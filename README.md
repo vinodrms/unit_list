@@ -1,3 +1,3 @@
 # UnitPal
 
-a [Sails](http://sailsjs.org) application
+Hotel Management Application
