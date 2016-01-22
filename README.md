@@ -1,3 +1,3 @@
 # UnitPal
 
-Hotel Management Application
+Hotel Management Application for internal use
