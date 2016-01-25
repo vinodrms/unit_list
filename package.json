@@ -37,7 +37,7 @@
 	"install-deps" : "npm install && cd assets && npm install && cd ..",
 	
     "build-server": "tsc --project api",
-	"build-client": "tsc --project assets/client || (cd assets && npm run build-client && cd ..)",
+	"build-client": "(tsc --project assets/client || echo '') && (cd assets && npm run build-client && cd ..)",
 	"build-all" : "npm run build-server && npm run build-client",
 	
 	"run-server-tests" : "npm run build-server && make test",
