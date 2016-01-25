@@ -11,3 +11,5 @@
 /// <reference path="moment/moment.d.ts" />
 /// <reference path="async/async.d.ts" />
 /// <reference path="should/should.d.ts" />
+/// <reference path="superagent/superagent.d.ts" />
+/// <reference path="supertest/supertest.d.ts" />

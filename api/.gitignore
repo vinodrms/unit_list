@@ -2,3 +2,4 @@ controllers/**/*.js
 models/**/*.js
 core/**/*.js
 policies/**/*.js
+test/**/*.js

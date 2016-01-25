@@ -1,0 +1,8 @@
+before_script:
+ - forever stop UnitPalProduction || echo 'No process named UnitPalProduction found. Continuing with the rest of the build.'
+ - npm run install-deps
+rspec:
+  script:
+   - npm run build-all
+   - npm run run-server-tests
+   - NODE_ENV=production forever -a -l /dev/null --uid "UnitPal" start app.js

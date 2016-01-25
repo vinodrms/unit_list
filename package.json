@@ -33,10 +33,18 @@
   "scripts": {
     "debug": "node debug app.js",
     "start": "node app.js",
+	
+	"install-deps" : "npm install && cd assets && npm install && cd ..",
+	
     "build-server": "tsc --project api",
+	"build-client": "tsc --project assets/client && cd assets && npm run build-client && cd ..",
+	"build-all" : "npm run build-server && npm run build-client",
+	
+	"run-server-tests" : "npm run build-server && make test",
+	
     "run-dev": "sails lift",
-    "run-test": "cd assets && npm run build-client && cd .. && NODE_ENV=test node app.js",
-    "run-prod": "cd assets && npm run build-client && cd .. && NODE_ENV=production node app.js"
+    "run-test": "npm run build-client && NODE_ENV=test node app.js",
+    "run-prod": "npm run build-client && NODE_ENV=production node app.js"
   },
   "main": "app.js",
   "repository": {
