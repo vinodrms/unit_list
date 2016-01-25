@@ -37,10 +37,11 @@
 	"install-deps" : "npm install && cd assets && npm install && cd ..",
 	
     "build-server": "tsc --project api",
-	"build-client": "tsc --project assets/client && cd assets && npm run build-client && cd ..",
+	"build-client": "tsc --project assets/client || (cd assets && npm run build-client && cd ..)",
 	"build-all" : "npm run build-server && npm run build-client",
 	
 	"run-server-tests" : "npm run build-server && make test",
+	"run-e2e-tests" : "npm run run-server-tests && cd assets && npm run e2e && cd ..",
 	
     "run-dev": "sails lift",
     "run-test": "npm run build-client && NODE_ENV=test node app.js",

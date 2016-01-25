@@ -22,6 +22,15 @@
             "showOutput": "always",
             "suppressTaskName": true,
             "isTestCommand": true
+        },
+        {
+            "taskName": "build e2e tests",
+            "args": ["--project", "assets/client/test/e2e", "--watch"],
+            "echoCommand": true,
+            "isWatching": true,
+            "problemMatcher": "$tsc",
+            "showOutput": "always",
+            "suppressTaskName": true
         }
     ]
 }
