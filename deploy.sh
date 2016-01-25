@@ -118,12 +118,12 @@ if [ -e "$DEPLOYMENT_TARGET/package.json" ]; then
 fi
 
 # 3. Install npm packages in assets
-echo ">> Going go assets to make npm install"
-cd "$DEPLOYMENT_TARGET"
-cd "assets"
-eval $NPM_CMD install --production
-exitWithMessageOnError "npm failed"
-cd - > /dev/null
+#echo ">> Going go assets to make npm install"
+#cd "$DEPLOYMENT_TARGET"
+#cd "assets"
+#eval $NPM_CMD install --production
+#exitWithMessageOnError "npm failed"
+#cd - > /dev/null
 
 ##################################################################################################################################
 
