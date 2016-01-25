@@ -32,7 +32,7 @@
   },
   "scripts": {
     "debug": "node debug app.js",
-    "start": "node app.js",
+    "start": "NODE_ENV=azure node app.js",
 	
 	"install-deps" : "npm install && cd assets && npm install && cd ..",
 	

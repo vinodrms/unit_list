@@ -46,5 +46,13 @@ module.exports.connections = {
         user      : '',
         password  : '',
         database  : 'UnitPalProd'
+    },
+	mongodbazure: {
+        adapter   : 'sails-mongo',
+        host      : 'ds054118.mongolab.com',
+        port      : 54118,
+        user      : 'threeangle',
+        password  : 'TestTest,01',
+        database  : 'MongoLabUnitPalProd'
     }
 };
