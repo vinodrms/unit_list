@@ -6,3 +6,4 @@ rspec:
    - npm run build-all
    - npm run run-server-tests
    - npm run forever-start
+   - echo "Finished the build for the Production Branch"
