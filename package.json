@@ -45,7 +45,10 @@
 	
     "run-dev": "sails lift",
     "run-test": "npm run build-client && NODE_ENV=test node app.js",
-    "run-prod": "npm run build-client && NODE_ENV=production node app.js"
+    "run-prod": "npm run build-client && NODE_ENV=production node app.js",
+	
+	"forever-stop": "forever stop UnitPalProduction || echo 'No process named UnitPalProduction found. Continuing with the rest of the build.'",
+	"forever-start": "NODE_ENV=production forever -a -l /dev/null --uid \"UnitPalProduction\" start app.js"
   },
   "main": "app.js",
   "repository": {
