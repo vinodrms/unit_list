@@ -18,6 +18,7 @@ The project has 3 Visual Studio Tasks
 
 To run locally on dev environment
 > npm run run-dev
+
 On test environment
 > npm run run-test
 
