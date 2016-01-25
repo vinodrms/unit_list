@@ -8,7 +8,8 @@ When you first clone the app, run in a terminal
 > npm run install-deps
 
 =========================================
-The project has 3 Visual Studio Tasks:
+
+The project has 3 Visual Studio Tasks
  - build server (Shift+Ctrl+B / Shift+Cmd+B)
  - build client (Shift+Ctrl+T / Shift+Cmd+T)
  - build e2e tests
