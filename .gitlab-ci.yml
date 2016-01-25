@@ -1,5 +1,4 @@
 before_script:
- - git checkout development
  - npm run forever-stop
  - npm run install-deps
 rspec:
