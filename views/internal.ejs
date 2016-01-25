@@ -10,11 +10,44 @@
     
         <title>UnitPal</title>
     
+		<script src="/node_modules/angular2/bundles/angular2-polyfills.min.js"></script>
+        <script src="/node_modules/systemjs/dist/system.js"></script>
+        <script src="/node_modules/rxjs/bundles/Rx.min.js"></script>
+        <script src="/node_modules/angular2/bundles/angular2.min.js"></script>
+        <script src="/node_modules/angular2/bundles/router.min.js"></script>
+        <script src="/node_modules/angular2/bundles/http.min.js"></script>
+		
+		<%if (isDevelopmentEnvironment == true) {%>
+            <script>
+                System.config({
+                    packages: {
+                        client: {
+                            format: 'register',
+                            defaultExtension: 'js'
+                        }
+                    },
+                    AppContext : {
+                        ComponentsBaseRootDirectory: "/client/src/"
+                    }
+                });
+                System.import('client/src/pages/internal/main/InternalBoot').then(null, console.error.bind(console));
+            </script>
+        <%} else {%>
+            <script>
+                System.config({
+                    bundles: { 'client/build/unitpal-internal-min.js': ['pages/internal/main/InternalBoot'] },
+                    AppContext : {
+                        ComponentsBaseRootDirectory: ""   
+                    }
+                });
+                System.import('pages/internal/main/InternalBoot').then(null, console.error.bind(console));
+            </script>
+        <%}%>
+		
     </head>
 
     <body>
-        <h>UnitPal</h>
-        <h1>Available Soon (internal)</h1>
+        <main-layout-internal></main-layout-internal>
     </body>
     
 </html>

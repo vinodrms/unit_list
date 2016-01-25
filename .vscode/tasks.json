@@ -12,6 +12,16 @@
             "showOutput": "always",
             "suppressTaskName": true,
             "isBuildCommand": true
+        },
+        {
+            "taskName": "build client",
+            "args": ["--project", "assets/client", "--watch"],
+            "echoCommand": true,
+            "isWatching": true,
+            "problemMatcher": "$tsc",
+            "showOutput": "always",
+            "suppressTaskName": true,
+            "isTestCommand": true
         }
     ]
 }

@@ -9,12 +9,45 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
     
         <title>UnitPal</title>
-    
+    	
+		<script src="/node_modules/angular2/bundles/angular2-polyfills.min.js"></script>
+        <script src="/node_modules/systemjs/dist/system.js"></script>
+        <script src="/node_modules/rxjs/bundles/Rx.min.js"></script>
+        <script src="/node_modules/angular2/bundles/angular2.min.js"></script>
+        <script src="/node_modules/angular2/bundles/router.min.js"></script>
+        <script src="/node_modules/angular2/bundles/http.min.js"></script>
+		
+		<%if (isDevelopmentEnvironment == true) {%>
+            <script>
+                System.config({
+                    packages: {
+                        client: {
+                            format: 'register',
+                            defaultExtension: 'js'
+                        }
+                    },
+                    AppContext : {
+                        ComponentsBaseRootDirectory: "/client/src/"
+                    }
+                });
+                System.import('client/src/pages/external/main/ExternalBoot').then(null, console.error.bind(console));
+            </script>
+        <%} else {%>
+            <script>
+                System.config({
+                    bundles: { 'client/build/unitpal-external-min.js': ['pages/external/main/ExternalBoot'] },
+                    AppContext : {
+                        ComponentsBaseRootDirectory: ""   
+                    }
+                });
+                System.import('pages/external/main/ExternalBoot').then(null, console.error.bind(console));
+            </script>
+        <%}%>
+		
     </head>
 
     <body>
-        <h>UnitPal</h>
-        <h1>Available Soon (external)</h1>
+        <main-layout-external></main-layout-external>
     </body>
     
 </html>

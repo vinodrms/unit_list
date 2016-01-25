@@ -1,0 +1,39 @@
+{
+  "name": "unitpal",
+  "version": "1.0.0",
+  "description": "UnitPal Hotel Manager",
+  "main": "index.js",
+  "scripts": {
+    "tsc": "tsc -p src -w",
+    "start": "lite-server --open=angular_app",
+    "e2e": "cd ../ && make test && cd assets && ./node_modules/protractor/bin/webdriver-manager update && ./node_modules/protractor/bin/protractor protractor.conf.js",
+	"build-client" : "gulp pack"
+  },
+  "keywords": [
+    "UnitPal"
+  ],
+  "author": "3angleTECH",
+  "license": "ISC",
+  "dependencies": {
+    "angular2": "2.0.0-beta.0",
+    "systemjs": "0.19.6",
+    "es6-promise": "^3.0.2",
+    "es6-shim": "^0.33.3",
+    "reflect-metadata": "0.1.2",
+    "rxjs": "5.0.0-beta.0",
+    "zone.js": "0.5.10",
+    "underscore": "^1.8.3"
+  },
+  "devDependencies": {
+    "concurrently": "^1.0.0",
+    "gulp": "^3.9.0",
+    "gulp-angular-embed-templates": "^1.1.0",
+    "gulp-minify": "0.0.5",
+    "gulp-sourcemaps": "^1.6.0",
+    "gulp-typescript": "^2.10.0",
+    "lite-server": "^1.3.1",
+    "phantomjs": "^1.9.19",
+    "protractor": "^3.0.0",
+    "typescript": "^1.8.0-dev.20160120"
+  }
+}
