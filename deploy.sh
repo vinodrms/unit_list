@@ -124,7 +124,6 @@ fi
 #eval $NPM_CMD install --production
 #exitWithMessageOnError "npm failed"
 #cd - > /dev/null
-
 ##################################################################################################################################
 
 # Post deployment stub
