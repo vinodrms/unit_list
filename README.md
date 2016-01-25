@@ -4,8 +4,9 @@ Hotel Management Application for internal use
 
 =========================================
 
-When you first clone the app, run in a terminal:
+When you first clone the app, run in a terminal
 > npm run install-deps
+
 =========================================
 The project has 3 Visual Studio Tasks:
  - build server (Shift+Ctrl+B / Shift+Cmd+B)
