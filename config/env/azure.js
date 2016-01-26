@@ -6,8 +6,5 @@ module.exports = {
     hookTimeout: 40000,
     log: {
         level: "silent"
-    },
-	paths : {
-		public: __dirname+'/../assets'
-	}
+    }
 };
