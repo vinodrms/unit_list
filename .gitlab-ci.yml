@@ -1,8 +1,10 @@
 before_script:
+ - git branch
  - npm run forever-stop
  - npm run install-deps
 rspec:
   script:
+   - git branch
    - npm run build-all
    - npm run run-server-tests
    - (git remote add azure https://unitpalprod:UnPL3%242_2%40suT21@unitpalprod.scm.azurewebsites.net:443/UnitPalProd.git) || echo "Azure remote already added"
