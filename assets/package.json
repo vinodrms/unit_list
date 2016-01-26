@@ -6,7 +6,7 @@
   "scripts": {
     "tsc": "tsc -p src -w",
     "start": "lite-server --open=angular_app",
-    "e2e": "./node_modules/protractor/bin/webdriver-manager update && ./node_modules/protractor/bin/protractor protractor.conf.js",
+    "e2e": "tsc --project client/test/e2e && ./node_modules/protractor/bin/webdriver-manager update && ./node_modules/protractor/bin/protractor protractor.conf.js",
 	"build-client" : "gulp pack"
   },
   "keywords": [
