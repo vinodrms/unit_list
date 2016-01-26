@@ -109,18 +109,21 @@ fi
 # 2. Select node version
 selectNodeVersion
 
-# 3. Install npm packages
+# 3. Install server npm packages
 cd "$DEPLOYMENT_TARGET"
 eval $NPM_CMD install
 exitWithMessageOnError "npm failed"
 
+# 4. Install client npm packages
 cd "assets"
 eval $NPM_CMD install
 exitWithMessageOnError "npm failed"
 cd ".."
 
+# 5. Build server
 eval node_modules/typescript/bin/tsc --project api
 
+# 6. Build client
 cd "assets"
 eval node_modules/gulp/bin/gulp.js pack
 exitWithMessageOnError "gulp pack failed"
