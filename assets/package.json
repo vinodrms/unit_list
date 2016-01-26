@@ -7,7 +7,7 @@
     "tsc": "tsc -p src -w",
     "start": "lite-server --open=angular_app",
     "e2e": "tsc --project client/test/e2e && ./node_modules/protractor/bin/webdriver-manager update && ./node_modules/protractor/bin/protractor protractor.conf.js",
-	"build-client" : "gulp pack"
+    "build-client": "gulp pack"
   },
   "keywords": [
     "UnitPal"
@@ -28,6 +28,7 @@
     "concurrently": "^1.0.0",
     "gulp": "^3.9.0",
     "gulp-angular-embed-templates": "^1.1.0",
+    "gulp-clean": "^0.3.1",
     "gulp-minify": "0.0.5",
     "gulp-sourcemaps": "^1.6.0",
     "gulp-typescript": "^2.10.0",

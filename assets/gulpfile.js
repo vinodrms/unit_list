@@ -2,6 +2,8 @@ var gulp = require('gulp');
 var ts = require('gulp-typescript');
 var minify = require('gulp-minify');
 var embedTemplates = require('gulp-angular-embed-templates');
+var clean = require('gulp-clean');
+
 var embedTemplatesOptions = {
     minimize: {
         quotes: true,
@@ -49,4 +51,21 @@ gulp.task('pack-external', function() {
 				.pipe(gulp.dest('client/build'));
 });
 
-gulp.task('pack', ['pack-internal', 'pack-external']);
+gulp.task('clean-dist', function() {
+	return gulp.src('dist', {read: false})
+		.pipe(clean());
+});
+
+gulp.task('copy-dist', ['pack-internal', 'pack-external', 'clean-dist'], function() {
+	var scripts = [
+		'client/build/**/*.js', 
+		'node_modules/angular2/bundles/**/*',
+		'node_modules/systemjs/dist/**/*',
+		'node_modules/rxjs/bundles/**/*',
+		'bower_components/**/*'
+		];
+	gulp.src(scripts, {base: '.'})
+          .pipe(gulp.dest('dist'));
+});
+
+gulp.task('pack', ['pack-internal', 'pack-external', 'copy-dist']);
