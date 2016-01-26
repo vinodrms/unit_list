@@ -118,7 +118,7 @@ cd "assets"
 eval $NPM_CMD install
 exitWithMessageOnError "npm failed"
 
-cd ".."
+cd "$DEPLOYMENT_TARGET"
 eval $NPM_CMD run build-server
 eval $NPM_CMD run build-client
 
