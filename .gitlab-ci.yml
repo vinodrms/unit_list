@@ -6,6 +6,6 @@ rspec:
    - npm run build-all
    - npm run run-server-tests
    - (git remote add azure https://unitpalprod:UnPL3$2_2@suT21@unitpalprod.scm.azurewebsites.net:443/UnitPalProd.git) || echo "Azure remote already added"
-   - git push azure master -p 
+   - git push azure master
    - npm run forever-start
    - echo "Finished the build for the Production Branch"
