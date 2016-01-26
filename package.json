@@ -28,27 +28,23 @@
     "sails-test-helper": "^0.5.0",
     "should": "^8.2.0",
     "swig-email-templates": "^2.0.0",
+    "typescript": "^1.8.0-dev.20160120",
     "underscore": "^1.8.3"
   },
   "scripts": {
     "debug": "node debug app.js",
     "start": "node app.js",
-	
-	"install-deps" : "npm install && cd assets && npm install && cd ..",
-	
-    "build-server": "tsc --project api",
-	"build-client": "(tsc --project assets/client || echo '') && (cd assets && npm run build-client && cd ..)",
-	"build-all" : "npm run build-server && npm run build-client",
-	
-	"run-server-tests" : "npm run build-server && make test",
-	"run-e2e-tests" : "npm run run-server-tests && cd assets && npm run e2e && cd ..",
-	
+    "install-deps": "npm install && cd assets && npm install && cd ..",
+    "build-server": "./node_modules/typescript/bin/tsc --project api",
+    "build-client": "(./node_modules/typescript/bin/tsc --project assets/client || echo '') && (cd assets && npm run build-client && cd ..)",
+    "build-all": "npm run build-server && npm run build-client",
+    "run-server-tests": "npm run build-server && make test",
+    "run-e2e-tests": "npm run run-server-tests && cd assets && npm run e2e && cd ..",
     "run-dev": "sails lift",
     "run-test": "npm run build-client && NODE_ENV=test node app.js",
     "run-prod": "npm run build-client && NODE_ENV=production node app.js",
-	
-	"forever-stop": "forever stop UnitPalProduction || echo 'No process named UnitPalProduction found. Continuing with the rest of the build.'",
-	"forever-start": "NODE_ENV=production forever -a -l /dev/null --uid \"UnitPalProduction\" start app.js"
+    "forever-stop": "forever stop UnitPalProduction || echo 'No process named UnitPalProduction found. Continuing with the rest of the build.'",
+    "forever-start": "NODE_ENV=production forever -a -l /dev/null --uid \"UnitPalProduction\" start app.js"
   },
   "main": "app.js",
   "repository": {
