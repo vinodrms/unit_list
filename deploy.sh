@@ -111,11 +111,11 @@ selectNodeVersion
 
 # 3. Install npm packages
 cd "$DEPLOYMENT_TARGET"
-eval $NPM_CMD install --production
+eval $NPM_CMD install
 exitWithMessageOnError "npm failed"
 
 cd "assets"
-eval $NPM_CMD install --production
+eval $NPM_CMD install
 exitWithMessageOnError "npm failed"
 
 cd ".."
