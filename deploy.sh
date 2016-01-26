@@ -117,10 +117,14 @@ exitWithMessageOnError "npm failed"
 cd "assets"
 eval $NPM_CMD install
 exitWithMessageOnError "npm failed"
+cd ".."
 
-cd "$DEPLOYMENT_TARGET"
-eval $NPM_CMD run build-server
-eval $NPM_CMD run build-client
+eval node_modules/typescript/bin/tsc --project api
+
+cd "assets"
+eval node_modules/gulp/bin/gulp.js pack
+exitWithMessageOnError "gulp pack failed"
+cd ".."
 
 cd - > /dev/null
 
