@@ -62,7 +62,11 @@ gulp.task('copy-dist', ['pack-internal', 'pack-external', 'clean-dist'], functio
 		'node_modules/angular2/bundles/**/*',
 		'node_modules/systemjs/dist/**/*',
 		'node_modules/rxjs/bundles/**/*',
-		'bower_components/**/*'
+		'js/**/*',
+		'styles/**/*',
+		'images/**/*',
+		'robots.txt',
+		'*.ico'
 		];
 	gulp.src(scripts, {base: '.'})
           .pipe(gulp.dest('dist'));
