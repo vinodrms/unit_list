@@ -17,20 +17,20 @@ The project has 3 Visual Studio Tasks
 =========================================
 
 To run locally on dev environment
-> npm run run-dev
+> npm run dev
 
 On test environment
-> npm run run-test
+> npm run test
 
 =========================================
 
 To run the server tests
-> npm run run-server-tests
+> npm run server-tests
 
 =========================================
 
 To run the e2e tests
  - Terminal 1
-	> npm run run-test
+	> npm run test
  - Terminal 2
-	> npm run run-e2e-tests
+	> npm run e2e-tests
