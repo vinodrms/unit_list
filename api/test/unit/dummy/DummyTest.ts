@@ -7,7 +7,7 @@ import should = require('should');
 import DefaultDBCollectionsImport = require('../../db-initializers/DefaultDBCollections');
 import DefaultDBCollections = DefaultDBCollectionsImport.DefaultDBCollections;
 
-describe("Booking Flow", function() {
+describe("Dummy Flow", function() {
     var defaultDBCollections = new DefaultDBCollections();
     
     before(function(done : any) {

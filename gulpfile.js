@@ -2,6 +2,7 @@ var gulp = require('gulp');
 var install = require("gulp-install");
 var env = require('gulp-env');
 var shell = require('gulp-shell');
+var mocha = require('gulp-mocha');
 
 gulp.task('install-client-deps', function () {
     gulp.src([__dirname + '/assets/bower.json', __dirname + '/assets/package.json'])
@@ -17,10 +18,16 @@ gulp.task('set-unit-test-env', function () {
 		}
 	})
 });
-gulp.task('run-server-tests', ['set-unit-test-env'], shell.task([
-	'node ./node_modules/sails-test-helper/node_modules/.bin/mocha --recursive -t 30000 -R spec api/test/unit/'
-]));
-
+gulp.task('run-server-tests', ['set-unit-test-env'], function () {
+	return gulp.src('api/test/unit/**/*.js', {read: false}) 
+		.pipe(mocha())
+		.once('error', function () {
+			process.exit(1);
+		})
+		.once('end', function () {
+			process.exit();
+		});
+});
 
 gulp.task('set-test-env', function () {
 	env({
