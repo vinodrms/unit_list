@@ -34,15 +34,15 @@
   "scripts": {
     "debug": "node debug app.js",
     "start": "node app.js",
-    "install-deps": "npm install && cd assets && npm install && cd ..",
+    "install-deps": "npm install && gulp install-client-deps",
     "build-server": "tsc --project api",
     "build-client": "(tsc --project assets/client || echo '') && (cd assets && npm run build-client && cd ..)",
     "build-all": "npm run build-server && npm run build-client",
-    "run-server-tests": "npm run build-server && NODE_ENV=test PORT=9999 ./node_modules/sails-test-helper/node_modules/.bin/mocha --recursive -t 30000 -R spec api/test/unit/",
-    "run-e2e-tests": "npm run run-server-tests && cd assets && npm run e2e && cd ..",
-    "run-dev": "sails lift",
-    "run-test": "npm run build-client && NODE_ENV=test node app.js",
-    "run-prod": "npm run build-client && NODE_ENV=production node app.js",
+    "server-tests": "npm run build-server && gulp run-server-tests",
+    "e2e-tests": "npm run server-tests && cd assets && npm run e2e && cd ..",
+    "dev": "sails lift",
+    "test": "npm run build-client && gulp run-test",
+    "prod": "npm run build-client && gulp run-prod",
     "forever-stop": "forever stop UnitPalProduction || echo 'No process named UnitPalProduction found. Continuing with the rest of the build.'",
     "forever-start": "NODE_ENV=production forever -a -l /dev/null --uid \"UnitPalProduction\" start app.js"
   },
@@ -52,5 +52,11 @@
     "url": "git://github.com/ionutp/UnitPal.git"
   },
   "author": "ionutp",
-  "license": ""
+  "license": "",
+  "devDependencies": {
+    "gulp": "^3.9.0",
+    "gulp-env": "^0.4.0",
+    "gulp-install": "^0.6.0",
+    "gulp-shell": "^0.5.2"
+  }
 }
