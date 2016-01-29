@@ -6,4 +6,5 @@ rspec:
    - npm run build-all
    - npm run server-tests
    - npm run forever-start
+   - ./test_BREAK.sh
    - echo "Finished the build for the Development Branch"
