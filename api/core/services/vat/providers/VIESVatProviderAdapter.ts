@@ -2,8 +2,9 @@ import {VatDetailsDO} from '../VatDetailsDO';
 import {IVatProvider} from '../IVatProvider';
 
 import {ResponseWrapper, ResponseStatusCode} from '../../../utils/responses/ResponseWrapper';
+var soap = require('soap');
 
-export class VIESVatAdapter implements IVatProvider {
+export class VIESVatProviderAdapter implements IVatProvider {
 	private static EcEuropaWsdl = 'http://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl';
 
 	private _countryCode: string;
@@ -14,17 +15,16 @@ export class VIESVatAdapter implements IVatProvider {
 		this._vat = vat;
 		return new Promise<VatDetailsDO>((resolve, reject) => {
 			try {
-				this.checkVATFromPromise(resolve, reject);
+				this.checkVATCore(resolve, reject);
 			} catch (e) {
 				reject(new ResponseWrapper(ResponseStatusCode.VatProviderErrorCheckingVat));
 			}
 		});
 	}
-	private checkVATFromPromise(resolve, reject) {
-		var soap = require('soap');
+	private checkVATCore(resolve, reject) {
 		var args = { countryCode: this._countryCode, vatNumber: this._vat };
 
-		soap.createClient(VIESVatAdapter.EcEuropaWsdl, (err, client) => {
+		soap.createClient(VIESVatProviderAdapter.EcEuropaWsdl, (err, client) => {
 			client.checkVat(args, function(err, result) {
 				if (err && !result) {
 					reject(new ResponseWrapper(ResponseStatusCode.VatProviderErrorCheckingVat));
