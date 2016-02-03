@@ -43,6 +43,9 @@
     },
     "supertest/supertest.d.ts": {
       "commit": "7b3d5a6ea5acda4a81f71309f1cc62354e63b681"
+    },
+    "expect/expect.d.ts": {
+      "commit": "e69fe60f2d6377ea4fae539493997b098f52cad1"
     }
   }
 }

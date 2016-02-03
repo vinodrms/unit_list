@@ -20,7 +20,7 @@ gulp.task('set-unit-test-env', function () {
 });
 gulp.task('run-server-tests', ['set-unit-test-env'], function () {
 	return gulp.src('api/test/unit/**/*.js', {read: false}) 
-		.pipe(mocha())
+		.pipe(mocha({timeout: 10000}))
 		.once('error', function () {
 			process.exit(1);
 		})

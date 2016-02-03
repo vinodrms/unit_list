@@ -1,4 +1,6 @@
 {
-	"Welcome": "Welcome",
-	"A brand new app.": "A brand new app."
+	"Ok" : "Ok",
+	"Problem checking the VAT": "Problem checking the VAT",
+	"The VAT is not in EU": "The VAT is not in EU",
+	"Invalid VAT format" : "Invalid VAT format"
 }

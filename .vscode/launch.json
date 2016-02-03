@@ -25,6 +25,16 @@
 			"type": "node",
 			"request": "attach",
 			"port": 5858
-		}
+		},
+        {
+            "name": "Run server tests",
+            "type": "node",
+            "program": "./node_modules/sails-test-helper/node_modules/mocha/bin/_mocha",
+            "stopOnEntry": false,
+            "args": ["api/test/unit/**/*.js", "--timeout", "10000"],
+            "cwd": ".",
+            "runtimeExecutable": null,
+            "env": { "NODE_ENV": "test"}
+        }
 	]
 }

@@ -1,0 +1,6 @@
+{
+	"Ok" : "Ok",
+	"Problem checking the VAT": "Eroare validare VAT",
+	"The VAT is not in EU": "Codul VAT nu este in UE",
+	"Invalid VAT format" : "Format VAT invalid"
+}
