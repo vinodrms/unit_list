@@ -2,6 +2,7 @@ import {Locales, Translation} from '../localization/Translation';
 
 export enum ResponseStatusCode {
 	Ok,
+	InvalidRequestParameters,
 	VatProviderErrorCheckingVat,
 	VatProviderNotInEu,
 	VatProviderInvalidVat
@@ -9,6 +10,7 @@ export enum ResponseStatusCode {
 
 var ResponseMessage: { [index: number]: string; } = {};
 ResponseMessage[ResponseStatusCode.Ok] = "Ok";
+ResponseMessage[ResponseStatusCode.InvalidRequestParameters] = "Invalid Request Parameters";
 ResponseMessage[ResponseStatusCode.VatProviderErrorCheckingVat] = "Problem checking the VAT";
 ResponseMessage[ResponseStatusCode.VatProviderNotInEu] = "The VAT is not in EU";
 ResponseMessage[ResponseStatusCode.VatProviderInvalidVat] = "Invalid VAT format";
@@ -28,7 +30,9 @@ export class ResponseWrapper {
 	}
 	
 	public buildResponse(locale : Locales) : Object {
-		this.translateMessage(locale);
+		if(! _.isUndefined(locale)) {
+			this.translateMessage(locale);	
+		}
 		return this;
 	}
 	private translateMessage(locale : Locales) {

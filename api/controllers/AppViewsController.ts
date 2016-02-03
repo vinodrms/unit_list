@@ -1,5 +1,5 @@
-import BaseControllerImport = require('./base/BaseController');
-import BaseController = BaseControllerImport.BaseController;
+import {BaseController} from './base/BaseController';
+import {AppEnvironment, AppEnvironmentType} from '../core/utils/environment/AppEnvironment';
 
 class AppViewsController extends BaseController {
 	protected _exportedMethods: any = [
@@ -20,7 +20,7 @@ class AppViewsController extends BaseController {
         });
 	}
 	private isDevelopmentEnvironment() : boolean {
-        if(sails.config.environment == 'development')
+        if(AppEnvironment.getAppEnvironment() == AppEnvironmentType.Development)
             return true;
         return false;
     }

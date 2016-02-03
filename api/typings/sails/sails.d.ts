@@ -7,12 +7,15 @@ declare module Express{
     };
     body : any;
     query : any;
+	sessionContext : any;
+	appContext : any;
   }
   export interface Response{
     view(route:string);
     view(route:string, locals:Object);
     json(params:Object);
     redirect(url:string);
+	forbidden(message:string);
   }
   export interface Application{}
   
