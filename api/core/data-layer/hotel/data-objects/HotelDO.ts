@@ -36,21 +36,21 @@ export class HotelDO extends BaseDO {
 		this.geoLocation.buildFromObject(object["geoLocation"]);
 
 		this.users = [];
-		for (var userObject in object["users"]) {
+		this.forEachElementOf(object["users"], (userObject: Object) => {
 			var userDO = new UserDO();
 			userDO.buildFromObject(userObject);
 			this.users.push(userDO);
-		}
+		});
 
 		this.taxes = new HotelTaxesDO();
 		this.taxes.buildFromObject(object["taxes"]);
 
 		this.customAmenities = [];
-		for (var amenityObject in object["customAmenities"]) {
+		this.forEachElementOf(object["customAmenities"], (amenityObject: Object) => {
 			var amenityDO = new AmenityDO();
 			amenityDO.buildFromObject(amenityObject);
-			this.customAmenities.push(amenityDO);
-		}
+			this.customAmenities.push(amenityDO);			
+		});
 
 		this.operationHours = new OperationHoursDO();
 		this.operationHours.buildFromObject(object["operationHours"]);

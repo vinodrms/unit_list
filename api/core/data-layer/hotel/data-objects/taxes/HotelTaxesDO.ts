@@ -16,17 +16,17 @@ export class HotelTaxesDO extends BaseDO {
 		super.buildFromObject(object);
 
 		this.vats = [];
-		for (var vatObject in object["vats"]) {
+		this.forEachElementOf(object["vats"], (vatObject: Object) => {
 			var vatDO = new VatDO();
 			vatDO.buildFromObject(vatObject);
 			this.vats.push(vatDO);
-		}
+		});
 
 		this.taxes = [];
-		for (var taxObject in object["taxes"]) {
+		this.forEachElementOf(object["taxes"], (taxObject: Object) => {
 			var taxDO = new TaxDO();
 			taxDO.buildFromObject(taxObject);
 			this.taxes.push(taxDO);
-		}
+		});
 	}
 }

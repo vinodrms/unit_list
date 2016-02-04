@@ -2,11 +2,6 @@ import {BaseController} from './base/BaseController';
 import {AppEnvironment, AppEnvironmentType} from '../core/utils/environment/AppEnvironment';
 
 class AppViewsController extends BaseController {
-	protected _exportedMethods: any = [
-    	'getExternalView',
-		'getInternalView'
-    ];
-
 	public getExternalView(req:Express.Request, res:Express.Response) {
 		var isDevelopmentEnvironment = this.isDevelopmentEnvironment();
         res.view("external", {
@@ -26,5 +21,8 @@ class AppViewsController extends BaseController {
     }
 }
 
-var controller = new AppViewsController();
-module.exports = controller.exports();
+var appViewsController = new AppViewsController();
+module.exports = {
+	getExternalView : appViewsController.getExternalView.bind(appViewsController),
+	getInternalView : appViewsController.getInternalView.bind(appViewsController)
+}
