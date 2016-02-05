@@ -10,6 +10,7 @@ export class HotelDO extends BaseDO {
 	constructor() {
 		super();
 	}
+	id: string;
 	contactDetails: HotelContactDetailsDO;
 	geoLocation: GeoLocationDO;
 	logoUrl: string;
@@ -24,7 +25,7 @@ export class HotelDO extends BaseDO {
 	operationHours: OperationHoursDO;
 
 	protected getPrimitiveProperties(): string[] {
-		return ["logoUrl", "ccy", "amenities", "paymentMethods", "configurationStatus", "timezone"];
+		return ["id", "logoUrl", "ccy", "amenities", "paymentMethods", "configurationStatus", "timezone"];
 	}
 	public buildFromObject(object: Object) {
 		super.buildFromObject(object);

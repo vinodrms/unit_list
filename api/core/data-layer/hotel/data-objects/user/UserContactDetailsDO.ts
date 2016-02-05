@@ -7,7 +7,6 @@ export class UserContactDetailsDO extends BaseDO {
 	}
 	address: AddressDO;
 	phone: string;
-	email: string;
 	firstName: string;
 	lastName: string;
 

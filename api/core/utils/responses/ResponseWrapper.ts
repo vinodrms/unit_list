@@ -5,7 +5,12 @@ export enum ResponseStatusCode {
 	InvalidRequestParameters,
 	VatProviderErrorCheckingVat,
 	VatProviderNotInEu,
-	VatProviderInvalidVat
+	VatProviderInvalidVat,
+	EmailTemplateBuilderProblemFindingTemplatesDirectory,
+	EmailTemplateBuilderProblemBuildingContent,
+	SmtpEmailSenderErrorSendingEmail,
+	HotelSignUpError,
+	HotelRepositoryErrorAddingHotel
 }
 
 var ResponseMessage: { [index: number]: string; } = {};
@@ -14,6 +19,11 @@ ResponseMessage[ResponseStatusCode.InvalidRequestParameters] = "Invalid Request 
 ResponseMessage[ResponseStatusCode.VatProviderErrorCheckingVat] = "Problem checking the VAT";
 ResponseMessage[ResponseStatusCode.VatProviderNotInEu] = "The VAT is not in EU";
 ResponseMessage[ResponseStatusCode.VatProviderInvalidVat] = "Invalid VAT format";
+ResponseMessage[ResponseStatusCode.EmailTemplateBuilderProblemFindingTemplatesDirectory] = "Error sending email: the content was not found on the server. Please contact the Administrator.";
+ResponseMessage[ResponseStatusCode.EmailTemplateBuilderProblemBuildingContent] = "Error sending email: problem building content. Please contact the Administrator.";
+ResponseMessage[ResponseStatusCode.SmtpEmailSenderErrorSendingEmail] = "Error sending email. Please contact the Administrator.";
+ResponseMessage[ResponseStatusCode.HotelSignUpError] = "Error signing up. Please try again.";
+ResponseMessage[ResponseStatusCode.HotelRepositoryErrorAddingHotel] = "Error adding the information. Please try again.";
 
 export class ResponseWrapper {
 	statusCode : ResponseStatusCode;

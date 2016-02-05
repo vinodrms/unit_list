@@ -9,10 +9,6 @@ class HotelsEntity extends BasePersistentEntity {
     }
     private buildCustomAttributes() {
         this.attributes = {
-            name: {
-                type: 'string',
-                required: true
-            },
             contactDetails: {
                 type: 'json',
                 required: true
@@ -24,24 +20,34 @@ class HotelsEntity extends BasePersistentEntity {
 				type: 'string'
 			},
 			users: {
-				type: 'json',
+				type: 'array',
 				required: true
 			},
 			ccy: {
-				type: 'string',
-				required: true
+				type: 'string'
 			},
 			taxes: {
 				type: 'json',
+				defaultsTo: {}
 			},
-			settings: {
-				type: 'json'
+			amenities: {
+				type: 'array',
+			},
+			customAmenities: {
+				type: 'array',
+			},
+			paymentMethods: {
+				type: 'array',
+			},
+			configurationStatus: {
+				type: 'boolean',
 			},
 			timezone: {
-				type: 'json'
+				type: 'string'
 			},
-			operationHoues: {
-				type: 'json'
+			operationHours: {
+				type: 'json',
+				defaultsTo: {}
 			}
 		};
     }

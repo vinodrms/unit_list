@@ -1,21 +1,23 @@
 import {BaseController} from './base/BaseController';
-import {AppEnvironment, AppEnvironmentType} from '../core/utils/environment/AppEnvironment';
+import {AppEnvironmentType} from '../core/utils/environment/UnitPalConfig';
+import {AppContext} from '../core/utils/AppContext';
 
 class AppViewsController extends BaseController {
 	public getExternalView(req:Express.Request, res:Express.Response) {
-		var isDevelopmentEnvironment = this.isDevelopmentEnvironment();
+		var isDevelopmentEnvironment = this.isDevelopmentEnvironment(req);
         res.view("external", {
 			isDevelopmentEnvironment : isDevelopmentEnvironment
         });
 	}
 	public getInternalView(req:Express.Request, res:Express.Response) {
-		var isDevelopmentEnvironment = this.isDevelopmentEnvironment();
+		var isDevelopmentEnvironment = this.isDevelopmentEnvironment(req);
         res.view("internal", {
 			isDevelopmentEnvironment : isDevelopmentEnvironment
         });
 	}
-	private isDevelopmentEnvironment() : boolean {
-        if(AppEnvironment.getAppEnvironment() == AppEnvironmentType.Development)
+	private isDevelopmentEnvironment(req:Express.Request) : boolean {
+		var appContext : AppContext = req.appContext;
+        if(appContext.getUnitPalConfig().getAppEnvironment() == AppEnvironmentType.Development)
             return true;
         return false;
     }

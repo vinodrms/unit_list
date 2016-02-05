@@ -46,6 +46,15 @@
     },
     "expect/expect.d.ts": {
       "commit": "e69fe60f2d6377ea4fae539493997b098f52cad1"
+    },
+    "swig/swig.d.ts": {
+      "commit": "e69fe60f2d6377ea4fae539493997b098f52cad1"
+    },
+    "swig-email-templates/swig-email-templates.d.ts": {
+      "commit": "e69fe60f2d6377ea4fae539493997b098f52cad1"
+    },
+    "extend/extend.d.ts": {
+      "commit": "e69fe60f2d6377ea4fae539493997b098f52cad1"
     }
   }
 }

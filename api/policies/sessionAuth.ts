@@ -1,14 +1,15 @@
-import {AppEnvironment, AppEnvironmentType} from '../core/utils/environment/AppEnvironment';
+import {UnitPalConfig, AppEnvironmentType} from '../core/utils/environment/UnitPalConfig';
 import {SessionContext} from '../core/utils/SessionContext';
 import {Locales} from '../core/utils/localization/Translation';
 
 module.exports = function(req:Express.Request, res:Express.Response, next : any) {
-	if (req.sessionContext) {
+	// TODO: check the key for the session (user)
+	if (req.sessionContext && req.sessionContext.user) {
 		return next();
 	}
-	
-	var appEnvironmentType = AppEnvironment.getAppEnvironment();
-	if(appEnvironmentType == AppEnvironmentType.Development) {
+	var unitPalConfig = new UnitPalConfig();
+	if(unitPalConfig.getAppEnvironment() == AppEnvironmentType.Development) {
+		// TODO: update with default user
 		req.sessionContext = new SessionContext(Locales.English);
 		return next();
 	}

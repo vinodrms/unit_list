@@ -14,3 +14,6 @@
 /// <reference path="superagent/superagent.d.ts" />
 /// <reference path="supertest/supertest.d.ts" />
 /// <reference path="expect/expect.d.ts" />
+/// <reference path="swig-email-templates/swig-email-templates.d.ts" />
+/// <reference path="swig/swig.d.ts" />
+/// <reference path="extend/extend.d.ts" />
