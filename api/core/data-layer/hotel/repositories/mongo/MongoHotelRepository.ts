@@ -3,7 +3,7 @@ import {HotelDO} from '../../data-objects/HotelDO';
 import {ResponseWrapper, ResponseStatusCode} from '../../../../utils/responses/ResponseWrapper';
 
 export class MongoHotelRepository extends AHotelRepository {
-	_hotelsEntity: Sails.Model;
+	private _hotelsEntity: Sails.Model;
 
 	constructor() {
 		super();
