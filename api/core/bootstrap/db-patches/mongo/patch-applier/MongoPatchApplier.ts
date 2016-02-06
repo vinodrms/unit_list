@@ -14,7 +14,7 @@ export class MongoPatchApplier implements IMongoPatchApplier {
 	private initPatchAppliers() {
 		this._mongoPatchAppliers = [new MongoPatch0()];
 	}
-	public applyAsyncWrapper(finishApplyingPatchCallback: { (err: any, result?: string[]): void; }) {
+	public applyAsync(finishApplyingPatchCallback: { (err: any, result?: string[]): void; }) {
 		this.apply().then((result: any) => {
 			finishApplyingPatchCallback(null, result);
 		}).catch((error: any) => {

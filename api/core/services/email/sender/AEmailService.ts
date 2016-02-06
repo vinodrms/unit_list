@@ -14,7 +14,7 @@ export abstract class AEmailService {
 
 	constructor(protected _unitPalConfig: UnitPalConfig, protected _emailMetadataDO: EmailMetadataDO, private _templateBuilder: IEmailTemplateBuilder) {
 	}
-	public buildEmailContentAndSendAsyncWrapper(finishBuildAndSendEmailContentCallback: { (err: any, result?: string): void; }) {
+	public buildEmailContentAndSendAsync(finishBuildAndSendEmailContentCallback: { (err: any, result?: string): void; }) {
 		this.buildEmailContentAndSend().then((result: string) => {
 			finishBuildAndSendEmailContentCallback(null, result);
 		}).catch((err: any) => {
@@ -30,11 +30,11 @@ export abstract class AEmailService {
 	private buildEmailContentAndSendCore(resolve, reject) {
 		async.waterfall([
 			((finishBuildEmailContentCallback) => {
-				this._templateBuilder.buildEmailContentAsyncWrapper(finishBuildEmailContentCallback);
+				this._templateBuilder.buildEmailContentAsync(finishBuildEmailContentCallback);
 			}),
 			((emailContent: string, finishSendEmailCallback) => {
 				this._emailContent = emailContent;
-				this.sendEmailAsyncWrapper(finishSendEmailCallback);
+				this.sendEmailAsync(finishSendEmailCallback);
 			})
 		], ((error: any, emailSendResult: any) => {
 			if (error) {
@@ -46,7 +46,7 @@ export abstract class AEmailService {
 		}));
 	}
 
-	private sendEmailAsyncWrapper(finishSendEmailCallback: { (err: any, emailContent?: string): void; }) {
+	private sendEmailAsync(finishSendEmailCallback: { (err: any, emailContent?: string): void; }) {
 		this.sendEmail().then((result: any) => {
 			finishSendEmailCallback(null, result);
 		}).catch((response: any) => {

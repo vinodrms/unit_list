@@ -1,3 +1,3 @@
 export interface IEmailTemplateBuilder {
-	buildEmailContentAsyncWrapper(finishBuildEmailContentCallback: { (err: any, emailContent?: string): void; });
+	buildEmailContentAsync(finishBuildEmailContentCallback: { (err: any, emailContent?: string): void; });
 }

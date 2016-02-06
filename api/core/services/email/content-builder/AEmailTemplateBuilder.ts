@@ -13,7 +13,7 @@ export abstract class AEmailTemplateBuilder implements IEmailTemplateBuilder {
 	protected abstract getHtmlName(): string;
 	protected abstract getContent(): Object;
 
-	public buildEmailContentAsyncWrapper(finishBuildEmailContentCallback: { (err: any, emailContent?: string): void; }) {
+	public buildEmailContentAsync(finishBuildEmailContentCallback: { (err: any, emailContent?: string): void; }) {
 		this.buildEmailContent().then((emailContent: string) => {
 			finishBuildEmailContentCallback(null, emailContent);
 		}).catch((err: any) => {

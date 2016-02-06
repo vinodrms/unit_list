@@ -7,14 +7,12 @@ export enum LockStatus {
 	Locked
 }
 
-export class MongoDBPatch implements IDBPatch {
+export abstract class AMongoDBPatch implements IDBPatch {
 	private static PatchType: string = "MongoDBPatch";
-	private _systemPatchesEntity: Sails.Model;
 	private _nativeSystemPatchesEntity: any;
 	private _appliedPatches: number[];
 
 	constructor() {
-		this._systemPatchesEntity = sails.models.systempatchesentity;
 	}
 
 	public applyPatches(): Promise<any> {
@@ -25,17 +23,17 @@ export class MongoDBPatch implements IDBPatch {
 	private applyPatchesCore(resolve, reject) {
 		async.waterfall([
 			((finishEnsuredIndexCallback) => {
-				this.ensureIndexAsyncWrapper(finishEnsuredIndexCallback);
+				this.ensureIndexAsync(finishEnsuredIndexCallback);
 			}),
 			((result: any, finishUpdatedLockStatusCallback) => {
-				this.acquireLockAsyncWrapper(finishUpdatedLockStatusCallback);
+				this.acquireLockAsync(finishUpdatedLockStatusCallback);
 			}),
 			((result: any, finishApplyingPatchCallback) => {
 				var patchApplier: MongoPatchApplier = new MongoPatchApplier(this._appliedPatches);
-				patchApplier.applyAsyncWrapper(finishApplyingPatchCallback);
+				patchApplier.applyAsync(finishApplyingPatchCallback);
 			}),
 			((newPatches: string[], finishUpdatedLockStatusCallback) => {
-				this.releaseLockAndUpdatePatchesAsyncWrapper(finishUpdatedLockStatusCallback, newPatches);
+				this.releaseLockAndUpdatePatchesAsync(finishUpdatedLockStatusCallback, newPatches);
 			})
 		], ((error: any, result: any) => {
 			if (error) {
@@ -47,7 +45,7 @@ export class MongoDBPatch implements IDBPatch {
 		}));
 	}
 
-	private ensureIndexAsyncWrapper(finishEnsuredIndexCallback: { (err: any, result?: any): void; }) {
+	private ensureIndexAsync(finishEnsuredIndexCallback: { (err: any, result?: any): void; }) {
 		this.ensureIndex().then((result: any) => {
 			finishEnsuredIndexCallback(null, result);
 		}).catch((error: any) => {
@@ -60,13 +58,8 @@ export class MongoDBPatch implements IDBPatch {
 		});
 	}
 	private ensureIndexCore(resolve, reject) {
-		this._systemPatchesEntity.native((err, nativeSystemPatchesEntity) => {
-			if (err || !nativeSystemPatchesEntity) {
-				reject("Error getting native SystemPatches collection!");
-				return;
-			}
+		this.getNativeSystemPatchesEntity().then((nativeSystemPatchesEntity: any) => {
 			this._nativeSystemPatchesEntity = nativeSystemPatchesEntity;
-
 			this._nativeSystemPatchesEntity.ensureIndex("patchType", { unique: true }, ((err, indexName) => {
 				if (err || !indexName) {
 					reject("Error ensuring unique index");
@@ -74,17 +67,20 @@ export class MongoDBPatch implements IDBPatch {
 				}
 				resolve(true);
 			}));
+		}).catch((error: any) => {
+			reject(error);
 		});
 	}
+	protected abstract getNativeSystemPatchesEntity(): any;
 
-	private acquireLockAsyncWrapper(finishUpdatedLockStatusCallback: { (err: any, result?: any): void; }) {
-		this.updateLockStatusAsyncWrapper(finishUpdatedLockStatusCallback, LockStatus.Unlocked, LockStatus.Locked, null);
+	private acquireLockAsync(finishUpdatedLockStatusCallback: { (err: any, result?: any): void; }) {
+		this.updateLockStatusAsync(finishUpdatedLockStatusCallback, LockStatus.Unlocked, LockStatus.Locked, null);
 	}
-	private releaseLockAndUpdatePatchesAsyncWrapper(finishUpdatedLockStatusCallback: { (err: any, result?: any): void; }, newPatches: string[]) {
-		this.updateLockStatusAsyncWrapper(finishUpdatedLockStatusCallback, LockStatus.Locked, LockStatus.Unlocked, newPatches);
+	private releaseLockAndUpdatePatchesAsync(finishUpdatedLockStatusCallback: { (err: any, result?: any): void; }, newPatches: string[]) {
+		this.updateLockStatusAsync(finishUpdatedLockStatusCallback, LockStatus.Locked, LockStatus.Unlocked, newPatches);
 	}
 
-	private updateLockStatusAsyncWrapper(finishUpdatedLockStatusCallback: { (err: any, result?: any): void; }, currentStatus: LockStatus, newStatus: LockStatus, newPatches: string[]) {
+	private updateLockStatusAsync(finishUpdatedLockStatusCallback: { (err: any, result?: any): void; }, currentStatus: LockStatus, newStatus: LockStatus, newPatches: string[]) {
 		this.updateLockStatus(currentStatus, newStatus, newPatches).then((result: any) => {
 			finishUpdatedLockStatusCallback(null, result);
 		}).catch((error: any) => {
@@ -100,7 +96,7 @@ export class MongoDBPatch implements IDBPatch {
 		var setClause = {
 			$set: {
 				lock: newStatus,
-				patchType: MongoDBPatch.PatchType
+				patchType: AMongoDBPatch.PatchType
 			}
 		};
 		if (newPatches) {

@@ -18,7 +18,7 @@ export class VIESVatProviderAdapter implements IVatProvider {
 			try {
 				this.checkVATCore(resolve, reject);
 			} catch (e) {
-				Logger.getInstance().logError("Error running VIES SOAP Service", {countryCode: countryCode, vat: vat}, e);
+				Logger.getInstance().logError("Error running VIES SOAP Service", { countryCode: countryCode, vat: vat }, e);
 				reject(new ErrorContainer(ErrorCode.VatProviderErrorCheckingVat, e));
 			}
 		});
@@ -38,11 +38,11 @@ export class VIESVatProviderAdapter implements IVatProvider {
 						reject(new ErrorContainer(ErrorCode.VatProviderInvalidVat));
 					}
 					else {
-						var vatDetails : VatDetailsDO = new VatDetailsDO(result.countryCode, result.vatNumber, result.name, result.address);
+						var vatDetails: VatDetailsDO = new VatDetailsDO(result.countryCode, result.vatNumber, result.name, result.address);
 						resolve(vatDetails);
 					}
 				}
-			}, {timeout: 5000});
+			}, { timeout: 5000 });
 		});
 	}
 }

@@ -18,7 +18,7 @@ export class UnitPalBootstrap {
 		dbPatch.applyPatches().then((result: any) => {
 			callback();
 		}).catch((error: any) => {
-			Logger.getInstance().logError("Error bootstrapping database", {step: "Bootstrap"}, error);
+			Logger.getInstance().logError("Error bootstrapping database", { step: "Bootstrap" }, error);
 			callback();
 		});
 	}
@@ -28,7 +28,7 @@ export class UnitPalBootstrap {
 			var logInitializer: ILogInitializer = logsInitFactory.getLogInitializer();
 			logInitializer.initLogger();
 		} catch (e) {
-			Logger.getInstance().logError("Error bootstrapping logging", {step: "Bootstrap"}, e);
+			Logger.getInstance().logError("Error bootstrapping logging", { step: "Bootstrap" }, e);
 		}
 	}
 }

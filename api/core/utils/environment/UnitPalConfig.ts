@@ -24,9 +24,9 @@ export class UnitPalConfig {
 	}
 	private updateAppEnvironment() {
 		switch (sails.config.environment) {
-			case 'development' : 
+			case 'development':
 				this._appEnvironment = AppEnvironmentType.Development;
-			case 'test' : 
+			case 'test':
 				this._appEnvironment = AppEnvironmentType.Test;
 			default:
 				this._appEnvironment = AppEnvironmentType.Production;
@@ -50,7 +50,7 @@ export class UnitPalConfig {
 		}
 		this._emailProviderSettings = sails.config.unitPalConfig.emailService.settings;
 	}
-	
+
 
 	public getAppEnvironment(): AppEnvironmentType {
 		return this._appEnvironment;

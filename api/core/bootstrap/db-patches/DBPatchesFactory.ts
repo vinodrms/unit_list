@@ -1,6 +1,6 @@
 import {UnitPalConfig, DatabaseType} from '../../utils/environment/UnitPalConfig';
 import {IDBPatch} from './IDBPatch';
-import {MongoDBPatch} from './mongo/MongoDBPatch';
+import {SailsMongoDBPatch} from './mongo/SailsMongoDBPatch';
 
 export class DBPatchesFactory {
 	private _databaseType: DatabaseType;
@@ -11,7 +11,7 @@ export class DBPatchesFactory {
 	getDBPatch(): IDBPatch {
 		switch (this._databaseType) {
 			default:
-				return new MongoDBPatch();
+				return new SailsMongoDBPatch();
 		}
 	}
 }
