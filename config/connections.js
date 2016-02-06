@@ -24,35 +24,35 @@ module.exports.connections = {
         adapter: 'sails-disk'
     },
     mongodbdev: {
-        adapter   : 'sails-mongo',
-        host      : 'localhost',
-        port      : 27017,
-        user      : '',
-        password  : '',
-        database  : 'UnitPalDev'
+        adapter: 'sails-mongo',
+        host: 'localhost',
+        port: 27017,
+        user: '',
+        password: '',
+        database: 'UnitPalDev'
     },
     mongodbtest: {
-        adapter   : 'sails-mongo',
-        host      : 'localhost',
-        port      : 27017,
-        user      : '',
-        password  : '',
-        database  : 'UnitPalTest'
+        adapter: 'sails-mongo',
+        host: 'localhost',
+        port: 27017,
+        user: '',
+        password: '',
+        database: 'UnitPalTest'
     },
     mongodbprod: {
-        adapter   : 'sails-mongo',
-        host      : 'localhost',
-        port      : 27017,
-        user      : '',
-        password  : '',
-        database  : 'UnitPalProd'
+        adapter: 'sails-mongo',
+        host: 'localhost',
+        port: 27017,
+        user: '',
+        password: '',
+        database: 'UnitPalProd'
     },
 	mongodbazure: {
-        adapter   : 'sails-mongo',
-        host      : 'ds054118.mongolab.com',
-        port      : 54118,
-        user      : 'threeangle',
-        password  : 'TestTest,01',
-        database  : 'MongoLabUnitPalProd'
-    }
+		adapter: 'sails-mongo',
+		host: 'ds054128.mongolab.com',
+		port: 54128,
+		user: 'threeangle',
+		password: 'TH64__djaj()21UPal',
+		database: 'unitpalazure'
+	}
 };
