@@ -49,10 +49,10 @@ module.exports.connections = {
     },
 	mongodbazure: {
 		adapter: 'sails-mongo',
-		host: 'ds054128.mongolab.com',
-		port: 54128,
-		user: 'threeangle',
-		password: 'TH64__djaj()21UPal',
-		database: 'unitpalazure'
+		host: process.env.MONGO_HOST,
+		port: process.env.MONGO_PORT,
+		user: process.env.MONGO_USER,
+		password: process.env.MONGO_PASSWD,
+		database: process.env.MONGO_DB
 	}
 };
