@@ -46,7 +46,7 @@ export class HotelSignUp {
 		async.waterfall([
 			((finishAddHotelCallback) => {
 				var hotelRepository: IHotelRepository = this._appContext.getRepositoryFactory().getHotelRepository();
-				hotelRepository.addHotelAsyncWrapper(defaultHotelData, finishAddHotelCallback);
+				hotelRepository.addHotelAsync(defaultHotelData, finishAddHotelCallback);
 			}),
 			((savedHotel: HotelDO, finishSendActivationEmailCallback) => {
 				this._savedHotel = savedHotel;
@@ -54,7 +54,7 @@ export class HotelSignUp {
 				var templateBuilder = new AccountActivationEmailTemplateBuilder(activationEmailTemplateDO);
 				var emailMetadataDO = this.getEmailMetadataDO();
 				var emailService: AEmailService = this._appContext.getServiceFactory().getEmailService(emailMetadataDO, templateBuilder);
-				emailService.buildEmailContentAndSendAsyncWrapper(finishSendActivationEmailCallback);
+				emailService.buildEmailContentAndSendAsync(finishSendActivationEmailCallback);
 			})
 		], ((error: any, emailSendResult: any) => {
 			if (error) {
