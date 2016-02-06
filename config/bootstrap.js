@@ -9,9 +9,11 @@
  * http://sailsjs.org/#!/documentation/reference/sails.config/sails.config.bootstrap.html
  */
 
-module.exports.bootstrap = function(cb) {
+var UnitPalBootstrapImport = require('../api/core/bootstrap/UnitPalBootstrap');
 
-  // It's very important to trigger this callback method when you are finished
-  // with the bootstrap!  (otherwise your server will never lift, since it's waiting on the bootstrap)
-  cb();
+module.exports.bootstrap = function (cb) {
+	// It's very important to trigger this callback method when you are finished
+	// with the bootstrap!  (otherwise your server will never lift, since it's waiting on the bootstrap)
+	var unitPalBootstrap = new UnitPalBootstrapImport.UnitPalBootstrap();
+	unitPalBootstrap.bootstrap(cb);
 };

@@ -1,30 +1,31 @@
-import BaseControllerImport = require('./base/BaseController');
-import BaseController = BaseControllerImport.BaseController;
+import {BaseController} from './base/BaseController';
+import {AppEnvironmentType} from '../core/utils/environment/UnitPalConfig';
+import {AppContext} from '../core/utils/AppContext';
 
 class AppViewsController extends BaseController {
-	protected _exportedMethods: any = [
-    	'getExternalView',
-		'getInternalView'
-    ];
-
-	public getExternalView(req:Express.Request, res:Express.Response) {
-		var isDevelopmentEnvironment = this.isDevelopmentEnvironment();
+	public getExternalView(req: Express.Request, res: Express.Response) {
+		var isDevelopmentEnvironment = this.isDevelopmentEnvironment(req);
         res.view("external", {
-			isDevelopmentEnvironment : isDevelopmentEnvironment
+			isDevelopmentEnvironment: isDevelopmentEnvironment
         });
 	}
-	public getInternalView(req:Express.Request, res:Express.Response) {
-		var isDevelopmentEnvironment = this.isDevelopmentEnvironment();
+	public getInternalView(req: Express.Request, res: Express.Response) {
+		var isDevelopmentEnvironment = this.isDevelopmentEnvironment(req);
         res.view("internal", {
-			isDevelopmentEnvironment : isDevelopmentEnvironment
+			isDevelopmentEnvironment: isDevelopmentEnvironment
         });
 	}
-	private isDevelopmentEnvironment() : boolean {
-        if(sails.config.environment == 'development')
-            return true;
-        return false;
+	private isDevelopmentEnvironment(req: Express.Request): boolean {
+		var appContext: AppContext = req.appContext;
+		if (appContext.getUnitPalConfig().getAppEnvironment() == AppEnvironmentType.Development) {
+			return true;
+		}
+		return false;
     }
 }
 
-var controller = new AppViewsController();
-module.exports = controller.exports();
+var appViewsController = new AppViewsController();
+module.exports = {
+	getExternalView: appViewsController.getExternalView.bind(appViewsController),
+	getInternalView: appViewsController.getInternalView.bind(appViewsController)
+}
