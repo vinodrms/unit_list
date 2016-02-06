@@ -1,8 +1,10 @@
-import {AHotelRepository} from '../AHotelRepository';
+import {MongoErrorCodes} from '../../../common/base/BaseMongoRepository';
+import {ErrorContainer, ErrorCode} from '../../../../utils/responses/ResponseWrapper';
+import {Logger} from '../../../../utils/logging/Logger';
+import {AMongoHotelRepository} from './AMongoHotelRepository';
 import {HotelDO} from '../../data-objects/HotelDO';
-import {ResponseWrapper, ResponseStatusCode} from '../../../../utils/responses/ResponseWrapper';
 
-export class MongoHotelRepository extends AHotelRepository {
+export class MongoHotelRepository extends AMongoHotelRepository {
 	private _hotelsEntity: Sails.Model;
 
 	constructor() {
@@ -21,7 +23,18 @@ export class MongoHotelRepository extends AHotelRepository {
 			savedHotel.buildFromObject(createdHotel);
 			resolve(savedHotel);
 		}).catch((err: Error) => {
-			reject(new ResponseWrapper(ResponseStatusCode.HotelRepositoryErrorAddingHotel));
+			var errorCode = this.getMongoErrorCode(err);
+			if (errorCode == MongoErrorCodes.DuplicateKeyError) {
+				Logger.getInstance().logBusiness("Account already exists", hotel, err);
+				reject(new ErrorContainer(ErrorCode.HotelRepositoryAccountAlreadyExists, err));
+			}
+			else {
+				Logger.getInstance().logError("Error adding hotel", hotel, err);
+				reject(new ErrorContainer(ErrorCode.HotelRepositoryErrorAddingHotel, err));
+			}
 		});
+	}
+	cleanRepository(): Promise<Object> {
+		return this._hotelsEntity.destroy({});
 	}
 }

@@ -1,7 +1,8 @@
 import {VatDetailsDO} from '../VatDetailsDO';
 import {IVatProvider} from '../IVatProvider';
 
-import {ResponseWrapper, ResponseStatusCode} from '../../../utils/responses/ResponseWrapper';
+import {ErrorContainer, ErrorCode} from '../../../utils/responses/ResponseWrapper';
+import {Logger} from '../../../utils/logging/Logger';
 var soap = require('soap');
 
 export class VIESVatProviderAdapter implements IVatProvider {
@@ -17,7 +18,8 @@ export class VIESVatProviderAdapter implements IVatProvider {
 			try {
 				this.checkVATCore(resolve, reject);
 			} catch (e) {
-				reject(new ResponseWrapper(ResponseStatusCode.VatProviderErrorCheckingVat));
+				Logger.getInstance().logError("Error running VIES SOAP Service", {countryCode: countryCode, vat: vat}, e);
+				reject(new ErrorContainer(ErrorCode.VatProviderErrorCheckingVat, e));
 			}
 		});
 	}
@@ -27,11 +29,13 @@ export class VIESVatProviderAdapter implements IVatProvider {
 		soap.createClient(VIESVatProviderAdapter.EcEuropaWsdl, (err, client) => {
 			client.checkVat(args, function(err, result) {
 				if (err && !result) {
-					reject(new ResponseWrapper(ResponseStatusCode.VatProviderErrorCheckingVat));
+					Logger.getInstance().logBusiness("Error checking VAT", args, err);
+					reject(new ErrorContainer(ErrorCode.VatProviderErrorCheckingVat));
 				}
 				else {
 					if (!result.valid) {
-						reject(new ResponseWrapper(ResponseStatusCode.VatProviderInvalidVat));
+						Logger.getInstance().logBusiness("Invalid VAT", args);
+						reject(new ErrorContainer(ErrorCode.VatProviderInvalidVat));
 					}
 					else {
 						var vatDetails : VatDetailsDO = new VatDetailsDO(result.countryCode, result.vatNumber, result.name, result.address);

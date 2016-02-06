@@ -1,26 +1,22 @@
-import {ResponseStatusCode, ResponseWrapper} from '../../../utils/responses/ResponseWrapper';
+import {IEmailTemplateBuilder} from './IEmailTemplateBuilder';
+import {ErrorContainer, ErrorCode} from '../../../utils/responses/ResponseWrapper';
+import {Logger} from '../../../utils/logging/Logger';
 
 import path = require('path');
-import extend = require('extend');
 var EmailTemplates = require('swig-email-templates');
 
-export class EmailTemplateDO {
-	destinationEmail: string;
-	subject: string;
-}
-
-export abstract class AEmailTemplateBuilder {
+export abstract class AEmailTemplateBuilder implements IEmailTemplateBuilder {
 	private static HtmlPath = "custom/html";
 
-	constructor(protected _emailTemplateDO: EmailTemplateDO) {
+	constructor() {
 	}
 	protected abstract getHtmlName(): string;
 	protected abstract getContent(): Object;
 
-	public buildEmailContentAsyncWrapper(finishBuildEmailContentCallback: { (err: ResponseWrapper, emailContent?: string): void; }) {
+	public buildEmailContentAsyncWrapper(finishBuildEmailContentCallback: { (err: any, emailContent?: string): void; }) {
 		this.buildEmailContent().then((emailContent: string) => {
 			finishBuildEmailContentCallback(null, emailContent);
-		}).catch((err: ResponseWrapper) => {
+		}).catch((err: any) => {
 			finishBuildEmailContentCallback(err);
 		});
 	}
@@ -35,10 +31,11 @@ export abstract class AEmailTemplateBuilder {
 		};
 		var templates = new EmailTemplates(options);
 		var templatePath = this.getEmailTemplatePath();
-		var emailData = extend(true, this._emailTemplateDO, this.getContent());
+		var emailData = this.getContent();
 		templates.render(templatePath, emailData, (err: any, html: string, text: string) => {
 			if (err || !html) {
-				reject(new ResponseWrapper(ResponseStatusCode.EmailTemplateBuilderProblemBuildingContent));
+				Logger.getInstance().logError("Error rendering email template", { emailData: emailData, options: options }, err);
+				reject(new ErrorContainer(ErrorCode.EmailTemplateBuilderProblemBuildingContent, err));
 				return;
 			}
 			resolve(html);

@@ -1,5 +1,5 @@
 import {IDBPatch} from '../IDBPatch';
-import {MongoPatchApplierComposite} from './patch-applier/MongoPatchApplierComposite';
+import {MongoPatchApplier} from './patch-applier/MongoPatchApplier';
 import async = require("async");
 
 export enum LockStatus {
@@ -8,10 +8,10 @@ export enum LockStatus {
 }
 
 export class MongoDBPatch implements IDBPatch {
-	private static PatchType = "MongoDBPatch";
+	private static PatchType: string = "MongoDBPatch";
 	private _systemPatchesEntity: Sails.Model;
 	private _nativeSystemPatchesEntity: any;
-	private _appliedPatches: string[];
+	private _appliedPatches: number[];
 
 	constructor() {
 		this._systemPatchesEntity = sails.models.systempatchesentity;
@@ -31,7 +31,7 @@ export class MongoDBPatch implements IDBPatch {
 				this.acquireLockAsyncWrapper(finishUpdatedLockStatusCallback);
 			}),
 			((result: any, finishApplyingPatchCallback) => {
-				var patchApplier: MongoPatchApplierComposite = new MongoPatchApplierComposite(this._appliedPatches);
+				var patchApplier: MongoPatchApplier = new MongoPatchApplier(this._appliedPatches);
 				patchApplier.applyAsyncWrapper(finishApplyingPatchCallback);
 			}),
 			((newPatches: string[], finishUpdatedLockStatusCallback) => {

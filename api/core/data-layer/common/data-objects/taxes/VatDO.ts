@@ -8,7 +8,7 @@ export class VatDO extends BaseDO {
 	name: string;
 	value: number;
 
-	protected getPrimitiveProperties(): string[] {
+	protected getPrimitivePropertyKeys(): string[] {
 		return ["id", "name", "value"];
 	}
 }

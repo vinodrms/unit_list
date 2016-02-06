@@ -1,21 +1,18 @@
-import {IMongoPatchApplier} from './IMongoPatchApplier';
-import {MongoPatch1} from './patches/MongoPatch1';
-
+import {IMongoPatchApplier} from './utils/IMongoPatchApplier';
+import {AMongoPatch, MongoPatcheType} from './utils/AMongoPatch';
+import {MongoPatch0} from './patches/MongoPatch0';
 import async = require("async");
 import _ = require("underscore");
 
-export class MongoPatchApplierComposite implements IMongoPatchApplier {
-	private _mongoPatchAppliers: IMongoPatchApplier[];
+export class MongoPatchApplier implements IMongoPatchApplier {
+	private _mongoPatchAppliers: AMongoPatch[];
 
-	constructor(private _appliedPatches: string[]) {
+	constructor(private _appliedPatches: MongoPatcheType[]) {
 		this.initPatchAppliers();
 	}
-	private initPatchAppliers() {
-		this._mongoPatchAppliers = [new MongoPatch1()];
 
-	}
-	public getPatchName(): string {
-		return "CompositePath";
+	private initPatchAppliers() {
+		this._mongoPatchAppliers = [new MongoPatch0()];
 	}
 	public applyAsyncWrapper(finishApplyingPatchCallback: { (err: any, result?: string[]): void; }) {
 		this.apply().then((result: any) => {
@@ -36,10 +33,11 @@ export class MongoPatchApplierComposite implements IMongoPatchApplier {
 				return applierIndex < this._mongoPatchAppliers.length;
 			}),
 			((finishApplySinglePatchCallback: any) => {
-				var patchApplier: IMongoPatchApplier = this._mongoPatchAppliers[applierIndex++];
-				if (!_.contains(this._appliedPatches, patchApplier.getPatchName())) {
+				var patchApplier: AMongoPatch = this._mongoPatchAppliers[applierIndex++];
+
+				if (!_.contains(this._appliedPatches, patchApplier.getPatchType())) {
 					patchApplier.apply().then((result: any) => {
-						this._appliedPatches.push(patchApplier.getPatchName());
+						this._appliedPatches.push(patchApplier.getPatchType());
 						finishApplySinglePatchCallback(null, result);
 					}).catch((err: Error) => {
 						finishApplySinglePatchCallback(err);

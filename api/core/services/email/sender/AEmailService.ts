@@ -1,24 +1,23 @@
 import {UnitPalConfig} from '../../../utils/environment/UnitPalConfig';
-import {AEmailTemplateBuilder} from '../content-builder/AEmailTemplateBuilder';
+import {IEmailTemplateBuilder} from '../content-builder/IEmailTemplateBuilder';
 import {AppContext} from '../../../utils/AppContext';
-import {ResponseStatusCode, ResponseWrapper} from '../../../utils/responses/ResponseWrapper';
 
 import async = require("async");
 
-export class EmailSenderDO {
+export class EmailMetadataDO {
 	destinationEmail: string;
 	subject: string;
 }
 
-export abstract class AEmailSender {
+export abstract class AEmailService {
 	protected _emailContent: string;
 
-	constructor(protected _unitPalConfig: UnitPalConfig, protected _emailSenderDO: EmailSenderDO, private _templateBuilder: AEmailTemplateBuilder) {
+	constructor(protected _unitPalConfig: UnitPalConfig, protected _emailMetadataDO: EmailMetadataDO, private _templateBuilder: IEmailTemplateBuilder) {
 	}
-	public buildEmailContentAndSendAsyncWrapper(finishBuildAndSendEmailContentCallback: { (err: ResponseWrapper, result?: string): void; }) {
+	public buildEmailContentAndSendAsyncWrapper(finishBuildAndSendEmailContentCallback: { (err: any, result?: string): void; }) {
 		this.buildEmailContentAndSend().then((result: string) => {
 			finishBuildAndSendEmailContentCallback(null, result);
-		}).catch((err: ResponseWrapper) => {
+		}).catch((err: any) => {
 			finishBuildAndSendEmailContentCallback(err);
 		});
 	}
@@ -46,11 +45,11 @@ export abstract class AEmailSender {
 			}
 		}));
 	}
-	
-	private sendEmailAsyncWrapper(finishSendEmailCallback: { (err: ResponseWrapper, emailContent?: string): void; }) {
+
+	private sendEmailAsyncWrapper(finishSendEmailCallback: { (err: any, emailContent?: string): void; }) {
 		this.sendEmail().then((result: any) => {
 			finishSendEmailCallback(null, result);
-		}).catch((response: ResponseWrapper) => {
+		}).catch((response: any) => {
 			finishSendEmailCallback(response);
 		});
 	}

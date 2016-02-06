@@ -14,7 +14,7 @@ export class TaxDO extends BaseDO {
 	type: TaxType;
 	value: number;
 
-	protected getPrimitiveProperties(): string[] {
+	protected getPrimitivePropertyKeys(): string[] {
 		return ["id", "name", "type", "value"];
 	}
 }

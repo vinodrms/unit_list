@@ -17,15 +17,15 @@ export class HotelDO extends BaseDO {
 	users: UserDO[];
 	ccy: string;
 	taxes: HotelTaxesDO;
-	amenities: string[];
+	amenityIds: string[];
 	customAmenities: AmenityDO[];
-	paymentMethods: string[];
+	paymentMethodIds: string[];
 	configurationStatus: boolean;
 	timezone: string;
 	operationHours: OperationHoursDO;
 
-	protected getPrimitiveProperties(): string[] {
-		return ["id", "logoUrl", "ccy", "amenities", "paymentMethods", "configurationStatus", "timezone"];
+	protected getPrimitivePropertyKeys(): string[] {
+		return ["id", "logoUrl", "ccy", "amenityIds", "paymentMethodIds", "configurationStatus", "timezone"];
 	}
 	public buildFromObject(object: Object) {
 		super.buildFromObject(object);

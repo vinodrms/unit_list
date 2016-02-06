@@ -7,7 +7,7 @@ export class GeoLocationDO extends BaseDO {
 	lng: number;
 	lat: number;
 
-	protected getPrimitiveProperties(): string[] {
+	protected getPrimitivePropertyKeys(): string[] {
 		return ["lng", "lat"];
 	}
 }

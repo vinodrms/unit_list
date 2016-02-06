@@ -9,7 +9,7 @@ export class AddressDO extends BaseDO {
 	country: string;
 	postalCode: string;
 
-	protected getPrimitiveProperties(): string[] {
+	protected getPrimitivePropertyKeys(): string[] {
 		return ["streetAddress", "city", "country", "postalCode"];
 	}
 }

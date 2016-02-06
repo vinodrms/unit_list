@@ -30,13 +30,13 @@ class HotelsEntity extends BasePersistentEntity {
 				type: 'json',
 				defaultsTo: {}
 			},
-			amenities: {
+			amenityIds: {
 				type: 'array',
 			},
 			customAmenities: {
 				type: 'array',
 			},
-			paymentMethods: {
+			paymentMethodIds: {
 				type: 'array',
 			},
 			configurationStatus: {

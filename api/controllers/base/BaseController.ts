@@ -1,4 +1,8 @@
-import {ResponseWrapper, ResponseStatusCode} from '../../core/utils/responses/ResponseWrapper';
+import {ErrorCode, ResponseWrapper} from '../../core/utils/responses/ResponseWrapper';
+import {ErrorParser} from '../../core/utils/responses/ErrorParser';
+import {Logger} from '../../core/utils/logging/Logger';
+
+import _ = require("underscore");
 
 export class BaseController {
 	protected precheckPOSTParameters(req: Express.Request, res: Express.Response, rootParameter: string, parameters: string[]): boolean {
@@ -19,8 +23,9 @@ export class BaseController {
 			}
 		});
 		if (!result) {
-			var wrapper = new ResponseWrapper(ResponseStatusCode.InvalidRequestParameters);
-			this.returnResponse(req, res, wrapper);
+			Logger.getInstance().logError("Invalid request parameters", { url: req.url, actualParameters: req[reqField], requiredParameters: parameters }, new Error());
+			var responseWrapper: ResponseWrapper = new ResponseWrapper(ErrorCode.InvalidRequestParameters);
+			this.returnResponse(req, res, responseWrapper);
 			return false;
 		}
 		return true;
@@ -38,7 +43,19 @@ export class BaseController {
 		return true;
 	}
 
-	protected returnResponse(req: Express.Request, res: Express.Response, wrapper: ResponseWrapper) {
-		res.json(wrapper.buildResponse(req.sessionContext.locale));
+	protected returnSuccesfulResponse(req: Express.Request, res: Express.Response, data: any) {
+		var responseWrapper = new ResponseWrapper(ErrorCode.Ok, data);
+		this.returnResponse(req, res, responseWrapper);
+	}
+	protected returnErrorResponse(req: Express.Request, res: Express.Response, error: any, defaultErrorCode: ErrorCode) {
+		var errorParser: ErrorParser = new ErrorParser(error, defaultErrorCode);
+		if (errorParser.isUncatchedError()) {
+			Logger.getInstance().logError("Uncatched error", { url: req.url, body: req.body, query: req.query }, error);
+		}
+		this.returnResponse(req, res, errorParser.getResponseWrapper());
+	}
+
+	private returnResponse(req: Express.Request, res: Express.Response, responseWrapper: ResponseWrapper) {
+		return res.json(responseWrapper.buildJson(req.sessionContext.locale));
 	}
 }

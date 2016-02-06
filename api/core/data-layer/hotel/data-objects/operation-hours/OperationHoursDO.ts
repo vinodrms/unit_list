@@ -10,7 +10,7 @@ export class OperationHoursDO extends BaseDO {
 	checkOutFrom: number;
 	checkOutTo: number;
 
-	protected getPrimitiveProperties(): string[] {
+	protected getPrimitivePropertyKeys(): string[] {
 		return ["checkInFrom", "checkInTo", "checkOutFrom", "checkOutTo"];
 	}
 }

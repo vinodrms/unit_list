@@ -13,7 +13,7 @@ export class HotelContactDetailsDO extends BaseDO {
 	email: string;
 	socialLinks: SocialLinksDO;
 
-	protected getPrimitiveProperties(): string[] {
+	protected getPrimitivePropertyKeys(): string[] {
 		return ["name", "phone", "fax", "email"];
 	}
 

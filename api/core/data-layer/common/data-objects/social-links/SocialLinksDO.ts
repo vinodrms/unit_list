@@ -8,7 +8,7 @@ export class SocialLinksDO extends BaseDO {
 	linkedinUrl: string;
 	twitterUrl: string;
 
-	protected getPrimitiveProperties(): string[] {
+	protected getPrimitivePropertyKeys(): string[] {
 		return ["facebookUrl", "linkedinUrl", "twitterUrl"];
 	}
 }

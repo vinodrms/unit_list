@@ -1,51 +1,70 @@
 import {Locales, Translation} from '../localization/Translation';
 
-export enum ResponseStatusCode {
+export enum ErrorCode {
 	Ok,
+	InternalServerError,
 	InvalidRequestParameters,
 	VatProviderErrorCheckingVat,
 	VatProviderNotInEu,
 	VatProviderInvalidVat,
 	EmailTemplateBuilderProblemFindingTemplatesDirectory,
 	EmailTemplateBuilderProblemBuildingContent,
-	SmtpEmailSenderErrorSendingEmail,
+	SmtpEmailServiceErrorSendingEmail,
 	HotelSignUpError,
-	HotelRepositoryErrorAddingHotel
+	HotelRepositoryAccountAlreadyExists,
+	HotelRepositoryErrorAddingHotel,
+
+	NUM_OF_ITEMS
 }
 
-var ResponseMessage: { [index: number]: string; } = {};
-ResponseMessage[ResponseStatusCode.Ok] = "Ok";
-ResponseMessage[ResponseStatusCode.InvalidRequestParameters] = "Invalid Request Parameters";
-ResponseMessage[ResponseStatusCode.VatProviderErrorCheckingVat] = "Problem checking the VAT";
-ResponseMessage[ResponseStatusCode.VatProviderNotInEu] = "The VAT is not in EU";
-ResponseMessage[ResponseStatusCode.VatProviderInvalidVat] = "Invalid VAT format";
-ResponseMessage[ResponseStatusCode.EmailTemplateBuilderProblemFindingTemplatesDirectory] = "Error sending email: the content was not found on the server. Please contact the Administrator.";
-ResponseMessage[ResponseStatusCode.EmailTemplateBuilderProblemBuildingContent] = "Error sending email: problem building content. Please contact the Administrator.";
-ResponseMessage[ResponseStatusCode.SmtpEmailSenderErrorSendingEmail] = "Error sending email. Please contact the Administrator.";
-ResponseMessage[ResponseStatusCode.HotelSignUpError] = "Error signing up. Please try again.";
-ResponseMessage[ResponseStatusCode.HotelRepositoryErrorAddingHotel] = "Error adding the information. Please try again.";
+var ErrorMessage: { [index: number]: string; } = {};
+ErrorMessage[ErrorCode.Ok] = "Ok";
+ErrorMessage[ErrorCode.InternalServerError] = "Internal Server Error.";
+ErrorMessage[ErrorCode.InvalidRequestParameters] = "Invalid Request Parameters";
+ErrorMessage[ErrorCode.VatProviderErrorCheckingVat] = "Problem checking the VAT";
+ErrorMessage[ErrorCode.VatProviderNotInEu] = "The VAT is not in EU";
+ErrorMessage[ErrorCode.VatProviderInvalidVat] = "Invalid VAT format";
+ErrorMessage[ErrorCode.EmailTemplateBuilderProblemFindingTemplatesDirectory] = "Error sending email: the content was not found on the server. Please contact the Administrator.";
+ErrorMessage[ErrorCode.EmailTemplateBuilderProblemBuildingContent] = "Error sending email: problem building content. Please contact the Administrator.";
+ErrorMessage[ErrorCode.SmtpEmailServiceErrorSendingEmail] = "Error sending email. Please contact the Administrator.";
+ErrorMessage[ErrorCode.HotelSignUpError] = "Error signing up. Please try again.";
+ErrorMessage[ErrorCode.HotelRepositoryAccountAlreadyExists] = "An account with this email already exists.";
+ErrorMessage[ErrorCode.HotelRepositoryErrorAddingHotel] = "Error adding the information. Please try again.";
+
+
+export class ErrorContainer {
+	public error: Error;
+	public code: ErrorCode;
+	constructor(code: ErrorCode, error?: Error) {
+		this.code = code;
+		this.error = error;
+		if (!this.error) {
+			this.error = new Error();
+		}
+	}
+}
 
 export class ResponseWrapper {
-	statusCode : ResponseStatusCode;
-	message : string;
-	data : any;
-	
-	constructor(statusCode : ResponseStatusCode, data? : any) {
+	statusCode: ErrorCode;
+	message: string;
+	data: any;
+
+	constructor(statusCode: ErrorCode, data?: any) {
 		this.statusCode = statusCode;
-		this.message = ResponseMessage[statusCode];
+		this.message = ErrorMessage[statusCode];
 		this.data = data;
-		if(!this.data) {
+		if (!this.data) {
 			this.data = {};
 		}
 	}
-	
-	public buildResponse(locale : Locales) : Object {
-		if(! _.isUndefined(locale)) {
-			this.translateMessage(locale);	
+
+	public buildJson(locale: Locales): Object {
+		if (!_.isUndefined(locale)) {
+			this.translateMessage(locale);
 		}
 		return this;
 	}
-	private translateMessage(locale : Locales) {
+	private translateMessage(locale: Locales) {
 		var translation = new Translation(locale);
 		this.message = translation.getTranslation(this.message);
 	}

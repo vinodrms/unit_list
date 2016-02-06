@@ -8,7 +8,7 @@ export class AmenityDO extends BaseDO {
 	name: string;
 	iconUrl: string;
 
-	protected getPrimitiveProperties(): string[] {
+	protected getPrimitivePropertyKeys(): string[] {
 		return ["id", "name", "iconUrl"];
 	}
 }

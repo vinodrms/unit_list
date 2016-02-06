@@ -1,4 +1,4 @@
-import {EmailTemplateDO, AEmailTemplateBuilder} from '../AEmailTemplateBuilder';
+import {AEmailTemplateBuilder} from '../AEmailTemplateBuilder';
 
 export class AccountActivationEmailTemplateDO {
 	firstName: string;
@@ -8,8 +8,8 @@ export class AccountActivationEmailTemplateDO {
 }
 
 export class AccountActivationEmailTemplateBuilder extends AEmailTemplateBuilder {
-	constructor(emailDO: EmailTemplateDO, private _activationEmailDO: AccountActivationEmailTemplateDO) {
-		super(emailDO);
+	constructor(private _activationEmailDO: AccountActivationEmailTemplateDO) {
+		super();
 	}
 	protected getContent(): Object {
 		return this._activationEmailDO;

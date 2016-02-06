@@ -1,13 +1,13 @@
 import _ = require("underscore");
 
 export abstract class BaseDO {
-	protected abstract getPrimitiveProperties(): string[];
+	protected abstract getPrimitivePropertyKeys(): string[];
 
 	public buildFromObject(object: Object) {
 		if (!object) {
 			return;
 		}
-		var primitiveProperties: string[] = this.getPrimitiveProperties();
+		var primitiveProperties: string[] = this.getPrimitivePropertyKeys();
 		primitiveProperties.forEach((property: string) => {
 			if (object.hasOwnProperty(property)) {
 				this[property] = object[property];

@@ -1,60 +1,60 @@
-import {ResponseWrapper, ResponseStatusCode} from '../../utils/responses/ResponseWrapper';
+import {ErrorContainer, ErrorCode} from '../../utils/responses/ResponseWrapper';
+import {Logger} from '../../utils/logging/Logger';
 import {AppContext} from '../../utils/AppContext';
 import {SessionContext} from '../../utils/SessionContext';
 import {HotelDO} from '../../data-layer/hotel/data-objects/HotelDO';
 import {HotelContactDetailsDO} from '../../data-layer/hotel/data-objects/hotel-contact-details/HotelContactDetailsDO';
 import {UserDO, AccountStatus, UserRoles} from '../../data-layer/hotel/data-objects/user/UserDO';
 import {UserContactDetailsDO} from '../../data-layer/hotel/data-objects/user/UserContactDetailsDO';
-import {AHotelRepository} from '../../data-layer/hotel/repositories/AHotelRepository';
+import {IHotelRepository} from '../../data-layer/hotel/repositories/IHotelRepository';
 import {AccountActivationEmailTemplateBuilder, AccountActivationEmailTemplateDO} from '../../services/email/content-builder/custom/AccountActivationEmailTemplateBuilder';
-import {EmailTemplateDO} from '../../services/email/content-builder/AEmailTemplateBuilder';
-import {AEmailSender, EmailSenderDO} from '../../services/email/sender/AEmailSender';
+import {AEmailService, EmailMetadataDO} from '../../services/email/sender/AEmailService';
 
 import async = require("async");
 
 export class HotelSignUpDO {
-	hotelName : string;
-	email : string;
-	password : string;
-	firstName : string;
-	lastName : string;
-	
-	public static getRequiredProperties() : string[] {
+	hotelName: string;
+	email: string;
+	password: string;
+	firstName: string;
+	lastName: string;
+
+	public static getRequiredProperties(): string[] {
 		return ["hotelName", "email", "password", "firstName", "lastName"];
 	}
 }
 
 export class HotelSignUp {
-	private _savedHotel : HotelDO;
-	
-	constructor(private _appContext : AppContext, private _sessionContext : SessionContext, private _signUpDO : HotelSignUpDO) {
+	private _savedHotel: HotelDO;
+
+	constructor(private _appContext: AppContext, private _sessionContext: SessionContext, private _signUpDO: HotelSignUpDO) {
 	}
-	
-	public signUp() : Promise<string> {
+
+	public signUp(): Promise<string> {
 		return new Promise<string>((resolve, reject) => {
 			try {
 				this.signUpCore(resolve, reject);
 			} catch (e) {
-				reject(new ResponseWrapper(ResponseStatusCode.HotelSignUpError));
+				Logger.getInstance().logError("Error saving hotel", this._signUpDO, e);
+				reject(new ErrorContainer(ErrorCode.HotelSignUpError, e));
 			}
 		});
 	}
-	
+
 	private signUpCore(resolve, reject) {
 		var defaultHotelData = this.generateDefaultHotel();
 		async.waterfall([
 			((finishAddHotelCallback) => {
-				var hotelRepository: AHotelRepository = this._appContext.getRepositoryFactory().getHotelRepository();
+				var hotelRepository: IHotelRepository = this._appContext.getRepositoryFactory().getHotelRepository();
 				hotelRepository.addHotelAsyncWrapper(defaultHotelData, finishAddHotelCallback);
 			}),
 			((savedHotel: HotelDO, finishSendActivationEmailCallback) => {
 				this._savedHotel = savedHotel;
 				var activationEmailTemplateDO = this.getAccountActivationEmailTemplateDO();
-				var emailTemplateDO = this.getEmailTemplateDO();
-				var templateBuilder = new AccountActivationEmailTemplateBuilder(emailTemplateDO, activationEmailTemplateDO);
-				var emailSenderDO = this.getEmailSenderDO();
-				var emailSender : AEmailSender = this._appContext.getServiceFactory().getEmailSender(emailSenderDO, templateBuilder);
-				emailSender.buildEmailContentAndSendAsyncWrapper(finishSendActivationEmailCallback);
+				var templateBuilder = new AccountActivationEmailTemplateBuilder(activationEmailTemplateDO);
+				var emailMetadataDO = this.getEmailMetadataDO();
+				var emailService: AEmailService = this._appContext.getServiceFactory().getEmailService(emailMetadataDO, templateBuilder);
+				emailService.buildEmailContentAndSendAsyncWrapper(finishSendActivationEmailCallback);
 			})
 		], ((error: any, emailSendResult: any) => {
 			if (error) {
@@ -65,7 +65,7 @@ export class HotelSignUp {
 			}
 		}));
 	}
-	private generateDefaultHotel() : HotelDO {
+	private generateDefaultHotel(): HotelDO {
 		// TODO: generate activation code, encrypt password 
 		var hotel = new HotelDO();
 		hotel.contactDetails = new HotelContactDetailsDO();
@@ -83,13 +83,14 @@ export class HotelSignUp {
 		user.password = this._signUpDO.password;
 		user.roles = [UserRoles.Administrator];
 		hotel.users.push(user);
-		hotel.amenities = [];
+		hotel.amenityIds = [];
 		hotel.customAmenities = [];
-		hotel.paymentMethods = [];
+		hotel.paymentMethodIds = [];
 		hotel.configurationStatus = false;
 		return hotel;
 	}
 	private getAccountActivationEmailTemplateDO(): AccountActivationEmailTemplateDO {
+		// TODO: update activation link
 		return {
 			activationLink: "dsadsajkdaghjdgajjdhas",
 			firstName: this._signUpDO.firstName,
@@ -97,13 +98,7 @@ export class HotelSignUp {
 			email: this._signUpDO.email
 		};
 	}
-	private getEmailTemplateDO() : EmailTemplateDO {
-		return {
-			destinationEmail: this._signUpDO.email,
-			subject: "UnitPal Account Activation"
-		}
-	}
-	private getEmailSenderDO(): EmailSenderDO {
+	private getEmailMetadataDO(): EmailMetadataDO {
 		return {
 			destinationEmail: this._signUpDO.email,
 			subject: "UnitPal Account Activation"

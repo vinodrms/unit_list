@@ -9,7 +9,7 @@ export class HotelTaxesDO extends BaseDO {
 	vats: VatDO[];
 	taxes: TaxDO[];
 
-	protected getPrimitiveProperties(): string[] {
+	protected getPrimitivePropertyKeys(): string[] {
 		return [];
 	}
 	public buildFromObject(object: Object) {

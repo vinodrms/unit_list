@@ -9,6 +9,7 @@ declare module Express{
     query : any;
 	sessionContext : any;
 	appContext : any;
+	url: any;
   }
   export interface Response{
     view(route:string);

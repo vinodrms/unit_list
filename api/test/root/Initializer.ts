@@ -1,9 +1,14 @@
-/// <reference path="../../typings/tsd.d.ts" />
+import {RepositoryCleanerWrapper} from '../db-initializers/RepositoryCleanerWrapper';
+import {UnitPalConfig} from '../../core/utils/environment/UnitPalConfig';
 
 require("sails-test-helper");
 
 before(function(done: any) {
-	// TODO : should clean the database before each test
-	console.log("Test initializer");
-	done();
+	var unitPalConfig = new UnitPalConfig();
+	var repositoryCleaner = new RepositoryCleanerWrapper(unitPalConfig);
+    repositoryCleaner.cleanRepository().then((result: any) => {
+        done();
+    }).catch((err: Error) => {
+        done(err.message);
+    });
 });

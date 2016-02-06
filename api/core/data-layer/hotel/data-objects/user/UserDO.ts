@@ -27,7 +27,7 @@ export class UserDO extends BaseDO {
 	lastLoggedIn: number;
 	language: Locales;
 
-	protected getPrimitiveProperties(): string[] {
+	protected getPrimitivePropertyKeys(): string[] {
 		return ["email", "password", "accountStatus", "activationCode", "activationExpiryTimestamp", "roles", "lastLoggedIn", "language"];
 	}
 

@@ -10,8 +10,8 @@ export class UserContactDetailsDO extends BaseDO {
 	firstName: string;
 	lastName: string;
 
-	protected getPrimitiveProperties(): string[] {
-		return ["phone", "email", "firstName", "lastName"];
+	protected getPrimitivePropertyKeys(): string[] {
+		return ["phone", "firstName", "lastName"];
 	}
 	public buildFromObject(object: Object) {
 		super.buildFromObject(object);

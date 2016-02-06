@@ -19,5 +19,5 @@ export class AppContext {
 	}
 	public getUnitPalConfig(): UnitPalConfig {
 		return this._unitPalConfig;
-	} 
+	}
 }

@@ -1,13 +1,14 @@
-import {IMongoPatchApplier} from '../IMongoPatchApplier';
+import {MongoPatcheType, AMongoPatch} from '../utils/AMongoPatch';
 
-export class MongoPatch1 implements IMongoPatchApplier {
+export class MongoPatch0 extends AMongoPatch {
 	private _hotelsEntity: Sails.Model;
 
 	constructor() {
+		super();
 		this._hotelsEntity = sails.models.hotelsentity;
 	}
-	public getPatchName(): string {
-		return "MongoPatch1";
+	public getPatchType(): MongoPatcheType {
+		return MongoPatcheType.CreateUniqueIndexOnHotel;
 	}
 	public apply(): Promise<any> {
 		return new Promise<Object>((resolve, reject) => {
@@ -18,12 +19,12 @@ export class MongoPatch1 implements IMongoPatchApplier {
 	private applyCore(resolve, reject) {
 		this._hotelsEntity.native((err, nativeHotelsEntity: any) => {
 			if (err || !nativeHotelsEntity) {
-				reject("Error getting native hotels collection");
+				reject(new Error("Error getting native hotels collection"));
 				return;
 			}
 			nativeHotelsEntity.ensureIndex("users.email", { unique: true }, ((err, indexName) => {
 				if (err || !indexName) {
-					reject("Error ensuring unique email for users index");
+					reject(new Error("Error ensuring unique email for users index"));
 					return;
 				}
 				resolve(true);

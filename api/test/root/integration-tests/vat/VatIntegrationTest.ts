@@ -4,7 +4,7 @@ import should = require('should');
 import {TestContext} from '../../../helpers/TestContext';
 import {IVatProvider} from '../../../../core/services/vat/IVatProvider';
 import {VatDetailsDO} from '../../../../core/services/vat/VatDetailsDO';
-import {ResponseWrapper} from '../../../../core/utils/responses/ResponseWrapper';
+import {ErrorContainer, ErrorCode} from '../../../../core/utils/responses/ResponseWrapper';
 
 describe("VAT Integration Tests", function() {
 	var vatProvider: IVatProvider;
@@ -23,14 +23,15 @@ describe("VAT Integration Tests", function() {
 				should.equal(vatDetails.getCountryCode(), "RO");
 				should.equal(vatDetails.getFullVatNumber(), "RO34121562");
 				done();
-			}).catch((error: ResponseWrapper) => {
+			}).catch((error: ErrorContainer) => {
 				done(error);
 			});
         });
 		it("Should return invalid company", function(done) {
 			vatProvider.checkVAT("RO", "999999999").then((vatDetails: VatDetailsDO) => {
 				done("Error: got company details even though the VAT is incorrect!");
-			}).catch((error: ResponseWrapper) => {
+			}).catch((error: ErrorContainer) => {
+				should.equal(error.code, ErrorCode.VatProviderInvalidVat);
 				done();
 			});
 		});

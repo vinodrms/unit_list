@@ -1,9 +1,10 @@
-import {ResponseStatusCode, ResponseWrapper} from '../../../../utils/responses/ResponseWrapper';
-import {AEmailSender, EmailSenderDO} from '../AEmailSender';
+import {ErrorContainer, ErrorCode} from '../../../../utils/responses/ResponseWrapper';
+import {Logger} from '../../../../utils/logging/Logger';
+import {AEmailService} from '../AEmailService';
 
 var email = require("emailjs");
 
-export class SmtpEmailSender extends AEmailSender {
+export class SmtpEmailService extends AEmailService {
 	protected sendEmail(): Promise<any> {
 		return new Promise<string>((resolve, reject) => {
 			this.sendEmailCore(resolve, reject);
@@ -22,15 +23,16 @@ export class SmtpEmailSender extends AEmailSender {
 		return {
 			text: "",
 			from: emailSettings.user,
-			to: this._emailSenderDO.destinationEmail,
-			subject: this._emailSenderDO.subject,
+			to: this._emailMetadataDO.destinationEmail,
+			subject: this._emailMetadataDO.subject,
 			attachment: [{ data: this._emailContent, alternative: true }]
 		};
 	}
 	private trySendingEmail(server: any, message: Object, resolve: any, reject: any) {
 		server.send(message, ((err) => {
 			if (err) {
-				reject(new ResponseWrapper(ResponseStatusCode.SmtpEmailSenderErrorSendingEmail));
+				Logger.getInstance().logError("Error sending email", this._emailMetadataDO, err);
+				reject(new ErrorContainer(ErrorCode.SmtpEmailServiceErrorSendingEmail, err));
 				return;
 			}
 			resolve(true);
