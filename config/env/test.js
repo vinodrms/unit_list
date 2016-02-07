@@ -4,9 +4,9 @@ module.exports = {
         connection: 'mongodbtest'
     },
     hookTimeout: 40000,
-    log: {
-        level: "silent"
-    },
+    // log: {
+    //     level: "silent"
+    // },
 	unitPalConfig: {
 		emailService: {
 			type: "mock",

@@ -3,8 +3,8 @@ module.exports = {
     models: {
         connection: 'mongodbprod'
     },
-    hookTimeout: 40000,
-    log: {
-        level: "silent"
-    }
+    hookTimeout: 40000//,
+    // log: {
+    //     level: "silent"
+    // }
 };

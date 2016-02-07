@@ -24,6 +24,7 @@ process.chdir(__dirname);
 
 // Ensure a "sails" can be located:
 (function() {
+	console.log(process.env);
   var sails;
   try {
     sails = require('sails');
