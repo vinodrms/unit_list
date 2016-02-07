@@ -16,11 +16,13 @@ export class UnitPalConfig {
 	private _databaseType: DatabaseType;
 	private _emailProviderType: EmailProviderType;
 	private _emailProviderSettings: Object;
+	private _appContextRoot: string;
 
 	constructor() {
 		this.updateAppEnvironment();
 		this.updateDatabaseType();
 		this.updateEmailProvider();
+		this.updateAppContextRoot();
 	}
 	private updateAppEnvironment() {
 		switch (sails.config.environment) {
@@ -50,6 +52,9 @@ export class UnitPalConfig {
 		}
 		this._emailProviderSettings = sails.config.unitPalConfig.emailService.settings;
 	}
+	private updateAppContextRoot() {
+		this._appContextRoot = sails.config.unitPalConfig.appContextRoot;
+	}
 
 
 	public getAppEnvironment(): AppEnvironmentType {
@@ -63,5 +68,8 @@ export class UnitPalConfig {
 	}
 	public getEmailProviderSettings(): Object {
 		return this._emailProviderSettings;
+	}
+	public getAppContextRoot(): string {
+		return this._appContextRoot;
 	}
 }
