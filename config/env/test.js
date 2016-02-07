@@ -1,5 +1,15 @@
 module.exports = {
-    port: 8001,
+	port: 8001,
+	connections: {
+		mongodbtest: {
+			adapter: 'sails-mongo',
+			host: 'localhost',
+			port: 27017,
+			user: '',
+			password: '',
+			database: 'UnitPalTest'
+		}
+	},
     models: {
         connection: 'mongodbtest'
     },
