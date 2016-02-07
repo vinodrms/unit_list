@@ -16,5 +16,8 @@ module.exports = {
     hookTimeout: 40000,
     log: {
         level: "silent"
-    }
+    },
+	unitPalConfig: {
+		appContextRoot: process.env.APP_CONTEXT_ROOT
+	}
 };

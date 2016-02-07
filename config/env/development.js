@@ -1,5 +1,5 @@
 module.exports = {
-    port: 8001,
+	port: 8001,
 	connections: {
 		mongodbdev: {
 			adapter: 'sails-mongo',

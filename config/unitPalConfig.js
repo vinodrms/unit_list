@@ -8,5 +8,6 @@ module.exports.unitPalConfig = {
 			tls: { ciphers: "SSLv3" },
 			host: "smtp.gmail.com"
 		}
-	}
+	},
+	appContextRoot: "http://127.0.0.1:8001"
 };
