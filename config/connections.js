@@ -22,37 +22,5 @@
 module.exports.connections = {
     localDiskDb: {
         adapter: 'sails-disk'
-    },
-    mongodbdev: {
-        adapter: 'sails-mongo',
-        host: 'localhost',
-        port: 27017,
-        user: '',
-        password: '',
-        database: 'UnitPalDev'
-    },
-    mongodbtest: {
-        adapter: 'sails-mongo',
-        host: 'localhost',
-        port: 27017,
-        user: '',
-        password: '',
-        database: 'UnitPalTest'
-    },
-    mongodbprod: {
-        adapter: 'sails-mongo',
-        host: 'localhost',
-        port: 27017,
-        user: '',
-        password: '',
-        database: 'UnitPalProd'
-    },
-	mongodbazure: {
-		adapter: 'sails-mongo',
-		host: process.env.MONGO_HOST,
-		port: process.env.MONGO_PORT,
-		user: process.env.MONGO_USER,
-		password: process.env.MONGO_PASSWD,
-		database: process.env.MONGO_DB
-	}
+    }
 };
