@@ -13,6 +13,11 @@ export enum ErrorCode {
 	HotelSignUpError,
 	HotelRepositoryAccountAlreadyExists,
 	HotelRepositoryErrorAddingHotel,
+	HotelLoginError,
+	HotelRepositoryErrorFindingAccount,
+	HotelRepositoryAccountNotFound,
+	HotelAuthenticationAccountNotActive,
+	HotelAuthenticationInvalidEmailOrPassword,
 
 	NUM_OF_ITEMS
 }
@@ -30,6 +35,11 @@ ErrorMessage[ErrorCode.SmtpEmailServiceErrorSendingEmail] = "Error sending email
 ErrorMessage[ErrorCode.HotelSignUpError] = "Error signing up. Please try again.";
 ErrorMessage[ErrorCode.HotelRepositoryAccountAlreadyExists] = "An account with this email already exists.";
 ErrorMessage[ErrorCode.HotelRepositoryErrorAddingHotel] = "Error adding the information. Please try again.";
+ErrorMessage[ErrorCode.HotelLoginError] = "Error signing in. Please try again.";
+ErrorMessage[ErrorCode.HotelRepositoryErrorFindingAccount] = "Error finding account. Please try again.";
+ErrorMessage[ErrorCode.HotelRepositoryAccountNotFound] = "Invalid email or password.";
+ErrorMessage[ErrorCode.HotelAuthenticationAccountNotActive] = "The account is not active.";
+ErrorMessage[ErrorCode.HotelAuthenticationInvalidEmailOrPassword] = "Invalid email or password.";
 
 
 export class ErrorContainer {

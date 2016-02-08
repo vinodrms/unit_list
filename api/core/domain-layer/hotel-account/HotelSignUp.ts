@@ -9,6 +9,7 @@ import {UserContactDetailsDO} from '../../data-layer/hotel/data-objects/user/Use
 import {IHotelRepository} from '../../data-layer/hotel/repositories/IHotelRepository';
 import {AccountActivationEmailTemplateBuilder, AccountActivationEmailTemplateDO} from '../../services/email/content-builder/custom/AccountActivationEmailTemplateBuilder';
 import {AEmailService, EmailMetadataDO} from '../../services/email/sender/AEmailService';
+import {AuthUtils} from './utils/AuthUtils';
 
 import async = require("async");
 
@@ -26,8 +27,11 @@ export class HotelSignUpDO {
 
 export class HotelSignUp {
 	private _savedHotel: HotelDO;
+	private _authUtils: AuthUtils;
+	private _activationCode: string;
 
 	constructor(private _appContext: AppContext, private _sessionContext: SessionContext, private _signUpDO: HotelSignUpDO) {
+		this._authUtils = new AuthUtils(this._appContext.getUnitPalConfig());
 	}
 
 	public signUp(): Promise<string> {
@@ -66,21 +70,22 @@ export class HotelSignUp {
 		}));
 	}
 	private generateDefaultHotel(): HotelDO {
-		// TODO: generate activation code, encrypt password 
+		this._activationCode = this._authUtils.generateAccountActivationCode();
+
 		var hotel = new HotelDO();
 		hotel.contactDetails = new HotelContactDetailsDO();
 		hotel.contactDetails.name = this._signUpDO.hotelName;
 		hotel.users = [];
 		var user = new UserDO();
 		user.accountStatus = AccountStatus.Pending;
-		user.activationCode = "123";
-		user.activationExpiryTimestamp = 111;
+		user.activationCode = this._activationCode;
+		user.activationExpiryTimestamp = this._authUtils.getAccountActivationExpiryTimestamp();
 		user.contactDetails = new UserContactDetailsDO();
 		user.contactDetails.firstName = this._signUpDO.firstName;
 		user.contactDetails.lastName = this._signUpDO.lastName;
 		user.email = this._signUpDO.email;
 		user.language = this._sessionContext.locale;
-		user.password = this._signUpDO.password;
+		user.password = this._authUtils.encrypPassword(this._signUpDO.password);
 		user.roles = [UserRoles.Administrator];
 		hotel.users.push(user);
 		hotel.amenityIds = [];
@@ -90,9 +95,8 @@ export class HotelSignUp {
 		return hotel;
 	}
 	private getAccountActivationEmailTemplateDO(): AccountActivationEmailTemplateDO {
-		// TODO: update activation link
 		return {
-			activationLink: "dsadsajkdaghjdgajjdhas",
+			activationLink: this._authUtils.getActivationLink(this._signUpDO.email, this._activationCode),
 			firstName: this._signUpDO.firstName,
 			lastName: this._signUpDO.lastName,
 			email: this._signUpDO.email

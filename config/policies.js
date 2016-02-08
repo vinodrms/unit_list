@@ -38,7 +38,8 @@ module.exports.policies = {
         'getExternalView': ['contextBuilder'],
         'getInternalView': ['contextBuilder']
     },
-	HotelAccountController: {
-		'signUp': ['contextBuilder']
+	AccountController: {
+		'signUp': ['contextBuilder'],
+		'logIn': ['contextBuilder', 'basicLogInContextBuilder']
 	}
 };

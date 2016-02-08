@@ -5,6 +5,8 @@ import {AEmailService, EmailMetadataDO} from './email/sender/AEmailService';
 import {SmtpEmailService} from './email/sender/custom/SmtpEmailService';
 import {MockEmailService} from './email/sender/custom/MockEmailService';
 import {AEmailTemplateBuilder} from './email/content-builder/AEmailTemplateBuilder';
+import {ILoginService} from './login/ILoginService';
+import {PassportLoginService} from './login/custom/PassportLoginService';
 
 export class ServiceFactory {
 	constructor(private _unitPalConfig: UnitPalConfig) {
@@ -20,5 +22,8 @@ export class ServiceFactory {
 			case EmailProviderType.Mock:
 				return new MockEmailService(this._unitPalConfig, emailMetadataDO, templateBuilder);
 		}
+	}
+	public getLoginService(): ILoginService {
+		return new PassportLoginService();
 	}
 }

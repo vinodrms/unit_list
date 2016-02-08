@@ -12,5 +12,6 @@ export abstract class AMongoHotelRepository extends BaseMongoRepository implemen
 		});
 	}
 	public abstract addHotel(hotel: HotelDO): Promise<HotelDO>;
+	public abstract getHotelByUserEmail(email: string): Promise<HotelDO>;
 	public abstract cleanRepository(): Promise<Object>;
 }

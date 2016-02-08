@@ -3,7 +3,7 @@ import should = require('should');
 
 import {TestContext} from '../../../helpers/TestContext';
 import {ErrorContainer, ErrorCode} from '../../../../core/utils/responses/ResponseWrapper';
-import {HotelSignUp, HotelSignUpDO} from '../../../../core/domain-layer/signup/HotelSignUp';
+import {HotelSignUp, HotelSignUpDO} from '../../../../core/domain-layer/hotel-account/HotelSignUp';
 
 describe("Sign Up Tests", function() {
     var testContext: TestContext;

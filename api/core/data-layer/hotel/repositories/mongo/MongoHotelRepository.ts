@@ -34,7 +34,30 @@ export class MongoHotelRepository extends AMongoHotelRepository {
 			}
 		});
 	}
-	cleanRepository(): Promise<Object> {
+
+	public getHotelByUserEmail(email: string): Promise<HotelDO> {
+		return new Promise<HotelDO>((resolve, reject) => {
+			this.getHotelByUserEmailCore(resolve, reject, email);
+		});
+	}
+	private getHotelByUserEmailCore(resolve, reject, email: string) {
+		this._hotelsEntity.findOne({ "users.email": email }).then((foundHotel: Sails.QueryResult) => {
+			if (!foundHotel) {
+				Logger.getInstance().logBusiness("Invalid email to retrieve hotel", { email: email });
+				reject(new ErrorContainer(ErrorCode.HotelRepositoryAccountNotFound));
+				return;
+			}
+			var hotel: HotelDO = new HotelDO();
+			hotel.buildFromObject(foundHotel);
+			resolve(hotel);
+		}).catch((err: Error) => {
+			Logger.getInstance().logError("Error getting hotel by email", { email: email }, err);
+			reject(new ErrorContainer(ErrorCode.HotelRepositoryErrorFindingAccount, err));
+		});
+	}
+
+
+	public cleanRepository(): Promise<Object> {
 		return this._hotelsEntity.destroy({});
 	}
 }
