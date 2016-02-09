@@ -2,40 +2,33 @@ require("sails-test-helper");
 import should = require('should');
 
 import {TestContext} from '../../../helpers/TestContext';
-import {SendgridAccountActivationTemplate} from '../../../../core/services/email/templates/sendgrid/SendgridAccountActivationTemplate';
-import {EmailTemplate} from '../../../../core/services/email/templates/EmailTemplate';
-import {EmailTemplateFactory} from '../../../../core/services/email/templates/EmailTemplateFactory';
-import {AEmailService, EmailHeaderDO} from '../../../../core/services/email/sender/AEmailService';
+import {AEmailService, EmailHeaderDO} from '../../../../core/services/email/AEmailService';
 import {ErrorContainer, ErrorCode} from '../../../../core/utils/responses/ResponseWrapper';
+import {AccountActivationEmailTemplateDO} from '../../../../core/services/email/data-objects/AccountActivationEmailTemplateDO';
 
 describe("Email Integration Tests", function() {
+    var testContext = new TestContext();
     var emailService: AEmailService;
 
     before(function(done: any) {
-        var testContext = new TestContext();
-
         var emailHeaderDO: EmailHeaderDO = {
             destinationEmail: 'dragos.pricope@gmail.com',
             subject: 'Test',
             attachments: []
         };
 
-        var emailTemplateDO = {
-            firstName: 'Dragos',
-            lastName: 'Pricope',
-            email: 'dragos.pricope@gmail.com',
-            activationLink: 'http://google.com',
-        };
-        var emailTemplate:EmailTemplate = EmailTemplateFactory.getAccountActivationEmailTemplate(emailTemplateDO);
-        
-        this.emailService = testContext.appContext.getServiceFactory().getEmailService(emailHeaderDO, emailTemplate);
+        var emailTemplateDO: AccountActivationEmailTemplateDO = new AccountActivationEmailTemplateDO();
+        emailTemplateDO.activationLink = 'http://google.com';
+        emailTemplateDO.firstName = 'Dragos';
+        emailTemplateDO.lastName = 'Pricope';
+        emailTemplateDO.email = 'dragos.pricope@gmail.com';
+
+        this.emailService = testContext.appContext.getServiceFactory().getEmailService(emailHeaderDO, emailTemplateDO);
         this.emailService.sendEmail().then((result: any) => {
-           
+            done();
         }).catch((error: ErrorContainer) => {
             done(error);
         });
-
-        done();
     });
 
     describe("Email delivery test", function() {

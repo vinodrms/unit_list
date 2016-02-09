@@ -1,19 +1,20 @@
 import {ErrorCode, ResponseWrapper} from './ResponseWrapper';
-
-import _ = require("underscore");
+import {AppUtils} from '../AppUtils';
 
 export class ErrorParser {
 	private _errorCode: ErrorCode;
 	private _isUncatchedError: boolean;
+	private _appUtils: AppUtils;
 
 	constructor(private _error: any, private _defaultErrorCode: ErrorCode) {
+		this._appUtils = new AppUtils();
 		this.parseError();
 	}
 	private parseError() {
 		this._errorCode = this._defaultErrorCode;
 		this._isUncatchedError = true;
 
-		if (!_.isUndefined(this._error) && !_.isUndefined(this._error.code)) {
+		if (!this._appUtils.isUndefined(this._error, "code")) {
 			var possibleErrorCode: any = this._error.code;
 			if (this.isStandardErrorCode(possibleErrorCode)) {
 				this._errorCode = possibleErrorCode;

@@ -1,6 +1,7 @@
-import {AEmailService} from '../AEmailService';
+import {AEmailService} from '../../AEmailService';
 import {ErrorContainer, ErrorCode} from '../../../../utils/responses/ResponseWrapper';
-import {Logger} from '../../../../utils/logging/Logger';
+import {Logger, LogLevel} from '../../../../utils/logging/Logger';
+import {SendgridTemplateFactory} from './SendgridTemplateFactory';
 
 import sendgrid = require("sendgrid");
 import _ = require("underscore");
@@ -25,9 +26,9 @@ export class SendgridEmailService extends AEmailService {
     }
 
     private buildEmailMessage(server: any): any {
-        
-        var emailTemplateDO = this._emailTemplate.getEmailTemplateDO;
-        var emailTemplateMetadata = this._emailTemplate.getTemplateMetadata();
+        var templateFactory: SendgridTemplateFactory = new SendgridTemplateFactory();
+        var emailTemplate = templateFactory.getTemplate(this._emailTemplate);
+        var emailTemplateMetadata = emailTemplate.getTemplateMetadata();
         var sendgridEmail = new server.Email(this.getSendgridEmailInitData());
 
         for (var tag in emailTemplateMetadata.subs) {
@@ -72,7 +73,7 @@ export class SendgridEmailService extends AEmailService {
     private trySendingEmail(server: any, message: Object, resolve: any, reject: any) {
         server.send(message, ((err, json) => {
             if (err) {
-                Logger.getInstance().logError("Error sending email", this._emailHeaderDO, err);
+                Logger.getInstance().logError(LogLevel.Error, "Error sending email", this._emailHeaderDO, err);
                 reject(new ErrorContainer(ErrorCode.SmtpEmailServiceErrorSendingEmail, err));
                 return;
             }

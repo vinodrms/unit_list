@@ -1,6 +1,6 @@
-import {UnitPalConfig} from '../../../utils/environment/UnitPalConfig';
-import {AppContext} from '../../../utils/AppContext';
-import {EmailTemplate} from '../templates/EmailTemplate';  
+import {UnitPalConfig} from '../../utils/environment/UnitPalConfig';
+import {AppContext} from '../../utils/AppContext';
+import {BaseEmailTemplateDO} from './data-objects/BaseEmailTemplateDO';
 
 import async = require("async");
 
@@ -12,7 +12,7 @@ export class EmailHeaderDO {
 
 export abstract class AEmailService {
 
-	constructor(protected _unitPalConfig: UnitPalConfig, protected _emailHeaderDO: EmailHeaderDO, protected _emailTemplate: EmailTemplate) {
+	constructor(protected _unitPalConfig: UnitPalConfig, protected _emailHeaderDO: EmailHeaderDO, protected _emailTemplate: BaseEmailTemplateDO) {
     }
     
 	protected abstract sendEmail(): Promise<any>;

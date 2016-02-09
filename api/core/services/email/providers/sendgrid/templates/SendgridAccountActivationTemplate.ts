@@ -1,9 +1,12 @@
-import {EmailTemplate} from '../EmailTemplate';
+import {ISendgridTemplate} from '../ISendgridTemplate';
+import {AccountActivationEmailTemplateDO} from '../../../data-objects/AccountActivationEmailTemplateDO';
 
-export class SendgridAccountActivationTemplate extends EmailTemplate {
-	
+export class SendgridAccountActivationTemplate implements ISendgridTemplate {
+    constructor(private _emailTemplateDO: AccountActivationEmailTemplateDO) {
+    }
+
     public getTemplateMetadata(): any {
-		return {
+        return {
             id: '1b22b1f6-775a-4576-895f-acd79bed6059',
             subs: {
                 "%firstName%": [
@@ -20,5 +23,5 @@ export class SendgridAccountActivationTemplate extends EmailTemplate {
                 ]
             }
         };
-	}
+    }
 }

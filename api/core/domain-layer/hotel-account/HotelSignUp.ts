@@ -1,15 +1,16 @@
 import {ErrorContainer, ErrorCode} from '../../utils/responses/ResponseWrapper';
-import {Logger} from '../../utils/logging/Logger';
+import {Logger, LogLevel} from '../../utils/logging/Logger';
 import {AppContext} from '../../utils/AppContext';
 import {SessionContext} from '../../utils/SessionContext';
 import {HotelDO} from '../../data-layer/hotel/data-objects/HotelDO';
 import {HotelContactDetailsDO} from '../../data-layer/hotel/data-objects/hotel-contact-details/HotelContactDetailsDO';
+import {ActionTokenDO} from '../../data-layer/hotel/data-objects/user/ActionTokenDO';
 import {UserDO, AccountStatus, UserRoles} from '../../data-layer/hotel/data-objects/user/UserDO';
 import {UserContactDetailsDO} from '../../data-layer/hotel/data-objects/user/UserContactDetailsDO';
 import {IHotelRepository} from '../../data-layer/hotel/repositories/IHotelRepository';
-import {AEmailService, EmailHeaderDO} from '../../services/email/sender/AEmailService';
-import {EmailTemplateFactory} from '../../services/email/templates/EmailTemplateFactory';
-import {EmailTemplate} from '../../services/email/templates/EmailTemplate';
+import {AEmailService, EmailHeaderDO} from '../../services/email/AEmailService';
+import {AccountActivationEmailTemplateDO} from '../../services/email/data-objects/AccountActivationEmailTemplateDO';
+import {AuthUtils} from './utils/AuthUtils';
 
 import async = require("async");
 
@@ -27,8 +28,11 @@ export class HotelSignUpDO {
 
 export class HotelSignUp {
 	private _savedHotel: HotelDO;
+	private _authUtils: AuthUtils;
+	private _activationCode: string;
 
 	constructor(private _appContext: AppContext, private _sessionContext: SessionContext, private _signUpDO: HotelSignUpDO) {
+		this._authUtils = new AuthUtils(this._appContext.getUnitPalConfig());
 	}
 
 	public signUp(): Promise<string> {
@@ -36,7 +40,7 @@ export class HotelSignUp {
 			try {
 				this.signUpCore(resolve, reject);
 			} catch (e) {
-				Logger.getInstance().logError("Error saving hotel", this._signUpDO, e);
+				Logger.getInstance().logError(LogLevel.Error, "Error saving hotel", this._signUpDO, e);
 				reject(new ErrorContainer(ErrorCode.HotelSignUpError, e));
 			}
 		});
@@ -61,26 +65,28 @@ export class HotelSignUp {
 				reject(error);
 			}
 			else {
-				resolve(this._savedHotel.users[0].activationCode);
+				resolve(this._savedHotel.users[0].accountActivationToken.code);
 			}
 		}));
 	}
 	private generateDefaultHotel(): HotelDO {
-		// TODO: generate activation code, encrypt password 
+		this._activationCode = this._authUtils.generateAccountActivationCode();
+
 		var hotel = new HotelDO();
 		hotel.contactDetails = new HotelContactDetailsDO();
 		hotel.contactDetails.name = this._signUpDO.hotelName;
 		hotel.users = [];
 		var user = new UserDO();
 		user.accountStatus = AccountStatus.Pending;
-		user.activationCode = "123";
-		user.activationExpiryTimestamp = 111;
+		user.accountActivationToken = new ActionTokenDO();
+		user.accountActivationToken.code = this._activationCode;
+		user.accountActivationToken.expiryTimestamp = this._authUtils.getAccountActionExpiryTimestamp();
 		user.contactDetails = new UserContactDetailsDO();
 		user.contactDetails.firstName = this._signUpDO.firstName;
 		user.contactDetails.lastName = this._signUpDO.lastName;
 		user.email = this._signUpDO.email;
 		user.language = this._sessionContext.locale;
-		user.password = this._signUpDO.password;
+		user.password = this._authUtils.encrypPassword(this._signUpDO.password);
 		user.roles = [UserRoles.Administrator];
 		hotel.users.push(user);
 		hotel.amenityIds = [];
@@ -89,15 +95,16 @@ export class HotelSignUp {
 		hotel.configurationStatus = false;
 		return hotel;
 	}
-	private getAccountActivationEmailTemplateDO(): EmailTemplate {
-		// TODO: update activation link
-		return EmailTemplateFactory.getAccountActivationEmailTemplate( {
-			activationLink: "dsadsajkdaghjdgajjdhas",
-			firstName: this._signUpDO.firstName,
-			lastName: this._signUpDO.lastName,
-			email: this._signUpDO.email
-        });
+    
+    private getAccountActivationEmailTemplateDO(): AccountActivationEmailTemplateDO {
+        var emailTemplateDO: AccountActivationEmailTemplateDO = new AccountActivationEmailTemplateDO();
+        emailTemplateDO.activationLink = this._authUtils.getActivationLink(this._signUpDO.email, this._activationCode);
+        emailTemplateDO.firstName = this._signUpDO.firstName;
+        emailTemplateDO.lastName = this._signUpDO.lastName;
+        emailTemplateDO.email = this._signUpDO.email;
+        return emailTemplateDO;
 	}
+    
 	private getEmailHeaderDO(): EmailHeaderDO {
 		return {
 			destinationEmail: this._signUpDO.email,

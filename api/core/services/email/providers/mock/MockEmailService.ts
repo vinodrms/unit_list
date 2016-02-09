@@ -1,4 +1,4 @@
-import {AEmailService} from '../AEmailService';
+import {AEmailService} from '../../AEmailService';
 
 export class MockEmailService extends AEmailService {
     protected sendEmail(): Promise<any> {

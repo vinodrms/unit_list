@@ -44,7 +44,10 @@ module.exports.routes = {
 	* for configuration options and examples.                                  *
 	*                                                                          *
 	***************************************************************************/
-	'POST /api/account/signUp': 'HotelAccountController.signUp'
+	'POST /api/account/signUp': 'AccountController.signUp',
+	'POST /api/account/logIn': 'AccountController.logIn',
+	'GET /api/account/activate': 'AccountController.activate'
+
 
 
 };

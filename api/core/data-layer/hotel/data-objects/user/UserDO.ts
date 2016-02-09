@@ -1,5 +1,6 @@
 import {BaseDO} from '../../../common/base/BaseDO';
 import {UserContactDetailsDO} from './UserContactDetailsDO';
+import {ActionTokenDO} from './ActionTokenDO';
 import {Locales} from '../../../../utils/localization/Translation';
 
 export enum AccountStatus {
@@ -20,15 +21,15 @@ export class UserDO extends BaseDO {
 	password: string;
 	accountStatus: AccountStatus;
 
-	activationCode: string;
-	activationExpiryTimestamp: number;
+	accountActivationToken: ActionTokenDO;
+	resetPasswordToken: ActionTokenDO;
 
 	roles: UserRoles[];
 	lastLoggedIn: number;
 	language: Locales;
 
 	protected getPrimitivePropertyKeys(): string[] {
-		return ["email", "password", "accountStatus", "activationCode", "activationExpiryTimestamp", "roles", "lastLoggedIn", "language"];
+		return ["email", "password", "accountStatus", "roles", "lastLoggedIn", "language"];
 	}
 
 	public buildFromObject(object: Object) {
@@ -36,5 +37,11 @@ export class UserDO extends BaseDO {
 
 		this.contactDetails = new UserContactDetailsDO();
 		this.contactDetails.buildFromObject(object["contactDetails"]);
+		
+		this.accountActivationToken = new ActionTokenDO();
+		this.accountActivationToken.buildFromObject(object["accountActivationToken"]);
+		
+		this.resetPasswordToken = new ActionTokenDO();
+		this.resetPasswordToken.buildFromObject(object["resetPasswordToken"]);
 	}
 }
