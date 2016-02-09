@@ -1,10 +1,10 @@
 import {UnitPalConfig, EmailProviderType} from '../utils/environment/UnitPalConfig';
 import {IVatProvider} from './vat/IVatProvider';
 import {VIESVatProviderAdapter} from './vat/providers/VIESVatProviderAdapter';
-import {AEmailService, EmailMetadataDO} from './email/sender/AEmailService';
-import {SmtpEmailService} from './email/sender/custom/SmtpEmailService';
-import {MockEmailService} from './email/sender/custom/MockEmailService';
-import {AEmailTemplateBuilder} from './email/content-builder/AEmailTemplateBuilder';
+import {AEmailService, EmailHeaderDO} from './email/sender/AEmailService';
+import {EmailTemplate} from './email/templates/EmailTemplate'
+import {MockEmailService} from './email/sender/providers/MockEmailService';
+import {SendgridEmailService} from './email/sender/providers/SendgridEmailService';
 
 export class ServiceFactory {
 	constructor(private _unitPalConfig: UnitPalConfig) {
@@ -13,12 +13,14 @@ export class ServiceFactory {
 	public getVatProvider(): IVatProvider {
 		return new VIESVatProviderAdapter();
 	}
-	public getEmailService(emailMetadataDO: EmailMetadataDO, templateBuilder: AEmailTemplateBuilder): AEmailService {
+    
+	public getEmailService(emailHeaderDO: EmailHeaderDO, emailTemplate: EmailTemplate): AEmailService {
 		switch (this._unitPalConfig.getEmailProviderType()) {
-			case EmailProviderType.StaticSmtp:
-				return new SmtpEmailService(this._unitPalConfig, emailMetadataDO, templateBuilder);
 			case EmailProviderType.Mock:
-				return new MockEmailService(this._unitPalConfig, emailMetadataDO, templateBuilder);
+				return new MockEmailService(this._unitPalConfig, emailHeaderDO, emailTemplate);
+            case EmailProviderType.Sendgrid:
+                return new SendgridEmailService(this._unitPalConfig, emailHeaderDO, emailTemplate);
 		}
+        return null;
 	}
 }

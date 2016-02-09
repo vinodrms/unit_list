@@ -19,8 +19,7 @@ module.exports = {
     },
 	unitPalConfig: {
 		emailService: {
-			type: "mock",
-			settings: {}
+			type: "mock"
 		}
 	}
 };

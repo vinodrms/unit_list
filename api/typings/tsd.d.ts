@@ -18,3 +18,4 @@
 /// <reference path="swig/swig.d.ts" />
 /// <reference path="extend/extend.d.ts" />
 /// <reference path="winston/winston.d.ts" />
+/// <reference path="sendgrid/sendgrid.d.ts" />

@@ -7,8 +7,9 @@ import {HotelContactDetailsDO} from '../../data-layer/hotel/data-objects/hotel-c
 import {UserDO, AccountStatus, UserRoles} from '../../data-layer/hotel/data-objects/user/UserDO';
 import {UserContactDetailsDO} from '../../data-layer/hotel/data-objects/user/UserContactDetailsDO';
 import {IHotelRepository} from '../../data-layer/hotel/repositories/IHotelRepository';
-import {AccountActivationEmailTemplateBuilder, AccountActivationEmailTemplateDO} from '../../services/email/content-builder/custom/AccountActivationEmailTemplateBuilder';
-import {AEmailService, EmailMetadataDO} from '../../services/email/sender/AEmailService';
+import {AEmailService, EmailHeaderDO} from '../../services/email/sender/AEmailService';
+import {EmailTemplateFactory} from '../../services/email/templates/EmailTemplateFactory';
+import {EmailTemplate} from '../../services/email/templates/EmailTemplate';
 
 import async = require("async");
 
@@ -51,10 +52,9 @@ export class HotelSignUp {
 			((savedHotel: HotelDO, finishSendActivationEmailCallback) => {
 				this._savedHotel = savedHotel;
 				var activationEmailTemplateDO = this.getAccountActivationEmailTemplateDO();
-				var templateBuilder = new AccountActivationEmailTemplateBuilder(activationEmailTemplateDO);
-				var emailMetadataDO = this.getEmailMetadataDO();
-				var emailService: AEmailService = this._appContext.getServiceFactory().getEmailService(emailMetadataDO, templateBuilder);
-				emailService.buildEmailContentAndSendAsync(finishSendActivationEmailCallback);
+				var emailMetadataDO = this.getEmailHeaderDO();
+				var emailService: AEmailService = this._appContext.getServiceFactory().getEmailService(emailMetadataDO, activationEmailTemplateDO);
+				emailService.sendEmailAsync(finishSendActivationEmailCallback);
 			})
 		], ((error: any, emailSendResult: any) => {
 			if (error) {
@@ -89,19 +89,20 @@ export class HotelSignUp {
 		hotel.configurationStatus = false;
 		return hotel;
 	}
-	private getAccountActivationEmailTemplateDO(): AccountActivationEmailTemplateDO {
+	private getAccountActivationEmailTemplateDO(): EmailTemplate {
 		// TODO: update activation link
-		return {
+		return EmailTemplateFactory.getAccountActivationEmailTemplate( {
 			activationLink: "dsadsajkdaghjdgajjdhas",
 			firstName: this._signUpDO.firstName,
 			lastName: this._signUpDO.lastName,
 			email: this._signUpDO.email
-		};
+        });
 	}
-	private getEmailMetadataDO(): EmailMetadataDO {
+	private getEmailHeaderDO(): EmailHeaderDO {
 		return {
 			destinationEmail: this._signUpDO.email,
-			subject: "UnitPal Account Activation"
+			subject: "UnitPal Account Activation",
+            attachments: []
 		};
 	}
 }

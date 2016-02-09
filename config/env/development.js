@@ -12,5 +12,14 @@ module.exports = {
 	},
     models: {
         connection: 'mongodbdev'
-    }
+    },
+    unitPalConfig: {
+        emailService: {
+			type: "sendgrid",
+			settings: {
+                apiKey: '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',
+                from: 'contact@unitpal.com'
+            }
+		}
+	}
 };

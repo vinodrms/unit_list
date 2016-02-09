@@ -8,9 +8,9 @@ import {HotelSignUp, HotelSignUpDO} from '../../../../core/domain-layer/signup/H
 describe("Sign Up Tests", function() {
     var testContext: TestContext;
 	var signUpDO: HotelSignUpDO = {
-		email: "paraschiv.ionut@gmail.com",
-		firstName: "Ionut Cristian",
-		lastName: "Paraschiv",
+		email: "dragos.pricope@gmail.com",
+		firstName: "Dragos",
+		lastName: "Pricope",
 		hotelName: "3angleTECH Hotel",
 		password: "1234"
 	};

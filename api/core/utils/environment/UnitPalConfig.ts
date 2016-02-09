@@ -3,6 +3,7 @@ export enum DatabaseType {
 }
 export enum EmailProviderType {
 	StaticSmtp,
+    Sendgrid,
 	Mock
 }
 export enum AppEnvironmentType {
@@ -43,9 +44,12 @@ export class UnitPalConfig {
 	}
 	private updateEmailProvider() {
 		switch (sails.config.unitPalConfig.emailService.type) {
-			case "mock":
+			case 'mock':
 				this._emailProviderType = EmailProviderType.Mock;
 				break;
+            case 'sendgrid':
+                this._emailProviderType = EmailProviderType.Sendgrid;
+                break;
 			default:
 				this._emailProviderType = EmailProviderType.StaticSmtp;
 				break;

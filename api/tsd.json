@@ -58,6 +58,9 @@
     },
     "winston/winston.d.ts": {
       "commit": "4ec3c5bf291bc02f49eb30c1077340b235165c67"
+    },
+    "sendgrid/sendgrid.d.ts": {
+      "commit": "72f0056f69f9a2290d2589c1a692896d24406928"
     }
   }
 }
