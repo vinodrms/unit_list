@@ -5,6 +5,7 @@ import {AppContext} from '../core/utils/AppContext';
 import {ILoginService, LoginType} from '../core/services/login/ILoginService';
 import {HotelDO} from '../core/data-layer/hotel/data-objects/HotelDO';
 import {UserDO} from '../core/data-layer/hotel/data-objects/user/UserDO';
+import {UserAccountActivation, UserAccountActivationDO} from '../core/domain-layer/hotel-account/UserAccountActivation';
 
 class AccountController extends BaseController {
 	public signUp(req: Express.Request, res: Express.Response) {
@@ -17,6 +18,21 @@ class AccountController extends BaseController {
 			this.returnSuccesfulResponse(req, res, result);
 		}).catch((err: any) => {
 			this.returnErrorResponse(req, res, err, ErrorCode.HotelSignUpError);
+		});
+	}
+	public activate(req: Express.Request, res: Express.Response) {
+		if (!this.precheckGETParameters(req, res, UserAccountActivationDO.getRequiredProperties())) {
+			return;
+		}
+		var appContext: AppContext = req.appContext;
+		var accActivationDO: UserAccountActivationDO = req.query;
+		var hotelActivateAccount = new UserAccountActivation(appContext, req.sessionContext, accActivationDO);
+		hotelActivateAccount.activate().then((result: any) => {
+			// TODO: add status code in login page to display alert with "account succesfully activated"
+			res.redirect(appContext.getUnitPalConfig().getAppContextRoot());
+		}).catch((err: any) => {
+			//TODO: redirect to login page with error code instead of returning JSON
+			this.returnErrorResponse(req, res, err, ErrorCode.HotelActivateError);
 		});
 	}
 	public logIn(req: Express.Request, res: Express.Response) {
@@ -34,5 +50,6 @@ class AccountController extends BaseController {
 var accountController = new AccountController();
 module.exports = {
 	signUp: accountController.signUp.bind(accountController),
-	logIn: accountController.logIn.bind(accountController)
+	logIn: accountController.logIn.bind(accountController),
+	activate: accountController.activate.bind(accountController),
 }

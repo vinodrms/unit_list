@@ -1,10 +1,15 @@
 import {ErrorCode, ResponseWrapper} from '../../core/utils/responses/ResponseWrapper';
 import {ErrorParser} from '../../core/utils/responses/ErrorParser';
-import {Logger} from '../../core/utils/logging/Logger';
+import {Logger, LogLevel} from '../../core/utils/logging/Logger';
+import {AppUtils} from '../../core/utils/AppUtils';
 
 import _ = require("underscore");
 
 export class BaseController {
+	protected _appUtils: AppUtils;
+	contructor() {
+		this._appUtils = new AppUtils();
+	}
 	protected precheckPOSTParameters(req: Express.Request, res: Express.Response, rootParameter: string, parameters: string[]): boolean {
 		var parameterArray = [rootParameter];
 		for (var parameter in parameters) {
@@ -18,27 +23,15 @@ export class BaseController {
 	private precheckParameters(req: Express.Request, res: Express.Response, reqField: string, parameters: string[]): boolean {
 		var result = true;
 		parameters.forEach((parameter: string) => {
-			if (!this.objectContainsParameter(req[reqField], parameter)) {
+			if (this._appUtils.isUndefined(req[reqField], parameter)) {
 				result = false;
 			}
 		});
 		if (!result) {
-			Logger.getInstance().logError("Invalid request parameters", { url: req.url, actualParameters: req[reqField], requiredParameters: parameters }, new Error());
+			Logger.getInstance().logBusiness(LogLevel.Error, "Invalid request parameters", { url: req.url, actualParameters: req[reqField], requiredParameters: parameters });
 			var responseWrapper: ResponseWrapper = new ResponseWrapper(ErrorCode.InvalidRequestParameters);
 			this.returnResponse(req, res, responseWrapper);
 			return false;
-		}
-		return true;
-	}
-	private objectContainsParameter(object: Object, parameter: string): boolean {
-		var currentObject = object;
-		var parameterStack: string[] = parameter.split(".");
-		for (var i = 0; i < parameterStack.length; i++) {
-			var param = parameterStack[i];
-			currentObject = currentObject[param];
-			if (currentObject === undefined) {
-				return false;
-			}
 		}
 		return true;
 	}
@@ -50,7 +43,7 @@ export class BaseController {
 	protected returnErrorResponse(req: Express.Request, res: Express.Response, error: any, defaultErrorCode: ErrorCode) {
 		var errorParser: ErrorParser = new ErrorParser(error, defaultErrorCode);
 		if (errorParser.isUncatchedError()) {
-			Logger.getInstance().logError("Uncatched error", { url: req.url, body: req.body, query: req.query }, error);
+			Logger.getInstance().logError(LogLevel.Error, "Uncatched error", { url: req.url, body: req.body, query: req.query }, error);
 		}
 		this.returnResponse(req, res, errorParser.getResponseWrapper());
 	}

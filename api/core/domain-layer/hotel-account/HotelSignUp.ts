@@ -1,9 +1,10 @@
 import {ErrorContainer, ErrorCode} from '../../utils/responses/ResponseWrapper';
-import {Logger} from '../../utils/logging/Logger';
+import {Logger, LogLevel} from '../../utils/logging/Logger';
 import {AppContext} from '../../utils/AppContext';
 import {SessionContext} from '../../utils/SessionContext';
 import {HotelDO} from '../../data-layer/hotel/data-objects/HotelDO';
 import {HotelContactDetailsDO} from '../../data-layer/hotel/data-objects/hotel-contact-details/HotelContactDetailsDO';
+import {ActionTokenDO} from '../../data-layer/hotel/data-objects/user/ActionTokenDO';
 import {UserDO, AccountStatus, UserRoles} from '../../data-layer/hotel/data-objects/user/UserDO';
 import {UserContactDetailsDO} from '../../data-layer/hotel/data-objects/user/UserContactDetailsDO';
 import {IHotelRepository} from '../../data-layer/hotel/repositories/IHotelRepository';
@@ -39,7 +40,7 @@ export class HotelSignUp {
 			try {
 				this.signUpCore(resolve, reject);
 			} catch (e) {
-				Logger.getInstance().logError("Error saving hotel", this._signUpDO, e);
+				Logger.getInstance().logError(LogLevel.Error, "Error saving hotel", this._signUpDO, e);
 				reject(new ErrorContainer(ErrorCode.HotelSignUpError, e));
 			}
 		});
@@ -65,7 +66,7 @@ export class HotelSignUp {
 				reject(error);
 			}
 			else {
-				resolve(this._savedHotel.users[0].activationCode);
+				resolve(this._savedHotel.users[0].accountActivationToken.code);
 			}
 		}));
 	}
@@ -78,8 +79,9 @@ export class HotelSignUp {
 		hotel.users = [];
 		var user = new UserDO();
 		user.accountStatus = AccountStatus.Pending;
-		user.activationCode = this._activationCode;
-		user.activationExpiryTimestamp = this._authUtils.getAccountActivationExpiryTimestamp();
+		user.accountActivationToken = new ActionTokenDO();
+		user.accountActivationToken.code = this._activationCode;
+		user.accountActivationToken.expiryTimestamp = this._authUtils.getAccountActionExpiryTimestamp();
 		user.contactDetails = new UserContactDetailsDO();
 		user.contactDetails.firstName = this._signUpDO.firstName;
 		user.contactDetails.lastName = this._signUpDO.lastName;

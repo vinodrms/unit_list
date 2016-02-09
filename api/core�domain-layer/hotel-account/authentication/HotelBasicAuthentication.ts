@@ -1,9 +1,9 @@
-import {AppContext} from '../../utils/AppContext';
-import {HotelDO} from '../../data-layer/hotel/data-objects/HotelDO';
-import {UserDO, AccountStatus} from '../../data-layer/hotel/data-objects/user/UserDO';
-import {Logger} from '../../utils/logging/Logger';
-import {ErrorContainer, ErrorCode} from '../../utils/responses/ResponseWrapper';
-import {AuthUtils} from './utils/AuthUtils';
+import {AppContext} from '../../../utils/AppContext';
+import {HotelDO} from '../../../data-layer/hotel/data-objects/HotelDO';
+import {UserDO, AccountStatus} from '../../../data-layer/hotel/data-objects/user/UserDO';
+import {Logger, LogLevel} from '../../../utils/logging/Logger';
+import {ErrorContainer, ErrorCode} from '../../../utils/responses/ResponseWrapper';
+import {AuthUtils} from '../utils/AuthUtils';
 import {IHotelAuthentication} from './IHotelAuthentication';
 
 import _ = require("underscore");
@@ -38,12 +38,12 @@ export class HotelBasicAuthentication implements IHotelAuthentication {
 						});
 					}
 					else {
-						Logger.getInstance().logBusiness("Invalid password", { email: this._email, hotel: hotel });
+						Logger.getInstance().logBusiness(LogLevel.Info, "Invalid password", { email: this._email, hotel: hotel });
 						reject(new ErrorContainer(ErrorCode.HotelAuthenticationInvalidEmailOrPassword));
 					}
 					break;
 				default:
-					Logger.getInstance().logBusiness("Account not active", { email: this._email, hotel: hotel });
+					Logger.getInstance().logBusiness(LogLevel.Info, "Account not active", { email: this._email, hotel: hotel });
 					reject(new ErrorContainer(ErrorCode.HotelAuthenticationAccountNotActive));
 					break;
 			}

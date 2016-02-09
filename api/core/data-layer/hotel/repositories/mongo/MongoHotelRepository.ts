@@ -3,60 +3,26 @@ import {ErrorContainer, ErrorCode} from '../../../../utils/responses/ResponseWra
 import {Logger} from '../../../../utils/logging/Logger';
 import {AMongoHotelRepository} from './AMongoHotelRepository';
 import {HotelDO} from '../../data-objects/HotelDO';
+import {MongoHotelAccountRepository} from './actions/MongoHotelAccountRepository';
 
 export class MongoHotelRepository extends AMongoHotelRepository {
 	private _hotelsEntity: Sails.Model;
+	private _accountActionsRepository: MongoHotelAccountRepository;
 
 	constructor() {
 		super();
 		this._hotelsEntity = sails.models.hotelsentity;
+		this._accountActionsRepository = new MongoHotelAccountRepository(this._hotelsEntity);
 	}
-
-	public addHotel(hotel: HotelDO): Promise<HotelDO> {
-		return new Promise<HotelDO>((resolve, reject) => {
-			this.addHotelCore(resolve, reject, hotel);
-		});
+	protected addHotel(hotel: HotelDO): Promise<HotelDO> {
+		return this._accountActionsRepository.addHotel(hotel);
 	}
-	private addHotelCore(resolve, reject, hotel: HotelDO) {
-		this._hotelsEntity.create(hotel).then((createdHotel: Sails.QueryResult) => {
-			var savedHotel: HotelDO = new HotelDO();
-			savedHotel.buildFromObject(createdHotel);
-			resolve(savedHotel);
-		}).catch((err: Error) => {
-			var errorCode = this.getMongoErrorCode(err);
-			if (errorCode == MongoErrorCodes.DuplicateKeyError) {
-				Logger.getInstance().logBusiness("Account already exists", hotel, err);
-				reject(new ErrorContainer(ErrorCode.HotelRepositoryAccountAlreadyExists, err));
-			}
-			else {
-				Logger.getInstance().logError("Error adding hotel", hotel, err);
-				reject(new ErrorContainer(ErrorCode.HotelRepositoryErrorAddingHotel, err));
-			}
-		});
-	}
-
 	public getHotelByUserEmail(email: string): Promise<HotelDO> {
-		return new Promise<HotelDO>((resolve, reject) => {
-			this.getHotelByUserEmailCore(resolve, reject, email);
-		});
+		return this._accountActionsRepository.getHotelByUserEmail(email);
 	}
-	private getHotelByUserEmailCore(resolve, reject, email: string) {
-		this._hotelsEntity.findOne({ "users.email": email }).then((foundHotel: Sails.QueryResult) => {
-			if (!foundHotel) {
-				Logger.getInstance().logBusiness("Invalid email to retrieve hotel", { email: email });
-				reject(new ErrorContainer(ErrorCode.HotelRepositoryAccountNotFound));
-				return;
-			}
-			var hotel: HotelDO = new HotelDO();
-			hotel.buildFromObject(foundHotel);
-			resolve(hotel);
-		}).catch((err: Error) => {
-			Logger.getInstance().logError("Error getting hotel by email", { email: email }, err);
-			reject(new ErrorContainer(ErrorCode.HotelRepositoryErrorFindingAccount, err));
-		});
+	public activateUserAccount(email: string, activationCode: string): Promise<HotelDO> {
+		return this._accountActionsRepository.activateUserAccount(email, activationCode);
 	}
-
-
 	public cleanRepository(): Promise<Object> {
 		return this._hotelsEntity.destroy({});
 	}

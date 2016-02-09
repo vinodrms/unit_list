@@ -45,7 +45,8 @@ module.exports.routes = {
 	*                                                                          *
 	***************************************************************************/
 	'POST /api/account/signUp': 'AccountController.signUp',
-	'POST /api/account/logIn': 'AccountController.logIn'
+	'POST /api/account/logIn': 'AccountController.logIn',
+	'GET /api/account/activate': 'AccountController.activate'
 
 
 

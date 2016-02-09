@@ -4,7 +4,7 @@ import {DBPatchesFactory} from './db-patches/DBPatchesFactory';
 import {IDBPatch} from './db-patches/IDBPatch';
 import {LogInitializerFactory} from './logs/LogInitializerFactory';
 import {ILogInitializer} from './logs/ILogInitializer';
-import {Logger} from '../utils/logging/Logger';
+import {Logger, LogLevel} from '../utils/logging/Logger';
 
 export class UnitPalBootstrap {
 	private _unitPalConfig: UnitPalConfig;
@@ -24,14 +24,14 @@ export class UnitPalBootstrap {
 			var logInitializer: ILogInitializer = logsInitFactory.getLogInitializer();
 			logInitializer.initLogger();
 		} catch (e) {
-			Logger.getInstance().logError("Error bootstrapping logging", { step: "Bootstrap" }, e);
+			Logger.getInstance().logError(LogLevel.Error, "Error bootstrapping logging", { step: "Bootstrap" }, e);
 		}
 	}
 	private initializeLoginService() {
 		try {
 			this._serviceBootstrapFactory.getLoginServiceInitializer().init();
 		} catch (e) {
-			Logger.getInstance().logError("Error bootstrapping login service", { step: "Bootstrap" }, e);
+			Logger.getInstance().logError(LogLevel.Error, "Error bootstrapping login service", { step: "Bootstrap" }, e);
 		}
 	}
 	private initializeDatabase(endCallback: { (): void; }) {
@@ -40,7 +40,7 @@ export class UnitPalBootstrap {
 		dbPatch.applyPatches().then((result: any) => {
 			endCallback();
 		}).catch((error: any) => {
-			Logger.getInstance().logError("Error bootstrapping database", { step: "Bootstrap" }, error);
+			Logger.getInstance().logError(LogLevel.Error, "Error bootstrapping database", { step: "Bootstrap" }, error);
 			endCallback();
 		});
 	}
