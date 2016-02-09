@@ -1,6 +1,6 @@
 import {IEmailTemplateBuilder} from './IEmailTemplateBuilder';
 import {ErrorContainer, ErrorCode} from '../../../utils/responses/ResponseWrapper';
-import {Logger} from '../../../utils/logging/Logger';
+import {Logger, LogLevel} from '../../../utils/logging/Logger';
 
 import path = require('path');
 var EmailTemplates = require('swig-email-templates');
@@ -34,7 +34,7 @@ export abstract class AEmailTemplateBuilder implements IEmailTemplateBuilder {
 		var emailData = this.getContent();
 		templates.render(templatePath, emailData, (err: any, html: string, text: string) => {
 			if (err || !html) {
-				Logger.getInstance().logError("Error rendering email template", { emailData: emailData, options: options }, err);
+				Logger.getInstance().logError(LogLevel.Error, "Error rendering email template", { emailData: emailData, options: options }, err);
 				reject(new ErrorContainer(ErrorCode.EmailTemplateBuilderProblemBuildingContent, err));
 				return;
 			}

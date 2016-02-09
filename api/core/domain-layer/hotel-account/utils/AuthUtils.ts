@@ -6,7 +6,7 @@ import util = require('util');
 
 export class AuthUtils {
 	private static SaltWorkFactor: number = 10;
-	private static AccountActivationExpiryOffsetMillis: number = 7 * 24 * 60 * 60 * 1000;
+	private static AccountActionExpiryOffsetMillis: number = 7 * 24 * 60 * 60 * 1000;
 
 	constructor(private _unitPalConfig: UnitPalConfig) {
 	}
@@ -18,8 +18,8 @@ export class AuthUtils {
 		return bcrypt.compareSync(unencryptedPassword, encrypedPassword);
 	}
 
-	public getAccountActivationExpiryTimestamp(): number {
-		return new Date().getTime() + AuthUtils.AccountActivationExpiryOffsetMillis;
+	public getAccountActionExpiryTimestamp(): number {
+		return new Date().getTime() + AuthUtils.AccountActionExpiryOffsetMillis;
 	}
 	public generateAccountActivationCode(): string {
 		return uuid.v1();

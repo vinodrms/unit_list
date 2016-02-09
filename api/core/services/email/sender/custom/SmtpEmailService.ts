@@ -1,5 +1,5 @@
 import {ErrorContainer, ErrorCode} from '../../../../utils/responses/ResponseWrapper';
-import {Logger} from '../../../../utils/logging/Logger';
+import {Logger, LogLevel} from '../../../../utils/logging/Logger';
 import {AEmailService} from '../AEmailService';
 
 var email = require("emailjs");
@@ -31,7 +31,7 @@ export class SmtpEmailService extends AEmailService {
 	private trySendingEmail(server: any, message: Object, resolve: any, reject: any) {
 		server.send(message, ((err) => {
 			if (err) {
-				Logger.getInstance().logError("Error sending email", this._emailMetadataDO, err);
+				Logger.getInstance().logError(LogLevel.Error, "Error sending email", this._emailMetadataDO, err);
 				reject(new ErrorContainer(ErrorCode.SmtpEmailServiceErrorSendingEmail, err));
 				return;
 			}
