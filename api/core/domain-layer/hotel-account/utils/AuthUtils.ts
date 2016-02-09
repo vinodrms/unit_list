@@ -1,17 +1,16 @@
 import {UnitPalConfig} from '../../../utils/environment/UnitPalConfig';
 
 import bcrypt = require('bcrypt');
-import uuid = require('node-uuid');
+
 import util = require('util');
 
 export class AuthUtils {
-	private static SaltWorkFactor: number = 10;
 	private static AccountActionExpiryOffsetMillis: number = 7 * 24 * 60 * 60 * 1000;
 
 	constructor(private _unitPalConfig: UnitPalConfig) {
 	}
 	public encrypPassword(password: string) {
-		var saltSync = bcrypt.genSaltSync(AuthUtils.SaltWorkFactor);
+		var saltSync = bcrypt.genSaltSync();
 		return bcrypt.hashSync(password, saltSync);
 	}
 	public isSamePassword(unencryptedPassword: string, encrypedPassword: string) {
@@ -20,9 +19,6 @@ export class AuthUtils {
 
 	public getAccountActionExpiryTimestamp(): number {
 		return new Date().getTime() + AuthUtils.AccountActionExpiryOffsetMillis;
-	}
-	public generateAccountActivationCode(): string {
-		return uuid.v1();
 	}
 	public getActivationLink(email: string, activationCode: string) {
 		var contextRoot = this._unitPalConfig.getAppContextRoot();

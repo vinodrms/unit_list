@@ -1,6 +1,7 @@
 import {ErrorContainer, ErrorCode} from '../../utils/responses/ResponseWrapper';
 import {Logger, LogLevel} from '../../utils/logging/Logger';
 import {AppContext} from '../../utils/AppContext';
+import {AppUtils} from '../../utils/AppUtils';
 import {SessionContext} from '../../utils/SessionContext';
 import {HotelDO} from '../../data-layer/hotel/data-objects/HotelDO';
 import {HotelContactDetailsDO} from '../../data-layer/hotel/data-objects/hotel-contact-details/HotelContactDetailsDO';
@@ -30,9 +31,11 @@ export class HotelSignUp {
 	private _savedHotel: HotelDO;
 	private _authUtils: AuthUtils;
 	private _activationCode: string;
+	private _appUtils: AppUtils;
 
 	constructor(private _appContext: AppContext, private _sessionContext: SessionContext, private _signUpDO: HotelSignUpDO) {
 		this._authUtils = new AuthUtils(this._appContext.getUnitPalConfig());
+		this._appUtils = new AppUtils();
 	}
 
 	public signUp(): Promise<string> {
@@ -56,8 +59,8 @@ export class HotelSignUp {
 			((savedHotel: HotelDO, finishSendActivationEmailCallback) => {
 				this._savedHotel = savedHotel;
 				var activationEmailTemplateDO = this.getAccountActivationEmailTemplateDO();
-				var emailMetadataDO = this.getEmailHeaderDO();
-				var emailService: AEmailService = this._appContext.getServiceFactory().getEmailService(emailMetadataDO, activationEmailTemplateDO);
+				var emailHeaderDO = this.getEmailHeaderDO();
+				var emailService: AEmailService = this._appContext.getServiceFactory().getEmailService(emailHeaderDO, activationEmailTemplateDO);
 				emailService.sendEmailAsync(finishSendActivationEmailCallback);
 			})
 		], ((error: any, emailSendResult: any) => {
@@ -70,13 +73,14 @@ export class HotelSignUp {
 		}));
 	}
 	private generateDefaultHotel(): HotelDO {
-		this._activationCode = this._authUtils.generateAccountActivationCode();
+		this._activationCode = this._appUtils.generateUniqueID();
 
 		var hotel = new HotelDO();
 		hotel.contactDetails = new HotelContactDetailsDO();
 		hotel.contactDetails.name = this._signUpDO.hotelName;
 		hotel.users = [];
 		var user = new UserDO();
+		user.id = this._appUtils.generateUniqueID();
 		user.accountStatus = AccountStatus.Pending;
 		user.accountActivationToken = new ActionTokenDO();
 		user.accountActivationToken.code = this._activationCode;
@@ -85,7 +89,7 @@ export class HotelSignUp {
 		user.contactDetails.firstName = this._signUpDO.firstName;
 		user.contactDetails.lastName = this._signUpDO.lastName;
 		user.email = this._signUpDO.email;
-		user.language = this._sessionContext.locale;
+		user.language = this._sessionContext.language;
 		user.password = this._authUtils.encrypPassword(this._signUpDO.password);
 		user.roles = [UserRoles.Administrator];
 		hotel.users.push(user);
@@ -95,7 +99,7 @@ export class HotelSignUp {
 		hotel.configurationStatus = false;
 		return hotel;
 	}
-    
+
     private getAccountActivationEmailTemplateDO(): AccountActivationEmailTemplateDO {
         var emailTemplateDO: AccountActivationEmailTemplateDO = new AccountActivationEmailTemplateDO();
         emailTemplateDO.activationLink = this._authUtils.getActivationLink(this._signUpDO.email, this._activationCode);
@@ -104,7 +108,7 @@ export class HotelSignUp {
         emailTemplateDO.email = this._signUpDO.email;
         return emailTemplateDO;
 	}
-    
+
 	private getEmailHeaderDO(): EmailHeaderDO {
 		return {
 			destinationEmail: this._signUpDO.email,

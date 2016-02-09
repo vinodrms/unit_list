@@ -3,16 +3,29 @@ import {SessionContext} from '../core/utils/SessionContext';
 import {Locales} from '../core/utils/localization/Translation';
 
 module.exports = function(req: Express.Request, res: Express.Response, next: any) {
-	// TODO: check the key for the session (user)
-	if (req.sessionContext && req.sessionContext.user) {
+	var sessionContext: SessionContext = req["user"];
+	if (req.isAuthenticated() && sessionContext) {
+		req.sessionContext = sessionContext;
 		return next();
 	}
 	var unitPalConfig = new UnitPalConfig();
 	if (unitPalConfig.getAppEnvironment() == AppEnvironmentType.Development) {
-		// TODO: update with default user
-		req.sessionContext = new SessionContext(Locales.English);
+		var devSessionContext: SessionContext = {
+			language: Locales.English,
+			sessionDO: {
+				hotel: {
+					id: "1",
+					ccy: "EUR"
+				},
+				user: {
+					id: "1",
+					email: "paraschiv.ionut@gmail.com",
+					roles: [0]
+				}
+			}
+		};
+		req.sessionContext = devSessionContext;
 		return next();
 	}
-
 	return res.forbidden('You are not permitted to perform this action.');
 };

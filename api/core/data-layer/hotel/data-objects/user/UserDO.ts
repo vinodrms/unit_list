@@ -16,6 +16,7 @@ export class UserDO extends BaseDO {
 	constructor() {
 		super();
 	}
+	id: string;
 	contactDetails: UserContactDetailsDO;
 	email: string;
 	password: string;
@@ -29,7 +30,7 @@ export class UserDO extends BaseDO {
 	language: Locales;
 
 	protected getPrimitivePropertyKeys(): string[] {
-		return ["email", "password", "accountStatus", "roles", "lastLoggedIn", "language"];
+		return ["id", "email", "password", "accountStatus", "roles", "lastLoggedIn", "language"];
 	}
 
 	public buildFromObject(object: Object) {

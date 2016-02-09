@@ -21,6 +21,7 @@ export enum ErrorCode {
 	HotelRepositoryErrorActivatingAccount,
 	HotelRepositoryAccountCouldNotBeActivated,
 	HotelActivateError,
+	AccControllerErrorInitializingSession,
 
 	NUM_OF_ITEMS
 }
@@ -46,6 +47,7 @@ ErrorMessage[ErrorCode.HotelAuthenticationInvalidEmailOrPassword] = "Invalid ema
 ErrorMessage[ErrorCode.HotelRepositoryErrorActivatingAccount] = "There was a problem while activating your account.";
 ErrorMessage[ErrorCode.HotelRepositoryAccountCouldNotBeActivated] = "The account could not be activated.";
 ErrorMessage[ErrorCode.HotelActivateError] = "There was a problem while activating your account.";
+ErrorMessage[ErrorCode.AccControllerErrorInitializingSession] = "There was a problem while creating your session. Please try again.";
 
 
 export class ErrorContainer {
