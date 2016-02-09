@@ -7,10 +7,11 @@ import {ErrorContainer, ErrorCode} from '../../../../core/utils/responses/Respon
 import {AccountActivationEmailTemplateDO} from '../../../../core/services/email/data-objects/AccountActivationEmailTemplateDO';
 
 describe("Email Integration Tests", function() {
-    var testContext = new TestContext();
+    var testContext;
     var emailService: AEmailService;
 
     before(function(done: any) {
+		testContext = new TestContext();
         var emailHeaderDO: EmailHeaderDO = {
             destinationEmail: 'dragos.pricope@gmail.com',
             subject: 'Test',
