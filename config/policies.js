@@ -42,5 +42,8 @@ module.exports.policies = {
 		'signUp': ['contextBuilder'],
 		'activate': ['contextBuilder'],
 		'logIn': ['contextBuilder', 'basicLogInContextBuilder']
-	}
+	},
+    ImageUploadController: {
+        'upload': ['contextBuilder']
+    }
 };

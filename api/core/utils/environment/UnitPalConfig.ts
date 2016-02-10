@@ -6,6 +6,10 @@ export enum EmailProviderType {
     Sendgrid,
 	Mock
 }
+export enum ImageStorageProviderType {
+    Cloudinary,
+	Mock
+}
 export enum AppEnvironmentType {
 	Development,
 	Test,
@@ -17,12 +21,15 @@ export class UnitPalConfig {
 	private _databaseType: DatabaseType;
 	private _emailProviderType: EmailProviderType;
 	private _emailProviderSettings: Object;
+    private _imageStorageProviderType: ImageStorageProviderType;
+    private _imageStorageProviderSettings: Object;
 	private _appContextRoot: string;
 
 	constructor() {
 		this.updateAppEnvironment();
 		this.updateDatabaseType();
 		this.updateEmailProvider();
+        this.updateImageStorageProvider();
 		this.updateAppContextRoot();
 	}
 	private updateAppEnvironment() {
@@ -56,11 +63,20 @@ export class UnitPalConfig {
 		}
 		this._emailProviderSettings = sails.config.unitPalConfig.emailService.settings;
 	}
+    private updateImageStorageProvider() {
+        switch (sails.config.unitPalConfig.imageUploadService.type) {
+			case 'cloudinary':
+				this._imageStorageProviderType = ImageStorageProviderType.Cloudinary;
+				break;
+			default:
+				this._imageStorageProviderType = ImageStorageProviderType.Cloudinary;
+				break;
+		}
+        this._imageStorageProviderSettings = sails.config.unitPalConfig.imageUploadService.settings;
+    }
 	private updateAppContextRoot() {
 		this._appContextRoot = sails.config.unitPalConfig.appContextRoot;
 	}
-
-
 	public getAppEnvironment(): AppEnvironmentType {
 		return this._appEnvironment;
 	}
@@ -72,6 +88,12 @@ export class UnitPalConfig {
 	}
 	public getEmailProviderSettings(): Object {
 		return this._emailProviderSettings;
+	}
+    public getImageStorageProviderType(): ImageStorageProviderType {
+		return this._imageStorageProviderType;
+	}
+	public getImageStorageProviderSettings(): Object {
+		return this._imageStorageProviderSettings;
 	}
 	public getAppContextRoot(): string {
 		return this._appContextRoot;
