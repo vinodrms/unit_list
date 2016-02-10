@@ -8,7 +8,7 @@ export class ImageUploadResponseDO {
     public imageUrl: string;
 }
 
-export abstract class IImageStorageService {
+export abstract class AImageStorageService {
     
     constructor(protected _unitPalConfig: UnitPalConfig) {
     }

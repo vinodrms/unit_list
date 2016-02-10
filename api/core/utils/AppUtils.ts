@@ -1,4 +1,5 @@
 import _ = require('underscore');
+import uuid = require('node-uuid');
 
 export class AppUtils {
 	constructor() {
@@ -19,5 +20,8 @@ export class AppUtils {
 			}
 		}
 		return false;
+	}
+	public generateUniqueID(): string {
+		return uuid.v1();
 	}
 }

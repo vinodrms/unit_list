@@ -36,10 +36,13 @@ export class UnitPalConfig {
 		switch (sails.config.environment) {
 			case 'development':
 				this._appEnvironment = AppEnvironmentType.Development;
+				break;
 			case 'test':
 				this._appEnvironment = AppEnvironmentType.Test;
+				break;
 			default:
 				this._appEnvironment = AppEnvironmentType.Production;
+				break;
 		}
 	}
 	private updateDatabaseType() {

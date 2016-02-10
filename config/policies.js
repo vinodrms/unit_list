@@ -41,7 +41,9 @@ module.exports.policies = {
 	AccountController: {
 		'signUp': ['contextBuilder'],
 		'activate': ['contextBuilder'],
-		'logIn': ['contextBuilder', 'basicLogInContextBuilder']
+		'logIn': ['contextBuilder', 'basicLogInContextBuilder'],
+        'requestResetPassword': ['contextBuilder'],
+		'resetPassword': ['contextBuilder']
 	},
     ImageUploadController: {
         'upload': ['contextBuilder']

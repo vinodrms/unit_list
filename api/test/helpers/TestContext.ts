@@ -9,6 +9,7 @@ export class TestContext {
 	constructor() {
 		var unitPalConfig = new UnitPalConfig();
 		this.appContext = new AppContext(unitPalConfig);
-		this.sessionContext = new SessionContext(Locales.English);
+		// TODO: the session context should hold the user and hotel
+		this.sessionContext = <any>{language: Locales.English};
 	}
 }

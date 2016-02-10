@@ -14,9 +14,9 @@ export abstract class AEmailService {
 
 	constructor(protected _unitPalConfig: UnitPalConfig, protected _emailHeaderDO: EmailHeaderDO, protected _emailTemplate: BaseEmailTemplateDO) {
     }
-    
+
 	protected abstract sendEmail(): Promise<any>;
-    
+
     public sendEmailAsync(finishSendEmailCallback: { (err: any, emailContent?: string): void; }) {
 		this.sendEmail().then((result: any) => {
 			finishSendEmailCallback(null, result);
@@ -24,5 +24,5 @@ export abstract class AEmailService {
 			finishSendEmailCallback(response);
 		});
 	}
-    
+
 }

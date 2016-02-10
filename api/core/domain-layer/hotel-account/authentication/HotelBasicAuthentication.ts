@@ -31,7 +31,7 @@ export class HotelBasicAuthentication implements IHotelAuthentication {
 
 			switch (user.accountStatus) {
 				case AccountStatus.Active:
-					if (this._authUtils.isSamePassword(user.password, this._password)) {
+					if (this._authUtils.isSamePassword(this._password, user.password)) {
 						resolve({
 							user: user,
 							hotel: hotel

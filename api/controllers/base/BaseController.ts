@@ -2,19 +2,16 @@ import {ErrorCode, ResponseWrapper} from '../../core/utils/responses/ResponseWra
 import {ErrorParser} from '../../core/utils/responses/ErrorParser';
 import {Logger, LogLevel} from '../../core/utils/logging/Logger';
 import {AppUtils} from '../../core/utils/AppUtils';
+import {SessionContext} from '../../core/utils/SessionContext';
 
 import _ = require("underscore");
 
 export class BaseController {
-	protected _appUtils: AppUtils;
-	contructor() {
-		this._appUtils = new AppUtils();
-	}
 	protected precheckPOSTParameters(req: Express.Request, res: Express.Response, rootParameter: string, parameters: string[]): boolean {
 		var parameterArray = [rootParameter];
-		for (var parameter in parameters) {
+		parameters.forEach((parameter: string) => {
 			parameterArray.push(rootParameter + "." + parameter);
-		}
+		});
 		return this.precheckParameters(req, res, "body", parameterArray);
 	}
 	protected precheckGETParameters(req: Express.Request, res: Express.Response, parameters: string[]): boolean {
@@ -22,8 +19,9 @@ export class BaseController {
 	}
 	private precheckParameters(req: Express.Request, res: Express.Response, reqField: string, parameters: string[]): boolean {
 		var result = true;
+		var appUtils: AppUtils = new AppUtils();
 		parameters.forEach((parameter: string) => {
-			if (this._appUtils.isUndefined(req[reqField], parameter)) {
+			if (appUtils.isUndefined(req[reqField], parameter)) {
 				result = false;
 			}
 		});
@@ -49,6 +47,7 @@ export class BaseController {
 	}
 
 	private returnResponse(req: Express.Request, res: Express.Response, responseWrapper: ResponseWrapper) {
-		return res.json(responseWrapper.buildJson(req.sessionContext.locale));
+		var sessionContext: SessionContext = req.sessionContext;
+		return res.json(responseWrapper.buildJson(sessionContext.language));
 	}
 }

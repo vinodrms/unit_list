@@ -47,6 +47,9 @@ module.exports.routes = {
 	'POST /api/account/signUp': 'AccountController.signUp',
 	'POST /api/account/logIn': 'AccountController.logIn',
 	'GET /api/account/activate': 'AccountController.activate',
-
+	'POST /api/account/logOut': 'AccountController.logOut',
+	'POST /api/account/requestResetPassword': 'AccountController.requestResetPassword',
+	'POST /api/account/resetPassword': 'AccountController.resetPassword',
+    
     'POST /api/image/upload': 'ImageUploadController.upload'
 };

@@ -6,7 +6,7 @@ import {BaseEmailTemplateDO} from './email/data-objects/BaseEmailTemplateDO'
 import {MockEmailService} from './email/providers/mock/MockEmailService';
 import {SendgridEmailService} from './email/providers/sendgrid/SendgridEmailService';
 import {ILoginService} from './login/ILoginService';
-import {IImageStorageService} from './image-storage/IImageStorageService';
+import {AImageStorageService} from './image-storage/AImageStorageService';
 import {CloudinaryImageStorageService} from './image-storage/cloudinary/CloudinaryImageStorageService';
 import {PassportLoginService} from './login/custom/PassportLoginService';
 
@@ -25,7 +25,7 @@ export class ServiceFactory {
                 return new MockEmailService(this._unitPalConfig, emailHeaderDO, emailTemplate);
         }
     }
-    public getImageStorageService(): IImageStorageService{
+    public getImageStorageService(): AImageStorageService{
         switch (this._unitPalConfig.getImageStorageProviderType()) {
             case ImageStorageProviderType.Cloudinary:
                 return new CloudinaryImageStorageService(this._unitPalConfig);

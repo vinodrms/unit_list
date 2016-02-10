@@ -11,10 +11,10 @@ module.exports = function(req: Express.Request, res: Express.Response, next: any
 
 	var appUtils = new AppUtils();
 	if (appUtils.isUndefined(req.sessionContext)) {
-		req.sessionContext = { locale: Locales.English };
+		req.sessionContext = { language: Locales.English };
 	}
-	else if (appUtils.isUndefined(req.sessionContext.locale)) {
-		req.sessionContext.locale = Locales.English;
+	else if (appUtils.isUndefined(req.sessionContext.language)) {
+		req.sessionContext.language = Locales.English;
 	}
 	return next();
 };

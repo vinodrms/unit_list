@@ -17,11 +17,11 @@ export class PassportLoginService implements ILoginServiceInitializer, ILoginSer
 		this.initLocalStrategy();
 	}
 	private initLocalStrategy() {
-		passport.serializeUser(function(sessionData: Object, done: any) {
-			done(null, sessionData);
+		passport.serializeUser(function(sessionContext: Object, done: any) {
+			done(null, sessionContext);
 		});
-		passport.deserializeUser(function(sessionData: any, done: any) {
-			done(null, sessionData);
+		passport.deserializeUser(function(sessionContext: any, done: any) {
+			done(null, sessionContext);
 		});
 		passport.use(new LocalStrategy.Strategy({
 			passReqToCallback: true,
