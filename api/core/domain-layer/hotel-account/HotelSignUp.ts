@@ -9,7 +9,7 @@ import {ActionTokenDO} from '../../data-layer/hotel/data-objects/user/ActionToke
 import {UserDO, AccountStatus, UserRoles} from '../../data-layer/hotel/data-objects/user/UserDO';
 import {UserContactDetailsDO} from '../../data-layer/hotel/data-objects/user/UserContactDetailsDO';
 import {IHotelRepository} from '../../data-layer/hotel/repositories/IHotelRepository';
-import {AEmailService, EmailHeaderDO} from '../../services/email/AEmailService';
+import {IEmailService, EmailHeaderDO} from '../../services/email/IEmailService';
 import {AccountActivationEmailTemplateDO} from '../../services/email/data-objects/AccountActivationEmailTemplateDO';
 import {AuthUtils} from './utils/AuthUtils';
 
@@ -60,7 +60,7 @@ export class HotelSignUp {
 				this._savedHotel = savedHotel;
 				var activationEmailTemplateDO = this.getAccountActivationEmailTemplateDO();
 				var emailHeaderDO = this.getEmailHeaderDO();
-				var emailService: AEmailService = this._appContext.getServiceFactory().getEmailService(emailHeaderDO, activationEmailTemplateDO);
+				var emailService: IEmailService = this._appContext.getServiceFactory().getEmailService(emailHeaderDO, activationEmailTemplateDO);
 				emailService.sendEmailAsync(finishSendActivationEmailCallback);
 			})
 		], ((error: any, emailSendResult: any) => {

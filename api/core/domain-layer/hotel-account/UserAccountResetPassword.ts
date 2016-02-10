@@ -6,7 +6,7 @@ import {ErrorContainer, ErrorCode} from '../../utils/responses/ResponseWrapper';
 import {IHotelRepository} from '../../data-layer/hotel/repositories/IHotelRepository';
 import {UserDO} from '../../data-layer/hotel/data-objects/user/UserDO';
 import {AccountPasswordWasResetTemplateDO} from '../../services/email/data-objects/AccountPasswordWasResetTemplateDO';
-import {AEmailService, EmailHeaderDO} from '../../services/email/AEmailService';
+import {IEmailService, EmailHeaderDO} from '../../services/email/IEmailService';
 
 import async = require("async");
 
@@ -49,7 +49,7 @@ export class UserAccountResetPassword {
 
 				var passwordWasResetEmailTemplateDO = this.getPasswordWasResetEmailTemplateDO();
 				var emailHeaderDO = this.getEmailHeaderDO();
-				var emailService: AEmailService = this._appContext.getServiceFactory().getEmailService(emailHeaderDO, passwordWasResetEmailTemplateDO);
+				var emailService: IEmailService = this._appContext.getServiceFactory().getEmailService(emailHeaderDO, passwordWasResetEmailTemplateDO);
 				emailService.sendEmailAsync(finishSendResetPasswordEmailCallback);
 			})
 		], ((error: any, emailSendResult: any) => {

@@ -1,15 +1,15 @@
 module.exports = {
-	port: 8001,
-	connections: {
-		mongodbtest: {
-			adapter: 'sails-mongo',
-			host: 'localhost',
-			port: 27017,
-			user: '',
-			password: '',
-			database: 'UnitPalTest'
-		}
-	},
+    port: 8001,
+    connections: {
+        mongodbtest: {
+            adapter: 'sails-mongo',
+            host: 'localhost',
+            port: 27017,
+            user: '',
+            password: '',
+            database: 'UnitPalTest'
+        }
+    },
     models: {
         connection: 'mongodbtest'
     },
@@ -17,9 +17,12 @@ module.exports = {
     log: {
         level: "silent"
     },
-	unitPalConfig: {
-		emailService: {
-			type: "mock"
-		}
-	}
+    unitPalConfig: {
+        emailService: {
+            type: "mock"
+        },
+        imageUploadService: {
+            type: "mock"
+        }
+    }
 };

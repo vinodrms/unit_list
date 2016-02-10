@@ -7,7 +7,7 @@ export class SendgridAccountActivationTemplate implements ISendgridTemplate {
 
     public getTemplateMetadata(): any {
         return {
-            id: '1b22b1f6-775a-4576-895f-acd79bed6059',
+            id: '42fd289b-266a-4b81-9535-5501817f6990',
             subs: {
                 "%firstName%": [
                     this._emailTemplateDO.firstName

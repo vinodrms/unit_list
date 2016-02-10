@@ -7,7 +7,7 @@ export class SendgridRequestResetPasswordTemplate implements ISendgridTemplate {
 
     public getTemplateMetadata(): any {
         return {
-            id: '1b22b1f6-775a-4576-895f-acd79bed6059',
+            id: 'a3c180f6-2b28-4d93-b62c-094ac96dd0e9',
             subs: {
                 "%firstName%": [
                     this._emailTemplateDO.firstName

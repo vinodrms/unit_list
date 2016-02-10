@@ -1,14 +1,8 @@
 import {UnitPalConfig} from '../../utils/environment/UnitPalConfig';
 
-export class ImageUploadRequestDO {
-    public imageName: string;
-}
+import {ImageUploadRequestDO, ImageUploadResponseDO, IImageStorageService} from './IImageStorageService';
 
-export class ImageUploadResponseDO {
-    public imageUrl: string;
-}
-
-export abstract class AImageStorageService {
+export abstract class AImageStorageService implements IImageStorageService{
     
     constructor(protected _unitPalConfig: UnitPalConfig) {
     }
@@ -16,7 +10,7 @@ export abstract class AImageStorageService {
 	protected abstract uploadImage(imageUploadRequestDO: ImageUploadRequestDO): Promise<ImageUploadResponseDO> ;
     
     public uploadImageAsync(imageUploadRequestDO: ImageUploadRequestDO, 
-                finishImageUploadCallback: { (err: any, emailContent?: string): void; }) {
+                finishImageUploadCallback: { (err: any, imageUploadResponse?: ImageUploadResponseDO): void; }) {
 		this.uploadImage(imageUploadRequestDO).then((result: any) => {
 			finishImageUploadCallback(null, result);
 		}).catch((response: any) => {

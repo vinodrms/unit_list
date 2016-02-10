@@ -2,13 +2,13 @@ require("sails-test-helper");
 import should = require('should');
 
 import {TestContext} from '../../../helpers/TestContext';
-import {AEmailService, EmailHeaderDO} from '../../../../core/services/email/AEmailService';
+import {IEmailService, EmailHeaderDO} from '../../../../core/services/email/IEmailService';
 import {ErrorContainer, ErrorCode} from '../../../../core/utils/responses/ResponseWrapper';
 import {AccountActivationEmailTemplateDO} from '../../../../core/services/email/data-objects/AccountActivationEmailTemplateDO';
 
 describe("Email Integration Tests", function() {
     var testContext;
-    var emailService: AEmailService;
+    var emailService: IEmailService;
 
     before(function(done: any) {
 		testContext = new TestContext();

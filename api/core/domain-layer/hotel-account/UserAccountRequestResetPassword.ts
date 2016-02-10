@@ -8,7 +8,7 @@ import {AuthUtils} from './utils/AuthUtils';
 import {AppUtils} from '../../utils/AppUtils';
 import {IHotelRepository} from '../../data-layer/hotel/repositories/IHotelRepository';
 import {AccountRequestResetPasswordTemplateDO} from '../../services/email/data-objects/AccountRequestResetPasswordTemplateDO';
-import {AEmailService, EmailHeaderDO} from '../../services/email/AEmailService';
+import {IEmailService, EmailHeaderDO} from '../../services/email/IEmailService';
 
 import async = require("async");
 import _ = require("underscore");
@@ -54,7 +54,7 @@ export class UserAccountRequestResetPassword {
 
 				var requestResetPasswordEmailTemplateDO = this.getRequestResetPasswordEmailTemplateDO();
 				var emailHeaderDO = this.getEmailHeaderDO();
-				var emailService: AEmailService = this._appContext.getServiceFactory().getEmailService(emailHeaderDO, requestResetPasswordEmailTemplateDO);
+				var emailService: IEmailService = this._appContext.getServiceFactory().getEmailService(emailHeaderDO, requestResetPasswordEmailTemplateDO);
 				emailService.sendEmailAsync(finishSendRequestResetPasswordEmailCallback);
 			})
 		], ((error: any, emailSendResult: any) => {

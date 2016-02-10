@@ -1,26 +1,35 @@
-import {AImageStorageService} from '../core/services/image-storage/AImageStorageService';
+import {IImageStorageService} from '../core/services/image-storage/IImageStorageService';
 import {BaseController} from './base/BaseController';
 import {ErrorCode} from '../core/utils/responses/ResponseWrapper';
 import {AppContext} from '../core/utils/AppContext';
 
+import _ = require('underscore');
+
 class ImageUploadController extends BaseController {
     public upload(req: any, res: any) {
-        var appContext: AppContext = req.appContext;
         
-        //TODO
-        req.file('image').upload(function(err, uploadedFiles) {
-            if (uploadedFiles && uploadedFiles.length > 0) {
-                // var imageStorageService: AImageStorageService =
-                //     appContext.getServiceFactory().getImageStorageService();
-                // var imageFile = uploadedFiles[0];
-                // console.log('aici!!!!!: ' + imageFile.fd);
-                // imageStorageService.uploadImage({
-                //     imageName: imageFile.fd
-                // }).then(function(result) {
-                //     res.json({ result: result });
-                // });
+        req['file']('image').upload(function(err, uploadedFiles) {
+            if (uploadedFiles && !_.isEmpty(uploadedFiles)) {
+                var appContext: AppContext = req.appContext;
+                var imageStorageService: IImageStorageService =
+                    appContext.getServiceFactory().getImageStorageService();
+                var imageFile = uploadedFiles[0];
+                
+                imageStorageService.uploadImageAsync({
+                    imageName: imageFile.fd
+                }, ((error: any, result: any) => {
+                    if (error) {
+                        res.json(error);
+                    }
+                    else {
+                        res.json(result);
+                        // this.returnSuccesfulResponse(req, res, result);
+                    }
+                }))
             }
-            // res.json({uploadedFiles: uploadedFiles});
+            else {
+                res.json('No files to upload');
+            }
         });
     }
 }
