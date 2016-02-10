@@ -1,36 +1,47 @@
+import {ThLogger, ThLogLevel} from '../core/utils/logging/ThLogger';
+import {ThError} from '../core/utils/th-responses/ThError';
+import {ThStatusCode, ThResponse} from '../core/utils/th-responses/ThResponse';
 import {IImageStorageService} from '../core/services/image-storage/IImageStorageService';
 import {BaseController} from './base/BaseController';
-import {ErrorCode} from '../core/utils/responses/ResponseWrapper';
 import {AppContext} from '../core/utils/AppContext';
 
-import _ = require('underscore');
-
 class ImageUploadController extends BaseController {
-    public upload(req: any, res: any) {
-        
-        req['file']('image').upload(function(err, uploadedFiles) {
-            if (uploadedFiles && !_.isEmpty(uploadedFiles)) {
-                var appContext: AppContext = req.appContext;
-                var imageStorageService: IImageStorageService =
-                    appContext.getServiceFactory().getImageStorageService();
-                var imageFile = uploadedFiles[0];
-                
-                imageStorageService.uploadImageAsync({
-                    imageName: imageFile.fd
-                }, ((error: any, result: any) => {
-                    if (error) {
-                        res.json(error);
-                    }
-                    else {
-                        res.json(result);
-                        // this.returnSuccesfulResponse(req, res, result);
-                    }
-                }))
-            }
-            else {
-                res.json('No files to upload');
-            }
-        });
+    public upload(req: Express.Request, res: Express.Response) {
+        var _ctrlContext = this;
+        try {
+            req.file('image').upload(function(err, uploadedFiles) {
+                if (err) {
+                    _ctrlContext.returnErrorResponse(req, res, err, ThStatusCode.ImageUploadControllerErrorUploadingImage);
+                    return;
+                }
+                if (uploadedFiles && !_.isEmpty(uploadedFiles)) {
+                    var appContext: AppContext = req.appContext;
+                    var imageStorageService: IImageStorageService = appContext.getServiceFactory().getImageStorageService();
+                    var imageFile = uploadedFiles[0];
+
+                    imageStorageService.uploadImageAsync({
+                        imageName: imageFile.fd
+                    }, ((error: any, result: any) => {
+                        if (error) {
+                            _ctrlContext.returnErrorResponse(req, res, error, ThStatusCode.ImageUploadControllerErrorUploadingImage);
+                        }
+                        else {
+                            _ctrlContext.returnSuccesfulResponse(req, res, result);
+                        }
+                    }))
+                    return;
+                }
+                else {
+                    var thError = new ThError(ThStatusCode.ImageUploadControllerNoFilesToUpload, null);
+                    ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "No files to upload", { url: req.url, body: req.body, query: req.query }, thError);
+                    _ctrlContext.returnErrorResponse(req, res, thError, ThStatusCode.ImageUploadControllerNoFilesToUpload);
+                }
+            });
+        } catch (e) {
+            var thError = new ThError(ThStatusCode.ImageUploadControllerGenericError, null);
+            ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Generic File Upload Error", { url: req.url, body: req.body, query: req.query }, thError);
+            _ctrlContext.returnErrorResponse(req, res, thError, ThStatusCode.ImageUploadControllerNoFilesToUpload);
+        }
     }
 }
 

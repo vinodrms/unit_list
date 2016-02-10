@@ -1,6 +1,3 @@
-import {MongoErrorCodes} from '../../../common/base/BaseMongoRepository';
-import {ErrorContainer, ErrorCode} from '../../../../utils/responses/ResponseWrapper';
-import {Logger} from '../../../../utils/logging/Logger';
 import {AMongoHotelRepository} from './AMongoHotelRepository';
 import {HotelDO} from '../../data-objects/HotelDO';
 import {UserDO} from '../../data-objects/user/UserDO';

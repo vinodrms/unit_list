@@ -1,3 +1,6 @@
+import {ThLogger, ThLogLevel} from '../../../utils/logging/ThLogger';
+import {ThError} from '../../../utils/th-responses/ThError';
+import {ThStatusCode} from '../../../utils/th-responses/ThResponse';
 import {AImageStorageService} from '../AImageStorageService';
 import {ImageUploadRequestDO, ImageUploadResponseDO} from '../IImageStorageService';
 import {UnitPalConfig} from '../../../utils/environment/UnitPalConfig';
@@ -15,17 +18,19 @@ export class CloudinaryImageStorageService extends AImageStorageService {
 
     public uploadImage(imageUploadRequestDO: ImageUploadRequestDO): Promise<ImageUploadResponseDO> {
         return new Promise<ImageUploadResponseDO>((resolve: { (imageUploadResponse?: ImageUploadResponseDO): void },
-            reject: { (err: any): void }) => {
+            reject: { (err: ThError): void }) => {
             this.uploadCore(imageUploadRequestDO, resolve, reject);
         });
     }
 
     public uploadCore(imageUploadRequestDO: ImageUploadRequestDO,
         resolve: { (imageUploadResponse?: ImageUploadResponseDO): void },
-        reject: { (err: any): void }) {
+        reject: { (err: ThError): void }) {
         cloudinary.uploader.upload(imageUploadRequestDO.imageName, (result) => {
-            if (result.error) {
-                reject(result.error.message);
+            if (!result || result.error) {
+                var thError = new ThError(ThStatusCode.CloudinaryImageStorageServiceErrorUploadingImage, result.error);
+                ThLogger.getInstance().logError(ThLogLevel.Error, "Error uploading image on cloudinary", imageUploadRequestDO, thError);
+                reject(thError);
             }
             else {
                 resolve({

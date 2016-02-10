@@ -1,3 +1,5 @@
+import {ThError} from '../../core/utils/th-responses/ThError';
+import {ThStatusCode, ThResponse} from '../../core/utils/th-responses/ThResponse';
 import {IRepositoryCleaner} from '../../core/data-layer/common/base/IRepositoryCleaner';
 import {RepositoryFactory} from '../../core/data-layer/RepositoryFactory';
 import {UnitPalConfig} from '../../core/utils/environment/UnitPalConfig';
@@ -11,8 +13,8 @@ export class RepositoryCleanerWrapper implements IRepositoryCleaner {
 		var repoFactory = new RepositoryFactory(this._unitPalConfig);
 		this._repositories = repoFactory.getRepositoryCleaners();
 	}
-	cleanRepository(): Promise<Object> {
-		return new Promise<Object>((resolve, reject) => {
+	cleanRepository(): Promise<boolean> {
+		return new Promise<boolean>((resolve: { (result: boolean): void }, reject: { (err: ThError): void }) => {
 			var repositoryIndex = 0;
 			async.whilst(
 				(() => {
@@ -22,12 +24,13 @@ export class RepositoryCleanerWrapper implements IRepositoryCleaner {
 					var repository: IRepositoryCleaner = this._repositories[repositoryIndex++];
 					repository.cleanRepository().then((result: any) => {
 						finishInitSingleRepositoryCallback(null, result);
-					}).catch((err: Error) => {
+					}).catch((err: any) => {
 						finishInitSingleRepositoryCallback(err);
 					});
 				}),
-				((err: Error) => {
+				((err: any) => {
 					if (err) {
+						var thError = new ThError(ThStatusCode.ErrorCleaningRepositories, err);
 						reject(err);
 					}
 					else {

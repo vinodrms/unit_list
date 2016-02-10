@@ -1,11 +1,12 @@
+import {ThLogger, ThLogLevel} from '../../utils/logging/ThLogger';
+import {ThError} from '../../utils/th-responses/ThError';
+import {ThStatusCode} from '../../utils/th-responses/ThResponse';
 import {AppContext} from '../../utils/AppContext';
 import {SessionContext} from '../../utils/SessionContext';
 import {UserDO} from '../../data-layer/hotel/data-objects/user/UserDO';
 import {ActionTokenDO} from '../../data-layer/hotel/data-objects/user/ActionTokenDO';
-import {Logger, LogLevel} from '../../utils/logging/Logger';
-import {ErrorContainer, ErrorCode} from '../../utils/responses/ResponseWrapper';
 import {AuthUtils} from './utils/AuthUtils';
-import {AppUtils} from '../../utils/AppUtils';
+import {ThUtils} from '../../utils/ThUtils';
 import {IHotelRepository} from '../../data-layer/hotel/repositories/IHotelRepository';
 import {AccountRequestResetPasswordTemplateDO} from '../../services/email/data-objects/AccountRequestResetPasswordTemplateDO';
 import {IEmailService, EmailHeaderDO} from '../../services/email/IEmailService';
@@ -23,26 +24,27 @@ export class UserAccountRequestResetPasswordDO {
 
 export class UserAccountRequestResetPassword {
 	private _authUtils: AuthUtils;
-	private _appUtils: AppUtils;
+	private _thUtils: ThUtils;
 	private _generatedToken: ActionTokenDO;
 	private _updatedUser: UserDO;
 
 	constructor(private _appContext: AppContext, private _sessionContext: SessionContext, private _resetPasswdDO: UserAccountRequestResetPasswordDO) {
 		this._authUtils = new AuthUtils(this._appContext.getUnitPalConfig());
-		this._appUtils = new AppUtils();
+		this._thUtils = new ThUtils();
 	}
 
 	public requestResetPassword(): Promise<ActionTokenDO> {
-		return new Promise<ActionTokenDO>((resolve: { (actionToken: ActionTokenDO): void }, reject: { (err: any): void }) => {
+		return new Promise<ActionTokenDO>((resolve: { (actionToken: ActionTokenDO): void }, reject: { (err: ThError): void }) => {
 			try {
 				this.requestResetPasswordCore(resolve, reject);
 			} catch (e) {
-				Logger.getInstance().logError(LogLevel.Error, "Error requesting reset password", this._resetPasswdDO, e);
-				reject(new ErrorContainer(ErrorCode.UserAccountRequestResetPasswordError, e));
+				var thError = new ThError(ThStatusCode.UserAccountRequestResetPasswordError, e);
+				ThLogger.getInstance().logError(ThLogLevel.Error, "Error requesting reset password", this._resetPasswdDO, thError);
+				reject(thError);
 			}
 		});
 	}
-	private requestResetPasswordCore(resolve: { (actionToken: ActionTokenDO): void }, reject: { (err: any): void }) {
+	private requestResetPasswordCore(resolve: { (actionToken: ActionTokenDO): void }, reject: { (ThError: any): void }) {
 		this._generatedToken = this.generateResetPasswordToken();
 		async.waterfall([
 			((finishUpdateTokenCallback) => {
@@ -59,7 +61,8 @@ export class UserAccountRequestResetPassword {
 			})
 		], ((error: any, emailSendResult: any) => {
 			if (error) {
-				reject(error);
+				var thError = new ThError(ThStatusCode.UserAccountRequestResetPasswordError, error);
+				reject(thError);
 			}
 			else {
 				resolve(this._generatedToken);
@@ -68,7 +71,7 @@ export class UserAccountRequestResetPassword {
 	}
 	private generateResetPasswordToken(): ActionTokenDO {
 		var resetPasswdToken = new ActionTokenDO();
-		resetPasswdToken.code = this._appUtils.generateUniqueID();
+		resetPasswdToken.code = this._thUtils.generateUniqueID();
 		resetPasswdToken.expiryTimestamp = this._authUtils.getAccountResetpasswordExpiryTimestamp();
 		return resetPasswdToken;
 	}

@@ -2,8 +2,10 @@ require("sails-test-helper");
 import should = require('should');
 
 import {TestContext} from '../../../helpers/TestContext';
-import {ErrorContainer, ErrorCode} from '../../../../core/utils/responses/ResponseWrapper';
+import {ThError} from '../../../../core/utils/th-responses/ThError';
+import {ThStatusCode, ThResponse} from '../../../../core/utils/th-responses/ThResponse';
 import {HotelSignUp, HotelSignUpDO} from '../../../../core/domain-layer/hotel-account/HotelSignUp';
+import {ActionTokenDO} from '../../../../core/data-layer/hotel/data-objects/user/ActionTokenDO';
 
 describe("Sign Up Tests", function() {
     var testContext: TestContext;
@@ -23,19 +25,20 @@ describe("Sign Up Tests", function() {
     describe("Check Sign Up", function() {
         it("Should return an activation code", function(done) {
 			var signUp = new HotelSignUp(testContext.appContext, testContext.sessionContext, signUpDO);
-			signUp.signUp().then((activationCode: string) => {
-				should.exist(activationCode);
+			signUp.signUp().then((accountActivationToken: ActionTokenDO) => {
+				should.exist(accountActivationToken.code);
+				should.exist(accountActivationToken.expiryTimestamp);
 				done();
-			}).catch((error: ErrorContainer) => {
+			}).catch((error: ThError) => {
 				done(error);
 			});
         });
 		it("Should return account already exists error code", function(done) {
 			var signUp = new HotelSignUp(testContext.appContext, testContext.sessionContext, signUpDO);
-			signUp.signUp().then((activationCode: string) => {
+			signUp.signUp().then((accountActivationToken: ActionTokenDO) => {
 				done("Signed up with the same email twice!");
-			}).catch((error: ErrorContainer) => {
-				should.equal(error.code, ErrorCode.HotelRepositoryAccountAlreadyExists);
+			}).catch((error: ThError) => {
+				should.equal(error.getThStatusCode(), ThStatusCode.HotelRepositoryAccountAlreadyExists);
 				done();
 			});
         });

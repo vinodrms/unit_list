@@ -1,7 +1,8 @@
-import {ErrorContainer, ErrorCode} from '../../utils/responses/ResponseWrapper';
-import {Logger, LogLevel} from '../../utils/logging/Logger';
+import {ThLogger, ThLogLevel} from '../../utils/logging/ThLogger';
+import {ThError} from '../../utils/th-responses/ThError';
+import {ThStatusCode} from '../../utils/th-responses/ThResponse';
 import {AppContext} from '../../utils/AppContext';
-import {AppUtils} from '../../utils/AppUtils';
+import {ThUtils} from '../../utils/ThUtils';
 import {SessionContext} from '../../utils/SessionContext';
 import {HotelDO} from '../../data-layer/hotel/data-objects/HotelDO';
 import {HotelContactDetailsDO} from '../../data-layer/hotel/data-objects/hotel-contact-details/HotelContactDetailsDO';
@@ -31,25 +32,26 @@ export class HotelSignUp {
 	private _savedHotel: HotelDO;
 	private _authUtils: AuthUtils;
 	private _activationCode: string;
-	private _appUtils: AppUtils;
+	private _thUtils: ThUtils;
 
 	constructor(private _appContext: AppContext, private _sessionContext: SessionContext, private _signUpDO: HotelSignUpDO) {
 		this._authUtils = new AuthUtils(this._appContext.getUnitPalConfig());
-		this._appUtils = new AppUtils();
+		this._thUtils = new ThUtils();
 	}
 
-	public signUp(): Promise<string> {
-		return new Promise<string>((resolve, reject) => {
+	public signUp(): Promise<ActionTokenDO> {
+		return new Promise<ActionTokenDO>((resolve: { (result: ActionTokenDO): void }, reject: { (err: ThError): void }) => {
 			try {
 				this.signUpCore(resolve, reject);
 			} catch (e) {
-				Logger.getInstance().logError(LogLevel.Error, "Error saving hotel", this._signUpDO, e);
-				reject(new ErrorContainer(ErrorCode.HotelSignUpError, e));
+				var thError = new ThError(ThStatusCode.HotelSignUpError, e);
+				ThLogger.getInstance().logError(ThLogLevel.Error, "Error saving hotel", this._signUpDO, thError);
+				reject(thError);
 			}
 		});
 	}
 
-	private signUpCore(resolve, reject) {
+	private signUpCore(resolve: { (result: ActionTokenDO): void }, reject: { (err: ThError): void }) {
 		var defaultHotelData = this.generateDefaultHotel();
 		async.waterfall([
 			((finishAddHotelCallback) => {
@@ -65,22 +67,23 @@ export class HotelSignUp {
 			})
 		], ((error: any, emailSendResult: any) => {
 			if (error) {
-				reject(error);
+				var thError = new ThError(ThStatusCode.HotelSignUpError, error);
+				reject(thError);
 			}
 			else {
-				resolve(this._savedHotel.users[0].accountActivationToken.code);
+				resolve(this._savedHotel.users[0].accountActivationToken);
 			}
 		}));
 	}
 	private generateDefaultHotel(): HotelDO {
-		this._activationCode = this._appUtils.generateUniqueID();
+		this._activationCode = this._thUtils.generateUniqueID();
 
 		var hotel = new HotelDO();
 		hotel.contactDetails = new HotelContactDetailsDO();
 		hotel.contactDetails.name = this._signUpDO.hotelName;
 		hotel.users = [];
 		var user = new UserDO();
-		user.id = this._appUtils.generateUniqueID();
+		user.id = this._thUtils.generateUniqueID();
 		user.accountStatus = AccountStatus.Pending;
 		user.accountActivationToken = new ActionTokenDO();
 		user.accountActivationToken.code = this._activationCode;

@@ -3,7 +3,6 @@ import should = require('should');
 
 import {TestContext} from '../../../helpers/TestContext';
 import {IEmailService, EmailHeaderDO} from '../../../../core/services/email/IEmailService';
-import {ErrorContainer, ErrorCode} from '../../../../core/utils/responses/ResponseWrapper';
 import {AccountActivationEmailTemplateDO} from '../../../../core/services/email/data-objects/AccountActivationEmailTemplateDO';
 
 describe("Email Integration Tests", function() {
@@ -27,7 +26,7 @@ describe("Email Integration Tests", function() {
         this.emailService = testContext.appContext.getServiceFactory().getEmailService(emailHeaderDO, emailTemplateDO);
         this.emailService.sendEmail().then((result: any) => {
             done();
-        }).catch((error: ErrorContainer) => {
+        }).catch((error: any) => {
             done(error);
         });
     });

@@ -4,7 +4,7 @@ export abstract class BaseDO {
 	protected abstract getPrimitivePropertyKeys(): string[];
 
 	public buildFromObject(object: Object) {
-		if (_.isUndefined(object)) {
+		if (_.isUndefined(object) || _.isNull(object)) {
 			return;
 		}
 		var primitiveProperties: string[] = this.getPrimitivePropertyKeys();
