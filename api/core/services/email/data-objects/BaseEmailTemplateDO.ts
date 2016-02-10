@@ -1,11 +1,13 @@
 export enum EmailTemplateTypes {
-    AccountActivation
+    AccountActivation,
+	AccountRequestResetPassword,
+	AccountPasswordWasReset
 }
 
 export class BaseEmailTemplateDO {
     constructor(private _emailTemplateType: EmailTemplateTypes) {
     }
-    public get emailTemplateType(): EmailTemplateTypes {
+    public getEmailTemplateType(): EmailTemplateTypes {
         return this._emailTemplateType;
     }
 }

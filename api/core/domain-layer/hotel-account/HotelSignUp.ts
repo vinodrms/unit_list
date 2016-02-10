@@ -84,7 +84,7 @@ export class HotelSignUp {
 		user.accountStatus = AccountStatus.Pending;
 		user.accountActivationToken = new ActionTokenDO();
 		user.accountActivationToken.code = this._activationCode;
-		user.accountActivationToken.expiryTimestamp = this._authUtils.getAccountActionExpiryTimestamp();
+		user.accountActivationToken.expiryTimestamp = this._authUtils.getAccountActivationExpiryTimestamp();
 		user.contactDetails = new UserContactDetailsDO();
 		user.contactDetails.firstName = this._signUpDO.firstName;
 		user.contactDetails.lastName = this._signUpDO.lastName;
@@ -112,7 +112,7 @@ export class HotelSignUp {
 	private getEmailHeaderDO(): EmailHeaderDO {
 		return {
 			destinationEmail: this._signUpDO.email,
-			subject: "UnitPal Account Activation",
+			subject: "[UnitPal] Account Activation",
             attachments: []
 		};
 	}

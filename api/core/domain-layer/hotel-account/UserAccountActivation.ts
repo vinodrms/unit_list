@@ -1,6 +1,6 @@
 import {AppContext} from '../../utils/AppContext';
 import {SessionContext} from '../../utils/SessionContext';
-import {HotelDO} from '../../data-layer/hotel/data-objects/HotelDO';
+import {UserDO} from '../../data-layer/hotel/data-objects/user/UserDO';
 
 export class UserAccountActivationDO {
 	activationCode: string;
@@ -14,15 +14,15 @@ export class UserAccountActivationDO {
 export class UserAccountActivation {
 	constructor(private _appContext: AppContext, private _sessionContext: SessionContext, private _accountActivationDO: UserAccountActivationDO) {
 	}
-	public activate(): Promise<HotelDO> {
-		return new Promise<HotelDO>((resolve, reject) => {
+	public activate(): Promise<UserDO> {
+		return new Promise<UserDO>((resolve: { (user: UserDO): void }, reject: { (err: any): void }) => {
 			this.activateCore(resolve, reject);
 		});
 	}
-	private activateCore(resolve, reject) {
+	private activateCore(resolve: { (user: UserDO): void }, reject: { (err: any): void }) {
 		var hotelRepository = this._appContext.getRepositoryFactory().getHotelRepository();
-		hotelRepository.activateUserAccount(this._accountActivationDO.email, this._accountActivationDO.activationCode).then((result: HotelDO) => {
-			resolve(result);
+		hotelRepository.activateUserAccount(this._accountActivationDO.email, this._accountActivationDO.activationCode).then((user: UserDO) => {
+			resolve(user);
 		}).catch((err: any) => {
 			reject(err);
 		});

@@ -22,6 +22,14 @@ export enum ErrorCode {
 	HotelRepositoryAccountCouldNotBeActivated,
 	HotelActivateError,
 	AccControllerErrorInitializingSession,
+	HotelRepositoryProblemUpdatingPasswordToken,
+	HotelRepositoryErrorUpdatingPasswordToken,
+	UserAccountRequestResetPasswordError,
+	AccControllerErrorRequestingResetPassword,
+	HotelRepositoryCountNotResetPassword,
+	HotelRepositoryErrorCouldNotResetPassword,
+	UserAccountResetPasswordError,
+	AccControllerErrorResettingPassword,
 
 	NUM_OF_ITEMS
 }
@@ -48,6 +56,14 @@ ErrorMessage[ErrorCode.HotelRepositoryErrorActivatingAccount] = "There was a pro
 ErrorMessage[ErrorCode.HotelRepositoryAccountCouldNotBeActivated] = "The account could not be activated.";
 ErrorMessage[ErrorCode.HotelActivateError] = "There was a problem while activating your account.";
 ErrorMessage[ErrorCode.AccControllerErrorInitializingSession] = "There was a problem while creating your session. Please try again.";
+ErrorMessage[ErrorCode.HotelRepositoryProblemUpdatingPasswordToken] = "The password could not be reset. Please check the email and try again.";
+ErrorMessage[ErrorCode.HotelRepositoryErrorUpdatingPasswordToken] = "There was a problem while resetting the password.";
+ErrorMessage[ErrorCode.UserAccountRequestResetPasswordError] = "There was a problem while resetting the password. Please contract the administrator if this problem persists.";
+ErrorMessage[ErrorCode.AccControllerErrorRequestingResetPassword] = "Problem resetting your password.";
+ErrorMessage[ErrorCode.HotelRepositoryCountNotResetPassword] = "Problem while updating the new password. The link you used may expired.";
+ErrorMessage[ErrorCode.HotelRepositoryErrorCouldNotResetPassword] = "Problem while updating the new password.";
+ErrorMessage[ErrorCode.UserAccountResetPasswordError] = "There was a problem while changing the password. Please contract the administrator if this problem persists.";
+ErrorMessage[ErrorCode.AccControllerErrorResettingPassword] = "There was a problem while changing the password.";
 
 
 export class ErrorContainer {
