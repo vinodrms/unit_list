@@ -1,5 +1,7 @@
 import {ILogInitializer} from '../ILogInitializer';
-import {Logger, LogLevel} from '../../../utils/logging/Logger';
+import {ThLogger, ThLogLevel} from '../../../utils/logging/ThLogger';
+import {ThError} from '../../../utils/th-responses/ThError';
+import {ThStatusCode} from '../../../utils/th-responses/ThResponse';
 
 import winston = require('winston');
 require('winston-mongodb').MongoDB;
@@ -25,7 +27,8 @@ export class MongoDBLogInitializer implements ILogInitializer {
 
 	public initLogger() {
 		if (!this._databaseConfig) {
-			Logger.getInstance().logError(LogLevel.Error, "Error reading database configuration from SystemLogsEntity", { step: "Bootstrap" }, new Error());
+			var thError = new ThError(ThStatusCode.ErrorBootstrappingApp, new Error());
+			ThLogger.getInstance().logError(ThLogLevel.Error, "Error reading database configuration from SystemLogsEntity", { step: "Bootstrap" }, thError);
 			return;
 		}
 		try {
@@ -39,7 +42,8 @@ export class MongoDBLogInitializer implements ILogInitializer {
 			var winstonTransports: any = winston.transports;
 			winston.add(winstonTransports.MongoDB, winstonOptions);
 		} catch (e) {
-			Logger.getInstance().logError(LogLevel.Error, "Error initializing winston with the database configuration", { dbConfig: this._databaseConfig, step: "Bootstrap" }, new Error());
+			var thError = new ThError(ThStatusCode.ErrorBootstrappingApp, e);
+			ThLogger.getInstance().logError(ThLogLevel.Error, "Error initializing winston with the database configuration", { dbConfig: this._databaseConfig, step: "Bootstrap" }, thError);
 		}
 
 		winston.remove(winston.transports.Console);

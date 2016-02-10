@@ -1,8 +1,9 @@
+import {ThLogger, ThLogLevel} from '../../utils/logging/ThLogger';
+import {ThError} from '../../utils/th-responses/ThError';
+import {ThStatusCode} from '../../utils/th-responses/ThResponse';
 import {AppContext} from '../../utils/AppContext';
 import {SessionContext} from '../../utils/SessionContext';
 import {AuthUtils} from './utils/AuthUtils';
-import {Logger, LogLevel} from '../../utils/logging/Logger';
-import {ErrorContainer, ErrorCode} from '../../utils/responses/ResponseWrapper';
 import {IHotelRepository} from '../../data-layer/hotel/repositories/IHotelRepository';
 import {UserDO} from '../../data-layer/hotel/data-objects/user/UserDO';
 import {AccountPasswordWasResetTemplateDO} from '../../services/email/data-objects/AccountPasswordWasResetTemplateDO';
@@ -28,16 +29,17 @@ export class UserAccountResetPassword {
 		this._authUtils = new AuthUtils(this._appContext.getUnitPalConfig());
 	}
 	public resetPassword(): Promise<UserDO> {
-		return new Promise<UserDO>((resolve: { (user: UserDO): void }, reject: { (err: any): void }) => {
+		return new Promise<UserDO>((resolve: { (user: UserDO): void }, reject: { (err: ThError): void }) => {
 			try {
 				this.resetPasswordCore(resolve, reject);
 			} catch (e) {
-				Logger.getInstance().logError(LogLevel.Error, "Error resetting password", this._resetPasswdDO, e);
-				reject(new ErrorContainer(ErrorCode.UserAccountResetPasswordError, e));
+				var thError = new ThError(ThStatusCode.UserAccountResetPasswordError, e);
+				ThLogger.getInstance().logError(ThLogLevel.Error, "Error resetting password", this._resetPasswdDO, thError);
+				reject(thError);
 			}
 		});
 	}
-	private resetPasswordCore(resolve: { (user: UserDO): void }, reject: { (err: any): void }) {
+	private resetPasswordCore(resolve: { (user: UserDO): void }, reject: { (err: ThError): void }) {
 		var encryptedPassword = this._authUtils.encrypPassword(this._resetPasswdDO.password);
 		async.waterfall([
 			((finishResetPasswordCallback) => {
@@ -54,7 +56,8 @@ export class UserAccountResetPassword {
 			})
 		], ((error: any, emailSendResult: any) => {
 			if (error) {
-				reject(error);
+				var thError = new ThError(ThStatusCode.UserAccountResetPasswordError, error);
+				reject(thError);
 			}
 			else {
 				resolve(this._updatedUser);

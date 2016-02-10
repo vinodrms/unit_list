@@ -1,8 +1,8 @@
 import {BaseController} from './base/BaseController';
-import {ErrorCode} from '../core/utils/responses/ResponseWrapper';
+import {ThStatusCode} from '../core/utils/th-responses/ThResponse';
 import {HotelSignUpDO, HotelSignUp} from '../core/domain-layer/hotel-account/HotelSignUp';
 import {AppContext} from '../core/utils/AppContext';
-import {SessionDO, SessionManager} from '../core/utils/SessionContext';
+import {SessionContext, SessionManager} from '../core/utils/SessionContext';
 import {ILoginService, LoginType} from '../core/services/login/ILoginService';
 import {HotelDO} from '../core/data-layer/hotel/data-objects/HotelDO';
 import {UserDO} from '../core/data-layer/hotel/data-objects/user/UserDO';
@@ -21,7 +21,7 @@ class AccountController extends BaseController {
 		hotelSignUp.signUp().then((result: any) => {
 			this.returnSuccesfulResponse(req, res, {});
 		}).catch((err: any) => {
-			this.returnErrorResponse(req, res, err, ErrorCode.HotelSignUpError);
+			this.returnErrorResponse(req, res, err, ThStatusCode.HotelSignUpError);
 		});
 	}
 	public activate(req: Express.Request, res: Express.Response) {
@@ -36,7 +36,7 @@ class AccountController extends BaseController {
 			res.redirect(appContext.getUnitPalConfig().getAppContextRoot());
 		}).catch((err: any) => {
 			//TODO: redirect to login page with error code instead of returning JSON
-			this.returnErrorResponse(req, res, err, ErrorCode.HotelActivateError);
+			this.returnErrorResponse(req, res, err, ThStatusCode.HotelActivateError);
 		});
 	}
 	public logIn(req: Express.Request, res: Express.Response) {
@@ -44,14 +44,13 @@ class AccountController extends BaseController {
 		var loginService: ILoginService = appContext.getServiceFactory().getLoginService();
 		loginService.logIn(LoginType.Basic, req).then((loginData: { user: UserDO, hotel: HotelDO }) => {
 			var sessionManager: SessionManager = new SessionManager(req);
-			sessionManager.initializeSession(loginData).then((sessionDO: SessionDO) => {
-				this.returnSuccesfulResponse(req, res, sessionDO);
+			sessionManager.initializeSession(loginData).then((sessionContext: SessionContext) => {
+				this.returnSuccesfulResponse(req, res, sessionContext);
 			}).catch((err: any) => {
-
-				this.returnErrorResponse(req, res, err, ErrorCode.AccControllerErrorInitializingSession);
+				this.returnErrorResponse(req, res, err, ThStatusCode.AccControllerErrorInitializingSession);
 			});
 		}).catch((err: any) => {
-			this.returnErrorResponse(req, res, err, ErrorCode.HotelLoginError);
+			this.returnErrorResponse(req, res, err, ThStatusCode.HotelLoginError);
 		});
 	}
 	public logOut(req: Express.Request, res: Express.Response) {
@@ -68,7 +67,7 @@ class AccountController extends BaseController {
 		reqPasswd.requestResetPassword().then((resetToken: ActionTokenDO) => {
 			this.returnSuccesfulResponse(req, res, {});
 		}).catch((err: any) => {
-			this.returnErrorResponse(req, res, err, ErrorCode.AccControllerErrorRequestingResetPassword);
+			this.returnErrorResponse(req, res, err, ThStatusCode.AccControllerErrorRequestingResetPassword);
 		});
 	}
 	public resetPassword(req: Express.Request, res: Express.Response) {
@@ -79,7 +78,7 @@ class AccountController extends BaseController {
 		reqPasswd.resetPassword().then((user: UserDO) => {
 			this.returnSuccesfulResponse(req, res, {});
 		}).catch((err: any) => {
-			this.returnErrorResponse(req, res, err, ErrorCode.AccControllerErrorResettingPassword);
+			this.returnErrorResponse(req, res, err, ThStatusCode.AccControllerErrorResettingPassword);
 		});
 	}
 }

@@ -1,8 +1,9 @@
+import {ThLogger, ThLogLevel} from '../../../utils/logging/ThLogger';
+import {ThError} from '../../../utils/th-responses/ThError';
+import {ThStatusCode} from '../../../utils/th-responses/ThResponse';
 import {AppContext} from '../../../utils/AppContext';
 import {HotelDO} from '../../../data-layer/hotel/data-objects/HotelDO';
 import {UserDO, AccountStatus} from '../../../data-layer/hotel/data-objects/user/UserDO';
-import {Logger, LogLevel} from '../../../utils/logging/Logger';
-import {ErrorContainer, ErrorCode} from '../../../utils/responses/ResponseWrapper';
 import {AuthUtils} from '../utils/AuthUtils';
 import {IHotelAuthentication} from './IHotelAuthentication';
 
@@ -23,7 +24,7 @@ export class HotelBasicAuthentication implements IHotelAuthentication {
 			this.checkCredentialsCore(resolve, reject);
 		});
 	}
-	private checkCredentialsCore(resolve: { (result?: { user: UserDO, hotel: HotelDO }): void; }, reject: any) {
+	private checkCredentialsCore(resolve: { (result?: { user: UserDO, hotel: HotelDO }): void; }, reject: { (err: ThError): void }) {
 		this._appContext.getRepositoryFactory().getHotelRepository().getHotelByUserEmail(this._email).then((hotel: HotelDO) => {
 			var user: UserDO = _.find(hotel.users, (currentUser: UserDO) => {
 				return currentUser.email == this._email;
@@ -38,17 +39,20 @@ export class HotelBasicAuthentication implements IHotelAuthentication {
 						});
 					}
 					else {
-						Logger.getInstance().logBusiness(LogLevel.Info, "Invalid password", { email: this._email, hotel: hotel });
-						reject(new ErrorContainer(ErrorCode.HotelAuthenticationInvalidEmailOrPassword));
+						var thError = new ThError(ThStatusCode.HotelAuthenticationInvalidEmailOrPassword, null);
+						ThLogger.getInstance().logBusiness(ThLogLevel.Info, "Invalid password", { email: this._email, hotel: hotel }, thError);
+						reject(thError);
 					}
 					break;
 				default:
-					Logger.getInstance().logBusiness(LogLevel.Info, "Account not active", { email: this._email, hotel: hotel });
-					reject(new ErrorContainer(ErrorCode.HotelAuthenticationAccountNotActive));
+					var thError = new ThError(ThStatusCode.HotelAuthenticationAccountNotActive, null);
+					ThLogger.getInstance().logBusiness(ThLogLevel.Info, "Account not active", { email: this._email, hotel: hotel }, thError);
+					reject(thError);
 					break;
 			}
 		}).catch((err: any) => {
-			reject(err);
+			var thError = new ThError(ThStatusCode.HotelAuthenticationErrorQueryingRepository, null);
+			reject(thError);
 		});
 	}
 }

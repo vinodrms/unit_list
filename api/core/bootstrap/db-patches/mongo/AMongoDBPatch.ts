@@ -1,3 +1,6 @@
+import {ThLogger, ThLogLevel} from '../../../utils/logging/ThLogger';
+import {ThError} from '../../../utils/th-responses/ThError';
+import {ThStatusCode} from '../../../utils/th-responses/ThResponse';
 import {IDBPatch} from '../IDBPatch';
 import {MongoPatchApplier} from './patch-applier/MongoPatchApplier';
 import async = require("async");
@@ -15,12 +18,12 @@ export abstract class AMongoDBPatch implements IDBPatch {
 	constructor() {
 	}
 
-	public applyPatches(): Promise<any> {
+	public applyPatches(): Promise<boolean> {
 		return new Promise<any>((resolve, reject) => {
 			this.applyPatchesCore(resolve, reject);
 		});
 	}
-	private applyPatchesCore(resolve, reject) {
+	private applyPatchesCore(resolve: { (result: any): void }, reject: { (err: ThError): void }) {
 		async.waterfall([
 			((finishEnsuredIndexCallback) => {
 				this.ensureIndexAsync(finishEnsuredIndexCallback);
@@ -37,10 +40,11 @@ export abstract class AMongoDBPatch implements IDBPatch {
 			})
 		], ((error: any, result: any) => {
 			if (error) {
-				reject(error);
+				var thError = new ThError(ThStatusCode.ErrorBootstrappingApp, error);
+				reject(thError);
 			}
 			else {
-				resolve(result);
+				resolve(true);
 			}
 		}));
 	}
@@ -57,18 +61,21 @@ export abstract class AMongoDBPatch implements IDBPatch {
 			this.ensureIndexCore(resolve, reject);
 		});
 	}
-	private ensureIndexCore(resolve, reject) {
+	private ensureIndexCore(resolve: { (result: any): void }, reject: { (err: ThError): void }) {
 		this.getNativeSystemPatchesEntity().then((nativeSystemPatchesEntity: any) => {
 			this._nativeSystemPatchesEntity = nativeSystemPatchesEntity;
 			this._nativeSystemPatchesEntity.ensureIndex("patchType", { unique: true }, ((err, indexName) => {
 				if (err || !indexName) {
-					reject("Error ensuring unique index");
+					var thError = new ThError(ThStatusCode.ErrorBootstrappingApp, err);
+					ThLogger.getInstance().logError(ThLogLevel.Error, "AMongoDBPatch - ensuring patchType index on native system patches collection", { step: "Bootstrap" }, thError);
+					reject(thError);
 					return;
 				}
 				resolve(true);
 			}));
 		}).catch((error: any) => {
-			reject(error);
+			var thError = new ThError(ThStatusCode.ErrorBootstrappingApp, error);
+			reject(thError);
 		});
 	}
 	protected abstract getNativeSystemPatchesEntity(): any;
@@ -92,7 +99,7 @@ export abstract class AMongoDBPatch implements IDBPatch {
 			this.updateLockStatusCore(resolve, reject, currentStatus, newStatus, newPatches);
 		});
 	}
-	private updateLockStatusCore(resolve, reject, currentStatus: LockStatus, newStatus: LockStatus, newPatches: string[]) {
+	private updateLockStatusCore(resolve: { (result: any): void }, reject: { (err: ThError): void }, currentStatus: LockStatus, newStatus: LockStatus, newPatches: string[]) {
 		var setClause = {
 			$set: {
 				lock: newStatus,
@@ -104,7 +111,9 @@ export abstract class AMongoDBPatch implements IDBPatch {
 		}
 		this._nativeSystemPatchesEntity.findAndModify({ lock: currentStatus }, [], setClause, { upsert: true, new: true }, (err, record) => {
 			if (err || !record || !record.value) {
-				reject("Error getting native SystemPatches lock!");
+				var thError = new ThError(ThStatusCode.ErrorBootstrappingApp, err);
+				ThLogger.getInstance().logError(ThLogLevel.Warning, "AMongoDBPatch - Error getting native SystemPatches lock!", { step: "Bootstrap" }, thError);
+				reject(thError);
 				return;
 			}
 			this._appliedPatches = record.value.patches;

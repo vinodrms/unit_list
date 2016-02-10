@@ -1,6 +1,6 @@
 import {AImageStorageService} from '../core/services/image-storage/AImageStorageService';
 import {BaseController} from './base/BaseController';
-import {ErrorCode} from '../core/utils/responses/ResponseWrapper';
+import {ThStatusCode} from '../core/utils/th-responses/ThResponse';
 import {AppContext} from '../core/utils/AppContext';
 
 class ImageUploadController extends BaseController {

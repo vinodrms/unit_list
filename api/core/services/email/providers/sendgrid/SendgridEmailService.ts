@@ -1,6 +1,7 @@
+import {ThLogger, ThLogLevel} from '../../../../utils/logging/ThLogger';
+import {ThError} from '../../../../utils/th-responses/ThError';
+import {ThStatusCode} from '../../../../utils/th-responses/ThResponse';
 import {AEmailService} from '../../AEmailService';
-import {ErrorContainer, ErrorCode} from '../../../../utils/responses/ResponseWrapper';
-import {Logger, LogLevel} from '../../../../utils/logging/Logger';
 import {SendgridTemplateFactory} from './SendgridTemplateFactory';
 
 import sendgrid = require("sendgrid");
@@ -8,13 +9,13 @@ import _ = require("underscore");
 
 export class SendgridEmailService extends AEmailService {
 
-    protected sendEmail(): Promise<any> {
-        return new Promise<string>((resolve, reject) => {
+    protected sendEmail(): Promise<boolean> {
+        return new Promise<boolean>((resolve: { (result: boolean): void }, reject: { (err: ThError): void }) => {
             this.sendEmailCore(resolve, reject);
         });
     }
 
-    private sendEmailCore(resolve, reject) {
+    private sendEmailCore(resolve: { (result: boolean): void }, reject: { (err: ThError): void }) {
         var server = this.initServer(sendgrid);
         var message = this.buildEmailMessage(server);
         this.trySendingEmail(server, message, resolve, reject);
@@ -34,7 +35,7 @@ export class SendgridEmailService extends AEmailService {
         for (var tag in emailTemplateMetadata.subs) {
             sendgridEmail.addSubstitution(tag, emailTemplateMetadata.subs[tag]);
         }
-        
+
         sendgridEmail.setFilters({
             templates: {
                 settings: {
@@ -46,10 +47,10 @@ export class SendgridEmailService extends AEmailService {
 
         return sendgridEmail;
     }
-    
+
     private getSendgridEmailInitData() {
         var emailSettings: any = this._unitPalConfig.getEmailProviderSettings();
-        
+
         var sendgridEmailInitData = {
             to: this._emailHeaderDO.destinationEmail,
             from: emailSettings.from,
@@ -57,24 +58,25 @@ export class SendgridEmailService extends AEmailService {
             files: [],
             html: `<p></p>`
         };
-        
-        if(!_.isEmpty(this._emailHeaderDO.attachments)) {
+
+        if (!_.isEmpty(this._emailHeaderDO.attachments)) {
             _.each(this._emailHeaderDO.attachments, (fileName) => {
                 sendgridEmailInitData.files.push({
-                    filename: fileName, 
+                    filename: fileName,
                     content: 'data'
                 });
             });
         }
-        
+
         return sendgridEmailInitData;
     }
-    
-    private trySendingEmail(server: any, message: Object, resolve: any, reject: any) {
-        server.send(message, ((err, json) => {
+
+    private trySendingEmail(server: any, message: Object, resolve: { (result: boolean): void }, reject: { (err: ThError): void }) {
+        server.send(message, ((err: Error, json) => {
             if (err) {
-                Logger.getInstance().logError(LogLevel.Error, "Error sending email", this._emailHeaderDO, err);
-                reject(new ErrorContainer(ErrorCode.SmtpEmailServiceErrorSendingEmail, err));
+				var thError = new ThError(ThStatusCode.SendGridServiceErrorSendingEmail, err);
+                ThLogger.getInstance().logError(ThLogLevel.Error, "Error sending email", this._emailHeaderDO, thError);
+                reject(thError);
                 return;
             }
             resolve(true);
