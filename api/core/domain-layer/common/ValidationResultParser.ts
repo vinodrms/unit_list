@@ -20,7 +20,9 @@ export class ValidationResultParser {
 			thError = new ThError(ThStatusCode.DataValidationError, null);
 		}
 		ThLogger.getInstance().logBusiness(ThLogLevel.Error, logMessage, { parameters: this._inputDO, validationErrors: this.getValidationErrorsJson() }, thError);
-		reject(thError);
+		process.nextTick(() => {
+			reject(thError);
+		});
 	}
 	private getValidationErrorsJson(): { type: InvalidConstraint, key: string }[] {
 		var validationErrorsJson = [];
