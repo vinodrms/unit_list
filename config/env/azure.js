@@ -18,6 +18,21 @@ module.exports = {
         level: "silent"
     },
 	unitPalConfig: {
-		appContextRoot: process.env.APP_CONTEXT_ROOT
+		appContextRoot: process.env.APP_CONTEXT_ROOT,
+		emailService: {
+			type: "sendgrid",
+			settings: {
+				apiKey: process.env.SENDGRID_API_KEY,
+				from: process.env.SENDGRID_FROM
+			}
+		},
+		imageUploadService: {
+			type: "cloudinary",
+			settings: {
+				cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+				api_key: process.env.CLOUDINARY_API_KEY,
+				api_secret: process.env.CLOUDINARY_API_SECRET
+			}
+		}
 	}
 };
