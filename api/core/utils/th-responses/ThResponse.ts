@@ -4,6 +4,9 @@ import {ThUtils} from '../ThUtils';
 export enum ThStatusCode {
 	Ok,
 	InternalServerError,
+	DataValidationError,
+	DataEmailValidationError,
+	DataPasswordValidationError,
 	ErrorBootstrappingApp,
 	ErrorCleaningRepositories,
 	InvalidRequestParameters,
@@ -48,6 +51,9 @@ export enum ThStatusCode {
 var ThMessage: { [index: number]: string; } = {};
 ThMessage[ThStatusCode.Ok] = "Ok";
 ThMessage[ThStatusCode.InternalServerError] = "Internal Server Error.";
+ThMessage[ThStatusCode.DataValidationError] = "Error validating data.";
+ThMessage[ThStatusCode.DataEmailValidationError] = "Error validating email.";
+ThMessage[ThStatusCode.DataPasswordValidationError] = "Error validating password.";
 ThMessage[ThStatusCode.ErrorBootstrappingApp] = "Error Bootstrapping App.";
 ThMessage[ThStatusCode.ErrorCleaningRepositories] = "Error Cleaning Repositories.";
 ThMessage[ThStatusCode.InvalidRequestParameters] = "Invalid Request Parameters";

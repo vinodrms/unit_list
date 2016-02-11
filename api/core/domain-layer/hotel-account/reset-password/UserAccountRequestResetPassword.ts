@@ -1,26 +1,20 @@
-import {ThLogger, ThLogLevel} from '../../utils/logging/ThLogger';
-import {ThError} from '../../utils/th-responses/ThError';
-import {ThStatusCode} from '../../utils/th-responses/ThResponse';
-import {AppContext} from '../../utils/AppContext';
-import {SessionContext} from '../../utils/SessionContext';
-import {UserDO} from '../../data-layer/hotel/data-objects/user/UserDO';
-import {ActionTokenDO} from '../../data-layer/hotel/data-objects/user/ActionTokenDO';
-import {AuthUtils} from './utils/AuthUtils';
-import {ThUtils} from '../../utils/ThUtils';
-import {IHotelRepository} from '../../data-layer/hotel/repositories/IHotelRepository';
-import {AccountRequestResetPasswordTemplateDO} from '../../services/email/data-objects/AccountRequestResetPasswordTemplateDO';
-import {IEmailService, EmailHeaderDO} from '../../services/email/IEmailService';
+import {ThLogger, ThLogLevel} from '../../../utils/logging/ThLogger';
+import {ThError} from '../../../utils/th-responses/ThError';
+import {ThStatusCode} from '../../../utils/th-responses/ThResponse';
+import {AppContext} from '../../../utils/AppContext';
+import {SessionContext} from '../../../utils/SessionContext';
+import {UserDO} from '../../../data-layer/hotel/data-objects/user/UserDO';
+import {ActionTokenDO} from '../../../data-layer/hotel/data-objects/user/ActionTokenDO';
+import {AuthUtils} from '../utils/AuthUtils';
+import {ThUtils} from '../../../utils/ThUtils';
+import {IHotelRepository} from '../../../data-layer/hotel/repositories/IHotelRepository';
+import {AccountRequestResetPasswordTemplateDO} from '../../../services/email/data-objects/AccountRequestResetPasswordTemplateDO';
+import {IEmailService, EmailHeaderDO} from '../../../services/email/IEmailService';
+import {UserAccountRequestResetPasswordDO} from './UserAccountRequestResetPasswordDO';
+import {ValidationResultParser} from '../../common/ValidationResultParser';
 
 import async = require("async");
 import _ = require("underscore");
-
-export class UserAccountRequestResetPasswordDO {
-	email: string;
-
-	public static getRequiredProperties(): string[] {
-		return ["email"];
-	}
-}
 
 export class UserAccountRequestResetPassword {
 	private _authUtils: AuthUtils;
@@ -45,6 +39,13 @@ export class UserAccountRequestResetPassword {
 		});
 	}
 	private requestResetPasswordCore(resolve: { (actionToken: ActionTokenDO): void }, reject: { (ThError: any): void }) {
+		var validationResult = UserAccountRequestResetPasswordDO.getValidationStructure().validateStructure(this._resetPasswdDO);
+		if (!validationResult.isValid()) {
+			var parser = new ValidationResultParser(validationResult, this._resetPasswdDO);
+			parser.logAndReject("Error validating request reset password fields", reject);
+			return;
+		}
+
 		this._generatedToken = this.generateResetPasswordToken();
 		async.waterfall([
 			((finishUpdateTokenCallback) => {

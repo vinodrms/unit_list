@@ -1,32 +1,22 @@
-import {ThLogger, ThLogLevel} from '../../utils/logging/ThLogger';
-import {ThError} from '../../utils/th-responses/ThError';
-import {ThStatusCode} from '../../utils/th-responses/ThResponse';
-import {AppContext} from '../../utils/AppContext';
-import {ThUtils} from '../../utils/ThUtils';
-import {SessionContext} from '../../utils/SessionContext';
-import {HotelDO} from '../../data-layer/hotel/data-objects/HotelDO';
-import {HotelContactDetailsDO} from '../../data-layer/hotel/data-objects/hotel-contact-details/HotelContactDetailsDO';
-import {ActionTokenDO} from '../../data-layer/hotel/data-objects/user/ActionTokenDO';
-import {UserDO, AccountStatus, UserRoles} from '../../data-layer/hotel/data-objects/user/UserDO';
-import {UserContactDetailsDO} from '../../data-layer/hotel/data-objects/user/UserContactDetailsDO';
-import {IHotelRepository} from '../../data-layer/hotel/repositories/IHotelRepository';
-import {IEmailService, EmailHeaderDO} from '../../services/email/IEmailService';
-import {AccountActivationEmailTemplateDO} from '../../services/email/data-objects/AccountActivationEmailTemplateDO';
-import {AuthUtils} from './utils/AuthUtils';
+import {ThLogger, ThLogLevel} from '../../../utils/logging/ThLogger';
+import {ThError} from '../../../utils/th-responses/ThError';
+import {ThStatusCode} from '../../../utils/th-responses/ThResponse';
+import {AppContext} from '../../../utils/AppContext';
+import {ThUtils} from '../../../utils/ThUtils';
+import {SessionContext} from '../../../utils/SessionContext';
+import {HotelDO} from '../../../data-layer/hotel/data-objects/HotelDO';
+import {HotelContactDetailsDO} from '../../../data-layer/hotel/data-objects/hotel-contact-details/HotelContactDetailsDO';
+import {ActionTokenDO} from '../../../data-layer/hotel/data-objects/user/ActionTokenDO';
+import {UserDO, AccountStatus, UserRoles} from '../../../data-layer/hotel/data-objects/user/UserDO';
+import {UserContactDetailsDO} from '../../../data-layer/hotel/data-objects/user/UserContactDetailsDO';
+import {IHotelRepository} from '../../../data-layer/hotel/repositories/IHotelRepository';
+import {IEmailService, EmailHeaderDO} from '../../../services/email/IEmailService';
+import {AccountActivationEmailTemplateDO} from '../../../services/email/data-objects/AccountActivationEmailTemplateDO';
+import {AuthUtils} from '../utils/AuthUtils';
+import {HotelSignUpDO} from './HotelSignUpDO';
+import {ValidationResultParser} from '../../common/ValidationResultParser';
 
 import async = require("async");
-
-export class HotelSignUpDO {
-	hotelName: string;
-	email: string;
-	password: string;
-	firstName: string;
-	lastName: string;
-
-	public static getRequiredProperties(): string[] {
-		return ["hotelName", "email", "password", "firstName", "lastName"];
-	}
-}
 
 export class HotelSignUp {
 	private _savedHotel: HotelDO;
@@ -52,6 +42,12 @@ export class HotelSignUp {
 	}
 
 	private signUpCore(resolve: { (result: ActionTokenDO): void }, reject: { (err: ThError): void }) {
+		var validationResult = HotelSignUpDO.getValidationRules().validateStructure(this._signUpDO);
+		if (!validationResult.isValid()) {
+			var parser = new ValidationResultParser(validationResult, this._signUpDO);
+			parser.logAndReject("Error validating hotel sign up fields", reject);
+			return;
+		}
 		var defaultHotelData = this.generateDefaultHotel();
 		async.waterfall([
 			((finishAddHotelCallback) => {
@@ -75,6 +71,7 @@ export class HotelSignUp {
 			}
 		}));
 	}
+
 	private generateDefaultHotel(): HotelDO {
 		this._activationCode = this._thUtils.generateUniqueID();
 

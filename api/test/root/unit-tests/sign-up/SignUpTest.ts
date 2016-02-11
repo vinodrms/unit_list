@@ -4,7 +4,8 @@ import should = require('should');
 import {TestContext} from '../../../helpers/TestContext';
 import {ThError} from '../../../../core/utils/th-responses/ThError';
 import {ThStatusCode, ThResponse} from '../../../../core/utils/th-responses/ThResponse';
-import {HotelSignUp, HotelSignUpDO} from '../../../../core/domain-layer/hotel-account/HotelSignUp';
+import {HotelSignUp} from '../../../../core/domain-layer/hotel-account/sign-up/HotelSignUp';
+import {HotelSignUpDO} from '../../../../core/domain-layer/hotel-account/sign-up/HotelSignUpDO';
 import {ActionTokenDO} from '../../../../core/data-layer/hotel/data-objects/user/ActionTokenDO';
 
 describe("Sign Up Tests", function() {
@@ -14,7 +15,7 @@ describe("Sign Up Tests", function() {
 		firstName: "Dragos",
 		lastName: "Pricope",
 		hotelName: "3angleTECH Hotel",
-		password: "1234"
+		password: "TestTest,01"
 	};
 
 	before(function(done: any) {
