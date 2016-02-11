@@ -1,11 +1,12 @@
+import {ThLogger, ThLogLevel} from '../../../utils/logging/ThLogger';
+import {ThError} from '../../../utils/th-responses/ThError';
+import {ThStatusCode} from '../../../utils/th-responses/ThResponse';
 import {VatDetailsDO} from '../VatDetailsDO';
 import {IVatProvider} from '../IVatProvider';
-
-import {ErrorContainer, ErrorCode} from '../../../utils/responses/ResponseWrapper';
-import {Logger} from '../../../utils/logging/Logger';
 var soap = require('soap');
 
 export class VIESVatProviderAdapter implements IVatProvider {
+	private static TimeoutMillis = 5000;
 	private static EcEuropaWsdl = 'http://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl';
 
 	private _countryCode: string;
@@ -14,35 +15,38 @@ export class VIESVatProviderAdapter implements IVatProvider {
 	public checkVAT(countryCode: string, vat: string): Promise<VatDetailsDO> {
 		this._countryCode = countryCode;
 		this._vat = vat;
-		return new Promise<VatDetailsDO>((resolve, reject) => {
+		return new Promise<VatDetailsDO>((resolve: { (result: VatDetailsDO): void }, reject: { (err: ThError): void }) => {
 			try {
 				this.checkVATCore(resolve, reject);
 			} catch (e) {
-				Logger.getInstance().logError("Error running VIES SOAP Service", { countryCode: countryCode, vat: vat }, e);
-				reject(new ErrorContainer(ErrorCode.VatProviderErrorCheckingVat, e));
+				var thError = new ThError(ThStatusCode.VatProviderErrorCheckingVat, e);
+				ThLogger.getInstance().logError(ThLogLevel.Error, "Error running VIES SOAP Service", { countryCode: countryCode, vat: vat }, thError);
+				reject(thError);
 			}
 		});
 	}
-	private checkVATCore(resolve, reject) {
+	private checkVATCore(resolve: { (result: VatDetailsDO): void }, reject: { (err: ThError): void }) {
 		var args = { countryCode: this._countryCode, vatNumber: this._vat };
 
 		soap.createClient(VIESVatProviderAdapter.EcEuropaWsdl, (err, client) => {
-			client.checkVat(args, function(err, result) {
+			client.checkVat(args, function(err: Error, result) {
 				if (err && !result) {
-					Logger.getInstance().logBusiness("Error checking VAT", args, err);
-					reject(new ErrorContainer(ErrorCode.VatProviderErrorCheckingVat));
+					var thError = new ThError(ThStatusCode.VatProviderErrorCheckingVat, err);
+					ThLogger.getInstance().logError(ThLogLevel.Error, "Error checking VAT", args, thError);
+					reject(thError);
 				}
 				else {
 					if (!result.valid) {
-						Logger.getInstance().logBusiness("Invalid VAT", args);
-						reject(new ErrorContainer(ErrorCode.VatProviderInvalidVat));
+						var thError = new ThError(ThStatusCode.VatProviderInvalidVat, null);
+						ThLogger.getInstance().logBusiness(ThLogLevel.Info, "Invalid VAT", args, thError);
+						reject(thError);
 					}
 					else {
 						var vatDetails: VatDetailsDO = new VatDetailsDO(result.countryCode, result.vatNumber, result.name, result.address);
 						resolve(vatDetails);
 					}
 				}
-			}, { timeout: 5000 });
+			}, { timeout: VIESVatProviderAdapter.TimeoutMillis });
 		});
 	}
 }

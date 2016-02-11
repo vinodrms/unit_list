@@ -7,6 +7,6 @@ export enum MongoPatcheType {
 
 export abstract class AMongoPatch implements IMongoPatchApplier, IMongoPatch {
 	constructor() { }
-	public abstract apply(): Promise<any>;
+	public abstract apply(): Promise<boolean>;
 	public abstract getPatchType(): MongoPatcheType;
 }

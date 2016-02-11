@@ -1,4 +1,4 @@
-import _ = require("underscore");
+import {ThUtils} from '../../../utils/ThUtils';
 
 export enum MongoErrorCodes {
 	GenericError,
@@ -8,8 +8,13 @@ var NativeMongoErrorCodes: { [index: number]: number; } = {};
 NativeMongoErrorCodes[MongoErrorCodes.DuplicateKeyError] = 11000;
 
 export class BaseMongoRepository {
+	protected _thUtils: ThUtils;
+	constructor() {
+		this._thUtils = new ThUtils();
+	}
+
 	protected getMongoErrorCode(err: any): MongoErrorCodes {
-		if (!_.isUndefined(err) && !_.isUndefined(err.originalError) && !_.isUndefined(err.originalError.code)) {
+		if (!this._thUtils.isUndefinedOrNull(err, "originalError.code")) {
 			var nativeMongoErrorCode = err.originalError.code;
 			return this.getMongoErrorCodeOfType(nativeMongoErrorCode);
 		}

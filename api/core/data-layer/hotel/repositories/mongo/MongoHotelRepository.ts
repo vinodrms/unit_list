@@ -1,40 +1,34 @@
-import {MongoErrorCodes} from '../../../common/base/BaseMongoRepository';
-import {ErrorContainer, ErrorCode} from '../../../../utils/responses/ResponseWrapper';
-import {Logger} from '../../../../utils/logging/Logger';
 import {AMongoHotelRepository} from './AMongoHotelRepository';
 import {HotelDO} from '../../data-objects/HotelDO';
+import {UserDO} from '../../data-objects/user/UserDO';
+import {MongoHotelAccountRepository} from './actions/MongoHotelAccountRepository';
+import {ActionTokenDO} from '../../data-objects/user/ActionTokenDO';
 
 export class MongoHotelRepository extends AMongoHotelRepository {
 	private _hotelsEntity: Sails.Model;
+	private _accountActionsRepository: MongoHotelAccountRepository;
 
 	constructor() {
 		super();
 		this._hotelsEntity = sails.models.hotelsentity;
+		this._accountActionsRepository = new MongoHotelAccountRepository(this._hotelsEntity);
 	}
-
-	public addHotel(hotel: HotelDO): Promise<HotelDO> {
-		return new Promise<HotelDO>((resolve, reject) => {
-			this.addHotelCore(resolve, reject, hotel);
-		});
+	protected addHotel(hotel: HotelDO): Promise<HotelDO> {
+		return this._accountActionsRepository.addHotel(hotel);
 	}
-	private addHotelCore(resolve, reject, hotel: HotelDO) {
-		this._hotelsEntity.create(hotel).then((createdHotel: Sails.QueryResult) => {
-			var savedHotel: HotelDO = new HotelDO();
-			savedHotel.buildFromObject(createdHotel);
-			resolve(savedHotel);
-		}).catch((err: Error) => {
-			var errorCode = this.getMongoErrorCode(err);
-			if (errorCode == MongoErrorCodes.DuplicateKeyError) {
-				Logger.getInstance().logBusiness("Account already exists", hotel, err);
-				reject(new ErrorContainer(ErrorCode.HotelRepositoryAccountAlreadyExists, err));
-			}
-			else {
-				Logger.getInstance().logError("Error adding hotel", hotel, err);
-				reject(new ErrorContainer(ErrorCode.HotelRepositoryErrorAddingHotel, err));
-			}
-		});
+	public getHotelByUserEmail(email: string): Promise<HotelDO> {
+		return this._accountActionsRepository.getHotelByUserEmail(email);
 	}
-	cleanRepository(): Promise<Object> {
+	public activateUserAccount(email: string, activationCode: string): Promise<UserDO> {
+		return this._accountActionsRepository.activateUserAccount(email, activationCode);
+	}
+	protected requestResetPassword(email: string, token: ActionTokenDO): Promise<UserDO> {
+		return this._accountActionsRepository.requestResetPassword(email, token);
+	}
+	protected resetPassword(email: string, activationCode: string, newPassword: string): Promise<UserDO> {
+		return this._accountActionsRepository.resetPassword(email, activationCode, newPassword);
+	}
+	public cleanRepository(): Promise<Object> {
 		return this._hotelsEntity.destroy({});
 	}
 }

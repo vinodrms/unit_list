@@ -6,16 +6,16 @@
   "bundle": "typings/tsd.d.ts",
   "installed": {
     "node/node.d.ts": {
-      "commit": "4ec3c5bf291bc02f49eb30c1077340b235165c67"
+      "commit": "72f0056f69f9a2290d2589c1a692896d24406928"
     },
     "express/express.d.ts": {
-      "commit": "a9680ac2efd3add0d38cd0331f30ad497d9dd1e0"
+      "commit": "c393f8974d44840a6c9cc6d5b5c0188a8f05143d"
     },
     "mime/mime.d.ts": {
-      "commit": "a9680ac2efd3add0d38cd0331f30ad497d9dd1e0"
+      "commit": "c393f8974d44840a6c9cc6d5b5c0188a8f05143d"
     },
     "serve-static/serve-static.d.ts": {
-      "commit": "a9680ac2efd3add0d38cd0331f30ad497d9dd1e0"
+      "commit": "c393f8974d44840a6c9cc6d5b5c0188a8f05143d"
     },
     "bluebird/bluebird.d.ts": {
       "commit": "a9680ac2efd3add0d38cd0331f30ad497d9dd1e0"
@@ -58,6 +58,27 @@
     },
     "winston/winston.d.ts": {
       "commit": "4ec3c5bf291bc02f49eb30c1077340b235165c67"
+    },
+    "sendgrid/sendgrid.d.ts": {
+      "commit": "72f0056f69f9a2290d2589c1a692896d24406928"
+    },
+    "passport/passport.d.ts": {
+      "commit": "c393f8974d44840a6c9cc6d5b5c0188a8f05143d"
+    },
+    "passport-local/passport-local.d.ts": {
+      "commit": "c393f8974d44840a6c9cc6d5b5c0188a8f05143d"
+    },
+    "bcrypt/bcrypt.d.ts": {
+      "commit": "c393f8974d44840a6c9cc6d5b5c0188a8f05143d"
+    },
+    "node-uuid/node-uuid.d.ts": {
+      "commit": "3030a4be536b6530c06b80081f1333dc0de4d703"
+    },
+    "node-uuid/node-uuid-cjs.d.ts": {
+      "commit": "3030a4be536b6530c06b80081f1333dc0de4d703"
+    },
+    "node-uuid/node-uuid-base.d.ts": {
+      "commit": "3030a4be536b6530c06b80081f1333dc0de4d703"
     }
   }
 }

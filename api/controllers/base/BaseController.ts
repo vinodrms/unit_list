@@ -1,15 +1,17 @@
-import {ErrorCode, ResponseWrapper} from '../../core/utils/responses/ResponseWrapper';
-import {ErrorParser} from '../../core/utils/responses/ErrorParser';
-import {Logger} from '../../core/utils/logging/Logger';
+import {ThLogger, ThLogLevel} from '../../core/utils/logging/ThLogger';
+import {ThError} from '../../core/utils/th-responses/ThError';
+import {ThStatusCode, ThResponse} from '../../core/utils/th-responses/ThResponse';
+import {ThUtils} from '../../core/utils/ThUtils';
+import {SessionContext} from '../../core/utils/SessionContext';
 
 import _ = require("underscore");
 
 export class BaseController {
 	protected precheckPOSTParameters(req: Express.Request, res: Express.Response, rootParameter: string, parameters: string[]): boolean {
 		var parameterArray = [rootParameter];
-		for (var parameter in parameters) {
+		parameters.forEach((parameter: string) => {
 			parameterArray.push(rootParameter + "." + parameter);
-		}
+		});
 		return this.precheckParameters(req, res, "body", parameterArray);
 	}
 	protected precheckGETParameters(req: Express.Request, res: Express.Response, parameters: string[]): boolean {
@@ -17,45 +19,36 @@ export class BaseController {
 	}
 	private precheckParameters(req: Express.Request, res: Express.Response, reqField: string, parameters: string[]): boolean {
 		var result = true;
+		var thUtils: ThUtils = new ThUtils();
 		parameters.forEach((parameter: string) => {
-			if (!this.objectContainsParameter(req[reqField], parameter)) {
+			if (thUtils.isUndefinedOrNull(req[reqField], parameter)) {
 				result = false;
 			}
 		});
 		if (!result) {
-			Logger.getInstance().logError("Invalid request parameters", { url: req.url, actualParameters: req[reqField], requiredParameters: parameters }, new Error());
-			var responseWrapper: ResponseWrapper = new ResponseWrapper(ErrorCode.InvalidRequestParameters);
-			this.returnResponse(req, res, responseWrapper);
+			var thError = new ThError(ThStatusCode.InvalidRequestParameters, null);
+			ThLogger.getInstance().logBusiness(ThLogLevel.Error, "Invalid request parameters", { url: req.url, actualParameters: req[reqField], requiredParameters: parameters }, thError);
+			var thResponse: ThResponse = new ThResponse(thError.getThStatusCode());
+			this.returnResponse(req, res, thResponse);
 			return false;
-		}
-		return true;
-	}
-	private objectContainsParameter(object: Object, parameter: string): boolean {
-		var currentObject = object;
-		var parameterStack: string[] = parameter.split(".");
-		for (var i = 0; i < parameterStack.length; i++) {
-			var param = parameterStack[i];
-			currentObject = currentObject[param];
-			if (currentObject === undefined) {
-				return false;
-			}
 		}
 		return true;
 	}
 
 	protected returnSuccesfulResponse(req: Express.Request, res: Express.Response, data: any) {
-		var responseWrapper = new ResponseWrapper(ErrorCode.Ok, data);
-		this.returnResponse(req, res, responseWrapper);
+		var thResponse = new ThResponse(ThStatusCode.Ok, data);
+		this.returnResponse(req, res, thResponse);
 	}
-	protected returnErrorResponse(req: Express.Request, res: Express.Response, error: any, defaultErrorCode: ErrorCode) {
-		var errorParser: ErrorParser = new ErrorParser(error, defaultErrorCode);
-		if (errorParser.isUncatchedError()) {
-			Logger.getInstance().logError("Uncatched error", { url: req.url, body: req.body, query: req.query }, error);
+	protected returnErrorResponse(req: Express.Request, res: Express.Response, error: any, defaultErrorCode: ThStatusCode) {
+		var thError = new ThError(defaultErrorCode, error);
+		if (thError.isNativeError()) {
+			ThLogger.getInstance().logError(ThLogLevel.Error, "Native Uncaught Error", { url: req.url, body: req.body, query: req.query }, thError);
 		}
-		this.returnResponse(req, res, errorParser.getResponseWrapper());
+		this.returnResponse(req, res, new ThResponse(thError.getThStatusCode()));
 	}
 
-	private returnResponse(req: Express.Request, res: Express.Response, responseWrapper: ResponseWrapper) {
-		return res.json(responseWrapper.buildJson(req.sessionContext.locale));
+	private returnResponse(req: Express.Request, res: Express.Response, thResponse: ThResponse) {
+		var sessionContext: SessionContext = req.sessionContext;
+		return res.json(thResponse.buildJson(sessionContext.language));
 	}
 }

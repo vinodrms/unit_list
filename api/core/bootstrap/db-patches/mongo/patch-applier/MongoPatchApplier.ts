@@ -1,3 +1,5 @@
+import {ThError} from '../../../../utils/th-responses/ThError';
+import {ThStatusCode} from '../../../../utils/th-responses/ThResponse';
 import {IMongoPatchApplier} from './utils/IMongoPatchApplier';
 import {AMongoPatch, MongoPatcheType} from './utils/AMongoPatch';
 import {MongoPatch0} from './patches/MongoPatch0';
@@ -14,19 +16,20 @@ export class MongoPatchApplier implements IMongoPatchApplier {
 	private initPatchAppliers() {
 		this._mongoPatchAppliers = [new MongoPatch0()];
 	}
-	public applyAsync(finishApplyingPatchCallback: { (err: any, result?: string[]): void; }) {
-		this.apply().then((result: any) => {
+	public applyAsync(finishApplyingPatchCallback: { (err: ThError, result?: MongoPatcheType[]): void; }) {
+		this.apply().then((result: MongoPatcheType[]) => {
 			finishApplyingPatchCallback(null, result);
 		}).catch((error: any) => {
-			finishApplyingPatchCallback(error);
+			var thError = new ThError(ThStatusCode.ErrorBootstrappingApp, error);
+			finishApplyingPatchCallback(thError);
 		});
 	}
-	public apply(): Promise<any> {
-		return new Promise<Object>((resolve, reject) => {
+	public apply(): Promise<MongoPatcheType[]> {
+		return new Promise<MongoPatcheType[]>((resolve, reject) => {
 			this.applyCore(resolve, reject);
 		});
 	}
-	private applyCore(resolve, reject) {
+	private applyCore(resolve: { (result: MongoPatcheType[]): void }, reject: { (err: ThError): void }) {
 		var applierIndex = 0;
 		async.whilst(
 			(() => {
@@ -36,20 +39,22 @@ export class MongoPatchApplier implements IMongoPatchApplier {
 				var patchApplier: AMongoPatch = this._mongoPatchAppliers[applierIndex++];
 
 				if (!_.contains(this._appliedPatches, patchApplier.getPatchType())) {
-					patchApplier.apply().then((result: any) => {
+					patchApplier.apply().then((result: boolean) => {
 						this._appliedPatches.push(patchApplier.getPatchType());
 						finishApplySinglePatchCallback(null, result);
 					}).catch((err: Error) => {
-						finishApplySinglePatchCallback(err);
+						var thError = new ThError(ThStatusCode.ErrorBootstrappingApp, err);
+						finishApplySinglePatchCallback(thError);
 					});
 				}
 				else {
-					finishApplySinglePatchCallback(null, "");
+					finishApplySinglePatchCallback(null, true);
 				}
 			}),
 			((err: Error) => {
 				if (err) {
-					reject(err);
+					var thError = new ThError(ThStatusCode.ErrorBootstrappingApp, err);
+					reject(thError);
 				}
 				else {
 					resolve(_.uniq(this._appliedPatches));

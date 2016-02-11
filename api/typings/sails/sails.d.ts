@@ -9,7 +9,9 @@ declare module Express{
     query : any;
 	sessionContext : any;
 	appContext : any;
+	basicHotelAuthentication: any;
 	url: any;
+    file: any;
   }
   export interface Response{
     view(route:string);

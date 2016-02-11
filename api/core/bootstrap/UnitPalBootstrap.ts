@@ -1,26 +1,24 @@
 import {UnitPalConfig} from '../utils/environment/UnitPalConfig';
+import {ServiceBootstrapFactory} from '../services/ServiceBootstrapFactory';
 import {DBPatchesFactory} from './db-patches/DBPatchesFactory';
 import {IDBPatch} from './db-patches/IDBPatch';
 import {LogInitializerFactory} from './logs/LogInitializerFactory';
 import {ILogInitializer} from './logs/ILogInitializer';
-import {Logger} from '../utils/logging/Logger';
+import {ThLogger, ThLogLevel} from '../utils/logging/ThLogger';
+import {ThError} from '../utils/th-responses/ThError';
+import {ThStatusCode} from '../utils/th-responses/ThResponse';
 
 export class UnitPalBootstrap {
 	private _unitPalConfig: UnitPalConfig;
+	private _serviceBootstrapFactory: ServiceBootstrapFactory;
 	constructor() {
 		this._unitPalConfig = new UnitPalConfig();
+		this._serviceBootstrapFactory = new ServiceBootstrapFactory(this._unitPalConfig);
 	}
-	bootstrap(callback: { (): void; }) {
+	bootstrap(endCallback: { (): void; }) {
 		this.initializeLogger();
-
-		var dbPatchesFactory = new DBPatchesFactory(this._unitPalConfig);
-		var dbPatch: IDBPatch = dbPatchesFactory.getDBPatch();
-		dbPatch.applyPatches().then((result: any) => {
-			callback();
-		}).catch((error: any) => {
-			Logger.getInstance().logError("Error bootstrapping database", { step: "Bootstrap" }, error);
-			callback();
-		});
+		this.initializeLoginService();
+		this.initializeDatabase(endCallback);
 	}
 	private initializeLogger() {
 		try {
@@ -28,7 +26,33 @@ export class UnitPalBootstrap {
 			var logInitializer: ILogInitializer = logsInitFactory.getLogInitializer();
 			logInitializer.initLogger();
 		} catch (e) {
-			Logger.getInstance().logError("Error bootstrapping logging", { step: "Bootstrap" }, e);
+			var thError = new ThError(ThStatusCode.ErrorBootstrappingApp, e);
+			if (thError.isNativeError()) {
+				ThLogger.getInstance().logError(ThLogLevel.Error, "Error bootstrapping logging", { step: "Bootstrap" }, thError);
+			}
 		}
+	}
+	private initializeLoginService() {
+		try {
+			this._serviceBootstrapFactory.getLoginServiceInitializer().init();
+		} catch (e) {
+			var thError = new ThError(ThStatusCode.ErrorBootstrappingApp, e);
+			if (thError.isNativeError()) {
+				ThLogger.getInstance().logError(ThLogLevel.Error, "Error bootstrapping login service", { step: "Bootstrap" }, thError);
+			}
+		}
+	}
+	private initializeDatabase(endCallback: { (): void; }) {
+		var dbPatchesFactory = new DBPatchesFactory(this._unitPalConfig);
+		var dbPatch: IDBPatch = dbPatchesFactory.getDBPatch();
+		dbPatch.applyPatches().then((result: any) => {
+			endCallback();
+		}).catch((error: any) => {
+			var thError = new ThError(ThStatusCode.ErrorBootstrappingApp, error);
+			if (thError.isNativeError()) {
+				ThLogger.getInstance().logError(ThLogLevel.Error, "Error bootstrapping database", { step: "Bootstrap" }, thError);
+			}
+			endCallback();
+		});
 	}
 }

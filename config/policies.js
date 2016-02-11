@@ -38,7 +38,14 @@ module.exports.policies = {
         'getExternalView': ['contextBuilder'],
         'getInternalView': ['contextBuilder']
     },
-	HotelAccountController: {
-		'signUp': ['contextBuilder']
-	}
+	AccountController: {
+		'signUp': ['contextBuilder'],
+		'activate': ['contextBuilder'],
+		'logIn': ['contextBuilder', 'basicLogInContextBuilder'],
+        'requestResetPassword': ['contextBuilder'],
+		'resetPassword': ['contextBuilder']
+	},
+    ImageUploadController: {
+        'upload': ['contextBuilder']
+    }
 };
