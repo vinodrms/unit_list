@@ -48,7 +48,7 @@ export enum ThStatusCode {
     ImageUploadControllerGenericError,
     SettingsMongoRepositoryAddDuplicateKeyError,
     SettingsMongoRepositoryAddError,
-    BaseMongoRepositoryGetNetiveEntityError,
+    MongoRepositoryGetNetiveEntityError,
     MongoPatchErrorEnsuringUniqueIndexOnSettings
 }
 
@@ -99,7 +99,7 @@ ThMessage[ThStatusCode.ImageUploadControllerNoFilesToUpload] = "No images sent f
 ThMessage[ThStatusCode.ImageUploadControllerGenericError] = "Error uploading files. Please check the content and try again.";
 ThMessage[ThStatusCode.SettingsMongoRepositoryAddDuplicateKeyError] = "Error inserting setting (duplicate key error).";
 ThMessage[ThStatusCode.SettingsMongoRepositoryAddError] = "Error inserting setting.";
-ThMessage[ThStatusCode.BaseMongoRepositoryGetNetiveEntityError] = "Error getting native entity for collection.";
+ThMessage[ThStatusCode.MongoRepositoryGetNetiveEntityError] = "Error getting native entity for collection.";
 ThMessage[ThStatusCode.MongoPatchErrorEnsuringUniqueIndexOnSettings] = "Error ensuring unique index on settings collection.";
 
     

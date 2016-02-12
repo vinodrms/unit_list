@@ -3,6 +3,8 @@ import {ThLogger, ThLogLevel} from '../../../utils/logging/ThLogger';
 import {ThError} from '../../../utils/th-responses/ThError';
 import {ThStatusCode} from '../../../utils/th-responses/ThResponse';
 
+var ObjectId = require('sails-mongo/node_modules/mongodb').ObjectID;
+
 export enum MongoErrorCodes {
     GenericError,
     DuplicateKeyError
@@ -37,21 +39,62 @@ export class MongoRepository {
         return new Promise<any>((resolve, reject) => {
             this._sailsEntity.native((err, nativeEntity: any) => {
                 if (err || !nativeEntity) {
-                    var thError = new ThError(ThStatusCode.BaseMongoRepositoryGetNetiveEntityError, err);
-                    ThLogger.getInstance().logError(ThLogLevel.Error, "Error getting native entity for sails collection", this._sailsEntity.attributes, thError);
-                    reject(thError);
+                    reject(err);
                     return;
                 }
                 resolve(nativeEntity);
             });
         });
     }
-	protected findAndModify(query: Object, setClause: Object, options?: Object): Promise<any> {
-		return new Promise<any>((resolve: { (data: any): void; }, reject: { (err: ThError): void; }) => {
-			this.findAndModifyCore(resolve, reject);
+	protected findAndModify(query: Object, updates: Object): Promise<Object> {
+		return new Promise<any>((resolve: { (data: any): void; }, reject: { (err: Error): void; }) => {
+			this.getNativeMongoCollection().then((nativeCollection: any) => {
+				this.findAndModifyCore(resolve, reject, nativeCollection, query, updates);
+			}).catch((error: any) => {
+				reject(error);
+			});
         });
 	}
-	private findAndModifyCore(resolve: { (data: any): void; }, reject: { (err: ThError): void; }) {
-		// TODO: partial work
+	private findAndModifyCore(resolve: { (data: any): void; }, reject: { (err: Error): void; }, nativeCollection: any, query: any, updates: Object) {
+		if (this._thUtils.isUndefinedOrNull(nativeCollection) || this._thUtils.isUndefinedOrNull(query) || this._thUtils.isUndefinedOrNull(updates)) {
+			reject(new Error("Null or empty parameters sent to findAndModify"));
+			return;
+		}
+		try {
+			query = this.preprocessQuery(query);
+			updates["updatedAt"] = this.getISODate();
+		} catch (e) {
+			reject(e);
+			return;
+		}
+		nativeCollection.findAndModify(query, [['_id', 'asc']], { $set: updates }, {}, (err: any, record: Object) => {
+			if (err) {
+				reject(err);
+				return;
+			}
+			var processedResult = this.processResult(record);
+			resolve(processedResult);
+		});
+	}
+	private preprocessQuery(query: any): Object {
+		if (!this._thUtils.isUndefinedOrNull(query.id)) {
+			query._id = new ObjectId(query.id);
+			delete query["id"];
+		}
+		return query;
+	}
+	private getISODate(): Date {
+		return new Date((new Date()).toISOString());
+	}
+	private processResult(record: any): Object {
+		if (!record || !record.value) {
+			return null;
+		}
+		var object = record.value;
+		if (!this._thUtils.isUndefinedOrNull(object._id)) {
+			object.id = object._id.toHexString();
+			delete object._id;
+		}
+		return object;
 	}
 }
