@@ -1,11 +1,11 @@
-import {BaseMongoRepository} from '../../../common/base/BaseMongoRepository';
+import {MongoRepository} from '../../../common/base/MongoRepository';
 import {IRepositoryCleaner} from '../../../common/base/IRepositoryCleaner';
 import {HotelDO} from '../../data-objects/HotelDO';
 import {UserDO} from '../../data-objects/user/UserDO';
 import {IHotelRepository} from '../IHotelRepository';
 import {ActionTokenDO} from '../../data-objects/user/ActionTokenDO';
 
-export abstract class AMongoHotelRepository extends BaseMongoRepository implements IHotelRepository, IRepositoryCleaner {
+export abstract class AMongoHotelRepository extends MongoRepository implements IHotelRepository, IRepositoryCleaner {
 	public addHotelAsync(hotel: HotelDO, finishAddHotelCallback: { (err: any, savedHotel?: HotelDO): void; }) {
 		this.addHotel(hotel).then((savedHotel: HotelDO) => {
 			finishAddHotelCallback(null, savedHotel);

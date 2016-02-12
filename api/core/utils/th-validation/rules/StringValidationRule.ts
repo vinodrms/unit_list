@@ -1,5 +1,5 @@
 import {AValidationRule} from './core/AValidationRule';
-import {InvalidConstraint} from './core/ValidationResult';
+import {InvalidConstraintType} from './core/ValidationResult';
 
 import _ = require("underscore");
 
@@ -8,7 +8,7 @@ export class StringValidationRule extends AValidationRule {
 	private _maxLength: number = Number.POSITIVE_INFINITY;
 
 	constructor(maxLength?: number) {
-		super(InvalidConstraint.String);
+		super(InvalidConstraintType.String);
 		if (!this._thUtils.isUndefinedOrNull(maxLength)) {
 			this.maxLength = maxLength;
 		}

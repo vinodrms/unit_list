@@ -45,7 +45,11 @@ export enum ThStatusCode {
     CloudinaryImageStorageServiceErrorUploadingImage,
     ImageUploadControllerErrorUploadingImage,
     ImageUploadControllerNoFilesToUpload,
-    ImageUploadControllerGenericError
+    ImageUploadControllerGenericError,
+    SettingsMongoRepositoryAddDuplicateKeyError,
+    SettingsMongoRepositoryAddError,
+    MongoRepositoryGetNetiveEntityError,
+    MongoPatchErrorEnsuringUniqueIndexOnSettings
 }
 
 var ThMessage: { [index: number]: string; } = {};
@@ -93,7 +97,12 @@ ThMessage[ThStatusCode.CloudinaryImageStorageServiceErrorUploadingImage] = "Ther
 ThMessage[ThStatusCode.ImageUploadControllerErrorUploadingImage] = "There was a problem while uploading the image.";
 ThMessage[ThStatusCode.ImageUploadControllerNoFilesToUpload] = "No images sent for the upload.";
 ThMessage[ThStatusCode.ImageUploadControllerGenericError] = "Error uploading files. Please check the content and try again.";
+ThMessage[ThStatusCode.SettingsMongoRepositoryAddDuplicateKeyError] = "Error inserting setting (duplicate key error).";
+ThMessage[ThStatusCode.SettingsMongoRepositoryAddError] = "Error inserting setting.";
+ThMessage[ThStatusCode.MongoRepositoryGetNetiveEntityError] = "Error getting native entity for collection.";
+ThMessage[ThStatusCode.MongoPatchErrorEnsuringUniqueIndexOnSettings] = "Error ensuring unique index on settings collection.";
 
+    
 export class ThResponse {
 	statusCode: ThStatusCode;
 	message: string;

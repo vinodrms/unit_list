@@ -1,12 +1,12 @@
 import {IValidationRule} from './IValidationRule';
-import {ValidationResult, InvalidConstraint} from './ValidationResult';
+import {ValidationResult, InvalidConstraintType} from './ValidationResult';
 import {ThUtils} from '../../../../utils/ThUtils';
 
 export abstract class AValidationRule implements IValidationRule {
 	protected _thUtils: ThUtils;
 	private _isNullable: boolean;
 
-	constructor(protected _invalidConstraint: InvalidConstraint) {
+	constructor(protected _invalidConstraint: InvalidConstraintType) {
 		this._thUtils = new ThUtils();
 		this._isNullable = false;
 	}

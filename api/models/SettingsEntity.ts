@@ -9,18 +9,14 @@ class SettingsEntity extends BasePersistentEntity {
     }
     private buildCustomAttributes() {
         this.attributes = {
-            code: {
-                type: 'string',
-                required: true
-            },
-            name: {
-                type: 'string',
+            metadata: {
+                type: 'json',
                 required: true
             },
             value: {
                 type: 'json'
             }
-		};
+        };
     }
 }
 

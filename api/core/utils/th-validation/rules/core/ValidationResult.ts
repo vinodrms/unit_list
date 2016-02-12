@@ -2,7 +2,7 @@ import {ThUtils} from '../../../../utils/ThUtils';
 
 import _ = require('underscore');
 
-export enum InvalidConstraint {
+export enum InvalidConstraintType {
 	Array,
 	Email,
 	Number,
@@ -12,25 +12,25 @@ export enum InvalidConstraint {
 }
 
 export class ValidationResult {
-	private _invalidConstraints: InvalidConstraint[];
+	private _invalidConstraintList: InvalidConstraintType[];
 
-	constructor(invalidConstraint?: InvalidConstraint) {
-		this._invalidConstraints = [];
+	constructor(invalidConstraint?: InvalidConstraintType) {
+		this._invalidConstraintList = [];
 		var thUtils = new ThUtils();
 		if (!thUtils.isUndefinedOrNull(invalidConstraint)) {
-			this._invalidConstraints.push(invalidConstraint);
+			this._invalidConstraintList.push(invalidConstraint);
 		}
 	}
 	public isValid(): boolean {
-		return this._invalidConstraints.length == 0;
+		return this._invalidConstraintList.length == 0;
 	}
 	public appendValidationResult(otherResult: ValidationResult) {
-		this._invalidConstraints = this._invalidConstraints.concat(otherResult.getInvalidConstraints());
+		this._invalidConstraintList = this._invalidConstraintList.concat(otherResult.getInvalidConstraintList());
 	}
-	public getInvalidConstraints(): InvalidConstraint[] {
-		return this._invalidConstraints;
+	public getInvalidConstraintList(): InvalidConstraintType[] {
+		return this._invalidConstraintList;
 	}
-	public containsInvalidConstraint(invalidConstraint: InvalidConstraint) {
-		return _.contains(this._invalidConstraints, invalidConstraint);
+	public containsInvalidConstraint(invalidConstraint: InvalidConstraintType) {
+		return _.contains(this._invalidConstraintList, invalidConstraint);
 	}
 }
