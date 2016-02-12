@@ -2,7 +2,8 @@ import {IMongoPatchApplier} from './IMongoPatchApplier';
 import {IMongoPatch} from './IMongoPatch';
 
 export enum MongoPatcheType {
-	CreateUniqueIndexOnHotel
+	CreateUniqueIndexOnHotel,
+    PopulateCountriesAndCurrencyCodes
 }
 
 export abstract class AMongoPatch implements IMongoPatchApplier, IMongoPatch {

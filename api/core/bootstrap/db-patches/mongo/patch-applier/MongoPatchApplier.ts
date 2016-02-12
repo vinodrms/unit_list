@@ -2,7 +2,8 @@ import {ThError} from '../../../../utils/th-responses/ThError';
 import {ThStatusCode} from '../../../../utils/th-responses/ThResponse';
 import {IMongoPatchApplier} from './utils/IMongoPatchApplier';
 import {AMongoPatch, MongoPatcheType} from './utils/AMongoPatch';
-import {MongoPatch0} from './patches/MongoPatch0';
+import {MongoPatch0} from './patches/patch0/MongoPatch0';
+import {MongoPatch1} from './patches/patch1/MongoPatch1';
 import async = require("async");
 import _ = require("underscore");
 
@@ -14,7 +15,7 @@ export class MongoPatchApplier implements IMongoPatchApplier {
 	}
 
 	private initPatchAppliers() {
-		this._mongoPatchAppliers = [new MongoPatch0()];
+		this._mongoPatchAppliers = [new MongoPatch0(), new MongoPatch1()];
 	}
 	public applyAsync(finishApplyingPatchCallback: { (err: ThError, result?: MongoPatcheType[]): void; }) {
 		this.apply().then((result: MongoPatcheType[]) => {
