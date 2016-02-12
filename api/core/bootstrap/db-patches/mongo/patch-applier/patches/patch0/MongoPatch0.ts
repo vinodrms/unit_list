@@ -2,7 +2,7 @@ import {MongoPatcheType, ATransactionalMongoPatch} from '../../utils/ATransactio
 import {ThLogger, ThLogLevel} from '../../../../../../utils/logging/ThLogger';
 import {ThError} from '../../../../../../utils/th-responses/ThError';
 import {ThStatusCode} from '../../../../../../utils/th-responses/ThResponse';
-import {BaseMongoRepository} from '../../../../../../data-layer/common/base/BaseMongoRepository';
+import {MongoRepository} from '../../../../../../data-layer/common/base/MongoRepository';
 
 export class MongoPatch0 extends ATransactionalMongoPatch {
     private _hotelsEntity: Sails.Model;
@@ -21,7 +21,8 @@ export class MongoPatch0 extends ATransactionalMongoPatch {
     }
 
     private applyCore(resolve: { (result: boolean): void }, reject: { (err: ThError): void }) {
-        BaseMongoRepository.getNativeMongoCollectionForSailsEntity(this._hotelsEntity).then((nativeHotelsCollection: any) => {
+		var mongoRepo = new MongoRepository(this._hotelsEntity);
+        mongoRepo.getNativeMongoCollection().then((nativeHotelsCollection: any) => {
             nativeHotelsCollection.ensureIndex("users.email", { unique: true }, ((err, indexName) => {
                 if (err || !indexName) {
                     var thError = new ThError(ThStatusCode.ErrorBootstrappingApp, err);

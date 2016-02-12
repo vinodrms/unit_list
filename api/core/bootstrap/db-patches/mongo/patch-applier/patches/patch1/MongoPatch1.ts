@@ -2,7 +2,7 @@ import {ThLogger, ThLogLevel} from '../../../../../../utils/logging/ThLogger';
 import {ThError} from '../../../../../../utils/th-responses/ThError';
 import {ThStatusCode} from '../../../../../../utils/th-responses/ThResponse';
 import {MongoPatcheType, ATransactionalMongoPatch} from '../../utils/ATransactionalMongoPatch';
-import {BaseMongoRepository} from '../../../../../../data-layer/common/base/BaseMongoRepository';
+import {MongoRepository} from '../../../../../../data-layer/common/base/MongoRepository';
 import {SettingsMongoRepository} from '../../../../../../data-layer/settings/repositories/mongo/SettingsMongoRepository';
 
 import {Amenities} from './data-sets/Amenities';
@@ -60,7 +60,8 @@ export class MongoPatch1 extends ATransactionalMongoPatch {
     }
 
 	private ensureMetadataTypeIndexOnSettingsCollectionAsync(finishedEnsuringIndex: { (error: ThError, result?: boolean): void }) {
-		BaseMongoRepository.getNativeMongoCollectionForSailsEntity(this._settingsEntity).then((nativeCollection: any) => {
+		var mongoRepo = new MongoRepository(this._settingsEntity);
+		mongoRepo.getNativeMongoCollection().then((nativeCollection: any) => {
 			nativeCollection.ensureIndex("metadata.type", { unique: true }, ((err, indexName) => {
 				if (err || !indexName) {
 					var thError = new ThError(ThStatusCode.MongoPatchErrorEnsuringUniqueIndexOnSettings, err);

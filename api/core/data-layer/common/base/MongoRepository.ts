@@ -10,9 +10,10 @@ export enum MongoErrorCodes {
 var NativeMongoErrorCodes: { [index: number]: number; } = {};
 NativeMongoErrorCodes[MongoErrorCodes.DuplicateKeyError] = 11000;
 
-export class BaseMongoRepository {
+export class MongoRepository {
     protected _thUtils: ThUtils;
-    constructor() {
+
+	constructor(private _sailsEntity: Sails.Model) {
         this._thUtils = new ThUtils();
     }
 
@@ -32,12 +33,12 @@ export class BaseMongoRepository {
         }
         return outErrorCode;
     }
-    public static getNativeMongoCollectionForSailsEntity(entity: Sails.Model): Promise<any> {
+    public getNativeMongoCollection(): Promise<any> {
         return new Promise<any>((resolve, reject) => {
-            entity.native((err, nativeEntity: any) => {
+            this._sailsEntity.native((err, nativeEntity: any) => {
                 if (err || !nativeEntity) {
                     var thError = new ThError(ThStatusCode.BaseMongoRepositoryGetNetiveEntityError, err);
-                    ThLogger.getInstance().logError(ThLogLevel.Error, "Error getting native entity for sails collection", entity.attributes, thError);
+                    ThLogger.getInstance().logError(ThLogLevel.Error, "Error getting native entity for sails collection", this._sailsEntity.attributes, thError);
                     reject(thError);
                     return;
                 }
@@ -45,4 +46,12 @@ export class BaseMongoRepository {
             });
         });
     }
+	protected findAndModify(query: Object, setClause: Object, options?: Object): Promise<any> {
+		return new Promise<any>((resolve: { (data: any): void; }, reject: { (err: ThError): void; }) => {
+			this.findAndModifyCore(resolve, reject);
+        });
+	}
+	private findAndModifyCore(resolve: { (data: any): void; }, reject: { (err: ThError): void; }) {
+		// TODO: partial work
+	}
 }

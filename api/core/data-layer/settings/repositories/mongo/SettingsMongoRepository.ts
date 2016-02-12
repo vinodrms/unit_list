@@ -2,14 +2,15 @@ import {ThLogger, ThLogLevel} from '../../../../utils/logging/ThLogger';
 import {ThError} from '../../../../utils/th-responses/ThError';
 import {ThStatusCode} from '../../../../utils/th-responses/ThResponse';
 import {ISettingsRepository} from '../ISettingsRepository';
-import {BaseMongoRepository, MongoErrorCodes} from '../../../common/base/BaseMongoRepository';
+import {MongoRepository, MongoErrorCodes} from '../../../common/base/MongoRepository';
 
-export class SettingsMongoRepository extends BaseMongoRepository implements ISettingsRepository {
+export class SettingsMongoRepository extends MongoRepository implements ISettingsRepository {
     private _settingsEntity: Sails.Model;
 
     constructor() {
-        super();
-        this._settingsEntity = sails.models.settingsentity;
+		var settingsEntity = sails.models.settingsentity;
+		super(settingsEntity);
+		this._settingsEntity = settingsEntity;
     }
 
     public addSettings(setting: Object): Promise<boolean> {

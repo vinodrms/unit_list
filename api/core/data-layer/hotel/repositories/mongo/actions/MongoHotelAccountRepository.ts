@@ -1,17 +1,16 @@
 import {ThLogger, ThLogLevel} from '../../../../../utils/logging/ThLogger';
 import {ThError} from '../../../../../utils/th-responses/ThError';
 import {ThStatusCode} from '../../../../../utils/th-responses/ThResponse';
-import {BaseMongoRepository} from '../../../../common/base/BaseMongoRepository';
-import {MongoErrorCodes} from '../../../../common/base/BaseMongoRepository';
+import {MongoRepository, MongoErrorCodes} from '../../../../common/base/MongoRepository';
 import {HotelDO} from '../../../data-objects/HotelDO';
 import {UserDO, AccountStatus} from '../../../data-objects/user/UserDO';
 import {ActionTokenDO} from '../../../data-objects/user/ActionTokenDO';
 
 import _ = require('underscore');
 
-export class MongoHotelAccountRepository extends BaseMongoRepository {
+export class MongoHotelAccountRepository extends MongoRepository {
 	constructor(private _hotelsEntity: Sails.Model) {
-		super();
+		super(_hotelsEntity);
 	}
 	public addHotel(hotel: HotelDO): Promise<HotelDO> {
 		return new Promise<HotelDO>((resolve, reject) => {

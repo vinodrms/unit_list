@@ -2,7 +2,7 @@ import {ThLogger, ThLogLevel} from '../../../utils/logging/ThLogger';
 import {ThError} from '../../../utils/th-responses/ThError';
 import {ThStatusCode} from '../../../utils/th-responses/ThResponse';
 import {AMongoDBPatch} from './AMongoDBPatch';
-import {BaseMongoRepository} from '../../../data-layer/common/base/BaseMongoRepository';
+import {MongoRepository} from '../../../data-layer/common/base/MongoRepository';
 
 export class SailsMongoDBPatch extends AMongoDBPatch {
     private _systemPatchesEntity: Sails.Model;
@@ -16,7 +16,8 @@ export class SailsMongoDBPatch extends AMongoDBPatch {
         });
     }
     private getNativeSystemPatchesEntityCore(resolve: { (result: any): void }, reject: { (err: ThError): void }) {
-        BaseMongoRepository.getNativeMongoCollectionForSailsEntity(this._systemPatchesEntity).then((nativeSystemPatchesEntity: any) => {
+		var mongoRepo = new MongoRepository(this._systemPatchesEntity);
+        mongoRepo.getNativeMongoCollection().then((nativeSystemPatchesEntity: any) => {
             resolve(nativeSystemPatchesEntity);
         }).catch((error: any) => {
             var thError = new ThError(ThStatusCode.ErrorBootstrappingApp, error);

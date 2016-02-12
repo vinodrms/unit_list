@@ -9,9 +9,11 @@ export class MongoHotelRepository extends AMongoHotelRepository {
 	private _accountActionsRepository: MongoHotelAccountRepository;
 
 	constructor() {
-		super();
-		this._hotelsEntity = sails.models.hotelsentity;
+		var hotelsEntity = sails.models.hotelsentity;
+		super(hotelsEntity);
+		this._hotelsEntity = hotelsEntity;
 		this._accountActionsRepository = new MongoHotelAccountRepository(this._hotelsEntity);
+		
 	}
 	protected addHotel(hotel: HotelDO): Promise<HotelDO> {
 		return this._accountActionsRepository.addHotel(hotel);
