@@ -1,36 +1,28 @@
 import {BaseController} from './base/BaseController';
 import {ThStatusCode} from '../core/utils/th-responses/ThResponse';
-import {HotelSignUpDO, HotelSignUp} from '../core/domain-layer/hotel-account/HotelSignUp';
+import {HotelSignUp} from '../core/domain-layer/hotel-account/sign-up/HotelSignUp';
 import {AppContext} from '../core/utils/AppContext';
 import {SessionContext, SessionManager} from '../core/utils/SessionContext';
 import {ILoginService, LoginType} from '../core/services/login/ILoginService';
 import {HotelDO} from '../core/data-layer/hotel/data-objects/HotelDO';
 import {UserDO} from '../core/data-layer/hotel/data-objects/user/UserDO';
 import {ActionTokenDO} from '../core/data-layer/hotel/data-objects/user/ActionTokenDO';
-import {UserAccountActivation, UserAccountActivationDO} from '../core/domain-layer/hotel-account/UserAccountActivation';
-import {UserAccountRequestResetPassword, UserAccountRequestResetPasswordDO} from '../core/domain-layer/hotel-account/UserAccountRequestResetPassword';
-import {UserAccountResetPassword, UserAccountResetPasswordDO} from '../core/domain-layer/hotel-account/UserAccountResetPassword';
+import {UserAccountActivation} from '../core/domain-layer/hotel-account/account-activation/UserAccountActivation';
+import {UserAccountRequestResetPassword} from '../core/domain-layer/hotel-account/reset-password/UserAccountRequestResetPassword';
+import {UserAccountResetPassword} from '../core/domain-layer/hotel-account/reset-password/UserAccountResetPassword';
 
 class AccountController extends BaseController {
 	public signUp(req: Express.Request, res: Express.Response) {
-		if (!this.precheckPOSTParameters(req, res, "accountData", HotelSignUpDO.getRequiredProperties())) {
-			return;
-		}
-		var signUpDO: HotelSignUpDO = req.body.accountData;
-		var hotelSignUp = new HotelSignUp(req.appContext, req.sessionContext, signUpDO);
-		hotelSignUp.signUp().then((result: any) => {
+		var hotelSignUp = new HotelSignUp(req.appContext, req.sessionContext, req.body.accountData);
+		hotelSignUp.signUp().then((result: ActionTokenDO) => {
 			this.returnSuccesfulResponse(req, res, {});
 		}).catch((err: any) => {
 			this.returnErrorResponse(req, res, err, ThStatusCode.HotelSignUpError);
 		});
 	}
 	public activate(req: Express.Request, res: Express.Response) {
-		if (!this.precheckGETParameters(req, res, UserAccountActivationDO.getRequiredProperties())) {
-			return;
-		}
 		var appContext: AppContext = req.appContext;
-		var accActivationDO: UserAccountActivationDO = req.query;
-		var hotelActivateAccount = new UserAccountActivation(appContext, req.sessionContext, accActivationDO);
+		var hotelActivateAccount = new UserAccountActivation(req.appContext, req.sessionContext, req.query);
 		hotelActivateAccount.activate().then((result: any) => {
 			// TODO: add status code in login page to display alert with "account succesfully activated"
 			res.redirect(appContext.getUnitPalConfig().getAppContextRoot());
@@ -60,9 +52,6 @@ class AccountController extends BaseController {
 	}
 
 	public requestResetPassword(req: Express.Request, res: Express.Response) {
-		if (!this.precheckPOSTParameters(req, res, "requestData", UserAccountRequestResetPasswordDO.getRequiredProperties())) {
-			return;
-		}
 		var reqPasswd = new UserAccountRequestResetPassword(req.appContext, req.sessionContext, req.body.requestData);
 		reqPasswd.requestResetPassword().then((resetToken: ActionTokenDO) => {
 			this.returnSuccesfulResponse(req, res, {});
@@ -71,9 +60,6 @@ class AccountController extends BaseController {
 		});
 	}
 	public resetPassword(req: Express.Request, res: Express.Response) {
-		if (!this.precheckPOSTParameters(req, res, "requestData", UserAccountResetPasswordDO.getRequiredProperties())) {
-			return;
-		}
 		var reqPasswd = new UserAccountResetPassword(req.appContext, req.sessionContext, req.body.requestData);
 		reqPasswd.resetPassword().then((user: UserDO) => {
 			this.returnSuccesfulResponse(req, res, {});

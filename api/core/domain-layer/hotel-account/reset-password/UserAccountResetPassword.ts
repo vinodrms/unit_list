@@ -1,25 +1,17 @@
-import {ThLogger, ThLogLevel} from '../../utils/logging/ThLogger';
-import {ThError} from '../../utils/th-responses/ThError';
-import {ThStatusCode} from '../../utils/th-responses/ThResponse';
-import {AppContext} from '../../utils/AppContext';
-import {SessionContext} from '../../utils/SessionContext';
-import {AuthUtils} from './utils/AuthUtils';
-import {IHotelRepository} from '../../data-layer/hotel/repositories/IHotelRepository';
-import {UserDO} from '../../data-layer/hotel/data-objects/user/UserDO';
-import {AccountPasswordWasResetTemplateDO} from '../../services/email/data-objects/AccountPasswordWasResetTemplateDO';
-import {IEmailService, EmailHeaderDO} from '../../services/email/IEmailService';
+import {ThLogger, ThLogLevel} from '../../../utils/logging/ThLogger';
+import {ThError} from '../../../utils/th-responses/ThError';
+import {ThStatusCode} from '../../../utils/th-responses/ThResponse';
+import {AppContext} from '../../../utils/AppContext';
+import {SessionContext} from '../../../utils/SessionContext';
+import {AuthUtils} from '../utils/AuthUtils';
+import {IHotelRepository} from '../../../data-layer/hotel/repositories/IHotelRepository';
+import {UserDO} from '../../../data-layer/hotel/data-objects/user/UserDO';
+import {AccountPasswordWasResetTemplateDO} from '../../../services/email/data-objects/AccountPasswordWasResetTemplateDO';
+import {IEmailService, EmailHeaderDO} from '../../../services/email/IEmailService';
+import {UserAccountResetPasswordDO} from './UserAccountResetPasswordDO';
+import {ValidationResultParser} from '../../common/ValidationResultParser';
 
 import async = require("async");
-
-export class UserAccountResetPasswordDO {
-	activationCode: string;
-	email: string;
-	password: string;
-
-	public static getRequiredProperties(): string[] {
-		return ["activationCode", "email", "password"];
-	}
-}
 
 export class UserAccountResetPassword {
 	private _authUtils: AuthUtils;
@@ -40,6 +32,13 @@ export class UserAccountResetPassword {
 		});
 	}
 	private resetPasswordCore(resolve: { (user: UserDO): void }, reject: { (err: ThError): void }) {
+		var validationResult = UserAccountResetPasswordDO.getValidationStructure().validateStructure(this._resetPasswdDO);
+		if (!validationResult.isValid()) {
+			var parser = new ValidationResultParser(validationResult, this._resetPasswdDO);
+			parser.logAndReject("Error validating reset password fields", reject);
+			return;
+		}
+
 		var encryptedPassword = this._authUtils.encrypPassword(this._resetPasswdDO.password);
 		async.waterfall([
 			((finishResetPasswordCallback) => {
