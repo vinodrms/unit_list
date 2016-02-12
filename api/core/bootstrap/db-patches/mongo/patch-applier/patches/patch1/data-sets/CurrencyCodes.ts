@@ -26,7 +26,7 @@ export class CurrencyCodes extends ABaseSetting {
         return ccySettingDO;
     }
 
-    public dataSet: { symbol: string, name: string, nativeSymbol: string, code: string, namePlural: string }[] = [
+    private dataSet: { symbol: string, name: string, nativeSymbol: string, code: string, namePlural: string }[] = [
         {
             symbol: "$",
             name: "US Dollar",

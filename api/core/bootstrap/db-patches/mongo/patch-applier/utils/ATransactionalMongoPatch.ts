@@ -6,7 +6,7 @@ export enum MongoPatcheType {
     PopulateCountriesAndCurrencyCodes
 }
 
-export abstract class AMongoPatch implements IMongoPatchApplier, IMongoPatch {
+export abstract class ATransactionalMongoPatch implements IMongoPatchApplier, IMongoPatch {
 	constructor() { }
 	public abstract apply(): Promise<boolean>;
 	public abstract getPatchType(): MongoPatcheType;

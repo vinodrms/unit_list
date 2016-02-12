@@ -1,14 +1,14 @@
 import {ThError} from '../../../../utils/th-responses/ThError';
 import {ThStatusCode} from '../../../../utils/th-responses/ThResponse';
 import {IMongoPatchApplier} from './utils/IMongoPatchApplier';
-import {AMongoPatch, MongoPatcheType} from './utils/AMongoPatch';
+import {ATransactionalMongoPatch, MongoPatcheType} from './utils/ATransactionalMongoPatch';
 import {MongoPatch0} from './patches/patch0/MongoPatch0';
 import {MongoPatch1} from './patches/patch1/MongoPatch1';
 import async = require("async");
 import _ = require("underscore");
 
 export class MongoPatchApplier implements IMongoPatchApplier {
-	private _mongoPatchAppliers: AMongoPatch[];
+	private _mongoPatchAppliers: ATransactionalMongoPatch[];
 
 	constructor(private _appliedPatches: MongoPatcheType[]) {
 		this.initPatchAppliers();
@@ -37,7 +37,7 @@ export class MongoPatchApplier implements IMongoPatchApplier {
 				return applierIndex < this._mongoPatchAppliers.length;
 			}),
 			((finishApplySinglePatchCallback: any) => {
-				var patchApplier: AMongoPatch = this._mongoPatchAppliers[applierIndex++];
+				var patchApplier: ATransactionalMongoPatch = this._mongoPatchAppliers[applierIndex++];
 
 				if (!_.contains(this._appliedPatches, patchApplier.getPatchType())) {
 					patchApplier.apply().then((result: boolean) => {

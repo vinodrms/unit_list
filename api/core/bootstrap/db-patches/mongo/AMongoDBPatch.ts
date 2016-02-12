@@ -19,19 +19,42 @@ export abstract class AMongoDBPatch implements IDBPatch {
 	}
 
 	public applyPatches(): Promise<boolean> {
-		return new Promise<any>((resolve, reject) => {
-			this.applyPatchesCore(resolve, reject);
+		return new Promise<any>((resolve: { (result: boolean): void }, reject: { (err: ThError): void }) => {
+			this.ensurePatchTypeIndexAndAcquireLock().then((result: any) => {
+				this.applyPatchesCore(resolve, reject);
+			}).catch((error: any) => {
+				var thError = new ThError(ThStatusCode.ErrorBootstrappingApp, error);
+				reject(thError);
+			});
 		});
 	}
-	private applyPatchesCore(resolve: { (result: any): void }, reject: { (err: ThError): void }) {
+	private ensurePatchTypeIndexAndAcquireLock(): Promise<boolean> {
+		return new Promise<boolean>((resolve: { (result: boolean): void }, reject: { (err: ThError): void }) => {
+			this.ensurePatchTypeIndexAndAcquireLockCore(resolve, reject);
+		});
+	}
+	private ensurePatchTypeIndexAndAcquireLockCore(resolve: { (result: boolean): void }, reject: { (err: ThError): void }) {
 		async.waterfall([
 			((finishEnsuredIndexCallback) => {
 				this.ensureIndexAsync(finishEnsuredIndexCallback);
 			}),
 			((result: any, finishUpdatedLockStatusCallback) => {
 				this.acquireLockAsync(finishUpdatedLockStatusCallback);
-			}),
-			((result: any, finishApplyingPatchCallback) => {
+			})
+		], ((error: any, result: any) => {
+			if (error) {
+				var thError = new ThError(ThStatusCode.ErrorBootstrappingApp, error);
+				reject(thError);
+			}
+			else {
+				resolve(true);
+			}
+		}));
+	}
+
+	private applyPatchesCore(resolve: { (result: any): void }, reject: { (err: ThError): void }) {
+		async.waterfall([
+			((finishApplyingPatchCallback) => {
 				var patchApplier: MongoPatchApplier = new MongoPatchApplier(this._appliedPatches);
 				patchApplier.applyAsync(finishApplyingPatchCallback);
 			}),
@@ -40,8 +63,17 @@ export abstract class AMongoDBPatch implements IDBPatch {
 			})
 		], ((error: any, result: any) => {
 			if (error) {
-				var thError = new ThError(ThStatusCode.ErrorBootstrappingApp, error);
-				reject(thError);
+				/* 
+					If we get an error the lock will still exist on the patch collection  
+				*/
+				this.releaseLock().then((result: any) => {
+					var thError = new ThError(ThStatusCode.ErrorBootstrappingApp, error);
+					reject(thError);
+				}).catch((err: any) => {
+					var thError = new ThError(ThStatusCode.ErrorBootstrappingApp, err);
+					ThLogger.getInstance().logError(ThLogLevel.Error, "[Critical] AMongoDBPatch: the lock still exists on the system patches collection and must be removed manually", { step: "Bootstrap" }, thError);
+					reject(thError);
+				});
 			}
 			else {
 				resolve(true);
@@ -93,6 +125,9 @@ export abstract class AMongoDBPatch implements IDBPatch {
 		}).catch((error: any) => {
 			finishUpdatedLockStatusCallback(error);
 		});
+	}
+	private releaseLock(): Promise<any> {
+		return this.updateLockStatus(LockStatus.Locked, LockStatus.Unlocked, null);
 	}
 	private updateLockStatus(currentStatus: LockStatus, newStatus: LockStatus, newPatches: string[]): Promise<any> {
 		return new Promise<any>((resolve, reject) => {

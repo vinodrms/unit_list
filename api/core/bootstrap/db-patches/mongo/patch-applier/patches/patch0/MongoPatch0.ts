@@ -1,10 +1,10 @@
-import {MongoPatcheType, AMongoPatch} from '../../utils/AMongoPatch';
+import {MongoPatcheType, ATransactionalMongoPatch} from '../../utils/ATransactionalMongoPatch';
 import {ThLogger, ThLogLevel} from '../../../../../../utils/logging/ThLogger';
 import {ThError} from '../../../../../../utils/th-responses/ThError';
 import {ThStatusCode} from '../../../../../../utils/th-responses/ThResponse';
 import {BaseMongoRepository} from '../../../../../../data-layer/common/base/BaseMongoRepository';
 
-export class MongoPatch0 extends AMongoPatch {
+export class MongoPatch0 extends ATransactionalMongoPatch {
     private _hotelsEntity: Sails.Model;
 
     constructor() {

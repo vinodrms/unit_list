@@ -24,7 +24,7 @@ export class PaymentMethods extends ABaseSetting {
         return pmSettingDO;
     }
 
-    public dataSet: { name: string, iconUrl: string }[] = [
+    private dataSet: { name: string, iconUrl: string }[] = [
         {
             name: "Visa",
             iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
