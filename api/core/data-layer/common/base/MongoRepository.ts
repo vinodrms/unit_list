@@ -3,7 +3,7 @@ import {ThLogger, ThLogLevel} from '../../../utils/logging/ThLogger';
 import {ThError} from '../../../utils/th-responses/ThError';
 import {ThStatusCode} from '../../../utils/th-responses/ThResponse';
 
-var ObjectId = require('sails-mongo/node_modules/mongodb').ObjectID;
+var ObjectId = require('mongodb').ObjectID;
 
 export enum MongoErrorCodes {
     GenericError,
