@@ -1,12 +1,12 @@
 import {AValidationRule} from './core/AValidationRule';
-import {InvalidConstraint} from './core/ValidationResult';
+import {InvalidConstraintType} from './core/ValidationResult';
 import {StringValidationRule} from './StringValidationRule';
 
 export class EmailValidationRule extends AValidationRule {
 	private static MaxEmailLength = 320;
 	private _stringValidationRule: StringValidationRule;
 	constructor() {
-		super(InvalidConstraint.Email);
+		super(InvalidConstraintType.Email);
 		this._stringValidationRule = new StringValidationRule(EmailValidationRule.MaxEmailLength);
 	}
 	protected validateCore(object: any): boolean {

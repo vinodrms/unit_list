@@ -1,11 +1,11 @@
 import {AValidationRule} from './core/AValidationRule';
-import {InvalidConstraint} from './core/ValidationResult';
+import {InvalidConstraintType} from './core/ValidationResult';
 import {StringValidationRule} from './StringValidationRule';
 
 export class PasswordValidationRule extends AValidationRule {
 	private _stringValidationRule: StringValidationRule;
 	constructor() {
-		super(InvalidConstraint.Password);
+		super(InvalidConstraintType.Password);
 		this._stringValidationRule = new StringValidationRule();
 	}
 	protected validateCore(object: any): boolean {

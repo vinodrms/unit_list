@@ -1,11 +1,11 @@
 import {AValidationRule} from './core/AValidationRule';
-import {InvalidConstraint} from './core/ValidationResult';
+import {InvalidConstraintType} from './core/ValidationResult';
 
 import _ = require("underscore");
 
 export class ArrayValidationRule extends AValidationRule {
 	constructor() {
-		super(InvalidConstraint.Array);
+		super(InvalidConstraintType.Array);
 	}
 	protected validateCore(object: any): boolean {
 		return _.isArray(object);

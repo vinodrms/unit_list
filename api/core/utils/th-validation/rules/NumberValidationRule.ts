@@ -1,12 +1,12 @@
 import {AValidationRule} from './core/AValidationRule';
-import {InvalidConstraint} from './core/ValidationResult';
+import {InvalidConstraintType} from './core/ValidationResult';
 
 export class NumberValidationRule extends AValidationRule {
 	private _minValue: number = Number.NEGATIVE_INFINITY;
 	private _maxValue: number = Number.POSITIVE_INFINITY;
 
 	constructor() {
-		super(InvalidConstraint.Number);
+		super(InvalidConstraintType.Number);
 	}
 	public set minValue(minValue: number) {
 		this._minValue = minValue;

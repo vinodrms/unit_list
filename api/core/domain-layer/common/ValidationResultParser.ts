@@ -1,4 +1,4 @@
-import {ValidationResult, InvalidConstraint} from '../../utils/th-validation/rules/core/ValidationResult';
+import {ValidationResult, InvalidConstraintType} from '../../utils/th-validation/rules/core/ValidationResult';
 import {ThLogger, ThLogLevel} from '../../utils/logging/ThLogger';
 import {ThError} from '../../utils/th-responses/ThError';
 import {ThStatusCode} from '../../utils/th-responses/ThResponse';
@@ -10,10 +10,10 @@ export class ValidationResultParser {
 	public logAndReject(logMessage: string, reject: { (err: ThError): void }) {
 		var thError: ThError;
 
-		if (this._validationResult.containsInvalidConstraint(InvalidConstraint.Password)) {
+		if (this._validationResult.containsInvalidConstraint(InvalidConstraintType.Password)) {
 			thError = new ThError(ThStatusCode.DataPasswordValidationError, null);
 		}
-		else if (this._validationResult.containsInvalidConstraint(InvalidConstraint.Email)) {
+		else if (this._validationResult.containsInvalidConstraint(InvalidConstraintType.Email)) {
 			thError = new ThError(ThStatusCode.DataEmailValidationError, null);
 		}
 		else {
@@ -24,14 +24,17 @@ export class ValidationResultParser {
 			reject(thError);
 		});
 	}
-	private getValidationErrorsJson(): { type: InvalidConstraint, key: string }[] {
+	private getValidationErrorsJson(): { type: InvalidConstraintType, key: string }[] {
 		var validationErrorsJson = [];
-		this._validationResult.getInvalidConstraints().forEach((invalidConstraint: InvalidConstraint) => {
+		this._validationResult.getInvalidConstraintList().forEach((invalidConstraintType: InvalidConstraintType) => {
 			validationErrorsJson.push({
-				type: invalidConstraint,
-				key: InvalidConstraint[invalidConstraint]
+				type: invalidConstraintType,
+				key: this.getInvalidConstraintTypeStringRepresentation(invalidConstraintType)
 			});
 		});
 		return validationErrorsJson;
+	}
+	private getInvalidConstraintTypeStringRepresentation(type: InvalidConstraintType): string {
+		return InvalidConstraintType[type];
 	}
 }
