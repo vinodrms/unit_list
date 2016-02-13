@@ -3,7 +3,8 @@ import {ThLogger, ThLogLevel} from '../../../utils/logging/ThLogger';
 import {ThError} from '../../../utils/th-responses/ThError';
 import {ThStatusCode} from '../../../utils/th-responses/ThResponse';
 
-var ObjectId = require('mongodb').ObjectID;
+import mongodb = require('mongodb');
+import ObjectID = mongodb.ObjectID;
 
 export enum MongoErrorCodes {
     GenericError,
@@ -78,7 +79,7 @@ export class MongoRepository {
 	}
 	private preprocessQuery(query: any): Object {
 		if (!this._thUtils.isUndefinedOrNull(query.id)) {
-			query._id = new ObjectId(query.id);
+			query._id = new ObjectID(query.id);
 			delete query["id"];
 		}
 		return query;
@@ -92,7 +93,8 @@ export class MongoRepository {
 		}
 		var object = record.value;
 		if (!this._thUtils.isUndefinedOrNull(object._id)) {
-			object.id = object._id.toHexString();
+			var objId: ObjectID = object._id;
+			object.id = objId.toHexString();
 			delete object._id;
 		}
 		return object;
