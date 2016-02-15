@@ -4,6 +4,8 @@ import {HotelDO} from '../../data-objects/HotelDO';
 import {UserDO} from '../../data-objects/user/UserDO';
 import {IHotelRepository} from '../IHotelRepository';
 import {ActionTokenDO} from '../../data-objects/user/ActionTokenDO';
+import {HotelContactDetailsDO} from '../../data-objects/hotel-contact-details/HotelContactDetailsDO';
+import {GeoLocationDO} from '../../../common/data-objects/geo-location/GeoLocationDO';
 
 export abstract class AMongoHotelRepository extends MongoRepository implements IHotelRepository, IRepositoryCleaner {
 	public addHotelAsync(hotel: HotelDO, finishAddHotelCallback: { (err: any, savedHotel?: HotelDO): void; }) {
@@ -23,6 +25,16 @@ export abstract class AMongoHotelRepository extends MongoRepository implements I
 		});
 	}
 	public abstract getHotelByUserEmail(email: string): Promise<HotelDO>;
+
+	public getHotelByIdAsync(id: string, finishGetHotelByIdCallback: { (err: any, hotel?: HotelDO): void; }) {
+		this.getHotelById(id).then((hotel: HotelDO) => {
+			finishGetHotelByIdCallback(null, hotel);
+		}).catch((error: any) => {
+			finishGetHotelByIdCallback(error);
+		});
+	}
+	protected abstract getHotelById(id: string): Promise<HotelDO>;
+
 	public abstract cleanRepository(): Promise<Object>;
 
 	public abstract activateUserAccount(email: string, activationCode: string): Promise<UserDO>;
@@ -44,4 +56,20 @@ export abstract class AMongoHotelRepository extends MongoRepository implements I
 		});
 	}
 	protected abstract resetPassword(email: string, activationCode: string, newPassword: string): Promise<UserDO>;
+
+	public updateBasicInformationAsync(
+		hotelMeta: { id: string, versionId: number },
+		updates: { contactDetails: HotelContactDetailsDO, geoLocation: GeoLocationDO, logoUrl: string },
+		updateBasicInformationCallback: { (err: any, updatedHotel?: HotelDO): void; }) {
+			this.updateBasicInformation(hotelMeta, updates).then((updatedHotel: HotelDO) => {
+				updateBasicInformationCallback(null, updatedHotel);
+			}).catch((error: any) => {
+				updateBasicInformationCallback(error);
+			});
+	}
+
+	protected abstract updateBasicInformation(
+		hotelMeta: { id: string, versionId: number },
+		updates: { contactDetails: HotelContactDetailsDO, geoLocation: GeoLocationDO, logoUrl: string }
+	): Promise<HotelDO>;
 }

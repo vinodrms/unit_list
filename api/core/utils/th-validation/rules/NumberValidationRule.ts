@@ -31,4 +31,9 @@ export class NumberValidationRule extends AValidationRule {
 		}
 		return false;
 	}
+	public static buildNullable(): NumberValidationRule {
+		var rule = new NumberValidationRule();
+		rule.isNullable = true;
+		return rule;
+	}
 }

@@ -16,7 +16,7 @@ export class HotelSignUpDO {
 		return new ObjectValidationStructure([
 			{
 				key: "hotelName",
-				validationStruct: new PrimitiveValidationStructure(new StringValidationRule(300))
+				validationStruct: new PrimitiveValidationStructure(new StringValidationRule(StringValidationRule.MaxHotelNameLength))
 			},
 			{
 				key: "email",
@@ -29,11 +29,11 @@ export class HotelSignUpDO {
 			},
 			{
 				key: "firstName",
-				validationStruct: new PrimitiveValidationStructure(new StringValidationRule(100))
+				validationStruct: new PrimitiveValidationStructure(new StringValidationRule(StringValidationRule.MaxNameLength))
 			},
 			{
 				key: "lastName",
-				validationStruct: new PrimitiveValidationStructure(new StringValidationRule(100))
+				validationStruct: new PrimitiveValidationStructure(new StringValidationRule(StringValidationRule.MaxNameLength))
 			}
 		]);
 	}

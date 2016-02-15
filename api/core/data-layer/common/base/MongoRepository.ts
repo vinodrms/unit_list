@@ -3,6 +3,7 @@ import {ThLogger, ThLogLevel} from '../../../utils/logging/ThLogger';
 import {ThError} from '../../../utils/th-responses/ThError';
 import {ThStatusCode} from '../../../utils/th-responses/ThResponse';
 
+import _ = require('underscore');
 import mongodb = require('mongodb');
 import ObjectID = mongodb.ObjectID;
 
@@ -64,11 +65,25 @@ export class MongoRepository {
 		try {
 			query = this.preprocessQuery(query);
 			updates["updatedAt"] = this.getISODate();
+			var updateQuery: any = {};
+			if (!this._thUtils.isUndefinedOrNull(updates["$inc"])) {
+				var incField = updates["$inc"];
+				delete updates["$inc"];
+				updateQuery = {
+					$set: updates,
+					$inc: incField
+				}
+			}
+			else {
+				updateQuery = {
+					$set: updates
+				}
+			}
 		} catch (e) {
 			reject(e);
 			return;
 		}
-		nativeCollection.findAndModify(query, [], { $set: updates }, { new: true }, (err: any, record: Object) => {
+		nativeCollection.findAndModify(query, [], updateQuery, { new: true }, (err: any, record: Object) => {
 			if (err) {
 				reject(err);
 				return;
@@ -81,6 +96,15 @@ export class MongoRepository {
 		if (!this._thUtils.isUndefinedOrNull(query.id)) {
 			query._id = new ObjectID(query.id);
 			delete query["id"];
+		}
+		else if (!this._thUtils.isUndefinedOrNull(query['$and']) && _.isArray(query['$and'])) {
+			_.map(query['$and'], (queryEntry: any) => {
+				if (!this._thUtils.isUndefinedOrNull(queryEntry.id)) {
+					queryEntry._id = new ObjectID(queryEntry.id);
+					delete queryEntry.id;
+				}
+				return queryEntry;
+			});
 		}
 		return query;
 	}

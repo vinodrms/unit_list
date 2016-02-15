@@ -89,7 +89,7 @@ export class MongoHotelAccountRepository extends MongoRepository {
 				updatedHotel.buildFromObject(updatedDBHotel);
 				resolve(this.getUserByEmailFromHotel(updatedHotel, email));
 			}).catch((err: Error) => {
-				var thError = new ThError(ThStatusCode.HotelRepositoryErrorActivatingAccount, null);
+				var thError = new ThError(ThStatusCode.HotelRepositoryErrorActivatingAccount, err);
 				ThLogger.getInstance().logError(ThLogLevel.Error, "Error activating hotel account", { email: email, activationCode: activationCode }, thError);
 				reject(thError);
 			});
