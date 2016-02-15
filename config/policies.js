@@ -47,5 +47,11 @@ module.exports.policies = {
 	},
     ImageUploadController: {
         'upload': ['contextBuilder']
+    },
+    SettingsController: {
+        'getAmenities': ['contextBuilder'],
+        'getCountries': ['contextBuilder'],
+        'getCurrencies': ['contextBuilder'],
+        'getPaymentMethods': ['contextBuilder']
     }
 };

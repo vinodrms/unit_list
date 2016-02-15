@@ -51,5 +51,10 @@ module.exports.routes = {
 	'POST /api/account/requestResetPassword': 'AccountController.requestResetPassword',
 	'POST /api/account/resetPassword': 'AccountController.resetPassword',
     
-    'POST /api/image/upload': 'ImageUploadController.upload'
+    'POST /api/image/upload': 'ImageUploadController.upload',
+    
+    'GET /api/settings/amenities': 'SettingsController.getAmenities',
+    'GET /api/settings/countries': 'SettingsController.getCountries',
+    'GET /api/settings/currencies': 'SettingsController.getCurrencies',
+    'GET /api/settings/paymentMethods': 'SettingsController.getPaymentMethods'
 };
