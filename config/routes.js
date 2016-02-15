@@ -54,5 +54,10 @@ module.exports.routes = {
 	'GET /api/hotel/details': 'HotelDetailsController.getDetails',
 	'POST /api/hotel/updateBasicInfo': 'HotelDetailsController.updateBasicInfo',
     
-    'POST /api/image/upload': 'ImageUploadController.upload'
+    'POST /api/image/upload': 'ImageUploadController.upload',
+    
+    'GET /api/settings/amenities': 'SettingsController.getAmenities',
+    'GET /api/settings/countries': 'SettingsController.getCountries',
+    'GET /api/settings/currencies': 'SettingsController.getCurrencies',
+    'GET /api/settings/paymentMethods': 'SettingsController.getPaymentMethods'
 };

@@ -3,7 +3,7 @@ import {ThError} from '../../../../../../utils/th-responses/ThError';
 import {ThStatusCode} from '../../../../../../utils/th-responses/ThResponse';
 import {MongoPatcheType, ATransactionalMongoPatch} from '../../utils/ATransactionalMongoPatch';
 import {MongoRepository} from '../../../../../../data-layer/common/base/MongoRepository';
-import {SettingsMongoRepository} from '../../../../../../data-layer/settings/repositories/mongo/SettingsMongoRepository';
+import {MongoSettingsRepository} from '../../../../../../data-layer/settings/repositories/mongo/MongoSettingsRepository';
 
 import {Amenities} from './data-sets/Amenities';
 import {Countries} from './data-sets/Countries';
@@ -21,12 +21,12 @@ export class MongoPatch1 extends ATransactionalMongoPatch {
 	];
 
     private _settingsEntity: Sails.Model;
-    private _mongoSettingsRepository: SettingsMongoRepository;
+    private _mongoSettingsRepository: MongoSettingsRepository;
 
     constructor() {
         super();
         this._settingsEntity = sails.models.settingsentity;
-        this._mongoSettingsRepository = new SettingsMongoRepository();
+        this._mongoSettingsRepository = new MongoSettingsRepository();
     }
     public getPatchType(): MongoPatcheType {
         return MongoPatcheType.PopulateCountriesAndCurrencyCodes;
