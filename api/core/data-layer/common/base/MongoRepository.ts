@@ -68,7 +68,7 @@ export class MongoRepository {
 			reject(e);
 			return;
 		}
-		nativeCollection.findAndModify(query, [['_id', 'asc']], { $set: updates }, {}, (err: any, record: Object) => {
+		nativeCollection.findAndModify(query, [], { $set: updates }, { new: true }, (err: any, record: Object) => {
 			if (err) {
 				reject(err);
 				return;

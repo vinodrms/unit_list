@@ -4,6 +4,7 @@ import {ActionTokenDO} from '../data-objects/user/ActionTokenDO';
 
 export interface IHotelRepository {
 	addHotelAsync(hotel: HotelDO, finishAddHotelCallback: { (err: any, savedHotel?: HotelDO): void; });
+	getHotelByUserEmailAsync(email: string, finishGetHotelByUserEmailCallback: { (err: any, hotel?: HotelDO): void; });
 	getHotelByUserEmail(email: string): Promise<HotelDO>;
 
 	activateUserAccount(email: string, activationCode: string): Promise<UserDO>;

@@ -50,6 +50,8 @@ module.exports.routes = {
 	'POST /api/account/logOut': 'AccountController.logOut',
 	'POST /api/account/requestResetPassword': 'AccountController.requestResetPassword',
 	'POST /api/account/resetPassword': 'AccountController.resetPassword',
+	
+	'GET /api/hotel/details': 'HotelDetailsController.getDetails',
     
     'POST /api/image/upload': 'ImageUploadController.upload'
 };

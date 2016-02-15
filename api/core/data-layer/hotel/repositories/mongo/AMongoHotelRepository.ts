@@ -14,6 +14,14 @@ export abstract class AMongoHotelRepository extends MongoRepository implements I
 		});
 	}
 	protected abstract addHotel(hotel: HotelDO): Promise<HotelDO>;
+
+	public getHotelByUserEmailAsync(email: string, finishGetHotelByUserEmailCallback: { (err: any, hotel?: HotelDO): void; }) {
+		this.getHotelByUserEmail(email).then((hotel: HotelDO) => {
+			finishGetHotelByUserEmailCallback(null, hotel);
+		}).catch((error: any) => {
+			finishGetHotelByUserEmailCallback(error);
+		});
+	}
 	public abstract getHotelByUserEmail(email: string): Promise<HotelDO>;
 	public abstract cleanRepository(): Promise<Object>;
 
