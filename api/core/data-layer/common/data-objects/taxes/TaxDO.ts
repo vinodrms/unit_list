@@ -2,7 +2,7 @@ import {BaseDO} from '../../base/BaseDO';
 
 export enum TaxType {
 	Percentage,
-	Value
+	Fixed
 }
 
 export class TaxDO extends BaseDO {
@@ -10,11 +10,11 @@ export class TaxDO extends BaseDO {
 		super();
 	}
 	id: string;
-	name: string;
 	type: TaxType;
+	name: string;
 	value: number;
 
 	protected getPrimitivePropertyKeys(): string[] {
-		return ["id", "name", "type", "value"];
+		return ["id", "type", "name", "value"];
 	}
 }

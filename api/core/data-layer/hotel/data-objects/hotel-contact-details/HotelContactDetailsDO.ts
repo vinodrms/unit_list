@@ -20,8 +20,8 @@ export class HotelContactDetailsDO extends BaseDO {
 	public buildFromObject(object: Object) {
 		super.buildFromObject(object);
 		this.address = new AddressDO();
-		this.address.buildFromObject(object["address"]);
+		this.address.buildFromObject(this.getPropertyFromObject("address", object));
 		this.socialLinks = new SocialLinksDO();
-		this.socialLinks.buildFromObject(object["socialLinks"]);
+		this.socialLinks.buildFromObject(this.getPropertyFromObject("socialLinks", object));
 	}
 }

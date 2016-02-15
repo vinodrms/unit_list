@@ -13,7 +13,14 @@ export class RepositoryCleanerWrapper implements IRepositoryCleaner {
 		var repoFactory = new RepositoryFactory(this._unitPalConfig);
 		this._repositories = repoFactory.getRepositoryCleaners();
 	}
-	cleanRepository(): Promise<boolean> {
+	public cleanRepositoryAsync(cleanRepoCallback: { (err: any, result?: boolean): void }) {
+		this.cleanRepository().then((result: boolean) => {
+			cleanRepoCallback(null, result);
+		}).catch((error: any) => {
+			cleanRepoCallback(error);
+		});
+	}
+	public cleanRepository(): Promise<boolean> {
 		return new Promise<boolean>((resolve: { (result: boolean): void }, reject: { (err: ThError): void }) => {
 			var repositoryIndex = 0;
 			async.whilst(

@@ -11,11 +11,12 @@ export class HotelDO extends BaseDO {
 		super();
 	}
 	id: string;
+	versionId: number;
 	contactDetails: HotelContactDetailsDO;
 	geoLocation: GeoLocationDO;
 	logoUrl: string;
 	users: UserDO[];
-	ccy: string;
+	ccyCode: string;
 	taxes: HotelTaxesDO;
 	amenityIds: string[];
 	customAmenities: AmenityDO[];
@@ -25,35 +26,35 @@ export class HotelDO extends BaseDO {
 	operationHours: OperationHoursDO;
 
 	protected getPrimitivePropertyKeys(): string[] {
-		return ["id", "logoUrl", "ccy", "amenityIds", "paymentMethodIds", "configurationStatus", "timezone"];
+		return ["id", "versionId", "logoUrl", "ccyCode", "amenityIds", "paymentMethodIds", "configurationStatus", "timezone"];
 	}
 	public buildFromObject(object: Object) {
 		super.buildFromObject(object);
 
 		this.contactDetails = new HotelContactDetailsDO();
-		this.contactDetails.buildFromObject(object["contactDetails"]);
+		this.contactDetails.buildFromObject(this.getPropertyFromObject("contactDetails", object));
 
 		this.geoLocation = new GeoLocationDO();
-		this.geoLocation.buildFromObject(object["geoLocation"]);
+		this.geoLocation.buildFromObject(this.getPropertyFromObject("geoLocation", object));
 
 		this.users = [];
-		this.forEachElementOf(object["users"], (userObject: Object) => {
+		this.forEachElementOf(this.getPropertyFromObject("users", object), (userObject: Object) => {
 			var userDO = new UserDO();
 			userDO.buildFromObject(userObject);
 			this.users.push(userDO);
 		});
 
 		this.taxes = new HotelTaxesDO();
-		this.taxes.buildFromObject(object["taxes"]);
+		this.taxes.buildFromObject(this.getPropertyFromObject("taxes", object));
 
 		this.customAmenities = [];
-		this.forEachElementOf(object["customAmenities"], (amenityObject: Object) => {
+		this.forEachElementOf(this.getPropertyFromObject("customAmenities", object), (amenityObject: Object) => {
 			var amenityDO = new AmenityDO();
 			amenityDO.buildFromObject(amenityObject);
 			this.customAmenities.push(amenityDO);			
 		});
 
 		this.operationHours = new OperationHoursDO();
-		this.operationHours.buildFromObject(object["operationHours"]);
+		this.operationHours.buildFromObject(this.getPropertyFromObject("operationHours", object));
 	}
 }

@@ -15,7 +15,7 @@ module.exports = function(req: Express.Request, res: Express.Response, next: any
 			sessionDO: {
 				hotel: {
 					id: "1",
-					ccy: "EUR"
+					ccyCode: "EUR"
 				},
 				user: {
 					id: "1",

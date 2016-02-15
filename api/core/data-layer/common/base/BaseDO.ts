@@ -1,10 +1,19 @@
+import {ThUtils} from '../../../utils/ThUtils';
+
+var thUtils: ThUtils = new ThUtils();
 import _ = require("underscore");
 
 export abstract class BaseDO {
 	protected abstract getPrimitivePropertyKeys(): string[];
 
+	protected getPropertyFromObject(propertyName: string, object: Object): Object {
+		if (thUtils.isUndefinedOrNull(object) || thUtils.isUndefinedOrNull(object[propertyName])) {
+			return null;
+		}
+		return object[propertyName];
+	}
 	public buildFromObject(object: Object) {
-		if (_.isUndefined(object) || _.isNull(object)) {
+		if (thUtils.isUndefinedOrNull(object)) {
 			return;
 		}
 		var primitiveProperties: string[] = this.getPrimitivePropertyKeys();

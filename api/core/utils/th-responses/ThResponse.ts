@@ -51,6 +51,9 @@ export enum ThStatusCode {
     SettingsMongoRepositoryReadError,
     MongoRepositoryGetNetiveEntityError,
     MongoPatchErrorEnsuringUniqueIndexOnSettings,
+	HotelGetDetailsError,
+	HotelGetDetailsErrorFormattingResponse,
+	HotelDetailsControllerErrorGettingDetails
 }
 
 var ThMessage: { [index: number]: string; } = {};
@@ -77,7 +80,7 @@ ThMessage[ThStatusCode.PassportLoginServiceErrorInvalidLogin] = "Error signing i
 ThMessage[ThStatusCode.HotelRepositoryErrorFindingAccount] = "Error finding account. Please try again.";
 ThMessage[ThStatusCode.HotelRepositoryAccountNotFound] = "Invalid email or password.";
 ThMessage[ThStatusCode.HotelAuthenticationAccountNotActive] = "The account is not active.";
-ThMessage[ThStatusCode.HotelAuthenticationErrorQueryingRepository] = "Error logging in. Please contact the administrator if this error persists.";
+ThMessage[ThStatusCode.HotelAuthenticationErrorQueryingRepository] = "Error logging in. Please check your credentials and try again.";
 ThMessage[ThStatusCode.HotelAuthenticationInvalidEmailOrPassword] = "Invalid email or password.";
 ThMessage[ThStatusCode.HotelRepositoryErrorActivatingAccount] = "There was a problem while activating your account.";
 ThMessage[ThStatusCode.UserAccountActivationErrorActivatingAccount] = "There was a problem while activating your account.";
@@ -103,7 +106,10 @@ ThMessage[ThStatusCode.SettingsMongoRepositoryAddError] = "Error inserting setti
 ThMessage[ThStatusCode.SettingsMongoRepositoryReadError] = "Error reading system setting.";
 ThMessage[ThStatusCode.MongoRepositoryGetNetiveEntityError] = "Error getting native entity for collection.";
 ThMessage[ThStatusCode.MongoPatchErrorEnsuringUniqueIndexOnSettings] = "Error ensuring unique index on settings collection.";
-    
+ThMessage[ThStatusCode.HotelGetDetailsError] = "Error getting details for the hotel. Please try again.";
+ThMessage[ThStatusCode.HotelGetDetailsErrorFormattingResponse] = "Error updating the details for the hotel. Please try again.";
+ThMessage[ThStatusCode.HotelDetailsControllerErrorGettingDetails] = "Error getting the details for your hotel. Please try again.";
+
 export class ThResponse {
 	statusCode: ThStatusCode;
 	message: string;
