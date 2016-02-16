@@ -6,15 +6,18 @@ export class HotelContactDetailsDO extends BaseDO {
 	constructor() {
 		super();
 	}
+	vatCode: string;
 	name: string;
 	address: AddressDO;
 	phone: string;
 	fax: string;
 	email: string;
+	websiteUrl: string;
 	socialLinks: SocialLinksDO;
+	contactName: string;
 
 	protected getPrimitivePropertyKeys(): string[] {
-		return ["name", "phone", "fax", "email"];
+		return ["vatCode", "name", "phone", "fax", "email", "websiteUrl", "contactName"];
 	}
 
 	public buildFromObject(object: Object) {

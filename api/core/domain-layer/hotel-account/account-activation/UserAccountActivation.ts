@@ -5,6 +5,7 @@ import {SessionContext} from '../../../utils/SessionContext';
 import {UserDO} from '../../../data-layer/hotel/data-objects/user/UserDO';
 import {UserAccountActivationDO} from './UserAccountActivationDO';
 import {ValidationResultParser} from '../../common/ValidationResultParser';
+import {UserAccountActivationRepoDO} from '../../../data-layer/hotel/repositories/IHotelRepository';
 
 export class UserAccountActivation {
 	constructor(private _appContext: AppContext, private _sessionContext: SessionContext, private _accountActivationDO: UserAccountActivationDO) {
@@ -21,9 +22,12 @@ export class UserAccountActivation {
 			parser.logAndReject("Error validating user account activation fields", reject);
 			return;
 		}
-
+		var activationParams: UserAccountActivationRepoDO = {
+			email: this._accountActivationDO.email,
+			activationCode: this._accountActivationDO.activationCode
+		};
 		var hotelRepository = this._appContext.getRepositoryFactory().getHotelRepository();
-		hotelRepository.activateUserAccount(this._accountActivationDO.email, this._accountActivationDO.activationCode).then((user: UserDO) => {
+		hotelRepository.activateUserAccount(activationParams).then((user: UserDO) => {
 			resolve(user);
 		}).catch((err: any) => {
 			var thError = new ThError(ThStatusCode.UserAccountActivationErrorActivatingAccount, err);

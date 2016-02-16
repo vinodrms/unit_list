@@ -4,6 +4,16 @@ import {InvalidConstraintType} from './core/ValidationResult';
 import _ = require("underscore");
 
 export class StringValidationRule extends AValidationRule {
+	public static MaxCityLength = 100;
+	public static MaxCountryCodeLength = 2;
+	public static MaxCountryLength = 100;
+	public static MaxStreetAddressLength = 95;
+	public static MaxUrlLength = 2083;
+	public static MaxPhoneLength = 50;
+	public static MaxNameLength = 50;
+	public static MaxHotelNameLength = 300;
+	public static MaxVatCodeNameLength = 30;
+
 	private _minLength: number = 0;
 	private _maxLength: number = Number.POSITIVE_INFINITY;
 
@@ -40,5 +50,10 @@ export class StringValidationRule extends AValidationRule {
 			return true;
 		}
 		return false;
+	}
+	public static buildNullable(maxLenght: number): StringValidationRule {
+		var rule = new StringValidationRule(maxLenght);
+		rule.isNullable = true;
+		return rule;
 	}
 }

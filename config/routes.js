@@ -52,6 +52,7 @@ module.exports.routes = {
 	'POST /api/account/resetPassword': 'AccountController.resetPassword',
 	
 	'GET /api/hotel/details': 'HotelDetailsController.getDetails',
+	'POST /api/hotel/updateBasicInfo': 'HotelDetailsController.updateBasicInfo',
     
     'POST /api/service/uploadImage': 'ServiceController.uploadImage',
     'GET /api/service/vatVerifier': 'ServiceController.checkVAT',
