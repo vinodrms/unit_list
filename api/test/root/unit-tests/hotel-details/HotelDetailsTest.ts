@@ -34,6 +34,4 @@ describe("Hotel Details Tests", function() {
         });
 
     });
-
-
 });

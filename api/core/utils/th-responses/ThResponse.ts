@@ -13,6 +13,7 @@ export enum ThStatusCode {
 	VatProviderErrorCheckingVat,
 	VatProviderNotInEu,
 	VatProviderInvalidVat,
+    VatProviderInvalidCountryCode,
 	EmailTemplateBuilderProblemFindingTemplatesDirectory,
 	EmailTemplateBuilderProblemBuildingContent,
 	SendGridServiceErrorSendingEmail,
@@ -64,10 +65,11 @@ ThMessage[ThStatusCode.DataEmailValidationError] = "Error validating email.";
 ThMessage[ThStatusCode.DataPasswordValidationError] = "Error validating password.";
 ThMessage[ThStatusCode.ErrorBootstrappingApp] = "Error Bootstrapping App.";
 ThMessage[ThStatusCode.ErrorCleaningRepositories] = "Error Cleaning Repositories.";
-ThMessage[ThStatusCode.InvalidRequestParameters] = "Invalid Request Parameters";
-ThMessage[ThStatusCode.VatProviderErrorCheckingVat] = "Problem checking the VAT";
+ThMessage[ThStatusCode.InvalidRequestParameters] = "Invalid Request Parameters.";
+ThMessage[ThStatusCode.VatProviderErrorCheckingVat] = "Error checking VAT number.";
 ThMessage[ThStatusCode.VatProviderNotInEu] = "The VAT is not in EU";
-ThMessage[ThStatusCode.VatProviderInvalidVat] = "Invalid VAT format";
+ThMessage[ThStatusCode.VatProviderInvalidVat] = "Invalid VAT number.";
+ThMessage[ThStatusCode.VatProviderInvalidCountryCode] = "Invalid country code";
 ThMessage[ThStatusCode.EmailTemplateBuilderProblemFindingTemplatesDirectory] = "Error sending email: the content was not found on the server. Please contact the Administrator.";
 ThMessage[ThStatusCode.EmailTemplateBuilderProblemBuildingContent] = "Error sending email: problem building content. Please contact the Administrator.";
 ThMessage[ThStatusCode.SendGridServiceErrorSendingEmail] = "Error sending email. Please contact the Administrator.";

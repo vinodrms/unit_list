@@ -55,7 +55,15 @@ export class MongoSettingsRepository extends MongoRepository implements ISetting
     public getCountries(valueCriteria?: Object): Promise<CountryDO[]> {
         return this.getSetting(SettingType.Countries, valueCriteria);
     }
-
+    
+    public getCountriesAsync(finishQueryCallback: { (err: any, country?: CountryDO[]): void; }, valueCriteria?: Object) {
+		this.getCountries(valueCriteria).then((retrievedCountries: CountryDO[]) => {
+			finishQueryCallback(null, retrievedCountries);
+		}).catch((error: any) => {
+			finishQueryCallback(error);
+		});
+	}
+    
     public getCurrencies(valueCriteria?: Object): Promise<CurrencyDO[]> {
         return this.getSetting(SettingType.CurrencyCodes, valueCriteria);
     }
