@@ -7,7 +7,7 @@ import {UserDO} from '../../../data-layer/hotel/data-objects/user/UserDO';
 import {ActionTokenDO} from '../../../data-layer/hotel/data-objects/user/ActionTokenDO';
 import {AuthUtils} from '../utils/AuthUtils';
 import {ThUtils} from '../../../utils/ThUtils';
-import {IHotelRepository} from '../../../data-layer/hotel/repositories/IHotelRepository';
+import {IHotelRepository, RequestResetPasswordRepoDO} from '../../../data-layer/hotel/repositories/IHotelRepository';
 import {AccountRequestResetPasswordTemplateDO} from '../../../services/email/data-objects/AccountRequestResetPasswordTemplateDO';
 import {IEmailService, EmailHeaderDO} from '../../../services/email/IEmailService';
 import {UserAccountRequestResetPasswordDO} from './UserAccountRequestResetPasswordDO';
@@ -49,8 +49,12 @@ export class UserAccountRequestResetPassword {
 		this._generatedToken = this.generateResetPasswordToken();
 		async.waterfall([
 			((finishUpdateTokenCallback) => {
+				var requestResetPasswordRepoDO: RequestResetPasswordRepoDO = {
+					email: this._resetPasswdDO.email,
+					token: this._generatedToken
+				};
 				var hotelRepository: IHotelRepository = this._appContext.getRepositoryFactory().getHotelRepository();
-				hotelRepository.requestResetPasswordAsync(this._resetPasswdDO.email, this._generatedToken, finishUpdateTokenCallback);
+				hotelRepository.requestResetPasswordAsync(requestResetPasswordRepoDO, finishUpdateTokenCallback);
 			}),
 			((updatedUser: UserDO, finishSendRequestResetPasswordEmailCallback) => {
 				this._updatedUser = updatedUser;

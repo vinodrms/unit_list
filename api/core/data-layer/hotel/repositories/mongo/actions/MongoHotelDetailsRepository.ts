@@ -5,6 +5,7 @@ import {MongoRepository, MongoErrorCodes} from '../../../../common/base/MongoRep
 import {HotelDO} from '../../../data-objects/HotelDO';
 import {HotelContactDetailsDO} from '../../../data-objects/hotel-contact-details/HotelContactDetailsDO';
 import {GeoLocationDO} from '../../../../common/data-objects/geo-location/GeoLocationDO';
+import {HotelMetaRepoDO, BasicHotelInfoRepoDO} from '../../IHotelRepository';
 
 export class MongoHotelDetailsRepository extends MongoRepository {
 	constructor(private _hotelsEntity: Sails.Model) {
@@ -32,11 +33,11 @@ export class MongoHotelDetailsRepository extends MongoRepository {
 			reject(thError);
 		});
 	}
-	public updateBasicInformation(hotelMeta: { id: string, versionId: number }, updates: { contactDetails: HotelContactDetailsDO, geoLocation: GeoLocationDO, logoUrl: string }): Promise<HotelDO> {
+	public updateBasicInformation(hotelMeta: HotelMetaRepoDO, basicInfo: BasicHotelInfoRepoDO): Promise<HotelDO> {
 		return this.findAndModifyHotel(hotelMeta, {
-			"contactDetails": updates.contactDetails,
-			"geoLocation": updates.geoLocation,
-			"logoUrl": updates.logoUrl
+			"contactDetails": basicInfo.contactDetails,
+			"geoLocation": basicInfo.geoLocation,
+			"logoUrl": basicInfo.logoUrl
 		});
 	}
 	private findAndModifyHotel(hotelMeta: { id: string, versionId: number }, updateQuery: Object): Promise<HotelDO> {

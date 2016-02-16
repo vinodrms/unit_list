@@ -5,6 +5,7 @@ import {MongoRepository, MongoErrorCodes} from '../../../../common/base/MongoRep
 import {HotelDO} from '../../../data-objects/HotelDO';
 import {UserDO, AccountStatus} from '../../../data-objects/user/UserDO';
 import {ActionTokenDO} from '../../../data-objects/user/ActionTokenDO';
+import {UserAccountActivationRepoDO, RequestResetPasswordRepoDO, ResetPasswordRepoDO} from '../../IHotelRepository';
 
 import _ = require('underscore');
 
@@ -60,19 +61,19 @@ export class MongoHotelAccountRepository extends MongoRepository {
 		});
 	}
 
-	public activateUserAccount(email: string, activationCode: string): Promise<UserDO> {
+	public activateUserAccount(activationParams: UserAccountActivationRepoDO): Promise<UserDO> {
 		return new Promise<UserDO>((resolve: { (user: UserDO): void }, reject: { (err: any): void }) => {
-			this.activateUserAccountCore(resolve, reject, email, activationCode);
+			this.activateUserAccountCore(resolve, reject, activationParams);
 		});
 	}
-	private activateUserAccountCore(resolve: { (user: UserDO): void }, reject: { (err: ThError): void }, email: string, activationCode: string) {
+	private activateUserAccountCore(resolve: { (user: UserDO): void }, reject: { (err: ThError): void }, activationParams: UserAccountActivationRepoDO) {
 		var currentTimestamp = new Date().getTime();
 		this.findAndModify(
 			{
 				$and: [
-					{ "users.email": email },
+					{ "users.email": activationParams.email },
 					{ "users.accountStatus": AccountStatus.Pending },
-					{ "users.accountActivationToken.code": activationCode },
+					{ "users.accountActivationToken.code": activationParams.activationCode },
 					{ "users.accountActivationToken.expiryTimestamp": { $gte: currentTimestamp } }
 				]
 			}, {
@@ -81,82 +82,82 @@ export class MongoHotelAccountRepository extends MongoRepository {
 			}).then((updatedDBHotel: Object) => {
 				if (!updatedDBHotel) {
 					var thError = new ThError(ThStatusCode.HotelRepositoryAccountCouldNotBeActivated, null);
-					ThLogger.getInstance().logBusiness(ThLogLevel.Info, "Problem activating hotel account", { email: email, activationCode: activationCode }, thError);
+					ThLogger.getInstance().logBusiness(ThLogLevel.Info, "Problem activating hotel account", activationParams, thError);
 					reject(thError);
 					return;
 				}
 				var updatedHotel: HotelDO = new HotelDO();
 				updatedHotel.buildFromObject(updatedDBHotel);
-				resolve(this.getUserByEmailFromHotel(updatedHotel, email));
+				resolve(this.getUserByEmailFromHotel(updatedHotel, activationParams.email));
 			}).catch((err: Error) => {
 				var thError = new ThError(ThStatusCode.HotelRepositoryErrorActivatingAccount, err);
-				ThLogger.getInstance().logError(ThLogLevel.Error, "Error activating hotel account", { email: email, activationCode: activationCode }, thError);
+				ThLogger.getInstance().logError(ThLogLevel.Error, "Error activating hotel account", activationParams, thError);
 				reject(thError);
 			});
 	}
-	public requestResetPassword(email: string, token: ActionTokenDO): Promise<UserDO> {
+	public requestResetPassword(reqParams: RequestResetPasswordRepoDO): Promise<UserDO> {
 		return new Promise<UserDO>((resolve: { (user: UserDO): void }, reject: { (err: any): void }) => {
-			this.requestResetPasswordCore(resolve, reject, email, token);
+			this.requestResetPasswordCore(resolve, reject, reqParams);
 		});
 	}
-	private requestResetPasswordCore(resolve: { (user: UserDO): void }, reject: { (err: ThError): void }, email: string, token: ActionTokenDO) {
+	private requestResetPasswordCore(resolve: { (user: UserDO): void }, reject: { (err: ThError): void }, reqParams: RequestResetPasswordRepoDO) {
 		this.findAndModify(
 			{
 				$and: [
-					{ "users.email": email },
+					{ "users.email": reqParams.email },
 					{ "users.accountStatus": { $in: [AccountStatus.Active, AccountStatus.Pending] } }
 				]
 			}, {
-				"users.$.resetPasswordToken": token
+				"users.$.resetPasswordToken": reqParams.token
 			}).then((updatedDBHotel: Object) => {
 				if (!updatedDBHotel) {
 					var thError = new ThError(ThStatusCode.HotelRepositoryProblemUpdatingPasswordToken, null);
-					ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Problem updating reset password token", { email: email, resetPasswordToken: token }, thError);
+					ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Problem updating reset password token", reqParams, thError);
 					reject(thError);
 					return;
 				}
 				var updatedHotel: HotelDO = new HotelDO();
 				updatedHotel.buildFromObject(updatedDBHotel);
-				resolve(this.getUserByEmailFromHotel(updatedHotel, email));
+				resolve(this.getUserByEmailFromHotel(updatedHotel, reqParams.email));
 			}).catch((err: Error) => {
 				var thError = new ThError(ThStatusCode.HotelRepositoryErrorUpdatingPasswordToken, err);
-				ThLogger.getInstance().logError(ThLogLevel.Error, "Error updating reset password token", { email: email, resetPasswordToken: token }, thError);
+				ThLogger.getInstance().logError(ThLogLevel.Error, "Error updating reset password token", reqParams, thError);
 				reject(thError);
 			});
 	}
-	public resetPassword(email: string, activationCode: string, newPassword: string): Promise<UserDO> {
+	public resetPassword(resetParams: ResetPasswordRepoDO): Promise<UserDO> {
 		return new Promise<UserDO>((resolve: { (user: UserDO): void }, reject: { (err: any): void }) => {
-			this.resetPasswordCore(resolve, reject, email, activationCode, newPassword);
+			this.resetPasswordCore(resolve, reject, resetParams);
 		});
 	}
-	private resetPasswordCore(resolve: { (user: UserDO): void }, reject: { (err: ThError): void }, email: string, activationCode: string, newPassword: string) {
+	private resetPasswordCore(resolve: { (user: UserDO): void }, reject: { (err: ThError): void }, resetParams: ResetPasswordRepoDO) {
 		var currentTimestamp = new Date().getTime();
 		this.findAndModify(
 			{
 				$and: [
-					{ "users.email": email },
+					{ "users.email": resetParams.email },
 					{ "users.accountStatus": { $in: [AccountStatus.Active, AccountStatus.Pending] } },
-					{ "users.resetPasswordToken.code": activationCode },
+					{ "users.resetPasswordToken.code": resetParams.activationCode },
 					{ "users.resetPasswordToken.expiryTimestamp": { $gte: currentTimestamp } },
 					{ "users.resetPasswordToken.updatedTimestamp": { $exists: false } }
 				]
 			}, {
 				"users.$.accountStatus": AccountStatus.Active,
 				"users.$.resetPasswordToken.updatedTimestamp": currentTimestamp,
-				"users.$.password": newPassword
+				"users.$.password": resetParams.newPassword
 			}).then((updatedDBHotel: Object) => {
 				if (!updatedHotel) {
 					var thError = new ThError(ThStatusCode.HotelRepositoryCouldNotResetPassword, null);
-					ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Problem resetting password - possible errors: code expired, account is disabled, password already changed", { email: email, activationCode: activationCode }, thError);
+					ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Problem resetting password - possible errors: code expired, account is disabled, password already changed", resetParams, thError);
 					reject(thError);
 					return;
 				}
 				var updatedHotel: HotelDO = new HotelDO();
 				updatedHotel.buildFromObject(updatedDBHotel);
-				resolve(this.getUserByEmailFromHotel(updatedHotel, email));
+				resolve(this.getUserByEmailFromHotel(updatedHotel, resetParams.email));
 			}).catch((err: Error) => {
 				var thError = new ThError(ThStatusCode.HotelRepositoryErrorCouldNotResetPassword, err);
-				ThLogger.getInstance().logError(ThLogLevel.Error, "Error resetting password", { email: email, activationCode: activationCode }, thError);
+				ThLogger.getInstance().logError(ThLogLevel.Error, "Error resetting password", resetParams, thError);
 				reject(thError);
 			});
 	}

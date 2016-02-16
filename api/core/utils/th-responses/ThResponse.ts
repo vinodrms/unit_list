@@ -53,6 +53,7 @@ export enum ThStatusCode {
     MongoPatchErrorEnsuringUniqueIndexOnSettings,
 	HotelGetDetailsError,
 	HotelGetDetailsErrorFormattingResponse,
+	HotelGetDetailsErrorFindingUserByEmail,
 	HotelDetailsControllerErrorGettingDetails,
 	HotelRepositoryHotelIdNotFound,
 	HotelRepositoryErrorFindingHotelById,
@@ -112,6 +113,7 @@ ThMessage[ThStatusCode.MongoRepositoryGetNetiveEntityError] = "Error getting nat
 ThMessage[ThStatusCode.MongoPatchErrorEnsuringUniqueIndexOnSettings] = "Error ensuring unique index on settings collection.";
 ThMessage[ThStatusCode.HotelGetDetailsError] = "Error getting details for the hotel. Please try again.";
 ThMessage[ThStatusCode.HotelGetDetailsErrorFormattingResponse] = "Error updating the details for the hotel. Please try again.";
+ThMessage[ThStatusCode.HotelGetDetailsErrorFindingUserByEmail] = "Error getting the details for the hotel. Please try again.";
 ThMessage[ThStatusCode.HotelDetailsControllerErrorGettingDetails] = "Error getting the details for your hotel. Please try again.";
 ThMessage[ThStatusCode.HotelRepositoryHotelIdNotFound] = "Problem getting the details for your hotel. Please try again.";
 ThMessage[ThStatusCode.HotelRepositoryErrorFindingHotelById] = "Error getting the details for your hotel. Please try again.";

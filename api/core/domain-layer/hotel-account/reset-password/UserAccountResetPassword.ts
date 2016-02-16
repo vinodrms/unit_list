@@ -4,7 +4,7 @@ import {ThStatusCode} from '../../../utils/th-responses/ThResponse';
 import {AppContext} from '../../../utils/AppContext';
 import {SessionContext} from '../../../utils/SessionContext';
 import {AuthUtils} from '../utils/AuthUtils';
-import {IHotelRepository} from '../../../data-layer/hotel/repositories/IHotelRepository';
+import {IHotelRepository, ResetPasswordRepoDO} from '../../../data-layer/hotel/repositories/IHotelRepository';
 import {UserDO} from '../../../data-layer/hotel/data-objects/user/UserDO';
 import {AccountPasswordWasResetTemplateDO} from '../../../services/email/data-objects/AccountPasswordWasResetTemplateDO';
 import {IEmailService, EmailHeaderDO} from '../../../services/email/IEmailService';
@@ -42,8 +42,13 @@ export class UserAccountResetPassword {
 		var encryptedPassword = this._authUtils.encrypPassword(this._resetPasswdDO.password);
 		async.waterfall([
 			((finishResetPasswordCallback) => {
+				var resetPasswordRepoDO: ResetPasswordRepoDO = {
+					activationCode: this._resetPasswdDO.activationCode,
+					email: this._resetPasswdDO.email,
+					newPassword: encryptedPassword
+				};
 				var hotelRepository: IHotelRepository = this._appContext.getRepositoryFactory().getHotelRepository();
-				hotelRepository.resetPasswordAsync(this._resetPasswdDO.email, this._resetPasswdDO.activationCode, encryptedPassword, finishResetPasswordCallback);
+				hotelRepository.resetPasswordAsync(resetPasswordRepoDO, finishResetPasswordCallback);
 			}),
 			((updatedUser: UserDO, finishSendResetPasswordEmailCallback) => {
 				this._updatedUser = updatedUser;
