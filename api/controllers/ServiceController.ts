@@ -4,9 +4,10 @@ import {ThStatusCode, ThResponse} from '../core/utils/th-responses/ThResponse';
 import {IImageStorageService} from '../core/services/image-storage/IImageStorageService';
 import {BaseController} from './base/BaseController';
 import {AppContext} from '../core/utils/AppContext';
+import {IVatProvider, VatDetailsDO} from '../core/services/vat/IVatProvider';
 
-class ImageUploadController extends BaseController {
-    public upload(req: Express.Request, res: Express.Response) {
+class ServiceController extends BaseController {
+    public uploadImage(req: Express.Request, res: Express.Response) {
         var _ctrlContext = this;
         try {
             req.file('image').upload(function(err, uploadedFiles) {
@@ -43,9 +44,26 @@ class ImageUploadController extends BaseController {
             _ctrlContext.returnErrorResponse(req, res, thError, ThStatusCode.ImageUploadControllerNoFilesToUpload);
         }
     }
+
+    public checkVAT(req: Express.Request, res: Express.Response) {
+        if(!this.precheckGETParameters(req, res, ['countryCode', 'vatNumber'])) return;
+        
+        var appContext: AppContext = req.appContext;
+        var vatNumberVerifier: IVatProvider = appContext.getServiceFactory().getVatProviderProxyService();
+        
+        var countryCode: string = req.query.countryCode;
+        var vatNumber: string = req.query.vatNumber;
+        
+        vatNumberVerifier.checkVAT(countryCode, vatNumber).then((vatDetails: VatDetailsDO) => {
+            this.returnSuccesfulResponse(req, res, vatDetails);
+        }).catch((error: ThError) => {
+            this.returnErrorResponse(req, res, error, ThStatusCode.VatProviderErrorCheckingVat);
+        });
+    }
 }
 
-var imageUploadController = new ImageUploadController();
+var serviceController = new ServiceController();
 module.exports = {
-    upload: imageUploadController.upload.bind(imageUploadController)
+    uploadImage: serviceController.uploadImage.bind(serviceController),
+    checkVAT: serviceController.checkVAT.bind(serviceController)
 }

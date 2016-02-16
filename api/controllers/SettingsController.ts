@@ -8,7 +8,7 @@ import {ISettingsRepository, AmenitySearchCriteriaDO, CountrySearchCriteriaDO, C
 export class SettingsController extends BaseController {
 
     public getAmenities(req: Express.Request, res: Express.Response) {
-        var amenityID: string = req['param']('id');
+        var amenityID: string = req.query.id;
         var thUtils = new ThUtils();
         var criteria: AmenitySearchCriteriaDO = {};
         var settingsRepository: ISettingsRepository = req.appContext.getRepositoryFactory().getSettingsRepository();
@@ -25,7 +25,7 @@ export class SettingsController extends BaseController {
 
     }
     public getCountries(req: Express.Request, res: Express.Response) {
-        var countryCode = req['param']('code');
+        var countryCode = req.query.code;
         var thUtils = new ThUtils();
         var criteria: CountrySearchCriteriaDO = {};
         var settingsRepository: ISettingsRepository = req.appContext.getRepositoryFactory().getSettingsRepository();
@@ -42,7 +42,7 @@ export class SettingsController extends BaseController {
 
     }
     public getCurrencies(req: Express.Request, res: Express.Response) {
-        var currencyCode = req['param']('code');
+        var currencyCode = req.query.code;
         var thUtils = new ThUtils();
         var criteria: CurrencySearchCriteriaDO = {};
         var settingsRepository: ISettingsRepository = req.appContext.getRepositoryFactory().getSettingsRepository();
@@ -59,7 +59,7 @@ export class SettingsController extends BaseController {
 
     }
     public getPaymentMethods(req: Express.Request, res: Express.Response) {
-        var paymentMethodId = req['param']('id');
+        var paymentMethodId = req.query.id;
         var thUtils = new ThUtils();
         var criteria: PaymentMethodSearchCriteriaDO = {};
         var settingsRepository: ISettingsRepository = req.appContext.getRepositoryFactory().getSettingsRepository();

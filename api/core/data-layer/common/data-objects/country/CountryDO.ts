@@ -6,8 +6,9 @@ export class CountryDO extends BaseDO {
     }
     code: string;
     name: string;
-
+    inEU: boolean;
+    
     protected getPrimitivePropertyKeys(): string[] {
-        return ["code", "name"];
+        return ["code", "name", "inEU"];
     }
 }

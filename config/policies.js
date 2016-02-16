@@ -44,14 +44,5 @@ module.exports.policies = {
 		'logIn': ['contextBuilder', 'basicLogInContextBuilder'],
         'requestResetPassword': ['contextBuilder'],
 		'resetPassword': ['contextBuilder']
-	},
-    ImageUploadController: {
-        'upload': ['contextBuilder']
-    },
-    SettingsController: {
-        'getAmenities': ['contextBuilder'],
-        'getCountries': ['contextBuilder'],
-        'getCurrencies': ['contextBuilder'],
-        'getPaymentMethods': ['contextBuilder']
-    }
+	}
 };

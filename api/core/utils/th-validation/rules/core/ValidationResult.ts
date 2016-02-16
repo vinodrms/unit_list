@@ -8,6 +8,7 @@ export enum InvalidConstraintType {
 	Number,
 	Object,
 	Password,
+    VatNumber,
 	String
 }
 

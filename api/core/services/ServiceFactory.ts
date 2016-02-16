@@ -1,5 +1,6 @@
 import {UnitPalConfig, EmailProviderType, ImageStorageProviderType} from '../utils/environment/UnitPalConfig';
 import {IVatProvider} from './vat/IVatProvider';
+import {VatProviderProxyService} from './vat/VatProviderProxyService';
 import {VIESVatProviderAdapter} from './vat/providers/VIESVatProviderAdapter';
 import {IEmailService, EmailHeaderDO} from './email/IEmailService';
 import {BaseEmailTemplateDO} from './email/data-objects/BaseEmailTemplateDO'
@@ -14,10 +15,11 @@ import {PassportLoginService} from './login/custom/PassportLoginService';
 export class ServiceFactory {
     constructor(private _unitPalConfig: UnitPalConfig) {
     }
-
-    public getVatProvider(): IVatProvider {
-        return new VIESVatProviderAdapter();
+    
+    public getVatProviderProxyService(): IVatProvider {
+        return new VatProviderProxyService(this._unitPalConfig);
     }
+    
     public getEmailService(emailHeaderDO: EmailHeaderDO, emailTemplate: BaseEmailTemplateDO): IEmailService {
         switch (this._unitPalConfig.getEmailProviderType()) {
             case EmailProviderType.Sendgrid:

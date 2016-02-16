@@ -26,6 +26,10 @@ export class PaymentMethods extends ABaseSetting {
 
     private dataSet: { name: string, iconUrl: string }[] = [
         {
+            name: "Cash",
+            iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
+        },
+        {
             name: "Visa",
             iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
         },
@@ -33,7 +37,6 @@ export class PaymentMethods extends ABaseSetting {
             name: "American Express",
             iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
         },
-        ,
         {
             name: "Euro/Mastercard",
             iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"

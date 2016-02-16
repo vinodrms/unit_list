@@ -24,7 +24,8 @@ export interface ISettingsRepository {
 
     getAmenities(valueCriteria?: AmenitySearchCriteriaDO): Promise<AmenityDO[]>;
 
-    getCountries(valueCriteria?: CountrySearchCriteriaDO): Promise<CountryDO[]>;
+    getCountriesAsync(finishQueryCallback: { (err: any, country?: CountryDO[]): void; }, valueCriteria?: Object);
+	getCountries(valueCriteria?: CountrySearchCriteriaDO): Promise<CountryDO[]>;
 
 	getCurrenciesAsync(getCurrenciesCallback: { (err: any, currencyList?: CurrencyDO[]): void; }, valueCriteria?: CurrencySearchCriteriaDO);
     getCurrencies(valueCriteria?: CurrencySearchCriteriaDO): Promise<CurrencyDO[]>;
