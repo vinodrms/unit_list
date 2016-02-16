@@ -86,7 +86,6 @@ export class HotelAddPaymentsPolicies {
 			}
 		}));
 	}
-
 	private precheckConstraintsAsync(finishedPrecheckingConstraintsCallback: { (err: any, success?: boolean): void; }) {
 		this.precheckConstraints().then((result: boolean) => {
 			finishedPrecheckingConstraintsCallback(null, result);
@@ -107,65 +106,59 @@ export class HotelAddPaymentsPolicies {
 	}
 	private precheckConstraintsCore(resolve: { (result: boolean): void }, reject: { (err: ThError): void }) {
 		if (this._loadedHotel.configurationCompleted) {
-			var thError = new ThError(ThStatusCode.HotelAddPaymentPoliciesHotelAlreadyConfigured, null);
-			ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Hotel already configured - can't change the payment policies", this._sessionContext, thError);
-			reject(thError);
+			this.precheckLogAndReject(ThStatusCode.HotelAddPaymentPoliciesHotelAlreadyConfigured, "Hotel configured & can't add other payment policies", reject);
 			return;
 		}
 		if (!this.paymentMethodListIsValid()) {
-			var thError = new ThError(ThStatusCode.HotelAddPaymentPoliciesInvalidPaymentMethodIdList, null);
-			ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Invalid payment method ids submitted", this._sessionContext, thError);
-			reject(thError);
+			this.precheckLogAndReject(ThStatusCode.HotelAddPaymentPoliciesInvalidPaymentMethodIdList, "Invalid payment method ids submitted", reject);
 			return;
 		}
-		if (!this.submittedTaxesAreValid()) {
-			var thError = new ThError(ThStatusCode.HotelAddPaymentPoliciesInvalidTaxes, null);
-			ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Invalid taxes", this._sessionContext, thError);
-			reject(thError);
+		if (!this.taxListsAreValid()) {
+			this.precheckLogAndReject(ThStatusCode.HotelAddPaymentPoliciesInvalidTaxes, "Invalid taxes", reject);
 			return;
 		}
 		if (!this.currencyCodeIsValid()) {
-			var thError = new ThError(ThStatusCode.HotelAddPaymentPoliciesInvalidCurrencyCode, null);
-			ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Invalid currency code", this._sessionContext, thError);
-			reject(thError);
+			this.precheckLogAndReject(ThStatusCode.HotelAddPaymentPoliciesInvalidCurrencyCode, "Invalid currency code", reject);
 			return;
 		}
 		//TODO: consider the usage of the taxes inside price products? (during the configuration phase)
 		resolve(true);
 	}
 	private paymentMethodListIsValid(): boolean {
-		var result = true;
+		var isValid = true;
 		this._paymentPoliciesDO.paymentMethodIdList.forEach((paymentMethodId: string) => {
-			var foundPaymentMethod: PaymentMethodDO = _.find(this._availablePaymentMethods, (paymentMethod: PaymentMethodDO) => {
-				return paymentMethod.id == paymentMethodId;
-			});
-			if (this._thUtils.isUndefinedOrNull(foundPaymentMethod)) {
-				result = false;
-			}
+			isValid = this.paymentMethodIdIsValid(paymentMethodId) ? isValid : false;
 		});
-		return result;
+		return isValid;
 	}
-	private submittedTaxesAreValid(): boolean {
+	private paymentMethodIdIsValid(paymentMethodId: string): boolean {
+		var foundPaymentMethod: PaymentMethodDO = _.find(this._availablePaymentMethods, (paymentMethod: PaymentMethodDO) => {
+			return paymentMethod.id == paymentMethodId;
+		});
+		return !this._thUtils.isUndefinedOrNull(foundPaymentMethod);
+	}
+
+	private taxListsAreValid(): boolean {
 		var taxes = new HotelTaxesDO();
 		taxes.vatList = [];
 		taxes.otherTaxList = [];
-		var isValid = this.submittedVatsAreValid(taxes) && this.submittedOtherTaxesAreValid(taxes);
+		var isValid = this.vatListIsValid(taxes) && this.otherTaxListIsValid(taxes);
 		this._precheckedTaxes = taxes;
 		return isValid;
 	}
-	private submittedVatsAreValid(taxes: HotelTaxesDO): boolean {
+	private vatListIsValid(taxes: HotelTaxesDO): boolean {
 		var isValid = true;
 		this._paymentPoliciesDO.taxes.vatList.forEach((vatEntry: HotelAddPaymentsPoliciesVatDO) => {
-			var vatDO = this.getTaxWithType(TaxType.Percentage, vatEntry.name, vatEntry.value);
+			var vatDO = this.buildTaxWithType(TaxType.Percentage, vatEntry.name, vatEntry.value);
 			isValid = vatDO.isValid() ? isValid : false;
 			this.pushIfValid(vatDO, taxes.vatList);
 		});
 		return isValid;
 	}
-	private submittedOtherTaxesAreValid(taxes: HotelTaxesDO): boolean {
+	private otherTaxListIsValid(taxes: HotelTaxesDO): boolean {
 		var isValid = true;
 		this._paymentPoliciesDO.taxes.otherTaxList.forEach((taxEntry: HotelAddPaymentsPoliciesOtherTaxDO) => {
-			var taxDo = this.getTaxWithType(taxEntry.type, taxEntry.name, taxEntry.value);
+			var taxDo = this.buildTaxWithType(taxEntry.type, taxEntry.name, taxEntry.value);
 			isValid = taxDo.isValid() ? isValid : false;
 			this.pushIfValid(taxDo, taxes.otherTaxList);
 		});
@@ -176,7 +169,7 @@ export class HotelAddPaymentsPolicies {
 			list.push(taxDO);
 		}
 	}
-	private getTaxWithType(taxType: TaxType, name: string, value: number): TaxDO {
+	private buildTaxWithType(taxType: TaxType, name: string, value: number): TaxDO {
 		var tax = new TaxDO();
 		tax.id = this._thUtils.generateUniqueID();
 		tax.type = taxType;
@@ -184,11 +177,18 @@ export class HotelAddPaymentsPolicies {
 		tax.value = value;
 		return tax;
 	}
+
 	private currencyCodeIsValid(): boolean {
 		var foundCurrency = _.find(this._availableCurrencyList, (currency: CurrencyDO) => {
 			return currency.code == this._paymentPoliciesDO.ccyCode;
 		});
 		return !this._thUtils.isUndefinedOrNull(foundCurrency);
+	}
+
+	private precheckLogAndReject(statusCode: ThStatusCode, message: string, reject: { (err: ThError): void }) {
+		var thError = new ThError(statusCode, null);
+		ThLogger.getInstance().logBusiness(ThLogLevel.Warning, message, this._sessionContext, thError);
+		reject(thError);
 	}
 
 	private getHotelMetaDO(): HotelMetaRepoDO {
