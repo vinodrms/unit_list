@@ -36,4 +36,15 @@ export class NumberValidationRule extends AValidationRule {
 		rule.isNullable = true;
 		return rule;
 	}
+	public static buildPercentageNumberRule(): NumberValidationRule {
+		var rule = new NumberValidationRule();
+		rule.minValue = 0.0;
+		rule.maxValue = 1.0;
+		return rule;
+	}
+	public static buildPriceNumberRule(): NumberValidationRule {
+		var rule = new NumberValidationRule();
+		rule.minValue = 0.0;
+		return rule;
+	}
 }

@@ -20,7 +20,7 @@ module.exports = function(req: Express.Request, res: Express.Response, next: any
 				user: {
 					id: "1",
 					email: "paraschiv.ionut@gmail.com",
-					roles: [0]
+					roleList: [0]
 				}
 			}
 		};

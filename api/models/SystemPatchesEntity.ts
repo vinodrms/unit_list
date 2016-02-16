@@ -17,7 +17,7 @@ class SystemPatchesEntity extends BasePersistentEntity {
                 type: 'integer',
                 required: true
             },
-            patches: {
+            patchList: {
                 type: 'array',
 				defaultsTo: []
             }

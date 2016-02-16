@@ -5,7 +5,7 @@ import {MongoRepository, MongoErrorCodes} from '../../../../common/base/MongoRep
 import {HotelDO} from '../../../data-objects/HotelDO';
 import {HotelContactDetailsDO} from '../../../data-objects/hotel-contact-details/HotelContactDetailsDO';
 import {GeoLocationDO} from '../../../../common/data-objects/geo-location/GeoLocationDO';
-import {HotelMetaRepoDO, BasicHotelInfoRepoDO} from '../../IHotelRepository';
+import {HotelMetaRepoDO, BasicHotelInfoRepoDO, PaymentsPoliciesRepoDO} from '../../IHotelRepository';
 
 export class MongoHotelDetailsRepository extends MongoRepository {
 	constructor(private _hotelsEntity: Sails.Model) {
@@ -40,6 +40,14 @@ export class MongoHotelDetailsRepository extends MongoRepository {
 			"logoUrl": basicInfo.logoUrl
 		});
 	}
+	public addPaymentsPolicies(hotelMeta: HotelMetaRepoDO, paymPoliciesParams: PaymentsPoliciesRepoDO): Promise<HotelDO> {
+		return this.findAndModifyHotel(hotelMeta, {
+			"paymentMethodIdList": paymPoliciesParams.paymentMethodIdList,
+			"ccyCode": paymPoliciesParams.ccyCode,
+			"taxes": paymPoliciesParams.taxes
+		});
+	}
+
 	private findAndModifyHotel(hotelMeta: { id: string, versionId: number }, updateQuery: Object): Promise<HotelDO> {
 		return new Promise<HotelDO>((resolve: { (updatedHotel: HotelDO): void }, reject: { (err: any): void }) => {
 			this.findAndModifyHotelCore(resolve, reject, hotelMeta, updateQuery);

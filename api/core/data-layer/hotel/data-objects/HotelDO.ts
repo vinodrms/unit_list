@@ -15,18 +15,18 @@ export class HotelDO extends BaseDO {
 	contactDetails: HotelContactDetailsDO;
 	geoLocation: GeoLocationDO;
 	logoUrl: string;
-	users: UserDO[];
+	userList: UserDO[];
 	ccyCode: string;
 	taxes: HotelTaxesDO;
-	amenityIds: string[];
-	customAmenities: AmenityDO[];
-	paymentMethodIds: string[];
-	configurationStatus: boolean;
+	amenityIdList: string[];
+	customAmenityList: AmenityDO[];
+	paymentMethodIdList: string[];
+	configurationCompleted: boolean;
 	timezone: string;
 	operationHours: OperationHoursDO;
 
 	protected getPrimitivePropertyKeys(): string[] {
-		return ["id", "versionId", "logoUrl", "ccyCode", "amenityIds", "paymentMethodIds", "configurationStatus", "timezone"];
+		return ["id", "versionId", "logoUrl", "ccyCode", "amenityIdList", "paymentMethodIdList", "configurationCompleted", "timezone"];
 	}
 	public buildFromObject(object: Object) {
 		super.buildFromObject(object);
@@ -37,21 +37,21 @@ export class HotelDO extends BaseDO {
 		this.geoLocation = new GeoLocationDO();
 		this.geoLocation.buildFromObject(this.getPropertyFromObject("geoLocation", object));
 
-		this.users = [];
-		this.forEachElementOf(this.getPropertyFromObject("users", object), (userObject: Object) => {
+		this.userList = [];
+		this.forEachElementOf(this.getPropertyFromObject("userList", object), (userObject: Object) => {
 			var userDO = new UserDO();
 			userDO.buildFromObject(userObject);
-			this.users.push(userDO);
+			this.userList.push(userDO);
 		});
 
 		this.taxes = new HotelTaxesDO();
 		this.taxes.buildFromObject(this.getPropertyFromObject("taxes", object));
 
-		this.customAmenities = [];
-		this.forEachElementOf(this.getPropertyFromObject("customAmenities", object), (amenityObject: Object) => {
+		this.customAmenityList = [];
+		this.forEachElementOf(this.getPropertyFromObject("customAmenityList", object), (amenityObject: Object) => {
 			var amenityDO = new AmenityDO();
 			amenityDO.buildFromObject(amenityObject);
-			this.customAmenities.push(amenityDO);			
+			this.customAmenityList.push(amenityDO);
 		});
 
 		this.operationHours = new OperationHoursDO();

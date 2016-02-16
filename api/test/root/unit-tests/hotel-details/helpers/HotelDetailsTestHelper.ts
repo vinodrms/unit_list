@@ -1,5 +1,11 @@
 import {HotelUpdateBasicInfoDO} from '../../../../../core/domain-layer/hotel-details/basic-info/HotelUpdateBasicInfoDO';
 import {HotelDO} from '../../../../../core/data-layer/hotel/data-objects/HotelDO';
+import {HotelAddPaymentsPoliciesDO, HotelAddPaymentsPoliciesOtherTaxDO, HotelAddPaymentsPoliciesVatDO} from '../../../../../core/domain-layer/hotel-details/payment-policies/HotelAddPaymentsPoliciesDO';
+import {TaxDO, TaxType} from '../../../../../core/data-layer/common/data-objects/taxes/TaxDO';
+import {DefaultDataBuilder} from '../../../../db-initializers/DefaultDataBuilder';
+import {PaymentMethodDO} from '../../../../../core/data-layer/common/data-objects/payment-method/PaymentMethodDO';
+
+import _ = require('underscore');
 
 export class HotelDetailsTestHelper {
 	public getHotelUpdateBasicInfoDO(hotel: HotelDO): HotelUpdateBasicInfoDO {
@@ -35,6 +41,39 @@ export class HotelDetailsTestHelper {
 		basicInfo.logoUrl = "http://testtesttest/29129321.png";
 
 		return basicInfo;
+	}
+
+	public getHotelAddPaymentsPoliciesDO(dataBuilder: DefaultDataBuilder): HotelAddPaymentsPoliciesDO {
+		var paymentMethodIdList: string[] = _.map(dataBuilder.paymentMethods, (paymentMethod: PaymentMethodDO) => {
+			return paymentMethod.id;
+		});
+
+		return {
+			ccyCode: "EUR",
+			paymentMethodIdList: paymentMethodIdList,
+			taxes: {
+				vatList: [
+					{
+						name: "VAT",
+						value: 0.8
+					}
+				],
+				otherTaxList: [
+					{
+						type: TaxType.Fixed,
+						name: "City Tax",
+						value: 10
+					}
+				]
+			}
+		}
+	}
+	public getInvalidOtherTaxDO(): HotelAddPaymentsPoliciesOtherTaxDO {
+		return {
+			type: TaxType.Percentage,
+			name: "Bed VAT",
+			value: 10
+		};
 	}
 
 }

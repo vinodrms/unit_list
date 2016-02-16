@@ -142,7 +142,7 @@ export abstract class AMongoDBPatch implements IDBPatch {
 			}
 		};
 		if (newPatches) {
-			setClause.$set['patches'] = newPatches;
+			setClause.$set['patchList'] = newPatches;
 		}
 		this._nativeSystemPatchesEntity.findAndModify({ lock: currentStatus }, [], setClause, { upsert: true, new: true }, (err, record) => {
 			if (err || !record || !record.value) {
@@ -151,7 +151,7 @@ export abstract class AMongoDBPatch implements IDBPatch {
 				reject(thError);
 				return;
 			}
-			this._appliedPatches = record.value.patches;
+			this._appliedPatches = record.value.patchList;
 			if (!this._appliedPatches) {
 				this._appliedPatches = [];
 			}

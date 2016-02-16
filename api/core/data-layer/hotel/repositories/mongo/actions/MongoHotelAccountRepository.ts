@@ -44,7 +44,7 @@ export class MongoHotelAccountRepository extends MongoRepository {
 		});
 	}
 	private getHotelByUserEmailCore(resolve: { (result: HotelDO): void }, reject: { (err: ThError): void }, email: string) {
-		this._hotelsEntity.findOne({ "users.email": email }).then((foundHotel: Sails.QueryResult) => {
+		this._hotelsEntity.findOne({ "userList.email": email }).then((foundHotel: Sails.QueryResult) => {
 			if (!foundHotel) {
 				var thError = new ThError(ThStatusCode.HotelRepositoryAccountNotFound, null);
 				ThLogger.getInstance().logBusiness(ThLogLevel.Info, "Invalid email to retrieve hotel", { email: email }, thError);
@@ -71,14 +71,14 @@ export class MongoHotelAccountRepository extends MongoRepository {
 		this.findAndModify(
 			{
 				$and: [
-					{ "users.email": activationParams.email },
-					{ "users.accountStatus": AccountStatus.Pending },
-					{ "users.accountActivationToken.code": activationParams.activationCode },
-					{ "users.accountActivationToken.expiryTimestamp": { $gte: currentTimestamp } }
+					{ "userList.email": activationParams.email },
+					{ "userList.accountStatus": AccountStatus.Pending },
+					{ "userList.accountActivationToken.code": activationParams.activationCode },
+					{ "userList.accountActivationToken.expiryTimestamp": { $gte: currentTimestamp } }
 				]
 			}, {
-				"users.$.accountStatus": AccountStatus.Active,
-				"users.$.accountActivationToken.updatedTimestamp": currentTimestamp
+				"userList.$.accountStatus": AccountStatus.Active,
+				"userList.$.accountActivationToken.updatedTimestamp": currentTimestamp
 			}).then((updatedDBHotel: Object) => {
 				if (!updatedDBHotel) {
 					var thError = new ThError(ThStatusCode.HotelRepositoryAccountCouldNotBeActivated, null);
@@ -104,11 +104,11 @@ export class MongoHotelAccountRepository extends MongoRepository {
 		this.findAndModify(
 			{
 				$and: [
-					{ "users.email": reqParams.email },
-					{ "users.accountStatus": { $in: [AccountStatus.Active, AccountStatus.Pending] } }
+					{ "userList.email": reqParams.email },
+					{ "userList.accountStatus": { $in: [AccountStatus.Active, AccountStatus.Pending] } }
 				]
 			}, {
-				"users.$.resetPasswordToken": reqParams.token
+				"userList.$.resetPasswordToken": reqParams.token
 			}).then((updatedDBHotel: Object) => {
 				if (!updatedDBHotel) {
 					var thError = new ThError(ThStatusCode.HotelRepositoryProblemUpdatingPasswordToken, null);
@@ -135,16 +135,16 @@ export class MongoHotelAccountRepository extends MongoRepository {
 		this.findAndModify(
 			{
 				$and: [
-					{ "users.email": resetParams.email },
-					{ "users.accountStatus": { $in: [AccountStatus.Active, AccountStatus.Pending] } },
-					{ "users.resetPasswordToken.code": resetParams.activationCode },
-					{ "users.resetPasswordToken.expiryTimestamp": { $gte: currentTimestamp } },
-					{ "users.resetPasswordToken.updatedTimestamp": { $exists: false } }
+					{ "userList.email": resetParams.email },
+					{ "userList.accountStatus": { $in: [AccountStatus.Active, AccountStatus.Pending] } },
+					{ "userList.resetPasswordToken.code": resetParams.activationCode },
+					{ "userList.resetPasswordToken.expiryTimestamp": { $gte: currentTimestamp } },
+					{ "userList.resetPasswordToken.updatedTimestamp": { $exists: false } }
 				]
 			}, {
-				"users.$.accountStatus": AccountStatus.Active,
-				"users.$.resetPasswordToken.updatedTimestamp": currentTimestamp,
-				"users.$.password": resetParams.newPassword
+				"userList.$.accountStatus": AccountStatus.Active,
+				"userList.$.resetPasswordToken.updatedTimestamp": currentTimestamp,
+				"userList.$.password": resetParams.newPassword
 			}).then((updatedDBHotel: Object) => {
 				if (!updatedHotel) {
 					var thError = new ThError(ThStatusCode.HotelRepositoryCouldNotResetPassword, null);
@@ -162,7 +162,7 @@ export class MongoHotelAccountRepository extends MongoRepository {
 			});
 	}
 	private getUserByEmailFromHotel(hotel: HotelDO, userEmail: string): UserDO {
-		return _.find(hotel.users, (currentUser: UserDO) => {
+		return _.find(hotel.userList, (currentUser: UserDO) => {
 			return currentUser.email == userEmail;
 		});
 	}

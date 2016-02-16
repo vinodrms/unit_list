@@ -9,7 +9,7 @@ export class SessionDO {
 	user: {
 		id: string
 		email: string,
-		roles: UserRoles[]
+		roleList: UserRoles[]
 	}
 	hotel: {
 		id: string,
@@ -47,7 +47,7 @@ export class SessionManager {
 			user: {
 				id: loginData.user.id,
 				email: loginData.user.email,
-				roles: loginData.user.roles
+				roleList: loginData.user.roleList
 			},
 			hotel: {
 				id: loginData.hotel.id,

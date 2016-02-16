@@ -21,12 +21,14 @@ export interface PaymentMethodSearchCriteriaDO {
 }
 
 export interface ISettingsRepository {
-    
+
     getAmenities(valueCriteria?: AmenitySearchCriteriaDO): Promise<AmenityDO[]>;
-    
+
     getCountries(valueCriteria?: CountrySearchCriteriaDO): Promise<CountryDO[]>;
-    
+
+	getCurrenciesAsync(getCurrenciesCallback: { (err: any, currencyList?: CurrencyDO[]): void; }, valueCriteria?: CurrencySearchCriteriaDO);
     getCurrencies(valueCriteria?: CurrencySearchCriteriaDO): Promise<CurrencyDO[]>;
-    
-    getPaymentMethods(valueCriteria?: PaymentMethodSearchCriteriaDO): Promise<PaymentMethodDO[]>;
+
+    getPaymentMethodsAsync(getPaymentMethodsCallback: { (err: any, paymentMethods?: PaymentMethodDO[]): void; }, valueCriteria?: PaymentMethodSearchCriteriaDO);
+	getPaymentMethods(valueCriteria?: PaymentMethodSearchCriteriaDO): Promise<PaymentMethodDO[]>;
 }

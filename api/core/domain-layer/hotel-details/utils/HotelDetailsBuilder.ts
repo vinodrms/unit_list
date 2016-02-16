@@ -36,7 +36,7 @@ export class HotelDetailsBuilder {
 		});
 	}
 	private buildCore(resolve: { (result: HotelDetailsDO): void }, reject: { (err: ThError): void }) {
-		var user: UserDO = _.find(this._hotel.users, (currentUser: UserDO) => {
+		var user: UserDO = _.find(this._hotel.userList, (currentUser: UserDO) => {
 			return currentUser.email == this._sessionContext.sessionDO.user.email;
 		});
 		if (!user) {
@@ -45,7 +45,7 @@ export class HotelDetailsBuilder {
 			reject(thError);
 			return;
 		}
-		delete this._hotel.users;
+		delete this._hotel.userList;
 		delete user.password;
 		delete user.accountActivationToken;
 		delete user.resetPasswordToken;

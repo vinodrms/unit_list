@@ -26,7 +26,7 @@ export class HotelBasicAuthentication implements IHotelAuthentication {
 	}
 	private checkCredentialsCore(resolve: { (result?: { user: UserDO, hotel: HotelDO }): void; }, reject: { (err: ThError): void }) {
 		this._appContext.getRepositoryFactory().getHotelRepository().getHotelByUserEmail(this._email).then((hotel: HotelDO) => {
-			var user: UserDO = _.find(hotel.users, (currentUser: UserDO) => {
+			var user: UserDO = _.find(hotel.userList, (currentUser: UserDO) => {
 				return currentUser.email == this._email;
 			});
 

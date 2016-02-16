@@ -2,7 +2,7 @@ import {MongoRepository} from '../../../common/base/MongoRepository';
 import {IRepositoryCleaner} from '../../../common/base/IRepositoryCleaner';
 import {HotelDO} from '../../data-objects/HotelDO';
 import {UserDO} from '../../data-objects/user/UserDO';
-import {IHotelRepository, HotelMetaRepoDO, BasicHotelInfoRepoDO, UserAccountActivationRepoDO, RequestResetPasswordRepoDO, ResetPasswordRepoDO} from '../IHotelRepository';
+import {IHotelRepository, HotelMetaRepoDO, BasicHotelInfoRepoDO, UserAccountActivationRepoDO, RequestResetPasswordRepoDO, ResetPasswordRepoDO, PaymentsPoliciesRepoDO} from '../IHotelRepository';
 import {ActionTokenDO} from '../../data-objects/user/ActionTokenDO';
 import {HotelContactDetailsDO} from '../../data-objects/hotel-contact-details/HotelContactDetailsDO';
 import {GeoLocationDO} from '../../../common/data-objects/geo-location/GeoLocationDO';
@@ -65,4 +65,13 @@ export abstract class AMongoHotelRepository extends MongoRepository implements I
 		});
 	}
 	protected abstract updateBasicInformation(hotelMeta: HotelMetaRepoDO, basicInfo: BasicHotelInfoRepoDO): Promise<HotelDO>;
+
+	public addPaymentsPoliciesAsync(hotelMeta: HotelMetaRepoDO, paymPoliciesParams: PaymentsPoliciesRepoDO, addPaymentsPoliciesCallback: { (err: any, updatedHotel?: HotelDO): void; }) {
+		this.addPaymentsPolicies(hotelMeta, paymPoliciesParams).then((updatedHotel: HotelDO) => {
+			addPaymentsPoliciesCallback(null, updatedHotel);
+		}).catch((error: any) => {
+			addPaymentsPoliciesCallback(error);
+		});
+	}
+	protected abstract addPaymentsPolicies(hotelMeta: HotelMetaRepoDO, paymPoliciesParams: PaymentsPoliciesRepoDO): Promise<HotelDO>;
 }

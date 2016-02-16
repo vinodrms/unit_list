@@ -23,10 +23,10 @@ export class MongoPatch0 extends ATransactionalMongoPatch {
     private applyCore(resolve: { (result: boolean): void }, reject: { (err: ThError): void }) {
 		var mongoRepo = new MongoRepository(this._hotelsEntity);
         mongoRepo.getNativeMongoCollection().then((nativeHotelsCollection: any) => {
-            nativeHotelsCollection.ensureIndex("users.email", { unique: true }, ((err, indexName) => {
+            nativeHotelsCollection.ensureIndex("userList.email", { unique: true }, ((err, indexName) => {
                 if (err || !indexName) {
                     var thError = new ThError(ThStatusCode.ErrorBootstrappingApp, err);
-                    ThLogger.getInstance().logError(ThLogLevel.Error, "Patch0 - Error ensuring unique email for users index", { step: "Bootstrap" }, thError);
+                    ThLogger.getInstance().logError(ThLogLevel.Error, "Patch0 - Error ensuring unique email for userList index", { step: "Bootstrap" }, thError);
                     reject(thError);
                     return;
                 }
