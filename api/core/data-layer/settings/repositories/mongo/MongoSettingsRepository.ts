@@ -48,10 +48,14 @@ export class MongoSettingsRepository extends MongoRepository implements ISetting
         });
     }
 
-    public getAmenities(valueCriteria?: Object): Promise<AmenityDO[]> {
-        return this.getSetting(SettingType.Amenities, valueCriteria);
+    public getRoomAmenities(valueCriteria?: Object): Promise<AmenityDO[]> {
+        return this.getSetting(SettingType.RoomAmenities, valueCriteria);
     }
-
+    
+    public getHotelAmenities(valueCriteria?: Object): Promise<AmenityDO[]> {
+        return this.getSetting(SettingType.HotelAmenities, valueCriteria);
+    }
+    
     public getCountries(valueCriteria?: Object): Promise<CountryDO[]> {
         return this.getSetting(SettingType.Countries, valueCriteria);
     }
@@ -96,7 +100,8 @@ export class MongoSettingsRepository extends MongoRepository implements ISetting
     private getSettingQueryResultDO(settingType: SettingType, queryResult: Sails.QueryResult): BaseDO[] {
         var getSettingsResponseDO: BaseDO;
         switch (settingType) {
-            case SettingType.Amenities: getSettingsResponseDO = new AmenitySettingDO(); break;
+            case SettingType.RoomAmenities: getSettingsResponseDO = new AmenitySettingDO(); break;
+            case SettingType.HotelAmenities: getSettingsResponseDO = new AmenitySettingDO(); break;
             case SettingType.Countries: getSettingsResponseDO = new CountrySettingDO(); break;
             case SettingType.CurrencyCodes: getSettingsResponseDO = new CurrencySettingDO(); break;
             case SettingType.PaymentMethods: getSettingsResponseDO = new PaymentMethodSettingDO(); break;

@@ -5,19 +5,23 @@ import {MongoPatcheType, ATransactionalMongoPatch} from '../../utils/ATransactio
 import {MongoRepository} from '../../../../../../data-layer/common/base/MongoRepository';
 import {MongoSettingsRepository} from '../../../../../../data-layer/settings/repositories/mongo/MongoSettingsRepository';
 
-import {Amenities} from './data-sets/Amenities';
+import {RoomAmenities} from './data-sets/amenities/RoomAmenities';
+import {HotelAmenities} from './data-sets/amenities/HotelAmenities';
 import {Countries} from './data-sets/Countries';
 import {CurrencyCodes} from './data-sets/CurrencyCodes';
 import {PaymentMethods} from './data-sets/PaymentMethods';
+import {BedTemplates} from './data-sets/BedTemplates';
 
 import async = require('async');
 
 export class MongoPatch1 extends ATransactionalMongoPatch {
 	private _settingsToAdd: Object[] = [
-		(new Amenities()).getAmenitySettingDO(),
+		(new RoomAmenities()).getAmenitySettingDO(),
+        (new HotelAmenities()).getAmenitySettingDO(),
 		(new Countries()).getCountrySettingDO(),
 		(new CurrencyCodes()).getCurrencySettingDO(),
-		(new PaymentMethods()).getPaymentMethodSettingDO()
+		(new PaymentMethods()).getPaymentMethodSettingDO(),
+        (new BedTemplates()).getBedTemplateSettingDO()
 	];
 
     private _settingsEntity: Sails.Model;

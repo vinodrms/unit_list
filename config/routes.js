@@ -57,7 +57,8 @@ module.exports.routes = {
     'POST /api/service/uploadImage': 'ServiceController.uploadImage',
     'GET /api/service/vatVerifier': 'ServiceController.checkVAT',
     
-    'GET /api/settings/amenities': 'SettingsController.getAmenities',
+    'GET /api/settings/roomAmenities': 'SettingsController.getRoomAmenities',
+    'GET /api/settings/hotelAmenities': 'SettingsController.getHotelAmenities',
     'GET /api/settings/countries': 'SettingsController.getCountries',
     'GET /api/settings/currencies': 'SettingsController.getCurrencies',
     'GET /api/settings/paymentMethods': 'SettingsController.getPaymentMethods'    

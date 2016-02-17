@@ -30,22 +30,24 @@ export class VatProviderProxyService implements IVatProvider {
     public checkVAT(countryCode: string, vat: string): Promise<VatDetailsDO> {
         this._countryCode = countryCode;
         this._vat = vat;
-        
+
         return new Promise<VatDetailsDO>((resolve, reject) => {
             this.checkVATCore(resolve, reject);
         });
     }
-    
+
     private validVatNumber(): boolean {
         var vatNumberValidationRule = new VatNumberValidationRule();
         return vatNumberValidationRule.validate(this._vat).isValid();
     }
-    
+
     private checkVATCore(resolve: { (result: VatDetailsDO): void }, reject: { (err: ThError): void }) {
-        if(!this.validVatNumber()) {
-            var thError = new ThError(ThStatusCode.VatProviderInvalidVat, null);
-            reject(thError);
-            return;
+        if (!this.validVatNumber()) {
+            process.nextTick(() => {
+                var thError = new ThError(ThStatusCode.VatProviderInvalidVat, null);
+                reject(thError);
+                return;
+            });
         }
         async.waterfall(
             [

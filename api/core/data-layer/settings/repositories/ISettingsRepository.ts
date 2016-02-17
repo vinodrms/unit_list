@@ -4,31 +4,33 @@ import {CountryDO} from '../../common/data-objects/country/CountryDO';
 import {CurrencyDO} from '../../common/data-objects/currency/CurrencyDO';
 import {PaymentMethodDO} from '../../common/data-objects/payment-method/PaymentMethodDO';
 
-export interface AmenitySearchCriteriaDO {
+export interface AmenitySearchCriteriaRepoDO {
     id?: string;
 }
 
-export interface CountrySearchCriteriaDO {
+export interface CountrySearchCriteriaRepoDO {
     code?: string;
 }
 
-export interface CurrencySearchCriteriaDO {
+export interface CurrencySearchCriteriaRepoDO {
     code?: string;
 }
 
-export interface PaymentMethodSearchCriteriaDO {
+export interface PaymentMethodSearchCriteriaRepoDO {
     id?: string;
 }
 
 export interface ISettingsRepository {
     
-    getAmenities(valueCriteria?: AmenitySearchCriteriaDO): Promise<AmenityDO[]>;
+    getRoomAmenities(valueCriteria?: AmenitySearchCriteriaRepoDO): Promise<AmenityDO[]>;
     
-    getCountries(valueCriteria?: CountrySearchCriteriaDO): Promise<CountryDO[]>;
+    getHotelAmenities(valueCriteria?: AmenitySearchCriteriaRepoDO): Promise<AmenityDO[]>;
+    
+    getCountries(valueCriteria?: CountrySearchCriteriaRepoDO): Promise<CountryDO[]>;
     
     getCountriesAsync(finishQueryCallback: { (err: any, country?: CountryDO[]): void; }, valueCriteria?: Object);
     
-    getCurrencies(valueCriteria?: CurrencySearchCriteriaDO): Promise<CurrencyDO[]>;
+    getCurrencies(valueCriteria?: CurrencySearchCriteriaRepoDO): Promise<CurrencyDO[]>;
     
-    getPaymentMethods(valueCriteria?: PaymentMethodSearchCriteriaDO): Promise<PaymentMethodDO[]>;
+    getPaymentMethods(valueCriteria?: PaymentMethodSearchCriteriaRepoDO): Promise<PaymentMethodDO[]>;
 }
