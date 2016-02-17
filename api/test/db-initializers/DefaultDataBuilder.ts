@@ -14,7 +14,7 @@ export class DefaultDataBuilder {
 	private _email: string = "paraschiv.ionut@gmail.com";
 	private _hotelDO: HotelDO;
 	private _userDO: UserDO;
-	private _paymentMethods: PaymentMethodDO[];
+	private _paymentMethodList: PaymentMethodDO[];
 
 	constructor(private _testContext: TestContext) {
 		this._repositoryCleaner = new RepositoryCleanerWrapper(this._testContext.appContext.getUnitPalConfig());
@@ -52,7 +52,7 @@ export class DefaultDataBuilder {
 				settingsRepository.getPaymentMethodsAsync(getPaymentMethodsCallback);
 			}),
 			((paymentMethods: PaymentMethodDO[], finishBuildOtherDO) => {
-				this._paymentMethods = paymentMethods;
+				this._paymentMethodList = paymentMethods;
 				// TODO: add other necessary build steps (e.g.: beds, price products etc.)
 				finishBuildOtherDO(null, true);
 			})
@@ -78,7 +78,7 @@ export class DefaultDataBuilder {
 	public get userDO(): UserDO {
 		return this._userDO;
 	}
-	public get paymentMethods(): PaymentMethodDO[] {
-		return this._paymentMethods;
+	public get paymentMethodList(): PaymentMethodDO[] {
+		return this._paymentMethodList;
 	}
 }

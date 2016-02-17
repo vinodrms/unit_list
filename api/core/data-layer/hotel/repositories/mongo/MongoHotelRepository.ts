@@ -6,7 +6,7 @@ import {MongoHotelDetailsRepository} from './actions/MongoHotelDetailsRepository
 import {ActionTokenDO} from '../../data-objects/user/ActionTokenDO';
 import {HotelContactDetailsDO} from '../../data-objects/hotel-contact-details/HotelContactDetailsDO';
 import {GeoLocationDO} from '../../../common/data-objects/geo-location/GeoLocationDO';
-import {HotelMetaRepoDO, BasicHotelInfoRepoDO, UserAccountActivationRepoDO, RequestResetPasswordRepoDO, ResetPasswordRepoDO, PaymentsPoliciesRepoDO} from '../IHotelRepository';
+import {HotelMetaRepoDO, BasicHotelInfoRepoDO, UserAccountActivationRepoDO, RequestResetPasswordRepoDO, ResetPasswordRepoDO, PaymentsPoliciesRepoDO, PaymentMethodIdListRepoDO} from '../IHotelRepository';
 
 export class MongoHotelRepository extends AMongoHotelRepository {
 	private _hotelsEntity: Sails.Model;
@@ -47,5 +47,8 @@ export class MongoHotelRepository extends AMongoHotelRepository {
 	}
 	protected addPaymentsPolicies(hotelMeta: HotelMetaRepoDO, paymPoliciesParams: PaymentsPoliciesRepoDO): Promise<HotelDO> {
 		return this._hotelDetailsRepository.addPaymentsPolicies(hotelMeta, paymPoliciesParams);
+	}
+	protected updatePaymentMethodIdList(hotelMeta: HotelMetaRepoDO, updatePaymMethodParams: PaymentMethodIdListRepoDO): Promise<HotelDO> {
+		return this._hotelDetailsRepository.updatePaymentMethodIdList(hotelMeta, updatePaymMethodParams);
 	}
 }

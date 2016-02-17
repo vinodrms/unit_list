@@ -33,6 +33,9 @@ export interface PaymentsPoliciesRepoDO {
 	paymentMethodIdList: string[];
 	taxes: HotelTaxesDO;
 }
+export interface PaymentMethodIdListRepoDO {
+	paymentMethodIdList: string[];
+}
 
 export interface IHotelRepository {
 	addHotelAsync(hotel: HotelDO, finishAddHotelCallback: { (err: any, savedHotel?: HotelDO): void; });
@@ -46,4 +49,5 @@ export interface IHotelRepository {
 
 	updateBasicInformationAsync(hotelMeta: HotelMetaRepoDO, basicInfo: BasicHotelInfoRepoDO, updateBasicInformationCallback: { (err: any, updatedHotel?: HotelDO): void; });
 	addPaymentsPoliciesAsync(hotelMeta: HotelMetaRepoDO, paymPoliciesParams: PaymentsPoliciesRepoDO, addPaymentsPoliciesCallback: { (err: any, updatedHotel?: HotelDO): void; });
+	updatePaymentMethodIdListAsync(hotelMeta: HotelMetaRepoDO, updatePaymMethodParams: PaymentMethodIdListRepoDO, updatePaymMethodsCallback: { (err: any, updatedHotel?: HotelDO): void; });
 }

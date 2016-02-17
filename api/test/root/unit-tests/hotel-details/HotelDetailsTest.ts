@@ -13,6 +13,7 @@ import {HotelUpdateBasicInfo} from '../../../../core/domain-layer/hotel-details/
 import {HotelDetailsDO} from '../../../../core/domain-layer/hotel-details/utils/HotelDetailsBuilder';
 import {HotelDetailsTestHelper} from './helpers/HotelDetailsTestHelper';
 import {HotelAddPaymentsPolicies} from '../../../../core/domain-layer/hotel-details/payment-policies/HotelAddPaymentsPolicies';
+import {HotelUpdatePaymentsMethods, HotelUpdatePaymentsMethodsDO} from '../../../../core/domain-layer/hotel-details/payment-policies/HotelUpdatePaymentsMethods';
 
 describe("Hotel Details Tests", function() {
     var testContext: TestContext;
@@ -112,6 +113,34 @@ describe("Hotel Details Tests", function() {
 			});
         });
     });
+
+	describe("Hotel Payment Methods Only", function() {
+		it("Should not update the hotel payment methods using invalid payment method id", function(done) {
+			var paymentMethodIdList = hotelDetailstestHelper.getPaymentMethodIdListFromPaymentMethodList(testDataBuilder.paymentMethodList);
+			paymentMethodIdList.push("1111111111");
+			var updtPaymMthdParam: HotelUpdatePaymentsMethodsDO = { paymentMethodIdList: paymentMethodIdList };
+			var updtPaymMthd = new HotelUpdatePaymentsMethods(testContext.appContext, testContext.sessionContext, updtPaymMthdParam);
+			updtPaymMthd.update().then((details: HotelDetailsDO) => {
+				done(new Error("did manage to update payment methods using wrong payment method id"));
+			}).catch((e: ThError) => {
+				should.notEqual(e.getThStatusCode(), ThStatusCode.Ok);
+				done();
+			});
+        });
+		it("Should update the hotel payment methods", function(done) {
+			var paymentMethodIdList = hotelDetailstestHelper.getPaymentMethodIdListFromPaymentMethodList(testDataBuilder.paymentMethodList);
+			paymentMethodIdList.splice(0, 1);
+			var updtPaymMthdParam: HotelUpdatePaymentsMethodsDO = { paymentMethodIdList: paymentMethodIdList };
+			var updtPaymMthd = new HotelUpdatePaymentsMethods(testContext.appContext, testContext.sessionContext, updtPaymMthdParam);
+			updtPaymMthd.update().then((details: HotelDetailsDO) => {
+				should.exist(details.hotel.paymentMethodIdList);
+				should.equal(details.hotel.paymentMethodIdList.length, paymentMethodIdList.length);
+				done();
+			}).catch((e: any) => {
+				done(e);
+			});
+        });
+	});
 
 
 });

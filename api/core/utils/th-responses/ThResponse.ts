@@ -61,7 +61,8 @@ export enum ThStatusCode {
 	HotelDetailsRepositoryProblemUpdatingAccount,
 	HotelDetailsRepositoryErrorUpdatingAccount,
 	HotelAddPaymentPoliciesHotelAlreadyConfigured,
-	HotelAddPaymentPoliciesInvalidPaymentMethodIdList,
+	PaymentMethodIdListValidatorInvalid,
+	PaymentMethodIdListValidatorError,
 	HotelAddPaymentsPoliciesErrorPrecheckingConstraints,
 	HotelAddPaymentPoliciesInvalidTaxes,
 	HotelAddPaymentsPoliciesError,
@@ -128,7 +129,8 @@ ThMessage[ThStatusCode.HotelRepositoryErrorFindingHotelById] = "Error getting th
 ThMessage[ThStatusCode.HotelDetailsRepositoryProblemUpdatingAccount] = "Problem updating the hotel's information. It is possible that someone else changed it at the same time. Please refresh the page and try again.";
 ThMessage[ThStatusCode.HotelDetailsRepositoryErrorUpdatingAccount] = "Error updating hotel's information. Please try again.";
 ThMessage[ThStatusCode.HotelAddPaymentPoliciesHotelAlreadyConfigured] = "You can't change the payments and policies for your hotel because you finished the wizard. You can only edit them or add new ones.";
-ThMessage[ThStatusCode.HotelAddPaymentPoliciesInvalidPaymentMethodIdList] = "Invalid payment methods submitted.";
+ThMessage[ThStatusCode.PaymentMethodIdListValidatorInvalid] = "Invalid payment methods submitted.";
+ThMessage[ThStatusCode.PaymentMethodIdListValidatorError] = "Error validating payment method id list.";
 ThMessage[ThStatusCode.HotelAddPaymentsPoliciesErrorPrecheckingConstraints] = "There was a problem while checking the payments and policies submitted.";
 ThMessage[ThStatusCode.HotelAddPaymentPoliciesInvalidTaxes] = "Invalid taxes sent.";
 ThMessage[ThStatusCode.HotelAddPaymentsPoliciesError] = "Error adding the payments and policies.";

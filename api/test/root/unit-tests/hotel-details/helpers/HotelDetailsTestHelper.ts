@@ -44,9 +44,7 @@ export class HotelDetailsTestHelper {
 	}
 
 	public getHotelAddPaymentsPoliciesDO(dataBuilder: DefaultDataBuilder): HotelAddPaymentsPoliciesDO {
-		var paymentMethodIdList: string[] = _.map(dataBuilder.paymentMethods, (paymentMethod: PaymentMethodDO) => {
-			return paymentMethod.id;
-		});
+		var paymentMethodIdList: string[] = this.getPaymentMethodIdListFromPaymentMethodList(dataBuilder.paymentMethodList);
 
 		return {
 			ccyCode: "EUR",
@@ -67,6 +65,12 @@ export class HotelDetailsTestHelper {
 				]
 			}
 		}
+	}
+	public getPaymentMethodIdListFromPaymentMethodList(paymentMethodList: PaymentMethodDO[]): string[] {
+		var paymentMethodIdList: string[] = _.map(paymentMethodList, (paymentMethod: PaymentMethodDO) => {
+			return paymentMethod.id;
+		});
+		return paymentMethodIdList;
 	}
 	public getInvalidOtherTaxDO(): HotelAddPaymentsPoliciesOtherTaxDO {
 		return {

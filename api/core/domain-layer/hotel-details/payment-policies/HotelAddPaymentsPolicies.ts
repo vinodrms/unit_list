@@ -13,6 +13,7 @@ import {PaymentMethodDO} from '../../../data-layer/common/data-objects/payment-m
 import {ThUtils} from '../../../utils/ThUtils';
 import {HotelMetaRepoDO, PaymentsPoliciesRepoDO} from '../../../data-layer/hotel/repositories/IHotelRepository';
 import {CurrencyDO} from '../../../data-layer/common/data-objects/currency/CurrencyDO';
+import {PaymentMethodIdListValidator} from './common/PaymentMethodIdListValidator';
 
 import _ = require("underscore");
 import async = require("async");
@@ -20,7 +21,6 @@ import async = require("async");
 export class HotelAddPaymentsPolicies {
 	private _thUtils: ThUtils;
 	private _loadedHotel: HotelDO;
-	private _availablePaymentMethods: PaymentMethodDO[];
 	private _availableCurrencyList: CurrencyDO[];
 
 	private _precheckedTaxes: HotelTaxesDO;
@@ -46,15 +46,13 @@ export class HotelAddPaymentsPolicies {
 				var hotelRepository = this._appContext.getRepositoryFactory().getHotelRepository();
 				hotelRepository.getHotelByIdAsync(this._sessionContext.sessionDO.hotel.id, finishGetHotelByIdCallback);
 			}),
-			((hotel: HotelDO, getPaymentMethodsCallback) => {
+			((hotel: HotelDO, finishedValidatingPaymentMethodIdListCallback) => {
 				this._loadedHotel = hotel;
 
-				var settingsRepository = this._appContext.getRepositoryFactory().getSettingsRepository();
-				settingsRepository.getPaymentMethodsAsync(getPaymentMethodsCallback);
+				var paymentMethodValidator = new PaymentMethodIdListValidator(this._appContext, this._sessionContext, this._paymentPoliciesDO.paymentMethodIdList);
+				paymentMethodValidator.validateAsync(finishedValidatingPaymentMethodIdListCallback);
 			}),
-			((paymentMethods: PaymentMethodDO[], getCurrenciesCallback) => {
-				this._availablePaymentMethods = paymentMethods;
-
+			((validatedPaymentMethodIdList: string[], getCurrenciesCallback) => {
 				var settingsRepository = this._appContext.getRepositoryFactory().getSettingsRepository();
 				settingsRepository.getCurrenciesAsync(getCurrenciesCallback, { code: this._paymentPoliciesDO.ccyCode });
 			}),
@@ -109,10 +107,6 @@ export class HotelAddPaymentsPolicies {
 			this.precheckLogAndReject(ThStatusCode.HotelAddPaymentPoliciesHotelAlreadyConfigured, "Hotel configured & can't add other payment policies", reject);
 			return;
 		}
-		if (!this.paymentMethodListIsValid()) {
-			this.precheckLogAndReject(ThStatusCode.HotelAddPaymentPoliciesInvalidPaymentMethodIdList, "Invalid payment method ids submitted", reject);
-			return;
-		}
 		if (!this.taxListsAreValid()) {
 			this.precheckLogAndReject(ThStatusCode.HotelAddPaymentPoliciesInvalidTaxes, "Invalid taxes", reject);
 			return;
@@ -124,20 +118,6 @@ export class HotelAddPaymentsPolicies {
 		//TODO: consider the usage of the taxes inside price products? (during the configuration phase)
 		resolve(true);
 	}
-	private paymentMethodListIsValid(): boolean {
-		var isValid = true;
-		this._paymentPoliciesDO.paymentMethodIdList.forEach((paymentMethodId: string) => {
-			isValid = this.paymentMethodIdIsValid(paymentMethodId) ? isValid : false;
-		});
-		return isValid;
-	}
-	private paymentMethodIdIsValid(paymentMethodId: string): boolean {
-		var foundPaymentMethod: PaymentMethodDO = _.find(this._availablePaymentMethods, (paymentMethod: PaymentMethodDO) => {
-			return paymentMethod.id == paymentMethodId;
-		});
-		return !this._thUtils.isUndefinedOrNull(foundPaymentMethod);
-	}
-
 	private taxListsAreValid(): boolean {
 		var taxes = new HotelTaxesDO();
 		taxes.vatList = [];

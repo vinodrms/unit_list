@@ -5,7 +5,7 @@ import {MongoRepository, MongoErrorCodes} from '../../../../common/base/MongoRep
 import {HotelDO} from '../../../data-objects/HotelDO';
 import {HotelContactDetailsDO} from '../../../data-objects/hotel-contact-details/HotelContactDetailsDO';
 import {GeoLocationDO} from '../../../../common/data-objects/geo-location/GeoLocationDO';
-import {HotelMetaRepoDO, BasicHotelInfoRepoDO, PaymentsPoliciesRepoDO} from '../../IHotelRepository';
+import {HotelMetaRepoDO, BasicHotelInfoRepoDO, PaymentsPoliciesRepoDO, PaymentMethodIdListRepoDO} from '../../IHotelRepository';
 
 export class MongoHotelDetailsRepository extends MongoRepository {
 	constructor(private _hotelsEntity: Sails.Model) {
@@ -45,6 +45,11 @@ export class MongoHotelDetailsRepository extends MongoRepository {
 			"paymentMethodIdList": paymPoliciesParams.paymentMethodIdList,
 			"ccyCode": paymPoliciesParams.ccyCode,
 			"taxes": paymPoliciesParams.taxes
+		});
+	}
+	public updatePaymentMethodIdList(hotelMeta: HotelMetaRepoDO, updatePaymMethodParams: PaymentMethodIdListRepoDO): Promise<HotelDO> {
+		return this.findAndModifyHotel(hotelMeta, {
+			"paymentMethodIdList": updatePaymMethodParams.paymentMethodIdList
 		});
 	}
 
