@@ -13,6 +13,7 @@ export class StringValidationRule extends AValidationRule {
 	public static MaxNameLength = 50;
 	public static MaxHotelNameLength = 300;
 	public static MaxVatCodeNameLength = 30;
+	public static MaxCurrencyCodeLength = 3;
 
 	private _minLength: number = 0;
 	private _maxLength: number = Number.POSITIVE_INFINITY;

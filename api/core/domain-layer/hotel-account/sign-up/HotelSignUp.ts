@@ -67,7 +67,7 @@ export class HotelSignUp {
 				reject(thError);
 			}
 			else {
-				resolve(this._savedHotel.users[0].accountActivationToken);
+				resolve(this._savedHotel.userList[0].accountActivationToken);
 			}
 		}));
 	}
@@ -78,7 +78,7 @@ export class HotelSignUp {
 		var hotel = new HotelDO();
 		hotel.contactDetails = new HotelContactDetailsDO();
 		hotel.contactDetails.name = this._signUpDO.hotelName;
-		hotel.users = [];
+		hotel.userList = [];
 		var user = new UserDO();
 		user.id = this._thUtils.generateUniqueID();
 		user.accountStatus = AccountStatus.Pending;
@@ -91,12 +91,12 @@ export class HotelSignUp {
 		user.email = this._signUpDO.email;
 		user.language = this._sessionContext.language;
 		user.password = this._authUtils.encrypPassword(this._signUpDO.password);
-		user.roles = [UserRoles.Administrator];
-		hotel.users.push(user);
-		hotel.amenityIds = [];
-		hotel.customAmenities = [];
-		hotel.paymentMethodIds = [];
-		hotel.configurationStatus = false;
+		user.roleList = [UserRoles.Administrator];
+		hotel.userList.push(user);
+		hotel.amenityIdList = [];
+		hotel.customAmenityList = [];
+		hotel.paymentMethodIdList = [];
+		hotel.configurationCompleted = false;
 		return hotel;
 	}
 

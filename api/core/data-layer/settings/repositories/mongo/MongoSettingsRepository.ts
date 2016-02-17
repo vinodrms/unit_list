@@ -55,9 +55,16 @@ export class MongoSettingsRepository extends MongoRepository implements ISetting
     public getHotelAmenities(valueCriteria?: Object): Promise<AmenityDO[]> {
         return this.getSetting(SettingType.HotelAmenities, valueCriteria);
     }
-    
-    public getCountries(valueCriteria?: Object): Promise<CountryDO[]> {
-        return this.getSetting(SettingType.Countries, valueCriteria);
+
+	public getCurrenciesAsync(getCurrenciesCallback: { (err: any, currencyList?: CurrencyDO[]): void; }, valueCriteria?: Object) {
+		this.getCurrencies(valueCriteria).then((currencyList?: CurrencyDO[]) => {
+			getCurrenciesCallback(null, currencyList);
+		}).catch((err: any) => {
+			getCurrenciesCallback(err);
+		});
+	}
+	public getCurrencies(valueCriteria?: Object): Promise<CurrencyDO[]> {
+        return this.getSetting(SettingType.CurrencyCodes, valueCriteria);
     }
     
     public getCountriesAsync(finishQueryCallback: { (err: any, country?: CountryDO[]): void; }, valueCriteria?: Object) {
@@ -67,11 +74,17 @@ export class MongoSettingsRepository extends MongoRepository implements ISetting
 			finishQueryCallback(error);
 		});
 	}
-    
-    public getCurrencies(valueCriteria?: Object): Promise<CurrencyDO[]> {
-        return this.getSetting(SettingType.CurrencyCodes, valueCriteria);
+	public getCountries(valueCriteria?: Object): Promise<CountryDO[]> {
+        return this.getSetting(SettingType.Countries, valueCriteria);
     }
 
+	public getPaymentMethodsAsync(getPaymentMethodsCallback: { (err: any, paymentMethods?: PaymentMethodDO[]): void; }, valueCriteria?: Object) {
+		this.getPaymentMethods(valueCriteria).then((paymentMethods: PaymentMethodDO[]) => {
+			getPaymentMethodsCallback(null, paymentMethods);
+		}).catch((err: any) => {
+			getPaymentMethodsCallback(err);
+		});
+	}
     public getPaymentMethods(valueCriteria?: Object): Promise<PaymentMethodDO[]> {
         return this.getSetting(SettingType.PaymentMethods, valueCriteria);
     }

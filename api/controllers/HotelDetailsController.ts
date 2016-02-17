@@ -6,6 +6,7 @@ import {HotelGetDetails} from '../core/domain-layer/hotel-details/get-details/Ho
 import {HotelDO} from '../core/data-layer/hotel/data-objects/HotelDO';
 import {UserDO} from '../core/data-layer/hotel/data-objects/user/UserDO';
 import {HotelUpdateBasicInfo} from '../core/domain-layer/hotel-details/basic-info/HotelUpdateBasicInfo';
+import {HotelAddPaymentsPolicies} from '../core/domain-layer/hotel-details/payment-policies/HotelAddPaymentsPolicies';
 
 class HotelDetailsController extends BaseController {
 	public getDetails(req: Express.Request, res: Express.Response) {
@@ -24,10 +25,19 @@ class HotelDetailsController extends BaseController {
 			this.returnErrorResponse(req, res, err, ThStatusCode.HotelDetailsControllerErrorGettingDetails);
 		});
 	}
+	public addPaymentsAndPolicies(req: Express.Request, res: Express.Response) {
+		var addPaymPolicies = new HotelAddPaymentsPolicies(req.appContext, req.sessionContext, req.body.paymentsAndPolicies);
+		addPaymPolicies.add().then((details: { user: UserDO, hotel: HotelDO }) => {
+			this.returnSuccesfulResponse(req, res, { details: details });
+		}).catch((err: any) => {
+			this.returnErrorResponse(req, res, err, ThStatusCode.HotelDetailsControllerErrorGettingDetails);
+		});
+	}
 }
 
 var hotelDetailsController = new HotelDetailsController();
 module.exports = {
 	getDetails: hotelDetailsController.getDetails.bind(hotelDetailsController),
-	updateBasicInfo: hotelDetailsController.updateBasicInfo.bind(hotelDetailsController)
+	updateBasicInfo: hotelDetailsController.updateBasicInfo.bind(hotelDetailsController),
+	addPaymentsAndPolicies: hotelDetailsController.addPaymentsAndPolicies.bind(hotelDetailsController)
 }

@@ -20,7 +20,7 @@ export class DefaultHotelBuilder {
 		var hotel = new HotelDO();
 		hotel.contactDetails = new HotelContactDetailsDO();
 		hotel.contactDetails.name = "3angleTECH Hotel";
-		hotel.users = [];
+		hotel.userList = [];
 		var user = new UserDO();
 		user.id = this._thUtils.generateUniqueID();
 		user.accountStatus = AccountStatus.Active;
@@ -34,12 +34,12 @@ export class DefaultHotelBuilder {
 		user.email = this._email;
 		user.language = Locales.English;
 		user.password = this._authUtils.encrypPassword(this._password);
-		user.roles = [UserRoles.Administrator];
-		hotel.users.push(user);
-		hotel.amenityIds = [];
-		hotel.customAmenities = [];
-		hotel.paymentMethodIds = [];
-		hotel.configurationStatus = false;
+		user.roleList = [UserRoles.Administrator];
+		hotel.userList.push(user);
+		hotel.amenityIdList = [];
+		hotel.customAmenityList = [];
+		hotel.paymentMethodIdList = [];
+		hotel.configurationCompleted = false;
 		return hotel;
 	}
 }

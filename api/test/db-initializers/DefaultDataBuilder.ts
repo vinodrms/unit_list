@@ -3,6 +3,7 @@ import {TestContext} from '../helpers/TestContext';
 import {DefaultHotelBuilder} from './builders/DefaultHotelBuilder';
 import {HotelDO} from '../../core/data-layer/hotel/data-objects/HotelDO';
 import {UserDO} from '../../core/data-layer/hotel/data-objects/user/UserDO';
+import {PaymentMethodDO} from '../../core/data-layer/common/data-objects/payment-method/PaymentMethodDO';
 
 import async = require('async');
 
@@ -13,6 +14,7 @@ export class DefaultDataBuilder {
 	private _email: string = "paraschiv.ionut@gmail.com";
 	private _hotelDO: HotelDO;
 	private _userDO: UserDO;
+	private _paymentMethods: PaymentMethodDO[];
 
 	constructor(private _testContext: TestContext) {
 		this._repositoryCleaner = new RepositoryCleanerWrapper(this._testContext.appContext.getUnitPalConfig());
@@ -41,11 +43,16 @@ export class DefaultDataBuilder {
 			}),
 			((savedHotel: HotelDO, finishBuildSessionDO) => {
 				this._hotelDO = savedHotel;
-				this._userDO = savedHotel.users[0];
+				this._userDO = savedHotel.userList[0];
 				this._testContext.updateSessionContext({ user: this._userDO, hotel: this._hotelDO });
 				finishBuildSessionDO(null, true);
 			}),
-			((result: any, finishBuildOtherDO) => { 
+			((result: any, getPaymentMethodsCallback) => {
+				var settingsRepository = this._testContext.appContext.getRepositoryFactory().getSettingsRepository();
+				settingsRepository.getPaymentMethodsAsync(getPaymentMethodsCallback);
+			}),
+			((paymentMethods: PaymentMethodDO[], finishBuildOtherDO) => {
+				this._paymentMethods = paymentMethods;
 				// TODO: add other necessary build steps (e.g.: beds, price products etc.)
 				finishBuildOtherDO(null, true);
 			})
@@ -70,5 +77,8 @@ export class DefaultDataBuilder {
 	}
 	public get userDO(): UserDO {
 		return this._userDO;
+	}
+	public get paymentMethods(): PaymentMethodDO[] {
+		return this._paymentMethods;
 	}
 }

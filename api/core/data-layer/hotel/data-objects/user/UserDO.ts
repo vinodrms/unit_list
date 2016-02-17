@@ -25,12 +25,12 @@ export class UserDO extends BaseDO {
 	accountActivationToken: ActionTokenDO;
 	resetPasswordToken: ActionTokenDO;
 
-	roles: UserRoles[];
+	roleList: UserRoles[];
 	lastLoggedIn: number;
 	language: Locales;
 
 	protected getPrimitivePropertyKeys(): string[] {
-		return ["id", "email", "password", "accountStatus", "roles", "lastLoggedIn", "language"];
+		return ["id", "email", "password", "accountStatus", "roleList", "lastLoggedIn", "language"];
 	}
 
 	public buildFromObject(object: Object) {

@@ -37,7 +37,7 @@ class AccountController extends BaseController {
 		loginService.logIn(LoginType.Basic, req).then((loginData: { user: UserDO, hotel: HotelDO }) => {
 			var sessionManager: SessionManager = new SessionManager(req);
 			sessionManager.initializeSession(loginData).then((sessionContext: SessionContext) => {
-				this.returnSuccesfulResponse(req, res, {configurationStatus: loginData.hotel.configurationStatus});
+				this.returnSuccesfulResponse(req, res, {configurationCompleted: loginData.hotel.configurationCompleted});
 			}).catch((err: any) => {
 				this.returnErrorResponse(req, res, err, ThStatusCode.AccControllerErrorInitializingSession);
 			});

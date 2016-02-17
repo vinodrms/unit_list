@@ -3,6 +3,7 @@ import {UserDO} from '../data-objects/user/UserDO';
 import {ActionTokenDO} from '../data-objects/user/ActionTokenDO';
 import {HotelContactDetailsDO} from '../data-objects/hotel-contact-details/HotelContactDetailsDO';
 import {GeoLocationDO} from '../../common/data-objects/geo-location/GeoLocationDO';
+import {HotelTaxesDO} from '../data-objects/taxes/HotelTaxesDO';
 
 export interface UserAccountActivationRepoDO {
 	email: string;
@@ -27,6 +28,11 @@ export interface BasicHotelInfoRepoDO {
 	geoLocation: GeoLocationDO;
 	logoUrl: string;
 }
+export interface PaymentsPoliciesRepoDO {
+	ccyCode: string;
+	paymentMethodIdList: string[];
+	taxes: HotelTaxesDO;
+}
 
 export interface IHotelRepository {
 	addHotelAsync(hotel: HotelDO, finishAddHotelCallback: { (err: any, savedHotel?: HotelDO): void; });
@@ -39,4 +45,5 @@ export interface IHotelRepository {
 	getHotelByIdAsync(id: string, finishGetHotelByIdCallback: { (err: any, hotel?: HotelDO): void; });
 
 	updateBasicInformationAsync(hotelMeta: HotelMetaRepoDO, basicInfo: BasicHotelInfoRepoDO, updateBasicInformationCallback: { (err: any, updatedHotel?: HotelDO): void; });
+	addPaymentsPoliciesAsync(hotelMeta: HotelMetaRepoDO, paymPoliciesParams: PaymentsPoliciesRepoDO, addPaymentsPoliciesCallback: { (err: any, updatedHotel?: HotelDO): void; });
 }
