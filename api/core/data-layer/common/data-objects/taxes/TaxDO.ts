@@ -1,11 +1,10 @@
 import {BaseDO} from '../../base/BaseDO';
+import _ = require("underscore");
 
 export enum TaxType {
 	Percentage,
 	Fixed
 }
-
-import _ = require("underscore");
 
 export class TaxDO extends BaseDO {
 	constructor() {

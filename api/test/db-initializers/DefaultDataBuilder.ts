@@ -8,6 +8,7 @@ import {PaymentMethodDO} from '../../core/data-layer/common/data-objects/payment
 import async = require('async');
 
 export class DefaultDataBuilder {
+	private static FirstUserIndex = 0;
 	private _repositoryCleaner: RepositoryCleanerWrapper;
 
 	private _password: string = "TestTest,01";
@@ -43,7 +44,7 @@ export class DefaultDataBuilder {
 			}),
 			((savedHotel: HotelDO, finishBuildSessionDO) => {
 				this._hotelDO = savedHotel;
-				this._userDO = savedHotel.userList[0];
+				this._userDO = savedHotel.userList[DefaultDataBuilder.FirstUserIndex];
 				this._testContext.updateSessionContext({ user: this._userDO, hotel: this._hotelDO });
 				finishBuildSessionDO(null, true);
 			}),

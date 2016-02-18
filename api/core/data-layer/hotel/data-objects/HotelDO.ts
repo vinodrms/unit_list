@@ -32,29 +32,29 @@ export class HotelDO extends BaseDO {
 		super.buildFromObject(object);
 
 		this.contactDetails = new HotelContactDetailsDO();
-		this.contactDetails.buildFromObject(this.getPropertyFromObject("contactDetails", object));
+		this.contactDetails.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "contactDetails"));
 
 		this.geoLocation = new GeoLocationDO();
-		this.geoLocation.buildFromObject(this.getPropertyFromObject("geoLocation", object));
+		this.geoLocation.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "geoLocation"));
 
 		this.userList = [];
-		this.forEachElementOf(this.getPropertyFromObject("userList", object), (userObject: Object) => {
+		this.forEachElementOf(this.getObjectPropertyEnsureUndefined(object, "userList"), (userObject: Object) => {
 			var userDO = new UserDO();
 			userDO.buildFromObject(userObject);
 			this.userList.push(userDO);
 		});
 
 		this.taxes = new HotelTaxesDO();
-		this.taxes.buildFromObject(this.getPropertyFromObject("taxes", object));
+		this.taxes.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "taxes"));
 
 		this.customAmenityList = [];
-		this.forEachElementOf(this.getPropertyFromObject("customAmenityList", object), (amenityObject: Object) => {
+		this.forEachElementOf(this.getObjectPropertyEnsureUndefined(object, "customAmenityList"), (amenityObject: Object) => {
 			var amenityDO = new AmenityDO();
 			amenityDO.buildFromObject(amenityObject);
 			this.customAmenityList.push(amenityDO);
 		});
 
 		this.operationHours = new OperationHoursDO();
-		this.operationHours.buildFromObject(this.getPropertyFromObject("operationHours", object));
+		this.operationHours.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "operationHours"));
 	}
 }

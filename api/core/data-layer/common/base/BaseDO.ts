@@ -6,7 +6,7 @@ import _ = require("underscore");
 export abstract class BaseDO {
 	protected abstract getPrimitivePropertyKeys(): string[];
 
-	protected getPropertyFromObject(propertyName: string, object: Object): Object {
+	protected getObjectPropertyEnsureUndefined(object: Object, propertyName: string): Object {
 		if (thUtils.isUndefinedOrNull(object) || thUtils.isUndefinedOrNull(object[propertyName])) {
 			return null;
 		}

@@ -4,6 +4,8 @@ import {HotelAddPaymentsPoliciesDO, HotelAddPaymentsPoliciesOtherTaxDO, HotelAdd
 import {TaxDO, TaxType} from '../../../../../core/data-layer/common/data-objects/taxes/TaxDO';
 import {DefaultDataBuilder} from '../../../../db-initializers/DefaultDataBuilder';
 import {PaymentMethodDO} from '../../../../../core/data-layer/common/data-objects/payment-method/PaymentMethodDO';
+import {HotelSaveTaxItemDO} from '../../../../../core/domain-layer/hotel-details/payment-policies/HotelSaveTaxItem';
+import {TaxItemType} from '../../../../../core/domain-layer/hotel-details/payment-policies/taxes/TaxItemActionFactory';
 
 import _ = require('underscore');
 
@@ -78,6 +80,12 @@ export class HotelDetailsTestHelper {
 			name: "Bed VAT",
 			value: 10
 		};
+	}
+	public getHotelSaveTaxItemDO(itemType: TaxItemType, taxObject: Object): HotelSaveTaxItemDO {
+		return {
+			itemType: itemType,
+			taxObject: taxObject
+		}
 	}
 
 }

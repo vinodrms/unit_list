@@ -1,11 +1,14 @@
 import {ThLogger, ThLogLevel} from '../../../../../utils/logging/ThLogger';
 import {ThError} from '../../../../../utils/th-responses/ThError';
 import {ThStatusCode} from '../../../../../utils/th-responses/ThResponse';
+import {ThUtils} from '../../../../../utils/ThUtils';
 import {MongoRepository, MongoErrorCodes} from '../../../../common/base/MongoRepository';
 import {HotelDO} from '../../../data-objects/HotelDO';
 import {HotelContactDetailsDO} from '../../../data-objects/hotel-contact-details/HotelContactDetailsDO';
 import {GeoLocationDO} from '../../../../common/data-objects/geo-location/GeoLocationDO';
-import {HotelMetaRepoDO, BasicHotelInfoRepoDO, PaymentsPoliciesRepoDO, PaymentMethodIdListRepoDO} from '../../IHotelRepository';
+import {HotelMetaRepoDO, BasicHotelInfoRepoDO, PaymentsPoliciesRepoDO, PaymentMethodIdListRepoDO, TaxMetaRepoDO, TaxRepoDO} from '../../IHotelRepository';
+
+import _ = require("underscore");
 
 export class MongoHotelDetailsRepository extends MongoRepository {
 	constructor(private _hotelsEntity: Sails.Model) {
@@ -52,20 +55,52 @@ export class MongoHotelDetailsRepository extends MongoRepository {
 			"paymentMethodIdList": updatePaymMethodParams.paymentMethodIdList
 		});
 	}
-
-	private findAndModifyHotel(hotelMeta: { id: string, versionId: number }, updateQuery: Object): Promise<HotelDO> {
-		return new Promise<HotelDO>((resolve: { (updatedHotel: HotelDO): void }, reject: { (err: any): void }) => {
-			this.findAndModifyHotelCore(resolve, reject, hotelMeta, updateQuery);
+	public updateTaxesVatItem(hotelMeta: HotelMetaRepoDO, vatMeta: TaxMetaRepoDO, newVat: TaxRepoDO): Promise<HotelDO> {
+		return this.findAndModifyHotel(hotelMeta, {
+			"taxes.vatList.$.name": newVat.tax.name,
+			"taxes.vatList.$.value": newVat.tax.value
+		}, [{
+			"taxes.vatList.id": vatMeta.id
+		}]);
+	}
+	public updateTaxesOtherTaxItem(hotelMeta: HotelMetaRepoDO, taxMeta: TaxMetaRepoDO, newTax: TaxRepoDO): Promise<HotelDO> {
+		return this.findAndModifyHotel(hotelMeta, {
+			"taxes.otherTaxList.$.name": newTax.tax.name,
+			"taxes.otherTaxList.$.value": newTax.tax.value,
+			"taxes.otherTaxList.$.type": newTax.tax.type
+		}, [{
+			"taxes.otherTaxList.id": taxMeta.id
+		}]);
+	}
+	public addTaxesVatItem(hotelMeta: HotelMetaRepoDO, newVat: TaxRepoDO): Promise<HotelDO> {
+		return this.findAndModifyHotel(hotelMeta, {
+			$push: { "taxes.vatList": newVat.tax }
 		});
 	}
-	private findAndModifyHotelCore(resolve: { (updatedHotel: HotelDO): void }, reject: { (err: ThError): void }, hotelMeta: { id: string, versionId: number }, updateQuery: any) {
+	public addTaxesOtherTaxItem(hotelMeta: HotelMetaRepoDO, newTax: TaxRepoDO): Promise<HotelDO> {
+		return this.findAndModifyHotel(hotelMeta, {
+			$push: { "taxes.otherTaxList": newTax.tax }
+		});
+	}
+
+	private findAndModifyHotel(hotelMeta: HotelMetaRepoDO, updateQuery: Object, optionalFindQueryList?: Object[]): Promise<HotelDO> {
+		return new Promise<HotelDO>((resolve: { (updatedHotel: HotelDO): void }, reject: { (err: any): void }) => {
+			this.findAndModifyHotelCore(resolve, reject, hotelMeta, updateQuery, optionalFindQueryList);
+		});
+	}
+	private findAndModifyHotelCore(resolve: { (updatedHotel: HotelDO): void }, reject: { (err: ThError): void }, hotelMeta: HotelMetaRepoDO, updateQuery: any, optionalFindQueryList?: Object[]) {
 		updateQuery.$inc = { "versionId": 1 };
+		var findQuery: Object[] = [
+			{ "id": hotelMeta.id },
+			{ "versionId": hotelMeta.versionId }
+		];
+		if (!this._thUtils.isUndefinedOrNull(optionalFindQueryList) && _.isArray(optionalFindQueryList)) {
+			findQuery = findQuery.concat(optionalFindQueryList);
+		}
+
 		this.findAndModify(
 			{
-				$and: [
-					{ "id": hotelMeta.id },
-					{ "versionId": hotelMeta.versionId }
-				]
+				$and: findQuery
 			}, updateQuery).then((updatedDBHotel: Object) => {
 				if (!updatedDBHotel) {
 					var thError = new ThError(ThStatusCode.HotelDetailsRepositoryProblemUpdatingAccount, null);

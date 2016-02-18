@@ -50,17 +50,19 @@ module.exports.routes = {
 	'POST /api/account/logOut': 'AccountController.logOut',
 	'POST /api/account/requestResetPassword': 'AccountController.requestResetPassword',
 	'POST /api/account/resetPassword': 'AccountController.resetPassword',
-	
+
 	'GET /api/hotel/details': 'HotelDetailsController.getDetails',
 	'POST /api/hotel/updateBasicInfo': 'HotelDetailsController.updateBasicInfo',
 	'POST /api/hotel/addPaymentsAndPolicies': 'HotelDetailsController.addPaymentsAndPolicies',
-    
+	'POST /api/hotel/updatePaymentsMethods': 'HotelDetailsController.updatePaymentsMethods',
+	'POST /api/hotel/saveTaxItem': 'HotelDetailsController.saveTaxItem',
+
     'POST /api/service/uploadImage': 'ServiceController.uploadImage',
     'GET /api/service/vatVerifier': 'ServiceController.checkVAT',
-    
+
     'GET /api/settings/roomAmenities': 'SettingsController.getRoomAmenities',
     'GET /api/settings/hotelAmenities': 'SettingsController.getHotelAmenities',
     'GET /api/settings/countries': 'SettingsController.getCountries',
     'GET /api/settings/currencies': 'SettingsController.getCurrencies',
-    'GET /api/settings/paymentMethods': 'SettingsController.getPaymentMethods'    
+    'GET /api/settings/paymentMethods': 'SettingsController.getPaymentMethods'
 };

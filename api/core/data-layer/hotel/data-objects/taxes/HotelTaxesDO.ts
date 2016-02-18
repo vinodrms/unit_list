@@ -15,14 +15,14 @@ export class HotelTaxesDO extends BaseDO {
 		super.buildFromObject(object);
 
 		this.vatList = [];
-		this.forEachElementOf(this.getPropertyFromObject("vatList", object), (vatObject: Object) => {
+		this.forEachElementOf(this.getObjectPropertyEnsureUndefined(object, "vatList"), (vatObject: Object) => {
 			var vatDO = new TaxDO();
 			vatDO.buildFromObject(vatObject);
 			this.vatList.push(vatDO);
 		});
 
 		this.otherTaxList = [];
-		this.forEachElementOf(this.getPropertyFromObject("otherTaxList", object), (taxObject: Object) => {
+		this.forEachElementOf(this.getObjectPropertyEnsureUndefined(object, "otherTaxList"), (taxObject: Object) => {
 			var taxDO = new TaxDO();
 			taxDO.buildFromObject(taxObject);
 			this.otherTaxList.push(taxDO);
