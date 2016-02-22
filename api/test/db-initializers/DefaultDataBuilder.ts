@@ -1,9 +1,12 @@
 import {RepositoryCleanerWrapper} from './RepositoryCleanerWrapper';
 import {TestContext} from '../helpers/TestContext';
 import {DefaultHotelBuilder} from './builders/DefaultHotelBuilder';
+import {DefaultBedConfigurationBuilder} from './builders/DefaultBedConfigurationBuilder';
 import {HotelDO} from '../../core/data-layer/hotel/data-objects/HotelDO';
+import {BedConfigurationDO} from '../../core/data-layer/bed-configuration/data-objects/BedConfigurationDO';
 import {UserDO} from '../../core/data-layer/hotel/data-objects/user/UserDO';
 import {PaymentMethodDO} from '../../core/data-layer/common/data-objects/payment-method/PaymentMethodDO';
+import {BedTemplateDO} from '../../core/data-layer/common/data-objects/bed-template/BedTemplateDO';
 
 import async = require('async');
 
@@ -14,8 +17,10 @@ export class DefaultDataBuilder {
 	private _email: string = "paraschiv.ionut@gmail.com";
 	private _hotelDO: HotelDO;
 	private _userDO: UserDO;
+    private _bedConfigurationDO: BedConfigurationDO;
 	private _paymentMethodList: PaymentMethodDO[];
-
+    private _bedTemplateList: BedTemplateDO[];
+    
 	constructor(private _testContext: TestContext) {
 		this._repositoryCleaner = new RepositoryCleanerWrapper(this._testContext.appContext.getUnitPalConfig());
 	}
@@ -53,8 +58,17 @@ export class DefaultDataBuilder {
 			}),
 			((paymentMethods: PaymentMethodDO[], finishBuildOtherDO) => {
 				this._paymentMethodList = paymentMethods;
-				// TODO: add other necessary build steps (e.g.: beds, price products etc.)
 				finishBuildOtherDO(null, true);
+			}),
+            ((result: any, getBedTemplatesCallback) => {
+				var settingsRepository = this._testContext.appContext.getRepositoryFactory().getSettingsRepository();
+				settingsRepository.getBedTemplatesAsync(getBedTemplatesCallback);
+			}),
+			((bedTemplates: BedTemplateDO[], finishBuildOtherDO) => {
+				this._bedTemplateList = bedTemplates;
+				var bedConfigurationBuilder: DefaultBedConfigurationBuilder = new DefaultBedConfigurationBuilder(this._testContext.appContext, this._hotelDO.id, this._bedTemplateList);
+                var bedConfiguration: BedConfigurationDO = bedConfigurationBuilder.getBedConfiguration();
+                this._testContext.appContext.getRepositoryFactory().getBedConfigurationRepository().addBedConfigurationAsync(bedConfiguration, finishBuildOtherDO);
 			})
 		], ((error: any, result: any) => {
 			if (error) {
@@ -81,4 +95,7 @@ export class DefaultDataBuilder {
 	public get paymentMethodList(): PaymentMethodDO[] {
 		return this._paymentMethodList;
 	}
+    public get bedTemplateList(): BedTemplateDO[] {
+        return this._bedTemplateList;
+    }
 }

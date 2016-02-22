@@ -62,5 +62,8 @@ module.exports.routes = {
     'GET /api/settings/hotelAmenities': 'SettingsController.getHotelAmenities',
     'GET /api/settings/countries': 'SettingsController.getCountries',
     'GET /api/settings/currencies': 'SettingsController.getCurrencies',
-    'GET /api/settings/paymentMethods': 'SettingsController.getPaymentMethods'    
+    'GET /api/settings/paymentMethods': 'SettingsController.getPaymentMethods',
+    
+    'GET /api/bedConfiguration': 'BedConfigurationsController.getBedConfiguration',
+    'POST /api/bedConfiguration': 'BedConfigurationsController.addBedConfiguration'    
 };

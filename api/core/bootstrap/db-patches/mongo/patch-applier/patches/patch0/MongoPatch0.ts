@@ -4,12 +4,30 @@ import {ThError} from '../../../../../../utils/th-responses/ThError';
 import {ThStatusCode} from '../../../../../../utils/th-responses/ThResponse';
 import {MongoRepository} from '../../../../../../data-layer/common/base/MongoRepository';
 
+import _ = require('underscore');
+
+class IndexMetadataDO {
+    entity: Sails.Model;
+    field: string;
+}
+
 export class MongoPatch0 extends ATransactionalMongoPatch {
-    private _hotelsEntity: Sails.Model;
+
+    private _indexList: IndexMetadataDO[];
 
     constructor() {
         super();
-        this._hotelsEntity = sails.models.hotelsentity;
+
+        this._indexList = [];
+        this._indexList.push({
+            entity: sails.models.hotelsentity,
+            field: "userList.email"
+        });
+        this._indexList.push({
+            entity: sails.models.bedconfigurationsentity,
+            field: "hotelId"
+        });
+
     }
     public getPatchType(): MongoPatcheType {
         return MongoPatcheType.CreateUniqueIndexOnHotel;
@@ -19,23 +37,35 @@ export class MongoPatch0 extends ATransactionalMongoPatch {
             this.applyCore(resolve, reject);
         });
     }
-
+    
     private applyCore(resolve: { (result: boolean): void }, reject: { (err: ThError): void }) {
-		var mongoRepo = new MongoRepository(this._hotelsEntity);
+        async.map(this._indexList, this.createIndexAsync, ((err: any, result?: boolean[]) => {
+            if(err || !result) {
+                var thError = new ThError(ThStatusCode.ErrorBootstrappingApp, err);
+                ThLogger.getInstance().logError(ThLogLevel.Error, "Patch0 - Error ensuring unique index.", { step: "Bootstrap" }, thError);
+                reject(thError);
+                return;
+            }
+            resolve(true);
+        }));
+    }
+    
+    private createIndexAsync(index: IndexMetadataDO, indexCreatedCallback: { (err: any, result?: boolean): void }) {
+        var mongoRepo = new MongoRepository(index.entity);
         mongoRepo.getNativeMongoCollection().then((nativeHotelsCollection: any) => {
-            nativeHotelsCollection.ensureIndex("userList.email", { unique: true }, ((err, indexName) => {
+            nativeHotelsCollection.ensureIndex(index.field, { unique: true }, ((err, indexName) => {
                 if (err || !indexName) {
                     var thError = new ThError(ThStatusCode.ErrorBootstrappingApp, err);
-                    ThLogger.getInstance().logError(ThLogLevel.Error, "Patch0 - Error ensuring unique email for userList index", { step: "Bootstrap" }, thError);
-                    reject(thError);
+                    ThLogger.getInstance().logError(ThLogLevel.Error, "Patch0 - Error ensuring unique index " + index.field + " for " + index.entity, { step: "Bootstrap" }, thError);
+                    indexCreatedCallback(thError);
                     return;
                 }
-                resolve(true);
+                indexCreatedCallback(null, true);
             }));
         }).catch((error: any) => {
             var thError = new ThError(ThStatusCode.ErrorBootstrappingApp, error);
-            ThLogger.getInstance().logError(ThLogLevel.Error, "Patch0 - Error getting native hotels collection", { step: "Bootstrap" }, thError);
-            reject(thError);
+            ThLogger.getInstance().logError(ThLogLevel.Error, "Patch0 - Error getting native " + index.entity + " collection", { step: "Bootstrap" }, thError);
+            indexCreatedCallback(thError);
         });
     }
 }

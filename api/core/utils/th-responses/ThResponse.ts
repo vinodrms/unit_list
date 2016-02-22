@@ -66,7 +66,11 @@ export enum ThStatusCode {
 	HotelAddPaymentsPoliciesErrorPrecheckingConstraints,
 	HotelAddPaymentPoliciesInvalidTaxes,
 	HotelAddPaymentsPoliciesError,
-	HotelAddPaymentPoliciesInvalidCurrencyCode
+	HotelAddPaymentPoliciesInvalidCurrencyCode,
+    BedConfigRepositoryConfigAlreadyExists,
+    BedConfigRepositoryErrorAddingConfig,
+    BedConfigRepositoryErrorFindingConfigByHotelId,
+    BedConfigRepositoryErrorFindingConfig    
 }
 
 var ThMessage: { [index: number]: string; } = {};
@@ -135,7 +139,10 @@ ThMessage[ThStatusCode.HotelAddPaymentsPoliciesErrorPrecheckingConstraints] = "T
 ThMessage[ThStatusCode.HotelAddPaymentPoliciesInvalidTaxes] = "Invalid taxes sent.";
 ThMessage[ThStatusCode.HotelAddPaymentsPoliciesError] = "Error adding the payments and policies.";
 ThMessage[ThStatusCode.HotelAddPaymentPoliciesInvalidCurrencyCode] = "Invalid currency code.";
-
+ThMessage[ThStatusCode.BedConfigRepositoryConfigAlreadyExists] = "The current hotel already has a bed configuration defined.";
+ThMessage[ThStatusCode.BedConfigRepositoryErrorAddingConfig] = "An error occurred while adding the bed configuration for the current hotel.";
+ThMessage[ThStatusCode.BedConfigRepositoryErrorFindingConfigByHotelId] = "Error finding bed configuration for the current hotel.";
+ThMessage[ThStatusCode.BedConfigRepositoryErrorFindingConfig] = "Error finding bed configuration.";
 export class ThResponse {
 	statusCode: ThStatusCode;
 	message: string;

@@ -10,6 +10,7 @@ import {PaymentMethodSettingDO} from '../../data-objects/payment-method/PaymentM
 import {SettingType} from '../../data-objects/common/SettingMetadataDO';
 import {BaseDO} from '../../../common/base/BaseDO';
 import {AmenityDO} from '../../../common/data-objects/amenity/AmenityDO';
+import {BedTemplateDO} from '../../../common/data-objects/bed-template/BedTemplateDO';
 import {CountryDO} from '../../../common/data-objects/country/CountryDO';
 import {CurrencyDO} from '../../../common/data-objects/currency/CurrencyDO';
 import {PaymentMethodDO} from '../../../common/data-objects/payment-method/PaymentMethodDO';
@@ -52,10 +53,23 @@ export class MongoSettingsRepository extends MongoRepository implements ISetting
         return this.getSetting(SettingType.RoomAmenities, valueCriteria);
     }
     
+    
     public getHotelAmenities(valueCriteria?: Object): Promise<AmenityDO[]> {
         return this.getSetting(SettingType.HotelAmenities, valueCriteria);
     }
-
+    
+    public getBedTemplates(valueCriteria?: Object): Promise<BedTemplateDO[]> {
+        return this.getSetting(SettingType.BedTemplates, valueCriteria);
+    } 
+    
+    public getBedTemplatesAsync(getBedTemplatesCallback: { (err: any, bedTemplateList?: BedTemplateDO[]): void; }, valueCriteria?: Object) {
+        this.getBedTemplates(valueCriteria).then((bedTemplateList?: BedTemplateDO[]) => {
+			getBedTemplatesCallback(null, bedTemplateList);
+		}).catch((err: any) => {
+			getBedTemplatesCallback(err);
+		});    
+    } 
+    
 	public getCurrenciesAsync(getCurrenciesCallback: { (err: any, currencyList?: CurrencyDO[]): void; }, valueCriteria?: Object) {
 		this.getCurrencies(valueCriteria).then((currencyList?: CurrencyDO[]) => {
 			getCurrenciesCallback(null, currencyList);

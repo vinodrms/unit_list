@@ -1,5 +1,6 @@
 import {SettingType} from '../data-objects/common/SettingMetadataDO';
 import {AmenityDO} from '../../common/data-objects/amenity/AmenityDO';
+import {BedTemplateDO} from '../../common/data-objects/bed-template/BedTemplateDO';
 import {CountryDO} from '../../common/data-objects/country/CountryDO';
 import {CurrencyDO} from '../../common/data-objects/currency/CurrencyDO';
 import {PaymentMethodDO} from '../../common/data-objects/payment-method/PaymentMethodDO';
@@ -24,6 +25,8 @@ export interface ISettingsRepository {
     getRoomAmenities(valueCriteria?: AmenitySearchCriteriaRepoDO): Promise<AmenityDO[]>;
     
     getHotelAmenities(valueCriteria?: AmenitySearchCriteriaRepoDO): Promise<AmenityDO[]>;
+    
+    getBedTemplatesAsync(getBedTemplatesCallback: { (err: any, bedTemplateList?: BedTemplateDO[]): void; }, valueCriteria?: Object);
     
     getCountries(valueCriteria?: CountrySearchCriteriaRepoDO): Promise<CountryDO[]>;
     
