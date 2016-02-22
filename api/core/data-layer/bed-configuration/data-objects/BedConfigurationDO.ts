@@ -17,7 +17,7 @@ export class BedConfigurationDO extends BaseDO {
         super.buildFromObject(object);
         
         this.bedList = [];
-		this.forEachElementOf(this.getPropertyFromObject("bedList", object), (userObject: Object) => {
+		this.forEachElementOf(this.getObjectPropertyEnsureUndefined(object, "bedList"), (userObject: Object) => {
 			var bedDO = new BedDO();
 			bedDO.buildFromObject(userObject);
 			this.bedList.push(bedDO);

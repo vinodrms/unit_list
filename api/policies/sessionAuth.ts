@@ -1,6 +1,7 @@
 import {UnitPalConfig, AppEnvironmentType} from '../core/utils/environment/UnitPalConfig';
 import {SessionContext} from '../core/utils/SessionContext';
 import {Locales} from '../core/utils/localization/Translation';
+import {UserRoles} from '../core/data-layer/hotel/data-objects/user/UserDO';
 
 module.exports = function(req: Express.Request, res: Express.Response, next: any) {
 	var sessionContext: SessionContext = req["user"];
@@ -20,7 +21,7 @@ module.exports = function(req: Express.Request, res: Express.Response, next: any
 				user: {
 					id: "1",
 					email: "paraschiv.ionut@gmail.com",
-					roleList: [0]
+					roleList: [UserRoles.Administrator]
 				}
 			}
 		};

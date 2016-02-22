@@ -37,12 +37,12 @@ export class UserDO extends BaseDO {
 		super.buildFromObject(object);
 
 		this.contactDetails = new UserContactDetailsDO();
-		this.contactDetails.buildFromObject(this.getPropertyFromObject("contactDetails", object));
+		this.contactDetails.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "contactDetails"));
 		
 		this.accountActivationToken = new ActionTokenDO();
-		this.accountActivationToken.buildFromObject(this.getPropertyFromObject("accountActivationToken", object));
+		this.accountActivationToken.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "accountActivationToken"));
 		
 		this.resetPasswordToken = new ActionTokenDO();
-		this.resetPasswordToken.buildFromObject(this.getPropertyFromObject("resetPasswordToken", object));
+		this.resetPasswordToken.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "resetPasswordToken"));
 	}
 }

@@ -63,27 +63,13 @@ export class MongoRepository {
 			return;
 		}
 		try {
-			query = this.preprocessQuery(query);
-			updates["updatedAt"] = this.getISODate();
-			var updateQuery: any = {};
-			if (!this._thUtils.isUndefinedOrNull(updates["$inc"])) {
-				var incField = updates["$inc"];
-				delete updates["$inc"];
-				updateQuery = {
-					$set: updates,
-					$inc: incField
-				}
-			}
-			else {
-				updateQuery = {
-					$set: updates
-				}
-			}
+			var preprocessedQuery = this.preprocessQuery(query);
+			var preprocessedUpdate = this.preprocessUpdateQuery(updates);
 		} catch (e) {
 			reject(e);
 			return;
 		}
-		nativeCollection.findAndModify(query, [], updateQuery, { new: true }, (err: any, record: Object) => {
+		nativeCollection.findAndModify(preprocessedQuery, [], preprocessedUpdate, { new: true }, (err: any, record: Object) => {
 			if (err) {
 				reject(err);
 				return;
@@ -110,6 +96,23 @@ export class MongoRepository {
 	}
 	private getISODate(): Date {
 		return new Date((new Date()).toISOString());
+	}
+	private preprocessUpdateQuery(updates: Object): Object {
+		updates["updatedAt"] = this.getISODate();
+
+		var processedUpdates: any = {};
+		// these are placed individually on the update query
+		var reservedWordList = ["$inc", "$push", "$pop", "$addToSet", "$pull", "$pullAll"];
+		reservedWordList.forEach((reservedWord: string) => {
+			var reservedWordValue = updates[reservedWord];
+			if (!this._thUtils.isUndefinedOrNull(reservedWordValue)) {
+				delete updates[reservedWord];
+				processedUpdates[reservedWord] = reservedWordValue;
+			}
+		});
+		// the rest of the updates are automatically given to the set attributte
+		processedUpdates["$set"] = updates;
+		return processedUpdates;
 	}
 	private processResult(record: any): Object {
 		if (!record || !record.value) {

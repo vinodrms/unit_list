@@ -3,7 +3,9 @@ import {UserDO} from '../data-objects/user/UserDO';
 import {ActionTokenDO} from '../data-objects/user/ActionTokenDO';
 import {HotelContactDetailsDO} from '../data-objects/hotel-contact-details/HotelContactDetailsDO';
 import {GeoLocationDO} from '../../common/data-objects/geo-location/GeoLocationDO';
+import {TaxDO} from '../../common/data-objects/taxes/TaxDO';
 import {HotelTaxesDO} from '../data-objects/taxes/HotelTaxesDO';
+import {OperationHoursDO} from '../data-objects/operation-hours/OperationHoursDO';
 
 export interface UserAccountActivationRepoDO {
 	email: string;
@@ -36,6 +38,17 @@ export interface PaymentsPoliciesRepoDO {
 export interface PaymentMethodIdListRepoDO {
 	paymentMethodIdList: string[];
 }
+export interface TaxMetaRepoDO {
+	id: string;
+}
+export interface TaxRepoDO {
+	tax: TaxDO
+}
+export interface PropertyDetailsRepoDO {
+	operationHours: OperationHoursDO;
+	timezone: string;
+	amenityIdList: string[];
+}
 
 export interface IHotelRepository {
 	addHotelAsync(hotel: HotelDO, finishAddHotelCallback: { (err: any, savedHotel?: HotelDO): void; });
@@ -50,4 +63,11 @@ export interface IHotelRepository {
 	updateBasicInformationAsync(hotelMeta: HotelMetaRepoDO, basicInfo: BasicHotelInfoRepoDO, updateBasicInformationCallback: { (err: any, updatedHotel?: HotelDO): void; });
 	addPaymentsPoliciesAsync(hotelMeta: HotelMetaRepoDO, paymPoliciesParams: PaymentsPoliciesRepoDO, addPaymentsPoliciesCallback: { (err: any, updatedHotel?: HotelDO): void; });
 	updatePaymentMethodIdListAsync(hotelMeta: HotelMetaRepoDO, updatePaymMethodParams: PaymentMethodIdListRepoDO, updatePaymMethodsCallback: { (err: any, updatedHotel?: HotelDO): void; });
+
+	updateTaxesVatItemAsync(hotelMeta: HotelMetaRepoDO, vatMeta: TaxMetaRepoDO, newVat: TaxRepoDO, updateVatCallback: { (err: any, updatedHotel?: HotelDO): void; });
+	updateTaxesOtherTaxItemAsync(hotelMeta: HotelMetaRepoDO, taxMeta: TaxMetaRepoDO, newTax: TaxRepoDO, updateTaxesCallback: { (err: any, updatedHotel?: HotelDO): void; });
+	addTaxesVatItemAsync(hotelMeta: HotelMetaRepoDO, newVat: TaxRepoDO, addVatCallback: { (err: any, updatedHotel?: HotelDO): void; });
+	addTaxesOtherTaxItemAsync(hotelMeta: HotelMetaRepoDO, newTax: TaxRepoDO, addTaxesCallback: { (err: any, updatedHotel?: HotelDO): void; });
+
+	updatePropertyDetailsAsync(hotelMeta: HotelMetaRepoDO, propertyDetails: PropertyDetailsRepoDO, updatePropertyDetailsCallback: { (err: any, updatedHotel?: HotelDO): void; });
 }

@@ -16,6 +16,6 @@ export class AddressDO extends BaseDO {
 	public buildFromObject(object: Object) {
 		super.buildFromObject(object);
 		this.country = new CountryDO();
-		this.country.buildFromObject(this.getPropertyFromObject("country", object));
+		this.country.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "country"));
 	}
 }

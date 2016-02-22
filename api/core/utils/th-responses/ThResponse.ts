@@ -56,6 +56,10 @@ export enum ThStatusCode {
 	HotelGetDetailsErrorFormattingResponse,
 	HotelGetDetailsErrorFindingUserByEmail,
 	HotelDetailsControllerErrorGettingDetails,
+	HotelDetailsControllerErrorUpdatingBasicInfo,
+	HotelDetailsControllerErrorAddingPaymentsAndPolicies,
+	HotelDetailsControllerErrorUpdatingPaymentMethods,
+	HotelDetailsControllerErrorSavingTaxItem,
 	HotelRepositoryHotelIdNotFound,
 	HotelRepositoryErrorFindingHotelById,
 	HotelDetailsRepositoryProblemUpdatingAccount,
@@ -70,7 +74,16 @@ export enum ThStatusCode {
     BedConfigRepositoryConfigAlreadyExists,
     BedConfigRepositoryErrorAddingConfig,
     BedConfigRepositoryErrorFindingConfigByHotelId,
-    BedConfigRepositoryErrorFindingConfig    
+    BedConfigRepositoryErrorFindingConfig,
+	HotelSaveTaxItemError,
+	ATaxItemActionStrategyInvalidTaxItemType,
+	ATaxItemActionStrategyErrorValidating,
+	HotelUpdatePropertyDetailsUpdateError,
+	HotelUpdatePropertyDetailsValidationError,
+	HotelUpdatePropertyDetailsInvalidAmenityIdList,
+	HotelUpdatePropertyDetailsInvalidOperationHours,
+	HotelUpdatePropertyDetailsInvalidTimezone,
+	HotelDetailsControllerErrorUpdatingPropertyDetails
 }
 
 var ThMessage: { [index: number]: string; } = {};
@@ -128,6 +141,10 @@ ThMessage[ThStatusCode.HotelGetDetailsError] = "Error getting details for the ho
 ThMessage[ThStatusCode.HotelGetDetailsErrorFormattingResponse] = "Error updating the details for the hotel. Please try again.";
 ThMessage[ThStatusCode.HotelGetDetailsErrorFindingUserByEmail] = "Error getting the details for the hotel. Please try again.";
 ThMessage[ThStatusCode.HotelDetailsControllerErrorGettingDetails] = "Error getting the details for your hotel. Please try again.";
+ThMessage[ThStatusCode.HotelDetailsControllerErrorUpdatingBasicInfo] = "Error updating the basic information. Please try again.";
+ThMessage[ThStatusCode.HotelDetailsControllerErrorAddingPaymentsAndPolicies] = "Error adding payments and policies. Please try again.";
+ThMessage[ThStatusCode.HotelDetailsControllerErrorUpdatingPaymentMethods] = "Error updating payment options. Please try again.";
+ThMessage[ThStatusCode.HotelDetailsControllerErrorSavingTaxItem] = "Error saving the tax. Please try again.";
 ThMessage[ThStatusCode.HotelRepositoryHotelIdNotFound] = "Problem getting the details for your hotel. Please try again.";
 ThMessage[ThStatusCode.HotelRepositoryErrorFindingHotelById] = "Error getting the details for your hotel. Please try again.";
 ThMessage[ThStatusCode.HotelDetailsRepositoryProblemUpdatingAccount] = "Problem updating the hotel's information. It is possible that someone else changed it at the same time. Please refresh the page and try again.";
@@ -143,6 +160,16 @@ ThMessage[ThStatusCode.BedConfigRepositoryConfigAlreadyExists] = "The current ho
 ThMessage[ThStatusCode.BedConfigRepositoryErrorAddingConfig] = "An error occurred while adding the bed configuration for the current hotel.";
 ThMessage[ThStatusCode.BedConfigRepositoryErrorFindingConfigByHotelId] = "Error finding bed configuration for the current hotel.";
 ThMessage[ThStatusCode.BedConfigRepositoryErrorFindingConfig] = "Error finding bed configuration.";
+ThMessage[ThStatusCode.HotelSaveTaxItemError] = "Error saving the tax item.";
+ThMessage[ThStatusCode.ATaxItemActionStrategyErrorValidating] = "Error validating the tax item.";
+ThMessage[ThStatusCode.ATaxItemActionStrategyInvalidTaxItemType] = "Invalid tax item type sent to server.";
+ThMessage[ThStatusCode.HotelUpdatePropertyDetailsUpdateError] = "Error updating the property details. Please try again.";
+ThMessage[ThStatusCode.HotelUpdatePropertyDetailsValidationError] = "Error validating the property details. Please try again.";
+ThMessage[ThStatusCode.HotelUpdatePropertyDetailsInvalidAmenityIdList] = "Invalid amenity list.";
+ThMessage[ThStatusCode.HotelUpdatePropertyDetailsInvalidOperationHours] = "Invalid operation hours.";
+ThMessage[ThStatusCode.HotelUpdatePropertyDetailsInvalidTimezone] = "Invalid timezone.";
+ThMessage[ThStatusCode.HotelDetailsControllerErrorUpdatingPropertyDetails] = "Error updating property details.";
+
 export class ThResponse {
 	statusCode: ThStatusCode;
 	message: string;

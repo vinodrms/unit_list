@@ -22,19 +22,13 @@ export interface PaymentMethodSearchCriteriaRepoDO {
 }
 
 export interface ISettingsRepository {
-    getRoomAmenities(valueCriteria?: AmenitySearchCriteriaRepoDO): Promise<AmenityDO[]>;
-    
-    getHotelAmenities(valueCriteria?: AmenitySearchCriteriaRepoDO): Promise<AmenityDO[]>;
     
     getBedTemplatesAsync(getBedTemplatesCallback: { (err: any, bedTemplateList?: BedTemplateDO[]): void; }, valueCriteria?: Object);
     
-    getCountries(valueCriteria?: CountrySearchCriteriaRepoDO): Promise<CountryDO[]>;
+    getRoomAmenities(valueCriteria?: AmenitySearchCriteriaRepoDO): Promise<AmenityDO[]>;
     
-    getCountriesAsync(finishQueryCallback: { (err: any, country?: CountryDO[]): void; }, valueCriteria?: Object);
-    
-    getCurrencies(valueCriteria?: CurrencySearchCriteriaRepoDO): Promise<CurrencyDO[]>;
-    
-    getPaymentMethods(valueCriteria?: PaymentMethodSearchCriteriaRepoDO): Promise<PaymentMethodDO[]>;
+    getHotelAmenitiesAsync(getAmenityListCallback: { (err: any, amenityList?: AmenityDO[]): void; }, valueCriteria?: AmenitySearchCriteriaRepoDO);
+	getHotelAmenities(valueCriteria?: AmenitySearchCriteriaRepoDO): Promise<AmenityDO[]>;
 
     getCountriesAsync(finishQueryCallback: { (err: any, country?: CountryDO[]): void; }, valueCriteria?: Object);
 	getCountries(valueCriteria?: CountrySearchCriteriaRepoDO): Promise<CountryDO[]>;

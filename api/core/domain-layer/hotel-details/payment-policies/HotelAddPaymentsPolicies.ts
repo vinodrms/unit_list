@@ -19,17 +19,19 @@ import _ = require("underscore");
 import async = require("async");
 
 export class HotelAddPaymentsPolicies {
+	private _paymentPoliciesDO: HotelAddPaymentsPoliciesDO;
 	private _thUtils: ThUtils;
 	private _loadedHotel: HotelDO;
 	private _availableCurrencyList: CurrencyDO[];
 
 	private _precheckedTaxes: HotelTaxesDO;
 
-	constructor(private _appContext: AppContext, private _sessionContext: SessionContext, private _paymentPoliciesDO: HotelAddPaymentsPoliciesDO) {
+	constructor(private _appContext: AppContext, private _sessionContext: SessionContext) {
 		this._thUtils = new ThUtils();
 	}
 
-	public add(): Promise<HotelDetailsDO> {
+	public add(paymentPoliciesDO: HotelAddPaymentsPoliciesDO): Promise<HotelDetailsDO> {
+		this._paymentPoliciesDO = paymentPoliciesDO;
 		return new Promise<HotelDetailsDO>((resolve: { (result: HotelDetailsDO): void }, reject: { (err: ThError): void }) => {
 			this.addCore(resolve, reject);
 		});

@@ -52,7 +52,13 @@ export class MongoSettingsRepository extends MongoRepository implements ISetting
     public getRoomAmenities(valueCriteria?: Object): Promise<AmenityDO[]> {
         return this.getSetting(SettingType.RoomAmenities, valueCriteria);
     }
-    
+	public getHotelAmenitiesAsync(getAmenityListCallback: { (err: any, amenityList?: AmenityDO[]): void; }, valueCriteria?: Object) {
+		this.getHotelAmenities(valueCriteria).then((result: AmenityDO[]) => {
+			getAmenityListCallback(null, result);
+		}).catch((err: any) => {
+			getAmenityListCallback(err);
+		});
+	}
     
     public getHotelAmenities(valueCriteria?: Object): Promise<AmenityDO[]> {
         return this.getSetting(SettingType.HotelAmenities, valueCriteria);
@@ -80,7 +86,7 @@ export class MongoSettingsRepository extends MongoRepository implements ISetting
 	public getCurrencies(valueCriteria?: Object): Promise<CurrencyDO[]> {
         return this.getSetting(SettingType.CurrencyCodes, valueCriteria);
     }
-    
+
     public getCountriesAsync(finishQueryCallback: { (err: any, country?: CountryDO[]): void; }, valueCriteria?: Object) {
 		this.getCountries(valueCriteria).then((retrievedCountries: CountryDO[]) => {
 			finishQueryCallback(null, retrievedCountries);

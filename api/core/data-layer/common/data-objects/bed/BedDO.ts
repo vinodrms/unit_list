@@ -33,7 +33,7 @@ export class BedDO extends BaseDO {
 		super.buildFromObject(object);
         
         this.size = new BedSizeDO();
-		this.size.buildFromObject(this.getPropertyFromObject("size", object));
+		this.size.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "size"));
 
     }
     

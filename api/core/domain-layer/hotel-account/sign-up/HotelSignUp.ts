@@ -19,6 +19,7 @@ import {ValidationResultParser} from '../../common/ValidationResultParser';
 import async = require("async");
 
 export class HotelSignUp {
+	private static FirstUserIndex = 0;
 	private _savedHotel: HotelDO;
 	private _authUtils: AuthUtils;
 	private _activationCode: string;
@@ -67,7 +68,7 @@ export class HotelSignUp {
 				reject(thError);
 			}
 			else {
-				resolve(this._savedHotel.userList[0].accountActivationToken);
+				resolve(this._savedHotel.userList[HotelSignUp.FirstUserIndex].accountActivationToken);
 			}
 		}));
 	}
