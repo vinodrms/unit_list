@@ -2,8 +2,8 @@ import {MongoRepository} from '../../../common/base/MongoRepository';
 import {IRepositoryCleaner} from '../../../common/base/IRepositoryCleaner';
 import {HotelDO} from '../../data-objects/HotelDO';
 import {UserDO} from '../../data-objects/user/UserDO';
-import {IHotelRepository, HotelMetaRepoDO, BasicHotelInfoRepoDO, UserAccountActivationRepoDO,
-RequestResetPasswordRepoDO, ResetPasswordRepoDO, PaymentsPoliciesRepoDO, PaymentMethodIdListRepoDO, TaxMetaRepoDO, TaxRepoDO} from '../IHotelRepository';
+import {IHotelRepository, HotelMetaRepoDO, BasicHotelInfoRepoDO, UserAccountActivationRepoDO, RequestResetPasswordRepoDO,
+ResetPasswordRepoDO, PaymentsPoliciesRepoDO, PaymentMethodIdListRepoDO, TaxMetaRepoDO, TaxRepoDO, PropertyDetailsRepoDO} from '../IHotelRepository';
 import {ActionTokenDO} from '../../data-objects/user/ActionTokenDO';
 import {HotelContactDetailsDO} from '../../data-objects/hotel-contact-details/HotelContactDetailsDO';
 import {GeoLocationDO} from '../../../common/data-objects/geo-location/GeoLocationDO';
@@ -120,4 +120,13 @@ export abstract class AMongoHotelRepository extends MongoRepository implements I
 		});
 	}
 	protected abstract addTaxesOtherTaxItem(hotelMeta: HotelMetaRepoDO, newTax: TaxRepoDO): Promise<HotelDO>;
+
+	public updatePropertyDetailsAsync(hotelMeta: HotelMetaRepoDO, propertyDetails: PropertyDetailsRepoDO, updatePropertyDetailsCallback: { (err: any, updatedHotel?: HotelDO): void; }) {
+		this.updatePropertyDetails(hotelMeta, propertyDetails).then((result: HotelDO) => {
+			updatePropertyDetailsCallback(null, result);
+		}).catch((err: any) => {
+			updatePropertyDetailsCallback(err);
+		});
+	}
+	protected abstract updatePropertyDetails(hotelMeta: HotelMetaRepoDO, propertyDetails: PropertyDetailsRepoDO): Promise<HotelDO>;
 }

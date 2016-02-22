@@ -7,7 +7,7 @@ import {ActionTokenDO} from '../../data-objects/user/ActionTokenDO';
 import {HotelContactDetailsDO} from '../../data-objects/hotel-contact-details/HotelContactDetailsDO';
 import {GeoLocationDO} from '../../../common/data-objects/geo-location/GeoLocationDO';
 import {HotelMetaRepoDO, BasicHotelInfoRepoDO, UserAccountActivationRepoDO, RequestResetPasswordRepoDO,
-ResetPasswordRepoDO, PaymentsPoliciesRepoDO, PaymentMethodIdListRepoDO, TaxMetaRepoDO, TaxRepoDO} from '../IHotelRepository';
+ResetPasswordRepoDO, PaymentsPoliciesRepoDO, PaymentMethodIdListRepoDO, TaxMetaRepoDO, TaxRepoDO, PropertyDetailsRepoDO} from '../IHotelRepository';
 
 export class MongoHotelRepository extends AMongoHotelRepository {
 	private _hotelsEntity: Sails.Model;
@@ -63,5 +63,8 @@ export class MongoHotelRepository extends AMongoHotelRepository {
 	}
 	protected addTaxesOtherTaxItem(hotelMeta: HotelMetaRepoDO, newTax: TaxRepoDO): Promise<HotelDO> {
 		return this._hotelDetailsRepository.addTaxesOtherTaxItem(hotelMeta, newTax);
+	}
+	protected updatePropertyDetails(hotelMeta: HotelMetaRepoDO, propertyDetails: PropertyDetailsRepoDO): Promise<HotelDO> {
+		return this._hotelDetailsRepository.updatePropertyDetails(hotelMeta, propertyDetails);
 	}
 }

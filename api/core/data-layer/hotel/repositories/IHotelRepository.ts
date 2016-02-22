@@ -5,6 +5,7 @@ import {HotelContactDetailsDO} from '../data-objects/hotel-contact-details/Hotel
 import {GeoLocationDO} from '../../common/data-objects/geo-location/GeoLocationDO';
 import {TaxDO} from '../../common/data-objects/taxes/TaxDO';
 import {HotelTaxesDO} from '../data-objects/taxes/HotelTaxesDO';
+import {OperationHoursDO} from '../data-objects/operation-hours/OperationHoursDO';
 
 export interface UserAccountActivationRepoDO {
 	email: string;
@@ -43,6 +44,11 @@ export interface TaxMetaRepoDO {
 export interface TaxRepoDO {
 	tax: TaxDO
 }
+export interface PropertyDetailsRepoDO {
+	operationHours: OperationHoursDO;
+	timezone: string;
+	amenityIdList: string[];
+}
 
 export interface IHotelRepository {
 	addHotelAsync(hotel: HotelDO, finishAddHotelCallback: { (err: any, savedHotel?: HotelDO): void; });
@@ -62,4 +68,6 @@ export interface IHotelRepository {
 	updateTaxesOtherTaxItemAsync(hotelMeta: HotelMetaRepoDO, taxMeta: TaxMetaRepoDO, newTax: TaxRepoDO, updateTaxesCallback: { (err: any, updatedHotel?: HotelDO): void; });
 	addTaxesVatItemAsync(hotelMeta: HotelMetaRepoDO, newVat: TaxRepoDO, addVatCallback: { (err: any, updatedHotel?: HotelDO): void; });
 	addTaxesOtherTaxItemAsync(hotelMeta: HotelMetaRepoDO, newTax: TaxRepoDO, addTaxesCallback: { (err: any, updatedHotel?: HotelDO): void; });
+
+	updatePropertyDetailsAsync(hotelMeta: HotelMetaRepoDO, propertyDetails: PropertyDetailsRepoDO, updatePropertyDetailsCallback: { (err: any, updatedHotel?: HotelDO): void; });
 }

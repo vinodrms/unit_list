@@ -23,10 +23,12 @@ import {OtherTaxItemAddStrategyDO} from '../../../../core/domain-layer/hotel-det
 import {OtherTaxItemUpdateStrategyDO} from '../../../../core/domain-layer/hotel-details/payment-policies/taxes/strategies/OtherTaxItemUpdateStrategy';
 import {VatTaxItemAddStrategyDO} from '../../../../core/domain-layer/hotel-details/payment-policies/taxes/strategies/VatTaxItemAddStrategy';
 import {VatTaxItemUpdateStrategyDO} from '../../../../core/domain-layer/hotel-details/payment-policies/taxes/strategies/VatTaxItemUpdateStrategy';
+import {HotelUpdatePropertyDetails} from '../../../../core/domain-layer/hotel-details/property-details/HotelUpdatePropertyDetails';
 
 describe("Hotel Details Tests", function() {
 	var FirstVatIndex = 0;
 	var InvalidTaxItemType = 99999;
+	var InvalidDayHour = 30;
 
     var testContext: TestContext;
 	var testDataBuilder: DefaultDataBuilder;
@@ -269,8 +271,94 @@ describe("Hotel Details Tests", function() {
 				done(e);
 			});
         });
-
 	});
 
-
+	describe("Hotel Property Details Tests", function() {
+		it("Should not update the hotel property details using null check in from hour", function(done) {
+			var propertyDetails = hotelDetailsTestHelper.getHotelUpdatePropertyDetailsDO(testDataBuilder);
+			propertyDetails.operationHours.checkInFrom.hour = null;
+			var updtPropertyDetails = new HotelUpdatePropertyDetails(testContext.appContext, testContext.sessionContext, propertyDetails);
+			updtPropertyDetails.update().then((details: HotelDetailsDO) => {
+				done(new Error("did manage to update property details using null check in from hour"));
+			}).catch((e: ThError) => {
+				should.notEqual(e.getThStatusCode(), ThStatusCode.Ok);
+				done();
+			});
+        });
+		it("Should not update the hotel property details using invalid check in from hour", function(done) {
+			var propertyDetails = hotelDetailsTestHelper.getHotelUpdatePropertyDetailsDO(testDataBuilder);
+			propertyDetails.operationHours.checkInFrom.hour = InvalidDayHour;
+			var updtPropertyDetails = new HotelUpdatePropertyDetails(testContext.appContext, testContext.sessionContext, propertyDetails);
+			updtPropertyDetails.update().then((details: HotelDetailsDO) => {
+				done(new Error("did manage to update property details using invalid check in from hour"));
+			}).catch((e: ThError) => {
+				should.notEqual(e.getThStatusCode(), ThStatusCode.Ok);
+				done();
+			});
+        });
+		it("Should not update the hotel property details using invalid amenity id", function(done) {
+			var propertyDetails = hotelDetailsTestHelper.getHotelUpdatePropertyDetailsDO(testDataBuilder);
+			propertyDetails.amenityIdList.push("1111111111");
+			var updtPropertyDetails = new HotelUpdatePropertyDetails(testContext.appContext, testContext.sessionContext, propertyDetails);
+			updtPropertyDetails.update().then((details: HotelDetailsDO) => {
+				done(new Error("did manage to update property details using invalid amenity id"));
+			}).catch((e: ThError) => {
+				should.notEqual(e.getThStatusCode(), ThStatusCode.Ok);
+				done();
+			});
+        });
+		it("Should not update the hotel property details using invalid timezone", function(done) {
+			var propertyDetails = hotelDetailsTestHelper.getHotelUpdatePropertyDetailsDO(testDataBuilder);
+			propertyDetails.timezone = "BukaresTimezone";
+			var updtPropertyDetails = new HotelUpdatePropertyDetails(testContext.appContext, testContext.sessionContext, propertyDetails);
+			updtPropertyDetails.update().then((details: HotelDetailsDO) => {
+				done(new Error("did manage to update property details using invalid timezone"));
+			}).catch((e: ThError) => {
+				should.notEqual(e.getThStatusCode(), ThStatusCode.Ok);
+				done();
+			});
+        });
+		it("Should update the hotel property details using valid data", function(done) {
+			var propertyDetails = hotelDetailsTestHelper.getHotelUpdatePropertyDetailsDO(testDataBuilder);
+			var updtPropertyDetails = new HotelUpdatePropertyDetails(testContext.appContext, testContext.sessionContext, propertyDetails);
+			updtPropertyDetails.update().then((details: HotelDetailsDO) => {
+				should.equal(details.hotel.timezone, propertyDetails.timezone);
+				should.equal(details.hotel.amenityIdList.length, propertyDetails.amenityIdList.length);
+				should.equal(details.hotel.operationHours.checkInFrom.hour, propertyDetails.operationHours.checkInFrom.hour);
+				should.equal(details.hotel.operationHours.checkInFrom.minute, propertyDetails.operationHours.checkInFrom.minute);
+				should.equal(details.hotel.operationHours.checkInToOptional.hour, propertyDetails.operationHours.checkInToOptional.hour);
+				should.equal(details.hotel.operationHours.checkInToOptional.minute, propertyDetails.operationHours.checkInToOptional.minute);
+				should.equal(details.hotel.operationHours.checkOutFromOptional.hour, propertyDetails.operationHours.checkOutFromOptional.hour);
+				should.equal(details.hotel.operationHours.checkOutFromOptional.minute, propertyDetails.operationHours.checkOutFromOptional.minute);
+				should.equal(details.hotel.operationHours.checkOutTo.hour, propertyDetails.operationHours.checkOutTo.hour);
+				should.equal(details.hotel.operationHours.checkOutTo.minute, propertyDetails.operationHours.checkOutTo.minute);
+				done();
+			}).catch((e: ThError) => {
+				done(e);
+			});
+        });
+		it("Should update the hotel property details using valid data containing optional null values", function(done) {
+			var propertyDetails = hotelDetailsTestHelper.getHotelUpdatePropertyDetailsDO(testDataBuilder);
+			propertyDetails.operationHours.checkInToOptional.hour = null;
+			propertyDetails.operationHours.checkInToOptional.minute = null;
+			propertyDetails.operationHours.checkOutFromOptional.hour = null;
+			propertyDetails.operationHours.checkOutFromOptional.minute = null;
+			var updtPropertyDetails = new HotelUpdatePropertyDetails(testContext.appContext, testContext.sessionContext, propertyDetails);
+			updtPropertyDetails.update().then((details: HotelDetailsDO) => {
+				should.equal(details.hotel.timezone, propertyDetails.timezone);
+				should.equal(details.hotel.amenityIdList.length, propertyDetails.amenityIdList.length);
+				should.equal(details.hotel.operationHours.checkInFrom.hour, propertyDetails.operationHours.checkInFrom.hour);
+				should.equal(details.hotel.operationHours.checkInFrom.minute, propertyDetails.operationHours.checkInFrom.minute);
+				should.equal(details.hotel.operationHours.checkInToOptional.hour, propertyDetails.operationHours.checkInToOptional.hour);
+				should.equal(details.hotel.operationHours.checkInToOptional.minute, propertyDetails.operationHours.checkInToOptional.minute);
+				should.equal(details.hotel.operationHours.checkOutFromOptional.hour, propertyDetails.operationHours.checkOutFromOptional.hour);
+				should.equal(details.hotel.operationHours.checkOutFromOptional.minute, propertyDetails.operationHours.checkOutFromOptional.minute);
+				should.equal(details.hotel.operationHours.checkOutTo.hour, propertyDetails.operationHours.checkOutTo.hour);
+				should.equal(details.hotel.operationHours.checkOutTo.minute, propertyDetails.operationHours.checkOutTo.minute);
+				done();
+			}).catch((e: ThError) => {
+				done(e);
+			});
+        });
+	});
 });

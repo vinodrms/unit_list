@@ -6,7 +6,7 @@ import {MongoRepository, MongoErrorCodes} from '../../../../common/base/MongoRep
 import {HotelDO} from '../../../data-objects/HotelDO';
 import {HotelContactDetailsDO} from '../../../data-objects/hotel-contact-details/HotelContactDetailsDO';
 import {GeoLocationDO} from '../../../../common/data-objects/geo-location/GeoLocationDO';
-import {HotelMetaRepoDO, BasicHotelInfoRepoDO, PaymentsPoliciesRepoDO, PaymentMethodIdListRepoDO, TaxMetaRepoDO, TaxRepoDO} from '../../IHotelRepository';
+import {HotelMetaRepoDO, BasicHotelInfoRepoDO, PaymentsPoliciesRepoDO, PaymentMethodIdListRepoDO, TaxMetaRepoDO, TaxRepoDO, PropertyDetailsRepoDO} from '../../IHotelRepository';
 
 import _ = require("underscore");
 
@@ -80,6 +80,13 @@ export class MongoHotelDetailsRepository extends MongoRepository {
 	public addTaxesOtherTaxItem(hotelMeta: HotelMetaRepoDO, newTax: TaxRepoDO): Promise<HotelDO> {
 		return this.findAndModifyHotel(hotelMeta, {
 			$push: { "taxes.otherTaxList": newTax.tax }
+		});
+	}
+	public updatePropertyDetails(hotelMeta: HotelMetaRepoDO, propertyDetails: PropertyDetailsRepoDO): Promise<HotelDO> {
+		return this.findAndModifyHotel(hotelMeta, {
+			"amenityIdList": propertyDetails.amenityIdList,
+			"operationHours": propertyDetails.operationHours,
+			"timezone": propertyDetails.timezone
 		});
 	}
 

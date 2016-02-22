@@ -26,3 +26,4 @@
 /// <reference path="node-uuid/node-uuid-cjs.d.ts" />
 /// <reference path="node-uuid/node-uuid.d.ts" />
 /// <reference path="mongodb/mongodb.d.ts" />
+/// <reference path="moment-timezone/moment-timezone.d.ts" />

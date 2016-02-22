@@ -73,7 +73,13 @@ export enum ThStatusCode {
 	HotelAddPaymentPoliciesInvalidCurrencyCode,
 	HotelSaveTaxItemError,
 	ATaxItemActionStrategyInvalidTaxItemType,
-	ATaxItemActionStrategyErrorValidating
+	ATaxItemActionStrategyErrorValidating,
+	HotelUpdatePropertyDetailsUpdateError,
+	HotelUpdatePropertyDetailsValidationError,
+	HotelUpdatePropertyDetailsInvalidAmenityIdList,
+	HotelUpdatePropertyDetailsInvalidOperationHours,
+	HotelUpdatePropertyDetailsInvalidTimezone,
+	HotelDetailsControllerErrorUpdatingPropertyDetails
 }
 
 var ThMessage: { [index: number]: string; } = {};
@@ -149,6 +155,12 @@ ThMessage[ThStatusCode.HotelAddPaymentPoliciesInvalidCurrencyCode] = "Invalid cu
 ThMessage[ThStatusCode.HotelSaveTaxItemError] = "Error saving the tax item.";
 ThMessage[ThStatusCode.ATaxItemActionStrategyErrorValidating] = "Error validating the tax item.";
 ThMessage[ThStatusCode.ATaxItemActionStrategyInvalidTaxItemType] = "Invalid tax item type sent to server.";
+ThMessage[ThStatusCode.HotelUpdatePropertyDetailsUpdateError] = "Error updating the property details. Please try again.";
+ThMessage[ThStatusCode.HotelUpdatePropertyDetailsValidationError] = "Error validating the property details. Please try again.";
+ThMessage[ThStatusCode.HotelUpdatePropertyDetailsInvalidAmenityIdList] = "Invalid amenity list.";
+ThMessage[ThStatusCode.HotelUpdatePropertyDetailsInvalidOperationHours] = "Invalid operation hours.";
+ThMessage[ThStatusCode.HotelUpdatePropertyDetailsInvalidTimezone] = "Invalid timezone.";
+ThMessage[ThStatusCode.HotelDetailsControllerErrorUpdatingPropertyDetails] = "Error updating property details.";
 
 export class ThResponse {
 	statusCode: ThStatusCode;

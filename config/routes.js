@@ -56,6 +56,7 @@ module.exports.routes = {
 	'POST /api/hotel/addPaymentsAndPolicies': 'HotelDetailsController.addPaymentsAndPolicies',
 	'POST /api/hotel/updatePaymentsMethods': 'HotelDetailsController.updatePaymentsMethods',
 	'POST /api/hotel/saveTaxItem': 'HotelDetailsController.saveTaxItem',
+	'POST /api/hotel/updatePropertyDetails': 'HotelDetailsController.updatePropertyDetails',
 
     'POST /api/service/uploadImage': 'ServiceController.uploadImage',
     'GET /api/service/vatVerifier': 'ServiceController.checkVAT',
