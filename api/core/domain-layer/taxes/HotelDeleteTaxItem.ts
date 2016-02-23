@@ -57,32 +57,28 @@ export class HotelDeleteTaxItem {
 			parser.logAndReject("Error validating data for delete tax item", reject);
 			return;
 		}
-		async.waterfall([
-			((finishGetTaxByIdCallback: { (err: ThError, result?: TaxDO): void; }) => {
-				var taxRepo = this._appContext.getRepositoryFactory().getTaxRepository();
-				taxRepo.getTaxByIdAsync(this._taxMeta, this._taxItemDO.id, finishGetTaxByIdCallback);
-			}),
-			((loadedTax: TaxDO, finishValidatingCallback: { (err: ThError, result?: boolean): void; }) => {
+		var taxRepo = this._appContext.getRepositoryFactory().getTaxRepository();
+		taxRepo.getTaxById(this._taxMeta, this._taxItemDO.id)
+			.then((loadedTax: TaxDO) => {
 				this._loadedTax = loadedTax;
-				this.validateLoadedTaxAsync(finishValidatingCallback);
-			}),
-			((validationResult: boolean, finishDeleteTaxCallback: { (err: ThError, result?: TaxDO): void; }) => {
+
+				return this.validateLoadedTax();
+			})
+			.then((validationResult: boolean) => {
 				var taxRepo = this._appContext.getRepositoryFactory().getTaxRepository();
 				var itemMeta = this.buildTaxItemMetaRepoDO();
-				taxRepo.deleteTaxAsync(this._taxMeta, itemMeta, finishDeleteTaxCallback);
+
+				return taxRepo.deleteTax(this._taxMeta, itemMeta);
 			})
-		], ((error: any, deletedTax: TaxDO) => {
-			if (error || !deletedTax) {
+			.then((deletedTax: TaxDO) => {
+				resolve(deletedTax);
+			}).catch((error: any) => {
 				var thError = new ThError(ThStatusCode.HotelDeleteTaxItemErrorDeleting, error);
 				if (thError.isNativeError()) {
 					ThLogger.getInstance().logError(ThLogLevel.Error, "error deleting tax item", this._taxItemDO, thError);
 				}
 				reject(thError);
-			}
-			else {
-				resolve(deletedTax);
-			}
-		}));
+			});
 	}
 	private buildTaxItemMetaRepoDO(): TaxItemMetaRepoDO {
 		return {
@@ -91,13 +87,6 @@ export class HotelDeleteTaxItem {
 		};
 	}
 
-	private validateLoadedTaxAsync(finishValidatingCallback: { (err: ThError, result?: boolean): void; }) {
-		this.validateLoadedTax().then((result: boolean) => {
-			finishValidatingCallback(null, result);
-		}).catch((err: any) => {
-			finishValidatingCallback(err);
-		});
-	}
 	private validateLoadedTax(): Promise<boolean> {
 		return new Promise<boolean>((resolve: { (result: boolean): void }, reject: { (err: ThError): void }) => {
 			try {
