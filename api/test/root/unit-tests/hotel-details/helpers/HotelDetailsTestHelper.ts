@@ -1,11 +1,8 @@
 import {HotelUpdateBasicInfoDO} from '../../../../../core/domain-layer/hotel-details/basic-info/HotelUpdateBasicInfoDO';
 import {HotelDO} from '../../../../../core/data-layer/hotel/data-objects/HotelDO';
-import {HotelAddPaymentsPoliciesDO, HotelAddPaymentsPoliciesOtherTaxDO, HotelAddPaymentsPoliciesVatDO} from '../../../../../core/domain-layer/hotel-details/payment-policies/HotelAddPaymentsPoliciesDO';
-import {TaxDO, TaxType} from '../../../../../core/data-layer/common/data-objects/taxes/TaxDO';
+import {HotelUpdatePaymentsPoliciesDO} from '../../../../../core/domain-layer/hotel-details/payment-policies/HotelUpdatePaymentsPoliciesDO';
 import {DefaultDataBuilder} from '../../../../db-initializers/DefaultDataBuilder';
 import {PaymentMethodDO} from '../../../../../core/data-layer/common/data-objects/payment-method/PaymentMethodDO';
-import {HotelSaveTaxItemDO} from '../../../../../core/domain-layer/hotel-details/payment-policies/HotelSaveTaxItem';
-import {TaxItemType} from '../../../../../core/domain-layer/hotel-details/payment-policies/taxes/TaxItemActionFactory';
 import {AmenityDO} from '../../../../../core/data-layer/common/data-objects/amenity/AmenityDO';
 import {HotelUpdatePropertyDetailsDO, HotelUpdatePropertyDetailsHourDO} from '../../../../../core/domain-layer/hotel-details/property-details/HotelUpdatePropertyDetailsDO';
 
@@ -47,27 +44,12 @@ export class HotelDetailsTestHelper {
 		return basicInfo;
 	}
 
-	public getHotelAddPaymentsPoliciesDO(dataBuilder: DefaultDataBuilder): HotelAddPaymentsPoliciesDO {
+	public getHotelUpdatePaymentsPoliciesDO(dataBuilder: DefaultDataBuilder): HotelUpdatePaymentsPoliciesDO {
 		var paymentMethodIdList: string[] = this.getPaymentMethodIdListFromPaymentMethodList(dataBuilder.paymentMethodList);
 
 		return {
 			ccyCode: "EUR",
 			paymentMethodIdList: paymentMethodIdList,
-			taxes: {
-				vatList: [
-					{
-						name: "VAT",
-						value: 0.8
-					}
-				],
-				otherTaxList: [
-					{
-						type: TaxType.Fixed,
-						name: "City Tax",
-						value: 10
-					}
-				]
-			}
 		}
 	}
 	public getPaymentMethodIdListFromPaymentMethodList(paymentMethodList: PaymentMethodDO[]): string[] {
@@ -75,19 +57,6 @@ export class HotelDetailsTestHelper {
 			return paymentMethod.id;
 		});
 		return paymentMethodIdList;
-	}
-	public getInvalidOtherTaxDO(): HotelAddPaymentsPoliciesOtherTaxDO {
-		return {
-			type: TaxType.Percentage,
-			name: "Bed VAT",
-			value: 10
-		};
-	}
-	public getHotelSaveTaxItemDO(itemType: TaxItemType, taxObject: Object): HotelSaveTaxItemDO {
-		return {
-			itemType: itemType,
-			taxObject: taxObject
-		}
 	}
 	public getHotelUpdatePropertyDetailsDO(dataBuilder: DefaultDataBuilder): HotelUpdatePropertyDetailsDO {
 		return {

@@ -53,10 +53,12 @@ module.exports.routes = {
 
 	'GET /api/hotel/details': 'HotelDetailsController.getDetails',
 	'POST /api/hotel/updateBasicInfo': 'HotelDetailsController.updateBasicInfo',
-	'POST /api/hotel/addPaymentsAndPolicies': 'HotelDetailsController.addPaymentsAndPolicies',
-	'POST /api/hotel/updatePaymentsMethods': 'HotelDetailsController.updatePaymentsMethods',
-	'POST /api/hotel/saveTaxItem': 'HotelDetailsController.saveTaxItem',
+	'POST /api/hotel/updatePaymentsAndPolicies': 'HotelDetailsController.updatePaymentsAndPolicies',
 	'POST /api/hotel/updatePropertyDetails': 'HotelDetailsController.updatePropertyDetails',
+
+	'GET /api/tax/getTaxes': 'TaxController.getTaxes',
+	'POST /api/tax/saveTaxItem': 'TaxController.saveTaxItem',
+	'POST /api/tax/deleteTaxItem': 'TaxController.deleteTaxItem',
 
     'POST /api/service/uploadImage': 'ServiceController.uploadImage',
     'GET /api/service/vatVerifier': 'ServiceController.checkVAT',

@@ -6,7 +6,7 @@ import {MongoRepository, MongoErrorCodes} from '../../../../common/base/MongoRep
 import {HotelDO} from '../../../data-objects/HotelDO';
 import {HotelContactDetailsDO} from '../../../data-objects/hotel-contact-details/HotelContactDetailsDO';
 import {GeoLocationDO} from '../../../../common/data-objects/geo-location/GeoLocationDO';
-import {HotelMetaRepoDO, BasicHotelInfoRepoDO, PaymentsPoliciesRepoDO, PaymentMethodIdListRepoDO, TaxMetaRepoDO, TaxRepoDO, PropertyDetailsRepoDO} from '../../IHotelRepository';
+import {HotelMetaRepoDO, BasicHotelInfoRepoDO, PaymentsPoliciesRepoDO, PropertyDetailsRepoDO} from '../../IHotelRepository';
 
 import _ = require("underscore");
 
@@ -43,45 +43,13 @@ export class MongoHotelDetailsRepository extends MongoRepository {
 			"logoUrl": basicInfo.logoUrl
 		});
 	}
-	public addPaymentsPolicies(hotelMeta: HotelMetaRepoDO, paymPoliciesParams: PaymentsPoliciesRepoDO): Promise<HotelDO> {
+	public updatePaymentsPolicies(hotelMeta: HotelMetaRepoDO, paymPoliciesParams: PaymentsPoliciesRepoDO): Promise<HotelDO> {
 		return this.findAndModifyHotel(hotelMeta, {
 			"paymentMethodIdList": paymPoliciesParams.paymentMethodIdList,
-			"ccyCode": paymPoliciesParams.ccyCode,
-			"taxes": paymPoliciesParams.taxes
+			"ccyCode": paymPoliciesParams.ccyCode
 		});
 	}
-	public updatePaymentMethodIdList(hotelMeta: HotelMetaRepoDO, updatePaymMethodParams: PaymentMethodIdListRepoDO): Promise<HotelDO> {
-		return this.findAndModifyHotel(hotelMeta, {
-			"paymentMethodIdList": updatePaymMethodParams.paymentMethodIdList
-		});
-	}
-	public updateTaxesVatItem(hotelMeta: HotelMetaRepoDO, vatMeta: TaxMetaRepoDO, newVat: TaxRepoDO): Promise<HotelDO> {
-		return this.findAndModifyHotel(hotelMeta, {
-			"taxes.vatList.$.name": newVat.tax.name,
-			"taxes.vatList.$.value": newVat.tax.value
-		}, [{
-			"taxes.vatList.id": vatMeta.id
-		}]);
-	}
-	public updateTaxesOtherTaxItem(hotelMeta: HotelMetaRepoDO, taxMeta: TaxMetaRepoDO, newTax: TaxRepoDO): Promise<HotelDO> {
-		return this.findAndModifyHotel(hotelMeta, {
-			"taxes.otherTaxList.$.name": newTax.tax.name,
-			"taxes.otherTaxList.$.value": newTax.tax.value,
-			"taxes.otherTaxList.$.type": newTax.tax.type
-		}, [{
-			"taxes.otherTaxList.id": taxMeta.id
-		}]);
-	}
-	public addTaxesVatItem(hotelMeta: HotelMetaRepoDO, newVat: TaxRepoDO): Promise<HotelDO> {
-		return this.findAndModifyHotel(hotelMeta, {
-			$push: { "taxes.vatList": newVat.tax }
-		});
-	}
-	public addTaxesOtherTaxItem(hotelMeta: HotelMetaRepoDO, newTax: TaxRepoDO): Promise<HotelDO> {
-		return this.findAndModifyHotel(hotelMeta, {
-			$push: { "taxes.otherTaxList": newTax.tax }
-		});
-	}
+	
 	public updatePropertyDetails(hotelMeta: HotelMetaRepoDO, propertyDetails: PropertyDetailsRepoDO): Promise<HotelDO> {
 		return this.findAndModifyHotel(hotelMeta, {
 			"amenityIdList": propertyDetails.amenityIdList,
