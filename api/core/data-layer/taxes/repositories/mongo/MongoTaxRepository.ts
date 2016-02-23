@@ -49,14 +49,7 @@ export class MongoTaxRepository extends MongoRepository implements ITaxRepositor
 		};
 	}
 
-	public getTaxByIdAsync(taxMeta: TaxMetaRepoDO, taxId: string, finishGetTaxByIdCallback: { (err: any, response?: TaxDO): void; }) {
-		this.getTaxById(taxMeta, taxId).then((result: TaxDO) => {
-			finishGetTaxByIdCallback(null, result);
-		}).catch((err: any) => {
-			finishGetTaxByIdCallback(err);
-		});
-	}
-	private getTaxById(taxMeta: TaxMetaRepoDO, taxId: string): Promise<TaxDO> {
+	public getTaxById(taxMeta: TaxMetaRepoDO, taxId: string): Promise<TaxDO> {
 		return new Promise<TaxDO>((resolve: { (result: TaxDO): void }, reject: { (err: ThError): void }) => {
 			this.getTaxByIdCore(taxMeta, taxId, resolve, reject);
 		});
@@ -115,14 +108,7 @@ export class MongoTaxRepository extends MongoRepository implements ITaxRepositor
 		reject(thError);
 	}
 
-	public updateTaxAsync(taxMeta: TaxMetaRepoDO, taxItemMeta: TaxItemMetaRepoDO, tax: TaxDO, updateTaxCallback: { (err: any, response?: TaxDO): void; }) {
-		this.updateTax(taxMeta, taxItemMeta, tax).then((result: TaxDO) => {
-			updateTaxCallback(null, result);
-		}).catch((err: any) => {
-			updateTaxCallback(err);
-		});
-	}
-	private updateTax(taxMeta: TaxMetaRepoDO, taxItemMeta: TaxItemMetaRepoDO, tax: TaxDO): Promise<TaxDO> {
+	public updateTax(taxMeta: TaxMetaRepoDO, taxItemMeta: TaxItemMetaRepoDO, tax: TaxDO): Promise<TaxDO> {
 		return this.findAndModifyTax(taxMeta, taxItemMeta,
 			{
 				"type": tax.type,
@@ -131,21 +117,12 @@ export class MongoTaxRepository extends MongoRepository implements ITaxRepositor
 				"value": tax.value
 			});
 	}
-
-	public deleteTaxAsync(taxMeta: TaxMetaRepoDO, taxItemMeta: TaxItemMetaRepoDO, deleteTaxCallback: { (err: any, response?: TaxDO): void; }) {
-		this.deleteTax(taxMeta, taxItemMeta).then((result: TaxDO) => {
-			deleteTaxCallback(null, result);
-		}).catch((err: any) => {
-			deleteTaxCallback(err);
-		});
-	}
-	private deleteTax(taxMeta: TaxMetaRepoDO, taxItemMeta: TaxItemMetaRepoDO): Promise<TaxDO> {
+	public deleteTax(taxMeta: TaxMetaRepoDO, taxItemMeta: TaxItemMetaRepoDO): Promise<TaxDO> {
 		return this.findAndModifyTax(taxMeta, taxItemMeta,
 			{
 				"status": TaxStatus.Deleted
 			});
 	}
-
 	private findAndModifyTax(taxMeta: TaxMetaRepoDO, taxItemMeta: TaxItemMetaRepoDO, updateQuery: Object): Promise<TaxDO> {
 		return new Promise<TaxDO>((resolve: { (result: TaxDO): void }, reject: { (err: ThError): void }) => {
 			this.findAndModifyTaxCore(taxMeta, taxItemMeta, updateQuery, resolve, reject);

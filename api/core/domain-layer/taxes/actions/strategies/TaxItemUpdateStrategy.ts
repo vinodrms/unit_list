@@ -16,29 +16,26 @@ export class TaxItemUpdateStrategy implements ITaxItemActionStrategy {
 	}
 
 	public save(resolve: { (result: TaxDO): void }, reject: { (err: ThError): void }) {
-		async.waterfall([
-			((finishGetTaxByIdCallback: { (err: ThError, result?: TaxDO): void; }) => {
-				var taxRepo = this._appContext.getRepositoryFactory().getTaxRepository();
-				taxRepo.getTaxByIdAsync(this._taxMeta, this._taxDO.id, finishGetTaxByIdCallback);
-			}),
-			((loadedTax: TaxDO, finishUpdateTaxCallback: { (err: ThError, result?: TaxDO): void; }) => {
+		var taxRepo = this._appContext.getRepositoryFactory().getTaxRepository();
+		taxRepo.getTaxById(this._taxMeta, this._taxDO.id)
+			.then((loadedTax: TaxDO) => {
 				this._loadedTax = loadedTax;
+
 				var taxRepo = this._appContext.getRepositoryFactory().getTaxRepository();
 				var itemMeta = this.buildTaxItemMetaRepoDO();
-				taxRepo.updateTaxAsync(this._taxMeta, itemMeta, this._taxDO, finishUpdateTaxCallback);
+
+				return taxRepo.updateTax(this._taxMeta, itemMeta, this._taxDO);
 			})
-		], ((error: any, result: TaxDO) => {
-			if (error || !result) {
+			.then((result: TaxDO) => {
+				resolve(result);
+			})
+			.catch((error: any) => {
 				var thError = new ThError(ThStatusCode.TaxItemUpdateStrategyErrorUpdating, error);
 				if (thError.isNativeError()) {
 					ThLogger.getInstance().logError(ThLogLevel.Error, "error updating tax item", this._taxDO, thError);
 				}
 				reject(thError);
-			}
-			else {
-				resolve(result);
-			}
-		}));
+			});
 	}
 	private buildTaxMetaRepoDO(): TaxMetaRepoDO {
 		return {

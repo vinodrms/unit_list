@@ -15,9 +15,9 @@ export interface TaxResponseRepoDO {
 
 export interface ITaxRepository {
 	getTaxList(taxMeta: TaxMetaRepoDO): Promise<TaxResponseRepoDO>;
-	getTaxByIdAsync(taxMeta: TaxMetaRepoDO, taxId: string, finishGetTaxByIdCallback: { (err: any, response?: TaxDO): void; });
+	getTaxById(taxMeta: TaxMetaRepoDO, taxId: string): Promise<TaxDO>;
 
 	addTax(taxMeta: TaxMetaRepoDO, tax: TaxDO): Promise<TaxDO>;
-	updateTaxAsync(taxMeta: TaxMetaRepoDO, taxItemMeta: TaxItemMetaRepoDO, tax: TaxDO, updateTaxCallback: { (err: any, response?: TaxDO): void; });
-	deleteTaxAsync(taxMeta: TaxMetaRepoDO, taxItemMeta: TaxItemMetaRepoDO, deleteTaxCallback: { (err: any, response?: TaxDO): void; });
+	updateTax(taxMeta: TaxMetaRepoDO, taxItemMeta: TaxItemMetaRepoDO, tax: TaxDO): Promise<TaxDO>;
+	deleteTax(taxMeta: TaxMetaRepoDO, taxItemMeta: TaxItemMetaRepoDO): Promise<TaxDO>;
 }
