@@ -64,7 +64,6 @@ export enum ThStatusCode {
 	HotelRepositoryErrorFindingHotelById,
 	HotelDetailsRepositoryProblemUpdatingAccount,
 	HotelDetailsRepositoryErrorUpdatingAccount,
-	HotelAddPaymentPoliciesHotelAlreadyConfigured,
 	PaymentMethodIdListValidatorInvalid,
 	PaymentMethodIdListValidatorError,
 	HotelAddPaymentsPoliciesErrorPrecheckingConstraints,
@@ -75,15 +74,34 @@ export enum ThStatusCode {
     BedRepositoryErrorAddingBed,
     BedRepositoryErrorFindingBedByHotelId,
     BedRepositoryErrorFindingBed,
+	HotelUpdatePaymentsPoliciesErrorPrecheckingConstraints,
+	HotelUpdatePaymentPoliciesInvalidTaxes,
+	HotelUpdatePaymentsPoliciesError,
+	HotelUpdatePaymentPoliciesInvalidCurrencyCode,
 	HotelSaveTaxItemError,
-	ATaxItemActionStrategyInvalidTaxItemType,
-	ATaxItemActionStrategyErrorValidating,
+	HotelSaveTaxItemValidationProblem,
+	TaxItemUpdateStrategyErrorUpdating,
 	HotelUpdatePropertyDetailsUpdateError,
 	HotelUpdatePropertyDetailsValidationError,
 	HotelUpdatePropertyDetailsInvalidAmenityIdList,
 	HotelUpdatePropertyDetailsInvalidOperationHours,
 	HotelUpdatePropertyDetailsInvalidTimezone,
-	HotelDetailsControllerErrorUpdatingPropertyDetails
+	HotelDetailsControllerErrorUpdatingPropertyDetails,
+	MongoTaxRepositoryInvalidList,
+	MongoTaxRepositoryErrorGettingTaxList,
+	MongoTaxRepositoryErrorGettingTax,
+	MongoTaxRepositoryNameAlreadyExists,
+	MongoTaxRepositoryErrorAddingTax,
+	MongoTaxRepositoryProblemUpdatingTax,
+	MongoTaxRepositoryErrorUpdatingTax,
+	MongoTaxRepositoryTaxNotFound,
+	MongoTaxRepositoryProblemAddingTax,
+	HotelDeleteTaxItemError,
+	HotelDeleteTaxItemErrorDeleting,
+	HotelDeleteTaxItemErrorValidating,
+	TaxControllerErrorGettingTaxes,
+	TaxControllerErrorSavingTax,
+	TaxControllerErrorDeletingTax,
 }
 
 var ThMessage: { [index: number]: string; } = {};
@@ -149,7 +167,6 @@ ThMessage[ThStatusCode.HotelRepositoryHotelIdNotFound] = "Problem getting the de
 ThMessage[ThStatusCode.HotelRepositoryErrorFindingHotelById] = "Error getting the details for your hotel. Please try again.";
 ThMessage[ThStatusCode.HotelDetailsRepositoryProblemUpdatingAccount] = "Problem updating the hotel's information. It is possible that someone else changed it at the same time. Please refresh the page and try again.";
 ThMessage[ThStatusCode.HotelDetailsRepositoryErrorUpdatingAccount] = "Error updating hotel's information. Please try again.";
-ThMessage[ThStatusCode.HotelAddPaymentPoliciesHotelAlreadyConfigured] = "You can't change the payments and policies for your hotel because you finished the wizard. You can only edit them or add new ones.";
 ThMessage[ThStatusCode.PaymentMethodIdListValidatorInvalid] = "Invalid payment methods submitted.";
 ThMessage[ThStatusCode.PaymentMethodIdListValidatorError] = "Error validating payment method id list.";
 ThMessage[ThStatusCode.HotelAddPaymentsPoliciesErrorPrecheckingConstraints] = "There was a problem while checking the payments and policies submitted.";
@@ -160,15 +177,34 @@ ThMessage[ThStatusCode.BedRepositoryBedAlreadyExists] = "The current hotel alrea
 ThMessage[ThStatusCode.BedRepositoryErrorAddingBed] = "An error occurred while adding this bed for the current hotel.";
 ThMessage[ThStatusCode.BedRepositoryErrorFindingBedByHotelId] = "Error finding this bed for the current hotel.";
 ThMessage[ThStatusCode.BedRepositoryErrorFindingBed] = "Error finding bed.";
+ThMessage[ThStatusCode.HotelUpdatePaymentsPoliciesErrorPrecheckingConstraints] = "There was a problem while checking the payments and policies submitted.";
+ThMessage[ThStatusCode.HotelUpdatePaymentPoliciesInvalidTaxes] = "Invalid taxes sent.";
+ThMessage[ThStatusCode.HotelUpdatePaymentsPoliciesError] = "Error adding the payments and policies.";
+ThMessage[ThStatusCode.HotelUpdatePaymentPoliciesInvalidCurrencyCode] = "Invalid currency code.";
 ThMessage[ThStatusCode.HotelSaveTaxItemError] = "Error saving the tax item.";
-ThMessage[ThStatusCode.ATaxItemActionStrategyErrorValidating] = "Error validating the tax item.";
-ThMessage[ThStatusCode.ATaxItemActionStrategyInvalidTaxItemType] = "Invalid tax item type sent to server.";
+ThMessage[ThStatusCode.HotelSaveTaxItemValidationProblem] = "Error validating the tax.";
+ThMessage[ThStatusCode.TaxItemUpdateStrategyErrorUpdating] = "Error updating the tax.";
 ThMessage[ThStatusCode.HotelUpdatePropertyDetailsUpdateError] = "Error updating the property details. Please try again.";
 ThMessage[ThStatusCode.HotelUpdatePropertyDetailsValidationError] = "Error validating the property details. Please try again.";
 ThMessage[ThStatusCode.HotelUpdatePropertyDetailsInvalidAmenityIdList] = "Invalid amenity list.";
 ThMessage[ThStatusCode.HotelUpdatePropertyDetailsInvalidOperationHours] = "Invalid operation hours.";
 ThMessage[ThStatusCode.HotelUpdatePropertyDetailsInvalidTimezone] = "Invalid timezone.";
 ThMessage[ThStatusCode.HotelDetailsControllerErrorUpdatingPropertyDetails] = "Error updating property details.";
+ThMessage[ThStatusCode.MongoTaxRepositoryInvalidList] = "Error getting the tax list.";
+ThMessage[ThStatusCode.MongoTaxRepositoryErrorGettingTaxList] = "Error getting the tax list. Please try again.";
+ThMessage[ThStatusCode.MongoTaxRepositoryErrorGettingTax] = "Error getting the tax. Please try again.";
+ThMessage[ThStatusCode.MongoTaxRepositoryNameAlreadyExists] = "The name of the tax already exists.";
+ThMessage[ThStatusCode.MongoTaxRepositoryErrorAddingTax] = "Error adding tax.";
+ThMessage[ThStatusCode.MongoTaxRepositoryProblemUpdatingTax] = "Problem updating the tax. It is possible that someone else changed it at the same time. Please refresh the page and try again.";
+ThMessage[ThStatusCode.MongoTaxRepositoryErrorUpdatingTax] = "Error updating tax.";
+ThMessage[ThStatusCode.MongoTaxRepositoryTaxNotFound] = "Tax not found.";
+ThMessage[ThStatusCode.MongoTaxRepositoryProblemAddingTax] = "Problem creating tax.";
+ThMessage[ThStatusCode.HotelDeleteTaxItemError] = "Error deleting tax item.";
+ThMessage[ThStatusCode.HotelDeleteTaxItemErrorDeleting] = "Error deleting tax item.";
+ThMessage[ThStatusCode.HotelDeleteTaxItemErrorValidating] = "Error validating the existing tax item.";
+ThMessage[ThStatusCode.TaxControllerErrorGettingTaxes] = "Error getting the taxes.";
+ThMessage[ThStatusCode.TaxControllerErrorSavingTax] = "Error saving tax.";
+ThMessage[ThStatusCode.TaxControllerErrorDeletingTax] = "Error deleting tax.";
 
 export class ThResponse {
 	statusCode: ThStatusCode;

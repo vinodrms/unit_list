@@ -5,6 +5,8 @@ import {ISettingsRepository} from './settings/repositories/ISettingsRepository';
 import {MongoSettingsRepository} from './settings/repositories/mongo/MongoSettingsRepository';
 import {IBedRepository} from './beds/repositories/IBedRepository';
 import {MongoBedRepository} from './beds/repositories/mongo/MongoBedRepository';
+import {ITaxRepository} from './taxes/repositories/ITaxRepository';
+import {MongoTaxRepository} from './taxes/repositories/mongo/MongoTaxRepository';
 import {IRepositoryCleaner} from './common/base/IRepositoryCleaner';
 
 export class RepositoryFactory {
@@ -26,18 +28,24 @@ export class RepositoryFactory {
 				return new MongoHotelRepository();
 		}
 	}
-    
+
     getSettingsRepository(): ISettingsRepository {
 		switch (this._databaseType) {
 			default:
 				return new MongoSettingsRepository();
 		}
 	}
-    
     getBedRepository(): IBedRepository {
         switch (this._databaseType) {
             default:
                 return new MongoBedRepository();
         }
     }
+
+	getTaxRepository(): ITaxRepository {
+		switch (this._databaseType) {
+			default:
+				return new MongoTaxRepository();
+		}
+	}
 }

@@ -7,7 +7,7 @@ import {ActionTokenDO} from '../../data-objects/user/ActionTokenDO';
 import {HotelContactDetailsDO} from '../../data-objects/hotel-contact-details/HotelContactDetailsDO';
 import {GeoLocationDO} from '../../../common/data-objects/geo-location/GeoLocationDO';
 import {HotelMetaRepoDO, BasicHotelInfoRepoDO, UserAccountActivationRepoDO, RequestResetPasswordRepoDO,
-ResetPasswordRepoDO, PaymentsPoliciesRepoDO, PaymentMethodIdListRepoDO, TaxMetaRepoDO, TaxRepoDO, PropertyDetailsRepoDO} from '../IHotelRepository';
+ResetPasswordRepoDO, PaymentsPoliciesRepoDO, PropertyDetailsRepoDO} from '../IHotelRepository';
 
 export class MongoHotelRepository extends AMongoHotelRepository {
 	private _hotelsEntity: Sails.Model;
@@ -46,23 +46,8 @@ export class MongoHotelRepository extends AMongoHotelRepository {
 	protected updateBasicInformation(hotelMeta: HotelMetaRepoDO, basicInfo: BasicHotelInfoRepoDO): Promise<HotelDO> {
 		return this._hotelDetailsRepository.updateBasicInformation(hotelMeta, basicInfo);
 	}
-	protected addPaymentsPolicies(hotelMeta: HotelMetaRepoDO, paymPoliciesParams: PaymentsPoliciesRepoDO): Promise<HotelDO> {
-		return this._hotelDetailsRepository.addPaymentsPolicies(hotelMeta, paymPoliciesParams);
-	}
-	protected updatePaymentMethodIdList(hotelMeta: HotelMetaRepoDO, updatePaymMethodParams: PaymentMethodIdListRepoDO): Promise<HotelDO> {
-		return this._hotelDetailsRepository.updatePaymentMethodIdList(hotelMeta, updatePaymMethodParams);
-	}
-	protected updateTaxesVatItem(hotelMeta: HotelMetaRepoDO, vatMeta: TaxMetaRepoDO, newVat: TaxRepoDO): Promise<HotelDO> {
-		return this._hotelDetailsRepository.updateTaxesVatItem(hotelMeta, vatMeta, newVat);
-	}
-	protected updateTaxesOtherTaxItem(hotelMeta: HotelMetaRepoDO, taxMeta: TaxMetaRepoDO, newTax: TaxRepoDO): Promise<HotelDO> {
-		return this._hotelDetailsRepository.updateTaxesOtherTaxItem(hotelMeta, taxMeta, newTax);
-	}
-	protected addTaxesVatItem(hotelMeta: HotelMetaRepoDO, newVat: TaxRepoDO): Promise<HotelDO> {
-		return this._hotelDetailsRepository.addTaxesVatItem(hotelMeta, newVat);
-	}
-	protected addTaxesOtherTaxItem(hotelMeta: HotelMetaRepoDO, newTax: TaxRepoDO): Promise<HotelDO> {
-		return this._hotelDetailsRepository.addTaxesOtherTaxItem(hotelMeta, newTax);
+	protected updatePaymentsPolicies(hotelMeta: HotelMetaRepoDO, paymPoliciesParams: PaymentsPoliciesRepoDO): Promise<HotelDO> {
+		return this._hotelDetailsRepository.updatePaymentsPolicies(hotelMeta, paymPoliciesParams);
 	}
 	protected updatePropertyDetails(hotelMeta: HotelMetaRepoDO, propertyDetails: PropertyDetailsRepoDO): Promise<HotelDO> {
 		return this._hotelDetailsRepository.updatePropertyDetails(hotelMeta, propertyDetails);

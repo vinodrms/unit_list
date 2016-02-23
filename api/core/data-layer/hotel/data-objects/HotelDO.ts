@@ -2,7 +2,6 @@ import {BaseDO} from '../../common/base/BaseDO';
 import {HotelContactDetailsDO} from './hotel-contact-details/HotelContactDetailsDO';
 import {GeoLocationDO} from '../../common/data-objects/geo-location/GeoLocationDO';
 import {UserDO} from './user/UserDO';
-import {HotelTaxesDO} from './taxes/HotelTaxesDO';
 import {AmenityDO} from '../../common/data-objects/amenity/AmenityDO';
 import {OperationHoursDO} from './operation-hours/OperationHoursDO';
 
@@ -17,7 +16,6 @@ export class HotelDO extends BaseDO {
 	logoUrl: string;
 	userList: UserDO[];
 	ccyCode: string;
-	taxes: HotelTaxesDO;
 	amenityIdList: string[];
 	customAmenityList: AmenityDO[];
 	paymentMethodIdList: string[];
@@ -43,9 +41,6 @@ export class HotelDO extends BaseDO {
 			userDO.buildFromObject(userObject);
 			this.userList.push(userDO);
 		});
-
-		this.taxes = new HotelTaxesDO();
-		this.taxes.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "taxes"));
 
 		this.customAmenityList = [];
 		this.forEachElementOf(this.getObjectPropertyEnsureUndefined(object, "customAmenityList"), (amenityObject: Object) => {
