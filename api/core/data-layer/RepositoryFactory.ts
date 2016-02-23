@@ -3,8 +3,8 @@ import {IHotelRepository} from './hotel/repositories/IHotelRepository';
 import {MongoHotelRepository} from './hotel/repositories/mongo/MongoHotelRepository';
 import {ISettingsRepository} from './settings/repositories/ISettingsRepository';
 import {MongoSettingsRepository} from './settings/repositories/mongo/MongoSettingsRepository';
-import {IBedConfigurationRepository} from './bed-configuration/repositories/IBedConfigurationRepository';
-import {MongoBedConfigurationRepository} from './bed-configuration/repositories/mongo/MongoBedConfigurationRepository';
+import {IBedRepository} from './beds/repositories/IBedRepository';
+import {MongoBedRepository} from './beds/repositories/mongo/MongoBedRepository';
 import {IRepositoryCleaner} from './common/base/IRepositoryCleaner';
 
 export class RepositoryFactory {
@@ -16,7 +16,7 @@ export class RepositoryFactory {
 	getRepositoryCleaners(): IRepositoryCleaner[] {
 		switch (this._databaseType) {
 			default:
-				return [new MongoHotelRepository(), new MongoBedConfigurationRepository()];
+				return [new MongoHotelRepository(), new MongoBedRepository()];
 		}
 	}
 
@@ -34,10 +34,10 @@ export class RepositoryFactory {
 		}
 	}
     
-    getBedConfigurationRepository(): IBedConfigurationRepository {
+    getBedRepository(): IBedRepository {
         switch (this._databaseType) {
             default:
-                return new MongoBedConfigurationRepository();
+                return new MongoBedRepository();
         }
     }
 }

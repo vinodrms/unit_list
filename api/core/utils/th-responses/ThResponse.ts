@@ -71,10 +71,10 @@ export enum ThStatusCode {
 	HotelAddPaymentPoliciesInvalidTaxes,
 	HotelAddPaymentsPoliciesError,
 	HotelAddPaymentPoliciesInvalidCurrencyCode,
-    BedConfigRepositoryConfigAlreadyExists,
-    BedConfigRepositoryErrorAddingConfig,
-    BedConfigRepositoryErrorFindingConfigByHotelId,
-    BedConfigRepositoryErrorFindingConfig,
+    BedRepositoryBedAlreadyExists,
+    BedRepositoryErrorAddingBed,
+    BedRepositoryErrorFindingBedByHotelId,
+    BedRepositoryErrorFindingBed,
 	HotelSaveTaxItemError,
 	ATaxItemActionStrategyInvalidTaxItemType,
 	ATaxItemActionStrategyErrorValidating,
@@ -156,10 +156,10 @@ ThMessage[ThStatusCode.HotelAddPaymentsPoliciesErrorPrecheckingConstraints] = "T
 ThMessage[ThStatusCode.HotelAddPaymentPoliciesInvalidTaxes] = "Invalid taxes sent.";
 ThMessage[ThStatusCode.HotelAddPaymentsPoliciesError] = "Error adding the payments and policies.";
 ThMessage[ThStatusCode.HotelAddPaymentPoliciesInvalidCurrencyCode] = "Invalid currency code.";
-ThMessage[ThStatusCode.BedConfigRepositoryConfigAlreadyExists] = "The current hotel already has a bed configuration defined.";
-ThMessage[ThStatusCode.BedConfigRepositoryErrorAddingConfig] = "An error occurred while adding the bed configuration for the current hotel.";
-ThMessage[ThStatusCode.BedConfigRepositoryErrorFindingConfigByHotelId] = "Error finding bed configuration for the current hotel.";
-ThMessage[ThStatusCode.BedConfigRepositoryErrorFindingConfig] = "Error finding bed configuration.";
+ThMessage[ThStatusCode.BedRepositoryBedAlreadyExists] = "The current hotel already has a bed with the same name defined.";
+ThMessage[ThStatusCode.BedRepositoryErrorAddingBed] = "An error occurred while adding this bed for the current hotel.";
+ThMessage[ThStatusCode.BedRepositoryErrorFindingBedByHotelId] = "Error finding this bed for the current hotel.";
+ThMessage[ThStatusCode.BedRepositoryErrorFindingBed] = "Error finding bed.";
 ThMessage[ThStatusCode.HotelSaveTaxItemError] = "Error saving the tax item.";
 ThMessage[ThStatusCode.ATaxItemActionStrategyErrorValidating] = "Error validating the tax item.";
 ThMessage[ThStatusCode.ATaxItemActionStrategyInvalidTaxItemType] = "Invalid tax item type sent to server.";

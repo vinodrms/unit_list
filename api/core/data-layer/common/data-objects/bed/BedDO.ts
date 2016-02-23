@@ -1,5 +1,10 @@
 import {BaseDO} from '../../base/BaseDO';
 
+export enum BedStatus {
+	Active,
+	Deleted
+}
+
 export class BedSizeDO extends BaseDO {
     constructor() {
         super();
@@ -19,14 +24,17 @@ export class BedDO extends BaseDO {
     }
     
     id: string;
-    templateId: string;
+    versionId: number;
+    hotelId: string;
+    bedTemplateId: string;
     name: string;
     size: BedSizeDO;
     maxNoAdults: number;
     maxNoChildren: number;
+    status: BedStatus;
     
     protected getPrimitivePropertyKeys(): string[] {
-        return ["id", "templateId", "name", "maxNoAdults", "maxNoChildren"];
+        return ["id", "versionId", "hotelId", "bedTemplateId", "name", "maxNoAdults", "maxNoChildren", "status"];
     }
     
     public buildFromObject(object: Object) {

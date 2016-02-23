@@ -1,9 +1,9 @@
 import {RepositoryCleanerWrapper} from './RepositoryCleanerWrapper';
 import {TestContext} from '../helpers/TestContext';
 import {DefaultHotelBuilder} from './builders/DefaultHotelBuilder';
-import {DefaultBedConfigurationBuilder} from './builders/DefaultBedConfigurationBuilder';
+import {DefaultBedBuilder} from './builders/DefaultBedBuilder';
 import {HotelDO} from '../../core/data-layer/hotel/data-objects/HotelDO';
-import {BedConfigurationDO} from '../../core/data-layer/bed-configuration/data-objects/BedConfigurationDO';
+import {BedDO} from '../../core/data-layer/common/data-objects/bed/BedDO';
 import {UserDO} from '../../core/data-layer/hotel/data-objects/user/UserDO';
 import {PaymentMethodDO} from '../../core/data-layer/common/data-objects/payment-method/PaymentMethodDO';
 import {BedTemplateDO} from '../../core/data-layer/common/data-objects/bed-template/BedTemplateDO';
@@ -19,7 +19,7 @@ export class DefaultDataBuilder {
 	private _email: string = "paraschiv.ionut@gmail.com";
 	private _hotelDO: HotelDO;
 	private _userDO: UserDO;
-    private _bedConfigurationDO: BedConfigurationDO;
+    private _bedList: BedDO[];
 	private _paymentMethodList: PaymentMethodDO[];
     private _bedTemplateList: BedTemplateDO[];    
 	private _hotelAmenityList: AmenityDO[];
@@ -75,9 +75,9 @@ export class DefaultDataBuilder {
 			}),
 			((bedTemplates: BedTemplateDO[], finishBuildOtherDO) => {
 				this._bedTemplateList = bedTemplates;
-				var bedConfigurationBuilder: DefaultBedConfigurationBuilder = new DefaultBedConfigurationBuilder(this._testContext.appContext, this._hotelDO.id, this._bedTemplateList);
-                var bedConfiguration: BedConfigurationDO = bedConfigurationBuilder.getBedConfiguration();
-                this._testContext.appContext.getRepositoryFactory().getBedConfigurationRepository().addBedConfigurationAsync(bedConfiguration, finishBuildOtherDO);
+				var bedBuilder: DefaultBedBuilder = new DefaultBedBuilder(this._testContext.appContext, this._hotelDO.id, this._bedTemplateList);
+                var bedList = bedBuilder.getBedList();
+                this._testContext.appContext.getRepositoryFactory().getBedRepository().createBedListAsync(bedList, finishBuildOtherDO);
 			})
 		], ((error: any, result: any) => {
 			if (error) {
@@ -106,6 +106,9 @@ export class DefaultDataBuilder {
 	}
     public get bedTemplateList(): BedTemplateDO[] {
         return this._bedTemplateList;
+    }
+    public get bedList(): BedDO[] {
+        return this._bedList;
     }
 	public get hotelAmenityList(): AmenityDO[] {
 		return this._hotelAmenityList;
