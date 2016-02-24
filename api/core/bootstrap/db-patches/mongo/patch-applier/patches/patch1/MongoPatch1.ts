@@ -11,6 +11,7 @@ import {Countries} from './data-sets/Countries';
 import {CurrencyCodes} from './data-sets/CurrencyCodes';
 import {PaymentMethods} from './data-sets/PaymentMethods';
 import {BedTemplates} from './data-sets/BedTemplates';
+import {AddOnProductCategories} from './data-sets/AddOnProductCategories';
 
 import async = require('async');
 
@@ -21,7 +22,8 @@ export class MongoPatch1 extends ATransactionalMongoPatch {
 		(new Countries()).getCountrySettingDO(),
 		(new CurrencyCodes()).getCurrencySettingDO(),
 		(new PaymentMethods()).getPaymentMethodSettingDO(),
-        (new BedTemplates()).getBedTemplateSettingDO()
+        (new BedTemplates()).getBedTemplateSettingDO(),
+		(new AddOnProductCategories()).getAddOnProductSettingDO()
 	];
 
     private _settingsEntity: Sails.Model;

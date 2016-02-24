@@ -14,6 +14,8 @@ import {BedTemplateDO} from '../../../common/data-objects/bed-template/BedTempla
 import {CountryDO} from '../../../common/data-objects/country/CountryDO';
 import {CurrencyDO} from '../../../common/data-objects/currency/CurrencyDO';
 import {PaymentMethodDO} from '../../../common/data-objects/payment-method/PaymentMethodDO';
+import {AddOnProductCategorySettingDO} from '../../data-objects/add-on-product/AddOnProductCategorySettingDO';
+import {AddOnProductCategoryDO} from '../../../common/data-objects/add-on-product/AddOnProductCategoryDO';
 
 import _ = require('underscore');
 
@@ -52,15 +54,15 @@ export class MongoSettingsRepository extends MongoRepository implements ISetting
     public getRoomAmenities(valueCriteria?: Object): Promise<AmenityDO[]> {
         return this.getSetting(SettingType.RoomAmenities, valueCriteria);
     }
-    
+
     public getHotelAmenities(valueCriteria?: Object): Promise<AmenityDO[]> {
         return this.getSetting(SettingType.HotelAmenities, valueCriteria);
     }
-    
+
     public getBedTemplates(valueCriteria?: Object): Promise<BedTemplateDO[]> {
         return this.getSetting(SettingType.BedTemplates, valueCriteria);
-    } 
-    
+    }
+
 	public getCurrencies(valueCriteria?: Object): Promise<CurrencyDO[]> {
         return this.getSetting(SettingType.CurrencyCodes, valueCriteria);
     }
@@ -72,6 +74,10 @@ export class MongoSettingsRepository extends MongoRepository implements ISetting
     public getPaymentMethods(valueCriteria?: Object): Promise<PaymentMethodDO[]> {
         return this.getSetting(SettingType.PaymentMethods, valueCriteria);
     }
+
+	public getAddOnProductCategories(valueCriteria?: Object): Promise<AddOnProductCategoryDO[]> {
+		return this.getSetting(SettingType.AddOnProductCategory, valueCriteria);
+	}
 
     private getSetting(settingType: SettingType, criteria?: Object): Promise<any> {
         return new Promise<any>((resolve, reject) => {
@@ -102,6 +108,7 @@ export class MongoSettingsRepository extends MongoRepository implements ISetting
             case SettingType.Countries: getSettingsResponseDO = new CountrySettingDO(); break;
             case SettingType.CurrencyCodes: getSettingsResponseDO = new CurrencySettingDO(); break;
             case SettingType.PaymentMethods: getSettingsResponseDO = new PaymentMethodSettingDO(); break;
+			case SettingType.AddOnProductCategory: getSettingsResponseDO = new AddOnProductCategorySettingDO(); break;
             default: getSettingsResponseDO = new AmenitySettingDO();
         }
         getSettingsResponseDO.buildFromObject(queryResult);

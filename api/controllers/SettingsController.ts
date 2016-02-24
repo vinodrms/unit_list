@@ -3,7 +3,8 @@ import {ThStatusCode} from '../core/utils/th-responses/ThResponse';
 import {ThUtils} from '../core/utils/ThUtils';
 import {AppContext} from '../core/utils/AppContext';
 import {SessionContext, SessionManager} from '../core/utils/SessionContext';
-import {ISettingsRepository, AmenitySearchCriteriaRepoDO, CountrySearchCriteriaRepoDO, CurrencySearchCriteriaRepoDO, PaymentMethodSearchCriteriaRepoDO} from '../core/data-layer/settings/repositories/ISettingsRepository';
+import {ISettingsRepository, AmenitySearchCriteriaRepoDO, CountrySearchCriteriaRepoDO,
+CurrencySearchCriteriaRepoDO, PaymentMethodSearchCriteriaRepoDO, AddOnProductCategoryCriteriaRepoDO} from '../core/data-layer/settings/repositories/ISettingsRepository';
 
 export class SettingsController extends BaseController {
 
@@ -90,7 +91,22 @@ export class SettingsController extends BaseController {
         }).catch((err: any) => {
             this.returnErrorResponse(req, res, err, ThStatusCode.SettingsMongoRepositoryReadError);
         });
+    }
+	public getAddOnProductCategories(req: Express.Request, res: Express.Response) {
+        var addOnProductId = req.query.id;
+        var thUtils = new ThUtils();
+        var criteria: AddOnProductCategoryCriteriaRepoDO = {};
+        var settingsRepository: ISettingsRepository = req.appContext.getRepositoryFactory().getSettingsRepository();
 
+        if (!thUtils.isUndefinedOrNull(addOnProductId) && addOnProductId.trim() != '') {
+            criteria.id = addOnProductId;
+        }
+
+        settingsRepository.getAddOnProductCategories(criteria).then((result: any) => {
+            this.returnSuccesfulResponse(req, res, result);
+        }).catch((err: any) => {
+            this.returnErrorResponse(req, res, err, ThStatusCode.SettingsMongoRepositoryReadError);
+        });
     }
 }
 
@@ -100,5 +116,6 @@ module.exports = {
     getHotelAmenities: settingsController.getHotelAmenities.bind(settingsController),
     getCountries: settingsController.getCountries.bind(settingsController),
     getCurrencies: settingsController.getCurrencies.bind(settingsController),
-    getPaymentMethods: settingsController.getPaymentMethods.bind(settingsController)
+    getPaymentMethods: settingsController.getPaymentMethods.bind(settingsController),
+	getAddOnProductCategories: settingsController.getAddOnProductCategories.bind(settingsController)
 }

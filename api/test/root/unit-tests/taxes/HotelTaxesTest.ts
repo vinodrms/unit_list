@@ -106,6 +106,17 @@ describe("Hotel Taxes Tests", function() {
 				done(e);
 			});
         });
+		
+		it("Should not create a second tax with the same name", function(done) {
+			var otherTax = taxesHelper.getValidOtherTaxDO();
+			var saveTaxItem = new HotelSaveTaxItem(testContext.appContext, testContext.sessionContext);
+			saveTaxItem.save(otherTax).then((result: TaxDO) => {
+				done(new Error("did manage to create two taxes with the same name"));
+			}).catch((e: ThError) => {
+				should.notEqual(e.getThStatusCode(), ThStatusCode.Ok);
+				done();
+			});
+        });
     });
 
 	describe("Hotel Get Taxes & Delete Flow", function() {
