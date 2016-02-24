@@ -56,9 +56,9 @@ module.exports.routes = {
 	'POST /api/hotel/updatePaymentsAndPolicies': 'HotelDetailsController.updatePaymentsAndPolicies',
 	'POST /api/hotel/updatePropertyDetails': 'HotelDetailsController.updatePropertyDetails',
 
-	'GET /api/tax/getTaxes': 'TaxController.getTaxes',
-	'POST /api/tax/saveTaxItem': 'TaxController.saveTaxItem',
-	'POST /api/tax/deleteTaxItem': 'TaxController.deleteTaxItem',
+	'GET /api/taxes': 'TaxesController.getTaxes',
+	'POST /api/taxes/saveTaxItem': 'TaxesController.saveTaxItem',
+	'POST /api/taxes/deleteTaxItem': 'TaxesController.deleteTaxItem',
 
     'POST /api/service/uploadImage': 'ServiceController.uploadImage',
     'GET /api/service/vatVerifier': 'ServiceController.checkVAT',
@@ -69,6 +69,7 @@ module.exports.routes = {
     'GET /api/settings/currencies': 'SettingsController.getCurrencies',
     'GET /api/settings/paymentMethods': 'SettingsController.getPaymentMethods',
     
-    'GET /api/bedConfiguration': 'BedConfigurationsController.getBedConfiguration',
-    'POST /api/bedConfiguration': 'BedConfigurationsController.addBedConfiguration'    
+    'GET /api/beds': 'BedsController.getBeds',
+    'POST /api/beds/saveBedItem': 'BedsController.saveBedItem',
+	'POST /api/beds/deleteBedItem': 'BedsController.deleteBedItem',   
 };

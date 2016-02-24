@@ -71,10 +71,21 @@ export enum ThStatusCode {
 	HotelAddPaymentPoliciesInvalidTaxes,
 	HotelAddPaymentsPoliciesError,
 	HotelAddPaymentPoliciesInvalidCurrencyCode,
-    BedRepositoryBedAlreadyExists,
-    BedRepositoryErrorAddingBed,
-    BedRepositoryErrorFindingBedByHotelId,
-    BedRepositoryErrorFindingBed,
+    MongoBedRepositoryInvalidList,
+    MongoBedRepositoryErrorGettingBedList,
+    MongoBedRepositoryErrorGettingBed,
+    MongoBedRepositoryBedNotFound,
+    MongoBedRepositoryErrorAddingBed,
+    MongoBedRepositoryNameAlreadyExists,
+    MongoBedRepositoryErrorUpdatingBed,
+    BedItemUpdateStrategyErrorUpdating,
+    SaveBedItemError,
+    DeleteBedItemErrorDeleting,
+    DeleteBedItemErrorValidating,
+    DeleteBedItemError,
+    BedControllerErrorGettingBeds,
+	BedControllerErrorSavingBed,
+	BedControllerErrorDeletingBed,
 	HotelUpdatePaymentsPoliciesErrorPrecheckingConstraints,
 	HotelUpdatePaymentPoliciesInvalidTaxes,
 	HotelUpdatePaymentsPoliciesError,
@@ -175,10 +186,20 @@ ThMessage[ThStatusCode.HotelAddPaymentsPoliciesErrorPrecheckingConstraints] = "T
 ThMessage[ThStatusCode.HotelAddPaymentPoliciesInvalidTaxes] = "Invalid taxes sent.";
 ThMessage[ThStatusCode.HotelAddPaymentsPoliciesError] = "Error adding the payments and policies.";
 ThMessage[ThStatusCode.HotelAddPaymentPoliciesInvalidCurrencyCode] = "Invalid currency code.";
-ThMessage[ThStatusCode.BedRepositoryBedAlreadyExists] = "The current hotel already has a bed with the same name defined.";
-ThMessage[ThStatusCode.BedRepositoryErrorAddingBed] = "An error occurred while adding this bed for the current hotel.";
-ThMessage[ThStatusCode.BedRepositoryErrorFindingBedByHotelId] = "Error finding this bed for the current hotel.";
-ThMessage[ThStatusCode.BedRepositoryErrorFindingBed] = "Error finding bed.";
+ThMessage[ThStatusCode.MongoBedRepositoryInvalidList] = "Error getting the bed list.";
+ThMessage[ThStatusCode.MongoBedRepositoryErrorGettingBedList] = "Error getting the bed list. Please try again.";
+ThMessage[ThStatusCode.MongoBedRepositoryErrorGettingBed] = "Error getting the bed. Please try again.";
+ThMessage[ThStatusCode.MongoBedRepositoryBedNotFound] = "Bed not found.";
+ThMessage[ThStatusCode.MongoBedRepositoryErrorAddingBed] = "An error occurred while adding this bed for the current hotel.";
+ThMessage[ThStatusCode.MongoBedRepositoryNameAlreadyExists] = "The name of the bed already exists.";
+ThMessage[ThStatusCode.MongoBedRepositoryErrorUpdatingBed] = "Problem updating the bed. It is possible that someone else changed it at the same time. Please refresh the page and try again.";
+ThMessage[ThStatusCode.BedItemUpdateStrategyErrorUpdating] = "Error updating the bed.";
+ThMessage[ThStatusCode.SaveBedItemError] = "Error saving the bed item.";
+ThMessage[ThStatusCode.DeleteBedItemErrorDeleting] = "Error deleting bed item.";
+ThMessage[ThStatusCode.DeleteBedItemErrorValidating] = "Error validating the existing bed item.";
+ThMessage[ThStatusCode.BedControllerErrorGettingBeds] = "Error getting the beds.";
+ThMessage[ThStatusCode.BedControllerErrorSavingBed] = "Error saving bed.";
+ThMessage[ThStatusCode.BedControllerErrorDeletingBed] = "Error deleting bed.";
 ThMessage[ThStatusCode.HotelUpdatePaymentsPoliciesErrorPrecheckingConstraints] = "There was a problem while checking the payments and policies submitted.";
 ThMessage[ThStatusCode.HotelUpdatePaymentPoliciesInvalidTaxes] = "Invalid taxes sent.";
 ThMessage[ThStatusCode.HotelUpdatePaymentsPoliciesError] = "Error adding the payments and policies.";

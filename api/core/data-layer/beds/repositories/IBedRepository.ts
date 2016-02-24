@@ -10,9 +10,9 @@ export interface BedItemMetaRepoDO {
 }
 
 export interface IBedRepository {
-    // getBedListForHotel(bedMeta: BedMetaRepoDO): Promise<BedDO[]>;
-	// getBedForHotel(bedMeta: BedMetaRepoDO, bedId: string): Promise<BedDO>;
-
+    getBedList(bedMeta: BedMetaRepoDO): Promise<BedDO[]>;
+	getBedById(bedMeta: BedMetaRepoDO, bedId: string): Promise<BedDO>;
+    
 	addBed(bedMeta: BedMetaRepoDO, bed: BedDO): Promise<BedDO>;
 	updateBed(bedMeta: BedMetaRepoDO, bedItemMeta: BedItemMetaRepoDO, tax: BedDO): Promise<BedDO>;
 	deleteBed(bedMeta: BedMetaRepoDO, bedItemMeta: BedItemMetaRepoDO): Promise<BedDO>;

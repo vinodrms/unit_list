@@ -7,7 +7,7 @@ import {HotelSaveTaxItem} from '../core/domain-layer/taxes/HotelSaveTaxItem';
 import {HotelDeleteTaxItem} from '../core/domain-layer/taxes/HotelDeleteTaxItem';
 import {TaxDO} from '../core/data-layer/taxes/data-objects/TaxDO';
 
-class TaxController extends BaseController {
+class TaxesController extends BaseController {
 	public getTaxes(req: Express.Request, res: Express.Response) {
 		var appContext: AppContext = req.appContext;
 		var sessionContext: SessionContext = req.sessionContext;
@@ -38,9 +38,9 @@ class TaxController extends BaseController {
 	}
 }
 
-var taxController = new TaxController();
+var taxesController = new TaxesController();
 module.exports = {
-	getTaxes: taxController.getTaxes.bind(taxController),
-	saveTaxItem: taxController.saveTaxItem.bind(taxController),
-	deleteTaxItem: taxController.deleteTaxItem.bind(taxController)
+	getTaxes: taxesController.getTaxes.bind(taxesController),
+	saveTaxItem: taxesController.saveTaxItem.bind(taxesController),
+	deleteTaxItem: taxesController.deleteTaxItem.bind(taxesController)
 }

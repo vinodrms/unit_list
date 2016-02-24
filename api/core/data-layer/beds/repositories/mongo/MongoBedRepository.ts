@@ -5,7 +5,7 @@ import {ThStatusCode} from '../../../../utils/th-responses/ThResponse';
 import {MongoRepository, MongoErrorCodes} from '../../../common/base/MongoRepository';
 import {IRepositoryCleaner} from '../../../common/base/IRepositoryCleaner';
 import {IBedRepository, BedMetaRepoDO, BedItemMetaRepoDO} from '../IBedRepository';
-import {BedDO} from '../../../common/data-objects/bed/BedDO';
+import {BedDO, BedStatus} from '../../../common/data-objects/bed/BedDO';
 
 import async = require('async');
 import _ = require('underscore');
@@ -19,227 +19,136 @@ export class MongoBedRepository extends MongoRepository implements IBedRepositor
         this._bedsEntity = bedsEntity;
     }
     
-    public addBed(bedMeta: BedMetaRepoDO, bed: BedDO): Promise<BedDO> {
-        return null;
-    }
-    
-    public deleteBed(bedMeta: BedMetaRepoDO, bedItemMeta: BedItemMetaRepoDO): Promise<BedDO> {
-        return null;
-    }
-    
-    public createBedListAsync(bedList: BedDO[], finishAddBedCallback: { (err: any, savedBedList?: BedDO[]): void }) {
-        this._bedsEntity.create(bedList).then((createdBedList: any) => {
-            var savedBedList: BedDO[] = [];
-            createdBedList.forEach(savedBed => {
-                var savedBedDO: BedDO = new BedDO();
-                savedBedDO.buildFromObject(savedBed);
-                savedBedList.push(savedBedDO);
-            });
-            finishAddBedCallback(null, savedBedList);
-        }).catch((err: Error) => {
-            finishAddBedCallback(err);
-        });
-    }
-
-    public saveBedAsync(bed: BedDO, finishAddBedCallback: { (err: any, savedBed?: BedDO): void }) {
-        this.saveBed(bed).then((savedBed: BedDO) => {
-            finishAddBedCallback(null, savedBed);
-        }).catch((error: any) => {
-            finishAddBedCallback(error);
-        });
-    }
-
-    private saveBed(bed: BedDO): Promise<BedDO> {
-        // if (this._thUtils.isUndefinedOrNull(bed.id))
-            return new Promise<BedDO>((resolve, reject) => {
-                this.createBedCore(resolve, reject, bed);
-            });
-        // return new Promise<BedDO>((resolve, reject) => {
-        //     this.updateBedCore(resolve, reject, bed);
-        // });
-    }
-
-    private createBedCore(resolve: { (result: BedDO): void }, reject: { (err: ThError): void }, bed: BedDO) {
-        this._bedsEntity.create(bed).then((createdBed: Sails.QueryResult) => {
-            var savedBed: BedDO = new BedDO();
-            savedBed.buildFromObject(createdBed);
-            resolve(savedBed);
-        }).catch((err: Error) => {
-            var errorCode = this.getMongoErrorCode(err);
-            if (errorCode == MongoErrorCodes.DuplicateKeyError) {
-                var thError = new ThError(ThStatusCode.BedRepositoryBedAlreadyExists, err);
-                ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Bed already exists", bed, thError);
-                reject(thError);
-            }
-            else {
-                var thError = new ThError(ThStatusCode.BedRepositoryErrorAddingBed, err);
-                ThLogger.getInstance().logError(ThLogLevel.Error, "Error adding bed", bed, thError);
-                reject(thError);
-            }
-        });
-    }
-
-    // private updateBedCore(resolve: { (result: BedDO): void }, reject: { (err: ThError): void }, bed: BedDO) {
-    //     this._bedsEntity.update({ _id: bed.id }, bed).then((updatedBeds: Sails.QueryResult[]) => {
-    //         if (!this._thUtils.isUndefinedOrNull(updatedBeds) && !_.isEmpty(updatedBeds)) {
-    //             var updatedBed: BedDO = new BedDO();
-    //             updatedBed.buildFromObject(updatedBeds[0]);
-    //             resolve(updatedBed);
-    //         }
-    //         //TODO 
-    //         // reject(error: no bed updated)
-    //     }).catch((err: Error) => {
-    //         var errorCode = this.getMongoErrorCode(err);
-            
-    //         //TODO
-    //         // reject (error: update error)
-    //         if (errorCode == MongoErrorCodes.DuplicateKeyError) {
-    //             var thError = new ThError(ThStatusCode.BedRepositoryBedAlreadyExists, err);
-    //             ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Bed already exists", bed, thError);
-    //             reject(thError);
-    //         }
-    //         else {
-    //             var thError = new ThError(ThStatusCode.BedRepositoryErrorAddingBed, err);
-    //             ThLogger.getInstance().logError(ThLogLevel.Error, "Error adding bed", bed, thError);
-    //             reject(thError);
-    //         }
-    //     });
-    // }
-
-    public getBedListByHotelIdAsync(hotelId: string, finishGetBedByHotelIdCallback: { (err: any, bedList?: BedDO[]): void }) {
-        this.getBedListByHotelId(hotelId).then((foundBedList: BedDO[]) => {
-            finishGetBedByHotelIdCallback(null, foundBedList);
-        }).catch((error: any) => {
-            finishGetBedByHotelIdCallback(error);
-        });
-    }
-
-    public getBedListByHotelId(hotelId: string): Promise<BedDO[]> {
-        return new Promise<BedDO[]>((resolve, reject) => {
-            this.getBedListByHotelIdCore(resolve, reject, hotelId);
-        });
-    }
-
-    private getBedListByHotelIdCore(resolve: { (result: BedDO[]): void }, reject: { (err: ThError): void }, hotelId: string) {
-        this._bedsEntity.find({ "hotelId": hotelId }).then((foundBedList: Sails.QueryResult[]) => {
-            if (!foundBedList) {
-                var thError = new ThError(ThStatusCode.BedRepositoryErrorFindingBedByHotelId, null);
-                ThLogger.getInstance().logBusiness(ThLogLevel.Info, "Invalid hotelId to retrieve bed configuration", { hotelId: hotelId }, thError);
-                reject(thError);
-                return;
-            }
-            var foundBedDOList: BedDO[] = [];
-
-            foundBedList.forEach(foundBed => {
-                var bedDO = new BedDO();
-                bedDO.buildFromObject(foundBed);
-                foundBedDOList.push(bedDO);
-            });
-
-            resolve(foundBedDOList);
-        }).catch((err: Error) => {
-            var thError = new ThError(ThStatusCode.BedRepositoryErrorFindingBed, err);
-            ThLogger.getInstance().logError(ThLogLevel.Error, "Error getting bed by hotelId", { hotelId: hotelId }, thError);
-            reject(thError);
-        });
-    }
-
-    public testPromiseChain() {
-        this.getBedListByHotelId("")
-            .then((bedList: BedDO[]) => {
-                return this.getBedListByHotelId("");
-            })
-            .then((bedList: BedDO[]) => {
-                return this.getBedListByHotelId("");
-            })
-            .catch((err: any) => {
-                console.log(err);
-            });
-    }
-
-    public testBedTransactionalUpdate(bed: BedDO): Promise<BedDO> {
-        return new Promise<BedDO>((resolve, reject) => {
-            this.testBedTransactionalUpdateCore(bed, resolve, reject);
-        });
-    }
-
-    private testBedTransactionalUpdateCore(bed: BedDO, resolve: { (result: BedDO): void }, reject: { (err: ThError): void }) {
-        this.getBedById(bed.id)
-            .then((bed: BedDO) => {
-                if(!bed) {
-                    reject(new ThError(ThStatusCode.BedRepositoryErrorFindingBed, null));
-                    return;
-                }
-                return this.updateBed(bed);
-            })
-            .then((bed: BedDO) => {
-                resolve(bed);
-                return;
-            })
-            .catch((err: any) => {
-                reject(err);
-                return;
-            });
-    }
-    
-    public updateBed(bed: BedDO): Promise<BedDO> {
-        return new Promise<BedDO>((resolve, reject) => {
-            this.updateBedCore(bed, resolve, reject);
-        });
-    }
-    
-    private updateBedCore(bed: BedDO, resolve: { (result: BedDO): void }, reject: { (err: ThError): void }) {
-        this._bedsEntity.update({ _id: bed.id }, bed).then((updatedBeds: Sails.QueryResult[]) => {
-            if (!this._thUtils.isUndefinedOrNull(updatedBeds) && !_.isEmpty(updatedBeds)) {
-                var updatedBed: BedDO = new BedDO();
-                updatedBed.buildFromObject(updatedBeds[0]);
-                resolve(updatedBed);
-            }
-            //TODO 
-            // reject(error: no bed updated)
-        }).catch((err: Error) => {
-            var errorCode = this.getMongoErrorCode(err);
-            
-            //TODO
-            // reject (error: update error)
-            if (errorCode == MongoErrorCodes.DuplicateKeyError) {
-                var thError = new ThError(ThStatusCode.BedRepositoryBedAlreadyExists, err);
-                ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Bed already exists", bed, thError);
-                reject(thError);
-            }
-            else {
-                var thError = new ThError(ThStatusCode.BedRepositoryErrorAddingBed, err);
-                ThLogger.getInstance().logError(ThLogLevel.Error, "Error adding bed", bed, thError);
-                reject(thError);
-            }
-        });
-    }
-    
-    public getBedById(id: string): Promise<BedDO> {
-        return new Promise<BedDO>((resolve, reject) => {
-            this.getBedByIdCore(resolve, reject, id);
-        });
-    }
-
-    private getBedByIdCore(resolve: { (result: BedDO): void }, reject: { (err: ThError): void }, id: string) {
-        this._bedsEntity.findOne({ "id": id }).then((foundBed: Sails.QueryResult) => {
-            if (!foundBed) {
-                var thError = new ThError(ThStatusCode.HotelRepositoryHotelIdNotFound, null);
-                ThLogger.getInstance().logBusiness(ThLogLevel.Info, "Invalid id to retrieve hotel", { id: id }, thError);
-                reject(thError);
-                return;
-            }
-            var bed: BedDO = new BedDO();
-            bed.buildFromObject(foundBed);
-            resolve(bed);
-        }).catch((err: Error) => {
-            var thError = new ThError(ThStatusCode.HotelRepositoryErrorFindingHotelById, err);
-            ThLogger.getInstance().logError(ThLogLevel.Error, "Error getting hotel by id", { id: id }, thError);
-            reject(thError);
-        });
-    }
-
     public cleanRepository(): Promise<Object> {
         return this._bedsEntity.destroy({});
     }
+    
+    public getBedList(bedMeta: BedMetaRepoDO): Promise<BedDO[]> {
+		return new Promise<BedDO[]>((resolve: { (result: BedDO[]): void }, reject: { (err: ThError): void }) => {
+			this.getBedListCore(bedMeta, resolve, reject);
+		});
+	}
+    private getBedListCore(bedMeta: BedMetaRepoDO, resolve: { (result: BedDO[]): void }, reject: { (err: ThError): void }) {
+		var searchCriteria = { "hotelId": bedMeta.hotelId, "status": BedStatus.Active };
+		this._bedsEntity.find(searchCriteria).then((dbBedList: Array<Sails.QueryResult>) => {
+            if (!dbBedList || !_.isArray(dbBedList)) {
+				var thError = new ThError(ThStatusCode.MongoBedRepositoryInvalidList, null);
+				ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "no existing bed list", bedMeta, thError);
+				return;
+			}
+			var resultDO = this.getQueryResultDO(dbBedList);
+            resolve(resultDO);
+        }).catch((err: Error) => {
+            var thError = new ThError(ThStatusCode.MongoBedRepositoryErrorGettingBedList, err);
+            ThLogger.getInstance().logError(ThLogLevel.Error, "Error getting bed list.", bedMeta, thError);
+            reject(thError);
+        });
+    }
+    private getQueryResultDO(dbBedList: Array<Sails.QueryResult>): BedDO[] {
+		var bedList: BedDO[] = [];
+		dbBedList.forEach((dbBed: Sails.QueryResult) => {
+			var bed = new BedDO();
+			bed.buildFromObject(dbBed);
+			bedList.push(bed);
+		});
+        return bedList;
+	}
+    
+    public getBedById(bedMeta: BedMetaRepoDO, bedId: string): Promise<BedDO> {
+		return new Promise<BedDO>((resolve: { (result: BedDO): void }, reject: { (err: ThError): void }) => {
+			this.getBedByIdCore(bedMeta, bedId, resolve, reject);
+		});
+	}
+    private getBedByIdCore(bedMeta: BedMetaRepoDO, bedId: string, resolve: { (result: BedDO): void }, reject: { (err: ThError): void }) {
+		this._bedsEntity.findOne({ "hotelId": bedMeta.hotelId, "id": bedId }).then((foundBed: Sails.QueryResult) => {
+			if (!foundBed) {
+				var thError = new ThError(ThStatusCode.MongoBedRepositoryBedNotFound, null);
+				ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Bed not found", { bedMeta: bedMeta, bedId: bedId }, thError);
+				reject(thError);
+				return;
+			}
+			var bed: BedDO = new BedDO();
+			bed.buildFromObject(foundBed);
+			resolve(bed);
+		}).catch((err: Error) => {
+			var thError = new ThError(ThStatusCode.MongoBedRepositoryErrorGettingBed, err);
+			ThLogger.getInstance().logError(ThLogLevel.Error, "Error getting bed by id", { bedMeta: bedMeta, bedId: bedId }, thError);
+			reject(thError);
+		});
+	}
+    
+    public addBed(bedMeta: BedMetaRepoDO, bed: BedDO): Promise<BedDO> {
+		return new Promise<BedDO>((resolve: { (result: BedDO): void }, reject: { (err: ThError): void }) => {
+			this.addBedCore(bedMeta, bed, resolve, reject);
+		});
+	}
+	private addBedCore(bedMeta: BedMetaRepoDO, bed: BedDO, resolve: { (result: BedDO): void }, reject: { (err: ThError): void }) {
+		bed.hotelId = bedMeta.hotelId;
+		bed.versionId = 0;
+		bed.status = BedStatus.Active;
+		this._bedsEntity.create(bed).then((createdBed: Sails.QueryResult) => {
+			if (!createdBed) {
+				var thError = new ThError(ThStatusCode.MongoBedRepositoryErrorAddingBed, null);
+				ThLogger.getInstance().logBusiness(ThLogLevel.Error, "Error creatng bed", { bedMeta: bedMeta, bed: bed }, thError);
+				reject(thError);
+				return;
+			}
+			var bed: BedDO = new BedDO();
+			bed.buildFromObject(createdBed);
+			resolve(bed);
+		}).catch((err: Error) => {
+			this.logAndReject(err, reject, { bedMeta: bedMeta, bed: bed }, ThStatusCode.MongoBedRepositoryErrorAddingBed);
+		});
+	}
+    private logAndReject(err: Error, reject: { (err: ThError): void }, context: Object, defaultStatusCode: ThStatusCode) {
+		var errorCode = this.getMongoErrorCode(err);
+		if (errorCode == MongoErrorCodes.DuplicateKeyError) {
+			var thError = new ThError(ThStatusCode.MongoBedRepositoryNameAlreadyExists, err);
+			ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Bed name already exists", context, thError);
+			reject(thError);
+			return;
+		}
+		var thError = new ThError(defaultStatusCode, err);
+		ThLogger.getInstance().logError(ThLogLevel.Error, "Error adding bed", context, thError);
+		reject(thError);
+	}
+    
+    public updateBed(bedMeta: BedMetaRepoDO, bedItemMeta: BedItemMetaRepoDO, bed: BedDO): Promise<BedDO> {
+		return this.findAndModifyBed(bedMeta, bedItemMeta, bed);
+	}
+    public deleteBed(bedMeta: BedMetaRepoDO, bedItemMeta: BedItemMetaRepoDO): Promise<BedDO> {
+		return this.findAndModifyBed(bedMeta, bedItemMeta,
+			{
+				"status": BedStatus.Deleted
+			});
+	}
+    private findAndModifyBed(bedMeta: BedMetaRepoDO, bedItemMeta: BedItemMetaRepoDO, updateQuery: Object): Promise<BedDO> {
+		return new Promise<BedDO>((resolve: { (result: BedDO): void }, reject: { (err: ThError): void }) => {
+			this.findAndModifyBedCore(bedMeta, bedItemMeta, updateQuery, resolve, reject);
+		});
+	}
+    private findAndModifyBedCore(bedMeta: BedMetaRepoDO, bedItemMeta: BedItemMetaRepoDO, updateQuery: any, resolve: { (result: BedDO): void }, reject: { (err: ThError): void }) {
+		updateQuery.$inc = { "versionId": 1 };
+		var findQuery: Object[] = [
+			{ "hotelId": bedMeta.hotelId },
+			{ "id": bedItemMeta.id },
+			{ "versionId": bedItemMeta.versionId }
+		];
+		this.findAndModify(
+			{
+				$and: findQuery
+			}, updateQuery).then((updatedDBBed: Object) => {
+				if (!updatedDBBed) {
+					var thError = new ThError(ThStatusCode.MongoBedRepositoryErrorUpdatingBed, null);
+					ThLogger.getInstance().logBusiness(ThLogLevel.Info, "Problem updating bed - concurrency", { bedMeta: bedMeta, bedItemMeta: bedItemMeta, updateQuery: updateQuery }, thError);
+					reject(thError);
+					return;
+				}
+				var bed: BedDO = new BedDO();
+				bed.buildFromObject(updatedDBBed);
+				resolve(bed);
+			}).catch((err: Error) => {
+				this.logAndReject(err, reject, { bedMeta: bedMeta, updateQuery: updateQuery }, ThStatusCode.MongoBedRepositoryErrorUpdatingBed);
+			});
+	}
 }
