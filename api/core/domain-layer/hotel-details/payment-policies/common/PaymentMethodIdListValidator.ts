@@ -7,7 +7,6 @@ import {PaymentMethodDO} from '../../../../data-layer/common/data-objects/paymen
 import {ThUtils} from '../../../../utils/ThUtils';
 
 import _ = require("underscore");
-import async = require("async");
 
 export class PaymentMethodIdListValidator {
 	private _thUtils: ThUtils;
@@ -16,48 +15,32 @@ export class PaymentMethodIdListValidator {
 	constructor(private _appContext: AppContext, private _sessionContext: SessionContext, private _paymentMethodIdList: string[]) {
 		this._thUtils = new ThUtils();
 	}
-	public validateAsync(finishedValidatingListCallback: { (err: any, success?: string[]): void; }) {
-		this.validate().then((result: string[]) => {
-			finishedValidatingListCallback(null, result);
-		}).catch((err: any) => {
-			finishedValidatingListCallback(err);
-		});
-	}
-	private validate(): Promise<string[]> {
+	public validate(): Promise<string[]> {
 		return new Promise<string[]>((resolve, reject) => {
 			this.validateCore(resolve, reject);
         });
 	}
 	private validateCore(resolve: { (result: string[]): void }, reject: { (err: ThError): void }) {
-		async.waterfall([
-			((getPaymentMethodsCallback) => {
-				var settingsRepository = this._appContext.getRepositoryFactory().getSettingsRepository();
-				settingsRepository.getPaymentMethodsAsync(getPaymentMethodsCallback);
-			}),
-			((paymentMethods: PaymentMethodDO[], finishedValidationsCallback: { (err: ThError, success?: string[]): void; }) => {
+		var settingsRepository = this._appContext.getRepositoryFactory().getSettingsRepository();
+		settingsRepository.getPaymentMethods()
+			.then((paymentMethods: PaymentMethodDO[]) => {
 				this._availablePaymentMethods = paymentMethods;
 
 				if (this.paymentMethodListIsValid()) {
-					finishedValidationsCallback(null, this._paymentMethodIdList);
+					resolve(this._paymentMethodIdList);
 				}
 				else {
 					var thError = new ThError(ThStatusCode.PaymentMethodIdListValidatorInvalid, null);
 					ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Invalid payment method ids submitted", this._sessionContext, thError);
-					finishedValidationsCallback(thError);
+					reject(thError);
 				}
-			})
-		], ((error: any, validatedPaymentIdList: string[]) => {
-			if (error) {
+			}).catch((error: any) => {
 				var thError = new ThError(ThStatusCode.PaymentMethodIdListValidatorError, error);
 				if (thError.isNativeError()) {
 					ThLogger.getInstance().logError(ThLogLevel.Error, "Error validating payment method id list", this._sessionContext, thError);
 				}
 				reject(thError);
-			}
-			else {
-				resolve(validatedPaymentIdList);
-			}
-		}));
+			});
 	}
 	private paymentMethodListIsValid(): boolean {
 		var isValid = true;

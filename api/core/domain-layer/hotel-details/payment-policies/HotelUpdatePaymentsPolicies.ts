@@ -14,7 +14,6 @@ import {CurrencyDO} from '../../../data-layer/common/data-objects/currency/Curre
 import {PaymentMethodIdListValidator} from './common/PaymentMethodIdListValidator';
 
 import _ = require("underscore");
-import async = require("async");
 
 export class HotelUpdatePaymentsPolicies {
 	private _paymentPoliciesDO: HotelUpdatePaymentsPoliciesDO;
@@ -39,56 +38,43 @@ export class HotelUpdatePaymentsPolicies {
 			parser.logAndReject("Error validating data for add payment policies", reject);
 			return;
 		}
-		async.waterfall([
-			((finishGetHotelByIdCallback) => {
-				var hotelRepository = this._appContext.getRepositoryFactory().getHotelRepository();
-				hotelRepository.getHotelByIdAsync(this._sessionContext.sessionDO.hotel.id, finishGetHotelByIdCallback);
-			}),
-			((hotel: HotelDO, finishedValidatingPaymentMethodIdListCallback) => {
+		var hotelRepository = this._appContext.getRepositoryFactory().getHotelRepository();
+		hotelRepository.getHotelById(this._sessionContext.sessionDO.hotel.id)
+			.then((hotel: HotelDO) => {
 				this._loadedHotel = hotel;
 
 				var paymentMethodValidator = new PaymentMethodIdListValidator(this._appContext, this._sessionContext, this._paymentPoliciesDO.paymentMethodIdList);
-				paymentMethodValidator.validateAsync(finishedValidatingPaymentMethodIdListCallback);
-			}),
-			((validatedPaymentMethodIdList: string[], getCurrenciesCallback) => {
+				return paymentMethodValidator.validate();
+			})
+			.then((validatedPaymentMethodIdList: string[]) => {
 				var settingsRepository = this._appContext.getRepositoryFactory().getSettingsRepository();
-				settingsRepository.getCurrenciesAsync(getCurrenciesCallback, { code: this._paymentPoliciesDO.ccyCode });
-			}),
-			((currencyList: CurrencyDO[], finishedPrecheckingConstraintsCallback) => {
+				return settingsRepository.getCurrencies({ code: this._paymentPoliciesDO.ccyCode });
+			})
+			.then((currencyList: CurrencyDO[]) => {
 				this._availableCurrencyList = currencyList;
-
-				this.precheckConstraintsAsync(finishedPrecheckingConstraintsCallback);
-			}),
-			((precheckConstraintsResult: boolean, addPaymentsPoliciesCallback) => {
+				return this.precheckConstraints();
+			})
+			.then((precheckConstraintsResult: boolean) => {
 				var hotelMetaDO: HotelMetaRepoDO = this.getHotelMetaDO();
 				var paymentsPoliciesRepoDO = this.getPaymentsPoliciesRepoDO();
 				var hotelRepository = this._appContext.getRepositoryFactory().getHotelRepository();
-				hotelRepository.updatePaymentsPoliciesAsync(hotelMetaDO, paymentsPoliciesRepoDO, addPaymentsPoliciesCallback);
-			}),
-			((hotel: HotelDO, finishBuildResponse) => {
-				var hotelDetailsBuilder = new HotelDetailsBuilder(this._sessionContext, hotel);
-				hotelDetailsBuilder.buildAsync(finishBuildResponse);
+				return hotelRepository.updatePaymentsPolicies(hotelMetaDO, paymentsPoliciesRepoDO);
 			})
-		], ((error: any, response: HotelDetailsDO) => {
-			if (error) {
+			.then((hotel: HotelDO) => {
+				var hotelDetailsBuilder = new HotelDetailsBuilder(this._sessionContext, hotel);
+				return hotelDetailsBuilder.build();
+			})
+			.then((response: HotelDetailsDO) => {
+				resolve(response);
+			}).catch((error: any) => {
 				var thError = new ThError(ThStatusCode.HotelUpdatePaymentsPoliciesError, error);
 				if (thError.isNativeError()) {
 					ThLogger.getInstance().logError(ThLogLevel.Error, "Error updating hotel payment and policies", this._sessionContext, thError);
 				}
 				reject(thError);
-			}
-			else {
-				resolve(response);
-			}
-		}));
+			});
 	}
-	private precheckConstraintsAsync(finishedPrecheckingConstraintsCallback: { (err: any, success?: boolean): void; }) {
-		this.precheckConstraints().then((result: boolean) => {
-			finishedPrecheckingConstraintsCallback(null, result);
-		}).catch((err: any) => {
-			finishedPrecheckingConstraintsCallback(err);
-		});
-	}
+
 	private precheckConstraints(): Promise<boolean> {
 		return new Promise<boolean>((resolve, reject) => {
 			try {

@@ -6,7 +6,6 @@ import {SessionContext} from '../../../utils/SessionContext';
 import {UserDO} from '../../../data-layer/hotel/data-objects/user/UserDO';
 import {HotelDO} from '../../../data-layer/hotel/data-objects/HotelDO';
 import {HotelDetailsBuilder, HotelDetailsDO} from '../utils/HotelDetailsBuilder';
-import async = require("async");
 
 export class HotelGetDetails {
 	constructor(private _appContext: AppContext, private _sessionContext: SessionContext) {
@@ -17,26 +16,20 @@ export class HotelGetDetails {
 		});
 	}
 	private getDetailsCore(resolve: { (result: HotelDetailsDO): void }, reject: { (err: ThError): void }) {
-		async.waterfall([
-			((finishGetHotelByUserEmailCallback) => {
-				var hotelRepository = this._appContext.getRepositoryFactory().getHotelRepository();
-				hotelRepository.getHotelByUserEmailAsync(this._sessionContext.sessionDO.user.email, finishGetHotelByUserEmailCallback);
-			}),
-			((hotel: HotelDO, finishBuildResponse) => {
+		var hotelRepository = this._appContext.getRepositoryFactory().getHotelRepository();
+		hotelRepository.getHotelByUserEmail(this._sessionContext.sessionDO.user.email)
+			.then((hotel: HotelDO) => {
 				var hotelDetailsBuilder = new HotelDetailsBuilder(this._sessionContext, hotel);
-				hotelDetailsBuilder.buildAsync(finishBuildResponse);
+				return hotelDetailsBuilder.build();
 			})
-		], ((error: any, details: HotelDetailsDO) => {
-			if (error) {
+			.then((details: HotelDetailsDO) => {
+				resolve(details);
+			}).catch((error: any) => {
 				var thError = new ThError(ThStatusCode.HotelGetDetailsError, error);
 				if (thError.isNativeError()) {
 					ThLogger.getInstance().logError(ThLogLevel.Error, "Error getting hotel details", this._sessionContext, thError);
 				}
 				reject(thError);
-			}
-			else {
-				resolve(details);
-			}
-		}));
+			});
 	}
 }

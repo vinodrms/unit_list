@@ -8,6 +8,5 @@ export class ImageUploadResponseDO {
 }
 
 export interface IImageStorageService {
-    uploadImageAsync(imageUploadRequestDO: ImageUploadRequestDO,
-        finishImageUploadCallback: { (err: any, imageUploadResponse?: ImageUploadResponseDO): void; });
+	uploadImage(imageUploadRequestDO: ImageUploadRequestDO): Promise<ImageUploadResponseDO>;
 }

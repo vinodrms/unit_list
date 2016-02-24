@@ -13,7 +13,6 @@ import {IEmailService, EmailHeaderDO} from '../../../services/email/IEmailServic
 import {UserAccountRequestResetPasswordDO} from './UserAccountRequestResetPasswordDO';
 import {ValidationResultParser} from '../../common/ValidationResultParser';
 
-import async = require("async");
 import _ = require("underscore");
 
 export class UserAccountRequestResetPassword {
@@ -47,32 +46,27 @@ export class UserAccountRequestResetPassword {
 		}
 
 		this._generatedToken = this.generateResetPasswordToken();
-		async.waterfall([
-			((finishUpdateTokenCallback) => {
-				var requestResetPasswordRepoDO: RequestResetPasswordRepoDO = {
-					email: this._resetPasswdDO.email,
-					token: this._generatedToken
-				};
-				var hotelRepository: IHotelRepository = this._appContext.getRepositoryFactory().getHotelRepository();
-				hotelRepository.requestResetPasswordAsync(requestResetPasswordRepoDO, finishUpdateTokenCallback);
-			}),
-			((updatedUser: UserDO, finishSendRequestResetPasswordEmailCallback) => {
+		var requestResetPasswordRepoDO: RequestResetPasswordRepoDO = {
+			email: this._resetPasswdDO.email,
+			token: this._generatedToken
+		};
+		var hotelRepository: IHotelRepository = this._appContext.getRepositoryFactory().getHotelRepository();
+		hotelRepository.requestResetPassword(requestResetPasswordRepoDO)
+			.then((updatedUser: UserDO) => {
 				this._updatedUser = updatedUser;
 
 				var requestResetPasswordEmailTemplateDO = this.getRequestResetPasswordEmailTemplateDO();
 				var emailHeaderDO = this.getEmailHeaderDO();
 				var emailService: IEmailService = this._appContext.getServiceFactory().getEmailService(emailHeaderDO, requestResetPasswordEmailTemplateDO);
-				emailService.sendEmailAsync(finishSendRequestResetPasswordEmailCallback);
+				return emailService.sendEmail();
 			})
-		], ((error: any, emailSendResult: any) => {
-			if (error) {
+			.then((sendEmailResult: any) => {
+				resolve(this._generatedToken);
+			}).
+			catch((error: any) => {
 				var thError = new ThError(ThStatusCode.UserAccountRequestResetPasswordError, error);
 				reject(thError);
-			}
-			else {
-				resolve(this._generatedToken);
-			}
-		}));
+			});
 	}
 	private generateResetPasswordToken(): ActionTokenDO {
 		var resetPasswdToken = new ActionTokenDO();

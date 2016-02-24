@@ -5,5 +5,5 @@ export class EmailHeaderDO {
 }
 
 export interface IEmailService {
-    sendEmailAsync(finishSendEmailCallback: { (err: any, reesult?: string): void; });
+	sendEmail(): Promise<any>;
 }

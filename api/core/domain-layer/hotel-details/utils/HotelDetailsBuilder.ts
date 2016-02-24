@@ -13,15 +13,7 @@ export interface HotelDetailsDO {
 export class HotelDetailsBuilder {
 	constructor(private _sessionContext: SessionContext, private _hotel: HotelDO) {
 	}
-
-	public buildAsync(finishBuildResponse: { (err: ThError, result?: HotelDetailsDO): void }) {
-		this.build().then((result: HotelDetailsDO) => {
-			finishBuildResponse(null, result);
-		}).catch((error: any) => {
-			finishBuildResponse(error);
-		});
-	}
-	private build(): Promise<HotelDetailsDO> {
+	public build(): Promise<HotelDetailsDO> {
 		return new Promise<HotelDetailsDO>((resolve: { (result: HotelDetailsDO): void }, reject: { (err: ThError): void }) => {
 			try {
 				this.buildCore(resolve, reject);

@@ -16,8 +16,6 @@ import {AuthUtils} from '../utils/AuthUtils';
 import {HotelSignUpDO} from './HotelSignUpDO';
 import {ValidationResultParser} from '../../common/ValidationResultParser';
 
-import async = require("async");
-
 export class HotelSignUp {
 	private static FirstUserIndex = 0;
 	private _savedHotel: HotelDO;
@@ -50,27 +48,22 @@ export class HotelSignUp {
 			return;
 		}
 		var defaultHotelData = this.generateDefaultHotel();
-		async.waterfall([
-			((finishAddHotelCallback) => {
-				var hotelRepository: IHotelRepository = this._appContext.getRepositoryFactory().getHotelRepository();
-				hotelRepository.addHotelAsync(defaultHotelData, finishAddHotelCallback);
-			}),
-			((savedHotel: HotelDO, finishSendActivationEmailCallback) => {
+		var hotelRepository: IHotelRepository = this._appContext.getRepositoryFactory().getHotelRepository();
+		hotelRepository.addHotel(defaultHotelData)
+			.then((savedHotel: HotelDO) => {
 				this._savedHotel = savedHotel;
+
 				var activationEmailTemplateDO = this.getAccountActivationEmailTemplateDO();
 				var emailHeaderDO = this.getEmailHeaderDO();
 				var emailService: IEmailService = this._appContext.getServiceFactory().getEmailService(emailHeaderDO, activationEmailTemplateDO);
-				emailService.sendEmailAsync(finishSendActivationEmailCallback);
+				return emailService.sendEmail();
 			})
-		], ((error: any, emailSendResult: any) => {
-			if (error) {
+			.then((sendEmailResult: any) => {
+				resolve(this._savedHotel.userList[HotelSignUp.FirstUserIndex].accountActivationToken);
+			}).catch((error: any) => {
 				var thError = new ThError(ThStatusCode.HotelSignUpError, error);
 				reject(thError);
-			}
-			else {
-				resolve(this._savedHotel.userList[HotelSignUp.FirstUserIndex].accountActivationToken);
-			}
-		}));
+			});
 	}
 
 	private generateDefaultHotel(): HotelDO {

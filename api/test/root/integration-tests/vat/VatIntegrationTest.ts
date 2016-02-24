@@ -35,15 +35,12 @@ describe("VAT Integration Tests", function() {
 				done();
 			});
 		});
-        it("Should return valid VAT number [NON-EU]", function(done) {
+        it("Should return non eu country error code [NON-EU]", function(done) {
 			vatProvider.checkVAT("CU", "999999999").then((vatDetails: VatDetailsDO) => {
-                should.equal(vatDetails.getCompanyName(), "");
-				should.equal(vatDetails.getVatNumber(), "999999999");
-				should.equal(vatDetails.getCountryCode(), "CU");
-				should.equal(vatDetails.getFullVatNumber(), "CU999999999");
-                done();
+                done(new Error("Got vat details for non eu country"));
 			}).catch((error: ThError) => {
-				done(error);
+				should.equal(error.getThStatusCode(), ThStatusCode.VatProviderProxyServiceNonEuCountry);
+				done();
 			});
 		});
         it("Should return invalid VAT number [NON-EU]", function(done) {

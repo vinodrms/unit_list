@@ -52,46 +52,18 @@ export class MongoSettingsRepository extends MongoRepository implements ISetting
         return this.getSetting(SettingType.RoomAmenities, valueCriteria);
     }
 
-	public getHotelAmenitiesAsync(getAmenityListCallback: { (err: any, amenityList?: AmenityDO[]): void; }, valueCriteria?: Object) {
-		this.getHotelAmenities(valueCriteria).then((result: AmenityDO[]) => {
-			getAmenityListCallback(null, result);
-		}).catch((err: any) => {
-			getAmenityListCallback(err);
-		});
-	}
     public getHotelAmenities(valueCriteria?: Object): Promise<AmenityDO[]> {
         return this.getSetting(SettingType.HotelAmenities, valueCriteria);
     }
 
-	public getCurrenciesAsync(getCurrenciesCallback: { (err: any, currencyList?: CurrencyDO[]): void; }, valueCriteria?: Object) {
-		this.getCurrencies(valueCriteria).then((currencyList?: CurrencyDO[]) => {
-			getCurrenciesCallback(null, currencyList);
-		}).catch((err: any) => {
-			getCurrenciesCallback(err);
-		});
-	}
 	public getCurrencies(valueCriteria?: Object): Promise<CurrencyDO[]> {
         return this.getSetting(SettingType.CurrencyCodes, valueCriteria);
     }
 
-    public getCountriesAsync(finishQueryCallback: { (err: any, country?: CountryDO[]): void; }, valueCriteria?: Object) {
-		this.getCountries(valueCriteria).then((retrievedCountries: CountryDO[]) => {
-			finishQueryCallback(null, retrievedCountries);
-		}).catch((error: any) => {
-			finishQueryCallback(error);
-		});
-	}
 	public getCountries(valueCriteria?: Object): Promise<CountryDO[]> {
         return this.getSetting(SettingType.Countries, valueCriteria);
     }
 
-	public getPaymentMethodsAsync(getPaymentMethodsCallback: { (err: any, paymentMethods?: PaymentMethodDO[]): void; }, valueCriteria?: Object) {
-		this.getPaymentMethods(valueCriteria).then((paymentMethods: PaymentMethodDO[]) => {
-			getPaymentMethodsCallback(null, paymentMethods);
-		}).catch((err: any) => {
-			getPaymentMethodsCallback(err);
-		});
-	}
     public getPaymentMethods(valueCriteria?: Object): Promise<PaymentMethodDO[]> {
         return this.getSetting(SettingType.PaymentMethods, valueCriteria);
     }

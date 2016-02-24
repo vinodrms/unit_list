@@ -39,16 +39,15 @@ export interface PropertyDetailsRepoDO {
 }
 
 export interface IHotelRepository {
-	addHotelAsync(hotel: HotelDO, finishAddHotelCallback: { (err: any, savedHotel?: HotelDO): void; });
+	addHotel(hotel: HotelDO): Promise<HotelDO>;
 	activateUserAccount(activationParams: UserAccountActivationRepoDO): Promise<UserDO>;
-	requestResetPasswordAsync(reqParams: RequestResetPasswordRepoDO, finishUpdateTokenCallback: { (err: any, user?: UserDO): void; });
-	resetPasswordAsync(resetParams: ResetPasswordRepoDO, finishResetPasswordCallback: { (err: any, user?: UserDO): void; });
+	requestResetPassword(reqParams: RequestResetPasswordRepoDO): Promise<UserDO>;
+	resetPassword(resetParams: ResetPasswordRepoDO): Promise<UserDO>;
 
-	getHotelByUserEmailAsync(email: string, finishGetHotelByUserEmailCallback: { (err: any, hotel?: HotelDO): void; });
 	getHotelByUserEmail(email: string): Promise<HotelDO>;
-	getHotelByIdAsync(id: string, finishGetHotelByIdCallback: { (err: any, hotel?: HotelDO): void; });
+	getHotelById(id: string): Promise<HotelDO>;
 
-	updateBasicInformationAsync(hotelMeta: HotelMetaRepoDO, basicInfo: BasicHotelInfoRepoDO, updateBasicInformationCallback: { (err: any, updatedHotel?: HotelDO): void; });
-	updatePaymentsPoliciesAsync(hotelMeta: HotelMetaRepoDO, paymPoliciesParams: PaymentsPoliciesRepoDO, addPaymentsPoliciesCallback: { (err: any, updatedHotel?: HotelDO): void; });
-	updatePropertyDetailsAsync(hotelMeta: HotelMetaRepoDO, propertyDetails: PropertyDetailsRepoDO, updatePropertyDetailsCallback: { (err: any, updatedHotel?: HotelDO): void; });
+	updateBasicInformation(hotelMeta: HotelMetaRepoDO, basicInfo: BasicHotelInfoRepoDO): Promise<HotelDO>;
+	updatePaymentsPolicies(hotelMeta: HotelMetaRepoDO, paymPoliciesParams: PaymentsPoliciesRepoDO): Promise<HotelDO>;
+	updatePropertyDetails(hotelMeta: HotelMetaRepoDO, propertyDetails: PropertyDetailsRepoDO): Promise<HotelDO>;
 }

@@ -11,7 +11,6 @@ import {CountryDO} from '../../data-layer/common/data-objects/country/CountryDO'
 import {VatProviderFactory} from './VatProviderFactory';
 
 import _ = require('underscore');
-import async = require('async');
 
 export class VatProviderProxyService implements IVatProvider {
 
@@ -49,46 +48,27 @@ export class VatProviderProxyService implements IVatProvider {
                 return;
             });
         }
-        async.waterfall(
-            [
-                ((finishedEUMemberCheck: { (error: ThError, result?: boolean): void }) => {
-                    this.euMemberAsync(this._countryCode, finishedEUMemberCheck);
-                }),
-                ((euMember: boolean, finishedVatNumberCheckCallback: any) => {
-                    if (!euMember) {
-                        finishedVatNumberCheckCallback(null, new VatDetailsDO(this._countryCode, this._vat, '', ''));
-                    }
-                    else {
-                        this.checkEUVatNumberAsync(this._countryCode, this._vat, finishedVatNumberCheckCallback);
-                    }
-                })
-            ],
-            ((err: Error, result: VatDetailsDO) => {
-                if (err) {
-                    var thError = new ThError(ThStatusCode.VatProviderErrorCheckingVat, err);
-                    reject(thError);
-                }
-                else {
-                    resolve(result);
-                }
-            })
-        );
-    }
-
-    private checkEUVatNumberAsync(countryCode: string, vatNumber: string, callback: { (err: any, companyDetails?: VatDetailsDO) }) {
-        this._vatProviderFactory.getEUVatProvider().checkVAT(countryCode, vatNumber).then((companyDetails: VatDetailsDO) => {
-            callback(null, companyDetails);
-        }).catch((error: any) => {
-            callback(error);
-        });
-    }
-
-    private euMemberAsync(countryCode: string, callback: { (err: any, euMember?: boolean): void }) {
-        this.euMember(countryCode).then((euMember: boolean) => {
-            callback(null, euMember);
-        }).catch((error: any) => {
-            callback(error);
-        });
+		this.euMember(this._countryCode)
+			.then((euMember: boolean) => {
+				if (!euMember) {
+					var thError = new ThError(ThStatusCode.VatProviderProxyServiceNonEuCountry, null);
+					ThLogger.getInstance().logBusiness(ThLogLevel.Info, "Non EU Country", { countryCode: this._countryCode, vat: this._vat }, thError);
+					reject(thError);
+				}
+				else {
+					return new Promise<boolean>((resolve: { (result: boolean): void }, reject: { (err: ThError): void }) => { resolve(true); });
+				}
+			})
+			.then((isEuResult: boolean) => {
+				return this._vatProviderFactory.getEUVatProvider().checkVAT(this._countryCode, this._vat);
+			})
+			.then((companyDetails: VatDetailsDO) => {
+				resolve(companyDetails);
+			})
+			.catch((err: any) => {
+				var thError = new ThError(ThStatusCode.VatProviderErrorCheckingVat, err);
+				reject(thError);
+			});
     }
 
     private euMember(countryCode: string): Promise<boolean> {
@@ -96,23 +76,24 @@ export class VatProviderProxyService implements IVatProvider {
             this.euMemberCore(resolve, reject, countryCode);
         });
     }
-
     private euMemberCore(resolve: { (result: boolean): void }, reject: { (err: ThError): void }, countryCode: string) {
-        this._appContext.getRepositoryFactory().getSettingsRepository().getCountriesAsync(
-            (error: any, country: CountryDO[]) => {
-                if (error || _.isEmpty(country)) {
-                    var thError = new ThError(ThStatusCode.VatProviderInvalidCountryCode, null);
+		var settingsRepo = this._appContext.getRepositoryFactory().getSettingsRepository();
+		settingsRepo.getCountries({ code: countryCode })
+			.then((countryList: CountryDO[]) => {
+				if (_.isEmpty(countryList)) {
+					var thError = new ThError(ThStatusCode.VatProviderInvalidCountryCode, null);
                     ThLogger.getInstance().logBusiness(ThLogLevel.Info, "Error retrieving country from system settings.", { countryCode: countryCode }, thError);
                     reject(thError);
-                    return;
+					return;
                 }
-                if (this._thUtils.isUndefinedOrNull(country[0].inEU)) {
+				if (this._thUtils.isUndefinedOrNull(countryList[0].inEU)) {
                     resolve(false);
                 }
-                else {
-                    resolve(country[0].inEU);
-                }
-            },
-            { code: countryCode });
+				resolve(countryList[0].inEU);
+			}).catch((err: any) => {
+				var thError = new ThError(ThStatusCode.VatProviderInvalidCountryCode, null);
+				ThLogger.getInstance().logBusiness(ThLogLevel.Info, "Error retrieving country from system settings.", { countryCode: countryCode }, thError);
+				reject(thError);
+			});
     }
 }

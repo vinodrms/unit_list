@@ -6,8 +6,6 @@ import {UserDO} from '../../core/data-layer/hotel/data-objects/user/UserDO';
 import {PaymentMethodDO} from '../../core/data-layer/common/data-objects/payment-method/PaymentMethodDO';
 import {AmenityDO} from '../../core/data-layer/common/data-objects/amenity/AmenityDO';
 
-import async = require('async');
-
 export class DefaultDataBuilder {
 	private static FirstUserIndex = 0;
 	private _repositoryCleaner: RepositoryCleanerWrapper;
@@ -35,44 +33,35 @@ export class DefaultDataBuilder {
 		});
 	}
 	private buildCore(resolve: { (result: boolean): void }, reject: { (err: any): void }) {
-		async.waterfall([
-			((cleanRepoCallback) => {
-				this._repositoryCleaner.cleanRepositoryAsync(cleanRepoCallback);
-			}),
-			((prevResult: any, finishBuildHotel) => {
+		this._repositoryCleaner.cleanRepository()
+			.then((result: any) => {
 				var hotelBuilder = new DefaultHotelBuilder(this._testContext.appContext, this._password, this._email);
 				var hotel = hotelBuilder.getHotel();
-				this._testContext.appContext.getRepositoryFactory().getHotelRepository().addHotelAsync(hotel, finishBuildHotel);
-			}),
-			((savedHotel: HotelDO, finishBuildSessionDO) => {
+
+				return this._testContext.appContext.getRepositoryFactory().getHotelRepository().addHotel(hotel);
+			}).then((savedHotel: HotelDO) => {
 				this._hotelDO = savedHotel;
 				this._userDO = savedHotel.userList[DefaultDataBuilder.FirstUserIndex];
 				this._testContext.updateSessionContext({ user: this._userDO, hotel: this._hotelDO });
-				finishBuildSessionDO(null, true);
-			}),
-			((result: any, getPaymentMethodsCallback) => {
+
+				return new Promise<boolean>((resolve: { (result: boolean): void }, reject: { (err: any): void }) => { resolve(true); });
+			}).then((prevResult: any) => {
 				var settingsRepository = this._testContext.appContext.getRepositoryFactory().getSettingsRepository();
-				settingsRepository.getPaymentMethodsAsync(getPaymentMethodsCallback);
-			}),
-			((paymentMethods: PaymentMethodDO[], getHotelAmenityListCallback) => {
-				this._paymentMethodList = paymentMethods;
-				
+
+				return settingsRepository.getPaymentMethods();
+			}).then((paymentMethodList: PaymentMethodDO[]) => {
+				this._paymentMethodList = paymentMethodList;
+
 				var settingsRepository = this._testContext.appContext.getRepositoryFactory().getSettingsRepository();
-				settingsRepository.getHotelAmenitiesAsync(getHotelAmenityListCallback);
-			}),
-			((hotelAmenityList: AmenityDO[], finishBuildOtherDO) => {
+				return settingsRepository.getHotelAmenities();
+			}).then((hotelAmenityList: AmenityDO[]) => {
 				this._hotelAmenityList = hotelAmenityList;
+				
 				// TODO: add other necessary build steps (e.g.: beds, price products etc.)
-				finishBuildOtherDO(null, true);
-			})
-		], ((error: any, result: any) => {
-			if (error) {
-				reject(error);
-			}
-			else {
-				resolve(result);
-			}
-		}));
+				resolve(true);
+			}).catch((err: any) => {
+				reject(err);
+			});
 	}
 
 	public get password(): string {
