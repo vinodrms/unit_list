@@ -1,19 +1,19 @@
 import {BedDO} from '../../common/data-objects/bed/BedDO';
 
 export interface BedMetaRepoDO {
+    hotelId: string;
+}
+
+export interface BedItemMetaRepoDO {
     id: string;
 	versionId: number;
 }
 
 export interface IBedRepository {
-    
-    createBedListAsync(bed: BedDO[], finishAddBedCallback: { (err: any, savedBedList?: BedDO[]): void });
-    
-    saveBedAsync(bedList: BedDO, finishAddBedCallback: { (err: any, savedBed?: BedDO): void });
-    
-    getBedListByHotelIdAsync(hotelId: string, finishGetBedByHotelIdCallback: { (err: any, bedList?: BedDO[]): void });
-    
-    testPromiseChain();
-    
-    updateBed(bed: BedDO): Promise<BedDO>;
+    getBedListForHotel(bedMeta: BedMetaRepoDO): Promise<BedDO[]>;
+	getBedForHotel(bedMeta: BedMetaRepoDO, bedId: string): Promise<BedDO>;
+
+	addBed(bedMeta: BedMetaRepoDO, bed: BedDO): Promise<BedDO>;
+	updateBed(bedMeta: BedMetaRepoDO, bedItemMeta: BedItemMetaRepoDO, tax: BedDO): Promise<BedDO>;
+	deleteBed(bedMeta: BedMetaRepoDO, bedItemMeta: BedItemMetaRepoDO): Promise<BedDO>;
 }
