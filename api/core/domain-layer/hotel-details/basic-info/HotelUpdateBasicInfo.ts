@@ -12,8 +12,6 @@ import {HotelDetailsBuilder, HotelDetailsDO} from '../utils/HotelDetailsBuilder'
 import {ValidationResultParser} from '../../common/ValidationResultParser';
 import {HotelMetaRepoDO, BasicHotelInfoRepoDO} from '../../../data-layer/hotel/repositories/IHotelRepository';
 
-import async = require("async");
-
 export class HotelUpdateBasicInfo {
 	private _loadedHotel: HotelDO;
 	constructor(private _appContext: AppContext, private _sessionContext: SessionContext, private _basicInfoDO: HotelUpdateBasicInfoDO) {
@@ -31,34 +29,29 @@ export class HotelUpdateBasicInfo {
 			parser.logAndReject("Error validating update basic information fields", reject);
 			return;
 		}
-		async.waterfall([
-			((finishGetHotelByIdCallback) => {
-				var hotelRepository = this._appContext.getRepositoryFactory().getHotelRepository();
-				hotelRepository.getHotelByIdAsync(this._sessionContext.sessionDO.hotel.id, finishGetHotelByIdCallback);
-			}),
-			((hotel: HotelDO, finishUpdateBasicInformationCallback) => {
+
+		var hotelRepository = this._appContext.getRepositoryFactory().getHotelRepository();
+		hotelRepository.getHotelById(this._sessionContext.sessionDO.hotel.id)
+			.then((hotel: HotelDO) => {
 				this._loadedHotel = hotel;
 				var hotelMeta: HotelMetaRepoDO = this.buildHotelMetaRepoDO();
 				var basicHotelInfo: BasicHotelInfoRepoDO = this.buildBasicHotelInfoRepoDO();
 				var hotelRepository = this._appContext.getRepositoryFactory().getHotelRepository();
-				hotelRepository.updateBasicInformationAsync(hotelMeta, basicHotelInfo, finishUpdateBasicInformationCallback);
-			}),
-			((hotel: HotelDO, finishBuildResponse) => {
-				var hotelDetailsBuilder = new HotelDetailsBuilder(this._sessionContext, hotel);
-				hotelDetailsBuilder.buildAsync(finishBuildResponse);
+				return hotelRepository.updateBasicInformation(hotelMeta, basicHotelInfo);
 			})
-		], ((error: any, response: HotelDetailsDO) => {
-			if (error) {
+			.then((hotel: HotelDO) => {
+				var hotelDetailsBuilder = new HotelDetailsBuilder(this._sessionContext, hotel);
+				return hotelDetailsBuilder.build();
+			})
+			.then((hotelDetails: HotelDetailsDO) => {
+				resolve(hotelDetails);
+			}).catch((error: any) => {
 				var thError = new ThError(ThStatusCode.HotelGetDetailsError, error);
 				if (thError.isNativeError()) {
 					ThLogger.getInstance().logError(ThLogLevel.Error, "Error updating hotel basic information", this._sessionContext, thError);
 				}
 				reject(thError);
-			}
-			else {
-				resolve(response);
-			}
-		}));
+			});
 	}
 	private buildHotelMetaRepoDO(): HotelMetaRepoDO {
 		return {

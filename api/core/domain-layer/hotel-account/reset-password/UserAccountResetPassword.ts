@@ -11,8 +11,6 @@ import {IEmailService, EmailHeaderDO} from '../../../services/email/IEmailServic
 import {UserAccountResetPasswordDO} from './UserAccountResetPasswordDO';
 import {ValidationResultParser} from '../../common/ValidationResultParser';
 
-import async = require("async");
-
 export class UserAccountResetPassword {
 	private _authUtils: AuthUtils;
 	private _updatedUser: UserDO;
@@ -40,33 +38,28 @@ export class UserAccountResetPassword {
 		}
 
 		var encryptedPassword = this._authUtils.encrypPassword(this._resetPasswdDO.password);
-		async.waterfall([
-			((finishResetPasswordCallback) => {
-				var resetPasswordRepoDO: ResetPasswordRepoDO = {
-					activationCode: this._resetPasswdDO.activationCode,
-					email: this._resetPasswdDO.email,
-					newPassword: encryptedPassword
-				};
-				var hotelRepository: IHotelRepository = this._appContext.getRepositoryFactory().getHotelRepository();
-				hotelRepository.resetPasswordAsync(resetPasswordRepoDO, finishResetPasswordCallback);
-			}),
-			((updatedUser: UserDO, finishSendResetPasswordEmailCallback) => {
+		var resetPasswordRepoDO: ResetPasswordRepoDO = {
+			activationCode: this._resetPasswdDO.activationCode,
+			email: this._resetPasswdDO.email,
+			newPassword: encryptedPassword
+		};
+		var hotelRepository: IHotelRepository = this._appContext.getRepositoryFactory().getHotelRepository();
+		hotelRepository.resetPassword(resetPasswordRepoDO)
+			.then((updatedUser: UserDO) => {
 				this._updatedUser = updatedUser;
 
 				var passwordWasResetEmailTemplateDO = this.getPasswordWasResetEmailTemplateDO();
 				var emailHeaderDO = this.getEmailHeaderDO();
 				var emailService: IEmailService = this._appContext.getServiceFactory().getEmailService(emailHeaderDO, passwordWasResetEmailTemplateDO);
-				emailService.sendEmailAsync(finishSendResetPasswordEmailCallback);
+				return emailService.sendEmail();
 			})
-		], ((error: any, emailSendResult: any) => {
-			if (error) {
+			.then((sendEmailResult: any) => {
+				resolve(this._updatedUser);
+			})
+			.catch((error: any) => {
 				var thError = new ThError(ThStatusCode.UserAccountResetPasswordError, error);
 				reject(thError);
-			}
-			else {
-				resolve(this._updatedUser);
-			}
-		}));
+			});
 	}
 	private getPasswordWasResetEmailTemplateDO(): AccountPasswordWasResetTemplateDO {
 		var emailTemplateDO: AccountPasswordWasResetTemplateDO = new AccountPasswordWasResetTemplateDO();

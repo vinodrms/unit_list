@@ -27,10 +27,10 @@ export class MongoPatch0 extends ATransactionalMongoPatch {
             entity: sails.models.bedsentity,
             fields: { "hotelId": 1, "name": 1}
         });
-        // this._indexList.push({
-        //     entity: sails.models.taxesentity,
-        //     fields: { "hotelId": 1, "name": 1}
-        // });
+        this._indexList.push({
+            entity: sails.models.taxesentity,
+            fields: { "hotelId": 1, "name": 1}
+        });
     }
     public getPatchType(): MongoPatcheType {
         return MongoPatcheType.CreateUniqueIndexOnHotel;

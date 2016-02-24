@@ -4,7 +4,7 @@ import {ThUtils} from '../../../../utils/ThUtils';
 import {ThStatusCode} from '../../../../utils/th-responses/ThResponse';
 import {MongoRepository, MongoErrorCodes} from '../../../common/base/MongoRepository';
 import {IRepositoryCleaner} from '../../../common/base/IRepositoryCleaner';
-import {IBedRepository} from '../IBedRepository';
+import {IBedRepository, BedMetaRepoDO, BedItemMetaRepoDO} from '../IBedRepository';
 import {BedDO} from '../../../common/data-objects/bed/BedDO';
 
 import async = require('async');
@@ -18,7 +18,15 @@ export class MongoBedRepository extends MongoRepository implements IBedRepositor
         super(bedsEntity);
         this._bedsEntity = bedsEntity;
     }
-
+    
+    public addBed(bedMeta: BedMetaRepoDO, bed: BedDO): Promise<BedDO> {
+        return null;
+    }
+    
+    public deleteBed(bedMeta: BedMetaRepoDO, bedItemMeta: BedItemMetaRepoDO): Promise<BedDO> {
+        return null;
+    }
+    
     public createBedListAsync(bedList: BedDO[], finishAddBedCallback: { (err: any, savedBedList?: BedDO[]): void }) {
         this._bedsEntity.create(bedList).then((createdBedList: any) => {
             var savedBedList: BedDO[] = [];

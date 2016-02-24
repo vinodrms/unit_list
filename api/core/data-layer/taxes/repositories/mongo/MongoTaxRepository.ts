@@ -4,16 +4,20 @@ import {ThStatusCode} from '../../../../utils/th-responses/ThResponse';
 import {MongoRepository, MongoErrorCodes} from '../../../common/base/MongoRepository';
 import {ITaxRepository, TaxResponseRepoDO, TaxMetaRepoDO, TaxItemMetaRepoDO} from '../ITaxRepository';
 import {TaxDO, TaxStatus, TaxType} from '../../data-objects/TaxDO';
+import {IRepositoryCleaner} from '../../../common/base/IRepositoryCleaner';
 
 import _ = require('underscore');
 
-export class MongoTaxRepository extends MongoRepository implements ITaxRepository {
+export class MongoTaxRepository extends MongoRepository implements ITaxRepository, IRepositoryCleaner {
 	private _taxEntity: Sails.Model;
     constructor() {
         var taxEntity = sails.models.taxesentity;
         super(taxEntity);
         this._taxEntity = taxEntity;
     }
+	public cleanRepository(): Promise<Object> {
+		return this._taxEntity.destroy({});
+	}
 
 	public getTaxList(taxMeta: TaxMetaRepoDO): Promise<TaxResponseRepoDO> {
 		return new Promise<TaxResponseRepoDO>((resolve: { (result: TaxResponseRepoDO): void }, reject: { (err: ThError): void }) => {

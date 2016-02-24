@@ -20,17 +20,12 @@ class ServiceController extends BaseController {
                     var imageStorageService: IImageStorageService = appContext.getServiceFactory().getImageStorageService();
                     var imageFile = uploadedFiles[0];
 
-                    imageStorageService.uploadImageAsync({
-                        imageName: imageFile.fd
-                    }, ((error: any, result: any) => {
-                        if (error) {
-                            _ctrlContext.returnErrorResponse(req, res, error, ThStatusCode.ImageUploadControllerErrorUploadingImage);
-                        }
-                        else {
-                            _ctrlContext.returnSuccesfulResponse(req, res, result);
-                        }
-                    }))
-                    return;
+					imageStorageService.uploadImage({ imageName: imageFile.fd })
+						.then((result: any) => {
+							_ctrlContext.returnSuccesfulResponse(req, res, result);
+						}).catch((error: any) => {
+							_ctrlContext.returnErrorResponse(req, res, error, ThStatusCode.ImageUploadControllerErrorUploadingImage);
+						});
                 }
                 else {
                     var thError = new ThError(ThStatusCode.ImageUploadControllerNoFilesToUpload, null);
@@ -46,14 +41,14 @@ class ServiceController extends BaseController {
     }
 
     public checkVAT(req: Express.Request, res: Express.Response) {
-        if(!this.precheckGETParameters(req, res, ['countryCode', 'vatNumber'])) return;
-        
+        if (!this.precheckGETParameters(req, res, ['countryCode', 'vatNumber'])) { return };
+
         var appContext: AppContext = req.appContext;
         var vatNumberVerifier: IVatProvider = appContext.getServiceFactory().getVatProviderProxyService();
-        
+
         var countryCode: string = req.query.countryCode;
         var vatNumber: string = req.query.vatNumber;
-        
+
         vatNumberVerifier.checkVAT(countryCode, vatNumber).then((vatDetails: VatDetailsDO) => {
             this.returnSuccesfulResponse(req, res, vatDetails);
         }).catch((error: ThError) => {

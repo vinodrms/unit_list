@@ -1,15 +1,10 @@
 import {RepositoryCleanerWrapper} from './RepositoryCleanerWrapper';
 import {TestContext} from '../helpers/TestContext';
 import {DefaultHotelBuilder} from './builders/DefaultHotelBuilder';
-import {DefaultBedBuilder} from './builders/DefaultBedBuilder';
 import {HotelDO} from '../../core/data-layer/hotel/data-objects/HotelDO';
-import {BedDO} from '../../core/data-layer/common/data-objects/bed/BedDO';
 import {UserDO} from '../../core/data-layer/hotel/data-objects/user/UserDO';
 import {PaymentMethodDO} from '../../core/data-layer/common/data-objects/payment-method/PaymentMethodDO';
-import {BedTemplateDO} from '../../core/data-layer/common/data-objects/bed-template/BedTemplateDO';
 import {AmenityDO} from '../../core/data-layer/common/data-objects/amenity/AmenityDO';
-
-import async = require('async');
 
 export class DefaultDataBuilder {
 	private static FirstUserIndex = 0;
@@ -19,9 +14,7 @@ export class DefaultDataBuilder {
 	private _email: string = "paraschiv.ionut@gmail.com";
 	private _hotelDO: HotelDO;
 	private _userDO: UserDO;
-    private _bedList: BedDO[];
 	private _paymentMethodList: PaymentMethodDO[];
-    private _bedTemplateList: BedTemplateDO[];    
 	private _hotelAmenityList: AmenityDO[];
 
 	constructor(private _testContext: TestContext) {
@@ -40,53 +33,35 @@ export class DefaultDataBuilder {
 		});
 	}
 	private buildCore(resolve: { (result: boolean): void }, reject: { (err: any): void }) {
-		async.waterfall([
-			((cleanRepoCallback) => {
-				this._repositoryCleaner.cleanRepositoryAsync(cleanRepoCallback);
-			}),
-			((prevResult: any, finishBuildHotel) => {
+		this._repositoryCleaner.cleanRepository()
+			.then((result: any) => {
 				var hotelBuilder = new DefaultHotelBuilder(this._testContext.appContext, this._password, this._email);
 				var hotel = hotelBuilder.getHotel();
-				this._testContext.appContext.getRepositoryFactory().getHotelRepository().addHotelAsync(hotel, finishBuildHotel);
-			}),
-			((savedHotel: HotelDO, finishBuildSessionDO) => {
+
+				return this._testContext.appContext.getRepositoryFactory().getHotelRepository().addHotel(hotel);
+			}).then((savedHotel: HotelDO) => {
 				this._hotelDO = savedHotel;
 				this._userDO = savedHotel.userList[DefaultDataBuilder.FirstUserIndex];
 				this._testContext.updateSessionContext({ user: this._userDO, hotel: this._hotelDO });
-				finishBuildSessionDO(null, true);
-			}),
-			((result: any, getPaymentMethodsCallback) => {
+
+				return new Promise<boolean>((resolve: { (result: boolean): void }, reject: { (err: any): void }) => { resolve(true); });
+			}).then((prevResult: any) => {
 				var settingsRepository = this._testContext.appContext.getRepositoryFactory().getSettingsRepository();
-				settingsRepository.getPaymentMethodsAsync(getPaymentMethodsCallback);
-			}),
-			((paymentMethods: PaymentMethodDO[], getHotelAmenityListCallback) => {
-				this._paymentMethodList = paymentMethods;
+
+				return settingsRepository.getPaymentMethods();
+			}).then((paymentMethodList: PaymentMethodDO[]) => {
+				this._paymentMethodList = paymentMethodList;
+
 				var settingsRepository = this._testContext.appContext.getRepositoryFactory().getSettingsRepository();
-				settingsRepository.getHotelAmenitiesAsync(getHotelAmenityListCallback);
-			}),
-			((hotelAmenityList: AmenityDO[], finishBuildOtherDO) => {
+				return settingsRepository.getHotelAmenities();
+			}).then((hotelAmenityList: AmenityDO[]) => {
 				this._hotelAmenityList = hotelAmenityList;
+				
 				// TODO: add other necessary build steps (e.g.: beds, price products etc.)
-				finishBuildOtherDO(null, true);
-			}),
-            ((result: any, getBedTemplatesCallback) => {
-				var settingsRepository = this._testContext.appContext.getRepositoryFactory().getSettingsRepository();
-				settingsRepository.getBedTemplatesAsync(getBedTemplatesCallback);
-			}),
-			((bedTemplates: BedTemplateDO[], finishBuildOtherDO) => {
-				this._bedTemplateList = bedTemplates;
-				var bedBuilder: DefaultBedBuilder = new DefaultBedBuilder(this._testContext.appContext, this._hotelDO.id, this._bedTemplateList);
-                var bedList = bedBuilder.getBedList();
-                this._testContext.appContext.getRepositoryFactory().getBedRepository().createBedListAsync(bedList, finishBuildOtherDO);
-			})
-		], ((error: any, result: any) => {
-			if (error) {
-				reject(error);
-			}
-			else {
-				resolve(result);
-			}
-		}));
+				resolve(true);
+			}).catch((err: any) => {
+				reject(err);
+			});
 	}
 
 	public get password(): string {
@@ -104,12 +79,6 @@ export class DefaultDataBuilder {
 	public get paymentMethodList(): PaymentMethodDO[] {
 		return this._paymentMethodList;
 	}
-    public get bedTemplateList(): BedTemplateDO[] {
-        return this._bedTemplateList;
-    }
-    public get bedList(): BedDO[] {
-        return this._bedList;
-    }
 	public get hotelAmenityList(): AmenityDO[] {
 		return this._hotelAmenityList;
 	}

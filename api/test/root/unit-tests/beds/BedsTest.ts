@@ -21,16 +21,7 @@ describe("Beds Tests", function() {
     
     describe("Beds Configuration Flow", function() {
         it("Should get the bed details", function(done) {
-			var hotelId = testContext.sessionContext.sessionDO.hotel.id;
-            
-            var bedDO: BedDO = new BedDO();
-            
-            testContext.appContext.getRepositoryFactory().getBedRepository().updateBed(bedDO).then((bed: BedDO) => {
-                
-            }).catch((err: any) => {
-                
-            });
-            
+			
             done();
         });
     });

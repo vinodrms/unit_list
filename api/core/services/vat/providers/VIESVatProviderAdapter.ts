@@ -12,7 +12,7 @@ export class VIESVatProviderAdapter implements IVatProvider {
 
     private _countryCode: string;
     private _vat: string;
-    
+
     public checkVAT(countryCode: string, vat: string): Promise<VatDetailsDO> {
         this._countryCode = countryCode;
         this._vat = vat;
@@ -31,7 +31,7 @@ export class VIESVatProviderAdapter implements IVatProvider {
         var args = { countryCode: this._countryCode, vatNumber: this._vat };
 
         soap.createClient(VIESVatProviderAdapter.EcEuropaWsdl, (err, client) => {
-            var thUtils = new ThUtils();   
+            var thUtils = new ThUtils();
             if (thUtils.isUndefinedOrNull(client) || (thUtils.isUndefinedOrNull(client.checkVat))) {
                 var thError = new ThError(ThStatusCode.VatProviderErrorCheckingVat, err);
                 ThLogger.getInstance().logError(ThLogLevel.Error, "Error checking VAT", args, thError);

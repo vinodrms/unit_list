@@ -15,7 +15,6 @@ import {ThUtils} from '../../../utils/ThUtils';
 import {ThDateUtils} from '../../../utils/th-dates/ThDateUtils';
 
 import _ = require('underscore');
-import async = require('async');
 
 export class HotelUpdatePropertyDetails {
 	private _thUtils: ThUtils;
@@ -43,53 +42,40 @@ export class HotelUpdatePropertyDetails {
 			parser.logAndReject("Error validating update property details fields", reject);
 			return;
 		}
-		async.waterfall([
-			((finishGetHotelByIdCallback: { (err: ThError, result?: HotelDO): void; }) => {
-				var hotelRepository = this._appContext.getRepositoryFactory().getHotelRepository();
-				hotelRepository.getHotelByIdAsync(this._sessionContext.sessionDO.hotel.id, finishGetHotelByIdCallback);
-			}),
-			((hotel: HotelDO, getAmenityListCallback: { (err: ThError, result?: AmenityDO[]): void; }) => {
+
+		var hotelRepository = this._appContext.getRepositoryFactory().getHotelRepository();
+		hotelRepository.getHotelById(this._sessionContext.sessionDO.hotel.id)
+			.then((hotel: HotelDO) => {
 				this._loadedHotel = hotel;
 
 				var settingsRepository = this._appContext.getRepositoryFactory().getSettingsRepository();
-				settingsRepository.getHotelAmenitiesAsync(getAmenityListCallback);
-			}),
-			((amenityList: AmenityDO[], finishedValidatingCallback: { (err: ThError, result?: boolean): void; }) => {
+				return settingsRepository.getHotelAmenities();
+			})
+			.then((amenityList: AmenityDO[]) => {
 				this._availableAmenityList = amenityList;
 
-				this.validatePropertyDetailsAsync(finishedValidatingCallback);
-			}),
-			((validationResult: boolean, updatePropertyDetailsCallback: { (err: any, updatedHotel?: HotelDO): void; }) => {
+				return this.validatePropertyDetails();
+			})
+			.then((validationResult: boolean) => {
 				var hotelRepository = this._appContext.getRepositoryFactory().getHotelRepository();
 
 				var hotelMeta = this.buildHotelMetaRepoDO();
 				var propertyDetails = this.buildPropertyDetailsRepoDO();
-				hotelRepository.updatePropertyDetailsAsync(hotelMeta, propertyDetails, updatePropertyDetailsCallback);
-			}),
-			((hotel: HotelDO, finishBuildResponse: { (err: any, hotelDetails?: HotelDetailsDO): void; }) => {
-				var hotelDetailsBuilder = new HotelDetailsBuilder(this._sessionContext, hotel);
-				hotelDetailsBuilder.buildAsync(finishBuildResponse);
+				return hotelRepository.updatePropertyDetails(hotelMeta, propertyDetails);
 			})
-		], ((error: any, result: HotelDetailsDO) => {
-			if (error) {
+			.then((hotel: HotelDO) => {
+				var hotelDetailsBuilder = new HotelDetailsBuilder(this._sessionContext, hotel);
+				return hotelDetailsBuilder.build();
+			})
+			.then((result: HotelDetailsDO) => {
+				resolve(result);
+			}).catch((error: any) => {
 				var thError = new ThError(ThStatusCode.HotelUpdatePropertyDetailsUpdateError, error);
 				if (thError.isNativeError()) {
 					ThLogger.getInstance().logBusiness(ThLogLevel.Error, "error updating property details", this._propertyDetailsDO, thError);
 				}
 				reject(thError);
-			}
-			else {
-				resolve(result);
-			}
-		}));
-	}
-
-	private validatePropertyDetailsAsync(finishedValidatingCallback: { (err: ThError, result?: boolean): void; }) {
-		this.validatePropertyDetails().then((result: boolean) => {
-			finishedValidatingCallback(null, result);
-		}).catch((err: any) => {
-			finishedValidatingCallback(err);
-		});
+			});
 	}
 	private validatePropertyDetails(): Promise<boolean> {
 		return new Promise<boolean>((resolve: { (result: boolean): void }, reject: { (err: ThError): void }) => {

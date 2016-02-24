@@ -14,6 +14,7 @@ export enum ThStatusCode {
 	VatProviderNotInEu,
 	VatProviderInvalidVat,
     VatProviderInvalidCountryCode,
+	VatProviderProxyServiceNonEuCountry,
 	EmailTemplateBuilderProblemFindingTemplatesDirectory,
 	EmailTemplateBuilderProblemBuildingContent,
 	SendGridServiceErrorSendingEmail,
@@ -117,6 +118,7 @@ ThMessage[ThStatusCode.VatProviderErrorCheckingVat] = "Error checking VAT number
 ThMessage[ThStatusCode.VatProviderNotInEu] = "The VAT is not in EU";
 ThMessage[ThStatusCode.VatProviderInvalidVat] = "Invalid VAT number.";
 ThMessage[ThStatusCode.VatProviderInvalidCountryCode] = "Invalid country code";
+ThMessage[ThStatusCode.VatProviderProxyServiceNonEuCountry] = "Non EU Country";
 ThMessage[ThStatusCode.EmailTemplateBuilderProblemFindingTemplatesDirectory] = "Error sending email: the content was not found on the server. Please contact the Administrator.";
 ThMessage[ThStatusCode.EmailTemplateBuilderProblemBuildingContent] = "Error sending email: problem building content. Please contact the Administrator.";
 ThMessage[ThStatusCode.SendGridServiceErrorSendingEmail] = "Error sending email. Please contact the Administrator.";
