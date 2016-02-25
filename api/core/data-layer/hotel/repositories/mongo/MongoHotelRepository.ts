@@ -1,5 +1,4 @@
 import {MongoRepository} from '../../../common/base/MongoRepository';
-import {IRepositoryCleaner} from '../../../common/base/IRepositoryCleaner';
 import {HotelDO} from '../../data-objects/HotelDO';
 import {UserDO} from '../../data-objects/user/UserDO';
 import {MongoHotelAccountRepository} from './actions/MongoHotelAccountRepository';
@@ -10,17 +9,15 @@ import {GeoLocationDO} from '../../../common/data-objects/geo-location/GeoLocati
 import {IHotelRepository, HotelMetaRepoDO, BasicHotelInfoRepoDO, UserAccountActivationRepoDO, RequestResetPasswordRepoDO,
 ResetPasswordRepoDO, PaymentsPoliciesRepoDO, PropertyDetailsRepoDO} from '../IHotelRepository';
 
-export class MongoHotelRepository extends MongoRepository implements IHotelRepository, IRepositoryCleaner {
-	private _hotelsEntity: Sails.Model;
+export class MongoHotelRepository extends MongoRepository implements IHotelRepository {
 	private _accountActionsRepository: MongoHotelAccountRepository;
 	private _hotelDetailsRepository: MongoHotelDetailsRepository;
 
 	constructor() {
 		var hotelsEntity = sails.models.hotelsentity;
 		super(hotelsEntity);
-		this._hotelsEntity = hotelsEntity;
-		this._accountActionsRepository = new MongoHotelAccountRepository(this._hotelsEntity);
-		this._hotelDetailsRepository = new MongoHotelDetailsRepository(this._hotelsEntity);
+		this._accountActionsRepository = new MongoHotelAccountRepository(hotelsEntity);
+		this._hotelDetailsRepository = new MongoHotelDetailsRepository(hotelsEntity);
 	}
 	public addHotel(hotel: HotelDO): Promise<HotelDO> {
 		return this._accountActionsRepository.addHotel(hotel);
@@ -36,9 +33,6 @@ export class MongoHotelRepository extends MongoRepository implements IHotelRepos
 	}
 	public resetPassword(resetParams: ResetPasswordRepoDO): Promise<UserDO> {
 		return this._accountActionsRepository.resetPassword(resetParams);
-	}
-	public cleanRepository(): Promise<Object> {
-		return this._hotelsEntity.destroy({});
 	}
 	public getHotelById(id: string): Promise<HotelDO> {
 		return this._hotelDetailsRepository.getHotelById(id);

@@ -3,26 +3,17 @@ import {ThError} from '../../../../utils/th-responses/ThError';
 import {ThUtils} from '../../../../utils/ThUtils';
 import {ThStatusCode} from '../../../../utils/th-responses/ThResponse';
 import {MongoRepository, MongoErrorCodes} from '../../../common/base/MongoRepository';
-import {IRepositoryCleaner} from '../../../common/base/IRepositoryCleaner';
 import {IBedRepository, BedMetaRepoDO, BedItemMetaRepoDO} from '../IBedRepository';
 import {BedDO, BedStatus} from '../../../common/data-objects/bed/BedDO';
 
 import async = require('async');
 import _ = require('underscore');
 
-export class MongoBedRepository extends MongoRepository implements IBedRepository, IRepositoryCleaner {
-    private _bedsEntity: Sails.Model;
-
+export class MongoBedRepository extends MongoRepository implements IBedRepository {
     constructor() {
-        var bedsEntity = sails.models.bedsentity;
-        super(bedsEntity);
-        this._bedsEntity = bedsEntity;
+        super(sails.models.bedsentity);
     }
-    
-    public cleanRepository(): Promise<Object> {
-        return this._bedsEntity.destroy({});
-    }
-    
+
     public getBedList(bedMeta: BedMetaRepoDO): Promise<BedDO[]> {
 		return new Promise<BedDO[]>((resolve: { (result: BedDO[]): void }, reject: { (err: ThError): void }) => {
 			this.getBedListCore(bedMeta, resolve, reject);
@@ -30,53 +21,58 @@ export class MongoBedRepository extends MongoRepository implements IBedRepositor
 	}
     private getBedListCore(bedMeta: BedMetaRepoDO, resolve: { (result: BedDO[]): void }, reject: { (err: ThError): void }) {
 		var searchCriteria = { "hotelId": bedMeta.hotelId, "status": BedStatus.Active };
-		this._bedsEntity.find(searchCriteria).then((dbBedList: Array<Sails.QueryResult>) => {
-            if (!dbBedList || !_.isArray(dbBedList)) {
+		this.findMultipleDocuments(searchCriteria,
+			() => {
 				var thError = new ThError(ThStatusCode.MongoBedRepositoryInvalidList, null);
 				ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "no existing bed list", bedMeta, thError);
-				return;
+				reject(thError);
+			},
+			(err: Error) => {
+				var thError = new ThError(ThStatusCode.MongoBedRepositoryErrorGettingBedList, err);
+				ThLogger.getInstance().logError(ThLogLevel.Error, "Error getting bed list.", bedMeta, thError);
+				reject(thError);
+			},
+			(dbBedList: Array<Object>) => {
+				var resultDO = this.getQueryResultDO(dbBedList);
+				resolve(resultDO);
 			}
-			var resultDO = this.getQueryResultDO(dbBedList);
-            resolve(resultDO);
-        }).catch((err: Error) => {
-            var thError = new ThError(ThStatusCode.MongoBedRepositoryErrorGettingBedList, err);
-            ThLogger.getInstance().logError(ThLogLevel.Error, "Error getting bed list.", bedMeta, thError);
-            reject(thError);
-        });
+		);
     }
-    private getQueryResultDO(dbBedList: Array<Sails.QueryResult>): BedDO[] {
+    private getQueryResultDO(dbBedList: Array<Object>): BedDO[] {
 		var bedList: BedDO[] = [];
-		dbBedList.forEach((dbBed: Sails.QueryResult) => {
+		dbBedList.forEach((dbBed: Object) => {
 			var bed = new BedDO();
 			bed.buildFromObject(dbBed);
 			bedList.push(bed);
 		});
         return bedList;
 	}
-    
+
     public getBedById(bedMeta: BedMetaRepoDO, bedId: string): Promise<BedDO> {
 		return new Promise<BedDO>((resolve: { (result: BedDO): void }, reject: { (err: ThError): void }) => {
 			this.getBedByIdCore(bedMeta, bedId, resolve, reject);
 		});
 	}
     private getBedByIdCore(bedMeta: BedMetaRepoDO, bedId: string, resolve: { (result: BedDO): void }, reject: { (err: ThError): void }) {
-		this._bedsEntity.findOne({ "hotelId": bedMeta.hotelId, "id": bedId }).then((foundBed: Sails.QueryResult) => {
-			if (!foundBed) {
+		this.findOneDocument({ "hotelId": bedMeta.hotelId, "id": bedId },
+			() => {
 				var thError = new ThError(ThStatusCode.MongoBedRepositoryBedNotFound, null);
 				ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Bed not found", { bedMeta: bedMeta, bedId: bedId }, thError);
 				reject(thError);
-				return;
+			},
+			(err: Error) => {
+				var thError = new ThError(ThStatusCode.MongoBedRepositoryErrorGettingBed, err);
+				ThLogger.getInstance().logError(ThLogLevel.Error, "Error getting bed by id", { bedMeta: bedMeta, bedId: bedId }, thError);
+				reject(thError);
+			},
+			(foundBed: Object) => {
+				var bed: BedDO = new BedDO();
+				bed.buildFromObject(foundBed);
+				resolve(bed);
 			}
-			var bed: BedDO = new BedDO();
-			bed.buildFromObject(foundBed);
-			resolve(bed);
-		}).catch((err: Error) => {
-			var thError = new ThError(ThStatusCode.MongoBedRepositoryErrorGettingBed, err);
-			ThLogger.getInstance().logError(ThLogLevel.Error, "Error getting bed by id", { bedMeta: bedMeta, bedId: bedId }, thError);
-			reject(thError);
-		});
+		);
 	}
-    
+
     public addBed(bedMeta: BedMetaRepoDO, bed: BedDO): Promise<BedDO> {
 		return new Promise<BedDO>((resolve: { (result: BedDO): void }, reject: { (err: ThError): void }) => {
 			this.addBedCore(bedMeta, bed, resolve, reject);
@@ -86,19 +82,16 @@ export class MongoBedRepository extends MongoRepository implements IBedRepositor
 		bed.hotelId = bedMeta.hotelId;
 		bed.versionId = 0;
 		bed.status = BedStatus.Active;
-		this._bedsEntity.create(bed).then((createdBed: Sails.QueryResult) => {
-			if (!createdBed) {
-				var thError = new ThError(ThStatusCode.MongoBedRepositoryErrorAddingBed, null);
-				ThLogger.getInstance().logBusiness(ThLogLevel.Error, "Error creatng bed", { bedMeta: bedMeta, bed: bed }, thError);
-				reject(thError);
-				return;
+		this.createDocument(bed,
+			(err: Error) => {
+				this.logAndReject(err, reject, { bedMeta: bedMeta, bed: bed }, ThStatusCode.MongoBedRepositoryErrorAddingBed);
+			},
+			(createdBed: Object) => {
+				var bed: BedDO = new BedDO();
+				bed.buildFromObject(createdBed);
+				resolve(bed);
 			}
-			var bed: BedDO = new BedDO();
-			bed.buildFromObject(createdBed);
-			resolve(bed);
-		}).catch((err: Error) => {
-			this.logAndReject(err, reject, { bedMeta: bedMeta, bed: bed }, ThStatusCode.MongoBedRepositoryErrorAddingBed);
-		});
+		);
 	}
     private logAndReject(err: Error, reject: { (err: ThError): void }, context: Object, defaultStatusCode: ThStatusCode) {
 		var errorCode = this.getMongoErrorCode(err);
@@ -112,7 +105,7 @@ export class MongoBedRepository extends MongoRepository implements IBedRepositor
 		ThLogger.getInstance().logError(ThLogLevel.Error, "Error adding bed", context, thError);
 		reject(thError);
 	}
-    
+
     public updateBed(bedMeta: BedMetaRepoDO, bedItemMeta: BedItemMetaRepoDO, bed: BedDO): Promise<BedDO> {
 		return this.findAndModifyBed(bedMeta, bedItemMeta, bed);
 	}
@@ -134,21 +127,20 @@ export class MongoBedRepository extends MongoRepository implements IBedRepositor
 			{ "id": bedItemMeta.id },
 			{ "versionId": bedItemMeta.versionId }
 		];
-		this.findAndModify(
-			{
-				$and: findQuery
-			}, updateQuery).then((updatedDBBed: Object) => {
-				if (!updatedDBBed) {
-					var thError = new ThError(ThStatusCode.MongoBedRepositoryErrorUpdatingBed, null);
-					ThLogger.getInstance().logBusiness(ThLogLevel.Info, "Problem updating bed - concurrency", { bedMeta: bedMeta, bedItemMeta: bedItemMeta, updateQuery: updateQuery }, thError);
-					reject(thError);
-					return;
-				}
+		this.findAndModifyDocument({ $and: findQuery }, updateQuery,
+			() => {
+				var thError = new ThError(ThStatusCode.MongoBedRepositoryErrorUpdatingBed, null);
+				ThLogger.getInstance().logBusiness(ThLogLevel.Info, "Problem updating bed - concurrency", { bedMeta: bedMeta, bedItemMeta: bedItemMeta, updateQuery: updateQuery }, thError);
+				reject(thError);
+			},
+			(err: Error) => {
+				this.logAndReject(err, reject, { bedMeta: bedMeta, updateQuery: updateQuery }, ThStatusCode.MongoBedRepositoryErrorUpdatingBed);
+			},
+			(updatedDBBed: Object) => {
 				var bed: BedDO = new BedDO();
 				bed.buildFromObject(updatedDBBed);
 				resolve(bed);
-			}).catch((err: Error) => {
-				this.logAndReject(err, reject, { bedMeta: bedMeta, updateQuery: updateQuery }, ThStatusCode.MongoBedRepositoryErrorUpdatingBed);
-			});
+			}
+		);
 	}
 }

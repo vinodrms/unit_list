@@ -11,8 +11,8 @@ import {HotelMetaRepoDO, BasicHotelInfoRepoDO, PaymentsPoliciesRepoDO, PropertyD
 import _ = require("underscore");
 
 export class MongoHotelDetailsRepository extends MongoRepository {
-	constructor(private _hotelsEntity: Sails.Model) {
-		super(_hotelsEntity);
+	constructor(hotelsEntity: Sails.Model) {
+		super(hotelsEntity);
 	}
 	public getHotelById(id: string): Promise<HotelDO> {
 		return new Promise<HotelDO>((resolve, reject) => {
@@ -20,21 +20,23 @@ export class MongoHotelDetailsRepository extends MongoRepository {
 		});
 	}
 	private getHotelByIdCore(resolve: { (result: HotelDO): void }, reject: { (err: ThError): void }, id: string) {
-		this._hotelsEntity.findOne({ "id": id }).then((foundHotel: Sails.QueryResult) => {
-			if (!foundHotel) {
+		this.findOneDocument({ "id": id },
+			() => {
 				var thError = new ThError(ThStatusCode.HotelRepositoryHotelIdNotFound, null);
 				ThLogger.getInstance().logBusiness(ThLogLevel.Info, "Invalid id to retrieve hotel", { id: id }, thError);
 				reject(thError);
-				return;
+			},
+			(err: Error) => {
+				var thError = new ThError(ThStatusCode.HotelRepositoryErrorFindingHotelById, err);
+				ThLogger.getInstance().logError(ThLogLevel.Error, "Error getting hotel by id", { id: id }, thError);
+				reject(thError);
+			},
+			(foundHotel: Object) => {
+				var hotel: HotelDO = new HotelDO();
+				hotel.buildFromObject(foundHotel);
+				resolve(hotel);
 			}
-			var hotel: HotelDO = new HotelDO();
-			hotel.buildFromObject(foundHotel);
-			resolve(hotel);
-		}).catch((err: Error) => {
-			var thError = new ThError(ThStatusCode.HotelRepositoryErrorFindingHotelById, err);
-			ThLogger.getInstance().logError(ThLogLevel.Error, "Error getting hotel by id", { id: id }, thError);
-			reject(thError);
-		});
+		);
 	}
 	public updateBasicInformation(hotelMeta: HotelMetaRepoDO, basicInfo: BasicHotelInfoRepoDO): Promise<HotelDO> {
 		return this.findAndModifyHotel(hotelMeta, {
@@ -49,7 +51,7 @@ export class MongoHotelDetailsRepository extends MongoRepository {
 			"ccyCode": paymPoliciesParams.ccyCode
 		});
 	}
-	
+
 	public updatePropertyDetails(hotelMeta: HotelMetaRepoDO, propertyDetails: PropertyDetailsRepoDO): Promise<HotelDO> {
 		return this.findAndModifyHotel(hotelMeta, {
 			"amenityIdList": propertyDetails.amenityIdList,
@@ -72,24 +74,23 @@ export class MongoHotelDetailsRepository extends MongoRepository {
 		if (!this._thUtils.isUndefinedOrNull(optionalFindQueryList) && _.isArray(optionalFindQueryList)) {
 			findQuery = findQuery.concat(optionalFindQueryList);
 		}
-
-		this.findAndModify(
-			{
-				$and: findQuery
-			}, updateQuery).then((updatedDBHotel: Object) => {
-				if (!updatedDBHotel) {
-					var thError = new ThError(ThStatusCode.HotelDetailsRepositoryProblemUpdatingAccount, null);
-					ThLogger.getInstance().logBusiness(ThLogLevel.Info, "Problem updating account - concurrency", { hotelMeta: hotelMeta, updateQuery: updateQuery }, thError);
-					reject(thError);
-					return;
-				}
-				var updatedHotel: HotelDO = new HotelDO();
-				updatedHotel.buildFromObject(updatedDBHotel);
-				resolve(updatedHotel);
-			}).catch((err: Error) => {
+		this.findAndModifyDocument(
+			{ $and: findQuery }, updateQuery,
+			() => {
+				var thError = new ThError(ThStatusCode.HotelDetailsRepositoryProblemUpdatingAccount, null);
+				ThLogger.getInstance().logBusiness(ThLogLevel.Info, "Problem updating account - concurrency", { hotelMeta: hotelMeta, updateQuery: updateQuery }, thError);
+				reject(thError);
+			},
+			(err: Error) => {
 				var thError = new ThError(ThStatusCode.HotelDetailsRepositoryErrorUpdatingAccount, err);
 				ThLogger.getInstance().logError(ThLogLevel.Error, "Error activating hotel account", { hotelMeta: hotelMeta, updateQuery: updateQuery }, thError);
 				reject(thError);
-			});
+			},
+			(updatedDBHotel: Object) => {
+				var updatedHotel: HotelDO = new HotelDO();
+				updatedHotel.buildFromObject(updatedDBHotel);
+				resolve(updatedHotel);
+			}
+		);
 	}
 }

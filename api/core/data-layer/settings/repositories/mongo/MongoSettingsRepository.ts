@@ -20,12 +20,8 @@ import {AddOnProductCategoryDO} from '../../../common/data-objects/add-on-produc
 import _ = require('underscore');
 
 export class MongoSettingsRepository extends MongoRepository implements ISettingsRepository {
-    private _settingsEntity: Sails.Model;
-
     constructor() {
-        var settingsEntity = sails.models.settingsentity;
-        super(settingsEntity);
-        this._settingsEntity = settingsEntity;
+        super(sails.models.settingsentity);
     }
 
     public addSettings(setting: Object): Promise<boolean> {
@@ -34,21 +30,24 @@ export class MongoSettingsRepository extends MongoRepository implements ISetting
         });
     }
     private addSettingsCore(resolve: { (result: boolean): void }, reject: { (err: ThError): void }, setting: Object) {
-        this._settingsEntity.create(setting).then((createdSetting: Sails.QueryResult) => {
-            resolve(true);
-        }).catch((err: Error) => {
-            var errorCode = this.getMongoErrorCode(err);
-            if (errorCode == MongoErrorCodes.DuplicateKeyError) {
-                var thError = new ThError(ThStatusCode.SettingsMongoRepositoryAddDuplicateKeyError, err);
-                ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Setting already exists", setting, thError);
-                reject(thError);
-            }
-            else {
-                var thError = new ThError(ThStatusCode.SettingsMongoRepositoryAddError, err);
-                ThLogger.getInstance().logError(ThLogLevel.Error, "Error adding setting", setting, thError);
-                reject(thError);
-            }
-        });
+		this.createDocument(setting,
+			(err: Error) => {
+				var errorCode = this.getMongoErrorCode(err);
+				if (errorCode == MongoErrorCodes.DuplicateKeyError) {
+					var thError = new ThError(ThStatusCode.SettingsMongoRepositoryAddDuplicateKeyError, err);
+					ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Setting already exists", setting, thError);
+					reject(thError);
+				}
+				else {
+					var thError = new ThError(ThStatusCode.SettingsMongoRepositoryAddError, err);
+					ThLogger.getInstance().logError(ThLogLevel.Error, "Error adding setting", setting, thError);
+					reject(thError);
+				}
+			},
+			(createdSetting: Object) => {
+				resolve(true);
+			}
+		);
     }
 
     public getRoomAmenities(valueCriteria?: Object): Promise<AmenityDO[]> {
@@ -86,21 +85,28 @@ export class MongoSettingsRepository extends MongoRepository implements ISetting
     }
 
     private getSettingCore(settingType: SettingType, criteria: Object, resolve: { (result: any): void }, reject: { (err: ThError): void }) {
-        this._settingsEntity.findOne({ "metadata.type": settingType }).then((settingRead: Sails.QueryResult) => {
-            var resultDO = this.getSettingQueryResultDO(settingType, settingRead);
-            if (criteria) {
-                resultDO = _.where(resultDO, criteria);
-            }
-            resolve(resultDO);
-        }).catch((err: Error) => {
-            var errorCode = this.getMongoErrorCode(err);
-            var thError = new ThError(ThStatusCode.HotelRepositoryErrorAddingHotel, err);
-            ThLogger.getInstance().logError(ThLogLevel.Error, "Error retrieving setting.", { settingType: settingType, criteria: criteria }, thError);
-            reject(thError);
-        });
+		this.findOneDocument({ "metadata.type": settingType },
+			() => {
+				var thError = new ThError(ThStatusCode.MongoSettingsRepositoryNotFound, null);
+				ThLogger.getInstance().logBusiness(ThLogLevel.Error, "Setting not found", { settingType: settingType, criteria: criteria }, thError);
+				reject(thError);
+			},
+			(err: Error) => {
+				var thError = new ThError(ThStatusCode.SettingsMongoRepositoryReadError, err);
+				ThLogger.getInstance().logError(ThLogLevel.Error, "Error retrieving setting.", { settingType: settingType, criteria: criteria }, thError);
+				reject(thError);
+			},
+			(settingRead: Object) => {
+				var resultDO = this.getSettingQueryResultDO(settingType, settingRead);
+				if (criteria) {
+					resultDO = _.where(resultDO, criteria);
+				}
+				resolve(resultDO);
+			}
+		);
     }
 
-    private getSettingQueryResultDO(settingType: SettingType, queryResult: Sails.QueryResult): BaseDO[] {
+    private getSettingQueryResultDO(settingType: SettingType, queryResult: Object): BaseDO[] {
         var getSettingsResponseDO: BaseDO;
         switch (settingType) {
             case SettingType.RoomAmenities: getSettingsResponseDO = new AmenitySettingDO(); break;

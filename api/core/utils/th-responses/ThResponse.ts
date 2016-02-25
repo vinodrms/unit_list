@@ -51,6 +51,7 @@ export enum ThStatusCode {
     SettingsMongoRepositoryAddDuplicateKeyError,
     SettingsMongoRepositoryAddError,
     SettingsMongoRepositoryReadError,
+	MongoSettingsRepositoryNotFound,
     MongoRepositoryGetNetiveEntityError,
     MongoPatchErrorEnsuringUniqueIndexOnSettings,
 	HotelGetDetailsError,
@@ -107,13 +108,18 @@ export enum ThStatusCode {
 	MongoTaxRepositoryProblemUpdatingTax,
 	MongoTaxRepositoryErrorUpdatingTax,
 	MongoTaxRepositoryTaxNotFound,
-	MongoTaxRepositoryProblemAddingTax,
 	HotelDeleteTaxItemError,
 	HotelDeleteTaxItemErrorDeleting,
 	HotelDeleteTaxItemErrorValidating,
 	TaxControllerErrorGettingTaxes,
 	TaxControllerErrorSavingTax,
 	TaxControllerErrorDeletingTax,
+	MongoAddOnProductRepositoryProblemUpdatingAddOnProduct,
+	MongoAddOnProductRepositoryErrorUpdatingAddOnProduct,
+	MongoAddOnProductRepositoryNameAlreadyExists,
+	MongoAddOnProductRepositoryErrorAddingAddOnProduct,
+	MongoAddOnProductRepositoryProductNotFound,
+	MongoAddOnProductRepositoryErrorGettingAddOnProduct
 }
 
 var ThMessage: { [index: number]: string; } = {};
@@ -166,6 +172,7 @@ ThMessage[ThStatusCode.ImageUploadControllerGenericError] = "Error uploading fil
 ThMessage[ThStatusCode.SettingsMongoRepositoryAddDuplicateKeyError] = "Error inserting setting (duplicate key error).";
 ThMessage[ThStatusCode.SettingsMongoRepositoryAddError] = "Error inserting setting.";
 ThMessage[ThStatusCode.SettingsMongoRepositoryReadError] = "Error reading system setting.";
+ThMessage[ThStatusCode.MongoSettingsRepositoryNotFound] = "Setting not found.";
 ThMessage[ThStatusCode.MongoRepositoryGetNetiveEntityError] = "Error getting native entity for collection.";
 ThMessage[ThStatusCode.MongoPatchErrorEnsuringUniqueIndexOnSettings] = "Error ensuring unique index on settings collection.";
 ThMessage[ThStatusCode.HotelGetDetailsError] = "Error getting details for the hotel. Please try again.";
@@ -221,13 +228,18 @@ ThMessage[ThStatusCode.MongoTaxRepositoryErrorAddingTax] = "Error adding tax.";
 ThMessage[ThStatusCode.MongoTaxRepositoryProblemUpdatingTax] = "Problem updating the tax. It is possible that someone else changed it at the same time. Please refresh the page and try again.";
 ThMessage[ThStatusCode.MongoTaxRepositoryErrorUpdatingTax] = "Error updating tax.";
 ThMessage[ThStatusCode.MongoTaxRepositoryTaxNotFound] = "Tax not found.";
-ThMessage[ThStatusCode.MongoTaxRepositoryProblemAddingTax] = "Problem creating tax.";
 ThMessage[ThStatusCode.HotelDeleteTaxItemError] = "Error deleting tax item.";
 ThMessage[ThStatusCode.HotelDeleteTaxItemErrorDeleting] = "Error deleting tax item.";
 ThMessage[ThStatusCode.HotelDeleteTaxItemErrorValidating] = "Error validating the existing tax item.";
 ThMessage[ThStatusCode.TaxControllerErrorGettingTaxes] = "Error getting the taxes.";
 ThMessage[ThStatusCode.TaxControllerErrorSavingTax] = "Error saving tax.";
 ThMessage[ThStatusCode.TaxControllerErrorDeletingTax] = "Error deleting tax.";
+ThMessage[ThStatusCode.MongoAddOnProductRepositoryProblemUpdatingAddOnProduct] = "Problem updating the add on product. It is possible that someone else changed it at the same time. Please refresh the page and try again.";
+ThMessage[ThStatusCode.MongoAddOnProductRepositoryErrorUpdatingAddOnProduct] = "Error updating add on product.";
+ThMessage[ThStatusCode.MongoAddOnProductRepositoryNameAlreadyExists] = "The add on product name you entered already exists.";
+ThMessage[ThStatusCode.MongoAddOnProductRepositoryErrorAddingAddOnProduct] = "Error creating add on product.";
+ThMessage[ThStatusCode.MongoAddOnProductRepositoryProductNotFound] = "Add on product not found.";
+ThMessage[ThStatusCode.MongoAddOnProductRepositoryErrorGettingAddOnProduct] = "Error getting add on product.";
 
 export class ThResponse {
 	statusCode: ThStatusCode;

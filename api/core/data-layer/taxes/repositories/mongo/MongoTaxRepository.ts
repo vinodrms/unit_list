@@ -4,20 +4,13 @@ import {ThStatusCode} from '../../../../utils/th-responses/ThResponse';
 import {MongoRepository, MongoErrorCodes} from '../../../common/base/MongoRepository';
 import {ITaxRepository, TaxResponseRepoDO, TaxMetaRepoDO, TaxItemMetaRepoDO} from '../ITaxRepository';
 import {TaxDO, TaxStatus, TaxType} from '../../data-objects/TaxDO';
-import {IRepositoryCleaner} from '../../../common/base/IRepositoryCleaner';
 
 import _ = require('underscore');
 
-export class MongoTaxRepository extends MongoRepository implements ITaxRepository, IRepositoryCleaner {
-	private _taxEntity: Sails.Model;
-    constructor() {
-        var taxEntity = sails.models.taxesentity;
-        super(taxEntity);
-        this._taxEntity = taxEntity;
+export class MongoTaxRepository extends MongoRepository implements ITaxRepository {
+	constructor() {
+        super(sails.models.taxesentity);
     }
-	public cleanRepository(): Promise<Object> {
-		return this._taxEntity.destroy({});
-	}
 
 	public getTaxList(taxMeta: TaxMetaRepoDO): Promise<TaxResponseRepoDO> {
 		return new Promise<TaxResponseRepoDO>((resolve: { (result: TaxResponseRepoDO): void }, reject: { (err: ThError): void }) => {
@@ -26,23 +19,26 @@ export class MongoTaxRepository extends MongoRepository implements ITaxRepositor
 	}
 	private getTaxListCore(taxMeta: TaxMetaRepoDO, resolve: { (result: TaxResponseRepoDO): void }, reject: { (err: ThError): void }) {
 		var searchCriteria = { "hotelId": taxMeta.hotelId, "status": TaxStatus.Active };
-		this._taxEntity.find(searchCriteria).then((dbTaxList: Array<Sails.QueryResult>) => {
-            if (!dbTaxList || !_.isArray(dbTaxList)) {
+		this.findMultipleDocuments(searchCriteria,
+			() => {
 				var thError = new ThError(ThStatusCode.MongoTaxRepositoryInvalidList, null);
 				ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "no existing tax list", taxMeta, thError);
-				return;
+				reject(thError);
+			},
+			(err: Error) => {
+				var thError = new ThError(ThStatusCode.MongoTaxRepositoryErrorGettingTaxList, err);
+				ThLogger.getInstance().logError(ThLogLevel.Error, "Error getting tax list.", taxMeta, thError);
+				reject(thError);
+			},
+			(dbTaxList: Array<Object>) => {
+				var resultDO = this.getQueryResultDO(dbTaxList);
+				resolve(resultDO);
 			}
-			var resultDO = this.getQueryResultDO(dbTaxList);
-            resolve(resultDO);
-        }).catch((err: Error) => {
-            var thError = new ThError(ThStatusCode.MongoTaxRepositoryErrorGettingTaxList, err);
-            ThLogger.getInstance().logError(ThLogLevel.Error, "Error getting tax list.", taxMeta, thError);
-            reject(thError);
-        });
+		);
     }
-	private getQueryResultDO(dbTaxList: Array<Sails.QueryResult>): TaxResponseRepoDO {
+	private getQueryResultDO(dbTaxList: Array<Object>): TaxResponseRepoDO {
 		var taxList: TaxDO[] = [];
-		dbTaxList.forEach((dbTax: Sails.QueryResult) => {
+		dbTaxList.forEach((dbTax: Object) => {
 			var tax = new TaxDO();
 			tax.buildFromObject(dbTax);
 			taxList.push(tax);
@@ -59,21 +55,23 @@ export class MongoTaxRepository extends MongoRepository implements ITaxRepositor
 		});
 	}
 	private getTaxByIdCore(taxMeta: TaxMetaRepoDO, taxId: string, resolve: { (result: TaxDO): void }, reject: { (err: ThError): void }) {
-		this._taxEntity.findOne({ "hotelId": taxMeta.hotelId, "id": taxId }).then((foundTax: Sails.QueryResult) => {
-			if (!foundTax) {
+		this.findOneDocument({ "hotelId": taxMeta.hotelId, "id": taxId },
+			() => {
 				var thError = new ThError(ThStatusCode.MongoTaxRepositoryTaxNotFound, null);
 				ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Tax not found", { taxMeta: taxMeta, taxId: taxId }, thError);
 				reject(thError);
-				return;
+			},
+			(err: Error) => {
+				var thError = new ThError(ThStatusCode.MongoTaxRepositoryErrorGettingTax, err);
+				ThLogger.getInstance().logError(ThLogLevel.Error, "Error getting tax by id", { taxMeta: taxMeta, taxId: taxId }, thError);
+				reject(thError);
+			},
+			(foundTax: Object) => {
+				var tax: TaxDO = new TaxDO();
+				tax.buildFromObject(foundTax);
+				resolve(tax);
 			}
-			var tax: TaxDO = new TaxDO();
-			tax.buildFromObject(foundTax);
-			resolve(tax);
-		}).catch((err: Error) => {
-			var thError = new ThError(ThStatusCode.MongoTaxRepositoryErrorGettingTax, err);
-			ThLogger.getInstance().logError(ThLogLevel.Error, "Error getting tax by id", { taxMeta: taxMeta, taxId: taxId }, thError);
-			reject(thError);
-		});
+		);
 	}
 
 	public addTax(taxMeta: TaxMetaRepoDO, tax: TaxDO): Promise<TaxDO> {
@@ -85,19 +83,16 @@ export class MongoTaxRepository extends MongoRepository implements ITaxRepositor
 		tax.hotelId = taxMeta.hotelId;
 		tax.versionId = 0;
 		tax.status = TaxStatus.Active;
-		this._taxEntity.create(tax).then((createdTax: Sails.QueryResult) => {
-			if (!createdTax) {
-				var thError = new ThError(ThStatusCode.MongoTaxRepositoryProblemAddingTax, null);
-				ThLogger.getInstance().logBusiness(ThLogLevel.Error, "Error creatng tax", { taxMeta: taxMeta, tax: tax }, thError);
-				reject(thError);
-				return;
+		this.createDocument(tax,
+			(err: Error) => {
+				this.logAndReject(err, reject, { taxMeta: taxMeta, tax: tax }, ThStatusCode.MongoTaxRepositoryErrorAddingTax);
+			},
+			(createdTax: Object) => {
+				var tax: TaxDO = new TaxDO();
+				tax.buildFromObject(createdTax);
+				resolve(tax);
 			}
-			var tax: TaxDO = new TaxDO();
-			tax.buildFromObject(createdTax);
-			resolve(tax);
-		}).catch((err: Error) => {
-			this.logAndReject(err, reject, { taxMeta: taxMeta, tax: tax }, ThStatusCode.MongoTaxRepositoryErrorAddingTax);
-		});
+		);
 	}
 	private logAndReject(err: Error, reject: { (err: ThError): void }, context: Object, defaultStatusCode: ThStatusCode) {
 		var errorCode = this.getMongoErrorCode(err);
@@ -139,21 +134,21 @@ export class MongoTaxRepository extends MongoRepository implements ITaxRepositor
 			{ "id": taxItemMeta.id },
 			{ "versionId": taxItemMeta.versionId }
 		];
-		this.findAndModify(
-			{
-				$and: findQuery
-			}, updateQuery).then((updatedDBTax: Object) => {
-				if (!updatedDBTax) {
-					var thError = new ThError(ThStatusCode.MongoTaxRepositoryProblemUpdatingTax, null);
-					ThLogger.getInstance().logBusiness(ThLogLevel.Info, "Problem updating tax - concurrency", { taxMeta: taxMeta, taxItemMeta: taxItemMeta, updateQuery: updateQuery }, thError);
-					reject(thError);
-					return;
-				}
+		this.findAndModifyDocument(
+			{ $and: findQuery }, updateQuery,
+			() => {
+				var thError = new ThError(ThStatusCode.MongoTaxRepositoryProblemUpdatingTax, null);
+				ThLogger.getInstance().logBusiness(ThLogLevel.Info, "Problem updating tax - concurrency", { taxMeta: taxMeta, taxItemMeta: taxItemMeta, updateQuery: updateQuery }, thError);
+				reject(thError);
+			},
+			(err: Error) => {
+				this.logAndReject(err, reject, { taxMeta: taxMeta, updateQuery: updateQuery }, ThStatusCode.MongoTaxRepositoryErrorUpdatingTax);
+			},
+			(updatedDBTax: Object) => {
 				var tax: TaxDO = new TaxDO();
 				tax.buildFromObject(updatedDBTax);
 				resolve(tax);
-			}).catch((err: Error) => {
-				this.logAndReject(err, reject, { taxMeta: taxMeta, updateQuery: updateQuery }, ThStatusCode.MongoTaxRepositoryErrorUpdatingTax);
-			});
+			}
+		);
 	}
 }

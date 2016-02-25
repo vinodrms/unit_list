@@ -1,12 +1,26 @@
 import {AddOnProductDO} from '../data-objects/AddOnProductDO';
+import {LazyLoadRepoDO, LazyLoadMetaResponseRepoDO} from '../../common/repo-data-objects/LazyLoadRepoDO';
 
 export interface AddOnProductMetaRepoDO {
 	hotelId: string;
 }
+export interface AddOnProductSearchCriteriaRepoDO {
+	name?: string;
+	categoryIdList?: string[];
+}
+export interface AddOnProductItemMetaRepoDO {
+	id: string;
+	versionId: number;
+}
 
 export interface IAddOnProductRepository {
-	getAddOnProductList(meta: AddOnProductMetaRepoDO): Promise<AddOnProductDO[]>;
+	getAddOnProductCategoryIdList(meta: AddOnProductMetaRepoDO): Promise<string[]>;
+	getAddOnProductListCount(meta: AddOnProductMetaRepoDO, searchCriteria: AddOnProductSearchCriteriaRepoDO): Promise<LazyLoadMetaResponseRepoDO>;
+	getAddOnProductList(meta: AddOnProductMetaRepoDO, searchCriteria: AddOnProductSearchCriteriaRepoDO, lazyLoad?: LazyLoadRepoDO): Promise<AddOnProductDO[]>;
+
 	getAddOnProductById(meta: AddOnProductMetaRepoDO, addOnProductId: string): Promise<AddOnProductDO>;
-	
-	//addAddOnProduct(meta: AddOnProductMetaRepoDO, addOnProduct: AddOnProductDO):Prom
+
+	addAddOnProduct(meta: AddOnProductMetaRepoDO, addOnProduct: AddOnProductDO): Promise<AddOnProductDO>;
+	updateAddOnProduct(meta: AddOnProductMetaRepoDO, itemMeta: AddOnProductItemMetaRepoDO, addOnProduct: AddOnProductDO): Promise<AddOnProductDO>;
+	deleteAddOnProduct(meta: AddOnProductMetaRepoDO, itemMeta: AddOnProductItemMetaRepoDO): Promise<AddOnProductDO>;
 }

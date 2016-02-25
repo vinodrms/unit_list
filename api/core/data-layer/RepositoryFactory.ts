@@ -7,6 +7,8 @@ import {IBedRepository} from './beds/repositories/IBedRepository';
 import {MongoBedRepository} from './beds/repositories/mongo/MongoBedRepository';
 import {ITaxRepository} from './taxes/repositories/ITaxRepository';
 import {MongoTaxRepository} from './taxes/repositories/mongo/MongoTaxRepository';
+import {IAddOnProductRepository} from './add-on-products/repositories/IAddOnProductRepository';
+import {MongoAddOnProductRepository} from './add-on-products/repositories/mongo/MongoAddOnProductRepository';
 import {IRepositoryCleaner} from './common/base/IRepositoryCleaner';
 
 export class RepositoryFactory {
@@ -18,7 +20,7 @@ export class RepositoryFactory {
 	getRepositoryCleaners(): IRepositoryCleaner[] {
 		switch (this._databaseType) {
 			default:
-				return [new MongoHotelRepository(), new MongoBedRepository(), new MongoTaxRepository()];
+				return [new MongoHotelRepository(), new MongoBedRepository(), new MongoTaxRepository(), new MongoAddOnProductRepository()];
 		}
 	}
 
@@ -46,6 +48,13 @@ export class RepositoryFactory {
 		switch (this._databaseType) {
 			default:
 				return new MongoTaxRepository();
+		}
+	}
+
+	getAddOnProductRepository(): IAddOnProductRepository {
+		switch (this._databaseType) {
+			default:
+				return new MongoAddOnProductRepository();
 		}
 	}
 }

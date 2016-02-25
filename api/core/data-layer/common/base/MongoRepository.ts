@@ -2,6 +2,7 @@ import {ThUtils} from '../../../utils/ThUtils';
 import {ThLogger, ThLogLevel} from '../../../utils/logging/ThLogger';
 import {ThError} from '../../../utils/th-responses/ThError';
 import {ThStatusCode} from '../../../utils/th-responses/ThResponse';
+import {IRepositoryCleaner} from './IRepositoryCleaner';
 
 import _ = require('underscore');
 import mongodb = require('mongodb');
@@ -14,12 +15,16 @@ export enum MongoErrorCodes {
 var NativeMongoErrorCodes: { [index: number]: number; } = {};
 NativeMongoErrorCodes[MongoErrorCodes.DuplicateKeyError] = 11000;
 
-export class MongoRepository {
+export class MongoRepository implements IRepositoryCleaner {
     protected _thUtils: ThUtils;
 
 	constructor(private _sailsEntity: Sails.Model) {
         this._thUtils = new ThUtils();
     }
+
+	public cleanRepository(): Promise<Object> {
+		return this._sailsEntity.destroy({});
+	}
 
     protected getMongoErrorCode(err: any): MongoErrorCodes {
         if (!this._thUtils.isUndefinedOrNull(err, "originalError.code")) {
@@ -48,34 +53,36 @@ export class MongoRepository {
             });
         });
     }
-	protected findAndModify(query: Object, updates: Object): Promise<Object> {
-		return new Promise<any>((resolve: { (data: any): void; }, reject: { (err: Error): void; }) => {
-			this.getNativeMongoCollection().then((nativeCollection: any) => {
-				this.findAndModifyCore(resolve, reject, nativeCollection, query, updates);
-			}).catch((error: any) => {
-				reject(error);
-			});
-        });
+	protected findAndModifyDocument(searchCriteria: Object, updates: Object, notFoundCallback: { (): void }, errorCallback: { (err: Error): void }, successCallback: { (updatedDocument: Object): void }) {
+		this.getNativeMongoCollection().then((nativeCollection: any) => {
+			this.findAndModifyDocumentCore(nativeCollection, searchCriteria, updates, notFoundCallback, errorCallback, successCallback);
+		}).catch((error: any) => {
+			errorCallback(error);
+		});
 	}
-	private findAndModifyCore(resolve: { (data: any): void; }, reject: { (err: Error): void; }, nativeCollection: any, query: any, updates: Object) {
-		if (this._thUtils.isUndefinedOrNull(nativeCollection) || this._thUtils.isUndefinedOrNull(query) || this._thUtils.isUndefinedOrNull(updates)) {
-			reject(new Error("Null or empty parameters sent to findAndModify"));
+	private findAndModifyDocumentCore(nativeCollection: any, searchCriteria: any, updates: Object, notFoundCallback: { (): void }, errorCallback: { (err: Error): void }, successCallback: { (updatedDocument: Object): void }) {
+		if (this._thUtils.isUndefinedOrNull(nativeCollection) || this._thUtils.isUndefinedOrNull(searchCriteria) || this._thUtils.isUndefinedOrNull(updates)) {
+			errorCallback(new Error("Null or empty parameters sent to findAndModify"));
 			return;
 		}
 		try {
-			var preprocessedQuery = this.preprocessQuery(query);
+			var preprocessedSearchCriteria = this.preprocessQuery(searchCriteria);
 			var preprocessedUpdate = this.preprocessUpdateQuery(updates);
 		} catch (e) {
-			reject(e);
+			errorCallback(e);
 			return;
 		}
-		nativeCollection.findAndModify(preprocessedQuery, [], preprocessedUpdate, { new: true }, (err: any, record: Object) => {
+		nativeCollection.findAndModify(preprocessedSearchCriteria, [], preprocessedUpdate, { new: true }, (err: any, record: Object) => {
 			if (err) {
-				reject(err);
+				errorCallback(err);
+				return;
+			}
+			if (!record || !record['value']) {
+				notFoundCallback();
 				return;
 			}
 			var processedResult = this.processResult(record);
-			resolve(processedResult);
+			successCallback(processedResult);
 		});
 	}
 	private preprocessQuery(query: any): Object {
@@ -115,9 +122,6 @@ export class MongoRepository {
 		return processedUpdates;
 	}
 	private processResult(record: any): Object {
-		if (!record || !record.value) {
-			return null;
-		}
 		var object = record.value;
 		if (!this._thUtils.isUndefinedOrNull(object._id)) {
 			var objId: ObjectID = object._id;
@@ -126,4 +130,40 @@ export class MongoRepository {
 		}
 		return object;
 	}
+
+	protected findOneDocument(searchCriteria: Object, notFoundCallback: { (): void }, errorCallback: { (err: Error): void }, successCallback: { (foundDocument: Object): void }) {
+		this._sailsEntity.findOne(searchCriteria).then((foundDocument: Sails.QueryResult) => {
+			if (!foundDocument) {
+				notFoundCallback();
+				return;
+			}
+			successCallback(foundDocument);
+		}).catch((err: Error) => {
+			errorCallback(err);
+		});
+	}
+	protected findMultipleDocuments(searchCriteria: Object, emptyResultCallback: { (): void }, errorCallback: { (err: Error): void }, successCallback: { (foundDocumentList: Array<Object>): void }) {
+		this._sailsEntity.find(searchCriteria).then((foundDocumentList: Array<Sails.QueryResult>) => {
+			if ((!foundDocumentList || !_.isArray(foundDocumentList))) {
+				emptyResultCallback();
+				return;
+			}
+			successCallback(foundDocumentList);
+		}).catch((err: Error) => {
+			errorCallback(err);
+		});
+	}
+	protected createDocument(documentToCreate: Object, errorCallback: { (err: Error): void }, successCallback: { (createdDocument: Object): void }) {
+		this._sailsEntity.create(documentToCreate).then((createdDocument: Sails.QueryResult) => {
+			if (!createdDocument) {
+				errorCallback(new Error("Empty document created"));
+				return;
+			}
+			successCallback(createdDocument);
+		}).catch((err: Error) => {
+			errorCallback(err);
+		});
+	}
+
+	protected destroyAllDocuments
 }
