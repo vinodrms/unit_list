@@ -4,7 +4,10 @@ import {DefaultHotelBuilder} from './builders/DefaultHotelBuilder';
 import {HotelDO} from '../../core/data-layer/hotel/data-objects/HotelDO';
 import {UserDO} from '../../core/data-layer/hotel/data-objects/user/UserDO';
 import {PaymentMethodDO} from '../../core/data-layer/common/data-objects/payment-method/PaymentMethodDO';
+import {AddOnProductCategoryDO} from '../../core/data-layer/common/data-objects/add-on-product/AddOnProductCategoryDO';
 import {AmenityDO} from '../../core/data-layer/common/data-objects/amenity/AmenityDO';
+import {DefaultTaxBuilder} from './builders/DefaultTaxBuilder';
+import {TaxResponseRepoDO} from '../../core/data-layer/taxes/repositories/ITaxRepository';
 
 export class DefaultDataBuilder {
 	private static FirstUserIndex = 0;
@@ -16,6 +19,8 @@ export class DefaultDataBuilder {
 	private _userDO: UserDO;
 	private _paymentMethodList: PaymentMethodDO[];
 	private _hotelAmenityList: AmenityDO[];
+	private _taxes: TaxResponseRepoDO;
+	private _addOnProductCategoryList: AddOnProductCategoryDO[];
 
 	constructor(private _testContext: TestContext) {
 		this._repositoryCleaner = new RepositoryCleanerWrapper(this._testContext.appContext.getUnitPalConfig());
@@ -56,6 +61,16 @@ export class DefaultDataBuilder {
 				return settingsRepository.getHotelAmenities();
 			}).then((hotelAmenityList: AmenityDO[]) => {
 				this._hotelAmenityList = hotelAmenityList;
+
+				var taxBuilder = new DefaultTaxBuilder(this._testContext.appContext, this._testContext.sessionContext.sessionDO.hotel.id);
+				return taxBuilder.loadTaxes();
+			}).then((loadedTaxes: TaxResponseRepoDO) => {
+				this._taxes = loadedTaxes;
+
+				var settingsRepository = this._testContext.appContext.getRepositoryFactory().getSettingsRepository();
+				return settingsRepository.getAddOnProductCategories();
+			}).then((addOnProductCategoryList: AddOnProductCategoryDO[]) => {
+				this._addOnProductCategoryList = addOnProductCategoryList;
 				
 				// TODO: add other necessary build steps (e.g.: beds, price products etc.)
 				resolve(true);
@@ -81,5 +96,11 @@ export class DefaultDataBuilder {
 	}
 	public get hotelAmenityList(): AmenityDO[] {
 		return this._hotelAmenityList;
+	}
+	public get taxes(): TaxResponseRepoDO {
+		return this._taxes;
+	}
+	public get addOnProductCategoryList(): AddOnProductCategoryDO[] {
+		return this._addOnProductCategoryList;
 	}
 }

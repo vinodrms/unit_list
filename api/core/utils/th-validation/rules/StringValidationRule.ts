@@ -52,7 +52,7 @@ export class StringValidationRule extends AValidationRule {
 		}
 		return false;
 	}
-	public static buildNullable(maxLenght: number): StringValidationRule {
+	public static buildNullable(maxLenght?: number): StringValidationRule {
 		var rule = new StringValidationRule(maxLenght);
 		rule.isNullable = true;
 		return rule;

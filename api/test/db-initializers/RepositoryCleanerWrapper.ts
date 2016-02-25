@@ -4,6 +4,8 @@ import {IRepositoryCleaner} from '../../core/data-layer/common/base/IRepositoryC
 import {RepositoryFactory} from '../../core/data-layer/RepositoryFactory';
 import {UnitPalConfig} from '../../core/utils/environment/UnitPalConfig';
 
+import async = require("async");
+
 export class RepositoryCleanerWrapper implements IRepositoryCleaner {
 	private _repositories: IRepositoryCleaner[];
 	constructor(private _unitPalConfig: UnitPalConfig) {

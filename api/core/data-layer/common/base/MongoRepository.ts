@@ -7,6 +7,7 @@ import {IRepositoryCleaner} from './IRepositoryCleaner';
 import _ = require('underscore');
 import mongodb = require('mongodb');
 import ObjectID = mongodb.ObjectID;
+import NativeMongoCollection = mongodb.Collection;
 
 export enum MongoErrorCodes {
     GenericError,
@@ -66,7 +67,7 @@ export class MongoRepository implements IRepositoryCleaner {
 			return;
 		}
 		try {
-			var preprocessedSearchCriteria = this.preprocessQuery(searchCriteria);
+			var preprocessedSearchCriteria = this.preprocessSearchCriteria(searchCriteria);
 			var preprocessedUpdate = this.preprocessUpdateQuery(updates);
 		} catch (e) {
 			errorCallback(e);
@@ -85,13 +86,13 @@ export class MongoRepository implements IRepositoryCleaner {
 			successCallback(processedResult);
 		});
 	}
-	private preprocessQuery(query: any): Object {
-		if (!this._thUtils.isUndefinedOrNull(query.id)) {
-			query._id = new ObjectID(query.id);
-			delete query["id"];
+	private preprocessSearchCriteria(searchCriteria: any): Object {
+		if (!this._thUtils.isUndefinedOrNull(searchCriteria.id)) {
+			searchCriteria._id = new ObjectID(searchCriteria.id);
+			delete searchCriteria["id"];
 		}
-		else if (!this._thUtils.isUndefinedOrNull(query['$and']) && _.isArray(query['$and'])) {
-			_.map(query['$and'], (queryEntry: any) => {
+		else if (!this._thUtils.isUndefinedOrNull(searchCriteria['$and']) && _.isArray(searchCriteria['$and'])) {
+			_.map(searchCriteria['$and'], (queryEntry: any) => {
 				if (!this._thUtils.isUndefinedOrNull(queryEntry.id)) {
 					queryEntry._id = new ObjectID(queryEntry.id);
 					delete queryEntry.id;
@@ -99,7 +100,7 @@ export class MongoRepository implements IRepositoryCleaner {
 				return queryEntry;
 			});
 		}
-		return query;
+		return searchCriteria;
 	}
 	private getISODate(): Date {
 		return new Date((new Date()).toISOString());
@@ -129,6 +130,31 @@ export class MongoRepository implements IRepositoryCleaner {
 			delete object._id;
 		}
 		return object;
+	}
+
+	protected findDistinctDocumentFieldValues(fieldName: string, searchCriteria: Object, errorCallback: { (err: Error): void }, successCallback: { (distinctValues: Array<Object>): void }) {
+		this.getNativeMongoCollection().then((nativeCollection: any) => {
+			this.findDistinctDocumentFieldValuesCore(nativeCollection, fieldName, searchCriteria, errorCallback, successCallback);
+		}).catch((error: any) => {
+			errorCallback(error);
+		});
+	}
+	private findDistinctDocumentFieldValuesCore(nativeCollection: NativeMongoCollection, fieldName: string, searchCriteria: Object, errorCallback: { (err: Error): void }, successCallback: { (distinctValues: Object[]): void }) {
+		if (fieldName === 'id') {
+			fieldName = '_id';
+		}
+		var preprocessedSearchCriteria = this.preprocessSearchCriteria(searchCriteria);
+		nativeCollection.distinct(fieldName, searchCriteria, (err: Error, distinctValues: Object[]) => {
+			if (err) {
+				errorCallback(err);
+				return;
+			}
+			if (!distinctValues || !_.isArray(distinctValues)) {
+				errorCallback(new Error("Invalid response for native mongo distinct query"));
+				return;
+			}
+			successCallback(distinctValues);
+		});
 	}
 
 	protected findOneDocument(searchCriteria: Object, notFoundCallback: { (): void }, errorCallback: { (err: Error): void }, successCallback: { (foundDocument: Object): void }) {

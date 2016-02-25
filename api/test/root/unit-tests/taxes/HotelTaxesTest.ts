@@ -20,8 +20,8 @@ describe("Hotel Taxes Tests", function() {
 
 	var createdVatTax: TaxDO;
 	var createdOtherTax: TaxDO;
-	var numCreatedVatTaxes = 0;
-	var numCreatedOtherTaxes = 0;
+	var numCreatedVatTaxes;
+	var numCreatedOtherTaxes;
 
 	before(function(done: any) {
 		taxesHelper = new HotelTaxesTestHelper();
@@ -30,6 +30,11 @@ describe("Hotel Taxes Tests", function() {
 		testDataBuilder.buildWithDoneCallback(done);
     });
 	describe("Hotel Update Taxes Flow", function() {
+		it("Should have initialized the default taxes", function(done) {
+			numCreatedVatTaxes = testDataBuilder.taxes.vatList.length;
+			numCreatedOtherTaxes = testDataBuilder.taxes.otherTaxList.length;
+			done();
+		});
         it("Should not create VAT Tax using invalid value type", function(done) {
 			var vat = taxesHelper.getVatDOWithInvalidValueType();
 			var saveTaxItem = new HotelSaveTaxItem(testContext.appContext, testContext.sessionContext);
@@ -106,7 +111,7 @@ describe("Hotel Taxes Tests", function() {
 				done(e);
 			});
         });
-		
+
 		it("Should not create a second tax with the same name", function(done) {
 			var otherTax = taxesHelper.getValidOtherTaxDO();
 			var saveTaxItem = new HotelSaveTaxItem(testContext.appContext, testContext.sessionContext);
@@ -141,7 +146,7 @@ describe("Hotel Taxes Tests", function() {
 			var deleteTaxItem = new HotelDeleteTaxItem(testContext.appContext, testContext.sessionContext);
 			deleteTaxItem.delete({ id: createdVatTax.id }).then((deletedTax: TaxDO) => {
 				should.equal(deletedTax.status, TaxStatus.Deleted);
-				numCreatedVatTaxes --;
+				numCreatedVatTaxes--;
 				done();
 			}).catch((err: any) => {
 				done(err);

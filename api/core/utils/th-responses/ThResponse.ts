@@ -119,7 +119,14 @@ export enum ThStatusCode {
 	MongoAddOnProductRepositoryNameAlreadyExists,
 	MongoAddOnProductRepositoryErrorAddingAddOnProduct,
 	MongoAddOnProductRepositoryProductNotFound,
-	MongoAddOnProductRepositoryErrorGettingAddOnProduct
+	MongoAddOnProductRepositoryErrorGettingAddOnProduct,
+	MongoAddOnProductRepositoryErrorReadingCategoryIdList,
+	SaveAddOnProductItemError,
+	SaveAddOnProductItemInvalidCategoryId,
+	SaveAddOnProductItemInvalidTaxId,
+	AddOnProductItemUpdateStrategyErrorUpdating,
+	DeleteAddOnProductItemError,
+	DeleteAddOnProductItemErrorValidating
 }
 
 var ThMessage: { [index: number]: string; } = {};
@@ -240,6 +247,13 @@ ThMessage[ThStatusCode.MongoAddOnProductRepositoryNameAlreadyExists] = "The add 
 ThMessage[ThStatusCode.MongoAddOnProductRepositoryErrorAddingAddOnProduct] = "Error creating add on product.";
 ThMessage[ThStatusCode.MongoAddOnProductRepositoryProductNotFound] = "Add on product not found.";
 ThMessage[ThStatusCode.MongoAddOnProductRepositoryErrorGettingAddOnProduct] = "Error getting add on product.";
+ThMessage[ThStatusCode.MongoAddOnProductRepositoryErrorReadingCategoryIdList] = "Error reading category list for defined add on products.";
+ThMessage[ThStatusCode.SaveAddOnProductItemError] = "Error saving add on product.";
+ThMessage[ThStatusCode.SaveAddOnProductItemInvalidCategoryId] = "Invalid category id.";
+ThMessage[ThStatusCode.SaveAddOnProductItemInvalidTaxId] = "Invalid tax id.";
+ThMessage[ThStatusCode.AddOnProductItemUpdateStrategyErrorUpdating] = "Error updating add on product id.";
+ThMessage[ThStatusCode.DeleteAddOnProductItemError] = "Error deleting add on product.";
+ThMessage[ThStatusCode.DeleteAddOnProductItemErrorValidating] = "Error validating add on product.";
 
 export class ThResponse {
 	statusCode: ThStatusCode;

@@ -6,28 +6,27 @@ import {AddOnProductDO} from '../../data-objects/AddOnProductDO';
 import {LazyLoadRepoDO, LazyLoadMetaResponseRepoDO} from '../../../common/repo-data-objects/LazyLoadRepoDO';
 import {IAddOnProductRepository, AddOnProductMetaRepoDO, AddOnProductSearchCriteriaRepoDO, AddOnProductItemMetaRepoDO} from '../IAddOnProductRepository';
 import {MongoAddOnProductCrudOperationsRepository} from './operations/MongoAddOnProductCrudOperationsRepository';
+import {MongoAddOnProductReadOperationsRepository} from './operations/MongoAddOnProductReadOperationsRepository';
 
 export class MongoAddOnProductRepository extends MongoRepository implements IAddOnProductRepository {
 	private _crudRepository: MongoAddOnProductCrudOperationsRepository;
-    
+	private _readRepository: MongoAddOnProductReadOperationsRepository;
+
 	constructor() {
         var addOnProdEntity = sails.models.addonproductentity;
         super(addOnProdEntity);
 		this._crudRepository = new MongoAddOnProductCrudOperationsRepository(addOnProdEntity);
+		this._readRepository = new MongoAddOnProductReadOperationsRepository(addOnProdEntity);
     }
 
 	public getAddOnProductCategoryIdList(meta: AddOnProductMetaRepoDO): Promise<string[]> {
-		// TODO
-		return null;
+		return this._readRepository.getAddOnProductCategoryIdList(meta);
 	}
-
 	public getAddOnProductListCount(meta: AddOnProductMetaRepoDO, searchCriteria: AddOnProductSearchCriteriaRepoDO): Promise<LazyLoadMetaResponseRepoDO> {
-		// TODO
-		return null;
+		return this._readRepository.getAddOnProductListCount(meta, searchCriteria);
 	}
 	public getAddOnProductList(meta: AddOnProductMetaRepoDO, searchCriteria: AddOnProductSearchCriteriaRepoDO, lazyLoad?: LazyLoadRepoDO): Promise<AddOnProductDO[]> {
-		// TODO
-		return null;
+		return this._readRepository.getAddOnProductList(meta, searchCriteria, lazyLoad);
 	}
 
 	public getAddOnProductById(meta: AddOnProductMetaRepoDO, addOnProductId: string): Promise<AddOnProductDO> {

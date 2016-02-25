@@ -9,8 +9,8 @@ import {AddOnProductRepositoryHelper} from './helpers/AddOnProductRepositoryHelp
 export class MongoAddOnProductCrudOperationsRepository extends MongoRepository {
 	private _helper: AddOnProductRepositoryHelper;
 
-    constructor(private _addOnProdEntity: Sails.Model) {
-        super(_addOnProdEntity);
+    constructor(addOnProdEntity: Sails.Model) {
+        super(addOnProdEntity);
 		this._helper = new AddOnProductRepositoryHelper();
     }
 	public addAddOnProduct(meta: AddOnProductMetaRepoDO, addOnProduct: AddOnProductDO): Promise<AddOnProductDO> {

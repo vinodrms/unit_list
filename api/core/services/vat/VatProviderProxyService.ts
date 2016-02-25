@@ -53,7 +53,7 @@ export class VatProviderProxyService implements IVatProvider {
 				if (!euMember) {
 					var thError = new ThError(ThStatusCode.VatProviderProxyServiceNonEuCountry, null);
 					ThLogger.getInstance().logBusiness(ThLogLevel.Info, "Non EU Country", { countryCode: this._countryCode, vat: this._vat }, thError);
-					reject(thError);
+					throw thError;
 				}
 				else {
 					return new Promise<boolean>((resolve: { (result: boolean): void }, reject: { (err: ThError): void }) => { resolve(true); });
