@@ -8,6 +8,8 @@ import {AddOnProductCategoryDO} from '../../core/data-layer/common/data-objects/
 import {AmenityDO} from '../../core/data-layer/common/data-objects/amenity/AmenityDO';
 import {DefaultTaxBuilder} from './builders/DefaultTaxBuilder';
 import {TaxResponseRepoDO} from '../../core/data-layer/taxes/repositories/ITaxRepository';
+import {DefaultAddOnProductBuilder} from './builders/DefaultAddOnProductBuilder';
+import {AddOnProductDO} from '../../core/data-layer/add-on-products/data-objects/AddOnProductDO';
 
 export class DefaultDataBuilder {
 	private static FirstUserIndex = 0;
@@ -21,6 +23,7 @@ export class DefaultDataBuilder {
 	private _hotelAmenityList: AmenityDO[];
 	private _taxes: TaxResponseRepoDO;
 	private _addOnProductCategoryList: AddOnProductCategoryDO[];
+	private _addOnProductList: AddOnProductDO[];
 
 	constructor(private _testContext: TestContext) {
 		this._repositoryCleaner = new RepositoryCleanerWrapper(this._testContext.appContext.getUnitPalConfig());
@@ -62,8 +65,8 @@ export class DefaultDataBuilder {
 			}).then((hotelAmenityList: AmenityDO[]) => {
 				this._hotelAmenityList = hotelAmenityList;
 
-				var taxBuilder = new DefaultTaxBuilder(this._testContext.appContext, this._testContext.sessionContext.sessionDO.hotel.id);
-				return taxBuilder.loadTaxes();
+				var taxBuilder = new DefaultTaxBuilder(this._testContext);
+				return taxBuilder.loadTaxes(taxBuilder, this._testContext);
 			}).then((loadedTaxes: TaxResponseRepoDO) => {
 				this._taxes = loadedTaxes;
 
@@ -71,6 +74,11 @@ export class DefaultDataBuilder {
 				return settingsRepository.getAddOnProductCategories();
 			}).then((addOnProductCategoryList: AddOnProductCategoryDO[]) => {
 				this._addOnProductCategoryList = addOnProductCategoryList;
+
+				var addOnProductBuilder = new DefaultAddOnProductBuilder(this._testContext);
+				return addOnProductBuilder.loadAddOnProducts(addOnProductBuilder, this._addOnProductCategoryList, this._taxes);
+			}).then((addOnProductList: AddOnProductDO[]) => {
+				this._addOnProductList = addOnProductList;
 				
 				// TODO: add other necessary build steps (e.g.: beds, price products etc.)
 				resolve(true);
@@ -102,5 +110,8 @@ export class DefaultDataBuilder {
 	}
 	public get addOnProductCategoryList(): AddOnProductCategoryDO[] {
 		return this._addOnProductCategoryList;
+	}
+	public get addOnProductList(): AddOnProductDO[] {
+		return this._addOnProductList;
 	}
 }

@@ -19,12 +19,7 @@ export class MongoTaxRepository extends MongoRepository implements ITaxRepositor
 	}
 	private getTaxListCore(taxMeta: TaxMetaRepoDO, resolve: { (result: TaxResponseRepoDO): void }, reject: { (err: ThError): void }) {
 		var searchCriteria = { "hotelId": taxMeta.hotelId, "status": TaxStatus.Active };
-		this.findMultipleDocuments(searchCriteria,
-			() => {
-				var thError = new ThError(ThStatusCode.MongoTaxRepositoryInvalidList, null);
-				ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "no existing tax list", taxMeta, thError);
-				reject(thError);
-			},
+		this.findMultipleDocuments({ criteria: searchCriteria },
 			(err: Error) => {
 				var thError = new ThError(ThStatusCode.MongoTaxRepositoryErrorGettingTaxList, err);
 				ThLogger.getInstance().logError(ThLogLevel.Error, "Error getting tax list.", taxMeta, thError);
@@ -129,13 +124,13 @@ export class MongoTaxRepository extends MongoRepository implements ITaxRepositor
 	}
 	private findAndModifyTaxCore(taxMeta: TaxMetaRepoDO, taxItemMeta: TaxItemMetaRepoDO, updateQuery: any, resolve: { (result: TaxDO): void }, reject: { (err: ThError): void }) {
 		updateQuery.$inc = { "versionId": 1 };
-		var findQuery: Object[] = [
-			{ "hotelId": taxMeta.hotelId },
-			{ "id": taxItemMeta.id },
-			{ "versionId": taxItemMeta.versionId }
-		];
+		var findQuery: Object = {
+			"hotelId": taxMeta.hotelId,
+			"id": taxItemMeta.id,
+			"versionId": taxItemMeta.versionId
+		};
 		this.findAndModifyDocument(
-			{ $and: findQuery }, updateQuery,
+			findQuery, updateQuery,
 			() => {
 				var thError = new ThError(ThStatusCode.MongoTaxRepositoryProblemUpdatingTax, null);
 				ThLogger.getInstance().logBusiness(ThLogLevel.Info, "Problem updating tax - concurrency", { taxMeta: taxMeta, taxItemMeta: taxItemMeta, updateQuery: updateQuery }, thError);

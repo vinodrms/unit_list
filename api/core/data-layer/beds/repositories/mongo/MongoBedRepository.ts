@@ -21,12 +21,7 @@ export class MongoBedRepository extends MongoRepository implements IBedRepositor
 	}
     private getBedListCore(bedMeta: BedMetaRepoDO, resolve: { (result: BedDO[]): void }, reject: { (err: ThError): void }) {
 		var searchCriteria = { "hotelId": bedMeta.hotelId, "status": BedStatus.Active };
-		this.findMultipleDocuments(searchCriteria,
-			() => {
-				var thError = new ThError(ThStatusCode.MongoBedRepositoryInvalidList, null);
-				ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "no existing bed list", bedMeta, thError);
-				reject(thError);
-			},
+		this.findMultipleDocuments({criteria: searchCriteria},
 			(err: Error) => {
 				var thError = new ThError(ThStatusCode.MongoBedRepositoryErrorGettingBedList, err);
 				ThLogger.getInstance().logError(ThLogLevel.Error, "Error getting bed list.", bedMeta, thError);
@@ -122,12 +117,12 @@ export class MongoBedRepository extends MongoRepository implements IBedRepositor
 	}
     private findAndModifyBedCore(bedMeta: BedMetaRepoDO, bedItemMeta: BedItemMetaRepoDO, updateQuery: any, resolve: { (result: BedDO): void }, reject: { (err: ThError): void }) {
 		updateQuery.$inc = { "versionId": 1 };
-		var findQuery: Object[] = [
-			{ "hotelId": bedMeta.hotelId },
-			{ "id": bedItemMeta.id },
-			{ "versionId": bedItemMeta.versionId }
-		];
-		this.findAndModifyDocument({ $and: findQuery }, updateQuery,
+		var findQuery: Object = {
+			"hotelId": bedMeta.hotelId,
+			"id": bedItemMeta.id,
+			"versionId": bedItemMeta.versionId
+		};
+		this.findAndModifyDocument(findQuery, updateQuery,
 			() => {
 				var thError = new ThError(ThStatusCode.MongoBedRepositoryErrorUpdatingBed, null);
 				ThLogger.getInstance().logBusiness(ThLogLevel.Info, "Problem updating bed - concurrency", { bedMeta: bedMeta, bedItemMeta: bedItemMeta, updateQuery: updateQuery }, thError);

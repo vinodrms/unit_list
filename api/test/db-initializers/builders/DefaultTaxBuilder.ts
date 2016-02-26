@@ -1,52 +1,50 @@
 import {TaxDO, TaxStatus, TaxType, TaxValueType} from '../../../core/data-layer/taxes/data-objects/TaxDO';
 import {ThError} from '../../../core/utils/th-responses/ThError';
 import {TaxResponseRepoDO} from '../../../core/data-layer/taxes/repositories/ITaxRepository';
-import {AppContext} from '../../../core/utils/AppContext';
+import {TestContext} from '../../helpers/TestContext';
 
 import async = require("async");
 
+export interface ITaxDataSource {
+	getTaxList(): TaxDO[];
+}
+
 export class DefaultTaxBuilder {
-	constructor(private _appContext: AppContext, private _hotelId: string) {
+	constructor(private _testContext: TestContext) {
 	}
-	private getTaxList(): TaxDO[] {
+	public getTaxList(): TaxDO[] {
 		var taxList = [];
-
-        var vatTax = new TaxDO();
-		vatTax.hotelId = this._hotelId;
-		vatTax.name = "[Builder] Romanian VAT";
-        vatTax.status = TaxStatus.Active;
-		vatTax.type = TaxType.Vat;
-		vatTax.value = 0.2;
-		vatTax.valueType = TaxValueType.Percentage;
-		taxList.push(vatTax);
-
-        var otherTax = new TaxDO();
-		otherTax.hotelId = this._hotelId;
-		otherTax.name = "[Builder] City Tax";
-        otherTax.status = TaxStatus.Active;
-		otherTax.type = TaxType.OtherTax;
-		otherTax.value = 50;
-		otherTax.valueType = TaxValueType.Fixed;
-		taxList.push(otherTax);
-
+		taxList.push(DefaultTaxBuilder.buildTaxDO(this._testContext, "[Builder] Romanian VAT", TaxType.Vat, 0.2, TaxValueType.Percentage));
+		taxList.push(DefaultTaxBuilder.buildTaxDO(this._testContext, "[Builder] City Tax", TaxType.OtherTax, 50, TaxValueType.Fixed));
 		return taxList;
 	}
-	public loadTaxes(): Promise<TaxResponseRepoDO> {
+	public static buildTaxDO(testContext: TestContext, name: string, taxType: TaxType, value: number, valueType: TaxValueType): TaxDO {
+		var tax = new TaxDO();
+		tax.hotelId = testContext.sessionContext.sessionDO.hotel.id;
+		tax.name = name;
+        tax.status = TaxStatus.Active;
+		tax.type = taxType;
+		tax.value = value;
+		tax.valueType = valueType;
+		return tax;
+	}
+
+	public loadTaxes(dataSource:ITaxDataSource, testContext: TestContext): Promise<TaxResponseRepoDO> {
 		return new Promise<TaxResponseRepoDO>((resolve: { (result: TaxResponseRepoDO): void }, reject: { (err: ThError): void }) => {
-			this.loadTaxesCore(resolve, reject);
+			this.loadTaxesCore(resolve, reject, dataSource, testContext);
 		});
 	}
-	private loadTaxesCore(resolve: { (result: TaxResponseRepoDO): void }, reject: { (err: ThError): void }) {
+	private loadTaxesCore(resolve: { (result: TaxResponseRepoDO): void }, reject: { (err: ThError): void }, dataSource:ITaxDataSource, testContext: TestContext) {
 		var taxIndex = 0;
-		var taxList: TaxDO[] = this.getTaxList();
+		var taxList: TaxDO[] = dataSource.getTaxList();
 		var addedTaxes: TaxDO[] = [];
 		async.whilst(
 			(() => {
 				return taxIndex < taxList.length;
 			}),
 			((finishInsertSingleTaxCallback: any) => {
-				var taxRepo = this._appContext.getRepositoryFactory().getTaxRepository();
-				taxRepo.addTax({ hotelId: this._hotelId }, taxList[taxIndex ++]).then((result: TaxDO) => {
+				var taxRepo = testContext.appContext.getRepositoryFactory().getTaxRepository();
+				taxRepo.addTax({ hotelId: testContext.sessionContext.sessionDO.hotel.id }, taxList[taxIndex++]).then((result: TaxDO) => {
 					addedTaxes.push(result);
 					finishInsertSingleTaxCallback(null, result);
 				}).catch((error: any) => {

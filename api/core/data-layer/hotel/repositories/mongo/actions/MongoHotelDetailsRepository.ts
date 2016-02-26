@@ -60,22 +60,19 @@ export class MongoHotelDetailsRepository extends MongoRepository {
 		});
 	}
 
-	private findAndModifyHotel(hotelMeta: HotelMetaRepoDO, updateQuery: Object, optionalFindQueryList?: Object[]): Promise<HotelDO> {
+	private findAndModifyHotel(hotelMeta: HotelMetaRepoDO, updateQuery: Object): Promise<HotelDO> {
 		return new Promise<HotelDO>((resolve: { (updatedHotel: HotelDO): void }, reject: { (err: any): void }) => {
-			this.findAndModifyHotelCore(resolve, reject, hotelMeta, updateQuery, optionalFindQueryList);
+			this.findAndModifyHotelCore(resolve, reject, hotelMeta, updateQuery);
 		});
 	}
-	private findAndModifyHotelCore(resolve: { (updatedHotel: HotelDO): void }, reject: { (err: ThError): void }, hotelMeta: HotelMetaRepoDO, updateQuery: any, optionalFindQueryList?: Object[]) {
+	private findAndModifyHotelCore(resolve: { (updatedHotel: HotelDO): void }, reject: { (err: ThError): void }, hotelMeta: HotelMetaRepoDO, updateQuery: any) {
 		updateQuery.$inc = { "versionId": 1 };
-		var findQuery: Object[] = [
-			{ "id": hotelMeta.id },
-			{ "versionId": hotelMeta.versionId }
-		];
-		if (!this._thUtils.isUndefinedOrNull(optionalFindQueryList) && _.isArray(optionalFindQueryList)) {
-			findQuery = findQuery.concat(optionalFindQueryList);
-		}
+		var findQuery: Object = {
+			"id": hotelMeta.id,
+			"versionId": hotelMeta.versionId
+		};
 		this.findAndModifyDocument(
-			{ $and: findQuery }, updateQuery,
+			findQuery, updateQuery,
 			() => {
 				var thError = new ThError(ThStatusCode.HotelDetailsRepositoryProblemUpdatingAccount, null);
 				ThLogger.getInstance().logBusiness(ThLogLevel.Info, "Problem updating account - concurrency", { hotelMeta: hotelMeta, updateQuery: updateQuery }, thError);

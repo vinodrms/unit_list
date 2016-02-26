@@ -4,7 +4,7 @@ import {ThStatusCode} from '../../../../utils/th-responses/ThResponse';
 import {MongoRepository, MongoErrorCodes} from '../../../common/base/MongoRepository';
 import {AddOnProductDO} from '../../data-objects/AddOnProductDO';
 import {LazyLoadRepoDO, LazyLoadMetaResponseRepoDO} from '../../../common/repo-data-objects/LazyLoadRepoDO';
-import {IAddOnProductRepository, AddOnProductMetaRepoDO, AddOnProductSearchCriteriaRepoDO, AddOnProductItemMetaRepoDO} from '../IAddOnProductRepository';
+import {IAddOnProductRepository, AddOnProductMetaRepoDO, AddOnProductSearchCriteriaRepoDO, AddOnProductItemMetaRepoDO, AddOnProductSearchResultRepoDO} from '../IAddOnProductRepository';
 import {MongoAddOnProductCrudOperationsRepository} from './operations/MongoAddOnProductCrudOperationsRepository';
 import {MongoAddOnProductReadOperationsRepository} from './operations/MongoAddOnProductReadOperationsRepository';
 
@@ -25,7 +25,7 @@ export class MongoAddOnProductRepository extends MongoRepository implements IAdd
 	public getAddOnProductListCount(meta: AddOnProductMetaRepoDO, searchCriteria: AddOnProductSearchCriteriaRepoDO): Promise<LazyLoadMetaResponseRepoDO> {
 		return this._readRepository.getAddOnProductListCount(meta, searchCriteria);
 	}
-	public getAddOnProductList(meta: AddOnProductMetaRepoDO, searchCriteria: AddOnProductSearchCriteriaRepoDO, lazyLoad?: LazyLoadRepoDO): Promise<AddOnProductDO[]> {
+	public getAddOnProductList(meta: AddOnProductMetaRepoDO, searchCriteria: AddOnProductSearchCriteriaRepoDO, lazyLoad?: LazyLoadRepoDO): Promise<AddOnProductSearchResultRepoDO> {
 		return this._readRepository.getAddOnProductList(meta, searchCriteria, lazyLoad);
 	}
 

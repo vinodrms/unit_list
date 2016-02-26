@@ -78,12 +78,12 @@ export class MongoAddOnProductCrudOperationsRepository extends MongoRepository {
 	}
 	private findAndModifyAddOnProductCore(meta: AddOnProductMetaRepoDO, itemMeta: AddOnProductItemMetaRepoDO, updateQuery: any, resolve: { (result: AddOnProductDO): void }, reject: { (err: ThError): void }) {
 		updateQuery.$inc = { "versionId": 1 };
-		var findQuery: Object[] = [
-			{ "hotelId": meta.hotelId },
-			{ "id": itemMeta.id },
-			{ "versionId": itemMeta.versionId }
-		];
-		this.findAndModifyDocument({ $and: findQuery }, updateQuery,
+		var findQuery: Object = {
+			"hotelId": meta.hotelId,
+			"id": itemMeta.id,
+			"versionId": itemMeta.versionId
+		};
+		this.findAndModifyDocument(findQuery, updateQuery,
 			() => {
 				var thError = new ThError(ThStatusCode.MongoAddOnProductRepositoryProblemUpdatingAddOnProduct, null);
 				ThLogger.getInstance().logBusiness(ThLogLevel.Info, "Problem updating add on product - concurrency", { meta: meta, itemMeta: itemMeta, updateQuery: updateQuery }, thError);
