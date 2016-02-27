@@ -40,31 +40,17 @@ export class DefaultAddOnProductBuilder implements IAddOnProductDataSource {
 		});
 	}
 	private loadAddOnProductsCore(resolve: { (result: AddOnProductDO[]): void }, reject: { (err: ThError): void }, dataSource: IAddOnProductDataSource, addOnProductCategoryList: AddOnProductCategoryDO[], taxes: TaxResponseRepoDO) {
-		var aopIndex = 0;
-		var aop: AddOnProductDO[] = dataSource.getAddOnProductList(addOnProductCategoryList, taxes);
-		var addedAopList: AddOnProductDO[] = [];
-		async.whilst(
-			(() => {
-				return aopIndex < aop.length;
-			}),
-			((finishInsertSingleTaxCallback: any) => {
-				var aopRepo = this._testContext.appContext.getRepositoryFactory().getAddOnProductRepository();
-				aopRepo.addAddOnProduct({ hotelId: this._testContext.sessionContext.sessionDO.hotel.id }, aop[aopIndex++])
-					.then((result: AddOnProductDO) => {
-						addedAopList.push(result);
-						finishInsertSingleTaxCallback(null, result);
-					}).catch((error: any) => {
-						finishInsertSingleTaxCallback(error);
-					});
-			}),
-			((err: any) => {
-				if (err) {
-					reject(err);
-				}
-				else {
-					resolve(addedAopList);
-				}
-			})
-		);
+		var addOnProductList: AddOnProductDO[] = dataSource.getAddOnProductList(addOnProductCategoryList, taxes);
+		var addOnProductRepository = this._testContext.appContext.getRepositoryFactory().getAddOnProductRepository();
+
+		var aopPromiseList: Promise<AddOnProductDO>[] = [];
+		addOnProductList.forEach((addOnProduct: AddOnProductDO) => {
+			aopPromiseList.push(addOnProductRepository.addAddOnProduct({ hotelId: this._testContext.sessionContext.sessionDO.hotel.id }, addOnProduct));
+		});
+		Promise.all(aopPromiseList).then((addOnProductList: AddOnProductDO[]) => {
+			resolve(addOnProductList);
+		}).catch((error: any) => {
+			reject(error);
+		});
 	}
 }

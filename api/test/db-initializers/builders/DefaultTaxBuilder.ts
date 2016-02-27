@@ -3,8 +3,6 @@ import {ThError} from '../../../core/utils/th-responses/ThError';
 import {TaxResponseRepoDO} from '../../../core/data-layer/taxes/repositories/ITaxRepository';
 import {TestContext} from '../../helpers/TestContext';
 
-import async = require("async");
-
 export interface ITaxDataSource {
 	getTaxList(): TaxDO[];
 }
@@ -29,40 +27,29 @@ export class DefaultTaxBuilder {
 		return tax;
 	}
 
-	public loadTaxes(dataSource:ITaxDataSource, testContext: TestContext): Promise<TaxResponseRepoDO> {
+	public loadTaxes(dataSource: ITaxDataSource, testContext: TestContext): Promise<TaxResponseRepoDO> {
 		return new Promise<TaxResponseRepoDO>((resolve: { (result: TaxResponseRepoDO): void }, reject: { (err: ThError): void }) => {
 			this.loadTaxesCore(resolve, reject, dataSource, testContext);
 		});
 	}
-	private loadTaxesCore(resolve: { (result: TaxResponseRepoDO): void }, reject: { (err: ThError): void }, dataSource:ITaxDataSource, testContext: TestContext) {
+	private loadTaxesCore(resolve: { (result: TaxResponseRepoDO): void }, reject: { (err: ThError): void }, dataSource: ITaxDataSource, testContext: TestContext) {
 		var taxIndex = 0;
 		var taxList: TaxDO[] = dataSource.getTaxList();
-		var addedTaxes: TaxDO[] = [];
-		async.whilst(
-			(() => {
-				return taxIndex < taxList.length;
-			}),
-			((finishInsertSingleTaxCallback: any) => {
-				var taxRepo = testContext.appContext.getRepositoryFactory().getTaxRepository();
-				taxRepo.addTax({ hotelId: testContext.sessionContext.sessionDO.hotel.id }, taxList[taxIndex++]).then((result: TaxDO) => {
-					addedTaxes.push(result);
-					finishInsertSingleTaxCallback(null, result);
-				}).catch((error: any) => {
-					finishInsertSingleTaxCallback(error);
-				});
-			}),
-			((err: any) => {
-				if (err) {
-					reject(err);
-				}
-				else {
-					var taxResponse: TaxResponseRepoDO = {
-						vatList: _.filter(addedTaxes, (tax: TaxDO) => { return tax.type === TaxType.Vat }),
-						otherTaxList: _.filter(addedTaxes, (tax: TaxDO) => { return tax.type === TaxType.OtherTax })
-					}
-					resolve(taxResponse);
-				}
-			})
-		);
+
+		var taxRepo = testContext.appContext.getRepositoryFactory().getTaxRepository();
+		var taxPromiseList: Promise<TaxDO>[] = [];
+
+		taxList.forEach((tax: TaxDO) => {
+			taxPromiseList.push(taxRepo.addTax({ hotelId: testContext.sessionContext.sessionDO.hotel.id }, tax));
+		});
+		Promise.all(taxPromiseList).then((addedTaxList: TaxDO[]) => {
+			var taxResponse: TaxResponseRepoDO = {
+				vatList: _.filter(addedTaxList, (tax: TaxDO) => { return tax.type === TaxType.Vat }),
+				otherTaxList: _.filter(addedTaxList, (tax: TaxDO) => { return tax.type === TaxType.OtherTax })
+			}
+			resolve(taxResponse);
+		}).catch((error: any) => {
+			reject(error);
+		});
 	}
 }

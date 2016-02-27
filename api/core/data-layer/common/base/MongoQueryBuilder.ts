@@ -10,7 +10,7 @@ export class MongoQueryBuilder {
 		this._processedQuery = {};
 	}
 
-	public addMultipleSelectOptions(fieldName: string, options: Object[]) {
+	public addMultipleSelectOptions<T>(fieldName: string, options: T[]) {
 		if (this._thUtils.isUndefinedOrNull(options) || !_.isArray(options)) {
 			return;
 		}
@@ -25,7 +25,7 @@ export class MongoQueryBuilder {
 		this._processedQuery[fieldName] = { "$regex": regexValue, "$options": "i" };
 	}
 
-	public addExactMatch(fieldName: string, value: any) {
+	public addExactMatch<T>(fieldName: string, value: T) {
 		if (this._thUtils.isUndefinedOrNull(value)) {
 			return;
 		}

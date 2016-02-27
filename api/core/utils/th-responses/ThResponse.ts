@@ -126,7 +126,13 @@ export enum ThStatusCode {
 	SaveAddOnProductItemInvalidTaxId,
 	AddOnProductItemUpdateStrategyErrorUpdating,
 	DeleteAddOnProductItemError,
-	DeleteAddOnProductItemErrorValidating
+	DeleteAddOnProductItemErrorValidating,
+	AddOnProductsControllerErrorGettingAddOnProduct,
+	AddOnProductsControllerErrorSavingAddOnProduct,
+	AddOnProductsControllerErrorDeletingAddOnProduct,
+	AddOnProductsControllerErrorGettingCategoryIdList,
+	AddOnProductsControllerErrorGettingCount,
+	AddOnProductsControllerErrorGettingList
 }
 
 var ThMessage: { [index: number]: string; } = {};
@@ -254,6 +260,12 @@ ThMessage[ThStatusCode.SaveAddOnProductItemInvalidTaxId] = "Invalid tax id.";
 ThMessage[ThStatusCode.AddOnProductItemUpdateStrategyErrorUpdating] = "Error updating add on product id.";
 ThMessage[ThStatusCode.DeleteAddOnProductItemError] = "Error deleting add on product.";
 ThMessage[ThStatusCode.DeleteAddOnProductItemErrorValidating] = "Error validating add on product.";
+ThMessage[ThStatusCode.AddOnProductsControllerErrorGettingAddOnProduct] = "Error getting add on product.";
+ThMessage[ThStatusCode.AddOnProductsControllerErrorSavingAddOnProduct] = "Error saving add on product.";
+ThMessage[ThStatusCode.AddOnProductsControllerErrorDeletingAddOnProduct] = "Error deleting add on product.";
+ThMessage[ThStatusCode.AddOnProductsControllerErrorGettingCategoryIdList] = "Error getting the categories for your add on products.";
+ThMessage[ThStatusCode.AddOnProductsControllerErrorGettingCount] = "Error getting the number of add on products.";
+ThMessage[ThStatusCode.AddOnProductsControllerErrorGettingList] = "Error getting the list of add on products.";
 
 export class ThResponse {
 	statusCode: ThStatusCode;

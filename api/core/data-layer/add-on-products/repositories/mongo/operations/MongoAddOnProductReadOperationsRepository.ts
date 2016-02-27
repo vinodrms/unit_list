@@ -44,7 +44,7 @@ export class MongoAddOnProductReadOperationsRepository extends MongoRepository {
 		});
 	}
 	private getAddOnProductListCountCore(resolve: { (result: LazyLoadMetaResponseRepoDO): void }, reject: { (err: ThError): void }, meta: AddOnProductMetaRepoDO, searchCriteria: AddOnProductSearchCriteriaRepoDO) {
-		var query = this.buildAddOnProductQuery(meta, searchCriteria);
+		var query = this.buildSearchCriteria(meta, searchCriteria);
 		return this.getDocumentCount(query,
 			(err: Error) => {
 				var thError = new ThError(ThStatusCode.MongoAddOnProductRepositoryErrorReadingDocumentCount, err);
@@ -63,7 +63,7 @@ export class MongoAddOnProductReadOperationsRepository extends MongoRepository {
 	}
 	private getAddOnProductListCore(resolve: { (result: AddOnProductSearchResultRepoDO): void }, reject: { (err: ThError): void }, meta: AddOnProductMetaRepoDO, searchCriteria: AddOnProductSearchCriteriaRepoDO, lazyLoad?: LazyLoadRepoDO) {
 		var mongoSearchCriteria: MongoSearchCriteria = {
-			criteria: this.buildAddOnProductQuery(meta, searchCriteria),
+			criteria: this.buildSearchCriteria(meta, searchCriteria),
 			sortCriteria: { categoryId: 1, name: 1 },
 			lazyLoad: lazyLoad
 		}
@@ -83,12 +83,14 @@ export class MongoAddOnProductReadOperationsRepository extends MongoRepository {
 		);
 	}
 
-	private buildAddOnProductQuery(meta: AddOnProductMetaRepoDO, searchCriteria: AddOnProductSearchCriteriaRepoDO): Object {
+	private buildSearchCriteria(meta: AddOnProductMetaRepoDO, searchCriteria: AddOnProductSearchCriteriaRepoDO): Object {
 		var mongoQueryBuilder = new MongoQueryBuilder();
-		mongoQueryBuilder.addMultipleSelectOptions("categoryId", searchCriteria.categoryIdList);
-		mongoQueryBuilder.addRegex("name", searchCriteria.name);
 		mongoQueryBuilder.addExactMatch("hotelId", meta.hotelId);
 		mongoQueryBuilder.addExactMatch("status", AddOnProductStatus.Active);
+		if (!this._thUtils.isUndefinedOrNull(searchCriteria)) {
+			mongoQueryBuilder.addMultipleSelectOptions("categoryId", searchCriteria.categoryIdList);
+			mongoQueryBuilder.addRegex("name", searchCriteria.name);
+		}
 		return mongoQueryBuilder.processedQuery;
 	}
 }

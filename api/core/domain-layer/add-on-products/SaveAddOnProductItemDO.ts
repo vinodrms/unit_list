@@ -15,6 +15,10 @@ export class SaveAddOnProductItemDO {
 	public static getValidationStructure(): IValidationStructure {
 		return new ObjectValidationStructure([
 			{
+				key: "id",
+				validationStruct: new PrimitiveValidationStructure(StringValidationRule.buildNullable())
+			},
+			{
 				key: "categoryId",
 				validationStruct: new PrimitiveValidationStructure(new StringValidationRule())
 			},

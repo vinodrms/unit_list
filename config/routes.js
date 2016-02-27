@@ -69,8 +69,15 @@ module.exports.routes = {
     'GET /api/settings/currencies': 'SettingsController.getCurrencies',
     'GET /api/settings/paymentMethods': 'SettingsController.getPaymentMethods',
 	'GET /api/settings/addOnProductCategories': 'SettingsController.getAddOnProductCategories',
-    
+
     'GET /api/beds': 'BedsController.getBeds',
     'POST /api/beds/saveBedItem': 'BedsController.saveBedItem',
-	'POST /api/beds/deleteBedItem': 'BedsController.deleteBedItem',   
+	'POST /api/beds/deleteBedItem': 'BedsController.deleteBedItem',
+
+	'POST /api/addOnProducts': 'AddOnProductsController.getAddOnProductList',
+	'POST /api/addOnProducts/count': 'AddOnProductsController.getAddOnProductListCount',
+	'GET /api/addOnProducts/categoryIdList': 'AddOnProductsController.getAddOnProductCategoryIdList',
+	'POST /api/addOnProducts/saveAddOnProductItem': 'AddOnProductsController.saveAddOnProductItem',
+	'POST /api/addOnProducts/deleteAddOnProductItem': 'AddOnProductsController.deleteAddOnProductItem',
+	'GET /api/addOnProducts/addOnProductItem': 'AddOnProductsController.getAddOnProductById'
 };

@@ -13,6 +13,10 @@ export class HotelSaveTaxItemDO {
 	public static getValidationStructure(): IValidationStructure {
 		return new ObjectValidationStructure([
 			{
+				key: "id",
+				validationStruct: new PrimitiveValidationStructure(StringValidationRule.buildNullable())
+			},
+			{
 				key: "type",
 				validationStruct: new PrimitiveValidationStructure(new NumberValidationRule())
 			},
