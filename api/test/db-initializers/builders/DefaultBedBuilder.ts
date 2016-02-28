@@ -8,36 +8,50 @@ import {AppContext} from '../../../core/utils/AppContext';
 import _ = require('underscore');
 
 export class DefaultBedBuilder {
-	private _thUtils: ThUtils;
-	private _authUtils;
-    
-	constructor(private _appContext: AppContext, private _hotelId: string, private _bedTemplateList: BedTemplateDO[]) {
-		this._thUtils = new ThUtils();
-		this._authUtils = new AuthUtils(this._appContext.getUnitPalConfig());
-	}
+    private _thUtils: ThUtils;
+    private _authUtils;
 
-	getBedList(): BedDO[] {
-		var bedList = [];
-        
-        var bed = new BedDO();
-		bed.hotelId = this._hotelId;
-		bed.name = "Double Bed";
-        bed.maxNoAdults = 2;
-        bed.maxNoChildren = 1;
-        
-        var bedSize = new  BedSizeDO();
+    constructor(private _appContext: AppContext, private _bedTemplateList: BedTemplateDO[]) {
+        this._thUtils = new ThUtils();
+        this._authUtils = new AuthUtils(this._appContext.getUnitPalConfig());
+    }
+
+    getBedList(): BedDO[] {
+        var bedList = [];
+        bedList.push(this.getDoubleBed());
+        bedList.push(this.getTwinBed())
+        return bedList;
+    }
+
+    getDoubleBed(): BedDO {
+        var bedDO = new BedDO();
+        bedDO.name = "Double Bed";
+        bedDO.maxNoAdults = 2;
+        bedDO.maxNoChildren = 1;
+        var bedSize = new BedSizeDO();
         bedSize.lengthCm = 100;
         bedSize.widthCm = 100;
-        bed.size = bedSize;
-        
-        if(!this._thUtils.isUndefinedOrNull(this._bedTemplateList) && !_.isEmpty(this._bedTemplateList)) {
-            bed.bedTemplateId = this._bedTemplateList[0].id; 
+        bedDO.size = bedSize;
+        if (!this._thUtils.isUndefinedOrNull(this._bedTemplateList) && !_.isEmpty(this._bedTemplateList)) {
+            bedDO.bedTemplateId = this._bedTemplateList[0].id;
         }
-        
-        bed.status = BedStatus.Active;
-        
-        bedList.push(bed);
-        
-		return bedList;
-	}
+        bedDO.status = BedStatus.Active;
+        return bedDO;
+    }
+    
+    getTwinBed(): BedDO {
+        var bedDO = new BedDO();
+        bedDO.name = "Twin Bed";
+        bedDO.maxNoAdults = 2;
+        bedDO.maxNoChildren = 1;
+        var bedSize = new BedSizeDO();
+        bedSize.lengthCm = 100;
+        bedSize.widthCm = 120;
+        bedDO.size = bedSize;
+        if (!this._thUtils.isUndefinedOrNull(this._bedTemplateList) && this._bedTemplateList.length > 1) {
+            bedDO.bedTemplateId = this._bedTemplateList[1].id;
+        }
+        bedDO.status = BedStatus.Active;
+        return bedDO;
+    }
 }

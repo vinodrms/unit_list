@@ -1,10 +1,13 @@
 import {RepositoryCleanerWrapper} from './RepositoryCleanerWrapper';
 import {TestContext} from '../helpers/TestContext';
 import {DefaultHotelBuilder} from './builders/DefaultHotelBuilder';
+import {DefaultBedBuilder} from './builders/DefaultBedBuilder';
 import {HotelDO} from '../../core/data-layer/hotel/data-objects/HotelDO';
 import {UserDO} from '../../core/data-layer/hotel/data-objects/user/UserDO';
 import {PaymentMethodDO} from '../../core/data-layer/common/data-objects/payment-method/PaymentMethodDO';
 import {AmenityDO} from '../../core/data-layer/common/data-objects/amenity/AmenityDO';
+import {BedTemplateDO} from '../../core/data-layer/common/data-objects/bed-template/BedTemplateDO';
+import {BedDO} from '../../core/data-layer/common/data-objects/bed/BedDO';
 
 export class DefaultDataBuilder {
 	private static FirstUserIndex = 0;
@@ -16,7 +19,9 @@ export class DefaultDataBuilder {
 	private _userDO: UserDO;
 	private _paymentMethodList: PaymentMethodDO[];
 	private _hotelAmenityList: AmenityDO[];
-
+    private _bedTemplateList: BedTemplateDO[];
+    private _bedList: BedDO[];
+    
 	constructor(private _testContext: TestContext) {
 		this._repositoryCleaner = new RepositoryCleanerWrapper(this._testContext.appContext.getUnitPalConfig());
 	}
@@ -57,9 +62,26 @@ export class DefaultDataBuilder {
 			}).then((hotelAmenityList: AmenityDO[]) => {
 				this._hotelAmenityList = hotelAmenityList;
 				
-				// TODO: add other necessary build steps (e.g.: beds, price products etc.)
-				resolve(true);
-			}).catch((err: any) => {
+				var settingsRepository = this._testContext.appContext.getRepositoryFactory().getSettingsRepository();
+                return settingsRepository.getBedTemplates();
+			}).then((bedTemplateList: BedTemplateDO[]) => {
+                this._bedTemplateList = bedTemplateList;
+                
+                var bedBuilder = new DefaultBedBuilder(this._testContext.appContext, this._bedTemplateList);
+                var bedListToBeAdded = bedBuilder.getBedList();
+                var bedRepository = this._testContext.appContext.getRepositoryFactory().getBedRepository();
+                var addBedsPromiseList: Promise<BedDO>[] = [];
+                bedListToBeAdded.forEach((bedToBeAdded: BedDO) => {
+                    addBedsPromiseList.push(bedRepository.addBed({ hotelId: this._hotelDO.id}, bedToBeAdded));    
+                });
+                return Promise.all(addBedsPromiseList);
+            }).then((addedBeds: BedDO[]) => {
+                this._bedList = addedBeds;
+                
+                // TODO: add other necessary build steps (e.g.: beds, price products etc.)
+                resolve(true);
+            })
+            .catch((err: any) => {
 				reject(err);
 			});
 	}
@@ -82,4 +104,10 @@ export class DefaultDataBuilder {
 	public get hotelAmenityList(): AmenityDO[] {
 		return this._hotelAmenityList;
 	}
+    public get bedTemplateList(): BedTemplateDO[] {
+        return this._bedTemplateList;
+    }
+    public get bedList(): BedDO[] {
+        return this._bedList;
+    }
 }

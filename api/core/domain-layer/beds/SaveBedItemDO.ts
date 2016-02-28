@@ -7,7 +7,8 @@ import {NumberValidationRule} from '../../utils/th-validation/rules/NumberValida
 import {BedSizeDO} from '../../data-layer/common/data-objects/bed/BedDO';
 
 export class SaveBedItemDO {
-	name: string;
+	bedTemplateId: string;
+    name: string;
 	maxNoAdults: number;
 	maxNoChildren: number;
 	status: number;
@@ -16,6 +17,10 @@ export class SaveBedItemDO {
 	public static getValidationStructure(): IValidationStructure {
 		return new ObjectValidationStructure([
 			{
+				key: "bedTemplateId",
+				validationStruct: new PrimitiveValidationStructure(new StringValidationRule())
+			},
+            {
 				key: "name",
 				validationStruct: new PrimitiveValidationStructure(new StringValidationRule(100))
 			},

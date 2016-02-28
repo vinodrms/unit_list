@@ -12,7 +12,8 @@ export class HotelTaxesTestHelper {
 		return vat;
 	}
 	public getVatDOWithInvalidValue(): HotelSaveTaxItemDO {
-		var vat = this.getValidVatDO();
+		var vat
+         = this.getValidVatDO();
 		vat.value = HotelTaxesTestHelper.InvalidPercentageValue;
 		return vat;
 	}
