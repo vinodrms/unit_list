@@ -3,8 +3,6 @@ import {ThError} from '../../utils/th-responses/ThError';
 import {ThStatusCode} from '../../utils/th-responses/ThResponse';
 import {AppContext} from '../../utils/AppContext';
 import {SessionContext} from '../../utils/SessionContext';
-import {HotelSaveTaxItemDO} from './HotelSaveTaxItemDO';
-import {TaxResponseRepoDO} from '../../data-layer/taxes/repositories/ITaxRepository';
 import {ValidationResultParser} from '../common/ValidationResultParser';
 import {TaxDO} from '../../data-layer/taxes/data-objects/TaxDO';
 import {IValidationStructure} from '../../utils/th-validation/structure/core/IValidationStructure';

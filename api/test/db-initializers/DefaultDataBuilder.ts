@@ -5,9 +5,14 @@ import {DefaultBedBuilder} from './builders/DefaultBedBuilder';
 import {HotelDO} from '../../core/data-layer/hotel/data-objects/HotelDO';
 import {UserDO} from '../../core/data-layer/hotel/data-objects/user/UserDO';
 import {PaymentMethodDO} from '../../core/data-layer/common/data-objects/payment-method/PaymentMethodDO';
+import {AddOnProductCategoryDO} from '../../core/data-layer/common/data-objects/add-on-product/AddOnProductCategoryDO';
 import {AmenityDO} from '../../core/data-layer/common/data-objects/amenity/AmenityDO';
 import {BedTemplateDO} from '../../core/data-layer/common/data-objects/bed-template/BedTemplateDO';
 import {BedDO} from '../../core/data-layer/common/data-objects/bed/BedDO';
+import {DefaultTaxBuilder} from './builders/DefaultTaxBuilder';
+import {TaxResponseRepoDO} from '../../core/data-layer/taxes/repositories/ITaxRepository';
+import {DefaultAddOnProductBuilder} from './builders/DefaultAddOnProductBuilder';
+import {AddOnProductDO} from '../../core/data-layer/add-on-products/data-objects/AddOnProductDO';
 
 export class DefaultDataBuilder {
 	private static FirstUserIndex = 0;
@@ -21,7 +26,10 @@ export class DefaultDataBuilder {
 	private _hotelAmenityList: AmenityDO[];
     private _bedTemplateList: BedTemplateDO[];
     private _bedList: BedDO[];
-    
+	private _taxes: TaxResponseRepoDO;
+	private _addOnProductCategoryList: AddOnProductCategoryDO[];
+	private _addOnProductList: AddOnProductDO[];
+
 	constructor(private _testContext: TestContext) {
 		this._repositoryCleaner = new RepositoryCleanerWrapper(this._testContext.appContext.getUnitPalConfig());
 	}
@@ -61,6 +69,21 @@ export class DefaultDataBuilder {
 				return settingsRepository.getHotelAmenities();
 			}).then((hotelAmenityList: AmenityDO[]) => {
 				this._hotelAmenityList = hotelAmenityList;
+
+				var taxBuilder = new DefaultTaxBuilder(this._testContext);
+				return taxBuilder.loadTaxes(taxBuilder, this._testContext);
+			}).then((loadedTaxes: TaxResponseRepoDO) => {
+				this._taxes = loadedTaxes;
+
+				var settingsRepository = this._testContext.appContext.getRepositoryFactory().getSettingsRepository();
+				return settingsRepository.getAddOnProductCategories();
+			}).then((addOnProductCategoryList: AddOnProductCategoryDO[]) => {
+				this._addOnProductCategoryList = addOnProductCategoryList;
+
+				var addOnProductBuilder = new DefaultAddOnProductBuilder(this._testContext);
+				return addOnProductBuilder.loadAddOnProducts(addOnProductBuilder, this._addOnProductCategoryList, this._taxes);
+			}).then((addOnProductList: AddOnProductDO[]) => {
+				this._addOnProductList = addOnProductList;
 				
 				var settingsRepository = this._testContext.appContext.getRepositoryFactory().getSettingsRepository();
                 return settingsRepository.getBedTemplates();
@@ -110,4 +133,13 @@ export class DefaultDataBuilder {
     public get bedList(): BedDO[] {
         return this._bedList;
     }
+	public get taxes(): TaxResponseRepoDO {
+		return this._taxes;
+	}
+	public get addOnProductCategoryList(): AddOnProductCategoryDO[] {
+		return this._addOnProductCategoryList;
+	}
+	public get addOnProductList(): AddOnProductDO[] {
+		return this._addOnProductList;
+	}
 }

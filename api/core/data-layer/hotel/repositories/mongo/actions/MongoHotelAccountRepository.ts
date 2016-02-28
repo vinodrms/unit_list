@@ -74,12 +74,12 @@ export class MongoHotelAccountRepository extends MongoRepository {
 	private activateUserAccountCore(resolve: { (user: UserDO): void }, reject: { (err: ThError): void }, activationParams: UserAccountActivationRepoDO) {
 		var currentTimestamp = new Date().getTime();
 		this.findAndModifyDocument(
-			{ $and: [
-					{ "userList.email": activationParams.email },
-					{ "userList.accountStatus": AccountStatus.Pending },
-					{ "userList.accountActivationToken.code": activationParams.activationCode },
-					{ "userList.accountActivationToken.expiryTimestamp": { $gte: currentTimestamp } }
-				] 
+			{
+				"userList.email": activationParams.email,
+				"userList.accountStatus": AccountStatus.Pending,
+				"userList.accountActivationToken.code": activationParams.activationCode,
+				"userList.accountActivationToken.expiryTimestamp": { $gte: currentTimestamp }
+
 			}, {
 				"userList.$.accountStatus": AccountStatus.Active,
 				"userList.$.accountActivationToken.updatedTimestamp": currentTimestamp
@@ -108,10 +108,10 @@ export class MongoHotelAccountRepository extends MongoRepository {
 	}
 	private requestResetPasswordCore(resolve: { (user: UserDO): void }, reject: { (err: ThError): void }, reqParams: RequestResetPasswordRepoDO) {
 		this.findAndModifyDocument(
-			{ $and: [
-					{ "userList.email": reqParams.email },
-					{ "userList.accountStatus": { $in: [AccountStatus.Active, AccountStatus.Pending] } }
-				]
+			{
+				"userList.email": reqParams.email,
+				"userList.accountStatus": { $in: [AccountStatus.Active, AccountStatus.Pending] }
+
 			}, {
 				"userList.$.resetPasswordToken": reqParams.token
 			},
@@ -140,13 +140,12 @@ export class MongoHotelAccountRepository extends MongoRepository {
 	private resetPasswordCore(resolve: { (user: UserDO): void }, reject: { (err: ThError): void }, resetParams: ResetPasswordRepoDO) {
 		var currentTimestamp = new Date().getTime();
 		this.findAndModifyDocument(
-			{ $and: [
-					{ "userList.email": resetParams.email },
-					{ "userList.accountStatus": { $in: [AccountStatus.Active, AccountStatus.Pending] } },
-					{ "userList.resetPasswordToken.code": resetParams.activationCode },
-					{ "userList.resetPasswordToken.expiryTimestamp": { $gte: currentTimestamp } },
-					{ "userList.resetPasswordToken.updatedTimestamp": { $exists: false } }
-				]
+			{
+				"userList.email": resetParams.email,
+				"userList.accountStatus": { $in: [AccountStatus.Active, AccountStatus.Pending] },
+				"userList.resetPasswordToken.code": resetParams.activationCode,
+				"userList.resetPasswordToken.expiryTimestamp": { $gte: currentTimestamp },
+				"userList.resetPasswordToken.updatedTimestamp": { $exists: false }
 			}, {
 				"userList.$.accountStatus": AccountStatus.Active,
 				"userList.$.resetPasswordToken.updatedTimestamp": currentTimestamp,

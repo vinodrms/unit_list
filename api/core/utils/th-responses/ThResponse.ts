@@ -72,7 +72,6 @@ export enum ThStatusCode {
 	HotelAddPaymentPoliciesInvalidTaxes,
 	HotelAddPaymentsPoliciesError,
 	HotelAddPaymentPoliciesInvalidCurrencyCode,
-    MongoBedRepositoryInvalidList,
     MongoBedRepositoryErrorGettingBedList,
     MongoBedRepositoryErrorGettingBed,
     MongoBedRepositoryBedNotFound,
@@ -100,7 +99,6 @@ export enum ThStatusCode {
 	HotelUpdatePropertyDetailsInvalidOperationHours,
 	HotelUpdatePropertyDetailsInvalidTimezone,
 	HotelDetailsControllerErrorUpdatingPropertyDetails,
-	MongoTaxRepositoryInvalidList,
 	MongoTaxRepositoryErrorGettingTaxList,
 	MongoTaxRepositoryErrorGettingTax,
 	MongoTaxRepositoryNameAlreadyExists,
@@ -119,7 +117,22 @@ export enum ThStatusCode {
 	MongoAddOnProductRepositoryNameAlreadyExists,
 	MongoAddOnProductRepositoryErrorAddingAddOnProduct,
 	MongoAddOnProductRepositoryProductNotFound,
-	MongoAddOnProductRepositoryErrorGettingAddOnProduct
+	MongoAddOnProductRepositoryErrorGettingAddOnProduct,
+	MongoAddOnProductRepositoryErrorReadingCategoryIdList,
+	MongoAddOnProductRepositoryErrorReadingDocumentCount,
+	MongoAddOnProductRepositoryErrorGettingList,
+	SaveAddOnProductItemError,
+	SaveAddOnProductItemInvalidCategoryId,
+	SaveAddOnProductItemInvalidTaxId,
+	AddOnProductItemUpdateStrategyErrorUpdating,
+	DeleteAddOnProductItemError,
+	DeleteAddOnProductItemErrorValidating,
+	AddOnProductsControllerErrorGettingAddOnProduct,
+	AddOnProductsControllerErrorSavingAddOnProduct,
+	AddOnProductsControllerErrorDeletingAddOnProduct,
+	AddOnProductsControllerErrorGettingCategoryIdList,
+	AddOnProductsControllerErrorGettingCount,
+	AddOnProductsControllerErrorGettingList
 }
 
 var ThMessage: { [index: number]: string; } = {};
@@ -193,7 +206,6 @@ ThMessage[ThStatusCode.HotelAddPaymentsPoliciesErrorPrecheckingConstraints] = "T
 ThMessage[ThStatusCode.HotelAddPaymentPoliciesInvalidTaxes] = "Invalid taxes sent.";
 ThMessage[ThStatusCode.HotelAddPaymentsPoliciesError] = "Error adding the payments and policies.";
 ThMessage[ThStatusCode.HotelAddPaymentPoliciesInvalidCurrencyCode] = "Invalid currency code.";
-ThMessage[ThStatusCode.MongoBedRepositoryInvalidList] = "Error getting the bed list.";
 ThMessage[ThStatusCode.MongoBedRepositoryErrorGettingBedList] = "Error getting the bed list. Please try again.";
 ThMessage[ThStatusCode.MongoBedRepositoryErrorGettingBed] = "Error getting the bed. Please try again.";
 ThMessage[ThStatusCode.MongoBedRepositoryBedNotFound] = "Bed not found.";
@@ -220,7 +232,6 @@ ThMessage[ThStatusCode.HotelUpdatePropertyDetailsInvalidAmenityIdList] = "Invali
 ThMessage[ThStatusCode.HotelUpdatePropertyDetailsInvalidOperationHours] = "Invalid operation hours.";
 ThMessage[ThStatusCode.HotelUpdatePropertyDetailsInvalidTimezone] = "Invalid timezone.";
 ThMessage[ThStatusCode.HotelDetailsControllerErrorUpdatingPropertyDetails] = "Error updating property details.";
-ThMessage[ThStatusCode.MongoTaxRepositoryInvalidList] = "Error getting the tax list.";
 ThMessage[ThStatusCode.MongoTaxRepositoryErrorGettingTaxList] = "Error getting the tax list. Please try again.";
 ThMessage[ThStatusCode.MongoTaxRepositoryErrorGettingTax] = "Error getting the tax. Please try again.";
 ThMessage[ThStatusCode.MongoTaxRepositoryNameAlreadyExists] = "The name of the tax already exists.";
@@ -240,6 +251,21 @@ ThMessage[ThStatusCode.MongoAddOnProductRepositoryNameAlreadyExists] = "The add 
 ThMessage[ThStatusCode.MongoAddOnProductRepositoryErrorAddingAddOnProduct] = "Error creating add on product.";
 ThMessage[ThStatusCode.MongoAddOnProductRepositoryProductNotFound] = "Add on product not found.";
 ThMessage[ThStatusCode.MongoAddOnProductRepositoryErrorGettingAddOnProduct] = "Error getting add on product.";
+ThMessage[ThStatusCode.MongoAddOnProductRepositoryErrorReadingCategoryIdList] = "Error reading category list for defined add on products.";
+ThMessage[ThStatusCode.MongoAddOnProductRepositoryErrorReadingDocumentCount] = "Error getting document count.";
+ThMessage[ThStatusCode.MongoAddOnProductRepositoryErrorGettingList] = "Error getting add on products.";
+ThMessage[ThStatusCode.SaveAddOnProductItemError] = "Error saving add on product.";
+ThMessage[ThStatusCode.SaveAddOnProductItemInvalidCategoryId] = "Invalid category id.";
+ThMessage[ThStatusCode.SaveAddOnProductItemInvalidTaxId] = "Invalid tax id.";
+ThMessage[ThStatusCode.AddOnProductItemUpdateStrategyErrorUpdating] = "Error updating add on product id.";
+ThMessage[ThStatusCode.DeleteAddOnProductItemError] = "Error deleting add on product.";
+ThMessage[ThStatusCode.DeleteAddOnProductItemErrorValidating] = "Error validating add on product.";
+ThMessage[ThStatusCode.AddOnProductsControllerErrorGettingAddOnProduct] = "Error getting add on product.";
+ThMessage[ThStatusCode.AddOnProductsControllerErrorSavingAddOnProduct] = "Error saving add on product.";
+ThMessage[ThStatusCode.AddOnProductsControllerErrorDeletingAddOnProduct] = "Error deleting add on product.";
+ThMessage[ThStatusCode.AddOnProductsControllerErrorGettingCategoryIdList] = "Error getting the categories for your add on products.";
+ThMessage[ThStatusCode.AddOnProductsControllerErrorGettingCount] = "Error getting the number of add on products.";
+ThMessage[ThStatusCode.AddOnProductsControllerErrorGettingList] = "Error getting the list of add on products.";
 
 export class ThResponse {
 	statusCode: ThStatusCode;
