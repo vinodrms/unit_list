@@ -6,6 +6,7 @@ import {MongoRepository} from '../../../../../../data-layer/common/base/MongoRep
 import {MongoSettingsRepository} from '../../../../../../data-layer/settings/repositories/mongo/MongoSettingsRepository';
 
 import {RoomAmenities} from './data-sets/amenities/RoomAmenities';
+import {RoomAttributes} from './data-sets/RoomAttributes';
 import {HotelAmenities} from './data-sets/amenities/HotelAmenities';
 import {Countries} from './data-sets/Countries';
 import {CurrencyCodes} from './data-sets/CurrencyCodes';
@@ -23,7 +24,8 @@ export class MongoPatch1 extends ATransactionalMongoPatch {
 		(new CurrencyCodes()).getCurrencySettingDO(),
 		(new PaymentMethods()).getPaymentMethodSettingDO(),
         (new BedTemplates()).getBedTemplateSettingDO(),
-		(new AddOnProductCategories()).getAddOnProductSettingDO()
+		(new AddOnProductCategories()).getAddOnProductSettingDO(),
+        (new RoomAttributes()).getRoomAttributeSettingDO()
 	];
 
     private _settingsEntity: Sails.Model;

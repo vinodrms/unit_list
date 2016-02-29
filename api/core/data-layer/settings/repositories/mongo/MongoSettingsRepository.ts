@@ -7,12 +7,14 @@ import {AmenitySettingDO} from '../../data-objects/amenity/AmenitySettingDO';
 import {CountrySettingDO} from '../../data-objects/country/CountrySettingDO';
 import {CurrencySettingDO} from '../../data-objects/currency/CurrencySettingDO';
 import {PaymentMethodSettingDO} from '../../data-objects/payment-method/PaymentMethodSettingDO';
+import {RoomAttributeSettingDO} from '../../data-objects/room-attribute/RoomAttributeSettingDO';
 import {SettingType} from '../../data-objects/common/SettingMetadataDO';
 import {BaseDO} from '../../../common/base/BaseDO';
 import {AmenityDO} from '../../../common/data-objects/amenity/AmenityDO';
 import {BedTemplateDO} from '../../../common/data-objects/bed-template/BedTemplateDO';
 import {CountryDO} from '../../../common/data-objects/country/CountryDO';
 import {CurrencyDO} from '../../../common/data-objects/currency/CurrencyDO';
+import {RoomAttributeDO} from '../../../common/data-objects/room-attribute/RoomAttributeDO';
 import {PaymentMethodDO} from '../../../common/data-objects/payment-method/PaymentMethodDO';
 import {AddOnProductCategorySettingDO} from '../../data-objects/add-on-product/AddOnProductCategorySettingDO';
 import {AddOnProductCategoryDO} from '../../../common/data-objects/add-on-product/AddOnProductCategoryDO';
@@ -53,7 +55,11 @@ export class MongoSettingsRepository extends MongoRepository implements ISetting
     public getRoomAmenities(valueCriteria?: Object): Promise<AmenityDO[]> {
         return this.getSetting(SettingType.RoomAmenities, valueCriteria);
     }
-
+    
+    public getRoomAttributes(valueCriteria?: Object): Promise<RoomAttributeDO[]> {
+        return this.getSetting(SettingType.RoomAttributes, valueCriteria);
+    }
+    
     public getHotelAmenities(valueCriteria?: Object): Promise<AmenityDO[]> {
         return this.getSetting(SettingType.HotelAmenities, valueCriteria);
     }
@@ -110,6 +116,7 @@ export class MongoSettingsRepository extends MongoRepository implements ISetting
         var getSettingsResponseDO: BaseDO;
         switch (settingType) {
             case SettingType.RoomAmenities: getSettingsResponseDO = new AmenitySettingDO(); break;
+            case SettingType.RoomAttributes: getSettingsResponseDO = new RoomAttributeSettingDO(); break;
             case SettingType.HotelAmenities: getSettingsResponseDO = new AmenitySettingDO(); break;
             case SettingType.Countries: getSettingsResponseDO = new CountrySettingDO(); break;
             case SettingType.CurrencyCodes: getSettingsResponseDO = new CurrencySettingDO(); break;

@@ -10,55 +10,27 @@ export class RoomAmenities extends Amenities {
 
         this.dataSet = [
             {
-                name: "Street View",
+                name: "Bath tub",
                 iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
             },
             {
-                name: "Park View",
+                name: "Hairdryer",
                 iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
             },
             {
-                name: "Sea View",
+                name: "Tv",
                 iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
             },
             {
-                name: "Courtyard View",
+                name: "Wifi",
                 iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
             },
             {
-                name: "Near Elevator",
+                name: "AC",
                 iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
             },
             {
-                name: "Wheelchair Friendly",
-                iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
-            },
-            {
-                name: "Smoking",
-                iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
-            },
-            {
-                name: "Non-Smoking",
-                iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
-            },
-            {
-                name: "Balcony",
-                iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
-            },
-            {
-                name: "Terrace",
-                iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
-            },
-            {
-                name: "Garden Access",
-                iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
-            },
-            {
-                name: "Pool Access",
-                iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
-            },
-            {
-                name: "Bay Window",
+                name: "Minibar",
                 iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
             }
         ];

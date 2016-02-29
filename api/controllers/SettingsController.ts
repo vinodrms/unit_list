@@ -4,10 +4,29 @@ import {ThUtils} from '../core/utils/ThUtils';
 import {AppContext} from '../core/utils/AppContext';
 import {SessionContext, SessionManager} from '../core/utils/SessionContext';
 import {ISettingsRepository, AmenitySearchCriteriaRepoDO, CountrySearchCriteriaRepoDO,
-CurrencySearchCriteriaRepoDO, PaymentMethodSearchCriteriaRepoDO, AddOnProductCategoryCriteriaRepoDO} from '../core/data-layer/settings/repositories/ISettingsRepository';
+CurrencySearchCriteriaRepoDO, PaymentMethodSearchCriteriaRepoDO, AddOnProductCategoryCriteriaRepoDO,
+RoomAttributeSearchCriteriaRepoDO} from '../core/data-layer/settings/repositories/ISettingsRepository';
 
 export class SettingsController extends BaseController {
+    
+    public getRoomAttributes(req: Express.Request, res: Express.Response) {
+        var roomAttributeID: string = req.query.id;
+        var thUtils = new ThUtils();
+        var criteria: AmenitySearchCriteriaRepoDO = {};
+        var settingsRepository: ISettingsRepository = req.appContext.getRepositoryFactory().getSettingsRepository();
 
+        if (!thUtils.isUndefinedOrNull(roomAttributeID) && roomAttributeID.trim() != '') {
+            criteria.id = roomAttributeID;
+        }
+
+        settingsRepository.getRoomAttributes(criteria).then((result: any) => {
+            this.returnSuccesfulResponse(req, res, result);
+        }).catch((err: any) => {
+            this.returnErrorResponse(req, res, err, ThStatusCode.SettingsMongoRepositoryReadError);
+        });
+
+    }
+    
     public getRoomAmenities(req: Express.Request, res: Express.Response) {
         var amenityID: string = req.query.id;
         var thUtils = new ThUtils();
@@ -112,6 +131,7 @@ export class SettingsController extends BaseController {
 
 var settingsController = new SettingsController();
 module.exports = {
+    getRoomAttributes: settingsController.getRoomAttributes.bind(settingsController),
     getRoomAmenities: settingsController.getRoomAmenities.bind(settingsController),
     getHotelAmenities: settingsController.getHotelAmenities.bind(settingsController),
     getCountries: settingsController.getCountries.bind(settingsController),

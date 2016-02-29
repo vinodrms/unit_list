@@ -64,6 +64,7 @@ module.exports.routes = {
     'GET /api/service/vatVerifier': 'ServiceController.checkVAT',
 
     'GET /api/settings/roomAmenities': 'SettingsController.getRoomAmenities',
+    'GET /api/settings/roomAttributes': 'SettingsController.getRoomAttributes',
     'GET /api/settings/hotelAmenities': 'SettingsController.getHotelAmenities',
     'GET /api/settings/countries': 'SettingsController.getCountries',
     'GET /api/settings/currencies': 'SettingsController.getCurrencies',
