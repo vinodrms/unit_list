@@ -10,7 +10,7 @@ export class AddOnProductsTestHelper {
 	public getValidSaveAddOnProductItemDO(): SaveAddOnProductItemDO {
 		return {
 			categoryId: this.getFirstValidCategoryId(),
-			description: "test test test",
+			notes: "test test test",
 			name: "My First Addon Product",
 			price: 100.0,
 			taxIdList: [this.getFirstValidVatTaxId()]
@@ -32,7 +32,7 @@ export class AddOnProductsTestHelper {
 	public getSaveAddOnProductItemDOFrom(product: AddOnProductDO) {
 		var aopDO: SaveAddOnProductItemDO = {
 			categoryId: this.getFirstValidCategoryId(),
-			description: "test test test !!!",
+			notes: "test test test !!!",
 			name: "My First Addon Product [Updated]",
 			price: 120.0,
 			taxIdList: [this.getFirstValidVatTaxId()]

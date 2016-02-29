@@ -30,7 +30,7 @@ export class DefaultAddOnProductBuilder implements IAddOnProductDataSource {
 		aop.name = name;
 		aop.price = price;
 		aop.taxIdList = [taxId];
-		aop.description = "test";
+		aop.notes = "test";
 		return aop;
 	}
 

@@ -76,7 +76,7 @@ describe("Hotel AddOn Products Tests", function() {
 				should.equal(createdAddOnProduct.taxIdList.length, addOnProdDO.taxIdList.length);
 				should.equal(createdAddOnProduct.name, addOnProdDO.name);
 				should.equal(createdAddOnProduct.price, addOnProdDO.price);
-				should.equal(createdAddOnProduct.description, addOnProdDO.description);
+				should.equal(createdAddOnProduct.notes, addOnProdDO.notes);
 				should.exist(createdAddOnProduct.id);
 				should.exist(createdAddOnProduct.hotelId);
 
