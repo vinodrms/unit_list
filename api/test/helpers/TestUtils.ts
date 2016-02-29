@@ -12,6 +12,6 @@ export class TestUtils {
 		return diffArray.length == 0;
 	}
 	public getRandomListElement<T>(list: T[]): T {
-		return list[this.getRandomIntBetween(0, list.length)];
+		return list[this.getRandomIntBetween(0, list.length - 1)];
 	}
 }
