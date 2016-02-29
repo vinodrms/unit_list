@@ -80,12 +80,14 @@ export enum ThStatusCode {
     MongoBedRepositoryErrorUpdatingBed,
     BedItemUpdateStrategyErrorUpdating,
     SaveBedItemError,
+    SaveBedItemInvalidBedTemplateId,
     DeleteBedItemErrorDeleting,
     DeleteBedItemErrorValidating,
     DeleteBedItemError,
     BedControllerErrorGettingBeds,
 	BedControllerErrorSavingBed,
 	BedControllerErrorDeletingBed,
+    BedControllerErrorGettingBedById,
 	HotelUpdatePaymentsPoliciesErrorPrecheckingConstraints,
 	HotelUpdatePaymentPoliciesInvalidTaxes,
 	HotelUpdatePaymentsPoliciesError,
@@ -214,11 +216,13 @@ ThMessage[ThStatusCode.MongoBedRepositoryNameAlreadyExists] = "The name of the b
 ThMessage[ThStatusCode.MongoBedRepositoryErrorUpdatingBed] = "Problem updating the bed. It is possible that someone else changed it at the same time. Please refresh the page and try again.";
 ThMessage[ThStatusCode.BedItemUpdateStrategyErrorUpdating] = "Error updating the bed.";
 ThMessage[ThStatusCode.SaveBedItemError] = "Error saving the bed item.";
+ThMessage[ThStatusCode.SaveBedItemInvalidBedTemplateId] = "Invalid bed template id.";
 ThMessage[ThStatusCode.DeleteBedItemErrorDeleting] = "Error deleting bed item.";
 ThMessage[ThStatusCode.DeleteBedItemErrorValidating] = "Error validating the existing bed item.";
 ThMessage[ThStatusCode.BedControllerErrorGettingBeds] = "Error getting the beds.";
 ThMessage[ThStatusCode.BedControllerErrorSavingBed] = "Error saving bed.";
 ThMessage[ThStatusCode.BedControllerErrorDeletingBed] = "Error deleting bed.";
+ThMessage[ThStatusCode.BedControllerErrorGettingBedById] = "Error getting bed by id.";
 ThMessage[ThStatusCode.HotelUpdatePaymentsPoliciesErrorPrecheckingConstraints] = "There was a problem while checking the payments and policies submitted.";
 ThMessage[ThStatusCode.HotelUpdatePaymentPoliciesInvalidTaxes] = "Invalid taxes sent.";
 ThMessage[ThStatusCode.HotelUpdatePaymentsPoliciesError] = "Error adding the payments and policies.";

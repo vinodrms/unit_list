@@ -5,30 +5,46 @@ import {DefaultDataBuilder} from '../../../../db-initializers/DefaultDataBuilder
 import should = require('should');
 
 export class BedsTestHelper {
-	private static InvalidPercentageValue = 1.01;
-    
+    private static InvalidPercentageValue = 1.01;
+
     constructor(private _defaultDataBuilder: DefaultDataBuilder) {
     }
-    
-	public getValidSaveBedItemDO(): SaveBedItemDO {
-		var bedSize = new BedSizeDO();
+
+    public getBedItemDOWithInvalidTemplateId(): SaveBedItemDO {
+        var bedSize = new BedSizeDO();
         bedSize.lengthCm = 120;
         bedSize.widthCm = 120;
-        var bedTemplateId: string; 
-        if(this._defaultDataBuilder.bedTemplateList && this._defaultDataBuilder.bedTemplateList.length > 2) {
-            bedTemplateId = this._defaultDataBuilder.bedTemplateList[2].id;
-        }
-        
+        var bedTemplateId: string = "123";
+
         return {
-			bedTemplateId: bedTemplateId,
+            bedTemplateId: bedTemplateId,
             name: "King Size",
             maxNoAdults: 2,
             maxNoChildren: 2,
-            status: BedStatus.Active,			
-			size: bedSize
-		};
-	}
-    
+            status: BedStatus.Active,
+            size: bedSize
+        };
+    }
+
+    public getValidSaveBedItemDO(): SaveBedItemDO {
+        var bedSize = new BedSizeDO();
+        bedSize.lengthCm = 120;
+        bedSize.widthCm = 120;
+        var bedTemplateId: string;
+        if (this._defaultDataBuilder.bedTemplateList && this._defaultDataBuilder.bedTemplateList.length > 2) {
+            bedTemplateId = this._defaultDataBuilder.bedTemplateList[2].id;
+        }
+
+        return {
+            bedTemplateId: bedTemplateId,
+            name: "King Size",
+            maxNoAdults: 2,
+            maxNoChildren: 2,
+            status: BedStatus.Active,
+            size: bedSize
+        };
+    }
+
     public getSaveBedItemDOFrom(bed: BedDO): SaveBedItemDO {
         var result = {
             bedTemplateId: bed.bedTemplateId,
@@ -41,21 +57,13 @@ export class BedsTestHelper {
         result["id"] = bed.id;
         return result;
     }
-    
-	// public getValidOtherTaxDO(): HotelSaveTaxItemDO {
-	// 	return {
-	// 		type: TaxType.OtherTax,
-	// 		name: "Church Tax",
-	// 		valueType: TaxValueType.Fixed,
-	// 		value: 100.827
-	// 	};
-	// }
 
-	// public validate(actualTax: TaxDO, oldTax: TaxDO) {
-	// 	should.equal(actualTax.name, oldTax.name);
-	// 	should.equal(actualTax.type, oldTax.type);
-	// 	should.equal(actualTax.value, oldTax.value);
-	// 	should.equal(actualTax.valueType, oldTax.valueType);
-	// 	should.equal(actualTax.status, oldTax.status);
-	// }
+    public validate(readBed: BedDO, createdBed: BedDO) {
+        should.equal(readBed.bedTemplateId, createdBed.bedTemplateId);
+        should.equal(readBed.name, createdBed.name);
+        should.equal(readBed.size.widthCm, createdBed.size.widthCm);
+        should.equal(readBed.size.lengthCm, createdBed.size.lengthCm);
+        should.equal(readBed.maxNoAdults, createdBed.maxNoAdults);
+        should.equal(readBed.maxNoChildren, createdBed.maxNoChildren);
+    }
 }

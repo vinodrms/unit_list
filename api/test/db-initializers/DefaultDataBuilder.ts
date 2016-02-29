@@ -27,7 +27,7 @@ export class DefaultDataBuilder {
     private _bedTemplateList: BedTemplateDO[];
     private _bedList: BedDO[];
 	private _taxes: TaxResponseRepoDO;
-	private _addOnProductCategoryList: AddOnProductCategoryDO[];
+	private _addOnProductCategoryList: AddOnProductCategoryDO[];  
 	private _addOnProductList: AddOnProductDO[];
 
 	constructor(private _testContext: TestContext) {

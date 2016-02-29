@@ -10,6 +10,7 @@ import {BedsTestHelper} from './helpers/BedsTestHelper';
 
 import {BedDO, BedSizeDO, BedStatus} from '../../../../core/data-layer/common/data-objects/bed/BedDO';
 import {SaveBedItem} from '../../../../core/domain-layer/beds/SaveBedItem';
+import {DeleteBedItem} from '../../../../core/domain-layer/beds/DeleteBedItem';
 import {SaveBedItemDO} from '../../../../core/domain-layer/beds/SaveBedItemDO';
 
 describe("Hotel Beds Tests", function() {
@@ -18,7 +19,7 @@ describe("Hotel Beds Tests", function() {
     var bedsHelper: BedsTestHelper;
 	var createdBed: BedDO;
 	
-	var numCreatedBeds = 0;
+	var numCreatedBeds = 2;
 
 	before(function(done: any) {
 		testContext = new TestContext();
@@ -29,15 +30,14 @@ describe("Hotel Beds Tests", function() {
     
 	describe("Hotel Update Beds Flow", function() {
         it("Should not create invalid bed", function(done) {
-			// var vat = taxesHelper.getVatDOWithInvalidValueType();
-			// var saveTaxItem = new HotelSaveTaxItem(testContext.appContext, testContext.sessionContext);
-			// saveTaxItem.save(vat).then((result: TaxDO) => {
-			// 	done(new Error("did manage to create a vat tax with invalid value type"));
-			// }).catch((e: ThError) => {
-			// 	should.notEqual(e.getThStatusCode(), ThStatusCode.Ok);
-			// 	done();
-			// });
-            done();
+			var bed = bedsHelper.getBedItemDOWithInvalidTemplateId();
+			var saveBedItem = new SaveBedItem(testContext.appContext, testContext.sessionContext);
+			saveBedItem.save(bed).then((result: BedDO) => {
+				done(new Error("did manage to create a bed with invalid bed template id"));
+			}).catch((e: ThError) => {
+				should.notEqual(e.getThStatusCode(), ThStatusCode.Ok);
+				done();
+			});
         });
 		it("Should create a new bed item", function(done) {
             var saveBedItemDO: SaveBedItemDO = bedsHelper.getValidSaveBedItemDO();
@@ -53,7 +53,8 @@ describe("Hotel Beds Tests", function() {
                 should.equal(result.maxNoChildren, saveBedItemDO.maxNoChildren);
                 
                 numCreatedBeds++;
-                this.createdBed = result;
+                
+                createdBed = result;
                 
                 done();    
             }).catch((e: ThError) => {
@@ -61,7 +62,7 @@ describe("Hotel Beds Tests", function() {
             });
         });
 		it("Should update the previously created bed", function(done) {
-			var bedToUpdate = bedsHelper.getSaveBedItemDOFrom(this.createdBed);
+			var bedToUpdate = bedsHelper.getSaveBedItemDOFrom(createdBed);
             bedToUpdate.maxNoAdults = 5;
             
             var saveBedItem = new SaveBedItem(testContext.appContext, testContext.sessionContext);
@@ -75,7 +76,7 @@ describe("Hotel Beds Tests", function() {
                 should.equal(result.maxNoAdults, bedToUpdate.maxNoAdults);
                 should.equal(result.maxNoChildren, bedToUpdate.maxNoChildren);
                 
-                this.createdBed = result;
+                createdBed = result;
                 
                 done();
             }).catch((e: ThError) => {
@@ -84,62 +85,52 @@ describe("Hotel Beds Tests", function() {
         });
 		
 		it("Should not create a second bed with the same name for the same hotel", function(done) {
-			// var otherTax = taxesHelper.getValidOtherTaxDO();
-			// var saveTaxItem = new HotelSaveTaxItem(testContext.appContext, testContext.sessionContext);
-			// saveTaxItem.save(otherTax).then((result: TaxDO) => {
-			// 	done(new Error("did manage to create two taxes with the same name"));
-			// }).catch((e: ThError) => {
-			// 	should.notEqual(e.getThStatusCode(), ThStatusCode.Ok);
-			// 	done();
-			// });
-            done();
+			var newBed = bedsHelper.getValidSaveBedItemDO();
+            var saveBedItem = new SaveBedItem(testContext.appContext, testContext.sessionContext);
+            
+            saveBedItem.save(newBed).then((result: BedDO) => {
+                done(new Error("did manage to create two beds with the same name"));    
+            }).catch((e: ThError) => {
+                should.notEqual(e.getThStatusCode, ThStatusCode.Ok);
+                done();    
+            });
         });
     });
 
 	describe("Hotel Get Beds & Delete Flow", function() {
 		it("Should get the previously added beds", function(done) {
-			// var taxRepo = testContext.appContext.getRepositoryFactory().getTaxRepository();
-			// taxRepo.getTaxList({ hotelId: testContext.sessionContext.sessionDO.hotel.id }).then((result: TaxResponseRepoDO) => {
-			// 	should.equal(result.otherTaxList.length, numCreatedOtherTaxes);
-			// 	should.equal(result.vatList.length, numCreatedVatTaxes);
+			var bedRepo = testContext.appContext.getRepositoryFactory().getBedRepository();
+			bedRepo.getBedList({ hotelId: testContext.sessionContext.sessionDO.hotel.id }).then((result: BedDO[]) => {
+				should.equal(result.length, numCreatedBeds);
 
-			// 	var actualVat = _.find(result.vatList, (tax: TaxDO) => { return tax.id === createdVatTax.id });
-			// 	taxesHelper.validate(actualVat, createdVatTax);
+				var readBed = _.find(result, (bed: BedDO) => { return bed.id === createdBed.id });
+				
+                bedsHelper.validate(readBed, createdBed);
 
-			// 	var actualOtherTax = _.find(result.otherTaxList, (tax: TaxDO) => { return tax.id === createdOtherTax.id });
-			// 	taxesHelper.validate(actualOtherTax, createdOtherTax);
-
-			// 	done();
-			// }).catch((err: any) => {
-			// 	done(err);
-			// });
-            done();
+				done();
+			}).catch((err: any) => {
+				done(err);
+			});
         });
 		it("Should delete one of the previously added beds", function(done) {
-			// var deleteTaxItem = new HotelDeleteTaxItem(testContext.appContext, testContext.sessionContext);
-			// deleteTaxItem.delete({ id: createdVatTax.id }).then((deletedTax: TaxDO) => {
-			// 	should.equal(deletedTax.status, TaxStatus.Deleted);
-			// 	numCreatedVatTaxes --;
-			// 	done();
-			// }).catch((err: any) => {
-			// 	done(err);
-			// });
-            done();
+			var deleteBedItem = new DeleteBedItem(testContext.appContext, testContext.sessionContext);
+			deleteBedItem.delete({ id: createdBed.id }).then((deletedBed: BedDO) => {
+				should.equal(deletedBed.status, BedStatus.Deleted);
+				numCreatedBeds--;
+				done();
+			}).catch((err: any) => {
+				done(err);
+			});
         });
 		it("Should get only the remaining beds", function(done) {
-			// var taxRepo = testContext.appContext.getRepositoryFactory().getTaxRepository();
-			// taxRepo.getTaxList({ hotelId: testContext.sessionContext.sessionDO.hotel.id }).then((result: TaxResponseRepoDO) => {
-			// 	should.equal(result.otherTaxList.length, numCreatedOtherTaxes);
-			// 	should.equal(result.vatList.length, numCreatedVatTaxes);
-
-			// 	var actualOtherTax = _.find(result.otherTaxList, (tax: TaxDO) => { return tax.id === createdOtherTax.id });
-			// 	taxesHelper.validate(actualOtherTax, createdOtherTax);
-
-			// 	done();
-			// }).catch((err: any) => {
-			// 	done(err);
-			// });
-            done();
+			var bedRepo = testContext.appContext.getRepositoryFactory().getBedRepository();
+            
+            bedRepo.getBedList({ hotelId: testContext.sessionContext.sessionDO.hotel.id }).then((result: BedDO[]) => {
+				should.equal(result.length, numCreatedBeds);
+				done();
+			}).catch((err: any) => {
+				done(err);
+			});
         });
 	});
 });
