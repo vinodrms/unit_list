@@ -18,9 +18,9 @@ export class AddOnProductDO extends BaseDO {
 	name: string;
 	price: number;
 	taxIdList: string[];
-	description: string;
+	notes: string;
 
 	protected getPrimitivePropertyKeys(): string[] {
-		return ["id", "hotelId", "versionId", "status", "categoryId", "name", "price", "taxIdList", "description"];
+		return ["id", "hotelId", "versionId", "status", "categoryId", "name", "price", "taxIdList", "notes"];
 	}
 }

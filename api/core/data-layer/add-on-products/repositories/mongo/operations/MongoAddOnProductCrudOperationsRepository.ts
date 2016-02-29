@@ -62,7 +62,7 @@ export class MongoAddOnProductCrudOperationsRepository extends MongoRepository {
 				"name": addOnProduct.name,
 				"price": addOnProduct.price,
 				"taxIdList": addOnProduct.taxIdList,
-				"description": addOnProduct.description
+				"notes": addOnProduct.notes
 			});
 	}
 	public deleteAddOnProduct(meta: AddOnProductMetaRepoDO, itemMeta: AddOnProductItemMetaRepoDO): Promise<AddOnProductDO> {

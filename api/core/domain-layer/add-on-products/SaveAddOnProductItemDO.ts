@@ -10,7 +10,7 @@ export class SaveAddOnProductItemDO {
 	name: string;
 	price: number;
 	taxIdList: string[];
-	description: string;
+	notes: string;
 
 	public static getValidationStructure(): IValidationStructure {
 		return new ObjectValidationStructure([
@@ -35,7 +35,7 @@ export class SaveAddOnProductItemDO {
 				validationStruct: new ArrayValidationStructure(new PrimitiveValidationStructure(new StringValidationRule()))
 			},
 			{
-				key: "description",
+				key: "notes",
 				validationStruct: new PrimitiveValidationStructure(StringValidationRule.buildNullable())
 			}
 		])

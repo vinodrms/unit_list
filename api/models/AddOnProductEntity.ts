@@ -39,7 +39,7 @@ class AddOnProductEntity extends BasePersistentEntity {
                 required: true,
 				defaultsTo: []
             },
-			description: {
+			notes: {
 				type: 'string',
 				defaultsTo: ""
 			}
