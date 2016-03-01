@@ -1,5 +1,5 @@
 import {LazyLoadRepoDO, LazyLoadMetaResponseRepoDO} from '../../common/repo-data-objects/LazyLoadRepoDO';
-import {CustomerDO} from '../data-objects/CustomerDO';
+import {CustomerDO, CustomerType} from '../data-objects/CustomerDO';
 
 export interface CustomerMetaRepoDO {
 	hotelId: string;
@@ -10,7 +10,9 @@ export interface CustomerItemMetaRepoDO {
 }
 
 export interface CustomerSearchCriteriaRepoDO {
-	linkedCustomerId: string;
+	type?: CustomerType;
+	linkedCustomerId?: string;
+	searchText?: string;
 }
 export interface CustomerSearchResultRepoDO {
 	lazyLoad?: LazyLoadRepoDO;

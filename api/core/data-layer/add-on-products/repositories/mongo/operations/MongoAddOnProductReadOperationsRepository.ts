@@ -28,7 +28,7 @@ export class MongoAddOnProductReadOperationsRepository extends MongoRepository {
 		};
 		this.findDistinctDocumentFieldValues("categoryId", findQuery,
 			(err: Error) => {
-				var thError = new ThError(ThStatusCode.MongoAddOnProductRepositoryErrorReadingCategoryIdList, err);
+				var thError = new ThError(ThStatusCode.AddOnProductRepositoryErrorReadingCategoryIdList, err);
 				ThLogger.getInstance().logError(ThLogLevel.Error, "Error reading categori id list for add on products", { meta: meta }, thError);
 				reject(thError);
 			},
@@ -47,7 +47,7 @@ export class MongoAddOnProductReadOperationsRepository extends MongoRepository {
 		var query = this.buildSearchCriteria(meta, searchCriteria);
 		return this.getDocumentCount(query,
 			(err: Error) => {
-				var thError = new ThError(ThStatusCode.MongoAddOnProductRepositoryErrorReadingDocumentCount, err);
+				var thError = new ThError(ThStatusCode.AddOnProductRepositoryErrorReadingDocumentCount, err);
 				ThLogger.getInstance().logError(ThLogLevel.Error, "error reading document count", { meta: meta, searchCriteria: searchCriteria }, thError);
 				reject(thError);
 			},
@@ -69,7 +69,7 @@ export class MongoAddOnProductReadOperationsRepository extends MongoRepository {
 		}
 		this.findMultipleDocuments(mongoSearchCriteria,
 			(err: Error) => {
-				var thError = new ThError(ThStatusCode.MongoAddOnProductRepositoryErrorGettingList, err);
+				var thError = new ThError(ThStatusCode.AddOnProductRepositoryErrorGettingList, err);
 				ThLogger.getInstance().logError(ThLogLevel.Error, "Error getting add on product list", { meta: meta, searchCriteria: searchCriteria }, thError);
 				reject(thError);
 			},

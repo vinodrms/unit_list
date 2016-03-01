@@ -23,7 +23,7 @@ export class MongoBedRepository extends MongoRepository implements IBedRepositor
 		var searchCriteria = { "hotelId": bedMeta.hotelId, "status": BedStatus.Active };
 		this.findMultipleDocuments({criteria: searchCriteria},
 			(err: Error) => {
-				var thError = new ThError(ThStatusCode.MongoBedRepositoryErrorGettingBedList, err);
+				var thError = new ThError(ThStatusCode.BedRepositoryErrorGettingBedList, err);
 				ThLogger.getInstance().logError(ThLogLevel.Error, "Error getting bed list.", bedMeta, thError);
 				reject(thError);
 			},
@@ -51,12 +51,12 @@ export class MongoBedRepository extends MongoRepository implements IBedRepositor
     private getBedByIdCore(bedMeta: BedMetaRepoDO, bedId: string, resolve: { (result: BedDO): void }, reject: { (err: ThError): void }) {
 		this.findOneDocument({ "hotelId": bedMeta.hotelId, "id": bedId },
 			() => {
-				var thError = new ThError(ThStatusCode.MongoBedRepositoryBedNotFound, null);
+				var thError = new ThError(ThStatusCode.BedRepositoryBedNotFound, null);
 				ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Bed not found", { bedMeta: bedMeta, bedId: bedId }, thError);
 				reject(thError);
 			},
 			(err: Error) => {
-				var thError = new ThError(ThStatusCode.MongoBedRepositoryErrorGettingBed, err);
+				var thError = new ThError(ThStatusCode.BedRepositoryErrorGettingBed, err);
 				ThLogger.getInstance().logError(ThLogLevel.Error, "Error getting bed by id", { bedMeta: bedMeta, bedId: bedId }, thError);
 				reject(thError);
 			},
@@ -79,7 +79,7 @@ export class MongoBedRepository extends MongoRepository implements IBedRepositor
 		bed.status = BedStatus.Active;
 		this.createDocument(bed,
 			(err: Error) => {
-				this.logAndReject(err, reject, { bedMeta: bedMeta, bed: bed }, ThStatusCode.MongoBedRepositoryErrorAddingBed);
+				this.logAndReject(err, reject, { bedMeta: bedMeta, bed: bed }, ThStatusCode.BedRepositoryErrorAddingBed);
 			},
 			(createdBed: Object) => {
 				var bed: BedDO = new BedDO();
@@ -91,7 +91,7 @@ export class MongoBedRepository extends MongoRepository implements IBedRepositor
     private logAndReject(err: Error, reject: { (err: ThError): void }, context: Object, defaultStatusCode: ThStatusCode) {
 		var errorCode = this.getMongoErrorCode(err);
 		if (errorCode == MongoErrorCodes.DuplicateKeyError) {
-			var thError = new ThError(ThStatusCode.MongoBedRepositoryNameAlreadyExists, err);
+			var thError = new ThError(ThStatusCode.BedRepositoryNameAlreadyExists, err);
 			ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Bed name already exists", context, thError);
 			reject(thError);
 			return;
@@ -124,12 +124,12 @@ export class MongoBedRepository extends MongoRepository implements IBedRepositor
 		};
 		this.findAndModifyDocument(findQuery, updateQuery,
 			() => {
-				var thError = new ThError(ThStatusCode.MongoBedRepositoryErrorUpdatingBed, null);
+				var thError = new ThError(ThStatusCode.BedRepositoryErrorUpdatingBed, null);
 				ThLogger.getInstance().logBusiness(ThLogLevel.Info, "Problem updating bed - concurrency", { bedMeta: bedMeta, bedItemMeta: bedItemMeta, updateQuery: updateQuery }, thError);
 				reject(thError);
 			},
 			(err: Error) => {
-				this.logAndReject(err, reject, { bedMeta: bedMeta, updateQuery: updateQuery }, ThStatusCode.MongoBedRepositoryErrorUpdatingBed);
+				this.logAndReject(err, reject, { bedMeta: bedMeta, updateQuery: updateQuery }, ThStatusCode.BedRepositoryErrorUpdatingBed);
 			},
 			(updatedDBBed: Object) => {
 				var bed: BedDO = new BedDO();

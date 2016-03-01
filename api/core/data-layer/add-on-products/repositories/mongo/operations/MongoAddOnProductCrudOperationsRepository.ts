@@ -25,7 +25,7 @@ export class MongoAddOnProductCrudOperationsRepository extends MongoRepository {
 
 		this.createDocument(addOnProduct,
 			(err: Error) => {
-				this.logAndReject(err, reject, { meat: meta, addOnProduct: addOnProduct }, ThStatusCode.MongoAddOnProductRepositoryErrorAddingAddOnProduct);
+				this.logAndReject(err, reject, { meat: meta, addOnProduct: addOnProduct }, ThStatusCode.AddOnProductRepositoryErrorAddingAddOnProduct);
 			},
 			(createdAddOnProduct: Object) => {
 				resolve(this._helper.buildAddOnProductDOFrom(createdAddOnProduct));
@@ -41,12 +41,12 @@ export class MongoAddOnProductCrudOperationsRepository extends MongoRepository {
 	private getAddOnProductByIdCore(meta: AddOnProductMetaRepoDO, addOnProductId: string, resolve: { (result: AddOnProductDO): void }, reject: { (err: ThError): void }) {
 		this.findOneDocument({ "hotelId": meta.hotelId, "id": addOnProductId },
 			() => {
-				var thError = new ThError(ThStatusCode.MongoAddOnProductRepositoryProductNotFound, null);
+				var thError = new ThError(ThStatusCode.AddOnProductRepositoryProductNotFound, null);
 				ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Add on product not found", { meta: meta, addOnProductId: addOnProductId }, thError);
 				reject(thError);
 			},
 			(err: Error) => {
-				var thError = new ThError(ThStatusCode.MongoAddOnProductRepositoryErrorGettingAddOnProduct, err);
+				var thError = new ThError(ThStatusCode.AddOnProductRepositoryErrorGettingAddOnProduct, err);
 				ThLogger.getInstance().logError(ThLogLevel.Error, "Error getting add on product by id", { meta: meta, addOnProductId: addOnProductId }, thError);
 				reject(thError);
 			},
@@ -85,12 +85,12 @@ export class MongoAddOnProductCrudOperationsRepository extends MongoRepository {
 		};
 		this.findAndModifyDocument(findQuery, updateQuery,
 			() => {
-				var thError = new ThError(ThStatusCode.MongoAddOnProductRepositoryProblemUpdatingAddOnProduct, null);
+				var thError = new ThError(ThStatusCode.AddOnProductRepositoryProblemUpdatingAddOnProduct, null);
 				ThLogger.getInstance().logBusiness(ThLogLevel.Info, "Problem updating add on product - concurrency", { meta: meta, itemMeta: itemMeta, updateQuery: updateQuery }, thError);
 				reject(thError);
 			},
 			(err: Error) => {
-				this.logAndReject(err, reject, { meta: meta, itemMeta: itemMeta, updateQuery: updateQuery }, ThStatusCode.MongoAddOnProductRepositoryErrorUpdatingAddOnProduct);
+				this.logAndReject(err, reject, { meta: meta, itemMeta: itemMeta, updateQuery: updateQuery }, ThStatusCode.AddOnProductRepositoryErrorUpdatingAddOnProduct);
 			},
 			(updatedDBAddOnProduct: Object) => {
 				resolve(this._helper.buildAddOnProductDOFrom(updatedDBAddOnProduct));
@@ -100,7 +100,7 @@ export class MongoAddOnProductCrudOperationsRepository extends MongoRepository {
 	private logAndReject(err: Error, reject: { (err: ThError): void }, context: Object, defaultStatusCode: ThStatusCode) {
 		var errorCode = this.getMongoErrorCode(err);
 		if (errorCode == MongoErrorCodes.DuplicateKeyError) {
-			var thError = new ThError(ThStatusCode.MongoAddOnProductRepositoryNameAlreadyExists, err);
+			var thError = new ThError(ThStatusCode.AddOnProductRepositoryNameAlreadyExists, err);
 			ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Add on product name already exists", context, thError);
 			reject(thError);
 			return;

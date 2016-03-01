@@ -32,6 +32,13 @@ export class MongoQueryBuilder {
 		this._processedQuery[fieldName] = value;
 	}
 
+	public addTextIndexSearch(text: string) {
+		if (this._thUtils.isUndefinedOrNull(text) || !_.isString(text)) {
+			return;
+		}
+		this._processedQuery["$text"] = { $search: "\"" + text + "\"" };
+	}
+
 	public get processedQuery() {
 		return this._processedQuery;
 	}
