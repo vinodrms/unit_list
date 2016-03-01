@@ -6,9 +6,15 @@ import {MongoRepository} from '../../../../../../data-layer/common/base/MongoRep
 
 import _ = require('underscore');
 
-class IndexMetadataDO {
+enum IndexType {
+	Unique,
+	Text
+}
+
+interface IndexMetadataDO {
     entity: Sails.Model;
     fields: Object;
+	type: IndexType;
 }
 
 export class MongoPatch0 extends ATransactionalMongoPatch {
@@ -21,19 +27,30 @@ export class MongoPatch0 extends ATransactionalMongoPatch {
         this._indexList = [];
         this._indexList.push({
             entity: sails.models.hotelsentity,
-            fields: { "userList.email": 1 }
+            fields: { "userList.email": 1 },
+			type: IndexType.Unique
         });
         this._indexList.push({
             entity: sails.models.bedsentity,
-            fields: { "hotelId": 1, "name": 1 }
+            fields: { "hotelId": 1, "name": 1 },
+			type: IndexType.Unique
         });
         this._indexList.push({
             entity: sails.models.taxesentity,
-            fields: { "hotelId": 1, "name": 1 }
+            fields: { "hotelId": 1, "name": 1 },
+			type: IndexType.Unique
         });
 		this._indexList.push({
             entity: sails.models.addonproductentity,
-            fields: { "hotelId": 1, "name": 1 }
+            fields: { "hotelId": 1, "name": 1 },
+			type: IndexType.Unique
+        });
+		this._indexList.push({
+            entity: sails.models.customersentity,
+            fields: {
+				"$**": "text"
+			},
+			type: IndexType.Text
         });
     }
     public getPatchType(): MongoPatcheType {
@@ -60,7 +77,11 @@ export class MongoPatch0 extends ATransactionalMongoPatch {
     private createIndexAsync(index: IndexMetadataDO, indexCreatedCallback: { (err: any, result?: boolean): void }) {
         var mongoRepo = new MongoRepository(index.entity);
         mongoRepo.getNativeMongoCollection().then((nativeHotelsCollection: any) => {
-            nativeHotelsCollection.createIndex(index.fields, { unique: true }, ((err, indexName) => {
+			var indexOptions = {};
+			if (index.type == IndexType.Unique) {
+				indexOptions = { unique: true };
+			}
+            nativeHotelsCollection.createIndex(index.fields, indexOptions, ((err, indexName) => {
                 if (err || !indexName) {
                     var thError = new ThError(ThStatusCode.ErrorBootstrappingApp, err);
                     ThLogger.getInstance().logError(ThLogLevel.Error, "Patch0 - Error ensuring unique index " + index.fields + " for " + index.entity, { step: "Bootstrap" }, thError);
