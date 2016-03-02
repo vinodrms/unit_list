@@ -72,7 +72,7 @@ export class MongoPatch1 extends ATransactionalMongoPatch {
 		mongoRepo.getNativeMongoCollection().then((nativeCollection: any) => {
 			nativeCollection.ensureIndex("metadata.type", { unique: true }, ((err, indexName) => {
 				if (err || !indexName) {
-					var thError = new ThError(ThStatusCode.MongoPatchErrorEnsuringUniqueIndexOnSettings, err);
+					var thError = new ThError(ThStatusCode.PatchErrorEnsuringUniqueIndexOnSettings, err);
 					ThLogger.getInstance().logError(ThLogLevel.Error, "AMongoDBPatch1 - ensuring metadata.type index on native settings patches collection", { step: "Bootstrap" }, thError);
 					finishedEnsuringIndex(thError);
 					return;

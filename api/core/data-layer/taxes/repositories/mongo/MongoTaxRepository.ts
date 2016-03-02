@@ -21,7 +21,7 @@ export class MongoTaxRepository extends MongoRepository implements ITaxRepositor
 		var searchCriteria = { "hotelId": taxMeta.hotelId, "status": TaxStatus.Active };
 		this.findMultipleDocuments({ criteria: searchCriteria },
 			(err: Error) => {
-				var thError = new ThError(ThStatusCode.MongoTaxRepositoryErrorGettingTaxList, err);
+				var thError = new ThError(ThStatusCode.TaxRepositoryErrorGettingTaxList, err);
 				ThLogger.getInstance().logError(ThLogLevel.Error, "Error getting tax list.", taxMeta, thError);
 				reject(thError);
 			},
@@ -52,12 +52,12 @@ export class MongoTaxRepository extends MongoRepository implements ITaxRepositor
 	private getTaxByIdCore(taxMeta: TaxMetaRepoDO, taxId: string, resolve: { (result: TaxDO): void }, reject: { (err: ThError): void }) {
 		this.findOneDocument({ "hotelId": taxMeta.hotelId, "id": taxId },
 			() => {
-				var thError = new ThError(ThStatusCode.MongoTaxRepositoryTaxNotFound, null);
+				var thError = new ThError(ThStatusCode.TaxRepositoryTaxNotFound, null);
 				ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Tax not found", { taxMeta: taxMeta, taxId: taxId }, thError);
 				reject(thError);
 			},
 			(err: Error) => {
-				var thError = new ThError(ThStatusCode.MongoTaxRepositoryErrorGettingTax, err);
+				var thError = new ThError(ThStatusCode.TaxRepositoryErrorGettingTax, err);
 				ThLogger.getInstance().logError(ThLogLevel.Error, "Error getting tax by id", { taxMeta: taxMeta, taxId: taxId }, thError);
 				reject(thError);
 			},
@@ -80,7 +80,7 @@ export class MongoTaxRepository extends MongoRepository implements ITaxRepositor
 		tax.status = TaxStatus.Active;
 		this.createDocument(tax,
 			(err: Error) => {
-				this.logAndReject(err, reject, { taxMeta: taxMeta, tax: tax }, ThStatusCode.MongoTaxRepositoryErrorAddingTax);
+				this.logAndReject(err, reject, { taxMeta: taxMeta, tax: tax }, ThStatusCode.TaxRepositoryErrorAddingTax);
 			},
 			(createdTax: Object) => {
 				var tax: TaxDO = new TaxDO();
@@ -92,7 +92,7 @@ export class MongoTaxRepository extends MongoRepository implements ITaxRepositor
 	private logAndReject(err: Error, reject: { (err: ThError): void }, context: Object, defaultStatusCode: ThStatusCode) {
 		var errorCode = this.getMongoErrorCode(err);
 		if (errorCode == MongoErrorCodes.DuplicateKeyError) {
-			var thError = new ThError(ThStatusCode.MongoTaxRepositoryNameAlreadyExists, err);
+			var thError = new ThError(ThStatusCode.TaxRepositoryNameAlreadyExists, err);
 			ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Tax name already exists", context, thError);
 			reject(thError);
 			return;
@@ -132,12 +132,12 @@ export class MongoTaxRepository extends MongoRepository implements ITaxRepositor
 		this.findAndModifyDocument(
 			findQuery, updateQuery,
 			() => {
-				var thError = new ThError(ThStatusCode.MongoTaxRepositoryProblemUpdatingTax, null);
+				var thError = new ThError(ThStatusCode.TaxRepositoryProblemUpdatingTax, null);
 				ThLogger.getInstance().logBusiness(ThLogLevel.Info, "Problem updating tax - concurrency", { taxMeta: taxMeta, taxItemMeta: taxItemMeta, updateQuery: updateQuery }, thError);
 				reject(thError);
 			},
 			(err: Error) => {
-				this.logAndReject(err, reject, { taxMeta: taxMeta, updateQuery: updateQuery }, ThStatusCode.MongoTaxRepositoryErrorUpdatingTax);
+				this.logAndReject(err, reject, { taxMeta: taxMeta, updateQuery: updateQuery }, ThStatusCode.TaxRepositoryErrorUpdatingTax);
 			},
 			(updatedDBTax: Object) => {
 				var tax: TaxDO = new TaxDO();

@@ -1,6 +1,7 @@
 import {BedTemplateDO} from '../../../core/data-layer/common/data-objects/bed-template/BedTemplateDO';
 import {RoomDO, RoomStatus, RoomMaintenanceStatus} from '../../../core/data-layer/rooms/data-objects/RoomDO';
 import {BedDO} from '../../../core/data-layer/common/data-objects/bed/BedDO';
+import {RoomCategoryDO} from '../../../core/data-layer/room-categories/data-objects/RoomCategoryDO';
 import {AuthUtils} from '../../../core/domain-layer/hotel-account/utils/AuthUtils';
 import {ThUtils} from '../../../core/utils/ThUtils';
 import {Locales} from '../../../core/utils/localization/Translation';
@@ -12,7 +13,7 @@ export class DefaultRoomBuilder {
     private _thUtils: ThUtils;
     private _authUtils;
 
-    constructor(private _appContext: AppContext, private _bedList: BedDO[]) {
+    constructor(private _appContext: AppContext, private _bedList: BedDO[], private _roomCategoryList: RoomCategoryDO[]) {
         this._thUtils = new ThUtils();
         this._authUtils = new AuthUtils(this._appContext.getUnitPalConfig());
     }

@@ -40,12 +40,12 @@ export class MongoSettingsRepository extends MongoRepository implements ISetting
 			(err: Error) => {
 				var errorCode = this.getMongoErrorCode(err);
 				if (errorCode == MongoErrorCodes.DuplicateKeyError) {
-					var thError = new ThError(ThStatusCode.SettingsMongoRepositoryAddDuplicateKeyError, err);
+					var thError = new ThError(ThStatusCode.SettingsRepositoryAddDuplicateKeyError, err);
 					ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Setting already exists", setting, thError);
 					reject(thError);
 				}
 				else {
-					var thError = new ThError(ThStatusCode.SettingsMongoRepositoryAddError, err);
+					var thError = new ThError(ThStatusCode.SettingsRepositoryAddError, err);
 					ThLogger.getInstance().logError(ThLogLevel.Error, "Error adding setting", setting, thError);
 					reject(thError);
 				}
@@ -105,7 +105,7 @@ export class MongoSettingsRepository extends MongoRepository implements ISetting
     private getSettingCore(settingType: SettingType, criteria: Object, resolve: { (result: any): void }, reject: { (err: ThError): void }) {
 		this.findOneDocument({ "metadata.type": settingType },
 			() => {
-				var thError = new ThError(ThStatusCode.MongoSettingsRepositoryNotFound, null);
+				var thError = new ThError(ThStatusCode.SettingsRepositoryNotFound, null);
 				ThLogger.getInstance().logBusiness(ThLogLevel.Error, "Setting not found", { settingType: settingType, criteria: criteria }, thError);
 				reject(thError);
 			},

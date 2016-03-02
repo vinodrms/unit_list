@@ -14,6 +14,8 @@ import {MongoTaxRepository} from './taxes/repositories/mongo/MongoTaxRepository'
 import {IAddOnProductRepository} from './add-on-products/repositories/IAddOnProductRepository';
 import {MongoAddOnProductRepository} from './add-on-products/repositories/mongo/MongoAddOnProductRepository';
 import {IRepositoryCleaner} from './common/base/IRepositoryCleaner';
+import {MongoCustomerRepository} from './customers/repositories/mongo/MongoCustomerRepository';
+import {ICustomerRepository} from './customers/repositories/ICustomerRepository';
 
 export class RepositoryFactory {
 	private _databaseType: DatabaseType;
@@ -73,6 +75,13 @@ export class RepositoryFactory {
 		switch (this._databaseType) {
 			default:
 				return new MongoRoomRepository();
+        }
+    }
+    
+	getCustomerRepository(): ICustomerRepository {
+		switch (this._databaseType) {
+			default:
+				return new MongoCustomerRepository();
 		}
 	}
 }

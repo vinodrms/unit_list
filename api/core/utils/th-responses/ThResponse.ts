@@ -48,12 +48,12 @@ export enum ThStatusCode {
     ImageUploadControllerErrorUploadingImage,
     ImageUploadControllerNoFilesToUpload,
     ImageUploadControllerGenericError,
-    SettingsMongoRepositoryAddDuplicateKeyError,
-    SettingsMongoRepositoryAddError,
+    SettingsRepositoryAddDuplicateKeyError,
+    SettingsRepositoryAddError,
     SettingsMongoRepositoryReadError,
-	MongoSettingsRepositoryNotFound,
-    MongoRepositoryGetNetiveEntityError,
-    MongoPatchErrorEnsuringUniqueIndexOnSettings,
+	SettingsRepositoryNotFound,
+    RepositoryGetNetiveEntityError,
+    PatchErrorEnsuringUniqueIndexOnSettings,
 	HotelGetDetailsError,
 	HotelGetDetailsErrorFormattingResponse,
 	HotelGetDetailsErrorFindingUserByEmail,
@@ -72,12 +72,16 @@ export enum ThStatusCode {
 	HotelAddPaymentPoliciesInvalidTaxes,
 	HotelAddPaymentsPoliciesError,
 	HotelAddPaymentPoliciesInvalidCurrencyCode,
-    MongoBedRepositoryErrorGettingBedList,
-    MongoBedRepositoryErrorGettingBed,
-    MongoBedRepositoryBedNotFound,
-    MongoBedRepositoryErrorAddingBed,
-    MongoBedRepositoryNameAlreadyExists,
-    MongoBedRepositoryErrorUpdatingBed,
+    RoomRepositoryErrorGettingRoomList,
+    RoomRepositoryErrorGettingRoom,
+    RoomCategoryRepositoryErrorGettingRoomCategoryList,
+    RoomCategoryRepositoryErrorGettingRoomCategory,
+    BedRepositoryErrorGettingBedList,
+    BedRepositoryErrorGettingBed,
+    BedRepositoryBedNotFound,
+    BedRepositoryErrorAddingBed,
+    BedRepositoryNameAlreadyExists,
+    BedRepositoryErrorUpdatingBed,
     BedItemUpdateStrategyErrorUpdating,
     SaveBedItemError,
     SaveBedItemInvalidBedTemplateId,
@@ -101,28 +105,28 @@ export enum ThStatusCode {
 	HotelUpdatePropertyDetailsInvalidOperationHours,
 	HotelUpdatePropertyDetailsInvalidTimezone,
 	HotelDetailsControllerErrorUpdatingPropertyDetails,
-	MongoTaxRepositoryErrorGettingTaxList,
-	MongoTaxRepositoryErrorGettingTax,
-	MongoTaxRepositoryNameAlreadyExists,
-	MongoTaxRepositoryErrorAddingTax,
-	MongoTaxRepositoryProblemUpdatingTax,
-	MongoTaxRepositoryErrorUpdatingTax,
-	MongoTaxRepositoryTaxNotFound,
+	TaxRepositoryErrorGettingTaxList,
+	TaxRepositoryErrorGettingTax,
+	TaxRepositoryNameAlreadyExists,
+	TaxRepositoryErrorAddingTax,
+	TaxRepositoryProblemUpdatingTax,
+	TaxRepositoryErrorUpdatingTax,
+	TaxRepositoryTaxNotFound,
 	HotelDeleteTaxItemError,
 	HotelDeleteTaxItemErrorDeleting,
 	HotelDeleteTaxItemErrorValidating,
 	TaxControllerErrorGettingTaxes,
 	TaxControllerErrorSavingTax,
 	TaxControllerErrorDeletingTax,
-	MongoAddOnProductRepositoryProblemUpdatingAddOnProduct,
-	MongoAddOnProductRepositoryErrorUpdatingAddOnProduct,
-	MongoAddOnProductRepositoryNameAlreadyExists,
-	MongoAddOnProductRepositoryErrorAddingAddOnProduct,
-	MongoAddOnProductRepositoryProductNotFound,
-	MongoAddOnProductRepositoryErrorGettingAddOnProduct,
-	MongoAddOnProductRepositoryErrorReadingCategoryIdList,
-	MongoAddOnProductRepositoryErrorReadingDocumentCount,
-	MongoAddOnProductRepositoryErrorGettingList,
+	AddOnProductRepositoryProblemUpdatingAddOnProduct,
+	AddOnProductRepositoryErrorUpdatingAddOnProduct,
+	AddOnProductRepositoryNameAlreadyExists,
+	AddOnProductRepositoryErrorAddingAddOnProduct,
+	AddOnProductRepositoryProductNotFound,
+	AddOnProductRepositoryErrorGettingAddOnProduct,
+	AddOnProductRepositoryErrorReadingCategoryIdList,
+	AddOnProductRepositoryErrorReadingDocumentCount,
+	AddOnProductRepositoryErrorGettingList,
 	SaveAddOnProductItemError,
 	SaveAddOnProductItemInvalidCategoryId,
 	SaveAddOnProductItemInvalidTaxId,
@@ -134,7 +138,14 @@ export enum ThStatusCode {
 	AddOnProductsControllerErrorDeletingAddOnProduct,
 	AddOnProductsControllerErrorGettingCategoryIdList,
 	AddOnProductsControllerErrorGettingCount,
-	AddOnProductsControllerErrorGettingList
+	AddOnProductsControllerErrorGettingList,
+	CustomerRepositoryCustomerNotFound,
+	CustomerRepositoryErrorGettingCustomer,
+	CustomerRepositoryErrorCreatingCustomer,
+	CustomerRepositoryProblemUpdatingCustomer,
+	CustomerRepositoryErrorUpdatingCustomer,
+	CustomerRepositoryErrorReadingCustomerCount,
+	CustomerRepositoryErrorGettingList
 }
 
 var ThMessage: { [index: number]: string; } = {};
@@ -184,12 +195,12 @@ ThMessage[ThStatusCode.CloudinaryImageStorageServiceErrorUploadingImage] = "Ther
 ThMessage[ThStatusCode.ImageUploadControllerErrorUploadingImage] = "There was a problem while uploading the image.";
 ThMessage[ThStatusCode.ImageUploadControllerNoFilesToUpload] = "No images sent for the upload.";
 ThMessage[ThStatusCode.ImageUploadControllerGenericError] = "Error uploading files. Please check the content and try again.";
-ThMessage[ThStatusCode.SettingsMongoRepositoryAddDuplicateKeyError] = "Error inserting setting (duplicate key error).";
-ThMessage[ThStatusCode.SettingsMongoRepositoryAddError] = "Error inserting setting.";
+ThMessage[ThStatusCode.SettingsRepositoryAddDuplicateKeyError] = "Error inserting setting (duplicate key error).";
+ThMessage[ThStatusCode.SettingsRepositoryAddError] = "Error inserting setting.";
 ThMessage[ThStatusCode.SettingsMongoRepositoryReadError] = "Error reading system setting.";
-ThMessage[ThStatusCode.MongoSettingsRepositoryNotFound] = "Setting not found.";
-ThMessage[ThStatusCode.MongoRepositoryGetNetiveEntityError] = "Error getting native entity for collection.";
-ThMessage[ThStatusCode.MongoPatchErrorEnsuringUniqueIndexOnSettings] = "Error ensuring unique index on settings collection.";
+ThMessage[ThStatusCode.SettingsRepositoryNotFound] = "Setting not found.";
+ThMessage[ThStatusCode.RepositoryGetNetiveEntityError] = "Error getting native entity for collection.";
+ThMessage[ThStatusCode.PatchErrorEnsuringUniqueIndexOnSettings] = "Error ensuring unique index on settings collection.";
 ThMessage[ThStatusCode.HotelGetDetailsError] = "Error getting details for the hotel. Please try again.";
 ThMessage[ThStatusCode.HotelGetDetailsErrorFormattingResponse] = "Error updating the details for the hotel. Please try again.";
 ThMessage[ThStatusCode.HotelGetDetailsErrorFindingUserByEmail] = "Error getting the details for the hotel. Please try again.";
@@ -208,12 +219,12 @@ ThMessage[ThStatusCode.HotelAddPaymentsPoliciesErrorPrecheckingConstraints] = "T
 ThMessage[ThStatusCode.HotelAddPaymentPoliciesInvalidTaxes] = "Invalid taxes sent.";
 ThMessage[ThStatusCode.HotelAddPaymentsPoliciesError] = "Error adding the payments and policies.";
 ThMessage[ThStatusCode.HotelAddPaymentPoliciesInvalidCurrencyCode] = "Invalid currency code.";
-ThMessage[ThStatusCode.MongoBedRepositoryErrorGettingBedList] = "Error getting the bed list. Please try again.";
-ThMessage[ThStatusCode.MongoBedRepositoryErrorGettingBed] = "Error getting the bed. Please try again.";
-ThMessage[ThStatusCode.MongoBedRepositoryBedNotFound] = "Bed not found.";
-ThMessage[ThStatusCode.MongoBedRepositoryErrorAddingBed] = "An error occurred while adding this bed for the current hotel.";
-ThMessage[ThStatusCode.MongoBedRepositoryNameAlreadyExists] = "The name of the bed already exists.";
-ThMessage[ThStatusCode.MongoBedRepositoryErrorUpdatingBed] = "Problem updating the bed. It is possible that someone else changed it at the same time. Please refresh the page and try again.";
+ThMessage[ThStatusCode.BedRepositoryErrorGettingBedList] = "Error getting the bed list. Please try again.";
+ThMessage[ThStatusCode.BedRepositoryErrorGettingBed] = "Error getting the bed. Please try again.";
+ThMessage[ThStatusCode.BedRepositoryBedNotFound] = "Bed not found.";
+ThMessage[ThStatusCode.BedRepositoryErrorAddingBed] = "An error occurred while adding this bed for the current hotel.";
+ThMessage[ThStatusCode.BedRepositoryNameAlreadyExists] = "The name of the bed already exists.";
+ThMessage[ThStatusCode.BedRepositoryErrorUpdatingBed] = "Problem updating the bed. It is possible that someone else changed it at the same time. Please refresh the page and try again.";
 ThMessage[ThStatusCode.BedItemUpdateStrategyErrorUpdating] = "Error updating the bed.";
 ThMessage[ThStatusCode.SaveBedItemError] = "Error saving the bed item.";
 ThMessage[ThStatusCode.SaveBedItemInvalidBedTemplateId] = "Invalid bed template id.";
@@ -223,6 +234,10 @@ ThMessage[ThStatusCode.BedControllerErrorGettingBeds] = "Error getting the beds.
 ThMessage[ThStatusCode.BedControllerErrorSavingBed] = "Error saving bed.";
 ThMessage[ThStatusCode.BedControllerErrorDeletingBed] = "Error deleting bed.";
 ThMessage[ThStatusCode.BedControllerErrorGettingBedById] = "Error getting bed by id.";
+ThMessage[ThStatusCode.RoomRepositoryErrorGettingRoomList] = "Error getting the room list. Please try again.";
+ThMessage[ThStatusCode.RoomRepositoryErrorGettingRoom] = "Error getting the room. Please try again.";
+ThMessage[ThStatusCode.RoomCategoryRepositoryErrorGettingRoomCategoryList] = "Error getting the room category list. Please try again.";
+ThMessage[ThStatusCode.RoomCategoryRepositoryErrorGettingRoomCategory] = "Error getting the room category. Please try again.";
 ThMessage[ThStatusCode.HotelUpdatePaymentsPoliciesErrorPrecheckingConstraints] = "There was a problem while checking the payments and policies submitted.";
 ThMessage[ThStatusCode.HotelUpdatePaymentPoliciesInvalidTaxes] = "Invalid taxes sent.";
 ThMessage[ThStatusCode.HotelUpdatePaymentsPoliciesError] = "Error adding the payments and policies.";
@@ -236,28 +251,28 @@ ThMessage[ThStatusCode.HotelUpdatePropertyDetailsInvalidAmenityIdList] = "Invali
 ThMessage[ThStatusCode.HotelUpdatePropertyDetailsInvalidOperationHours] = "Invalid operation hours.";
 ThMessage[ThStatusCode.HotelUpdatePropertyDetailsInvalidTimezone] = "Invalid timezone.";
 ThMessage[ThStatusCode.HotelDetailsControllerErrorUpdatingPropertyDetails] = "Error updating property details.";
-ThMessage[ThStatusCode.MongoTaxRepositoryErrorGettingTaxList] = "Error getting the tax list. Please try again.";
-ThMessage[ThStatusCode.MongoTaxRepositoryErrorGettingTax] = "Error getting the tax. Please try again.";
-ThMessage[ThStatusCode.MongoTaxRepositoryNameAlreadyExists] = "The name of the tax already exists.";
-ThMessage[ThStatusCode.MongoTaxRepositoryErrorAddingTax] = "Error adding tax.";
-ThMessage[ThStatusCode.MongoTaxRepositoryProblemUpdatingTax] = "Problem updating the tax. It is possible that someone else changed it at the same time. Please refresh the page and try again.";
-ThMessage[ThStatusCode.MongoTaxRepositoryErrorUpdatingTax] = "Error updating tax.";
-ThMessage[ThStatusCode.MongoTaxRepositoryTaxNotFound] = "Tax not found.";
+ThMessage[ThStatusCode.TaxRepositoryErrorGettingTaxList] = "Error getting the tax list. Please try again.";
+ThMessage[ThStatusCode.TaxRepositoryErrorGettingTax] = "Error getting the tax. Please try again.";
+ThMessage[ThStatusCode.TaxRepositoryNameAlreadyExists] = "The name of the tax already exists.";
+ThMessage[ThStatusCode.TaxRepositoryErrorAddingTax] = "Error adding tax.";
+ThMessage[ThStatusCode.TaxRepositoryProblemUpdatingTax] = "Problem updating the tax. It is possible that someone else changed it at the same time. Please refresh the page and try again.";
+ThMessage[ThStatusCode.TaxRepositoryErrorUpdatingTax] = "Error updating tax.";
+ThMessage[ThStatusCode.TaxRepositoryTaxNotFound] = "Tax not found.";
 ThMessage[ThStatusCode.HotelDeleteTaxItemError] = "Error deleting tax item.";
 ThMessage[ThStatusCode.HotelDeleteTaxItemErrorDeleting] = "Error deleting tax item.";
 ThMessage[ThStatusCode.HotelDeleteTaxItemErrorValidating] = "Error validating the existing tax item.";
 ThMessage[ThStatusCode.TaxControllerErrorGettingTaxes] = "Error getting the taxes.";
 ThMessage[ThStatusCode.TaxControllerErrorSavingTax] = "Error saving tax.";
 ThMessage[ThStatusCode.TaxControllerErrorDeletingTax] = "Error deleting tax.";
-ThMessage[ThStatusCode.MongoAddOnProductRepositoryProblemUpdatingAddOnProduct] = "Problem updating the add on product. It is possible that someone else changed it at the same time. Please refresh the page and try again.";
-ThMessage[ThStatusCode.MongoAddOnProductRepositoryErrorUpdatingAddOnProduct] = "Error updating add on product.";
-ThMessage[ThStatusCode.MongoAddOnProductRepositoryNameAlreadyExists] = "The add on product name you entered already exists.";
-ThMessage[ThStatusCode.MongoAddOnProductRepositoryErrorAddingAddOnProduct] = "Error creating add on product.";
-ThMessage[ThStatusCode.MongoAddOnProductRepositoryProductNotFound] = "Add on product not found.";
-ThMessage[ThStatusCode.MongoAddOnProductRepositoryErrorGettingAddOnProduct] = "Error getting add on product.";
-ThMessage[ThStatusCode.MongoAddOnProductRepositoryErrorReadingCategoryIdList] = "Error reading category list for defined add on products.";
-ThMessage[ThStatusCode.MongoAddOnProductRepositoryErrorReadingDocumentCount] = "Error getting document count.";
-ThMessage[ThStatusCode.MongoAddOnProductRepositoryErrorGettingList] = "Error getting add on products.";
+ThMessage[ThStatusCode.AddOnProductRepositoryProblemUpdatingAddOnProduct] = "Problem updating the add on product. It is possible that someone else changed it at the same time. Please refresh the page and try again.";
+ThMessage[ThStatusCode.AddOnProductRepositoryErrorUpdatingAddOnProduct] = "Error updating add on product.";
+ThMessage[ThStatusCode.AddOnProductRepositoryNameAlreadyExists] = "The add on product name you entered already exists.";
+ThMessage[ThStatusCode.AddOnProductRepositoryErrorAddingAddOnProduct] = "Error creating add on product.";
+ThMessage[ThStatusCode.AddOnProductRepositoryProductNotFound] = "Add on product not found.";
+ThMessage[ThStatusCode.AddOnProductRepositoryErrorGettingAddOnProduct] = "Error getting add on product.";
+ThMessage[ThStatusCode.AddOnProductRepositoryErrorReadingCategoryIdList] = "Error reading category list for defined add on products.";
+ThMessage[ThStatusCode.AddOnProductRepositoryErrorReadingDocumentCount] = "Error getting document count.";
+ThMessage[ThStatusCode.AddOnProductRepositoryErrorGettingList] = "Error getting add on products.";
 ThMessage[ThStatusCode.SaveAddOnProductItemError] = "Error saving add on product.";
 ThMessage[ThStatusCode.SaveAddOnProductItemInvalidCategoryId] = "Invalid category id.";
 ThMessage[ThStatusCode.SaveAddOnProductItemInvalidTaxId] = "Invalid tax id.";
@@ -270,6 +285,13 @@ ThMessage[ThStatusCode.AddOnProductsControllerErrorDeletingAddOnProduct] = "Erro
 ThMessage[ThStatusCode.AddOnProductsControllerErrorGettingCategoryIdList] = "Error getting the categories for your add on products.";
 ThMessage[ThStatusCode.AddOnProductsControllerErrorGettingCount] = "Error getting the number of add on products.";
 ThMessage[ThStatusCode.AddOnProductsControllerErrorGettingList] = "Error getting the list of add on products.";
+ThMessage[ThStatusCode.CustomerRepositoryCustomerNotFound] = "The customer was not found.";
+ThMessage[ThStatusCode.CustomerRepositoryErrorGettingCustomer] = "Error getting customer.";
+ThMessage[ThStatusCode.CustomerRepositoryErrorCreatingCustomer] = "Error creating customer.";
+ThMessage[ThStatusCode.CustomerRepositoryProblemUpdatingCustomer] = "Problem updating the customer. It is possible that someone else changed it at the same time. Please refresh the page and try again.";
+ThMessage[ThStatusCode.CustomerRepositoryErrorUpdatingCustomer] = "Error updating the customer.";
+ThMessage[ThStatusCode.CustomerRepositoryErrorReadingCustomerCount] = "Error getting the number of customers.";
+ThMessage[ThStatusCode.CustomerRepositoryErrorGettingList] = "Error getting customers.";
 
 export class ThResponse {
 	statusCode: ThStatusCode;

@@ -31,7 +31,7 @@ export class MongoRoomCategoryRepository extends MongoRepository implements IRoo
 		}
 		this.findMultipleDocuments(mongoSearchCriteria,
 			(err: Error) => {
-				var thError = new ThError(ThStatusCode.MongoAddOnProductRepositoryErrorGettingList, err);
+				var thError = new ThError(ThStatusCode.RoomCategoryRepositoryErrorGettingRoomCategoryList, err);
 				ThLogger.getInstance().logError(ThLogLevel.Error, "Error getting room list", { meta: meta, searchCriteria: searchCriteria }, thError);
 				reject(thError);
 			},

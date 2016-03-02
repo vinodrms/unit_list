@@ -20,6 +20,6 @@ export interface RoomCategorySearchResultRepoDO {
 }
 
 export interface IRoomCategoryRepository {
-    getRoomCategoryList(roomCategoryMetaRepoDO: RoomCategoryMetaRepoDO): Promise<RoomCategorySearchResultRepoDO>;
+    getRoomCategoryList(roomCategoryMetaRepoDO: RoomCategoryMetaRepoDO, searchCriteria: RoomCategorySearchCriteriaMetaRepoDO, lazyLoad?: LazyLoadRepoDO): Promise<RoomCategorySearchResultRepoDO>;
 	getRoomCategoryById(roomCategoryItemMeta: RoomCategoryItemMetaRepoDO): Promise<RoomCategoryDO>;
 }

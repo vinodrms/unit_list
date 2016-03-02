@@ -31,7 +31,7 @@ export class MongoRoomRepository extends MongoRepository implements IRoomReposit
 		}
 		this.findMultipleDocuments(mongoSearchCriteria,
 			(err: Error) => {
-				var thError = new ThError(ThStatusCode.MongoAddOnProductRepositoryErrorGettingList, err);
+				var thError = new ThError(ThStatusCode.RoomRepositoryErrorGettingRoomList, err);
 				ThLogger.getInstance().logError(ThLogLevel.Error, "Error getting room list", { meta: meta, searchCriteria: searchCriteria }, thError);
 				reject(thError);
 			},
@@ -51,7 +51,7 @@ export class MongoRoomRepository extends MongoRepository implements IRoomReposit
 		return mongoQueryBuilder.processedQuery;
 	}
     
-	public getRoomById(roomMeta: RoomMetaRepoDO, roomId: string): Promise<RoomDO> {
+	public getRoomById(roomItemMeta: RoomItemMetaRepoDO): Promise<RoomDO> {
         return null;    
     }
 }
