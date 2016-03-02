@@ -5,6 +5,10 @@ import {ISettingsRepository} from './settings/repositories/ISettingsRepository';
 import {MongoSettingsRepository} from './settings/repositories/mongo/MongoSettingsRepository';
 import {IBedRepository} from './beds/repositories/IBedRepository';
 import {MongoBedRepository} from './beds/repositories/mongo/MongoBedRepository';
+import {MongoRoomRepository} from './rooms/repositories/mongo/MongoRoomRepository';
+import {IRoomRepository} from './rooms/repositories/IRoomRepository';
+import {MongoRoomCategoryRepository} from './room-categories/repositories/mongo/MongoRoomCategoryRepository';
+import {IRoomCategoryRepository} from './room-categories/repositories/IRoomCategoryRepository';
 import {ITaxRepository} from './taxes/repositories/ITaxRepository';
 import {MongoTaxRepository} from './taxes/repositories/mongo/MongoTaxRepository';
 import {IAddOnProductRepository} from './add-on-products/repositories/IAddOnProductRepository';
@@ -55,6 +59,20 @@ export class RepositoryFactory {
 		switch (this._databaseType) {
 			default:
 				return new MongoAddOnProductRepository();
+		}
+	}
+    
+    getRoomCategoryRepository(): IRoomCategoryRepository {
+		switch (this._databaseType) {
+			default:
+				return new MongoRoomCategoryRepository();
+		}
+	}
+    
+    getRoomRepository(): IRoomRepository {
+		switch (this._databaseType) {
+			default:
+				return new MongoRoomRepository();
 		}
 	}
 }

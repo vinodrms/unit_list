@@ -45,6 +45,16 @@ export class MongoPatch0 extends ATransactionalMongoPatch {
             fields: { "hotelId": 1, "name": 1 },
 			type: IndexType.Unique
         });
+        this._indexList.push({
+            entity: sails.models.roomsentity,
+            fields: { "hotelId": 1, "name": 1 },
+			type: IndexType.Unique
+        });
+        this._indexList.push({
+            entity: sails.models.roomcategoriesentity,
+            fields: { "hotelId": 1, "diplayName": 1 },
+			type: IndexType.Unique
+        });
 		this._indexList.push({
             entity: sails.models.customersentity,
             fields: {

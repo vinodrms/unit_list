@@ -10,7 +10,46 @@ class RoomsEntity extends BasePersistentEntity {
     
     private buildCustomAttributes() {
         this.attributes = {
-            
+            versionId: {
+                type: 'integer',
+                required: true,
+                defaultsTo: 0
+            },
+            hotelId: {
+                type: 'string',
+                required: true
+            },
+            name: {
+                type: "string",
+                required: true
+            },
+            floor: {
+                type: "integer",
+                required: true
+            },
+            categoryId: {
+                type: "string",
+                required: true
+            },
+            bedIdList: {
+                type: "array"
+            },
+            amenityIdList: {
+                type: "array"
+            },
+            attributeIdList: {
+                type: "array"
+            },
+            notes: {
+                type: "string"
+            },
+            maintenanceStatus: {
+                type: "integer"  
+            },
+            status: {
+                type: 'integer',
+                required: true    
+            }
         };
     }
 }

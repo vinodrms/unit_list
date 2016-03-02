@@ -2,6 +2,7 @@ import {RepositoryCleanerWrapper} from './RepositoryCleanerWrapper';
 import {TestContext} from '../helpers/TestContext';
 import {DefaultHotelBuilder} from './builders/DefaultHotelBuilder';
 import {DefaultBedBuilder} from './builders/DefaultBedBuilder';
+import {DefaultRoomBuilder} from './builders/DefaultRoomBuilder';
 import {HotelDO} from '../../core/data-layer/hotel/data-objects/HotelDO';
 import {UserDO} from '../../core/data-layer/hotel/data-objects/user/UserDO';
 import {PaymentMethodDO} from '../../core/data-layer/common/data-objects/payment-method/PaymentMethodDO';
@@ -9,6 +10,7 @@ import {AddOnProductCategoryDO} from '../../core/data-layer/common/data-objects/
 import {AmenityDO} from '../../core/data-layer/common/data-objects/amenity/AmenityDO';
 import {BedTemplateDO} from '../../core/data-layer/common/data-objects/bed-template/BedTemplateDO';
 import {BedDO} from '../../core/data-layer/common/data-objects/bed/BedDO';
+import {RoomDO} from '../../core/data-layer/rooms/data-objects/RoomDO';
 import {DefaultTaxBuilder} from './builders/DefaultTaxBuilder';
 import {TaxResponseRepoDO} from '../../core/data-layer/taxes/repositories/ITaxRepository';
 import {DefaultAddOnProductBuilder} from './builders/DefaultAddOnProductBuilder';
@@ -26,6 +28,7 @@ export class DefaultDataBuilder {
 	private _hotelAmenityList: AmenityDO[];
     private _bedTemplateList: BedTemplateDO[];
     private _bedList: BedDO[];
+    private _roomList: RoomDO[];
 	private _taxes: TaxResponseRepoDO;
 	private _addOnProductCategoryList: AddOnProductCategoryDO[];  
 	private _addOnProductList: AddOnProductDO[];
@@ -132,6 +135,9 @@ export class DefaultDataBuilder {
     }
     public get bedList(): BedDO[] {
         return this._bedList;
+    }
+    public get roomList(): RoomDO[] {
+        return this._roomList;
     }
 	public get taxes(): TaxResponseRepoDO {
 		return this._taxes;

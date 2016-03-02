@@ -5,7 +5,6 @@ import {DefaultDataBuilder} from '../../../../db-initializers/DefaultDataBuilder
 import should = require('should');
 
 export class BedsTestHelper {
-    private static InvalidPercentageValue = 1.01;
 
     constructor(private _defaultDataBuilder: DefaultDataBuilder) {
     }

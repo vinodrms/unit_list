@@ -8,7 +8,6 @@ export interface AddOnProductItemMetaRepoDO {
 	id: string;
 	versionId: number;
 }
-
 export interface AddOnProductSearchCriteriaRepoDO {
 	name?: string;
 	categoryIdList?: string[];

@@ -8,7 +8,9 @@ export enum SettingType {
     PaymentMethods,
     BedTemplates,
 	AddOnProductCategory,
-    RoomAttributes
+    RoomAttributes,
+    RoomTypes,
+    RoomSalesCategories
 };
 
 export class SettingMetadataDO extends BaseDO {

@@ -8,6 +8,8 @@ import {CountrySettingDO} from '../../data-objects/country/CountrySettingDO';
 import {CurrencySettingDO} from '../../data-objects/currency/CurrencySettingDO';
 import {PaymentMethodSettingDO} from '../../data-objects/payment-method/PaymentMethodSettingDO';
 import {RoomAttributeSettingDO} from '../../data-objects/room-attribute/RoomAttributeSettingDO';
+import {RoomTypeSettingDO} from '../../data-objects/room-type/RoomTypeSettingDO';
+import {RoomSalesCategorySettingDO} from '../../data-objects/room-sales-category/RoomSalesCategorySettingDO';
 import {SettingType} from '../../data-objects/common/SettingMetadataDO';
 import {BaseDO} from '../../../common/base/BaseDO';
 import {AmenityDO} from '../../../common/data-objects/amenity/AmenityDO';
@@ -15,6 +17,8 @@ import {BedTemplateDO} from '../../../common/data-objects/bed-template/BedTempla
 import {CountryDO} from '../../../common/data-objects/country/CountryDO';
 import {CurrencyDO} from '../../../common/data-objects/currency/CurrencyDO';
 import {RoomAttributeDO} from '../../../common/data-objects/room-attribute/RoomAttributeDO';
+import {RoomTypeDO} from '../../../common/data-objects/room-type/RoomTypeDO';
+import {RoomSalesCategoryDO} from '../../../common/data-objects/room-sales-category/RoomSalesCategoryDO';
 import {PaymentMethodDO} from '../../../common/data-objects/payment-method/PaymentMethodDO';
 import {AddOnProductCategorySettingDO} from '../../data-objects/add-on-product/AddOnProductCategorySettingDO';
 import {AddOnProductCategoryDO} from '../../../common/data-objects/add-on-product/AddOnProductCategoryDO';
@@ -58,6 +62,14 @@ export class MongoSettingsRepository extends MongoRepository implements ISetting
     
     public getRoomAttributes(valueCriteria?: Object): Promise<RoomAttributeDO[]> {
         return this.getSetting(SettingType.RoomAttributes, valueCriteria);
+    }
+    
+    public getRoomTypes(valueCriteria?: Object): Promise<RoomTypeDO[]> {
+        return this.getSetting(SettingType.RoomTypes, valueCriteria);
+    }
+    
+    public getRoomSalesCategories(valueCriteria?: Object): Promise<RoomSalesCategoryDO[]> {
+        return this.getSetting(SettingType.RoomSalesCategories, valueCriteria);
     }
     
     public getHotelAmenities(valueCriteria?: Object): Promise<AmenityDO[]> {
@@ -117,6 +129,8 @@ export class MongoSettingsRepository extends MongoRepository implements ISetting
         switch (settingType) {
             case SettingType.RoomAmenities: getSettingsResponseDO = new AmenitySettingDO(); break;
             case SettingType.RoomAttributes: getSettingsResponseDO = new RoomAttributeSettingDO(); break;
+            case SettingType.RoomTypes: getSettingsResponseDO = new RoomAttributeSettingDO(); break;
+            case SettingType.RoomSalesCategories: getSettingsResponseDO = new RoomAttributeSettingDO(); break;
             case SettingType.HotelAmenities: getSettingsResponseDO = new AmenitySettingDO(); break;
             case SettingType.Countries: getSettingsResponseDO = new CountrySettingDO(); break;
             case SettingType.CurrencyCodes: getSettingsResponseDO = new CurrencySettingDO(); break;
