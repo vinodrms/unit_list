@@ -27,10 +27,9 @@ export class RepositoryFactory {
         switch (this._databaseType) {
             default:
                 return [new MongoHotelRepository(), new MongoBedRepository(), new MongoTaxRepository(), new MongoAddOnProductRepository(),
-                    new MongoRoomRepository(), new MongoRoomCategoryRepository()];
+                    new MongoRoomRepository(), new MongoRoomCategoryRepository(),  new MongoCustomerRepository()];
         }
     }
-
     getHotelRepository(): IHotelRepository {
         switch (this._databaseType) {
             default:

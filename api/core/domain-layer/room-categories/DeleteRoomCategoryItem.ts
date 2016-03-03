@@ -42,7 +42,7 @@ export class DeleteRoomCategoryItem {
 			try {
 				this.deleteCore(resolve, reject);
 			} catch (error) {
-				var thError = new ThError(ThStatusCode.DeleteAddOnProductItemError, error);
+				var thError = new ThError(ThStatusCode.DeleteRoomCategoryItemError, error);
 				ThLogger.getInstance().logError(ThLogLevel.Error, "error deleting room category", this._deleteItemDO, thError);
 				reject(thError);
 			}
@@ -70,7 +70,7 @@ export class DeleteRoomCategoryItem {
 			.then((deletedRoomCategory: RoomCategoryDO) => {
 				resolve(deletedRoomCategory);
 			}).catch((error: any) => {
-				var thError = new ThError(ThStatusCode.DeleteAddOnProductItemError, error);
+				var thError = new ThError(ThStatusCode.DeleteRoomCategoryItemError, error);
 				if (thError.isNativeError()) {
 					ThLogger.getInstance().logError(ThLogLevel.Error, "error deleting room category", this._deleteItemDO, thError);
 				}
@@ -88,7 +88,7 @@ export class DeleteRoomCategoryItem {
 			try {
 				this.validateLoadedRoomCategoryCore(resolve, reject);
 			} catch (error) {
-				var thError = new ThError(ThStatusCode.DeleteAddOnProductItemErrorValidating, error);
+				var thError = new ThError(ThStatusCode.DeleteRoomCategoryItemError, error);
 				ThLogger.getInstance().logError(ThLogLevel.Error, "error validating loaded room category", this._loadedRoomCategory, thError);
 				reject(thError);
 			}

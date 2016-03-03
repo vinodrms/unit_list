@@ -88,7 +88,7 @@ export class MongoAddOnProductReadOperationsRepository extends MongoRepository {
 		mongoQueryBuilder.addExactMatch("hotelId", meta.hotelId);
 		mongoQueryBuilder.addExactMatch("status", AddOnProductStatus.Active);
 		if (!this._thUtils.isUndefinedOrNull(searchCriteria)) {
-			mongoQueryBuilder.addMultipleSelectOptions("categoryId", searchCriteria.categoryIdList);
+			mongoQueryBuilder.addMultipleSelectOptionList("categoryId", searchCriteria.categoryIdList);
 			mongoQueryBuilder.addRegex("name", searchCriteria.name);
 		}
 		return mongoQueryBuilder.processedQuery;

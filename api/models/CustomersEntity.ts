@@ -31,17 +31,13 @@ class CustomersEntity extends BasePersistentEntity {
                 type: 'json',
                 required: true
             },
-			agreementUrl: {
-				type: 'string',
-				defaultsTo: ""
+			fileAttachmentUrlList: {
+				type: 'array',
+				defaultsTo: []
 			},
 			priceProductDetails: {
 				type: 'json',
                 required: true
-			},
-			linkedCustomerIdList: {
-				type: 'array',
-				defaultsTo: []
 			},
 			notes: {
                 type: 'string',

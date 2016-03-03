@@ -66,7 +66,7 @@ export class MongoCustomerReadOperationsRepository extends MongoRepository {
 		mongoQueryBuilder.addExactMatch("hotelId", meta.hotelId);
 		mongoQueryBuilder.addExactMatch("status", CustomerStatus.Active);
 		if (!this._thUtils.isUndefinedOrNull(searchCriteria)) {
-			mongoQueryBuilder.addMultipleSelectOptions("categoryId", [searchCriteria.linkedCustomerId]);
+			mongoQueryBuilder.addMultipleSelectOptionList("id", searchCriteria.customerIdList);
 			mongoQueryBuilder.addTextIndexSearch(searchCriteria.searchText);
 			mongoQueryBuilder.addExactMatch("type", searchCriteria.type);
 		}

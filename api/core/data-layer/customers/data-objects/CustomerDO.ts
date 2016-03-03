@@ -1,8 +1,9 @@
 import {BaseDO} from '../../common/base/BaseDO';
 import {CustomerPriceProductDetailsDO} from './price-product-details/CustomerPriceProductDetailsDO';
-import {CompanyDetailsDO} from './customer-details/CompanyDetailsDO';
-import {IndividualDetailsDO} from './customer-details/IndividualDetailsDO';
-import {TravelAgencyDetailsDO} from './customer-details/TravelAgencyDetailsDO';
+import {IndividualDetailsDO} from './customer-details/individual/IndividualDetailsDO';
+import {CompanyDetailsDO} from './customer-details/corporate/CompanyDetailsDO';
+import {TravelAgencyDetailsDO} from './customer-details/corporate/TravelAgencyDetailsDO';
+import {ICustomerDetailsDO} from './customer-details/ICustomerDetailsDO';
 
 export enum CustomerType {
 	Individual,
@@ -23,14 +24,13 @@ export class CustomerDO extends BaseDO {
 	versionId: number;
 	type: CustomerType;
 	status: CustomerStatus;
-	customerDetails: BaseDO;
-	agreementUrl: string;
+	customerDetails: ICustomerDetailsDO;
+	fileAttachmentUrlList: string[];
 	priceProductDetails: CustomerPriceProductDetailsDO;
-	linkedCustomerIdList: string[];
 	notes: string;
 
 	protected getPrimitivePropertyKeys(): string[] {
-		return ["id", "hotelId", "versionId", "type", "status", "agreementUrl", "linkedCustomerIdList", "notes"];
+		return ["id", "hotelId", "versionId", "type", "status", "fileAttachmentUrlList", "notes"];
 	}
 
 	public buildFromObject(object: Object) {
@@ -52,11 +52,10 @@ export class CustomerDO extends BaseDO {
 		this.priceProductDetails = new CustomerPriceProductDetailsDO();
 		this.priceProductDetails.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "priceProductDetails"));
 	}
-
-	public isValid(): boolean {
-		return this.isValidCustomerType();
+	public isCompanyOrTravelAgency(): boolean {
+		return this.type === CustomerType.Company || this.type === CustomerType.TravelAgency;
 	}
-	private isValidCustomerType(): boolean {
-		return this.type === CustomerType.Individual || this.type === CustomerType.Company || this.type === CustomerType.TravelAgency;
+	public isIndividual(): boolean {
+		return this.type === CustomerType.Individual;
 	}
 }
