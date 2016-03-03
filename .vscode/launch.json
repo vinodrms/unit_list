@@ -27,7 +27,7 @@
 			"port": 5858
 		},
         {
-            "name": "Run server tests",
+            "name": "Server tests",
             "type": "node",
             "program": "./node_modules/sails-test-helper/node_modules/mocha/bin/_mocha",
             "stopOnEntry": false,
@@ -37,7 +37,7 @@
             "env": { "NODE_ENV": "test"}
         },
         {
-            "name": "Run server tests with coverage",
+            "name": "Code coverage",
             "type": "node",
             "program": "./node_modules/istanbul/lib/cli.js",
             "stopOnEntry": false,

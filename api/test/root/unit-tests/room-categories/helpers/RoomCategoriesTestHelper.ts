@@ -23,4 +23,14 @@ export class RoomCategoriesTestHelper {
             displayName: "Xxxxxxx"
         };
     }
+    
+    public getSavedRoomCategoryItemDOFrom(roomCategory: RoomCategoryDO): SaveRoomCategoryItemDO {
+        var result = {
+            hotelId: roomCategory.hotelId,
+            displayName: roomCategory.displayName,
+            status: roomCategory.status
+        }
+        result["id"] = roomCategory.id;
+        return result;
+    }
 }

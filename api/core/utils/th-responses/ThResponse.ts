@@ -79,6 +79,8 @@ export enum ThStatusCode {
     RoomCategoryRepositoryErrorGettingRoomCategory,
     RoomCategoryRepositoryNameAlreadyExists,
     RoomCategoryRepositoryErrorAddingRoomCategory,
+    RoomCategoryRepositoryRoomCategoryNotFound,
+    RoomCategoryRepositoryErrorGettingRoom,
     SaveRoomCategoryItemError,
     DeleteRoomCategoryItemError,
     RoomCategoryItemUpdateStrategyErrorUpdating,
@@ -257,6 +259,8 @@ ThMessage[ThStatusCode.RoomCategoryRepositoryErrorGettingRoomCategoryList] = "Er
 ThMessage[ThStatusCode.RoomCategoryRepositoryErrorGettingRoomCategory] = "Error getting the room category. Please try again.";
 ThMessage[ThStatusCode.RoomCategoryRepositoryNameAlreadyExists] = "The room category you entered already exists.";
 ThMessage[ThStatusCode.RoomCategoryRepositoryErrorAddingRoomCategory] = "Error creating room category.";
+ThMessage[ThStatusCode.RoomCategoryRepositoryRoomCategoryNotFound] = "Room category not found.";
+ThMessage[ThStatusCode.RoomCategoryRepositoryErrorGettingRoom] = "Error getting room.";
 ThMessage[ThStatusCode.SaveRoomCategoryItemError] = "Error saving room category.";
 ThMessage[ThStatusCode.DeleteRoomCategoryItemError] = "Error deleting room category.";
 ThMessage[ThStatusCode.RoomCategoryItemUpdateStrategyErrorUpdating] = "Error updating room category id.";

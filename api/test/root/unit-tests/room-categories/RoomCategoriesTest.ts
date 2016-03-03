@@ -53,5 +53,34 @@ describe("Hotel Room Categories Tests", function() {
                 done(e);    
             });
         });
+        it("Should update the previously created room category", function(done) {
+			var roomCategoryToUpdate = roomCategoriesHelper.getSavedRoomCategoryItemDOFrom(createdRoomCategory);
+            roomCategoryToUpdate.displayName = "YYYYYY";
+            
+            var saveRoomCategoryItem = new SaveRoomCategoryItem(testContext.appContext, testContext.sessionContext);
+            saveRoomCategoryItem.save(roomCategoryToUpdate).then((result: RoomCategoryDO) => {
+                should.equal(result.hotelId, testContext.sessionContext.sessionDO.hotel.id);
+                should.exist(result.id);
+                should.equal(result.displayName, roomCategoryToUpdate.displayName);
+                
+                createdRoomCategory = result;
+                
+                done();
+            }).catch((e: ThError) => {
+                done(e);
+            });
+        });
+        
+        it("Should not create a second room category with the same display name for the same hotel", function(done) {
+			
+            var saveRoomCategoryItem = new SaveRoomCategoryItem(testContext.appContext, testContext.sessionContext);
+            
+            saveRoomCategoryItem.save(createdRoomCategory).then((result: SaveRoomCategoryItemDO) => {
+                done(new Error("did manage to create two room categories with the same display name"));    
+            }).catch((e: ThError) => {
+                should.notEqual(e.getThStatusCode, ThStatusCode.Ok);
+                done();    
+            });
+        });
     });
 });
