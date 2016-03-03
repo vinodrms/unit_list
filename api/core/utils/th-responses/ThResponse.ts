@@ -157,7 +157,11 @@ export enum ThStatusCode {
 	SaveCustomerItemCompOrTACannotBeLinkedToOtherCustomers,
 	SaveCustomerItemCannotSetPriceProductsForPublic,
 	SaveCustomerItemInvalidPriceProductIdList,
-	CustomerItemUpdateStrategyError
+	CustomerItemUpdateStrategyError,
+	CustomersControllerErrorGettingCustomer,
+	CustomersControllerErrorSavingCustomer,
+	CustomersControllerErrorGettingCount,
+	CustomersControllerErrorGettingList
 }
 
 var ThMessage: { [index: number]: string; } = {};
@@ -316,6 +320,10 @@ ThMessage[ThStatusCode.SaveCustomerItemCompOrTACannotBeLinkedToOtherCustomers] =
 ThMessage[ThStatusCode.SaveCustomerItemCannotSetPriceProductsForPublic] = "Cannot set specific price products for this client unless private is selected.";
 ThMessage[ThStatusCode.SaveCustomerItemInvalidPriceProductIdList] = "Some of the selected price products could not be found.";
 ThMessage[ThStatusCode.CustomerItemUpdateStrategyError] = "Error updating customer.";
+ThMessage[ThStatusCode.CustomersControllerErrorGettingCustomer] = "Error getting customer.";
+ThMessage[ThStatusCode.CustomersControllerErrorSavingCustomer] = "Error saving customer.";
+ThMessage[ThStatusCode.CustomersControllerErrorGettingCount] = "Error getting the number of customers.";
+ThMessage[ThStatusCode.CustomersControllerErrorGettingList] = "Error getting the list of customers.";
 
 export class ThResponse {
 	statusCode: ThStatusCode;
