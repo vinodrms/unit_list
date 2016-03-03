@@ -35,6 +35,16 @@
             "cwd": ".",
             "runtimeExecutable": null,
             "env": { "NODE_ENV": "test"}
+        },
+        {
+            "name": "Run server tests with coverage",
+            "type": "node",
+            "program": "./node_modules/istanbul/lib/cli.js",
+            "stopOnEntry": false,
+            "args": ["cover", "./node_modules/sails-test-helper/node_modules/mocha/bin/_mocha", "--", "-R", "spec", "api/test/root/**/*.js", "--timeout", "1000000"],
+            "cwd": ".",
+            "runtimeExecutable": null,
+            "env": { "NODE_ENV": "test"}
         }
 	]
 }

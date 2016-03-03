@@ -1,4 +1,5 @@
 import {RoomCategoryDO} from '../../../../../core/data-layer/room-categories/data-objects/RoomCategoryDO';
+import {SaveRoomCategoryItemDO} from '../../../../../core/domain-layer/room-categories/SaveRoomCategoryItemDO';
 
 import {DefaultDataBuilder} from '../../../../db-initializers/DefaultDataBuilder';
 
@@ -9,4 +10,17 @@ export class RoomCategoriesTestHelper {
     constructor(private _defaultDataBuilder: DefaultDataBuilder) {
     }
     
+    public getRoomCategoryItemDOWithInvalidDisplayName(): SaveRoomCategoryItemDO {
+        return {
+            hotelId: this._defaultDataBuilder.hotelDO.id,
+            displayName: "Xx"
+        };
+    }
+    
+    public getValidSaveRoomCategoryItemDO(): SaveRoomCategoryItemDO {
+        return {
+            hotelId: this._defaultDataBuilder.hotelDO.id,
+            displayName: "Xxxxxxx"
+        };
+    }
 }

@@ -6,7 +6,7 @@ import {StringValidationRule} from '../../utils/th-validation/rules/StringValida
 export class SaveRoomCategoryItemDO {
     hotelId: string;
     displayName: string;
-
+    
     public static getValidationStructure(): IValidationStructure {
         return new ObjectValidationStructure([
             {
