@@ -32,13 +32,16 @@ class RoomsEntity extends BasePersistentEntity {
                 required: true
             },
             bedIdList: {
-                type: "array"
+                type: "array",
+                defaultsTo: []
             },
             amenityIdList: {
-                type: "array"
+                type: "array",
+                defaultsTo: []
             },
             attributeIdList: {
-                type: "array"
+                type: "array",
+                defaultsTo: []
             },
             notes: {
                 type: "string"

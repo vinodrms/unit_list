@@ -52,7 +52,7 @@ export class MongoPatch0 extends ATransactionalMongoPatch {
         });
         this._indexList.push({
             entity: sails.models.roomcategoriesentity,
-            fields: { "hotelId": 1, "diplayName": 1 },
+            fields: { "hotelId": 1, "displayName": 1 },
 			type: IndexType.Unique
         });
 		this._indexList.push({

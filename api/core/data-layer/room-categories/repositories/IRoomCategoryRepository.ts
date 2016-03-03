@@ -21,5 +21,9 @@ export interface RoomCategorySearchResultRepoDO {
 
 export interface IRoomCategoryRepository {
     getRoomCategoryList(roomCategoryMetaRepoDO: RoomCategoryMetaRepoDO, searchCriteria: RoomCategorySearchCriteriaMetaRepoDO, lazyLoad?: LazyLoadRepoDO): Promise<RoomCategorySearchResultRepoDO>;
-	getRoomCategoryById(roomCategoryItemMeta: RoomCategoryItemMetaRepoDO): Promise<RoomCategoryDO>;
+	getRoomCategoryById(roomCategoryMeta: RoomCategoryMetaRepoDO, roomCategoryId: string): Promise<RoomCategoryDO>;
+    
+    addRoomCategory(meta: RoomCategoryMetaRepoDO, roomCategory: RoomCategoryDO): Promise<RoomCategoryDO>;
+    updateRoomCategory(meta: RoomCategoryMetaRepoDO, itemMeta: RoomCategoryItemMetaRepoDO, addOnProduct: RoomCategoryDO): Promise<RoomCategoryDO>;
+	deleteRoomCategory(meta: RoomCategoryMetaRepoDO, itemMeta: RoomCategoryItemMetaRepoDO): Promise<RoomCategoryDO>;
 }

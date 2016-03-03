@@ -5,7 +5,7 @@ class RoomCategoriesEntity extends BasePersistentEntity {
     
     constructor(tableName: string) {
         super(tableName);
-        this.buildCustomAttributes();    
+    this.buildCustomAttributes();    
     }
     
     private buildCustomAttributes() {
@@ -22,6 +22,10 @@ class RoomCategoriesEntity extends BasePersistentEntity {
             displayName: {
                 type: 'string',
                 required: true
+            },
+            status: {
+                type: 'integer',
+                required: true    
             }
         };
     }

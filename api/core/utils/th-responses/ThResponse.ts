@@ -74,8 +74,14 @@ export enum ThStatusCode {
 	HotelAddPaymentPoliciesInvalidCurrencyCode,
     RoomRepositoryErrorGettingRoomList,
     RoomRepositoryErrorGettingRoom,
+    RoomRepositoryErrorReadingCategoryIdList,
     RoomCategoryRepositoryErrorGettingRoomCategoryList,
     RoomCategoryRepositoryErrorGettingRoomCategory,
+    RoomCategoryRepositoryNameAlreadyExists,
+    RoomCategoryRepositoryErrorAddingRoomCategory,
+    SaveRoomCategoryItemError,
+    DeleteRoomCategoryItemError,
+    RoomCategoryItemUpdateStrategyErrorUpdating,
     BedRepositoryErrorGettingBedList,
     BedRepositoryErrorGettingBed,
     BedRepositoryBedNotFound,
@@ -236,8 +242,14 @@ ThMessage[ThStatusCode.BedControllerErrorDeletingBed] = "Error deleting bed.";
 ThMessage[ThStatusCode.BedControllerErrorGettingBedById] = "Error getting bed by id.";
 ThMessage[ThStatusCode.RoomRepositoryErrorGettingRoomList] = "Error getting the room list. Please try again.";
 ThMessage[ThStatusCode.RoomRepositoryErrorGettingRoom] = "Error getting the room. Please try again.";
+ThMessage[ThStatusCode.RoomRepositoryErrorReadingCategoryIdList] = "Error reading category list for defined rooms.";
 ThMessage[ThStatusCode.RoomCategoryRepositoryErrorGettingRoomCategoryList] = "Error getting the room category list. Please try again.";
 ThMessage[ThStatusCode.RoomCategoryRepositoryErrorGettingRoomCategory] = "Error getting the room category. Please try again.";
+ThMessage[ThStatusCode.RoomCategoryRepositoryNameAlreadyExists] = "The room category you entered already exists.";
+ThMessage[ThStatusCode.RoomCategoryRepositoryErrorAddingRoomCategory] = "Error creating room category.";
+ThMessage[ThStatusCode.SaveRoomCategoryItemError] = "Error saving room category.";
+ThMessage[ThStatusCode.DeleteRoomCategoryItemError] = "Error deleting room category.";
+ThMessage[ThStatusCode.RoomCategoryItemUpdateStrategyErrorUpdating] = "Error updating room category id.";
 ThMessage[ThStatusCode.HotelUpdatePaymentsPoliciesErrorPrecheckingConstraints] = "There was a problem while checking the payments and policies submitted.";
 ThMessage[ThStatusCode.HotelUpdatePaymentPoliciesInvalidTaxes] = "Invalid taxes sent.";
 ThMessage[ThStatusCode.HotelUpdatePaymentsPoliciesError] = "Error adding the payments and policies.";

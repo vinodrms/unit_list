@@ -5,7 +5,7 @@ import {MongoRepository, MongoErrorCodes, MongoSearchCriteria} from '../../../co
 import {MongoQueryBuilder} from '../../../common/base/MongoQueryBuilder';
 import {IRoomCategoryRepository, RoomCategoryMetaRepoDO, RoomCategoryItemMetaRepoDO, RoomCategorySearchResultRepoDO, RoomCategorySearchCriteriaMetaRepoDO} from '../IRoomCategoryRepository';
 import {LazyLoadRepoDO, LazyLoadMetaResponseRepoDO} from '../../../common/repo-data-objects/LazyLoadRepoDO';
-import {RoomCategoryDO} from '../../data-objects/RoomCategoryDO';
+import {RoomCategoryDO, RoomCategoryStatus} from '../../data-objects/RoomCategoryDO';
 import {RoomCategoryRepositoryHelper} from "./helpers/RoomCategoryRepositoryHelper";
 
 import _ = require('underscore');
@@ -14,7 +14,7 @@ export class MongoRoomCategoryRepository extends MongoRepository implements IRoo
 	private _helper: RoomCategoryRepositoryHelper;
     
     constructor() {
-        super(sails.models.roomsentity);
+        super(sails.models.roomcategoriesentity);
         this._helper = new RoomCategoryRepositoryHelper();
     }
     
@@ -32,7 +32,7 @@ export class MongoRoomCategoryRepository extends MongoRepository implements IRoo
 		this.findMultipleDocuments(mongoSearchCriteria,
 			(err: Error) => {
 				var thError = new ThError(ThStatusCode.RoomCategoryRepositoryErrorGettingRoomCategoryList, err);
-				ThLogger.getInstance().logError(ThLogLevel.Error, "Error getting room list", { meta: meta, searchCriteria: searchCriteria }, thError);
+				ThLogger.getInstance().logError(ThLogLevel.Error, "Error getting room category list", { meta: meta, searchCriteria: searchCriteria }, thError);
 				reject(thError);
 			},
 			(foundRoomList: Object[]) => {
@@ -50,7 +50,76 @@ export class MongoRoomCategoryRepository extends MongoRepository implements IRoo
 		return mongoQueryBuilder.processedQuery;
 	}
     
-	public getRoomCategoryById(roomCategoryItemMeta: RoomCategoryItemMetaRepoDO): Promise<RoomCategoryDO> {
+	public getRoomCategoryById(roomCategoryMeta: RoomCategoryMetaRepoDO, roomCategoryId: string): Promise<RoomCategoryDO> {
         return null;    
     }
+    
+    public addRoomCategory(meta: RoomCategoryMetaRepoDO, roomCategory: RoomCategoryDO): Promise<RoomCategoryDO> {
+        return new Promise<RoomCategoryDO>((resolve: { (result: RoomCategoryDO): void }, reject: { (err: ThError): void }) => {
+			this.addRoomCategoryCore(meta, roomCategory, resolve, reject);
+		});
+    }
+    
+	private addRoomCategoryCore(meta: RoomCategoryMetaRepoDO, roomCategory: RoomCategoryDO, resolve: { (result: RoomCategoryDO): void }, reject: { (err: ThError): void }) {
+		roomCategory.hotelId = meta.hotelId;
+		roomCategory.versionId = 0;
+        roomCategory.status = RoomCategoryStatus.Active;
+        
+		this.createDocument(roomCategory,
+			(err: Error) => {
+				this.logAndReject(err, reject, { meat: meta, roomCategory: roomCategory }, ThStatusCode.RoomCategoryRepositoryErrorAddingRoomCategory);
+			},
+			(createdRoomCategory: Object) => {
+				resolve(this._helper.buildRoomCategoryDOFrom(createdRoomCategory));
+			}
+		);
+	}
+    
+    public updateRoomCategory(meta: RoomCategoryMetaRepoDO, itemMeta: RoomCategoryItemMetaRepoDO, addOnProduct: RoomCategoryDO): Promise<RoomCategoryDO> {
+        return null;
+    }
+    
+	public deleteRoomCategory(meta: RoomCategoryMetaRepoDO, itemMeta: RoomCategoryItemMetaRepoDO): Promise<RoomCategoryDO> {
+        return null;
+    }
+    
+    private findAndModifyRoomCategory(meta: RoomCategoryMetaRepoDO, itemMeta: RoomCategoryItemMetaRepoDO, updateQuery: Object): Promise<RoomCategoryDO> {
+		return new Promise<RoomCategoryDO>((resolve: { (result: RoomCategoryDO): void }, reject: { (err: ThError): void }) => {
+			this.findAndModifyRoomCategoryCore(meta, itemMeta, updateQuery, resolve, reject);
+		});
+	}
+	private findAndModifyRoomCategoryCore(meta: RoomCategoryMetaRepoDO, itemMeta: RoomCategoryItemMetaRepoDO, updateQuery: any, resolve: { (result: RoomCategoryDO): void }, reject: { (err: ThError): void }) {
+		updateQuery.$inc = { "versionId": 1 };
+		var findQuery: Object = {
+			"hotelId": meta.hotelId,
+			"id": itemMeta.id,
+			"versionId": itemMeta.versionId
+		};
+		this.findAndModifyDocument(findQuery, updateQuery,
+			() => {
+				var thError = new ThError(ThStatusCode.AddOnProductRepositoryProblemUpdatingAddOnProduct, null);
+				ThLogger.getInstance().logBusiness(ThLogLevel.Info, "Problem updating room category - concurrency", { meta: meta, itemMeta: itemMeta, updateQuery: updateQuery }, thError);
+				reject(thError);
+			},
+			(err: Error) => {
+				this.logAndReject(err, reject, { meta: meta, itemMeta: itemMeta, updateQuery: updateQuery }, ThStatusCode.AddOnProductRepositoryErrorUpdatingAddOnProduct);
+			},
+			(updatedDBRoomCategoryProduct: Object) => {
+				resolve(this._helper.buildRoomCategoryDOFrom(updatedDBRoomCategoryProduct));
+			}
+		);
+	}
+    
+    private logAndReject(err: Error, reject: { (err: ThError): void }, context: Object, defaultStatusCode: ThStatusCode) {
+		var errorCode = this.getMongoErrorCode(err);
+		if (errorCode == MongoErrorCodes.DuplicateKeyError) {
+        var thError = new ThError(ThStatusCode.RoomCategoryRepositoryNameAlreadyExists, err);
+			ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Room category name already exists for this hotel", context, thError);
+			reject(thError);
+			return;
+		}
+		var thError = new ThError(defaultStatusCode, err);
+		ThLogger.getInstance().logError(ThLogLevel.Error, "Error adding room category", context, thError);
+		reject(thError);
+	}
 }

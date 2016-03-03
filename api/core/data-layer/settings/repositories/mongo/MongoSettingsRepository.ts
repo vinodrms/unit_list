@@ -8,8 +8,6 @@ import {CountrySettingDO} from '../../data-objects/country/CountrySettingDO';
 import {CurrencySettingDO} from '../../data-objects/currency/CurrencySettingDO';
 import {PaymentMethodSettingDO} from '../../data-objects/payment-method/PaymentMethodSettingDO';
 import {RoomAttributeSettingDO} from '../../data-objects/room-attribute/RoomAttributeSettingDO';
-import {RoomTypeSettingDO} from '../../data-objects/room-type/RoomTypeSettingDO';
-import {RoomSalesCategorySettingDO} from '../../data-objects/room-sales-category/RoomSalesCategorySettingDO';
 import {SettingType} from '../../data-objects/common/SettingMetadataDO';
 import {BaseDO} from '../../../common/base/BaseDO';
 import {AmenityDO} from '../../../common/data-objects/amenity/AmenityDO';
@@ -129,8 +127,6 @@ export class MongoSettingsRepository extends MongoRepository implements ISetting
         switch (settingType) {
             case SettingType.RoomAmenities: getSettingsResponseDO = new AmenitySettingDO(); break;
             case SettingType.RoomAttributes: getSettingsResponseDO = new RoomAttributeSettingDO(); break;
-            case SettingType.RoomTypes: getSettingsResponseDO = new RoomAttributeSettingDO(); break;
-            case SettingType.RoomSalesCategories: getSettingsResponseDO = new RoomAttributeSettingDO(); break;
             case SettingType.HotelAmenities: getSettingsResponseDO = new AmenitySettingDO(); break;
             case SettingType.Countries: getSettingsResponseDO = new CountrySettingDO(); break;
             case SettingType.CurrencyCodes: getSettingsResponseDO = new CurrencySettingDO(); break;

@@ -14,9 +14,11 @@ export class StringValidationRule extends AValidationRule {
 	public static MaxHotelNameLength = 300;
 	public static MaxVatCodeNameLength = 30;
 	public static MaxCurrencyCodeLength = 3;
-
-	private _minLength: number = 0;
-	private _maxLength: number = Number.POSITIVE_INFINITY;
+    public static MinRoomCategoryLength = 3;
+    public static MaxRoomCategoryLength = 100;
+    
+	public _minLength: number = 0;
+	public _maxLength: number = Number.POSITIVE_INFINITY;
 
 	constructor(maxLength?: number) {
 		super(InvalidConstraintType.String);
@@ -57,4 +59,9 @@ export class StringValidationRule extends AValidationRule {
 		rule.isNullable = true;
 		return rule;
 	}
+    public static buildMinMaxLength(minLength: number, maxLength: number) {
+        var rule = new StringValidationRule(maxLength);
+        rule._minLength = minLength;
+        return rule;    
+    }
 }

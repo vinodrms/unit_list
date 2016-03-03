@@ -18,19 +18,33 @@ export class DefaultRoomCategoryBuilder {
     getRoomCategoryList(): RoomCategoryDO[] {
         var roomCategoryList = [];
         roomCategoryList.push(this.getFirstRoomCategory());
-        roomCategoryList.push(this.getSecondRoomCategory())
+        roomCategoryList.push(this.getSecondRoomCategory());
+        roomCategoryList.push(this.getThirdRoomCategory());
+        roomCategoryList.push(this.getFourthRoomCategory());
         return roomCategoryList;
     }
 
-    getFirstRoomCategory(): RoomCategoryDO {
+    private getFirstRoomCategory(): RoomCategoryDO {
         var roomCategoryDO = new RoomCategoryDO();
-        
+        roomCategoryDO.displayName="Double Standard";
         return roomCategoryDO;
     }
     
-    getSecondRoomCategory(): RoomCategoryDO {
+    private getSecondRoomCategory(): RoomCategoryDO {
         var roomCategoryDO = new RoomCategoryDO();
-        
+        roomCategoryDO.displayName="Double Standard with Two Single Beds";
+        return roomCategoryDO;
+    }
+    
+    private getThirdRoomCategory(): RoomCategoryDO {
+        var roomCategoryDO = new RoomCategoryDO();
+        roomCategoryDO.displayName="Quad";
+        return roomCategoryDO;
+    }
+    
+    private getFourthRoomCategory(): RoomCategoryDO {
+        var roomCategoryDO = new RoomCategoryDO();
+        roomCategoryDO.displayName="Junior Suite for 4 adults";
         return roomCategoryDO;
     }
 }

@@ -18,6 +18,28 @@ export class MongoRoomRepository extends MongoRepository implements IRoomReposit
         this._helper = new RoomRepositoryHelper();
     }
     
+    public getRoomCategoryIdList(meta: RoomMetaRepoDO): Promise<string[]> {
+        return new Promise<string[]>((resolve: { (result: string[]): void }, reject: { (err: ThError): void }) => {
+			this.getRoomCategoryIdListCore(resolve, reject, meta);
+		});
+    }
+    
+    private getRoomCategoryIdListCore(resolve: { (result: string[]): void }, reject: { (err: ThError): void }, meta: RoomMetaRepoDO) {
+        var findQuery: Object = {
+			"hotelId": meta.hotelId
+		};
+		this.findDistinctDocumentFieldValues("categoryId", findQuery,
+			(err: Error) => {
+				var thError = new ThError(ThStatusCode.RoomRepositoryErrorReadingCategoryIdList, err);
+				ThLogger.getInstance().logError(ThLogLevel.Error, "Error reading category id list for rooms", { meta: meta }, thError);
+				reject(thError);
+			},
+			(distinctCategoryIdList: string[]) => {
+				resolve(distinctCategoryIdList);
+			}
+		);
+	}
+    
     public getRoomList(roomMeta: RoomMetaRepoDO, searchCriteria: RoomSearchCriteriaRepoDO, lazyLoad?: LazyLoadRepoDO): Promise<RoomSearchResultRepoDO> {
         return new Promise<RoomSearchResultRepoDO>((resolve: { (result: RoomSearchResultRepoDO): void }, reject: { (err: ThError): void }) => {
 			this.getRoomListCore(resolve, reject, roomMeta, searchCriteria, lazyLoad);
@@ -51,7 +73,7 @@ export class MongoRoomRepository extends MongoRepository implements IRoomReposit
 		return mongoQueryBuilder.processedQuery;
 	}
     
-	public getRoomById(roomItemMeta: RoomItemMetaRepoDO): Promise<RoomDO> {
+	public getRoomById(roomMeta: RoomMetaRepoDO, roomId: string): Promise<RoomDO> {
         return null;    
     }
 }

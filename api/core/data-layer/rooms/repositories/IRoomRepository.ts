@@ -17,6 +17,8 @@ export interface RoomSearchResultRepoDO {
 }
 
 export interface IRoomRepository {
+    getRoomCategoryIdList(meta: RoomMetaRepoDO): Promise<string[]>;
+    
 	getRoomList(roomMeta: RoomMetaRepoDO, searchCriteria: RoomSearchCriteriaRepoDO, lazyLoad?: LazyLoadRepoDO): Promise<RoomSearchResultRepoDO>;
-	getRoomById(roomItemMeta: RoomItemMetaRepoDO): Promise<RoomDO>;
+	getRoomById(roomMeta: RoomMetaRepoDO, roomId: string): Promise<RoomDO>;
 }

@@ -18,31 +18,32 @@ import {MongoCustomerRepository} from './customers/repositories/mongo/MongoCusto
 import {ICustomerRepository} from './customers/repositories/ICustomerRepository';
 
 export class RepositoryFactory {
-	private _databaseType: DatabaseType;
-	constructor(private _unitPalConfig: UnitPalConfig) {
-		this._databaseType = _unitPalConfig.getDatabaseType();
-	}
+    private _databaseType: DatabaseType;
+    constructor(private _unitPalConfig: UnitPalConfig) {
+        this._databaseType = _unitPalConfig.getDatabaseType();
+    }
 
-	getRepositoryCleaners(): IRepositoryCleaner[] {
-		switch (this._databaseType) {
-			default:
-				return [new MongoHotelRepository(), new MongoBedRepository(), new MongoTaxRepository(), new MongoAddOnProductRepository()];
-		}
-	}
+    getRepositoryCleaners(): IRepositoryCleaner[] {
+        switch (this._databaseType) {
+            default:
+                return [new MongoHotelRepository(), new MongoBedRepository(), new MongoTaxRepository(), new MongoAddOnProductRepository(),
+                    new MongoRoomRepository(), new MongoRoomCategoryRepository()];
+        }
+    }
 
-	getHotelRepository(): IHotelRepository {
-		switch (this._databaseType) {
-			default:
-				return new MongoHotelRepository();
-		}
-	}
+    getHotelRepository(): IHotelRepository {
+        switch (this._databaseType) {
+            default:
+                return new MongoHotelRepository();
+        }
+    }
 
     getSettingsRepository(): ISettingsRepository {
-		switch (this._databaseType) {
-			default:
-				return new MongoSettingsRepository();
-		}
-	}
+        switch (this._databaseType) {
+            default:
+                return new MongoSettingsRepository();
+        }
+    }
     getBedRepository(): IBedRepository {
         switch (this._databaseType) {
             default:
@@ -50,38 +51,38 @@ export class RepositoryFactory {
         }
     }
 
-	getTaxRepository(): ITaxRepository {
-		switch (this._databaseType) {
-			default:
-				return new MongoTaxRepository();
-		}
-	}
-
-	getAddOnProductRepository(): IAddOnProductRepository {
-		switch (this._databaseType) {
-			default:
-				return new MongoAddOnProductRepository();
-		}
-	}
-    
-    getRoomCategoryRepository(): IRoomCategoryRepository {
-		switch (this._databaseType) {
-			default:
-				return new MongoRoomCategoryRepository();
-		}
-	}
-    
-    getRoomRepository(): IRoomRepository {
-		switch (this._databaseType) {
-			default:
-				return new MongoRoomRepository();
+    getTaxRepository(): ITaxRepository {
+        switch (this._databaseType) {
+            default:
+                return new MongoTaxRepository();
         }
     }
-    
-	getCustomerRepository(): ICustomerRepository {
-		switch (this._databaseType) {
-			default:
-				return new MongoCustomerRepository();
-		}
-	}
+
+    getAddOnProductRepository(): IAddOnProductRepository {
+        switch (this._databaseType) {
+            default:
+                return new MongoAddOnProductRepository();
+        }
+    }
+
+    getRoomCategoryRepository(): IRoomCategoryRepository {
+        switch (this._databaseType) {
+            default:
+                return new MongoRoomCategoryRepository();
+        }
+    }
+
+    getRoomRepository(): IRoomRepository {
+        switch (this._databaseType) {
+            default:
+                return new MongoRoomRepository();
+        }
+    }
+
+    getCustomerRepository(): ICustomerRepository {
+        switch (this._databaseType) {
+            default:
+                return new MongoCustomerRepository();
+        }
+    }
 }
