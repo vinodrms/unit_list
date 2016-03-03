@@ -17,6 +17,7 @@ import {DefaultAddOnProductBuilder} from '../../../db-initializers/builders/Defa
 import {TestUtils} from '../../../helpers/TestUtils';
 import {LazyLoadMetaResponseRepoDO} from '../../../../core/data-layer/common/repo-data-objects/LazyLoadRepoDO';
 import {AddOnProductSearchResultRepoDO} from '../../../../core/data-layer/add-on-products/repositories/IAddOnProductRepository';
+import {AddOnProductCategoryDO} from '../../../../core/data-layer/common/data-objects/add-on-product/AddOnProductCategoryDO';
 
 describe("Hotel AddOn Products Tests", function() {
 	var InvalidAddOnProductName = "$%&@^#*^_)(*&^%$#@!(@sau)2197<,>/;:\"}|]{)}";
@@ -180,7 +181,7 @@ describe("Hotel AddOn Products Tests", function() {
 				});
         });
 	});
-	describe("Add On Products Lazy Loading Tests", function() {
+	describe("Add On Products Lazy Loading + Filter Tests", function() {
 		it("Should get the count for the Add On Products", function(done) {
 			var addOnProdRepo = testContext.appContext.getRepositoryFactory().getAddOnProductRepository();
 			addOnProdRepo.getAddOnProductListCount({ hotelId: testContext.sessionContext.sessionDO.hotel.id }, {})
@@ -206,6 +207,20 @@ describe("Hotel AddOn Products Tests", function() {
 			addOnProdRepo.getAddOnProductList({ hotelId: testContext.sessionContext.sessionDO.hotel.id }, {}, { pageNumber: 1, pageSize: addOnProdListIndexer.lazyLoadingPageSize })
 				.then((searchResult: AddOnProductSearchResultRepoDO) => {
 					should.equal(searchResult.addOnProductList.length, AddOnProductListIndexer.SecondPageCount);
+					done();
+				}).catch((error: any) => {
+					done(error);
+				});
+        });
+		it("Should get only the Add On Products which are attached to the Breakfast Category", function(done) {
+			var breakfastCategory: AddOnProductCategoryDO = addOnProdDataSource.getBreakfastCategory(testDataBuilder.addOnProductCategoryList);
+
+			var addOnProdRepo = testContext.appContext.getRepositoryFactory().getAddOnProductRepository();
+			addOnProdRepo.getAddOnProductList({ hotelId: testContext.sessionContext.sessionDO.hotel.id }, { categoryIdList: [breakfastCategory.id] })
+				.then((searchResult: AddOnProductSearchResultRepoDO) => {
+					var addOnproductList: AddOnProductDO[] = searchResult.addOnProductList;
+					var nonBreakfastAddOnProdList = _.filter(addOnproductList, (addOnProduct: AddOnProductDO) => { return addOnProduct.categoryId !== breakfastCategory.id });
+					should.equal(nonBreakfastAddOnProdList.length, 0);
 					done();
 				}).catch((error: any) => {
 					done(error);

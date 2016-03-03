@@ -100,7 +100,7 @@ describe("Hotel Customers Tests", function() {
         });
 	});
 
-	describe("Customers Filters And Test Index Tests", function() {
+	describe("Customers Filters And Text Index Tests", function() {
 		it("Should get customers using search text", function(done) {
 			var customersRepo = testContext.appContext.getRepositoryFactory().getCustomerRepository();
 			customersRepo.getCustomerList({ hotelId: testContext.sessionContext.sessionDO.hotel.id }, { searchText: SearchText })
