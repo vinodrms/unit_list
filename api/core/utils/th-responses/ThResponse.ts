@@ -145,7 +145,13 @@ export enum ThStatusCode {
 	CustomerRepositoryProblemUpdatingCustomer,
 	CustomerRepositoryErrorUpdatingCustomer,
 	CustomerRepositoryErrorReadingCustomerCount,
-	CustomerRepositoryErrorGettingList
+	CustomerRepositoryErrorGettingList,
+	SaveCustomerItemError,
+	SaveCustomerItemInvalidOrNullClientType,
+	SaveCustomerItemCompOrTACannotBeLinkedToOtherCustomers,
+	SaveCustomerItemCannotSetPriceProductsForPublic,
+	SaveCustomerItemInvalidPriceProductIdList,
+	CustomerItemUpdateStrategyError
 }
 
 var ThMessage: { [index: number]: string; } = {};
@@ -292,6 +298,12 @@ ThMessage[ThStatusCode.CustomerRepositoryProblemUpdatingCustomer] = "Problem upd
 ThMessage[ThStatusCode.CustomerRepositoryErrorUpdatingCustomer] = "Error updating the customer.";
 ThMessage[ThStatusCode.CustomerRepositoryErrorReadingCustomerCount] = "Error getting the number of customers.";
 ThMessage[ThStatusCode.CustomerRepositoryErrorGettingList] = "Error getting customers.";
+ThMessage[ThStatusCode.SaveCustomerItemError] = "Error saving customer.";
+ThMessage[ThStatusCode.SaveCustomerItemInvalidOrNullClientType] = "Invalid client type.";
+ThMessage[ThStatusCode.SaveCustomerItemCompOrTACannotBeLinkedToOtherCustomers] = "Companies or travel agencies cannot be linked to other customers.";
+ThMessage[ThStatusCode.SaveCustomerItemCannotSetPriceProductsForPublic] = "Cannot set specific price products for this client unless private is selected.";
+ThMessage[ThStatusCode.SaveCustomerItemInvalidPriceProductIdList] = "Some of the selected price products could not be found.";
+ThMessage[ThStatusCode.CustomerItemUpdateStrategyError] = "Error updating customer.";
 
 export class ThResponse {
 	statusCode: ThStatusCode;

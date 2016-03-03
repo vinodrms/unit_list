@@ -11,7 +11,7 @@ export interface CustomerItemMetaRepoDO {
 
 export interface CustomerSearchCriteriaRepoDO {
 	type?: CustomerType;
-	linkedCustomerId?: string;
+	customerIdList?: string[];
 	searchText?: string;
 }
 export interface CustomerSearchResultRepoDO {

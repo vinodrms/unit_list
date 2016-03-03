@@ -26,7 +26,7 @@ export class RepositoryFactory {
 	getRepositoryCleaners(): IRepositoryCleaner[] {
 		switch (this._databaseType) {
 			default:
-				return [new MongoHotelRepository(), new MongoBedRepository(), new MongoTaxRepository(), new MongoAddOnProductRepository()];
+				return [new MongoHotelRepository(), new MongoBedRepository(), new MongoTaxRepository(), new MongoAddOnProductRepository(), new MongoCustomerRepository()];
 		}
 	}
 

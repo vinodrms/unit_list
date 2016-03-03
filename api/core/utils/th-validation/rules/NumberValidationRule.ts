@@ -12,13 +12,17 @@ export class NumberValidationRule extends AValidationRule {
 		super(InvalidConstraintType.Number);
 	}
 	public set minValue(minValue: number) {
-		this._minValue = minValue;
+		if (_.isNumber(minValue)) {
+			this._minValue = minValue;
+		}
 	}
 	public get minValue(): number {
 		return this._minValue;
 	}
 	public set maxValue(maxValue: number) {
-		this._maxValue = maxValue;
+		if (_.isNumber(maxValue)) {
+			this._maxValue = maxValue;
+		}
 	}
 	public get maxValue(): number {
 		return this._maxValue;
@@ -61,9 +65,25 @@ export class NumberValidationRule extends AValidationRule {
 		rule.maxValue = 1.0;
 		return rule;
 	}
+	public static buildNullablePercentageNumberRule(): NumberValidationRule {
+		var rule = NumberValidationRule.buildPercentageNumberRule();
+		rule.isNullable = true;
+		return rule;
+	}
 	public static buildPriceNumberRule(): NumberValidationRule {
 		var rule = new NumberValidationRule();
 		rule.minValue = 0.0;
+		return rule;
+	}
+	public static buildIntegerNumberRule(minValue?: number): NumberValidationRule {
+		var rule = new NumberValidationRule();
+		rule.isInteger = true;
+		rule.minValue = minValue;
+		return rule;
+	}
+	public static buildNullableIntegerNumberRule(minValue?: number): NumberValidationRule {
+		var rule = NumberValidationRule.buildIntegerNumberRule(minValue);
+		rule.isNullable = true;
 		return rule;
 	}
 }

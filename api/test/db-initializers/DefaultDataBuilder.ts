@@ -16,6 +16,8 @@ import {DefaultTaxBuilder} from './builders/DefaultTaxBuilder';
 import {TaxResponseRepoDO} from '../../core/data-layer/taxes/repositories/ITaxRepository';
 import {DefaultAddOnProductBuilder} from './builders/DefaultAddOnProductBuilder';
 import {AddOnProductDO} from '../../core/data-layer/add-on-products/data-objects/AddOnProductDO';
+import {DefaultCustomerBuilder} from './builders/DefaultCustomerBuilder';
+import {CustomerDO} from '../../core/data-layer/customers/data-objects/CustomerDO';
 
 export class DefaultDataBuilder {
 	private static FirstUserIndex = 0;
@@ -32,8 +34,9 @@ export class DefaultDataBuilder {
     private _roomList: RoomDO[];
     private _roomCategoryList: RoomCategoryDO[];
 	private _taxes: TaxResponseRepoDO;
-	private _addOnProductCategoryList: AddOnProductCategoryDO[];  
+	private _addOnProductCategoryList: AddOnProductCategoryDO[];
 	private _addOnProductList: AddOnProductDO[];
+	private _customerList: CustomerDO[];
 
 	constructor(private _testContext: TestContext) {
 		this._repositoryCleaner = new RepositoryCleanerWrapper(this._testContext.appContext.getUnitPalConfig());
@@ -89,18 +92,23 @@ export class DefaultDataBuilder {
 				return addOnProductBuilder.loadAddOnProducts(addOnProductBuilder, this._addOnProductCategoryList, this._taxes);
 			}).then((addOnProductList: AddOnProductDO[]) => {
 				this._addOnProductList = addOnProductList;
-				
+
 				var settingsRepository = this._testContext.appContext.getRepositoryFactory().getSettingsRepository();
                 return settingsRepository.getBedTemplates();
 			}).then((bedTemplateList: BedTemplateDO[]) => {
                 this._bedTemplateList = bedTemplateList;
-                
+
+				var customerBuilder = new DefaultCustomerBuilder(this._testContext);
+				return customerBuilder.loadCustomers(customerBuilder);
+			}).then((customerList: CustomerDO[]) => {
+				this._customerList = customerList;
+
                 var bedBuilder = new DefaultBedBuilder(this._testContext.appContext, this._bedTemplateList);
                 var bedListToBeAdded = bedBuilder.getBedList();
                 var bedRepository = this._testContext.appContext.getRepositoryFactory().getBedRepository();
                 var addBedsPromiseList: Promise<BedDO>[] = [];
                 bedListToBeAdded.forEach((bedToBeAdded: BedDO) => {
-                    addBedsPromiseList.push(bedRepository.addBed({ hotelId: this._hotelDO.id}, bedToBeAdded));    
+                    addBedsPromiseList.push(bedRepository.addBed({ hotelId: this._hotelDO.id}, bedToBeAdded));
                 });
                 return Promise.all(addBedsPromiseList);
             }).then((addedBeds: BedDO[]) => {
@@ -152,5 +160,8 @@ export class DefaultDataBuilder {
 	}
 	public get addOnProductList(): AddOnProductDO[] {
 		return this._addOnProductList;
+	}
+	public get customerList(): CustomerDO[] {
+		return this._customerList;
 	}
 }
