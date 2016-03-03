@@ -81,5 +81,10 @@ module.exports.routes = {
 	'GET /api/addOnProducts/categoryIdList': 'AddOnProductsController.getAddOnProductCategoryIdList',
 	'POST /api/addOnProducts/saveAddOnProductItem': 'AddOnProductsController.saveAddOnProductItem',
 	'POST /api/addOnProducts/deleteAddOnProductItem': 'AddOnProductsController.deleteAddOnProductItem',
-	'GET /api/addOnProducts/addOnProductItem': 'AddOnProductsController.getAddOnProductById'
+	'GET /api/addOnProducts/addOnProductItem': 'AddOnProductsController.getAddOnProductById',
+	
+	'POST /api/customers': 'CustomersController.getCustomerList',
+	'POST /api/customers/count': 'CustomersController.getCustomerListCount',
+	'POST /api/customers/saveCustomerItem': 'CustomersController.saveCustomerItem',
+	'GET /api/customers/customerItem': 'CustomersController.getCustomerById'
 };
