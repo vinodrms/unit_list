@@ -9,28 +9,29 @@ export class RoomCategoriesTestHelper {
 
     constructor(private _defaultDataBuilder: DefaultDataBuilder) {
     }
-    
+
     public getRoomCategoryItemDOWithInvalidDisplayName(): SaveRoomCategoryItemDO {
         return {
-            hotelId: this._defaultDataBuilder.hotelDO.id,
             displayName: "Xx"
         };
     }
-    
+
     public getValidSaveRoomCategoryItemDO(): SaveRoomCategoryItemDO {
         return {
-            hotelId: this._defaultDataBuilder.hotelDO.id,
             displayName: "Xxxxxxx"
         };
     }
-    
+
     public getSavedRoomCategoryItemDOFrom(roomCategory: RoomCategoryDO): SaveRoomCategoryItemDO {
         var result = {
-            hotelId: roomCategory.hotelId,
             displayName: roomCategory.displayName,
-            status: roomCategory.status
         }
         result["id"] = roomCategory.id;
         return result;
+    }
+
+    public validate(readRoomCategory: RoomCategoryDO, createdRoomCategory: RoomCategoryDO) {
+        should.equal(readRoomCategory.hotelId, createdRoomCategory.hotelId);
+        should.equal(readRoomCategory.displayName, createdRoomCategory.displayName);
     }
 }

@@ -4,7 +4,6 @@ import {PrimitiveValidationStructure} from '../../utils/th-validation/structure/
 import {StringValidationRule} from '../../utils/th-validation/rules/StringValidationRule';
 
 export class SaveRoomCategoryItemDO {
-    hotelId: string;
     displayName: string;
     
     public static getValidationStructure(): IValidationStructure {
@@ -12,10 +11,6 @@ export class SaveRoomCategoryItemDO {
             {
                 key: "id",
                 validationStruct: new PrimitiveValidationStructure(StringValidationRule.buildNullable())
-            },
-            {
-                key: "hotelId",
-                validationStruct: new PrimitiveValidationStructure(new StringValidationRule())
             },
             {
                 key: "displayName",

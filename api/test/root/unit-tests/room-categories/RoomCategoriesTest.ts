@@ -7,10 +7,11 @@ import {ThStatusCode} from '../../../../core/utils/th-responses/ThResponse';
 import {DefaultDataBuilder} from '../../../db-initializers/DefaultDataBuilder';
 import {TestContext} from '../../../helpers/TestContext';
 import {RoomCategoriesTestHelper} from './helpers/RoomCategoriesTestHelper';
-import {RoomCategoryDO} from '../../../../core/data-layer/room-categories/data-objects/RoomCategoryDO';
+import {RoomCategoryDO, RoomCategoryStatus} from '../../../../core/data-layer/room-categories/data-objects/RoomCategoryDO';
 import {SaveRoomCategoryItem} from '../../../../core/domain-layer/room-categories/SaveRoomCategoryItem';
 import {DeleteRoomCategoryItem} from '../../../../core/domain-layer/room-categories/DeleteRoomCategoryItem';
 import {SaveRoomCategoryItemDO} from '../../../../core/domain-layer/room-categories/SaveRoomCategoryItemDO';
+import {RoomCategorySearchResultRepoDO} from '../../../../core/data-layer/room-categories/repositories/IRoomCategoryRepository';
 
 describe("Hotel Room Categories Tests", function() {
     var testContext: TestContext;
@@ -18,7 +19,7 @@ describe("Hotel Room Categories Tests", function() {
     var roomCategoriesHelper: RoomCategoriesTestHelper;
     
     var createdRoomCategory: RoomCategoryDO;
-    var numCreatedRoomCategories = 3;
+    var numCreatedRoomCategories = 4;
     
 	before(function(done: any) {
 		testContext = new TestContext();
@@ -70,7 +71,6 @@ describe("Hotel Room Categories Tests", function() {
                 done(e);
             });
         });
-        
         it("Should not create a second room category with the same display name for the same hotel", function(done) {
 			
             var saveRoomCategoryItem = new SaveRoomCategoryItem(testContext.appContext, testContext.sessionContext);
@@ -83,4 +83,41 @@ describe("Hotel Room Categories Tests", function() {
             });
         });
     });
+    
+    describe("Hotel Get Room Categories & Delete Flow", function() {
+		it("Should get the previously added room categories", function(done) {
+			var roomCategoryRepo = testContext.appContext.getRepositoryFactory().getRoomCategoryRepository();
+			roomCategoryRepo.getRoomCategoryList({ hotelId: testContext.sessionContext.sessionDO.hotel.id }).then((result: RoomCategorySearchResultRepoDO) => {
+				should.equal(result.roomCategoryList.length, numCreatedRoomCategories);
+
+				var readRoomCategory = _.find(result.roomCategoryList, (roomCategory: RoomCategoryDO) => { return roomCategory.id === createdRoomCategory.id });
+				
+                roomCategoriesHelper.validate(readRoomCategory, createdRoomCategory);
+
+				done();
+			}).catch((err: any) => {
+				done(err);
+			});
+        });
+		it("Should delete one of the previously added room categories", function(done) {
+			var deleteRoomCategoryItem = new DeleteRoomCategoryItem(testContext.appContext, testContext.sessionContext);
+			deleteRoomCategoryItem.delete({ id: createdRoomCategory.id }).then((deletedRoomCategory: RoomCategoryDO) => {
+				should.equal(deletedRoomCategory.status, RoomCategoryStatus.Deleted);
+				numCreatedRoomCategories--;
+				done();
+			}).catch((err: any) => {
+				done(err);
+			});
+        });
+		it("Should get only the remaining room categories", function(done) {
+			var roomCategoryRepo = testContext.appContext.getRepositoryFactory().getRoomCategoryRepository();
+            
+            roomCategoryRepo.getRoomCategoryList({ hotelId: testContext.sessionContext.sessionDO.hotel.id }).then((result: RoomCategorySearchResultRepoDO) => {
+				should.equal(result.roomCategoryList.length, numCreatedRoomCategories);
+				done();
+			}).catch((err: any) => {
+				done(err);
+			});
+        });
+	});
 });

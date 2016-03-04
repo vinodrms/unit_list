@@ -24,13 +24,15 @@ export class RoomDO extends BaseDO {
     bedIdList: string[];
     amenityIdList: string[];
     attributeIdList: string[];
+    fileUrlList: string[];
+    description: string;
     notes: string;
     maintenanceStatus: RoomMaintenanceStatus;
     status: RoomStatus;
 
     protected getPrimitivePropertyKeys(): string[] {
         return ["id", "versionId", "hotelId", "name", "floor", "categoryId", "bedIdList", "amenityIdList",
-            "attributeIdList", "notes", "maintenanceStatus", "status"];
+            "attributeIdList", "fileUrlList", "description", "notes", "maintenanceStatus", "status"];
     }
 
     public buildFromObject(object: Object) {

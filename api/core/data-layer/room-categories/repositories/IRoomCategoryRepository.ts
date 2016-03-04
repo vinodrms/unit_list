@@ -16,11 +16,11 @@ export interface RoomCategorySearchCriteriaMetaRepoDO {
 
 export interface RoomCategorySearchResultRepoDO {
 	lazyLoad?: LazyLoadRepoDO;
-	roomList: RoomCategoryDO[];
+	roomCategoryList: RoomCategoryDO[];
 }
 
 export interface IRoomCategoryRepository {
-    getRoomCategoryList(roomCategoryMetaRepoDO: RoomCategoryMetaRepoDO, searchCriteria: RoomCategorySearchCriteriaMetaRepoDO, lazyLoad?: LazyLoadRepoDO): Promise<RoomCategorySearchResultRepoDO>;
+    getRoomCategoryList(roomCategoryMetaRepoDO: RoomCategoryMetaRepoDO, searchCriteria?: RoomCategorySearchCriteriaMetaRepoDO, lazyLoad?: LazyLoadRepoDO): Promise<RoomCategorySearchResultRepoDO>;
 	getRoomCategoryById(roomCategoryMeta: RoomCategoryMetaRepoDO, roomCategoryId: string): Promise<RoomCategoryDO>;
     
     addRoomCategory(meta: RoomCategoryMetaRepoDO, roomCategory: RoomCategoryDO): Promise<RoomCategoryDO>;

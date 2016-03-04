@@ -38,7 +38,7 @@ export class MongoRoomCategoryRepository extends MongoRepository implements IRoo
             (foundRoomList: Object[]) => {
                 var roomList = this._helper.buildRoomCategoryListFrom(foundRoomList);
                 resolve({
-                    roomList: roomList,
+                    roomCategoryList: roomList,
                     lazyLoad: lazyLoad
                 });
             }
@@ -47,6 +47,7 @@ export class MongoRoomCategoryRepository extends MongoRepository implements IRoo
     private buildSearchCriteria(meta: RoomCategoryMetaRepoDO, searchCriteria: RoomCategorySearchCriteriaMetaRepoDO): Object {
         var mongoQueryBuilder = new MongoQueryBuilder();
         mongoQueryBuilder.addExactMatch("hotelId", meta.hotelId);
+        mongoQueryBuilder.addExactMatch("status", RoomCategoryStatus.Active);
         return mongoQueryBuilder.processedQuery;
     }
 
