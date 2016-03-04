@@ -22,13 +22,13 @@ gulp.task('set-unit-test-env', function () {
 });
 gulp.task('pre-server-tests', function () {
 	return gulp.src(['api/core/**/*.js'])
-		.pipe(istanbul())
+		.pipe(istanbul({ includeUntested: true }))
 		.pipe(istanbul.hookRequire());
 });
 gulp.task('run-server-tests', ['set-unit-test-env', 'pre-server-tests'], function () {
 	return gulp.src('api/test/root/**/*.js', { read: false })
 		.pipe(mocha({ timeout: 10000 }))
-		.pipe(istanbul.writeReports())
+		.pipe(istanbul.writeReports({ reporters: ['lcov', 'text-summary'] }))
 		.once('error', function () {
 			process.exit(1);
 		})
