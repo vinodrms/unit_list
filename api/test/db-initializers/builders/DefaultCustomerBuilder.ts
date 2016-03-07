@@ -10,7 +10,7 @@ import {TravelAgencyDetailsDO} from '../../../core/data-layer/customers/data-obj
 import {BaseCorporateDetailsDO} from '../../../core/data-layer/customers/data-objects/customer-details/corporate/BaseCorporateDetailsDO';
 import {ICustomerDetailsDO} from '../../../core/data-layer/customers/data-objects/customer-details/ICustomerDetailsDO';
 import {AddressDO} from '../../../core/data-layer/common/data-objects/address/AddressDO';
-import {DayDateDO} from '../../../core/data-layer/common/data-objects/dates/DayDateDO';
+import {ThDateDO} from '../../../core/utils/th-dates/data-objects/ThDateDO';
 
 export interface ICustomerDataSource {
 	getCustomerList(): CustomerDO[];
@@ -64,7 +64,7 @@ export class DefaultCustomerBuilder implements ICustomerDataSource {
 		var details = new IndividualDetailsDO();
 		details.address = new AddressDO();
 		details.address.streetAddress = streetAddress;
-		details.birthday = new DayDateDO();
+		details.birthday = new ThDateDO();
 		details.birthday.day = 22;
 		details.birthday.month = 1;
 		details.birthday.year = 1989;

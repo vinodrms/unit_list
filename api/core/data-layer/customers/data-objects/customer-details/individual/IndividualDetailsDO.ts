@@ -1,6 +1,6 @@
 import {BaseDO} from '../../../../common/base/BaseDO';
 import {AddressDO} from '../../../../common/data-objects/address/AddressDO';
-import {DayDateDO} from '../../../../common/data-objects/dates/DayDateDO';
+import {ThDateDO} from '../../../../../utils/th-dates/data-objects/ThDateDO';
 import {ICustomerDetailsDO} from '../ICustomerDetailsDO';
 
 export class IndividualDetailsDO extends BaseDO implements ICustomerDetailsDO {
@@ -13,7 +13,7 @@ export class IndividualDetailsDO extends BaseDO implements ICustomerDetailsDO {
 	email: string;
 	phone: string;
 	passportNo: string;
-	birthday: DayDateDO;
+	birthday: ThDateDO;
 
 	protected getPrimitivePropertyKeys(): string[] {
 		return ["firstName", "lastName", "email", "phone", "passportNo"];
@@ -22,7 +22,7 @@ export class IndividualDetailsDO extends BaseDO implements ICustomerDetailsDO {
 		super.buildFromObject(object);
 		this.address = new AddressDO();
 		this.address.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "address"));
-		this.birthday = new DayDateDO();
+		this.birthday = new ThDateDO();
 		this.birthday.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "birthday"));
 	}
 	public getAddress(): AddressDO {

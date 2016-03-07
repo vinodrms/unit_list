@@ -1,8 +1,8 @@
-import {BaseDO} from '../../base/BaseDO';
+import {BaseDO} from '../../../data-layer/common/base/BaseDO';
 
 import moment = require("moment");
 
-export class DayDateDO extends BaseDO {
+export class ThDateDO extends BaseDO {
     constructor() {
         super();
     }
