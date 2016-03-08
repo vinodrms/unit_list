@@ -8,7 +8,7 @@ import {ValidationResultParser} from '../common/ValidationResultParser';
 import {CustomerDO, CustomerType} from '../../data-layer/customers/data-objects/CustomerDO';
 import {SaveCustomerItemDO} from './SaveCustomerItemDO';
 import {CustomerMetaRepoDO, CustomerSearchResultRepoDO} from '../../data-layer/customers/repositories/ICustomerRepository';
-import {PriceProductType} from '../../data-layer/price-products/data-objects/PriceProductDO';
+import {PriceProductAvailability} from '../../data-layer/price-products/data-objects/PriceProductDO';
 import {CustomerItemActionFactory} from './save-actions/CustomerItemActionFactory';
 import {ICustomerItemActionStrategy} from './save-actions/ICustomerItemActionStrategy';
 
@@ -77,7 +77,7 @@ export class SaveCustomerItem {
 			resolve(true);
 			return;
 		}
-		else if (priceProductDetails.priceProductType === PriceProductType.Public) {
+		else if (priceProductDetails.priceProductAvailability === PriceProductAvailability.Public) {
 			var thError = new ThError(ThStatusCode.SaveCustomerItemCannotSetPriceProductsForPublic, null);
 			ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Cannot set price products for public", this._saveCustomerDO, thError);
 			reject(thError);

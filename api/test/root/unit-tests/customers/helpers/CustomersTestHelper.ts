@@ -3,7 +3,7 @@ import {TestContext} from '../../../../helpers/TestContext';
 import {SaveCustomerItemDO, CompanyCustomerItemDetailsDO, CustomerItemAddressDO,
 TravelAgencyCustomerItemDetailsDO, IndividualCustomerItemDetailsDO} from '../../../../../core/domain-layer/customers/SaveCustomerItemDO';
 import {CustomerDO, CustomerType} from '../../../../../core/data-layer/customers/data-objects/CustomerDO';
-import {PriceProductType} from '../../../../../core/data-layer/price-products/data-objects/PriceProductDO';
+import {PriceProductAvailability} from '../../../../../core/data-layer/price-products/data-objects/PriceProductDO';
 
 export class CustomersTestHelper {
 	constructor(private _dataBuilder: DefaultDataBuilder, private _testContext: TestContext) {
@@ -66,7 +66,7 @@ export class CustomersTestHelper {
 			type: custType,
 			priceProductDetails: {
 				priceProductIdList: [],
-				priceProductType: PriceProductType.Public
+				priceProductAvailability: PriceProductAvailability.Public
 			},
 			customerDetails: this.getIndividualCustDetails()
 		}

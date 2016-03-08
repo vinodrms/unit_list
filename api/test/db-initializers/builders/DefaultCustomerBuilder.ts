@@ -1,7 +1,7 @@
 import {ThError} from '../../../core/utils/th-responses/ThError';
 import {CustomerDO, CustomerStatus, CustomerType} from '../../../core/data-layer/customers/data-objects/CustomerDO';
 import {CustomerPriceProductDetailsDO} from '../../../core/data-layer/customers/data-objects/price-product-details/CustomerPriceProductDetailsDO';
-import {PriceProductType} from '../../../core/data-layer/price-products/data-objects/PriceProductDO';
+import {PriceProductAvailability} from '../../../core/data-layer/price-products/data-objects/PriceProductDO';
 import {TestContext} from '../../helpers/TestContext';
 import {ThUtils} from '../../../core/utils/ThUtils';
 import {IndividualDetailsDO} from '../../../core/data-layer/customers/data-objects/customer-details/individual/IndividualDetailsDO';
@@ -40,7 +40,7 @@ export class DefaultCustomerBuilder implements ICustomerDataSource {
 		var priceProductDetails = new CustomerPriceProductDetailsDO();
 		priceProductDetails.bookingCode = thUtils.generateUniqueID();
 		priceProductDetails.priceProductIdList = [];
-		priceProductDetails.priceProductType = PriceProductType.Public;
+		priceProductDetails.priceProductAvailability = PriceProductAvailability.Public;
 		cust.priceProductDetails = priceProductDetails;
 
 		cust.status = CustomerStatus.Active;
@@ -66,7 +66,7 @@ export class DefaultCustomerBuilder implements ICustomerDataSource {
 		details.address.streetAddress = streetAddress;
 		details.birthday = new ThDateDO();
 		details.birthday.day = 22;
-		details.birthday.month = 1;
+		details.birthday.month = 0;
 		details.birthday.year = 1989;
 		details.firstName = name;
 		details.lastName = name;

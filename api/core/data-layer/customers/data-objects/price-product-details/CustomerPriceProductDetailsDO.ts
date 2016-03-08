@@ -1,15 +1,15 @@
 import {BaseDO} from '../../../common/base/BaseDO';
-import {PriceProductType} from '../../../price-products/data-objects/PriceProductDO';
+import {PriceProductAvailability} from '../../../price-products/data-objects/PriceProductDO';
 
 export class CustomerPriceProductDetailsDO extends BaseDO {
 	constructor() {
 		super();
 	}
-	priceProductType: PriceProductType;
+	priceProductAvailability: PriceProductAvailability;
 	priceProductIdList: string[];
 	bookingCode: string;
 
 	protected getPrimitivePropertyKeys(): string[] {
-		return ["priceProductType", "priceProductIdList", "bookingCode"];
+		return ["priceProductAvailability", "priceProductIdList", "bookingCode"];
 	}
 }

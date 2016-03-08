@@ -8,7 +8,7 @@ import {NumberInListValidationRule} from '../../utils/th-validation/rules/Number
 import {EmailValidationRule} from '../../utils/th-validation/rules/EmailValidationRule';
 import {BooleanValidationRule} from '../../utils/th-validation/rules/BooleanValidationRule';
 import {CustomerType} from '../../data-layer/customers/data-objects/CustomerDO';
-import {PriceProductType} from '../../data-layer/price-products/data-objects/PriceProductDO';
+import {PriceProductAvailability} from '../../data-layer/price-products/data-objects/PriceProductDO';
 
 export interface CustomerItemAddressDO {
 	streetAddress?: string;
@@ -54,7 +54,7 @@ export class SaveCustomerItemDO {
 	customerDetails: any;
 	fileAttachmentUrlList: string[];
 	priceProductDetails: {
-		priceProductType: PriceProductType;
+		priceProductAvailability: PriceProductAvailability;
 		priceProductIdList: string[];
 	};
 	notes: string;
@@ -81,8 +81,8 @@ export class SaveCustomerItemDO {
 				key: "priceProductDetails",
 				validationStruct: new ObjectValidationStructure([
 					{
-						key: "priceProductType",
-						validationStruct: new PrimitiveValidationStructure(new NumberInListValidationRule([PriceProductType.Private, PriceProductType.Public]))
+						key: "priceProductAvailability",
+						validationStruct: new PrimitiveValidationStructure(new NumberInListValidationRule([PriceProductAvailability.Private, PriceProductAvailability.Public]))
 					},
 					{
 						key: "priceProductIdList",
