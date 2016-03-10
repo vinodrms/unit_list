@@ -11,7 +11,20 @@ import {RoomCategoryDO} from '../core/data-layer/room-categories/data-objects/Ro
 import {RoomCategoryMetaRepoDO, RoomCategorySearchResultRepoDO} from '../core/data-layer/room-categories/repositories/IRoomCategoryRepository';
 
 class RoomCategoriesController extends BaseController {
-
+    
+    public getRoomCategoryList(req: Express.Request, res: Express.Response) {
+        var appContext: AppContext = req.appContext;
+        var sessionContext: SessionContext = req.sessionContext;
+        
+        var roomCategoryMeta = this.getRoomCategoryMetaRepoDOFrom(sessionContext);
+        var roomCategoryRepo = appContext.getRepositoryFactory().getRoomCategoryRepository();
+		roomCategoryRepo.getRoomCategoryList(roomCategoryMeta).then((result: RoomCategorySearchResultRepoDO) => {
+			this.returnSuccesfulResponse(req, res, { result: result });
+		}).catch((err: any) => {
+			this.returnErrorResponse(req, res, err, ThStatusCode.RoomControllerErrorGettingRooms);
+		});
+    }
+    
     public saveRoomCategoryItem(req: Express.Request, res: Express.Response) {
         var appContext: AppContext = req.appContext;
         var sessionContext: SessionContext = req.sessionContext;
@@ -77,6 +90,7 @@ class RoomCategoriesController extends BaseController {
 
 var roomCategoriesController = new RoomCategoriesController();
 module.exports = {
+    getRoomCategoryList: roomCategoriesController.getRoomCategoryList.bind(roomCategoriesController),
     saveRoomCategoryItem: roomCategoriesController.saveRoomCategoryItem.bind(roomCategoriesController),
     deleteRoomCategoryItem: roomCategoriesController.deleteRoomCategoryItem.bind(roomCategoriesController),
     getRoomCategoryById: roomCategoriesController.getRoomCategoryById.bind(roomCategoriesController),

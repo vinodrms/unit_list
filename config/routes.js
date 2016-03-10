@@ -94,6 +94,7 @@ module.exports.routes = {
     'GET /api/rooms/roomItem': 'RoomsController.getRoomById',
     'GET /api/rooms/usedRoomCategories': 'RoomsController.getUsedRoomCategoryList',
     
+    'POST /api/roomCategories': 'RoomCategoriesController.getRoomCategoryList',
     'POST /api/roomCategories/saveRoomCategoryItem': 'RoomCategoriesController.saveRoomCategoryItem',
 	'POST /api/roomCategories/deleteRoomCategoryItem': 'RoomCategoriesController.deleteRoomCategoryItem',
     'GET /api/roomsCategories/roomItem': 'RoomCategoriesController.getRoomCategoryById',
