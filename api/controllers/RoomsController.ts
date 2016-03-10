@@ -107,6 +107,7 @@ var roomsController = new RoomsController();
 module.exports = {
     getRoomById: roomsController.getRoomById.bind(roomsController),
 	getRoomList: roomsController.getRoomList.bind(roomsController),
+    getRoomListCount: roomsController.getRoomListCount.bind(roomsController),
     saveRoomItem: roomsController.saveRoomItem.bind(roomsController),
     deleteRoomItem: roomsController.deleteRoomItem.bind(roomsController),
     getUsedRoomCategoryList: roomsController.getUsedRoomCategoryList.bind(roomsController)
