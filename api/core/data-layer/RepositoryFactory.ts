@@ -16,6 +16,8 @@ import {MongoAddOnProductRepository} from './add-on-products/repositories/mongo/
 import {IRepositoryCleaner} from './common/base/IRepositoryCleaner';
 import {MongoCustomerRepository} from './customers/repositories/mongo/MongoCustomerRepository';
 import {ICustomerRepository} from './customers/repositories/ICustomerRepository';
+import {IPriceProductRepository} from './price-products/repositories/IPriceProductRepository';
+import {MongoPriceProductRepository} from './price-products/repositories/mongo/MongoPriceProductRepository';
 
 export class RepositoryFactory {
     private _databaseType: DatabaseType;
@@ -27,7 +29,7 @@ export class RepositoryFactory {
         switch (this._databaseType) {
             default:
                 return [new MongoHotelRepository(), new MongoBedRepository(), new MongoTaxRepository(), new MongoAddOnProductRepository(),
-                    new MongoRoomRepository(), new MongoRoomCategoryRepository(),  new MongoCustomerRepository()];
+                    new MongoRoomRepository(), new MongoRoomCategoryRepository(), new MongoCustomerRepository(), new MongoPriceProductRepository()];
         }
     }
     getHotelRepository(): IHotelRepository {
@@ -84,4 +86,11 @@ export class RepositoryFactory {
                 return new MongoCustomerRepository();
         }
     }
+
+	getPriceProductRepository(): IPriceProductRepository {
+		switch (this._databaseType) {
+            default:
+                return new MongoPriceProductRepository();
+        }
+	}
 }

@@ -1,5 +1,16 @@
 import {BaseDO} from '../../../common/base/BaseDO';
 
+export enum PriceProductPriceType {
+	PricePerRoomCategory,
+	PricePerPerson
+}
+
+export interface PriceProductPriceQueryDO {
+	roomCategoryId: string;
+	noOfAdults: number;
+	noOfChildren: number;
+}
+
 export interface IPriceProductPrice extends BaseDO {
-	getPriceFor(noOfAdults: number, noOfChildren: number): number;
+	getPriceFor(query: PriceProductPriceQueryDO): number;
 }

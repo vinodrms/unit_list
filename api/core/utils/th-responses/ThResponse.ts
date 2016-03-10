@@ -192,7 +192,14 @@ export enum ThStatusCode {
     CustomersControllerErrorGettingCustomer,
     CustomersControllerErrorSavingCustomer,
     CustomersControllerErrorGettingCount,
-    CustomersControllerErrorGettingList
+    CustomersControllerErrorGettingList,
+	PriceProductRepositoryErrorAddingPriceProduct,
+	PriceProductRepositoryProductNotFound,
+	PriceProductRepositoryErrorGettingPriceProduct,
+	PriceProductRepositoryProblemUpdatingPriceProduct,
+	PriceProductRepositoryErrorUpdatingPriceProduct,
+	PriceProductRepositoryErrorReadingDocumentCount,
+	PriceProductRepositoryErrorGettingList
 }
 
 var ThMessage: { [index: number]: string; } = {};
@@ -386,6 +393,13 @@ ThMessage[ThStatusCode.CustomersControllerErrorGettingCustomer] = "Error getting
 ThMessage[ThStatusCode.CustomersControllerErrorSavingCustomer] = "Error saving customer.";
 ThMessage[ThStatusCode.CustomersControllerErrorGettingCount] = "Error getting the number of customers.";
 ThMessage[ThStatusCode.CustomersControllerErrorGettingList] = "Error getting the list of customers.";
+ThMessage[ThStatusCode.PriceProductRepositoryErrorAddingPriceProduct] = "Error adding price product.";
+ThMessage[ThStatusCode.PriceProductRepositoryProductNotFound] = "Price product not found.";
+ThMessage[ThStatusCode.PriceProductRepositoryErrorGettingPriceProduct] = "Error getting price product.";
+ThMessage[ThStatusCode.PriceProductRepositoryProblemUpdatingPriceProduct] = "Problem updating price product. It is possible that someone else changed it at the same time. Please refresh the page and try again.";
+ThMessage[ThStatusCode.PriceProductRepositoryErrorUpdatingPriceProduct] = "Error updating price product.";
+ThMessage[ThStatusCode.PriceProductRepositoryErrorReadingDocumentCount] = "Error reading the number of price products.";
+ThMessage[ThStatusCode.PriceProductRepositoryErrorGettingList] = "Error getting the list of price products.";
 
 export class ThResponse {
     statusCode: ThStatusCode;

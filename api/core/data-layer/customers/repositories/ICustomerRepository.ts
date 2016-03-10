@@ -13,6 +13,7 @@ export interface CustomerSearchCriteriaRepoDO {
 	type?: CustomerType;
 	customerIdList?: string[];
 	searchText?: string;
+	priceProductIdList?: string[];
 }
 export interface CustomerSearchResultRepoDO {
 	lazyLoad?: LazyLoadRepoDO;
