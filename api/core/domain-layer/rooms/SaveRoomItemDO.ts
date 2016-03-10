@@ -10,7 +10,7 @@ export class SaveRoomItemDO {
     
     name: string;
     floor: number;
-    category: string;
+    categoryId: string;
     bedIdList: string[];
     amenityIdList: string[];
     attributeIdList: string[];
@@ -38,7 +38,7 @@ export class SaveRoomItemDO {
                 validationStruct: new PrimitiveValidationStructure(new NumberValidationRule())
             },
             {
-                key: "category",
+                key: "categoryId",
                 validationStruct: new PrimitiveValidationStructure(new StringValidationRule())
             },
             {

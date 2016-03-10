@@ -21,8 +21,7 @@ import _ = require("underscore");
 export class SaveRoomItem {
     private _thUtils: ThUtils;
     private _roomDO: SaveRoomItemDO;
-    private _roomCategory: RoomCategoryDO;
-    
+
     constructor(private _appContext: AppContext, private _sessionContext: SessionContext) {
         this._thUtils = new ThUtils();
     }
@@ -50,27 +49,8 @@ export class SaveRoomItem {
         var settingsRepository = this._appContext.getRepositoryFactory().getSettingsRepository();
         var roomCategoriesRepository = this._appContext.getRepositoryFactory().getRoomCategoryRepository();
         var bedsRepository = this._appContext.getRepositoryFactory().getBedRepository();
-        
-        roomCategoriesRepository.getRoomCategoryList({ hotelId: this._sessionContext.sessionDO.hotel.id }, { displayName: this._roomDO.category }).then((result: RoomCategorySearchResultRepoDO) => {
-            if (_.isEmpty(result.roomCategoryList)) {
-                var saveRoomCategoryItem = new SaveRoomCategoryItem(this._appContext, this._sessionContext);
-                saveRoomCategoryItem.save({ displayName: this._roomDO.category }).then((roomCategory: RoomCategoryDO) => {
-                    this._roomCategory = roomCategory; 
-                    return this.validateRoomItemReferences();
-                }).catch((error: any) => {
-                    var thError = new ThError(ThStatusCode.SaveRoomItemError, error);
-                    if (thError.isNativeError()) {
-                        ThLogger.getInstance().logError(ThLogLevel.Error, "error saving room item - error saving room category", this._roomDO, thError);
-                    }
-                    throw thError;
-                });
-            }
-            else {
-                this._roomCategory = result.roomCategoryList[0];
-                return this.validateRoomItemReferences();
-            }
 
-        }).then((validReferences: boolean) => {
+        this.validateRoomItemReferences().then((validReferences: boolean) => {
             if (!validReferences) {
                 var thError = new ThError(ThStatusCode.SaveRoomItemInvalidAmenityList, null);
                 ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Invalid room item references", this._roomDO, thError);
@@ -98,8 +78,17 @@ export class SaveRoomItem {
     private validateRoomItemReferencesCore(resolve: { (result: boolean): void }, reject: { (err: ThError): void }) {
         var settingsRepository = this._appContext.getRepositoryFactory().getSettingsRepository();
         var bedsRepository = this._appContext.getRepositoryFactory().getBedRepository();
+        var roomCategoriesRepository = this._appContext.getRepositoryFactory().getRoomCategoryRepository();
 
-        settingsRepository.getRoomAmenities().then((roomAmenityList: AmenityDO[]) => {
+        roomCategoriesRepository.getRoomCategoryById({ hotelId: this._sessionContext.sessionDO.hotel.id }, this._roomDO.categoryId).then((roomCategory: RoomCategoryDO) => {
+            if(this._thUtils.isUndefinedOrNull(roomCategory)) {
+                var thError = new ThError(ThStatusCode.SaveRoomItemInvalidCategoryId, null);
+                ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Invalid category id", this._roomDO, thError);
+                throw thError;
+            }
+            
+            return settingsRepository.getRoomAmenities();    
+        }).then((roomAmenityList: AmenityDO[]) => {
             if (!this.roomAmenityListIsValid(roomAmenityList)) {
                 var thError = new ThError(ThStatusCode.SaveRoomItemInvalidAmenityList, null);
                 ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Invalid amenity list", this._roomDO, thError);
@@ -155,6 +144,7 @@ export class SaveRoomItem {
     }
     private saveRoomCore(resolve: { (result: RoomDO): void }, reject: { (err: ThError): void }) {
         var actionFactory = new RoomItemActionFactory(this._appContext, this._sessionContext);
+        var roomDO = this.buildRoomDO();
         var actionStrategy = actionFactory.getActionStrategy(this.buildRoomDO());
         actionStrategy.save(resolve, reject);
     }
@@ -163,7 +153,6 @@ export class SaveRoomItem {
         var room = new RoomDO();
         room.buildFromObject(this._roomDO);
         room.hotelId = this._sessionContext.sessionDO.hotel.id;
-        room.categoryId = this._roomCategory.id;
         return room;
     }
 }

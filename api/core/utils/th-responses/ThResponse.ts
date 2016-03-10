@@ -90,6 +90,7 @@ export enum ThStatusCode {
     RoomsControllerErrorGettingRoomById,
     RoomsControllerErrorGettingRoomCategories,
     RoomsControllerErrorGettingCount,
+    SaveRoomItemInvalidCategoryId,
     SaveRoomItemInvalidAmenityList,
     SaveRoomItemInvalidAttributeList,
     SaveRoomItemInvalidBedList,
@@ -298,6 +299,7 @@ ThMessage[ThStatusCode.RoomsControllerErrorDeletingRoom] = "Error deleting room.
 ThMessage[ThStatusCode.RoomsControllerErrorGettingRoomById] = "Error getting room by id.";
 ThMessage[ThStatusCode.RoomsControllerErrorGettingRoomCategories] = "Error getting room categories.";
 ThMessage[ThStatusCode.RoomsControllerErrorGettingCount] = "Error getting the number of rooms.";
+ThMessage[ThStatusCode.SaveRoomItemInvalidCategoryId] = "Invalid category id.";
 ThMessage[ThStatusCode.SaveRoomItemInvalidAmenityList] = "Invalid amenity list.";
 ThMessage[ThStatusCode.SaveRoomItemInvalidAttributeList] = "Invalid attribute list.";
 ThMessage[ThStatusCode.SaveRoomItemInvalidBedList] = "Invalid bed list.";

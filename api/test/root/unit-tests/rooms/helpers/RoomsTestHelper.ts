@@ -21,7 +21,7 @@ export class RoomsTestHelper {
         return {
             name: "Demo Room",
             floor: 1,
-            category: "Xxxxx",
+            categoryId: this._testUtils.getRandomListElement(this._defaultDataBuilder.roomCategoryList).id,
             bedIdList: this._testUtils.getIdSampleFrom(this._defaultDataBuilder.bedList, 2),
             amenityIdList: this._testUtils.getIdSampleFrom(this._defaultDataBuilder.roomAmenityList, 3),
             attributeIdList: this._testUtils.getIdSampleFrom(this._defaultDataBuilder.roomAttributeList, 3),
@@ -31,12 +31,27 @@ export class RoomsTestHelper {
             maintenanceStatus: RoomMaintenanceStatus.CheckInReady
         };
     }
-
+    
+    public getSaveRoomItemDOWithInvalidCategory(): SaveRoomItemDO {
+        return {
+            name: "Invalid Category",
+            floor: 1,
+            categoryId: "X",
+            bedIdList: this._testUtils.getIdSampleFrom(this._defaultDataBuilder.bedList, 2),
+            amenityIdList: this._testUtils.getIdSampleFrom(this._defaultDataBuilder.roomAmenityList, 3),
+            attributeIdList: this._testUtils.getIdSampleFrom(this._defaultDataBuilder.roomAttributeList, 3),
+            fileUrlList: [],
+            description: "Demo description",
+            notes: "Demo notes",
+            maintenanceStatus: RoomMaintenanceStatus.CheckInReady
+        };
+    }
+    
     public getSaveRoomItemDOWithInvalidBeds(): SaveRoomItemDO {
         return {
             name: "Invalid Beds",
             floor: 1,
-            category: "Xxxxx",
+            categoryId: this._testUtils.getRandomListElement(this._defaultDataBuilder.roomCategoryList).id,
             bedIdList: ["X"],
             amenityIdList: this._testUtils.getIdSampleFrom(this._defaultDataBuilder.roomAmenityList, 3),
             attributeIdList: this._testUtils.getIdSampleFrom(this._defaultDataBuilder.roomAttributeList, 3),
@@ -51,7 +66,7 @@ export class RoomsTestHelper {
         return {
             name: "Invalid Amenities",
             floor: 1,
-            category: "Xxxxx",
+            categoryId: this._testUtils.getRandomListElement(this._defaultDataBuilder.roomCategoryList).id,
             bedIdList: this._testUtils.getIdSampleFrom(this._defaultDataBuilder.bedList, 2),
             amenityIdList: ["X"],
             attributeIdList: this._testUtils.getIdSampleFrom(this._defaultDataBuilder.roomAttributeList, 3),
@@ -66,7 +81,7 @@ export class RoomsTestHelper {
         return {
             name: "Invalid Attributes",
             floor: 1,
-            category: "Xxxxx",
+            categoryId: this._testUtils.getRandomListElement(this._defaultDataBuilder.roomCategoryList).id,
             bedIdList: this._testUtils.getIdSampleFrom(this._defaultDataBuilder.bedList, 2),
             amenityIdList: this._testUtils.getIdSampleFrom(this._defaultDataBuilder.roomAmenityList, 3),
             attributeIdList: ["X"],
@@ -81,7 +96,7 @@ export class RoomsTestHelper {
         var result = {
             name: room.name,
             floor: room.floor,
-            category: "",
+            categoryId: this._testUtils.getRandomListElement(this._defaultDataBuilder.roomCategoryList).id,
             bedIdList: room.bedIdList,
             amenityIdList: room.amenityIdList,
             attributeIdList: room.attributeIdList,

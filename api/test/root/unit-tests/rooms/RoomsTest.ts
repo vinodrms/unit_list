@@ -36,6 +36,16 @@ describe("Hotel Rooms Tests", function() {
     });
 
     describe("Hotel Update Rooms Flow", function() {
+        it("Should not create room with invalid category", function(done) {
+            var saveRoomItemDO: SaveRoomItemDO = roomsHelper.getSaveRoomItemDOWithInvalidCategory();
+            var saveRoomItem = new SaveRoomItem(testContext.appContext, testContext.sessionContext);
+            saveRoomItem.save(saveRoomItemDO).then((result: RoomDO) => {
+                done(new Error("did manage to create a room with invalid category"));
+            }).catch((e: ThError) => {
+                should.notEqual(e.getThStatusCode(), ThStatusCode.Ok);
+                done();
+            });
+        });
         it("Should not create room with invalid beds", function(done) {
             var saveRoomItemDO: SaveRoomItemDO = roomsHelper.getSaveRoomItemDOWithInvalidBeds();
             var saveRoomItem = new SaveRoomItem(testContext.appContext, testContext.sessionContext);
@@ -75,6 +85,7 @@ describe("Hotel Rooms Tests", function() {
                 should.exist(result.id);
                 should.equal(result.name, saveRoomItemDO.name);
                 should.equal(result.floor, saveRoomItemDO.floor);
+                should.equal(result.categoryId, saveRoomItemDO.categoryId);
                 testUtils.stringArraysAreEqual(result.bedIdList, saveRoomItemDO.bedIdList).should.be.true;
                 testUtils.stringArraysAreEqual(result.amenityIdList, saveRoomItemDO.amenityIdList).should.be.true;
                 testUtils.stringArraysAreEqual(result.attributeIdList, saveRoomItemDO.attributeIdList).should.be.true;
@@ -85,13 +96,6 @@ describe("Hotel Rooms Tests", function() {
                 numCreatedRooms++;
                 createdRoom = result;
 
-                var roomCategoryRepo = testContext.appContext.getRepositoryFactory().getRoomCategoryRepository();
-                return roomCategoryRepo.getRoomCategoryList({ hotelId: testContext.sessionContext.sessionDO.hotel.id }, { displayName: saveRoomItemDO.category });
-            }).then((result: RoomCategorySearchResultRepoDO) => {
-                if (_.isEmpty(result.roomCategoryList)) {
-                    done(new Error("no matching room category found in hotel room categories"));
-                }
-                should.equal(result.roomCategoryList[0].id, createdRoom.categoryId);
                 done();
             }).catch((e: ThError) => {
                 done(e);
@@ -101,7 +105,7 @@ describe("Hotel Rooms Tests", function() {
             var roomToUpdate = roomsHelper.getSaveRoomItemDOFrom(createdRoom);
 
             roomToUpdate.floor = 20;
-            roomToUpdate.category = testUtils.getRandomListElement(testDataBuilder.roomCategoryList).displayName;
+            roomToUpdate.categoryId = testUtils.getRandomListElement(testDataBuilder.roomCategoryList).id;
             roomToUpdate.bedIdList = testUtils.getIdSampleFrom(testDataBuilder.bedList, 1);
             roomToUpdate.amenityIdList = testUtils.getIdSampleFrom(testDataBuilder.roomAmenityList, 4);
             roomToUpdate.attributeIdList = testUtils.getIdSampleFrom(testDataBuilder.roomAttributeList, 3);
@@ -113,10 +117,9 @@ describe("Hotel Rooms Tests", function() {
             saveBedItem.save(roomToUpdate).then((result: RoomDO) => {
                 should.equal(result.hotelId, testContext.sessionContext.sessionDO.hotel.id);
                 should.exist(result.id);
-
                 should.equal(result.name, roomToUpdate.name);
                 should.equal(result.floor, roomToUpdate.floor);
-
+                should.equal(result.categoryId, roomToUpdate.categoryId);
                 testUtils.stringArraysAreEqual(result.bedIdList, roomToUpdate.bedIdList).should.be.true;
                 testUtils.stringArraysAreEqual(result.amenityIdList, roomToUpdate.amenityIdList).should.be.true;
                 testUtils.stringArraysAreEqual(result.attributeIdList, roomToUpdate.attributeIdList).should.be.true;
@@ -126,13 +129,6 @@ describe("Hotel Rooms Tests", function() {
 
                 createdRoom = result;
 
-                var roomCategoryRepo = testContext.appContext.getRepositoryFactory().getRoomCategoryRepository();
-                return roomCategoryRepo.getRoomCategoryList({ hotelId: testContext.sessionContext.sessionDO.hotel.id }, { displayName: roomToUpdate.category });
-            }).then((result: RoomCategorySearchResultRepoDO) => {
-                if (_.isEmpty(result.roomCategoryList)) {
-                    done(new Error("no matching room category found in hotel room categories"));
-                }
-                should.equal(result.roomCategoryList[0].id, createdRoom.categoryId);
                 done();
             }).catch((e: ThError) => {
                 done(e);
