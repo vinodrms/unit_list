@@ -7,7 +7,8 @@ export enum RoomStatus {
 
 export enum RoomMaintenanceStatus {
     Cleaning,
-    Dirty
+    Dirty,
+    CheckInReady
 }
 
 export class RoomDO extends BaseDO {

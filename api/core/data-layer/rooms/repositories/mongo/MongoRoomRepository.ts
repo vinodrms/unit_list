@@ -1,79 +1,44 @@
-import {ThLogger, ThLogLevel} from '../../../../utils/logging/ThLogger';
-import {ThError} from '../../../../utils/th-responses/ThError';
-import {ThStatusCode} from '../../../../utils/th-responses/ThResponse';
 import {MongoRepository, MongoErrorCodes, MongoSearchCriteria} from '../../../common/base/MongoRepository';
 import {MongoQueryBuilder} from '../../../common/base/MongoQueryBuilder';
 import {IRoomRepository, RoomMetaRepoDO, RoomItemMetaRepoDO, RoomSearchCriteriaRepoDO, RoomSearchResultRepoDO} from '../IRoomRepository';
 import {LazyLoadRepoDO, LazyLoadMetaResponseRepoDO} from '../../../common/repo-data-objects/LazyLoadRepoDO';
 import {RoomDO, RoomStatus} from '../../data-objects/RoomDO';
 import {RoomRepositoryHelper} from './helpers/RoomRepositoryHelper';
-
-import _ = require('underscore');
+import {MongoRoomReadOperationsRepository} from './operations/MongoRoomReadOperationsRepository';
+import {MongoRoomEditOperationsRepository} from './operations/MongoRoomEditOperationsRepository';
 
 export class MongoRoomRepository extends MongoRepository implements IRoomRepository {
-	private _helper: RoomRepositoryHelper;
+    private _readRepository: MongoRoomReadOperationsRepository;
+    private _editRepository: MongoRoomEditOperationsRepository;
     
     constructor() {
-        super(sails.models.roomsentity);
-        this._helper = new RoomRepositoryHelper();
+        var roomsEntity = sails.models.roomsentity; 
+        super(roomsEntity);
+        this._readRepository = new MongoRoomReadOperationsRepository(roomsEntity);
+        this._editRepository = new MongoRoomEditOperationsRepository(roomsEntity);
     }
     
     public getRoomCategoryIdList(meta: RoomMetaRepoDO): Promise<string[]> {
-        return new Promise<string[]>((resolve: { (result: string[]): void }, reject: { (err: ThError): void }) => {
-			this.getRoomCategoryIdListCore(resolve, reject, meta);
-		});
+        return this._readRepository.getRoomCategoryIdList(meta);
+    }
+
+    public getRoomList(roomMeta: RoomMetaRepoDO, searchCriteria?: RoomSearchCriteriaRepoDO, lazyLoad?: LazyLoadRepoDO): Promise<RoomSearchResultRepoDO> {
+        return this._readRepository.getRoomList(roomMeta, searchCriteria, lazyLoad);
     }
     
-    private getRoomCategoryIdListCore(resolve: { (result: string[]): void }, reject: { (err: ThError): void }, meta: RoomMetaRepoDO) {
-        var findQuery: Object = {
-			"hotelId": meta.hotelId
-		};
-		this.findDistinctDocumentFieldValues("categoryId", findQuery,
-			(err: Error) => {
-				var thError = new ThError(ThStatusCode.RoomRepositoryErrorReadingCategoryIdList, err);
-				ThLogger.getInstance().logError(ThLogLevel.Error, "Error reading category id list for rooms", { meta: meta }, thError);
-				reject(thError);
-			},
-			(distinctCategoryIdList: string[]) => {
-				resolve(distinctCategoryIdList);
-			}
-		);
-	}
-    
-    public getRoomList(roomMeta: RoomMetaRepoDO, searchCriteria: RoomSearchCriteriaRepoDO, lazyLoad?: LazyLoadRepoDO): Promise<RoomSearchResultRepoDO> {
-        return new Promise<RoomSearchResultRepoDO>((resolve: { (result: RoomSearchResultRepoDO): void }, reject: { (err: ThError): void }) => {
-			this.getRoomListCore(resolve, reject, roomMeta, searchCriteria, lazyLoad);
-		});
+    public getRoomById(roomMeta: RoomMetaRepoDO, roomId: string): Promise<RoomDO> {
+        return this._readRepository.getRoomById(roomMeta, roomId);
     }
-    private getRoomListCore(resolve: { (result: RoomSearchResultRepoDO): void }, reject: { (err: ThError): void }, meta: RoomMetaRepoDO, searchCriteria: RoomSearchCriteriaRepoDO, lazyLoad?: LazyLoadRepoDO) {
-		var mongoSearchCriteria: MongoSearchCriteria = {
-			criteria: this.buildSearchCriteria(meta, searchCriteria),
-			sortCriteria: { name: 1 },
-			lazyLoad: lazyLoad
-		}
-		this.findMultipleDocuments(mongoSearchCriteria,
-			(err: Error) => {
-				var thError = new ThError(ThStatusCode.RoomRepositoryErrorGettingRoomList, err);
-				ThLogger.getInstance().logError(ThLogLevel.Error, "Error getting room list", { meta: meta, searchCriteria: searchCriteria }, thError);
-				reject(thError);
-			},
-			(foundRoomList: Object[]) => {
-				var roomList = this._helper.buildRoomListFrom(foundRoomList);
-				resolve({
-					roomList: roomList,
-					lazyLoad: lazyLoad
-				});
-			}
-		);
-	}
-    private buildSearchCriteria(meta: RoomMetaRepoDO, searchCriteria: RoomSearchCriteriaRepoDO): Object {
-		var mongoQueryBuilder = new MongoQueryBuilder();
-		mongoQueryBuilder.addExactMatch("hotelId", meta.hotelId);
-		mongoQueryBuilder.addExactMatch("status", RoomStatus.Active);
-		return mongoQueryBuilder.processedQuery;
-	}
-    
-	public getRoomById(roomMeta: RoomMetaRepoDO, roomId: string): Promise<RoomDO> {
-        return null;    
+
+    public addRoom(meta: RoomMetaRepoDO, room: RoomDO): Promise<RoomDO> {
+        return this._editRepository.addRoom(meta, room);
+    }
+
+    public updateRoom(meta: RoomMetaRepoDO, itemMeta: RoomItemMetaRepoDO, room: RoomDO): Promise<RoomDO> {
+        return this._editRepository.updateRoom(meta, itemMeta, room);
+    }
+
+    public deleteRoom(meta: RoomMetaRepoDO, itemMeta: RoomItemMetaRepoDO): Promise<RoomDO> {
+        return this._editRepository.deleteRoom(meta, itemMeta);
     }
 }

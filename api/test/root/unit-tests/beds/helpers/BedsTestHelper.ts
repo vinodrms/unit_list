@@ -17,7 +17,7 @@ export class BedsTestHelper {
 
         return {
             bedTemplateId: bedTemplateId,
-            name: "King Size",
+            name: "King Size Type 1",
             maxNoAdults: 2,
             maxNoChildren: 2,
             status: BedStatus.Active,
@@ -36,7 +36,7 @@ export class BedsTestHelper {
 
         return {
             bedTemplateId: bedTemplateId,
-            name: "King Size",
+            name: "King Size Type 1",
             maxNoAdults: 2,
             maxNoChildren: 2,
             status: BedStatus.Active,

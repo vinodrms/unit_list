@@ -9,8 +9,12 @@ export interface BedItemMetaRepoDO {
 	versionId: number;
 }
 
+export interface BedSearchCriteriaRepoDO {
+	bedIdList?: string[];
+}
+
 export interface IBedRepository {
-    getBedList(bedMeta: BedMetaRepoDO): Promise<BedDO[]>;
+    getBedList(bedMeta: BedMetaRepoDO, searchCriteria?: BedSearchCriteriaRepoDO): Promise<BedDO[]>;
 	getBedById(bedMeta: BedMetaRepoDO, bedId: string): Promise<BedDO>;
     
 	addBed(bedMeta: BedMetaRepoDO, bed: BedDO): Promise<BedDO>;

@@ -13,28 +13,28 @@ import _ = require("underscore");
 
 export class SaveRoomCategoryItem {
     private _thUtils: ThUtils;
-    private _roomCategorytDO: SaveRoomCategoryItemDO;
+    private _roomCategoryDO: SaveRoomCategoryItemDO;
 
     constructor(private _appContext: AppContext, private _sessionContext: SessionContext) {
         this._thUtils = new ThUtils();
     }
 
     public save(roomCategoryDO: SaveRoomCategoryItemDO): Promise<RoomCategoryDO> {
-        this._roomCategorytDO = roomCategoryDO;
+        this._roomCategoryDO = roomCategoryDO;
         return new Promise<RoomCategoryDO>((resolve: { (result: RoomCategoryDO): void }, reject: { (err: ThError): void }) => {
             try {
                 this.saveCore(resolve, reject);
             } catch (error) {
                 var thError = new ThError(ThStatusCode.SaveRoomCategoryItemError, error);
-                ThLogger.getInstance().logError(ThLogLevel.Error, "error saving room category", this._roomCategorytDO, thError);
+                ThLogger.getInstance().logError(ThLogLevel.Error, "error saving room category", this._roomCategoryDO, thError);
                 reject(thError);
             }
         });
     }
     private saveCore(resolve: { (result: RoomCategoryDO): void }, reject: { (err: ThError): void }) {
-        var validationResult = SaveRoomCategoryItemDO.getValidationStructure().validateStructure(this._roomCategorytDO);
+        var validationResult = SaveRoomCategoryItemDO.getValidationStructure().validateStructure(this._roomCategoryDO);
         if (!validationResult.isValid()) {
-            var parser = new ValidationResultParser(validationResult, this._roomCategorytDO);
+            var parser = new ValidationResultParser(validationResult, this._roomCategoryDO);
             parser.logAndReject("Error validating data for save room category", reject);
             return;
         }
@@ -44,7 +44,7 @@ export class SaveRoomCategoryItem {
         }).catch((error: any) => {
             var thError = new ThError(ThStatusCode.SaveRoomCategoryItemError, error);
             if (thError.isNativeError()) {
-                ThLogger.getInstance().logError(ThLogLevel.Error, "error saving room category item", this._roomCategorytDO, thError);
+                ThLogger.getInstance().logError(ThLogLevel.Error, "error saving room category item", this._roomCategoryDO, thError);
             }
             reject(thError);
         });
@@ -63,7 +63,7 @@ export class SaveRoomCategoryItem {
 
     private buildRoomCategoryDO(): RoomCategoryDO {
         var roomCategory = new RoomCategoryDO();
-        roomCategory.buildFromObject(this._roomCategorytDO);
+        roomCategory.buildFromObject(this._roomCategoryDO);
         roomCategory.hotelId = this._sessionContext.sessionDO.hotel.id;
         return roomCategory;
     }

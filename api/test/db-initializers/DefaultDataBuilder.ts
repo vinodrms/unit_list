@@ -12,6 +12,7 @@ import {AmenityDO} from '../../core/data-layer/common/data-objects/amenity/Ameni
 import {BedTemplateDO} from '../../core/data-layer/common/data-objects/bed-template/BedTemplateDO';
 import {BedDO} from '../../core/data-layer/common/data-objects/bed/BedDO';
 import {RoomDO} from '../../core/data-layer/rooms/data-objects/RoomDO';
+import {RoomAttributeDO} from '../../core/data-layer/common/data-objects/room-attribute/RoomAttributeDO';
 import {RoomCategoryDO} from '../../core/data-layer/room-categories/data-objects/RoomCategoryDO';
 import {DefaultTaxBuilder} from './builders/DefaultTaxBuilder';
 import {TaxResponseRepoDO} from '../../core/data-layer/taxes/repositories/ITaxRepository';
@@ -34,6 +35,8 @@ export class DefaultDataBuilder {
     private _bedList: BedDO[];
     private _roomList: RoomDO[];
     private _roomCategoryList: RoomCategoryDO[];
+    private _roomAttributeList: RoomAttributeDO[];
+    private _roomAmenityList: AmenityDO[];
     private _taxes: TaxResponseRepoDO;
     private _addOnProductCategoryList: AddOnProductCategoryDO[];
     private _addOnProductList: AddOnProductDO[];
@@ -114,7 +117,22 @@ export class DefaultDataBuilder {
             }).then((customerList: CustomerDO[]) => {
                 this._customerList = customerList;
                 
-                resolve(true);
+                var settingsRepository = this._testContext.appContext.getRepositoryFactory().getSettingsRepository();
+                return settingsRepository.getRoomAmenities();
+            }).then((roomAmenityList: AmenityDO[]) => {
+                this._roomAmenityList = roomAmenityList;
+                
+                var settingsRepository = this._testContext.appContext.getRepositoryFactory().getSettingsRepository();
+                return settingsRepository.getRoomAttributes();
+            }).then((roomAttributeList: RoomAttributeDO[]) => {
+                this._roomAttributeList = roomAttributeList;
+                
+                var roomBuilder = new DefaultRoomBuilder(this._testContext);
+                return roomBuilder.loadRooms(roomBuilder, this._bedList, this._roomCategoryList, this._roomAttributeList, this._roomAmenityList);
+            }).then((roomList: RoomDO[]) => {
+                this._roomList = roomList;
+                
+                resolve(true);  
             }).catch((err: any) => {
                 reject(err);
             });
@@ -146,6 +164,12 @@ export class DefaultDataBuilder {
     }
     public get roomCategoryList(): RoomCategoryDO[] {
         return this._roomCategoryList;
+    }
+    public get roomAttributeList(): RoomAttributeDO[] {
+        return this._roomAttributeList;
+    }
+    public get roomAmenityList(): AmenityDO[] {
+        return this._roomAmenityList;
     }
     public get roomList(): RoomDO[] {
         return this._roomList;

@@ -2,47 +2,47 @@ import {Locales, Translation} from '../localization/Translation';
 import {ThUtils} from '../ThUtils';
 
 export enum ThStatusCode {
-	Ok,
-	InternalServerError,
-	DataValidationError,
-	DataEmailValidationError,
-	DataPasswordValidationError,
-	ErrorBootstrappingApp,
-	ErrorCleaningRepositories,
-	InvalidRequestParameters,
-	VatProviderErrorCheckingVat,
-	VatProviderNotInEu,
-	VatProviderInvalidVat,
+    Ok,
+    InternalServerError,
+    DataValidationError,
+    DataEmailValidationError,
+    DataPasswordValidationError,
+    ErrorBootstrappingApp,
+    ErrorCleaningRepositories,
+    InvalidRequestParameters,
+    VatProviderErrorCheckingVat,
+    VatProviderNotInEu,
+    VatProviderInvalidVat,
     VatProviderInvalidCountryCode,
-	VatProviderProxyServiceNonEuCountry,
-	EmailTemplateBuilderProblemFindingTemplatesDirectory,
-	EmailTemplateBuilderProblemBuildingContent,
-	SendGridServiceErrorSendingEmail,
-	HotelSignUpError,
-	HotelRepositoryAccountAlreadyExists,
-	HotelRepositoryErrorAddingHotel,
-	HotelLoginError,
-	PassportLoginServiceInvalidLogin,
-	PassportLoginServiceErrorInvalidLogin,
-	HotelRepositoryErrorFindingAccount,
-	HotelRepositoryAccountNotFound,
-	HotelAuthenticationAccountNotActive,
-	HotelAuthenticationErrorQueryingRepository,
-	HotelAuthenticationInvalidEmailOrPassword,
-	HotelRepositoryErrorActivatingAccount,
-	UserAccountActivationErrorActivatingAccount,
-	HotelRepositoryAccountCouldNotBeActivated,
-	HotelActivateError,
-	AccControllerErrorInitializingSession,
-	SessionManagerErrorInitializingSession,
-	HotelRepositoryProblemUpdatingPasswordToken,
-	HotelRepositoryErrorUpdatingPasswordToken,
-	UserAccountRequestResetPasswordError,
-	AccControllerErrorRequestingResetPassword,
-	HotelRepositoryCouldNotResetPassword,
-	HotelRepositoryErrorCouldNotResetPassword,
-	UserAccountResetPasswordError,
-	AccControllerErrorResettingPassword,
+    VatProviderProxyServiceNonEuCountry,
+    EmailTemplateBuilderProblemFindingTemplatesDirectory,
+    EmailTemplateBuilderProblemBuildingContent,
+    SendGridServiceErrorSendingEmail,
+    HotelSignUpError,
+    HotelRepositoryAccountAlreadyExists,
+    HotelRepositoryErrorAddingHotel,
+    HotelLoginError,
+    PassportLoginServiceInvalidLogin,
+    PassportLoginServiceErrorInvalidLogin,
+    HotelRepositoryErrorFindingAccount,
+    HotelRepositoryAccountNotFound,
+    HotelAuthenticationAccountNotActive,
+    HotelAuthenticationErrorQueryingRepository,
+    HotelAuthenticationInvalidEmailOrPassword,
+    HotelRepositoryErrorActivatingAccount,
+    UserAccountActivationErrorActivatingAccount,
+    HotelRepositoryAccountCouldNotBeActivated,
+    HotelActivateError,
+    AccControllerErrorInitializingSession,
+    SessionManagerErrorInitializingSession,
+    HotelRepositoryProblemUpdatingPasswordToken,
+    HotelRepositoryErrorUpdatingPasswordToken,
+    UserAccountRequestResetPasswordError,
+    AccControllerErrorRequestingResetPassword,
+    HotelRepositoryCouldNotResetPassword,
+    HotelRepositoryErrorCouldNotResetPassword,
+    UserAccountResetPasswordError,
+    AccControllerErrorResettingPassword,
     ImageStorageServiceErrorUploadingImage,
     CloudinaryImageStorageServiceErrorUploadingImage,
     ImageUploadControllerErrorUploadingImage,
@@ -51,39 +51,65 @@ export enum ThStatusCode {
     SettingsRepositoryAddDuplicateKeyError,
     SettingsRepositoryAddError,
     SettingsMongoRepositoryReadError,
-	SettingsRepositoryNotFound,
+    SettingsRepositoryNotFound,
     RepositoryGetNetiveEntityError,
     PatchErrorEnsuringUniqueIndexOnSettings,
-	HotelGetDetailsError,
-	HotelGetDetailsErrorFormattingResponse,
-	HotelGetDetailsErrorFindingUserByEmail,
-	HotelDetailsControllerErrorGettingDetails,
-	HotelDetailsControllerErrorUpdatingBasicInfo,
-	HotelDetailsControllerErrorAddingPaymentsAndPolicies,
-	HotelDetailsControllerErrorUpdatingPaymentMethods,
-	HotelDetailsControllerErrorSavingTaxItem,
-	HotelRepositoryHotelIdNotFound,
-	HotelRepositoryErrorFindingHotelById,
-	HotelDetailsRepositoryProblemUpdatingAccount,
-	HotelDetailsRepositoryErrorUpdatingAccount,
-	PaymentMethodIdListValidatorInvalid,
-	PaymentMethodIdListValidatorError,
-	HotelAddPaymentsPoliciesErrorPrecheckingConstraints,
-	HotelAddPaymentPoliciesInvalidTaxes,
-	HotelAddPaymentsPoliciesError,
-	HotelAddPaymentPoliciesInvalidCurrencyCode,
+    HotelGetDetailsError,
+    HotelGetDetailsErrorFormattingResponse,
+    HotelGetDetailsErrorFindingUserByEmail,
+    HotelDetailsControllerErrorGettingDetails,
+    HotelDetailsControllerErrorUpdatingBasicInfo,
+    HotelDetailsControllerErrorAddingPaymentsAndPolicies,
+    HotelDetailsControllerErrorUpdatingPaymentMethods,
+    HotelDetailsControllerErrorSavingTaxItem,
+    HotelRepositoryHotelIdNotFound,
+    HotelRepositoryErrorFindingHotelById,
+    HotelDetailsRepositoryProblemUpdatingAccount,
+    HotelDetailsRepositoryErrorUpdatingAccount,
+    PaymentMethodIdListValidatorInvalid,
+    PaymentMethodIdListValidatorError,
+    HotelAddPaymentsPoliciesErrorPrecheckingConstraints,
+    HotelAddPaymentPoliciesInvalidTaxes,
+    HotelAddPaymentsPoliciesError,
+    HotelAddPaymentPoliciesInvalidCurrencyCode,
     RoomRepositoryErrorGettingRoomList,
     RoomRepositoryErrorGettingRoom,
+    RoomRepositoryRoomNotFound,
     RoomRepositoryErrorReadingCategoryIdList,
+    RoomRepositoryNameAlreadyExists,
+    RoomRepositoryErrorUpdatingRoom,
+    RoomItemUpdateStrategyErrorUpdating,
+    RoomRepositoryProblemUpdatingRoom,
+    RoomRepositoryErrorAddingRoom,
+    SaveRoomItemError,
+    DeleteRoomItemError,
+    RoomControllerErrorGettingRooms,
+    RoomControllerErrorSavingRoom,
+    RoomControllerErrorDeletingRoom,
+    RoomControllerErrorGettingRoomById,
+    RoomControllerErrorGettingRoomCategories,
+    SaveRoomItemInvalidAmenityList,
+    SaveRoomItemInvalidAttributeList,
+    SaveRoomItemInvalidBedList,
+    RoomAggregatorGetUsedCategoriesError,
+    RoomAggregatorCategoryStatsListError,
+    RoomAggregatorCategoryStatsError,
+    RoomAggregatorRoomStatsError,
     RoomCategoryRepositoryErrorGettingRoomCategoryList,
     RoomCategoryRepositoryErrorGettingRoomCategory,
     RoomCategoryRepositoryNameAlreadyExists,
     RoomCategoryRepositoryErrorAddingRoomCategory,
     RoomCategoryRepositoryRoomCategoryNotFound,
     RoomCategoryRepositoryErrorGettingRoom,
+    RoomCategoryRepositoryProblemUpdatingRoomCategory,
+    RoomCategoryRepositoryErrorUpdatingRoomCategory,
+    RoomCategoryItemUpdateStrategyErrorUpdating,
     SaveRoomCategoryItemError,
     DeleteRoomCategoryItemError,
-    RoomCategoryItemUpdateStrategyErrorUpdating,
+    RoomCategoriesControllerErrorSavingRoomCategory,
+    RoomCategoriesControllerErrorDeletingRoomCategory,
+    RoomCategoriesControllerErrorGettingRoomCategoryById,
+    RoomCategoriesControllerErrorGettingRoomCategoriesStats,
     BedRepositoryErrorGettingBedList,
     BedRepositoryErrorGettingBed,
     BedRepositoryBedNotFound,
@@ -97,73 +123,73 @@ export enum ThStatusCode {
     DeleteBedItemErrorValidating,
     DeleteBedItemError,
     BedControllerErrorGettingBeds,
-	BedControllerErrorSavingBed,
-	BedControllerErrorDeletingBed,
+    BedControllerErrorSavingBed,
+    BedControllerErrorDeletingBed,
     BedControllerErrorGettingBedById,
-	HotelUpdatePaymentsPoliciesErrorPrecheckingConstraints,
-	HotelUpdatePaymentPoliciesInvalidTaxes,
-	HotelUpdatePaymentsPoliciesError,
-	HotelUpdatePaymentPoliciesInvalidCurrencyCode,
-	HotelSaveTaxItemError,
-	HotelSaveTaxItemValidationProblem,
-	TaxItemUpdateStrategyErrorUpdating,
-	HotelUpdatePropertyDetailsUpdateError,
-	HotelUpdatePropertyDetailsValidationError,
-	HotelUpdatePropertyDetailsInvalidAmenityIdList,
-	HotelUpdatePropertyDetailsInvalidOperationHours,
-	HotelUpdatePropertyDetailsInvalidTimezone,
-	HotelDetailsControllerErrorUpdatingPropertyDetails,
-	TaxRepositoryErrorGettingTaxList,
-	TaxRepositoryErrorGettingTax,
-	TaxRepositoryNameAlreadyExists,
-	TaxRepositoryErrorAddingTax,
-	TaxRepositoryProblemUpdatingTax,
-	TaxRepositoryErrorUpdatingTax,
-	TaxRepositoryTaxNotFound,
-	HotelDeleteTaxItemError,
-	HotelDeleteTaxItemErrorDeleting,
-	HotelDeleteTaxItemErrorValidating,
-	TaxControllerErrorGettingTaxes,
-	TaxControllerErrorSavingTax,
-	TaxControllerErrorDeletingTax,
-	AddOnProductRepositoryProblemUpdatingAddOnProduct,
-	AddOnProductRepositoryErrorUpdatingAddOnProduct,
-	AddOnProductRepositoryNameAlreadyExists,
-	AddOnProductRepositoryErrorAddingAddOnProduct,
-	AddOnProductRepositoryProductNotFound,
-	AddOnProductRepositoryErrorGettingAddOnProduct,
-	AddOnProductRepositoryErrorReadingCategoryIdList,
-	AddOnProductRepositoryErrorReadingDocumentCount,
-	AddOnProductRepositoryErrorGettingList,
-	SaveAddOnProductItemError,
-	SaveAddOnProductItemInvalidCategoryId,
-	SaveAddOnProductItemInvalidTaxId,
-	AddOnProductItemUpdateStrategyErrorUpdating,
-	DeleteAddOnProductItemError,
-	DeleteAddOnProductItemErrorValidating,
-	AddOnProductsControllerErrorGettingAddOnProduct,
-	AddOnProductsControllerErrorSavingAddOnProduct,
-	AddOnProductsControllerErrorDeletingAddOnProduct,
-	AddOnProductsControllerErrorGettingCategoryIdList,
-	AddOnProductsControllerErrorGettingCount,
-	AddOnProductsControllerErrorGettingList,
-	CustomerRepositoryCustomerNotFound,
-	CustomerRepositoryErrorGettingCustomer,
-	CustomerRepositoryErrorCreatingCustomer,
-	CustomerRepositoryProblemUpdatingCustomer,
-	CustomerRepositoryErrorUpdatingCustomer,
-	CustomerRepositoryErrorReadingCustomerCount,
-	CustomerRepositoryErrorGettingList,
-	SaveCustomerItemError,
-	SaveCustomerItemInvalidOrNullClientType,
-	SaveCustomerItemCompOrTACannotBeLinkedToOtherCustomers,
-	SaveCustomerItemCannotSetPriceProductsForPublic,
-	SaveCustomerItemInvalidPriceProductIdList,
-	CustomerItemUpdateStrategyError,
-	CustomersControllerErrorGettingCustomer,
-	CustomersControllerErrorSavingCustomer,
-	CustomersControllerErrorGettingCount,
-	CustomersControllerErrorGettingList
+    HotelUpdatePaymentsPoliciesErrorPrecheckingConstraints,
+    HotelUpdatePaymentPoliciesInvalidTaxes,
+    HotelUpdatePaymentsPoliciesError,
+    HotelUpdatePaymentPoliciesInvalidCurrencyCode,
+    HotelSaveTaxItemError,
+    HotelSaveTaxItemValidationProblem,
+    TaxItemUpdateStrategyErrorUpdating,
+    HotelUpdatePropertyDetailsUpdateError,
+    HotelUpdatePropertyDetailsValidationError,
+    HotelUpdatePropertyDetailsInvalidAmenityIdList,
+    HotelUpdatePropertyDetailsInvalidOperationHours,
+    HotelUpdatePropertyDetailsInvalidTimezone,
+    HotelDetailsControllerErrorUpdatingPropertyDetails,
+    TaxRepositoryErrorGettingTaxList,
+    TaxRepositoryErrorGettingTax,
+    TaxRepositoryNameAlreadyExists,
+    TaxRepositoryErrorAddingTax,
+    TaxRepositoryProblemUpdatingTax,
+    TaxRepositoryErrorUpdatingTax,
+    TaxRepositoryTaxNotFound,
+    HotelDeleteTaxItemError,
+    HotelDeleteTaxItemErrorDeleting,
+    HotelDeleteTaxItemErrorValidating,
+    TaxControllerErrorGettingTaxes,
+    TaxControllerErrorSavingTax,
+    TaxControllerErrorDeletingTax,
+    AddOnProductRepositoryProblemUpdatingAddOnProduct,
+    AddOnProductRepositoryErrorUpdatingAddOnProduct,
+    AddOnProductRepositoryNameAlreadyExists,
+    AddOnProductRepositoryErrorAddingAddOnProduct,
+    AddOnProductRepositoryProductNotFound,
+    AddOnProductRepositoryErrorGettingAddOnProduct,
+    AddOnProductRepositoryErrorReadingCategoryIdList,
+    AddOnProductRepositoryErrorReadingDocumentCount,
+    AddOnProductRepositoryErrorGettingList,
+    SaveAddOnProductItemError,
+    SaveAddOnProductItemInvalidCategoryId,
+    SaveAddOnProductItemInvalidTaxId,
+    AddOnProductItemUpdateStrategyErrorUpdating,
+    DeleteAddOnProductItemError,
+    DeleteAddOnProductItemErrorValidating,
+    AddOnProductsControllerErrorGettingAddOnProduct,
+    AddOnProductsControllerErrorSavingAddOnProduct,
+    AddOnProductsControllerErrorDeletingAddOnProduct,
+    AddOnProductsControllerErrorGettingCategoryIdList,
+    AddOnProductsControllerErrorGettingCount,
+    AddOnProductsControllerErrorGettingList,
+    CustomerRepositoryCustomerNotFound,
+    CustomerRepositoryErrorGettingCustomer,
+    CustomerRepositoryErrorCreatingCustomer,
+    CustomerRepositoryProblemUpdatingCustomer,
+    CustomerRepositoryErrorUpdatingCustomer,
+    CustomerRepositoryErrorReadingCustomerCount,
+    CustomerRepositoryErrorGettingList,
+    SaveCustomerItemError,
+    SaveCustomerItemInvalidOrNullClientType,
+    SaveCustomerItemCompOrTACannotBeLinkedToOtherCustomers,
+    SaveCustomerItemCannotSetPriceProductsForPublic,
+    SaveCustomerItemInvalidPriceProductIdList,
+    CustomerItemUpdateStrategyError,
+    CustomersControllerErrorGettingCustomer,
+    CustomersControllerErrorSavingCustomer,
+    CustomersControllerErrorGettingCount,
+    CustomersControllerErrorGettingList
 }
 
 var ThMessage: { [index: number]: string; } = {};
@@ -254,16 +280,42 @@ ThMessage[ThStatusCode.BedControllerErrorDeletingBed] = "Error deleting bed.";
 ThMessage[ThStatusCode.BedControllerErrorGettingBedById] = "Error getting bed by id.";
 ThMessage[ThStatusCode.RoomRepositoryErrorGettingRoomList] = "Error getting the room list. Please try again.";
 ThMessage[ThStatusCode.RoomRepositoryErrorGettingRoom] = "Error getting the room. Please try again.";
+ThMessage[ThStatusCode.RoomRepositoryRoomNotFound] = "Room not found.";
 ThMessage[ThStatusCode.RoomRepositoryErrorReadingCategoryIdList] = "Error reading category list for defined rooms.";
+ThMessage[ThStatusCode.RoomRepositoryNameAlreadyExists] = "Room name already exists for this hotel.";
+ThMessage[ThStatusCode.RoomRepositoryErrorUpdatingRoom] = "Error updating room.";
+ThMessage[ThStatusCode.RoomRepositoryProblemUpdatingRoom] = "Problem updating the room. It is possible that someone else changed it at the same time. Please refresh the page and try again.";
+ThMessage[ThStatusCode.RoomRepositoryErrorAddingRoom] = "Error creating room.";
+ThMessage[ThStatusCode.RoomItemUpdateStrategyErrorUpdating] = "Error updating room.";
+ThMessage[ThStatusCode.SaveRoomItemError] = "Error saving room.";
+ThMessage[ThStatusCode.DeleteRoomItemError] = "Error deleting room.";
+ThMessage[ThStatusCode.RoomControllerErrorGettingRooms] = "Error getting the rooms.";
+ThMessage[ThStatusCode.RoomControllerErrorSavingRoom] = "Error saving room.";
+ThMessage[ThStatusCode.RoomControllerErrorDeletingRoom] = "Error deleting room.";
+ThMessage[ThStatusCode.RoomControllerErrorGettingRoomById] = "Error getting room by id.";
+ThMessage[ThStatusCode.RoomControllerErrorGettingRoomCategories] = "Error getting room categories.";
+ThMessage[ThStatusCode.SaveRoomItemInvalidAmenityList] = "Invalid amenity list.";
+ThMessage[ThStatusCode.SaveRoomItemInvalidAttributeList] = "Invalid attribute list.";
+ThMessage[ThStatusCode.SaveRoomItemInvalidBedList] = "Invalid bed list.";
+ThMessage[ThStatusCode.RoomAggregatorGetUsedCategoriesError] = "Error getting the room categories that have at least a room associated.";
+ThMessage[ThStatusCode.RoomAggregatorCategoryStatsListError] = "Error computing the room category stats list.";
+ThMessage[ThStatusCode.RoomAggregatorCategoryStatsError] = "Error computing the room category stats.";
+ThMessage[ThStatusCode.RoomAggregatorRoomStatsError] = "Error computing the room stats.";
 ThMessage[ThStatusCode.RoomCategoryRepositoryErrorGettingRoomCategoryList] = "Error getting the room category list. Please try again.";
 ThMessage[ThStatusCode.RoomCategoryRepositoryErrorGettingRoomCategory] = "Error getting the room category. Please try again.";
 ThMessage[ThStatusCode.RoomCategoryRepositoryNameAlreadyExists] = "The room category you entered already exists.";
 ThMessage[ThStatusCode.RoomCategoryRepositoryErrorAddingRoomCategory] = "Error creating room category.";
 ThMessage[ThStatusCode.RoomCategoryRepositoryRoomCategoryNotFound] = "Room category not found.";
 ThMessage[ThStatusCode.RoomCategoryRepositoryErrorGettingRoom] = "Error getting room.";
+ThMessage[ThStatusCode.RoomCategoryRepositoryProblemUpdatingRoomCategory] = "Problem updating the room category. It is possible that someone else changed it at the same time. Please refresh the page and try again.";
+ThMessage[ThStatusCode.RoomCategoryRepositoryErrorUpdatingRoomCategory] = "Error updating room category.";
 ThMessage[ThStatusCode.SaveRoomCategoryItemError] = "Error saving room category.";
 ThMessage[ThStatusCode.DeleteRoomCategoryItemError] = "Error deleting room category.";
 ThMessage[ThStatusCode.RoomCategoryItemUpdateStrategyErrorUpdating] = "Error updating room category id.";
+ThMessage[ThStatusCode.RoomCategoriesControllerErrorSavingRoomCategory] = "Error saving room category.";
+ThMessage[ThStatusCode.RoomCategoriesControllerErrorDeletingRoomCategory] = "Error deleting room category.";
+ThMessage[ThStatusCode.RoomCategoriesControllerErrorGettingRoomCategoryById] = "Error getting room category by id.";
+ThMessage[ThStatusCode.RoomCategoriesControllerErrorGettingRoomCategoriesStats] = "Error getting room categories stats.";
 ThMessage[ThStatusCode.HotelUpdatePaymentsPoliciesErrorPrecheckingConstraints] = "There was a problem while checking the payments and policies submitted.";
 ThMessage[ThStatusCode.HotelUpdatePaymentPoliciesInvalidTaxes] = "Invalid taxes sent.";
 ThMessage[ThStatusCode.HotelUpdatePaymentsPoliciesError] = "Error adding the payments and policies.";
@@ -330,28 +382,28 @@ ThMessage[ThStatusCode.CustomersControllerErrorGettingCount] = "Error getting th
 ThMessage[ThStatusCode.CustomersControllerErrorGettingList] = "Error getting the list of customers.";
 
 export class ThResponse {
-	statusCode: ThStatusCode;
-	message: string;
-	data: any;
+    statusCode: ThStatusCode;
+    message: string;
+    data: any;
 
-	constructor(statusCode: ThStatusCode, data?: any) {
-		this.statusCode = statusCode;
-		this.message = ThMessage[statusCode];
-		this.data = data;
-		if (!this.data) {
-			this.data = {};
-		}
-	}
+    constructor(statusCode: ThStatusCode, data?: any) {
+        this.statusCode = statusCode;
+        this.message = ThMessage[statusCode];
+        this.data = data;
+        if (!this.data) {
+            this.data = {};
+        }
+    }
 
-	public buildJson(locale: Locales): Object {
-		var thUtils = new ThUtils();
-		if (!thUtils.isUndefinedOrNull(locale)) {
-			this.translateMessage(locale);
-		}
-		return this;
-	}
-	private translateMessage(locale: Locales) {
-		var translation = new Translation(locale);
-		this.message = translation.getTranslation(this.message);
-	}
+    public buildJson(locale: Locales): Object {
+        var thUtils = new ThUtils();
+        if (!thUtils.isUndefinedOrNull(locale)) {
+            this.translateMessage(locale);
+        }
+        return this;
+    }
+    private translateMessage(locale: Locales) {
+        var translation = new Translation(locale);
+        this.message = translation.getTranslation(this.message);
+    }
 }

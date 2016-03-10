@@ -34,7 +34,15 @@ export class BedTemplates extends ABaseSetting {
             iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
         },
         {
+            name: "Twin Bed",
+            iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
+        },
+        {
             name: "King Size Bed",
+            iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
+        },
+        {
+            name: "Child Bed",
             iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
         }
     ];        

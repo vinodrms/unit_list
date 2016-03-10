@@ -23,6 +23,8 @@ export class DefaultRoomCategoryBuilder implements IRoomCategoryDataSource {
         roomCategoryList.push(this.getSecondRoomCategory());
         roomCategoryList.push(this.getThirdRoomCategory());
         roomCategoryList.push(this.getFourthRoomCategory());
+        roomCategoryList.push(this.getFifthRoomCategory());
+        roomCategoryList.push(this.getSixthRoomCategory());
         return roomCategoryList;
     }
 
@@ -49,7 +51,19 @@ export class DefaultRoomCategoryBuilder implements IRoomCategoryDataSource {
         roomCategoryDO.displayName = "Junior Suite for 4 adults";
         return roomCategoryDO;
     }
-
+    
+    private getFifthRoomCategory(): RoomCategoryDO {
+        var roomCategoryDO = new RoomCategoryDO();
+        roomCategoryDO.displayName = "Single Standard";
+        return roomCategoryDO;
+    }
+    
+    private getSixthRoomCategory(): RoomCategoryDO {
+        var roomCategoryDO = new RoomCategoryDO();
+        roomCategoryDO.displayName = "Triple Standard";
+        return roomCategoryDO;
+    }
+    
     public loadRoomCategories(dataSource: IRoomCategoryDataSource): Promise<RoomCategoryDO[]> {
         return new Promise<RoomCategoryDO[]>((resolve: { (result: RoomCategoryDO[]): void }, reject: { (err: ThError): void }) => {
             this.loadRoomCategoriesCore(resolve, reject, dataSource);

@@ -19,7 +19,7 @@ describe("Hotel Room Categories Tests", function() {
     var roomCategoriesHelper: RoomCategoriesTestHelper;
     
     var createdRoomCategory: RoomCategoryDO;
-    var numCreatedRoomCategories = 4;
+    var numCreatedRoomCategories = 6;
     
 	before(function(done: any) {
 		testContext = new TestContext();

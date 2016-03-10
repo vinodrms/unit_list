@@ -10,7 +10,7 @@ export class SaveRoomItemDO {
     
     name: string;
     floor: number;
-    categoryId: string;
+    category: string;
     bedIdList: string[];
     amenityIdList: string[];
     attributeIdList: string[];
@@ -27,7 +27,7 @@ export class SaveRoomItemDO {
             },
             {
                 key: "hotelId",
-                validationStruct: new PrimitiveValidationStructure(new StringValidationRule())
+                validationStruct: new PrimitiveValidationStructure(StringValidationRule.buildNullable())
             },
             {
                 key: "name",
@@ -38,7 +38,7 @@ export class SaveRoomItemDO {
                 validationStruct: new PrimitiveValidationStructure(new NumberValidationRule())
             },
             {
-                key: "categoryId",
+                key: "category",
                 validationStruct: new PrimitiveValidationStructure(new StringValidationRule())
             },
             {
@@ -67,7 +67,7 @@ export class SaveRoomItemDO {
             },
             {
                 key: "maintenanceStatus",
-                validationStruct: new PrimitiveValidationStructure(new StringValidationRule())
+                validationStruct: new PrimitiveValidationStructure(new NumberValidationRule())
             }
         ])
     }

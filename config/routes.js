@@ -80,11 +80,22 @@ module.exports.routes = {
 	'POST /api/addOnProducts/count': 'AddOnProductsController.getAddOnProductListCount',
 	'GET /api/addOnProducts/categoryIdList': 'AddOnProductsController.getAddOnProductCategoryIdList',
 	'POST /api/addOnProducts/saveAddOnProductItem': 'AddOnProductsController.saveAddOnProductItem',
-	'POST /api/addOnProducts/deleteAddOnProductItem': 'AddOnProductsController.deleteAddOnProductItem',
+	'POST /api/addOnProducts/deleteAddOnProductItem': 'AddOnProductMsController.deleteAddOnProductItem',
 	'GET /api/addOnProducts/addOnProductItem': 'AddOnProductsController.getAddOnProductById',
 	
 	'POST /api/customers': 'CustomersController.getCustomerList',
 	'POST /api/customers/count': 'CustomersController.getCustomerListCount',
 	'POST /api/customers/saveCustomerItem': 'CustomersController.saveCustomerItem',
-	'GET /api/customers/customerItem': 'CustomersController.getCustomerById'
+	'GET /api/customers/customerItem': 'CustomersController.getCustomerById',
+    
+    'POST /api/rooms': 'RoomsController.getRoomList',
+    'POST /api/rooms/saveRoomItem': 'RoomsController.saveRoomItem',
+	'POST /api/rooms/deleteRoomItem': 'RoomsController.deleteRoomItem',
+    'GET /api/rooms/roomItem': 'RoomsController.getRoomById',
+    'GET /api/rooms/usedRoomCategories': 'RoomsController.getUsedRoomCategoryList',
+    
+    'POST /api/roomCategories/saveRoomCategoryItem': 'RoomCategoriesController.saveRoomCategoryItem',
+	'POST /api/roomCategories/deleteRoomCategoryItem': 'RoomCategoriesController.deleteRoomCategoryItem',
+    'GET /api/roomsCategories/roomItem': 'RoomCategoriesController.getRoomCategoryById',
+    'POST /api/roomsCategories/stats': 'RoomCategoriesController.getRoomCategoryStatsList',
 };

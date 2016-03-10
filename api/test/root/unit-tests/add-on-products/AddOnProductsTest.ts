@@ -131,7 +131,7 @@ describe("Hotel AddOn Products Tests", function() {
 			addOnProdRepo.getAddOnProductCategoryIdList({ hotelId: testContext.sessionContext.sessionDO.hotel.id }).then((categoryIdList: string[]) => {
 				var prevCategoryIdList = addOnProdListIndexer.categoryIdList;
 				should.equal(categoryIdList.length, prevCategoryIdList.length);
-				should.equal(testUtils.compareStringArrays(categoryIdList, prevCategoryIdList), true);
+				should.equal(testUtils.stringArraysAreEqual(categoryIdList, prevCategoryIdList), true);
 				done();
 			}).catch((error: any) => {
 				done(error);
