@@ -6,7 +6,7 @@ import {SessionContext} from '../../../utils/SessionContext';
 import {HotelDO} from '../../../data-layer/hotel/data-objects/HotelDO';
 import {AmenityDO} from '../../../data-layer/common/data-objects/amenity/AmenityDO';
 import {OperationHoursDO} from '../../../data-layer/hotel/data-objects/operation-hours/OperationHoursDO';
-import {HourDO} from '../../../data-layer/hotel/data-objects/operation-hours/HourDO';
+import {ThHourDO} from '../../../utils/th-dates/data-objects/ThHourDO';
 import {HotelDetailsBuilder, HotelDetailsDO} from '../utils/HotelDetailsBuilder';
 import {HotelUpdatePropertyDetailsDO, HotelUpdatePropertyDetailsHourDO} from './HotelUpdatePropertyDetailsDO';
 import {HotelMetaRepoDO, PropertyDetailsRepoDO} from '../../../data-layer/hotel/repositories/IHotelRepository';
@@ -132,7 +132,7 @@ export class HotelUpdatePropertyDetails {
 		this._validatedOperationHoursDO.checkOutFromOptional = this.buildOptionalHourDOFrom(this._propertyDetailsDO.operationHours.checkOutFromOptional);
 		return true;
 	}
-	private buildOptionalHourDOFrom(inputHour: HotelUpdatePropertyDetailsHourDO): HourDO {
+	private buildOptionalHourDOFrom(inputHour: HotelUpdatePropertyDetailsHourDO): ThHourDO {
 		var hourDO = this.buildHourDOFrom(inputHour);
 		if (!hourDO.isValid()) {
 			hourDO.hour = null;
@@ -140,8 +140,8 @@ export class HotelUpdatePropertyDetails {
 		}
 		return hourDO;
 	}
-	private buildHourDOFrom(inputHour: HotelUpdatePropertyDetailsHourDO): HourDO {
-		var hour = new HourDO();
+	private buildHourDOFrom(inputHour: HotelUpdatePropertyDetailsHourDO): ThHourDO {
+		var hour = new ThHourDO();
 		hour.buildFromObject(inputHour);
 		return hour;
 	}

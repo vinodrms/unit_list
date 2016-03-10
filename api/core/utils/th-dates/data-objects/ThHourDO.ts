@@ -1,7 +1,8 @@
-import {BaseDO} from '../../../common/base/BaseDO';
+import {BaseDO} from '../../../data-layer/common/base/BaseDO';
+
 import _ = require("underscore");
 
-export class HourDO extends BaseDO {
+export class ThHourDO extends BaseDO {
 	private static MinHourOfDay = 0;
 	private static MaxHourOfDay = 23;
 
@@ -11,8 +12,10 @@ export class HourDO extends BaseDO {
 	constructor() {
 		super();
 	}
+
 	hour: number;
 	minute: number;
+
 	protected getPrimitivePropertyKeys(): string[] {
 		return ["hour", "minute"];
 	}
@@ -20,9 +23,9 @@ export class HourDO extends BaseDO {
 		return this.isValidHour() && this.isValidMinute();
 	}
 	private isValidHour(): boolean {
-		return _.isNumber(this.hour) && HourDO.MinHourOfDay <= this.hour && this.hour <= HourDO.MaxHourOfDay;
+		return _.isNumber(this.hour) && ThHourDO.MinHourOfDay <= this.hour && this.hour <= ThHourDO.MaxHourOfDay;
 	}
 	private isValidMinute(): boolean {
-		return _.isNumber(this.minute) && HourDO.MinMinuteOfHour <= this.minute && this.minute <= HourDO.MaxMinuteOfHour;
+		return _.isNumber(this.minute) && ThHourDO.MinMinuteOfHour <= this.minute && this.minute <= ThHourDO.MaxMinuteOfHour;
 	}
 }
