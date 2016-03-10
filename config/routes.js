@@ -89,6 +89,7 @@ module.exports.routes = {
 	'GET /api/customers/customerItem': 'CustomersController.getCustomerById',
     
     'POST /api/rooms': 'RoomsController.getRoomList',
+    'POST /api/rooms/count': 'RoomsController.getRoomListCount',
     'POST /api/rooms/saveRoomItem': 'RoomsController.saveRoomItem',
 	'POST /api/rooms/deleteRoomItem': 'RoomsController.deleteRoomItem',
     'GET /api/rooms/roomItem': 'RoomsController.getRoomById',

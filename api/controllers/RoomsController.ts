@@ -8,6 +8,7 @@ import {DeleteRoomItem} from '../core/domain-layer/rooms/DeleteRoomItem';
 import {RoomMetaRepoDO, RoomSearchResultRepoDO} from '../core/data-layer/rooms/repositories/IRoomRepository';
 import {RoomDO} from '../core/data-layer/rooms/data-objects/RoomDO';
 import {RoomCategoryDO} from '../core/data-layer/room-categories/data-objects/RoomCategoryDO';
+import {LazyLoadRepoDO, LazyLoadMetaResponseRepoDO} from '../core/data-layer/common/repo-data-objects/LazyLoadRepoDO';
 
 class RoomsController extends BaseController {
 	
@@ -21,7 +22,20 @@ class RoomsController extends BaseController {
 		roomRepo.getRoomList(roomMeta).then((result: RoomSearchResultRepoDO) => {
 			this.returnSuccesfulResponse(req, res, { result: result });
 		}).catch((err: any) => {
-			this.returnErrorResponse(req, res, err, ThStatusCode.RoomControllerErrorGettingRooms);
+			this.returnErrorResponse(req, res, err, ThStatusCode.RoomsControllerErrorGettingRooms);
+		});
+	}
+    
+    public getRoomListCount(req: Express.Request, res: Express.Response) {
+		var appContext: AppContext = req.appContext;
+		var sessionContext: SessionContext = req.sessionContext;
+
+		var roomMeta = this.getRoomMetaRepoDOFrom(sessionContext);
+		var roomRepo = appContext.getRepositoryFactory().getRoomRepository();
+		roomRepo.getRoomListCount(roomMeta, req.body.searchCriteria).then((lazyLoadMeta: LazyLoadMetaResponseRepoDO) => {
+			this.returnSuccesfulResponse(req, res, lazyLoadMeta);
+		}).catch((err: any) => {
+			this.returnErrorResponse(req, res, err, ThStatusCode.RoomsControllerErrorGettingCount);
 		});
 	}
     
@@ -33,7 +47,7 @@ class RoomsController extends BaseController {
 		saveRoomItem.save(req.body.room).then((updatedRoom: RoomDO) => {
 			this.returnSuccesfulResponse(req, res, { room: updatedRoom });
 		}).catch((err: any) => {
-			this.returnErrorResponse(req, res, err, ThStatusCode.RoomControllerErrorSavingRoom);
+			this.returnErrorResponse(req, res, err, ThStatusCode.RoomsControllerErrorSavingRoom);
 		});
 	}
     
@@ -45,7 +59,7 @@ class RoomsController extends BaseController {
 		deleteRoomItem.delete(req.body.room).then((deletedRoom: RoomDO) => {
 			this.returnSuccesfulResponse(req, res, { room: deletedRoom });
 		}).catch((err: any) => {
-			this.returnErrorResponse(req, res, err, ThStatusCode.RoomControllerErrorDeletingRoom);
+			this.returnErrorResponse(req, res, err, ThStatusCode.RoomsControllerErrorDeletingRoom);
 		});
 	}
     
@@ -62,7 +76,7 @@ class RoomsController extends BaseController {
 		roomRepo.getRoomById(roomMeta, roomId).then((room: RoomDO) => {
 			this.returnSuccesfulResponse(req, res, { room: room });
 		}).catch((err: any) => {
-			this.returnErrorResponse(req, res, err, ThStatusCode.RoomControllerErrorGettingRoomById);
+			this.returnErrorResponse(req, res, err, ThStatusCode.RoomsControllerErrorGettingRoomById);
 		});
 	}
     
@@ -76,7 +90,7 @@ class RoomsController extends BaseController {
         roomAggregator.getUsedRoomCategoryList(roomAggregatorMeta).then((roomCategoryList: RoomCategoryDO[]) => {
 			this.returnSuccesfulResponse(req, res, { roomCategoryList: roomCategoryList });
 		}).catch((err: any) => {
-			this.returnErrorResponse(req, res, err, ThStatusCode.RoomControllerErrorGettingRoomCategories);
+			this.returnErrorResponse(req, res, err, ThStatusCode.RoomsControllerErrorGettingRoomCategories);
 		});
     }
     

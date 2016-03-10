@@ -26,6 +26,10 @@ export class MongoRoomRepository extends MongoRepository implements IRoomReposit
         return this._readRepository.getRoomList(roomMeta, searchCriteria, lazyLoad);
     }
     
+    public getRoomListCount(roomMeta: RoomMetaRepoDO, searchCriteria: RoomSearchCriteriaRepoDO): Promise<LazyLoadMetaResponseRepoDO> {
+        return this._readRepository.getRoomListCount(roomMeta, searchCriteria);
+    }
+    
     public getRoomById(roomMeta: RoomMetaRepoDO, roomId: string): Promise<RoomDO> {
         return this._readRepository.getRoomById(roomMeta, roomId);
     }

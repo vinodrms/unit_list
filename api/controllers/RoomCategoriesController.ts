@@ -21,7 +21,7 @@ class RoomCategoriesController extends BaseController {
 		roomCategoryRepo.getRoomCategoryList(roomCategoryMeta).then((result: RoomCategorySearchResultRepoDO) => {
 			this.returnSuccesfulResponse(req, res, { result: result });
 		}).catch((err: any) => {
-			this.returnErrorResponse(req, res, err, ThStatusCode.RoomControllerErrorGettingRooms);
+			this.returnErrorResponse(req, res, err, ThStatusCode.RoomsControllerErrorGettingRooms);
 		});
     }
     

@@ -81,13 +81,15 @@ export enum ThStatusCode {
     RoomItemUpdateStrategyErrorUpdating,
     RoomRepositoryProblemUpdatingRoom,
     RoomRepositoryErrorAddingRoom,
+    RoomRepositoryErrorReadingDocumentCount,
     SaveRoomItemError,
     DeleteRoomItemError,
-    RoomControllerErrorGettingRooms,
-    RoomControllerErrorSavingRoom,
-    RoomControllerErrorDeletingRoom,
-    RoomControllerErrorGettingRoomById,
-    RoomControllerErrorGettingRoomCategories,
+    RoomsControllerErrorGettingRooms,
+    RoomsControllerErrorSavingRoom,
+    RoomsControllerErrorDeletingRoom,
+    RoomsControllerErrorGettingRoomById,
+    RoomsControllerErrorGettingRoomCategories,
+    RoomsControllerErrorGettingCount,
     SaveRoomItemInvalidAmenityList,
     SaveRoomItemInvalidAttributeList,
     SaveRoomItemInvalidBedList,
@@ -286,14 +288,16 @@ ThMessage[ThStatusCode.RoomRepositoryNameAlreadyExists] = "Room name already exi
 ThMessage[ThStatusCode.RoomRepositoryErrorUpdatingRoom] = "Error updating room.";
 ThMessage[ThStatusCode.RoomRepositoryProblemUpdatingRoom] = "Problem updating the room. It is possible that someone else changed it at the same time. Please refresh the page and try again.";
 ThMessage[ThStatusCode.RoomRepositoryErrorAddingRoom] = "Error creating room.";
+ThMessage[ThStatusCode.RoomRepositoryErrorReadingDocumentCount] = "Error getting document count.";
 ThMessage[ThStatusCode.RoomItemUpdateStrategyErrorUpdating] = "Error updating room.";
 ThMessage[ThStatusCode.SaveRoomItemError] = "Error saving room.";
 ThMessage[ThStatusCode.DeleteRoomItemError] = "Error deleting room.";
-ThMessage[ThStatusCode.RoomControllerErrorGettingRooms] = "Error getting the rooms.";
-ThMessage[ThStatusCode.RoomControllerErrorSavingRoom] = "Error saving room.";
-ThMessage[ThStatusCode.RoomControllerErrorDeletingRoom] = "Error deleting room.";
-ThMessage[ThStatusCode.RoomControllerErrorGettingRoomById] = "Error getting room by id.";
-ThMessage[ThStatusCode.RoomControllerErrorGettingRoomCategories] = "Error getting room categories.";
+ThMessage[ThStatusCode.RoomsControllerErrorGettingRooms] = "Error getting the rooms.";
+ThMessage[ThStatusCode.RoomsControllerErrorSavingRoom] = "Error saving room.";
+ThMessage[ThStatusCode.RoomsControllerErrorDeletingRoom] = "Error deleting room.";
+ThMessage[ThStatusCode.RoomsControllerErrorGettingRoomById] = "Error getting room by id.";
+ThMessage[ThStatusCode.RoomsControllerErrorGettingRoomCategories] = "Error getting room categories.";
+ThMessage[ThStatusCode.RoomsControllerErrorGettingCount] = "Error getting the number of rooms.";
 ThMessage[ThStatusCode.SaveRoomItemInvalidAmenityList] = "Invalid amenity list.";
 ThMessage[ThStatusCode.SaveRoomItemInvalidAttributeList] = "Invalid attribute list.";
 ThMessage[ThStatusCode.SaveRoomItemInvalidBedList] = "Invalid bed list.";

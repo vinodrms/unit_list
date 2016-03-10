@@ -38,7 +38,25 @@ export class MongoRoomReadOperationsRepository extends MongoRepository {
             }
         );
     }
-
+    
+    public getRoomListCount(meta: RoomMetaRepoDO, searchCriteria: RoomSearchCriteriaRepoDO): Promise<LazyLoadMetaResponseRepoDO> {
+		return new Promise<LazyLoadMetaResponseRepoDO>((resolve: { (result: LazyLoadMetaResponseRepoDO): void }, reject: { (err: ThError): void }) => {
+			this.getRoomListCountCore(resolve, reject, meta, searchCriteria);
+		});
+	}
+	private getRoomListCountCore(resolve: { (result: LazyLoadMetaResponseRepoDO): void }, reject: { (err: ThError): void }, meta: RoomMetaRepoDO, searchCriteria: RoomSearchCriteriaRepoDO) {
+		var query = this.buildSearchCriteria(meta, searchCriteria);
+		return this.getDocumentCount(query,
+			(err: Error) => {
+				var thError = new ThError(ThStatusCode.RoomRepositoryErrorReadingDocumentCount, err);
+				ThLogger.getInstance().logError(ThLogLevel.Error, "error reading document count", { meta: meta, searchCriteria: searchCriteria }, thError);
+				reject(thError);
+			},
+			(meta: LazyLoadMetaResponseRepoDO) => {
+				resolve(meta);
+			});
+	}
+    
     public getRoomList(roomMeta: RoomMetaRepoDO, searchCriteria?: RoomSearchCriteriaRepoDO, lazyLoad?: LazyLoadRepoDO): Promise<RoomSearchResultRepoDO> {
         return new Promise<RoomSearchResultRepoDO>((resolve: { (result: RoomSearchResultRepoDO): void }, reject: { (err: ThError): void }) => {
             this.getRoomListCore(resolve, reject, roomMeta, searchCriteria, lazyLoad);
