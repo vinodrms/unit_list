@@ -3,7 +3,7 @@ import {ThStatusCode} from '../core/utils/th-responses/ThResponse';
 import {AppContext} from '../core/utils/AppContext';
 import {SessionContext} from '../core/utils/SessionContext';
 import {RoomAggregator, RoomAggregatorMetaDO} from '../core/domain-layer/rooms/aggregators/RoomAggregator';
-import {RoomCategoryStatsDO} from '../core/domain-layer/rooms/aggregators/data-objects/RoomCategoryStatsDO';
+import {RoomCategoryStatsDO} from '../core/data-layer/room-categories/data-objects/RoomCategoryStatsDO';
 import {DeleteRoomCategoryItem} from '../core/domain-layer/room-categories/DeleteRoomCategoryItem';
 import {SaveRoomCategoryItem} from '../core/domain-layer/room-categories/SaveRoomCategoryItem';
 import {RoomDO} from '../core/data-layer/rooms/data-objects/RoomDO';

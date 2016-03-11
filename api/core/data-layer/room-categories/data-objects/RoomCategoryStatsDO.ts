@@ -1,5 +1,5 @@
-import {RoomCategoryDO} from '../../../../data-layer/room-categories/data-objects/RoomCategoryDO';
-import {BaseDO} from '../../../../data-layer/common/base/BaseDO';
+import {BaseDO} from '../../common/base/BaseDO';
+import {RoomCategoryDO} from './RoomCategoryDO';
 
 export class RoomCategoryStatsDO extends BaseDO {
     constructor() {
