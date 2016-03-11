@@ -166,7 +166,7 @@ export enum ThStatusCode {
     AddOnProductRepositoryErrorGettingList,
     SaveAddOnProductItemError,
     SaveAddOnProductItemInvalidCategoryId,
-    SaveAddOnProductItemInvalidTaxId,
+    TaxIdValidatorInvalidTaxId,
     AddOnProductItemUpdateStrategyErrorUpdating,
     DeleteAddOnProductItemError,
     DeleteAddOnProductItemErrorValidating,
@@ -176,6 +176,7 @@ export enum ThStatusCode {
     AddOnProductsControllerErrorGettingCategoryIdList,
     AddOnProductsControllerErrorGettingCount,
     AddOnProductsControllerErrorGettingList,
+	AddOnProductIdValidatorInvalidId,
     CustomerRepositoryCustomerNotFound,
     CustomerRepositoryErrorGettingCustomer,
     CustomerRepositoryErrorCreatingCustomer,
@@ -199,7 +200,16 @@ export enum ThStatusCode {
 	PriceProductRepositoryProblemUpdatingPriceProduct,
 	PriceProductRepositoryErrorUpdatingPriceProduct,
 	PriceProductRepositoryErrorReadingDocumentCount,
-	PriceProductRepositoryErrorGettingList
+	PriceProductRepositoryErrorGettingList,
+	SavePriceProductItemError,
+	SavePriceProductItemInvalidPrice,
+	SavePriceProductItemInvalidConstraints,
+	SavePriceProductItemInvalidConditions,
+	PriceProductItemUpdateStrategyOnlyActiveAndDraftCanBeUpdated,
+	PriceProductItemStrategyInvalidStatus,
+	PriceProductValidatorUnusedRoomCategoryId,
+	PriceProductValidatorEmptyRoomCategoryList,
+	PriceProductValidatorInvalidPrices
 }
 
 var ThMessage: { [index: number]: string; } = {};
@@ -366,7 +376,7 @@ ThMessage[ThStatusCode.AddOnProductRepositoryErrorReadingDocumentCount] = "Error
 ThMessage[ThStatusCode.AddOnProductRepositoryErrorGettingList] = "Error getting add on products.";
 ThMessage[ThStatusCode.SaveAddOnProductItemError] = "Error saving add on product.";
 ThMessage[ThStatusCode.SaveAddOnProductItemInvalidCategoryId] = "Invalid category id.";
-ThMessage[ThStatusCode.SaveAddOnProductItemInvalidTaxId] = "Invalid tax id.";
+ThMessage[ThStatusCode.TaxIdValidatorInvalidTaxId] = "Invalid tax id.";
 ThMessage[ThStatusCode.AddOnProductItemUpdateStrategyErrorUpdating] = "Error updating add on product id.";
 ThMessage[ThStatusCode.DeleteAddOnProductItemError] = "Error deleting add on product.";
 ThMessage[ThStatusCode.DeleteAddOnProductItemErrorValidating] = "Error validating add on product.";
@@ -376,6 +386,7 @@ ThMessage[ThStatusCode.AddOnProductsControllerErrorDeletingAddOnProduct] = "Erro
 ThMessage[ThStatusCode.AddOnProductsControllerErrorGettingCategoryIdList] = "Error getting the categories for your add on products.";
 ThMessage[ThStatusCode.AddOnProductsControllerErrorGettingCount] = "Error getting the number of add on products.";
 ThMessage[ThStatusCode.AddOnProductsControllerErrorGettingList] = "Error getting the list of add on products.";
+ThMessage[ThStatusCode.AddOnProductIdValidatorInvalidId] = "Invalid add on product id list.";
 ThMessage[ThStatusCode.CustomerRepositoryCustomerNotFound] = "The customer was not found.";
 ThMessage[ThStatusCode.CustomerRepositoryErrorGettingCustomer] = "Error getting customer.";
 ThMessage[ThStatusCode.CustomerRepositoryErrorCreatingCustomer] = "Error creating customer.";
@@ -400,6 +411,15 @@ ThMessage[ThStatusCode.PriceProductRepositoryProblemUpdatingPriceProduct] = "Pro
 ThMessage[ThStatusCode.PriceProductRepositoryErrorUpdatingPriceProduct] = "Error updating price product.";
 ThMessage[ThStatusCode.PriceProductRepositoryErrorReadingDocumentCount] = "Error reading the number of price products.";
 ThMessage[ThStatusCode.PriceProductRepositoryErrorGettingList] = "Error getting the list of price products.";
+ThMessage[ThStatusCode.SavePriceProductItemError] = "Error saving price product.";
+ThMessage[ThStatusCode.SavePriceProductItemInvalidPrice] = "Invalid price submitted.";
+ThMessage[ThStatusCode.SavePriceProductItemInvalidConstraints] = "Invalid constraints submitted.";
+ThMessage[ThStatusCode.SavePriceProductItemInvalidConditions] = "Invalid conditions submitted.";
+ThMessage[ThStatusCode.PriceProductItemUpdateStrategyOnlyActiveAndDraftCanBeUpdated] = "Only draft or active price products can be updated.";
+ThMessage[ThStatusCode.PriceProductItemStrategyInvalidStatus] = "A price product can only be saved as draft or active.";
+ThMessage[ThStatusCode.PriceProductValidatorUnusedRoomCategoryId] = "You can assign on the price product only room categories which have rooms assigned.";
+ThMessage[ThStatusCode.PriceProductValidatorEmptyRoomCategoryList] = "Please assign at least one room category to the price product";
+ThMessage[ThStatusCode.PriceProductValidatorInvalidPrices] = "Please complete all the required price values";
 
 export class ThResponse {
     statusCode: ThStatusCode;

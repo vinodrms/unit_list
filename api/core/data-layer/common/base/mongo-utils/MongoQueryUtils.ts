@@ -8,9 +8,11 @@ export class MongoQueryUtils {
 	public preprocessQueryValueList(fieldName: string, valueList: any[]): { fieldName: string, valueList: any[] } {
 		var convertedFieldName = fieldName, convertedValueList = [];
 		valueList.forEach((value: any) => {
-			var preprocessedValue = this.preprocessQueryValue(fieldName, value);
-			convertedFieldName = preprocessedValue.fieldName;
-			convertedValueList.push(preprocessedValue.value);
+			try {
+				var preprocessedValue = this.preprocessQueryValue(fieldName, value);
+				convertedFieldName = preprocessedValue.fieldName;
+				convertedValueList.push(preprocessedValue.value);
+			} catch (error) { }
 		});
 		return {
 			fieldName: convertedFieldName,

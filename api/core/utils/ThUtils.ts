@@ -24,4 +24,8 @@ export class ThUtils {
 	public generateUniqueID(): string {
 		return uuid.v1();
 	}
+	public firstArrayIncludedInSecond<T>(firstArray: T[], secondArray: T[]): boolean {
+        var diffArray: T[] = _.difference(firstArray, secondArray);
+        return diffArray.length == 0;
+    }
 }

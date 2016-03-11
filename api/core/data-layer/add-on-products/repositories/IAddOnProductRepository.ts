@@ -11,6 +11,7 @@ export interface AddOnProductItemMetaRepoDO {
 export interface AddOnProductSearchCriteriaRepoDO {
 	name?: string;
 	categoryIdList?: string[];
+	addOnProductIdList?: string[];
 }
 export interface AddOnProductSearchResultRepoDO {
 	lazyLoad?: LazyLoadRepoDO;

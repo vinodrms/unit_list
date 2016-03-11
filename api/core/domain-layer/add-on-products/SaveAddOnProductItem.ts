@@ -7,8 +7,7 @@ import {ThUtils} from '../../utils/ThUtils';
 import {ValidationResultParser} from '../common/ValidationResultParser';
 import {AddOnProductDO} from '../../data-layer/add-on-products/data-objects/AddOnProductDO';
 import {AddOnProductCategoryDO} from '../../data-layer/common/data-objects/add-on-product/AddOnProductCategoryDO';
-import {TaxDO} from '../../data-layer/taxes/data-objects/TaxDO';
-import {TaxResponseRepoDO} from '../../data-layer/taxes/repositories/ITaxRepository';
+import {TaxIdValidator} from '../taxes/validators/TaxIdValidator';
 import {AddOnProductItemActionFactory} from './save-actions/AddOnProductItemActionFactory';
 import {SaveAddOnProductItemDO} from './SaveAddOnProductItemDO';
 
@@ -49,15 +48,11 @@ export class SaveAddOnProductItem {
 					ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Invalid category id", this._addOnProductDO, thError);
 					throw thError;
 				}
-				var taxRepository = this._appContext.getRepositoryFactory().getTaxRepository();
-				return taxRepository.getTaxList({ hotelId: this._sessionContext.sessionDO.hotel.id });
+
+				var taxIdValidator = new TaxIdValidator(this._appContext, this._sessionContext);
+				return taxIdValidator.validateTaxIdList(this._addOnProductDO.taxIdList);
 			})
-			.then((taxResponse: TaxResponseRepoDO) => {
-				if (!this.taxIdListIsValid(taxResponse)) {
-					var thError = new ThError(ThStatusCode.SaveAddOnProductItemInvalidTaxId, null);
-					ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Invalid tax id list", this._addOnProductDO, thError);
-					throw thError;
-				}
+			.then((taxValidationResult: boolean) => {
 				return this.saveAddOnProduct();
 			})
 			.then((savedAddOnProduct: AddOnProductDO) => {
@@ -74,18 +69,6 @@ export class SaveAddOnProductItem {
 	private categoryIdIsValid(addOnProductCategoryList: AddOnProductCategoryDO[]) {
 		var foundAddOnProductCategory = _.find(addOnProductCategoryList, (category: AddOnProductCategoryDO) => { return category.id === this._addOnProductDO.categoryId });
 		return !this._thUtils.isUndefinedOrNull(foundAddOnProductCategory);
-	}
-
-	private taxIdListIsValid(taxResponse: TaxResponseRepoDO): boolean {
-		var isValid = true;
-		this._addOnProductDO.taxIdList.forEach((taxId: string) => {
-			isValid = (this.taxIdIsValid(taxId, taxResponse.otherTaxList) || this.taxIdIsValid(taxId, taxResponse.vatList)) ? isValid : false;
-		});
-		return isValid;
-	}
-	private taxIdIsValid(taxId: string, taxList: TaxDO[]) {
-		var foundTax = _.find(taxList, (tax: TaxDO) => { return tax.id === taxId });
-		return !this._thUtils.isUndefinedOrNull(foundTax);
 	}
 
 	private saveAddOnProduct(): Promise<AddOnProductDO> {

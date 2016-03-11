@@ -2,6 +2,8 @@ import {BaseDO} from '../../../../common/base/BaseDO';
 import {ThUtils} from '../../../../../utils/ThUtils';
 import {IPriceProductPrice, PriceProductPriceQueryDO} from '../IPriceProductPrice';
 import {PriceForFixedNumberOfPersonsDO} from './PriceForFixedNumberOfPersonsDO';
+import {RoomCategoryStatsDO} from '../../../../room-categories/data-objects/RoomCategoryStatsDO';
+import {NumberValidationRule} from '../../../../../utils/th-validation/rules/NumberValidationRule';
 
 import _ = require("underscore");
 
@@ -40,5 +42,29 @@ export class PricePerPersonDO extends BaseDO implements IPriceProductPrice {
 	}
 	private getPriceForNumberOfPersons(priceList: PriceForFixedNumberOfPersonsDO[], noOfPersons: number): PriceForFixedNumberOfPersonsDO {
 		return _.find(priceList, (price: PriceForFixedNumberOfPersonsDO) => { return price.noOfPersons === noOfPersons });
+	}
+
+	public priceConfigurationIsValidFor(roomCategoryStatList: RoomCategoryStatsDO[]): boolean {
+		var maxNoOfAdults: number = _.max(roomCategoryStatList, (stat: RoomCategoryStatsDO) => { return stat.maxNoAdults }).maxNoAdults;
+		if (!this.priceListIsValidForMaxNoOfPersons(this.adultsPriceList, maxNoOfAdults)) {
+			return false;
+		}
+
+		var maxNoOfChildren = _.max(roomCategoryStatList, (stat: RoomCategoryStatsDO) => { return stat.maxNoChildren }).maxNoChildren;
+		return this.priceListIsValidForMaxNoOfPersons(this.chldrenPriceList, maxNoOfChildren);
+	}
+	private priceListIsValidForMaxNoOfPersons(priceList: PriceForFixedNumberOfPersonsDO[], maxNoOfPersons: number): boolean {
+		var thUtils = new ThUtils();
+		for (var noOfPersons = 1; noOfPersons <= maxNoOfPersons; noOfPersons++) {
+			var priceForFixedNumberOfPersons = this.getPriceForNumberOfPersons(priceList, noOfPersons);
+			if (thUtils.isUndefinedOrNull(priceForFixedNumberOfPersons)) {
+				return false;
+			}
+			var priceRule = NumberValidationRule.buildPriceNumberRule();
+			if (!priceRule.validate(priceForFixedNumberOfPersons.price).isValid()) {
+				return false;
+			}
+		}
+		return true;
 	}
 }
