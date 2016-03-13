@@ -68,6 +68,7 @@ export class MongoPriceProductReadOperationsRepository extends MongoRepository {
 			mongoQueryBuilder.addRegex("name", searchCriteria.name);
 			mongoQueryBuilder.addExactMatch("status", searchCriteria.status);
 			mongoQueryBuilder.addMultipleSelectOptionList("id", searchCriteria.priceProductIdList);
+			mongoQueryBuilder.addMultipleSelectOptionList("addOnProductIdList", searchCriteria.addOnProductIdList);
 		}
 		return mongoQueryBuilder.processedQuery;
 	}

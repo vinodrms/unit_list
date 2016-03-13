@@ -16,7 +16,7 @@ import {SaveRoomItemDO} from '../../../../core/domain-layer/rooms/SaveRoomItemDO
 import {SaveRoomItem} from '../../../../core/domain-layer/rooms/SaveRoomItem';
 import {DeleteRoomItem} from '../../../../core/domain-layer/rooms/DeleteRoomItem';
 import {RoomAggregator} from '../../../../core/domain-layer/rooms/aggregators/RoomAggregator';
-import {RoomCategoryStatsDO} from '../../../../core/domain-layer/rooms/aggregators/data-objects/RoomCategoryStatsDO';
+import {RoomCategoryStatsDO} from '../../../../core/data-layer/room-categories/data-objects/RoomCategoryStatsDO';
 
 describe("Hotel Rooms Tests", function() {
     var testUtils: TestUtils;

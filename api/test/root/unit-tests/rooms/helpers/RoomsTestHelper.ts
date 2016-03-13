@@ -4,7 +4,7 @@ import {RoomCategoryDO} from '../../../../../core/data-layer/room-categories/dat
 
 import {DefaultDataBuilder} from '../../../../db-initializers/DefaultDataBuilder';
 import {SaveRoomItemDO} from '../../../../../core/domain-layer/rooms/SaveRoomItemDO';
-import {RoomCategoryStatsDO} from '../../../../../core/domain-layer/rooms/aggregators/data-objects/RoomCategoryStatsDO';
+import {RoomCategoryStatsDO} from '../../../../../core/data-layer/room-categories/data-objects/RoomCategoryStatsDO';
 import {TestUtils} from '../../../../helpers/TestUtils';
 
 import should = require('should');

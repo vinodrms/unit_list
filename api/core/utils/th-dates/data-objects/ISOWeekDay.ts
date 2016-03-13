@@ -7,3 +7,17 @@ export enum ISOWeekDay {
 	Saturday,
 	Sunday
 }
+
+export class ISOWeekDayUtils {
+	public getISOWeekDayList(): ISOWeekDay[] {
+		return [
+			ISOWeekDay.Monday,
+			ISOWeekDay.Tuesday,
+			ISOWeekDay.Wednesday,
+			ISOWeekDay.Thursday,
+			ISOWeekDay.Friday,
+			ISOWeekDay.Saturday,
+			ISOWeekDay.Sunday
+		];
+	}
+}

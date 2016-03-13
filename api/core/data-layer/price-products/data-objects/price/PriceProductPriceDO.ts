@@ -2,6 +2,7 @@ import {BaseDO} from '../../../common/base/BaseDO';
 import {PriceProductPriceType, PriceProductPriceQueryDO, IPriceProductPrice} from './IPriceProductPrice';
 import {PricePerRoomCategoryDO} from './price-per-room-category/PricePerRoomCategoryDO';
 import {PricePerPersonDO} from './price-per-person/PricePerPersonDO';
+import {RoomCategoryStatsDO} from '../../../room-categories/data-objects/RoomCategoryStatsDO';
 
 export class PriceProductPriceDO extends BaseDO implements IPriceProductPrice {
 	type: PriceProductPriceType;
@@ -26,5 +27,8 @@ export class PriceProductPriceDO extends BaseDO implements IPriceProductPrice {
 	}
 	public getPriceFor(query: PriceProductPriceQueryDO): number {
 		return this.priceConfiguration.getPriceFor(query);
+	}
+	public priceConfigurationIsValidFor(roomCategoryStatList: RoomCategoryStatsDO[]): boolean {
+		return this.priceConfiguration.priceConfigurationIsValidFor(roomCategoryStatList);
 	}
 }

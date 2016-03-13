@@ -24,6 +24,7 @@ export interface PriceProductSearchCriteriaRepoDO {
 	name?: string;
 	status?: PriceProductStatus;
 	priceProductIdList?: string[];
+	addOnProductIdList?: string[];
 }
 export interface PriceProductSearchResultRepoDO {
 	lazyLoad?: LazyLoadRepoDO;

@@ -8,8 +8,8 @@ import {RoomDO} from '../../../data-layer/rooms/data-objects/RoomDO';
 import {RoomCategoryDO} from '../../../data-layer/room-categories/data-objects/RoomCategoryDO';
 import {BedDO} from '../../../data-layer/common/data-objects/bed/BedDO';
 import {RoomCategorySearchResultRepoDO} from '../../../data-layer/room-categories/repositories/IRoomCategoryRepository';
-import {RoomCategoryStatsDO} from './data-objects/RoomCategoryStatsDO';
-import {RoomStatsDO} from './data-objects/RoomStatsDO';
+import {RoomCategoryStatsDO} from '../../../data-layer/room-categories/data-objects/RoomCategoryStatsDO';
+import {RoomStatsDO} from '../../../data-layer/rooms/data-objects/RoomStatsDO';
 import {RoomMetaRepoDO, RoomSearchResultRepoDO} from '../../../data-layer/rooms/repositories/IRoomRepository';
 
 import _ = require('underscore');

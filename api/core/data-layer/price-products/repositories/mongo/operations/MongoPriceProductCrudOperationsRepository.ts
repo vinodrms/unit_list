@@ -70,9 +70,6 @@ export class MongoPriceProductCrudOperationsRepository extends MongoRepository {
 				"roomCategoryIdList": priceProduct.roomCategoryIdList,
 				"price": priceProduct.price,
 				"taxIdList": priceProduct.taxIdList,
-				"openIntervalList": priceProduct.openIntervalList,
-				"openForArrivalIntervalList": priceProduct.openForArrivalIntervalList,
-				"openForDepartureIntervalList": priceProduct.openForDepartureIntervalList,
 				"yieldFilterList": priceProduct.yieldFilterList,
 				"constraints": priceProduct.constraints,
 				"conditions": priceProduct.conditions
