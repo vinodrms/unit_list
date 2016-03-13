@@ -95,6 +95,7 @@ export enum ThStatusCode {
     SaveRoomItemInvalidAttributeList,
     SaveRoomItemInvalidBedList,
     RoomAggregatorGetUsedCategoriesError,
+    RoomAggregatorCategoryStatsListInvalidCatgoryIdListError,
     RoomAggregatorCategoryStatsListError,
     RoomAggregatorCategoryStatsError,
     RoomAggregatorRoomStatsError,
@@ -311,6 +312,7 @@ ThMessage[ThStatusCode.SaveRoomItemInvalidAmenityList] = "Invalid amenity list."
 ThMessage[ThStatusCode.SaveRoomItemInvalidAttributeList] = "Invalid attribute list.";
 ThMessage[ThStatusCode.SaveRoomItemInvalidBedList] = "Invalid bed list.";
 ThMessage[ThStatusCode.RoomAggregatorGetUsedCategoriesError] = "Error getting the room categories that have at least a room associated.";
+ThMessage[ThStatusCode.RoomAggregatorCategoryStatsListInvalidCatgoryIdListError] = "Invalid category id list";
 ThMessage[ThStatusCode.RoomAggregatorCategoryStatsListError] = "Error computing the room category stats list.";
 ThMessage[ThStatusCode.RoomAggregatorCategoryStatsError] = "Error computing the room category stats.";
 ThMessage[ThStatusCode.RoomAggregatorRoomStatsError] = "Error computing the room stats.";

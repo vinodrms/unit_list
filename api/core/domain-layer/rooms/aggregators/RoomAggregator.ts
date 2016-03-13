@@ -58,6 +58,13 @@ export class RoomAggregator {
         var roomRepository = this._appContext.getRepositoryFactory().getRoomRepository();
         var roomCategoryRepository = this._appContext.getRepositoryFactory().getRoomCategoryRepository();
         roomCategoryRepository.getRoomCategoryList({ hotelId: roomAggregatorMeta.hotelId }, { categoryIdList: roomCategoryIdList }).then((result: RoomCategorySearchResultRepoDO) => {
+            if(_.isEmpty(result.roomCategoryList) || roomCategoryIdList.length != result.roomCategoryList.length) {
+                var thError = new ThError(ThStatusCode.RoomAggregatorCategoryStatsListInvalidCatgoryIdListError, null);
+                ThLogger.getInstance().logError(ThLogLevel.Error, "Invalid category id list", { categoryIdList: roomCategoryIdList }, thError);
+                reject(thError);
+                return;
+            }
+            
             var computeCategoryStatsPromiseList = [];
             result.roomCategoryList.forEach((roomCategory) => {
                 computeCategoryStatsPromiseList.push(this.getRoomCategoryStats(roomCategory));
@@ -73,7 +80,7 @@ export class RoomAggregator {
             reject(thError);
         });
     }
-
+        
     private getRoomCategoryStats(categoryDO: RoomCategoryDO): Promise<RoomCategoryStatsDO> {
         return new Promise<RoomCategoryStatsDO>((resolve: { (result: RoomCategoryStatsDO): void }, reject: { (err: ThError): void }) => {
             this.getRoomCategoryStatsCore(resolve, reject, categoryDO);
@@ -84,6 +91,12 @@ export class RoomAggregator {
         var roomRepository = this._appContext.getRepositoryFactory().getRoomRepository();
         roomRepository.getRoomList({ hotelId: categoryDO.hotelId }, { categoryId: categoryDO.id }).then((result: RoomSearchResultRepoDO) => {
             var computeRoomStatsPromiseList = [];
+
+            if (_.isEmpty(result.roomList)) {
+                resolve(this.getEmptyCategoryStatsDO(categoryDO));
+                return;
+            }
+
             result.roomList.forEach((room) => {
                 computeRoomStatsPromiseList.push(this.getRoomStats(room));
             });
@@ -97,6 +110,7 @@ export class RoomAggregator {
             roomCategoryStats.maxNoChildren = _.max(roomStatsList, (roomStats) => {
                 return roomStats.maxNoChildren;
             }).maxNoChildren;
+            roomCategoryStats.noOfRooms = roomStatsList.length;
             resolve(roomCategoryStats);
         }).catch((error: any) => {
             var thError = new ThError(ThStatusCode.RoomAggregatorCategoryStatsError, error);
@@ -137,5 +151,15 @@ export class RoomAggregator {
             }
             reject(thError);
         });
+    }
+
+    private getEmptyCategoryStatsDO(roomCategoryDO: RoomCategoryDO): RoomCategoryStatsDO {
+        var roomCategoryStats = new RoomCategoryStatsDO();
+        roomCategoryStats.roomCategory = roomCategoryDO;
+        roomCategoryStats.maxNoAdults = 0;
+        roomCategoryStats.maxNoChildren = 0;
+        roomCategoryStats.noOfRooms = 0;
+        
+        return roomCategoryStats;
     }
 }
