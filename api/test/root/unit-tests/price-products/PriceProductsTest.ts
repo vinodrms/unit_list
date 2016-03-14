@@ -9,12 +9,18 @@ import {DefaultDataBuilder} from '../../../db-initializers/DefaultDataBuilder';
 import {TestContext} from '../../../helpers/TestContext';
 import {TestUtils} from '../../../helpers/TestUtils';
 import {PriceProductsHelper} from './helpers/PriceProductsHelper';
+import {CustomersTestHelper} from '../customers/helpers/CustomersTestHelper';
 import {RoomCategoryStatsDO} from '../../../../core/data-layer/room-categories/data-objects/RoomCategoryStatsDO';
 import {SavePriceProductItem} from '../../../../core/domain-layer/price-products/SavePriceProductItem';
-import {PriceProductDO} from '../../../../core/data-layer/price-products/data-objects/PriceProductDO';
+import {PriceProductDO, PriceProductAvailability} from '../../../../core/data-layer/price-products/data-objects/PriceProductDO';
+import {CustomerDO} from '../../../../core/data-layer/customers/data-objects/CustomerDO';
 import {PriceProductStatus} from '../../../../core/data-layer/price-products/data-objects/PriceProductDO';
 import {PriceProductCancellationPolicyType} from '../../../../core/data-layer/price-products/data-objects/conditions/cancellation/IPriceProductCancellationPolicy';
 import {PriceProductCancellationPenaltyType} from '../../../../core/data-layer/price-products/data-objects/conditions/penalty/IPriceProductCancellationPenalty';
+import {SaveCustomerItem} from '../../../../core/domain-layer/customers/SaveCustomerItem';
+import {ArchivePriceProductItem} from '../../../../core/domain-layer/price-products/ArchivePriceProductItem';
+import {DraftArchivedPriceProductItem} from '../../../../core/domain-layer/price-products/DraftArchivedPriceProductItem';
+import {DeleteDraftPriceProductItem} from '../../../../core/domain-layer/price-products/DeleteDraftPriceProductItem';
 
 describe("Hotel Price Products Tests", function() {
 	var InvalidRoomCategoryId = "12121221211";
@@ -27,14 +33,17 @@ describe("Hotel Price Products Tests", function() {
 	var testUtils: TestUtils;
 
 	var pphelper: PriceProductsHelper;
+	var custHelper: CustomersTestHelper;
 
 	var addedPriceProduct: PriceProductDO;
+	var addedCompanyCustomer: CustomerDO;
 
 	before(function(done: any) {
 		testContext = new TestContext();
 		testDataBuilder = new DefaultDataBuilder(testContext);
 		testUtils = new TestUtils();
 		pphelper = new PriceProductsHelper(testDataBuilder, testContext);
+		custHelper = new CustomersTestHelper(testDataBuilder, testContext);
 
 		testDataBuilder.buildWithDoneCallback(done);
     });
@@ -184,6 +193,74 @@ describe("Hotel Price Products Tests", function() {
 				done(e);
 			});
         });
-	});
+		it("Should attach the price product to a customer profile", function(done) {
+			var companyCustDO = custHelper.getCompanyCustomer();
+			companyCustDO.priceProductDetails.priceProductAvailability = PriceProductAvailability.Private;
+			companyCustDO.priceProductDetails.priceProductIdList = [addedPriceProduct.id];
 
+			var saveCustItem = new SaveCustomerItem(testContext.appContext, testContext.sessionContext);
+			saveCustItem.save(companyCustDO).then((cust: CustomerDO) => {
+				should.exist(cust.id);
+				addedCompanyCustomer = cust;
+				done();
+			}).catch((error: any) => {
+				done(error);
+			});
+        });
+		it("Should not archive the price product attached to a customer profile", function(done) {
+			var archivePPItem = new ArchivePriceProductItem(testContext.appContext, testContext.sessionContext);
+			archivePPItem.archive({ id: addedPriceProduct.id }).then((priceProduct: PriceProductDO) => {
+				done(new Error("Managed to archive a price product attached to a customer"));
+			}).catch((e: any) => {
+				should.notEqual(e.getThStatusCode(), ThStatusCode.Ok);
+				done();
+			});
+        });
+		it("Should detach the price product from the customer profile", function(done) {
+			var companyCustDO = addedCompanyCustomer;
+			companyCustDO.priceProductDetails.priceProductAvailability = PriceProductAvailability.Public;
+			companyCustDO.priceProductDetails.priceProductIdList = [];
+			var saveCustItem = new SaveCustomerItem(testContext.appContext, testContext.sessionContext);
+			saveCustItem.save(companyCustDO).then((cust: CustomerDO) => {
+				should.equal(cust.id, companyCustDO.id);
+				addedCompanyCustomer = cust;
+				done();
+			}).catch((error: any) => {
+				done(error);
+			});
+        });
+		it("Should archive the price product", function(done) {
+			var archivePPItem = new ArchivePriceProductItem(testContext.appContext, testContext.sessionContext);
+			archivePPItem.archive({ id: addedPriceProduct.id }).then((priceProduct: PriceProductDO) => {
+				should.equal(priceProduct.id, addedPriceProduct.id);
+				should.equal(priceProduct.status, PriceProductStatus.Archived);
+				addedPriceProduct = priceProduct;
+				done();
+			}).catch((e: any) => {
+				done(e);
+			});
+        });
+		it("Should mark the archived price product as draft", function(done) {
+			var draftPPItem = new DraftArchivedPriceProductItem(testContext.appContext, testContext.sessionContext);
+			draftPPItem.draft({ id: addedPriceProduct.id }).then((priceProduct: PriceProductDO) => {
+				should.equal(priceProduct.id, addedPriceProduct.id);
+				should.equal(priceProduct.status, PriceProductStatus.Draft);
+				addedPriceProduct = priceProduct;
+				done();
+			}).catch((e: any) => {
+				done(e);
+			});
+        });
+		it("Should delete the draft price product", function(done) {
+			var deletePPItem = new DeleteDraftPriceProductItem(testContext.appContext, testContext.sessionContext);
+			deletePPItem.delete({ id: addedPriceProduct.id }).then((priceProduct: PriceProductDO) => {
+				should.equal(priceProduct.id, addedPriceProduct.id);
+				should.equal(priceProduct.status, PriceProductStatus.Deleted);
+				addedPriceProduct = priceProduct;
+				done();
+			}).catch((e: any) => {
+				done(e);
+			});
+        });
+	});
 });

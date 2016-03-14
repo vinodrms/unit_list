@@ -11,8 +11,8 @@ export interface PriceProductItemMetaRepoDO {
 	versionId: number;
 }
 export interface PriceProductUpdateStatusParamsRepoDO {
-	oldStatus: string;
-	newStatus: number;
+	oldStatus: PriceProductStatus;
+	newStatus: PriceProductStatus;
 }
 export interface PriceProductUpdateYMIntervalsParamsRepoDO {
 	openIntervalList: ThDayInYearIntervalDO[];

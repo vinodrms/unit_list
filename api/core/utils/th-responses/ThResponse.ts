@@ -210,7 +210,12 @@ export enum ThStatusCode {
 	PriceProductItemStrategyInvalidStatus,
 	PriceProductValidatorUnusedRoomCategoryId,
 	PriceProductValidatorEmptyRoomCategoryList,
-	PriceProductValidatorInvalidPrices
+	PriceProductValidatorInvalidPrices,
+	ArchivePriceProductItemError,
+	ArchivePriceProductItemNonActiveStatus,
+	ArchivePriceProductItemUsedInCustomersError,
+	UpdatePriceProductItemStatusError,
+	UpdatePriceProductItemStatusWrongStatus
 }
 
 var ThMessage: { [index: number]: string; } = {};
@@ -420,8 +425,13 @@ ThMessage[ThStatusCode.SavePriceProductItemInvalidConditions] = "Invalid conditi
 ThMessage[ThStatusCode.PriceProductItemUpdateStrategyOnlyActiveAndDraftCanBeUpdated] = "Only draft or active price products can be updated.";
 ThMessage[ThStatusCode.PriceProductItemStrategyInvalidStatus] = "A price product can only be saved as draft or active.";
 ThMessage[ThStatusCode.PriceProductValidatorUnusedRoomCategoryId] = "You can assign on the price product only room categories which have rooms assigned.";
-ThMessage[ThStatusCode.PriceProductValidatorEmptyRoomCategoryList] = "Please assign at least one room category to the price product";
-ThMessage[ThStatusCode.PriceProductValidatorInvalidPrices] = "Please complete all the required price values";
+ThMessage[ThStatusCode.PriceProductValidatorEmptyRoomCategoryList] = "Please assign at least one room category to the price product.";
+ThMessage[ThStatusCode.PriceProductValidatorInvalidPrices] = "Please complete all the required price values.";
+ThMessage[ThStatusCode.ArchivePriceProductItemError] = "Please while archiving the price product.";
+ThMessage[ThStatusCode.ArchivePriceProductItemNonActiveStatus] = "Please while archiving the price product.";
+ThMessage[ThStatusCode.ArchivePriceProductItemUsedInCustomersError] = "Could not delete the price product because it is assigned to customers.";
+ThMessage[ThStatusCode.UpdatePriceProductItemStatusError] = "Error updating the status of the price product.";
+ThMessage[ThStatusCode.UpdatePriceProductItemStatusWrongStatus] = "Cannot run this action on the current price product.";
 
 export class ThResponse {
     statusCode: ThStatusCode;
