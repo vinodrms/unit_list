@@ -9,7 +9,7 @@ import _ = require("underscore");
 
 export class PricePerPersonDO extends BaseDO implements IPriceProductPrice {
 	adultsPriceList: PriceForFixedNumberOfPersonsDO[];
-	chldrenPriceList: PriceForFixedNumberOfPersonsDO[];
+	childrenPriceList: PriceForFixedNumberOfPersonsDO[];
 	defaultPrice: number;
 
 	protected getPrimitivePropertyKeys(): string[] {
@@ -19,7 +19,7 @@ export class PricePerPersonDO extends BaseDO implements IPriceProductPrice {
 		super.buildFromObject(object);
 
 		this.adultsPriceList = this.buildPriceList(object, "adultsPriceList");
-		this.chldrenPriceList = this.buildPriceList(object, "chldrenPriceList");
+		this.childrenPriceList = this.buildPriceList(object, "childrenPriceList");
 	}
 	private buildPriceList(object: Object, objectKey: string): PriceForFixedNumberOfPersonsDO[] {
 		var priceList: PriceForFixedNumberOfPersonsDO[] = [];
@@ -33,7 +33,7 @@ export class PricePerPersonDO extends BaseDO implements IPriceProductPrice {
 
 	public getPriceFor(query: PriceProductPriceQueryDO): number {
 		var adultsPrice = this.getPriceForNumberOfPersons(this.adultsPriceList, query.noOfAdults);
-		var childrenPrice = this.getPriceForNumberOfPersons(this.chldrenPriceList, query.noOfChildren);
+		var childrenPrice = this.getPriceForNumberOfPersons(this.childrenPriceList, query.noOfChildren);
 		var thUtils = new ThUtils();
 		if (thUtils.isUndefinedOrNull(adultsPrice) || thUtils.isUndefinedOrNull(childrenPrice)) {
 			return this.defaultPrice;
@@ -51,7 +51,7 @@ export class PricePerPersonDO extends BaseDO implements IPriceProductPrice {
 		}
 
 		var maxNoOfChildren = _.max(roomCategoryStatList, (stat: RoomCategoryStatsDO) => { return stat.maxNoChildren }).maxNoChildren;
-		return this.priceListIsValidForMaxNoOfPersons(this.chldrenPriceList, maxNoOfChildren);
+		return this.priceListIsValidForMaxNoOfPersons(this.childrenPriceList, maxNoOfChildren);
 	}
 	private priceListIsValidForMaxNoOfPersons(priceList: PriceForFixedNumberOfPersonsDO[], maxNoOfPersons: number): boolean {
 		var thUtils = new ThUtils();
