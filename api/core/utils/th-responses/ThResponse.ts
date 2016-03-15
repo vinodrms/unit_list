@@ -188,7 +188,6 @@ export enum ThStatusCode {
     SaveCustomerItemInvalidOrNullClientType,
     SaveCustomerItemCompOrTACannotBeLinkedToOtherCustomers,
     SaveCustomerItemCannotSetPriceProductsForPublic,
-    SaveCustomerItemInvalidPriceProductIdList,
     CustomerItemUpdateStrategyError,
     CustomersControllerErrorGettingCustomer,
     CustomersControllerErrorSavingCustomer,
@@ -215,7 +214,8 @@ export enum ThStatusCode {
 	ArchivePriceProductItemUsedInCustomersError,
 	UpdatePriceProductItemStatusError,
 	UpdatePriceProductItemStatusWrongStatus,
-	PriceProductsYieldManagementInvalidInterval
+	PriceProductsYieldManagementInvalidInterval,
+	PriceProductIdValidatorInvalidId
 }
 
 var ThMessage: { [index: number]: string; } = {};
@@ -404,7 +404,6 @@ ThMessage[ThStatusCode.SaveCustomerItemError] = "Error saving customer.";
 ThMessage[ThStatusCode.SaveCustomerItemInvalidOrNullClientType] = "Invalid client type.";
 ThMessage[ThStatusCode.SaveCustomerItemCompOrTACannotBeLinkedToOtherCustomers] = "Companies or travel agencies cannot be linked to other customers.";
 ThMessage[ThStatusCode.SaveCustomerItemCannotSetPriceProductsForPublic] = "Cannot set specific price products for this client unless private is selected.";
-ThMessage[ThStatusCode.SaveCustomerItemInvalidPriceProductIdList] = "Some of the selected price products could not be found.";
 ThMessage[ThStatusCode.CustomerItemUpdateStrategyError] = "Error updating customer.";
 ThMessage[ThStatusCode.CustomersControllerErrorGettingCustomer] = "Error getting customer.";
 ThMessage[ThStatusCode.CustomersControllerErrorSavingCustomer] = "Error saving customer.";
@@ -432,6 +431,7 @@ ThMessage[ThStatusCode.ArchivePriceProductItemUsedInCustomersError] = "Could not
 ThMessage[ThStatusCode.UpdatePriceProductItemStatusError] = "Error updating the status of the price product.";
 ThMessage[ThStatusCode.UpdatePriceProductItemStatusWrongStatus] = "Cannot run this action on the current price product.";
 ThMessage[ThStatusCode.PriceProductsYieldManagementInvalidInterval] = "Invalid interval submitted.";
+ThMessage[ThStatusCode.PriceProductIdValidatorInvalidId] = "Invalid price products.";
 
 export class ThResponse {
     statusCode: ThStatusCode;
