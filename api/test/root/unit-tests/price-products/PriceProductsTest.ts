@@ -20,8 +20,8 @@ import {PriceProductCancellationPolicyType} from '../../../../core/data-layer/pr
 import {PriceProductCancellationPenaltyType} from '../../../../core/data-layer/price-products/data-objects/conditions/penalty/IPriceProductCancellationPenalty';
 import {SaveCustomerItem} from '../../../../core/domain-layer/customers/SaveCustomerItem';
 import {ArchivePriceProductItem} from '../../../../core/domain-layer/price-products/ArchivePriceProductItem';
-import {DraftArchivedPriceProductItem} from '../../../../core/domain-layer/price-products/DraftArchivedPriceProductItem';
-import {DeleteDraftPriceProductItem} from '../../../../core/domain-layer/price-products/DeleteDraftPriceProductItem';
+import {DraftPriceProductItem} from '../../../../core/domain-layer/price-products/DraftPriceProductItem';
+import {DeletePriceProductItem} from '../../../../core/domain-layer/price-products/DeletePriceProductItem';
 import {PriceProductSearchResultRepoDO} from '../../../../core/data-layer/price-products/repositories/IPriceProductRepository';
 
 describe("Hotel Price Products Tests", function() {
@@ -239,7 +239,7 @@ describe("Hotel Price Products Tests", function() {
 			});
         });
 		it("Should mark the archived price product as draft", function(done) {
-			var draftPPItem = new DraftArchivedPriceProductItem(testContext.appContext, testContext.sessionContext);
+			var draftPPItem = new DraftPriceProductItem(testContext.appContext, testContext.sessionContext);
 			draftPPItem.draft({ id: addedPriceProduct.id }).then((priceProduct: PriceProductDO) => {
 				should.equal(priceProduct.id, addedPriceProduct.id);
 				should.equal(priceProduct.status, PriceProductStatus.Draft);
@@ -250,7 +250,7 @@ describe("Hotel Price Products Tests", function() {
 			});
         });
 		it("Should delete the draft price product", function(done) {
-			var deletePPItem = new DeleteDraftPriceProductItem(testContext.appContext, testContext.sessionContext);
+			var deletePPItem = new DeletePriceProductItem(testContext.appContext, testContext.sessionContext);
 			deletePPItem.delete({ id: addedPriceProduct.id }).then((priceProduct: PriceProductDO) => {
 				should.equal(priceProduct.id, addedPriceProduct.id);
 				should.equal(priceProduct.status, PriceProductStatus.Deleted);

@@ -4,12 +4,12 @@ import {PriceProductInputIdDO} from './validation-structures/PriceProductInputId
 import {PriceProductDO, PriceProductStatus} from '../../data-layer/price-products/data-objects/PriceProductDO';
 import {UpdatePriceProductItemStatus} from './utils/UpdatePriceProductItemStatus';
 
-export class DeleteDraftPriceProductItem {
+export class DraftPriceProductItem {
 	constructor(private _appContext: AppContext, private _sessionContext: SessionContext) {
 	}
 
-	public delete(inputDO: PriceProductInputIdDO): Promise<PriceProductDO> {
+	public draft(inputDO: PriceProductInputIdDO): Promise<PriceProductDO> {
 		var updatePPItemStatus = new UpdatePriceProductItemStatus(this._appContext, this._sessionContext);
-		return updatePPItemStatus.updateStatus(inputDO, PriceProductStatus.Draft, PriceProductStatus.Deleted);
+		return updatePPItemStatus.updateStatus(inputDO, PriceProductStatus.Archived, PriceProductStatus.Draft);
 	}
 }

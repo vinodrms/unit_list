@@ -82,22 +82,33 @@ module.exports.routes = {
 	'POST /api/addOnProducts/saveAddOnProductItem': 'AddOnProductsController.saveAddOnProductItem',
 	'POST /api/addOnProducts/deleteAddOnProductItem': 'AddOnProductMsController.deleteAddOnProductItem',
 	'GET /api/addOnProducts/addOnProductItem': 'AddOnProductsController.getAddOnProductById',
-	
+
 	'POST /api/customers': 'CustomersController.getCustomerList',
 	'POST /api/customers/count': 'CustomersController.getCustomerListCount',
 	'POST /api/customers/saveCustomerItem': 'CustomersController.saveCustomerItem',
 	'GET /api/customers/customerItem': 'CustomersController.getCustomerById',
-    
+
     'POST /api/rooms': 'RoomsController.getRoomList',
     'POST /api/rooms/count': 'RoomsController.getRoomListCount',
     'POST /api/rooms/saveRoomItem': 'RoomsController.saveRoomItem',
 	'POST /api/rooms/deleteRoomItem': 'RoomsController.deleteRoomItem',
     'GET /api/rooms/roomItem': 'RoomsController.getRoomById',
     'GET /api/rooms/usedRoomCategories': 'RoomsController.getUsedRoomCategoryList',
-    
+
     'POST /api/roomCategories': 'RoomCategoriesController.getRoomCategoryList',
     'POST /api/roomCategories/saveRoomCategoryItem': 'RoomCategoriesController.saveRoomCategoryItem',
 	'POST /api/roomCategories/deleteRoomCategoryItem': 'RoomCategoriesController.deleteRoomCategoryItem',
     'GET /api/roomsCategories/roomItem': 'RoomCategoriesController.getRoomCategoryById',
     'POST /api/roomsCategories/stats': 'RoomCategoriesController.getRoomCategoryStatsList',
+
+	'POST /api/priceProducts': 'PriceProductsController.getPriceProductList',
+	'POST /api/priceProducts/count': 'PriceProductsController.getPriceProductListCount',
+	'POST /api/priceProducts/savePriceProductItem': 'PriceProductsController.savePriceProductItem',
+	'POST /api/priceProducts/archivePriceProductItem': 'PriceProductsController.archivePriceProductItem',
+	'POST /api/priceProducts/deletePriceProductItem': 'PriceProductsController.deletePriceProductItem',
+	'POST /api/priceProducts/draftPriceProductItem': 'PriceProductsController.draftPriceProductItem',
+	'GET /api/priceProducts/priceProductItem': 'PriceProductsController.getPriceProductById',
+
+	'POST /api/yieldManager/closePriceProducts': 'YieldManagerController.closePriceProducts',
+	'POST /api/yieldManager/openPriceProducts': 'YieldManagerController.openPriceProducts',
 };

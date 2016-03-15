@@ -218,7 +218,15 @@ export enum ThStatusCode {
 	UpdatePriceProductItemStatusError,
 	UpdatePriceProductItemStatusWrongStatus,
 	PriceProductsYieldManagementInvalidInterval,
-	PriceProductIdValidatorInvalidId
+	PriceProductIdValidatorInvalidId,
+	PriceProductsControllerErrorGettingPriceProduct,
+	PriceProductsControllerErrorSavingPriceProduct,
+	PriceProductsControllerErrorDeletingPriceProduct,
+	PriceProductsControllerErrorMarkingPriceProductAsDraft,
+	PriceProductsControllerErrorArchivingProduct,
+	PriceProductsControllerErrorGettingCount,
+	PriceProductsControllerErrorGettingList,
+	YieldManagerControllerErrorClosing
 }
 
 var ThMessage: { [index: number]: string; } = {};
@@ -438,6 +446,14 @@ ThMessage[ThStatusCode.UpdatePriceProductItemStatusError] = "Error updating the 
 ThMessage[ThStatusCode.UpdatePriceProductItemStatusWrongStatus] = "Cannot run this action on the current price product.";
 ThMessage[ThStatusCode.PriceProductsYieldManagementInvalidInterval] = "Invalid interval submitted.";
 ThMessage[ThStatusCode.PriceProductIdValidatorInvalidId] = "Invalid price products.";
+ThMessage[ThStatusCode.PriceProductsControllerErrorGettingPriceProduct] = "Error getting price product.";
+ThMessage[ThStatusCode.PriceProductsControllerErrorSavingPriceProduct] = "Error saving price product.";
+ThMessage[ThStatusCode.PriceProductsControllerErrorDeletingPriceProduct] = "Error deleting price product.";
+ThMessage[ThStatusCode.PriceProductsControllerErrorMarkingPriceProductAsDraft] = "Error marking the price product as draft.";
+ThMessage[ThStatusCode.PriceProductsControllerErrorArchivingProduct] = "Error archiving price product.";
+ThMessage[ThStatusCode.PriceProductsControllerErrorGettingCount] = "Error the number of price products.";
+ThMessage[ThStatusCode.PriceProductsControllerErrorGettingList] = "Error getting the list price product.";
+ThMessage[ThStatusCode.YieldManagerControllerErrorClosing] = "Error closing the period for the price products.";
 
 export class ThResponse {
     statusCode: ThStatusCode;
