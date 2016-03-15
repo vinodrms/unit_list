@@ -152,6 +152,8 @@ export enum ThStatusCode {
     HotelDeleteTaxItemError,
     HotelDeleteTaxItemErrorDeleting,
     HotelDeleteTaxItemErrorValidating,
+	HotelDeleteTaxItemUsedInAddOnProducts,
+	HotelDeleteTaxItemUsedInDraftOrActivePriceProducts,
     TaxControllerErrorGettingTaxes,
     TaxControllerErrorSavingTax,
     TaxControllerErrorDeletingTax,
@@ -369,6 +371,8 @@ ThMessage[ThStatusCode.TaxRepositoryTaxNotFound] = "Tax not found.";
 ThMessage[ThStatusCode.HotelDeleteTaxItemError] = "Error deleting tax item.";
 ThMessage[ThStatusCode.HotelDeleteTaxItemErrorDeleting] = "Error deleting tax item.";
 ThMessage[ThStatusCode.HotelDeleteTaxItemErrorValidating] = "Error validating the existing tax item.";
+ThMessage[ThStatusCode.HotelDeleteTaxItemUsedInAddOnProducts] = "Cannot delete the tax because it is used in add on products.";
+ThMessage[ThStatusCode.HotelDeleteTaxItemUsedInDraftOrActivePriceProducts] = "Cannot delete the tax because it is used in active or draft price products.";
 ThMessage[ThStatusCode.TaxControllerErrorGettingTaxes] = "Error getting the taxes.";
 ThMessage[ThStatusCode.TaxControllerErrorSavingTax] = "Error saving tax.";
 ThMessage[ThStatusCode.TaxControllerErrorDeletingTax] = "Error deleting tax.";

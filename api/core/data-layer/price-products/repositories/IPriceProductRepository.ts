@@ -26,6 +26,7 @@ export interface PriceProductSearchCriteriaRepoDO {
 	statusList?: PriceProductStatus[];
 	priceProductIdList?: string[];
 	addOnProductIdList?: string[];
+	taxIdList?: string[];
 }
 export interface PriceProductSearchResultRepoDO {
 	lazyLoad?: LazyLoadRepoDO;

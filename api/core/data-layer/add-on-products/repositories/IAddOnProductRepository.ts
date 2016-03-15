@@ -12,6 +12,7 @@ export interface AddOnProductSearchCriteriaRepoDO {
 	name?: string;
 	categoryIdList?: string[];
 	addOnProductIdList?: string[];
+	taxIdList?: string[];
 }
 export interface AddOnProductSearchResultRepoDO {
 	lazyLoad?: LazyLoadRepoDO;

@@ -10,7 +10,7 @@ import {PrimitiveValidationStructure} from '../../utils/th-validation/structure/
 import {StringValidationRule} from '../../utils/th-validation/rules/StringValidationRule';
 import {AddOnProductMetaRepoDO, AddOnProductItemMetaRepoDO} from '../../data-layer/add-on-products/repositories/IAddOnProductRepository';
 import {AddOnProductDO} from '../../data-layer/add-on-products/data-objects/AddOnProductDO';
-import {PriceProductDO, PriceProductStatus} from '../../data-layer/price-products/data-objects/PriceProductDO';
+import {PriceProductStatus} from '../../data-layer/price-products/data-objects/PriceProductDO';
 import {PriceProductSearchResultRepoDO} from '../../data-layer/price-products/repositories/IPriceProductRepository';
 
 export class DeleteAddOnProductItemDO {

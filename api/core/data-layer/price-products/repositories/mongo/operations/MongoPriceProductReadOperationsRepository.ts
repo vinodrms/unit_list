@@ -77,6 +77,7 @@ export class MongoPriceProductReadOperationsRepository extends MongoRepository {
 			}
 			mongoQueryBuilder.addMultipleSelectOptionList("id", searchCriteria.priceProductIdList);
 			mongoQueryBuilder.addMultipleSelectOptionList("addOnProductIdList", searchCriteria.addOnProductIdList);
+			mongoQueryBuilder.addMultipleSelectOptionList("taxIdList", searchCriteria.taxIdList);
 		}
 		return mongoQueryBuilder.processedQuery;
 	}

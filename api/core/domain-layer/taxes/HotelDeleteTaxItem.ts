@@ -10,6 +10,9 @@ import {ObjectValidationStructure} from '../../utils/th-validation/structure/Obj
 import {PrimitiveValidationStructure} from '../../utils/th-validation/structure/PrimitiveValidationStructure';
 import {StringValidationRule} from '../../utils/th-validation/rules/StringValidationRule';
 import {TaxMetaRepoDO, TaxItemMetaRepoDO} from '../../data-layer/taxes/repositories/ITaxRepository';
+import {AddOnProductSearchResultRepoDO} from '../../data-layer/add-on-products/repositories/IAddOnProductRepository';
+import {PriceProductSearchResultRepoDO} from '../../data-layer/price-products/repositories/IPriceProductRepository';
+import {PriceProductStatus} from '../../data-layer/price-products/data-objects/PriceProductDO';
 
 export class HotelDeleteTaxItemDO {
 	id: string;
@@ -97,7 +100,33 @@ export class HotelDeleteTaxItem {
 		});
 	}
 	private validateLoadedTaxCore(resolve: { (result: boolean): void }, reject: { (err: ThError): void }) {
-		// TODO: add validations for deleting VAT (eg: if it is used in existing price products or open invoices)
-		resolve(true);
+		var addOnProductRepo = this._appContext.getRepositoryFactory().getAddOnProductRepository();
+		addOnProductRepo.getAddOnProductList({ hotelId: this._sessionContext.sessionDO.hotel.id },
+			{ taxIdList: [this._taxItemDO.id] })
+			.then((aopSeachResult: AddOnProductSearchResultRepoDO) => {
+				if (aopSeachResult.addOnProductList.length > 0) {
+					var thError = new ThError(ThStatusCode.HotelDeleteTaxItemUsedInAddOnProducts, null);
+					ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Tax used in add on product", this._taxItemDO, thError);
+					throw thError;
+				}
+
+				var priceProductRepo = this._appContext.getRepositoryFactory().getPriceProductRepository();
+				return priceProductRepo.getPriceProductList({ hotelId: this._sessionContext.sessionDO.hotel.id },
+					{
+						taxIdList: [this._taxItemDO.id],
+						statusList: [PriceProductStatus.Active, PriceProductStatus.Draft]
+					})
+			})
+			.then((ppSeachResult: PriceProductSearchResultRepoDO) => {
+				if (ppSeachResult.priceProductList.length > 0) {
+					var thError = new ThError(ThStatusCode.HotelDeleteTaxItemUsedInDraftOrActivePriceProducts, null);
+					ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Tax used in price product", this._taxItemDO, thError);
+					throw thError;
+				}
+				// TODO: add validations for deleting VAT (eg: if it is used in open invoices)
+				resolve(true);
+			}).catch((error: any) => {
+				reject(error);
+			});
 	}
 }
