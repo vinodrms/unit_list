@@ -217,6 +217,8 @@ export enum ThStatusCode {
 	ArchivePriceProductItemUsedInCustomersError,
 	UpdatePriceProductItemStatusError,
 	UpdatePriceProductItemStatusWrongStatus,
+	DraftPriceProductItemOnlyArchived,
+	DraftPriceProductItemError,
 	PriceProductsYieldManagementInvalidInterval,
 	PriceProductIdValidatorInvalidId,
 	PriceProductsControllerErrorGettingPriceProduct,
@@ -445,6 +447,8 @@ ThMessage[ThStatusCode.ArchivePriceProductItemNonActiveStatus] = "Please while a
 ThMessage[ThStatusCode.ArchivePriceProductItemUsedInCustomersError] = "Could not delete the price product because it is assigned to customers.";
 ThMessage[ThStatusCode.UpdatePriceProductItemStatusError] = "Error updating the status of the price product.";
 ThMessage[ThStatusCode.UpdatePriceProductItemStatusWrongStatus] = "Cannot run this action on the current price product.";
+ThMessage[ThStatusCode.DraftPriceProductItemOnlyArchived] = "Only archived price products can be marked as drafts.";
+ThMessage[ThStatusCode.DraftPriceProductItemError] = "Error marking the price product as draft.";
 ThMessage[ThStatusCode.PriceProductsYieldManagementInvalidInterval] = "Invalid interval submitted.";
 ThMessage[ThStatusCode.PriceProductIdValidatorInvalidId] = "Invalid price products.";
 ThMessage[ThStatusCode.PriceProductsControllerErrorGettingPriceProduct] = "Error getting price product.";
