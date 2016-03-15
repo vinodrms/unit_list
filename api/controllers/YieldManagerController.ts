@@ -17,7 +17,7 @@ export class YieldManagerController extends BaseController {
 		ppYM.open(req.body.yieldData).then((priceProductList: PriceProductDO[]) => {
 			this.returnSuccesfulResponse(req, res, { priceProductList: priceProductList });
 		}).catch((err: any) => {
-			this.returnErrorResponse(req, res, err, ThStatusCode.YieldManagerControllerErrorClosing);
+			this.returnErrorResponse(req, res, err, ThStatusCode.YieldManagerControllerErrorOpening);
 		});
 	}
 }

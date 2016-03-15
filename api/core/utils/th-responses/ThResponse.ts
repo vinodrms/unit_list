@@ -226,7 +226,8 @@ export enum ThStatusCode {
 	PriceProductsControllerErrorArchivingProduct,
 	PriceProductsControllerErrorGettingCount,
 	PriceProductsControllerErrorGettingList,
-	YieldManagerControllerErrorClosing
+	YieldManagerControllerErrorClosing,
+	YieldManagerControllerErrorOpening
 }
 
 var ThMessage: { [index: number]: string; } = {};
@@ -454,6 +455,7 @@ ThMessage[ThStatusCode.PriceProductsControllerErrorArchivingProduct] = "Error ar
 ThMessage[ThStatusCode.PriceProductsControllerErrorGettingCount] = "Error the number of price products.";
 ThMessage[ThStatusCode.PriceProductsControllerErrorGettingList] = "Error getting the list price product.";
 ThMessage[ThStatusCode.YieldManagerControllerErrorClosing] = "Error closing the period for the price products.";
+ThMessage[ThStatusCode.YieldManagerControllerErrorOpening] = "Error opening the period for the price products.";
 
 export class ThResponse {
     statusCode: ThStatusCode;
