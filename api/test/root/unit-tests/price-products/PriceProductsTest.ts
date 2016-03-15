@@ -194,9 +194,7 @@ describe("Hotel Price Products Tests", function() {
 			});
         });
 		it("Should attach the price product to a customer profile", function(done) {
-			var companyCustDO = custHelper.getCompanyCustomer();
-			companyCustDO.priceProductDetails.priceProductAvailability = PriceProductAvailability.Private;
-			companyCustDO.priceProductDetails.priceProductIdList = [addedPriceProduct.id];
+			var companyCustDO = custHelper.getCompanyCustomer(addedPriceProduct.id);
 
 			var saveCustItem = new SaveCustomerItem(testContext.appContext, testContext.sessionContext);
 			saveCustItem.save(companyCustDO).then((cust: CustomerDO) => {
