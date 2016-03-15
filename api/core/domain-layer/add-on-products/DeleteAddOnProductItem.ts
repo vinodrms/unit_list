@@ -10,6 +10,8 @@ import {PrimitiveValidationStructure} from '../../utils/th-validation/structure/
 import {StringValidationRule} from '../../utils/th-validation/rules/StringValidationRule';
 import {AddOnProductMetaRepoDO, AddOnProductItemMetaRepoDO} from '../../data-layer/add-on-products/repositories/IAddOnProductRepository';
 import {AddOnProductDO} from '../../data-layer/add-on-products/data-objects/AddOnProductDO';
+import {PriceProductDO, PriceProductStatus} from '../../data-layer/price-products/data-objects/PriceProductDO';
+import {PriceProductSearchResultRepoDO} from '../../data-layer/price-products/repositories/IPriceProductRepository';
 
 export class DeleteAddOnProductItemDO {
 	id: string;
@@ -95,7 +97,22 @@ export class DeleteAddOnProductItem {
 		});
 	}
 	private validateLoadedAddOnProductCore(resolve: { (result: boolean): void }, reject: { (err: ThError): void }) {
-		// TODO: add validations for deleting addon product (eg: if it is used in existing price products or open invoices)
-		resolve(true);
+		var priceProductRepo = this._appContext.getRepositoryFactory().getPriceProductRepository();
+		priceProductRepo.getPriceProductList({ hotelId: this._sessionContext.sessionDO.hotel.id },
+			{
+				addOnProductIdList: [this._deleteItemDO.id],
+				statusList: [PriceProductStatus.Active, PriceProductStatus.Draft]
+			})
+			.then((priceProductSearchResult: PriceProductSearchResultRepoDO) => {
+				if (priceProductSearchResult.priceProductList.length > 0) {
+					var thError = new ThError(ThStatusCode.DeleteAddOnProductItemUsedInDraftOrActivePriceProducts, null);
+					ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Add on product delete error: used in price products", this._deleteItemDO, thError);
+					reject(thError);
+				}
+				// TODO: add validations for deleting addon product (eg: if it is used in open invoices)
+				resolve(true);
+			}).catch((error: any) => {
+				reject(error);
+			});
 	}
 }
