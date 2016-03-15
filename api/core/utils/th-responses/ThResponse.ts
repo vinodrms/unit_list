@@ -214,7 +214,8 @@ export enum ThStatusCode {
 	ArchivePriceProductItemNonActiveStatus,
 	ArchivePriceProductItemUsedInCustomersError,
 	UpdatePriceProductItemStatusError,
-	UpdatePriceProductItemStatusWrongStatus
+	UpdatePriceProductItemStatusWrongStatus,
+	PriceProductsYieldManagementInvalidInterval
 }
 
 var ThMessage: { [index: number]: string; } = {};
@@ -430,6 +431,7 @@ ThMessage[ThStatusCode.ArchivePriceProductItemNonActiveStatus] = "Please while a
 ThMessage[ThStatusCode.ArchivePriceProductItemUsedInCustomersError] = "Could not delete the price product because it is assigned to customers.";
 ThMessage[ThStatusCode.UpdatePriceProductItemStatusError] = "Error updating the status of the price product.";
 ThMessage[ThStatusCode.UpdatePriceProductItemStatusWrongStatus] = "Cannot run this action on the current price product.";
+ThMessage[ThStatusCode.PriceProductsYieldManagementInvalidInterval] = "Invalid interval submitted.";
 
 export class ThResponse {
     statusCode: ThStatusCode;
