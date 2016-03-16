@@ -1,7 +1,7 @@
 import {DefaultDataBuilder} from '../../../../db-initializers/DefaultDataBuilder';
 import {TestContext} from '../../../../helpers/TestContext';
 import {SaveCustomerItemDO, CompanyCustomerItemDetailsDO, CustomerItemAddressDO,
-TravelAgencyCustomerItemDetailsDO, IndividualCustomerItemDetailsDO} from '../../../../../core/domain-layer/customers/SaveCustomerItemDO';
+	TravelAgencyCustomerItemDetailsDO, IndividualCustomerItemDetailsDO} from '../../../../../core/domain-layer/customers/SaveCustomerItemDO';
 import {CustomerDO, CustomerType} from '../../../../../core/data-layer/customers/data-objects/CustomerDO';
 import {PriceProductAvailability} from '../../../../../core/data-layer/price-products/data-objects/PriceProductDO';
 
@@ -33,8 +33,10 @@ export class CustomersTestHelper {
 			}
 		}
 	}
-	public getCompanyCustomer(): SaveCustomerItemDO {
+	public getCompanyCustomer(priceProductId: string): SaveCustomerItemDO {
 		var company = this.getSaveCustomerItemDO(CustomerType.Company, "just another company");
+		company.priceProductDetails.priceProductAvailability = PriceProductAvailability.Private;
+		company.priceProductDetails.priceProductIdList = [priceProductId];
 		company.customerDetails = this.getCompanyCustDetails();
 		return company;
 	}

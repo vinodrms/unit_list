@@ -1,6 +1,7 @@
 import {DefaultDataBuilder} from '../../../../db-initializers/DefaultDataBuilder';
 import {TestContext} from '../../../../helpers/TestContext';
 import {TestUtils} from '../../../../helpers/TestUtils';
+import {DefaultPriceProductBuilder} from '../../../../db-initializers/builders/DefaultPriceProductBuilder';
 import {SavePriceProductItemDO} from '../../../../../core/domain-layer/price-products/SavePriceProductItemDO';
 import {SavePriceProductItemPriceDO} from '../../../../../core/domain-layer/price-products/validation-structures/SavePriceProductItemPriceDO';
 import {PriceProductStatus, PriceProductAvailability} from '../../../../../core/data-layer/price-products/data-objects/PriceProductDO';
@@ -15,7 +16,6 @@ import {PriceProductConstraintType} from '../../../../../core/data-layer/price-p
 import {ISOWeekDay} from '../../../../../core/utils/th-dates/data-objects/ISOWeekDay';
 
 export class PriceProductsHelper {
-	private static RoomIndex = 0;
 	private _testUtils: TestUtils;
 	private _roomCategoryStat: RoomCategoryStatsDO;
 
@@ -23,12 +23,9 @@ export class PriceProductsHelper {
 		this._testUtils = new TestUtils();
 	}
 
-	public indexRoomCategory(): Promise<RoomCategoryStatsDO[]> {
-		var aggregator = new RoomAggregator(this._testContext.appContext);
-		return aggregator.getRoomCategoryStatsList({ hotelId: this._testContext.sessionContext.sessionDO.hotel.id }, [this.getRoomCategoryId()]);
-	}
-
 	public getDraftSavePriceProductItemDO(): SavePriceProductItemDO {
+		this.ensureRoomCategoryStatWasSet();
+
 		return {
 			status: PriceProductStatus.Draft,
 			name: "Test Price Product",
@@ -36,7 +33,7 @@ export class PriceProductsHelper {
 			lastRoomAvailability: false,
 			addOnProductIdList: [this._testUtils.getRandomListElement(this._dataBuilder.addOnProductList).id],
 			roomCategoryIdList: [this.getRoomCategoryId()],
-			price: this.getPricePerPerson(),
+			price: DefaultPriceProductBuilder.getPricePerPerson(this._roomCategoryStat),
 			taxIdList: [this._testUtils.getRandomListElement(this._dataBuilder.taxes.vatList).id],
 			yieldFilterList: [],
 			constraints: {
@@ -92,52 +89,16 @@ export class PriceProductsHelper {
 		}
 	}
 	public getRoomCategoryId(): string {
-		return this._dataBuilder.roomList[PriceProductsHelper.RoomIndex].categoryId;
+		this.ensureRoomCategoryStatWasSet();
+		return this._roomCategoryStat.roomCategory.id;
 	}
-	public getPricePerPerson(): SavePriceProductItemPriceDO {
-		return {
-			type: PriceProductPriceType.PricePerPerson,
-			priceConfiguration: {
-				defaultPrice: 100.5,
-				adultsPriceList: this.getPriceForFixedNumberOfPersonsDOList(this._roomCategoryStat.maxNoAdults),
-				chldrenPriceList: this.getPriceForFixedNumberOfPersonsDOList(this._roomCategoryStat.maxNoChildren)
-			}
-		}
-	}
-	private getPriceForFixedNumberOfPersonsDOList(maxNoOfPersons: number): PriceForFixedNumberOfPersonsDO[] {
-		var priceList: PriceForFixedNumberOfPersonsDO[] = [];
-		for (var noOfPersons = 1; noOfPersons <= maxNoOfPersons; noOfPersons++) {
-			var price = new PriceForFixedNumberOfPersonsDO();
-			price.buildFromObject({
-				noOfPersons: noOfPersons,
-				price: this._testUtils.getRandomFloatBetween(50, 100)
-			});
-			priceList.push(price);
-		}
-		return priceList;
-	}
-	public getPricePerRoomCategory(): SavePriceProductItemPriceDO {
-		var priceConfiguration = new PricePerRoomCategoryDO();
-		priceConfiguration.buildFromObject({
-			priceList: [
-				{
-					roomCategoryId: this.getRoomCategoryId,
-					price: 98.21
-				}
-			]
-		})
-		return {
-			type: PriceProductPriceType.PricePerRoomCategory,
-			priceConfiguration: priceConfiguration
-		};
-	}
-
-
 	public get roomCategoryStat(): RoomCategoryStatsDO {
+		this.ensureRoomCategoryStatWasSet();
 		return this._roomCategoryStat;
 	}
-	public set roomCategoryStat(roomStat: RoomCategoryStatsDO) {
-		this._roomCategoryStat = roomStat;
+	private ensureRoomCategoryStatWasSet() {
+		if (!this._roomCategoryStat) {
+			this._roomCategoryStat = this._testUtils.getRandomListElement(this._dataBuilder.roomCategoryStatsList);
+		}
 	}
-
 }

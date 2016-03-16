@@ -153,6 +153,8 @@ export enum ThStatusCode {
     HotelDeleteTaxItemError,
     HotelDeleteTaxItemErrorDeleting,
     HotelDeleteTaxItemErrorValidating,
+    HotelDeleteTaxItemUsedInAddOnProducts,
+    HotelDeleteTaxItemUsedInDraftOrActivePriceProducts,
     TaxControllerErrorGettingTaxes,
     TaxControllerErrorSavingTax,
     TaxControllerErrorDeletingTax,
@@ -171,6 +173,7 @@ export enum ThStatusCode {
     AddOnProductItemUpdateStrategyErrorUpdating,
     DeleteAddOnProductItemError,
     DeleteAddOnProductItemErrorValidating,
+    DeleteAddOnProductItemUsedInDraftOrActivePriceProducts,
     AddOnProductsControllerErrorGettingAddOnProduct,
     AddOnProductsControllerErrorSavingAddOnProduct,
     AddOnProductsControllerErrorDeletingAddOnProduct,
@@ -189,7 +192,6 @@ export enum ThStatusCode {
     SaveCustomerItemInvalidOrNullClientType,
     SaveCustomerItemCompOrTACannotBeLinkedToOtherCustomers,
     SaveCustomerItemCannotSetPriceProductsForPublic,
-    SaveCustomerItemInvalidPriceProductIdList,
     CustomerItemUpdateStrategyError,
     CustomersControllerErrorGettingCustomer,
     CustomersControllerErrorSavingCustomer,
@@ -216,6 +218,19 @@ export enum ThStatusCode {
     ArchivePriceProductItemUsedInCustomersError,
     UpdatePriceProductItemStatusError,
     UpdatePriceProductItemStatusWrongStatus,
+    DraftPriceProductItemOnlyArchived,
+    DraftPriceProductItemError,
+    PriceProductsYieldManagementInvalidInterval,
+    PriceProductIdValidatorInvalidId,
+    PriceProductsControllerErrorGettingPriceProduct,
+    PriceProductsControllerErrorSavingPriceProduct,
+    PriceProductsControllerErrorDeletingPriceProduct,
+    PriceProductsControllerErrorMarkingPriceProductAsDraft,
+    PriceProductsControllerErrorArchivingProduct,
+    PriceProductsControllerErrorGettingCount,
+    PriceProductsControllerErrorGettingList,
+    YieldManagerControllerErrorClosing,
+    YieldManagerControllerErrorOpening,
     HotelConfigurationRepositoryNotFound,
     HotelConfigurationRepositoryReadError,
     HotelConfigurationRepositoryErrorAddingConfiguration,
@@ -373,6 +388,8 @@ ThMessage[ThStatusCode.TaxRepositoryTaxNotFound] = "Tax not found.";
 ThMessage[ThStatusCode.HotelDeleteTaxItemError] = "Error deleting tax item.";
 ThMessage[ThStatusCode.HotelDeleteTaxItemErrorDeleting] = "Error deleting tax item.";
 ThMessage[ThStatusCode.HotelDeleteTaxItemErrorValidating] = "Error validating the existing tax item.";
+ThMessage[ThStatusCode.HotelDeleteTaxItemUsedInAddOnProducts] = "Cannot delete the tax because it is used in add on products.";
+ThMessage[ThStatusCode.HotelDeleteTaxItemUsedInDraftOrActivePriceProducts] = "Cannot delete the tax because it is used in active or draft price products.";
 ThMessage[ThStatusCode.TaxControllerErrorGettingTaxes] = "Error getting the taxes.";
 ThMessage[ThStatusCode.TaxControllerErrorSavingTax] = "Error saving tax.";
 ThMessage[ThStatusCode.TaxControllerErrorDeletingTax] = "Error deleting tax.";
@@ -391,6 +408,7 @@ ThMessage[ThStatusCode.TaxIdValidatorInvalidTaxId] = "Invalid tax id.";
 ThMessage[ThStatusCode.AddOnProductItemUpdateStrategyErrorUpdating] = "Error updating add on product id.";
 ThMessage[ThStatusCode.DeleteAddOnProductItemError] = "Error deleting add on product.";
 ThMessage[ThStatusCode.DeleteAddOnProductItemErrorValidating] = "Error validating add on product.";
+ThMessage[ThStatusCode.DeleteAddOnProductItemUsedInDraftOrActivePriceProducts] = "Cannot delete the add on product because it was added in active or draft price products.";
 ThMessage[ThStatusCode.AddOnProductsControllerErrorGettingAddOnProduct] = "Error getting add on product.";
 ThMessage[ThStatusCode.AddOnProductsControllerErrorSavingAddOnProduct] = "Error saving add on product.";
 ThMessage[ThStatusCode.AddOnProductsControllerErrorDeletingAddOnProduct] = "Error deleting add on product.";
@@ -409,7 +427,6 @@ ThMessage[ThStatusCode.SaveCustomerItemError] = "Error saving customer.";
 ThMessage[ThStatusCode.SaveCustomerItemInvalidOrNullClientType] = "Invalid client type.";
 ThMessage[ThStatusCode.SaveCustomerItemCompOrTACannotBeLinkedToOtherCustomers] = "Companies or travel agencies cannot be linked to other customers.";
 ThMessage[ThStatusCode.SaveCustomerItemCannotSetPriceProductsForPublic] = "Cannot set specific price products for this client unless private is selected.";
-ThMessage[ThStatusCode.SaveCustomerItemInvalidPriceProductIdList] = "Some of the selected price products could not be found.";
 ThMessage[ThStatusCode.CustomerItemUpdateStrategyError] = "Error updating customer.";
 ThMessage[ThStatusCode.CustomersControllerErrorGettingCustomer] = "Error getting customer.";
 ThMessage[ThStatusCode.CustomersControllerErrorSavingCustomer] = "Error saving customer.";
@@ -436,6 +453,19 @@ ThMessage[ThStatusCode.ArchivePriceProductItemNonActiveStatus] = "Please while a
 ThMessage[ThStatusCode.ArchivePriceProductItemUsedInCustomersError] = "Could not delete the price product because it is assigned to customers.";
 ThMessage[ThStatusCode.UpdatePriceProductItemStatusError] = "Error updating the status of the price product.";
 ThMessage[ThStatusCode.UpdatePriceProductItemStatusWrongStatus] = "Cannot run this action on the current price product.";
+ThMessage[ThStatusCode.DraftPriceProductItemOnlyArchived] = "Only archived price products can be marked as drafts.";
+ThMessage[ThStatusCode.DraftPriceProductItemError] = "Error marking the price product as draft.";
+ThMessage[ThStatusCode.PriceProductsYieldManagementInvalidInterval] = "Invalid interval submitted.";
+ThMessage[ThStatusCode.PriceProductIdValidatorInvalidId] = "Invalid price products.";
+ThMessage[ThStatusCode.PriceProductsControllerErrorGettingPriceProduct] = "Error getting price product.";
+ThMessage[ThStatusCode.PriceProductsControllerErrorSavingPriceProduct] = "Error saving price product.";
+ThMessage[ThStatusCode.PriceProductsControllerErrorDeletingPriceProduct] = "Error deleting price product.";
+ThMessage[ThStatusCode.PriceProductsControllerErrorMarkingPriceProductAsDraft] = "Error marking the price product as draft.";
+ThMessage[ThStatusCode.PriceProductsControllerErrorArchivingProduct] = "Error archiving price product.";
+ThMessage[ThStatusCode.PriceProductsControllerErrorGettingCount] = "Error the number of price products.";
+ThMessage[ThStatusCode.PriceProductsControllerErrorGettingList] = "Error getting the list price product.";
+ThMessage[ThStatusCode.YieldManagerControllerErrorClosing] = "Error closing the period for the price products.";
+ThMessage[ThStatusCode.YieldManagerControllerErrorOpening] = "Error opening the period for the price products.";
 ThMessage[ThStatusCode.HotelConfigurationRepositoryNotFound] = "Hotel configuration not found.";
 ThMessage[ThStatusCode.HotelConfigurationRepositoryReadError] = "Cannot read hotel configuration.";
 ThMessage[ThStatusCode.HotelConfigurationRepositoryErrorAddingConfiguration] = "Cannot add hotel configuration.";

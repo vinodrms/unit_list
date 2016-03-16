@@ -91,6 +91,7 @@ export class MongoAddOnProductReadOperationsRepository extends MongoRepository {
 			mongoQueryBuilder.addMultipleSelectOptionList("categoryId", searchCriteria.categoryIdList);
 			mongoQueryBuilder.addMultipleSelectOptionList("id", searchCriteria.addOnProductIdList);
 			mongoQueryBuilder.addRegex("name", searchCriteria.name);
+			mongoQueryBuilder.addMultipleSelectOptionList("taxIdList", searchCriteria.taxIdList);
 		}
 		return mongoQueryBuilder.processedQuery;
 	}

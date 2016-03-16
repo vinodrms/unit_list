@@ -11,6 +11,7 @@ import {CustomerMetaRepoDO, CustomerSearchResultRepoDO} from '../../data-layer/c
 import {PriceProductAvailability} from '../../data-layer/price-products/data-objects/PriceProductDO';
 import {CustomerItemActionFactory} from './save-actions/CustomerItemActionFactory';
 import {ICustomerItemActionStrategy} from './save-actions/ICustomerItemActionStrategy';
+import {PriceProductIdValidator} from '../price-products/validators/PriceProductIdValidator';
 
 import _ = require("underscore");
 
@@ -83,9 +84,12 @@ export class SaveCustomerItem {
 			reject(thError);
 			return;
 		}
-		// TODO: get all the price products from the priceProductIdList and return ThStatusCode.SaveCustomerItemInvalidPriceProductIdList
-		
-		resolve(true);
+		var ppIdValitator = new PriceProductIdValidator(this._appContext, this._sessionContext);
+		ppIdValitator.validatePriceProductIdList(priceProductDetails.priceProductIdList).then((result: boolean) => {
+			resolve(true);
+		}).catch((error: any) => {
+			reject(error);
+		});
 	}
 
 	private saveCustomerItem(): Promise<CustomerDO> {

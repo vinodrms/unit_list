@@ -23,8 +23,10 @@ export interface PriceProductUpdateYMIntervalsParamsRepoDO {
 export interface PriceProductSearchCriteriaRepoDO {
 	name?: string;
 	status?: PriceProductStatus;
+	statusList?: PriceProductStatus[];
 	priceProductIdList?: string[];
 	addOnProductIdList?: string[];
+	taxIdList?: string[];
 }
 export interface PriceProductSearchResultRepoDO {
 	lazyLoad?: LazyLoadRepoDO;

@@ -7,6 +7,7 @@ import {ThError} from '../../../../core/utils/th-responses/ThError';
 import {ThStatusCode} from '../../../../core/utils/th-responses/ThResponse';
 import {TestContext} from '../../../helpers/TestContext';
 import {DefaultDataBuilder} from '../../../db-initializers/DefaultDataBuilder';
+import {TestUtils} from '../../../helpers/TestUtils';
 import {CustomersTestHelper} from './helpers/CustomersTestHelper';
 import {SaveCustomerItem} from '../../../../core/domain-layer/customers/SaveCustomerItem';
 import {CustomerDO, CustomerType} from '../../../../core/data-layer/customers/data-objects/CustomerDO';
@@ -17,6 +18,7 @@ describe("Hotel Customers Tests", function() {
 
 	var testContext: TestContext;
 	var testDataBuilder: DefaultDataBuilder;
+	var testUtils: TestUtils;
 	var custHelper: CustomersTestHelper;
 
 	var addedIndividualCustomer: CustomerDO;
@@ -25,6 +27,7 @@ describe("Hotel Customers Tests", function() {
 	before(function(done: any) {
 		testContext = new TestContext();
 		testDataBuilder = new DefaultDataBuilder(testContext);
+		testUtils = new TestUtils();
 		custHelper = new CustomersTestHelper(testDataBuilder, testContext);
 		testDataBuilder.buildWithDoneCallback(done);
     });
@@ -49,7 +52,8 @@ describe("Hotel Customers Tests", function() {
 			});
         });
 		it("Should create a company", function(done) {
-			var companyCustDO = custHelper.getCompanyCustomer();
+			var priceProductId = testUtils.getRandomListElement(testDataBuilder.priceProductList).id;
+			var companyCustDO = custHelper.getCompanyCustomer(priceProductId);
 			var saveCustItem = new SaveCustomerItem(testContext.appContext, testContext.sessionContext);
 			saveCustItem.save(companyCustDO).then((cust: CustomerDO) => {
 				should.exist(cust.id);

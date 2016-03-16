@@ -4,7 +4,7 @@ import {PriceProductInputIdDO} from './validation-structures/PriceProductInputId
 import {PriceProductDO, PriceProductStatus} from '../../data-layer/price-products/data-objects/PriceProductDO';
 import {UpdatePriceProductItemStatus} from './utils/UpdatePriceProductItemStatus';
 
-export class DeleteDraftPriceProductItem {
+export class DeletePriceProductItem {
 	constructor(private _appContext: AppContext, private _sessionContext: SessionContext) {
 	}
 

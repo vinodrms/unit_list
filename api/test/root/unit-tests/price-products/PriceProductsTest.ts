@@ -8,6 +8,7 @@ import {ThStatusCode} from '../../../../core/utils/th-responses/ThResponse';
 import {DefaultDataBuilder} from '../../../db-initializers/DefaultDataBuilder';
 import {TestContext} from '../../../helpers/TestContext';
 import {TestUtils} from '../../../helpers/TestUtils';
+import {DefaultPriceProductBuilder} from '../../../db-initializers/builders/DefaultPriceProductBuilder';
 import {PriceProductsHelper} from './helpers/PriceProductsHelper';
 import {CustomersTestHelper} from '../customers/helpers/CustomersTestHelper';
 import {RoomCategoryStatsDO} from '../../../../core/data-layer/room-categories/data-objects/RoomCategoryStatsDO';
@@ -19,8 +20,9 @@ import {PriceProductCancellationPolicyType} from '../../../../core/data-layer/pr
 import {PriceProductCancellationPenaltyType} from '../../../../core/data-layer/price-products/data-objects/conditions/penalty/IPriceProductCancellationPenalty';
 import {SaveCustomerItem} from '../../../../core/domain-layer/customers/SaveCustomerItem';
 import {ArchivePriceProductItem} from '../../../../core/domain-layer/price-products/ArchivePriceProductItem';
-import {DraftArchivedPriceProductItem} from '../../../../core/domain-layer/price-products/DraftArchivedPriceProductItem';
-import {DeleteDraftPriceProductItem} from '../../../../core/domain-layer/price-products/DeleteDraftPriceProductItem';
+import {DraftPriceProductItem} from '../../../../core/domain-layer/price-products/DraftPriceProductItem';
+import {DeletePriceProductItem} from '../../../../core/domain-layer/price-products/DeletePriceProductItem';
+import {PriceProductSearchResultRepoDO} from '../../../../core/data-layer/price-products/repositories/IPriceProductRepository';
 
 describe("Hotel Price Products Tests", function() {
 	var InvalidRoomCategoryId = "12121221211";
@@ -49,18 +51,6 @@ describe("Hotel Price Products Tests", function() {
     });
 
 	describe("Price Products Validation Tests", function() {
-        it("Should index the default category for the price product", function(done) {
-			pphelper.indexRoomCategory().then((roomStatList: RoomCategoryStatsDO[]) => {
-				var categoryStat: RoomCategoryStatsDO = _.find(roomStatList, (roomStat: RoomCategoryStatsDO) => { return roomStat.roomCategory.id === pphelper.getRoomCategoryId() });
-				pphelper.roomCategoryStat = categoryStat;
-
-				should.equal(roomStatList.length > 0, true);
-				should.exist(categoryStat);
-				done();
-			}).catch((error: any) => {
-				done(error);
-			});
-        });
 		it("Should not save price product with invalid room category id", function(done) {
 			var priceProductItem = pphelper.getDraftSavePriceProductItemDO();
 			priceProductItem.roomCategoryIdList.push(InvalidRoomCategoryId);
@@ -99,7 +89,7 @@ describe("Hotel Price Products Tests", function() {
         });
 		it("Should not save price product with missing price per person", function(done) {
 			var priceProductItem = pphelper.getDraftSavePriceProductItemDO();
-			priceProductItem.price = pphelper.getPricePerPerson();
+			priceProductItem.price = DefaultPriceProductBuilder.getPricePerPerson(pphelper.roomCategoryStat);
 			priceProductItem.price.priceConfiguration["adultsPriceList"] = [];
 
 			var savePPItem = new SavePriceProductItem(testContext.appContext, testContext.sessionContext);
@@ -112,7 +102,7 @@ describe("Hotel Price Products Tests", function() {
         });
 		it("Should not save price product with missing price per category", function(done) {
 			var priceProductItem = pphelper.getDraftSavePriceProductItemDO();
-			priceProductItem.price = pphelper.getPricePerRoomCategory();
+			priceProductItem.price = DefaultPriceProductBuilder.getPricePerRoomCategory(pphelper.roomCategoryStat);
 			priceProductItem.price.priceConfiguration["priceList"] = [];
 
 			var savePPItem = new SavePriceProductItem(testContext.appContext, testContext.sessionContext);
@@ -171,6 +161,16 @@ describe("Hotel Price Products Tests", function() {
 				done(e);
 			});
         });
+		it("Should get the list of Price Products", function(done) {
+			var ppRepo = testContext.appContext.getRepositoryFactory().getPriceProductRepository();
+			ppRepo.getPriceProductList({ hotelId: testContext.sessionContext.sessionDO.hotel.id }, { status: PriceProductStatus.Active })
+				.then((searchResult: PriceProductSearchResultRepoDO) => {
+					should.equal(searchResult.priceProductList.length, testDataBuilder.priceProductList.length + 1);
+					done();
+				}).catch((e: any) => {
+					done(e);
+				});
+        });
 		it("Should update only the Yield Filters for the Active Price Product", function(done) {
 			var priceProductItem = pphelper.getDraftSavePriceProductItemDO();
 			priceProductItem["id"] = addedPriceProduct.id;
@@ -194,9 +194,7 @@ describe("Hotel Price Products Tests", function() {
 			});
         });
 		it("Should attach the price product to a customer profile", function(done) {
-			var companyCustDO = custHelper.getCompanyCustomer();
-			companyCustDO.priceProductDetails.priceProductAvailability = PriceProductAvailability.Private;
-			companyCustDO.priceProductDetails.priceProductIdList = [addedPriceProduct.id];
+			var companyCustDO = custHelper.getCompanyCustomer(addedPriceProduct.id);
 
 			var saveCustItem = new SaveCustomerItem(testContext.appContext, testContext.sessionContext);
 			saveCustItem.save(companyCustDO).then((cust: CustomerDO) => {
@@ -241,7 +239,7 @@ describe("Hotel Price Products Tests", function() {
 			});
         });
 		it("Should mark the archived price product as draft", function(done) {
-			var draftPPItem = new DraftArchivedPriceProductItem(testContext.appContext, testContext.sessionContext);
+			var draftPPItem = new DraftPriceProductItem(testContext.appContext, testContext.sessionContext);
 			draftPPItem.draft({ id: addedPriceProduct.id }).then((priceProduct: PriceProductDO) => {
 				should.equal(priceProduct.id, addedPriceProduct.id);
 				should.equal(priceProduct.status, PriceProductStatus.Draft);
@@ -252,7 +250,7 @@ describe("Hotel Price Products Tests", function() {
 			});
         });
 		it("Should delete the draft price product", function(done) {
-			var deletePPItem = new DeleteDraftPriceProductItem(testContext.appContext, testContext.sessionContext);
+			var deletePPItem = new DeletePriceProductItem(testContext.appContext, testContext.sessionContext);
 			deletePPItem.delete({ id: addedPriceProduct.id }).then((priceProduct: PriceProductDO) => {
 				should.equal(priceProduct.id, addedPriceProduct.id);
 				should.equal(priceProduct.status, PriceProductStatus.Deleted);

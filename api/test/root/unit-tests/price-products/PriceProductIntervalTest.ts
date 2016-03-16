@@ -1,21 +1,38 @@
 require("sails-test-helper");
 import should = require('should');
 import supertest = require('supertest');
+import _ = require("underscore");
 
 import {TestContext} from '../../../helpers/TestContext';
+import {DefaultDataBuilder} from '../../../db-initializers/DefaultDataBuilder';
 import {ThDateDO, ThMonth} from '../../../../core/utils/th-dates/data-objects/ThDateDO';
 import {ThDayInYearIntervalDO} from '../../../../core/utils/th-dates/data-objects/ThDayInYearIntervalDO';
 import {ThDateIntervalUtils} from '../../../../core/utils/th-dates/ThDateIntervalUtils';
 import {ThDateUtils} from '../../../../core/utils/th-dates/ThDateUtils';
+import {PriceProductDO} from '../../../../core/data-layer/price-products/data-objects/PriceProductDO';
+import {PriceProductsYieldManagement} from '../../../../core/domain-layer/yield-manager/PriceProductsYieldManagement';
+import {PriceProductsYieldManagementDO, PriceProductYieldAttribute} from '../../../../core/domain-layer/yield-manager/PriceProductsYieldManagementDO';
+
+function testPriceProductOpenInterval(priceProduct: PriceProductDO, firstIntervalEnd: ThDateDO, secondIntervalStart: ThDateDO) {
+	should.equal(priceProduct.openIntervalList.length >= 2, true);
+	should.equal(priceProduct.openIntervalList[0].getEnd().day, firstIntervalEnd.day);
+	should.equal(priceProduct.openIntervalList[0].getEnd().month, firstIntervalEnd.month);
+	should.equal(priceProduct.openIntervalList[0].getEnd().year, firstIntervalEnd.year);
+	should.equal(priceProduct.openIntervalList[1].getStart().day, secondIntervalStart.day);
+	should.equal(priceProduct.openIntervalList[1].getStart().month, secondIntervalStart.month);
+	should.equal(priceProduct.openIntervalList[1].getStart().year, secondIntervalStart.year);
+}
 
 describe("Price Products Interval Tests", function() {
     var testContext: TestContext;
 	var thDateUtils: ThDateUtils;
+	var testDataBuilder: DefaultDataBuilder;
 
 	before(function(done: any) {
 		testContext = new TestContext();
+		testDataBuilder = new DefaultDataBuilder(testContext);
 		thDateUtils = new ThDateUtils();
-		done();
+		testDataBuilder.buildWithDoneCallback(done);
     });
 
 	describe("DayInYear Merge Tests", function() {
@@ -232,4 +249,45 @@ describe("Price Products Interval Tests", function() {
 		});
 
     });
+
+	describe("Yield Management Tests", function() {
+		it("Should close interval on price products", function(done) {
+			var yieldData: PriceProductsYieldManagementDO = {
+				attribute: PriceProductYieldAttribute.OpenPeriod,
+				priceProductIdList: _.map(testDataBuilder.priceProductList, (priceProduct: PriceProductDO) => { return priceProduct.id }),
+				interval: ThDayInYearIntervalDO.buildThDayInYearIntervalDO(
+					ThDateDO.buildThDateDO(2016, ThMonth.January, 1),
+					ThDateDO.buildThDateDO(2016, ThMonth.July, 1)
+				)
+			};
+			var ppYm = new PriceProductsYieldManagement(testContext.appContext, testContext.sessionContext);
+			ppYm.close(yieldData).then((yieldedPriceProducts: PriceProductDO[]) => {
+				yieldedPriceProducts.forEach((priceProduct: PriceProductDO) => {
+					testPriceProductOpenInterval(priceProduct, ThDateDO.buildThDateDO(2015, ThMonth.December, 31), ThDateDO.buildThDateDO(2016, ThMonth.July, 2));
+				});
+				done();
+			}).catch((error: any) => {
+				done(error);
+			});
+        });
+		it("Should open interval on price products", function(done) {
+			var yieldData: PriceProductsYieldManagementDO = {
+				attribute: PriceProductYieldAttribute.OpenPeriod,
+				priceProductIdList: _.map(testDataBuilder.priceProductList, (priceProduct: PriceProductDO) => { return priceProduct.id }),
+				interval: ThDayInYearIntervalDO.buildThDayInYearIntervalDO(
+					ThDateDO.buildThDateDO(2016, ThMonth.June, 1),
+					ThDateDO.buildThDateDO(2016, ThMonth.July, 1)
+				)
+			};
+			var ppYm = new PriceProductsYieldManagement(testContext.appContext, testContext.sessionContext);
+			ppYm.open(yieldData).then((yieldedPriceProducts: PriceProductDO[]) => {
+				yieldedPriceProducts.forEach((priceProduct: PriceProductDO) => {
+					testPriceProductOpenInterval(priceProduct, ThDateDO.buildThDateDO(2015, ThMonth.December, 31), ThDateDO.buildThDateDO(2016, ThMonth.June, 1));
+				});
+				done();
+			}).catch((error: any) => {
+				done(error);
+			});
+        });
+	});
 });

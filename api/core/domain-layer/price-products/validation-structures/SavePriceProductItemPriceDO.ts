@@ -23,7 +23,7 @@ export class SavePriceProductItemPriceDO {
 						validationStruct: SavePriceProductItemPriceDO.getPriceForFixedNumberOfPersonsDOValidationStructure()
 					},
 					{
-						key: "chldrenPriceList",
+						key: "childrenPriceList",
 						validationStruct: SavePriceProductItemPriceDO.getPriceForFixedNumberOfPersonsDOValidationStructure()
 					}
 				]);

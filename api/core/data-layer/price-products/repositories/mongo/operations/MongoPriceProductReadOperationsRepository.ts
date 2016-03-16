@@ -8,6 +8,8 @@ import {PriceProductDO, PriceProductStatus} from '../../../data-objects/PricePro
 import {PriceProductRepositoryHelper} from './helpers/PriceProductRepositoryHelper';
 import {LazyLoadRepoDO, LazyLoadMetaResponseRepoDO} from '../../../../common/repo-data-objects/LazyLoadRepoDO';
 
+import _ = require("underscore");
+
 export class MongoPriceProductReadOperationsRepository extends MongoRepository {
 	private _helper: PriceProductRepositoryHelper;
 
@@ -66,9 +68,16 @@ export class MongoPriceProductReadOperationsRepository extends MongoRepository {
 		mongoQueryBuilder.addExactMatch("hotelId", meta.hotelId);
 		if (!this._thUtils.isUndefinedOrNull(searchCriteria)) {
 			mongoQueryBuilder.addRegex("name", searchCriteria.name);
-			mongoQueryBuilder.addExactMatch("status", searchCriteria.status);
+
+			if (!this._thUtils.isUndefinedOrNull(searchCriteria.statusList) && _.isArray(searchCriteria.statusList)) {
+				mongoQueryBuilder.addMultipleSelectOptionList("status", searchCriteria.statusList);
+			}
+			else {
+				mongoQueryBuilder.addExactMatch("status", searchCriteria.status);
+			}
 			mongoQueryBuilder.addMultipleSelectOptionList("id", searchCriteria.priceProductIdList);
 			mongoQueryBuilder.addMultipleSelectOptionList("addOnProductIdList", searchCriteria.addOnProductIdList);
+			mongoQueryBuilder.addMultipleSelectOptionList("taxIdList", searchCriteria.taxIdList);
 		}
 		return mongoQueryBuilder.processedQuery;
 	}
