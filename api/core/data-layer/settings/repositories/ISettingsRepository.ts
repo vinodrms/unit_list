@@ -6,6 +6,7 @@ import {CountryDO} from '../../common/data-objects/country/CountryDO';
 import {CurrencyDO} from '../../common/data-objects/currency/CurrencyDO';
 import {PaymentMethodDO} from '../../common/data-objects/payment-method/PaymentMethodDO';
 import {AddOnProductCategoryDO} from '../../common/data-objects/add-on-product/AddOnProductCategoryDO';
+import {YieldManagerFilterDO} from '../../common/data-objects/yield-manager-filter/YieldManagerFilterDO';
 
 export interface AmenitySearchCriteriaRepoDO {
     id?: string;
@@ -44,4 +45,5 @@ export interface ISettingsRepository {
     getPaymentMethods(valueCriteria?: PaymentMethodSearchCriteriaRepoDO): Promise<PaymentMethodDO[]>;
 
 	getAddOnProductCategories(valueCriteria?: AddOnProductCategoryCriteriaRepoDO): Promise<AddOnProductCategoryDO[]>;
+    getDefaultYieldManagerFilters(): Promise<YieldManagerFilterDO[]>;
 }

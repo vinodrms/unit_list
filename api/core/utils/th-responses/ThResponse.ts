@@ -177,7 +177,7 @@ export enum ThStatusCode {
     AddOnProductsControllerErrorGettingCategoryIdList,
     AddOnProductsControllerErrorGettingCount,
     AddOnProductsControllerErrorGettingList,
-	AddOnProductIdValidatorInvalidId,
+    AddOnProductIdValidatorInvalidId,
     CustomerRepositoryCustomerNotFound,
     CustomerRepositoryErrorGettingCustomer,
     CustomerRepositoryErrorCreatingCustomer,
@@ -195,27 +195,31 @@ export enum ThStatusCode {
     CustomersControllerErrorSavingCustomer,
     CustomersControllerErrorGettingCount,
     CustomersControllerErrorGettingList,
-	PriceProductRepositoryErrorAddingPriceProduct,
-	PriceProductRepositoryProductNotFound,
-	PriceProductRepositoryErrorGettingPriceProduct,
-	PriceProductRepositoryProblemUpdatingPriceProduct,
-	PriceProductRepositoryErrorUpdatingPriceProduct,
-	PriceProductRepositoryErrorReadingDocumentCount,
-	PriceProductRepositoryErrorGettingList,
-	SavePriceProductItemError,
-	SavePriceProductItemInvalidPrice,
-	SavePriceProductItemInvalidConstraints,
-	SavePriceProductItemInvalidConditions,
-	PriceProductItemUpdateStrategyOnlyActiveAndDraftCanBeUpdated,
-	PriceProductItemStrategyInvalidStatus,
-	PriceProductValidatorUnusedRoomCategoryId,
-	PriceProductValidatorEmptyRoomCategoryList,
-	PriceProductValidatorInvalidPrices,
-	ArchivePriceProductItemError,
-	ArchivePriceProductItemNonActiveStatus,
-	ArchivePriceProductItemUsedInCustomersError,
-	UpdatePriceProductItemStatusError,
-	UpdatePriceProductItemStatusWrongStatus
+    PriceProductRepositoryErrorAddingPriceProduct,
+    PriceProductRepositoryProductNotFound,
+    PriceProductRepositoryErrorGettingPriceProduct,
+    PriceProductRepositoryProblemUpdatingPriceProduct,
+    PriceProductRepositoryErrorUpdatingPriceProduct,
+    PriceProductRepositoryErrorReadingDocumentCount,
+    PriceProductRepositoryErrorGettingList,
+    SavePriceProductItemError,
+    SavePriceProductItemInvalidPrice,
+    SavePriceProductItemInvalidConstraints,
+    SavePriceProductItemInvalidConditions,
+    PriceProductItemUpdateStrategyOnlyActiveAndDraftCanBeUpdated,
+    PriceProductItemStrategyInvalidStatus,
+    PriceProductValidatorUnusedRoomCategoryId,
+    PriceProductValidatorEmptyRoomCategoryList,
+    PriceProductValidatorInvalidPrices,
+    ArchivePriceProductItemError,
+    ArchivePriceProductItemNonActiveStatus,
+    ArchivePriceProductItemUsedInCustomersError,
+    UpdatePriceProductItemStatusError,
+    UpdatePriceProductItemStatusWrongStatus,
+    HotelConfigurationRepositoryNotFound,
+    HotelConfigurationRepositoryReadError,
+    HotelConfigurationRepositoryErrorAddingConfiguration,
+    HotelConfigurationRepositorAlreadyExists
 }
 
 var ThMessage: { [index: number]: string; } = {};
@@ -432,6 +436,10 @@ ThMessage[ThStatusCode.ArchivePriceProductItemNonActiveStatus] = "Please while a
 ThMessage[ThStatusCode.ArchivePriceProductItemUsedInCustomersError] = "Could not delete the price product because it is assigned to customers.";
 ThMessage[ThStatusCode.UpdatePriceProductItemStatusError] = "Error updating the status of the price product.";
 ThMessage[ThStatusCode.UpdatePriceProductItemStatusWrongStatus] = "Cannot run this action on the current price product.";
+ThMessage[ThStatusCode.HotelConfigurationRepositoryNotFound] = "Hotel configuration not found.";
+ThMessage[ThStatusCode.HotelConfigurationRepositoryReadError] = "Cannot read hotel configuration.";
+ThMessage[ThStatusCode.HotelConfigurationRepositoryErrorAddingConfiguration] = "Cannot add hotel configuration.";
+ThMessage[ThStatusCode.HotelConfigurationRepositorAlreadyExists] = "This configuration already exists for the hotel.";
 
 export class ThResponse {
     statusCode: ThStatusCode;

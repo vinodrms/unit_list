@@ -20,6 +20,8 @@ import {RoomSalesCategoryDO} from '../../../common/data-objects/room-sales-categ
 import {PaymentMethodDO} from '../../../common/data-objects/payment-method/PaymentMethodDO';
 import {AddOnProductCategorySettingDO} from '../../data-objects/add-on-product/AddOnProductCategorySettingDO';
 import {AddOnProductCategoryDO} from '../../../common/data-objects/add-on-product/AddOnProductCategoryDO';
+import {YieldManagerFilterSettingDO} from '../../data-objects/yield-manager-filter/YieldManagerFilterSettingDO';
+import {YieldManagerFilterDO} from '../../../common/data-objects/yield-manager-filter/YieldManagerFilterDO';
 
 import _ = require('underscore');
 
@@ -93,7 +95,11 @@ export class MongoSettingsRepository extends MongoRepository implements ISetting
 	public getAddOnProductCategories(valueCriteria?: Object): Promise<AddOnProductCategoryDO[]> {
 		return this.getSetting(SettingType.AddOnProductCategory, valueCriteria);
 	}
-
+    
+    public getDefaultYieldManagerFilters(valueCriteria?: Object): Promise<YieldManagerFilterDO[]> {
+		return this.getSetting(SettingType.YieldManagerFilter, valueCriteria);
+	}
+    
     private getSetting(settingType: SettingType, criteria?: Object): Promise<any> {
         return new Promise<any>((resolve, reject) => {
             this.getSettingCore(settingType, criteria, resolve, reject);
@@ -132,6 +138,7 @@ export class MongoSettingsRepository extends MongoRepository implements ISetting
             case SettingType.CurrencyCodes: getSettingsResponseDO = new CurrencySettingDO(); break;
             case SettingType.PaymentMethods: getSettingsResponseDO = new PaymentMethodSettingDO(); break;
 			case SettingType.AddOnProductCategory: getSettingsResponseDO = new AddOnProductCategorySettingDO(); break;
+            case SettingType.YieldManagerFilter: getSettingsResponseDO = new YieldManagerFilterSettingDO(); break;
             default: getSettingsResponseDO = new AmenitySettingDO();
         }
         getSettingsResponseDO.buildFromObject(queryResult);

@@ -18,6 +18,9 @@ import {MongoCustomerRepository} from './customers/repositories/mongo/MongoCusto
 import {ICustomerRepository} from './customers/repositories/ICustomerRepository';
 import {IPriceProductRepository} from './price-products/repositories/IPriceProductRepository';
 import {MongoPriceProductRepository} from './price-products/repositories/mongo/MongoPriceProductRepository';
+import {IHotelConfigurationRepository} from './hotel-configurations/repositories/IHotelConfigurationRepository';
+import {MongoHotelConfigurationRepository} from './hotel-configurations/repositories/mongo/MongoHotelConfigurationRepository';
+
 
 export class RepositoryFactory {
     private _databaseType: DatabaseType;
@@ -29,7 +32,7 @@ export class RepositoryFactory {
         switch (this._databaseType) {
             default:
                 return [new MongoHotelRepository(), new MongoBedRepository(), new MongoTaxRepository(), new MongoAddOnProductRepository(),
-                    new MongoRoomRepository(), new MongoRoomCategoryRepository(), new MongoCustomerRepository(), new MongoPriceProductRepository()];
+                    new MongoRoomRepository(), new MongoRoomCategoryRepository(), new MongoCustomerRepository(), new MongoPriceProductRepository(), new MongoHotelConfigurationRepository()];
         }
     }
     getHotelRepository(): IHotelRepository {
@@ -91,6 +94,13 @@ export class RepositoryFactory {
 		switch (this._databaseType) {
             default:
                 return new MongoPriceProductRepository();
+        }
+	}
+    
+    getHotelConfigurationsRepository(): IHotelConfigurationRepository {
+		switch (this._databaseType) {
+            default:
+                return new MongoHotelConfigurationRepository();
         }
 	}
 }

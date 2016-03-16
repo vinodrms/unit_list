@@ -13,6 +13,7 @@ import {CurrencyCodes} from './data-sets/CurrencyCodes';
 import {PaymentMethods} from './data-sets/PaymentMethods';
 import {BedTemplates} from './data-sets/BedTemplates';
 import {AddOnProductCategories} from './data-sets/AddOnProductCategories';
+import {YieldManagerFilters} from './data-sets/YieldManagerFilters';
 
 import async = require('async');
 
@@ -25,7 +26,8 @@ export class MongoPatch1 extends ATransactionalMongoPatch {
 		(new PaymentMethods()).getPaymentMethodSettingDO(),
         (new BedTemplates()).getBedTemplateSettingDO(),
 		(new AddOnProductCategories()).getAddOnProductSettingDO(),
-        (new RoomAttributes()).getRoomAttributeSettingDO()
+        (new RoomAttributes()).getRoomAttributeSettingDO(),
+        (new YieldManagerFilters()).getYieldManagerFilterSettingDO()
 	];
 
     private _settingsEntity: Sails.Model;

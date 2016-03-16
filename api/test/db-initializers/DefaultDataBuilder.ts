@@ -20,6 +20,7 @@ import {DefaultAddOnProductBuilder} from './builders/DefaultAddOnProductBuilder'
 import {AddOnProductDO} from '../../core/data-layer/add-on-products/data-objects/AddOnProductDO';
 import {DefaultCustomerBuilder} from './builders/DefaultCustomerBuilder';
 import {CustomerDO} from '../../core/data-layer/customers/data-objects/CustomerDO';
+import {YieldManagerFilterDO} from '../../core/data-layer/common/data-objects/yield-manager-filter/YieldManagerFilterDO';
 
 export class DefaultDataBuilder {
     private static FirstUserIndex = 0;
@@ -41,7 +42,8 @@ export class DefaultDataBuilder {
     private _addOnProductCategoryList: AddOnProductCategoryDO[];
     private _addOnProductList: AddOnProductDO[];
     private _customerList: CustomerDO[];
-
+    private _defaultYieldManagerFilters: YieldManagerFilterDO[];
+    
     constructor(private _testContext: TestContext) {
         this._repositoryCleaner = new RepositoryCleanerWrapper(this._testContext.appContext.getUnitPalConfig());
     }
@@ -77,6 +79,11 @@ export class DefaultDataBuilder {
             }).then((paymentMethodList: PaymentMethodDO[]) => {
                 this._paymentMethodList = paymentMethodList;
 
+                var settingsRepository = this._testContext.appContext.getRepositoryFactory().getSettingsRepository();
+                return settingsRepository.getDefaultYieldManagerFilters();
+            }).then((yieldManagerFilterList: YieldManagerFilterDO[]) => {
+                this._defaultYieldManagerFilters = yieldManagerFilterList;
+                
                 var settingsRepository = this._testContext.appContext.getRepositoryFactory().getSettingsRepository();
                 return settingsRepository.getHotelAmenities();
             }).then((hotelAmenityList: AmenityDO[]) => {
@@ -152,6 +159,9 @@ export class DefaultDataBuilder {
     }
     public get paymentMethodList(): PaymentMethodDO[] {
         return this._paymentMethodList;
+    }
+    public get defaultYieldManagerFilters(): YieldManagerFilterDO[] {
+        return this._defaultYieldManagerFilters;
     }
     public get hotelAmenityList(): AmenityDO[] {
         return this._hotelAmenityList;

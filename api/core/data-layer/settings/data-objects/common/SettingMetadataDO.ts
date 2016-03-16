@@ -10,7 +10,8 @@ export enum SettingType {
 	AddOnProductCategory,
     RoomAttributes,
     RoomTypes,
-    RoomSalesCategories
+    RoomSalesCategories,
+    YieldManagerFilter
 };
 
 export class SettingMetadataDO extends BaseDO {
