@@ -234,7 +234,8 @@ export enum ThStatusCode {
     HotelConfigurationRepositoryNotFound,
     HotelConfigurationRepositoryReadError,
     HotelConfigurationRepositoryErrorAddingConfiguration,
-    HotelConfigurationRepositorAlreadyExists
+    HotelConfigurationRepositorAlreadyExists,
+	YieldManagerFilterValidatorInvalidFilters
 }
 
 var ThMessage: { [index: number]: string; } = {};
@@ -470,6 +471,7 @@ ThMessage[ThStatusCode.HotelConfigurationRepositoryNotFound] = "Hotel configurat
 ThMessage[ThStatusCode.HotelConfigurationRepositoryReadError] = "Cannot read hotel configuration.";
 ThMessage[ThStatusCode.HotelConfigurationRepositoryErrorAddingConfiguration] = "Cannot add hotel configuration.";
 ThMessage[ThStatusCode.HotelConfigurationRepositorAlreadyExists] = "This configuration already exists for the hotel.";
+ThMessage[ThStatusCode.YieldManagerFilterValidatorInvalidFilters] = "Invalid price product filters.";
 
 export class ThResponse {
     statusCode: ThStatusCode;

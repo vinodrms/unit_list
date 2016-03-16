@@ -50,7 +50,7 @@ export class PriceProductDO extends BaseDO {
 		this.openForDepartureIntervalList = this.buildListOfIntervals(object, "openForDepartureIntervalList");
 
 		this.yieldFilterList = [];
-		this.forEachElementOf(this.getObjectPropertyEnsureUndefined(object, "yieldFilterReferenceList"), (yieldFilterObject: Object) => {
+		this.forEachElementOf(this.getObjectPropertyEnsureUndefined(object, "yieldFilterList"), (yieldFilterObject: Object) => {
 			var yieldFilterDO = new PriceProductYieldFilterDO();
 			yieldFilterDO.buildFromObject(yieldFilterObject);
 			this.yieldFilterList.push(yieldFilterDO);

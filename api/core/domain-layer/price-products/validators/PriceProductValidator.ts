@@ -10,6 +10,7 @@ import {PriceProductDO} from '../../../data-layer/price-products/data-objects/Pr
 import {TaxIdValidator} from '../../taxes/validators/TaxIdValidator';
 import {AddOnProductIdValidator} from '../../add-on-products/validators/AddOnProductIdValidator';
 import {RoomAggregator} from '../../rooms/aggregators/RoomAggregator';
+import {YieldManagerFilterValidator} from '../../hotel-configurations/validators/YieldManagerFilterValidator';
 
 import _ = require("underscore");
 
@@ -61,8 +62,10 @@ export class PriceProductValidator {
 					ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Invalid prices sent", this._priceProduct, thError);
 					throw thError;
 				}
-				// TODO: validate the yield filter ids!
-
+				var ymFilterValidator = new YieldManagerFilterValidator(this._appContext, this._sessionContext);
+				return ymFilterValidator.validateFilterList(this._priceProduct.yieldFilterList);
+			})
+			.then((filterCheckResult: boolean) => {
 				resolve(true);
 			}).catch((error: any) => {
 				reject(error);

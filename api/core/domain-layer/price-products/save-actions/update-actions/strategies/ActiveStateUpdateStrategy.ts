@@ -6,6 +6,7 @@ import {SessionContext} from '../../../../../utils/SessionContext';
 import {PriceProductDO} from '../../../../../data-layer/price-products/data-objects/PriceProductDO';
 import {PriceProductMetaRepoDO, PriceProductItemMetaRepoDO} from '../../../../../data-layer/price-products/repositories/IPriceProductRepository';
 import {IPriceProductItemActionStrategy} from '../../IPriceProductItemActionStrategy';
+import {YieldManagerFilterValidator} from '../../../../hotel-configurations/validators/YieldManagerFilterValidator';
 
 export class ActiveStateUpdateStrategy implements IPriceProductItemActionStrategy {
 	constructor(private _appContext: AppContext, private _sessionContext: SessionContext,
@@ -14,8 +15,12 @@ export class ActiveStateUpdateStrategy implements IPriceProductItemActionStrateg
 	}
 
 	public save(resolve: { (result: PriceProductDO): void }, reject: { (err: ThError): void }) {
-		var priceProductRepo = this._appContext.getRepositoryFactory().getPriceProductRepository();
-		priceProductRepo.updatePriceProductYieldFilters(this._ppRepoMeta, this._ppItemRepoMeta, this._priceProductDO.yieldFilterList)
+		var ymFilterValidator = new YieldManagerFilterValidator(this._appContext, this._sessionContext);
+		ymFilterValidator.validateFilterList(this._priceProductDO.yieldFilterList)
+			.then((filterCheckResult: boolean) => {
+				var priceProductRepo = this._appContext.getRepositoryFactory().getPriceProductRepository();
+				return priceProductRepo.updatePriceProductYieldFilters(this._ppRepoMeta, this._ppItemRepoMeta, this._priceProductDO.yieldFilterList);
+			})
 			.then((updatedPriceProduct: PriceProductDO) => {
 				resolve(updatedPriceProduct);
 			}).catch((error: any) => {

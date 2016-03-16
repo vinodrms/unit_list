@@ -29,15 +29,6 @@ describe("Yield Manager Filter Tests", function() {
     });
 
     describe("Yield Manager Filter Update Filters Flow", function() {
-        it("Init yield manager configuration to defaults", function(done) {
-            var hotelConfigRepo = testContext.appContext.getRepositoryFactory().getHotelConfigurationsRepository();            
-            hotelConfigRepo.initYieldManagerFilterConfigurationWithDefaults({ hotelId: testContext.sessionContext.sessionDO.hotel.id }, testDataBuilder.defaultYieldManagerFilters).then((addedConfig: YieldManagerFilterConfigurationDO) => {
-                done();
-            }).catch((error: any) => {
-                done(error);
-            });
-        });
-
         it("Read the yield manager configuration for the hotel after init", function(done) {
             var hotelConfigRepo = testContext.appContext.getRepositoryFactory().getHotelConfigurationsRepository();
             hotelConfigRepo.getYieldManagerFilterConfiguration({ hotelId: testContext.sessionContext.sessionDO.hotel.id }).then((config: YieldManagerFilterConfigurationDO) => {

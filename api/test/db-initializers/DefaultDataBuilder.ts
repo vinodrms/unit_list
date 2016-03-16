@@ -25,6 +25,7 @@ import {RoomAggregator} from '../../core/domain-layer/rooms/aggregators/RoomAggr
 import {RoomCategoryStatsDO} from '../../core/data-layer/room-categories/data-objects/RoomCategoryStatsDO';
 import {DefaultPriceProductBuilder} from './builders/DefaultPriceProductBuilder';
 import {PriceProductDO} from '../../core/data-layer/price-products/data-objects/PriceProductDO';
+import {HotelConfigurationsBootstrap} from '../../core/domain-layer/hotel-configurations/HotelConfigurationsBootstrap';
 
 import _ = require("underscore");
 
@@ -91,7 +92,10 @@ export class DefaultDataBuilder {
                 return settingsRepository.getDefaultYieldManagerFilters();
             }).then((yieldManagerFilterList: YieldManagerFilterDO[]) => {
                 this._defaultYieldManagerFilters = yieldManagerFilterList;
-                
+
+				var hotelConfigBootstrap = new HotelConfigurationsBootstrap(this._testContext.appContext, this._hotelDO.id);
+				return hotelConfigBootstrap.bootstrap();
+			}).then((bootstrapResult: boolean) => {
                 var settingsRepository = this._testContext.appContext.getRepositoryFactory().getSettingsRepository();
                 return settingsRepository.getHotelAmenities();
             }).then((hotelAmenityList: AmenityDO[]) => {

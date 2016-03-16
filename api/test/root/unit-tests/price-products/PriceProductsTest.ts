@@ -51,6 +51,11 @@ describe("Hotel Price Products Tests", function() {
     });
 
 	describe("Price Products Validation Tests", function() {
+		it("Should update the price product filter list", function(done) {
+			pphelper.updateYMValidFilterList(testDataBuilder.defaultYieldManagerFilters);
+			done();
+		});
+
 		it("Should not save price product with invalid room category id", function(done) {
 			var priceProductItem = pphelper.getDraftSavePriceProductItemDO();
 			priceProductItem.roomCategoryIdList.push(InvalidRoomCategoryId);
@@ -125,6 +130,18 @@ describe("Hotel Price Products Tests", function() {
 			var savePPItem = new SavePriceProductItem(testContext.appContext, testContext.sessionContext);
 			savePPItem.save(priceProductItem).then((result: PriceProductDO) => {
 				done(new Error("Did manage to create price product with invalid tax id"));
+			}).catch((e: ThError) => {
+				should.notEqual(e.getThStatusCode(), ThStatusCode.Ok);
+				done();
+			});
+        });
+		it("Should not save price product with invalid filters", function(done) {
+			var priceProductItem = pphelper.getDraftSavePriceProductItemDO();
+			priceProductItem.yieldFilterList = pphelper.getInvalidFilterList();
+
+			var savePPItem = new SavePriceProductItem(testContext.appContext, testContext.sessionContext);
+			savePPItem.save(priceProductItem).then((result: PriceProductDO) => {
+				done(new Error("Did manage to create price product with invalid filters"));
 			}).catch((e: ThError) => {
 				should.notEqual(e.getThStatusCode(), ThStatusCode.Ok);
 				done();

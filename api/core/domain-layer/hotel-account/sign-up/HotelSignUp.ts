@@ -15,6 +15,7 @@ import {AccountActivationEmailTemplateDO} from '../../../services/email/data-obj
 import {AuthUtils} from '../utils/AuthUtils';
 import {HotelSignUpDO} from './HotelSignUpDO';
 import {ValidationResultParser} from '../../common/ValidationResultParser';
+import {HotelConfigurationsBootstrap} from '../../hotel-configurations/HotelConfigurationsBootstrap';
 
 export class HotelSignUp {
 	private static FirstUserIndex = 0;
@@ -53,6 +54,10 @@ export class HotelSignUp {
 			.then((savedHotel: HotelDO) => {
 				this._savedHotel = savedHotel;
 
+				var hotelConfigBootstrap = new HotelConfigurationsBootstrap(this._appContext, savedHotel.id);
+				return hotelConfigBootstrap.bootstrap();
+			})
+			.then((bootstrapResult: boolean) => {
 				var activationEmailTemplateDO = this.getAccountActivationEmailTemplateDO();
 				var emailHeaderDO = this.getEmailHeaderDO();
 				var emailService: IEmailService = this._appContext.getServiceFactory().getEmailService(emailHeaderDO, activationEmailTemplateDO);
