@@ -7,7 +7,7 @@ import {TranslationService} from './TranslationService';
 	name: 'translate',
 	pure: false // stateful pipe
 })
-export class TranslatePipe implements PipeTransform, OnDestroy {
+export class TranslationPipe implements PipeTransform, OnDestroy {
 	private static TemplateVariableRegex: RegExp = /%\s?([^{}\s]*)\s?%/g;
 
 	private _thUtils: ThUtils;
@@ -46,7 +46,7 @@ export class TranslatePipe implements PipeTransform, OnDestroy {
 		this._pipeValue = this.applyTemplateRegex(translatedMessage, this._previousArgs[0]);
 	}
 	private applyTemplateRegex(message: string, parameters: Object): string {
-		return message.replace(TranslatePipe.TemplateVariableRegex, (substring: string, actualKey: string) => {
+		return message.replace(TranslationPipe.TemplateVariableRegex, (substring: string, actualKey: string) => {
 			if (this._thUtils.isUndefinedOrNull(parameters, actualKey)) {
 				return "";
 			}

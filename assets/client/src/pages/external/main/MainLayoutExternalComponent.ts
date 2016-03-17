@@ -4,14 +4,14 @@ import {HTTP_PROVIDERS} from 'angular2/http';
 import {IThHttp} from '../../../common/utils/http/IThHttp';
 import {ThHttp} from '../../../common/utils/http/ThHttp';
 import {TranslationService} from '../../../common/utils/localization/TranslationService';
-import {TranslatePipe} from '../../../common/utils/localization/TranslatePipe';
+import {TranslationPipe} from '../../../common/utils/localization/TranslationPipe';
 
 @Component({
     selector: 'main-layout-external',
     templateUrl: '/client/src/pages/external/main/template/main-layout-external.html',
     directives: [],
     providers: [HTTP_PROVIDERS, provide(IThHttp, { useClass: ThHttp })],
-	pipes: [TranslatePipe]
+	pipes: [TranslationPipe]
 })
 
 export class MainLayoutExternalComponent extends BaseComponent {
