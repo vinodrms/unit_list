@@ -29,7 +29,8 @@ gulp.task('pack-internal', function() {
 	return tsResult.js
 		.pipe(minify({
 			exclude: ['tasks'],
-			ignoreFiles: ['-min.js']
+			ignoreFiles: ['-min.js'],
+			mangle: false
 		}))
 		.pipe(gulp.dest('client/build'));
 });
@@ -46,7 +47,8 @@ gulp.task('pack-external', function() {
 		.pipe(ts(tsProject));
 	return tsResult.js
 		.pipe(minify({
-			ignoreFiles: ['-min.js']
+			ignoreFiles: ['-min.js'],
+			mangle: false
 		}))
 		.pipe(gulp.dest('client/build'));
 });
