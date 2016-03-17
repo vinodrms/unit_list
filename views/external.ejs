@@ -1,25 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <!-- Meta, title, CSS, favicons, etc. -->
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-    
-        <title>UnitPal</title>
-    	
-		<script src="/node_modules/angular2/bundles/angular2-polyfills.min.js"></script>
-        <script src="/node_modules/systemjs/dist/system.js"></script>
-        <script src="/node_modules/rxjs/bundles/Rx.min.js"></script>
-        <script src="/node_modules/angular2/bundles/angular2.min.js"></script>
-        <script src="/node_modules/angular2/bundles/router.min.js"></script>
-        <script src="/node_modules/angular2/bundles/http.min.js"></script>
-		
-		<%if (isDevelopmentEnvironment == true) {%>
-            <script>
-                System.config({
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<!-- Meta, title, CSS, favicons, etc. -->
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<title>UnitPal</title>
+
+	<script src="/node_modules/angular2/bundles/angular2-polyfills.min.js"></script>
+	<script src="/node_modules/es6-shim/es6-shim.min.js"></script>
+	<script src="/node_modules/systemjs/dist/system-polyfills.js"></script>
+	<script src="/node_modules/angular2/es6/prod/src/testing/shims_for_IE.js"></script>
+
+	<script src="/node_modules/systemjs/dist/system.js"></script>
+	<script src="/node_modules/rxjs/bundles/Rx.min.js"></script>
+	<script src="/node_modules/angular2/bundles/angular2.min.js"></script>
+	<script src="/node_modules/angular2/bundles/router.min.js"></script>
+	<script src="/node_modules/angular2/bundles/http.min.js"></script>
+
+	<script src="/node_modules/underscore/underscore-min.js"></script>
+
+	<%if (isDevelopmentEnvironment == true) {%>
+		<script>
+			System.config({
                     packages: {
                         client: {
                             format: 'register',
@@ -31,23 +37,23 @@
                     }
                 });
                 System.import('client/src/pages/external/main/ExternalBoot').then(null, console.error.bind(console));
-            </script>
-        <%} else {%>
-            <script>
-                System.config({
+		</script>
+		<%} else {%>
+			<script>
+				System.config({
                     bundles: { 'client/build/unitpal-external-min.js': ['pages/external/main/ExternalBoot'] },
                     AppContext : {
                         ComponentsBaseRootDirectory: ""   
                     }
                 });
                 System.import('pages/external/main/ExternalBoot').then(null, console.error.bind(console));
-            </script>
-        <%}%>
-		
-    </head>
+			</script>
+			<%}%>
 
-    <body>
-        <main-layout-external></main-layout-external>
-    </body>
-    
+</head>
+
+<body>
+	<main-layout-external></main-layout-external>
+</body>
+
 </html>
