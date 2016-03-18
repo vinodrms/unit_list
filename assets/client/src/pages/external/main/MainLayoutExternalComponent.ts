@@ -1,29 +1,22 @@
-import {Component, Inject, provide} from 'angular2/core';
-import {BaseComponent} from '../../../common/components/BaseComponent';
-import {HTTP_PROVIDERS} from 'angular2/http';
-import {IThHttp} from '../../../common/utils/http/IThHttp';
-import {ThHttp} from '../../../common/utils/http/ThHttp';
-import {TranslationService} from '../../../common/utils/localization/TranslationService';
+import {Component} from 'angular2/core';
+import {BaseComponent} from '../../../common/base/BaseComponent';
 import {TranslationPipe} from '../../../common/utils/localization/TranslationPipe';
+import {ROUTER_DIRECTIVES, ROUTER_BINDINGS, RouteConfig} from 'angular2/router';
+import {LogInComponent} from '../pages/log-in/LogInComponent';
 
 @Component({
     selector: 'main-layout-external',
     templateUrl: '/client/src/pages/external/main/template/main-layout-external.html',
-    directives: [],
-    providers: [HTTP_PROVIDERS, provide(IThHttp, { useClass: ThHttp })],
+	directives: [ROUTER_DIRECTIVES],
 	pipes: [TranslationPipe]
 })
 
+@RouteConfig([
+	{ path: '/', name: 'LoginPageComponent', component: LogInComponent }
+])
+
 export class MainLayoutExternalComponent extends BaseComponent {
-	// TODO: remove
-	name = "Ionut Paraschiv";
-
-	constructor( @Inject(IThHttp) thHttp: IThHttp, private trServ: TranslationService) {
+	constructor() {
 		super();
-	}
-
-	// TODO: remove (translation testing purposes only)
-	updatelang() {
-		this.trServ.locale = 1 - this.trServ.locale;
 	}
 }

@@ -17,11 +17,18 @@
 
 	<script src="/node_modules/systemjs/dist/system.js"></script>
 	<script src="/node_modules/rxjs/bundles/Rx.min.js"></script>
-	<script src="/node_modules/angular2/bundles/angular2.min.js"></script>
+	<script src="/node_modules/angular2/bundles/angular2.dev.js"></script>
 	<script src="/node_modules/angular2/bundles/router.min.js"></script>
 	<script src="/node_modules/angular2/bundles/http.min.js"></script>
 
 	<script src="/node_modules/underscore/underscore-min.js"></script>
+	
+	<style>
+		/* TODO remove: testing purposes */
+		.invalid {
+			border-color: red;
+		}
+	</style>
 
 	<%if (isDevelopmentEnvironment == true) {%>
 		<script>

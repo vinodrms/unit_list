@@ -1,0 +1,20 @@
+<form [ngFormModel]="_logInService.loginForm" (submit)="logIn()">
+	<h1>Login</h1>
+	<div >
+		<input type="text" class="form-control" ngControl="email" placeholder="Email" [ngClass]="{invalid: controlIsInvalid('email')}" />
+	</div>
+	<div>
+		<input type="password" class="form-control" placeholder="Password" />
+	</div>
+	<div>
+		<button class="btn btn-default submit">Log in</button>
+		<a class="reset_pass" href="reset_password.html">Lost your password?</a>
+	</div>
+	<div class="clearfix"></div>
+	<div class="separator">
+		<p class="change_link">New to site?
+			<button (click)="updatelang()" class="to_register"> Create Account </button>
+		</p>
+		<div class="clearfix"></div>
+	</div>
+</form>
