@@ -70,7 +70,8 @@ module.exports.routes = {
     'GET /api/settings/currencies': 'SettingsController.getCurrencies',
     'GET /api/settings/paymentMethods': 'SettingsController.getPaymentMethods',
 	'GET /api/settings/addOnProductCategories': 'SettingsController.getAddOnProductCategories',
-
+    'GET /api/settings/bedTemplates': 'SettingsController.getBedTemplates',
+    
     'POST /api/beds': 'BedsController.getBedList',
     'POST /api/beds/saveBedItem': 'BedsController.saveBedItem',
 	'POST /api/beds/deleteBedItem': 'BedsController.deleteBedItem',

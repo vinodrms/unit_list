@@ -127,6 +127,15 @@ export class SettingsController extends BaseController {
             this.returnErrorResponse(req, res, err, ThStatusCode.SettingsMongoRepositoryReadError);
         });
     }
+    public getBedTemplates(req: Express.Request, res: Express.Response) {
+        var thUtils = new ThUtils();
+        var settingsRepository: ISettingsRepository = req.appContext.getRepositoryFactory().getSettingsRepository();
+        settingsRepository.getBedTemplates().then((result: any) => {
+            this.returnSuccesfulResponse(req, res, result);
+        }).catch((err: any) => {
+            this.returnErrorResponse(req, res, err, ThStatusCode.SettingsMongoRepositoryReadError);
+        });
+    }
 }
 
 var settingsController = new SettingsController();
@@ -137,5 +146,6 @@ module.exports = {
     getCountries: settingsController.getCountries.bind(settingsController),
     getCurrencies: settingsController.getCurrencies.bind(settingsController),
     getPaymentMethods: settingsController.getPaymentMethods.bind(settingsController),
-	getAddOnProductCategories: settingsController.getAddOnProductCategories.bind(settingsController)
+	getAddOnProductCategories: settingsController.getAddOnProductCategories.bind(settingsController),
+    getBedTemplates: settingsController.getBedTemplates.bind(settingsController)
 }
