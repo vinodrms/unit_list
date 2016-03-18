@@ -1,6 +1,6 @@
 import {MongoRepository} from '../../../common/base/MongoRepository';
 import {PriceProductDO} from '../../data-objects/PriceProductDO';
-import {PriceProductYieldFilterDO} from '../../data-objects/yield-filter/PriceProductYieldFilterDO';
+import {PriceProductYieldFilterMetaDO} from '../../data-objects/yield-filter/PriceProductYieldFilterDO';
 import {LazyLoadRepoDO, LazyLoadMetaResponseRepoDO} from '../../../common/repo-data-objects/LazyLoadRepoDO';
 import {IPriceProductRepository, PriceProductMetaRepoDO, PriceProductSearchCriteriaRepoDO,
 	PriceProductItemMetaRepoDO, PriceProductSearchResultRepoDO, PriceProductUpdateStatusParamsRepoDO, PriceProductUpdateYMIntervalsParamsRepoDO} from '../IPriceProductRepository';
@@ -37,7 +37,7 @@ export class MongoPriceProductRepository extends MongoRepository implements IPri
 	public updatePriceProductStatus(meta: PriceProductMetaRepoDO, itemMeta: PriceProductItemMetaRepoDO, params: PriceProductUpdateStatusParamsRepoDO): Promise<PriceProductDO> {
 		return this._crudRepository.updatePriceProductStatus(meta, itemMeta, params);
 	}
-	public updatePriceProductYieldFilters(meta: PriceProductMetaRepoDO, itemMeta: PriceProductItemMetaRepoDO, filterList: PriceProductYieldFilterDO[]): Promise<PriceProductDO> {
+	public updatePriceProductYieldFilters(meta: PriceProductMetaRepoDO, itemMeta: PriceProductItemMetaRepoDO, filterList: PriceProductYieldFilterMetaDO[]): Promise<PriceProductDO> {
 		return this._crudRepository.updatePriceProductYieldFilters(meta, itemMeta, filterList);
 	}
 	public updatePriceProductYieldManagerIntervals(meta: PriceProductMetaRepoDO, itemMeta: PriceProductItemMetaRepoDO, intervals: PriceProductUpdateYMIntervalsParamsRepoDO): Promise<PriceProductDO> {

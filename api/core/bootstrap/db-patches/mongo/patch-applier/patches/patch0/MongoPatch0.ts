@@ -85,6 +85,7 @@ export class MongoPatch0 extends ATransactionalMongoPatch {
                 reject(thError);
                 return;
             }
+            
             resolve(true);
         }));
     }

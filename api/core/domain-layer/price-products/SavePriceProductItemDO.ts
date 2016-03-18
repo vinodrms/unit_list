@@ -1,6 +1,6 @@
 import {PriceProductStatus, PriceProductAvailability} from '../../data-layer/price-products/data-objects/PriceProductDO';
 import {PriceProductPriceType} from '../../data-layer/price-products/data-objects/price/IPriceProductPrice';
-import {PriceProductYieldFilterDO} from '../../data-layer/price-products/data-objects/yield-filter/PriceProductYieldFilterDO';
+import {PriceProductYieldFilterMetaDO} from '../../data-layer/price-products/data-objects/yield-filter/PriceProductYieldFilterDO';
 import {PriceProductConstraintType} from '../../data-layer/price-products/data-objects/constraint/IPriceProductConstraint';
 import {PriceProductCancellationPolicyType} from '../../data-layer/price-products/data-objects/conditions/cancellation/IPriceProductCancellationPolicy';
 import {PriceProductCancellationPenaltyType} from '../../data-layer/price-products/data-objects/conditions/penalty/IPriceProductCancellationPenalty';
@@ -33,7 +33,7 @@ export class SavePriceProductItemDO {
 	roomCategoryIdList: string[];
 	price: SavePriceProductItemPriceDO;
 	taxIdList: string[];
-	yieldFilterList: PriceProductYieldFilterDO[];
+	yieldFilterList: PriceProductYieldFilterMetaDO[];
 	constraints: SavePriceProductItemConstraintListDO;
 	conditions: SavePriceProductItemConditionsDO;
 

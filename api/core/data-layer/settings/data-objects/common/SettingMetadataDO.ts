@@ -11,7 +11,7 @@ export enum SettingType {
     RoomAttributes,
     RoomTypes,
     RoomSalesCategories,
-    YieldManagerFilter
+    YieldFilter
 };
 
 export class SettingMetadataDO extends BaseDO {

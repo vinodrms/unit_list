@@ -4,28 +4,28 @@ import {ThStatusCode} from '../../../utils/th-responses/ThResponse';
 import {AppContext} from '../../../utils/AppContext';
 import {SessionContext} from '../../../utils/SessionContext';
 import {ThUtils} from '../../../utils/ThUtils';
-import {PriceProductYieldFilterDO} from '../../../data-layer/price-products/data-objects/yield-filter/PriceProductYieldFilterDO';
-import {YieldManagerFilterConfigurationDO} from '../../../data-layer/hotel-configurations/data-objects/yield-manager-filter/YieldManagerFilterConfigurationDO';
-import {YieldManagerFilterDO} from '../../../data-layer/common/data-objects/yield-manager-filter/YieldManagerFilterDO';
-import {YieldManagerFilterValueDO} from '../../../data-layer/common/data-objects/yield-manager-filter/YieldManagerFilterValueDO';
+import {PriceProductYieldFilterMetaDO} from '../../../data-layer/price-products/data-objects/yield-filter/PriceProductYieldFilterDO';
+import {YieldFilterConfigurationDO} from '../../../data-layer/hotel-configurations/data-objects/yield-filter/YieldFilterConfigurationDO';
+import {YieldFilterDO} from '../../../data-layer/common/data-objects/yield-filter/YieldFilterDO';
+import {YieldFilterValueDO} from '../../../data-layer/common/data-objects/yield-filter/YieldFilterValueDO';
 
 import _ = require("underscore");
 
 export class YieldManagerFilterValidator {
 	private _thUtils: ThUtils;
 
-	private _filterListToCheck: PriceProductYieldFilterDO[];
-	private _filterListChecked: PriceProductYieldFilterDO[];
+	private _filterListToCheck: PriceProductYieldFilterMetaDO[];
+	private _filterListChecked: PriceProductYieldFilterMetaDO[];
 
 	constructor(private _appContext: AppContext, private _sessionContext: SessionContext) {
 		this._thUtils = new ThUtils();
 	}
 
-	public validateFilter(filter: PriceProductYieldFilterDO): Promise<boolean> {
+	public validateFilter(filter: PriceProductYieldFilterMetaDO): Promise<boolean> {
 		return this.validateFilterList([filter]);
 	}
 
-	public validateFilterList(filterList: PriceProductYieldFilterDO[]): Promise<boolean> {
+	public validateFilterList(filterList: PriceProductYieldFilterMetaDO[]): Promise<boolean> {
 		this._filterListToCheck = filterList;
 		return new Promise<boolean>((resolve: { (result: boolean): void }, reject: { (err: ThError): void }) => {
 			this.validateFilterListCore(resolve, reject);
@@ -38,13 +38,13 @@ export class YieldManagerFilterValidator {
 			return;
 		}
 
-		var hotelConfigRepo = this._appContext.getRepositoryFactory().getHotelConfigurationsRepository();
-		hotelConfigRepo.getYieldManagerFilterConfiguration({ hotelId: this._sessionContext.sessionDO.hotel.id })
-			.then((filterConfig: YieldManagerFilterConfigurationDO) => {
+		var hotelConfigRepo = this._appContext.getRepositoryFactory().getYieldFilterConfigurationsRepository();
+		hotelConfigRepo.getYieldFilterConfiguration({ hotelId: this._sessionContext.sessionDO.hotel.id })
+			.then((filterConfig: YieldFilterConfigurationDO) => {
 				this._filterListChecked = this.getCheckedFilters(filterConfig.value);
 
 				if (this._filterListToCheck.length != this._filterListChecked.length) {
-					var thError = new ThError(ThStatusCode.YieldManagerFilterValidatorInvalidFilters, null);
+					var thError = new ThError(ThStatusCode.YieldFilterValidatorInvalidFilters, null);
 					ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Invalid PP filters", this._filterListToCheck, thError);
 					throw thError;
 				}
@@ -53,29 +53,29 @@ export class YieldManagerFilterValidator {
 				reject(error);
 			});
 	}
-	private getCheckedFilters(availableFilterList: YieldManagerFilterDO[]): PriceProductYieldFilterDO[] {
-		var checkedFilterList: PriceProductYieldFilterDO[] = [];
-		this._filterListToCheck.forEach((yieldFilter: PriceProductYieldFilterDO) => {
+	private getCheckedFilters(availableFilterList: YieldFilterDO[]): PriceProductYieldFilterMetaDO[] {
+		var checkedFilterList: PriceProductYieldFilterMetaDO[] = [];
+		this._filterListToCheck.forEach((yieldFilter: PriceProductYieldFilterMetaDO) => {
 			if (this.yieldFilterIsValid(availableFilterList, yieldFilter)) {
 				checkedFilterList.push(yieldFilter);
 			}
 		});
 		return checkedFilterList;
 	}
-	private yieldFilterIsValid(availableFilterList: YieldManagerFilterDO[], yieldFilter: PriceProductYieldFilterDO): boolean {
-		var foundFilter: YieldManagerFilterDO = _.find(availableFilterList, (filter: YieldManagerFilterDO) => { return filter.id === yieldFilter.filterId });
+	private yieldFilterIsValid(availableFilterList: YieldFilterDO[], yieldFilter: PriceProductYieldFilterMetaDO): boolean {
+		var foundFilter: YieldFilterDO = _.find(availableFilterList, (filter: YieldFilterDO) => { return filter.id === yieldFilter.filterId });
 		if (this._thUtils.isUndefinedOrNull(foundFilter)) {
 			return false;
 		}
-		var ymFilterValueList: YieldManagerFilterValueDO[] = foundFilter.values;
-		var foundFilterValue: YieldManagerFilterValueDO = _.find(ymFilterValueList, (filterValue: YieldManagerFilterValueDO) => { return filterValue.id === yieldFilter.valueId });
+		var ymFilterValueList: YieldFilterValueDO[] = foundFilter.values;
+		var foundFilterValue: YieldFilterValueDO = _.find(ymFilterValueList, (filterValue: YieldFilterValueDO) => { return filterValue.id === yieldFilter.valueId });
 		if (this._thUtils.isUndefinedOrNull(foundFilterValue)) {
 			return false;
 		}
 		return true;
 	}
 
-	public getValidFilterList(): PriceProductYieldFilterDO[] {
+	public getValidFilterList(): PriceProductYieldFilterMetaDO[] {
 		return this._filterListChecked;
 	}
 }

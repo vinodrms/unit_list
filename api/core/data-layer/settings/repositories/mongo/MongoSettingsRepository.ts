@@ -20,8 +20,8 @@ import {RoomSalesCategoryDO} from '../../../common/data-objects/room-sales-categ
 import {PaymentMethodDO} from '../../../common/data-objects/payment-method/PaymentMethodDO';
 import {AddOnProductCategorySettingDO} from '../../data-objects/add-on-product/AddOnProductCategorySettingDO';
 import {AddOnProductCategoryDO} from '../../../common/data-objects/add-on-product/AddOnProductCategoryDO';
-import {YieldManagerFilterSettingDO} from '../../data-objects/yield-manager-filter/YieldManagerFilterSettingDO';
-import {YieldManagerFilterDO} from '../../../common/data-objects/yield-manager-filter/YieldManagerFilterDO';
+import {YieldFilterSettingDO} from '../../data-objects/yield-manager-filter/YieldManagerFilterSettingDO';
+import {YieldFilterDO} from '../../../common/data-objects/yield-filter/YieldFilterDO';
 
 import _ = require('underscore');
 
@@ -96,8 +96,8 @@ export class MongoSettingsRepository extends MongoRepository implements ISetting
 		return this.getSetting(SettingType.AddOnProductCategory, valueCriteria);
 	}
     
-    public getDefaultYieldManagerFilters(valueCriteria?: Object): Promise<YieldManagerFilterDO[]> {
-		return this.getSetting(SettingType.YieldManagerFilter, valueCriteria);
+    public getDefaultYieldFilters(valueCriteria?: Object): Promise<YieldFilterDO[]> {
+		return this.getSetting(SettingType.YieldFilter, valueCriteria);
 	}
     
     private getSetting(settingType: SettingType, criteria?: Object): Promise<any> {
@@ -138,7 +138,7 @@ export class MongoSettingsRepository extends MongoRepository implements ISetting
             case SettingType.CurrencyCodes: getSettingsResponseDO = new CurrencySettingDO(); break;
             case SettingType.PaymentMethods: getSettingsResponseDO = new PaymentMethodSettingDO(); break;
 			case SettingType.AddOnProductCategory: getSettingsResponseDO = new AddOnProductCategorySettingDO(); break;
-            case SettingType.YieldManagerFilter: getSettingsResponseDO = new YieldManagerFilterSettingDO(); break;
+            case SettingType.YieldFilter: getSettingsResponseDO = new YieldFilterSettingDO(); break;
             default: getSettingsResponseDO = new AmenitySettingDO();
         }
         getSettingsResponseDO.buildFromObject(queryResult);

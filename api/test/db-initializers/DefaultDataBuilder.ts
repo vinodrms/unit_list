@@ -20,12 +20,13 @@ import {DefaultAddOnProductBuilder} from './builders/DefaultAddOnProductBuilder'
 import {AddOnProductDO} from '../../core/data-layer/add-on-products/data-objects/AddOnProductDO';
 import {DefaultCustomerBuilder} from './builders/DefaultCustomerBuilder';
 import {CustomerDO} from '../../core/data-layer/customers/data-objects/CustomerDO';
-import {YieldManagerFilterDO} from '../../core/data-layer/common/data-objects/yield-manager-filter/YieldManagerFilterDO';
+import {YieldFilterDO} from '../../core/data-layer/common/data-objects/yield-filter/YieldFilterDO';
 import {RoomAggregator} from '../../core/domain-layer/rooms/aggregators/RoomAggregator';
 import {RoomCategoryStatsDO} from '../../core/data-layer/room-categories/data-objects/RoomCategoryStatsDO';
 import {DefaultPriceProductBuilder} from './builders/DefaultPriceProductBuilder';
 import {PriceProductDO} from '../../core/data-layer/price-products/data-objects/PriceProductDO';
 import {HotelConfigurationsBootstrap} from '../../core/domain-layer/hotel-configurations/HotelConfigurationsBootstrap';
+import {YieldFilterConfigurationDO} from '../../core/data-layer/hotel-configurations/data-objects/yield-filter/YieldFilterConfigurationDO';
 
 import _ = require("underscore");
 
@@ -50,7 +51,8 @@ export class DefaultDataBuilder {
     private _addOnProductCategoryList: AddOnProductCategoryDO[];
     private _addOnProductList: AddOnProductDO[];
     private _customerList: CustomerDO[];
-    private _defaultYieldManagerFilters: YieldManagerFilterDO[];
+    private _defaultYieldFilters: YieldFilterDO[];
+    private _yieldFilters: YieldFilterDO[];
 	private _priceProductList: PriceProductDO[];
 
     constructor(private _testContext: TestContext) {
@@ -89,13 +91,19 @@ export class DefaultDataBuilder {
                 this._paymentMethodList = paymentMethodList;
 
                 var settingsRepository = this._testContext.appContext.getRepositoryFactory().getSettingsRepository();
-                return settingsRepository.getDefaultYieldManagerFilters();
-            }).then((yieldManagerFilterList: YieldManagerFilterDO[]) => {
-                this._defaultYieldManagerFilters = yieldManagerFilterList;
+                return settingsRepository.getDefaultYieldFilters();
+            }).then((yieldFilterList: YieldFilterDO[]) => {
+                this._defaultYieldFilters = yieldFilterList;
 
 				var hotelConfigBootstrap = new HotelConfigurationsBootstrap(this._testContext.appContext, this._hotelDO.id);
 				return hotelConfigBootstrap.bootstrap();
 			}).then((bootstrapResult: boolean) => {
+                
+                var yieldFiltersRepository = this._testContext.appContext.getRepositoryFactory().getYieldFilterConfigurationsRepository();
+                return yieldFiltersRepository.getYieldFilterConfiguration({ hotelId: this._testContext.sessionContext.sessionDO.hotel.id });
+            }).then((yieldFilterConfiguration: YieldFilterConfigurationDO) => {
+                this._yieldFilters = yieldFilterConfiguration.value;
+                
                 var settingsRepository = this._testContext.appContext.getRepositoryFactory().getSettingsRepository();
                 return settingsRepository.getHotelAmenities();
             }).then((hotelAmenityList: AmenityDO[]) => {
@@ -183,8 +191,11 @@ export class DefaultDataBuilder {
     public get paymentMethodList(): PaymentMethodDO[] {
         return this._paymentMethodList;
     }
-    public get defaultYieldManagerFilters(): YieldManagerFilterDO[] {
-        return this._defaultYieldManagerFilters;
+    public get defaultYieldFilters(): YieldFilterDO[] {
+        return this._defaultYieldFilters;
+    }
+    public get yieldFilters(): YieldFilterDO[] {
+        return this._yieldFilters;
     }
     public get hotelAmenityList(): AmenityDO[] {
         return this._hotelAmenityList;

@@ -234,8 +234,19 @@ export enum ThStatusCode {
     HotelConfigurationRepositoryNotFound,
     HotelConfigurationRepositoryReadError,
     HotelConfigurationRepositoryErrorAddingConfiguration,
-    HotelConfigurationRepositorAlreadyExists,
-	YieldManagerFilterValidatorInvalidFilters
+    HotelConfigurationRepositoryAlreadyExists,
+    HotelConfigurationRepositoryProblemUpdatingConfiguration,
+    HotelConfigurationRepositoryErrorUpdatingConfiguration,
+	YieldFilterValidatorInvalidFilters,
+    HotelConfigurationControlllerErrorGettingYieldFilterConfig,
+    HotelConfigurationControlllerErrorSavingYieldFilterValue,
+    SaveYieldFilterValueError,
+    YieldFilterRepositoryErrorGettingYieldFilter,
+    YieldFilterRepositoryErrorGettingYieldFilterValue,
+    YieldFilterRepositoryErrorAddingYieldFilterValue,
+    YieldFilterRepositoryErrorUpdatingYieldFilterValue,
+    YieldFilterRepositoryErrorDuplicateFilterValue,
+    YieldFilterRepositoryErrorLabelOrColorCodeInvalid
 }
 
 var ThMessage: { [index: number]: string; } = {};
@@ -470,8 +481,20 @@ ThMessage[ThStatusCode.YieldManagerControllerErrorOpening] = "Error opening the 
 ThMessage[ThStatusCode.HotelConfigurationRepositoryNotFound] = "Hotel configuration not found.";
 ThMessage[ThStatusCode.HotelConfigurationRepositoryReadError] = "Cannot read hotel configuration.";
 ThMessage[ThStatusCode.HotelConfigurationRepositoryErrorAddingConfiguration] = "Cannot add hotel configuration.";
-ThMessage[ThStatusCode.HotelConfigurationRepositorAlreadyExists] = "This configuration already exists for the hotel.";
-ThMessage[ThStatusCode.YieldManagerFilterValidatorInvalidFilters] = "Invalid price product filters.";
+ThMessage[ThStatusCode.HotelConfigurationRepositoryAlreadyExists] = "This configuration already exists for the hotel.";
+ThMessage[ThStatusCode.HotelConfigurationRepositoryProblemUpdatingConfiguration] = "Problem updating hotel configuration - concurrency.";
+ThMessage[ThStatusCode.HotelConfigurationRepositoryErrorUpdatingConfiguration] = "Error updating hotel configuration.";
+ThMessage[ThStatusCode.YieldFilterValidatorInvalidFilters] = "Invalid price product filters.";
+ThMessage[ThStatusCode.HotelConfigurationControlllerErrorGettingYieldFilterConfig] = "The yield filter config for this hotel could not be read.";
+ThMessage[ThStatusCode.HotelConfigurationControlllerErrorSavingYieldFilterValue] = "Error saving the yield filter value.";
+ThMessage[ThStatusCode.SaveYieldFilterValueError] = "Error saving the yield filter value.";
+ThMessage[ThStatusCode.YieldFilterRepositoryErrorGettingYieldFilter] = "Error finding yield filter by id.";
+ThMessage[ThStatusCode.YieldFilterRepositoryErrorGettingYieldFilterValue] = "Error finding yield filter value by id.";
+ThMessage[ThStatusCode.YieldFilterRepositoryErrorAddingYieldFilterValue] = "Error adding filter value.";
+ThMessage[ThStatusCode.YieldFilterRepositoryErrorUpdatingYieldFilterValue] = "Error updating filter value.";
+ThMessage[ThStatusCode.YieldFilterRepositoryErrorDuplicateFilterValue] = "Duplicate filter value.";
+ThMessage[ThStatusCode.YieldFilterRepositoryErrorLabelOrColorCodeInvalid] = "Filter Rules -> TextFilter: label-defined, colorCode-null; ColorFilter: label-null, colorCode-defined";
+
 
 export class ThResponse {
     statusCode: ThStatusCode;

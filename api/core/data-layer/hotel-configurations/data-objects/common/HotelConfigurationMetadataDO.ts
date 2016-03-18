@@ -1,7 +1,7 @@
 import {BaseDO} from '../../../common/base/BaseDO';
 
 export enum HotelConfigurationType {
-    YieldManagerFilter
+    YieldFilter
 };
 
 export class HotelConfigurationMetadataDO extends BaseDO {

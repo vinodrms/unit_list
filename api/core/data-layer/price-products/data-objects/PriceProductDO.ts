@@ -3,7 +3,7 @@ import {PriceProductPriceDO} from './price/PriceProductPriceDO';
 import {ThDayInYearIntervalDO} from '../../../utils/th-dates/data-objects/ThDayInYearIntervalDO';
 import {PriceProductConstraintWrapperDO} from './constraint/PriceProductConstraintWrapperDO';
 import {PriceProductConditionsDO} from './conditions/PriceProductConditionsDO';
-import {PriceProductYieldFilterDO} from './yield-filter/PriceProductYieldFilterDO';
+import {PriceProductYieldFilterMetaDO} from './yield-filter/PriceProductYieldFilterDO';
 
 export enum PriceProductStatus {
 	Draft,
@@ -32,7 +32,7 @@ export class PriceProductDO extends BaseDO {
 	openIntervalList: ThDayInYearIntervalDO[];
 	openForArrivalIntervalList: ThDayInYearIntervalDO[];
 	openForDepartureIntervalList: ThDayInYearIntervalDO[];
-	yieldFilterList: PriceProductYieldFilterDO[];
+	yieldFilterList: PriceProductYieldFilterMetaDO[];
 	constraints: PriceProductConstraintWrapperDO;
 	conditions: PriceProductConditionsDO;
 
@@ -51,7 +51,7 @@ export class PriceProductDO extends BaseDO {
 
 		this.yieldFilterList = [];
 		this.forEachElementOf(this.getObjectPropertyEnsureUndefined(object, "yieldFilterList"), (yieldFilterObject: Object) => {
-			var yieldFilterDO = new PriceProductYieldFilterDO();
+			var yieldFilterDO = new PriceProductYieldFilterMetaDO();
 			yieldFilterDO.buildFromObject(yieldFilterObject);
 			this.yieldFilterList.push(yieldFilterDO);
 		});

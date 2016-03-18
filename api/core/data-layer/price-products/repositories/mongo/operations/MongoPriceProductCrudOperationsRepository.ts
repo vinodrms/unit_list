@@ -4,7 +4,7 @@ import {ThStatusCode} from '../../../../../utils/th-responses/ThResponse';
 import {MongoRepository} from '../../../../common/base/MongoRepository';
 import {PriceProductMetaRepoDO, PriceProductItemMetaRepoDO, PriceProductUpdateStatusParamsRepoDO, PriceProductUpdateYMIntervalsParamsRepoDO} from '../../IPriceProductRepository';
 import {PriceProductDO, PriceProductStatus} from '../../../data-objects/PriceProductDO';
-import {PriceProductYieldFilterDO} from '../../../data-objects/yield-filter/PriceProductYieldFilterDO';
+import {PriceProductYieldFilterMetaDO} from '../../../data-objects/yield-filter/PriceProductYieldFilterDO';
 import {PriceProductRepositoryHelper} from './helpers/PriceProductRepositoryHelper';
 
 export class MongoPriceProductCrudOperationsRepository extends MongoRepository {
@@ -87,7 +87,7 @@ export class MongoPriceProductCrudOperationsRepository extends MongoRepository {
 				"status": params.newStatus
 			});
 	}
-	public updatePriceProductYieldFilters(meta: PriceProductMetaRepoDO, itemMeta: PriceProductItemMetaRepoDO, filterList: PriceProductYieldFilterDO[]): Promise<PriceProductDO> {
+	public updatePriceProductYieldFilters(meta: PriceProductMetaRepoDO, itemMeta: PriceProductItemMetaRepoDO, filterList: PriceProductYieldFilterMetaDO[]): Promise<PriceProductDO> {
 		return this.findAndModifyPriceProduct(meta, itemMeta, {},
 			{
 				"yieldFilterList": filterList

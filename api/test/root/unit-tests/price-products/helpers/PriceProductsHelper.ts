@@ -5,11 +5,11 @@ import {DefaultPriceProductBuilder} from '../../../../db-initializers/builders/D
 import {SavePriceProductItemDO} from '../../../../../core/domain-layer/price-products/SavePriceProductItemDO';
 import {SavePriceProductItemPriceDO} from '../../../../../core/domain-layer/price-products/validation-structures/SavePriceProductItemPriceDO';
 import {PriceProductStatus, PriceProductAvailability} from '../../../../../core/data-layer/price-products/data-objects/PriceProductDO';
-import {PriceProductYieldFilterDO} from '../../../../../core/data-layer/price-products/data-objects/yield-filter/PriceProductYieldFilterDO';
+import {PriceProductYieldFilterMetaDO} from '../../../../../core/data-layer/price-products/data-objects/yield-filter/PriceProductYieldFilterDO';
 import {PriceProductPriceType} from '../../../../../core/data-layer/price-products/data-objects/price/IPriceProductPrice';
 import {PriceProductCancellationPolicyType} from '../../../../../core/data-layer/price-products/data-objects/conditions/cancellation/IPriceProductCancellationPolicy';
 import {PriceProductCancellationPenaltyType} from '../../../../../core/data-layer/price-products/data-objects/conditions/penalty/IPriceProductCancellationPenalty';
-import {YieldManagerFilterDO} from '../../../../../core/data-layer/common/data-objects/yield-manager-filter/YieldManagerFilterDO';
+import {YieldFilterDO} from '../../../../../core/data-layer/common/data-objects/yield-filter/YieldFilterDO';
 import {RoomAggregator} from '../../../../../core/domain-layer/rooms/aggregators/RoomAggregator';
 import {RoomCategoryStatsDO} from '../../../../../core/data-layer/room-categories/data-objects/RoomCategoryStatsDO';
 import {PriceForFixedNumberOfPersonsDO} from '../../../../../core/data-layer/price-products/data-objects/price/price-per-person/PriceForFixedNumberOfPersonsDO';
@@ -20,24 +20,24 @@ import {ISOWeekDay} from '../../../../../core/utils/th-dates/data-objects/ISOWee
 export class PriceProductsHelper {
 	private _testUtils: TestUtils;
 	private _roomCategoryStat: RoomCategoryStatsDO;
-	private _validPPFilters: PriceProductYieldFilterDO[];
+	private _validPPFilters: PriceProductYieldFilterMetaDO[];
 
 	constructor(private _dataBuilder: DefaultDataBuilder, private _testContext: TestContext) {
 		this._testUtils = new TestUtils();
 	}
 
-	public updateYMValidFilterList(validFilterList: YieldManagerFilterDO[]) {
+	public updateYMValidFilterList(validFilterList: YieldFilterDO[]) {
 		var filter = this._testUtils.getRandomListElement(validFilterList);
 		var filterValue = this._testUtils.getRandomListElement(filter.values);
 
-		var validFilter = new PriceProductYieldFilterDO();
+		var validFilter = new PriceProductYieldFilterMetaDO();
 		validFilter.filterId = filter.id;
 		validFilter.valueId = filterValue.id;
 		this._validPPFilters = [validFilter];
 	}
 
-	public getInvalidFilterList(): PriceProductYieldFilterDO[] {
-		var filter = new PriceProductYieldFilterDO();
+	public getInvalidFilterList(): PriceProductYieldFilterMetaDO[] {
+		var filter = new PriceProductYieldFilterMetaDO();
 		filter.filterId = "123456";
 		filter.valueId = "123456";
 		return [filter];

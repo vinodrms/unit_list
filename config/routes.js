@@ -111,4 +111,7 @@ module.exports.routes = {
 
 	'POST /api/yieldManager/closePriceProducts': 'YieldManagerController.closePriceProducts',
 	'POST /api/yieldManager/openPriceProducts': 'YieldManagerController.openPriceProducts',
+    
+    'GET /api/hotelConfigurations/yieldFilters': 'HotelConfigurationsController.getYieldFilterConfiguration',
+    'POST /api/hotelConfigurations/saveYieldFilterValue': 'HotelConfigurationsController.saveYieldFilterValue'
 };

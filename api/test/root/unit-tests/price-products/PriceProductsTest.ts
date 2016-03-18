@@ -52,7 +52,7 @@ describe("Hotel Price Products Tests", function() {
 
 	describe("Price Products Validation Tests", function() {
 		it("Should update the price product filter list", function(done) {
-			pphelper.updateYMValidFilterList(testDataBuilder.defaultYieldManagerFilters);
+			pphelper.updateYMValidFilterList(testDataBuilder.defaultYieldFilters);
 			done();
 		});
 

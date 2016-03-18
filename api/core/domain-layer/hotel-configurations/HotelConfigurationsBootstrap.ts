@@ -2,8 +2,8 @@ import {ThLogger, ThLogLevel} from '../../utils/logging/ThLogger';
 import {ThError} from '../../utils/th-responses/ThError';
 import {ThStatusCode} from '../../utils/th-responses/ThResponse';
 import {AppContext} from '../../utils/AppContext';
-import {YieldManagerFilterDO} from '../../data-layer/common/data-objects/yield-manager-filter/YieldManagerFilterDO';
-import {YieldManagerFilterConfigurationDO} from '../../data-layer/hotel-configurations/data-objects/yield-manager-filter/YieldManagerFilterConfigurationDO';
+import {YieldFilterDO} from '../../data-layer/common/data-objects/yield-filter/YieldFilterDO';
+import {YieldFilterConfigurationDO} from '../../data-layer/hotel-configurations/data-objects/yield-filter/YieldFilterConfigurationDO';
 
 export class HotelConfigurationsBootstrap {
 	constructor(private _appContext: AppContext, private _hotelId: string) {
@@ -29,12 +29,12 @@ export class HotelConfigurationsBootstrap {
 	}
 	private bootstrapYieldManagerFiltersCore(resolve: { (result: boolean): void }, reject: { (err: ThError): void }) {
 		var settingsRepo = this._appContext.getRepositoryFactory().getSettingsRepository();
-		settingsRepo.getDefaultYieldManagerFilters()
-			.then((defaultFilterList: YieldManagerFilterDO[]) => {
-				var hotelConfigRepo = this._appContext.getRepositoryFactory().getHotelConfigurationsRepository();
-				return hotelConfigRepo.initYieldManagerFilterConfigurationWithDefaults({ hotelId: this._hotelId }, defaultFilterList);
+		settingsRepo.getDefaultYieldFilters()
+			.then((defaultFilterList: YieldFilterDO[]) => {
+				var hotelConfigRepo = this._appContext.getRepositoryFactory().getYieldFilterConfigurationsRepository();
+				return hotelConfigRepo.initYieldFilterConfigurationWithDefaults({ hotelId: this._hotelId }, defaultFilterList);
 			})
-			.then((ymFilterConfiguration: YieldManagerFilterConfigurationDO) => {
+			.then((ymFilterConfiguration: YieldFilterConfigurationDO) => {
 				resolve(true);
 			}).catch((error: any) => {
 				reject(error);

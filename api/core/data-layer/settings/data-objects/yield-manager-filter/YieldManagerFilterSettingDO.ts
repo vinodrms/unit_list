@@ -1,10 +1,10 @@
 import {BaseDO} from '../../../common/base/BaseDO';
 import {SettingMetadataDO} from '../common/SettingMetadataDO';
-import {YieldManagerFilterDO} from '../../../common/data-objects/yield-manager-filter/YieldManagerFilterDO';
+import {YieldFilterDO} from '../../../common/data-objects/yield-filter/YieldFilterDO';
 
-export class YieldManagerFilterSettingDO extends BaseDO {
+export class YieldFilterSettingDO extends BaseDO {
     metadata: SettingMetadataDO;
-    value: YieldManagerFilterDO[];
+    value: YieldFilterDO[];
     protected getPrimitivePropertyKeys(): string[] {
         return [];
     }
@@ -16,10 +16,10 @@ export class YieldManagerFilterSettingDO extends BaseDO {
         this.metadata.buildFromObject(object["metadata"]);
 
         this.value = [];
-        this.forEachElementOf(object["value"], (yieldManagerFilterObject: Object) => {
-            var yieldManagerFilterDO = new YieldManagerFilterDO();
-            yieldManagerFilterDO.buildFromObject(yieldManagerFilterObject);
-            this.value.push(yieldManagerFilterDO);
+        this.forEachElementOf(object["value"], (yieldFilterObject: Object) => {
+            var yieldFilterDO = new YieldFilterDO();
+            yieldFilterDO.buildFromObject(yieldFilterObject);
+            this.value.push(yieldFilterDO);
         });
     }
 }
