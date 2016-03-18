@@ -1,7 +1,7 @@
 import {Pipe, PipeTransform, EventEmitter, OnDestroy} from 'angular2/core';
 import {isPresent} from "angular2/src/facade/lang";
 import {ThUtils} from '../ThUtils';
-import {TranslationService} from './TranslationService';
+import {ThTranslation} from './ThTranslation';
 
 @Pipe({
 	name: 'translate',
@@ -14,7 +14,7 @@ export class TranslationPipe implements PipeTransform, OnDestroy {
     private _previousArgs: any[];
 	private _pipeValue: string;
 
-	constructor(private _translationService: TranslationService) {
+	constructor(private _thTranslation: ThTranslation) {
 	}
 
 	public transform(phrase: string, args: any[]): any {
@@ -26,7 +26,7 @@ export class TranslationPipe implements PipeTransform, OnDestroy {
 
 		this.updatePipeValue();
 		this.dispose();
-		this._onLangChange = this._translationService.onLangChange.subscribe((event: any) => {
+		this._onLangChange = this._thTranslation.onLangChange.subscribe((event: any) => {
             this.updatePipeValue();
         });
 
@@ -38,7 +38,7 @@ export class TranslationPipe implements PipeTransform, OnDestroy {
 		if (_.isArray(this._previousArgs) && this._previousArgs.length > 0 && !_.isObject(this._previousArgs[0])) {
 			parameters = this._previousArgs[0];
 		}
-		this._pipeValue = this._translationService.getTranslation(this._previousPhrase, parameters);
+		this._pipeValue = this._thTranslation.translate(this._previousPhrase, parameters);
 	}
 
     public ngOnDestroy(): void {

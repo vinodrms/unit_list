@@ -1,8 +1,9 @@
-import {Injectable, EventEmitter} from 'angular2/core';
+import {Injectable, Inject, EventEmitter} from 'angular2/core';
 import {ThUtils} from '../ThUtils';
 import {ThCookie} from '../cookies/ThCookie';
 import {DanishTranslations} from './locales/Danish';
 import {EnglishTranslations} from './locales/English';
+import {IThCookie} from '../cookies/IThCookie';
 
 export enum Locales {
 	English,
@@ -14,7 +15,7 @@ SupportedLocales[Locales.English] = "en";
 SupportedLocales[Locales.Danish] = "dk";
 
 @Injectable()
-export class TranslationService {
+export class ThTranslation {
 	private static TemplateVariableRegex: RegExp = /%\s?([^{}\s]*)\s?%/g;
 	private static LanguageCookieName = "ThLocales";
 	private static DefaultLocale = Locales.English;
@@ -25,18 +26,18 @@ export class TranslationService {
 	private _locale: Locales;
 	private _translationJson: Object = {};
 
-	constructor() {
+	constructor(@Inject(IThCookie) private _thCookie: IThCookie) {
 		this._thUtils = new ThUtils();
 		this.updateDefaultLocale();
 	}
 	private updateDefaultLocale() {
-		var cookieLang: string = ThCookie.getCookie(TranslationService.LanguageCookieName);
+		var cookieLang: string = this._thCookie.getCookie(ThTranslation.LanguageCookieName);
 		if (this.updateLocaleStr(cookieLang)) {
 			return;
 		}
 		var browserLang = this.getBrowserLangStr();
 		if (!this.updateLocaleStr(browserLang)) {
-			this.locale = TranslationService.DefaultLocale;
+			this.locale = ThTranslation.DefaultLocale;
 		}
 	}
 	private getBrowserLangStr(): string {
@@ -64,7 +65,7 @@ export class TranslationService {
 			return;
 		}
 		this._locale = locale;
-		ThCookie.setCookie(TranslationService.LanguageCookieName, SupportedLocales[this._locale]);
+		this._thCookie.setCookie(ThTranslation.LanguageCookieName, SupportedLocales[this._locale]);
 		this.updateTranslationJson();
 		this.onLangChange.emit({});
 	}
@@ -82,7 +83,7 @@ export class TranslationService {
 		}
 	}
 
-	public getTranslation(phrase: string, parameters?: Object): string {
+	public translate(phrase: string, parameters?: Object): string {
 		var translatedPhrase = this.getFromTranslationObject(phrase);
 		return this.applyTemplateRegexToParams(translatedPhrase, parameters);
 	}
@@ -97,7 +98,7 @@ export class TranslationService {
 		if (this._thUtils.isUndefinedOrNull(parameters) && !_.isObject(parameters)) {
 			return phrase;
 		}
-		return phrase.replace(TranslationService.TemplateVariableRegex, (substring: string, actualKey: string) => {
+		return phrase.replace(ThTranslation.TemplateVariableRegex, (substring: string, actualKey: string) => {
 			if (this._thUtils.isUndefinedOrNull(parameters, actualKey)) {
 				return "";
 			}

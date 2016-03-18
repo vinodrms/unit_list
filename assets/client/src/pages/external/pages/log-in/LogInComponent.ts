@@ -4,7 +4,7 @@ import {BaseFormComponent} from '../../../../common/base/BaseFormComponent';
 import {TranslationPipe} from '../../../../common/utils/localization/TranslationPipe';
 import {LogInService} from './services/LogInService';
 import {ThError} from '../../../../common/utils/responses/ThError';
-import {TranslationService} from '../../../../common/utils/localization/TranslationService';
+import {AppContext} from '../../../../common/utils/AppContext';
 
 @Component({
 	selector: 'log-in-component',
@@ -14,7 +14,7 @@ import {TranslationService} from '../../../../common/utils/localization/Translat
 })
 
 export class LogInComponent extends BaseFormComponent {
-	constructor(public _logInService: LogInService, private _translationService: TranslationService) {
+	constructor(private _appContext: AppContext, public _logInService: LogInService) {
 		super();
 	}
 
@@ -25,7 +25,7 @@ export class LogInComponent extends BaseFormComponent {
 	public logIn() {
 		this.didSubmitForm = true;
 		if (!this._logInService.isValid()) {
-			alert(this._translationService.getTranslation("Please complete all the required fields"));
+			alert(this._appContext.thTranslation.translate("Please complete all the required fields"));
 			return;
 		}
 
@@ -35,7 +35,7 @@ export class LogInComponent extends BaseFormComponent {
 		}, (error: ThError) => {
 			alert(error.message);
 			// TODO: remove - lang testing purposes
-			this._translationService.locale = 1 - this._translationService.locale;
+			this._appContext.thTranslation.locale = 1 - this._appContext.thTranslation.locale;
 		})
 	}
 }

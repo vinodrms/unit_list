@@ -5,7 +5,7 @@ import {Http, Response, URLSearchParams} from 'angular2/http';
 import {IThHttp} from './IThHttp';
 import {ThUtils} from '../ThUtils';
 import {ThError} from '../responses/ThError';
-import {TranslationService} from '../localization/TranslationService';
+import {ThTranslation} from '../localization/ThTranslation';
 
 enum ThStatusCode {
     Ok
@@ -20,7 +20,7 @@ export class ThHttp implements IThHttp {
 
 	private _thUtils: ThUtils;
 
-	constructor(private _http: Http, private _translationService: TranslationService) {
+	constructor(private _http: Http, private _thTranslation: ThTranslation) {
 	}
 
 	public get(method: string, parameters: Object): Observable<Object> {
@@ -38,7 +38,7 @@ export class ThHttp implements IThHttp {
 	}
 	private getDefaultReqParams(): Object {
 		return {
-			thLocale: this._translationService.locale
+			thLocale: this._thTranslation.locale
 		}
 	}
 	private buildUrlWithParameters(method: string, parameters: Object): URLSearchParams {

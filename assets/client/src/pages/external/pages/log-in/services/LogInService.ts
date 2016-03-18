@@ -1,5 +1,5 @@
 import {Injectable, Inject} from 'angular2/core';
-import {IThHttp} from '../../../../../common/utils/http/IThHttp';
+import {AppContext} from '../../../../../common/utils/AppContext';
 import {FormBuilder, ControlGroup, Validators} from 'angular2/common';
 import {ThValidators} from '../../../../../common/utils/form-utils/ThFormUtils';
 import {CredentialsDO} from '../data-objects/CredentialsDO';
@@ -9,7 +9,7 @@ import {Observable} from 'rxjs/Observable';
 export class LogInService {
 	private _loginForm: ControlGroup;
 
-	constructor( @Inject(IThHttp) private _thHttp: IThHttp, private _formBuilder: FormBuilder) {
+	constructor(private _appContext: AppContext, private _formBuilder: FormBuilder) {
 		this.initLoginForm();
 	}
 	private initLoginForm() {
@@ -33,6 +33,6 @@ export class LogInService {
 	public logIn(): Observable<any> {
 		var credentials = new CredentialsDO();
 		credentials.buildFromObject(this._loginForm.value);
-		return this._thHttp.post("account/logIn", credentials);
+		return this._appContext.thHttp.post("account/logIn", credentials);
 	}
 }
