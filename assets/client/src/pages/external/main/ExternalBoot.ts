@@ -15,8 +15,8 @@ bootstrap(MainLayoutExternalComponent,
         bind(APP_BASE_HREF).toValue(""),
         provide(LocationStrategy, { useClass: HashLocationStrategy }),
 
+		TranslationService,
 		HTTP_PROVIDERS,
-		provide(IThHttp, { useClass: ThHttp }),
-		TranslationService
+		provide(IThHttp, { useClass: ThHttp })
     ]
 );

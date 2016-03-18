@@ -8,9 +8,6 @@ import {TranslationService} from './TranslationService';
 	pure: false // stateful pipe
 })
 export class TranslationPipe implements PipeTransform, OnDestroy {
-	private static TemplateVariableRegex: RegExp = /%\s?([^{}\s]*)\s?%/g;
-
-	private _thUtils: ThUtils;
 	private _onLangChange: EventEmitter<string>;
 
 	private _previousPhrase: string;
@@ -18,7 +15,6 @@ export class TranslationPipe implements PipeTransform, OnDestroy {
 	private _pipeValue: string;
 
 	constructor(private _translationService: TranslationService) {
-		this._thUtils = new ThUtils();
 	}
 
 	public transform(phrase: string, args: any[]): any {
@@ -38,20 +34,11 @@ export class TranslationPipe implements PipeTransform, OnDestroy {
 	}
 
 	private updatePipeValue() {
-		var translatedMessage = this._translationService.getTranslation(this._previousPhrase);
-		if (!_.isArray(this._previousArgs) || this._previousArgs.length === 0 || !_.isObject(this._previousArgs[0])) {
-			this._pipeValue = translatedMessage;
-			return;
+		var parameters = null;
+		if (_.isArray(this._previousArgs) && this._previousArgs.length > 0 && !_.isObject(this._previousArgs[0])) {
+			parameters = this._previousArgs[0];
 		}
-		this._pipeValue = this.applyTemplateRegex(translatedMessage, this._previousArgs[0]);
-	}
-	private applyTemplateRegex(message: string, parameters: Object): string {
-		return message.replace(TranslationPipe.TemplateVariableRegex, (substring: string, actualKey: string) => {
-			if (this._thUtils.isUndefinedOrNull(parameters, actualKey)) {
-				return "";
-			}
-			return parameters[actualKey];
-		});
+		this._pipeValue = this._translationService.getTranslation(this._previousPhrase, parameters);
 	}
 
     public ngOnDestroy(): void {

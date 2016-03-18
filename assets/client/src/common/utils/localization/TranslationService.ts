@@ -15,6 +15,7 @@ SupportedLocales[Locales.Danish] = "dk";
 
 @Injectable()
 export class TranslationService {
+	private static TemplateVariableRegex: RegExp = /%\s?([^{}\s]*)\s?%/g;
 	private static LanguageCookieName = "ThLocales";
 	private static DefaultLocale = Locales.English;
 
@@ -81,11 +82,26 @@ export class TranslationService {
 		}
 	}
 
-	public getTranslation(phrase: string): string {
+	public getTranslation(phrase: string, parameters?: Object): string {
+		var translatedPhrase = this.getFromTranslationObject(phrase);
+		return this.applyTemplateRegexToParams(translatedPhrase, parameters);
+	}
+	private getFromTranslationObject(phrase: string): string {
 		var translatedMessage = this._translationJson[phrase];
 		if (this._thUtils.isUndefinedOrNull(translatedMessage)) {
 			return phrase;
 		}
 		return translatedMessage;
+	}
+	private applyTemplateRegexToParams(phrase: string, parameters?: Object): string {
+		if (this._thUtils.isUndefinedOrNull(parameters) && !_.isObject(parameters)) {
+			return phrase;
+		}
+		return phrase.replace(TranslationService.TemplateVariableRegex, (substring: string, actualKey: string) => {
+			if (this._thUtils.isUndefinedOrNull(parameters, actualKey)) {
+				return "";
+			}
+			return parameters[actualKey];
+		});
 	}
 }

@@ -5,6 +5,7 @@ import {Http, Response, URLSearchParams} from 'angular2/http';
 import {IThHttp} from './IThHttp';
 import {ThUtils} from '../ThUtils';
 import {ThError} from '../responses/ThError';
+import {TranslationService} from '../localization/TranslationService';
 
 enum ThStatusCode {
     Ok
@@ -19,7 +20,7 @@ export class ThHttp implements IThHttp {
 
 	private _thUtils: ThUtils;
 
-	constructor(private _http: Http) {
+	constructor(private _http: Http, private _translationService: TranslationService) {
 	}
 
 	public get(method: string, parameters: Object): Observable<Object> {
@@ -27,13 +28,18 @@ export class ThHttp implements IThHttp {
 		var searchParams = this.buildUrlWithParameters(method, parameters);
 
 		return Observable.create((observer: Observer<Object>) => {
-			this._http.get(fullGetUrl, { search: searchParams }).subscribe((res: Response) => {
+			this._http.get(fullGetUrl, { search: searchParams, body: JSON.stringify(this.getDefaultReqParams()) }).subscribe((res: Response) => {
 				this.parseResult(res, observer);
 			}, (err: Error) => {
 				observer.error(new ThError(err.message));
 				observer.complete();
 			});
 		});
+	}
+	private getDefaultReqParams(): Object {
+		return {
+			thLocale: this._translationService.locale
+		}
 	}
 	private buildUrlWithParameters(method: string, parameters: Object): URLSearchParams {
 		let urlSearchParams: URLSearchParams = new URLSearchParams();
@@ -52,9 +58,12 @@ export class ThHttp implements IThHttp {
 
 	public post(method: string, parameters: Object): Observable<Object> {
 		var url = this.appendBaseUrl(method);
-
+		var actualParams = this.getDefaultReqParams();
+		if (_.isObject(parameters)) {
+			actualParams = _.extend(actualParams, parameters);
+		}
 		return Observable.create((observer: Observer<Object>) => {
-			this._http.post(url, JSON.stringify(parameters)).subscribe((res: Response) => {
+			this._http.post(url, JSON.stringify(actualParams)).subscribe((res: Response) => {
 				this.parseResult(res, observer);
 			}, (err: Error) => {
 				observer.error(new ThError(err.message));
