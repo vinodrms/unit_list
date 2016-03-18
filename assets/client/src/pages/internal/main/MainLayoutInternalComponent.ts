@@ -1,5 +1,5 @@
 import {Component} from 'angular2/core';
-import {BaseComponent} from '../../../common/components/BaseComponent';
+import {BaseComponent} from '../../../common/base/BaseComponent';
 
 @Component({
     selector: 'main-layout-internal',

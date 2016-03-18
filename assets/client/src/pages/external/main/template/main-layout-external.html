@@ -1,31 +1,12 @@
 <div id="wrapper">
 	<div id="login" class="animate form">
 		<section class="login_content">
-			<form>
-				<h1>Login Form</h1>
-				<div>
-					<input type="text" class="form-control" placeholder="Email" required="" />
-				</div>
-				<div>
-					<input type="password" class="form-control" placeholder="Password" required="" />
-				</div>
-				<div>
-					<a class="btn btn-default submit" href="wizard_1.html">Log in</a>
-					<a class="reset_pass" href="reset_password.html">Lost your password?</a>
-				</div>
-				<div class="clearfix"></div>
-				<div class="separator">
-					<p class="change_link">New to site?
-						<button (click)="updatelang()" class="to_register"> Create Account </button>
-					</p>
-					<div class="clearfix"></div>
-					<br />
-					<div>
-						<h1><i class="fa fa-building" style="font-size: 26px;"></i> UnitPal {{ 'Welcome, %name%!' | translate:{name: name} }}</h1>
-						<p>©2016 UnitPal.</p>
-					</div>
-				</div>
-			</form>
+			<router-outlet></router-outlet>
+			<br />
+			<div>
+				<h1><i class="fa fa-building" style="font-size: 26px;"></i> UnitPal</h1>
+				<p>©2016 UnitPal.</p>
+			</div>
 		</section>
 	</div>
 </div>
