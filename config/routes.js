@@ -100,18 +100,18 @@ module.exports.routes = {
 	/*
 		Front End Views
 	*/
-	'GET /*': {
+	'GET /home*': {
 		controller: 'AppViewsController',
-		action: 'getExternalView',
+		action: 'getInternalView',
 		skipAssets: true,
 		skipRegex: [
 			/^\/api\/.*$/,
 			/^\/node_modules\/.*$/
 		]
 	},
-	'GET /home*': {
+	'GET /*': {
 		controller: 'AppViewsController',
-		action: 'getInternalView',
+		action: 'getExternalView',
 		skipAssets: true,
 		skipRegex: [
 			/^\/api\/.*$/,

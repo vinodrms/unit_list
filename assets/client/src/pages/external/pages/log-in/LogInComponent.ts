@@ -1,6 +1,6 @@
 import {Component, AfterViewInit} from 'angular2/core';
 import {ControlGroup} from 'angular2/common';
-import {RouteParams, Router, Location} from 'angular2/router';
+import {RouteParams, Location} from 'angular2/router';
 import {BaseFormComponent} from '../../../../common/base/BaseFormComponent';
 import {TranslationPipe} from '../../../../common/utils/localization/TranslationPipe';
 import {LogInService} from './services/LogInService';
@@ -21,11 +21,10 @@ export class LogInComponent extends BaseFormComponent implements AfterViewInit {
 	constructor(
 		private _appContext: AppContext,
 		private _logInService: LogInService,
-		private _router: Router,
 		private _location: Location,
 		routeParams: RouteParams) {
-		super();
 
+		super();
 		this._statusCodeParser = new LogInStatusCodeParser();
 		this._statusCodeParser.updateStatusCode(routeParams.get("loginStatusCode"));
 	}
