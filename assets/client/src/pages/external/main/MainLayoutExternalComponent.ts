@@ -12,7 +12,7 @@ import {LogInComponent} from '../pages/log-in/LogInComponent';
 })
 
 @RouteConfig([
-	{ path: '/', name: 'LoginPageComponent', component: LogInComponent }
+	{ path: '/', name: 'LogInComponent', component: LogInComponent }
 ])
 
 export class MainLayoutExternalComponent extends BaseComponent {

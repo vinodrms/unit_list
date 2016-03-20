@@ -1,8 +1,10 @@
-import {Component} from 'angular2/core';
+import {Component, AfterViewInit} from 'angular2/core';
 import {ControlGroup} from 'angular2/common';
+import {RouteParams, Router, Location} from 'angular2/router';
 import {BaseFormComponent} from '../../../../common/base/BaseFormComponent';
 import {TranslationPipe} from '../../../../common/utils/localization/TranslationPipe';
 import {LogInService} from './services/LogInService';
+import {LogInStatusCodeParser} from './utils/LogInStatusCodeParser';
 import {ThError} from '../../../../common/utils/responses/ThError';
 import {AppContext} from '../../../../common/utils/AppContext';
 
@@ -13,9 +15,37 @@ import {AppContext} from '../../../../common/utils/AppContext';
 	pipes: [TranslationPipe]
 })
 
-export class LogInComponent extends BaseFormComponent {
-	constructor(private _appContext: AppContext, public _logInService: LogInService) {
+export class LogInComponent extends BaseFormComponent implements AfterViewInit {
+	private _statusCodeParser: LogInStatusCodeParser;
+
+	constructor(
+		private _appContext: AppContext,
+		private _logInService: LogInService,
+		private _router: Router,
+		private _location: Location,
+		routeParams: RouteParams) {
 		super();
+
+		this._statusCodeParser = new LogInStatusCodeParser();
+		this._statusCodeParser.updateStatusCode(routeParams.get("loginStatusCode"));
+	}
+
+	ngAfterViewInit() {
+		this.removeAllQueryParams();
+		this.displayStatusAlertIfNecessary();
+	}
+	private removeAllQueryParams() {
+		this._location.replaceState("/");
+	}
+	private displayStatusAlertIfNecessary() {
+		var loginStatus = this._statusCodeParser.getLoginStatusResponse();
+		// TODO: alert accordingly
+		if (loginStatus.displaySuccess) {
+			alert('SUCCES: ' + this._appContext.thTranslation.translate(loginStatus.message));
+		}
+		else if (loginStatus.displayError) {
+			alert('ERROR: ' + this._appContext.thTranslation.translate(loginStatus.message));
+		}
 	}
 
 	protected getDefaultControlGroup(): ControlGroup {

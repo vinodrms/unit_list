@@ -1,8 +1,10 @@
 import {Observable} from 'rxjs/Observable';
 import {Observer} from "rxjs/Observer";
-import {Injectable} from 'angular2/core';
+import {Injectable, Inject} from 'angular2/core';
 import {Http, Response, URLSearchParams} from 'angular2/http';
 import {IThHttp} from './IThHttp';
+import {IBrowserLocation} from '../browser-location/IBrowserLocation';
+import {LoginStatusCode} from '../responses/LoginStatusCode';
 import {ThUtils} from '../ThUtils';
 import {ThError} from '../responses/ThError';
 import {ThTranslation} from '../localization/ThTranslation';
@@ -20,7 +22,10 @@ export class ThHttp implements IThHttp {
 
 	private _thUtils: ThUtils;
 
-	constructor(private _http: Http, private _thTranslation: ThTranslation) {
+	constructor(
+		private _http: Http,
+		private _thTranslation: ThTranslation,
+		@Inject(IBrowserLocation) private _browserLocation: IBrowserLocation) {
 	}
 
 	public get(method: string, parameters: Object): Observable<Object> {
@@ -84,7 +89,7 @@ export class ThHttp implements IThHttp {
 			observer.complete();
 		}
 		else if (result.status == ThHttp.HttpForbidden) {
-			// TODO : handle session timeout
+			this._browserLocation.goToLoginPage(LoginStatusCode.SessionTimeout);
 		}
 		else {
 			observer.error(new ThError(result.statusText));

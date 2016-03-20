@@ -21,29 +21,9 @@
  */
 
 module.exports.routes = {
-
-	/***************************************************************************
-	*                                                                          *
-	* Make the view located at `views/homepage.ejs` (or `views/homepage.jade`, *
-	* etc. depending on your default view engine) your home page.              *
-	*                                                                          *
-	* (Alternatively, remove this and add an `index.html` file in your         *
-	* `assets` directory)                                                      *
-	*                                                                          *
-	***************************************************************************/
-
-	'GET /': 'AppViewsController.getExternalView',
-	'GET /home': 'AppViewsController.getInternalView',
-
-	/***************************************************************************
-	*                                                                          *
-	* Custom routes here...                                                    *
-	*                                                                          *
-	* If a request to a URL doesn't match any of the custom routes above, it   *
-	* is matched against Sails route blueprints. See `config/blueprints.js`    *
-	* for configuration options and examples.                                  *
-	*                                                                          *
-	***************************************************************************/
+	/*
+		Server APIs
+	*/
 	'POST /api/account/signUp': 'AccountController.signUp',
 	'POST /api/account/logIn': 'AccountController.logIn',
 	'GET /api/account/activate': 'AccountController.activate',
@@ -71,7 +51,7 @@ module.exports.routes = {
     'GET /api/settings/paymentMethods': 'SettingsController.getPaymentMethods',
 	'GET /api/settings/addOnProductCategories': 'SettingsController.getAddOnProductCategories',
     'GET /api/settings/bedTemplates': 'SettingsController.getBedTemplates',
-    
+
     'POST /api/beds': 'BedsController.getBedList',
     'POST /api/beds/saveBedItem': 'BedsController.saveBedItem',
 	'POST /api/beds/deleteBedItem': 'BedsController.deleteBedItem',
@@ -112,7 +92,30 @@ module.exports.routes = {
 
 	'POST /api/yieldManager/closePriceProducts': 'YieldManagerController.closePriceProducts',
 	'POST /api/yieldManager/openPriceProducts': 'YieldManagerController.openPriceProducts',
-    
+
     'GET /api/hotelConfigurations/yieldFilters': 'HotelConfigurationsController.getYieldFilterConfiguration',
-    'POST /api/hotelConfigurations/saveYieldFilterValue': 'HotelConfigurationsController.saveYieldFilterValue'
+    'POST /api/hotelConfigurations/saveYieldFilterValue': 'HotelConfigurationsController.saveYieldFilterValue',
+
+
+	/*
+		Front End Views
+	*/
+	'GET /*': {
+		controller: 'AppViewsController',
+		action: 'getExternalView',
+		skipAssets: true,
+		skipRegex: [
+			/^\/api\/.*$/,
+			/^\/node_modules\/.*$/
+		]
+	},
+	'GET /home*': {
+		controller: 'AppViewsController',
+		action: 'getInternalView',
+		skipAssets: true,
+		skipRegex: [
+			/^\/api\/.*$/,
+			/^\/node_modules\/.*$/
+		]
+	}
 };
