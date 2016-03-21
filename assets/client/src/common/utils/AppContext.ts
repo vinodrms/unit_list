@@ -8,6 +8,8 @@ import {IRouterNavigator} from './navigator/IRouterNavigator';
 import {RouterNavigator} from './navigator/RouterNavigator';
 import {IToaster} from './toaster/IToaster';
 
+export {ThServerApi} from './http/ThServerApi';
+
 @Injectable()
 export class AppContext {
 	public thUtils: ThUtils;

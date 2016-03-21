@@ -1,6 +1,6 @@
 import {Component} from 'angular2/core';
 import {ControlGroup} from 'angular2/common';
-import {RouterLink, Router} from 'angular2/router';
+import {RouterLink} from 'angular2/router';
 import {BaseFormComponent} from '../../../../common/base/BaseFormComponent';
 import {ExternalFooterComponent} from '../common/footer/ExternalFooterComponent';
 import {TranslationPipe} from '../../../../common/utils/localization/TranslationPipe';
@@ -19,7 +19,6 @@ import {LoginStatusCode} from '../../../../common/utils/responses/LoginStatusCod
 
 export class ResetPasswordComponent extends BaseFormComponent {
 	constructor(
-		private _router: Router,
 		private _appContext: AppContext,
 		private _resetPasswdService: ResetPasswordService) {
 

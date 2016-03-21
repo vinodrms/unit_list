@@ -1,5 +1,5 @@
 import {Injectable, Inject} from 'angular2/core';
-import {AppContext} from '../../../../../common/utils/AppContext';
+import {AppContext, ThServerApi} from '../../../../../common/utils/AppContext';
 import {FormBuilder, ControlGroup, Validators} from 'angular2/common';
 import {ThValidators} from '../../../../../common/utils/form-utils/ThFormUtils';
 import {CredentialsDO} from '../data-objects/CredentialsDO';
@@ -26,7 +26,7 @@ export class LogInService {
 	public logIn(): Observable<any> {
 		var credentials = new CredentialsDO();
 		credentials.buildFromObject(this._loginForm.value);
-		return this._appContext.thHttp.post("account/logIn", credentials);
+		return this._appContext.thHttp.post(ThServerApi.AccountLogIn, credentials);
 	}
 
 	public get loginForm(): ControlGroup {

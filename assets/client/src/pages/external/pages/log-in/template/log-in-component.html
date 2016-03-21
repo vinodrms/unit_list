@@ -1,7 +1,7 @@
 <form [ngFormModel]="getDefaultControlGroup()" (submit)="logIn()">
 	<h1>{{ "Login to " | translate }} UnitPal</h1>
 	<div [ngClass]="{bad: controlIsInvalid('email')}">
-		<input type="text" class="form-control" placeholder="{{ 'Email' | translate }}" ngControl="email"/>
+		<input type="text" class="form-control" placeholder="{{ 'Email' | translate }}" ngControl="email" />
 	</div>
 	<div [ngClass]="{bad: controlIsInvalid('password')}">
 		<input type="password" class="form-control" placeholder="{{ 'Password' | translate }}" ngControl="password" />
@@ -14,9 +14,7 @@
 	<div class="clearfix"></div>
 	<div class="separator">
 		<p class="change_link">New to site?
-			<a class="to_register"> Create Account </a>
-		</p>
-		<p class="change_link">{{ 'Create Account' | translate }}
+			<a class="to_register"> {{ 'Create Account' | translate }} </a>
 		</p>
 		<external-footer-component></external-footer-component>
 	</div>

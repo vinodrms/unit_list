@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+	<base href="/">
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<!-- Meta, title, CSS, favicons, etc. -->
 	<meta charset="utf-8">
@@ -46,9 +47,6 @@
                             format: 'register',
                             defaultExtension: 'js'
                         }
-                    },
-                    AppContext : {
-                        ComponentsBaseRootDirectory: "/client/src/"
                     }
                 });
                 System.import('client/src/pages/external/main/ExternalBoot').then(null, console.error.bind(console));
@@ -56,10 +54,7 @@
 		<%} else {%>
 			<script>
 				System.config({
-                    bundles: { 'client/build/unitpal-external-min.js': ['pages/external/main/ExternalBoot'] },
-                    AppContext : {
-                        ComponentsBaseRootDirectory: ""   
-                    }
+                    bundles: { 'client/build/unitpal-external-min.js': ['pages/external/main/ExternalBoot'] }
                 });
                 System.import('pages/external/main/ExternalBoot').then(null, console.error.bind(console));
 			</script>

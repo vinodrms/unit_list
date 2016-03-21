@@ -1,6 +1,6 @@
 import {Injectable, Inject} from 'angular2/core';
 import {Observable} from 'rxjs/Observable';
-import {AppContext} from '../../../../../common/utils/AppContext';
+import {AppContext, ThServerApi} from '../../../../../common/utils/AppContext';
 import {FormBuilder, ControlGroup, Validators} from 'angular2/common';
 import {ThValidators} from '../../../../../common/utils/form-utils/ThFormUtils';
 import {ResetPasswordDO} from '../data-objects/ResetPasswordDO';
@@ -24,7 +24,7 @@ export class ResetPasswordService {
 	public resetPassword(): Observable<any> {
 		var resetPasswd = new ResetPasswordDO();
 		resetPasswd.buildFromObject(this._resetPasswdForm.value);
-		return this._appContext.thHttp.post("account/requestResetPassword", { requestData: resetPasswd });
+		return this._appContext.thHttp.post(ThServerApi.AccountRequestResetPassword, { requestData: resetPasswd });
 	}
 
 	public get resetPasswdForm(): ControlGroup {

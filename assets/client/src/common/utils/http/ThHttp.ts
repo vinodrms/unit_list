@@ -8,6 +8,7 @@ import {LoginStatusCode} from '../responses/LoginStatusCode';
 import {ThUtils} from '../ThUtils';
 import {ThError} from '../responses/ThError';
 import {ThTranslation} from '../localization/ThTranslation';
+import {ThServerApi, ServerApiBuilder} from './ThServerApi';
 
 enum ThStatusCode {
     Ok
@@ -15,8 +16,6 @@ enum ThStatusCode {
 
 @Injectable()
 export class ThHttp implements IThHttp {
-	private static BaseEndpointUrl = '/api/';
-
 	private static HttpOk = 200;
 	private static HttpForbidden = 403;
 
@@ -27,13 +26,18 @@ export class ThHttp implements IThHttp {
 		private _thTranslation: ThTranslation,
 		@Inject(IBrowserLocation) private _browserLocation: IBrowserLocation) {
 	}
+	
+	private getApiUrl(serverApi: ThServerApi): string {
+		var builder = new ServerApiBuilder(serverApi);
+		return builder.getUrl();
+	}
 
-	public get(method: string, parameters: Object): Observable<Object> {
-		var fullGetUrl = this.appendBaseUrl(method);
-		var searchParams = this.buildUrlWithParameters(method, parameters);
+	public get(serverApi: ThServerApi, parameters: Object): Observable<Object> {
+		var url = this.getApiUrl(serverApi);
+		var searchParams = this.buildSearchParameters(parameters);
 
 		return Observable.create((observer: Observer<Object>) => {
-			this._http.get(fullGetUrl, { search: searchParams, body: JSON.stringify(this.getDefaultReqParams()) }).subscribe((res: Response) => {
+			this._http.get(url, { search: searchParams, body: JSON.stringify(this.getDefaultReqParams()) }).subscribe((res: Response) => {
 				this.parseResult(res, observer);
 			}, (err: Error) => {
 				observer.error(new ThError(err.message));
@@ -46,7 +50,7 @@ export class ThHttp implements IThHttp {
 			thLocale: this._thTranslation.locale
 		}
 	}
-	private buildUrlWithParameters(method: string, parameters: Object): URLSearchParams {
+	private buildSearchParameters(parameters: Object): URLSearchParams {
 		let urlSearchParams: URLSearchParams = new URLSearchParams();
 		if (this._thUtils.isUndefinedOrNull(parameters)) {
 			return urlSearchParams;
@@ -57,12 +61,9 @@ export class ThHttp implements IThHttp {
 		});
 		return urlSearchParams;
 	}
-	private appendBaseUrl(method: String): string {
-		return ThHttp.BaseEndpointUrl + method;
-	}
 
-	public post(method: string, parameters: Object): Observable<Object> {
-		var url = this.appendBaseUrl(method);
+	public post(serverApi: ThServerApi, parameters: Object): Observable<Object> {
+		var url = this.getApiUrl(serverApi);
 		var actualParams = this.getDefaultReqParams();
 		if (_.isObject(parameters)) {
 			actualParams = _.extend(actualParams, parameters);

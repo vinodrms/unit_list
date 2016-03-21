@@ -77,7 +77,7 @@ export class UserAccountRequestResetPassword {
 
 	private getRequestResetPasswordEmailTemplateDO(): AccountRequestResetPasswordTemplateDO {
         var emailTemplateDO: AccountRequestResetPasswordTemplateDO = new AccountRequestResetPasswordTemplateDO();
-		emailTemplateDO.activationLink = this._authUtils.getResetPasswordLink(this._generatedToken.code);
+		emailTemplateDO.activationLink = this._authUtils.getResetPasswordLink(this._resetPasswdDO.email, this._generatedToken.code);
 		emailTemplateDO.firstName = this._updatedUser.contactDetails.firstName;
 		emailTemplateDO.lastName = this._updatedUser.contactDetails.lastName;
         return emailTemplateDO;

@@ -17,7 +17,7 @@ LoginStatusResponsesWrapper[LoginStatusCode.SessionTimeout] = { action: LoginSta
 LoginStatusResponsesWrapper[LoginStatusCode.AccountActivationOk] = { action: LoginStatusAction.SuccessAlert, message: "Account succesfully activated" };
 LoginStatusResponsesWrapper[LoginStatusCode.AccountActivationError] = { action: LoginStatusAction.ErrorAlert, message: "Problem activating account. The link may have expired." };
 LoginStatusResponsesWrapper[LoginStatusCode.RequestResetPasswordOk] = { action: LoginStatusAction.SuccessAlert, message: "Am email has been sent. Please check your inbox." };
-
+LoginStatusResponsesWrapper[LoginStatusCode.UpdatePasswordOk] = { action: LoginStatusAction.SuccessAlert, message: "Your password was reset. Please log in using the new credentials." };
 
 export class LogInStatusCodeParser {
 	private _statusCode: LoginStatusCode;
