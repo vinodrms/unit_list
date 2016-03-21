@@ -13,3 +13,5 @@
 /// <reference path="moment/moment.d.ts" />
 /// <reference path="systemjs/systemjs.d.ts" />
 /// <reference path="underscore/underscore.d.ts" />
+/// <reference path="jquery/jquery.d.ts" />
+/// <reference path="toastr/toastr.d.ts" />

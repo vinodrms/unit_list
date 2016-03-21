@@ -1,8 +1,10 @@
-import {Component} from 'angular2/core';
+import {Inject, Component, ElementRef} from 'angular2/core';
 import {BaseComponent} from '../../../common/base/BaseComponent';
 import {TranslationPipe} from '../../../common/utils/localization/TranslationPipe';
 import {ROUTER_DIRECTIVES, ROUTER_BINDINGS, RouteConfig} from 'angular2/router';
 import {LogInComponent} from '../pages/log-in/LogInComponent';
+import {ResetPasswordComponent} from '../pages/reset-password/ResetPasswordComponent';
+import {IToaster} from '../../../common/utils/toaster/IToaster';
 
 @Component({
     selector: 'main-layout-external',
@@ -12,11 +14,14 @@ import {LogInComponent} from '../pages/log-in/LogInComponent';
 })
 
 @RouteConfig([
-	{ path: '/', name: 'LogInComponent', component: LogInComponent }
+	{ path: '/', name: 'LogInComponent', component: LogInComponent },
+	{ path: '/reset', name: 'ResetPasswordComponent', component: ResetPasswordComponent }
+	
 ])
 
 export class MainLayoutExternalComponent extends BaseComponent {
-	constructor() {
+	constructor(elementRef: ElementRef, @Inject(IToaster) toaster: IToaster) {
 		super();
+		toaster.bootstrap(elementRef);
 	}
 }

@@ -1,17 +1,19 @@
 import {Component, AfterViewInit} from 'angular2/core';
 import {ControlGroup} from 'angular2/common';
-import {RouteParams, Location} from 'angular2/router';
+import {RouteParams, Location, RouterLink} from 'angular2/router';
 import {BaseFormComponent} from '../../../../common/base/BaseFormComponent';
 import {TranslationPipe} from '../../../../common/utils/localization/TranslationPipe';
 import {LogInService} from './services/LogInService';
-import {LogInStatusCodeParser} from './utils/LogInStatusCodeParser';
+import {LogInStatusCodeParser, LoginStatusAction} from './utils/LogInStatusCodeParser';
 import {ThError} from '../../../../common/utils/responses/ThError';
 import {AppContext} from '../../../../common/utils/AppContext';
+import {ExternalFooterComponent} from '../common/footer/ExternalFooterComponent';
 
 @Component({
 	selector: 'log-in-component',
 	templateUrl: '/client/src/pages/external/pages/log-in/template/log-in-component.html',
 	providers: [LogInService],
+	directives: [RouterLink, ExternalFooterComponent],
 	pipes: [TranslationPipe]
 })
 
@@ -38,12 +40,17 @@ export class LogInComponent extends BaseFormComponent implements AfterViewInit {
 	}
 	private displayStatusAlertIfNecessary() {
 		var loginStatus = this._statusCodeParser.getLoginStatusResponse();
-		// TODO: alert accordingly
-		if (loginStatus.displaySuccess) {
-			alert('SUCCES: ' + this._appContext.thTranslation.translate(loginStatus.message));
-		}
-		else if (loginStatus.displayError) {
-			alert('ERROR: ' + this._appContext.thTranslation.translate(loginStatus.message));
+		switch (loginStatus.action) {
+			case LoginStatusAction.SuccessAlert:
+				var successMessage = this._appContext.thTranslation.translate(loginStatus.message);
+				this._appContext.toaster.success(successMessage);
+				break;
+			case LoginStatusAction.ErrorAlert:
+				var errorMessage = this._appContext.thTranslation.translate(loginStatus.message);
+				this._appContext.toaster.error(errorMessage);
+				break;
+			default:
+				break;
 		}
 	}
 
@@ -54,17 +61,15 @@ export class LogInComponent extends BaseFormComponent implements AfterViewInit {
 	public logIn() {
 		this.didSubmitForm = true;
 		if (!this._logInService.isValid()) {
-			alert(this._appContext.thTranslation.translate("Please complete all the required fields"));
+			var errorMessage = this._appContext.thTranslation.translate("Please complete all the required fields");
+			this._appContext.toaster.error(errorMessage);
 			return;
 		}
-
-		// TODO: implement login logic
 		this._logInService.logIn().subscribe((result: Object) => {
+			// TODO: navigate to corresponding page after log in
 
 		}, (error: ThError) => {
-			alert(error.message);
-			// TODO: remove - lang testing purposes
-			this._appContext.thTranslation.locale = 1 - this._appContext.thTranslation.locale;
-		})
+			this._appContext.toaster.error(error.message);
+		});
 	}
 }

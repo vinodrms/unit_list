@@ -61,12 +61,23 @@ gulp.task('clean-dist', function() {
 gulp.task('copy-dist', ['pack-internal', 'pack-external', 'clean-dist'], function() {
 	var scripts = [
 		'client/build/**/*.js',
+		'client/static-assets/**/*',
+		
+		'node_modules/bootstrap/dist/**/*',
+		'node_modules/font-awesome/**/*',
+		'node_modules/animate.css/**/*',
+		'node_modules/bootstrap-daterangepicker/**/*',
+		'node_modules/toastr/build/**/*',
+		'node_modules/jquery.1/**/*',
+		'node_modules/moment/min/**/*',
+		'node_modules/pace-progress**/*',
+		'node_modules/underscore/**/*',
+		
 		'node_modules/angular2/bundles/**/*',
 		'node_modules/angular2/es6/**/*',
 		'node_modules/es6-shim/**/*',
 		'node_modules/systemjs/dist/**/*',
 		'node_modules/rxjs/bundles/**/*',
-		'node_modules/underscore/**/*',
 		'js/**/*',
 		'styles/**/*',
 		'images/**/*',

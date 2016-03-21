@@ -11,6 +11,10 @@ import {IThHttp} from '../../../common/utils/http/IThHttp';
 import {ThHttp} from '../../../common/utils/http/ThHttp';
 import {IBrowserLocation} from '../../../common/utils/browser-location/IBrowserLocation';
 import {BrowserLocation} from '../../../common/utils/browser-location/BrowserLocation';
+import {IRouterNavigator} from '../../../common/utils/navigator/IRouterNavigator';
+import {RouterNavigator} from '../../../common/utils/navigator/RouterNavigator';
+import {IToaster} from '../../../common/utils/toaster/IToaster';
+import {Toaster} from '../../../common/utils/toaster/Toaster';
 import {ThTranslation} from '../../../common/utils/localization/ThTranslation';
 import {AppContext} from '../../../common/utils/AppContext';
 
@@ -21,9 +25,11 @@ bootstrap(MainLayoutExternalComponent,
 
 		provide(IThCookie, { useClass: ThCookie }),
 		provide(IBrowserLocation, { useClass: BrowserLocation }),
+		provide(IRouterNavigator, { useClass: RouterNavigator }),
 		ThTranslation,
 		HTTP_PROVIDERS,
 		provide(IThHttp, { useClass: ThHttp }),
+		provide(IToaster, { useClass: Toaster }),
 		AppContext
     ]
 );

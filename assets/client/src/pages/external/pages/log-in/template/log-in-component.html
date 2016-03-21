@@ -1,20 +1,23 @@
 <form [ngFormModel]="getDefaultControlGroup()" (submit)="logIn()">
-	<h1>{{ "Login" | translate }}</h1>
-	<div >
-		<input type="text" class="form-control" placeholder="{{ 'Email' | translate }}" ngControl="email" [ngClass]="{invalid: controlIsInvalid('email')}" />
+	<h1>{{ "Login to " | translate }} UnitPal</h1>
+	<div [ngClass]="{bad: controlIsInvalid('email')}">
+		<input type="text" class="form-control" placeholder="{{ 'Email' | translate }}" ngControl="email"/>
+	</div>
+	<div [ngClass]="{bad: controlIsInvalid('password')}">
+		<input type="password" class="form-control" placeholder="{{ 'Password' | translate }}" ngControl="password" />
 	</div>
 	<div>
-		<input type="password" class="form-control" placeholder="{{ 'Password' | translate }}" ngControl="password" [ngClass]="{invalid: controlIsInvalid('password')}" />
-	</div>
-	<div>
-		<button class="btn btn-default submit">{{ 'Log In' | translate }}</button>
-		<a class="reset_pass" href="reset_password.html">{{ 'Lost your password?' | translate }}</a>
+		<button class="btn btn-primary btn-lg submit" type="submit">{{ 'Log In' | translate }}</button>
+		<br/>
+		<a class="reset_pass" [routerLink]="['/ResetPasswordComponent']">{{ 'Lost your password?' | translate }}</a>
 	</div>
 	<div class="clearfix"></div>
 	<div class="separator">
-		<p class="change_link">{{ 'New to site?' | translate }}
-			<button (click)="updatelang()" class="to_register"> {{ 'Create Account' | translate }} </button>
+		<p class="change_link">New to site?
+			<a class="to_register"> Create Account </a>
 		</p>
-		<div class="clearfix"></div>
+		<p class="change_link">{{ 'Create Account' | translate }}
+		</p>
+		<external-footer-component></external-footer-component>
 	</div>
 </form>

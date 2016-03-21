@@ -1,16 +1,23 @@
 import {LoginStatusCode} from '../../../../../common/utils/responses/LoginStatusCode';
 
 export interface LoginStatusResponse {
-	displayError: boolean;
-	displaySuccess: boolean;
+	action: LoginStatusAction;
 	message?: string;
 }
 
+export enum LoginStatusAction {
+	NoAction,
+	SuccessAlert,
+	ErrorAlert
+}
+
 var LoginStatusResponsesWrapper: { [index: number]: LoginStatusResponse; } = {};
-LoginStatusResponsesWrapper[LoginStatusCode.Ok] = { displayError: false, displaySuccess: false };
-LoginStatusResponsesWrapper[LoginStatusCode.SessionTimeout] = { displayError: true, displaySuccess: false, message: "Your session expired. Please log in again." };
-LoginStatusResponsesWrapper[LoginStatusCode.AccountActivationOk] = { displayError: false, displaySuccess: true, message: "Account succesfully activated" };
-LoginStatusResponsesWrapper[LoginStatusCode.AccountActivationError] = { displayError: true, displaySuccess: false, message: "Problem activating account. The link may have expired." };
+LoginStatusResponsesWrapper[LoginStatusCode.Ok] = { action: LoginStatusAction.NoAction };
+LoginStatusResponsesWrapper[LoginStatusCode.SessionTimeout] = { action: LoginStatusAction.ErrorAlert, message: "Your session expired. Please log in again." };
+LoginStatusResponsesWrapper[LoginStatusCode.AccountActivationOk] = { action: LoginStatusAction.SuccessAlert, message: "Account succesfully activated" };
+LoginStatusResponsesWrapper[LoginStatusCode.AccountActivationError] = { action: LoginStatusAction.ErrorAlert, message: "Problem activating account. The link may have expired." };
+LoginStatusResponsesWrapper[LoginStatusCode.RequestResetPasswordOk] = { action: LoginStatusAction.SuccessAlert, message: "Am email has been sent. Please check your inbox." };
+
 
 export class LogInStatusCodeParser {
 	private _statusCode: LoginStatusCode;

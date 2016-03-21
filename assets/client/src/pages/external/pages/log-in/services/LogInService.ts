@@ -19,13 +19,6 @@ export class LogInService {
 		})
 	}
 
-	public get loginForm(): ControlGroup {
-		return this._loginForm;
-	}
-	public set loginForm(loginForm: ControlGroup) {
-		this._loginForm = loginForm;
-	}
-
 	public isValid(): boolean {
 		return this.loginForm.valid;
 	}
@@ -34,5 +27,12 @@ export class LogInService {
 		var credentials = new CredentialsDO();
 		credentials.buildFromObject(this._loginForm.value);
 		return this._appContext.thHttp.post("account/logIn", credentials);
+	}
+
+	public get loginForm(): ControlGroup {
+		return this._loginForm;
+	}
+	public set loginForm(loginForm: ControlGroup) {
+		this._loginForm = loginForm;
 	}
 }

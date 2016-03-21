@@ -3,11 +3,15 @@ export var EnglishTranslations: Object = {
 	"Login": "Login",
 	"Email": "Email",
 	"Password": "Password",
+	"Login to ": "Login to ", 
 	"Log In": "Log In",
 	"Lost your password?": "Lost your password?",
 	"New to site?": "New to site?",
 	"Create Account": "Create Account",
 	"Your session expired. Please log in again." : "Your session expired. Please log in again.",
 	"Account succesfully activated": "Account succesfully activated",
-	"Problem activating account. The link may have expired.": "Problem activating account. The link may have expired."
+	"Problem activating account. The link may have expired.": "Problem activating account. The link may have expired.",
+	"Am email has been sent. Please check your inbox.": "Am email has been sent. Please check your inbox.",
+	"Reset Password": "Reset Password",
+	"Remember your password ?": "Remember your password ?"
 };

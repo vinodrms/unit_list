@@ -1,12 +1,10 @@
-<div id="wrapper">
-	<div id="login" class="animate form">
-		<section class="login_content">
-			<router-outlet></router-outlet>
-			<br />
-			<div>
-				<h1><i class="fa fa-building" style="font-size: 26px;"></i> UnitPal</h1>
-				<p>©2016 UnitPal.</p>
-			</div>
-		</section>
+<div class="container-fluid wrapper">
+	<div class="col-sm-4 col-sm-offset-4">
+		<div id="login" class="animate form">
+			<img src="client/static-assets/images/unit_pal_logo.png" class="login_logo center-block" alt="" />
+			<section class="login_content content-box">
+				<router-outlet></router-outlet>
+			</section>
+		</div>
 	</div>
 </div>
