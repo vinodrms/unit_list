@@ -8,16 +8,18 @@ import {LogInStatusCodeParser, LoginStatusAction} from './utils/LogInStatusCodeP
 import {ThError} from '../../../../common/utils/responses/ThError';
 import {AppContext} from '../../../../common/utils/AppContext';
 import {ExternalFooterComponent} from '../common/footer/ExternalFooterComponent';
+import {LoadingButtonComponent} from '../../../../common/utils/components/LoadingButtonComponent';
 
 @Component({
 	selector: 'log-in-component',
 	templateUrl: '/client/src/pages/external/pages/log-in/template/log-in-component.html',
 	providers: [LogInService],
-	directives: [RouterLink, ExternalFooterComponent],
+	directives: [RouterLink, ExternalFooterComponent, LoadingButtonComponent],
 	pipes: [TranslationPipe]
 })
 
 export class LogInComponent extends BaseFormComponent implements AfterViewInit {
+	public isLoading: boolean = false;
 	private _statusCodeParser: LogInStatusCodeParser;
 
 	constructor(
@@ -65,10 +67,13 @@ export class LogInComponent extends BaseFormComponent implements AfterViewInit {
 			this._appContext.toaster.error(errorMessage);
 			return;
 		}
+		this.isLoading = true;
 		this._logInService.logIn().subscribe((result: Object) => {
 			// TODO: navigate to corresponding page after log in
 
+			this.isLoading = false;
 		}, (error: ThError) => {
+			this.isLoading = false;
 			this._appContext.toaster.error(error.message);
 		});
 	}

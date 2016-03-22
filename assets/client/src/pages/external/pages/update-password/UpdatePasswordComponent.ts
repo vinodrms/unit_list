@@ -7,18 +7,20 @@ import {BaseFormComponent} from '../../../../common/base/BaseFormComponent';
 import {ExternalFooterComponent} from '../common/footer/ExternalFooterComponent';
 import {UpdatePasswordService} from './services/UpdatePasswordService';
 import {TranslationPipe} from '../../../../common/utils/localization/TranslationPipe';
-import {UpdatePasswordDO} from './data-objects/UpdatePasswordDO';
 import {LoginStatusCode} from '../../../../common/utils/responses/LoginStatusCode';
+import {LoadingButtonComponent} from '../../../../common/utils/components/LoadingButtonComponent';
 
 @Component({
 	selector: 'update-password-component',
 	templateUrl: '/client/src/pages/external/pages/update-password/template/update-password-component.html',
-	directives: [RouterLink, ExternalFooterComponent],
+	directives: [RouterLink, ExternalFooterComponent, LoadingButtonComponent],
 	providers: [UpdatePasswordService],
 	pipes: [TranslationPipe]
 })
 
 export class UpdatePasswordComponent extends BaseFormComponent {
+	public isLoading: boolean = false;
+	
 	constructor(
 		routeParams: RouteParams,
 		private _appContext: AppContext,
@@ -33,27 +35,20 @@ export class UpdatePasswordComponent extends BaseFormComponent {
 		return this._updatePasswdService.updatePasswdForm;
 	}
 
-	public controlIsInvalid(controlName: string, controlGroup?: ControlGroup): boolean {
-		if (controlName === 'passwordConfirmation') {
-			var isInvalid = super.controlIsInvalid(controlName, controlGroup);
-			if (isInvalid) {
-				return true;
-			}
-			var updatePassDO = this._updatePasswdService.getUpdatePasswordDO();
-			return !this._updatePasswdService.passwordsMatch() && updatePassDO.passwordConfirmation.length > 0 && updatePassDO.password.length > 0;
-		}
-		return super.controlIsInvalid(controlName, controlGroup);
-	}
 
 	public updatePassword() {
+		this.didSubmitForm = true;
 		if (!this._updatePasswdService.isValid()) {
 			var errorMessage = this._appContext.thTranslation.translate("Please complete all the required fields");
 			this._appContext.toaster.error(errorMessage);
 			return;
 		}
+		this.isLoading = true;
 		this._updatePasswdService.updatePassword().subscribe((result: Object) => {
+			this.isLoading = false;
 			this._appContext.routerNavigator.navigateTo("LogInComponent", { loginStatusCode: LoginStatusCode.UpdatePasswordOk });
 		}, (error: ThError) => {
+			this.isLoading = false;
 			this._appContext.toaster.error(error.message);
 		})
 	}

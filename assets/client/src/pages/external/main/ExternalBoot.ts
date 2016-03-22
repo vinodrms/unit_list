@@ -15,6 +15,8 @@ import {IRouterNavigator} from '../../../common/utils/navigator/IRouterNavigator
 import {RouterNavigator} from '../../../common/utils/navigator/RouterNavigator';
 import {IToaster} from '../../../common/utils/toaster/IToaster';
 import {Toaster} from '../../../common/utils/toaster/Toaster';
+import {IModalService} from '../../../common/utils/modals/IModalService';
+import {ModalService} from '../../../common/utils/modals/ModalService';
 import {ThTranslation} from '../../../common/utils/localization/ThTranslation';
 import {AppContext} from '../../../common/utils/AppContext';
 
@@ -28,6 +30,7 @@ bootstrap(MainLayoutExternalComponent,
 		HTTP_PROVIDERS,
 		provide(IThHttp, { useClass: ThHttp }),
 		provide(IToaster, { useClass: Toaster }),
+		provide(IModalService, { useClass: ModalService }),
 		AppContext
     ]
 );

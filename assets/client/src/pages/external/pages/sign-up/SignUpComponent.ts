@@ -1,47 +1,45 @@
 import {Component} from 'angular2/core';
 import {ControlGroup} from 'angular2/common';
-import {RouterLink} from 'angular2/router';
-import {BaseFormComponent} from '../../../../common/base/BaseFormComponent';
-import {ExternalFooterComponent} from '../common/footer/ExternalFooterComponent';
-import {TranslationPipe} from '../../../../common/utils/localization/TranslationPipe';
+import {RouterLink, Router, RouteParams} from 'angular2/router';
 import {AppContext} from '../../../../common/utils/AppContext';
 import {ThError} from '../../../../common/utils/responses/ThError';
-import {ResetPasswordService} from './services/ResetPasswordService';
+import {BaseFormComponent} from '../../../../common/base/BaseFormComponent';
+import {ExternalFooterComponent} from '../common/footer/ExternalFooterComponent';
+import {SignUpService} from './services/SignUpService';
+import {TranslationPipe} from '../../../../common/utils/localization/TranslationPipe';
 import {LoginStatusCode} from '../../../../common/utils/responses/LoginStatusCode';
 import {LoadingButtonComponent} from '../../../../common/utils/components/LoadingButtonComponent';
 
 @Component({
-	selector: 'reset-password-component',
-	templateUrl: '/client/src/pages/external/pages/reset-password/template/reset-password-component.html',
+	selector: 'sign-up-component',
+	templateUrl: '/client/src/pages/external/pages/sign-up/template/sign-up-component.html',
 	directives: [RouterLink, ExternalFooterComponent, LoadingButtonComponent],
-	pipes: [TranslationPipe],
-	providers: [ResetPasswordService]
+	providers: [SignUpService],
+	pipes: [TranslationPipe]
 })
 
-export class ResetPasswordComponent extends BaseFormComponent {
+export class SignUpComponent extends BaseFormComponent {
 	public isLoading: boolean = false;
-	
-	constructor(
-		private _appContext: AppContext,
-		private _resetPasswdService: ResetPasswordService) {
 
+	constructor(private _appContext: AppContext, private _signUpService: SignUpService) {
 		super();
 	}
+
 	protected getDefaultControlGroup(): ControlGroup {
-		return this._resetPasswdService.resetPasswdForm;
+		return this._signUpService.signUpForm;
 	}
 
-	public resetPassword() {
+	public signUp() {
 		this.didSubmitForm = true;
-		if (!this._resetPasswdService.isValid()) {
+		if (!this._signUpService.isValid()) {
 			var errorMessage = this._appContext.thTranslation.translate("Please complete all the required fields");
 			this._appContext.toaster.error(errorMessage);
 			return;
 		}
 		this.isLoading = true;
-		this._resetPasswdService.resetPassword().subscribe((result: Object) => {
+		this._signUpService.signUp().subscribe((result: Object) => {
 			this.isLoading = false;
-			this._appContext.routerNavigator.navigateTo("LogInComponent", { loginStatusCode: LoginStatusCode.RequestResetPasswordOk });
+			this._appContext.routerNavigator.navigateTo("LogInComponent", { loginStatusCode: LoginStatusCode.SignUpOk });
 		}, (error: ThError) => {
 			this.isLoading = false;
 			this._appContext.toaster.error(error.message);

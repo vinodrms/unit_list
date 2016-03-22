@@ -13,9 +13,13 @@ export abstract class BaseFormComponent extends BaseComponent {
 
 	protected abstract getDefaultControlGroup(): ControlGroup;
 
-	public controlIsInvalid(controlName: string, controlGroup?: ControlGroup): boolean {
+	private getAbstractControl(controlName: string, controlGroup?: ControlGroup): AbstractControl {
 		var fieldCG: ControlGroup = (!controlGroup) ? this.getDefaultControlGroup() : controlGroup;
-		let control: AbstractControl = fieldCG.find(controlName);
+		return fieldCG.find(controlName);
+	}
+
+	public controlIsInvalid(controlName: string, controlGroup?: ControlGroup): boolean {
+		let control: AbstractControl = this.getAbstractControl(controlName, controlGroup);
 		if (!control) {
 			return false;
 		}
@@ -23,5 +27,14 @@ export abstract class BaseFormComponent extends BaseComponent {
 			return !control.valid;
 		}
 		return false;
+	}
+	public confirmationControlIsInvalid(confirmationControlName: string, controlName: string, controlGroup?: ControlGroup): boolean {
+		var isInvalid = this.controlIsInvalid(confirmationControlName, controlGroup);
+		if (isInvalid) {
+			return true;
+		}
+		let confirmationControl: AbstractControl = this.getAbstractControl(confirmationControlName, controlGroup);
+		let control: AbstractControl = this.getAbstractControl(controlName, controlGroup);
+		return control.value !== confirmationControl.value && (confirmationControl.dirty || this._didSubmitForm);
 	}
 }

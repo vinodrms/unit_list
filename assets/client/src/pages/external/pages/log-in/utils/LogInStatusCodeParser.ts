@@ -18,6 +18,7 @@ LoginStatusResponsesWrapper[LoginStatusCode.AccountActivationOk] = { action: Log
 LoginStatusResponsesWrapper[LoginStatusCode.AccountActivationError] = { action: LoginStatusAction.ErrorAlert, message: "Problem activating account. The link may have expired." };
 LoginStatusResponsesWrapper[LoginStatusCode.RequestResetPasswordOk] = { action: LoginStatusAction.SuccessAlert, message: "Am email has been sent. Please check your inbox." };
 LoginStatusResponsesWrapper[LoginStatusCode.UpdatePasswordOk] = { action: LoginStatusAction.SuccessAlert, message: "Your password was reset. Please log in using the new credentials." };
+LoginStatusResponsesWrapper[LoginStatusCode.SignUpOk] = { action: LoginStatusAction.SuccessAlert, message: "Please activate your account from your email." };
 
 export class LogInStatusCodeParser {
 	private _statusCode: LoginStatusCode;

@@ -7,7 +7,7 @@ import {ThUtils} from './ThUtils';
 import {IRouterNavigator} from './navigator/IRouterNavigator';
 import {RouterNavigator} from './navigator/RouterNavigator';
 import {IToaster} from './toaster/IToaster';
-
+import {IModalService} from './modals/IModalService';
 export {ThServerApi} from './http/ThServerApi';
 
 @Injectable()
@@ -20,7 +20,8 @@ export class AppContext {
 		@Inject(IRouterNavigator) public routerNavigator: IRouterNavigator,
 		public thTranslation: ThTranslation,
 		@Inject(IThHttp) public thHttp: IThHttp,
-		@Inject(IToaster) public toaster: IToaster
+		@Inject(IToaster) public toaster: IToaster,
+		@Inject(IModalService) public modalService: IModalService
 	) {
 		this.thUtils = new ThUtils();
 	}

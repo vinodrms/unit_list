@@ -9,14 +9,14 @@
 		<label *ngIf="controlIsInvalid('password')" class="form-label"><small><i class="fa fa-info-circle"></i> {{ 'Insert your password' | translate }}</small></label>
 	</div>
 	<div>
-		<button class="btn btn-primary btn-lg submit" type="submit">{{ 'Log In' | translate }}</button>
+		<loading-button [isLoading]="isLoading" title="Log In"></loading-button>
 		<br/>
 		<a class="reset_pass" [routerLink]="['/ResetPasswordComponent']">{{ 'Lost your password?' | translate }}</a>
 	</div>
 	<div class="clearfix"></div>
 	<div class="separator">
 		<p class="change_link">New to site?
-			<a class="to_register"> {{ 'Create Account' | translate }} </a>
+			<a class="to_register" [routerLink]="['/SignUpComponent']"> {{ 'Create Account' | translate }} </a>
 		</p>
 		<external-footer-component></external-footer-component>
 	</div>

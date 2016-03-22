@@ -4,5 +4,6 @@ export enum LoginStatusCode {
 	AccountActivationOk,
 	AccountActivationError,
 	RequestResetPasswordOk,
-	UpdatePasswordOk
+	UpdatePasswordOk,
+	SignUpOk
 }

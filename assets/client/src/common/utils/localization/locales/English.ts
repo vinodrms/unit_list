@@ -22,6 +22,15 @@ export var EnglishTranslations: Object = {
 	"Insert your password": "Insert your password",
 	"At least 6 characters, 1 number and 1 upper case": "At least 6 characters, 1 number and 1 upper case",
 	"The passwords should match": "The passwords should match",
-	"Invalid email": "Invalid email"
+	"Invalid email": "Invalid email",
+	"Please activate your account from your email.": "Please activate your account from your email.",
+	"Hotel Name": "Hotel Name",
+	"Enter a name for your hotel": "Enter a name for your hotel",
+	"First Name": "First Name",
+	"Enter your first name": "Enter your first name",
+	"Last Name": "Last Name",
+	"Enter your last name": "Enter your last name",
+	"Back to ": "Back to "
+
 	
 };
