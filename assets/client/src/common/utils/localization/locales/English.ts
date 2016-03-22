@@ -17,6 +17,11 @@ export var EnglishTranslations: Object = {
 	"Update Password": "Update Password",
 	"New Password": "New Password",
 	"Confirm Password": "Confirm Password",
-	"Your password was reset. Please log in using the new credentials.": "Your password was reset. Please log in using the new credentials."
+	"Your password was reset. Please log in using the new credentials.": "Your password was reset. Please log in using the new credentials.",
+	"Insert your email": "Insert your email",
+	"Insert your password": "Insert your password",
+	"At least 6 characters, 1 number and 1 upper case": "At least 6 characters, 1 number and 1 upper case",
+	"The passwords should match": "The passwords should match",
+	"Invalid email": "Invalid email"
 	
 };

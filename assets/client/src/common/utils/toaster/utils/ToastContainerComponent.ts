@@ -32,4 +32,7 @@ export class ToastContainerComponent {
 			return toast.id !== toastId;
 		});
 	}
+	public dismiss(toast) {
+		this.removeToast(toast.id);
+	}
 }

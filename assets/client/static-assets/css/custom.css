@@ -2517,8 +2517,8 @@ select.parsley-error {
     box-shadow: 0 0 4px -2px #CE5454;
     position: relative;
     left: 0;
-    -moz-animation: .7s 1 shake linear;
-    -webkit-animation: 0.7s 1 shake linear;
+    /*-moz-animation: .7s 1 shake linear;*/
+    /*-webkit-animation: 0.7s 1 shake linear;*/
 }
 
 .item input,
@@ -5732,7 +5732,7 @@ form:after {
 
 .login_content a { color:#fc8433; } 
 
-.login_content form { margin: 20px 0; position: relative }
+.login_content form { margin: 20px 0 10px 0; position: relative }
 .login_content form input[type="text"],
 .login_content form input[type="email"],
 .login_content form input[type="password"] {    -webkit-border-radius: 2px;
@@ -5752,7 +5752,7 @@ form:after {
     transition: all 0.5s ease;
     border: 1px solid #c8c8c8;
     color: #777;
-    margin: 0 0 20px;
+    /*margin: 0 0 20px;*/
     width: 100%;
 }
 .login_content form input[type="text"]:focus,
@@ -5764,15 +5764,18 @@ form:after {
     -o-box-shadow: 0 0 2px #ed1c24 inset;
     box-shadow: 0 0 2px #A97AAD inset;
     background-color: #fff;
-    border: 1px solid #fc8433;
+    /*border: 1px solid #fc8433;*/
     outline: none;
 }
 
 #username { background-position: 10px 10px !important }
 #password { background-position: 10px -53px !important }
+
 .login_content form div a {
-    margin: 10px 15px 0 0;
+    margin: 15px auto 10px;
+	display: inline-block;
 }
+
 .reset_pass {margin-top:10px !important;}
 .separator {border-top: 1px solid #D8D8D8;
            margin-top: 10px;

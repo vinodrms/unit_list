@@ -40,13 +40,15 @@ export class UpdatePasswordComponent extends BaseFormComponent {
 				return true;
 			}
 			var updatePassDO = this._updatePasswdService.getUpdatePasswordDO();
-			return !this._updatePasswdService.passwordsMatch() && updatePassDO.password.length > 0;
+			return !this._updatePasswdService.passwordsMatch() && updatePassDO.passwordConfirmation.length > 0 && updatePassDO.password.length > 0;
 		}
 		return super.controlIsInvalid(controlName, controlGroup);
 	}
 
 	public updatePassword() {
 		if (!this._updatePasswdService.isValid()) {
+			var errorMessage = this._appContext.thTranslation.translate("Please complete all the required fields");
+			this._appContext.toaster.error(errorMessage);
 			return;
 		}
 		this._updatePasswdService.updatePassword().subscribe((result: Object) => {

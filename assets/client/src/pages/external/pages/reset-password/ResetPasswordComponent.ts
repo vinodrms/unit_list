@@ -30,6 +30,8 @@ export class ResetPasswordComponent extends BaseFormComponent {
 
 	public resetPassword() {
 		if (!this._resetPasswdService.isValid()) {
+			var errorMessage = this._appContext.thTranslation.translate("Please complete all the required fields");
+			this._appContext.toaster.error(errorMessage);
 			return;
 		}
 		this._resetPasswdService.resetPassword().subscribe((result: Object) => {
