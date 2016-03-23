@@ -7,7 +7,14 @@ import {BaseComponent} from '../../../../../common/base/BaseComponent';
 })
 
 export class ExternalFooterComponent extends BaseComponent {
+	year: number;
+
 	constructor() {
 		super();
+		this.updateYear();
+	}
+	private updateYear() {
+		var d = new Date();
+		this.year = d.getFullYear();
 	}
 }
