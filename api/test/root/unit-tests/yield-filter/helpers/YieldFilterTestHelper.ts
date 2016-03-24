@@ -18,8 +18,8 @@ export class YieldFilterTestHelper {
     public getValidTextYieldFilterValueDO(): SaveYieldFilterValueDO {
         var saveYieldFilterValueDO = new SaveYieldFilterValueDO();
         saveYieldFilterValueDO.filterId = this.getFilterIdByType(YieldFilterType.Text);
-        saveYieldFilterValueDO.description = "Fourth filter";
-        saveYieldFilterValueDO.label = "4";
+        saveYieldFilterValueDO.description = "Test filter";
+        saveYieldFilterValueDO.label = "11";
         return saveYieldFilterValueDO;
     }
 
@@ -34,8 +34,8 @@ export class YieldFilterTestHelper {
     public getInvalidColorYieldFilterValueDO(): SaveYieldFilterValueDO {
         var saveYieldFilterValueDO = new SaveYieldFilterValueDO();
         saveYieldFilterValueDO.filterId = this.getFilterIdByType(YieldFilterType.Color);
-        saveYieldFilterValueDO.description = "Fifth filter";
-        saveYieldFilterValueDO.label = "10";
+        saveYieldFilterValueDO.description = "Test filter 2";
+        saveYieldFilterValueDO.label = "12";
         return saveYieldFilterValueDO;
     }
 

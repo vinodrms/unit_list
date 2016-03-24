@@ -38,6 +38,7 @@ export class DefaultBedBuilder implements IBedDataSource {
         bedSize.lengthCm = 100;
         bedSize.widthCm = 100;
         bedDO.size = bedSize;
+		bedDO.notes = "nice bed";
         if (!this._thUtils.isUndefinedOrNull(bedTemplateList[0])) {
             bedDO.bedTemplateId = bedTemplateList[0].id;
         }
@@ -54,6 +55,7 @@ export class DefaultBedBuilder implements IBedDataSource {
         bedSize.lengthCm = 100;
         bedSize.widthCm = 100;
         bedDO.size = bedSize;
+		bedDO.notes = "nice bed";
         if (!this._thUtils.isUndefinedOrNull(bedTemplateList[1])) {
             bedDO.bedTemplateId = bedTemplateList[1].id;
         }
@@ -70,6 +72,7 @@ export class DefaultBedBuilder implements IBedDataSource {
         bedSize.lengthCm = 100;
         bedSize.widthCm = 120;
         bedDO.size = bedSize;
+		bedDO.notes = "nice bed";
         if (!this._thUtils.isUndefinedOrNull(bedTemplateList[2])) {
             bedDO.bedTemplateId = bedTemplateList[2].id;
         }
@@ -86,6 +89,7 @@ export class DefaultBedBuilder implements IBedDataSource {
         bedSize.lengthCm = 100;
         bedSize.widthCm = 120;
         bedDO.size = bedSize;
+		bedDO.notes = "nice bed";
         if (!this._thUtils.isUndefinedOrNull(bedTemplateList[3])) {
             bedDO.bedTemplateId = bedTemplateList[3].id;
         }
@@ -102,6 +106,7 @@ export class DefaultBedBuilder implements IBedDataSource {
         bedSize.lengthCm = 80;
         bedSize.widthCm = 80;
         bedDO.size = bedSize;
+		bedDO.notes = "nice bed";
         if (!this._thUtils.isUndefinedOrNull(bedTemplateList[4])) {
             bedDO.bedTemplateId = bedTemplateList[4].id;
         }

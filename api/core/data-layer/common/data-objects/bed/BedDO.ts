@@ -32,9 +32,10 @@ export class BedDO extends BaseDO {
     maxNoAdults: number;
     maxNoChildren: number;
     status: BedStatus;
+	notes: string;
     
     protected getPrimitivePropertyKeys(): string[] {
-        return ["id", "versionId", "hotelId", "bedTemplateId", "name", "maxNoAdults", "maxNoChildren", "status"];
+        return ["id", "versionId", "hotelId", "bedTemplateId", "name", "maxNoAdults", "maxNoChildren", "status", "notes"];
     }
     
     public buildFromObject(object: Object) {

@@ -13,6 +13,7 @@ export class SaveBedItemDO {
 	maxNoChildren: number;
 	status: number;
     size: BedSizeDO;
+	notes: string;
     
 	public static getValidationStructure(): IValidationStructure {
 		return new ObjectValidationStructure([
@@ -48,6 +49,10 @@ export class SaveBedItemDO {
 						validationStruct: new PrimitiveValidationStructure(new NumberValidationRule())
 					}
 				])
+			},
+            {
+				key: "notes",
+				validationStruct: new PrimitiveValidationStructure(StringValidationRule.buildNullable())
 			}
 		])
 	}

@@ -104,7 +104,7 @@ describe("Yield Filter Tests", function() {
 
         it("Should update a text filter value", function(done) {
             var saveYieldFilterValueDO: SaveYieldFilterValueDO = yieldFiltersHelper.getTextSaveYieldFilterValueDOFrom(updatedYieldConfigurations);
-            saveYieldFilterValueDO.label = '6';
+            saveYieldFilterValueDO.label = '66';
             saveYieldFilterValueDO.description = 'Seventh filter';
             var saveYieldFilterValue = new SaveYieldFilterValue(testContext.appContext, testContext.sessionContext);
             saveYieldFilterValue.save(saveYieldFilterValueDO).then((yieldConfig: YieldFilterConfigurationDO) => {

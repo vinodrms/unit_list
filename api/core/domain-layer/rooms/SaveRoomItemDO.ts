@@ -55,7 +55,7 @@ export class SaveRoomItemDO {
             },
             {
                 key: "fileUrlList",
-                validationStruct: new ArrayValidationStructure(new PrimitiveValidationStructure(new StringValidationRule()))
+                validationStruct: new ArrayValidationStructure(new PrimitiveValidationStructure(new StringValidationRule(StringValidationRule.MaxUrlLength)))
             },
             {
                 key: "description",

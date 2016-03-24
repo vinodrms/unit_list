@@ -11,6 +11,7 @@ export class SaveAddOnProductItemDO {
 	price: number;
 	taxIdList: string[];
 	notes: string;
+	fileUrlList: string[];
 
 	public static getValidationStructure(): IValidationStructure {
 		return new ObjectValidationStructure([
@@ -37,7 +38,11 @@ export class SaveAddOnProductItemDO {
 			{
 				key: "notes",
 				validationStruct: new PrimitiveValidationStructure(StringValidationRule.buildNullable())
-			}
+			},
+            {
+                key: "fileUrlList",
+                validationStruct: new ArrayValidationStructure(new PrimitiveValidationStructure(new StringValidationRule(StringValidationRule.MaxUrlLength)))
+            }
 		])
 	}
 }

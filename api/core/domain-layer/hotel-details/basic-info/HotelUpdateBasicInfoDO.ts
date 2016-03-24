@@ -8,6 +8,7 @@ import {NumberValidationRule} from '../../../utils/th-validation/rules/NumberVal
 export class HotelUpdateBasicInfoDO {
 	versionId: number;
 	contactDetails: {
+		companyName: string,
 		vatCode: string,
 		name: string,
 		address: {
@@ -45,6 +46,10 @@ export class HotelUpdateBasicInfoDO {
 			{
 				key: "contactDetails",
 				validationStruct: new ObjectValidationStructure([
+					{
+						key: "companyName",
+						validationStruct: new PrimitiveValidationStructure(new StringValidationRule(StringValidationRule.MaxHotelNameLength))
+					},
 					{
 						key: "vatCode",
 						validationStruct: new PrimitiveValidationStructure(new StringValidationRule(StringValidationRule.MaxVatCodeNameLength))

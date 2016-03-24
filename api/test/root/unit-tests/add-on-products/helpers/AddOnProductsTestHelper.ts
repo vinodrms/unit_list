@@ -13,7 +13,8 @@ export class AddOnProductsTestHelper {
 			notes: "test test test",
 			name: "My First Addon Product",
 			price: 100.0,
-			taxIdList: [this.getFirstValidVatTaxId()]
+			taxIdList: [this.getFirstValidVatTaxId()],
+			fileUrlList: []
 		};
 	}
 	private getFirstValidCategoryId(): string {
@@ -35,7 +36,8 @@ export class AddOnProductsTestHelper {
 			notes: "test test test !!!",
 			name: "My First Addon Product [Updated]",
 			price: 120.0,
-			taxIdList: [this.getFirstValidVatTaxId()]
+			taxIdList: [this.getFirstValidVatTaxId()],
+			fileUrlList: []
 		};
 		aopDO['id'] = product.id;
 		return aopDO;

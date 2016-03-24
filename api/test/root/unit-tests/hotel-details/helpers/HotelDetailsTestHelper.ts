@@ -13,6 +13,7 @@ export class HotelDetailsTestHelper {
 		var basicInfo: HotelUpdateBasicInfoDO = new HotelUpdateBasicInfoDO();
 		basicInfo.versionId = hotel.versionId;
 		basicInfo.contactDetails = {
+			companyName: "THREEANGLE SOFTWARE SOLUTIONS SRL",
 			vatCode: "RO34221562",
 			name: "3angleTECH Hotel",
 			address: {

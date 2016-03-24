@@ -20,6 +20,8 @@ export class DefaultHotelBuilder {
 		var hotel = new HotelDO();
 		hotel.contactDetails = new HotelContactDetailsDO();
 		hotel.contactDetails.name = "3angleTECH Hotel";
+		hotel.contactDetails.companyName = "THREEANGLE SOFTWARE SOLUTIONS";
+		hotel.contactDetails.vatCode = "RO34121562";
 		hotel.userList = [];
 		var user = new UserDO();
 		user.id = this._thUtils.generateUniqueID();

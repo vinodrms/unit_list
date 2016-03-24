@@ -21,7 +21,8 @@ export class BedsTestHelper {
             maxNoAdults: 2,
             maxNoChildren: 2,
             status: BedStatus.Active,
-            size: bedSize
+            size: bedSize,
+			notes: "very confortable bed"
         };
     }
 
@@ -40,7 +41,8 @@ export class BedsTestHelper {
             maxNoAdults: 2,
             maxNoChildren: 2,
             status: BedStatus.Active,
-            size: bedSize
+            size: bedSize,
+			notes: "the most confortable bed"
         };
     }
 
@@ -51,7 +53,8 @@ export class BedsTestHelper {
             size: bed.size,
             maxNoAdults: bed.maxNoAdults,
             maxNoChildren: bed.maxNoChildren,
-            status: bed.status
+            status: bed.status,
+			notes: "nice bed"
         }
         result["id"] = bed.id;
         return result;

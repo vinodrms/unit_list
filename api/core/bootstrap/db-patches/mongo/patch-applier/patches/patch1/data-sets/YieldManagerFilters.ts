@@ -5,8 +5,9 @@ import {YieldFilterDO, YieldFilterType} from '../../../../../../../data-layer/co
 import {YieldFilterSettingDO} from '../../../../../../../data-layer/settings/data-objects/yield-manager-filter/YieldManagerFilterSettingDO';
 
 export class YieldManagerFilters extends ABaseSetting {
+	private static NumYieldLevels = 10;
     private dataSet: { label: string, type: YieldFilterType, values: YieldFilterValueDO[] }[];
-    
+
     constructor() {
         super(SettingType.YieldFilter, "Default Yield Manager Filters");
         this.init();
@@ -30,51 +31,44 @@ export class YieldManagerFilters extends ABaseSetting {
     }
 
     private init() {
-        var yieldGroup = {
-            label: "Yield Group",
+        var yieldLevel = {
+            label: "Yield Level",
             type: YieldFilterType.Text,
             values: []
         };
-        var firstFilter = new YieldFilterValueDO();
-        firstFilter.id = this._thUtils.generateUniqueID();
-        firstFilter.description = "First Filter";
-        firstFilter.label = "1";
-        var secondFilter = new YieldFilterValueDO();
-        secondFilter.id = this._thUtils.generateUniqueID();
-        secondFilter.description = "Second Filter";
-        secondFilter.label = "2";
-        var thirdFilter = new YieldFilterValueDO();
-        thirdFilter.id = this._thUtils.generateUniqueID();
-        thirdFilter.description = "Third Filter";
-        thirdFilter.label = "3";
-        yieldGroup.values.push(firstFilter);
-        yieldGroup.values.push(secondFilter);
-        yieldGroup.values.push(thirdFilter);
 
-        var yieldLevel = {
-            label: "Yield Level",
+		for (var level = 1; level <= YieldManagerFilters.NumYieldLevels; level++) {
+			var firstFilter = new YieldFilterValueDO();
+			firstFilter.id = this._thUtils.generateUniqueID();
+			firstFilter.description = "";
+			firstFilter.label = level + "";
+			yieldLevel.values.push(firstFilter);
+		}
+
+        var yieldGroup = {
+            label: "Yield Group",
             type: YieldFilterType.Color,
             values: []
         };
         var redFilter = new YieldFilterValueDO();
         redFilter.id = this._thUtils.generateUniqueID();
         redFilter.colorCode = "red";
-        redFilter.description = "Red filter";
+        redFilter.description = "";
         var yellowFilter = new YieldFilterValueDO();
         yellowFilter.id = this._thUtils.generateUniqueID();
         yellowFilter.colorCode = "yellow";
-        yellowFilter.description = "Yellow filter";
+        yellowFilter.description = "";
         var greenFilter = new YieldFilterValueDO();
         greenFilter.id = this._thUtils.generateUniqueID();
         greenFilter.colorCode = "green";
-        greenFilter.description = "Green filter";
-        
-        yieldLevel.values.push(redFilter);
-        yieldLevel.values.push(yellowFilter);
-        yieldLevel.values.push(greenFilter);
-        
+        greenFilter.description = "";
+
+        yieldGroup.values.push(redFilter);
+        yieldGroup.values.push(yellowFilter);
+        yieldGroup.values.push(greenFilter);
+
         this.dataSet = [];
-        this.dataSet.push(yieldGroup);
         this.dataSet.push(yieldLevel);
+        this.dataSet.push(yieldGroup);
     }
 }
