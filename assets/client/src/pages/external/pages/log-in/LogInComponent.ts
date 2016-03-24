@@ -68,13 +68,21 @@ export class LogInComponent extends BaseFormComponent implements AfterViewInit {
 			return;
 		}
 		this.isLoading = true;
-		this._logInService.logIn().subscribe((result: Object) => {
-			// TODO: navigate to corresponding page after log in
-
+		this._logInService.logIn().subscribe((loginResult: Object) => {
 			this.isLoading = false;
+			this.goToMainPage(loginResult);
 		}, (error: ThError) => {
 			this.isLoading = false;
 			this._appContext.toaster.error(error.message);
 		});
+	}
+	private goToMainPage(loginResult: Object) {
+		if (!this._appContext.thUtils.isUndefinedOrNull(loginResult, "configurationCompleted")) {
+			if (loginResult["configurationCompleted"] === false) {
+				this._appContext.browserLocation.goToWizardPage();
+				return;
+			}
+		}
+		this._appContext.browserLocation.goToHomePage();
 	}
 }

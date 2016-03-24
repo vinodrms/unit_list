@@ -2,20 +2,31 @@
 <html lang="en">
 
 <head>
-	<base href="/home/">
+	<base href="/">
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<!-- Meta, title, CSS, favicons, etc. -->
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="shortcut icon" href="/client/static-assets/images/favicon.ico" />
 
 	<title>UnitPal</title>
 
+	<!-- CSS -->
+	<link href="/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+	<link href="/node_modules/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+	<link href="/node_modules/animate.css/animate.min.css" rel="stylesheet">
+	<link href="/node_modules/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
+	<link href="/node_modules/toastr/build/toastr.min.css" rel="stylesheet">
+	<!-- Custom CSS -->
+	<link href="/client/static-assets/css/custom.css" rel="stylesheet">
+	<link href="/client/static-assets/css/unitpal.css" rel="stylesheet">
 
-	<!--<script src="/node_modules/es6-shim/es6-shim.min.js"></script>
-	<script src="/node_modules/systemjs/dist/system-polyfills.js"></script>
-	<script src="/node_modules/angular2/es6/prod/src/testing/shims_for_IE.js"></script>-->
+	<!-- JS Libraries -->
+	<script src="/node_modules/jquery.1/node_modules/jquery/dist/jquery.min.js"></script>
+	<script src="/node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
 
+	<!-- Angular JS -->
 	<script src="/node_modules/angular2/bundles/angular2-polyfills.min.js"></script>
 	<script src="/node_modules/systemjs/dist/system.js"></script>
 	<script src="/node_modules/rxjs/bundles/Rx.min.js"></script>
@@ -23,7 +34,11 @@
 	<script src="/node_modules/angular2/bundles/router.dev.js"></script>
 	<script src="/node_modules/angular2/bundles/http.dev.js"></script>
 
+	<!-- Other JS Libraries -->
+	<script src="/node_modules/moment/min/moment.min.js"></script>
 	<script src="/node_modules/underscore/underscore-min.js"></script>
+	<script src="/node_modules/bootstrap-daterangepicker/daterangepicker.js"></script>
+	<script src="/node_modules/pace-progress/pace.min.js"></script>
 
 	<%if (isDevelopmentEnvironment == true) {%>
 		<script>
@@ -33,9 +48,6 @@
                             format: 'register',
                             defaultExtension: 'js'
                         }
-                    },
-                    AppContext : {
-                        ComponentsBaseRootDirectory: "/client/src/"
                     }
                 });
                 System.import('client/src/pages/internal/main/InternalBoot').then(null, console.error.bind(console));
@@ -43,10 +55,7 @@
 		<%} else {%>
 			<script>
 				System.config({
-                    bundles: { 'client/build/unitpal-internal-min.js': ['pages/internal/main/InternalBoot'] },
-                    AppContext : {
-                        ComponentsBaseRootDirectory: ""   
-                    }
+                    bundles: { 'client/build/unitpal-internal-min.js': ['pages/internal/main/InternalBoot'] }
                 });
                 System.import('pages/internal/main/InternalBoot').then(null, console.error.bind(console));
 			</script>

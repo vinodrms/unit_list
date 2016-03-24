@@ -11,4 +11,10 @@ export class BrowserLocation implements IBrowserLocation {
 	public goToLoginPage(statusCode: LoginStatusCode) {
 		location.href = '/?loginStatusCode=' + statusCode;
 	}
+	public goToWizardPage() {
+		location.href = '/home/wizard';
+	}
+	public goToHomePage() {
+		location.href = '/home';
+	}
 }
