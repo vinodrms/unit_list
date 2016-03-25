@@ -1,0 +1,32 @@
+<div class="row">
+	<!-- logo area -->
+	<div class="col-xs-2 col-md-2 text-center">
+		<img src="/client/static-assets/images/unit_pal_logo.png" class="singup_logo center-block" alt="" />
+	</div>
+
+	<div class="col-xs-12 col-md-10">
+		<!-- top navigation -->
+		<div class="row">
+			<div class="col-xs-10">
+				<h1 class="signup-title bottom-align-text"><strong>Unit</strong>Pal &nbsp; {{ 'Step %stepIndex% of %stepNo%' | translate:{stepIndex: getStateIndex(), stepNo: numberOfSteps} }}: {{ getStateName() | translate }}</h1>
+			</div>
+			<div class="col-xs-2">
+				<ul class="nav navbar-nav navbar-right">
+					<li class="">
+						<a class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+							<span class="fa fa-gear fa-2x"></span>
+						</a>
+						<ul class="dropdown-menu dropdown-usermenu animated fadeInDown pull-right">
+							<li>
+								<a>{{ 'Help' | translate }}</a>
+							</li>
+							<li><a href="login.html"><i class="fa fa-sign-out pull-right"></i> {{ 'Log Out' | translate }}</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<!-- /top navigation -->
+	</div>
+</div>

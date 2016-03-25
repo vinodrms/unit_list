@@ -35,7 +35,7 @@ export class TranslationPipe implements PipeTransform, OnDestroy {
 
 	private updatePipeValue() {
 		var parameters = null;
-		if (_.isArray(this._previousArgs) && this._previousArgs.length > 0 && !_.isObject(this._previousArgs[0])) {
+		if (_.isArray(this._previousArgs) && this._previousArgs.length > 0 && _.isObject(this._previousArgs[0])) {
 			parameters = this._previousArgs[0];
 		}
 		this._pipeValue = this._thTranslation.translate(this._previousPhrase, parameters);

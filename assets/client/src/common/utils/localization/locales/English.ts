@@ -30,7 +30,19 @@ export var EnglishTranslations: Object = {
 	"Enter your first name": "Enter your first name",
 	"Last Name": "Last Name",
 	"Enter your last name": "Enter your last name",
-	"Back to ": "Back to "
-
+	"Back to ": "Back to ",
+	"Step %stepIndex% of %stepNo%": "Step %stepIndex% of %stepNo%",
+	"Basic Information": "Basic Information",
+	"Skip this step": "Skip this step",
+	"Previous": "Previous",
+	"Next": "Next",
+	"Finish": "Finish",
+	"Help": "Help",
+	"Log Out": "Log Out",
+	"Welcome to UnitPal": "Welcome to UnitPal",
+	"let's set up your hotel.": "let's set up your hotel.",
+	"[Wizard Step 0] Welcome Message" : "Welcome to UnitPal. We'll guide you through all the steps necessary to configure your hotel.",
+	"[Wizard Step 0] Basic Information text": "The basic information contains important information for your hotel such as contact details, taxes, hotel amenities and operation hours.",
+	"name & address": "name & address"
 	
 };

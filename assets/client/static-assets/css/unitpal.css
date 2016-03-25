@@ -21,7 +21,22 @@ body {
 .main-content a { color: #fc8433; cursor: pointer; } 
 .main-content a:hover { color: #1E3A6A; cursor: pointer; } 
 
-body, html, .container-fluid {   height: 100%;  }
+
+body, html {   height: 100%;  }
+
+header { height:120px !important; padding:24px 24px 0px 24px;  }
+
+.container.body { 
+	display: table;
+    width: 100%;
+	height:80%;
+    margin-bottom: -120px !important;
+    padding: 0px 24px 24px 24px;
+    -moz-box-sizing: border-box ;
+    box-sizing: border-box;
+  }
+
+.row.main-row { height:100%; display: table-row; }
 
 .login_logo { 	margin-bottom:24px; }
 .singup_logo { max-width:96px; height:auto; margin-bottom:24px;}
@@ -32,7 +47,6 @@ body, html, .container-fluid {   height: 100%;  }
     margin: 0 auto;
     height: 100%;
     padding: 20px 0;
-
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
@@ -45,8 +59,6 @@ body, html, .container-fluid {   height: 100%;  }
 	box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.3);
  }
 
-
-.main_container { padding:24px; }
 
 body.nav-md .container.body .left_col  { background-color:rgba(255, 255, 255, 0.66); color:#0b2139; float: none !important; display: table-cell;  }
 body.nav-md .container.body .right_col { float: none; display: table-cell; vertical-align: top; }
@@ -66,7 +78,7 @@ body.nav-md .container.body .right_col { float: none; display: table-cell; verti
 
 .page-info { padding:12px; }
 
-.signup-step-01 { background:#fff url(../../pages/images/signup_background_01.png) right bottom no-repeat !important; background-size: contain;  } 
+.signup-step-01 { background:#fff url(/client-static-assets/pages/images/signup_background_01.png) right bottom no-repeat !important; background-size: contain;  } 
 .signup-skip { margin-right:12px; }
 
 .btn.btn-app {

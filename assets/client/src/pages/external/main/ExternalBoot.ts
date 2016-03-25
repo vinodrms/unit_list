@@ -1,7 +1,7 @@
 /// <reference path="../../../../typings/tsd.d.ts" />
 
 import {bootstrap} from 'angular2/platform/browser';
-import {bind, provide, enableProdMode} from 'angular2/core';
+import {provide, enableProdMode} from 'angular2/core';
 import {ROUTER_PROVIDERS} from 'angular2/router';
 import {MainLayoutExternalComponent} from './MainLayoutExternalComponent';
 import {HTTP_PROVIDERS} from 'angular2/http';

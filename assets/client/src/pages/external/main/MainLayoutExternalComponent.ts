@@ -17,7 +17,7 @@ import {SignUpComponent} from '../pages/sign-up/SignUpComponent';
 })
 
 @RouteConfig([
-	{ path: '/', name: 'LogInComponent', component: LogInComponent },
+	{ path: '/', name: 'LogInComponent', component: LogInComponent, useAsDefault: true },
 	{ path: '/reset', name: 'ResetPasswordComponent', component: ResetPasswordComponent },
 	{ path: '/update-password/:activationCode/:email', name: 'UpdatePasswordComponent', component: UpdatePasswordComponent },
 	{ path: '/sign-up', name: 'SignUpComponent', component: SignUpComponent }

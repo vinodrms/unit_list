@@ -8,12 +8,12 @@ export class RouterNavigator implements IRouterNavigator {
 	constructor(private _router: Router) {
 	}
 
-	public navigateTo(componentName: string, params?: Object) {
+	public navigateTo(componentStackPath: string, params?: Object) {
 		if (!params) {
-			this._router.navigate([componentName]);
+			this._router.navigate([componentStackPath]);
 		}
 		else {
-			this._router.navigate([componentName, params]);
+			this._router.navigate([componentStackPath, params]);
 		}
 	}
 }
