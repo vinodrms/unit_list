@@ -12,10 +12,10 @@ import {HotelService} from './HotelService';
 import {HotelDetailsDO} from './data-objects/HotelDetailsDO';
 import {HotelPaymentMethodsService} from '../settings/HotelPaymentMethodsService';
 import {HotelPaymentMethodsDO} from '../settings/data-objects/HotelPaymentMethodsDO';
-import {HotelAggregatedInfoDO} from './data-objects/HotelAggregatedInfoDO';
+import {HotelAggregatedInfo} from './utils/HotelAggregatedInfo';
 
 @Injectable()
-export class HotelAggregatorService extends ARequestService<HotelAggregatedInfoDO> {
+export class HotelAggregatorService extends ARequestService<HotelAggregatedInfo> {
 	constructor(
 		private _hotelAmenitiesService: HotelAmenitiesService,
 		private _paymentMethodsService: HotelPaymentMethodsService,
@@ -29,17 +29,17 @@ export class HotelAggregatorService extends ARequestService<HotelAggregatedInfoD
 			this._paymentMethodsService.getPaymentMethodsDO(),
 			this._hotelService.getHotelDetailsDO()
 		).map((result: [HotelAmenitiesDO, HotelPaymentMethodsDO, HotelDetailsDO]) => {
-			var aggregatedInfo: HotelAggregatedInfoDO = new HotelAggregatedInfoDO();
+			var aggregatedInfo: HotelAggregatedInfo = new HotelAggregatedInfo();
 			aggregatedInfo.hotelAmenities = result[0];
 			aggregatedInfo.paymentMethods = result[1];
 			aggregatedInfo.hotelDetails = result[2];
 			return aggregatedInfo;
 		});
 	}
-	protected parseResult(result: HotelAggregatedInfoDO): HotelAggregatedInfoDO {
+	protected parseResult(result: HotelAggregatedInfo): HotelAggregatedInfo {
 		return result;
 	}
-	public getHotelHotelAggregatedInfoDO(): Observable<HotelAggregatedInfoDO> {
+	public getHotelAggregatedInfo(): Observable<HotelAggregatedInfo> {
 		return this.getServiceObservable();
 	}
 }

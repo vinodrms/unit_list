@@ -5,7 +5,7 @@ import {AppContext, ThError} from '../../../../../../../../../common/utils/AppCo
 import {WizardBasicInfoNameAddressService} from './services/WizardBasicInfoNameAddressService';
 import {WizardBasicInformationStateService} from '../../main/services/WizardBasicInformationStateService';
 import {HotelAggregatorService} from '../../../../../../../services/hotel/HotelAggregatorService';
-import {HotelAggregatedInfoDO} from '../../../../../../../services/hotel/data-objects/HotelAggregatedInfoDO';
+import {HotelAggregatedInfo} from '../../../../../../../services/hotel/utils/HotelAggregatedInfo';
 
 @Component({
 	selector: 'wizard-basic-info-name-address',
@@ -22,7 +22,8 @@ export class WizardBasicInfoNameAddressComponent extends BaseComponent implement
 
 	ngOnInit() {
 		//TODO: remove
-		this._hotelAggregator.getHotelHotelAggregatedInfoDO().subscribe((hotelDetails: HotelAggregatedInfoDO) => {
+		this._hotelAggregator.getHotelAggregatedInfo().subscribe((hotelDetails: HotelAggregatedInfo) => {
+			console.log(hotelDetails);
 		}, (error: ThError) => {
 		});
 	}
