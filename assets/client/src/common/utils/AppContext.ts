@@ -9,6 +9,7 @@ import {RouterNavigator} from './navigator/RouterNavigator';
 import {IToaster} from './toaster/IToaster';
 import {IModalService} from './modals/IModalService';
 export {ThServerApi} from './http/ThServerApi';
+export {ThError} from './responses/ThError';
 
 @Injectable()
 export class AppContext {

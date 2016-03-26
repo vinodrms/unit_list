@@ -19,8 +19,8 @@ export class SettingsController extends BaseController {
             criteria.id = roomAttributeID;
         }
 
-        settingsRepository.getRoomAttributes(criteria).then((result: any) => {
-            this.returnSuccesfulResponse(req, res, result);
+        settingsRepository.getRoomAttributes(criteria).then((roomAttributeList: any) => {
+            this.returnSuccesfulResponse(req, res, { roomAttributeList: roomAttributeList });
         }).catch((err: any) => {
             this.returnErrorResponse(req, res, err, ThStatusCode.SettingsMongoRepositoryReadError);
         });
@@ -37,8 +37,8 @@ export class SettingsController extends BaseController {
             criteria.id = amenityID;
         }
 
-        settingsRepository.getRoomAmenities(criteria).then((result: any) => {
-            this.returnSuccesfulResponse(req, res, result);
+        settingsRepository.getRoomAmenities(criteria).then((roomAmenityList: any) => {
+            this.returnSuccesfulResponse(req, res, {roomAmenityList: roomAmenityList});
         }).catch((err: any) => {
             this.returnErrorResponse(req, res, err, ThStatusCode.SettingsMongoRepositoryReadError);
         });
@@ -54,8 +54,8 @@ export class SettingsController extends BaseController {
             criteria.id = amenityID;
         }
 
-        settingsRepository.getHotelAmenities(criteria).then((result: any) => {
-            this.returnSuccesfulResponse(req, res, result);
+        settingsRepository.getHotelAmenities(criteria).then((hotelAmenityList: any) => {
+            this.returnSuccesfulResponse(req, res, {hotelAmenityList: hotelAmenityList});
         }).catch((err: any) => {
             this.returnErrorResponse(req, res, err, ThStatusCode.SettingsMongoRepositoryReadError);
         });
@@ -71,8 +71,8 @@ export class SettingsController extends BaseController {
             criteria.code = countryCode;
         }
 
-        settingsRepository.getCountries(criteria).then((result: any) => {
-            this.returnSuccesfulResponse(req, res, result);
+        settingsRepository.getCountries(criteria).then((countryList: any) => {
+            this.returnSuccesfulResponse(req, res, {countryList: countryList});
         }).catch((err: any) => {
             this.returnErrorResponse(req, res, err, ThStatusCode.SettingsMongoRepositoryReadError);
         });
@@ -88,8 +88,8 @@ export class SettingsController extends BaseController {
             criteria.code = currencyCode;
         }
 
-        settingsRepository.getCurrencies(criteria).then((result: any) => {
-            this.returnSuccesfulResponse(req, res, result);
+        settingsRepository.getCurrencies(criteria).then((currencyList: any) => {
+            this.returnSuccesfulResponse(req, res, {currencyList: currencyList});
         }).catch((err: any) => {
             this.returnErrorResponse(req, res, err, ThStatusCode.SettingsMongoRepositoryReadError);
         });
@@ -105,8 +105,8 @@ export class SettingsController extends BaseController {
             criteria.id = paymentMethodId;
         }
 
-        settingsRepository.getPaymentMethods(criteria).then((result: any) => {
-            this.returnSuccesfulResponse(req, res, result);
+        settingsRepository.getPaymentMethods(criteria).then((paymentMethodList: any) => {
+            this.returnSuccesfulResponse(req, res, {paymentMethodList: paymentMethodList});
         }).catch((err: any) => {
             this.returnErrorResponse(req, res, err, ThStatusCode.SettingsMongoRepositoryReadError);
         });
@@ -121,8 +121,8 @@ export class SettingsController extends BaseController {
             criteria.id = addOnProductId;
         }
 
-        settingsRepository.getAddOnProductCategories(criteria).then((result: any) => {
-            this.returnSuccesfulResponse(req, res, result);
+        settingsRepository.getAddOnProductCategories(criteria).then((addOnProductCategoryList: any) => {
+            this.returnSuccesfulResponse(req, res, {addOnProductCategoryList: addOnProductCategoryList});
         }).catch((err: any) => {
             this.returnErrorResponse(req, res, err, ThStatusCode.SettingsMongoRepositoryReadError);
         });
@@ -130,8 +130,8 @@ export class SettingsController extends BaseController {
     public getBedTemplates(req: Express.Request, res: Express.Response) {
         var thUtils = new ThUtils();
         var settingsRepository: ISettingsRepository = req.appContext.getRepositoryFactory().getSettingsRepository();
-        settingsRepository.getBedTemplates().then((result: any) => {
-            this.returnSuccesfulResponse(req, res, result);
+        settingsRepository.getBedTemplates().then((bedTemplateList: any) => {
+            this.returnSuccesfulResponse(req, res, {bedTemplateList: bedTemplateList});
         }).catch((err: any) => {
             this.returnErrorResponse(req, res, err, ThStatusCode.SettingsMongoRepositoryReadError);
         });

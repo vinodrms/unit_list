@@ -25,14 +25,15 @@ export class ThHttp implements IThHttp {
 		private _http: Http,
 		private _thTranslation: ThTranslation,
 		@Inject(IBrowserLocation) private _browserLocation: IBrowserLocation) {
+		this._thUtils = new ThUtils();
 	}
-	
+
 	private getApiUrl(serverApi: ThServerApi): string {
 		var builder = new ServerApiBuilder(serverApi);
 		return builder.getUrl();
 	}
 
-	public get(serverApi: ThServerApi, parameters: Object): Observable<Object> {
+	public get(serverApi: ThServerApi, parameters?: Object): Observable<Object> {
 		var url = this.getApiUrl(serverApi);
 		var searchParams = this.buildSearchParameters(parameters);
 
