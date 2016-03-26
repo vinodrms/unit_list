@@ -5,22 +5,22 @@ import 'rxjs/add/operator/share';
 import {BaseDO} from '../../../../common/base/BaseDO';
 import {ThError} from '../../../../common/utils/responses/ThError';
 
-export abstract class ARequestService {
-	private _serviceObservable: Observable<BaseDO>;
-	private _serviceObserver: Observer<BaseDO>;
+export abstract class ARequestService<T> {
+	private _serviceObservable: Observable<T>;
+	private _serviceObserver: Observer<T>;
 
-	protected _requestResult: BehaviorSubject<BaseDO>;
+	protected _requestResult: BehaviorSubject<T>;
 
 	constructor() {
-		this._serviceObservable = new Observable((serviceObserver: Observer<BaseDO>) => {
+		this._serviceObservable = new Observable((serviceObserver: Observer<T>) => {
 			this._serviceObserver = serviceObserver;
 		}).share();
 	}
 
-	protected getServiceObservable(): Observable<BaseDO> {
+	protected getServiceObservable(): Observable<T> {
 		if (!this._requestResult) {
 			this.sendRequest().subscribe((result: Object) => {
-				var parsedResult = this.parseResult(result);
+				var parsedResult: T = this.parseResult(result);
 
 				this._requestResult = new BehaviorSubject(parsedResult);
 				this._serviceObservable.subscribe(s => this._requestResult.next(s));
@@ -37,5 +37,5 @@ export abstract class ARequestService {
 	}
 
 	protected abstract sendRequest(): Observable<Object>;
-	protected abstract parseResult(result: Object): BaseDO;
+	protected abstract parseResult(result: Object): T;
 }

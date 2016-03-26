@@ -15,7 +15,7 @@ import {HotelPaymentMethodsDO} from '../settings/data-objects/HotelPaymentMethod
 import {HotelAggregatedInfoDO} from './data-objects/HotelAggregatedInfoDO';
 
 @Injectable()
-export class HotelAggregatorService extends ARequestService {
+export class HotelAggregatorService extends ARequestService<HotelAggregatedInfoDO> {
 	constructor(
 		private _hotelAmenitiesService: HotelAmenitiesService,
 		private _paymentMethodsService: HotelPaymentMethodsService,

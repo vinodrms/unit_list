@@ -5,7 +5,7 @@ import {ARequestService} from '../common/ARequestService';
 import {HotelAmenitiesDO} from './data-objects/HotelAmenitiesDO';
 
 @Injectable()
-export class HotelAmenitiesService extends ARequestService {
+export class HotelAmenitiesService extends ARequestService<HotelAmenitiesDO> {
 	constructor(private _appContext: AppContext) {
 		super();
 	}

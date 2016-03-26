@@ -6,7 +6,7 @@ import {HotelDetailsDO} from './data-objects/HotelDetailsDO';
 import {HotelAmenitiesService} from '../settings/HotelAmenitiesService';
 
 @Injectable()
-export class HotelService extends ARequestService {
+export class HotelService extends ARequestService<HotelDetailsDO> {
 	constructor(private _appContext: AppContext) {
 		super();
 	}
