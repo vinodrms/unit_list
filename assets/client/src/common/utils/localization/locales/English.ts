@@ -43,6 +43,8 @@ export var EnglishTranslations: Object = {
 	"let's set up your hotel.": "let's set up your hotel.",
 	"[Wizard Step 0] Welcome Message" : "Welcome to UnitPal. We'll guide you through all the steps necessary to configure your hotel.",
 	"[Wizard Step 0] Basic Information text": "The basic information contains important information for your hotel such as contact details, taxes, hotel amenities and operation hours.",
-	"name & address": "name & address"
+	"name & address": "name & address",
+	"Select image": "Select image",
+	"Remove": "Remove"
 	
 };

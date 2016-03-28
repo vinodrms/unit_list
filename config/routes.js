@@ -40,7 +40,7 @@ module.exports.routes = {
 	'POST /api/taxes/saveTaxItem': 'TaxesController.saveTaxItem',
 	'POST /api/taxes/deleteTaxItem': 'TaxesController.deleteTaxItem',
 
-    'POST /api/service/uploadImage': 'ServiceController.uploadImage',
+    'POST /api/service/uploadFile': 'ServiceController.uploadFile',
     'GET /api/service/vatVerifier': 'ServiceController.checkVAT',
 
     'GET /api/settings/roomAmenities': 'SettingsController.getRoomAmenities',

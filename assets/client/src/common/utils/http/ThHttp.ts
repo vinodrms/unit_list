@@ -2,7 +2,7 @@ import {Observable} from 'rxjs/Observable';
 import {Observer} from "rxjs/Observer";
 import {Injectable, Inject} from 'angular2/core';
 import {Http, Response, URLSearchParams} from 'angular2/http';
-import {IThHttp} from './IThHttp';
+import {IThHttp, UploadedFileResponse} from './IThHttp';
 import {IBrowserLocation} from '../browser-location/IBrowserLocation';
 import {LoginStatusCode} from '../responses/LoginStatusCode';
 import {ThUtils} from '../ThUtils';
@@ -79,16 +79,33 @@ export class ThHttp implements IThHttp {
 		});
 	}
 
+	public uploadFile(file: File): Observable<UploadedFileResponse> {
+		let url = this.getApiUrl(ThServerApi.ServiceUploadFile);
+		return new Observable((observer: Observer<UploadedFileResponse>) => {
+			let formData: FormData = new FormData();
+			let xhr: XMLHttpRequest = new XMLHttpRequest();
+
+			formData.append("file", file, file.name);
+
+			xhr.onreadystatechange = () => {
+				if (xhr.readyState === 4) {
+					if (xhr.status === 200) {
+						var resultJson = JSON.parse(xhr.response);
+						this.parseJsonResult(resultJson, observer);
+					} else {
+						observer.error(xhr.response);
+					}
+				}
+			};
+			xhr.open('POST', url, true);
+			xhr.send(formData);
+		});
+	}
+
 	private parseResult(result: Response, observer: Observer<Object>) {
 		if (result.status == ThHttp.HttpOk) {
 			var resultJson: Object = result.json();
-			if (resultJson["statusCode"] == ThStatusCode.Ok) {
-				observer.next(resultJson["data"]);
-				observer.complete();
-				return;
-			}
-			observer.error(new ThError(resultJson["message"]));
-			observer.complete();
+			this.parseJsonResult(resultJson, observer);
 		}
 		else if (result.status == ThHttp.HttpForbidden) {
 			this._browserLocation.goToLoginPage(LoginStatusCode.SessionTimeout);
@@ -97,5 +114,14 @@ export class ThHttp implements IThHttp {
 			observer.error(new ThError(result.statusText));
 			observer.complete();
 		}
+	}
+	private parseJsonResult(resultJson: Object, observer: Observer<Object>) {
+		if (resultJson["statusCode"] == ThStatusCode.Ok) {
+			observer.next(resultJson["data"]);
+			observer.complete();
+			return;
+		}
+		observer.error(new ThError(resultJson["message"]));
+		observer.complete();
 	}
 }

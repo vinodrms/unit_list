@@ -7,10 +7,10 @@ import {AppContext} from '../core/utils/AppContext';
 import {IVatProvider, VatDetailsDO} from '../core/services/vat/IVatProvider';
 
 class ServiceController extends BaseController {
-    public uploadImage(req: Express.Request, res: Express.Response) {
+    public uploadFile(req: Express.Request, res: Express.Response) {
         var _ctrlContext = this;
         try {
-            req.file('image').upload(function(err, uploadedFiles) {
+            req.file('file').upload(function(err, uploadedFiles) {
                 if (err) {
                     _ctrlContext.returnErrorResponse(req, res, err, ThStatusCode.ImageUploadControllerErrorUploadingImage);
                     return;
@@ -59,6 +59,6 @@ class ServiceController extends BaseController {
 
 var serviceController = new ServiceController();
 module.exports = {
-    uploadImage: serviceController.uploadImage.bind(serviceController),
+    uploadFile: serviceController.uploadFile.bind(serviceController),
     checkVAT: serviceController.checkVAT.bind(serviceController)
 }
