@@ -11,7 +11,8 @@ import {LoadingComponent} from './LoadingComponent';
 		<div class="fileinput fileinput-new" data-provides="fileinput">
 			<div class="fileinput-preview thumbnail" data-trigger="fileinput" style="width: height: 150px;">
 				<loading-component [isLoading]="isLoading"></loading-component>
-				<img [src]="imageUrl">
+				<img *ngIf="imageUrl" [src]="imageUrl">
+				<i class="fa fa-picture-o fa-5x" *ngIf="!imageUrl"></i>
 			</div>
 			<div>
 				<span class="btn btn-default btn-file">
