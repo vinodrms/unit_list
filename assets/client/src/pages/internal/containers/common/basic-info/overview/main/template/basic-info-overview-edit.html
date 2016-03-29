@@ -1,0 +1,101 @@
+<loading-component [isLoading]="isLoading"></loading-component>
+<form class="form-horizontal form-label-left" *ngIf="!isLoading" [ngFormModel]="getDefaultControlGroup()">
+	<div class="row">
+		<div class="col-sm-12 col-md-6 form-group">
+			<div class="row">
+				<div class="col-xs-12 col-md-12 form-group" [ngClass]="{bad: controlIsInvalid('name')}" >
+					<input type="text" placeholder="{{ 'Name of the Hotel' | translate }}" class="form-control" ngControl="name"/>
+					<label *ngIf="controlIsInvalid('name')" class="form-label"><small><i class="fa fa-info-circle"></i> {{ 'Enter a name for your hotel' | translate }}</small></label>
+				</div>
+			</div>
+			<!-- VAT -->
+
+			<vat-input 
+				[vatDetails]="vatDetails"
+				[isRequired]="true"
+				[didSubmitForm]="didSubmitForm" 
+				(onVatDetailsChanged)="didChangeVatDetails($event)" 
+				(onVatResponseReceived)="didGetVatResponse($event)">
+			</vat-input>
+			
+			<div class="row">
+				<div class="col-xs-12 col-md-12 form-group" [ngClass]="{bad: controlIsInvalid('companyName')}">
+					<input type="text" placeholder="{{ 'Name of the Company' | translate }}" class="form-control" ngControl="companyName"/>
+					<label *ngIf="controlIsInvalid('companyName')" class="form-label"><small><i class="fa fa-info-circle"></i> {{ 'Enter a name for your company' | translate }}</small></label>
+				</div>
+			</div>
+			
+			<div class="row">
+				<div class="col-xs-12 col-md-6 form-group" [ngClass]="{bad: controlIsInvalid('streetAddress')}">
+					<input type="text" placeholder="{{ 'Address' | translate }}" class="form-control" ngControl="streetAddress">
+					<label *ngIf="controlIsInvalid('streetAddress')" class="form-label"><small><i class="fa fa-info-circle"></i> {{ 'Enter the address' | translate }}</small></label>
+				</div>
+				<div class="col-xs-6 col-md-3 form-group" [ngClass]="{bad: controlIsInvalid('city')}">
+					<input type="text" placeholder="{{ 'City' | translate }}" class="form-control" ngControl="city">
+					<label *ngIf="controlIsInvalid('city')" class="form-label"><small><i class="fa fa-info-circle"></i> {{ 'Enter the city' | translate }}</small></label>
+				</div>
+				<div class="col-xs-6 col-md-3 form-group" [ngClass]="{bad: controlIsInvalid('postalCode')}">
+					<input type="text" placeholder="{{ 'Postal Code' | translate }}" class="form-control" ngControl="postalCode">
+					<label *ngIf="controlIsInvalid('postalCode')" class="form-label"><small><i class="fa fa-info-circle"></i> {{ 'Enter the postal code' | translate }}</small></label>
+				</div>
+			</div>
+
+			<hr class="separator">
+
+			<div class="row">
+				<div class="col-xs-12 col-md-6 form-group" [ngClass]="{bad: controlIsInvalid('phone')}">
+					<input type="text" placeholder="{{ 'Phone' | translate }}" class="form-control" ngControl="phone">
+					<label *ngIf="controlIsInvalid('phone')" class="form-label"><small><i class="fa fa-info-circle"></i> {{ 'Enter a valid phone' | translate }}</small></label>
+				</div>
+				<div class="col-xs-12 col-md-6 form-group" [ngClass]="{bad: controlIsInvalid('fax')}">
+					<input type="text" placeholder="{{ 'Fax' | translate }}" class="form-control" ngControl="fax">
+					<label *ngIf="controlIsInvalid('fax')" class="form-label"><small><i class="fa fa-info-circle"></i> {{ 'Enter a valid fax' | translate }}</small></label>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12 col-md-12 form-group">
+					<input type="text" placeholder="{{ 'Contact Person\'s Name' | translate }}" class="form-control" ngControl="contactName"/>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-xs-12 col-md-6 form-group" [ngClass]="{bad: controlIsInvalid('websiteUrl')}">
+					<input type="text" class="form-control" placeholder="{{ 'Your Website' | translate }}" ngControl="websiteUrl">
+					<label *ngIf="controlIsInvalid('websiteUrl')" class="form-label"><small><i class="fa fa-info-circle"></i> {{ 'Enter a valid url' | translate }}</small></label>
+				</div>
+				<div class="col-xs-12 col-md-6 form-group" [ngClass]="{bad: controlIsInvalid('email')}">
+					<input type="email" placeholder="{{ 'Contact Email' | translate }}" class="form-control" ngControl="email">
+					<label *ngIf="controlIsInvalid('email')" class="form-label"><small><i class="fa fa-info-circle"></i> {{ 'Enter a valid contact email' | translate }}</small></label>
+				</div>
+			</div>
+		</div>
+		<div class="col-sm-12 col-md-6 form-group">
+			<image-upload [imageUrl]="logoUrl" (onImageUpload)="didUploadLogo($event)" ></image-upload>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-3 form-group">
+			<div class="input-group" [ngClass]="{bad: controlIsInvalid('facebookUrl')}">
+				<span class="input-group-addon"><i class="fa fa-facebook"></i></span>
+				<input type="text" class="form-control" ngControl="facebookUrl">
+				<label *ngIf="controlIsInvalid('facebookUrl')" class="form-label"><small><i class="fa fa-info-circle"></i> {{ 'Enter a valid url' | translate }}</small></label>
+			</div>
+		</div>
+		<div class="col-sm-3 form-group">
+			<div class="input-group" [ngClass]="{bad: controlIsInvalid('twitterUrl')}">
+				<span class="input-group-addon"><i class="fa fa-twitter"></i></span>
+				<input type="text" class="form-control" ngControl="twitterUrl">
+				<label *ngIf="controlIsInvalid('twitterUrl')" class="form-label"><small><i class="fa fa-info-circle"></i> {{ 'Enter a valid url' | translate }}</small></label>
+			</div>
+		</div>
+		<div class="col-sm-3 form-group">
+			<div class="input-group" [ngClass]="{bad: controlIsInvalid('linkedinUrl')}">
+				<span class="input-group-addon"><i class="fa fa-linkedin"></i></span>
+				<input type="text" class="form-control" ngControl="linkedinUrl">
+				<label *ngIf="controlIsInvalid('linkedinUrl')" class="form-label"><small><i class="fa fa-info-circle"></i> {{ 'Enter a valid url' | translate }}</small></label>
+			</div>
+		</div>
+		<div class="col-xs-3 form-group">
+		</div>
+	</div>
+</form>

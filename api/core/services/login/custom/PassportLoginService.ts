@@ -48,24 +48,26 @@ export class PassportLoginService implements ILoginServiceInitializer, ILoginSer
 	private logInCore(loginType: LoginType, req: any, resolve: { (result: { user: UserDO, hotel: HotelDO }): void; }, reject: { (err: ThError): void }) {
 		var loginStrategyName = this._passportLoginTypes[loginType];
 		passport.authenticate(loginStrategyName, function(err, result: { user: UserDO, hotel: HotelDO }) {
-			if (err) {
-				var thError = new ThError(ThStatusCode.PassportLoginServiceErrorInvalidLogin, err);
-				if (thError.isNativeError()) {
-					ThLogger.getInstance().logError(ThLogLevel.Warning, "Invalid Login", req.body, thError);
+			process.nextTick(() => {
+				if (err) {
+					var thError = new ThError(ThStatusCode.PassportLoginServiceErrorInvalidLogin, err);
+					if (thError.isNativeError()) {
+						ThLogger.getInstance().logError(ThLogLevel.Warning, "Invalid Login", req.body, thError);
+					}
+					reject(thError);
+					return;
 				}
-				reject(thError);
-				return;
-			}
-			/*
-				Passport can return 'err'=null and put false on 'result'
-			*/
-			if (!result) {
-				var thError = new ThError(ThStatusCode.PassportLoginServiceInvalidLogin, null);
-				ThLogger.getInstance().logBusiness(ThLogLevel.Info, "Invalid Login", req.body, thError);
-				reject(thError);
-				return;
-			}
-			resolve(result);
+				/*
+					Passport can return 'err'=null and put false on 'result'
+				*/
+				if (!result) {
+					var thError = new ThError(ThStatusCode.PassportLoginServiceInvalidLogin, null);
+					ThLogger.getInstance().logBusiness(ThLogLevel.Info, "Invalid Login", req.body, thError);
+					reject(thError);
+					return;
+				}
+				resolve(result);
+			});
 		})(req, null, null);
 	}
 }

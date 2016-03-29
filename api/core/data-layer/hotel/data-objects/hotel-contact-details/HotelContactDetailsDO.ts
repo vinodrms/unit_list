@@ -6,22 +6,26 @@ export class HotelContactDetailsDO extends BaseDO {
 	constructor() {
 		super();
 	}
+	companyName: string;
+	vatCode: string;
 	name: string;
 	address: AddressDO;
 	phone: string;
 	fax: string;
 	email: string;
+	websiteUrl: string;
 	socialLinks: SocialLinksDO;
+	contactName: string;
 
 	protected getPrimitivePropertyKeys(): string[] {
-		return ["name", "phone", "fax", "email"];
+		return ["companyName", "vatCode", "name", "phone", "fax", "email", "websiteUrl", "contactName"];
 	}
 
 	public buildFromObject(object: Object) {
 		super.buildFromObject(object);
 		this.address = new AddressDO();
-		this.address.buildFromObject(object["address"]);
+		this.address.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "address"));
 		this.socialLinks = new SocialLinksDO();
-		this.socialLinks.buildFromObject(object["socialLinks"]);
+		this.socialLinks.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "socialLinks"));
 	}
 }

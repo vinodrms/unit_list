@@ -15,10 +15,10 @@ import {AccountActivationEmailTemplateDO} from '../../../services/email/data-obj
 import {AuthUtils} from '../utils/AuthUtils';
 import {HotelSignUpDO} from './HotelSignUpDO';
 import {ValidationResultParser} from '../../common/ValidationResultParser';
-
-import async = require("async");
+import {HotelConfigurationsBootstrap} from '../../hotel-configurations/HotelConfigurationsBootstrap';
 
 export class HotelSignUp {
+	private static FirstUserIndex = 0;
 	private _savedHotel: HotelDO;
 	private _authUtils: AuthUtils;
 	private _activationCode: string;
@@ -49,27 +49,26 @@ export class HotelSignUp {
 			return;
 		}
 		var defaultHotelData = this.generateDefaultHotel();
-		async.waterfall([
-			((finishAddHotelCallback) => {
-				var hotelRepository: IHotelRepository = this._appContext.getRepositoryFactory().getHotelRepository();
-				hotelRepository.addHotelAsync(defaultHotelData, finishAddHotelCallback);
-			}),
-			((savedHotel: HotelDO, finishSendActivationEmailCallback) => {
+		var hotelRepository: IHotelRepository = this._appContext.getRepositoryFactory().getHotelRepository();
+		hotelRepository.addHotel(defaultHotelData)
+			.then((savedHotel: HotelDO) => {
 				this._savedHotel = savedHotel;
+
+				var hotelConfigBootstrap = new HotelConfigurationsBootstrap(this._appContext, savedHotel.id);
+				return hotelConfigBootstrap.bootstrap();
+			})
+			.then((bootstrapResult: boolean) => {
 				var activationEmailTemplateDO = this.getAccountActivationEmailTemplateDO();
 				var emailHeaderDO = this.getEmailHeaderDO();
 				var emailService: IEmailService = this._appContext.getServiceFactory().getEmailService(emailHeaderDO, activationEmailTemplateDO);
-				emailService.sendEmailAsync(finishSendActivationEmailCallback);
+				return emailService.sendEmail();
 			})
-		], ((error: any, emailSendResult: any) => {
-			if (error) {
+			.then((sendEmailResult: any) => {
+				resolve(this._savedHotel.userList[HotelSignUp.FirstUserIndex].accountActivationToken);
+			}).catch((error: any) => {
 				var thError = new ThError(ThStatusCode.HotelSignUpError, error);
 				reject(thError);
-			}
-			else {
-				resolve(this._savedHotel.users[0].accountActivationToken);
-			}
-		}));
+			});
 	}
 
 	private generateDefaultHotel(): HotelDO {
@@ -78,7 +77,7 @@ export class HotelSignUp {
 		var hotel = new HotelDO();
 		hotel.contactDetails = new HotelContactDetailsDO();
 		hotel.contactDetails.name = this._signUpDO.hotelName;
-		hotel.users = [];
+		hotel.userList = [];
 		var user = new UserDO();
 		user.id = this._thUtils.generateUniqueID();
 		user.accountStatus = AccountStatus.Pending;
@@ -91,12 +90,12 @@ export class HotelSignUp {
 		user.email = this._signUpDO.email;
 		user.language = this._sessionContext.language;
 		user.password = this._authUtils.encrypPassword(this._signUpDO.password);
-		user.roles = [UserRoles.Administrator];
-		hotel.users.push(user);
-		hotel.amenityIds = [];
-		hotel.customAmenities = [];
-		hotel.paymentMethodIds = [];
-		hotel.configurationStatus = false;
+		user.roleList = [UserRoles.Administrator];
+		hotel.userList.push(user);
+		hotel.amenityIdList = [];
+		hotel.customAmenityList = [];
+		hotel.paymentMethodIdList = [];
+		hotel.configurationCompleted = false;
 		return hotel;
 	}
 

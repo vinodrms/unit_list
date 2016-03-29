@@ -10,6 +10,7 @@ import {ActionTokenDO} from '../core/data-layer/hotel/data-objects/user/ActionTo
 import {UserAccountActivation} from '../core/domain-layer/hotel-account/account-activation/UserAccountActivation';
 import {UserAccountRequestResetPassword} from '../core/domain-layer/hotel-account/reset-password/UserAccountRequestResetPassword';
 import {UserAccountResetPassword} from '../core/domain-layer/hotel-account/reset-password/UserAccountResetPassword';
+import {LoginStatusCode} from '../core/utils/th-responses/LoginStatusCode';
 
 class AccountController extends BaseController {
 	public signUp(req: Express.Request, res: Express.Response) {
@@ -24,11 +25,9 @@ class AccountController extends BaseController {
 		var appContext: AppContext = req.appContext;
 		var hotelActivateAccount = new UserAccountActivation(req.appContext, req.sessionContext, req.query);
 		hotelActivateAccount.activate().then((result: any) => {
-			// TODO: add status code in login page to display alert with "account succesfully activated"
-			res.redirect(appContext.getUnitPalConfig().getAppContextRoot());
+			res.redirect(appContext.getUnitPalConfig().getAppContextRoot() + "/?loginStatusCode=" + LoginStatusCode.AccountActivationOk);
 		}).catch((err: any) => {
-			//TODO: redirect to login page with error code instead of returning JSON
-			this.returnErrorResponse(req, res, err, ThStatusCode.HotelActivateError);
+			res.redirect(appContext.getUnitPalConfig().getAppContextRoot() + "/?loginStatusCode=" + LoginStatusCode.AccountActivationError);
 		});
 	}
 	public logIn(req: Express.Request, res: Express.Response) {
@@ -37,7 +36,7 @@ class AccountController extends BaseController {
 		loginService.logIn(LoginType.Basic, req).then((loginData: { user: UserDO, hotel: HotelDO }) => {
 			var sessionManager: SessionManager = new SessionManager(req);
 			sessionManager.initializeSession(loginData).then((sessionContext: SessionContext) => {
-				this.returnSuccesfulResponse(req, res, sessionContext);
+				this.returnSuccesfulResponse(req, res, { configurationCompleted: loginData.hotel.configurationCompleted });
 			}).catch((err: any) => {
 				this.returnErrorResponse(req, res, err, ThStatusCode.AccControllerErrorInitializingSession);
 			});

@@ -5,10 +5,10 @@
 			"name": "Launch",
 			"type": "node",
 			"request": "launch",
-			"program": "app.js",
+			"program": "${workspaceRoot}/app.js",
 			"stopOnEntry": false,
 			"args": [],
-			"cwd": ".",
+			"cwd": "${workspaceRoot}",
 			"runtimeExecutable": null,
 			"runtimeArgs": [
 				"--nolazy"
@@ -27,12 +27,22 @@
 			"port": 5858
 		},
         {
-            "name": "Run server tests",
+            "name": "Server tests",
             "type": "node",
-            "program": "./node_modules/sails-test-helper/node_modules/mocha/bin/_mocha",
+            "program": "${workspaceRoot}/node_modules/sails-test-helper/node_modules/mocha/bin/_mocha",
             "stopOnEntry": false,
             "args": ["api/test/root/**/*.js", "--timeout", "1000000"],
-            "cwd": ".",
+            "cwd": "${workspaceRoot}",
+            "runtimeExecutable": null,
+            "env": { "NODE_ENV": "test"}
+        },
+        {
+            "name": "Code coverage",
+            "type": "node",
+            "program": "${workspaceRoot}/node_modules/istanbul/lib/cli.js",
+            "stopOnEntry": false,
+            "args": ["cover", "./node_modules/sails-test-helper/node_modules/mocha/bin/_mocha", "--", "-R", "spec", "api/test/root/**/*.js", "--timeout", "1000000"],
+            "cwd": "${workspaceRoot}",
             "runtimeExecutable": null,
             "env": { "NODE_ENV": "test"}
         }

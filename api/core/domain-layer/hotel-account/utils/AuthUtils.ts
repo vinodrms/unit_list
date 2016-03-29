@@ -30,9 +30,10 @@ export class AuthUtils {
 		var encodedActivationCode = encodeURIComponent(activationCode);
 		return util.format("%s/api/account/activate?email=%s&activationCode=%s", contextRoot, encodedEmail, encodedActivationCode);
 	}
-	public getResetPasswordLink(activationCode: string) {
+	public getResetPasswordLink(email: string, activationCode: string) {
 		var contextRoot = this._unitPalConfig.getAppContextRoot();
 		var encodedActivationCode = encodeURIComponent(activationCode);
-		return util.format("%s/#/%s", contextRoot, encodedActivationCode);
+		var encodedEmail = encodeURIComponent(email);
+		return util.format("%s/update-password/%s/%s", contextRoot, encodedActivationCode, encodedEmail);
 	}
 }

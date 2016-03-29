@@ -9,6 +9,11 @@ class SettingsEntity extends BasePersistentEntity {
     }
     private buildCustomAttributes() {
         this.attributes = {
+			versionId: {
+				type: 'integer',
+				required: true,
+				defaultsTo: 0
+			},
             metadata: {
                 type: 'json',
                 required: true

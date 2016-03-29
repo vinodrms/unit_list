@@ -4,14 +4,12 @@ import {ThStatusCode} from '../../../utils/th-responses/ThResponse';
 import {AppContext} from '../../../utils/AppContext';
 import {SessionContext} from '../../../utils/SessionContext';
 import {AuthUtils} from '../utils/AuthUtils';
-import {IHotelRepository} from '../../../data-layer/hotel/repositories/IHotelRepository';
+import {IHotelRepository, ResetPasswordRepoDO} from '../../../data-layer/hotel/repositories/IHotelRepository';
 import {UserDO} from '../../../data-layer/hotel/data-objects/user/UserDO';
 import {AccountPasswordWasResetTemplateDO} from '../../../services/email/data-objects/AccountPasswordWasResetTemplateDO';
 import {IEmailService, EmailHeaderDO} from '../../../services/email/IEmailService';
 import {UserAccountResetPasswordDO} from './UserAccountResetPasswordDO';
 import {ValidationResultParser} from '../../common/ValidationResultParser';
-
-import async = require("async");
 
 export class UserAccountResetPassword {
 	private _authUtils: AuthUtils;
@@ -40,28 +38,28 @@ export class UserAccountResetPassword {
 		}
 
 		var encryptedPassword = this._authUtils.encrypPassword(this._resetPasswdDO.password);
-		async.waterfall([
-			((finishResetPasswordCallback) => {
-				var hotelRepository: IHotelRepository = this._appContext.getRepositoryFactory().getHotelRepository();
-				hotelRepository.resetPasswordAsync(this._resetPasswdDO.email, this._resetPasswdDO.activationCode, encryptedPassword, finishResetPasswordCallback);
-			}),
-			((updatedUser: UserDO, finishSendResetPasswordEmailCallback) => {
+		var resetPasswordRepoDO: ResetPasswordRepoDO = {
+			activationCode: this._resetPasswdDO.activationCode,
+			email: this._resetPasswdDO.email,
+			newPassword: encryptedPassword
+		};
+		var hotelRepository: IHotelRepository = this._appContext.getRepositoryFactory().getHotelRepository();
+		hotelRepository.resetPassword(resetPasswordRepoDO)
+			.then((updatedUser: UserDO) => {
 				this._updatedUser = updatedUser;
 
 				var passwordWasResetEmailTemplateDO = this.getPasswordWasResetEmailTemplateDO();
 				var emailHeaderDO = this.getEmailHeaderDO();
 				var emailService: IEmailService = this._appContext.getServiceFactory().getEmailService(emailHeaderDO, passwordWasResetEmailTemplateDO);
-				emailService.sendEmailAsync(finishSendResetPasswordEmailCallback);
+				return emailService.sendEmail();
 			})
-		], ((error: any, emailSendResult: any) => {
-			if (error) {
+			.then((sendEmailResult: any) => {
+				resolve(this._updatedUser);
+			})
+			.catch((error: any) => {
 				var thError = new ThError(ThStatusCode.UserAccountResetPasswordError, error);
 				reject(thError);
-			}
-			else {
-				resolve(this._updatedUser);
-			}
-		}));
+			});
 	}
 	private getPasswordWasResetEmailTemplateDO(): AccountPasswordWasResetTemplateDO {
 		var emailTemplateDO: AccountPasswordWasResetTemplateDO = new AccountPasswordWasResetTemplateDO();

@@ -3,8 +3,15 @@ import {BaseDO} from '../../../common/base/BaseDO';
 export enum SettingType {
     Countries,
     CurrencyCodes,
-    Amenities,
-    PaymentMethods
+    HotelAmenities,
+    RoomAmenities,
+    PaymentMethods,
+    BedTemplates,
+	AddOnProductCategory,
+    RoomAttributes,
+    RoomTypes,
+    RoomSalesCategories,
+    YieldFilter
 };
 
 export class SettingMetadataDO extends BaseDO {

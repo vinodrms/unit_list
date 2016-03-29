@@ -2,8 +2,20 @@ import {ThUtils} from '../../../utils/ThUtils';
 import {ThLogger, ThLogLevel} from '../../../utils/logging/ThLogger';
 import {ThError} from '../../../utils/th-responses/ThError';
 import {ThStatusCode} from '../../../utils/th-responses/ThResponse';
+import {IRepositoryCleaner} from './IRepositoryCleaner';
+import {LazyLoadMetaResponseRepoDO, LazyLoadRepoDO} from '../repo-data-objects/LazyLoadRepoDO';
+import {MongoUtils} from './mongo-utils/MongoUtils';
+import {MongoFindSingleDocument} from './mongo-utils/MongoFindSingleDocument';
+import {MongoCreateDocument} from './mongo-utils/MongoCreateDocument';
+import {MongoFindAndModifyDocument} from './mongo-utils/MongoFindAndModifyDocument';
+import {MongoFindDocumentDistinctFieldValues} from './mongo-utils/MongoFindDocumentDistinctFieldValues';
+import {MongoFindMultipleDocuments} from './mongo-utils/MongoFindMultipleDocuments';
+import {MongoDocumentCount} from './mongo-utils/MongoDocumentCount';
 
-var ObjectId = require('mongodb').ObjectID;
+import _ = require('underscore');
+import mongodb = require('mongodb');
+import ObjectID = mongodb.ObjectID;
+import Collection = mongodb.Collection;
 
 export enum MongoErrorCodes {
     GenericError,
@@ -12,12 +24,22 @@ export enum MongoErrorCodes {
 var NativeMongoErrorCodes: { [index: number]: number; } = {};
 NativeMongoErrorCodes[MongoErrorCodes.DuplicateKeyError] = 11000;
 
-export class MongoRepository {
+export interface MongoSearchCriteria {
+	criteria: Object;
+	sortCriteria?: Object;
+	lazyLoad?: LazyLoadRepoDO;
+}
+
+export class MongoRepository implements IRepositoryCleaner {
     protected _thUtils: ThUtils;
 
 	constructor(private _sailsEntity: Sails.Model) {
         this._thUtils = new ThUtils();
     }
+
+	public cleanRepository(): Promise<Object> {
+		return this._sailsEntity.destroy({});
+	}
 
     protected getMongoErrorCode(err: any): MongoErrorCodes {
         if (!this._thUtils.isUndefinedOrNull(err, "originalError.code")) {
@@ -35,66 +57,53 @@ export class MongoRepository {
         }
         return outErrorCode;
     }
-    public getNativeMongoCollection(): Promise<any> {
-        return new Promise<any>((resolve, reject) => {
-            this._sailsEntity.native((err, nativeEntity: any) => {
-                if (err || !nativeEntity) {
-                    reject(err);
-                    return;
-                }
-                resolve(nativeEntity);
-            });
-        });
+	
+    public getNativeMongoCollection(): Promise<Collection> {
+		var mongoUtils = new MongoUtils();
+        return mongoUtils.getNativeMongoCollection(this._sailsEntity);
     }
-	protected findAndModify(query: Object, updates: Object): Promise<Object> {
-		return new Promise<any>((resolve: { (data: any): void; }, reject: { (err: Error): void; }) => {
-			this.getNativeMongoCollection().then((nativeCollection: any) => {
-				this.findAndModifyCore(resolve, reject, nativeCollection, query, updates);
-			}).catch((error: any) => {
-				reject(error);
-			});
-        });
+
+	protected createDocument(documentToCreate: Object, errorCallback: { (err: Error): void }, successCallback: { (createdDocument: Object): void }) {
+		var mongoCreateDoc = new MongoCreateDocument(this._sailsEntity);
+		mongoCreateDoc.errorCallback = errorCallback;
+		mongoCreateDoc.successCallback = successCallback;
+		return mongoCreateDoc.createDocument(documentToCreate);
 	}
-	private findAndModifyCore(resolve: { (data: any): void; }, reject: { (err: Error): void; }, nativeCollection: any, query: any, updates: Object) {
-		if (this._thUtils.isUndefinedOrNull(nativeCollection) || this._thUtils.isUndefinedOrNull(query) || this._thUtils.isUndefinedOrNull(updates)) {
-			reject(new Error("Null or empty parameters sent to findAndModify"));
-			return;
-		}
-		try {
-			query = this.preprocessQuery(query);
-			updates["updatedAt"] = this.getISODate();
-		} catch (e) {
-			reject(e);
-			return;
-		}
-		nativeCollection.findAndModify(query, [['_id', 'asc']], { $set: updates }, {}, (err: any, record: Object) => {
-			if (err) {
-				reject(err);
-				return;
-			}
-			var processedResult = this.processResult(record);
-			resolve(processedResult);
-		});
+
+	protected findAndModifyDocument(searchCriteria: Object, updates: Object, notFoundCallback: { (): void }, errorCallback: { (err: Error): void }, successCallback: { (updatedDocument: Object): void }) {
+		var findAndModifyDoc = new MongoFindAndModifyDocument(this._sailsEntity);
+		findAndModifyDoc.notFoundCallback = notFoundCallback;
+		findAndModifyDoc.errorCallback = errorCallback;
+		findAndModifyDoc.successCallback = successCallback;
+		return findAndModifyDoc.findAndModifyDocument(searchCriteria, updates);
 	}
-	private preprocessQuery(query: any): Object {
-		if (!this._thUtils.isUndefinedOrNull(query.id)) {
-			query._id = new ObjectId(query.id);
-			delete query["id"];
-		}
-		return query;
+
+	protected findDistinctDocumentFieldValues(fieldName: string, searchCriteria: Object, errorCallback: { (err: Error): void }, successCallback: { (distinctValues: Array<Object>): void }) {
+		var finder = new MongoFindDocumentDistinctFieldValues(this._sailsEntity);
+		finder.errorCallback = errorCallback;
+		finder.successCallback = successCallback;
+		return finder.findDistinctDocumentFieldValues(fieldName, searchCriteria);
 	}
-	private getISODate(): Date {
-		return new Date((new Date()).toISOString());
+
+	protected findOneDocument(searchCriteria: Object, notFoundCallback: { (): void }, errorCallback: { (err: Error): void }, successCallback: { (foundDocument: Object): void }) {
+		var mongoFindDoc = new MongoFindSingleDocument(this._sailsEntity);
+		mongoFindDoc.notFoundCallback = notFoundCallback;
+		mongoFindDoc.errorCallback = errorCallback;
+		mongoFindDoc.successCallback = successCallback;
+		return mongoFindDoc.findOneDocument(searchCriteria);
 	}
-	private processResult(record: any): Object {
-		if (!record || !record.value) {
-			return null;
-		}
-		var object = record.value;
-		if (!this._thUtils.isUndefinedOrNull(object._id)) {
-			object.id = object._id.toHexString();
-			delete object._id;
-		}
-		return object;
+
+	protected findMultipleDocuments(searchCriteria: MongoSearchCriteria, errorCallback: { (err: Error): void }, successCallback: { (foundDocumentList: Array<Object>): void }) {
+		var finder = new MongoFindMultipleDocuments(this._sailsEntity);
+		finder.errorCallback = errorCallback;
+		finder.successCallback = successCallback;
+		return finder.findMultipleDocuments(searchCriteria);
+	}
+
+	protected getDocumentCount(searchCriteria: Object, errorCallback: { (err: Error): void }, successCallback: { (meta: LazyLoadMetaResponseRepoDO): void }) {
+		var docCount = new MongoDocumentCount(this._sailsEntity);
+		docCount.errorCallback = errorCallback;
+		docCount.successCallback = successCallback;
+		return docCount.getDocumentCount(searchCriteria);
 	}
 }

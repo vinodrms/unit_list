@@ -4,6 +4,13 @@ import {StringValidationRule} from './StringValidationRule';
 
 export class PasswordValidationRule extends AValidationRule {
 	private _stringValidationRule: StringValidationRule;
+	private static MinLength = 6;
+	private static PasswordRegexList: RegExp[] = [
+		/^(?=.*[a-z]).+$/,
+		/^(?=.*[A-Z]).+$/,
+		/^(?=.*\d).+$/
+	]
+	
 	constructor() {
 		super(InvalidConstraintType.Password);
 		this._stringValidationRule = new StringValidationRule();
@@ -16,7 +23,16 @@ export class PasswordValidationRule extends AValidationRule {
 		return this.validateByPasswordRegex(object);
 	}
 	private validateByPasswordRegex(passwd: string): boolean {
-		var re = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{6,}$/;
-		return re.test(passwd);
+		var valueStr: string = passwd;
+		if (valueStr.length < PasswordValidationRule.MinLength) {
+			return false;
+		}
+		for (var index = 0; index < PasswordValidationRule.PasswordRegexList.length; index++) {
+			var regex = PasswordValidationRule.PasswordRegexList[index];
+			if (!regex.test(valueStr)) {
+				return false;
+			}
+		}
+		return true;
 	}
 }

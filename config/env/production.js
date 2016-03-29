@@ -16,5 +16,8 @@ module.exports = {
     hookTimeout: 40000,
     log: {
         level: "silent"
+    },
+    unitPalConfig: {
+        appContextRoot: "http://demo.3angletech.com:8001"
     }
 };

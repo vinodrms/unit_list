@@ -6,7 +6,7 @@
   "bundle": "typings/tsd.d.ts",
   "installed": {
     "node/node.d.ts": {
-      "commit": "72f0056f69f9a2290d2589c1a692896d24406928"
+      "commit": "bcd5761826eb567876c197ccc6a87c4d05731054"
     },
     "express/express.d.ts": {
       "commit": "c393f8974d44840a6c9cc6d5b5c0188a8f05143d"
@@ -27,10 +27,10 @@
       "commit": "a9680ac2efd3add0d38cd0331f30ad497d9dd1e0"
     },
     "moment/moment.d.ts": {
-      "commit": "a9680ac2efd3add0d38cd0331f30ad497d9dd1e0"
+      "commit": "95433230a9913054c57c715e6b91a9ae738d0b97"
     },
     "moment/moment-node.d.ts": {
-      "commit": "a9680ac2efd3add0d38cd0331f30ad497d9dd1e0"
+      "commit": "95433230a9913054c57c715e6b91a9ae738d0b97"
     },
     "async/async.d.ts": {
       "commit": "a9680ac2efd3add0d38cd0331f30ad497d9dd1e0"
@@ -79,6 +79,12 @@
     },
     "node-uuid/node-uuid-base.d.ts": {
       "commit": "3030a4be536b6530c06b80081f1333dc0de4d703"
+    },
+    "mongodb/mongodb.d.ts": {
+      "commit": "bcd5761826eb567876c197ccc6a87c4d05731054"
+    },
+    "moment-timezone/moment-timezone.d.ts": {
+      "commit": "95433230a9913054c57c715e6b91a9ae738d0b97"
     }
   }
 }

@@ -9,7 +9,7 @@ import _ = require("underscore");
 
 export class SendgridEmailService extends AEmailService {
 
-    protected sendEmail(): Promise<boolean> {
+    public sendEmail(): Promise<boolean> {
         return new Promise<boolean>((resolve: { (result: boolean): void }, reject: { (err: ThError): void }) => {
             this.sendEmailCore(resolve, reject);
         });

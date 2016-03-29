@@ -4,8 +4,21 @@ import {InvalidConstraintType} from './core/ValidationResult';
 import _ = require("underscore");
 
 export class StringValidationRule extends AValidationRule {
-	private _minLength: number = 0;
-	private _maxLength: number = Number.POSITIVE_INFINITY;
+	public static MaxCityLength = 100;
+	public static MaxCountryCodeLength = 2;
+	public static MaxCountryLength = 100;
+	public static MaxStreetAddressLength = 95;
+	public static MaxUrlLength = 2083;
+	public static MaxPhoneLength = 50;
+	public static MaxNameLength = 50;
+	public static MaxHotelNameLength = 300;
+	public static MaxVatCodeNameLength = 30;
+	public static MaxCurrencyCodeLength = 3;
+    public static MinRoomCategoryLength = 3;
+    public static MaxRoomCategoryLength = 100;
+    
+	public _minLength: number = 0;
+	public _maxLength: number = Number.POSITIVE_INFINITY;
 
 	constructor(maxLength?: number) {
 		super(InvalidConstraintType.String);
@@ -41,4 +54,14 @@ export class StringValidationRule extends AValidationRule {
 		}
 		return false;
 	}
+	public static buildNullable(maxLenght?: number): StringValidationRule {
+		var rule = new StringValidationRule(maxLenght);
+		rule.isNullable = true;
+		return rule;
+	}
+    public static buildMinMaxLength(minLength: number, maxLength: number) {
+        var rule = new StringValidationRule(maxLength);
+        rule._minLength = minLength;
+        return rule;    
+    }
 }

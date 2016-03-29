@@ -3,30 +3,40 @@ import {ThError} from '../../../../../../utils/th-responses/ThError';
 import {ThStatusCode} from '../../../../../../utils/th-responses/ThResponse';
 import {MongoPatcheType, ATransactionalMongoPatch} from '../../utils/ATransactionalMongoPatch';
 import {MongoRepository} from '../../../../../../data-layer/common/base/MongoRepository';
-import {SettingsMongoRepository} from '../../../../../../data-layer/settings/repositories/mongo/SettingsMongoRepository';
+import {MongoSettingsRepository} from '../../../../../../data-layer/settings/repositories/mongo/MongoSettingsRepository';
 
-import {Amenities} from './data-sets/Amenities';
+import {RoomAmenities} from './data-sets/amenities/RoomAmenities';
+import {RoomAttributes} from './data-sets/RoomAttributes';
+import {HotelAmenities} from './data-sets/amenities/HotelAmenities';
 import {Countries} from './data-sets/Countries';
 import {CurrencyCodes} from './data-sets/CurrencyCodes';
 import {PaymentMethods} from './data-sets/PaymentMethods';
+import {BedTemplates} from './data-sets/BedTemplates';
+import {AddOnProductCategories} from './data-sets/AddOnProductCategories';
+import {YieldManagerFilters} from './data-sets/YieldManagerFilters';
 
 import async = require('async');
 
 export class MongoPatch1 extends ATransactionalMongoPatch {
 	private _settingsToAdd: Object[] = [
-		(new Amenities()).getAmenitySettingDO(),
+		(new RoomAmenities()).getAmenitySettingDO(),
+        (new HotelAmenities()).getAmenitySettingDO(),
 		(new Countries()).getCountrySettingDO(),
 		(new CurrencyCodes()).getCurrencySettingDO(),
-		(new PaymentMethods()).getPaymentMethodSettingDO()
+		(new PaymentMethods()).getPaymentMethodSettingDO(),
+        (new BedTemplates()).getBedTemplateSettingDO(),
+		(new AddOnProductCategories()).getAddOnProductSettingDO(),
+        (new RoomAttributes()).getRoomAttributeSettingDO(),
+        (new YieldManagerFilters()).getYieldManagerFilterSettingDO()
 	];
 
     private _settingsEntity: Sails.Model;
-    private _mongoSettingsRepository: SettingsMongoRepository;
+    private _mongoSettingsRepository: MongoSettingsRepository;
 
     constructor() {
         super();
         this._settingsEntity = sails.models.settingsentity;
-        this._mongoSettingsRepository = new SettingsMongoRepository();
+        this._mongoSettingsRepository = new MongoSettingsRepository();
     }
     public getPatchType(): MongoPatcheType {
         return MongoPatcheType.PopulateCountriesAndCurrencyCodes;
@@ -64,7 +74,7 @@ export class MongoPatch1 extends ATransactionalMongoPatch {
 		mongoRepo.getNativeMongoCollection().then((nativeCollection: any) => {
 			nativeCollection.ensureIndex("metadata.type", { unique: true }, ((err, indexName) => {
 				if (err || !indexName) {
-					var thError = new ThError(ThStatusCode.MongoPatchErrorEnsuringUniqueIndexOnSettings, err);
+					var thError = new ThError(ThStatusCode.PatchErrorEnsuringUniqueIndexOnSettings, err);
 					ThLogger.getInstance().logError(ThLogLevel.Error, "AMongoDBPatch1 - ensuring metadata.type index on native settings patches collection", { step: "Bootstrap" }, thError);
 					finishedEnsuringIndex(thError);
 					return;

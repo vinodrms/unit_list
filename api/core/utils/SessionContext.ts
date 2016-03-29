@@ -9,11 +9,11 @@ export class SessionDO {
 	user: {
 		id: string
 		email: string,
-		roles: UserRoles[]
+		roleList: UserRoles[]
 	}
 	hotel: {
 		id: string,
-		ccy: string
+		ccyCode: string
 	}
 }
 export class SessionContext {
@@ -42,16 +42,16 @@ export class SessionManager {
 			}
 		});
 	}
-	private getSessionContext(loginData: { user: UserDO, hotel: HotelDO }): SessionContext {
+	public getSessionContext(loginData: { user: UserDO, hotel: HotelDO }): SessionContext {
 		var sessionDO: SessionDO = {
 			user: {
 				id: loginData.user.id,
 				email: loginData.user.email,
-				roles: loginData.user.roles
+				roleList: loginData.user.roleList
 			},
 			hotel: {
 				id: loginData.hotel.id,
-				ccy: loginData.hotel.ccy
+				ccyCode: loginData.hotel.ccyCode
 			}
 		};
 		return {

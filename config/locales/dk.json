@@ -2,5 +2,6 @@
 	"Ok" : "Ok",
 	"Problem checking the VAT": "Problem kontrollere VAT",
 	"The VAT is not in EU": "VAT er ikke i EU",
-	"Invalid VAT format" : "Ugyldig VAT format"
+	"Invalid VAT format" : "Ugyldig VAT format",
+	"Error logging in. Please check your credentials and try again.": "Fejl logge ind. Kontroller dine legitimationsoplysninger, og prøv igen."
 }

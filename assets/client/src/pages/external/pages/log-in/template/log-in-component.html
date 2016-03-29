@@ -1,0 +1,23 @@
+<form [ngFormModel]="getDefaultControlGroup()" (submit)="logIn()">
+	<h1>{{ "Login to " | translate }} UnitPal</h1>
+	<div [ngClass]="{bad: controlIsInvalid('email')}" class="form-group">
+		<input type="text" class="form-control" placeholder="{{ 'Email' | translate }}" ngControl="email" />
+		<label *ngIf="controlIsInvalid('email')" class="form-label"><small><i class="fa fa-info-circle"></i> {{ 'Insert your email' | translate }}</small></label>
+	</div>
+	<div [ngClass]="{bad: controlIsInvalid('password')}" class="form-group">
+		<input type="password" class="form-control" placeholder="{{ 'Password' | translate }}" ngControl="password" />
+		<label *ngIf="controlIsInvalid('password')" class="form-label"><small><i class="fa fa-info-circle"></i> {{ 'Insert your password' | translate }}</small></label>
+	</div>
+	<div>
+		<loading-button [isLoading]="isLoading" title="Log In"></loading-button>
+		<br/>
+		<a class="reset_pass" [routerLink]="['/ResetPasswordComponent']">{{ 'Lost your password?' | translate }}</a>
+	</div>
+	<div class="clearfix"></div>
+	<div class="separator">
+		<p class="change_link">New to site?
+			<a class="to_register" [routerLink]="['/SignUpComponent']"> {{ 'Create Account' | translate }} </a>
+		</p>
+		<external-footer-component></external-footer-component>
+	</div>
+</form>

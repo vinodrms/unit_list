@@ -25,6 +25,7 @@
     "grunt-sync": "~0.0.4",
     "include-all": "~0.1.3",
     "moment": "^2.11.1",
+    "moment-timezone": "^0.5.0",
     "mongodb": "^2.1.7",
     "node-uuid": "^1.4.7",
     "passport": "^0.3.2",
@@ -38,7 +39,7 @@
     "should": "^8.2.0",
     "soap": "^0.12.0",
     "swig-email-templates": "^2.0.0",
-    "typescript": "^1.8.0-dev.20160120",
+    "typescript": "^1.8.9",
     "underscore": "^1.8.3",
     "util": "^0.10.3",
     "winston": "^2.1.1",
@@ -48,8 +49,8 @@
     "debug": "node debug app.js",
     "start": "node app.js",
     "install-deps": "npm install && gulp install-client-deps",
-    "build-server": "tsc --project api",
-    "build-client": "(tsc --project assets/client || echo '') && (cd assets && npm run build-client && cd ..)",
+    "build-server": "gulp clean-server && tsc --project api",
+    "build-client": "gulp clean-client && (tsc --project assets/client || echo '') && (cd assets && npm run build-client && cd ..)",
     "build-all": "npm run build-server && npm run build-client",
     "server-tests": "npm run build-server && gulp run-server-tests",
     "e2e-tests": "npm run server-tests && cd assets && npm run e2e && cd ..",
@@ -68,9 +69,12 @@
   "license": "",
   "devDependencies": {
     "gulp": "^3.9.0",
+    "gulp-clean": "^0.3.1",
     "gulp-env": "^0.4.0",
     "gulp-install": "^0.6.0",
+    "gulp-istanbul": "^0.10.3",
     "gulp-mocha": "^2.2.0",
-    "gulp-shell": "^0.5.2"
+    "gulp-shell": "^0.5.2",
+    "istanbul": "^0.4.2"
   }
 }

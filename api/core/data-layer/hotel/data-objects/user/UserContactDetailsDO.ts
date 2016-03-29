@@ -17,6 +17,6 @@ export class UserContactDetailsDO extends BaseDO {
 		super.buildFromObject(object);
 
 		this.address = new AddressDO();
-		this.address.buildFromObject(object["address"]);
+		this.address.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "address"));
 	}
 }

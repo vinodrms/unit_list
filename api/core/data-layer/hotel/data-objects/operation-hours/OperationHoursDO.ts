@@ -1,16 +1,33 @@
 import {BaseDO} from '../../../common/base/BaseDO';
+import {ThHourDO} from '../../../../utils/th-dates/data-objects/ThHourDO';
 
 export class OperationHoursDO extends BaseDO {
 	constructor() {
 		super();
 	}
-	checkInFrom: number;
-	checkInTo: number;
+	checkInFrom: ThHourDO;
+	checkInToOptional: ThHourDO;
 
-	checkOutFrom: number;
-	checkOutTo: number;
+	checkOutFromOptional: ThHourDO;
+	checkOutTo: ThHourDO;
 
 	protected getPrimitivePropertyKeys(): string[] {
-		return ["checkInFrom", "checkInTo", "checkOutFrom", "checkOutTo"];
+		return [];
+	}
+
+	public buildFromObject(object: Object) {
+		super.buildFromObject(object);
+
+		this.checkInFrom = new ThHourDO();
+		this.checkInFrom.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "checkInFrom"));
+
+		this.checkInToOptional = new ThHourDO();
+		this.checkInToOptional.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "checkInToOptional"));
+
+		this.checkOutFromOptional = new ThHourDO();
+		this.checkOutFromOptional.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "checkOutFromOptional"));
+
+		this.checkOutTo = new ThHourDO();
+		this.checkOutTo.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "checkOutTo"));
 	}
 }

@@ -8,7 +8,10 @@ export enum InvalidConstraintType {
 	Number,
 	Object,
 	Password,
-	String
+    VatNumber,
+	String,
+	NumberInList,
+	Boolean
 }
 
 export class ValidationResult {
