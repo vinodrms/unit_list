@@ -43,7 +43,7 @@ export class ImageUploadComponent {
 	}
 
 	public didSelectFile(event: any) {
-		var files: File[] = event.srcElement.files;
+		var files: File[] = (event.srcElement || event.target).files;
 		if (files.length == 0) {
 			return;
 		}
