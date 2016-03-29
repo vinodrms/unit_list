@@ -17,4 +17,10 @@ export class CountriesDO extends BaseDO {
 			this.countryList.push(countryDO);
 		});
 	}
+
+	public getCountryByCode(countryCode: string): CountryDO {
+		return _.find(this.countryList, (country: CountryDO) => {
+			return country.code === countryCode;
+		});
+	}
 }

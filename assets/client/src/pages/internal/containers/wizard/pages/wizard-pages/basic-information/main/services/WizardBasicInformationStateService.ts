@@ -5,7 +5,7 @@ import {AWizardState} from '../../../services/AWizardState';
 import {IBasicInfoStep} from './IBasicInfoStep';
 import {WizardBasicInformationController} from './WizardBasicInformationController';
 import {WizardBasicInfoIntroService} from '../../pages/intro/services/WizardBasicInfoIntroService';
-import {WizardBasicInfoNameAddressService} from '../../pages/name-address/services/WizardBasicInfoNameAddressService';
+import {WizardBasicInfoOverviewService} from '../../pages/overview/services/WizardBasicInfoOverviewService';
 
 @Injectable()
 export class WizardBasicInformationStateService extends AWizardState {
@@ -13,9 +13,9 @@ export class WizardBasicInformationStateService extends AWizardState {
 	private _basicInfoController: WizardBasicInformationController;
 
 	constructor(private _appContext: AppContext,
-		introService: WizardBasicInfoIntroService, nameAddressService: WizardBasicInfoNameAddressService) {
+		introService: WizardBasicInfoIntroService, overviewService: WizardBasicInfoOverviewService) {
 		super();
-		this._basicInfoController = new WizardBasicInformationController([introService, nameAddressService]);
+		this._basicInfoController = new WizardBasicInformationController([introService, overviewService]);
 	}
 
 	public handleNextPressed(): Promise<any> {

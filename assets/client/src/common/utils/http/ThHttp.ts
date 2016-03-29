@@ -37,7 +37,7 @@ export class ThHttp implements IThHttp {
 		var url = this.getApiUrl(serverApi);
 		var searchParams = this.buildSearchParameters(parameters);
 
-		return Observable.create((observer: Observer<Object>) => {
+		return new Observable((observer: Observer<Object>) => {
 			this._http.get(url, { search: searchParams, body: JSON.stringify(this.getDefaultReqParams()) }).subscribe((res: Response) => {
 				this.parseResult(res, observer);
 			}, (err: Error) => {
@@ -69,7 +69,7 @@ export class ThHttp implements IThHttp {
 		if (_.isObject(parameters)) {
 			actualParams = _.extend(actualParams, parameters);
 		}
-		return Observable.create((observer: Observer<Object>) => {
+		return new Observable((observer: Observer<Object>) => {
 			this._http.post(url, JSON.stringify(actualParams)).subscribe((res: Response) => {
 				this.parseResult(res, observer);
 			}, (err: Error) => {

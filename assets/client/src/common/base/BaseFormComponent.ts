@@ -23,7 +23,7 @@ export abstract class BaseFormComponent extends BaseComponent {
 		if (!control) {
 			return false;
 		}
-		if (this._didSubmitForm || control.dirty) {
+		if (this.didSubmitForm || control.dirty) {
 			return !control.valid;
 		}
 		return false;

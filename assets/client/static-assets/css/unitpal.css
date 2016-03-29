@@ -61,7 +61,7 @@ header { height:120px !important; padding:24px 24px 0px 24px;  }
 
 
 body.nav-md .container.body .left_col  { background-color:rgba(255, 255, 255, 0.66); color:#0b2139; float: none !important; display: table-cell;  }
-body.nav-md .container.body .right_col { float: none; display: table-cell; vertical-align: top; }
+body.nav-md .container.body .right_col { float: none; display: table-cell; vertical-align: top; position:relative; }
 
 
 .nav.side-menu>li>a, .nav.child_menu>li>a { border-bottom:1px solid #fff;   padding: 13px 15px 13px; margin:0px; } 
@@ -72,7 +72,6 @@ body.nav-md .container.body .right_col { float: none; display: table-cell; verti
 
 .nav .open>a.user-profile, .nav .open>a.user-profile:focus, .nav .open>a.user-profile:hover { color: #0b2139 !important; width: 62px; }
 
-.page-title { border-bottom:1px solid #ccc; margin-bottom:12px;   }
 .page-title h1 {  padding:0px 12px 12px 12px; }
 .page-title h1, .page-title h2, .page-title h3, .page-title h1 small { color:#fc8333;  } 
 
@@ -124,3 +123,20 @@ input:focus {
 	margin-top:-1px;
 	display:block;
  }
+
+ 
+    @media only screen and (min-width : 768px) {
+		
+ .bottom-row { position:absolute; display:block; bottom:24px; right:24px; width:100%; }
+
+    }
+	
+.button-items  { display:inline-block; }
+.button-items  .btn-default { width:128px; padding:12px 12px 6px 12px; }
+ 
+ .fileinput-preview > img {
+  width: auto;
+  max-width: 100%;
+  height: auto;
+  max-height: 100%;
+}

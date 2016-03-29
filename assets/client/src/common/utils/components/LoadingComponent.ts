@@ -1,4 +1,4 @@
-import {Component, OnChanges, Input, SimpleChange, Output, EventEmitter} from 'angular2/core';
+import {Component, Input, Output, EventEmitter} from 'angular2/core';
 
 @Component({
 	selector: 'loading-component',
@@ -12,16 +12,10 @@ import {Component, OnChanges, Input, SimpleChange, Output, EventEmitter} from 'a
 	pipes: []
 })
 
-export class LoadingComponent implements OnChanges {
+export class LoadingComponent {
 	@Input() isLoading: boolean;
 
 	constructor() {
 		this.isLoading = false;
 	}
-
-	ngOnChanges(changes: { [propName: string]: SimpleChange }) {
-		if (changes["isLoading"] && _.isBoolean(changes["isLoading"].currentValue)) {
-			this.isLoading = changes["isLoading"].currentValue;
-		}
-    }
 }

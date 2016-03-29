@@ -1,4 +1,4 @@
-import {Component, OnChanges, Input, SimpleChange, Output, EventEmitter} from 'angular2/core';
+import {Component, Input, Output, EventEmitter} from 'angular2/core';
 import {TranslationPipe} from '../localization/TranslationPipe';
 
 @Component({
@@ -12,7 +12,7 @@ import {TranslationPipe} from '../localization/TranslationPipe';
 	pipes: [TranslationPipe]
 })
 
-export class LoadingButtonComponent implements OnChanges {
+export class LoadingButtonComponent {
 	@Input() isLoading: boolean;
 	@Input() title: string;
 	@Output() didClick: EventEmitter<any> = new EventEmitter();
@@ -22,14 +22,6 @@ export class LoadingButtonComponent implements OnChanges {
 		this.title = "";
 	}
 
-	ngOnChanges(changes: { [propName: string]: SimpleChange }) {
-		if (changes["isLoading"] && _.isBoolean(changes["isLoading"].currentValue)) {
-			this.isLoading = changes["isLoading"].currentValue;
-		}
-		if (changes["title"] && _.isString(changes["title"].currentValue)) {
-			this.title = changes["title"].currentValue;
-		}
-    }
 	didClickButton() {
 		this.didClick.next(null);
 	}

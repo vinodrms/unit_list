@@ -9,7 +9,7 @@ import {WizardBedsComponent} from '../pages/wizard-pages/beds/WizardBedsComponen
 
 import {WizardBasicInformationStateService} from '../pages/wizard-pages/basic-information/main/services/WizardBasicInformationStateService';
 import {WizardBasicInfoIntroService} from '../pages/wizard-pages/basic-information/pages/intro/services/WizardBasicInfoIntroService';
-import {WizardBasicInfoNameAddressService} from '../pages/wizard-pages/basic-information/pages/name-address/services/WizardBasicInfoNameAddressService';
+import {WizardBasicInfoOverviewService} from '../pages/wizard-pages/basic-information/pages/overview/services/WizardBasicInfoOverviewService';
 import {WizardBedsStateService} from '../pages/wizard-pages/beds/services/WizardBedsStateService';
 import {WizardService} from '../pages/wizard-pages/services/WizardService';
 
@@ -22,7 +22,7 @@ import {WizardService} from '../pages/wizard-pages/services/WizardService';
 	selector: 'main-wizard-component',
 	templateUrl: '/client/src/pages/internal/containers/wizard/main/template/main-wizard-component.html',
 	directives: [RouterOutlet, WizardHeaderComponent, WizardNavbarComponent, WizardStepsComponent],
-	providers: [WizardBasicInfoIntroService, WizardBasicInfoNameAddressService,
+	providers: [WizardBasicInfoIntroService, WizardBasicInfoOverviewService,
 		WizardBasicInformationStateService, WizardBedsStateService, WizardService]
 })
 

@@ -38,4 +38,7 @@ export abstract class ARequestService<T> {
 
 	protected abstract sendRequest(): Observable<Object>;
 	protected abstract parseResult(result: Object): T;
+	protected updateResult(result: T) {
+		this._serviceObserver.next(result);
+	}
 }

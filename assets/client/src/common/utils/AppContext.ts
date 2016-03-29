@@ -10,10 +10,12 @@ import {IToaster} from './toaster/IToaster';
 import {IModalService} from './modals/IModalService';
 export {ThServerApi} from './http/ThServerApi';
 export {ThError} from './responses/ThError';
+import {CountryCodeVatConvertor} from './convertors/CountryCodeVatConvertor';
 
 @Injectable()
 export class AppContext {
 	public thUtils: ThUtils;
+	public countryCodeVatConvertor: CountryCodeVatConvertor;
 
 	constructor(
 		@Inject(IThCookie) public thCookie: IThCookie,
@@ -25,5 +27,6 @@ export class AppContext {
 		@Inject(IModalService) public modalService: IModalService
 	) {
 		this.thUtils = new ThUtils();
+		this.countryCodeVatConvertor = new CountryCodeVatConvertor();
 	}
 }

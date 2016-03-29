@@ -1,4 +1,4 @@
-import {Component, OnChanges, Input, SimpleChange, Output, EventEmitter} from 'angular2/core';
+import {Component, Input, Output, EventEmitter} from 'angular2/core';
 import {AppContext, ThError} from '../AppContext';
 import {UploadedFileResponse} from '../http/IThHttp';
 import {TranslationPipe} from '../localization/TranslationPipe';
@@ -28,7 +28,7 @@ import {LoadingComponent} from './LoadingComponent';
 	pipes: [TranslationPipe]
 })
 
-export class ImageUploadComponent implements OnChanges {
+export class ImageUploadComponent {
 	isLoading: boolean = false;
 
 	@Input() imageUrl: string;
@@ -37,12 +37,6 @@ export class ImageUploadComponent implements OnChanges {
 	constructor(private _appContext: AppContext) {
 		this.imageUrl = "";
 	}
-
-	public ngOnChanges(changes: { [propName: string]: SimpleChange }) {
-		if (changes["imageUrl"] && _.isBoolean(changes["imageUrl"].currentValue)) {
-			this.imageUrl = changes["imageUrl"].currentValue;
-		}
-    }
 
 	public removeImageUrl() {
 		this.setImageUrl("");

@@ -4,6 +4,8 @@ import {EmailValidator} from './validators/EmailValidator';
 import {PasswordValidator} from './validators/PasswordValidator';
 import {VatValidator} from './validators/VatValidator';
 import {BooleanValidator} from './validators/BooleanValidator';
+import {PhoneValidator} from './validators/PhoneValidator';
+import {UrlValidator} from './validators/UrlValidator';
 
 export class ThValidators {
 	public static emailValidator(control: AbstractControl): ValidationResult {
@@ -17,6 +19,18 @@ export class ThValidators {
 	}
 	public static booleanValidator(control: AbstractControl): ValidationResult {
 		return ThValidators.validator(control, new BooleanValidator());
+	}
+	public static phoneValidator(control: AbstractControl): ValidationResult {
+		return ThValidators.validator(control, new PhoneValidator());
+	}
+	public static nullablePhoneValidator(control: AbstractControl): ValidationResult {
+		return ThValidators.validator(control, new PhoneValidator(true));
+	}
+	public static urlValidator(control: AbstractControl): ValidationResult {
+		return ThValidators.validator(control, new UrlValidator());
+	}
+	public static nullableUrlValidator(control: AbstractControl): ValidationResult {
+		return ThValidators.validator(control, new UrlValidator(true));
 	}
 
 	private static validator(control: AbstractControl, thValidator: AThValidator): ValidationResult {

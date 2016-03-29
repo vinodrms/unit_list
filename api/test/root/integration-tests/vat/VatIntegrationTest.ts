@@ -18,10 +18,10 @@ describe("VAT Integration Tests", function() {
     describe("Company Details from VAT [EU]", function() {
         it("Should find the details for Threeangle Software [EU]", function(done) {
             vatProvider.checkVAT("RO", "34121562").then((vatDetails: VatDetailsDO) => {
-				should.equal(vatDetails.getCompanyName(), "THREEANGLE SOFTWARE SOLUTIONS SRL");
-				should.equal(vatDetails.getVatNumber(), "34121562");
-				should.equal(vatDetails.getCountryCode(), "RO");
-				should.equal(vatDetails.getFullVatNumber(), "RO34121562");
+				should.equal(vatDetails.companyName, "THREEANGLE SOFTWARE SOLUTIONS SRL");
+				should.equal(vatDetails.vatNumber, "34121562");
+				should.equal(vatDetails.countryCode, "RO");
+				should.equal(vatDetails.fullVatNumber, "RO34121562");
 				done();
 			}).catch((error: ThError) => {
 				done(error);

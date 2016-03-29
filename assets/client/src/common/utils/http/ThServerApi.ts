@@ -4,11 +4,13 @@ export enum ThServerApi {
 	AccountRequestResetPassword,
 	AccountResetPassword,
 	HotelDetails,
+	HotelDetailsUpdateBasicInfo,
 
 	SettingsHotelAmenities,
 	SettingsPaymentMethods,
 	SettingsCountries,
-	ServiceUploadFile
+	ServiceUploadFile,
+	ServiceVatVerifier
 }
 
 var ThServerApiUrl: { [index: number]: string; } = {};
@@ -22,6 +24,9 @@ ThServerApiUrl[ThServerApi.SettingsHotelAmenities] = "/settings/hotelAmenities";
 ThServerApiUrl[ThServerApi.SettingsPaymentMethods] = "/settings/paymentMethods";
 ThServerApiUrl[ThServerApi.SettingsCountries] = "/settings/countries";
 ThServerApiUrl[ThServerApi.ServiceUploadFile] = "/service/uploadFile";
+ThServerApiUrl[ThServerApi.ServiceVatVerifier] = "/service/vatVerifier";
+ThServerApiUrl[ThServerApi.HotelDetailsUpdateBasicInfo] = "/hotel/updateBasicInfo";
+
 
 export class ServerApiBuilder {
 	public static ApiRoot = "/api";
