@@ -5,7 +5,7 @@ import {Component, Input, Output, EventEmitter} from 'angular2/core';
 	template: `
 		<center *ngIf="isLoading">
 			<div>
-				<img src="/client/static-assets/images/anim.gif" width="60" height="60" alt=""/>
+				<i class="fa fa-spinner fa-pulse fa-3x"></i>
 			</div>
 		</center>
 	`,

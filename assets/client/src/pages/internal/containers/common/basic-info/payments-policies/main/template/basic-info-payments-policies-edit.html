@@ -1,124 +1,109 @@
-<div class="col-md-3">
-    <label class="control-label">
-        <h3>Select the default currency</h3>
-        <small>This will be used across all your Price Products, AddOnProducts and Invoices</small></label>
-    <select class="select2_single form-control" tabindex="-1">
-        <option value="EUR">EUR - Euro</option>
-        <option value="RON">RON - Romanian LEU</option>
-    </select>
+<loading-component [isLoading]="isLoading"></loading-component>
+<div *ngIf="!isLoading">
+	<div class="col-md-3">
+		<label class="control-label">
+			<h3>{{ 'Select the default currency' | translate }}  </h3>
+			<small>{{ 'This will be used across all your Price Products, Add On Products and Invoices' | translate }}</small>
+		</label>
+		<div class="form-group" [ngClass]="{bad: !hotel.ccyCode && didSubmitForm}">
+			<select class="form-control" [ngModel]="hotel.ccyCode" (change)="didChangeCurrencyCode($event.target.value)">
+				<option *ngFor="#currency of currencies.currencyList" [value]="currency.code">{{currency.code}} - {{currency.name}}</option>
+			</select>
+			<label *ngIf="!hotel.ccyCode && didSubmitForm" class="form-label"><small><i class="fa fa-info-circle"></i> {{ 'Select a currency' | translate }}</small></label>
+		</div>
 
-    <hr>
+		<hr>
 
-    <label class="control-label">Payment Methods</label>
-    <div class="well">
-        <ul class="list-group checked-list-box">
-            <div class="checkbox">
-                <label>
-                    <input type="checkbox" value=""><i class="fa fa-money"></i> Cash</label>
-            </div>
-            <div class="checkbox">
-                <label>
-                    <input type="checkbox" value=""><i class="fa fa-cc-visa"></i> Visa
-                </label>
-            </div>
-            <div class="checkbox">
-                <label>
-                    <input type="checkbox" value=""><i class="fa fa-cc-amex"></i> American Express</label>
-            </div>
-            <div class="checkbox">
-                <label>
-                    <input type="checkbox" value=""><i class="fa fa-cc-mastercard"></i> Euro Mastercard</label>
-            </div>
-            <div class="checkbox">
-                <label>
-                    <input type="checkbox" value=""><i class="fa fa-cc-diners-club"></i> Diners Club</label>
-            </div>
-            <div class="checkbox">
-                <label>
-                    <input type="checkbox" value=""><i class="fa fa-credit-card-alt"></i> Maestro</label>
-            </div>
-            <div class="checkbox">
-                <label>
-                    <input type="checkbox" value=""><i class="fa fa-cc-discover"></i> Discover</label>
-            </div>
-        </ul>
-    </div>
+		<label class="control-label">Payment Methods</label>
+		<div class="well">
+			<ul class="list-group checked-list-box">
+				<div class="checkbox" *ngFor="#paymentMethodVM of paymentMethods.paymentMethodList">
+					<label>
+						<input type="checkbox" [(ngModel)]="paymentMethodVM.isSelected"><i class="fa" [ngClass]="paymentMethodVM.paymentMethod.iconUrl"></i> {{paymentMethodVM.paymentMethod.name}}
+					</label>
+				</div>
+			</ul>
+			<div class="form-group" [ngClass]="{bad: !didSelectPaymentMethod()&&didSubmitForm}">
+				<label *ngIf="!didSelectPaymentMethod() && didSubmitForm" class="form-label"><small><i class="fa fa-info-circle"></i> {{ 'Select at least a payment method' | translate }}</small></label>
+			</div>
+		</div>
 
-</div>
+	</div>
 
-<div class="col-md-4 col-md-offset-1">
+	<div class="col-md-4 col-md-offset-1">
 
-    <label class="control-label">
-        <h3>VAT</h3>
-        <small>Add VATs that will laber on used</small></label>
+		<label class="control-label">
+			<h3>VAT</h3>
+			<small>Add VATs that will laber on used</small></label>
 
-    <table class="table table-striped projects">
-        <thead>
-            <th></th>
-            <th></th>
-            <th></th>
-        </thead>
-        <tbody>
-            <tr>
-                <td>Room VAT</td>
-                <td>20%</td>
-                <td>
-                    <a data-toggle="modal" href="#vatModal" class="btn btn-xs"><i class="fa fa-pencil"></i> Edit </a>
-                </td>
-            </tr>
-            <tr>
-                <td>Food VAT</td>
-                <td>8%</td>
-                <td>
-                    <a data-toggle="modal" href="#vatModal" class="btn btn-xs"><i class="fa fa-pencil"></i> Edit </a>
-                </td>
-            </tr>
-            <tr>
-                <td></td>
-                <td>
-                    <a data-toggle="modal" href="#vatModal" class="btn btn-xs"><i class="fa fa-plus"></i> Add </a>
-                </td>
-                <td></td>
-            </tr>
-        </tbody>
-    </table>
-</div>
+		<table class="table table-striped projects">
+			<thead>
+				<th></th>
+				<th></th>
+				<th></th>
+			</thead>
+			<tbody>
+				<tr>
+					<td>Room VAT</td>
+					<td>20%</td>
+					<td>
+						<a data-toggle="modal" href="#vatModal" class="btn btn-xs"><i class="fa fa-pencil"></i> Edit </a>
+					</td>
+				</tr>
+				<tr>
+					<td>Food VAT</td>
+					<td>8%</td>
+					<td>
+						<a data-toggle="modal" href="#vatModal" class="btn btn-xs"><i class="fa fa-pencil"></i> Edit </a>
+					</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td>
+						<a data-toggle="modal" href="#vatModal" class="btn btn-xs"><i class="fa fa-plus"></i> Add </a>
+					</td>
+					<td></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
 
-<div class="col-md-4">
-    <label class="control-label">
-        <h3>Other Taxes</h3>
-        <small>e.g. City Tax</small></label>
+	<div class="col-md-4">
+		<label class="control-label">
+			<h3>Other Taxes</h3>
+			<small>e.g. City Tax</small></label>
 
 
 
-    <table class="table table-striped projects">
-        <thead>
-            <th></th>
-            <th></th>
-            <th></th>
-        </thead>
-        <tbody>
-            <tr>
-                <td>City Tax</td>
-                <td>20 EUR</td>
-                <td>
-                    <a data-toggle="modal" href="#otherTaxModal" class="btn btn-xs"><i class="fa fa-pencil"></i> Edit </a>
-                </td>
-            </tr>
-            <tr>
-                <td>Percentage Tax</td>
-                <td>8%</td>
-                <td>
-                    <a data-toggle="modal" href="#otherTaxModal" class="btn btn-xs"><i class="fa fa-pencil"></i> Edit </a>
-                </td>
-            </tr>
-            <tr>
-                <td></td>
-                <td>
-                    <a data-toggle="modal" href="#otherTaxModal" class="btn btn-xs"><i class="fa fa-plus"></i> Add </a>
-                </td>
-                <td></td>
-            </tr>
-        </tbody>
-    </table>
+		<table class="table table-striped projects">
+			<thead>
+				<th></th>
+				<th></th>
+				<th></th>
+			</thead>
+			<tbody>
+				<tr>
+					<td>City Tax</td>
+					<td>20 EUR</td>
+					<td>
+						<a data-toggle="modal" href="#otherTaxModal" class="btn btn-xs"><i class="fa fa-pencil"></i> Edit </a>
+					</td>
+				</tr>
+				<tr>
+					<td>Percentage Tax</td>
+					<td>8%</td>
+					<td>
+						<a data-toggle="modal" href="#otherTaxModal" class="btn btn-xs"><i class="fa fa-pencil"></i> Edit </a>
+					</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td>
+						<a data-toggle="modal" href="#otherTaxModal" class="btn btn-xs"><i class="fa fa-plus"></i> Add </a>
+					</td>
+					<td></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
 </div>

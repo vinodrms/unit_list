@@ -77,7 +77,7 @@ body.nav-md .container.body .right_col { float: none; display: table-cell; verti
 
 .page-info { padding:12px; }
 
-.signup-step-01 { background:#fff url(/client-static-assets/pages/images/signup_background_01.png) right bottom no-repeat !important; background-size: contain;  } 
+.signup-step-01 { background:#fff url(/client/static-assets/images/signup_background_01.png) right bottom no-repeat !important; background-size: contain;  } 
 .signup-skip { margin-right:12px; }
 
 .btn.btn-app {

@@ -9,6 +9,7 @@ export enum ThServerApi {
 	SettingsHotelAmenities,
 	SettingsPaymentMethods,
 	SettingsCountries,
+	SettingsCurrencies,
 	ServiceUploadFile,
 	ServiceVatVerifier
 }
@@ -22,6 +23,7 @@ ThServerApiUrl[ThServerApi.HotelDetails] = "/hotel/details";
 
 ThServerApiUrl[ThServerApi.SettingsHotelAmenities] = "/settings/hotelAmenities";
 ThServerApiUrl[ThServerApi.SettingsPaymentMethods] = "/settings/paymentMethods";
+ThServerApiUrl[ThServerApi.SettingsCurrencies] = "/settings/currencies";
 ThServerApiUrl[ThServerApi.SettingsCountries] = "/settings/countries";
 ThServerApiUrl[ThServerApi.ServiceUploadFile] = "/service/uploadFile";
 ThServerApiUrl[ThServerApi.ServiceVatVerifier] = "/service/vatVerifier";

@@ -8,12 +8,12 @@
 		<i class="fa fa-arrow-left"></i> {{ 'Previous' | translate }}
 	</a>
 	<a class="btn btn-app" role="button" *ngIf="hasNext()" (click)="handleNextPressed()">
-		<i *ngIf="isMovingNext" class="fa fa-refresh fa-spin"></i>
+		<i *ngIf="isMovingNext" class="fa fa-spinner fa-pulse"></i>
 		<i *ngIf="!isMovingNext" class="fa fa-arrow-right"></i> 
 		{{ 'Next' | translate }}
 	</a>
 	<a class="btn btn-app" role="button" *ngIf="!hasNext()" (click)="handleNextPressed()">
-		<i *ngIf="isMovingNext" class="fa fa-refresh fa-spin"></i>
+		<i *ngIf="isMovingNext" class="fa fa-spinner fa-pulse"></i>
 		<i *ngIf="!isMovingNext" class="fa fa-arrow-right"></i> 
 		{{ 'Finish' | translate }}
 	</a>

@@ -59,6 +59,7 @@ export var EnglishTranslations: Object = {
 	"Enter a valid phone": "Enter a valid phone",
 	"Fax": "Fax",
 	"Enter a valid fax": "Enter a valid fax", 
+	"Enter a contact name": "Enter a contact name",
 	"Contact Person\'s Name": "Contact Person\'s Name",
 	"Your Website": "Your Website",
 	"Contact Email": "Contact Email",
@@ -69,5 +70,9 @@ export var EnglishTranslations: Object = {
     "[Wizard Step 0] Payments & Policies text": "Payments & policies small description",
     "payments & policies": "payments & policies",
     "[Wizard Step 0] Property Details text": "Property details small description",
-    "property details": "property details"
+    "property details": "property details",
+	"Select the default currency": "Select the default currency",
+	"This will be used across all your Price Products, Add On Products and Invoices": "This will be used across all your Price Products, Add On Products and Invoices",
+	"Select a currency" : "Select a currency",
+	"Select at least a payment method": "Select at least a payment method"
 };

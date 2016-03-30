@@ -53,8 +53,9 @@
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-xs-12 col-md-12 form-group">
+				<div class="col-xs-12 col-md-12 form-group" [ngClass]="{bad: controlIsInvalid('contactName')}">
 					<input type="text" placeholder="{{ 'Contact Person\'s Name' | translate }}" class="form-control" ngControl="contactName"/>
+					<label *ngIf="controlIsInvalid('contactName')" class="form-label"><small><i class="fa fa-info-circle"></i> {{ 'Enter a contact name' | translate }}</small></label>
 				</div>
 			</div>
 

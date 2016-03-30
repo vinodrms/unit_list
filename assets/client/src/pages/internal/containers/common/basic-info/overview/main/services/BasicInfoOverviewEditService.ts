@@ -40,7 +40,7 @@ export class BasicInfoOverviewEditService {
 			"postalCode": [this._hotel.contactDetails.address.postalCode, Validators.compose([Validators.required])],
 			"phone": [this._hotel.contactDetails.phone, Validators.compose([Validators.required, ThValidators.phoneValidator])],
 			"fax": [this._hotel.contactDetails.fax, Validators.compose([Validators.maxLength(ThFieldLengths.MaxPhoneLength), ThValidators.nullablePhoneValidator])],
-			"contactName": [this._hotel.contactDetails.contactName, Validators.compose([Validators.maxLength(ThFieldLengths.MaxNameLength)])],
+			"contactName": [this._hotel.contactDetails.contactName, Validators.compose([Validators.required, Validators.maxLength(ThFieldLengths.MaxNameLength)])],
 			"websiteUrl": [this._hotel.contactDetails.websiteUrl, Validators.compose([Validators.maxLength(ThFieldLengths.MaxUrlLength), ThValidators.nullableUrlValidator])],
 			"email": [this._hotel.contactDetails.email, Validators.compose([ThValidators.emailValidator, Validators.maxLength(ThFieldLengths.MaxUrlLength)])],
 			"facebookUrl": [this._hotel.contactDetails.socialLinks.facebookUrl, Validators.compose([Validators.maxLength(ThFieldLengths.MaxUrlLength), ThValidators.nullableUrlValidator])],
