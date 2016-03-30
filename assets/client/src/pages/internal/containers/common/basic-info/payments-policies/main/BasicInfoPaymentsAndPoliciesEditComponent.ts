@@ -13,16 +13,23 @@ import {HotelAggregatedInfo} from '../../../../../services/hotel/utils/HotelAggr
 import {HotelDO} from '../../../../../services/hotel/data-objects/hotel/HotelDO';
 import {BasicInfoPaymentsAndPoliciesEditService} from './services/BasicInfoPaymentsAndPoliciesEditService';
 import {PaymentMethodVMContainer, PaymentMethodVM} from './services/utils/PaymentMethodVMContainer'; 
+import {TaxService} from '../../../../../services/taxes/TaxService';
+import {TaxType} from '../../../../../services/taxes/data-objects/TaxDO';
+import {TaxContainerDO} from '../../../../../services/taxes/data-objects/TaxContainerDO';
+import {BasicInfoTaxListComponent} from '../pages/tax-list/BasicInfoTaxListComponent';
 
 @Component({
 	selector: 'basic-info-payments-policies-edit',
 	templateUrl: '/client/src/pages/internal/containers/common/basic-info/payments-policies/main/template/basic-info-payments-policies-edit.html',
-	directives: [LoadingComponent],
+	directives: [LoadingComponent, BasicInfoTaxListComponent],
 	providers: [],
 	pipes: [TranslationPipe]
 })
 
 export class BasicInfoPaymentsAndPoliciesEditComponent extends BaseComponent implements OnInit {
+	vatTaxType = TaxType.Vat;
+	otherTaxType = TaxType.OtherTax;
+	
 	isLoading: boolean = true;
 	currencies: CurrenciesDO;
 	paymentMethods: PaymentMethodVMContainer;
@@ -31,7 +38,8 @@ export class BasicInfoPaymentsAndPoliciesEditComponent extends BaseComponent imp
 	constructor(private _appContext: AppContext,
 		private _currenciesService: CurrenciesService,
 		private _hotelAggregator: HotelAggregatorService,
-		private _paymPoliciesEditService: BasicInfoPaymentsAndPoliciesEditService) {
+		private _paymPoliciesEditService: BasicInfoPaymentsAndPoliciesEditService,
+		private _taxService: TaxService) {
 		super();
 	}
 
@@ -46,15 +54,15 @@ export class BasicInfoPaymentsAndPoliciesEditComponent extends BaseComponent imp
 			
 			this.hotel = hotelAggregatedInfo.hotelDetails.hotel;
 			this.paymentMethods = new PaymentMethodVMContainer(hotelAggregatedInfo.paymentMethods, this.hotel.paymentMethodIdList);
-			this.initDefaults();
+			this._paymPoliciesEditService.bootstrap(this.paymentMethods, this.hotel);
 			this.isLoading = false;
 		}, (error: ThError) => {
 			this.isLoading = false;
 			this._appContext.toaster.error(this._appContext.thTranslation.translate(error.message));
 		});
-	}
-	private initDefaults() {
-		this._paymPoliciesEditService.bootstrap(this.paymentMethods, this.hotel);
+		this._taxService.getTaxContainerDO().subscribe((taxContainer: TaxContainerDO) => {
+			this._paymPoliciesEditService.bootstrapTaxContainer(taxContainer);
+		});
 	}
 	public didChangeCurrencyCode(ccyCode: string) {
 		this._paymPoliciesEditService.didUpdateCcyCode(ccyCode);

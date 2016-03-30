@@ -74,5 +74,11 @@ export var EnglishTranslations: Object = {
 	"Select the default currency": "Select the default currency",
 	"This will be used across all your Price Products, Add On Products and Invoices": "This will be used across all your Price Products, Add On Products and Invoices",
 	"Select a currency" : "Select a currency",
-	"Select at least a payment method": "Select at least a payment method"
+	"Select at least a payment method": "Select at least a payment method",
+	"Other Taxes": "Other Taxes",
+	"e.g. City Tax": "e.g. City Tax",
+	"VAT": "VAT",
+	"Add VATs that will be later on used": "Add VATs that will be later on used",
+	"You must select a currency before adding an other tax": "You must select a currency before adding an other tax",
+	"Please add at least a VAT tax": "Please add at least a VAT tax"
 };

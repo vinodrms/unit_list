@@ -7,6 +7,7 @@ import {WizardBasicInfoPaymentsAndPoliciesComponent} from '../pages/payments-pol
 import {WizardBasicInfoPropertyDetailsComponent} from '../pages/property-details/WizardBasicInfoPropertyDetailsComponent';
 import {HOTEL_AGGREGATOR_PROVIDERS} from '../../../../../../services/hotel/HotelProviders';
 import {SETTINGS_PROVIDERS} from '../../../../../../services/settings/SettingsProviders';
+import {TaxService} from '../../../../../../services/taxes/TaxService';
 
 @RouteConfig([
 	{ path: '/intro', name: 'WizardBasicInfoIntroComponent', component: WizardBasicInfoIntroComponent, useAsDefault: true },
@@ -18,7 +19,7 @@ import {SETTINGS_PROVIDERS} from '../../../../../../services/settings/SettingsPr
 	selector: 'wizard-basic-information',
 	templateUrl: '/client/src/pages/internal/containers/wizard/pages/wizard-pages/basic-information/main/template/wizard-basic-information.html',
 	directives: [RouterOutlet],
-	providers: [SETTINGS_PROVIDERS, HOTEL_AGGREGATOR_PROVIDERS]
+	providers: [SETTINGS_PROVIDERS, HOTEL_AGGREGATOR_PROVIDERS, TaxService]
 })
 export class WizardBasicInformationComponent extends BaseComponent {
 	constructor() {

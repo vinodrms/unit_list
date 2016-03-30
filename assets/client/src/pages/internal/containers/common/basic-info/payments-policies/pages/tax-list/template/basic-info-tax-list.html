@@ -1,0 +1,28 @@
+<label class="control-label">
+	<h3>{{ title || translate }}</h3>
+	<small>{{ description || translate }}</small></label>
+
+<table class="table table-striped projects">
+	<thead>
+		<th></th>
+		<th></th>
+		<th></th>
+	</thead>
+	<tbody>
+		<tr *ngFor="#tax of taxList">
+			<td>{{tax.name}}</td>
+			<td *ngIf="tax.isPercentageValue()">{{tax.value | percentage}}</td>
+			<td *ngIf="tax.isFixedValue()">{{tax.value}} {{ccyCode}}</td>
+			<td>
+				<a class="btn btn-xs" (click)="editTax(tax.id)"><i class="fa fa-pencil"></i> Edit </a>
+			</td>
+		</tr>
+		<tr>
+			<td></td>
+			<td>
+				<a class="btn btn-xs" (click)="addNewTax()"><i class="fa fa-plus"></i> Add </a>
+			</td>
+			<td></td>
+		</tr>
+	</tbody>
+</table>

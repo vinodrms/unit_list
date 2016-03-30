@@ -6,6 +6,7 @@ import {PaymentMethodVMContainer} from '../services/utils/PaymentMethodVMContain
 import {HotelDO} from '../../../../../../services/hotel/data-objects/hotel/HotelDO';
 import {HotelService} from '../../../../../../services/hotel/HotelService';
 import {HotelDetailsDO} from '../../../../../../services/hotel/data-objects/HotelDetailsDO';
+import {TaxContainerDO} from '../../../../../../services/taxes/data-objects/TaxContainerDO';
 
 @Injectable()
 export class BasicInfoPaymentsAndPoliciesEditService {
@@ -13,9 +14,13 @@ export class BasicInfoPaymentsAndPoliciesEditService {
 
 	private _paymentMethods: PaymentMethodVMContainer;
 	private _hotel: HotelDO;
+	private _taxContainer: TaxContainerDO;
 
     constructor(private _appContext: AppContext,
 		private _hotelService: HotelService) {
+	}
+	public bootstrapTaxContainer(taxContainer: TaxContainerDO) {
+		this._taxContainer = taxContainer;
 	}
 	public bootstrap(paymentMethods: PaymentMethodVMContainer, hotel: HotelDO) {
 		this._paymentMethods = paymentMethods;
@@ -28,14 +33,21 @@ export class BasicInfoPaymentsAndPoliciesEditService {
 	public didSelectPaymentMethod(): boolean {
 		return this._paymentMethods.getSelectedPaymentMethodIdList().length > 0;
 	}
-
 	private isValid() {
 		return this._hotel.ccyCode && this._paymentMethods.getSelectedPaymentMethodIdList().length > 0;
 	}
+	private didAddTax(): boolean {
+		return this._taxContainer && this._taxContainer.vatList.length > 0;
+	} 
 	public savePaymentsAndPolicies(): Observable<any> {
 		this.didSubmitForm = true;
 		if (!this.isValid()) {
 			var errorMessage = this._appContext.thTranslation.translate("Please complete all the required fields");
+			this._appContext.toaster.error(errorMessage);
+			return this.reject();
+		}
+		if (!this.didAddTax()) {
+			var errorMessage = this._appContext.thTranslation.translate("Please add at least a VAT tax");
 			this._appContext.toaster.error(errorMessage);
 			return this.reject();
 		}

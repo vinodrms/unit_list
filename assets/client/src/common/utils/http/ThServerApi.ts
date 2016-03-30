@@ -11,7 +11,8 @@ export enum ThServerApi {
 	SettingsCountries,
 	SettingsCurrencies,
 	ServiceUploadFile,
-	ServiceVatVerifier
+	ServiceVatVerifier,
+	Taxes
 }
 
 var ThServerApiUrl: { [index: number]: string; } = {};
@@ -29,6 +30,7 @@ ThServerApiUrl[ThServerApi.ServiceUploadFile] = "/service/uploadFile";
 ThServerApiUrl[ThServerApi.ServiceVatVerifier] = "/service/vatVerifier";
 ThServerApiUrl[ThServerApi.HotelDetailsUpdateBasicInfo] = "/hotel/updateBasicInfo";
 ThServerApiUrl[ThServerApi.HotelDetailsUpdatePaymentsAndPolicies] = "/hotel/updatePaymentsAndPolicies";
+ThServerApiUrl[ThServerApi.Taxes] = "/taxes";
 
 export class ServerApiBuilder {
 	public static ApiRoot = "/api";
