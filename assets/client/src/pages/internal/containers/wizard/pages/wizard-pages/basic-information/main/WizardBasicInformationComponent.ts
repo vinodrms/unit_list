@@ -3,13 +3,14 @@ import {BaseComponent} from '../../../../../../../../common/base/BaseComponent';
 import {RouteConfig, RouterOutlet} from 'angular2/router';
 import {WizardBasicInfoIntroComponent} from '../pages/intro/WizardBasicInfoIntroComponent';
 import {WizardBasicInfoOverviewComponent} from '../pages/overview/WizardBasicInfoOverviewComponent';
+import {WizardBasicInfoPaymentsAndPoliciesComponent} from '../pages/payments-policies/WizardBasicInfoPaymentsAndPoliciesComponent';
 import {HOTEL_AGGREGATOR_PROVIDERS} from '../../../../../../services/hotel/HotelProviders';
 import {SETTINGS_PROVIDERS} from '../../../../../../services/settings/SettingsProviders';
 
 @RouteConfig([
 	{ path: '/intro', name: 'WizardBasicInfoIntroComponent', component: WizardBasicInfoIntroComponent, useAsDefault: true },
-	{ path: '/overview', name: 'WizardBasicInfoOverviewComponent', component: WizardBasicInfoOverviewComponent }
-
+	{ path: '/overview', name: 'WizardBasicInfoOverviewComponent', component: WizardBasicInfoOverviewComponent },
+    { path: '/payments-policies', name: 'WizardBasicInfoPaymentsAndPoliciesComponent', component: WizardBasicInfoPaymentsAndPoliciesComponent }
 ])
 @Component({
 	selector: 'wizard-basic-information',

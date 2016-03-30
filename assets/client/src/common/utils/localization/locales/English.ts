@@ -65,6 +65,7 @@ export var EnglishTranslations: Object = {
 	"Enter a valid contact email": "Enter a valid contact email",
 	"Select a country": "Select a country",
 	"Insert a VAT Number": "Insert a VAT Number",
-	"Enter a valid url": "Enter a valid url"
-	
+	"Enter a valid url": "Enter a valid url",
+    "[Wizard Step 0] Payments & Policies text": "Payments & policies small description",
+    "payments & policies": "payments & policies"
 };
