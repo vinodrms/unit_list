@@ -2,16 +2,16 @@ import {Injectable} from 'angular2/core';
 import {IBasicInfoStep} from '../../../main/services/IBasicInfoStep';
 import {Observer} from 'rxjs/Observer';
 import {Observable} from 'rxjs/Observable';
-import {BasicInfoPaymentsAndPoliciesEditService} from '../../../../../../../common/basic-info/payments-policies/main/services/BasicInfoPaymentsAndPoliciesEditService';
+import {BasicInfoPropertyDetailsEditService} from '../../../../../../../common/basic-info/property-details/main/services/BasicInfoPropertyDetailsEditService';
 
 @Injectable()
-export class WizardBasicInfoPaymentsAndPoliciesService implements IBasicInfoStep {
-	private _editService: BasicInfoPaymentsAndPoliciesEditService;
+export class WizardBasicInfoPropertyDetailsService implements IBasicInfoStep {
+	private _editService: BasicInfoPropertyDetailsEditService;
 
 	stepIndex: number;
 	constructor() {
 	}
-	public bootstrap(editService: BasicInfoPaymentsAndPoliciesEditService) {
+	public bootstrap(editService: BasicInfoPropertyDetailsEditService) {
 		this._editService = editService;
 	}
 
@@ -21,6 +21,6 @@ export class WizardBasicInfoPaymentsAndPoliciesService implements IBasicInfoStep
 		});
 	}
 	public getComponentName(): string {
-		return "WizardBasicInfoPaymentsAndPoliciesComponent";
+		return "WizardBasicInfoPropertyDetailsComponent";
 	}
 }

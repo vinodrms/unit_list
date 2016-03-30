@@ -67,5 +67,7 @@ export var EnglishTranslations: Object = {
 	"Insert a VAT Number": "Insert a VAT Number",
 	"Enter a valid url": "Enter a valid url",
     "[Wizard Step 0] Payments & Policies text": "Payments & policies small description",
-    "payments & policies": "payments & policies"
+    "payments & policies": "payments & policies",
+    "[Wizard Step 0] Property Details text": "Property details small description",
+    "property details": "property details"
 };

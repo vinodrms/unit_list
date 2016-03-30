@@ -7,10 +7,7 @@ import {WizardStepsComponent} from '../pages/utils/wizard-steps/WizardStepsCompo
 import {WizardBasicInformationComponent} from '../pages/wizard-pages/basic-information/main/WizardBasicInformationComponent';
 import {WizardBedsComponent} from '../pages/wizard-pages/beds/WizardBedsComponent';
 
-import {WizardBasicInformationStateService} from '../pages/wizard-pages/basic-information/main/services/WizardBasicInformationStateService';
-import {WizardBasicInfoIntroService} from '../pages/wizard-pages/basic-information/pages/intro/services/WizardBasicInfoIntroService';
-import {WizardBasicInfoOverviewService} from '../pages/wizard-pages/basic-information/pages/overview/services/WizardBasicInfoOverviewService';
-import {WizardBasicInfoPaymentsAndPoliciesService} from '../pages/wizard-pages/basic-information/pages/payments-policies/services/WizardBasicInfoPaymentsAndPoliciesService';
+import {WIZARD_BASIC_INFO_PAGES_PROVIDERS} from '../pages/wizard-pages/basic-information/main/services/WizardBasicInfoPagesProvider';
 import {WizardBedsStateService} from '../pages/wizard-pages/beds/services/WizardBedsStateService';
 import {WizardService} from '../pages/wizard-pages/services/WizardService';
 
@@ -23,8 +20,8 @@ import {WizardService} from '../pages/wizard-pages/services/WizardService';
 	selector: 'main-wizard-component',
 	templateUrl: '/client/src/pages/internal/containers/wizard/main/template/main-wizard-component.html',
 	directives: [RouterOutlet, WizardHeaderComponent, WizardNavbarComponent, WizardStepsComponent],
-	providers: [WizardBasicInfoIntroService, WizardBasicInfoOverviewService, WizardBasicInfoPaymentsAndPoliciesService, 
-		WizardBasicInformationStateService, WizardBedsStateService, WizardService]
+	providers: [ WIZARD_BASIC_INFO_PAGES_PROVIDERS,
+		WizardBedsStateService, WizardService]
 })
 
 export class MainWizardComponent extends BaseComponent {
