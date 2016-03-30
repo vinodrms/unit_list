@@ -12,8 +12,8 @@ export class SessionDO {
 		roleList: UserRoles[]
 	}
 	hotel: {
-		id: string,
-		ccyCode: string
+		id: string//,
+		//ccyCode: string
 	}
 }
 export class SessionContext {
@@ -50,8 +50,7 @@ export class SessionManager {
 				roleList: loginData.user.roleList
 			},
 			hotel: {
-				id: loginData.hotel.id,
-				ccyCode: loginData.hotel.ccyCode
+				id: loginData.hotel.id
 			}
 		};
 		return {
