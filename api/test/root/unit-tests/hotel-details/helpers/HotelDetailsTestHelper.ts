@@ -79,6 +79,10 @@ export class HotelDetailsTestHelper {
 				checkOutFromOptional: {
 					hour: 7,
 					minute: 0
+				},
+				cancellationHour: {
+					hour: 18,
+					minute: 0
 				}
 			}
 		}

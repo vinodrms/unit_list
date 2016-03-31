@@ -17,6 +17,7 @@ export class HotelUpdatePropertyDetailsDO {
 		checkInToOptional: HotelUpdatePropertyDetailsHourDO,
 		checkOutFromOptional: HotelUpdatePropertyDetailsHourDO,
 		checkOutTo: HotelUpdatePropertyDetailsHourDO,
+		cancellationHour: HotelUpdatePropertyDetailsHourDO
 	}
 	timezone: string;
 	amenityIdList: string[];
@@ -40,6 +41,10 @@ export class HotelUpdatePropertyDetailsDO {
 					},
 					{
 						key: "checkOutTo",
+						validationStruct: HotelUpdatePropertyDetailsDO.getRequiredHourDOValidationStructure()
+					},
+					{
+						key: "cancellationHour",
 						validationStruct: HotelUpdatePropertyDetailsDO.getRequiredHourDOValidationStructure()
 					}
 				])
