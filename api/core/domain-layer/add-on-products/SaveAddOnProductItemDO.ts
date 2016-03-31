@@ -9,6 +9,7 @@ export class SaveAddOnProductItemDO {
 	categoryId: string;
 	name: string;
 	price: number;
+	internalCost: number;
 	taxIdList: string[];
 	notes: string;
 	fileUrlList: string[];
@@ -29,7 +30,11 @@ export class SaveAddOnProductItemDO {
 			},
 			{
 				key: "price",
-				validationStruct: new PrimitiveValidationStructure(new NumberValidationRule())
+				validationStruct: new PrimitiveValidationStructure(NumberValidationRule.buildPriceNumberRule())
+			},
+			{
+				key: "internalCost",
+				validationStruct: new PrimitiveValidationStructure(NumberValidationRule.buildNullablePriceNumberRule())
 			},
 			{
 				key: "taxIdList",
