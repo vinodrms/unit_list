@@ -2,18 +2,18 @@
 
 @import url(https://fonts.googleapis.com/css?family=Raleway:400,200,200italic,400italic,700,700italic&subset=latin,latin-ext);
 
-body {
-	color: #0b2139;
+body, html {
+	
 	
 	background: #9ac6f8;
 	background: -moz-linear-gradient(-45deg,  #9ac6f8 0%, #558bd0 50%, #2266b2 75%, #1d5899 100%);
 	background: -webkit-linear-gradient(-45deg,  #9ac6f8 0%,#558bd0 50%,#2266b2 75%,#1d5899 100%);
 	background: linear-gradient(135deg,  #9ac6f8 0%,#558bd0 50%,#2266b2 75%,#1d5899 100%);
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#9ac6f8', endColorstr='#1d5899',GradientType=1 );
-	
+
 	background-size: cover;
-	background-repeat: no-repeat;
-	
+	background-repeat: no-repeat; 
+	color: #0b2139;
 	font-family: 'Raleway', sans-serif;
 	font-size:16px;
 }
@@ -22,14 +22,14 @@ body {
 .main-content a:hover { color: #1E3A6A; cursor: pointer; } 
 
 
-body, html {   height: 100%;  }
+body, html {   height: 100%; margin-bottom:-120px; padding-bottom:76px;  }
 
 header { height:120px !important; padding:24px 24px 0px 24px;  }
 
 .container.body { 
 	display: table;
     width: 100%;
-	height:80%;
+	height:100%;
     margin-bottom: -120px !important;
     padding: 0px 24px 24px 24px;
     -moz-box-sizing: border-box ;
@@ -140,3 +140,55 @@ input:focus {
   height: auto;
   max-height: 100%;
 }
+
+table .buttons, table button, table .btn { margin:0px; }
+
+ 
+.page-title .description { margin-top:6px; }
+
+.overview-right { border-left: 1px solid #ccc; padding:0 24px; }
+
+.singleview-right { border-left: 1px solid #ccc; padding:0 24px; }
+.singleview-left .pagination { margin:0px; }
+.singleview .x_panel { padding:0px; margin:0px; }
+#singleview-search-input input { border:0px; padding:12px !important; margin:0px; padding:0px;   }
+#singleview-search-input input:focus { border:0px !important; background:#eee; }
+#singleview-search-input .btn { background:transparent; border:0px; color:#ccc; }
+#singleview-search-input .input-group { margin:0px; }
+
+.add-bed { padding-top:12px; margin-top:24px; border-top:1px solid #ccc; } 
+
+.table-foot { border-top: 1px solid #ccc; padding:12px 0px; } 
+.table-foot .pagination { margin:0px; }
+
+.signup-table { margin-bottom: 0px !important; } 
+
+.signup-table td { padding:12px !important; } 
+
+
+.vertical-alignment-helper {
+    display:table;
+    height: 100%;
+    width: 100%;
+}
+.vertical-align-center {
+    /* To center vertically */
+    display: table-cell;
+    vertical-align: middle;
+}
+.modal-content {
+    /* Bootstrap sets the size of the modal in the modal-dialog class, we need to inherit it */
+    width:inherit;
+    height:inherit;
+    /* To center horizontally */
+    margin: 0 auto;
+}
+
+/* Fixes Section */
+
+/* resolves the wrong padding on Chrome for input type="number" */
+input[type="number"].form-control {
+	padding-top: 0px;
+}
+
+/* End Fixes Section */

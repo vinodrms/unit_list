@@ -5,7 +5,7 @@ import {ModalDialogInstance} from '../utils/ModalDialogInstance';
 
 @Injectable()
 export class LoadingModalService {
-	private _dialogInstance: ModalDialogInstance;
+	private _dialogInstance: ModalDialogInstance<any>;
 
 	constructor( @Inject(IModalService) private _modalService: IModalService) {
 	}
@@ -15,7 +15,7 @@ export class LoadingModalService {
 			return;
 		}
 		this._modalService.open(<any>LoadingModalComponent, Injector.resolve([]))
-			.then((dialogInstance: ModalDialogInstance) => {
+			.then((dialogInstance: ModalDialogInstance<any>) => {
 				this._dialogInstance = dialogInstance;
 				completionBlock();
 			}).catch((error: any) => {

@@ -1,20 +1,16 @@
-<body class="nav-md">
-	<header>
-		<wizard-header-component></wizard-header-component>
-	</header>
-
-
-	<div class="container body">
-		<div class="row main-row">
-			<div class="col-md-2 left_col">
-				<wizard-navbar-component></wizard-navbar-component>
-			</div>
-			<div class="right_col main-content" role="main">
-				<router-outlet></router-outlet>
-				<div class="row">
-					<wizard-steps-component></wizard-steps-component>
-				</div>
+<header>
+	<wizard-header-component></wizard-header-component>
+</header>
+<div class="container body">
+	<div class="row main-row">
+		<div class="col-md-2 left_col">
+			<wizard-navbar-component></wizard-navbar-component>
+		</div>
+		<div class="right_col main-content" role="main">
+			<router-outlet></router-outlet>
+			<div class="row bottom-row">
+				<wizard-steps-component></wizard-steps-component>
 			</div>
 		</div>
-	</div>	
-</body>
+	</div>
+</div>

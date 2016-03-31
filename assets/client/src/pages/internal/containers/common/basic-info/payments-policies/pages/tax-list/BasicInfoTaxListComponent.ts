@@ -1,19 +1,19 @@
 import {Component, OnInit, Input} from 'angular2/core';
 import {BaseComponent} from '../../../../../../../../common/base/BaseComponent';
+import {AppContext} from '../../../../../../../../common/utils/AppContext';
 import {TranslationPipe} from '../../../../../../../../common/utils/localization/TranslationPipe';
 import {PercentagePipe} from '../../../../../../../../common/utils/pipes/PercentagePipe';
-import {ThError, AppContext} from '../../../../../../../../common/utils/AppContext';
 import {TaxService} from '../../../../../../services/taxes/TaxService';
 import {TaxContainerDO} from '../../../../../../services/taxes/data-objects/TaxContainerDO';
 import {TaxDO, TaxType} from '../../../../../../services/taxes/data-objects/TaxDO';
-import {HotelService} from '../../../../../../services/hotel/HotelService';
-import {HotelDetailsDO} from '../../../../../../services/hotel/data-objects/HotelDetailsDO';
 import {ITaxViewer} from './utils/ITaxViewer';
 import {TaxViewerFactory} from './utils/TaxViewerFactory';
+import {TaxEditModalService} from '../tax-modal/services/TaxEditModalService';
 
 @Component({
 	selector: 'basic-info-tax-list',
 	templateUrl: '/client/src/pages/internal/containers/common/basic-info/payments-policies/pages/tax-list/template/basic-info-tax-list.html',
+	providers: [TaxEditModalService],
 	pipes: [TranslationPipe, PercentagePipe]
 })
 
@@ -35,8 +35,8 @@ export class BasicInfoTaxListComponent extends BaseComponent implements OnInit {
 	private _taxViewer: ITaxViewer;
 
 	constructor(private _appContext: AppContext,
-		private _taxService: TaxService,
-		private _hotelService: HotelService) {
+		private _taxEditModal: TaxEditModalService,
+		private _taxService: TaxService) {
 		super();
 	}
 
@@ -56,7 +56,7 @@ export class BasicInfoTaxListComponent extends BaseComponent implements OnInit {
 	}
 
 	editTax(taxId: string) {
-		// TODO: modal
+		this._taxEditModal.editTax(_.find(this.taxList, (tax: TaxDO) => { return tax.id === taxId }), this.ccyCode);
 	}
 	addNewTax() {
 		var permissionResult = this._taxViewer.canAddNewTax(this.ccyCode);
@@ -65,6 +65,6 @@ export class BasicInfoTaxListComponent extends BaseComponent implements OnInit {
 			this._appContext.toaster.error(errorMsg);
 			return;
 		}
-		// TODO: modal
+		this._taxEditModal.addTax(this._taxType, this.ccyCode);
 	}
 }
