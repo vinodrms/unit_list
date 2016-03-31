@@ -11,7 +11,8 @@ import {IImageStorageService} from './image-storage/IImageStorageService';
 import {CloudinaryImageStorageService} from './image-storage/cloudinary/CloudinaryImageStorageService';
 import {MockImageStorageService} from './image-storage/mock/MockImageStorageService';
 import {PassportLoginService} from './login/custom/PassportLoginService';
-
+import {MomentTimeZonesService} from './time-zones/providers/moment/MomentTimeZonesService';
+import {ITimeZonesService} from './time-zones/ITimeZonesService';
 export class ServiceFactory {
     constructor(private _unitPalConfig: UnitPalConfig) {
     }
@@ -40,5 +41,8 @@ export class ServiceFactory {
     }
     public getLoginService(): ILoginService {
         return new PassportLoginService();
+    }
+    public getTimeZonesService(): ITimeZonesService {
+        return new MomentTimeZonesService();
     }
 }

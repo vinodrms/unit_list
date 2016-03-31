@@ -42,6 +42,7 @@ module.exports.routes = {
 
     'POST /api/service/uploadFile': 'ServiceController.uploadFile',
     'GET /api/service/vatVerifier': 'ServiceController.checkVAT',
+    'GET /api/service/availableTimeZones': 'ServiceController.getAvailableTimeZones',
 
     'GET /api/settings/roomAmenities': 'SettingsController.getRoomAmenities',
     'GET /api/settings/roomAttributes': 'SettingsController.getRoomAttributes',
