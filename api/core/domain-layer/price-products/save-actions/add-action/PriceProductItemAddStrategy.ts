@@ -4,6 +4,7 @@ import {ThStatusCode} from '../../../../utils/th-responses/ThResponse';
 import {AppContext} from '../../../../utils/AppContext';
 import {SessionContext} from '../../../../utils/SessionContext';
 import {PriceProductDO, PriceProductStatus} from '../../../../data-layer/price-products/data-objects/PriceProductDO';
+import {PriceProductPriceConfigurationState} from '../../../../data-layer/price-products/data-objects/price/IPriceProductPrice';
 import {PriceProductMetaRepoDO} from '../../../../data-layer/price-products/repositories/IPriceProductRepository';
 import {IPriceProductItemActionStrategy} from '../IPriceProductItemActionStrategy';
 import {PriceProductValidator} from '../../validators/PriceProductValidator';
@@ -28,6 +29,7 @@ export class PriceProductItemAddStrategy implements IPriceProductItemActionStrat
 				var ppUtils = new PriceProductActionUtils();
 				ppUtils.populateDefaultIntervalsOn(this._priceProductDO);
 				var ppRepo = this._appContext.getRepositoryFactory().getPriceProductRepository();
+				this._priceProductDO.price.priceConfigurationState = PriceProductPriceConfigurationState.Valid;
 				return ppRepo.addPriceProduct(this._ppRepoMeta, this._priceProductDO);
 			})
 			.then((addedPriceProduct: PriceProductDO) => {

@@ -8,15 +8,15 @@ import {NumberValidationRule} from '../../../utils/th-validation/rules/NumberVal
 
 export class SavePriceProductItemPriceDO {
 	type: PriceProductPriceType;
-	priceConfiguration: Object;
+	priceList: Object[];
 
 	public static getPriceConfigurationValidationStructure(priceDO: SavePriceProductItemPriceDO): IValidationStructure {
 		switch (priceDO.type) {
 			case PriceProductPriceType.PricePerPerson:
-				return new ObjectValidationStructure([
+				return new ArrayValidationStructure(new ObjectValidationStructure([
 					{
-						key: "defaultPrice",
-						validationStruct: new PrimitiveValidationStructure(NumberValidationRule.buildPriceNumberRule())
+						key: "roomCategoryId",
+						validationStruct: new PrimitiveValidationStructure(new StringValidationRule())
 					},
 					{
 						key: "adultsPriceList",
@@ -26,23 +26,18 @@ export class SavePriceProductItemPriceDO {
 						key: "childrenPriceList",
 						validationStruct: SavePriceProductItemPriceDO.getPriceForFixedNumberOfPersonsDOValidationStructure()
 					}
-				]);
-			case PriceProductPriceType.PricePerRoomCategory:
-				return new ObjectValidationStructure([
+				]));
+			case PriceProductPriceType.SinglePrice:
+				return new ArrayValidationStructure(new ObjectValidationStructure([
 					{
-						key: "priceList",
-						validationStruct: new ArrayValidationStructure(new ObjectValidationStructure([
-							{
-								key: "roomCategoryId",
-								validationStruct: new PrimitiveValidationStructure(new StringValidationRule())
-							},
-							{
-								key: "price",
-								validationStruct: new PrimitiveValidationStructure(NumberValidationRule.buildPriceNumberRule())
-							}
-						]))
+						key: "roomCategoryId",
+						validationStruct: new PrimitiveValidationStructure(new StringValidationRule())
+					},
+					{
+						key: "price",
+						validationStruct: new PrimitiveValidationStructure(NumberValidationRule.buildPriceNumberRule())
 					}
-				]);
+				]));
 		}
 	}
 	private static getPriceForFixedNumberOfPersonsDOValidationStructure(): IValidationStructure {

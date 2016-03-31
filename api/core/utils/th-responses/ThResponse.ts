@@ -229,6 +229,7 @@ export enum ThStatusCode {
     PriceProductsControllerErrorArchivingProduct,
     PriceProductsControllerErrorGettingCount,
     PriceProductsControllerErrorGettingList,
+	PricePerPersonForSingleRoomCategoryDOInvalidPriceConfiguration,
     YieldManagerControllerErrorClosing,
     YieldManagerControllerErrorOpening,
     HotelConfigurationRepositoryNotFound,

@@ -1,4 +1,7 @@
 import {BaseDO} from '../../../../common/base/BaseDO';
+import {ThLogger, ThLogLevel} from '../../../../../utils/logging/ThLogger';
+import {ThError} from '../../../../../utils/th-responses/ThError';
+import {ThStatusCode} from '../../../../../utils/th-responses/ThResponse';
 import {ThUtils} from '../../../../../utils/ThUtils';
 import {IPriceProductPrice, PriceProductPriceQueryDO} from '../IPriceProductPrice';
 import {PriceForFixedNumberOfPersonsDO} from './PriceForFixedNumberOfPersonsDO';
@@ -10,10 +13,10 @@ import _ = require("underscore");
 export class PricePerPersonDO extends BaseDO implements IPriceProductPrice {
 	adultsPriceList: PriceForFixedNumberOfPersonsDO[];
 	childrenPriceList: PriceForFixedNumberOfPersonsDO[];
-	defaultPrice: number;
+	roomCategoryId: string;
 
 	protected getPrimitivePropertyKeys(): string[] {
-		return ["defaultPrice"];
+		return ["roomCategoryId"];
 	}
 	public buildFromObject(object: Object) {
 		super.buildFromObject(object);
@@ -32,26 +35,42 @@ export class PricePerPersonDO extends BaseDO implements IPriceProductPrice {
 	}
 
 	public getPriceFor(query: PriceProductPriceQueryDO): number {
-		var adultsPrice = this.getPriceForNumberOfPersons(this.adultsPriceList, query.noOfAdults);
-		var childrenPrice = this.getPriceForNumberOfPersons(this.childrenPriceList, query.noOfChildren);
-		var thUtils = new ThUtils();
-		if (thUtils.isUndefinedOrNull(adultsPrice) || thUtils.isUndefinedOrNull(childrenPrice)) {
-			return this.defaultPrice;
+		try {
+			var adultsPrice = 0;
+			for (var noOfAdults = 1; noOfAdults <= query.noOfAdults; noOfAdults++) {
+				adultsPrice += this.getPriceForNumberOfPersons(this.adultsPriceList, noOfAdults).price;
+			}
+
+			var childrenPrice = 0;
+			for (var noOfChildren = 1; noOfChildren <= query.noOfChildren; noOfChildren++) {
+				childrenPrice += this.getPriceForNumberOfPersons(this.childrenPriceList, noOfChildren).price;
+			}
+
+			return adultsPrice + childrenPrice;
+		} catch (e) {
+			var thError = new ThError(ThStatusCode.PricePerPersonForSingleRoomCategoryDOInvalidPriceConfiguration, e);
+			ThLogger.getInstance().logBusiness(ThLogLevel.Error, "Possible invalid price product configuration!", { query: query, priceConfig: this }, thError);
+			return 0;
 		}
-		return adultsPrice.price + childrenPrice.price;
 	}
 	private getPriceForNumberOfPersons(priceList: PriceForFixedNumberOfPersonsDO[], noOfPersons: number): PriceForFixedNumberOfPersonsDO {
 		return _.find(priceList, (price: PriceForFixedNumberOfPersonsDO) => { return price.noOfPersons === noOfPersons });
 	}
 
 	public priceConfigurationIsValidFor(roomCategoryStatList: RoomCategoryStatsDO[]): boolean {
-		var maxNoOfAdults: number = _.max(roomCategoryStatList, (stat: RoomCategoryStatsDO) => { return stat.maxNoAdults }).maxNoAdults;
+		var roomCategStat: RoomCategoryStatsDO = _.find(roomCategoryStatList, (stat: RoomCategoryStatsDO) => {
+			return stat.roomCategory.id === this.roomCategoryId;
+		});
+		if (!roomCategStat) {
+			return false;
+		}
+		var maxNoOfAdults: number = roomCategStat.maxNoAdults;
 		if (!this.priceListIsValidForMaxNoOfPersons(this.adultsPriceList, maxNoOfAdults)) {
 			return false;
 		}
 
-		var maxNoOfChildren = _.max(roomCategoryStatList, (stat: RoomCategoryStatsDO) => { return stat.maxNoChildren }).maxNoChildren;
-		return this.priceListIsValidForMaxNoOfPersons(this.childrenPriceList, maxNoOfChildren);
+		var maxNoOfChildren = roomCategStat.maxNoChildren;
+		return this.priceListIsValidForMaxNoOfPersons(this.childrenPriceList, (maxNoOfChildren + maxNoOfAdults));
 	}
 	private priceListIsValidForMaxNoOfPersons(priceList: PriceForFixedNumberOfPersonsDO[], maxNoOfPersons: number): boolean {
 		var thUtils = new ThUtils();
@@ -66,5 +85,8 @@ export class PricePerPersonDO extends BaseDO implements IPriceProductPrice {
 			}
 		}
 		return true;
+	}
+	public isConfiguredForRoomCategory(roomCategoryId: string): boolean {
+		return this.roomCategoryId === roomCategoryId;
 	}
 }
