@@ -16,15 +16,15 @@ export class ModalService implements IModalService {
 		this._elementRef = elementRef;
 	}
 
-	public open(componentType: FunctionConstructor, providers: ResolvedProvider[]): Promise<ModalDialogInstance> {
-		return new Promise<ModalDialogInstance>((resolve: { (result: ModalDialogInstance): void }, reject: { (err: ThError): void }) => {
-			this.openCore(resolve, reject, componentType, providers);
+	public open<T>(componentType: FunctionConstructor, providers: ResolvedProvider[]): Promise<ModalDialogInstance<T>> {
+		return new Promise<ModalDialogInstance<T>>((resolve: { (result: ModalDialogInstance<T>): void }, reject: { (err: ThError): void }) => {
+			this.openCore<T>(resolve, reject, componentType, providers);
 		});
 	}
-	private openCore(resolve: { (result: ModalDialogInstance): void }, reject: { (err: ThError): void }, componentType: FunctionConstructor, providers: ResolvedProvider[]) {
-		let dialog = new ModalDialogInstance();
+	private openCore<T>(resolve: { (result: ModalDialogInstance<T>): void }, reject: { (err: ThError): void }, componentType: FunctionConstructor, providers: ResolvedProvider[]) {
+		let dialog = new ModalDialogInstance<T>();
 		let dialogProviders = Injector.resolve([provide(ModalDialogInstance, { useValue: dialog })]);
-
+		
 		this._componentLoader.loadNextToLocation(ModalBackdropComponent, this._elementRef, dialogProviders)
 			.then((backdropRef: ComponentRef) => {
 				dialog.backdropRef = backdropRef;
@@ -42,6 +42,7 @@ export class ModalService implements IModalService {
 				resolve(dialog);
 			})
 			.catch((err: any) => {
+				console.error(err);
 				reject(new ThError("Error opening popup"));
 			});
 	}

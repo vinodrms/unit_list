@@ -14,8 +14,7 @@ import {ModalDialogInstance} from '../utils/ModalDialogInstance';
 })
 
 export class LoadingModalComponent implements ICustomModalComponent {
-	constructor(public dialog: ModalDialogInstance) {
-
+	constructor() {
 	}
 	public isBlocking(): boolean {
 		return true;

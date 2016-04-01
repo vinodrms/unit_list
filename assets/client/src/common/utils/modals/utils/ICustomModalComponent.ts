@@ -6,7 +6,6 @@ export enum ModalSize {
 }
 
 export interface ICustomModalComponent {
-    dialog: ModalDialogInstance;
 	isBlocking(): boolean;
 	getSize(): ModalSize;
 }

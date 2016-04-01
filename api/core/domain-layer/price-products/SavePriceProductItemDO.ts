@@ -72,11 +72,11 @@ export class SavePriceProductItemDO {
 				validationStruct: new ObjectValidationStructure([
 					{
 						key: "type",
-						validationStruct: new PrimitiveValidationStructure(new NumberInListValidationRule([PriceProductPriceType.PricePerPerson, PriceProductPriceType.PricePerRoomCategory]))
+						validationStruct: new PrimitiveValidationStructure(new NumberInListValidationRule([PriceProductPriceType.PricePerPerson, PriceProductPriceType.SinglePrice]))
 					},
 					{
-						key: "priceConfiguration",
-						validationStruct: new ObjectValidationStructure([])
+						key: "priceList",
+						validationStruct: new ArrayValidationStructure(new ObjectValidationStructure([]))
 					}
 				])
 			},

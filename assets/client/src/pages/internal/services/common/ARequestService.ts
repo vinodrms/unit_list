@@ -43,6 +43,17 @@ export abstract class ARequestService<T> {
 			return this._requestResult;
 		}
 	}
+	protected updateServiceResult() {
+		this._inProgressRequest = true;
+		this.sendRequest().subscribe((result: Object) => {
+			var parsedResult: T = this.parseResult(result);
+			this._inProgressRequest = false;
+			this._serviceObserver.next(parsedResult);
+		}, (error: ThError) => {
+			this._inProgressRequest = false;
+			this._serviceObserver.error(error);
+		});
+	}
 
 	protected abstract sendRequest(): Observable<Object>;
 	protected abstract parseResult(result: Object): T;

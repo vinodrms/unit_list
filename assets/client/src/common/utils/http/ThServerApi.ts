@@ -13,7 +13,8 @@ export enum ThServerApi {
 	ServiceUploadFile,
 	ServiceVatVerifier,
     ServiceTimezones,
-	Taxes
+	Taxes,
+	TaxesSaveItem
 }
 
 var ThServerApiUrl: { [index: number]: string; } = {};
@@ -33,6 +34,7 @@ ThServerApiUrl[ThServerApi.ServiceTimezones] = "/service/availableTimeZones";
 ThServerApiUrl[ThServerApi.HotelDetailsUpdateBasicInfo] = "/hotel/updateBasicInfo";
 ThServerApiUrl[ThServerApi.HotelDetailsUpdatePaymentsAndPolicies] = "/hotel/updatePaymentsAndPolicies";
 ThServerApiUrl[ThServerApi.Taxes] = "/taxes";
+ThServerApiUrl[ThServerApi.TaxesSaveItem] = "/taxes/saveTaxItem";
 
 export class ServerApiBuilder {
 	public static ApiRoot = "/api";

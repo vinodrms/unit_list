@@ -3,6 +3,6 @@ import {ModalDialogInstance} from './utils/ModalDialogInstance';
 
 export interface IModalService {
 	bootstrap(elementRef: ElementRef);
-	open(componentType: FunctionConstructor, providers: ResolvedProvider[]): Promise<ModalDialogInstance>;
+	open<T>(componentType: FunctionConstructor, providers: ResolvedProvider[]): Promise<ModalDialogInstance<T>>;
 }
 export const IModalService = new OpaqueToken("IModalService");

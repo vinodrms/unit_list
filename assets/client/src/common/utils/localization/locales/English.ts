@@ -80,5 +80,19 @@ export var EnglishTranslations: Object = {
 	"VAT": "VAT",
 	"Add VATs that will be later on used": "Add VATs that will be later on used",
 	"You must select a currency before adding an other tax": "You must select a currency before adding an other tax",
-	"Please add at least a VAT tax": "Please add at least a VAT tax"
+	"Please add at least a VAT tax": "Please add at least a VAT tax",
+	"New Tax": "New Tax",
+	"Save Tax": "Save Tax",
+	"Name of tax": "Name of tax",
+	"Enter a name": "Enter a name",
+	"Save": "Save",
+	"VAT Value 0 - 100": "VAT Value 0 - 100",
+	"Type of Value": "Type of Value",
+	"Tax Value 0 - 100": "Tax Value 0 - 100",
+	"Value": "Value",
+	"Enter a valid value": "Enter a valid value",
+	"Percentage": "Percentage",
+	"Fixed Price": "Fixed Price",
+	"Close": "Close",
+	"Enter the value": "Enter the value"
 };

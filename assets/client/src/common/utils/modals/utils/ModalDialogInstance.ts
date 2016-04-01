@@ -1,31 +1,33 @@
-import {Observable} from 'rxjs/Observable';
-import {Observer} from 'rxjs/Observer';
+import {Observable, Observer} from 'rxjs/Rx';
 import {ComponentRef} from 'angular2/core';
 import {ModalSize} from './ICustomModalComponent';
 
-export class ModalDialogInstance {
+export class ModalDialogInstance<T> {
 	private _backdropRef;
 	private _containerRef;
 	private _contentRef: ComponentRef;
 	private _modalSize;
 
-
-    private _result: Observable<Object>;
-	private _resultObserver: Observer<Object>;
+    private _resultObservable: Observable<T>;
+	private _resultObserver: Observer<T>;
 
     constructor() {
 		this._modalSize = ModalSize.Large;
-		this._result = Observable.create((observer: Observer<Object>) => {
+		this._resultObservable = new Observable((observer: Observer<T>) => {
 			this._resultObserver = observer;
 		});
     }
 
-	public addResult(result: Object) {
-		this._resultObserver.next(result);
+	public addResult(result: T) {
+		if (this._resultObserver) {
+			this._resultObserver.next(result);
+		}
 	}
 
     public close() {
-        if (this._contentRef.instance.isBlocking && this._contentRef.instance.isBlocking() === true) return;
+        if (this._contentRef.instance.isBlocking && this._contentRef.instance.isBlocking() === true) {
+			return;
+		}
         this.dispose();
     }
 	public closeForced() {
@@ -33,7 +35,9 @@ export class ModalDialogInstance {
 	}
 
     private dispose() {
-		this._resultObserver.complete();
+		if (this._resultObserver) {
+			this._resultObserver.complete();
+		}
         this._containerRef.dispose();
         this._backdropRef.dispose();
         this._contentRef.dispose();
@@ -69,7 +73,7 @@ export class ModalDialogInstance {
 		this._modalSize = modalSize;
 	}
 
-	get result(): Observable<Object> {
-        return this._result;
+	get resultObservable(): Observable<T> {
+        return this._resultObservable;
     }
 }

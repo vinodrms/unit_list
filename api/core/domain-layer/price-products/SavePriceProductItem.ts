@@ -49,7 +49,7 @@ export class SavePriceProductItem {
 		}
 
 		var priceValidationResult = SavePriceProductItemPriceDO.getPriceConfigurationValidationStructure(this._inputDO.price);
-		if (!priceValidationResult.validateStructure(this._inputDO.price.priceConfiguration).isValid()) {
+		if (!priceValidationResult.validateStructure(this._inputDO.price.priceList).isValid()) {
 			var thError = new ThError(ThStatusCode.SavePriceProductItemInvalidPrice, null);
 			ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Invalid submitted price for price product", this._inputDO, thError);
 			reject(thError);
