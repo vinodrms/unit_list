@@ -78,26 +78,29 @@ body.nav-md .container.body .right_col { float: none; display: table-cell; verti
 .page-info { padding:12px; }
 
 .signup-step-01 { background:#fff url(/client/static-assets/images/signup_background_01.png) right bottom no-repeat !important; background-size: contain;  } 
+.signup-step-05 { background:#fff url(/client/static-assets/images/singup_background_05.png) right bottom no-repeat !important; background-size: contain;  } 
 .signup-skip { margin-right:12px; }
 
 .btn.btn-app {
     position: relative;
-    padding: 15px 5px;
+    padding: 12px 4px;
     margin: 0px 1px 0px 0px;
     min-width: 80px;
     height: 60px;
     -webkit-box-shadow: none;
     -moz-box-shadow: none;
     box-shadow: none;
-    -webkit-border-radius: 0;
-    -moz-border-radius: 0;
-    border-radius: 0;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
     text-align: center;
-    color: #fc8433;
+    color: #fff;
     border: 0px;
-    background-color: rgba(255, 132, 50, 0.1); ;
+    background-color: rgba(255, 132, 50, 1.0); ;
     font-size: 12px;
 }
+
+.signup-step .btn.btn-app .fa { font-size: 36px; }
 
 .bad input:focus {
 	border : 1px solid #fc8433 !important;
@@ -147,7 +150,7 @@ table .buttons, table button, table .btn { margin:0px; }
 .page-title .description { margin-top:6px; }
 
 .overview-right { border-left: 1px solid #ccc; padding:0 24px; }
-
+.overview-left .table p { margin:0px; }
 .singleview-right { border-left: 1px solid #ccc; padding:0 24px; }
 .singleview-left .pagination { margin:0px; }
 .singleview .x_panel { padding:0px; margin:0px; }
