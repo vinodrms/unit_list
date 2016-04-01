@@ -94,5 +94,6 @@ export var EnglishTranslations: Object = {
 	"Percentage": "Percentage",
 	"Fixed Price": "Fixed Price",
 	"Close": "Close",
-	"Enter the value": "Enter the value"
+	"Enter the value": "Enter the value",
+	"Add-On Products": "Add-On Products"
 };

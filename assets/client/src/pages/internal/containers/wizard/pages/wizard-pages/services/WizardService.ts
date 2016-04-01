@@ -4,6 +4,7 @@ import {IWizardState, WizardStateMeta} from './IWizardState';
 import {IWizardController} from './IWizardController';
 import {WizardBasicInformationStateService} from '../basic-information/main/services/WizardBasicInformationStateService';
 import {WizardBedsStateService} from '../beds/services/WizardBedsStateService';
+import {WizardAddOnProductsStateService} from '../add-on-products/services/WizardAddOnProductsStateService';
 
 @Injectable()
 export class WizardService implements IWizardState, IWizardController {
@@ -13,8 +14,8 @@ export class WizardService implements IWizardState, IWizardController {
 	private _currentState: IWizardState;
 
 	constructor(private _appContext: AppContext,
-		basicInfo: WizardBasicInformationStateService, beds: WizardBedsStateService) {
-		this._stateList = [basicInfo, beds];
+		basicInfo: WizardBasicInformationStateService, beds: WizardBedsStateService, addOnProducts: WizardAddOnProductsStateService) {
+		this._stateList = [basicInfo, beds, addOnProducts];
 		for (var stateIndex = 0; stateIndex < this._stateList.length; stateIndex++) {
 			this._stateList[stateIndex].stateIndex = stateIndex;
 			this._stateList[stateIndex].wasVisited = false;

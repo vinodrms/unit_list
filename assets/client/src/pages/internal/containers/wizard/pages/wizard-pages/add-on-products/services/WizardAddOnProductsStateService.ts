@@ -3,7 +3,7 @@ import {WizardStateMeta} from '../../services/IWizardState';
 import {AWizardState} from '../../services/AWizardState';
 
 @Injectable()
-export class WizardBedsStateService extends AWizardState {
+export class WizardAddOnProductsStateService extends AWizardState {
 	public handleNextPressed(): Promise<any> {
 		return new Promise<any>((resolve: { (result: any): void }, reject: { (err: any): void }) => {
 			this.wizardController.moveNext();
@@ -33,10 +33,10 @@ export class WizardBedsStateService extends AWizardState {
 	}
 	public getMeta(): WizardStateMeta {
 		return {
-			startRelativeComponentPath: "WizardBedsComponent",
-			endRelativeComponentPath: "WizardBedsComponent",
+			startRelativeComponentPath: "WizardAddOnProductsComponent",
+			endRelativeComponentPath: "WizardAddOnProductsComponent",
 			iconFontName: "",
-			name: "Beds"
+			name: "Add-On Products"
 		};
 	}
 }

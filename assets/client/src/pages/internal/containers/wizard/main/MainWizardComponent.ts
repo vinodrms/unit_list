@@ -6,14 +6,17 @@ import {WizardNavbarComponent} from '../pages/utils/navbar/WizardNavbarComponent
 import {WizardStepsComponent} from '../pages/utils/wizard-steps/WizardStepsComponent';
 import {WizardBasicInformationComponent} from '../pages/wizard-pages/basic-information/main/WizardBasicInformationComponent';
 import {WizardBedsComponent} from '../pages/wizard-pages/beds/WizardBedsComponent';
+import {WizardAddOnProductsComponent} from '../pages/wizard-pages/add-on-products/WizardAddOnProductsComponent';
 
 import {WIZARD_BASIC_INFO_PAGES_PROVIDERS} from '../pages/wizard-pages/basic-information/main/services/WizardBasicInfoPagesProvider';
 import {WizardBedsStateService} from '../pages/wizard-pages/beds/services/WizardBedsStateService';
+import {WizardAddOnProductsStateService} from '../pages/wizard-pages/add-on-products/services/WizardAddOnProductsStateService';
 import {WizardService} from '../pages/wizard-pages/services/WizardService';
 
 @RouteConfig([
 	{ path: '/basic-info/...', name: 'WizardBasicInformationComponent', component: WizardBasicInformationComponent, useAsDefault: true },
-	{ path: '/beds', name: 'WizardBedsComponent', component: WizardBedsComponent }
+	{ path: '/beds', name: 'WizardBedsComponent', component: WizardBedsComponent },
+	{ path: '/add-on-products', name: 'WizardAddOnProductsComponent', component: WizardAddOnProductsComponent }
 ])
 
 @Component({
@@ -21,7 +24,7 @@ import {WizardService} from '../pages/wizard-pages/services/WizardService';
 	templateUrl: '/client/src/pages/internal/containers/wizard/main/template/main-wizard-component.html',
 	directives: [RouterOutlet, WizardHeaderComponent, WizardNavbarComponent, WizardStepsComponent],
 	providers: [ WIZARD_BASIC_INFO_PAGES_PROVIDERS,
-		WizardBedsStateService, WizardService]
+		WizardBedsStateService, WizardAddOnProductsStateService, WizardService]
 })
 
 export class MainWizardComponent extends BaseComponent {
