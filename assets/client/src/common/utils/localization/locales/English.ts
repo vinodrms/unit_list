@@ -95,7 +95,6 @@ export var EnglishTranslations: Object = {
 	"Fixed Price": "Fixed Price",
 	"Close": "Close",
 	"Enter the value": "Enter the value",
-<<<<<<< HEAD
     "Select the timezone": "Select the timezone",
     "This will be used for automatic processes that need to know your local hour": "This will be used for automatic processes that need to know your local hour",
     "Check in from": "Check in from",
@@ -103,8 +102,6 @@ export var EnglishTranslations: Object = {
     "Check out from": "Check out from",
     "Check out to": "Check out to",
     "Booking Cancellation Hour": "Booking Cancellation Hour",
-    "Hotel Amenities": "Hotel Amenities"
-=======
+    "Hotel Amenities": "Hotel Amenities",
 	"Add-On Products": "Add-On Products"
->>>>>>> 41b61edf49d72d8780e7089323fdaaf7b64cb1c0
 };
