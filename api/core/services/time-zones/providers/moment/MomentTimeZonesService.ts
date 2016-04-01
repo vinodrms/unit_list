@@ -1,4 +1,4 @@
-import {ITimeZonesService} from '../../ITimeZonesService';
+import {ITimeZonesService, TimeZoneDO} from '../../ITimeZonesService';
 import {ThError} from '../../../../utils/th-responses/ThError';
 
 import moment = require("moment");
@@ -6,16 +6,19 @@ import moment = require("moment");
 export class MomentTimeZonesService implements ITimeZonesService {
 
     constructor() {
-
     }
 
-    public getAllAvailableTimeZones(): Promise<string[]> {
-        return new Promise<any>((resolve: { (timeZones: string[]): void }, reject: { (err: ThError): void }) => {
+    public getAllAvailableTimeZones(): Promise<TimeZoneDO[]> {
+        return new Promise<any>((resolve: { (timeZoneList: TimeZoneDO[]): void }, reject: { (err: ThError): void }) => {
             this.getAllAvailableTimeZonesCore(resolve, reject);
         });
     }
 
-    private getAllAvailableTimeZonesCore(resolve: { (timeZones: string[]): void }, reject: { (err: ThError): void }) {
-        resolve(moment.tz.names());
+    private getAllAvailableTimeZonesCore(resolve: { (timeZoneList: TimeZoneDO[]): void }, reject: { (err: ThError): void }) {
+        var timeZoneList: TimeZoneDO[] = [];
+        moment.tz.names().forEach(timeZoneName => {
+            timeZoneList.push({ name: timeZoneName });
+        });
+        resolve(timeZoneList);
     }
 }

@@ -45,10 +45,12 @@ export class BasicInfoPaymentsAndPoliciesEditComponent extends BaseComponent imp
 
 	public ngOnInit() {
 		this.isLoading = true;
+        debugger
 		Observable.zip(
 			this._currenciesService.getCurrenciesDO(),
 			this._hotelAggregator.getHotelAggregatedInfo()
 		).subscribe((result: [CurrenciesDO, HotelAggregatedInfo]) => {
+            debugger
 			this.currencies = result[0];
 			var hotelAggregatedInfo = result[1];
 			

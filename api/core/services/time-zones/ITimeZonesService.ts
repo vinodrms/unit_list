@@ -1,3 +1,7 @@
+export class TimeZoneDO {
+    public name: string;
+}
+
 export interface ITimeZonesService {
-	getAllAvailableTimeZones(): Promise<string[]>;
+	getAllAvailableTimeZones(): Promise<TimeZoneDO[]>;
 }

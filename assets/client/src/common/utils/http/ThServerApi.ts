@@ -12,6 +12,7 @@ export enum ThServerApi {
 	SettingsCurrencies,
 	ServiceUploadFile,
 	ServiceVatVerifier,
+    ServiceTimezones,
 	Taxes
 }
 
@@ -28,6 +29,7 @@ ThServerApiUrl[ThServerApi.SettingsCurrencies] = "/settings/currencies";
 ThServerApiUrl[ThServerApi.SettingsCountries] = "/settings/countries";
 ThServerApiUrl[ThServerApi.ServiceUploadFile] = "/service/uploadFile";
 ThServerApiUrl[ThServerApi.ServiceVatVerifier] = "/service/vatVerifier";
+ThServerApiUrl[ThServerApi.ServiceTimezones] = "/service/availableTimeZones";
 ThServerApiUrl[ThServerApi.HotelDetailsUpdateBasicInfo] = "/hotel/updateBasicInfo";
 ThServerApiUrl[ThServerApi.HotelDetailsUpdatePaymentsAndPolicies] = "/hotel/updatePaymentsAndPolicies";
 ThServerApiUrl[ThServerApi.Taxes] = "/taxes";

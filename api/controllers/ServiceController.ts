@@ -5,7 +5,7 @@ import {IImageStorageService} from '../core/services/image-storage/IImageStorage
 import {BaseController} from './base/BaseController';
 import {AppContext} from '../core/utils/AppContext';
 import {IVatProvider, VatDetailsDO} from '../core/services/vat/IVatProvider';
-import {ITimeZonesService} from '../core/services/time-zones/ITimeZonesService';
+import {ITimeZonesService, TimeZoneDO} from '../core/services/time-zones/ITimeZonesService';
 
 class ServiceController extends BaseController {
     public uploadFile(req: Express.Request, res: Express.Response) {
@@ -61,10 +61,10 @@ class ServiceController extends BaseController {
         var appContext: AppContext = req.appContext;
         var timeZonesService: ITimeZonesService = appContext.getServiceFactory().getTimeZonesService();
 
-        timeZonesService.getAllAvailableTimeZones().then((timeZones: string[]) => {
-            this.returnSuccesfulResponse(req, res, { "timeZones": timeZones });
+        timeZonesService.getAllAvailableTimeZones().then((timezoneList: TimeZoneDO[]) => {
+            this.returnSuccesfulResponse(req, res, { timezoneList: timezoneList });
         }).catch((error: ThError) => {
-            this.returnErrorResponse(req, res, error, ThStatusCode.VatProviderErrorCheckingVat);
+            this.returnErrorResponse(req, res, error, ThStatusCode.TimezoneServiceErrorGettingAvailableTZs);
         });
     }
 }

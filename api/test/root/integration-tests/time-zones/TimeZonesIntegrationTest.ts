@@ -2,7 +2,7 @@ require("sails-test-helper");
 import should = require('should');
 
 import {TestContext} from '../../../helpers/TestContext';
-import {ITimeZonesService} from '../../../../core/services/time-zones/ITimeZonesService';
+import {ITimeZonesService, TimeZoneDO} from '../../../../core/services/time-zones/ITimeZonesService';
 
 describe("Time Zones Integration Tests", function() {
     const numTimeZones = 586;
@@ -18,7 +18,7 @@ describe("Time Zones Integration Tests", function() {
 
     describe("Get all available time zones", function() {
         it("Should get all available time zones", function(done) {
-            timeZonesService.getAllAvailableTimeZones().then((result: string[]) => {
+            timeZonesService.getAllAvailableTimeZones().then((result: TimeZoneDO[]) => {
                 should.equal(result.length, numTimeZones);
                 done();
             }).catch((error: any) => {

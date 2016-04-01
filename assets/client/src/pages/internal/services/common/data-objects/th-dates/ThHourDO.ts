@@ -1,8 +1,8 @@
 import {BaseDO} from '../../../../../../common/base/BaseDO';
 
 export class ThHourDO extends BaseDO {
-	private static MinHourOfDay = 0;
-	private static MaxHourOfDay = 23;
+	public static MinHourOfDay = 0;
+	public static MaxHourOfDay = 23;
 
 	private static MinMinuteOfHour = 0;
 	private static MaxMinuteOfHour = 59;
