@@ -17,7 +17,11 @@ export class WizardBasicInfoPropertyDetailsService implements IBasicInfoStep {
 
 	public save(): Promise<any> {
 		return new Promise<any>((resolve: { (result: any): void }, reject: { (err: any): void }) => {
-			resolve(true);
+			this._editService.savePropertyDetails().subscribe((result: any) => {
+				resolve(true);
+			}, (error: any) => {
+				reject(error);
+			});
 		});
 	}
 	public getComponentName(): string {

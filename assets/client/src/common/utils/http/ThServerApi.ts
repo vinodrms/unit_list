@@ -6,6 +6,7 @@ export enum ThServerApi {
 	HotelDetails,
 	HotelDetailsUpdateBasicInfo,
     HotelDetailsUpdatePaymentsAndPolicies,
+    HotelDetailsUpdatePropertyDetails,
 	SettingsHotelAmenities,
 	SettingsPaymentMethods,
 	SettingsCountries,
@@ -21,6 +22,7 @@ var ThServerApiUrl: { [index: number]: string; } = {};
 ThServerApiUrl[ThServerApi.AccountSignUp] = "/account/signUp";
 ThServerApiUrl[ThServerApi.AccountLogIn] = "/account/logIn";
 ThServerApiUrl[ThServerApi.AccountRequestResetPassword] = "/account/requestResetPassword";
+
 ThServerApiUrl[ThServerApi.AccountResetPassword] = "/account/resetPassword";
 ThServerApiUrl[ThServerApi.HotelDetails] = "/hotel/details";
 
@@ -33,6 +35,7 @@ ThServerApiUrl[ThServerApi.ServiceVatVerifier] = "/service/vatVerifier";
 ThServerApiUrl[ThServerApi.ServiceTimezones] = "/service/availableTimeZones";
 ThServerApiUrl[ThServerApi.HotelDetailsUpdateBasicInfo] = "/hotel/updateBasicInfo";
 ThServerApiUrl[ThServerApi.HotelDetailsUpdatePaymentsAndPolicies] = "/hotel/updatePaymentsAndPolicies";
+ThServerApiUrl[ThServerApi.HotelDetailsUpdatePropertyDetails] = "/hotel/updatePropertyDetails";
 ThServerApiUrl[ThServerApi.Taxes] = "/taxes";
 ThServerApiUrl[ThServerApi.TaxesSaveItem] = "/taxes/saveTaxItem";
 

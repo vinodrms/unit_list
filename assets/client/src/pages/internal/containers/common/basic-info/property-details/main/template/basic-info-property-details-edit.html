@@ -2,11 +2,11 @@
 <div *ngIf="!isLoading">
     <div class="col-md-5">
         <label class="control-label">
-            <h2>Select the timezone</h2><small>This will be used for automatic processes that need to know your local hour</small>
+            <h2>{{ 'Select the timezone' | translate }}</h2><small>{{ 'This will be used for automatic processes that need to know your local hour' | translate }}</small>
         </label>
 
         <div class="form-group">
-            <select class="select2_single form-control" [ngModel]="hotel.timezone" (change)="didChangeTimezone($event.target.value)">
+            <select class="select2_single form-control" [ngModel]="hotel.timezone" (change)="updateTimezone($event.target.value)">
                 <option *ngFor="#timezone of timezoneList" [value]="timezone">{{timezone.name}}</option>
             </select>
         </div>
@@ -14,33 +14,42 @@
         <hr>
         <div class="row">
             <div class="col-xs-6">
-                <label>Check in from</label>
+                <label>{{ 'Check in from' | translate }}</label>
 
-                <select class="form-control" [ngModel]="hotel.operationHours.checkInFrom" (change)="didChangeCheckInFrom($event.target.value)">
+                <select class="form-control" [ngModel]="hotel.operationHours.checkInFrom" (change)="updateCheckInFrom($event.target.value)">
                     <option *ngFor="#operationHour of operationHoursList" [value]="operationHour">{{operationHour.hour | hour}}:{{operationHour.minute | minute}}</option>
                 </select>
 
             </div>
 
             <div class="col-xs-6">
-                <label>Check in to</label>
-                <select class="form-control" [ngModel]="hotel.operationHours.checkInTo" (change)="didChangeCheckInTo($event.target.value)">
-                    <option *ngFor="#operationHour of operationHoursList" [value]="operationHour">{{operationHour.hour  | hour}}:{{operationHour.minute | minute}}</option>
+                <label>{{ 'Check in to' | translate }}</label>
+                <select class="form-control" [ngModel]="hotel.operationHours.checkInTo" (change)="updateCheckInTo($event.target.value)">
+                    <option *ngFor="#operationHour of operationHoursList" [value]="operationHour">{{operationHour.hour | hour}}:{{operationHour.minute | minute}}</option>
                 </select>
             </div>
         </div>
         <hr>
         <div class="row">
             <div class="col-xs-6">
-                <label>Check out from</label>
-                <select class="form-control" [ngModel]="hotel.operationHours.checkOutFrom" (change)="didChangeCheckOutFrom($event.target.value)">
+                <label>{{ 'Check out from' | translate }}</label>
+                <select class="form-control" [ngModel]="hotel.operationHours.checkOutFrom" (change)="updateCheckOutFrom($event.target.value)">
                     <option *ngFor="#operationHour of operationHoursList" [value]="operationHour">{{operationHour.hour | hour}}:{{operationHour.minute | minute}}</option>
                 </select>
             </div>
 
             <div class="col-xs-6">
-                <label>Check out to</label>
-                <select class="form-control" [ngModel]="hotel.operationHours.checkOutTo" (change)="didChangeCheckOutTo($event.target.value)">
+                <label>{{ 'Check out to' | translate }}</label>
+                <select class="form-control" [ngModel]="hotel.operationHours.checkOutTo" (change)="updateCheckOutTo($event.target.value)">
+                    <option *ngFor="#operationHour of operationHoursList" [value]="operationHour">{{operationHour.hour | hour}}:{{operationHour.minute | minute}}</option>
+                </select>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-xs-6">
+                <label>{{ 'Booking Cancellation Hour' | translate }}</label>
+                <select class="form-control" [ngModel]="hotel.operationHours.cancellationHour" (change)="updateCancellationHour($event.target.value)">
                     <option *ngFor="#operationHour of operationHoursList" [value]="operationHour">{{operationHour.hour | hour}}:{{operationHour.minute | minute}}</option>
                 </select>
             </div>
@@ -50,171 +59,24 @@
     <div class="col-md-6 col-md-offset-1">
 
         <label class="control-label">
-            <h2>Hotel Amenities</h2></label>
+            <h2>{{ 'Hotel Amenities' | translate }}</h2></label>
 
         <div class="form-group">
-            <div class="button-items">
+            <div class="button-items" *ngFor="#hotelAmenityVM of hotelAmenities.hotelAmenityList">
                 <div class="info-block block-info clearfix">
                     <div data-toggle="buttons" class="btn-group bizmoduleselect">
                         <label class="btn btn-default">
                             <div class="bizcontent">
-                                <input type="checkbox" name="var_id[]" autocomplete="off" value="">
+                                <input type="checkbox" [(ngModel)]="hotelAmenityVM.isSelected">
                                 <span class="glyphicon glyphicon-ok glyphicon-lg"></span>
-                                <h5>Wifi</h5>
-                            </div>
-                        </label>
-                    </div>
-                </div>
-            </div>
-            <div class="button-items">
-                <div class="info-block block-info clearfix">
-                    <div data-toggle="buttons" class="btn-group bizmoduleselect">
-                        <label class="btn btn-default">
-                            <div class="bizcontent">
-                                <input type="checkbox" name="var_id[]" autocomplete="off" value="">
-                                <span class="glyphicon glyphicon-ok glyphicon-lg"></span>
-                                <h5>Restaurant</h5>
-                            </div>
-                        </label>
-                    </div>
-                </div>
-            </div>
-            <div class="button-items">
-                <div class="info-block block-info clearfix">
-                    <div data-toggle="buttons" class="btn-group bizmoduleselect">
-                        <label class="btn btn-default">
-                            <div class="bizcontent">
-                                <input type="checkbox" name="var_id[]" autocomplete="off" value="">
-                                <span class="glyphicon glyphicon-ok glyphicon-lg"></span>
-                                <h5>Inside Pool</h5>
-                            </div>
-                        </label>
-                    </div>
-                </div>
-            </div>
-
-            <div class="button-items">
-                <div class="info-block block-info clearfix">
-                    <div data-toggle="buttons" class="btn-group bizmoduleselect">
-                        <label class="btn btn-default">
-                            <div class="bizcontent">
-                                <input type="checkbox" name="var_id[]" autocomplete="off" value="">
-                                <span class="glyphicon glyphicon-ok glyphicon-lg"></span>
-                                <h5>Laundry Service</h5>
-                            </div>
-                        </label>
-                    </div>
-                </div>
-            </div>
-
-            <div class="button-items">
-                <div class="info-block block-info clearfix">
-                    <div data-toggle="buttons" class="btn-group bizmoduleselect">
-                        <label class="btn btn-default">
-                            <div class="bizcontent">
-                                <input type="checkbox" name="var_id[]" autocomplete="off" value="">
-                                <span class="glyphicon glyphicon-ok glyphicon-lg"></span>
-                                <h5>Parking</h5>
-                            </div>
-                        </label>
-                    </div>
-                </div>
-            </div>
-
-            <div class="button-items">
-                <div class="info-block block-info clearfix">
-                    <div data-toggle="buttons" class="btn-group bizmoduleselect">
-                        <label class="btn btn-default">
-                            <div class="bizcontent">
-                                <input type="checkbox" name="var_id[]" autocomplete="off" value="">
-                                <span class="glyphicon glyphicon-ok glyphicon-lg"></span>
-                                <h5>Pets Allowed</h5>
-                            </div>
-                        </label>
-                    </div>
-                </div>
-            </div>
-            <div class="button-items">
-                <div class="info-block block-info clearfix">
-                    <div data-toggle="buttons" class="btn-group bizmoduleselect">
-                        <label class="btn btn-default">
-                            <div class="bizcontent">
-                                <input type="checkbox" name="var_id[]" autocomplete="off" value="">
-                                <span class="glyphicon glyphicon-ok glyphicon-lg"></span>
-                                <h5>Wifi</h5>
-                            </div>
-                        </label>
-                    </div>
-                </div>
-            </div>
-            <div class="button-items">
-                <div class="info-block block-info clearfix">
-                    <div data-toggle="buttons" class="btn-group bizmoduleselect">
-                        <label class="btn btn-default">
-                            <div class="bizcontent">
-                                <input type="checkbox" name="var_id[]" autocomplete="off" value="">
-                                <span class="glyphicon glyphicon-ok glyphicon-lg"></span>
-                                <h5>Restaurant</h5>
-                            </div>
-                        </label>
-                    </div>
-                </div>
-            </div>
-            <div class="button-items">
-                <div class="info-block block-info clearfix">
-                    <div data-toggle="buttons" class="btn-group bizmoduleselect">
-                        <label class="btn btn-default">
-                            <div class="bizcontent">
-                                <input type="checkbox" name="var_id[]" autocomplete="off" value="">
-                                <span class="glyphicon glyphicon-ok glyphicon-lg"></span>
-                                <h5>Inside Pool</h5>
-                            </div>
-                        </label>
-                    </div>
-                </div>
-            </div>
-
-            <div class="button-items">
-                <div class="info-block block-info clearfix">
-                    <div data-toggle="buttons" class="btn-group bizmoduleselect">
-                        <label class="btn btn-default">
-                            <div class="bizcontent">
-                                <input type="checkbox" name="var_id[]" autocomplete="off" value="">
-                                <span class="glyphicon glyphicon-ok glyphicon-lg"></span>
-                                <h5>Laundry Service</h5>
-                            </div>
-                        </label>
-                    </div>
-                </div>
-            </div>
-
-            <div class="button-items">
-                <div class="info-block block-info clearfix">
-                    <div data-toggle="buttons" class="btn-group bizmoduleselect">
-                        <label class="btn btn-default">
-                            <div class="bizcontent">
-                                <input type="checkbox" name="var_id[]" autocomplete="off" value="">
-                                <span class="glyphicon glyphicon-ok glyphicon-lg"></span>
-                                <h5>Parking</h5>
-                            </div>
-                        </label>
-                    </div>
-                </div>
-            </div>
-
-            <div class="button-items">
-                <div class="info-block block-info clearfix">
-                    <div data-toggle="buttons" class="btn-group bizmoduleselect">
-                        <label class="btn btn-default">
-                            <div class="bizcontent">
-                                <input type="checkbox" name="var_id[]" autocomplete="off" value="">
-                                <span class="glyphicon glyphicon-ok glyphicon-lg"></span>
-                                <h5>Pets Allowed</h5>
+                                <h5>{{hotelAmenityVM.hotelAmenity.name}}</h5>
                             </div>
                         </label>
                     </div>
                 </div>
             </div>
         </div>
+
     </div>
+
 </div>

@@ -94,5 +94,13 @@ export var EnglishTranslations: Object = {
 	"Percentage": "Percentage",
 	"Fixed Price": "Fixed Price",
 	"Close": "Close",
-	"Enter the value": "Enter the value"
+	"Enter the value": "Enter the value",
+    "Select the timezone": "Select the timezone",
+    "This will be used for automatic processes that need to know your local hour": "This will be used for automatic processes that need to know your local hour",
+    "Check in from": "Check in from",
+    "Check in to": "Check in to",
+    "Check out from": "Check out from",
+    "Check out to": "Check out to",
+    "Booking Cancellation Hour": "Booking Cancellation Hour",
+    "Hotel Amenities": "Hotel Amenities"
 };
