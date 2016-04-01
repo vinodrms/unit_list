@@ -53,7 +53,7 @@ export class SavePriceProductItemDO {
 			},
 			{
 				key: "availability",
-				validationStruct: new PrimitiveValidationStructure(new NumberInListValidationRule([PriceProductAvailability.Private, PriceProductAvailability.Public]))
+				validationStruct: new PrimitiveValidationStructure(new NumberInListValidationRule([PriceProductAvailability.Confidential, PriceProductAvailability.Public]))
 			},
 			{
 				key: "lastRoomAvailability",

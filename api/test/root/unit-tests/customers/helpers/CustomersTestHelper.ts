@@ -35,7 +35,7 @@ export class CustomersTestHelper {
 	}
 	public getCompanyCustomer(priceProductId: string): SaveCustomerItemDO {
 		var company = this.getSaveCustomerItemDO(CustomerType.Company, "just another company");
-		company.priceProductDetails.priceProductAvailability = PriceProductAvailability.Private;
+		company.priceProductDetails.allowPublicPriceProducts = false;
 		company.priceProductDetails.priceProductIdList = [priceProductId];
 		company.customerDetails = this.getCompanyCustDetails();
 		return company;
@@ -68,7 +68,7 @@ export class CustomersTestHelper {
 			type: custType,
 			priceProductDetails: {
 				priceProductIdList: [],
-				priceProductAvailability: PriceProductAvailability.Public
+				allowPublicPriceProducts: true
 			},
 			customerDetails: this.getIndividualCustDetails()
 		}

@@ -40,7 +40,7 @@ export class DefaultCustomerBuilder implements ICustomerDataSource {
 		var priceProductDetails = new CustomerPriceProductDetailsDO();
 		priceProductDetails.bookingCode = thUtils.generateUniqueID();
 		priceProductDetails.priceProductIdList = [];
-		priceProductDetails.priceProductAvailability = PriceProductAvailability.Public;
+		priceProductDetails.allowPublicPriceProducts = true;
 		cust.priceProductDetails = priceProductDetails;
 
 		cust.status = CustomerStatus.Active;

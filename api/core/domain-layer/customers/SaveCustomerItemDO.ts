@@ -54,7 +54,7 @@ export class SaveCustomerItemDO {
 	customerDetails: any;
 	fileAttachmentUrlList: string[];
 	priceProductDetails: {
-		priceProductAvailability: PriceProductAvailability;
+		allowPublicPriceProducts: boolean;
 		priceProductIdList: string[];
 	};
 	notes: string;
@@ -81,8 +81,8 @@ export class SaveCustomerItemDO {
 				key: "priceProductDetails",
 				validationStruct: new ObjectValidationStructure([
 					{
-						key: "priceProductAvailability",
-						validationStruct: new PrimitiveValidationStructure(new NumberInListValidationRule([PriceProductAvailability.Private, PriceProductAvailability.Public]))
+						key: "allowPublicPriceProducts",
+						validationStruct: new PrimitiveValidationStructure(new BooleanValidationRule())
 					},
 					{
 						key: "priceProductIdList",
