@@ -9,11 +9,13 @@ export class WizardBedsStateService extends AWizardState {
 
 	public handleNextPressed(): Promise<any> {
 		return new Promise<any>((resolve: { (result: any): void }, reject: { (err: any): void }) => {
+			this.wizardController.moveNext();
 			resolve(true);
 		});
 	}
 	public handlePreviousPressed(): Promise<any> {
 		return new Promise<any>((resolve: { (result: any): void }, reject: { (err: any): void }) => {
+			this.wizardController.movePrevious();
 			resolve(true);
 		});
 	}
@@ -34,7 +36,8 @@ export class WizardBedsStateService extends AWizardState {
 	}
 	public getMeta(): WizardStateMeta {
 		return {
-			relativeComponentPath: "WizardBedsComponent",
+			startRelativeComponentPath: "WizardBedsComponent",
+			endRelativeComponentPath: "WizardBedsComponent",
 			iconFontName: "",
 			name: "Beds"
 		};

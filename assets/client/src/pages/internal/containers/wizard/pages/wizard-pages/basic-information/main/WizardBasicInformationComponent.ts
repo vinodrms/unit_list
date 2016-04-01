@@ -8,6 +8,8 @@ import {WizardBasicInfoPropertyDetailsComponent} from '../pages/property-details
 import {HOTEL_AGGREGATOR_PROVIDERS} from '../../../../../../services/hotel/HotelProviders';
 import {SETTINGS_PROVIDERS} from '../../../../../../services/settings/SettingsProviders';
 import {TaxService} from '../../../../../../services/taxes/TaxService';
+import {WizardBasicInformationStateService} from './services/WizardBasicInformationStateService';
+import {WizardService} from '../../services/WizardService';
 
 @RouteConfig([
 	{ path: '/intro', name: 'WizardBasicInfoIntroComponent', component: WizardBasicInfoIntroComponent, useAsDefault: true },
@@ -22,7 +24,8 @@ import {TaxService} from '../../../../../../services/taxes/TaxService';
 	providers: [SETTINGS_PROVIDERS, HOTEL_AGGREGATOR_PROVIDERS, TaxService]
 })
 export class WizardBasicInformationComponent extends BaseComponent {
-	constructor() {
+	constructor(wizardService: WizardService, basicInfoStateService: WizardBasicInformationStateService) {
 		super();
+		wizardService.bootstrapWizardIndex(basicInfoStateService.stateIndex);
 	}
 }

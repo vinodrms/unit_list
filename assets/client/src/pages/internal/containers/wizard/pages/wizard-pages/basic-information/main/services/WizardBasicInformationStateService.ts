@@ -15,7 +15,7 @@ export class WizardBasicInformationStateService extends AWizardState {
 	private _basicInfoController: WizardBasicInformationController;
 
 	constructor(private _appContext: AppContext,
-		introService: WizardBasicInfoIntroService, overviewService: WizardBasicInfoOverviewService, 
+		introService: WizardBasicInfoIntroService, overviewService: WizardBasicInfoOverviewService,
         paymentsAndPolicies: WizardBasicInfoPaymentsAndPoliciesService, propertyDetails: WizardBasicInfoPropertyDetailsService) {
 		super();
 		this._basicInfoController = new WizardBasicInformationController([introService, overviewService, paymentsAndPolicies, propertyDetails]);
@@ -77,7 +77,8 @@ export class WizardBasicInformationStateService extends AWizardState {
 	}
 	public getMeta(): WizardStateMeta {
 		return {
-			relativeComponentPath: "WizardBasicInformationComponent/WizardBasicInfoIntroComponent",
+			startRelativeComponentPath: "WizardBasicInformationComponent/WizardBasicInfoIntroComponent",
+			endRelativeComponentPath: "WizardBasicInformationComponent/WizardBasicInfoPropertyDetailsComponent",
 			iconFontName: "",
 			name: "Basic Information"
 		};

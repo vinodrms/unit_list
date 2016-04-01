@@ -2,7 +2,8 @@ import {IWizardController} from './IWizardController';
 
 export interface WizardStateMeta {
 	name: string;
-	relativeComponentPath: string;
+	startRelativeComponentPath: string;
+	endRelativeComponentPath: string;
 	iconFontName: string;
 }
 
