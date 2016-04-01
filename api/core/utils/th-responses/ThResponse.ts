@@ -192,7 +192,6 @@ export enum ThStatusCode {
     SaveCustomerItemError,
     SaveCustomerItemInvalidOrNullClientType,
     SaveCustomerItemCompOrTACannotBeLinkedToOtherCustomers,
-    SaveCustomerItemCannotSetPriceProductsForPublic,
     CustomerItemUpdateStrategyError,
     CustomersControllerErrorGettingCustomer,
     CustomersControllerErrorSavingCustomer,
@@ -441,7 +440,6 @@ ThMessage[ThStatusCode.CustomerRepositoryErrorGettingList] = "Error getting cust
 ThMessage[ThStatusCode.SaveCustomerItemError] = "Error saving customer.";
 ThMessage[ThStatusCode.SaveCustomerItemInvalidOrNullClientType] = "Invalid client type.";
 ThMessage[ThStatusCode.SaveCustomerItemCompOrTACannotBeLinkedToOtherCustomers] = "Companies or travel agencies cannot be linked to other customers.";
-ThMessage[ThStatusCode.SaveCustomerItemCannotSetPriceProductsForPublic] = "Cannot set specific price products for this client unless private is selected.";
 ThMessage[ThStatusCode.CustomerItemUpdateStrategyError] = "Error updating customer.";
 ThMessage[ThStatusCode.CustomersControllerErrorGettingCustomer] = "Error getting customer.";
 ThMessage[ThStatusCode.CustomersControllerErrorSavingCustomer] = "Error saving customer.";

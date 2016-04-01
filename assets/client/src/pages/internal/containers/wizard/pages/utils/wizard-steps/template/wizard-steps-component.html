@@ -5,16 +5,14 @@
 		{{ 'Skip this step' | translate }}
 	</a>
 	<a class="btn btn-app" role="button" *ngIf="hasPrevious()" (click)="handlePreviousPressed()">
-		<i class="fa fa-arrow-left"></i> {{ 'Previous' | translate }}
+		<i class="fa fa-angle-left"></i>
 	</a>
 	<a class="btn btn-app" role="button" *ngIf="hasNext()" (click)="handleNextPressed()">
 		<i *ngIf="isMovingNext" class="fa fa-spinner fa-pulse"></i>
-		<i *ngIf="!isMovingNext" class="fa fa-arrow-right"></i> 
-		{{ 'Next' | translate }}
+		<i *ngIf="!isMovingNext" class="fa fa-angle-right"></i> 
 	</a>
 	<a class="btn btn-app" role="button" *ngIf="!hasNext()" (click)="handleNextPressed()">
 		<i *ngIf="isMovingNext" class="fa fa-spinner fa-pulse"></i>
-		<i *ngIf="!isMovingNext" class="fa fa-arrow-right"></i> 
-		{{ 'Finish' | translate }}
+		<i *ngIf="!isMovingNext" class="fa fa-angle-double-right"></i> 
 	</a>
 </div>

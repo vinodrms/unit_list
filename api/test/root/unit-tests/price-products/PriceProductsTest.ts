@@ -233,7 +233,7 @@ describe("Hotel Price Products Tests", function() {
         });
 		it("Should detach the price product from the customer profile", function(done) {
 			var companyCustDO = addedCompanyCustomer;
-			companyCustDO.priceProductDetails.priceProductAvailability = PriceProductAvailability.Public;
+			companyCustDO.priceProductDetails.allowPublicPriceProducts = true;
 			companyCustDO.priceProductDetails.priceProductIdList = [];
 			var saveCustItem = new SaveCustomerItem(testContext.appContext, testContext.sessionContext);
 			saveCustItem.save(companyCustDO).then((cust: CustomerDO) => {

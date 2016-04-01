@@ -14,7 +14,7 @@ export enum PriceProductStatus {
 
 export enum PriceProductAvailability {
 	Public,
-	Private
+	Confidential
 }
 
 export class PriceProductDO extends BaseDO {

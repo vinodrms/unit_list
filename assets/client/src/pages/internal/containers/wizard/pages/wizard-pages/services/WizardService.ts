@@ -8,7 +8,7 @@ import {WizardBedsStateService} from '../beds/services/WizardBedsStateService';
 @Injectable()
 export class WizardService implements IWizardState, IWizardController {
 	private static NavigationBase = "/MainWizardComponent/";
-	
+
 	private _stateList: IWizardState[];
 	private _currentState: IWizardState;
 
@@ -19,33 +19,43 @@ export class WizardService implements IWizardState, IWizardController {
 			this._stateList[stateIndex].stateIndex = stateIndex;
 			this._stateList[stateIndex].wasVisited = false;
 			this._stateList[stateIndex].wizardController = this;
+			this.bootstrapWizardIndex(0);
 		}
-		this._currentState = this._stateList[0];
-		this._currentState.wasVisited = true;
+	}
+	public bootstrapWizardIndex(currentIndex: number) {
+		this._currentState = this._stateList[currentIndex];
+		for(var stateIndex = 0; stateIndex <= currentIndex; stateIndex ++) {
+			this._stateList[stateIndex].wasVisited = true;
+		}
 	}
 
 	public moveNext() {
 		if (this._currentState.stateIndex == this._stateList.length - 1) {
+			// TODO: go to home screen
 			return;
 		}
-		this.setCurrentState(this._currentState.stateIndex + 1);
+		this.setCurrentState(this._currentState.stateIndex + 1, true);
 	}
 	public movePrevious() {
 		if (this._currentState.stateIndex == 0) {
 			return;
 		}
-		this.setCurrentState(this._currentState.stateIndex - 1);
+		this.setCurrentState(this._currentState.stateIndex - 1, false);
 	}
 	public moveToState(stateIndex: number) {
 		if (this._stateList[stateIndex].wasVisited) {
-			this.setCurrentState(stateIndex);
+			this.setCurrentState(stateIndex, true);
 		}
 	}
-	private setCurrentState(newStateIndex: number) {
+	private setCurrentState(newStateIndex: number, moveToStart: boolean) {
 		if (newStateIndex !== this.stateIndex) {
 			this._currentState = this._stateList[newStateIndex];
 			this._currentState.wasVisited = true;
-			this._appContext.routerNavigator.navigateTo(WizardService.NavigationBase + this._currentState.getMeta().relativeComponentPath);
+			var relativePath = this._currentState.getMeta().endRelativeComponentPath;
+			if (moveToStart) {
+				relativePath = this._currentState.getMeta().startRelativeComponentPath;
+			}
+			this._appContext.routerNavigator.navigateTo(WizardService.NavigationBase + relativePath);
 		}
 	}
 	public getStateList(): IWizardState[] {

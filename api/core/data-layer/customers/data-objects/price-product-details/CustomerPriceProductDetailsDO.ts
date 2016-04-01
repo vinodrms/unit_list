@@ -5,11 +5,11 @@ export class CustomerPriceProductDetailsDO extends BaseDO {
 	constructor() {
 		super();
 	}
-	priceProductAvailability: PriceProductAvailability;
+	allowPublicPriceProducts: boolean;
 	priceProductIdList: string[];
 	bookingCode: string;
 
 	protected getPrimitivePropertyKeys(): string[] {
-		return ["priceProductAvailability", "priceProductIdList", "bookingCode"];
+		return ["allowPublicPriceProducts", "priceProductIdList", "bookingCode"];
 	}
 }
