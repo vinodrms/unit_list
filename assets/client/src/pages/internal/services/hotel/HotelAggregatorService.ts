@@ -1,7 +1,7 @@
 import {Injectable} from 'angular2/core';
 import {Observable} from 'rxjs/Observable';
 import {Observer} from 'rxjs/Observer';
-import 'rxjs/add/observable/zip';
+import 'rxjs/add/observable/combineLatest';
 import 'rxjs/add/operator/map';
 import {BaseDO} from '../../../../common/base/BaseDO';
 import {ThError} from '../../../../common/utils/AppContext';
@@ -24,7 +24,7 @@ export class HotelAggregatorService extends ARequestService<HotelAggregatedInfo>
 	}
 
 	protected sendRequest(): Observable<Object> {
-		return Observable.zip(
+		return Observable.combineLatest(
 			this._hotelAmenitiesService.getHotelAmenitiesDO(),
 			this._paymentMethodsService.getPaymentMethodsDO(),
 			this._hotelService.getHotelDetailsDO()

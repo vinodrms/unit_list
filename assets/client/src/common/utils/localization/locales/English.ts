@@ -95,5 +95,6 @@ export var EnglishTranslations: Object = {
 	"Fixed Price": "Fixed Price",
 	"Close": "Close",
 	"Enter the value": "Enter the value",
-	"Add-On Products": "Add-On Products"
+	"Add-On Products": "Add-On Products",
+	"[Wizard Step 4] Add-On Products text": "Add-On Products represent the products which the property can sell to the customers. You will be able to add them to bills or include them in Price Products."
 };

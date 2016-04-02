@@ -6,8 +6,6 @@ import {WizardBasicInfoOverviewComponent} from '../pages/overview/WizardBasicInf
 import {WizardBasicInfoPaymentsAndPoliciesComponent} from '../pages/payments-policies/WizardBasicInfoPaymentsAndPoliciesComponent';
 import {WizardBasicInfoPropertyDetailsComponent} from '../pages/property-details/WizardBasicInfoPropertyDetailsComponent';
 import {HOTEL_AGGREGATOR_PROVIDERS} from '../../../../../../services/hotel/HotelProviders';
-import {SETTINGS_PROVIDERS} from '../../../../../../services/settings/SettingsProviders';
-import {TaxService} from '../../../../../../services/taxes/TaxService';
 import {WizardBasicInformationStateService} from './services/WizardBasicInformationStateService';
 import {WizardService} from '../../services/WizardService';
 
@@ -21,7 +19,7 @@ import {WizardService} from '../../services/WizardService';
 	selector: 'wizard-basic-information',
 	templateUrl: '/client/src/pages/internal/containers/wizard/pages/wizard-pages/basic-information/main/template/wizard-basic-information.html',
 	directives: [RouterOutlet],
-	providers: [SETTINGS_PROVIDERS, HOTEL_AGGREGATOR_PROVIDERS, TaxService]
+	providers: [HOTEL_AGGREGATOR_PROVIDERS]
 })
 export class WizardBasicInformationComponent extends BaseComponent {
 	constructor(wizardService: WizardService, basicInfoStateService: WizardBasicInformationStateService) {
