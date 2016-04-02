@@ -40,9 +40,8 @@ export class ThHttp implements IThHttp {
 		return new Observable((observer: Observer<Object>) => {
 			this._http.get(url, { search: searchParams, body: JSON.stringify(this.getDefaultReqParams()) }).subscribe((res: Response) => {
 				this.parseResult(res, observer);
-			}, (err: Error) => {
-				observer.error(new ThError(err.message));
-				observer.complete();
+			}, (err: any) => {
+				this.parseError(err, observer);
 			});
 		});
 	}
@@ -72,9 +71,8 @@ export class ThHttp implements IThHttp {
 		return new Observable((observer: Observer<Object>) => {
 			this._http.post(url, JSON.stringify(actualParams)).subscribe((res: Response) => {
 				this.parseResult(res, observer);
-			}, (err: Error) => {
-				observer.error(new ThError(err.message));
-				observer.complete();
+			}, (err: any) => {
+				this.parseError(err, observer);
 			});
 		});
 	}
@@ -100,6 +98,14 @@ export class ThHttp implements IThHttp {
 			xhr.open('POST', url, true);
 			xhr.send(formData);
 		});
+	}
+	private parseError(error: any, observer: Observer<Object>) {
+		if (error.status == ThHttp.HttpForbidden) {
+			this._browserLocation.goToLoginPage(LoginStatusCode.SessionTimeout);
+			return;
+		}
+		observer.error(new ThError(error.message));
+		observer.complete();
 	}
 
 	private parseResult(result: Response, observer: Observer<Object>) {

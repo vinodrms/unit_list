@@ -61,4 +61,11 @@ export class SessionManager {
 	public destroySession() {
 		this._req.logout();
 	}
+	public sessionExists(): boolean {
+		var sessionContext: SessionContext = this._req["user"];
+		if (this._req.isAuthenticated() && sessionContext) {
+			return true;
+		}
+		return false;
+	}
 }
