@@ -10,6 +10,8 @@ import {AMongoHotelConfigurationRepository, HotelConfigurationMetaRepoDO} from '
 import {IYieldFilterConfigurationRepository, YieldFilterMetaRepoDO, YieldFilterValueMetaRepoDO} from '../IYieldFilterConfigurationRepository';
 import {HotelConfigurationDO} from '../../data-objects/HotelConfigurationDO';
 
+import _ = require("underscore");
+
 export class MongoYieldFilterConfigurationRepository extends AMongoHotelConfigurationRepository implements IYieldFilterConfigurationRepository {
 
     public addYieldFilterValue(meta: HotelConfigurationMetaRepoDO, filterMeta: YieldFilterMetaRepoDO, yieldFilterValue: YieldFilterValueDO): Promise<YieldFilterConfigurationDO> {
@@ -117,12 +119,12 @@ export class MongoYieldFilterConfigurationRepository extends AMongoHotelConfigur
     private filterValueUpdateValid(yieldFilterValue: YieldFilterValueDO, yieldFilter: YieldFilterDO): boolean {
         var sameYieldValueItems = [];
         if (yieldFilter.type == YieldFilterType.Text) {
-            sameYieldValueItems = _.where(yieldFilter.values, (value: YieldFilterValueDO) => {
+            sameYieldValueItems = _.filter(yieldFilter.values, (value: YieldFilterValueDO) => {
                 return value.label === yieldFilterValue.label && value.id != yieldFilterValue.id;
             });
         }
         else {
-            sameYieldValueItems = _.where(yieldFilter.values, (value: YieldFilterValueDO) => {
+            sameYieldValueItems = _.filter(yieldFilter.values, (value: YieldFilterValueDO) => {
                 return value.colorCode === yieldFilterValue.colorCode && value.id != yieldFilterValue.id;
             });
         }
@@ -132,12 +134,12 @@ export class MongoYieldFilterConfigurationRepository extends AMongoHotelConfigur
     private filterValueAdditionValid(yieldFilterValue: YieldFilterValueDO, yieldFilter: YieldFilterDO): boolean {
         var sameYieldValueItems = [];
         if (yieldFilter.type == YieldFilterType.Text) {
-            sameYieldValueItems = _.where(yieldFilter.values, (value: YieldFilterValueDO) => {
+            sameYieldValueItems = _.filter(yieldFilter.values, (value: YieldFilterValueDO) => {
                 return value.label === yieldFilterValue.label;
             });
         }
         else {
-            sameYieldValueItems = _.where(yieldFilter.values, (value: YieldFilterValueDO) => {
+            sameYieldValueItems = _.filter(yieldFilter.values, (value: YieldFilterValueDO) => {
                 return value.colorCode === yieldFilterValue.colorCode;
             });
         }
