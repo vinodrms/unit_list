@@ -54,7 +54,7 @@
     "build-all": "npm run build-server && npm run build-client",
     "server-tests": "npm run build-server && gulp run-server-tests",
     "e2e-tests": "npm run server-tests && cd assets && npm run e2e && cd ..",
-    "dev": "sails lift",
+    "dev": "node app.js",
     "test": "npm run build-client && gulp run-test",
     "prod": "npm run build-client && gulp run-prod",
     "forever-stop": "forever stop UnitPalProduction || echo 'No process named UnitPalProduction found. Continuing with the rest of the build.'",
