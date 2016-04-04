@@ -1,1 +1,13 @@
-<p>DA!</p>
+<div class="col-md-9 overview-left">
+	<lazy-loading-table 
+		[isCollapsed]="isCollapsed" 
+		(onAdd)="addAddOnProduct()"
+		(onCopy)="copyAddOnProduct($event)"
+		(onDelete)="deleteAddOnProduct($event)"
+		(onSelect)="selectAddOnProduct($event)"
+		(onEdit)="editAddOnProduct($event)"
+		>
+	</lazy-loading-table>
+</div>
+<div class="col-md-3 overview-right hidden-xs hidden-sm">
+</div>

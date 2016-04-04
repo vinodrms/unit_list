@@ -96,5 +96,16 @@ export var EnglishTranslations: Object = {
 	"Close": "Close",
 	"Enter the value": "Enter the value",
 	"Add-On Products": "Add-On Products",
-	"[Wizard Step 4] Add-On Products text": "Add-On Products represent the products which the property can sell to the customers. You will be able to add them to bills or include them in Price Products."
+	"[Wizard Step 4] Add-On Products text": "Add-On Products represent the products which the property can sell to the customers. You will be able to add them to bills or include them in Price Products.",
+	"Showing %fromIndex% to %toIndex% of %totalCount% items": "Showing %fromIndex% to %toIndex% of %totalCount% items",
+	"Name": "Name",
+	"Category": "Category",
+	"Price": "Price",
+	"Notes": "Notes",
+	"Add-On Product": "Add-On Product",
+	"Add": "Add",
+	"Search by name": "Search by name",
+	"Search": "Search",
+	"Show": "Show",
+	"items": "items"
 };

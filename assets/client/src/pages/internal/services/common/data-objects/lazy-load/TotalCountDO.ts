@@ -10,4 +10,8 @@ export class TotalCountDO extends BaseDO {
     protected getPrimitivePropertyKeys(): string[] {
         return ["numOfItems"];
     }
+	
+	public getLastPageIndex(numOfItemsPerPage: number): number {
+		return Math.floor(this.numOfItems / numOfItemsPerPage);
+	}
 }

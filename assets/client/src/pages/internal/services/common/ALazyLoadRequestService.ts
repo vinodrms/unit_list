@@ -2,28 +2,19 @@ import {Observer} from 'rxjs/Observer';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/combineLatest';
-import {ARequestService} from './ARequestService';
+import {ILazyLoadRequestService, PageContent, LazyLoadData} from './ILazyLoadRequestService';
 import {AppContext, ThServerApi} from '../../../../common/utils/AppContext';
 import {PageMetaDO} from './data-objects/lazy-load/PageMetaDO';
 import {TotalCountDO} from './data-objects/lazy-load/TotalCountDO';
 
-export interface PageContent<T> {
-	pageMeta: PageMetaDO;
-	pageData: T;
-}
-export interface LazyLoadData<T> {
-	totalCount: TotalCountDO;
-	pageContent: PageContent<T>;
-}
-
-export abstract class ALazyLoadRequestService<T> {
-	private static DefaultPageSize = 20;
+export abstract class ALazyLoadRequestService<T> implements ILazyLoadRequestService<T> {
+	private static DefaultPageSize = 10;
 
 	private _countObservable: Observable<TotalCountDO>;
 	private _countObserver: Observer<TotalCountDO>;
 
-	private _pageDataObservable: Observable<T>;
-	private _pageDataObserver: Observer<T>;
+	private _pageDataObservable: Observable<T[]>;
+	private _pageDataObserver: Observer<T[]>;
 
 	protected _searchCriteria: Object;
 	private _pageMeta: PageMetaDO;
@@ -33,7 +24,6 @@ export abstract class ALazyLoadRequestService<T> {
 		this.initPageMeta();
 		this.initCountObservable();
 		this.initPageDataObservable();
-		this.refreshAllData();
 	}
 	private initSearchCriteria() {
 		this._searchCriteria = {};
@@ -49,18 +39,18 @@ export abstract class ALazyLoadRequestService<T> {
 		});
 	}
 	private initPageDataObservable() {
-		this._pageDataObservable = new Observable((serviceObserver: Observer<T>) => {
+		this._pageDataObservable = new Observable((serviceObserver: Observer<T[]>) => {
 			this._pageDataObserver = serviceObserver;
 		});
 	}
-	private refreshAllData() {
+
+	public refreshData() {
 		this.updateCount();
 		this.updatePageData();
 	}
-
 	public updateSearchCriteria(searchCriteria: Object) {
 		this._searchCriteria = searchCriteria;
-		this.refreshAllData();
+		this.refreshData();
 	}
 	public updatePageNumber(pageNumber: number) {
 		this._pageMeta.pageNumber = pageNumber;
@@ -68,6 +58,7 @@ export abstract class ALazyLoadRequestService<T> {
 	}
 	public updatePageSize(pageSize: number) {
 		this._pageMeta.pageSize = pageSize;
+		this._pageMeta.pageNumber = 0;
 		this.updatePageData();
 	}
 
@@ -89,7 +80,7 @@ export abstract class ALazyLoadRequestService<T> {
 				pageMeta.buildFromObject(pageDataObject["lazyLoad"]);
 				return {
 					pageMeta: pageMeta,
-					pageData: pageDataObject
+					pageItemList: pageDataObject
 				}
 			})
 			.flatMap((pageContent: PageContent<Object>) => {
@@ -97,7 +88,7 @@ export abstract class ALazyLoadRequestService<T> {
 			})
 			.subscribe((pageContent: PageContent<T>) => {
 				if (pageContent.pageMeta.pageNumber === this._pageMeta.pageNumber) {
-					this._pageDataObserver.next(pageContent.pageData);
+					this._pageDataObserver.next(pageContent.pageItemList);
 				}
 			}, (error: any) => {
 				this._pageDataObserver.error(error);
@@ -111,11 +102,11 @@ export abstract class ALazyLoadRequestService<T> {
 		return Observable.combineLatest(
 			this._countObservable,
 			this._pageDataObservable
-		).map((result: [TotalCountDO, T]) => {
+		).map((result: [TotalCountDO, T[]]) => {
 			var lazyLoadData: LazyLoadData<T> = {
 				totalCount: result[0],
 				pageContent: {
-					pageData: result[1],
+					pageItemList: result[1],
 					pageMeta: this._pageMeta
 				}
 			};
@@ -124,12 +115,13 @@ export abstract class ALazyLoadRequestService<T> {
 	}
 
 	private parsePageData(pageContent: PageContent<Object>): Observable<PageContent<T>> {
-		return this.parsePageDataCore(pageContent.pageData).map((pageDataDO: T) => {
+		return this.parsePageDataCore(pageContent.pageItemList).map((pageDataDOList: T[]) => {
 			return {
 				pageMeta: pageContent.pageMeta,
-				pageData: pageDataDO
+				pageItemList: pageDataDOList
 			}
 		});
 	}
-	protected abstract parsePageDataCore(pageDataObject: Object): Observable<T>;
+	protected abstract parsePageDataCore(pageDataObject: Object): Observable<T[]>;
+	public abstract searchByText(text: string);
 }
