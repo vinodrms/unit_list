@@ -8,7 +8,7 @@ import {ModalSize} from '../ICustomModalComponent';
 		'tabindex': '0',
         'role': 'dialog',
         'class': 'in modal',
-        'style': 'display: block; position:absolute; ',
+        'style': 'display: block;',
 		'(click)': 'onClick()'
 	},
 	template: `

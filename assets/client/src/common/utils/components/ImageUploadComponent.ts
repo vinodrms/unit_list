@@ -7,23 +7,20 @@ import {LoadingComponent} from './LoadingComponent';
 @Component({
 	selector: 'image-upload',
 	template: `
-	<div class="btn btn-default btn-file">
-		<div class="fileinput fileinput-new" data-provides="fileinput">
-			<div class="fileinput-preview thumbnail" data-trigger="fileinput" style="width: height: 150px;">
-				<loading-component [isLoading]="isLoading"></loading-component>
-				<img *ngIf="imageUrl" [src]="imageUrl">
-				<i class="fa fa-picture-o fa-5x" *ngIf="!imageUrl"></i>
-			</div>
-			<div>
-				<span class="btn btn-default btn-file">
-					<span class="fileinput-new">{{ 'Select image' | translate }}</span>
-					<span class="fileinput-exists">Change</span>
+		<span class="btn btn-default btn-file file-upload">
+			<div class="fileinput fileinput-new" data-provides="fileinput">
+				<div class="fileinput-preview thumbnail" data-trigger="fileinput" style="width: 100%;">
+					<loading-component [isLoading]="isLoading"></loading-component>
+					<img *ngIf="imageUrl && !isLoading" [src]="imageUrl" />
+					<i class="fa fa-picture-o fa-5x" *ngIf="!imageUrl && !isLoading"></i>
+				</div>
+				<span class="btn btn-default btn-file file-upload">
 					<input type="file" name="..." accept="image/*" (change)="didSelectFile($event)" />
 				</span>
+				<br/>
 				<a class="btn btn-default fileinput-exists" data-dismiss="fileinput" (click)="removeImageUrl()">{{ 'Remove' | translate }}</a>
 			</div>
-		</div>
-	</div>
+		</span>
 	`,
 	directives: [LoadingComponent],
 	pipes: [TranslationPipe]

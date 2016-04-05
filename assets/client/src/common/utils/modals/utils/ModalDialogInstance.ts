@@ -23,6 +23,11 @@ export class ModalDialogInstance<T> {
 			this._resultObserver.next(result);
 		}
 	}
+	public addErrorResult(error: any) {
+		if (this._resultObserver) {
+			this._resultObserver.error(error);
+		}
+	}
 
     public close() {
         if (this._contentRef.instance.isBlocking && this._contentRef.instance.isBlocking() === true) {

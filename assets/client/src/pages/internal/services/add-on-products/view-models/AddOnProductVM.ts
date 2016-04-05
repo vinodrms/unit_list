@@ -9,6 +9,10 @@ export class AddOnProductVM {
 	private _category: AddOnProductCategoryDO;
 	private _vatTax: TaxDO;
 	private _ccy: CurrencyDO;
+	
+	constructor() {
+		this._ccy = new CurrencyDO();
+	}
 
 	public get addOnProduct(): AddOnProductDO {
 		return this._addOnProduct;
@@ -44,5 +48,15 @@ export class AddOnProductVM {
 	}
 	public set ccy(ccy: CurrencyDO) {
 		this._ccy = ccy;
+	}
+	
+	public buildPrototype(): AddOnProductVM {
+		var copy = new AddOnProductVM();
+		copy.addOnProduct = new AddOnProductDO();
+		copy.addOnProduct.buildFromObject(this.addOnProduct);
+		copy.category = this.category;
+		copy.ccy = this.ccy;
+		copy.taxList = this.taxList;
+		return copy;
 	}
 }

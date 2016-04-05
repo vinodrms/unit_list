@@ -1,6 +1,6 @@
-<div class="col-md-9 overview-left">
+<div class="overview-left" [ngClass]="{'col-sm-9': !isEditing, 'col-sm-3': isEditing}">
 	<lazy-loading-table 
-		[isCollapsed]="isCollapsed" 
+		[isCollapsed]="isEditing" 
 		(onAdd)="addAddOnProduct()"
 		(onCopy)="copyAddOnProduct($event)"
 		(onDelete)="deleteAddOnProduct($event)"
@@ -9,5 +9,17 @@
 		>
 	</lazy-loading-table>
 </div>
-<div class="col-md-3 overview-right hidden-xs hidden-sm">
+<div class="col-sm-3 overview-right hidden-xs hidden-sm" *ngIf="!isEditing">
+	<add-on-product-overview 
+		*ngIf="selectedAddOnProductVM" 
+		[addOnProductVM]="selectedAddOnProductVM"
+		(onEdit)="editAddOnProduct($event)">
+	</add-on-product-overview>
+</div>
+<div class="col-sm-9 singleview-right" *ngIf="isEditing">
+	<add-on-product-edit
+		*ngIf="selectedAddOnProductVM" 
+		[addOnProductVM]="selectedAddOnProductVM"
+		(onExit)="showViewScreen()">
+	</add-on-product-edit>
 </div>
