@@ -11,11 +11,14 @@ export enum ThServerApi {
 	SettingsPaymentMethods,
 	SettingsCountries,
 	SettingsCurrencies,
+	SettingsAddOnProductCategories,
 	ServiceUploadFile,
 	ServiceVatVerifier,
     ServiceTimezones,
 	Taxes,
-	TaxesSaveItem
+	TaxesSaveItem,
+	AddOnProducts,
+	AddOnProductsCount
 }
 
 var ThServerApiUrl: { [index: number]: string; } = {};
@@ -30,6 +33,7 @@ ThServerApiUrl[ThServerApi.SettingsHotelAmenities] = "/settings/hotelAmenities";
 ThServerApiUrl[ThServerApi.SettingsPaymentMethods] = "/settings/paymentMethods";
 ThServerApiUrl[ThServerApi.SettingsCurrencies] = "/settings/currencies";
 ThServerApiUrl[ThServerApi.SettingsCountries] = "/settings/countries";
+ThServerApiUrl[ThServerApi.SettingsAddOnProductCategories] = "/settings/addOnProductCategories";
 ThServerApiUrl[ThServerApi.ServiceUploadFile] = "/service/uploadFile";
 ThServerApiUrl[ThServerApi.ServiceVatVerifier] = "/service/vatVerifier";
 ThServerApiUrl[ThServerApi.ServiceTimezones] = "/service/availableTimeZones";
@@ -38,6 +42,8 @@ ThServerApiUrl[ThServerApi.HotelDetailsUpdatePaymentsAndPolicies] = "/hotel/upda
 ThServerApiUrl[ThServerApi.HotelDetailsUpdatePropertyDetails] = "/hotel/updatePropertyDetails";
 ThServerApiUrl[ThServerApi.Taxes] = "/taxes";
 ThServerApiUrl[ThServerApi.TaxesSaveItem] = "/taxes/saveTaxItem";
+ThServerApiUrl[ThServerApi.AddOnProducts] = "/addOnProducts";
+ThServerApiUrl[ThServerApi.AddOnProductsCount] = "/addOnProducts/count";
 
 export class ServerApiBuilder {
 	public static ApiRoot = "/api";

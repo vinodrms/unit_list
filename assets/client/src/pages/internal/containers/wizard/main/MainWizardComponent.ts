@@ -12,6 +12,9 @@ import {WIZARD_BASIC_INFO_PAGES_PROVIDERS} from '../pages/wizard-pages/basic-inf
 import {WizardBedsStateService} from '../pages/wizard-pages/beds/services/WizardBedsStateService';
 import {WizardAddOnProductsStateService} from '../pages/wizard-pages/add-on-products/services/WizardAddOnProductsStateService';
 import {WizardService} from '../pages/wizard-pages/services/WizardService';
+import {SETTINGS_PROVIDERS} from '../../../services/settings/SettingsProviders';
+import {TaxService} from '../../../services/taxes/TaxService';
+import {HOTEL_AGGREGATOR_PROVIDERS} from '../../../services/hotel/HotelProviders';
 
 @RouteConfig([
 	{ path: '/basic-info/...', name: 'WizardBasicInformationComponent', component: WizardBasicInformationComponent, useAsDefault: true },
@@ -23,7 +26,7 @@ import {WizardService} from '../pages/wizard-pages/services/WizardService';
 	selector: 'main-wizard-component',
 	templateUrl: '/client/src/pages/internal/containers/wizard/main/template/main-wizard-component.html',
 	directives: [RouterOutlet, WizardHeaderComponent, WizardNavbarComponent, WizardStepsComponent],
-	providers: [ WIZARD_BASIC_INFO_PAGES_PROVIDERS,
+	providers: [ SETTINGS_PROVIDERS, HOTEL_AGGREGATOR_PROVIDERS, TaxService, WIZARD_BASIC_INFO_PAGES_PROVIDERS,
 		WizardBedsStateService, WizardAddOnProductsStateService, WizardService]
 })
 

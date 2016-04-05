@@ -1,7 +1,7 @@
 import {Component, OnInit} from 'angular2/core';
 import {ControlGroup} from 'angular2/common';
 import {Observable} from 'rxjs/Observable';
-import 'rxjs/add/observable/zip';
+import 'rxjs/add/observable/combineLatest';
 import {BaseComponent} from '../../../../../../../common/base/BaseComponent';
 import {ThError, AppContext} from '../../../../../../../common/utils/AppContext';
 import {TranslationPipe} from '../../../../../../../common/utils/localization/TranslationPipe';
@@ -45,8 +45,8 @@ export class BasicInfoPaymentsAndPoliciesEditComponent extends BaseComponent imp
 
 	public ngOnInit() {
 		this.isLoading = true;
-        debugger
-		Observable.zip(
+
+		Observable.combineLatest(
 			this._currenciesService.getCurrenciesDO(),
 			this._hotelAggregator.getHotelAggregatedInfo()
 		).subscribe((result: [CurrenciesDO, HotelAggregatedInfo]) => {

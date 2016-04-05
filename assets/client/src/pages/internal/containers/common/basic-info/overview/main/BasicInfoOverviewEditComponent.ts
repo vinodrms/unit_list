@@ -1,7 +1,7 @@
 import {Component, OnInit} from 'angular2/core';
 import {ControlGroup} from 'angular2/common';
 import {Observable} from 'rxjs/Observable';
-import 'rxjs/add/observable/zip';
+import 'rxjs/add/observable/combineLatest';
 import {BaseFormComponent} from '../../../../../../../common/base/BaseFormComponent';
 import {ThError, AppContext} from '../../../../../../../common/utils/AppContext';
 import {TranslationPipe} from '../../../../../../../common/utils/localization/TranslationPipe';
@@ -39,7 +39,7 @@ export class BasicInfoOverviewEditComponent extends BaseFormComponent implements
 
 	public ngOnInit() {
 		this.isLoading = true;
-		Observable.zip(
+		Observable.combineLatest(
 			this._countriesService.getCountriesDO(),
 			this._hotelAggregator.getHotelAggregatedInfo()
 		).subscribe((result: [CountriesDO, HotelAggregatedInfo]) => {

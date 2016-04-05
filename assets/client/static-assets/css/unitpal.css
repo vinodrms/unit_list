@@ -78,7 +78,7 @@ body.nav-md .container.body .right_col { float: none; display: table-cell; verti
 .page-info { padding:12px; }
 
 .signup-step-01 { background:#fff url(/client/static-assets/images/signup_background_01.png) right bottom no-repeat !important; background-size: contain;  } 
-.signup-step-05 { background:#fff url(/client/static-assets/images/singup_background_05.png) right bottom no-repeat !important; background-size: contain;  } 
+.signup-step-05 { background:#fff url(/client/static-assets/images/signup_background_01.png) right bottom no-repeat !important; background-size: contain;  } 
 .signup-skip { margin-right:12px; }
 
 .btn.btn-app {
@@ -130,7 +130,7 @@ input:focus {
  
     @media only screen and (min-width : 768px) {
 		
- .bottom-row { position:absolute; display:block; bottom:24px; right:24px; width:100%; }
+ .bottom-row { position:absolute; display:block; bottom:0px; right:24px; width:100%; }
 
     }
 	

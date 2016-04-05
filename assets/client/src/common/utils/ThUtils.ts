@@ -18,6 +18,19 @@ export class ThUtils {
 		}
 		return false;
 	}
+	public getObjectValueByPropertyStack(object: Object, parameterStack: string): any {
+		if(this.isUndefinedOrNull(object, parameterStack)) {
+			return null;
+		}
+		var currentObject = object;
+		var parameterStackArray: string[] = parameterStack.split(".");
+		for (var i = 0; i < parameterStackArray.length; i++) {
+			var param = parameterStackArray[i];
+			currentObject = currentObject[param];
+		}
+		return currentObject;
+	}
+	
 	public firstArrayIncludedInSecond<T>(firstArray: T[], secondArray: T[]): boolean {
         var diffArray: T[] = _.difference(firstArray, secondArray);
         return diffArray.length == 0;
