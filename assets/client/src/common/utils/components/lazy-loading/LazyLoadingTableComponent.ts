@@ -14,7 +14,7 @@ import {TableOptions} from './utils/TableOptions';
 
 @Component({
 	selector: 'lazy-loading-table',
-	templateUrl: "/client/src/common/utils/components/lazy-loading/template/lazy-loading-table.html",
+	templateUrl: '/client/src/common/utils/components/lazy-loading/template/lazy-loading-table.html',
 	directives: [LoadingComponent],
 	pipes: [TranslationPipe, PricePipe, PercentagePipe]
 })
