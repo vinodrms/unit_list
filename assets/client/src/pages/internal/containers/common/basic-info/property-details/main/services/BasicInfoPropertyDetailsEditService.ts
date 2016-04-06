@@ -26,9 +26,8 @@ export class BasicInfoPropertyDetailsEditService {
 		this._hotel = hotel;
 	}
     
-    public updateTimezone(timezone: TimezoneDO) {
-        debugger
-	    this._hotel.timezone = timezone.name;        	
+    public updateTimezone(timezone: string) {
+	    this._hotel.timezone = timezone;        	
 	}
     
     public updateCheckInFrom(checkInFromHour: ThHourDO) {
@@ -51,21 +50,21 @@ export class BasicInfoPropertyDetailsEditService {
         this._hotel.operationHours.cancellationHour = cancellationHour;
     }
     
-    //TODO
     private isValid() {
-		return true;
+		return this._hotel.timezone && this._hotel.operationHours.checkInFrom.isValid() && this._hotel.operationHours.checkOutTo.isValid() && this._hotel.operationHours.cancellationHour.isValid();
 	}
     
     public savePropertyDetails(): Observable<any> {
 		this.didSubmitForm = true;
+
 		if (!this.isValid()) {
 			var errorMessage = this._appContext.thTranslation.translate("Please complete all the required fields");
 			this._appContext.toaster.error(errorMessage);
 			return this.reject();
 		}
 		this._hotel.amenityIdList = this._hotelAmenities.getSelectedHotelAmenityList();
+
 		return new Observable<any>((observer: Observer<any>) => {
-            debugger
 			this._hotelService.updatePropertyDetails(this._hotel).subscribe((hotel: HotelDetailsDO) => {
 				observer.next(hotel);
 				observer.complete();

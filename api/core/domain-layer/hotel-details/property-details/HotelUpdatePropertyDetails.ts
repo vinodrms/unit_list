@@ -125,7 +125,9 @@ export class HotelUpdatePropertyDetails {
 		this._validatedOperationHoursDO = new OperationHoursDO();
 		this._validatedOperationHoursDO.checkInFrom = this.buildHourDOFrom(this._propertyDetailsDO.operationHours.checkInFrom);
 		this._validatedOperationHoursDO.checkOutTo = this.buildHourDOFrom(this._propertyDetailsDO.operationHours.checkOutTo);
-		if (!this._validatedOperationHoursDO.checkInFrom.isValid() || !this._validatedOperationHoursDO.checkOutTo.isValid()) {
+		this._validatedOperationHoursDO.cancellationHour = this.buildOptionalHourDOFrom(this._propertyDetailsDO.operationHours.cancellationHour);
+        if (!this._validatedOperationHoursDO.checkInFrom.isValid() || !this._validatedOperationHoursDO.checkOutTo.isValid() ||
+            !this._validatedOperationHoursDO.cancellationHour.isValid()) {
 			return false;
 		}
 		this._validatedOperationHoursDO.checkInToOptional = this.buildOptionalHourDOFrom(this._propertyDetailsDO.operationHours.checkInToOptional);

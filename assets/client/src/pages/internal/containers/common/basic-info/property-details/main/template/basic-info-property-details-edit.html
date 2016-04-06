@@ -5,53 +5,47 @@
             <h2>{{ 'Select the timezone' | translate }}</h2><small>{{ 'This will be used for automatic processes that need to know your local hour' | translate }}</small>
         </label>
 
-        <div class="form-group">
+        <div class="form-group" [ngClass]="{bad: displayTimezoneError()}">
             <select class="select2_single form-control" [ngModel]="hotel.timezone" (change)="updateTimezone($event.target.value)">
-                <option *ngFor="#timezone of timezoneList" [value]="timezone">{{timezone.name}}</option>
+                <option *ngFor="#timezone of timezoneList" [value]="timezone.name">{{timezone.name}}</option>
             </select>
+            <label *ngIf="displayTimezoneError()" class="form-label"><small><i class="fa fa-info-circle"></i> {{ 'Select a timezone' | translate }}</small></label>
         </div>
 
         <hr>
         <div class="row">
             <div class="col-xs-6">
                 <label>{{ 'Check in from' | translate }}</label>
-
-                <select class="form-control" [ngModel]="hotel.operationHours.checkInFrom" (change)="updateCheckInFrom($event.target.value)">
-                    <option *ngFor="#operationHour of operationHoursList" [value]="operationHour">{{operationHour.hour | hour}}:{{operationHour.minute | minute}}</option>
-                </select>
-
+                <th-hour-select [hoursList]="operationHoursList" [initialHourIndex]="initialCheckInFromIndex" (onHourSelected)="diChangeCheckInFrom($event)"
+                [isRequired]="true" errorMessage="{{ 'Required' | translate }}" [didSubmitForm]="didSubmitForm"></th-hour-select>
             </div>
 
             <div class="col-xs-6">
-                <label>{{ 'Check in to' | translate }}</label>
-                <select class="form-control" [ngModel]="hotel.operationHours.checkInTo" (change)="updateCheckInTo($event.target.value)">
-                    <option *ngFor="#operationHour of operationHoursList" [value]="operationHour">{{operationHour.hour | hour}}:{{operationHour.minute | minute}}</option>
-                </select>
+                <label>{{ 'Check in to (optional)' | translate }}</label>
+                <th-hour-select [hoursList]="operationHoursList" [initialHourIndex]="initialCheckInToIndex" (onHourSelected)="diChangeCheckInTo($event)"
+                [isRequired]="false" [didSubmitForm]="didSubmitForm"></th-hour-select>
             </div>
         </div>
         <hr>
         <div class="row">
             <div class="col-xs-6">
-                <label>{{ 'Check out from' | translate }}</label>
-                <select class="form-control" [ngModel]="hotel.operationHours.checkOutFrom" (change)="updateCheckOutFrom($event.target.value)">
-                    <option *ngFor="#operationHour of operationHoursList" [value]="operationHour">{{operationHour.hour | hour}}:{{operationHour.minute | minute}}</option>
-                </select>
+                <label>{{ 'Check out from (optional)' | translate }}</label>
+                <th-hour-select [hoursList]="operationHoursList" [initialHourIndex]="initialCheckOutFromIndex" (onHourSelected)="diChangeCheckOutFrom($event)"
+                [isRequired]="false" [didSubmitForm]="didSubmitForm"></th-hour-select>
             </div>
 
             <div class="col-xs-6">
                 <label>{{ 'Check out to' | translate }}</label>
-                <select class="form-control" [ngModel]="hotel.operationHours.checkOutTo" (change)="updateCheckOutTo($event.target.value)">
-                    <option *ngFor="#operationHour of operationHoursList" [value]="operationHour">{{operationHour.hour | hour}}:{{operationHour.minute | minute}}</option>
-                </select>
+                <th-hour-select [hoursList]="operationHoursList" [initialHourIndex]="initialCheckOutToIndex" (onHourSelected)="diChangeCheckOutTo($event)"
+                [isRequired]="true" errorMessage="{{ 'Required' | translate }}" [didSubmitForm]="didSubmitForm"></th-hour-select>
             </div>
         </div>
         <hr>
         <div class="row">
             <div class="col-xs-6">
                 <label>{{ 'Booking Cancellation Hour' | translate }}</label>
-                <select class="form-control" [ngModel]="hotel.operationHours.cancellationHour" (change)="updateCancellationHour($event.target.value)">
-                    <option *ngFor="#operationHour of operationHoursList" [value]="operationHour">{{operationHour.hour | hour}}:{{operationHour.minute | minute}}</option>
-                </select>
+                <th-hour-select [hoursList]="operationHoursList" [initialHourIndex]="initialBookingCancellationHourIndex" (onHourSelected)="diChangeCancellationHour($event)"
+                [isRequired]="true" errorMessage="{{ 'Required' | translate }}" [didSubmitForm]="didSubmitForm"></th-hour-select>
             </div>
         </div>
     </div>
@@ -64,19 +58,19 @@
         <div class="form-group">
             <div class="button-items" *ngFor="#hotelAmenityVM of hotelAmenities.hotelAmenityList">
                 <div class="info-block block-info clearfix">
-                    <div data-toggle="buttons" class="btn-group bizmoduleselect">
-                        <label class="btn btn-default">
-                            <div class="bizcontent">
-                                <input type="checkbox" [(ngModel)]="hotelAmenityVM.isSelected">
+                    <div data-toggle="buttons" class="btn-group">
+                        <label class="btn btn-default" [ngClass]="{active: hotelAmenityVM.isSelected}" (click)="hotelAmenityVM.toggle()">
+                            <div>
                                 <span class="glyphicon glyphicon-ok glyphicon-lg"></span>
                                 <h5>{{hotelAmenityVM.hotelAmenity.name}}</h5>
                             </div>
+                            
                         </label>
                     </div>
                 </div>
             </div>
         </div>
-
+        
     </div>
 
 </div>

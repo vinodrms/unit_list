@@ -4,6 +4,10 @@ import {HotelAmenitiesDO} from '../../../../../../../services/settings/data-obje
 export class HotelAmenityVM {
     hotelAmenity: AmenityDO;
     isSelected: boolean;
+    
+    public toggle() {
+        this.isSelected = !this.isSelected;
+    }
 }
 
 export class HotelAmenityVMContainer {
