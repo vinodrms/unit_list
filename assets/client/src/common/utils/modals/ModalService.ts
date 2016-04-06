@@ -4,6 +4,8 @@ import {ModalBackdropComponent} from './utils/components/ModalBackdropComponent'
 import {ModalContainerComponent} from './utils/components/ModalContainerComponent';
 import {ModalDialogInstance} from './utils/ModalDialogInstance';
 import {ThError} from '../responses/ThError';
+import {ConfirmationModalComponent} from './modals/confirmation/ConfirmationModalComponent';
+import {ConfirmationModalInput} from './modals/confirmation/utils/ConfirmationModalInput';
 
 @Injectable()
 export class ModalService implements IModalService {
@@ -24,7 +26,7 @@ export class ModalService implements IModalService {
 	private openCore<T>(resolve: { (result: ModalDialogInstance<T>): void }, reject: { (err: ThError): void }, componentType: FunctionConstructor, providers: ResolvedProvider[]) {
 		let dialog = new ModalDialogInstance<T>();
 		let dialogProviders = Injector.resolve([provide(ModalDialogInstance, { useValue: dialog })]);
-		
+
 		this._componentLoader.loadNextToLocation(ModalBackdropComponent, this._elementRef, dialogProviders)
 			.then((backdropRef: ComponentRef) => {
 				dialog.backdropRef = backdropRef;
@@ -45,5 +47,22 @@ export class ModalService implements IModalService {
 				console.error(err);
 				reject(new ThError("Error opening popup"));
 			});
+	}
+	public confirm(title: string, content: string, onConfirmCallback: { (): void }, onRejectCallback?: { (): void }) {
+		var confirmationModalInput = new ConfirmationModalInput();
+		confirmationModalInput.title = title;
+		confirmationModalInput.content = content;
+
+		this.open<any>(<any>ConfirmationModalComponent, Injector.resolve([
+			provide(ConfirmationModalInput, { useValue: confirmationModalInput })
+		])).then((modalInstance: ModalDialogInstance<any>) => {
+			modalInstance.resultObservable.subscribe((result: any) => {
+				onConfirmCallback();
+			}, (err: any) => {
+				if(onRejectCallback) {
+					onRejectCallback();
+				}
+			});
+		});
 	}
 }

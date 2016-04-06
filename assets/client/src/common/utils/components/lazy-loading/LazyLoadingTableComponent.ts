@@ -9,16 +9,8 @@ import {LazyLoadTableMeta, TableRowCommand, TableColumnValueMeta, TablePropertyT
 import {ILazyLoadRequestService, LazyLoadData, PageContent} from '../../../../pages/internal/services/common/ILazyLoadRequestService';
 import {TotalCountDO} from '../../../../pages/internal/services/common/data-objects/lazy-load/TotalCountDO';
 import {PageMetaDO} from '../../../../pages/internal/services/common/data-objects/lazy-load/PageMetaDO';
-
-interface PagePaginationIndex {
-	pageNumber: number;
-	displayNumber: number;
-	isSelected: boolean;
-}
-class TableItem<T> {
-	isSelected: boolean;
-	item: T;
-}
+import {PaginationIndex} from './utils/PaginationIndex';
+import {TableOptions} from './utils/TableOptions';
 
 @Component({
 	selector: 'lazy-loading-table',
@@ -27,149 +19,97 @@ class TableItem<T> {
 	pipes: [TranslationPipe, PricePipe, PercentagePipe]
 })
 export class LazyLoadingTableComponent<T> {
-	private _isCollapsed: boolean;
+	protected _isCollapsed: boolean;
 
-	public get isCollapsed(): boolean {
+	protected get isCollapsed(): boolean {
 		return this._isCollapsed;
 	}
 	@Input()
-	public set isCollapsed(isCollapsed: boolean) {
+	protected set isCollapsed(isCollapsed: boolean) {
 		this._isCollapsed = isCollapsed;
 		if (!this.tableMeta || !this.tableMeta.columnMetaList) {
 			return;
 		}
-		this.updateColumnMetaList();
+		this.filterColumnMetaList();
+
+		if (this._isCollapsed && !this.paginationIndex.defaultNoOfItemsPerPageIsSelected()) {
+			var selectedItemIndex = this.getSelectedItemIndexInPageItemList();
+			var newPageNumber = this.paginationIndex.getUpdatedPageNumber(this.totalCount, this.pageMeta, selectedItemIndex);
+
+			this.paginationIndex.numOfItemsPerPage = PaginationIndex.DefaultItemsPerPage;
+			this.lazyLoadingRequest.updatePageNumberAndPageSize(newPageNumber, PaginationIndex.DefaultItemsPerPage);
+		}
 	}
 
-	@Output() onAdd = new EventEmitter();
-	public addItem() {
+	@Output() protected onAdd = new EventEmitter();
+	protected addItem() {
 		this.onAdd.next({});
 	}
 
-	@Output() onCopy = new EventEmitter();
-	public copyItem(itemVM: TableItem<T>) {
-		this.deselectItemsDifferentThan(itemVM.item);
-		itemVM.isSelected = false;
-		this.onCopy.next(itemVM.item);
+	@Output() protected onCopy = new EventEmitter();
+	protected copyItem(item: T) {
+		this.deselectCurrentItem();
+		this.onCopy.next(item);
 	}
 
-	@Output() onDelete = new EventEmitter();
-	public deleteItem(itemVM: TableItem<T>) {
-		this.deselectItemsDifferentThan(itemVM.item);
-		itemVM.isSelected = true;
-		this.onDelete.next(itemVM.item);
+	@Output() protected onDelete = new EventEmitter();
+	protected deleteItem(item: T) {
+		this.deselectCurrentItem();
+		this.onDelete.next(item);
 	}
 
-	@Output() onEdit = new EventEmitter();
-	public editItem(itemVM: TableItem<T>) {
-		this.deselectItemsDifferentThan(itemVM.item);
-		itemVM.isSelected = true;
-		this.onEdit.next(itemVM.item);
+	@Output() protected onEdit = new EventEmitter();
+	protected editItem(item: T) {
+		this.deselectCurrentItem();
+		this.selectTableItem(item);
+		this.onEdit.next(item);
 	}
 
-	@Output() onSelect = new EventEmitter();
+	@Output() protected onSelect = new EventEmitter();
 
-	didInit: boolean = false;
-	numOfItemsPerPage: number = 10;
-	lazyLoadingRequest: ILazyLoadRequestService<T>;
+	protected didInit: boolean = false;
 
-	tableMeta: LazyLoadTableMeta;
-	columnMetaList: TableColumnMeta[];
-	totalCount: TotalCountDO;
-	pageMeta: PageMetaDO;
-	itemVMList: TableItem<T>[];
+	protected lazyLoadingRequest: ILazyLoadRequestService<T>;
+	protected tableMeta: LazyLoadTableMeta;
+	protected columnMetaList: TableColumnMeta[];
+	protected totalCount: TotalCountDO;
+	protected pageMeta: PageMetaDO;
+	protected itemList: T[] = [];
+	protected selectedItemId: string = "";
 
-	canSelect: boolean = false;
-	canCopy: boolean = false;
-	canEdit: boolean = false;
-	canDelete: boolean = false;
-	canAdd: boolean = false;
-	canSearch: boolean = false;
-	textSearchControl: Control;
+	protected tableOptions: TableOptions;
+	protected textSearchControl: Control;
 
-	firstPageNumber: number;
-	lastPageNumber: number;
-	paginationIndexList: PagePaginationIndex[];
-	pageNumberStat: string;
+	protected paginationIndex: PaginationIndex;
 
 	constructor(private _appContext: AppContext) {
+		this.paginationIndex = new PaginationIndex(_appContext);
+		this.tableOptions = new TableOptions();
 	}
 
 	public bootstrap(lazyLoadingRequest: ILazyLoadRequestService<T>, tableMeta: LazyLoadTableMeta) {
 		setTimeout(() => {
 			this.lazyLoadingRequest = lazyLoadingRequest;
-			this.attachRequestObservable();
 			this.tableMeta = tableMeta;
-			this.updatePageOptions();
+
+			this.attachRequestObservable();
+			this.tableOptions.updatePageOptions(tableMeta);
 		});
-	}
-	private updatePageOptions() {
-		this.canSelect = _.contains(this.tableMeta.supportedRowCommandList, TableRowCommand.Select);
-		this.canEdit = _.contains(this.tableMeta.supportedRowCommandList, TableRowCommand.Edit);
-		this.canCopy = _.contains(this.tableMeta.supportedRowCommandList, TableRowCommand.Copy);
-		this.canDelete = _.contains(this.tableMeta.supportedRowCommandList, TableRowCommand.Delete);
-		this.canAdd = _.contains(this.tableMeta.supportedRowCommandList, TableRowCommand.Add);
-		if (this.canAdd && !this.tableMeta.addButtonText) {
-			this.tableMeta.addButtonText = "Add";
-		}
-		this.canSearch = _.contains(this.tableMeta.supportedRowCommandList, TableRowCommand.Search);
-		if (this.canSearch && !this.tableMeta.searchInputPlaceholder) {
-			this.tableMeta.searchInputPlaceholder = "Search";
-		}
 	}
 	private attachRequestObservable() {
 		this.lazyLoadingRequest.getDataObservable().subscribe((lazyLoadData: LazyLoadData<T>) => {
 			this.totalCount = lazyLoadData.totalCount;
 			this.pageMeta = lazyLoadData.pageContent.pageMeta;
+			this.itemList = lazyLoadData.pageContent.pageItemList;
 
-			this.updatePageItemVMList(lazyLoadData);
-			this.buildPaginationOptions();
+			this.paginationIndex.buildPaginationOptions(this.totalCount, this.pageMeta);
 			this.registerSearchInputObservable();
-			this.updateColumnMetaList();
+			this.filterColumnMetaList();
 
 			this.didInit = true;
 		});
 		this.lazyLoadingRequest.refreshData();
 	}
-	private updatePageItemVMList(lazyLoadData: LazyLoadData<T>) {
-		this.itemVMList = [];
-		_.forEach(lazyLoadData.pageContent.pageItemList, (item: T) => {
-			var newItem = new TableItem<T>();
-			newItem.isSelected = false;
-			newItem.item = item;
-			this.itemVMList.push(newItem);
-		});
-	}
-	private buildPaginationOptions() {
-		this.firstPageNumber = 0;
-		this.lastPageNumber = this.totalCount.getLastPageIndex(this.numOfItemsPerPage);
-		this.paginationIndexList = [];
-		this.addPaginationIndex(this.pageMeta.pageNumber - 1);
-		this.addPaginationIndex(this.pageMeta.pageNumber);
-		this.addPaginationIndex(this.pageMeta.pageNumber + 1);
-
-		var fromIndex = (this.pageMeta.pageNumber * this.pageMeta.pageSize) + 1;
-		if (this.totalCount.numOfItems == 0) {
-			fromIndex = 0;
-		}
-		this.pageNumberStat = this._appContext.thTranslation.translate("Showing %fromIndex% to %toIndex% of %totalCount% items",
-			{
-				fromIndex: fromIndex,
-				toIndex: Math.min(((this.pageMeta.pageNumber + 1) * this.pageMeta.pageSize), this.totalCount.numOfItems),
-				totalCount: this.totalCount.numOfItems
-			})
-	}
-	private addPaginationIndex(pageNumber: number) {
-		if (pageNumber < this.firstPageNumber || pageNumber > this.lastPageNumber) {
-			return;
-		}
-		this.paginationIndexList.push({
-			displayNumber: pageNumber + 1,
-			pageNumber: pageNumber,
-			isSelected: pageNumber === this.pageMeta.pageNumber
-		});
-	}
-
 	private registerSearchInputObservable() {
 		if (this.textSearchControl) {
 			return;
@@ -182,74 +122,90 @@ export class LazyLoadingTableComponent<T> {
 				this.searchByText();
 			});
 	}
-	private updateColumnMetaList() {
+	private filterColumnMetaList() {
 		if (this.isCollapsed) {
-			this.columnMetaList = _.filter(this.tableMeta.columnMetaList, (columnMeta: TableColumnMeta) => {
-				return columnMeta.valueMeta.showInCollapsedView;
-			});
-			return;
+			this.columnMetaList = _.filter(this.tableMeta.columnMetaList, (columnMeta: TableColumnMeta) => { return columnMeta.valueMeta.showInCollapsedView; });
 		}
-		this.columnMetaList = this.tableMeta.columnMetaList;
+		else {
+			this.columnMetaList = this.tableMeta.columnMetaList;
+		}
 	}
 
-
-	public searchByText() {
+	protected searchByText() {
 		this.lazyLoadingRequest.searchByText(this.textSearchControl.value);
 	}
 
-	public isFirstPage(): boolean {
-		return this.pageMeta.pageNumber === this.firstPageNumber;
+	protected isFirstPage(): boolean {
+		return this.pageMeta.pageNumber === this.paginationIndex.firstPageNumber;
 	}
-	public isLastPage(): boolean {
-		return this.pageMeta.pageNumber === this.lastPageNumber;
+	protected isLastPage(): boolean {
+		return this.pageMeta.pageNumber === this.paginationIndex.lastPageNumber;
 	}
-	public updatePageNumber(pageNumber: number) {
-		if (pageNumber >= this.firstPageNumber && pageNumber <= this.lastPageNumber) {
+	protected updatePageNumber(pageNumber: number) {
+		if (pageNumber >= this.paginationIndex.firstPageNumber && pageNumber <= this.paginationIndex.lastPageNumber) {
 			this.lazyLoadingRequest.updatePageNumber(pageNumber);
 		}
 	}
 
-	public isPercentage(valueMeta: TableColumnValueMeta): boolean {
+	protected isPercentage(valueMeta: TableColumnValueMeta): boolean {
 		return valueMeta.propertyType === TablePropertyType.PercentageType;
 	}
-	public isPrice(valueMeta: TableColumnValueMeta): boolean {
+	protected isPrice(valueMeta: TableColumnValueMeta): boolean {
 		return valueMeta.propertyType === TablePropertyType.PriceType;
 	}
-	public isStringOrNumber(valueMeta: TableColumnValueMeta): boolean {
+	protected isStringOrNumber(valueMeta: TableColumnValueMeta): boolean {
 		return valueMeta.propertyType === TablePropertyType.NumberType || valueMeta.propertyType === TablePropertyType.StringType;
 	}
 
-	public didChangeNumOfItemsPerPage(newValue: string) {
-		this.numOfItemsPerPage = parseInt(newValue);
-		this.lazyLoadingRequest.updatePageSize(this.numOfItemsPerPage);
+	protected didChangeNumOfItemsPerPage(newValue: string) {
+		this.paginationIndex.numOfItemsPerPage = parseInt(newValue);
+		this.lazyLoadingRequest.updatePageSize(this.paginationIndex.numOfItemsPerPage);
 	}
 
-	public onItemSelected(item: T, eventValue: any): boolean {
-		this.deselectItemsDifferentThan(item);
-		if (eventValue) {
-			this.onSelect.next(item);
+	protected didSelectItem(item: T) {
+		this.deselectCurrentItem();
+		this.selectTableItem(item);
+		this.onSelect.next(item)
+	}
+
+	private deselectCurrentItem() {
+		if (this.tableMeta.autoSelectRows) {
+			this.deselectItem();
 		}
-		return true;
 	}
-	public markSelected(itemVM: TableItem<T>) {
-		itemVM.isSelected = true;
+	public deselectItem() {
+		this.selectedItemId = "";
 	}
-	private deselectItemsDifferentThan(item: T) {
-		var selectedId = this.getItemId(item);
-		_.forEach(this.itemVMList, (listItem: TableItem<T>) => {
-			if (selectedId !== this.getItemId(listItem.item)) {
-				listItem.isSelected = false;
+	private selectTableItem(item: T) {
+		if (this.tableMeta.autoSelectRows) {
+			this.selectItem(this.getItemId(item));
+		}
+	}
+	public selectItem(itemId: string) {
+		this.selectedItemId = itemId;
+	}
+	protected isSelected(item: T) {
+		return this.getItemId(item) === this.selectedItemId;
+	}
+
+	private getSelectedItemIndexInPageItemList(): number {
+		if (!this.selectedItemId) {
+			return Math.floor(this.itemList.length / 2);
+		}
+		for (var index = 0; index < this.itemList.length; index++) {
+			if (this.getItemId(this.itemList[index]) === this.selectedItemId) {
+				return index;
 			}
-		});
+		}
 	}
 	private getItemId(item: T): string {
 		return this._appContext.thUtils.getObjectValueByPropertyStack(item, this.tableMeta.rowIdPropertySelector);
 	}
 
-	public getItemValue(item: T, valueMeta: TableColumnValueMeta): any {
+	protected getItemValue(item: T, valueMeta: TableColumnValueMeta): any {
 		return this._appContext.thUtils.getObjectValueByPropertyStack(item, valueMeta.objectPropertyId);
 	}
-	public getDependentItemValue(item: T, valueMeta: TableColumnValueMeta): any {
+	protected getDependentItemValue(item: T, valueMeta: TableColumnValueMeta): any {
 		return this._appContext.thUtils.getObjectValueByPropertyStack(item, valueMeta.dependentObjectPropertyId);
 	}
 }

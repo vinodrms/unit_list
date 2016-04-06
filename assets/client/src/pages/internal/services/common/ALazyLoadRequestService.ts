@@ -50,6 +50,7 @@ export abstract class ALazyLoadRequestService<T> implements ILazyLoadRequestServ
 	}
 	public updateSearchCriteria(searchCriteria: Object) {
 		this._searchCriteria = searchCriteria;
+		this._pageMeta.pageNumber = 0;
 		this.refreshData();
 	}
 	public updatePageNumber(pageNumber: number) {
@@ -59,6 +60,11 @@ export abstract class ALazyLoadRequestService<T> implements ILazyLoadRequestServ
 	public updatePageSize(pageSize: number) {
 		this._pageMeta.pageSize = pageSize;
 		this._pageMeta.pageNumber = 0;
+		this.updatePageData();
+	}
+	public updatePageNumberAndPageSize(pageNumber: number, pageSize: number) {
+		this._pageMeta.pageSize = pageSize;
+		this._pageMeta.pageNumber = pageNumber;
 		this.updatePageData();
 	}
 

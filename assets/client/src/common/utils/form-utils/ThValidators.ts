@@ -6,6 +6,7 @@ import {VatValidator} from './validators/VatValidator';
 import {BooleanValidator} from './validators/BooleanValidator';
 import {PhoneValidator} from './validators/PhoneValidator';
 import {UrlValidator} from './validators/UrlValidator';
+import {PriceValidator} from './validators/PriceValidator';
 
 export class ThValidators {
 	public static emailValidator(control: AbstractControl): ValidationResult {
@@ -31,6 +32,12 @@ export class ThValidators {
 	}
 	public static nullableUrlValidator(control: AbstractControl): ValidationResult {
 		return ThValidators.validator(control, new UrlValidator(true));
+	}
+	public static priceValidator(control: AbstractControl): ValidationResult {
+		return ThValidators.validator(control, new PriceValidator());
+	}
+	public static nullablePriceValidator(control: AbstractControl): ValidationResult {
+		return ThValidators.validator(control, new PriceValidator(true));
 	}
 
 	private static validator(control: AbstractControl, thValidator: AThValidator): ValidationResult {

@@ -12,6 +12,7 @@ export class WizardService implements IWizardState, IWizardController {
 
 	private _stateList: IWizardState[];
 	private _currentState: IWizardState;
+	private _wizardButtonsVisible: boolean = true;
 
 	constructor(private _appContext: AppContext,
 		basicInfo: WizardBasicInformationStateService, beds: WizardBedsStateService, addOnProducts: WizardAddOnProductsStateService) {
@@ -56,6 +57,7 @@ export class WizardService implements IWizardState, IWizardController {
 			if (moveToStart) {
 				relativePath = this._currentState.getMeta().startRelativeComponentPath;
 			}
+			this._wizardButtonsVisible = true;
 			this._appContext.routerNavigator.navigateTo(WizardService.NavigationBase + relativePath);
 		}
 	}
@@ -108,5 +110,11 @@ export class WizardService implements IWizardState, IWizardController {
 	}
 	public set wizardController(wizardController: IWizardController) {
 		this._currentState.wizardController = wizardController;
+	}
+	public get wizardButtonsVisible(): boolean {
+		return this._wizardButtonsVisible;
+	}
+	public set wizardButtonsVisible(wizardButtonsVisible: boolean) {
+		this._wizardButtonsVisible = wizardButtonsVisible;
 	}
 }

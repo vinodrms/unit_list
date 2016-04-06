@@ -1,7 +1,7 @@
 import {Injectable, Inject, Injector} from 'angular2/core';
-import {IModalService} from '../IModalService';
+import {IModalService} from '../../IModalService';
 import {LoadingModalComponent} from './LoadingModalComponent';
-import {ModalDialogInstance} from '../utils/ModalDialogInstance';
+import {ModalDialogInstance} from '../../utils/ModalDialogInstance';
 
 @Injectable()
 export class LoadingModalService {
