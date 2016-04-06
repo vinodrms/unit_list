@@ -256,3 +256,7 @@ input[type="number"].form-control {
 .grid-btn {
     margin: 2px !important;
 }
+/* Bootstrap img-responsive bug on Firefox */
+.img-responsive {
+	width: 100%;
+}
