@@ -47,6 +47,8 @@ export class AddOnProductsComponent extends BaseComponent {
 	public addAddOnProduct() {
 		var newAddOnProductVM = this.buildNewAddOnProductVM();
 		this._inventoryStateManager.canPerformAction(InventoryScreenAction.Add).then((newState: InventoryScreenStateType) => {
+			this._aopTableComponent.deselectItem();
+			
 			this._inventoryStateManager.currentItem = newAddOnProductVM;
 			this._inventoryStateManager.screenStateType = newState;
 		}).catch((e: any) => { });
@@ -55,6 +57,8 @@ export class AddOnProductsComponent extends BaseComponent {
 		var newAddOnProductVM = addOnProductVM.buildPrototype();
 		delete newAddOnProductVM.addOnProduct.id;
 		this._inventoryStateManager.canPerformAction(InventoryScreenAction.Copy, newAddOnProductVM).then((newState: InventoryScreenStateType) => {
+			this._aopTableComponent.deselectItem();
+			
 			this._inventoryStateManager.currentItem = newAddOnProductVM;
 			this._inventoryStateManager.screenStateType = newState;
 		}).catch((e: any) => { });
@@ -62,6 +66,8 @@ export class AddOnProductsComponent extends BaseComponent {
 	public editAddOnProduct(addOnProductVM: AddOnProductVM) {
 		var newAddOnProductVM = addOnProductVM.buildPrototype();
 		this._inventoryStateManager.canPerformAction(InventoryScreenAction.Edit, newAddOnProductVM).then((newState: InventoryScreenStateType) => {
+			this._aopTableComponent.selectItem(newAddOnProductVM.addOnProduct.id);
+			
 			this._inventoryStateManager.currentItem = newAddOnProductVM;
 			this._inventoryStateManager.screenStateType = newState;
 		}).catch((e: any) => { });
@@ -74,6 +80,8 @@ export class AddOnProductsComponent extends BaseComponent {
 
 			this._appContext.modalService.confirm(title, content, () => {
 				if (newState === InventoryScreenStateType.View) {
+					this._aopTableComponent.deselectItem();
+					
 					this._inventoryStateManager.currentItem = null;
 				}
 				this._inventoryStateManager.screenStateType = newState;
@@ -84,12 +92,16 @@ export class AddOnProductsComponent extends BaseComponent {
 	public selectAddOnProduct(addOnProductVM: AddOnProductVM) {
 		var newAddOnProductVM = addOnProductVM.buildPrototype();
 		this._inventoryStateManager.canPerformAction(InventoryScreenAction.Select, newAddOnProductVM).then((newState: InventoryScreenStateType) => {
+			this._aopTableComponent.selectItem(newAddOnProductVM.addOnProduct.id);
+			
 			this._inventoryStateManager.currentItem = newAddOnProductVM;
 			this._inventoryStateManager.screenStateType = newState;
 		}).catch((e: any) => { });
 	}
 
 	public showViewScreen() {
+		this._aopTableComponent.deselectItem();
+		
 		this._inventoryStateManager.currentItem = null;
 		this._inventoryStateManager.screenStateType = InventoryScreenStateType.View;
 	}

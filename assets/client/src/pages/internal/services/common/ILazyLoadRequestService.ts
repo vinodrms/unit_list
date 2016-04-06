@@ -15,6 +15,7 @@ export interface ILazyLoadRequestService<T> {
 	updateSearchCriteria(searchCriteria: Object);
 	updatePageNumber(pageNumber: number);
 	updatePageSize(pageSize: number);
+	updatePageNumberAndPageSize(pageNumber: number, pageSize: number);
 	getDataObservable(): Observable<LazyLoadData<T>>;
 	searchByText(text: string);
 	refreshData();

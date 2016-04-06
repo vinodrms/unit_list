@@ -62,6 +62,11 @@ export abstract class ALazyLoadRequestService<T> implements ILazyLoadRequestServ
 		this._pageMeta.pageNumber = 0;
 		this.updatePageData();
 	}
+	public updatePageNumberAndPageSize(pageNumber: number, pageSize: number) {
+		this._pageMeta.pageSize = pageSize;
+		this._pageMeta.pageNumber = pageNumber;
+		this.updatePageData();
+	}
 
 	private updateCount() {
 		this._appContext.thHttp.post(this._countApi, this.getParameters()).map((countObject: Object) => {

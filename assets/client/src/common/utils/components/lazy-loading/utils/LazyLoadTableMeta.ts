@@ -37,4 +37,5 @@ export interface LazyLoadTableMeta {
 	supportedRowCommandList: TableRowCommand[];
 	addButtonText?: string;
 	searchInputPlaceholder?: string;
+	autoSelectRows: boolean;
 }

@@ -10,6 +10,7 @@ export class AddOnProductTableMetaBuilderService {
 			rowIdPropertySelector: "addOnProduct.id",
 			addButtonText: "Add-On Product",
 			searchInputPlaceholder: "Search by name",
+			autoSelectRows: false,
 			columnMetaList: [
 				{
 					displayName: "Name",
