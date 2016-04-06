@@ -79,7 +79,7 @@ export abstract class ALazyLoadRequestService<T> implements ILazyLoadRequestServ
 			this._countObserver.error(error);
 		});
 	}
-	private updatePageData() {
+	protected updatePageData() {
 		this._appContext.thHttp.post(this._pageDataApi, this.getParameters())
 			.map((pageDataObject: Object) => {
 				var pageMeta: PageMetaDO = new PageMetaDO();

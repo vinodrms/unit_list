@@ -39,7 +39,10 @@ class AddOnProductEntity extends BasePersistentEntity {
             },
 			taxIdList: {
                 type: 'array',
-                required: true,
+				defaultsTo: []
+            },
+			fileUrlList: {
+                type: 'array',
 				defaultsTo: []
             },
 			notes: {

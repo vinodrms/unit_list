@@ -137,5 +137,7 @@ export var EnglishTranslations: Object = {
 	"The VAT is included in the price.": "The VAT is included in the price.",
 	"Add On Product Image": "Add On Product Image",
 	"Edit Add-On Product": "Edit Add-On Product",
-	"Create New Add-On Product": "Create New Add-On Product"
+	"Create New Add-On Product": "Create New Add-On Product",
+	"Save Changes": "Save Changes",
+	"Cancel": "Cancel"
 };

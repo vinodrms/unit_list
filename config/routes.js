@@ -62,7 +62,7 @@ module.exports.routes = {
 	'POST /api/addOnProducts/count': 'AddOnProductsController.getAddOnProductListCount',
 	'GET /api/addOnProducts/categoryIdList': 'AddOnProductsController.getAddOnProductCategoryIdList',
 	'POST /api/addOnProducts/saveAddOnProductItem': 'AddOnProductsController.saveAddOnProductItem',
-	'POST /api/addOnProducts/deleteAddOnProductItem': 'AddOnProductMsController.deleteAddOnProductItem',
+	'POST /api/addOnProducts/deleteAddOnProductItem': 'AddOnProductsController.deleteAddOnProductItem',
 	'GET /api/addOnProducts/addOnProductItem': 'AddOnProductsController.getAddOnProductById',
 
 	'POST /api/customers': 'CustomersController.getCustomerList',

@@ -20,6 +20,7 @@ export class AddOnProductOverviewComponent extends BaseComponent {
 	@Input()
 	public set addOnProductVM(addOnProductVM: AddOnProductVM) {
 		this._addOnProductVM = addOnProductVM;
+		this.imageUrl = "";
 		if (this._addOnProductVM.addOnProduct.fileUrlList && this._addOnProductVM.addOnProduct.fileUrlList.length > 0) {
 			this.imageUrl = this._addOnProductVM.addOnProduct.fileUrlList[0];
 		}
