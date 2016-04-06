@@ -1,4 +1,4 @@
-import {Component, ViewChild, AfterViewInit} from 'angular2/core';
+import {Component, ViewChild, AfterViewInit, Output, EventEmitter} from 'angular2/core';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/combineLatest';
 import {BaseComponent} from '../../../../../../../common/base/BaseComponent';
@@ -21,6 +21,8 @@ import {InventoryScreenAction} from '../../utils/state-manager/InventoryScreenAc
 	directives: [LazyLoadingTableComponent, AddOnProductOverviewComponent, AddOnProductEditComponent]
 })
 export class AddOnProductsComponent extends BaseComponent {
+	@Output() protected onScreenStateTypeChanged = new EventEmitter();
+	
 	@ViewChild(LazyLoadingTableComponent)
 	private _aopTableComponent: LazyLoadingTableComponent<AddOnProductVM>;
 
@@ -31,6 +33,12 @@ export class AddOnProductsComponent extends BaseComponent {
 		private _addOnProductsService: AddOnProductsService) {
 		super();
 		this._inventoryStateManager = new InventoryStateManager<AddOnProductVM>(this._appContext, "addOnProduct.id");
+		this.registerStateChange();
+	}
+	private registerStateChange() {
+		this._inventoryStateManager.stateChangedObservable.subscribe((currentState: InventoryScreenStateType) => {
+			this.onScreenStateTypeChanged.next(currentState);
+		});
 	}
 
 	public ngAfterViewInit() {

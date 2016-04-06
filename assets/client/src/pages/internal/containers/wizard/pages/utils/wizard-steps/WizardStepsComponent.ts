@@ -3,6 +3,7 @@ import {BaseComponent} from '../../../../../../../common/base/BaseComponent';
 import {TranslationPipe} from '../../../../../../../common/utils/localization/TranslationPipe';
 import {WizardService} from '../../wizard-pages/services/WizardService';
 import {IWizardState} from '../../wizard-pages/services/IWizardState';
+import {IWizardController} from '../../wizard-pages/services/IWizardController';
 
 @Component({
 	selector: 'wizard-steps-component',
@@ -12,12 +13,14 @@ import {IWizardState} from '../../wizard-pages/services/IWizardState';
 
 export class WizardStepsComponent extends BaseComponent {
 	private _currentState: IWizardState;
+	private _wizardController: IWizardController;
 
 	isMovingNext: boolean = false;
 
 	constructor(wizardService: WizardService) {
 		super();
 		this._currentState = wizardService;
+		this._wizardController = wizardService;
 	}
 	public hasNext(): boolean {
 		return this._currentState.hasNext();
@@ -43,4 +46,7 @@ export class WizardStepsComponent extends BaseComponent {
 	public handleSkipPressed() {
 		this._currentState.handleSkipPressed();
 	}
+	public get wizardButtonsVisible(): boolean {
+		return this._wizardController.wizardButtonsVisible;
+	}	
 }
