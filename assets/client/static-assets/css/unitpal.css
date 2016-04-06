@@ -219,3 +219,9 @@ input[type="number"].form-control {
     border-color: rgba(54, 206, 141, 1.0) !important;
 }
 /* End Bootstrap overrides */
+
+/* ThCSS */
+.grid-btn {
+    margin: 2px !important;
+}
+/* End ThCSS */
