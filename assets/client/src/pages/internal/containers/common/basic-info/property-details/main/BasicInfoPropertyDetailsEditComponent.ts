@@ -40,8 +40,6 @@ export class BasicInfoPropertyDetailsEditComponent extends BaseComponent impleme
     initialCheckOutToIndex: number;
     initialBookingCancellationHourIndex: number;
     
-    amenities: number[] = [1, 2];
-    
     constructor(private _appContext: AppContext,
         private _hotelAggregator: HotelAggregatorService,
         private _propertyDetailsEditService: BasicInfoPropertyDetailsEditService,
