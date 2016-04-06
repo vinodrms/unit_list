@@ -103,12 +103,18 @@ export class LazyLoadingTableComponent<T> {
 			this.itemList = lazyLoadData.pageContent.pageItemList;
 
 			this.paginationIndex.buildPaginationOptions(this.totalCount, this.pageMeta);
+			this.checkInvalidPageNumber();
 			this.registerSearchInputObservable();
 			this.filterColumnMetaList();
 
 			this.didInit = true;
 		});
 		this.lazyLoadingRequest.refreshData();
+	}
+	private checkInvalidPageNumber() {
+		if (this.paginationIndex.isInvalidPageNumber(this.totalCount, this.pageMeta)) {
+			this.lazyLoadingRequest.updatePageNumber(this.paginationIndex.lastPageNumber);
+		}
 	}
 	private registerSearchInputObservable() {
 		if (this.textSearchControl) {
@@ -155,6 +161,9 @@ export class LazyLoadingTableComponent<T> {
 	}
 	protected isStringOrNumber(valueMeta: TableColumnValueMeta): boolean {
 		return valueMeta.propertyType === TablePropertyType.NumberType || valueMeta.propertyType === TablePropertyType.StringType;
+	}
+	protected noResultsExist(): boolean {
+		return this.totalCount.numOfItems === 0 && this.itemList.length === 0;
 	}
 
 	protected didChangeNumOfItemsPerPage(newValue: string) {

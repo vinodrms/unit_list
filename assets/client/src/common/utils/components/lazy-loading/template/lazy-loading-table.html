@@ -39,7 +39,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			<tr *ngFor="#item of itemList" [ngClass]="{active: (isSelected(item) && tableOptions.canSelect)}">
+			<tr *ngIf="!noResultsExist" *ngFor="#item of itemList" [ngClass]="{active: (isSelected(item) && tableOptions.canSelect)}">
 				<td *ngFor="#columnMeta of columnMetaList" (click)="tableOptions.canSelect && didSelectItem(item)">
 					<span *ngIf="isPercentage(columnMeta.valueMeta)">
 						{{ getItemValue(item, columnMeta.valueMeta) | percentage }}
@@ -62,6 +62,13 @@
 					<a class="btn btn-xs" *ngIf="tableOptions.canDelete" (click)="deleteItem(item)">
 						<i class="fa fa-remove"></i>
 					</a>
+				</td>
+			</tr>
+			<tr *ngIf="noResultsExist">
+				<td [attr.colspan]="columnMetaList.length + 1">
+					<center>
+						{{ 'No items to display' | translate }}
+					</center>
 				</td>
 			</tr>
 		</tbody>

@@ -142,5 +142,6 @@ export var EnglishTranslations: Object = {
 	"Cancel": "Cancel",
 	"Skip Add-On Products": "Skip Add-On Products",
 	"Are you sure you want to skip adding add on products ?": "Are you sure you want to skip adding add on products ?",
-	"Are you sure you want to go forward without adding any add on product ?": "Are you sure you want to go forward without adding any add on product ?"
+	"Are you sure you want to go forward without adding any add on product ?": "Are you sure you want to go forward without adding any add on product ?",
+	"No items to display": "No items to display"
 };

@@ -130,7 +130,7 @@ input:focus {
  
     @media only screen and (min-width : 768px) {
 		
- .bottom-row { position:absolute; display:block; bottom:24px; right:24px; width:100%; }
+ .bottom-row { position:absolute; display:block; bottom:0px; right:24px; width:100%; }
 
     }
 	
