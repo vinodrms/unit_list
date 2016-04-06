@@ -72,7 +72,7 @@ export class WizardService implements IWizardState, IWizardController {
 		return this._currentState.handlePreviousPressed();
 	}
 	public handleSkipPressed(): Promise<any> {
-		return this._currentState.handlePreviousPressed();
+		return this._currentState.handleSkipPressed();
 	}
 	public canSkip(): boolean {
 		return this._currentState.canSkip();

@@ -89,7 +89,6 @@ export class AddOnProductsComponent extends BaseComponent {
 			this._appContext.modalService.confirm(title, content, () => {
 				if (newState === InventoryScreenStateType.View) {
 					this._aopTableComponent.deselectItem();
-
 					this._inventoryStateManager.currentItem = null;
 				}
 				this._inventoryStateManager.screenStateType = newState;

@@ -139,5 +139,8 @@ export var EnglishTranslations: Object = {
 	"Edit Add-On Product": "Edit Add-On Product",
 	"Create New Add-On Product": "Create New Add-On Product",
 	"Save Changes": "Save Changes",
-	"Cancel": "Cancel"
+	"Cancel": "Cancel",
+	"Skip Add-On Products": "Skip Add-On Products",
+	"Are you sure you want to skip adding add on products ?": "Are you sure you want to skip adding add on products ?",
+	"Are you sure you want to go forward without adding any add on product ?": "Are you sure you want to go forward without adding any add on product ?"
 };
