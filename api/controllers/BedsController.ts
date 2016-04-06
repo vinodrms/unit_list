@@ -3,9 +3,10 @@ import {ThStatusCode} from '../core/utils/th-responses/ThResponse';
 import {AppContext} from '../core/utils/AppContext';
 import {SessionContext} from '../core/utils/SessionContext';
 import {SaveBedItem} from '../core/domain-layer/beds/SaveBedItem';
-import {BedMetaRepoDO} from '../core/data-layer/beds/repositories/IBedRepository';
+import {BedMetaRepoDO, BedSearchResultRepoDO} from '../core/data-layer/beds/repositories/IBedRepository';
 import {DeleteBedItem} from '../core/domain-layer/beds/DeleteBedItem';
 import {BedDO} from '../core/data-layer/common/data-objects/bed/BedDO';
+import {LazyLoadRepoDO, LazyLoadMetaResponseRepoDO} from '../core/data-layer/common/repo-data-objects/LazyLoadRepoDO';
 
 class BedsController extends BaseController {
 	
@@ -33,13 +34,26 @@ class BedsController extends BaseController {
         var bedMeta = this.getBedMetaRepoDOFrom(sessionContext);
         
 		var bedRepo = appContext.getRepositoryFactory().getBedRepository();
-		bedRepo.getBedList(bedMeta).then((beds: BedDO[]) => {
+		bedRepo.getBedList(bedMeta).then((beds: BedSearchResultRepoDO) => {
 			this.returnSuccesfulResponse(req, res, { beds: beds });
 		}).catch((err: any) => {
 			this.returnErrorResponse(req, res, err, ThStatusCode.BedControllerErrorGettingBeds);
 		});
 	}
+    
+    public getBedListCount(req: Express.Request, res: Express.Response) {
+		var appContext: AppContext = req.appContext;
+		var sessionContext: SessionContext = req.sessionContext;
 
+		var bedMeta = this.getBedMetaRepoDOFrom(sessionContext);
+		var bedRepo = appContext.getRepositoryFactory().getBedRepository();
+		bedRepo.getBedListCount(bedMeta, req.body.searchCriteria).then((lazyLoadMeta: LazyLoadMetaResponseRepoDO) => {
+			this.returnSuccesfulResponse(req, res, lazyLoadMeta);
+		}).catch((err: any) => {
+			this.returnErrorResponse(req, res, err, ThStatusCode.BedsControllerErrorGettingCount);
+		});
+	}
+    
 	public saveBedItem(req: Express.Request, res: Express.Response) {
 		var saveBedItem = new SaveBedItem(req.appContext, req.sessionContext);
 		saveBedItem.save(req.body.bed).then((updatedBed: BedDO) => {
@@ -68,5 +82,6 @@ module.exports = {
     getBedById: bedsController.getBedById.bind(bedsController),
 	getBedList: bedsController.getBedList.bind(bedsController),
 	saveBedItem: bedsController.saveBedItem.bind(bedsController),
-	deleteBedItem: bedsController.deleteBedItem.bind(bedsController)
+	deleteBedItem: bedsController.deleteBedItem.bind(bedsController),
+    getBedListCount: bedsController.getBedListCount.bind(bedsController)
 }

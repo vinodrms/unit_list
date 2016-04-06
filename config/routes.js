@@ -54,6 +54,7 @@ module.exports.routes = {
     'GET /api/settings/bedTemplates': 'SettingsController.getBedTemplates',
 
     'POST /api/beds': 'BedsController.getBedList',
+    'POST /api/beds/count': 'BedsController.getBedListCount',
     'POST /api/beds/saveBedItem': 'BedsController.saveBedItem',
 	'POST /api/beds/deleteBedItem': 'BedsController.deleteBedItem',
     'GET /api/beds/bedItem': 'BedsController.getBedById',
