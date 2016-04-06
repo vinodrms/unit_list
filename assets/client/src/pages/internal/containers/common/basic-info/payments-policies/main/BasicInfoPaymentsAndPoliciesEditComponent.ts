@@ -50,7 +50,6 @@ export class BasicInfoPaymentsAndPoliciesEditComponent extends BaseComponent imp
 			this._currenciesService.getCurrenciesDO(),
 			this._hotelAggregator.getHotelAggregatedInfo()
 		).subscribe((result: [CurrenciesDO, HotelAggregatedInfo]) => {
-            debugger
 			this.currencies = result[0];
 			var hotelAggregatedInfo = result[1];
 			
