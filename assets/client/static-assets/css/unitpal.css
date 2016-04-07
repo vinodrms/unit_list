@@ -38,7 +38,7 @@ header { height:80px !important; padding:12px 24px 0px 24px;  }
 
 .row.main-row { height:100%; display: table-row; }
 
-.login_logo { 	margin-bottom:24px; }
+.login_logo { 	margin-bottom:24px; max-width: 150px; height: auto; }
 .singup_logo { max-width:60px; height:auto; margin-bottom:24px;}
 .signup-title { font-weight:200; font-size: 24px; padding-left: 24px; border-left: 1px solid #fff; color:#fff; float:left; }
 .navbar-right { margin-top:0px; }
@@ -241,16 +241,16 @@ input[type="number"].form-control {
 .btn-primary:active,
 .btn-primary:visited,
 .btn-primary:focus {
-    background-color:rgba(255, 132, 50, 1.0) !important;
-    border-color: rgba(255, 132, 50, 1.0) !important;
+    background-color: #6098D1 !important;
+    border-color: #6098D1 !important;
 }
 .btn-danger,
 .btn-danger:hover,
 .btn-danger:active,
 .btn-danger:visited,
 .btn-danger:focus {
-    background-color:rgba(54, 206, 141, 1.0) !important;
-    border-color: rgba(54, 206, 141, 1.0) !important;
+	background-color:#F89D28 !important;
+    border-color: #F89D28 !important;
 }
 /* End Bootstrap overrides */
 
