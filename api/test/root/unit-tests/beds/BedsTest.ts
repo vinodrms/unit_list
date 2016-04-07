@@ -12,6 +12,7 @@ import {BedDO, BedSizeDO, BedStatus} from '../../../../core/data-layer/common/da
 import {SaveBedItem} from '../../../../core/domain-layer/beds/SaveBedItem';
 import {DeleteBedItem} from '../../../../core/domain-layer/beds/DeleteBedItem';
 import {SaveBedItemDO} from '../../../../core/domain-layer/beds/SaveBedItemDO';
+import {BedSearchResultRepoDO} from '../../../../core/data-layer/beds/repositories/IBedRepository';
 
 describe("Hotel Beds Tests", function() {
     var testContext: TestContext;
@@ -100,10 +101,10 @@ describe("Hotel Beds Tests", function() {
 	describe("Hotel Get Beds & Delete Flow", function() {
 		it("Should get the previously added beds", function(done) {
 			var bedRepo = testContext.appContext.getRepositoryFactory().getBedRepository();
-			bedRepo.getBedList({ hotelId: testContext.sessionContext.sessionDO.hotel.id }).then((result: BedDO[]) => {
-				should.equal(result.length, numCreatedBeds);
+			bedRepo.getBedList({ hotelId: testContext.sessionContext.sessionDO.hotel.id }).then((result: BedSearchResultRepoDO) => {
+				should.equal(result.bedList.length, numCreatedBeds);
 
-				var readBed = _.find(result, (bed: BedDO) => { return bed.id === createdBed.id });
+				var readBed = _.find(result.bedList, (bed: BedDO) => { return bed.id === createdBed.id });
 				
                 bedsHelper.validate(readBed, createdBed);
 
@@ -125,8 +126,8 @@ describe("Hotel Beds Tests", function() {
 		it("Should get only the remaining beds", function(done) {
 			var bedRepo = testContext.appContext.getRepositoryFactory().getBedRepository();
             
-            bedRepo.getBedList({ hotelId: testContext.sessionContext.sessionDO.hotel.id }).then((result: BedDO[]) => {
-				should.equal(result.length, numCreatedBeds);
+            bedRepo.getBedList({ hotelId: testContext.sessionContext.sessionDO.hotel.id }).then((result: BedSearchResultRepoDO) => {
+				should.equal(result.bedList.length, numCreatedBeds);
 				done();
 			}).catch((err: any) => {
 				done(err);

@@ -121,6 +121,7 @@ export enum ThStatusCode {
     BedRepositoryErrorAddingBed,
     BedRepositoryNameAlreadyExists,
     BedRepositoryErrorUpdatingBed,
+    BedRepositoryErrorReadingDocumentCount,
     BedItemUpdateStrategyErrorUpdating,
     SaveBedItemError,
     SaveBedItemInvalidBedTemplateId,
@@ -131,6 +132,7 @@ export enum ThStatusCode {
     BedControllerErrorSavingBed,
     BedControllerErrorDeletingBed,
     BedControllerErrorGettingBedById,
+    BedsControllerErrorGettingCount,
     HotelUpdatePaymentsPoliciesErrorPrecheckingConstraints,
     HotelUpdatePaymentPoliciesInvalidTaxes,
     HotelUpdatePaymentsPoliciesError,
@@ -328,6 +330,7 @@ ThMessage[ThStatusCode.BedRepositoryBedNotFound] = "Bed not found.";
 ThMessage[ThStatusCode.BedRepositoryErrorAddingBed] = "An error occurred while adding this bed for the current hotel.";
 ThMessage[ThStatusCode.BedRepositoryNameAlreadyExists] = "The name of the bed already exists.";
 ThMessage[ThStatusCode.BedRepositoryErrorUpdatingBed] = "Problem updating the bed. It is possible that someone else changed it at the same time. Please refresh the page and try again.";
+ThMessage[ThStatusCode.BedRepositoryErrorReadingDocumentCount] = "Error getting document count.";
 ThMessage[ThStatusCode.BedItemUpdateStrategyErrorUpdating] = "Error updating the bed.";
 ThMessage[ThStatusCode.SaveBedItemError] = "Error saving the bed item.";
 ThMessage[ThStatusCode.SaveBedItemInvalidBedTemplateId] = "Invalid bed template id.";
@@ -337,6 +340,7 @@ ThMessage[ThStatusCode.BedControllerErrorGettingBeds] = "Error getting the beds.
 ThMessage[ThStatusCode.BedControllerErrorSavingBed] = "Error saving bed.";
 ThMessage[ThStatusCode.BedControllerErrorDeletingBed] = "Error deleting bed.";
 ThMessage[ThStatusCode.BedControllerErrorGettingBedById] = "Error getting bed by id.";
+ThMessage[ThStatusCode.BedsControllerErrorGettingCount] = "Error getting the number of beds.";
 ThMessage[ThStatusCode.RoomRepositoryErrorGettingRoomList] = "Error getting the room list. Please try again.";
 ThMessage[ThStatusCode.RoomRepositoryErrorGettingRoom] = "Error getting the room. Please try again.";
 ThMessage[ThStatusCode.RoomRepositoryRoomNotFound] = "Room not found.";

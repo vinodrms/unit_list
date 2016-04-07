@@ -3,7 +3,8 @@ import {ThError} from '../../../../utils/th-responses/ThError';
 import {ThUtils} from '../../../../utils/ThUtils';
 import {ThStatusCode} from '../../../../utils/th-responses/ThResponse';
 import {MongoRepository, MongoErrorCodes} from '../../../common/base/MongoRepository';
-import {IBedRepository, BedMetaRepoDO, BedItemMetaRepoDO, BedSearchCriteriaRepoDO} from '../IBedRepository';
+import {LazyLoadRepoDO, LazyLoadMetaResponseRepoDO} from '../../../common/repo-data-objects/LazyLoadRepoDO';
+import {IBedRepository, BedMetaRepoDO, BedItemMetaRepoDO, BedSearchCriteriaRepoDO, BedSearchResultRepoDO} from '../IBedRepository';
 import {BedDO, BedStatus} from '../../../common/data-objects/bed/BedDO';
 import {MongoQueryBuilder} from '../../../common/base/MongoQueryBuilder';
 import {MongoBedReadOperationsRepository} from './operations/MongoBedReadOperationsRepository';
@@ -23,8 +24,12 @@ export class MongoBedRepository extends MongoRepository implements IBedRepositor
         this._editRepository = new MongoBedEditOperationsRepository(bedsEntity);
     }
 
-    public getBedList(bedMeta: BedMetaRepoDO, searchCriteria?: BedSearchCriteriaRepoDO): Promise<BedDO[]> {
-        return this._readRepository.getBedList(bedMeta, searchCriteria);
+    public getBedList(bedMeta: BedMetaRepoDO, searchCriteria?: BedSearchCriteriaRepoDO, lazyLoad?: LazyLoadRepoDO): Promise<BedSearchResultRepoDO> {
+        return this._readRepository.getBedList(bedMeta, searchCriteria, lazyLoad);
+    }
+    
+    public getBedListCount(bedMeta: BedMetaRepoDO, searchCriteria: BedSearchCriteriaRepoDO): Promise<LazyLoadMetaResponseRepoDO> {
+        return this._readRepository.getBedListCount(bedMeta, searchCriteria);
     }
     
     public getBedById(bedMeta: BedMetaRepoDO, bedId: string): Promise<BedDO> {
