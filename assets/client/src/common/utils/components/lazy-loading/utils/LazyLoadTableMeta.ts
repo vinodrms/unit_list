@@ -16,14 +16,16 @@ export enum TablePropertyType {
 	StringType,
 	NumberType,
 	PercentageType,
-	PriceType
+	PriceType,
+    CapacityType
 }
 
 export interface TableColumnValueMeta {
 	objectPropertyId: string;
 	propertyType: TablePropertyType;
 	dependentObjectPropertyId?: string;
-	showInCollapsedView: boolean;
+    fonts?: Object;
+    showInCollapsedView: boolean;
 }
 
 export interface TableColumnMeta {

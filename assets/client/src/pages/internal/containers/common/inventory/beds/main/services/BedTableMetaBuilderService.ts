@@ -31,24 +31,27 @@ export class BedTableMetaBuilderService {
 				{
 					displayName: "Capacity",
 					valueMeta: {
-						objectPropertyId: "",
-						propertyType: TablePropertyType.PriceType,
-						dependentObjectPropertyId: "",
+						objectPropertyId: "capacity",
+						propertyType: TablePropertyType.CapacityType,
+						fonts: {
+                            child: "fa fa-child",
+                            adult: "fa fa-male"    
+                        },
 						showInCollapsedView: false
 					}
 				},
 				{
 					displayName: "Size",
 					valueMeta: {
-						objectPropertyId: "vatTax.value",
-						propertyType: TablePropertyType.PercentageType,
+						objectPropertyId: "size",
+						propertyType: TablePropertyType.StringType,
 						showInCollapsedView: false
 					}
 				},
 				{
 					displayName: "Notes",
 					valueMeta: {
-						objectPropertyId: "addOnProduct.notes",
+						objectPropertyId: "bed.notes",
 						propertyType: TablePropertyType.StringType,
 						showInCollapsedView: false
 					}

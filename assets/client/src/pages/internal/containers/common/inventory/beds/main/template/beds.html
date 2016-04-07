@@ -1,1 +1,25 @@
-<h1>Beds Component</h1>
+<div class="overview-left" [ngClass]="{'col-sm-9': !isEditing, 'col-sm-3': isEditing}">
+	<lazy-loading-table 
+		[isCollapsed]="isEditing" 
+		(onAdd)="addBed()"
+		(onCopy)="copyBed($event)"
+		(onDelete)="deleteBed($event)"
+		(onSelect)="selectBed($event)"
+		(onEdit)="editBed($event)"
+        >
+	</lazy-loading-table>
+</div>
+<div class="col-sm-3 overview-right hidden-xs hidden-sm" *ngIf="!isEditing">
+	<bed-overview
+		*ngIf="selectedBedVM" 
+		[addOnProductVM]="selectedBedVM"
+		(onEdit)="editAddOnProduct($event)">
+	</bed-overview>
+</div>
+<div class="col-sm-9 singleview-right" *ngIf="isEditing">
+	<bed-edit
+		*ngIf="selectedBedVM" 
+		[bedVM]="selectedBedVM"
+		(onExit)="showViewScreen()">
+	</bed-edit>
+</div>

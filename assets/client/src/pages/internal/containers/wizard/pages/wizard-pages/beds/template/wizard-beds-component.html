@@ -1,1 +1,16 @@
-<h1>Beds</h1>
+<div class="signup-step-05">
+	<div class="row page-title">
+		<div class="col-sm-4">
+			<h1>{{ 'Beds' | translate }} &gt; <small>{{ 'Overview' | translate }}</small></h1>
+		</div>
+		<div class="col-sm-6 description">
+			<small>{{ '[Wizard Step 2] Beds text' | translate }}</small>
+		</div>
+		<div class="col-sm-2 text-right">
+			<h1>5 <i class="fa fa-puzzle-piece"></i></h1>
+		</div>
+	</div>
+</div>
+<div class="row x_panel">
+	<beds (onScreenStateTypeChanged)="didChangeScreenStateType($event)"></beds>
+</div>

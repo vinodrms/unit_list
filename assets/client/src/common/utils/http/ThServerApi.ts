@@ -21,7 +21,11 @@ export enum ThServerApi {
 	AddOnProducts,
 	AddOnProductsCount,
 	AddOnProductsSaveItem,
-	AddOnProductsDeleteItem
+	AddOnProductsDeleteItem,
+    Beds,
+    BedsCount,
+    BedsSaveItem,
+    BedsDeleteItem
 }
 
 var ThServerApiUrl: { [index: number]: string; } = {};
@@ -50,6 +54,10 @@ ThServerApiUrl[ThServerApi.AddOnProducts] = "/addOnProducts";
 ThServerApiUrl[ThServerApi.AddOnProductsCount] = "/addOnProducts/count";
 ThServerApiUrl[ThServerApi.AddOnProductsSaveItem] = "/addOnProducts/saveAddOnProductItem";
 ThServerApiUrl[ThServerApi.AddOnProductsDeleteItem] = "/addOnProducts/deleteAddOnProductItem";
+ThServerApiUrl[ThServerApi.Beds] = "/beds";
+ThServerApiUrl[ThServerApi.BedsCount] = "/beds/count";
+ThServerApiUrl[ThServerApi.BedsSaveItem] = "/beds/saveBedItem";
+ThServerApiUrl[ThServerApi.BedsDeleteItem] = "/beds/deleteBedItem";
 
 export class ServerApiBuilder {
 	public static ApiRoot = "/api";

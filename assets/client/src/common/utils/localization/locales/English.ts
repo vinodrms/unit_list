@@ -142,5 +142,8 @@ export var EnglishTranslations: Object = {
 	"Are you sure you want to skip adding add on products ?": "Are you sure you want to skip adding add on products ?",
 	"Are you sure you want to go forward without adding any add on product ?": "Are you sure you want to go forward without adding any add on product ?",
 	"No items to display": "No items to display",
-	"Add Add-On Product": "Add Add-On Product"
+	"Add Add-On Product": "Add Add-On Product",
+    "Delete Bed": "Delete Bed",
+    "Beds": "Beds",
+    "[Wizard Step 2] Beds text": "Bla bla",  
 };

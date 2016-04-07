@@ -4,6 +4,8 @@ import {AWizardState} from '../../services/AWizardState';
 
 @Injectable()
 export class WizardBedsStateService extends AWizardState {
+    private _totalNoOfBeds: number = 0;
+    
 	public handleNextPressed(): Promise<any> {
 		return new Promise<any>((resolve: { (result: any): void }, reject: { (err: any): void }) => {
 			this.wizardController.moveNext();
@@ -38,5 +40,12 @@ export class WizardBedsStateService extends AWizardState {
 			iconFontName: "",
 			name: "Beds"
 		};
+	}
+    
+    public get totalNoOfBeds(): number {
+		return this._totalNoOfBeds;
+	}
+	public set totalNoOfBeds(totalNoOfBeds: number) {
+		this._totalNoOfBeds = totalNoOfBeds;
 	}
 }
