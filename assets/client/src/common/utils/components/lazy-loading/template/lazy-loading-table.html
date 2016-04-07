@@ -64,6 +64,13 @@
 					</a>
 				</td>
 			</tr>
+			<tr *ngIf="noResultsExist()">
+				<td [attr.colspan]="columnMetaList.length + 1">
+					<center>
+						{{ 'No items to display' | translate }}
+					</center>
+				</td>
+			</tr>
 		</tbody>
 	</table>
 	<div class="row table-foot">

@@ -59,6 +59,15 @@ export class PaginationIndex {
 		});
 	}
 
+	public isInvalidPageNumber(totalCount: TotalCountDO, pageMeta: PageMetaDO): boolean {
+		var lastItemIndex = totalCount.numOfItems - 1;
+		if (lastItemIndex < 0) {
+			lastItemIndex = 0;
+		}
+		var indexOfFirstItemFromCurrentPage = pageMeta.pageNumber * pageMeta.pageSize;
+		return lastItemIndex < indexOfFirstItemFromCurrentPage;
+	}
+
 	public defaultNoOfItemsPerPageIsSelected() {
 		return this.numOfItemsPerPage === PaginationIndex.DefaultItemsPerPage;
 	}

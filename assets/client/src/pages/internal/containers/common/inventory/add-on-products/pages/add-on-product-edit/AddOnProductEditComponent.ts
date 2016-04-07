@@ -19,6 +19,8 @@ import {TaxDO} from '../../../../../../services/taxes/data-objects/TaxDO';
 import {HotelAggregatorService} from '../../../../../../services/hotel/HotelAggregatorService';
 import {HotelAggregatedInfo} from '../../../../../../services/hotel/utils/HotelAggregatedInfo';
 import {CurrencyDO} from '../../../../../../services/common/data-objects/currency/CurrencyDO';
+import {AddOnProductsService} from '../../../../../../services/add-on-products/AddOnProductsService';
+import {AddOnProductDO} from '../../../../../../services/add-on-products/data-objects/AddOnProductDO';
 
 @Component({
 	selector: 'add-on-product-edit',
@@ -30,6 +32,7 @@ import {CurrencyDO} from '../../../../../../services/common/data-objects/currenc
 
 export class AddOnProductEditComponent extends BaseFormComponent implements OnInit {
 	isLoading: boolean;
+	isSavingAddOnProduct: boolean = false;
 
 	addOnProductCategoryList: AddOnProductCategoryDO[];
 	vatList: TaxDO[];
@@ -59,7 +62,8 @@ export class AddOnProductEditComponent extends BaseFormComponent implements OnIn
 		private _addOnProductCategoriesService: AddOnProductCategoriesService,
 		private _taxService: TaxService,
 		private _addOnProductEditService: AddOnProductEditService,
-		private _hotelAggregatorService: HotelAggregatorService) {
+		private _hotelAggregatorService: HotelAggregatorService,
+		private _addOnProductsService: AddOnProductsService) {
 		super();
 	}
 
@@ -133,6 +137,13 @@ export class AddOnProductEditComponent extends BaseFormComponent implements OnIn
 		if (this.addOnProductVatId !== this.noVatId) {
 			addOnProduct.taxIdList.push(this.addOnProductVatId);
 		}
-		// TODO: save
+		this.isSavingAddOnProduct = true;
+		this._addOnProductsService.saveAddOnProductDO(addOnProduct).subscribe((updatedAddOnProduct: AddOnProductDO) => {
+			this.isSavingAddOnProduct = false;
+			this.showViewScreen();
+		}, (error: ThError) => {
+			this.isSavingAddOnProduct = false;
+			this._appContext.toaster.error(error.message);
+		});
 	}
 }

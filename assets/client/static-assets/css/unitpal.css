@@ -134,8 +134,14 @@ input:focus {
 
     }
 	
-.button-items  { display:inline-block; }
+.button-items  { display:inline-block; line-height:0; }
 .button-items  .btn-default { width:128px; padding:12px 12px 6px 12px; }
+
+.button-radio  { display:inline-block; line-height:0; }
+.button-radio  .btn-default { width:72px; padding:18px 12px 18px 12px; }
+ 
+.button-check { display:inline-block; line-height:0; }
+.button-check .btn-default { width:48px; padding:12px 6px 12px 6px; } 
  
  .fileinput-preview > img {
   width: auto;
@@ -172,6 +178,30 @@ table .buttons, table button, table .btn { margin:0px; }
 .save-cancel { padding-bottom:12px; margin-bottom:12px; border-bottom:1px solid #ccc; }
 .file-upload { width:100%; }
 
+.bed-group { margin-bottom: 0px; }
+.amenities-group { margin-bottom: 0px; }
+
+.bed-add a { padding:50px 12px; height:124px; }
+.bed-selector { padding: 12px; border: 1px solid #ccc; -webkit-border-radius: 4px;
+-moz-border-radius: 4px;
+border-radius: 4px;  }
+
+.bed-slot { background: #ccc;
+-webkit-border-radius: 2px;
+-moz-border-radius: 2px;
+border-radius: 2px;
+padding:6px; 
+height:102px;
+display:block;
+ }
+ 
+ .bed-slot p { color:#000; margin:0px; }
+ .bed-slot h4 { font-size:13px; margin:0; padding:0;  }
+ 
+.bed-slot:hover { background: #ccc; } 
+
+.button-cancel, .button-save, .button-copy { min-width:128px; padding:12px 16px; }
+
 label small { font-weight:normal; }
 
 .vertical-alignment-helper {
@@ -201,6 +231,8 @@ input[type="number"].form-control {
 
 /* End Fixes Section */
 
+/* 3angle TECH */
+
 /* Bootstrap overrides */
 .btn-primary,
 .btn-primary:hover,
@@ -220,8 +252,11 @@ input[type="number"].form-control {
 }
 /* End Bootstrap overrides */
 
-/* ThCSS */
+/* Grid spacing - for angular */
 .grid-btn {
     margin: 2px !important;
 }
-/* End ThCSS */
+/* Bootstrap img-responsive bug on Firefox */
+.img-responsive {
+	width: 100%;
+}

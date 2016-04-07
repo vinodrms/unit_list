@@ -23,7 +23,7 @@ gulp.task('pack-internal', function() {
         outFile: 'unitpal-internal.js'
     });
 
-	var tsResult = gulp.src('client/src/pages/internal/**/*.ts')
+	var tsResult = gulp.src(['client/src/common/**/*.ts', 'client/src/pages/internal/**/*.ts'])
 		.pipe(embedTemplates(embedTemplatesOptions))
 		.pipe(ts(tsProject));
 	return tsResult.js

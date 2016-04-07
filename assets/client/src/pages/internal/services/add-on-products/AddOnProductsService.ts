@@ -53,4 +53,21 @@ export class AddOnProductsService extends ALazyLoadRequestService<AddOnProductVM
 			name: text
 		});
 	}
+
+	public saveAddOnProductDO(addOnProduct: AddOnProductDO): Observable<AddOnProductDO> {
+		return this.runServerPostActionOnAddOnProduct(ThServerApi.AddOnProductsSaveItem, addOnProduct);
+	}
+	public deleteAddOnProductDO(addOnProduct: AddOnProductDO): Observable<AddOnProductDO> {
+		return this.runServerPostActionOnAddOnProduct(ThServerApi.AddOnProductsDeleteItem, addOnProduct);
+	}
+
+	private runServerPostActionOnAddOnProduct(apiAction: ThServerApi, addOnProduct: AddOnProductDO): Observable<AddOnProductDO> {
+		return this._appContext.thHttp.post(apiAction, { addOnProduct: addOnProduct }).map((addOnProductObject: Object) => {
+			this.refreshData();
+
+			var updatedAddOnProductDO: AddOnProductDO = new AddOnProductDO();
+			updatedAddOnProductDO.buildFromObject(addOnProductObject["addOnProduct"]);
+			return updatedAddOnProductDO;
+		});
+	}
 }

@@ -2,7 +2,7 @@ import {Component, ViewChild, AfterViewInit, Output, EventEmitter} from 'angular
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/combineLatest';
 import {BaseComponent} from '../../../../../../../common/base/BaseComponent';
-import {AppContext} from '../../../../../../../common/utils/AppContext';
+import {AppContext, ThError} from '../../../../../../../common/utils/AppContext';
 import {AddOnProductsService} from '../../../../../services/add-on-products/AddOnProductsService';
 import {AddOnProductVM} from '../../../../../services/add-on-products/view-models/AddOnProductVM';
 import {AddOnProductDO} from '../../../../../services/add-on-products/data-objects/AddOnProductDO';
@@ -22,7 +22,7 @@ import {InventoryScreenAction} from '../../utils/state-manager/InventoryScreenAc
 })
 export class AddOnProductsComponent extends BaseComponent {
 	@Output() protected onScreenStateTypeChanged = new EventEmitter();
-	
+
 	@ViewChild(LazyLoadingTableComponent)
 	private _aopTableComponent: LazyLoadingTableComponent<AddOnProductVM>;
 
@@ -56,7 +56,7 @@ export class AddOnProductsComponent extends BaseComponent {
 		var newAddOnProductVM = this.buildNewAddOnProductVM();
 		this._inventoryStateManager.canPerformAction(InventoryScreenAction.Add).then((newState: InventoryScreenStateType) => {
 			this._aopTableComponent.deselectItem();
-			
+
 			this._inventoryStateManager.currentItem = newAddOnProductVM;
 			this._inventoryStateManager.screenStateType = newState;
 		}).catch((e: any) => { });
@@ -66,7 +66,7 @@ export class AddOnProductsComponent extends BaseComponent {
 		delete newAddOnProductVM.addOnProduct.id;
 		this._inventoryStateManager.canPerformAction(InventoryScreenAction.Copy, newAddOnProductVM).then((newState: InventoryScreenStateType) => {
 			this._aopTableComponent.deselectItem();
-			
+
 			this._inventoryStateManager.currentItem = newAddOnProductVM;
 			this._inventoryStateManager.screenStateType = newState;
 		}).catch((e: any) => { });
@@ -75,7 +75,7 @@ export class AddOnProductsComponent extends BaseComponent {
 		var newAddOnProductVM = addOnProductVM.buildPrototype();
 		this._inventoryStateManager.canPerformAction(InventoryScreenAction.Edit, newAddOnProductVM).then((newState: InventoryScreenStateType) => {
 			this._aopTableComponent.selectItem(newAddOnProductVM.addOnProduct.id);
-			
+
 			this._inventoryStateManager.currentItem = newAddOnProductVM;
 			this._inventoryStateManager.screenStateType = newState;
 		}).catch((e: any) => { });
@@ -89,19 +89,25 @@ export class AddOnProductsComponent extends BaseComponent {
 			this._appContext.modalService.confirm(title, content, () => {
 				if (newState === InventoryScreenStateType.View) {
 					this._aopTableComponent.deselectItem();
-					
 					this._inventoryStateManager.currentItem = null;
 				}
 				this._inventoryStateManager.screenStateType = newState;
-				// TODO: implement aop delete
+				this.deleteAddOnProductOnServer(newAddOnProductVM.addOnProduct);
 			});
 		}).catch((e: any) => { });
 	}
+	private deleteAddOnProductOnServer(addOnProductDO: AddOnProductDO) {
+		this._addOnProductsService.deleteAddOnProductDO(addOnProductDO).subscribe((deletedAddOnProduct: AddOnProductDO) => {
+		}, (error: ThError) => {
+			this._appContext.toaster.error(error.message);
+		});
+	}
+
 	public selectAddOnProduct(addOnProductVM: AddOnProductVM) {
 		var newAddOnProductVM = addOnProductVM.buildPrototype();
 		this._inventoryStateManager.canPerformAction(InventoryScreenAction.Select, newAddOnProductVM).then((newState: InventoryScreenStateType) => {
 			this._aopTableComponent.selectItem(newAddOnProductVM.addOnProduct.id);
-			
+
 			this._inventoryStateManager.currentItem = newAddOnProductVM;
 			this._inventoryStateManager.screenStateType = newState;
 		}).catch((e: any) => { });
@@ -109,7 +115,7 @@ export class AddOnProductsComponent extends BaseComponent {
 
 	public showViewScreen() {
 		this._aopTableComponent.deselectItem();
-		
+
 		this._inventoryStateManager.currentItem = null;
 		this._inventoryStateManager.screenStateType = InventoryScreenStateType.View;
 	}
