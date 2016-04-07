@@ -12,6 +12,7 @@ export enum ThServerApi {
 	SettingsCountries,
 	SettingsCurrencies,
 	SettingsAddOnProductCategories,
+    SettingsBedTemplates,
 	ServiceUploadFile,
 	ServiceVatVerifier,
     ServiceTimezones,
@@ -34,6 +35,7 @@ ThServerApiUrl[ThServerApi.SettingsPaymentMethods] = "/settings/paymentMethods";
 ThServerApiUrl[ThServerApi.SettingsCurrencies] = "/settings/currencies";
 ThServerApiUrl[ThServerApi.SettingsCountries] = "/settings/countries";
 ThServerApiUrl[ThServerApi.SettingsAddOnProductCategories] = "/settings/addOnProductCategories";
+ThServerApiUrl[ThServerApi.SettingsBedTemplates] = "/settings/bedTemplates";
 ThServerApiUrl[ThServerApi.ServiceUploadFile] = "/service/uploadFile";
 ThServerApiUrl[ThServerApi.ServiceVatVerifier] = "/service/vatVerifier";
 ThServerApiUrl[ThServerApi.ServiceTimezones] = "/service/availableTimeZones";
