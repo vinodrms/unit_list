@@ -5,11 +5,13 @@
             <h2>{{ 'Select the timezone' | translate }}</h2><small>{{ 'This will be used for automatic processes that need to know your local hour' | translate }}</small>
         </label>
 
-        <div class="form-group" [ngClass]="{bad: displayTimezoneError()}">
-            <select class="select2_single form-control" [ngModel]="hotel.timezone" (change)="updateTimezone($event.target.value)">
-                <option *ngFor="#timezone of timezoneList" [value]="timezone.name">{{timezone.name}}</option>
-            </select>
-            <label *ngIf="displayTimezoneError()" class="form-label"><small><i class="fa fa-info-circle"></i> {{ 'Select a timezone' | translate }}</small></label>
+        <div class="form-group">
+			<div class="input-group" [ngClass]="{'form-warning': displayTimezoneError()}">
+            	<select class="select2_single form-control" [ngModel]="hotel.timezone" (change)="updateTimezone($event.target.value)">
+                	<option *ngFor="#timezone of timezoneList" [value]="timezone.name">{{timezone.name}}</option>
+            	</select>
+			</div>
+            <label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Select a timezone' | translate }}</small></label>
         </div>
 
         <hr>

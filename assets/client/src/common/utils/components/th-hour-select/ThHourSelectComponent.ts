@@ -10,12 +10,14 @@ import {TranslationPipe} from '../../../../common/utils/localization/Translation
 @Component({
     selector: 'th-hour-select',
     template: `
-        <div class="input-group" [ngClass]="{bad: displayError()}">
-            <select class="form-control" [ngClass]="{bad: displayError()}" [ngModel]="initialHourIndex" (change)="onHourChanged($event.target.value)">
-                <option *ngFor="#hourVM of hoursList" [value]="hourVM.index">{{hourVM.thHour.hour | hour}}:{{hourVM.thHour.minute | minute}}</option>
-            </select>
-            <label *ngIf="displayError()" class="form-label"><small><i class="fa fa-info-circle"></i> {{errorMessage | translate}}</small></label>
-            </div>
+		<div class="form-group">
+        	<div class="input-group" [ngClass]="{'form-warning': displayError()}">
+            	<select class="form-control" [ngModel]="initialHourIndex" (change)="onHourChanged($event.target.value)">
+                	<option *ngFor="#hourVM of hoursList" [value]="hourVM.index">{{hourVM.thHour.hour | hour}}:{{hourVM.thHour.minute | minute}}</option>
+            	</select>
+			</div>
+            <label class="form-warning"><small><i class="fa fa-info-circle"></i> {{errorMessage | translate}}</small></label>
+		</div>
         `,
     pipes: [TranslationPipe, HourPipe, MinutePipe]
 })

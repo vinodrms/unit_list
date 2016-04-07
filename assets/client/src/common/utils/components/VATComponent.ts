@@ -27,18 +27,20 @@ export interface VatResponse {
 	selector: 'vat-input',
 	template: `
 		<div class="row">
-			<div class="col-xs-12 col-md-6 form-group" [ngClass]="{bad: displayCountryError()}">
-				<select class="form-control" [ngModel]="vatDetails.countryCode" (change)="didSelectCountryCode($event.target.value)">
-					<option *ngFor="#country of countryList" [value]="country.code">{{country.name}}</option>
-				</select>
-				<label *ngIf="displayCountryError()" class="form-label"><small><i class="fa fa-info-circle"></i> {{ 'Select a country' | translate }}</small></label>
+			<div class="col-xs-12 col-md-6 form-group">
+				<div class="input-group" [ngClass]="{'form-warning': displayCountryError()}">
+					<select class="form-control" [ngModel]="vatDetails.countryCode" (change)="didSelectCountryCode($event.target.value)">
+						<option *ngFor="#country of countryList" [value]="country.code">{{country.name}}</option>
+					</select>
+				</div>
+				<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Select a country' | translate }}</small></label>
 			</div>
 			<div class="col-xs-12 col-md-6 form-group">
-				<div class="input-group" [ngClass]="{bad: displayVatError()}">
+				<div class="input-group" [ngClass]="{'form-warning': displayVatError()}">
 					<span class="input-group-addon">{{convertedCountryCode}}</span>
 					<input type="text" class="form-control" placeholder="VAT Code" [ngFormControl]="vatCodeControl" [disabled]="!vatDetails.countryCode">
-					<label *ngIf="displayVatError()" class="form-label"><small><i class="fa fa-info-circle"></i> {{ 'Insert a VAT Number' | translate }}</small></label>
 				</div>
+				<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Insert a VAT Number' | translate }}</small></label>
 			</div>
 		</div>
 	`,
