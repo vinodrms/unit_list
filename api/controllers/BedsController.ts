@@ -34,8 +34,8 @@ class BedsController extends BaseController {
         var bedMeta = this.getBedMetaRepoDOFrom(sessionContext);
         
 		var bedRepo = appContext.getRepositoryFactory().getBedRepository();
-		bedRepo.getBedList(bedMeta).then((beds: BedSearchResultRepoDO) => {
-			this.returnSuccesfulResponse(req, res, { beds: beds });
+		bedRepo.getBedList(bedMeta, req.body.searchCriteria, req.body.lazyLoad).then((beds: BedSearchResultRepoDO) => {
+			this.returnSuccesfulResponse(req, res, beds);
 		}).catch((err: any) => {
 			this.returnErrorResponse(req, res, err, ThStatusCode.BedControllerErrorGettingBeds);
 		});
