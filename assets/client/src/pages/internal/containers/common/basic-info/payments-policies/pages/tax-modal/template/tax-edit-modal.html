@@ -5,10 +5,12 @@
 </div>
 <div class="modal-body">
 	<form (submit)="saveTax()">
-		<div class="form-group" [ngClass]="{bad: (!isValidName() && didSubmitForm)}">
+		<div class="form-group">
 			<label>{{ 'Name of tax' | translate }}:</label>
-			<input type="text" class="form-control" [(ngModel)]="taxDO.name" />
-			<label *ngIf="!isValidName() && didSubmitForm" class="form-label"><small><i class="fa fa-info-circle"></i> {{ 'Enter a name' | translate }}</small></label>
+			<div class="input-group" [ngClass]="{'form-warning': (!isValidName() && didSubmitForm)}">
+				<input type="text" class="form-control" [(ngModel)]="taxDO.name" />
+			</div>
+			<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter a name' | translate }}</small></label>
 		</div>
 
 		<div class="form-group row" *ngIf="!isVatTax()">
@@ -24,17 +26,21 @@
 			<div class="col-xs-6">
 				<label *ngIf="taxDO.valueType === getPercentageTaxValueType()">1 - 100 %:</label>
 				<label *ngIf="taxDO.valueType === getFixedTaxValueType()">{{ 'Value' | translate }} {{ccyCode}}:</label>
-				<div class="form-group" [ngClass]="{bad: (!isValidValue() && didSubmitForm)}">
-					<input type="number" class="form-control" id="perval" placeholder="{{ 'Enter the value' | translate }}" [(ngModel)]="taxDO.value">
-					<label *ngIf="!isValidValue() && didSubmitForm" class="form-label"><small><i class="fa fa-info-circle"></i> {{ 'Enter a valid value' | translate }}</small></label>
+				<div class="form-group">
+					<div class="input-group" [ngClass]="{'form-warning': (!isValidValue() && didSubmitForm)}">
+						<input type="number" class="form-control" id="perval" placeholder="{{ 'Enter the value' | translate }}" [(ngModel)]="taxDO.value">
+					</div>
+					<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter a valid value' | translate }}</small></label>
 				</div>
 			</div>
 		</div>
 
-		<div class="form-group" *ngIf="isVatTax()" [ngClass]="{bad: (!isValidValue() && didSubmitForm)}">
+		<div class="form-group" *ngIf="isVatTax()">
 			<label>1 - 100 %</label>
-			<input type="number" class="form-control" placeholder="{{ 'VAT Value 0 - 100' | translate }}" [(ngModel)]="taxDO.value">
-			<label *ngIf="!isValidValue() && didSubmitForm" class="form-label"><small><i class="fa fa-info-circle"></i> {{ 'Enter a valid value' | translate }}</small></label>
+			<div class="input-group" [ngClass]="{'form-warning': (!isValidValue() && didSubmitForm)}">
+				<input type="number" class="form-control" placeholder="{{ 'VAT Value 0 - 100' | translate }}" [(ngModel)]="taxDO.value">
+			</div>
+			<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter a valid value' | translate }}</small></label>
 		</div>
 		<center>
 			<loading-button [isLoading]="isLoading" title="Save"></loading-button>

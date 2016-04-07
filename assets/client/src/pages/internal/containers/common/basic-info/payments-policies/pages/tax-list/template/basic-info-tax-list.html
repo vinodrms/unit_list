@@ -14,13 +14,15 @@
 			<td *ngIf="tax.isPercentageValue()">{{tax.value | percentage}}</td>
 			<td *ngIf="tax.isFixedValue()">{{tax.value}} {{ccyCode}}</td>
 			<td>
-				<a class="btn btn-xs" (click)="editTax(tax.id)"><i class="fa fa-pencil"></i> Edit </a>
+				<a class="btn btn-xs" (click)="editTax(tax.id)"><i class="fa fa-pencil"></i> {{ 'Edit' || translate }} </a>
 			</td>
 		</tr>
 		<tr>
 			<td></td>
 			<td>
-				<a class="btn btn-xs" (click)="addNewTax()"><i class="fa fa-plus"></i> Add </a>
+				<center>
+					<a class="btn btn-xs" (click)="addNewTax()"><i class="fa fa-plus"></i> {{ 'Add' || translate }} </a>
+				</center>
 			</td>
 			<td></td>
 		</tr>
