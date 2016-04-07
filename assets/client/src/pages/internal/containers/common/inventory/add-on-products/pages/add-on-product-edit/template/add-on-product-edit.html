@@ -2,28 +2,27 @@
 <div class="row" *ngIf="!isLoading" [ngFormModel]="getDefaultControlGroup()">
 	<div class="col-md-8">
 		<div class="row">
-			<div class="col-md-12 col-xs-12 form-group" [ngClass]="{bad: controlIsInvalid('name')}">
-				<label *ngIf="isNewAddOnProduct()">{{ 'Edit Add-On Product' | translate }}</label>
-				<label *ngIf="!isNewAddOnProduct()">{{ 'Create New Add-On Product' | translate }}</label>
-				<input type="text" placeholder="{{ 'Add-On Product Name' | translate }}" class="form-control input-group-lg" ngControl="name">
-				<label *ngIf="controlIsInvalid('name')" class="form-label"><small><i class="fa fa-info-circle"></i> {{ 'Enter a name for the add-on product' | translate }}</small></label>
+			<div class="col-md-12 col-xs-12 form-group">
+				<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('name')}">
+					<input type="text" class="form-control" placeholder="{{ 'Add-On Product Name' | translate }}" ngControl="name">
+				</div>
+				<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter a name for the add-on product' | translate }}</small></label>
 			</div>
 		</div>
-
 		<div class="row">
 			<div class="col-md-6 col-xs-12 form-group">
-				<div class="input-group" [ngClass]="{bad: controlIsInvalid('price')}">
+				<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('price')}">
 					<span class="input-group-addon">{{ccy.nativeSymbol}}</span>
 					<input type="number" placeholder="{{ 'Add On Product Price' | translate }}" class="form-control" ngControl="price">
-					<label *ngIf="controlIsInvalid('price')" class="form-label"><small><i class="fa fa-info-circle"></i> {{ 'Enter a price for the add-on product' | translate }}</small></label>
 				</div>
+				<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter a price for the add-on product' | translate }}</small></label>
 			</div>
 			<div class="col-md-6 col-xs-12 form-group">
-				<div class="input-group" [ngClass]="{bad: controlIsInvalid('internalCost')}">
+				<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('internalCost')}">
 					<span class="input-group-addon">{{ccy.nativeSymbol}}</span>
 					<input type="number" placeholder="{{ 'Internal Cost' | translate }}" class="form-control" ngControl="internalCost">
-					<label *ngIf="controlIsInvalid('internalCost')" class="form-label"><small><i class="fa fa-info-circle"></i> {{ 'Enter a valid price' | translate }}</small></label>
 				</div>
+				<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter a valid price' | translate }}</small></label>
 			</div>
 		</div>
 		<hr>
@@ -31,13 +30,13 @@
 			<div class="col-md-6 col-xs-12 form-group">
 				<label for="addoncat">{{ 'Category' | translate }}</label>
 				<br/>
-				<div class="input-group" [ngClass]="{bad: (!didSelectCategory() && didSubmitForm)}">
+				<div class="input-group" [ngClass]="{'form-warning': (!didSelectCategory() && didSubmitForm)}">
 					<label class="text-muted"><small><i class="fa fa-info-circle"></i> {{ 'The category of your add on product.' | translate }}</small></label>
 					<select class="form-control" [ngModel]="addOnProductVM.addOnProduct.categoryId" (change)="didChangeCategoryId($event.target.value)">
 						<option *ngFor="#addOnProductCategory of addOnProductCategoryList" [value]="addOnProductCategory.id">{{addOnProductCategory.name}}</option>
 					</select>
-					<label *ngIf="(!didSelectCategory() && didSubmitForm)" class="form-label"><small><i class="fa fa-info-circle"></i> {{ 'Select a category' | translate }}</small></label>
 				</div>
+				<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Select a category' | translate }}</small></label>
 			</div>
 			<div class="col-md-6 col-xs-12 form-group">
 				<label for="addoncat">{{ 'VAT' | translate }}</label>
@@ -58,16 +57,18 @@
 	</div>
 	<div class="col-md-4">
 		<label>{{ 'Add On Product Image' | translate }}</label>
-		<image-upload [imageUrl]="imageUrl" (onImageUpload)="didUploadImage($event)" ></image-upload>
+		<image-upload [imageUrl]="imageUrl" (onImageUpload)="didUploadImage($event)"></image-upload>
 	</div>
-	
+
 	<div class="row">
 		<div class="col-xs-8">
 		</div>
 		<div class="col-xs-4">
-			<button type="button" class="btn btn-primary btn-block" (click)="saveAddOnProduct()">
-				<i *ngIf="isSavingAddOnProduct" class="fa fa-spinner fa-pulse"></i>
-				{{ 'Save Changes' | translate }}
+			<button type="button" class="btn btn-primary btn-block" *ngIf="!isNewAddOnProduct()" (click)="saveAddOnProduct()">
+				<i *ngIf="isSavingAddOnProduct" class="fa fa-spinner fa-pulse"></i> {{ 'Save Changes' | translate }}
+			</button>
+			<button type="button" class="btn btn-primary btn-block" *ngIf="isNewAddOnProduct()" (click)="saveAddOnProduct()">
+				<i *ngIf="isSavingAddOnProduct" class="fa fa-spinner fa-pulse"></i> {{ 'Add Add-On Product' | translate }}
 			</button>
 		</div>
 	</div>

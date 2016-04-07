@@ -117,7 +117,7 @@ export class AddOnProductEditComponent extends BaseFormComponent implements OnIn
 		return this._addOnProductVM.addOnProduct.categoryId != null;
 	}
 	public isNewAddOnProduct(): boolean {
-		return this._addOnProductVM.addOnProduct.id != null;
+		return this._addOnProductVM.addOnProduct.id == null || this._addOnProductVM.addOnProduct.id.length == 0;
 	}
 
 	public saveAddOnProduct() {

@@ -4,9 +4,9 @@
 	<div class="row">
 		<div *ngIf="tableOptions.canSearch" [ngClass]="{'col-md-4': !isCollapsed, 'col-md-12': isCollapsed}" >
 			<div class="input-group">
-				<input type="text" class="form-control input-lg" placeholder="{{tableMeta.searchInputPlaceholder}}" [ngFormControl]="textSearchControl" />
+				<input type="text" class="form-control" placeholder="{{tableMeta.searchInputPlaceholder}}" [ngFormControl]="textSearchControl" />
 				<span class="input-group-btn">
-					<button class="btn btn-lg" type="button" (click)="searchByText()">
+					<button class="btn" type="button" (click)="searchByText()">
 						<i class="glyphicon glyphicon-search"></i>
 					</button>
 				</span>
