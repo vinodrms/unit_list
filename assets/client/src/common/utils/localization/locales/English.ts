@@ -145,5 +145,16 @@ export var EnglishTranslations: Object = {
 	"Add Add-On Product": "Add Add-On Product",
     "Delete Bed": "Delete Bed",
     "Beds": "Beds",
-    "[Wizard Step 2] Beds text": "Bla bla",  
+    "[Wizard Step 2] Beds text": "Bla bla",
+	"Breakfast": "Breakfast",
+	"Skip Breakfast": "Skip Breakfast",
+	"Are you sure you want to skip adding a breakfast ?": "Are you sure you want to skip adding a breakfast ?",
+	"Are you sure you want to go forward without adding a Breakfast ?": "Are you sure you want to go forward without adding a Breakfast ?",
+	"[Wizard Step 3] Breakfast text": "Here you can add different types of Breakfast that you can sell. Breakfast represents an Add On Product from the Breakfast category.",
+	"Breakfast Name": "Breakfast Name",
+	"Price Charged": "Price Charged",
+	"Enter a valid price that will be charged": "Enter a valid price that will be charged",
+	"Image of the Product": "Image of the Product",
+	"Product Name": "Product Name",
+	"Add Product": "Add Product"
 };

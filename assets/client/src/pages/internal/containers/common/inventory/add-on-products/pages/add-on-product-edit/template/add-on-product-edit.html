@@ -4,7 +4,7 @@
 		<div class="row">
 			<div class="col-md-12 col-xs-12 form-group">
 				<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('name')}">
-					<input type="text" class="form-control" placeholder="{{ 'Add-On Product Name' | translate }}" ngControl="name">
+					<input type="text" class="form-control" placeholder="{{ 'Product Name' | translate }}" ngControl="name">
 				</div>
 				<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter a name for the add-on product' | translate }}</small></label>
 			</div>
@@ -13,9 +13,9 @@
 			<div class="col-md-6 col-xs-12 form-group">
 				<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('price')}">
 					<span class="input-group-addon">{{ccy.nativeSymbol}}</span>
-					<input type="number" placeholder="{{ 'Add On Product Price' | translate }}" class="form-control" ngControl="price">
+					<input type="number" placeholder="{{ 'Price Charged' | translate }}" class="form-control" ngControl="price">
 				</div>
-				<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter a price for the add-on product' | translate }}</small></label>
+				<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter a valid price that will be charged' | translate }}</small></label>
 			</div>
 			<div class="col-md-6 col-xs-12 form-group">
 				<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('internalCost')}">
@@ -28,6 +28,15 @@
 		<hr>
 		<div class="row">
 			<div class="col-md-6 col-xs-12 form-group">
+				<label for="addoncat">{{ 'VAT' | translate }}</label>
+				<br/>
+				<label class="text-muted"><small><i class="fa fa-info-circle"></i> {{ 'The VAT is included in the price.' | translate }}</small></label>
+				<select class="form-control" [ngModel]="addOnProductVatId" (change)="didSelectTaxId($event.target.value)">
+					<option [value]="noVatId">{{ 'No VAT' | translate }}</option>
+					<option *ngFor="#vat of vatList" [value]="vat.id">{{vat.name}}</option>
+				</select>
+			</div>
+			<div class="col-md-6 col-xs-12 form-group" *ngIf="showCategorySelector()">
 				<label for="addoncat">{{ 'Category' | translate }}</label>
 				<br/>
 				<div class="input-group" [ngClass]="{'form-warning': (!didSelectCategory() && didSubmitForm)}">
@@ -38,15 +47,6 @@
 				</div>
 				<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Select a category' | translate }}</small></label>
 			</div>
-			<div class="col-md-6 col-xs-12 form-group">
-				<label for="addoncat">{{ 'VAT' | translate }}</label>
-				<br/>
-				<label class="text-muted"><small><i class="fa fa-info-circle"></i> {{ 'The VAT is included in the price.' | translate }}</small></label>
-				<select class="form-control" [ngModel]="addOnProductVatId" (change)="didSelectTaxId($event.target.value)">
-					<option [value]="noVatId">{{ 'No VAT' | translate }}</option>
-					<option *ngFor="#vat of vatList" [value]="vat.id">{{vat.name}}</option>
-				</select>
-			</div>
 		</div>
 		<div class="row">
 			<div class="col-md-12 col-xs-12 form-group">
@@ -56,7 +56,7 @@
 		</div>
 	</div>
 	<div class="col-md-4">
-		<label>{{ 'Add On Product Image' | translate }}</label>
+		<label>{{ 'Image of the Product' | translate }}</label>
 		<image-upload [imageUrl]="imageUrl" (onImageUpload)="didUploadImage($event)"></image-upload>
 	</div>
 
@@ -68,7 +68,7 @@
 				<i *ngIf="isSavingAddOnProduct" class="fa fa-spinner fa-pulse"></i> {{ 'Save Changes' | translate }}
 			</button>
 			<button type="button" class="btn btn-primary btn-block" *ngIf="isNewAddOnProduct()" (click)="saveAddOnProduct()">
-				<i *ngIf="isSavingAddOnProduct" class="fa fa-spinner fa-pulse"></i> {{ 'Add Add-On Product' | translate }}
+				<i *ngIf="isSavingAddOnProduct" class="fa fa-spinner fa-pulse"></i> {{ 'Add Product' | translate }}
 			</button>
 		</div>
 	</div>

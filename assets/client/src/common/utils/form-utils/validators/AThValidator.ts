@@ -16,7 +16,7 @@ export abstract class AThValidator implements Validator {
 	}
 
 	public validate(control: AbstractControl): ValidationResult {
-		if(!control.value && this._isNullable) {
+		if (this._isNullable && (control.value == null || control.value == undefined || this.isEmptyString(control.value))) {
 			return null;
 		}
 		if (this.isValidCore(control.value)) {
@@ -28,4 +28,12 @@ export abstract class AThValidator implements Validator {
 	}
 
 	protected abstract isValidCore(value: any): boolean;
+
+	private isEmptyString(value: any): boolean {
+		if (_.isString(value)) {
+			var valueStr = <string>value;
+			return valueStr.length == 0;
+		}
+		return false;
+	}
 }

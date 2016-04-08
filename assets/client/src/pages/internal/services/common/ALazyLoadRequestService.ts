@@ -16,6 +16,7 @@ export abstract class ALazyLoadRequestService<T> implements ILazyLoadRequestServ
 	private _pageDataObservable: Observable<T[]>;
 	private _pageDataObserver: Observer<T[]>;
 
+	protected _defaultSearchCriteria: Object;
 	protected _searchCriteria: Object;
 	private _pageMeta: PageMetaDO;
 
@@ -26,6 +27,7 @@ export abstract class ALazyLoadRequestService<T> implements ILazyLoadRequestServ
 		this.initPageDataObservable();
 	}
 	private initSearchCriteria() {
+		this._defaultSearchCriteria = {};
 		this._searchCriteria = {};
 	}
 	private initPageMeta() {
@@ -101,7 +103,9 @@ export abstract class ALazyLoadRequestService<T> implements ILazyLoadRequestServ
 			});
 	}
 	private getParameters(): Object {
-		return { searchCriteria: this._searchCriteria, lazyLoad: this._pageMeta };
+		var fullSearchCriteria = _.clone(this._defaultSearchCriteria);
+		fullSearchCriteria = _.extend(fullSearchCriteria, this._searchCriteria);
+		return { searchCriteria: fullSearchCriteria, lazyLoad: this._pageMeta };
 	}
 
 	public getDataObservable(): Observable<LazyLoadData<T>> {
@@ -130,4 +134,11 @@ export abstract class ALazyLoadRequestService<T> implements ILazyLoadRequestServ
 	}
 	protected abstract parsePageDataCore(pageDataObject: Object): Observable<T[]>;
 	public abstract searchByText(text: string);
+	
+	protected get defaultSearchCriteria(): Object {
+		return this._defaultSearchCriteria;
+	}
+	protected set defaultSearchCriteria(defaultSearchCriteria: Object) {
+		this._defaultSearchCriteria = defaultSearchCriteria;
+	}
 }

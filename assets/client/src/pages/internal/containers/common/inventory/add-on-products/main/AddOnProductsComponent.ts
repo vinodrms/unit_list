@@ -1,4 +1,4 @@
-import {Component, ViewChild, AfterViewInit, Output, EventEmitter} from 'angular2/core';
+import {Component, ViewChild, AfterViewInit, Input, Output, EventEmitter} from 'angular2/core';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/combineLatest';
 import {BaseComponent} from '../../../../../../../common/base/BaseComponent';
@@ -13,6 +13,9 @@ import {AddOnProductEditComponent} from '../pages/add-on-product-edit/AddOnProdu
 import {InventoryStateManager} from '../../utils/state-manager/InventoryStateManager';
 import {InventoryScreenStateType} from '../../utils/state-manager/InventoryScreenStateType';
 import {InventoryScreenAction} from '../../utils/state-manager/InventoryScreenAction';
+import {AddOnProductCategoriesService} from '../../../../../services/settings/AddOnProductCategoriesService';
+import {AddOnProductCategoriesDO} from '../../../../../services/settings/data-objects/AddOnProductCategoriesDO';
+import {AddOnProductCategoryDO} from '../../../../../services/common/data-objects/add-on-product/AddOnProductCategoryDO';
 
 @Component({
 	selector: 'add-on-products',
@@ -21,6 +24,9 @@ import {InventoryScreenAction} from '../../utils/state-manager/InventoryScreenAc
 	directives: [LazyLoadingTableComponent, AddOnProductOverviewComponent, AddOnProductEditComponent]
 })
 export class AddOnProductsComponent extends BaseComponent {
+	@Input() protected filterBreakfastCategory: boolean = false;
+	filteredCategory: AddOnProductCategoryDO;
+	
 	@Output() protected onScreenStateTypeChanged = new EventEmitter();
 
 	@ViewChild(LazyLoadingTableComponent)
@@ -30,6 +36,7 @@ export class AddOnProductsComponent extends BaseComponent {
 
 	constructor(private _appContext: AppContext,
 		private _tableBuilder: AddOnProductTableMetaBuilderService,
+		private _addOnProductCategoriesService: AddOnProductCategoriesService,
 		private _addOnProductsService: AddOnProductsService) {
 		super();
 		this._inventoryStateManager = new InventoryStateManager<AddOnProductVM>(this._appContext, "addOnProduct.id");
@@ -42,7 +49,21 @@ export class AddOnProductsComponent extends BaseComponent {
 	}
 
 	public ngAfterViewInit() {
-		this._aopTableComponent.bootstrap(this._addOnProductsService, this._tableBuilder.buildLazyLoadTableMeta());
+		if(!this.filterBreakfastCategory) {
+			this.bootstrapTableComponent();
+			return;
+		}
+		this._addOnProductCategoriesService.getAddOnProductCategoriesDO().subscribe((addOnProductCategoriesDO: AddOnProductCategoriesDO) => {
+			var breakfastCategory: AddOnProductCategoryDO = addOnProductCategoriesDO.getBreakfastCategory();
+			if(breakfastCategory && breakfastCategory.id) {
+				this.filteredCategory = breakfastCategory;
+				this._addOnProductsService.setDefaultCategory(breakfastCategory);
+			}
+			this.bootstrapTableComponent();
+		});
+	}
+	private bootstrapTableComponent() {
+		this._aopTableComponent.bootstrap(this._addOnProductsService, this._tableBuilder.buildLazyLoadTableMeta(this.filterBreakfastCategory));	
 	}
 
 	public get isEditing(): boolean {

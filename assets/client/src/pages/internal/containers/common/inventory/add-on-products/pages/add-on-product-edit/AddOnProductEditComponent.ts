@@ -42,6 +42,11 @@ export class AddOnProductEditComponent extends BaseFormComponent implements OnIn
 	imageUrl: string = "";
 	addOnProductVatId: string;
 
+	@Input() filteredCategory: AddOnProductCategoryDO;
+	public showCategorySelector(): boolean {
+		return !this.filteredCategory;
+	}
+	
 	private _addOnProductVM: AddOnProductVM;
 	public get addOnProductVM(): AddOnProductVM {
 		return this._addOnProductVM;
@@ -49,10 +54,14 @@ export class AddOnProductEditComponent extends BaseFormComponent implements OnIn
 	@Input()
 	public set addOnProductVM(addOnProductVM: AddOnProductVM) {
 		this._addOnProductVM = addOnProductVM;
+		if(this.filteredCategory) {
+			this._addOnProductVM.addOnProduct.categoryId = this.filteredCategory.id;
+		}
+		
 		this.initDefaultAddOnProductData();
 		this.initForm();
 	}
-
+	
 	@Output() onExit = new EventEmitter();
 	public showViewScreen() {
 		this.onExit.next(true);

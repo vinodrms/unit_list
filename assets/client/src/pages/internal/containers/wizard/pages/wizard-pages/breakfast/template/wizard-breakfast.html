@@ -1,13 +1,13 @@
 <div class="signup-step-05">
 	<div class="row page-title">
 		<div class="col-sm-4">
-			<h1>{{ 'Add-On Products' | translate }} &gt; 
+			<h1>{{ 'Breakfast' | translate }} &gt; 
 				<small *ngIf="!isEditScreen">{{ 'Overview' | translate }}</small>
 				<small *ngIf="isEditScreen">{{ 'Edit' | translate }}</small>
 			</h1>
 		</div>
 		<div class="col-sm-6 description">
-			<small>{{ '[Wizard Step 4] Add-On Products text' | translate }}</small>
+			<small>{{ '[Wizard Step 3] Breakfast text' | translate }}</small>
 		</div>
 		<div class="col-sm-2 text-right">
 			<h1>5 <i class="fa fa-puzzle-piece"></i></h1>
@@ -15,5 +15,5 @@
 	</div>
 </div>
 <div class="row x_panel">
-	<add-on-products (onScreenStateTypeChanged)="didChangeScreenStateType($event)"></add-on-products>
+	<add-on-products [filterBreakfastCategory]="true" (onScreenStateTypeChanged)="didChangeScreenStateType($event)"></add-on-products>
 </div>
