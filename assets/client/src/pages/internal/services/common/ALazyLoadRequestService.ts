@@ -36,12 +36,12 @@ export abstract class ALazyLoadRequestService<T> implements ILazyLoadRequestServ
 		this._pageMeta.pageSize = ALazyLoadRequestService.DefaultPageSize;
 	}
 	private initCountObservable() {
-		this._countObservable = new Observable((serviceObserver: Observer<TotalCountDO>) => {
+		this._countObservable = new Observable<TotalCountDO>((serviceObserver: Observer<TotalCountDO>) => {
 			this._countObserver = serviceObserver;
 		});
 	}
 	private initPageDataObservable() {
-		this._pageDataObservable = new Observable((serviceObserver: Observer<T[]>) => {
+		this._pageDataObservable = new Observable<T[]>((serviceObserver: Observer<T[]>) => {
 			this._pageDataObserver = serviceObserver;
 		});
 	}

@@ -127,7 +127,7 @@ export var EnglishTranslations: Object = {
 	"Confirm Discard": "Confirm Discard",
 	"Are you sure you want to discard the current editing item ?": "Are you sure you want to discard the current editing item ?",
 	"Add-On Product Name": "Add-On Product Name",
-	"Enter a name for the add-on product": "Enter a name for the add-on product",
+	"Enter a name for the product": "Enter a name for the product",
 	"Add On Product Price": "Add On Product Price",
 	"Enter a price for the add-on product": "Enter a price for the add-on product",
 	"Internal Cost": "Internal Cost",

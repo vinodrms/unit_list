@@ -13,7 +13,7 @@ export class ModalDialogInstance<T> {
 
     constructor() {
 		this._modalSize = ModalSize.Large;
-		this._resultObservable = new Observable((observer: Observer<T>) => {
+		this._resultObservable = new Observable<T>((observer: Observer<T>) => {
 			this._resultObserver = observer;
 		});
     }
