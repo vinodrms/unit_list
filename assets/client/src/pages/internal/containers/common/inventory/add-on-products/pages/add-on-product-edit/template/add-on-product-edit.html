@@ -42,6 +42,7 @@
 				<div class="input-group" [ngClass]="{'form-warning': (!didSelectCategory() && didSubmitForm)}">
 					<label class="text-muted"><small><i class="fa fa-info-circle"></i> {{ 'The category of your add on product.' | translate }}</small></label>
 					<select class="form-control" [ngModel]="addOnProductVM.addOnProduct.categoryId" (change)="didChangeCategoryId($event.target.value)">
+						<option value="" disabled>{{ 'Select a category' | translate }}</option>
 						<option *ngFor="#addOnProductCategory of addOnProductCategoryList" [value]="addOnProductCategory.id">{{addOnProductCategory.name}}</option>
 					</select>
 				</div>
