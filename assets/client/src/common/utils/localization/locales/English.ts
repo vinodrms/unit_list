@@ -156,5 +156,8 @@ export var EnglishTranslations: Object = {
 	"Enter a valid price that will be charged": "Enter a valid price that will be charged",
 	"Image of the Product": "Image of the Product",
 	"Product Name": "Product Name",
-	"Add Product": "Add Product"
+	"Add Product": "Add Product",
+	"Please add at least an active Price Product before going forward": "Please add at least an active Price Product before going forward",
+	"Price Products": "Price Products",
+	"[Wizard Step 5] Price Products": "Price Products represent price packages that contain complex rules to increase your property's earnings. They can be yielded from the Yield Manager."
 };
