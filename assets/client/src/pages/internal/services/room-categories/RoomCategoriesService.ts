@@ -4,13 +4,25 @@ import {AppContext, ThServerApi} from '../../../../common/utils/AppContext';
 import {ARequestService} from '../common/ARequestService';
 import {RoomCategoryDO} from './data-objects/RoomCategoryDO';
 
+export enum RoomCategoriesType {
+	AllCategories,
+	UsedInRooms
+}
+
 @Injectable()
 export class RoomCategoriesService extends ARequestService<RoomCategoryDO[]> {
+	private _categoriesType: RoomCategoriesType;
+	
 	constructor(private _appContext: AppContext) {
 		super();
 	}
 	protected sendRequest(): Observable<Object> {
-		return this._appContext.thHttp.post(ThServerApi.RoomCategories, {});
+		switch (this._categoriesType) {
+			case RoomCategoriesType.UsedInRooms:
+				return this._appContext.thHttp.get(ThServerApi.RoomsUsedRoomCategories);
+			default:
+				return this._appContext.thHttp.post(ThServerApi.RoomCategories, {});
+		}
 	}
 	protected parseResult(result: Object): RoomCategoryDO[] {
 		var roomCategoryList: RoomCategoryDO[] = [];
@@ -37,5 +49,12 @@ export class RoomCategoriesService extends ARequestService<RoomCategoryDO[]> {
 			roomCategoryDO.buildFromObject(taxObject["roomCategory"]);
 			return roomCategoryDO;
 		});
+	}
+	
+	public get categoriesType(): RoomCategoriesType {
+		return this._categoriesType;
+	}
+	public set categoriesType(categoriesType: RoomCategoriesType) {
+		this._categoriesType = categoriesType;
 	}
 }

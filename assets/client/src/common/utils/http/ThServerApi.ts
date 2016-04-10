@@ -28,7 +28,8 @@ export enum ThServerApi {
     BedsDeleteItem,
 	RoomCategories,
 	RoomCategoriesSaveItem,
-	RoomCategoriesStats
+	RoomCategoriesStats,
+	RoomsUsedRoomCategories
 }
 
 var ThServerApiUrl: { [index: number]: string; } = {};
@@ -64,6 +65,7 @@ ThServerApiUrl[ThServerApi.BedsDeleteItem] = "/beds/deleteBedItem";
 ThServerApiUrl[ThServerApi.RoomCategories] = "/roomCategories";
 ThServerApiUrl[ThServerApi.RoomCategoriesSaveItem] = "/roomCategories/saveRoomCategoryItem";
 ThServerApiUrl[ThServerApi.RoomCategoriesStats] = "/roomsCategories/stats";
+ThServerApiUrl[ThServerApi.RoomsUsedRoomCategories] = "/rooms/usedRoomCategories";
 
 export class ServerApiBuilder {
 	public static ApiRoot = "/api";

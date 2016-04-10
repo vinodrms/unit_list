@@ -30,6 +30,7 @@ export class RoomCategoriesModalComponent extends BaseComponent implements ICust
 		private _roomCategService: RoomCategoriesService) {
 		super();
 		this.allowCategoryEdit = this._roomCategModalInput.allowCategoryEdit;
+		this._roomCategService.categoriesType = this._roomCategModalInput.roomCategoriesType;
 	}
 
 	public ngOnInit() {
