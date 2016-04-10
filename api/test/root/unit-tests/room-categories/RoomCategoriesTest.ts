@@ -72,10 +72,11 @@ describe("Hotel Room Categories Tests", function() {
             });
         });
         it("Should not create a second room category with the same display name for the same hotel", function(done) {
-			
             var saveRoomCategoryItem = new SaveRoomCategoryItem(testContext.appContext, testContext.sessionContext);
+			var roomCategory = _.clone(createdRoomCategory);
+			delete roomCategory.id;
             
-            saveRoomCategoryItem.save(createdRoomCategory).then((result: SaveRoomCategoryItemDO) => {
+            saveRoomCategoryItem.save(roomCategory).then((result: SaveRoomCategoryItemDO) => {
                 done(new Error("did manage to create two room categories with the same display name"));    
             }).catch((e: ThError) => {
                 should.notEqual(e.getThStatusCode, ThStatusCode.Ok);
