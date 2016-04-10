@@ -12,7 +12,7 @@ export class RoomCategoryStatsDO extends BaseDO {
     maxNoChildren: number;
 
     protected getPrimitivePropertyKeys(): string[] {
-        return ["noOfRooms", "maxNoOfAdults", "maxNoOfChildren"];
+        return ["noOfRooms", "maxNoAdults", "maxNoChildren"];
     }
 
     public buildFromObject(object: Object) {
