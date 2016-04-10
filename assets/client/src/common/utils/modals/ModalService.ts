@@ -40,6 +40,7 @@ export class ModalService implements IModalService {
 				return this._componentLoader.loadIntoLocation(componentType, containerRef.location, "modalDialog", modalDataProviders);
 			})
 			.then((contentRef: ComponentRef) => {
+				this.updateModalBodyMaxHeight();
 				dialog.contentRef = contentRef;
 				resolve(dialog);
 			})
@@ -48,6 +49,11 @@ export class ModalService implements IModalService {
 				reject(new ThError("Error opening popup"));
 			});
 	}
+	private updateModalBodyMaxHeight() {
+		$('.modal .modal-body').css('overflow-y', 'auto');
+		$('.modal .modal-body').css('max-height', $(window).height() * 0.7);
+	}
+
 	public confirm(title: string, content: string, onConfirmCallback: { (): void }, onRejectCallback?: { (): void }) {
 		var confirmationModalInput = new ConfirmationModalInput();
 		confirmationModalInput.title = title;
@@ -59,7 +65,7 @@ export class ModalService implements IModalService {
 			modalInstance.resultObservable.subscribe((result: any) => {
 				onConfirmCallback();
 			}, (err: any) => {
-				if(onRejectCallback) {
+				if (onRejectCallback) {
 					onRejectCallback();
 				}
 			});

@@ -159,5 +159,7 @@ export var EnglishTranslations: Object = {
 	"Add Product": "Add Product",
 	"Please add at least an active Price Product before going forward": "Please add at least an active Price Product before going forward",
 	"Price Products": "Price Products",
-	"[Wizard Step 5] Price Products": "Price Products represent price packages that contain complex rules to increase your property's earnings. They can be yielded from the Yield Manager."
+	"[Wizard Step 5] Price Products": "Price Products represent price packages that contain complex rules to increase your property's earnings. They can be yielded from the Yield Manager.",
+	"Select Room Category": "Select Room Category",
+	"The room category name you entered already exists" : "The room category name you entered already exists"
 };
