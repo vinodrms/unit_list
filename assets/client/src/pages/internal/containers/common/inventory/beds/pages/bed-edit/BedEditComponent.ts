@@ -56,6 +56,7 @@ export class BedEditComponent extends BaseFormComponent implements OnInit {
 			this._bedTemplateService.getBedTemplatesDO()
 		).subscribe((result: [BedTemplatesDO]) => {
             this.bedTemplateList = result[0].bedTemplateList;
+            this.initDefaultBedData();
             this.isLoading = false;            
 		}, (error: ThError) => {
 			this.isLoading = false;
@@ -64,7 +65,7 @@ export class BedEditComponent extends BaseFormComponent implements OnInit {
     }
     
     private initDefaultBedData() {
-		if(!this.bedVM.bed.bedTemplateId) {
+		if(!this.bedVM.bed.bedTemplateId && this.bedTemplateList && !_.isEmpty(this.bedTemplateList)) {
             this.bedVM.bed.bedTemplateId = this.bedTemplateList[0].id;
         }
 	}
