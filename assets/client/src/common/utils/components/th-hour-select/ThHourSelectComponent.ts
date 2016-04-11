@@ -13,6 +13,7 @@ import {TranslationPipe} from '../../../../common/utils/localization/Translation
 		<div class="form-group">
         	<div class="input-group" [ngClass]="{'form-warning': displayError()}">
             	<select class="form-control" [ngModel]="initialHourIndex" (change)="onHourChanged($event.target.value)">
+                    <option value="" disabled></option>
                 	<option *ngFor="#hourVM of hoursList" [value]="hourVM.index">{{hourVM.thHour.hour | hour}}:{{hourVM.thHour.minute | minute}}</option>
             	</select>
 			</div>

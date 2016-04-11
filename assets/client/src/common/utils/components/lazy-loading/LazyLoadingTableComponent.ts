@@ -88,7 +88,8 @@ export class LazyLoadingTableComponent<T> {
 	}
 
 	public bootstrap(lazyLoadingRequest: ILazyLoadRequestService<T>, tableMeta: LazyLoadTableMeta) {
-		setTimeout(() => {
+		//wait for next tick
+        setTimeout(() => {
 			this.lazyLoadingRequest = lazyLoadingRequest;
 			this.tableMeta = tableMeta;
 
@@ -98,7 +99,7 @@ export class LazyLoadingTableComponent<T> {
 	}
 	private attachRequestObservable() {
 		this.lazyLoadingRequest.getDataObservable().subscribe((lazyLoadData: LazyLoadData<T>) => {
-			this.totalCount = lazyLoadData.totalCount;
+            this.totalCount = lazyLoadData.totalCount;
 			this.pageMeta = lazyLoadData.pageContent.pageMeta;
 			this.itemList = lazyLoadData.pageContent.pageItemList;
 
@@ -164,6 +165,12 @@ export class LazyLoadingTableComponent<T> {
 	}
 	protected isNotes(valueMeta: TableColumnValueMeta): boolean {
 		return valueMeta.propertyType === TablePropertyType.NotesType;
+	}
+    protected isCapacity(valueMeta: TableColumnValueMeta): boolean {
+		return valueMeta.propertyType === TablePropertyType.CapacityType;
+	}
+    protected isFontIcon(valueMeta: TableColumnValueMeta): boolean {
+		return valueMeta.propertyType === TablePropertyType.FontIconType;
 	}
 	protected noResultsExist(): boolean {
 		return this.totalCount.numOfItems === 0 && this.itemList.length === 0;

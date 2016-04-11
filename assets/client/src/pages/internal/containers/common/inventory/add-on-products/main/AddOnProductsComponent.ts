@@ -18,132 +18,134 @@ import {AddOnProductCategoriesDO} from '../../../../../services/settings/data-ob
 import {AddOnProductCategoryDO} from '../../../../../services/common/data-objects/add-on-product/AddOnProductCategoryDO';
 
 @Component({
-	selector: 'add-on-products',
-	templateUrl: '/client/src/pages/internal/containers/common/inventory/add-on-products/main/template/add-on-products.html',
-	providers: [AddOnProductsService, AddOnProductTableMetaBuilderService],
-	directives: [LazyLoadingTableComponent, AddOnProductOverviewComponent, AddOnProductEditComponent]
+    selector: 'add-on-products',
+    templateUrl: '/client/src/pages/internal/containers/common/inventory/add-on-products/main/template/add-on-products.html',
+    providers: [AddOnProductsService, AddOnProductTableMetaBuilderService],
+    directives: [LazyLoadingTableComponent, AddOnProductOverviewComponent, AddOnProductEditComponent]
 })
 export class AddOnProductsComponent extends BaseComponent {
-	@Input() protected filterBreakfastCategory: boolean = false;
-	filteredCategory: AddOnProductCategoryDO;
-	
-	@Output() protected onScreenStateTypeChanged = new EventEmitter();
+    @Input() protected filterBreakfastCategory: boolean = false;
+    filteredCategory: AddOnProductCategoryDO;
 
-	@ViewChild(LazyLoadingTableComponent)
-	private _aopTableComponent: LazyLoadingTableComponent<AddOnProductVM>;
+    @Output() protected onScreenStateTypeChanged = new EventEmitter();
 
-	private _inventoryStateManager: InventoryStateManager<AddOnProductVM>;
+    @ViewChild(LazyLoadingTableComponent)
+    private _aopTableComponent: LazyLoadingTableComponent<AddOnProductVM>;
 
-	constructor(private _appContext: AppContext,
-		private _tableBuilder: AddOnProductTableMetaBuilderService,
-		private _addOnProductCategoriesService: AddOnProductCategoriesService,
-		private _addOnProductsService: AddOnProductsService) {
-		super();
-		this._inventoryStateManager = new InventoryStateManager<AddOnProductVM>(this._appContext, "addOnProduct.id");
-		this.registerStateChange();
-	}
-	private registerStateChange() {
-		this._inventoryStateManager.stateChangedObservable.subscribe((currentState: InventoryScreenStateType) => {
-			this.onScreenStateTypeChanged.next(currentState);
-		});
-	}
+    private _inventoryStateManager: InventoryStateManager<AddOnProductVM>;
 
-	public ngAfterViewInit() {
-		if(!this.filterBreakfastCategory) {
-			this.bootstrapTableComponent();
-			return;
-		}
-		this._addOnProductCategoriesService.getAddOnProductCategoriesDO().subscribe((addOnProductCategoriesDO: AddOnProductCategoriesDO) => {
-			var breakfastCategory: AddOnProductCategoryDO = addOnProductCategoriesDO.getBreakfastCategory();
-			if(breakfastCategory && breakfastCategory.id) {
-				this.filteredCategory = breakfastCategory;
-				this._addOnProductsService.setDefaultCategory(breakfastCategory);
-			}
-			this.bootstrapTableComponent();
-		});
-	}
-	private bootstrapTableComponent() {
-		this._aopTableComponent.bootstrap(this._addOnProductsService, this._tableBuilder.buildLazyLoadTableMeta(this.filterBreakfastCategory));	
-	}
+    constructor(private _appContext: AppContext,
+        private _tableBuilder: AddOnProductTableMetaBuilderService,
+        private _addOnProductCategoriesService: AddOnProductCategoriesService,
+        private _addOnProductsService: AddOnProductsService) {
+        super();
+        this._inventoryStateManager = new InventoryStateManager<AddOnProductVM>(this._appContext, "addOnProduct.id");
+        this.registerStateChange();
+    }
+    private registerStateChange() {
+        this._inventoryStateManager.stateChangedObservable.subscribe((currentState: InventoryScreenStateType) => {
+            this.onScreenStateTypeChanged.next(currentState);
+        });
+    }
 
-	public get isEditing(): boolean {
-		return this._inventoryStateManager.screenStateType === InventoryScreenStateType.Edit;
-	}
-	public get selectedAddOnProductVM(): AddOnProductVM {
-		return this._inventoryStateManager.currentItem;
-	}
+    public ngAfterViewInit() {
+        if (!this.filterBreakfastCategory) {
+            this.bootstrapTableComponent();
+            return;
+        }
+        this._addOnProductCategoriesService.getAddOnProductCategoriesDO().subscribe((addOnProductCategoriesDO: AddOnProductCategoriesDO) => {
+            var breakfastCategory: AddOnProductCategoryDO = addOnProductCategoriesDO.getBreakfastCategory();
+            if (breakfastCategory && breakfastCategory.id) {
+                this.filteredCategory = breakfastCategory;
+                this._addOnProductsService.setDefaultCategory(breakfastCategory);
+            }
+            this.bootstrapTableComponent();
+        });
+    }
+    private bootstrapTableComponent() {
+        this._aopTableComponent.bootstrap(this._addOnProductsService, this._tableBuilder.buildLazyLoadTableMeta(this.filterBreakfastCategory));
+    }
 
-	public addAddOnProduct() {
-		var newAddOnProductVM = this.buildNewAddOnProductVM();
-		this._inventoryStateManager.canPerformAction(InventoryScreenAction.Add).then((newState: InventoryScreenStateType) => {
-			this._aopTableComponent.deselectItem();
+    public get isEditing(): boolean {
+        return this._inventoryStateManager.screenStateType === InventoryScreenStateType.Edit;
+    }
+    public get selectedAddOnProductVM(): AddOnProductVM {
+        return this._inventoryStateManager.currentItem;
+    }
 
-			this._inventoryStateManager.currentItem = newAddOnProductVM;
-			this._inventoryStateManager.screenStateType = newState;
-		}).catch((e: any) => { });
-	}
-	public copyAddOnProduct(addOnProductVM: AddOnProductVM) {
-		var newAddOnProductVM = addOnProductVM.buildPrototype();
-		delete newAddOnProductVM.addOnProduct.id;
-		this._inventoryStateManager.canPerformAction(InventoryScreenAction.Copy, newAddOnProductVM).then((newState: InventoryScreenStateType) => {
-			this._aopTableComponent.deselectItem();
+    public addAddOnProduct() {
+        var newAddOnProductVM = this.buildNewAddOnProductVM();
+        this._inventoryStateManager.canPerformAction(InventoryScreenAction.Add).then((newState: InventoryScreenStateType) => {
+            this._aopTableComponent.deselectItem();
 
-			this._inventoryStateManager.currentItem = newAddOnProductVM;
-			this._inventoryStateManager.screenStateType = newState;
-		}).catch((e: any) => { });
-	}
-	public editAddOnProduct(addOnProductVM: AddOnProductVM) {
-		var newAddOnProductVM = addOnProductVM.buildPrototype();
-		this._inventoryStateManager.canPerformAction(InventoryScreenAction.Edit, newAddOnProductVM).then((newState: InventoryScreenStateType) => {
-			this._aopTableComponent.selectItem(newAddOnProductVM.addOnProduct.id);
+            this._inventoryStateManager.currentItem = newAddOnProductVM;
+            this._inventoryStateManager.screenStateType = newState;
+        }).catch((e: any) => { });
+    }
+    public copyAddOnProduct(addOnProductVM: AddOnProductVM) {
+        var newAddOnProductVM = addOnProductVM.buildPrototype();
+        delete newAddOnProductVM.addOnProduct.id;
+        this._inventoryStateManager.canPerformAction(InventoryScreenAction.Copy, newAddOnProductVM).then((newState: InventoryScreenStateType) => {
+            this._aopTableComponent.deselectItem();
 
-			this._inventoryStateManager.currentItem = newAddOnProductVM;
-			this._inventoryStateManager.screenStateType = newState;
-		}).catch((e: any) => { });
-	}
-	public deleteAddOnProduct(addOnProductVM: AddOnProductVM) {
-		var newAddOnProductVM = addOnProductVM.buildPrototype();
-		this._inventoryStateManager.canPerformAction(InventoryScreenAction.Delete, newAddOnProductVM).then((newState: InventoryScreenStateType) => {
-			var title = this._appContext.thTranslation.translate("Delete Add-On Product");
-			var content = this._appContext.thTranslation.translate("Are you sure you want to delete %name% ?", { name: addOnProductVM.addOnProduct.name });
+            this._inventoryStateManager.currentItem = newAddOnProductVM;
+            this._inventoryStateManager.screenStateType = newState;
+        }).catch((e: any) => { });
+    }
+    public editAddOnProduct(addOnProductVM: AddOnProductVM) {
+        var newAddOnProductVM = addOnProductVM.buildPrototype();
+        this._inventoryStateManager.canPerformAction(InventoryScreenAction.Edit, newAddOnProductVM).then((newState: InventoryScreenStateType) => {
+            this._aopTableComponent.selectItem(newAddOnProductVM.addOnProduct.id);
 
-			this._appContext.modalService.confirm(title, content, () => {
-				if (newState === InventoryScreenStateType.View) {
-					this._aopTableComponent.deselectItem();
-					this._inventoryStateManager.currentItem = null;
-				}
-				this._inventoryStateManager.screenStateType = newState;
-				this.deleteAddOnProductOnServer(newAddOnProductVM.addOnProduct);
-			});
-		}).catch((e: any) => { });
-	}
-	private deleteAddOnProductOnServer(addOnProductDO: AddOnProductDO) {
-		this._addOnProductsService.deleteAddOnProductDO(addOnProductDO).subscribe((deletedAddOnProduct: AddOnProductDO) => {
-		}, (error: ThError) => {
-			this._appContext.toaster.error(error.message);
-		});
-	}
+            this._inventoryStateManager.currentItem = newAddOnProductVM;
+            this._inventoryStateManager.screenStateType = newState;
+        }).catch((e: any) => { });
+    }
+    public deleteAddOnProduct(addOnProductVM: AddOnProductVM) {
+        var newAddOnProductVM = addOnProductVM.buildPrototype();
+        this._inventoryStateManager.canPerformAction(InventoryScreenAction.Delete, newAddOnProductVM).then((newState: InventoryScreenStateType) => {
+            var title = this._appContext.thTranslation.translate("Delete Add-On Product");
+            var content = this._appContext.thTranslation.translate("Are you sure you want to delete %name% ?", { name: addOnProductVM.addOnProduct.name });
+            var positiveLabel = this._appContext.thTranslation.translate("Yes");
+            var negativeLabel = this._appContext.thTranslation.translate("No");
 
-	public selectAddOnProduct(addOnProductVM: AddOnProductVM) {
-		var newAddOnProductVM = addOnProductVM.buildPrototype();
-		this._inventoryStateManager.canPerformAction(InventoryScreenAction.Select, newAddOnProductVM).then((newState: InventoryScreenStateType) => {
-			this._aopTableComponent.selectItem(newAddOnProductVM.addOnProduct.id);
+            this._appContext.modalService.confirm(title, content, { positive: positiveLabel, negative: negativeLabel }, () => {
+                if (newState === InventoryScreenStateType.View) {
+                    this._aopTableComponent.deselectItem();
+                    this._inventoryStateManager.currentItem = null;
+                }
+                this._inventoryStateManager.screenStateType = newState;
+                this.deleteAddOnProductOnServer(newAddOnProductVM.addOnProduct);
+            });
+        }).catch((e: any) => { });
+    }
+    private deleteAddOnProductOnServer(addOnProductDO: AddOnProductDO) {
+        this._addOnProductsService.deleteAddOnProductDO(addOnProductDO).subscribe((deletedAddOnProduct: AddOnProductDO) => {
+        }, (error: ThError) => {
+            this._appContext.toaster.error(error.message);
+        });
+    }
 
-			this._inventoryStateManager.currentItem = newAddOnProductVM;
-			this._inventoryStateManager.screenStateType = newState;
-		}).catch((e: any) => { });
-	}
+    public selectAddOnProduct(addOnProductVM: AddOnProductVM) {
+        var newAddOnProductVM = addOnProductVM.buildPrototype();
+        this._inventoryStateManager.canPerformAction(InventoryScreenAction.Select, newAddOnProductVM).then((newState: InventoryScreenStateType) => {
+            this._aopTableComponent.selectItem(newAddOnProductVM.addOnProduct.id);
 
-	public showViewScreen() {
-		this._aopTableComponent.deselectItem();
+            this._inventoryStateManager.currentItem = newAddOnProductVM;
+            this._inventoryStateManager.screenStateType = newState;
+        }).catch((e: any) => { });
+    }
 
-		this._inventoryStateManager.currentItem = null;
-		this._inventoryStateManager.screenStateType = InventoryScreenStateType.View;
-	}
+    public showViewScreen() {
+        this._aopTableComponent.deselectItem();
 
-	private buildNewAddOnProductVM(): AddOnProductVM {
-		var vm = new AddOnProductVM();
-		vm.addOnProduct = new AddOnProductDO();
-		return vm;
-	}
+        this._inventoryStateManager.currentItem = null;
+        this._inventoryStateManager.screenStateType = InventoryScreenStateType.View;
+    }
+
+    private buildNewAddOnProductVM(): AddOnProductVM {
+        var vm = new AddOnProductVM();
+        vm.addOnProduct = new AddOnProductDO();
+        return vm;
+    }
 }

@@ -1,1 +1,25 @@
-<h1>Beds Overview</h1>
+<div class="row">
+    <div class="col-sm-12">
+        <h1><i [ngClass]="bedVM.template.iconUrl" class="fa-4x"></i></h1>
+    </div>
+    <div class="col-sm-12">
+        <kbd>{{ 'Selected' | translate }}</kbd>
+    </div>
+    <div class="col-sm-12">
+        <h1>{{ bedVM.bed.name }}</h1>
+    </div>
+    <div class="col-sm-12">
+        <small>Accomodates {{ bedVM.bed.maxNoAdults }} <i class="fa fa-male"></i> {{ bedVM.bed.maxNoChildren }} <i class="fa fa-child"></i></small>
+        <br/>
+        <small>Size <i class="fa fa-arrows-h"></i> {{ bedVM.bed.size.lengthCm }} <i class="fa fa-arrows-v"> {{ bedVM.bed.size.widthCm }}</i></small>
+    </div>
+
+    <div class="col-sm-12">
+        <small>{{ bedVM.bed.notes }}</small>
+    </div>
+    <div class="col-sm-12">
+		<a class="btn btn-lg" (click)="editBed()">
+			<i class="fa fa-pencil"></i> {{ 'Edit' | translate }}
+		</a>
+	</div>
+</div>

@@ -25,8 +25,7 @@ export class BedsService extends ALazyLoadRequestService<BedVM> {
 		return Observable.combineLatest(
 			this._bedTemplatesService.getBedTemplatesDO()
 		).map((result: [BedTemplatesDO]) => {
-            var bedTemplates = result[0];
-            
+            var bedTemplates = result[0];            
             var beds = new BedsDO;
             beds.buildFromObject(pageDataObject);
             

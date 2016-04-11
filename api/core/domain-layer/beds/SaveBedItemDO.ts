@@ -34,10 +34,6 @@ export class SaveBedItemDO {
 				validationStruct: new PrimitiveValidationStructure(new NumberValidationRule())
 			},
             {
-				key: "status",
-				validationStruct: new PrimitiveValidationStructure(new NumberValidationRule())
-			},
-            {
 				key: "size",
 				validationStruct: new ObjectValidationStructure([
 					{

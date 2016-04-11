@@ -12,8 +12,8 @@
 <div class="col-sm-3 overview-right hidden-xs hidden-sm" *ngIf="!isEditing">
 	<bed-overview
 		*ngIf="selectedBedVM" 
-		[addOnProductVM]="selectedBedVM"
-		(onEdit)="editAddOnProduct($event)">
+		[bedVM]="selectedBedVM"
+		(onEdit)="editBed($event)">
 	</bed-overview>
 </div>
 <div class="col-sm-9 singleview-right" *ngIf="isEditing">

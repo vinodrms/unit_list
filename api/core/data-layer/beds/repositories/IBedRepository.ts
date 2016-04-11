@@ -11,6 +11,7 @@ export interface BedItemMetaRepoDO {
 
 export interface BedSearchCriteriaRepoDO {
 	bedIdList?: string[];
+    name?: string;
 }
 
 export interface BedSearchResultRepoDO {

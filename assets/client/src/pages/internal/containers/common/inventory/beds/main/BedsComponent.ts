@@ -22,108 +22,108 @@ import {BedEditComponent} from '../pages/bed-edit/BedEditComponent';
 })
 export class BedsComponent extends BaseComponent {
     @Output() protected onScreenStateTypeChanged = new EventEmitter();
-    
+
     @ViewChild(LazyLoadingTableComponent)
-	private _bedTableComponent: LazyLoadingTableComponent<BedVM>;
-    
+    private _bedTableComponent: LazyLoadingTableComponent<BedVM>;
+
     private _inventoryStateManager: InventoryStateManager<BedVM>;
-    
+
     constructor(private _appContext: AppContext,
-		private _tableBuilder: BedTableMetaBuilderService,
-		private _bedsService: BedsService) {
-		super();
-		this._inventoryStateManager = new InventoryStateManager<BedVM>(this._appContext, "bed.id");
-		this.registerStateChange();
-	}
+        private _tableBuilder: BedTableMetaBuilderService,
+        private _bedsService: BedsService) {
+        super();
+        this._inventoryStateManager = new InventoryStateManager<BedVM>(this._appContext, "bed.id");
+        this.registerStateChange();
+    }
     private registerStateChange() {
-		this._inventoryStateManager.stateChangedObservable.subscribe((currentState: InventoryScreenStateType) => {
-			this.onScreenStateTypeChanged.next(currentState);
-		});
-	}
-    
+        this._inventoryStateManager.stateChangedObservable.subscribe((currentState: InventoryScreenStateType) => {
+            this.onScreenStateTypeChanged.next(currentState);
+        });
+    }
+
     public ngAfterViewInit() {
-        debugger
-		this._bedTableComponent.bootstrap(this._bedsService, this._tableBuilder.buildLazyLoadTableMeta());
-	}
-    
+        this._bedTableComponent.bootstrap(this._bedsService, this._tableBuilder.buildLazyLoadTableMeta());
+    }
+
     public get isEditing(): boolean {
-		return this._inventoryStateManager.screenStateType === InventoryScreenStateType.Edit;
-	}
+        return this._inventoryStateManager.screenStateType === InventoryScreenStateType.Edit;
+    }
     public get selectedBedVM(): BedVM {
-		return this._inventoryStateManager.currentItem;
-	}
+        return this._inventoryStateManager.currentItem;
+    }
     public addBed() {
-		var newBedVM = this.buildNewBedVM();
-		this._inventoryStateManager.canPerformAction(InventoryScreenAction.Add).then((newState: InventoryScreenStateType) => {
-			this._bedTableComponent.deselectItem();
+        var newBedVM = this.buildNewBedVM();
+        this._inventoryStateManager.canPerformAction(InventoryScreenAction.Add).then((newState: InventoryScreenStateType) => {
+            this._bedTableComponent.deselectItem();
 
-			this._inventoryStateManager.currentItem = newBedVM;
-			this._inventoryStateManager.screenStateType = newState;
-		}).catch((e: any) => { });
-	}
+            this._inventoryStateManager.currentItem = newBedVM;
+            this._inventoryStateManager.screenStateType = newState;
+        }).catch((e: any) => { });
+    }
     public copyBed(bedVM: BedVM) {
-		var newBedVM = bedVM.buildPrototype();
-		delete newBedVM.bed.id;
-		this._inventoryStateManager.canPerformAction(InventoryScreenAction.Copy, newBedVM).then((newState: InventoryScreenStateType) => {
-			this._bedTableComponent.deselectItem();
+        var newBedVM = bedVM.buildPrototype();
+        delete newBedVM.bed.id;
+        this._inventoryStateManager.canPerformAction(InventoryScreenAction.Copy, newBedVM).then((newState: InventoryScreenStateType) => {
+            this._bedTableComponent.deselectItem();
 
-			this._inventoryStateManager.currentItem = newBedVM;
-			this._inventoryStateManager.screenStateType = newState;
-		}).catch((e: any) => { });
-	}
+            this._inventoryStateManager.currentItem = newBedVM;
+            this._inventoryStateManager.screenStateType = newState;
+        }).catch((e: any) => { });
+    }
     public editBed(bedVM: BedVM) {
-		var newAddOnProductVM = bedVM.buildPrototype();
-		this._inventoryStateManager.canPerformAction(InventoryScreenAction.Edit, newAddOnProductVM).then((newState: InventoryScreenStateType) => {
-			this._bedTableComponent.selectItem(bedVM.bed.id);
+        var newAddOnProductVM = bedVM.buildPrototype();
+        this._inventoryStateManager.canPerformAction(InventoryScreenAction.Edit, newAddOnProductVM).then((newState: InventoryScreenStateType) => {
+            this._bedTableComponent.selectItem(bedVM.bed.id);
 
-			this._inventoryStateManager.currentItem = newAddOnProductVM;
-			this._inventoryStateManager.screenStateType = newState;
-		}).catch((e: any) => { });
-	}
+            this._inventoryStateManager.currentItem = newAddOnProductVM;
+            this._inventoryStateManager.screenStateType = newState;
+        }).catch((e: any) => { });
+    }
     public deleteBed(bedVM: BedVM) {
-		var newBedVM = bedVM.buildPrototype();
-		this._inventoryStateManager.canPerformAction(InventoryScreenAction.Delete, newBedVM).then((newState: InventoryScreenStateType) => {
-			var title = this._appContext.thTranslation.translate("Delete Bed");
-			var content = this._appContext.thTranslation.translate("Are you sure you want to delete %name% ?", { name: bedVM.bed.name });
+        var newBedVM = bedVM.buildPrototype();
+        this._inventoryStateManager.canPerformAction(InventoryScreenAction.Delete, newBedVM).then((newState: InventoryScreenStateType) => {
+            var title = this._appContext.thTranslation.translate("Delete Bed");
+            var content = this._appContext.thTranslation.translate("Are you sure you want to delete %name% ?", { name: bedVM.bed.name });
+            var positiveLabel = this._appContext.thTranslation.translate("Yes");
+            var negativeLabel = this._appContext.thTranslation.translate("No");
+            this._appContext.modalService.confirm(title, content, { positive: positiveLabel, negative: negativeLabel }, () => {
+                if (newState === InventoryScreenStateType.View) {
+                    this._bedTableComponent.deselectItem();
+                    this._inventoryStateManager.currentItem = null;
+                }
+                this._inventoryStateManager.screenStateType = newState;
+                this.deleteBedOnServer(newBedVM.bed);
+            });
+        }).catch((e: any) => { });
+    }
 
-			this._appContext.modalService.confirm(title, content, () => {
-				if (newState === InventoryScreenStateType.View) {
-					this._bedTableComponent.deselectItem();
-					this._inventoryStateManager.currentItem = null;
-				}
-				this._inventoryStateManager.screenStateType = newState;
-				this.deleteBedOnServer(newBedVM.bed);
-			});
-		}).catch((e: any) => { });
-	}
-    
     private deleteBedOnServer(bedDO: BedDO) {
-		this._bedsService.deleteBedDO(bedDO).subscribe((deletedBed: BedDO) => {
-		}, (error: ThError) => {
-			this._appContext.toaster.error(error.message);
-		});
-	}
-    
+        this._bedsService.deleteBedDO(bedDO).subscribe((deletedBed: BedDO) => {
+        }, (error: ThError) => {
+            this._appContext.toaster.error(error.message);
+        });
+    }
+
     public selectBed(bedVM: BedVM) {
-		var newBedVM = bedVM.buildPrototype();
-		this._inventoryStateManager.canPerformAction(InventoryScreenAction.Select, newBedVM).then((newState: InventoryScreenStateType) => {
-			this._bedTableComponent.selectItem(newBedVM.bed.id);
+        var newBedVM = bedVM.buildPrototype();
+        this._inventoryStateManager.canPerformAction(InventoryScreenAction.Select, newBedVM).then((newState: InventoryScreenStateType) => {
+            this._bedTableComponent.selectItem(newBedVM.bed.id);
 
-			this._inventoryStateManager.currentItem = newBedVM;
-			this._inventoryStateManager.screenStateType = newState;
-		}).catch((e: any) => { });
-	}
+            this._inventoryStateManager.currentItem = newBedVM;
+            this._inventoryStateManager.screenStateType = newState;
+        }).catch((e: any) => { });
+    }
 
-	public showViewScreen() {
-		this._bedTableComponent.deselectItem();
+    public showViewScreen() {
+        this._bedTableComponent.deselectItem();
 
-		this._inventoryStateManager.currentItem = null;
-		this._inventoryStateManager.screenStateType = InventoryScreenStateType.View;
-	}
-    
+        this._inventoryStateManager.currentItem = null;
+        this._inventoryStateManager.screenStateType = InventoryScreenStateType.View;
+    }
+
     private buildNewBedVM(): BedVM {
-		var vm = new BedVM();
-		vm.bed = new BedDO();
-		return vm;
-	}
+        var vm = new BedVM();
+        vm.bed = new BedDO();
+        return vm;
+    }
 }

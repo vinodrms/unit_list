@@ -10,7 +10,7 @@ export class BedTemplatesService extends ARequestService<BedTemplatesDO> {
 		super();
 	}
 	protected sendRequest(): Observable<Object> {
-		return this._appContext.thHttp.get(ThServerApi.SettingsCountries);
+		return this._appContext.thHttp.get(ThServerApi.SettingsBedTemplates);
 	}
 	protected parseResult(result: Object): BedTemplatesDO {
 		var bedTemplatesDO: BedTemplatesDO = new BedTemplatesDO();

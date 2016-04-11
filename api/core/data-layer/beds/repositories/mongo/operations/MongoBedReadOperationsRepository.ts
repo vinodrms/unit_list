@@ -92,9 +92,12 @@ export class MongoBedReadOperationsRepository extends MongoRepository {
         mongoQueryBuilder.addExactMatch("hotelId", meta.hotelId);
         mongoQueryBuilder.addExactMatch("status", BedStatus.Active);
 
-        if (searchCriteria) {
-            if (searchCriteria.bedIdList) {
+        if (!this._thUtils.isUndefinedOrNull(searchCriteria)) {
+            if (!this._thUtils.isUndefinedOrNull(searchCriteria.bedIdList)) {
                 mongoQueryBuilder.addMultipleSelectOptionList("id", searchCriteria.bedIdList);
+            }
+            if (!this._thUtils.isUndefinedOrNull(searchCriteria.name)) {
+                mongoQueryBuilder.addRegex("name", searchCriteria.name);
             }
         }
         
