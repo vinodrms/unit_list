@@ -132,7 +132,7 @@ textarea {
  
     @media only screen and (min-width : 768px) {
 		
- .bottom-row { position:absolute; display:block; bottom:24px; right:24px; width:100%; }
+ .bottom-row { position:absolute; display:block; bottom:0px; right:24px; width:100%; }
 
     }
 	
@@ -261,4 +261,19 @@ input[type="number"].form-control {
 /* Bootstrap img-responsive bug on Firefox */
 .img-responsive {
 	width: 100%;
+}
+
+.modal .modal-body {
+	max-height: 70vh;
+	overflow:auto;
+	overflow-x:hidden;
+}
+.selectable-row {
+	cursor: pointer;
+}
+.modal a {
+	color: #fc8433;
+}
+.modal a:hover {
+	color: #cf5b11;
 }

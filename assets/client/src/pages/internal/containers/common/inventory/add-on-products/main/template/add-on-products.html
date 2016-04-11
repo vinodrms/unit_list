@@ -19,6 +19,7 @@
 <div class="col-sm-9 singleview-right" *ngIf="isEditing">
 	<add-on-product-edit
 		*ngIf="selectedAddOnProductVM" 
+		[filteredCategory]="filteredCategory"
 		[addOnProductVM]="selectedAddOnProductVM"
 		(onExit)="showViewScreen()">
 	</add-on-product-edit>

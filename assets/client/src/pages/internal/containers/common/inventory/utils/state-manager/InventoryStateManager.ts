@@ -20,7 +20,7 @@ export class InventoryStateManager<T> implements IInventoryState<T> {
 			new ViewInventoryState<T>(appContext, objectIdSelector),
 			new EditInventoryState<T>(appContext, objectIdSelector)
 		];
-		this._stateChangedObservable = new Observable((serviceObserver: Observer<InventoryScreenStateType>) => {
+		this._stateChangedObservable = new Observable<InventoryScreenStateType>((serviceObserver: Observer<InventoryScreenStateType>) => {
 			this._stateChangedObserver = serviceObserver;
 		});
 		this.screenStateType = InventoryScreenStateType.View;

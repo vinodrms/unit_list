@@ -37,7 +37,7 @@ export class ThHttp implements IThHttp {
 		var url = this.getApiUrl(serverApi);
 		var searchParams = this.buildSearchParameters(parameters);
 
-		return new Observable((observer: Observer<Object>) => {
+		return new Observable<Object>((observer: Observer<Object>) => {
 			this._http.get(url, { search: searchParams, body: JSON.stringify(this.getDefaultReqParams()) }).subscribe((res: Response) => {
 				this.parseResult(res, observer);
 			}, (err: any) => {
@@ -79,7 +79,7 @@ export class ThHttp implements IThHttp {
 
 	public uploadFile(file: File): Observable<UploadedFileResponse> {
 		let url = this.getApiUrl(ThServerApi.ServiceUploadFile);
-		return new Observable((observer: Observer<UploadedFileResponse>) => {
+		return new Observable<UploadedFileResponse>((observer: Observer<UploadedFileResponse>) => {
 			let formData: FormData = new FormData();
 			let xhr: XMLHttpRequest = new XMLHttpRequest();
 

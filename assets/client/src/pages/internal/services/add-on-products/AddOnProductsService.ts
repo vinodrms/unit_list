@@ -13,6 +13,7 @@ import {AddOnProductCategoriesService} from '../settings/AddOnProductCategoriesS
 import {AddOnProductCategoriesDO} from '../settings/data-objects/AddOnProductCategoriesDO';
 import {HotelAggregatorService} from '../hotel/HotelAggregatorService';
 import {HotelAggregatedInfo} from '../hotel/utils/HotelAggregatedInfo';
+import {AddOnProductCategoryDO} from '../common/data-objects/add-on-product/AddOnProductCategoryDO';
 
 @Injectable()
 export class AddOnProductsService extends ALazyLoadRequestService<AddOnProductVM> {
@@ -52,6 +53,9 @@ export class AddOnProductsService extends ALazyLoadRequestService<AddOnProductVM
 		this.updateSearchCriteria({
 			name: text
 		});
+	}
+	public setDefaultCategory(addOnProductCategory: AddOnProductCategoryDO) {
+		this.defaultSearchCriteria = { categoryIdList: [ addOnProductCategory.id ] };
 	}
 
 	public saveAddOnProductDO(addOnProduct: AddOnProductDO): Observable<AddOnProductDO> {

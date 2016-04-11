@@ -18,6 +18,9 @@ import {TotalCountDO} from '../../../../../services/common/data-objects/lazy-loa
 })
 
 export class WizardAddOnProductsComponent extends BaseComponent implements OnInit {
+	private _isEditScreen: boolean;
+	
+	
 	private _wizardController: IWizardController;
 
 	constructor(wizardService: WizardService, 
@@ -26,6 +29,7 @@ export class WizardAddOnProductsComponent extends BaseComponent implements OnIni
 		super();
 		wizardService.bootstrapWizardIndex(_addOnProductsStateService.stateIndex);
 		this._wizardController = wizardService;
+		this.isEditScreen = false;
 	}
 	
 	public ngOnInit() {
@@ -38,11 +42,20 @@ export class WizardAddOnProductsComponent extends BaseComponent implements OnIni
 		switch (screenStateType) {
 			case InventoryScreenStateType.Edit:
 				this._wizardController.wizardButtonsVisible = false;
+				this.isEditScreen = true;
 				break;
 			default:
 				this._addOnProductsTotalCountService.updateTotalCount();
 				this._wizardController.wizardButtonsVisible = true;
+				this.isEditScreen = false;
 				break;
 		}
+	}
+	
+	public get isEditScreen(): boolean {
+		return this._isEditScreen;
+	}
+	public set isEditScreen(isEditScreen: boolean) {
+		this._isEditScreen = isEditScreen;
 	}
 }

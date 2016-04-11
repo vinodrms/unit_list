@@ -37,7 +37,7 @@ export class PriceProductDO extends BaseDO {
 	conditions: PriceProductConditionsDO;
 
 	protected getPrimitivePropertyKeys(): string[] {
-		return ["id", "hotelId", "versionId", "status", "name", "availability", "lastRoomAvailability", "addOnProductIdList", "roomCategoryIdList", "priceType", "taxIdList"];
+		return ["id", "hotelId", "versionId", "status", "name", "availability", "lastRoomAvailability", "addOnProductIdList", "roomCategoryIdList", "taxIdList"];
 	}
 	public buildFromObject(object: Object) {
 		super.buildFromObject(object);

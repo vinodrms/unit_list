@@ -1,0 +1,10 @@
+<div class="overview-left" [ngClass]="{'col-sm-9': !isEditing, 'col-sm-3': isEditing}">
+	<lazy-loading-table>
+	</lazy-loading-table>
+</div>
+<div class="col-sm-3 overview-right hidden-xs hidden-sm" *ngIf="!isEditing">
+
+</div>
+<div class="col-sm-9 singleview-right" *ngIf="isEditing">
+	
+</div>

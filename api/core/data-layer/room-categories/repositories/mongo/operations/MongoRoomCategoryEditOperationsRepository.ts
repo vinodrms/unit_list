@@ -38,7 +38,10 @@ export class MongoRoomCategoryEditOperationsRepository extends MongoRepository {
     }
 
     public updateRoomCategory(meta: RoomCategoryMetaRepoDO, itemMeta: RoomCategoryItemMetaRepoDO, roomCategory: RoomCategoryDO): Promise<RoomCategoryDO> {
-        return this.findAndModifyRoomCategory(meta, itemMeta, roomCategory);
+        return this.findAndModifyRoomCategory(meta, itemMeta, 
+			{
+				"displayName": roomCategory.displayName
+			});
     }
 
     public deleteRoomCategory(meta: RoomCategoryMetaRepoDO, itemMeta: RoomCategoryItemMetaRepoDO): Promise<RoomCategoryDO> {
