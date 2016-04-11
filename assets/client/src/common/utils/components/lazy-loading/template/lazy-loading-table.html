@@ -51,6 +51,12 @@
 					<span *ngIf="isStringOrNumber(columnMeta.valueMeta)">
 						{{ getItemValue(item, columnMeta.valueMeta) }}
 					</span>
+                    <span *ngIf="isCapacity(columnMeta.valueMeta)">
+						{{ getItemValue(item, columnMeta.valueMeta).maxAdults }} <i [ngClass]="columnMeta.valueMeta.fonts.adult"></i> {{ getItemValue(item, columnMeta.valueMeta).maxChildren }} <i [ngClass]="columnMeta.valueMeta.fonts.child"></i>
+					</span>
+                    <span *ngIf="isFontIcon(columnMeta.valueMeta)">
+						<i [ngClass]="getItemValue(item, columnMeta.valueMeta)"></i> 
+					</span>
 				</td>
 				<td>
 					<a class="btn btn-xs" *ngIf="tableOptions.canCopy" (click)="copyItem(item)">

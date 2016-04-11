@@ -16,7 +16,7 @@ export class BedTableMetaBuilderService {
 					displayName: "Type",
 					valueMeta: {
 						objectPropertyId: "template.iconUrl",
-						propertyType: TablePropertyType.StringType,
+						propertyType: TablePropertyType.FontIconType,
 						showInCollapsedView: true
 					}
 				},
@@ -25,7 +25,7 @@ export class BedTableMetaBuilderService {
 					valueMeta: {
 						objectPropertyId: "bed.name",
 						propertyType: TablePropertyType.StringType,
-						showInCollapsedView: false
+						showInCollapsedView: true
 					}
 				},
 				{

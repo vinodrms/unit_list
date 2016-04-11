@@ -17,7 +17,8 @@ export enum TablePropertyType {
 	NumberType,
 	PercentageType,
 	PriceType,
-    CapacityType
+    CapacityType,
+    FontIconType
 }
 
 export interface TableColumnValueMeta {

@@ -28,7 +28,6 @@ export class WizardBedsComponent extends BaseComponent {
 	}
     
     public ngOnInit() {
-        debugger
 		this._bedsTotalCountService.getTotalCountDO().subscribe((totalCount: TotalCountDO) => {
 			this._bedsStateService.totalNoOfBeds = totalCount.numOfItems;
 		});

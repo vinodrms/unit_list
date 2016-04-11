@@ -42,7 +42,6 @@ export class BedsComponent extends BaseComponent {
 	}
     
     public ngAfterViewInit() {
-        debugger
 		this._bedTableComponent.bootstrap(this._bedsService, this._tableBuilder.buildLazyLoadTableMeta());
 	}
     

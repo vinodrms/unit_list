@@ -1,1 +1,185 @@
-<h1>Bed Edit</h1>
+<loading-component [isLoading]="isLoading"></loading-component>
+<div class="row" *ngIf="!isLoading" [ngFormModel]="getDefaultControlGroup()">
+    <div class="col-md-9">
+        <div class="row">
+            <div class="col-md-12 col-xs-12 form-group">
+                <label for="addonproductname">Bed Name</label>
+                <input type="text" placeholder="Enter Bed Name" class="form-control input-group-lg">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12 col-xs-12">
+
+                <label class="control-label">Base Bed Type</label>
+
+                <div class="form-group btn-group bed-group" role="group">
+                    <div class="button-radio">
+                        <div class="info-block block-info clearfix">
+                            <div data-toggle="buttons">
+                                <label class="btn btn-default">
+                                    <div class="bizcontent">
+                                        <input type="radio" name="var_id[]" autocomplete="off" value="">
+                                        <span class="glyphicon glyphicon-ok glyphicon-lg"></span>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="button-radio">
+                        <div class="info-block block-info clearfix">
+                            <div data-toggle="buttons">
+                                <label class="btn btn-default">
+                                    <div class="bizcontent">
+                                        <input type="radio" name="var_id[]" autocomplete="off" value="">
+                                        <span class="glyphicon glyphicon-ok glyphicon-lg"></span>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="button-radio">
+                        <div class="info-block block-info clearfix">
+                            <div data-toggle="buttons">
+                                <label class="btn btn-default">
+                                    <div class="bizcontent">
+                                        <input type="radio" name="var_id[]" autocomplete="off" value="">
+                                        <span class="glyphicon glyphicon-ok glyphicon-lg"></span>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="button-radio">
+                        <div class="info-block block-info clearfix">
+                            <div data-toggle="buttons">
+                                <label class="btn btn-default">
+                                    <div class="bizcontent">
+                                        <input type="radio" name="var_id[]" autocomplete="off" value="">
+                                        <span class="glyphicon glyphicon-ok glyphicon-lg"></span>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="button-radio">
+                        <div class="info-block block-info clearfix">
+                            <div data-toggle="buttons">
+                                <label class="btn btn-default">
+                                    <div class="bizcontent">
+                                        <input type="radio" name="var_id[]" autocomplete="off" value="">
+                                        <span class="glyphicon glyphicon-ok glyphicon-lg"></span>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="button-radio">
+                        <div class="info-block block-info clearfix">
+                            <div data-toggle="buttons">
+                                <label class="btn btn-default">
+                                    <div class="bizcontent">
+                                        <input type="radio" name="var_id[]" autocomplete="off" value="">
+                                        <span class="glyphicon glyphicon-ok glyphicon-lg"></span>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="button-radio">
+                        <div class="info-block block-info clearfix">
+                            <div data-toggle="buttons">
+                                <label class="btn btn-default">
+                                    <div class="bizcontent">
+                                        <input type="radio" name="var_id[]" autocomplete="off" value="">
+                                        <span class="glyphicon glyphicon-ok glyphicon-lg"></span>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="button-radio">
+                        <div class="info-block block-info clearfix">
+                            <div data-toggle="buttons">
+                                <label class="btn btn-default">
+                                    <div class="bizcontent">
+                                        <input type="radio" name="var_id[]" autocomplete="off" value="">
+                                        <span class="glyphicon glyphicon-ok glyphicon-lg"></span>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+        <hr/>
+
+        <div class="row">
+            <div class="col-md-6 col-xs-12">
+                <label for="bedcap">Capacity</label>
+                <div class="row">
+                    <div class="col-xs-6">
+                        <div class="input-group">
+                            <span class="input-group-addon" id="basic-addon1"><i class="fa fa-male"></i></span>
+                            <input type="number" placeholder="Adults" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="col-xs-6">
+                        <div class="input-group">
+                            <span class="input-group-addon" id="basic-addon2"><i class="fa fa-child"></i></span>
+                            <input type="number" placeholder="Children" class="form-control">
+                        </div>
+
+                    </div>
+                </div>
+
+                <label class="text-muted"><small><i class="fa fa-info-circle"></i> Each adult is replaceable with a child. Max Adults: 2 Max Children: 1 OR Max Adults: 1 Max Children: 2 OR Max Children: 3</small></label>
+
+            </div>
+
+            <div class="col-md-6 col-xs-12 form-group">
+                <label for="bedcap">Dimensions <small>in cm</small></label>
+                <div class="row">
+                    <div class="col-xs-6">
+                        <div class="input-group">
+                            <span class="input-group-addon" id="basic-addon4"><i class="fa fa-arrows-h"></i></span>
+                            <input type="number" placeholder="Width" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-xs-6">
+                        <div class="input-group">
+                            <span class="input-group-addon" id="basic-addon3"><i class="fa fa-arrows-v"></i></span>
+                            <input type="number" placeholder="Length" class="form-control">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <hr>
+
+        <div class="row">
+            <div class="col-md-12 col-xs-12 form-group">
+                <label for="notesproduct">Notes</label>
+                <textarea class="form-control" placeholer="Message"></textarea>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="col-md-3">
+        <button type="button" class="btn btn-block btn-warning button-cancel"><i class="fa fa-ban"></i> Cancel</button>
+        <button type="button" class="btn btn-block btn-info button-copy"><i class="fa fa-clone"></i> Copy</button>
+        <button type="button" class="btn btn-block btn-success button-save"><i class="fa fa-floppy-o"></i> Save Changes</button>
+    </div>
+
+</div>
