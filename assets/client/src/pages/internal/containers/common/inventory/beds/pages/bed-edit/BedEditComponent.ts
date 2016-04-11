@@ -1,5 +1,6 @@
 import {Component, OnInit, Input, Output, EventEmitter} from 'angular2/core';
 import {ControlGroup} from 'angular2/common';
+import {Observable} from 'rxjs/Observable';
 import {TranslationPipe} from '../../../../../../../../common/utils/localization/TranslationPipe';
 import {BedEditService} from './services/BedEditService';
 import {LoadingComponent} from '../../../../../../../../common/utils/components/LoadingComponent';
@@ -9,6 +10,8 @@ import {BedTemplateDO} from '../../../../../../services/common/data-objects/bed-
 import {BedVM} from '../../../../../../services/beds/view-models/BedVM';
 import {BedDO} from '../../../../../../services/beds/data-objects/BedDO';
 import {BedsService} from '../../../../../../services/beds/BedsService';
+import {BedTemplatesService} from '../../../../../../services/settings/BedTemplatesService';
+import {BedTemplatesDO} from '../../../../../../services/settings/data-objects/BedTemplatesDO';
 
 @Component({
     selector: 'bed-edit',
@@ -22,6 +25,7 @@ export class BedEditComponent extends BaseFormComponent implements OnInit {
     isSavingBed: boolean = false;
     
     bedTemplateList: BedTemplateDO[];
+    bedType: string = '7131c509-fd7b-11e5-aba0-5d59df7d7f18';
     
     private _bedVM: BedVM;
     public get bedVM(): BedVM {
@@ -40,14 +44,29 @@ export class BedEditComponent extends BaseFormComponent implements OnInit {
     
     constructor(private _appContext: AppContext,
         private _bedEditService: BedEditService,
-        private _bedsService: BedsService) {
+        private _bedsService: BedsService,
+        private _bedTemplateService: BedTemplatesService) {
         super();
     }
 
-    ngOnInit() { }
+    ngOnInit() { 
+        this.isLoading = true;
+        
+		Observable.combineLatest(
+			this._bedTemplateService.getBedTemplatesDO()
+		).subscribe((result: [BedTemplatesDO]) => {
+            this.bedTemplateList = result[0].bedTemplateList;
+            this.isLoading = false;            
+		}, (error: ThError) => {
+			this.isLoading = false;
+			this._appContext.toaster.error(this._appContext.thTranslation.translate(error.message));
+		});
+    }
     
     private initDefaultBedData() {
-		
+		if(!this.bedVM.bed.bedTemplateId) {
+            this.bedVM.bed.bedTemplateId = this.bedTemplateList[0].id;
+        }
 	}
 	private initForm() {
 		this.didSubmitForm = false;

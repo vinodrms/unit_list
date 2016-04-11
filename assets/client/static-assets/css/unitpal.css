@@ -255,9 +255,13 @@ input[type="number"].form-control {
 /* End Bootstrap overrides */
 
 /* Grid spacing - for angular */
-.grid-btn {
+.th-grid-btn {
     margin: 2px !important;
 }
+.th-radio-input {
+    display: none;
+}
+
 /* Bootstrap img-responsive bug on Firefox */
 .img-responsive {
 	width: 100%;
