@@ -21,9 +21,9 @@ export class SaveYieldFilterValue {
         this._thUtils = new ThUtils();
     }
 
-    public save(yieldFilterValueDO: SaveYieldFilterValueDO): Promise<YieldFilterConfigurationDO> {
+    public save(yieldFilterValueDO: SaveYieldFilterValueDO): Promise<YieldFilterValueDO> {
         this._yieldFilterValue = yieldFilterValueDO;
-        return new Promise<YieldFilterConfigurationDO>((resolve: { (result: YieldFilterConfigurationDO): void }, reject: { (err: ThError): void }) => {
+        return new Promise<YieldFilterValueDO>((resolve: { (result: YieldFilterValueDO): void }, reject: { (err: ThError): void }) => {
             try {
                 this.saveCore(resolve, reject);
             } catch (error) {
@@ -33,7 +33,7 @@ export class SaveYieldFilterValue {
             }
         });
     }
-    private saveCore(resolve: { (result: YieldFilterConfigurationDO): void }, reject: { (err: ThError): void }) {
+    private saveCore(resolve: { (result: YieldFilterValueDO): void }, reject: { (err: ThError): void }) {
         var validationResult = SaveYieldFilterValueDO.getValidationStructure().validateStructure(this._yieldFilterValue);
         if (!validationResult.isValid()) {
             var parser = new ValidationResultParser(validationResult, this._yieldFilterValue);
@@ -41,8 +41,8 @@ export class SaveYieldFilterValue {
             return;
         }
 
-        this.saveYieldFilterValue().then((savedYieldFilterConfiguration: YieldFilterConfigurationDO) => {
-            resolve(savedYieldFilterConfiguration);
+        this.saveYieldFilterValue().then((yieldFilterValueDO: YieldFilterValueDO) => {
+            resolve(yieldFilterValueDO);
         }).catch((error: any) => {
             var thError = new ThError(ThStatusCode.SaveYieldFilterValueError, error);
             if (thError.isNativeError()) {
@@ -53,12 +53,12 @@ export class SaveYieldFilterValue {
     }
 
 
-    private saveYieldFilterValue(): Promise<YieldFilterConfigurationDO> {
-        return new Promise<YieldFilterConfigurationDO>((resolve: { (result: YieldFilterConfigurationDO): void }, reject: { (err: ThError): void }) => {
+    private saveYieldFilterValue(): Promise<YieldFilterValueDO> {
+        return new Promise<YieldFilterValueDO>((resolve: { (result: YieldFilterValueDO): void }, reject: { (err: ThError): void }) => {
             this.saveYieldFilterValueCore(resolve, reject);
         });
     }
-    private saveYieldFilterValueCore(resolve: { (result: YieldFilterConfigurationDO): void }, reject: { (err: ThError): void }) {
+    private saveYieldFilterValueCore(resolve: { (result: YieldFilterValueDO): void }, reject: { (err: ThError): void }) {
         var actionFactory = new YieldFilterValueActionFactory(this._appContext, this._sessionContext);
         var yieldFilterValueDO = this.buildYieldFilterValueDO();
         var actionStrategy = actionFactory.getActionStrategy({ filterId: this._yieldFilterValue.filterId }, this.buildYieldFilterValueDO());

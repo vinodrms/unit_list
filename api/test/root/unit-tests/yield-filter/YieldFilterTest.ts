@@ -37,6 +37,8 @@ describe("Yield Filter Tests", function() {
             var hotelConfigRepo = testContext.appContext.getRepositoryFactory().getYieldFilterConfigurationsRepository();
             hotelConfigRepo.getYieldFilterConfiguration({ hotelId: testContext.sessionContext.sessionDO.hotel.id }).then((config: YieldFilterConfigurationDO) => {
                 should.equal(testDataBuilder.defaultYieldFilters.length, config.value.length);
+				
+				updatedYieldConfigurations = config;
                 done();
             }).catch((error: any) => {
                 done(error);
@@ -47,10 +49,7 @@ describe("Yield Filter Tests", function() {
             var saveYieldFilterValueDO: SaveYieldFilterValueDO = yieldFiltersHelper.getValidTextYieldFilterValueDO();
             var saveYieldFilterValue = new SaveYieldFilterValue(testContext.appContext, testContext.sessionContext);
 
-            saveYieldFilterValue.save(saveYieldFilterValueDO).then((yieldConfig: YieldFilterConfigurationDO) => {
-                var yieldFilter: YieldFilterDO = _.findWhere(yieldConfig.value, { id: saveYieldFilterValueDO.filterId });
-                var yieldValue: YieldFilterValueDO = _.last(yieldFilter.values);
-                
+            saveYieldFilterValue.save(saveYieldFilterValueDO).then((yieldValue: YieldFilterValueDO) => {
                 should.equal(yieldValue.label, saveYieldFilterValueDO.label);
                 should.equal(yieldValue.description, saveYieldFilterValueDO.description);
                 should.exist(yieldValue.id);
@@ -65,15 +64,11 @@ describe("Yield Filter Tests", function() {
             var saveYieldFilterValueDO: SaveYieldFilterValueDO = yieldFiltersHelper.getValidColorYieldFilterValueDO();
             var saveYieldFilterValue = new SaveYieldFilterValue(testContext.appContext, testContext.sessionContext);
 
-            saveYieldFilterValue.save(saveYieldFilterValueDO).then((yieldConfig: YieldFilterConfigurationDO) => {
-                var yieldFilter: YieldFilterDO = _.findWhere(yieldConfig.value, { id: saveYieldFilterValueDO.filterId });
-                var yieldValue: YieldFilterValueDO = _.last(yieldFilter.values);
-                
+            saveYieldFilterValue.save(saveYieldFilterValueDO).then((yieldValue: YieldFilterValueDO) => {
                 should.equal(yieldValue.colorCode, saveYieldFilterValueDO.colorCode);
                 should.equal(yieldValue.description, saveYieldFilterValueDO.description);
                 should.exist(yieldValue.id);
                 
-                updatedYieldConfigurations = yieldConfig;
                 done();
             }).catch((error: any) => {
                 done(error);
@@ -84,7 +79,7 @@ describe("Yield Filter Tests", function() {
             var saveYieldFilterValueDO: SaveYieldFilterValueDO = yieldFiltersHelper.getInvalidTextYieldFilterValueDO();
             var saveYieldFilterValue = new SaveYieldFilterValue(testContext.appContext, testContext.sessionContext);
 
-            saveYieldFilterValue.save(saveYieldFilterValueDO).then((yieldConfig: YieldFilterConfigurationDO) => {
+            saveYieldFilterValue.save(saveYieldFilterValueDO).then((yieldValue: YieldFilterValueDO) => {
                 done(new Error("did manage to add an invalid text filter value to the hotel's yield text filter"));
             }).catch((error: any) => {
                 done();
@@ -95,7 +90,7 @@ describe("Yield Filter Tests", function() {
             var saveYieldFilterValueDO: SaveYieldFilterValueDO = yieldFiltersHelper.getInvalidColorYieldFilterValueDO();
             var saveYieldFilterValue = new SaveYieldFilterValue(testContext.appContext, testContext.sessionContext);
 
-            saveYieldFilterValue.save(saveYieldFilterValueDO).then((yieldConfig: YieldFilterConfigurationDO) => {
+            saveYieldFilterValue.save(saveYieldFilterValueDO).then((yieldValue: YieldFilterValueDO) => {
                 done(new Error("did manage to add an invalid color filter value to the hotel's yield color filter"));
             }).catch((error: any) => {
                 done();
@@ -107,14 +102,11 @@ describe("Yield Filter Tests", function() {
             saveYieldFilterValueDO.label = '66';
             saveYieldFilterValueDO.description = 'Seventh filter';
             var saveYieldFilterValue = new SaveYieldFilterValue(testContext.appContext, testContext.sessionContext);
-            saveYieldFilterValue.save(saveYieldFilterValueDO).then((yieldConfig: YieldFilterConfigurationDO) => {
-                var yieldFilter: YieldFilterDO = _.findWhere(yieldConfig.value, { id: saveYieldFilterValueDO.filterId });
-                var yieldValue: YieldFilterValueDO = _.findWhere(yieldFilter.values, { id: saveYieldFilterValueDO["id"] });
+            saveYieldFilterValue.save(saveYieldFilterValueDO).then((yieldValue: YieldFilterValueDO) => {
                 
                 should.equal(yieldValue.label, saveYieldFilterValueDO.label);
                 should.equal(yieldValue.description, saveYieldFilterValueDO.description);
                 
-                updatedYieldConfigurations = yieldConfig;
                 done();
             }).catch((error: any) => {
                 done(error);
@@ -126,15 +118,10 @@ describe("Yield Filter Tests", function() {
             saveYieldFilterValueDO.colorCode = 'pinkie';
             saveYieldFilterValueDO.description = 'Pinkie filter';
             var saveYieldFilterValue = new SaveYieldFilterValue(testContext.appContext, testContext.sessionContext);
-            saveYieldFilterValue.save(saveYieldFilterValueDO).then((yieldConfig: YieldFilterConfigurationDO) => {
-                
-                var yieldFilter: YieldFilterDO = _.findWhere(yieldConfig.value, { id: saveYieldFilterValueDO.filterId });
-                var yieldValue: YieldFilterValueDO = _.findWhere(yieldFilter.values, { id: saveYieldFilterValueDO["id"] });
-                
+            saveYieldFilterValue.save(saveYieldFilterValueDO).then((yieldValue: YieldFilterValueDO) => {
                 should.equal(yieldValue.colorCode, saveYieldFilterValueDO.colorCode);
                 should.equal(yieldValue.description, saveYieldFilterValueDO.description);
                 
-                updatedYieldConfigurations = yieldConfig;
                 done();
             }).catch((error: any) => {
                 done(error);
@@ -143,8 +130,10 @@ describe("Yield Filter Tests", function() {
 
         it("Should not update a text filter value with an existing label", function(done) {
             var saveYieldFilterValueDO: SaveYieldFilterValueDO = yieldFiltersHelper.getTextSaveYieldFilterValueDOFrom(updatedYieldConfigurations);
+			saveYieldFilterValueDO.label = yieldFiltersHelper.getExistingLabelFrom(updatedYieldConfigurations);
+			
             var saveYieldFilterValue = new SaveYieldFilterValue(testContext.appContext, testContext.sessionContext);
-            saveYieldFilterValue.save(saveYieldFilterValueDO).then((yieldConfig: YieldFilterConfigurationDO) => {
+            saveYieldFilterValue.save(saveYieldFilterValueDO).then((yieldValue: YieldFilterValueDO) => {
                 done(new Error("Managed to update a text filter value with an existing label"));
             }).catch((error: any) => {
                 done();
@@ -153,8 +142,10 @@ describe("Yield Filter Tests", function() {
 
         it("Should not update a color filter value with an existing colorCode", function(done) {
             var saveYieldFilterValueDO: SaveYieldFilterValueDO = yieldFiltersHelper.getColorSaveYieldFilterValueDOFrom(updatedYieldConfigurations);
+			saveYieldFilterValueDO.colorCode = yieldFiltersHelper.getExistingColorCodeFrom(updatedYieldConfigurations);
+			
             var saveYieldFilterValue = new SaveYieldFilterValue(testContext.appContext, testContext.sessionContext);
-            saveYieldFilterValue.save(saveYieldFilterValueDO).then((yieldConfig: YieldFilterConfigurationDO) => {
+            saveYieldFilterValue.save(saveYieldFilterValueDO).then((yieldValue: YieldFilterValueDO) => {
                 done(new Error("Managed to update a color filter value with an existing colorCode"));
             }).catch((error: any) => {
                 done();

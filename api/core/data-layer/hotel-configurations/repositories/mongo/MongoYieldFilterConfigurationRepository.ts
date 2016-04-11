@@ -14,14 +14,14 @@ import _ = require("underscore");
 
 export class MongoYieldFilterConfigurationRepository extends AMongoHotelConfigurationRepository implements IYieldFilterConfigurationRepository {
 
-    public addYieldFilterValue(meta: HotelConfigurationMetaRepoDO, filterMeta: YieldFilterMetaRepoDO, yieldFilterValue: YieldFilterValueDO): Promise<YieldFilterConfigurationDO> {
-        return new Promise<YieldFilterConfigurationDO>((resolve, reject) => {
+    public addYieldFilterValue(meta: HotelConfigurationMetaRepoDO, filterMeta: YieldFilterMetaRepoDO, yieldFilterValue: YieldFilterValueDO): Promise<YieldFilterValueDO> {
+        return new Promise<YieldFilterValueDO>((resolve, reject) => {
             this.addYieldFilterValueCore(meta, filterMeta, yieldFilterValue, resolve, reject);
         });
     }
 
     public addYieldFilterValueCore(meta: HotelConfigurationMetaRepoDO, filterMeta: YieldFilterMetaRepoDO, yieldFilterValue: YieldFilterValueDO,
-        resolve: { (result: YieldFilterConfigurationDO): void }, reject: { (err: ThError): void }) {
+        resolve: { (result: YieldFilterValueDO): void }, reject: { (err: ThError): void }) {
 
         this.getYieldFilterConfiguration(meta).then((yieldFilterConfig: YieldFilterConfigurationDO) => {
             var foundYieldFilter = _.findWhere(yieldFilterConfig.value, { id: filterMeta.filterId });
@@ -42,7 +42,7 @@ export class MongoYieldFilterConfigurationRepository extends AMongoHotelConfigur
                 throw (thError);
             }
         }).then((addedHotelConfig: HotelConfigurationDO) => {
-            resolve(<YieldFilterConfigurationDO>addedHotelConfig);
+            resolve(yieldFilterValue);
         }).catch((err: Error) => {
             var thError = new ThError(ThStatusCode.YieldFilterRepositoryErrorAddingYieldFilterValue, err);
             ThLogger.getInstance().logError(ThLogLevel.Error, "Error adding filter value", { hotelId: meta.hotelId, filterMeta: filterMeta, yieldManagerFilterValue: yieldFilterValue }, thError);
@@ -50,14 +50,14 @@ export class MongoYieldFilterConfigurationRepository extends AMongoHotelConfigur
         });
     }
 
-    public updateYieldFilterValue(meta: HotelConfigurationMetaRepoDO, filterMeta: YieldFilterMetaRepoDO, filterValueMeta: YieldFilterValueMetaRepoDO, yieldFilterValue: YieldFilterValueDO): Promise<YieldFilterConfigurationDO> {
-        return new Promise<YieldFilterConfigurationDO>((resolve, reject) => {
+    public updateYieldFilterValue(meta: HotelConfigurationMetaRepoDO, filterMeta: YieldFilterMetaRepoDO, filterValueMeta: YieldFilterValueMetaRepoDO, yieldFilterValue: YieldFilterValueDO): Promise<YieldFilterValueDO> {
+        return new Promise<YieldFilterValueDO>((resolve, reject) => {
             this.updateYieldFilterValueCore(meta, filterMeta, filterValueMeta, yieldFilterValue, resolve, reject);
         });
     }
 
     private updateYieldFilterValueCore(meta: HotelConfigurationMetaRepoDO, filterMeta: YieldFilterMetaRepoDO, filterValueMeta: YieldFilterValueMetaRepoDO, yieldFilterValue: YieldFilterValueDO,
-        resolve: { (result: YieldFilterConfigurationDO): void }, reject: { (err: ThError): void }) {
+        resolve: { (result: YieldFilterValueDO): void }, reject: { (err: ThError): void }) {
 
         this.getYieldFilterConfiguration(meta).then((yieldFilterConfig: YieldFilterConfigurationDO) => {
             var foundYieldFilter = _.findWhere(yieldFilterConfig.value, { id: filterMeta.filterId });
@@ -85,7 +85,7 @@ export class MongoYieldFilterConfigurationRepository extends AMongoHotelConfigur
                 throw (thError);
             }
         }).then((addedHotelConfig: HotelConfigurationDO) => {
-            resolve(<YieldFilterConfigurationDO>addedHotelConfig);
+            resolve(yieldFilterValue);
         }).catch((err: Error) => {
             var thError = new ThError(ThStatusCode.YieldFilterRepositoryErrorUpdatingYieldFilterValue, err);
             ThLogger.getInstance().logError(ThLogLevel.Error, "Error updating filter value", { hotelId: meta.hotelId, filterMeta: filterMeta, yieldManagerFilterValue: yieldFilterValue }, thError);
@@ -135,12 +135,12 @@ export class MongoYieldFilterConfigurationRepository extends AMongoHotelConfigur
         var sameYieldValueItems = [];
         if (yieldFilter.type == YieldFilterType.Text) {
             sameYieldValueItems = _.filter(yieldFilter.values, (value: YieldFilterValueDO) => {
-                return value.label === yieldFilterValue.label;
+                return value.label === yieldFilterValue.label && value.id !== yieldFilterValue.id;
             });
         }
         else {
             sameYieldValueItems = _.filter(yieldFilter.values, (value: YieldFilterValueDO) => {
-                return value.colorCode === yieldFilterValue.colorCode;
+                return value.colorCode === yieldFilterValue.colorCode && value.id !== yieldFilterValue.id;
             });
         }
         return _.isEmpty(sameYieldValueItems);

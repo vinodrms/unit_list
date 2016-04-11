@@ -1,0 +1,82 @@
+<div class="modal-header text-center">
+	<button type="button" class="close" (click)="closeDialog()">&times;</button>
+	<h4 class="modal-title">{{ yieldFilter.label }}</h4>
+</div>
+<div class="modal-body" #scrollableContent>
+	<table class="table">
+		<thead>
+			<th>{{ 'Filter Value' | translate }}</th>
+			<th>{{ 'Description' | translate }}</th>
+			<th></th>
+		</thead>
+		<tbody>
+			<tr *ngFor="#yieldFilterValueVM of yieldFilterValueVMList" [ngClass]="{active: isFilterSelected(yieldFilterValueVM)}">
+				<!-- Text Filter -->
+				<td class="selectable-row" 
+					*ngIf="isTextFilter() && !yieldFilterValueVM.isEditing" 
+					(click)="selectedFilter(yieldFilterValueVM)"> 
+					{{yieldFilterValueVM.filterValue.label}} 
+				</td>
+				<td *ngIf="isTextFilter() && yieldFilterValueVM.isEditing"> 
+					<input type="text" class="form-control" 
+						[(ngModel)]="yieldFilterValueVM.filterValue.label" 
+						(keyup.enter)="saveYieldFilter(yieldFilterValueVM)"
+						/>	 
+				</td>
+				<!-- Color Filter -->
+				<td *ngIf="isColorFilter()">
+					<div class="row">
+						<div class="col-xs-2">
+							<div class="color-box" [ngClass]="yieldFilterValueVM.colorMeta.colorCodeStr"></div>
+						</div>
+						<div class="col-xs-6">
+							<select class="form-control" *ngIf="yieldFilterValueVM.isEditing" [ngModel]="yieldFilterValueVM.filterValue.colorCode" (change)="didChangeColorCodeFor(yieldFilterValueVM, $event.target.value)">
+								<option *ngFor="#colorMeta of colorFilter.colorMetaList" [value]="colorMeta.colorCodeStr">{{ colorMeta.displayName | translate }}</option>
+							</select>
+						</div>
+						<div class="col-xs-4">
+						</div>
+					</div> 
+				</td>
+				
+				<!-- Description -->
+				<td class="selectable-row"  *ngIf="!yieldFilterValueVM.isEditing"
+					(click)="selectedFilter(yieldFilterValueVM)"> 
+					{{yieldFilterValueVM.filterValue.description}} 
+				</td>
+				
+				<!-- Operations -->
+				<td *ngIf="yieldFilterValueVM.isEditing">
+					<input type="text" class="form-control" 
+						[(ngModel)]="yieldFilterValueVM.filterValue.description" 
+						(keyup.enter)="saveYieldFilter(yieldFilterValueVM)"
+						/> 
+				</td>
+
+				<td>
+					<a class="btn btn-xs" *ngIf="!yieldFilterValueVM.isEditing && !yieldFilterValueVM.isSaving" (click)="editYieldFilter(yieldFilterValueVM)">
+						<i class="fa fa-edit"></i>
+					</a>
+					<a class="btn btn-xs" *ngIf="yieldFilterValueVM.isEditing && !yieldFilterValueVM.isSaving" (click)="saveYieldFilter(yieldFilterValueVM)">
+						<i class="fa fa-save"></i>
+					</a>
+					<a class="btn btn-xs" *ngIf="yieldFilterValueVM.isSaving">
+						<i class="fa fa-spinner fa-pulse"></i>
+					</a>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+<div class="modal-footer">
+	<div class="pull-left">
+		<a (click)="addYieldFilterValue()">
+			<span class="glyphicon glyphicon-plus-sign fa-2x"></span>
+		</a>
+	</div>
+	<button type="button" class="btn btn-primary" 
+		[disabled]="!didSelectFilterValue()"
+		(click)="triggerSelectFilterValue()">
+		{{ 'Select' | translate }}
+	</button>
+</div>

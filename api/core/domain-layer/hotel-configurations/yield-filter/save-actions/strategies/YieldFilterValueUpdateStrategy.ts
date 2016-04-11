@@ -16,11 +16,11 @@ export class YieldFilterValueUpdateStrategy implements IYieldFilterValueActionSt
     constructor(private _appContext: AppContext, private _sessionContext: SessionContext, private _filterMeta: YieldFilterMetaRepoDO, private _yieldFilterValueDO: YieldFilterValueDO) {
         this._configurationMeta = this.buildHotelConfigurationMetaRepoDO();
     }
-    save(resolve: { (result: YieldFilterConfigurationDO): void }, reject: { (err: ThError): void }) {
+    save(resolve: { (result: YieldFilterValueDO): void }, reject: { (err: ThError): void }) {
         var yieldFilterConfigRepo = this._appContext.getRepositoryFactory().getYieldFilterConfigurationsRepository();
         yieldFilterConfigRepo.updateYieldFilterValue(this._configurationMeta, this._filterMeta, { filterValueId: this._yieldFilterValueDO.id }, this._yieldFilterValueDO)
-            .then((updatedYieldFilterConfiguration: YieldFilterConfigurationDO) => {
-                resolve(updatedYieldFilterConfiguration);
+            .then((yieldFilterValueDO: YieldFilterValueDO) => {
+                resolve(yieldFilterValueDO);
             }).catch((error: any) => {
                 reject(error);
             });

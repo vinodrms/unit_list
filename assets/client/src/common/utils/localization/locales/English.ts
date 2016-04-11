@@ -161,5 +161,19 @@ export var EnglishTranslations: Object = {
 	"Price Products": "Price Products",
 	"[Wizard Step 5] Price Products": "Price Products represent price packages that contain complex rules to increase your property's earnings. They can be yielded from the Yield Manager.",
 	"Select Room Category": "Select Room Category",
-	"The room category name you entered already exists" : "The room category name you entered already exists"
+	"The room category name you entered already exists" : "The room category name you entered already exists",
+	"Select Yield Filter": "Select Yield Filter",
+	"Color Code": "Color Code",
+	"Filter Label": "Filter Label",
+	"Red": "Red",
+	"Yellow": "Yellow",
+	"Green": "Green",
+	"Blue": "Blue",
+	"Gray": "Gray",
+	"Brown": "Brown",
+	"Violet": "Violet",
+	"Orange": "Orange",
+	"Olive": "Olive",
+	"Purple": "Purple",
+	"Filter Value": "Filter Value"
 };
