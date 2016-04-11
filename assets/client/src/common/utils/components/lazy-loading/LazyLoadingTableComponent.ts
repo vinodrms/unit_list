@@ -162,6 +162,9 @@ export class LazyLoadingTableComponent<T> {
 	protected isStringOrNumber(valueMeta: TableColumnValueMeta): boolean {
 		return valueMeta.propertyType === TablePropertyType.NumberType || valueMeta.propertyType === TablePropertyType.StringType;
 	}
+	protected isNotes(valueMeta: TableColumnValueMeta): boolean {
+		return valueMeta.propertyType === TablePropertyType.NotesType;
+	}
 	protected noResultsExist(): boolean {
 		return this.totalCount.numOfItems === 0 && this.itemList.length === 0;
 	}

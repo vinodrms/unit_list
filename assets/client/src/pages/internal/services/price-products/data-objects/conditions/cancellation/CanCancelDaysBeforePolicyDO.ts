@@ -1,5 +1,5 @@
 import {BaseDO} from '../../../../../../../common/base/BaseDO';
-import {IPriceProductCancellationPolicy} from './IPriceProductCancellationPolicy';
+import {IPriceProductCancellationPolicy, CancellationPolicyDescription} from './IPriceProductCancellationPolicy';
 
 export class CanCancelDaysBeforePolicyDO extends BaseDO implements IPriceProductCancellationPolicy {
 	daysBefore: number;
@@ -7,7 +7,14 @@ export class CanCancelDaysBeforePolicyDO extends BaseDO implements IPriceProduct
 	protected getPrimitivePropertyKeys(): string[] {
 		return ["daysBefore"];
 	}
-
+	public getDescription(): CancellationPolicyDescription {
+		return {
+			phrase: "Can cancel until %daysBefore% days prior to arrival",
+			parameters: {
+				timeOfArrival: this.daysBefore
+			}
+		}
+	}
 	public hasCancellationPolicy(): boolean {
 		return true;
 	}

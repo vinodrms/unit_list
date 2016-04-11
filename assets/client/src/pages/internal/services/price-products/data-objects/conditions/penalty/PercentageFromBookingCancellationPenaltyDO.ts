@@ -1,5 +1,5 @@
 import {BaseDO} from '../../../../../../../common/base/BaseDO';
-import {IPriceProductCancellationPenalty} from './IPriceProductCancellationPenalty';
+import {IPriceProductCancellationPenalty, CancellationPenaltyDescription} from './IPriceProductCancellationPenalty';
 
 export class PercentageFromBookingCancellationPenaltyDO extends BaseDO implements IPriceProductCancellationPenalty {
 	percentage: number;
@@ -7,7 +7,12 @@ export class PercentageFromBookingCancellationPenaltyDO extends BaseDO implement
 	protected getPrimitivePropertyKeys(): string[] {
 		return ["percentage"];
 	}
-
+	public getDescription(): CancellationPenaltyDescription {
+		return {
+			phrase: "Pay %percentage%% from whole booking",
+			parameters: (this.percentage * 100) + ""
+		}
+	}
 	public hasCancellationPenalty(): boolean {
 		return true;
 	}

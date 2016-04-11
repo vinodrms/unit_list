@@ -49,8 +49,14 @@
 						{{ getItemValue(item, columnMeta.valueMeta) | price }}
 					</span>
 					<span *ngIf="isStringOrNumber(columnMeta.valueMeta)">
-						{{ getItemValue(item, columnMeta.valueMeta) }}
+						{{ getItemValue(item, columnMeta.valueMeta) | translate }}
 					</span>
+					<span *ngIf="isNotes(columnMeta.valueMeta)">
+						<small>
+							{{ getItemValue(item, columnMeta.valueMeta) | translate }}
+						</small>
+					</span>
+					
 				</td>
 				<td>
 					<a class="btn btn-xs" *ngIf="tableOptions.canCopy" (click)="copyItem(item)">
