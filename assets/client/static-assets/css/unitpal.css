@@ -281,3 +281,41 @@ input[type="number"].form-control {
 .modal a:hover {
 	color: #cf5b11;
 }
+.color-box {
+  float: left;
+  width: 20px;
+  height: 20px;
+  margin: 5px;
+  border: 1px solid rgba(0, 0, 0, .2);
+}
+
+.red {
+  background: red;
+}
+.yellow {
+  background: yellow;
+}
+.green {
+  background: green;
+}
+.blue {
+  background: blue;
+}
+.gray {
+  background: gray;
+}
+.brown {
+  background: brown;
+}
+.violet {
+  background: violet;
+}
+.orange {
+  background: orange;
+}
+.olive {
+  background: olive;
+}
+.purple {
+  background: purple;
+}

@@ -1,0 +1,27 @@
+<div class="modal-header text-center">
+	<button type="button" class="close" (click)="closeDialog()">&times;</button>
+	<h4 class="modal-title">{{ 'Select Tax' | translate }}</h4>
+</div>
+<div class="modal-body">
+	<loading-component [isLoading]="isLoading"></loading-component>
+	<table class="table" *ngIf="!isLoading">
+		<thead>
+			<th></th>
+			<th></th>
+		</thead>
+		<tbody>
+			<tr *ngFor="#tax of taxList" [ngClass]="{active: isTaxSelected(tax)}" (click)="selectTax(tax)" class="selectable-row">
+				<td>{{tax.name}}</td>
+				<td *ngIf="tax.isPercentageValue()">{{tax.value | percentage}}</td>
+				<td *ngIf="tax.isFixedValue()">{{tax.value}} {{ccyCode}}</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+<div class="modal-footer">
+	<button type="button" class="btn btn-primary" 
+		[disabled]="!didSelectTax()"
+		(click)="triggerSelectedTax()">
+		{{ 'Select' | translate }}
+	</button>
+</div>

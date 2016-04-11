@@ -3,7 +3,8 @@
 	<h4 class="modal-title">{{ 'Select Room Category' | translate }}</h4>
 </div>
 <div class="modal-body" #scrollableContent>
-	<table class="table">
+	<loading-component [isLoading]="isLoading"></loading-component>
+	<table class="table" *ngIf="!isLoading">
 		<thead>
 			<th></th>
 			<th *ngIf="allowCategoryEdit"></th>

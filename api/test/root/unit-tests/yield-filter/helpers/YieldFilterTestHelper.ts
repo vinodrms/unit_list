@@ -62,6 +62,12 @@ export class YieldFilterTestHelper {
         
         return result;
     }
+	public getExistingLabelFrom(yieldFilterConfiguration: YieldFilterConfigurationDO): string {
+    	var filterId = this.getFilterIdByType(YieldFilterType.Text);
+        var foundYieldFilter = _.findWhere(yieldFilterConfiguration.value, {id: filterId});
+		var yieldFilterValue: YieldFilterValueDO = _.first(foundYieldFilter.values);
+		return yieldFilterValue.label;
+	}
     
     public getColorSaveYieldFilterValueDOFrom(yieldFilterConfiguration: YieldFilterConfigurationDO): SaveYieldFilterValueDO {
         var filterId = this.getFilterIdByType(YieldFilterType.Color);
@@ -78,7 +84,12 @@ export class YieldFilterTestHelper {
         
         return result;
     }
-    
+	public getExistingColorCodeFrom(yieldFilterConfiguration: YieldFilterConfigurationDO): string {
+    	var filterId = this.getFilterIdByType(YieldFilterType.Color);
+        var foundYieldFilter = _.findWhere(yieldFilterConfiguration.value, {id: filterId});
+		var yieldFilterValue: YieldFilterValueDO = _.first(foundYieldFilter.values);
+		return yieldFilterValue.colorCode;
+	}
     private getFilterIdByType(yieldFilterType: YieldFilterType): string {
         var filterId: string;
 

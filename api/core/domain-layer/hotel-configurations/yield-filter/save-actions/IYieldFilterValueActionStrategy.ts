@@ -1,6 +1,6 @@
 import {ThError} from '../../../../utils/th-responses/ThError';
-import {YieldFilterConfigurationDO} from '../../../../data-layer/hotel-configurations/data-objects/yield-filter/YieldFilterConfigurationDO';
+import {YieldFilterValueDO} from '../../../../data-layer/common/data-objects/yield-filter/YieldFilterValueDO';
 
 export interface IYieldFilterValueActionStrategy {
-	save(resolve: { (result: YieldFilterConfigurationDO): void }, reject: { (err: ThError): void });
+	save(resolve: { (result: YieldFilterValueDO): void }, reject: { (err: ThError): void });
 }

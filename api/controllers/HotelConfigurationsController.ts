@@ -6,6 +6,7 @@ import {LazyLoadMetaResponseRepoDO} from '../core/data-layer/common/repo-data-ob
 import {HotelConfigurationMetaRepoDO} from '../core/data-layer/hotel-configurations/repositories/mongo/AMongoHotelConfigurationRepository';
 import {YieldFilterConfigurationDO} from '../core/data-layer/hotel-configurations/data-objects/yield-filter/YieldFilterConfigurationDO';
 import {SaveYieldFilterValue} from '../core/domain-layer/hotel-configurations/yield-filter/SaveYieldFilterValue';
+import {YieldFilterValueDO} from '../core/data-layer/common/data-objects/yield-filter/YieldFilterValueDO';
 
 class HotelConfigurationsController extends BaseController {
 	
@@ -29,8 +30,8 @@ class HotelConfigurationsController extends BaseController {
 		var sessionContext: SessionContext = req.sessionContext;
         
         var saveYieldFilterValue = new SaveYieldFilterValue(appContext, sessionContext);
-		saveYieldFilterValue.save(req.body.yieldFilterValue).then((updatedYieldFilterConfig: YieldFilterConfigurationDO) => {
-			this.returnSuccesfulResponse(req, res, { updatedYieldFilterConfig: updatedYieldFilterConfig });
+		saveYieldFilterValue.save(req.body.yieldFilterValue).then((yieldFilterValue: YieldFilterValueDO) => {
+			this.returnSuccesfulResponse(req, res, { yieldFilterValue: yieldFilterValue });
 		}).catch((err: any) => {
 			this.returnErrorResponse(req, res, err, ThStatusCode.HotelConfigurationControlllerErrorSavingYieldFilterValue);
 		});

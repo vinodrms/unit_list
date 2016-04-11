@@ -175,5 +175,21 @@ export var EnglishTranslations: Object = {
     "Bed Type": "Bed Type",
     "Skip Beds": "Skip Beds",
     "Before moving to the next section you have to add at least a bed to your inventory.": "Before moving to the next section you have to add at least a bed to your inventory.",
-    "OK": "OK"
+    "OK": "OK",
+	"Select Yield Filter": "Select Yield Filter",
+	"Color Code": "Color Code",
+	"Filter Label": "Filter Label",
+	"Red": "Red",
+	"Yellow": "Yellow",
+	"Green": "Green",
+	"Blue": "Blue",
+	"Gray": "Gray",
+	"Brown": "Brown",
+	"Violet": "Violet",
+	"Orange": "Orange",
+	"Olive": "Olive",
+	"Purple": "Purple",
+	"Filter Value": "Filter Value",
+	"Select Add-On Product": "Select Add-On Product",
+	"Select Tax": "Select Tax"
 };

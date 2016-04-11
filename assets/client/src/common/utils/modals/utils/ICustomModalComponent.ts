@@ -2,7 +2,8 @@ import {ModalDialogInstance} from './ModalDialogInstance';
 
 export enum ModalSize {
 	Small,
-	Large
+	Large,
+	Medium
 }
 
 export interface ICustomModalComponent {
