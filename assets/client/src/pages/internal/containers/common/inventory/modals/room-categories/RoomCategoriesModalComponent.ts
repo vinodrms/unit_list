@@ -1,5 +1,6 @@
 import {Component, OnInit, AfterViewChecked, ViewChild, ElementRef} from 'angular2/core';
 import {BaseComponent} from '../../../../../../../common/base/BaseComponent';
+import {LoadingComponent} from '../../../../../../../common/utils/components/LoadingComponent';
 import {ThError, AppContext} from '../../../../../../../common/utils/AppContext';
 import {ICustomModalComponent, ModalSize} from '../../../../../../../common/utils/modals/utils/ICustomModalComponent';
 import {ModalDialogInstance} from '../../../../../../../common/utils/modals/utils/ModalDialogInstance';
@@ -14,9 +15,12 @@ import {RoomCategoryVM} from './services/view-models/RoomCategoryVM';
 	selector: 'room-categories-modal',
 	templateUrl: "/client/src/pages/internal/containers/common/inventory/modals/room-categories/template/room-categories-modal.html",
 	providers: [RoomCategoriesService],
+	directives: [LoadingComponent],
 	pipes: [TranslationPipe]
 })
 export class RoomCategoriesModalComponent extends BaseComponent implements ICustomModalComponent, OnInit, AfterViewChecked {
+	isLoading: boolean = true;
+	
 	private _scrollToBottom: boolean = false;
 	@ViewChild('scrollableContent') private tableScrollContainer: ElementRef;
 
@@ -44,6 +48,7 @@ export class RoomCategoriesModalComponent extends BaseComponent implements ICust
 					this.selectedCategoryVM = roomCategVM;
 				}
 			});
+			this.isLoading = false;
 		});
 	}
 

@@ -27,13 +27,13 @@ export class YieldFilterModalComponent extends BaseComponent implements ICustomM
 
 	constructor(private _appContext: AppContext,
 		private _modalDialogInstance: ModalDialogInstance<YieldFilterValueDO>,
-		private _roomCategModalInput: YieldFilterModalInput) {
+		private _yieldFilterModalInput: YieldFilterModalInput) {
 		super();
 
 		this.colorFilter = new ColorFilter();
-		this.yieldFilter = this._roomCategModalInput.yieldFilter;
+		this.yieldFilter = this._yieldFilterModalInput.yieldFilter;
 		this.yieldFilterValueVMList = [];
-		_.forEach(this._roomCategModalInput.yieldFilter.values, (filterValue: YieldFilterValueDO) => {
+		_.forEach(this._yieldFilterModalInput.yieldFilter.values, (filterValue: YieldFilterValueDO) => {
 			this.yieldFilterValueVMList.push(new YieldFilterValueVM(filterValue, this.yieldFilter.id, this.colorFilter.getColorMetaByColorCode(filterValue.colorCode)));
 		});
 	}
@@ -86,7 +86,7 @@ export class YieldFilterModalComponent extends BaseComponent implements ICustomM
 			return;
 		}
 		yieldFilterValueVM.isSaving = true;
-		this._roomCategModalInput.yieldFilterService.saveYieldValue(yieldFilterValueVM.filterId, yieldFilterValueVM.filterValue)
+		this._yieldFilterModalInput.yieldFilterService.saveYieldValue(yieldFilterValueVM.filterId, yieldFilterValueVM.filterValue)
 			.subscribe((savedYieldFilterValue: YieldFilterValueDO) => {
 				yieldFilterValueVM.filterValue = savedYieldFilterValue;
 				yieldFilterValueVM.isEditing = false;
