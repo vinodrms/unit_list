@@ -1,7 +1,13 @@
+export interface ConfirmationModalButtons {
+    positive: string,
+    negative?: string
+}
+
 export class ConfirmationModalInput {
 	private _title: string;
 	private _content: string;
-
+    private _buttons: ConfirmationModalButtons;
+    
 	constructor() {
 	}
 
@@ -17,5 +23,12 @@ export class ConfirmationModalInput {
 	}
 	public set content(content: string) {
 		this._content = content;
+	}
+    
+    public get buttons(): ConfirmationModalButtons {
+		return this._buttons;
+	}
+	public set buttons(content: ConfirmationModalButtons) {
+		this._buttons = content;
 	}
 }

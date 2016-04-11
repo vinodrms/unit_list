@@ -5,7 +5,7 @@ import {ModalContainerComponent} from './utils/components/ModalContainerComponen
 import {ModalDialogInstance} from './utils/ModalDialogInstance';
 import {ThError} from '../responses/ThError';
 import {ConfirmationModalComponent} from './modals/confirmation/ConfirmationModalComponent';
-import {ConfirmationModalInput} from './modals/confirmation/utils/ConfirmationModalInput';
+import {ConfirmationModalInput, ConfirmationModalButtons} from './modals/confirmation/utils/ConfirmationModalInput';
 
 @Injectable()
 export class ModalService implements IModalService {
@@ -54,11 +54,12 @@ export class ModalService implements IModalService {
 		$('.modal .modal-body').css('max-height', $(window).height() * 0.7);
 	}
 
-	public confirm(title: string, content: string, onConfirmCallback: { (): void }, onRejectCallback?: { (): void }) {
+	public confirm(title: string, content: string, confirmationButtons: ConfirmationModalButtons, onConfirmCallback: { (): void }, onRejectCallback?: { (): void }) {
 		var confirmationModalInput = new ConfirmationModalInput();
 		confirmationModalInput.title = title;
 		confirmationModalInput.content = content;
-
+        confirmationModalInput.buttons = confirmationButtons;
+        
 		this.open<any>(<any>ConfirmationModalComponent, Injector.resolve([
 			provide(ConfirmationModalInput, { useValue: confirmationModalInput })
 		])).then((modalInstance: ModalDialogInstance<any>) => {
