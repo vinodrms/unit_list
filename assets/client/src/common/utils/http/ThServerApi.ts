@@ -31,7 +31,9 @@ export enum ThServerApi {
 	RoomCategoriesStats,
 	RoomsUsedRoomCategories,
 	HotelConfigurationsYieldFilters,
-	HotelConfigurationsSaveYieldFilterValue
+	HotelConfigurationsSaveYieldFilterValue,
+	PriceProducts,
+	PriceProductsCount
 }
 
 var ThServerApiUrl: { [index: number]: string; } = {};
@@ -70,6 +72,8 @@ ThServerApiUrl[ThServerApi.RoomCategoriesStats] = "/roomsCategories/stats";
 ThServerApiUrl[ThServerApi.RoomsUsedRoomCategories] = "/rooms/usedRoomCategories";
 ThServerApiUrl[ThServerApi.HotelConfigurationsYieldFilters] = "/hotelConfigurations/yieldFilters";
 ThServerApiUrl[ThServerApi.HotelConfigurationsSaveYieldFilterValue] = "/hotelConfigurations/saveYieldFilterValue";
+ThServerApiUrl[ThServerApi.PriceProducts] = "/priceProducts";
+ThServerApiUrl[ThServerApi.PriceProductsCount] = "/priceProducts/count";
 
 export class ServerApiBuilder {
 	public static ApiRoot = "/api";

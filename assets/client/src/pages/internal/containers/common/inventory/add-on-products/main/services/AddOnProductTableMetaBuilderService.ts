@@ -48,7 +48,7 @@ export class AddOnProductTableMetaBuilderService {
 					displayName: "Notes",
 					valueMeta: {
 						objectPropertyId: "addOnProduct.notes",
-						propertyType: TablePropertyType.StringType,
+						propertyType: TablePropertyType.NotesType,
 						showInCollapsedView: false
 					}
 				}
@@ -101,7 +101,7 @@ export class AddOnProductTableMetaBuilderService {
 					displayName: "Notes",
 					valueMeta: {
 						objectPropertyId: "addOnProduct.notes",
-						propertyType: TablePropertyType.StringType,
+						propertyType: TablePropertyType.NotesType,
 						showInCollapsedView: false
 					}
 				}

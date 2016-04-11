@@ -6,8 +6,13 @@ export enum PriceProductCancellationPolicyType {
 	CanCancelDaysBefore,
 	CanCancelBeforeTimeOnDayOfArrival
 }
+export interface CancellationPolicyDescription {
+	phrase: string;
+	parameters?: Object;
+}
 
 export interface IPriceProductCancellationPolicy extends BaseDO {
+	getDescription(): CancellationPolicyDescription;
 	hasCancellationPolicy(): boolean;
 	isValid(): boolean;
 }

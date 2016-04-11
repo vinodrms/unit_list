@@ -7,7 +7,13 @@ export enum PriceProductCancellationPenaltyType {
 	PercentageFromBooking
 }
 
+export interface CancellationPenaltyDescription {
+	phrase: string;
+	parameters?: Object;
+}
+
 export interface IPriceProductCancellationPenalty extends BaseDO {
+	getDescription(): CancellationPenaltyDescription;
 	hasCancellationPenalty(): boolean;
 	isValid(): boolean;
 }

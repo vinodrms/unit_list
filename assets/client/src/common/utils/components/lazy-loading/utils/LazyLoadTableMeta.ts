@@ -18,6 +18,7 @@ export enum TablePropertyType {
 	PercentageType,
 	PriceType,
     CapacityType,
+	NotesType,
     FontIconType
 }
 

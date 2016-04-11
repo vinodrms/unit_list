@@ -1,11 +1,15 @@
 import {BaseDO} from '../../../../../../../common/base/BaseDO';
-import {IPriceProductCancellationPenalty} from './IPriceProductCancellationPenalty';
+import {IPriceProductCancellationPenalty, CancellationPenaltyDescription} from './IPriceProductCancellationPenalty';
 
 export class FullStayCancellationPenaltyDO extends BaseDO implements IPriceProductCancellationPenalty {
 	protected getPrimitivePropertyKeys(): string[] {
 		return [];
 	}
-
+	public getDescription(): CancellationPenaltyDescription {
+		return {
+			phrase: "Pay full stay"
+		}
+	}
 	public hasCancellationPenalty(): boolean {
 		return true;
 	}
