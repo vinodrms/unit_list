@@ -175,5 +175,6 @@ export var EnglishTranslations: Object = {
 	"Orange": "Orange",
 	"Olive": "Olive",
 	"Purple": "Purple",
-	"Filter Value": "Filter Value"
+	"Filter Value": "Filter Value",
+	"Select Add-On Product": "Select Add-On Product"
 };
