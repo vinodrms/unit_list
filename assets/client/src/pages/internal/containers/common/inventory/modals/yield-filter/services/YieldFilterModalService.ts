@@ -4,6 +4,7 @@ import {ModalDialogInstance} from '../../../../../../../../common/utils/modals/u
 import {YieldFilterModalComponent} from '../YieldFilterModalComponent';
 import {YieldFilterModalInput} from './utils/YieldFilterModalInput';
 import {YieldFilterDO} from '../../../../../../services/common/data-objects/yield-filter/YieldFilterDO';
+import {YieldFilterValueDO} from '../../../../../../services/common/data-objects/yield-filter/YieldFilterValueDO';
 import {YieldFiltersService} from '../../../../../../services/hotel-configurations/YieldFiltersService';
 
 @Injectable()
