@@ -61,6 +61,7 @@ export class MongoBedEditOperationsRepository extends MongoRepository {
     }
     private findAndModifyBedCore(bedMeta: BedMetaRepoDO, bedItemMeta: BedItemMetaRepoDO, updateQuery: any, resolve: { (result: BedDO): void }, reject: { (err: ThError): void }) {
         updateQuery.$inc = { "versionId": 1 };
+        delete updateQuery.versionId;
         var findQuery: Object = {
             "hotelId": bedMeta.hotelId,
             "id": bedItemMeta.id,
