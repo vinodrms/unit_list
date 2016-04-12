@@ -8,7 +8,6 @@ import {ALazyLoadRequestService} from '../common/ALazyLoadRequestService';
 import {BedsDO} from './data-objects/BedsDO';
 import {BedDO} from './data-objects/BedDO';
 import {BedVM} from './view-models/BedVM';
-import {HotelAggregatorService} from '../hotel/HotelAggregatorService';
 import {BedTemplatesService} from '../settings/BedTemplatesService';
 import {BedTemplateDO} from '../common/data-objects/bed-template/BedTemplateDO';
 import {BedTemplatesDO} from '../settings/data-objects/BedTemplatesDO';

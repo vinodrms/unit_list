@@ -214,6 +214,8 @@ export var EnglishTranslations: Object = {
 	"No cancellation penalty": "No cancellation penalty",
 	"Pay %percentage%% from whole booking": "Pay %percentage%% from whole booking",
 	"Conditions": "Conditions",
+    "Skip Rooms": "Skip Rooms",
+    "Before moving to the next section you have to add at least a room to your inventory.": "Before moving to the next section you have to add at least a room to your inventory.",
 	"Delete": "Delete",
 	"Archive": "Archive",
 	"Mark as Draft": "Mark as Draft",

@@ -13,6 +13,8 @@ export enum ThServerApi {
 	SettingsCurrencies,
 	SettingsAddOnProductCategories,
     SettingsBedTemplates,
+    SettingsRoomAmenities,
+    SettingsRoomAttributes,
 	ServiceUploadFile,
 	ServiceVatVerifier,
     ServiceTimezones,
@@ -26,6 +28,10 @@ export enum ThServerApi {
     BedsCount,
     BedsSaveItem,
     BedsDeleteItem,
+    Rooms,
+    RoomsCount,
+    RoomsSaveItem,
+    RoomsDeleteItem,
 	RoomCategories,
 	RoomCategoriesSaveItem,
 	RoomCategoriesStats,
@@ -54,6 +60,8 @@ ThServerApiUrl[ThServerApi.SettingsCurrencies] = "/settings/currencies";
 ThServerApiUrl[ThServerApi.SettingsCountries] = "/settings/countries";
 ThServerApiUrl[ThServerApi.SettingsAddOnProductCategories] = "/settings/addOnProductCategories";
 ThServerApiUrl[ThServerApi.SettingsBedTemplates] = "/settings/bedTemplates";
+ThServerApiUrl[ThServerApi.SettingsRoomAmenities] = "/settings/roomAmenities";
+ThServerApiUrl[ThServerApi.SettingsRoomAttributes] = "/settings/roomAttributes";
 ThServerApiUrl[ThServerApi.ServiceUploadFile] = "/service/uploadFile";
 ThServerApiUrl[ThServerApi.ServiceVatVerifier] = "/service/vatVerifier";
 ThServerApiUrl[ThServerApi.ServiceTimezones] = "/service/availableTimeZones";
@@ -70,6 +78,10 @@ ThServerApiUrl[ThServerApi.Beds] = "/beds";
 ThServerApiUrl[ThServerApi.BedsCount] = "/beds/count";
 ThServerApiUrl[ThServerApi.BedsSaveItem] = "/beds/saveBedItem";
 ThServerApiUrl[ThServerApi.BedsDeleteItem] = "/beds/deleteBedItem";
+ThServerApiUrl[ThServerApi.Rooms] = "/rooms";
+ThServerApiUrl[ThServerApi.RoomsCount] = "/rooms/count";
+ThServerApiUrl[ThServerApi.RoomsSaveItem] = "/rooms/saveRoomItem";
+ThServerApiUrl[ThServerApi.RoomsDeleteItem] = "/rooms/deleteRoomItem";
 ThServerApiUrl[ThServerApi.RoomCategories] = "/roomCategories";
 ThServerApiUrl[ThServerApi.RoomCategoriesSaveItem] = "/roomCategories/saveRoomCategoryItem";
 ThServerApiUrl[ThServerApi.RoomCategoriesStats] = "/roomsCategories/stats";

@@ -10,8 +10,8 @@ import {TotalCountDO} from '../../../../../services/common/data-objects/lazy-loa
 import {InventoryScreenStateType} from '../../../../common/inventory/utils/state-manager/InventoryScreenStateType';
 
 @Component({
-	selector: 'wizard-beds-component',
-	templateUrl: '/client/src/pages/internal/containers/wizard/pages/wizard-pages/beds/template/wizard-beds-component.html',
+	selector: 'wizard-beds',
+	templateUrl: '/client/src/pages/internal/containers/wizard/pages/wizard-pages/beds/template/wizard-beds.html',
     providers: [BedsTotalCountService],
     directives: [BedsComponent],
 	pipes: [TranslationPipe]

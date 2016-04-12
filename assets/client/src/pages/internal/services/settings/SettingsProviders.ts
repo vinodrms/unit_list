@@ -4,6 +4,8 @@ import {HotelAmenitiesService} from './HotelAmenitiesService';
 import {HotelPaymentMethodsService} from './HotelPaymentMethodsService';
 import {BedTemplatesService} from './BedTemplatesService';
 import {AddOnProductCategoriesService} from './AddOnProductCategoriesService';
+import {RoomAmenitiesService} from './RoomAmenitiesService';
+import {RoomAttributesService} from './RoomAttributesService';
 
 export const SETTINGS_PROVIDERS: any[] = [
 	CountriesService,
@@ -11,5 +13,7 @@ export const SETTINGS_PROVIDERS: any[] = [
 	HotelAmenitiesService,
 	HotelPaymentMethodsService,
 	AddOnProductCategoriesService,
-    BedTemplatesService
+    BedTemplatesService,
+    RoomAmenitiesService,
+    RoomAttributesService
 ];
