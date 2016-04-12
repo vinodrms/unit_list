@@ -20,7 +20,7 @@ class RoomsController extends BaseController {
 
 		var roomRepo = appContext.getRepositoryFactory().getRoomRepository();
 		roomRepo.getRoomList(roomMeta, req.body.searchCriteria, req.body.lazyLoad).then((rooms: RoomSearchResultRepoDO) => {
-			this.returnSuccesfulResponse(req, res, { rooms });
+			this.returnSuccesfulResponse(req, res, rooms);
 		}).catch((err: any) => {
 			this.returnErrorResponse(req, res, err, ThStatusCode.RoomsControllerErrorGettingRooms);
 		});
