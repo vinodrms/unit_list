@@ -63,4 +63,26 @@ export class PriceProductsService extends ALazyLoadRequestService<PriceProductVM
 		}
 	}
 
+	public savePriceProductDO(priceProduct: PriceProductDO): Observable<PriceProductDO> {
+		return this.runServerPostActionOnPriceProduct(ThServerApi.PriceProductsSaveItem, priceProduct);
+	}
+	public deletePriceProductDO(priceProduct: PriceProductDO): Observable<PriceProductDO> {
+		return this.runServerPostActionOnPriceProduct(ThServerApi.PriceProductsDeleteItem, priceProduct);
+	}
+	public archivePriceProductDO(priceProduct: PriceProductDO): Observable<PriceProductDO> {
+		return this.runServerPostActionOnPriceProduct(ThServerApi.PriceProductsArchiveItem, priceProduct);
+	}
+	public draftPriceProductDO(priceProduct: PriceProductDO): Observable<PriceProductDO> {
+		return this.runServerPostActionOnPriceProduct(ThServerApi.PriceProductsDraftItem, priceProduct);
+	}
+
+	private runServerPostActionOnPriceProduct(apiAction: ThServerApi, priceProduct: PriceProductDO): Observable<PriceProductDO> {
+		return this._appContext.thHttp.post(apiAction, { priceProduct: priceProduct }).map((addOnProductObject: Object) => {
+			this.refreshData();
+
+			var updatedPriceProductDO: PriceProductDO = new PriceProductDO();
+			updatedPriceProductDO.buildFromObject(addOnProductObject["priceProduct"]);
+			return updatedPriceProductDO;
+		});
+	}
 }

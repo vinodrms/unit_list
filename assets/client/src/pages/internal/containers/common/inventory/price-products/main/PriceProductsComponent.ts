@@ -78,60 +78,82 @@ export class PriceProductsComponent extends BaseComponent implements AfterViewIn
 		return this.priceProductStatus === PriceProductStatus.Archived;
 	}
 
-	/*
-	public addAddOnProduct() {
-        var newAddOnProductVM = this.buildNewAddOnProductVM();
+	public addPriceProduct() {
+        var newPriceProductVM = this.buildNewPriceProductVM();
         this._inventoryStateManager.canPerformAction(InventoryScreenAction.Add).then((newState: InventoryScreenStateType) => {
             this._aopTableComponent.deselectItem();
 
-            this._inventoryStateManager.currentItem = newAddOnProductVM;
+            this._inventoryStateManager.currentItem = newPriceProductVM;
             this._inventoryStateManager.screenStateType = newState;
         }).catch((e: any) => { });
     }
-    public copyAddOnProduct(addOnProductVM: AddOnProductVM) {
-        var newAddOnProductVM = addOnProductVM.buildPrototype();
-        delete newAddOnProductVM.addOnProduct.id;
-        this._inventoryStateManager.canPerformAction(InventoryScreenAction.Copy, newAddOnProductVM).then((newState: InventoryScreenStateType) => {
+    public copyPriceProduct(priceProductVM: PriceProductVM) {
+        var newPriceProductVM = priceProductVM.buildPrototype();
+        delete newPriceProductVM.priceProduct.id;
+		newPriceProductVM.priceProduct.status = PriceProductStatus.Draft;
+        this._inventoryStateManager.canPerformAction(InventoryScreenAction.Copy, newPriceProductVM).then((newState: InventoryScreenStateType) => {
             this._aopTableComponent.deselectItem();
 
-            this._inventoryStateManager.currentItem = newAddOnProductVM;
+            this._inventoryStateManager.currentItem = newPriceProductVM;
             this._inventoryStateManager.screenStateType = newState;
         }).catch((e: any) => { });
     }
-    public editAddOnProduct(addOnProductVM: AddOnProductVM) {
-        var newAddOnProductVM = addOnProductVM.buildPrototype();
-        this._inventoryStateManager.canPerformAction(InventoryScreenAction.Edit, newAddOnProductVM).then((newState: InventoryScreenStateType) => {
-            this._aopTableComponent.selectItem(newAddOnProductVM.addOnProduct.id);
+	public editPriceProduct(priceProductVM: PriceProductVM) {
+        var newPriceProductVM = priceProductVM.buildPrototype();
+        this._inventoryStateManager.canPerformAction(InventoryScreenAction.Edit, newPriceProductVM).then((newState: InventoryScreenStateType) => {
+            this._aopTableComponent.selectItem(newPriceProductVM.priceProduct.id);
 
-            this._inventoryStateManager.currentItem = newAddOnProductVM;
+            this._inventoryStateManager.currentItem = newPriceProductVM;
             this._inventoryStateManager.screenStateType = newState;
         }).catch((e: any) => { });
     }
-    public deleteAddOnProduct(addOnProductVM: AddOnProductVM) {
-        var newAddOnProductVM = addOnProductVM.buildPrototype();
-        this._inventoryStateManager.canPerformAction(InventoryScreenAction.Delete, newAddOnProductVM).then((newState: InventoryScreenStateType) => {
-            var title = this._appContext.thTranslation.translate("Delete Add-On Product");
-            var content = this._appContext.thTranslation.translate("Are you sure you want to delete %name% ?", { name: addOnProductVM.addOnProduct.name });
+	public deletePriceProduct(priceProductVM: PriceProductVM) {
+		var title = this._appContext.thTranslation.translate("Delete Price Product");
+		var content = this._appContext.thTranslation.translate("Are you sure you want to delete %name% ?", { name: priceProductVM.priceProduct.name });
+		this.confirmRemoveAction(priceProductVM, title, content, (priceProductDO: PriceProductDO) => {
+			this._priceProductsService.deletePriceProductDO(priceProductDO).subscribe((deletedAddOnProduct: PriceProductDO) => {
+			}, (error: ThError) => {
+				this._appContext.toaster.error(error.message);
+			});
+		});
+    }
+	public archivePriceProduct(priceProductVM: PriceProductVM) {
+		var title = this._appContext.thTranslation.translate("Archive Price Product");
+		var content = this._appContext.thTranslation.translate("Are you sure you want to archive %name% ?", { name: priceProductVM.priceProduct.name });
+		this.confirmRemoveAction(priceProductVM, title, content, (priceProductDO: PriceProductDO) => {
+			this._priceProductsService.archivePriceProductDO(priceProductDO).subscribe((deletedAddOnProduct: PriceProductDO) => {
+			}, (error: ThError) => {
+				this._appContext.toaster.error(error.message);
+			});
+		});
+	}
+	public draftPriceProduct(priceProductVM: PriceProductVM) {
+		var title = this._appContext.thTranslation.translate("Draft Price Product");
+		var content = this._appContext.thTranslation.translate("Are you sure you want to mark %name% as draft ?", { name: priceProductVM.priceProduct.name });
+		this.confirmRemoveAction(priceProductVM, title, content, (priceProductDO: PriceProductDO) => {
+			this._priceProductsService.draftPriceProductDO(priceProductDO).subscribe((deletedAddOnProduct: PriceProductDO) => {
+			}, (error: ThError) => {
+				this._appContext.toaster.error(error.message);
+			});
+		});
+	}
+	private confirmRemoveAction(priceProductVM: PriceProductVM, confirmationTitle, confirmationContent, onConfirm: { (priceProductDO: PriceProductDO): void }) {
+		var newPriceProductVM = priceProductVM.buildPrototype();
+        this._inventoryStateManager.canPerformAction(InventoryScreenAction.Delete, newPriceProductVM).then((newState: InventoryScreenStateType) => {
             var positiveLabel = this._appContext.thTranslation.translate("Yes");
             var negativeLabel = this._appContext.thTranslation.translate("No");
 
-            this._appContext.modalService.confirm(title, content, { positive: positiveLabel, negative: negativeLabel }, () => {
+            this._appContext.modalService.confirm(confirmationTitle, confirmationContent, { positive: positiveLabel, negative: negativeLabel }, () => {
                 if (newState === InventoryScreenStateType.View) {
                     this._aopTableComponent.deselectItem();
                     this._inventoryStateManager.currentItem = null;
                 }
                 this._inventoryStateManager.screenStateType = newState;
-                this.deleteAddOnProductOnServer(newAddOnProductVM.addOnProduct);
+                onConfirm(newPriceProductVM.priceProduct);
             });
         }).catch((e: any) => { });
-    }
-    private deleteAddOnProductOnServer(addOnProductDO: AddOnProductDO) {
-        this._addOnProductsService.deleteAddOnProductDO(addOnProductDO).subscribe((deletedAddOnProduct: AddOnProductDO) => {
-        }, (error: ThError) => {
-            this._appContext.toaster.error(error.message);
-        });
-    }
-	*/
+	}
+
     public selectPriceProduct(priceProductVM: PriceProductVM) {
         var newPriceProductVM = priceProductVM.buildPrototype();
         this._inventoryStateManager.canPerformAction(InventoryScreenAction.Select, newPriceProductVM).then((newState: InventoryScreenStateType) => {
@@ -150,6 +172,7 @@ export class PriceProductsComponent extends BaseComponent implements AfterViewIn
     private buildNewPriceProductVM(): PriceProductVM {
         var vm = new PriceProductVM(this._appContext.thTranslation);
         vm.priceProduct = new PriceProductDO();
+		vm.priceProduct.status = PriceProductStatus.Draft;
         return vm;
     }
 

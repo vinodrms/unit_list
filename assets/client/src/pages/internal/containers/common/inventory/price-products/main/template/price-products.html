@@ -14,9 +14,15 @@
 		<br/>
 	</div>
 	<lazy-loading-table
-		[isCollapsed]="isEditing" 
-		
+		[isCollapsed]="isEditing"
+		(onAdd)="addPriceProduct()"
+		(onCopy)="copyPriceProduct($event)"
 		(onSelect)="selectPriceProduct($event)"
+		
+		(onEdit)="editPriceProduct($event)"
+		(onDelete)="deletePriceProduct($event)"
+		(onArchive)="archivePriceProduct($event)"
+		(onDraft)="draftPriceProduct($event)"
 		>
 	</lazy-loading-table>
 </div>
@@ -24,6 +30,11 @@
 	<price-product-overview 
 		*ngIf="selectedPriceProductVM" 
 		[priceProductVM]="selectedPriceProductVM"
+		
+		(onEdit)="editPriceProduct($event)"
+		(onDelete)="deletePriceProduct($event)"
+		(onArchive)="archivePriceProduct($event)"
+		(onDraft)="draftPriceProduct($event)"
 		>
 	</price-product-overview>
 </div>

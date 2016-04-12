@@ -32,7 +32,7 @@
 		<a class="btn btn-lg" (click)="archivePriceProduct()" *ngIf="priceProductVM.priceProduct.isActive()">
 			<i class="fa fa-archive"></i> {{ 'Archive' | translate }}
 		</a>
-		<a class="btn btn-lg" (click)="activatePriceProduct()" *ngIf="priceProductVM.priceProduct.isArchived()">
+		<a class="btn btn-lg" (click)="draftPriceProduct()" *ngIf="priceProductVM.priceProduct.isArchived()">
 			<i class="fa fa-retweet"></i> {{ 'Mark as Draft' | translate }}
 		</a>
 	</div>

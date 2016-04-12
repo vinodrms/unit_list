@@ -221,5 +221,10 @@ export var EnglishTranslations: Object = {
 	"Mark as Draft": "Mark as Draft",
 	"Some prices are missing from the price product\'s configuration": "Some prices are missing from the price product\'s configuration",
     "Rooms": "Rooms",
-    "[Wizard Step 3] Rooms text": "In this section you can define the rooms for your hotel."  
+    "[Wizard Step 3] Rooms text": "In this section you can define the rooms for your hotel.",  
+	"Delete Price Product": "Delete Price Product",
+	"Are you sure you want to archive %name%": "Are you sure you want to archive %name%" ,
+	"Draft Price Product": "Draft Price Product",
+	"Are you sure you want to mark %name% as draft ?": "Are you sure you want to mark %name% as draft ?",
+	"Archive Price Product" : "Archive Price Product"
 };
