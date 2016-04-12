@@ -53,4 +53,13 @@ export class PriceProductDO extends BaseDO {
 		this.conditions = new PriceProductConditionsDO();
 		this.conditions.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "conditions"));
 	}
+	public isDraft(): boolean {
+		return this.status === PriceProductStatus.Draft;
+	}
+	public isActive(): boolean {
+		return this.status === PriceProductStatus.Active;
+	}
+	public isArchived(): boolean {
+		return this.status === PriceProductStatus.Archived;
+	}
 }

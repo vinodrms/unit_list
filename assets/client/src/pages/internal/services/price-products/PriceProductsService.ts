@@ -53,7 +53,9 @@ export class PriceProductsService extends ALazyLoadRequestService<PriceProductVM
 		});
 	}
 	public searchByText(text: string) {
-
+		this.updateSearchCriteria({
+			name: text
+		});
 	}
 	public setStatusFilter(status: PriceProductStatus) {
 		this.defaultSearchCriteria = {

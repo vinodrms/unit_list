@@ -96,6 +96,12 @@ export class PriceProductVM {
 		this._roomCategoryList = roomCategoryList;
 		this._priceProduct.roomCategoryIdList = _.map(roomCategoryList, (roomCategory: RoomCategoryDO) => { return roomCategory.id });
 	}
+	public get yieldFilterVMValues(): YieldFilterValueVM[] {
+		return this._yieldFilterVMValues;
+	}
+	public set yieldFilterVMValues(yieldFilterVMValues: YieldFilterValueVM[]) {
+		this._yieldFilterVMValues = yieldFilterVMValues;
+	}
 
 	public updateYieldFilterValueVM(filterValueVM: YieldFilterValueVM) {
 		this._yieldFilterVMValues = _.reject(this._yieldFilterVMValues, (yieldFilterValue: YieldFilterValueVM) => {
@@ -123,7 +129,7 @@ export class PriceProductVM {
 		});
 		return filterValueVM.yieldFilterValue;
 	}
-	
+
 	public get availabilityString(): string {
 		switch (this._priceProduct.availability) {
 			case PriceProductAvailability.Confidential:
@@ -143,7 +149,7 @@ export class PriceProductVM {
 	public get roomCategoriesString(): string {
 		var roomCategoriesString: string = "";
 		_.forEach(this._roomCategoryList, (roomCategory: RoomCategoryDO) => {
-			if(roomCategoriesString.length > 0) {
+			if (roomCategoriesString.length > 0) {
 				roomCategoriesString += ", ";
 			}
 			roomCategoriesString += roomCategory.displayName;
@@ -152,9 +158,20 @@ export class PriceProductVM {
 	}
 	public get cancellationConditionsString(): string {
 		var policyDesc = this._priceProduct.conditions.policy.getDescription();
-		var description = this._thTranslation.translate(policyDesc.phrase, policyDesc.parameters); 
+		var description = this._thTranslation.translate(policyDesc.phrase, policyDesc.parameters);
 		var penaltyDesc = this._priceProduct.conditions.penalty.getDescription();
 		description += " / " + this._thTranslation.translate(penaltyDesc.phrase, penaltyDesc.parameters);
 		return description;
+	}
+
+	public buildPrototype(): PriceProductVM {
+		var copy = new PriceProductVM(this._thTranslation);
+		copy.priceProduct = new PriceProductDO();
+		copy.priceProduct.buildFromObject(this.priceProduct);
+		copy.vatTax = this.vatTax;
+		copy.otherTaxList = this.otherTaxList;
+		copy.roomCategoryList = this.roomCategoryList;
+		copy.yieldFilterVMValues = this.yieldFilterVMValues;
+		return copy;
 	}
 }

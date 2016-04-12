@@ -1,0 +1,39 @@
+<div class="row" *ngIf="priceProductVM">
+	<div class="col-sm-12">
+		<kbd>{{ 'Selected' | translate }}</kbd>
+	</div>
+	<div class="col-sm-12">
+		<h1>{{priceProductVM.priceProduct.name}}</h1>
+	</div>
+	<div class="col-sm-12">
+		<i class="fa fa-home"></i> <small>{{priceProductVM.roomCategoriesString}}</small>
+	</div>
+	<div class="col-sm-12">
+		<i class="fa fa-globe"></i> <small>{{priceProductVM.availabilityString}}</small>
+	</div>
+	<div class="col-sm-12">
+		<i class="fa fa-credit-card"></i> <small>{{priceProductVM.priceTypeString}}</small>
+		<i class="fa fa-check green-color" *ngIf="priceConfigurationIsValid()"></i>
+		<i class="fa fa-exclamation-circle red-color" *ngIf="!priceConfigurationIsValid()"></i>
+	</div>
+	<div class="col-sm-12" *ngIf="!priceConfigurationIsValid()">
+		<label class="text-muted"><small><i class="fa fa-info-circle"></i> {{ 'Some prices are missing from the price product\'s configuration' | translate }}</small></label>
+	</div>
+	<div class="col-sm-12">
+		<i class="fa fa-calendar-check-o"></i> <small>{{priceProductVM.cancellationConditionsString}}</small>
+	</div>
+	<div class="col-sm-12">
+		<a class="btn btn-lg" (click)="editPriceProduct()">
+			<i class="fa fa-pencil"></i> {{ 'Edit' | translate }}
+		</a>
+		<a class="btn btn-lg" (click)="deletePriceProduct()" *ngIf="priceProductVM.priceProduct.isDraft()">
+			<i class="fa fa-remove"></i> {{ 'Delete' | translate }}
+		</a>
+		<a class="btn btn-lg" (click)="archivePriceProduct()" *ngIf="priceProductVM.priceProduct.isActive()">
+			<i class="fa fa-archive"></i> {{ 'Archive' | translate }}
+		</a>
+		<a class="btn btn-lg" (click)="activatePriceProduct()" *ngIf="priceProductVM.priceProduct.isArchived()">
+			<i class="fa fa-retweet"></i> {{ 'Mark as Draft' | translate }}
+		</a>
+	</div>
+</div>
