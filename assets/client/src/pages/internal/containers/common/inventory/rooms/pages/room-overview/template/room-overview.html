@@ -1,1 +1,23 @@
-<p>ROOM OVERVIEW</p>
+<div class="row">
+    <div class="col-sm-12">
+		<img class="img-responsive" [src]="roomVM.room.fileUrlList[0]" *ngIf="roomVM.room.fileUrlList && roomVM.room.fileUrlList.length>0" />
+	</div>
+    <div class="col-sm-12">
+        <kbd>{{ 'Selected' | translate }}</kbd>
+    </div>
+    <div class="col-sm-12">
+        <h1>{{ roomVM.room.name }}</h1>
+    </div>
+    <div class="col-sm-12">
+        <small>Accomodates {{ roomVM.capacity.maxAdults }} <i class="fa fa-male"></i> {{ roomVM.capacity.maxChildren }} <i class="fa fa-child"></i></small>
+    </div>
+
+    <div class="col-sm-12">
+        <small>{{ roomVM.room.notes }}</small>
+    </div>
+    <div class="col-sm-12">
+		<a class="btn btn-lg" (click)="editRoom()">
+			<i class="fa fa-pencil"></i> {{ 'Edit' | translate }}
+		</a>
+	</div>
+</div>
