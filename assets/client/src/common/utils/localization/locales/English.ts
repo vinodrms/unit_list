@@ -242,5 +242,17 @@ export var EnglishTranslations: Object = {
 	"Add On Products": "Add On Products",
 	"You can include Add On Products in the Price Product. The prices will include the Add On Product Prices.": "You can include Add On Products in the Price Product. The prices will include the Add On Product Prices.",
 	"The VAT needs to be included in the price": "The VAT needs to be included in the price",
-	"Other taxes included in the Price Product": "Other taxes included in the Price Product"
+	"Other taxes included in the Price Product": "Other taxes included in the Price Product",
+	"Price per number of persons": "Price per number of persons",
+	"Invalid Price": "Invalid Price",
+	"Price For Adults": "Price For Adults",
+	"st": "st",
+	"nd": "nd",
+	"rd": "rd",
+	"th": "th",
+	"Price For Children": "Price For Children",
+	"All the prices are cummulative. For example, the price for a booking made for 2 adults and 2 children will have the total price as the sum between the 1st Adult, 2nd Adult, 1st Child and 2nd Child": "All the prices are cummulative. For example, the price for a booking made for 2 adults and 2 children will have the total price as the sum between the 1st Adult, 2nd Adult, 1st Child and 2nd Child",
+	"Single price for a room category, not dependent on the number of persons": "Single price for a room category, not dependent on the number of persons",
+	"Price configuration in %ccySymbol%": "Price configuration in %ccySymbol%"
+	
 };

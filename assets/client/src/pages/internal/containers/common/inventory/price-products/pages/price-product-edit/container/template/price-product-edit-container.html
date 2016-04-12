@@ -6,63 +6,23 @@
 	<hr>
 	<div class="row">
 		<div class="col-md-6 col-sm-6 col-xs-12">
-			<price-product-edit-room-categories-section [didSubmit]="didSubmit"></price-product-edit-room-categories-section>
+			<price-product-edit-room-categories-section 
+				[didSubmit]="didSubmit"
+				(onRoomCategoryChange)="handleRoomCategoryChange($event)">
+			</price-product-edit-room-categories-section>
 		</div>
 		<div class="col-md-6 col-sm-6 col-xs-12">
 			<price-product-edit-add-on-products-section [didSubmit]="didSubmit"></price-product-edit-add-on-products-section>
 		</div>	
 	</div>
-	
+	<hr>
+	<div class="row">
+		<price-product-edit-prices-section [didSubmit]="didSubmit"></price-product-edit-prices-section>
+	</div>
 	<div class="row">
 		<price-product-edit-taxes-section [didSubmit]="didSubmit"></price-product-edit-taxes-section>
 	</div>
-	<hr>
-
-	<div class="row">
-
-
-		<div class="col-md-4 col-xs-12 form-group">
-
-
-			<label for="pricetype">Price per number of persons</label>
-			<div class="input-group">
-				<div class="btn-group" data-toggle="buttons">
-					<label class="btn btn-default active">
-						<input type="radio" name="options" id="option5" autocomplete="off" checked>Yes
-					</label>
-					<label class="btn btn-default">
-						<input type="radio" name="options" id="option6" autocomplete="off">No
-					</label>
-				</div>
-
-			</div>
-			<small class="text-muted"><i class="fa fa-info-circle"></i> Price per number of adults/children, or single price for room category </small>
-
-		</div>
-
-		<div class="col-md-4 col-xs-6">
-
-			<label for="pricetype">Price configuration</label>
-			<div class="row">
-				<div class="col-xs-6">
-					<label for="sroom">Single Room</label>
-					<div class="input-group">
-						<input type="number" placeholder="Price" class="form-control">
-					</div>
-				</div>
-
-				<div class="col-xs-6">
-					<label for="sroom">Double Room</label>
-					<div class="input-group">
-						<input type="number" placeholder="Price" class="form-control">
-					</div>
-				</div>
-
-			</div>
-		</div>
-
-
-	</div>
+	
 	<hr>
 	<!-- Filters -->
 	<div class="row">

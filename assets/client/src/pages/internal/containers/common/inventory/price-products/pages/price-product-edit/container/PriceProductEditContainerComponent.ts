@@ -13,19 +13,22 @@ import {EagerAddOnProductsService} from '../../../../../../../services/add-on-pr
 import {AddOnProductsDO} from '../../../../../../../services/add-on-products/data-objects/AddOnProductsDO';
 import {HotelAggregatorService} from '../../../../../../../services/hotel/HotelAggregatorService';
 import {HotelAggregatedInfo} from '../../../../../../../services/hotel/utils/HotelAggregatedInfo';
+import {RoomCategoryDO} from '../../../../../../../services/room-categories/data-objects/RoomCategoryDO';
 import {PriceProductEditSectionContainer} from './utils/PriceProductEditSectionContainer';
 import {PriceProductEditTopSectionComponent} from '../sections/top-section/PriceProductEditTopSectionComponent';
 import {PriceProductEditRoomCategoriesSectionComponent} from '../sections/room-categories/PriceProductEditRoomCategoriesSectionComponent';
 import {PriceProductEditAddOnProductsSectionComponent} from '../sections/add-on-products/PriceProductEditAddOnProductsSectionComponent';
 import {PriceProductEditTaxesSectionComponent} from '../sections/taxes/PriceProductEditTaxesSectionComponent';
+import {PriceProductEditPricesSectionComponent} from '../sections/prices/PriceProductEditPricesSectionComponent';
 
 @Component({
 	selector: 'price-product-edit-container',
 	templateUrl: '/client/src/pages/internal/containers/common/inventory/price-products/pages/price-product-edit/container/template/price-product-edit-container.html',
 	providers: [EagerAddOnProductsService],
-	directives: [LoadingComponent, 
-		PriceProductEditTopSectionComponent, PriceProductEditRoomCategoriesSectionComponent, 
-		PriceProductEditAddOnProductsSectionComponent, PriceProductEditTaxesSectionComponent],
+	directives: [LoadingComponent,
+		PriceProductEditTopSectionComponent, PriceProductEditRoomCategoriesSectionComponent,
+		PriceProductEditAddOnProductsSectionComponent, PriceProductEditTaxesSectionComponent,
+		PriceProductEditPricesSectionComponent],
 	pipes: [TranslationPipe]
 })
 
@@ -34,6 +37,7 @@ export class PriceProductEditContainerComponent extends BaseComponent implements
 	@ViewChild(PriceProductEditRoomCategoriesSectionComponent) private _roomCategoriesSectionComponent: PriceProductEditRoomCategoriesSectionComponent;
 	@ViewChild(PriceProductEditAddOnProductsSectionComponent) private _addOnProductsSection: PriceProductEditAddOnProductsSectionComponent;
 	@ViewChild(PriceProductEditTaxesSectionComponent) private _editTaxesSection: PriceProductEditTaxesSectionComponent;
+	@ViewChild(PriceProductEditPricesSectionComponent) private _editPricesSection: PriceProductEditPricesSectionComponent;
 
 	private _didInit = false;
 	isLoading: boolean = true;
@@ -72,7 +76,8 @@ export class PriceProductEditContainerComponent extends BaseComponent implements
 					this._topSectionComponent,
 					this._roomCategoriesSectionComponent,
 					this._addOnProductsSection,
-					this._editTaxesSection
+					this._editTaxesSection,
+					this._editPricesSection
 				]
 			);
 			this.initializeDependentData();
@@ -111,6 +116,10 @@ export class PriceProductEditContainerComponent extends BaseComponent implements
 	private yieldFiltersAreReadOnly(): boolean {
 		return this.isReadOnly() && this._priceProductVM.priceProduct.status !== PriceProductStatus.Active;
 	}
+	public handleRoomCategoryChange(roomCategoryList: RoomCategoryDO[]) {
+		this._editPricesSection.updatePricesForRoomCategories(roomCategoryList);
+	}
+
 	public savePriceProduct() {
 		this.didSubmit = true;
 		if (!this._editSectionContainer.isValid()) {

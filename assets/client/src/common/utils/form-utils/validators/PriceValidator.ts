@@ -1,4 +1,5 @@
 import {AThValidator} from './AThValidator';
+import {ThDataValidators} from '../utils/ThDataValidators';
 
 export class PriceValidator extends AThValidator {
 	constructor(isNullable?: boolean) {
@@ -6,9 +7,6 @@ export class PriceValidator extends AThValidator {
 	}
 
 	protected isValidCore(value: any): boolean {
-		if (!_.isNumber(value)) {
-			return false;
-		}
-		return value >= 0.0;
+		return ThDataValidators.isValidPrice(value);
 	}
 }
