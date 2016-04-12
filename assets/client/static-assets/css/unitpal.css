@@ -292,11 +292,17 @@ input[type="number"].form-control {
 .red {
   background: red;
 }
+.red-color {
+	color: red;
+}
 .yellow {
   background: yellow;
 }
 .green {
   background: green;
+}
+.green-color {
+	color: green;
 }
 .blue {
   background: blue;

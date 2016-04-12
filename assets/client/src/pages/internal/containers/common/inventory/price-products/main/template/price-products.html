@@ -1,11 +1,31 @@
 <div class="overview-left" [ngClass]="{'col-sm-9': !isEditing, 'col-sm-3': isEditing}">
+	<div class="row">
+		<ul class="nav nav-tabs">
+			<li [ngClass]="{active : areActivePriceProducts()}">
+				<a (click)="viewActivePriceProducts()">Active</a>
+			</li>
+			<li [ngClass]="{active : areDraftPriceProducts()}">
+				<a (click)="viewDraftPriceProducts()">Draft</a>
+			</li>
+			<li [ngClass]="{active : areArchivedPriceProducts()}">
+				<a (click)="viewArchivedPriceProducts()">Archived</a>
+			</li>
+		</ul>
+		<br/>
+	</div>
 	<lazy-loading-table
 		[isCollapsed]="isEditing" 
+		
+		(onSelect)="selectPriceProduct($event)"
 		>
 	</lazy-loading-table>
 </div>
 <div class="col-sm-3 overview-right hidden-xs hidden-sm" *ngIf="!isEditing">
-
+	<price-product-overview 
+		*ngIf="selectedPriceProductVM" 
+		[priceProductVM]="selectedPriceProductVM"
+		>
+	</price-product-overview>
 </div>
 <div class="col-sm-9 singleview-right" *ngIf="isEditing">
 	

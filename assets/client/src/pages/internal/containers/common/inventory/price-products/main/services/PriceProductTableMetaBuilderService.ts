@@ -7,7 +7,7 @@ export class PriceProductTableMetaBuilderService {
 
 	public buildLazyLoadTableMeta(): LazyLoadTableMeta {
 		return {
-			supportedRowCommandList: [TableRowCommand.Copy, TableRowCommand.Delete, TableRowCommand.Edit, TableRowCommand.Select, TableRowCommand.Add, TableRowCommand.Search],
+			supportedRowCommandList: [TableRowCommand.Copy, TableRowCommand.Edit, TableRowCommand.Select, TableRowCommand.Add, TableRowCommand.Search],
 			rowIdPropertySelector: "priceProduct.id",
 			addButtonText: "Price Product",
 			searchInputPlaceholder: "Search by name",

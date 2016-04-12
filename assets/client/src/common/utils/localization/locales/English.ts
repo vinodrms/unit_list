@@ -209,5 +209,9 @@ export var EnglishTranslations: Object = {
 	"Pay full stay": "Pay full stay",
 	"No cancellation penalty": "No cancellation penalty",
 	"Pay %percentage%% from whole booking": "Pay %percentage%% from whole booking",
-	"Conditions": "Conditions"
+	"Conditions": "Conditions",
+	"Delete": "Delete",
+	"Archive": "Archive",
+	"Mark as Draft": "Mark as Draft",
+	"Some prices are missing from the price product\'s configuration": "Some prices are missing from the price product\'s configuration"
 };
