@@ -84,6 +84,12 @@ export class RoomVM {
             roomAttributeCopy.buildFromObject(roomAttributeItem);
             copy.roomAttributeList.push(roomAttributeCopy);       
         });
+        copy.bedList = [];
+        this.bedList.forEach((bed: BedDO) => {
+            var bedCopy = new BedDO();    
+            bedCopy.buildFromObject(bed);
+            copy.bedList.push(bedCopy);
+        });
 		return copy;
 	}
 }
