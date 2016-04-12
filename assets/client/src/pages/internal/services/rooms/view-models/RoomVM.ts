@@ -3,6 +3,7 @@ import {RoomCategoryDO} from '../../room-categories/data-objects/RoomCategoryDO'
 import {BedDO} from '../../beds/data-objects/BedDO';
 import {AmenityDO} from '../../common/data-objects/amenity/AmenityDO';
 import {RoomAttributeDO} from '../../common/data-objects/room-attribute/RoomAttributeDO';
+import {CapacityDO} from '../../common/data-objects/capacity/CapacityDO';
 
 export class RoomVM {
 
@@ -50,6 +51,20 @@ export class RoomVM {
         this._roomAttributeList = roomAttributeList;
     }
     
+    public get capacity(): CapacityDO {
+        var maxAdults = 0, maxChildren = 0;
+        
+        _.forEach(this.bedList, (bedDO: BedDO) => {
+            maxAdults += bedDO.maxNoAdults;
+            maxChildren += bedDO.maxNoChildren;
+        });
+        
+        return {
+            maxChildren: maxChildren,
+            maxAdults: maxAdults
+        }
+    }
+    
     public buildPrototype(): RoomVM {
 		var copy = new RoomVM();
 		copy.room = new RoomDO();
@@ -57,11 +72,6 @@ export class RoomVM {
         copy.category = new RoomCategoryDO();
         copy.category.buildFromObject(this.category);
         copy.bedList = [];
-        this.bedList.forEach((bedItem: BedDO) => {
-            var bedCopy = new BedDO();
-            bedCopy.buildFromObject(bedItem);
-            copy.bedList.push(bedCopy);    
-        });
         copy.roomAmenityList = [];
         this.roomAmenityList.forEach((roomAmenityItem: AmenityDO) => {
             var roomAmenityCopy = new AmenityDO();

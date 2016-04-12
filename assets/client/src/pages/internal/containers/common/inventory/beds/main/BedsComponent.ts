@@ -71,11 +71,11 @@ export class BedsComponent extends BaseComponent {
         }).catch((e: any) => { });
     }
     public editBed(bedVM: BedVM) {
-        var newAddOnProductVM = bedVM.buildPrototype();
-        this._inventoryStateManager.canPerformAction(InventoryScreenAction.Edit, newAddOnProductVM).then((newState: InventoryScreenStateType) => {
+        var newBedVM = bedVM.buildPrototype();
+        this._inventoryStateManager.canPerformAction(InventoryScreenAction.Edit, newBedVM).then((newState: InventoryScreenStateType) => {
             this._bedTableComponent.selectItem(bedVM.bed.id);
 
-            this._inventoryStateManager.currentItem = newAddOnProductVM;
+            this._inventoryStateManager.currentItem = newBedVM;
             this._inventoryStateManager.screenStateType = newState;
         }).catch((e: any) => { });
     }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from 'angular2/core';
+import {Component} from 'angular2/core';
 import {BaseComponent} from '../../../../../../../common/base/BaseComponent';
 import {WizardRoomsStateService} from './services/WizardRoomsStateService';
 import {TranslationPipe} from '../../../../../../../common/utils/localization/TranslationPipe';
@@ -7,11 +7,13 @@ import {WizardService} from '../services/WizardService';
 import {InventoryScreenStateType} from '../../../../common/inventory/utils/state-manager/InventoryScreenStateType';
 import {RoomsTotalCountService} from '../../../../../services/rooms/RoomsTotalCountService';
 import {TotalCountDO} from '../../../../../services/common/data-objects/lazy-load/TotalCountDO';
+import {RoomsComponent} from '../../../../common/inventory/rooms/main/RoomsComponent';
 
 @Component({
     selector: 'wizard-rooms',
     templateUrl: '/client/src/pages/internal/containers/wizard/pages/wizard-pages/rooms/template/wizard-rooms.html',
     providers: [RoomsTotalCountService],
+    directives: [RoomsComponent],
     pipes: [TranslationPipe]
 })
 export class WizardRoomsComponent extends BaseComponent {

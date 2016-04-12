@@ -14,13 +14,18 @@ import {RoomCategoriesService} from '../room-categories/RoomCategoriesService';
 import {RoomCategoryDO} from '../room-categories/data-objects/RoomCategoryDO';
 import {RoomAmenitiesService} from '../settings/RoomAmenitiesService';
 import {RoomAttributesService} from '../settings/RoomAttributesService';
+import {BedsService} from '../beds/BedsService';
+import {BedsEagerService} from '../beds/BedsEagerService';
 import {AmenityDO} from '../common/data-objects/amenity/AmenityDO';
 import {RoomAttributeDO} from '../common/data-objects/room-attribute/RoomAttributeDO';
+import {BedsDO} from '../beds/data-objects/BedsDO';
+import {BedDO} from '../beds/data-objects/BedDO';
 
 @Injectable()
 export class RoomsService extends ALazyLoadRequestService<RoomVM> {
     constructor(appContext: AppContext, private _roomCategoriesService: RoomCategoriesService,
-        private _roomAmenitiesService: RoomAmenitiesService, private _roomAttributesService: RoomAttributesService) {
+        private _roomAmenitiesService: RoomAmenitiesService, private _roomAttributesService: RoomAttributesService,
+        private _bedsEagerService: BedsEagerService) {
 		super(appContext, ThServerApi.RoomsCount, ThServerApi.Rooms);
 	}
     
@@ -28,16 +33,19 @@ export class RoomsService extends ALazyLoadRequestService<RoomVM> {
 		return Observable.combineLatest(
             this._roomAmenitiesService.getRoomAmenitiesDO(),
             this._roomAttributesService.getRoomAttributesDO(),
-            this._roomCategoriesService.getRoomCategoryList()
-        ).map((result: [RoomAmenitiesDO, RoomAttributesDO, RoomCategoryDO[]]) => {
+            this._roomCategoriesService.getRoomCategoryList(),
+            this._bedsEagerService.getBedList()
+        ).map((result: [RoomAmenitiesDO, RoomAttributesDO, RoomCategoryDO[], BedsDO]) => {
             var roomAmenities = result[0];
             var roomAttributes = result[1];
             var roomCategories = result[2];
+            var beds = result[3];
             
             var rooms = new RoomsDO();
-            rooms.buildFromObject(rooms);
+            rooms.buildFromObject(pageDataObject);
             
             var roomVMList: RoomVM[] = [];
+            
             _.forEach(rooms.roomList, (room: RoomDO) => {
                 var roomVM = new RoomVM();
                 roomVM.room = room;
@@ -48,16 +56,32 @@ export class RoomsService extends ALazyLoadRequestService<RoomVM> {
                 
                 roomVM.roomAmenityList = [];
                 _.forEach(room.amenityIdList, (amenityId: string) => {
-                    roomVM.roomAmenityList.push(_.find(roomAmenities.roomAmenityList, (roomAmenity: AmenityDO) => {
+                    var roomAmenity = _.find(roomAmenities.roomAmenityList, (roomAmenity: AmenityDO) => {
                         return roomAmenity.id === amenityId;
-                    }));        
+                    });
+                    if(!this._appContext.thUtils.isUndefinedOrNull(roomAmenity)) {
+                        roomVM.roomAmenityList.push();        
+                    }
                 });
                 
                 roomVM.roomAttributeList = [];
                 _.forEach(room.attributeIdList, (attributeId: string) => {
-                    roomVM.roomAttributeList.push(_.find(roomAttributes.roomAttributeList, (roomAttribute: RoomAttributeDO) => {
+                    var roomAttribute = _.find(roomAttributes.roomAttributeList, (roomAttribute: RoomAttributeDO) => {
                         return roomAttribute.id === attributeId;    
-                    }));    
+                    });
+                    if(!this._appContext.thUtils.isUndefinedOrNull(roomAttribute)) {
+                        roomVM.roomAttributeList.push(roomAttribute);    
+                    }
+                });
+                
+                roomVM.bedList = [];
+                _.forEach(room.bedIdList, (bedId: string) => {
+                    var bed = _.find(beds.bedList, (bedDO: BedDO) => {
+                        return bedDO.id === bedId;    
+                    });
+                    if(!this._appContext.thUtils.isUndefinedOrNull(bed)) {
+                        roomVM.bedList.push(bed);    
+                    }
                 });
                 
                 roomVMList.push(roomVM);    
@@ -71,13 +95,13 @@ export class RoomsService extends ALazyLoadRequestService<RoomVM> {
 		});
 	}
     public saveRoomDO(room: RoomDO): Observable<RoomDO> {
-		return this.runServerPostActionOnBed(ThServerApi.RoomsSaveItem, room);
+		return this.runServerPostActionOnRoom(ThServerApi.RoomsSaveItem, room);
 	}
 	public deleteRoomDO(room: RoomDO): Observable<RoomDO> {
-		return this.runServerPostActionOnBed(ThServerApi.RoomsDeleteItem, room);
+		return this.runServerPostActionOnRoom(ThServerApi.RoomsDeleteItem, room);
 	}
 
-	private runServerPostActionOnBed(apiAction: ThServerApi, room: RoomDO): Observable<RoomDO> {
+	private runServerPostActionOnRoom(apiAction: ThServerApi, room: RoomDO): Observable<RoomDO> {
 		return this._appContext.thHttp.post(apiAction, { room: room }).map((roomObject: Object) => {
 			this.refreshData();
 

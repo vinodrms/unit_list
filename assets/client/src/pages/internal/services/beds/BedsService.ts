@@ -25,7 +25,7 @@ export class BedsService extends ALazyLoadRequestService<BedVM> {
 			this._bedTemplatesService.getBedTemplatesDO()
 		).map((result: [BedTemplatesDO]) => {
             var bedTemplates = result[0];            
-            var beds = new BedsDO;
+            var beds = new BedsDO();
             beds.buildFromObject(pageDataObject);
             
             var bedVMList: BedVM[] = [];
