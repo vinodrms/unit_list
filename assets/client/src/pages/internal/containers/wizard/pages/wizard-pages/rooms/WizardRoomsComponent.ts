@@ -11,6 +11,7 @@ import {TotalCountDO} from '../../../../../services/common/data-objects/lazy-loa
 @Component({
     selector: 'wizard-rooms',
     templateUrl: '/client/src/pages/internal/containers/wizard/pages/wizard-pages/rooms/template/wizard-rooms.html',
+    providers: [RoomsTotalCountService],
     pipes: [TranslationPipe]
 })
 export class WizardRoomsComponent extends BaseComponent {

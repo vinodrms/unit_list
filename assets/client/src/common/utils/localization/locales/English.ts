@@ -219,5 +219,7 @@ export var EnglishTranslations: Object = {
 	"Delete": "Delete",
 	"Archive": "Archive",
 	"Mark as Draft": "Mark as Draft",
-	"Some prices are missing from the price product\'s configuration": "Some prices are missing from the price product\'s configuration"
+	"Some prices are missing from the price product\'s configuration": "Some prices are missing from the price product\'s configuration",
+    "Rooms": "Rooms",
+    "[Wizard Step 3] Rooms text": "In this section you can define the rooms for your hotel."  
 };
