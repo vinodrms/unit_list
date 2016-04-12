@@ -226,5 +226,9 @@ export var EnglishTranslations: Object = {
 	"Are you sure you want to archive %name%": "Are you sure you want to archive %name%" ,
 	"Draft Price Product": "Draft Price Product",
 	"Are you sure you want to mark %name% as draft ?": "Are you sure you want to mark %name% as draft ?",
-	"Archive Price Product" : "Archive Price Product"
+	"Archive Price Product" : "Archive Price Product",
+    "Delete Room": "Delete Room",
+    "Room Name": "Room Name",
+    "Enter a name for the room": "Enter a name for the room",
+    "Add Room": "Add Room"
 };

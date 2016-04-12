@@ -1,0 +1,50 @@
+<loading-component [isLoading]="isLoading"></loading-component>
+<div class="row" *ngIf="!isLoading" [ngFormModel]="getDefaultControlGroup()">
+
+    <div class="row">
+        <div class="col-md-2">
+            <label>{{ 'Name' | translate }}</label>
+        </div>
+        <div class="col-md-6">
+            <div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('name')}">
+                <input type="text" class="form-control" placeholder="{{ 'Room Name' | translate }}" ngControl="name">
+            </div>
+            <label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter a name for the room' | translate }}</small></label>
+        </div>
+        <div class="col-md-4">
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-2">
+            <label>{{ 'Notes' | translate }}</label>
+        </div>
+        <div class="col-md-6">
+            <textarea class="form-control" ngControl="notes"></textarea>
+        </div>
+        <div class="col-md-4">
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+        </div>
+        <div class="col-md-4">
+            <button type="button" class="btn btn-primary btn-block" *ngIf="!isNewRoom()" (click)="saveRoom()">
+                <i *ngIf="isSavingRoom" class="fa fa-spinner fa-pulse"></i> {{ 'Save Changes' | translate }}
+            </button>
+            <button type="button" class="btn btn-primary btn-block" *ngIf="isNewRoom()" (click)="saveRoom()">
+                <i *ngIf="isSavingRoom" class="fa fa-spinner fa-pulse"></i> {{ 'Add Room' | translate }}
+            </button>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+        </div>
+        <div class="col-md-4">
+            <button type="button" class="btn btn-danger btn-block" (click)="showViewScreen()">{{ 'Cancel' | translate }}</button>
+        </div>
+    </div>
+
+</div>
