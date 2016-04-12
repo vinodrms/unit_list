@@ -37,9 +37,9 @@ export class PriceProductOverviewComponent extends BaseComponent {
 		this.onArchive.next(this._priceProductVM);
 	}
 
-	@Output() onActivate = new EventEmitter();
-	public activatePriceProduct() {
-		this.onActivate.next(this._priceProductVM);
+	@Output() onDraft = new EventEmitter();
+	public draftPriceProduct() {
+		this.onDraft.next(this._priceProductVM);
 	}
 
 	constructor() {

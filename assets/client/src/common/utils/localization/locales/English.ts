@@ -217,5 +217,10 @@ export var EnglishTranslations: Object = {
 	"Delete": "Delete",
 	"Archive": "Archive",
 	"Mark as Draft": "Mark as Draft",
-	"Some prices are missing from the price product\'s configuration": "Some prices are missing from the price product\'s configuration"
+	"Some prices are missing from the price product\'s configuration": "Some prices are missing from the price product\'s configuration",
+	"Delete Price Product": "Delete Price Product",
+	"Are you sure you want to archive %name%": "Are you sure you want to archive %name%" ,
+	"Draft Price Product": "Draft Price Product",
+	"Are you sure you want to mark %name% as draft ?": "Are you sure you want to mark %name% as draft ?",
+	"Archive Price Product" : "Archive Price Product"
 };

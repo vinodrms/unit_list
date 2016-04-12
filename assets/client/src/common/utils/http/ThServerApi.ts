@@ -33,7 +33,11 @@ export enum ThServerApi {
 	HotelConfigurationsYieldFilters,
 	HotelConfigurationsSaveYieldFilterValue,
 	PriceProducts,
-	PriceProductsCount
+	PriceProductsCount,
+	PriceProductsSaveItem,
+	PriceProductsArchiveItem,
+	PriceProductsDeleteItem,
+	PriceProductsDraftItem
 }
 
 var ThServerApiUrl: { [index: number]: string; } = {};
@@ -74,6 +78,10 @@ ThServerApiUrl[ThServerApi.HotelConfigurationsYieldFilters] = "/hotelConfigurati
 ThServerApiUrl[ThServerApi.HotelConfigurationsSaveYieldFilterValue] = "/hotelConfigurations/saveYieldFilterValue";
 ThServerApiUrl[ThServerApi.PriceProducts] = "/priceProducts";
 ThServerApiUrl[ThServerApi.PriceProductsCount] = "/priceProducts/count";
+ThServerApiUrl[ThServerApi.PriceProductsSaveItem] = "/priceProducts/savePriceProductItem";
+ThServerApiUrl[ThServerApi.PriceProductsArchiveItem] = "/priceProducts/archivePriceProductItem";
+ThServerApiUrl[ThServerApi.PriceProductsDeleteItem] = "/priceProducts/deletePriceProductItem";
+ThServerApiUrl[ThServerApi.PriceProductsDraftItem] = "/priceProducts/draftPriceProductItem";
 
 export class ServerApiBuilder {
 	public static ApiRoot = "/api";
