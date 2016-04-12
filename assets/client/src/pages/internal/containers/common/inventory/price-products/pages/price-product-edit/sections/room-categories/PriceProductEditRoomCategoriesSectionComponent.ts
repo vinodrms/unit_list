@@ -6,6 +6,7 @@ import {PriceProductVM} from '../../../../../../../../services/price-products/vi
 import {ModalDialogInstance} from '../../../../../../../../../../common/utils/modals/utils/ModalDialogInstance';
 import {RoomCategoriesModalService} from '../../../../../modals/room-categories/services/RoomCategoriesModalService';
 import {RoomCategoryDO} from '../../../../../../../../services/room-categories/data-objects/RoomCategoryDO';
+import {CurrencyDO} from '../../../../../../../../services/common/data-objects/currency/CurrencyDO';
 
 @Component({
 	selector: 'price-product-edit-room-categories-section',

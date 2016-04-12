@@ -14,42 +14,9 @@
 	</div>
 	
 	<div class="row">
-		<div class="col-md-4 col-xs-12 ">
-			<label for="roomname">VAT</label>
-			<div class="input-group">
-				<select class="select2_single form-control" tabindex="-1">
-					<option value="Bed VAT">Bed VAT</option>
-					<option value="Food VAT">Food VAT</option>
-				</select>
-			</div>
-			<small class="text-muted"><i class="fa fa-info-circle"></i> The VAT is included in the price </small>
-			<label for="roomname">Other Taxes</label>
-			<table class="table table-striped projects">
-				<tbody>
-					<tr>
-						<td>City Tax</td>
-						<td>20EUR</td>
-						<td>
-							<a class="btn btn-xs"><i class="fa fa-remove"></i> Remove </a>
-						</td>
-					</tr>
-					<tr>
-						<td> <a data-toggle="modal" href="#otherTaxModal" class="btn btn-xs"><i class="fa fa-plus"></i> Add </a></td>
-						<td>
-
-						</td>
-						<td></td>
-					</tr>
-				</tbody>
-			</table>
-			<small class="text-muted"><i class="fa fa-info-circle"></i> Other taxes included in the Price Product </small>
-
-
-		</div>
+		<price-product-edit-taxes-section [didSubmit]="didSubmit"></price-product-edit-taxes-section>
 	</div>
 	<hr>
-
-
 
 	<div class="row">
 

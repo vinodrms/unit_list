@@ -1,0 +1,38 @@
+<div class="col-md-6 col-sm-6 col-xs-12 ">
+	<label>{{ 'VAT' | translate }}</label>
+	<div class="input-group">
+		<select class="form-control" [ngModel]="vatTaxId" (change)="didSelectVatTaxId($event.target.value)" [disabled]="readonly">
+			<option [value]="noVatTaxId">{{ 'No VAT' | translate }}</option>
+			<option *ngFor="#vat of vatTaxList" [value]="vat.id">{{vat.name}} - {{vat.value | percentage}}</option>
+		</select>
+	</div>
+	<small class="text-muted"><i class="fa fa-info-circle"></i> {{ 'The VAT needs to be included in the price' | translate }} </small>
+</div>
+<div class="col-md-6 col-sm-6 col-xs-12 ">
+	<label for="roomname">Other Taxes</label>
+	<table class="table table-striped projects">
+		<tbody>
+			<tr *ngFor="#tax of otherTaxList">
+				<td>{{tax.name}}</td>
+				<td *ngIf="tax.isPercentageValue()">{{tax.value | percentage}}</td>
+				<td *ngIf="tax.isFixedValue()">{{ccy.nativeSymbol}} {{tax.value}}</td>
+				<td *ngIf="!readonly">
+					<a class="btn btn-xs" (click)="removeOtherTax(tax)">
+						<i class="fa fa-remove"></i> {{ 'Remove' | translate }}
+					</a>
+				</td>
+			</tr>
+			<tr>
+				<td *ngIf="!readonly">
+					<a class="btn btn-xs" (click)="openOtherTaxSelectModal()">
+						<i class="fa fa-plus"></i> {{ 'Add' | translate }}
+					</a>
+				</td>
+				<td>
+				</td>
+				<td></td>
+			</tr>
+		</tbody>
+		<small class="text-muted"><i class="fa fa-info-circle"></i> {{ 'Other taxes included in the Price Product' | translate }} </small>
+	</table>
+</div>

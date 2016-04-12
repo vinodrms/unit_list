@@ -17,12 +17,15 @@ import {PriceProductEditSectionContainer} from './utils/PriceProductEditSectionC
 import {PriceProductEditTopSectionComponent} from '../sections/top-section/PriceProductEditTopSectionComponent';
 import {PriceProductEditRoomCategoriesSectionComponent} from '../sections/room-categories/PriceProductEditRoomCategoriesSectionComponent';
 import {PriceProductEditAddOnProductsSectionComponent} from '../sections/add-on-products/PriceProductEditAddOnProductsSectionComponent';
+import {PriceProductEditTaxesSectionComponent} from '../sections/taxes/PriceProductEditTaxesSectionComponent';
 
 @Component({
 	selector: 'price-product-edit-container',
 	templateUrl: '/client/src/pages/internal/containers/common/inventory/price-products/pages/price-product-edit/container/template/price-product-edit-container.html',
 	providers: [EagerAddOnProductsService],
-	directives: [LoadingComponent, PriceProductEditTopSectionComponent, PriceProductEditRoomCategoriesSectionComponent, PriceProductEditAddOnProductsSectionComponent],
+	directives: [LoadingComponent, 
+		PriceProductEditTopSectionComponent, PriceProductEditRoomCategoriesSectionComponent, 
+		PriceProductEditAddOnProductsSectionComponent, PriceProductEditTaxesSectionComponent],
 	pipes: [TranslationPipe]
 })
 
@@ -30,6 +33,7 @@ export class PriceProductEditContainerComponent extends BaseComponent implements
 	@ViewChild(PriceProductEditTopSectionComponent) private _topSectionComponent: PriceProductEditTopSectionComponent;
 	@ViewChild(PriceProductEditRoomCategoriesSectionComponent) private _roomCategoriesSectionComponent: PriceProductEditRoomCategoriesSectionComponent;
 	@ViewChild(PriceProductEditAddOnProductsSectionComponent) private _addOnProductsSection: PriceProductEditAddOnProductsSectionComponent;
+	@ViewChild(PriceProductEditTaxesSectionComponent) private _editTaxesSection: PriceProductEditTaxesSectionComponent;
 
 	private _didInit = false;
 	isLoading: boolean = true;
@@ -63,6 +67,14 @@ export class PriceProductEditContainerComponent extends BaseComponent implements
 	ngAfterViewInit() {
 		setTimeout(() => {
 			this._didInit = true;
+			this._editSectionContainer = new PriceProductEditSectionContainer(
+				[
+					this._topSectionComponent,
+					this._roomCategoriesSectionComponent,
+					this._addOnProductsSection,
+					this._editTaxesSection
+				]
+			);
 			this.initializeDependentData();
 		});
 	}
@@ -83,7 +95,6 @@ export class PriceProductEditContainerComponent extends BaseComponent implements
 			this._priceProductVM.addOnProductList = result[0].addOnProductList;
 			this._priceProductVM.ccy = result[1].ccy;
 
-			this._editSectionContainer = new PriceProductEditSectionContainer([this._topSectionComponent, this._roomCategoriesSectionComponent, this._addOnProductsSection]);
 			this._editSectionContainer.initializeFrom(this._priceProductVM);
 			this._editSectionContainer.readonly = this.isReadOnly();
 

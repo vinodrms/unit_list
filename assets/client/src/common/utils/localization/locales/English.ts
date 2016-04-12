@@ -236,5 +236,7 @@ export var EnglishTranslations: Object = {
 	"The link between the price product and rooms.": "The link between the price product and rooms.",
 	"Select at least a room category": "Select at least a room category",
 	"Add On Products": "Add On Products",
-	"You can include Add On Products in the Price Product. The prices will include the Add On Product Prices.": "You can include Add On Products in the Price Product. The prices will include the Add On Product Prices."
+	"You can include Add On Products in the Price Product. The prices will include the Add On Product Prices.": "You can include Add On Products in the Price Product. The prices will include the Add On Product Prices.",
+	"The VAT needs to be included in the price": "The VAT needs to be included in the price",
+	"Other taxes included in the Price Product": "Other taxes included in the Price Product"
 };

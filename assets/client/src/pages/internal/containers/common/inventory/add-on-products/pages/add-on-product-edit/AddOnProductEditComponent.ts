@@ -8,6 +8,7 @@ import {ImageUploadComponent} from '../../../../../../../../common/utils/compone
 import {AppContext, ThError} from '../../../../../../../../common/utils/AppContext';
 import {TranslationPipe} from '../../../../../../../../common/utils/localization/TranslationPipe';
 import {PricePipe} from '../../../../../../../../common/utils/pipes/PricePipe';
+import {PercentagePipe} from '../../../../../../../../common/utils/pipes/PercentagePipe';
 import {AddOnProductVM} from '../../../../../../services/add-on-products/view-models/AddOnProductVM';
 import {AddOnProductEditService} from './services/AddOnProductEditService';
 import {AddOnProductCategoriesService} from '../../../../../../services/settings/AddOnProductCategoriesService';
@@ -27,7 +28,7 @@ import {AddOnProductDO} from '../../../../../../services/add-on-products/data-ob
 	templateUrl: '/client/src/pages/internal/containers/common/inventory/add-on-products/pages/add-on-product-edit/template/add-on-product-edit.html',
 	providers: [AddOnProductEditService],
 	directives: [LoadingComponent, ImageUploadComponent],
-	pipes: [TranslationPipe, PricePipe],
+	pipes: [TranslationPipe, PricePipe, PercentagePipe]
 })
 
 export class AddOnProductEditComponent extends BaseFormComponent implements OnInit {
