@@ -25,7 +25,6 @@ export class BedEditComponent extends BaseFormComponent implements OnInit {
     isSavingBed: boolean = false;
     
     bedTemplateList: BedTemplateDO[];
-    bedType: string = '7131c509-fd7b-11e5-aba0-5d59df7d7f18';
     
     private _bedVM: BedVM;
     public get bedVM(): BedVM {
