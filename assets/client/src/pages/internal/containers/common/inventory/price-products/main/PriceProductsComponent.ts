@@ -14,12 +14,13 @@ import {PriceProductVM} from '../../../../../services/price-products/view-models
 import {PriceProductDO, PriceProductStatus} from '../../../../../services/price-products/data-objects/PriceProductDO';
 import {PriceProductTableMetaBuilderService} from './services/PriceProductTableMetaBuilderService';
 import {PriceProductOverviewComponent} from '../pages/price-product-overview/PriceProductOverviewComponent';
+import {PriceProductEditContainerComponent} from '../pages/price-product-edit/container/PriceProductEditContainerComponent';
 
 @Component({
 	selector: 'price-products',
 	templateUrl: '/client/src/pages/internal/containers/common/inventory/price-products/main/template/price-products.html',
 	providers: [RoomCategoriesService, YieldFiltersService, PriceProductsService, PriceProductTableMetaBuilderService],
-	directives: [LazyLoadingTableComponent, PriceProductOverviewComponent]
+	directives: [LazyLoadingTableComponent, PriceProductOverviewComponent, PriceProductEditContainerComponent]
 })
 export class PriceProductsComponent extends BaseComponent implements AfterViewInit {
 	@Output() protected onScreenStateTypeChanged = new EventEmitter();

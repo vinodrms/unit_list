@@ -9,6 +9,8 @@ import {YieldFilterValueVM} from './YieldFilterValueVM';
 import {YieldFilterDO} from '../../common/data-objects/yield-filter/YieldFilterDO';
 import {YieldFilterValueDO} from '../../common/data-objects/yield-filter/YieldFilterValueDO';
 import {PriceProductYieldFilterMetaDO} from '../data-objects/yield-filter/PriceProductYieldFilterDO';
+import {CurrencyDO} from '../../common/data-objects/currency/CurrencyDO';
+import {AddOnProductDO} from '../../add-on-products/data-objects/AddOnProductDO';
 
 export class PriceProductVM {
 	private _priceProduct: PriceProductDO;
@@ -16,6 +18,8 @@ export class PriceProductVM {
 	private _otherTaxList: TaxDO[];
 	private _roomCategoryList: RoomCategoryDO[];
 	private _yieldFilterVMValues: YieldFilterValueVM[];
+	private _ccy: CurrencyDO;
+	private _addOnProductList: AddOnProductDO[];
 
 	constructor(private _thTranslation: ThTranslation) {
 	}
@@ -101,6 +105,18 @@ export class PriceProductVM {
 	}
 	public set yieldFilterVMValues(yieldFilterVMValues: YieldFilterValueVM[]) {
 		this._yieldFilterVMValues = yieldFilterVMValues;
+	}
+	public get ccy(): CurrencyDO {
+		return this._ccy;
+	}
+	public set ccy(ccy: CurrencyDO) {
+		this._ccy = ccy;
+	}
+	public get addOnProductList(): AddOnProductDO[] {
+		return this._addOnProductList;
+	}
+	public set addOnProductList(addOnProductList: AddOnProductDO[]) {
+		this._addOnProductList = addOnProductList;
 	}
 
 	public updateYieldFilterValueVM(filterValueVM: YieldFilterValueVM) {

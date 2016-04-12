@@ -226,5 +226,15 @@ export var EnglishTranslations: Object = {
 	"Are you sure you want to archive %name%": "Are you sure you want to archive %name%" ,
 	"Draft Price Product": "Draft Price Product",
 	"Are you sure you want to mark %name% as draft ?": "Are you sure you want to mark %name% as draft ?",
-	"Archive Price Product" : "Archive Price Product"
+	"Archive Price Product" : "Archive Price Product",
+	"Enter Name": "Enter Name",
+	"If public, it will be bookable by anyone. If Confidential, you will need to add it from specific customer profiles": "If public, it will be bookable by anyone. If Confidential, you will need to add it from specific customer profiles",
+	"Last Room Availability": "Last Room Availability",
+	"On": "On",
+	"Off": "Off",
+	"If marked, then the price product will be bookable anytime, not considering the its yielding. Used better with private price products.": "If marked, then the price product will be bookable anytime, not considering the its yielding. Used better with private price products.",
+	"The link between the price product and rooms.": "The link between the price product and rooms.",
+	"Select at least a room category": "Select at least a room category",
+	"Add On Products": "Add On Products",
+	"You can include Add On Products in the Price Product. The prices will include the Add On Product Prices.": "You can include Add On Products in the Price Product. The prices will include the Add On Product Prices."
 };

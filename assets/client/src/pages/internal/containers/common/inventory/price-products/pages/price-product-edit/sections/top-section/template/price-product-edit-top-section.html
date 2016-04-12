@@ -1,0 +1,35 @@
+<div class="col-md-4 col-xs-12 form-group" [ngFormModel]="getDefaultControlGroup()">
+	<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('name')}">
+		<label>{{ 'Price Product Name' | translate }}</label>
+		<input type="text" placeholder="{{ 'Enter Name' | translate }}" class="form-control input-group-lg" ngControl="name" [readonly]="readonly">
+	</div>
+	<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter a name for the product' | translate }}</small></label>
+</div>
+<div class="col-md-4 col-xs-12">
+	<label>{{ 'Availability' | translate }}</label>
+	<div class="input-group">
+		<div class="btn-group" data-toggle="buttons">
+			<button class="btn btn-default" (click)="isPublicAvailability=true" [ngClass]="{'active': isPublicAvailability}" [disabled]="readonly">
+				<input type="radio"/><i class="fa fa-users"></i> {{ 'Public' | translate }}
+			</button>
+			<button class="btn btn-default" (click)="isPublicAvailability=false" [ngClass]="{'active': !isPublicAvailability}" [disabled]="readonly">
+				<input type="radio"/><i class="fa fa-user"></i> {{ 'Confidential' | translate }}
+			</button>
+		</div>
+	</div>
+	<small class="text-muted"><i class="fa fa-info-circle"></i>  {{ 'If public, it will be bookable by anyone. If Confidential, you will need to add it from specific customer profiles' | translate }}</small>
+</div>
+<div class="col-md-4 col-xs-12 ">
+	<label for="roomname">{{ 'Last Room Availability' | translate }}</label>
+	<div class="input-group">
+		<div class="btn-group" data-toggle="buttons">
+			<button class="btn btn-default" (click)="isLastRoomAvailabilityEnabled=true" [ngClass]="{'active': isLastRoomAvailabilityEnabled}" [disabled]="readonly">
+				<input type="radio"/> {{ 'On' | translate }}
+			</button>
+			<button class="btn btn-default" (click)="isLastRoomAvailabilityEnabled=false" [ngClass]="{'active': !isLastRoomAvailabilityEnabled}" [disabled]="readonly">
+				<input type="radio"/> {{ 'Off' | translate }}
+			</button>
+		</div>
+	</div>
+	<small class="text-muted"><i class="fa fa-info-circle"></i> {{ 'If marked, then the price product will be bookable anytime, not considering the its yielding. Used better with private price products.' | translate }} </small>
+</div>
