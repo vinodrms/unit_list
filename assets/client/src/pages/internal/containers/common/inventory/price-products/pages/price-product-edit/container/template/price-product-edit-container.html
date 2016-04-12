@@ -1,0 +1,243 @@
+<loading-component [isLoading]="isLoading"></loading-component>
+<div [hidden]="isLoading">
+	<div class="row">
+		<price-product-edit-top-section [didSubmit]="didSubmit"></price-product-edit-top-section>
+	</div>
+	<hr>
+	<div class="row">
+		<div class="col-md-6 col-sm-6 col-xs-12">
+			<price-product-edit-room-categories-section [didSubmit]="didSubmit"></price-product-edit-room-categories-section>
+		</div>
+		<div class="col-md-6 col-sm-6 col-xs-12">
+			<price-product-edit-add-on-products-section [didSubmit]="didSubmit"></price-product-edit-add-on-products-section>
+		</div>	
+	</div>
+	
+	<div class="row">
+		<div class="col-md-4 col-xs-12 ">
+			<label for="roomname">VAT</label>
+			<div class="input-group">
+				<select class="select2_single form-control" tabindex="-1">
+					<option value="Bed VAT">Bed VAT</option>
+					<option value="Food VAT">Food VAT</option>
+				</select>
+			</div>
+			<small class="text-muted"><i class="fa fa-info-circle"></i> The VAT is included in the price </small>
+			<label for="roomname">Other Taxes</label>
+			<table class="table table-striped projects">
+				<tbody>
+					<tr>
+						<td>City Tax</td>
+						<td>20EUR</td>
+						<td>
+							<a class="btn btn-xs"><i class="fa fa-remove"></i> Remove </a>
+						</td>
+					</tr>
+					<tr>
+						<td> <a data-toggle="modal" href="#otherTaxModal" class="btn btn-xs"><i class="fa fa-plus"></i> Add </a></td>
+						<td>
+
+						</td>
+						<td></td>
+					</tr>
+				</tbody>
+			</table>
+			<small class="text-muted"><i class="fa fa-info-circle"></i> Other taxes included in the Price Product </small>
+
+
+		</div>
+	</div>
+	<hr>
+
+
+
+	<div class="row">
+
+
+		<div class="col-md-4 col-xs-12 form-group">
+
+
+			<label for="pricetype">Price per number of persons</label>
+			<div class="input-group">
+				<div class="btn-group" data-toggle="buttons">
+					<label class="btn btn-default active">
+						<input type="radio" name="options" id="option5" autocomplete="off" checked>Yes
+					</label>
+					<label class="btn btn-default">
+						<input type="radio" name="options" id="option6" autocomplete="off">No
+					</label>
+				</div>
+
+			</div>
+			<small class="text-muted"><i class="fa fa-info-circle"></i> Price per number of adults/children, or single price for room category </small>
+
+		</div>
+
+		<div class="col-md-4 col-xs-6">
+
+			<label for="pricetype">Price configuration</label>
+			<div class="row">
+				<div class="col-xs-6">
+					<label for="sroom">Single Room</label>
+					<div class="input-group">
+						<input type="number" placeholder="Price" class="form-control">
+					</div>
+				</div>
+
+				<div class="col-xs-6">
+					<label for="sroom">Double Room</label>
+					<div class="input-group">
+						<input type="number" placeholder="Price" class="form-control">
+					</div>
+				</div>
+
+			</div>
+		</div>
+
+
+	</div>
+	<hr>
+	<!-- Filters -->
+	<div class="row">
+		<div class="col-xs-12">
+			<h3>Filters</h3></div>
+		<div class="col-md-4">
+			<p class="text-muted small"><i class="fa fa-info-circle"></i> Used in the Yield Manager. Use same filter values for similar price products.</p>
+		</div>
+		<div class="col-md-4">
+			<label class="control-label">Yield Level: <small>0 / Low Season Price Products</small></label>
+			<a class="btn btn-default" role="button" data-toggle="modal" href="#yieldLevelModal">
+				<i class="fa fa-arrow-right"></i> Select
+			</a>
+		</div>
+
+		<div class="col-md-4">
+			<label class="control-label">Yield Group: <small>Red / Corporate (TODO: add color box!)</small></label>
+			<a class="btn btn-default" role="button" data-toggle="modal" href="#yieldGroupModal">
+				<i class="fa fa-arrow-right"></i> Select
+			</a>
+		</div>
+	</div>
+
+	<!-- Constraints -->
+	<hr>
+	<div class="row">
+
+		<div class="col-md-12">
+
+			<h3>Constraints</h3>
+			<p class="text-muted small"> <i class="fa fa-info-circle"></i> Constraints to apply your price product..</p>
+
+			<table class="table table-striped projects">
+				<tbody>
+					<tr>
+						<td>Bookable only on</td>
+						<td>Monday, Tuesday</td>
+						<td>
+							<a class="btn btn-xs"><i class="fa fa-remove"></i> Remove </a>
+						</td>
+					</tr>
+					<tr>
+						<td><a data-toggle="modal" href="#constraintsModal" class="btn btn-xs"><i class="fa fa-plus"></i> Add </a></td>
+						<td>
+
+						</td>
+						<td></td>
+					</tr>
+				</tbody>
+			</table>
+
+		</div>
+	</div>
+	<hr>
+
+	<!-- cancellation -->
+
+	<div class="row">
+
+		<div class="col-md-6">
+
+			<h3>Cancellation</h3>
+			<label class="control-label">Option available </label>
+
+			<div class="form-group">
+				<select class="select2_single form-control" tabindex="-1">
+					<option value="0">Can cancel before time on day of arrival</option>
+					<option value="1">Can cancel before number of days</option>
+					<option value="2">No cancellation possible</option>
+				</select>
+			</div>
+
+			<div class="row">
+				<div class="col-xs-6">
+					<div class="form-group">
+						<label class="control-label">Time of Arrival</label>
+						<select class="select2_single form-control" tabindex="-1">
+							<option value="0">12:30</option>
+							<option value="0">13:00</option>
+							<option value="2">13:30</option>
+						</select>
+					</div>
+
+				</div>
+				<div class="col-xs-6">
+
+					<label class="control-label">Has Condition</label>
+					<div class="form-group">
+
+						<div class="btn-group" data-toggle="buttons">
+							<label class="btn btn-default active">
+								<input type="radio" name="options" id="option8" autocomplete="off" checked> Yes
+							</label>
+							<label class="btn btn-default">
+								<input type="radio" name="options" id="option9" autocomplete="off"> No
+							</label>
+						</div>
+					</div>
+
+				</div>
+			</div>
+			<p class="text-muted small"> <i class="fa fa-info-circle"></i> If no condition, the client can cancel the bookings anytime</p>
+
+		</div>
+
+		<div class="col-md-6">
+			<h4>Penalty</h4>
+			<label class="control-label">Type of Penalty </label>
+			<div class="form-group">
+				<select class="select2_single form-control" tabindex="-1">
+					<option value="0">Pay first night</option>
+					<option value="0">Pay full stay</option>
+					<option value="2">Pay percentage from booking</option>
+				</select>
+			</div>
+			<label class="control-label">Booking Percentage</label>
+			<div class="form-group">
+				<input type="number" placeholder="Percentage" class="form-control">
+			</div>
+			<p class="text-muted small"> <i class="fa fa-info-circle"></i> Only if the cancellation has condition</p>
+		</div>
+
+
+
+
+	</div>
+
+	<hr>
+	<div class="row">
+		<div class="col-xs-8">
+		</div>
+		<div class="col-xs-4">
+			<button type="button" class="btn btn-primary btn-block" (click)="savePriceProduct()">
+				<i *ngIf="isSavingPriceProduct" class="fa fa-spinner fa-pulse"></i> {{ 'Save Changes' | translate }}
+			</button>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-8">
+		</div>
+		<div class="col-xs-4">
+			<button type="button" class="btn btn-danger btn-block" (click)="showViewScreen()">{{ 'Cancel' | translate }}</button>
+		</div>
+	</div>
+</div>

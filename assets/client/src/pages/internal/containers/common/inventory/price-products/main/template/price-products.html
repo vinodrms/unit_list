@@ -39,5 +39,9 @@
 	</price-product-overview>
 </div>
 <div class="col-sm-9 singleview-right" *ngIf="isEditing">
-	
+	<price-product-edit-container
+		*ngIf="selectedPriceProductVM" 
+		[priceProductVM]="selectedPriceProductVM"
+		(onExit)="showViewScreen()">
+	</price-product-edit-container>
 </div>

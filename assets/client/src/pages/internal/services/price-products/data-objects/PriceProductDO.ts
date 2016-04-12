@@ -30,6 +30,16 @@ export class PriceProductDO extends BaseDO {
 	yieldFilterList: PriceProductYieldFilterMetaDO[];
 	constraints: PriceProductConstraintWrapperDO;
 	conditions: PriceProductConditionsDO;
+	
+	constructor() {
+		super();
+		this.setDefaults();
+	}
+	private setDefaults() {
+		this.name = "";
+		this.availability = PriceProductAvailability.Public;
+		this.lastRoomAvailability = false;
+	}
 
 	protected getPrimitivePropertyKeys(): string[] {
 		return ["id", "versionId", "status", "name", "availability", "lastRoomAvailability", "addOnProductIdList", "roomCategoryIdList", "taxIdList"];
