@@ -4,11 +4,11 @@
 		<div class="btn-group" data-toggle="buttons">
 			<button class="btn btn-default" (click)="isPricePerNumberOfPersons=true" [ngClass]="{'active': isPricePerNumberOfPersons}"
 			[disabled]="readonly">
-				<input type="radio">{{ 'Yes' | translate }}
+				{{ 'Yes' | translate }}
 			</button>
 			<button class="btn btn-default" (click)="isPricePerNumberOfPersons=false" [ngClass]="{'active': !isPricePerNumberOfPersons}"
 			[disabled]="readonly">
-				<input type="radio" name="options" id="option6" autocomplete="off">{{ 'No' | translate }}
+				{{ 'No' | translate }}
 			</button>
 		</div>
 	</div>
