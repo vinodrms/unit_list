@@ -66,6 +66,7 @@ export var EnglishTranslations: Object = {
 	"Enter a valid contact email": "Enter a valid contact email",
 	"Select a country": "Select a country",
 	"Insert a VAT Number": "Insert a VAT Number",
+	"VAT Required": "VAT Required",
 	"Enter a valid url": "Enter a valid url",
     "[Wizard Step 0] Payments & Policies text": "Payments & policies small description",
     "payments & policies": "payments & policies",
@@ -253,6 +254,7 @@ export var EnglishTranslations: Object = {
 	"Price For Children": "Price For Children",
 	"All the prices are cummulative. For example, the price for a booking made for 2 adults and 2 children will have the total price as the sum between the 1st Adult, 2nd Adult, 1st Child and 2nd Child": "All the prices are cummulative. For example, the price for a booking made for 2 adults and 2 children will have the total price as the sum between the 1st Adult, 2nd Adult, 1st Child and 2nd Child",
 	"Single price for a room category, not dependent on the number of persons": "Single price for a room category, not dependent on the number of persons",
-	"Price configuration in %ccySymbol%": "Price configuration in %ccySymbol%"
+	"Price configuration in %ccySymbol%": "Price configuration in %ccySymbol%",
+	"Price Product Required": "Price Product Required"
 	
 };

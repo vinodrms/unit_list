@@ -38,7 +38,7 @@ export class BasicInfoPaymentsAndPoliciesEditService {
 	}
 	private didAddTax(): boolean {
 		return this._taxContainer && this._taxContainer.vatList.length > 0;
-	} 
+	}
 	public savePaymentsAndPolicies(): Observable<any> {
 		this.didSubmitForm = true;
 		if (!this.isValid()) {
@@ -47,8 +47,9 @@ export class BasicInfoPaymentsAndPoliciesEditService {
 			return this.reject();
 		}
 		if (!this.didAddTax()) {
+			var modalTitle = this._appContext.thTranslation.translate("VAT Required");
 			var errorMessage = this._appContext.thTranslation.translate("Please add at least a VAT tax");
-			this._appContext.toaster.error(errorMessage);
+			this._appContext.modalService.confirm(modalTitle, errorMessage, { positive: "Ok" }, () => { }, () => { });
 			return this.reject();
 		}
 		this._hotel.paymentMethodIdList = this._paymentMethods.getSelectedPaymentMethodIdList();
