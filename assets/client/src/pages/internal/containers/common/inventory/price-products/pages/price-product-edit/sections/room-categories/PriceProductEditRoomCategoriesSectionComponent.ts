@@ -33,9 +33,9 @@ export class PriceProductEditRoomCategoriesSectionComponent extends BaseComponen
 		return this._roomCategoryList.length > 0;
 	}
 	public initializeFrom(priceProductVM: PriceProductVM) {
-		this._roomCategoryList = priceProductVM.roomCategoryList;
-		if (!this._roomCategoryList) {
-			this._roomCategoryList = [];
+		this._roomCategoryList = [];
+		if (priceProductVM.roomCategoryList && priceProductVM.roomCategoryList.length > 0) {
+			this._roomCategoryList = this._roomCategoryList.concat(priceProductVM.roomCategoryList);
 		}
 	}
 	public updateDataOn(priceProductVM: PriceProductVM) {

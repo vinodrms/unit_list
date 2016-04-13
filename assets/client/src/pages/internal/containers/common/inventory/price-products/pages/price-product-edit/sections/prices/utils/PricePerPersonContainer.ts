@@ -23,6 +23,7 @@ export class PricePerPersonContainer implements IPriceContainer {
 
 	public initializeFrom(priceType: PriceProductPriceType, priceList: IPriceProductPrice[]) {
 		if(priceType !== PriceProductPriceType.PricePerPerson) {
+			this.resetValues();
 			return;
 		}
 		var pricePerPersonDOList: PricePerPersonDO[] = <PricePerPersonDO[]> priceList;
@@ -38,6 +39,9 @@ export class PricePerPersonContainer implements IPriceContainer {
 			newPricePerPersonVMList.push(pricePerPersonVM);
 		});
 		this._pricePerPersonVMList = newPricePerPersonVMList;
+	}
+	private resetValues() {
+		this._pricePerPersonVMList = [];
 	}
 
 	public updateFromRoomCategoryStatsList(roomCategoryStatsList: RoomCategoryStatsDO[]) {

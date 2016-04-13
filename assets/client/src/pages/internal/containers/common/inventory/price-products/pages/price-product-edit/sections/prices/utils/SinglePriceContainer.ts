@@ -22,6 +22,7 @@ export class SinglePriceContainer implements IPriceContainer {
 
 	public initializeFrom(priceType: PriceProductPriceType, priceList: IPriceProductPrice[]) {
 		if (priceType !== PriceProductPriceType.SinglePrice) {
+			this.resetValues();
 			return;
 		}
 		var singlePriceDOList: SinglePriceDO[] = <SinglePriceDO[]>priceList;
@@ -36,6 +37,9 @@ export class SinglePriceContainer implements IPriceContainer {
 			newSinglePriceVMList.push(singlePriceVM);
 		});
 		this._singlePriceVMList = newSinglePriceVMList;
+	}
+	private resetValues() {
+		this._singlePriceVMList = [];
 	}
 
 	public updateFromRoomCategoryStatsList(roomCategoryStatsList: RoomCategoryStatsDO[]) {
