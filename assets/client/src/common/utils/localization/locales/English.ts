@@ -238,6 +238,7 @@ export var EnglishTranslations: Object = {
     "Amenities": "Amenities",
     "Attributes": "Attributes",
     "Insert a valid floor number": "Insert a valid floor number",
+    "Image of the Room": "Image of the Room",
 	"If public, it will be bookable by anyone. If Confidential, you will need to add it from specific customer profiles": "If public, it will be bookable by anyone. If Confidential, you will need to add it from specific customer profiles",
 	"Last Room Availability": "Last Room Availability",
 	"On": "On",
