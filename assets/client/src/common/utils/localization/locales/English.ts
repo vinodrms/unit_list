@@ -282,7 +282,7 @@ export var EnglishTranslations: Object = {
 	"Percentage from booking": "Percentage from booking",
 	"Enter a valid percentage": "Enter a valid percentage",
 	"Select the time of arrival": "Select the time of arrival",
-	"Days until day of arrival": "Days until day of arrival",
+	"Days until day of arrival at": "Days until day of arrival at",
 	"Price Product Constraints": "Price Product Constraints",
 	"Bookable only on days from week": "Bookable only on days from week",
 	"Bookings can only be made on specific days from week (e.g. It you select Monday, the price product will apply only to bookings made from Monday to Tuesday.)": "Bookings can only be made on specific days from week (e.g. It you select Monday, the price product will apply only to bookings made from Monday to Tuesday.)",
@@ -313,7 +313,9 @@ export var EnglishTranslations: Object = {
 	"length of %noDays% days": "length of %noDays% days",
 	"%noOfRooms% rooms": "%noOfRooms% rooms",
 	"Constraints": "Constraints",
-	"Constraints to apply the price product on bookings": "Constraints to apply the price product on bookings"
+	"Constraints to apply the price product on bookings": "Constraints to apply the price product on bookings",
+	"If selected, you will be able to edit the price product further on. If not, the price product will be automatically activated and available for bookings.": "If selected, you will be able to edit the price product further on. If not, the price product will be automatically activated and available for bookings.",
+	"Save as Draft": "Save as Draft"
 	
 	
 };

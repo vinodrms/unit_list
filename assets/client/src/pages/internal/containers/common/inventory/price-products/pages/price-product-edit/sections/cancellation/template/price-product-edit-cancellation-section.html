@@ -30,7 +30,7 @@
 		</div>
 		<div class="col-xs-12 form-group" *ngIf="isCanCancelDaysBeforePolicy()">
 			<div class="input-group" [ngClass]="{'form-warning': (didSubmit&&!conditions.policy.isValid())}">
-				<label>{{ 'Days until day of arrival' | translate }} {{ cancellationHour | thhour }}</label>
+				<label>{{ 'Days until day of arrival at' | translate }} {{ cancellationHour | thhour }}</label>
 				<input type="number" placeholder="{{ 'Number of days' | translate }}" class="form-control input-group-lg" [(ngModel)]="conditions.policy.daysBefore" [readonly]="readonly">
 			</div>
 			<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter the number of days' | translate }}</small></label>
