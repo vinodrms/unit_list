@@ -32,13 +32,6 @@ export class BasicInfoPropertyDetailsEditComponent extends BaseComponent impleme
     timezoneList: TimezoneDO[];
     hotelAmenities: HotelAmenityVMContainer;
     hotel: HotelDO;
-
-    operationHoursList: ThHourVM[];
-    initialCheckInFromIndex: number;
-    initialCheckInToIndex: number;
-    initialCheckOutFromIndex: number;
-    initialCheckOutToIndex: number;
-    initialBookingCancellationHourIndex: number;
     
     constructor(private _appContext: AppContext,
         private _hotelAggregator: HotelAggregatorService,
@@ -58,49 +51,11 @@ export class BasicInfoPropertyDetailsEditComponent extends BaseComponent impleme
             this.hotel = result[1].hotelDetails.hotel;
             this.hotelAmenities = new HotelAmenityVMContainer(result[1].hotelAmenities, this.hotel.amenityIdList);
 
-            this.initDefaults();
-
             this._propertyDetailsEditService.bootstrap(this.hotelAmenities, this.hotel);
-
             this.isLoading = false;
         }, (error: ThError) => {
             this.isLoading = false;
             this._appContext.toaster.error(this._appContext.thTranslation.translate(error.message));
-        });
-    }
-
-    initDefaults() {
-        this.operationHoursList = [];
-        var index = 0;
-        for (var i = ThHourDO.MinHourOfDay; i <= ThHourDO.MaxHourOfDay; i++) {
-            var firstThHour: ThHourDO = new ThHourDO();
-            firstThHour.hour = i;
-            firstThHour.minute = 0;
-            var secondThHour: ThHourDO = new ThHourDO();
-            secondThHour.hour = i;
-            secondThHour.minute = 30;
-
-            this.operationHoursList.push(new ThHourVM(firstThHour, index++));
-            this.operationHoursList.push(new ThHourVM(secondThHour, index++));
-        }
-
-        this.initialCheckInFromIndex = -1;
-        this.initialCheckInToIndex = -1;
-        this.initialCheckOutFromIndex = -1;
-        this.initialCheckOutToIndex = -1;
-        this.initialBookingCancellationHourIndex = -1;
-
-        this.operationHoursList.forEach((thHourVM: ThHourVM) => {
-            if (this.hotel.operationHours.checkInFrom && this.equalHours(thHourVM.thHour, this.hotel.operationHours.checkInFrom)) 
-                this.initialCheckInFromIndex = thHourVM.index;
-            if (this.hotel.operationHours.checkInToOptional && this.equalHours(thHourVM.thHour, this.hotel.operationHours.checkInToOptional)) 
-                this.initialCheckInToIndex = thHourVM.index;
-            if (this.hotel.operationHours.checkOutFromOptional && this.equalHours(thHourVM.thHour, this.hotel.operationHours.checkOutFromOptional)) 
-                this.initialCheckOutFromIndex = thHourVM.index;
-            if (this.hotel.operationHours.checkOutTo && this.equalHours(thHourVM.thHour, this.hotel.operationHours.checkOutTo)) 
-                this.initialCheckOutToIndex = thHourVM.index;
-            if (this.hotel.operationHours.cancellationHour && this.equalHours(thHourVM.thHour, this.hotel.operationHours.cancellationHour)) 
-                this.initialBookingCancellationHourIndex = thHourVM.index;
         });
     }
     

@@ -6,6 +6,7 @@ import {HotelDO} from '../../../../pages/internal/services/hotel/data-objects/ho
 import {HourPipe} from '../../../../common/utils/pipes/HourPipe';
 import {MinutePipe} from '../../../../common/utils/pipes/MinutePipe';
 import {TranslationPipe} from '../../../../common/utils/localization/TranslationPipe';
+import {OperationHoursBuilder} from './utils/OperationHoursBuilder';
 
 @Component({
     selector: 'th-hour-select',
@@ -23,9 +24,12 @@ import {TranslationPipe} from '../../../../common/utils/localization/Translation
     pipes: [TranslationPipe, HourPipe, MinutePipe]
 })
 export class ThHourSelectComponent extends BaseComponent implements OnInit {
+	private _hoursBuilder: OperationHoursBuilder = new OperationHoursBuilder();
     
-    @Input() hoursList: ThHourVM[];
-    @Input() initialHourIndex: number;
+    hoursList: ThHourVM[];
+    initialHourIndex: number = -1;
+	
+	@Input() initialHour: ThHourDO;
     @Input() isRequired: boolean = false;
 	@Input() didSubmitForm: boolean = false;
     @Input() errorMessage: string;
@@ -36,10 +40,11 @@ export class ThHourSelectComponent extends BaseComponent implements OnInit {
     
     constructor() { 
         super();
+		this.hoursList = this._hoursBuilder.operationHoursList;
     }
     
     ngOnInit() {
-        this.selectedHourIndex = this.initialHourIndex;
+		this.initialHourIndex = this._hoursBuilder.getInitialIndexFor(this.initialHour);
     }
     
     onHourChanged(hourIndex: number) {
