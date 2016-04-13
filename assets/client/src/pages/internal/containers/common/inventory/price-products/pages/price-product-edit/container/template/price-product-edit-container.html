@@ -22,14 +22,16 @@
 	<div class="row">
 		<price-product-edit-taxes-section [didSubmit]="didSubmit"></price-product-edit-taxes-section>
 	</div>
-	
 	<hr>
-	<!-- Filters -->
 	<div class="row">
 		<price-product-edit-filters-section [didSubmit]="didSubmit"></price-product-edit-filters-section>
 	</div>
+	<hr>
+	<div class="row">
+		<price-product-edit-cancellation-section [didSubmit]="didSubmit"></price-product-edit-cancellation-section>
+	</div>
 
-	<!-- Constraints -->
+
 	<hr>
 	<div class="row">
 
@@ -60,78 +62,6 @@
 		</div>
 	</div>
 	<hr>
-
-	<!-- cancellation -->
-
-	<div class="row">
-
-		<div class="col-md-6">
-
-			<h3>Cancellation</h3>
-			<label class="control-label">Option available </label>
-
-			<div class="form-group">
-				<select class="select2_single form-control" tabindex="-1">
-					<option value="0">Can cancel before time on day of arrival</option>
-					<option value="1">Can cancel before number of days</option>
-					<option value="2">No cancellation possible</option>
-				</select>
-			</div>
-
-			<div class="row">
-				<div class="col-xs-6">
-					<div class="form-group">
-						<label class="control-label">Time of Arrival</label>
-						<select class="select2_single form-control" tabindex="-1">
-							<option value="0">12:30</option>
-							<option value="0">13:00</option>
-							<option value="2">13:30</option>
-						</select>
-					</div>
-
-				</div>
-				<div class="col-xs-6">
-
-					<label class="control-label">Has Condition</label>
-					<div class="form-group">
-
-						<div class="btn-group" data-toggle="buttons">
-							<label class="btn btn-default active">
-								<input type="radio" name="options" id="option8" autocomplete="off" checked> Yes
-							</label>
-							<label class="btn btn-default">
-								<input type="radio" name="options" id="option9" autocomplete="off"> No
-							</label>
-						</div>
-					</div>
-
-				</div>
-			</div>
-			<p class="text-muted small"> <i class="fa fa-info-circle"></i> If no condition, the client can cancel the bookings anytime</p>
-
-		</div>
-
-		<div class="col-md-6">
-			<h4>Penalty</h4>
-			<label class="control-label">Type of Penalty </label>
-			<div class="form-group">
-				<select class="select2_single form-control" tabindex="-1">
-					<option value="0">Pay first night</option>
-					<option value="0">Pay full stay</option>
-					<option value="2">Pay percentage from booking</option>
-				</select>
-			</div>
-			<label class="control-label">Booking Percentage</label>
-			<div class="form-group">
-				<input type="number" placeholder="Percentage" class="form-control">
-			</div>
-			<p class="text-muted small"> <i class="fa fa-info-circle"></i> Only if the cancellation has condition</p>
-		</div>
-
-
-
-
-	</div>
 
 	<hr>
 	<div class="row">

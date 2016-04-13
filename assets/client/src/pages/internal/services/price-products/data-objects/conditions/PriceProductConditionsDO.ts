@@ -2,15 +2,11 @@ import {BaseDO} from '../../../../../../common/base/BaseDO';
 
 import {IPriceProductCancellationPolicy, PriceProductCancellationPolicyType} from './cancellation/IPriceProductCancellationPolicy';
 import {NoCancellationPolicyDO} from './cancellation/NoCancellationPolicyDO';
-import {NoCancellationPossiblePolicyDO} from './cancellation/NoCancellationPossiblePolicyDO';
-import {CanCancelDaysBeforePolicyDO} from './cancellation/CanCancelDaysBeforePolicyDO';
-import {CanCancelBeforeTimeOnDayOfArrivalPolicyDO} from './cancellation/CanCancelBeforeTimeOnDayOfArrivalPolicyDO';
+import {PriceProductCancellationPolicyFactory} from './cancellation/PriceProductCancellationPolicyFactory';
 
 import {IPriceProductCancellationPenalty, PriceProductCancellationPenaltyType} from './penalty/IPriceProductCancellationPenalty';
+import {PriceProductCancellationPenaltyFactory} from './penalty/PriceProductCancellationPenaltyFactory';
 import {NoCancellationPenaltyDO} from './penalty/NoCancellationPenaltyDO';
-import {FullStayCancellationPenaltyDO} from './penalty/FullStayCancellationPenaltyDO';
-import {FirstNightOnlyCancellationPenaltyDO} from './penalty/FirstNightOnlyCancellationPenaltyDO';
-import {PercentageFromBookingCancellationPenaltyDO} from './penalty/PercentageFromBookingCancellationPenaltyDO';
 
 export class PriceProductConditionsDO extends BaseDO {
 	policyType: PriceProductCancellationPolicyType;
@@ -26,36 +22,12 @@ export class PriceProductConditionsDO extends BaseDO {
 	public buildFromObject(object: Object) {
 		super.buildFromObject(object);
 
-		switch (this.policyType) {
-			case PriceProductCancellationPolicyType.NoPolicy:
-				this.policy = new NoCancellationPolicyDO();
-				break;
-			case PriceProductCancellationPolicyType.NoCancellationPossible:
-				this.policy = new NoCancellationPossiblePolicyDO();
-				break;
-			case PriceProductCancellationPolicyType.CanCancelDaysBefore:
-				this.policy = new CanCancelDaysBeforePolicyDO();
-				break;
-			case PriceProductCancellationPolicyType.CanCancelBeforeTimeOnDayOfArrival:
-				this.policy = new CanCancelBeforeTimeOnDayOfArrivalPolicyDO();
-				break;
-		}
+		var cancellationPolicyFactory = new PriceProductCancellationPolicyFactory();
+		this.policy = cancellationPolicyFactory.getCancellationPolicyByPolicyType(this.policyType);
 		this.policy.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "policy"));
 
-		switch (this.penaltyType) {
-			case PriceProductCancellationPenaltyType.NoPenalty:
-				this.penalty = new NoCancellationPenaltyDO();
-				break;
-			case PriceProductCancellationPenaltyType.FullStay:
-				this.penalty = new FullStayCancellationPenaltyDO();
-				break;
-			case PriceProductCancellationPenaltyType.FirstNightOnly:
-				this.penalty = new FirstNightOnlyCancellationPenaltyDO();
-				break;
-			case PriceProductCancellationPenaltyType.PercentageFromBooking:
-				this.penalty = new PercentageFromBookingCancellationPenaltyDO();
-				break;
-		}
+		var cancellationPenaltyFactory = new PriceProductCancellationPenaltyFactory();
+		this.penalty = cancellationPenaltyFactory.getCancellationPenaltyByPenaltyType(this.penaltyType);
 		this.penalty.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "penalty"));
 	}
 
@@ -70,5 +42,20 @@ export class PriceProductConditionsDO extends BaseDO {
 			return false;
 		}
 		return this.policy.isValid() && this.penalty.isValid();
+	}
+
+	public prototypeConditions(): PriceProductConditionsDO {
+		var conditions = new PriceProductConditionsDO();
+		conditions.buildFromObject(this);
+		return conditions;
+	}
+
+	public static buildDefault(): PriceProductConditionsDO {
+		var conditions = new PriceProductConditionsDO();
+		conditions.policyType = PriceProductCancellationPolicyType.NoPolicy;
+		conditions.policy = new NoCancellationPolicyDO();
+		conditions.penaltyType = PriceProductCancellationPenaltyType.NoPenalty;
+		conditions.penalty = new NoCancellationPenaltyDO();
+		return conditions;
 	}
 }

@@ -4,6 +4,13 @@ import {ThHourDO} from '../../../../common/data-objects/th-dates/ThHourDO';
 
 export class CanCancelBeforeTimeOnDayOfArrivalPolicyDO extends BaseDO implements IPriceProductCancellationPolicy {
 	timeOfArrival: ThHourDO;
+	
+	constructor() {
+		super();
+		this.timeOfArrival = new ThHourDO();
+		this.timeOfArrival.hour = 12;
+		this.timeOfArrival.minute = 30;
+	}
 
 	protected getPrimitivePropertyKeys(): string[] {
 		return [];

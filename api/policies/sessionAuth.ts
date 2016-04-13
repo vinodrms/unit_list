@@ -15,7 +15,11 @@ module.exports = function(req: Express.Request, res: Express.Response, next: any
 			language: Locales.English,
 			sessionDO: {
 				hotel: {
+<<<<<<< HEAD
 					id: "570793406d6d38d00240b506"
+=======
+					id: "570bc63ed5d45fecaf47f003"
+>>>>>>> a4957135aed5eb92ce41da3712d4d6bffc65e912
 				},
 				user: {
 					id: "68a28490-f661-11e5-a533-ef4574c81a92",
