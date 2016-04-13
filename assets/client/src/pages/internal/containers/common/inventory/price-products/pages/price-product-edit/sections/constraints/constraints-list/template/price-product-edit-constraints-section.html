@@ -1,11 +1,15 @@
 <div class="col-md-12">
 	<div class="row">
-		<label>{{ 'Constraints' | translate }}</label>
+		<div class="col-xs-12">
+			<label>{{ 'Constraints' | translate }}</label>
+		</div>
 	</div>
 	<div class="row">
-		<small class="text-muted" *ngIf="!isPricePerNumberOfPersons">
-			<i class="fa fa-info-circle"></i> {{ 'Constraints to apply the price product on bookings' | translate }} 
-		</small>
+		<div class="col-xs-12">
+			<small class="text-muted" *ngIf="!isPricePerNumberOfPersons">
+				<i class="fa fa-info-circle"></i> {{ 'Constraints to apply the price product on bookings' | translate }} 
+			</small>
+		</div>
 	</div>
 
 	<table class="table table-striped projects">

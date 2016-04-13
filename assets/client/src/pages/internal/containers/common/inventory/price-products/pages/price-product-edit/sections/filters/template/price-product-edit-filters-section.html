@@ -1,11 +1,15 @@
 <div class="col-md-4 col-sm-4 col-xs-12 form-group">
 	<div class="row">
-		<label>{{ 'Filters' | translate }}</label>
+		<div class="col-xs-12">
+			<label>{{ 'Filters' | translate }}</label>
+		</div>
 	</div>
 	<div class="row">
-		<small class="text-muted" *ngIf="!isPricePerNumberOfPersons">
-			<i class="fa fa-info-circle"></i> {{ 'The filters are used for grouping similar price products. The price products from the same group can be yielded together.' | translate }} 
-		</small>
+		<div class="col-xs-12">
+			<small class="text-muted" *ngIf="!isPricePerNumberOfPersons">
+				<i class="fa fa-info-circle"></i> {{ 'The filters are used for grouping similar price products. The price products from the same group can be yielded together.' | translate }} 
+			</small>
+		</div>
 	</div>
 </div>
 <div class="col-md-8 col-sm-8 col-xs-12">
