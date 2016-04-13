@@ -16,3 +16,8 @@ export interface IPriceProductCancellationPolicy extends BaseDO {
 	hasCancellationPolicy(): boolean;
 	isValid(): boolean;
 }
+
+export interface CancellationPolicyMeta {
+	policyName: string;
+	policyType: PriceProductCancellationPolicyType;
+}

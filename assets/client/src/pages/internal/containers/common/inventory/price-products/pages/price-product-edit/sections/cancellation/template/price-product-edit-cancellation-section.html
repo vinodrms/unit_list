@@ -1,0 +1,55 @@
+<div class="col-md-6 col-sm-6 col-sm-6" *ngIf="didInit">
+	<div class="row">
+		<label>{{ 'Cancellation Policy' | translate }}</label>
+	</div>
+	<div class="row">
+		<small class="text-muted">
+			<i class="fa fa-info-circle"></i> {{ 'Conditions for cancelling' | translate }} 
+		</small>
+	</div>
+
+	<div class="form-group">
+		<select class="form-control" [ngModel]="conditions.policyType" (change)="didChangePolicyType($event.target.value)">
+			<option *ngFor="#cancellationPolicyMeta of cancellationPolicyMetaList" [value]="cancellationPolicyMeta.policyType">
+				{{cancellationPolicyMeta.policyName | translate}}
+			</option>
+		</select>
+	</div>
+
+	<div class="row">
+		<div class="col-xs-12" *ngIf="isCancelBeforeTimeOnDayOfArrivalPolicy()">
+			<label>{{ 'Time on day of arrival' | translate }}</label>
+			<th-hour-select 
+				[readonly]="readonly"
+				[initialHour]="conditions.policy.timeOfArrival"  
+				[isRequired]="true" errorMessage="{{ 'Required' | translate }}" 
+				[didSubmitForm]="didSubmit"
+				(onHourSelected)="diChangeTimeOnDayOfArrival($event)"
+				>
+			</th-hour-select>
+		</div>
+	</div>
+</div>
+
+<div class="col-md-6 col-sm-6 col-sm-6" *ngIf="didInit">
+	<div class="row">
+		<label>{{ 'Cancellation Penalty' | translate }}</label>
+	</div>
+	<div class="row">
+		<small class="text-muted">
+			<i class="fa fa-info-circle"></i> {{ 'Attach penalty on cancellation' | translate }} 
+		</small>
+	</div>
+	<div class="form-group">
+		<select class="form-control" [ngModel]="conditions.penaltyType">
+			<option *ngFor="#cancellationPenaltyMeta of filteredCancellationPenaltyMetaList" [value]="cancellationPenaltyMeta.penaltyType">
+				{{cancellationPenaltyMeta.penaltyName | translate}}
+			</option>
+		</select>
+	</div>
+	<label class="control-label">Booking Percentage</label>
+	<div class="form-group">
+		<input type="number" placeholder="Percentage" class="form-control">
+	</div>
+	<p class="text-muted small"> <i class="fa fa-info-circle"></i> Only if the cancellation has condition</p>
+</div>

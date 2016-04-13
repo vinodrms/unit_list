@@ -21,6 +21,7 @@ import {PriceProductEditAddOnProductsSectionComponent} from '../sections/add-on-
 import {PriceProductEditTaxesSectionComponent} from '../sections/taxes/PriceProductEditTaxesSectionComponent';
 import {PriceProductEditPricesSectionComponent} from '../sections/prices/PriceProductEditPricesSectionComponent';
 import {PriceProductEditFiltersSectionComponent} from '../sections/filters/PriceProductEditFiltersSectionComponent';
+import {PriceProductEditCancellationSectionComponent} from '../sections/cancellation/PriceProductEditCancellationSectionComponent';
 
 @Component({
 	selector: 'price-product-edit-container',
@@ -29,7 +30,8 @@ import {PriceProductEditFiltersSectionComponent} from '../sections/filters/Price
 	directives: [LoadingComponent,
 		PriceProductEditTopSectionComponent, PriceProductEditRoomCategoriesSectionComponent,
 		PriceProductEditAddOnProductsSectionComponent, PriceProductEditTaxesSectionComponent,
-		PriceProductEditPricesSectionComponent, PriceProductEditFiltersSectionComponent],
+		PriceProductEditPricesSectionComponent, PriceProductEditFiltersSectionComponent,
+		PriceProductEditCancellationSectionComponent],
 	pipes: [TranslationPipe]
 })
 
@@ -40,6 +42,7 @@ export class PriceProductEditContainerComponent extends BaseComponent implements
 	@ViewChild(PriceProductEditTaxesSectionComponent) private _editTaxesSection: PriceProductEditTaxesSectionComponent;
 	@ViewChild(PriceProductEditPricesSectionComponent) private _editPricesSection: PriceProductEditPricesSectionComponent;
 	@ViewChild(PriceProductEditFiltersSectionComponent) private _editFiltersSection: PriceProductEditFiltersSectionComponent;
+	@ViewChild(PriceProductEditCancellationSectionComponent) private _editCancellationSection: PriceProductEditCancellationSectionComponent;
 
 	private _didInit = false;
 	isLoading: boolean = true;
@@ -80,7 +83,8 @@ export class PriceProductEditContainerComponent extends BaseComponent implements
 					this._addOnProductsSection,
 					this._editTaxesSection,
 					this._editPricesSection,
-					this._editFiltersSection
+					this._editFiltersSection,
+					this._editCancellationSection
 				]
 			);
 			this.initializeDependentData();

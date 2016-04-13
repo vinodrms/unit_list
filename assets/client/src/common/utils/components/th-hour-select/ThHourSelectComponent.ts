@@ -13,7 +13,7 @@ import {OperationHoursBuilder} from './utils/OperationHoursBuilder';
     template: `
 		<div class="form-group">
         	<div class="input-group" [ngClass]="{'form-warning': displayError()}">
-            	<select class="form-control" [ngModel]="initialHourIndex" (change)="onHourChanged($event.target.value)">
+            	<select class="form-control" [ngModel]="initialHourIndex" (change)="onHourChanged($event.target.value)" [disabled]="readonly">
                     <option value="" disabled></option>
                 	<option *ngFor="#hourVM of hoursList" [value]="hourVM.index">{{hourVM.thHour.hour | hour}}:{{hourVM.thHour.minute | minute}}</option>
             	</select>
@@ -29,6 +29,7 @@ export class ThHourSelectComponent extends BaseComponent implements OnInit {
     hoursList: ThHourVM[];
     initialHourIndex: number = -1;
 	
+	@Input() readonly: boolean;
 	@Input() initialHour: ThHourDO;
     @Input() isRequired: boolean = false;
 	@Input() didSubmitForm: boolean = false;
