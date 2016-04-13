@@ -36,8 +36,6 @@ export class ThHourSelectComponent extends BaseComponent implements OnInit {
     
     @Output() onHourSelected = new EventEmitter();
     
-    selectedHourIndex: number;
-    
     constructor() { 
         super();
 		this.hoursList = this._hoursBuilder.operationHoursList;
@@ -48,7 +46,7 @@ export class ThHourSelectComponent extends BaseComponent implements OnInit {
     }
     
     onHourChanged(hourIndex: number) {
-        this.selectedHourIndex = hourIndex;
+        this.initialHourIndex = hourIndex;
         var selectedHourVM: ThHourVM = _.find(this.hoursList, ((hourVM: ThHourVM)=>{
             return hourVM.index == hourIndex;            
         }));
@@ -56,6 +54,6 @@ export class ThHourSelectComponent extends BaseComponent implements OnInit {
 	}
     
     public displayError(): boolean {
-		return this.didSubmitForm && (!this.selectedHourIndex || this.selectedHourIndex == -1) && this.isRequired;
+		return this.didSubmitForm && (!this.initialHourIndex || this.initialHourIndex == -1) && this.isRequired;
 	}
 }

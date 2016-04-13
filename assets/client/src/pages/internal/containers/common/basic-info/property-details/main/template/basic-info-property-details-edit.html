@@ -30,7 +30,7 @@
             <div class="col-xs-6">
                 <label>{{ 'Check in to (optional)' | translate }}</label>
                 <th-hour-select 
-					[initialHour]="hotel.operationHours.checkInTo" 
+					[initialHour]="hotel.operationHours.checkInToOptional" 
 					(onHourSelected)="diChangeCheckInTo($event)"
                 	[isRequired]="false" 
 					[didSubmitForm]="didSubmitForm">
@@ -42,7 +42,7 @@
             <div class="col-xs-6">
                 <label>{{ 'Check out from (optional)' | translate }}</label>
                 <th-hour-select
-					[initialHour]="hotel.operationHours.checkOutFrom" 
+					[initialHour]="hotel.operationHours.checkOutFromOptional" 
 					(onHourSelected)="diChangeCheckOutFrom($event)"
 					[isRequired]="false" 
 					[didSubmitForm]="didSubmitForm">

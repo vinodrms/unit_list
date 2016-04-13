@@ -79,16 +79,16 @@ export class BasicInfoPropertyDetailsEditComponent extends BaseComponent impleme
         this._propertyDetailsEditService.updateCheckInFrom(checkInFromHour);
     }
 
-    public diChangeCheckInTo(checkInFromHour: ThHourDO) {
-        this._propertyDetailsEditService.updateCheckInTo(checkInFromHour);
+    public diChangeCheckInTo(checkInTo: ThHourDO) {
+        this._propertyDetailsEditService.updateCheckInTo(checkInTo);
     }
 
-    public diChangeCheckOutFrom(checkInFromHour: ThHourDO) {
-        this._propertyDetailsEditService.updateCheckOutFrom(checkInFromHour);
+    public diChangeCheckOutFrom(checkOutFrom: ThHourDO) {
+        this._propertyDetailsEditService.updateCheckOutFrom(checkOutFrom);
     }
 
-    public diChangeCheckOutTo(checkInFromHour: ThHourDO) {
-        this._propertyDetailsEditService.updateCheckOutTo(checkInFromHour);
+    public diChangeCheckOutTo(checkOutTo: ThHourDO) {
+        this._propertyDetailsEditService.updateCheckOutTo(checkOutTo);
     }
 
     public diChangeCancellationHour(cancellationHour: ThHourDO) {
