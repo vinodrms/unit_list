@@ -278,6 +278,10 @@ export var EnglishTranslations: Object = {
 	"Time on day of arrival": "Time on day of arrival",
 	"Number of days": "Number of days",
 	"Days before": "Days before",
-	"Enter the number of days": "Enter the number of days"
+	"Enter the number of days": "Enter the number of days",
+	"Percentage from booking": "Percentage from booking",
+	"Enter a valid percentage": "Enter a valid percentage",
+	"Select the time of arrival": "Select the time of arrival",
+	"Days until day of arrival": "Days until day of arrival"
 	
 };

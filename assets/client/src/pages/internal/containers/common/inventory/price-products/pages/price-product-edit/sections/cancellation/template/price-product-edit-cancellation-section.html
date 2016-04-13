@@ -22,7 +22,7 @@
 			<th-hour-select 
 				[readonly]="readonly"
 				[initialHour]="conditions.policy.timeOfArrival"  
-				[isRequired]="true" errorMessage="{{ 'Required' | translate }}" 
+				[isRequired]="true" errorMessage="{{ 'Select the time of arrival' | translate }}" 
 				[didSubmitForm]="didSubmit"
 				(onHourSelected)="diChangeTimeOnDayOfArrival($event)"
 				>
@@ -30,7 +30,7 @@
 		</div>
 		<div class="col-xs-12 form-group" *ngIf="isCanCancelDaysBeforePolicy()">
 			<div class="input-group" [ngClass]="{'form-warning': (didSubmit&&!conditions.policy.isValid())}">
-				<label>{{ 'Days before' | translate }}</label>
+				<label>{{ 'Days until day of arrival' | translate }} {{ cancellationHour | thhour }}</label>
 				<input type="number" placeholder="{{ 'Number of days' | translate }}" class="form-control input-group-lg" [(ngModel)]="conditions.policy.daysBefore" [readonly]="readonly">
 			</div>
 			<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter the number of days' | translate }}</small></label>
@@ -46,17 +46,25 @@
 		<small class="text-muted">
 			<i class="fa fa-info-circle"></i> {{ 'Attach penalty on cancellation' | translate }} 
 		</small>
+		<div class="col-xs-12 form-group">
+			<select class="form-control" [ngModel]="conditions.penaltyType" (change)="didChangePenaltyType($event.target.value)" [disabled]="readonly">
+				<option *ngFor="#cancellationPenaltyMeta of filteredCancellationPenaltyMetaList" [value]="cancellationPenaltyMeta.penaltyType">
+					{{cancellationPenaltyMeta.penaltyName | translate}}
+				</option>
+			</select>
+		</div>
+		<div class="col-xs-12" *ngIf="isPercentageFromBookingCancellationPenalty()">
+			<label>{{ 'Percentage from booking' | translate }}</label>
+			<percentage-input-number
+				[didSubmitForm]="didSubmit"
+				[initialPercentage]="conditions.penalty.percentage"
+				[readonly]="readonly"
+				[isRequired]="true"
+				[errorMessage]="'Enter a valid percentage'" 
+				(onPercentageChanged)="didSetPercentageFromBooking($event)"
+				>
+			</percentage-input-number>
+		</div>
 	</div>
-	<div class="form-group">
-		<select class="form-control" [ngModel]="conditions.penaltyType" [disabled]="readonly">
-			<option *ngFor="#cancellationPenaltyMeta of filteredCancellationPenaltyMetaList" [value]="cancellationPenaltyMeta.penaltyType">
-				{{cancellationPenaltyMeta.penaltyName | translate}}
-			</option>
-		</select>
-	</div>
-	<label class="control-label">Booking Percentage</label>
-	<div class="form-group">
-		<input type="number" placeholder="Percentage" class="form-control">
-	</div>
-	<p class="text-muted small"> <i class="fa fa-info-circle"></i> Only if the cancellation has condition</p>
+	
 </div>

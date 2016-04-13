@@ -106,10 +106,11 @@ export class PriceProductEditContainerComponent extends BaseComponent implements
 		).subscribe((result: [AddOnProductsDO, HotelAggregatedInfo]) => {
 			this._priceProductVM.addOnProductList = result[0].addOnProductList;
 			this._priceProductVM.ccy = result[1].ccy;
-
+			
 			this._editSectionContainer.initializeFrom(this._priceProductVM);
 			this._editSectionContainer.readonly = this.isReadOnly();
 			this._editFiltersSection.readonly = this.yieldFiltersAreReadOnly();
+			this._editCancellationSection.cancellationHour = result[1].hotelDetails.hotel.operationHours.cancellationHour;
 
 			this.isLoading = false;
 			this.didSubmit = false;
