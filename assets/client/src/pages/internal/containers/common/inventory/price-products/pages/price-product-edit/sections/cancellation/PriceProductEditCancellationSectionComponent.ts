@@ -7,6 +7,8 @@ import {IPriceProductEditSection} from '../utils/IPriceProductEditSection';
 import {PriceProductVM} from '../../../../../../../../services/price-products/view-models/PriceProductVM';
 import {IPriceProductCancellationPolicy, CancellationPolicyMeta, PriceProductCancellationPolicyType} from '../../../../../../../../services/price-products/data-objects/conditions/cancellation/IPriceProductCancellationPolicy';
 import {PriceProductCancellationPolicyFactory} from '../../../../../../../../services/price-products/data-objects/conditions/cancellation/PriceProductCancellationPolicyFactory';
+import {CanCancelBeforeTimeOnDayOfArrivalPolicyDO} from '../../../../../../../../services/price-products/data-objects/conditions/cancellation/CanCancelBeforeTimeOnDayOfArrivalPolicyDO';
+import {CanCancelDaysBeforePolicyDO} from '../../../../../../../../services/price-products/data-objects/conditions/cancellation/CanCancelDaysBeforePolicyDO';
 import {PriceProductConditionsDO} from '../../../../../../../../services/price-products/data-objects/conditions/PriceProductConditionsDO';
 import {IPriceProductCancellationPenalty, CancellationPenaltyMeta} from '../../../../../../../../services/price-products/data-objects/conditions/penalty/IPriceProductCancellationPenalty';
 import {PriceProductCancellationPenaltyFactory} from '../../../../../../../../services/price-products/data-objects/conditions/penalty/PriceProductCancellationPenaltyFactory';
@@ -40,7 +42,7 @@ export class PriceProductEditCancellationSectionComponent extends BaseComponent 
 	}
 
 	public isValid(): boolean {
-		return true;
+		return this.conditions.isValid();
 	}
 	public initializeFrom(priceProductVM: PriceProductVM) {
 		if (!priceProductVM.priceProduct.conditions) {
@@ -89,10 +91,15 @@ export class PriceProductEditCancellationSectionComponent extends BaseComponent 
 		// 
 	}
 	
+	
 	public isCancelBeforeTimeOnDayOfArrivalPolicy(): boolean {
 		return this.conditions.policyType === PriceProductCancellationPolicyType.CanCancelBeforeTimeOnDayOfArrival; 
 	}
 	public diChangeTimeOnDayOfArrival(thHour: ThHourDO) {
-		console.log(thHour);
+		if(!this.isCancelBeforeTimeOnDayOfArrivalPolicy()) { return };
+		(<CanCancelBeforeTimeOnDayOfArrivalPolicyDO>this.conditions.policy).timeOfArrival = thHour;
+	}
+	public isCanCancelDaysBeforePolicy(): boolean {
+		return this.conditions.policyType === PriceProductCancellationPolicyType.CanCancelDaysBefore;
 	}
 }

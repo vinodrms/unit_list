@@ -275,6 +275,9 @@ export var EnglishTranslations: Object = {
 	"Pay percentage from booking": "Pay percentage from booking",
 	"Cancellation Penalty": "Cancellation Penalty",
 	"Attach penalty on cancellation": "Attach penalty on cancellation",
-	"Time on day of arrival": "Time on day of arrival"
+	"Time on day of arrival": "Time on day of arrival",
+	"Number of days": "Number of days",
+	"Days before": "Days before",
+	"Enter the number of days": "Enter the number of days"
 	
 };
