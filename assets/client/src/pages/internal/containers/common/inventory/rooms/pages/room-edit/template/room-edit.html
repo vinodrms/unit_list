@@ -1,25 +1,118 @@
 <loading-component [isLoading]="isLoading"></loading-component>
 <div class="row" *ngIf="!isLoading" [ngFormModel]="getDefaultControlGroup()">
+    <div class="row">
+
+        <div class="col-md-8">
+            <div class="row">
+                <div class="col-md-4 col-xs-12 form-group">
+                    <label>{{ 'Category' | translate }}</label>
+                    <select class="select2_single form-control">
+                        <option value="Bed VAT">Default Room</option>
+                        <option value="Food VAT">VIP Room</option>
+                    </select>
+                </div>
+
+                <div class="col-md-4 col-xs-12 form-group">
+                    <label>{{ 'Name' | translate }}</label>
+                    <div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('name')}">
+                        <input type="text" class="form-control" placeholder="{{ 'Enter Room Name' | translate }}" ngControl="name">
+                    </div>
+                    <label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter a name for the room' | translate }}</small></label>
+                </div>
+
+                <div class="col-md-4 col-xs-12 ">
+                    <label>{{ 'Floor Number' | translate }}</label>
+                    <div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('floor')}">
+                        <span class="input-group-addon"><i class="fa fa-caret-square-o-up"></i></span>
+                        <input type="number" placeholder="{{ 'Enter floor no' | translate }}" class="form-control" ngControl="floor">
+                    </div>
+                    <label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Insert a valid floor number' | translate }}</small></label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+                    <label class="control-label">{{ 'Beds' | translate }}</label>
+                </div>
+                <div class="col-md-4">
+                </div>
+            </div>
+            <div class="clear"></div>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="row">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <label>{{ 'Image of the Product' | translate }}</label>
+            <image-upload [imageUrl]="roomVM.imageUrl" (onImageUpload)="didUploadImage($event)"></image-upload>
+        </div>
+
+    </div>
+
+
+    <hr/>
 
     <div class="row">
-        <div class="col-md-2">
-            <label>{{ 'Name' | translate }}</label>
-        </div>
-        <div class="col-md-6">
-            <div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('name')}">
-                <input type="text" class="form-control" placeholder="{{ 'Room Name' | translate }}" ngControl="name">
-            </div>
-            <label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter a name for the room' | translate }}</small></label>
+        <div class="col-md-8">
+            <label class="control-label">{{ 'Amenities' | translate }}</label>
         </div>
         <div class="col-md-4">
         </div>
     </div>
-    
+
     <div class="row">
-        <div class="col-md-2">
+        <div class="col-md-8">
+            <div class="form-group btn-group amenities-group" role="group">
+                <div class="button-check th-grid-btn" *ngFor="#roomAmenityVM of roomAmenities.roomAmenityList">
+                    <div class="info-block block-info clearfix" title="{{ roomAmenityVM.roomAmenity.name }}">
+                        <div data-toggle="buttons">
+                            <label class="btn btn-default" [ngClass]="{active: roomAmenityVM.isSelected}" (click)="roomAmenityVM.toggle()">
+                                <span [ngClass]="roomAmenityVM.roomAmenity.iconUrl"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+            <label class="control-label">{{ 'Attributes' | translate }}</label>
+        </div>
+        <div class="col-md-4">
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="form-group btn-group amenities-group" role="group">
+                <div class="button-check th-grid-btn" *ngFor="#roomAttributeVM of roomAttributes.roomAttributeList">
+                    <div class="info-block block-info clearfix" title="{{ roomAttributeVM.roomAttribute.name }}">
+                        <div data-toggle="buttons">
+                            <label class="btn btn-default" [ngClass]="{active: roomAttributeVM.isSelected}" (click)="roomAttributeVM.toggle()">
+                                <span [ngClass]="roomAttributeVM.roomAttribute.iconUrl"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
             <label>{{ 'Notes' | translate }}</label>
         </div>
-        <div class="col-md-6">
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
             <textarea class="form-control" ngControl="notes"></textarea>
         </div>
         <div class="col-md-4">
@@ -46,5 +139,4 @@
             <button type="button" class="btn btn-danger btn-block" (click)="showViewScreen()">{{ 'Cancel' | translate }}</button>
         </div>
     </div>
-
 </div>

@@ -11,27 +11,27 @@ export class RoomAmenities extends Amenities {
         this.dataSet = [
             {
                 name: "Bath tub",
-                iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
+                iconUrl: "glyphicon glyphicon-music glyphicon-lg"
             },
             {
                 name: "Hairdryer",
-                iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
+                iconUrl: "glyphicon glyphicon-lock glyphicon-lg"
             },
             {
                 name: "Tv",
-                iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
+                iconUrl: "glyphicon glyphicon-camera glyphicon-lg"
             },
             {
                 name: "Wifi",
-                iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
+                iconUrl: "glyphicon glyphicon-adjust glyphicon-lg"
             },
             {
                 name: "AC",
-                iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
+                iconUrl: "glyphicon glyphicon-leaf glyphicon-lg"
             },
             {
                 name: "Minibar",
-                iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
+                iconUrl: "glyphicon glyphicon-tasks glyphicon-lg"
             }
         ];
 

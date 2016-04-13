@@ -88,8 +88,11 @@ export class MongoRoomReadOperationsRepository extends MongoRepository {
         mongoQueryBuilder.addExactMatch("hotelId", meta.hotelId);
         mongoQueryBuilder.addExactMatch("status", RoomStatus.Active);
         if (searchCriteria) {
-            if (searchCriteria.categoryId) {
+            if (!this._thUtils.isUndefinedOrNull(searchCriteria.categoryId)) {
                 mongoQueryBuilder.addExactMatch("categoryId", searchCriteria.categoryId);
+            }
+            if (!this._thUtils.isUndefinedOrNull(searchCriteria.name)) {
+                mongoQueryBuilder.addRegex("name", searchCriteria.name);
             }
         }
         return mongoQueryBuilder.processedQuery;
