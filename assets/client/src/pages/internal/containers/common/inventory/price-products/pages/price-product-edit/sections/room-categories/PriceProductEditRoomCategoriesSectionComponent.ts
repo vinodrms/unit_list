@@ -1,4 +1,4 @@
-import {Component, Input} from 'angular2/core';
+import {Component, Input, Output, EventEmitter} from 'angular2/core';
 import {BaseComponent} from '../../../../../../../../../../common/base/BaseComponent';
 import {TranslationPipe} from '../../../../../../../../../../common/utils/localization/TranslationPipe';
 import {IPriceProductEditSection} from '../utils/IPriceProductEditSection';
@@ -17,6 +17,11 @@ import {CurrencyDO} from '../../../../../../../../services/common/data-objects/c
 export class PriceProductEditRoomCategoriesSectionComponent extends BaseComponent implements IPriceProductEditSection {
 	readonly: boolean;
 	@Input() didSubmit: boolean;
+	
+	@Output() onRoomCategoryChange = new EventEmitter();
+	public triggerRoomCategoryChange() {
+		this.onRoomCategoryChange.next(this._roomCategoryList);
+	}
 
 	private _roomCategoryList: RoomCategoryDO[];
 
@@ -28,9 +33,9 @@ export class PriceProductEditRoomCategoriesSectionComponent extends BaseComponen
 		return this._roomCategoryList.length > 0;
 	}
 	public initializeFrom(priceProductVM: PriceProductVM) {
-		this._roomCategoryList = priceProductVM.roomCategoryList;
-		if (!this._roomCategoryList) {
-			this._roomCategoryList = [];
+		this._roomCategoryList = [];
+		if (priceProductVM.roomCategoryList && priceProductVM.roomCategoryList.length > 0) {
+			this._roomCategoryList = this._roomCategoryList.concat(priceProductVM.roomCategoryList);
 		}
 	}
 	public updateDataOn(priceProductVM: PriceProductVM) {
@@ -40,6 +45,7 @@ export class PriceProductEditRoomCategoriesSectionComponent extends BaseComponen
 
 	public removeRoomCategory(roomCategory: RoomCategoryDO) {
 		this._roomCategoryList = _.filter(this._roomCategoryList, (arrayRoomCateg: RoomCategoryDO) => { return arrayRoomCateg.id !== roomCategory.id });
+		this.triggerRoomCategoryChange();
 	}
 
 	public openRoomCategorySelectModal() {
@@ -53,6 +59,7 @@ export class PriceProductEditRoomCategoriesSectionComponent extends BaseComponen
 		var foundRoomCategory = _.find(this._roomCategoryList, (roomCategory: RoomCategoryDO) => { return roomCategory.id === roomCategoryToAdd.id });
 		if (!foundRoomCategory) {
 			this._roomCategoryList.push(roomCategoryToAdd);
+			this.triggerRoomCategoryChange();
 		}
 	}
 

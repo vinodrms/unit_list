@@ -10,10 +10,10 @@
 	<div class="input-group">
 		<div class="btn-group" data-toggle="buttons">
 			<button class="btn btn-default" (click)="isPublicAvailability=true" [ngClass]="{'active': isPublicAvailability}" [disabled]="readonly">
-				<input type="radio"/><i class="fa fa-users"></i> {{ 'Public' | translate }}
+				<i class="fa fa-users"></i> {{ 'Public' | translate }}
 			</button>
 			<button class="btn btn-default" (click)="isPublicAvailability=false" [ngClass]="{'active': !isPublicAvailability}" [disabled]="readonly">
-				<input type="radio"/><i class="fa fa-user"></i> {{ 'Confidential' | translate }}
+				<i class="fa fa-user"></i> {{ 'Confidential' | translate }}
 			</button>
 		</div>
 	</div>
@@ -24,10 +24,10 @@
 	<div class="input-group">
 		<div class="btn-group" data-toggle="buttons">
 			<button class="btn btn-default" (click)="isLastRoomAvailabilityEnabled=true" [ngClass]="{'active': isLastRoomAvailabilityEnabled}" [disabled]="readonly">
-				<input type="radio"/> {{ 'On' | translate }}
+				{{ 'On' | translate }}
 			</button>
 			<button class="btn btn-default" (click)="isLastRoomAvailabilityEnabled=false" [ngClass]="{'active': !isLastRoomAvailabilityEnabled}" [disabled]="readonly">
-				<input type="radio"/> {{ 'Off' | translate }}
+				{{ 'Off' | translate }}
 			</button>
 		</div>
 	</div>

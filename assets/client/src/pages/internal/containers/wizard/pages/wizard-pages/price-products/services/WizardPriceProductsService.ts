@@ -14,7 +14,9 @@ export class WizardPriceProductsService extends AWizardState {
 	public handleNextPressed(): Promise<any> {
 		return new Promise<any>((resolve: { (result: any): void }, reject: { (err: any): void }) => {
 			if (this._totalNoOfActivePriceProducts === 0) {
-				this._appContext.toaster.error("Please add at least an active Price Product before going forward");
+				var modalTitle = this._appContext.thTranslation.translate("Price Product Required");
+				var errorMessage = this._appContext.thTranslation.translate("Please add at least an active Price Product before going forward");
+				this._appContext.modalService.confirm(modalTitle, errorMessage, { positive: "Ok" }, () => { }, () => { });
 				return;
 			}
 			this.wizardController.moveNext();

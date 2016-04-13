@@ -34,9 +34,9 @@ export class PriceProductEditAddOnProductsSectionComponent extends BaseComponent
 		return true;
 	}
 	public initializeFrom(priceProductVM: PriceProductVM) {
-		this._addOnProductList = priceProductVM.addOnProductList;
-		if (!this._addOnProductList) {
-			this._addOnProductList = [];
+		this._addOnProductList = [];
+		if (priceProductVM.addOnProductList && priceProductVM.addOnProductList.length > 0) {
+			this._addOnProductList = this._addOnProductList.concat(priceProductVM.addOnProductList);
 		}
 		this.ccy = priceProductVM.ccy;
 	}
