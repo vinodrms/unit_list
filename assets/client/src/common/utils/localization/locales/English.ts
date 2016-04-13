@@ -261,6 +261,14 @@ export var EnglishTranslations: Object = {
 	"Yield Level": "Yield Level",
 	"Yield Group": "Yield Group",
 	"Not Set": "Not Set",
-	"Select": "Select" 
+	"Select": "Select",
+	"Cancellation Policy": "Cancellation Policy",
+	"Conditions for cancelling": "Conditions for cancelling",
+	"Can cancel before number of days until arrival": "Can cancel before number of days until arrival",
+	"Can cancel before time on day of arrival": "Can cancel before time on day of arrival",
+	"Pay percentage from booking": "Pay percentage from booking",
+	"Cancellation Penalty": "Cancellation Penalty",
+	"Attach penalty on cancellation": "Attach penalty on cancellation",
+	"Time on day of arrival": "Time on day of arrival"
 	
 };

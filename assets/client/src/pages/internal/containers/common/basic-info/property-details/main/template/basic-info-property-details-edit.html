@@ -19,36 +19,56 @@
         <div class="row">
             <div class="col-xs-6">
                 <label>{{ 'Check in from' | translate }}</label>
-                <th-hour-select [hoursList]="operationHoursList" [initialHourIndex]="initialCheckInFromIndex" (onHourSelected)="diChangeCheckInFrom($event)"
-                [isRequired]="true" errorMessage="{{ 'Required' | translate }}" [didSubmitForm]="didSubmitForm"></th-hour-select>
+                <th-hour-select 
+					[initialHour]="hotel.operationHours.checkInFrom" 
+					(onHourSelected)="diChangeCheckInFrom($event)"
+					[isRequired]="true" errorMessage="{{ 'Required' | translate }}" 
+					[didSubmitForm]="didSubmitForm">
+				</th-hour-select>
             </div>
 
             <div class="col-xs-6">
                 <label>{{ 'Check in to (optional)' | translate }}</label>
-                <th-hour-select [hoursList]="operationHoursList" [initialHourIndex]="initialCheckInToIndex" (onHourSelected)="diChangeCheckInTo($event)"
-                [isRequired]="false" [didSubmitForm]="didSubmitForm"></th-hour-select>
+                <th-hour-select 
+					[initialHour]="hotel.operationHours.checkInTo" 
+					(onHourSelected)="diChangeCheckInTo($event)"
+                	[isRequired]="false" 
+					[didSubmitForm]="didSubmitForm">
+				</th-hour-select>
             </div>
         </div>
         <hr>
         <div class="row">
             <div class="col-xs-6">
                 <label>{{ 'Check out from (optional)' | translate }}</label>
-                <th-hour-select [hoursList]="operationHoursList" [initialHourIndex]="initialCheckOutFromIndex" (onHourSelected)="diChangeCheckOutFrom($event)"
-                [isRequired]="false" [didSubmitForm]="didSubmitForm"></th-hour-select>
+                <th-hour-select
+					[initialHour]="hotel.operationHours.checkOutFrom" 
+					(onHourSelected)="diChangeCheckOutFrom($event)"
+					[isRequired]="false" 
+					[didSubmitForm]="didSubmitForm">
+				</th-hour-select>
             </div>
 
             <div class="col-xs-6">
                 <label>{{ 'Check out to' | translate }}</label>
-                <th-hour-select [hoursList]="operationHoursList" [initialHourIndex]="initialCheckOutToIndex" (onHourSelected)="diChangeCheckOutTo($event)"
-                [isRequired]="true" errorMessage="{{ 'Required' | translate }}" [didSubmitForm]="didSubmitForm"></th-hour-select>
+                <th-hour-select
+					[initialHour]="hotel.operationHours.checkOutTo" 
+					(onHourSelected)="diChangeCheckOutTo($event)"
+                	[isRequired]="true" errorMessage="{{ 'Required' | translate }}" 
+					[didSubmitForm]="didSubmitForm">
+				</th-hour-select>
             </div>
         </div>
         <hr>
         <div class="row">
             <div class="col-xs-6">
                 <label>{{ 'Booking Cancellation Hour' | translate }}</label>
-                <th-hour-select [hoursList]="operationHoursList" [initialHourIndex]="initialBookingCancellationHourIndex" (onHourSelected)="diChangeCancellationHour($event)"
-                [isRequired]="true" errorMessage="{{ 'Required' | translate }}" [didSubmitForm]="didSubmitForm"></th-hour-select>
+                <th-hour-select 
+					[initialHour]="hotel.operationHours.cancellationHour" 
+					(onHourSelected)="diChangeCancellationHour($event)"
+                	[isRequired]="true" errorMessage="{{ 'Required' | translate }}" 
+					[didSubmitForm]="didSubmitForm">
+				</th-hour-select>
             </div>
         </div>
     </div>
