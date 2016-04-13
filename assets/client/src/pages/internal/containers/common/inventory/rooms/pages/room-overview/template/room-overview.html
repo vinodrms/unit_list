@@ -1,6 +1,6 @@
 <div class="row">
     <div class="col-sm-12">
-		<img class="img-responsive" [src]="roomVM.room.fileUrlList[0]" *ngIf="roomVM.room.fileUrlList && roomVM.room.fileUrlList.length>0" />
+		<img class="img-responsive" [src]="roomVM.imageUrl" *ngIf="roomVM.imageUrl" />
 	</div>
     <div class="col-sm-12">
         <kbd>{{ 'Selected' | translate }}</kbd>

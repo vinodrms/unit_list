@@ -51,6 +51,30 @@ export class RoomVM {
         this._roomAttributeList = roomAttributeList;
     }
     
+    public get imageUrl(): string {
+        if(!this.room.fileUrlList) {
+            this.room.fileUrlList = [];
+        }
+        if(_.isEmpty(this.room.fileUrlList)) {
+            return null;
+        }
+        else {
+            return this.room.fileUrlList[0];
+        }
+    }
+    
+    public set imageUrl(imageUrl: string) {
+        if(!this.room.fileUrlList) {
+            this.room.fileUrlList = [];
+        }
+        if(_.isEmpty(this.room.fileUrlList)) {
+            this.room.fileUrlList.push(imageUrl);
+        }
+        else {
+            this.room.fileUrlList[0] = imageUrl;
+        }
+    }
+    
     public get capacity(): CapacityDO {
         var maxAdults = 0, maxChildren = 0;
         

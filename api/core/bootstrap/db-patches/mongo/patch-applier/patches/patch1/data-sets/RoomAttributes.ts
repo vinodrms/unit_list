@@ -28,55 +28,55 @@ export class RoomAttributes extends ABaseSetting {
     private dataSet: { name: string, iconUrl: string }[] = [
         {
             name: "Street View",
-            iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
+            iconUrl: "glyphicon glyphicon-asterisk glyphicon-lg"
         },
         {
             name: "Park View",
-            iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
+            iconUrl: "glyphicon glyphicon-glass glyphicon-lg"
         },
         {
             name: "Sea View",
-            iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
+            iconUrl: "glyphicon glyphicon-th-large glyphicon-lg"
         },
         {
             name: "Courtyard View",
-            iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
+            iconUrl: "glyphicon glyphicon-signal glyphicon-lg"
         },
         {
             name: "Near Elevator",
-            iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
+            iconUrl: "glyphicon glyphicon-download glyphicon-lg"
         },
         {
             name: "Wheelchair Friendly",
-            iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
+            iconUrl: "glyphicon glyphicon-flag glyphicon-lg"
         },
         {
             name: "Smoking",
-            iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
+            iconUrl: "glyphicon glyphicon-tags glyphicon-lg"
         },
         {
             name: "Non-Smoking",
-            iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
+            iconUrl: "glyphicon glyphicon-floppy-save glyphicon-lg"
         },
         {
             name: "Balcony",
-            iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
+            iconUrl: "glyphicon glyphicon-phone-alt glyphicon-lg"
         },
         {
             name: "Terrace",
-            iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
+            iconUrl: "glyphicon glyphicon-tree-deciduous glyphicon-lg"
         },
         {
             name: "Garden Access",
-            iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
+            iconUrl: "glyphicon glyphicon-blackboard glyphicon-lg"
         },
         {
             name: "Pool Access",
-            iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
+            iconUrl: "glyphicon glyphicon-scissors glyphicon-lg"
         },
         {
             name: "Bay Window",
-            iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
+            iconUrl: "glyphicon glyphicon-oil glyphicon-lg"
         }
     ];
 
