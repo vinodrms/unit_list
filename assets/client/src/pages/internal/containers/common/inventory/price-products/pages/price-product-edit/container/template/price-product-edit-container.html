@@ -30,36 +30,9 @@
 	<div class="row">
 		<price-product-edit-cancellation-section [didSubmit]="didSubmit"></price-product-edit-cancellation-section>
 	</div>
-
-
 	<hr>
 	<div class="row">
-
-		<div class="col-md-12">
-
-			<h3>Constraints</h3>
-			<p class="text-muted small"> <i class="fa fa-info-circle"></i> Constraints to apply your price product..</p>
-
-			<table class="table table-striped projects">
-				<tbody>
-					<tr>
-						<td>Bookable only on</td>
-						<td>Monday, Tuesday</td>
-						<td>
-							<a class="btn btn-xs"><i class="fa fa-remove"></i> Remove </a>
-						</td>
-					</tr>
-					<tr>
-						<td><a data-toggle="modal" href="#constraintsModal" class="btn btn-xs"><i class="fa fa-plus"></i> Add </a></td>
-						<td>
-
-						</td>
-						<td></td>
-					</tr>
-				</tbody>
-			</table>
-
-		</div>
+		<price-product-edit-constraints-section [didSubmit]="didSubmit"></price-product-edit-constraints-section>
 	</div>
 	<hr>
 

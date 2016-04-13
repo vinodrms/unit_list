@@ -1,0 +1,27 @@
+<div class="col-md-12">
+	<h3>{{ 'Constraints' | translate }} </h3>
+	<p class="text-muted small"> <i class="fa fa-info-circle"></i> {{ 'Constraints to apply the price product on bookings' | translate }}</p>
+
+	<table class="table table-striped projects">
+		<tbody>
+			<tr *ngFor="#constraintVM of constraintContainer.constraintVMList">
+				<td>{{constraintVM.displayTitle | translate}}</td>
+				<td>{{constraintVM.displayValue}}</td>
+				<td *ngIf="!readonly">
+					<a class="btn btn-xs" (click)="removeConstraint(constraintVM)">
+						<i class="fa fa-remove"></i> {{ 'Remove' | translate }} 
+					</a>
+				</td>
+			</tr>
+			<tr>
+				<td *ngIf="!readonly">
+					<a class="btn btn-xs" (click)="openConstraintsModal()">
+						<i class="fa fa-plus"></i> {{ 'Add' | translate }}
+					</a>
+				</td>
+				<td></td>
+				<td></td>
+			</tr>
+		</tbody>
+	</table>
+</div>

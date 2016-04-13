@@ -1,0 +1,17 @@
+import {BaseDO} from '../../../../../../../common/base/BaseDO';
+import {IPriceProductConstraint} from '../IPriceProductConstraint';
+import {ThTranslation} from '../../../../../../../common/utils/localization/ThTranslation';
+
+export class NumberOfRoomsConstraintDO extends BaseDO implements IPriceProductConstraint {
+	noOfRooms: number;
+
+	protected getPrimitivePropertyKeys(): string[] {
+		return ["noOfRooms"];
+	}
+	public isValid() {
+		return _.isNumber(this.noOfRooms) && this.noOfRooms >= 1;
+	}
+	public getValueDisplayString(thTranslation: ThTranslation): string {
+		return thTranslation.translate("%noOfRooms% rooms", {noOfRooms: this.noOfRooms});		
+	}
+}
