@@ -260,6 +260,12 @@ export var EnglishTranslations: Object = {
 	"All the prices are cummulative. For example, the price for a booking made for 2 adults and 2 children will have the total price as the sum between the 1st Adult, 2nd Adult, 1st Child and 2nd Child": "All the prices are cummulative. For example, the price for a booking made for 2 adults and 2 children will have the total price as the sum between the 1st Adult, 2nd Adult, 1st Child and 2nd Child",
 	"Single price for a room category, not dependent on the number of persons": "Single price for a room category, not dependent on the number of persons",
 	"Price configuration in %ccySymbol%": "Price configuration in %ccySymbol%",
-	"Price Product Required": "Price Product Required"
+	"Price Product Required": "Price Product Required",
+	"Filters": "Filters",
+	"The filters are used for grouping similar price products. The price products from the same group can be yielded together.": "The filters are used for grouping similar price products. The price products from the same group can be yielded together.",
+	"Yield Level": "Yield Level",
+	"Yield Group": "Yield Group",
+	"Not Set": "Not Set",
+	"Select": "Select" 
 	
 };

@@ -41,28 +41,7 @@ export class PriceProductVM {
 		});
 	}
 	public initFromYieldFilters(yieldFilters: YieldFiltersDO) {
-		this._yieldFilterVMValues = [];
-		_.forEach(yieldFilters.yieldFilterList, (yieldFilter: YieldFilterDO) => {
-			var foundFilter: PriceProductYieldFilterMetaDO = _.find(this._priceProduct.yieldFilterList, (filter: PriceProductYieldFilterMetaDO) => {
-				return filter.filterId === yieldFilter.id;
-			});
-			var filterValueVM = new YieldFilterValueVM();
-			filterValueVM.filterId = yieldFilter.id;
-
-			if (!foundFilter) {
-				this._yieldFilterVMValues.push(filterValueVM);
-				return;
-			}
-			var foundFilterValue: YieldFilterValueDO = _.find(yieldFilter.values, (filterValue: YieldFilterValueDO) => {
-				return filterValue.id === foundFilter.valueId;
-			});
-			if (!foundFilterValue) {
-				this._yieldFilterVMValues.push(filterValueVM);
-				return;
-			}
-			filterValueVM.yieldFilterValue = foundFilterValue;
-			this._yieldFilterVMValues.push(filterValueVM);
-		});
+		this._yieldFilterVMValues = YieldFilterValueVM.buildYieldFilterValueVMList(yieldFilters, this.priceProduct.yieldFilterList);
 	}
 
 	public get priceProduct(): PriceProductDO {
@@ -117,33 +96,6 @@ export class PriceProductVM {
 	}
 	public set addOnProductList(addOnProductList: AddOnProductDO[]) {
 		this._addOnProductList = addOnProductList;
-	}
-
-	public updateYieldFilterValueVM(filterValueVM: YieldFilterValueVM) {
-		this._yieldFilterVMValues = _.reject(this._yieldFilterVMValues, (yieldFilterValue: YieldFilterValueVM) => {
-			return yieldFilterValue.filterId === filterValueVM.filterId;
-		});
-		this._yieldFilterVMValues.push(filterValueVM);
-		this.updateYieldFilterValuesOnPriceProductDO();
-		this.updateYieldFilterValuesOnPriceProductDO();
-	}
-	private updateYieldFilterValuesOnPriceProductDO() {
-		this._priceProduct.yieldFilterList = [];
-		_.forEach(this._yieldFilterVMValues, (yieldFilterValue: YieldFilterValueVM) => {
-			if (!yieldFilterValue.yieldFilterValue || !yieldFilterValue.yieldFilterValue.id) {
-				return;
-			}
-			var ppFilter = new PriceProductYieldFilterMetaDO();
-			ppFilter.filterId = yieldFilterValue.filterId;
-			ppFilter.valueId = yieldFilterValue.yieldFilterValue.id;
-			this._priceProduct.yieldFilterList.push(ppFilter);
-		});
-	}
-	public getFilterValue(filterId: string): YieldFilterValueDO {
-		var filterValueVM: YieldFilterValueVM = _.find(this._yieldFilterVMValues, (filterVMValue: YieldFilterValueVM) => {
-			return filterVMValue.filterId === filterId;
-		});
-		return filterValueVM.yieldFilterValue;
 	}
 
 	public get availabilityString(): string {

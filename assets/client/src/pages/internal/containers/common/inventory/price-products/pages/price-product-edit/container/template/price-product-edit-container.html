@@ -26,24 +26,7 @@
 	<hr>
 	<!-- Filters -->
 	<div class="row">
-		<div class="col-xs-12">
-			<h3>Filters</h3></div>
-		<div class="col-md-4">
-			<p class="text-muted small"><i class="fa fa-info-circle"></i> Used in the Yield Manager. Use same filter values for similar price products.</p>
-		</div>
-		<div class="col-md-4">
-			<label class="control-label">Yield Level: <small>0 / Low Season Price Products</small></label>
-			<a class="btn btn-default" role="button" data-toggle="modal" href="#yieldLevelModal">
-				<i class="fa fa-arrow-right"></i> Select
-			</a>
-		</div>
-
-		<div class="col-md-4">
-			<label class="control-label">Yield Group: <small>Red / Corporate (TODO: add color box!)</small></label>
-			<a class="btn btn-default" role="button" data-toggle="modal" href="#yieldGroupModal">
-				<i class="fa fa-arrow-right"></i> Select
-			</a>
-		</div>
+		<price-product-edit-filters-section [didSubmit]="didSubmit"></price-product-edit-filters-section>
 	</div>
 
 	<!-- Constraints -->

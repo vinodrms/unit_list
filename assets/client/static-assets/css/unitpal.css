@@ -325,3 +325,8 @@ input[type="number"].form-control {
 .purple {
   background: purple;
 }
+.yield-filter {
+    height: 60px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

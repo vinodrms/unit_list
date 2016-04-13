@@ -20,6 +20,7 @@ import {PriceProductEditRoomCategoriesSectionComponent} from '../sections/room-c
 import {PriceProductEditAddOnProductsSectionComponent} from '../sections/add-on-products/PriceProductEditAddOnProductsSectionComponent';
 import {PriceProductEditTaxesSectionComponent} from '../sections/taxes/PriceProductEditTaxesSectionComponent';
 import {PriceProductEditPricesSectionComponent} from '../sections/prices/PriceProductEditPricesSectionComponent';
+import {PriceProductEditFiltersSectionComponent} from '../sections/filters/PriceProductEditFiltersSectionComponent';
 
 @Component({
 	selector: 'price-product-edit-container',
@@ -28,7 +29,7 @@ import {PriceProductEditPricesSectionComponent} from '../sections/prices/PricePr
 	directives: [LoadingComponent,
 		PriceProductEditTopSectionComponent, PriceProductEditRoomCategoriesSectionComponent,
 		PriceProductEditAddOnProductsSectionComponent, PriceProductEditTaxesSectionComponent,
-		PriceProductEditPricesSectionComponent],
+		PriceProductEditPricesSectionComponent, PriceProductEditFiltersSectionComponent],
 	pipes: [TranslationPipe]
 })
 
@@ -38,6 +39,7 @@ export class PriceProductEditContainerComponent extends BaseComponent implements
 	@ViewChild(PriceProductEditAddOnProductsSectionComponent) private _addOnProductsSection: PriceProductEditAddOnProductsSectionComponent;
 	@ViewChild(PriceProductEditTaxesSectionComponent) private _editTaxesSection: PriceProductEditTaxesSectionComponent;
 	@ViewChild(PriceProductEditPricesSectionComponent) private _editPricesSection: PriceProductEditPricesSectionComponent;
+	@ViewChild(PriceProductEditFiltersSectionComponent) private _editFiltersSection: PriceProductEditFiltersSectionComponent;
 
 	private _didInit = false;
 	isLoading: boolean = true;
@@ -77,7 +79,8 @@ export class PriceProductEditContainerComponent extends BaseComponent implements
 					this._roomCategoriesSectionComponent,
 					this._addOnProductsSection,
 					this._editTaxesSection,
-					this._editPricesSection
+					this._editPricesSection,
+					this._editFiltersSection
 				]
 			);
 			this.initializeDependentData();
@@ -102,6 +105,7 @@ export class PriceProductEditContainerComponent extends BaseComponent implements
 
 			this._editSectionContainer.initializeFrom(this._priceProductVM);
 			this._editSectionContainer.readonly = this.isReadOnly();
+			this._editFiltersSection.readonly = this.yieldFiltersAreReadOnly();
 
 			this.isLoading = false;
 			this.didSubmit = false;
