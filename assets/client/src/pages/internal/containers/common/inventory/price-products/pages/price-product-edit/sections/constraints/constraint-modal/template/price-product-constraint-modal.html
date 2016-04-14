@@ -16,9 +16,11 @@
 				</select>
 			</div>
 		</div>
-		<small class="text-muted">
-			<i class="fa fa-info-circle"></i> {{ description | translate }} 
-		</small>
+		<div class="col-md-12 col-sm-12 col-xs-12">
+			<small class="text-muted">
+				<i class="fa fa-info-circle"></i> {{ description | translate }} 
+			</small>
+		</div>
 	</div>
 	<hr/>
 	<div class="row" *ngIf="isDaysFromWeekConstraint()">
