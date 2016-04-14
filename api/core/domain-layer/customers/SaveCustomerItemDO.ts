@@ -8,6 +8,7 @@ import {NumberInListValidationRule} from '../../utils/th-validation/rules/Number
 import {EmailValidationRule} from '../../utils/th-validation/rules/EmailValidationRule';
 import {BooleanValidationRule} from '../../utils/th-validation/rules/BooleanValidationRule';
 import {CustomerType} from '../../data-layer/customers/data-objects/CustomerDO';
+import {CommissionType} from '../../data-layer/customers/data-objects/customer-details/corporate/BaseCorporateDetailsDO';
 import {PriceProductAvailability} from '../../data-layer/price-products/data-objects/PriceProductDO';
 
 export interface CustomerItemAddressDO {
@@ -36,23 +37,30 @@ export interface IndividualCustomerItemDetailsDO extends CustomerItemDetailsDO {
 }
 interface CorporateCustomerItemDetailsDO extends CustomerItemDetailsDO {
 	vatCode?: string;
+	governmentCode?: string;
 	name: string;
 	fax?: string;
 	websiteUrl?: string;
 	contactName?: string;
 	payInvoiceByAgreement: boolean;
+	invoiceFee?: number;
 	accountNo?: string;
+	commissionType: CommissionType;
 	commission?: number;
 }
 export interface CompanyCustomerItemDetailsDO extends CorporateCustomerItemDetailsDO {
 }
 export interface TravelAgencyCustomerItemDetailsDO extends CorporateCustomerItemDetailsDO {
 }
+export interface CustomerFileAttachment {
+	name: string;
+	url: number;
+}
 
 export class SaveCustomerItemDO {
 	type: CustomerType;
 	customerDetails: any;
-	fileAttachmentUrlList: string[];
+	fileAttachmentList: CustomerFileAttachment[];
 	priceProductDetails: {
 		allowPublicPriceProducts: boolean;
 		priceProductIdList: string[];
@@ -74,8 +82,17 @@ export class SaveCustomerItemDO {
 				validationStruct: SaveCustomerItemDO.getCustomerDetailsValidationStructure(customerType)
 			},
 			{
-				key: "fileAttachmentUrlList",
-				validationStruct: new ArrayValidationStructure(new PrimitiveValidationStructure(new StringValidationRule(StringValidationRule.MaxUrlLength)))
+				key: "fileAttachmentList",
+				validationStruct: new ArrayValidationStructure(new ObjectValidationStructure([
+					{
+						key: "name",
+						validationStruct: new PrimitiveValidationStructure(new StringValidationRule(2000))
+					},
+					{
+						key: "url",
+						validationStruct: new PrimitiveValidationStructure(new StringValidationRule(StringValidationRule.MaxUrlLength))
+					}
+				]))
 			},
 			{
 				key: "priceProductDetails",
@@ -164,6 +181,10 @@ export class SaveCustomerItemDO {
 				validationStruct: new PrimitiveValidationStructure(StringValidationRule.buildNullable(StringValidationRule.MaxVatCodeNameLength))
 			},
 			{
+				key: "governmentCode",
+				validationStruct: new PrimitiveValidationStructure(StringValidationRule.buildNullable())
+			},
+			{
 				key: "name",
 				validationStruct: new PrimitiveValidationStructure(new StringValidationRule(StringValidationRule.MaxNameLength))
 			},
@@ -196,12 +217,20 @@ export class SaveCustomerItemDO {
 				validationStruct: new PrimitiveValidationStructure(new BooleanValidationRule())
 			},
 			{
+				key: "invoiceFee",
+				validationStruct: new PrimitiveValidationStructure(NumberValidationRule.buildNullablePriceNumberRule())
+			},
+			{
 				key: "accountNo",
 				validationStruct: new PrimitiveValidationStructure(StringValidationRule.buildNullable(200))
 			},
 			{
+				key: "commissionType",
+				validationStruct: new PrimitiveValidationStructure(new NumberInListValidationRule([CommissionType.Fixed, CommissionType.Percentage]))
+			},
+			{
 				key: "commission",
-				validationStruct: new PrimitiveValidationStructure(NumberValidationRule.buildNullablePercentageNumberRule())
+				validationStruct: new PrimitiveValidationStructure(NumberValidationRule.buildNullable())
 			}
 		]);
 	}
