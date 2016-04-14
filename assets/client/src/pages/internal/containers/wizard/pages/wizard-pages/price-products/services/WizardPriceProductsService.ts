@@ -17,6 +17,7 @@ export class WizardPriceProductsService extends AWizardState {
 				var modalTitle = this._appContext.thTranslation.translate("Price Product Required");
 				var errorMessage = this._appContext.thTranslation.translate("Please add at least an active Price Product before going forward");
 				this._appContext.modalService.confirm(modalTitle, errorMessage, { positive: "Ok" }, () => { }, () => { });
+				resolve(false);
 				return;
 			}
 			this.wizardController.moveNext();
