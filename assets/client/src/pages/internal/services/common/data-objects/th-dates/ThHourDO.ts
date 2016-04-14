@@ -26,4 +26,13 @@ export class ThHourDO extends BaseDO {
 	private isValidMinute(): boolean {
 		return _.isNumber(this.minute) && ThHourDO.MinMinuteOfHour <= this.minute && this.minute <= ThHourDO.MaxMinuteOfHour;
 	}
+	public toString(): string {
+		return this.addLeftPaddingIfNeccessary(this.hour) + ":" + this.addLeftPaddingIfNeccessary(this.minute);
+    }
+	private addLeftPaddingIfNeccessary(hourOrMinute: number): string {
+		if (hourOrMinute < 10) {
+            return '0' + hourOrMinute;
+        }
+		return hourOrMinute + '';
+	}
 }

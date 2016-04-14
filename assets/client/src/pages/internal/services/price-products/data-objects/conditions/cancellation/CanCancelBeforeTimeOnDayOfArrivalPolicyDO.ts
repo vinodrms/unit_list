@@ -22,7 +22,7 @@ export class CanCancelBeforeTimeOnDayOfArrivalPolicyDO extends BaseDO implements
 		return {
 			phrase: "Can cancel before %timeOfArrival% on day of arrival",
 			parameters: {
-				timeOfArrival: this.timeOfArrival.hour + ":" + this.timeOfArrival.minute
+				timeOfArrival: (this.timeOfArrival != null  ? this.timeOfArrival.toString(): "")
 			}
 		}
 	}

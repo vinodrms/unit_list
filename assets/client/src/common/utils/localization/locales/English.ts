@@ -213,7 +213,7 @@ export var EnglishTranslations: Object = {
 	"Pay first night": "Pay first night",
 	"Pay full stay": "Pay full stay",
 	"No cancellation penalty": "No cancellation penalty",
-	"Pay %percentage%% from whole booking": "Pay %percentage%% from whole booking",
+	"Pay %percentage% from whole booking": "Pay %percentage% from whole booking",
 	"Conditions": "Conditions",
     "Skip Rooms": "Skip Rooms",
     "Before moving to the next section you have to add at least a room to your inventory.": "Before moving to the next section you have to add at least a room to your inventory.",

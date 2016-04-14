@@ -7,15 +7,9 @@ import {ThHourDO} from '../../../pages/internal/services/common/data-objects/th-
 
 export class ThHourPipe implements PipeTransform {
     transform(thHour: ThHourDO, args: any[]): any {
-		if(!thHour) {
-			return '';
+		if(thHour != null && thHour.toString) {
+			return thHour.toString();
 		}
-		return this.getNumberString(thHour.hour) + ":" + this.getNumberString(thHour.minute);
+		return "";
     }
-	private getNumberString(hourOrMinute: number): string {
-		if(hourOrMinute < 10) {
-            return '0' + hourOrMinute; 
-        }
-		return hourOrMinute + '';
-	}
 }
