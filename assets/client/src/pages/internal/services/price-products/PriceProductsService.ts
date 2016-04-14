@@ -22,7 +22,7 @@ export class PriceProductsService extends ALazyLoadRequestService<PriceProductVM
 		private _roomCategoriesService: RoomCategoriesService,
 		private _yieldFiltersService: YieldFiltersService) {
 		super(appContext, ThServerApi.PriceProductsCount, ThServerApi.PriceProducts);
-		this.defaultSearchCriteria = { status: 0 };
+		this.defaultSearchCriteria = { status: PriceProductStatus.Active };
 	}
 
 	protected parsePageDataCore(pageDataObject: Object): Observable<PriceProductVM[]> {

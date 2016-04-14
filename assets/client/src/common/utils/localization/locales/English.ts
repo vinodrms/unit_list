@@ -320,6 +320,14 @@ export var EnglishTranslations: Object = {
 	"Are you sure you want to go forward without adding any customer ?": "Are you sure you want to go forward without adding any customer ?",
 	"Are you sure you want to skip adding customers ?": "Are you sure you want to skip adding customers ?",
 	"Customer Register": "Customer Register",
-	"[Wizard Step 6] Customer Register text" : "Here you can add customers for your hotel. Each customer can be an individual, corporate customer or a travel agent."
+	"[Wizard Step 6] Customer Register text" : "Here you can add customers for your hotel. Each customer can be an individual, corporate customer or a travel agent.",
+	"Individual": "Individual",
+	"Company": "Company",
+	"Travel Agency": "Travel Agency",
+	"Customer": "Customer",
+	"Search by name, address, email ..": "Search by name, address, email ..",
+	"Individuals": "Individuals",
+	"Companies": "Companies",
+	"Travel Agencies": "Travel Agencies"
 	
 };
