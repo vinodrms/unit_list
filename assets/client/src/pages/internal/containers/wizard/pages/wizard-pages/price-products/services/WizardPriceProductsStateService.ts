@@ -4,7 +4,7 @@ import {AWizardState} from '../../services/AWizardState';
 import {AppContext} from '../../../../../../../../common/utils/AppContext';
 
 @Injectable()
-export class WizardPriceProductsService extends AWizardState {
+export class WizardPriceProductsStateService extends AWizardState {
 	private _totalNoOfActivePriceProducts: number = 0;
 
 	constructor(private _appContext: AppContext) {

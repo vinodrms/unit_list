@@ -1,7 +1,7 @@
 import {Component, OnInit} from 'angular2/core';
 import {BaseComponent} from '../../../../../../../common/base/BaseComponent';
 import {TranslationPipe} from '../../../../../../../common/utils/localization/TranslationPipe';
-import {WizardPriceProductsService} from './services/WizardPriceProductsService';
+import {WizardPriceProductsStateService} from './services/WizardPriceProductsStateService';
 import {WizardService} from '../services/WizardService';
 import {IWizardController} from '../../wizard-pages/services/IWizardController';
 import {PriceProductsComponent} from '../../../../common/inventory/price-products/main/PriceProductsComponent';
@@ -23,17 +23,17 @@ export class WizardPriceProductsComponent extends BaseComponent implements OnIni
 	private _wizardController: IWizardController;
 
 	constructor(wizardService: WizardService,
-		private _priceProductsService: WizardPriceProductsService,
+		private _priceProductsStateService: WizardPriceProductsStateService,
 		private _priceProductsTotalCountService: PriceProductsTotalCountService) {
 		super();
-		wizardService.bootstrapWizardIndex(_priceProductsService.stateIndex);
+		wizardService.bootstrapWizardIndex(_priceProductsStateService.stateIndex);
 		this._wizardController = wizardService;
 		this.isEditScreen = false;
 	}
 
 	public ngOnInit() {
 		this._priceProductsTotalCountService.getTotalCountDO(PriceProductStatus.Active).subscribe((totalCount: TotalCountDO) => {
-			this._priceProductsService.totalNoOfActivePriceProducts = totalCount.numOfItems;
+			this._priceProductsStateService.totalNoOfActivePriceProducts = totalCount.numOfItems;
 		});
 	}
 

@@ -315,7 +315,11 @@ export var EnglishTranslations: Object = {
 	"Constraints": "Constraints",
 	"Constraints to apply the price product on bookings": "Constraints to apply the price product on bookings",
 	"If selected, you will be able to edit the price product further on. If not, the price product will be automatically activated and available for bookings.": "If selected, you will be able to edit the price product further on. If not, the price product will be automatically activated and available for bookings.",
-	"Save as Draft": "Save as Draft"
-	
+	"Save as Draft": "Save as Draft",
+	"Skip Customer Register": "Skip Customer Register",
+	"Are you sure you want to go forward without adding any customer ?": "Are you sure you want to go forward without adding any customer ?",
+	"Are you sure you want to skip adding customers ?": "Are you sure you want to skip adding customers ?",
+	"Customer Register": "Customer Register",
+	"[Wizard Step 6] Customer Register text" : "Here you can add customers for your hotel. Each customer can be an individual, corporate customer or a travel agent."
 	
 };
