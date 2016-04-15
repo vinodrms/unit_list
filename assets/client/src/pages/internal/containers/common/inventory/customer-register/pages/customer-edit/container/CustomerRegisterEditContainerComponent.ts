@@ -1,4 +1,4 @@
-import {Component, Output, EventEmitter, Input} from 'angular2/core';
+import {Component, Output, EventEmitter, Input, ViewChild, AfterViewInit} from 'angular2/core';
 import {Observable} from 'rxjs/Observable';
 import {Subscription} from 'rxjs/Subscription';
 import {BaseComponent} from '../../../../../../../../../common/base/BaseComponent';
@@ -17,21 +17,34 @@ import {CustomerDetailsMeta} from '../../../../../../../services/customers/data-
 import {CustomerDetailsFactory} from '../../../../../../../services/customers/data-objects/customer-details/CustomerDetailsFactory';
 import {FileAttachmentsComponent} from '../../../../../../../../../common/utils/components/file-attachments/FileAttachmentsComponent';
 import {FileAttachmentDO} from '../../../../../../../services/common/data-objects/file/FileAttachmentDO';
+import {CorporateCustomerDetailsComponent} from '../customer-details/corporate/CorporateCustomerDetailsComponent';
+import {IndividualCustomerDetailsComponent} from '../customer-details/individual/IndividualCustomerDetailsComponent';
+import {CustomerDetailsContainer} from './utils/CustomerDetailsContainer';
+import {CorporateDetailsDO} from '../../../../../../../services/customers/data-objects/customer-details/CorporateDetailsDO';
+import {IndividualDetailsDO} from '../../../../../../../services/customers/data-objects/customer-details/IndividualDetailsDO';
+import {CountriesService} from '../../../../../../../services/settings/CountriesService';
+import {CountriesDO} from '../../../../../../../services/settings/data-objects/CountriesDO';
+import {CustomersService} from '../../../../../../../services/customers/CustomersService';
 
 @Component({
 	selector: 'customer-register-edit-container',
 	templateUrl: '/client/src/pages/internal/containers/common/inventory/customer-register/pages/customer-edit/container/template/customer-register-edit-container.html',
 	providers: [EagerPriceProductsService, PriceProductsModalService],
-	directives: [FileAttachmentsComponent],
+	directives: [FileAttachmentsComponent, CorporateCustomerDetailsComponent, IndividualCustomerDetailsComponent],
 	pipes: [TranslationPipe]
 })
 
-export class CustomerRegisterEditContainerComponent extends BaseComponent {
+export class CustomerRegisterEditContainerComponent extends BaseComponent implements AfterViewInit {
+	@ViewChild(CorporateCustomerDetailsComponent) private _corporateCustomerDetailsComponent: CorporateCustomerDetailsComponent;
+	@ViewChild(IndividualCustomerDetailsComponent) private _individualCustDetailsComponent: IndividualCustomerDetailsComponent;
+
+	isSavingCustomer: boolean = false;
 	isLoading: boolean = true;
 	private _didInit: boolean = false;
 	didSubmit: boolean = false;
 
 	private _dependentDataSubscription: Subscription;
+	customerDetailsContainer: CustomerDetailsContainer;
 
 	@Output() onExit = new EventEmitter();
 	public showViewScreen() {
@@ -50,15 +63,22 @@ export class CustomerRegisterEditContainerComponent extends BaseComponent {
 
 	custDetailsMetaList: CustomerDetailsMeta[];
 
-	constructor(private _eagerPriceProductsService: EagerPriceProductsService,
-		private _priceProductsModalService: PriceProductsModalService) {
+	constructor(private _appContext: AppContext,
+		private _countriesService: CountriesService,
+		private _eagerPriceProductsService: EagerPriceProductsService,
+		private _priceProductsModalService: PriceProductsModalService,
+		private _customersService: CustomersService) {
 		super();
-		this._didInit = true;
 		var custDetailsFactory = new CustomerDetailsFactory();
 		this.custDetailsMetaList = custDetailsFactory.getCustomerDetailsMetaList();
-		this.initializeDependentData();
 	}
-
+	public ngAfterViewInit() {
+		setTimeout(() => {
+			this.customerDetailsContainer = new CustomerDetailsContainer(this._corporateCustomerDetailsComponent, this._individualCustDetailsComponent);
+			this._didInit = true;
+			this.initializeDependentData();
+		});
+	}
 	private initializeDependentData() {
 		if (!this._didInit || !this._customerVM) {
 			return;
@@ -68,20 +88,27 @@ export class CustomerRegisterEditContainerComponent extends BaseComponent {
 			this._dependentDataSubscription.unsubscribe();
 		}
 		this._dependentDataSubscription = Observable.combineLatest(
-			this._eagerPriceProductsService.getPriceProducts(PriceProductStatus.Active, this._customerVM.customer.priceProductDetails.priceProductIdList)
-		).subscribe((result: [PriceProductsDO]) => {
+			this._eagerPriceProductsService.getPriceProducts(PriceProductStatus.Active, this._customerVM.customer.priceProductDetails.priceProductIdList),
+			this._countriesService.getCountriesDO()
+		).subscribe((result: [PriceProductsDO, CountriesDO]) => {
 			this._customerVM.priceProductList = result[0].priceProductList;
-			
+			this.customerDetailsContainer.initializeFrom(this._customerVM.customer);
+			this._individualCustDetailsComponent.countriesDO = result[1];
+
 			this.isLoading = false;
 			this.didSubmit = false;
-			this.customerVM.priceProductList
 		});
 	}
 
 	public didChangeCustomerType(customerTypeStr: string) {
 		var customerType: CustomerType = parseInt(customerTypeStr);
-		// TODO: details dependent on customer type
-		
+		this.customerVM.customer.type = customerType;
+	}
+	public isIndividualCustomer(): boolean {
+		return this.customerVM.customer.type === CustomerType.Individual;
+	}
+	public isCorporateCustomer(): boolean {
+		return this.customerVM.customer.type === CustomerType.Company || this.customerVM.customer.type === CustomerType.TravelAgency;
 	}
 
 	public removePriceProduct(priceProductToRemove: PriceProductDO) {
@@ -100,7 +127,7 @@ export class CustomerRegisterEditContainerComponent extends BaseComponent {
 			this._customerVM.priceProductList.push(priceProduct);
 		}
 	}
-	
+
 	public didChangeFileAttachmentList(fileAttachmentList: FileAttachmentDO[]) {
 		this._customerVM.customer.fileAttachmentList = fileAttachmentList;
 	}
@@ -112,7 +139,37 @@ export class CustomerRegisterEditContainerComponent extends BaseComponent {
 		this.customerVM.customer.priceProductDetails.allowPublicPriceProducts = allowPublicPriceProducts;
 	}
 
+	public get corporateDetails(): CorporateDetailsDO {
+		if (!this.customerDetailsContainer) {
+			return null;
+		}
+		return this.customerDetailsContainer.corporateDetailsDO;
+	}
+	public get individualDetails(): IndividualDetailsDO {
+		if (!this.customerDetailsContainer) {
+			return null;
+		}
+		return this.customerDetailsContainer.individualDetailsDO;
+	}
+
 	public saveCustomer() {
-		// TODO
+		this.didSubmit = true;
+		if (!this.customerDetailsContainer.isValid(this.customerVM.customer)) {
+			var errorMessage = this._appContext.thTranslation.translate("Please complete all the required fields");
+			this._appContext.toaster.error(errorMessage);
+			return;
+		}
+		var customer = this._customerVM.customer;
+		customer.priceProductDetails.priceProductIdList = _.map(this._customerVM.priceProductList, (priceProduct: PriceProductDO) => { return priceProduct.id } );
+		this.customerDetailsContainer.updateCustomerDetailsOn(customer);
+		
+		this.isSavingCustomer = true;
+		this._customersService.saveCustomerDO(customer).subscribe((updatedCustomer: CustomerDO) => {
+			this.isSavingCustomer = false;
+			this.showViewScreen();
+		}, (error: ThError) => {
+			this.isSavingCustomer = false;
+			this._appContext.toaster.error(error.message);
+		});
 	}
 }

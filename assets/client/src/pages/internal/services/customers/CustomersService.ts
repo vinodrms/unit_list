@@ -47,7 +47,7 @@ export class CustomersService extends ALazyLoadRequestService<CustomerVM> {
 		this.defaultSearchCriteria = {}
 	}
 
-	public savePriceProductDO(customer: CustomerDO): Observable<CustomerDO> {
+	public saveCustomerDO(customer: CustomerDO): Observable<CustomerDO> {
 		return this._appContext.thHttp.post(ThServerApi.CustomersSaveItem, { customer: customer }).map((customerObject: Object) => {
 			this.refreshData();
 

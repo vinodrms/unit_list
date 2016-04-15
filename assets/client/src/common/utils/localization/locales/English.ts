@@ -345,5 +345,15 @@ export var EnglishTranslations: Object = {
 	"File Attachments": "File Attachments",
 	"The maximum file size is 16MB": "The maximum file size is 16MB",
 	"Remove file": "Remove file",
-	"Are you sure you want to remove %fileName% ?": "Are you sure you want to remove %fileName% ?"
+	"Are you sure you want to remove %fileName% ?": "Are you sure you want to remove %fileName% ?",
+	"Enter the first name": "Enter the first name",
+	"Passport Number": "Passport Number",
+	"Country": "Country",
+	"Enter a valid email": "Enter a valid email",
+	"Select a date": "Select a date",
+	"Birthday": "Birthday",
+	"Invalid passport number": "Invalid passport number",
+	"Invalid city length": "Invalid city length",
+	"Invalid address length": "Invalid address length",
+	"Invalid postal code length": "Invalid postal code length"
 };

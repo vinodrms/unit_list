@@ -52,9 +52,25 @@
 			<small class="text-muted"><i class="fa fa-info-circle"></i> {{ 'Allow this customer to make reservations using specific price products.' | translate }} </small>
 		</div>
 	</div>
-	
+	<hr>
 	<div class="row">
-		
+		<div class="col-md-12 col-sm-12 col-xs-12">
+			<individual-customer-details 
+				[hidden]="!isIndividualCustomer()"
+				[didSubmit]="didSubmit"
+				[individualDetails]="individualDetails"
+				>
+			</individual-customer-details>
+			<corporate-customer-details 
+				[hidden]="!isCorporateCustomer()"
+				[didSubmit]="didSubmit"
+				[corporateDetails]="corporateDetails"
+				>
+			</corporate-customer-details>
+		</div>
+	</div>
+	<hr>
+	<div class="row">
 		<div class="col-md-8 col-xs-12">
 			<file-attachments
 				[fileAttachmentList]="customerVM.customer.fileAttachmentList"
@@ -69,15 +85,12 @@
 		</div>	
 	</div>
 
-
-
-
 	<div class="row">
 		<div class="col-xs-8"></div>
 		<div class="col-xs-4">
 			<div class="row">
 				<button type="button" class="btn btn-primary btn-block" (click)="saveCustomer()">
-					<i *ngIf="isSavingPriceProduct" class="fa fa-spinner fa-pulse"></i> {{ 'Save Changes' | translate }}
+					<i *ngIf="isSavingCustomer" class="fa fa-spinner fa-pulse"></i> {{ 'Save Changes' | translate }}
 				</button>
 			</div>
 			<div class="row">
