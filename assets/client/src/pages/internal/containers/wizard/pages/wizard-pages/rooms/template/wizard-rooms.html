@@ -7,7 +7,7 @@
 			<small>{{ '[Wizard Step 3] Rooms text' | translate }}</small>
 		</div>
 		<div class="col-sm-2 text-right">
-			<h1>3 <i class="fa fa-puzzle-piece"></i></h1>
+			<h1>{{ _roomsStateService.totalNoOfRooms }} <span class="unitpal-font">{{_roomsStateService.getMeta().iconFontName}}</span></h1>
 		</div>
 	</div>
 </div>
