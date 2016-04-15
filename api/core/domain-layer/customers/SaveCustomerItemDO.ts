@@ -54,7 +54,7 @@ export interface TravelAgencyCustomerItemDetailsDO extends CorporateCustomerItem
 }
 export interface CustomerFileAttachment {
 	name: string;
-	url: number;
+	url: string;
 }
 
 export class SaveCustomerItemDO {
