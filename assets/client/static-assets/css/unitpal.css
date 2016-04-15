@@ -407,6 +407,31 @@ input[type="number"].form-control {
 }
 .th-btn-weekday {width:100px !important;}
 
+/* Upload components */
 input[type="file"] {
     display: none;
 }
+
+.th-img-upload-preview {
+   width: 100%; 
+   margin-bottom:5px; 
+   text-align:center;
+}
+
+.th-img-upload-placeholder {
+    top: 50%;
+    transform: translate(0, -50%);
+    position: relative;
+}
+
+.th-file-actions {
+    width: 15%;
+}
+.th-file-label {
+    width: 85%;
+}
+.th-file-add {
+    width:30%;
+    padding-left:0px
+}
+

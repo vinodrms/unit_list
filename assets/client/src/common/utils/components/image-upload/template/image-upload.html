@@ -1,6 +1,6 @@
-<div class="fileinput-preview thumbnail" data-trigger="fileinput" style="width: 100%; margin-bottom:5px; text-align:center;">
-	<div *ngIf="isLoading" style="top: 50%;transform: translate(0, -50%);position: relative;"><i class="fa fa-spinner fa-pulse fa-3x"></i></div>
-	<div *ngIf="!imageUrl && !isLoading" style="top: 50%;transform: translate(0, -50%);position: relative;"><i class="fa fa-picture-o fa-5x"></i></div>
+<div class="fileinput-preview thumbnail th-img-upload-preview" data-trigger="fileinput">
+	<div *ngIf="isLoading" class="th-img-upload-placeholder"><i class="fa fa-spinner fa-pulse fa-3x"></i></div>
+	<div *ngIf="!imageUrl && !isLoading" class="th-img-upload-placeholder"><i class="fa fa-picture-o fa-5x"></i></div>
 	<img *ngIf="imageUrl && !isLoading" [src]="imageUrl" />
 </div>
 <div class="row">

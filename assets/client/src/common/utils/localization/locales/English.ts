@@ -346,5 +346,6 @@ export var EnglishTranslations: Object = {
 	"The maximum file size is 16MB": "The maximum file size is 16MB",
 	"Remove file": "Remove file",
 	"Are you sure you want to remove %fileName% ?": "Are you sure you want to remove %fileName% ?",
-	"Upload": "Upload"
+	"Upload": "Upload",
+	"Attach file": "Attach file"
 };
