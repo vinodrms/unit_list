@@ -20,6 +20,7 @@ export class WizardRoomsStateService extends AWizardState  {
             //     var content = this._appContext.thTranslation.translate("Before moving to the next section you have to add at least a room to your inventory.");
             //     var positiveLabel = this._appContext.thTranslation.translate("OK");
             //     this.confirmFromModal(resolve, reject, title, content, positiveLabel);
+            //      resolve(false);
             //     return;
             // }
             this.wizardController.moveNext();

@@ -1,12 +1,28 @@
+import {BaseDO} from '../../../../../common/base/BaseDO';
 import {BedDO} from '../data-objects/BedDO';
 import {BedTemplateDO} from '../../common/data-objects/bed-template/BedTemplateDO';
 import {CapacityDO} from '../../common/data-objects/capacity/CapacityDO';
 
-export class BedVM {
+export class BedVM extends BaseDO {
     private _bed: BedDO;
     private _template: BedTemplateDO;
      
     constructor() {
+        super();
+    }
+    
+    protected getPrimitivePropertyKeys(): string[] {
+        return [];
+    }
+    
+    public buildFromObject(object: Object) {
+		super.buildFromObject(object);
+        
+        this._bed = new BedDO();
+		this._bed.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "bed"));
+        
+        this._template = new BedTemplateDO();
+		this._template.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "template"));
     }
     
     public get bed(): BedDO {

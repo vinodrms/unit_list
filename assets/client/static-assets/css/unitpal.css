@@ -183,18 +183,10 @@ table .buttons, table button, table .btn { margin:0px; }
 .bed-group { margin-bottom: 0px; }
 .amenities-group { margin-bottom: 0px; }
 
-.bed-add a { padding:50px 12px; height:124px; }
-.bed-selector { padding: 12px; border: 1px solid #ccc; -webkit-border-radius: 4px;
--moz-border-radius: 4px;
-border-radius: 4px;  }
 
-.bed-slot { background: #ccc;
--webkit-border-radius: 2px;
--moz-border-radius: 2px;
-border-radius: 2px;
-padding:6px; 
-height:102px;
-display:block;
+
+.bed-slot {  
+    display:inline;
  }
  
  .bed-slot p { color:#000; margin:0px; }
@@ -262,6 +254,85 @@ input[type="number"].form-control {
     display: none;
 }
 
+.bed-add { 
+    float: right;
+    width: 40px;
+    height: 160px;
+    margin: 0px;
+}
+.bed-add-btn {
+    height: 40px;
+    margin: 0px; 
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+    position: absolute;
+    top: 50%;
+    transform: translate(0, -50%);
+}
+.bed-remove-btn {
+    float: right;
+    margin: 0 0 10px 10px;
+}
+.bed-container {
+    float: left;
+    width: calc(100% - 40px);
+    height: 160px;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    white-space: nowrap;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border: 1px solid #ccc; 
+    border-radius: 4px;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+.bed-slot {
+    width: 140px;
+    height:120px;
+    display: inline-block;
+    margin:10px 5px;
+    border: 1px solid #fc8433;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    position: relative;
+    color: #fc8433;
+}
+.bed-slot:hover {
+    background-color: transparent;
+}
+.btn.bed-slot:hover {
+    color: #fc8433;
+}
+.bed-slot.available {
+    border: none;
+    background: #ccc;
+}
+.bed-slot.available:hover {
+    background-color: #ccc;
+}
+.bed-slot.unselected {
+    color: #000;
+    border: 1px solid #000;
+}
+.bed-slot.unselected:hover {
+    color: #fc8433;
+    border: 1px solid #fc8433;
+}
+.bed-slot-inner {
+    margin: 0;
+    position: absolute;
+    top: 50%; 
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.room-categ-label {
+    width: 85%;
+}
+.room-categ-select {
+    width: 15%;
+}
 /* Bootstrap img-responsive bug on Firefox */
 .img-responsive {
 	width: 100%;

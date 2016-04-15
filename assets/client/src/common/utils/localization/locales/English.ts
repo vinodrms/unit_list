@@ -237,8 +237,13 @@ export var EnglishTranslations: Object = {
     "Enter floor no": "Enter floor no",
     "Amenities": "Amenities",
     "Attributes": "Attributes",
+    "Select Bed": "Select Bed",
+	"No category selected": "No category selected",
     "Insert a valid floor number": "Insert a valid floor number",
+	"Select a room category": "Select a room category",
     "Image of the Room": "Image of the Room",
+	"Remove Bed": "Remove Bed",
+	"Are you sure you want to remove one %name% from this room ?": "Are you sure you want to remove one %name% from this room ?",
 	"If public, it will be bookable by anyone. If Confidential, you will need to add it from specific customer profiles": "If public, it will be bookable by anyone. If Confidential, you will need to add it from specific customer profiles",
 	"Last Room Availability": "Last Room Availability",
 	"On": "On",
@@ -279,5 +284,5 @@ export var EnglishTranslations: Object = {
 	"Number of days": "Number of days",
 	"Days before": "Days before",
 	"Enter the number of days": "Enter the number of days"
-	
+    	
 };
