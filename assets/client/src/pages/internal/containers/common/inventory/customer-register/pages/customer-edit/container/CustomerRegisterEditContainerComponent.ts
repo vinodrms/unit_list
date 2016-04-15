@@ -25,6 +25,8 @@ import {IndividualDetailsDO} from '../../../../../../../services/customers/data-
 import {CountriesService} from '../../../../../../../services/settings/CountriesService';
 import {CountriesDO} from '../../../../../../../services/settings/data-objects/CountriesDO';
 import {CustomersService} from '../../../../../../../services/customers/CustomersService';
+import {HotelAggregatorService} from '../../../../../../../services/hotel/HotelAggregatorService';
+import {HotelAggregatedInfo} from '../../../../../../../services/hotel/utils/HotelAggregatedInfo';
 
 @Component({
 	selector: 'customer-register-edit-container',
@@ -67,7 +69,8 @@ export class CustomerRegisterEditContainerComponent extends BaseComponent implem
 		private _countriesService: CountriesService,
 		private _eagerPriceProductsService: EagerPriceProductsService,
 		private _priceProductsModalService: PriceProductsModalService,
-		private _customersService: CustomersService) {
+		private _customersService: CustomersService,
+		private _hotelAggregatorService: HotelAggregatorService) {
 		super();
 		var custDetailsFactory = new CustomerDetailsFactory();
 		this.custDetailsMetaList = custDetailsFactory.getCustomerDetailsMetaList();
@@ -89,11 +92,15 @@ export class CustomerRegisterEditContainerComponent extends BaseComponent implem
 		}
 		this._dependentDataSubscription = Observable.combineLatest(
 			this._eagerPriceProductsService.getPriceProducts(PriceProductStatus.Active, this._customerVM.customer.priceProductDetails.priceProductIdList),
-			this._countriesService.getCountriesDO()
-		).subscribe((result: [PriceProductsDO, CountriesDO]) => {
+			this._countriesService.getCountriesDO(),
+			this._hotelAggregatorService.getHotelAggregatedInfo()
+		).subscribe((result: [PriceProductsDO, CountriesDO, HotelAggregatedInfo]) => {
 			this._customerVM.priceProductList = result[0].priceProductList;
 			this.customerDetailsContainer.initializeFrom(this._customerVM.customer);
+			
 			this._individualCustDetailsComponent.countriesDO = result[1];
+			this._corporateCustomerDetailsComponent.countriesDO = result[1];
+			this._corporateCustomerDetailsComponent.currency = result[2].ccy;
 
 			this.isLoading = false;
 			this.didSubmit = false;

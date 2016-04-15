@@ -8,6 +8,7 @@ import {PhoneValidator} from './validators/PhoneValidator';
 import {UrlValidator} from './validators/UrlValidator';
 import {PriceValidator} from './validators/PriceValidator';
 import {NumberValidator} from './validators/NumberValidator';
+import {PercentageValidator} from './validators/PercentageValidator';
 
 export class ThValidators {
 	public static emailValidator(control: AbstractControl): ValidationResult {
@@ -48,6 +49,12 @@ export class ThValidators {
 	}
 	public static nullablePriceValidator(control: AbstractControl): ValidationResult {
 		return ThValidators.validator(control, new PriceValidator(true));
+	}
+	public static percentageValidator(control: AbstractControl): ValidationResult {
+		return ThValidators.validator(control, new PercentageValidator());
+	}
+	public static nullablePercentageValidator(control: AbstractControl): ValidationResult {
+		return ThValidators.validator(control, new PercentageValidator(true));
 	}
 
 	private static validator(control: AbstractControl, thValidator: AThValidator): ValidationResult {

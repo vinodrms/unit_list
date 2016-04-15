@@ -35,16 +35,20 @@ export class IndividualCustomerDetailsComponent extends BaseFormComponent {
 			return;
 		}
 		this._individualDetails = individualDetails;
+		this.initPage();
+	}
+
+	constructor(private _formBuilder: IndividualDetailsFormBuilderService) {
+		super();
+	}
+	
+	private initPage() {
 		this.countryCode = this._individualDetails.address.country.code;
 		if (!this.countryCode) {
 			this.countryCode = this.invalidCountryCode;
 		}
 		this._formBuilder.updateControlValuesFrom(this._individualDetails);
 		this.didInit = true;
-	}
-
-	constructor(private _formBuilder: IndividualDetailsFormBuilderService) {
-		super();
 	}
 
 	protected didSelectBirthday(birthday: ThDateDO) {

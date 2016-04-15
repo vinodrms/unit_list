@@ -1,7 +1,7 @@
 import {ICustomerDetailsDO, CustomerDetailsMeta} from './ICustomerDetailsDO';
 import {CustomerType} from '../CustomerDO';
 import {IndividualDetailsDO} from './IndividualDetailsDO';
-import {CorporateDetailsDO} from './CorporateDetailsDO';
+import {CorporateDetailsDO, CommissionType} from './CorporateDetailsDO';
 import {AddressDO} from '../../../common/data-objects/address/AddressDO';
 import {CountryDO} from '../../../common/data-objects/country/CountryDO';
 import {ThDateDO} from '../../../common/data-objects/th-dates/ThDateDO';
@@ -29,6 +29,8 @@ export class CustomerDetailsFactory {
 		var corporateDetails = new CorporateDetailsDO();
 		corporateDetails.address = new AddressDO();
 		corporateDetails.address.country = new CountryDO();
+		corporateDetails.payInvoiceByAgreement = false;
+		corporateDetails.commissionType = CommissionType.Fixed;
 		return corporateDetails;
 	}
 	public getCustomerDetailsMetaList(): CustomerDetailsMeta[] {
