@@ -1,4 +1,4 @@
-import {ICustomerDetailsDO} from './ICustomerDetailsDO';
+import {ICustomerDetailsDO, CustomerDetailsMeta} from './ICustomerDetailsDO';
 import {CustomerType} from '../CustomerDO';
 import {IndividualDetailsDO} from './IndividualDetailsDO';
 import {CorporateDetailsDO} from './CorporateDetailsDO';
@@ -30,5 +30,21 @@ export class CustomerDetailsFactory {
 		corporateDetails.address = new AddressDO();
 		corporateDetails.address.country = new CountryDO();
 		return corporateDetails;
+	}
+	public getCustomerDetailsMetaList(): CustomerDetailsMeta[] {
+		return [
+			{
+				customerType: CustomerType.Individual,
+				customerTypeName: "Individual"
+			},
+			{
+				customerType: CustomerType.Company,
+				customerTypeName: "Company"
+			},
+			{
+				customerType: CustomerType.TravelAgency,
+				customerTypeName: "Travel Agency"
+			}
+		];
 	}
 }

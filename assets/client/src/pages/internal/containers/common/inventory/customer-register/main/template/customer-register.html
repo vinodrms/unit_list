@@ -2,7 +2,7 @@
 	<div class="row test">
 		<ul class="nav nav-tabs">
 			<li *ngFor="#filter of filterList" [ngClass]="{active : isFilterSelected(filter)}">
-				<a (click)="selectFilter(filter)">{{filter.displayText | translate}}</a>
+				<a (click)="selectFilter(filter)">{{filter.customerTypeName | translate}}</a>
 			</li>
 		</ul>
 		<br/>
@@ -24,5 +24,10 @@
 	</customer-register-overview>
 </div>
 <div class="col-sm-9 singleview-right" *ngIf="isEditing">
-
+	<customer-register-edit-container
+		*ngIf="selectedCustomerVM" 
+		[customerVM]="selectedCustomerVM"
+		(onExit)="showViewScreen()">
+		>
+	</customer-register-edit-container>
 </div>

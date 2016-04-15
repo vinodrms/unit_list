@@ -1,45 +1,32 @@
 import {Injectable} from 'angular2/core';
 import {CustomerType} from '../../../../../../services/customers/data-objects/CustomerDO';
 import {CustomersService} from '../../../../../../services/customers/CustomersService';
-
-export interface CustomerFilterMeta {
-	customerType: number;
-	displayText: string;
-}
+import {CustomerDetailsMeta} from '../../../../../../services/customers/data-objects/customer-details/ICustomerDetailsDO';
+import {CustomerDetailsFactory} from '../../../../../../services/customers/data-objects/customer-details/CustomerDetailsFactory';
 
 @Injectable()
 export class CustomerTableFilterService {
 	private static AllCustomersType: number = 9999999;
 
-	private _filterList: CustomerFilterMeta[];
-	private _currentFilter: CustomerFilterMeta;
+	private _filterList: CustomerDetailsMeta[];
+	private _currentFilter: CustomerDetailsMeta;
 
 	constructor(private _customersService: CustomersService) {
 		this.initFilterList();
 	}
 	private initFilterList() {
-		this._filterList = [
+		var custFactory = new CustomerDetailsFactory();
+		this._filterList= [
 			{
-				displayText: "All Customers",
+				customerTypeName: "All Customers",
 				customerType: CustomerTableFilterService.AllCustomersType
-			},
-			{
-				displayText: "Individuals",
-				customerType: CustomerType.Individual
-			},
-			{
-				displayText: "Companies",
-				customerType: CustomerType.Company
-			},
-			{
-				displayText: "Travel Agencies",
-				customerType: CustomerType.TravelAgency
 			}
 		];
+		this._filterList = this._filterList.concat(custFactory.getCustomerDetailsMetaList());
 		this._currentFilter = this._filterList[0];
 	}
 
-	public selectFilter(filter: CustomerFilterMeta) {
+	public selectFilter(filter: CustomerDetailsMeta) {
 		var customerType = filter.customerType;
 		if(customerType === this._currentFilter.customerType) {
 			return;
@@ -49,7 +36,7 @@ export class CustomerTableFilterService {
 	}
 
 	private getFilterByCustomerType(customerType: CustomerType) {
-		return _.find(this._filterList, (filter: CustomerFilterMeta) => {
+		return _.find(this._filterList, (filter: CustomerDetailsMeta) => {
 			return filter.customerType === customerType;
 		});
 	}
@@ -62,20 +49,20 @@ export class CustomerTableFilterService {
 		}
 		this._customersService.refreshData();
 	}
-	public isFilterSelected(filter: CustomerFilterMeta): boolean {
+	public isFilterSelected(filter: CustomerDetailsMeta): boolean {
 		return filter.customerType === this._currentFilter.customerType;
 	}
 	
-	public get filterList(): CustomerFilterMeta[] {
+	public get filterList(): CustomerDetailsMeta[] {
 		return this._filterList;
 	}
-	public set filterList(filterList: CustomerFilterMeta[]) {
+	public set filterList(filterList: CustomerDetailsMeta[]) {
 		this._filterList = filterList;
 	}
-	public get currentFilter(): CustomerFilterMeta {
+	public get currentFilter(): CustomerDetailsMeta {
 		return this._currentFilter;
 	}
-	public set currentFilter(currentFilter: CustomerFilterMeta) {
+	public set currentFilter(currentFilter: CustomerDetailsMeta) {
 		this._currentFilter = currentFilter;
 	}
 }

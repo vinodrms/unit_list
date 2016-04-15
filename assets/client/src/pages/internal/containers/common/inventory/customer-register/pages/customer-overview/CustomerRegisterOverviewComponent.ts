@@ -6,7 +6,7 @@ import {CustomerVM} from '../../../../../../services/customers/view-models/Custo
 
 @Component({
 	selector: 'customer-register-overview',
-	templateUrl: '/client/src/pages/internal/containers/common/inventory/customer-register/pages/overview/template/customer-register-overview.html',
+	templateUrl: '/client/src/pages/internal/containers/common/inventory/customer-register/pages/customer-overview/template/customer-register-overview.html',
 	pipes: [TranslationPipe, PercentagePipe]
 })
 

@@ -7,19 +7,21 @@ import {CustomerRegisterTableMetaBuilderService} from './services/CustomerRegist
 import {InventoryStateManager} from '../../utils/state-manager/InventoryStateManager';
 import {InventoryScreenStateType} from '../../utils/state-manager/InventoryScreenStateType';
 import {InventoryScreenAction} from '../../utils/state-manager/InventoryScreenAction';
-import {CustomerTableFilterService, CustomerFilterMeta} from './services/CustomerTableFilterService';
+import {CustomerTableFilterService} from './services/CustomerTableFilterService';
 import {CustomersService} from '../../../../../services/customers/CustomersService';
 import {CustomerVM} from '../../../../../services/customers/view-models/CustomerVM';
 import {CustomerDO, CustomerType} from '../../../../../services/customers/data-objects/CustomerDO';
 import {CustomerPriceProductDetailsDO} from '../../../../../services/customers/data-objects/price-product-details/CustomerPriceProductDetailsDO';
 import {CustomerDetailsFactory} from '../../../../../services/customers/data-objects/customer-details/CustomerDetailsFactory';
-import {CustomerRegisterOverviewComponent} from '../pages/overview/CustomerRegisterOverviewComponent';
+import {CustomerDetailsMeta} from '../../../../../services/customers/data-objects/customer-details/ICustomerDetailsDO';
+import {CustomerRegisterOverviewComponent} from '../pages/customer-overview/CustomerRegisterOverviewComponent';
+import {CustomerRegisterEditContainerComponent} from '../pages/customer-edit/container/CustomerRegisterEditContainerComponent';
 
 @Component({
     selector: 'customer-register',
     templateUrl: '/client/src/pages/internal/containers/common/inventory/customer-register/main/template/customer-register.html',
     providers: [CustomersService, CustomerRegisterTableMetaBuilderService, CustomerTableFilterService],
-    directives: [LazyLoadingTableComponent, CustomerRegisterOverviewComponent],
+    directives: [LazyLoadingTableComponent, CustomerRegisterOverviewComponent, CustomerRegisterEditContainerComponent],
 	pipes: [TranslationPipe]
 })
 export class CustomerRegisterComponent extends BaseComponent {
@@ -36,7 +38,7 @@ export class CustomerRegisterComponent extends BaseComponent {
         private _tableBuilder: CustomerRegisterTableMetaBuilderService,
 		private _custTableFilterService: CustomerTableFilterService) {
         super();
-		this._inventoryStateManager = new InventoryStateManager<CustomerVM>(this._appContext, "priceProduct.id");
+		this._inventoryStateManager = new InventoryStateManager<CustomerVM>(this._appContext, "customer.id");
 		this.registerStateChange();
     }
 	private registerStateChange() {
@@ -99,16 +101,16 @@ export class CustomerRegisterComponent extends BaseComponent {
         return vm;
     }
 
-	public get filterList(): CustomerFilterMeta[] {
+	public get filterList(): CustomerDetailsMeta[] {
 		if(this.isEditing) {
 			return [this._custTableFilterService.currentFilter];
 		}
 		return this._custTableFilterService.filterList;
 	}
-	public isFilterSelected(filter: CustomerFilterMeta): boolean {
+	public isFilterSelected(filter: CustomerDetailsMeta): boolean {
 		return this._custTableFilterService.isFilterSelected(filter);
 	}
-	public selectFilter(filter: CustomerFilterMeta) {
+	public selectFilter(filter: CustomerDetailsMeta) {
 		return this._custTableFilterService.selectFilter(filter);
 	}
 }
