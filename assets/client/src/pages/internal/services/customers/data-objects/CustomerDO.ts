@@ -9,10 +9,6 @@ export enum CustomerType {
 	Company,
 	TravelAgency
 }
-export enum CustomerStatus {
-	Active,
-	Deleted
-}
 
 export class CustomerDO extends BaseDO {
 	constructor() {
@@ -21,14 +17,13 @@ export class CustomerDO extends BaseDO {
 	id: string;
 	versionId: number;
 	type: CustomerType;
-	status: CustomerStatus;
 	customerDetails: ICustomerDetailsDO;
 	fileAttachmentList: FileAttachmentDO[];
 	priceProductDetails: CustomerPriceProductDetailsDO;
 	notes: string;
 
 	protected getPrimitivePropertyKeys(): string[] {
-		return ["id", "versionId", "type", "status", "notes"];
+		return ["id", "versionId", "type", "notes"];
 	}
 
 	public buildFromObject(object: Object) {

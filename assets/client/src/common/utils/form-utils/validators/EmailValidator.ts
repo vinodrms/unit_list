@@ -1,8 +1,8 @@
 import {AThValidator} from './AThValidator';
 
 export class EmailValidator extends AThValidator {
-	constructor() {
-		super("invalidEmail");
+	constructor(isNullable?: boolean) {
+		super("invalidEmail", isNullable);
 	}
 
 	protected isValidCore(value: any): boolean {

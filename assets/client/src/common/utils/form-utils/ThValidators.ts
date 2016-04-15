@@ -13,6 +13,9 @@ export class ThValidators {
 	public static emailValidator(control: AbstractControl): ValidationResult {
 		return ThValidators.validator(control, new EmailValidator());
 	}
+	public static nullableEmailValidator(control: AbstractControl): ValidationResult {
+		return ThValidators.validator(control, new EmailValidator(true));
+	}
 	public static passwordValidator(control: AbstractControl): ValidationResult {
 		return ThValidators.validator(control, new PasswordValidator());
 	}

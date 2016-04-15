@@ -49,8 +49,9 @@ export class CustomerVM {
 
 	public buildPrototype(): CustomerVM {
 		var copy = new CustomerVM();
-		copy.customer = new CustomerDO();
-		copy.customer.buildFromObject(this.customer);
+		var copyDO = new CustomerDO;
+		copyDO.buildFromObject(this.customer);
+		copy.customer = copyDO;
 		copy.priceProductList = [];
 		copy.priceProductList = copy.priceProductList.concat(this._priceProductList);
 		return copy;

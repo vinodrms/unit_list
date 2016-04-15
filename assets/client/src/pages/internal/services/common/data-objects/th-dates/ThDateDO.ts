@@ -26,4 +26,15 @@ export class ThDateDO extends BaseDO {
     protected getPrimitivePropertyKeys(): string[] {
         return ["year", "month", "day"];
     }
+	
+	public toString(): string {
+		return this.getDayString() + "/" + this.getMonthString() + "/" + this.year;
+	}
+	private getDayString(): string {
+		return this.day < 10 ? ("0" + this.day) : ("" + this.day);
+	}
+	private getMonthString(): string {
+		var actualMonth = this.month + 1; 
+		return actualMonth < 10 ? ("0" + actualMonth) : ("" + actualMonth);
+	}
 }

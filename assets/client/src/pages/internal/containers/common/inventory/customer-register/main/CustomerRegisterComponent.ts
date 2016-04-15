@@ -98,6 +98,8 @@ export class CustomerRegisterComponent extends BaseComponent {
 		vm.customer.customerDetails = custDetailsFactory.getCustomerDetailsByType(vm.customer.type);
 		vm.customer.fileAttachmentList = [];
 		vm.customer.priceProductDetails = new CustomerPriceProductDetailsDO();
+		vm.customer.priceProductDetails.allowPublicPriceProducts = true;
+		vm.customer.priceProductDetails.priceProductIdList = [];
         return vm;
     }
 
