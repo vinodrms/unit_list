@@ -357,5 +357,9 @@ export var EnglishTranslations: Object = {
 	"Invalid address length": "Invalid address length",
 	"Invalid postal code length": "Invalid postal code length",
 	"Upload": "Upload",
-	"Attach file": "Attach file"
+	"Attach file": "Attach file",
+	"Company Name": "Company Name",
+	"Contact Person": "Contact Person",
+	"Website": "Website",
+	"Hotel Logo": "Hotel Logo"
 };
