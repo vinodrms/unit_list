@@ -54,18 +54,16 @@
                             <a class="btn btn-xs bed-remove-btn" (click)="removeBed(bedIndex)">
                                 <i class="fa fa-2x fa-remove"></i>
                             </a>
-                            <div class="bed-slot-inner">
-                                <center>
-                                    <i class="fa fa-4x fa-bed"></i>
-                                    <br/>
-                                    <small>{{bedVM.bed.name}}</small>
-                                    <br/> {{bedVM.capacity.maxAdults}}
-                                    <i class="fa fa-male"></i> {{bedVM.capacity.maxChildren}}<i class="fa fa-child"></i>
-                                </center>
+                            <div class="bed-slot-inner" [title]="bedVM.bed.name">
+                                <i class="fa fa-4x fa-bed"></i>
+                                <br/>
+                                <small>{{bedVM.bed.name}}</small>
+                                <br/> {{bedVM.capacity.maxAdults}}
+                                <i class="fa fa-male"></i> {{bedVM.capacity.maxChildren}}<i class="fa fa-child"></i>
                             </div>
                         </div>
                         <div *ngFor="#emptySlot of emptySlots" class="bed-slot available">
-                           
+
                         </div>
                     </div>
                     <div class="bed-add">

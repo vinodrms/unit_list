@@ -326,6 +326,10 @@ input[type="number"].form-control {
     top: 50%; 
     left: 50%;
     transform: translate(-50%, -50%);
+    width: 100px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    text-align: center;
 }
 .room-categ-label {
     width: 85%;

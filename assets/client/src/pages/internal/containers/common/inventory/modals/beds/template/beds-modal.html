@@ -8,14 +8,12 @@
     <div class="row">
         <div class="col-md-4" *ngFor="#bedVM of bedVMList">
             <div class="btn bed-slot" [ngClass]="{'unselected': !bedSelected(bedVM)}" (click)="selectedBedVM=bedVM">
-                <div class="bed-slot-inner">
-                    <center>
-                        <i [ngClass]="bedVM.template.iconUrl" class="fa-4x"></i>
-                        <br/>
-                        <small>{{bedVM.bed.name}}</small>
-                        <br/> {{bedVM.capacity.maxAdults}}
-                        <i class="fa fa-male"></i> {{bedVM.capacity.maxChildren}}<i class="fa fa-child"></i>
-                    </center>
+                <div class="bed-slot-inner" [title]="bedVM.bed.name">
+                    <i [ngClass]="bedVM.template.iconUrl" class="fa-4x"></i>
+                    <br/>
+                    <small>{{bedVM.bed.name}}</small>
+                    <br/> {{bedVM.capacity.maxAdults}}
+                    <i class="fa fa-male"></i> {{bedVM.capacity.maxChildren}}<i class="fa fa-child"></i>
                 </div>
             </div>
         </div>
@@ -24,9 +22,7 @@
 
 </div>
 <div class="modal-footer">
-    <button type="button" class="btn btn-primary" 
-        [disabled]="!didSelectBed()"
-        (click)="triggerSelectedBed()">
+    <button type="button" class="btn btn-primary" [disabled]="!didSelectBed()" (click)="triggerSelectedBed()">
         {{ 'Select' | translate }}
     </button>
 </div>
