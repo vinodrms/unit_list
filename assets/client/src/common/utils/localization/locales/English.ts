@@ -341,5 +341,9 @@ export var EnglishTranslations: Object = {
 	"If allowed, public price products will be available for this customer.": "If allowed, public price products will be available for this customer.",
 	"Confidential Price Products": "Confidential Price Products",
 	"Allow this customer to make reservations using specific price products.": "Allow this customer to make reservations using specific price products.",
-	"Select Price Product": "Select Price Product"
+	"Select Price Product": "Select Price Product",
+	"File Attachments": "File Attachments",
+	"The maximum file size is 16MB": "The maximum file size is 16MB",
+	"Remove file": "Remove file",
+	"Are you sure you want to remove %fileName% ?": "Are you sure you want to remove %fileName% ?"
 };

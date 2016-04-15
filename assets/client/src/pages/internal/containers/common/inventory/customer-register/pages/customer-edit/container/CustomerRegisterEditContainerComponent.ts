@@ -15,11 +15,14 @@ import {PriceProductsDO} from '../../../../../../../services/price-products/data
 import {PriceProductDO} from '../../../../../../../services/price-products/data-objects/PriceProductDO';
 import {CustomerDetailsMeta} from '../../../../../../../services/customers/data-objects/customer-details/ICustomerDetailsDO';
 import {CustomerDetailsFactory} from '../../../../../../../services/customers/data-objects/customer-details/CustomerDetailsFactory';
+import {FileAttachmentsComponent} from '../../../../../../../../../common/utils/components/file-attachments/FileAttachmentsComponent';
+import {FileAttachmentDO} from '../../../../../../../services/common/data-objects/file/FileAttachmentDO';
 
 @Component({
 	selector: 'customer-register-edit-container',
 	templateUrl: '/client/src/pages/internal/containers/common/inventory/customer-register/pages/customer-edit/container/template/customer-register-edit-container.html',
 	providers: [EagerPriceProductsService, PriceProductsModalService],
+	directives: [FileAttachmentsComponent],
 	pipes: [TranslationPipe]
 })
 
@@ -78,7 +81,7 @@ export class CustomerRegisterEditContainerComponent extends BaseComponent {
 	public didChangeCustomerType(customerTypeStr: string) {
 		var customerType: CustomerType = parseInt(customerTypeStr);
 		// TODO: details dependent on customer type
-
+		
 	}
 
 	public removePriceProduct(priceProductToRemove: PriceProductDO) {
@@ -96,6 +99,10 @@ export class CustomerRegisterEditContainerComponent extends BaseComponent {
 		if (!foundPriceProduct) {
 			this._customerVM.priceProductList.push(priceProduct);
 		}
+	}
+	
+	public didChangeFileAttachmentList(fileAttachmentList: FileAttachmentDO[]) {
+		this._customerVM.customer.fileAttachmentList = fileAttachmentList;
 	}
 
 	public get allowPublicPriceProducts(): boolean {

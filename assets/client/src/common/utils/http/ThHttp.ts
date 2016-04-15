@@ -18,6 +18,7 @@ enum ThStatusCode {
 export class ThHttp implements IThHttp {
 	private static HttpOk = 200;
 	private static HttpForbidden = 403;
+	private static MaxFileSizeBytes: number = 16 * 1024 * 1024;
 
 	private _thUtils: ThUtils;
 
@@ -80,6 +81,12 @@ export class ThHttp implements IThHttp {
 	public uploadFile(file: File): Observable<UploadedFileResponse> {
 		let url = this.getApiUrl(ThServerApi.ServiceUploadFile);
 		return new Observable<UploadedFileResponse>((observer: Observer<UploadedFileResponse>) => {
+			if(file.size > ThHttp.MaxFileSizeBytes) {
+				var thError = new ThError(this._thTranslation.translate("The maximum file size is 16MB"));
+				observer.error(thError);
+				observer.complete();
+				return;
+			}
 			let formData: FormData = new FormData();
 			let xhr: XMLHttpRequest = new XMLHttpRequest();
 

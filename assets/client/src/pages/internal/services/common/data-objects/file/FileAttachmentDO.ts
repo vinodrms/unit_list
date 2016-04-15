@@ -5,7 +5,7 @@ export class FileAttachmentDO extends BaseDO {
 		super();
 	}
 	name: string;
-	url: number;
+	url: string;
 
 	protected getPrimitivePropertyKeys(): string[] {
 		return ["name", "url"];

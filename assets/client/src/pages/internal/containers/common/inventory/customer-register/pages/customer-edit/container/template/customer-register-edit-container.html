@@ -10,7 +10,7 @@
 			</div>
 		</div>
 		<div class="col-md-4 col-xs-6">
-			<label for="roomcat">{{ 'Public Price Products' | translate }}</label>
+			<label>{{ 'Public Price Products' | translate }}</label>
 			<div class="input-group">
 				<div class="btn-group" data-toggle="buttons">
 					<button class="btn btn-default" (click)="allowPublicPriceProducts=true" [ngClass]="{'active': allowPublicPriceProducts}"
@@ -52,8 +52,22 @@
 			<small class="text-muted"><i class="fa fa-info-circle"></i> {{ 'Allow this customer to make reservations using specific price products.' | translate }} </small>
 		</div>
 	</div>
-
-
+	
+	<div class="row">
+		
+		<div class="col-md-8 col-xs-12">
+			<file-attachments
+				[fileAttachmentList]="customerVM.customer.fileAttachmentList"
+				(onFileAttachmentsChange)="didChangeFileAttachmentList($event)"
+				>
+			</file-attachments>
+		</div>
+		
+		<div class="col-md-4 col-xs-12 form-group">
+			<label>{{ 'Notes' | translate }}</label>
+			<textarea class="form-control" [(ngModel)]="customerVM.customer.notes"></textarea>
+		</div>	
+	</div>
 
 
 
