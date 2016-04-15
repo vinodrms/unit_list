@@ -55,6 +55,7 @@ export class MongoRoomEditOperationsRepository extends MongoRepository {
     }
     private findAndModifyRoomCore(roomMeta: RoomMetaRepoDO, roomItemMeta: RoomItemMetaRepoDO, updateQuery: any, resolve: { (result: RoomDO): void }, reject: { (err: ThError): void }) {
         updateQuery.$inc = { "versionId": 1 };
+        delete updateQuery.versionId;
         var findQuery: Object = {
             "hotelId": roomMeta.hotelId,
             "id": roomItemMeta.id,

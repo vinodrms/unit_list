@@ -1,18 +1,9 @@
 <loading-component [isLoading]="isLoading"></loading-component>
 <div class="row" *ngIf="!isLoading" [ngFormModel]="getDefaultControlGroup()">
     <div class="row">
-
         <div class="col-md-8">
             <div class="row">
-                <div class="col-md-4 col-xs-12 form-group">
-                    <label>{{ 'Category' | translate }}</label>
-                    <select class="select2_single form-control">
-                        <option value="Bed VAT">Default Room</option>
-                        <option value="Food VAT">VIP Room</option>
-                    </select>
-                </div>
-
-                <div class="col-md-4 col-xs-12 form-group">
+                <div class="col-md-6 col-xs-12 form-group">
                     <label>{{ 'Name' | translate }}</label>
                     <div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('name')}">
                         <input type="text" class="form-control" placeholder="{{ 'Enter Room Name' | translate }}" ngControl="name">
@@ -20,7 +11,7 @@
                     <label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter a name for the room' | translate }}</small></label>
                 </div>
 
-                <div class="col-md-4 col-xs-12 ">
+                <div class="col-md-6 col-xs-12 ">
                     <label>{{ 'Floor Number' | translate }}</label>
                     <div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('floor')}">
                         <span class="input-group-addon"><i class="fa fa-caret-square-o-up"></i></span>
@@ -29,6 +20,25 @@
                     <label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Insert a valid floor number' | translate }}</small></label>
                 </div>
             </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <label>{{ 'Category' | translate }}</label>
+                    <table class="table table-striped form-group">
+                        <tbody class="input-group" [ngClass]="{'form-warning': didSubmitForm&&roomCategoryNotSelected}">
+                            <tr>
+                                <td class="room-categ-label" *ngIf="roomVM.category">{{roomVM.category.displayName}}</td>
+                                <td class="room-categ-label" *ngIf="!roomVM.category">{{ 'No category selected' | translate }}</td>
+                                <td class="room-categ-select">
+                                    <a class="btn btn-xs" (click)="openRoomCategorySelectModal()"><i class="fa fa-pencil"></i> {{ 'Select' | translate }} </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Select a room category' | translate }}</small></label>
+                    </table>
+                </div>
+            </div>
+
             <div class="row">
                 <div class="col-md-8">
                     <label class="control-label">{{ 'Beds' | translate }}</label>
@@ -36,24 +46,43 @@
                 <div class="col-md-4">
                 </div>
             </div>
-            <div class="clear"></div>
+
             <div class="row">
-                <div class="col-md-8">
-                    <div class="row">
+                <div class="col-md-12">
+                    <div class="bed-container">
+                        <div *ngFor="#bedVM of roomVM.bedList; #bedIndex = index" class="bed-slot">
+                            <a class="btn btn-xs bed-remove-btn" (click)="removeBed(bedIndex)">
+                                <i class="fa fa-2x fa-remove"></i>
+                            </a>
+                            <div class="bed-slot-inner">
+                                <center>
+                                    <i class="fa fa-4x fa-bed"></i>
+                                    <br/>
+                                    <small>{{bedVM.bed.name}}</small>
+                                    <br/> {{bedVM.capacity.maxAdults}}
+                                    <i class="fa fa-male"></i> {{bedVM.capacity.maxChildren}}<i class="fa fa-child"></i>
+                                </center>
+                            </div>
+                        </div>
+                        <div *ngFor="#emptySlot of emptySlots" class="bed-slot available">
+                           
+                        </div>
+                    </div>
+                    <div class="bed-add">
+                        <button type="button" class="btn center-block btn-danger bed-add-btn" (click)="openBedsSelectModal()" [disabled]="maximuNumberOfBedsReached"><i class="fa fa-plus-circle"></i></button>
                     </div>
                 </div>
-                <div class="col-md-4">
-                </div>
+
             </div>
         </div>
 
+
         <div class="col-md-4">
-            <label>{{ 'Image of the Product' | translate }}</label>
+            <label>{{ 'Image of the Room' | translate }}</label>
             <image-upload [imageUrl]="roomVM.imageUrl" (onImageUpload)="didUploadImage($event)"></image-upload>
         </div>
 
     </div>
-
 
     <hr/>
 

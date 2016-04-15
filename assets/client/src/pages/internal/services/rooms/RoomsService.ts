@@ -20,6 +20,7 @@ import {AmenityDO} from '../common/data-objects/amenity/AmenityDO';
 import {RoomAttributeDO} from '../common/data-objects/room-attribute/RoomAttributeDO';
 import {BedsDO} from '../beds/data-objects/BedsDO';
 import {BedDO} from '../beds/data-objects/BedDO';
+import {BedVM} from '../beds/view-models/BedVM';
 
 @Injectable()
 export class RoomsService extends ALazyLoadRequestService<RoomVM> {
@@ -34,12 +35,12 @@ export class RoomsService extends ALazyLoadRequestService<RoomVM> {
             this._roomAmenitiesService.getRoomAmenitiesDO(),
             this._roomAttributesService.getRoomAttributesDO(),
             this._roomCategoriesService.getRoomCategoryList(),
-            this._bedsEagerService.getBedList()
-        ).map((result: [RoomAmenitiesDO, RoomAttributesDO, RoomCategoryDO[], BedsDO]) => {
+            this._bedsEagerService.getBedAggregatedList()
+        ).map((result: [RoomAmenitiesDO, RoomAttributesDO, RoomCategoryDO[], BedVM[]]) => {
             var roomAmenities = result[0];
             var roomAttributes = result[1];
             var roomCategories = result[2];
-            var beds = result[3];
+            var bedVMList = result[3];
             
             var rooms = new RoomsDO();
             rooms.buildFromObject(pageDataObject);
@@ -76,8 +77,8 @@ export class RoomsService extends ALazyLoadRequestService<RoomVM> {
                 
                 roomVM.bedList = [];
                 _.forEach(room.bedIdList, (bedId: string) => {
-                    var bed = _.find(beds.bedList, (bedDO: BedDO) => {
-                        return bedDO.id === bedId;    
+                    var bed = _.find(bedVMList, (bedVM: BedVM) => {
+                        return bedVM.bed.id === bedId;    
                     });
                     if(!this._appContext.thUtils.isUndefinedOrNull(bed)) {
                         roomVM.bedList.push(bed);    

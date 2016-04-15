@@ -40,7 +40,7 @@ export class RoomEditService {
     public updateRoom(room: RoomDO) {
         room.name = this._roomForm.value["name"];
         room.floor = this._roomForm.value["floor"];
-        room.notes = this._roomForm.value["notes"]
+        room.notes = this._roomForm.value["notes"];
     }
 
     public isValidForm(): boolean {

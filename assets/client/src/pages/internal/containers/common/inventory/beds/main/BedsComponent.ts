@@ -63,6 +63,7 @@ export class BedsComponent extends BaseComponent {
     public copyBed(bedVM: BedVM) {
         var newBedVM = bedVM.buildPrototype();
         delete newBedVM.bed.id;
+        newBedVM.bed.name = '';
         this._inventoryStateManager.canPerformAction(InventoryScreenAction.Copy, newBedVM).then((newState: InventoryScreenStateType) => {
             this._bedTableComponent.deselectItem();
 

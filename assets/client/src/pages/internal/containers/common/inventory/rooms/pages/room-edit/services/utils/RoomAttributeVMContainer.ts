@@ -23,6 +23,12 @@ export class RoomAttributeVMContainer {
         });
     }
     
+    public resetRoomAttributeSelection() {
+        this._roomAttributeList.forEach((roomAttribute: RoomAttributeVM) => {
+            roomAttribute.isSelected = false;        
+        });
+    }
+    
     public get roomAttributeList(): RoomAttributeVM[] {
 		return this._roomAttributeList;
 	}

@@ -135,7 +135,8 @@ export class SaveRoomItem {
 
     private bedListIsValid(bedList: BedDO[]): boolean {
         var hotelBedIdList: string[] = _.map(bedList, (bed: BedDO) => { return bed.id; });
-        return _.intersection(hotelBedIdList, this._roomDO.bedIdList).length === this._roomDO.bedIdList.length;
+        var noDuplicatesBedIdList = _.uniq(this._roomDO.bedIdList);
+        return _.intersection(hotelBedIdList, noDuplicatesBedIdList).length === noDuplicatesBedIdList.length;
     }
 
     private saveRoom(): Promise<RoomDO> {

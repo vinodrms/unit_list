@@ -59,7 +59,6 @@ export class RoomsComponent extends BaseComponent {
         var newRoomVM = this.buildNewRoomVM();
         this._inventoryStateManager.canPerformAction(InventoryScreenAction.Add).then((newState: InventoryScreenStateType) => {
             this._roomTableComponent.deselectItem();
-
             this._inventoryStateManager.currentItem = newRoomVM;
             this._inventoryStateManager.screenStateType = newState;
         }).catch((e: any) => { });
@@ -68,6 +67,7 @@ export class RoomsComponent extends BaseComponent {
     public copyRoom(roomVM: RoomVM) {
         var newRoomVM = roomVM.buildPrototype();
         delete newRoomVM.room.id;
+        newRoomVM.room.name='';
         this._inventoryStateManager.canPerformAction(InventoryScreenAction.Copy, newRoomVM).then((newState: InventoryScreenStateType) => {
             this._roomTableComponent.deselectItem();
 

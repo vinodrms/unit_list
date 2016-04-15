@@ -23,6 +23,12 @@ export class RoomAmenityVMContainer {
         });
     }
     
+    public resetRoomAmenitySelection() {
+        this._roomAmenityList.forEach((roomAmenity: RoomAmenityVM) => {
+            roomAmenity.isSelected = false;        
+        });
+    }
+    
     public get roomAmenityList(): RoomAmenityVM[] {
 		return this._roomAmenityList;
 	}
