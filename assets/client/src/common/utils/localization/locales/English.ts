@@ -372,5 +372,7 @@ export var EnglishTranslations: Object = {
 	"Enter a valid account number": "Enter a valid account number",
 	"Type of Commission": "Type of Commission",
 	"Commission": "Commission",
-	"Enter a valid commission": "Enter a valid commission"
+	"Enter a valid commission": "Enter a valid commission",
+	"Contact Person": "Contact Person",
+	"Hotel Logo": "Hotel Logo"
 };

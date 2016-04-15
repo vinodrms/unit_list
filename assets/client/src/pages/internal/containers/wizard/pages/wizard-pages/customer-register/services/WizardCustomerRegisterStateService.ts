@@ -61,7 +61,7 @@ export class WizardCustomerRegisterStateService extends AWizardState {
         return {
             startRelativeComponentPath: "WizardCustomerRegisterComponent",
             endRelativeComponentPath: "WizardCustomerRegisterComponent",
-            iconFontName: "",
+            iconFontName: "&",
             name: "Customer Register"
         };
     }

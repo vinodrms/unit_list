@@ -50,7 +50,7 @@ export class WizardBedsStateService extends AWizardState {
         return {
             startRelativeComponentPath: "WizardBedsComponent",
             endRelativeComponentPath: "WizardBedsComponent",
-            iconFontName: "",
+            iconFontName: "!",
             name: "Beds"
         };
     }

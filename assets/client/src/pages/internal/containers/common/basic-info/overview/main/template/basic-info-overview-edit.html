@@ -4,6 +4,7 @@
 		<div class="col-sm-12 col-md-6">
 			<div class="row">
 				<div class="col-xs-12 col-md-12 form-group" >
+					<label>{{ 'Hotel Name' | translate }}</label>
 					<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('name')}">
 						<input type="text" placeholder="{{ 'Name of the Hotel' | translate }}" class="form-control" ngControl="name"/>
 					</div>
@@ -22,6 +23,7 @@
 			
 			<div class="row">
 				<div class="col-xs-12 col-md-12 form-group">
+					<label>{{ 'Company Name' | translate }}</label>
 					<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('companyName')}">
 						<input type="text" placeholder="{{ 'Name of the Company' | translate }}" class="form-control" ngControl="companyName"/>
 					</div>
@@ -31,18 +33,21 @@
 			
 			<div class="row">
 				<div class="col-xs-12 col-md-6 form-group">
+					<label>{{ 'Address' | translate }}</label>
 					<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('streetAddress')}">
 						<input type="text" placeholder="{{ 'Address' | translate }}" class="form-control" ngControl="streetAddress">
 					</div>
 					<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter the address' | translate }}</small></label>
 				</div>
 				<div class="col-xs-6 col-md-3 form-group">
+					<label>{{ 'City' | translate }}</label>
 					<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('city')}">
 						<input type="text" placeholder="{{ 'City' | translate }}" class="form-control" ngControl="city">
 					</div>
 					<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter the city' | translate }}</small></label>
 				</div>
 				<div class="col-xs-6 col-md-3 form-group">
+					<label>{{ 'Postal Code' | translate }}</label>
 					<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('postalCode')}">
 						<input type="text" placeholder="{{ 'Postal Code' | translate }}" class="form-control" ngControl="postalCode">
 					</div>
@@ -54,12 +59,14 @@
 
 			<div class="row">
 				<div class="col-xs-12 col-md-6 form-group">
+					<label>{{ 'Phone' | translate }}</label>
 					<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('phone')}">
 						<input type="text" placeholder="{{ 'Phone' | translate }}" class="form-control" ngControl="phone">
 					</div>
 					<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter a valid phone' | translate }}</small></label>
 				</div>
 				<div class="col-xs-12 col-md-6 form-group">
+					<label>{{ 'Fax' | translate }}</label>
 					<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('fax')}">
 						<input type="text" placeholder="{{ 'Fax' | translate }}" class="form-control" ngControl="fax">
 					</div>
@@ -68,6 +75,7 @@
 			</div>
 			<div class="row">
 				<div class="col-xs-12 col-md-12 form-group">
+					<label>{{ 'Contact Person' | translate }}</label>
 					<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('contactName')}">
 						<input type="text" placeholder="{{ 'Contact Person\'s Name' | translate }}" class="form-control" ngControl="contactName"/>
 					</div>
@@ -77,12 +85,14 @@
 
 			<div class="row">
 				<div class="col-xs-12 col-md-6 form-group">
+					<label>{{ 'Website' | translate }}</label>
 					<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('websiteUrl')}">
 						<input type="text" class="form-control" placeholder="{{ 'Your Website' | translate }}" ngControl="websiteUrl">
 					</div>
 					<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter a valid url' | translate }}</small></label>
 				</div>
 				<div class="col-xs-12 col-md-6 form-group">
+					<label>{{ 'Email' | translate }}</label>
 					<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('email')}">
 						<input type="email" placeholder="{{ 'Contact Email' | translate }}" class="form-control" ngControl="email">
 					</div>
@@ -91,12 +101,14 @@
 			</div>
 		</div>
 		<div class="col-sm-12 col-md-3 form-group">
+			<label>{{ 'Hotel Logo' | translate }}</label>
 			<image-upload [imageUrl]="logoUrl" (onImageUpload)="didUploadLogo($event)" ></image-upload>
 		</div>
 	</div>
 	<div class="row">
 		<div class="col-sm-3 form-group">
 			<div class="input-group">
+				<label>Facebook</label>
 				<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('facebookUrl')}">
 					<span class="input-group-addon"><i class="fa fa-facebook"></i></span>
 					<input type="text" class="form-control" ngControl="facebookUrl">
@@ -106,6 +118,7 @@
 		</div>
 		<div class="col-sm-3 form-group">
 			<div class="input-group">
+				<label>Twitter</label>
 				<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('twitterUrl')}">
 					<span class="input-group-addon"><i class="fa fa-twitter"></i></span>
 					<input type="text" class="form-control" ngControl="twitterUrl">
@@ -115,6 +128,7 @@
 		</div>
 		<div class="col-sm-3 form-group">
 			<div class="input-group">
+				<label>LinkedIn</label>
 				<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('linkedinUrl')}">
 					<span class="input-group-addon"><i class="fa fa-linkedin"></i></span>
 					<input type="text" class="form-control" ngControl="linkedinUrl">

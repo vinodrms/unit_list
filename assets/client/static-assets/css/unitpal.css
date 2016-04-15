@@ -2,6 +2,16 @@
 
 @import url(https://fonts.googleapis.com/css?family=Raleway:400,200,200italic,400italic,700,700italic&subset=latin,latin-ext);
 
+@font-face {
+    font-family: UnitpalIcons;
+    src:url(../fonts/UnitpalIcons.TTF);
+}
+
+.unitpal-font { font-family: UnitpalIcons !important; font-weight:normal; font-size:larger; }
+
+.menu_section .unitpal-font { font-size:x-large; margin-top:-8px; }
+.signup-step-nav { font-size:x-large; }
+
 body, html {
 	
 	

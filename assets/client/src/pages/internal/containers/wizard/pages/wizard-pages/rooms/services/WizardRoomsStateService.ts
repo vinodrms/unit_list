@@ -52,7 +52,7 @@ export class WizardRoomsStateService extends AWizardState  {
         return {
             startRelativeComponentPath: "WizardRoomsComponent",
             endRelativeComponentPath: "WizardRoomsComponent",
-            iconFontName: "",
+            iconFontName: "\"",
             name: "Rooms"
         };
     }

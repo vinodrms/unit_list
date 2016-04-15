@@ -79,7 +79,7 @@ export class WizardBasicInformationStateService extends AWizardState {
 		return {
 			startRelativeComponentPath: "WizardBasicInformationComponent/WizardBasicInfoIntroComponent",
 			endRelativeComponentPath: "WizardBasicInformationComponent/WizardBasicInfoPropertyDetailsComponent",
-			iconFontName: "",
+			iconFontName: "8",
 			name: "Basic Information"
 		};
 	}

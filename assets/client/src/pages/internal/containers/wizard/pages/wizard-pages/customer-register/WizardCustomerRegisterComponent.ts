@@ -30,6 +30,7 @@ export class WizardCustomerRegisterComponent extends BaseComponent implements On
 	}
 
 	public ngOnInit() {
+		
 	}
 
 	public didChangeScreenStateType(screenStateType: InventoryScreenStateType) {

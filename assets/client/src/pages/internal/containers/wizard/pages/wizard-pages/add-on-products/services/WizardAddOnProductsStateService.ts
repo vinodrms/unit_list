@@ -61,7 +61,7 @@ export class WizardAddOnProductsStateService extends AWizardState {
         return {
             startRelativeComponentPath: "WizardAddOnProductsComponent",
             endRelativeComponentPath: "WizardAddOnProductsComponent",
-            iconFontName: "",
+            iconFontName: "$",
             name: "Add-On Products"
         };
     }
