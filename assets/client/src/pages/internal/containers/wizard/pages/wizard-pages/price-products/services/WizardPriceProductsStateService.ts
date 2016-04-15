@@ -49,7 +49,7 @@ export class WizardPriceProductsStateService extends AWizardState {
 		return {
 			startRelativeComponentPath: "WizardPriceProductsComponent",
 			endRelativeComponentPath: "WizardPriceProductsComponent",
-			iconFontName: "",
+			iconFontName: "%",
 			name: "Price Products"
 		};
 	}

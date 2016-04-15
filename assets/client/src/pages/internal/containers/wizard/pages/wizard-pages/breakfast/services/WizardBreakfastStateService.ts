@@ -65,7 +65,7 @@ export class WizardBreakfastStateService extends AWizardState {
         return {
             startRelativeComponentPath: "WizardBreakfastComponent",
             endRelativeComponentPath: "WizardBreakfastComponent",
-            iconFontName: "",
+            iconFontName: "#",
             name: "Breakfast"
         };
     }
