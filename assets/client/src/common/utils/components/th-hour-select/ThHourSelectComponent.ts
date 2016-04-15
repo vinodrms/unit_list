@@ -1,10 +1,9 @@
 import { Component, OnInit, Input, Output, EventEmitter } from 'angular2/core';
 import {BaseComponent} from '../../../../common/base/BaseComponent';
+import {ThHourPipe} from '../../../../common/utils/pipes/ThHourPipe';
 import {ThHourDO} from '../../../../pages/internal/services/common/data-objects/th-dates/ThHourDO';
 import {ThHourVM} from './utils/ThHourVM';
-import {HotelDO} from '../../../../pages/internal/services/hotel/data-objects/hotel/HotelDO.ts'
-import {HourPipe} from '../../../../common/utils/pipes/HourPipe';
-import {MinutePipe} from '../../../../common/utils/pipes/MinutePipe';
+import {HotelDO} from '../../../../pages/internal/services/hotel/data-objects/hotel/HotelDO.ts';
 import {TranslationPipe} from '../../../../common/utils/localization/TranslationPipe';
 import {OperationHoursBuilder} from './utils/OperationHoursBuilder';
 
@@ -15,13 +14,13 @@ import {OperationHoursBuilder} from './utils/OperationHoursBuilder';
         	<div class="input-group" [ngClass]="{'form-warning': displayError()}">
             	<select class="form-control" [ngModel]="initialHourIndex" (change)="onHourChanged($event.target.value)" [disabled]="readonly">
                     <option value="" disabled></option>
-                	<option *ngFor="#hourVM of hoursList" [value]="hourVM.index">{{hourVM.thHour.hour | hour}}:{{hourVM.thHour.minute | minute}}</option>
+                	<option *ngFor="#hourVM of hoursList" [value]="hourVM.index">{{hourVM.thHour | thhour}}</option>
             	</select>
 			</div>
             <label class="form-warning"><small><i class="fa fa-info-circle"></i> {{errorMessage | translate}}</small></label>
 		</div>
         `,
-    pipes: [TranslationPipe, HourPipe, MinutePipe]
+    pipes: [TranslationPipe, ThHourPipe]
 })
 export class ThHourSelectComponent extends BaseComponent implements OnInit {
 	private _hoursBuilder: OperationHoursBuilder = new OperationHoursBuilder();

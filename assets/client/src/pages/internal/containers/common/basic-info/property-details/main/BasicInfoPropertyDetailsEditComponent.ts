@@ -1,7 +1,5 @@
 import { Component, OnInit } from 'angular2/core';
 import {TranslationPipe} from '../../../../../../../common/utils/localization/TranslationPipe';
-import {HourPipe} from '../../../../../../../common/utils/pipes/HourPipe';
-import {MinutePipe} from '../../../../../../../common/utils/pipes/MinutePipe';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/zip';
 import {LoadingComponent} from '../../../../../../../common/utils/components/LoadingComponent';
@@ -24,7 +22,7 @@ import {BasicInfoPropertyDetailsEditService} from './services/BasicInfoPropertyD
     templateUrl: '/client/src/pages/internal/containers/common/basic-info/property-details/main/template/basic-info-property-details-edit.html',
     directives: [LoadingComponent, ThHourSelectComponent],
     providers: [],
-    pipes: [TranslationPipe, HourPipe, MinutePipe]
+    pipes: [TranslationPipe]
 })
 export class BasicInfoPropertyDetailsEditComponent extends BaseComponent implements OnInit {
     isLoading: boolean = true;
