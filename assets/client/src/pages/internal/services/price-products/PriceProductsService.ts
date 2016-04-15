@@ -12,7 +12,7 @@ import {YieldFiltersService} from '../hotel-configurations/YieldFiltersService';
 import {YieldFiltersDO} from '../hotel-configurations/data-objects/YieldFiltersDO';
 
 import {PriceProductsDO} from './data-objects/PriceProductsDO';
-import {PriceProductDO, PriceProductStatus} from './data-objects/PriceProductDO';
+import {PriceProductDO, PriceProductStatus, PriceProductAvailability} from './data-objects/PriceProductDO';
 import {PriceProductVM} from './view-models/PriceProductVM';
 
 @Injectable()
@@ -61,6 +61,9 @@ export class PriceProductsService extends ALazyLoadRequestService<PriceProductVM
 		this.defaultSearchCriteria = {
 			status: status
 		}
+	}
+	public setAvailabilityFilter(availability: PriceProductAvailability) {
+		this.defaultSearchCriteria["availability"] = availability; 
 	}
 
 	public savePriceProductDO(priceProduct: PriceProductDO): Observable<PriceProductDO> {

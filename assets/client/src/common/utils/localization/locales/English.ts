@@ -328,6 +328,13 @@ export var EnglishTranslations: Object = {
 	"Search by name, address, email ..": "Search by name, address, email ..",
 	"Individuals": "Individuals",
 	"Companies": "Companies",
-	"Travel Agencies": "Travel Agencies"
-	
+	"Travel Agencies": "Travel Agencies",
+	"Type of customer": "Type of customer",
+	"Public Price Products": "Public Price Products",
+	"Allow": "Allow",
+	"Disable": "Disable",
+	"If allowed, public price products will be available for this customer.": "If allowed, public price products will be available for this customer.",
+	"Confidential Price Products": "Confidential Price Products",
+	"Allow this customer to make reservations using specific price products.": "Allow this customer to make reservations using specific price products.",
+	"Select Price Product": "Select Price Product"	
 };

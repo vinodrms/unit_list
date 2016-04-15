@@ -1,9 +1,12 @@
 import {CustomerDO, CustomerType} from '../data-objects/CustomerDO';
 import {PriceProductDO} from '../../price-products/data-objects/PriceProductDO';
+import {CustomerDetailsFactory} from '../data-objects/customer-details/CustomerDetailsFactory';
+import {CustomerDetailsMeta} from '../data-objects/customer-details/ICustomerDetailsDO';
 
 export class CustomerVM {
 	private _customer: CustomerDO;
 	private _priceProductList: PriceProductDO[];
+	private _customerTypeString: string;
 
 	constructor() {
 		this._priceProductList = [];
@@ -14,6 +17,9 @@ export class CustomerVM {
 	}
 	public set customer(customer: CustomerDO) {
 		this._customer = customer;
+		var custDetailsFactory = new CustomerDetailsFactory();
+		var foundDetailsMeta = _.find(custDetailsFactory.getCustomerDetailsMetaList(), (meta: CustomerDetailsMeta) => { return meta.customerType === customer.type });
+		this._customerTypeString = !foundDetailsMeta ? "" : foundDetailsMeta.customerTypeName;
 	}
 	public get priceProductList(): PriceProductDO[] {
 		return this._priceProductList;
@@ -29,18 +35,11 @@ export class CustomerVM {
 		return this._customer.customerDetails.getAddress().toString();
 	}
 	public get customerTypeString(): string {
-		switch (this._customer.type) {
-			case CustomerType.Individual:
-				return "Individual";
-			case CustomerType.Company:
-				return "Company";
-			case CustomerType.TravelAgency:
-				return "Travel Agency";
-			default:
-				return "";
-		}
+		return this._customerTypeString;
 	}
-
+	public set customerTypeString(customerTypeString: string) {
+		this._customerTypeString = customerTypeString;
+	}
 	public get phoneString(): string {
 		return this._customer.customerDetails.getPhone();
 	}
