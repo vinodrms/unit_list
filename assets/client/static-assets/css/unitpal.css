@@ -406,3 +406,7 @@ input[type="number"].form-control {
     text-overflow: ellipsis;
 }
 .th-btn-weekday {width:100px !important;}
+
+input[type="file"] {
+    display: none;
+}
