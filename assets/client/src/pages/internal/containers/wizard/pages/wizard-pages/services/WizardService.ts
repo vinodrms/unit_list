@@ -7,7 +7,8 @@ import {WizardBedsStateService} from '../beds/services/WizardBedsStateService';
 import {WizardRoomsStateService} from '../rooms/services/WizardRoomsStateService';
 import {WizardBreakfastStateService} from '../breakfast/services/WizardBreakfastStateService';
 import {WizardAddOnProductsStateService} from '../add-on-products/services/WizardAddOnProductsStateService';
-import {WizardPriceProductsService} from '../price-products/services/WizardPriceProductsService';
+import {WizardPriceProductsStateService} from '../price-products/services/WizardPriceProductsStateService';
+import {WizardCustomerRegisterStateService} from '../customer-register/services/WizardCustomerRegisterStateService';
 
 @Injectable()
 export class WizardService implements IWizardState, IWizardController {
@@ -20,8 +21,9 @@ export class WizardService implements IWizardState, IWizardController {
 	constructor(private _appContext: AppContext,
 		basicInfo: WizardBasicInformationStateService, beds: WizardBedsStateService,
         rooms: WizardRoomsStateService, breakfast: WizardBreakfastStateService, 
-        addOnProducts: WizardAddOnProductsStateService, priceProducts: WizardPriceProductsService) {
-		this._stateList = [basicInfo, beds, rooms, breakfast, addOnProducts, priceProducts];
+        addOnProducts: WizardAddOnProductsStateService, priceProducts: WizardPriceProductsStateService,
+		customerRegister: WizardCustomerRegisterStateService) {
+		this._stateList = [basicInfo, beds, rooms, breakfast, addOnProducts, priceProducts, customerRegister];
 		for (var stateIndex = 0; stateIndex < this._stateList.length; stateIndex++) {
 			this._stateList[stateIndex].stateIndex = stateIndex;
 			this._stateList[stateIndex].wasVisited = false;

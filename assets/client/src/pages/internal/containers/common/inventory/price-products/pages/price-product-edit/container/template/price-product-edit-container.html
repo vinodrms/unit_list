@@ -7,13 +7,13 @@
 	<div class="row">
 		<div class="col-md-6 col-sm-6 col-xs-12">
 			<price-product-edit-room-categories-section 
-				[didSubmit]="didSubmit"
+				[didSubmit]="didSubmit" 
 				(onRoomCategoryChange)="handleRoomCategoryChange($event)">
 			</price-product-edit-room-categories-section>
 		</div>
 		<div class="col-md-6 col-sm-6 col-xs-12">
 			<price-product-edit-add-on-products-section [didSubmit]="didSubmit"></price-product-edit-add-on-products-section>
-		</div>	
+		</div>
 	</div>
 	<hr>
 	<div class="row">
@@ -24,60 +24,57 @@
 	</div>
 	<hr>
 	<div class="row">
+		<price-product-edit-cancellation-section [didSubmit]="didSubmit"></price-product-edit-cancellation-section>
+	</div>
+	<hr>
+	<div class="row">
+		<price-product-edit-constraints-section [didSubmit]="didSubmit"></price-product-edit-constraints-section>
+	</div>
+	<div class="row">
 		<price-product-edit-filters-section [didSubmit]="didSubmit"></price-product-edit-filters-section>
 	</div>
 	<hr>
-	<div class="row">
-		<price-product-edit-cancellation-section [didSubmit]="didSubmit"></price-product-edit-cancellation-section>
-	</div>
 
-
-	<hr>
-	<div class="row">
-
-		<div class="col-md-12">
-
-			<h3>Constraints</h3>
-			<p class="text-muted small"> <i class="fa fa-info-circle"></i> Constraints to apply your price product..</p>
-
-			<table class="table table-striped projects">
-				<tbody>
-					<tr>
-						<td>Bookable only on</td>
-						<td>Monday, Tuesday</td>
-						<td>
-							<a class="btn btn-xs"><i class="fa fa-remove"></i> Remove </a>
-						</td>
-					</tr>
-					<tr>
-						<td><a data-toggle="modal" href="#constraintsModal" class="btn btn-xs"><i class="fa fa-plus"></i> Add </a></td>
-						<td>
-
-						</td>
-						<td></td>
-					</tr>
-				</tbody>
-			</table>
-
-		</div>
-	</div>
-	<hr>
-
-	<hr>
 	<div class="row">
 		<div class="col-xs-8">
+			<div *ngIf="isNewOrDraftPriceProduct()">
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="col-xs-4">
+							<label class="control-label">{{ 'Save as Draft' | translate }}</label>
+						</div>
+						<div class="col-xs-8">
+							<div class="input-group">
+								<div class="btn-group" data-toggle="buttons">
+									<button class="btn btn-default" (click)="saveAsDraft=true" [ngClass]="{'active': saveAsDraft}">
+										{{ 'Yes' | translate }}
+									</button>
+									<button class="btn btn-default" (click)="saveAsDraft=false" [ngClass]="{'active': !saveAsDraft}">
+										{{ 'No' | translate }}
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12">
+						<small class="text-muted" *ngIf="!isPricePerNumberOfPersons">
+							<i class="fa fa-info-circle"></i> {{ 'If selected, you will be able to edit the price product further on. If not, the price product will be automatically activated and available for bookings.' | translate }}
+						</small>
+					</div>
+				</div>
+			</div>
 		</div>
 		<div class="col-xs-4">
-			<button type="button" class="btn btn-primary btn-block" (click)="savePriceProduct()">
-				<i *ngIf="isSavingPriceProduct" class="fa fa-spinner fa-pulse"></i> {{ 'Save Changes' | translate }}
-			</button>
-		</div>
-	</div>
-	<div class="row">
-		<div class="col-xs-8">
-		</div>
-		<div class="col-xs-4">
-			<button type="button" class="btn btn-danger btn-block" (click)="showViewScreen()">{{ 'Cancel' | translate }}</button>
+			<div class="row" *ngIf="canSavePriceProduct()">
+				<button type="button" class="btn btn-primary btn-block" (click)="savePriceProduct()">
+					<i *ngIf="isSavingPriceProduct" class="fa fa-spinner fa-pulse"></i> {{ 'Save Changes' | translate }}
+				</button>
+			</div>
+			<div class="row">
+				<button type="button" class="btn btn-danger btn-block" (click)="showViewScreen()">{{ 'Cancel' | translate }}</button>
+			</div>
 		</div>
 	</div>
 </div>

@@ -7,9 +7,6 @@ export class CanCancelBeforeTimeOnDayOfArrivalPolicyDO extends BaseDO implements
 	
 	constructor() {
 		super();
-		this.timeOfArrival = new ThHourDO();
-		this.timeOfArrival.hour = 12;
-		this.timeOfArrival.minute = 30;
 	}
 
 	protected getPrimitivePropertyKeys(): string[] {
@@ -25,7 +22,7 @@ export class CanCancelBeforeTimeOnDayOfArrivalPolicyDO extends BaseDO implements
 		return {
 			phrase: "Can cancel before %timeOfArrival% on day of arrival",
 			parameters: {
-				timeOfArrival: this.timeOfArrival.hour + ":" + this.timeOfArrival.minute
+				timeOfArrival: (this.timeOfArrival != null  ? this.timeOfArrival.toString(): "")
 			}
 		}
 	}
@@ -34,6 +31,6 @@ export class CanCancelBeforeTimeOnDayOfArrivalPolicyDO extends BaseDO implements
 		return true;
 	}
 	public isValid(): boolean {
-		return this.timeOfArrival.isValid();
+		return this.timeOfArrival && this.timeOfArrival.isValid();
 	}
 }

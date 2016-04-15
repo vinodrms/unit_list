@@ -1,14 +1,14 @@
 <div class="overview-left" [ngClass]="{'col-sm-9': !isEditing, 'col-sm-3': isEditing}">
 	<div class="row">
 		<ul class="nav nav-tabs">
-			<li [ngClass]="{active : areActivePriceProducts()}">
-				<a (click)="viewActivePriceProducts()">Active</a>
+			<li [ngClass]="{active : areActivePriceProducts()}" *ngIf="!isEditing || areActivePriceProducts()">
+				<a (click)="viewActivePriceProducts()">{{ 'Active' | translate }}</a>
 			</li>
-			<li [ngClass]="{active : areDraftPriceProducts()}">
-				<a (click)="viewDraftPriceProducts()">Draft</a>
+			<li [ngClass]="{active : areDraftPriceProducts()}" *ngIf="!isEditing || areDraftPriceProducts()">
+				<a (click)="viewDraftPriceProducts()">{{ 'Draft' | translate }}</a>
 			</li>
-			<li [ngClass]="{active : areArchivedPriceProducts()}">
-				<a (click)="viewArchivedPriceProducts()">Archived</a>
+			<li [ngClass]="{active : areArchivedPriceProducts()}" *ngIf="!isEditing || areArchivedPriceProducts()">
+				<a (click)="viewArchivedPriceProducts()">{{ 'Archived' | translate }}</a>
 			</li>
 		</ul>
 		<br/>

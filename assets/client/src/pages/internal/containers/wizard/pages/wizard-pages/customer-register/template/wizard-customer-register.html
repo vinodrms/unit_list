@@ -1,0 +1,19 @@
+<div class="signup-step-07">
+	<div class="row page-title">
+		<div class="col-sm-4">
+			<h1>{{ 'Customer Register' | translate }} &gt; 
+				<small *ngIf="!isEditScreen">{{ 'Overview' | translate }}</small>
+				<small *ngIf="isEditScreen">{{ 'Edit' | translate }}</small>
+			</h1>
+		</div>
+		<div class="col-sm-6 description">
+			<small>{{ '[Wizard Step 6] Customer Register text' | translate }}</small>
+		</div>
+		<div class="col-sm-2 text-right">
+			<h1>7 <i class="fa fa-puzzle-piece"></i></h1>
+		</div>
+	</div>
+</div>
+<div class="row x_panel">
+	<customer-register (onScreenStateTypeChanged)="didChangeScreenStateType($event)"></customer-register>
+</div>

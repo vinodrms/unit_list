@@ -18,4 +18,23 @@ export class AddressDO extends BaseDO {
 		this.country = new CountryDO();
 		this.country.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "country"));
 	}
+	public toString(): string {
+		var addressString = "";
+		addressString = this.appendString(addressString, this.city);
+		addressString = this.appendString(addressString, this.streetAddress);
+		if(this.country) {
+			addressString = this.appendString(addressString, this.country.name);
+		}
+		return addressString;
+	}
+	private appendString(initialString: string, toAppendString: string): string {
+		if(!toAppendString) {
+			return initialString;
+		}
+		if(initialString.length > 0) {
+			initialString += ", ";
+		}
+		initialString += toAppendString;
+		return initialString;
+	}
 }

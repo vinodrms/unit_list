@@ -7,7 +7,7 @@ import {ThUtils} from '../../../core/utils/ThUtils';
 import {IndividualDetailsDO} from '../../../core/data-layer/customers/data-objects/customer-details/individual/IndividualDetailsDO';
 import {CompanyDetailsDO} from '../../../core/data-layer/customers/data-objects/customer-details/corporate/CompanyDetailsDO';
 import {TravelAgencyDetailsDO} from '../../../core/data-layer/customers/data-objects/customer-details/corporate/TravelAgencyDetailsDO';
-import {BaseCorporateDetailsDO} from '../../../core/data-layer/customers/data-objects/customer-details/corporate/BaseCorporateDetailsDO';
+import {BaseCorporateDetailsDO, CommissionType} from '../../../core/data-layer/customers/data-objects/customer-details/corporate/BaseCorporateDetailsDO';
 import {ICustomerDetailsDO} from '../../../core/data-layer/customers/data-objects/customer-details/ICustomerDetailsDO';
 import {AddressDO} from '../../../core/data-layer/common/data-objects/address/AddressDO';
 import {ThDateDO} from '../../../core/utils/th-dates/data-objects/ThDateDO';
@@ -33,7 +33,7 @@ export class DefaultCustomerBuilder implements ICustomerDataSource {
 
 		var cust = new CustomerDO();
 
-		cust.fileAttachmentUrlList = [];
+		cust.fileAttachmentList = [];
 		cust.hotelId = testContext.sessionContext.sessionDO.hotel.id;
 		cust.notes = "tes ttest test test";
 
@@ -84,10 +84,11 @@ export class DefaultCustomerBuilder implements ICustomerDataSource {
 		details.accountNo = "RO21678361237127831";
 		details.address = new AddressDO();
 		details.address.streetAddress = streetAddress;
+		details.commissionType = CommissionType.Percentage;
 		details.commission = 0.1;
 		details.contactName = "Ionut Paraschiv";
 		details.name = name;
-		details.payInvoiceByAgreement = true;
+		details.payInvoiceByAgreement = false;
 		details.phone = "217893129371";
 		details.vatCode = "RO34121562";
 		details.websiteUrl = "www.3angle.tech";

@@ -31,7 +31,7 @@ class CustomersEntity extends BasePersistentEntity {
                 type: 'json',
                 required: true
             },
-			fileAttachmentUrlList: {
+			fileAttachmentList: {
 				type: 'array',
 				defaultsTo: []
 			},

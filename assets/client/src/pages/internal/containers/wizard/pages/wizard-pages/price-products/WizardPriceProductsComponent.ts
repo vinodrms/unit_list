@@ -1,16 +1,19 @@
 import {Component, OnInit} from 'angular2/core';
 import {BaseComponent} from '../../../../../../../common/base/BaseComponent';
 import {TranslationPipe} from '../../../../../../../common/utils/localization/TranslationPipe';
-import {WizardPriceProductsService} from './services/WizardPriceProductsService';
+import {WizardPriceProductsStateService} from './services/WizardPriceProductsStateService';
 import {WizardService} from '../services/WizardService';
 import {IWizardController} from '../../wizard-pages/services/IWizardController';
 import {PriceProductsComponent} from '../../../../common/inventory/price-products/main/PriceProductsComponent';
 import {InventoryScreenStateType} from '../../../../common/inventory/utils/state-manager/InventoryScreenStateType';
+import {PriceProductsTotalCountService} from '../../../../../services/price-products/PriceProductsTotalCountService';
+import {PriceProductStatus} from '../../../../../services/price-products/data-objects/PriceProductDO';
+import {TotalCountDO} from '../../../../../services/common/data-objects/lazy-load/TotalCountDO';
 
 @Component({
 	selector: 'wizard-price-products',
 	templateUrl: '/client/src/pages/internal/containers/wizard/pages/wizard-pages/price-products/template/wizard-price-products.html',
-	providers: [],
+	providers: [PriceProductsTotalCountService],
 	directives: [PriceProductsComponent],
 	pipes: [TranslationPipe]
 })
@@ -20,14 +23,18 @@ export class WizardPriceProductsComponent extends BaseComponent implements OnIni
 	private _wizardController: IWizardController;
 
 	constructor(wizardService: WizardService,
-		private _priceProductsService: WizardPriceProductsService) {
+		private _priceProductsStateService: WizardPriceProductsStateService,
+		private _priceProductsTotalCountService: PriceProductsTotalCountService) {
 		super();
-		wizardService.bootstrapWizardIndex(_priceProductsService.stateIndex);
+		wizardService.bootstrapWizardIndex(_priceProductsStateService.stateIndex);
 		this._wizardController = wizardService;
 		this.isEditScreen = false;
 	}
 
 	public ngOnInit() {
+		this._priceProductsTotalCountService.getTotalCountDO(PriceProductStatus.Active).subscribe((totalCount: TotalCountDO) => {
+			this._priceProductsStateService.totalNoOfActivePriceProducts = totalCount.numOfItems;
+		});
 	}
 
 	public didChangeScreenStateType(screenStateType: InventoryScreenStateType) {
@@ -38,6 +45,7 @@ export class WizardPriceProductsComponent extends BaseComponent implements OnIni
 				break;
 			default:
 				this._wizardController.wizardButtonsVisible = true;
+				this._priceProductsTotalCountService.updateTotalCount();
 				this.isEditScreen = false;
 				break;
 		}

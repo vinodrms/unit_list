@@ -7,7 +7,8 @@ import {AppContext, ThError} from '../../../../../../../../../common/utils/AppCo
 import {LoadingComponent} from '../../../../../../../../../common/utils/components/LoadingComponent';
 import {TranslationPipe} from '../../../../../../../../../common/utils/localization/TranslationPipe';
 import {PriceProductVM} from '../../../../../../../services/price-products/view-models/PriceProductVM';
-import {PriceProductStatus} from '../../../../../../../services/price-products/data-objects/PriceProductDO';
+import {PriceProductDO, PriceProductStatus} from '../../../../../../../services/price-products/data-objects/PriceProductDO';
+import {PriceProductsService} from '../../../../../../../services/price-products/PriceProductsService';
 import {YieldFiltersService} from '../../../../../../../services/hotel-configurations/YieldFiltersService';
 import {EagerAddOnProductsService} from '../../../../../../../services/add-on-products/EagerAddOnProductsService';
 import {AddOnProductsDO} from '../../../../../../../services/add-on-products/data-objects/AddOnProductsDO';
@@ -22,6 +23,7 @@ import {PriceProductEditTaxesSectionComponent} from '../sections/taxes/PriceProd
 import {PriceProductEditPricesSectionComponent} from '../sections/prices/PriceProductEditPricesSectionComponent';
 import {PriceProductEditFiltersSectionComponent} from '../sections/filters/PriceProductEditFiltersSectionComponent';
 import {PriceProductEditCancellationSectionComponent} from '../sections/cancellation/PriceProductEditCancellationSectionComponent';
+import {PriceProductEditConstraintsSectionComponent} from '../sections/constraints/constraints-list/PriceProductEditConstraintsSectionComponent';
 
 @Component({
 	selector: 'price-product-edit-container',
@@ -31,7 +33,7 @@ import {PriceProductEditCancellationSectionComponent} from '../sections/cancella
 		PriceProductEditTopSectionComponent, PriceProductEditRoomCategoriesSectionComponent,
 		PriceProductEditAddOnProductsSectionComponent, PriceProductEditTaxesSectionComponent,
 		PriceProductEditPricesSectionComponent, PriceProductEditFiltersSectionComponent,
-		PriceProductEditCancellationSectionComponent],
+		PriceProductEditCancellationSectionComponent, PriceProductEditConstraintsSectionComponent],
 	pipes: [TranslationPipe]
 })
 
@@ -43,10 +45,12 @@ export class PriceProductEditContainerComponent extends BaseComponent implements
 	@ViewChild(PriceProductEditPricesSectionComponent) private _editPricesSection: PriceProductEditPricesSectionComponent;
 	@ViewChild(PriceProductEditFiltersSectionComponent) private _editFiltersSection: PriceProductEditFiltersSectionComponent;
 	@ViewChild(PriceProductEditCancellationSectionComponent) private _editCancellationSection: PriceProductEditCancellationSectionComponent;
+	@ViewChild(PriceProductEditConstraintsSectionComponent) private _editConstraintsSection: PriceProductEditConstraintsSectionComponent;
 
 	private _didInit = false;
 	isLoading: boolean = true;
 	isSavingPriceProduct: boolean = false;
+	saveAsDraft: boolean = true;
 	didSubmit = false;
 
 	private _priceProductVM: PriceProductVM;
@@ -70,7 +74,8 @@ export class PriceProductEditContainerComponent extends BaseComponent implements
 	constructor(private _appContext: AppContext,
 		private _yieldFiltersService: YieldFiltersService,
 		private _eagerAddOnProductsService: EagerAddOnProductsService,
-		private _hotelAggregatorService: HotelAggregatorService) {
+		private _hotelAggregatorService: HotelAggregatorService,
+		private _priceProductsService: PriceProductsService) {
 		super();
 	}
 	ngAfterViewInit() {
@@ -84,7 +89,8 @@ export class PriceProductEditContainerComponent extends BaseComponent implements
 					this._editTaxesSection,
 					this._editPricesSection,
 					this._editFiltersSection,
-					this._editCancellationSection
+					this._editCancellationSection,
+					this._editConstraintsSection
 				]
 			);
 			this.initializeDependentData();
@@ -110,9 +116,11 @@ export class PriceProductEditContainerComponent extends BaseComponent implements
 			this._editSectionContainer.initializeFrom(this._priceProductVM);
 			this._editSectionContainer.readonly = this.isReadOnly();
 			this._editFiltersSection.readonly = this.yieldFiltersAreReadOnly();
+			this._editCancellationSection.cancellationHour = result[1].hotelDetails.hotel.operationHours.cancellationHour;
 
 			this.isLoading = false;
 			this.didSubmit = false;
+			this.saveAsDraft = true;
 		}, (error: ThError) => {
 			this.isLoading = false;
 			this._appContext.toaster.error(this._appContext.thTranslation.translate(error.message));
@@ -128,14 +136,45 @@ export class PriceProductEditContainerComponent extends BaseComponent implements
 		this._editPricesSection.updatePricesForRoomCategories(roomCategoryList);
 	}
 
+	public isNewOrDraftPriceProduct() {
+		return this._priceProductVM != null &&
+			(!this._priceProductVM.priceProduct.id ||
+				this._priceProductVM.priceProduct.status === PriceProductStatus.Draft
+			);
+	}
+	public canSavePriceProduct(): boolean {
+		return this._priceProductVM != null &&
+			(this._priceProductVM.priceProduct.status === PriceProductStatus.Draft ||
+				this._priceProductVM.priceProduct.status === PriceProductStatus.Active
+			);
+	}
+
 	public savePriceProduct() {
 		this.didSubmit = true;
-		if (!this._editSectionContainer.isValid()) {
+		if (!this._editSectionContainer.isValid() || !this.canSavePriceProduct()) {
 			var errorMessage = this._appContext.thTranslation.translate("Please complete all the required fields");
 			this._appContext.toaster.error(errorMessage);
 			return;
 		}
 		this._editSectionContainer.updateDataOn(this._priceProductVM);
-		// TODO: save on server
+		this.updateStatusForNewPriceProductOn(this._priceProductVM);
+
+		this.isSavingPriceProduct = true;
+		this._priceProductsService.savePriceProductDO(this._priceProductVM.priceProduct)
+			.subscribe((updatedPriceProduct: PriceProductDO) => {
+				this.isSavingPriceProduct = false;
+				this.showViewScreen();
+			}, (error: ThError) => {
+				this.isSavingPriceProduct = false;
+				this._appContext.toaster.error(error.message);
+			});
+	}
+	private updateStatusForNewPriceProductOn(priceProductVM: PriceProductVM) {
+		if (!this.isNewOrDraftPriceProduct()) { return };
+		if (this.saveAsDraft) {
+			priceProductVM.priceProduct.status = PriceProductStatus.Draft;
+			return;
+		}
+		priceProductVM.priceProduct.status = PriceProductStatus.Active;
 	}
 }

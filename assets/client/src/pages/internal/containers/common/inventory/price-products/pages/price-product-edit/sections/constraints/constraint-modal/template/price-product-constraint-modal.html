@@ -1,0 +1,80 @@
+<div class="modal-header text-center">
+	<button type="button" class="close" (click)="closeDialog()">&times;</button>
+	<h4 class="modal-title">{{ 'Price Product Constraints' | translate }}</h4>
+</div>
+<div class="modal-body">
+	<div class="row">
+		<div class="col-md-4 col-sm-4 col-xs-4">
+			<label>{{ 'Type of Constraint' | translate }}</label>
+		</div>
+		<div class="col-md-8 col-sm-8 col-xs-8">
+			<div class="form-group">
+				<select class="form-control" [ngModel]="constraintDO.type" (change)="didChangeConstraintType($event.target.value)">
+					<option *ngFor="#constraintMeta of constraintMetaList" [value]="constraintMeta.constraintType">
+						{{constraintMeta.title | translate}}
+					</option>
+				</select>
+			</div>
+		</div>
+		<div class="col-md-12 col-sm-12 col-xs-12">
+			<small class="text-muted">
+				<i class="fa fa-info-circle"></i> {{ description | translate }} 
+			</small>
+		</div>
+	</div>
+	<hr/>
+	<div class="row" *ngIf="isDaysFromWeekConstraint()">
+		<div class="col-md-12">
+			<div class="btn-group btn-group-lg" role="group">
+				<div class="button-check th-grid-btn" *ngFor="#isoWeekDayVM of isoWeekDayVMList">
+					<div class="info-block block-info clearfix" title="{{ isoWeekDayVM.name | translate }}">
+						<div data-toggle="buttons">
+							<label class="btn btn-default th-btn-weekday" [ngClass]="{active: constraintDO.constraint.includesDay(isoWeekDayVM.iSOWeekDay)}"
+							(click)="constraintDO.constraint.addOrRemove(isoWeekDayVM.iSOWeekDay)">
+								{{ isoWeekDayVM.name | translate }}
+							</label>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row" *ngIf="isLeadDaysConstraint()">
+		<div class="col-md-4 col-sm-4 col-xs-4 form-group">
+			<label>{{ 'Number of Days' | translate }}</label>
+		</div>
+		<div class="col-md-8 col-sm-8 col-xs-8 form-group">
+			<div class="input-group">
+				<input type="number" placeholder="{{ 'Enter a valid number of days' | translate }}" class="form-control input-group-lg" [(ngModel)]="constraintDO.constraint.leadDays"
+				/>
+			</div>
+		</div>
+	</div>
+	<div class="row" *ngIf="isLengthOfStayConstraint()">
+		<div class="col-md-4 col-sm-4 col-xs-4 form-group">
+			<label>{{ 'Minimum Length of Stay' | translate }}</label>
+		</div>
+		<div class="col-md-8 col-sm-8 col-xs-8 form-group">
+			<div class="input-group">
+				<input type="number" placeholder="{{ 'Enter a valid length of stay in days' | translate }}" class="form-control input-group-lg"
+				[(ngModel)]="constraintDO.constraint.minLengthOfStay" />
+			</div>
+		</div>
+	</div>
+	<div class="row" *ngIf="isNumberOfRoomsConstraint()">
+		<div class="col-md-4 col-sm-4 col-xs-4 form-group">
+			<label>{{ 'Minimum Number of Rooms' | translate }}</label>
+		</div>
+		<div class="col-md-8 col-sm-8 col-xs-8 form-group">
+			<div class="input-group">
+				<input type="number" placeholder="{{ 'Enter a valid number of rooms' | translate }}" class="form-control input-group-lg"
+				[(ngModel)]="constraintDO.constraint.noOfRooms" />
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal-footer">
+	<button type="button" class="btn btn-primary" (click)="addConstraint()" [disabled]="!constraintDO.isValid()">
+		{{ 'Add' | translate }}
+	</button>
+</div>

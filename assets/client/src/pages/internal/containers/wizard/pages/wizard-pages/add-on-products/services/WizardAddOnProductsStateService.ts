@@ -17,6 +17,7 @@ export class WizardAddOnProductsStateService extends AWizardState {
                 var title = this._appContext.thTranslation.translate("Skip Add-On Products");
                 var content = this._appContext.thTranslation.translate("Are you sure you want to go forward without adding any add on product ?");
                 this.confirmFromModalAndGoForward(resolve, reject, title, content);
+				resolve(false);
                 return;
             }
             this.wizardController.moveNext();

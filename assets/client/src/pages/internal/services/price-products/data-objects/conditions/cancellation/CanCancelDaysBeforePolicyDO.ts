@@ -11,7 +11,7 @@ export class CanCancelDaysBeforePolicyDO extends BaseDO implements IPriceProduct
 		return {
 			phrase: "Can cancel until %daysBefore% days prior to arrival",
 			parameters: {
-				timeOfArrival: this.daysBefore
+				daysBefore: this.daysBefore
 			}
 		}
 	}

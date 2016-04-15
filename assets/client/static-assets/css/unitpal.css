@@ -144,7 +144,7 @@ textarea {
  
 .button-check { display:inline-block; line-height:0; }
 .button-check .btn-default { width:48px; padding:12px 6px 12px 6px; } 
- 
+
  .fileinput-preview > img {
   width: auto;
   max-width: 100%;
@@ -401,3 +401,4 @@ input[type="number"].form-control {
     overflow: hidden;
     text-overflow: ellipsis;
 }
+.th-btn-weekday {width:100px !important;}

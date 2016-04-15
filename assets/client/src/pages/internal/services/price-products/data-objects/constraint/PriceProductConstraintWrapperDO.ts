@@ -1,6 +1,7 @@
 import {BaseDO} from '../../../../../../common/base/BaseDO';
 import {IPriceProductConstraint} from './IPriceProductConstraint';
 import {PriceProductConstraintDO} from './PriceProductConstraintDO';
+import {ThTranslation} from '../../../../../../common/utils/localization/ThTranslation';
 
 export class PriceProductConstraintWrapperDO extends BaseDO implements IPriceProductConstraint {
 	constraintList: PriceProductConstraintDO[];
@@ -18,5 +19,18 @@ export class PriceProductConstraintWrapperDO extends BaseDO implements IPricePro
 			constraintDO.buildFromObject(constraintObject);
 			this.constraintList.push(constraintDO);
 		});
+	}
+	
+	public isValid(): boolean {
+		var isValid = true;
+		_.forEach(this.constraintList, (constraint: PriceProductConstraintDO) => {
+			if(!constraint.isValid()) {
+				isValid = false;
+			}
+		});
+		return isValid;
+	}
+	public getValueDisplayString(thTranslation: ThTranslation): string {
+		return "";
 	}
 }

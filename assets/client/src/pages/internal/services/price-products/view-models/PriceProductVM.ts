@@ -55,21 +55,12 @@ export class PriceProductVM {
 	}
 	public set vatTax(vatTax: TaxDO) {
 		this._vatTax = vatTax;
-		this.updateTaxIdListOnPriceProductDO();
 	}
 	public get otherTaxList(): TaxDO[] {
 		return this._otherTaxList;
 	}
 	public set otherTaxList(otherTaxList: TaxDO[]) {
 		this._otherTaxList = otherTaxList;
-		this.updateTaxIdListOnPriceProductDO();
-	}
-	private updateTaxIdListOnPriceProductDO() {
-		this._priceProduct.taxIdList = [];
-		if (this.vatTax) {
-			this._priceProduct.taxIdList.push(this.vatTax.id);
-		}
-		this._priceProduct.taxIdList.concat(_.map(this._otherTaxList, (otherTax: TaxDO) => { return otherTax.id }));
 	}
 
 	public get roomCategoryList(): RoomCategoryDO[] {

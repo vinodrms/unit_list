@@ -2,6 +2,7 @@ import {Component, ViewChild, AfterViewInit, Input, Output, EventEmitter} from '
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/combineLatest';
 import {BaseComponent} from '../../../../../../../common/base/BaseComponent';
+import {TranslationPipe} from '../../../../../../../common/utils/localization/TranslationPipe';
 import {AppContext, ThError} from '../../../../../../../common/utils/AppContext';
 import {LazyLoadingTableComponent} from '../../../../../../../common/utils/components/lazy-loading/LazyLoadingTableComponent';
 import {InventoryStateManager} from '../../utils/state-manager/InventoryStateManager';
@@ -20,7 +21,8 @@ import {PriceProductEditContainerComponent} from '../pages/price-product-edit/co
 	selector: 'price-products',
 	templateUrl: '/client/src/pages/internal/containers/common/inventory/price-products/main/template/price-products.html',
 	providers: [RoomCategoriesService, YieldFiltersService, PriceProductsService, PriceProductTableMetaBuilderService],
-	directives: [LazyLoadingTableComponent, PriceProductOverviewComponent, PriceProductEditContainerComponent]
+	directives: [LazyLoadingTableComponent, PriceProductOverviewComponent, PriceProductEditContainerComponent],
+	pipes: [TranslationPipe]
 })
 export class PriceProductsComponent extends BaseComponent implements AfterViewInit {
 	@Output() protected onScreenStateTypeChanged = new EventEmitter();

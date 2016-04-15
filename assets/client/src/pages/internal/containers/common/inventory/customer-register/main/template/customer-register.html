@@ -1,0 +1,28 @@
+<div class="overview-left" [ngClass]="{'col-sm-9': !isEditing, 'col-sm-3': isEditing}">
+	<div class="row test">
+		<ul class="nav nav-tabs">
+			<li *ngFor="#filter of filterList" [ngClass]="{active : isFilterSelected(filter)}">
+				<a (click)="selectFilter(filter)">{{filter.displayText | translate}}</a>
+			</li>
+		</ul>
+		<br/>
+	</div>
+	<lazy-loading-table
+		[isCollapsed]="isEditing"
+		(onAdd)="addCustomer()"
+		(onSelect)="selectCustomer($event)"
+		(onEdit)="editCustomer($event)"
+		>
+	</lazy-loading-table>
+</div>
+<div class="col-sm-3 overview-right hidden-xs hidden-sm" *ngIf="!isEditing">
+	<customer-register-overview 
+		*ngIf="selectedCustomerVM" 
+		[customerVM]="selectedCustomerVM"
+		(onEdit)="editCustomer($event)">
+		>
+	</customer-register-overview>
+</div>
+<div class="col-sm-9 singleview-right" *ngIf="isEditing">
+
+</div>

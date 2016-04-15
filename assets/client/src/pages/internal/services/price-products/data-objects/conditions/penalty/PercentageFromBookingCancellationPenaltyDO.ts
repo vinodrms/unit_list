@@ -9,8 +9,10 @@ export class PercentageFromBookingCancellationPenaltyDO extends BaseDO implement
 	}
 	public getDescription(): CancellationPenaltyDescription {
 		return {
-			phrase: "Pay %percentage%% from whole booking",
-			parameters: (this.percentage * 100) + ""
+			phrase: "Pay %percentage% from whole booking",
+			parameters: {
+				percentage: (this.percentage * 100) + "%" 
+			} 
 		}
 	}
 	public hasCancellationPenalty(): boolean {
