@@ -9,6 +9,9 @@
 
 .unitpal-font { font-family: UnitpalIcons !important; font-weight:normal; font-size:larger; }
 
+.menu_section .unitpal-font { font-size:x-large; margin-top:-8px; }
+.signup-step-nav { font-size:x-large; }
+
 body, html {
 	
 	
