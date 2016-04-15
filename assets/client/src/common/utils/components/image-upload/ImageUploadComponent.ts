@@ -1,27 +1,12 @@
 import {Component, Input, Output, EventEmitter} from 'angular2/core';
-import {AppContext, ThError} from '../AppContext';
-import {UploadedFileResponse} from '../http/IThHttp';
-import {TranslationPipe} from '../localization/TranslationPipe';
-import {LoadingComponent} from './LoadingComponent';
+import {AppContext, ThError} from '../../AppContext';
+import {UploadedFileResponse} from '../../http/IThHttp';
+import {TranslationPipe} from '../../localization/TranslationPipe';
+import {LoadingComponent} from '../LoadingComponent';
 
 @Component({
 	selector: 'image-upload',
-	template: `
-		<span class="btn btn-default btn-file file-upload">
-			<div class="fileinput fileinput-new" data-provides="fileinput">
-				<div class="fileinput-preview thumbnail" data-trigger="fileinput" style="width: 100%;">
-					<loading-component [isLoading]="isLoading"></loading-component>
-					<img *ngIf="imageUrl && !isLoading" [src]="imageUrl" />
-					<i class="fa fa-picture-o fa-5x" *ngIf="!imageUrl && !isLoading"></i>
-				</div>
-				<span class="btn btn-default btn-file file-upload">
-					<input type="file" name="..." accept="image/*" (change)="didSelectFile($event)" />
-				</span>
-				<br/>
-				<a class="btn btn-default fileinput-exists" data-dismiss="fileinput" (click)="removeImageUrl()">{{ 'Remove' | translate }}</a>
-			</div>
-		</span>
-	`,
+	templateUrl: '/client/src/common/utils/components/image-upload/template/image-upload.html',
 	directives: [LoadingComponent],
 	pipes: [TranslationPipe]
 })

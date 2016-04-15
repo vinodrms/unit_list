@@ -4,7 +4,7 @@ import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/combineLatest';
 import {BaseFormComponent} from '../../../../../../../../common/base/BaseFormComponent';
 import {LoadingComponent} from '../../../../../../../../common/utils/components/LoadingComponent';
-import {ImageUploadComponent} from '../../../../../../../../common/utils/components/ImageUploadComponent';
+import {ImageUploadComponent} from '../../../../../../../../common/utils/components/image-upload/ImageUploadComponent';
 import {AppContext, ThError} from '../../../../../../../../common/utils/AppContext';
 import {TranslationPipe} from '../../../../../../../../common/utils/localization/TranslationPipe';
 import {PricePipe} from '../../../../../../../../common/utils/pipes/PricePipe';

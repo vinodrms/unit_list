@@ -355,5 +355,7 @@ export var EnglishTranslations: Object = {
 	"Invalid passport number": "Invalid passport number",
 	"Invalid city length": "Invalid city length",
 	"Invalid address length": "Invalid address length",
-	"Invalid postal code length": "Invalid postal code length"
+	"Invalid postal code length": "Invalid postal code length",
+	"Upload": "Upload",
+	"Attach file": "Attach file"
 };

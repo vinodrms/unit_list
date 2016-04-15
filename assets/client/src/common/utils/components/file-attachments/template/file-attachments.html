@@ -16,12 +16,12 @@
 <table class="table table-striped projects">
 	<tbody>
 		<tr *ngFor="#fileAttachment of fileAttachmentList">
-			<td>
+			<td class="th-file-label">
 				<a [href]="fileAttachment.url" target="_blank">
 					{{fileAttachment.name}}
 				</a>
 			</td>
-			<td>
+			<td class="th-file-actions">
 				<a class="btn btn-xs" [href]="fileAttachment.url" target="_blank">
 					<i class="fa fa-download"></i>
 				</a>
@@ -31,12 +31,12 @@
 			</td>
 		</tr>
 		<tr>
-			<td>
-				<span class="btn btn-default btn-file">
-					<input type="file" name="..." (change)="didSelectFile($event)" />
-				</span>
+			<td class="th-file-label">
+				<label class="btn btn-primary btn-block th-file-add">
+					<input type="file" (change)="didSelectFile($event)"/><i class="fa fa-paperclip" aria-hidden="true"></i>  {{ 'Attach file' | translate }}
+				</label>
 			</td>
-			<td></td>
+			<td class="th-file-actions"></td>
 		</tr>
 	</tbody>
 </table>

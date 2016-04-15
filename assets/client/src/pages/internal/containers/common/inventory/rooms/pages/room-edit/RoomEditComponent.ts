@@ -3,7 +3,7 @@ import {ControlGroup} from 'angular2/common';
 import {Observable} from 'rxjs/Observable';
 import {TranslationPipe} from '../../../../../../../../common/utils/localization/TranslationPipe';
 import {LoadingComponent} from '../../../../../../../../common/utils/components/LoadingComponent';
-import {ImageUploadComponent} from '../../../../../../../../common/utils/components/ImageUploadComponent';
+import {ImageUploadComponent} from '../../../../../../../../common/utils/components/image-upload/ImageUploadComponent';
 import {BaseFormComponent} from '../../../../../../../../common/base/BaseFormComponent';
 import {AppContext, ThError} from '../../../../../../../../common/utils/AppContext';
 import {RoomVM} from '../../../../../../services/rooms/view-models/RoomVM';

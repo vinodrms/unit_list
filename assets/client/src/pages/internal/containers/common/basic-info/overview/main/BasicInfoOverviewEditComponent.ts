@@ -6,7 +6,7 @@ import {BaseFormComponent} from '../../../../../../../common/base/BaseFormCompon
 import {ThError, AppContext} from '../../../../../../../common/utils/AppContext';
 import {TranslationPipe} from '../../../../../../../common/utils/localization/TranslationPipe';
 import {LoadingComponent} from '../../../../../../../common/utils/components/LoadingComponent';
-import {ImageUploadComponent} from '../../../../../../../common/utils/components/ImageUploadComponent';
+import {ImageUploadComponent} from '../../../../../../../common/utils/components/image-upload/ImageUploadComponent';
 import {VATComponent, VatDetails, VatResponse} from '../../../../../../../common/utils/components/VATComponent';
 import {CountriesService} from '../../../../../services/settings/CountriesService';
 import {CountriesDO} from '../../../../../services/settings/data-objects/CountriesDO';
