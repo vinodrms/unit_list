@@ -173,6 +173,7 @@ export var EnglishTranslations: Object = {
     "Length": "Length",
     "Add Bed": "Add Bed",
     "Type": "Type",
+	"Icon": "Icon",
     "Bed Name": "Bed Name",
     "Skip Beds": "Skip Beds",
     "Before moving to the next section you have to add at least a bed to your inventory.": "Before moving to the next section you have to add at least a bed to your inventory.",
