@@ -7,8 +7,7 @@
 	</div>
 	<div class="col-sm-12">
 		<i class="fa fa-male" 
-			[ngClass]="{'fa-male': customerVM.customer.isIndividual(), 'fa-building': customerVM.customer.isCompany(), 'fa-automobile': customerVM.customer.isTravelAgency()}" 
-		></i> 
+			[ngClass]="{'fa-male': customerVM.customer.isIndividual(), 'fa-building': customerVM.customer.isCompany(), 'fa-automobile': customerVM.customer.isTravelAgency()}"></i> 
 		<small>{{customerVM.customerTypeString}}</small>
 	</div>
 	<div class="col-sm-12">

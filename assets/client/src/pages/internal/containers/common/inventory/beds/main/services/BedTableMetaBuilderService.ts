@@ -34,8 +34,8 @@ export class BedTableMetaBuilderService {
 						objectPropertyId: "capacity",
 						propertyType: TablePropertyType.CapacityType,
 						fonts: {
-                            child: "fa fa-child",
-                            adult: "fa fa-male"    
+                            child: ";",
+                            adult: ":"    
                         },
 						showInCollapsedView: false
 					}

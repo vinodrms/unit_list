@@ -55,11 +55,11 @@
                                 <i class="fa fa-2x fa-remove"></i>
                             </a>
                             <div class="bed-slot-inner" [title]="bedVM.bed.name">
-                                <i class="fa fa-4x fa-bed"></i>
+                                <span class="unitpal-font">{{bedVM.template.iconUrl}}</span>
                                 <br/>
                                 <small>{{bedVM.bed.name}}</small>
                                 <br/> {{bedVM.capacity.maxAdults}}
-                                <i class="fa fa-male"></i> {{bedVM.capacity.maxChildren}}<i class="fa fa-child"></i>
+                                <span class="unitpal-font">:</span> {{bedVM.capacity.maxChildren}}<span class="unitpal-font">;</span>
                             </div>
                         </div>
                         <div *ngFor="#emptySlot of emptySlots" class="bed-slot available">
@@ -73,7 +73,6 @@
 
             </div>
         </div>
-
 
         <div class="col-md-4">
             <label>{{ 'Image of the Room' | translate }}</label>
@@ -93,7 +92,7 @@
     </div>
 
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-12">
             <div class="form-group btn-group amenities-group" role="group">
                 <div class="button-check th-grid-btn" *ngFor="#roomAmenityVM of roomAmenities.roomAmenityList">
                     <div class="info-block block-info clearfix" title="{{ roomAmenityVM.roomAmenity.name }}">
@@ -117,7 +116,7 @@
     </div>
 
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-12">
             <div class="form-group btn-group amenities-group" role="group">
                 <div class="button-check th-grid-btn" *ngFor="#roomAttributeVM of roomAttributes.roomAttributeList">
                     <div class="info-block block-info clearfix" title="{{ roomAttributeVM.roomAttribute.name }}">

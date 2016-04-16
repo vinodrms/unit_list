@@ -57,10 +57,10 @@
 						</small>
 					</span>
                     <span *ngIf="isCapacity(columnMeta.valueMeta)">
-						{{ getItemValue(item, columnMeta.valueMeta).maxAdults }} <i [ngClass]="columnMeta.valueMeta.fonts.adult"></i> {{ getItemValue(item, columnMeta.valueMeta).maxChildren }} <i [ngClass]="columnMeta.valueMeta.fonts.child"></i>
+						{{ getItemValue(item, columnMeta.valueMeta).maxAdults }} <span class="unitpal-font">{{columnMeta.valueMeta.fonts.adult}}</span> {{ getItemValue(item, columnMeta.valueMeta).maxChildren }} <span class="unitpal-font">{{columnMeta.valueMeta.fonts.child}}</span>
 					</span>
                     <span *ngIf="isFontIcon(columnMeta.valueMeta)">
-						<i [ngClass]="getItemValue(item, columnMeta.valueMeta)"></i> 
+						<span class="unitpal-font">{{getItemValue(item, columnMeta.valueMeta)}}</span> 
 					</span>
 				</td>
 				<td>

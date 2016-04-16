@@ -17,13 +17,13 @@
 
     <div class="row">
         <div class="col-md-2">
-            <label class="control-label">{{ 'Type' | translate }}</label>
+            <label class="control-label">{{ 'Icon' | translate }}</label>
         </div>
         <div class="col-md-10">
             <div class="row" data-toggle="buttons">
                 <div class="col-md-3 button-items" *ngFor="#bedTemplate of bedTemplateList">
                     <label class="btn btn-default btn-group" [ngClass]="{ active: bedTemplate.id == bedVM.bed.bedTemplateId }" (click)="bedVM.bed.bedTemplateId=bedTemplate.id">
-                        <i class="fa-4x" [ngClass]="bedTemplate.iconUrl"></i>
+                        <span class="unitpal-font">{{bedTemplate.iconUrl}}</span>
                     </label>
                 </div>
             </div>
@@ -38,7 +38,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('maxAdults')}">
-                        <span class="input-group-addon"><i class="fa fa-male"></i></span>
+                        <span class="input-group-addon"><span class="unitpal-font">:</span></span>
                         <input type="number" class="form-control" placeholder="{{ 'Adults' | translate }}" ngControl="maxAdults">
                     </div>
                     <label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Insert a valid max number of adults' | translate }}</small></label>
@@ -46,7 +46,7 @@
 
                 <div class="col-md-6">
                     <div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('maxChildren')}">
-                        <span class="input-group-addon"><i class="fa fa-child"></i></span>
+                        <span class="input-group-addon"><span class="unitpal-font">;</span></span>
                         <input type="number" class="form-control" placeholder="{{ 'Children' | translate }}" ngControl="maxChildren">
                     </div>
                     <label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Insert a valid max number of children' | translate }}</small></label>

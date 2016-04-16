@@ -49,7 +49,7 @@
 						<div class="row">
 							<div class="col-md-12 col-sm-12 col-xs-12 form-group" *ngFor="#pricePerAdult of pricePerPersonVM.pricePerPerson.adultsPriceList">
 								<div class="input-group" [ngClass]="{'form-warning': displayError()&&!pricePerAdult.isValid()}">
-									<span class="input-group-addon"><small>{{pricePerAdult.noOfPersons}}{{getNumberSuffix(pricePerAdult.noOfPersons)}}</small> <i class="fa fa-male"></i></span>
+									<span class="input-group-addon"><small>{{pricePerAdult.noOfPersons}}{{getNumberSuffix(pricePerAdult.noOfPersons)}}</small> <span class="unitpal-font">:</span></span>
 									<input type="number" placeholder="{{'Price' | translate}}" class="form-control" [(ngModel)]="pricePerAdult.price"
 									[readonly]="readonly" />
 								</div>

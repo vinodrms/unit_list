@@ -9,11 +9,11 @@
         <div class="col-md-4" *ngFor="#bedVM of bedVMList">
             <div class="btn bed-slot" [ngClass]="{'unselected': !bedSelected(bedVM)}" (click)="selectedBedVM=bedVM">
                 <div class="bed-slot-inner" [title]="bedVM.bed.name">
-                    <i [ngClass]="bedVM.template.iconUrl" class="fa-4x"></i>
+                    <span class="unitpal-font">{{bedVM.template.iconUrl}}</span>
                     <br/>
                     <small>{{bedVM.bed.name}}</small>
                     <br/> {{bedVM.capacity.maxAdults}}
-                    <i class="fa fa-male"></i> {{bedVM.capacity.maxChildren}}<i class="fa fa-child"></i>
+                    <span class="unitpal-font">:</span> {{bedVM.capacity.maxChildren}}<span class="unitpal-font">;</span>
                 </div>
             </div>
         </div>
