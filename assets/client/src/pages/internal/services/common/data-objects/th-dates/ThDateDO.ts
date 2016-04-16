@@ -28,6 +28,9 @@ export class ThDateDO extends BaseDO {
     }
 	
 	public toString(): string {
+		if(!_.isNumber(this.year) || !_.isNumber(this.month) || !_.isNumber(this.day)) {
+			return "";
+		}
 		return this.getDayString() + "/" + this.getMonthString() + "/" + this.year;
 	}
 	private getDayString(): string {

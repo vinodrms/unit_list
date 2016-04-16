@@ -43,11 +43,14 @@ export class CustomerDetailsContainer {
 		if (customer.isIndividual()) {
 			return this._individualCustDetailsComponent.isValid();
 		}
-		return false;
+		return this._corporateCustomerDetailsComponent.isValid();
 	}
 	public updateCustomerDetailsOn(customer: CustomerDO) {
 		if (customer.isIndividual()) {
 			customer.customerDetails = this._individualCustDetailsComponent.getCustomerDetails();
+		}
+		else {
+			customer.customerDetails = this._corporateCustomerDetailsComponent.getCustomerDetails();
 		}
 	}
 }

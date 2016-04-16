@@ -6,11 +6,13 @@ import {WizardService} from '../services/WizardService';
 import {IWizardController} from '../../wizard-pages/services/IWizardController';
 import {CustomerRegisterComponent} from '../../../../common/inventory/customer-register/main/CustomerRegisterComponent';
 import {InventoryScreenStateType} from '../../../../common/inventory/utils/state-manager/InventoryScreenStateType';
+import {CustomersTotalCountService} from '../../../../../services/customers/CustomersTotalCountService';
+import {TotalCountDO} from '../../../../../services/common/data-objects/lazy-load/TotalCountDO';
 
 @Component({
 	selector: 'wizard-customer-register',
 	templateUrl: '/client/src/pages/internal/containers/wizard/pages/wizard-pages/customer-register/template/wizard-customer-register.html',
-	providers: [],
+	providers: [CustomersTotalCountService],
 	directives: [CustomerRegisterComponent],
 	pipes: [TranslationPipe]
 })
@@ -22,7 +24,8 @@ export class WizardCustomerRegisterComponent extends BaseComponent implements On
 	private _wizardController: IWizardController;
 
 	constructor(wizardService: WizardService,
-		private _customerRegisterStateService: WizardCustomerRegisterStateService) {
+		private _customerRegisterStateService: WizardCustomerRegisterStateService,
+		private _customersTotalCountService: CustomersTotalCountService) {
 		super();
 		wizardService.bootstrapWizardIndex(_customerRegisterStateService.stateIndex);
 		this._wizardController = wizardService;
@@ -30,7 +33,9 @@ export class WizardCustomerRegisterComponent extends BaseComponent implements On
 	}
 
 	public ngOnInit() {
-		
+		this._customersTotalCountService.getTotalCountDO().subscribe((totalCount: TotalCountDO) => {
+			this._customerRegisterStateService.totalNoOfCustomers = totalCount.numOfItems;
+		});
 	}
 
 	public didChangeScreenStateType(screenStateType: InventoryScreenStateType) {
@@ -41,6 +46,7 @@ export class WizardCustomerRegisterComponent extends BaseComponent implements On
 				break;
 			default:
 				this._wizardController.wizardButtonsVisible = true;
+				this._customersTotalCountService.updateTotalCount();
 				this.isEditScreen = false;
 				break;
 		}

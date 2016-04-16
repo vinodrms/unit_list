@@ -28,6 +28,7 @@ export interface VatResponse {
 	template: `
 		<div class="row">
 			<div class="col-xs-12 col-md-6 form-group">
+				<label>{{ 'Country' | translate }}</label>
 				<div class="input-group" [ngClass]="{'form-warning': displayCountryError()}">
 					<select class="form-control" [ngModel]="vatDetails.countryCode" (change)="didSelectCountryCode($event.target.value)">
 						<option value="" disabled>{{ 'Select a country' | translate }}</option>
@@ -37,9 +38,10 @@ export interface VatResponse {
 				<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Select a country' | translate }}</small></label>
 			</div>
 			<div class="col-xs-12 col-md-6 form-group">
+				<label>{{ 'VAT Code' | translate }}</label>
 				<div class="input-group" [ngClass]="{'form-warning': displayVatError()}">
 					<span class="input-group-addon">{{convertedCountryCode}}</span>
-					<input type="text" class="form-control" placeholder="VAT Code" [ngFormControl]="vatCodeControl" [disabled]="!vatDetails.countryCode">
+					<input type="text" class="form-control" placeholder="{{ 'VAT Code' | translate }}" [ngFormControl]="vatCodeControl" [disabled]="!vatDetails.countryCode">
 				</div>
 				<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Insert a VAT Number' | translate }}</small></label>
 			</div>
@@ -64,7 +66,9 @@ export class VATComponent extends BaseComponent implements OnInit {
 	}
 	@Input()
 	public set vatDetails(vatDetails: VatDetails) {
-		this._vatDetails = vatDetails;
+		if(vatDetails) {
+			this._vatDetails = vatDetails;	
+		}
 		this.preprocessVatDetails();
 		this.vatCodeControl = new Control(this.vatDetails.fullVat);
 		this.initVatSearchInput();
