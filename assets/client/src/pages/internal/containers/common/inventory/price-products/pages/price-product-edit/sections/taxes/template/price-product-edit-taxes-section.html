@@ -18,7 +18,7 @@
 				<td *ngIf="tax.isFixedValue()">{{ccy.nativeSymbol}} {{tax.value}}</td>
 				<td *ngIf="!readonly">
 					<a class="btn btn-xs" (click)="removeOtherTax(tax)">
-						<i class="fa fa-remove"></i> {{ 'Remove' | translate }}
+						<i class="fa unitpal-font">\</i> {{ 'Remove' | translate }}
 					</a>
 				</td>
 			</tr>

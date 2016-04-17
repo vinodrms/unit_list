@@ -65,13 +65,13 @@
 				</td>
 				<td>
 					<a class="btn btn-xs" *ngIf="tableOptions.canCopy" (click)="copyItem(item)">
-						<i class="fa fa-copy"></i>
+						<i class="fa unitpal-font">[</i>
 					</a>
 					<a class="btn btn-xs" *ngIf="tableOptions.canEdit" (click)="editItem(item)">
-						<i class="fa fa-edit"></i>
+						<i class="fa unitpal-font">]</i>
 					</a>
 					<a class="btn btn-xs" *ngIf="tableOptions.canDelete" (click)="deleteItem(item)">
-						<i class="fa fa-remove"></i>
+						<i class="fa unitpal-font">\</i>
 					</a>
 				</td>
 			</tr>

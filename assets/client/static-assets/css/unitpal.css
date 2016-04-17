@@ -264,6 +264,7 @@ input[type="number"].form-control {
     display: none;
 }
 
+.bed-btn { font-size:48px; }
 .bed-add { 
     float: right;
     width: 40px;
@@ -332,6 +333,7 @@ input[type="number"].form-control {
 }
 .bed-slot-inner {
     margin: 0;
+    padding-bottom: 5px;
     position: absolute;
     top: 50%; 
     left: 50%;

@@ -52,10 +52,10 @@
                     <div class="bed-container">
                         <div *ngFor="#bedVM of roomVM.bedList; #bedIndex = index" class="bed-slot">
                             <a class="btn btn-xs bed-remove-btn" (click)="removeBed(bedIndex)">
-                                <i class="fa fa-2x fa-remove"></i>
+                                <i class="fa unitpal-font">\</i>
                             </a>
                             <div class="bed-slot-inner" [title]="bedVM.bed.name">
-                                <span class="unitpal-font">{{bedVM.template.iconUrl}}</span>
+                                <span class="unitpal-font bed-btn">{{bedVM.template.iconUrl}}</span>
                                 <br/>
                                 <small>{{bedVM.bed.name}}</small>
                                 <br/> {{bedVM.capacity.maxAdults}}

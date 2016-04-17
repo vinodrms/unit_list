@@ -27,7 +27,7 @@
 			<i class="fa fa-pencil"></i> {{ 'Edit' | translate }}
 		</a>
 		<a class="btn btn-lg" (click)="deletePriceProduct()" *ngIf="priceProductVM.priceProduct.isDraft()">
-			<i class="fa fa-remove"></i> {{ 'Delete' | translate }}
+			<i class="fa unitpal-font">\</i> {{ 'Delete' | translate }}
 		</a>
 		<a class="btn btn-lg" (click)="archivePriceProduct()" *ngIf="priceProductVM.priceProduct.isActive()">
 			<i class="fa fa-archive"></i> {{ 'Archive' | translate }}

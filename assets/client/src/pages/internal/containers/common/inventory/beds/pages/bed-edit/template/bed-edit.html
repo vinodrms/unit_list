@@ -23,7 +23,7 @@
             <div class="row" data-toggle="buttons">
                 <div class="col-md-3 button-items" *ngFor="#bedTemplate of bedTemplateList">
                     <label class="btn btn-default btn-group" [ngClass]="{ active: bedTemplate.id == bedVM.bed.bedTemplateId }" (click)="bedVM.bed.bedTemplateId=bedTemplate.id">
-                        <span class="unitpal-font">{{bedTemplate.iconUrl}}</span>
+                        <span class="unitpal-font bed-btn">{{bedTemplate.iconUrl}}</span>
                     </label>
                 </div>
             </div>
