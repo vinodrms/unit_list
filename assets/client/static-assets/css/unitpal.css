@@ -36,6 +36,8 @@ body,html {
 
 .card {
     padding: 12px 24px;
+    height: 100%;
+    overflow-y: hidden;
 }
 
 .card a {
@@ -59,8 +61,7 @@ header {
     padding: 12px 24px 0;
 }
 
-.container.body {
-    display: table;
+.container {
     width: 100%;
     height: 100%;
     margin-bottom: -120px !important;
@@ -69,9 +70,11 @@ header {
     box-sizing: border-box;
 }
 
-.row.main-row {
+.container-fluid>.row{
+    margin-left: 0px;
+    margin-right: 0px;
+    padding: 0px 12px 0px 12px;
     height: 100%;
-    display: table-row;
 }
 
 .login_logo {
@@ -229,15 +232,6 @@ textarea {
     resize: none;
 }
 
-@media only screen and (min-width : 768px) {
-    .bottom-row {
-        position: absolute;
-        display: block;
-        bottom: 0;
-        right: 24px;
-        width: 100%;
-    }
-}
 
 .button-items {
     display: inline-block;
@@ -403,14 +397,12 @@ label small {
 }
 
 .vertical-alignment-helper {
-    display: table;
     height: 100%;
     width: 100%;
 }
 
 .vertical-align-center {
 /* To center vertically */
-    display: table-cell;
     vertical-align: middle;
 }
 
@@ -432,8 +424,23 @@ input[type="number"].form-control {
 /* End Fixes Section */
 /* 3angle TECH */
 
+.wizard-nav  {
+    background-color:rgba(255, 255, 255, 0.66);
+    color:#0b2139;
+    padding: 0px;
+    height: 100%;
+    /*TODO: Use scroll*/ 
+    overflow-y: hidden;
+}
+
+.nav.side-menu> li.current-page, .nav.side-menu> li.active {
+    border-right: 6px solid #fc8433 !important;
+    background: #fff;
+}
+
 .card-body{
-    padding-top: 12px; 
+    padding-top: 12px;
+    height: 100%;
 }
 
 /* Theme structure */

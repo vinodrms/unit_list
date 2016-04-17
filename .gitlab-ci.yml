@@ -1,9 +1,9 @@
-before_script:
- - npm run forever-stop
- - npm run install-deps
-rspec:
-  script:
-   - npm run build-all
-   - npm run server-tests
-   - npm run forever-start
-   - echo "Finished the build for the Development Branch"
+# before_script:
+#  - npm run forever-stop
+#  - npm run install-deps
+# rspec:
+#   script:
+#    - npm run build-all
+#    - npm run server-tests
+#    - npm run forever-start
+#    - echo "Finished the build for the Development Branch"
