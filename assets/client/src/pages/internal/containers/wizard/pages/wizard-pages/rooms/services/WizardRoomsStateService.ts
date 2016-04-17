@@ -13,16 +13,14 @@ export class WizardRoomsStateService extends AWizardState  {
     
     public handleNextPressed(): Promise<any> {
         return new Promise<any>((resolve: { (result: any): void }, reject: { (err: any): void }) => {
-            //TODO remove coment
-            
-            // if (this._totalNoOfRooms === 0) {
-            //     var title = this._appContext.thTranslation.translate("Skip Rooms");
-            //     var content = this._appContext.thTranslation.translate("Before moving to the next section you have to add at least a room to your inventory.");
-            //     var positiveLabel = this._appContext.thTranslation.translate("OK");
-            //     this.confirmFromModal(resolve, reject, title, content, positiveLabel);
-            //      resolve(false);
-            //     return;
-            // }
+            if (this._totalNoOfRooms === 0) {
+                var title = this._appContext.thTranslation.translate("Skip Rooms");
+                var content = this._appContext.thTranslation.translate("Before moving to the next section you have to add at least a room to your inventory.");
+                var positiveLabel = this._appContext.thTranslation.translate("OK");
+                this.confirmFromModal(resolve, reject, title, content, positiveLabel);
+                 resolve(false);
+                return;
+            }
             this.wizardController.moveNext();
             resolve(true);
         });
