@@ -34,16 +34,16 @@ body,html {
     font-size: 15px;
 }
 
-.main-content {
+.card {
     padding: 12px 24px;
 }
 
-.main-content a {
+.card a {
     color: #fc8433;
     cursor: pointer;
 }
 
-.main-content a:hover {
+.card a:hover {
     color: #1E3A6A;
     cursor: pointer;
 }
