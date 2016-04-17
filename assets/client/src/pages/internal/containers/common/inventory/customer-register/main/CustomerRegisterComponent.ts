@@ -17,11 +17,14 @@ import {CustomerDetailsMeta} from '../../../../../services/customers/data-object
 import {CustomerRegisterOverviewComponent} from '../pages/customer-overview/CustomerRegisterOverviewComponent';
 import {CustomerRegisterEditContainerComponent} from '../pages/customer-edit/container/CustomerRegisterEditContainerComponent';
 
+//TODO: change this code to use Decorator
+import {WizardStepsComponent} from '../../../../wizard/pages/utils/wizard-steps/WizardStepsComponent';
+
 @Component({
     selector: 'customer-register',
     templateUrl: '/client/src/pages/internal/containers/common/inventory/customer-register/main/template/customer-register.html',
     providers: [CustomersService, CustomerRegisterTableMetaBuilderService, CustomerTableFilterService],
-    directives: [LazyLoadingTableComponent, CustomerRegisterOverviewComponent, CustomerRegisterEditContainerComponent],
+    directives: [WizardStepsComponent, LazyLoadingTableComponent, CustomerRegisterOverviewComponent, CustomerRegisterEditContainerComponent],
 	pipes: [TranslationPipe]
 })
 export class CustomerRegisterComponent extends BaseComponent {

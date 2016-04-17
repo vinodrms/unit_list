@@ -287,24 +287,6 @@ table .buttons,table button,table .btn {
     margin: 0;
 }
 
-.singleview-right {
-    border-left: 1px solid #ccc;
-    padding: 24px;
-}
-
-.singleview-left .pagination {
-    margin: 0;
-}
-
-.singleview .pagination {
-    margin: 0;
-}
-
-.singleview .x_panel {
-    padding: 0;
-    margin: 0;
-}
-
 #singleview-search-input input {
     border: 0;
     padding: 12px !important;
@@ -440,7 +422,10 @@ input[type="number"].form-control {
 
 .card-body{
     padding-top: 12px;
-    height: 100%;
+    /* TODO: If we put 100% it will be 100% of the parent height, when it should be 100% of the remaining height.
+    *  TO fix this we substract 82px (card-header height + padding), this is a quick fix that work but we should find something smarter.
+    */
+    height: calc(100% - 82px)
 }
 
 /* Theme structure */
@@ -479,6 +464,8 @@ input[type="number"].form-control {
 
 .edit-container {
     height: 100%;
+    border-left: 1px solid #ccc;
+    padding: 24px;    
     overflow-y: scroll;
     overflow-x: hidden;
 }

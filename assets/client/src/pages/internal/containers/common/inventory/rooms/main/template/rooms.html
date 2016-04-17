@@ -15,8 +15,12 @@
 		[roomVM]="selectedRoomVM"
 		(onEdit)="editRoom($event)">
 	</room-overview>
+
+	<div class="row">
+		<wizard-steps-component></wizard-steps-component>
+	</div>
 </div>
-<div class="col-sm-9 singleview-right" *ngIf="isEditing">
+<div class="col-sm-9 edit-container" *ngIf="isEditing">
 	<room-edit
 		*ngIf="selectedRoomVM" 
 		[roomVM]="selectedRoomVM"

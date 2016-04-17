@@ -6,10 +6,12 @@ import {BasicInfoPropertyDetailsEditComponent} from '../../../../../../common/ba
 import {BasicInfoPropertyDetailsEditService} from '../../../../../../common/basic-info/property-details/main/services/BasicInfoPropertyDetailsEditService';
 import {WizardBasicInfoPropertyDetailsService} from './services/WizardBasicInfoPropertyDetailsService';
 
+//TODO: change this code to use Decorator
+import {WizardStepsComponent} from '../../../../utils/wizard-steps/WizardStepsComponent';
 @Component({
 	selector: 'wizard-basic-info-property-details',
 	templateUrl: '/client/src/pages/internal/containers/wizard/pages/wizard-pages/basic-information/pages/property-details/template/wizard-basic-info-property-details.html',
-	directives: [BasicInfoPropertyDetailsEditComponent],
+	directives: [WizardStepsComponent, BasicInfoPropertyDetailsEditComponent],
 	providers: [BasicInfoPropertyDetailsEditService],
 	pipes: [TranslationPipe]
 })

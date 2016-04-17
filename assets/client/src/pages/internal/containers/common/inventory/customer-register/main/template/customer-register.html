@@ -22,8 +22,11 @@
 		(onEdit)="editCustomer($event)">
 		>
 	</customer-register-overview>
+	<div class="row">
+		<wizard-steps-component></wizard-steps-component>
+	</div>
 </div>
-<div class="col-sm-9 singleview-right" *ngIf="isEditing">
+<div class="col-sm-9 edit-container" *ngIf="isEditing">
 	<customer-register-edit-container
 		*ngIf="selectedCustomerVM" 
 		[customerVM]="selectedCustomerVM"

@@ -37,8 +37,12 @@
 		(onDraft)="draftPriceProduct($event)"
 		>
 	</price-product-overview>
+	<div class="row">
+		<wizard-steps-component></wizard-steps-component>
+	</div>
+	
 </div>
-<div class="col-sm-9 singleview-right edit-container" *ngIf="isEditing">
+<div class="col-sm-9 edit-container edit-container" *ngIf="isEditing">
 	<price-product-edit-container
 		*ngIf="selectedPriceProductVM" 
 		[priceProductVM]="selectedPriceProductVM"

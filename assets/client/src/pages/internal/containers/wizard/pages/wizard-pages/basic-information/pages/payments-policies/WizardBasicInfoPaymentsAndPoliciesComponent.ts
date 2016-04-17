@@ -6,10 +6,12 @@ import {WizardBasicInformationStateService} from '../../main/services/WizardBasi
 import {BasicInfoPaymentsAndPoliciesEditComponent} from '../../../../../../common/basic-info/payments-policies/main/BasicInfoPaymentsAndPoliciesEditComponent';
 import {BasicInfoPaymentsAndPoliciesEditService} from '../../../../../../common/basic-info/payments-policies/main/services/BasicInfoPaymentsAndPoliciesEditService';
 
+//TODO: change this code to use Decorator
+import {WizardStepsComponent} from '../../../../utils/wizard-steps/WizardStepsComponent';
 @Component({
 	selector: 'wizard-basic-info-payments-policies',
 	templateUrl: '/client/src/pages/internal/containers/wizard/pages/wizard-pages/basic-information/pages/payments-policies/template/wizard-basic-info-payments-policies.html',
-	directives: [BasicInfoPaymentsAndPoliciesEditComponent],
+	directives: [WizardStepsComponent, BasicInfoPaymentsAndPoliciesEditComponent],
 	providers: [BasicInfoPaymentsAndPoliciesEditService],
 	pipes: [TranslationPipe]
 })
