@@ -265,6 +265,7 @@ input[type="number"].form-control {
 }
 
 .bed-btn { font-size:48px; }
+.bed-icon-overview { font-size:75px; }
 .bed-add { 
     float: right;
     width: 40px;
