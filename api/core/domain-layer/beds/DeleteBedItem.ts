@@ -11,6 +11,7 @@ import {ObjectValidationStructure} from '../../utils/th-validation/structure/Obj
 import {PrimitiveValidationStructure} from '../../utils/th-validation/structure/PrimitiveValidationStructure';
 import {StringValidationRule} from '../../utils/th-validation/rules/StringValidationRule';
 import {BedMetaRepoDO, BedItemMetaRepoDO} from '../../data-layer/beds/repositories/IBedRepository';
+import {RoomSearchResultRepoDO} from '../../data-layer/rooms/repositories/IRoomRepository';
 
 export class DeleteBedItemDO {
 	id: string;
@@ -98,7 +99,21 @@ export class DeleteBedItem {
 		});
 	}
 	private validateLoadedBedCore(resolve: { (result: boolean): void }, reject: { (err: ThError): void }) {
-		// TODO: add validations for deleting Bed
-		resolve(true);
+		var roomsRepo = this._appContext.getRepositoryFactory().getRoomRepository();
+		roomsRepo.getRoomList({ hotelId: this._sessionContext.sessionDO.hotel.id },
+			{
+				bedIdList: [this._bedItemDO.id]
+			})
+			.then((roomSearchResult: RoomSearchResultRepoDO) => {
+				if (roomSearchResult.roomList.length > 0) {
+					var thError = new ThError(ThStatusCode.DeleteBedItemErrorUsedInRooms, null);
+					ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Bed delete error: used in rooms", this._bedItemDO, thError);
+					reject(thError);
+				}
+				// TODO: add validations for deleting Bed
+				resolve(true);
+			}).catch((error: any) => {
+				reject(error);
+			});
 	}
 }
