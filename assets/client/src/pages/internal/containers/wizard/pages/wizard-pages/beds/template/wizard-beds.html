@@ -1,16 +1,14 @@
-<div class="signup-step-05">
-	<div class="row page-title">
-		<div class="col-sm-4">
-			<h1>{{ 'Beds' | translate }} &gt; <small>{{ 'Overview' | translate }}</small></h1>
-		</div>
-		<div class="col-sm-6 description">
-			<small>{{ '[Wizard Step 2] Beds text' | translate }}</small>
-		</div>
-		<div class="col-sm-2 text-right">
-			<h1>{{ _bedsStateService.totalNoOfBeds }} <span class="unitpal-font">{{_bedsStateService.getMeta().iconFontName}}</span></h1>
-		</div>
+<div class="row card-header signup-step-05">
+	<div class="col-sm-4">
+		<h1>{{ 'Beds' | translate }} &gt; <small>{{ 'Overview' | translate }}</small></h1>
+	</div>
+	<div class="col-sm-6 description">
+		<small>{{ '[Wizard Step 2] Beds text' | translate }}</small>
+	</div>
+	<div class="col-sm-2 text-right">
+		<h1>{{ _bedsStateService.totalNoOfBeds }} <span class="unitpal-font">{{_bedsStateService.getMeta().iconFontName}}</span></h1>
 	</div>
 </div>
-<div class="row x_panel">
+<div class="row card-body">
 	<beds (onScreenStateTypeChanged)="didChangeScreenStateType($event)"></beds>
 </div>

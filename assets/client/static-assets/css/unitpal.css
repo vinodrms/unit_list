@@ -17,8 +17,8 @@
     margin-top: -8px;
 }
 
-.signup-step-nav {
-    font-size: x-large;
+.signup-step {
+    background-color: white; 
 }
 
 body,html {
@@ -32,6 +32,10 @@ body,html {
     color: #0b2139;
     font-family: 'Raleway',sans-serif;
     font-size: 15px;
+}
+
+.main-content {
+    padding: 12px 24px;
 }
 
 .main-content a {
@@ -146,12 +150,16 @@ body.nav-md .container.body .right_col {
     width: 62px;
 }
 
-.page-title h1 {
+.card-header{
+    border-bottom: 1px solid #ccc;
+}
+
+.card-header h1 {
     padding: 0 6px 6px;
     font-size: 24px;
 }
 
-.page-title h1,.page-title h2,.page-title h3,.page-title h1 small {
+.card-header h1,.card-header h2,.card-header h3,.card-header h1 small {
     color: #fc8333;
 }
 
@@ -286,7 +294,7 @@ table .buttons,table button,table .btn {
     margin: 0;
 }
 
-.page-title .description {
+.card-header .description {
     margin-top: 6px;
 }
 
@@ -429,6 +437,7 @@ label small {
 }
 
 /* Fixes Section */
+
 /* resolves the wrong padding on Chrome for input type="number" */
 input[type="number"].form-control {
     padding-top: 0;
@@ -436,6 +445,51 @@ input[type="number"].form-control {
 
 /* End Fixes Section */
 /* 3angle TECH */
+
+.card-body{
+    padding-top: 12px; 
+}
+
+/* Theme structure */
+
+/*@media (max-height: 750px) {
+    .card-body {
+        height: 500px;
+    }
+}
+
+@media (min-height: 750px) {
+    .card-body {
+        height: 500px;
+    }
+}
+@media (min-height: 800px) {
+    .card-body {
+        height: 550px;
+    }
+}
+@media (min-height: 850px) {
+    .card-body {
+        height: 600px;
+    }
+}
+@media (min-height: 900px) {
+    .card-body {
+        height: 650px;
+    }
+}
+@media (min-height: 950px) {
+    .card-body {
+        height: 700px;
+    }
+}*/
+
+.edit-container {
+    height: 100%;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
 /* Bootstrap overrides */
 .btn-primary,.btn-primary:hover,.btn-primary:active,.btn-primary:visited,.btn-primary:focus {
     background-color: #6098D1 !important;
