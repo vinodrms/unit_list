@@ -12,7 +12,6 @@
 		<h1>{{ _priceProductsStateService.totalNoOfActivePriceProducts }} <span class="unitpal-font">{{ _priceProductsStateService.getMeta().iconFontName }}</span></h1>
 	</div>
 </div>
-
 <div class="row card-body">
-	<price-products (onScreenStateTypeChanged)="didChangeScreenStateType($event)"></price-products>
+	<price-products (onScreenStateTypeChanged)="didChangeScreenStateType($event)" (onItemDeleted)="didDeleteItem($event)"></price-products>
 </div>

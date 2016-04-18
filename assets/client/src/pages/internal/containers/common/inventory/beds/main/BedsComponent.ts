@@ -25,7 +25,8 @@ import {WizardStepsComponent} from '../../../../wizard/pages/utils/wizard-steps/
 })
 export class BedsComponent extends BaseComponent {
     @Output() protected onScreenStateTypeChanged = new EventEmitter();
-
+    @Output() protected onItemDeleted = new EventEmitter();
+    
     @ViewChild(LazyLoadingTableComponent)
     private _bedTableComponent: LazyLoadingTableComponent<BedVM>;
 
@@ -43,7 +44,10 @@ export class BedsComponent extends BaseComponent {
             this.onScreenStateTypeChanged.next(currentState);
         });
     }
-
+    private registerItemDeletion(deletedBed: BedDO) {
+        this.onItemDeleted.next(deletedBed);
+    }
+    
     public ngAfterViewInit() {
         this._bedTableComponent.bootstrap(this._bedsService, this._tableBuilder.buildLazyLoadTableMeta());
     }
@@ -103,6 +107,7 @@ export class BedsComponent extends BaseComponent {
 
     private deleteBedOnServer(bedDO: BedDO) {
         this._bedsService.deleteBedDO(bedDO).subscribe((deletedBed: BedDO) => {
+            this.registerItemDeletion(deletedBed);
         }, (error: ThError) => {
             this._appContext.toaster.error(error.message);
         });

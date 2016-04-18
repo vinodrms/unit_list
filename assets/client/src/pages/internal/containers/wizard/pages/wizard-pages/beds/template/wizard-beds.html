@@ -9,6 +9,7 @@
 		<h1>{{ _bedsStateService.totalNoOfBeds }} <span class="unitpal-font">{{_bedsStateService.getMeta().iconFontName}}</span></h1>
 	</div>
 </div>
+
 <div class="row card-body">
-	<beds (onScreenStateTypeChanged)="didChangeScreenStateType($event)"></beds>
+	<beds (onScreenStateTypeChanged)="didChangeScreenStateType($event)" (onItemDeleted)="didDeleteItem($event)"></beds>
 </div>
