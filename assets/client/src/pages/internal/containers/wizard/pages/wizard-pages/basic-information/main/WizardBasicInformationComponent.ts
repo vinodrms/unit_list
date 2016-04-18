@@ -11,6 +11,9 @@ import {TimezoneService} from '../../../../../../services/timezones/TimezoneServ
 import {WizardBasicInformationStateService} from './services/WizardBasicInformationStateService';
 import {WizardService} from '../../services/WizardService';
 
+//TODO: change this code to use Decorator
+import {WizardStepsComponent} from '../../../utils/wizard-steps/WizardStepsComponent';
+
 @RouteConfig([
 	{ path: '/intro', name: 'WizardBasicInfoIntroComponent', component: WizardBasicInfoIntroComponent, useAsDefault: true },
 	{ path: '/overview', name: 'WizardBasicInfoOverviewComponent', component: WizardBasicInfoOverviewComponent },

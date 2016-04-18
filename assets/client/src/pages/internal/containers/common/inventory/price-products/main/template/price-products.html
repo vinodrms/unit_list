@@ -1,5 +1,5 @@
 <div class="overview-left" [ngClass]="{'col-sm-9': !isEditing, 'col-sm-3': isEditing}">
-	<div class="row">
+	<div>
 		<ul class="nav nav-tabs">
 			<li [ngClass]="{active : areActivePriceProducts()}" *ngIf="!isEditing || areActivePriceProducts()">
 				<a (click)="viewActivePriceProducts()">{{ 'Active' | translate }}</a>
@@ -37,8 +37,10 @@
 		(onDraft)="draftPriceProduct($event)"
 		>
 	</price-product-overview>
+	<wizard-steps-component></wizard-steps-component>
+	
 </div>
-<div class="col-sm-9 singleview-right" *ngIf="isEditing">
+<div class="col-sm-9 edit-container edit-container" *ngIf="isEditing">
 	<price-product-edit-container
 		*ngIf="selectedPriceProductVM" 
 		[priceProductVM]="selectedPriceProductVM"

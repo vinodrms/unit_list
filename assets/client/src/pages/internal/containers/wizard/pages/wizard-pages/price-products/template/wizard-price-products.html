@@ -1,19 +1,17 @@
-<div class="signup-step-05">
-	<div class="row page-title">
-		<div class="col-sm-4">
-			<h1>{{ 'Price Products' | translate }} &gt; 
+<div class="row card-header">
+	<div class="col-sm-4">
+		<h1>{{ 'Price Products' | translate }} &gt; 
 				<small *ngIf="!isEditScreen">{{ 'Overview' | translate }}</small>
 				<small *ngIf="isEditScreen">{{ 'Edit' | translate }}</small>
 			</h1>
-		</div>
-		<div class="col-sm-6 description">
-			<small>{{ '[Wizard Step 5] Price Products' | translate }}</small>
-		</div>
-		<div class="col-sm-2 text-right">
-			<h1>{{ _priceProductsStateService.totalNoOfActivePriceProducts }} <span class="unitpal-font">{{ _priceProductsStateService.getMeta().iconFontName }}</span></h1>
-		</div>
+	</div>
+	<div class="col-sm-6 description">
+		<small>{{ '[Wizard Step 5] Price Products' | translate }}</small>
+	</div>
+	<div class="col-sm-2 text-right">
+		<h1>{{ _priceProductsStateService.totalNoOfActivePriceProducts }} <span class="unitpal-font">{{ _priceProductsStateService.getMeta().iconFontName }}</span></h1>
 	</div>
 </div>
-<div class="row x_panel">
+<div class="row card-body">
 	<price-products (onScreenStateTypeChanged)="didChangeScreenStateType($event)" (onItemDeleted)="didDeleteItem($event)"></price-products>
 </div>

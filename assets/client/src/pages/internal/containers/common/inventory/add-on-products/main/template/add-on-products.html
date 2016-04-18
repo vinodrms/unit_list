@@ -15,8 +15,10 @@
 		[addOnProductVM]="selectedAddOnProductVM"
 		(onEdit)="editAddOnProduct($event)">
 	</add-on-product-overview>
+	<wizard-steps-component></wizard-steps-component>
+	
 </div>
-<div class="col-sm-9 singleview-right" *ngIf="isEditing">
+<div class="col-sm-9 edit-container" *ngIf="isEditing">
 	<add-on-product-edit
 		*ngIf="selectedAddOnProductVM" 
 		[filteredCategory]="filteredCategory"

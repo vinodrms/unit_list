@@ -1,19 +1,17 @@
-<div class="signup-step-05">
-	<div class="row page-title">
-		<div class="col-sm-4">
-			<h1>{{ 'Breakfast' | translate }} &gt; 
+<div class="row card-header">
+	<div class="col-sm-4">
+		<h1>{{ 'Breakfast' | translate }} &gt; 
 				<small *ngIf="!isEditScreen">{{ 'Overview' | translate }}</small>
 				<small *ngIf="isEditScreen">{{ 'Edit' | translate }}</small>
 			</h1>
-		</div>
-		<div class="col-sm-6 description">
-			<small>{{ '[Wizard Step 3] Breakfast text' | translate }}</small>
-		</div>
-		<div class="col-sm-2 text-right">
-			<h1>{{ _breakfastStateService.totalNoOfBreakfasts }} <span class="unitpal-font">{{ _breakfastStateService.getMeta().iconFontName }}</span></h1>
-		</div>
+	</div>
+	<div class="col-sm-6 description">
+		<small>{{ '[Wizard Step 3] Breakfast text' | translate }}</small>
+	</div>
+	<div class="col-sm-2 text-right">
+		<h1>{{ _breakfastStateService.totalNoOfBreakfasts }} <span class="unitpal-font">{{ _breakfastStateService.getMeta().iconFontName }}</span></h1>
 	</div>
 </div>
-<div class="row x_panel">
+<div class="row card-body">
 	<add-on-products [filterBreakfastCategory]="true" (onScreenStateTypeChanged)="didChangeScreenStateType($event)"></add-on-products>
 </div>

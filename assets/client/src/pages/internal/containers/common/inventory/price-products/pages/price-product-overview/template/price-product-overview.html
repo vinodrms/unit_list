@@ -1,28 +1,28 @@
-<div class="row" *ngIf="priceProductVM">
-	<div class="col-sm-12">
+<div class="overview-right-body" *ngIf="priceProductVM">
+	<div>
 		<kbd>{{ 'Selected' | translate }}</kbd>
 	</div>
-	<div class="col-sm-12">
+	<div>
 		<h1>{{priceProductVM.priceProduct.name}}</h1>
 	</div>
-	<div class="col-sm-12">
+	<div>
 		<i class="fa fa-home"></i> <small>{{priceProductVM.roomCategoriesString}}</small>
 	</div>
-	<div class="col-sm-12">
+	<div>
 		<i class="fa fa-globe"></i> <small>{{priceProductVM.availabilityString}}</small>
 	</div>
-	<div class="col-sm-12">
+	<div>
 		<i class="fa fa-credit-card"></i> <small>{{priceProductVM.priceTypeString}}</small>
 		<i class="fa fa-check green-color" *ngIf="priceConfigurationIsValid()"></i>
 		<i class="fa fa-exclamation-circle red-color" *ngIf="!priceConfigurationIsValid()"></i>
 	</div>
-	<div class="col-sm-12" *ngIf="!priceConfigurationIsValid()">
+	<div *ngIf="!priceConfigurationIsValid()">
 		<label class="text-muted"><small><i class="fa fa-info-circle"></i> {{ 'Some prices are missing from the price product\'s configuration' | translate }}</small></label>
 	</div>
-	<div class="col-sm-12">
+	<div>
 		<i class="fa fa-calendar-check-o"></i> <small>{{priceProductVM.cancellationConditionsString}}</small>
 	</div>
-	<div class="col-sm-12">
+	<div>
 		<a class="btn btn-lg" (click)="editPriceProduct()">
 			<i class="fa fa-pencil"></i> {{ 'Edit' | translate }}
 		</a>

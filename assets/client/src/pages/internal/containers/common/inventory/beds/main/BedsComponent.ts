@@ -14,11 +14,14 @@ import {InventoryScreenAction} from '../../utils/state-manager/InventoryScreenAc
 import {BedOverviewComponent} from '../pages/bed-overview/BedOverviewComponent';
 import {BedEditComponent} from '../pages/bed-edit/BedEditComponent';
 
+//TODO: change this code to use Decorator
+import {WizardStepsComponent} from '../../../../wizard/pages/utils/wizard-steps/WizardStepsComponent';
+
 @Component({
     selector: 'beds',
     templateUrl: '/client/src/pages/internal/containers/common/inventory/beds/main/template/beds.html',
     providers: [BedsService, BedTableMetaBuilderService],
-    directives: [LazyLoadingTableComponent, BedOverviewComponent, BedEditComponent]
+    directives: [WizardStepsComponent, LazyLoadingTableComponent, BedOverviewComponent, BedEditComponent]
 })
 export class BedsComponent extends BaseComponent {
     @Output() protected onScreenStateTypeChanged = new EventEmitter();

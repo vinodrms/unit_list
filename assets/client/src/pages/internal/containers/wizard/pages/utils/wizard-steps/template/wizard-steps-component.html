@@ -1,7 +1,4 @@
-<div class="col-xs-8">
-</div>
-<div class="col-xs-4" *ngIf="wizardButtonsVisible">
-	<div class="text-right">
+<div class="wizard-pagination" align="center" *ngIf="wizardButtonsVisible">
 		<a class="signup-skip" *ngIf="canSkip()" (click)="handleSkipPressed()">
 		{{ 'Skip this step' | translate }}
 		</a>
@@ -16,5 +13,4 @@
 			<i *ngIf="isMovingNext" class="fa fa-spinner fa-pulse"></i>
 			<i *ngIf="!isMovingNext" class="fa fa-angle-double-right"></i>
 		</a>
-	</div>
 </div>

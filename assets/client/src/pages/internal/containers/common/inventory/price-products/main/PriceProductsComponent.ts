@@ -17,11 +17,14 @@ import {PriceProductTableMetaBuilderService} from './services/PriceProductTableM
 import {PriceProductOverviewComponent} from '../pages/price-product-overview/PriceProductOverviewComponent';
 import {PriceProductEditContainerComponent} from '../pages/price-product-edit/container/PriceProductEditContainerComponent';
 
+//TODO: change this code to use Decorator
+import {WizardStepsComponent} from '../../../../wizard/pages/utils/wizard-steps/WizardStepsComponent';
+
 @Component({
 	selector: 'price-products',
 	templateUrl: '/client/src/pages/internal/containers/common/inventory/price-products/main/template/price-products.html',
 	providers: [RoomCategoriesService, YieldFiltersService, PriceProductsService, PriceProductTableMetaBuilderService],
-	directives: [LazyLoadingTableComponent, PriceProductOverviewComponent, PriceProductEditContainerComponent],
+	directives: [WizardStepsComponent, LazyLoadingTableComponent, PriceProductOverviewComponent, PriceProductEditContainerComponent],
 	pipes: [TranslationPipe]
 })
 export class PriceProductsComponent extends BaseComponent implements AfterViewInit {

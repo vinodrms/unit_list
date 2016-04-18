@@ -16,11 +16,14 @@ import {RoomOverviewComponent} from '../pages/room-overview/RoomOverviewComponen
 import {RoomEditComponent} from '../pages/room-edit/RoomEditComponent';
 import {BedsEagerService} from '../../../../../services/beds/BedsEagerService';
 
+//TODO: change this code to use Decorator
+import {WizardStepsComponent} from '../../../../wizard/pages/utils/wizard-steps/WizardStepsComponent';
+
 @Component({
     selector: 'rooms',
     templateUrl: '/client/src/pages/internal/containers/common/inventory/rooms/main/template/rooms.html',
     providers: [BedsEagerService, RoomsService, RoomCategoriesService, RoomTableMetaBuilderService],
-    directives: [LazyLoadingTableComponent, RoomOverviewComponent, RoomEditComponent]
+    directives: [WizardStepsComponent, LazyLoadingTableComponent, RoomOverviewComponent, RoomEditComponent]
 })
 export class RoomsComponent extends BaseComponent {
     @Output() protected onScreenStateTypeChanged = new EventEmitter();

@@ -1,17 +1,13 @@
 <header>
 	<wizard-header-component></wizard-header-component>
 </header>
-<div class="container body">
-	<div class="row main-row">
-		<div class="col-md-2 left_col">
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-2 wizard-nav">
 			<wizard-navbar-component></wizard-navbar-component>
 		</div>
-		<div class="right_col main-content signup-step" role="main">
+		<div class="col-md-10 card signup-step" role="main">
 			<router-outlet></router-outlet>
-            <!--<div class="clearfix"></div>-->
-			<div class="row bottom-row">
-				<wizard-steps-component></wizard-steps-component>
-			</div>
 		</div>
 	</div>
 </div>

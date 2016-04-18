@@ -17,11 +17,14 @@ import {AddOnProductCategoriesService} from '../../../../../services/settings/Ad
 import {AddOnProductCategoriesDO} from '../../../../../services/settings/data-objects/AddOnProductCategoriesDO';
 import {AddOnProductCategoryDO} from '../../../../../services/common/data-objects/add-on-product/AddOnProductCategoryDO';
 
+//TODO: change this code to use Decorator
+import {WizardStepsComponent} from '../../../../wizard/pages/utils/wizard-steps/WizardStepsComponent';
+
 @Component({
     selector: 'add-on-products',
     templateUrl: '/client/src/pages/internal/containers/common/inventory/add-on-products/main/template/add-on-products.html',
     providers: [AddOnProductsService, AddOnProductTableMetaBuilderService],
-    directives: [LazyLoadingTableComponent, AddOnProductOverviewComponent, AddOnProductEditComponent]
+    directives: [WizardStepsComponent, LazyLoadingTableComponent, AddOnProductOverviewComponent, AddOnProductEditComponent]
 })
 export class AddOnProductsComponent extends BaseComponent {
     @Input() protected filterBreakfastCategory: boolean = false;
