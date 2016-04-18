@@ -1,5 +1,5 @@
 <div class="overview-left" [ngClass]="{'col-sm-9': !isEditing, 'col-sm-3': isEditing}">
-	<div class="row test">
+	<div>
 		<ul class="nav nav-tabs">
 			<li *ngFor="#filter of filterList" [ngClass]="{active : isFilterSelected(filter)}">
 				<a (click)="selectFilter(filter)">{{filter.customerTypeName | translate}}</a>
@@ -22,9 +22,7 @@
 		(onEdit)="editCustomer($event)">
 		>
 	</customer-register-overview>
-	<div class="row">
-		<wizard-steps-component></wizard-steps-component>
-	</div>
+	<wizard-steps-component></wizard-steps-component>
 </div>
 <div class="col-sm-9 edit-container" *ngIf="isEditing">
 	<customer-register-edit-container

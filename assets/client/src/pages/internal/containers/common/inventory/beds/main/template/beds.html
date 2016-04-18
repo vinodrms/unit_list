@@ -15,9 +15,7 @@
 		[bedVM]="selectedBedVM"
 		(onEdit)="editBed($event)">
 	</bed-overview>
-	<div class="row">
-		<wizard-steps-component></wizard-steps-component>
-	</div>
+	<wizard-steps-component></wizard-steps-component>
 </div>
 <div class="col-sm-9 edit-container" *ngIf="isEditing">
 	<bed-edit

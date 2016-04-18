@@ -1,20 +1,20 @@
-<div class="row" *ngIf="addOnProductVM">
-	<div class="col-sm-12">
+<div class="overview-right-body" *ngIf="addOnProductVM">
+	<div>
 		<img class="img-responsive" [src]="imageUrl" *ngIf="imageUrl" />
 	</div>
-	<div class="col-sm-12">
+	<div>
 		<kbd>{{ 'Selected' | translate }}</kbd>
 	</div>
-	<div class="col-sm-12">
+	<div>
 		<h1>{{addOnProductVM.addOnProduct.name}}</h1>
 	</div>
-	<div class="col-sm-12">
+	<div>
 		<small>{{addOnProductVM.ccy.nativeSymbol}} {{ addOnProductVM.addOnProduct.price | price }}</small>
 	</div>
-	<div class="col-sm-12">
+	<div>
 		<small>{{addOnProductVM.addOnProduct.notes}}</small>
 	</div>
-	<div class="col-sm-12">
+	<div>
 		<a class="btn btn-lg" (click)="editAddOnProduct()">
 			<i class="fa fa-pencil"></i> {{ 'Edit' | translate }}
 		</a>

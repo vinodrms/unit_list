@@ -35,7 +35,6 @@ body,html {
 }
 
 .card {
-    padding: 12px 24px;
     height: 100%;
     overflow-y: hidden;
 }
@@ -141,6 +140,7 @@ header {
 
 .card-header{
     border-bottom: 1px solid #ccc;
+    height: 70px;
 }
 
 .card-header h1 {
@@ -156,29 +156,64 @@ header {
     padding: 12px;
 }
 
-.signup-step-01 {
-    background: #fff url(/client/static-assets/images/signup_background_01.png) right bottom no-repeat !important;
-    background-size: contain;
+basic-information,
+beds,
+rooms,
+breakfast,
+add-on-products,
+price-products,
+customer-register,
+beds {
+    display: block;
+    height: 100%;
 }
 
-.signup-step-05 {
-    background: #fff url(/client/static-assets/images/signup_background_01.png) right bottom no-repeat !important;
-    background-size: contain;
+basic-information{
+    background: #fff url(/client/static-assets/images/background_01_default.png) right bottom no-repeat !important;
+}
+
+beds{
+    background: #fff url(/client/static-assets/images/background_02_beds.png) right bottom no-repeat !important;
+}
+
+rooms{
+    background: #fff url(/client/static-assets/images/background_03_rooms.png) right bottom no-repeat !important;
+}
+
+breakfast{
+    background: #fff url(/client/static-assets/images/background_04_breakfast.png) right bottom no-repeat !important;
+}
+
+add-on-products{
+    background: #fff url(/client/static-assets/images/background_05_addon.png) right bottom no-repeat !important;
+}
+
+price-products{
+    background: #fff url(/client/static-assets/images/background_06_pproducts.png) right bottom no-repeat !important;
+}
+
+customer-register{
+    background: #fff url(/client/static-assets/images/background_07_customers.png) right bottom no-repeat !important;
 }
 
 .signup-skip {
     margin-right: 12px;
 }
 
+.wizard-pagination{
+  position: absolute;
+  left:0px;
+  bottom: 0px;
+  width: 100%;
+  height: 80px;
+  padding-top: 10px;
+}
+
 .btn.btn-app {
     position: relative;
-    padding: 12px 4px;
-    margin: 0 1px 0 0;
-    min-width: 80px;
+    padding-top: 12px;
+    width: 60px;
     height: 60px;
-    -webkit-box-shadow: none;
-    -moz-box-shadow: none;
-    box-shadow: none;
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
     border-radius: 4px;
@@ -280,7 +315,8 @@ table .buttons,table button,table .btn {
 
 .overview-right {
     border-left: 1px solid #ccc;
-    padding: 0 24px;
+    padding: 0 0 0 24px;
+    height: 100%;
 }
 
 .overview-left .table p {
@@ -406,6 +442,11 @@ input[type="number"].form-control {
 /* End Fixes Section */
 /* 3angle TECH */
 
+.overview-right-body{
+    height: calc(100% - 80px);
+    overflow-y: scroll    
+}
+
 .wizard-nav  {
     background-color:rgba(255, 255, 255, 0.66);
     color:#0b2139;
@@ -425,7 +466,7 @@ input[type="number"].form-control {
     /* TODO: If we put 100% it will be 100% of the parent height, when it should be 100% of the remaining height.
     *  TO fix this we substract 82px (card-header height + padding), this is a quick fix that work but we should find something smarter.
     */
-    height: calc(100% - 82px)
+    height: calc(100% - 70px)
 }
 
 /* Theme structure */
