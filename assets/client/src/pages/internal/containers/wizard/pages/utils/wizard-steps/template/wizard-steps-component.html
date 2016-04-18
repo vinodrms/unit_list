@@ -5,6 +5,7 @@
 		<a class="btn btn-app" role="button" *ngIf="hasPrevious()" (click)="handlePreviousPressed()">
 			<i class="fa fa-angle-left"></i>
 		</a>
+		<span class="btn-spaceing"></span>
 		<a class="btn btn-app" role="button" *ngIf="hasNext()" (click)="handleNextPressed()">
 			<i *ngIf="isMovingNext" class="fa fa-spinner fa-pulse"></i>
 			<i *ngIf="!isMovingNext" class="fa fa-angle-right"></i>
