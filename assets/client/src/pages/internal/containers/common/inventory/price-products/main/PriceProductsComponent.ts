@@ -26,7 +26,8 @@ import {PriceProductEditContainerComponent} from '../pages/price-product-edit/co
 })
 export class PriceProductsComponent extends BaseComponent implements AfterViewInit {
 	@Output() protected onScreenStateTypeChanged = new EventEmitter();
-
+	@Output() protected onItemDeleted = new EventEmitter();
+	
 	@ViewChild(LazyLoadingTableComponent)
 	private _aopTableComponent: LazyLoadingTableComponent<PriceProductVM>;
 
@@ -46,6 +47,9 @@ export class PriceProductsComponent extends BaseComponent implements AfterViewIn
 			this.onScreenStateTypeChanged.next(currentState);
 		});
 	}
+	private registerItemDeletion(deletedPP: PriceProductDO) {
+        this.onItemDeleted.next(deletedPP);
+    }
 	private setDefaultPriceProductStatus() {
 		this._priceProductStatus = PriceProductStatus.Active;
 		this._priceProductsService.setStatusFilter(this.priceProductStatus);
@@ -115,6 +119,7 @@ export class PriceProductsComponent extends BaseComponent implements AfterViewIn
 		var content = this._appContext.thTranslation.translate("Are you sure you want to delete %name% ?", { name: priceProductVM.priceProduct.name });
 		this.confirmRemoveAction(priceProductVM, title, content, (priceProductDO: PriceProductDO) => {
 			this._priceProductsService.deletePriceProductDO(priceProductDO).subscribe((deletedAddOnProduct: PriceProductDO) => {
+				this.registerItemDeletion(priceProductDO);
 			}, (error: ThError) => {
 				this._appContext.toaster.error(error.message);
 			});

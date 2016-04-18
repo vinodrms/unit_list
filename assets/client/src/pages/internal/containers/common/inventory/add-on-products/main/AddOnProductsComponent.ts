@@ -28,7 +28,8 @@ export class AddOnProductsComponent extends BaseComponent {
     filteredCategory: AddOnProductCategoryDO;
 
     @Output() protected onScreenStateTypeChanged = new EventEmitter();
-
+    @Output() protected onItemDeleted = new EventEmitter();
+    
     @ViewChild(LazyLoadingTableComponent)
     private _aopTableComponent: LazyLoadingTableComponent<AddOnProductVM>;
 
@@ -47,7 +48,10 @@ export class AddOnProductsComponent extends BaseComponent {
             this.onScreenStateTypeChanged.next(currentState);
         });
     }
-
+    private registerItemDeletion(deletedAddOnProduct:AddOnProductDO) {
+        this.onItemDeleted.next(deletedAddOnProduct);
+    }
+    
     public ngAfterViewInit() {
         if (!this.filterBreakfastCategory) {
             this.bootstrapTableComponent();
@@ -121,6 +125,7 @@ export class AddOnProductsComponent extends BaseComponent {
     }
     private deleteAddOnProductOnServer(addOnProductDO: AddOnProductDO) {
         this._addOnProductsService.deleteAddOnProductDO(addOnProductDO).subscribe((deletedAddOnProduct: AddOnProductDO) => {
+            this.registerItemDeletion(addOnProductDO);
         }, (error: ThError) => {
             this._appContext.toaster.error(error.message);
         });

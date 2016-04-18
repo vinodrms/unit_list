@@ -12,5 +12,5 @@
 	</div>
 </div>
 <div class="row x_panel">
-	<rooms (onScreenStateTypeChanged)="didChangeScreenStateType($event)"></rooms>
+	<rooms (onScreenStateTypeChanged)="didChangeScreenStateType($event)" (onItemDeleted)="didDeleteItem($event)"></rooms>
 </div>

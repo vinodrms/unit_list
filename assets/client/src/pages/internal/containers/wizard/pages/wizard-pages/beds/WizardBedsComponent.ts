@@ -3,6 +3,7 @@ import {BaseComponent} from '../../../../../../../common/base/BaseComponent';
 import {WizardBedsStateService} from './services/WizardBedsStateService';
 import {WizardService} from '../services/WizardService';
 import {BedsTotalCountService} from '../../../../../services/beds/BedsTotalCountService';
+import {BedDO} from '../../../../../services/beds/data-objects/BedDO';
 import {TranslationPipe} from '../../../../../../../common/utils/localization/TranslationPipe';
 import {BedsComponent} from '../../../../common/inventory/beds/main/BedsComponent';
 import {IWizardController} from '../../wizard-pages/services/IWizardController';
@@ -43,5 +44,9 @@ export class WizardBedsComponent extends BaseComponent {
 				this._wizardController.wizardButtonsVisible = true;
 				break;
 		}
+	}
+	
+	public didDeleteItem(deletedBed: BedDO) {
+		this._bedsTotalCountService.updateTotalCount();
 	}
 }

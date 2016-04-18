@@ -24,6 +24,7 @@ import {BedsEagerService} from '../../../../../services/beds/BedsEagerService';
 })
 export class RoomsComponent extends BaseComponent {
     @Output() protected onScreenStateTypeChanged = new EventEmitter();
+    @Output() protected onItemDeleted = new EventEmitter();
 
     @ViewChild(LazyLoadingTableComponent)
     private _roomTableComponent: LazyLoadingTableComponent<RoomVM>;
@@ -43,7 +44,10 @@ export class RoomsComponent extends BaseComponent {
             this.onScreenStateTypeChanged.next(currentState);
         });
     }
-
+    private registerItemDeletion(deletedBed: RoomDO) {
+        this.onItemDeleted.next(deletedBed);
+    }
+    
     public ngAfterViewInit() {
         this._roomTableComponent.bootstrap(this._roomService, this._tableBuilder.buildLazyLoadTableMeta());
     }
@@ -67,7 +71,7 @@ export class RoomsComponent extends BaseComponent {
     public copyRoom(roomVM: RoomVM) {
         var newRoomVM = roomVM.buildPrototype();
         delete newRoomVM.room.id;
-        newRoomVM.room.name='';
+        newRoomVM.room.name = '';
         this._inventoryStateManager.canPerformAction(InventoryScreenAction.Copy, newRoomVM).then((newState: InventoryScreenStateType) => {
             this._roomTableComponent.deselectItem();
 
@@ -106,6 +110,7 @@ export class RoomsComponent extends BaseComponent {
 
     private deleteRoomOnServer(roomDO: RoomDO) {
         this._roomService.deleteRoomDO(roomDO).subscribe((deletedRoom: RoomDO) => {
+            this.registerItemDeletion(deletedRoom);
         }, (error: ThError) => {
             this._appContext.toaster.error(error.message);
         });

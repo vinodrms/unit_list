@@ -6,6 +6,7 @@ import {IWizardController} from '../../wizard-pages/services/IWizardController';
 import {WizardService} from '../services/WizardService';
 import {InventoryScreenStateType} from '../../../../common/inventory/utils/state-manager/InventoryScreenStateType';
 import {RoomsTotalCountService} from '../../../../../services/rooms/RoomsTotalCountService';
+import {RoomDO} from '../../../../../services/rooms/data-objects/RoomDO';
 import {TotalCountDO} from '../../../../../services/common/data-objects/lazy-load/TotalCountDO';
 import {RoomsComponent} from '../../../../common/inventory/rooms/main/RoomsComponent';
 
@@ -43,5 +44,8 @@ export class WizardRoomsComponent extends BaseComponent {
                 break;
         }
     }
-
+    
+    public didDeleteItem(deletedRoom: RoomDO) {
+		this._roomsTotalCountService.updateTotalCount();
+	}
 }

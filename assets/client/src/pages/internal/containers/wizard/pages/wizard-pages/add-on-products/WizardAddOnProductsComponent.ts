@@ -7,6 +7,7 @@ import {IWizardController} from '../../wizard-pages/services/IWizardController';
 import {AddOnProductsComponent} from '../../../../common/inventory/add-on-products/main/AddOnProductsComponent';
 import {InventoryScreenStateType} from '../../../../common/inventory/utils/state-manager/InventoryScreenStateType';
 import {AddOnProductsTotalCountService} from '../../../../../services/add-on-products/AddOnProductsTotalCountService';
+import {AddOnProductDO} from '../../../../../services/add-on-products/data-objects/AddOnProductDO';
 import {TotalCountDO} from '../../../../../services/common/data-objects/lazy-load/TotalCountDO';
 
 @Component({
@@ -57,5 +58,9 @@ export class WizardAddOnProductsComponent extends BaseComponent implements OnIni
 	}
 	public set isEditScreen(isEditScreen: boolean) {
 		this._isEditScreen = isEditScreen;
+	}
+	
+	public didDeleteItem(deletedAddOnProduct: AddOnProductDO) {
+		this._addOnProductsTotalCountService.updateTotalCount();
 	}
 }
