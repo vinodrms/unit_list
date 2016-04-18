@@ -105,7 +105,7 @@ export class RoomsComponent extends BaseComponent {
     }
 
     private deleteRoomOnServer(roomDO: RoomDO) {
-        this._roomService.deleteRoomDO(roomDO).subscribe((deletedBed: RoomDO) => {
+        this._roomService.deleteRoomDO(roomDO).subscribe((deletedRoom: RoomDO) => {
         }, (error: ThError) => {
             this._appContext.toaster.error(error.message);
         });
