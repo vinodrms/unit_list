@@ -6,11 +6,14 @@
     src: url(../fonts/UnitpalIcons.TTF);
 }
 
-.unitpal-font {
+/*.unitpal-font {
     font-family: UnitpalIcons !important;
     font-weight: 400;
     font-size: larger;
-}
+}*/
+
+.unitpal-font { font-family: UnitpalIcons !important; font-weight:normal; font-size:larger; }
+.unitpal-large { font-size:xx-large;  line-height:100%; } 
 
 .menu_section .unitpal-font {
     font-size: x-large;

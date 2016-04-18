@@ -10,28 +10,44 @@ export class RoomAmenities extends Amenities {
 
         this.dataSet = [
             {
-                name: "Bath tub",
-                iconUrl: "glyphicon glyphicon-music glyphicon-lg"
+                name: "Minibar",
+                iconUrl: "Í"
             },
             {
-                name: "Hairdryer",
-                iconUrl: "glyphicon glyphicon-lock glyphicon-lg"
+                name: "Aircondition (AC)",
+                iconUrl: "Î"
             },
             {
-                name: "Tv",
-                iconUrl: "glyphicon glyphicon-camera glyphicon-lg"
+                name: "Tea/Coffee",
+                iconUrl: "Ï"
             },
             {
                 name: "Wifi",
-                iconUrl: "glyphicon glyphicon-adjust glyphicon-lg"
+                iconUrl: "Â"
             },
             {
-                name: "AC",
-                iconUrl: "glyphicon glyphicon-leaf glyphicon-lg"
+                name: "Tv",
+                iconUrl: "Ð"
             },
             {
-                name: "Minibar",
-                iconUrl: "glyphicon glyphicon-tasks glyphicon-lg"
+                name: "Pets (allowed)",
+                iconUrl: "Ë"
+            },
+            {
+                name: "Bath tub",
+                iconUrl: "Ñ"
+            },
+            {
+                name: "Hairdryer",
+                iconUrl: "Ó"
+            },
+            {
+                name: "Iron Board",
+                iconUrl: "Ò"
+            },
+            {
+                name: "Kitchen",
+                iconUrl: "Ô"
             }
         ];
 

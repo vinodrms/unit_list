@@ -98,7 +98,7 @@
                     <div class="info-block block-info clearfix" title="{{ roomAmenityVM.roomAmenity.name }}">
                         <div data-toggle="buttons">
                             <label class="btn btn-default" [ngClass]="{active: roomAmenityVM.isSelected}" (click)="roomAmenityVM.toggle()">
-                                <span [ngClass]="roomAmenityVM.roomAmenity.iconUrl"></span>
+                                <span class="unitpal-font unitpal-large">{{roomAmenityVM.roomAmenity.iconUrl}}</span>
                             </label>
                         </div>
                     </div>
@@ -122,7 +122,7 @@
                     <div class="info-block block-info clearfix" title="{{ roomAttributeVM.roomAttribute.name }}">
                         <div data-toggle="buttons">
                             <label class="btn btn-default" [ngClass]="{active: roomAttributeVM.isSelected}" (click)="roomAttributeVM.toggle()">
-                                <span [ngClass]="roomAttributeVM.roomAttribute.iconUrl"></span>
+                                <span class="unitpal-font unitpal-large">{{roomAttributeVM.roomAttribute.iconUrl}}</span>
                             </label>
                         </div>
                     </div>

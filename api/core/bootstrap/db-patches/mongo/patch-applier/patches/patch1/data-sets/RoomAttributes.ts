@@ -28,55 +28,55 @@ export class RoomAttributes extends ABaseSetting {
     private dataSet: { name: string, iconUrl: string }[] = [
         {
             name: "Street View",
-            iconUrl: "glyphicon glyphicon-asterisk glyphicon-lg"
+            iconUrl: "Õ"
         },
         {
             name: "Park View",
-            iconUrl: "glyphicon glyphicon-glass glyphicon-lg"
+            iconUrl: "Ö"
         },
         {
             name: "Sea View",
-            iconUrl: "glyphicon glyphicon-th-large glyphicon-lg"
+            iconUrl: "×"
         },
         {
             name: "Courtyard View",
-            iconUrl: "glyphicon glyphicon-signal glyphicon-lg"
+            iconUrl: "Ø"
         },
         {
             name: "Near Elevator",
-            iconUrl: "glyphicon glyphicon-download glyphicon-lg"
+            iconUrl: "Ù"
         },
         {
             name: "Wheelchair Friendly",
-            iconUrl: "glyphicon glyphicon-flag glyphicon-lg"
+            iconUrl: "Ú"
         },
         {
             name: "Smoking",
-            iconUrl: "glyphicon glyphicon-tags glyphicon-lg"
+            iconUrl: "Û"
         },
         {
             name: "Non-Smoking",
-            iconUrl: "glyphicon glyphicon-floppy-save glyphicon-lg"
+            iconUrl: "Ü"
         },
         {
             name: "Balcony",
-            iconUrl: "glyphicon glyphicon-phone-alt glyphicon-lg"
+            iconUrl: "Þ"
         },
         {
             name: "Terrace",
-            iconUrl: "glyphicon glyphicon-tree-deciduous glyphicon-lg"
+            iconUrl: "à"
         },
         {
             name: "Garden Access",
-            iconUrl: "glyphicon glyphicon-blackboard glyphicon-lg"
+            iconUrl: "ß"
         },
         {
             name: "Pool Access",
-            iconUrl: "glyphicon glyphicon-scissors glyphicon-lg"
+            iconUrl: "Ý"
         },
         {
-            name: "Bay Window",
-            iconUrl: "glyphicon glyphicon-oil glyphicon-lg"
+            name: "Allergy Friendly",
+            iconUrl: "á"
         }
     ];
 
