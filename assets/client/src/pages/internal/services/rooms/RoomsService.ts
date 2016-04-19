@@ -104,11 +104,16 @@ export class RoomsService extends ALazyLoadRequestService<RoomVM> {
 
 	private runServerPostActionOnRoom(apiAction: ThServerApi, room: RoomDO): Observable<RoomDO> {
 		return this._appContext.thHttp.post(apiAction, { room: room }).map((roomObject: Object) => {
-			this.refreshData();
+			this.runRefreshOnDependencies();
+            this.refreshData();
 
 			var updatedRoomDO: RoomDO = new RoomDO();
 			updatedRoomDO.buildFromObject(roomObject["room"]);
 			return updatedRoomDO;
 		});
 	}
+    
+    private runRefreshOnDependencies() {
+        this._roomCategoriesService.refreshData();
+    }
 }
