@@ -259,7 +259,6 @@ label.form-warning {
     -moz-border-radius: 0 0 6px 6px;
     -webkit-border-radius: 0 0 6px 6px;
     color: #fff;
-    margin-top: -10px;
     display: none;
     width: 100% !important;
     z-index: 99;
