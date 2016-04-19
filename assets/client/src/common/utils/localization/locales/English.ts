@@ -33,7 +33,7 @@ export var EnglishTranslations: Object = {
 	"Back to ": "Back to ",
 	"Step %stepIndex% of %stepNo%": "Step %stepIndex% of %stepNo%",
 	"Basic Information": "Basic Information",
-	"Skip this step": "Skip this step",
+	"Skip this step": "Skip",
 	"Previous": "Previous",
 	"Next": "Next",
 	"Finish": "Finish",
