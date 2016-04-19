@@ -50,7 +50,7 @@
 							<div class="col-md-12 col-sm-12 col-xs-12 form-group" *ngFor="#pricePerAdult of pricePerPersonVM.pricePerPerson.adultsPriceList">
 								<div class="input-group" [ngClass]="{'form-warning': displayError()&&!pricePerAdult.isValid()}">
 									<span class="input-group-addon"><small>{{pricePerAdult.noOfPersons}}{{getNumberSuffix(pricePerAdult.noOfPersons)}}</small> <span class="unitpal-font">:</span></span>
-									<input type="number" placeholder="{{'Price' | translate}}" class="form-control" [(ngModel)]="pricePerAdult.price"
+									<input type="number" class="form-control" [(ngModel)]="pricePerAdult.price"
 									[readonly]="readonly" />
 								</div>
 								<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Invalid Price' | translate }}</small></label>
@@ -63,7 +63,7 @@
 							<div class="col-md-12 col-sm-12 col-xs-12 form-group" *ngFor="#pricePerChild of pricePerPersonVM.pricePerPerson.childrenPriceList">
 								<div class="input-group" [ngClass]="{'form-warning': displayError()&&!pricePerChild.isValid()}">
 									<span class="input-group-addon"><small>{{pricePerChild.noOfPersons}}{{getNumberSuffix(pricePerChild.noOfPersons)}}</small> <i class="fa fa-child"></i></span>
-									<input type="number" placeholder="{{'Price' | translate}}" class="form-control" [(ngModel)]="pricePerChild.price"
+									<input type="number" class="form-control" [(ngModel)]="pricePerChild.price"
 									[readonly]="readonly" />
 								</div>
 								<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Invalid Price' | translate }}</small></label>

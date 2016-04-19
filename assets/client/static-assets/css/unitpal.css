@@ -6,11 +6,14 @@
     src: url(../fonts/UnitpalIcons.TTF);
 }
 
-.unitpal-font {
+/*.unitpal-font {
     font-family: UnitpalIcons !important;
     font-weight: 400;
     font-size: larger;
-}
+}*/
+
+.unitpal-font { font-family: UnitpalIcons !important; font-weight:normal; font-size:larger; }
+.unitpal-large { font-size:xx-large;  line-height:100%; } 
 
 .menu_section .unitpal-font {
     font-size: x-large;
@@ -268,7 +271,6 @@ label.form-warning {
     -moz-border-radius: 0 0 6px 6px;
     -webkit-border-radius: 0 0 6px 6px;
     color: #fff;
-    margin-top: -10px;
     display: none;
     width: 100% !important;
     z-index: 99;
@@ -731,8 +733,13 @@ input[type="file"] {
     display: none;
 }
 
+.th-img-upload-container {
+    width:250px;
+}
+
 .th-img-upload-preview {
     width: 100%;
+    height: 150px;
     margin-bottom: 5px;
     text-align: center;
 }

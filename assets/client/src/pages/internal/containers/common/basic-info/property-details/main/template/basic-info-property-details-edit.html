@@ -81,13 +81,11 @@
         <div class="form-group">
             <div class="button-items" *ngFor="#hotelAmenityVM of hotelAmenities.hotelAmenityList">
                 <div class="info-block block-info clearfix">
-                    <div data-toggle="buttons" class="btn-group">
+                    <div data-toggle="buttons" class="btn-group" title="{{ hotelAmenityVM.hotelAmenity.name }}">
                         <label class="btn btn-default th-grid-btn" [ngClass]="{active: hotelAmenityVM.isSelected}" (click)="hotelAmenityVM.toggle()">
                             <div>
-                                <span class="glyphicon glyphicon-ok glyphicon-lg"></span>
-                                <h5>{{hotelAmenityVM.hotelAmenity.name}}</h5>
+                                <span class="unitpal-font unitpal-large">{{hotelAmenityVM.hotelAmenity.iconUrl}}</span>
                             </div>
-                            
                         </label>
                     </div>
                 </div>

@@ -11,43 +11,59 @@ export class HotelAmenities extends Amenities {
         this.dataSet = [
             {
                 name: "Parking",
-                iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
+                iconUrl: "À"
+            },
+            {
+                name: "Laundry Service",
+                iconUrl: "Á"
             },
             {
                 name: "WiFi",
-                iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
+                iconUrl: "Â"
             },
             {
                 name: "Bar",
-                iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
+                iconUrl: "Ã"
             },
             {
                 name: "Restaurant",
-                iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
+                iconUrl: "Ä"
             },
             {
-                name: "Pets Allowed",
-                iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
+                name: "24/7 Reception",
+                iconUrl: "Å"    
             },
             {
-                name: "Outside Pool",
-                iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
+                name: "Currency Exchange",
+                iconUrl: "Æ"    
             },
             {
-                name: "Inside Pool",
-                iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
-            },
-            {
-                name: "Wellness",
-                iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
+                name: "Luggage storage",
+                iconUrl: "Ç"    
             },
             {
                 name: "Transfer",
-                iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
+                iconUrl: "È"    
             },
             {
-                name: "Loundry Service",
-                iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
+                name: "Gym",
+                iconUrl: "É"
+            },
+            {
+                name: "Pool",
+                iconUrl: "Ý"    
+            },
+            {
+                name: "Wellness",
+                iconUrl: "Ê"
+            },
+            {
+                name: "Pets Allowed",
+                iconUrl: "Ë"
+            },
+            {
+                name: "Room Service",
+                iconUrl: "Ì"
             }
         ];
 

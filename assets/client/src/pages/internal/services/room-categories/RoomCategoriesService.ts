@@ -42,7 +42,11 @@ export class RoomCategoriesService extends ARequestService<RoomCategoryDO[]> {
 	public getRoomCategoryList(): Observable<RoomCategoryDO[]> {
 		return this.getServiceObservable();
 	}
-
+	
+	public refreshData() {
+		this.updateServiceResult();
+	}
+	
 	public saveRoomCategory(roomCategDO: RoomCategoryDO): Observable<RoomCategoryDO> {
 		return this._appContext.thHttp.post(ThServerApi.RoomCategoriesSaveItem, { roomCategory: roomCategDO }).map((taxObject: Object) => {
 			var roomCategoryDO: RoomCategoryDO = new RoomCategoryDO();
