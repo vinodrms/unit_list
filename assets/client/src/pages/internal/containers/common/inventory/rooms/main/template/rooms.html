@@ -1,4 +1,4 @@
-<div class="overview-left" [ngClass]="{'col-sm-9': !isEditing, 'col-sm-3': isEditing}">
+<div class="overview-left" [ngClass]="{'col-xs-9 col-md-9': !isEditing, 'col-xs-3 col-md-3': isEditing}">
 	<lazy-loading-table 
 		[isCollapsed]="isEditing" 
 		(onAdd)="addRoom()"
@@ -9,7 +9,7 @@
         >
 	</lazy-loading-table>
 </div>
-<div class="col-sm-3 overview-right hidden-xs hidden-sm" *ngIf="!isEditing">
+<div class="col-xs-3 col-md-3 overview-right" *ngIf="!isEditing">
 	<room-overview
 		*ngIf="selectedRoomVM" 
 		[roomVM]="selectedRoomVM"
@@ -17,7 +17,7 @@
 	</room-overview>
 	<wizard-steps-component></wizard-steps-component>
 </div>
-<div class="col-sm-9 edit-container" *ngIf="isEditing">
+<div class="col-xs-9 col-md-9 edit-container" *ngIf="isEditing">
 	<room-edit
 		*ngIf="selectedRoomVM" 
 		[roomVM]="selectedRoomVM"

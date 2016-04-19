@@ -1,4 +1,4 @@
-<div class="overview-left" [ngClass]="{'col-sm-9': !isEditing, 'col-sm-3': isEditing}">
+<div class="overview-left" [ngClass]="{'col-xs-9 col-md-9': !isEditing, 'col-xs-3 col-md-3': isEditing}">
 	<div>
 		<ul class="nav nav-tabs">
 			<li *ngFor="#filter of filterList" [ngClass]="{active : isFilterSelected(filter)}">
@@ -15,7 +15,7 @@
 		>
 	</lazy-loading-table>
 </div>
-<div class="col-sm-3 overview-right hidden-xs hidden-sm" *ngIf="!isEditing">
+<div class="col-xs-3 col-md-3 overview-right" *ngIf="!isEditing">
 	<customer-register-overview 
 		*ngIf="selectedCustomerVM" 
 		[customerVM]="selectedCustomerVM"
@@ -24,7 +24,7 @@
 	</customer-register-overview>
 	<wizard-steps-component></wizard-steps-component>
 </div>
-<div class="col-sm-9 edit-container" *ngIf="isEditing">
+<div class="col-xs-9 col-md-9 edit-container" *ngIf="isEditing">
 	<customer-register-edit-container
 		*ngIf="selectedCustomerVM" 
 		[customerVM]="selectedCustomerVM"
