@@ -1,7 +1,7 @@
 <loading-component [isLoading]="isLoading"></loading-component>
 <form class="form-horizontal form-label-left" *ngIf="!isLoading" [ngFormModel]="getDefaultControlGroup()">
 	<div class="row">
-		<div class="col-sm-12 col-md-6">
+		<div class="col-xs-6 col-md-6">
 			<div class="row">
 				<div class="col-xs-12 col-md-12 form-group" >
 					<label>{{ 'Hotel Name' | translate }}</label>
@@ -11,7 +11,6 @@
 					<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter a name for your hotel' | translate }}</small></label>
 				</div>
 			</div>
-			<!-- VAT -->
 
 			<vat-input 
 				[vatDetails]="vatDetails"
@@ -100,13 +99,13 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-sm-12 col-md-3 form-group">
+		<div class="col-xs-12 col-md-3 form-group">
 			<label>{{ 'Hotel Logo' | translate }}</label>
 			<image-upload [imageUrl]="logoUrl" (onImageUpload)="didUploadLogo($event)" ></image-upload>
 		</div>
 	</div>
 	<div class="row">
-		<div class="col-sm-3 form-group">
+		<div class="col-xs-3 col-md-3 form-group">
 			<div class="input-group">
 				<label>Facebook</label>
 				<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('facebookUrl')}">
@@ -116,7 +115,7 @@
 				<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter a valid url' | translate }}</small></label>
 			</div>
 		</div>
-		<div class="col-sm-3 form-group">
+		<div class="col-xs-3 col-md-3 form-group">
 			<div class="input-group">
 				<label>Twitter</label>
 				<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('twitterUrl')}">
@@ -126,7 +125,7 @@
 				<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter a valid url' | translate }}</small></label>
 			</div>
 		</div>
-		<div class="col-sm-3 form-group">
+		<div class="col-xs-3 col-md-3 form-group">
 			<div class="input-group">
 				<label>LinkedIn</label>
 				<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('linkedinUrl')}">
@@ -136,7 +135,7 @@
 				<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter a valid url' | translate }}</small></label>
 			</div>
 		</div>
-		<div class="col-xs-3 form-group">
+		<div class="col-xs-3 col-md-3 form-group">
 		</div>
 	</div>
 </form>
