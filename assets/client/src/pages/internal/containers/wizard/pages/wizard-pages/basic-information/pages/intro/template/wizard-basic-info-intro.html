@@ -8,10 +8,13 @@
 		</div>
 	</div>
 </div>
-<div class="row page-info">
-	<div class="col-md-8">
-		<p>{{ '[Wizard Step 0] Welcome Message' | translate }}</p>
+<div class="row card-body page-info">
+	<div class="overview-left" class='col-xs-9 col-md-9'>
+		<div class="col-xs-9 col-md-9">
+			<p>{{ '[Wizard Step 0] Welcome Message' | translate }}</p>
+		</div>
 	</div>
-	<wizard-steps-component></wizard-steps-component>
-	
+	<div class="col-xs-3 col-md-3 overview-right">
+		<wizard-steps-component></wizard-steps-component>
+	</div>
 </div>

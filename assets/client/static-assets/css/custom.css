@@ -728,7 +728,6 @@ li.current-page {
 li.current-page a {
     color: #000;
 }
-.nav>li.disabled-page>a { color:#b1becd; cursor:crosshair !important; }
 
 .navbar-brand,
 .navbar-nav>li>a {
