@@ -65,15 +65,18 @@
 			<image-upload [imageUrl]="imageUrl" (onImageUpload)="didUploadImage($event)"></image-upload>
 		</div>
 	</div>
+	
 	<div class="row">
-		<div class="col-xs-12 col-md-offset-8 col-md-4">
-			<button type="button" class="btn btn-primary btn-block" *ngIf="!isNewAddOnProduct()" (click)="saveAddOnProduct()">
+        <div class="col-xs-12 col-md-offset-6 col-md-3">
+            <button type="button" class="btn btn-primary btn-block" *ngIf="!isNewAddOnProduct()" (click)="saveAddOnProduct()">
 				<i *ngIf="isSavingAddOnProduct" class="fa fa-spinner fa-pulse"></i> {{ 'Save Changes' | translate }}
 			</button>
 			<button type="button" class="btn btn-primary btn-block" *ngIf="isNewAddOnProduct()" (click)="saveAddOnProduct()">
 				<i *ngIf="isSavingAddOnProduct" class="fa fa-spinner fa-pulse"></i> {{ 'Add Product' | translate }}
 			</button>
-			<button type="button" class="btn btn-danger btn-block" (click)="showViewScreen()">{{ 'Cancel' | translate }}</button>
-		</div>
-	</div>
+        </div>
+        <div class="col-xs-12 col-md-3">
+            <button type="button" class="btn btn-danger btn-block" (click)="showViewScreen()">{{ 'Cancel' | translate }}</button>
+        </div>
+    </div>
 </div>

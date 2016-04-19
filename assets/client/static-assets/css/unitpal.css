@@ -504,6 +504,12 @@ input[type="number"].form-control {
     overflow-x: hidden;
 }
 
+.basic-info-container {
+    height: calc(100%);
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
 /* Bootstrap overrides */
 .btn-primary,
 .btn-primary:hover,
@@ -534,9 +540,11 @@ input[type="number"].form-control {
 }
 
 .bed-btn {
+    margin: 5px 0px;
+}
+.bed-btn > span {
     font-size: 48px;
 }
-
 .bed-icon-overview {
     font-size: 75px;
 }
@@ -724,6 +732,7 @@ input[type="number"].form-control {
     text-overflow: ellipsis;
 }
 
+/* Maybe get rid of the 'th' prefix */
 .th-btn-weekday {
     width: 100px !important;
 }

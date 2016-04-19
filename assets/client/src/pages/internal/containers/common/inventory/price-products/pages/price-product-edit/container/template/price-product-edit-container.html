@@ -6,9 +6,7 @@
 	<hr>
 	<div class="row">
 		<div class="col-md-6 col-sm-6 col-xs-12">
-			<price-product-edit-room-categories-section 
-				[didSubmit]="didSubmit" 
-				(onRoomCategoryChange)="handleRoomCategoryChange($event)">
+			<price-product-edit-room-categories-section [didSubmit]="didSubmit" (onRoomCategoryChange)="handleRoomCategoryChange($event)">
 			</price-product-edit-room-categories-section>
 		</div>
 		<div class="col-md-6 col-sm-6 col-xs-12">
@@ -66,15 +64,18 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-xs-4">
-			<div class="row" *ngIf="canSavePriceProduct()">
-				<button type="button" class="btn btn-primary btn-block" (click)="savePriceProduct()">
+	</div>
+
+
+	<div class="row" *ngIf="canSavePriceProduct()">
+		<div class="col-xs-12 col-md-offset-6 col-md-3">
+			<button type="button" class="btn btn-primary btn-block" (click)="savePriceProduct()">
 					<i *ngIf="isSavingPriceProduct" class="fa fa-spinner fa-pulse"></i> {{ 'Save Changes' | translate }}
 				</button>
-			</div>
-			<div class="row">
-				<button type="button" class="btn btn-danger btn-block" (click)="showViewScreen()">{{ 'Cancel' | translate }}</button>
-			</div>
+		</div>
+		<div class="col-xs-12 col-md-3">
+			<button type="button" class="btn btn-danger btn-block" (click)="showViewScreen()">{{ 'Cancel' | translate }}</button>
 		</div>
 	</div>
+
 </div>
