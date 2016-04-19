@@ -13,7 +13,7 @@
 			<div class="form-group">
 				<label>{{ 'Government Code' | translate }}</label>
 				<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('governmentCode')}">
-					<input type="text" class="form-control" placeholder="{{ 'Government Code' | translate }}" ngControl="governmentCode">
+					<input type="text" class="form-control" ngControl="governmentCode">
 				</div>
 				<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Government code too long' | translate }}</small></label>
 			</div>
@@ -24,7 +24,7 @@
 			<div class="form-group">
 				<label>{{ 'Company Name' | translate }}</label>
 				<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('name')}">
-					<input type="text" class="form-control" placeholder="{{ 'Company Name' | translate }}" ngControl="name">
+					<input type="text" class="form-control" ngControl="name">
 				</div>
 				<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter the company name' | translate }}</small></label>
 			</div>
@@ -33,7 +33,7 @@
 			<div class="form-group">
 				<label>{{ 'Address' | translate }}</label>
 				<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('streetAddress')}">
-					<input type="text" class="form-control" placeholder="{{ 'Address' | translate }}" ngControl="streetAddress">
+					<input type="text" class="form-control" ngControl="streetAddress">
 				</div>
 				<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Invalid address length' | translate }}</small></label>
 			</div>
@@ -42,7 +42,7 @@
 			<div class="form-group">
 				<label>{{ 'City' | translate }}</label>
 				<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('city')}">
-					<input type="text" class="form-control" placeholder="{{ 'City' | translate }}" ngControl="city">
+					<input type="text" class="form-control" ngControl="city">
 				</div>
 				<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Invalid city length' | translate }}</small></label>
 			</div>
@@ -53,7 +53,7 @@
 			<div class="form-group">
 				<label>{{ 'Postal Code' | translate }}</label>
 				<div class="input-group"  [ngClass]="{'form-warning': controlIsInvalid('postalCode')}">
-					<input type="text" class="form-control" placeholder="{{ 'Postal Code' | translate }}" ngControl="postalCode">
+					<input type="text" class="form-control" ngControl="postalCode">
 				</div>
 				<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Invalid postal code length' | translate }}</small></label>
 			</div>
@@ -62,7 +62,7 @@
 			<div class="form-group">
 				<label>{{ 'Website' | translate }}</label>
 				<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('websiteUrl')}">
-					<input type="text" class="form-control" placeholder="{{ 'Website' | translate }}" ngControl="websiteUrl">
+					<input type="text" class="form-control" ngControl="websiteUrl">
 				</div>
 				<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter a valid url' | translate }}</small></label>
 			</div>
@@ -71,7 +71,7 @@
 			<div class="form-group">
 				<label>{{ 'Contact Name' | translate }}</label>
 				<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('contactName')}">
-					<input type="text" class="form-control" placeholder="{{ 'Contact Name' | translate }}" ngControl="contactName">
+					<input type="text" class="form-control" ngControl="contactName">
 				</div>
 				<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Invalid name length' | translate }}</small></label>
 			</div>
@@ -82,7 +82,7 @@
 			<div class="form-group">
 				<label>{{ 'Phone' | translate }}</label>
 				<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('phone')}">
-					<input type="text" class="form-control" placeholder="{{ 'Phone' | translate }}" ngControl="phone">
+					<input type="text" class="form-control" ngControl="phone">
 				</div>
 				<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter a valid phone' | translate }}</small></label>
 			</div>
@@ -91,7 +91,7 @@
 			<div class="form-group">
 				<label>{{ 'Fax' | translate }}</label>
 				<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('fax')}">
-					<input type="text" class="form-control" placeholder="{{ 'Fax' | translate }}" ngControl="fax">
+					<input type="text" class="form-control" ngControl="fax">
 				</div>
 				<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter a valid fax' | translate }}</small></label>
 			</div>
@@ -100,7 +100,7 @@
 			<div class="form-group">
 				<label>{{ 'Email' | translate }}</label>
 				<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('email')}">
-					<input type="text" class="form-control" placeholder="{{ 'Email' | translate }}" ngControl="email">
+					<input type="text" class="form-control" ngControl="email">
 				</div>
 				<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter a valid email' | translate }}</small></label>
 			</div>
@@ -125,7 +125,7 @@
 			<div class="form-group">
 				<label>{{ 'Invoice Fee' | translate }} <span>{{currencyNativeSymbol}}</span></label>
 				<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('invoiceFee')}">
-					<input type="number" class="form-control" placeholder="{{ 'Invoice Fee' | translate }}" ngControl="invoiceFee">
+					<input type="number" class="form-control" ngControl="invoiceFee">
 				</div>
 				<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter a valid price' | translate }}</small></label>
 			</div>
@@ -134,7 +134,7 @@
 			<div class="form-group">
 				<label>{{ 'Account Number' | translate }}</label>
 				<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('accountNo')}">
-					<input type="string" class="form-control" placeholder="{{ 'Account Number' | translate }}" ngControl="accountNo">
+					<input type="string" class="form-control" ngControl="accountNo">
 				</div>
 				<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter a valid account number' | translate }}</small></label>
 			</div>
@@ -161,7 +161,7 @@
 					<span *ngIf="!isFixedCommission">%</span>
 				</label>
 				<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('commission')}">
-					<input type="number" class="form-control" placeholder="{{ 'Commission' | translate }}" ngControl="commission">
+					<input type="number" class="form-control" ngControl="commission">
 				</div>
 				<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter a valid commission' | translate }}</small></label>
 			</div>

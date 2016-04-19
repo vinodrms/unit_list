@@ -6,7 +6,7 @@
                 <div class="col-md-6 col-xs-12 form-group">
                     <label>{{ 'Name' | translate }}</label>
                     <div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('name')}">
-                        <input type="text" class="form-control" placeholder="{{ 'Enter Room Name' | translate }}" ngControl="name">
+                        <input type="text" class="form-control" ngControl="name">
                     </div>
                     <label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter a name for the room' | translate }}</small></label>
                 </div>
@@ -15,7 +15,7 @@
                     <label>{{ 'Floor Number' | translate }}</label>
                     <div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('floor')}">
                         <span class="input-group-addon"><i class="fa fa-caret-square-o-up"></i></span>
-                        <input type="number" placeholder="{{ 'Enter floor no' | translate }}" class="form-control" ngControl="floor">
+                        <input type="number" class="form-control" ngControl="floor">
                     </div>
                     <label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Insert a valid floor number' | translate }}</small></label>
                 </div>
