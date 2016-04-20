@@ -64,7 +64,6 @@ export class LazyLoadingTableComponent<T> {
 		this.selectTableItem(item);
 		this.onEdit.next(item);
 		
-		debugger;
 		var $table = <any>($('lazy-loading-table table.table'));
 		setTimeout(()=>{
 			$table.floatThead('reflow');

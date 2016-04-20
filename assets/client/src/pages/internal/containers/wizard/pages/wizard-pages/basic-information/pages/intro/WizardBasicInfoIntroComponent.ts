@@ -14,8 +14,11 @@ import {WizardStepsComponent} from '../../../../utils/wizard-steps/WizardStepsCo
 	pipes: [TranslationPipe]
 })
 export class WizardBasicInfoIntroComponent extends BaseComponent {
-	constructor(introService: WizardBasicInfoIntroService, basicInfoStateService: WizardBasicInformationStateService) {
+	constructor(private _introService: WizardBasicInfoIntroService, 
+		private _basicInfoStateService: WizardBasicInformationStateService) {
 		super();
-		basicInfoStateService.basicInfoController.bootstrapBasicInfoStepIndex(introService.stepIndex);
+	}
+	ngOnInit() {
+		this._basicInfoStateService.basicInfoController.bootstrapBasicInfoStepIndex(this._introService.stepIndex);
 	}
 }
