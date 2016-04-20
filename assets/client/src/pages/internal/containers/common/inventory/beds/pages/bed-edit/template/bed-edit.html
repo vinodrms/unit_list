@@ -15,7 +15,7 @@
         <div class="col-xs-12 col-md-12 form-group">
             <label class="control-label">{{ 'Icon' | translate }}</label>
             <div class="row" data-toggle="buttons">
-                <div class="col-md-2 button-items" *ngFor="#bedTemplate of bedTemplateList">
+                <div class="col-md-2 button-items" *ngFor="#bedTemplate of bedTemplateList" title="{{ bedTemplate.name }}">
                     <label class="btn btn-default btn-group bed-btn" [ngClass]="{ active: bedTemplate.id == bedVM.bed.bedTemplateId }" (click)="bedVM.bed.bedTemplateId=bedTemplate.id">
                         <span class="unitpal-font">{{bedTemplate.iconUrl}}</span>
                     </label>
