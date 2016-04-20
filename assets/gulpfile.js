@@ -72,7 +72,7 @@ gulp.task('copy-dist', ['pack-internal', 'pack-external', 'clean-dist'], functio
 		'node_modules/moment/min/**/*',
 		'node_modules/pace-progress**/*',
 		'node_modules/underscore/**/*',
-		'node_modules/floathead/**/*',
+		'node_modules/floatthead/**/*',
 		
 		'node_modules/angular2/bundles/**/*',
 		'node_modules/angular2/es6/**/*',
