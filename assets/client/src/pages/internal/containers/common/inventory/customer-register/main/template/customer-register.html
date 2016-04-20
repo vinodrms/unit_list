@@ -1,11 +1,10 @@
 <div class="overview-left" [ngClass]="{'col-xs-9 col-md-9': !isEditing, 'col-xs-3 col-md-3': isEditing}">
-	<div>
+	<div class="lazy-loading-table-filter">
 		<ul class="nav nav-tabs">
 			<li *ngFor="#filter of filterList" [ngClass]="{active : isFilterSelected(filter)}">
 				<a (click)="selectFilter(filter)">{{filter.customerTypeName | translate}}</a>
 			</li>
 		</ul>
-		<br/>
 	</div>
 	<lazy-loading-table
 		[isCollapsed]="isEditing"

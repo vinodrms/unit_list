@@ -475,9 +475,17 @@ lazy-loading-table>div{
     height: 100%;
 }
 
+div.lazy-loading-table-filter {
+    height: 43px;
+    margin-bottom: 7px;
+}
+div.lazy-loading-table-filter + lazy-loading-table {
+    height: calc(100% - 50px);
+}
+
 lazy-loading-table{
     display: block;
-    height: 100%;    
+    height: 100%;
 }
 
 lazy-loading-table .table-wrapper{
