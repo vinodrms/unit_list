@@ -542,9 +542,11 @@ input[type="number"].form-control {
 .bed-btn {
     margin: 5px 0px;
 }
+
 .bed-btn > span {
     font-size: 48px;
 }
+
 .bed-icon-overview {
     font-size: 75px;
 }
@@ -598,7 +600,9 @@ input[type="number"].form-control {
     position: relative;
     color: #fc8433;
 }
-
+.bed-slot-icon {
+    font-size: 48px;
+}
 .bed-slot:hover {
     background-color: transparent;
 }
@@ -627,12 +631,10 @@ input[type="number"].form-control {
 }
 
 .bed-slot-inner {
-    margin: 0;
-    padding-bottom: 5px;
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%,-50%);
+    transform: translate(-50%,-55%);
     width: 100px;
     text-overflow: ellipsis;
     overflow: hidden;
