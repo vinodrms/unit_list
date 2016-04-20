@@ -1,6 +1,7 @@
 export enum ThServerApi {
 	AccountSignUp,
 	AccountLogIn,
+	AccountLogOut,
 	AccountRequestResetPassword,
 	AccountResetPassword,
 	HotelDetails,
@@ -52,6 +53,7 @@ export enum ThServerApi {
 var ThServerApiUrl: { [index: number]: string; } = {};
 ThServerApiUrl[ThServerApi.AccountSignUp] = "/account/signUp";
 ThServerApiUrl[ThServerApi.AccountLogIn] = "/account/logIn";
+ThServerApiUrl[ThServerApi.AccountLogOut] = "/account/logOut";
 ThServerApiUrl[ThServerApi.AccountRequestResetPassword] = "/account/requestResetPassword";
 
 ThServerApiUrl[ThServerApi.AccountResetPassword] = "/account/resetPassword";
