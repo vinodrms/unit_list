@@ -375,5 +375,6 @@ export var EnglishTranslations: Object = {
 	"Commission": "Commission",
 	"Enter a valid commission": "Enter a valid commission",
 	"Contact Person": "Contact Person",
-	"Hotel Logo": "Hotel Logo"
+	"Hotel Logo": "Hotel Logo",
+	"Clone": "Clone"
 };
