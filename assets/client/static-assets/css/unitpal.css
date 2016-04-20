@@ -531,6 +531,12 @@ lazy-loading-table .table-wrapper table thead {
     overflow-x: hidden;
 }
 
+.basic-info-container {
+    height: calc(100%);
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
 /* Bootstrap overrides */
 .btn-primary,
 .btn-primary:hover,
@@ -561,6 +567,10 @@ lazy-loading-table .table-wrapper table thead {
 }
 
 .bed-btn {
+    margin: 5px 0px;
+}
+
+.bed-btn > span {
     font-size: 48px;
 }
 
@@ -617,7 +627,9 @@ lazy-loading-table .table-wrapper table thead {
     position: relative;
     color: #fc8433;
 }
-
+.bed-slot-icon {
+    font-size: 48px;
+}
 .bed-slot:hover {
     background-color: transparent;
 }
@@ -646,12 +658,10 @@ lazy-loading-table .table-wrapper table thead {
 }
 
 .bed-slot-inner {
-    margin: 0;
-    padding-bottom: 5px;
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%,-50%);
+    transform: translate(-50%,-55%);
     width: 100px;
     text-overflow: ellipsis;
     overflow: hidden;
@@ -751,6 +761,7 @@ lazy-loading-table .table-wrapper table thead {
     text-overflow: ellipsis;
 }
 
+/* Maybe get rid of the 'th' prefix */
 .th-btn-weekday {
     width: 100px !important;
 }
@@ -788,4 +799,10 @@ input[type="file"] {
 .th-file-add {
     width: 30%;
     padding-left: 0;
+}
+
+.next-btn-loading {
+    font-size: 38px !important;
+    top: -9px !important;
+    left: -7px;
 }

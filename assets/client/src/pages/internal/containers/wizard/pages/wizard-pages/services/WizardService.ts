@@ -36,6 +36,7 @@ export class WizardService implements IWizardState, IWizardController {
 		for (var stateIndex = 0; stateIndex <= currentIndex; stateIndex++) {
 			this._stateList[stateIndex].wasVisited = true;
 		}
+		this._wizardButtonsVisible = true;
 	}
 
 	public moveNext() {

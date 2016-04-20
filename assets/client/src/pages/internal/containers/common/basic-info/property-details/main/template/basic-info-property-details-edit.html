@@ -1,6 +1,6 @@
 <loading-component [isLoading]="isLoading"></loading-component>
-<div *ngIf="!isLoading">
-    <div class="col-md-5">
+<div class="row" *ngIf="!isLoading">
+    <div class="col-xs-12 col-md-5">
         <label class="control-label">
             <h2>{{ 'Select the timezone' | translate }}</h2><small>{{ 'This will be used for automatic processes that need to know your local hour' | translate }}</small>
         </label>
@@ -17,8 +17,8 @@
 
         <hr>
         <div class="row">
-            <div class="col-xs-6">
-                <label>{{ 'Check in from' | translate }}</label>
+            <div class="col-xs-6 col-md-6 form-group">
+                <label>{{ 'Check in from' | translate }}*</label>
                 <th-hour-select 
 					[initialHour]="hotel.operationHours.checkInFrom" 
 					(onHourSelected)="diChangeCheckInFrom($event)"
@@ -27,8 +27,8 @@
 				</th-hour-select>
             </div>
 
-            <div class="col-xs-6">
-                <label>{{ 'Check in to (optional)' | translate }}</label>
+            <div class="col-xs-6 col-md-6 form-group">
+                <label>{{ 'Check in to' | translate }}</label>
                 <th-hour-select 
 					[initialHour]="hotel.operationHours.checkInToOptional" 
 					(onHourSelected)="diChangeCheckInTo($event)"
@@ -39,8 +39,8 @@
         </div>
         <hr>
         <div class="row">
-            <div class="col-xs-6">
-                <label>{{ 'Check out from (optional)' | translate }}</label>
+            <div class="col-xs-6 col-md-6 form-group">
+                <label>{{ 'Check out from' | translate }}</label>
                 <th-hour-select
 					[initialHour]="hotel.operationHours.checkOutFromOptional" 
 					(onHourSelected)="diChangeCheckOutFrom($event)"
@@ -49,8 +49,8 @@
 				</th-hour-select>
             </div>
 
-            <div class="col-xs-6">
-                <label>{{ 'Check out to' | translate }}</label>
+            <div class="col-xs-6 col-md-6 form-group">
+                <label>{{ 'Check out to' | translate }}*</label>
                 <th-hour-select
 					[initialHour]="hotel.operationHours.checkOutTo" 
 					(onHourSelected)="diChangeCheckOutTo($event)"
@@ -61,7 +61,7 @@
         </div>
         <hr>
         <div class="row">
-            <div class="col-xs-6">
+            <div class="col-xs-6 col-md-6 form-group">
                 <label>{{ 'Booking Cancellation Hour' | translate }}</label>
                 <th-hour-select 
 					[initialHour]="hotel.operationHours.cancellationHour" 
@@ -73,10 +73,11 @@
         </div>
     </div>
 
-    <div class="col-md-6 col-md-offset-1">
+    <div class="col-xs-12 col-md-6 col-md-offset-1">
 
         <label class="control-label">
-            <h2>{{ 'Hotel Amenities' | translate }}</h2></label>
+            <h2>{{ 'Hotel Amenities' | translate }}</h2>
+        </label>
 
         <div class="form-group">
             <div class="button-items" *ngFor="#hotelAmenityVM of hotelAmenities.hotelAmenityList">

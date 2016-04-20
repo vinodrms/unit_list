@@ -48,7 +48,6 @@ class PriceProductsEntity extends BasePersistentEntity {
             },
 			taxIdList: {
                 type: 'array',
-                required: true,
 				defaultsTo: []
             },
 			openIntervalList: {

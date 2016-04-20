@@ -19,7 +19,10 @@
 							<li>
 								<a>{{ 'Help' | translate }}</a>
 							</li>
-							<li><a><i class="fa fa-sign-out pull-right"></i> {{ 'Log Out' | translate }}</a>
+							<li>
+								<a (click)="logOut()">
+									<i class="fa fa-sign-out pull-right"></i> {{ 'Log Out' | translate }}
+								</a>
 							</li>
 						</ul>
 					</li>

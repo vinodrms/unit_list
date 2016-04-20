@@ -35,13 +35,13 @@
 							<td>
 								<a class="btn btn-xs" (click)="removePriceProduct(priceProduct)">
 									<i class="fa unitpal-font">\</i> {{ 'Remove' | translate }}
-								 </a>
+								</a>
 							</td>
 						</tr>
 						<tr>
 							<td>
 								<a class="btn btn-xs" (click)="openPriceProductSelectModal()">
-									<i class="fa fa-plus"></i> {{ 'Add' | translate }} 
+									<i class="fa fa-plus"></i> {{ 'Add' | translate }}
 								</a>
 							</td>
 							<td></td>
@@ -55,47 +55,34 @@
 	<hr>
 	<div class="row">
 		<div class="col-md-12 col-sm-12 col-xs-12">
-			<individual-customer-details 
-				[hidden]="!isIndividualCustomer()"
-				[didSubmit]="didSubmit"
-				[individualDetails]="individualDetails"
-				>
+			<individual-customer-details [hidden]="!isIndividualCustomer()" [didSubmit]="didSubmit" [individualDetails]="individualDetails">
 			</individual-customer-details>
-			<corporate-customer-details 
-				[hidden]="!isCorporateCustomer()"
-				[didSubmit]="didSubmit"
-				[corporateDetails]="corporateDetails"
-				>
+			<corporate-customer-details [hidden]="!isCorporateCustomer()" [didSubmit]="didSubmit" [corporateDetails]="corporateDetails">
 			</corporate-customer-details>
 		</div>
 	</div>
 	<hr>
 	<div class="row">
 		<div class="col-md-8 col-xs-12">
-			<file-attachments
-				[fileAttachmentList]="customerVM.customer.fileAttachmentList"
-				(onFileAttachmentsChange)="didChangeFileAttachmentList($event)"
-				>
+			<file-attachments [fileAttachmentList]="customerVM.customer.fileAttachmentList" (onFileAttachmentsChange)="didChangeFileAttachmentList($event)">
 			</file-attachments>
 		</div>
-		
+
 		<div class="col-md-4 col-xs-12 form-group">
 			<label>{{ 'Notes' | translate }}</label>
 			<textarea class="form-control" [(ngModel)]="customerVM.customer.notes"></textarea>
-		</div>	
-	</div>
-
-	<div class="row">
-		<div class="col-xs-8"></div>
-		<div class="col-xs-4">
-			<div class="row">
-				<button type="button" class="btn btn-primary btn-block" (click)="saveCustomer()">
-					<i *ngIf="isSavingCustomer" class="fa fa-spinner fa-pulse"></i> {{ 'Save Changes' | translate }}
-				</button>
-			</div>
-			<div class="row">
-				<button type="button" class="btn btn-danger btn-block" (click)="showViewScreen()">{{ 'Cancel' | translate }}</button>
-			</div>
 		</div>
 	</div>
+	
+	<div class="row">
+        <div class="col-xs-12 col-md-offset-6 col-md-3">
+			<button type="button" class="btn btn-primary btn-block" (click)="saveCustomer()">
+					<i *ngIf="isSavingCustomer" class="fa fa-spinner fa-pulse"></i> {{ 'Save Changes' | translate }}
+				</button>
+        </div>
+        <div class="col-xs-12 col-md-3">
+            <button type="button" class="btn btn-danger btn-block" (click)="showViewScreen()">{{ 'Cancel' | translate }}</button>
+        </div>
+    </div>
+	
 </div>
