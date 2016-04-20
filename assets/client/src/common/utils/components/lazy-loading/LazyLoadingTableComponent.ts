@@ -63,11 +63,18 @@ export class LazyLoadingTableComponent<T> {
 		this.deselectCurrentItem();
 		this.selectTableItem(item);
 		this.onEdit.next(item);
+		
+		debugger;
+		var $table = <any>($('lazy-loading-table table.table'));
+		setTimeout(()=>{
+			$table.floatThead('reflow');
+		}, 0);
 	}
 
 	@Output() protected onSelect = new EventEmitter();
 
 	protected didInit: boolean = false;
+	protected domNeedsRefresh:boolean = false;
 
 	protected lazyLoadingRequest: ILazyLoadRequestService<T>;
 	protected tableMeta: LazyLoadTableMeta;
@@ -109,9 +116,11 @@ export class LazyLoadingTableComponent<T> {
 			this.filterColumnMetaList();
 
 			this.didInit = true;
+			this.domNeedsRefresh = true;
 		});
 		this.lazyLoadingRequest.refreshData();
 	}
+	
 	private checkInvalidPageNumber() {
 		if (this.paginationIndex.isInvalidPageNumber(this.totalCount, this.pageMeta)) {
 			this.lazyLoadingRequest.updatePageNumber(this.paginationIndex.lastPageNumber);
@@ -226,5 +235,21 @@ export class LazyLoadingTableComponent<T> {
 	}
 	protected getDependentItemValue(item: T, valueMeta: TableColumnValueMeta): any {
 		return this._appContext.thUtils.getObjectValueByPropertyStack(item, valueMeta.dependentObjectPropertyId);
+	}
+	
+
+	private makeTableHeaderFloatable(){
+		var $table = <any>($('lazy-loading-table table.table'));
+		// $table.floatThead('destroy');
+		$table.floatThead({
+  			position: 'fixed'
+  		});  
+	}	
+	
+	public ngAfterViewChecked(){
+		if (this.domNeedsRefresh){
+			this.makeTableHeaderFloatable();
+			this.domNeedsRefresh = false;
+		}
 	}
 }
