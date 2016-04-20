@@ -15,10 +15,10 @@ module.exports = function(req: Express.Request, res: Express.Response, next: any
 			language: Locales.English,
 			sessionDO: {
 				hotel: {
-					id: "5712316fbd5dd09c432b5aa2"
+					id: "571514a3b521e2c0235f0fb4"
 				},
 				user: {
-					id: "9f783e30-03cf-11e6-a2b2-0357ae938a4c",
+					id: "3963ed00-0588-11e6-9c40-efddfd9ed9a0",
 					email: "paraschiv.ionut@gmail.com",
 					roleList: [UserRoles.Administrator]
 				}
