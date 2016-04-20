@@ -98,7 +98,14 @@
 			<div class="col-xs-4 col-md-4" *ngIf="!isCollapsed">
 				<div class="dataTables_info" id="example_info" role="status" aria-live="polite">{{paginationIndex.pageNumberStat}}</div>
 			</div>
-			<div class="text-right"  [ngClass]="{'col-xs-4 col-md-4': !isCollapsed, 'col-xs-12 col-md-12': isCollapsed}">
+
+			<div class="col-xs-3 col-md-3" *ngIf="isCollapsed">
+					<a class="btn btn-lg" *ngIf="tableOptions.canAdd" (click)="addItem()">
+						<i class="fa fa-plus"></i>
+					</a>
+			</div>
+
+			<div class="text-right"  [ngClass]="{'col-xs-4 col-md-4': !isCollapsed, 'col-xs-9 col-md-9': isCollapsed}">
 				<center>
 					<ul class="pagination">
 						<li [ngClass]="{disabled: isFirstPage()}">
@@ -115,13 +122,6 @@
 							</a>
 						</li>
 					</ul>
-				</center>
-			</div>
-			<div class="col-xs-12 col-md-12" *ngIf="isCollapsed">
-				<center>
-					<a class="btn btn-lg" *ngIf="tableOptions.canAdd" (click)="addItem()">
-						<i class="fa fa-plus"></i> {{tableMeta.addButtonText}}
-					</a>
 				</center>
 			</div>
 		</div>
