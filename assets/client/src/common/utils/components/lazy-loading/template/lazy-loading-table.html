@@ -1,9 +1,9 @@
 <loading-component [isLoading]="!didInit"></loading-component>
 
 <div *ngIf="didInit">
-		<div class="row">
+		<div class="row table-filter">
 			<!--TODO: Investigate if !isCollapsed && !tableOptions.canSearch then the total sum is 16 != 12-->
-			<div *ngIf="tableOptions.canSearch" [ngClass]="{'col-md-4': !isCollapsed, 'col-md-12': isCollapsed}" >
+			<div *ngIf="tableOptions.canSearch" [ngClass]="{'col-xs-4 col-md-4': !isCollapsed, 'col-xs-12 col-md-12': isCollapsed}" >
 				<div class="input-group">
 					<input type="text" class="form-control" placeholder="{{tableMeta.searchInputPlaceholder}}" [ngFormControl]="textSearchControl" />
 					<span class="input-group-btn">
@@ -13,11 +13,11 @@
 					</span>
 				</div>
 			</div>
-			<div class="col-md-4" *ngIf="!tableOptions.canSearch && !isCollapsed">
+			<div class="col-xs-4 col-md-4" *ngIf="!tableOptions.canSearch && !isCollapsed">
 			</div>
-			<div class="col-md-4" *ngIf="!isCollapsed">
+			<div class="col-xs-4 col-md-4" *ngIf="!isCollapsed">
 			</div>
-			<div class="col-md-4" *ngIf="!isCollapsed">
+			<div class="col-xs-4 col-md-4" *ngIf="!isCollapsed">
 				<div>
 					<label>{{ 'Show' | translate }}
 						<select [ngModel]="paginationIndex.numOfItemsPerPage" (change)="didChangeNumOfItemsPerPage($event.target.value)">
@@ -30,8 +30,8 @@
 			</div>
 		</div>
 
-		<div class="row">
-			<div class="col-md-12">
+		<div class="row table-wrapper">
+			<div class="col-xs-12 col-md-12">
 				<table class="table table-hover">
 					<thead>
 						<tr>
@@ -90,15 +90,15 @@
 			</div>
 		</div>
 		<div class="row table-foot">
-			<div class="col-sm-4" *ngIf="!isCollapsed">
+			<div class="col-xs-4 col-md-4" *ngIf="!isCollapsed">
 				<a class="btn btn-lg" *ngIf="tableOptions.canAdd" (click)="addItem()">
 					<i class="fa fa-plus"></i> {{tableMeta.addButtonText}}
 				</a>
 			</div>
-			<div class="col-sm-4" *ngIf="!isCollapsed">
+			<div class="col-xs-4 col-md-4" *ngIf="!isCollapsed">
 				<div class="dataTables_info" id="example_info" role="status" aria-live="polite">{{paginationIndex.pageNumberStat}}</div>
 			</div>
-			<div class="text-right"  [ngClass]="{'col-sm-4': !isCollapsed, 'col-sm-12': isCollapsed}">
+			<div class="text-right"  [ngClass]="{'col-xs-4 col-md-4': !isCollapsed, 'col-xs-12 col-md-12': isCollapsed}">
 				<center>
 					<ul class="pagination">
 						<li [ngClass]="{disabled: isFirstPage()}">
@@ -117,7 +117,7 @@
 					</ul>
 				</center>
 			</div>
-			<div class="col-sm-12" *ngIf="isCollapsed">
+			<div class="col-xs-12 col-md-12" *ngIf="isCollapsed">
 				<center>
 					<a class="btn btn-lg" *ngIf="tableOptions.canAdd" (click)="addItem()">
 						<i class="fa fa-plus"></i> {{tableMeta.addButtonText}}

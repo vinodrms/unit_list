@@ -116,6 +116,9 @@ header {
 }
 
 .nav.side-menu>li>a{
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
     border-bottom: 1px solid #fff;
     padding: 13px 15px;
     margin: 0;
@@ -337,6 +340,10 @@ table .buttons,table button,table .btn {
     height: 100%;
 }
 
+.overview-left {
+    height: 100%;
+}
+
 .overview-left .table p {
     margin: 0;
 }
@@ -461,6 +468,26 @@ input[type="number"].form-control {
 
 /* End Fixes Section */
 /* 3angle TECH */
+
+/*lazy-loading-table table.table tbody,*/
+
+lazy-loading-table>div{
+    height: 100%;
+}
+
+lazy-loading-table{
+    display: block;
+    height: 100%;    
+}
+
+lazy-loading-table .table-wrapper{
+    height: calc(100% - 105px);
+    overflow-y: scroll;
+}
+
+lazy-loading-table .table-wrapper table thead {
+    background-color: white;
+}
 
 .overview-right-body{
     height: calc(100% - 82px);
