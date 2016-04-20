@@ -7,11 +7,11 @@
 		</a>
 		<span class="btn-spaceing"></span>
 		<a class="btn btn-app" role="button" *ngIf="hasNext()" (click)="handleNextPressed()">
-			<i *ngIf="isMovingNext" class="fa fa-spinner fa-pulse"></i>
+			<i *ngIf="isMovingNext" class="fa fa-spinner fa-pulse next-btn-loading"></i>
 			<i *ngIf="!isMovingNext" class="fa fa-angle-right"></i>
 		</a>
 		<a class="btn btn-app" role="button" *ngIf="!hasNext()" (click)="handleNextPressed()">
-			<i *ngIf="isMovingNext" class="fa fa-spinner fa-pulse"></i>
+			<i *ngIf="isMovingNext" class="fa fa-spinner fa-pulse next-btn-loading"></i>
 			<i *ngIf="!isMovingNext" class="fa fa-angle-double-right"></i>
 		</a>
 </div>

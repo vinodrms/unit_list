@@ -773,3 +773,9 @@ input[type="file"] {
     width: 30%;
     padding-left: 0;
 }
+
+.next-btn-loading {
+    font-size: 38px !important;
+    top: -9px !important;
+    left: -7px;
+}
