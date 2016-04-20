@@ -45,7 +45,7 @@
 				</a>
 				<div class="row">
 					<div class="col-md-6 col-sm-6 col-xs-6">
-						<label><small>{{ 'Price For Adults' | translate }}</small></label>
+						<label><small>{{ 'Price For Adults' | translate }}*</small></label>
 						<div class="row">
 							<div class="col-md-12 col-sm-12 col-xs-12 form-group" *ngFor="#pricePerAdult of pricePerPersonVM.pricePerPerson.adultsPriceList">
 								<div class="input-group" [ngClass]="{'form-warning': displayError()&&!pricePerAdult.isValid()}">
@@ -58,7 +58,7 @@
 						</div>
 					</div>
 					<div class="col-md-6 col-sm-6 col-xs-6">
-						<label><small>{{ 'Price For Children' | translate }}</small></label>
+						<label><small>{{ 'Price For Children' | translate }}*</small></label>
 						<div class="row">
 							<div class="col-md-12 col-sm-12 col-xs-12 form-group" *ngFor="#pricePerChild of pricePerPersonVM.pricePerPerson.childrenPriceList">
 								<div class="input-group" [ngClass]="{'form-warning': displayError()&&!pricePerChild.isValid()}">

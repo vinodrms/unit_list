@@ -4,7 +4,7 @@
 		<div class="col-xs-12 col-md-8">
 			<div class="row">
 				<div class="col-xs-12 col-md-12 form-group">
-					<label>{{ 'Product Name' | translate }}</label>
+					<label>{{ 'Product Name' | translate }}*</label>
 					<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('name')}">
 						<input type="text" class="form-control" ngControl="name">
 					</div>
@@ -13,7 +13,7 @@
 			</div>
 			<div class="row">
 				<div class="col-xs-12 col-md-6 form-group">
-					<label>{{ 'Price Charged' | translate }}</label>
+					<label>{{ 'Price Charged' | translate }}*</label>
 					<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('price')}">
 						<span class="input-group-addon">{{ccy.nativeSymbol}}</span>
 						<input type="number" class="form-control" ngControl="price">
@@ -21,7 +21,7 @@
 					<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter a valid price that will be charged' | translate }}</small></label>
 				</div>
 				<div class="col-xs-12 col-md-6 form-group">
-					<label>{{ 'Internal Cost' | translate }}</label>
+					<label>{{ 'Internal Cost' | translate }}*</label>
 					<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('internalCost')}">
 						<span class="input-group-addon">{{ccy.nativeSymbol}}</span>
 						<input type="number" class="form-control" ngControl="internalCost">

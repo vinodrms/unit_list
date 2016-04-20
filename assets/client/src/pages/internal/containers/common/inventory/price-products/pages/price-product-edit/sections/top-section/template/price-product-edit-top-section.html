@@ -1,6 +1,6 @@
 <div class="col-md-4 col-xs-12 form-group" [ngFormModel]="getDefaultControlGroup()">
 	<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('name')}">
-		<label>{{ 'Price Product Name' | translate }}</label>
+		<label>{{ 'Price Product Name' | translate }}*</label>
 		<input type="text" class="form-control input-group-lg" ngControl="name" [readonly]="readonly">
 	</div>
 	<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter a name for the product' | translate }}</small></label>

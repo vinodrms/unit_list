@@ -4,7 +4,7 @@
         <div class="col-xs-12 col-md-8">
             <div class="row">
                 <div class="col-xs-12 col-md-6 form-group">
-                    <label>{{ 'Name' | translate }}</label>
+                    <label>{{ 'Name' | translate }}*</label>
                     <div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('name')}">
                         <input type="text" class="form-control" ngControl="name">
                     </div>
@@ -12,7 +12,7 @@
                 </div>
 
                 <div class="col-xs-12 col-md-6 form-group">
-                    <label>{{ 'Floor Number' | translate }}</label>
+                    <label>{{ 'Floor Number' | translate }}*</label>
                     <div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('floor')}">
                         <span class="input-group-addon"><i class="fa fa-caret-square-o-up"></i></span>
                         <input type="number" class="form-control" ngControl="floor">
@@ -23,7 +23,7 @@
 
             <div class="row">
                 <div class="col-xs-12 col-md-12">
-                    <label>{{ 'Category' | translate }}</label>
+                    <label>{{ 'Category' | translate }}*</label>
                     <table class="table table-striped form-group">
                         <tbody class="input-group" [ngClass]="{'form-warning': didSubmitForm&&roomCategoryNotSelected}">
                             <tr>
