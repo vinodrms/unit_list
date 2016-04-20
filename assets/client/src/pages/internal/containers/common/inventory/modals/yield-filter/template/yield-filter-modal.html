@@ -24,7 +24,9 @@
 						/>	 
 				</td>
 				<!-- Color Filter -->
-				<td *ngIf="isColorFilter()">
+				<td *ngIf="isColorFilter()"
+					[ngClass]="{'selectable-row': !yieldFilterValueVM.isEditing}"
+					(click)="!yieldFilterValueVM.isEditing && selectedFilter(yieldFilterValueVM)">
 					<div class="row">
 						<div class="col-xs-2">
 							<div class="color-box" [ngClass]="yieldFilterValueVM.colorMeta.colorCodeStr"></div>
