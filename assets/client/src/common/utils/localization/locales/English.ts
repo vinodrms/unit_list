@@ -376,5 +376,6 @@ export var EnglishTranslations: Object = {
 	"Enter a valid commission": "Enter a valid commission",
 	"Contact Person": "Contact Person",
 	"Hotel Logo": "Hotel Logo",
-	"Clone": "Clone"
+	"Clone": "Clone",
+	"The maximum limit beds per room has been exceeded.": "The maximum limit beds per room has been exceeded."
 };

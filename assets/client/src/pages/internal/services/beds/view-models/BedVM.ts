@@ -6,7 +6,7 @@ import {CapacityDO} from '../../common/data-objects/capacity/CapacityDO';
 export class BedVM extends BaseDO {
     private _bed: BedDO;
     private _template: BedTemplateDO;
-     
+      
     constructor() {
         super();
     }

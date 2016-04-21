@@ -676,6 +676,10 @@ lazy-loading-table .table-wrapper table thead {
     text-align: center;
 }
 
+.bed-selection-message {
+    text-align: center;
+}
+
 .room-categ-label {
     width: 85%;
 }
@@ -713,6 +717,18 @@ lazy-loading-table .table-wrapper table thead {
     height: 20px;
     margin: 5px;
     border: 1px solid rgba(0,0,0,.2);
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-warning {
+    color:#fc8433;
+}
+
+.table-item-action-group {
+    text-align:right;
 }
 
 .red {
