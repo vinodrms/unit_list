@@ -122,9 +122,11 @@ export class CustomerRegisterEditContainerComponent extends BaseComponent implem
 		this._customerVM.priceProductList = _.filter(this._customerVM.priceProductList, (priceProduct: PriceProductDO) => { return priceProduct.id !== priceProductToRemove.id });
 	}
 	public openPriceProductSelectModal() {
-		this._priceProductsModalService.openPriceProductsModal(PriceProductStatus.Active).then((modalDialogInstance: ModalDialogInstance<PriceProductDO>) => {
-			modalDialogInstance.resultObservable.subscribe((selectedPriceProduct: PriceProductDO) => {
-				this.addPriceProductIfNotExists(selectedPriceProduct);
+		this._priceProductsModalService.openPriceProductsModal(PriceProductStatus.Active).then((modalDialogInstance: ModalDialogInstance<PriceProductDO[]>) => {
+			modalDialogInstance.resultObservable.subscribe((selectedPriceProductList: PriceProductDO[]) => {
+				_.forEach(selectedPriceProductList, (selectedPriceProduct: PriceProductDO) => {
+					this.addPriceProductIfNotExists(selectedPriceProduct);
+				});
 			});
 		}).catch((e: any) => { });
 	}

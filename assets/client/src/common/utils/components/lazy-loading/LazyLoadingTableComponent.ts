@@ -1,4 +1,4 @@
-import {Component, OnInit, Output, EventEmitter, Input} from 'angular2/core';
+import {Component, OnInit, Output, EventEmitter, Input, AfterViewChecked, Inject, ElementRef} from 'angular2/core';
 import {Control} from 'angular2/common';
 import {LoadingComponent} from '../LoadingComponent';
 import {TranslationPipe} from '../../localization/TranslationPipe';
@@ -18,7 +18,7 @@ import {TableOptions} from './utils/TableOptions';
 	directives: [LoadingComponent],
 	pipes: [TranslationPipe, PricePipe, PercentagePipe]
 })
-export class LazyLoadingTableComponent<T> {
+export class LazyLoadingTableComponent<T> implements AfterViewChecked {
 	protected _isCollapsed: boolean;
 
 	protected get isCollapsed(): boolean {
@@ -39,6 +39,7 @@ export class LazyLoadingTableComponent<T> {
 			this.paginationIndex.numOfItemsPerPage = PaginationIndex.DefaultItemsPerPage;
 			this.lazyLoadingRequest.updatePageNumberAndPageSize(newPageNumber, PaginationIndex.DefaultItemsPerPage);
 		}
+		this.reflowTableHeader();
 	}
 
 	@Output() protected onAdd = new EventEmitter();
@@ -48,32 +49,28 @@ export class LazyLoadingTableComponent<T> {
 
 	@Output() protected onCopy = new EventEmitter();
 	protected copyItem(item: T) {
-		this.deselectCurrentItem();
+		this.deselectItemIfNecessary(item);
 		this.onCopy.next(item);
 	}
 
 	@Output() protected onDelete = new EventEmitter();
 	protected deleteItem(item: T) {
-		this.deselectCurrentItem();
+		this.deselectItemIfNecessary(item);
 		this.onDelete.next(item);
 	}
 
 	@Output() protected onEdit = new EventEmitter();
 	protected editItem(item: T) {
-		this.deselectCurrentItem();
+		this.deselectItemIfNecessary(item);
 		this.selectTableItem(item);
 		this.onEdit.next(item);
-		
-		var $table = <any>($('lazy-loading-table table.table'));
-		setTimeout(()=>{
-			$table.floatThead('reflow');
-		}, 0);
 	}
 
 	@Output() protected onSelect = new EventEmitter();
+	@Output() protected onMultiSelect = new EventEmitter();
 
 	protected didInit: boolean = false;
-	protected domNeedsRefresh:boolean = false;
+	protected domNeedsRefresh: boolean = false;
 
 	protected lazyLoadingRequest: ILazyLoadRequestService<T>;
 	protected tableMeta: LazyLoadTableMeta;
@@ -81,14 +78,15 @@ export class LazyLoadingTableComponent<T> {
 	protected totalCount: TotalCountDO;
 	protected pageMeta: PageMetaDO;
 	protected itemList: T[] = [];
-	protected selectedItemId: string = "";
+	protected selectedItemList: T[] = [];
 
 	protected tableOptions: TableOptions;
 	protected textSearchControl: Control;
 
 	protected paginationIndex: PaginationIndex;
 
-	constructor(private _appContext: AppContext) {
+	constructor(private _appContext: AppContext,
+		@Inject(ElementRef) private _elementRef: ElementRef) {
 		this.paginationIndex = new PaginationIndex(_appContext);
 		this.tableOptions = new TableOptions();
 	}
@@ -119,7 +117,7 @@ export class LazyLoadingTableComponent<T> {
 		});
 		this.lazyLoadingRequest.refreshData();
 	}
-	
+
 	private checkInvalidPageNumber() {
 		if (this.paginationIndex.isInvalidPageNumber(this.totalCount, this.pageMeta)) {
 			this.lazyLoadingRequest.updatePageNumber(this.paginationIndex.lastPageNumber);
@@ -190,37 +188,64 @@ export class LazyLoadingTableComponent<T> {
 	}
 
 	protected didSelectItem(item: T) {
-		this.deselectCurrentItem();
-		this.selectTableItem(item);
-		this.onSelect.next(item)
-	}
-
-	private deselectCurrentItem() {
-		if (this.tableMeta.autoSelectRows) {
-			this.deselectItem();
+		if(this.tableOptions.canMultiSelect) {
+			if(this.isSelected(item)) {
+				this.deselectItemIfNecessary(item);
+			}
+			else {
+				this.selectTableItem(item);
+			}
+			this.onMultiSelect.next(this.selectedItemList);
+		}
+		else {
+			this.deselectItemIfNecessary(item);
+			this.selectTableItem(item);
+			this.onSelect.next(item);	
 		}
 	}
-	public deselectItem() {
-		this.selectedItemId = "";
+
+	private deselectItemIfNecessary(item: T) {
+		var itemId: string = this.getItemId(item);
+		if (this.tableMeta.autoSelectRows) {
+			this.deselectItem(itemId);
+		}
+	}
+	public deselectItem(itemId?: string) {
+		if(!itemId) {
+			this.selectedItemList = [];	
+		}
+		else {
+			this.selectedItemList = _.filter(this.selectedItemList, (innerItem: T) => { return this.getItemId(innerItem) !== itemId });	
+		}
 	}
 	private selectTableItem(item: T) {
 		if (this.tableMeta.autoSelectRows) {
-			this.selectItem(this.getItemId(item));
+			this.selectItem(item);
 		}
 	}
-	public selectItem(itemId: string) {
-		this.selectedItemId = itemId;
+	public selectItem(item: T) {
+		if(this.tableOptions.canMultiSelect) {
+			if(!this.isSelected(item)) {
+				this.selectedItemList.push(item);	
+			}
+		}
+		else {
+			this.selectedItemList = [item];	
+		}
 	}
-	protected isSelected(item: T) {
-		return this.getItemId(item) === this.selectedItemId;
+	protected isSelected(item: T): boolean {
+		var itemId: string = this.getItemId(item);
+		var founditem: T = _.find(this.selectedItemList, (innerItem: T) => { return this.getItemId(innerItem) === itemId });
+		return founditem != null;
 	}
 
 	private getSelectedItemIndexInPageItemList(): number {
-		if (!this.selectedItemId) {
+		if (!this.selectedItemList || this.selectedItemList.length == 0) {
 			return Math.floor(this.itemList.length / 2);
 		}
+		var selectedItemId = this.getItemId(this.selectedItemList[0]);
 		for (var index = 0; index < this.itemList.length; index++) {
-			if (this.getItemId(this.itemList[index]) === this.selectedItemId) {
+			if (this.getItemId(this.itemList[index]) === selectedItemId) {
 				return index;
 			}
 		}
@@ -235,20 +260,25 @@ export class LazyLoadingTableComponent<T> {
 	protected getDependentItemValue(item: T, valueMeta: TableColumnValueMeta): any {
 		return this._appContext.thUtils.getObjectValueByPropertyStack(item, valueMeta.dependentObjectPropertyId);
 	}
-	
 
-	private makeTableHeaderFloatable(){
-		var $table = <any>($('lazy-loading-table table.table'));
-		// $table.floatThead('destroy');
-		$table.floatThead({
-  			position: 'fixed'
-  		});  
-	}	
-	
-	public ngAfterViewChecked(){
-		if (this.domNeedsRefresh){
+
+	public ngAfterViewChecked() {
+		if (this.domNeedsRefresh) {
 			this.makeTableHeaderFloatable();
 			this.domNeedsRefresh = false;
 		}
+	}
+	private makeTableHeaderFloatable() {
+		// TODO: decomment to allow sticky header
+		// this.getTableElement().floatThead({ position: 'fixed' });
+	}
+	private reflowTableHeader() {
+		setTimeout(()=>{
+			// TODO: decomment to allow sticky header
+			// this.getTableElement().floatThead('reflow');
+		}, 0);
+	}
+	private getTableElement(): any {
+		return $(this._elementRef.nativeElement).find("table.table");
 	}
 }

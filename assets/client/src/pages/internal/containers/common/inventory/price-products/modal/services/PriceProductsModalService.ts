@@ -9,7 +9,7 @@ import {PriceProductsModalComponent} from '../PriceProductsModalComponent';
 export class PriceProductsModalService {
 	constructor(private _appContext: AppContext) { }
 
-	public openPriceProductsModal(priceProductStatus: PriceProductStatus): Promise<ModalDialogInstance<PriceProductDO>> {
+	public openPriceProductsModal(priceProductStatus: PriceProductStatus): Promise<ModalDialogInstance<PriceProductDO[]>> {
 		var priceProductModalInput = new PriceProductsModalInput();
 		priceProductModalInput.priceProductStatus = priceProductStatus;
 

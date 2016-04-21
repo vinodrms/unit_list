@@ -3,7 +3,7 @@
 	<h4 class="modal-title">{{ 'Select Add-On Product' | translate }}</h4>
 </div>
 <div class="modal-body">
-	<lazy-loading-table (onSelect)="selectAddOnProduct($event)"></lazy-loading-table>
+	<lazy-loading-table (onMultiSelect)="didSelectAddOnProductList($event)"></lazy-loading-table>
 </div>
 <div class="modal-footer">
 	<button type="button" class="btn btn-primary" [disabled]="!didSelectAddOnProduct()" (click)="triggerSelectedAddOnProduct()">

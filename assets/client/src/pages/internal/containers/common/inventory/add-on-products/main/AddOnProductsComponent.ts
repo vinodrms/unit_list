@@ -102,7 +102,7 @@ export class AddOnProductsComponent extends BaseComponent {
     public editAddOnProduct(addOnProductVM: AddOnProductVM) {
         var newAddOnProductVM = addOnProductVM.buildPrototype();
         this._inventoryStateManager.canPerformAction(InventoryScreenAction.Edit, newAddOnProductVM).then((newState: InventoryScreenStateType) => {
-            this._aopTableComponent.selectItem(newAddOnProductVM.addOnProduct.id);
+            this._aopTableComponent.selectItem(newAddOnProductVM);
 
             this._inventoryStateManager.currentItem = newAddOnProductVM;
             this._inventoryStateManager.screenStateType = newState;
@@ -137,7 +137,7 @@ export class AddOnProductsComponent extends BaseComponent {
     public selectAddOnProduct(addOnProductVM: AddOnProductVM) {
         var newAddOnProductVM = addOnProductVM.buildPrototype();
         this._inventoryStateManager.canPerformAction(InventoryScreenAction.Select, newAddOnProductVM).then((newState: InventoryScreenStateType) => {
-            this._aopTableComponent.selectItem(newAddOnProductVM.addOnProduct.id);
+            this._aopTableComponent.selectItem(newAddOnProductVM);
 
             this._inventoryStateManager.currentItem = newAddOnProductVM;
             this._inventoryStateManager.screenStateType = newState;

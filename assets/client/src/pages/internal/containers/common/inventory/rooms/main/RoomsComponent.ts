@@ -86,7 +86,7 @@ export class RoomsComponent extends BaseComponent {
     public editRoom(roomVM: RoomVM) {
         var newRoomVM = roomVM.buildPrototype();
         this._inventoryStateManager.canPerformAction(InventoryScreenAction.Edit, newRoomVM).then((newState: InventoryScreenStateType) => {
-            this._roomTableComponent.selectItem(roomVM.room.id);
+            this._roomTableComponent.selectItem(roomVM);
 
             this._inventoryStateManager.currentItem = newRoomVM;
             this._inventoryStateManager.screenStateType = newState;
@@ -122,7 +122,7 @@ export class RoomsComponent extends BaseComponent {
     public selectRoom(roomVM: RoomVM) {
         var newRoomVM = roomVM.buildPrototype();
         this._inventoryStateManager.canPerformAction(InventoryScreenAction.Select, newRoomVM).then((newState: InventoryScreenStateType) => {
-            this._roomTableComponent.selectItem(newRoomVM.room.id);
+            this._roomTableComponent.selectItem(newRoomVM);
 
             this._inventoryStateManager.currentItem = newRoomVM;
             this._inventoryStateManager.screenStateType = newState;

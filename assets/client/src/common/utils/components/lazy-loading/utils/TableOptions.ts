@@ -2,6 +2,7 @@ import {LazyLoadTableMeta, TableRowCommand} from './LazyLoadTableMeta';
 
 export class TableOptions {
 	canSelect: boolean = false;
+	canMultiSelect: boolean = false;
 	canCopy: boolean = false;
 	canEdit: boolean = false;
 	canDelete: boolean = false;
@@ -13,6 +14,7 @@ export class TableOptions {
 
 	public updatePageOptions(tableMeta: LazyLoadTableMeta) {
 		this.canSelect = _.contains(tableMeta.supportedRowCommandList, TableRowCommand.Select);
+		this.canMultiSelect = _.contains(tableMeta.supportedRowCommandList, TableRowCommand.MultipleSelect);
 		this.canEdit = _.contains(tableMeta.supportedRowCommandList, TableRowCommand.Edit);
 		this.canCopy = _.contains(tableMeta.supportedRowCommandList, TableRowCommand.Copy);
 		this.canDelete = _.contains(tableMeta.supportedRowCommandList, TableRowCommand.Delete);
