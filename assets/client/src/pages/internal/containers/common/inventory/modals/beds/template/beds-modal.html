@@ -8,7 +8,7 @@
     <div class="row">
         <div class="col-xs-6 col-md-4" *ngFor="#bedSelectionVM of bedSelectionVMList">
             <div class="row">
-                <div class="col-xs-12 col-md-12" style="text-align:center;">
+                <div class="col-xs-12 col-md-12 text-center">
                     <div class="btn bed-slot unselected" (click)="bedSelectionVM.numberOfInstances=bedSelectionVM.numberOfInstances+1">
                         <div class="bed-slot-inner" [title]="bedSelectionVM.bedVM.bed.name">
                             <div class="bed-btn">

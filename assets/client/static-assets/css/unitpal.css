@@ -719,8 +719,16 @@ lazy-loading-table .table-wrapper table thead {
     border: 1px solid rgba(0,0,0,.2);
 }
 
+.text-center {
+    text-align: center;
+}
+
 .text-warning {
     color:#fc8433;
+}
+
+.table-item-action-group {
+    text-align:right;
 }
 
 .red {
