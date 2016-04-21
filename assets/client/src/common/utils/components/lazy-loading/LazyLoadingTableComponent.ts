@@ -1,4 +1,4 @@
-import {Component, OnInit, Output, EventEmitter, Input} from 'angular2/core';
+import {Component, OnInit, Output, EventEmitter, Input, AfterViewChecked, Inject, ElementRef} from 'angular2/core';
 import {Control} from 'angular2/common';
 import {LoadingComponent} from '../LoadingComponent';
 import {TranslationPipe} from '../../localization/TranslationPipe';
@@ -18,7 +18,7 @@ import {TableOptions} from './utils/TableOptions';
 	directives: [LoadingComponent],
 	pipes: [TranslationPipe, PricePipe, PercentagePipe]
 })
-export class LazyLoadingTableComponent<T> {
+export class LazyLoadingTableComponent<T> implements AfterViewChecked {
 	protected _isCollapsed: boolean;
 
 	protected get isCollapsed(): boolean {
@@ -39,6 +39,7 @@ export class LazyLoadingTableComponent<T> {
 			this.paginationIndex.numOfItemsPerPage = PaginationIndex.DefaultItemsPerPage;
 			this.lazyLoadingRequest.updatePageNumberAndPageSize(newPageNumber, PaginationIndex.DefaultItemsPerPage);
 		}
+		this.reflowTableHeader();
 	}
 
 	@Output() protected onAdd = new EventEmitter();
@@ -63,17 +64,12 @@ export class LazyLoadingTableComponent<T> {
 		this.deselectCurrentItem();
 		this.selectTableItem(item);
 		this.onEdit.next(item);
-		
-		var $table = <any>($('lazy-loading-table table.table'));
-		setTimeout(()=>{
-			$table.floatThead('reflow');
-		}, 0);
 	}
 
 	@Output() protected onSelect = new EventEmitter();
 
 	protected didInit: boolean = false;
-	protected domNeedsRefresh:boolean = false;
+	protected domNeedsRefresh: boolean = false;
 
 	protected lazyLoadingRequest: ILazyLoadRequestService<T>;
 	protected tableMeta: LazyLoadTableMeta;
@@ -88,7 +84,8 @@ export class LazyLoadingTableComponent<T> {
 
 	protected paginationIndex: PaginationIndex;
 
-	constructor(private _appContext: AppContext) {
+	constructor(private _appContext: AppContext,
+		@Inject(ElementRef) private _elementRef: ElementRef) {
 		this.paginationIndex = new PaginationIndex(_appContext);
 		this.tableOptions = new TableOptions();
 	}
@@ -119,7 +116,7 @@ export class LazyLoadingTableComponent<T> {
 		});
 		this.lazyLoadingRequest.refreshData();
 	}
-	
+
 	private checkInvalidPageNumber() {
 		if (this.paginationIndex.isInvalidPageNumber(this.totalCount, this.pageMeta)) {
 			this.lazyLoadingRequest.updatePageNumber(this.paginationIndex.lastPageNumber);
@@ -235,20 +232,25 @@ export class LazyLoadingTableComponent<T> {
 	protected getDependentItemValue(item: T, valueMeta: TableColumnValueMeta): any {
 		return this._appContext.thUtils.getObjectValueByPropertyStack(item, valueMeta.dependentObjectPropertyId);
 	}
-	
 
-	private makeTableHeaderFloatable(){
-		var $table = <any>($('lazy-loading-table table.table'));
-		// $table.floatThead('destroy');
-		$table.floatThead({
-  			position: 'fixed'
-  		});  
-	}	
-	
-	public ngAfterViewChecked(){
-		if (this.domNeedsRefresh){
+
+	public ngAfterViewChecked() {
+		if (this.domNeedsRefresh) {
 			this.makeTableHeaderFloatable();
 			this.domNeedsRefresh = false;
 		}
+	}
+	private makeTableHeaderFloatable() {
+		// TODO: decomment to allow sticky header
+		// this.getTableElement().floatThead({ position: 'fixed' });
+	}
+	private reflowTableHeader() {
+		setTimeout(()=>{
+			// TODO: decomment to allow sticky header
+			// this.getTableElement().floatThead('reflow');
+		}, 0);
+	}
+	private getTableElement(): any {
+		return $(this._elementRef.nativeElement).find("table.table");
 	}
 }
