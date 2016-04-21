@@ -11,21 +11,23 @@ export class RoomCategoriesModalService {
 
 	constructor(private _appContext: AppContext) { }
 
-	public openAllCategoriesModal(allowCategoryEdit: boolean, initialRoomCategoryId?: string): Promise<ModalDialogInstance<RoomCategoryDO>> {
+	public openAllCategoriesModal(allowCategoryEdit: boolean, initialRoomCategoryId?: string): Promise<ModalDialogInstance<RoomCategoryDO[]>> {
 		var roomCategInput = new RoomCategoriesModalInput();
 		roomCategInput.allowCategoryEdit = allowCategoryEdit;
 		roomCategInput.initialRoomCategoryId = initialRoomCategoryId;
 		roomCategInput.roomCategoriesType = RoomCategoriesType.AllCategories;
+		roomCategInput.allowMultiSelection = false;
 
 		return this._appContext.modalService.open<any>(<any>RoomCategoriesModalComponent, Injector.resolve([
 			provide(RoomCategoriesModalInput, { useValue: roomCategInput })
 		]));
 	}
 	
-	public openUsedCategoriesModal(): Promise<ModalDialogInstance<RoomCategoryDO>> {
+	public openUsedCategoriesModal(): Promise<ModalDialogInstance<RoomCategoryDO[]>> {
 		var roomCategInput = new RoomCategoriesModalInput();
 		roomCategInput.allowCategoryEdit = false;
 		roomCategInput.roomCategoriesType = RoomCategoriesType.UsedInRooms;
+		roomCategInput.allowMultiSelection = true;
 
 		return this._appContext.modalService.open<any>(<any>RoomCategoriesModalComponent, Injector.resolve([
 			provide(RoomCategoriesModalInput, { useValue: roomCategInput })

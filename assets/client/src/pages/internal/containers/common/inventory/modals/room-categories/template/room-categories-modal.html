@@ -13,7 +13,7 @@
 			<tr *ngFor="#roomCategoryVM of roomCategoryVMList" [ngClass]="{active: isCategorySelected(roomCategoryVM)}">
 				<td class="selectable-row" 
 					*ngIf="!roomCategoryVM.isEditing" 
-					(click)="selectedCategoryVM=roomCategoryVM"> 
+					(click)="selectRoomCategory(roomCategoryVM)"> 
 					{{roomCategoryVM.roomCategory.displayName}} 
 				</td>
 				<td *ngIf="roomCategoryVM.isEditing"> 

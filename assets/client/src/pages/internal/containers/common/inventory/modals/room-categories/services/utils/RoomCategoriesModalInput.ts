@@ -4,7 +4,8 @@ export class RoomCategoriesModalInput {
 	private _allowCategoryEdit: boolean;
 	private _initialRoomCategoryId: string;
 	private _roomCategoriesType: RoomCategoriesType;
-	
+	private _allowMultiSelection: boolean;
+
 	public get allowCategoryEdit(): boolean {
 		return this._allowCategoryEdit;
 	}
@@ -22,5 +23,11 @@ export class RoomCategoriesModalInput {
 	}
 	public set roomCategoriesType(roomCategoriesType: RoomCategoriesType) {
 		this._roomCategoriesType = roomCategoriesType;
+	}
+	public get allowMultiSelection(): boolean {
+		return this._allowMultiSelection;
+	}
+	public set allowMultiSelection(allowMultiSelection: boolean) {
+		this._allowMultiSelection = allowMultiSelection;
 	}
 }

@@ -185,14 +185,16 @@ export class RoomEditComponent extends BaseFormComponent implements OnInit {
     }
 
     public openRoomCategorySelectModal() {
-        this.getRoomCategoriesModalPromise().then((modalDialogInstance: ModalDialogInstance<RoomCategoryDO>) => {
-            modalDialogInstance.resultObservable.subscribe((selectedRoomCategory: RoomCategoryDO) => {
-                this.roomVM.category = selectedRoomCategory;
+        this.getRoomCategoriesModalPromise().then((modalDialogInstance: ModalDialogInstance<RoomCategoryDO[]>) => {
+            modalDialogInstance.resultObservable.subscribe((selectedRoomCategoryList: RoomCategoryDO[]) => {
+                if(selectedRoomCategoryList.length > 0) {
+                    this.roomVM.category = selectedRoomCategoryList[0];   
+                }
             });
         }).catch((e: any) => { });
     }
 
-    private getRoomCategoriesModalPromise(): Promise<ModalDialogInstance<RoomCategoryDO>> {
+    private getRoomCategoriesModalPromise(): Promise<ModalDialogInstance<RoomCategoryDO[]>> {
         if (this.roomCategoryNotSelected) {
             return this._roomCategoriesModalService.openAllCategoriesModal(true);
         }

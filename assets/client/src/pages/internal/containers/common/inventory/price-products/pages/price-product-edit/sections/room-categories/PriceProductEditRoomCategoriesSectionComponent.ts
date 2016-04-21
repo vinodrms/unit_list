@@ -49,9 +49,11 @@ export class PriceProductEditRoomCategoriesSectionComponent extends BaseComponen
 	}
 
 	public openRoomCategorySelectModal() {
-		this._roomCategoriesModalService.openUsedCategoriesModal().then((modalDialogInstance: ModalDialogInstance<RoomCategoryDO>) => {
-			modalDialogInstance.resultObservable.subscribe((selectedRoomCategory: RoomCategoryDO) => {
-				this.addRoomCategoryIfNotExists(selectedRoomCategory);
+		this._roomCategoriesModalService.openUsedCategoriesModal().then((modalDialogInstance: ModalDialogInstance<RoomCategoryDO[]>) => {
+			modalDialogInstance.resultObservable.subscribe((selectedRoomCategoryList: RoomCategoryDO[]) => {
+				_.forEach(selectedRoomCategoryList, (selectedRoomCategory: RoomCategoryDO) => {
+					this.addRoomCategoryIfNotExists(selectedRoomCategory);
+				});
 			});
 		}).catch((e: any) => { });
 	}

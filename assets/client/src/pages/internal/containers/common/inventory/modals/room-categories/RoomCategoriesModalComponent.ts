@@ -20,16 +20,16 @@ import {RoomCategoryVM} from './services/view-models/RoomCategoryVM';
 })
 export class RoomCategoriesModalComponent extends BaseComponent implements ICustomModalComponent, OnInit, AfterViewChecked {
 	isLoading: boolean = true;
-	
+
 	private _scrollToBottom: boolean = false;
 	@ViewChild('scrollableContent') private tableScrollContainer: ElementRef;
 
 	allowCategoryEdit: boolean;
 	roomCategoryVMList: RoomCategoryVM[];
-	selectedCategoryVM: RoomCategoryVM;
+	selectedCategoryVMList: RoomCategoryVM[] = [];
 
 	constructor(private _appContext: AppContext,
-		private _modalDialogInstance: ModalDialogInstance<RoomCategoryDO>,
+		private _modalDialogInstance: ModalDialogInstance<RoomCategoryDO[]>,
 		private _roomCategModalInput: RoomCategoriesModalInput,
 		private _roomCategService: RoomCategoriesService) {
 		super();
@@ -45,7 +45,7 @@ export class RoomCategoriesModalComponent extends BaseComponent implements ICust
 				roomCategVM.roomCategory = roomCategDO;
 				this.roomCategoryVMList.push(roomCategVM);
 				if (this._roomCategModalInput.initialRoomCategoryId && roomCategVM.roomCategory.id === this._roomCategModalInput.initialRoomCategoryId) {
-					this.selectedCategoryVM = roomCategVM;
+					this.selectedCategoryVMList = [roomCategVM];
 				}
 			});
 			this.isLoading = false;
@@ -115,16 +115,36 @@ export class RoomCategoriesModalComponent extends BaseComponent implements ICust
 		this._scrollToBottom = true;
 	}
 	public didSelectCategory(): boolean {
-		return this.selectedCategoryVM != null;
+		return this.selectedCategoryVMList.length > 0;
+	}
+	public selectRoomCategory(roomCategVM: RoomCategoryVM) {
+		if (this._roomCategModalInput.allowMultiSelection) {
+			if (!this.isCategorySelected(roomCategVM)) {
+				this.selectedCategoryVMList.push(roomCategVM);
+			}
+			else {
+				this.selectedCategoryVMList = _.filter(this.selectedCategoryVMList, (innerRoomCategVM: RoomCategoryVM) => {
+					return innerRoomCategVM.roomCategory.id !== roomCategVM.roomCategory.id;
+				});
+			}
+		}
+		else {
+			this.selectedCategoryVMList = [roomCategVM];
+		}
 	}
 	public isCategorySelected(roomCategVM: RoomCategoryVM): boolean {
-		return this.didSelectCategory() && roomCategVM.roomCategory.id === this.selectedCategoryVM.roomCategory.id;
+		return this.didSelectCategory() &&
+			(_.find(this.selectedCategoryVMList, (innerRoomCategVM: RoomCategoryVM) => {
+				return innerRoomCategVM.roomCategory.id === roomCategVM.roomCategory.id
+			})) != null;
 	}
 	public triggerSelectedCategory() {
 		if (!this.didSelectCategory()) {
 			return;
 		}
-		this._modalDialogInstance.addResult(this.selectedCategoryVM.roomCategory);
+		this._modalDialogInstance.addResult(_.map(this.selectedCategoryVMList, (roomCategVM: RoomCategoryVM) => {
+			return roomCategVM.roomCategory;
+		}));
 		this.closeDialog();
 	}
 }
