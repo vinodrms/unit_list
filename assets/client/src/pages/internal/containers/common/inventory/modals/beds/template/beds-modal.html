@@ -6,24 +6,36 @@
     <loading-component [isLoading]="isLoading"></loading-component>
 
     <div class="row">
-        <div class="col-md-4" *ngFor="#bedVM of bedVMList">
-            <div class="btn bed-slot" [ngClass]="{'unselected': !bedSelected(bedVM)}" (click)="selectedBedVM=bedVM">
-                <div class="bed-slot-inner" [title]="bedVM.bed.name">
-                    <div class="bed-btn">
-                        <span class="unitpal-font">{{bedVM.template.iconUrl}}</span>
+        <div class="col-md-4" *ngFor="#bedSelectionVM of bedSelectionVMList">
+            <div class="row">
+                <div class="col-md-12" style="text-align:center;">
+                    <div class="btn bed-slot unselected" (click)="bedSelectionVM.numberOfInstances=bedSelectionVM.numberOfInstances+1">
+                        <div class="bed-slot-inner" [title]="bedSelectionVM.bedVM.bed.name">
+                            <div class="bed-btn">
+                                <span class="unitpal-font">{{bedSelectionVM.bedVM.template.iconUrl}}</span>
+                            </div>
+                            <small>{{bedSelectionVM.bedVM.bed.name}}</small>
+                            <br/> {{bedSelectionVM.bedVM.capacity.maxAdults}}
+                            <span class="unitpal-font">:</span> {{bedSelectionVM.bedVM.capacity.maxChildren}}<span class="unitpal-font">;</span>
+                        </div>
                     </div>
-                    <small>{{bedVM.bed.name}}</small>
-                    <br/> {{bedVM.capacity.maxAdults}}
-                    <span class="unitpal-font">:</span> {{bedVM.capacity.maxChildren}}<span class="unitpal-font">;</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-offset-3 col-md-6 form-group">
+                    <input type="number" class="form-control" [(ngModel)]="bedSelectionVM.numberOfInstances" [min]="minBedNo" [max]="maxBedNo">
                 </div>
             </div>
         </div>
     </div>
-
-
+    <div *ngIf="didPassedTheMaxNoOfBeds" class="row">
+        <div class="col-md-12 bed-selection-message">
+            <small class="text-warning"><i class="fa fa-info-circle"></i> The maximum limit of {{maxBedNo}} beds per room has been passed.</small>
+        </div>
+    </div>
 </div>
 <div class="modal-footer">
-    <button type="button" class="btn btn-primary" [disabled]="!didSelectBed()" (click)="triggerSelectedBed()">
-        {{ 'Select' | translate }}
+    <button type="button" class="btn btn-primary" [disabled]="!didSelectAtLeastOneBed||didPassedTheMaxNoOfBeds" (click)="triggerSelectedBed()">
+        {{ 'Save' | translate }}
     </button>
 </div>

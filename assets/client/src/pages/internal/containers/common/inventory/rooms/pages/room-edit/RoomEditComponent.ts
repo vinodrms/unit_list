@@ -20,14 +20,14 @@ import {RoomAttributeVMContainer, RoomAttributeVM} from './services/utils/RoomAt
 import {RoomAmenityVMContainer, RoomAmenityVM} from './services/utils/RoomAmenityVMContainer';
 import {ModalDialogInstance} from '../../../../../../../../common/utils/modals/utils/ModalDialogInstance';
 import {RoomCategoriesModalService} from '../../../modals/room-categories/services/RoomCategoriesModalService';
-import {BedsModalService} from '../../../modals/beds/services/BedsModalService';
 import {BedVM} from '../../../../../../services/beds/view-models/BedVM';
+import {BedSelectorComponent} from './components/bed-selector/BedSelectorComponent';
 
 @Component({
     selector: 'room-edit',
     templateUrl: '/client/src/pages/internal/containers/common/inventory/rooms/pages/room-edit/template/room-edit.html',
-    providers: [RoomEditService, RoomCategoriesModalService, BedsModalService],
-    directives: [LoadingComponent, ImageUploadComponent],
+    providers: [RoomEditService, RoomCategoriesModalService],
+    directives: [LoadingComponent, ImageUploadComponent, BedSelectorComponent],
     pipes: [TranslationPipe]
 })
 export class RoomEditComponent extends BaseFormComponent implements OnInit {
@@ -62,8 +62,7 @@ export class RoomEditComponent extends BaseFormComponent implements OnInit {
         private _roomAmenitiesService: RoomAmenitiesService,
         private _roomAttributesService: RoomAttributesService,
         private _roomCategoriesModalService: RoomCategoriesModalService,
-        private _bedsEagerService: BedsEagerService,
-        private _bedsModalService: BedsModalService) {
+        private _bedsEagerService: BedsEagerService) {
         super();
     }
 
@@ -94,7 +93,7 @@ export class RoomEditComponent extends BaseFormComponent implements OnInit {
         if (this._appContext.thUtils.isUndefinedOrNull(this.roomVM.room.maintenanceStatus)) {
             this.roomVM.room.maintenanceStatus = RoomMaintenanceStatus.CheckInReady;
         }
-        if (this._appContext.thUtils.isUndefinedOrNull(this._roomVM.room.amenityIdList) && 
+        if (this._appContext.thUtils.isUndefinedOrNull(this._roomVM.room.amenityIdList) &&
             !this._appContext.thUtils.isUndefinedOrNull(this.roomAmenities)) {
             this.roomAmenities.resetRoomAmenitySelection();
         }
@@ -102,7 +101,6 @@ export class RoomEditComponent extends BaseFormComponent implements OnInit {
             !this._appContext.thUtils.isUndefinedOrNull(this.roomAttributes)) {
             this.roomAttributes.resetRoomAttributeSelection();
         };
-        this.resetEmptySlots();
     }
     private initForm() {
         this.didSubmitForm = false;
@@ -151,39 +149,6 @@ export class RoomEditComponent extends BaseFormComponent implements OnInit {
         this.roomVM.imageUrl = imageUrl;
     }
 
-    public addBed(bedVM: BedVM) {
-        this.roomVM.bedList.push(bedVM);
-        this.resetEmptySlots();
-    }
-    public removeBed(bedIndex: number) {
-
-        var title = this._appContext.thTranslation.translate("Remove Bed");
-        var content = this._appContext.thTranslation.translate("Are you sure you want to remove one %name% from this room ?", { name: this.roomVM.bedList[bedIndex].bed.name });
-        var positiveLabel = this._appContext.thTranslation.translate("Yes");
-        var negativeLabel = this._appContext.thTranslation.translate("No");
-        this._appContext.modalService.confirm(title, content, { positive: positiveLabel, negative: negativeLabel }, () => {
-            this.roomVM.bedList.splice(bedIndex, 1);
-            this.resetEmptySlots();
-        });
-    }
-
-    private resetEmptySlots() {
-        if (this._appContext.thUtils.isUndefinedOrNull(this.emptySlots)) {
-            this.emptySlots = [];
-        }
-        var emptySlotsNO = this.MAX_BED_NO - this.roomVM.bedList.length;
-        if (emptySlotsNO < this.emptySlots.length) {
-            while (emptySlotsNO != this.emptySlots.length) {
-                this.emptySlots.splice(0, 1);
-            }
-        }
-        else if (emptySlotsNO > this.emptySlots.length) {
-            while (emptySlotsNO != this.emptySlots.length) {
-                this.emptySlots.push(new Object());
-            }
-        }
-    }
-
     public openRoomCategorySelectModal() {
         this.getRoomCategoriesModalPromise().then((modalDialogInstance: ModalDialogInstance<RoomCategoryDO>) => {
             modalDialogInstance.resultObservable.subscribe((selectedRoomCategory: RoomCategoryDO) => {
@@ -201,19 +166,12 @@ export class RoomEditComponent extends BaseFormComponent implements OnInit {
         }
     }
 
-    public get maximuNumberOfBedsReached(): boolean {
-        return this.MAX_BED_NO === this.roomVM.bedList.length;
-    }
-
     public get roomCategoryNotSelected(): boolean {
         return this._appContext.thUtils.isUndefinedOrNull(this.roomVM.category);
     }
-
-    public openBedsSelectModal() {
-        this._bedsModalService.openAllBedsModal(this.allAvailableBeds).then((modalDialogInstance: ModalDialogInstance<BedVM>) => {
-            modalDialogInstance.resultObservable.subscribe((selectedBed: BedVM) => {
-                this.addBed(selectedBed);
-            });
-        }).catch((e: any) => { });
+    
+    public diChangeSelectedBedList(savedBedVMList: BedVM[]) {
+        debugger
+        this.roomVM.bedList = savedBedVMList;
     }
 }
