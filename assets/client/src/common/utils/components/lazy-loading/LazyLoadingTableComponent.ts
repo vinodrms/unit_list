@@ -49,24 +49,25 @@ export class LazyLoadingTableComponent<T> implements AfterViewChecked {
 
 	@Output() protected onCopy = new EventEmitter();
 	protected copyItem(item: T) {
-		this.deselectCurrentItem();
+		this.deselectItemIfNecessary(item);
 		this.onCopy.next(item);
 	}
 
 	@Output() protected onDelete = new EventEmitter();
 	protected deleteItem(item: T) {
-		this.deselectCurrentItem();
+		this.deselectItemIfNecessary(item);
 		this.onDelete.next(item);
 	}
 
 	@Output() protected onEdit = new EventEmitter();
 	protected editItem(item: T) {
-		this.deselectCurrentItem();
+		this.deselectItemIfNecessary(item);
 		this.selectTableItem(item);
 		this.onEdit.next(item);
 	}
 
 	@Output() protected onSelect = new EventEmitter();
+	@Output() protected onMultiSelect = new EventEmitter();
 
 	protected didInit: boolean = false;
 	protected domNeedsRefresh: boolean = false;
@@ -77,7 +78,7 @@ export class LazyLoadingTableComponent<T> implements AfterViewChecked {
 	protected totalCount: TotalCountDO;
 	protected pageMeta: PageMetaDO;
 	protected itemList: T[] = [];
-	protected selectedItemId: string = "";
+	protected selectedItemList: T[] = [];
 
 	protected tableOptions: TableOptions;
 	protected textSearchControl: Control;
@@ -187,37 +188,64 @@ export class LazyLoadingTableComponent<T> implements AfterViewChecked {
 	}
 
 	protected didSelectItem(item: T) {
-		this.deselectCurrentItem();
-		this.selectTableItem(item);
-		this.onSelect.next(item)
-	}
-
-	private deselectCurrentItem() {
-		if (this.tableMeta.autoSelectRows) {
-			this.deselectItem();
+		if(this.tableOptions.canMultiSelect) {
+			if(this.isSelected(item)) {
+				this.deselectItemIfNecessary(item);
+			}
+			else {
+				this.selectTableItem(item);
+			}
+			this.onMultiSelect.next(this.selectedItemList);
+		}
+		else {
+			this.deselectItemIfNecessary(item);
+			this.selectTableItem(item);
+			this.onSelect.next(item);	
 		}
 	}
-	public deselectItem() {
-		this.selectedItemId = "";
+
+	private deselectItemIfNecessary(item: T) {
+		var itemId: string = this.getItemId(item);
+		if (this.tableMeta.autoSelectRows) {
+			this.deselectItem(itemId);
+		}
+	}
+	public deselectItem(itemId?: string) {
+		if(!itemId) {
+			this.selectedItemList = [];	
+		}
+		else {
+			this.selectedItemList = _.filter(this.selectedItemList, (innerItem: T) => { return this.getItemId(innerItem) !== itemId });	
+		}
 	}
 	private selectTableItem(item: T) {
 		if (this.tableMeta.autoSelectRows) {
-			this.selectItem(this.getItemId(item));
+			this.selectItem(item);
 		}
 	}
-	public selectItem(itemId: string) {
-		this.selectedItemId = itemId;
+	public selectItem(item: T) {
+		if(this.tableOptions.canMultiSelect) {
+			if(!this.isSelected(item)) {
+				this.selectedItemList.push(item);	
+			}
+		}
+		else {
+			this.selectedItemList = [item];	
+		}
 	}
-	protected isSelected(item: T) {
-		return this.getItemId(item) === this.selectedItemId;
+	protected isSelected(item: T): boolean {
+		var itemId: string = this.getItemId(item);
+		var founditem: T = _.find(this.selectedItemList, (innerItem: T) => { return this.getItemId(innerItem) === itemId });
+		return founditem != null;
 	}
 
 	private getSelectedItemIndexInPageItemList(): number {
-		if (!this.selectedItemId) {
+		if (!this.selectedItemList || this.selectedItemList.length == 0) {
 			return Math.floor(this.itemList.length / 2);
 		}
+		var selectedItemId = this.getItemId(this.selectedItemList[0]);
 		for (var index = 0; index < this.itemList.length; index++) {
-			if (this.getItemId(this.itemList[index]) === this.selectedItemId) {
+			if (this.getItemId(this.itemList[index]) === selectedItemId) {
 				return index;
 			}
 		}

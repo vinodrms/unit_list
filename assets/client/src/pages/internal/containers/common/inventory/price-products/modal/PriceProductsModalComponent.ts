@@ -26,11 +26,11 @@ export class PriceProductsModalComponent extends BaseComponent implements ICusto
 	@ViewChild(LazyLoadingTableComponent)
 	private _aopTableComponent: LazyLoadingTableComponent<PriceProductVM>;
 
-	private _selectedPriceProduct: PriceProductDO;
+	private _selectedPriceProductList: PriceProductDO[] = [];
 	private _isPublicAvailability: boolean;
 
 	constructor(private _appContext: AppContext,
-		private _modalDialogInstance: ModalDialogInstance<PriceProductDO>,
+		private _modalDialogInstance: ModalDialogInstance<PriceProductDO[]>,
 		private _tableBuilder: PriceProductTableMetaBuilderService,
 		private _priceProductsService: PriceProductsService,
 		private _modalInput: PriceProductsModalInput) {
@@ -45,7 +45,7 @@ export class PriceProductsModalComponent extends BaseComponent implements ICusto
 	}
 	private bootstrapPriceProductsTable() {
 		var lazyLoadTableMeta: LazyLoadTableMeta = this._tableBuilder.buildLazyLoadTableMeta();
-		lazyLoadTableMeta.supportedRowCommandList = [TableRowCommand.Search, TableRowCommand.Select];
+		lazyLoadTableMeta.supportedRowCommandList = [TableRowCommand.Search, TableRowCommand.MultipleSelect];
 		lazyLoadTableMeta.autoSelectRows = true;
 		this._aopTableComponent.bootstrap(this._priceProductsService, lazyLoadTableMeta);
 	}
@@ -80,17 +80,19 @@ export class PriceProductsModalComponent extends BaseComponent implements ICusto
 		}
 	}
 
-	public selectPriceProduct(selectedPriceProduct: PriceProductVM) {
-		this._selectedPriceProduct = selectedPriceProduct.priceProduct;
+	public didSelectPriceProductList(selectedPriceProductList: PriceProductVM[]) {
+		this._selectedPriceProductList = _.map(selectedPriceProductList, (ppVm: PriceProductVM) => {
+			return ppVm.priceProduct;
+		});
 	}
 	public didSelectPriceProduct(): boolean {
-		return this._selectedPriceProduct != null;
+		return this._selectedPriceProductList.length > 0;
 	}
 	public triggerSelectedPriceProduct() {
 		if (!this.didSelectPriceProduct()) {
 			return;
 		}
-		this._modalDialogInstance.addResult(this._selectedPriceProduct);
+		this._modalDialogInstance.addResult(this._selectedPriceProductList);
 		this.closeDialog();
 	}
 }

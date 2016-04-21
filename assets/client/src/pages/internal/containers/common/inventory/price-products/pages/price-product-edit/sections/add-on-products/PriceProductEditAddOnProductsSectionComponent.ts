@@ -50,9 +50,11 @@ export class PriceProductEditAddOnProductsSectionComponent extends BaseComponent
 	}
 
 	public openAddOnProductSelectModal() {
-		this._addOnProductsModalService.openAddOnProductsModal().then((modalDialogInstance: ModalDialogInstance<AddOnProductDO>) => {
-			modalDialogInstance.resultObservable.subscribe((selectedAddOnProduct: AddOnProductDO) => {
-				this.addAddOnProductIfNotExists(selectedAddOnProduct);
+		this._addOnProductsModalService.openAddOnProductsModal().then((modalDialogInstance: ModalDialogInstance<AddOnProductDO[]>) => {
+			modalDialogInstance.resultObservable.subscribe((selectedAddOnProductList: AddOnProductDO[]) => {
+				_.forEach(selectedAddOnProductList, (aop: AddOnProductDO) => {
+					this.addAddOnProductIfNotExists(aop);
+				});
 			});
 		}).catch((e: any) => { });
 	}

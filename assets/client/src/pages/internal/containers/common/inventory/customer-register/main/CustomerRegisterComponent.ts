@@ -71,7 +71,7 @@ export class CustomerRegisterComponent extends BaseComponent {
 	public editCustomer(customerVM: CustomerVM) {
         var newCustomerVM = customerVM.buildPrototype();
         this._inventoryStateManager.canPerformAction(InventoryScreenAction.Edit, newCustomerVM).then((newState: InventoryScreenStateType) => {
-            this._aopTableComponent.selectItem(newCustomerVM.customer.id);
+            this._aopTableComponent.selectItem(newCustomerVM);
 
             this._inventoryStateManager.currentItem = newCustomerVM;
             this._inventoryStateManager.screenStateType = newState;
@@ -80,7 +80,7 @@ export class CustomerRegisterComponent extends BaseComponent {
     public selectCustomer(customerVM: CustomerVM) {
         var newCustomerVM = customerVM.buildPrototype();
         this._inventoryStateManager.canPerformAction(InventoryScreenAction.Select, newCustomerVM).then((newState: InventoryScreenStateType) => {
-            this._aopTableComponent.selectItem(newCustomerVM.customer.id);
+            this._aopTableComponent.selectItem(newCustomerVM);
 
             this._inventoryStateManager.currentItem = newCustomerVM;
             this._inventoryStateManager.screenStateType = newState;

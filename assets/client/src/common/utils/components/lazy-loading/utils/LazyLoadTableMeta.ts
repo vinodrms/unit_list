@@ -4,7 +4,8 @@ export enum TableRowCommand {
 	Delete,
 	Select,
 	Add,
-	Search
+	Search,
+	MultipleSelect
 }
 
 export enum TableViewOption {

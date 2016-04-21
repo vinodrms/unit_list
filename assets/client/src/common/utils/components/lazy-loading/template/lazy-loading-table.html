@@ -42,8 +42,8 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr *ngFor="#item of itemList" [ngClass]="{active: (isSelected(item) && tableOptions.canSelect)}">
-							<td *ngFor="#columnMeta of columnMetaList" (click)="tableOptions.canSelect && didSelectItem(item)" [ngClass]="{'selectable-row': tableOptions.canSelect}">
+						<tr *ngFor="#item of itemList" [ngClass]="{active: (isSelected(item) && (tableOptions.canSelect || tableOptions.canMultiSelect)  )}">
+							<td *ngFor="#columnMeta of columnMetaList" (click)="(tableOptions.canSelect || tableOptions.canMultiSelect) && didSelectItem(item)" [ngClass]="{'selectable-row': (tableOptions.canSelect || tableOptions.canMultiSelect)}">
 								<span *ngIf="isPercentage(columnMeta.valueMeta)">
 									{{ getItemValue(item, columnMeta.valueMeta) | percentage }}
 								</span>

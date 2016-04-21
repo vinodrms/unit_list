@@ -111,7 +111,7 @@ export class PriceProductsComponent extends BaseComponent implements AfterViewIn
 	public editPriceProduct(priceProductVM: PriceProductVM) {
         var newPriceProductVM = priceProductVM.buildPrototype();
         this._inventoryStateManager.canPerformAction(InventoryScreenAction.Edit, newPriceProductVM).then((newState: InventoryScreenStateType) => {
-            this._aopTableComponent.selectItem(newPriceProductVM.priceProduct.id);
+            this._aopTableComponent.selectItem(newPriceProductVM);
 
             this._inventoryStateManager.currentItem = newPriceProductVM;
             this._inventoryStateManager.screenStateType = newState;
@@ -168,7 +168,7 @@ export class PriceProductsComponent extends BaseComponent implements AfterViewIn
     public selectPriceProduct(priceProductVM: PriceProductVM) {
         var newPriceProductVM = priceProductVM.buildPrototype();
         this._inventoryStateManager.canPerformAction(InventoryScreenAction.Select, newPriceProductVM).then((newState: InventoryScreenStateType) => {
-            this._aopTableComponent.selectItem(newPriceProductVM.priceProduct.id);
+            this._aopTableComponent.selectItem(newPriceProductVM);
 
             this._inventoryStateManager.currentItem = newPriceProductVM;
             this._inventoryStateManager.screenStateType = newState;

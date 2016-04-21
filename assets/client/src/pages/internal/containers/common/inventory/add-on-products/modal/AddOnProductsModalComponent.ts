@@ -26,10 +26,10 @@ export class AddOnProductsModalComponent extends BaseComponent implements ICusto
 	@ViewChild(LazyLoadingTableComponent)
 	private _aopTableComponent: LazyLoadingTableComponent<AddOnProductVM>;
 
-	private _selectedAddOnProduct: AddOnProductDO;
+	private _selectedAddOnProductList: AddOnProductDO[] = [];
 
 	constructor(private _appContext: AppContext,
-		private _modalDialogInstance: ModalDialogInstance<AddOnProductDO>,
+		private _modalDialogInstance: ModalDialogInstance<AddOnProductDO[]>,
 		private _tableBuilder: AddOnProductTableMetaBuilderService,
 		private _addOnProductsService: AddOnProductsService) {
 		super();
@@ -40,7 +40,7 @@ export class AddOnProductsModalComponent extends BaseComponent implements ICusto
 	}
 	private bootstrapAddOnProductsTable() {
 		var lazyLoadTableMeta: LazyLoadTableMeta = this._tableBuilder.buildLazyLoadTableMeta(false);
-		lazyLoadTableMeta.supportedRowCommandList = [TableRowCommand.Search, TableRowCommand.Select];
+		lazyLoadTableMeta.supportedRowCommandList = [TableRowCommand.Search, TableRowCommand.MultipleSelect];
 		lazyLoadTableMeta.autoSelectRows = true;
 		this._aopTableComponent.bootstrap(this._addOnProductsService, lazyLoadTableMeta);
 	}
@@ -56,17 +56,19 @@ export class AddOnProductsModalComponent extends BaseComponent implements ICusto
 		return ModalSize.Large;
 	}
 
-	public selectAddOnProduct(addOnProductVM: AddOnProductVM) {
-		this._selectedAddOnProduct = addOnProductVM.addOnProduct;
+	public didSelectAddOnProductList(addOnProductVMList: AddOnProductVM[]) {
+		this._selectedAddOnProductList = _.map(addOnProductVMList, (aopVm: AddOnProductVM) => {
+			return aopVm.addOnProduct;	
+		});
 	}
 	public didSelectAddOnProduct(): boolean {
-		return this._selectedAddOnProduct != null;
+		return this._selectedAddOnProductList.length > 0;
 	}
 	public triggerSelectedAddOnProduct() {
 		if (!this.didSelectAddOnProduct()) {
 			return;
 		}
-		this._modalDialogInstance.addResult(this._selectedAddOnProduct);
+		this._modalDialogInstance.addResult(this._selectedAddOnProductList);
 		this.closeDialog();
 	}
 }

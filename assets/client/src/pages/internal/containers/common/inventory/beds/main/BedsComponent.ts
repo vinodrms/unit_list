@@ -81,7 +81,7 @@ export class BedsComponent extends BaseComponent {
     public editBed(bedVM: BedVM) {
         var newBedVM = bedVM.buildPrototype();
         this._inventoryStateManager.canPerformAction(InventoryScreenAction.Edit, newBedVM).then((newState: InventoryScreenStateType) => {
-            this._bedTableComponent.selectItem(bedVM.bed.id);
+            this._bedTableComponent.selectItem(bedVM);
 
             this._inventoryStateManager.currentItem = newBedVM;
             this._inventoryStateManager.screenStateType = newState;
@@ -116,7 +116,7 @@ export class BedsComponent extends BaseComponent {
     public selectBed(bedVM: BedVM) {
         var newBedVM = bedVM.buildPrototype();
         this._inventoryStateManager.canPerformAction(InventoryScreenAction.Select, newBedVM).then((newState: InventoryScreenStateType) => {
-            this._bedTableComponent.selectItem(newBedVM.bed.id);
+            this._bedTableComponent.selectItem(newBedVM);
 
             this._inventoryStateManager.currentItem = newBedVM;
             this._inventoryStateManager.screenStateType = newState;

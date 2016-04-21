@@ -14,7 +14,7 @@
 		</ul>
 		<br/>
 	</div>
-	<lazy-loading-table (onSelect)="selectPriceProduct($event)"></lazy-loading-table>
+	<lazy-loading-table (onMultiSelect)="didSelectPriceProductList($event)"></lazy-loading-table>
 </div>
 <div class="modal-footer">
 	<button type="button" class="btn btn-primary" [disabled]="!didSelectPriceProduct()" (click)="triggerSelectedPriceProduct()">
