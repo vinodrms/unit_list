@@ -27,10 +27,10 @@ export class TaxListModalComponent extends BaseComponent implements ICustomModal
 	ccyCode: string;
 	taxList: TaxDO[];
 
-	private _selectedTax: TaxDO;
+	private _selectedTaxList: TaxDO[] = [];
 
 	constructor(private _appContext: AppContext,
-		private _modalDialogInstance: ModalDialogInstance<TaxDO>,
+		private _modalDialogInstance: ModalDialogInstance<TaxDO[]>,
 		private _taxListModalInput: TaxListModalInput,
 		private _hotelService: HotelService,
 		private _taxService: TaxService) {
@@ -70,19 +70,25 @@ export class TaxListModalComponent extends BaseComponent implements ICustomModal
 	}
 
 	public didSelectTax() {
-		return this._selectedTax != null;
+		return this._selectedTaxList.length > 0;
 	}
 	public isTaxSelected(taxDO: TaxDO) {
-		return this.didSelectTax() && this._selectedTax.id === taxDO.id;
+		return this.didSelectTax() &&
+			(_.find(this._selectedTaxList, (selectedTax: TaxDO) => { return selectedTax.id === taxDO.id })) != null;
 	}
 	public selectTax(taxDO: TaxDO) {
-		this._selectedTax = taxDO;
+		if (!this.isTaxSelected(taxDO)) {
+			this._selectedTaxList.push(taxDO);
+		}
+		else {
+			this._selectedTaxList = _.filter(this._selectedTaxList, (selectedTax: TaxDO) => { return selectedTax.id !== taxDO.id });
+		}
 	}
 	public triggerSelectedTax() {
 		if (!this.didSelectTax()) {
 			return;
 		}
-		this._modalDialogInstance.addResult(this._selectedTax);
+		this._modalDialogInstance.addResult(this._selectedTaxList);
 		this.closeDialog();
 	}
 }

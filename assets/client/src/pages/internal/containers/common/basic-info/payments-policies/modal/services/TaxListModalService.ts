@@ -10,7 +10,7 @@ export class TaxListModalService {
 
 	constructor(private _appContext: AppContext) { }
 
-	public openTaxListModal(taxType: TaxType): Promise<ModalDialogInstance<TaxDO>> {
+	public openTaxListModal(taxType: TaxType): Promise<ModalDialogInstance<TaxDO[]>> {
 		var taxListModalInput = new TaxListModalInput();
 		taxListModalInput.taxType = taxType;
 

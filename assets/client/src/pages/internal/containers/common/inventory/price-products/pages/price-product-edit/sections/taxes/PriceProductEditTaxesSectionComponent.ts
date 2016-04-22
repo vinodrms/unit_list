@@ -65,9 +65,11 @@ export class PriceProductEditTaxesSectionComponent extends BaseComponent impleme
 		this.vatTaxId = vatTaxId;
 	}
 	public openOtherTaxSelectModal() {
-		this._taxListModalService.openTaxListModal(TaxType.OtherTax).then((modalDialogInstance: ModalDialogInstance<TaxDO>) => {
-			modalDialogInstance.resultObservable.subscribe((selectedTax: TaxDO) => {
-				this.addOtherTaxIfNotExists(selectedTax);
+		this._taxListModalService.openTaxListModal(TaxType.OtherTax).then((modalDialogInstance: ModalDialogInstance<TaxDO[]>) => {
+			modalDialogInstance.resultObservable.subscribe((selectedTaxList: TaxDO[]) => {
+				_.forEach(selectedTaxList, (selectedTax: TaxDO) => {
+					this.addOtherTaxIfNotExists(selectedTax);
+				});
 			});
 		}).catch((e: any) => { });
 	}
