@@ -1,4 +1,5 @@
 import {Component, Input, OnInit} from 'angular2/core';
+import 'rxjs/add/operator/map';
 import {BaseComponent} from '../../../../../../../../../../common/base/BaseComponent';
 import {TranslationPipe} from '../../../../../../../../../../common/utils/localization/TranslationPipe';
 import {IPriceProductEditSection} from '../utils/IPriceProductEditSection';
@@ -33,10 +34,17 @@ export class PriceProductEditFiltersSectionComponent extends BaseComponent imple
 		super();
 	}
 	public ngOnInit() {
-		this._yieldFiltersService.getYieldFiltersDO().subscribe((yieldFiltersDO: YieldFiltersDO) => {
-			this.yieldFiltersDO = yieldFiltersDO;
-			this.updateYieldFilterVMValues();
-		});
+		this._yieldFiltersService.getYieldFiltersDO()
+			.map((yieldFiltersDO: YieldFiltersDO) => {
+				yieldFiltersDO.yieldFilterList = _.sortBy(yieldFiltersDO.yieldFilterList, (yieldFiler: YieldFilterDO) => {
+					return yieldFiler.label;
+				});
+				return yieldFiltersDO;
+			})
+			.subscribe((yieldFiltersDO: YieldFiltersDO) => {
+				this.yieldFiltersDO = yieldFiltersDO;
+				this.updateYieldFilterVMValues();
+			});
 	}
 	private updateYieldFilterVMValues() {
 		if (!this.yieldFiltersDO || !this._priceProductYieldFilterMetaList) {
