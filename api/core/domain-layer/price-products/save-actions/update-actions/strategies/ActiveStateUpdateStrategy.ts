@@ -19,7 +19,7 @@ export class ActiveStateUpdateStrategy implements IPriceProductItemActionStrateg
 		ymFilterValidator.validateFilterList(this._priceProductDO.yieldFilterList)
 			.then((filterCheckResult: boolean) => {
 				var priceProductRepo = this._appContext.getRepositoryFactory().getPriceProductRepository();
-				return priceProductRepo.updatePriceProductYieldFilters(this._ppRepoMeta, this._ppItemRepoMeta, this._priceProductDO.yieldFilterList);
+				return priceProductRepo.updatePriceProductYieldFiltersAndNotes(this._ppRepoMeta, this._ppItemRepoMeta, this._priceProductDO.yieldFilterList, this._priceProductDO.notes);
 			})
 			.then((updatedPriceProduct: PriceProductDO) => {
 				resolve(updatedPriceProduct);

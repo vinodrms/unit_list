@@ -155,6 +155,7 @@ describe("Hotel Price Products Tests", function() {
 			savePPItem.save(priceProductItem).then((priceProduct: PriceProductDO) => {
 				should.equal(priceProduct.name, priceProductItem.name);
 				should.equal(priceProduct.status, PriceProductStatus.Draft);
+				should.equal(priceProduct.notes, priceProductItem.notes);
 				should.exist(priceProduct.id);
 				addedPriceProduct = priceProduct;
 				done();
@@ -188,13 +189,14 @@ describe("Hotel Price Products Tests", function() {
 					done(e);
 				});
         });
-		it("Should update only the Yield Filters for the Active Price Product", function(done) {
+		it("Should update only the Yield Filters and Notes for the Active Price Product", function(done) {
 			var priceProductItem = pphelper.getDraftSavePriceProductItemDO();
 			priceProductItem["id"] = addedPriceProduct.id;
 			priceProductItem.status = PriceProductStatus.Draft;
 			priceProductItem.roomCategoryIdList = [];
 			priceProductItem.taxIdList = [];
 			priceProductItem.name = NewPriceProductName;
+			priceProductItem.notes = "Updated notes for my price product!";
 
 			var savePPItem = new SavePriceProductItem(testContext.appContext, testContext.sessionContext);
 			savePPItem.save(priceProductItem).then((updatedPriceProduct: PriceProductDO) => {
@@ -203,7 +205,8 @@ describe("Hotel Price Products Tests", function() {
 				should.equal(updatedPriceProduct.id, addedPriceProduct.id);
 				should.equal(testUtils.stringArraysAreEqual(updatedPriceProduct.taxIdList, addedPriceProduct.taxIdList), true);
 				should.equal(testUtils.stringArraysAreEqual(updatedPriceProduct.roomCategoryIdList, addedPriceProduct.roomCategoryIdList), true);
-
+				should.equal(priceProductItem.notes, updatedPriceProduct.notes);
+				
 				addedPriceProduct = updatedPriceProduct;
 				done();
 			}).catch((e: ThError) => {

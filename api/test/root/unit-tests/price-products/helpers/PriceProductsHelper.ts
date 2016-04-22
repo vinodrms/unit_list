@@ -104,7 +104,8 @@ export class PriceProductsHelper {
 				penalty: {
 					percentage: 0.3
 				}
-			}
+			},
+			notes: "A nice price product"
 		}
 	}
 	public getRoomCategoryId(): string {

@@ -36,6 +36,7 @@ export class SavePriceProductItemDO {
 	yieldFilterList: PriceProductYieldFilterMetaDO[];
 	constraints: SavePriceProductItemConstraintListDO;
 	conditions: SavePriceProductItemConditionsDO;
+	notes: string;
 
 	public static getValidationStructure(): IValidationStructure {
 		return new ObjectValidationStructure([
@@ -146,6 +147,10 @@ export class SavePriceProductItemDO {
 						validationStruct: new ObjectValidationStructure([])
 					}
 				])
+			},
+			{
+				key: "notes",
+				validationStruct: new PrimitiveValidationStructure(StringValidationRule.buildNullable())
 			}
 		]);
 	}
