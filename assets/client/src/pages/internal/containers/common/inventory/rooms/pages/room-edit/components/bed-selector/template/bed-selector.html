@@ -1,0 +1,20 @@
+<div class="bed-container">
+    <div *ngFor="#bedVM of selectedBedList; #bedIndex = index" class="bed-slot">
+        <a class="btn btn-xs bed-remove-btn" (click)="removeBed(bedIndex)">
+            <i class="fa unitpal-font">\</i>
+        </a>
+        <div class="bed-slot-inner" [title]="bedVM.bed.name">
+            <span class="bed-slot-icon unitpal-font">{{bedVM.template.iconUrl}}</span>
+            <br/>
+            <small>{{bedVM.bed.name}}</small>
+            <br/> {{bedVM.capacity.maxAdults}}
+            <span class="unitpal-font">:</span> {{bedVM.capacity.maxChildren}}<span class="unitpal-font">;</span>
+        </div>
+    </div>
+    <div *ngFor="#emptySlot of emptySlots" class="bed-slot available">
+
+    </div>
+</div>
+<div class="bed-add">
+    <button type="button" class="btn center-block btn-danger bed-add-btn" (click)="openBedsSelectModal()" [disabled]="maximuNumberOfBedsReached"><i class="fa fa-plus-circle"></i></button>
+</div>

@@ -1,0 +1,25 @@
+<div class="overview-right-body">
+    <div>
+        <span class="unitpal-font bed-icon-overview">{{bedVM.template.iconUrl}}</span>
+    </div>
+    <div>
+        <kbd>{{ 'Selected' | translate }}</kbd>
+    </div>
+    <div>
+        <h1>{{ bedVM.bed.name }}</h1>
+    </div>
+    <div>
+        <small>Accomodates {{ bedVM.bed.maxNoAdults }} <span class="unitpal-font">:</span> {{ bedVM.bed.maxNoChildren }} <span class="unitpal-font">;</span></small>
+        <br/>
+        <small>Size <i class="fa fa-arrows-h"></i> {{ bedVM.bed.size.lengthCm }} <i class="fa fa-arrows-v"> {{ bedVM.bed.size.widthCm }}</i></small>
+    </div>
+
+    <div>
+        <small>{{ bedVM.bed.notes }}</small>
+    </div>
+    <div>
+		<a class="btn btn-lg" (click)="editBed()">
+			<i class="fa fa-pencil"></i> {{ 'Edit' | translate }}
+		</a>
+	</div>
+</div>

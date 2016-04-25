@@ -4,6 +4,7 @@ import {SaveCustomerItemDO, CompanyCustomerItemDetailsDO, CustomerItemAddressDO,
 	TravelAgencyCustomerItemDetailsDO, IndividualCustomerItemDetailsDO} from '../../../../../core/domain-layer/customers/SaveCustomerItemDO';
 import {CustomerDO, CustomerType} from '../../../../../core/data-layer/customers/data-objects/CustomerDO';
 import {PriceProductAvailability} from '../../../../../core/data-layer/price-products/data-objects/PriceProductDO';
+import {CommissionType} from '../../../../../core/data-layer/customers/data-objects/customer-details/corporate/BaseCorporateDetailsDO';
 
 export class CustomersTestHelper {
 	constructor(private _dataBuilder: DefaultDataBuilder, private _testContext: TestContext) {
@@ -35,7 +36,7 @@ export class CustomersTestHelper {
 	}
 	public getCompanyCustomer(priceProductId: string): SaveCustomerItemDO {
 		var company = this.getSaveCustomerItemDO(CustomerType.Company, "just another company");
-		company.priceProductDetails.priceProductAvailability = PriceProductAvailability.Private;
+		company.priceProductDetails.allowPublicPriceProducts = false;
 		company.priceProductDetails.priceProductIdList = [priceProductId];
 		company.customerDetails = this.getCompanyCustDetails();
 		return company;
@@ -53,22 +54,23 @@ export class CustomersTestHelper {
 				postalCode: "3276831",
 				streetAddress: "6D Regiei Boulevard"
 			},
+			commissionType: CommissionType.Percentage,
 			commission: 0.2,
 			contactName: "Ionut Paraschiv",
 			email: "ionut.paraschiv@3angle.tech",
-			payInvoiceByAgreement: true,
+			payInvoiceByAgreement: false,
 			vatCode: "RO34121562"
 		}
 	}
 
 	private getSaveCustomerItemDO(custType: CustomerType, notes: string): SaveCustomerItemDO {
 		return {
-			fileAttachmentUrlList: [],
+			fileAttachmentList: [],
 			notes: notes,
 			type: custType,
 			priceProductDetails: {
 				priceProductIdList: [],
-				priceProductAvailability: PriceProductAvailability.Public
+				allowPublicPriceProducts: true
 			},
 			customerDetails: this.getIndividualCustDetails()
 		}

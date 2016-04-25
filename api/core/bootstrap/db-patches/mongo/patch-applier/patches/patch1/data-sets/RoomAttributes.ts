@@ -28,55 +28,55 @@ export class RoomAttributes extends ABaseSetting {
     private dataSet: { name: string, iconUrl: string }[] = [
         {
             name: "Street View",
-            iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
+            iconUrl: "Õ"
         },
         {
             name: "Park View",
-            iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
+            iconUrl: "Ö"
         },
         {
             name: "Sea View",
-            iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
+            iconUrl: "×"
         },
         {
             name: "Courtyard View",
-            iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
+            iconUrl: "Ø"
         },
         {
             name: "Near Elevator",
-            iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
+            iconUrl: "Ù"
         },
         {
             name: "Wheelchair Friendly",
-            iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
+            iconUrl: "Ú"
         },
         {
             name: "Smoking",
-            iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
+            iconUrl: "Û"
         },
         {
             name: "Non-Smoking",
-            iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
+            iconUrl: "Ü"
         },
         {
             name: "Balcony",
-            iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
+            iconUrl: "Þ"
         },
         {
             name: "Terrace",
-            iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
+            iconUrl: "à"
         },
         {
             name: "Garden Access",
-            iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
+            iconUrl: "ß"
         },
         {
             name: "Pool Access",
-            iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
+            iconUrl: "Ý"
         },
         {
-            name: "Bay Window",
-            iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
+            name: "Allergy Friendly",
+            iconUrl: "á"
         }
     ];
 

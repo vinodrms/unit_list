@@ -27,37 +27,37 @@ export class PaymentMethods extends ABaseSetting {
     private dataSet: { name: string, iconUrl: string }[] = [
         {
             name: "Cash",
-            iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
+            iconUrl: "fa-money"
         },
         {
             name: "Visa",
-            iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
+            iconUrl: "fa-cc-visa"
         },
         {
             name: "American Express",
-            iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
+            iconUrl: "fa-cc-amex"
         },
         {
             name: "Euro/Mastercard",
-            iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
+            iconUrl: "fa-cc-mastercard"
         }
         ,
         {
             name: "Diners Club",
-            iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
+            iconUrl: "fa-cc-diners-club"
         }
         ,
         {
             name: "JCB",
-            iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
+            iconUrl: "fa-cc-jcb"
         },
         {
             name: "Maestro",
-            iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
+            iconUrl: "fa-credit-card-alt"
         },
         {
             name: "Discover",
-            iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
+            iconUrl: "fa-cc-discover"
         }
     ];
 }

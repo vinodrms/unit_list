@@ -6,10 +6,13 @@ import {WizardBasicInformationStateService} from '../../main/services/WizardBasi
 import {BasicInfoOverviewEditComponent} from '../../../../../../common/basic-info/overview/main/BasicInfoOverviewEditComponent';
 import {BasicInfoOverviewEditService} from '../../../../../../common/basic-info/overview/main/services/BasicInfoOverviewEditService';
 
+//TODO: change this code to use Decorator
+import {WizardStepsComponent} from '../../../../utils/wizard-steps/WizardStepsComponent';
+
 @Component({
 	selector: 'wizard-basic-info-overview',
 	templateUrl: '/client/src/pages/internal/containers/wizard/pages/wizard-pages/basic-information/pages/overview/template/wizard-basic-info-overview.html',
-	directives: [BasicInfoOverviewEditComponent],
+	directives: [WizardStepsComponent, BasicInfoOverviewEditComponent],
 	providers: [BasicInfoOverviewEditService],
 	pipes: [TranslationPipe]
 })

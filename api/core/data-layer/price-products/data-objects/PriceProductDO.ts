@@ -14,7 +14,7 @@ export enum PriceProductStatus {
 
 export enum PriceProductAvailability {
 	Public,
-	Private
+	Confidential
 }
 
 export class PriceProductDO extends BaseDO {
@@ -35,9 +35,10 @@ export class PriceProductDO extends BaseDO {
 	yieldFilterList: PriceProductYieldFilterMetaDO[];
 	constraints: PriceProductConstraintWrapperDO;
 	conditions: PriceProductConditionsDO;
+	notes: string;
 
 	protected getPrimitivePropertyKeys(): string[] {
-		return ["id", "hotelId", "versionId", "status", "name", "availability", "lastRoomAvailability", "addOnProductIdList", "roomCategoryIdList", "priceType", "taxIdList"];
+		return ["id", "hotelId", "versionId", "status", "name", "availability", "lastRoomAvailability", "addOnProductIdList", "roomCategoryIdList", "taxIdList", "notes"];
 	}
 	public buildFromObject(object: Object) {
 		super.buildFromObject(object);

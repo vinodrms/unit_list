@@ -1,0 +1,78 @@
+<div class="col-md-6 col-sm-6 col-sm-6" *ngIf="didInit">
+	<div class="row">
+		<div class="col-xs-12">
+			<label>{{ 'Cancellation Policy' | translate }}</label>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12">
+			<small class="text-muted">
+				<i class="fa fa-info-circle"></i> {{ 'Conditions for cancelling' | translate }} 
+			</small>
+		</div>
+	</div>
+
+	<div class="form-group">
+		<select class="form-control" [ngModel]="conditions.policyType" (change)="didChangePolicyType($event.target.value)" [disabled]="readonly">
+			<option *ngFor="#cancellationPolicyMeta of cancellationPolicyMetaList" [value]="cancellationPolicyMeta.policyType">
+				{{cancellationPolicyMeta.policyName | translate}}
+			</option>
+		</select>
+	</div>
+
+	<div class="row">
+		<div class="col-xs-12" *ngIf="isCancelBeforeTimeOnDayOfArrivalPolicy()">
+			<label>{{ 'Time on day of arrival' | translate }}</label>
+			<th-hour-select 
+				[readonly]="readonly"
+				[initialHour]="conditions.policy.timeOfArrival"  
+				[isRequired]="true" errorMessage="{{ 'Select the time of arrival' | translate }}" 
+				[didSubmitForm]="didSubmit"
+				(onHourSelected)="diChangeTimeOnDayOfArrival($event)"
+				>
+			</th-hour-select>
+		</div>
+		<div class="col-xs-12 form-group" *ngIf="isCanCancelDaysBeforePolicy()">
+			<div class="input-group" [ngClass]="{'form-warning': (didSubmit&&!conditions.policy.isValid())}">
+				<label>{{ 'Days until day of arrival at' | translate }} {{ cancellationHour | thhour }}</label>
+				<input type="number" placeholder="{{ 'Number of days' | translate }}" class="form-control input-group-lg" [(ngModel)]="conditions.policy.daysBefore" [readonly]="readonly">
+			</div>
+			<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter the number of days' | translate }}</small></label>
+		</div>
+	</div>
+</div>
+
+<div class="col-md-6 col-sm-6 col-sm-6" *ngIf="didInit">
+	<div class="row">
+		<div class="col-xs-12">
+			<label>{{ 'Cancellation Penalty' | translate }}</label>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12">
+			<small class="text-muted">
+				<i class="fa fa-info-circle"></i> {{ 'Attach penalty on cancellation' | translate }} 
+			</small>
+		</div>
+		<div class="col-xs-12 form-group">
+			<select class="form-control" [ngModel]="conditions.penaltyType" (change)="didChangePenaltyType($event.target.value)" [disabled]="readonly">
+				<option *ngFor="#cancellationPenaltyMeta of filteredCancellationPenaltyMetaList" [value]="cancellationPenaltyMeta.penaltyType">
+					{{cancellationPenaltyMeta.penaltyName | translate}}
+				</option>
+			</select>
+		</div>
+		<div class="col-xs-12" *ngIf="isPercentageFromBookingCancellationPenalty()">
+			<label>{{ 'Percentage from booking' | translate }}</label>
+			<percentage-input-number
+				[didSubmitForm]="didSubmit"
+				[initialPercentage]="conditions.penalty.percentage"
+				[readonly]="readonly"
+				[isRequired]="true"
+				[errorMessage]="'Enter a valid percentage'" 
+				(onPercentageChanged)="didSetPercentageFromBooking($event)"
+				>
+			</percentage-input-number>
+		</div>
+	</div>
+	
+</div>

@@ -1,0 +1,42 @@
+<div class="row">
+	<div class="col-md-6 col-xs-6">
+		<label>{{ 'File Attachments' | translate }}</label>
+		<i class="fa fa-spinner fa-pulse" *ngIf="isLoading"></i>
+	</div>
+	<div class="col-md-6 col-xs-6">
+
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-8 col-xs-8">
+		<p class="text-muted small"> <i class="fa fa-info-circle"></i> pdf, doc, docx, txt, jpg ...</p>
+	</div>
+</div>
+
+<table class="table table-striped projects">
+	<tbody>
+		<tr *ngFor="#fileAttachment of fileAttachmentList">
+			<td class="th-file-label">
+				<a [href]="fileAttachment.url" target="_blank">
+					{{fileAttachment.name}}
+				</a>
+			</td>
+			<td class="th-file-actions">
+				<a class="btn btn-xs" [href]="fileAttachment.url" target="_blank">
+					<i class="fa fa-download"></i>
+				</a>
+				<a class="btn btn-xs">
+					<i class="fa unitpal-font" (click)="removeFileAttachment(fileAttachment)">\</i>
+				</a>
+			</td>
+		</tr>
+		<tr>
+			<td class="th-file-label">
+				<label class="btn btn-primary btn-block th-file-add">
+					<input type="file" (change)="didSelectFile($event)"/><i class="fa fa-paperclip" aria-hidden="true"></i>  {{ 'Attach file' | translate }}
+				</label>
+			</td>
+			<td class="th-file-actions"></td>
+		</tr>
+	</tbody>
+</table>

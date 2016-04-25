@@ -10,16 +10,18 @@ import {AMongoHotelConfigurationRepository, HotelConfigurationMetaRepoDO} from '
 import {IYieldFilterConfigurationRepository, YieldFilterMetaRepoDO, YieldFilterValueMetaRepoDO} from '../IYieldFilterConfigurationRepository';
 import {HotelConfigurationDO} from '../../data-objects/HotelConfigurationDO';
 
+import _ = require("underscore");
+
 export class MongoYieldFilterConfigurationRepository extends AMongoHotelConfigurationRepository implements IYieldFilterConfigurationRepository {
 
-    public addYieldFilterValue(meta: HotelConfigurationMetaRepoDO, filterMeta: YieldFilterMetaRepoDO, yieldFilterValue: YieldFilterValueDO): Promise<YieldFilterConfigurationDO> {
-        return new Promise<YieldFilterConfigurationDO>((resolve, reject) => {
+    public addYieldFilterValue(meta: HotelConfigurationMetaRepoDO, filterMeta: YieldFilterMetaRepoDO, yieldFilterValue: YieldFilterValueDO): Promise<YieldFilterValueDO> {
+        return new Promise<YieldFilterValueDO>((resolve, reject) => {
             this.addYieldFilterValueCore(meta, filterMeta, yieldFilterValue, resolve, reject);
         });
     }
 
     public addYieldFilterValueCore(meta: HotelConfigurationMetaRepoDO, filterMeta: YieldFilterMetaRepoDO, yieldFilterValue: YieldFilterValueDO,
-        resolve: { (result: YieldFilterConfigurationDO): void }, reject: { (err: ThError): void }) {
+        resolve: { (result: YieldFilterValueDO): void }, reject: { (err: ThError): void }) {
 
         this.getYieldFilterConfiguration(meta).then((yieldFilterConfig: YieldFilterConfigurationDO) => {
             var foundYieldFilter = _.findWhere(yieldFilterConfig.value, { id: filterMeta.filterId });
@@ -40,7 +42,7 @@ export class MongoYieldFilterConfigurationRepository extends AMongoHotelConfigur
                 throw (thError);
             }
         }).then((addedHotelConfig: HotelConfigurationDO) => {
-            resolve(<YieldFilterConfigurationDO>addedHotelConfig);
+            resolve(yieldFilterValue);
         }).catch((err: Error) => {
             var thError = new ThError(ThStatusCode.YieldFilterRepositoryErrorAddingYieldFilterValue, err);
             ThLogger.getInstance().logError(ThLogLevel.Error, "Error adding filter value", { hotelId: meta.hotelId, filterMeta: filterMeta, yieldManagerFilterValue: yieldFilterValue }, thError);
@@ -48,14 +50,14 @@ export class MongoYieldFilterConfigurationRepository extends AMongoHotelConfigur
         });
     }
 
-    public updateYieldFilterValue(meta: HotelConfigurationMetaRepoDO, filterMeta: YieldFilterMetaRepoDO, filterValueMeta: YieldFilterValueMetaRepoDO, yieldFilterValue: YieldFilterValueDO): Promise<YieldFilterConfigurationDO> {
-        return new Promise<YieldFilterConfigurationDO>((resolve, reject) => {
+    public updateYieldFilterValue(meta: HotelConfigurationMetaRepoDO, filterMeta: YieldFilterMetaRepoDO, filterValueMeta: YieldFilterValueMetaRepoDO, yieldFilterValue: YieldFilterValueDO): Promise<YieldFilterValueDO> {
+        return new Promise<YieldFilterValueDO>((resolve, reject) => {
             this.updateYieldFilterValueCore(meta, filterMeta, filterValueMeta, yieldFilterValue, resolve, reject);
         });
     }
 
     private updateYieldFilterValueCore(meta: HotelConfigurationMetaRepoDO, filterMeta: YieldFilterMetaRepoDO, filterValueMeta: YieldFilterValueMetaRepoDO, yieldFilterValue: YieldFilterValueDO,
-        resolve: { (result: YieldFilterConfigurationDO): void }, reject: { (err: ThError): void }) {
+        resolve: { (result: YieldFilterValueDO): void }, reject: { (err: ThError): void }) {
 
         this.getYieldFilterConfiguration(meta).then((yieldFilterConfig: YieldFilterConfigurationDO) => {
             var foundYieldFilter = _.findWhere(yieldFilterConfig.value, { id: filterMeta.filterId });
@@ -83,7 +85,7 @@ export class MongoYieldFilterConfigurationRepository extends AMongoHotelConfigur
                 throw (thError);
             }
         }).then((addedHotelConfig: HotelConfigurationDO) => {
-            resolve(<YieldFilterConfigurationDO>addedHotelConfig);
+            resolve(yieldFilterValue);
         }).catch((err: Error) => {
             var thError = new ThError(ThStatusCode.YieldFilterRepositoryErrorUpdatingYieldFilterValue, err);
             ThLogger.getInstance().logError(ThLogLevel.Error, "Error updating filter value", { hotelId: meta.hotelId, filterMeta: filterMeta, yieldManagerFilterValue: yieldFilterValue }, thError);
@@ -117,12 +119,12 @@ export class MongoYieldFilterConfigurationRepository extends AMongoHotelConfigur
     private filterValueUpdateValid(yieldFilterValue: YieldFilterValueDO, yieldFilter: YieldFilterDO): boolean {
         var sameYieldValueItems = [];
         if (yieldFilter.type == YieldFilterType.Text) {
-            sameYieldValueItems = _.where(yieldFilter.values, (value: YieldFilterValueDO) => {
+            sameYieldValueItems = _.filter(yieldFilter.values, (value: YieldFilterValueDO) => {
                 return value.label === yieldFilterValue.label && value.id != yieldFilterValue.id;
             });
         }
         else {
-            sameYieldValueItems = _.where(yieldFilter.values, (value: YieldFilterValueDO) => {
+            sameYieldValueItems = _.filter(yieldFilter.values, (value: YieldFilterValueDO) => {
                 return value.colorCode === yieldFilterValue.colorCode && value.id != yieldFilterValue.id;
             });
         }
@@ -132,13 +134,13 @@ export class MongoYieldFilterConfigurationRepository extends AMongoHotelConfigur
     private filterValueAdditionValid(yieldFilterValue: YieldFilterValueDO, yieldFilter: YieldFilterDO): boolean {
         var sameYieldValueItems = [];
         if (yieldFilter.type == YieldFilterType.Text) {
-            sameYieldValueItems = _.where(yieldFilter.values, (value: YieldFilterValueDO) => {
-                return value.label === yieldFilterValue.label;
+            sameYieldValueItems = _.filter(yieldFilter.values, (value: YieldFilterValueDO) => {
+                return value.label === yieldFilterValue.label && value.id !== yieldFilterValue.id;
             });
         }
         else {
-            sameYieldValueItems = _.where(yieldFilter.values, (value: YieldFilterValueDO) => {
-                return value.colorCode === yieldFilterValue.colorCode;
+            sameYieldValueItems = _.filter(yieldFilter.values, (value: YieldFilterValueDO) => {
+                return value.colorCode === yieldFilterValue.colorCode && value.id !== yieldFilterValue.id;
             });
         }
         return _.isEmpty(sameYieldValueItems);

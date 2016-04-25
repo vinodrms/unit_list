@@ -1,0 +1,27 @@
+<div class="overview-right-body" *ngIf="customerVM">
+	<div>
+		<kbd>{{ 'Selected' | translate }}</kbd>
+	</div>
+	<div>
+		<h1>{{customerVM.customerNameString}}</h1>
+	</div>
+	<div>
+		<i class="fa fa-male" 
+			[ngClass]="{'fa-male': customerVM.customer.isIndividual(), 'fa-building': customerVM.customer.isCompany(), 'fa-automobile': customerVM.customer.isTravelAgency()}"></i> 
+		<small>{{customerVM.customerTypeString}}</small>
+	</div>
+	<div>
+		<i class="fa fa-home" [ngClass]=""></i> <small>{{customerVM.customerAddressString}}</small>
+	</div>
+	<div>
+		<i class="fa fa-phone"></i> <small>{{customerVM.phoneString}}</small>
+	</div>
+	<div>
+		<i class="fa fa-mail-reply"></i> <small>{{customerVM.emailString}}</small>
+	</div>
+	<div>
+		<a class="btn btn-lg" (click)="editCustomer()">
+			<i class="fa fa-pencil"></i> {{ 'Edit' | translate }}
+		</a>
+	</div>
+</div>

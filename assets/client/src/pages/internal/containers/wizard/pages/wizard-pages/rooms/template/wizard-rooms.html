@@ -1,0 +1,14 @@
+<div class="row card-header">
+	<div class="col-sm-4">
+		<h1>{{ 'Rooms' | translate }} &gt; <small>{{ 'Overview' | translate }}</small></h1>
+	</div>
+	<div class="col-sm-6 description">
+		<small>{{ '[Wizard Step 3] Rooms text' | translate }}</small>
+	</div>
+	<div class="col-sm-2 text-right">
+		<h1>{{ _roomsStateService.totalNoOfRooms }} <span class="unitpal-font">{{_roomsStateService.getMeta().iconFontName}}</span></h1>
+	</div>
+</div>
+<div class="row card-body">
+	<rooms class="col-xs-12" (onScreenStateTypeChanged)="didChangeScreenStateType($event)" (onItemDeleted)="didDeleteItem($event)"></rooms>
+</div>

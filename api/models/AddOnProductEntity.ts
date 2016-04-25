@@ -34,9 +34,15 @@ class AddOnProductEntity extends BasePersistentEntity {
                 type: 'float',
                 required: true
             },
+			internalCost: {
+                type: 'float'
+            },
 			taxIdList: {
                 type: 'array',
-                required: true,
+				defaultsTo: []
+            },
+			fileUrlList: {
+                type: 'array',
 				defaultsTo: []
             },
 			notes: {

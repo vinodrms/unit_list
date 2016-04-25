@@ -75,7 +75,8 @@ export class MongoPriceProductCrudOperationsRepository extends MongoRepository {
 				"openForDepartureIntervalList": priceProduct.openForDepartureIntervalList,
 				"yieldFilterList": priceProduct.yieldFilterList,
 				"constraints": priceProduct.constraints,
-				"conditions": priceProduct.conditions
+				"conditions": priceProduct.conditions,
+				"notes": priceProduct.notes
 			});
 	}
 	public updatePriceProductStatus(meta: PriceProductMetaRepoDO, itemMeta: PriceProductItemMetaRepoDO, params: PriceProductUpdateStatusParamsRepoDO): Promise<PriceProductDO> {
@@ -87,10 +88,11 @@ export class MongoPriceProductCrudOperationsRepository extends MongoRepository {
 				"status": params.newStatus
 			});
 	}
-	public updatePriceProductYieldFilters(meta: PriceProductMetaRepoDO, itemMeta: PriceProductItemMetaRepoDO, filterList: PriceProductYieldFilterMetaDO[]): Promise<PriceProductDO> {
+	public updatePriceProductYieldFiltersAndNotes(meta: PriceProductMetaRepoDO, itemMeta: PriceProductItemMetaRepoDO, filterList: PriceProductYieldFilterMetaDO[], notes: string): Promise<PriceProductDO> {
 		return this.findAndModifyPriceProduct(meta, itemMeta, {},
 			{
-				"yieldFilterList": filterList
+				"yieldFilterList": filterList,
+				"notes": notes
 			});
 	}
 	public updatePriceProductYieldManagerIntervals(meta: PriceProductMetaRepoDO, itemMeta: PriceProductItemMetaRepoDO, intervals: PriceProductUpdateYMIntervalsParamsRepoDO): Promise<PriceProductDO> {

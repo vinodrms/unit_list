@@ -10,28 +10,44 @@ export class RoomAmenities extends Amenities {
 
         this.dataSet = [
             {
-                name: "Bath tub",
-                iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
+                name: "Minibar",
+                iconUrl: "Í"
             },
             {
-                name: "Hairdryer",
-                iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
+                name: "Aircondition (AC)",
+                iconUrl: "Î"
             },
             {
-                name: "Tv",
-                iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
+                name: "Tea/Coffee",
+                iconUrl: "Ï"
             },
             {
                 name: "Wifi",
-                iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
+                iconUrl: "Â"
             },
             {
-                name: "AC",
-                iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
+                name: "Tv",
+                iconUrl: "Ð"
             },
             {
-                name: "Minibar",
-                iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
+                name: "Pets (allowed)",
+                iconUrl: "Ë"
+            },
+            {
+                name: "Bath tub",
+                iconUrl: "Ñ"
+            },
+            {
+                name: "Hairdryer",
+                iconUrl: "Ó"
+            },
+            {
+                name: "Iron Board",
+                iconUrl: "Ò"
+            },
+            {
+                name: "Kitchen",
+                iconUrl: "Ô"
             }
         ];
 

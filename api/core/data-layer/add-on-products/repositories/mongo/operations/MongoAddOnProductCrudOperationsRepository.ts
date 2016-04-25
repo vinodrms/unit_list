@@ -58,10 +58,12 @@ export class MongoAddOnProductCrudOperationsRepository extends MongoRepository {
 	public updateAddOnProduct(meta: AddOnProductMetaRepoDO, itemMeta: AddOnProductItemMetaRepoDO, addOnProduct: AddOnProductDO): Promise<AddOnProductDO> {
 		return this.findAndModifyAddOnProduct(meta, itemMeta,
 			{
-				"categoryId": addOnProduct.categoryId,
 				"name": addOnProduct.name,
 				"price": addOnProduct.price,
+				"internalCost": addOnProduct.internalCost,
+				"categoryId": addOnProduct.categoryId,
 				"taxIdList": addOnProduct.taxIdList,
+				"fileUrlList": addOnProduct.fileUrlList,
 				"notes": addOnProduct.notes
 			});
 	}

@@ -14,8 +14,9 @@ import {PriceProductConstraintWrapperDO} from '../../../core/data-layer/price-pr
 import {PricePerPersonDO} from '../../../core/data-layer/price-products/data-objects/price/price-per-person/PricePerPersonDO';
 import {PriceForFixedNumberOfPersonsDO} from '../../../core/data-layer/price-products/data-objects/price/price-per-person/PriceForFixedNumberOfPersonsDO';
 import {PriceProductPriceDO} from '../../../core/data-layer/price-products/data-objects/price/PriceProductPriceDO';
+import {PriceProductPriceConfigurationState} from '../../../core/data-layer/price-products/data-objects/price/IPriceProductPrice';
 import {PriceProductPriceType} from '../../../core/data-layer/price-products/data-objects/price/IPriceProductPrice';
-import {PricePerRoomCategoryDO} from '../../../core/data-layer/price-products/data-objects/price/price-per-room-category/PricePerRoomCategoryDO';
+import {SinglePriceDO} from '../../../core/data-layer/price-products/data-objects/price/single-price/SinglePriceDO';
 import {RoomCategoryStatsDO} from '../../../core/data-layer/room-categories/data-objects/RoomCategoryStatsDO';
 
 export interface IPriceProductDataSource {
@@ -34,7 +35,7 @@ export class DefaultPriceProductBuilder implements IPriceProductDataSource {
 		var taxId = this._testUtils.getRandomListElement(taxes.vatList).id;
 		var addOnProductId = this._testUtils.getRandomListElement(addOnProductList).id;
 		ppList.push(DefaultPriceProductBuilder.buildPriceProductDO(this._testContext, "Price Product 1", this._testUtils.getRandomListElement(roomCategoryStatsList), taxId, addOnProductId, PriceProductPriceType.PricePerPerson));
-		ppList.push(DefaultPriceProductBuilder.buildPriceProductDO(this._testContext, "Price Product 2", this._testUtils.getRandomListElement(roomCategoryStatsList), taxId, addOnProductId, PriceProductPriceType.PricePerRoomCategory));
+		ppList.push(DefaultPriceProductBuilder.buildPriceProductDO(this._testContext, "Price Product 2", this._testUtils.getRandomListElement(roomCategoryStatsList), taxId, addOnProductId, PriceProductPriceType.SinglePrice));
 		return ppList;
 	}
 	public static buildPriceProductDO(testContext: TestContext, name: string, roomCategoryStat: RoomCategoryStatsDO, taxId: string, addOnProductId: string, priceType: PriceProductPriceType): PriceProductDO {
@@ -56,7 +57,7 @@ export class DefaultPriceProductBuilder implements IPriceProductDataSource {
 			case PriceProductPriceType.PricePerPerson:
 				priceProduct.price = DefaultPriceProductBuilder.getPricePerPerson(roomCategoryStat);
 				break;
-			case PriceProductPriceType.PricePerRoomCategory:
+			case PriceProductPriceType.SinglePrice:
 				priceProduct.price = DefaultPriceProductBuilder.getPricePerRoomCategory(roomCategoryStat);
 				break;
 		}
@@ -72,11 +73,12 @@ export class DefaultPriceProductBuilder implements IPriceProductDataSource {
 	public static getPricePerPerson(roomCategoryStat: RoomCategoryStatsDO): PriceProductPriceDO {
 		var outPrice = new PriceProductPriceDO();
 		outPrice.type = PriceProductPriceType.PricePerPerson;
+		outPrice.priceConfigurationState = PriceProductPriceConfigurationState.Valid;
 		var pricePerPerson = new PricePerPersonDO();
-		pricePerPerson.defaultPrice = 50;
+		pricePerPerson.roomCategoryId = roomCategoryStat.roomCategory.id;
 		pricePerPerson.adultsPriceList = DefaultPriceProductBuilder.getPriceForFixedNumberOfPersonsDOList(roomCategoryStat.maxNoAdults);
-		pricePerPerson.childrenPriceList = DefaultPriceProductBuilder.getPriceForFixedNumberOfPersonsDOList(roomCategoryStat.maxNoChildren)
-		outPrice.priceConfiguration = pricePerPerson;
+		pricePerPerson.childrenPriceList = DefaultPriceProductBuilder.getPriceForFixedNumberOfPersonsDOList(roomCategoryStat.maxNoChildren + roomCategoryStat.maxNoAdults);
+		outPrice.priceList = [pricePerPerson];
 		return outPrice;
 	}
 	private static getPriceForFixedNumberOfPersonsDOList(maxNoOfPersons: number): PriceForFixedNumberOfPersonsDO[] {
@@ -95,17 +97,12 @@ export class DefaultPriceProductBuilder implements IPriceProductDataSource {
 
 	public static getPricePerRoomCategory(roomCategoryStat: RoomCategoryStatsDO): PriceProductPriceDO {
 		var outPrice = new PriceProductPriceDO();
-		outPrice.type = PriceProductPriceType.PricePerRoomCategory;
-		var priceConfiguration = new PricePerRoomCategoryDO();
-		priceConfiguration.buildFromObject({
-			priceList: [
-				{
-					roomCategoryId: roomCategoryStat.roomCategory.id,
-					price: 98.21
-				}
-			]
-		});
-		outPrice.priceConfiguration = priceConfiguration;
+		outPrice.type = PriceProductPriceType.SinglePrice;
+		outPrice.priceConfigurationState = PriceProductPriceConfigurationState.Valid;
+		var singlePrice = new SinglePriceDO();
+		singlePrice.price = 98.21;
+		singlePrice.roomCategoryId = roomCategoryStat.roomCategory.id;
+		outPrice.priceList = [singlePrice];
 		return outPrice;
 	}
 

@@ -15,6 +15,7 @@ export enum ThStatusCode {
     VatProviderInvalidVat,
     VatProviderInvalidCountryCode,
     VatProviderProxyServiceNonEuCountry,
+    TimezoneServiceErrorGettingAvailableTZs,
     EmailTemplateBuilderProblemFindingTemplatesDirectory,
     EmailTemplateBuilderProblemBuildingContent,
     SendGridServiceErrorSendingEmail,
@@ -120,16 +121,19 @@ export enum ThStatusCode {
     BedRepositoryErrorAddingBed,
     BedRepositoryNameAlreadyExists,
     BedRepositoryErrorUpdatingBed,
+    BedRepositoryErrorReadingDocumentCount,
     BedItemUpdateStrategyErrorUpdating,
     SaveBedItemError,
     SaveBedItemInvalidBedTemplateId,
     DeleteBedItemErrorDeleting,
     DeleteBedItemErrorValidating,
     DeleteBedItemError,
+    DeleteBedItemErrorUsedInRooms,
     BedControllerErrorGettingBeds,
     BedControllerErrorSavingBed,
     BedControllerErrorDeletingBed,
     BedControllerErrorGettingBedById,
+    BedsControllerErrorGettingCount,
     HotelUpdatePaymentsPoliciesErrorPrecheckingConstraints,
     HotelUpdatePaymentPoliciesInvalidTaxes,
     HotelUpdatePaymentsPoliciesError,
@@ -191,7 +195,6 @@ export enum ThStatusCode {
     SaveCustomerItemError,
     SaveCustomerItemInvalidOrNullClientType,
     SaveCustomerItemCompOrTACannotBeLinkedToOtherCustomers,
-    SaveCustomerItemCannotSetPriceProductsForPublic,
     CustomerItemUpdateStrategyError,
     CustomersControllerErrorGettingCustomer,
     CustomersControllerErrorSavingCustomer,
@@ -229,6 +232,7 @@ export enum ThStatusCode {
     PriceProductsControllerErrorArchivingProduct,
     PriceProductsControllerErrorGettingCount,
     PriceProductsControllerErrorGettingList,
+	PricePerPersonForSingleRoomCategoryDOInvalidPriceConfiguration,
     YieldManagerControllerErrorClosing,
     YieldManagerControllerErrorOpening,
     HotelConfigurationRepositoryNotFound,
@@ -263,6 +267,7 @@ ThMessage[ThStatusCode.VatProviderNotInEu] = "The VAT is not in EU";
 ThMessage[ThStatusCode.VatProviderInvalidVat] = "Invalid VAT number.";
 ThMessage[ThStatusCode.VatProviderInvalidCountryCode] = "Invalid country code";
 ThMessage[ThStatusCode.VatProviderProxyServiceNonEuCountry] = "Non EU Country";
+ThMessage[ThStatusCode.TimezoneServiceErrorGettingAvailableTZs] = "Error getting available timezones";
 ThMessage[ThStatusCode.EmailTemplateBuilderProblemFindingTemplatesDirectory] = "Error sending email: the content was not found on the server. Please contact the Administrator.";
 ThMessage[ThStatusCode.EmailTemplateBuilderProblemBuildingContent] = "Error sending email: problem building content. Please contact the Administrator.";
 ThMessage[ThStatusCode.SendGridServiceErrorSendingEmail] = "Error sending email. Please contact the Administrator.";
@@ -326,15 +331,18 @@ ThMessage[ThStatusCode.BedRepositoryBedNotFound] = "Bed not found.";
 ThMessage[ThStatusCode.BedRepositoryErrorAddingBed] = "An error occurred while adding this bed for the current hotel.";
 ThMessage[ThStatusCode.BedRepositoryNameAlreadyExists] = "The name of the bed already exists.";
 ThMessage[ThStatusCode.BedRepositoryErrorUpdatingBed] = "Problem updating the bed. It is possible that someone else changed it at the same time. Please refresh the page and try again.";
+ThMessage[ThStatusCode.BedRepositoryErrorReadingDocumentCount] = "Error getting document count.";
 ThMessage[ThStatusCode.BedItemUpdateStrategyErrorUpdating] = "Error updating the bed.";
 ThMessage[ThStatusCode.SaveBedItemError] = "Error saving the bed item.";
 ThMessage[ThStatusCode.SaveBedItemInvalidBedTemplateId] = "Invalid bed template id.";
 ThMessage[ThStatusCode.DeleteBedItemErrorDeleting] = "Error deleting bed item.";
 ThMessage[ThStatusCode.DeleteBedItemErrorValidating] = "Error validating the existing bed item.";
+ThMessage[ThStatusCode.DeleteBedItemErrorUsedInRooms] = "Cannot delete the bed because it was assigned to at least a room in your inventory.";
 ThMessage[ThStatusCode.BedControllerErrorGettingBeds] = "Error getting the beds.";
 ThMessage[ThStatusCode.BedControllerErrorSavingBed] = "Error saving bed.";
 ThMessage[ThStatusCode.BedControllerErrorDeletingBed] = "Error deleting bed.";
 ThMessage[ThStatusCode.BedControllerErrorGettingBedById] = "Error getting bed by id.";
+ThMessage[ThStatusCode.BedsControllerErrorGettingCount] = "Error getting the number of beds.";
 ThMessage[ThStatusCode.RoomRepositoryErrorGettingRoomList] = "Error getting the room list. Please try again.";
 ThMessage[ThStatusCode.RoomRepositoryErrorGettingRoom] = "Error getting the room. Please try again.";
 ThMessage[ThStatusCode.RoomRepositoryRoomNotFound] = "Room not found.";
@@ -438,7 +446,6 @@ ThMessage[ThStatusCode.CustomerRepositoryErrorGettingList] = "Error getting cust
 ThMessage[ThStatusCode.SaveCustomerItemError] = "Error saving customer.";
 ThMessage[ThStatusCode.SaveCustomerItemInvalidOrNullClientType] = "Invalid client type.";
 ThMessage[ThStatusCode.SaveCustomerItemCompOrTACannotBeLinkedToOtherCustomers] = "Companies or travel agencies cannot be linked to other customers.";
-ThMessage[ThStatusCode.SaveCustomerItemCannotSetPriceProductsForPublic] = "Cannot set specific price products for this client unless private is selected.";
 ThMessage[ThStatusCode.CustomerItemUpdateStrategyError] = "Error updating customer.";
 ThMessage[ThStatusCode.CustomersControllerErrorGettingCustomer] = "Error getting customer.";
 ThMessage[ThStatusCode.CustomersControllerErrorSavingCustomer] = "Error saving customer.";

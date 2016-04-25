@@ -1,5 +1,7 @@
 import {Component, OnInit} from 'angular2/core';
 import {BaseComponent} from '../../../../../../../common/base/BaseComponent';
+import {ThError, AppContext, ThServerApi} from '../../../../../../../common/utils/AppContext';
+import {LoginStatusCode} from '../../../../../../../common/utils/responses/LoginStatusCode';
 import {WizardService} from '../../wizard-pages/services/WizardService';
 import {IWizardState} from '../../wizard-pages/services/IWizardState';
 import {TranslationPipe} from '../../../../../../../common/utils/localization/TranslationPipe';
@@ -15,7 +17,7 @@ export class WizardHeaderComponent extends BaseComponent {
 
 	numberOfSteps: number = 0;
 
-	constructor(wizardService: WizardService) {
+	constructor(wizardService: WizardService, private _appContext: AppContext) {
 		super();
 		this.numberOfSteps = wizardService.getStateList().length;
 		this._wizardState = wizardService;
@@ -26,5 +28,15 @@ export class WizardHeaderComponent extends BaseComponent {
 	}
 	public getStateName(): string {
 		return this._wizardState.getMeta().name;
+	}
+	public logOut() {
+		this._appContext.thHttp.post(ThServerApi.AccountLogOut, {}).subscribe((result: any) => {
+			this.goToMainPage();
+		}, (error: ThError) => {
+			this.goToMainPage();
+		});
+	}
+	private goToMainPage() {
+		this._appContext.browserLocation.goToLoginPage(LoginStatusCode.Ok);
 	}
 }

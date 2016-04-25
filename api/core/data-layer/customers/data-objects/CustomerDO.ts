@@ -1,4 +1,5 @@
 import {BaseDO} from '../../common/base/BaseDO';
+import {FileAttachmentDO} from '../../common/data-objects/file/FileAttachmentDO';
 import {CustomerPriceProductDetailsDO} from './price-product-details/CustomerPriceProductDetailsDO';
 import {IndividualDetailsDO} from './customer-details/individual/IndividualDetailsDO';
 import {CompanyDetailsDO} from './customer-details/corporate/CompanyDetailsDO';
@@ -25,12 +26,12 @@ export class CustomerDO extends BaseDO {
 	type: CustomerType;
 	status: CustomerStatus;
 	customerDetails: ICustomerDetailsDO;
-	fileAttachmentUrlList: string[];
+	fileAttachmentList: FileAttachmentDO[];
 	priceProductDetails: CustomerPriceProductDetailsDO;
 	notes: string;
 
 	protected getPrimitivePropertyKeys(): string[] {
-		return ["id", "hotelId", "versionId", "type", "status", "fileAttachmentUrlList", "notes"];
+		return ["id", "hotelId", "versionId", "type", "status", "notes"];
 	}
 
 	public buildFromObject(object: Object) {
@@ -48,6 +49,13 @@ export class CustomerDO extends BaseDO {
 				break;
 		}
 		this.customerDetails.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "customerDetails"));
+
+		this.fileAttachmentList = [];
+		this.forEachElementOf(this.getObjectPropertyEnsureUndefined(object, "fileAttachmentList"), (fileAttachmentObject: Object) => {
+			var fileAttachmentDO = new FileAttachmentDO();
+			fileAttachmentDO.buildFromObject(fileAttachmentObject);
+			this.fileAttachmentList.push(fileAttachmentDO);
+		});
 
 		this.priceProductDetails = new CustomerPriceProductDetailsDO();
 		this.priceProductDetails.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "priceProductDetails"));

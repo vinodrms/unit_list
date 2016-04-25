@@ -23,7 +23,7 @@ gulp.task('pack-internal', function() {
         outFile: 'unitpal-internal.js'
     });
 
-	var tsResult = gulp.src('client/src/pages/internal/**/*.ts')
+	var tsResult = gulp.src(['client/src/common/**/*.ts', 'client/src/pages/internal/**/*.ts'])
 		.pipe(embedTemplates(embedTemplatesOptions))
 		.pipe(ts(tsProject));
 	return tsResult.js
@@ -72,6 +72,7 @@ gulp.task('copy-dist', ['pack-internal', 'pack-external', 'clean-dist'], functio
 		'node_modules/moment/min/**/*',
 		'node_modules/pace-progress**/*',
 		'node_modules/underscore/**/*',
+		'node_modules/floatthead/**/*',
 		
 		'node_modules/angular2/bundles/**/*',
 		'node_modules/angular2/es6/**/*',

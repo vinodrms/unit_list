@@ -15,7 +15,7 @@ import { Component } from 'angular2/core';
         '[style.bottom]': 'bottom'
 
     },
-    template: '<div [style.position]="position" class="in modal-backdrop" #modalBackdrop></div>'
+    template: '<div class="in modal-backdrop" #modalBackdrop></div>'
 })
 export class ModalBackdropComponent {
     public position: string;
@@ -30,7 +30,6 @@ export class ModalBackdropComponent {
         this.initDefaults();
     }
 	private initDefaults() {
-		this.position = 'absolute';
 		this.height = '100%';
 		this.width = '100%';
 		this.top = this.left = this.right = this.bottom = '0';

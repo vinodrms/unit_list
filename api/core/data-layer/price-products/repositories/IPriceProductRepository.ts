@@ -1,4 +1,4 @@
-import {PriceProductDO, PriceProductStatus} from '../data-objects/PriceProductDO';
+import {PriceProductDO, PriceProductStatus, PriceProductAvailability} from '../data-objects/PriceProductDO';
 import {PriceProductYieldFilterMetaDO} from '../data-objects/yield-filter/PriceProductYieldFilterDO';
 import {ThDayInYearIntervalDO} from '../../../utils/th-dates/data-objects/ThDayInYearIntervalDO';
 import {LazyLoadRepoDO, LazyLoadMetaResponseRepoDO} from '../../common/repo-data-objects/LazyLoadRepoDO';
@@ -27,6 +27,7 @@ export interface PriceProductSearchCriteriaRepoDO {
 	priceProductIdList?: string[];
 	addOnProductIdList?: string[];
 	taxIdList?: string[];
+	availability?: PriceProductAvailability;
 }
 export interface PriceProductSearchResultRepoDO {
 	lazyLoad?: LazyLoadRepoDO;
@@ -43,6 +44,6 @@ export interface IPriceProductRepository {
 
 	updatePriceProduct(meta: PriceProductMetaRepoDO, itemMeta: PriceProductItemMetaRepoDO, priceProduct: PriceProductDO): Promise<PriceProductDO>;
 	updatePriceProductStatus(meta: PriceProductMetaRepoDO, itemMeta: PriceProductItemMetaRepoDO, params: PriceProductUpdateStatusParamsRepoDO): Promise<PriceProductDO>;
-	updatePriceProductYieldFilters(meta: PriceProductMetaRepoDO, itemMeta: PriceProductItemMetaRepoDO, filterList: PriceProductYieldFilterMetaDO[]): Promise<PriceProductDO>;
+	updatePriceProductYieldFiltersAndNotes(meta: PriceProductMetaRepoDO, itemMeta: PriceProductItemMetaRepoDO, filterList: PriceProductYieldFilterMetaDO[], notes: string): Promise<PriceProductDO>;
 	updatePriceProductYieldManagerIntervals(meta: PriceProductMetaRepoDO, itemMeta: PriceProductItemMetaRepoDO, intervals: PriceProductUpdateYMIntervalsParamsRepoDO): Promise<PriceProductDO>;
 }

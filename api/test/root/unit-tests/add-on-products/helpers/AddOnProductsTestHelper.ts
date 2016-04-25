@@ -13,6 +13,7 @@ export class AddOnProductsTestHelper {
 			notes: "test test test",
 			name: "My First Addon Product",
 			price: 100.0,
+			internalCost: 20.0,
 			taxIdList: [this.getFirstValidVatTaxId()],
 			fileUrlList: []
 		};
@@ -36,6 +37,7 @@ export class AddOnProductsTestHelper {
 			notes: "test test test !!!",
 			name: "My First Addon Product [Updated]",
 			price: 120.0,
+			internalCost: 0,
 			taxIdList: [this.getFirstValidVatTaxId()],
 			fileUrlList: []
 		};

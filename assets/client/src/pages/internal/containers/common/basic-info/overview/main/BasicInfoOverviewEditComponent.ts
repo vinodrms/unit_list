@@ -1,12 +1,12 @@
 import {Component, OnInit} from 'angular2/core';
 import {ControlGroup} from 'angular2/common';
 import {Observable} from 'rxjs/Observable';
-import 'rxjs/add/observable/zip';
+import 'rxjs/add/observable/combineLatest';
 import {BaseFormComponent} from '../../../../../../../common/base/BaseFormComponent';
 import {ThError, AppContext} from '../../../../../../../common/utils/AppContext';
 import {TranslationPipe} from '../../../../../../../common/utils/localization/TranslationPipe';
 import {LoadingComponent} from '../../../../../../../common/utils/components/LoadingComponent';
-import {ImageUploadComponent} from '../../../../../../../common/utils/components/ImageUploadComponent';
+import {ImageUploadComponent} from '../../../../../../../common/utils/components/image-upload/ImageUploadComponent';
 import {VATComponent, VatDetails, VatResponse} from '../../../../../../../common/utils/components/VATComponent';
 import {CountriesService} from '../../../../../services/settings/CountriesService';
 import {CountriesDO} from '../../../../../services/settings/data-objects/CountriesDO';
@@ -39,7 +39,7 @@ export class BasicInfoOverviewEditComponent extends BaseFormComponent implements
 
 	public ngOnInit() {
 		this.isLoading = true;
-		Observable.zip(
+		Observable.combineLatest(
 			this._countriesService.getCountriesDO(),
 			this._hotelAggregator.getHotelAggregatedInfo()
 		).subscribe((result: [CountriesDO, HotelAggregatedInfo]) => {

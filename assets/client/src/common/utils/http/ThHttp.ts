@@ -18,6 +18,7 @@ enum ThStatusCode {
 export class ThHttp implements IThHttp {
 	private static HttpOk = 200;
 	private static HttpForbidden = 403;
+	private static MaxFileSizeBytes: number = 16 * 1024 * 1024;
 
 	private _thUtils: ThUtils;
 
@@ -37,12 +38,11 @@ export class ThHttp implements IThHttp {
 		var url = this.getApiUrl(serverApi);
 		var searchParams = this.buildSearchParameters(parameters);
 
-		return new Observable((observer: Observer<Object>) => {
+		return new Observable<Object>((observer: Observer<Object>) => {
 			this._http.get(url, { search: searchParams, body: JSON.stringify(this.getDefaultReqParams()) }).subscribe((res: Response) => {
 				this.parseResult(res, observer);
-			}, (err: Error) => {
-				observer.error(new ThError(err.message));
-				observer.complete();
+			}, (err: any) => {
+				this.parseError(err, observer);
 			});
 		});
 	}
@@ -72,16 +72,21 @@ export class ThHttp implements IThHttp {
 		return new Observable((observer: Observer<Object>) => {
 			this._http.post(url, JSON.stringify(actualParams)).subscribe((res: Response) => {
 				this.parseResult(res, observer);
-			}, (err: Error) => {
-				observer.error(new ThError(err.message));
-				observer.complete();
+			}, (err: any) => {
+				this.parseError(err, observer);
 			});
 		});
 	}
 
 	public uploadFile(file: File): Observable<UploadedFileResponse> {
 		let url = this.getApiUrl(ThServerApi.ServiceUploadFile);
-		return new Observable((observer: Observer<UploadedFileResponse>) => {
+		return new Observable<UploadedFileResponse>((observer: Observer<UploadedFileResponse>) => {
+			if(file.size > ThHttp.MaxFileSizeBytes) {
+				var thError = new ThError(this._thTranslation.translate("The maximum file size is 16MB"));
+				observer.error(thError);
+				observer.complete();
+				return;
+			}
 			let formData: FormData = new FormData();
 			let xhr: XMLHttpRequest = new XMLHttpRequest();
 
@@ -100,6 +105,14 @@ export class ThHttp implements IThHttp {
 			xhr.open('POST', url, true);
 			xhr.send(formData);
 		});
+	}
+	private parseError(error: any, observer: Observer<Object>) {
+		if (error.status == ThHttp.HttpForbidden) {
+			this._browserLocation.goToLoginPage(LoginStatusCode.SessionTimeout);
+			return;
+		}
+		observer.error(new ThError(error.message));
+		observer.complete();
 	}
 
 	private parseResult(result: Response, observer: Observer<Object>) {

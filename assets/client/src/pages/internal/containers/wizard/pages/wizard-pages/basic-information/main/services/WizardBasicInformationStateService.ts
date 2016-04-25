@@ -6,6 +6,8 @@ import {IBasicInfoStep} from './IBasicInfoStep';
 import {WizardBasicInformationController} from './WizardBasicInformationController';
 import {WizardBasicInfoIntroService} from '../../pages/intro/services/WizardBasicInfoIntroService';
 import {WizardBasicInfoOverviewService} from '../../pages/overview/services/WizardBasicInfoOverviewService';
+import {WizardBasicInfoPaymentsAndPoliciesService} from '../../pages/payments-policies/services/WizardBasicInfoPaymentsAndPoliciesService';
+import {WizardBasicInfoPropertyDetailsService} from '../../pages/property-details/services/WizardBasicInfoPropertyDetailsService';
 
 @Injectable()
 export class WizardBasicInformationStateService extends AWizardState {
@@ -13,9 +15,10 @@ export class WizardBasicInformationStateService extends AWizardState {
 	private _basicInfoController: WizardBasicInformationController;
 
 	constructor(private _appContext: AppContext,
-		introService: WizardBasicInfoIntroService, overviewService: WizardBasicInfoOverviewService) {
+		introService: WizardBasicInfoIntroService, overviewService: WizardBasicInfoOverviewService,
+        paymentsAndPolicies: WizardBasicInfoPaymentsAndPoliciesService, propertyDetails: WizardBasicInfoPropertyDetailsService) {
 		super();
-		this._basicInfoController = new WizardBasicInformationController([introService, overviewService]);
+		this._basicInfoController = new WizardBasicInformationController([introService, overviewService, paymentsAndPolicies, propertyDetails]);
 	}
 
 	public handleNextPressed(): Promise<any> {
@@ -74,8 +77,9 @@ export class WizardBasicInformationStateService extends AWizardState {
 	}
 	public getMeta(): WizardStateMeta {
 		return {
-			relativeComponentPath: "WizardBasicInformationComponent/WizardBasicInfoIntroComponent",
-			iconFontName: "",
+			startRelativeComponentPath: "WizardBasicInformationComponent/WizardBasicInfoIntroComponent",
+			endRelativeComponentPath: "WizardBasicInformationComponent/WizardBasicInfoPropertyDetailsComponent",
+			iconFontName: "8",
 			name: "Basic Information"
 		};
 	}

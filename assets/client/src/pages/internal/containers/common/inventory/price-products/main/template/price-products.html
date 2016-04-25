@@ -1,0 +1,48 @@
+<div class="overview-left" [ngClass]="{'col-xs-9': !isEditing, 'col-xs-3': isEditing}">
+	<div class="lazy-loading-table-filter">
+		<ul class="nav nav-tabs">
+			<li [ngClass]="{active : areActivePriceProducts()}" *ngIf="!isEditing || areActivePriceProducts()">
+				<a (click)="viewActivePriceProducts()">{{ 'Active' | translate }}</a>
+			</li>
+			<li [ngClass]="{active : areDraftPriceProducts()}" *ngIf="!isEditing || areDraftPriceProducts()">
+				<a (click)="viewDraftPriceProducts()">{{ 'Draft' | translate }}</a>
+			</li>
+			<li [ngClass]="{active : areArchivedPriceProducts()}" *ngIf="!isEditing || areArchivedPriceProducts()">
+				<a (click)="viewArchivedPriceProducts()">{{ 'Archived' | translate }}</a>
+			</li>
+		</ul>
+	</div>
+	<lazy-loading-table
+		[isCollapsed]="isEditing"
+		(onAdd)="addPriceProduct()"
+		(onCopy)="copyPriceProduct($event)"
+		(onSelect)="selectPriceProduct($event)"
+		
+		(onEdit)="editPriceProduct($event)"
+		(onDelete)="deletePriceProduct($event)"
+		(onArchive)="archivePriceProduct($event)"
+		(onDraft)="draftPriceProduct($event)"
+		>
+	</lazy-loading-table>
+</div>
+<div class="col-xs-3 overview-right" *ngIf="!isEditing">
+	<price-product-overview 
+		*ngIf="selectedPriceProductVM" 
+		[priceProductVM]="selectedPriceProductVM"
+		
+		(onEdit)="editPriceProduct($event)"
+		(onDelete)="deletePriceProduct($event)"
+		(onArchive)="archivePriceProduct($event)"
+		(onDraft)="draftPriceProduct($event)"
+		>
+	</price-product-overview>
+	<wizard-steps-component></wizard-steps-component>
+	
+</div>
+<div class="col-xs-9 edit-container edit-container" *ngIf="isEditing">
+	<price-product-edit-container
+		*ngIf="selectedPriceProductVM" 
+		[priceProductVM]="selectedPriceProductVM"
+		(onExit)="showViewScreen()">
+	</price-product-edit-container>
+</div>

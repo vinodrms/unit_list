@@ -8,21 +8,23 @@ import {ModalSize} from '../ICustomModalComponent';
 		'tabindex': '0',
         'role': 'dialog',
         'class': 'in modal',
-        'style': 'display: block; position:absolute; ',
+        'style': 'display: block;',
 		'(click)': 'onClick()'
 	},
 	template: `
-		<div class="modal-dialog" [ngClass]="{'modal-lg': isLarge(), 'modal-sm': isSmall()}">
-			<div class="modal-content" (click)="onContainerClick($event)" style="display: block">
-				<div style="display: none" #modalDialog>
+		<div class="vertical-alignment-helper">
+			<div class="modal-dialog vertical-align-center" [ngClass]="{'modal-lg': isLarge(), 'modal-sm': isSmall()}">
+				<div class="modal-content" (click)="onContainerClick($event)">
+					<div style="display: none" #modalDialog>
+					</div>
 				</div>
-         	</div>
-    	</div>
+			</div>
+		</div>
 	`
 })
 
-export class ModalContainerComponent {
-	constructor(private _dialogInstance: ModalDialogInstance) {
+export class ModalContainerComponent<T> {
+	constructor(private _dialogInstance: ModalDialogInstance<T>) {
 
 	}
 

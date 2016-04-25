@@ -11,6 +11,7 @@ import {RoomCategorySearchResultRepoDO} from '../../../data-layer/room-categorie
 import {RoomCategoryStatsDO} from '../../../data-layer/room-categories/data-objects/RoomCategoryStatsDO';
 import {RoomStatsDO} from '../../../data-layer/rooms/data-objects/RoomStatsDO';
 import {RoomMetaRepoDO, RoomSearchResultRepoDO} from '../../../data-layer/rooms/repositories/IRoomRepository';
+import {BedSearchResultRepoDO} from '../../../data-layer/beds/repositories/IBedRepository';
 
 import _ = require('underscore');
 
@@ -130,12 +131,12 @@ export class RoomAggregator {
     private getRoomStatsCore(resolve: { (result: RoomStatsDO): void }, reject: { (err: ThError): void }, roomDO: RoomDO) {
         var bedRepository = this._appContext.getRepositoryFactory().getBedRepository();
 
-        bedRepository.getBedList({ hotelId: roomDO.hotelId }, { bedIdList: roomDO.bedIdList }).then((bedList: BedDO[]) => {
-            var noOfAdults = bedList.reduce((sum, bed) => {
+        bedRepository.getBedList({ hotelId: roomDO.hotelId }, { bedIdList: roomDO.bedIdList }).then((bedResult: BedSearchResultRepoDO) => {
+            var noOfAdults = bedResult.bedList.reduce((sum, bed) => {
                 return sum + bed.maxNoAdults;
             }, 0);
 
-            var noOfChildren = bedList.reduce((sum, bed) => {
+            var noOfChildren = bedResult.bedList.reduce((sum, bed) => {
                 return sum + bed.maxNoChildren;
             }, 0);
 

@@ -95,7 +95,7 @@ describe("Hotel Price Products Tests", function() {
 		it("Should not save price product with missing price per person", function(done) {
 			var priceProductItem = pphelper.getDraftSavePriceProductItemDO();
 			priceProductItem.price = DefaultPriceProductBuilder.getPricePerPerson(pphelper.roomCategoryStat);
-			priceProductItem.price.priceConfiguration["adultsPriceList"] = [];
+			priceProductItem.price.priceList[0]["adultsPriceList"] = [];
 
 			var savePPItem = new SavePriceProductItem(testContext.appContext, testContext.sessionContext);
 			savePPItem.save(priceProductItem).then((result: PriceProductDO) => {
@@ -108,7 +108,7 @@ describe("Hotel Price Products Tests", function() {
 		it("Should not save price product with missing price per category", function(done) {
 			var priceProductItem = pphelper.getDraftSavePriceProductItemDO();
 			priceProductItem.price = DefaultPriceProductBuilder.getPricePerRoomCategory(pphelper.roomCategoryStat);
-			priceProductItem.price.priceConfiguration["priceList"] = [];
+			priceProductItem.price.priceList = [];
 
 			var savePPItem = new SavePriceProductItem(testContext.appContext, testContext.sessionContext);
 			savePPItem.save(priceProductItem).then((result: PriceProductDO) => {
@@ -155,6 +155,7 @@ describe("Hotel Price Products Tests", function() {
 			savePPItem.save(priceProductItem).then((priceProduct: PriceProductDO) => {
 				should.equal(priceProduct.name, priceProductItem.name);
 				should.equal(priceProduct.status, PriceProductStatus.Draft);
+				should.equal(priceProduct.notes, priceProductItem.notes);
 				should.exist(priceProduct.id);
 				addedPriceProduct = priceProduct;
 				done();
@@ -188,13 +189,14 @@ describe("Hotel Price Products Tests", function() {
 					done(e);
 				});
         });
-		it("Should update only the Yield Filters for the Active Price Product", function(done) {
+		it("Should update only the Yield Filters and Notes for the Active Price Product", function(done) {
 			var priceProductItem = pphelper.getDraftSavePriceProductItemDO();
 			priceProductItem["id"] = addedPriceProduct.id;
 			priceProductItem.status = PriceProductStatus.Draft;
 			priceProductItem.roomCategoryIdList = [];
 			priceProductItem.taxIdList = [];
 			priceProductItem.name = NewPriceProductName;
+			priceProductItem.notes = "Updated notes for my price product!";
 
 			var savePPItem = new SavePriceProductItem(testContext.appContext, testContext.sessionContext);
 			savePPItem.save(priceProductItem).then((updatedPriceProduct: PriceProductDO) => {
@@ -203,7 +205,8 @@ describe("Hotel Price Products Tests", function() {
 				should.equal(updatedPriceProduct.id, addedPriceProduct.id);
 				should.equal(testUtils.stringArraysAreEqual(updatedPriceProduct.taxIdList, addedPriceProduct.taxIdList), true);
 				should.equal(testUtils.stringArraysAreEqual(updatedPriceProduct.roomCategoryIdList, addedPriceProduct.roomCategoryIdList), true);
-
+				should.equal(priceProductItem.notes, updatedPriceProduct.notes);
+				
 				addedPriceProduct = updatedPriceProduct;
 				done();
 			}).catch((e: ThError) => {
@@ -233,7 +236,7 @@ describe("Hotel Price Products Tests", function() {
         });
 		it("Should detach the price product from the customer profile", function(done) {
 			var companyCustDO = addedCompanyCustomer;
-			companyCustDO.priceProductDetails.priceProductAvailability = PriceProductAvailability.Public;
+			companyCustDO.priceProductDetails.allowPublicPriceProducts = true;
 			companyCustDO.priceProductDetails.priceProductIdList = [];
 			var saveCustItem = new SaveCustomerItem(testContext.appContext, testContext.sessionContext);
 			saveCustItem.save(companyCustDO).then((cust: CustomerDO) => {

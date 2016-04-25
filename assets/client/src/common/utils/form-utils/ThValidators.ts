@@ -6,10 +6,16 @@ import {VatValidator} from './validators/VatValidator';
 import {BooleanValidator} from './validators/BooleanValidator';
 import {PhoneValidator} from './validators/PhoneValidator';
 import {UrlValidator} from './validators/UrlValidator';
+import {PriceValidator} from './validators/PriceValidator';
+import {NumberValidator} from './validators/NumberValidator';
+import {PercentageValidator} from './validators/PercentageValidator';
 
 export class ThValidators {
 	public static emailValidator(control: AbstractControl): ValidationResult {
 		return ThValidators.validator(control, new EmailValidator());
+	}
+	public static nullableEmailValidator(control: AbstractControl): ValidationResult {
+		return ThValidators.validator(control, new EmailValidator(true));
 	}
 	public static passwordValidator(control: AbstractControl): ValidationResult {
 		return ThValidators.validator(control, new PasswordValidator());
@@ -20,6 +26,12 @@ export class ThValidators {
 	public static booleanValidator(control: AbstractControl): ValidationResult {
 		return ThValidators.validator(control, new BooleanValidator());
 	}
+    public static numberValidator(control: AbstractControl): ValidationResult {
+        return ThValidators.validator(control, new NumberValidator());
+    }
+    public static nullableNumberValidator(control: AbstractControl): ValidationResult {
+        return ThValidators.validator(control, new NumberValidator(true));
+    }
 	public static phoneValidator(control: AbstractControl): ValidationResult {
 		return ThValidators.validator(control, new PhoneValidator());
 	}
@@ -31,6 +43,18 @@ export class ThValidators {
 	}
 	public static nullableUrlValidator(control: AbstractControl): ValidationResult {
 		return ThValidators.validator(control, new UrlValidator(true));
+	}
+	public static priceValidator(control: AbstractControl): ValidationResult {
+		return ThValidators.validator(control, new PriceValidator());
+	}
+	public static nullablePriceValidator(control: AbstractControl): ValidationResult {
+		return ThValidators.validator(control, new PriceValidator(true));
+	}
+	public static percentageValidator(control: AbstractControl): ValidationResult {
+		return ThValidators.validator(control, new PercentageValidator());
+	}
+	public static nullablePercentageValidator(control: AbstractControl): ValidationResult {
+		return ThValidators.validator(control, new PercentageValidator(true));
 	}
 
 	private static validator(control: AbstractControl, thValidator: AThValidator): ValidationResult {

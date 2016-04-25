@@ -75,6 +75,11 @@ export class NumberValidationRule extends AValidationRule {
 		rule.minValue = 0.0;
 		return rule;
 	}
+	public static buildNullablePriceNumberRule(): NumberValidationRule {
+		var rule = NumberValidationRule.buildPriceNumberRule();
+		rule.isNullable = true;
+		return rule;
+	}
 	public static buildIntegerNumberRule(minValue?: number): NumberValidationRule {
 		var rule = new NumberValidationRule();
 		rule.isInteger = true;

@@ -728,7 +728,6 @@ li.current-page {
 li.current-page a {
     color: #000;
 }
-.nav>li.disabled-page>a { color:#b1becd; cursor:crosshair !important; }
 
 .navbar-brand,
 .navbar-nav>li>a {
@@ -2385,7 +2384,7 @@ button,
 }
 
 .input-group {
-    margin-bottom: 10px;
+    margin-bottom: 5px;
 }
 
 .ln_solid {
@@ -4646,7 +4645,7 @@ ul.project_files li a i {
 }
 
 .thumbnail {
-    height: 190px;
+    height: 160px;
     overflow: hidden;
 }
 

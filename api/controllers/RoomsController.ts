@@ -11,21 +11,21 @@ import {RoomCategoryDO} from '../core/data-layer/room-categories/data-objects/Ro
 import {LazyLoadRepoDO, LazyLoadMetaResponseRepoDO} from '../core/data-layer/common/repo-data-objects/LazyLoadRepoDO';
 
 class RoomsController extends BaseController {
-	
+
     public getRoomList(req: Express.Request, res: Express.Response) {
         var appContext: AppContext = req.appContext;
         var sessionContext: SessionContext = req.sessionContext;
-        
+
         var roomMeta = this.getRoomMetaRepoDOFrom(sessionContext);
-        
+
 		var roomRepo = appContext.getRepositoryFactory().getRoomRepository();
-		roomRepo.getRoomList(roomMeta).then((result: RoomSearchResultRepoDO) => {
-			this.returnSuccesfulResponse(req, res, { result: result });
+		roomRepo.getRoomList(roomMeta, req.body.searchCriteria, req.body.lazyLoad).then((rooms: RoomSearchResultRepoDO) => {
+			this.returnSuccesfulResponse(req, res, rooms);
 		}).catch((err: any) => {
 			this.returnErrorResponse(req, res, err, ThStatusCode.RoomsControllerErrorGettingRooms);
 		});
 	}
-    
+
     public getRoomListCount(req: Express.Request, res: Express.Response) {
 		var appContext: AppContext = req.appContext;
 		var sessionContext: SessionContext = req.sessionContext;
@@ -38,11 +38,11 @@ class RoomsController extends BaseController {
 			this.returnErrorResponse(req, res, err, ThStatusCode.RoomsControllerErrorGettingCount);
 		});
 	}
-    
+
     public saveRoomItem(req: Express.Request, res: Express.Response) {
         var appContext: AppContext = req.appContext;
         var sessionContext: SessionContext = req.sessionContext;
-        
+
 		var saveRoomItem = new SaveRoomItem(appContext, sessionContext);
 		saveRoomItem.save(req.body.room).then((updatedRoom: RoomDO) => {
 			this.returnSuccesfulResponse(req, res, { room: updatedRoom });
@@ -50,11 +50,11 @@ class RoomsController extends BaseController {
 			this.returnErrorResponse(req, res, err, ThStatusCode.RoomsControllerErrorSavingRoom);
 		});
 	}
-    
+
     public deleteRoomItem(req: Express.Request, res: Express.Response) {
         var appContext: AppContext = req.appContext;
         var sessionContext: SessionContext = req.sessionContext;
-        
+
 		var deleteRoomItem = new DeleteRoomItem(appContext, sessionContext);
 		deleteRoomItem.delete(req.body.room).then((deletedRoom: RoomDO) => {
 			this.returnSuccesfulResponse(req, res, { room: deletedRoom });
@@ -62,13 +62,13 @@ class RoomsController extends BaseController {
 			this.returnErrorResponse(req, res, err, ThStatusCode.RoomsControllerErrorDeletingRoom);
 		});
 	}
-    
+
     public getRoomById(req: Express.Request, res: Express.Response) {
 		if (!this.precheckGETParameters(req, res, ['id'])) { return };
-        
+
         var appContext: AppContext = req.appContext;
         var sessionContext: SessionContext = req.sessionContext;
-        
+
 		var roomId = req.query.id;
 		var roomMeta = this.getRoomMetaRepoDOFrom(sessionContext);
 
@@ -79,25 +79,25 @@ class RoomsController extends BaseController {
 			this.returnErrorResponse(req, res, err, ThStatusCode.RoomsControllerErrorGettingRoomById);
 		});
 	}
-    
+
     public getUsedRoomCategoryList(req: Express.Request, res: Express.Response) {
         var appContext: AppContext = req.appContext;
         var sessionContext: SessionContext = req.sessionContext;
-        
+
         var roomAggregator = new RoomAggregator(appContext);
         var roomAggregatorMeta = this.getRoomAggregatorMetaDOFrom(sessionContext);
-        
+
         roomAggregator.getUsedRoomCategoryList(roomAggregatorMeta).then((roomCategoryList: RoomCategoryDO[]) => {
-			this.returnSuccesfulResponse(req, res, { roomCategoryList: roomCategoryList });
+			this.returnSuccesfulResponse(req, res, { result: { roomCategoryList: roomCategoryList } });
 		}).catch((err: any) => {
 			this.returnErrorResponse(req, res, err, ThStatusCode.RoomsControllerErrorGettingRoomCategories);
 		});
     }
-    
+
     private getRoomMetaRepoDOFrom(sessionContext: SessionContext): RoomMetaRepoDO {
 		return { hotelId: sessionContext.sessionDO.hotel.id };
 	}
-    
+
     private getRoomAggregatorMetaDOFrom(sessionContext: SessionContext): RoomAggregatorMetaDO {
         return { hotelId: sessionContext.sessionDO.hotel.id };
     }

@@ -1,0 +1,98 @@
+<loading-component [isLoading]="isLoading"></loading-component>
+<div class="row" *ngIf="!isLoading">
+    <div class="col-xs-12 col-md-5">
+        <label class="control-label">
+            <h2>{{ 'Select the timezone' | translate }}</h2><small>{{ 'This will be used for automatic processes that need to know your local hour' | translate }}</small>
+        </label>
+
+        <div class="form-group">
+			<div class="input-group" [ngClass]="{'form-warning': displayTimezoneError()}">
+            	<select class="select2_single form-control" [ngModel]="hotel.timezone" (change)="updateTimezone($event.target.value)">
+                    <option value="" disabled></option>
+                	<option *ngFor="#timezone of timezoneList" [value]="timezone.name">{{timezone.name}}</option>
+            	</select>
+			</div>
+            <label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Select a timezone' | translate }}</small></label>
+        </div>
+
+        <hr>
+        <div class="row">
+            <div class="col-xs-6 col-md-6 form-group">
+                <label>{{ 'Check in from' | translate }}*</label>
+                <th-hour-select 
+					[initialHour]="hotel.operationHours.checkInFrom" 
+					(onHourSelected)="diChangeCheckInFrom($event)"
+					[isRequired]="true" errorMessage="{{ 'Required' | translate }}" 
+					[didSubmitForm]="didSubmitForm">
+				</th-hour-select>
+            </div>
+
+            <div class="col-xs-6 col-md-6 form-group">
+                <label>{{ 'Check in to' | translate }}</label>
+                <th-hour-select 
+					[initialHour]="hotel.operationHours.checkInToOptional" 
+					(onHourSelected)="diChangeCheckInTo($event)"
+                	[isRequired]="false" 
+					[didSubmitForm]="didSubmitForm">
+				</th-hour-select>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-xs-6 col-md-6 form-group">
+                <label>{{ 'Check out from' | translate }}</label>
+                <th-hour-select
+					[initialHour]="hotel.operationHours.checkOutFromOptional" 
+					(onHourSelected)="diChangeCheckOutFrom($event)"
+					[isRequired]="false" 
+					[didSubmitForm]="didSubmitForm">
+				</th-hour-select>
+            </div>
+
+            <div class="col-xs-6 col-md-6 form-group">
+                <label>{{ 'Check out to' | translate }}*</label>
+                <th-hour-select
+					[initialHour]="hotel.operationHours.checkOutTo" 
+					(onHourSelected)="diChangeCheckOutTo($event)"
+                	[isRequired]="true" errorMessage="{{ 'Required' | translate }}" 
+					[didSubmitForm]="didSubmitForm">
+				</th-hour-select>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-xs-6 col-md-6 form-group">
+                <label>{{ 'Booking Cancellation Hour' | translate }}</label>
+                <th-hour-select 
+					[initialHour]="hotel.operationHours.cancellationHour" 
+					(onHourSelected)="diChangeCancellationHour($event)"
+                	[isRequired]="true" errorMessage="{{ 'Required' | translate }}" 
+					[didSubmitForm]="didSubmitForm">
+				</th-hour-select>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xs-12 col-md-6 col-md-offset-1">
+
+        <label class="control-label">
+            <h2>{{ 'Hotel Amenities' | translate }}</h2>
+        </label>
+
+        <div class="form-group">
+            <div class="button-items" *ngFor="#hotelAmenityVM of hotelAmenities.hotelAmenityList">
+                <div class="info-block block-info clearfix">
+                    <div data-toggle="buttons" class="btn-group" title="{{ hotelAmenityVM.hotelAmenity.name }}">
+                        <label class="btn btn-default th-grid-btn" [ngClass]="{active: hotelAmenityVM.isSelected}" (click)="hotelAmenityVM.toggle()">
+                            <div>
+                                <span class="unitpal-font unitpal-large">{{hotelAmenityVM.hotelAmenity.iconUrl}}</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+
+</div>

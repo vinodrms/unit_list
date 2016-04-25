@@ -1,29 +1,41 @@
 <form [ngFormModel]="getDefaultControlGroup()" (submit)="signUp()">
 	<h1>{{ "Create Account" | translate }}</h1>
 	
-	<div [ngClass]="{bad: controlIsInvalid('hotelName')}"  class="form-group">
-		<input type="text" class="form-control" placeholder="{{ 'Hotel Name' | translate }}" ngControl="hotelName" />
-		<label *ngIf="controlIsInvalid('hotelName')" class="form-label"><small><i class="fa fa-info-circle"></i> {{ 'Enter a name for your hotel' | translate }}</small></label>
+	<div class="form-group">
+		<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('hotelName')}">
+			<input type="text" class="form-control" placeholder="{{ 'Hotel Name' | translate }}" ngControl="hotelName" />
+		</div>
+		<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter a name for your hotel' | translate }}</small></label>
 	</div>
-	<div [ngClass]="{bad: controlIsInvalid('email')}" class="form-group">
-		<input type="text" class="form-control" placeholder="{{ 'Email' | translate }}" ngControl="email" />
-		<label *ngIf="controlIsInvalid('email')" class="form-label"><small><i class="fa fa-info-circle"></i> {{ 'Invalid email' | translate }}</small></label>
+	<div class="form-group">
+		<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('email')}">
+			<input type="text" class="form-control" placeholder="{{ 'Email' | translate }}" ngControl="email" />
+		</div>
+		<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Invalid email' | translate }}</small></label>
 	</div>
-	<div [ngClass]="{bad: controlIsInvalid('password')}"  class="form-group">
-		<input type="password" class="form-control" placeholder="{{ 'Password' | translate }}" ngControl="password" />
-		<label *ngIf="controlIsInvalid('password')" class="form-label"><small><i class="fa fa-info-circle"></i> {{ 'At least 6 characters, 1 number and 1 upper case' | translate }}</small></label>
+	<div class="form-group">
+		<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('password')}">
+			<input type="password" class="form-control" placeholder="{{ 'Password' | translate }}" ngControl="password" />
+		</div>
+		<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'At least 6 characters, 1 number and 1 upper case' | translate }}</small></label>
 	</div>
-	<div [ngClass]="{bad: confirmationControlIsInvalid('passwordConfirmation', 'password')}" class="form-group">
-		<input type="password" class="form-control" placeholder="{{ 'Confirm Password' | translate }}" ngControl="passwordConfirmation" />
-		<label *ngIf="confirmationControlIsInvalid('passwordConfirmation', 'password')" class="form-label"><small><i class="fa fa-info-circle"></i> {{ 'The passwords should match' | translate }}</small></label>
+	<div class="form-group">
+		<div class="input-group" [ngClass]="{'form-warning': confirmationControlIsInvalid('passwordConfirmation', 'password')}">
+			<input type="password" class="form-control" placeholder="{{ 'Confirm Password' | translate }}" ngControl="passwordConfirmation" />
+		</div>
+		<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'The passwords should match' | translate }}</small></label>
 	</div>
-	<div [ngClass]="{bad: controlIsInvalid('firstName')}"  class="form-group">
-		<input type="text" class="form-control" placeholder="{{ 'First Name' | translate }}" ngControl="firstName" />
-		<label *ngIf="controlIsInvalid('firstName')" class="form-label"><small><i class="fa fa-info-circle"></i> {{ 'Enter your first name' | translate }}</small></label>
+	<div class="form-group">
+		<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('firstName')}">
+			<input type="text" class="form-control" placeholder="{{ 'First Name' | translate }}" ngControl="firstName" />
+		</div>
+		<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter your first name' | translate }}</small></label>
 	</div>
-	<div [ngClass]="{bad: controlIsInvalid('lastName')}"  class="form-group">
-		<input type="text" class="form-control" placeholder="{{ 'Last Name' | translate }}" ngControl="lastName" />
-		<label *ngIf="controlIsInvalid('lastName')" class="form-label"><small><i class="fa fa-info-circle"></i> {{ 'Enter your last name' | translate }}</small></label>
+	<div class="form-group">
+		<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('lastName')}">
+			<input type="text" class="form-control" placeholder="{{ 'Last Name' | translate }}" ngControl="lastName" />
+		</div>
+		<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter your last name' | translate }}</small></label>
 	</div>
 	<div>
 		<loading-button [isLoading]="isLoading" title="Create Account"></loading-button>

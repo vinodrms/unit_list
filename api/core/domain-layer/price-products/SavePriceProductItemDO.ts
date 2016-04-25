@@ -36,6 +36,7 @@ export class SavePriceProductItemDO {
 	yieldFilterList: PriceProductYieldFilterMetaDO[];
 	constraints: SavePriceProductItemConstraintListDO;
 	conditions: SavePriceProductItemConditionsDO;
+	notes: string;
 
 	public static getValidationStructure(): IValidationStructure {
 		return new ObjectValidationStructure([
@@ -53,7 +54,7 @@ export class SavePriceProductItemDO {
 			},
 			{
 				key: "availability",
-				validationStruct: new PrimitiveValidationStructure(new NumberInListValidationRule([PriceProductAvailability.Private, PriceProductAvailability.Public]))
+				validationStruct: new PrimitiveValidationStructure(new NumberInListValidationRule([PriceProductAvailability.Confidential, PriceProductAvailability.Public]))
 			},
 			{
 				key: "lastRoomAvailability",
@@ -72,11 +73,11 @@ export class SavePriceProductItemDO {
 				validationStruct: new ObjectValidationStructure([
 					{
 						key: "type",
-						validationStruct: new PrimitiveValidationStructure(new NumberInListValidationRule([PriceProductPriceType.PricePerPerson, PriceProductPriceType.PricePerRoomCategory]))
+						validationStruct: new PrimitiveValidationStructure(new NumberInListValidationRule([PriceProductPriceType.PricePerPerson, PriceProductPriceType.SinglePrice]))
 					},
 					{
-						key: "priceConfiguration",
-						validationStruct: new ObjectValidationStructure([])
+						key: "priceList",
+						validationStruct: new ArrayValidationStructure(new ObjectValidationStructure([]))
 					}
 				])
 			},
@@ -146,6 +147,10 @@ export class SavePriceProductItemDO {
 						validationStruct: new ObjectValidationStructure([])
 					}
 				])
+			},
+			{
+				key: "notes",
+				validationStruct: new PrimitiveValidationStructure(StringValidationRule.buildNullable())
 			}
 		]);
 	}

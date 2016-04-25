@@ -1,0 +1,50 @@
+<div class="col-md-4 col-sm-4 col-xs-12 form-group">
+	<div class="row">
+		<div class="col-xs-12">
+			<label>{{ 'Filters' | translate }}</label>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12">
+			<small class="text-muted" *ngIf="!isPricePerNumberOfPersons">
+				<i class="fa fa-info-circle"></i> {{ 'The filters are used for grouping similar price products. The price products from the same group can be yielded together.' | translate }} 
+			</small>
+		</div>
+	</div>
+</div>
+<div class="col-md-8 col-sm-8 col-xs-12">
+	<div class="row" *ngIf="didInit">
+		<div class="col-md-6 col-sm-6 col-xs-12" *ngFor="#yieldFilterVM of yieldFilterVMValues">
+			<div class="row">
+				<div class="col-md-6 col-sm-6 col-xs-6">
+					<label class="control-label">{{yieldFilterVM.label | translate}}: </label>
+				</div>
+				<div class="col-md-6 col-sm-6 col-xs-6 yield-filter">
+					<div *ngIf="yieldFilterVM.hasValue()">
+						<div *ngIf="yieldFilterVM.isColor()" class="row">
+							<div class="color-box" [ngClass]="yieldFilterVM.yieldFilterValue.colorCode"></div>
+						</div>
+						<div *ngIf="yieldFilterVM.isText()" class="row">
+							<b>{{yieldFilterVM.yieldFilterValue.label}}</b>
+						</div>
+						<div *ngIf="yieldFilterVM.yieldFilterValue.description" class="row">
+							<small>{{yieldFilterVM.yieldFilterValue.description}}</small>
+						</div>
+						<div *ngIf="!yieldFilterVM.yieldFilterValue.description" class="row">
+							<i class="fa fa-fw">&nbsp;</i>
+						</div>
+					</div>
+					<div *ngIf="!yieldFilterVM.hasValue()">
+						<small>{{ 'Not Set' | translate }}</small>
+					</div>
+				</div>
+			</div>
+			<div class="row" *ngIf="!readonly">
+				<a class="btn btn-default" role="button" (click)="openSelectFilterModalFor(yieldFilterVM.filterId)">
+					<i class="fa fa-arrow-right"></i> {{ 'Select' | translate }}
+				</a>
+			</div>
+
+		</div>
+	</div>
+</div>

@@ -1,0 +1,33 @@
+<div class="overview-left" [ngClass]="{'col-xs-9 col-md-9': !isEditing, 'col-xs-3 col-md-3': isEditing}">
+	<div class="lazy-loading-table-filter">
+		<ul class="nav nav-tabs">
+			<li *ngFor="#filter of filterList" [ngClass]="{active : isFilterSelected(filter)}">
+				<a (click)="selectFilter(filter)">{{filter.customerTypeName | translate}}</a>
+			</li>
+		</ul>
+	</div>
+	<lazy-loading-table
+		[isCollapsed]="isEditing"
+		(onAdd)="addCustomer()"
+		(onSelect)="selectCustomer($event)"
+		(onEdit)="editCustomer($event)"
+		>
+	</lazy-loading-table>
+</div>
+<div class="col-xs-3 col-md-3 overview-right" *ngIf="!isEditing">
+	<customer-register-overview 
+		*ngIf="selectedCustomerVM" 
+		[customerVM]="selectedCustomerVM"
+		(onEdit)="editCustomer($event)">
+		>
+	</customer-register-overview>
+	<wizard-steps-component></wizard-steps-component>
+</div>
+<div class="col-xs-9 col-md-9 edit-container" *ngIf="isEditing">
+	<customer-register-edit-container
+		*ngIf="selectedCustomerVM" 
+		[customerVM]="selectedCustomerVM"
+		(onExit)="showViewScreen()">
+		>
+	</customer-register-edit-container>
+</div>

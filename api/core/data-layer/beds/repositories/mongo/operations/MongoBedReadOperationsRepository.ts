@@ -3,7 +3,8 @@ import {ThError} from '../../../../../utils/th-responses/ThError';
 import {ThUtils} from '../../../../../utils/ThUtils';
 import {ThStatusCode} from '../../../../../utils/th-responses/ThResponse';
 import {MongoRepository} from '../../../../common/base/MongoRepository';
-import {BedMetaRepoDO, BedSearchCriteriaRepoDO} from '../../IBedRepository';
+import {LazyLoadRepoDO, LazyLoadMetaResponseRepoDO} from '../../../../common/repo-data-objects/LazyLoadRepoDO';
+import {BedMetaRepoDO, BedSearchCriteriaRepoDO, BedSearchResultRepoDO} from '../../IBedRepository';
 import {BedDO, BedStatus} from '../../../../common/data-objects/bed/BedDO';
 import {MongoQueryBuilder} from '../../../../common/base/MongoQueryBuilder';
 
@@ -12,13 +13,13 @@ export class MongoBedReadOperationsRepository extends MongoRepository {
         super(bedEntity);
     }
 
-	public getBedList(bedMeta: BedMetaRepoDO, searchCriteria?: BedSearchCriteriaRepoDO): Promise<BedDO[]> {
-        return new Promise<BedDO[]>((resolve: { (result: BedDO[]): void }, reject: { (err: ThError): void }) => {
-            this.getBedListCore(resolve, reject, bedMeta, searchCriteria);
+	public getBedList(bedMeta: BedMetaRepoDO, searchCriteria?: BedSearchCriteriaRepoDO, lazyLoad?: LazyLoadRepoDO): Promise<BedSearchResultRepoDO> {
+        return new Promise<BedSearchResultRepoDO>((resolve: { (result: BedSearchResultRepoDO): void }, reject: { (err: ThError): void }) => {
+            this.getBedListCore(resolve, reject, bedMeta, searchCriteria, lazyLoad);
         });
     }
-    private getBedListCore(resolve: { (result: BedDO[]): void }, reject: { (err: ThError): void }, bedMeta: BedMetaRepoDO, searchCriteria?: BedSearchCriteriaRepoDO) {
-        this.findMultipleDocuments({ criteria: this.buildSearchCriteria(bedMeta, searchCriteria) },
+    private getBedListCore(resolve: { (result: BedSearchResultRepoDO): void }, reject: { (err: ThError): void }, bedMeta: BedMetaRepoDO, searchCriteria?: BedSearchCriteriaRepoDO, lazyLoad?: LazyLoadRepoDO) {
+        this.findMultipleDocuments({ criteria: this.buildSearchCriteria(bedMeta, searchCriteria), lazyLoad: lazyLoad },
             (err: Error) => {
                 var thError = new ThError(ThStatusCode.BedRepositoryErrorGettingBedList, err);
                 ThLogger.getInstance().logError(ThLogLevel.Error, "Error getting bed list.", bedMeta, thError);
@@ -26,7 +27,10 @@ export class MongoBedReadOperationsRepository extends MongoRepository {
             },
             (dbBedList: Array<Object>) => {
                 var resultDO = this.getQueryResultDO(dbBedList);
-                resolve(resultDO);
+                resolve({
+                    bedList: resultDO,
+                    lazyLoad: lazyLoad
+                });
             }
         );
     }
@@ -39,7 +43,25 @@ export class MongoBedReadOperationsRepository extends MongoRepository {
         });
         return bedList;
     }
-
+    
+    public getBedListCount(meta: BedMetaRepoDO, searchCriteria: BedSearchCriteriaRepoDO): Promise<LazyLoadMetaResponseRepoDO> {
+		return new Promise<LazyLoadMetaResponseRepoDO>((resolve: { (result: LazyLoadMetaResponseRepoDO): void }, reject: { (err: ThError): void }) => {
+			this.getBedListCountCore(resolve, reject, meta, searchCriteria);
+		});
+	}
+	private getBedListCountCore(resolve: { (result: LazyLoadMetaResponseRepoDO): void }, reject: { (err: ThError): void }, meta: BedMetaRepoDO, searchCriteria: BedSearchCriteriaRepoDO) {
+		var query = this.buildSearchCriteria(meta, searchCriteria);
+		return this.getDocumentCount(query,
+			(err: Error) => {
+				var thError = new ThError(ThStatusCode.BedRepositoryErrorReadingDocumentCount, err);
+				ThLogger.getInstance().logError(ThLogLevel.Error, "error reading document count", { meta: meta, searchCriteria: searchCriteria }, thError);
+				reject(thError);
+			},
+			(meta: LazyLoadMetaResponseRepoDO) => {
+				resolve(meta);
+			});
+	}
+    
     public getBedById(bedMeta: BedMetaRepoDO, bedId: string): Promise<BedDO> {
         return new Promise<BedDO>((resolve: { (result: BedDO): void }, reject: { (err: ThError): void }) => {
             this.getBedByIdCore(bedMeta, bedId, resolve, reject);
@@ -70,9 +92,12 @@ export class MongoBedReadOperationsRepository extends MongoRepository {
         mongoQueryBuilder.addExactMatch("hotelId", meta.hotelId);
         mongoQueryBuilder.addExactMatch("status", BedStatus.Active);
 
-        if (searchCriteria) {
-            if (searchCriteria.bedIdList) {
+        if (!this._thUtils.isUndefinedOrNull(searchCriteria)) {
+            if (!this._thUtils.isUndefinedOrNull(searchCriteria.bedIdList)) {
                 mongoQueryBuilder.addMultipleSelectOptionList("id", searchCriteria.bedIdList);
+            }
+            if (!this._thUtils.isUndefinedOrNull(searchCriteria.name)) {
+                mongoQueryBuilder.addRegex("name", searchCriteria.name);
             }
         }
         

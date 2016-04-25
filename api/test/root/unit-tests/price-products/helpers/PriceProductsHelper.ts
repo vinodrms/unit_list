@@ -13,7 +13,6 @@ import {YieldFilterDO} from '../../../../../core/data-layer/common/data-objects/
 import {RoomAggregator} from '../../../../../core/domain-layer/rooms/aggregators/RoomAggregator';
 import {RoomCategoryStatsDO} from '../../../../../core/data-layer/room-categories/data-objects/RoomCategoryStatsDO';
 import {PriceForFixedNumberOfPersonsDO} from '../../../../../core/data-layer/price-products/data-objects/price/price-per-person/PriceForFixedNumberOfPersonsDO';
-import {PricePerRoomCategoryDO} from '../../../../../core/data-layer/price-products/data-objects/price/price-per-room-category/PricePerRoomCategoryDO';
 import {PriceProductConstraintType} from '../../../../../core/data-layer/price-products/data-objects/constraint/IPriceProductConstraint';
 import {ISOWeekDay} from '../../../../../core/utils/th-dates/data-objects/ISOWeekDay';
 
@@ -105,7 +104,8 @@ export class PriceProductsHelper {
 				penalty: {
 					percentage: 0.3
 				}
-			}
+			},
+			notes: "A nice price product"
 		}
 	}
 	public getRoomCategoryId(): string {

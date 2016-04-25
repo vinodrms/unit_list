@@ -4,6 +4,7 @@ import {ThStatusCode} from '../../../../../utils/th-responses/ThResponse';
 import {AppContext} from '../../../../../utils/AppContext';
 import {SessionContext} from '../../../../../utils/SessionContext';
 import {PriceProductDO, PriceProductStatus} from '../../../../../data-layer/price-products/data-objects/PriceProductDO';
+import {PriceProductPriceConfigurationState} from '../../../../../data-layer/price-products/data-objects/price/IPriceProductPrice';
 import {PriceProductMetaRepoDO, PriceProductItemMetaRepoDO} from '../../../../../data-layer/price-products/repositories/IPriceProductRepository';
 import {IPriceProductItemActionStrategy} from '../../IPriceProductItemActionStrategy';
 import {PriceProductValidator} from '../../../validators/PriceProductValidator';
@@ -28,7 +29,9 @@ export class DraftStateUpdateStrategy implements IPriceProductItemActionStrategy
 			.then((result: boolean) => {
 				var ppUtils = new PriceProductActionUtils();
 				ppUtils.populateDefaultIntervalsOn(this._priceProductDO);
+				
 				var ppRepo = this._appContext.getRepositoryFactory().getPriceProductRepository();
+				this._priceProductDO.price.priceConfigurationState = PriceProductPriceConfigurationState.Valid;
 				return ppRepo.updatePriceProduct(this._ppRepoMeta, this._ppItemRepoMeta, this._priceProductDO);
 			})
 			.then((updatedPriceProduct: PriceProductDO) => {

@@ -1,0 +1,51 @@
+<div class="modal-header text-center">
+	<button type="button" class="close" (click)="closeDialog()">&times;</button>
+	<h4 class="modal-title">{{ 'Select Room Category' | translate }}</h4>
+</div>
+<div class="modal-body" #scrollableContent>
+	<loading-component [isLoading]="isLoading"></loading-component>
+	<table class="table" *ngIf="!isLoading">
+		<thead>
+			<th></th>
+			<th *ngIf="allowCategoryEdit"></th>
+		</thead>
+		<tbody>
+			<tr *ngFor="#roomCategoryVM of roomCategoryVMList" [ngClass]="{active: isCategorySelected(roomCategoryVM)}">
+				<td class="selectable-row" 
+					*ngIf="!roomCategoryVM.isEditing" 
+					(click)="selectRoomCategory(roomCategoryVM)"> 
+					{{roomCategoryVM.roomCategory.displayName}} 
+				</td>
+				<td *ngIf="roomCategoryVM.isEditing"> 
+					<input type="text" class="form-control" 
+						[(ngModel)]="roomCategoryVM.roomCategory.displayName" 
+						(keyup.enter)="saveRoomCategory(roomCategoryVM)"
+						/>	 
+				</td>
+				<td *ngIf="allowCategoryEdit">
+					<a class="btn btn-xs" *ngIf="!roomCategoryVM.isEditing && !roomCategoryVM.isSaving" (click)="editRoomCategory(roomCategoryVM)">
+						<i class="fa unitpal-font">]</i>
+					</a>
+					<a class="btn btn-xs" *ngIf="roomCategoryVM.isEditing && !roomCategoryVM.isSaving" (click)="saveRoomCategory(roomCategoryVM)">
+						<i class="fa fa-save"></i>
+					</a>
+					<a class="btn btn-xs" *ngIf="roomCategoryVM.isSaving">
+						<i class="fa fa-spinner fa-pulse"></i>
+					</a>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+<div class="modal-footer">
+	<div class="pull-left" *ngIf="allowCategoryEdit">
+		<a (click)="addRoomCategory()">
+			<span class="glyphicon glyphicon-plus-sign fa-2x"></span>
+		</a>
+	</div>
+	<button type="button" class="btn btn-primary" 
+		[disabled]="!didSelectCategory()"
+		(click)="triggerSelectedCategory()">
+		{{ 'Select' | translate }}
+	</button>
+</div>

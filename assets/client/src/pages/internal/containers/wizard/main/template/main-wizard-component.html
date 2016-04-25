@@ -1,20 +1,13 @@
-<body class="nav-md">
-	<header>
-		<wizard-header-component></wizard-header-component>
-	</header>
-
-
-	<div class="container body">
-		<div class="row main-row">
-			<div class="col-md-2 left_col">
-				<wizard-navbar-component></wizard-navbar-component>
-			</div>
-			<div class="right_col main-content" role="main">
-				<router-outlet></router-outlet>
-				<div class="row">
-					<wizard-steps-component></wizard-steps-component>
-				</div>
-			</div>
+<header>
+	<wizard-header-component></wizard-header-component>
+</header>
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-xs-2 col-md-2 wizard-nav">
+			<wizard-navbar-component></wizard-navbar-component>
 		</div>
-	</div>	
-</body>
+		<div class="col-xs-10 col-md-10 card signup-step" role="main">
+			<router-outlet></router-outlet>
+		</div>
+	</div>
+</div>

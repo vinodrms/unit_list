@@ -1,0 +1,170 @@
+<div [ngFormModel]="getDefaultControlGroup()">
+	<div class="row">
+		<div class="col-md-8 col-xs-12">
+			<vat-input 
+				[vatDetails]="vatDetails"
+				[isRequired]="true"
+				[didSubmitForm]="didSubmit" 
+				(onVatDetailsChanged)="didChangeVatDetails($event)" 
+				(onVatResponseReceived)="didGetVatResponse($event)">
+			</vat-input>
+		</div>
+		<div class="col-md-4 col-xs-12">
+			<div class="form-group">
+				<label>{{ 'Government Code' | translate }}</label>
+				<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('governmentCode')}">
+					<input type="text" class="form-control" ngControl="governmentCode">
+				</div>
+				<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Government code too long' | translate }}</small></label>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-4 col-xs-12">
+			<div class="form-group">
+				<label>{{ 'Company Name' | translate }}</label>
+				<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('name')}">
+					<input type="text" class="form-control" ngControl="name">
+				</div>
+				<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter the company name' | translate }}</small></label>
+			</div>
+		</div>
+		<div class="col-md-4 col-xs-12">
+			<div class="form-group">
+				<label>{{ 'Address' | translate }}</label>
+				<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('streetAddress')}">
+					<input type="text" class="form-control" ngControl="streetAddress">
+				</div>
+				<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Invalid address length' | translate }}</small></label>
+			</div>
+		</div>
+		<div class="col-md-4 col-xs-12">
+			<div class="form-group">
+				<label>{{ 'City' | translate }}</label>
+				<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('city')}">
+					<input type="text" class="form-control" ngControl="city">
+				</div>
+				<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Invalid city length' | translate }}</small></label>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-4 col-xs-12">
+			<div class="form-group">
+				<label>{{ 'Postal Code' | translate }}</label>
+				<div class="input-group"  [ngClass]="{'form-warning': controlIsInvalid('postalCode')}">
+					<input type="text" class="form-control" ngControl="postalCode">
+				</div>
+				<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Invalid postal code length' | translate }}</small></label>
+			</div>
+		</div>
+		<div class="col-md-4 col-xs-12">
+			<div class="form-group">
+				<label>{{ 'Website' | translate }}</label>
+				<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('websiteUrl')}">
+					<input type="text" class="form-control" ngControl="websiteUrl">
+				</div>
+				<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter a valid url' | translate }}</small></label>
+			</div>
+		</div>
+		<div class="col-md-4 col-xs-12">
+			<div class="form-group">
+				<label>{{ 'Contact Name' | translate }}</label>
+				<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('contactName')}">
+					<input type="text" class="form-control" ngControl="contactName">
+				</div>
+				<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Invalid name length' | translate }}</small></label>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-4 col-xs-12">
+			<div class="form-group">
+				<label>{{ 'Phone' | translate }}</label>
+				<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('phone')}">
+					<input type="text" class="form-control" ngControl="phone">
+				</div>
+				<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter a valid phone' | translate }}</small></label>
+			</div>
+		</div>
+		<div class="col-md-4 col-xs-12">
+			<div class="form-group">
+				<label>{{ 'Fax' | translate }}</label>
+				<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('fax')}">
+					<input type="text" class="form-control" ngControl="fax">
+				</div>
+				<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter a valid fax' | translate }}</small></label>
+			</div>
+		</div>
+		<div class="col-md-4 col-xs-12">
+			<div class="form-group">
+				<label>{{ 'Email' | translate }}</label>
+				<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('email')}">
+					<input type="text" class="form-control" ngControl="email">
+				</div>
+				<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter a valid email' | translate }}</small></label>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-4 col-xs-12">
+			<label>{{ 'Pay Invoice By Agreement' | translate }}</label>
+			<div class="input-group">
+				<div class="btn-group" data-toggle="buttons">
+					<button class="btn btn-default" (click)="payInvoiceByAgreement=true" [ngClass]="{'active': payInvoiceByAgreement}">
+					{{ 'Yes' | translate }}
+				</button>
+					<button class="btn btn-default" (click)="payInvoiceByAgreement=false" [ngClass]="{'active': !payInvoiceByAgreement}">
+					{{ 'No' | translate }}
+				</button>
+				</div>
+			</div>
+			<small class="text-muted"><i class="fa fa-info-circle"></i>  {{ 'If selected, it means that you have an agreement with the company to pay invoices.' | translate }}</small>
+		</div>
+		<div class="col-md-4 col-xs-12">
+			<div class="form-group">
+				<label>{{ 'Invoice Fee' | translate }} <span>{{currencyNativeSymbol}}</span></label>
+				<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('invoiceFee')}">
+					<input type="number" class="form-control" ngControl="invoiceFee">
+				</div>
+				<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter a valid price' | translate }}</small></label>
+			</div>
+		</div>
+		<div class="col-md-4 col-xs-12">
+			<div class="form-group">
+				<label>{{ 'Account Number' | translate }}</label>
+				<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('accountNo')}">
+					<input type="string" class="form-control" ngControl="accountNo">
+				</div>
+				<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter a valid account number' | translate }}</small></label>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-4 col-xs-12">
+			<label>{{ 'Type of Commission' | translate }}</label>
+			<div class="input-group">
+				<div class="btn-group" data-toggle="buttons">
+					<button class="btn btn-default" (click)="isFixedCommission=true" [ngClass]="{'active': isFixedCommission}">
+					{{ 'Fixed Price' | translate }}
+				</button>
+					<button class="btn btn-default" (click)="isFixedCommission=false" [ngClass]="{'active': !isFixedCommission}">
+					{{ 'Percentage' | translate }}
+				</button>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4 col-xs-12">
+			<div class="form-group">
+				<label>{{ 'Commission' | translate }} 
+					<span *ngIf="isFixedCommission">{{currencyNativeSymbol}}</span>
+					<span *ngIf="!isFixedCommission">%</span>
+				</label>
+				<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('commission')}">
+					<input type="number" class="form-control" ngControl="commission">
+				</div>
+				<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter a valid commission' | translate }}</small></label>
+			</div>
+		</div>
+	</div>
+</div>

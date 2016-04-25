@@ -4,48 +4,69 @@ import {IWizardState, WizardStateMeta} from './IWizardState';
 import {IWizardController} from './IWizardController';
 import {WizardBasicInformationStateService} from '../basic-information/main/services/WizardBasicInformationStateService';
 import {WizardBedsStateService} from '../beds/services/WizardBedsStateService';
+import {WizardRoomsStateService} from '../rooms/services/WizardRoomsStateService';
+import {WizardBreakfastStateService} from '../breakfast/services/WizardBreakfastStateService';
+import {WizardAddOnProductsStateService} from '../add-on-products/services/WizardAddOnProductsStateService';
+import {WizardPriceProductsStateService} from '../price-products/services/WizardPriceProductsStateService';
+import {WizardCustomerRegisterStateService} from '../customer-register/services/WizardCustomerRegisterStateService';
 
 @Injectable()
 export class WizardService implements IWizardState, IWizardController {
 	private static NavigationBase = "/MainWizardComponent/";
-	
+
 	private _stateList: IWizardState[];
 	private _currentState: IWizardState;
+	private _wizardButtonsVisible: boolean = true;
 
 	constructor(private _appContext: AppContext,
-		basicInfo: WizardBasicInformationStateService, beds: WizardBedsStateService) {
-		this._stateList = [basicInfo, beds];
+		basicInfo: WizardBasicInformationStateService, beds: WizardBedsStateService,
+        rooms: WizardRoomsStateService, breakfast: WizardBreakfastStateService, 
+        addOnProducts: WizardAddOnProductsStateService, priceProducts: WizardPriceProductsStateService,
+		customerRegister: WizardCustomerRegisterStateService) {
+		this._stateList = [basicInfo, beds, rooms, breakfast, addOnProducts, priceProducts, customerRegister];
 		for (var stateIndex = 0; stateIndex < this._stateList.length; stateIndex++) {
 			this._stateList[stateIndex].stateIndex = stateIndex;
 			this._stateList[stateIndex].wasVisited = false;
 			this._stateList[stateIndex].wizardController = this;
+			this.bootstrapWizardIndex(0);
 		}
-		this._currentState = this._stateList[0];
-		this._currentState.wasVisited = true;
+	}
+	public bootstrapWizardIndex(currentIndex: number) {
+		this._currentState = this._stateList[currentIndex];
+		for (var stateIndex = 0; stateIndex <= currentIndex; stateIndex++) {
+			this._stateList[stateIndex].wasVisited = true;
+		}
+		this._wizardButtonsVisible = true;
 	}
 
 	public moveNext() {
 		if (this._currentState.stateIndex == this._stateList.length - 1) {
+			// TODO: go to home screen
 			return;
 		}
-		this.setCurrentState(this._currentState.stateIndex + 1);
+		this.setCurrentState(this._currentState.stateIndex + 1, true);
 	}
 	public movePrevious() {
 		if (this._currentState.stateIndex == 0) {
 			return;
 		}
-		this.setCurrentState(this._currentState.stateIndex - 1);
+		this.setCurrentState(this._currentState.stateIndex - 1, false);
 	}
 	public moveToState(stateIndex: number) {
 		if (this._stateList[stateIndex].wasVisited) {
-			this.setCurrentState(stateIndex);
+			this.setCurrentState(stateIndex, true);
 		}
 	}
-	private setCurrentState(newStateIndex: number) {
+	private setCurrentState(newStateIndex: number, moveToStart: boolean) {
 		if (newStateIndex !== this.stateIndex) {
 			this._currentState = this._stateList[newStateIndex];
 			this._currentState.wasVisited = true;
-			this._appContext.routerNavigator.navigateTo(WizardService.NavigationBase + this._currentState.getMeta().relativeComponentPath);
+			var relativePath = this._currentState.getMeta().endRelativeComponentPath;
+			if (moveToStart) {
+				relativePath = this._currentState.getMeta().startRelativeComponentPath;
+			}
+			this._wizardButtonsVisible = true;
+			this._appContext.routerNavigator.navigateTo(WizardService.NavigationBase + relativePath);
 		}
 	}
 	public getStateList(): IWizardState[] {
@@ -59,7 +80,7 @@ export class WizardService implements IWizardState, IWizardController {
 		return this._currentState.handlePreviousPressed();
 	}
 	public handleSkipPressed(): Promise<any> {
-		return this._currentState.handlePreviousPressed();
+		return this._currentState.handleSkipPressed();
 	}
 	public canSkip(): boolean {
 		return this._currentState.canSkip();
@@ -97,5 +118,11 @@ export class WizardService implements IWizardState, IWizardController {
 	}
 	public set wizardController(wizardController: IWizardController) {
 		this._currentState.wizardController = wizardController;
+	}
+	public get wizardButtonsVisible(): boolean {
+		return this._wizardButtonsVisible;
+	}
+	public set wizardButtonsVisible(wizardButtonsVisible: boolean) {
+		this._wizardButtonsVisible = wizardButtonsVisible;
 	}
 }

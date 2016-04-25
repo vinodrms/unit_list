@@ -29,4 +29,18 @@ export class HotelService extends ARequestService<HotelDetailsDO> {
 			return hotelDetails;
 		});
 	}
+	public updatePaymentsAndPolicies(hotel: HotelDO): Observable<HotelDetailsDO> {
+		return this._appContext.thHttp.post(ThServerApi.HotelDetailsUpdatePaymentsAndPolicies, { paymentsAndPolicies: hotel }).map((hotelDetailsObject: Object) => {
+			var hotelDetails: HotelDetailsDO = this.parseResult(hotelDetailsObject);
+			this.updateResult(hotelDetails);
+			return hotelDetails;
+		});
+	}
+    public updatePropertyDetails(hotel: HotelDO): Observable<HotelDetailsDO> {
+		return this._appContext.thHttp.post(ThServerApi.HotelDetailsUpdatePropertyDetails, { propertyDetails: hotel }).map((hotelDetailsObject: Object) => {
+			var hotelDetails: HotelDetailsDO = this.parseResult(hotelDetailsObject);
+			this.updateResult(hotelDetails);
+			return hotelDetails;
+		});
+	}
 }

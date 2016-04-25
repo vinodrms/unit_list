@@ -1,0 +1,103 @@
+
+<div *ngIf="didInit" [ngFormModel]="getDefaultControlGroup()">
+	<div class="row">
+		<div class="col-md-4 col-xs-6">
+			<div class="form-group">
+				<label>{{ 'First Name' | translate }}</label>
+				<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('firstName')}">
+					<input type="text" class="form-control" ngControl="firstName">
+				</div>
+				<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter the first name' | translate }}</small></label>
+			</div>
+		</div>
+		<div class="col-md-4 col-xs-6">
+			<div class="form-group">
+				<label>{{ 'Last Name' | translate }}</label>
+				<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('lastName')}">
+					<input type="text" class="form-control" ngControl="lastName">
+				</div>
+				<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter the last name' | translate }}</small></label>
+			</div>
+		</div>
+		<div class="col-md-4 col-xs-12">
+			<div class="form-group">
+				<label>{{ 'Passport Number' | translate }}</label>
+				<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('passportNo')}">
+					<input type="text" class="form-control" ngControl="passportNo">
+				</div>
+				<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Invalid passport number' | translate }}</small></label>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-4 col-xs-6">
+			<div class="form-group">
+				<label>{{ 'Country' | translate }}</label>
+				<div class="input-group">
+					<select class="form-control" [ngModel]="countryCode" (change)="didChangeCountryCode($event.target.value)">
+						<option [value]="invalidCountryCode" disabled>{{ 'Select a country' | translate }}</option>
+						<option *ngFor="#country of countryList" [value]="country.code">{{country.name}}</option>
+					</select>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4 col-xs-6">
+			<div class="form-group">
+				<label>{{ 'City' | translate }}</label>
+				<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('city')}">
+					<input type="text" class="form-control" ngControl="city">
+				</div>
+				<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Invalid city length' | translate }}</small></label>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-4 col-xs-6">
+			<div class="form-group">
+				<label>{{ 'Address' | translate }}</label>
+				<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('streetAddress')}">
+					<input type="text" class="form-control" ngControl="streetAddress">
+				</div>
+				<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Invalid address length' | translate }}</small></label>
+			</div>
+		</div>
+		<div class="col-md-4 col-xs-6">
+			<div class="form-group">
+				<label>{{ 'Postal Code' | translate }}</label>
+				<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('postalCode')}">
+					<input type="text" class="form-control" ngControl="postalCode">
+				</div>
+				<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Invalid postal code length' | translate }}</small></label>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-4 col-xs-6">
+			<div class="form-group">
+				<label>{{ 'Email' | translate }}</label>
+				<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('email')}">
+					<input type="text" class="form-control" ngControl="email">
+				</div>
+				<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Invalid email' | translate }}</small></label>
+			</div>
+		</div>
+		<div class="col-md-4 col-xs-6">
+			<div class="form-group">
+				<label>{{ 'Phone' | translate }}</label>
+				<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('phone')}">
+					<input type="text" class="form-control" ngControl="phone">
+				</div>
+				<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter a valid phone' | translate }}</small></label>
+			</div>
+		</div>
+
+		<div class="col-md-4 col-xs-6">
+			<th-date-picker
+				[initialThDate]="individualDetails.birthday"
+				[label]="'Birthday'"
+				(didSelectThDate)="didSelectBirthday($event)"
+				>
+			</th-date-picker>
+		</div>
+	</div>
+</div>

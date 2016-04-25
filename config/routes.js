@@ -42,6 +42,7 @@ module.exports.routes = {
 
     'POST /api/service/uploadFile': 'ServiceController.uploadFile',
     'GET /api/service/vatVerifier': 'ServiceController.checkVAT',
+    'GET /api/service/availableTimeZones': 'ServiceController.getAvailableTimeZones',
 
     'GET /api/settings/roomAmenities': 'SettingsController.getRoomAmenities',
     'GET /api/settings/roomAttributes': 'SettingsController.getRoomAttributes',
@@ -53,6 +54,7 @@ module.exports.routes = {
     'GET /api/settings/bedTemplates': 'SettingsController.getBedTemplates',
 
     'POST /api/beds': 'BedsController.getBedList',
+    'POST /api/beds/count': 'BedsController.getBedListCount',
     'POST /api/beds/saveBedItem': 'BedsController.saveBedItem',
 	'POST /api/beds/deleteBedItem': 'BedsController.deleteBedItem',
     'GET /api/beds/bedItem': 'BedsController.getBedById',
@@ -61,7 +63,7 @@ module.exports.routes = {
 	'POST /api/addOnProducts/count': 'AddOnProductsController.getAddOnProductListCount',
 	'GET /api/addOnProducts/categoryIdList': 'AddOnProductsController.getAddOnProductCategoryIdList',
 	'POST /api/addOnProducts/saveAddOnProductItem': 'AddOnProductsController.saveAddOnProductItem',
-	'POST /api/addOnProducts/deleteAddOnProductItem': 'AddOnProductMsController.deleteAddOnProductItem',
+	'POST /api/addOnProducts/deleteAddOnProductItem': 'AddOnProductsController.deleteAddOnProductItem',
 	'GET /api/addOnProducts/addOnProductItem': 'AddOnProductsController.getAddOnProductById',
 
 	'POST /api/customers': 'CustomersController.getCustomerList',

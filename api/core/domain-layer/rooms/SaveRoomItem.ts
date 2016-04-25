@@ -11,6 +11,7 @@ import {RoomDO} from '../../data-layer/rooms/data-objects/RoomDO';
 import {RoomCategoryDO} from '../../data-layer/room-categories/data-objects/RoomCategoryDO';
 import {BedDO} from '../../data-layer/common/data-objects/bed/BedDO';
 import {SaveRoomItemDO} from './SaveRoomItemDO';
+import {BedSearchResultRepoDO} from '../../data-layer/beds/repositories/IBedRepository';
 import {RoomItemActionFactory} from './save-actions/RoomItemActionFactory';
 
 import {RoomCategorySearchResultRepoDO} from '../../data-layer/room-categories/repositories/IRoomCategoryRepository';
@@ -104,8 +105,8 @@ export class SaveRoomItem {
             }
 
             return bedsRepository.getBedList({ hotelId: this._sessionContext.sessionDO.hotel.id });
-        }).then((bedList: BedDO[]) => {
-            if (!this.bedListIsValid(bedList)) {
+        }).then((bedsResult: BedSearchResultRepoDO) => {
+            if (!this.bedListIsValid(bedsResult.bedList)) {
                 var thError = new ThError(ThStatusCode.SaveRoomItemInvalidBedList, null);
                 ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Invalid bed list", this._roomDO, thError);
                 throw thError;
@@ -134,7 +135,8 @@ export class SaveRoomItem {
 
     private bedListIsValid(bedList: BedDO[]): boolean {
         var hotelBedIdList: string[] = _.map(bedList, (bed: BedDO) => { return bed.id; });
-        return _.intersection(hotelBedIdList, this._roomDO.bedIdList).length === this._roomDO.bedIdList.length;
+        var noDuplicatesBedIdList = _.uniq(this._roomDO.bedIdList);
+        return _.intersection(hotelBedIdList, noDuplicatesBedIdList).length === noDuplicatesBedIdList.length;
     }
 
     private saveRoom(): Promise<RoomDO> {

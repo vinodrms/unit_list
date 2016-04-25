@@ -5,7 +5,7 @@ import {TranslationPipe} from '../localization/TranslationPipe';
 	selector: 'loading-button',
 	template: `
 		<button class="btn btn-primary btn-lg submit" type="submit" (click)="didClickButton()">
-			<i *ngIf="isLoading" class="fa fa-refresh fa-spin"></i>
+			<i *ngIf="isLoading" class="fa fa-spinner fa-pulse"></i>
 			{{ title | translate }}
 		</button>
 	`,

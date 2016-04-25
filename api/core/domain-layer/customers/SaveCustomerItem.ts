@@ -78,12 +78,7 @@ export class SaveCustomerItem {
 			resolve(true);
 			return;
 		}
-		else if (priceProductDetails.priceProductAvailability === PriceProductAvailability.Public) {
-			var thError = new ThError(ThStatusCode.SaveCustomerItemCannotSetPriceProductsForPublic, null);
-			ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Cannot set price products for public", this._saveCustomerDO, thError);
-			reject(thError);
-			return;
-		}
+
 		var ppIdValitator = new PriceProductIdValidator(this._appContext, this._sessionContext);
 		ppIdValitator.validatePriceProductIdList(priceProductDetails.priceProductIdList).then((result: boolean) => {
 			resolve(true);

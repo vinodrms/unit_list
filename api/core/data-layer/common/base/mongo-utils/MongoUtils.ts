@@ -25,7 +25,8 @@ export class MongoUtils {
     }
 
 	public preprocessSearchCriteria(searchCriteria: any): Object {
-		if (!this._thUtils.isUndefinedOrNull(searchCriteria.id)) {
+		if (!this._thUtils.isUndefinedOrNull(searchCriteria.id) 
+				&& this._thUtils.isUndefinedOrNull(searchCriteria.id.$in)) {
 			searchCriteria._id = new ObjectID(searchCriteria.id);
 			delete searchCriteria["id"];
 		}

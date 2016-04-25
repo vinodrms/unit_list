@@ -4,6 +4,8 @@ import {ModalBackdropComponent} from './utils/components/ModalBackdropComponent'
 import {ModalContainerComponent} from './utils/components/ModalContainerComponent';
 import {ModalDialogInstance} from './utils/ModalDialogInstance';
 import {ThError} from '../responses/ThError';
+import {ConfirmationModalComponent} from './modals/confirmation/ConfirmationModalComponent';
+import {ConfirmationModalInput, ConfirmationModalButtons} from './modals/confirmation/utils/ConfirmationModalInput';
 
 @Injectable()
 export class ModalService implements IModalService {
@@ -16,13 +18,13 @@ export class ModalService implements IModalService {
 		this._elementRef = elementRef;
 	}
 
-	public open(componentType: FunctionConstructor, providers: ResolvedProvider[]): Promise<ModalDialogInstance> {
-		return new Promise<ModalDialogInstance>((resolve: { (result: ModalDialogInstance): void }, reject: { (err: ThError): void }) => {
-			this.openCore(resolve, reject, componentType, providers);
+	public open<T>(componentType: FunctionConstructor, providers: ResolvedProvider[]): Promise<ModalDialogInstance<T>> {
+		return new Promise<ModalDialogInstance<T>>((resolve: { (result: ModalDialogInstance<T>): void }, reject: { (err: ThError): void }) => {
+			this.openCore<T>(resolve, reject, componentType, providers);
 		});
 	}
-	private openCore(resolve: { (result: ModalDialogInstance): void }, reject: { (err: ThError): void }, componentType: FunctionConstructor, providers: ResolvedProvider[]) {
-		let dialog = new ModalDialogInstance();
+	private openCore<T>(resolve: { (result: ModalDialogInstance<T>): void }, reject: { (err: ThError): void }, componentType: FunctionConstructor, providers: ResolvedProvider[]) {
+		let dialog = new ModalDialogInstance<T>();
 		let dialogProviders = Injector.resolve([provide(ModalDialogInstance, { useValue: dialog })]);
 
 		this._componentLoader.loadNextToLocation(ModalBackdropComponent, this._elementRef, dialogProviders)
@@ -38,11 +40,36 @@ export class ModalService implements IModalService {
 				return this._componentLoader.loadIntoLocation(componentType, containerRef.location, "modalDialog", modalDataProviders);
 			})
 			.then((contentRef: ComponentRef) => {
+				this.updateModalBodyMaxHeight();
 				dialog.contentRef = contentRef;
 				resolve(dialog);
 			})
 			.catch((err: any) => {
+				console.error(err);
 				reject(new ThError("Error opening popup"));
 			});
+	}
+	private updateModalBodyMaxHeight() {
+		$('.modal .modal-body').css('overflow-y', 'auto');
+		$('.modal .modal-body').css('max-height', $(window).height() * 0.8);
+	}
+
+	public confirm(title: string, content: string, confirmationButtons: ConfirmationModalButtons, onConfirmCallback: { (): void }, onRejectCallback?: { (): void }) {
+		var confirmationModalInput = new ConfirmationModalInput();
+		confirmationModalInput.title = title;
+		confirmationModalInput.content = content;
+        confirmationModalInput.buttons = confirmationButtons;
+        
+		this.open<any>(<any>ConfirmationModalComponent, Injector.resolve([
+			provide(ConfirmationModalInput, { useValue: confirmationModalInput })
+		])).then((modalInstance: ModalDialogInstance<any>) => {
+			modalInstance.resultObservable.subscribe((result: any) => {
+				onConfirmCallback();
+			}, (err: any) => {
+				if (onRejectCallback) {
+					onRejectCallback();
+				}
+			});
+		});
 	}
 }

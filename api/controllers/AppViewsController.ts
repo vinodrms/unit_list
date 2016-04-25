@@ -1,6 +1,8 @@
 import {BaseController} from './base/BaseController';
 import {AppEnvironmentType} from '../core/utils/environment/UnitPalConfig';
 import {AppContext} from '../core/utils/AppContext';
+import {SessionManager} from '../core/utils/SessionContext';
+import {LoginStatusCode} from '../core/utils/th-responses/LoginStatusCode';
 
 class AppViewsController extends BaseController {
 	public getExternalView(req: Express.Request, res: Express.Response) {
@@ -11,7 +13,12 @@ class AppViewsController extends BaseController {
 	}
 	public getInternalView(req: Express.Request, res: Express.Response) {
 		var isDevelopmentEnvironment = this.isDevelopmentEnvironment(req);
-        res.view("internal", {
+		var sessionManager = new SessionManager(req);
+		if (!isDevelopmentEnvironment && !sessionManager.sessionExists()) {
+			var appContext: AppContext = req.appContext;
+			return res.redirect(appContext.getUnitPalConfig().getAppContextRoot() + "/?loginStatusCode=" + LoginStatusCode.SessionTimeout);
+		}
+        return res.view("internal", {
 			isDevelopmentEnvironment: isDevelopmentEnvironment
         });
 	}

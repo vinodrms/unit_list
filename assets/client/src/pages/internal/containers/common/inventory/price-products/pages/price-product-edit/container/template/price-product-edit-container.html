@@ -1,0 +1,83 @@
+<loading-component [isLoading]="isLoading"></loading-component>
+<div [hidden]="isLoading">
+	<div class="row">
+		<price-product-edit-top-section [didSubmit]="didSubmit"></price-product-edit-top-section>
+	</div>
+	<hr>
+	<div class="row">
+		<div class="col-md-6 col-sm-6 col-xs-12">
+			<price-product-edit-room-categories-section [didSubmit]="didSubmit" (onRoomCategoryChange)="handleRoomCategoryChange($event)">
+			</price-product-edit-room-categories-section>
+		</div>
+		<div class="col-md-6 col-sm-6 col-xs-12">
+			<price-product-edit-add-on-products-section [didSubmit]="didSubmit"></price-product-edit-add-on-products-section>
+		</div>
+	</div>
+	<hr>
+	<div class="row">
+		<price-product-edit-prices-section [didSubmit]="didSubmit"></price-product-edit-prices-section>
+	</div>
+	<div class="row">
+		<price-product-edit-taxes-section [didSubmit]="didSubmit"></price-product-edit-taxes-section>
+	</div>
+	<hr>
+	<div class="row">
+		<price-product-edit-cancellation-section [didSubmit]="didSubmit"></price-product-edit-cancellation-section>
+	</div>
+	<hr>
+	<div class="row">
+		<price-product-edit-constraints-section [didSubmit]="didSubmit"></price-product-edit-constraints-section>
+	</div>
+	<div class="row">
+		<price-product-edit-filters-section [didSubmit]="didSubmit"></price-product-edit-filters-section>
+	</div>
+	<div class="row">
+		<price-product-edit-notes-section [didSubmit]="didSubmit"></price-product-edit-notes-section>
+	</div>
+	<hr>
+
+	<div class="row">
+		<div class="col-xs-8">
+			<div *ngIf="isNewOrDraftPriceProduct()">
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="col-xs-4">
+							<label class="control-label">{{ 'Save as Draft' | translate }}</label>
+						</div>
+						<div class="col-xs-8">
+							<div class="input-group">
+								<div class="btn-group" data-toggle="buttons">
+									<button class="btn btn-default" (click)="saveAsDraft=true" [ngClass]="{'active': saveAsDraft}">
+										{{ 'Yes' | translate }}
+									</button>
+									<button class="btn btn-default" (click)="saveAsDraft=false" [ngClass]="{'active': !saveAsDraft}">
+										{{ 'No' | translate }}
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12">
+						<small class="text-muted" *ngIf="!isPricePerNumberOfPersons">
+							<i class="fa fa-info-circle"></i> {{ 'If selected, you will be able to edit the price product further on. If not, the price product will be automatically activated and available for bookings.' | translate }}
+						</small>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<div class="row">
+		<div class="col-xs-12 col-md-offset-6 col-md-3">
+			<button type="button" class="btn btn-primary btn-block" (click)="savePriceProduct()" *ngIf="canSavePriceProduct()">
+					<i *ngIf="isSavingPriceProduct" class="fa fa-spinner fa-pulse"></i> {{ 'Save Changes' | translate }}
+				</button>
+		</div>
+		<div class="col-xs-12 col-md-3">
+			<button type="button" class="btn btn-danger btn-block" (click)="showViewScreen()">{{ 'Cancel' | translate }}</button>
+		</div>
+	</div>
+</div>

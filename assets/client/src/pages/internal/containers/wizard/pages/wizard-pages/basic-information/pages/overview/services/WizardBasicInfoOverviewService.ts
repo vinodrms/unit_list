@@ -6,15 +6,10 @@ import {BasicInfoOverviewEditService} from '../../../../../../../common/basic-in
 
 @Injectable()
 export class WizardBasicInfoOverviewService implements IBasicInfoStep {
-	private _serviceObservable;
-	private _serviceObserver: Observer<any>;
 	private _editService: BasicInfoOverviewEditService;
 
 	stepIndex: number;
 	constructor() {
-		this._serviceObservable = new Observable((serviceObserver: Observer<any>) => {
-			this._serviceObserver = serviceObserver;
-		}).share();
 	}
 	public bootstrap(editService: BasicInfoOverviewEditService) {
 		this._editService = editService;
@@ -31,12 +26,5 @@ export class WizardBasicInfoOverviewService implements IBasicInfoStep {
 	}
 	public getComponentName(): string {
 		return "WizardBasicInfoOverviewComponent";
-	}
-
-	public get serviceObservable(): Observable<any> {
-		return this._serviceObservable;
-	}
-	public set serviceObservable(serviceObservable: Observable<any>) {
-		this._serviceObservable = serviceObservable;
 	}
 }

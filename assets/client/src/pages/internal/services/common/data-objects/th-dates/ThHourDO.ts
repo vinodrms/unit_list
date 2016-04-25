@@ -1,8 +1,8 @@
 import {BaseDO} from '../../../../../../common/base/BaseDO';
 
 export class ThHourDO extends BaseDO {
-	private static MinHourOfDay = 0;
-	private static MaxHourOfDay = 23;
+	public static MinHourOfDay = 0;
+	public static MaxHourOfDay = 23;
 
 	private static MinMinuteOfHour = 0;
 	private static MaxMinuteOfHour = 59;
@@ -25,5 +25,14 @@ export class ThHourDO extends BaseDO {
 	}
 	private isValidMinute(): boolean {
 		return _.isNumber(this.minute) && ThHourDO.MinMinuteOfHour <= this.minute && this.minute <= ThHourDO.MaxMinuteOfHour;
+	}
+	public toString(): string {
+		return this.addLeftPaddingIfNeccessary(this.hour) + ":" + this.addLeftPaddingIfNeccessary(this.minute);
+    }
+	private addLeftPaddingIfNeccessary(hourOrMinute: number): string {
+		if (hourOrMinute < 10) {
+            return '0' + hourOrMinute;
+        }
+		return hourOrMinute + '';
 	}
 }

@@ -1,0 +1,28 @@
+<div class="overview-left" [ngClass]="{'col-xs-9': !isEditing, 'col-xs-3': isEditing}">
+	<lazy-loading-table 
+		[isCollapsed]="isEditing" 
+		(onAdd)="addAddOnProduct()"
+		(onCopy)="copyAddOnProduct($event)"
+		(onDelete)="deleteAddOnProduct($event)"
+		(onSelect)="selectAddOnProduct($event)"
+		(onEdit)="editAddOnProduct($event)"
+		>
+	</lazy-loading-table>
+</div>
+<div class="col-xs-3 overview-right" *ngIf="!isEditing">
+	<add-on-product-overview 
+		*ngIf="selectedAddOnProductVM" 
+		[addOnProductVM]="selectedAddOnProductVM"
+		(onEdit)="editAddOnProduct($event)">
+	</add-on-product-overview>
+	<wizard-steps-component></wizard-steps-component>
+	
+</div>
+<div class="col-xs-9 edit-container" *ngIf="isEditing">
+	<add-on-product-edit
+		*ngIf="selectedAddOnProductVM" 
+		[filteredCategory]="filteredCategory"
+		[addOnProductVM]="selectedAddOnProductVM"
+		(onExit)="showViewScreen()">
+	</add-on-product-edit>
+</div>

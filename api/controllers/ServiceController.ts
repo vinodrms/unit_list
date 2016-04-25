@@ -5,6 +5,7 @@ import {IImageStorageService} from '../core/services/image-storage/IImageStorage
 import {BaseController} from './base/BaseController';
 import {AppContext} from '../core/utils/AppContext';
 import {IVatProvider, VatDetailsDO} from '../core/services/vat/IVatProvider';
+import {ITimeZonesService, TimeZoneDO} from '../core/services/time-zones/ITimeZonesService';
 
 class ServiceController extends BaseController {
     public uploadFile(req: Express.Request, res: Express.Response) {
@@ -20,12 +21,12 @@ class ServiceController extends BaseController {
                     var imageStorageService: IImageStorageService = appContext.getServiceFactory().getImageStorageService();
                     var imageFile = uploadedFiles[0];
 
-					imageStorageService.uploadImage({ imageName: imageFile.fd })
-						.then((result: any) => {
-							_ctrlContext.returnSuccesfulResponse(req, res, result);
-						}).catch((error: any) => {
-							_ctrlContext.returnErrorResponse(req, res, error, ThStatusCode.ImageUploadControllerErrorUploadingImage);
-						});
+                    imageStorageService.uploadImage({ imageName: imageFile.fd })
+                        .then((result: any) => {
+                            _ctrlContext.returnSuccesfulResponse(req, res, result);
+                        }).catch((error: any) => {
+                            _ctrlContext.returnErrorResponse(req, res, error, ThStatusCode.ImageUploadControllerErrorUploadingImage);
+                        });
                 }
                 else {
                     var thError = new ThError(ThStatusCode.ImageUploadControllerNoFilesToUpload, null);
@@ -55,10 +56,22 @@ class ServiceController extends BaseController {
             this.returnErrorResponse(req, res, error, ThStatusCode.VatProviderErrorCheckingVat);
         });
     }
+
+    public getAvailableTimeZones(req: Express.Request, res: Express.Response) {
+        var appContext: AppContext = req.appContext;
+        var timeZonesService: ITimeZonesService = appContext.getServiceFactory().getTimeZonesService();
+
+        timeZonesService.getAllAvailableTimeZones().then((timezoneList: TimeZoneDO[]) => {
+            this.returnSuccesfulResponse(req, res, { timezoneList: timezoneList });
+        }).catch((error: ThError) => {
+            this.returnErrorResponse(req, res, error, ThStatusCode.TimezoneServiceErrorGettingAvailableTZs);
+        });
+    }
 }
 
 var serviceController = new ServiceController();
 module.exports = {
     uploadFile: serviceController.uploadFile.bind(serviceController),
-    checkVAT: serviceController.checkVAT.bind(serviceController)
+    checkVAT: serviceController.checkVAT.bind(serviceController),
+    getAvailableTimeZones: serviceController.getAvailableTimeZones.bind(serviceController)
 }

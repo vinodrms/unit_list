@@ -27,23 +27,35 @@ export class BedTemplates extends ABaseSetting {
     private dataSet: { name: string, iconUrl: string }[] = [
         {
             name: "Single Bed",
-            iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
+            iconUrl: "5"
         },
         {
             name: "Double Bed",
-            iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
+            iconUrl: "1"
         },
         {
-            name: "Twin Bed",
-            iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
+            name: "Modular",
+            iconUrl: "5"
         },
         {
-            name: "King Size Bed",
-            iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
+            name: "Queen/King",
+            iconUrl: "2"
         },
         {
-            name: "Child Bed",
-            iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
+            name: "Baby Crib/Cot",
+            iconUrl: "6"
+        },
+        {
+            name: "Stacked",
+            iconUrl: "4"
+        },
+        {
+            name: "Couch",
+            iconUrl: "7"
+        },
+        {
+            name: "Custom",
+            iconUrl: "3"
         }
     ];        
 } 

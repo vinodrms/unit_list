@@ -11,6 +11,8 @@ export class OperationHoursDO extends BaseDO {
 	checkOutFromOptional: ThHourDO;
 	checkOutTo: ThHourDO;
 
+	cancellationHour: ThHourDO;
+
 	protected getPrimitivePropertyKeys(): string[] {
 		return [];
 	}
@@ -18,16 +20,16 @@ export class OperationHoursDO extends BaseDO {
 	public buildFromObject(object: Object) {
 		super.buildFromObject(object);
 
-		this.checkInFrom = new ThHourDO();
-		this.checkInFrom.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "checkInFrom"));
+		this.checkInFrom = this.buildThHourDO(object, "checkInFrom");
+		this.checkInToOptional = this.buildThHourDO(object, "checkInToOptional");
+		this.checkOutFromOptional = this.buildThHourDO(object, "checkOutFromOptional");
+		this.checkOutTo = this.buildThHourDO(object, "checkOutTo");
+		this.cancellationHour = this.buildThHourDO(object, "cancellationHour");
+	}
 
-		this.checkInToOptional = new ThHourDO();
-		this.checkInToOptional.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "checkInToOptional"));
-
-		this.checkOutFromOptional = new ThHourDO();
-		this.checkOutFromOptional.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "checkOutFromOptional"));
-
-		this.checkOutTo = new ThHourDO();
-		this.checkOutTo.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "checkOutTo"));
+	private buildThHourDO(object: Object, objectKey: string): ThHourDO {
+		var hour = new ThHourDO();
+		hour.buildFromObject(this.getObjectPropertyEnsureUndefined(object, objectKey));
+		return hour;
 	}
 }
