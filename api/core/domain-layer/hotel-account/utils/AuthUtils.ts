@@ -1,6 +1,6 @@
 import {UnitPalConfig} from '../../../utils/environment/UnitPalConfig';
 
-import bcrypt = require('bcrypt');
+import bcrypt = require('bcrypt-nodejs');
 
 import util = require('util');
 
