@@ -68,9 +68,6 @@
     "passport-local/passport-local.d.ts": {
       "commit": "c393f8974d44840a6c9cc6d5b5c0188a8f05143d"
     },
-    "bcrypt/bcrypt.d.ts": {
-      "commit": "c393f8974d44840a6c9cc6d5b5c0188a8f05143d"
-    },
     "node-uuid/node-uuid.d.ts": {
       "commit": "3030a4be536b6530c06b80081f1333dc0de4d703"
     },
@@ -85,6 +82,9 @@
     },
     "moment-timezone/moment-timezone.d.ts": {
       "commit": "95433230a9913054c57c715e6b91a9ae738d0b97"
+    },
+    "bcrypt-nodejs/bcrypt-nodejs.d.ts": {
+      "commit": "2d448c0a3152e8871521848c5c2c61ab4e2a2cc9"
     }
   }
 }
