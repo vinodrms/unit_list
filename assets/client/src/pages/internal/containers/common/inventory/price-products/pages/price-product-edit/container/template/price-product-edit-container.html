@@ -31,6 +31,9 @@
 	<div class="row">
 		<price-product-edit-filters-section [didSubmit]="didSubmit"></price-product-edit-filters-section>
 	</div>
+	<div class="row">
+		<price-product-edit-notes-section [didSubmit]="didSubmit"></price-product-edit-notes-section>
+	</div>
 	<hr>
 
 	<div class="row">
@@ -67,9 +70,9 @@
 	</div>
 
 
-	<div class="row" *ngIf="canSavePriceProduct()">
+	<div class="row">
 		<div class="col-xs-12 col-md-offset-6 col-md-3">
-			<button type="button" class="btn btn-primary btn-block" (click)="savePriceProduct()">
+			<button type="button" class="btn btn-primary btn-block" (click)="savePriceProduct()" *ngIf="canSavePriceProduct()">
 					<i *ngIf="isSavingPriceProduct" class="fa fa-spinner fa-pulse"></i> {{ 'Save Changes' | translate }}
 				</button>
 		</div>
@@ -77,5 +80,4 @@
 			<button type="button" class="btn btn-danger btn-block" (click)="showViewScreen()">{{ 'Cancel' | translate }}</button>
 		</div>
 	</div>
-
 </div>

@@ -30,7 +30,8 @@ export class PriceProductDO extends BaseDO {
 	yieldFilterList: PriceProductYieldFilterMetaDO[];
 	constraints: PriceProductConstraintWrapperDO;
 	conditions: PriceProductConditionsDO;
-	
+	notes: string;
+
 	constructor() {
 		super();
 		this.setDefaults();
@@ -42,7 +43,7 @@ export class PriceProductDO extends BaseDO {
 	}
 
 	protected getPrimitivePropertyKeys(): string[] {
-		return ["id", "versionId", "status", "name", "availability", "lastRoomAvailability", "addOnProductIdList", "roomCategoryIdList", "taxIdList"];
+		return ["id", "versionId", "status", "name", "availability", "lastRoomAvailability", "addOnProductIdList", "roomCategoryIdList", "taxIdList", "notes"];
 	}
 	public buildFromObject(object: Object) {
 		super.buildFromObject(object);

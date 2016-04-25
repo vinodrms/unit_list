@@ -377,5 +377,6 @@ export var EnglishTranslations: Object = {
 	"Contact Person": "Contact Person",
 	"Hotel Logo": "Hotel Logo",
 	"Clone": "Clone",
-	"The maximum limit beds per room has been exceeded.": "The maximum limit beds per room has been exceeded."
+	"The maximum limit beds per room has been exceeded.": "The maximum limit beds per room has been exceeded.",
+	"Notes are too long": "Notes are too long"
 };

@@ -24,6 +24,7 @@ import {PriceProductEditPricesSectionComponent} from '../sections/prices/PricePr
 import {PriceProductEditFiltersSectionComponent} from '../sections/filters/PriceProductEditFiltersSectionComponent';
 import {PriceProductEditCancellationSectionComponent} from '../sections/cancellation/PriceProductEditCancellationSectionComponent';
 import {PriceProductEditConstraintsSectionComponent} from '../sections/constraints/constraints-list/PriceProductEditConstraintsSectionComponent';
+import {PriceProductEditNotesSectionComponent} from '../sections/notes/PriceProductEditNotesSectionComponent';
 
 @Component({
 	selector: 'price-product-edit-container',
@@ -33,7 +34,8 @@ import {PriceProductEditConstraintsSectionComponent} from '../sections/constrain
 		PriceProductEditTopSectionComponent, PriceProductEditRoomCategoriesSectionComponent,
 		PriceProductEditAddOnProductsSectionComponent, PriceProductEditTaxesSectionComponent,
 		PriceProductEditPricesSectionComponent, PriceProductEditFiltersSectionComponent,
-		PriceProductEditCancellationSectionComponent, PriceProductEditConstraintsSectionComponent],
+		PriceProductEditCancellationSectionComponent, PriceProductEditConstraintsSectionComponent,
+		PriceProductEditNotesSectionComponent],
 	pipes: [TranslationPipe]
 })
 
@@ -46,6 +48,7 @@ export class PriceProductEditContainerComponent extends BaseComponent implements
 	@ViewChild(PriceProductEditFiltersSectionComponent) private _editFiltersSection: PriceProductEditFiltersSectionComponent;
 	@ViewChild(PriceProductEditCancellationSectionComponent) private _editCancellationSection: PriceProductEditCancellationSectionComponent;
 	@ViewChild(PriceProductEditConstraintsSectionComponent) private _editConstraintsSection: PriceProductEditConstraintsSectionComponent;
+	@ViewChild(PriceProductEditNotesSectionComponent) private _editNotesSection: PriceProductEditNotesSectionComponent;
 
 	private _didInit = false;
 	isLoading: boolean = true;
@@ -90,7 +93,8 @@ export class PriceProductEditContainerComponent extends BaseComponent implements
 					this._editPricesSection,
 					this._editFiltersSection,
 					this._editCancellationSection,
-					this._editConstraintsSection
+					this._editConstraintsSection,
+					this._editNotesSection
 				]
 			);
 			this.initializeDependentData();
@@ -116,6 +120,7 @@ export class PriceProductEditContainerComponent extends BaseComponent implements
 			this._editSectionContainer.initializeFrom(this._priceProductVM);
 			this._editSectionContainer.readonly = this.isReadOnly();
 			this._editFiltersSection.readonly = this.yieldFiltersAreReadOnly();
+			this._editNotesSection.readonly = this.yieldFiltersAreReadOnly();
 			this._editCancellationSection.cancellationHour = result[1].hotelDetails.hotel.operationHours.cancellationHour;
 
 			this.isLoading = false;
