@@ -23,6 +23,9 @@
 		<i class="fa fa-calendar-check-o"></i> <small>{{priceProductVM.cancellationConditionsString}}</small>
 	</div>
 	<div>
+		<small>{{priceProductVM.priceProduct.notes}}</small>
+	</div>
+	<div>
 		<a class="btn btn-lg" (click)="editPriceProduct()">
 			<i class="fa fa-pencil"></i> {{ 'Edit' | translate }}
 		</a>
