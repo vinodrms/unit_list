@@ -1,4 +1,4 @@
-import {Component, ViewChild, AfterViewInit, Input, Output, EventEmitter} from 'angular2/core';
+import {Component, ViewChild, AfterViewInit, Input, Output, EventEmitter, DynamicComponentLoader, Type, ResolvedProvider, ElementRef} from 'angular2/core';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/combineLatest';
 import {BaseComponent} from '../../../../../../../common/base/BaseComponent';
@@ -17,14 +17,11 @@ import {PriceProductTableMetaBuilderService} from './services/PriceProductTableM
 import {PriceProductOverviewComponent} from '../pages/price-product-overview/PriceProductOverviewComponent';
 import {PriceProductEditContainerComponent} from '../pages/price-product-edit/container/PriceProductEditContainerComponent';
 
-//TODO: change this code to use Decorator
-import {WizardStepsComponent} from '../../../../wizard/pages/utils/wizard-steps/WizardStepsComponent';
-
 @Component({
 	selector: 'price-products',
 	templateUrl: '/client/src/pages/internal/containers/common/inventory/price-products/main/template/price-products.html',
 	providers: [RoomCategoriesService, YieldFiltersService, PriceProductsService, PriceProductTableMetaBuilderService],
-	directives: [WizardStepsComponent, LazyLoadingTableComponent, PriceProductOverviewComponent, PriceProductEditContainerComponent],
+	directives: [LazyLoadingTableComponent, PriceProductOverviewComponent, PriceProductEditContainerComponent],
 	pipes: [TranslationPipe]
 })
 export class PriceProductsComponent extends BaseComponent implements AfterViewInit {
@@ -37,7 +34,9 @@ export class PriceProductsComponent extends BaseComponent implements AfterViewIn
 	private _inventoryStateManager: InventoryStateManager<PriceProductVM>;
 	private _priceProductStatus: PriceProductStatus;
 
-	constructor(private _appContext: AppContext,
+	constructor(private _dynamicComponentLoader: DynamicComponentLoader,
+        private _elementRef: ElementRef,
+        private _appContext: AppContext,
 		private _priceProductsService: PriceProductsService,
 		private _tableBuilder: PriceProductTableMetaBuilderService) {
 		super();
@@ -45,6 +44,9 @@ export class PriceProductsComponent extends BaseComponent implements AfterViewIn
 		this.registerStateChange();
 		this.setDefaultPriceProductStatus();
 	}
+    public bootstrapOverviewBottom(componentToInject: Type, providers: ResolvedProvider[]) {
+        this._dynamicComponentLoader.loadIntoLocation(componentToInject, this._elementRef, "overviewBottom", providers);
+    }
 	private registerStateChange() {
 		this._inventoryStateManager.stateChangedObservable.subscribe((currentState: InventoryScreenStateType) => {
 			this.onScreenStateTypeChanged.next(currentState);
@@ -62,33 +64,33 @@ export class PriceProductsComponent extends BaseComponent implements AfterViewIn
 		this._aopTableComponent.bootstrap(this._priceProductsService, this._tableBuilder.buildLazyLoadTableMeta());
 	}
 
-	public get isEditing(): boolean {
+	protected get isEditing(): boolean {
 		return this._inventoryStateManager.screenStateType === InventoryScreenStateType.Edit;
 	}
-	public get selectedPriceProductVM(): PriceProductVM {
+	protected get selectedPriceProductVM(): PriceProductVM {
 		return this._inventoryStateManager.currentItem;
 	}
 
-	public viewActivePriceProducts() {
+	protected viewActivePriceProducts() {
 		this.priceProductStatus = PriceProductStatus.Active;
 	}
-	public areActivePriceProducts(): boolean {
+	protected areActivePriceProducts(): boolean {
 		return this.priceProductStatus === PriceProductStatus.Active;
 	}
-	public viewDraftPriceProducts() {
+	protected viewDraftPriceProducts() {
 		this.priceProductStatus = PriceProductStatus.Draft;
 	}
-	public areDraftPriceProducts(): boolean {
+	protected areDraftPriceProducts(): boolean {
 		return this.priceProductStatus === PriceProductStatus.Draft;
 	}
-	public viewArchivedPriceProducts() {
+	protected viewArchivedPriceProducts() {
 		this.priceProductStatus = PriceProductStatus.Archived;
 	}
-	public areArchivedPriceProducts(): boolean {
+	protected areArchivedPriceProducts(): boolean {
 		return this.priceProductStatus === PriceProductStatus.Archived;
 	}
 
-	public addPriceProduct() {
+	protected addPriceProduct() {
         var newPriceProductVM = this.buildNewPriceProductVM();
         this._inventoryStateManager.canPerformAction(InventoryScreenAction.Add).then((newState: InventoryScreenStateType) => {
             this._aopTableComponent.deselectItem();
@@ -97,7 +99,7 @@ export class PriceProductsComponent extends BaseComponent implements AfterViewIn
             this._inventoryStateManager.screenStateType = newState;
         }).catch((e: any) => { });
     }
-    public copyPriceProduct(priceProductVM: PriceProductVM) {
+    protected copyPriceProduct(priceProductVM: PriceProductVM) {
         var newPriceProductVM = priceProductVM.buildPrototype();
         delete newPriceProductVM.priceProduct.id;
 		newPriceProductVM.priceProduct.status = PriceProductStatus.Draft;
@@ -108,7 +110,7 @@ export class PriceProductsComponent extends BaseComponent implements AfterViewIn
             this._inventoryStateManager.screenStateType = newState;
         }).catch((e: any) => { });
     }
-	public editPriceProduct(priceProductVM: PriceProductVM) {
+	protected editPriceProduct(priceProductVM: PriceProductVM) {
         var newPriceProductVM = priceProductVM.buildPrototype();
         this._inventoryStateManager.canPerformAction(InventoryScreenAction.Edit, newPriceProductVM).then((newState: InventoryScreenStateType) => {
             this._aopTableComponent.selectItem(newPriceProductVM);
@@ -117,7 +119,7 @@ export class PriceProductsComponent extends BaseComponent implements AfterViewIn
             this._inventoryStateManager.screenStateType = newState;
         }).catch((e: any) => { });
     }
-	public deletePriceProduct(priceProductVM: PriceProductVM) {
+	protected deletePriceProduct(priceProductVM: PriceProductVM) {
 		var title = this._appContext.thTranslation.translate("Delete Price Product");
 		var content = this._appContext.thTranslation.translate("Are you sure you want to delete %name% ?", { name: priceProductVM.priceProduct.name });
 		this.confirmRemoveAction(priceProductVM, title, content, (priceProductDO: PriceProductDO) => {
@@ -128,7 +130,7 @@ export class PriceProductsComponent extends BaseComponent implements AfterViewIn
 			});
 		});
     }
-	public archivePriceProduct(priceProductVM: PriceProductVM) {
+	protected archivePriceProduct(priceProductVM: PriceProductVM) {
 		var title = this._appContext.thTranslation.translate("Archive Price Product");
 		var content = this._appContext.thTranslation.translate("Are you sure you want to archive %name% ?", { name: priceProductVM.priceProduct.name });
 		this.confirmRemoveAction(priceProductVM, title, content, (priceProductDO: PriceProductDO) => {
@@ -138,7 +140,7 @@ export class PriceProductsComponent extends BaseComponent implements AfterViewIn
 			});
 		});
 	}
-	public draftPriceProduct(priceProductVM: PriceProductVM) {
+	protected draftPriceProduct(priceProductVM: PriceProductVM) {
 		var title = this._appContext.thTranslation.translate("Draft Price Product");
 		var content = this._appContext.thTranslation.translate("Are you sure you want to mark %name% as draft ?", { name: priceProductVM.priceProduct.name });
 		this.confirmRemoveAction(priceProductVM, title, content, (priceProductDO: PriceProductDO) => {
@@ -148,7 +150,7 @@ export class PriceProductsComponent extends BaseComponent implements AfterViewIn
 			});
 		});
 	}
-	private confirmRemoveAction(priceProductVM: PriceProductVM, confirmationTitle, confirmationContent, onConfirm: { (priceProductDO: PriceProductDO): void }) {
+	protected confirmRemoveAction(priceProductVM: PriceProductVM, confirmationTitle, confirmationContent, onConfirm: { (priceProductDO: PriceProductDO): void }) {
 		var newPriceProductVM = priceProductVM.buildPrototype();
         this._inventoryStateManager.canPerformAction(InventoryScreenAction.Delete, newPriceProductVM).then((newState: InventoryScreenStateType) => {
             var positiveLabel = this._appContext.thTranslation.translate("Yes");
@@ -165,7 +167,7 @@ export class PriceProductsComponent extends BaseComponent implements AfterViewIn
         }).catch((e: any) => { });
 	}
 
-    public selectPriceProduct(priceProductVM: PriceProductVM) {
+    protected selectPriceProduct(priceProductVM: PriceProductVM) {
         var newPriceProductVM = priceProductVM.buildPrototype();
         this._inventoryStateManager.canPerformAction(InventoryScreenAction.Select, newPriceProductVM).then((newState: InventoryScreenStateType) => {
             this._aopTableComponent.selectItem(newPriceProductVM);
@@ -175,7 +177,7 @@ export class PriceProductsComponent extends BaseComponent implements AfterViewIn
         }).catch((e: any) => { });
     }
 
-    public showViewScreen() {
+    protected showViewScreen() {
         this._aopTableComponent.deselectItem();
         this._inventoryStateManager.currentItem = null;
         this._inventoryStateManager.screenStateType = InventoryScreenStateType.View;
@@ -187,10 +189,10 @@ export class PriceProductsComponent extends BaseComponent implements AfterViewIn
         return vm;
     }
 
-	public get priceProductStatus(): PriceProductStatus {
+	protected get priceProductStatus(): PriceProductStatus {
 		return this._priceProductStatus;
 	}
-	public set priceProductStatus(priceProductStatus: PriceProductStatus) {
+	protected set priceProductStatus(priceProductStatus: PriceProductStatus) {
 		if (priceProductStatus === this._priceProductStatus) {
 			return;
 		}

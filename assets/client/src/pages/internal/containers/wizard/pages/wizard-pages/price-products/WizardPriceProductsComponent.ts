@@ -1,4 +1,4 @@
-import {Component, OnInit} from 'angular2/core';
+import {Component, ViewChild, OnInit, AfterViewInit, Injector, provide} from 'angular2/core';
 import {BaseComponent} from '../../../../../../../common/base/BaseComponent';
 import {TranslationPipe} from '../../../../../../../common/utils/localization/TranslationPipe';
 import {WizardPriceProductsStateService} from './services/WizardPriceProductsStateService';
@@ -9,6 +9,7 @@ import {InventoryScreenStateType} from '../../../../common/inventory/utils/state
 import {PriceProductsTotalCountService} from '../../../../../services/price-products/PriceProductsTotalCountService';
 import {PriceProductStatus, PriceProductDO} from '../../../../../services/price-products/data-objects/PriceProductDO';
 import {TotalCountDO} from '../../../../../services/common/data-objects/lazy-load/TotalCountDO';
+import {WizardStepsComponent} from '../../utils/wizard-steps/WizardStepsComponent';
 
 @Component({
 	selector: 'wizard-price-products',
@@ -18,16 +19,17 @@ import {TotalCountDO} from '../../../../../services/common/data-objects/lazy-loa
 	pipes: [TranslationPipe]
 })
 
-export class WizardPriceProductsComponent extends BaseComponent implements OnInit {
+export class WizardPriceProductsComponent extends BaseComponent implements OnInit, AfterViewInit {
+	@ViewChild(PriceProductsComponent) private _priceProductsComponent: PriceProductsComponent;
 	private _isEditScreen: boolean;
 	private _wizardController: IWizardController;
 
-	constructor(wizardService: WizardService,
+	constructor(private _wizardService: WizardService,
 		private _priceProductsStateService: WizardPriceProductsStateService,
 		private _priceProductsTotalCountService: PriceProductsTotalCountService) {
 		super();
-		wizardService.bootstrapWizardIndex(_priceProductsStateService.stateIndex);
-		this._wizardController = wizardService;
+		_wizardService.bootstrapWizardIndex(_priceProductsStateService.stateIndex);
+		this._wizardController = _wizardService;
 		this.isEditScreen = false;
 	}
 
@@ -35,6 +37,14 @@ export class WizardPriceProductsComponent extends BaseComponent implements OnIni
 		this._priceProductsTotalCountService.getTotalCountDO(PriceProductStatus.Active).subscribe((totalCount: TotalCountDO) => {
 			this._priceProductsStateService.totalNoOfActivePriceProducts = totalCount.numOfItems;
 		});
+	}
+    public ngAfterViewInit() {
+		setTimeout(() => {
+			this.initializeWizardStepsComponent();
+		});
+	}
+	private initializeWizardStepsComponent() {
+		this._priceProductsComponent.bootstrapOverviewBottom(WizardStepsComponent, Injector.resolve([provide(WizardService, { useValue: this._wizardService })]))
 	}
 
 	public didChangeScreenStateType(screenStateType: InventoryScreenStateType) {

@@ -1,4 +1,4 @@
-import {Component, OnInit} from 'angular2/core';
+import {Component} from 'angular2/core';
 import {RouteConfig, RouterOutlet, ROUTER_DIRECTIVES} from 'angular2/router';
 import {BaseComponent} from '../../../../../../../../../../common/base/BaseComponent';
 import {TranslationPipe} from '../../../../../../../../../../common/utils/localization/TranslationPipe';
@@ -23,14 +23,11 @@ import {TimezoneService} from '../../../../../../../../services/timezones/Timezo
 	providers: [TimezoneService, SettingsBasicInformationService],
 	pipes: [TranslationPipe]
 })
-export class SettingsBasicInformationComponent extends BaseComponent implements OnInit {
+export class SettingsBasicInformationComponent extends BaseComponent {
 
 	constructor(private _navbarService: SettingsNavbarService,
 		private _basicInfoService: SettingsBasicInformationService) {
 		super();
-	}
-
-	ngOnInit() {
 		this._navbarService.bootstrap(SettingsPageType.BasicInformation);
 	}
 

@@ -42,6 +42,10 @@ body,html {
     height: 100%;
     overflow-y: hidden;
 }
+.full-height {
+    height: 100%;
+    overflow-y: hidden;
+}
 
 .card a {
     color: #fc8433;

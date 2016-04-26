@@ -3,8 +3,8 @@ import {ComponentRef} from 'angular2/core';
 import {ModalSize} from './ICustomModalComponent';
 
 export class ModalDialogInstance<T> {
-	private _backdropRef;
-	private _containerRef;
+	private _backdropRef: ComponentRef;
+	private _containerRef: ComponentRef;
 	private _contentRef: ComponentRef;
 	private _modalSize;
 

@@ -1,8 +1,21 @@
-<div class="row card">
+<div class="row full-height">
 	<div class="col-xs-2 col-md-2 wizard-nav">
 		<settings-navbar></settings-navbar>
 	</div>
 	<div class="col-xs-10 col-md-10 card signup-step" role="main">
-		<router-outlet></router-outlet>
+		<div class="row card-header">
+			<div class="col-xs-10 col-md-10">
+				<h1>
+			<span class="fa fa-gear"></span>
+			{{ 'Settings' | translate }} > <small>{{ pageName | translate }}</small>
+		</h1>
+			</div>
+			<div class="col-xs-2 col-md-2 text-right">
+				<h1> {{ numberOfItemsString }} <span class="unitpal-font">{{ iconFontName }}</span></h1>
+			</div>
+		</div>
+		<div class="row card-body">
+			<router-outlet></router-outlet>
+		</div>
 	</div>
 </div>

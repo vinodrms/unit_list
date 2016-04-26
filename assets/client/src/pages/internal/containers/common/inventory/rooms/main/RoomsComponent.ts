@@ -1,4 +1,4 @@
-import {Component, ViewChild, AfterViewInit, Output, EventEmitter} from 'angular2/core';
+import {Component, ViewChild, AfterViewInit, Output, EventEmitter, DynamicComponentLoader, Type, ResolvedProvider, ElementRef} from 'angular2/core';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/combineLatest';
 import {BaseComponent} from '../../../../../../../common/base/BaseComponent';
@@ -16,16 +16,13 @@ import {RoomOverviewComponent} from '../pages/room-overview/RoomOverviewComponen
 import {RoomEditComponent} from '../pages/room-edit/RoomEditComponent';
 import {BedsEagerService} from '../../../../../services/beds/BedsEagerService';
 
-//TODO: change this code to use Decorator
-import {WizardStepsComponent} from '../../../../wizard/pages/utils/wizard-steps/WizardStepsComponent';
-
 @Component({
     selector: 'rooms',
     templateUrl: '/client/src/pages/internal/containers/common/inventory/rooms/main/template/rooms.html',
     providers: [BedsEagerService, RoomsService, RoomCategoriesService, RoomTableMetaBuilderService],
-    directives: [WizardStepsComponent, LazyLoadingTableComponent, RoomOverviewComponent, RoomEditComponent]
+    directives: [LazyLoadingTableComponent, RoomOverviewComponent, RoomEditComponent]
 })
-export class RoomsComponent extends BaseComponent {
+export class RoomsComponent extends BaseComponent implements AfterViewInit {
     @Output() protected onScreenStateTypeChanged = new EventEmitter();
     @Output() protected onItemDeleted = new EventEmitter();
 
@@ -34,12 +31,17 @@ export class RoomsComponent extends BaseComponent {
 
     private _inventoryStateManager: InventoryStateManager<RoomVM>;
 
-    constructor(private _appContext: AppContext,
+    constructor(private _dynamicComponentLoader: DynamicComponentLoader,
+        private _elementRef: ElementRef,
+        private _appContext: AppContext,
         private _tableBuilder: RoomTableMetaBuilderService,
         private _roomService: RoomsService) {
         super();
         this._inventoryStateManager = new InventoryStateManager<RoomVM>(this._appContext, "room.id");
         this.registerStateChange();
+    }
+    public bootstrapOverviewBottom(componentToInject: Type, providers: ResolvedProvider[]) {
+        this._dynamicComponentLoader.loadIntoLocation(componentToInject, this._elementRef, "overviewBottom", providers);
     }
 
     private registerStateChange() {
@@ -55,14 +57,14 @@ export class RoomsComponent extends BaseComponent {
         this._roomTableComponent.bootstrap(this._roomService, this._tableBuilder.buildLazyLoadTableMeta());
     }
 
-    public get isEditing(): boolean {
+    protected get isEditing(): boolean {
         return this._inventoryStateManager.screenStateType === InventoryScreenStateType.Edit;
     }
-    public get selectedRoomVM(): RoomVM {
+    protected get selectedRoomVM(): RoomVM {
         return this._inventoryStateManager.currentItem;
     }
 
-    public addRoom() {
+    protected addRoom() {
         var newRoomVM = this.buildNewRoomVM();
         this._inventoryStateManager.canPerformAction(InventoryScreenAction.Add).then((newState: InventoryScreenStateType) => {
             this._roomTableComponent.deselectItem();
@@ -71,7 +73,7 @@ export class RoomsComponent extends BaseComponent {
         }).catch((e: any) => { });
     }
 
-    public copyRoom(roomVM: RoomVM) {
+    protected copyRoom(roomVM: RoomVM) {
         var newRoomVM = roomVM.buildPrototype();
         delete newRoomVM.room.id;
         newRoomVM.room.name = '';
@@ -83,7 +85,7 @@ export class RoomsComponent extends BaseComponent {
         }).catch((e: any) => { });
     }
 
-    public editRoom(roomVM: RoomVM) {
+    protected editRoom(roomVM: RoomVM) {
         var newRoomVM = roomVM.buildPrototype();
         this._inventoryStateManager.canPerformAction(InventoryScreenAction.Edit, newRoomVM).then((newState: InventoryScreenStateType) => {
             this._roomTableComponent.selectItem(roomVM);
@@ -93,7 +95,7 @@ export class RoomsComponent extends BaseComponent {
         }).catch((e: any) => { });
     }
 
-    public deleteRoom(roomVM: RoomVM) {
+    protected deleteRoom(roomVM: RoomVM) {
         var newRoomVM = roomVM.buildPrototype();
         this._inventoryStateManager.canPerformAction(InventoryScreenAction.Delete, newRoomVM).then((newState: InventoryScreenStateType) => {
             var title = this._appContext.thTranslation.translate("Delete Room");
@@ -119,7 +121,7 @@ export class RoomsComponent extends BaseComponent {
         });
     }
 
-    public selectRoom(roomVM: RoomVM) {
+    protected selectRoom(roomVM: RoomVM) {
         var newRoomVM = roomVM.buildPrototype();
         this._inventoryStateManager.canPerformAction(InventoryScreenAction.Select, newRoomVM).then((newState: InventoryScreenStateType) => {
             this._roomTableComponent.selectItem(newRoomVM);
@@ -129,7 +131,7 @@ export class RoomsComponent extends BaseComponent {
         }).catch((e: any) => { });
     }
 
-    public showViewScreen() {
+    protected showViewScreen() {
         this._roomTableComponent.deselectItem();
 
         this._inventoryStateManager.currentItem = null;
