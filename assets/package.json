@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "UnitPal Hotel Manager",
   "main": "index.js",
+  "engines": {
+    "node": "5.5.0"
+  },
   "scripts": {
     "tsc": "tsc -p src -w",
     "start": "lite-server --open=.",
