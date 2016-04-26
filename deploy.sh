@@ -110,9 +110,9 @@ fi
 selectNodeVersion
 
 # 2.1 Install rimraf and remove node_module for client and server
-# eval $NPM_CMD install -g rimraf
-# cd "$DEPLOYMENT_TARGET"
-# rimraf node_modules
+eval $NPM_CMD install -g rimraf
+cd "$DEPLOYMENT_TARGET"
+rimraf node_modules
 # cd "assets"
 # rimraf node_modules
 

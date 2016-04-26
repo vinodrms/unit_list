@@ -5,7 +5,7 @@
   "main": "index.js",
   "engines" : { 
     "node" : "4.4.1",
-    "npm" : "2.14.12" 
+    "npm" : "2.14.20" 
   },
   "scripts": {
     "tsc": "tsc -p src -w",
@@ -19,7 +19,7 @@
   "author": "3angleTECH",
   "license": "ISC",
   "dependencies": {
-    "angular2": "^2.0.0-beta.15",
+    "angular2": "2.0.0-beta.15",
     "animate.css": "^3.5.1",
     "bootstrap": "^3.3.6",
     "bootstrap-daterangepicker": "^2.1.19",
