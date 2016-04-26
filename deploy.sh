@@ -110,11 +110,17 @@ fi
 selectNodeVersion
 
 # 2.1 Install rimraf and remove node_module for client and server
-eval $NPM_CMD install -g rimraf
-cd "$DEPLOYMENT_TARGET"
-rimraf node_modules
-cd "assets"
-rimraf node_modules
+# eval $NPM_CMD install -g rimraf
+# cd "$DEPLOYMENT_TARGET"
+# rimraf node_modules
+# cd "assets"
+# rimraf node_modules
+
+eval $NPM_CMD install -g node-gyp
+git clone https://github.com/christkv/kerberos.git
+cd kerberos
+eval $NPM_CMD install
+node-gyp rebuild
 
 # 3. Install server npm packages
 cd "$DEPLOYMENT_TARGET"
