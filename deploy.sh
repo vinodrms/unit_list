@@ -113,8 +113,8 @@ selectNodeVersion
 eval $NPM_CMD install -g rimraf
 cd "$DEPLOYMENT_TARGET"
 rimraf node_modules
-# cd "assets"
-# rimraf node_modules
+cd "assets"
+rimraf node_modules
 
 # 3. Install server npm packages
 cd "$DEPLOYMENT_TARGET"
