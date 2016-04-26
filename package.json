@@ -4,9 +4,6 @@
   "version": "0.0.0",
   "description": "a Sails application",
   "keywords": [],
-  "engines": {
-    "node": "5.5.0"
-  },
   "dependencies": {
     "async": "^1.5.2",
     "bcrypt-nodejs": "0.0.3",
