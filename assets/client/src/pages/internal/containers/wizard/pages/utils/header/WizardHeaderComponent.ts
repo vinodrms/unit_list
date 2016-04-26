@@ -30,13 +30,6 @@ export class WizardHeaderComponent extends BaseComponent {
 		return this._wizardState.getMeta().name;
 	}
 	public logOut() {
-		this._appContext.thHttp.post(ThServerApi.AccountLogOut, {}).subscribe((result: any) => {
-			this.goToMainPage();
-		}, (error: ThError) => {
-			this.goToMainPage();
-		});
-	}
-	private goToMainPage() {
-		this._appContext.browserLocation.goToLoginPage(LoginStatusCode.Ok);
+		this._appContext.logOut();
 	}
 }

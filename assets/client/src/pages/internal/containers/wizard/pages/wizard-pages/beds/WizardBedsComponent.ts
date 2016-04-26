@@ -1,4 +1,4 @@
-import {Component} from 'angular2/core';
+import {Component, ViewChild, OnInit, AfterViewInit, Injector, provide} from 'angular2/core';
 import {BaseComponent} from '../../../../../../../common/base/BaseComponent';
 import {WizardBedsStateService} from './services/WizardBedsStateService';
 import {WizardService} from '../services/WizardService';
@@ -9,6 +9,7 @@ import {BedsComponent} from '../../../../common/inventory/beds/main/BedsComponen
 import {IWizardController} from '../../wizard-pages/services/IWizardController';
 import {TotalCountDO} from '../../../../../services/common/data-objects/lazy-load/TotalCountDO';
 import {InventoryScreenStateType} from '../../../../common/inventory/utils/state-manager/InventoryScreenStateType';
+import {WizardStepsComponent} from '../../utils/wizard-steps/WizardStepsComponent';
 
 @Component({
 	selector: 'wizard-beds',
@@ -18,22 +19,31 @@ import {InventoryScreenStateType} from '../../../../common/inventory/utils/state
 	pipes: [TranslationPipe]
 })
 
-export class WizardBedsComponent extends BaseComponent {
+export class WizardBedsComponent extends BaseComponent implements OnInit, AfterViewInit {
+	@ViewChild(BedsComponent) private _bedsComponent: BedsComponent;
     private _wizardController: IWizardController;
-    
-	constructor(wizardService: WizardService, private _bedsStateService: WizardBedsStateService,
+
+	constructor(private _wizardService: WizardService, private _bedsStateService: WizardBedsStateService,
         private _bedsTotalCountService: BedsTotalCountService) {
 		super();
-		wizardService.bootstrapWizardIndex(_bedsStateService.stateIndex);
-        this._wizardController = wizardService;
+		_wizardService.bootstrapWizardIndex(_bedsStateService.stateIndex);
+        this._wizardController = _wizardService;
 	}
-    
+
     public ngOnInit() {
 		this._bedsTotalCountService.getTotalCountDO().subscribe((totalCount: TotalCountDO) => {
 			this._bedsStateService.totalNoOfBeds = totalCount.numOfItems;
 		});
 	}
-    
+	public ngAfterViewInit() {
+		setTimeout(() => {
+			this.initializeWizardStepsComponent();
+		});
+	}
+	private initializeWizardStepsComponent() {
+		this._bedsComponent.bootstrapOverviewBottom(WizardStepsComponent, Injector.resolve([provide(WizardService, { useValue: this._wizardService })]))
+	}
+
     public didChangeScreenStateType(screenStateType: InventoryScreenStateType) {
 		switch (screenStateType) {
 			case InventoryScreenStateType.Edit:
@@ -45,7 +55,7 @@ export class WizardBedsComponent extends BaseComponent {
 				break;
 		}
 	}
-	
+
 	public didDeleteItem(deletedBed: BedDO) {
 		this._bedsTotalCountService.updateTotalCount();
 	}

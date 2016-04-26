@@ -1,4 +1,4 @@
-import { Component, OnInit } from 'angular2/core';
+import {Component, OnInit, Input} from 'angular2/core';
 import {TranslationPipe} from '../../../../../../../common/utils/localization/TranslationPipe';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/zip';
@@ -25,6 +25,9 @@ import {BasicInfoPropertyDetailsEditService} from './services/BasicInfoPropertyD
     pipes: [TranslationPipe]
 })
 export class BasicInfoPropertyDetailsEditComponent extends BaseComponent implements OnInit {
+    @Input() canAutoSave: boolean = false;
+	isSaving: boolean = false;
+    
     isLoading: boolean = true;
 
     timezoneList: TimezoneDO[];
@@ -91,5 +94,13 @@ export class BasicInfoPropertyDetailsEditComponent extends BaseComponent impleme
 
     public diChangeCancellationHour(cancellationHour: ThHourDO) {
         this._propertyDetailsEditService.updateCancellationHour(cancellationHour);
+    }
+    savePropertyDetails() {
+        this._propertyDetailsEditService.savePropertyDetails().subscribe((result: any) => {
+			this.isSaving = false;
+			this._appContext.toaster.success(this._appContext.thTranslation.translate("Information Saved Succesfully"));
+		}, (error: any) => {
+			this.isSaving = false;
+		});
     }
 }

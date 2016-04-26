@@ -1,4 +1,4 @@
-import {Component, OnInit} from 'angular2/core';
+import {Component, ViewChild, OnInit, AfterViewInit, Injector, provide} from 'angular2/core';
 import {BaseComponent} from '../../../../../../../common/base/BaseComponent';
 import {TranslationPipe} from '../../../../../../../common/utils/localization/TranslationPipe';
 import {WizardBreakfastStateService} from './services/WizardBreakfastStateService';
@@ -11,6 +11,7 @@ import {TotalCountDO} from '../../../../../services/common/data-objects/lazy-loa
 import {AddOnProductCategoriesService} from '../../../../../services/settings/AddOnProductCategoriesService';
 import {AddOnProductCategoriesDO} from '../../../../../services/settings/data-objects/AddOnProductCategoriesDO';
 import {AddOnProductCategoryDO} from '../../../../../services/common/data-objects/add-on-product/AddOnProductCategoryDO';
+import {WizardStepsComponent} from '../../utils/wizard-steps/WizardStepsComponent';
 
 @Component({
 	selector: 'wizard-breakfast',
@@ -20,19 +21,19 @@ import {AddOnProductCategoryDO} from '../../../../../services/common/data-object
 	pipes: [TranslationPipe]
 })
 
-export class WizardBreakfastComponent extends BaseComponent implements OnInit {
+export class WizardBreakfastComponent extends BaseComponent implements OnInit, AfterViewInit {
+	@ViewChild(AddOnProductsComponent) private _addOnProductsComponent: AddOnProductsComponent;
 	private _isEditScreen: boolean;
-
 
 	private _wizardController: IWizardController;
 
-	constructor(wizardService: WizardService,
+	constructor(private _wizardService: WizardService,
 		private _breakfastStateService: WizardBreakfastStateService,
 		private _addOnProductCategoriesService: AddOnProductCategoriesService,
 		private _addOnProductsTotalCountService: AddOnProductsTotalCountService) {
 		super();
-		wizardService.bootstrapWizardIndex(_breakfastStateService.stateIndex);
-		this._wizardController = wizardService;
+		_wizardService.bootstrapWizardIndex(_breakfastStateService.stateIndex);
+		this._wizardController = _wizardService;
 		this.isEditScreen = false;
 	}
 
@@ -43,6 +44,14 @@ export class WizardBreakfastComponent extends BaseComponent implements OnInit {
 		}).subscribe((totalCount: TotalCountDO) => {
 			this._breakfastStateService.totalNoOfBreakfasts = totalCount.numOfItems;
 		});
+	}
+    public ngAfterViewInit() {
+		setTimeout(() => {
+			this.initializeWizardStepsComponent();
+		});
+	}
+	private initializeWizardStepsComponent() {
+		this._addOnProductsComponent.bootstrapOverviewBottom(WizardStepsComponent, Injector.resolve([provide(WizardService, { useValue: this._wizardService })]))
 	}
 
 	public didChangeScreenStateType(screenStateType: InventoryScreenStateType) {

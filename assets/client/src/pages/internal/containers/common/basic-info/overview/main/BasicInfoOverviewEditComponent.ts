@@ -1,4 +1,4 @@
-import {Component, OnInit} from 'angular2/core';
+import {Component, OnInit, Input} from 'angular2/core';
 import {ControlGroup} from 'angular2/common';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/combineLatest';
@@ -18,11 +18,13 @@ import {BasicInfoOverviewEditService} from './services/BasicInfoOverviewEditServ
 	selector: 'basic-info-overview-edit',
 	templateUrl: '/client/src/pages/internal/containers/common/basic-info/overview/main/template/basic-info-overview-edit.html',
 	directives: [LoadingComponent, ImageUploadComponent, VATComponent],
-	providers: [],
 	pipes: [TranslationPipe]
 })
 
 export class BasicInfoOverviewEditComponent extends BaseFormComponent implements OnInit {
+	@Input() canAutoSave: boolean = false;
+	isSaving: boolean = false;
+
 	isLoading: boolean = true;
 	countries: CountriesDO;
 	hotelInfo: HotelAggregatedInfo;
@@ -59,7 +61,7 @@ export class BasicInfoOverviewEditComponent extends BaseFormComponent implements
 			countryCode: hotelDO.contactDetails.address.country.code,
 			fullVat: hotelDO.contactDetails.vatCode
 		}
-		this._overviewEditService.initForm(this.countries, this.hotelInfo);
+		this._overviewEditService.updateFormValues(this.countries, this.hotelInfo);
 	}
 	protected getDefaultControlGroup(): ControlGroup {
 		return this._overviewEditService.overviewForm;
@@ -76,5 +78,15 @@ export class BasicInfoOverviewEditComponent extends BaseFormComponent implements
 	}
 	public didGetVatResponse(vatResponse: VatResponse) {
 		this._overviewEditService.didGetVatResponse(vatResponse);
+	}
+
+	public saveOverview() {
+		this.isSaving = true;
+		this._overviewEditService.saveOverview().subscribe((result: any) => {
+			this.isSaving = false;
+			this._appContext.toaster.success(this._appContext.thTranslation.translate("Information Saved Succesfully"));
+		}, (error: any) => {
+			this.isSaving = false;
+		});
 	}
 }

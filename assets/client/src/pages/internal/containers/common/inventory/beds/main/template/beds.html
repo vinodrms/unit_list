@@ -9,18 +9,17 @@
         >
 	</lazy-loading-table>
 </div>
-<div class="col-xs-3 col-md-3 overview-right" *ngIf="!isEditing">
+<div [ngClass]="{'col-xs-3 overview-right': !isEditing, 'col-xs-9 edit-container': isEditing}">
 	<bed-overview
-		*ngIf="selectedBedVM" 
+		*ngIf="selectedBedVM && !isEditing" 
 		[bedVM]="selectedBedVM"
 		(onEdit)="editBed($event)">
 	</bed-overview>
-	<wizard-steps-component></wizard-steps-component>
-</div>
-<div class="col-xs-9 col-md-9 edit-container" *ngIf="isEditing">
 	<bed-edit
-		*ngIf="selectedBedVM" 
+		*ngIf="selectedBedVM && isEditing" 
 		[bedVM]="selectedBedVM"
 		(onExit)="showViewScreen()">
 	</bed-edit>
+	<div #overviewBottom>
+	</div>
 </div>

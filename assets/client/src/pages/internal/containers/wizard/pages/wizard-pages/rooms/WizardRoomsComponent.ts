@@ -1,4 +1,4 @@
-import {Component} from 'angular2/core';
+import {Component, ViewChild, OnInit, AfterViewInit, Injector, provide} from 'angular2/core';
 import {BaseComponent} from '../../../../../../../common/base/BaseComponent';
 import {WizardRoomsStateService} from './services/WizardRoomsStateService';
 import {TranslationPipe} from '../../../../../../../common/utils/localization/TranslationPipe';
@@ -9,6 +9,7 @@ import {RoomsTotalCountService} from '../../../../../services/rooms/RoomsTotalCo
 import {RoomDO} from '../../../../../services/rooms/data-objects/RoomDO';
 import {TotalCountDO} from '../../../../../services/common/data-objects/lazy-load/TotalCountDO';
 import {RoomsComponent} from '../../../../common/inventory/rooms/main/RoomsComponent';
+import {WizardStepsComponent} from '../../utils/wizard-steps/WizardStepsComponent';
 
 @Component({
     selector: 'wizard-rooms',
@@ -17,21 +18,30 @@ import {RoomsComponent} from '../../../../common/inventory/rooms/main/RoomsCompo
     directives: [RoomsComponent],
     pipes: [TranslationPipe]
 })
-export class WizardRoomsComponent extends BaseComponent {
+export class WizardRoomsComponent extends BaseComponent implements OnInit, AfterViewInit {
+    @ViewChild(RoomsComponent) private _roomsComponent: RoomsComponent;
     private _wizardController: IWizardController;
 
-    constructor(wizardService: WizardService, private _roomsStateService: WizardRoomsStateService, 
+    constructor(private _wizardService: WizardService, private _roomsStateService: WizardRoomsStateService, 
         private _roomsTotalCountService: RoomsTotalCountService) {
         super();
-        wizardService.bootstrapWizardIndex(_roomsStateService.stateIndex);
-        this._wizardController = wizardService;
+        _wizardService.bootstrapWizardIndex(_roomsStateService.stateIndex);
+        this._wizardController = _wizardService;
     }
 
-    ngOnInit() { 
+    public ngOnInit() { 
         this._roomsTotalCountService.getTotalCountDO().subscribe((totalCount: TotalCountDO) => {
 			this._roomsStateService.totalNoOfRooms = totalCount.numOfItems;
 		});
     }
+    public ngAfterViewInit() {
+		setTimeout(() => {
+			this.initializeWizardStepsComponent();
+		});
+	}
+	private initializeWizardStepsComponent() {
+		this._roomsComponent.bootstrapOverviewBottom(WizardStepsComponent, Injector.resolve([provide(WizardService, { useValue: this._wizardService })]))
+	}
 
     public didChangeScreenStateType(screenStateType: InventoryScreenStateType) {
         switch (screenStateType) {

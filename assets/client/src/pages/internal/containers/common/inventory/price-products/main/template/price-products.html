@@ -25,24 +25,21 @@
 		>
 	</lazy-loading-table>
 </div>
-<div class="col-xs-3 overview-right" *ngIf="!isEditing">
+<div [ngClass]="{'col-xs-3 overview-right': !isEditing, 'col-xs-9 edit-container': isEditing}">
 	<price-product-overview 
-		*ngIf="selectedPriceProductVM" 
+		*ngIf="selectedPriceProductVM && !isEditing" 
 		[priceProductVM]="selectedPriceProductVM"
-		
 		(onEdit)="editPriceProduct($event)"
 		(onDelete)="deletePriceProduct($event)"
 		(onArchive)="archivePriceProduct($event)"
 		(onDraft)="draftPriceProduct($event)"
 		>
 	</price-product-overview>
-	<wizard-steps-component></wizard-steps-component>
-	
-</div>
-<div class="col-xs-9 edit-container edit-container" *ngIf="isEditing">
 	<price-product-edit-container
-		*ngIf="selectedPriceProductVM" 
+		*ngIf="selectedPriceProductVM && isEditing" 
 		[priceProductVM]="selectedPriceProductVM"
 		(onExit)="showViewScreen()">
 	</price-product-edit-container>
+	<div #overviewBottom>
+	</div>
 </div>
