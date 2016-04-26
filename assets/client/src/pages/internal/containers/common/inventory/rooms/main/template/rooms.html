@@ -9,18 +9,17 @@
         >
 	</lazy-loading-table>
 </div>
-<div class="col-xs-3 col-md-3 overview-right" *ngIf="!isEditing">
+<div [ngClass]="{'col-xs-3 overview-right': !isEditing, 'col-xs-9 edit-container': isEditing}">
 	<room-overview
-		*ngIf="selectedRoomVM" 
+		*ngIf="selectedRoomVM && !isEditing" 
 		[roomVM]="selectedRoomVM"
 		(onEdit)="editRoom($event)">
 	</room-overview>
-	<wizard-steps-component></wizard-steps-component>
-</div>
-<div class="col-xs-9 col-md-9 edit-container" *ngIf="isEditing">
 	<room-edit
-		*ngIf="selectedRoomVM" 
+		*ngIf="selectedRoomVM && isEditing" 
 		[roomVM]="selectedRoomVM"
 		(onExit)="showViewScreen()">
 	</room-edit>
+	<div #overviewBottom>
+	</div>
 </div>

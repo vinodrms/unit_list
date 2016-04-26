@@ -14,20 +14,19 @@
 		>
 	</lazy-loading-table>
 </div>
-<div class="col-xs-3 col-md-3 overview-right" *ngIf="!isEditing">
+<div [ngClass]="{'col-xs-3 overview-right': !isEditing, 'col-xs-9 edit-container': isEditing}">
 	<customer-register-overview 
-		*ngIf="selectedCustomerVM" 
+		*ngIf="selectedCustomerVM && !isEditing" 
 		[customerVM]="selectedCustomerVM"
 		(onEdit)="editCustomer($event)">
 		>
 	</customer-register-overview>
-	<wizard-steps-component></wizard-steps-component>
-</div>
-<div class="col-xs-9 col-md-9 edit-container" *ngIf="isEditing">
 	<customer-register-edit-container
-		*ngIf="selectedCustomerVM" 
+		*ngIf="selectedCustomerVM && isEditing" 
 		[customerVM]="selectedCustomerVM"
 		(onExit)="showViewScreen()">
 		>
 	</customer-register-edit-container>
+	<div #overviewBottom>
+	</div>
 </div>

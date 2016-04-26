@@ -12,7 +12,8 @@ import {WizardCustomerRegisterStateService} from '../customer-register/services/
 
 @Injectable()
 export class WizardService implements IWizardState, IWizardController {
-	private static NavigationBase = "/MainWizardComponent/";
+	private static WizardNavigationBasePath = "/MainWizardComponent/";
+	private static HomeNavigationPath = "/MainHomeComponent/";
 
 	private _stateList: IWizardState[];
 	private _currentState: IWizardState;
@@ -41,7 +42,7 @@ export class WizardService implements IWizardState, IWizardController {
 
 	public moveNext() {
 		if (this._currentState.stateIndex == this._stateList.length - 1) {
-			// TODO: go to home screen
+			this._appContext.routerNavigator.navigateTo(WizardService.HomeNavigationPath);
 			return;
 		}
 		this.setCurrentState(this._currentState.stateIndex + 1, true);
@@ -66,7 +67,7 @@ export class WizardService implements IWizardState, IWizardController {
 				relativePath = this._currentState.getMeta().startRelativeComponentPath;
 			}
 			this._wizardButtonsVisible = true;
-			this._appContext.routerNavigator.navigateTo(WizardService.NavigationBase + relativePath);
+			this._appContext.routerNavigator.navigateTo(WizardService.WizardNavigationBasePath + relativePath);
 		}
 	}
 	public getStateList(): IWizardState[] {

@@ -1,4 +1,4 @@
-import {Component, OnInit} from 'angular2/core';
+import {Component, ViewChild, OnInit, AfterViewInit, Injector, provide} from 'angular2/core';
 import {BaseComponent} from '../../../../../../../common/base/BaseComponent';
 import {TranslationPipe} from '../../../../../../../common/utils/localization/TranslationPipe';
 import {WizardCustomerRegisterStateService} from './services/WizardCustomerRegisterStateService';
@@ -8,6 +8,7 @@ import {CustomerRegisterComponent} from '../../../../common/inventory/customer-r
 import {InventoryScreenStateType} from '../../../../common/inventory/utils/state-manager/InventoryScreenStateType';
 import {CustomersTotalCountService} from '../../../../../services/customers/CustomersTotalCountService';
 import {TotalCountDO} from '../../../../../services/common/data-objects/lazy-load/TotalCountDO';
+import {WizardStepsComponent} from '../../utils/wizard-steps/WizardStepsComponent';
 
 @Component({
 	selector: 'wizard-customer-register',
@@ -17,18 +18,18 @@ import {TotalCountDO} from '../../../../../services/common/data-objects/lazy-loa
 	pipes: [TranslationPipe]
 })
 
-export class WizardCustomerRegisterComponent extends BaseComponent implements OnInit {
+export class WizardCustomerRegisterComponent extends BaseComponent implements OnInit, AfterViewInit {
+	@ViewChild(CustomerRegisterComponent) private _customerRegisterComponent: CustomerRegisterComponent;
 	private _isEditScreen: boolean;
-
 
 	private _wizardController: IWizardController;
 
-	constructor(wizardService: WizardService,
+	constructor(private _wizardService: WizardService,
 		private _customerRegisterStateService: WizardCustomerRegisterStateService,
 		private _customersTotalCountService: CustomersTotalCountService) {
 		super();
-		wizardService.bootstrapWizardIndex(_customerRegisterStateService.stateIndex);
-		this._wizardController = wizardService;
+		_wizardService.bootstrapWizardIndex(_customerRegisterStateService.stateIndex);
+		this._wizardController = _wizardService;
 		this.isEditScreen = false;
 	}
 
@@ -36,6 +37,14 @@ export class WizardCustomerRegisterComponent extends BaseComponent implements On
 		this._customersTotalCountService.getTotalCountDO().subscribe((totalCount: TotalCountDO) => {
 			this._customerRegisterStateService.totalNoOfCustomers = totalCount.numOfItems;
 		});
+	}
+    public ngAfterViewInit() {
+		setTimeout(() => {
+			this.initializeWizardStepsComponent();
+		});
+	}
+	private initializeWizardStepsComponent() {
+		this._customerRegisterComponent.bootstrapOverviewBottom(WizardStepsComponent, Injector.resolve([provide(WizardService, { useValue: this._wizardService })]))
 	}
 
 	public didChangeScreenStateType(screenStateType: InventoryScreenStateType) {

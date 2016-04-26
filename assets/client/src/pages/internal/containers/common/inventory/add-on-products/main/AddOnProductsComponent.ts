@@ -1,4 +1,4 @@
-import {Component, ViewChild, AfterViewInit, Input, Output, EventEmitter} from 'angular2/core';
+import {Component, ViewChild, AfterViewInit, Input, Output, EventEmitter, DynamicComponentLoader, Type, ResolvedProvider, ElementRef} from 'angular2/core';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/combineLatest';
 import {BaseComponent} from '../../../../../../../common/base/BaseComponent';
@@ -17,28 +17,27 @@ import {AddOnProductCategoriesService} from '../../../../../services/settings/Ad
 import {AddOnProductCategoriesDO} from '../../../../../services/settings/data-objects/AddOnProductCategoriesDO';
 import {AddOnProductCategoryDO} from '../../../../../services/common/data-objects/add-on-product/AddOnProductCategoryDO';
 
-//TODO: change this code to use Decorator
-import {WizardStepsComponent} from '../../../../wizard/pages/utils/wizard-steps/WizardStepsComponent';
-
 @Component({
     selector: 'add-on-products',
     templateUrl: '/client/src/pages/internal/containers/common/inventory/add-on-products/main/template/add-on-products.html',
     providers: [AddOnProductsService, AddOnProductTableMetaBuilderService],
-    directives: [WizardStepsComponent, LazyLoadingTableComponent, AddOnProductOverviewComponent, AddOnProductEditComponent]
+    directives: [LazyLoadingTableComponent, AddOnProductOverviewComponent, AddOnProductEditComponent]
 })
-export class AddOnProductsComponent extends BaseComponent {
+export class AddOnProductsComponent extends BaseComponent implements AfterViewInit {
     @Input() protected filterBreakfastCategory: boolean = false;
     filteredCategory: AddOnProductCategoryDO;
 
     @Output() protected onScreenStateTypeChanged = new EventEmitter();
     @Output() protected onItemDeleted = new EventEmitter();
-    
+
     @ViewChild(LazyLoadingTableComponent)
     private _aopTableComponent: LazyLoadingTableComponent<AddOnProductVM>;
 
     private _inventoryStateManager: InventoryStateManager<AddOnProductVM>;
 
-    constructor(private _appContext: AppContext,
+    constructor(private _dynamicComponentLoader: DynamicComponentLoader,
+        private _elementRef: ElementRef,
+        private _appContext: AppContext,
         private _tableBuilder: AddOnProductTableMetaBuilderService,
         private _addOnProductCategoriesService: AddOnProductCategoriesService,
         private _addOnProductsService: AddOnProductsService) {
@@ -46,15 +45,18 @@ export class AddOnProductsComponent extends BaseComponent {
         this._inventoryStateManager = new InventoryStateManager<AddOnProductVM>(this._appContext, "addOnProduct.id");
         this.registerStateChange();
     }
+    public bootstrapOverviewBottom(componentToInject: Type, providers: ResolvedProvider[]) {
+        this._dynamicComponentLoader.loadIntoLocation(componentToInject, this._elementRef, "overviewBottom", providers);
+    }
     private registerStateChange() {
         this._inventoryStateManager.stateChangedObservable.subscribe((currentState: InventoryScreenStateType) => {
             this.onScreenStateTypeChanged.next(currentState);
         });
     }
-    private registerItemDeletion(deletedAddOnProduct:AddOnProductDO) {
+    private registerItemDeletion(deletedAddOnProduct: AddOnProductDO) {
         this.onItemDeleted.next(deletedAddOnProduct);
     }
-    
+
     public ngAfterViewInit() {
         if (!this.filterBreakfastCategory) {
             this.bootstrapTableComponent();
@@ -73,14 +75,14 @@ export class AddOnProductsComponent extends BaseComponent {
         this._aopTableComponent.bootstrap(this._addOnProductsService, this._tableBuilder.buildLazyLoadTableMeta(this.filterBreakfastCategory));
     }
 
-    public get isEditing(): boolean {
+    protected get isEditing(): boolean {
         return this._inventoryStateManager.screenStateType === InventoryScreenStateType.Edit;
     }
-    public get selectedAddOnProductVM(): AddOnProductVM {
+    protected get selectedAddOnProductVM(): AddOnProductVM {
         return this._inventoryStateManager.currentItem;
     }
 
-    public addAddOnProduct() {
+    protected addAddOnProduct() {
         var newAddOnProductVM = this.buildNewAddOnProductVM();
         this._inventoryStateManager.canPerformAction(InventoryScreenAction.Add).then((newState: InventoryScreenStateType) => {
             this._aopTableComponent.deselectItem();
@@ -89,7 +91,7 @@ export class AddOnProductsComponent extends BaseComponent {
             this._inventoryStateManager.screenStateType = newState;
         }).catch((e: any) => { });
     }
-    public copyAddOnProduct(addOnProductVM: AddOnProductVM) {
+    protected copyAddOnProduct(addOnProductVM: AddOnProductVM) {
         var newAddOnProductVM = addOnProductVM.buildPrototype();
         delete newAddOnProductVM.addOnProduct.id;
         this._inventoryStateManager.canPerformAction(InventoryScreenAction.Copy, newAddOnProductVM).then((newState: InventoryScreenStateType) => {
@@ -99,7 +101,7 @@ export class AddOnProductsComponent extends BaseComponent {
             this._inventoryStateManager.screenStateType = newState;
         }).catch((e: any) => { });
     }
-    public editAddOnProduct(addOnProductVM: AddOnProductVM) {
+    protected editAddOnProduct(addOnProductVM: AddOnProductVM) {
         var newAddOnProductVM = addOnProductVM.buildPrototype();
         this._inventoryStateManager.canPerformAction(InventoryScreenAction.Edit, newAddOnProductVM).then((newState: InventoryScreenStateType) => {
             this._aopTableComponent.selectItem(newAddOnProductVM);
@@ -108,7 +110,7 @@ export class AddOnProductsComponent extends BaseComponent {
             this._inventoryStateManager.screenStateType = newState;
         }).catch((e: any) => { });
     }
-    public deleteAddOnProduct(addOnProductVM: AddOnProductVM) {
+    protected deleteAddOnProduct(addOnProductVM: AddOnProductVM) {
         var newAddOnProductVM = addOnProductVM.buildPrototype();
         this._inventoryStateManager.canPerformAction(InventoryScreenAction.Delete, newAddOnProductVM).then((newState: InventoryScreenStateType) => {
             var title = this._appContext.thTranslation.translate("Delete Add-On Product");
@@ -134,7 +136,7 @@ export class AddOnProductsComponent extends BaseComponent {
         });
     }
 
-    public selectAddOnProduct(addOnProductVM: AddOnProductVM) {
+    protected selectAddOnProduct(addOnProductVM: AddOnProductVM) {
         var newAddOnProductVM = addOnProductVM.buildPrototype();
         this._inventoryStateManager.canPerformAction(InventoryScreenAction.Select, newAddOnProductVM).then((newState: InventoryScreenStateType) => {
             this._aopTableComponent.selectItem(newAddOnProductVM);
@@ -144,7 +146,7 @@ export class AddOnProductsComponent extends BaseComponent {
         }).catch((e: any) => { });
     }
 
-    public showViewScreen() {
+    protected showViewScreen() {
         this._aopTableComponent.deselectItem();
 
         this._inventoryStateManager.currentItem = null;

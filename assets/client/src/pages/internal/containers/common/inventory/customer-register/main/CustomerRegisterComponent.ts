@@ -1,4 +1,4 @@
-import {Component, Output, EventEmitter, ViewChild} from 'angular2/core';
+import {Component, Output, EventEmitter, ViewChild, AfterViewInit, DynamicComponentLoader, Type, ResolvedProvider, ElementRef} from 'angular2/core';
 import {BaseComponent} from '../../../../../../../common/base/BaseComponent';
 import {TranslationPipe} from '../../../../../../../common/utils/localization/TranslationPipe';
 import {AppContext, ThError} from '../../../../../../../common/utils/AppContext';
@@ -17,17 +17,14 @@ import {CustomerDetailsMeta} from '../../../../../services/customers/data-object
 import {CustomerRegisterOverviewComponent} from '../pages/customer-overview/CustomerRegisterOverviewComponent';
 import {CustomerRegisterEditContainerComponent} from '../pages/customer-edit/container/CustomerRegisterEditContainerComponent';
 
-//TODO: change this code to use Decorator
-import {WizardStepsComponent} from '../../../../wizard/pages/utils/wizard-steps/WizardStepsComponent';
-
 @Component({
     selector: 'customer-register',
     templateUrl: '/client/src/pages/internal/containers/common/inventory/customer-register/main/template/customer-register.html',
     providers: [CustomersService, CustomerRegisterTableMetaBuilderService, CustomerTableFilterService],
-    directives: [WizardStepsComponent, LazyLoadingTableComponent, CustomerRegisterOverviewComponent, CustomerRegisterEditContainerComponent],
+    directives: [LazyLoadingTableComponent, CustomerRegisterOverviewComponent, CustomerRegisterEditContainerComponent],
 	pipes: [TranslationPipe]
 })
-export class CustomerRegisterComponent extends BaseComponent {
+export class CustomerRegisterComponent extends BaseComponent implements AfterViewInit {
     @Output() protected onScreenStateTypeChanged = new EventEmitter();
 
 	@ViewChild(LazyLoadingTableComponent)
@@ -36,13 +33,18 @@ export class CustomerRegisterComponent extends BaseComponent {
 	private _inventoryStateManager: InventoryStateManager<CustomerVM>;
 	private _customerType: CustomerType;
 
-    constructor(private _appContext: AppContext,
+    constructor(private _dynamicComponentLoader: DynamicComponentLoader,
+        private _elementRef: ElementRef,
+        private _appContext: AppContext,
 		private _customersService: CustomersService,
         private _tableBuilder: CustomerRegisterTableMetaBuilderService,
 		private _custTableFilterService: CustomerTableFilterService) {
         super();
 		this._inventoryStateManager = new InventoryStateManager<CustomerVM>(this._appContext, "customer.id");
 		this.registerStateChange();
+    }
+    public bootstrapOverviewBottom(componentToInject: Type, providers: ResolvedProvider[]) {
+        this._dynamicComponentLoader.loadIntoLocation(componentToInject, this._elementRef, "overviewBottom", providers);
     }
 	private registerStateChange() {
 		this._inventoryStateManager.stateChangedObservable.subscribe((currentState: InventoryScreenStateType) => {
@@ -52,14 +54,14 @@ export class CustomerRegisterComponent extends BaseComponent {
 	public ngAfterViewInit() {
 		this._aopTableComponent.bootstrap(this._customersService, this._tableBuilder.buildLazyLoadTableMeta());
 	}
-	public get isEditing(): boolean {
+	protected get isEditing(): boolean {
 		return this._inventoryStateManager.screenStateType === InventoryScreenStateType.Edit;
 	}
-	public get selectedCustomerVM(): CustomerVM {
+	protected get selectedCustomerVM(): CustomerVM {
 		return this._inventoryStateManager.currentItem;
 	}
 
-	public addCustomer() {
+	protected addCustomer() {
         var newCustomerVM = this.buildNewCustomerVM();
         this._inventoryStateManager.canPerformAction(InventoryScreenAction.Add).then((newState: InventoryScreenStateType) => {
             this._aopTableComponent.deselectItem();
@@ -68,7 +70,7 @@ export class CustomerRegisterComponent extends BaseComponent {
             this._inventoryStateManager.screenStateType = newState;
         }).catch((e: any) => { });
     }
-	public editCustomer(customerVM: CustomerVM) {
+	protected editCustomer(customerVM: CustomerVM) {
         var newCustomerVM = customerVM.buildPrototype();
         this._inventoryStateManager.canPerformAction(InventoryScreenAction.Edit, newCustomerVM).then((newState: InventoryScreenStateType) => {
             this._aopTableComponent.selectItem(newCustomerVM);
@@ -77,7 +79,7 @@ export class CustomerRegisterComponent extends BaseComponent {
             this._inventoryStateManager.screenStateType = newState;
         }).catch((e: any) => { });
     }
-    public selectCustomer(customerVM: CustomerVM) {
+    protected selectCustomer(customerVM: CustomerVM) {
         var newCustomerVM = customerVM.buildPrototype();
         this._inventoryStateManager.canPerformAction(InventoryScreenAction.Select, newCustomerVM).then((newState: InventoryScreenStateType) => {
             this._aopTableComponent.selectItem(newCustomerVM);
@@ -87,12 +89,12 @@ export class CustomerRegisterComponent extends BaseComponent {
         }).catch((e: any) => { });
     }
 
-    public showViewScreen() {
+    protected showViewScreen() {
         this._aopTableComponent.deselectItem();
         this._inventoryStateManager.currentItem = null;
         this._inventoryStateManager.screenStateType = InventoryScreenStateType.View;
     }
-    private buildNewCustomerVM(): CustomerVM {
+    protected buildNewCustomerVM(): CustomerVM {
         var vm = new CustomerVM();
 		vm.customer = new CustomerDO();
 
@@ -106,16 +108,16 @@ export class CustomerRegisterComponent extends BaseComponent {
         return vm;
     }
 
-	public get filterList(): CustomerDetailsMeta[] {
+	protected get filterList(): CustomerDetailsMeta[] {
 		if(this.isEditing) {
 			return [this._custTableFilterService.currentFilter];
 		}
 		return this._custTableFilterService.filterList;
 	}
-	public isFilterSelected(filter: CustomerDetailsMeta): boolean {
+	protected isFilterSelected(filter: CustomerDetailsMeta): boolean {
 		return this._custTableFilterService.isFilterSelected(filter);
 	}
-	public selectFilter(filter: CustomerDetailsMeta) {
+	protected selectFilter(filter: CustomerDetailsMeta) {
 		return this._custTableFilterService.selectFilter(filter);
 	}
 }

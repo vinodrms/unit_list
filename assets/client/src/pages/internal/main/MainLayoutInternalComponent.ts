@@ -15,7 +15,7 @@ import {MainWizardComponent} from '../containers/wizard/main/MainWizardComponent
 })
 
 @RouteConfig([
-	{ path: '/', name: 'MainHomeComponent', component: MainHomeComponent, useAsDefault: true },
+	{ path: '/...', name: 'MainHomeComponent', component: MainHomeComponent, useAsDefault: true },
 	{ path: '/wizard/...', name: 'MainWizardComponent', component: MainWizardComponent }
 ])
 
