@@ -9,3 +9,4 @@ git push azure master
 cd ../../
 rm -rf azure
 echo "Finished install on Azure"
+
