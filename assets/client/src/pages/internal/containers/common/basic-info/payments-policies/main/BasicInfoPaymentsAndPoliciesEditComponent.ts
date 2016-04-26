@@ -1,4 +1,4 @@
-import {Component, OnInit} from 'angular2/core';
+import {Component, OnInit, Input} from 'angular2/core';
 import {ControlGroup} from 'angular2/common';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/combineLatest';
@@ -12,7 +12,7 @@ import {HotelAggregatorService} from '../../../../../services/hotel/HotelAggrega
 import {HotelAggregatedInfo} from '../../../../../services/hotel/utils/HotelAggregatedInfo';
 import {HotelDO} from '../../../../../services/hotel/data-objects/hotel/HotelDO';
 import {BasicInfoPaymentsAndPoliciesEditService} from './services/BasicInfoPaymentsAndPoliciesEditService';
-import {PaymentMethodVMContainer, PaymentMethodVM} from './services/utils/PaymentMethodVMContainer'; 
+import {PaymentMethodVMContainer, PaymentMethodVM} from './services/utils/PaymentMethodVMContainer';
 import {TaxService} from '../../../../../services/taxes/TaxService';
 import {TaxType} from '../../../../../services/taxes/data-objects/TaxDO';
 import {TaxContainerDO} from '../../../../../services/taxes/data-objects/TaxContainerDO';
@@ -27,9 +27,12 @@ import {BasicInfoTaxListComponent} from '../pages/tax-list/BasicInfoTaxListCompo
 })
 
 export class BasicInfoPaymentsAndPoliciesEditComponent extends BaseComponent implements OnInit {
+	@Input() canAutoSave: boolean = false;
+	isSaving: boolean = false;
+
 	vatTaxType = TaxType.Vat;
 	otherTaxType = TaxType.OtherTax;
-	
+
 	isLoading: boolean = true;
 	currencies: CurrenciesDO;
 	paymentMethods: PaymentMethodVMContainer;
@@ -52,7 +55,7 @@ export class BasicInfoPaymentsAndPoliciesEditComponent extends BaseComponent imp
 		).subscribe((result: [CurrenciesDO, HotelAggregatedInfo]) => {
 			this.currencies = result[0];
 			var hotelAggregatedInfo = result[1];
-			
+
 			this.hotel = hotelAggregatedInfo.hotelDetails.hotel;
 			this.paymentMethods = new PaymentMethodVMContainer(hotelAggregatedInfo.paymentMethods, this.hotel.paymentMethodIdList);
 			this._paymPoliciesEditService.bootstrap(this.paymentMethods, this.hotel);
@@ -73,5 +76,15 @@ export class BasicInfoPaymentsAndPoliciesEditComponent extends BaseComponent imp
 	}
 	protected didSelectPaymentMethod() {
 		return this._paymPoliciesEditService.didSelectPaymentMethod();
+	}
+
+	savePaymentsAndPolicies() {
+		this.isSaving = true;
+		this._paymPoliciesEditService.savePaymentsAndPolicies().subscribe((result: any) => {
+			this.isSaving = false;
+			this._appContext.toaster.success(this._appContext.thTranslation.translate("Information Saved Succesfully"));
+		}, (error: any) => {
+			this.isSaving = false;
+		});
 	}
 }

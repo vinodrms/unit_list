@@ -1,0 +1,13 @@
+<div class="scroll-view">
+	<div id="sidebar-menu" class="main_menu_side main_menu">
+		<div class="menu_section">
+			<ul class="nav side-menu">
+				<li *ngFor="#settingsPage of settingsPageList" [ngClass]="{'current-page': settingsPage.selected}">
+					<a (click)="changePage(settingsPage)"> 
+						{{settingsPage.pageName | translate}}<span class="pull-right unitpal-font">{{settingsPage.iconFontName}}</span>
+					</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>
