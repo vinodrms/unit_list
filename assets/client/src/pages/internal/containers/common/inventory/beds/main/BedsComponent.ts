@@ -1,4 +1,4 @@
-import {Component, ViewChild, AfterViewInit, Output, EventEmitter} from 'angular2/core';
+import {Component, ViewChild, AfterViewInit, Output, EventEmitter, DynamicComponentLoader, Type, ResolvedProvider, ElementRef} from 'angular2/core';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/combineLatest';
 import {BaseComponent} from '../../../../../../../common/base/BaseComponent';
@@ -14,31 +14,34 @@ import {InventoryScreenAction} from '../../utils/state-manager/InventoryScreenAc
 import {BedOverviewComponent} from '../pages/bed-overview/BedOverviewComponent';
 import {BedEditComponent} from '../pages/bed-edit/BedEditComponent';
 
-//TODO: change this code to use Decorator
-import {WizardStepsComponent} from '../../../../wizard/pages/utils/wizard-steps/WizardStepsComponent';
-
 @Component({
     selector: 'beds',
     templateUrl: '/client/src/pages/internal/containers/common/inventory/beds/main/template/beds.html',
     providers: [BedsService, BedTableMetaBuilderService],
-    directives: [WizardStepsComponent, LazyLoadingTableComponent, BedOverviewComponent, BedEditComponent]
+    directives: [LazyLoadingTableComponent, BedOverviewComponent, BedEditComponent]
 })
 export class BedsComponent extends BaseComponent {
     @Output() protected onScreenStateTypeChanged = new EventEmitter();
     @Output() protected onItemDeleted = new EventEmitter();
-    
+
     @ViewChild(LazyLoadingTableComponent)
     private _bedTableComponent: LazyLoadingTableComponent<BedVM>;
 
     private _inventoryStateManager: InventoryStateManager<BedVM>;
 
-    constructor(private _appContext: AppContext,
+    constructor(private _dynamicComponentLoader: DynamicComponentLoader,
+        private _elementRef: ElementRef,
+        private _appContext: AppContext,
         private _tableBuilder: BedTableMetaBuilderService,
         private _bedsService: BedsService) {
         super();
         this._inventoryStateManager = new InventoryStateManager<BedVM>(this._appContext, "bed.id");
         this.registerStateChange();
     }
+    public bootstrapOverviewBottom(componentToInject: Type, providers: ResolvedProvider[]) {
+        this._dynamicComponentLoader.loadIntoLocation(componentToInject, this._elementRef, "overviewBottom", providers);
+    }
+    
     private registerStateChange() {
         this._inventoryStateManager.stateChangedObservable.subscribe((currentState: InventoryScreenStateType) => {
             this.onScreenStateTypeChanged.next(currentState);
@@ -47,18 +50,18 @@ export class BedsComponent extends BaseComponent {
     private registerItemDeletion(deletedBed: BedDO) {
         this.onItemDeleted.next(deletedBed);
     }
-    
-    public ngAfterViewInit() {
+
+    protected ngAfterViewInit() {
         this._bedTableComponent.bootstrap(this._bedsService, this._tableBuilder.buildLazyLoadTableMeta());
     }
 
-    public get isEditing(): boolean {
+    protected get isEditing(): boolean {
         return this._inventoryStateManager.screenStateType === InventoryScreenStateType.Edit;
     }
-    public get selectedBedVM(): BedVM {
+    protected get selectedBedVM(): BedVM {
         return this._inventoryStateManager.currentItem;
     }
-    public addBed() {
+    protected addBed() {
         var newBedVM = this.buildNewBedVM();
         this._inventoryStateManager.canPerformAction(InventoryScreenAction.Add).then((newState: InventoryScreenStateType) => {
             this._bedTableComponent.deselectItem();
@@ -67,7 +70,7 @@ export class BedsComponent extends BaseComponent {
             this._inventoryStateManager.screenStateType = newState;
         }).catch((e: any) => { });
     }
-    public copyBed(bedVM: BedVM) {
+    protected copyBed(bedVM: BedVM) {
         var newBedVM = bedVM.buildPrototype();
         delete newBedVM.bed.id;
         newBedVM.bed.name = '';
@@ -78,7 +81,7 @@ export class BedsComponent extends BaseComponent {
             this._inventoryStateManager.screenStateType = newState;
         }).catch((e: any) => { });
     }
-    public editBed(bedVM: BedVM) {
+    protected editBed(bedVM: BedVM) {
         var newBedVM = bedVM.buildPrototype();
         this._inventoryStateManager.canPerformAction(InventoryScreenAction.Edit, newBedVM).then((newState: InventoryScreenStateType) => {
             this._bedTableComponent.selectItem(bedVM);
@@ -87,7 +90,7 @@ export class BedsComponent extends BaseComponent {
             this._inventoryStateManager.screenStateType = newState;
         }).catch((e: any) => { });
     }
-    public deleteBed(bedVM: BedVM) {
+    protected deleteBed(bedVM: BedVM) {
         var newBedVM = bedVM.buildPrototype();
         this._inventoryStateManager.canPerformAction(InventoryScreenAction.Delete, newBedVM).then((newState: InventoryScreenStateType) => {
             var title = this._appContext.thTranslation.translate("Delete Bed");
@@ -113,7 +116,7 @@ export class BedsComponent extends BaseComponent {
         });
     }
 
-    public selectBed(bedVM: BedVM) {
+    protected selectBed(bedVM: BedVM) {
         var newBedVM = bedVM.buildPrototype();
         this._inventoryStateManager.canPerformAction(InventoryScreenAction.Select, newBedVM).then((newState: InventoryScreenStateType) => {
             this._bedTableComponent.selectItem(newBedVM);
@@ -123,7 +126,7 @@ export class BedsComponent extends BaseComponent {
         }).catch((e: any) => { });
     }
 
-    public showViewScreen() {
+    protected showViewScreen() {
         this._bedTableComponent.deselectItem();
 
         this._inventoryStateManager.currentItem = null;

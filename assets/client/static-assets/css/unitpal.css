@@ -854,3 +854,9 @@ input[type="file"] {
   width: 100%;
   height: 2px;
 }
+.th-padding-top {
+    padding-top: 12px;
+}
+.th-padding-bottom {
+    padding-bottom: 12px;
+}
