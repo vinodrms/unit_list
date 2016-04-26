@@ -59,6 +59,11 @@ export class MongoHotelDetailsRepository extends MongoRepository {
 			"timezone": propertyDetails.timezone
 		});
 	}
+	public markConfigurationCompleted(hotelMeta: HotelMetaRepoDO): Promise<HotelDO> {
+		return this.findAndModifyHotel(hotelMeta, {
+			"configurationCompleted": true
+		});
+	}
 
 	private findAndModifyHotel(hotelMeta: HotelMetaRepoDO, updateQuery: Object): Promise<HotelDO> {
 		return new Promise<HotelDO>((resolve: { (updatedHotel: HotelDO): void }, reject: { (err: any): void }) => {

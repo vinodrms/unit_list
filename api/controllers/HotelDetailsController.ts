@@ -8,6 +8,7 @@ import {UserDO} from '../core/data-layer/hotel/data-objects/user/UserDO';
 import {HotelUpdateBasicInfo} from '../core/domain-layer/hotel-details/basic-info/HotelUpdateBasicInfo';
 import {HotelUpdatePaymentsPolicies} from '../core/domain-layer/hotel-details/payment-policies/HotelUpdatePaymentsPolicies';
 import {HotelUpdatePropertyDetails} from '../core/domain-layer/hotel-details/property-details/HotelUpdatePropertyDetails';
+import {HotelConfigurations} from '../core/domain-layer/hotel-details/config-completed/HotelConfigurations';
 
 class HotelDetailsController extends BaseController {
 	public getDetails(req: Express.Request, res: Express.Response) {
@@ -42,6 +43,14 @@ class HotelDetailsController extends BaseController {
 			this.returnErrorResponse(req, res, err, ThStatusCode.HotelDetailsControllerErrorUpdatingPropertyDetails);
 		});
 	}
+	public markConfigurationCompleted(req: Express.Request, res: Express.Response) {
+		var hotelConfigurationStatus = new HotelConfigurations(req.appContext, req.sessionContext);
+		hotelConfigurationStatus.markAsCompleted().then((configurationCompleted: boolean) => {
+			this.returnSuccesfulResponse(req, res, { configurationCompleted: configurationCompleted });
+		}).catch((err: any) => {
+			this.returnErrorResponse(req, res, err, ThStatusCode.HotelDetailsControllerErrorUpdatingPropertyDetails);
+		});
+	}
 }
 
 var hotelDetailsController = new HotelDetailsController();
@@ -50,4 +59,5 @@ module.exports = {
 	updateBasicInfo: hotelDetailsController.updateBasicInfo.bind(hotelDetailsController),
 	updatePaymentsAndPolicies: hotelDetailsController.updatePaymentsAndPolicies.bind(hotelDetailsController),
 	updatePropertyDetails: hotelDetailsController.updatePropertyDetails.bind(hotelDetailsController),
+	markConfigurationCompleted: hotelDetailsController.markConfigurationCompleted.bind(hotelDetailsController)
 }

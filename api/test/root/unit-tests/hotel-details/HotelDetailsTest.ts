@@ -15,8 +15,9 @@ import {HotelDetailsDO} from '../../../../core/domain-layer/hotel-details/utils/
 import {HotelDetailsTestHelper} from './helpers/HotelDetailsTestHelper';
 import {HotelUpdatePaymentsPolicies} from '../../../../core/domain-layer/hotel-details/payment-policies/HotelUpdatePaymentsPolicies';
 import {HotelUpdatePropertyDetails} from '../../../../core/domain-layer/hotel-details/property-details/HotelUpdatePropertyDetails';
+import {HotelConfigurations} from '../../../../core/domain-layer/hotel-details/config-completed/HotelConfigurations';
 
-describe("Hotel Details Tests", function() {
+describe("Hotel Details Tests", function () {
 	var InvalidDayHour = 30;
 
     var testContext: TestContext;
@@ -24,14 +25,14 @@ describe("Hotel Details Tests", function() {
 	var hotelDetailsTestHelper: HotelDetailsTestHelper;
 	var testHotelDetailsDO: HotelDetailsDO;
 
-	before(function(done: any) {
+	before(function (done: any) {
 		hotelDetailsTestHelper = new HotelDetailsTestHelper();
 		testContext = new TestContext();
 		testDataBuilder = new DefaultDataBuilder(testContext);
 		testDataBuilder.buildWithDoneCallback(done);
     });
-	describe("Hotel Details Flow", function() {
-        it("Should get the hotel details", function(done) {
+	describe("Hotel Details Flow", function () {
+        it("Should get the hotel details", function (done) {
 			var hotelDetails = new HotelGetDetails(testContext.appContext, testContext.sessionContext);
 			hotelDetails.getDetails().then((details: HotelDetailsDO) => {
 				testHotelDetailsDO = details;
@@ -46,7 +47,7 @@ describe("Hotel Details Tests", function() {
 				done(e);
 			});
         });
-		it("Should update the hotel basic information", function(done) {
+		it("Should update the hotel basic information", function (done) {
 			var basicUpdateDO = hotelDetailsTestHelper.getHotelUpdateBasicInfoDO(testDataBuilder.hotelDO);
 			var updateBasicInfo = new HotelUpdateBasicInfo(testContext.appContext, testContext.sessionContext, basicUpdateDO);
 			updateBasicInfo.update().then((details: HotelDetailsDO) => {
@@ -62,10 +63,19 @@ describe("Hotel Details Tests", function() {
 				done(e);
 			});
         });
+		it("Should mark the hotel's configurationCompleted as true", function (done) {
+			var hotelConfigurationStatus = new HotelConfigurations(testContext.appContext, testContext.sessionContext);
+			hotelConfigurationStatus.markAsCompleted().then((configurationCompleted: boolean) => {
+				should.equal(configurationCompleted, true);
+				done();
+			}).catch((e: any) => {
+				done(e);
+			});
+        });
     });
 
-	describe("Hotel Payments and Policies", function() {
-		it("Should not update the hotel payments and policies using invalid currency code", function(done) {
+	describe("Hotel Payments and Policies", function () {
+		it("Should not update the hotel payments and policies using invalid currency code", function (done) {
 			var paymPoliciesDO = hotelDetailsTestHelper.getHotelUpdatePaymentsPoliciesDO(testDataBuilder);
 			paymPoliciesDO.ccyCode = "XXX";
 			var updatePaymPolicies = new HotelUpdatePaymentsPolicies(testContext.appContext, testContext.sessionContext);
@@ -76,7 +86,7 @@ describe("Hotel Details Tests", function() {
 				done();
 			});
         });
-		it("Should not update the hotel payments and policies using invalid payment id", function(done) {
+		it("Should not update the hotel payments and policies using invalid payment id", function (done) {
 			var paymPoliciesDO = hotelDetailsTestHelper.getHotelUpdatePaymentsPoliciesDO(testDataBuilder);
 			paymPoliciesDO.paymentMethodIdList.push("1111111111111");
 			var updatePaymPolicies = new HotelUpdatePaymentsPolicies(testContext.appContext, testContext.sessionContext);
@@ -87,7 +97,7 @@ describe("Hotel Details Tests", function() {
 				done();
 			});
         });
-		it("Should update the hotel payments and policies", function(done) {
+		it("Should update the hotel payments and policies", function (done) {
 			var paymPoliciesDO = hotelDetailsTestHelper.getHotelUpdatePaymentsPoliciesDO(testDataBuilder);
 			var updatePaymPolicies = new HotelUpdatePaymentsPolicies(testContext.appContext, testContext.sessionContext);
 			updatePaymPolicies.update(paymPoliciesDO).then((details: HotelDetailsDO) => {
@@ -101,8 +111,8 @@ describe("Hotel Details Tests", function() {
         });
     });
 
-	describe("Hotel Property Details Tests", function() {
-		it("Should not update the hotel property details using null check in from hour", function(done) {
+	describe("Hotel Property Details Tests", function () {
+		it("Should not update the hotel property details using null check in from hour", function (done) {
 			var propertyDetails = hotelDetailsTestHelper.getHotelUpdatePropertyDetailsDO(testDataBuilder);
 			propertyDetails.operationHours.checkInFrom.hour = null;
 			var updtPropertyDetails = new HotelUpdatePropertyDetails(testContext.appContext, testContext.sessionContext, propertyDetails);
@@ -113,7 +123,7 @@ describe("Hotel Details Tests", function() {
 				done();
 			});
         });
-		it("Should not update the hotel property details using invalid check in from hour", function(done) {
+		it("Should not update the hotel property details using invalid check in from hour", function (done) {
 			var propertyDetails = hotelDetailsTestHelper.getHotelUpdatePropertyDetailsDO(testDataBuilder);
 			propertyDetails.operationHours.checkInFrom.hour = InvalidDayHour;
 			var updtPropertyDetails = new HotelUpdatePropertyDetails(testContext.appContext, testContext.sessionContext, propertyDetails);
@@ -124,7 +134,7 @@ describe("Hotel Details Tests", function() {
 				done();
 			});
         });
-		it("Should not update the hotel property details using invalid amenity id", function(done) {
+		it("Should not update the hotel property details using invalid amenity id", function (done) {
 			var propertyDetails = hotelDetailsTestHelper.getHotelUpdatePropertyDetailsDO(testDataBuilder);
 			propertyDetails.amenityIdList.push("1111111111");
 			var updtPropertyDetails = new HotelUpdatePropertyDetails(testContext.appContext, testContext.sessionContext, propertyDetails);
@@ -135,7 +145,7 @@ describe("Hotel Details Tests", function() {
 				done();
 			});
         });
-		it("Should not update the hotel property details using invalid timezone", function(done) {
+		it("Should not update the hotel property details using invalid timezone", function (done) {
 			var propertyDetails = hotelDetailsTestHelper.getHotelUpdatePropertyDetailsDO(testDataBuilder);
 			propertyDetails.timezone = "BukaresTimezone";
 			var updtPropertyDetails = new HotelUpdatePropertyDetails(testContext.appContext, testContext.sessionContext, propertyDetails);
@@ -146,7 +156,7 @@ describe("Hotel Details Tests", function() {
 				done();
 			});
         });
-		it("Should update the hotel property details using valid data", function(done) {
+		it("Should update the hotel property details using valid data", function (done) {
 			var propertyDetails = hotelDetailsTestHelper.getHotelUpdatePropertyDetailsDO(testDataBuilder);
 			var updtPropertyDetails = new HotelUpdatePropertyDetails(testContext.appContext, testContext.sessionContext, propertyDetails);
 			updtPropertyDetails.update().then((details: HotelDetailsDO) => {
@@ -165,7 +175,7 @@ describe("Hotel Details Tests", function() {
 				done(e);
 			});
         });
-		it("Should update the hotel property details using valid data containing optional null values", function(done) {
+		it("Should update the hotel property details using valid data containing optional null values", function (done) {
 			var propertyDetails = hotelDetailsTestHelper.getHotelUpdatePropertyDetailsDO(testDataBuilder);
 			propertyDetails.operationHours.checkInToOptional.hour = null;
 			propertyDetails.operationHours.checkInToOptional.minute = null;

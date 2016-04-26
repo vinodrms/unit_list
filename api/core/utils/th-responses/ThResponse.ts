@@ -58,6 +58,7 @@ export enum ThStatusCode {
     HotelGetDetailsError,
     HotelGetDetailsErrorFormattingResponse,
     HotelGetDetailsErrorFindingUserByEmail,
+    HotelConfigurationsErrorMarkingAsCompleted,
     HotelDetailsControllerErrorGettingDetails,
     HotelDetailsControllerErrorUpdatingBasicInfo,
     HotelDetailsControllerErrorAddingPaymentsAndPolicies,
@@ -310,6 +311,7 @@ ThMessage[ThStatusCode.PatchErrorEnsuringUniqueIndexOnSettings] = "Error ensurin
 ThMessage[ThStatusCode.HotelGetDetailsError] = "Error getting details for the hotel. Please try again.";
 ThMessage[ThStatusCode.HotelGetDetailsErrorFormattingResponse] = "Error updating the details for the hotel. Please try again.";
 ThMessage[ThStatusCode.HotelGetDetailsErrorFindingUserByEmail] = "Error getting the details for the hotel. Please try again.";
+ThMessage[ThStatusCode.HotelConfigurationsErrorMarkingAsCompleted] = "Error marking the configurations as completed.";
 ThMessage[ThStatusCode.HotelDetailsControllerErrorGettingDetails] = "Error getting the details for your hotel. Please try again.";
 ThMessage[ThStatusCode.HotelDetailsControllerErrorUpdatingBasicInfo] = "Error updating the basic information. Please try again.";
 ThMessage[ThStatusCode.HotelDetailsControllerErrorAddingPaymentsAndPolicies] = "Error adding payments and policies. Please try again.";
