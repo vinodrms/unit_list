@@ -1,5 +1,5 @@
 import {Injectable} from 'angular2/core';
-import {AppContext} from '../../../../../../../common/utils/AppContext';
+import {AppContext, ThServerApi} from '../../../../../../../common/utils/AppContext';
 import {IWizardState, WizardStateMeta} from './IWizardState';
 import {IWizardController} from './IWizardController';
 import {WizardBasicInformationStateService} from '../basic-information/main/services/WizardBasicInformationStateService';
@@ -42,10 +42,15 @@ export class WizardService implements IWizardState, IWizardController {
 
 	public moveNext() {
 		if (this._currentState.stateIndex == this._stateList.length - 1) {
+			// TODO: decomment next line to mark the configuration as completed
+			// this.markConfigurationCompleted();
 			this._appContext.routerNavigator.navigateTo(WizardService.HomeNavigationPath);
 			return;
 		}
 		this.setCurrentState(this._currentState.stateIndex + 1, true);
+	}
+	private markConfigurationCompleted() {
+		this._appContext.thHttp.post(ThServerApi.HotelDetailsMarkConfigurationCompleted, {}).subscribe((result: any) => {});
 	}
 	public movePrevious() {
 		if (this._currentState.stateIndex == 0) {

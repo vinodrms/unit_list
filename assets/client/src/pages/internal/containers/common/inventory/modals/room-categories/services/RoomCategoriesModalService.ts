@@ -1,4 +1,4 @@
-import {Injectable, Injector, provide} from 'angular2/core';
+import {Injectable, ReflectiveInjector, provide} from 'angular2/core';
 import {AppContext} from '../../../../../../../../common/utils/AppContext';
 import {ModalDialogInstance} from '../../../../../../../../common/utils/modals/utils/ModalDialogInstance';
 import {RoomCategoriesModalComponent} from '../RoomCategoriesModalComponent';
@@ -18,7 +18,7 @@ export class RoomCategoriesModalService {
 		roomCategInput.roomCategoriesType = RoomCategoriesType.AllCategories;
 		roomCategInput.allowMultiSelection = false;
 
-		return this._appContext.modalService.open<any>(<any>RoomCategoriesModalComponent, Injector.resolve([
+		return this._appContext.modalService.open<any>(<any>RoomCategoriesModalComponent, ReflectiveInjector.resolve([
 			provide(RoomCategoriesModalInput, { useValue: roomCategInput })
 		]));
 	}
@@ -29,7 +29,7 @@ export class RoomCategoriesModalService {
 		roomCategInput.roomCategoriesType = RoomCategoriesType.UsedInRooms;
 		roomCategInput.allowMultiSelection = true;
 
-		return this._appContext.modalService.open<any>(<any>RoomCategoriesModalComponent, Injector.resolve([
+		return this._appContext.modalService.open<any>(<any>RoomCategoriesModalComponent, ReflectiveInjector.resolve([
 			provide(RoomCategoriesModalInput, { useValue: roomCategInput })
 		]));
 	}

@@ -1,4 +1,4 @@
-import {Injectable, DynamicComponentLoader, ComponentRef, ElementRef} from 'angular2/core';
+import {Injectable, DynamicComponentLoader, ComponentRef, ViewContainerRef} from 'angular2/core';
 import {IToaster} from './IToaster';
 import {Toast, ToastType} from './utils/Toast';
 import {ToastContainerComponent} from './utils/ToastContainerComponent';
@@ -12,8 +12,8 @@ export class Toaster implements IToaster {
 	constructor(private _loader: DynamicComponentLoader) {
 	}
 
-	public bootstrap(elementRef: ElementRef) {
-		this._loader.loadNextToLocation(ToastContainerComponent, elementRef)
+	public bootstrap(viewContainerRef: ViewContainerRef) {
+		this._loader.loadNextToLocation(ToastContainerComponent, viewContainerRef)
 			.then((ref) => {
 				this._container = ref;
 			});

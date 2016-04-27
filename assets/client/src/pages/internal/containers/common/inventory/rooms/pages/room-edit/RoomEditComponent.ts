@@ -173,7 +173,6 @@ export class RoomEditComponent extends BaseFormComponent implements OnInit {
     }
     
     public diChangeSelectedBedList(savedBedVMList: BedVM[]) {
-        debugger
         this.roomVM.bedList = savedBedVMList;
     }
 }

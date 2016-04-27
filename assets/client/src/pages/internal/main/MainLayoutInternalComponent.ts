@@ -1,4 +1,4 @@
-import {Component, Inject, ElementRef} from 'angular2/core';
+import {Component, Inject, ViewContainerRef} from 'angular2/core';
 import {ROUTER_DIRECTIVES, RouteConfig} from 'angular2/router';
 import {BaseComponent} from '../../../common/base/BaseComponent';
 import {IToaster} from '../../../common/utils/toaster/IToaster';
@@ -20,9 +20,9 @@ import {MainWizardComponent} from '../containers/wizard/main/MainWizardComponent
 ])
 
 export class MainLayoutInternalComponent extends BaseComponent {
-	constructor(elementRef: ElementRef, @Inject(IToaster) toaster: IToaster, @Inject(IModalService) modalService: IModalService) {
+	constructor(viewContainerRef: ViewContainerRef, @Inject(IToaster) toaster: IToaster, @Inject(IModalService) modalService: IModalService) {
 		super();
-		toaster.bootstrap(elementRef);
-		modalService.bootstrap(elementRef);
+		toaster.bootstrap(viewContainerRef);
+		modalService.bootstrap(viewContainerRef);
 	}
 }

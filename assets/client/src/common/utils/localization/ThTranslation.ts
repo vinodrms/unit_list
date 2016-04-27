@@ -26,7 +26,7 @@ export class ThTranslation {
 	private _locale: Locales;
 	private _translationJson: Object = {};
 
-	constructor(@Inject(IThCookie) private _thCookie: IThCookie) {
+	constructor( @Inject(IThCookie) private _thCookie: IThCookie) {
 		this._thUtils = new ThUtils();
 		this.updateDefaultLocale();
 	}
@@ -97,6 +97,9 @@ export class ThTranslation {
 	private applyTemplateRegexToParams(phrase: string, parameters?: Object): string {
 		if (this._thUtils.isUndefinedOrNull(parameters) && !_.isObject(parameters)) {
 			return phrase;
+		}
+		if (!_.isString(phrase)) {
+			return "";
 		}
 		return phrase.replace(ThTranslation.TemplateVariableRegex, (substring: string, actualKey: string) => {
 			if (this._thUtils.isUndefinedOrNull(parameters, actualKey)) {

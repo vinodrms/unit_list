@@ -1,4 +1,4 @@
-import {Injectable, Injector, provide} from 'angular2/core';
+import {Injectable, ReflectiveInjector, provide} from 'angular2/core';
 import {AppContext} from '../../../../../../../../common/utils/AppContext';
 import {ModalDialogInstance} from '../../../../../../../../common/utils/modals/utils/ModalDialogInstance';
 import {BedsModalComponent} from '../BedsModalComponent';
@@ -18,7 +18,7 @@ export class BedsModalService {
         bedsModalInput.selectedBedVMList = selectedBedVMList;
         bedsModalInput.minNoOfBeds = minNoOfBeds;
         bedsModalInput.maxNoOfBeds = maxNoOfBeds;
-		return this._appContext.modalService.open<any>(<any>BedsModalComponent, Injector.resolve([ 
+		return this._appContext.modalService.open<any>(<any>BedsModalComponent, ReflectiveInjector.resolve([ 
             provide(BedsModalInput, {useValue: bedsModalInput})
         ]));
 	}

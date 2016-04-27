@@ -20,7 +20,7 @@
 			<div class="col-xs-4 col-md-4" *ngIf="!isCollapsed">
 				<div>
 					<label>{{ 'Show' | translate }}
-						<select [ngModel]="paginationIndex.numOfItemsPerPage" (change)="didChangeNumOfItemsPerPage($event.target.value)">
+						<select [ngModel]="paginationIndex.numOfItemsPerPage" (ngModelChange)="didChangeNumOfItemsPerPage($event)">
 							<option *ngFor="#nomPerPage of paginationIndex.nunOfItemsPerPageList" [value]="nomPerPage">
 								{{nomPerPage}}
 							</option>

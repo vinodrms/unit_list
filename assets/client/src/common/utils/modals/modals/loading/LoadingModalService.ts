@@ -1,4 +1,4 @@
-import {Injectable, Inject, Injector} from 'angular2/core';
+import {Injectable, Inject, ReflectiveInjector} from 'angular2/core';
 import {IModalService} from '../../IModalService';
 import {LoadingModalComponent} from './LoadingModalComponent';
 import {ModalDialogInstance} from '../../utils/ModalDialogInstance';
@@ -14,7 +14,7 @@ export class LoadingModalService {
 		if (this._dialogInstance) {
 			return;
 		}
-		this._modalService.open(<any>LoadingModalComponent, Injector.resolve([]))
+		this._modalService.open(<any>LoadingModalComponent, ReflectiveInjector.resolve([]))
 			.then((dialogInstance: ModalDialogInstance<any>) => {
 				this._dialogInstance = dialogInstance;
 				completionBlock();

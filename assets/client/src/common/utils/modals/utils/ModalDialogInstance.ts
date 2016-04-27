@@ -33,19 +33,19 @@ export class ModalDialogInstance<T> {
         if (this._contentRef.instance.isBlocking && this._contentRef.instance.isBlocking() === true) {
 			return;
 		}
-        this.dispose();
+        this.destroy();
     }
 	public closeForced() {
-		this.dispose();
+		this.destroy();
 	}
 
-    private dispose() {
+    private destroy() {
 		if (this._resultObserver) {
 			this._resultObserver.complete();
 		}
-        this._containerRef.dispose();
-        this._backdropRef.dispose();
-        this._contentRef.dispose();
+        this._containerRef.destroy();
+        this._backdropRef.destroy();
+        this._contentRef.destroy();
     }
 
 	public get backdropRef(): ComponentRef {

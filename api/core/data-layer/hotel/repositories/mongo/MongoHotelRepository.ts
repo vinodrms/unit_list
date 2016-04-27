@@ -7,7 +7,7 @@ import {ActionTokenDO} from '../../data-objects/user/ActionTokenDO';
 import {HotelContactDetailsDO} from '../../data-objects/hotel-contact-details/HotelContactDetailsDO';
 import {GeoLocationDO} from '../../../common/data-objects/geo-location/GeoLocationDO';
 import {IHotelRepository, HotelMetaRepoDO, BasicHotelInfoRepoDO, UserAccountActivationRepoDO, RequestResetPasswordRepoDO,
-ResetPasswordRepoDO, PaymentsPoliciesRepoDO, PropertyDetailsRepoDO} from '../IHotelRepository';
+	ResetPasswordRepoDO, PaymentsPoliciesRepoDO, PropertyDetailsRepoDO} from '../IHotelRepository';
 
 export class MongoHotelRepository extends MongoRepository implements IHotelRepository {
 	private _accountActionsRepository: MongoHotelAccountRepository;
@@ -45,5 +45,8 @@ export class MongoHotelRepository extends MongoRepository implements IHotelRepos
 	}
 	public updatePropertyDetails(hotelMeta: HotelMetaRepoDO, propertyDetails: PropertyDetailsRepoDO): Promise<HotelDO> {
 		return this._hotelDetailsRepository.updatePropertyDetails(hotelMeta, propertyDetails);
+	}
+	public markConfigurationCompleted(hotelMeta: HotelMetaRepoDO): Promise<HotelDO> {
+		return this._hotelDetailsRepository.markConfigurationCompleted(hotelMeta);
 	}
 }

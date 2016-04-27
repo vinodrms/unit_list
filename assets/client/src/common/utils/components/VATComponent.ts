@@ -30,7 +30,7 @@ export interface VatResponse {
 			<div class="col-xs-12 col-md-6 form-group">
 				<label>{{ 'Country' | translate }}</label>
 				<div class="input-group" [ngClass]="{'form-warning': displayCountryError()}">
-					<select class="form-control" [ngModel]="vatDetails.countryCode" (change)="didSelectCountryCode($event.target.value)">
+					<select class="form-control" [ngModel]="vatDetails.countryCode" (ngModelChange)="didSelectCountryCode($event)">
 						<option value="" disabled>{{ 'Select a country' | translate }}</option>
 						<option *ngFor="#country of countryList" [value]="country.code">{{country.name}}</option>
 					</select>

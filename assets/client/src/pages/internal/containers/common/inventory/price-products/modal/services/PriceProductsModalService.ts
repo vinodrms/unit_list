@@ -1,4 +1,4 @@
-import {Injectable, Injector, provide} from 'angular2/core';
+import {Injectable, ReflectiveInjector, provide} from 'angular2/core';
 import {AppContext} from '../../../../../../../../common/utils/AppContext';
 import {ModalDialogInstance} from '../../../../../../../../common/utils/modals/utils/ModalDialogInstance';
 import {PriceProductsModalInput} from './utils/PriceProductsModalInput';
@@ -13,7 +13,7 @@ export class PriceProductsModalService {
 		var priceProductModalInput = new PriceProductsModalInput();
 		priceProductModalInput.priceProductStatus = priceProductStatus;
 
-		return this._appContext.modalService.open<any>(<any>PriceProductsModalComponent, Injector.resolve([
+		return this._appContext.modalService.open<any>(<any>PriceProductsModalComponent, ReflectiveInjector.resolve([
 			provide(PriceProductsModalInput, { useValue: priceProductModalInput })
 		]));
 	}

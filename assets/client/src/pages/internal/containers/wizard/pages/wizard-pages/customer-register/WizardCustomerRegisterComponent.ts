@@ -1,4 +1,4 @@
-import {Component, ViewChild, OnInit, AfterViewInit, Injector, provide} from 'angular2/core';
+import {Component, ViewChild, OnInit, AfterViewInit, ReflectiveInjector, provide} from 'angular2/core';
 import {BaseComponent} from '../../../../../../../common/base/BaseComponent';
 import {TranslationPipe} from '../../../../../../../common/utils/localization/TranslationPipe';
 import {WizardCustomerRegisterStateService} from './services/WizardCustomerRegisterStateService';
@@ -44,7 +44,7 @@ export class WizardCustomerRegisterComponent extends BaseComponent implements On
 		});
 	}
 	private initializeWizardStepsComponent() {
-		this._customerRegisterComponent.bootstrapOverviewBottom(WizardStepsComponent, Injector.resolve([provide(WizardService, { useValue: this._wizardService })]))
+		this._customerRegisterComponent.bootstrapOverviewBottom(WizardStepsComponent, ReflectiveInjector.resolve([provide(WizardService, { useValue: this._wizardService })]))
 	}
 
 	public didChangeScreenStateType(screenStateType: InventoryScreenStateType) {

@@ -1,4 +1,4 @@
-import {Component, ViewChild, OnInit, AfterViewInit, Injector, provide} from 'angular2/core';
+import {Component, ViewChild, OnInit, AfterViewInit, ReflectiveInjector, provide} from 'angular2/core';
 import {BaseComponent} from '../../../../../../../common/base/BaseComponent';
 import {WizardRoomsStateService} from './services/WizardRoomsStateService';
 import {TranslationPipe} from '../../../../../../../common/utils/localization/TranslationPipe';
@@ -40,7 +40,7 @@ export class WizardRoomsComponent extends BaseComponent implements OnInit, After
 		});
 	}
 	private initializeWizardStepsComponent() {
-		this._roomsComponent.bootstrapOverviewBottom(WizardStepsComponent, Injector.resolve([provide(WizardService, { useValue: this._wizardService })]))
+		this._roomsComponent.bootstrapOverviewBottom(WizardStepsComponent, ReflectiveInjector.resolve([provide(WizardService, { useValue: this._wizardService })]))
 	}
 
     public didChangeScreenStateType(screenStateType: InventoryScreenStateType) {

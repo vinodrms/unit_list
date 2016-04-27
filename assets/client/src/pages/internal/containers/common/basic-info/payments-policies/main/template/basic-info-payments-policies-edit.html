@@ -7,7 +7,7 @@
 		</label>
 		<div class="form-group">
 			<div class="input-group" [ngClass]="{'form-warning': (!hotel.ccyCode && didSubmitForm)}">
-				<select class="form-control" [ngModel]="hotel.ccyCode" (change)="didChangeCurrencyCode($event.target.value)">
+				<select class="form-control" [ngModel]="hotel.ccyCode" (ngModelChange)="didChangeCurrencyCode($event)">
 					<option value="" disabled>{{ 'Select a currency' | translate }}</option>
 					<option *ngFor="#currency of currencies.currencyList" [value]="currency.code">{{currency.code}} - {{currency.name}}</option>
 				</select>

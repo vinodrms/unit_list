@@ -1,4 +1,4 @@
-import { Component } from 'angular2/core';
+import { Component, ViewChild, ViewContainerRef } from 'angular2/core';
 
 /**
  * Represents the modal backdrop.
@@ -18,6 +18,8 @@ import { Component } from 'angular2/core';
     template: '<div class="in modal-backdrop" #modalBackdrop></div>'
 })
 export class ModalBackdropComponent {
+    @ViewChild('modalBackdrop', {read: ViewContainerRef}) viewContainerRef: ViewContainerRef;
+    
     public position: string;
     public height: string;
     public width: string;

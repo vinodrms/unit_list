@@ -8,6 +8,7 @@ export enum ThServerApi {
 	HotelDetailsUpdateBasicInfo,
     HotelDetailsUpdatePaymentsAndPolicies,
     HotelDetailsUpdatePropertyDetails,
+	HotelDetailsMarkConfigurationCompleted,
 	SettingsHotelAmenities,
 	SettingsPaymentMethods,
 	SettingsCountries,
@@ -73,6 +74,7 @@ ThServerApiUrl[ThServerApi.ServiceTimezones] = "/service/availableTimeZones";
 ThServerApiUrl[ThServerApi.HotelDetailsUpdateBasicInfo] = "/hotel/updateBasicInfo";
 ThServerApiUrl[ThServerApi.HotelDetailsUpdatePaymentsAndPolicies] = "/hotel/updatePaymentsAndPolicies";
 ThServerApiUrl[ThServerApi.HotelDetailsUpdatePropertyDetails] = "/hotel/updatePropertyDetails";
+ThServerApiUrl[ThServerApi.HotelDetailsMarkConfigurationCompleted] = "/hotel/markConfigurationCompleted";
 ThServerApiUrl[ThServerApi.Taxes] = "/taxes";
 ThServerApiUrl[ThServerApi.TaxesSaveItem] = "/taxes/saveTaxItem";
 ThServerApiUrl[ThServerApi.AddOnProducts] = "/addOnProducts";

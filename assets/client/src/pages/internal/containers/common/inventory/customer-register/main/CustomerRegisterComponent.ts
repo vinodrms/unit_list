@@ -1,4 +1,4 @@
-import {Component, Output, EventEmitter, ViewChild, AfterViewInit, DynamicComponentLoader, Type, ResolvedProvider, ElementRef} from 'angular2/core';
+import {Component, Output, EventEmitter, ViewChild, AfterViewInit, DynamicComponentLoader, Type, ResolvedReflectiveProvider, ViewContainerRef} from 'angular2/core';
 import {BaseComponent} from '../../../../../../../common/base/BaseComponent';
 import {TranslationPipe} from '../../../../../../../common/utils/localization/TranslationPipe';
 import {AppContext, ThError} from '../../../../../../../common/utils/AppContext';
@@ -26,6 +26,7 @@ import {CustomerRegisterEditContainerComponent} from '../pages/customer-edit/con
 })
 export class CustomerRegisterComponent extends BaseComponent implements AfterViewInit {
     @Output() protected onScreenStateTypeChanged = new EventEmitter();
+	@ViewChild('overviewBottom', {read: ViewContainerRef}) private _overviewBottomVCRef: ViewContainerRef;
 
 	@ViewChild(LazyLoadingTableComponent)
 	private _aopTableComponent: LazyLoadingTableComponent<CustomerVM>;
@@ -34,7 +35,6 @@ export class CustomerRegisterComponent extends BaseComponent implements AfterVie
 	private _customerType: CustomerType;
 
     constructor(private _dynamicComponentLoader: DynamicComponentLoader,
-        private _elementRef: ElementRef,
         private _appContext: AppContext,
 		private _customersService: CustomersService,
         private _tableBuilder: CustomerRegisterTableMetaBuilderService,
@@ -43,8 +43,8 @@ export class CustomerRegisterComponent extends BaseComponent implements AfterVie
 		this._inventoryStateManager = new InventoryStateManager<CustomerVM>(this._appContext, "customer.id");
 		this.registerStateChange();
     }
-    public bootstrapOverviewBottom(componentToInject: Type, providers: ResolvedProvider[]) {
-        this._dynamicComponentLoader.loadIntoLocation(componentToInject, this._elementRef, "overviewBottom", providers);
+    public bootstrapOverviewBottom(componentToInject: Type, providers: ResolvedReflectiveProvider[]) {
+        this._dynamicComponentLoader.loadNextToLocation(componentToInject, this._overviewBottomVCRef, providers);
     }
 	private registerStateChange() {
 		this._inventoryStateManager.stateChangedObservable.subscribe((currentState: InventoryScreenStateType) => {

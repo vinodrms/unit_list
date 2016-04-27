@@ -1,4 +1,4 @@
-import {Component, ViewChild, AfterViewInit, Input, Output, EventEmitter, DynamicComponentLoader, Type, ResolvedProvider, ElementRef} from 'angular2/core';
+import {Component, ViewChild, AfterViewInit, Input, Output, EventEmitter, DynamicComponentLoader, Type, ResolvedReflectiveProvider, ViewContainerRef} from 'angular2/core';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/combineLatest';
 import {BaseComponent} from '../../../../../../../common/base/BaseComponent';
@@ -26,6 +26,7 @@ import {AddOnProductCategoryDO} from '../../../../../services/common/data-object
 export class AddOnProductsComponent extends BaseComponent implements AfterViewInit {
     @Input() protected filterBreakfastCategory: boolean = false;
     filteredCategory: AddOnProductCategoryDO;
+    @ViewChild('overviewBottom', {read: ViewContainerRef}) private _overviewBottomVCRef: ViewContainerRef;
 
     @Output() protected onScreenStateTypeChanged = new EventEmitter();
     @Output() protected onItemDeleted = new EventEmitter();
@@ -36,7 +37,6 @@ export class AddOnProductsComponent extends BaseComponent implements AfterViewIn
     private _inventoryStateManager: InventoryStateManager<AddOnProductVM>;
 
     constructor(private _dynamicComponentLoader: DynamicComponentLoader,
-        private _elementRef: ElementRef,
         private _appContext: AppContext,
         private _tableBuilder: AddOnProductTableMetaBuilderService,
         private _addOnProductCategoriesService: AddOnProductCategoriesService,
@@ -45,8 +45,8 @@ export class AddOnProductsComponent extends BaseComponent implements AfterViewIn
         this._inventoryStateManager = new InventoryStateManager<AddOnProductVM>(this._appContext, "addOnProduct.id");
         this.registerStateChange();
     }
-    public bootstrapOverviewBottom(componentToInject: Type, providers: ResolvedProvider[]) {
-        this._dynamicComponentLoader.loadIntoLocation(componentToInject, this._elementRef, "overviewBottom", providers);
+    public bootstrapOverviewBottom(componentToInject: Type, providers: ResolvedReflectiveProvider[]) {
+        this._dynamicComponentLoader.loadNextToLocation(componentToInject, this._overviewBottomVCRef, providers);
     }
     private registerStateChange() {
         this._inventoryStateManager.stateChangedObservable.subscribe((currentState: InventoryScreenStateType) => {

@@ -2,7 +2,8 @@
 
 import {bootstrap} from 'angular2/platform/browser';
 import {provide, enableProdMode} from 'angular2/core';
-import {ROUTER_PROVIDERS, APP_BASE_HREF} from 'angular2/router';
+import {ROUTER_PROVIDERS} from 'angular2/router';
+import {APP_BASE_HREF} from 'angular2/platform/common';
 import {MainLayoutInternalComponent} from './MainLayoutInternalComponent';
 import {HTTP_PROVIDERS} from 'angular2/http';
 import {IThCookie} from '../../../common/utils/cookies/IThCookie';
