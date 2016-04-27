@@ -5,7 +5,7 @@ import {Pipe, PipeTransform} from 'angular2/core';
 })
 
 export class PercentagePipe implements PipeTransform {
-	transform(value: number, args: any[]) : any {
+	transform(value: number) : any {
 		if(!value) {
 			return "";
 		}

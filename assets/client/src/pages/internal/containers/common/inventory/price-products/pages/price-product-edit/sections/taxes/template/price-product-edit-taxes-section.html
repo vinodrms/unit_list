@@ -1,7 +1,7 @@
 <div class="col-md-6 col-sm-6 col-xs-12 ">
 	<label>{{ 'VAT' | translate }}</label>
 	<div class="input-group">
-		<select class="form-control" [ngModel]="vatTaxId" (change)="didSelectVatTaxId($event.target.value)" [disabled]="readonly">
+		<select class="form-control" [ngModel]="vatTaxId" (ngModelChange)="didSelectVatTaxId($event)" [disabled]="readonly">
 			<option [value]="noVatTaxId">{{ 'No VAT' | translate }}</option>
 			<option *ngFor="#vat of vatTaxList" [value]="vat.id">{{vat.name}} - {{vat.value | percentage}}</option>
 		</select>

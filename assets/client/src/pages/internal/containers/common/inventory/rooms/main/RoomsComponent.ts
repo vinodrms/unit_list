@@ -1,4 +1,4 @@
-import {Component, ViewChild, AfterViewInit, Output, EventEmitter, DynamicComponentLoader, Type, ResolvedProvider, ElementRef} from 'angular2/core';
+import {Component, ViewChild, AfterViewInit, Output, EventEmitter, DynamicComponentLoader, Type, ResolvedReflectiveProvider, ViewContainerRef} from 'angular2/core';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/combineLatest';
 import {BaseComponent} from '../../../../../../../common/base/BaseComponent';
@@ -25,6 +25,7 @@ import {BedsEagerService} from '../../../../../services/beds/BedsEagerService';
 export class RoomsComponent extends BaseComponent implements AfterViewInit {
     @Output() protected onScreenStateTypeChanged = new EventEmitter();
     @Output() protected onItemDeleted = new EventEmitter();
+    @ViewChild('overviewBottom', {read: ViewContainerRef}) private _overviewBottomVCRef: ViewContainerRef;
 
     @ViewChild(LazyLoadingTableComponent)
     private _roomTableComponent: LazyLoadingTableComponent<RoomVM>;
@@ -32,7 +33,6 @@ export class RoomsComponent extends BaseComponent implements AfterViewInit {
     private _inventoryStateManager: InventoryStateManager<RoomVM>;
 
     constructor(private _dynamicComponentLoader: DynamicComponentLoader,
-        private _elementRef: ElementRef,
         private _appContext: AppContext,
         private _tableBuilder: RoomTableMetaBuilderService,
         private _roomService: RoomsService) {
@@ -40,8 +40,8 @@ export class RoomsComponent extends BaseComponent implements AfterViewInit {
         this._inventoryStateManager = new InventoryStateManager<RoomVM>(this._appContext, "room.id");
         this.registerStateChange();
     }
-    public bootstrapOverviewBottom(componentToInject: Type, providers: ResolvedProvider[]) {
-        this._dynamicComponentLoader.loadIntoLocation(componentToInject, this._elementRef, "overviewBottom", providers);
+    public bootstrapOverviewBottom(componentToInject: Type, providers: ResolvedReflectiveProvider[]) {
+        this._dynamicComponentLoader.loadNextToLocation(componentToInject, this._overviewBottomVCRef, providers);
     }
 
     private registerStateChange() {

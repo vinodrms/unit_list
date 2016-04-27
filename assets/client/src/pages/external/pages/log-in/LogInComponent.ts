@@ -1,6 +1,7 @@
 import {Component, AfterViewInit} from 'angular2/core';
 import {ControlGroup} from 'angular2/common';
-import {RouteParams, Location, RouterLink} from 'angular2/router';
+import {RouteParams, RouterLink} from 'angular2/router';
+import {Location} from 'angular2/platform/common';
 import {BaseFormComponent} from '../../../../common/base/BaseFormComponent';
 import {TranslationPipe} from '../../../../common/utils/localization/TranslationPipe';
 import {LogInService} from './services/LogInService';

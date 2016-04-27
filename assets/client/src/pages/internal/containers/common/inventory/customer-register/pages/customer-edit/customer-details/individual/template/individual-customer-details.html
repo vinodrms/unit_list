@@ -34,7 +34,7 @@
 			<div class="form-group">
 				<label>{{ 'Country' | translate }}</label>
 				<div class="input-group">
-					<select class="form-control" [ngModel]="countryCode" (change)="didChangeCountryCode($event.target.value)">
+					<select class="form-control" [ngModel]="countryCode" (ngModelChange)="didChangeCountryCode($event)">
 						<option [value]="invalidCountryCode" disabled>{{ 'Select a country' | translate }}</option>
 						<option *ngFor="#country of countryList" [value]="country.code">{{country.name}}</option>
 					</select>

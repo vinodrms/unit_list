@@ -1,4 +1,4 @@
-import {Inject, Component, ElementRef} from 'angular2/core';
+import {Inject, Component, ViewContainerRef} from 'angular2/core';
 import {BaseComponent} from '../../../common/base/BaseComponent';
 import {TranslationPipe} from '../../../common/utils/localization/TranslationPipe';
 import {ROUTER_DIRECTIVES, RouteConfig} from 'angular2/router';
@@ -24,9 +24,9 @@ import {SignUpComponent} from '../pages/sign-up/SignUpComponent';
 ])
 
 export class MainLayoutExternalComponent extends BaseComponent {
-	constructor(elementRef: ElementRef, @Inject(IToaster) toaster: IToaster, @Inject(IModalService) modalService: IModalService) {
+	constructor(viewContainerRef: ViewContainerRef, @Inject(IToaster) toaster: IToaster, @Inject(IModalService) modalService: IModalService) {
 		super();
-		toaster.bootstrap(elementRef);
-		modalService.bootstrap(elementRef);
+		toaster.bootstrap(viewContainerRef);
+		modalService.bootstrap(viewContainerRef);
 	}
 }

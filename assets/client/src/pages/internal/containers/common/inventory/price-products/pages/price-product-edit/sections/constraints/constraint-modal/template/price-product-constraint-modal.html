@@ -9,7 +9,7 @@
 		</div>
 		<div class="col-md-8 col-sm-8 col-xs-8">
 			<div class="form-group">
-				<select class="form-control" [ngModel]="constraintDO.type" (change)="didChangeConstraintType($event.target.value)">
+				<select class="form-control" [ngModel]="constraintDO.type" (ngModelChange)="didChangeConstraintType($event)">
 					<option *ngFor="#constraintMeta of constraintMetaList" [value]="constraintMeta.constraintType">
 						{{constraintMeta.title | translate}}
 					</option>

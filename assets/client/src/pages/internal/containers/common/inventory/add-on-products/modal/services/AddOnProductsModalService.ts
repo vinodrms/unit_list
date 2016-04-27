@@ -1,4 +1,4 @@
-import {Injectable, Injector} from 'angular2/core';
+import {Injectable, ReflectiveInjector} from 'angular2/core';
 import {AppContext} from '../../../../../../../../common/utils/AppContext';
 import {ModalDialogInstance} from '../../../../../../../../common/utils/modals/utils/ModalDialogInstance';
 import {AddOnProductsModalComponent} from '../AddOnProductsModalComponent';
@@ -9,6 +9,6 @@ export class AddOnProductsModalService {
 	constructor(private _appContext: AppContext) { }
 
 	public openAddOnProductsModal(): Promise<ModalDialogInstance<AddOnProductDO[]>> {
-		return this._appContext.modalService.open<any>(<any>AddOnProductsModalComponent, Injector.resolve([]));
+		return this._appContext.modalService.open<any>(<any>AddOnProductsModalComponent, ReflectiveInjector.resolve([]));
 	}
 }

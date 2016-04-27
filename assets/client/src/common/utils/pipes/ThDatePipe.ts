@@ -6,7 +6,7 @@ import {ThDateDO} from '../../../pages/internal/services/common/data-objects/th-
 })
 
 export class ThDatePipe implements PipeTransform {
-    transform(thDate: ThDateDO, args: any[]): any {
+    transform(thDate: ThDateDO): any {
 		if (thDate != null && thDate.toString) {
 			return thDate.toString();
 		}

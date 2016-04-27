@@ -17,7 +17,7 @@
 			<div class="col-xs-6">
 				<label for="usr">{{ 'Type of Value' | translate }}:</label>
 				<div class="form-group">
-					<select class="select2_single form-control" [ngModel]="taxDO.valueType" (change)="didChangeTaxValueType($event.target.value)">
+					<select class="select2_single form-control" [ngModel]="taxDO.valueType" (ngModelChange)="didChangeTaxValueType($event)">
 						<option [value]="getPercentageTaxValueType()">{{ 'Percentage' | translate }}</option>
 						<option [value]="getFixedTaxValueType()">{{ 'Fixed Price' | translate }}</option>
 					</select>

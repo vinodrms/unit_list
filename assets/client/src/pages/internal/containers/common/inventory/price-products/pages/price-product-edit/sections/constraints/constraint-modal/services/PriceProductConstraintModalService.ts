@@ -1,4 +1,4 @@
-import {Injectable, Injector} from 'angular2/core';
+import {Injectable, ReflectiveInjector} from 'angular2/core';
 import {AppContext} from '../../../../../../../../../../../../common/utils/AppContext';
 import {ModalDialogInstance} from '../../../../../../../../../../../../common/utils/modals/utils/ModalDialogInstance';
 import {PriceProductConstraintModalComponent} from '../PriceProductConstraintModalComponent';
@@ -9,6 +9,6 @@ export class PriceProductConstraintModalService {
 	constructor(private _appContext: AppContext) { }
 
 	public openPriceProductConstraintsModal(): Promise<ModalDialogInstance<PriceProductConstraintDO>> {
-		return this._appContext.modalService.open<any>(<any>PriceProductConstraintModalComponent, Injector.resolve([]));
+		return this._appContext.modalService.open<any>(<any>PriceProductConstraintModalComponent, ReflectiveInjector.resolve([]));
 	}
 }

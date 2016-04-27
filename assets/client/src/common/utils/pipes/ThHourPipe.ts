@@ -6,7 +6,7 @@ import {ThHourDO} from '../../../pages/internal/services/common/data-objects/th-
 })
 
 export class ThHourPipe implements PipeTransform {
-    transform(thHour: ThHourDO, args: any[]): any {
+    transform(thHour: ThHourDO): any {
 		if(thHour != null && thHour.toString) {
 			return thHour.toString();
 		}

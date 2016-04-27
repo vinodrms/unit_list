@@ -1,4 +1,4 @@
-import {Component, ViewChild, AfterViewInit, Output, EventEmitter, DynamicComponentLoader, Type, ResolvedProvider, ElementRef} from 'angular2/core';
+import {Component, ViewChild, AfterViewInit, Output, EventEmitter, DynamicComponentLoader, Type, ResolvedReflectiveProvider, ViewContainerRef} from 'angular2/core';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/combineLatest';
 import {BaseComponent} from '../../../../../../../common/base/BaseComponent';
@@ -23,6 +23,7 @@ import {BedEditComponent} from '../pages/bed-edit/BedEditComponent';
 export class BedsComponent extends BaseComponent {
     @Output() protected onScreenStateTypeChanged = new EventEmitter();
     @Output() protected onItemDeleted = new EventEmitter();
+    @ViewChild('overviewBottom', {read: ViewContainerRef}) private _overviewBottomVCRef: ViewContainerRef;
 
     @ViewChild(LazyLoadingTableComponent)
     private _bedTableComponent: LazyLoadingTableComponent<BedVM>;
@@ -30,7 +31,6 @@ export class BedsComponent extends BaseComponent {
     private _inventoryStateManager: InventoryStateManager<BedVM>;
 
     constructor(private _dynamicComponentLoader: DynamicComponentLoader,
-        private _elementRef: ElementRef,
         private _appContext: AppContext,
         private _tableBuilder: BedTableMetaBuilderService,
         private _bedsService: BedsService) {
@@ -38,8 +38,8 @@ export class BedsComponent extends BaseComponent {
         this._inventoryStateManager = new InventoryStateManager<BedVM>(this._appContext, "bed.id");
         this.registerStateChange();
     }
-    public bootstrapOverviewBottom(componentToInject: Type, providers: ResolvedProvider[]) {
-        this._dynamicComponentLoader.loadIntoLocation(componentToInject, this._elementRef, "overviewBottom", providers);
+    public bootstrapOverviewBottom(componentToInject: Type, providers: ResolvedReflectiveProvider[]) {
+        this._dynamicComponentLoader.loadNextToLocation(componentToInject, this._overviewBottomVCRef, providers);
     }
     
     private registerStateChange() {
