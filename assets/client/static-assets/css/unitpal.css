@@ -736,51 +736,51 @@ lazy-loading-table .table-wrapper table thead {
 }
 
 .red {
-    background: red;
+    background: #FF0000;
 }
 
 .red-color {
-    color: red;
+    color: #FF0000;
 }
 
 .yellow {
-    background: #ff0;
+    background: #D1D100;
 }
 
 .green {
-    background: green;
+    background: #5CB85C;
 }
 
 .green-color {
-    color: green;
+    color: #5CB85C;
 }
 
 .blue {
-    background: blue;
+    background: #428BCA;
 }
 
 .gray {
-    background: gray;
+    background: #7F8C8D;
 }
 
 .brown {
-    background: #a52a2a;
+    background: #AD8D43;
 }
 
 .violet {
-    background: #ee82ee;
+    background: #A295D6;
 }
 
 .orange {
-    background: orange;
+    background: #F0AD4E;
 }
 
 .olive {
-    background: olive;
+    background: #D1D100;
 }
 
 .purple {
-    background: purple;
+    background: #8E44AD;
 }
 
 .yield-filter {
