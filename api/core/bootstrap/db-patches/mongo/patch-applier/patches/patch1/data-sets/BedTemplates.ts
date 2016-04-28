@@ -27,7 +27,7 @@ export class BedTemplates extends ABaseSetting {
     private dataSet: { name: string, iconUrl: string }[] = [
         {
             name: "Single Bed",
-            iconUrl: "5"
+            iconUrl: "A"
         },
         {
             name: "Double Bed",
