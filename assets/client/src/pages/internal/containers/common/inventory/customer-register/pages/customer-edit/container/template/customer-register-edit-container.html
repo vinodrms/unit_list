@@ -5,7 +5,7 @@
 			<div class="input-group">
 				<label>{{ 'Type of customer' | translate }}</label>
 				<select class="form-control" [ngModel]="customerVM.customer.type" (ngModelChange)="didChangeCustomerType($event)">
-					<option *ngFor="#custDetailsMeta of custDetailsMetaList" [value]="custDetailsMeta.customerType">{{custDetailsMeta.customerTypeName | translate}}</option>
+					<option *ngFor="let custDetailsMeta of custDetailsMetaList" [value]="custDetailsMeta.customerType">{{custDetailsMeta.customerTypeName | translate}}</option>
 				</select>
 			</div>
 		</div>
@@ -30,7 +30,7 @@
 			<div class="input-group">
 				<table class="table table-striped projects">
 					<tbody>
-						<tr *ngFor="#priceProduct of customerVM.priceProductList">
+						<tr *ngFor="let priceProduct of customerVM.priceProductList">
 							<td>{{priceProduct.name}}</td>
 							<td>
 								<a class="btn btn-xs" (click)="removePriceProduct(priceProduct)">

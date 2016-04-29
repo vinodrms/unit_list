@@ -1,6 +1,6 @@
 import {Observer} from 'rxjs/Observer';
 import {Observable} from 'rxjs/Observable';
-import {BehaviorSubject} from 'rxjs/subject/BehaviorSubject';
+import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import 'rxjs/add/operator/share';
 import {BaseDO} from '../../../../common/base/BaseDO';
 import {ThError} from '../../../../common/utils/responses/ThError';

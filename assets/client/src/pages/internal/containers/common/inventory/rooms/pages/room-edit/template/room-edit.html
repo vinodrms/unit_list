@@ -65,7 +65,7 @@
         </div>
         <div class="col-xs-12 col-md-12">
             <div class="btn-group amenities-group" role="group">
-                <div class="button-check th-grid-btn" *ngFor="#roomAmenityVM of roomAmenities.roomAmenityList">
+                <div class="button-check th-grid-btn" *ngFor="let roomAmenityVM of roomAmenities.roomAmenityList">
                     <div class="info-block block-info clearfix" title="{{ roomAmenityVM.roomAmenity.name }}">
                         <div data-toggle="buttons">
                             <label class="btn btn-default" [ngClass]="{active: roomAmenityVM.isSelected}" (click)="roomAmenityVM.toggle()">
@@ -84,7 +84,7 @@
         </div>
         <div class="col-xs-12 col-md-12">
             <div class="btn-group amenities-group" role="group">
-                <div class="button-check th-grid-btn" *ngFor="#roomAttributeVM of roomAttributes.roomAttributeList">
+                <div class="button-check th-grid-btn" *ngFor="let roomAttributeVM of roomAttributes.roomAttributeList">
                     <div class="info-block block-info clearfix" title="{{ roomAttributeVM.roomAttribute.name }}">
                         <div data-toggle="buttons">
                             <label class="btn btn-default" [ngClass]="{active: roomAttributeVM.isSelected}" (click)="roomAttributeVM.toggle()">

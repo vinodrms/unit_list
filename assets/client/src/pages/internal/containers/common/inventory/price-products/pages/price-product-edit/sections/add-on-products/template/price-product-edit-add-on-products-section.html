@@ -1,7 +1,7 @@
 <label>{{ 'Add On Products' | translate }}</label>
 <table class="table table-striped form-group" *ngIf="didInitialize()">
 	<tbody class="input-group">
-		<tr *ngFor="#addOnProduct of addOnProductList">
+		<tr *ngFor="let addOnProduct of addOnProductList">
 			<td>{{addOnProduct.name}}</td>
 			<td>{{ccy.nativeSymbol}} {{addOnProduct.price | price}}</td>
 			<td *ngIf="!readonly">

@@ -21,7 +21,7 @@
 				<div>
 					<label>{{ 'Show' | translate }}
 						<select [ngModel]="paginationIndex.numOfItemsPerPage" (ngModelChange)="didChangeNumOfItemsPerPage($event)">
-							<option *ngFor="#nomPerPage of paginationIndex.nunOfItemsPerPageList" [value]="nomPerPage">
+							<option *ngFor="let nomPerPage of paginationIndex.nunOfItemsPerPageList" [value]="nomPerPage">
 								{{nomPerPage}}
 							</option>
 						</select> {{ 'items' | translate }}
@@ -35,15 +35,15 @@
 				<table class="table table-hover">
 					<thead>
 						<tr>
-							<th *ngFor="#columnMeta of columnMetaList">
+							<th *ngFor="let columnMeta of columnMetaList">
 								{{ columnMeta.displayName | translate }}
 							</th>
 							<th></th>
 						</tr>
 					</thead>
 					<tbody>
-						<tr *ngFor="#item of itemList" [ngClass]="{active: (isSelected(item) && (tableOptions.canSelect || tableOptions.canMultiSelect)  )}">
-							<td *ngFor="#columnMeta of columnMetaList" (click)="(tableOptions.canSelect || tableOptions.canMultiSelect) && didSelectItem(item)" [ngClass]="{'selectable-row': (tableOptions.canSelect || tableOptions.canMultiSelect)}">
+						<tr *ngFor="let item of itemList" [ngClass]="{active: (isSelected(item) && (tableOptions.canSelect || tableOptions.canMultiSelect)  )}">
+							<td *ngFor="let columnMeta of columnMetaList" (click)="(tableOptions.canSelect || tableOptions.canMultiSelect) && didSelectItem(item)" [ngClass]="{'selectable-row': (tableOptions.canSelect || tableOptions.canMultiSelect)}">
 								<span *ngIf="isPercentage(columnMeta.valueMeta)">
 									{{ getItemValue(item, columnMeta.valueMeta) | percentage }}
 								</span>
@@ -113,7 +113,7 @@
 								<i class="fa fa-angle-double-left"></i>
 							</a>
 						</li>
-						<li *ngFor="#index of paginationIndex.indexList" [ngClass]="{active: index.isSelected}">
+						<li *ngFor="let index of paginationIndex.indexList" [ngClass]="{active: index.isSelected}">
 							<a (click)="updatePageNumber(index.pageNumber)">{{index.displayNumber}}</a>
 						</li>
 						<li [ngClass]="{disabled: isLastPage()}">

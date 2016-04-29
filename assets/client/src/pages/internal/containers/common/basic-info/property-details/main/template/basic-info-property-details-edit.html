@@ -9,7 +9,7 @@
 			<div class="input-group" [ngClass]="{'form-warning': displayTimezoneError()}">
             	<select class="select2_single form-control" [ngModel]="hotel.timezone" (ngModelChange)="updateTimezone($event)">
                     <option value="" disabled></option>
-                	<option *ngFor="#timezone of timezoneList" [value]="timezone.name">{{timezone.name}}</option>
+                	<option *ngFor="let timezone of timezoneList" [value]="timezone.name">{{timezone.name}}</option>
             	</select>
 			</div>
             <label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Select a timezone' | translate }}</small></label>
@@ -80,7 +80,7 @@
         </label>
 
         <div class="form-group">
-            <div class="button-items" *ngFor="#hotelAmenityVM of hotelAmenities.hotelAmenityList">
+            <div class="button-items" *ngFor="let hotelAmenityVM of hotelAmenities.hotelAmenityList">
                 <div class="info-block block-info clearfix">
                     <div data-toggle="buttons" class="btn-group" title="{{ hotelAmenityVM.hotelAmenity.name }}">
                         <label class="btn btn-default th-grid-btn" [ngClass]="{active: hotelAmenityVM.isSelected}" (click)="hotelAmenityVM.toggle()">

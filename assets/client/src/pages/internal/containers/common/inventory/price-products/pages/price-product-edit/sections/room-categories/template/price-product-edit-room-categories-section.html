@@ -1,7 +1,7 @@
 <label>{{ 'Room Categories' | translate }}*</label>
 <table class="table table-striped form-group">
 	<tbody class="input-group" [ngClass]="{'form-warning': didSubmit&&!isValid()}">
-		<tr *ngFor="#roomCategory of roomCategoryList">
+		<tr *ngFor="let roomCategory of roomCategoryList">
 			<td>{{roomCategory.displayName}}</td>
 			<td *ngIf="!readonly">
 				<a class="btn btn-xs" (click)="removeRoomCategory(roomCategory)">

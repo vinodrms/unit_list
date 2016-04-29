@@ -24,7 +24,7 @@ export class BedSelectorComponent extends BaseComponent implements OnInit {
     @Input() availableBedList: BedVM[];
     @Input() selectedBedList: BedVM[];
     
-    @Output() selectedBedListChanged: EventEmitter<BedVM[]> = new EventEmitter(); 
+    @Output() selectedBedListChanged: EventEmitter<BedVM[]> = new EventEmitter<BedVM[]>(); 
     
     constructor(private _appContext: AppContext,
         private _bedsModalService: BedsModalService) {

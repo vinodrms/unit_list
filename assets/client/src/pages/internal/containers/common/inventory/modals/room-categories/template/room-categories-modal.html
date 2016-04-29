@@ -10,7 +10,7 @@
 			<th *ngIf="allowCategoryEdit"></th>
 		</thead>
 		<tbody>
-			<tr *ngFor="#roomCategoryVM of roomCategoryVMList" [ngClass]="{active: isCategorySelected(roomCategoryVM)}">
+			<tr *ngFor="let roomCategoryVM of roomCategoryVMList" [ngClass]="{active: isCategorySelected(roomCategoryVM)}">
 				<td class="selectable-row" 
 					*ngIf="!roomCategoryVM.isEditing" 
 					(click)="selectRoomCategory(roomCategoryVM)"> 

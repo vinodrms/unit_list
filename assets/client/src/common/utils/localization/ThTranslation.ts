@@ -99,7 +99,7 @@ export class ThTranslation {
 			return phrase;
 		}
 		if (!_.isString(phrase)) {
-			return "";
+			return phrase;
 		}
 		return phrase.replace(ThTranslation.TemplateVariableRegex, (substring: string, actualKey: string) => {
 			if (this._thUtils.isUndefinedOrNull(parameters, actualKey)) {

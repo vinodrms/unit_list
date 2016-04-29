@@ -37,7 +37,7 @@
 					<label class="text-muted"><small><i class="fa fa-info-circle"></i> {{ 'The VAT is included in the price.' | translate }}</small></label>
 					<select class="form-control" [ngModel]="addOnProductVatId" (ngModelChange)="didSelectTaxId($event)">
 					<option [value]="noVatId">{{ 'No VAT' | translate }}</option>
-					<option *ngFor="#vat of vatList" [value]="vat.id">{{vat.name}} - {{vat.value | percentage}}</option>
+					<option *ngFor="let vat of vatList" [value]="vat.id">{{vat.name}} - {{vat.value | percentage}}</option>
 				</select>
 				</div>
 				<div class="col-xs-12 col-md-6 form-group" *ngIf="showCategorySelector()">
@@ -47,7 +47,7 @@
 						<label class="text-muted"><small><i class="fa fa-info-circle"></i> {{ 'The category of your add on product.' | translate }}</small></label>
 						<select class="form-control" [ngModel]="addOnProductVM.addOnProduct.categoryId" (ngModelChange)="didChangeCategoryId($event)">
 						<option value="" disabled>{{ 'Select a category' | translate }}</option>
-						<option *ngFor="#addOnProductCategory of addOnProductCategoryList" [value]="addOnProductCategory.id">{{addOnProductCategory.name}}</option>
+						<option *ngFor="let addOnProductCategory of addOnProductCategoryList" [value]="addOnProductCategory.id">{{addOnProductCategory.name}}</option>
 					</select>
 					</div>
 					<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Select a category' | translate }}</small></label>

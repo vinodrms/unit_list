@@ -14,7 +14,7 @@ import {OperationHoursBuilder} from './utils/OperationHoursBuilder';
         	<div class="input-group" [ngClass]="{'form-warning': displayError()}">
             	<select class="form-control" [ngModel]="initialHourIndex" (ngModelChange)="onHourChanged($event)" [disabled]="readonly">
                     <option value="" disabled></option>
-                	<option *ngFor="#hourVM of hoursList" [value]="hourVM.index">{{hourVM.thHour | thhour}}</option>
+                	<option *ngFor="let hourVM of hoursList" [value]="hourVM.index">{{hourVM.thHour | thhour}}</option>
             	</select>
 			</div>
             <label class="form-warning"><small><i class="fa fa-info-circle"></i> {{errorMessage | translate}}</small></label>

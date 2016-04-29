@@ -14,7 +14,7 @@
 
 	<table class="table table-striped projects">
 		<tbody>
-			<tr *ngFor="#constraintVM of constraintContainer.constraintVMList">
+			<tr *ngFor="let constraintVM of constraintContainer.constraintVMList">
 				<td>{{constraintVM.displayTitle | translate}}</td>
 				<td>{{constraintVM.displayValue}}</td>
 				<td *ngIf="!readonly">

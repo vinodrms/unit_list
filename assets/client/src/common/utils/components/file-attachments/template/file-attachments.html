@@ -15,7 +15,7 @@
 
 <table class="table table-striped projects">
 	<tbody>
-		<tr *ngFor="#fileAttachment of fileAttachmentList">
+		<tr *ngFor="let fileAttachment of fileAttachmentList">
 			<td class="th-file-label">
 				<a [href]="fileAttachment.url" target="_blank">
 					{{fileAttachment.name}}

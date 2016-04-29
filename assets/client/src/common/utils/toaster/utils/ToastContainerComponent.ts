@@ -5,7 +5,7 @@ import {Toast} from './Toast';
 	selector: 'toast-container-component',
 	template: `
     <div id="toast-container" class="toast-top-right" aria-live="polite" role="alert">
-      <div *ngFor="#toast of toasts" class="toast-{{toast.toastClass}}" (click)="dismiss(toast)">
+      <div *ngFor="let toast of toasts" class="toast-{{toast.toastClass}}" (click)="dismiss(toast)">
         <div *ngIf="toast.title" class="{{titleClass}}">{{toast.title}}</div>
         <div class="{{messageClass}}">{{toast.message}}</div>
       </div>

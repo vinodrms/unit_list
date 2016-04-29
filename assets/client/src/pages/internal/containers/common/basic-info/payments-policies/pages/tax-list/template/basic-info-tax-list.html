@@ -9,7 +9,7 @@
 		<th></th>
 	</thead>
 	<tbody>
-		<tr *ngFor="#tax of taxList">
+		<tr *ngFor="let tax of taxList">
 			<td>{{tax.name}}</td>
 			<td *ngIf="tax.isPercentageValue()">{{tax.value | percentage}}</td>
 			<td *ngIf="tax.isFixedValue()">{{tax.value}} {{ccyCode}}</td>

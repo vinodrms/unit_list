@@ -3,7 +3,7 @@
 	<div class="input-group">
 		<select class="form-control" [ngModel]="vatTaxId" (ngModelChange)="didSelectVatTaxId($event)" [disabled]="readonly">
 			<option [value]="noVatTaxId">{{ 'No VAT' | translate }}</option>
-			<option *ngFor="#vat of vatTaxList" [value]="vat.id">{{vat.name}} - {{vat.value | percentage}}</option>
+			<option *ngFor="let vat of vatTaxList" [value]="vat.id">{{vat.name}} - {{vat.value | percentage}}</option>
 		</select>
 	</div>
 	<small class="text-muted"><i class="fa fa-info-circle"></i> {{ 'The VAT needs to be included in the price' | translate }} </small>
@@ -12,7 +12,7 @@
 	<label for="roomname">Other Taxes</label>
 	<table class="table table-striped projects">
 		<tbody>
-			<tr *ngFor="#tax of otherTaxList">
+			<tr *ngFor="let tax of otherTaxList">
 				<td>{{tax.name}}</td>
 				<td *ngIf="tax.isPercentageValue()">{{tax.value | percentage}}</td>
 				<td *ngIf="tax.isFixedValue()">{{ccy.nativeSymbol}} {{tax.value}}</td>

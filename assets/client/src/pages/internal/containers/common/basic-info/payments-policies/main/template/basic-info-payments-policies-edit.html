@@ -9,7 +9,7 @@
 			<div class="input-group" [ngClass]="{'form-warning': (!hotel.ccyCode && didSubmitForm)}">
 				<select class="form-control" [ngModel]="hotel.ccyCode" (ngModelChange)="didChangeCurrencyCode($event)">
 					<option value="" disabled>{{ 'Select a currency' | translate }}</option>
-					<option *ngFor="#currency of currencies.currencyList" [value]="currency.code">{{currency.code}} - {{currency.name}}</option>
+					<option *ngFor="let currency of currencies.currencyList" [value]="currency.code">{{currency.code}} - {{currency.name}}</option>
 				</select>
 			</div>
 			<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Select a currency' | translate }}</small></label>
@@ -21,7 +21,7 @@
 		<div class="well form-group">
 			<div class="input-group" [ngClass]="{'form-warning': (!didSelectPaymentMethod()&&didSubmitForm)}">
 				<ul class="list-group checked-list-box">
-					<div class="checkbox" *ngFor="#paymentMethodVM of paymentMethods.paymentMethodList">
+					<div class="checkbox" *ngFor="let paymentMethodVM of paymentMethods.paymentMethodList">
 						<label>
 							<input type="checkbox" [(ngModel)]="paymentMethodVM.isSelected"><i class="fa" [ngClass]="paymentMethodVM.paymentMethod.iconUrl"></i> {{paymentMethodVM.paymentMethod.name}}
 						</label>

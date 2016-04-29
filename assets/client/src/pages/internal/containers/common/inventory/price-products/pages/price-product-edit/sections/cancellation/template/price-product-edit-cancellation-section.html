@@ -14,7 +14,7 @@
 
 	<div class="form-group">
 		<select class="form-control" [ngModel]="conditions.policyType" (ngModelChange)="didChangePolicyType($event)" [disabled]="readonly">
-			<option *ngFor="#cancellationPolicyMeta of cancellationPolicyMetaList" [value]="cancellationPolicyMeta.policyType">
+			<option *ngFor="let cancellationPolicyMeta of cancellationPolicyMetaList" [value]="cancellationPolicyMeta.policyType">
 				{{cancellationPolicyMeta.policyName | translate}}
 			</option>
 		</select>
@@ -56,7 +56,7 @@
 		</div>
 		<div class="col-xs-12 form-group">
 			<select class="form-control" [ngModel]="conditions.penaltyType" (ngModelChange)="didChangePenaltyType($event)" [disabled]="readonly">
-				<option *ngFor="#cancellationPenaltyMeta of filteredCancellationPenaltyMetaList" [value]="cancellationPenaltyMeta.penaltyType">
+				<option *ngFor="let cancellationPenaltyMeta of filteredCancellationPenaltyMetaList" [value]="cancellationPenaltyMeta.penaltyType">
 					{{cancellationPenaltyMeta.penaltyName | translate}}
 				</option>
 			</select>

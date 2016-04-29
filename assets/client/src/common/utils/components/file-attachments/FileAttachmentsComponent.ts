@@ -20,7 +20,7 @@ export class FileAttachmentsComponent extends BaseComponent {
 		this._fileAttachmentList = fileAttachmentList;
 	}
 
-	@Output() onFileAttachmentsChange: EventEmitter<FileAttachmentDO[]> = new EventEmitter();
+	@Output() onFileAttachmentsChange: EventEmitter<FileAttachmentDO[]> = new EventEmitter<FileAttachmentDO[]>();
 	isLoading: boolean;
 
 	constructor(private _appContext: AppContext) {
