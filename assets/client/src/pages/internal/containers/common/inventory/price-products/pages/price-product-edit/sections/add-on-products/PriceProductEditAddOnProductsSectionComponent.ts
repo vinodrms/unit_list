@@ -4,7 +4,7 @@ import {TranslationPipe} from '../../../../../../../../../../common/utils/locali
 import {PricePipe} from '../../../../../../../../../../common/utils/pipes/PricePipe';
 import {IPriceProductEditSection} from '../utils/IPriceProductEditSection';
 import {PriceProductVM} from '../../../../../../../../services/price-products/view-models/PriceProductVM';
-import {ModalDialogInstance} from '../../../../../../../../../../common/utils/modals/utils/ModalDialogInstance';
+import {ModalDialogRef} from '../../../../../../../../../../common/utils/modals/utils/ModalDialogRef';
 import {AddOnProductsModalService} from '../../../../../add-on-products/modal/services/AddOnProductsModalService';
 import {AddOnProductDO} from '../../../../../../../../services/add-on-products/data-objects/AddOnProductDO';
 import {CurrencyDO} from '../../../../../../../../services/common/data-objects/currency/CurrencyDO';
@@ -50,7 +50,7 @@ export class PriceProductEditAddOnProductsSectionComponent extends BaseComponent
 	}
 
 	public openAddOnProductSelectModal() {
-		this._addOnProductsModalService.openAddOnProductsModal().then((modalDialogInstance: ModalDialogInstance<AddOnProductDO[]>) => {
+		this._addOnProductsModalService.openAddOnProductsModal().then((modalDialogInstance: ModalDialogRef<AddOnProductDO[]>) => {
 			modalDialogInstance.resultObservable.subscribe((selectedAddOnProductList: AddOnProductDO[]) => {
 				_.forEach(selectedAddOnProductList, (aop: AddOnProductDO) => {
 					this.addAddOnProductIfNotExists(aop);

@@ -1,6 +1,6 @@
 import {Injectable, ReflectiveInjector, provide} from 'angular2/core';
 import {AppContext} from '../../../AppContext';
-import {ModalDialogInstance} from '../../utils/ModalDialogInstance';
+import {ModalDialogRef} from '../../utils/ModalDialogRef';
 import {ConfirmationModalComponent} from './ConfirmationModalComponent';
 import {ConfirmationModalInput} from './utils/ConfirmationModalInput';
 
@@ -9,7 +9,7 @@ export class ConfirmationModalService {
 
 	constructor(private _appContext: AppContext) { }
 
-	public openModal(title: string, content: string): Promise<ModalDialogInstance<any>> {
+	public openModal(title: string, content: string): Promise<ModalDialogRef<any>> {
 		var confirmationModalInput = new ConfirmationModalInput();
 		confirmationModalInput.title = title;
 		confirmationModalInput.content = content;

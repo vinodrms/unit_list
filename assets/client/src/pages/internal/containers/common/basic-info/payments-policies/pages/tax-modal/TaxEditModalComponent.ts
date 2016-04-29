@@ -4,7 +4,7 @@ import {AppContext, ThError} from '../../../../../../../../common/utils/AppConte
 import {TranslationPipe} from '../../../../../../../../common/utils/localization/TranslationPipe';
 import {LoadingButtonComponent} from '../../../../../../../../common/utils/components/LoadingButtonComponent';
 import {ICustomModalComponent, ModalSize} from '../../../../../../../../common/utils/modals/utils/ICustomModalComponent';
-import {ModalDialogInstance} from '../../../../../../../../common/utils/modals/utils/ModalDialogInstance';
+import {ModalDialogRef} from '../../../../../../../../common/utils/modals/utils/ModalDialogRef';
 import {TaxEditModalInput} from './services/utils/TaxEditModalInput';
 import {TaxDO, TaxType, TaxValueType} from '../../../../../../services/taxes/data-objects/TaxDO';
 import {TaxService} from '../../../../../../services/taxes/TaxService';
@@ -24,7 +24,7 @@ export class TaxEditModalComponent extends BaseComponent implements ICustomModal
 
 	constructor(
 		private _appContext: AppContext,
-		private _modalDialogInstance: ModalDialogInstance<TaxDO>,
+		private _modalDialogRef: ModalDialogRef<TaxDO>,
 		private _taxService: TaxService,
 		modalInput: TaxEditModalInput) {
 		super();
@@ -45,7 +45,7 @@ export class TaxEditModalComponent extends BaseComponent implements ICustomModal
 		return ModalSize.Small;
 	}
 	public closeDialog() {
-		this._modalDialogInstance.closeForced();
+		this._modalDialogRef.closeForced();
 	}
 
 	public isVatTax(): boolean {
@@ -78,8 +78,8 @@ export class TaxEditModalComponent extends BaseComponent implements ICustomModal
 		}
 		this.isLoading = true;
 		this._taxService.saveTax(newTax).subscribe((updatedTax: TaxDO) => {
-			this._modalDialogInstance.addResult(updatedTax);
-			this._modalDialogInstance.closeForced();
+			this._modalDialogRef.addResult(updatedTax);
+			this._modalDialogRef.closeForced();
 			this.isLoading = false;
 		}, (error: ThError) => {
 			this.isLoading = false;

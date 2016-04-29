@@ -2,7 +2,7 @@ import {Injectable, ReflectiveInjector, provide, DynamicComponentLoader, ViewCon
 import {IModalService} from './IModalService';
 import {ModalBackdropComponent} from './utils/components/ModalBackdropComponent';
 import {ModalContainerComponent} from './utils/components/ModalContainerComponent';
-import {ModalDialogInstance} from './utils/ModalDialogInstance';
+import {ModalDialogRef} from './utils/ModalDialogRef';
 import {ThError} from '../responses/ThError';
 import {ConfirmationModalComponent} from './modals/confirmation/ConfirmationModalComponent';
 import {ConfirmationModalInput, ConfirmationModalButtons} from './modals/confirmation/utils/ConfirmationModalInput';
@@ -18,14 +18,14 @@ export class ModalService implements IModalService {
 		this._viewContainerRef = viewContainerRef;
 	}
 
-	public open<T>(componentType: Type, providers: ResolvedReflectiveProvider[]): Promise<ModalDialogInstance<T>> {
-		return new Promise<ModalDialogInstance<T>>((resolve: { (result: ModalDialogInstance<T>): void }, reject: { (err: ThError): void }) => {
+	public open<T>(componentType: Type, providers: ResolvedReflectiveProvider[]): Promise<ModalDialogRef<T>> {
+		return new Promise<ModalDialogRef<T>>((resolve: { (result: ModalDialogRef<T>): void }, reject: { (err: ThError): void }) => {
 			this.openCore<T>(resolve, reject, componentType, providers);
 		});
 	}
-	private openCore<T>(resolve: { (result: ModalDialogInstance<T>): void }, reject: { (err: ThError): void }, componentType: Type, providers: ResolvedReflectiveProvider[]) {
-		let dialog = new ModalDialogInstance<T>();
-		let dialogProviders = ReflectiveInjector.resolve([provide(ModalDialogInstance, { useValue: dialog })]);
+	private openCore<T>(resolve: { (result: ModalDialogRef<T>): void }, reject: { (err: ThError): void }, componentType: Type, providers: ResolvedReflectiveProvider[]) {
+		let dialog = new ModalDialogRef<T>();
+		let dialogProviders = ReflectiveInjector.resolve([provide(ModalDialogRef, { useValue: dialog })]);
 
 		this._componentLoader.loadNextToLocation(ModalBackdropComponent, this._viewContainerRef, dialogProviders)
 			.then((backdropRef: ComponentRef) => {
@@ -38,7 +38,7 @@ export class ModalService implements IModalService {
 				containerRef.changeDetectorRef.detectChanges();
 				
 				dialog.containerRef = containerRef;
-				let modalDataProviders = ReflectiveInjector.resolve([provide(ModalDialogInstance, { useValue: dialog })]).concat(providers);
+				let modalDataProviders = ReflectiveInjector.resolve([provide(ModalDialogRef, { useValue: dialog })]).concat(providers);
 				return this._componentLoader.loadNextToLocation(componentType, containerRef.instance.viewContainerRef, modalDataProviders);
 			})
 			.then((contentRef: ComponentRef) => {
@@ -64,7 +64,7 @@ export class ModalService implements IModalService {
         
 		this.open<any>(ConfirmationModalComponent, ReflectiveInjector.resolve([
 			provide(ConfirmationModalInput, { useValue: confirmationModalInput })
-		])).then((modalInstance: ModalDialogInstance<any>) => {
+		])).then((modalInstance: ModalDialogRef<any>) => {
 			modalInstance.resultObservable.subscribe((result: any) => {
 				onConfirmCallback();
 			}, (err: any) => {

@@ -3,7 +3,7 @@ import {ControlGroup} from 'angular2/common';
 import {Observable} from 'rxjs/Observable';
 import {TranslationPipe} from '../../../../../../../../../../common/utils/localization/TranslationPipe';
 import {AppContext, ThError} from '../../../../../../../../../../common/utils/AppContext';
-import {ModalDialogInstance} from '../../../../../../../../../../common/utils/modals/utils/ModalDialogInstance';
+import {ModalDialogRef} from '../../../../../../../../../../common/utils/modals/utils/ModalDialogRef';
 import {BedSelectionVM} from '../../../../../modals/beds/services/utils/BedSelectionVM';
 import {BedsModalService} from '../../../../../modals/beds/services/BedsModalService';
 import {BedVM} from '../../../../../../../../services/beds/view-models/BedVM';
@@ -57,7 +57,7 @@ export class BedSelectorComponent extends BaseComponent implements OnInit {
     }
     
     public openBedsSelectModal() {
-        this._bedsModalService.openAllBedsModal(this.availableBedList, this.selectedBedList, this.MIN_BED_NO, this.MAX_BED_NO).then((modalDialogInstance: ModalDialogInstance<BedVM[]>) => {
+        this._bedsModalService.openAllBedsModal(this.availableBedList, this.selectedBedList, this.MIN_BED_NO, this.MAX_BED_NO).then((modalDialogInstance: ModalDialogRef<BedVM[]>) => {
             modalDialogInstance.resultObservable.subscribe((savedSelectedBedList: BedVM[]) => {
                 this.selectedBedList = savedSelectedBedList;
                 this.resetEmptySlots();

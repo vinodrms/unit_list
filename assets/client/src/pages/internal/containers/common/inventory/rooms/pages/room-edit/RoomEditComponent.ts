@@ -18,7 +18,7 @@ import {RoomAmenitiesService} from '../../../../../../services/settings/RoomAmen
 import {RoomAttributesService} from '../../../../../../services/settings/RoomAttributesService';
 import {RoomAttributeVMContainer, RoomAttributeVM} from './services/utils/RoomAttributeVMContainer';
 import {RoomAmenityVMContainer, RoomAmenityVM} from './services/utils/RoomAmenityVMContainer';
-import {ModalDialogInstance} from '../../../../../../../../common/utils/modals/utils/ModalDialogInstance';
+import {ModalDialogRef} from '../../../../../../../../common/utils/modals/utils/ModalDialogRef';
 import {RoomCategoriesModalService} from '../../../modals/room-categories/services/RoomCategoriesModalService';
 import {BedVM} from '../../../../../../services/beds/view-models/BedVM';
 import {BedSelectorComponent} from './components/bed-selector/BedSelectorComponent';
@@ -150,7 +150,7 @@ export class RoomEditComponent extends BaseFormComponent implements OnInit {
     }
 
     public openRoomCategorySelectModal() {
-        this.getRoomCategoriesModalPromise().then((modalDialogInstance: ModalDialogInstance<RoomCategoryDO[]>) => {
+        this.getRoomCategoriesModalPromise().then((modalDialogInstance: ModalDialogRef<RoomCategoryDO[]>) => {
             modalDialogInstance.resultObservable.subscribe((selectedRoomCategoryList: RoomCategoryDO[]) => {
                 if(selectedRoomCategoryList.length > 0) {
                     this.roomVM.category = selectedRoomCategoryList[0];   
@@ -159,7 +159,7 @@ export class RoomEditComponent extends BaseFormComponent implements OnInit {
         }).catch((e: any) => { });
     }
 
-    private getRoomCategoriesModalPromise(): Promise<ModalDialogInstance<RoomCategoryDO[]>> {
+    private getRoomCategoriesModalPromise(): Promise<ModalDialogRef<RoomCategoryDO[]>> {
         if (this.roomCategoryNotSelected) {
             return this._roomCategoriesModalService.openAllCategoriesModal(true);
         }

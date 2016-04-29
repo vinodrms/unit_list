@@ -4,7 +4,7 @@ import {Subscription} from 'rxjs/Subscription';
 import {BaseComponent} from '../../../../../../../../../common/base/BaseComponent';
 import {AppContext, ThError} from '../../../../../../../../../common/utils/AppContext';
 import {LoadingComponent} from '../../../../../../../../../common/utils/components/LoadingComponent';
-import {ModalDialogInstance} from '../../../../../../../../../common/utils/modals/utils/ModalDialogInstance';
+import {ModalDialogRef} from '../../../../../../../../../common/utils/modals/utils/ModalDialogRef';
 import {PriceProductsModalService} from '../../../../price-products/modal/services/PriceProductsModalService';
 import {TranslationPipe} from '../../../../../../../../../common/utils/localization/TranslationPipe';
 import {CustomerVM} from '../../../../../../../services/customers/view-models/CustomerVM';
@@ -122,8 +122,8 @@ export class CustomerRegisterEditContainerComponent extends BaseComponent implem
 		this._customerVM.priceProductList = _.filter(this._customerVM.priceProductList, (priceProduct: PriceProductDO) => { return priceProduct.id !== priceProductToRemove.id });
 	}
 	public openPriceProductSelectModal() {
-		this._priceProductsModalService.openPriceProductsModal(PriceProductStatus.Active).then((modalDialogInstance: ModalDialogInstance<PriceProductDO[]>) => {
-			modalDialogInstance.resultObservable.subscribe((selectedPriceProductList: PriceProductDO[]) => {
+		this._priceProductsModalService.openPriceProductsModal(PriceProductStatus.Active).then((modalDialogRef: ModalDialogRef<PriceProductDO[]>) => {
+			modalDialogRef.resultObservable.subscribe((selectedPriceProductList: PriceProductDO[]) => {
 				_.forEach(selectedPriceProductList, (selectedPriceProduct: PriceProductDO) => {
 					this.addPriceProductIfNotExists(selectedPriceProduct);
 				});

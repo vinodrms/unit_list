@@ -1,5 +1,3 @@
-import {ModalDialogInstance} from './ModalDialogInstance';
-
 export enum ModalSize {
 	Small,
 	Large,

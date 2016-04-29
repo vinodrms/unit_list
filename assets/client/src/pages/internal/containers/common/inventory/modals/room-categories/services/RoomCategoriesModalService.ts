@@ -1,6 +1,6 @@
 import {Injectable, ReflectiveInjector, provide} from 'angular2/core';
 import {AppContext} from '../../../../../../../../common/utils/AppContext';
-import {ModalDialogInstance} from '../../../../../../../../common/utils/modals/utils/ModalDialogInstance';
+import {ModalDialogRef} from '../../../../../../../../common/utils/modals/utils/ModalDialogRef';
 import {RoomCategoriesModalComponent} from '../RoomCategoriesModalComponent';
 import {RoomCategoriesModalInput} from './utils/RoomCategoriesModalInput';
 import {RoomCategoryDO} from '../../../../../../services/room-categories/data-objects/RoomCategoryDO';
@@ -11,7 +11,7 @@ export class RoomCategoriesModalService {
 
 	constructor(private _appContext: AppContext) { }
 
-	public openAllCategoriesModal(allowCategoryEdit: boolean, initialRoomCategoryId?: string): Promise<ModalDialogInstance<RoomCategoryDO[]>> {
+	public openAllCategoriesModal(allowCategoryEdit: boolean, initialRoomCategoryId?: string): Promise<ModalDialogRef<RoomCategoryDO[]>> {
 		var roomCategInput = new RoomCategoriesModalInput();
 		roomCategInput.allowCategoryEdit = allowCategoryEdit;
 		roomCategInput.initialRoomCategoryId = initialRoomCategoryId;
@@ -23,7 +23,7 @@ export class RoomCategoriesModalService {
 		]));
 	}
 	
-	public openUsedCategoriesModal(): Promise<ModalDialogInstance<RoomCategoryDO[]>> {
+	public openUsedCategoriesModal(): Promise<ModalDialogRef<RoomCategoryDO[]>> {
 		var roomCategInput = new RoomCategoriesModalInput();
 		roomCategInput.allowCategoryEdit = false;
 		roomCategInput.roomCategoriesType = RoomCategoriesType.UsedInRooms;

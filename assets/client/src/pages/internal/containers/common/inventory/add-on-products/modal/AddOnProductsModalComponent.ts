@@ -4,7 +4,7 @@ import {LazyLoadingTableComponent} from '../../../../../../../common/utils/compo
 import {TranslationPipe} from '../../../../../../../common/utils/localization/TranslationPipe';
 import {ThError, AppContext} from '../../../../../../../common/utils/AppContext';
 import {ICustomModalComponent, ModalSize} from '../../../../../../../common/utils/modals/utils/ICustomModalComponent';
-import {ModalDialogInstance} from '../../../../../../../common/utils/modals/utils/ModalDialogInstance';
+import {ModalDialogRef} from '../../../../../../../common/utils/modals/utils/ModalDialogRef';
 import {AddOnProductDO} from '../../../../../services/add-on-products/data-objects/AddOnProductDO';
 import {AddOnProductVM} from '../../../../../services/add-on-products/view-models/AddOnProductVM';
 import {AddOnProductsService} from '../../../../../services/add-on-products/AddOnProductsService';
@@ -29,7 +29,7 @@ export class AddOnProductsModalComponent extends BaseComponent implements ICusto
 	private _selectedAddOnProductList: AddOnProductDO[] = [];
 
 	constructor(private _appContext: AppContext,
-		private _modalDialogInstance: ModalDialogInstance<AddOnProductDO[]>,
+		private _modalDialogRef: ModalDialogRef<AddOnProductDO[]>,
 		private _tableBuilder: AddOnProductTableMetaBuilderService,
 		private _addOnProductsService: AddOnProductsService) {
 		super();
@@ -46,7 +46,7 @@ export class AddOnProductsModalComponent extends BaseComponent implements ICusto
 	}
 
 	public closeDialog() {
-		this._modalDialogInstance.closeForced();
+		this._modalDialogRef.closeForced();
 	}
 
 	public isBlocking(): boolean {
@@ -68,7 +68,7 @@ export class AddOnProductsModalComponent extends BaseComponent implements ICusto
 		if (!this.didSelectAddOnProduct()) {
 			return;
 		}
-		this._modalDialogInstance.addResult(this._selectedAddOnProductList);
+		this._modalDialogRef.addResult(this._selectedAddOnProductList);
 		this.closeDialog();
 	}
 }

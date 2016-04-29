@@ -2,7 +2,7 @@ import {Observable, Observer} from 'rxjs/Rx';
 import {ComponentRef} from 'angular2/core';
 import {ModalSize} from './ICustomModalComponent';
 
-export class ModalDialogInstance<T> {
+export class ModalDialogRef<T> {
 	private _backdropRef: ComponentRef;
 	private _containerRef: ComponentRef;
 	private _contentRef: ComponentRef;

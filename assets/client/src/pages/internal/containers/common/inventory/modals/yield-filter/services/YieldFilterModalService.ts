@@ -1,6 +1,6 @@
 import {Injectable, ReflectiveInjector, provide} from 'angular2/core';
 import {AppContext} from '../../../../../../../../common/utils/AppContext';
-import {ModalDialogInstance} from '../../../../../../../../common/utils/modals/utils/ModalDialogInstance';
+import {ModalDialogRef} from '../../../../../../../../common/utils/modals/utils/ModalDialogRef';
 import {YieldFilterModalComponent} from '../YieldFilterModalComponent';
 import {YieldFilterModalInput} from './utils/YieldFilterModalInput';
 import {YieldFilterDO} from '../../../../../../services/common/data-objects/yield-filter/YieldFilterDO';
@@ -11,7 +11,7 @@ import {YieldFiltersService} from '../../../../../../services/hotel-configuratio
 export class YieldFilterModalService {
 	constructor(private _appContext: AppContext) { }
 
-	public openYieldFilterModal(yieldFilterService: YieldFiltersService, yieldFilter: YieldFilterDO): Promise<ModalDialogInstance<YieldFilterValueDO>> {
+	public openYieldFilterModal(yieldFilterService: YieldFiltersService, yieldFilter: YieldFilterDO): Promise<ModalDialogRef<YieldFilterValueDO>> {
 		var yieldFilterModalInput = new YieldFilterModalInput();
 		yieldFilterModalInput.yieldFilterService = yieldFilterService;
 		yieldFilterModalInput.yieldFilter = yieldFilter;

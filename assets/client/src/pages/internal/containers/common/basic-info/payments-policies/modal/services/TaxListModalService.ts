@@ -1,6 +1,6 @@
 import {Injectable, ReflectiveInjector, provide} from 'angular2/core';
 import {AppContext} from '../../../../../../../../common/utils/AppContext';
-import {ModalDialogInstance} from '../../../../../../../../common/utils/modals/utils/ModalDialogInstance';
+import {ModalDialogRef} from '../../../../../../../../common/utils/modals/utils/ModalDialogRef';
 import {TaxListModalComponent} from '../TaxListModalComponent';
 import {TaxListModalInput} from './utils/TaxListModalInput';
 import {TaxDO, TaxType} from '../../../../../../services/taxes/data-objects/TaxDO';
@@ -10,7 +10,7 @@ export class TaxListModalService {
 
 	constructor(private _appContext: AppContext) { }
 
-	public openTaxListModal(taxType: TaxType): Promise<ModalDialogInstance<TaxDO[]>> {
+	public openTaxListModal(taxType: TaxType): Promise<ModalDialogRef<TaxDO[]>> {
 		var taxListModalInput = new TaxListModalInput();
 		taxListModalInput.taxType = taxType;
 
