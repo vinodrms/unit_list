@@ -17,12 +17,12 @@
 	<tbody>
 		<tr *ngFor="let fileAttachment of fileAttachmentList">
 			<td class="th-file-label">
-				<a [href]="fileAttachment.url" target="_blank">
+				<a [download]="fileAttachment.name" [href]="fileAttachment.url" target="_blank">
 					{{fileAttachment.name}}
 				</a>
 			</td>
 			<td class="th-file-actions">
-				<a class="btn btn-xs" [href]="fileAttachment.url" target="_blank">
+				<a class="btn btn-xs" [download]="fileAttachment.name" [href]="fileAttachment.url" target="_blank">
 					<i class="fa fa-download"></i>
 				</a>
 				<a class="btn btn-xs">
