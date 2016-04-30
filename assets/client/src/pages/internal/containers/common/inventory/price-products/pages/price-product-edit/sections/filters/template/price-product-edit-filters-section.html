@@ -1,6 +1,6 @@
 <div class="col-md-4 col-sm-4 col-xs-12 form-group">
 	<div class="row">
-		<div class="col-xs-12">
+		<div class="col-xs-12 form-group">
 			<label>{{ 'Filters' | translate }}</label>
 		</div>
 	</div>
@@ -16,7 +16,7 @@
 	<div class="row" *ngIf="didInit">
 		<div class="col-md-6 col-sm-6 col-xs-12" *ngFor="let yieldFilterVM of yieldFilterVMValues">
 			<div class="row">
-				<div class="col-md-6 col-sm-6 col-xs-6">
+				<div class="col-md-6 col-sm-6 col-xs-6 form-group">
 					<label class="control-label">{{yieldFilterVM.label | translate}}: </label>
 				</div>
 				<div class="col-md-6 col-sm-6 col-xs-6 yield-filter">

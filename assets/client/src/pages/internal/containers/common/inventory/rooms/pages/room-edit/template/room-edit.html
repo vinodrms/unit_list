@@ -22,7 +22,7 @@
             </div>
 
             <div class="row">
-                <div class="col-xs-12 col-md-12">
+                <div class="col-xs-12 col-md-12 form-group">
                     <label>{{ 'Category' | translate }}*</label>
                     <table class="table table-striped form-group">
                         <tbody class="input-group" [ngClass]="{'form-warning': didSubmitForm&&roomCategoryNotSelected}">
@@ -39,18 +39,18 @@
                 </div>
             </div>
 
-            <div class="row form-group">
-                <div class="col-xs-12 col-md-12">
+            <div class="row">
+                <div class="col-xs-12 col-md-12 form-group">
                     <label class="control-label">{{ 'Beds' | translate }}</label>
                 </div>
-                <div class="col-xs-12 col-md-12">
+                <div class="col-xs-12 col-md-12 form-group">
                     <bed-selector [availableBedList]="allAvailableBeds" [selectedBedList]="roomVM.bedList" (selectedBedListChanged)="diChangeSelectedBedList($event)"></bed-selector>
                 </div>
 
             </div>
         </div>
 
-        <div class="col-xs-12 col-md-4">
+        <div class="col-xs-12 col-md-4 form-group">
             <label>{{ 'Image of the Room' | translate }}</label>
             <image-upload [imageUrl]="roomVM.imageUrl" (onImageUpload)="didUploadImage($event)"></image-upload>
         </div>
@@ -59,11 +59,11 @@
 
     <hr/>
 
-    <div class="row form-group">
-        <div class="col-xs-12 col-md-12">
+    <div class="row">
+        <div class="col-xs-12 col-md-12 form-group">
             <label class="control-label">{{ 'Amenities' | translate }}</label>
         </div>
-        <div class="col-xs-12 col-md-12">
+        <div class="col-xs-12 col-md-12 form-group">
             <div class="btn-group amenities-group" role="group">
                 <div class="button-check th-grid-btn" *ngFor="let roomAmenityVM of roomAmenities.roomAmenityList">
                     <div class="info-block block-info clearfix" title="{{ roomAmenityVM.roomAmenity.name }}">
@@ -78,11 +78,11 @@
         </div>
     </div>
 
-    <div class="row form-group">
-        <div class="col-xs-12 col-md-12">
+    <div class="row">
+        <div class="col-xs-12 col-md-12 form-group">
             <label class="control-label">{{ 'Attributes' | translate }}</label>
         </div>
-        <div class="col-xs-12 col-md-12">
+        <div class="col-xs-12 col-md-12 form-group">
             <div class="btn-group amenities-group" role="group">
                 <div class="button-check th-grid-btn" *ngFor="let roomAttributeVM of roomAttributes.roomAttributeList">
                     <div class="info-block block-info clearfix" title="{{ roomAttributeVM.roomAttribute.name }}">
@@ -97,11 +97,11 @@
         </div>
     </div>
 
-    <div class="row form-group">
-        <div class="col-xs-12 col-md-8">
+    <div class="row">
+        <div class="col-xs-12 col-md-8 form-group">
             <label>{{ 'Notes' | translate }}</label>
         </div>
-        <div class="col-xs-12 col-md-8">
+        <div class="col-xs-12 col-md-8 form-group">
             <textarea class="form-control" ngControl="notes"></textarea>
         </div>
     </div>

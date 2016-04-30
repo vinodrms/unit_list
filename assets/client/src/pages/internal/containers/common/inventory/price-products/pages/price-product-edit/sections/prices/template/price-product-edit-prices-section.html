@@ -22,7 +22,7 @@
 
 <div class="col-md-8 col-sm-8 col-xs-12">
 	<loading-component [isLoading]="isLoading"></loading-component>
-	<div class="row" *ngIf="!isLoading">
+	<div class="row form-group" *ngIf="!isLoading">
 		<label>{{ 'Price configuration in %ccySymbol%' | translate:{ccySymbol: ccy.nativeSymbol} }}</label>
 
 		<div class="row" *ngIf="!isPricePerNumberOfPersons">
@@ -36,7 +36,7 @@
 			</div>
 		</div>
 		<div class="row" *ngIf="isPricePerNumberOfPersons">
-			<div class="col-md-12 col-sm-12 col-xs-12" *ngFor="let pricePerPersonVM of pricePerPersonContainer.pricePerPersonVMList">
+			<div class="col-md-12 col-sm-12 col-xs-12 form-group" *ngFor="let pricePerPersonVM of pricePerPersonContainer.pricePerPersonVMList">
 				<label>{{pricePerPersonVM.roomCategoryStats.roomCategory.displayName}}</label>
 				<a class="btn" 
 					*ngIf="pricePerPersonVM.previousRoomCategoryId" 

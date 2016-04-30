@@ -2,14 +2,14 @@
 <div [hidden]="isLoading">
 	<div class="row">
 		<div class="col-md-4 col-xs-6 form-group">
+			<label>{{ 'Type of customer' | translate }}</label>
 			<div class="input-group">
-				<label>{{ 'Type of customer' | translate }}</label>
 				<select class="form-control" [ngModel]="customerVM.customer.type" (ngModelChange)="didChangeCustomerType($event)">
 					<option *ngFor="let custDetailsMeta of custDetailsMetaList" [value]="custDetailsMeta.customerType">{{custDetailsMeta.customerTypeName | translate}}</option>
 				</select>
 			</div>
 		</div>
-		<div class="col-md-4 col-xs-6">
+		<div class="col-md-4 col-xs-6 form-group">
 			<label>{{ 'Public Price Products' | translate }}</label>
 			<div class="input-group">
 				<div class="btn-group" data-toggle="buttons">
@@ -25,7 +25,7 @@
 			</div>
 			<small class="text-muted"><i class="fa fa-info-circle"></i>  {{ 'If allowed, public price products will be available for this customer.' | translate }}</small>
 		</div>
-		<div class="col-md-4 col-xs-12 ">
+		<div class="col-md-4 col-xs-12 form-group">
 			<label>{{ 'Confidential Price Products' | translate }}</label>
 			<div class="input-group">
 				<table class="table table-striped projects">

@@ -1,4 +1,4 @@
-<div class="col-md-6 col-sm-6 col-xs-12 ">
+<div class="col-md-6 col-sm-6 col-xs-12 form-group">
 	<label>{{ 'VAT' | translate }}</label>
 	<div class="input-group">
 		<select class="form-control" [ngModel]="vatTaxId" (ngModelChange)="didSelectVatTaxId($event)" [disabled]="readonly">
@@ -8,7 +8,7 @@
 	</div>
 	<small class="text-muted"><i class="fa fa-info-circle"></i> {{ 'The VAT needs to be included in the price' | translate }} </small>
 </div>
-<div class="col-md-6 col-sm-6 col-xs-12 ">
+<div class="col-md-6 col-sm-6 col-xs-12 form-group">
 	<label for="roomname">Other Taxes</label>
 	<table class="table table-striped projects">
 		<tbody>

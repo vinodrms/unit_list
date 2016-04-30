@@ -1,21 +1,23 @@
-<label>{{ 'Room Categories' | translate }}*</label>
-<table class="table table-striped form-group">
-	<tbody class="input-group" [ngClass]="{'form-warning': didSubmit&&!isValid()}">
-		<tr *ngFor="let roomCategory of roomCategoryList">
-			<td>{{roomCategory.displayName}}</td>
-			<td *ngIf="!readonly">
-				<a class="btn btn-xs" (click)="removeRoomCategory(roomCategory)">
-					<i class="fa unitpal-font">\</i> {{ 'Remove' | translate }} 
-				</a>
-			</td>
-		</tr>
-		<tr>
-			<td  *ngIf="!readonly">
-				<a class="btn btn-xs" (click)="openRoomCategorySelectModal()"><i class="fa fa-plus"></i> {{ 'Add' | translate }} </a>
-			</td>
-			<td></td>
-		</tr>
-	</tbody>
-	<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Select at least a room category' | translate }}</small></label>
-	<small class="text-muted"><i class="fa fa-info-circle"></i> {{ 'The link between the price product and rooms.' | translate }}</small>
-</table>
+<div class="form-group">
+	<label>{{ 'Room Categories' | translate }}*</label>
+	<table class="table table-striped form-group">
+		<tbody class="input-group" [ngClass]="{'form-warning': didSubmit&&!isValid()}">
+			<tr *ngFor="let roomCategory of roomCategoryList">
+				<td>{{roomCategory.displayName}}</td>
+				<td *ngIf="!readonly">
+					<a class="btn btn-xs" (click)="removeRoomCategory(roomCategory)">
+						<i class="fa unitpal-font">\</i> {{ 'Remove' | translate }} 
+					</a>
+				</td>
+			</tr>
+			<tr>
+				<td  *ngIf="!readonly">
+					<a class="btn btn-xs" (click)="openRoomCategorySelectModal()"><i class="fa fa-plus"></i> {{ 'Add' | translate }} </a>
+				</td>
+				<td></td>
+			</tr>
+		</tbody>
+		<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Select at least a room category' | translate }}</small></label>
+		<small class="text-muted"><i class="fa fa-info-circle"></i> {{ 'The link between the price product and rooms.' | translate }}</small>
+	</table>
+</div>
