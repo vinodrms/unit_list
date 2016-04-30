@@ -106,7 +106,7 @@ header {
 .container-fluid {
     margin: 0 auto;
     height: calc(100% - 80px);
-    padding: 12px 0;
+    padding: 12px 0 4px 0;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
@@ -350,6 +350,7 @@ table .buttons,table button,table .btn {
 
 .overview-left {
     height: 100%;
+    padding-top: 12px;
 }
 
 .overview-left .table p {
@@ -530,7 +531,6 @@ lazy-loading-table .table-wrapper table thead {
 }
 
 .card-body{
-    padding-top: 12px;
     /* TODO: If we put 100% it will be 100% of the parent height, when it should be 100% of the remaining height.
     *  TO fix this we substract 82px (card-header height + padding), this is a quick fix that work but we should find something smarter.
     */
