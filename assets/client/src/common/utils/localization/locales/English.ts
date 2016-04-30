@@ -382,5 +382,6 @@ export var EnglishTranslations: Object = {
 	"Settings": "Settings",
 	"Information Saved Succesfully": "Information Saved Succesfully",
 	"Payments & Policies": "Payments & Policies",
-	"Property Details": "Property Details"
+	"Property Details": "Property Details",
+	"Change": "Change"
 };

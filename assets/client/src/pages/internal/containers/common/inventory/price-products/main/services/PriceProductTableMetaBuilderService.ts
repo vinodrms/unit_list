@@ -14,7 +14,7 @@ export class PriceProductTableMetaBuilderService {
 			autoSelectRows: false,
 			columnMetaList: [
 				{
-					displayName: "Price Product Name",
+					displayName: "Name",
 					valueMeta: {
 						objectPropertyId: "priceProduct.name",
 						propertyType: TablePropertyType.StringType,

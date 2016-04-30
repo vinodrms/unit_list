@@ -30,7 +30,10 @@
                                 <td class="room-categ-label" *ngIf="roomVM.category">{{roomVM.category.displayName}}</td>
                                 <td class="room-categ-label" *ngIf="!roomVM.category">{{ 'No category selected' | translate }}</td>
                                 <td class="room-categ-select">
-                                    <a class="btn btn-xs" (click)="openRoomCategorySelectModal()"><i class="fa fa-pencil"></i> {{ 'Select' | translate }} </a>
+                                    <a class="btn btn-xs" (click)="openRoomCategorySelectModal()"><i class="fa fa-pencil"></i> 
+                                        <span *ngIf="!roomVM.category">{{ 'Select' | translate }}</span>
+                                        <span *ngIf="roomVM.category">{{ 'Change' | translate }}</span> 
+                                    </a>
                                 </td>
                             </tr>
                         </tbody>
