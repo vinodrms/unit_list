@@ -58,8 +58,8 @@ body,html {
 }
 
 header {
-    height: 70px !important;
-    padding: 12px 12px 0;
+    height: 61px !important;
+    padding: 0 12px 0 12px;
 }
 
 .container {
@@ -85,8 +85,9 @@ header {
 }
 
 .singup_logo {
-    max-width: 45px;
-    height: auto;
+    padding-top: 10px;
+    max-height: 49px;
+    width: auto;
     margin-bottom: 12px;
 }
 
@@ -105,8 +106,8 @@ header {
 
 .container-fluid {
     margin: 0 auto;
-    height: calc(100% - 80px);
-    padding: 12px 0 4px 0;
+    height: calc(100% - 71px);
+    padding: 0 0 4px 0;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
