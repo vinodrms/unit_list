@@ -1,128 +1,255 @@
 <loading-component [isLoading]="!didInit"></loading-component>
 
 <div *ngIf="didInit">
-		<div class="row table-filter">
-			<!--TODO: Investigate if !isCollapsed && !tableOptions.canSearch then the total sum is 16 != 12-->
-			<div *ngIf="tableOptions.canSearch" [ngClass]="{'col-xs-4 col-md-4': !isCollapsed, 'col-xs-12 col-md-12': isCollapsed}" >
-				<div class="input-group">
-					<input type="text" class="form-control" placeholder="{{tableMeta.searchInputPlaceholder}}" [ngFormControl]="textSearchControl" />
-					<span class="input-group-btn">
+	<div class="row table-filter">
+		<!--TODO: Investigate if !isCollapsed && !tableOptions.canSearch then the total sum is 16 != 12-->
+		<div *ngIf="tableOptions.canSearch" [ngClass]="{'col-xs-4 col-md-4': !isCollapsed, 'col-xs-12 col-md-12': isCollapsed}">
+			<div class="input-group">
+				<input type="text" class="form-control" placeholder="{{tableMeta.searchInputPlaceholder}}" [ngFormControl]="textSearchControl"
+				/>
+				<span class="input-group-btn">
 						<button class="btn" type="button" (click)="searchByText()">
 							<i class="glyphicon glyphicon-search"></i>
 						</button>
 					</span>
-				</div>
 			</div>
-			<div class="col-xs-4 col-md-4" *ngIf="!tableOptions.canSearch && !isCollapsed">
-			</div>
-			<div class="col-xs-4 col-md-4" *ngIf="!isCollapsed">
-			</div>
-			<div class="col-xs-4 col-md-4" *ngIf="!isCollapsed">
-				<div>
-					<label>{{ 'Show' | translate }}
+		</div>
+		<div class="col-xs-4 col-md-4" *ngIf="!tableOptions.canSearch && !isCollapsed">
+		</div>
+		<div class="col-xs-4 col-md-4" *ngIf="!isCollapsed">
+		</div>
+		<div class="col-xs-4 col-md-4" *ngIf="!isCollapsed">
+			<div>
+				<label>{{ 'Show' | translate }}
 						<select [ngModel]="paginationIndex.numOfItemsPerPage" (ngModelChange)="didChangeNumOfItemsPerPage($event)">
 							<option *ngFor="let nomPerPage of paginationIndex.nunOfItemsPerPageList" [value]="nomPerPage">
 								{{nomPerPage}}
 							</option>
 						</select> {{ 'items' | translate }}
 					</label>
-				</div>
 			</div>
 		</div>
+	</div>
 
-		<div class="row table-wrapper">
-			<div class="col-xs-12 col-md-12">
-				<table class="table table-hover">
-					<thead>
-						<tr>
-							<th *ngFor="let columnMeta of columnMetaList">
-								{{ columnMeta.displayName | translate }}
-							</th>
-							<th></th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr *ngFor="let item of itemList" [ngClass]="{active: (isSelected(item) && (tableOptions.canSelect || tableOptions.canMultiSelect)  )}">
-							<td *ngFor="let columnMeta of columnMetaList" (click)="(tableOptions.canSelect || tableOptions.canMultiSelect) && didSelectItem(item)" [ngClass]="{'selectable-row': (tableOptions.canSelect || tableOptions.canMultiSelect)}">
-								<span *ngIf="isPercentage(columnMeta.valueMeta)">
-									{{ getItemValue(item, columnMeta.valueMeta) | percentage }}
-								</span>
-								<span *ngIf="isPrice(columnMeta.valueMeta)">
-									{{ getDependentItemValue(item, columnMeta.valueMeta) }}
-									{{ getItemValue(item, columnMeta.valueMeta) | price }}
-								</span>
-								<span *ngIf="isStringOrNumber(columnMeta.valueMeta)">
-									{{ getItemValue(item, columnMeta.valueMeta) | translate }}
-								</span>
-								<span *ngIf="isNotes(columnMeta.valueMeta)">
-									<small>
-										{{ getItemValue(item, columnMeta.valueMeta) | translate }}
-									</small>
-								</span>
-								<span *ngIf="isCapacity(columnMeta.valueMeta)">
-									{{ getItemValue(item, columnMeta.valueMeta).maxAdults }} <span class="unitpal-font">{{columnMeta.valueMeta.fonts.adult}}</span> {{ getItemValue(item, columnMeta.valueMeta).maxChildren }} <span class="unitpal-font">{{columnMeta.valueMeta.fonts.child}}</span>
-								</span>
-								<span *ngIf="isFontIcon(columnMeta.valueMeta)">
-									<span class="unitpal-font">{{getItemValue(item, columnMeta.valueMeta)}}</span> 
-								</span>
-							</td>
-							<td class="table-item-action-group">
-								<a class="btn btn-xs" *ngIf="tableOptions.canCopy" (click)="copyItem(item)" title="{{ 'Clone' | translate }}">
-									<i class="fa unitpal-font">[</i>
-								</a>
-								<a class="btn btn-xs" *ngIf="tableOptions.canEdit" (click)="editItem(item)" title="{{ 'Edit' | translate }}">
-									<i class="fa unitpal-font">]</i>
-								</a>
-								<a class="btn btn-xs" *ngIf="tableOptions.canDelete" (click)="deleteItem(item)" title="{{ 'Delete' | translate }}">
-									<i class="fa unitpal-font">\</i>
-								</a>
-							</td>
-						</tr>
-						<tr *ngIf="noResultsExist()">
-							<td [attr.colspan]="columnMetaList.length + 1">
-								<center>
-									{{ 'No items to display' | translate }}
-								</center>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-		</div>
-		<div class="row table-foot">
-			<div class="col-xs-4 col-md-4" *ngIf="!isCollapsed">
-				<a class="btn btn-lg" *ngIf="tableOptions.canAdd" (click)="addItem()">
-					<i class="fa fa-plus"></i> {{tableMeta.addButtonText}}
-				</a>
-			</div>
-			<div class="col-xs-4 col-md-4" *ngIf="!isCollapsed">
-				<div class="dataTables_info" id="example_info" role="status" aria-live="polite">{{paginationIndex.pageNumberStat}}</div>
-			</div>
+	<div>
+		<table class="lazy-loading">
+			<thead>
+				<tr>
+					<th field='Nick'>Nick</th>
+					<th field='Mail'>Mail</th>
+					<th field='Web'>Web</th>
+					<th field='Twitter'>Twitter</th>
+					<th field='Id'>Id</th>
+				</tr>
+			</thead>
+			<tfoot>
+				<tr>
+					<td field='New'>
+						<a class="btn btn-lg" *ngIf="tableOptions.canAdd" (click)="addItem()">
+							<i class="fa fa-plus"></i> {{tableMeta.addButtonText}}
+						</a>
+					</td>
 
-			<div class="col-xs-3 col-md-3" *ngIf="isCollapsed">
-					<a class="btn btn-lg" *ngIf="tableOptions.canAdd" (click)="addItem()">
-						<i class="fa fa-plus"></i>
-					</a>
-			</div>
+					<td field='Stats'>
+						{{paginationIndex.pageNumberStat}}
+					</td>
+					<td field='Pages'>
+						<ul class="pagination">
+							<li [ngClass]="{disabled: isFirstPage()}">
+								<a (click)="updatePageNumber(paginationIndex.firstPageNumber)">
+									<i class="fa fa-angle-double-left"></i>
+								</a>
+							</li>
+							<li *ngFor="let index of paginationIndex.indexList" [ngClass]="{active: index.isSelected}">
+								<a (click)="updatePageNumber(index.pageNumber)">{{index.displayNumber}}</a>
+							</li>
+							<li [ngClass]="{disabled: isLastPage()}">
+								<a (click)="updatePageNumber(paginationIndex.lastPageNumber)">
+									<i class="fa fa-angle-double-right"></i>
+								</a>
+							</li>
+						</ul>
 
-			<div class="text-right"  [ngClass]="{'col-xs-4 col-md-4': !isCollapsed, 'col-xs-9 col-md-9': isCollapsed}">
-				<center>
-					<ul class="pagination">
-						<li [ngClass]="{disabled: isFirstPage()}">
-							<a (click)="updatePageNumber(paginationIndex.firstPageNumber)">
-								<i class="fa fa-angle-double-left"></i>
-							</a>
-						</li>
-						<li *ngFor="let index of paginationIndex.indexList" [ngClass]="{active: index.isSelected}">
-							<a (click)="updatePageNumber(index.pageNumber)">{{index.displayNumber}}</a>
-						</li>
-						<li [ngClass]="{disabled: isLastPage()}">
-							<a (click)="updatePageNumber(paginationIndex.lastPageNumber)">
-								<i class="fa fa-angle-double-right"></i>
-							</a>
-						</li>
-					</ul>
-				</center>
-			</div>
-		</div>
+					</td>
+				</tr>
+			</tfoot>
+			<tbody>
+				<tr>
+					<td field='Nick'>Fulano</td>
+					<td field='Mail'>Fulano@gmail.com</td>
+					<td field='Web'>fulano.es</td>
+					<td field='Twitter'>@Fulano</td>
+					<td field='Id'>1</td>
+				</tr>
+				<tr>
+					<td field='Nick'>Fulano</td>
+					<td field='Mail'>Fulano@gmail.com</td>
+					<td field='Web'>fulano.es</td>
+					<td field='Twitter'>@Fulano</td>
+					<td field='Id'>1</td>
+				</tr>
+				<tr>
+					<td field='Nick'>Fulano</td>
+					<td field='Mail'>Fulano@gmail.com</td>
+					<td field='Web'>fulano.es</td>
+					<td field='Twitter'>@Fulano</td>
+					<td field='Id'>1</td>
+				</tr>
+				<tr>
+					<td field='Nick'>Fulano</td>
+					<td field='Mail'>Fulano@gmail.com</td>
+					<td field='Web'>fulano.es</td>
+					<td field='Twitter'>@Fulano</td>
+					<td field='Id'>1</td>
+				</tr>
+				<tr>
+					<td field='Nick'>Fulano</td>
+					<td field='Mail'>Fulano@gmail.com</td>
+					<td field='Web'>fulano.es</td>
+					<td field='Twitter'>@Fulano</td>
+					<td field='Id'>1</td>
+				</tr>
+				<tr>
+					<td field='Nick'>Fulano</td>
+					<td field='Mail'>Fulano@gmail.com</td>
+					<td field='Web'>fulano.es</td>
+					<td field='Twitter'>@Fulano</td>
+					<td field='Id'>1</td>
+				</tr>
+				<tr>
+					<td field='Nick'>Fulano</td>
+					<td field='Mail'>Fulano@gmail.com</td>
+					<td field='Web'>fulano.es</td>
+					<td field='Twitter'>@Fulano</td>
+					<td field='Id'>1</td>
+				</tr>
+				<tr>
+					<td field='Nick'>Fulano</td>
+					<td field='Mail'>Fulano@gmail.com</td>
+					<td field='Web'>fulano.es</td>
+					<td field='Twitter'>@Fulano</td>
+					<td field='Id'>1</td>
+				</tr>
+				<tr>
+					<td field='Nick'>Fulano</td>
+					<td field='Mail'>Fulano@gmail.com</td>
+					<td field='Web'>fulano.es</td>
+					<td field='Twitter'>@Fulano</td>
+					<td field='Id'>1</td>
+				</tr>
+				<tr>
+					<td field='Nick'>Fulano</td>
+					<td field='Mail'>Fulano@gmail.com</td>
+					<td field='Web'>fulano.es</td>
+					<td field='Twitter'>@Fulano</td>
+					<td field='Id'>1</td>
+				</tr>
+				<tr>
+					<td field='Nick'>Fulano</td>
+					<td field='Mail'>Fulano@gmail.com</td>
+					<td field='Web'>fulano.es</td>
+					<td field='Twitter'>@Fulano</td>
+					<td field='Id'>1</td>
+				</tr>
+				<tr>
+					<td field='Nick'>Fulano</td>
+					<td field='Mail'>Fulano@gmail.com</td>
+					<td field='Web'>fulano.es</td>
+					<td field='Twitter'>@Fulano</td>
+					<td field='Id'>1</td>
+				</tr>
+				<tr>
+					<td field='Nick'>Fulano</td>
+					<td field='Mail'>Fulano@gmail.com</td>
+					<td field='Web'>fulano.es</td>
+					<td field='Twitter'>@Fulano</td>
+					<td field='Id'>1</td>
+				</tr>
+				<tr>
+					<td field='Nick'>Fulano</td>
+					<td field='Mail'>Fulano@gmail.com</td>
+					<td field='Web'>fulano.es</td>
+					<td field='Twitter'>@Fulano</td>
+					<td field='Id'>1</td>
+				</tr>
+				<tr>
+					<td field='Nick'>Fulano</td>
+					<td field='Mail'>Fulano@gmail.com</td>
+					<td field='Web'>fulano.es</td>
+					<td field='Twitter'>@Fulano</td>
+					<td field='Id'>1</td>
+				</tr>
+				<tr>
+					<td field='Nick'>Fulano</td>
+					<td field='Mail'>Fulano@gmail.com</td>
+					<td field='Web'>fulano.es</td>
+					<td field='Twitter'>@Fulano</td>
+					<td field='Id'>1</td>
+				</tr>
+				<tr>
+					<td field='Nick'>Fulano</td>
+					<td field='Mail'>Fulano@gmail.com</td>
+					<td field='Web'>fulano.es</td>
+					<td field='Twitter'>@Fulano</td>
+					<td field='Id'>1</td>
+				</tr>
+				<tr>
+					<td field='Nick'>Fulano</td>
+					<td field='Mail'>Fulano@gmail.com</td>
+					<td field='Web'>fulano.es</td>
+					<td field='Twitter'>@Fulano</td>
+					<td field='Id'>1</td>
+				</tr>
+				<tr>
+					<td field='Nick'>Fulano</td>
+					<td field='Mail'>Fulano@gmail.com</td>
+					<td field='Web'>fulano.es</td>
+					<td field='Twitter'>@Fulano</td>
+					<td field='Id'>1</td>
+				</tr>
+				<tr>
+					<td field='Nick'>Fulano</td>
+					<td field='Mail'>Fulano@gmail.com</td>
+					<td field='Web'>fulano.es</td>
+					<td field='Twitter'>@Fulano</td>
+					<td field='Id'>1</td>
+				</tr>
+				<tr>
+					<td field='Nick'>Fulano</td>
+					<td field='Mail'>Fulano@gmail.com</td>
+					<td field='Web'>fulano.es</td>
+					<td field='Twitter'>@Fulano</td>
+					<td field='Id'>1</td>
+				</tr>
+				<tr>
+					<td field='Nick'>Fulano</td>
+					<td field='Mail'>Fulano@gmail.com</td>
+					<td field='Web'>fulano.es</td>
+					<td field='Twitter'>@Fulano</td>
+					<td field='Id'>1</td>
+				</tr>
+				<tr>
+					<td field='Nick'>Fulano</td>
+					<td field='Mail'>Fulano@gmail.com</td>
+					<td field='Web'>fulano.es</td>
+					<td field='Twitter'>@Fulano</td>
+					<td field='Id'>1</td>
+				</tr>
+				<tr>
+					<td field='Nick'>Fulano</td>
+					<td field='Mail'>Fulano@gmail.com</td>
+					<td field='Web'>fulano.es</td>
+					<td field='Twitter'>@Fulano</td>
+					<td field='Id'>1</td>
+				</tr>
+				<tr>
+					<td field='Nick'>Fulano</td>
+					<td field='Mail'>Fulano@gmail.com</td>
+					<td field='Web'>fulano.es</td>
+					<td field='Twitter'>@Fulano</td>
+					<td field='Id'>1</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
 </div>

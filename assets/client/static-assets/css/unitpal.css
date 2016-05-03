@@ -498,14 +498,13 @@ lazy-loading-table{
     height: 100%;
 }
 
-lazy-loading-table .table-wrapper{
+/*lazy-loading-table .table-wrapper{
     height: calc(100% - 105px);
-    overflow-y: scroll;
-}
-
+}*/
+/*
 lazy-loading-table .table-wrapper table thead {
     background-color: white;
-}
+}*/
 
 .overview-right-body{
     height: calc(100% - 82px);
@@ -875,4 +874,144 @@ input[type="file"] {
 .form-group > label {
     font-size: 12px;
     font-weight: bold;
+}
+
+
+/**
+    Lazy loading fixed header table css
+*/
+table.lazy-loading {
+    background: #15BFCC;
+    table-layout: fixed;
+    margin: 1rem auto;
+    width: 98%;
+    box-shadow: 0 0 4px 2px rgba(0, 0, 0, .4);
+    border-collapse: collapse;
+    border: 1px solid rgba(0, 0, 0, .5);
+    border-top: 0 none;
+}
+table.lazy-loading thead {
+    background: #FF7361;
+    text-align: center;
+    z-index: 2;
+}
+
+table.lazy-loading thead tr {
+  padding-right: 17px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, .6);
+  z-index: 2;
+}
+
+table.lazy-loading th {
+  border-right: 2px solid rgba(0, 0, 0, .2);
+  padding: .7rem 0;
+  font-size: 1.5rem;
+  font-weight: normal;
+  font-variant: small-caps;
+}
+
+table.lazy-loading tbody {
+  display: block;
+  height: calc(40vh - 1px);
+    /*min-height: calc(100% - 225px);*/
+  /*use calc for fixed ie9 & <*/
+  overflow-Y: scroll;
+  color: #000;
+}
+
+table.lazy-loading tr {
+  display: block;
+  overflow: hidden;
+}
+
+table.lazy-loading tbody tr:nth-child(odd) {
+  background: rgba(0, 0, 0, .2);
+}
+
+table.lazy-loading th,
+table.lazy-loading td {
+  float: left;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+table.lazy-loading td {
+  padding: .5rem 0 .5rem 1rem;
+  border-right: 2px solid rgba(0, 0, 0, .2);
+}
+
+table.lazy-loading tfoot td {
+  /*padding: .5rem 0 .5rem 1rem;*/
+  border-right: 0px;
+  width: 33.33%;
+  min-height: 61px;
+  padding-left: 0px;
+      /*display: -webkit-box;
+    -webkit-box-pack: center;
+    -webkit-box-align: center;*/
+}
+
+table.lazy-loading td:nth-child(2n) {
+  color: #fff;
+}
+
+table.lazy-loading [field='Nick'] {
+  width: 30%;
+}
+
+table.lazy-loading [field='Mail'] {
+  width: 20%;
+}
+
+table.lazy-loading [field='Web'] {
+  width: 20%;
+}
+
+table.lazy-loading [field='Twitter'] {
+  width: 20%;
+}
+
+table.lazy-loading [field='Id'] {
+  width: 10%;
+}
+
+table.lazy-loading .pagination {
+  padding: 0px;
+  margin: 0px;
+}
+
+table.lazy-loading th:last-child,
+table.lazy-loading td:last-child {
+  text-align: center;
+  border-right: 0 none;
+  padding-left: 0;
+}
+
+.up-col-10p {
+    width: 10%
+}
+.up-col-20p {
+    width: 20%
+}
+.up-col-30p {
+    width: 30%
+}
+.up-col-40p {
+    width: 40%
+}
+.up-col-50p {
+    width: 50%
+}
+.up-col-60p {
+    width: 60%
+}
+.up-col-70p {
+    width: 70%
+}
+.up-col-80p {
+    width: 80%
+}
+.up-col-90p {
+    width: 90%
 }
