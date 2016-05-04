@@ -79,13 +79,13 @@ gulp.task('copy-dist', ['pack-internal', 'pack-external', 'clean-dist'], functio
 		'node_modules/toastr/build/**/*',
 		'node_modules/jquery.1/**/*',
 		'node_modules/moment/min/**/*',
-		'node_modules/pace-progress**/*',
+		'node_modules/pace-progress/**/*',
 		'node_modules/underscore/**/*',
 		'node_modules/floatthead/**/*',
 
 		'node_modules/es6-shim/**/*',
-		'node_modules/systemjs/**/*',
-		'node_modules/zone.js/**/*',
+		'node_modules/systemjs/dist/**/*',
+		'node_modules/zone.js/dist/**/*',
 		'node_modules/reflect-metadata/**/*',
 
 		'js/**/*',
