@@ -1,4 +1,4 @@
-import {Component, OnInit, Inject} from 'angular2/core';
+import {Component, OnInit, Inject} from '@angular/core';
 import {BaseComponent} from '../../../../../../../../common/base/BaseComponent';
 import {AppContext, ThError} from '../../../../../../../../common/utils/AppContext';
 import {TranslationPipe} from '../../../../../../../../common/utils/localization/TranslationPipe';

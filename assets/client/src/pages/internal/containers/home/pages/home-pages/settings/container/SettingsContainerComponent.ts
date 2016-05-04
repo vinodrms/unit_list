@@ -1,5 +1,5 @@
-import {Component, OnInit} from 'angular2/core';
-import {RouteConfig, RouterOutlet, ROUTER_DIRECTIVES} from 'angular2/router';
+import {Component, OnInit} from '@angular/core';
+import {RouteConfig, RouterOutlet, ROUTER_DIRECTIVES} from '@angular/router-deprecated';
 import {TranslationPipe} from '../../../../../../../../common/utils/localization/TranslationPipe';
 import {SettingsNavbarComponent} from '../subcomponents/navbar/SettingsNavbarComponent';
 import {SettingsNavbarService} from '../subcomponents/navbar/services/SettingsNavbarService';

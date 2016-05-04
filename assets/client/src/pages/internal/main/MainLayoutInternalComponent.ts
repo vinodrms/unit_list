@@ -1,5 +1,5 @@
-import {Component, Inject, ViewContainerRef} from 'angular2/core';
-import {ROUTER_DIRECTIVES, RouteConfig} from 'angular2/router';
+import {Component, Inject, ViewContainerRef} from '@angular/core';
+import {ROUTER_DIRECTIVES, RouteConfig} from '@angular/router-deprecated';
 import {BaseComponent} from '../../../common/base/BaseComponent';
 import {IToaster} from '../../../common/utils/toaster/IToaster';
 import {IModalService} from '../../../common/utils/modals/IModalService';

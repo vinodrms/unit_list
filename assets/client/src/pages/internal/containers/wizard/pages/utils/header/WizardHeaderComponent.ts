@@ -1,4 +1,4 @@
-import {Component, OnInit} from 'angular2/core';
+import {Component, OnInit} from '@angular/core';
 import {BaseComponent} from '../../../../../../../common/base/BaseComponent';
 import {ThError, AppContext, ThServerApi} from '../../../../../../../common/utils/AppContext';
 import {LoginStatusCode} from '../../../../../../../common/utils/responses/LoginStatusCode';

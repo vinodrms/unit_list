@@ -1,7 +1,7 @@
-import {Injectable} from 'angular2/core';
+import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 import {Observer} from 'rxjs/Observer';
-import {FormBuilder, ControlGroup, Validators, AbstractControl, Control} from 'angular2/common';
+import {FormBuilder, ControlGroup, Validators, AbstractControl, Control} from '@angular/common';
 import {AppContext, ThServerApi, ThError} from '../../../../../../../../common/utils/AppContext';
 import {ThValidators, ThFieldLengths} from '../../../../../../../../common/utils/form-utils/ThFormUtils';
 import {CountriesDO} from '../../../../../../services/settings/data-objects/CountriesDO';

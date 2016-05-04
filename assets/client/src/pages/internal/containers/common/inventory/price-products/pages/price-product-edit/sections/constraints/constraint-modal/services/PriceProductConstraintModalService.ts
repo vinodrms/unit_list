@@ -1,4 +1,4 @@
-import {Injectable, ReflectiveInjector} from 'angular2/core';
+import {Injectable, ReflectiveInjector} from '@angular/core';
 import {AppContext} from '../../../../../../../../../../../../common/utils/AppContext';
 import {ModalDialogRef} from '../../../../../../../../../../../../common/utils/modals/utils/ModalDialogRef';
 import {PriceProductConstraintModalComponent} from '../PriceProductConstraintModalComponent';

@@ -1,5 +1,5 @@
-import {Component, OnInit, Output, EventEmitter, Input, AfterViewChecked, Inject, ElementRef} from 'angular2/core';
-import {Control} from 'angular2/common';
+import {Component, OnInit, Output, EventEmitter, Input, AfterViewChecked, Inject, ElementRef} from '@angular/core';
+import {Control} from '@angular/common';
 import {LoadingComponent} from '../LoadingComponent';
 import {TranslationPipe} from '../../localization/TranslationPipe';
 import {PricePipe} from '../../pipes/PricePipe';

@@ -1,4 +1,4 @@
-import {Component} from 'angular2/core';
+import {Component} from '@angular/core';
 import {BaseComponent} from '../../../../../../../../../../../common/base/BaseComponent';
 import {TranslationPipe} from '../../../../../../../../../../../common/utils/localization/TranslationPipe';
 import {BasicInfoOverviewEditComponent} from '../../../../../../../../common/basic-info/overview/main/BasicInfoOverviewEditComponent';

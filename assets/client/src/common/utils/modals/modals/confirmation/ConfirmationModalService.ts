@@ -1,4 +1,4 @@
-import {Injectable, ReflectiveInjector, provide} from 'angular2/core';
+import {Injectable, ReflectiveInjector, provide} from '@angular/core';
 import {AppContext} from '../../../AppContext';
 import {ModalDialogRef} from '../../utils/ModalDialogRef';
 import {ConfirmationModalComponent} from './ConfirmationModalComponent';

@@ -1,5 +1,5 @@
 import {LoginStatusCode} from '../responses/LoginStatusCode';
-import {OpaqueToken} from 'angular2/core';
+import {OpaqueToken} from '@angular/core';
 
 export interface IBrowserLocation {
 	goToLoginPage(statusCode: LoginStatusCode);

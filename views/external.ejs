@@ -26,17 +26,11 @@
 	<script src="/node_modules/jquery.1/node_modules/jquery/dist/jquery.min.js"></script>
 	<script src="/node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
 
-	<!-- Angular JS -->
+	<!-- Angular JS Deps -->
 	<script src="/node_modules/es6-shim/es6-shim.min.js"></script>
-	<script src="/node_modules/systemjs/dist/system-polyfills.js"></script>
-    <script src="/node_modules/angular2/es6/dev/src/testing/shims_for_IE.js"></script>   
-	
-	<script src="/node_modules/angular2/bundles/angular2-polyfills.min.js"></script>
+	<script src="/node_modules/zone.js/dist/zone.js"></script>
+	<script src="/node_modules/reflect-metadata/Reflect.js"></script>
 	<script src="/node_modules/systemjs/dist/system.js"></script>
-	<script src="/node_modules/rxjs/bundles/Rx.min.js"></script>
-	<script src="/node_modules/angular2/bundles/angular2.dev.js"></script>
-	<script src="/node_modules/angular2/bundles/router.dev.js"></script>
-	<script src="/node_modules/angular2/bundles/http.dev.js"></script>
 
 	<!-- Other JS Libraries -->
 	<script src="/node_modules/moment/min/moment.min.js"></script>
@@ -44,31 +38,22 @@
 	<script src="/node_modules/bootstrap-daterangepicker/daterangepicker.js"></script>
 	<script src="/node_modules/pace-progress/pace.min.js"></script>
 
-	<%if (isDevelopmentEnvironment == true) {%>
+	<%if (isDevelopmentEnvironment) {%>
+		<script src="/client/systemjs.external.config.js"></script>
 		<script>
-			System.config({
-                    packages: {
-                        client: {
-                            format: 'register',
-                            defaultExtension: 'js'
-                        }
-                    }
-                });
-                System.import('client/src/pages/external/main/ExternalBoot').then(null, console.error.bind(console));
+			System.import('external').catch(function(err){ console.error(err); });
 		</script>
-		<%} else {%>
-			<script>
-				System.config({
-                    bundles: { 'client/build/unitpal-external-min.js': ['pages/external/main/ExternalBoot'] }
-                });
-                System.import('pages/external/main/ExternalBoot').then(null, console.error.bind(console));
-			</script>
-			<%}%>
+	<%}%>
 
 </head>
 
 <body>
 	<main-layout-external></main-layout-external>
+	
+	<%if (!isDevelopmentEnvironment) {%>
+		<script src="/client/build/unitpal-external.min.js"></script>
+	<%}%>
+	
 </body>
 
 </html>

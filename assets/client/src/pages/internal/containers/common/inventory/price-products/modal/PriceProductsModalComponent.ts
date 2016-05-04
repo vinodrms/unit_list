@@ -1,4 +1,4 @@
-import {Component, AfterViewInit, ViewChild} from 'angular2/core';
+import {Component, AfterViewInit, ViewChild} from '@angular/core';
 import {BaseComponent} from '../../../../../../../common/base/BaseComponent';
 import {LazyLoadingTableComponent} from '../../../../../../../common/utils/components/lazy-loading/LazyLoadingTableComponent';
 import {LazyLoadTableMeta, TableRowCommand} from '../../../../../../../common/utils/components/lazy-loading/utils/LazyLoadTableMeta';

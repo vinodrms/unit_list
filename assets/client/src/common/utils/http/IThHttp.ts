@@ -1,5 +1,5 @@
 import {Observable} from 'rxjs/Observable';
-import {OpaqueToken} from 'angular2/core';
+import {OpaqueToken} from '@angular/core';
 import {ThServerApi} from './ThServerApi';
 
 export interface UploadedFileResponse {

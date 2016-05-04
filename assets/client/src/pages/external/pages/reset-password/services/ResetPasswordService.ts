@@ -1,7 +1,7 @@
-import {Injectable, Inject} from 'angular2/core';
+import {Injectable, Inject} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 import {AppContext, ThServerApi} from '../../../../../common/utils/AppContext';
-import {FormBuilder, ControlGroup, Validators} from 'angular2/common';
+import {FormBuilder, ControlGroup, Validators} from '@angular/common';
 import {ThValidators} from '../../../../../common/utils/form-utils/ThFormUtils';
 import {ResetPasswordDO} from '../data-objects/ResetPasswordDO';
 

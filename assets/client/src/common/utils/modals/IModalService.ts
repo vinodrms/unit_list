@@ -1,4 +1,4 @@
-import {Type, OpaqueToken, ViewContainerRef, ResolvedReflectiveProvider} from 'angular2/core';
+import {Type, OpaqueToken, ViewContainerRef, ResolvedReflectiveProvider} from '@angular/core';
 import {ModalDialogRef} from './utils/ModalDialogRef';
 import {ConfirmationModalButtons} from './modals/confirmation/utils/ConfirmationModalInput';
 

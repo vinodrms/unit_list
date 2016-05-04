@@ -1,8 +1,9 @@
-import {Injectable, ReflectiveInjector, provide, DynamicComponentLoader, ViewContainerRef, Type, ComponentRef, ResolvedReflectiveProvider} from 'angular2/core';
+import {Injectable, ReflectiveInjector, provide, DynamicComponentLoader, ViewContainerRef, Type, ComponentRef, ResolvedReflectiveProvider} from '@angular/core';
 import {IModalService} from './IModalService';
 import {ModalBackdropComponent} from './utils/components/ModalBackdropComponent';
 import {ModalContainerComponent} from './utils/components/ModalContainerComponent';
 import {ModalDialogRef} from './utils/ModalDialogRef';
+import {ICustomModalComponent} from './utils/ICustomModalComponent';
 import {ThError} from '../responses/ThError';
 import {ConfirmationModalComponent} from './modals/confirmation/ConfirmationModalComponent';
 import {ConfirmationModalInput, ConfirmationModalButtons} from './modals/confirmation/utils/ConfirmationModalInput';
@@ -10,7 +11,7 @@ import {ConfirmationModalInput, ConfirmationModalButtons} from './modals/confirm
 @Injectable()
 export class ModalService implements IModalService {
 	private _viewContainerRef: ViewContainerRef;
-	private _container: ComponentRef;
+	private _container: ComponentRef<ICustomModalComponent>;
 
 	constructor(private _componentLoader: DynamicComponentLoader) { }
 
@@ -28,20 +29,20 @@ export class ModalService implements IModalService {
 		let dialogProviders = ReflectiveInjector.resolve([provide(ModalDialogRef, { useValue: dialog })]);
 
 		this._componentLoader.loadNextToLocation(ModalBackdropComponent, this._viewContainerRef, dialogProviders)
-			.then((backdropRef: ComponentRef) => {
+			.then((backdropRef: ComponentRef<any>) => {
 				backdropRef.changeDetectorRef.detectChanges();
 				
 				dialog.backdropRef = backdropRef;
 				return this._componentLoader.loadNextToLocation(ModalContainerComponent, backdropRef.instance.viewContainerRef, dialogProviders);
 			})
-			.then((containerRef: ComponentRef) => {
+			.then((containerRef: ComponentRef<any>) => {
 				containerRef.changeDetectorRef.detectChanges();
 				
 				dialog.containerRef = containerRef;
 				let modalDataProviders = ReflectiveInjector.resolve([provide(ModalDialogRef, { useValue: dialog })]).concat(providers);
 				return this._componentLoader.loadNextToLocation(componentType, containerRef.instance.viewContainerRef, modalDataProviders);
 			})
-			.then((contentRef: ComponentRef) => {
+			.then((contentRef: ComponentRef<ICustomModalComponent>) => {
 				this.updateModalBodyMaxHeight();
 				dialog.contentRef = contentRef;
 				resolve(dialog);

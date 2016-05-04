@@ -1,5 +1,5 @@
-import {Injectable} from 'angular2/core';
-import {FormBuilder, ControlGroup, Validators, AbstractControl, Control} from 'angular2/common';
+import {Injectable} from '@angular/core';
+import {FormBuilder, ControlGroup, Validators, AbstractControl, Control} from '@angular/common';
 import {BedVM} from '../../../../../../../services/beds/view-models/BedVM';
 import {BedDO, BedSizeDO} from '../../../../../../../services/beds/data-objects/BedDO';
 import {ThValidators, ThFieldLengths} from '../../../../../../../../../common/utils/form-utils/ThFormUtils';

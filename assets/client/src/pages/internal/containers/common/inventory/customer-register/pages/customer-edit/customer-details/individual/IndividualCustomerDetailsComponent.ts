@@ -1,5 +1,5 @@
-import {Component, Input} from 'angular2/core';
-import {ControlGroup} from 'angular2/common';
+import {Component, Input} from '@angular/core';
+import {ControlGroup} from '@angular/common';
 import {BaseFormComponent} from '../../../../../../../../../../common/base/BaseFormComponent';
 import {TranslationPipe} from '../../../../../../../../../../common/utils/localization/TranslationPipe';
 import {ThDatePickerComponent} from '../../../../../../../../../../common/utils/components/ThDatePickerComponent';

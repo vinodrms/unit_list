@@ -1,4 +1,4 @@
-import {Component, Output, EventEmitter, Input, ViewChild, AfterViewInit} from 'angular2/core';
+import {Component, Output, EventEmitter, Input, ViewChild, AfterViewInit} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 import {Subscription} from 'rxjs/Subscription';
 import {BaseComponent} from '../../../../../../../../../common/base/BaseComponent';

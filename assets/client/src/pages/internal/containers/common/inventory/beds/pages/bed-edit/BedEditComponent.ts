@@ -1,5 +1,5 @@
-import {Component, OnInit, Input, Output, EventEmitter} from 'angular2/core';
-import {ControlGroup} from 'angular2/common';
+import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
+import {ControlGroup} from '@angular/common';
 import {Observable} from 'rxjs/Observable';
 import {TranslationPipe} from '../../../../../../../../common/utils/localization/TranslationPipe';
 import {BedEditService} from './services/BedEditService';
