@@ -13,14 +13,17 @@ import {MockImageStorageService} from './image-storage/mock/MockImageStorageServ
 import {PassportLoginService} from './login/custom/PassportLoginService';
 import {MomentTimeZonesService} from './time-zones/providers/moment/MomentTimeZonesService';
 import {ITimeZonesService} from './time-zones/ITimeZonesService';
+import {INotificationService} from './notifications/INotificationService';
+import {MockNotificationService} from './notifications/providers/MockNotificationService';
+
 export class ServiceFactory {
     constructor(private _unitPalConfig: UnitPalConfig) {
     }
-    
+
     public getVatProviderProxyService(): IVatProvider {
         return new VatProviderProxyService(this._unitPalConfig);
     }
-    
+
     public getEmailService(emailHeaderDO: EmailHeaderDO, emailTemplate: BaseEmailTemplateDO): IEmailService {
         switch (this._unitPalConfig.getEmailProviderType()) {
             case EmailProviderType.Sendgrid:
@@ -44,5 +47,9 @@ export class ServiceFactory {
     }
     public getTimeZonesService(): ITimeZonesService {
         return new MomentTimeZonesService();
+    }
+    public getNotificationService(): INotificationService {
+        // TODO: implement real notifications service
+        return new MockNotificationService();
     }
 }
