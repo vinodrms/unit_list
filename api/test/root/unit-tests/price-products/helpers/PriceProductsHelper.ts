@@ -12,7 +12,6 @@ import {PriceProductCancellationPenaltyType} from '../../../../../core/data-laye
 import {YieldFilterDO} from '../../../../../core/data-layer/common/data-objects/yield-filter/YieldFilterDO';
 import {RoomAggregator} from '../../../../../core/domain-layer/rooms/aggregators/RoomAggregator';
 import {RoomCategoryStatsDO} from '../../../../../core/data-layer/room-categories/data-objects/RoomCategoryStatsDO';
-import {PriceForFixedNumberOfPersonsDO} from '../../../../../core/data-layer/price-products/data-objects/price/price-per-person/PriceForFixedNumberOfPersonsDO';
 import {PriceProductConstraintType} from '../../../../../core/data-layer/price-products/data-objects/constraint/IPriceProductConstraint';
 import {ISOWeekDay} from '../../../../../core/utils/th-dates/data-objects/ISOWeekDay';
 

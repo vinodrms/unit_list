@@ -60,13 +60,31 @@
 					<div class="col-md-6 col-sm-6 col-xs-6">
 						<label><small>{{ 'Price For Children' | translate }}*</small></label>
 						<div class="row">
-							<div class="col-md-12 col-sm-12 col-xs-12 form-group" *ngFor="let pricePerChild of pricePerPersonVM.pricePerPerson.childrenPriceList">
-								<div class="input-group" [ngClass]="{'form-warning': displayError()&&!pricePerChild.isValid()}">
-									<span class="input-group-addon"><small>{{pricePerChild.noOfPersons}}{{getNumberSuffix(pricePerChild.noOfPersons)}}</small> <span class="unitpal-font">;</span></span>
-									<input type="number" class="form-control" [(ngModel)]="pricePerChild.price"
-									[readonly]="readonly" />
+							<div class="col-md-12 col-sm-12 col-xs-12" *ngFor="let pricePerChild of pricePerPersonVM.pricePerPerson.childrenPriceList">
+								<div class="row">
+									<div class="col-xs-12 form-group" *ngIf="pricePerChild.noOfPersons === 1">	
+										<div class="input-group" [ngClass]="{'form-warning': displayError()&&!pricePerPersonVM.pricePerPerson.firstChildWithoutAdultPriceIsValid()}">
+											<span class="input-group-addon"><small>1{{getNumberSuffix(1)}}</small> <span class="unitpal-font">;</span></span>
+											<input type="number" class="form-control" [(ngModel)]="pricePerPersonVM.pricePerPerson.firstChildWithoutAdultPrice"
+											[readonly]="readonly" />
+										</div>
+										<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Invalid Price' | translate }}</small></label>
+										<small class="text-muted">
+											<i class="fa fa-info-circle"></i> {{ 'Reservation without adults' | translate }}
+										</small>
+									</div>
+									<div class="col-xs-12 form-group">	
+										<div class="input-group" [ngClass]="{'form-warning': displayError()&&!pricePerChild.isValid()}">
+											<span class="input-group-addon"><small>{{pricePerChild.noOfPersons}}{{getNumberSuffix(pricePerChild.noOfPersons)}}</small> <span class="unitpal-font">;</span></span>
+											<input type="number" class="form-control" [(ngModel)]="pricePerChild.price"
+											[readonly]="readonly" />
+										</div>
+										<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Invalid Price' | translate }}</small></label>
+										<small class="text-muted" *ngIf="pricePerChild.noOfPersons === 1">
+											<i class="fa fa-info-circle"></i>  {{ 'Reservation with at least one adult' | translate }}
+										</small>
+									</div>
 								</div>
-								<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Invalid Price' | translate }}</small></label>
 							</div>
 						</div>
 					</div>

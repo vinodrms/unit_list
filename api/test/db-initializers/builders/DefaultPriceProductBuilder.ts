@@ -78,6 +78,7 @@ export class DefaultPriceProductBuilder implements IPriceProductDataSource {
 		pricePerPerson.roomCategoryId = roomCategoryStat.roomCategory.id;
 		pricePerPerson.adultsPriceList = DefaultPriceProductBuilder.getPriceForFixedNumberOfPersonsDOList(roomCategoryStat.maxNoAdults);
 		pricePerPerson.childrenPriceList = DefaultPriceProductBuilder.getPriceForFixedNumberOfPersonsDOList(roomCategoryStat.maxNoChildren + roomCategoryStat.maxNoAdults);
+		pricePerPerson.firstChildWithoutAdultPrice = 50.0;
 		outPrice.priceList = [pricePerPerson];
 		return outPrice;
 	}
