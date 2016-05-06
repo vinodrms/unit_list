@@ -1,5 +1,5 @@
 import {PriceProductDO} from '../../../../data-layer/price-products/data-objects/PriceProductDO';
-import {ThDayInYearIntervalDO} from '../../../../utils/th-dates/data-objects/ThDayInYearIntervalDO';
+import {ThDateIntervalDO} from '../../../../utils/th-dates/data-objects/ThDateIntervalDO';
 import {ThDateUtils} from '../../../../utils/th-dates/ThDateUtils';
 
 export class PriceProductActionUtils {
@@ -14,11 +14,11 @@ export class PriceProductActionUtils {
 		priceProduct.openForDepartureIntervalList = this.getDefaultIntervals();
 	}
 
-	private getDefaultIntervals(): ThDayInYearIntervalDO[] {
+	private getDefaultIntervals(): ThDateIntervalDO[] {
 		var minDate = this._thDateUtils.getMinThDateDO();
 		var maxDate = this._thDateUtils.getMaxThDateDO();
-		var defaultIntervalList: ThDayInYearIntervalDO[] = [
-			ThDayInYearIntervalDO.buildThDayInYearIntervalDO(minDate, maxDate)
+		var defaultIntervalList: ThDateIntervalDO[] = [
+			ThDateIntervalDO.buildThDateIntervalDO(minDate, maxDate)
 		];
 		return defaultIntervalList;
 	}
