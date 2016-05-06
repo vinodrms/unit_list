@@ -281,4 +281,19 @@ export class LazyLoadingTableComponent<T> implements AfterViewChecked {
 	private getTableElement(): any {
 		return $(this._elementRef.nativeElement).find("table.table");
 	}
+	
+	public getCellStyle(columnValueMeta: TableColumnValueMeta, isCollapsed: boolean): string {
+		var classes = '';
+		
+		if(this.tableOptions.canSelect || this.tableOptions.canMultiSelect) {
+			classes += 'selectable-row ';	
+		}
+		if(isCollapsed) {
+			classes += columnValueMeta.collapsedStyle;
+		}
+		else {
+			classes += columnValueMeta.normalStyle;
+		}
+		return classes;			
+	}
 }

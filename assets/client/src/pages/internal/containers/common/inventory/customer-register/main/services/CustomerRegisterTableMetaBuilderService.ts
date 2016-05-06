@@ -17,7 +17,9 @@ export class CustomerRegisterTableMetaBuilderService {
 					valueMeta: {
 						objectPropertyId: "customerNameString",
 						propertyType: TablePropertyType.StringType,
-						showInCollapsedView: true
+						showInCollapsedView: true,
+						normalStyle: "up-col-30p left",
+						collapsedStyle: "up-col-70p left"
 					}
 				},
 				{
@@ -25,7 +27,8 @@ export class CustomerRegisterTableMetaBuilderService {
 					valueMeta: {
 						objectPropertyId: "customerTypeString",
 						propertyType: TablePropertyType.StringType,
-						showInCollapsedView: false
+						showInCollapsedView: false,
+						normalStyle: "up-col-10p center"
 					}
 				},
 				{
@@ -33,7 +36,8 @@ export class CustomerRegisterTableMetaBuilderService {
 					valueMeta: {
 						objectPropertyId: "customerAddressString",
 						propertyType: TablePropertyType.StringType,
-						showInCollapsedView: false
+						showInCollapsedView: false,
+						normalStyle: "up-col-20p center"
 					}
 				},
 				{
@@ -41,7 +45,8 @@ export class CustomerRegisterTableMetaBuilderService {
 					valueMeta: {
 						objectPropertyId: "customer.notes",
 						propertyType: TablePropertyType.NotesType,
-						showInCollapsedView: false
+						showInCollapsedView: false,
+						normalStyle: "up-col-30p left"
 					}
 				}
 			]

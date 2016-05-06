@@ -36,6 +36,7 @@ body,html {
     color: #0b2139;
     font-family: 'Raleway',sans-serif;
     font-size: 15px;
+    overflow: hidden;
 }
 
 .card {
@@ -352,6 +353,8 @@ table .buttons,table button,table .btn {
 .overview-left {
     height: 100%;
     padding-top: 12px;
+    padding-left: 0px;
+    padding-right: 0px;
 }
 
 .overview-left .table p {
@@ -479,32 +482,10 @@ input[type="number"].form-control {
 /* End Fixes Section */
 /* 3angle TECH */
 
-/*lazy-loading-table table.table tbody,*/
-
-lazy-loading-table>div{
-    height: 100%;
-}
-
-div.lazy-loading-table-filter {
-    height: 43px;
-    margin-bottom: 7px;
-}
-div.lazy-loading-table-filter + lazy-loading-table {
-    height: calc(100% - 50px);
-}
-
-lazy-loading-table{
+lazy-loading-table {
     display: block;
     height: 100%;
 }
-
-/*lazy-loading-table .table-wrapper{
-    height: calc(100% - 105px);
-}*/
-/*
-lazy-loading-table .table-wrapper table thead {
-    background-color: white;
-}*/
 
 .overview-right-body{
     height: calc(100% - 82px);
@@ -876,47 +857,18 @@ input[type="file"] {
     font-weight: bold;
 }
 
-
 /**
     Lazy loading fixed header table css
 */
+.table-filter {
+    margin: 0px 15px 15px 10px;
+}
+
 table.lazy-loading {
-    background: #15BFCC;
     table-layout: fixed;
-    margin: 1rem auto;
-    width: 98%;
-    box-shadow: 0 0 4px 2px rgba(0, 0, 0, .4);
+    margin: 0;
+    width: 100%;
     border-collapse: collapse;
-    border: 1px solid rgba(0, 0, 0, .5);
-    border-top: 0 none;
-}
-table.lazy-loading thead {
-    background: #FF7361;
-    text-align: center;
-    z-index: 2;
-}
-
-table.lazy-loading thead tr {
-  padding-right: 17px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, .6);
-  z-index: 2;
-}
-
-table.lazy-loading th {
-  border-right: 2px solid rgba(0, 0, 0, .2);
-  padding: .7rem 0;
-  font-size: 1.5rem;
-  font-weight: normal;
-  font-variant: small-caps;
-}
-
-table.lazy-loading tbody {
-  display: block;
-  height: calc(40vh - 1px);
-    /*min-height: calc(100% - 225px);*/
-  /*use calc for fixed ie9 & <*/
-  overflow-Y: scroll;
-  color: #000;
 }
 
 table.lazy-loading tr {
@@ -924,8 +876,39 @@ table.lazy-loading tr {
   overflow: hidden;
 }
 
-table.lazy-loading tbody tr:nth-child(odd) {
-  background: rgba(0, 0, 0, .2);
+table.lazy-loading thead tr {
+  padding-right: 17px;
+  background: rgb(238, 238, 238);
+}
+
+table.lazy-loading tbody {
+  display: block;
+  /*height: calc(100vh - 330px);*/
+  /*use calc for fixed ie9 & <*/
+  overflow-Y: scroll;
+  color: #000;
+}
+
+table.lazy-loading tbody tr {
+    border-top: 1px solid rgba(0, 0, 0, .2);
+}
+table.lazy-loading tbody tr:first-child {
+    border-top: 0 none;
+}
+table.lazy-loading tbody td:nth-child(odd) {
+    background: rgb(244, 244, 244);
+}
+
+table.lazy-loading tbody td:last-child {
+    background: rgb(244, 244, 244);
+}
+
+table.lazy-loading tfoot td {
+    height: 61px;
+    line-height: 61px;
+    padding-left: 0px;
+    border-top: 1px solid rgba(0, 0, 0, .2);
+    background: transparent;
 }
 
 table.lazy-loading th,
@@ -934,46 +917,36 @@ table.lazy-loading td {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+  height: 40px;
+  line-height: 40px;
 }
 
-table.lazy-loading td {
-  padding: .5rem 0 .5rem 1rem;
-  border-right: 2px solid rgba(0, 0, 0, .2);
+table.lazy-loading th {
+    font-weight: bold;
 }
 
-table.lazy-loading tfoot td {
-  /*padding: .5rem 0 .5rem 1rem;*/
-  border-right: 0px;
-  width: 33.33%;
-  min-height: 61px;
-  padding-left: 0px;
-      /*display: -webkit-box;
-    -webkit-box-pack: center;
-    -webkit-box-align: center;*/
+table.lazy-loading th.center,
+table.lazy-loading td.center {
+    text-align: center;
 }
 
-table.lazy-loading td:nth-child(2n) {
-  color: #fff;
+table.lazy-loading th.left,
+table.lazy-loading td.left {
+    padding-left: .5rem;
+    text-align: left;
 }
 
-table.lazy-loading [field='Nick'] {
-  width: 30%;
+table.lazy-loading td.right {
+    padding-right: .5rem;
+    text-align: right;
 }
 
-table.lazy-loading [field='Mail'] {
-  width: 20%;
+table.lazy-loading th:nth-child(odd) {
+    background: rgb(238, 238, 238);
 }
 
-table.lazy-loading [field='Web'] {
-  width: 20%;
-}
-
-table.lazy-loading [field='Twitter'] {
-  width: 20%;
-}
-
-table.lazy-loading [field='Id'] {
-  width: 10%;
+table.lazy-loading th:nth-child(even) {
+    background: rgb(244, 244, 244);
 }
 
 table.lazy-loading .pagination {
@@ -983,35 +956,62 @@ table.lazy-loading .pagination {
 
 table.lazy-loading th:last-child,
 table.lazy-loading td:last-child {
-  text-align: center;
-  border-right: 0 none;
   padding-left: 0;
 }
 
+table.lazy-loading th:last-child {
+    background: rgb(238, 238, 238);
+}
+
+.up-col-0p {
+    width: 0%;   
+}
+
+.up-col-5p {
+    width: 5%;    
+}
 .up-col-10p {
-    width: 10%
+    width: 10%;
+}
+.up-col-15p {
+    width: 15%;
 }
 .up-col-20p {
-    width: 20%
+    width: 20%;
+}
+.up-col-25p {
+    width: 25%;
 }
 .up-col-30p {
-    width: 30%
+    width: 30%;
+}
+.up-col-33p {
+    width: 33.33%;
+}
+.up-col-35p {
+    width: 35%;
 }
 .up-col-40p {
-    width: 40%
+    width: 40%;
 }
 .up-col-50p {
-    width: 50%
+    width: 50%;
 }
 .up-col-60p {
-    width: 60%
+    width: 60%;
 }
 .up-col-70p {
-    width: 70%
+    width: 70%;
 }
 .up-col-80p {
-    width: 80%
+    width: 80%;   
 }
 .up-col-90p {
-    width: 90%
+    width: 90%;
+}
+.up-col-95p {
+    width: 95%;
+}
+.up-col-100p {
+    width: 100%;
 }

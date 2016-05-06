@@ -28,10 +28,12 @@ export interface TableColumnValueMeta {
 	propertyType: TablePropertyType;
 	dependentObjectPropertyId?: string;
     fonts?: Object;
+	normalStyle?: string,
+	collapsedStyle?: string,
     showInCollapsedView: boolean;
 }
 
-export interface TableColumnMeta {
+export class TableColumnMeta {
 	displayName: string;
 	valueMeta: TableColumnValueMeta;
 }

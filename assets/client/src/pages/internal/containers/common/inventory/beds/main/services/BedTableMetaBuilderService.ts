@@ -17,7 +17,8 @@ export class BedTableMetaBuilderService {
 					valueMeta: {
 						objectPropertyId: "template.iconUrl",
 						propertyType: TablePropertyType.FontIconType,
-						showInCollapsedView: true
+						showInCollapsedView: false,
+						normalStyle: "up-col-5p center",
 					}
 				},
 				{
@@ -25,7 +26,9 @@ export class BedTableMetaBuilderService {
 					valueMeta: {
 						objectPropertyId: "bed.name",
 						propertyType: TablePropertyType.StringType,
-						showInCollapsedView: true
+						showInCollapsedView: true,
+						normalStyle: "up-col-25p left",
+						collapsedStyle: "up-col-70p left"
 					}
 				},
 				{
@@ -37,7 +40,8 @@ export class BedTableMetaBuilderService {
                             child: ";",
                             adult: ":"    
                         },
-						showInCollapsedView: false
+						showInCollapsedView: false,
+						normalStyle: "up-col-10p center"
 					}
 				},
 				{
@@ -45,7 +49,8 @@ export class BedTableMetaBuilderService {
 					valueMeta: {
 						objectPropertyId: "size",
 						propertyType: TablePropertyType.StringType,
-						showInCollapsedView: false
+						showInCollapsedView: false,
+						normalStyle: "up-col-10p center"
 					}
 				},
 				{
@@ -53,7 +58,8 @@ export class BedTableMetaBuilderService {
 					valueMeta: {
 						objectPropertyId: "bed.notes",
 						propertyType: TablePropertyType.StringType,
-						showInCollapsedView: false
+						showInCollapsedView: false,
+						normalStyle: "up-col-40p left"
 					}
 				}
 			]
