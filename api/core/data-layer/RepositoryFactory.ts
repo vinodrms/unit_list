@@ -20,6 +20,8 @@ import {IPriceProductRepository} from './price-products/repositories/IPriceProdu
 import {MongoPriceProductRepository} from './price-products/repositories/mongo/MongoPriceProductRepository';
 import {IYieldFilterConfigurationRepository} from './hotel-configurations/repositories/IYieldFilterConfigurationRepository';
 import {MongoYieldFilterConfigurationRepository} from './hotel-configurations/repositories/mongo/MongoYieldFilterConfigurationRepository';
+import {IAllotmentRepository} from './allotment/repositories/IAllotmentRepository';
+import {MongoAllotmentRepository} from './allotment/repositories/mongo/MongoAllotmentRepository';
 
 export class RepositoryFactory {
     private _databaseType: DatabaseType;
@@ -31,11 +33,11 @@ export class RepositoryFactory {
         switch (this._databaseType) {
             default:
                 return [new MongoHotelRepository(), new MongoBedRepository(), new MongoTaxRepository(), new MongoAddOnProductRepository(),
-                    new MongoRoomRepository(), new MongoRoomCategoryRepository(), new MongoCustomerRepository(), new MongoPriceProductRepository(), 
-                    new MongoYieldFilterConfigurationRepository()];
+                    new MongoRoomRepository(), new MongoRoomCategoryRepository(), new MongoCustomerRepository(), new MongoPriceProductRepository(),
+                    new MongoYieldFilterConfigurationRepository(), new MongoAllotmentRepository()];
         }
     }
-    
+
     getHotelRepository(): IHotelRepository {
         switch (this._databaseType) {
             default:
@@ -91,17 +93,24 @@ export class RepositoryFactory {
         }
     }
 
-	getPriceProductRepository(): IPriceProductRepository {
-		switch (this._databaseType) {
+    getPriceProductRepository(): IPriceProductRepository {
+        switch (this._databaseType) {
             default:
                 return new MongoPriceProductRepository();
         }
-	}
-    
+    }
+
     getYieldFilterConfigurationsRepository(): IYieldFilterConfigurationRepository {
-		switch (this._databaseType) {
+        switch (this._databaseType) {
             default:
                 return new MongoYieldFilterConfigurationRepository();
         }
-	}
+    }
+
+    getAllotmentRepository(): IAllotmentRepository {
+        switch (this._databaseType) {
+            default:
+                return new MongoAllotmentRepository();
+        }
+    }
 }
