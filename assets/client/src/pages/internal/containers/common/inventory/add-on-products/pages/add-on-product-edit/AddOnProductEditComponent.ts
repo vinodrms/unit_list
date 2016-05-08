@@ -22,12 +22,13 @@ import {HotelAggregatedInfo} from '../../../../../../services/hotel/utils/HotelA
 import {CurrencyDO} from '../../../../../../services/common/data-objects/currency/CurrencyDO';
 import {AddOnProductsService} from '../../../../../../services/add-on-products/AddOnProductsService';
 import {AddOnProductDO} from '../../../../../../services/add-on-products/data-objects/AddOnProductDO';
+import {CustomScroll} from '../../../../../../../../common/utils/directives/CustomScroll';
 
 @Component({
 	selector: 'add-on-product-edit',
 	templateUrl: '/client/src/pages/internal/containers/common/inventory/add-on-products/pages/add-on-product-edit/template/add-on-product-edit.html',
 	providers: [AddOnProductEditService],
-	directives: [LoadingComponent, ImageUploadComponent],
+	directives: [LoadingComponent, CustomScroll, ImageUploadComponent],
 	pipes: [TranslationPipe, PricePipe, PercentagePipe]
 })
 

@@ -1,94 +1,95 @@
 <loading-component [isLoading]="isLoading"></loading-component>
-<div *ngIf="!isLoading" [ngFormModel]="getDefaultControlGroup()">
-
-    <div class="row">
-        <div class="col-xs-12 col-md-6 form-group">
-            <label>{{ 'Name' | translate }}*</label>
-            <div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('name')}">
-                <input type="text" class="form-control" ngControl="name">
+<div *ngIf="!isLoading" [ngFormModel]="getDefaultControlGroup()" class="edit-form-container" customScroll>
+    <div class="edit-form">
+        <div class="row">
+            <div class="col-xs-12 col-md-6 form-group">
+                <label>{{ 'Name' | translate }}*</label>
+                <div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('name')}">
+                    <input type="text" class="form-control" ngControl="name">
+                </div>
+                <label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter a name for the bed' | translate }}</small></label>
             </div>
-            <label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter a name for the bed' | translate }}</small></label>
         </div>
-    </div>
 
-    <div class="row">
-        <div class="col-xs-12 col-md-12 form-group">
-            <label class="control-label">{{ 'Icon' | translate }}</label>
-            <div class="row" data-toggle="buttons">
-                <div class="col-md-2 button-items" *ngFor="let bedTemplate of bedTemplateList" title="{{ bedTemplate.name }}">
-                    <label class="btn btn-default btn-group bed-btn" [ngClass]="{ active: bedTemplate.id == bedVM.bed.bedTemplateId }" (click)="bedVM.bed.bedTemplateId=bedTemplate.id">
+        <div class="row">
+            <div class="col-xs-12 col-md-12 form-group">
+                <label class="control-label">{{ 'Icon' | translate }}</label>
+                <div class="row" data-toggle="buttons">
+                    <div class="col-md-2 button-items" *ngFor="let bedTemplate of bedTemplateList" title="{{ bedTemplate.name }}">
+                        <label class="btn btn-default btn-group bed-btn" [ngClass]="{ active: bedTemplate.id == bedVM.bed.bedTemplateId }" (click)="bedVM.bed.bedTemplateId=bedTemplate.id">
                         <span class="unitpal-font">{{bedTemplate.iconUrl}}</span>
                     </label>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <hr/>
-    <div class="row">
-        <div class="col-xs-12 col-md-6 form-group">
-            <label>{{ 'Capacity' | translate }}*</label>
-            <div class="row">
-                <div class="col-xs-6 col-md-6">
-                    <div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('maxAdults')}">
-                        <span class="input-group-addon"><span class="unitpal-font">:</span></span>
-                        <input type="number" class="form-control" placeholder="{{ 'Adults' | translate }}" ngControl="maxAdults">
+        <hr/>
+        <div class="row">
+            <div class="col-xs-12 col-md-6 form-group">
+                <label>{{ 'Capacity' | translate }}*</label>
+                <div class="row">
+                    <div class="col-xs-6 col-md-6">
+                        <div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('maxAdults')}">
+                            <span class="input-group-addon"><span class="unitpal-font">:</span></span>
+                            <input type="number" class="form-control" placeholder="{{ 'Adults' | translate }}" ngControl="maxAdults">
+                        </div>
+                        <label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Insert a valid max number of adults' | translate }}</small></label>
                     </div>
-                    <label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Insert a valid max number of adults' | translate }}</small></label>
-                </div>
-                <div class="col-xs-6 col-md-6">
-                    <div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('maxChildren')}">
-                        <span class="input-group-addon"><span class="unitpal-font">;</span></span>
-                        <input type="number" class="form-control" placeholder="{{ 'Children' | translate }}" ngControl="maxChildren">
+                    <div class="col-xs-6 col-md-6">
+                        <div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('maxChildren')}">
+                            <span class="input-group-addon"><span class="unitpal-font">;</span></span>
+                            <input type="number" class="form-control" placeholder="{{ 'Children' | translate }}" ngControl="maxChildren">
+                        </div>
+                        <label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Insert a valid max number of children' | translate }}</small></label>
                     </div>
-                    <label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Insert a valid max number of children' | translate }}</small></label>
                 </div>
+                <label class="text-muted"><small><i class="fa fa-info-circle"></i> {{ 'Each adult is replaceable with a child. Max Adults: 2 Max Children: 1 OR Max Adults: 1 Max Children: 2 OR Max Children: 3' | translate }}</small></label>
             </div>
-            <label class="text-muted"><small><i class="fa fa-info-circle"></i> {{ 'Each adult is replaceable with a child. Max Adults: 2 Max Children: 1 OR Max Adults: 1 Max Children: 2 OR Max Children: 3' | translate }}</small></label>
-        </div>
-        <div class="col-xs-12 col-md-6 form-group">
-            <label>{{ 'Dimensions' | translate }}*</label>
-            <div class="row">
-                <div class="col-xs-6">
-                    <div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('width')}">
-                        <span class="input-group-addon"><i class="fa fa-arrows-h"></i></span>
-                        <input type="number" class="form-control" placeholder="{{ 'Width' | translate }}" ngControl="width">
+            <div class="col-xs-12 col-md-6 form-group">
+                <label>{{ 'Dimensions' | translate }}*</label>
+                <div class="row">
+                    <div class="col-xs-6">
+                        <div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('width')}">
+                            <span class="input-group-addon"><i class="fa fa-arrows-h"></i></span>
+                            <input type="number" class="form-control" placeholder="{{ 'Width' | translate }}" ngControl="width">
+                        </div>
+                        <label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Insert a valid bed width' | translate }}</small></label>
                     </div>
-                    <label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Insert a valid bed width' | translate }}</small></label>
+
+                    <div class="col-xs-6">
+                        <div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('length')}">
+                            <span class="input-group-addon"><i class="fa fa-arrows-v"></i></span>
+                            <input type="number" class="form-control" placeholder="{{ 'Length' | translate }}" ngControl="length">
+                        </div>
+                        <label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Insert a valid bed length' | translate }}</small></label>
+                    </div>
                 </div>
 
-                <div class="col-xs-6">
-                    <div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('length')}">
-                        <span class="input-group-addon"><i class="fa fa-arrows-v"></i></span>
-                        <input type="number" class="form-control" placeholder="{{ 'Length' | translate }}" ngControl="length">
-                    </div>
-                    <label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Insert a valid bed length' | translate }}</small></label>
-                </div>
+                <label class="text-muted"><small><i class="fa fa-info-circle"></i> {{ 'Dimensions are expressed in cm' | translate }}</small></label>
             </div>
-
-            <label class="text-muted"><small><i class="fa fa-info-circle"></i> {{ 'Dimensions are expressed in cm' | translate }}</small></label>
         </div>
-    </div>
 
-    <hr/>
+        <hr/>
 
-    <div class="row">
-        <div class="col-xs-12 col-md-6 form-group">
-            <label>{{ 'Notes' | translate }}</label>
-            <textarea class="form-control" ngControl="notes"></textarea>
+        <div class="row">
+            <div class="col-xs-12 col-md-6 form-group">
+                <label>{{ 'Notes' | translate }}</label>
+                <textarea class="form-control" ngControl="notes"></textarea>
+            </div>
         </div>
-    </div>
-    
-    <div class="row">
-        <div class="col-xs-12 col-md-offset-6 col-md-3">
-            <button type="button" class="btn btn-primary btn-block" *ngIf="!isNewBed()" (click)="saveBed()">
+
+        <div class="row">
+            <div class="col-xs-12 col-md-offset-6 col-md-3">
+                <button type="button" class="btn btn-primary btn-block" *ngIf="!isNewBed()" (click)="saveBed()">
                 <i *ngIf="isSavingBed" class="fa fa-spinner fa-pulse"></i> {{ 'Save Changes' | translate }}
             </button>
-            <button type="button" class="btn btn-primary btn-block" *ngIf="isNewBed()" (click)="saveBed()">
+                <button type="button" class="btn btn-primary btn-block" *ngIf="isNewBed()" (click)="saveBed()">
                 <i *ngIf="isSavingBed" class="fa fa-spinner fa-pulse"></i> {{ 'Add Bed' | translate }}
             </button>
-        </div>
-        <div class="col-xs-12 col-md-3">
-            <button type="button" class="btn btn-danger btn-block" (click)="showViewScreen()">{{ 'Cancel' | translate }}</button>
+            </div>
+            <div class="col-xs-12 col-md-3">
+                <button type="button" class="btn btn-danger btn-block" (click)="showViewScreen()">{{ 'Cancel' | translate }}</button>
+            </div>
         </div>
     </div>
 </div>

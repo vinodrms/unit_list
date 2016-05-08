@@ -1,6 +1,6 @@
 <loading-component [isLoading]="!didInit"></loading-component>
 
-<div *ngIf="didInit">
+<div *ngIf="didInit" class="lazy-loading-table-container">
 	<div class="row table-filter">
 		<!--TODO: Investigate if !isCollapsed && !tableOptions.canSearch then the total sum is 16 != 12-->
 		<div *ngIf="tableOptions.canSearch" [ngClass]="{'col-xs-4 col-md-4': !isCollapsed, 'col-xs-12 col-md-12': isCollapsed}">
@@ -31,53 +31,21 @@
 		</div>
 	</div>
 
-
-	<table class="lazy-loading">
+	<table [ngClass]="getTableClasses()">
 		<thead>
 			<tr>
 				<th *ngFor="let columnMeta of columnMetaList" [ngClass]="isCollapsed? columnMeta.valueMeta.collapsedStyle : columnMeta.valueMeta.normalStyle">
 					{{ columnMeta.displayName | translate }}
 				</th>
-				<th [ngClass]="{'up-col-10p': !isCollapsed, 'up-col-20p': isCollapsed}">
+				<th [ngClass]="{'up-col-10p': !isCollapsed, 'up-col-30p': isCollapsed}">
 				</th>
 			</tr>
-
 		</thead>
-		<tfoot>
-			<tr>
-				<td [ngClass]="{'up-col-33p': !isCollapsed, 'up-col-30p': isCollapsed}">
-					<a class="btn btn-lg" *ngIf="tableOptions.canAdd" (click)="addItem()">
-						<i class="fa fa-plus"></i> {{tableMeta.addButtonText}}
-					</a>
-				</td>
 
-				<td [ngClass]="{'up-col-33p': !isCollapsed, 'up-col-0p': isCollapsed}">
-					{{paginationIndex.pageNumberStat}}
-				</td>
-				<td class="right" [ngClass]="{'up-col-33p': !isCollapsed, 'up-col-70p': isCollapsed}">
-					<ul class="pagination">
-						<li [ngClass]="{disabled: isFirstPage()}">
-							<a (click)="updatePageNumber(paginationIndex.firstPageNumber)">
-								<i class="fa fa-angle-double-left"></i>
-							</a>
-						</li>
-						<li *ngFor="let index of paginationIndex.indexList" [ngClass]="{active: index.isSelected}">
-							<a (click)="updatePageNumber(index.pageNumber)">{{index.displayNumber}}</a>
-						</li>
-						<li [ngClass]="{disabled: isLastPage()}">
-							<a (click)="updatePageNumber(paginationIndex.lastPageNumber)">
-								<i class="fa fa-angle-double-right"></i>
-							</a>
-						</li>
-					</ul>
-
-				</td>
-			</tr>
-		</tfoot>
-		<tbody>
-			<tr *ngFor="let item of itemList" [ngClass]="{active: (isSelected(item) && (tableOptions.canSelect || tableOptions.canMultiSelect)  )}">
+		<tbody customScroll>
+			<tr *ngFor="let item of itemList" [ngClass]="getRowClasses(item)">
 				<td *ngFor="let columnMeta of columnMetaList" (click)="(tableOptions.canSelect || tableOptions.canMultiSelect) && didSelectItem(item)"
-					[ngClass]="getCellStyle(columnMeta.valueMeta, isCollapsed)">
+					[ngClass]="getCellClasses(columnMeta.valueMeta, isCollapsed)">
 					<span *ngIf="isPercentage(columnMeta.valueMeta)">
 									{{ getItemValue(item, columnMeta.valueMeta) | percentage }}
 								</span>
@@ -112,6 +80,13 @@
 					</a>
 				</td>
 			</tr>
+			<tr>
+				<td *ngFor="let columnMeta of columnMetaList" [ngClass]="getCellClasses(columnMeta.valueMeta, isCollapsed)">
+				</td>
+				<td class="table-item-action-group" [ngClass]="{'up-col-10p': !isCollapsed, 'up-col-30p': isCollapsed}">
+					
+				</td>
+			</tr>
 			<tr *ngIf="noResultsExist()">
 				<td class="up-col-100p">
 					<center>
@@ -120,6 +95,36 @@
 				</td>
 			</tr>
 		</tbody>
-	</table>
 
+		<tfoot>
+			<tr>
+			<td [ngClass]="{'left up-col-30p': !isCollapsed, 'left up-col-45p': isCollapsed}">
+					<a class="btn btn-lg" *ngIf="tableOptions.canAdd" (click)="addItem()">
+						<i class="fa fa-plus"></i> {{ 'Add' | translate }}
+					</a>
+				</td>
+				<td [ngClass]="{'up-col-30p': !isCollapsed, 'up-col-0p': isCollapsed}">
+					{{paginationIndex.pageNumberStat}}
+				</td>
+				<td class="right pagination-container" [ngClass]="{'up-col-50p': !isCollapsed, 'up-col-55p': isCollapsed}">
+					<ul class="pagination th-pagination">
+						<li [ngClass]="{disabled: isFirstPage()}">
+							<a (click)="updatePageNumber(paginationIndex.firstPageNumber)">
+								<i class="fa fa-angle-double-left"></i>
+							</a>
+						</li>
+						<li *ngFor="let index of paginationIndex.indexList" [ngClass]="{active: index.isSelected}">
+							<a (click)="updatePageNumber(index.pageNumber)">{{index.displayNumber}}</a>
+						</li>
+						<li [ngClass]="{disabled: isLastPage()}">
+							<a (click)="updatePageNumber(paginationIndex.lastPageNumber)">
+								<i class="fa fa-angle-double-right"></i>
+							</a>
+						</li>
+					</ul>
+				</td>
+			</tr>
+		</tfoot>
+		
+	</table>
 </div>

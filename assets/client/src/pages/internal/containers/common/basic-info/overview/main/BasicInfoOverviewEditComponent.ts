@@ -13,11 +13,12 @@ import {CountriesDO} from '../../../../../services/settings/data-objects/Countri
 import {HotelAggregatorService} from '../../../../../services/hotel/HotelAggregatorService';
 import {HotelAggregatedInfo} from '../../../../../services/hotel/utils/HotelAggregatedInfo';
 import {BasicInfoOverviewEditService} from './services/BasicInfoOverviewEditService';
+import {CustomScroll} from '../../../../../../../common/utils/directives/CustomScroll';
 
 @Component({
 	selector: 'basic-info-overview-edit',
 	templateUrl: '/client/src/pages/internal/containers/common/basic-info/overview/main/template/basic-info-overview-edit.html',
-	directives: [LoadingComponent, ImageUploadComponent, VATComponent],
+	directives: [LoadingComponent, CustomScroll, ImageUploadComponent, VATComponent],
 	pipes: [TranslationPipe]
 })
 

@@ -1,4 +1,4 @@
-import {Component, OnInit, Output, EventEmitter, Input, AfterViewChecked, Inject, ElementRef} from 'angular2/core';
+import {Component, OnInit, Output, EventEmitter, Input, AfterViewInit, Inject, ElementRef} from 'angular2/core';
 import {Control} from 'angular2/common';
 import {LoadingComponent} from '../LoadingComponent';
 import {TranslationPipe} from '../../localization/TranslationPipe';
@@ -11,14 +11,17 @@ import {TotalCountDO} from '../../../../pages/internal/services/common/data-obje
 import {PageMetaDO} from '../../../../pages/internal/services/common/data-objects/lazy-load/PageMetaDO';
 import {PaginationIndex} from './utils/PaginationIndex';
 import {TableOptions} from './utils/TableOptions';
+import {CustomScroll} from '../../directives/CustomScroll';
+
+declare var jQuery:any;
 
 @Component({
 	selector: 'lazy-loading-table',
 	templateUrl: '/client/src/common/utils/components/lazy-loading/template/lazy-loading-table.html',
-	directives: [LoadingComponent],
+	directives: [LoadingComponent, CustomScroll],
 	pipes: [TranslationPipe, PricePipe, PercentagePipe]
 })
-export class LazyLoadingTableComponent<T> implements AfterViewChecked {
+export class LazyLoadingTableComponent<T> implements AfterViewInit {
 	protected _isCollapsed: boolean;
 
 	protected get isCollapsed(): boolean {
@@ -39,7 +42,6 @@ export class LazyLoadingTableComponent<T> implements AfterViewChecked {
 			this.paginationIndex.numOfItemsPerPage = PaginationIndex.DefaultItemsPerPage;
 			this.lazyLoadingRequest.updatePageNumberAndPageSize(newPageNumber, PaginationIndex.DefaultItemsPerPage);
 		}
-		this.reflowTableHeader();
 	}
 
 	@Output() protected onAdd = new EventEmitter();
@@ -70,7 +72,6 @@ export class LazyLoadingTableComponent<T> implements AfterViewChecked {
 	@Output() protected onMultiSelect = new EventEmitter();
 
 	protected didInit: boolean = false;
-	protected domNeedsRefresh: boolean = false;
 
 	protected lazyLoadingRequest: ILazyLoadRequestService<T>;
 	protected tableMeta: LazyLoadTableMeta;
@@ -113,11 +114,20 @@ export class LazyLoadingTableComponent<T> implements AfterViewChecked {
 			this.filterColumnMetaList();
 
 			this.didInit = true;
-			this.domNeedsRefresh = true;
 		});
 		this.lazyLoadingRequest.refreshData();
 	}
-
+	ngAfterViewInit() {
+		this.initializeCustomScrollBar();
+	}
+	private initializeCustomScrollBar() {
+		
+		// setTimeout(() => { 
+		// 	debugger
+		// 	jQuery(this._elementRef.nativeElement).find('.tbodycontainer').simplebar();	
+		// }, 0);
+		
+	}
 	private checkInvalidPageNumber() {
 		if (this.paginationIndex.isInvalidPageNumber(this.totalCount, this.pageMeta)) {
 			this.lazyLoadingRequest.updatePageNumber(this.paginationIndex.lastPageNumber);
@@ -261,33 +271,24 @@ export class LazyLoadingTableComponent<T> implements AfterViewChecked {
 		return this._appContext.thUtils.getObjectValueByPropertyStack(item, valueMeta.dependentObjectPropertyId);
 	}
 
-
-	public ngAfterViewChecked() {
-		if (this.domNeedsRefresh) {
-			this.makeTableHeaderFloatable();
-			this.domNeedsRefresh = false;
-		}
-	}
-	private makeTableHeaderFloatable() {
-		// TODO: decomment to allow sticky header
-		// this.getTableElement().floatThead({ position: 'fixed' });
-	}
-	private reflowTableHeader() {
-		setTimeout(()=>{
-			// TODO: decomment to allow sticky header
-			// this.getTableElement().floatThead('reflow');
-		}, 0);
-	}
 	private getTableElement(): any {
 		return $(this._elementRef.nativeElement).find("table.table");
 	}
 	
-	public getCellStyle(columnValueMeta: TableColumnValueMeta, isCollapsed: boolean): string {
+	public getTableClasses(): string {
+		var classes = 'lazy-loading ';
+		if((this.columnMetaList.length + 1) % 2 == 0) {
+			classes += 'even-columns';
+		}
+		else {
+			classes += 'odd-columns';
+		}
+		return classes;	
+	}
+	
+	public getCellClasses(columnValueMeta: TableColumnValueMeta, isCollapsed: boolean): string {
 		var classes = '';
 		
-		if(this.tableOptions.canSelect || this.tableOptions.canMultiSelect) {
-			classes += 'selectable-row ';	
-		}
 		if(isCollapsed) {
 			classes += columnValueMeta.collapsedStyle;
 		}
@@ -295,5 +296,15 @@ export class LazyLoadingTableComponent<T> implements AfterViewChecked {
 			classes += columnValueMeta.normalStyle;
 		}
 		return classes;			
+	}
+	
+	public getRowClasses(item: T) {
+		var classes = '';
+		
+		if(this.isSelected(item) && (this.tableOptions.canSelect || this.tableOptions.canMultiSelect)) {
+			classes += 'active ';	
+		}
+		classes += 'selectable-row';
+		return classes;
 	}
 }

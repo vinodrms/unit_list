@@ -1,88 +1,89 @@
 <loading-component [isLoading]="isLoading"></loading-component>
-<div [hidden]="isLoading">
-	<div class="row">
-		<div class="col-md-4 col-xs-6 form-group">
-			<label>{{ 'Type of customer' | translate }}</label>
-			<div class="input-group">
-				<select class="form-control" [ngModel]="customerVM.customer.type" (ngModelChange)="didChangeCustomerType($event)">
+<div [hidden]="isLoading" class="edit-form-container" customScroll>
+	<div class="edit-form">
+		<div class="row">
+			<div class="col-md-4 col-xs-6 form-group">
+				<label>{{ 'Type of customer' | translate }}</label>
+				<div class="input-group">
+					<select class="form-control" [ngModel]="customerVM.customer.type" (ngModelChange)="didChangeCustomerType($event)">
 					<option *ngFor="let custDetailsMeta of custDetailsMetaList" [value]="custDetailsMeta.customerType">{{custDetailsMeta.customerTypeName | translate}}</option>
 				</select>
-			</div>
-		</div>
-		<div class="col-md-4 col-xs-6 form-group">
-			<label>{{ 'Public Price Products' | translate }}</label>
-			<div class="input-group">
-				<div class="btn-group" data-toggle="buttons">
-					<button class="btn btn-default" (click)="allowPublicPriceProducts=true" [ngClass]="{'active': allowPublicPriceProducts}"
-						[disabled]="readonly">
-					{{ 'Allow' | translate }}
-				</button>
-					<button class="btn btn-default" (click)="allowPublicPriceProducts=false" [ngClass]="{'active': !allowPublicPriceProducts}"
-						[disabled]="readonly">
-					{{ 'Disable' | translate }}
-				</button>
 				</div>
 			</div>
-			<small class="text-muted"><i class="fa fa-info-circle"></i>  {{ 'If allowed, public price products will be available for this customer.' | translate }}</small>
-		</div>
-		<div class="col-md-4 col-xs-12 form-group">
-			<label>{{ 'Confidential Price Products' | translate }}</label>
-			<div class="input-group">
-				<table class="table table-striped projects">
-					<tbody>
-						<tr *ngFor="let priceProduct of customerVM.priceProductList">
-							<td>{{priceProduct.name}}</td>
-							<td>
-								<a class="btn btn-xs" (click)="removePriceProduct(priceProduct)">
-									<i class="fa unitpal-font">\</i> {{ 'Remove' | translate }}
-								</a>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<a class="btn btn-xs" (click)="openPriceProductSelectModal()">
-									<i class="fa fa-plus"></i> {{ 'Add' | translate }}
-								</a>
-							</td>
-							<td></td>
-						</tr>
-					</tbody>
-				</table>
+			<div class="col-md-4 col-xs-6 form-group">
+				<label>{{ 'Public Price Products' | translate }}</label>
+				<div class="input-group">
+					<div class="btn-group" data-toggle="buttons">
+						<button class="btn btn-default" (click)="allowPublicPriceProducts=true" [ngClass]="{'active': allowPublicPriceProducts}"
+							[disabled]="readonly">
+					{{ 'Allow' | translate }}
+				</button>
+						<button class="btn btn-default" (click)="allowPublicPriceProducts=false" [ngClass]="{'active': !allowPublicPriceProducts}"
+							[disabled]="readonly">
+					{{ 'Disable' | translate }}
+				</button>
+					</div>
+				</div>
+				<small class="text-muted"><i class="fa fa-info-circle"></i>  {{ 'If allowed, public price products will be available for this customer.' | translate }}</small>
 			</div>
-			<small class="text-muted"><i class="fa fa-info-circle"></i> {{ 'Allow this customer to make reservations using specific price products.' | translate }} </small>
+			<div class="col-md-4 col-xs-12 form-group">
+				<label>{{ 'Confidential Price Products' | translate }}</label>
+				<div class="input-group">
+					<table class="table table-striped projects">
+						<tbody>
+							<tr *ngFor="let priceProduct of customerVM.priceProductList">
+								<td>{{priceProduct.name}}</td>
+								<td>
+									<a class="btn btn-xs" (click)="removePriceProduct(priceProduct)">
+										<i class="fa unitpal-font">\</i> {{ 'Remove' | translate }}
+									</a>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<a class="btn btn-xs" (click)="openPriceProductSelectModal()">
+										<i class="fa fa-plus"></i> {{ 'Add' | translate }}
+									</a>
+								</td>
+								<td></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<small class="text-muted"><i class="fa fa-info-circle"></i> {{ 'Allow this customer to make reservations using specific price products.' | translate }} </small>
+			</div>
 		</div>
-	</div>
-	<hr>
-	<div class="row">
-		<div class="col-md-12 col-sm-12 col-xs-12">
-			<individual-customer-details [hidden]="!isIndividualCustomer()" [didSubmit]="didSubmit" [individualDetails]="individualDetails">
-			</individual-customer-details>
-			<corporate-customer-details [hidden]="!isCorporateCustomer()" [didSubmit]="didSubmit" [corporateDetails]="corporateDetails">
-			</corporate-customer-details>
+		<hr>
+		<div class="row">
+			<div class="col-md-12 col-sm-12 col-xs-12">
+				<individual-customer-details [hidden]="!isIndividualCustomer()" [didSubmit]="didSubmit" [individualDetails]="individualDetails">
+				</individual-customer-details>
+				<corporate-customer-details [hidden]="!isCorporateCustomer()" [didSubmit]="didSubmit" [corporateDetails]="corporateDetails">
+				</corporate-customer-details>
+			</div>
 		</div>
-	</div>
-	<hr>
-	<div class="row">
-		<div class="col-md-8 col-xs-12">
-			<file-attachments [fileAttachmentList]="customerVM.customer.fileAttachmentList" (onFileAttachmentsChange)="didChangeFileAttachmentList($event)">
-			</file-attachments>
+		<hr>
+		<div class="row">
+			<div class="col-md-8 col-xs-12">
+				<file-attachments [fileAttachmentList]="customerVM.customer.fileAttachmentList" (onFileAttachmentsChange)="didChangeFileAttachmentList($event)">
+				</file-attachments>
+			</div>
+
+			<div class="col-md-4 col-xs-12 form-group">
+				<label>{{ 'Notes' | translate }}</label>
+				<textarea class="form-control" [(ngModel)]="customerVM.customer.notes"></textarea>
+			</div>
 		</div>
 
-		<div class="col-md-4 col-xs-12 form-group">
-			<label>{{ 'Notes' | translate }}</label>
-			<textarea class="form-control" [(ngModel)]="customerVM.customer.notes"></textarea>
-		</div>
-	</div>
-	
-	<div class="row">
-        <div class="col-xs-12 col-md-offset-6 col-md-3">
-			<button type="button" class="btn btn-primary btn-block" (click)="saveCustomer()">
+		<div class="row">
+			<div class="col-xs-12 col-md-offset-6 col-md-3">
+				<button type="button" class="btn btn-primary btn-block" (click)="saveCustomer()">
 					<i *ngIf="isSavingCustomer" class="fa fa-spinner fa-pulse"></i> {{ 'Save Changes' | translate }}
 				</button>
-        </div>
-        <div class="col-xs-12 col-md-3">
-            <button type="button" class="btn btn-danger btn-block" (click)="showViewScreen()">{{ 'Cancel' | translate }}</button>
-        </div>
-    </div>
-	
+			</div>
+			<div class="col-xs-12 col-md-3">
+				<button type="button" class="btn btn-danger btn-block" (click)="showViewScreen()">{{ 'Cancel' | translate }}</button>
+			</div>
+		</div>
+	</div>
 </div>

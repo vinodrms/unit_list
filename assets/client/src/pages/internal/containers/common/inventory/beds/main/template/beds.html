@@ -1,5 +1,5 @@
 <div class="overview-left" [ngClass]="{'col-xs-9 col-md-9': !isEditing, 'col-xs-3 col-md-3': isEditing}">
-	<lazy-loading-table 
+	<lazy-loading-table
 		[isCollapsed]="isEditing" 
 		(onAdd)="addBed()"
 		(onCopy)="copyBed($event)"

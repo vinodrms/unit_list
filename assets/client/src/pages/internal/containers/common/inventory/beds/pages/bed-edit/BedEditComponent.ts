@@ -12,12 +12,13 @@ import {BedDO} from '../../../../../../services/beds/data-objects/BedDO';
 import {BedsService} from '../../../../../../services/beds/BedsService';
 import {BedTemplatesService} from '../../../../../../services/settings/BedTemplatesService';
 import {BedTemplatesDO} from '../../../../../../services/settings/data-objects/BedTemplatesDO';
+import {CustomScroll} from '../../../../../../../../common/utils/directives/CustomScroll';
 
 @Component({
     selector: 'bed-edit',
     templateUrl: '/client/src/pages/internal/containers/common/inventory/beds/pages/bed-edit/template/bed-edit.html',
     providers: [BedEditService],
-    directives: [LoadingComponent],
+    directives: [LoadingComponent, CustomScroll],
     pipes: [TranslationPipe]
 })
 export class BedEditComponent extends BaseFormComponent implements OnInit {

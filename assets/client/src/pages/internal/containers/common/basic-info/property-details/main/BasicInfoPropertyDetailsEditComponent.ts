@@ -16,11 +16,12 @@ import {TimezoneDO} from '../../../../../services/timezones//data-objects/Timezo
 import {ThHourDO} from '../../../../../services/common/data-objects/th-dates/ThHourDO';
 import {ThHourVM} from '../../../../../../../common/utils/components/th-hour-select/utils/ThHourVM';
 import {BasicInfoPropertyDetailsEditService} from './services/BasicInfoPropertyDetailsEditService';
+import {CustomScroll} from '../../../../../../../common/utils/directives/CustomScroll';
 
 @Component({
     selector: 'basic-info-property-details-edit',
     templateUrl: '/client/src/pages/internal/containers/common/basic-info/property-details/main/template/basic-info-property-details-edit.html',
-    directives: [LoadingComponent, ThHourSelectComponent],
+    directives: [LoadingComponent, CustomScroll, ThHourSelectComponent],
     providers: [],
     pipes: [TranslationPipe]
 })

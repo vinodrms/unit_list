@@ -17,11 +17,12 @@ import {TaxService} from '../../../../../services/taxes/TaxService';
 import {TaxType} from '../../../../../services/taxes/data-objects/TaxDO';
 import {TaxContainerDO} from '../../../../../services/taxes/data-objects/TaxContainerDO';
 import {BasicInfoTaxListComponent} from '../pages/tax-list/BasicInfoTaxListComponent';
+import {CustomScroll} from '../../../../../../../common/utils/directives/CustomScroll';
 
 @Component({
 	selector: 'basic-info-payments-policies-edit',
 	templateUrl: '/client/src/pages/internal/containers/common/basic-info/payments-policies/main/template/basic-info-payments-policies-edit.html',
-	directives: [LoadingComponent, BasicInfoTaxListComponent],
+	directives: [LoadingComponent, CustomScroll, BasicInfoTaxListComponent],
 	providers: [],
 	pipes: [TranslationPipe]
 })

@@ -25,12 +25,13 @@ import {PriceProductEditFiltersSectionComponent} from '../sections/filters/Price
 import {PriceProductEditCancellationSectionComponent} from '../sections/cancellation/PriceProductEditCancellationSectionComponent';
 import {PriceProductEditConstraintsSectionComponent} from '../sections/constraints/constraints-list/PriceProductEditConstraintsSectionComponent';
 import {PriceProductEditNotesSectionComponent} from '../sections/notes/PriceProductEditNotesSectionComponent';
+import {CustomScroll} from '../../../../../../../../../common/utils/directives/CustomScroll';
 
 @Component({
 	selector: 'price-product-edit-container',
 	templateUrl: '/client/src/pages/internal/containers/common/inventory/price-products/pages/price-product-edit/container/template/price-product-edit-container.html',
 	providers: [EagerAddOnProductsService],
-	directives: [LoadingComponent,
+	directives: [LoadingComponent, CustomScroll,
 		PriceProductEditTopSectionComponent, PriceProductEditRoomCategoriesSectionComponent,
 		PriceProductEditAddOnProductsSectionComponent, PriceProductEditTaxesSectionComponent,
 		PriceProductEditPricesSectionComponent, PriceProductEditFiltersSectionComponent,

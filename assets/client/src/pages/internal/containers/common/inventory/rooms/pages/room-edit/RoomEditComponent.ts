@@ -22,12 +22,13 @@ import {ModalDialogRef} from '../../../../../../../../common/utils/modals/utils/
 import {RoomCategoriesModalService} from '../../../modals/room-categories/services/RoomCategoriesModalService';
 import {BedVM} from '../../../../../../services/beds/view-models/BedVM';
 import {BedSelectorComponent} from './components/bed-selector/BedSelectorComponent';
+import {CustomScroll} from '../../../../../../../../common/utils/directives/CustomScroll';
 
 @Component({
     selector: 'room-edit',
     templateUrl: '/client/src/pages/internal/containers/common/inventory/rooms/pages/room-edit/template/room-edit.html',
     providers: [RoomEditService, RoomCategoriesModalService],
-    directives: [LoadingComponent, ImageUploadComponent, BedSelectorComponent],
+    directives: [LoadingComponent, CustomScroll, ImageUploadComponent, BedSelectorComponent],
     pipes: [TranslationPipe]
 })
 export class RoomEditComponent extends BaseFormComponent implements OnInit {

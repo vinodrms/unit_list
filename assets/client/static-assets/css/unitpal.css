@@ -351,6 +351,8 @@ table .buttons,table button,table .btn {
 }
 
 .overview-left {
+    display: flex;
+    flex-direction: column;
     height: 100%;
     padding-top: 12px;
     padding-left: 0px;
@@ -387,23 +389,6 @@ table .buttons,table button,table .btn {
     padding-top: 12px;
     margin-top: 24px;
     border-top: 1px solid #ccc;
-}
-
-.table-foot {
-    border-top: 1px solid #ccc;
-    padding: 12px 0;
-}
-
-.table-foot .pagination {
-    margin: 0;
-}
-
-.signup-table {
-    margin-bottom: 0 !important;
-}
-
-.signup-table td {
-    padding: 12px !important;
 }
 
 .save-cancel {
@@ -489,7 +474,7 @@ lazy-loading-table {
 
 .overview-right-body{
     height: calc(100% - 82px);
-    overflow-y: scroll    
+    overflow-y: hidden;    
 }
 
 .wizard-nav  {
@@ -524,17 +509,30 @@ lazy-loading-table {
 /* Theme structure */
 
 .edit-container {
-    height: calc(100%);
+    height: 100%;
     border-left: 1px solid #ccc;
-    padding: 24px;    
-    overflow-y: scroll;
-    overflow-x: hidden;
+    overflow: hidden;
+    padding: 0px;
+}
+
+.edit-form-container {
+    height: 100%;
+}
+
+.edit-form {
+    margin: 15px;
 }
 
 .basic-info-container {
-    height: calc(100%);
-    overflow-y: scroll;
-    overflow-x: hidden;
+    height: 100%;
+    padding: 0px;
+}
+.basic-info-form-container {
+    height: 100%;
+}
+.basic-info-form {
+    height: 100%;
+    padding: 5px 15px;
 }
 
 /* Bootstrap overrides */
@@ -860,69 +858,129 @@ input[type="file"] {
 /**
     Lazy loading fixed header table css
 */
+lazy-loading-table {
+    display: flex;
+    flex-direction: column;
+}
+
+.lazy-loading-table-container {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
 .table-filter {
-    margin: 0px 15px 15px 10px;
+    margin: 0px 10px 5px 10px;
+    flex-grow: 0;
 }
 
 table.lazy-loading {
-    table-layout: fixed;
-    margin: 0;
-    width: 100%;
-    border-collapse: collapse;
-}
-
-table.lazy-loading tr {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
   overflow: hidden;
+  height: 100%;
+  margin:0;
 }
 
-table.lazy-loading thead tr {
-  padding-right: 17px;
-  background: rgb(238, 238, 238);
+table.lazy-loading tbody,
+table.lazy-loading thead,
+table.lazy-loading tfoot {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 0;
+  flex-shrink: 0;
 }
 
 table.lazy-loading tbody {
+  overflow-y: hidden;
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+
+table.lazy-loading tbody tr:last-child {
+  flex-grow: 1;
+}
+
+table.lazy-loading tr {
+  display: flex;
+  flex-direction: row;
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+
+table.lazy-loading tbody tr:not(:last-child):not(:first-child) {
+    border-top: 1px solid rgb(220,220,220)
+}
+
+table.lazy-loading tr.active,
+table.lazy-loading tbody tr:not(:last-child):hover {
+  background: rgb(210,210,210);
+}
+
+table.lazy-loading td,
+table.lazy-loading th {
   display: block;
-  /*height: calc(100vh - 330px);*/
-  /*use calc for fixed ie9 & <*/
-  overflow-Y: scroll;
-  color: #000;
-}
-
-table.lazy-loading tbody tr {
-    border-top: 1px solid rgba(0, 0, 0, .2);
-}
-table.lazy-loading tbody tr:first-child {
-    border-top: 0 none;
-}
-table.lazy-loading tbody td:nth-child(odd) {
-    background: rgb(244, 244, 244);
-}
-
-table.lazy-loading tbody td:last-child {
-    background: rgb(244, 244, 244);
-}
-
-table.lazy-loading tfoot td {
-    height: 61px;
-    line-height: 61px;
-    padding-left: 0px;
-    border-top: 1px solid rgba(0, 0, 0, .2);
-    background: transparent;
-}
-
-table.lazy-loading th,
-table.lazy-loading td {
-  float: left;
+  flex-direction: column;
+  flex-shrink: 1;
+  flex-grow: 1;
+  flex-basis: 50px;
+  text-align: center;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  height: 40px;
-  line-height: 40px;
 }
 
-table.lazy-loading th {
-    font-weight: bold;
+table.lazy-loading thead tr,
+table.lazy-loading tbody tr {
+  height: 40px;
+}
+table.lazy-loading th,
+table.lazy-loading tbody td {
+  line-height: 40px;
+}
+table.lazy-loading tfoot td {
+  height: 50px;
+  line-height: 50px;
+}
+table.lazy-loading tfoot {
+    border-top: 1px solid rgb(210,210,210);
+}
+
+table.lazy-loading th:nth-child(even) {
+  background: rgba(225, 225, 225, 0.6);  
+}
+
+table.lazy-loading th:nth-child(odd) {
+  background: rgba(244, 244, 244, 0.6);  
+}
+
+table.lazy-loading.odd-columns th:last-child {
+  background: rgba(225, 225, 225, 0.6);  
+}
+
+table.lazy-loading.even-columns th:last-child {
+  background: rgba(244, 244, 244, 0.6);  
+}
+
+table.lazy-loading tbody td:nth-child(even) {
+  background: rgba(244, 244, 244, 0.6);
+}
+
+table.lazy-loading tbody td:nth-child(odd) {
+  background: rgba(255, 255, 255, 0.6);
+}
+
+table.lazy-loading.odd-columns tbody td:last-child {
+  background: rgba(244, 244, 244, 0.6);  
+}
+
+table.lazy-loading.even-columns tbody td:last-child {
+  background: rgba(255, 255, 255, 0.6);  
+}
+
+table.lazy-loading tfoot {
+  background: rgba(255, 255, 255);
 }
 
 table.lazy-loading th.center,
@@ -932,86 +990,76 @@ table.lazy-loading td.center {
 
 table.lazy-loading th.left,
 table.lazy-loading td.left {
-    padding-left: .5rem;
+    padding-left: 5px;
     text-align: left;
 }
 
 table.lazy-loading td.right {
-    padding-right: .5rem;
     text-align: right;
 }
 
-table.lazy-loading th:nth-child(odd) {
-    background: rgb(238, 238, 238);
+table.lazy-loading .pagination-container {
+    padding-right: 10px;       
 }
 
-table.lazy-loading th:nth-child(even) {
-    background: rgb(244, 244, 244);
+/* This is to override default pagination style */
+table.lazy-loading .th-pagination {
+    margin: 5px 0px 0px 0px;
 }
 
-table.lazy-loading .pagination {
-  padding: 0px;
-  margin: 0px;
-}
-
-table.lazy-loading th:last-child,
-table.lazy-loading td:last-child {
-  padding-left: 0;
-}
-
-table.lazy-loading th:last-child {
-    background: rgb(238, 238, 238);
+.lazy-loading-table-filter {
+    margin-bottom: 5px;    
 }
 
 .up-col-0p {
-    width: 0%;   
+    display: none !important;   
 }
-
 .up-col-5p {
-    width: 5%;    
+    flex-grow: 1 !important;
 }
 .up-col-10p {
-    width: 10%;
+    flex-grow: 2 !important;
 }
 .up-col-15p {
-    width: 15%;
+    flex-grow: 3 !important;
 }
 .up-col-20p {
-    width: 20%;
+    flex-grow: 4 !important;
 }
 .up-col-25p {
-    width: 25%;
+    flex-grow: 5 !important;
 }
 .up-col-30p {
-    width: 30%;
-}
-.up-col-33p {
-    width: 33.33%;
+    flex-grow: 6 !important;
 }
 .up-col-35p {
-    width: 35%;
+    flex-grow: 7 !important;
 }
 .up-col-40p {
-    width: 40%;
+    flex-grow: 8 !important;
 }
 .up-col-50p {
-    width: 50%;
+    flex-grow: 10 !important;
 }
 .up-col-60p {
-    width: 60%;
+    flex-grow: 12 !important;
 }
 .up-col-70p {
-    width: 70%;
+    flex-grow: 14 !important;
 }
 .up-col-80p {
-    width: 80%;   
+    flex-grow: 16 !important;   
 }
 .up-col-90p {
-    width: 90%;
+    flex-grow: 18 !important;
 }
 .up-col-95p {
-    width: 95%;
+    flex-grow: 19 !important;
 }
 .up-col-100p {
-    width: 100%;
+    flex-grow: 20 !important;
+}
+
+.edit-form-container {
+    padding: 10px;
 }

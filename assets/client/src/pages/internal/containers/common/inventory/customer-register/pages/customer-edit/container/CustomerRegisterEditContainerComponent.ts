@@ -27,12 +27,13 @@ import {CountriesDO} from '../../../../../../../services/settings/data-objects/C
 import {CustomersService} from '../../../../../../../services/customers/CustomersService';
 import {HotelAggregatorService} from '../../../../../../../services/hotel/HotelAggregatorService';
 import {HotelAggregatedInfo} from '../../../../../../../services/hotel/utils/HotelAggregatedInfo';
+import {CustomScroll} from '../../../../../../../../../common/utils/directives/CustomScroll';
 
 @Component({
 	selector: 'customer-register-edit-container',
 	templateUrl: '/client/src/pages/internal/containers/common/inventory/customer-register/pages/customer-edit/container/template/customer-register-edit-container.html',
 	providers: [EagerPriceProductsService, PriceProductsModalService],
-	directives: [FileAttachmentsComponent, CorporateCustomerDetailsComponent, IndividualCustomerDetailsComponent],
+	directives: [CustomScroll, FileAttachmentsComponent, CorporateCustomerDetailsComponent, IndividualCustomerDetailsComponent],
 	pipes: [TranslationPipe]
 })
 

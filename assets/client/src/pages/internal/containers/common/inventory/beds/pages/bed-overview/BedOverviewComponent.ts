@@ -2,11 +2,13 @@ import { Component, Input, Output, EventEmitter } from 'angular2/core';
 import {BaseComponent} from '../../../../../../../../common/base/BaseComponent';
 import {TranslationPipe} from '../../../../../../../../common/utils/localization/TranslationPipe';
 import {BedVM} from '../../../../../../services/beds/view-models/BedVM';
+import {CustomScroll} from '../../../../../../../../common/utils/directives/CustomScroll';
 
 @Component({
     selector: 'bed-overview',
     templateUrl: '/client/src/pages/internal/containers/common/inventory/beds/pages/bed-overview/template/bed-overview.html',
-    pipes: [TranslationPipe]
+    pipes: [TranslationPipe],
+	directives: [CustomScroll]
 })
 export class BedOverviewComponent extends BaseComponent {
     constructor() { 
