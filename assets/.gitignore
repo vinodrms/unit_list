@@ -16,5 +16,6 @@ nbproject
 .idea
 .node_history
 client/**/*.js
+!client/static-assets/js/*.js
 !*.config.js
 dist
