@@ -80,7 +80,7 @@
 					</a>
 				</td>
 			</tr>
-			<tr>
+			<tr *ngIf="!noResultsExist()">
 				<td *ngFor="let columnMeta of columnMetaList" [ngClass]="getCellClasses(columnMeta.valueMeta, isCollapsed)">
 				</td>
 				<td class="table-item-action-group" [ngClass]="{'up-col-10p': !isCollapsed, 'up-col-30p': isCollapsed}">
