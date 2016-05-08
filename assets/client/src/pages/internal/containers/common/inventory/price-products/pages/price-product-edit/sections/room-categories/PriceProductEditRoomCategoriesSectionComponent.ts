@@ -1,4 +1,4 @@
-import {Component, Input, Output, EventEmitter} from 'angular2/core';
+import {Component, Input, Output, EventEmitter} from '@angular/core';
 import {BaseComponent} from '../../../../../../../../../../common/base/BaseComponent';
 import {TranslationPipe} from '../../../../../../../../../../common/utils/localization/TranslationPipe';
 import {IPriceProductEditSection} from '../utils/IPriceProductEditSection';

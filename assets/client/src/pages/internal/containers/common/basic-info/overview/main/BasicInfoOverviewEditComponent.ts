@@ -1,5 +1,5 @@
-import {Component, OnInit, Input} from 'angular2/core';
-import {ControlGroup} from 'angular2/common';
+import {Component, OnInit, Input} from '@angular/core';
+import {ControlGroup} from '@angular/common';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/combineLatest';
 import {BaseFormComponent} from '../../../../../../../common/base/BaseFormComponent';

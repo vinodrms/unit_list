@@ -1,4 +1,4 @@
-import {Component, Input, Output, EventEmitter} from 'angular2/core';
+import {Component, Input, Output, EventEmitter} from '@angular/core';
 import {AppContext, ThError} from '../../AppContext';
 import {UploadedFileResponse} from '../../http/IThHttp';
 import {TranslationPipe} from '../../localization/TranslationPipe';

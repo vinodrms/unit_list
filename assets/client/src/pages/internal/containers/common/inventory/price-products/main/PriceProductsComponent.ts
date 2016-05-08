@@ -1,4 +1,4 @@
-import {Component, ViewChild, AfterViewInit, Input, Output, EventEmitter, DynamicComponentLoader, Type, ResolvedReflectiveProvider, ViewContainerRef} from 'angular2/core';
+import {Component, ViewChild, AfterViewInit, Input, Output, EventEmitter, DynamicComponentLoader, Type, ResolvedReflectiveProvider, ViewContainerRef} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/combineLatest';
 import {BaseComponent} from '../../../../../../../common/base/BaseComponent';

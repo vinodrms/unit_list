@@ -1,4 +1,4 @@
-import {Component} from 'angular2/core';
+import {Component} from '@angular/core';
 import {BaseComponent} from '../../../../base/BaseComponent';
 import {ICustomModalComponent, ModalSize} from '../../utils/ICustomModalComponent';
 import {ModalDialogRef} from '../../utils/ModalDialogRef';

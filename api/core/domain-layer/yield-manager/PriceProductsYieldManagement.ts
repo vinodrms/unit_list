@@ -5,7 +5,7 @@ import {AppContext} from '../../utils/AppContext';
 import {SessionContext} from '../../utils/SessionContext';
 import {PriceProductsYieldManagementDO, PriceProductYieldAttribute} from './PriceProductsYieldManagementDO';
 import {PriceProductDO} from '../../data-layer/price-products/data-objects/PriceProductDO';
-import {ThDayInYearIntervalDO} from '../../utils/th-dates/data-objects/ThDayInYearIntervalDO';
+import {ThDateIntervalDO} from '../../utils/th-dates/data-objects/ThDateIntervalDO';
 import {ValidationResultParser} from '../common/ValidationResultParser';
 import {PriceProductMetaRepoDO, PriceProductItemMetaRepoDO} from '../../data-layer/price-products/repositories/IPriceProductRepository';
 import {IPriceProductIntervalStrategy} from './interval-strategies/IPriceProductIntervalStrategy';
@@ -14,7 +14,7 @@ import {PriceProductRemoveIntervalStrategy} from './interval-strategies/PricePro
 
 export class PriceProductsYieldManagement {
 	private _yieldData: PriceProductsYieldManagementDO;
-	private _yieldInterval: ThDayInYearIntervalDO;
+	private _yieldInterval: ThDateIntervalDO;
 	private _intervalStrategy: IPriceProductIntervalStrategy;
 
 	constructor(private _appContext: AppContext, private _sessionContext: SessionContext) {
@@ -42,7 +42,7 @@ export class PriceProductsYieldManagement {
 			parser.logAndReject("Error validating data for yield price products", reject);
 			return false;
 		}
-		this._yieldInterval = new ThDayInYearIntervalDO();
+		this._yieldInterval = new ThDateIntervalDO();
 		this._yieldInterval.buildFromObject(this._yieldData.interval);
 		if (!this._yieldInterval.isValid()) {
 			var thError = new ThError(ThStatusCode.PriceProductsYieldManagementInvalidInterval, null);

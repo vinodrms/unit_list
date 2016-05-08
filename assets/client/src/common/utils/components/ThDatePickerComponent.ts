@@ -1,4 +1,4 @@
-import {Component, Input, Output, EventEmitter, ElementRef, AfterViewInit, Inject} from 'angular2/core';
+import {Component, Input, Output, EventEmitter, ElementRef, AfterViewInit, Inject} from '@angular/core';
 import {TranslationPipe} from '../localization/TranslationPipe';
 import {ThDateDO} from '../../../pages/internal/services/common/data-objects/th-dates/ThDateDO';
 import {ThDatePipe} from '../pipes/ThDatePipe';

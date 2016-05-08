@@ -1,5 +1,5 @@
-import {ThDayInYearIntervalDO} from '../../../utils/th-dates/data-objects/ThDayInYearIntervalDO';
+import {ThDateIntervalDO} from '../../../utils/th-dates/data-objects/ThDateIntervalDO';
 
 export interface IPriceProductIntervalStrategy {
-	apply(intervalList: ThDayInYearIntervalDO[], interval: ThDayInYearIntervalDO): ThDayInYearIntervalDO[];
+	apply(intervalList: ThDateIntervalDO[], interval: ThDateIntervalDO): ThDateIntervalDO[];
 }

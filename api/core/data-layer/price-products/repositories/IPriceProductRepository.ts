@@ -1,6 +1,6 @@
 import {PriceProductDO, PriceProductStatus, PriceProductAvailability} from '../data-objects/PriceProductDO';
 import {PriceProductYieldFilterMetaDO} from '../data-objects/yield-filter/PriceProductYieldFilterDO';
-import {ThDayInYearIntervalDO} from '../../../utils/th-dates/data-objects/ThDayInYearIntervalDO';
+import {ThDateIntervalDO} from '../../../utils/th-dates/data-objects/ThDateIntervalDO';
 import {LazyLoadRepoDO, LazyLoadMetaResponseRepoDO} from '../../common/repo-data-objects/LazyLoadRepoDO';
 
 export interface PriceProductMetaRepoDO {
@@ -15,9 +15,9 @@ export interface PriceProductUpdateStatusParamsRepoDO {
 	newStatus: PriceProductStatus;
 }
 export interface PriceProductUpdateYMIntervalsParamsRepoDO {
-	openIntervalList: ThDayInYearIntervalDO[];
-	openForArrivalIntervalList: ThDayInYearIntervalDO[];
-	openForDepartureIntervalList: ThDayInYearIntervalDO[];
+	openIntervalList: ThDateIntervalDO[];
+	openForArrivalIntervalList: ThDateIntervalDO[];
+	openForDepartureIntervalList: ThDateIntervalDO[];
 }
 
 export interface PriceProductSearchCriteriaRepoDO {

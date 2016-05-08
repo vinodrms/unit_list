@@ -1,5 +1,5 @@
-import {Component} from 'angular2/core';
-import {RouteConfig, RouterOutlet} from 'angular2/router';
+import {Component} from '@angular/core';
+import {RouteConfig, RouterOutlet} from '@angular/router-deprecated';
 import {BaseComponent} from '../../../../../common/base/BaseComponent';
 import {WizardHeaderComponent} from '../pages/utils/header/WizardHeaderComponent';
 import {WizardNavbarComponent} from '../pages/utils/navbar/WizardNavbarComponent';

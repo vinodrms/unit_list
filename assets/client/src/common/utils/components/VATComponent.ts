@@ -1,5 +1,5 @@
-import {Component, OnChanges, Input, SimpleChange, Output, EventEmitter, OnInit} from 'angular2/core';
-import {Control} from 'angular2/common';
+import {Component, OnChanges, Input, SimpleChange, Output, EventEmitter, OnInit} from '@angular/core';
+import {Control} from '@angular/common';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/switchMap';

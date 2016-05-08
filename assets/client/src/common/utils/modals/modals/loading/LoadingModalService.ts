@@ -1,4 +1,4 @@
-import {Injectable, Inject, ReflectiveInjector} from 'angular2/core';
+import {Injectable, Inject, ReflectiveInjector} from '@angular/core';
 import {IModalService} from '../../IModalService';
 import {LoadingModalComponent} from './LoadingModalComponent';
 import {ModalDialogRef} from '../../utils/ModalDialogRef';

@@ -86,6 +86,7 @@ export class PricePerPersonContainer implements IPriceContainer {
 				destAdultPrice.price = priceForFixedNoOfPersons.price;
 			}
 		});
+		destPricePerPersonDO.firstChildWithoutAdultPrice = sourcePricePerPersonDO.firstChildWithoutAdultPrice;
 		destPricePerPersonDO.childrenPriceList.forEach((destChildPrice: PriceForFixedNumberOfPersonsDO) => {
 			var priceForFixedNoOfPersons = sourcePricePerPersonDO.getPriceForNumberOfChildren(destChildPrice.noOfPersons);
 			if (priceForFixedNoOfPersons) {

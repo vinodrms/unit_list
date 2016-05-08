@@ -1,5 +1,5 @@
-import {Component, OnInit} from 'angular2/core';
-import {RouteConfig, RouterOutlet, ROUTER_DIRECTIVES} from 'angular2/router';
+import {Component, OnInit} from '@angular/core';
+import {RouteConfig, RouterOutlet, ROUTER_DIRECTIVES} from '@angular/router-deprecated';
 import {BaseComponent} from '../../../../../common/base/BaseComponent';
 import {MainHeaderComponent} from '../pages/utils/header/MainHeaderComponent';
 import {HotelOperationsContainerComponent} from '../pages/home-pages/hotel-operations/container/HotelOperationsContainerComponent';

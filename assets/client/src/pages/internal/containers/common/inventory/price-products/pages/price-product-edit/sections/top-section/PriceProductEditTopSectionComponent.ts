@@ -1,5 +1,5 @@
-import {Component, Input} from 'angular2/core';
-import {Control, Validators, ControlGroup, FormBuilder} from 'angular2/common';
+import {Component, Input} from '@angular/core';
+import {Control, Validators, ControlGroup, FormBuilder} from '@angular/common';
 import {BaseFormComponent} from '../../../../../../../../../../common/base/BaseFormComponent';
 import {TranslationPipe} from '../../../../../../../../../../common/utils/localization/TranslationPipe';
 import {IPriceProductEditSection} from '../utils/IPriceProductEditSection';

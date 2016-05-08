@@ -1,4 +1,4 @@
-import {Component, OnInit, AfterViewChecked, ViewChild, ElementRef} from 'angular2/core';
+import {Component, OnInit, AfterViewChecked, ViewChild, ElementRef} from '@angular/core';
 import {BaseComponent} from '../../../../../../../common/base/BaseComponent';
 import {LoadingComponent} from '../../../../../../../common/utils/components/LoadingComponent';
 import {ThError, AppContext} from '../../../../../../../common/utils/AppContext';

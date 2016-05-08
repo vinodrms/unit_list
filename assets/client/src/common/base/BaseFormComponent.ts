@@ -1,4 +1,4 @@
-import {ControlGroup, AbstractControl} from 'angular2/common';
+import {ControlGroup, AbstractControl} from '@angular/common';
 import {BaseComponent} from './BaseComponent';
 
 export abstract class BaseFormComponent extends BaseComponent {

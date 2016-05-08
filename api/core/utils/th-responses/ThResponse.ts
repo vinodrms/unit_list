@@ -251,7 +251,14 @@ export enum ThStatusCode {
     YieldFilterRepositoryErrorAddingYieldFilterValue,
     YieldFilterRepositoryErrorUpdatingYieldFilterValue,
     YieldFilterRepositoryErrorDuplicateFilterValue,
-    YieldFilterRepositoryErrorLabelOrColorCodeInvalid
+    YieldFilterRepositoryErrorLabelOrColorCodeInvalid,
+    AllotmentRepositoryErrorAddingAllotment,
+    AllotmentRepositoryAllotmentNotFound,
+    AllotmentRepositoryErrorGettingAllotment,
+    AllotmentRepositoryProblemUpdatingAllotment,
+    AllotmentRepositoryErrorUpdatingAllotment,
+    AllotmentRepositoryErrorReadingDocumentCount,
+    AllotmentRepositoryErrorGettingList
 }
 
 var ThMessage: { [index: number]: string; } = {};
@@ -503,7 +510,13 @@ ThMessage[ThStatusCode.YieldFilterRepositoryErrorAddingYieldFilterValue] = "Erro
 ThMessage[ThStatusCode.YieldFilterRepositoryErrorUpdatingYieldFilterValue] = "Error updating filter value.";
 ThMessage[ThStatusCode.YieldFilterRepositoryErrorDuplicateFilterValue] = "Duplicate filter value.";
 ThMessage[ThStatusCode.YieldFilterRepositoryErrorLabelOrColorCodeInvalid] = "Filter Rules -> TextFilter: label-defined, colorCode-null; ColorFilter: label-null, colorCode-defined";
-
+ThMessage[ThStatusCode.AllotmentRepositoryErrorAddingAllotment] = "Error adding allotment.";
+ThMessage[ThStatusCode.AllotmentRepositoryAllotmentNotFound] = "Allotment not found.";
+ThMessage[ThStatusCode.AllotmentRepositoryErrorGettingAllotment] = "Error getting allotment.";
+ThMessage[ThStatusCode.AllotmentRepositoryProblemUpdatingAllotment] = "Error updating allotment. It is possible that someone else changed it at the same time. Please refresh the page and try again.";
+ThMessage[ThStatusCode.AllotmentRepositoryErrorUpdatingAllotment] = "Error updating allotment.";
+ThMessage[ThStatusCode.AllotmentRepositoryErrorReadingDocumentCount] = "Error reading the number of allotments.";
+ThMessage[ThStatusCode.AllotmentRepositoryErrorGettingList] = "Error getting the allotments."; 
 
 export class ThResponse {
     statusCode: ThStatusCode;

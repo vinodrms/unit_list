@@ -1,5 +1,5 @@
-import {Injectable} from 'angular2/core';
-import {FormBuilder, ControlGroup, Validators, AbstractControl, Control} from 'angular2/common';
+import {Injectable} from '@angular/core';
+import {FormBuilder, ControlGroup, Validators, AbstractControl, Control} from '@angular/common';
 import {AddOnProductVM} from '../../../../../../../services/add-on-products/view-models/AddOnProductVM';
 import {AddOnProductDO} from '../../../../../../../services/add-on-products/data-objects/AddOnProductDO';
 import {ThValidators, ThFieldLengths} from '../../../../../../../../../common/utils/form-utils/ThFormUtils';

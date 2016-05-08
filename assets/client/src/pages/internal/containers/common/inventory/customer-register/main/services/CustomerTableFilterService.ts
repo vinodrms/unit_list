@@ -1,4 +1,4 @@
-import {Injectable} from 'angular2/core';
+import {Injectable} from '@angular/core';
 import {CustomerType} from '../../../../../../services/customers/data-objects/CustomerDO';
 import {CustomersService} from '../../../../../../services/customers/CustomersService';
 import {CustomerDetailsMeta} from '../../../../../../services/customers/data-objects/customer-details/ICustomerDetailsDO';

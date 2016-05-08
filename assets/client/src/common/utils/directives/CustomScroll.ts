@@ -1,4 +1,4 @@
-import {Directive, OnInit, OnDestroy, ElementRef} from 'angular2/core';
+import {Directive, OnInit, OnDestroy, ElementRef} from '@angular/core';
 
 declare var jQuery: any;
 

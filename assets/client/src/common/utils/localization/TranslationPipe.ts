@@ -1,5 +1,4 @@
-import {Pipe, PipeTransform, EventEmitter, OnDestroy} from 'angular2/core';
-import {isPresent} from "angular2/src/facade/lang";
+import {Pipe, PipeTransform, EventEmitter, OnDestroy} from '@angular/core';
 import {ThUtils} from '../ThUtils';
 import {ThTranslation} from './ThTranslation';
 
@@ -45,7 +44,7 @@ export class TranslationPipe implements PipeTransform, OnDestroy {
         this.destroy();
     }
 	private destroy(): void {
-        if (isPresent(this._onLangChange)) {
+        if (this._onLangChange) {
             this._onLangChange.unsubscribe();
             this._onLangChange = undefined;
         }

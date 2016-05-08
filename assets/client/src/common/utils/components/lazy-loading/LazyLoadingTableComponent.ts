@@ -1,5 +1,5 @@
-import {Component, OnInit, Output, EventEmitter, Input, AfterViewInit, Inject, ElementRef} from 'angular2/core';
-import {Control} from 'angular2/common';
+import {Component, OnInit, Output, EventEmitter, Input, AfterViewChecked, Inject, ElementRef} from '@angular/core';
+import {Control} from '@angular/common';
 import {LoadingComponent} from '../LoadingComponent';
 import {TranslationPipe} from '../../localization/TranslationPipe';
 import {PricePipe} from '../../pipes/PricePipe';
@@ -21,7 +21,7 @@ declare var jQuery:any;
 	directives: [LoadingComponent, CustomScroll],
 	pipes: [TranslationPipe, PricePipe, PercentagePipe]
 })
-export class LazyLoadingTableComponent<T> implements AfterViewInit {
+export class LazyLoadingTableComponent<T> {
 	protected _isCollapsed: boolean;
 
 	protected get isCollapsed(): boolean {
@@ -116,17 +116,6 @@ export class LazyLoadingTableComponent<T> implements AfterViewInit {
 			this.didInit = true;
 		});
 		this.lazyLoadingRequest.refreshData();
-	}
-	ngAfterViewInit() {
-		this.initializeCustomScrollBar();
-	}
-	private initializeCustomScrollBar() {
-		
-		// setTimeout(() => { 
-		// 	debugger
-		// 	jQuery(this._elementRef.nativeElement).find('.tbodycontainer').simplebar();	
-		// }, 0);
-		
 	}
 	private checkInvalidPageNumber() {
 		if (this.paginationIndex.isInvalidPageNumber(this.totalCount, this.pageMeta)) {

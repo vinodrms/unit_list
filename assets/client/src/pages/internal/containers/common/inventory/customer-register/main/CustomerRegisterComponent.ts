@@ -1,4 +1,4 @@
-import {Component, Output, EventEmitter, ViewChild, AfterViewInit, DynamicComponentLoader, Type, ResolvedReflectiveProvider, ViewContainerRef} from 'angular2/core';
+import {Component, Output, EventEmitter, ViewChild, AfterViewInit, DynamicComponentLoader, Type, ResolvedReflectiveProvider, ViewContainerRef} from '@angular/core';
 import {BaseComponent} from '../../../../../../../common/base/BaseComponent';
 import {TranslationPipe} from '../../../../../../../common/utils/localization/TranslationPipe';
 import {AppContext, ThError} from '../../../../../../../common/utils/AppContext';

@@ -1,4 +1,4 @@
-import {Component, Input, Optional, Inject} from 'angular2/core';
+import {Component, Input, Optional, Inject} from '@angular/core';
 import {Toast} from './Toast';
 
 @Component({

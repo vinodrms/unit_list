@@ -1,4 +1,4 @@
-import {Component, AfterViewChecked, ViewChild, ElementRef} from 'angular2/core';
+import {Component, AfterViewChecked, ViewChild, ElementRef} from '@angular/core';
 import {BaseComponent} from '../../../../../../../common/base/BaseComponent';
 import {ThError, AppContext} from '../../../../../../../common/utils/AppContext';
 import {ICustomModalComponent, ModalSize} from '../../../../../../../common/utils/modals/utils/ICustomModalComponent';

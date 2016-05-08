@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from 'angular2/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import {BaseComponent} from '../../../../common/base/BaseComponent';
 import {ThHourPipe} from '../../../../common/utils/pipes/ThHourPipe';
 import {ThHourDO} from '../../../../pages/internal/services/common/data-objects/th-dates/ThHourDO';
