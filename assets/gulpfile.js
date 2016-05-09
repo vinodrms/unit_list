@@ -26,7 +26,7 @@ function compileAppFromDirectory(dirName) {
 	var tsResult = gulp.src(['client/src/common/**/*.ts', dirName])
 		.pipe(embedTemplates(embedTemplatesOptions))
 		.pipe(ts(tsProject));
-	return tsResult.js.pipe(gulp.dest('client/src'));
+	return tsResult.js.pipe(gulp.dest('client'));
 }
 
 function packCompiledFiles(configFileName, outFileName, appConfigName, endCallback) {
