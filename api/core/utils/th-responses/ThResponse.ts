@@ -197,6 +197,8 @@ export enum ThStatusCode {
     SaveCustomerItemInvalidOrNullClientType,
     SaveCustomerItemCompOrTACannotBeLinkedToOtherCustomers,
     CustomerItemUpdateStrategyError,
+    CustomerItemUpdateStrategyCustTypeChanged,
+    CustomerItemUpdateStrategyPriceProductUsedInAllotment,
     CustomersControllerErrorGettingCustomer,
     CustomersControllerErrorSavingCustomer,
     CustomersControllerErrorGettingCount,
@@ -466,6 +468,8 @@ ThMessage[ThStatusCode.SaveCustomerItemError] = "Error saving customer.";
 ThMessage[ThStatusCode.SaveCustomerItemInvalidOrNullClientType] = "Invalid client type.";
 ThMessage[ThStatusCode.SaveCustomerItemCompOrTACannotBeLinkedToOtherCustomers] = "Companies or travel agencies cannot be linked to other customers.";
 ThMessage[ThStatusCode.CustomerItemUpdateStrategyError] = "Error updating customer.";
+ThMessage[ThStatusCode.CustomerItemUpdateStrategyCustTypeChanged] = "The type of a customer cannot be changed.";
+ThMessage[ThStatusCode.CustomerItemUpdateStrategyPriceProductUsedInAllotment] = "You cannot remove price products used in allotments. Please archive the allotments first.";
 ThMessage[ThStatusCode.CustomersControllerErrorGettingCustomer] = "Error getting customer.";
 ThMessage[ThStatusCode.CustomersControllerErrorSavingCustomer] = "Error saving customer.";
 ThMessage[ThStatusCode.CustomersControllerErrorGettingCount] = "Error getting the number of customers.";
@@ -488,7 +492,7 @@ ThMessage[ThStatusCode.PriceProductValidatorEmptyRoomCategoryList] = "Please ass
 ThMessage[ThStatusCode.PriceProductValidatorInvalidPrices] = "Please complete all the required price values.";
 ThMessage[ThStatusCode.ArchivePriceProductItemError] = "Please while archiving the price product.";
 ThMessage[ThStatusCode.ArchivePriceProductItemNonActiveStatus] = "Please while archiving the price product.";
-ThMessage[ThStatusCode.ArchivePriceProductItemUsedInCustomersError] = "Could not delete the price product because it is assigned to customers.";
+ThMessage[ThStatusCode.ArchivePriceProductItemUsedInCustomersError] = "Could not archive the price product because it is assigned to customers.";
 ThMessage[ThStatusCode.UpdatePriceProductItemStatusError] = "Error updating the status of the price product.";
 ThMessage[ThStatusCode.UpdatePriceProductItemStatusWrongStatus] = "Cannot run this action on the current price product.";
 ThMessage[ThStatusCode.DraftPriceProductItemOnlyArchived] = "Only archived price products can be marked as drafts.";

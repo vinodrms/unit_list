@@ -23,8 +23,12 @@ import {ArchivePriceProductItem} from '../../../../core/domain-layer/price-produ
 import {DraftPriceProductItem} from '../../../../core/domain-layer/price-products/DraftPriceProductItem';
 import {DeletePriceProductItem} from '../../../../core/domain-layer/price-products/DeletePriceProductItem';
 import {PriceProductSearchResultRepoDO} from '../../../../core/data-layer/price-products/repositories/IPriceProductRepository';
+import {AllotmentsHelper} from '../allotments/helpers/AllotmentsHelper';
+import {SaveAllotmentItem} from '../../../../core/domain-layer/allotment/SaveAllotmentItem';
+import {AllotmentDO, AllotmentStatus} from '../../../../core/data-layer/allotment/data-objects/AllotmentDO';
+import {ArchiveAllotmentItem} from '../../../../core/domain-layer/allotment/ArchiveAllotmentItem';
 
-describe("Hotel Price Products Tests", function() {
+describe("Hotel Price Products Tests", function () {
 	var InvalidRoomCategoryId = "12121221211";
 	var InvalidAddOnProductId = "12121221211";
 	var InvalidTaxId = "12121221211";
@@ -36,27 +40,30 @@ describe("Hotel Price Products Tests", function() {
 
 	var pphelper: PriceProductsHelper;
 	var custHelper: CustomersTestHelper;
+	var allotmentsHelper: AllotmentsHelper;
 
 	var addedPriceProduct: PriceProductDO;
 	var addedCompanyCustomer: CustomerDO;
+	var addedAllotment: AllotmentDO;
 
-	before(function(done: any) {
+	before(function (done: any) {
 		testContext = new TestContext();
 		testDataBuilder = new DefaultDataBuilder(testContext);
 		testUtils = new TestUtils();
 		pphelper = new PriceProductsHelper(testDataBuilder, testContext);
 		custHelper = new CustomersTestHelper(testDataBuilder, testContext);
+		allotmentsHelper = new AllotmentsHelper(testDataBuilder, testContext);
 
 		testDataBuilder.buildWithDoneCallback(done);
     });
 
-	describe("Price Products Validation Tests", function() {
-		it("Should update the price product filter list", function(done) {
+	describe("Price Products Validation Tests", function () {
+		it("Should update the price product filter list", function (done) {
 			pphelper.updateYMValidFilterList(testDataBuilder.defaultYieldFilters);
 			done();
 		});
 
-		it("Should not save price product with invalid room category id", function(done) {
+		it("Should not save price product with invalid room category id", function (done) {
 			var priceProductItem = pphelper.getDraftSavePriceProductItemDO();
 			priceProductItem.roomCategoryIdList.push(InvalidRoomCategoryId);
 
@@ -68,7 +75,7 @@ describe("Hotel Price Products Tests", function() {
 				done();
 			});
         });
-		it("Should not save price product with invalid add on product id", function(done) {
+		it("Should not save price product with invalid add on product id", function (done) {
 			var priceProductItem = pphelper.getDraftSavePriceProductItemDO();
 			priceProductItem.addOnProductIdList.push(InvalidAddOnProductId);
 
@@ -80,7 +87,7 @@ describe("Hotel Price Products Tests", function() {
 				done();
 			});
         });
-		it("Should not save price product with invalid tax id", function(done) {
+		it("Should not save price product with invalid tax id", function (done) {
 			var priceProductItem = pphelper.getDraftSavePriceProductItemDO();
 			priceProductItem.taxIdList.push(InvalidTaxId);
 
@@ -92,7 +99,7 @@ describe("Hotel Price Products Tests", function() {
 				done();
 			});
         });
-		it("Should not save price product with missing price per person", function(done) {
+		it("Should not save price product with missing price per person", function (done) {
 			var priceProductItem = pphelper.getDraftSavePriceProductItemDO();
 			priceProductItem.price = DefaultPriceProductBuilder.getPricePerPerson(pphelper.roomCategoryStat);
 			priceProductItem.price.priceList[0]["adultsPriceList"] = [];
@@ -105,7 +112,7 @@ describe("Hotel Price Products Tests", function() {
 				done();
 			});
         });
-		it("Should not save price product with missing price per category", function(done) {
+		it("Should not save price product with missing price per category", function (done) {
 			var priceProductItem = pphelper.getDraftSavePriceProductItemDO();
 			priceProductItem.price = DefaultPriceProductBuilder.getPricePerRoomCategory(pphelper.roomCategoryStat);
 			priceProductItem.price.priceList = [];
@@ -118,7 +125,7 @@ describe("Hotel Price Products Tests", function() {
 				done();
 			});
         });
-		it("Should not save price product with invalid conditions", function(done) {
+		it("Should not save price product with invalid conditions", function (done) {
 			var priceProductItem = pphelper.getDraftSavePriceProductItemDO();
 			priceProductItem.conditions.policyType = PriceProductCancellationPolicyType.CanCancelBeforeTimeOnDayOfArrival;
 			priceProductItem.conditions.policy = {
@@ -135,7 +142,7 @@ describe("Hotel Price Products Tests", function() {
 				done();
 			});
         });
-		it("Should not save price product with invalid filters", function(done) {
+		it("Should not save price product with invalid filters", function (done) {
 			var priceProductItem = pphelper.getDraftSavePriceProductItemDO();
 			priceProductItem.yieldFilterList = pphelper.getInvalidFilterList();
 
@@ -148,8 +155,8 @@ describe("Hotel Price Products Tests", function() {
 			});
         });
 	});
-	describe("Price Products CRUD Tests", function() {
-		it("Should save a draft price product", function(done) {
+	describe("Price Products CRUD Tests", function () {
+		it("Should save a draft price product", function (done) {
 			var priceProductItem = pphelper.getDraftSavePriceProductItemDO();
 			var savePPItem = new SavePriceProductItem(testContext.appContext, testContext.sessionContext);
 			savePPItem.save(priceProductItem).then((priceProduct: PriceProductDO) => {
@@ -163,7 +170,7 @@ describe("Hotel Price Products Tests", function() {
 				done(e);
 			});
         });
-		it("Should update the price product and mark it as Active", function(done) {
+		it("Should update the price product and mark it as Active", function (done) {
 			var priceProductItem = pphelper.getDraftSavePriceProductItemDO();
 			priceProductItem["id"] = addedPriceProduct.id;
 			priceProductItem.status = PriceProductStatus.Active;
@@ -179,7 +186,7 @@ describe("Hotel Price Products Tests", function() {
 				done(e);
 			});
         });
-		it("Should get the list of Price Products", function(done) {
+		it("Should get the list of Price Products", function (done) {
 			var ppRepo = testContext.appContext.getRepositoryFactory().getPriceProductRepository();
 			ppRepo.getPriceProductList({ hotelId: testContext.sessionContext.sessionDO.hotel.id }, { status: PriceProductStatus.Active })
 				.then((searchResult: PriceProductSearchResultRepoDO) => {
@@ -189,7 +196,7 @@ describe("Hotel Price Products Tests", function() {
 					done(e);
 				});
         });
-		it("Should update only the Yield Filters and Notes for the Active Price Product", function(done) {
+		it("Should update only the Yield Filters and Notes for the Active Price Product", function (done) {
 			var priceProductItem = pphelper.getDraftSavePriceProductItemDO();
 			priceProductItem["id"] = addedPriceProduct.id;
 			priceProductItem.status = PriceProductStatus.Draft;
@@ -206,14 +213,14 @@ describe("Hotel Price Products Tests", function() {
 				should.equal(testUtils.stringArraysAreEqual(updatedPriceProduct.taxIdList, addedPriceProduct.taxIdList), true);
 				should.equal(testUtils.stringArraysAreEqual(updatedPriceProduct.roomCategoryIdList, addedPriceProduct.roomCategoryIdList), true);
 				should.equal(priceProductItem.notes, updatedPriceProduct.notes);
-				
+
 				addedPriceProduct = updatedPriceProduct;
 				done();
 			}).catch((e: ThError) => {
 				done(e);
 			});
         });
-		it("Should attach the price product to a customer profile", function(done) {
+		it("Should attach the price product to a customer profile", function (done) {
 			var companyCustDO = custHelper.getCompanyCustomer(addedPriceProduct.id);
 
 			var saveCustItem = new SaveCustomerItem(testContext.appContext, testContext.sessionContext);
@@ -225,7 +232,7 @@ describe("Hotel Price Products Tests", function() {
 				done(error);
 			});
         });
-		it("Should not archive the price product attached to a customer profile", function(done) {
+		it("Should not archive the price product attached to a customer profile", function (done) {
 			var archivePPItem = new ArchivePriceProductItem(testContext.appContext, testContext.sessionContext);
 			archivePPItem.archive({ id: addedPriceProduct.id }).then((priceProduct: PriceProductDO) => {
 				done(new Error("Managed to archive a price product attached to a customer"));
@@ -234,7 +241,42 @@ describe("Hotel Price Products Tests", function() {
 				done();
 			});
         });
-		it("Should detach the price product from the customer profile", function(done) {
+		it("Should create an allotment with the price product", function (done) {
+			var allotmentItem = allotmentsHelper.getSaveAllotmentItemDO(addedCompanyCustomer, addedPriceProduct);
+			var saveAllotmentItem = new SaveAllotmentItem(testContext.appContext, testContext.sessionContext);
+			saveAllotmentItem.save(allotmentItem).then((savedAllotment: AllotmentDO) => {
+				should.exist(savedAllotment.id);
+				addedAllotment = savedAllotment;
+				done();
+			}).catch((e: ThError) => {
+				done(e);
+			});
+        });
+		it("Should not be able to detach the price product from the customer profile if active allotment exists", function (done) {
+			var companyCustDO = addedCompanyCustomer;
+			companyCustDO.priceProductDetails.allowPublicPriceProducts = true;
+			companyCustDO.priceProductDetails.priceProductIdList = [];
+			var saveCustItem = new SaveCustomerItem(testContext.appContext, testContext.sessionContext);
+			saveCustItem.save(companyCustDO).then((cust: CustomerDO) => {
+				done(new Error("Did manage to detach price product from customer profile with active allotment"));
+			}).catch((e: ThError) => {
+				should.notEqual(e.getThStatusCode(), ThStatusCode.Ok);
+				done();
+			});
+        });
+		it("Should archive the allotment", function (done) {
+			var archiveAllotmentItem = new ArchiveAllotmentItem(testContext.appContext, testContext.sessionContext);
+			archiveAllotmentItem.archive({ id: addedAllotment.id }).then((archivedAllotment: AllotmentDO) => {
+				should.equal(archivedAllotment.id, addedAllotment.id);
+				should.equal(archivedAllotment.status, AllotmentStatus.Archived);
+
+				addedAllotment = archivedAllotment;
+				done();
+			}).catch((e: ThError) => {
+				done(e);
+			});
+        });
+		it("Should detach the price product from the customer profile", function (done) {
 			var companyCustDO = addedCompanyCustomer;
 			companyCustDO.priceProductDetails.allowPublicPriceProducts = true;
 			companyCustDO.priceProductDetails.priceProductIdList = [];
@@ -247,7 +289,7 @@ describe("Hotel Price Products Tests", function() {
 				done(error);
 			});
         });
-		it("Should archive the price product", function(done) {
+		it("Should archive the price product", function (done) {
 			var archivePPItem = new ArchivePriceProductItem(testContext.appContext, testContext.sessionContext);
 			archivePPItem.archive({ id: addedPriceProduct.id }).then((priceProduct: PriceProductDO) => {
 				should.equal(priceProduct.id, addedPriceProduct.id);
@@ -258,7 +300,7 @@ describe("Hotel Price Products Tests", function() {
 				done(e);
 			});
         });
-		it("Should mark the archived price product as draft", function(done) {
+		it("Should mark the archived price product as draft", function (done) {
 			var draftPPItem = new DraftPriceProductItem(testContext.appContext, testContext.sessionContext);
 			draftPPItem.draft({ id: addedPriceProduct.id }).then((priceProduct: PriceProductDO) => {
 				should.equal(priceProduct.id, addedPriceProduct.id);
@@ -269,7 +311,7 @@ describe("Hotel Price Products Tests", function() {
 				done(e);
 			});
         });
-		it("Should delete the draft price product", function(done) {
+		it("Should delete the draft price product", function (done) {
 			var deletePPItem = new DeletePriceProductItem(testContext.appContext, testContext.sessionContext);
 			deletePPItem.delete({ id: addedPriceProduct.id }).then((priceProduct: PriceProductDO) => {
 				should.equal(priceProduct.id, addedPriceProduct.id);

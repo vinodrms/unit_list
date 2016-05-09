@@ -12,6 +12,7 @@ export interface AllotmentSearchCriteriaRepoDO {
 	status?: AllotmentStatus;
 	customerId?: string;
 	priceProductId?: string;
+	priceProductIdList?: string[];
 	roomCategoryId?: string;
 	allotmentIdList?: string[];
 }

@@ -66,7 +66,12 @@ export class MongoAllotmentReadOperationsRepository extends MongoRepository {
 		if (!this._thUtils.isUndefinedOrNull(searchCriteria)) {
 			mongoQueryBuilder.addExactMatch("status", searchCriteria.status);
 			mongoQueryBuilder.addExactMatch("customerId", searchCriteria.customerId);
-			mongoQueryBuilder.addExactMatch("priceProductId", searchCriteria.priceProductId);
+			if (!this._thUtils.isUndefinedOrNull(searchCriteria.priceProductIdList) && _.isArray(searchCriteria.priceProductIdList)) {
+				mongoQueryBuilder.addMultipleSelectOptionList("priceProductId", searchCriteria.priceProductIdList);
+			}
+			else {
+				mongoQueryBuilder.addExactMatch("priceProductId", searchCriteria.priceProductId);
+			}
 			mongoQueryBuilder.addExactMatch("roomCategoryId", searchCriteria.roomCategoryId);
 			mongoQueryBuilder.addMultipleSelectOptionList("id", searchCriteria.allotmentIdList);
 		}
