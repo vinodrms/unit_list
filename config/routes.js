@@ -98,6 +98,12 @@ module.exports.routes = {
 
     'GET /api/hotelConfigurations/yieldFilters': 'HotelConfigurationsController.getYieldFilterConfiguration',
     'POST /api/hotelConfigurations/saveYieldFilterValue': 'HotelConfigurationsController.saveYieldFilterValue',
+	
+	'POST /api/allotments': 'AllotmentsController.getAllotmentList',
+	'POST /api/allotments/count': 'AllotmentsController.getAllotmentListCount',
+	'POST /api/allotments/saveAllotmentItem': 'AllotmentsController.saveAllotmentItem',
+	'POST /api/allotments/archiveAllotmentItem': 'AllotmentsController.archiveAllotmentItem',
+	'GET /api/allotments/allotmentItem': 'AllotmentsController.getAllotmentById',
 
 
 	/*

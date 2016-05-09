@@ -270,7 +270,12 @@ export enum ThStatusCode {
     AllotmentValidatorNotActivePriceProduct,
     AllotmentValidatorInvalidRoomCategId,
     ArchiveAllotmentItemError,
-    ArchiveAllotmentItemNotActiveAllotment
+    ArchiveAllotmentItemNotActiveAllotment,
+    AllotmentsControllerErrorGettingAllotment,
+    AllotmentsControllerErrorSavingAllotment,
+    AllotmentsControllerErrorArchivingAllotment,
+    AllotmentsControllerErrorGettingCount,
+    AllotmentsControllerErrorGettingList
 }
 
 var ThMessage: { [index: number]: string; } = {};
@@ -540,7 +545,12 @@ ThMessage[ThStatusCode.AllotmentValidatorInvalidPriceProductId] = "Please select
 ThMessage[ThStatusCode.AllotmentValidatorNotActivePriceProduct] = "Allotments can only be created on Active Price Products.";
 ThMessage[ThStatusCode.AllotmentValidatorInvalidRoomCategId] = "Allotments can only be created on a specific room category from the price product.";
 ThMessage[ThStatusCode.ArchiveAllotmentItemError] = "Error archiving allotment.";
-ThMessage[ThStatusCode.ArchiveAllotmentItemNotActiveAllotment] = "Only active allotments can be archived."; 
+ThMessage[ThStatusCode.ArchiveAllotmentItemNotActiveAllotment] = "Only active allotments can be archived.";
+ThMessage[ThStatusCode.AllotmentsControllerErrorGettingAllotment] = "Error getting allotment.";
+ThMessage[ThStatusCode.AllotmentsControllerErrorSavingAllotment] = "Error saving allotment.";
+ThMessage[ThStatusCode.AllotmentsControllerErrorArchivingAllotment] = "Error archiving allotment.";
+ThMessage[ThStatusCode.AllotmentsControllerErrorGettingCount] = "Error getting the number of allotments.";
+ThMessage[ThStatusCode.AllotmentsControllerErrorGettingList] = "Error getting the list of allotments.";
 
 export class ThResponse {
     statusCode: ThStatusCode;
