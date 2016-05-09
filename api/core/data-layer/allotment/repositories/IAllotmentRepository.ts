@@ -28,4 +28,5 @@ export interface IAllotmentRepository {
 
 	addAllotment(meta: AllotmentMetaRepoDO, allotment: AllotmentDO): Promise<AllotmentDO>;
 	updateAllotment(meta: AllotmentMetaRepoDO, itemMeta: AllotmentItemMetaRepoDO, allotment: AllotmentDO): Promise<AllotmentDO>;
+	updateAllotmentStatus(meta: AllotmentMetaRepoDO, itemMeta: AllotmentItemMetaRepoDO, status: AllotmentStatus): Promise<AllotmentDO>;
 }

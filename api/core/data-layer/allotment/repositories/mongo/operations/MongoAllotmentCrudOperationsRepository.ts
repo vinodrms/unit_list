@@ -3,7 +3,7 @@ import {ThError} from '../../../../../utils/th-responses/ThError';
 import {ThStatusCode} from '../../../../../utils/th-responses/ThResponse';
 import {MongoRepository} from '../../../../common/base/MongoRepository';
 import {AllotmentMetaRepoDO, AllotmentItemMetaRepoDO} from '../../IAllotmentRepository';
-import {AllotmentDO} from '../../../data-objects/AllotmentDO';
+import {AllotmentDO, AllotmentStatus} from '../../../data-objects/AllotmentDO';
 import {AllotmentRepositoryHelper} from './helpers/AllotmentRepositoryHelper';
 
 export class MongoAllotmentCrudOperationsRepository extends MongoRepository {
@@ -61,6 +61,12 @@ export class MongoAllotmentCrudOperationsRepository extends MongoRepository {
 		return this.findAndModifyAllotment(meta, itemMeta, {},
 			{
 				"notes": allotment.notes
+			});
+	}
+	public updateAllotmentStatus(meta: AllotmentMetaRepoDO, itemMeta: AllotmentItemMetaRepoDO, status: AllotmentStatus): Promise<AllotmentDO> {
+		return this.findAndModifyAllotment(meta, itemMeta, {},
+			{
+				"status": status
 			});
 	}
 	private findAndModifyAllotment(meta: AllotmentMetaRepoDO, itemMeta: AllotmentItemMetaRepoDO, findQuery: Object, updateQuery: Object): Promise<AllotmentDO> {

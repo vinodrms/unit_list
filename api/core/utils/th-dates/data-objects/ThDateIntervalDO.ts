@@ -27,6 +27,13 @@ export class ThDateIntervalDO extends BaseDO implements IThInterval<ThDateDO> {
 		return startMoment.isValid() && endMoment.isValid() && dateComparator.compare(this.start, this.end) < 0;
 	}
 
+	public getNumberOfDays(): number {
+		var thDateUtils = new ThDateUtils();
+		var startMoment = thDateUtils.convertThDateDOToMoment(this.start);
+		var endMoment = thDateUtils.convertThDateDOToMoment(this.end);
+		return endMoment.diff(startMoment, "days");
+	}
+
 	public getStart(): ThDateDO {
 		return this.start;
 	}

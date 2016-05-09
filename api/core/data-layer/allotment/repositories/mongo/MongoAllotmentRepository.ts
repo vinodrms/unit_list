@@ -1,7 +1,7 @@
 import {MongoRepository} from '../../../common/base/MongoRepository';
 import {LazyLoadRepoDO, LazyLoadMetaResponseRepoDO} from '../../../common/repo-data-objects/LazyLoadRepoDO';
 import {IAllotmentRepository, AllotmentMetaRepoDO, AllotmentItemMetaRepoDO, AllotmentSearchCriteriaRepoDO, AllotmentSearchResultRepoDO} from '../IAllotmentRepository';
-import {AllotmentDO} from '../../data-objects/AllotmentDO';
+import {AllotmentDO, AllotmentStatus} from '../../data-objects/AllotmentDO';
 import {MongoAllotmentCrudOperationsRepository} from './operations/MongoAllotmentCrudOperationsRepository';
 import {MongoAllotmentReadOperationsRepository} from './operations/MongoAllotmentReadOperationsRepository';
 
@@ -31,5 +31,8 @@ export class MongoAllotmentRepository extends MongoRepository implements IAllotm
 	}
 	public updateAllotment(meta: AllotmentMetaRepoDO, itemMeta: AllotmentItemMetaRepoDO, allotment: AllotmentDO): Promise<AllotmentDO> {
 		return this._crudRepository.updateAllotment(meta, itemMeta, allotment);
+	}
+	public updateAllotmentStatus(meta: AllotmentMetaRepoDO, itemMeta: AllotmentItemMetaRepoDO, status: AllotmentStatus): Promise<AllotmentDO> {
+		return this._crudRepository.updateAllotmentStatus(meta, itemMeta, status);
 	}
 }

@@ -258,7 +258,17 @@ export enum ThStatusCode {
     AllotmentRepositoryProblemUpdatingAllotment,
     AllotmentRepositoryErrorUpdatingAllotment,
     AllotmentRepositoryErrorReadingDocumentCount,
-    AllotmentRepositoryErrorGettingList
+    AllotmentRepositoryErrorGettingList,
+    SaveAllotmentItemError,
+    SaveAllotmentItemInvalidConstraints,
+    SaveAllotmentItemInvalidInterval,
+    SaveAllotmentItemInvalidIntervalLength,
+    SaveAllotmentItemInvalidAvailability,
+    AllotmentValidatorInvalidPriceProductId,
+    AllotmentValidatorNotActivePriceProduct,
+    AllotmentValidatorInvalidRoomCategId,
+    ArchiveAllotmentItemError,
+    ArchiveAllotmentItemNotActiveAllotment
 }
 
 var ThMessage: { [index: number]: string; } = {};
@@ -516,7 +526,17 @@ ThMessage[ThStatusCode.AllotmentRepositoryErrorGettingAllotment] = "Error gettin
 ThMessage[ThStatusCode.AllotmentRepositoryProblemUpdatingAllotment] = "Error updating allotment. It is possible that someone else changed it at the same time. Please refresh the page and try again.";
 ThMessage[ThStatusCode.AllotmentRepositoryErrorUpdatingAllotment] = "Error updating allotment.";
 ThMessage[ThStatusCode.AllotmentRepositoryErrorReadingDocumentCount] = "Error reading the number of allotments.";
-ThMessage[ThStatusCode.AllotmentRepositoryErrorGettingList] = "Error getting the allotments."; 
+ThMessage[ThStatusCode.AllotmentRepositoryErrorGettingList] = "Error getting the allotments.";
+ThMessage[ThStatusCode.SaveAllotmentItemError] = "Error saving allotment.";
+ThMessage[ThStatusCode.SaveAllotmentItemInvalidConstraints] = "Error validating the constraints.";
+ThMessage[ThStatusCode.SaveAllotmentItemInvalidInterval] = "Invalid interval submitted.";
+ThMessage[ThStatusCode.SaveAllotmentItemInvalidIntervalLength] = "The interval for the allotment is too large. Please use intervals smaller than 5 years.";
+ThMessage[ThStatusCode.SaveAllotmentItemInvalidAvailability] = "Please insert the number of available rooms for each day from the week.";
+ThMessage[ThStatusCode.AllotmentValidatorInvalidPriceProductId] = "Please select a price product that is attached to the customer.";
+ThMessage[ThStatusCode.AllotmentValidatorNotActivePriceProduct] = "Allotments can only be created on Active Price Products.";
+ThMessage[ThStatusCode.AllotmentValidatorInvalidRoomCategId] = "Allotments can only be created on a specific room category from the price product.";
+ThMessage[ThStatusCode.ArchiveAllotmentItemError] = "Error archiving allotment.";
+ThMessage[ThStatusCode.ArchiveAllotmentItemNotActiveAllotment] = "Only active allotments can be archived."; 
 
 export class ThResponse {
     statusCode: ThStatusCode;
