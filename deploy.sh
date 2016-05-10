@@ -116,6 +116,11 @@ selectNodeVersion
 # cd "assets"
 # rimraf node_modules
 
+# 2.2. Copy native Node modules
+cd "$DEPLOYMENT_TARGET"
+mkdir node_modules
+cp ../native_modules/* ./node_modules/
+
 # 3. Install server npm packages
 cd "$DEPLOYMENT_TARGET"
 eval $NPM_CMD install
