@@ -89,7 +89,7 @@ export class HotelSignUp {
 		user.contactDetails.lastName = this._signUpDO.lastName;
 		user.email = this._signUpDO.email;
 		user.language = this._sessionContext.language;
-		user.password = this._authUtils.encrypPassword(this._signUpDO.password);
+		user.password = this._authUtils.encryptPassword(this._signUpDO.password);
 		user.roleList = [UserRoles.Administrator];
 		hotel.userList.push(user);
 		hotel.amenityIdList = [];
