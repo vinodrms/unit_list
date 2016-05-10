@@ -3,25 +3,49 @@ import {HotelContactDetailsDO} from '../../../core/data-layer/hotel/data-objects
 import {ActionTokenDO} from '../../../core/data-layer/hotel/data-objects/user/ActionTokenDO';
 import {UserDO, AccountStatus, UserRoles} from '../../../core/data-layer/hotel/data-objects/user/UserDO';
 import {UserContactDetailsDO} from '../../../core/data-layer/hotel/data-objects/user/UserContactDetailsDO';
-import {AuthUtils} from '../../../core/domain-layer/hotel-account/utils/AuthUtils';
+import {AddressDO} from '../../../core/data-layer/common/data-objects/address/AddressDO';
+import {CountryDO} from '../../../core/data-layer/common/data-objects/country/CountryDO';
+import {OperationHoursDO} from '../../../core/data-layer/hotel/data-objects/operation-hours/OperationHoursDO';
+import {ThHourDO} from '../../../core/utils/th-dates/data-objects/ThHourDO';
 import {ThUtils} from '../../../core/utils/ThUtils';
 import {Locales} from '../../../core/utils/localization/Translation';
 import {AppContext} from '../../../core/utils/AppContext';
 
 export class DefaultHotelBuilder {
 	private _thUtils;
-	private _authUtils;
-	constructor(private _appContext: AppContext, private _password: string, private _email: string) {
+
+	constructor(private _appContext: AppContext, private _email: string) {
 		this._thUtils = new ThUtils();
-		this._authUtils = new AuthUtils(this._appContext.getUnitPalConfig());
 	}
 
 	getHotel(): HotelDO {
 		var hotel = new HotelDO();
+		hotel.ccyCode = "EUR";
 		hotel.contactDetails = new HotelContactDetailsDO();
 		hotel.contactDetails.name = "3angleTECH Hotel";
 		hotel.contactDetails.companyName = "THREEANGLE SOFTWARE SOLUTIONS";
 		hotel.contactDetails.vatCode = "RO34121562";
+		hotel.contactDetails.address = new AddressDO();
+		hotel.contactDetails.address.city = "Bucharest";
+		hotel.contactDetails.address.country = new CountryDO();
+		hotel.contactDetails.address.country.code = "RO";
+		hotel.contactDetails.address.country.name = "Romania";
+		hotel.contactDetails.address.country.inEU = true;
+		hotel.contactDetails.address.postalCode = "060204";
+		hotel.contactDetails.address.streetAddress = "blvd Regiei nr 6D, bloc 4, etaj 4, birou 1A, sector 6";
+		hotel.contactDetails.contactName = "Ionut Paraschiv";
+		hotel.contactDetails.email = "contact@3angle.tech";
+		hotel.contactDetails.fax = "0722375399";
+		hotel.contactDetails.phone = "0722375399";
+		hotel.contactDetails.websiteUrl = "www.3angle.tech";
+		hotel.timezone = "Europe/Bucharest";
+		hotel.operationHours = new OperationHoursDO();
+		hotel.operationHours.checkOutFromOptional = ThHourDO.buildThHourDO(8, 0);
+		hotel.operationHours.checkOutTo = ThHourDO.buildThHourDO(12, 0);
+		hotel.operationHours.checkInFrom = ThHourDO.buildThHourDO(14, 0);
+		hotel.operationHours.checkInToOptional = ThHourDO.buildThHourDO(19, 0);
+		hotel.operationHours.cancellationHour = ThHourDO.buildThHourDO(19, 0);
+
 		hotel.userList = [];
 		var user = new UserDO();
 		user.id = this._thUtils.generateUniqueID();
@@ -35,7 +59,7 @@ export class DefaultHotelBuilder {
 		user.contactDetails.lastName = "Paraschiv";
 		user.email = this._email;
 		user.language = Locales.English;
-		user.password = this._authUtils.encrypPassword(this._password);
+		user.password = "";
 		user.roleList = [UserRoles.Administrator];
 		hotel.userList.push(user);
 		hotel.amenityIdList = [];

@@ -34,7 +34,6 @@ export class DefaultDataBuilder {
     private static FirstUserIndex = 0;
     private _repositoryCleaner: RepositoryCleanerWrapper;
 
-    private _password: string = "TestTest,01";
     private _email: string = "paraschiv.ionut@gmail.com";
     private _hotelDO: HotelDO;
     private _userDO: UserDO;
@@ -73,7 +72,7 @@ export class DefaultDataBuilder {
     private buildCore(resolve: { (result: boolean): void }, reject: { (err: any): void }) {
         this._repositoryCleaner.cleanRepository()
             .then((result: any) => {
-                var hotelBuilder = new DefaultHotelBuilder(this._testContext.appContext, this._password, this._email);
+                var hotelBuilder = new DefaultHotelBuilder(this._testContext.appContext, this._email);
                 var hotel = hotelBuilder.getHotel();
 
                 return this._testContext.appContext.getRepositoryFactory().getHotelRepository().addHotel(hotel);
@@ -176,9 +175,6 @@ export class DefaultDataBuilder {
             });
     }
 
-    public get password(): string {
-        return this._password;
-    }
     public get email(): string {
         return this._email;
     }
