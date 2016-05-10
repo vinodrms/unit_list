@@ -5,8 +5,7 @@
 		(onCopy)="copyRoom($event)"
 		(onDelete)="deleteRoom($event)"
 		(onSelect)="selectRoom($event)"
-		(onEdit)="editRoom($event)"
-        >
+		(onEdit)="editRoom($event)">
 	</lazy-loading-table>
 </div>
 <div [ngClass]="{'col-xs-3 overview-right': !isEditing, 'col-xs-9 edit-container': isEditing}">

@@ -689,6 +689,16 @@ lazy-loading-table {
     overflow-x: hidden;
 }
 
+.modal .modal-body.table-selection {
+    min-height: 60vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-body lazy-loading-table {
+    flex-grow: 1;
+} 
+
 .selectable-row {
     cursor: pointer;
 }

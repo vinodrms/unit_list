@@ -2,7 +2,7 @@
 	<button type="button" class="close" (click)="closeDialog()">&times;</button>
 	<h4 class="modal-title">{{ 'Select Add-On Product' | translate }}</h4>
 </div>
-<div class="modal-body">
+<div class="modal-body table-selection">
 	<lazy-loading-table (onMultiSelect)="didSelectAddOnProductList($event)"></lazy-loading-table>
 </div>
 <div class="modal-footer">
