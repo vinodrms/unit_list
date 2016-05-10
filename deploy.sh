@@ -137,7 +137,7 @@ eval node_modules/typescript/bin/tsc --project api
 
 # 6. Build client
 cd "assets"
-eval $NODE_EXE node_modules/gulp/bin/gulp.js pack
+eval "$NODE_EXE" node_modules/gulp/bin/gulp.js pack
 exitWithMessageOnError "gulp pack failed"
 cd ".."
 
