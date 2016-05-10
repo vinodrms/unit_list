@@ -1,4 +1,4 @@
-import {Injectable} from 'angular2/core';
+import {Injectable} from '@angular/core';
 import {AppContext} from '../../../../../../../../../../common/utils/AppContext';
 import {SettingsPageVM} from './utils/SettingsPageVM';
 import {SettingsPageType} from './utils/SettingsPageType';

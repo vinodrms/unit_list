@@ -1,6 +1,6 @@
-import {Component} from 'angular2/core';
-import {ControlGroup} from 'angular2/common';
-import {RouterLink, Router, RouteParams} from 'angular2/router';
+import {Component} from '@angular/core';
+import {ControlGroup} from '@angular/common';
+import {RouterLink, Router, RouteParams} from '@angular/router-deprecated';
 import {AppContext} from '../../../../common/utils/AppContext';
 import {ThError} from '../../../../common/utils/responses/ThError';
 import {BaseFormComponent} from '../../../../common/base/BaseFormComponent';

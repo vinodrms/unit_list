@@ -1,6 +1,7 @@
 <loading-component [isLoading]="isLoading"></loading-component>
-<div class="row" *ngIf="!isLoading">
-	<div class="col-xs-12 col-md-3">
+<div class="basic-info-form-container" customScroll>
+<div class="row basic-info-form" *ngIf="!isLoading">
+	<div class="col-xs-12 col-md-4">
 		<label class="control-label">
 			<h3>{{ 'Select the default currency' | translate }}  </h3>
 			<small>{{ 'This will be used across all your Price Products, Add On Products and Invoices' | translate }}</small>
@@ -9,7 +10,7 @@
 			<div class="input-group" [ngClass]="{'form-warning': (!hotel.ccyCode && didSubmitForm)}">
 				<select class="form-control" [ngModel]="hotel.ccyCode" (ngModelChange)="didChangeCurrencyCode($event)">
 					<option value="" disabled>{{ 'Select a currency' | translate }}</option>
-					<option *ngFor="#currency of currencies.currencyList" [value]="currency.code">{{currency.code}} - {{currency.name}}</option>
+					<option *ngFor="let currency of currencies.currencyList" [value]="currency.code">{{currency.code}} - {{currency.name}}</option>
 				</select>
 			</div>
 			<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Select a currency' | translate }}</small></label>
@@ -21,7 +22,7 @@
 		<div class="well form-group">
 			<div class="input-group" [ngClass]="{'form-warning': (!didSelectPaymentMethod()&&didSubmitForm)}">
 				<ul class="list-group checked-list-box">
-					<div class="checkbox" *ngFor="#paymentMethodVM of paymentMethods.paymentMethodList">
+					<div class="checkbox" *ngFor="let paymentMethodVM of paymentMethods.paymentMethodList">
 						<label>
 							<input type="checkbox" [(ngModel)]="paymentMethodVM.isSelected"><i class="fa" [ngClass]="paymentMethodVM.paymentMethod.iconUrl"></i> {{paymentMethodVM.paymentMethod.name}}
 						</label>
@@ -33,13 +34,14 @@
 
 	</div>
 
-	<div class="col-xs-12 col-md-offset-1 col-md-4">
+	<div class="col-xs-12 col-md-4">
 		<basic-info-tax-list [ccyCode]="hotel.ccyCode" [taxType]="vatTaxType"></basic-info-tax-list>
 	</div>
 
 	<div class="col-xs-12 col-md-4">
 		<basic-info-tax-list [ccyCode]="hotel.ccyCode" [taxType]="otherTaxType"></basic-info-tax-list>
 	</div>
+</div>
 </div>
 <div class="row" *ngIf="!isLoading">
 	<div class="col-xs-12 col-md-offset-8 col-md-4" *ngIf="canAutoSave">

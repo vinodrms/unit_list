@@ -1,7 +1,7 @@
 import {Observable} from 'rxjs/Observable';
 import {Observer} from "rxjs/Observer";
-import {Injectable, Inject} from 'angular2/core';
-import {Http, Response, URLSearchParams} from 'angular2/http';
+import {Injectable, Inject} from '@angular/core';
+import {Http, Response, URLSearchParams} from '@angular/http';
 import {IThHttp, UploadedFileResponse} from './IThHttp';
 import {IBrowserLocation} from '../browser-location/IBrowserLocation';
 import {LoginStatusCode} from '../responses/LoginStatusCode';

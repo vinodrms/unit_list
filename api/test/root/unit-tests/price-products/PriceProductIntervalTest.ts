@@ -6,7 +6,7 @@ import _ = require("underscore");
 import {TestContext} from '../../../helpers/TestContext';
 import {DefaultDataBuilder} from '../../../db-initializers/DefaultDataBuilder';
 import {ThDateDO, ThMonth} from '../../../../core/utils/th-dates/data-objects/ThDateDO';
-import {ThDayInYearIntervalDO} from '../../../../core/utils/th-dates/data-objects/ThDayInYearIntervalDO';
+import {ThDateIntervalDO} from '../../../../core/utils/th-dates/data-objects/ThDateIntervalDO';
 import {ThDateIntervalUtils} from '../../../../core/utils/th-dates/ThDateIntervalUtils';
 import {ThDateUtils} from '../../../../core/utils/th-dates/ThDateUtils';
 import {PriceProductDO} from '../../../../core/data-layer/price-products/data-objects/PriceProductDO';
@@ -38,20 +38,20 @@ describe("Price Products Interval Tests", function() {
 	describe("DayInYear Merge Tests", function() {
         it("Should merge into one interval", function(done) {
 
-			var intervalList: ThDayInYearIntervalDO[] = [
-				ThDayInYearIntervalDO.buildThDayInYearIntervalDO(
+			var intervalList: ThDateIntervalDO[] = [
+				ThDateIntervalDO.buildThDateIntervalDO(
 					ThDateDO.buildThDateDO(2016, ThMonth.January, 22),
 					ThDateDO.buildThDateDO(2016, ThMonth.February, 10)
 				),
-				ThDayInYearIntervalDO.buildThDayInYearIntervalDO(
+				ThDateIntervalDO.buildThDateIntervalDO(
 					ThDateDO.buildThDateDO(2016, ThMonth.February, 10),
 					ThDateDO.buildThDateDO(2016, ThMonth.March, 20)
 				),
-				ThDayInYearIntervalDO.buildThDayInYearIntervalDO(
+				ThDateIntervalDO.buildThDateIntervalDO(
 					ThDateDO.buildThDateDO(2016, ThMonth.March, 13),
 					ThDateDO.buildThDateDO(2016, ThMonth.March, 15)
 				),
-				ThDayInYearIntervalDO.buildThDayInYearIntervalDO(
+				ThDateIntervalDO.buildThDateIntervalDO(
 					ThDateDO.buildThDateDO(2016, ThMonth.March, 5),
 					ThDateDO.buildThDateDO(2016, ThMonth.March, 21)
 				)
@@ -73,19 +73,19 @@ describe("Price Products Interval Tests", function() {
         });
 
 		it("Should add one interval and merge", function(done) {
-			var intervalList: ThDayInYearIntervalDO[] = [
-				ThDayInYearIntervalDO.buildThDayInYearIntervalDO(
+			var intervalList: ThDateIntervalDO[] = [
+				ThDateIntervalDO.buildThDateIntervalDO(
 					ThDateDO.buildThDateDO(2016, ThMonth.January, 1),
 					ThDateDO.buildThDateDO(2016, ThMonth.March, 1)
 				),
-				ThDayInYearIntervalDO.buildThDayInYearIntervalDO(
+				ThDateIntervalDO.buildThDateIntervalDO(
 					ThDateDO.buildThDateDO(2016, ThMonth.April, 1),
 					ThDateDO.buildThDateDO(2016, ThMonth.May, 1)
 				)
 			];
 
 			var utils = new ThDateIntervalUtils(intervalList);
-			utils.addInterval(ThDayInYearIntervalDO.buildThDayInYearIntervalDO(
+			utils.addInterval(ThDateIntervalDO.buildThDateIntervalDO(
 				ThDateDO.buildThDateDO(2016, ThMonth.March, 2),
 				ThDateDO.buildThDateDO(2016, ThMonth.March, 31)
 			));
@@ -102,14 +102,14 @@ describe("Price Products Interval Tests", function() {
 
 
 		it("Should not substract interval", function(done) {
-			var intervalList: ThDayInYearIntervalDO[] = [
-				ThDayInYearIntervalDO.buildThDayInYearIntervalDO(
+			var intervalList: ThDateIntervalDO[] = [
+				ThDateIntervalDO.buildThDateIntervalDO(
 					ThDateDO.buildThDateDO(2016, ThMonth.February, 1),
 					ThDateDO.buildThDateDO(2016, ThMonth.March, 1)
 				)
 			];
 			var utils = new ThDateIntervalUtils(intervalList);
-			utils.removeInterval(ThDayInYearIntervalDO.buildThDayInYearIntervalDO(
+			utils.removeInterval(ThDateIntervalDO.buildThDateIntervalDO(
 				ThDateDO.buildThDateDO(2016, ThMonth.January, 15),
 				ThDateDO.buildThDateDO(2016, ThMonth.January, 19)
 			));
@@ -125,14 +125,14 @@ describe("Price Products Interval Tests", function() {
         });
 
 		it("Should not substract interval", function(done) {
-			var intervalList: ThDayInYearIntervalDO[] = [
-				ThDayInYearIntervalDO.buildThDayInYearIntervalDO(
+			var intervalList: ThDateIntervalDO[] = [
+				ThDateIntervalDO.buildThDateIntervalDO(
 					ThDateDO.buildThDateDO(2016, ThMonth.February, 1),
 					ThDateDO.buildThDateDO(2016, ThMonth.March, 1)
 				)
 			];
 			var utils = new ThDateIntervalUtils(intervalList);
-			utils.removeInterval(ThDayInYearIntervalDO.buildThDayInYearIntervalDO(
+			utils.removeInterval(ThDateIntervalDO.buildThDateIntervalDO(
 				ThDateDO.buildThDateDO(2016, ThMonth.March, 15),
 				ThDateDO.buildThDateDO(2016, ThMonth.March, 19)
 			));
@@ -148,14 +148,14 @@ describe("Price Products Interval Tests", function() {
         });
 
 		it("Should substract all active intervals", function(done) {
-			var intervalList: ThDayInYearIntervalDO[] = [
-				ThDayInYearIntervalDO.buildThDayInYearIntervalDO(
+			var intervalList: ThDateIntervalDO[] = [
+				ThDateIntervalDO.buildThDateIntervalDO(
 					ThDateDO.buildThDateDO(2016, ThMonth.February, 1),
 					ThDateDO.buildThDateDO(2016, ThMonth.March, 1)
 				)
 			];
 			var utils = new ThDateIntervalUtils(intervalList);
-			utils.removeInterval(ThDayInYearIntervalDO.buildThDayInYearIntervalDO(
+			utils.removeInterval(ThDateIntervalDO.buildThDateIntervalDO(
 				ThDateDO.buildThDateDO(2016, ThMonth.January, 1),
 				ThDateDO.buildThDateDO(2016, ThMonth.March, 1)
 			));
@@ -170,11 +170,11 @@ describe("Price Products Interval Tests", function() {
 			var minDate = thDateUtils.getMinThDateDO();
 			var maxDate = thDateUtils.getMaxThDateDO();
 
-			var intervalList: ThDayInYearIntervalDO[] = [
-				ThDayInYearIntervalDO.buildThDayInYearIntervalDO(minDate, maxDate)
+			var intervalList: ThDateIntervalDO[] = [
+				ThDateIntervalDO.buildThDateIntervalDO(minDate, maxDate)
 			];
 			var utils = new ThDateIntervalUtils(intervalList);
-			utils.removeInterval(ThDayInYearIntervalDO.buildThDayInYearIntervalDO(
+			utils.removeInterval(ThDateIntervalDO.buildThDateIntervalDO(
 				ThDateDO.buildThDateDO(2014, ThMonth.January, 1),
 				ThDateDO.buildThDateDO(2016, ThMonth.March, 15)
 			));
@@ -200,14 +200,14 @@ describe("Price Products Interval Tests", function() {
 		});
 
 		it("Should keep a left subinterval", function(done) {
-			var intervalList: ThDayInYearIntervalDO[] = [
-				ThDayInYearIntervalDO.buildThDayInYearIntervalDO(
+			var intervalList: ThDateIntervalDO[] = [
+				ThDateIntervalDO.buildThDateIntervalDO(
 					ThDateDO.buildThDateDO(2016, ThMonth.February, 1),
 					ThDateDO.buildThDateDO(2016, ThMonth.March, 1)
 				)
 			];
 			var utils = new ThDateIntervalUtils(intervalList);
-			utils.removeInterval(ThDayInYearIntervalDO.buildThDayInYearIntervalDO(
+			utils.removeInterval(ThDateIntervalDO.buildThDateIntervalDO(
 				ThDateDO.buildThDateDO(2016, ThMonth.February, 15),
 				ThDateDO.buildThDateDO(2016, ThMonth.March, 15)
 			));
@@ -225,14 +225,14 @@ describe("Price Products Interval Tests", function() {
 		});
 
 		it("Should keep a right subinterval", function(done) {
-			var intervalList: ThDayInYearIntervalDO[] = [
-				ThDayInYearIntervalDO.buildThDayInYearIntervalDO(
+			var intervalList: ThDateIntervalDO[] = [
+				ThDateIntervalDO.buildThDateIntervalDO(
 					ThDateDO.buildThDateDO(2016, ThMonth.February, 1),
 					ThDateDO.buildThDateDO(2016, ThMonth.March, 1)
 				)
 			];
 			var utils = new ThDateIntervalUtils(intervalList);
-			utils.removeInterval(ThDayInYearIntervalDO.buildThDayInYearIntervalDO(
+			utils.removeInterval(ThDateIntervalDO.buildThDateIntervalDO(
 				ThDateDO.buildThDateDO(2016, ThMonth.January, 15),
 				ThDateDO.buildThDateDO(2016, ThMonth.February, 15)
 			));
@@ -255,7 +255,7 @@ describe("Price Products Interval Tests", function() {
 			var yieldData: PriceProductsYieldManagementDO = {
 				attribute: PriceProductYieldAttribute.OpenPeriod,
 				priceProductIdList: _.map(testDataBuilder.priceProductList, (priceProduct: PriceProductDO) => { return priceProduct.id }),
-				interval: ThDayInYearIntervalDO.buildThDayInYearIntervalDO(
+				interval: ThDateIntervalDO.buildThDateIntervalDO(
 					ThDateDO.buildThDateDO(2016, ThMonth.January, 1),
 					ThDateDO.buildThDateDO(2016, ThMonth.July, 1)
 				)
@@ -274,7 +274,7 @@ describe("Price Products Interval Tests", function() {
 			var yieldData: PriceProductsYieldManagementDO = {
 				attribute: PriceProductYieldAttribute.OpenPeriod,
 				priceProductIdList: _.map(testDataBuilder.priceProductList, (priceProduct: PriceProductDO) => { return priceProduct.id }),
-				interval: ThDayInYearIntervalDO.buildThDayInYearIntervalDO(
+				interval: ThDateIntervalDO.buildThDateIntervalDO(
 					ThDateDO.buildThDateDO(2016, ThMonth.June, 1),
 					ThDateDO.buildThDateDO(2016, ThMonth.July, 1)
 				)

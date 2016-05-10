@@ -4,7 +4,7 @@ import {ThDateDO} from './ThDateDO';
 import {ThDateUtils} from '../ThDateUtils';
 import {ThDateComparator} from '../ThDateComparator';
 
-export class ThDayInYearIntervalDO extends BaseDO implements IThInterval<ThDateDO> {
+export class ThDateIntervalDO extends BaseDO implements IThInterval<ThDateDO> {
 	start: ThDateDO;
 	end: ThDateDO;
 
@@ -24,7 +24,14 @@ export class ThDayInYearIntervalDO extends BaseDO implements IThInterval<ThDateD
 		var startMoment = thDateUtils.convertThDateDOToMoment(this.start);
 		var endMoment = thDateUtils.convertThDateDOToMoment(this.end);
 		var dateComparator = new ThDateComparator();
-		return startMoment.isValid() && endMoment.isValid() && dateComparator.compare(this.start, this.end) <= 0;
+		return startMoment.isValid() && endMoment.isValid() && dateComparator.compare(this.start, this.end) < 0;
+	}
+
+	public getNumberOfDays(): number {
+		var thDateUtils = new ThDateUtils();
+		var startMoment = thDateUtils.convertThDateDOToMoment(this.start);
+		var endMoment = thDateUtils.convertThDateDOToMoment(this.end);
+		return endMoment.diff(startMoment, "days");
 	}
 
 	public getStart(): ThDateDO {
@@ -34,8 +41,8 @@ export class ThDayInYearIntervalDO extends BaseDO implements IThInterval<ThDateD
 		return this.end;
 	}
 
-	public static buildThDayInYearIntervalDO(start: ThDateDO, end: ThDateDO): ThDayInYearIntervalDO {
-		var outInterval = new ThDayInYearIntervalDO();
+	public static buildThDateIntervalDO(start: ThDateDO, end: ThDateDO): ThDateIntervalDO {
+		var outInterval = new ThDateIntervalDO();
 		outInterval.start = start;
 		outInterval.end = end;
 		return outInterval;

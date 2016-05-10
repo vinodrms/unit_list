@@ -1,4 +1,4 @@
-import {Injectable} from 'angular2/core';
+import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 import {AppContext, ThServerApi} from '../../../../common/utils/AppContext';
 import {ARequestService} from '../common/ARequestService';

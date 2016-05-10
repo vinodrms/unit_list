@@ -1,10 +1,10 @@
-import {Component, Input, OnInit} from 'angular2/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {BaseComponent} from '../../../../../../../../../../common/base/BaseComponent';
 import {TranslationPipe} from '../../../../../../../../../../common/utils/localization/TranslationPipe';
 import {PercentagePipe} from '../../../../../../../../../../common/utils/pipes/PercentagePipe';
 import {IPriceProductEditSection} from '../utils/IPriceProductEditSection';
 import {PriceProductVM} from '../../../../../../../../services/price-products/view-models/PriceProductVM';
-import {ModalDialogInstance} from '../../../../../../../../../../common/utils/modals/utils/ModalDialogInstance';
+import {ModalDialogRef} from '../../../../../../../../../../common/utils/modals/utils/ModalDialogRef';
 import {TaxListModalService} from '../../../../../../basic-info/payments-policies/modal/services/TaxListModalService';
 import {TaxService} from '../../../../../../../../services/taxes/TaxService';
 import {TaxContainerDO} from '../../../../../../../../services/taxes/data-objects/TaxContainerDO';
@@ -65,7 +65,7 @@ export class PriceProductEditTaxesSectionComponent extends BaseComponent impleme
 		this.vatTaxId = vatTaxId;
 	}
 	public openOtherTaxSelectModal() {
-		this._taxListModalService.openTaxListModal(TaxType.OtherTax).then((modalDialogInstance: ModalDialogInstance<TaxDO[]>) => {
+		this._taxListModalService.openTaxListModal(TaxType.OtherTax).then((modalDialogInstance: ModalDialogRef<TaxDO[]>) => {
 			modalDialogInstance.resultObservable.subscribe((selectedTaxList: TaxDO[]) => {
 				_.forEach(selectedTaxList, (selectedTax: TaxDO) => {
 					this.addOtherTaxIfNotExists(selectedTax);

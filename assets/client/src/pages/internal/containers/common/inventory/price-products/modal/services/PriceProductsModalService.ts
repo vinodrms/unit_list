@@ -1,6 +1,6 @@
-import {Injectable, ReflectiveInjector, provide} from 'angular2/core';
+import {Injectable, ReflectiveInjector, provide} from '@angular/core';
 import {AppContext} from '../../../../../../../../common/utils/AppContext';
-import {ModalDialogInstance} from '../../../../../../../../common/utils/modals/utils/ModalDialogInstance';
+import {ModalDialogRef} from '../../../../../../../../common/utils/modals/utils/ModalDialogRef';
 import {PriceProductsModalInput} from './utils/PriceProductsModalInput';
 import {PriceProductStatus, PriceProductDO} from '../../../../../../services/price-products/data-objects/PriceProductDO';
 import {PriceProductsModalComponent} from '../PriceProductsModalComponent';
@@ -9,7 +9,7 @@ import {PriceProductsModalComponent} from '../PriceProductsModalComponent';
 export class PriceProductsModalService {
 	constructor(private _appContext: AppContext) { }
 
-	public openPriceProductsModal(priceProductStatus: PriceProductStatus): Promise<ModalDialogInstance<PriceProductDO[]>> {
+	public openPriceProductsModal(priceProductStatus: PriceProductStatus): Promise<ModalDialogRef<PriceProductDO[]>> {
 		var priceProductModalInput = new PriceProductsModalInput();
 		priceProductModalInput.priceProductStatus = priceProductStatus;
 

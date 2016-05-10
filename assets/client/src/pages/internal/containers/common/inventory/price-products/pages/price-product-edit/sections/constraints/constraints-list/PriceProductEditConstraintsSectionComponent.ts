@@ -1,10 +1,10 @@
-import {Component, Input, Output, EventEmitter} from 'angular2/core';
+import {Component, Input, Output, EventEmitter} from '@angular/core';
 import {BaseComponent} from '../../../../../../../../../../../common/base/BaseComponent';
 import {AppContext} from '../../../../../../../../../../../common/utils/AppContext';
 import {TranslationPipe} from '../../../../../../../../../../../common/utils/localization/TranslationPipe';
 import {IPriceProductEditSection} from '../../utils/IPriceProductEditSection';
 import {PriceProductVM} from '../../../../../../../../../services/price-products/view-models/PriceProductVM';
-import {ModalDialogInstance} from '../../../../../../../../../../../common/utils/modals/utils/ModalDialogInstance';
+import {ModalDialogRef} from '../../../../../../../../../../../common/utils/modals/utils/ModalDialogRef';
 import {PriceProductConstraintModalService} from '../constraint-modal/services/PriceProductConstraintModalService';
 import {PriceProductConstraintDO} from '../../../../../../../../../services/price-products/data-objects/constraint/PriceProductConstraintDO';
 import {PriceProductConstraintWrapperDO} from '../../../../../../../../../services/price-products/data-objects/constraint/PriceProductConstraintWrapperDO';
@@ -58,7 +58,7 @@ export class PriceProductEditConstraintsSectionComponent extends BaseComponent i
 	}
 	public openConstraintsModal() {
 		this._constraintsModal.openPriceProductConstraintsModal()
-			.then((modalDialogInstance: ModalDialogInstance<PriceProductConstraintDO>) => {
+			.then((modalDialogInstance: ModalDialogRef<PriceProductConstraintDO>) => {
 				modalDialogInstance.resultObservable.subscribe((addedConstraint: PriceProductConstraintDO) => {
 					this.constraintContainer.addConstraint(addedConstraint);
 				})

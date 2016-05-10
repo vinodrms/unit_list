@@ -1,4 +1,4 @@
-import {Injectable} from 'angular2/core';
+import {Injectable} from '@angular/core';
 import {LazyLoadTableMeta, TableRowCommand, TableColumnMeta, TablePropertyType} from '../../../../../../../../common/utils/components/lazy-loading/utils/LazyLoadTableMeta';
 
 @Injectable()
@@ -14,11 +14,13 @@ export class PriceProductTableMetaBuilderService {
 			autoSelectRows: false,
 			columnMetaList: [
 				{
-					displayName: "Price Product Name",
+					displayName: "Name",
 					valueMeta: {
 						objectPropertyId: "priceProduct.name",
 						propertyType: TablePropertyType.StringType,
-						showInCollapsedView: true
+						showInCollapsedView: true,
+						normalStyle: "up-col-15p left",
+						collapsedStyle: "up-col-70p left"
 					}
 				},
 				{
@@ -26,7 +28,8 @@ export class PriceProductTableMetaBuilderService {
 					valueMeta: {
 						objectPropertyId: "roomCategoriesString",
 						propertyType: TablePropertyType.StringType,
-						showInCollapsedView: false
+						showInCollapsedView: false,
+						normalStyle: "up-col-20p left"
 					}
 				},
 				{
@@ -34,7 +37,8 @@ export class PriceProductTableMetaBuilderService {
 					valueMeta: {
 						objectPropertyId: "vatTax.value",
 						propertyType: TablePropertyType.PercentageType,
-						showInCollapsedView: false
+						showInCollapsedView: false,
+						normalStyle: "up-col-5p center"
 					}
 				},
 				{
@@ -42,7 +46,8 @@ export class PriceProductTableMetaBuilderService {
 					valueMeta: {
 						objectPropertyId: "availabilityString",
 						propertyType: TablePropertyType.StringType,
-						showInCollapsedView: false
+						showInCollapsedView: false,
+						normalStyle: "up-col-15p center"
 					}
 				},
 				{
@@ -50,7 +55,8 @@ export class PriceProductTableMetaBuilderService {
 					valueMeta: {
 						objectPropertyId: "priceTypeString",
 						propertyType: TablePropertyType.StringType,
-						showInCollapsedView: false
+						showInCollapsedView: false,
+						normalStyle: "up-col-15p center"
 					}
 				},
 				{
@@ -58,7 +64,8 @@ export class PriceProductTableMetaBuilderService {
 					valueMeta: {
 						objectPropertyId: "cancellationConditionsString",
 						propertyType: TablePropertyType.NotesType,
-						showInCollapsedView: false
+						showInCollapsedView: false,
+						normalStyle: "up-col-20p center"
 					}
 				}
 			]

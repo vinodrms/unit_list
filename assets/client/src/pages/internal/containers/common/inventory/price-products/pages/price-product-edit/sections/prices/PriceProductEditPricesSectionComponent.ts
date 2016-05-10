@@ -1,4 +1,4 @@
-import {Component, Input} from 'angular2/core';
+import {Component, Input} from '@angular/core';
 import {BaseComponent} from '../../../../../../../../../../common/base/BaseComponent';
 import {AppContext, ThError} from '../../../../../../../../../../common/utils/AppContext';
 import {LoadingComponent} from '../../../../../../../../../../common/utils/components/LoadingComponent';

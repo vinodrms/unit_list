@@ -258,6 +258,8 @@ export var EnglishTranslations: Object = {
 	"Other taxes included in the Price Product": "Other taxes included in the Price Product",
 	"Price per number of persons": "Price per number of persons",
 	"Invalid Price": "Invalid Price",
+	"Reservation without adults": "Reservation without adults",
+	"Reservation with at least one adult": "Reservation with at least one adult",
 	"Price For Adults": "Price For Adults",
 	"st": "st",
 	"nd": "nd",
@@ -382,5 +384,6 @@ export var EnglishTranslations: Object = {
 	"Settings": "Settings",
 	"Information Saved Succesfully": "Information Saved Succesfully",
 	"Payments & Policies": "Payments & Policies",
-	"Property Details": "Property Details"
+	"Property Details": "Property Details",
+	"Change": "Change"
 };

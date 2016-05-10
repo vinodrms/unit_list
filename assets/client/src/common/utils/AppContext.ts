@@ -1,4 +1,4 @@
-import {Injectable, Inject} from 'angular2/core';
+import {Injectable, Inject} from '@angular/core';
 import {IThCookie} from './cookies/IThCookie';
 import {ThTranslation} from './localization/ThTranslation';
 import {IBrowserLocation} from './browser-location/IBrowserLocation';

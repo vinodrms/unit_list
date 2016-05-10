@@ -12,6 +12,4 @@
 		<h1>{{ _breakfastStateService.totalNoOfBreakfasts }} <span class="unitpal-font">{{ _breakfastStateService.getMeta().iconFontName }}</span></h1>
 	</div>
 </div>
-<div class="row card-body">
-	<add-on-products class="col-xs-12" [filterBreakfastCategory]="true" (onScreenStateTypeChanged)="didChangeScreenStateType($event)"></add-on-products>
-</div>
+<add-on-products class="row card-body" [filterBreakfastCategory]="true" (onScreenStateTypeChanged)="didChangeScreenStateType($event)"></add-on-products>

@@ -1,8 +1,8 @@
-import {Component, AfterViewChecked, ViewChild, ElementRef} from 'angular2/core';
+import {Component, AfterViewChecked, ViewChild, ElementRef} from '@angular/core';
 import {BaseComponent} from '../../../../../../../common/base/BaseComponent';
 import {ThError, AppContext} from '../../../../../../../common/utils/AppContext';
 import {ICustomModalComponent, ModalSize} from '../../../../../../../common/utils/modals/utils/ICustomModalComponent';
-import {ModalDialogInstance} from '../../../../../../../common/utils/modals/utils/ModalDialogInstance';
+import {ModalDialogRef} from '../../../../../../../common/utils/modals/utils/ModalDialogRef';
 import {TranslationPipe} from '../../../../../../../common/utils/localization/TranslationPipe';
 import {YieldFilterModalInput} from './services/utils/YieldFilterModalInput';
 import {YieldFilterDO, YieldFilterType} from '../../../../../services/common/data-objects/yield-filter/YieldFilterDO';
@@ -26,7 +26,7 @@ export class YieldFilterModalComponent extends BaseComponent implements ICustomM
 	colorFilter: ColorFilter;
 
 	constructor(private _appContext: AppContext,
-		private _modalDialogInstance: ModalDialogInstance<YieldFilterValueDO>,
+		private _modalDialogRef: ModalDialogRef<YieldFilterValueDO>,
 		private _yieldFilterModalInput: YieldFilterModalInput) {
 		super();
 
@@ -50,7 +50,7 @@ export class YieldFilterModalComponent extends BaseComponent implements ICustomM
     }
 
 	public closeDialog() {
-		this._modalDialogInstance.closeForced();
+		this._modalDialogRef.closeForced();
 	}
 
 	public isBlocking(): boolean {
@@ -110,7 +110,7 @@ export class YieldFilterModalComponent extends BaseComponent implements ICustomM
 		if (!this.didSelectFilterValue()) {
 			return;
 		}
-		this._modalDialogInstance.addResult(this.selectedYieldFilterValue);
+		this._modalDialogRef.addResult(this.selectedYieldFilterValue);
 		this.closeDialog();
 	}
 }

@@ -1,6 +1,6 @@
 import {BaseDO} from '../../common/base/BaseDO';
 import {PriceProductPriceDO} from './price/PriceProductPriceDO';
-import {ThDayInYearIntervalDO} from '../../../utils/th-dates/data-objects/ThDayInYearIntervalDO';
+import {ThDateIntervalDO} from '../../../utils/th-dates/data-objects/ThDateIntervalDO';
 import {PriceProductConstraintWrapperDO} from './constraint/PriceProductConstraintWrapperDO';
 import {PriceProductConditionsDO} from './conditions/PriceProductConditionsDO';
 import {PriceProductYieldFilterMetaDO} from './yield-filter/PriceProductYieldFilterDO';
@@ -29,9 +29,9 @@ export class PriceProductDO extends BaseDO {
 	roomCategoryIdList: string[];
 	price: PriceProductPriceDO;
 	taxIdList: string[];
-	openIntervalList: ThDayInYearIntervalDO[];
-	openForArrivalIntervalList: ThDayInYearIntervalDO[];
-	openForDepartureIntervalList: ThDayInYearIntervalDO[];
+	openIntervalList: ThDateIntervalDO[];
+	openForArrivalIntervalList: ThDateIntervalDO[];
+	openForDepartureIntervalList: ThDateIntervalDO[];
 	yieldFilterList: PriceProductYieldFilterMetaDO[];
 	constraints: PriceProductConstraintWrapperDO;
 	conditions: PriceProductConditionsDO;
@@ -63,10 +63,10 @@ export class PriceProductDO extends BaseDO {
 		this.conditions = new PriceProductConditionsDO();
 		this.conditions.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "conditions"));
 	}
-	private buildListOfIntervals(object: Object, objectKey: string): ThDayInYearIntervalDO[] {
-		var intervalList: ThDayInYearIntervalDO[] = [];
+	private buildListOfIntervals(object: Object, objectKey: string): ThDateIntervalDO[] {
+		var intervalList: ThDateIntervalDO[] = [];
 		this.forEachElementOf(this.getObjectPropertyEnsureUndefined(object, objectKey), (intervalObject: Object) => {
-			var intervalDO = new ThDayInYearIntervalDO();
+			var intervalDO = new ThDateIntervalDO();
 			intervalDO.buildFromObject(intervalObject);
 			intervalList.push(intervalDO);
 		});

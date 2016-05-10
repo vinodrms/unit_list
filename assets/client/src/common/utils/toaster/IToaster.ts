@@ -1,4 +1,4 @@
-import {OpaqueToken, ViewContainerRef} from 'angular2/core';
+import {OpaqueToken, ViewContainerRef} from '@angular/core';
 
 export interface IToaster {
 	bootstrap(viewContainerRef: ViewContainerRef);

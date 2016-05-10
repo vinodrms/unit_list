@@ -12,6 +12,4 @@
 		<h1>{{ _addOnProductsStateService.totalNoOfAddOnProducts }} <span class="unitpal-font">{{ _addOnProductsStateService.getMeta().iconFontName }}</span></h1>
 	</div>
 </div>
-<div class="row card-body">
-	<add-on-products class="col-xs-12" (onScreenStateTypeChanged)="didChangeScreenStateType($event)" (onItemDeleted)="didDeleteItem($event)"></add-on-products>
-</div>
+<add-on-products class="row card-body" (onScreenStateTypeChanged)="didChangeScreenStateType($event)" (onItemDeleted)="didDeleteItem($event)"></add-on-products>

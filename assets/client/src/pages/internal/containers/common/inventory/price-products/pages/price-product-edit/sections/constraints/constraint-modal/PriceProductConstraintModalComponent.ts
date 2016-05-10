@@ -1,9 +1,9 @@
-import {Component} from 'angular2/core';
+import {Component} from '@angular/core';
 import {BaseComponent} from '../../../../../../../../../../../common/base/BaseComponent';
 import {TranslationPipe} from '../../../../../../../../../../../common/utils/localization/TranslationPipe';
 import {ThError, AppContext} from '../../../../../../../../../../../common/utils/AppContext';
 import {ICustomModalComponent, ModalSize} from '../../../../../../../../../../../common/utils/modals/utils/ICustomModalComponent';
-import {ModalDialogInstance} from '../../../../../../../../../../../common/utils/modals/utils/ModalDialogInstance';
+import {ModalDialogRef} from '../../../../../../../../../../../common/utils/modals/utils/ModalDialogRef';
 import {ISOWeekDayUtils, ISOWeekDayVM} from '../../../../../../../../../services/common/data-objects/th-dates/ISOWeekDay';
 import {PriceProductConstraintDO} from '../../../../../../../../../services/price-products/data-objects/constraint/PriceProductConstraintDO';
 import {IPriceProductConstraint, PriceProductConstraintMeta, PriceProductConstraintType} from '../../../../../../../../../services/price-products/data-objects/constraint/IPriceProductConstraint';
@@ -22,7 +22,7 @@ export class PriceProductConstraintModalComponent extends BaseComponent implemen
 	constraintMetaList: PriceProductConstraintMeta[];
 
 	constructor(private _appContext: AppContext,
-		private _modalDialogInstance: ModalDialogInstance<PriceProductConstraintDO>) {
+		private _modalDialogRef: ModalDialogRef<PriceProductConstraintDO>) {
 		super();
 		this._constraintFactory = new PriceProductConstraintFactory();
 		this.constraintMetaList = this._constraintFactory.getPriceProductConstraintMetaList();
@@ -33,7 +33,7 @@ export class PriceProductConstraintModalComponent extends BaseComponent implemen
 	}
 
 	public closeDialog() {
-		this._modalDialogInstance.closeForced();
+		this._modalDialogRef.closeForced();
 	}
 
 	public isBlocking(): boolean {
@@ -70,7 +70,7 @@ export class PriceProductConstraintModalComponent extends BaseComponent implemen
 		if(!this.constraintDO.isValid()) {
 			return;
 		}
-		this._modalDialogInstance.addResult(this.constraintDO);
+		this._modalDialogRef.addResult(this.constraintDO);
 		this.closeDialog();
 	}
 }

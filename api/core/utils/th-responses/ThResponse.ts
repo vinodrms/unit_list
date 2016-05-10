@@ -197,6 +197,8 @@ export enum ThStatusCode {
     SaveCustomerItemInvalidOrNullClientType,
     SaveCustomerItemCompOrTACannotBeLinkedToOtherCustomers,
     CustomerItemUpdateStrategyError,
+    CustomerItemUpdateStrategyCustTypeChanged,
+    CustomerItemUpdateStrategyPriceProductUsedInAllotment,
     CustomersControllerErrorGettingCustomer,
     CustomersControllerErrorSavingCustomer,
     CustomersControllerErrorGettingCount,
@@ -251,7 +253,29 @@ export enum ThStatusCode {
     YieldFilterRepositoryErrorAddingYieldFilterValue,
     YieldFilterRepositoryErrorUpdatingYieldFilterValue,
     YieldFilterRepositoryErrorDuplicateFilterValue,
-    YieldFilterRepositoryErrorLabelOrColorCodeInvalid
+    YieldFilterRepositoryErrorLabelOrColorCodeInvalid,
+    AllotmentRepositoryErrorAddingAllotment,
+    AllotmentRepositoryAllotmentNotFound,
+    AllotmentRepositoryErrorGettingAllotment,
+    AllotmentRepositoryProblemUpdatingAllotment,
+    AllotmentRepositoryErrorUpdatingAllotment,
+    AllotmentRepositoryErrorReadingDocumentCount,
+    AllotmentRepositoryErrorGettingList,
+    SaveAllotmentItemError,
+    SaveAllotmentItemInvalidConstraints,
+    SaveAllotmentItemInvalidInterval,
+    SaveAllotmentItemInvalidIntervalLength,
+    SaveAllotmentItemInvalidAvailability,
+    AllotmentValidatorInvalidPriceProductId,
+    AllotmentValidatorNotActivePriceProduct,
+    AllotmentValidatorInvalidRoomCategId,
+    ArchiveAllotmentItemError,
+    ArchiveAllotmentItemNotActiveAllotment,
+    AllotmentsControllerErrorGettingAllotment,
+    AllotmentsControllerErrorSavingAllotment,
+    AllotmentsControllerErrorArchivingAllotment,
+    AllotmentsControllerErrorGettingCount,
+    AllotmentsControllerErrorGettingList
 }
 
 var ThMessage: { [index: number]: string; } = {};
@@ -449,6 +473,8 @@ ThMessage[ThStatusCode.SaveCustomerItemError] = "Error saving customer.";
 ThMessage[ThStatusCode.SaveCustomerItemInvalidOrNullClientType] = "Invalid client type.";
 ThMessage[ThStatusCode.SaveCustomerItemCompOrTACannotBeLinkedToOtherCustomers] = "Companies or travel agencies cannot be linked to other customers.";
 ThMessage[ThStatusCode.CustomerItemUpdateStrategyError] = "Error updating customer.";
+ThMessage[ThStatusCode.CustomerItemUpdateStrategyCustTypeChanged] = "The type of a customer cannot be changed.";
+ThMessage[ThStatusCode.CustomerItemUpdateStrategyPriceProductUsedInAllotment] = "You cannot remove price products used in allotments. Please archive the allotments first.";
 ThMessage[ThStatusCode.CustomersControllerErrorGettingCustomer] = "Error getting customer.";
 ThMessage[ThStatusCode.CustomersControllerErrorSavingCustomer] = "Error saving customer.";
 ThMessage[ThStatusCode.CustomersControllerErrorGettingCount] = "Error getting the number of customers.";
@@ -471,7 +497,7 @@ ThMessage[ThStatusCode.PriceProductValidatorEmptyRoomCategoryList] = "Please ass
 ThMessage[ThStatusCode.PriceProductValidatorInvalidPrices] = "Please complete all the required price values.";
 ThMessage[ThStatusCode.ArchivePriceProductItemError] = "Please while archiving the price product.";
 ThMessage[ThStatusCode.ArchivePriceProductItemNonActiveStatus] = "Please while archiving the price product.";
-ThMessage[ThStatusCode.ArchivePriceProductItemUsedInCustomersError] = "Could not delete the price product because it is assigned to customers.";
+ThMessage[ThStatusCode.ArchivePriceProductItemUsedInCustomersError] = "Could not archive the price product because it is assigned to customers.";
 ThMessage[ThStatusCode.UpdatePriceProductItemStatusError] = "Error updating the status of the price product.";
 ThMessage[ThStatusCode.UpdatePriceProductItemStatusWrongStatus] = "Cannot run this action on the current price product.";
 ThMessage[ThStatusCode.DraftPriceProductItemOnlyArchived] = "Only archived price products can be marked as drafts.";
@@ -503,7 +529,28 @@ ThMessage[ThStatusCode.YieldFilterRepositoryErrorAddingYieldFilterValue] = "Erro
 ThMessage[ThStatusCode.YieldFilterRepositoryErrorUpdatingYieldFilterValue] = "Error updating filter value.";
 ThMessage[ThStatusCode.YieldFilterRepositoryErrorDuplicateFilterValue] = "Duplicate filter value.";
 ThMessage[ThStatusCode.YieldFilterRepositoryErrorLabelOrColorCodeInvalid] = "Filter Rules -> TextFilter: label-defined, colorCode-null; ColorFilter: label-null, colorCode-defined";
-
+ThMessage[ThStatusCode.AllotmentRepositoryErrorAddingAllotment] = "Error adding allotment.";
+ThMessage[ThStatusCode.AllotmentRepositoryAllotmentNotFound] = "Allotment not found.";
+ThMessage[ThStatusCode.AllotmentRepositoryErrorGettingAllotment] = "Error getting allotment.";
+ThMessage[ThStatusCode.AllotmentRepositoryProblemUpdatingAllotment] = "Error updating allotment. It is possible that someone else changed it at the same time. Please refresh the page and try again.";
+ThMessage[ThStatusCode.AllotmentRepositoryErrorUpdatingAllotment] = "Error updating allotment.";
+ThMessage[ThStatusCode.AllotmentRepositoryErrorReadingDocumentCount] = "Error reading the number of allotments.";
+ThMessage[ThStatusCode.AllotmentRepositoryErrorGettingList] = "Error getting the allotments.";
+ThMessage[ThStatusCode.SaveAllotmentItemError] = "Error saving allotment.";
+ThMessage[ThStatusCode.SaveAllotmentItemInvalidConstraints] = "Error validating the constraints.";
+ThMessage[ThStatusCode.SaveAllotmentItemInvalidInterval] = "Invalid interval submitted.";
+ThMessage[ThStatusCode.SaveAllotmentItemInvalidIntervalLength] = "The interval for the allotment is too large. Please use intervals smaller than 5 years.";
+ThMessage[ThStatusCode.SaveAllotmentItemInvalidAvailability] = "Please insert the number of available rooms for each day from the week.";
+ThMessage[ThStatusCode.AllotmentValidatorInvalidPriceProductId] = "Please select a price product that is attached to the customer.";
+ThMessage[ThStatusCode.AllotmentValidatorNotActivePriceProduct] = "Allotments can only be created on Active Price Products.";
+ThMessage[ThStatusCode.AllotmentValidatorInvalidRoomCategId] = "Allotments can only be created on a specific room category from the price product.";
+ThMessage[ThStatusCode.ArchiveAllotmentItemError] = "Error archiving allotment.";
+ThMessage[ThStatusCode.ArchiveAllotmentItemNotActiveAllotment] = "Only active allotments can be archived.";
+ThMessage[ThStatusCode.AllotmentsControllerErrorGettingAllotment] = "Error getting allotment.";
+ThMessage[ThStatusCode.AllotmentsControllerErrorSavingAllotment] = "Error saving allotment.";
+ThMessage[ThStatusCode.AllotmentsControllerErrorArchivingAllotment] = "Error archiving allotment.";
+ThMessage[ThStatusCode.AllotmentsControllerErrorGettingCount] = "Error getting the number of allotments.";
+ThMessage[ThStatusCode.AllotmentsControllerErrorGettingList] = "Error getting the list of allotments.";
 
 export class ThResponse {
     statusCode: ThStatusCode;

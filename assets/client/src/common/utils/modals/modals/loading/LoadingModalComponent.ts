@@ -1,6 +1,6 @@
-import {Component} from 'angular2/core';
+import {Component} from '@angular/core';
 import {ICustomModalComponent, ModalSize} from '../../utils/ICustomModalComponent';
-import {ModalDialogInstance} from '../../utils/ModalDialogInstance';
+import {ModalDialogRef} from '../../utils/ModalDialogRef';
 
 @Component({
 	selector: 'loading-modal-component',

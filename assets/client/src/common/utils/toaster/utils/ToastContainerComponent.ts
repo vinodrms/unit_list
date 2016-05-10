@@ -1,11 +1,11 @@
-import {Component, Input, Optional, Inject} from 'angular2/core';
+import {Component, Input, Optional, Inject} from '@angular/core';
 import {Toast} from './Toast';
 
 @Component({
 	selector: 'toast-container-component',
 	template: `
     <div id="toast-container" class="toast-top-right" aria-live="polite" role="alert">
-      <div *ngFor="#toast of toasts" class="toast-{{toast.toastClass}}" (click)="dismiss(toast)">
+      <div *ngFor="let toast of toasts" class="toast-{{toast.toastClass}}" (click)="dismiss(toast)">
         <div *ngIf="toast.title" class="{{titleClass}}">{{toast.title}}</div>
         <div class="{{messageClass}}">{{toast.message}}</div>
       </div>

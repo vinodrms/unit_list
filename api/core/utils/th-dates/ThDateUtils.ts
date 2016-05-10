@@ -33,7 +33,7 @@ export class ThDateUtils {
 	public convertThDateDOToMoment(inDate: ThDateDO): moment.Moment {
 		return moment([inDate.year, inDate.month, inDate.day]);
 	}
-	private convertMomentToThDateDO(day: moment.Moment): ThDateDO {
+	public convertMomentToThDateDO(day: moment.Moment): ThDateDO {
 		return ThDateDO.buildThDateDO(day.year(), day.month(), day.date());
 	}
 }

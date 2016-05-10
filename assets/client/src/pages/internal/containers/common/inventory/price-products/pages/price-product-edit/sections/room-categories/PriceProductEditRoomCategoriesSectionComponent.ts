@@ -1,9 +1,9 @@
-import {Component, Input, Output, EventEmitter} from 'angular2/core';
+import {Component, Input, Output, EventEmitter} from '@angular/core';
 import {BaseComponent} from '../../../../../../../../../../common/base/BaseComponent';
 import {TranslationPipe} from '../../../../../../../../../../common/utils/localization/TranslationPipe';
 import {IPriceProductEditSection} from '../utils/IPriceProductEditSection';
 import {PriceProductVM} from '../../../../../../../../services/price-products/view-models/PriceProductVM';
-import {ModalDialogInstance} from '../../../../../../../../../../common/utils/modals/utils/ModalDialogInstance';
+import {ModalDialogRef} from '../../../../../../../../../../common/utils/modals/utils/ModalDialogRef';
 import {RoomCategoriesModalService} from '../../../../../modals/room-categories/services/RoomCategoriesModalService';
 import {RoomCategoryDO} from '../../../../../../../../services/room-categories/data-objects/RoomCategoryDO';
 import {CurrencyDO} from '../../../../../../../../services/common/data-objects/currency/CurrencyDO';
@@ -49,7 +49,7 @@ export class PriceProductEditRoomCategoriesSectionComponent extends BaseComponen
 	}
 
 	public openRoomCategorySelectModal() {
-		this._roomCategoriesModalService.openUsedCategoriesModal().then((modalDialogInstance: ModalDialogInstance<RoomCategoryDO[]>) => {
+		this._roomCategoriesModalService.openUsedCategoriesModal().then((modalDialogInstance: ModalDialogRef<RoomCategoryDO[]>) => {
 			modalDialogInstance.resultObservable.subscribe((selectedRoomCategoryList: RoomCategoryDO[]) => {
 				_.forEach(selectedRoomCategoryList, (selectedRoomCategory: RoomCategoryDO) => {
 					this.addRoomCategoryIfNotExists(selectedRoomCategory);

@@ -1,4 +1,4 @@
-import {Injectable, Inject, EventEmitter} from 'angular2/core';
+import {Injectable, Inject, EventEmitter} from '@angular/core';
 import {ThUtils} from '../ThUtils';
 import {ThCookie} from '../cookies/ThCookie';
 import {DanishTranslations} from './locales/Danish';
@@ -99,7 +99,7 @@ export class ThTranslation {
 			return phrase;
 		}
 		if (!_.isString(phrase)) {
-			return "";
+			return phrase;
 		}
 		return phrase.replace(ThTranslation.TemplateVariableRegex, (substring: string, actualKey: string) => {
 			if (this._thUtils.isUndefinedOrNull(parameters, actualKey)) {

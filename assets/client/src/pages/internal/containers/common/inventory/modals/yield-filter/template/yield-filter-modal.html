@@ -10,7 +10,7 @@
 			<th></th>
 		</thead>
 		<tbody>
-			<tr *ngFor="#yieldFilterValueVM of yieldFilterValueVMList" [ngClass]="{active: isFilterSelected(yieldFilterValueVM)}">
+			<tr *ngFor="let yieldFilterValueVM of yieldFilterValueVMList" [ngClass]="{active: isFilterSelected(yieldFilterValueVM)}">
 				<!-- Text Filter -->
 				<td class="selectable-row" 
 					*ngIf="isTextFilter() && !yieldFilterValueVM.isEditing" 
@@ -33,7 +33,7 @@
 						</div>
 						<div class="col-xs-6">
 							<select class="form-control" *ngIf="yieldFilterValueVM.isEditing" [ngModel]="yieldFilterValueVM.filterValue.colorCode" (ngModelChange)="didChangeColorCodeFor(yieldFilterValueVM, $event)">
-								<option *ngFor="#colorMeta of colorFilter.colorMetaList" [value]="colorMeta.colorCodeStr">{{ colorMeta.displayName | translate }}</option>
+								<option *ngFor="let colorMeta of colorFilter.colorMetaList" [value]="colorMeta.colorCodeStr">{{ colorMeta.displayName | translate }}</option>
 							</select>
 						</div>
 						<div class="col-xs-4">

@@ -1,9 +1,9 @@
-import {Component, Input, OnInit} from 'angular2/core';
+import {Component, Input, OnInit} from '@angular/core';
 import 'rxjs/add/operator/map';
 import {BaseComponent} from '../../../../../../../../../../common/base/BaseComponent';
 import {TranslationPipe} from '../../../../../../../../../../common/utils/localization/TranslationPipe';
 import {IPriceProductEditSection} from '../utils/IPriceProductEditSection';
-import {ModalDialogInstance} from '../../../../../../../../../../common/utils/modals/utils/ModalDialogInstance';
+import {ModalDialogRef} from '../../../../../../../../../../common/utils/modals/utils/ModalDialogRef';
 import {PriceProductVM} from '../../../../../../../../services/price-products/view-models/PriceProductVM';
 import {PriceProductYieldFilterMetaDO} from '../../../../../../../../services/price-products/data-objects/yield-filter/PriceProductYieldFilterDO';
 import {YieldFilterValueVM} from '../../../../../../../../services/price-products/view-models/YieldFilterValueVM';
@@ -76,8 +76,8 @@ export class PriceProductEditFiltersSectionComponent extends BaseComponent imple
 			return;
 		}
 		this._yieldFilterModalService.openYieldFilterModal(this._yieldFiltersService, yieldFilter)
-			.then((modalDialogInstance: ModalDialogInstance<YieldFilterValueDO>) => {
-				modalDialogInstance.resultObservable.subscribe((selectedYFValue: YieldFilterValueDO) => {
+			.then((modalDialogRef: ModalDialogRef<YieldFilterValueDO>) => {
+				modalDialogRef.resultObservable.subscribe((selectedYFValue: YieldFilterValueDO) => {
 					this.didSelectFilterValue(filterId, selectedYFValue);
 				})
 			}).catch((e: any) => { });

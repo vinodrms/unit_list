@@ -1,4 +1,4 @@
-import {Injectable, DynamicComponentLoader, ComponentRef, ViewContainerRef} from 'angular2/core';
+import {Injectable, DynamicComponentLoader, ComponentRef, ViewContainerRef} from '@angular/core';
 import {IToaster} from './IToaster';
 import {Toast, ToastType} from './utils/Toast';
 import {ToastContainerComponent} from './utils/ToastContainerComponent';
@@ -6,7 +6,7 @@ import {ToastContainerComponent} from './utils/ToastContainerComponent';
 @Injectable()
 export class Toaster implements IToaster {
 	private static ToasterTimeout = 4000;
-	private _container: ComponentRef;
+	private _container: ComponentRef<any>;
 	private _toastIndex = 0;
 
 	constructor(private _loader: DynamicComponentLoader) {

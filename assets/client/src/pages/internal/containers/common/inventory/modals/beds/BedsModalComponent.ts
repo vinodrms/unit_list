@@ -1,9 +1,9 @@
-import {Component, OnInit, AfterViewChecked, ViewChild, ElementRef} from 'angular2/core';
+import {Component, OnInit, AfterViewChecked, ViewChild, ElementRef} from '@angular/core';
 import {BaseComponent} from '../../../../../../../common/base/BaseComponent';
 import {LoadingComponent} from '../../../../../../../common/utils/components/LoadingComponent';
 import {ThError, AppContext} from '../../../../../../../common/utils/AppContext';
 import {ICustomModalComponent, ModalSize} from '../../../../../../../common/utils/modals/utils/ICustomModalComponent';
-import {ModalDialogInstance} from '../../../../../../../common/utils/modals/utils/ModalDialogInstance';
+import {ModalDialogRef} from '../../../../../../../common/utils/modals/utils/ModalDialogRef';
 import {TranslationPipe} from '../../../../../../../common/utils/localization/TranslationPipe';
 import {BedVM} from '../../../../../services/beds/view-models/BedVM';
 import {BedsModalInput} from './services/utils/BedsModalInput';
@@ -25,7 +25,7 @@ export class BedsModalComponent extends BaseComponent implements ICustomModalCom
     @ViewChild('scrollableContent') private tableScrollContainer: ElementRef;
 	
     constructor(private _appContext: AppContext,
-		private _modalDialogInstance: ModalDialogInstance<BedVM[]>,
+		private _modalDialogRef: ModalDialogRef<BedVM[]>,
 		private _bedsModalInput: BedsModalInput) {
 		super();
 	}
@@ -48,7 +48,7 @@ export class BedsModalComponent extends BaseComponent implements ICustomModalCom
     }
 
 	public closeDialog() {
-		this._modalDialogInstance.closeForced();
+		this._modalDialogRef.closeForced();
 	}
     
     public isBlocking(): boolean {
@@ -116,7 +116,7 @@ export class BedsModalComponent extends BaseComponent implements ICustomModalCom
 		if (!this.didSelectAtLeastOneBed) {
 			return;
 		}
-		this._modalDialogInstance.addResult(this.getSavedBedVMList());
+		this._modalDialogRef.addResult(this.getSavedBedVMList());
 		this.closeDialog();
 	}
 }

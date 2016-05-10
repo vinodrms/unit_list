@@ -1,7 +1,7 @@
-import {Component} from 'angular2/core';
+import {Component} from '@angular/core';
 import {BaseComponent} from '../../../../base/BaseComponent';
 import {ICustomModalComponent, ModalSize} from '../../utils/ICustomModalComponent';
-import {ModalDialogInstance} from '../../utils/ModalDialogInstance';
+import {ModalDialogRef} from '../../utils/ModalDialogRef';
 import {ConfirmationModalInput, ConfirmationModalButtons} from './utils/ConfirmationModalInput';
 import {TranslationPipe} from '../../../localization/TranslationPipe';
 
@@ -32,7 +32,7 @@ export class ConfirmationModalComponent extends BaseComponent implements ICustom
 	content = "";
     buttons: ConfirmationModalButtons;
     
-	constructor(private _modalDialogInstance: ModalDialogInstance<any>,
+	constructor(private _modalDialogInstance: ModalDialogRef<any>,
 		confirmationModalInput: ConfirmationModalInput) {
 		super();
 		this.title = confirmationModalInput.title;

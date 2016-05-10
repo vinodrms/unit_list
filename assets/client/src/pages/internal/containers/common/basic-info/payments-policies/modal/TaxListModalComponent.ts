@@ -1,11 +1,11 @@
-import {Component, OnInit} from 'angular2/core';
+import {Component, OnInit} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/combineLatest';
 import {BaseComponent} from '../../../../../../../common/base/BaseComponent';
 import {LoadingComponent} from '../../../../../../../common/utils/components/LoadingComponent';
 import {ThError, AppContext} from '../../../../../../../common/utils/AppContext';
 import {ICustomModalComponent, ModalSize} from '../../../../../../../common/utils/modals/utils/ICustomModalComponent';
-import {ModalDialogInstance} from '../../../../../../../common/utils/modals/utils/ModalDialogInstance';
+import {ModalDialogRef} from '../../../../../../../common/utils/modals/utils/ModalDialogRef';
 import {TranslationPipe} from '../../../../../../../common/utils/localization/TranslationPipe';
 import {PercentagePipe} from '../../../../../../../common/utils/pipes/PercentagePipe';
 import {TaxService} from '../../../../../services/taxes/TaxService';
@@ -30,7 +30,7 @@ export class TaxListModalComponent extends BaseComponent implements ICustomModal
 	private _selectedTaxList: TaxDO[] = [];
 
 	constructor(private _appContext: AppContext,
-		private _modalDialogInstance: ModalDialogInstance<TaxDO[]>,
+		private _modalDialogRef: ModalDialogRef<TaxDO[]>,
 		private _taxListModalInput: TaxListModalInput,
 		private _hotelService: HotelService,
 		private _taxService: TaxService) {
@@ -59,7 +59,7 @@ export class TaxListModalComponent extends BaseComponent implements ICustomModal
 	}
 
 	public closeDialog() {
-		this._modalDialogInstance.closeForced();
+		this._modalDialogRef.closeForced();
 	}
 
 	public isBlocking(): boolean {
@@ -88,7 +88,7 @@ export class TaxListModalComponent extends BaseComponent implements ICustomModal
 		if (!this.didSelectTax()) {
 			return;
 		}
-		this._modalDialogInstance.addResult(this._selectedTaxList);
+		this._modalDialogRef.addResult(this._selectedTaxList);
 		this.closeDialog();
 	}
 }

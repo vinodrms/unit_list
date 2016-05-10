@@ -1,5 +1,6 @@
 import {BaseDO} from '../../../data-layer/common/base/BaseDO';
 import {ThDateUtils} from '../ThDateUtils';
+import {ISOWeekDay} from './ISOWeekDay';
 
 import moment = require("moment");
 
@@ -53,6 +54,14 @@ export class ThDateDO extends BaseDO {
 		var thisMoment = thDateUtils.convertThDateDOToMoment(this);
 		var otherMoment = thDateUtils.convertThDateDOToMoment(otherDate);
 		return thisMoment.isSame(otherMoment, "day");
+	}
+	public getISOWeekDay(): ISOWeekDay {
+		var thDateUtils = new ThDateUtils();
+		var thisMoment = thDateUtils.convertThDateDOToMoment(this);
+		return thisMoment.isoWeekday();
+	}
+	public buildPrototype(): ThDateDO {
+		return ThDateDO.buildThDateDO(this.year, this.month, this.day);
 	}
 
 	public static buildThDateDO(year: number, month: number, day: number): ThDateDO {

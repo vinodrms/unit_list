@@ -25,6 +25,10 @@ export class SavePriceProductItemPriceDO {
 					{
 						key: "childrenPriceList",
 						validationStruct: SavePriceProductItemPriceDO.getPriceForFixedNumberOfPersonsDOValidationStructure()
+					},
+					{
+						key: "firstChildWithoutAdultPrice",
+						validationStruct: new PrimitiveValidationStructure(NumberValidationRule.buildPriceNumberRule())
 					}
 				]));
 			case PriceProductPriceType.SinglePrice:

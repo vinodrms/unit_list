@@ -1,4 +1,4 @@
-import {Injectable} from 'angular2/core';
+import {Injectable} from '@angular/core';
 import {LazyLoadTableMeta, TableRowCommand, TableColumnMeta, TablePropertyType} from '../../../../../../../../common/utils/components/lazy-loading/utils/LazyLoadTableMeta';
 
 @Injectable()
@@ -17,7 +17,9 @@ export class RoomTableMetaBuilderService {
 					valueMeta: {
 						objectPropertyId: "room.name",
 						propertyType: TablePropertyType.StringType,
-						showInCollapsedView: true
+						showInCollapsedView: true,
+						normalStyle: "up-col-25p left",
+						collapsedStyle: "up-col-70p left"
 					}
 				},
                 {
@@ -25,7 +27,8 @@ export class RoomTableMetaBuilderService {
 					valueMeta: {
 						objectPropertyId: "category.displayName",
 						propertyType: TablePropertyType.StringType,
-						showInCollapsedView: false
+						showInCollapsedView: false,
+						normalStyle: "up-col-25p left"
 					}
 				},
                 {
@@ -33,7 +36,8 @@ export class RoomTableMetaBuilderService {
 					valueMeta: {
 						objectPropertyId: "room.floor",
 						propertyType: TablePropertyType.StringType,
-						showInCollapsedView: false
+						showInCollapsedView: false,
+						normalStyle: "up-col-10p center"
 					}
 				},
 				{
@@ -45,7 +49,8 @@ export class RoomTableMetaBuilderService {
                             child: ";",
                             adult: ":"    
                         },
-						showInCollapsedView: false
+						showInCollapsedView: false,
+						normalStyle: "up-col-10p center"
 					}
 				},
 				{
@@ -53,7 +58,8 @@ export class RoomTableMetaBuilderService {
 					valueMeta: {
 						objectPropertyId: "room.notes",
 						propertyType: TablePropertyType.StringType,
-						showInCollapsedView: false
+						showInCollapsedView: false,
+						normalStyle: "up-col-20p left"
 					}
 				}
 			]

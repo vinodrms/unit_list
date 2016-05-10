@@ -6,7 +6,7 @@
     <loading-component [isLoading]="isLoading"></loading-component>
 
     <div class="row">
-        <div class="col-xs-6 col-md-4" *ngFor="#bedSelectionVM of bedSelectionVMList">
+        <div class="col-xs-6 col-md-4" *ngFor="let bedSelectionVM of bedSelectionVMList">
             <div class="row">
                 <div class="col-xs-12 col-md-12 text-center">
                     <div class="btn bed-slot unselected" (click)="bedSelectionVM.numberOfInstances=bedSelectionVM.numberOfInstances+1">

@@ -1,5 +1,5 @@
-import {Injectable} from 'angular2/core';
-import {FormBuilder, ControlGroup, Validators, AbstractControl, Control} from 'angular2/common';
+import {Injectable} from '@angular/core';
+import {FormBuilder, ControlGroup, Validators, AbstractControl, Control} from '@angular/common';
 import {RoomVM} from '../../../../../../../services/rooms/view-models/RoomVM';
 import {RoomDO} from '../../../../../../../services/rooms/data-objects/RoomDO';
 import {ThValidators, ThFieldLengths} from '../../../../../../../../../common/utils/form-utils/ThFormUtils';

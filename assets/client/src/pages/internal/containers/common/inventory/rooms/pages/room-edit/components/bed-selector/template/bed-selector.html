@@ -1,5 +1,5 @@
 <div class="bed-container">
-    <div *ngFor="#bedVM of selectedBedList; #bedIndex = index" class="bed-slot">
+    <div *ngFor="let bedVM of selectedBedList; let bedIndex = index" class="bed-slot">
         <a class="btn btn-xs bed-remove-btn" (click)="removeBed(bedIndex)">
             <i class="fa unitpal-font">\</i>
         </a>
@@ -11,7 +11,7 @@
             <span class="unitpal-font">:</span> {{bedVM.capacity.maxChildren}}<span class="unitpal-font">;</span>
         </div>
     </div>
-    <div *ngFor="#emptySlot of emptySlots" class="bed-slot available">
+    <div *ngFor="let emptySlot of emptySlots" class="bed-slot available">
 
     </div>
 </div>

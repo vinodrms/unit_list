@@ -1,6 +1,6 @@
 <div class="col-md-6 col-sm-6 col-sm-6" *ngIf="didInit">
 	<div class="row">
-		<div class="col-xs-12">
+		<div class="col-xs-12 form-group">
 			<label>{{ 'Cancellation Policy' | translate }}</label>
 		</div>
 	</div>
@@ -14,7 +14,7 @@
 
 	<div class="form-group">
 		<select class="form-control" [ngModel]="conditions.policyType" (ngModelChange)="didChangePolicyType($event)" [disabled]="readonly">
-			<option *ngFor="#cancellationPolicyMeta of cancellationPolicyMetaList" [value]="cancellationPolicyMeta.policyType">
+			<option *ngFor="let cancellationPolicyMeta of cancellationPolicyMetaList" [value]="cancellationPolicyMeta.policyType">
 				{{cancellationPolicyMeta.policyName | translate}}
 			</option>
 		</select>
@@ -44,7 +44,7 @@
 
 <div class="col-md-6 col-sm-6 col-sm-6" *ngIf="didInit">
 	<div class="row">
-		<div class="col-xs-12">
+		<div class="col-xs-12 form-group">
 			<label>{{ 'Cancellation Penalty' | translate }}</label>
 		</div>
 	</div>
@@ -56,7 +56,7 @@
 		</div>
 		<div class="col-xs-12 form-group">
 			<select class="form-control" [ngModel]="conditions.penaltyType" (ngModelChange)="didChangePenaltyType($event)" [disabled]="readonly">
-				<option *ngFor="#cancellationPenaltyMeta of filteredCancellationPenaltyMetaList" [value]="cancellationPenaltyMeta.penaltyType">
+				<option *ngFor="let cancellationPenaltyMeta of filteredCancellationPenaltyMetaList" [value]="cancellationPenaltyMeta.penaltyType">
 					{{cancellationPenaltyMeta.penaltyName | translate}}
 				</option>
 			</select>

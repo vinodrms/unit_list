@@ -1,4 +1,4 @@
-import {Injectable} from 'angular2/core';
+import {Injectable} from '@angular/core';
 import {WizardStateMeta} from '../../services/IWizardState';
 import {AWizardState} from '../../services/AWizardState';
 import {AppContext} from '../../../../../../../../common/utils/AppContext';

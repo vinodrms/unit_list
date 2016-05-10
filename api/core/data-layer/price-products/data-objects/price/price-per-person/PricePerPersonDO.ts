@@ -13,10 +13,11 @@ import _ = require("underscore");
 export class PricePerPersonDO extends BaseDO implements IPriceProductPrice {
 	adultsPriceList: PriceForFixedNumberOfPersonsDO[];
 	childrenPriceList: PriceForFixedNumberOfPersonsDO[];
+	firstChildWithoutAdultPrice: number;
 	roomCategoryId: string;
 
 	protected getPrimitivePropertyKeys(): string[] {
-		return ["roomCategoryId"];
+		return ["firstChildWithoutAdultPrice", "roomCategoryId"];
 	}
 	public buildFromObject(object: Object) {
 		super.buildFromObject(object);
@@ -43,7 +44,11 @@ export class PricePerPersonDO extends BaseDO implements IPriceProductPrice {
 
 			var childrenPrice = 0;
 			for (var noOfChildren = 1; noOfChildren <= query.noOfChildren; noOfChildren++) {
-				childrenPrice += this.getPriceForNumberOfPersons(this.childrenPriceList, noOfChildren).price;
+				var priceForCurrentChild = this.getPriceForNumberOfPersons(this.childrenPriceList, noOfChildren).price;
+				if (noOfChildren === 1 && query.noOfAdults === 0) {
+					priceForCurrentChild = this.firstChildWithoutAdultPrice;
+				}
+				childrenPrice += priceForCurrentChild;
 			}
 
 			return adultsPrice + childrenPrice;
@@ -69,6 +74,10 @@ export class PricePerPersonDO extends BaseDO implements IPriceProductPrice {
 			return false;
 		}
 
+		if (!this.priceIsValid(this.firstChildWithoutAdultPrice)) {
+			return false;
+		}
+
 		var maxNoOfChildren = roomCategStat.maxNoChildren;
 		return this.priceListIsValidForMaxNoOfPersons(this.childrenPriceList, (maxNoOfChildren + maxNoOfAdults));
 	}
@@ -79,12 +88,15 @@ export class PricePerPersonDO extends BaseDO implements IPriceProductPrice {
 			if (thUtils.isUndefinedOrNull(priceForFixedNumberOfPersons)) {
 				return false;
 			}
-			var priceRule = NumberValidationRule.buildPriceNumberRule();
-			if (!priceRule.validate(priceForFixedNumberOfPersons.price).isValid()) {
+			if (!this.priceIsValid(priceForFixedNumberOfPersons.price)) {
 				return false;
 			}
 		}
 		return true;
+	}
+	private priceIsValid(price: number): boolean {
+		var priceRule = NumberValidationRule.buildPriceNumberRule();
+		return priceRule.validate(price).isValid();
 	}
 	public isConfiguredForRoomCategory(roomCategoryId: string): boolean {
 		return this.roomCategoryId === roomCategoryId;

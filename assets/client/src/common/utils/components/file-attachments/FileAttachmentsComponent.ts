@@ -1,4 +1,4 @@
-import {Component, Input, Output, EventEmitter} from 'angular2/core';
+import {Component, Input, Output, EventEmitter} from '@angular/core';
 import {BaseComponent} from '../../../base/BaseComponent';
 import {AppContext, ThError} from '../../AppContext';
 import {FileAttachmentDO} from '../../../../pages/internal/services/common/data-objects/file/FileAttachmentDO';
@@ -20,7 +20,7 @@ export class FileAttachmentsComponent extends BaseComponent {
 		this._fileAttachmentList = fileAttachmentList;
 	}
 
-	@Output() onFileAttachmentsChange: EventEmitter<FileAttachmentDO[]> = new EventEmitter();
+	@Output() onFileAttachmentsChange: EventEmitter<FileAttachmentDO[]> = new EventEmitter<FileAttachmentDO[]>();
 	isLoading: boolean;
 
 	constructor(private _appContext: AppContext) {

@@ -12,7 +12,4 @@
 		<h1>{{ _customerRegisterStateService.totalNoOfCustomers }} <span class="unitpal-font">{{ _customerRegisterStateService.getMeta().iconFontName }}</span></h1>
 	</div>
 </div>
-
-<div class="row card-body">
-	<customer-register class="col-xs-12" (onScreenStateTypeChanged)="didChangeScreenStateType($event)"></customer-register>
-</div>
+<customer-register class="row card-body" (onScreenStateTypeChanged)="didChangeScreenStateType($event)"></customer-register>

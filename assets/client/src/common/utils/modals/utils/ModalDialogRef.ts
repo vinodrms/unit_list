@@ -1,11 +1,11 @@
 import {Observable, Observer} from 'rxjs/Rx';
-import {ComponentRef} from 'angular2/core';
-import {ModalSize} from './ICustomModalComponent';
+import {ComponentRef} from '@angular/core';
+import {ModalSize, ICustomModalComponent} from './ICustomModalComponent';
 
-export class ModalDialogInstance<T> {
-	private _backdropRef: ComponentRef;
-	private _containerRef: ComponentRef;
-	private _contentRef: ComponentRef;
+export class ModalDialogRef<T> {
+	private _backdropRef: ComponentRef<any>;
+	private _containerRef: ComponentRef<any>;
+	private _contentRef: ComponentRef<ICustomModalComponent>;
 	private _modalSize;
 
     private _resultObservable: Observable<T>;
@@ -48,24 +48,24 @@ export class ModalDialogInstance<T> {
         this._contentRef.destroy();
     }
 
-	public get backdropRef(): ComponentRef {
+	public get backdropRef(): ComponentRef<any> {
 		return this._backdropRef;
 	}
-	public set backdropRef(backdropRef: ComponentRef) {
+	public set backdropRef(backdropRef: ComponentRef<any>) {
 		this._backdropRef = backdropRef;
 	}
 
-	public get containerRef(): ComponentRef {
+	public get containerRef(): ComponentRef<any> {
 		return this._containerRef;
 	}
-	public set containerRef(containerRef: ComponentRef) {
+	public set containerRef(containerRef: ComponentRef<any>) {
 		this._containerRef = containerRef;
 	}
 
-	public get contentRef(): ComponentRef {
+	public get contentRef(): ComponentRef<ICustomModalComponent> {
 		return this._contentRef;
 	}
-	public set contentRef(contentRef: ComponentRef) {
+	public set contentRef(contentRef: ComponentRef<ICustomModalComponent>) {
 		this._contentRef = contentRef;
 		if (this._contentRef.instance.getSize) {
 			this._modalSize = this._contentRef.instance.getSize();

@@ -18,6 +18,7 @@
 	<link href="/node_modules/animate.css/animate.min.css" rel="stylesheet">
 	<link href="/node_modules/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
 	<link href="/node_modules/toastr/build/toastr.min.css" rel="stylesheet">
+	<link href="/client/static-assets/css/simplebar.css" rel="stylesheet">
 	<!-- Custom CSS -->
 	<link href="/client/static-assets/css/unitpal.css" rel="stylesheet">
 
@@ -25,50 +26,35 @@
 	<script src="/node_modules/jquery.1/node_modules/jquery/dist/jquery.min.js"></script>
 	<script src="/node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
 
-	<!-- Angular JS -->
+	<!-- Angular JS Deps -->
 	<script src="/node_modules/es6-shim/es6-shim.min.js"></script>
-	<script src="/node_modules/systemjs/dist/system-polyfills.js"></script>
-    <script src="/node_modules/angular2/es6/dev/src/testing/shims_for_IE.js"></script>   
-	
-	<script src="/node_modules/angular2/bundles/angular2-polyfills.min.js"></script>
+	<script src="/node_modules/zone.js/dist/zone.js"></script>
+	<script src="/node_modules/reflect-metadata/Reflect.js"></script>
 	<script src="/node_modules/systemjs/dist/system.js"></script>
-	<script src="/node_modules/rxjs/bundles/Rx.min.js"></script>
-	<script src="/node_modules/angular2/bundles/angular2.dev.js"></script>
-	<script src="/node_modules/angular2/bundles/router.dev.js"></script>
-	<script src="/node_modules/angular2/bundles/http.dev.js"></script>
 
 	<!-- Other JS Libraries -->
 	<script src="/node_modules/moment/min/moment.min.js"></script>
 	<script src="/node_modules/underscore/underscore-min.js"></script>
 	<script src="/node_modules/bootstrap-daterangepicker/daterangepicker.js"></script>
 	<script src="/node_modules/pace-progress/pace.min.js"></script>
-	<script src="/node_modules/floatthead/dist/jquery.floatThead.js"></script>
-
-	<%if (isDevelopmentEnvironment == true) {%>
+	<script src="/client/static-assets/js/simplebar.min.js"></script>
+	
+	<%if (isDevelopmentEnvironment) {%>
+		<script src="/client/systemjs.internal.config.js"></script>
 		<script>
-			System.config({
-                    packages: {
-                        client: {
-                            format: 'register',
-                            defaultExtension: 'js'
-                        }
-                    }
-                });
-                System.import('client/src/pages/internal/main/InternalBoot').then(null, console.error.bind(console));
+			System.import('internal').catch(function(err){ console.error(err); });
 		</script>
-		<%} else {%>
-			<script>
-				System.config({
-                    bundles: { 'client/build/unitpal-internal-min.js': ['pages/internal/main/InternalBoot'] }
-                });
-                System.import('pages/internal/main/InternalBoot').then(null, console.error.bind(console));
-			</script>
-			<%}%>
+	<%}%>
 
 </head>
 
 <body>
 	<main-layout-internal></main-layout-internal>
+
+	<%if (!isDevelopmentEnvironment) {%>
+		<script src="/client/build/unitpal-internal.min.js"></script>
+	<%}%>
+
 </body>
 
 </html>

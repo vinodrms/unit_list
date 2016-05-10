@@ -1,11 +1,11 @@
 import {IPriceProductIntervalStrategy} from './IPriceProductIntervalStrategy';
-import {ThDayInYearIntervalDO} from '../../../utils/th-dates/data-objects/ThDayInYearIntervalDO';
+import {ThDateIntervalDO} from '../../../utils/th-dates/data-objects/ThDateIntervalDO';
 import {ThDateIntervalUtils} from '../../../utils/th-dates/ThDateIntervalUtils';
 
 export class PriceProductAddIntervalStrategy implements IPriceProductIntervalStrategy {
-	public apply(intervalList: ThDayInYearIntervalDO[], interval: ThDayInYearIntervalDO): ThDayInYearIntervalDO[] {
+	public apply(intervalList: ThDateIntervalDO[], interval: ThDateIntervalDO): ThDateIntervalDO[] {
 		var intervalUtils = new ThDateIntervalUtils(intervalList);
 		intervalUtils.addInterval(interval);
-		return <ThDayInYearIntervalDO[]>intervalUtils.getProcessedIntervals();
+		return <ThDateIntervalDO[]>intervalUtils.getProcessedIntervals();
 	}
 }

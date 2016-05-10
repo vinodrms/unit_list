@@ -1,6 +1,6 @@
-import {Component} from 'angular2/core';
+import {Component} from '@angular/core';
 import {BaseComponent} from '../../../../../../../../common/base/BaseComponent';
-import {RouteConfig, RouterOutlet} from 'angular2/router';
+import {RouteConfig, RouterOutlet} from '@angular/router-deprecated';
 import {WizardBasicInfoIntroComponent} from '../pages/intro/WizardBasicInfoIntroComponent';
 import {WizardBasicInfoOverviewComponent} from '../pages/overview/WizardBasicInfoOverviewComponent';
 import {WizardBasicInfoPaymentsAndPoliciesComponent} from '../pages/payments-policies/WizardBasicInfoPaymentsAndPoliciesComponent';

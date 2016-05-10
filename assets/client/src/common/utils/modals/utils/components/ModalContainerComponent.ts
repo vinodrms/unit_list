@@ -1,5 +1,5 @@
-import {Component, ViewChild, ViewContainerRef} from 'angular2/core';
-import {ModalDialogInstance} from '../ModalDialogInstance';
+import {Component, ViewChild, ViewContainerRef} from '@angular/core';
+import {ModalDialogRef} from '../ModalDialogRef';
 import {ModalSize} from '../ICustomModalComponent';
 
 @Component({
@@ -26,7 +26,7 @@ import {ModalSize} from '../ICustomModalComponent';
 export class ModalContainerComponent<T> {
 	@ViewChild('modalDialog', {read: ViewContainerRef}) viewContainerRef: ViewContainerRef;
 	
-	constructor(private _dialogInstance: ModalDialogInstance<T>) {
+	constructor(private _dialogInstance: ModalDialogRef<T>) {
 
 	}
 

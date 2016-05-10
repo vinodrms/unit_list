@@ -1,119 +1,121 @@
 <loading-component [isLoading]="!didInit"></loading-component>
 
-<div *ngIf="didInit">
-		<div class="row table-filter">
-			<!--TODO: Investigate if !isCollapsed && !tableOptions.canSearch then the total sum is 16 != 12-->
-			<div *ngIf="tableOptions.canSearch" [ngClass]="{'col-xs-4 col-md-4': !isCollapsed, 'col-xs-12 col-md-12': isCollapsed}" >
-				<div class="input-group">
-					<input type="text" class="form-control" placeholder="{{tableMeta.searchInputPlaceholder}}" [ngFormControl]="textSearchControl" />
-					<span class="input-group-btn">
+<div *ngIf="didInit" class="lazy-loading-table-container">
+	<div class="row table-filter">
+		<!--TODO: Investigate if !isCollapsed && !tableOptions.canSearch then the total sum is 16 != 12-->
+		<div *ngIf="tableOptions.canSearch" [ngClass]="{'col-xs-4 col-md-4': !isCollapsed, 'col-xs-12 col-md-12': isCollapsed}">
+			<div class="input-group">
+				<input type="text" class="form-control" placeholder="{{tableMeta.searchInputPlaceholder}}" [ngFormControl]="textSearchControl"
+				/>
+				<span class="input-group-btn">
 						<button class="btn" type="button" (click)="searchByText()">
 							<i class="glyphicon glyphicon-search"></i>
 						</button>
 					</span>
-				</div>
 			</div>
-			<div class="col-xs-4 col-md-4" *ngIf="!tableOptions.canSearch && !isCollapsed">
-			</div>
-			<div class="col-xs-4 col-md-4" *ngIf="!isCollapsed">
-			</div>
-			<div class="col-xs-4 col-md-4" *ngIf="!isCollapsed">
-				<div>
-					<label>{{ 'Show' | translate }}
+		</div>
+		<div class="col-xs-4 col-md-4" *ngIf="!tableOptions.canSearch && !isCollapsed">
+		</div>
+		<div class="col-xs-4 col-md-4" *ngIf="!isCollapsed">
+		</div>
+		<div class="col-xs-4 col-md-4" *ngIf="!isCollapsed">
+			<div>
+				<label>{{ 'Show' | translate }}
 						<select [ngModel]="paginationIndex.numOfItemsPerPage" (ngModelChange)="didChangeNumOfItemsPerPage($event)">
-							<option *ngFor="#nomPerPage of paginationIndex.nunOfItemsPerPageList" [value]="nomPerPage">
+							<option *ngFor="let nomPerPage of paginationIndex.nunOfItemsPerPageList" [value]="nomPerPage">
 								{{nomPerPage}}
 							</option>
 						</select> {{ 'items' | translate }}
 					</label>
-				</div>
 			</div>
 		</div>
+	</div>
 
-		<div class="row table-wrapper">
-			<div class="col-xs-12 col-md-12">
-				<table class="table table-hover">
-					<thead>
-						<tr>
-							<th *ngFor="#columnMeta of columnMetaList">
-								{{ columnMeta.displayName | translate }}
-							</th>
-							<th></th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr *ngFor="#item of itemList" [ngClass]="{active: (isSelected(item) && (tableOptions.canSelect || tableOptions.canMultiSelect)  )}">
-							<td *ngFor="#columnMeta of columnMetaList" (click)="(tableOptions.canSelect || tableOptions.canMultiSelect) && didSelectItem(item)" [ngClass]="{'selectable-row': (tableOptions.canSelect || tableOptions.canMultiSelect)}">
-								<span *ngIf="isPercentage(columnMeta.valueMeta)">
+	<table [ngClass]="getTableClasses()">
+		<thead>
+			<tr>
+				<th *ngFor="let columnMeta of columnMetaList" 
+					[ngClass]="isCollapsed? columnMeta.valueMeta.collapsedStyle : columnMeta.valueMeta.normalStyle"
+					title="{{ columnMeta.displayName | translate }}">
+					{{ columnMeta.displayName | translate }}
+				</th>
+				<th [ngClass]="{'up-col-10p': !isCollapsed, 'up-col-30p': isCollapsed}">
+				</th>
+			</tr>
+		</thead>
+
+		<tbody customScroll>
+			<tr *ngFor="let item of itemList" [ngClass]="getRowClasses(item)">
+				<td *ngFor="let columnMeta of columnMetaList" (click)="(tableOptions.canSelect || tableOptions.canMultiSelect) && didSelectItem(item)"
+					[ngClass]="getCellClasses(columnMeta.valueMeta, isCollapsed)">
+					<span *ngIf="isPercentage(columnMeta.valueMeta)">
 									{{ getItemValue(item, columnMeta.valueMeta) | percentage }}
 								</span>
-								<span *ngIf="isPrice(columnMeta.valueMeta)">
+					<span *ngIf="isPrice(columnMeta.valueMeta)">
 									{{ getDependentItemValue(item, columnMeta.valueMeta) }}
 									{{ getItemValue(item, columnMeta.valueMeta) | price }}
 								</span>
-								<span *ngIf="isStringOrNumber(columnMeta.valueMeta)">
+					<span *ngIf="isStringOrNumber(columnMeta.valueMeta)" title="{{ getItemValue(item, columnMeta.valueMeta) | translate }}">
 									{{ getItemValue(item, columnMeta.valueMeta) | translate }}
 								</span>
-								<span *ngIf="isNotes(columnMeta.valueMeta)">
+					<span *ngIf="isNotes(columnMeta.valueMeta)" title="{{ getItemValue(item, columnMeta.valueMeta) | translate }}">
 									<small>
 										{{ getItemValue(item, columnMeta.valueMeta) | translate }}
 									</small>
 								</span>
-								<span *ngIf="isCapacity(columnMeta.valueMeta)">
-									{{ getItemValue(item, columnMeta.valueMeta).maxAdults }} <span class="unitpal-font">{{columnMeta.valueMeta.fonts.adult}}</span> {{ getItemValue(item, columnMeta.valueMeta).maxChildren }} <span class="unitpal-font">{{columnMeta.valueMeta.fonts.child}}</span>
-								</span>
-								<span *ngIf="isFontIcon(columnMeta.valueMeta)">
-									<span class="unitpal-font">{{getItemValue(item, columnMeta.valueMeta)}}</span> 
-								</span>
-							</td>
-							<td class="table-item-action-group">
-								<a class="btn btn-xs" *ngIf="tableOptions.canCopy" (click)="copyItem(item)" title="{{ 'Clone' | translate }}">
-									<i class="fa unitpal-font">[</i>
-								</a>
-								<a class="btn btn-xs" *ngIf="tableOptions.canEdit" (click)="editItem(item)" title="{{ 'Edit' | translate }}">
-									<i class="fa unitpal-font">]</i>
-								</a>
-								<a class="btn btn-xs" *ngIf="tableOptions.canDelete" (click)="deleteItem(item)" title="{{ 'Delete' | translate }}">
-									<i class="fa unitpal-font">\</i>
-								</a>
-							</td>
-						</tr>
-						<tr *ngIf="noResultsExist()">
-							<td [attr.colspan]="columnMetaList.length + 1">
-								<center>
-									{{ 'No items to display' | translate }}
-								</center>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-		</div>
-		<div class="row table-foot">
-			<div class="col-xs-4 col-md-4" *ngIf="!isCollapsed">
-				<a class="btn btn-lg" *ngIf="tableOptions.canAdd" (click)="addItem()">
-					<i class="fa fa-plus"></i> {{tableMeta.addButtonText}}
-				</a>
-			</div>
-			<div class="col-xs-4 col-md-4" *ngIf="!isCollapsed">
-				<div class="dataTables_info" id="example_info" role="status" aria-live="polite">{{paginationIndex.pageNumberStat}}</div>
-			</div>
-
-			<div class="col-xs-3 col-md-3" *ngIf="isCollapsed">
-					<a class="btn btn-lg" *ngIf="tableOptions.canAdd" (click)="addItem()">
-						<i class="fa fa-plus"></i>
+					<span *ngIf="isCapacity(columnMeta.valueMeta)">
+									{{ getItemValue(item, columnMeta.valueMeta).maxAdults }} <span class="unitpal-font">{{columnMeta.valueMeta.fonts.adult}}</span>					{{ getItemValue(item, columnMeta.valueMeta).maxChildren }} <span class="unitpal-font">{{columnMeta.valueMeta.fonts.child}}</span>
+					</span>
+					<span *ngIf="isFontIcon(columnMeta.valueMeta)">
+									<span class="unitpal-font">{{getItemValue(item, columnMeta.valueMeta)}}</span>
+					</span>
+				</td>
+				<td class="table-item-action-group" [ngClass]="{'up-col-10p': !isCollapsed, 'up-col-30p': isCollapsed}">
+					<a class="btn btn-xs" *ngIf="tableOptions.canCopy" (click)="copyItem(item)" title="{{ 'Clone' | translate }}">
+						<i class="fa unitpal-font">[</i>
 					</a>
-			</div>
+					<a class="btn btn-xs" *ngIf="tableOptions.canEdit" (click)="editItem(item)" title="{{ 'Edit' | translate }}">
+						<i class="fa unitpal-font">]</i>
+					</a>
+					<a class="btn btn-xs" *ngIf="tableOptions.canDelete" (click)="deleteItem(item)" title="{{ 'Delete' | translate }}">
+						<i class="fa unitpal-font">\</i>
+					</a>
+				</td>
+			</tr>
+			<tr *ngIf="!noResultsExist()">
+				<td *ngFor="let columnMeta of columnMetaList" [ngClass]="getCellClasses(columnMeta.valueMeta, isCollapsed)">
+				</td>
+				<td class="table-item-action-group" [ngClass]="{'up-col-10p': !isCollapsed, 'up-col-30p': isCollapsed}">
+					
+				</td>
+			</tr>
+			<tr *ngIf="noResultsExist()">
+				<td class="up-col-100p">
+					<center>
+						{{ 'No items to display' | translate }}
+					</center>
+				</td>
+			</tr>
+		</tbody>
 
-			<div class="text-right"  [ngClass]="{'col-xs-4 col-md-4': !isCollapsed, 'col-xs-9 col-md-9': isCollapsed}">
-				<center>
-					<ul class="pagination">
+		<tfoot>
+			<tr>
+			<td [ngClass]="{'left up-col-30p': !isCollapsed, 'left up-col-45p': isCollapsed}">
+					<a class="btn btn-lg" *ngIf="tableOptions.canAdd" (click)="addItem()">
+						<i class="fa fa-plus"></i> {{ 'Add' | translate }}
+					</a>
+				</td>
+				<td [ngClass]="{'up-col-30p': !isCollapsed, 'up-col-0p': isCollapsed}">
+					{{paginationIndex.pageNumberStat}}
+				</td>
+				<td class="right pagination-container" [ngClass]="{'up-col-50p': !isCollapsed, 'up-col-55p': isCollapsed}">
+					<ul class="pagination th-pagination">
 						<li [ngClass]="{disabled: isFirstPage()}">
 							<a (click)="updatePageNumber(paginationIndex.firstPageNumber)">
 								<i class="fa fa-angle-double-left"></i>
 							</a>
 						</li>
-						<li *ngFor="#index of paginationIndex.indexList" [ngClass]="{active: index.isSelected}">
+						<li *ngFor="let index of paginationIndex.indexList" [ngClass]="{active: index.isSelected}">
 							<a (click)="updatePageNumber(index.pageNumber)">{{index.displayNumber}}</a>
 						</li>
 						<li [ngClass]="{disabled: isLastPage()}">
@@ -122,7 +124,9 @@
 							</a>
 						</li>
 					</ul>
-				</center>
-			</div>
-		</div>
+				</td>
+			</tr>
+		</tfoot>
+		
+	</table>
 </div>

@@ -1,4 +1,4 @@
-import { Component, ViewChild, ViewContainerRef } from 'angular2/core';
+import { Component, ViewChild, ViewContainerRef } from '@angular/core';
 
 /**
  * Represents the modal backdrop.

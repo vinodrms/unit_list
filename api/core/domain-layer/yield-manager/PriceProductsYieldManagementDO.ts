@@ -1,4 +1,4 @@
-import {ThDayInYearIntervalDO} from '../../utils/th-dates/data-objects/ThDayInYearIntervalDO';
+import {ThDateIntervalDO} from '../../utils/th-dates/data-objects/ThDateIntervalDO';
 import {IValidationStructure} from '../../utils/th-validation/structure/core/IValidationStructure';
 import {ObjectValidationStructure} from '../../utils/th-validation/structure/ObjectValidationStructure';
 import {PrimitiveValidationStructure} from '../../utils/th-validation/structure/PrimitiveValidationStructure';
@@ -15,7 +15,7 @@ export enum PriceProductYieldAttribute {
 
 export class PriceProductsYieldManagementDO {
 	priceProductIdList: string[];
-	interval: ThDayInYearIntervalDO;
+	interval: ThDateIntervalDO;
 	attribute: PriceProductYieldAttribute;
 
 	public static getValidationStructure(): IValidationStructure {

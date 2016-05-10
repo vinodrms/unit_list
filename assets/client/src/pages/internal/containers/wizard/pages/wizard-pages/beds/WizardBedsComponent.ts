@@ -1,4 +1,4 @@
-import {Component, ViewChild, OnInit, AfterViewInit, ReflectiveInjector, provide} from 'angular2/core';
+import {Component, ViewChild, OnInit, AfterViewInit, ReflectiveInjector, provide} from '@angular/core';
 import {BaseComponent} from '../../../../../../../common/base/BaseComponent';
 import {WizardBedsStateService} from './services/WizardBedsStateService';
 import {WizardService} from '../services/WizardService';

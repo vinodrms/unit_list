@@ -36,6 +36,7 @@ body,html {
     color: #0b2139;
     font-family: 'Raleway',sans-serif;
     font-size: 15px;
+    overflow: hidden;
 }
 
 .card {
@@ -58,8 +59,8 @@ body,html {
 }
 
 header {
-    height: 70px !important;
-    padding: 12px 12px 0;
+    height: 61px !important;
+    padding: 0 12px 0 12px;
 }
 
 .container {
@@ -85,8 +86,9 @@ header {
 }
 
 .singup_logo {
-    max-width: 45px;
-    height: auto;
+    padding-top: 10px;
+    max-height: 49px;
+    width: auto;
     margin-bottom: 12px;
 }
 
@@ -105,8 +107,8 @@ header {
 
 .container-fluid {
     margin: 0 auto;
-    height: calc(100% - 80px);
-    padding: 12px 0;
+    height: calc(100% - 71px);
+    padding: 0 0 4px 0;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
@@ -155,11 +157,12 @@ header {
 .card-header{
     border-bottom: 1px solid #ccc;
     height: 70px;
+    overflow: hidden;
 }
 
 .card-header h1 {
     padding: 0 6px 6px;
-    font-size: 24px;
+    font-size: 22px;
 }
 
 .card-header h1,
@@ -343,9 +346,17 @@ table .buttons,table button,table .btn {
     padding: 0 0 0 24px;
     height: 100%;
 }
+.overview-right h1 {
+    font-size: 22px; 
+}
 
 .overview-left {
+    display: flex;
+    flex-direction: column;
     height: 100%;
+    padding-top: 12px;
+    padding-left: 0px;
+    padding-right: 0px;
 }
 
 .overview-left .table p {
@@ -378,23 +389,6 @@ table .buttons,table button,table .btn {
     padding-top: 12px;
     margin-top: 24px;
     border-top: 1px solid #ccc;
-}
-
-.table-foot {
-    border-top: 1px solid #ccc;
-    padding: 12px 0;
-}
-
-.table-foot .pagination {
-    margin: 0;
-}
-
-.signup-table {
-    margin-bottom: 0 !important;
-}
-
-.signup-table td {
-    padding: 12px !important;
 }
 
 .save-cancel {
@@ -473,37 +467,14 @@ input[type="number"].form-control {
 /* End Fixes Section */
 /* 3angle TECH */
 
-/*lazy-loading-table table.table tbody,*/
-
-lazy-loading-table>div{
-    height: 100%;
-}
-
-div.lazy-loading-table-filter {
-    height: 43px;
-    margin-bottom: 7px;
-}
-div.lazy-loading-table-filter + lazy-loading-table {
-    height: calc(100% - 50px);
-}
-
-lazy-loading-table{
+lazy-loading-table {
     display: block;
     height: 100%;
 }
 
-lazy-loading-table .table-wrapper{
-    height: calc(100% - 105px);
-    overflow-y: scroll;
-}
-
-lazy-loading-table .table-wrapper table thead {
-    background-color: white;
-}
-
 .overview-right-body{
     height: calc(100% - 82px);
-    overflow-y: scroll    
+    overflow-y: hidden;    
 }
 
 .wizard-nav  {
@@ -526,27 +497,42 @@ lazy-loading-table .table-wrapper table thead {
 }
 
 .card-body{
-    padding-top: 12px;
     /* TODO: If we put 100% it will be 100% of the parent height, when it should be 100% of the remaining height.
     *  TO fix this we substract 82px (card-header height + padding), this is a quick fix that work but we should find something smarter.
     */
     height: calc(100% - 70px)
 }
+.card-body h3 {
+    font-size: 20px;
+}
 
 /* Theme structure */
 
 .edit-container {
-    height: calc(100%);
+    height: 100%;
     border-left: 1px solid #ccc;
-    padding: 24px;    
-    overflow-y: scroll;
-    overflow-x: hidden;
+    overflow: hidden;
+    padding: 0px;
+}
+
+.edit-form-container {
+    height: 100%;
+}
+
+.edit-form {
+    margin: 15px;
 }
 
 .basic-info-container {
-    height: calc(100%);
-    overflow-y: scroll;
-    overflow-x: hidden;
+    height: 100%;
+    padding: 0px;
+}
+.basic-info-form-container {
+    height: 100%;
+}
+.basic-info-form {
+    height: 100%;
+    padding: 5px 15px;
 }
 
 /* Bootstrap overrides */
@@ -800,12 +786,12 @@ input[type="file"] {
 }
 
 .th-img-upload-container {
-    width:250px;
+    width:100%;
 }
 
 .th-img-upload-preview {
     width: 100%;
-    height: 150px;
+    height: 142px;
     margin-bottom: 5px;
     text-align: center;
 }
@@ -863,4 +849,217 @@ input[type="file"] {
 }
 .th-padding-bottom {
     padding-bottom: 12px;
+}
+.form-group > label {
+    font-size: 12px;
+    font-weight: bold;
+}
+
+/**
+    Lazy loading fixed header table css
+*/
+lazy-loading-table {
+    display: flex;
+    flex-direction: column;
+}
+
+.lazy-loading-table-container {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.table-filter {
+    margin: 0px 10px 5px 10px;
+    flex-grow: 0;
+}
+
+table.lazy-loading {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  overflow: hidden;
+  height: 100%;
+  margin:0;
+}
+
+table.lazy-loading tbody,
+table.lazy-loading thead,
+table.lazy-loading tfoot {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+
+table.lazy-loading tbody {
+  overflow-y: hidden;
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+
+table.lazy-loading tbody tr:last-child {
+  flex-grow: 1;
+}
+
+table.lazy-loading tr {
+  display: flex;
+  flex-direction: row;
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+
+table.lazy-loading tbody tr:not(:last-child):not(:first-child) {
+    border-top: 1px solid rgb(220,220,220)
+}
+
+table.lazy-loading tr.active,
+table.lazy-loading tbody tr:not(:last-child):hover {
+  background: rgb(210,210,210);
+}
+
+table.lazy-loading td,
+table.lazy-loading th {
+  display: block;
+  flex-direction: column;
+  flex-shrink: 1;
+  flex-grow: 1;
+  flex-basis: 50px;
+  text-align: center;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+table.lazy-loading thead tr,
+table.lazy-loading tbody tr {
+  height: 40px;
+}
+table.lazy-loading th,
+table.lazy-loading tbody td {
+  line-height: 40px;
+}
+table.lazy-loading tfoot td {
+  height: 50px;
+  line-height: 50px;
+}
+table.lazy-loading tfoot {
+    border-top: 1px solid rgb(210,210,210);
+}
+
+table.lazy-loading th:nth-child(even) {
+  background: rgba(225, 225, 225, 0.6);  
+}
+
+table.lazy-loading th:nth-child(odd) {
+  background: rgba(244, 244, 244, 0.6);  
+}
+
+table.lazy-loading.odd-columns th:last-child {
+  background: rgba(225, 225, 225, 0.6);  
+}
+
+table.lazy-loading.even-columns th:last-child {
+  background: rgba(244, 244, 244, 0.6);  
+}
+
+table.lazy-loading tbody td:nth-child(even) {
+  background: rgba(244, 244, 244, 0.6);
+}
+
+table.lazy-loading tbody td:nth-child(odd) {
+  background: rgba(255, 255, 255, 0.6);
+}
+
+table.lazy-loading.odd-columns tbody td:last-child {
+  background: rgba(244, 244, 244, 0.6);  
+}
+
+table.lazy-loading.even-columns tbody td:last-child {
+  background: rgba(255, 255, 255, 0.6);  
+}
+
+table.lazy-loading tfoot {
+  background: rgba(255, 255, 255);
+}
+
+table.lazy-loading th.center,
+table.lazy-loading td.center {
+    text-align: center;
+}
+
+table.lazy-loading th.left,
+table.lazy-loading td.left {
+    padding-left: 5px;
+    text-align: left;
+}
+
+table.lazy-loading td.right {
+    text-align: right;
+}
+
+table.lazy-loading .pagination-container {
+    padding-right: 10px;       
+}
+
+/* This is to override default pagination style */
+table.lazy-loading .th-pagination {
+    margin: 5px 0px 0px 0px;
+}
+
+.lazy-loading-table-filter {
+    margin-bottom: 5px;    
+}
+
+.up-col-0p {
+    display: none !important;   
+}
+.up-col-5p {
+    flex-grow: 1 !important;
+}
+.up-col-10p {
+    flex-grow: 2 !important;
+}
+.up-col-15p {
+    flex-grow: 3 !important;
+}
+.up-col-20p {
+    flex-grow: 4 !important;
+}
+.up-col-25p {
+    flex-grow: 5 !important;
+}
+.up-col-30p {
+    flex-grow: 6 !important;
+}
+.up-col-35p {
+    flex-grow: 7 !important;
+}
+.up-col-40p {
+    flex-grow: 8 !important;
+}
+.up-col-50p {
+    flex-grow: 10 !important;
+}
+.up-col-60p {
+    flex-grow: 12 !important;
+}
+.up-col-70p {
+    flex-grow: 14 !important;
+}
+.up-col-80p {
+    flex-grow: 16 !important;   
+}
+.up-col-90p {
+    flex-grow: 18 !important;
+}
+.up-col-95p {
+    flex-grow: 19 !important;
+}
+.up-col-100p {
+    flex-grow: 20 !important;
+}
+
+.edit-form-container {
+    padding: 10px;
 }

@@ -1,9 +1,9 @@
-import {Component, OnInit, AfterViewChecked, ViewChild, ElementRef} from 'angular2/core';
+import {Component, OnInit, AfterViewChecked, ViewChild, ElementRef} from '@angular/core';
 import {BaseComponent} from '../../../../../../../common/base/BaseComponent';
 import {LoadingComponent} from '../../../../../../../common/utils/components/LoadingComponent';
 import {ThError, AppContext} from '../../../../../../../common/utils/AppContext';
 import {ICustomModalComponent, ModalSize} from '../../../../../../../common/utils/modals/utils/ICustomModalComponent';
-import {ModalDialogInstance} from '../../../../../../../common/utils/modals/utils/ModalDialogInstance';
+import {ModalDialogRef} from '../../../../../../../common/utils/modals/utils/ModalDialogRef';
 import {TranslationPipe} from '../../../../../../../common/utils/localization/TranslationPipe';
 import {RoomCategoriesModalService} from './services/RoomCategoriesModalService';
 import {RoomCategoriesModalInput} from './services/utils/RoomCategoriesModalInput';
@@ -29,7 +29,7 @@ export class RoomCategoriesModalComponent extends BaseComponent implements ICust
 	selectedCategoryVMList: RoomCategoryVM[] = [];
 
 	constructor(private _appContext: AppContext,
-		private _modalDialogInstance: ModalDialogInstance<RoomCategoryDO[]>,
+		private _modalDialogRef: ModalDialogRef<RoomCategoryDO[]>,
 		private _roomCategModalInput: RoomCategoriesModalInput,
 		private _roomCategService: RoomCategoriesService) {
 		super();
@@ -65,7 +65,7 @@ export class RoomCategoriesModalComponent extends BaseComponent implements ICust
     }
 
 	public closeDialog() {
-		this._modalDialogInstance.closeForced();
+		this._modalDialogRef.closeForced();
 	}
 
 	public isBlocking(): boolean {
@@ -142,7 +142,7 @@ export class RoomCategoriesModalComponent extends BaseComponent implements ICust
 		if (!this.didSelectCategory()) {
 			return;
 		}
-		this._modalDialogInstance.addResult(_.map(this.selectedCategoryVMList, (roomCategVM: RoomCategoryVM) => {
+		this._modalDialogRef.addResult(_.map(this.selectedCategoryVMList, (roomCategVM: RoomCategoryVM) => {
 			return roomCategVM.roomCategory;
 		}));
 		this.closeDialog();

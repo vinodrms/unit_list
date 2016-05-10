@@ -1,12 +1,12 @@
 <div class="overview-left" [ngClass]="{'col-xs-9 col-md-9': !isEditing, 'col-xs-3 col-md-3': isEditing}">
-	<lazy-loading-table 
+	<lazy-loading-table
 		[isCollapsed]="isEditing" 
 		(onAdd)="addBed()"
 		(onCopy)="copyBed($event)"
 		(onDelete)="deleteBed($event)"
 		(onSelect)="selectBed($event)"
 		(onEdit)="editBed($event)"
-        >
+		>
 	</lazy-loading-table>
 </div>
 <div [ngClass]="{'col-xs-3 overview-right': !isEditing, 'col-xs-9 edit-container': isEditing}">

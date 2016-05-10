@@ -1,82 +1,84 @@
 <loading-component [isLoading]="isLoading"></loading-component>
-<div *ngIf="!isLoading" [ngFormModel]="getDefaultControlGroup()">
-	<div class="row">
-		<div class="col-xs-12 col-md-8">
-			<div class="row">
-				<div class="col-xs-12 col-md-12 form-group">
-					<label>{{ 'Product Name' | translate }}*</label>
-					<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('name')}">
-						<input type="text" class="form-control" ngControl="name">
+<div *ngIf="!isLoading" [ngFormModel]="getDefaultControlGroup()" class="edit-form-container" customScroll>
+	<div class="edit-form">
+		<div class="row">
+			<div class="col-xs-12 col-md-8">
+				<div class="row">
+					<div class="col-xs-12 col-md-12 form-group">
+						<label>{{ 'Product Name' | translate }}*</label>
+						<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('name')}">
+							<input type="text" class="form-control" ngControl="name">
+						</div>
+						<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter a name for the product' | translate }}</small></label>
 					</div>
-					<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter a name for the product' | translate }}</small></label>
 				</div>
-			</div>
-			<div class="row">
-				<div class="col-xs-12 col-md-6 form-group">
-					<label>{{ 'Price Charged' | translate }}*</label>
-					<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('price')}">
-						<span class="input-group-addon">{{ccy.nativeSymbol}}</span>
-						<input type="number" class="form-control" ngControl="price">
+				<div class="row">
+					<div class="col-xs-12 col-md-6 form-group">
+						<label>{{ 'Price Charged' | translate }}*</label>
+						<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('price')}">
+							<span class="input-group-addon">{{ccy.nativeSymbol}}</span>
+							<input type="number" class="form-control" ngControl="price">
+						</div>
+						<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter a valid price that will be charged' | translate }}</small></label>
 					</div>
-					<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter a valid price that will be charged' | translate }}</small></label>
-				</div>
-				<div class="col-xs-12 col-md-6 form-group">
-					<label>{{ 'Internal Cost' | translate }}*</label>
-					<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('internalCost')}">
-						<span class="input-group-addon">{{ccy.nativeSymbol}}</span>
-						<input type="number" class="form-control" ngControl="internalCost">
+					<div class="col-xs-12 col-md-6 form-group">
+						<label>{{ 'Internal Cost' | translate }}*</label>
+						<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('internalCost')}">
+							<span class="input-group-addon">{{ccy.nativeSymbol}}</span>
+							<input type="number" class="form-control" ngControl="internalCost">
+						</div>
+						<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter a valid price' | translate }}</small></label>
 					</div>
-					<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter a valid price' | translate }}</small></label>
 				</div>
-			</div>
-			<hr>
-			<div class="row">
-				<div class="col-xs-12 col-md-6 form-group">
-					<label>{{ 'VAT' | translate }}</label>
-					<br/>
-					<label class="text-muted"><small><i class="fa fa-info-circle"></i> {{ 'The VAT is included in the price.' | translate }}</small></label>
-					<select class="form-control" [ngModel]="addOnProductVatId" (ngModelChange)="didSelectTaxId($event)">
+				<hr>
+				<div class="row">
+					<div class="col-xs-12 col-md-6 form-group">
+						<label>{{ 'VAT' | translate }}</label>
+						<br/>
+						<label class="text-muted"><small><i class="fa fa-info-circle"></i> {{ 'The VAT is included in the price.' | translate }}</small></label>
+						<select class="form-control" [ngModel]="addOnProductVatId" (ngModelChange)="didSelectTaxId($event)">
 					<option [value]="noVatId">{{ 'No VAT' | translate }}</option>
-					<option *ngFor="#vat of vatList" [value]="vat.id">{{vat.name}} - {{vat.value | percentage}}</option>
+					<option *ngFor="let vat of vatList" [value]="vat.id">{{vat.name}} - {{vat.value | percentage}}</option>
 				</select>
-				</div>
-				<div class="col-xs-12 col-md-6 form-group" *ngIf="showCategorySelector()">
-					<label>{{ 'Category' | translate }}</label>
-					<br/>
-					<div class="input-group" [ngClass]="{'form-warning': (!didSelectCategory() && didSubmitForm)}">
-						<label class="text-muted"><small><i class="fa fa-info-circle"></i> {{ 'The category of your add on product.' | translate }}</small></label>
-						<select class="form-control" [ngModel]="addOnProductVM.addOnProduct.categoryId" (ngModelChange)="didChangeCategoryId($event)">
-						<option value="" disabled>{{ 'Select a category' | translate }}</option>
-						<option *ngFor="#addOnProductCategory of addOnProductCategoryList" [value]="addOnProductCategory.id">{{addOnProductCategory.name}}</option>
-					</select>
 					</div>
-					<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Select a category' | translate }}</small></label>
+					<div class="col-xs-12 col-md-6 form-group" *ngIf="showCategorySelector()">
+						<label>{{ 'Category' | translate }}</label>
+						<br/>
+						<div class="input-group" [ngClass]="{'form-warning': (!didSelectCategory() && didSubmitForm)}">
+							<label class="text-muted"><small><i class="fa fa-info-circle"></i> {{ 'The category of your add on product.' | translate }}</small></label>
+							<select class="form-control" [ngModel]="addOnProductVM.addOnProduct.categoryId" (ngModelChange)="didChangeCategoryId($event)">
+						<option value="" disabled>{{ 'Select a category' | translate }}</option>
+						<option *ngFor="let addOnProductCategory of addOnProductCategoryList" [value]="addOnProductCategory.id">{{addOnProductCategory.name}}</option>
+					</select>
+						</div>
+						<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Select a category' | translate }}</small></label>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12 col-md-12 form-group">
+						<label>{{ 'Notes' | translate }}</label>
+						<textarea class="form-control" ngControl="notes"></textarea>
+					</div>
 				</div>
 			</div>
-			<div class="row">
-				<div class="col-xs-12 col-md-12 form-group">
-					<label>{{ 'Notes' | translate }}</label>
-					<textarea class="form-control" ngControl="notes"></textarea>
-				</div>
+			<div class="col-xs-12 col-md-4 form-group">
+				<label>{{ 'Image of the Product' | translate }}</label>
+				<image-upload [imageUrl]="imageUrl" (onImageUpload)="didUploadImage($event)"></image-upload>
 			</div>
 		</div>
-		<div class="col-xs-12 col-md-4">
-			<label>{{ 'Image of the Product' | translate }}</label>
-			<image-upload [imageUrl]="imageUrl" (onImageUpload)="didUploadImage($event)"></image-upload>
-		</div>
-	</div>
-	
-	<div class="row">
-        <div class="col-xs-12 col-md-offset-6 col-md-3">
-            <button type="button" class="btn btn-primary btn-block" *ngIf="!isNewAddOnProduct()" (click)="saveAddOnProduct()">
+
+		<div class="row">
+			<div class="col-xs-12 col-md-offset-6 col-md-3">
+				<button type="button" class="btn btn-primary btn-block" *ngIf="!isNewAddOnProduct()" (click)="saveAddOnProduct()">
 				<i *ngIf="isSavingAddOnProduct" class="fa fa-spinner fa-pulse"></i> {{ 'Save Changes' | translate }}
 			</button>
-			<button type="button" class="btn btn-primary btn-block" *ngIf="isNewAddOnProduct()" (click)="saveAddOnProduct()">
+				<button type="button" class="btn btn-primary btn-block" *ngIf="isNewAddOnProduct()" (click)="saveAddOnProduct()">
 				<i *ngIf="isSavingAddOnProduct" class="fa fa-spinner fa-pulse"></i> {{ 'Add Product' | translate }}
 			</button>
-        </div>
-        <div class="col-xs-12 col-md-3">
-            <button type="button" class="btn btn-danger btn-block" (click)="showViewScreen()">{{ 'Cancel' | translate }}</button>
-        </div>
-    </div>
+			</div>
+			<div class="col-xs-12 col-md-3">
+				<button type="button" class="btn btn-danger btn-block" (click)="showViewScreen()">{{ 'Cancel' | translate }}</button>
+			</div>
+		</div>
+	</div>
 </div>

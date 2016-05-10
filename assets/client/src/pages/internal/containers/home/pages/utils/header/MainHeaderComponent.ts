@@ -1,5 +1,5 @@
-import {Component, OnInit} from 'angular2/core';
-import {RouterLink} from 'angular2/router';
+import {Component, OnInit} from '@angular/core';
+import {RouterLink} from '@angular/router-deprecated';
 import {BaseComponent} from '../../../../../../../common/base/BaseComponent';
 import {AppContext} from '../../../../../../../common/utils/AppContext';
 import {LoginStatusCode} from '../../../../../../../common/utils/responses/LoginStatusCode';

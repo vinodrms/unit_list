@@ -1,11 +1,11 @@
-import {Component, AfterViewInit, ViewChild} from 'angular2/core';
+import {Component, AfterViewInit, ViewChild} from '@angular/core';
 import {BaseComponent} from '../../../../../../../common/base/BaseComponent';
 import {LazyLoadingTableComponent} from '../../../../../../../common/utils/components/lazy-loading/LazyLoadingTableComponent';
 import {LazyLoadTableMeta, TableRowCommand} from '../../../../../../../common/utils/components/lazy-loading/utils/LazyLoadTableMeta';
 import {TranslationPipe} from '../../../../../../../common/utils/localization/TranslationPipe';
 import {AppContext} from '../../../../../../../common/utils/AppContext';
 import {ICustomModalComponent, ModalSize} from '../../../../../../../common/utils/modals/utils/ICustomModalComponent';
-import {ModalDialogInstance} from '../../../../../../../common/utils/modals/utils/ModalDialogInstance';
+import {ModalDialogRef} from '../../../../../../../common/utils/modals/utils/ModalDialogRef';
 import {PriceProductTableMetaBuilderService} from '../main/services/PriceProductTableMetaBuilderService';
 import {TaxService} from '../../../../../services/taxes/TaxService';
 import {RoomCategoriesService} from '../../../../../services/room-categories/RoomCategoriesService';
@@ -30,7 +30,7 @@ export class PriceProductsModalComponent extends BaseComponent implements ICusto
 	private _isPublicAvailability: boolean;
 
 	constructor(private _appContext: AppContext,
-		private _modalDialogInstance: ModalDialogInstance<PriceProductDO[]>,
+		private _modalDialogRef: ModalDialogRef<PriceProductDO[]>,
 		private _tableBuilder: PriceProductTableMetaBuilderService,
 		private _priceProductsService: PriceProductsService,
 		private _modalInput: PriceProductsModalInput) {
@@ -51,7 +51,7 @@ export class PriceProductsModalComponent extends BaseComponent implements ICusto
 	}
 
 	public closeDialog() {
-		this._modalDialogInstance.closeForced();
+		this._modalDialogRef.closeForced();
 	}
 	public isBlocking(): boolean {
 		return false;
@@ -92,7 +92,7 @@ export class PriceProductsModalComponent extends BaseComponent implements ICusto
 		if (!this.didSelectPriceProduct()) {
 			return;
 		}
-		this._modalDialogInstance.addResult(this._selectedPriceProductList);
+		this._modalDialogRef.addResult(this._selectedPriceProductList);
 		this.closeDialog();
 	}
 }

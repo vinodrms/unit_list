@@ -27,3 +27,4 @@
 /// <reference path="mongodb/mongodb.d.ts" />
 /// <reference path="moment-timezone/moment-timezone.d.ts" />
 /// <reference path="bcrypt-nodejs/bcrypt-nodejs.d.ts" />
+/// <reference path="bcrypt/bcrypt.d.ts" />

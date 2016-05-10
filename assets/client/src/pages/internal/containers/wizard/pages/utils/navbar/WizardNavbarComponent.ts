@@ -1,4 +1,4 @@
-import {Component} from 'angular2/core';
+import {Component} from '@angular/core';
 import {BaseComponent} from '../../../../../../../common/base/BaseComponent';
 import {WizardService} from '../../wizard-pages/services/WizardService';
 import {IWizardState, WizardStateMeta} from '../../wizard-pages/services/IWizardState';
