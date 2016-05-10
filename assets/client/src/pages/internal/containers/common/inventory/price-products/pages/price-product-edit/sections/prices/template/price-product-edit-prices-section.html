@@ -39,7 +39,7 @@
 			<div class="col-md-12 col-sm-12 col-xs-12 form-group" *ngFor="let pricePerPersonVM of pricePerPersonContainer.pricePerPersonVMList">
 				<label>{{pricePerPersonVM.roomCategoryStats.roomCategory.displayName}}</label>
 				<a class="btn" 
-					*ngIf="pricePerPersonVM.previousRoomCategoryId" 
+					*ngIf="pricePerPersonVM.previousRoomCategoryId && !readonly" 
 					(click)="pricePerPersonContainer.copyPrices(pricePerPersonVM.previousRoomCategoryId, pricePerPersonVM.roomCategoryStats.roomCategory.id)">
 					<i class="fa unitpal-font">[</i> <small>{{ 'Copy Prices from Previous Room Category' | translate }}</small>
 				</a>
