@@ -6,8 +6,7 @@
 		<h1>{{customerVM.customerNameString}}</h1>
 	</div>
 	<div>
-		<i class="fa fa-male" 
-			[ngClass]="{'fa-male': customerVM.customer.isIndividual(), 'fa-building': customerVM.customer.isCompany(), 'fa-automobile': customerVM.customer.isTravelAgency()}"></i> 
+		<span class="unitpal-font">{{ customerVM.customerTypeFont }}</span> 
 		<small>{{customerVM.customerTypeString}}</small>
 	</div>
 	<div>
