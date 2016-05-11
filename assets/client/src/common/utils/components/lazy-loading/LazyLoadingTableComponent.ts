@@ -4,6 +4,7 @@ import {LoadingComponent} from '../LoadingComponent';
 import {TranslationPipe} from '../../localization/TranslationPipe';
 import {PricePipe} from '../../pipes/PricePipe';
 import {PercentagePipe} from '../../pipes/PercentagePipe';
+import {ThDateIntervalPipe} from '../../pipes/ThDateIntervalPipe';
 import {AppContext} from '../../AppContext';
 import {LazyLoadTableMeta, TableRowCommand, TableColumnValueMeta, TablePropertyType, TableViewOption, TableColumnMeta} from './utils/LazyLoadTableMeta';
 import {ILazyLoadRequestService, LazyLoadData, PageContent} from '../../../../pages/internal/services/common/ILazyLoadRequestService';
@@ -19,7 +20,7 @@ declare var jQuery:any;
 	selector: 'lazy-loading-table',
 	templateUrl: '/client/src/common/utils/components/lazy-loading/template/lazy-loading-table.html',
 	directives: [LoadingComponent, CustomScroll],
-	pipes: [TranslationPipe, PricePipe, PercentagePipe]
+	pipes: [TranslationPipe, PricePipe, PercentagePipe, ThDateIntervalPipe]
 })
 export class LazyLoadingTableComponent<T> {
 	protected _isCollapsed: boolean;
@@ -176,6 +177,9 @@ export class LazyLoadingTableComponent<T> {
 	}
     protected isFontIcon(valueMeta: TableColumnValueMeta): boolean {
 		return valueMeta.propertyType === TablePropertyType.FontIconType;
+	}
+	protected isDateInterval(valueMeta: TableColumnValueMeta): boolean {
+		return valueMeta.propertyType === TablePropertyType.DateIntervalType;
 	}
 	protected noResultsExist(): boolean {
 		return this.totalCount.numOfItems === 0 && this.itemList.length === 0;

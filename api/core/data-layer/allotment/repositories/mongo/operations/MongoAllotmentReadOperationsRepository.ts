@@ -74,6 +74,7 @@ export class MongoAllotmentReadOperationsRepository extends MongoRepository {
 			}
 			mongoQueryBuilder.addExactMatch("roomCategoryId", searchCriteria.roomCategoryId);
 			mongoQueryBuilder.addMultipleSelectOptionList("id", searchCriteria.allotmentIdList);
+			mongoQueryBuilder.addRegex("notes", searchCriteria.notes);
 		}
 		return mongoQueryBuilder.processedQuery;
 	}

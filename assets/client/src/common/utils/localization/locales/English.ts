@@ -385,5 +385,18 @@ export var EnglishTranslations: Object = {
 	"Information Saved Succesfully": "Information Saved Succesfully",
 	"Payments & Policies": "Payments & Policies",
 	"Property Details": "Property Details",
-	"Change": "Change"
+	"Change": "Change",
+	"Allotments": "Allotments",
+	"Skip Allotments": "Skip Allotments",
+	"Are you sure you want to go forward without adding any allotments ?": "Are you sure you want to go forward without adding any allotments ?",
+	"Are you sure you want to skip adding allotments ?": "Are you sure you want to skip adding allotments ?",
+	"[Wizard Step 7] Allotments text": "Allotments represent rooms that can be prereserverd for your customers (e.g. travel agents).",
+	"Release time in days": "Release time in days",
+	"The number of days before the allotment is released": "The number of days before the allotment is released",
+	"Allotment": "Allotment",
+	"Search by notes": "Search by notes",
+	"Period": "Period",
+	"Room Category": "Room Category",
+	"Room": "Room",
+	"No Constraints": "No Constraints"
 };

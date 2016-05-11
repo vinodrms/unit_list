@@ -1,0 +1,28 @@
+<div class="overview-left" [ngClass]="{'col-xs-9': !isEditing, 'col-xs-3': isEditing}">
+	<div class="lazy-loading-table-filter">
+		<ul class="nav nav-tabs">
+			<li [ngClass]="{active : areActiveAllotments()}" *ngIf="!isEditing || areActiveAllotments()">
+				<a (click)="viewActiveAllotments()">{{ 'Active' | translate }}</a>
+			</li>
+			<li [ngClass]="{active : areArchivedAllotments()}" *ngIf="!isEditing || areArchivedAllotments()">
+				<a (click)="viewArchivedAllotments()">{{ 'Archived' | translate }}</a>
+			</li>
+		</ul>
+	</div>
+	<lazy-loading-table
+		[isCollapsed]="isEditing"
+		(onSelect)="selectAllotment($event)"
+		>
+	</lazy-loading-table>
+</div>
+<div [ngClass]="{'col-xs-3 overview-right': !isEditing, 'col-xs-9 edit-container': isEditing}">
+	<allotment-overview 
+		*ngIf="selectedAllotmentVM && !isEditing" 
+		[allotmentVM]="selectedAllotmentVM"
+		
+		>
+	</allotment-overview>
+	
+	<div #overviewBottom>
+	</div>
+</div>

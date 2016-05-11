@@ -1,4 +1,5 @@
 import {ThTranslation} from '../../../../../common/utils/localization/ThTranslation';
+import {ThUtils} from '../../../../../common/utils/ThUtils';
 import {PriceProductDO, PriceProductAvailability} from '../data-objects/PriceProductDO';
 import {PriceProductPriceType} from '../data-objects/price/IPriceProductPrice';
 import {TaxContainerDO} from '../../taxes/data-objects/TaxContainerDO';
@@ -13,6 +14,7 @@ import {CurrencyDO} from '../../common/data-objects/currency/CurrencyDO';
 import {AddOnProductDO} from '../../add-on-products/data-objects/AddOnProductDO';
 
 export class PriceProductVM {
+	private _thUtils: ThUtils;
 	private _priceProduct: PriceProductDO;
 	private _vatTax: TaxDO;
 	private _otherTaxList: TaxDO[];
@@ -22,6 +24,7 @@ export class PriceProductVM {
 	private _addOnProductList: AddOnProductDO[];
 
 	constructor(private _thTranslation: ThTranslation) {
+		this._thUtils = new ThUtils();
 	}
 
 	public initFromTaxes(taxContainer: TaxContainerDO) {
@@ -106,14 +109,11 @@ export class PriceProductVM {
 		}
 	}
 	public get roomCategoriesString(): string {
-		var roomCategoriesString: string = "";
-		_.forEach(this._roomCategoryList, (roomCategory: RoomCategoryDO) => {
-			if (roomCategoriesString.length > 0) {
-				roomCategoriesString += ", ";
-			}
-			roomCategoriesString += roomCategory.displayName;
-		});
-		return roomCategoriesString;
+		return this._thUtils.concatStringsWithComma(
+			_.map(this._roomCategoryList, (roomCategory: RoomCategoryDO) => {
+				return roomCategory.displayName
+			})
+		);
 	}
 	public get cancellationConditionsString(): string {
 		var policyDesc = this._priceProduct.conditions.policy.getDescription();

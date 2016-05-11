@@ -179,6 +179,7 @@ breakfast,
 add-on-products,
 price-products,
 customer-register,
+allotments,
 beds {
     display: block;
     height: 100%;
@@ -210,6 +211,9 @@ price-products{
 
 customer-register{
     background: #fff url(/client/static-assets/images/background_07_customers.png) right bottom no-repeat !important;
+}
+allotments{
+    background: #fff url(/client/static-assets/images/background_08_allotment.png) right bottom no-repeat !important;
 }
 
 .signup-skip {
@@ -1083,4 +1087,11 @@ table.lazy-loading .th-pagination {
 .basic-info-settings-edit-container {
     height: calc(100% - 53px);
     padding: 5px 0 5px 0;       
+}
+
+.allotment-availability-overview {
+    margin-top: 5px;
+    margin-right: 5px;
+    margin-bottom: 5px !important;
+    width: 80%;
 }

@@ -1,4 +1,6 @@
 import {BaseDO} from '../../../../../../common/base/BaseDO';
+import {ThDateUtils} from './ThDateUtils';
+import {ISOWeekDay} from './ISOWeekDay';
 
 export enum ThMonth {
 	January,
@@ -20,15 +22,56 @@ export class ThDateDO extends BaseDO {
         super();
     }
     year: number;
-	month: ThMonth;
+	month: number;
 	day: number;
 
     protected getPrimitivePropertyKeys(): string[] {
         return ["year", "month", "day"];
     }
-	
+
+	public isValid(): boolean {
+		var thDateUtils = new ThDateUtils();
+		var thisMoment = thDateUtils.convertThDateDOToMoment(this);
+		return thisMoment.isValid();
+	}
+
+	public isBefore(otherDate: ThDateDO): boolean {
+		var thDateUtils = new ThDateUtils();
+		var thisMoment = thDateUtils.convertThDateDOToMoment(this);
+		var otherMoment = thDateUtils.convertThDateDOToMoment(otherDate);
+		return thisMoment.isBefore(otherMoment, "day");
+	}
+	public isAfter(otherDate: ThDateDO): boolean {
+		var thDateUtils = new ThDateUtils();
+		var thisMoment = thDateUtils.convertThDateDOToMoment(this);
+		var otherMoment = thDateUtils.convertThDateDOToMoment(otherDate);
+		return thisMoment.isAfter(otherMoment, "day");
+	}
+	public isSame(otherDate: ThDateDO): boolean {
+		var thDateUtils = new ThDateUtils();
+		var thisMoment = thDateUtils.convertThDateDOToMoment(this);
+		var otherMoment = thDateUtils.convertThDateDOToMoment(otherDate);
+		return thisMoment.isSame(otherMoment, "day");
+	}
+	public getISOWeekDay(): ISOWeekDay {
+		var thDateUtils = new ThDateUtils();
+		var thisMoment = thDateUtils.convertThDateDOToMoment(this);
+		return thisMoment.isoWeekday();
+	}
+	public buildPrototype(): ThDateDO {
+		return ThDateDO.buildThDateDO(this.year, this.month, this.day);
+	}
+
+	public static buildThDateDO(year: number, month: number, day: number): ThDateDO {
+		var outDate = new ThDateDO();
+		outDate.year = year;
+		outDate.month = month;
+		outDate.day = day;
+		return outDate;
+	}
+
 	public toString(): string {
-		if(!_.isNumber(this.year) || !_.isNumber(this.month) || !_.isNumber(this.day)) {
+		if (!_.isNumber(this.year) || !_.isNumber(this.month) || !_.isNumber(this.day)) {
 			return "";
 		}
 		return this.getDayString() + "/" + this.getMonthString() + "/" + this.year;
@@ -37,7 +80,7 @@ export class ThDateDO extends BaseDO {
 		return this.day < 10 ? ("0" + this.day) : ("" + this.day);
 	}
 	private getMonthString(): string {
-		var actualMonth = this.month + 1; 
+		var actualMonth = this.month + 1;
 		return actualMonth < 10 ? ("0" + actualMonth) : ("" + actualMonth);
 	}
 }

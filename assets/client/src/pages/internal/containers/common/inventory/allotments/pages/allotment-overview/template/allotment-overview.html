@@ -1,0 +1,46 @@
+<div customScroll class="overview-right-body" *ngIf="allotmentVM">
+	<div>
+		<kbd>{{ 'Selected' | translate }}</kbd>
+	</div>
+	<div>
+		<h1>{{allotmentVM.customer.customerName}}</h1>
+	</div>
+	<div>
+		<span class="unitpal-font">%</span> <small>{{allotmentVM.priceProduct.name}}</small>
+	</div>
+	<div>
+		<span class="unitpal-font">"</span> <small>{{allotmentVM.roomCategory.displayName}}</small>
+	</div>
+	<div>
+		<i class="fa fa-calendar"></i> 
+		<small>{{allotmentVM.allotment.openInterval | thdateinterval}}</small>
+	</div>
+	<div>
+		<small>
+			<table class="table allotment-availability-overview">
+				<tbody>
+					<tr>
+						<td *ngFor="let isoWeekDayVM of isoWeekDayVMList"><b> {{isoWeekDayVM.name | translate | thtrim:2}} </b></td>
+					</tr>
+					<tr>
+						<td *ngFor="let isoWeekDayVM of isoWeekDayVMList">{{allotmentVM.allotment.availability.getAllotmentAvailabilityForDayDO(isoWeekDayVM.iSOWeekDay).availableCount}} </td>
+					</tr>
+				</tbody>
+			</table>	
+		</small>
+	</div>
+	<div>
+		<i class="fa fa-calendar-check-o"></i> <small>{{allotmentVM.constraintsString}}</small>
+	</div>
+	<div>
+		<small>{{allotmentVM.allotment.notes}}</small>
+	</div>
+	<div>
+		<a class="btn btn-lg" (click)="editAllotment()">
+			<i class="fa fa-pencil"></i> {{ 'Edit' | translate }}
+		</a>
+		<a class="btn btn-lg" (click)="archiveAllotment()" *ngIf="allotmentVM.allotment.isActive()">
+			<i class="fa fa-archive"></i> {{ 'Archive' | translate }}
+		</a>
+	</div>
+</div>

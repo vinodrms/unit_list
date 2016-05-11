@@ -66,6 +66,9 @@
 					<span *ngIf="isCapacity(columnMeta.valueMeta)">
 									{{ getItemValue(item, columnMeta.valueMeta).maxAdults }} <span class="unitpal-font">{{columnMeta.valueMeta.fonts.adult}}</span>					{{ getItemValue(item, columnMeta.valueMeta).maxChildren }} <span class="unitpal-font">{{columnMeta.valueMeta.fonts.child}}</span>
 					</span>
+					<span *ngIf="isDateInterval(columnMeta.valueMeta)">
+									{{ getItemValue(item, columnMeta.valueMeta) | thdateinterval }}
+								</span>
 					<span *ngIf="isFontIcon(columnMeta.valueMeta)">
 									<span class="unitpal-font">{{getItemValue(item, columnMeta.valueMeta)}}</span>
 					</span>

@@ -9,6 +9,7 @@ import {WizardBreakfastStateService} from '../breakfast/services/WizardBreakfast
 import {WizardAddOnProductsStateService} from '../add-on-products/services/WizardAddOnProductsStateService';
 import {WizardPriceProductsStateService} from '../price-products/services/WizardPriceProductsStateService';
 import {WizardCustomerRegisterStateService} from '../customer-register/services/WizardCustomerRegisterStateService';
+import {WizardAllotmentsStateService} from '../allotments/services/WizardAllotmentsStateService';
 
 @Injectable()
 export class WizardService implements IWizardState, IWizardController {
@@ -23,8 +24,8 @@ export class WizardService implements IWizardState, IWizardController {
 		basicInfo: WizardBasicInformationStateService, beds: WizardBedsStateService,
         rooms: WizardRoomsStateService, breakfast: WizardBreakfastStateService, 
         addOnProducts: WizardAddOnProductsStateService, priceProducts: WizardPriceProductsStateService,
-		customerRegister: WizardCustomerRegisterStateService) {
-		this._stateList = [basicInfo, beds, rooms, breakfast, addOnProducts, priceProducts, customerRegister];
+		customerRegister: WizardCustomerRegisterStateService, allotments: WizardAllotmentsStateService) {
+		this._stateList = [basicInfo, beds, rooms, breakfast, addOnProducts, priceProducts, customerRegister, allotments];
 		for (var stateIndex = 0; stateIndex < this._stateList.length; stateIndex++) {
 			this._stateList[stateIndex].stateIndex = stateIndex;
 			this._stateList[stateIndex].wasVisited = false;

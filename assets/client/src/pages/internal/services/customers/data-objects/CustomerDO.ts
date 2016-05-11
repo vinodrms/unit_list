@@ -53,4 +53,7 @@ export class CustomerDO extends BaseDO {
 	public isTravelAgency(): boolean {
 		return this.type === CustomerType.TravelAgency;
 	}
+	public get customerName(): string {
+		return this.customerDetails.getName();
+	}
 }

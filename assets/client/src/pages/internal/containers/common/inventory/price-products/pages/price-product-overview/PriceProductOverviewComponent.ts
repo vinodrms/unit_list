@@ -21,7 +21,6 @@ export class PriceProductOverviewComponent extends BaseComponent {
 	@Input()
 	public set priceProductVM(priceProductVM: PriceProductVM) {
 		this._priceProductVM = priceProductVM;
-		this._priceProductVM.priceProduct.isDraft;
 	}
 
 	@Output() onEdit = new EventEmitter();
