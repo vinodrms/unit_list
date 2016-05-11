@@ -27,6 +27,8 @@ import {DefaultPriceProductBuilder} from './builders/DefaultPriceProductBuilder'
 import {PriceProductDO} from '../../core/data-layer/price-products/data-objects/PriceProductDO';
 import {HotelConfigurationsBootstrap} from '../../core/domain-layer/hotel-configurations/HotelConfigurationsBootstrap';
 import {YieldFilterConfigurationDO} from '../../core/data-layer/hotel-configurations/data-objects/yield-filter/YieldFilterConfigurationDO';
+import {DefaultAllotmentBuilder} from './builders/DefaultAllotmentBuilder';
+import {AllotmentDO} from '../../core/data-layer/allotment/data-objects/AllotmentDO';
 
 import _ = require("underscore");
 
@@ -34,7 +36,6 @@ export class DefaultDataBuilder {
     private static FirstUserIndex = 0;
     private _repositoryCleaner: RepositoryCleanerWrapper;
 
-    private _password: string = "TestTest,01";
     private _email: string = "paraschiv.ionut@gmail.com";
     private _hotelDO: HotelDO;
     private _userDO: UserDO;
@@ -44,7 +45,7 @@ export class DefaultDataBuilder {
     private _bedList: BedDO[];
     private _roomList: RoomDO[];
     private _roomCategoryList: RoomCategoryDO[];
-	private _roomCategoryStatsList: RoomCategoryStatsDO[];
+    private _roomCategoryStatsList: RoomCategoryStatsDO[];
     private _roomAttributeList: RoomAttributeDO[];
     private _roomAmenityList: AmenityDO[];
     private _taxes: TaxResponseRepoDO;
@@ -53,7 +54,8 @@ export class DefaultDataBuilder {
     private _customerList: CustomerDO[];
     private _defaultYieldFilters: YieldFilterDO[];
     private _yieldFilters: YieldFilterDO[];
-	private _priceProductList: PriceProductDO[];
+    private _priceProductList: PriceProductDO[];
+    private _allotmentList: AllotmentDO[];
 
     constructor(private _testContext: TestContext) {
         this._repositoryCleaner = new RepositoryCleanerWrapper(this._testContext.appContext.getUnitPalConfig());
@@ -73,7 +75,7 @@ export class DefaultDataBuilder {
     private buildCore(resolve: { (result: boolean): void }, reject: { (err: any): void }) {
         this._repositoryCleaner.cleanRepository()
             .then((result: any) => {
-                var hotelBuilder = new DefaultHotelBuilder(this._testContext.appContext, this._password, this._email);
+                var hotelBuilder = new DefaultHotelBuilder(this._testContext.appContext, this._email);
                 var hotel = hotelBuilder.getHotel();
 
                 return this._testContext.appContext.getRepositoryFactory().getHotelRepository().addHotel(hotel);
@@ -95,15 +97,15 @@ export class DefaultDataBuilder {
             }).then((yieldFilterList: YieldFilterDO[]) => {
                 this._defaultYieldFilters = yieldFilterList;
 
-				var hotelConfigBootstrap = new HotelConfigurationsBootstrap(this._testContext.appContext, this._hotelDO.id);
-				return hotelConfigBootstrap.bootstrap();
-			}).then((bootstrapResult: boolean) => {
-                
+                var hotelConfigBootstrap = new HotelConfigurationsBootstrap(this._testContext.appContext, this._hotelDO.id);
+                return hotelConfigBootstrap.bootstrap();
+            }).then((bootstrapResult: boolean) => {
+
                 var yieldFiltersRepository = this._testContext.appContext.getRepositoryFactory().getYieldFilterConfigurationsRepository();
                 return yieldFiltersRepository.getYieldFilterConfiguration({ hotelId: this._testContext.sessionContext.sessionDO.hotel.id });
             }).then((yieldFilterConfiguration: YieldFilterConfigurationDO) => {
                 this._yieldFilters = yieldFilterConfiguration.value;
-                
+
                 var settingsRepository = this._testContext.appContext.getRepositoryFactory().getSettingsRepository();
                 return settingsRepository.getHotelAmenities();
             }).then((hotelAmenityList: AmenityDO[]) => {
@@ -139,11 +141,6 @@ export class DefaultDataBuilder {
             }).then((addedRoomCategories: RoomCategoryDO[]) => {
                 this._roomCategoryList = addedRoomCategories;
 
-                var customerBuilder = new DefaultCustomerBuilder(this._testContext);
-                return customerBuilder.loadCustomers(customerBuilder);
-            }).then((customerList: CustomerDO[]) => {
-                this._customerList = customerList;
-
                 var settingsRepository = this._testContext.appContext.getRepositoryFactory().getSettingsRepository();
                 return settingsRepository.getRoomAmenities();
             }).then((roomAmenityList: AmenityDO[]) => {
@@ -159,16 +156,26 @@ export class DefaultDataBuilder {
             }).then((roomList: RoomDO[]) => {
                 this._roomList = roomList;
 
-				var roomCategoryIdList: string[] = _.map(this._roomList, (room: RoomDO) => { return room.categoryId });
-				var aggregator = new RoomAggregator(this._testContext.appContext);
-				return aggregator.getRoomCategoryStatsList({ hotelId: this._testContext.sessionContext.sessionDO.hotel.id }, roomCategoryIdList);
-			}).then((roomCategoryStatsList: RoomCategoryStatsDO[]) => {
-				this._roomCategoryStatsList = roomCategoryStatsList;
+                var roomCategoryIdList: string[] = _.map(this._roomList, (room: RoomDO) => { return room.categoryId });
+                var aggregator = new RoomAggregator(this._testContext.appContext);
+                return aggregator.getRoomCategoryStatsList({ hotelId: this._testContext.sessionContext.sessionDO.hotel.id }, roomCategoryIdList);
+            }).then((roomCategoryStatsList: RoomCategoryStatsDO[]) => {
+                this._roomCategoryStatsList = roomCategoryStatsList;
 
-				var priceProductBuilder = new DefaultPriceProductBuilder(this._testContext);
-				return priceProductBuilder.loadPriceProducts(priceProductBuilder, this._roomCategoryStatsList, this._taxes, this._addOnProductList);
-			}).then((priceProductList: PriceProductDO[]) => {
-				this._priceProductList = priceProductList;
+                var priceProductBuilder = new DefaultPriceProductBuilder(this._testContext);
+                return priceProductBuilder.loadPriceProducts(priceProductBuilder, this._roomCategoryStatsList, this._taxes, this._addOnProductList);
+            }).then((priceProductList: PriceProductDO[]) => {
+                this._priceProductList = priceProductList;
+
+                var customerBuilder = new DefaultCustomerBuilder(this._testContext, this._priceProductList);
+                return customerBuilder.loadCustomers(customerBuilder);
+            }).then((customerList: CustomerDO[]) => {
+                this._customerList = customerList;
+
+                var allotmentBuilder = new DefaultAllotmentBuilder(this._testContext);
+                return allotmentBuilder.loadAllotments(allotmentBuilder, this._priceProductList, this._customerList);
+            }).then((allotmentList: AllotmentDO[]) => {
+                this._allotmentList = allotmentList;
 
                 resolve(true);
             }).catch((err: any) => {
@@ -176,9 +183,6 @@ export class DefaultDataBuilder {
             });
     }
 
-    public get password(): string {
-        return this._password;
-    }
     public get email(): string {
         return this._email;
     }
@@ -209,7 +213,7 @@ export class DefaultDataBuilder {
     public get roomCategoryList(): RoomCategoryDO[] {
         return this._roomCategoryList;
     }
-	public get roomCategoryStatsList(): RoomCategoryStatsDO[] {
+    public get roomCategoryStatsList(): RoomCategoryStatsDO[] {
         return this._roomCategoryStatsList;
     }
     public get roomAttributeList(): RoomAttributeDO[] {
@@ -233,7 +237,13 @@ export class DefaultDataBuilder {
     public get customerList(): CustomerDO[] {
         return this._customerList;
     }
-	public get priceProductList(): PriceProductDO[] {
+    public get priceProductList(): PriceProductDO[] {
         return this._priceProductList;
+    }
+    public get allotmentList(): AllotmentDO[] {
+        return this._allotmentList;
+    }
+    public set allotmentList(allotmentList: AllotmentDO[]) {
+        this._allotmentList = allotmentList;
     }
 }

@@ -3,11 +3,13 @@ import {BaseComponent} from '../../../../../../../../common/base/BaseComponent';
 import {TranslationPipe} from '../../../../../../../../common/utils/localization/TranslationPipe';
 import {PercentagePipe} from '../../../../../../../../common/utils/pipes/PercentagePipe';
 import {CustomerVM} from '../../../../../../services/customers/view-models/CustomerVM';
+import {CustomScroll} from '../../../../../../../../common/utils/directives/CustomScroll';
 
 @Component({
 	selector: 'customer-register-overview',
 	templateUrl: '/client/src/pages/internal/containers/common/inventory/customer-register/pages/customer-overview/template/customer-register-overview.html',
-	pipes: [TranslationPipe, PercentagePipe]
+	pipes: [TranslationPipe, PercentagePipe],
+	directives: [CustomScroll]
 })
 
 export class CustomerRegisterOverviewComponent extends BaseComponent {

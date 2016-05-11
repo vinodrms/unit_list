@@ -39,7 +39,7 @@
 					title="{{ columnMeta.displayName | translate }}">
 					{{ columnMeta.displayName | translate }}
 				</th>
-				<th [ngClass]="{'up-col-10p': !isCollapsed, 'up-col-30p': isCollapsed}">
+				<th *ngIf="tableOptions.canCopy||tableOptions.canEdit||tableOptions.canDelete" [ngClass]="{'up-col-10p': !isCollapsed, 'up-col-30p': isCollapsed}">
 				</th>
 			</tr>
 		</thead>
@@ -70,7 +70,7 @@
 									<span class="unitpal-font">{{getItemValue(item, columnMeta.valueMeta)}}</span>
 					</span>
 				</td>
-				<td class="table-item-action-group" [ngClass]="{'up-col-10p': !isCollapsed, 'up-col-30p': isCollapsed}">
+				<td *ngIf="tableOptions.canCopy||tableOptions.canEdit||tableOptions.canDelete" class="table-item-action-group" [ngClass]="{'up-col-10p': !isCollapsed, 'up-col-30p': isCollapsed}">
 					<a class="btn btn-xs" *ngIf="tableOptions.canCopy" (click)="copyItem(item)" title="{{ 'Clone' | translate }}">
 						<i class="fa unitpal-font">[</i>
 					</a>
@@ -85,7 +85,7 @@
 			<tr *ngIf="!noResultsExist()">
 				<td *ngFor="let columnMeta of columnMetaList" [ngClass]="getCellClasses(columnMeta.valueMeta, isCollapsed)">
 				</td>
-				<td class="table-item-action-group" [ngClass]="{'up-col-10p': !isCollapsed, 'up-col-30p': isCollapsed}">
+				<td *ngIf="tableOptions.canCopy||tableOptions.canEdit||tableOptions.canDelete" class="table-item-action-group" [ngClass]="{'up-col-10p': !isCollapsed, 'up-col-30p': isCollapsed}">
 					
 				</td>
 			</tr>

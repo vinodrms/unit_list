@@ -1,4 +1,4 @@
-<div class="overview-right-body th-padding-top" *ngIf="customerVM">
+<div customScroll class="overview-right-body" *ngIf="customerVM">
 	<div>
 		<kbd>{{ 'Selected' | translate }}</kbd>
 	</div>
@@ -6,8 +6,7 @@
 		<h1>{{customerVM.customerNameString}}</h1>
 	</div>
 	<div>
-		<i class="fa fa-male" 
-			[ngClass]="{'fa-male': customerVM.customer.isIndividual(), 'fa-building': customerVM.customer.isCompany(), 'fa-automobile': customerVM.customer.isTravelAgency()}"></i> 
+		<span class="unitpal-font">{{ customerVM.customerTypeFont }}</span> 
 		<small>{{customerVM.customerTypeString}}</small>
 	</div>
 	<div>

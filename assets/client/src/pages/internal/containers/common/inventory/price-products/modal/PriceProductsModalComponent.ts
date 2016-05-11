@@ -49,7 +49,7 @@ export class PriceProductsModalComponent extends BaseComponent implements ICusto
 		lazyLoadTableMeta.autoSelectRows = true;
 		this._aopTableComponent.bootstrap(this._priceProductsService, lazyLoadTableMeta);
 	}
-
+	
 	public closeDialog() {
 		this._modalDialogRef.closeForced();
 	}

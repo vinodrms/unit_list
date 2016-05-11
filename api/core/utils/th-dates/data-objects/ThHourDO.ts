@@ -28,4 +28,11 @@ export class ThHourDO extends BaseDO {
 	private isValidMinute(): boolean {
 		return _.isNumber(this.minute) && ThHourDO.MinMinuteOfHour <= this.minute && this.minute <= ThHourDO.MaxMinuteOfHour;
 	}
+
+	public static buildThHourDO(hour: number, minute: number): ThHourDO {
+		var hourDO = new ThHourDO();
+		hourDO.hour = hour;
+		hourDO.minute = minute;
+		return hourDO;
+	}
 }

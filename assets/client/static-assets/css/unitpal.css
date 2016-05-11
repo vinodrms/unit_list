@@ -172,10 +172,6 @@ header {
     color: #fc8333;
 }
 
-.page-info {
-    padding: 12px;
-}
-
 basic-information,
 beds,
 rooms,
@@ -343,7 +339,7 @@ table .buttons,table button,table .btn {
 
 .overview-right {
     border-left: 1px solid #ccc;
-    padding: 0 0 0 24px;
+    padding: 5px 0 0 24px;
     height: 100%;
 }
 .overview-right h1 {
@@ -688,6 +684,16 @@ lazy-loading-table {
     overflow: auto;
     overflow-x: hidden;
 }
+
+.modal .modal-body.table-selection {
+    min-height: 60vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-body lazy-loading-table {
+    flex-grow: 1;
+} 
 
 .selectable-row {
     cursor: pointer;
@@ -1062,4 +1068,19 @@ table.lazy-loading .th-pagination {
 
 .edit-form-container {
     padding: 10px;
+}
+
+.basic-info-settings-container {
+    height: 100%;
+    padding: 0px;
+    overflow: hidden;
+}
+
+.basic-info-settings-tabbar {
+    margin-top: 10px;            
+}
+
+.basic-info-settings-edit-container {
+    height: calc(100% - 53px);
+    padding: 5px 0 5px 0;       
 }

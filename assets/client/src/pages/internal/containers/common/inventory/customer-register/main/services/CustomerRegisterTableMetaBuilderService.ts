@@ -13,7 +13,7 @@ export class CustomerRegisterTableMetaBuilderService {
 			autoSelectRows: false,
 			columnMetaList: [
 				{
-					displayName: "Customer Name",
+					displayName: "Name",
 					valueMeta: {
 						objectPropertyId: "customerNameString",
 						propertyType: TablePropertyType.StringType,
@@ -23,10 +23,10 @@ export class CustomerRegisterTableMetaBuilderService {
 					}
 				},
 				{
-					displayName: "Customer Type",
+					displayName: "Type",
 					valueMeta: {
-						objectPropertyId: "customerTypeString",
-						propertyType: TablePropertyType.StringType,
+						objectPropertyId: "customerTypeFont",
+						propertyType: TablePropertyType.FontIconType,
 						showInCollapsedView: false,
 						normalStyle: "up-col-10p center"
 					}

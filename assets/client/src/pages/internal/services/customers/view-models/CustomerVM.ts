@@ -4,6 +4,10 @@ import {CustomerDetailsFactory} from '../data-objects/customer-details/CustomerD
 import {CustomerDetailsMeta} from '../data-objects/customer-details/ICustomerDetailsDO';
 
 export class CustomerVM {
+	private static IndividualCustFont = "(";
+	private static CompanyCustFont = ")";
+	private static TravelAgentCustFont = "*";
+
 	private _customer: CustomerDO;
 	private _priceProductList: PriceProductDO[];
 	private _customerTypeString: string;
@@ -36,6 +40,16 @@ export class CustomerVM {
 	}
 	public get customerTypeString(): string {
 		return this._customerTypeString;
+	}
+	public get customerTypeFont(): string {
+		switch (this._customer.type) {
+			case CustomerType.Individual:
+				return CustomerVM.IndividualCustFont;
+			case CustomerType.Company:
+				return CustomerVM.CompanyCustFont;
+			default:
+				return CustomerVM.TravelAgentCustFont;
+		}
 	}
 	public set customerTypeString(customerTypeString: string) {
 		this._customerTypeString = customerTypeString;

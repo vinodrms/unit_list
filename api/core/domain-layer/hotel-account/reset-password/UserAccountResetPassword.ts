@@ -37,7 +37,7 @@ export class UserAccountResetPassword {
 			return;
 		}
 
-		var encryptedPassword = this._authUtils.encrypPassword(this._resetPasswdDO.password);
+		var encryptedPassword = this._authUtils.encryptPassword(this._resetPasswdDO.password);
 		var resetPasswordRepoDO: ResetPasswordRepoDO = {
 			activationCode: this._resetPasswdDO.activationCode,
 			email: this._resetPasswdDO.email,
