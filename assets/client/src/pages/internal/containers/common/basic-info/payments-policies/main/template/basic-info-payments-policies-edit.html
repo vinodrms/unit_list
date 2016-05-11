@@ -41,13 +41,10 @@
 		<div class="col-xs-12 col-md-4">
 			<basic-info-tax-list [ccyCode]="hotel.ccyCode" [taxType]="otherTaxType"></basic-info-tax-list>
 		</div>
-		<div *ngIf="!isLoading" class="col-xs-12 col-md-offset-9 col-md-3" *ngIf="canAutoSave">
+		<div *ngIf="!isLoading && canAutoSave" class="col-xs-12 col-md-offset-9 col-md-3">
 			<button type="button" class="btn btn-primary btn-block" (click)="savePaymentsAndPolicies()">
 			<i *ngIf="isSaving" class="fa fa-spinner fa-pulse"></i> {{ 'Save Changes' | translate }}
 		</button>
 		</div>
 	</div>
-	
-		
-	
 </div>
