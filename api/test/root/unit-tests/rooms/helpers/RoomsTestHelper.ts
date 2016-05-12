@@ -120,25 +120,34 @@ export class RoomsTestHelper {
     }
 
     public validateRoomCategoryStatsList(roomCategoryStatsList: RoomCategoryStatsDO[]) {
-        should.equal(roomCategoryStatsList.length, 3);
+        should.equal(roomCategoryStatsList.length, 4);
         
         var categoryDisplayNameList: any = roomCategoryStatsList.map((roomCategoryStats) => { return roomCategoryStats.roomCategory.displayName });
         should.equal(_.contains(categoryDisplayNameList, 'Single Standard'), true);
         should.equal(_.contains(categoryDisplayNameList, 'Triple Standard'), true);
         should.equal(_.contains(categoryDisplayNameList, 'Double Standard'), true);
-        
+        should.equal(_.contains(categoryDisplayNameList, 'Double Std with Baby Bed'), true);
+
         roomCategoryStatsList.forEach((roomCategoryStats) => {
             if (roomCategoryStats.roomCategory.displayName === 'Single Standard') {
-                should.equal(roomCategoryStats.maxNoAdults, 1);
-                should.equal(roomCategoryStats.maxNoChildren, 1);
+                should.equal(roomCategoryStats.capacity.totalCapacity.maxNoAdults, 1);
+                should.equal(roomCategoryStats.capacity.totalCapacity.maxNoChildren, 1);
+                should.equal(roomCategoryStats.capacity.totalCapacity.maxNoBabies, 0);
             }
             else if (roomCategoryStats.roomCategory.displayName === 'Triple Standard') {
-                should.equal(roomCategoryStats.maxNoAdults, 3);
-                should.equal(roomCategoryStats.maxNoChildren, 4);
+                should.equal(roomCategoryStats.capacity.totalCapacity.maxNoAdults, 3);
+                should.equal(roomCategoryStats.capacity.totalCapacity.maxNoChildren, 2);
+                should.equal(roomCategoryStats.capacity.totalCapacity.maxNoBabies, 0);
             }
             else if (roomCategoryStats.roomCategory.displayName === 'Double Standard') {
-                should.equal(roomCategoryStats.maxNoAdults, 2);
-                should.equal(roomCategoryStats.maxNoChildren, 3);
+                should.equal(roomCategoryStats.capacity.totalCapacity.maxNoAdults, 2);
+                should.equal(roomCategoryStats.capacity.totalCapacity.maxNoChildren, 1);
+                should.equal(roomCategoryStats.capacity.totalCapacity.maxNoBabies, 0);
+            }
+            else if (roomCategoryStats.roomCategory.displayName === 'Double Std with Baby Bed') {
+                should.equal(roomCategoryStats.capacity.totalCapacity.maxNoAdults, 2);
+                should.equal(roomCategoryStats.capacity.totalCapacity.maxNoChildren, 1);
+                should.equal(roomCategoryStats.capacity.totalCapacity.maxNoBabies, 1);
             }
         });
     }

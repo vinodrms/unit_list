@@ -150,15 +150,17 @@ export class DefaultDataBuilder {
                 return settingsRepository.getRoomAttributes();
             }).then((roomAttributeList: RoomAttributeDO[]) => {
                 this._roomAttributeList = roomAttributeList;
-
+                
                 var roomBuilder = new DefaultRoomBuilder(this._testContext);
                 return roomBuilder.loadRooms(roomBuilder, this._bedList, this._roomCategoryList, this._roomAttributeList, this._roomAmenityList);
             }).then((roomList: RoomDO[]) => {
                 this._roomList = roomList;
 
                 var roomCategoryIdList: string[] = _.map(this._roomList, (room: RoomDO) => { return room.categoryId });
+                var distinctRoomCategoryIdList = _.uniq(roomCategoryIdList, function(roomCategoryId) { return roomCategoryId; });
                 var aggregator = new RoomAggregator(this._testContext.appContext);
-                return aggregator.getRoomCategoryStatsList({ hotelId: this._testContext.sessionContext.sessionDO.hotel.id }, roomCategoryIdList);
+                
+                return aggregator.getRoomCategoryStatsList({ hotelId: this._testContext.sessionContext.sessionDO.hotel.id }, distinctRoomCategoryIdList);
             }).then((roomCategoryStatsList: RoomCategoryStatsDO[]) => {
                 this._roomCategoryStatsList = roomCategoryStatsList;
 

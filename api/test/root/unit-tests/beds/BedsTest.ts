@@ -20,7 +20,7 @@ describe("Hotel Beds Tests", function() {
     var bedsHelper: BedsTestHelper;
 	var createdBed: BedDO;
 	
-	var numCreatedBeds = 5;
+	var numCreatedBeds = 6;
 
 	before(function(done: any) {
 		testContext = new TestContext();
@@ -30,7 +30,7 @@ describe("Hotel Beds Tests", function() {
     });
     
 	describe("Hotel Update Beds Flow", function() {
-        it("Should not create invalid bed", function(done) {
+        it("Should not create a bed with an invalid template id", function(done) {
 			var bed = bedsHelper.getBedItemDOWithInvalidTemplateId();
 			var saveBedItem = new SaveBedItem(testContext.appContext, testContext.sessionContext);
 			saveBedItem.save(bed).then((result: BedDO) => {
@@ -40,18 +40,66 @@ describe("Hotel Beds Tests", function() {
 				done();
 			});
         });
+        it("Should not create a baby bed with size and capacity filled in", function(done) {
+			var bed = bedsHelper.getBabyBedItemDOWithInvalidSizeAndCapacity();
+			var saveBedItem = new SaveBedItem(testContext.appContext, testContext.sessionContext);
+            
+			saveBedItem.save(bed).then((result: BedDO) => {
+				done(new Error("did manage to create a baby bed with size and capacity filled in"));
+			}).catch((e: ThError) => {
+				should.notEqual(e.getThStatusCode(), ThStatusCode.Ok);
+				done();
+			});
+        });
+        it("Should not create an adults/children bed with size and capacity not filled in", function(done) {
+			var bed = bedsHelper.getAdultsChildrenBedItemDOWithInvalidSizeAndCapacity();
+			var saveBedItem = new SaveBedItem(testContext.appContext, testContext.sessionContext);
+            
+			saveBedItem.save(bed).then((result: BedDO) => {
+				done(new Error("did manage to create an adults/children bed with size and capacity not filled in"));
+			}).catch((e: ThError) => {
+				should.notEqual(e.getThStatusCode(), ThStatusCode.Ok);
+				done();
+			});
+        });
+        it("Should create a new baby bed", function(done) {
+			var saveBedItemDO = bedsHelper.getValidRollawayBabyBedItemDO();
+            var saveBedItem = new SaveBedItem(testContext.appContext, testContext.sessionContext);
+            
+			saveBedItem.save(saveBedItemDO).then((result: BedDO) => {
+				should.equal(result.hotelId, testContext.sessionContext.sessionDO.hotel.id);
+                should.exist(result.id);
+                should.equal(result.bedTemplateId, saveBedItemDO.bedTemplateId);
+                should.equal(result.name, saveBedItemDO.name);
+                should.equal(result.storageType, saveBedItemDO.storageType);
+                should.not.exist(result.size.lengthCm);
+                should.not.exist(result.size.widthCm);
+                should.not.exist(result.capacity.maxNoAdults);
+                should.not.exist(result.capacity.maxNoChildren);
+                numCreatedBeds++;
+                
+                createdBed = result;
+                
+                done();    
+			}).catch((e: ThError) => {
+				done(e);
+			});
+        });
+        
 		it("Should create a new bed item", function(done) {
             var saveBedItemDO: SaveBedItemDO = bedsHelper.getValidSaveBedItemDO();
             var saveBedItem = new SaveBedItem(testContext.appContext, testContext.sessionContext);
+            
             saveBedItem.save(saveBedItemDO).then((result: BedDO) => {
                 should.equal(result.hotelId, testContext.sessionContext.sessionDO.hotel.id);
                 should.exist(result.id);
                 should.equal(result.bedTemplateId, saveBedItemDO.bedTemplateId);
                 should.equal(result.name, saveBedItemDO.name);
+                should.equal(result.storageType, saveBedItemDO.storageType);
                 should.equal(result.size.widthCm, saveBedItemDO.size.widthCm);
                 should.equal(result.size.lengthCm, saveBedItemDO.size.lengthCm);
-                should.equal(result.maxNoAdults, saveBedItemDO.maxNoAdults);
-                should.equal(result.maxNoChildren, saveBedItemDO.maxNoChildren);
+                should.equal(result.capacity.maxNoAdults, saveBedItemDO.capacity.maxNoAdults);
+                should.equal(result.capacity.maxNoChildren, saveBedItemDO.capacity.maxNoChildren);
                 
                 numCreatedBeds++;
                 
@@ -64,7 +112,7 @@ describe("Hotel Beds Tests", function() {
         });
 		it("Should update the previously created bed", function(done) {
 			var bedToUpdate = bedsHelper.getSaveBedItemDOFrom(createdBed);
-            bedToUpdate.maxNoAdults = 5;
+            bedToUpdate.capacity.maxNoAdults = 5;
             
             var saveBedItem = new SaveBedItem(testContext.appContext, testContext.sessionContext);
             saveBedItem.save(bedToUpdate).then((result: BedDO) => {
@@ -72,10 +120,11 @@ describe("Hotel Beds Tests", function() {
                 should.exist(result.id);
                 should.equal(result.bedTemplateId, bedToUpdate.bedTemplateId);
                 should.equal(result.name, bedToUpdate.name);
+                should.equal(result.storageType, bedToUpdate.storageType);
                 should.equal(result.size.widthCm, bedToUpdate.size.widthCm);
                 should.equal(result.size.lengthCm, bedToUpdate.size.lengthCm);
-                should.equal(result.maxNoAdults, bedToUpdate.maxNoAdults);
-                should.equal(result.maxNoChildren, bedToUpdate.maxNoChildren);
+                should.equal(result.capacity.maxNoAdults, bedToUpdate.capacity.maxNoAdults);
+                should.equal(result.capacity.maxNoChildren, bedToUpdate.capacity.maxNoChildren);
                 
                 createdBed = result;
                 

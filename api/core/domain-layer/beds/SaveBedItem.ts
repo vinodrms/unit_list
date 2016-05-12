@@ -6,7 +6,7 @@ import {AppContext} from '../../utils/AppContext';
 import {SessionContext} from '../../utils/SessionContext';
 import {SaveBedItemDO} from './SaveBedItemDO';
 import {ValidationResultParser} from '../common/ValidationResultParser';
-import {BedDO} from '../../data-layer/common/data-objects/bed/BedDO';
+import {BedDO, BedAccommodationType} from '../../data-layer/common/data-objects/bed/BedDO';
 import {BedTemplateDO} from '../../data-layer/common/data-objects/bed-template/BedTemplateDO';
 import {BedItemActionFactory} from './actions/BedItemActionFactory';
 
@@ -31,10 +31,7 @@ export class SaveBedItem {
         });
     }
     private saveCore(resolve: { (result: BedDO): void }, reject: { (err: ThError): void }) {
-        var validationResult = SaveBedItemDO.getValidationStructure().validateStructure(this._bedItemDO);
-        if (!validationResult.isValid()) {
-            var parser = new ValidationResultParser(validationResult, this._bedItemDO);
-            parser.logAndReject("Error validating data for save bed item", reject);
+        if (!this.submittedStructureIsValid(reject)) {
             return;
         }
 
@@ -60,10 +57,58 @@ export class SaveBedItem {
             });
 
     }
-
+    
     private bedTemplateIdIsValid(bedTemplatesList: BedTemplateDO[]) {
         var foundBedTemplate = _.find(bedTemplatesList, (bedTemplate: BedTemplateDO) => { return bedTemplate.id === this._bedItemDO.bedTemplateId });
         return !this._thUtils.isUndefinedOrNull(foundBedTemplate);
+    }
+    
+    private submittedStructureIsValid(reject: { (err: ThError): void }): boolean {
+        if (!this.sizeAndCapacityAreValid()) {
+            var thError = new ThError(ThStatusCode.SaveBedItemInvalidSizeAndOrCapacity, null);
+            ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Invalid size and/or capacity", this._bedItemDO, thError);
+            reject(thError);
+            return false;
+        }
+
+        var validationResult = SaveBedItemDO.getValidationStructure().validateStructure(this._bedItemDO);
+        if (!validationResult.isValid()) {
+            var parser = new ValidationResultParser(validationResult, this._bedItemDO);
+            parser.logAndReject("Error validating data for save bed item", reject);
+            return false;
+        }
+
+        if (this._bedItemDO.accommodationType === BedAccommodationType.AdultsAndChildren) {
+            validationResult = SaveBedItemDO.getSizeAndCapacityValidationStructure().validateStructure(this._bedItemDO);
+            if (!validationResult.isValid()) {
+                var parser = new ValidationResultParser(validationResult, this._bedItemDO);
+                parser.logAndReject("Error validating data for save bed item", reject);
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    private sizeAndCapacityAreValid(): boolean {
+        if (this._bedItemDO.accommodationType === BedAccommodationType.AdultsAndChildren) {
+            return this.sizeAndCapacityExist();
+        }
+        else if (this._bedItemDO.accommodationType === BedAccommodationType.Babies) {
+            return this.sizeAndCapacityAreNull();
+        }
+    }
+
+    private sizeAndCapacityExist(): boolean {
+        if (this._thUtils.isUndefinedOrNull(this._bedItemDO.size) || this._thUtils.isUndefinedOrNull(this._bedItemDO.capacity)) {
+            return false;
+        }
+        return true;
+    }
+    private sizeAndCapacityAreNull(): boolean {
+        if (!this._thUtils.isUndefinedOrNull(this._bedItemDO.size) || !this._thUtils.isUndefinedOrNull(this._bedItemDO.capacity)) {
+            return false;
+        }
+        return true;
     }
 
     private getBedDO(): BedDO {

@@ -35,6 +35,8 @@ export class DefaultRoomBuilder implements IRoomDataSource {
         roomList.push(this.getSingleRoom(bedList, roomCategoryList, roomAttributeList, roomAmenityList));
         roomList.push(this.getDoubleRoom(bedList, roomCategoryList, roomAttributeList, roomAmenityList));
         roomList.push(this.getTripleRoom(bedList, roomCategoryList, roomAttributeList, roomAmenityList));
+        roomList.push(this.getFirstDoubleRoomWithBabyBed(bedList, roomCategoryList, roomAttributeList, roomAmenityList));
+        roomList.push(this.getSecondDoubleRoomWithBabyBed(bedList, roomCategoryList, roomAttributeList, roomAmenityList));
         
         return roomList;
     }
@@ -105,6 +107,56 @@ export class DefaultRoomBuilder implements IRoomDataSource {
         roomDO.notes = "First floor triple room notes.";
         roomDO.maintenanceStatus = RoomMaintenanceStatus.CheckInReady;
         roomDO.status = RoomStatus.Active;
+        return roomDO;
+    }
+    
+    private getFirstDoubleRoomWithBabyBed(bedList: BedDO[], roomCategoryList: RoomCategoryDO[],
+        roomAttributeList: RoomAttributeDO[], roomAmenityList: AmenityDO[]): RoomDO {
+        var roomDO = new RoomDO();
+        roomDO.name = "102 Double";
+        roomDO.floor = 1;
+        if(!this._thUtils.isUndefinedOrNull(roomCategoryList[6])) {
+            roomDO.categoryId = roomCategoryList[6].id;
+        }
+        roomDO.bedIdList = [];
+        if(!this._thUtils.isUndefinedOrNull(bedList[0])) {
+            roomDO.bedIdList.push(bedList[0].id);
+        }
+        if(!this._thUtils.isUndefinedOrNull(bedList[4])) {
+            roomDO.bedIdList.push(bedList[4].id);
+        }
+        roomDO.amenityIdList = this._testUtils.getIdSampleFrom(roomAmenityList, 3);
+        roomDO.attributeIdList = this._testUtils.getIdSampleFrom(roomAttributeList, 5);
+        roomDO.description = "First floor double room with baby bed description.";
+        roomDO.notes = "First floor double room with baby bed notes.";
+        roomDO.maintenanceStatus = RoomMaintenanceStatus.CheckInReady;
+        roomDO.status = RoomStatus.Active;
+        
+        return roomDO;
+    }
+    
+    private getSecondDoubleRoomWithBabyBed(bedList: BedDO[], roomCategoryList: RoomCategoryDO[],
+        roomAttributeList: RoomAttributeDO[], roomAmenityList: AmenityDO[]): RoomDO {
+        var roomDO = new RoomDO();
+        roomDO.name = "202 Double";
+        roomDO.floor = 2;
+        if(!this._thUtils.isUndefinedOrNull(roomCategoryList[6])) {
+            roomDO.categoryId = roomCategoryList[6].id;
+        }
+        roomDO.bedIdList = [];
+        if(!this._thUtils.isUndefinedOrNull(bedList[0])) {
+            roomDO.bedIdList.push(bedList[0].id);
+        }
+        if(!this._thUtils.isUndefinedOrNull(bedList[4])) {
+            roomDO.bedIdList.push(bedList[4].id);
+        }
+        roomDO.amenityIdList = this._testUtils.getIdSampleFrom(roomAmenityList, 3);
+        roomDO.attributeIdList = this._testUtils.getIdSampleFrom(roomAttributeList, 5);
+        roomDO.description = "Second floor second double room with baby bed description.";
+        roomDO.notes = "Second floor second double room with baby bed notes.";
+        roomDO.maintenanceStatus = RoomMaintenanceStatus.CheckInReady;
+        roomDO.status = RoomStatus.Active;
+        
         return roomDO;
     }
     

@@ -6,10 +6,10 @@ import {AppContext} from '../../../utils/AppContext';
 import {SessionContext} from '../../../utils/SessionContext';
 import {RoomDO} from '../../../data-layer/rooms/data-objects/RoomDO';
 import {RoomCategoryDO} from '../../../data-layer/room-categories/data-objects/RoomCategoryDO';
-import {BedDO} from '../../../data-layer/common/data-objects/bed/BedDO';
+import {BedDO, BedStorageType, BedAccommodationType} from '../../../data-layer/common/data-objects/bed/BedDO';
 import {RoomCategorySearchResultRepoDO} from '../../../data-layer/room-categories/repositories/IRoomCategoryRepository';
 import {RoomCategoryStatsDO} from '../../../data-layer/room-categories/data-objects/RoomCategoryStatsDO';
-import {RoomStatsDO} from '../../../data-layer/rooms/data-objects/RoomStatsDO';
+import {RoomStatsDO, RoomCapacityDO, BedConfigCapacityDO} from '../../../data-layer/rooms/data-objects/RoomStatsDO';
 import {RoomMetaRepoDO, RoomSearchResultRepoDO} from '../../../data-layer/rooms/repositories/IRoomRepository';
 import {BedSearchResultRepoDO} from '../../../data-layer/beds/repositories/IBedRepository';
 
@@ -59,13 +59,13 @@ export class RoomAggregator {
         var roomRepository = this._appContext.getRepositoryFactory().getRoomRepository();
         var roomCategoryRepository = this._appContext.getRepositoryFactory().getRoomCategoryRepository();
         roomCategoryRepository.getRoomCategoryList({ hotelId: roomAggregatorMeta.hotelId }, { categoryIdList: roomCategoryIdList }).then((result: RoomCategorySearchResultRepoDO) => {
-            if(_.isEmpty(result.roomCategoryList) || roomCategoryIdList.length != result.roomCategoryList.length) {
+            if (_.isEmpty(result.roomCategoryList) || roomCategoryIdList.length != result.roomCategoryList.length) {
                 var thError = new ThError(ThStatusCode.RoomAggregatorCategoryStatsListInvalidCatgoryIdListError, null);
                 ThLogger.getInstance().logError(ThLogLevel.Error, "Invalid category id list", { categoryIdList: roomCategoryIdList }, thError);
                 reject(thError);
                 return;
             }
-            
+
             var computeCategoryStatsPromiseList = [];
             result.roomCategoryList.forEach((roomCategory) => {
                 computeCategoryStatsPromiseList.push(this.getRoomCategoryStats(roomCategory));
@@ -81,7 +81,7 @@ export class RoomAggregator {
             reject(thError);
         });
     }
-        
+
     private getRoomCategoryStats(categoryDO: RoomCategoryDO): Promise<RoomCategoryStatsDO> {
         return new Promise<RoomCategoryStatsDO>((resolve: { (result: RoomCategoryStatsDO): void }, reject: { (err: ThError): void }) => {
             this.getRoomCategoryStatsCore(resolve, reject, categoryDO);
@@ -105,13 +105,9 @@ export class RoomAggregator {
         }).then((roomStatsList: RoomStatsDO[]) => {
             var roomCategoryStats = new RoomCategoryStatsDO();
             roomCategoryStats.roomCategory = categoryDO;
-            roomCategoryStats.maxNoAdults = _.max(roomStatsList, (roomStats) => {
-                return roomStats.maxNoAdults;
-            }).maxNoAdults;
-            roomCategoryStats.maxNoChildren = _.max(roomStatsList, (roomStats) => {
-                return roomStats.maxNoChildren;
-            }).maxNoChildren;
+            roomCategoryStats.capacity = roomStatsList[0].capacity;
             roomCategoryStats.noOfRooms = roomStatsList.length;
+            
             resolve(roomCategoryStats);
         }).catch((error: any) => {
             var thError = new ThError(ThStatusCode.RoomAggregatorCategoryStatsError, error);
@@ -132,18 +128,13 @@ export class RoomAggregator {
         var bedRepository = this._appContext.getRepositoryFactory().getBedRepository();
 
         bedRepository.getBedList({ hotelId: roomDO.hotelId }, { bedIdList: roomDO.bedIdList }).then((bedResult: BedSearchResultRepoDO) => {
-            var noOfAdults = bedResult.bedList.reduce((sum, bed) => {
-                return sum + bed.maxNoAdults;
-            }, 0);
-
-            var noOfChildren = bedResult.bedList.reduce((sum, bed) => {
-                return sum + bed.maxNoChildren;
-            }, 0);
 
             var roomStats = new RoomStatsDO();
             roomStats.room = roomDO;
-            roomStats.maxNoAdults = noOfAdults;
-            roomStats.maxNoChildren = noOfChildren;
+            roomStats.capacity = new RoomCapacityDO();
+            roomStats.capacity.rollawayCapacity = this.getBedConfigCapacityByStorageType(bedResult.bedList, BedStorageType.Rollaway);
+            roomStats.capacity.stationaryCapacity = this.getBedConfigCapacityByStorageType(bedResult.bedList, BedStorageType.Stationary);
+            
             resolve(roomStats);
         }).catch((error: any) => {
             var thError = new ThError(ThStatusCode.RoomAggregatorRoomStatsError, error);
@@ -154,13 +145,71 @@ export class RoomAggregator {
         });
     }
 
+    private getBedConfigCapacityByStorageType(bedList: BedDO[], bedStorageType: BedStorageType): BedConfigCapacityDO {
+        var bedConfigCapacity = new BedConfigCapacityDO();
+        var bedListToAggregate: BedDO[] = this.filterBedListByStorageType(bedList, bedStorageType);
+        var noOfAdultsInStationaryBeds = bedListToAggregate.reduce((sum, bed) => {
+            if (bed.accommodationType === BedAccommodationType.AdultsAndChildren) {
+                sum += bed.capacity.maxNoAdults;
+            }
+            return sum;
+        }, 0);
+
+        var noOfChildrenInStationaryBeds = bedListToAggregate.reduce((sum, bed) => {
+            if (bed.accommodationType === BedAccommodationType.AdultsAndChildren) {
+                sum += bed.capacity.maxNoChildren;
+            }
+            return sum;
+        }, 0);
+
+        var noOfBabiesInStationaryBeds = bedListToAggregate.reduce((sum, bed) => {
+            if (bed.accommodationType === BedAccommodationType.Babies) {
+                sum += 1;
+            }
+            return sum;
+        }, 0);
+        
+        bedConfigCapacity.maxNoAdults = noOfAdultsInStationaryBeds;
+        bedConfigCapacity.maxNoChildren = noOfChildrenInStationaryBeds;
+        bedConfigCapacity.maxNoBabies = noOfBabiesInStationaryBeds;
+        
+        return bedConfigCapacity;
+    }
+    
+    private filterBedListByStorageType(bedList: BedDO[], bedStorageType: BedStorageType): BedDO[] {
+        switch (bedStorageType) {
+            case BedStorageType.Rollaway: return this.getRollawayBeds(bedList);
+            case BedStorageType.Stationary: return this.getStationaryBeds(bedList);
+            default: return [];
+        }
+    }
+    
+    private getStationaryBeds(bedList: BedDO[]): BedDO[] {
+        return _.filter(bedList, (bed: BedDO) => {
+            return bed.storageType === BedStorageType.Stationary;
+        });
+    }
+
+    private getRollawayBeds(bedList: BedDO[]): BedDO[] {
+        return _.filter(bedList, (bed: BedDO) => {
+            return bed.storageType === BedStorageType.Rollaway;
+        });
+    }
+    
     private getEmptyCategoryStatsDO(roomCategoryDO: RoomCategoryDO): RoomCategoryStatsDO {
         var roomCategoryStats = new RoomCategoryStatsDO();
+
         roomCategoryStats.roomCategory = roomCategoryDO;
-        roomCategoryStats.maxNoAdults = 0;
-        roomCategoryStats.maxNoChildren = 0;
         roomCategoryStats.noOfRooms = 0;
-        
+
+        roomCategoryStats.capacity = new RoomCapacityDO();
+        var emptyCapacity = new BedConfigCapacityDO();
+        emptyCapacity.maxNoAdults = 0;
+        emptyCapacity.maxNoBabies = 0;
+        emptyCapacity.maxNoChildren = 0;
+        roomCategoryStats.capacity.stationaryCapacity = emptyCapacity;
+        roomCategoryStats.capacity.rollawayCapacity = emptyCapacity;
+
         return roomCategoryStats;
     }
 }

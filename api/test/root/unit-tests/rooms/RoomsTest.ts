@@ -24,7 +24,7 @@ describe("Hotel Rooms Tests", function() {
     var testDataBuilder: DefaultDataBuilder;
     var roomsHelper: RoomsTestHelper;
     var createdRoom: RoomDO;
-    var numCreatedRooms = 3;
+    var numCreatedRooms = 5;
     var usedRoomCategoryIdList: string[];
 
     before(function(done: any) {
@@ -197,7 +197,7 @@ describe("Hotel Rooms Tests", function() {
 
         it("Should get the room category stats for each room category id passed as argument", function(done) {
             var roomAggregator = new RoomAggregator(testContext.appContext);
-
+            
             roomAggregator.getRoomCategoryStatsList({ hotelId: testContext.sessionContext.sessionDO.hotel.id }, usedRoomCategoryIdList).then((roomCategoryStatsList: RoomCategoryStatsDO[]) => {
                 roomsHelper.validateRoomCategoryStatsList(roomCategoryStatsList);
                 done();

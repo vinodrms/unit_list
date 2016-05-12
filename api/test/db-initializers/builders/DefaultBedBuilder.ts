@@ -1,5 +1,5 @@
 import {BedTemplateDO} from '../../../core/data-layer/common/data-objects/bed-template/BedTemplateDO';
-import {BedDO, BedSizeDO, BedStatus} from '../../../core/data-layer/common/data-objects/bed/BedDO';
+import {BedDO, BedSizeDO, BedStatus, BedCapacityDO, BedStorageType, BedAccommodationType} from '../../../core/data-layer/common/data-objects/bed/BedDO';
 import {AuthUtils} from '../../../core/domain-layer/hotel-account/utils/AuthUtils';
 import {ThUtils} from '../../../core/utils/ThUtils';
 import {Locales} from '../../../core/utils/localization/Translation';
@@ -22,23 +22,28 @@ export class DefaultBedBuilder implements IBedDataSource {
     public getBedList(bedTemplateList: BedTemplateDO[]): BedDO[] {
         var bedList = [];
         bedList.push(this.getDoubleBed(bedTemplateList));
-        bedList.push(this.getTwinBed(bedTemplateList))
-        bedList.push(this.getSingleBed(bedTemplateList))
-        bedList.push(this.getKingSizeBed(bedTemplateList))
-        bedList.push(this.getChildBed(bedTemplateList))
+        bedList.push(this.getTwinBed(bedTemplateList));
+        bedList.push(this.getSingleBed(bedTemplateList));
+        bedList.push(this.getKingSizeBed(bedTemplateList));
+        bedList.push(this.getBabyBed(bedTemplateList));
+        bedList.push(this.getRollawaySingleBed(bedTemplateList));
         return bedList;
     }
     
     private getSingleBed(bedTemplateList: BedTemplateDO[]): BedDO {
         var bedDO = new BedDO();
         bedDO.name = "Single Bed";
-        bedDO.maxNoAdults = 1;
-        bedDO.maxNoChildren = 1;
+        var bedCapacity = new BedCapacityDO();
+        bedCapacity.maxNoAdults = 1;
+        bedCapacity.maxNoChildren = 1;
+        bedDO.capacity = bedCapacity;
         var bedSize = new BedSizeDO();
-        bedSize.lengthCm = 100;
-        bedSize.widthCm = 100;
+        bedSize.lengthCm = 200;
+        bedSize.widthCm = 200;
         bedDO.size = bedSize;
-		bedDO.notes = "nice bed";
+        bedDO.storageType = BedStorageType.Stationary;
+        bedDO.accommodationType = BedAccommodationType.AdultsAndChildren;
+		bedDO.notes = "nice single bed";
         if (!this._thUtils.isUndefinedOrNull(bedTemplateList[0])) {
             bedDO.bedTemplateId = bedTemplateList[0].id;
         }
@@ -49,13 +54,17 @@ export class DefaultBedBuilder implements IBedDataSource {
     private getDoubleBed(bedTemplateList: BedTemplateDO[]): BedDO {
         var bedDO = new BedDO();
         bedDO.name = "Double Bed";
-        bedDO.maxNoAdults = 2;
-        bedDO.maxNoChildren = 3;
+        var bedCapacity = new BedCapacityDO();
+        bedCapacity.maxNoAdults = 2;
+        bedCapacity.maxNoChildren = 1;
+        bedDO.capacity = bedCapacity;
         var bedSize = new BedSizeDO();
-        bedSize.lengthCm = 100;
-        bedSize.widthCm = 100;
+        bedSize.lengthCm = 200;
+        bedSize.widthCm = 200;
         bedDO.size = bedSize;
-		bedDO.notes = "nice bed";
+        bedDO.storageType = BedStorageType.Stationary;
+        bedDO.accommodationType = BedAccommodationType.AdultsAndChildren;
+		bedDO.notes = "nice double bed";
         if (!this._thUtils.isUndefinedOrNull(bedTemplateList[1])) {
             bedDO.bedTemplateId = bedTemplateList[1].id;
         }
@@ -66,13 +75,17 @@ export class DefaultBedBuilder implements IBedDataSource {
     private getTwinBed(bedTemplateList: BedTemplateDO[]): BedDO {
         var bedDO = new BedDO();
         bedDO.name = "Twin Bed";
-        bedDO.maxNoAdults = 2;
-        bedDO.maxNoChildren = 2;
+        var bedCapacity = new BedCapacityDO();
+        bedCapacity.maxNoAdults = 2;
+        bedCapacity.maxNoChildren = 1;
+        bedDO.capacity = bedCapacity;
         var bedSize = new BedSizeDO();
-        bedSize.lengthCm = 100;
-        bedSize.widthCm = 120;
+        bedSize.lengthCm = 200;
+        bedSize.widthCm = 200;
         bedDO.size = bedSize;
-		bedDO.notes = "nice bed";
+        bedDO.storageType = BedStorageType.Stationary;
+        bedDO.accommodationType = BedAccommodationType.AdultsAndChildren;
+		bedDO.notes = "nice twin bed";
         if (!this._thUtils.isUndefinedOrNull(bedTemplateList[2])) {
             bedDO.bedTemplateId = bedTemplateList[2].id;
         }
@@ -83,13 +96,17 @@ export class DefaultBedBuilder implements IBedDataSource {
     private getKingSizeBed(bedTemplateList: BedTemplateDO[]): BedDO {
         var bedDO = new BedDO();
         bedDO.name = "King Size Bed";
-        bedDO.maxNoAdults = 3;
-        bedDO.maxNoChildren = 3;
+        var bedCapacity = new BedCapacityDO();
+        bedCapacity.maxNoAdults = 2;
+        bedCapacity.maxNoChildren = 2;
+        bedDO.capacity = bedCapacity;
         var bedSize = new BedSizeDO();
-        bedSize.lengthCm = 100;
-        bedSize.widthCm = 120;
+        bedSize.lengthCm = 200;
+        bedSize.widthCm = 250;
         bedDO.size = bedSize;
-		bedDO.notes = "nice bed";
+        bedDO.storageType = BedStorageType.Stationary;
+        bedDO.accommodationType = BedAccommodationType.AdultsAndChildren;
+		bedDO.notes = "nice king size bed";
         if (!this._thUtils.isUndefinedOrNull(bedTemplateList[3])) {
             bedDO.bedTemplateId = bedTemplateList[3].id;
         }
@@ -97,18 +114,35 @@ export class DefaultBedBuilder implements IBedDataSource {
         return bedDO;
     }
     
-    private getChildBed(bedTemplateList: BedTemplateDO[]): BedDO {
+    private getBabyBed(bedTemplateList: BedTemplateDO[]): BedDO {
         var bedDO = new BedDO();
-        bedDO.name = "Child Bed";
-        bedDO.maxNoAdults = 0;
-        bedDO.maxNoChildren = 1;
-        var bedSize = new BedSizeDO();
-        bedSize.lengthCm = 80;
-        bedSize.widthCm = 80;
-        bedDO.size = bedSize;
-		bedDO.notes = "nice bed";
+        bedDO.name = "Baby Bed";
+        bedDO.storageType = BedStorageType.Rollaway;
+        bedDO.accommodationType = BedAccommodationType.Babies;
+		bedDO.notes = "nice baby bed";
         if (!this._thUtils.isUndefinedOrNull(bedTemplateList[4])) {
             bedDO.bedTemplateId = bedTemplateList[4].id;
+        }
+        bedDO.status = BedStatus.Active;
+        return bedDO;
+    }
+    
+    private getRollawaySingleBed(bedTemplateList: BedTemplateDO[]): BedDO {
+        var bedDO = new BedDO();
+        bedDO.name = "Rollaway Single Bed";
+        var bedCapacity = new BedCapacityDO();
+        bedCapacity.maxNoAdults = 1;
+        bedCapacity.maxNoChildren = 1;
+        bedDO.capacity = bedCapacity;
+        var bedSize = new BedSizeDO();
+        bedSize.lengthCm = 200;
+        bedSize.widthCm = 200;
+        bedDO.size = bedSize;
+        bedDO.accommodationType = BedAccommodationType.AdultsAndChildren;
+        bedDO.storageType = BedStorageType.Rollaway;
+		bedDO.notes = "nice rollaway single bed";
+        if (!this._thUtils.isUndefinedOrNull(bedTemplateList[0])) {
+            bedDO.bedTemplateId = bedTemplateList[0].id;
         }
         bedDO.status = BedStatus.Active;
         return bedDO;

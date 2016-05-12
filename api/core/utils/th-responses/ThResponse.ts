@@ -125,6 +125,7 @@ export enum ThStatusCode {
     BedRepositoryErrorReadingDocumentCount,
     BedItemUpdateStrategyErrorUpdating,
     SaveBedItemError,
+    SaveBedItemInvalidSizeAndOrCapacity,
     SaveBedItemInvalidBedTemplateId,
     DeleteBedItemErrorDeleting,
     DeleteBedItemErrorValidating,
@@ -360,6 +361,7 @@ ThMessage[ThStatusCode.BedRepositoryErrorUpdatingBed] = "Problem updating the be
 ThMessage[ThStatusCode.BedRepositoryErrorReadingDocumentCount] = "Error getting document count.";
 ThMessage[ThStatusCode.BedItemUpdateStrategyErrorUpdating] = "Error updating the bed.";
 ThMessage[ThStatusCode.SaveBedItemError] = "Error saving the bed item.";
+ThMessage[ThStatusCode.SaveBedItemInvalidSizeAndOrCapacity] = "Size and capacity mandatory for Adults/Children and should be null for Babies";
 ThMessage[ThStatusCode.SaveBedItemInvalidBedTemplateId] = "Invalid bed template id.";
 ThMessage[ThStatusCode.DeleteBedItemErrorDeleting] = "Error deleting bed item.";
 ThMessage[ThStatusCode.DeleteBedItemErrorValidating] = "Error validating the existing bed item.";

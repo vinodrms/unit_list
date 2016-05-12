@@ -25,6 +25,7 @@ export class DefaultRoomCategoryBuilder implements IRoomCategoryDataSource {
         roomCategoryList.push(this.getFourthRoomCategory());
         roomCategoryList.push(this.getFifthRoomCategory());
         roomCategoryList.push(this.getSixthRoomCategory());
+        roomCategoryList.push(this.getSeventhRoomCategory());
         return roomCategoryList;
     }
 
@@ -61,6 +62,12 @@ export class DefaultRoomCategoryBuilder implements IRoomCategoryDataSource {
     private getSixthRoomCategory(): RoomCategoryDO {
         var roomCategoryDO = new RoomCategoryDO();
         roomCategoryDO.displayName = "Triple Standard";
+        return roomCategoryDO;
+    }
+    
+    private getSeventhRoomCategory(): RoomCategoryDO {
+        var roomCategoryDO = new RoomCategoryDO();
+        roomCategoryDO.displayName = "Double Std with Baby Bed";
         return roomCategoryDO;
     }
     
