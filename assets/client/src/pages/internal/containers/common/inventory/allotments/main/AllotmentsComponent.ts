@@ -10,16 +10,20 @@ import {EagerPriceProductsService} from '../../../../../services/price-products/
 import {EagerCustomersService} from '../../../../../services/customers/EagerCustomersService';
 import {LazyLoadingTableComponent} from '../../../../../../../common/utils/components/lazy-loading/LazyLoadingTableComponent';
 import {AllotmentVM} from '../../../../../services/allotments/view-models/AllotmentVM';
-import {AllotmentStatus} from '../../../../../services/allotments/data-objects/AllotmentDO';
+import {AllotmentDO, AllotmentStatus} from '../../../../../services/allotments/data-objects/AllotmentDO';
+import {AllotmentAvailabilityDO} from '../../../../../services/allotments/data-objects/availability/AllotmentAvailabilityDO';
+import {AllotmentAvailabilityForDayDO} from '../../../../../services/allotments/data-objects/availability/AllotmentAvailabilityForDayDO';
 import {AllotmentsService} from '../../../../../services/allotments/AllotmentsService';
 import {AllotmentsTableMetaBuilderService} from './services/AllotmentsTableMetaBuilderService';
 import {AllotmentOverviewComponent} from '../pages/allotment-overview/AllotmentOverviewComponent';
+import {AllotmentEditContainerComponent} from '../pages/allotment-edit/container/AllotmentEditContainerComponent';
+import {ISOWeekDayUtils, ISOWeekDay}  from '../../../../../services/common/data-objects/th-dates/ISOWeekDay';
 
 @Component({
 	selector: 'allotments',
 	templateUrl: '/client/src/pages/internal/containers/common/inventory/allotments/main/template/allotments.html',
 	providers: [AllotmentsService, AllotmentsTableMetaBuilderService, EagerCustomersService, EagerPriceProductsService, RoomCategoriesService],
-	directives: [LazyLoadingTableComponent, AllotmentOverviewComponent],
+	directives: [LazyLoadingTableComponent, AllotmentOverviewComponent, AllotmentEditContainerComponent],
 	pipes: [TranslationPipe]
 })
 export class AllotmentsComponent extends BaseComponent implements AfterViewInit {
@@ -74,7 +78,44 @@ export class AllotmentsComponent extends BaseComponent implements AfterViewInit 
             this._inventoryStateManager.screenStateType = newState;
         }).catch((e: any) => { });
     }
+	protected editAllotment(allotmentVM: AllotmentVM) {
+		var newAllotmentVM = allotmentVM.buildPrototype();
+        this._inventoryStateManager.canPerformAction(InventoryScreenAction.Edit, newAllotmentVM).then((newState: InventoryScreenStateType) => {
+            this._aopTableComponent.selectItem(newAllotmentVM);
 
+            this._inventoryStateManager.currentItem = newAllotmentVM;
+            this._inventoryStateManager.screenStateType = newState;
+        }).catch((e: any) => { });
+	}
+	protected addAllotment(allotmentVM: AllotmentVM) {
+		var newAllotmentVM = this.buildNewAllotmentVM();
+        this._inventoryStateManager.canPerformAction(InventoryScreenAction.Add).then((newState: InventoryScreenStateType) => {
+            this._aopTableComponent.deselectItem();
+
+            this._inventoryStateManager.currentItem = newAllotmentVM;
+            this._inventoryStateManager.screenStateType = newState;
+        }).catch((e: any) => { });
+	}
+	private buildNewAllotmentVM(): AllotmentVM {
+        var vm = new AllotmentVM(this._appContext.thTranslation);
+        vm.allotment = new AllotmentDO();
+		vm.allotment.status = AllotmentStatus.Active;
+		vm.allotment.availability = new AllotmentAvailabilityDO();
+		vm.allotment.availability.availabilityForDayList = [];
+		var isoWeekDayList = (new ISOWeekDayUtils()).getISOWeekDayList();
+		_.forEach(isoWeekDayList, (isoWeekDay: ISOWeekDay) => {
+			var availability = new AllotmentAvailabilityForDayDO();
+			availability.isoWeekDay = isoWeekDay;
+			vm.allotment.availability.availabilityForDayList.push(availability);
+		});
+        return vm;
+    }
+
+	protected showViewScreen() {
+        this._aopTableComponent.deselectItem();
+        this._inventoryStateManager.currentItem = null;
+        this._inventoryStateManager.screenStateType = InventoryScreenStateType.View;
+    }
 
 	protected areActiveAllotments(): boolean {
 		return this.allotmentStatus === AllotmentStatus.Active;

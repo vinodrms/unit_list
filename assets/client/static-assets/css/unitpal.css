@@ -1095,3 +1095,6 @@ table.lazy-loading .th-pagination {
     margin-bottom: 5px !important;
     width: 80%;
 }
+.disabled-text {
+    color: #7F8C8D;
+}

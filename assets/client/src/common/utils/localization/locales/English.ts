@@ -398,5 +398,11 @@ export var EnglishTranslations: Object = {
 	"Period": "Period",
 	"Room Category": "Room Category",
 	"Room": "Room",
-	"No Constraints": "No Constraints"
+	"No Constraints": "No Constraints",
+	"No customer selected": "No customer selected",
+	"Select Customer": "Select Customer",
+	"Select a price product": "Select a price product",
+	"The selected customer does not have any attached Price Products.": "The selected customer does not have any attached Price Products.",
+	"Start Date": "Start Date",
+	"End Date": "End Date"
 };

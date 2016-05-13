@@ -1,0 +1,22 @@
+<div class="edit-form-container" customScroll>
+	<div class="edit-form">
+		<div class="row">
+			<allotment-edit-top-section [didSubmit]="didSubmit"></allotment-edit-top-section>
+		</div>
+		<div class="row">
+			<allotment-open-interval-section [didSubmit]="didSubmit"></allotment-open-interval-section>	
+		</div>
+
+
+		<div class="row">
+			<div class="col-xs-12 col-md-offset-6 col-md-3">
+				<button type="button" class="btn btn-primary btn-block" (click)="saveAllotment()" *ngIf="canSaveAllotment()">
+					<i *ngIf="isSavingAllotment" class="fa fa-spinner fa-pulse"></i> {{ 'Save Changes' | translate }}
+				</button>
+			</div>
+			<div class="col-xs-12 col-md-3">
+				<button type="button" class="btn btn-danger btn-block" (click)="showViewScreen()">{{ 'Cancel' | translate }}</button>
+			</div>
+		</div>
+	</div>
+</div>

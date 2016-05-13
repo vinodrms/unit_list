@@ -53,6 +53,9 @@ export class AllotmentVM {
 		}
 		return constraintsString;
 	}
+	public isNewAllotment(): boolean {
+		return !this._allotment.id;
+	}
 
 	public buildPrototype(): AllotmentVM {
 		var copy = new AllotmentVM(this._thTranslation);
