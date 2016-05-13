@@ -404,5 +404,7 @@ export var EnglishTranslations: Object = {
 	"Select a price product": "Select a price product",
 	"The selected customer does not have any attached Price Products.": "The selected customer does not have any attached Price Products.",
 	"Start Date": "Start Date",
-	"End Date": "End Date"
+	"End Date": "End Date",
+	"Room Availability": "Room Availability",
+	"Invalid Number of Rooms": "Invalid Number of Rooms"
 };

@@ -1,0 +1,14 @@
+<div class="col-xs-12 form-group th-list-group">
+	<label>{{ 'Room Availability' | translate }}*</label>
+	<div class="row" *ngIf="allotmentAvailability">
+		<div class="col-xs-12 col-sm-3 form-group" *ngFor="let availabilityForDay of allotmentAvailability.availabilityForDayList">
+			<div class="input-group" [ngClass]="{'form-warning': didSubmit&&!availabilityForDay.isValid()}">
+				<span class="input-group-addon"><small> 
+					{{ getISOWeekDayString(availabilityForDay.isoWeekDay) | translate | thtrim:2 }} 
+				</small> </span>
+				<input type="number" class="form-control" [(ngModel)]="availabilityForDay.availableCount" [readonly]="readonly" />
+			</div>
+			<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Invalid Number of Rooms' | translate }}</small></label>
+		</div>
+	</div>
+</div>

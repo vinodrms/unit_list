@@ -8,7 +8,7 @@ import {ThDateUtils} from '../../../pages/internal/services/common/data-objects/
 	selector: 'th-date-interval-picker',
 	template: `
 		<div class="row">
-			<div class="col-sm-4 col-xs-4">
+			<div class="col-xs-12 col-sm-4">
 				<th-date-picker
 					[readonly]="readonly"
 					[initialThDate]="dateInterval.start"
@@ -18,7 +18,7 @@ import {ThDateUtils} from '../../../pages/internal/services/common/data-objects/
 					>
 				</th-date-picker>
 			</div>
-			<div class="col-sm-4 col-xs-4">
+			<div class="col-xs-12 col-sm-4">
 				<th-date-picker
 					[readonly]="readonly"
 					[initialThDate]="dateInterval.end"

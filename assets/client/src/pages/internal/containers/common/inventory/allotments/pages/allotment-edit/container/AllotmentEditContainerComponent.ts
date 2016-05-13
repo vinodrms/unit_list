@@ -9,17 +9,19 @@ import {CustomerDO} from '../../../../../../../services/customers/data-objects/C
 import {AllotmentEditSectionContainer} from './utils/AllotmentEditSectionContainer';
 import {AllotmentEditTopSectionComponent} from '../sections/top-section/AllotmentEditTopSectionComponent';
 import {AllotmentOpenIntervalSectionComponent} from '../sections/open-interval/AllotmentOpenIntervalSectionComponent';
+import {AllotmentAvailabilitySectionComponent} from '../sections/availability/AllotmentAvailabilitySectionComponent';
 
 @Component({
 	selector: 'allotment-edit-container',
 	templateUrl: '/client/src/pages/internal/containers/common/inventory/allotments/pages/allotment-edit/container/template/allotment-edit-container.html',
-	directives: [CustomScroll, AllotmentEditTopSectionComponent, AllotmentOpenIntervalSectionComponent],
+	directives: [CustomScroll, AllotmentEditTopSectionComponent, AllotmentOpenIntervalSectionComponent, AllotmentAvailabilitySectionComponent],
 	providers: [],
 	pipes: [TranslationPipe]
 })
 export class AllotmentEditContainerComponent extends BaseComponent implements AfterViewInit {
 	@ViewChild(AllotmentEditTopSectionComponent) private _topSectionComponent: AllotmentEditTopSectionComponent;
 	@ViewChild(AllotmentOpenIntervalSectionComponent) private _openIntervalSectionComponent: AllotmentOpenIntervalSectionComponent;
+	@ViewChild(AllotmentAvailabilitySectionComponent) private _availabilitySectionComponent: AllotmentAvailabilitySectionComponent;
 
 	private _allotmentVM: AllotmentVM;
 	public get allotmentVM(): AllotmentVM {
@@ -51,7 +53,8 @@ export class AllotmentEditContainerComponent extends BaseComponent implements Af
 			this._allotmentEditSectionContainer = new AllotmentEditSectionContainer(
 				[
 					this._topSectionComponent,
-					this._openIntervalSectionComponent
+					this._openIntervalSectionComponent,
+					this._availabilitySectionComponent
 				]
 			);
 			this.initializeDependentData();
