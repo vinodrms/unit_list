@@ -31,7 +31,7 @@ export class AllotmentsComponent extends BaseComponent implements AfterViewInit 
 	@ViewChild('overviewBottom', { read: ViewContainerRef }) private _overviewBottomVCRef: ViewContainerRef;
 
 	@ViewChild(LazyLoadingTableComponent)
-	private _aopTableComponent: LazyLoadingTableComponent<AllotmentVM>;
+	private _allTableComponent: LazyLoadingTableComponent<AllotmentVM>;
 
 	private _inventoryStateManager: InventoryStateManager<AllotmentVM>;
 	private _allotmentStatus: AllotmentStatus;
@@ -59,7 +59,7 @@ export class AllotmentsComponent extends BaseComponent implements AfterViewInit 
 	}
 
 	public ngAfterViewInit() {
-		this._aopTableComponent.bootstrap(this._allotmentsService, this._tableBuilder.buildLazyLoadTableMeta());
+		this._allTableComponent.bootstrap(this._allotmentsService, this._tableBuilder.buildLazyLoadTableMeta());
 	}
 
 	protected get isEditing(): boolean {
@@ -72,7 +72,7 @@ export class AllotmentsComponent extends BaseComponent implements AfterViewInit 
 	protected selectAllotment(allotmentVM: AllotmentVM) {
         var newAllotmentVM = allotmentVM.buildPrototype();
         this._inventoryStateManager.canPerformAction(InventoryScreenAction.Select, newAllotmentVM).then((newState: InventoryScreenStateType) => {
-            this._aopTableComponent.selectItem(newAllotmentVM);
+            this._allTableComponent.selectItem(newAllotmentVM);
 
             this._inventoryStateManager.currentItem = newAllotmentVM;
             this._inventoryStateManager.screenStateType = newState;
@@ -81,7 +81,7 @@ export class AllotmentsComponent extends BaseComponent implements AfterViewInit 
 	protected editAllotment(allotmentVM: AllotmentVM) {
 		var newAllotmentVM = allotmentVM.buildPrototype();
         this._inventoryStateManager.canPerformAction(InventoryScreenAction.Edit, newAllotmentVM).then((newState: InventoryScreenStateType) => {
-            this._aopTableComponent.selectItem(newAllotmentVM);
+            this._allTableComponent.selectItem(newAllotmentVM);
 
             this._inventoryStateManager.currentItem = newAllotmentVM;
             this._inventoryStateManager.screenStateType = newState;
@@ -90,12 +90,37 @@ export class AllotmentsComponent extends BaseComponent implements AfterViewInit 
 	protected addAllotment(allotmentVM: AllotmentVM) {
 		var newAllotmentVM = this.buildNewAllotmentVM();
         this._inventoryStateManager.canPerformAction(InventoryScreenAction.Add).then((newState: InventoryScreenStateType) => {
-            this._aopTableComponent.deselectItem();
+            this._allTableComponent.deselectItem();
 
             this._inventoryStateManager.currentItem = newAllotmentVM;
             this._inventoryStateManager.screenStateType = newState;
         }).catch((e: any) => { });
 	}
+	protected archiveAllotment(allotmentVM: AllotmentVM) {
+		var newAllotmentVM = allotmentVM.buildPrototype();
+        this._inventoryStateManager.canPerformAction(InventoryScreenAction.Delete, newAllotmentVM).then((newState: InventoryScreenStateType) => {
+            var positiveLabel = this._appContext.thTranslation.translate("Yes");
+            var negativeLabel = this._appContext.thTranslation.translate("No");
+			var title = this._appContext.thTranslation.translate("Archive Allotment");
+			var content = this._appContext.thTranslation.translate("Are you sure you want to archive the allotment assigned to %customerName% ?", { customerName: allotmentVM.customer.customerName });
+            this._appContext.modalService.confirm(title, content, { positive: positiveLabel, negative: negativeLabel }, () => {
+                if (newState === InventoryScreenStateType.View) {
+                    this._allTableComponent.deselectItem();
+                    this._inventoryStateManager.currentItem = null;
+                }
+                this._inventoryStateManager.screenStateType = newState;
+                this.archiveAllotmentOnServer(newAllotmentVM.allotment);
+            });
+        }).catch((e: any) => { });
+	}
+	private archiveAllotmentOnServer(allotment: AllotmentDO) {
+        this._allotmentsService.archiveAllotmentDO(allotment).subscribe((archivedAllotment: AllotmentDO) => {
+            // TODO: trigger item deletion
+        }, (error: ThError) => {
+            this._appContext.toaster.error(error.message);
+        });
+    }
+
 	private buildNewAllotmentVM(): AllotmentVM {
         var vm = new AllotmentVM(this._appContext.thTranslation);
         vm.allotment = new AllotmentDO();
@@ -112,7 +137,7 @@ export class AllotmentsComponent extends BaseComponent implements AfterViewInit 
     }
 
 	protected showViewScreen() {
-        this._aopTableComponent.deselectItem();
+        this._allTableComponent.deselectItem();
         this._inventoryStateManager.currentItem = null;
         this._inventoryStateManager.screenStateType = InventoryScreenStateType.View;
     }

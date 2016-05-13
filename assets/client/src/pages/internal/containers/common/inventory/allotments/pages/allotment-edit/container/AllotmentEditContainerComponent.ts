@@ -10,11 +10,17 @@ import {AllotmentEditSectionContainer} from './utils/AllotmentEditSectionContain
 import {AllotmentEditTopSectionComponent} from '../sections/top-section/AllotmentEditTopSectionComponent';
 import {AllotmentOpenIntervalSectionComponent} from '../sections/open-interval/AllotmentOpenIntervalSectionComponent';
 import {AllotmentAvailabilitySectionComponent} from '../sections/availability/AllotmentAvailabilitySectionComponent';
+import {AllotmentEditConstraintsSectionComponent} from '../sections/constraints/constraint-list/AllotmentEditConstraintsSectionComponent';
+import {AllotmentNotesSectionComponent} from '../sections/notes/AllotmentNotesSectionComponent';
+import {AllotmentsService} from '../../../../../../../services/allotments/AllotmentsService';
 
 @Component({
 	selector: 'allotment-edit-container',
 	templateUrl: '/client/src/pages/internal/containers/common/inventory/allotments/pages/allotment-edit/container/template/allotment-edit-container.html',
-	directives: [CustomScroll, AllotmentEditTopSectionComponent, AllotmentOpenIntervalSectionComponent, AllotmentAvailabilitySectionComponent],
+	directives: [CustomScroll,
+		AllotmentEditTopSectionComponent, AllotmentOpenIntervalSectionComponent,
+		AllotmentAvailabilitySectionComponent, AllotmentEditConstraintsSectionComponent,
+		AllotmentNotesSectionComponent],
 	providers: [],
 	pipes: [TranslationPipe]
 })
@@ -22,6 +28,8 @@ export class AllotmentEditContainerComponent extends BaseComponent implements Af
 	@ViewChild(AllotmentEditTopSectionComponent) private _topSectionComponent: AllotmentEditTopSectionComponent;
 	@ViewChild(AllotmentOpenIntervalSectionComponent) private _openIntervalSectionComponent: AllotmentOpenIntervalSectionComponent;
 	@ViewChild(AllotmentAvailabilitySectionComponent) private _availabilitySectionComponent: AllotmentAvailabilitySectionComponent;
+	@ViewChild(AllotmentEditConstraintsSectionComponent) private _editConstraintsSectionComponent: AllotmentEditConstraintsSectionComponent;
+	@ViewChild(AllotmentNotesSectionComponent) private _notesSectionComponent: AllotmentNotesSectionComponent;
 
 	private _allotmentVM: AllotmentVM;
 	public get allotmentVM(): AllotmentVM {
@@ -43,8 +51,8 @@ export class AllotmentEditContainerComponent extends BaseComponent implements Af
 	didSubmit = false;
 	private _allotmentEditSectionContainer: AllotmentEditSectionContainer;
 
-	constructor(private _appContext: AppContext
-	) {
+	constructor(private _appContext: AppContext,
+		private _allotmentsService: AllotmentsService) {
 		super();
 	}
 	ngAfterViewInit() {
@@ -54,7 +62,9 @@ export class AllotmentEditContainerComponent extends BaseComponent implements Af
 				[
 					this._topSectionComponent,
 					this._openIntervalSectionComponent,
-					this._availabilitySectionComponent
+					this._availabilitySectionComponent,
+					this._editConstraintsSectionComponent,
+					this._notesSectionComponent
 				]
 			);
 			this.initializeDependentData();
@@ -70,7 +80,9 @@ export class AllotmentEditContainerComponent extends BaseComponent implements Af
 		this._allotmentEditSectionContainer.readonly = this.isReadOnly();
 		this.isLoading = false;
 		this.didSubmit = false;
-		// TODO: set readonly false for notes for status active
+		if (this._allotmentVM.allotment.status === AllotmentStatus.Active) {
+			this._notesSectionComponent.readonly = false;
+		}
 	}
 	private isReadOnly(): boolean {
 		return this._allotmentVM != null && !this._allotmentVM.isNewAllotment();
@@ -88,8 +100,16 @@ export class AllotmentEditContainerComponent extends BaseComponent implements Af
 			return;
 		}
 
-		this.isSavingAllotment = true;
+		this._allotmentEditSectionContainer.updateDataOn(this._allotmentVM);
 
-		this.isSavingAllotment = false;
+		this.isSavingAllotment = true;
+		this._allotmentsService.saveAllotmentDO(this._allotmentVM.allotment)
+			.subscribe((updatedAllotment: AllotmentDO) => {
+				this.isSavingAllotment = false;
+				this.showViewScreen();
+			}, (error: ThError) => {
+				this.isSavingAllotment = false;
+				this._appContext.toaster.error(error.message);
+			});
 	}
 }

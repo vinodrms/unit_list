@@ -16,6 +16,8 @@ import {CustomerDO} from '../customers/data-objects/CustomerDO';
 import {AllotmentVM} from './view-models/AllotmentVM';
 import {AllotmentsDO} from './data-objects/AllotmentsDO';
 import {AllotmentDO, AllotmentStatus} from './data-objects/AllotmentDO';
+import {AllotmentConstraintMeta} from './data-objects/constraint/IAllotmentConstraint';
+import {AllotmentConstraintFactory} from './data-objects/constraint/AllotmentConstraintFactory';
 
 @Injectable()
 export class AllotmentsService extends ALazyLoadRequestService<AllotmentVM> {
@@ -44,12 +46,15 @@ export class AllotmentsService extends ALazyLoadRequestService<AllotmentVM> {
 			var customerList: CustomerDO[] = result[2].customerList;
 
 			var allotmentVMList: AllotmentVM[] = [];
+			var constraintFactory = new AllotmentConstraintFactory();
+			var allotmentConstraintMetaList: AllotmentConstraintMeta[] = constraintFactory.getAllotmentConstraintMetaList();
 			_.forEach(allotments.allotmentList, (allotmentDO: AllotmentDO) => {
 				var allotmentVM = new AllotmentVM(this._appContext.thTranslation);
 				allotmentVM.allotment = allotmentDO;
 				allotmentVM.roomCategory = _.find(roomCategoryList, (category: RoomCategoryDO) => { return category.id === allotmentDO.roomCategoryId });
 				allotmentVM.priceProduct = _.find(priceProductList, (priceProduct: PriceProductDO) => { return priceProduct.id === allotmentDO.priceProductId });
 				allotmentVM.customer = _.find(customerList, (customer: CustomerDO) => { return customer.id === allotmentDO.customerId });
+				allotmentVM.constraintMetaList = allotmentConstraintMetaList;
 
 				allotmentVMList.push(allotmentVM);
 			});
@@ -65,5 +70,21 @@ export class AllotmentsService extends ALazyLoadRequestService<AllotmentVM> {
 		this.defaultSearchCriteria = {
 			status: status
 		}
+	}
+
+	public saveAllotmentDO(allotment: AllotmentDO): Observable<AllotmentDO> {
+		return this.runServerPostActionOnAllotment(ThServerApi.AllotmentsSaveItem, allotment);
+	}
+	public archiveAllotmentDO(allotment: AllotmentDO): Observable<AllotmentDO> {
+		return this.runServerPostActionOnAllotment(ThServerApi.AllotmentsArchiveItem, allotment);
+	}
+	private runServerPostActionOnAllotment(apiAction: ThServerApi, allotment: AllotmentDO): Observable<AllotmentDO> {
+		return this._appContext.thHttp.post(apiAction, { allotment: allotment }).map((allotmentObject: Object) => {
+			this.refreshData();
+
+			var updatedAllotmentDO: AllotmentDO = new AllotmentDO();
+			updatedAllotmentDO.buildFromObject(allotmentObject["allotment"]);
+			return updatedAllotmentDO;
+		});
 	}
 }

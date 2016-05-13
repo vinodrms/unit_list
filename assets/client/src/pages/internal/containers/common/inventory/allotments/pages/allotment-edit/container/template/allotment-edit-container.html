@@ -9,7 +9,13 @@
 		<div class="row">
 			<allotment-availability-section [didSubmit]="didSubmit"></allotment-availability-section>
 		</div>
-
+		<div class="row">
+			<allotment-edit-constraints-section [didSubmit]="didSubmit"></allotment-edit-constraints-section>
+		</div>
+		<div class="row">
+			<allotment-notes-section [didSubmit]="didSubmit"></allotment-notes-section>
+		</div>
+		
 		<div class="row">
 			<div class="col-xs-12 col-md-offset-6 col-md-3">
 				<button type="button" class="btn btn-primary btn-block" (click)="saveAllotment()" *ngIf="canSaveAllotment()">

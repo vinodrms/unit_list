@@ -1,4 +1,5 @@
 import {BaseDO} from '../../../../../../../common/base/BaseDO';
+import {ThDataValidators} from '../../../../../../../common/utils/form-utils/utils/ThDataValidators';
 import {IPriceProductConstraint} from '../IPriceProductConstraint';
 import {ThTranslation} from '../../../../../../../common/utils/localization/ThTranslation';
 
@@ -10,7 +11,7 @@ export class LengthOfStayConstraintDO extends BaseDO implements IPriceProductCon
 	}
 	
 	public isValid() {
-		return _.isNumber(this.minLengthOfStay) && this.minLengthOfStay >= 1;
+		return ThDataValidators.isValidInteger(this.minLengthOfStay) && this.minLengthOfStay >= 1;
 	}
 	public getValueDisplayString(thTranslation: ThTranslation): string {
 		return thTranslation.translate("length of %noDays% days", {noDays: this.minLengthOfStay});		

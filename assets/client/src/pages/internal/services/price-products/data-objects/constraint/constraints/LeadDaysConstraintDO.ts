@@ -1,4 +1,5 @@
 import {BaseDO} from '../../../../../../../common/base/BaseDO';
+import {ThDataValidators} from '../../../../../../../common/utils/form-utils/utils/ThDataValidators';
 import {IPriceProductConstraint} from '../IPriceProductConstraint';
 import {ThTranslation} from '../../../../../../../common/utils/localization/ThTranslation';
 
@@ -8,12 +9,12 @@ export class LeadDaysConstraintDO extends BaseDO implements IPriceProductConstra
 	protected getPrimitivePropertyKeys(): string[] {
 		return ["leadDays"];
 	}
-	
+
 	public isValid() {
-		return _.isNumber(this.leadDays) && this.leadDays >= 0;
+		return ThDataValidators.isValidInteger(this.leadDays) && this.leadDays >= 0;
 	}
-	
+
 	public getValueDisplayString(thTranslation: ThTranslation): string {
-		return thTranslation.translate("%noDays% days", {noDays: this.leadDays});		
+		return thTranslation.translate("%noDays% days", { noDays: this.leadDays });
 	}
 }

@@ -14,6 +14,7 @@
 		(onSelect)="selectAllotment($event)"
 		(onEdit)="editAllotment($event)"
 		(onAdd)="addAllotment()"
+		(onArchive)="archiveAllotment($event)"
 		>
 	</lazy-loading-table>
 </div>
@@ -22,6 +23,7 @@
 		*ngIf="selectedAllotmentVM && !isEditing" 
 		[allotmentVM]="selectedAllotmentVM"
 		(onEdit)="editAllotment($event)"
+		(onArchive)="archiveAllotment($event)"
 		>
 	</allotment-overview>
 	<allotment-edit-container

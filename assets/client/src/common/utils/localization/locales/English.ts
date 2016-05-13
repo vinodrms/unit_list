@@ -406,5 +406,11 @@ export var EnglishTranslations: Object = {
 	"Start Date": "Start Date",
 	"End Date": "End Date",
 	"Room Availability": "Room Availability",
-	"Invalid Number of Rooms": "Invalid Number of Rooms"
+	"Invalid Number of Rooms": "Invalid Number of Rooms",
+	"Constraints for the bookings made through this allotment": "Constraints for the bookings made through this allotment",
+	"Bookings can only be made on specific days from week (e.g. It you select Monday, the allotment will apply only to bookings made from Monday to Tuesday.)": "Bookings can only be made on specific days from week (e.g. It you select Monday, the allotment will apply only to bookings made from Monday to Tuesday.)",
+	"Allotment Constraints": "Allotment Constraints",
+	"Release time in Days": "Release time in Days",
+	"Archive Allotment": "Archive Allotment",
+	"Are you sure you want to archive the allotment assigned to %customerName% ?": "Are you sure you want to archive the allotment assigned to %customerName% ?"
 };
