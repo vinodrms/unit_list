@@ -60,6 +60,10 @@ export class CustomerVM {
 	public get emailString(): string {
 		return this._customer.customerDetails.getEmail();
 	}
+	
+	public isNewCustomer(): boolean {
+		return !this._customer.id;
+	}
 
 	public buildPrototype(): CustomerVM {
 		var copy = new CustomerVM();
