@@ -1,7 +1,7 @@
 <div class="col-xs-12 col-sm-4 form-group th-list-group">
 	<label>{{ 'Customer' | translate }}*</label>
 	<table class="table table-striped form-group">
-		<tbody class="input-group" [ngClass]="{'form-warning': didSubmit&&!selectedCustomerDO}">
+		<tbody class="input-group" [ngClass]="{'form-warning': ((didSubmit&&!selectedCustomerDO&&!noAvailablePriceProductsError) || noAvailablePriceProductsError)}">
 			<tr>
 				<td *ngIf="selectedCustomerDO">{{selectedCustomerDO.customerName}}</td>
 				<td *ngIf="!selectedCustomerDO">{{ 'No customer selected' | translate }}</td>
@@ -13,19 +13,26 @@
 				</td>
 			</tr>
 		</tbody>
-		<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Select a customer' | translate }}</small></label>
+		<label class="form-warning">
+			<small *ngIf="didSubmit && !selectedCustomerDO && !noAvailablePriceProductsError">
+				<i class="fa fa-info-circle"></i> {{ 'Select a customer' | translate }}
+			</small>
+			<small *ngIf="noAvailablePriceProductsError">
+				<i class="fa fa-info-circle"></i> {{ 'The selected customer does not have any attached Price Products. You can perform this action from the Customer Register.' | translate }}
+			</small>
+		</label>
 	</table>
 </div>
 
 <div class="col-xs-12 col-sm-4 form-group">
 	<label>{{ 'Price Product' | translate }}* </label> <i class="fa fa-spinner fa-pulse" *ngIf="isLoadingDependentData"></i>
-	<div class="input-group" [ngClass]="{'form-warning': noAvailablePriceProductsError}">
+	<div class="input-group" [ngClass]="{'form-warning': didSubmit&&!selectedPriceProductId}">
 		<select class="form-control" [ngModel]="selectedPriceProductId" (ngModelChange)="didSelectPriceProductId($event)" [disabled]="readonly">
 			<option value="" disabled>{{ 'Select a price product' | translate }}</option>
 			<option *ngFor="let priceProduct of priceProductList" [value]="priceProduct.id">{{priceProduct.name}}</option>
 		</select>
 	</div>
-	<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'The selected customer does not have any attached Price Products.' | translate }}</small></label>
+	<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Select a price product' | translate }}</small></label>
 </div>
 
 <div class="col-xs-12 col-sm-4 form-group">

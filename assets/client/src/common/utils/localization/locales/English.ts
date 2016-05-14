@@ -402,7 +402,7 @@ export var EnglishTranslations: Object = {
 	"No customer selected": "No customer selected",
 	"Select Customer": "Select Customer",
 	"Select a price product": "Select a price product",
-	"The selected customer does not have any attached Price Products.": "The selected customer does not have any attached Price Products.",
+	"The selected customer does not have any attached Price Products. You can perform this action from the Customer Register.": "The selected customer does not have any attached Price Products. You can perform this action from the Customer Register.",
 	"Start Date": "Start Date",
 	"End Date": "End Date",
 	"Room Availability": "Room Availability",
