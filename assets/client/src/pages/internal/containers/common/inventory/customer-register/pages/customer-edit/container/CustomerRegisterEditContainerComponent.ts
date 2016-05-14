@@ -28,11 +28,14 @@ import {CustomersService} from '../../../../../../../services/customers/Customer
 import {HotelAggregatorService} from '../../../../../../../services/hotel/HotelAggregatorService';
 import {HotelAggregatedInfo} from '../../../../../../../services/hotel/utils/HotelAggregatedInfo';
 import {CustomScroll} from '../../../../../../../../../common/utils/directives/CustomScroll';
+import {EagerAllotmentsService} from '../../../../../../../services/allotments/EagerAllotmentsService';
+import {AllotmentStatus, AllotmentDO} from '../../../../../../../services/allotments/data-objects/AllotmentDO';
+import {AllotmentsDO} from '../../../../../../../services/allotments/data-objects/AllotmentsDO';
 
 @Component({
 	selector: 'customer-register-edit-container',
 	templateUrl: '/client/src/pages/internal/containers/common/inventory/customer-register/pages/customer-edit/container/template/customer-register-edit-container.html',
-	providers: [EagerPriceProductsService, PriceProductsModalService],
+	providers: [EagerPriceProductsService, PriceProductsModalService, EagerAllotmentsService],
 	directives: [CustomScroll, FileAttachmentsComponent, CorporateCustomerDetailsComponent, IndividualCustomerDetailsComponent],
 	pipes: [TranslationPipe]
 })
@@ -71,7 +74,8 @@ export class CustomerRegisterEditContainerComponent extends BaseComponent implem
 		private _eagerPriceProductsService: EagerPriceProductsService,
 		private _priceProductsModalService: PriceProductsModalService,
 		private _customersService: CustomersService,
-		private _hotelAggregatorService: HotelAggregatorService) {
+		private _hotelAggregatorService: HotelAggregatorService,
+		private _eagerAllotmentsService: EagerAllotmentsService) {
 		super();
 		var custDetailsFactory = new CustomerDetailsFactory();
 		this.custDetailsMetaList = custDetailsFactory.getCustomerDetailsMetaList();
@@ -93,15 +97,17 @@ export class CustomerRegisterEditContainerComponent extends BaseComponent implem
 		}
 		this._dependentDataSubscription = Observable.combineLatest(
 			this._eagerPriceProductsService.getPriceProducts(PriceProductStatus.Active, this._customerVM.customer.priceProductDetails.priceProductIdList),
+			this._eagerAllotmentsService.getAllotments(AllotmentStatus.Active, this._customerVM.customer.priceProductDetails.priceProductIdList),
 			this._countriesService.getCountriesDO(),
 			this._hotelAggregatorService.getHotelAggregatedInfo()
-		).subscribe((result: [PriceProductsDO, CountriesDO, HotelAggregatedInfo]) => {
+		).subscribe((result: [PriceProductsDO, AllotmentsDO, CountriesDO, HotelAggregatedInfo]) => {
 			this._customerVM.priceProductList = result[0].priceProductList;
+			this._customerVM.allotmentList = result[1].allotmentList;
 			this.customerDetailsContainer.initializeFrom(this._customerVM.customer);
-			
-			this._individualCustDetailsComponent.countriesDO = result[1];
-			this._corporateCustomerDetailsComponent.countriesDO = result[1];
-			this._corporateCustomerDetailsComponent.currency = result[2].ccy;
+
+			this._individualCustDetailsComponent.countriesDO = result[2];
+			this._corporateCustomerDetailsComponent.countriesDO = result[2];
+			this._corporateCustomerDetailsComponent.currency = result[3].ccy;
 
 			this.isLoading = false;
 			this.didSubmit = false;
@@ -170,9 +176,9 @@ export class CustomerRegisterEditContainerComponent extends BaseComponent implem
 			return;
 		}
 		var customer = this._customerVM.customer;
-		customer.priceProductDetails.priceProductIdList = _.map(this._customerVM.priceProductList, (priceProduct: PriceProductDO) => { return priceProduct.id } );
+		customer.priceProductDetails.priceProductIdList = _.map(this._customerVM.priceProductList, (priceProduct: PriceProductDO) => { return priceProduct.id });
 		this.customerDetailsContainer.updateCustomerDetailsOn(customer);
-		
+
 		this.isSavingCustomer = true;
 		this._customersService.saveCustomerDO(customer).subscribe((updatedCustomer: CustomerDO) => {
 			this.isSavingCustomer = false;

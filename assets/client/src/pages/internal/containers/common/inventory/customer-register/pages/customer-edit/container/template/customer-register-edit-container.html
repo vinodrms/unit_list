@@ -33,7 +33,12 @@
 						<tbody>
 							<tr *ngFor="let priceProduct of customerVM.priceProductList">
 								<td>{{priceProduct.name}}</td>
-								<td>
+								<td *ngIf="customerVM.getNumberOfAllotmentsForPriceProduct(priceProduct)>0">
+									<center [title]="'You have %noAllotments% allotments on this Price Product. If you want to remove it, archive the allotment first.' | translate:{noAllotments: customerVM.getNumberOfAllotmentsForPriceProduct(priceProduct)}">
+										<p>{{customerVM.getNumberOfAllotmentsForPriceProduct(priceProduct)}} <span class="unitpal-font">â</span></p>
+									</center>
+								</td>
+								<td *ngIf="customerVM.getNumberOfAllotmentsForPriceProduct(priceProduct)==0">
 									<a class="btn btn-xs" (click)="removePriceProduct(priceProduct)">
 										<i class="fa unitpal-font">\</i> {{ 'Remove' | translate }}
 									</a>
