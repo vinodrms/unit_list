@@ -1,5 +1,6 @@
 import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import {TranslationPipe} from '../localization/TranslationPipe';
+import {ThDataValidators} from '../form-utils/utils/ThDataValidators';
 
 @Component({
 	selector: 'percentage-input-number',
@@ -51,6 +52,6 @@ export class PercentageInputNumberComponent implements OnInit {
 		return this.didSubmitForm && !this.isValidPercentage() && this.isRequired;
 	}
 	private isValidPercentage(): boolean {
-		return _.isNumber(this.percentage) && this.percentage >= 0 && this.percentage <= 100;
+		return _.isNumber(this.percentage) && this.percentage >= 0 && this.percentage <= 100 && ThDataValidators.isValidInteger(this.percentage);
 	}
 }

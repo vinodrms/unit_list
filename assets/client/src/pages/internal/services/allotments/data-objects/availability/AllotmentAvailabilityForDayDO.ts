@@ -10,6 +10,6 @@ export class AllotmentAvailabilityForDayDO extends BaseDO {
 		return ["isoWeekDay", "availableCount"];
 	}
 	isValid(): boolean {
-		return ThDataValidators.isValidInteger(this.availableCount);
+		return _.isNumber(this.availableCount) && this.availableCount >= 0 && ThDataValidators.isValidInteger(this.availableCount);
 	}
 }
