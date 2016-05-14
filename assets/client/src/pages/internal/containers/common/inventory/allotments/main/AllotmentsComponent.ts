@@ -28,6 +28,7 @@ import {ISOWeekDayUtils, ISOWeekDay}  from '../../../../../services/common/data-
 })
 export class AllotmentsComponent extends BaseComponent implements AfterViewInit {
 	@Output() protected onScreenStateTypeChanged = new EventEmitter();
+	@Output() protected onItemDeleted = new EventEmitter();
 	@ViewChild('overviewBottom', { read: ViewContainerRef }) private _overviewBottomVCRef: ViewContainerRef;
 
 	@ViewChild(LazyLoadingTableComponent)
@@ -53,6 +54,9 @@ export class AllotmentsComponent extends BaseComponent implements AfterViewInit 
 			this.onScreenStateTypeChanged.next(currentState);
 		});
 	}
+	private registerItemDeletion(deletedAll: AllotmentDO) {
+        this.onItemDeleted.next(deletedAll);
+    }
 	private setDefaultAllotmentStatus() {
 		this._allotmentStatus = AllotmentStatus.Active;
 		this._allotmentsService.setStatusFilter(this.allotmentStatus);
@@ -115,7 +119,7 @@ export class AllotmentsComponent extends BaseComponent implements AfterViewInit 
 	}
 	private archiveAllotmentOnServer(allotment: AllotmentDO) {
         this._allotmentsService.archiveAllotmentDO(allotment).subscribe((archivedAllotment: AllotmentDO) => {
-            // TODO: trigger item deletion
+            this.registerItemDeletion(archivedAllotment);
         }, (error: ThError) => {
             this._appContext.toaster.error(error.message);
         });
