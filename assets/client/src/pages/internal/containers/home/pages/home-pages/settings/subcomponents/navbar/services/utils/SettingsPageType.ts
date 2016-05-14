@@ -4,5 +4,6 @@ export enum SettingsPageType {
 	Rooms,
 	AddOnProducts,
 	PriceProducts,
-	CustomerRegister
+	CustomerRegister,
+	Allotments
 }

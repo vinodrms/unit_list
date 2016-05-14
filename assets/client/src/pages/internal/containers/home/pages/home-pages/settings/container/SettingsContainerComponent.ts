@@ -9,6 +9,7 @@ import {SettingsRoomsComponent} from '../subcomponents/rooms/SettingsRoomsCompon
 import {SettingsAddOnProductsComponent} from '../subcomponents/add-on-products/SettingsAddOnProductsComponent';
 import {SettingsPriceProductsComponent} from '../subcomponents/price-products/SettingsPriceProductsComponent';
 import {SettingsCustomerRegisterComponent} from '../subcomponents/customer-register/SettingsCustomerRegisterComponent';
+import {SettingsAllotmentsComponent} from '../subcomponents/allotments/SettingsAllotmentsComponent';
 
 @RouteConfig([
 	{ path: '/basic-info/...', name: 'SettingsBasicInformationComponent', component: SettingsBasicInformationComponent, useAsDefault: true },
@@ -16,9 +17,9 @@ import {SettingsCustomerRegisterComponent} from '../subcomponents/customer-regis
     { path: '/rooms', name: 'SettingsRoomsComponent', component: SettingsRoomsComponent },
 	{ path: '/add-on-products', name: 'SettingsAddOnProductsComponent', component: SettingsAddOnProductsComponent },
 	{ path: '/price-products', name: 'SettingsPriceProductsComponent', component: SettingsPriceProductsComponent },
-	{ path: '/customer-register', name: 'SettingsCustomerRegisterComponent', component: SettingsCustomerRegisterComponent }
+	{ path: '/customer-register', name: 'SettingsCustomerRegisterComponent', component: SettingsCustomerRegisterComponent },
+	{ path: '/allotments', name: 'SettingsAllotmentsComponent', component: SettingsAllotmentsComponent }
 ])
-
 @Component({
 	selector: 'settings-container',
 	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/settings/container/template/settings-container.html',
