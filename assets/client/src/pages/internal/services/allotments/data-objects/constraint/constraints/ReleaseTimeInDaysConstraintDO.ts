@@ -1,5 +1,6 @@
 import {BaseDO} from '../../../../../../../common/base/BaseDO';
 import {ThTranslation} from '../../../../../../../common/utils/localization/ThTranslation';
+import {ThDataValidators} from '../../../../../../../common/utils/form-utils/utils/ThDataValidators';
 import {IAllotmentConstraint} from '../IAllotmentConstraint';
 
 export class ReleaseTimeInDaysConstraintDO extends BaseDO implements IAllotmentConstraint {
@@ -10,7 +11,7 @@ export class ReleaseTimeInDaysConstraintDO extends BaseDO implements IAllotmentC
 	}
 
 	public isValid() {
-		return _.isNumber(this.noOfDays) && this.noOfDays >= 0;
+		return ThDataValidators.isValidInteger(this.noOfDays);
 	}
 
 	public getValueDisplayString(thTranslation: ThTranslation): string {

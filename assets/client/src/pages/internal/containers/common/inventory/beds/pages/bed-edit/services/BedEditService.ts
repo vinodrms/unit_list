@@ -22,8 +22,8 @@ export class BedEditService {
     }
     private initFormControls() {
         this._nameControl = new Control(null, Validators.compose([Validators.required, Validators.maxLength(200)]));
-        this._maxAdultsControl = new Control(null, Validators.compose([Validators.required, ThValidators.numberValidator]));
-        this._maxChildrenControl = new Control(null, Validators.compose([Validators.required, ThValidators.numberValidator]));
+        this._maxAdultsControl = new Control(null, Validators.compose([Validators.required, ThValidators.positiveIntegerValidator]));
+        this._maxChildrenControl = new Control(null, Validators.compose([Validators.required, ThValidators.positiveIntegerValidator]));
         this._widthControl = new Control(null, Validators.compose([Validators.required, ThValidators.numberValidator]));
         this._lengthControl = new Control(null, Validators.compose([Validators.required, ThValidators.numberValidator]));
         this._notesControl = new Control(null, Validators.compose([Validators.maxLength(2000)]));

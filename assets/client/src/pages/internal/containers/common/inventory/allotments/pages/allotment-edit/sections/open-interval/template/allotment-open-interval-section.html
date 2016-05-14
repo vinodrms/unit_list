@@ -1,0 +1,9 @@
+<div class="col-xs-12 form-group">
+	<th-date-interval-picker
+		[readonly]="readonly"
+		[minDate]="minDate"
+		[initialThDateInterval]="dateInterval"
+		(didSelectThDateInterval)="didSelectOpenInterval($event)"
+		>
+	</th-date-interval-picker>
+</div>

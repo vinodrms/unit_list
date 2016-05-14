@@ -29,11 +29,11 @@
 			</table>	
 		</small>
 	</div>
-	<div>
-		<i class="fa fa-calendar-check-o"></i> <small>{{allotmentVM.constraintsString}}</small>
-	</div>
-	<div>
-		<small>{{allotmentVM.allotment.notes}}</small>
+	<div *ngFor="let constraint of allotmentVM.allotment.constraints.constraintList">
+		<i class="fa fa-calendar-check-o"></i> 
+		<small>
+			{{ getConstraintDescription(constraint) }}
+		</small>
 	</div>
 	<div>
 		<a class="btn btn-lg" (click)="editAllotment()">

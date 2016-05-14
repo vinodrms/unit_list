@@ -398,5 +398,20 @@ export var EnglishTranslations: Object = {
 	"Period": "Period",
 	"Room Category": "Room Category",
 	"Room": "Room",
-	"No Constraints": "No Constraints"
+	"No Constraints": "No Constraints",
+	"No customer selected": "No customer selected",
+	"Select Customer": "Select Customer",
+	"Select a price product": "Select a price product",
+	"The selected customer does not have any attached Price Products. You can perform this action from the Customer Register.": "The selected customer does not have any attached Price Products. You can perform this action from the Customer Register.",
+	"Start Date": "Start Date",
+	"End Date": "End Date",
+	"Room Availability": "Room Availability",
+	"Invalid Number of Rooms": "Invalid Number of Rooms",
+	"Constraints for the bookings made through this allotment": "Constraints for the bookings made through this allotment",
+	"Bookings can only be made on specific days from week (e.g. It you select Monday, the allotment will apply only to bookings made from Monday to Tuesday.)": "Bookings can only be made on specific days from week (e.g. It you select Monday, the allotment will apply only to bookings made from Monday to Tuesday.)",
+	"Allotment Constraints": "Allotment Constraints",
+	"Release time in Days": "Release time in Days",
+	"Archive Allotment": "Archive Allotment",
+	"Are you sure you want to archive the allotment assigned to %customerName% ?": "Are you sure you want to archive the allotment assigned to %customerName% ?",
+	"You have %noAllotments% allotments on this Price Product. If you want to remove it, archive the allotment first.": "You have %noAllotments% allotments on this Price Product. If you want to remove it, archive the allotment first."
 };

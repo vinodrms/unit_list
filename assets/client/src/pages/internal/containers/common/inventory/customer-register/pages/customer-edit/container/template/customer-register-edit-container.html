@@ -5,9 +5,9 @@
 			<div class="col-md-4 col-xs-6 form-group">
 				<label>{{ 'Type of customer' | translate }}</label>
 				<div class="input-group">
-					<select class="form-control" [ngModel]="customerVM.customer.type" (ngModelChange)="didChangeCustomerType($event)">
-					<option *ngFor="let custDetailsMeta of custDetailsMetaList" [value]="custDetailsMeta.customerType">{{custDetailsMeta.customerTypeName | translate}}</option>
-				</select>
+					<select class="form-control" [ngModel]="customerVM.customer.type" (ngModelChange)="didChangeCustomerType($event)" [disabled]="!customerVM.isNewCustomer()">
+						<option *ngFor="let custDetailsMeta of custDetailsMetaList" [value]="custDetailsMeta.customerType">{{custDetailsMeta.customerTypeName | translate}}</option>
+					</select>
 				</div>
 			</div>
 			<div class="col-md-4 col-xs-6 form-group">
@@ -33,7 +33,12 @@
 						<tbody>
 							<tr *ngFor="let priceProduct of customerVM.priceProductList">
 								<td>{{priceProduct.name}}</td>
-								<td>
+								<td *ngIf="customerVM.getNumberOfAllotmentsForPriceProduct(priceProduct)>0">
+									<center [title]="'You have %noAllotments% allotments on this Price Product. If you want to remove it, archive the allotment first.' | translate:{noAllotments: customerVM.getNumberOfAllotmentsForPriceProduct(priceProduct)}">
+										<p>{{customerVM.getNumberOfAllotmentsForPriceProduct(priceProduct)}} <span class="unitpal-font">â</span></p>
+									</center>
+								</td>
+								<td *ngIf="customerVM.getNumberOfAllotmentsForPriceProduct(priceProduct)==0">
 									<a class="btn btn-xs" (click)="removePriceProduct(priceProduct)">
 										<i class="fa unitpal-font">\</i> {{ 'Remove' | translate }}
 									</a>

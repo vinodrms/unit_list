@@ -24,4 +24,14 @@ export class AllotmentAvailabilityDO extends BaseDO {
 			return availabilityForDay.isoWeekDay === isoWeekDay;
 		});
 	}
+	
+	isValid(): boolean {
+		var isValid = true;
+		_.forEach(this.availabilityForDayList, (availabilityForDay: AllotmentAvailabilityForDayDO) => {
+			if(!availabilityForDay.isValid()) {
+				isValid = false;
+			}
+		});
+		return isValid;
+	}
 }

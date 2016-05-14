@@ -12,6 +12,9 @@
 	<lazy-loading-table
 		[isCollapsed]="isEditing"
 		(onSelect)="selectAllotment($event)"
+		(onEdit)="editAllotment($event)"
+		(onAdd)="addAllotment()"
+		(onArchive)="archiveAllotment($event)"
 		>
 	</lazy-loading-table>
 </div>
@@ -19,9 +22,15 @@
 	<allotment-overview 
 		*ngIf="selectedAllotmentVM && !isEditing" 
 		[allotmentVM]="selectedAllotmentVM"
-		
+		(onEdit)="editAllotment($event)"
+		(onArchive)="archiveAllotment($event)"
 		>
 	</allotment-overview>
+	<allotment-edit-container
+		*ngIf="selectedAllotmentVM && isEditing" 
+		[allotmentVM]="selectedAllotmentVM"
+		(onExit)="showViewScreen()">
+	</allotment-edit-container>
 	
 	<div #overviewBottom>
 	</div>

@@ -19,7 +19,8 @@ export class AllotmentsTableMetaBuilderService {
 						objectPropertyId: "customer.customerName",
 						propertyType: TablePropertyType.StringType,
 						showInCollapsedView: true,
-						normalStyle: "up-col-20p left"
+						normalStyle: "up-col-20p left",
+						collapsedStyle: "up-col-70p left"
 					}
 				},
 				{

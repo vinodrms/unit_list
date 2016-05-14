@@ -1,0 +1,58 @@
+<div class="modal-header text-center">
+	<button type="button" class="close" (click)="closeDialog()">&times;</button>
+	<h4 class="modal-title">{{ 'Allotment Constraints' | translate }}</h4>
+</div>
+<div class="modal-body">
+	<div class="row">
+		<div class="col-md-4 col-sm-4 col-xs-4 form-group">
+			<label>{{ 'Type of Constraint' | translate }}</label>
+		</div>
+		<div class="col-md-8 col-sm-8 col-xs-8">
+			<div class="form-group">
+				<select class="form-control" [ngModel]="constraintDO.type" (ngModelChange)="didChangeConstraintType($event)">
+					<option *ngFor="let constraintMeta of constraintMetaList" [value]="constraintMeta.constraintType">
+						{{constraintMeta.title | translate}}
+					</option>
+				</select>
+			</div>
+		</div>
+		<div class="col-md-12 col-sm-12 col-xs-12">
+			<small class="text-muted">
+				<i class="fa fa-info-circle"></i> {{ description | translate }} 
+			</small>
+		</div>
+	</div>
+	<hr/>
+	<div class="row" *ngIf="isDaysFromWeekConstraint()">
+		<div class="col-md-12">
+			<div class="btn-group btn-group-lg" role="group">
+				<div class="button-check th-grid-btn" *ngFor="let isoWeekDayVM of isoWeekDayVMList">
+					<div class="info-block block-info clearfix" title="{{ isoWeekDayVM.name | translate }}">
+						<div data-toggle="buttons">
+							<label class="btn btn-default th-btn-weekday" [ngClass]="{active: constraintDO.constraint.includesDay(isoWeekDayVM.iSOWeekDay)}"
+							(click)="constraintDO.constraint.addOrRemove(isoWeekDayVM.iSOWeekDay)">
+								{{ isoWeekDayVM.name | translate }}
+							</label>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row" *ngIf="isReleaseTimeInDaysConstraint()">
+		<div class="col-md-4 col-sm-4 col-xs-4 form-group">
+			<label>{{ 'Release time in Days' | translate }}</label>
+		</div>
+		<div class="col-md-8 col-sm-8 col-xs-8 form-group">
+			<div class="input-group">
+				<input type="number" placeholder="{{ 'Enter a valid number of days' | translate }}" class="form-control input-group-lg" [(ngModel)]="constraintDO.constraint.noOfDays"
+				/>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal-footer">
+	<button type="button" class="btn btn-primary" (click)="addConstraint()" [disabled]="!constraintDO.isValid()">
+		{{ 'Add' | translate }}
+	</button>
+</div>

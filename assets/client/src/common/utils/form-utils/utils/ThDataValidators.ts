@@ -5,4 +5,7 @@ export class ThDataValidators {
 		}
 		return value >= 0;
 	}
+	public static isValidInteger(n: number): boolean {
+		return Number(n) === n && n % 1 === 0;
+	}
 }

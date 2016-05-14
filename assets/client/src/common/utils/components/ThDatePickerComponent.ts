@@ -2,6 +2,7 @@ import {Component, Input, Output, EventEmitter, ElementRef, AfterViewInit, Injec
 import {TranslationPipe} from '../localization/TranslationPipe';
 import {ThDateDO} from '../../../pages/internal/services/common/data-objects/th-dates/ThDateDO';
 import {ThDatePipe} from '../pipes/ThDatePipe';
+import {ThDateUtils} from '../../../pages/internal/services/common/data-objects/th-dates/ThDateUtils';
 
 @Component({
     selector: 'th-date-picker',
@@ -10,7 +11,7 @@ import {ThDatePipe} from '../pipes/ThDatePipe';
 			<label>{{ label | translate }}</label>
 			<div class="input-group">
 				<span class="input-group-addon"><small></small> <i class="fa fa-calendar-o"></i></span>
-				<span class="form-control" style="padding-top: 0px;">{{ selectedThDate | thdate }}</span>
+				<span class="form-control" [ngClass]="{'disabled-text': readonly}">{{ selectedThDate | thdate }}</span>
 			</div>
 		</div>
 	`,
@@ -28,6 +29,27 @@ export class ThDatePickerComponent implements AfterViewInit {
 	public set initialThDate(initialThDate: ThDateDO) {
 		this._initialThDate = initialThDate;
 		this.selectedThDate = initialThDate;
+		this.initializeDatePicker();
+	}
+
+	private _minThDate: ThDateDO;
+	public get minThDate(): ThDateDO {
+		return this._minThDate;
+	}
+	@Input()
+	public set minThDate(minThDate: ThDateDO) {
+		this._minThDate = minThDate;
+		this.initializeDatePicker();
+	}
+	private _readonly: boolean;
+	public get readonly(): boolean {
+		return this._readonly;
+	}
+	@Input()
+	public set readonly(readonly: boolean) {
+		this._readonly = readonly;
+		this.destroyIfNecessary();
+		this.recreateIfNecessary();
 	}
 
 	@Output() didSelectThDate = new EventEmitter();
@@ -36,26 +58,44 @@ export class ThDatePickerComponent implements AfterViewInit {
 	}
 
 	selectedThDate: ThDateDO;
+	private didInitView: boolean = false;
+	private _thDateUtils = new ThDateUtils();
+	private _didInitDateRangePickerElement: boolean = false;
 
 	constructor( @Inject(ElementRef) private _elementRef: ElementRef) {
 	}
 
 	ngAfterViewInit() {
+		this.didInitView = true;
 		this.initializeDatePicker();
 	}
 	private initializeDatePicker() {
-		var options: Object = { singleDatePicker: true, showDropdowns: true };
+		if (!this.didInitView || this._readonly) {
+			return;
+		}
+		var options: Object = {
+			singleDatePicker: true,
+			showDropdowns: true
+		};
+		if (this.validThDate(this._minThDate)) {
+			options["minDate"] = this._thDateUtils.convertThDateDOToMoment(this._minThDate);
+		}
 		if (this.initialThDate && this.initialThDate.year) {
 			var initialMoment = moment([this.initialThDate.year, this.initialThDate.month, this.initialThDate.day]);
 			if (initialMoment.isValid()) {
 				options["startDate"] = initialMoment;
 			}
 		}
-		var jQueryElement: any = $(this._elementRef.nativeElement).find(".input-group");
+		var jQueryElement: any = this.getJQueryElement();
 		jQueryElement.daterangepicker(options, (start: moment.Moment, end: moment.Moment, label) => {
 			this.didSelectMoment(start);
 		});
+		this._didInitDateRangePickerElement = true;
 	}
+	private getJQueryElement(): any {
+		return $(this._elementRef.nativeElement).find(".input-group");
+	}
+
 	private didSelectMoment(dateMoment: moment.Moment) {
 		var newThDate = new ThDateDO();
 		newThDate.day = dateMoment.date();
@@ -63,5 +103,21 @@ export class ThDatePickerComponent implements AfterViewInit {
 		newThDate.year = dateMoment.year();
 		this.selectedThDate = newThDate;
 		this.triggerSelectedDate();
+	}
+	private validThDate(thDateDO: ThDateDO): boolean {
+		return thDateDO && thDateDO.isValid && thDateDO.isValid();
+	}
+	private destroyIfNecessary() {
+		if (this.readonly && this._didInitDateRangePickerElement) {
+			var jQueryElement: any = this.getJQueryElement();
+			var datePickerObject: any = jQueryElement.data('daterangepicker');
+			datePickerObject.remove();
+			this._didInitDateRangePickerElement = false;
+		}
+	}
+	private recreateIfNecessary() {
+		if (!this.readonly && !this._didInitDateRangePickerElement) {
+			this.initializeDatePicker();
+		}
 	}
 }

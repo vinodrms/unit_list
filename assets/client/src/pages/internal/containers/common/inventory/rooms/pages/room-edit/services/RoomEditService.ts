@@ -19,7 +19,7 @@ export class RoomEditService {
     }
     private initFormControls() {
         this._nameControl = new Control(null, Validators.compose([Validators.required, Validators.maxLength(200)]));
-        this._floorControl = new Control(null, Validators.compose([Validators.required, ThValidators.numberValidator]));
+        this._floorControl = new Control(null, Validators.compose([Validators.required, ThValidators.integerValidator]));
         this._notesControl = new Control(null, Validators.compose([Validators.maxLength(2000)]));
     }
     private initFormGroup() {

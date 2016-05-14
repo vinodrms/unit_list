@@ -12,4 +12,4 @@
 		<h1>{{ _allotmentsStateService.totalNoOfAllotments }} <span class="unitpal-font">{{ _allotmentsStateService.getMeta().iconFontName }}</span></h1>
 	</div>
 </div>
-<allotments class="row card-body" (onScreenStateTypeChanged)="didChangeScreenStateType($event)"></allotments>
+<allotments class="row card-body" (onScreenStateTypeChanged)="didChangeScreenStateType($event)" (onItemDeleted)="didDeleteItem($event)"></allotments>
