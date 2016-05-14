@@ -83,7 +83,7 @@ export class CorporateDetailsFormBuilderService {
 			this._commissionControl.updateValue(corporateDetails.commission);
 		}
 		else {
-			this._commissionControl.updateValue(corporateDetails.commission * 100);
+			this._commissionControl.updateValue(Math.round(corporateDetails.commission * 100));
 		}
 		this.isFixedCommission = isFixedCommission;
 	}

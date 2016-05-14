@@ -33,7 +33,7 @@ export class PercentageInputNumberComponent implements OnInit {
 
 	public ngOnInit() {
 		if (this.initialPercentage != null && _.isNumber(this.initialPercentage)) {
-			this.percentage = this.initialPercentage * 100;
+			this.percentage = Math.round(this.initialPercentage * 100);
 		}
 	}
 
