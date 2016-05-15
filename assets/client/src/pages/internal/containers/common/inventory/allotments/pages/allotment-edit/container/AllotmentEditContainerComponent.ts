@@ -3,6 +3,7 @@ import {BaseComponent} from '../../../../../../../../../common/base/BaseComponen
 import {TranslationPipe} from '../../../../../../../../../common/utils/localization/TranslationPipe';
 import {AppContext, ThError} from '../../../../../../../../../common/utils/AppContext';
 import {CustomScroll} from '../../../../../../../../../common/utils/directives/CustomScroll';
+import {PrintableSection} from '../../../../../../../../../common/utils/directives/PrintableSection';
 import {AllotmentVM} from '../../../../../../../services/allotments/view-models/AllotmentVM';
 import {AllotmentDO, AllotmentStatus} from '../../../../../../../services/allotments/data-objects/AllotmentDO';
 import {CustomerDO} from '../../../../../../../services/customers/data-objects/CustomerDO';
@@ -17,7 +18,7 @@ import {AllotmentsService} from '../../../../../../../services/allotments/Allotm
 @Component({
 	selector: 'allotment-edit-container',
 	templateUrl: '/client/src/pages/internal/containers/common/inventory/allotments/pages/allotment-edit/container/template/allotment-edit-container.html',
-	directives: [CustomScroll,
+	directives: [CustomScroll, PrintableSection,
 		AllotmentEditTopSectionComponent, AllotmentOpenIntervalSectionComponent,
 		AllotmentAvailabilitySectionComponent, AllotmentEditConstraintsSectionComponent,
 		AllotmentNotesSectionComponent],
@@ -111,5 +112,10 @@ export class AllotmentEditContainerComponent extends BaseComponent implements Af
 				this.isSavingAllotment = false;
 				this._appContext.toaster.error(error.message);
 			});
+	}
+
+	printPage() {
+		var title = this._appContext.thTranslation.translate("Allotment for %customerName%", { customerName: this._allotmentVM.customer.customerName });
+		this._appContext.thUtils.printPage(title);
 	}
 }

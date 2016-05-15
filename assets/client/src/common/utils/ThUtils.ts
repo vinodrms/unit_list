@@ -49,4 +49,10 @@ export class ThUtils {
 		});
 		return stringConcat;
 	}
+	public printPage(pageTitle: string) {
+		var previousTitle = document.title;
+		document.title = pageTitle;
+		window.print();
+		document.title = previousTitle;
+	}
 }

@@ -7,6 +7,7 @@ import {ILogInitializer} from './logs/ILogInitializer';
 import {ThLogger, ThLogLevel} from '../utils/logging/ThLogger';
 import {ThError} from '../utils/th-responses/ThError';
 import {ThStatusCode} from '../utils/th-responses/ThResponse';
+import {CronJobInitializer} from '../cron-jobs/CronJobInitializer';
 
 export class UnitPalBootstrap {
 	private _unitPalConfig: UnitPalConfig;
@@ -19,6 +20,7 @@ export class UnitPalBootstrap {
 		this.initializeLogger();
 		this.initializeLoginService();
 		this.initializeDatabase(endCallback);
+		this.initializeCronJobs();
 	}
 	private initializeLogger() {
 		try {
@@ -54,5 +56,9 @@ export class UnitPalBootstrap {
 			}
 			endCallback();
 		});
+	}
+	private initializeCronJobs() {
+		var cronInitializer = new CronJobInitializer();
+		cronInitializer.schedule();
 	}
 }
