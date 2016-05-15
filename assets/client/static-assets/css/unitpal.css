@@ -1101,3 +1101,26 @@ table.lazy-loading .th-pagination {
 .th-list-group {
     margin-bottom: 0;
 }
+
+@media print {
+    @page {
+        size:297mm 210mm;
+    }
+    body * {
+        visibility:hidden;
+    }
+    .printable-section, .printable-section * {
+        visibility:visible;
+    }
+    .printable-section {
+        height: 100%;
+        width: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        margin: 0;
+        padding: 15px;
+        font-size: 10px;
+        line-height: 13px;
+    }
+}

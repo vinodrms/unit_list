@@ -49,4 +49,7 @@ export class ThUtils {
 		});
 		return stringConcat;
 	}
+	public printPage() {
+		window.print();
+	}
 }
