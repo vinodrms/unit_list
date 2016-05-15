@@ -115,6 +115,7 @@ export class AllotmentEditContainerComponent extends BaseComponent implements Af
 	}
 
 	printPage() {
-		this._appContext.thUtils.printPage();
+		var title = this._appContext.thTranslation.translate("Allotment for %customerName%", { customerName: this._allotmentVM.customer.customerName });
+		this._appContext.thUtils.printPage(title);
 	}
 }
