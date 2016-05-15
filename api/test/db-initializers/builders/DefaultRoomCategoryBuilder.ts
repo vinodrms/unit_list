@@ -1,84 +1,160 @@
 import {RoomCategoryDO} from '../../../core/data-layer/room-categories/data-objects/RoomCategoryDO';
+import {BedConfigDO} from '../../../core/data-layer/room-categories/data-objects/bed-config/BedConfigDO';
+import {BedMetaDO} from '../../../core/data-layer/room-categories/data-objects/bed-config/BedMetaDO';
 import {AuthUtils} from '../../../core/domain-layer/hotel-account/utils/AuthUtils';
 import {ThUtils} from '../../../core/utils/ThUtils';
 import {Locales} from '../../../core/utils/localization/Translation';
 import {AppContext} from '../../../core/utils/AppContext';
 import {ThError} from '../../../core/utils/th-responses/ThError';
 import {TestContext} from '../../helpers/TestContext';
+import {BedDO} from '../../../core/data-layer/common/data-objects/bed/BedDO';
+import {BedType} from './DefaultBedBuilder';
 
 import _ = require('underscore');
 
+export enum RoomCategoryType {
+    Single,
+    Double,
+    DoubleDouble,
+    Twin,
+    Studio,
+    DoubleKing
+}
+
 export interface IRoomCategoryDataSource {
-    getRoomCategoryList(): RoomCategoryDO[];
+    getRoomCategoryList(bedList: BedDO[]): RoomCategoryDO[];
 }
 
 export class DefaultRoomCategoryBuilder implements IRoomCategoryDataSource {
-
+    private _thUtils: ThUtils;
+    
     constructor(private _testContext: TestContext) {
+        this._thUtils = new ThUtils();
     }
 
-    public getRoomCategoryList(): RoomCategoryDO[] {
+    public getRoomCategoryList(bedList: BedDO[]): RoomCategoryDO[] {
         var roomCategoryList = [];
-        roomCategoryList.push(this.getFirstRoomCategory());
-        roomCategoryList.push(this.getSecondRoomCategory());
-        roomCategoryList.push(this.getThirdRoomCategory());
-        roomCategoryList.push(this.getFourthRoomCategory());
-        roomCategoryList.push(this.getFifthRoomCategory());
-        roomCategoryList.push(this.getSixthRoomCategory());
-        roomCategoryList.push(this.getSeventhRoomCategory());
+        roomCategoryList.push(this.getSingleRoomCategory(bedList));
+        roomCategoryList.push(this.getDoubleRoomCategory(bedList));
+        roomCategoryList.push(this.getDoubleDoubleRoomCategory(bedList));
+        roomCategoryList.push(this.getTwinRoomCategory(bedList));
+        roomCategoryList.push(this.getStudioRoomCategory(bedList));
+        roomCategoryList.push(this.getDoubleKingRoomCategory(bedList));
         return roomCategoryList;
     }
 
-    private getFirstRoomCategory(): RoomCategoryDO {
+    private getSingleRoomCategory(bedList: BedDO[]): RoomCategoryDO {
         var roomCategoryDO = new RoomCategoryDO();
-        roomCategoryDO.displayName = "Double Standard";
+        roomCategoryDO.displayName = "Single Room";
+        
+        var singleStationaryMeta = new BedMetaDO();
+        singleStationaryMeta.bedId = bedList[BedType.SingleStationary].id;
+        singleStationaryMeta.noOfInstances = 1;
+        
+        var babyRollawayMeta = new BedMetaDO();
+        babyRollawayMeta.bedId = bedList[BedType.BabyRollaway].id;
+        babyRollawayMeta.noOfInstances = 1;
+        
+        roomCategoryDO.bedConfig = new BedConfigDO();
+        roomCategoryDO.bedConfig.bedMetaList = [];
+        roomCategoryDO.bedConfig.bedMetaList.push(singleStationaryMeta);
+        roomCategoryDO.bedConfig.bedMetaList.push(babyRollawayMeta);
+        
         return roomCategoryDO;
     }
 
-    private getSecondRoomCategory(): RoomCategoryDO {
+    private getDoubleRoomCategory(bedList: BedDO[]): RoomCategoryDO {
         var roomCategoryDO = new RoomCategoryDO();
-        roomCategoryDO.displayName = "Double Standard with Two Single Beds";
+        roomCategoryDO.displayName = "Double Room";
+        
+        var doubleStationaryMeta = new BedMetaDO();
+        doubleStationaryMeta.bedId = bedList[BedType.DoubleStationary].id;
+        doubleStationaryMeta.noOfInstances = 1;
+        
+        var babyRollawayMeta = new BedMetaDO();
+        babyRollawayMeta.bedId = bedList[BedType.BabyRollaway].id;
+        babyRollawayMeta.noOfInstances = 2;
+       
+        roomCategoryDO.bedConfig = new BedConfigDO();
+        roomCategoryDO.bedConfig.bedMetaList = [];
+        roomCategoryDO.bedConfig.bedMetaList.push(doubleStationaryMeta);
+        roomCategoryDO.bedConfig.bedMetaList.push(babyRollawayMeta);
+        
         return roomCategoryDO;
     }
 
-    private getThirdRoomCategory(): RoomCategoryDO {
+    private getDoubleDoubleRoomCategory(bedList: BedDO[]): RoomCategoryDO {
         var roomCategoryDO = new RoomCategoryDO();
-        roomCategoryDO.displayName = "Quad";
+        roomCategoryDO.displayName = "Double Double Room";
+        
+        var doubleStationaryMeta = new BedMetaDO();
+        doubleStationaryMeta.bedId = bedList[BedType.DoubleStationary].id;
+        doubleStationaryMeta.noOfInstances = 2;
+        
+        roomCategoryDO.bedConfig = new BedConfigDO();
+        roomCategoryDO.bedConfig.bedMetaList = [];
+        roomCategoryDO.bedConfig.bedMetaList.push(doubleStationaryMeta);
+        
         return roomCategoryDO;
     }
 
-    private getFourthRoomCategory(): RoomCategoryDO {
+    private getTwinRoomCategory(bedList: BedDO[]): RoomCategoryDO {
         var roomCategoryDO = new RoomCategoryDO();
-        roomCategoryDO.displayName = "Junior Suite for 4 adults";
+        roomCategoryDO.displayName = "Twin Room";
+        
+        var twinStationaryMeta = new BedMetaDO();
+        twinStationaryMeta.bedId = bedList[BedType.TwinStationary].id;
+        twinStationaryMeta.noOfInstances = 2;
+        
+        roomCategoryDO.bedConfig = new BedConfigDO();
+        roomCategoryDO.bedConfig.bedMetaList = [];
+        roomCategoryDO.bedConfig.bedMetaList.push(twinStationaryMeta);
+        
         return roomCategoryDO;
     }
     
-    private getFifthRoomCategory(): RoomCategoryDO {
+    private getStudioRoomCategory(bedList: BedDO[]): RoomCategoryDO {
         var roomCategoryDO = new RoomCategoryDO();
-        roomCategoryDO.displayName = "Single Standard";
+        roomCategoryDO.displayName = "Studio Room";
+        
+        var couchStationaryMeta = new BedMetaDO();
+        couchStationaryMeta.bedId = bedList[BedType.CouchStationary].id;
+        couchStationaryMeta.noOfInstances = 1;
+        
+        var singleRollawayMeta = new BedMetaDO();
+        singleRollawayMeta.bedId = bedList[BedType.SingleRollaway].id;
+        singleRollawayMeta.noOfInstances = 1;
+        
+        roomCategoryDO.bedConfig = new BedConfigDO();
+        roomCategoryDO.bedConfig.bedMetaList = [];
+        roomCategoryDO.bedConfig.bedMetaList.push(couchStationaryMeta);
+        roomCategoryDO.bedConfig.bedMetaList.push(singleRollawayMeta);
+        
         return roomCategoryDO;
     }
     
-    private getSixthRoomCategory(): RoomCategoryDO {
+    private getDoubleKingRoomCategory(bedList: BedDO[]): RoomCategoryDO {
         var roomCategoryDO = new RoomCategoryDO();
-        roomCategoryDO.displayName = "Triple Standard";
+        roomCategoryDO.displayName = "Double King Room";
+        
+        var kingStationaryMeta = new BedMetaDO();
+        kingStationaryMeta.bedId = bedList[BedType.KingSizeStationary].id;
+        kingStationaryMeta.noOfInstances = 1;
+        
+        roomCategoryDO.bedConfig = new BedConfigDO();
+        roomCategoryDO.bedConfig.bedMetaList = [];
+        roomCategoryDO.bedConfig.bedMetaList.push(kingStationaryMeta);
         return roomCategoryDO;
     }
     
-    private getSeventhRoomCategory(): RoomCategoryDO {
-        var roomCategoryDO = new RoomCategoryDO();
-        roomCategoryDO.displayName = "Double Std with Baby Bed";
-        return roomCategoryDO;
-    }
-    
-    public loadRoomCategories(dataSource: IRoomCategoryDataSource): Promise<RoomCategoryDO[]> {
+    public loadRoomCategories(dataSource: IRoomCategoryDataSource, bedList: BedDO[]): Promise<RoomCategoryDO[]> {
         return new Promise<RoomCategoryDO[]>((resolve: { (result: RoomCategoryDO[]): void }, reject: { (err: ThError): void }) => {
-            this.loadRoomCategoriesCore(resolve, reject, dataSource);
+            this.loadRoomCategoriesCore(resolve, reject, dataSource, bedList);
         });
     }
-    private loadRoomCategoriesCore(resolve: { (result: RoomCategoryDO[]): void }, reject: { (err: ThError): void }, dataSource: IRoomCategoryDataSource) {
+    private loadRoomCategoriesCore(resolve: { (result: RoomCategoryDO[]): void }, reject: { (err: ThError): void }, dataSource: IRoomCategoryDataSource, bedList: BedDO[]) {
 
-        var roomCategoriesToBeAded = dataSource.getRoomCategoryList();
+        var roomCategoriesToBeAded = dataSource.getRoomCategoryList(bedList);
         var roomCategoryRepository = this._testContext.appContext.getRepositoryFactory().getRoomCategoryRepository();
         var addRoomCategoriesPromiseList: Promise<RoomCategoryDO>[] = [];
         roomCategoriesToBeAded.forEach((roomCategoryToBeAdded: RoomCategoryDO) => {

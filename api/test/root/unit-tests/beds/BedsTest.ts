@@ -20,7 +20,7 @@ describe("Hotel Beds Tests", function() {
     var bedsHelper: BedsTestHelper;
 	var createdBed: BedDO;
 	
-	var numCreatedBeds = 6;
+	var numCreatedBeds = 7;
 
 	before(function(done: any) {
 		testContext = new TestContext();

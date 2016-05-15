@@ -9,7 +9,7 @@ import {RoomCategoryStatsDO} from '../../../data-layer/room-categories/data-obje
 import {PriceProductDO} from '../../../data-layer/price-products/data-objects/PriceProductDO';
 import {TaxIdValidator} from '../../taxes/validators/TaxIdValidator';
 import {AddOnProductIdValidator} from '../../add-on-products/validators/AddOnProductIdValidator';
-import {RoomAggregator} from '../../rooms/aggregators/RoomAggregator';
+import {RoomCategoryStatsAggregator} from '../../room-categories/aggregators/RoomCategoryStatsAggregator';
 import {YieldManagerFilterValidator} from '../../hotel-configurations/validators/YieldManagerFilterValidator';
 
 import _ = require("underscore");
@@ -43,7 +43,7 @@ export class PriceProductValidator {
 				return addOnProductIdValidator.validateAddOnProductIdList(this._priceProduct.addOnProductIdList);
 			})
 			.then((addOnProductValidationResult: boolean) => {
-				var roomAggregator = new RoomAggregator(this._appContext);
+				var roomAggregator = new RoomCategoryStatsAggregator(this._appContext);
 				return roomAggregator.getUsedRoomCategoryList({ hotelId: this._sessionContext.sessionDO.hotel.id });
 			})
 			.then((usedRoomCategoryList: RoomCategoryDO[]) => {
@@ -53,7 +53,7 @@ export class PriceProductValidator {
 					ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Invalid room category id list", this._priceProduct, thError);
 					throw thError;
 				}
-				var roomAggregator = new RoomAggregator(this._appContext);
+				var roomAggregator = new RoomCategoryStatsAggregator(this._appContext);
 				return roomAggregator.getRoomCategoryStatsList({ hotelId: this._sessionContext.sessionDO.hotel.id }, this._priceProduct.roomCategoryIdList);
 			})
 			.then((roomCategoryStats: RoomCategoryStatsDO[]) => {
