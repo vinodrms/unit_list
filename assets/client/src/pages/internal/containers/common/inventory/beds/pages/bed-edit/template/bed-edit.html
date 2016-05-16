@@ -12,10 +12,42 @@
         </div>
 
         <div class="row">
+            
+            <div class="col-md-6 col-xs-12 form-group">
+                <label>{{ 'Type:' | translate }}</label>
+                <div class="input-group">
+                    <div class="btn-group" data-toggle="buttons">
+                        <button class="btn btn-default" (click)="toggleStorageType()" [ngClass]="{'active': isStationary}" [disabled]="readonly">
+				{{ 'Stationary' | translate }}
+			</button>
+                        <button class="btn btn-default" (click)="toggleStorageType()" [ngClass]="{'active': !isStationary}" [disabled]="readonly">
+				{{ 'Rollaway' | translate }}
+			</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-xs-12 form-group">
+                <label>{{ 'Bed accomodates:' | translate }}</label>
+                <div class="input-group">
+                    <div class="btn-group" data-toggle="buttons">
+                        <button class="btn btn-default" (click)="toggleAccommodationType()" [ngClass]="{'active': !accomodatesBabies}" [disabled]="readonly">
+				{{ 'Adults / Children' | translate }}
+			</button>
+                        <button class="btn btn-default" (click)="toggleAccommodationType()" [ngClass]="{'active': accomodatesBabies}" [disabled]="readonly">
+				{{ 'Babies' | translate }}
+			</button>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+
+        <div class="row">
             <div class="col-xs-12 col-md-12 form-group">
                 <label class="control-label">{{ 'Icon' | translate }}</label>
                 <div class="row" data-toggle="buttons">
-                    <div class="col-md-2 button-items" *ngFor="let bedTemplate of bedTemplateList" title="{{ bedTemplate.name }}">
+                    <div class="col-md-2 button-items" *ngFor="let bedTemplate of displayedBedTemplates" title="{{ bedTemplate.name }}">
                         <label class="btn btn-default btn-group bed-btn" [ngClass]="{ active: bedTemplate.id == bedVM.bed.bedTemplateId }" (click)="bedVM.bed.bedTemplateId=bedTemplate.id">
                         <span class="unitpal-font">{{bedTemplate.iconUrl}}</span>
                     </label>
@@ -24,7 +56,7 @@
             </div>
         </div>
         <hr/>
-        <div class="row">
+        <div *ngIf="!accomodatesBabies" class="row">
             <div class="col-xs-12 col-md-6 form-group">
                 <label>{{ 'Capacity' | translate }}*</label>
                 <div class="row">
@@ -69,7 +101,7 @@
             </div>
         </div>
 
-        <hr/>
+        <hr *ngIf="!accomodatesBabies" />
 
         <div class="row">
             <div class="col-xs-12 col-md-6 form-group">

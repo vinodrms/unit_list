@@ -79,10 +79,10 @@ export class RoomVM {
     public get capacity(): CapacityDO {
         var maxAdults = 0, maxChildren = 0;
         
-        _.forEach(this.bedList, (bedVM: BedVM) => {
-            maxAdults += bedVM.bed.maxNoAdults;
-            maxChildren += bedVM.bed.maxNoChildren;
-        });
+        // _.forEach(this.bedList, (bedVM: BedVM) => {
+        //     maxAdults += bedVM.bed.maxNoAdults;
+        //     maxChildren += bedVM.bed.maxNoChildren;
+        // });
         
         return {
             maxChildren: maxChildren,

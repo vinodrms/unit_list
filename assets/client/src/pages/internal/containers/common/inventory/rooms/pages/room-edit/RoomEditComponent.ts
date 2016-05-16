@@ -129,11 +129,12 @@ export class RoomEditComponent extends BaseFormComponent implements OnInit {
         room.amenityIdList = this.roomAmenities.getSelectedRoomAmenityList();
         room.attributeIdList = this.roomAttributes.getSelectedRoomAttributeList();
         room.categoryId = this.roomVM.category.id;
-        room.bedIdList = [];
+        
+        // room.bedIdList = [];
 
-        _.forEach(this.roomVM.bedList, (bedVM: BedVM) => {
-            room.bedIdList.push(bedVM.bed.id);
-        });
+        // _.forEach(this.roomVM.bedList, (bedVM: BedVM) => {
+        //     room.bedIdList.push(bedVM.bed.id);
+        // });
 
         this.isSavingRoom = true;
 

@@ -64,6 +64,7 @@ export class SaveBedItem {
     }
     
     private submittedStructureIsValid(reject: { (err: ThError): void }): boolean {
+        
         if (!this.sizeAndCapacityAreValid()) {
             var thError = new ThError(ThStatusCode.SaveBedItemInvalidSizeAndOrCapacity, null);
             ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Invalid size and/or capacity", this._bedItemDO, thError);

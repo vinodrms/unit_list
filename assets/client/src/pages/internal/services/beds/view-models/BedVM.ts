@@ -37,16 +37,19 @@ export class BedVM extends BaseDO {
     }
     public set template(template: BedTemplateDO) {
         this._template = template;
-    }
-    
+    }                  
     public get capacity(): CapacityDO {
         return {
-            maxChildren: this._bed.maxNoChildren,
-            maxAdults: this._bed.maxNoAdults
+            maxChildren: this._bed.capacity.maxNoChildren,
+            maxAdults: this._bed.capacity.maxNoAdults
         }
     }
     
     public get size(): string {
+        if(!this._bed.size || !this._bed.size.widthCm || !this._bed.size.lengthCm) {
+            return "-";    
+        }
+        
         return this._bed.size.widthCm + 'X' + this._bed.size.lengthCm;
     }
     
@@ -58,4 +61,4 @@ export class BedVM extends BaseDO {
         copy.template.buildFromObject(this.template);
 		return copy;
 	}
-}
+}                                                                                                                                                                                                                                 

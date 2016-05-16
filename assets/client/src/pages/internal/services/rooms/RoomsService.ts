@@ -76,14 +76,14 @@ export class RoomsService extends ALazyLoadRequestService<RoomVM> {
                 });
                 
                 roomVM.bedList = [];
-                _.forEach(room.bedIdList, (bedId: string) => {
-                    var bed = _.find(bedVMList, (bedVM: BedVM) => {
-                        return bedVM.bed.id === bedId;    
-                    });
-                    if(!this._appContext.thUtils.isUndefinedOrNull(bed)) {
-                        roomVM.bedList.push(bed);    
-                    }
-                });
+                // _.forEach(room.bedIdList, (bedId: string) => {
+                //     var bed = _.find(bedVMList, (bedVM: BedVM) => {
+                //         return bedVM.bed.id === bedId;    
+                //     });
+                //     if(!this._appContext.thUtils.isUndefinedOrNull(bed)) {
+                //         roomVM.bedList.push(bed);    
+                //     }
+                // });
                 
                 roomVMList.push(roomVM);    
             });

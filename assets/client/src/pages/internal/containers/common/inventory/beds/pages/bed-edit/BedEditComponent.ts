@@ -8,7 +8,7 @@ import {BaseFormComponent} from '../../../../../../../../common/base/BaseFormCom
 import {AppContext, ThError} from '../../../../../../../../common/utils/AppContext';
 import {BedTemplateDO} from '../../../../../../services/common/data-objects/bed-template/BedTemplateDO';
 import {BedVM} from '../../../../../../services/beds/view-models/BedVM';
-import {BedDO} from '../../../../../../services/beds/data-objects/BedDO';
+import {BedDO, BedStorageType, BedAccommodationType} from '../../../../../../services/beds/data-objects/BedDO';
 import {BedsService} from '../../../../../../services/beds/BedsService';
 import {BedTemplatesService} from '../../../../../../services/settings/BedTemplatesService';
 import {BedTemplatesDO} from '../../../../../../services/settings/data-objects/BedTemplatesDO';
@@ -25,7 +25,8 @@ export class BedEditComponent extends BaseFormComponent implements OnInit {
     isLoading: boolean;
     isSavingBed: boolean = false;
     
-    bedTemplateList: BedTemplateDO[];
+    displayedBedTemplates: BedTemplateDO[];
+    allBedTemplates: BedTemplateDO[];
     
     private _bedVM: BedVM;
     public get bedVM(): BedVM {
@@ -47,6 +48,8 @@ export class BedEditComponent extends BaseFormComponent implements OnInit {
         private _bedsService: BedsService,
         private _bedTemplateService: BedTemplatesService) {
         super();
+        
+        this.displayedBedTemplates = [];
     }
 
     ngOnInit() { 
@@ -55,7 +58,7 @@ export class BedEditComponent extends BaseFormComponent implements OnInit {
 		Observable.combineLatest(
 			this._bedTemplateService.getBedTemplatesDO()
 		).subscribe((result: [BedTemplatesDO]) => {
-            this.bedTemplateList = result[0].bedTemplateList;
+            this.allBedTemplates = result[0].bedTemplateList;
             this.initDefaultBedData();
             this.isLoading = false;            
 		}, (error: ThError) => {
@@ -65,9 +68,10 @@ export class BedEditComponent extends BaseFormComponent implements OnInit {
     }
     
     private initDefaultBedData() {
-		if(!this.bedVM.bed.bedTemplateId && this.bedTemplateList && !_.isEmpty(this.bedTemplateList)) {
-            this.bedVM.bed.bedTemplateId = this.bedTemplateList[0].id;
+		if(!this.bedVM.bed.bedTemplateId && this.allBedTemplates && !_.isEmpty(this.allBedTemplates)) {
+            this.bedVM.bed.bedTemplateId = this.allBedTemplates[0].id;
         }
+        this.filterBedTemplatesByAccommodationType();
 	}
 	private initForm() {
 		this.didSubmitForm = false;
@@ -89,8 +93,12 @@ export class BedEditComponent extends BaseFormComponent implements OnInit {
 			this._appContext.toaster.error(errorMessage);
 			return;
 		}    
+        
         var bed = this._bedVM.bed;
         this._bedEditService.updateBed(bed);
+        if(this._bedVM.bed.accommodationType === BedAccommodationType.Babies) {
+            this.removeDimensionsAndCapacityFromBedObject(bed);
+        }
         
         this.isSavingBed = true;
 		this._bedsService.saveBedDO(bed).subscribe((updatedBed: BedDO) => {
@@ -100,5 +108,53 @@ export class BedEditComponent extends BaseFormComponent implements OnInit {
 			this.isSavingBed = false;
 			this._appContext.toaster.error(error.message);
 		});
+    }
+    
+    private removeDimensionsAndCapacityFromBedObject(bed: BedDO) {
+        delete bed.size;
+        delete bed.capacity;        
+    }
+    
+    public toggleStorageType() {
+        if(this._bedVM.bed.storageType === BedStorageType.Rollaway) {
+            this._bedVM.bed.storageType = BedStorageType.Stationary;
+        }
+        else if(this._bedVM.bed.storageType === BedStorageType.Stationary) {
+            this._bedVM.bed.storageType = BedStorageType.Rollaway;
+        }         
+    }
+    
+    public toggleAccommodationType() {
+        if(this._bedVM.bed.accommodationType === BedAccommodationType.Babies) {
+            this._bedVM.bed.accommodationType = BedAccommodationType.AdultsAndChildren;
+        }
+        else if(this._bedVM.bed.accommodationType === BedAccommodationType.AdultsAndChildren) {
+            this._bedVM.bed.accommodationType = BedAccommodationType.Babies;
+        }
+        this.filterBedTemplatesByAccommodationType();
+        this.makeTheDefaultBedTemplateSelection();    
+    }
+    
+    private filterBedTemplatesByAccommodationType() {
+        this.displayedBedTemplates = _.filter(this.allBedTemplates, (bedTemplate: BedTemplateDO) => {
+            return bedTemplate.accommodationType === this._bedVM.bed.accommodationType;     
+        });
+    }
+    
+    private makeTheDefaultBedTemplateSelection() {
+        if(this.displayedBedTemplates.length === 1) {
+            this.bedVM.bed.bedTemplateId = this.displayedBedTemplates[0].id;
+        }
+        else {
+            delete this.bedVM.bed.bedTemplateId;
+        }        
+    }
+    
+    public get isStationary(): boolean {
+        return this._bedVM.bed.storageType === BedStorageType.Stationary;
+    }
+    
+    public get accomodatesBabies(): boolean {
+        return this._bedVM.bed.accommodationType === BedAccommodationType.Babies
     }
 }

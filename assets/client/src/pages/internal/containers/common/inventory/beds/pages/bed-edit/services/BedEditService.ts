@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {FormBuilder, ControlGroup, Validators, AbstractControl, Control} from '@angular/common';
 import {BedVM} from '../../../../../../../services/beds/view-models/BedVM';
-import {BedDO, BedSizeDO} from '../../../../../../../services/beds/data-objects/BedDO';
+import {BedDO, BedSizeDO, BedCapacityDO} from '../../../../../../../services/beds/data-objects/BedDO';
 import {ThValidators, ThFieldLengths} from '../../../../../../../../../common/utils/form-utils/ThFormUtils';
 
 @Injectable()
@@ -42,8 +42,8 @@ export class BedEditService {
     public updateFormValues(bedVM: BedVM) {
         var bedDO = bedVM.bed;
         this._nameControl.updateValue(bedDO.name);
-        this._maxAdultsControl.updateValue(bedDO.maxNoAdults);
-        this._maxChildrenControl.updateValue(bedDO.maxNoChildren);
+        this._maxAdultsControl.updateValue(bedDO.capacity.maxNoAdults);
+        this._maxChildrenControl.updateValue(bedDO.capacity.maxNoChildren);
         if (!bedDO.size) {
             this._widthControl.updateValue(null);
             this._lengthControl.updateValue(null);
@@ -57,8 +57,12 @@ export class BedEditService {
 
     public updateBed(bed: BedDO) {
         bed.name = this._bedForm.value["name"];
-        bed.maxNoAdults = this._bedForm.value["maxAdults"];
-        bed.maxNoChildren = this._bedForm.value["maxChildren"];
+        
+        var bedCapacity = new BedCapacityDO();
+        bedCapacity.maxNoAdults = this._bedForm.value["maxAdults"];
+        bedCapacity.maxNoChildren = this._bedForm.value["maxChildren"];
+        bed.capacity = bedCapacity;
+        
         var bedSizeDO = new BedSizeDO();
         bedSizeDO.widthCm = this._bedForm.value["width"];
         bedSizeDO.lengthCm = this._bedForm.value["length"];

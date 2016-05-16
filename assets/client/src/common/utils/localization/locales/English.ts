@@ -414,5 +414,10 @@ export var EnglishTranslations: Object = {
 	"Archive Allotment": "Archive Allotment",
 	"Are you sure you want to archive the allotment assigned to %customerName% ?": "Are you sure you want to archive the allotment assigned to %customerName% ?",
 	"You have %noAllotments% allotments on this Price Product. If you want to remove it, archive the allotment first.": "You have %noAllotments% allotments on this Price Product. If you want to remove it, archive the allotment first.",
-	"Allotment for %customerName%": "Allotment for %customerName%"
+	"Allotment for %customerName%": "Allotment for %customerName%",
+	"Babies": "Babies",
+	"Adults / Children": "Adults \/ Children",
+	"Bed accomodates:": "Bed accomodates:",
+	"Stationary": "Stationary",
+	"Rollaway": "Rollaway"
 };
