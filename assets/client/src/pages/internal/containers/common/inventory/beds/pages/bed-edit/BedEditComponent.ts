@@ -127,9 +127,11 @@ export class BedEditComponent extends BaseFormComponent implements OnInit {
     public toggleAccommodationType() {
         if(this._bedVM.bed.accommodationType === BedAccommodationType.Babies) {
             this._bedVM.bed.accommodationType = BedAccommodationType.AdultsAndChildren;
+            this._bedEditService.addValidatorsForSizeAndCapacityAndInitValues(this._bedVM);
         }
         else if(this._bedVM.bed.accommodationType === BedAccommodationType.AdultsAndChildren) {
             this._bedVM.bed.accommodationType = BedAccommodationType.Babies;
+            this._bedEditService.removeValidatorsForSizeAndCapacity();
         }
         this.filterBedTemplatesByAccommodationType();
         this.makeTheDefaultBedTemplateSelection();    

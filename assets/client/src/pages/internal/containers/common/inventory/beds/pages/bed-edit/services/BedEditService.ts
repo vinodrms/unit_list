@@ -57,12 +57,12 @@ export class BedEditService {
 
     public updateBed(bed: BedDO) {
         bed.name = this._bedForm.value["name"];
-        
+
         var bedCapacity = new BedCapacityDO();
         bedCapacity.maxNoAdults = this._bedForm.value["maxAdults"];
         bedCapacity.maxNoChildren = this._bedForm.value["maxChildren"];
         bed.capacity = bedCapacity;
-        
+
         var bedSizeDO = new BedSizeDO();
         bedSizeDO.widthCm = this._bedForm.value["width"];
         bedSizeDO.lengthCm = this._bedForm.value["length"];
@@ -79,5 +79,39 @@ export class BedEditService {
     }
     public set bedForm(bedForm: ControlGroup) {
         this._bedForm = bedForm;
+    }
+
+    public removeValidatorsForSizeAndCapacity() {
+        this.removeValidatorsFor(this._maxAdultsControl);
+        this.resetControl(this._maxAdultsControl, '');
+        
+        this.removeValidatorsFor(this._maxChildrenControl);
+        this.resetControl(this._maxChildrenControl, '');
+        
+        this.removeValidatorsFor(this._lengthControl);
+        this.resetControl(this._lengthControl, '');
+        
+        this.removeValidatorsFor(this._widthControl);
+        this.resetControl(this._widthControl, '');
+    }
+    
+    public addValidatorsForSizeAndCapacityAndInitValues(bedVM: BedVM) {
+        this._maxAdultsControl.validator = Validators.compose([Validators.required, ThValidators.positiveIntegerValidator]);
+        this.resetControl(this._maxAdultsControl, bedVM.bed.capacity.maxNoAdults);
+        this._maxChildrenControl.validator = Validators.compose([Validators.required, ThValidators.positiveIntegerValidator]);
+        this.resetControl(this._maxChildrenControl, bedVM.bed.capacity.maxNoChildren);
+        this._lengthControl.validator = Validators.compose([Validators.required, ThValidators.numberValidator]);
+        this.resetControl(this._lengthControl, bedVM.bed.size.lengthCm);
+        this._widthControl.validator = Validators.compose([Validators.required, ThValidators.numberValidator]);
+        this.resetControl(this._widthControl, bedVM.bed.size.widthCm);
+    }
+    
+    private removeValidatorsFor(control: Control) {
+        control.validator = Validators.compose([]);
+    }
+    
+    private resetControl(control: Control, value: any) {
+        control.setErrors(null);
+        control.updateValue(value);
     }
 }

@@ -17,10 +17,10 @@
                 <label>{{ 'Type:' | translate }}</label>
                 <div class="input-group">
                     <div class="btn-group" data-toggle="buttons">
-                        <button class="btn btn-default" (click)="toggleStorageType()" [ngClass]="{'active': isStationary}" [disabled]="readonly">
+                        <button class="btn btn-default" (click)="toggleStorageType()" [ngClass]="{'active': isStationary}">
 				{{ 'Stationary' | translate }}
 			</button>
-                        <button class="btn btn-default" (click)="toggleStorageType()" [ngClass]="{'active': !isStationary}" [disabled]="readonly">
+                        <button class="btn btn-default" (click)="toggleStorageType()" [ngClass]="{'active': !isStationary}">
 				{{ 'Rollaway' | translate }}
 			</button>
                     </div>
@@ -31,10 +31,10 @@
                 <label>{{ 'Bed accomodates:' | translate }}</label>
                 <div class="input-group">
                     <div class="btn-group" data-toggle="buttons">
-                        <button class="btn btn-default" (click)="toggleAccommodationType()" [ngClass]="{'active': !accomodatesBabies}" [disabled]="readonly">
+                        <button class="btn btn-default" (click)="toggleAccommodationType()" [ngClass]="{'active': !accomodatesBabies}" [disabled]="!isNewBed()">
 				{{ 'Adults / Children' | translate }}
 			</button>
-                        <button class="btn btn-default" (click)="toggleAccommodationType()" [ngClass]="{'active': accomodatesBabies}" [disabled]="readonly">
+                        <button class="btn btn-default" (click)="toggleAccommodationType()" [ngClass]="{'active': accomodatesBabies}" [disabled]="!isNewBed()">
 				{{ 'Babies' | translate }}
 			</button>
                     </div>
@@ -63,14 +63,14 @@
                     <div class="col-xs-6 col-md-6">
                         <div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('maxAdults')}">
                             <span class="input-group-addon"><span class="unitpal-font">:</span></span>
-                            <input type="number" class="form-control" placeholder="{{ 'Adults' | translate }}" ngControl="maxAdults">
+                            <input type="number" class="form-control" placeholder="{{ 'Adults' | translate }}" ngControl="maxAdults" [disabled]="!isNewBed()">
                         </div>
                         <label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Insert a valid max number of adults' | translate }}</small></label>
                     </div>
                     <div class="col-xs-6 col-md-6">
                         <div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('maxChildren')}">
                             <span class="input-group-addon"><span class="unitpal-font">;</span></span>
-                            <input type="number" class="form-control" placeholder="{{ 'Children' | translate }}" ngControl="maxChildren">
+                            <input type="number" class="form-control" placeholder="{{ 'Children' | translate }}" ngControl="maxChildren" [disabled]="!isNewBed()">
                         </div>
                         <label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Insert a valid max number of children' | translate }}</small></label>
                     </div>
