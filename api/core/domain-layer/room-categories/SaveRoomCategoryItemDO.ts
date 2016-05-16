@@ -16,25 +16,25 @@ export class SaveRoomCategoryItemDO {
                 key: "displayName",
                 validationStruct: new PrimitiveValidationStructure(StringValidationRule.buildMinMaxLength(StringValidationRule.MinRoomCategoryLength,
                     StringValidationRule.MaxRoomCategoryLength))
-            },
-            {
-                key: "bedConfig",
-                validationStruct: new ObjectValidationStructure([
-                    {
-                        key: "bedMetaList",
-                        validationStruct: new ArrayValidationStructure(new ObjectValidationStructure([
-                            {
-                                key: "bedId",
-                                validationStruct: new PrimitiveValidationStructure(new StringValidationRule())
-                            },
-                            {
-                                key: "noOfInstances",
-                                validationStruct: new PrimitiveValidationStructure(NumberValidationRule.buildIntegerNumberRule(1))
-                            }
-                        ]))
-                    }
-                ])
             }
         ])
+    }
+
+    public static getBedConfigValidationStructure(): IValidationStructure {
+        return new ObjectValidationStructure([
+            {
+                key: "bedMetaList",
+                validationStruct: new ArrayValidationStructure(new ObjectValidationStructure([
+                    {
+                        key: "bedId",
+                        validationStruct: new PrimitiveValidationStructure(new StringValidationRule())
+                    },
+                    {
+                        key: "noOfInstances",
+                        validationStruct: new PrimitiveValidationStructure(NumberValidationRule.buildIntegerNumberRule(1))
+                    }
+                ]))
+            }
+        ]);
     }
 }

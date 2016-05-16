@@ -419,5 +419,8 @@ export var EnglishTranslations: Object = {
 	"Adults / Children": "Adults \/ Children",
 	"Bed accomodates:": "Bed accomodates:",
 	"Stationary": "Stationary",
-	"Rollaway": "Rollaway"
+	"Rollaway": "Rollaway",
+	"Stationary Beds": "Stationary Beds",
+	"Rollaway Beds": "Rollaway Beds",
+	"Add at least a stationary or a rollaway bed for the newly added category.": "Add at least a stationary or a rollaway bed for the newly added category."
 };

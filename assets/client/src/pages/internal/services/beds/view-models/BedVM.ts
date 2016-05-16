@@ -1,5 +1,5 @@
 import {BaseDO} from '../../../../../common/base/BaseDO';
-import {BedDO} from '../data-objects/BedDO';
+import {BedDO, BedAccommodationType} from '../data-objects/BedDO';
 import {BedTemplateDO} from '../../common/data-objects/bed-template/BedTemplateDO';
 import {CapacityDO} from '../../common/data-objects/capacity/CapacityDO';
 
@@ -61,4 +61,8 @@ export class BedVM extends BaseDO {
         copy.template.buildFromObject(this.template);
 		return copy;
 	}
+    
+    public get accomodatesBabies(): boolean {
+        return this._bed.accommodationType === BedAccommodationType.Babies;
+    }
 }                                                                                                                                                                                                                                 

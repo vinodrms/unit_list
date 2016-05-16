@@ -25,7 +25,7 @@ class RoomCategoriesEntity extends BasePersistentEntity {
             },
             bedConfig: {
                 type: "json",
-                required: true
+                required: false
             },
             status: {
                 type: 'integer',
