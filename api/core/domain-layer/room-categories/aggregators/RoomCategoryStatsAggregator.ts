@@ -60,8 +60,17 @@ export class RoomCategoryStatsAggregator {
     private getRoomCategoryStatsListCore(resolve: { (result: RoomCategoryStatsDO[]): void }, reject: { (err: ThError): void }, roomCategoryAggregatorMeta: RoomCategoryStatsAggregatorMetaDO, roomCategoryIdList: string[]) {
         var roomRepository = this._appContext.getRepositoryFactory().getRoomRepository();
         var roomCategoryRepository = this._appContext.getRepositoryFactory().getRoomCategoryRepository();
-        roomCategoryRepository.getRoomCategoryList({ hotelId: roomCategoryAggregatorMeta.hotelId }, { categoryIdList: roomCategoryIdList }).then((result: RoomCategorySearchResultRepoDO) => {
-            if (_.isEmpty(result.roomCategoryList) || roomCategoryIdList.length != result.roomCategoryList.length) {
+        
+        var roomCategoriesPromise: Promise<RoomCategorySearchResultRepoDO>;
+        if(this._thUtils.isUndefinedOrNull(roomCategoryIdList) || _.isEmpty(roomCategoryIdList)) {
+            roomCategoriesPromise = roomCategoryRepository.getRoomCategoryList({ hotelId: roomCategoryAggregatorMeta.hotelId });    
+        }
+        else {
+            roomCategoriesPromise = roomCategoryRepository.getRoomCategoryList({ hotelId: roomCategoryAggregatorMeta.hotelId }, { categoryIdList: roomCategoryIdList });
+        }
+        roomCategoriesPromise.then((result: RoomCategorySearchResultRepoDO) => {
+            if (_.isEmpty(result.roomCategoryList) || 
+                (!this._thUtils.isUndefinedOrNull(roomCategoryIdList) && !_.isEmpty(roomCategoryIdList) && roomCategoryIdList.length != result.roomCategoryList.length)) {
                 var thError = new ThError(ThStatusCode.RoomAggregatorCategoryStatsListInvalidCatgoryIdListError, null);
                 ThLogger.getInstance().logError(ThLogLevel.Error, "Invalid category id list", { categoryIdList: roomCategoryIdList }, thError);
                 reject(thError);

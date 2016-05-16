@@ -88,9 +88,9 @@ export class RoomEditComponent extends BaseFormComponent implements OnInit {
     }
 
     private initDefaultRoomData() {
-        if (this._appContext.thUtils.isUndefinedOrNull(this.roomVM.bedList)) {
-            this.roomVM.bedList = [];
-        }
+        // if (this._appContext.thUtils.isUndefinedOrNull(this.roomVM.bedList)) {
+        //     this.roomVM.bedList = [];
+        // }
         if (this._appContext.thUtils.isUndefinedOrNull(this.roomVM.room.maintenanceStatus)) {
             this.roomVM.room.maintenanceStatus = RoomMaintenanceStatus.CheckInReady;
         }
@@ -175,6 +175,6 @@ export class RoomEditComponent extends BaseFormComponent implements OnInit {
     }
     
     public diChangeSelectedBedList(savedBedVMList: BedVM[]) {
-        this.roomVM.bedList = savedBedVMList;
+        // this.roomVM.bedList = savedBedVMList;
     }
 }

@@ -67,8 +67,7 @@ class RoomCategoriesController extends BaseController {
     }
 
     public getRoomCategoryStatsList(req: Express.Request, res: Express.Response) {
-        if (!this.precheckPOSTParameters(req, res, 'roomCategoryIdList', [])) { return };
-        
+        // if (!this.precheckPOSTParameters(req, res, 'roomCategoryIdList', [])) { return };
         var appContext: AppContext = req.appContext;
         var sessionContext: SessionContext = req.sessionContext;
         
