@@ -69,7 +69,7 @@
 					<span *ngIf="isFontIcon(columnMeta.valueMeta)">
 									<span class="unitpal-font">{{getItemValue(item, columnMeta.valueMeta)}}</span>
 					</span>
-					<span *ngIf="isCapacity(columnMeta.valueMeta) && getItemValue(item, columnMeta.valueMeta).maxAdults && getItemValue(item, columnMeta.valueMeta).maxChildren">
+					<span *ngIf="isCapacity(columnMeta.valueMeta) && !isUndefinedOrNull(getItemValue(item, columnMeta.valueMeta).maxAdults) && !isUndefinedOrNull(getItemValue(item, columnMeta.valueMeta).maxChildren)">
 									{{ getItemValue(item, columnMeta.valueMeta).maxAdults }} <span class="unitpal-font">{{columnMeta.valueMeta.fonts.adult}}</span>					{{ getItemValue(item, columnMeta.valueMeta).maxChildren }} <span class="unitpal-font">{{columnMeta.valueMeta.fonts.child}}</span>
 					</span>
 					<span *ngIf="isCapacity(columnMeta.valueMeta) && !getItemValue(item, columnMeta.valueMeta).maxAdults && !getItemValue(item, columnMeta.valueMeta).maxChildren">
