@@ -246,4 +246,7 @@ export class DefaultDataBuilder {
     public set allotmentList(allotmentList: AllotmentDO[]) {
         this._allotmentList = allotmentList;
     }
+    public get defaultTimezone(): string {
+        return this._hotelDO.timezone;
+    }
 }

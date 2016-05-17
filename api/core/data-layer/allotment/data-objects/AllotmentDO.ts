@@ -21,13 +21,14 @@ export class AllotmentDO extends BaseDO {
 	priceProductId: string;
 	roomCategoryId: string;
 	openInterval: ThDateIntervalDO;
+	expiryUtcTimestamp: number;
 	availability: AllotmentAvailabilityDO;
 	inventory: AllotmentInventoryDO;
 	constraints: AllotmentConstraintWrapperDO;
 	notes: string;
 
 	protected getPrimitivePropertyKeys(): string[] {
-		return ["id", "hotelId", "versionId", "status", "customerId", "priceProductId", "roomCategoryId", "notes"];
+		return ["id", "hotelId", "versionId", "status", "customerId", "priceProductId", "roomCategoryId", "expiryUtcTimestamp", "notes"];
 	}
 
 	public buildFromObject(object: Object) {

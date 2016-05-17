@@ -12,8 +12,7 @@ export class SessionDO {
 		roleList: UserRoles[]
 	}
 	hotel: {
-		id: string//,
-		//ccyCode: string
+		id: string
 	}
 }
 export class SessionContext {

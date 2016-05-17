@@ -16,6 +16,7 @@ export interface AllotmentSearchCriteriaRepoDO {
 	roomCategoryId?: string;
 	allotmentIdList?: string[];
 	notes?: string;
+	maxExpiryUtcTimestamp?: number;
 }
 export interface AllotmentSearchResultRepoDO {
 	lazyLoad?: LazyLoadRepoDO;

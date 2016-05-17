@@ -43,8 +43,7 @@ export class WizardService implements IWizardState, IWizardController {
 
 	public moveNext() {
 		if (this._currentState.stateIndex == this._stateList.length - 1) {
-			// TODO: decomment next line to mark the configuration as completed
-			// this.markConfigurationCompleted();
+			this.markConfigurationCompleted();
 			this._appContext.routerNavigator.navigateTo(WizardService.HomeNavigationPath);
 			return;
 		}

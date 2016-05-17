@@ -1,4 +1,5 @@
 import {ThDateDO} from './data-objects/ThDateDO';
+import {ThHourDO} from './data-objects/ThHourDO';
 
 import moment = require('moment-timezone');
 
@@ -35,5 +36,8 @@ export class ThDateUtils {
 	}
 	public convertMomentToThDateDO(day: moment.Moment): ThDateDO {
 		return ThDateDO.buildThDateDO(day.year(), day.month(), day.date());
+	}
+	public convertMomentToThHourDO(day: moment.Moment): ThHourDO {
+		return ThHourDO.buildThHourDO(day.hour(), day.minute());
 	}
 }

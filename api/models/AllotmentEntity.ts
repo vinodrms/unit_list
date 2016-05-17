@@ -38,6 +38,10 @@ class AllotmentEntity extends BasePersistentEntity {
 				type: 'json',
 				required: true
 			},
+			expiryUtcTimestamp: {
+				type: 'float',
+                required: true
+			},
 			availability: {
 				type: 'json',
 				required: true

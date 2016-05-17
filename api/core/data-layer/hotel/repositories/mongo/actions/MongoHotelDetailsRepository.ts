@@ -2,11 +2,12 @@ import {ThLogger, ThLogLevel} from '../../../../../utils/logging/ThLogger';
 import {ThError} from '../../../../../utils/th-responses/ThError';
 import {ThStatusCode} from '../../../../../utils/th-responses/ThResponse';
 import {ThUtils} from '../../../../../utils/ThUtils';
-import {MongoRepository, MongoErrorCodes} from '../../../../common/base/MongoRepository';
+import {MongoRepository, MongoErrorCodes, MongoSearchCriteria} from '../../../../common/base/MongoRepository';
 import {HotelDO} from '../../../data-objects/HotelDO';
 import {HotelContactDetailsDO} from '../../../data-objects/hotel-contact-details/HotelContactDetailsDO';
 import {GeoLocationDO} from '../../../../common/data-objects/geo-location/GeoLocationDO';
 import {HotelMetaRepoDO, BasicHotelInfoRepoDO, PaymentsPoliciesRepoDO, PropertyDetailsRepoDO} from '../../IHotelRepository';
+import {LazyLoadRepoDO} from '../../../../common/repo-data-objects/LazyLoadRepoDO';
 
 import _ = require("underscore");
 
@@ -92,6 +93,34 @@ export class MongoHotelDetailsRepository extends MongoRepository {
 				var updatedHotel: HotelDO = new HotelDO();
 				updatedHotel.buildFromObject(updatedDBHotel);
 				resolve(updatedHotel);
+			}
+		);
+	}
+
+	public getHotelList(lazyLoad: LazyLoadRepoDO): Promise<HotelDO[]> {
+		return new Promise<HotelDO[]>((resolve: { (result: HotelDO[]): void }, reject: { (err: ThError): void }) => {
+			this.getHotelListCore(resolve, reject, lazyLoad);
+		});
+	}
+	private getHotelListCore(resolve: { (result: HotelDO[]): void }, reject: { (err: ThError): void }, lazyLoad?: LazyLoadRepoDO) {
+		var mongoSearchCriteria: MongoSearchCriteria = {
+			criteria: {},
+			lazyLoad: lazyLoad
+		}
+		this.findMultipleDocuments(mongoSearchCriteria,
+			(err: Error) => {
+				var thError = new ThError(ThStatusCode.HotelDetailsRepositoryErrorGettingList, err);
+				ThLogger.getInstance().logError(ThLogLevel.Error, "Error getting hotel list", { msearchCriteria: mongoSearchCriteria }, thError);
+				reject(thError);
+			},
+			(foundHotelList: Object[]) => {
+				var hotelList: HotelDO[] = [];
+				foundHotelList.forEach((foundHotel: Object) => {
+					var hotel = new HotelDO();
+					hotel.buildFromObject(foundHotel);
+					hotelList.push(hotel);
+				});
+				resolve(hotelList);
 			}
 		);
 	}

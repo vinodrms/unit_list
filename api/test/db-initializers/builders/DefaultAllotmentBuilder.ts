@@ -75,6 +75,8 @@ export class DefaultAllotmentBuilder implements IAllotmentDataSource {
 			availabilityForDay.availableCount = 10;
 			allotment.availability.availabilityForDayList.push(availabilityForDay);
 		});
+		var expiryDate = thDateUtils.addDaysToThDateDO(allotment.openInterval.getEnd().buildPrototype(), 1);
+		allotment.expiryUtcTimestamp = expiryDate.getUtcTimestamp();
 
 		allotment.constraints = new AllotmentConstraintWrapperDO();
 		allotment.constraints.constraintList = [];
@@ -98,8 +100,8 @@ export class DefaultAllotmentBuilder implements IAllotmentDataSource {
 		allotmentList.forEach((allotment: AllotmentDO) => {
 			allPromiseList.push(allotmentRepository.addAllotment({ hotelId: this._testContext.sessionContext.sessionDO.hotel.id }, allotment));
 		});
-		Promise.all(allPromiseList).then((allotmentList: AllotmentDO[]) => {
-			resolve(allotmentList);
+		Promise.all(allPromiseList).then((createdAllotmentList: AllotmentDO[]) => {
+			resolve(createdAllotmentList);
 		}).catch((error: any) => {
 			reject(error);
 		});

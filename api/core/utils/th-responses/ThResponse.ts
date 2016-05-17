@@ -275,7 +275,10 @@ export enum ThStatusCode {
     AllotmentsControllerErrorSavingAllotment,
     AllotmentsControllerErrorArchivingAllotment,
     AllotmentsControllerErrorGettingCount,
-    AllotmentsControllerErrorGettingList
+    AllotmentsControllerErrorGettingList,
+    HotelDetailsRepositoryErrorGettingList,
+    HotelIteratorError,
+    AllotmentArchiverCronJobExecutorError
 }
 
 var ThMessage: { [index: number]: string; } = {};
@@ -551,6 +554,9 @@ ThMessage[ThStatusCode.AllotmentsControllerErrorSavingAllotment] = "Error saving
 ThMessage[ThStatusCode.AllotmentsControllerErrorArchivingAllotment] = "Error archiving allotment.";
 ThMessage[ThStatusCode.AllotmentsControllerErrorGettingCount] = "Error getting the number of allotments.";
 ThMessage[ThStatusCode.AllotmentsControllerErrorGettingList] = "Error getting the list of allotments.";
+ThMessage[ThStatusCode.HotelDetailsRepositoryErrorGettingList] = "Error getting the list of hotels.";
+ThMessage[ThStatusCode.HotelIteratorError] = "Error iterating through the hotels.";
+ThMessage[ThStatusCode.AllotmentArchiverCronJobExecutorError] = "Error archiving allotments from the process.";
 
 export class ThResponse {
     statusCode: ThStatusCode;

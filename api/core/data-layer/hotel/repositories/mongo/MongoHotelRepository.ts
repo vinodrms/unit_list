@@ -8,6 +8,7 @@ import {HotelContactDetailsDO} from '../../data-objects/hotel-contact-details/Ho
 import {GeoLocationDO} from '../../../common/data-objects/geo-location/GeoLocationDO';
 import {IHotelRepository, HotelMetaRepoDO, BasicHotelInfoRepoDO, UserAccountActivationRepoDO, RequestResetPasswordRepoDO,
 	ResetPasswordRepoDO, PaymentsPoliciesRepoDO, PropertyDetailsRepoDO} from '../IHotelRepository';
+import {LazyLoadRepoDO} from '../../../common/repo-data-objects/LazyLoadRepoDO';
 
 export class MongoHotelRepository extends MongoRepository implements IHotelRepository {
 	private _accountActionsRepository: MongoHotelAccountRepository;
@@ -36,6 +37,9 @@ export class MongoHotelRepository extends MongoRepository implements IHotelRepos
 	}
 	public getHotelById(id: string): Promise<HotelDO> {
 		return this._hotelDetailsRepository.getHotelById(id);
+	}
+	public getHotelList(lazyLoad: LazyLoadRepoDO): Promise<HotelDO[]> {
+		return this._hotelDetailsRepository.getHotelList(lazyLoad);
 	}
 	public updateBasicInformation(hotelMeta: HotelMetaRepoDO, basicInfo: BasicHotelInfoRepoDO): Promise<HotelDO> {
 		return this._hotelDetailsRepository.updateBasicInformation(hotelMeta, basicInfo);
