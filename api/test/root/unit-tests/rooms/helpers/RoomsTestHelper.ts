@@ -22,7 +22,6 @@ export class RoomsTestHelper {
             name: "Demo Room",
             floor: 1,
             categoryId: this._testUtils.getRandomListElement(this._defaultDataBuilder.roomCategoryList).id,
-            bedIdList: this._testUtils.getIdSampleFrom(this._defaultDataBuilder.bedList, 2),
             amenityIdList: this._testUtils.getIdSampleFrom(this._defaultDataBuilder.roomAmenityList, 3),
             attributeIdList: this._testUtils.getIdSampleFrom(this._defaultDataBuilder.roomAttributeList, 3),
             fileUrlList: [],
@@ -37,22 +36,6 @@ export class RoomsTestHelper {
             name: "Invalid Category",
             floor: 1,
             categoryId: "X",
-            bedIdList: this._testUtils.getIdSampleFrom(this._defaultDataBuilder.bedList, 2),
-            amenityIdList: this._testUtils.getIdSampleFrom(this._defaultDataBuilder.roomAmenityList, 3),
-            attributeIdList: this._testUtils.getIdSampleFrom(this._defaultDataBuilder.roomAttributeList, 3),
-            fileUrlList: [],
-            description: "Demo description",
-            notes: "Demo notes",
-            maintenanceStatus: RoomMaintenanceStatus.CheckInReady
-        };
-    }
-    
-    public getSaveRoomItemDOWithInvalidBeds(): SaveRoomItemDO {
-        return {
-            name: "Invalid Beds",
-            floor: 1,
-            categoryId: this._testUtils.getRandomListElement(this._defaultDataBuilder.roomCategoryList).id,
-            bedIdList: ["X"],
             amenityIdList: this._testUtils.getIdSampleFrom(this._defaultDataBuilder.roomAmenityList, 3),
             attributeIdList: this._testUtils.getIdSampleFrom(this._defaultDataBuilder.roomAttributeList, 3),
             fileUrlList: [],
@@ -67,7 +50,6 @@ export class RoomsTestHelper {
             name: "Invalid Amenities",
             floor: 1,
             categoryId: this._testUtils.getRandomListElement(this._defaultDataBuilder.roomCategoryList).id,
-            bedIdList: this._testUtils.getIdSampleFrom(this._defaultDataBuilder.bedList, 2),
             amenityIdList: ["X"],
             attributeIdList: this._testUtils.getIdSampleFrom(this._defaultDataBuilder.roomAttributeList, 3),
             fileUrlList: [],
@@ -82,7 +64,6 @@ export class RoomsTestHelper {
             name: "Invalid Attributes",
             floor: 1,
             categoryId: this._testUtils.getRandomListElement(this._defaultDataBuilder.roomCategoryList).id,
-            bedIdList: this._testUtils.getIdSampleFrom(this._defaultDataBuilder.bedList, 2),
             amenityIdList: this._testUtils.getIdSampleFrom(this._defaultDataBuilder.roomAmenityList, 3),
             attributeIdList: ["X"],
             fileUrlList: [],
@@ -97,7 +78,6 @@ export class RoomsTestHelper {
             name: room.name,
             floor: room.floor,
             categoryId: this._testUtils.getRandomListElement(this._defaultDataBuilder.roomCategoryList).id,
-            bedIdList: room.bedIdList,
             amenityIdList: room.amenityIdList,
             attributeIdList: room.attributeIdList,
             fileUrlList: room.fileUrlList,
@@ -110,46 +90,12 @@ export class RoomsTestHelper {
         return result;
     }
 
-    public getDistinctRoomCategoriesFrom(roomList: RoomDO[]): string[] {
-        var roomCategoryIdList = [];
-        roomList.forEach(room => {
-            if (!_.contains(roomCategoryIdList, room.categoryId))
-                roomCategoryIdList.push(room.categoryId);
-        });
-        return roomCategoryIdList;
-    }
-
-    public validateRoomCategoryStatsList(roomCategoryStatsList: RoomCategoryStatsDO[]) {
-        should.equal(roomCategoryStatsList.length, 3);
-        
-        var categoryDisplayNameList: any = roomCategoryStatsList.map((roomCategoryStats) => { return roomCategoryStats.roomCategory.displayName });
-        should.equal(_.contains(categoryDisplayNameList, 'Single Standard'), true);
-        should.equal(_.contains(categoryDisplayNameList, 'Triple Standard'), true);
-        should.equal(_.contains(categoryDisplayNameList, 'Double Standard'), true);
-        
-        roomCategoryStatsList.forEach((roomCategoryStats) => {
-            if (roomCategoryStats.roomCategory.displayName === 'Single Standard') {
-                should.equal(roomCategoryStats.maxNoAdults, 1);
-                should.equal(roomCategoryStats.maxNoChildren, 1);
-            }
-            else if (roomCategoryStats.roomCategory.displayName === 'Triple Standard') {
-                should.equal(roomCategoryStats.maxNoAdults, 3);
-                should.equal(roomCategoryStats.maxNoChildren, 4);
-            }
-            else if (roomCategoryStats.roomCategory.displayName === 'Double Standard') {
-                should.equal(roomCategoryStats.maxNoAdults, 2);
-                should.equal(roomCategoryStats.maxNoChildren, 3);
-            }
-        });
-    }
-
     public validateCreatedRoom(readRoom: RoomDO, createdRoom: RoomDO) {
         should.equal(readRoom.hotelId, createdRoom.hotelId);
         should.equal(readRoom.id, createdRoom.id);
         should.equal(readRoom.name, createdRoom.name);
         should.equal(readRoom.floor, createdRoom.floor);
         should.equal(readRoom.categoryId, createdRoom.categoryId);
-        this._testUtils.stringArraysAreEqual(readRoom.bedIdList, createdRoom.bedIdList).should.be.true;
         this._testUtils.stringArraysAreEqual(readRoom.amenityIdList, createdRoom.amenityIdList).should.be.true;
         this._testUtils.stringArraysAreEqual(readRoom.attributeIdList, createdRoom.attributeIdList).should.be.true;
         should.equal(readRoom.description, createdRoom.description);

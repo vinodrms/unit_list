@@ -12,12 +12,16 @@ export enum RoomMaintenanceStatus {
 }
 
 export class RoomDO extends BaseDO {
+    constructor() {
+        super();
+    }
+
     id: string;
     versionId: number;
+    hotelId: string;
     name: string;
     floor: number;
     categoryId: string;
-    bedIdList: string[];
     amenityIdList: string[];
     attributeIdList: string[];
     fileUrlList: string[];
@@ -25,16 +29,12 @@ export class RoomDO extends BaseDO {
     notes: string;
     maintenanceStatus: RoomMaintenanceStatus;
     status: RoomStatus;
-    
-    constructor() {
-        super();
-    }
-    
+
     protected getPrimitivePropertyKeys(): string[] {
-		return ["id", "versionId", "name", "floor", "categoryId", "bedIdList", "amenityIdList",
+        return ["id", "versionId", "hotelId", "name", "floor", "categoryId", "amenityIdList",
             "attributeIdList", "fileUrlList", "description", "notes", "maintenanceStatus", "status"];
-	}
-    
+    }
+
     public buildFromObject(object: Object) {
         super.buildFromObject(object);
     }

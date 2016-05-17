@@ -11,6 +11,7 @@ import {RoomVM} from './view-models/RoomVM';
 import {RoomAmenitiesDO} from '../settings/data-objects/RoomAmenitiesDO';
 import {RoomAttributesDO} from '../settings/data-objects/RoomAttributesDO';
 import {RoomCategoriesService} from '../room-categories/RoomCategoriesService';
+import {RoomCategoriesStatsService} from '../room-categories/RoomCategoriesStatsService';
 import {RoomCategoryDO} from '../room-categories/data-objects/RoomCategoryDO';
 import {RoomAmenitiesService} from '../settings/RoomAmenitiesService';
 import {RoomAttributesService} from '../settings/RoomAttributesService';
@@ -21,12 +22,13 @@ import {RoomAttributeDO} from '../common/data-objects/room-attribute/RoomAttribu
 import {BedsDO} from '../beds/data-objects/BedsDO';
 import {BedDO} from '../beds/data-objects/BedDO';
 import {BedVM} from '../beds/view-models/BedVM';
+import {RoomCategoryStatsDO} from '../room-categories/data-objects/RoomCategoryStatsDO';
 
 @Injectable()
 export class RoomsService extends ALazyLoadRequestService<RoomVM> {
     constructor(appContext: AppContext, private _roomCategoriesService: RoomCategoriesService,
-        private _roomAmenitiesService: RoomAmenitiesService, private _roomAttributesService: RoomAttributesService,
-        private _bedsEagerService: BedsEagerService) {
+        private _roomCategoriesStatsService: RoomCategoriesStatsService, private _roomAmenitiesService: RoomAmenitiesService, 
+        private _roomAttributesService: RoomAttributesService, private _bedsEagerService: BedsEagerService) {
 		super(appContext, ThServerApi.RoomsCount, ThServerApi.Rooms);
 	}
     
@@ -35,18 +37,19 @@ export class RoomsService extends ALazyLoadRequestService<RoomVM> {
             this._roomAmenitiesService.getRoomAmenitiesDO(),
             this._roomAttributesService.getRoomAttributesDO(),
             this._roomCategoriesService.getRoomCategoryList(),
+            this._roomCategoriesStatsService.getRoomCategoryStatsForRoomCategoryIdList([]),
             this._bedsEagerService.getBedAggregatedList()
-        ).map((result: [RoomAmenitiesDO, RoomAttributesDO, RoomCategoryDO[], BedVM[]]) => {
+        ).map((result: [RoomAmenitiesDO, RoomAttributesDO, RoomCategoryDO[], RoomCategoryStatsDO[], BedVM[]]) => {
             var roomAmenities = result[0];
             var roomAttributes = result[1];
             var roomCategories = result[2];
-            var bedVMList = result[3];
+            var roomCategoriesStats = result[3];
+            var bedVMList = result[4];
             
             var rooms = new RoomsDO();
             rooms.buildFromObject(pageDataObject);
             
             var roomVMList: RoomVM[] = [];
-            
             _.forEach(rooms.roomList, (room: RoomDO) => {
                 var roomVM = new RoomVM();
                 roomVM.room = room;
@@ -75,15 +78,19 @@ export class RoomsService extends ALazyLoadRequestService<RoomVM> {
                     }
                 });
                 
-                roomVM.bedList = [];
-                _.forEach(room.bedIdList, (bedId: string) => {
-                    var bed = _.find(bedVMList, (bedVM: BedVM) => {
-                        return bedVM.bed.id === bedId;    
-                    });
-                    if(!this._appContext.thUtils.isUndefinedOrNull(bed)) {
-                        roomVM.bedList.push(bed);    
-                    }
+                roomVM.categoryStats = _.find(roomCategoriesStats, (roomCategoryStats: RoomCategoryStatsDO) => {
+                    return roomCategoryStats.roomCategory.id === room.categoryId;    
                 });
+                
+                // roomVM.bedList = [];
+                // _.forEach(room.bedIdList, (bedId: string) => {
+                //     var bed = _.find(bedVMList, (bedVM: BedVM) => {
+                //         return bedVM.bed.id === bedId;    
+                //     });
+                //     if(!this._appContext.thUtils.isUndefinedOrNull(bed)) {
+                //         roomVM.bedList.push(bed);    
+                //     }
+                // });
                 
                 roomVMList.push(roomVM);    
             });

@@ -15,7 +15,6 @@ import {RoomSearchResultRepoDO} from '../../../../core/data-layer/rooms/reposito
 import {SaveRoomItemDO} from '../../../../core/domain-layer/rooms/SaveRoomItemDO';
 import {SaveRoomItem} from '../../../../core/domain-layer/rooms/SaveRoomItem';
 import {DeleteRoomItem} from '../../../../core/domain-layer/rooms/DeleteRoomItem';
-import {RoomAggregator} from '../../../../core/domain-layer/rooms/aggregators/RoomAggregator';
 import {RoomCategoryStatsDO} from '../../../../core/data-layer/room-categories/data-objects/RoomCategoryStatsDO';
 
 describe("Hotel Rooms Tests", function() {
@@ -24,8 +23,7 @@ describe("Hotel Rooms Tests", function() {
     var testDataBuilder: DefaultDataBuilder;
     var roomsHelper: RoomsTestHelper;
     var createdRoom: RoomDO;
-    var numCreatedRooms = 3;
-    var usedRoomCategoryIdList: string[];
+    var numCreatedRooms = 7;
 
     before(function(done: any) {
         testUtils = new TestUtils();
@@ -46,16 +44,7 @@ describe("Hotel Rooms Tests", function() {
                 done();
             });
         });
-        it("Should not create room with invalid beds", function(done) {
-            var saveRoomItemDO: SaveRoomItemDO = roomsHelper.getSaveRoomItemDOWithInvalidBeds();
-            var saveRoomItem = new SaveRoomItem(testContext.appContext, testContext.sessionContext);
-            saveRoomItem.save(saveRoomItemDO).then((result: RoomDO) => {
-                done(new Error("did manage to create a room with invalid beds"));
-            }).catch((e: ThError) => {
-                should.notEqual(e.getThStatusCode(), ThStatusCode.Ok);
-                done();
-            });
-        });
+        
         it("Should not create room with invalid amenities", function(done) {
             var saveRoomItemDO: SaveRoomItemDO = roomsHelper.getSaveRoomItemDOWithInvalidAmenities();
             var saveRoomItem = new SaveRoomItem(testContext.appContext, testContext.sessionContext);
@@ -86,7 +75,6 @@ describe("Hotel Rooms Tests", function() {
                 should.equal(result.name, saveRoomItemDO.name);
                 should.equal(result.floor, saveRoomItemDO.floor);
                 should.equal(result.categoryId, saveRoomItemDO.categoryId);
-                testUtils.stringArraysAreEqual(result.bedIdList, saveRoomItemDO.bedIdList).should.be.true;
                 testUtils.stringArraysAreEqual(result.amenityIdList, saveRoomItemDO.amenityIdList).should.be.true;
                 testUtils.stringArraysAreEqual(result.attributeIdList, saveRoomItemDO.attributeIdList).should.be.true;
                 should.equal(result.description, saveRoomItemDO.description);
@@ -105,8 +93,7 @@ describe("Hotel Rooms Tests", function() {
             var roomToUpdate = roomsHelper.getSaveRoomItemDOFrom(createdRoom);
 
             roomToUpdate.floor = 20;
-            roomToUpdate.categoryId = testUtils.getRandomListElement(testDataBuilder.roomCategoryList).id;
-            roomToUpdate.bedIdList = testUtils.getIdSampleFrom(testDataBuilder.bedList, 1);
+            roomToUpdate.categoryId = testUtils.getRandomListElement(testDataBuilder.roomCategoryList).id;            
             roomToUpdate.amenityIdList = testUtils.getIdSampleFrom(testDataBuilder.roomAmenityList, 4);
             roomToUpdate.attributeIdList = testUtils.getIdSampleFrom(testDataBuilder.roomAttributeList, 3);
             roomToUpdate.description = "New description";
@@ -120,7 +107,6 @@ describe("Hotel Rooms Tests", function() {
                 should.equal(result.name, roomToUpdate.name);
                 should.equal(result.floor, roomToUpdate.floor);
                 should.equal(result.categoryId, roomToUpdate.categoryId);
-                testUtils.stringArraysAreEqual(result.bedIdList, roomToUpdate.bedIdList).should.be.true;
                 testUtils.stringArraysAreEqual(result.amenityIdList, roomToUpdate.amenityIdList).should.be.true;
                 testUtils.stringArraysAreEqual(result.attributeIdList, roomToUpdate.attributeIdList).should.be.true;
                 should.equal(result.description, roomToUpdate.description);
@@ -179,31 +165,5 @@ describe("Hotel Rooms Tests", function() {
                 done(err);
             });
         });
-    });
-
-    describe("Room - Room Categories Aggregator", function() {
-        it("Should get all the room categories for which the hotel assigned at least a room", function(done) {
-            var roomAggregator = new RoomAggregator(testContext.appContext);
-            roomAggregator.getUsedRoomCategoryList({ hotelId: testContext.sessionContext.sessionDO.hotel.id }).then((roomCategoryList: RoomCategoryDO[]) => {
-                usedRoomCategoryIdList = roomCategoryList.map((roomCategory: RoomCategoryDO) => { return roomCategory.id });
-                if (testUtils.stringArraysAreEqual(roomsHelper.getDistinctRoomCategoriesFrom(testDataBuilder.roomList), usedRoomCategoryIdList))
-                    done();
-                else
-                    done(new Error("The used room categories query may be incorrect"));
-            }).catch((err: any) => {
-                done(err);
-            });
-        });
-
-        it("Should get the room category stats for each room category id passed as argument", function(done) {
-            var roomAggregator = new RoomAggregator(testContext.appContext);
-
-            roomAggregator.getRoomCategoryStatsList({ hotelId: testContext.sessionContext.sessionDO.hotel.id }, usedRoomCategoryIdList).then((roomCategoryStatsList: RoomCategoryStatsDO[]) => {
-                roomsHelper.validateRoomCategoryStatsList(roomCategoryStatsList);
-                done();
-            }).catch((err: any) => {
-                done(err);
-            });
-        });
-    });
+    });    
 });

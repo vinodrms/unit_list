@@ -13,6 +13,7 @@ import {PageMetaDO} from '../../../../pages/internal/services/common/data-object
 import {PaginationIndex} from './utils/PaginationIndex';
 import {TableOptions} from './utils/TableOptions';
 import {CustomScroll} from '../../directives/CustomScroll';
+import {ThUtils} from '../../ThUtils';
 
 declare var jQuery:any;
 
@@ -23,6 +24,7 @@ declare var jQuery:any;
 	pipes: [TranslationPipe, PricePipe, PercentagePipe, ThDateIntervalPipe]
 })
 export class LazyLoadingTableComponent<T> {
+	private _thUtils: ThUtils;
 	protected _isCollapsed: boolean;
 
 	protected get isCollapsed(): boolean {
@@ -89,6 +91,7 @@ export class LazyLoadingTableComponent<T> {
 
 	constructor(private _appContext: AppContext,
 		@Inject(ElementRef) private _elementRef: ElementRef) {
+		this._thUtils = new ThUtils();
 		this.paginationIndex = new PaginationIndex(_appContext);
 		this.tableOptions = new TableOptions();
 	}
@@ -299,5 +302,9 @@ export class LazyLoadingTableComponent<T> {
 		}
 		classes += 'selectable-row';
 		return classes;
+	}
+	
+	public isUndefinedOrNull(value: any): boolean {
+		return this._thUtils.isUndefinedOrNull(value);
 	}
 }

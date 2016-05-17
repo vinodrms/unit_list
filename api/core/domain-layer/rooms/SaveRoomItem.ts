@@ -9,9 +9,7 @@ import {AmenityDO} from '../../data-layer/common/data-objects/amenity/AmenityDO'
 import {RoomAttributeDO} from '../../data-layer/common/data-objects/room-attribute/RoomAttributeDO';
 import {RoomDO} from '../../data-layer/rooms/data-objects/RoomDO';
 import {RoomCategoryDO} from '../../data-layer/room-categories/data-objects/RoomCategoryDO';
-import {BedDO} from '../../data-layer/common/data-objects/bed/BedDO';
 import {SaveRoomItemDO} from './SaveRoomItemDO';
-import {BedSearchResultRepoDO} from '../../data-layer/beds/repositories/IBedRepository';
 import {RoomItemActionFactory} from './save-actions/RoomItemActionFactory';
 
 import {RoomCategorySearchResultRepoDO} from '../../data-layer/room-categories/repositories/IRoomCategoryRepository';
@@ -104,19 +102,11 @@ export class SaveRoomItem {
                 throw thError;
             }
 
-            return bedsRepository.getBedList({ hotelId: this._sessionContext.sessionDO.hotel.id });
-        }).then((bedsResult: BedSearchResultRepoDO) => {
-            if (!this.bedListIsValid(bedsResult.bedList)) {
-                var thError = new ThError(ThStatusCode.SaveRoomItemInvalidBedList, null);
-                ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Invalid bed list", this._roomDO, thError);
-                throw thError;
-            }
-
             resolve(true);
         }).catch((error: any) => {
             var thError = new ThError(ThStatusCode.SaveRoomItemError, error);
             if (thError.isNativeError()) {
-                ThLogger.getInstance().logError(ThLogLevel.Error, "error saving room item - amenities, attributes, beds validation error", this._roomDO, thError);
+                ThLogger.getInstance().logError(ThLogLevel.Error, "error saving room item - amenities, attributes validation error", this._roomDO, thError);
             }
             reject(thError);
         });
@@ -131,12 +121,6 @@ export class SaveRoomItem {
     private roomAmenityListIsValid(roomAmenityList: AmenityDO[]): boolean {
         var hotelRoomAmenityIdList: string[] = _.map(roomAmenityList, (roomAmenity: AmenityDO) => { return roomAmenity.id; });
         return _.intersection(hotelRoomAmenityIdList, this._roomDO.amenityIdList).length === this._roomDO.amenityIdList.length;
-    }
-
-    private bedListIsValid(bedList: BedDO[]): boolean {
-        var hotelBedIdList: string[] = _.map(bedList, (bed: BedDO) => { return bed.id; });
-        var noDuplicatesBedIdList = _.uniq(this._roomDO.bedIdList);
-        return _.intersection(hotelBedIdList, noDuplicatesBedIdList).length === noDuplicatesBedIdList.length;
     }
 
     private saveRoom(): Promise<RoomDO> {

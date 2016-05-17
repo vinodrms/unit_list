@@ -5,12 +5,15 @@ import {BedVM} from '../../beds/view-models/BedVM';
 import {AmenityDO} from '../../common/data-objects/amenity/AmenityDO';
 import {RoomAttributeDO} from '../../common/data-objects/room-attribute/RoomAttributeDO';
 import {CapacityDO} from '../../common/data-objects/capacity/CapacityDO';
+import {RoomCategoryStatsDO} from '../../room-categories/data-objects/RoomCategoryStatsDO';
 
 export class RoomVM {
 
     private _room: RoomDO;
     private _category: RoomCategoryDO;
-    private _bedList: BedVM[];
+    
+    private _categoryStats: RoomCategoryStatsDO;
+    
     private _roomAmenityList: AmenityDO[];
     private _roomAttributeList: RoomAttributeDO[];
     
@@ -31,11 +34,11 @@ export class RoomVM {
         this._category = category;
     }
     
-    public get bedList(): BedVM[] {
-        return this._bedList;
+    public get categoryStats(): RoomCategoryStatsDO {
+        return this._categoryStats;
     }
-    public set bedList(bedList: BedVM[]) {
-        this._bedList = bedList;
+    public set categoryStats(categoryStats: RoomCategoryStatsDO) {
+        this._categoryStats = categoryStats;
     }
     
     public get roomAmenityList(): AmenityDO[] {
@@ -77,16 +80,11 @@ export class RoomVM {
     }
     
     public get capacity(): CapacityDO {
-        var maxAdults = 0, maxChildren = 0;
-        
-        _.forEach(this.bedList, (bedVM: BedVM) => {
-            maxAdults += bedVM.bed.maxNoAdults;
-            maxChildren += bedVM.bed.maxNoChildren;
-        });
+        var maxAdults = 0, maxChildren = 0;        
         
         return {
-            maxChildren: maxChildren,
-            maxAdults: maxAdults
+            maxChildren: this._categoryStats.capacity.totalCapacity.maxNoChildren,
+            maxAdults: this._categoryStats.capacity.totalCapacity.maxNoAdults
         }
     }
     
@@ -109,12 +107,10 @@ export class RoomVM {
             roomAttributeCopy.buildFromObject(roomAttributeItem);
             copy.roomAttributeList.push(roomAttributeCopy);       
         });
-        copy.bedList = [];
-        this.bedList.forEach((bedVM: BedVM) => {
-            var bedVMCopy = new BedVM();    
-            bedVMCopy.buildFromObject(bedVM);
-            copy.bedList.push(bedVMCopy);
-        });
+        
+        copy.categoryStats = new RoomCategoryStatsDO();
+        copy.categoryStats.buildFromObject(this.categoryStats);
+        
 		return copy;
 	}
 }

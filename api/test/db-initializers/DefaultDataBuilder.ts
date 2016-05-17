@@ -21,7 +21,7 @@ import {AddOnProductDO} from '../../core/data-layer/add-on-products/data-objects
 import {DefaultCustomerBuilder} from './builders/DefaultCustomerBuilder';
 import {CustomerDO} from '../../core/data-layer/customers/data-objects/CustomerDO';
 import {YieldFilterDO} from '../../core/data-layer/common/data-objects/yield-filter/YieldFilterDO';
-import {RoomAggregator} from '../../core/domain-layer/rooms/aggregators/RoomAggregator';
+import {RoomCategoryStatsAggregator} from '../../core/domain-layer/room-categories/aggregators/RoomCategoryStatsAggregator';
 import {RoomCategoryStatsDO} from '../../core/data-layer/room-categories/data-objects/RoomCategoryStatsDO';
 import {DefaultPriceProductBuilder} from './builders/DefaultPriceProductBuilder';
 import {PriceProductDO} from '../../core/data-layer/price-products/data-objects/PriceProductDO';
@@ -135,9 +135,9 @@ export class DefaultDataBuilder {
                 return bedBuilder.loadBeds(bedBuilder, bedTemplateList);
             }).then((addedBeds: BedDO[]) => {
                 this._bedList = addedBeds;
-
+                
                 var roomCategoryBuilder = new DefaultRoomCategoryBuilder(this._testContext);
-                return roomCategoryBuilder.loadRoomCategories(roomCategoryBuilder);
+                return roomCategoryBuilder.loadRoomCategories(roomCategoryBuilder, this._bedList);
             }).then((addedRoomCategories: RoomCategoryDO[]) => {
                 this._roomCategoryList = addedRoomCategories;
 
@@ -150,15 +150,17 @@ export class DefaultDataBuilder {
                 return settingsRepository.getRoomAttributes();
             }).then((roomAttributeList: RoomAttributeDO[]) => {
                 this._roomAttributeList = roomAttributeList;
-
+                
                 var roomBuilder = new DefaultRoomBuilder(this._testContext);
-                return roomBuilder.loadRooms(roomBuilder, this._bedList, this._roomCategoryList, this._roomAttributeList, this._roomAmenityList);
+                return roomBuilder.loadRooms(roomBuilder, this._roomCategoryList, this._roomAttributeList, this._roomAmenityList);
             }).then((roomList: RoomDO[]) => {
                 this._roomList = roomList;
 
                 var roomCategoryIdList: string[] = _.map(this._roomList, (room: RoomDO) => { return room.categoryId });
-                var aggregator = new RoomAggregator(this._testContext.appContext);
-                return aggregator.getRoomCategoryStatsList({ hotelId: this._testContext.sessionContext.sessionDO.hotel.id }, roomCategoryIdList);
+                var distinctRoomCategoryIdList = _.uniq(roomCategoryIdList, function(roomCategoryId) { return roomCategoryId; });
+                var aggregator = new RoomCategoryStatsAggregator(this._testContext.appContext);
+                
+                return aggregator.getRoomCategoryStatsList({ hotelId: this._testContext.sessionContext.sessionDO.hotel.id }, distinctRoomCategoryIdList);
             }).then((roomCategoryStatsList: RoomCategoryStatsDO[]) => {
                 this._roomCategoryStatsList = roomCategoryStatsList;
 

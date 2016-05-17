@@ -2,7 +2,7 @@ import {BaseController} from './base/BaseController';
 import {ThStatusCode} from '../core/utils/th-responses/ThResponse';
 import {AppContext} from '../core/utils/AppContext';
 import {SessionContext} from '../core/utils/SessionContext';
-import {RoomAggregator, RoomAggregatorMetaDO} from '../core/domain-layer/rooms/aggregators/RoomAggregator';
+import {RoomCategoryStatsAggregator, RoomCategoryStatsAggregatorMetaDO} from '../core/domain-layer/room-categories/aggregators/RoomCategoryStatsAggregator';
 import {RoomCategoryStatsDO} from '../core/data-layer/room-categories/data-objects/RoomCategoryStatsDO';
 import {DeleteRoomCategoryItem} from '../core/domain-layer/room-categories/DeleteRoomCategoryItem';
 import {SaveRoomCategoryItem} from '../core/domain-layer/room-categories/SaveRoomCategoryItem';
@@ -67,14 +67,13 @@ class RoomCategoriesController extends BaseController {
     }
 
     public getRoomCategoryStatsList(req: Express.Request, res: Express.Response) {
-        if (!this.precheckPOSTParameters(req, res, 'roomCategoryIdList', [])) { return };
-        
+        // if (!this.precheckPOSTParameters(req, res, 'roomCategoryIdList', [])) { return };
         var appContext: AppContext = req.appContext;
         var sessionContext: SessionContext = req.sessionContext;
         
-        var roomAggregator = new RoomAggregator(appContext);
-        var roomAggregatorMeta = this.getRoomAggregatorMetaDOFrom(sessionContext);
-        roomAggregator.getRoomCategoryStatsList(roomAggregatorMeta, req.body.roomCategoryIdList).then((roomCategoryStatsList: RoomCategoryStatsDO[]) => {
+        var roomCategStatsAggregator = new RoomCategoryStatsAggregator(appContext);
+        var roomCategStatsAggregatorMeta = this.getRoomAggregatorMetaDOFrom(sessionContext);
+        roomCategStatsAggregator.getRoomCategoryStatsList(roomCategStatsAggregatorMeta, req.body.roomCategoryIdList).then((roomCategoryStatsList: RoomCategoryStatsDO[]) => {
             this.returnSuccesfulResponse(req, res, { roomCategoryStatsList: roomCategoryStatsList });
         }).catch((err: any) => {
             this.returnErrorResponse(req, res, err, ThStatusCode.RoomCategoriesControllerErrorGettingRoomCategoriesStats);
@@ -85,7 +84,7 @@ class RoomCategoriesController extends BaseController {
         return { hotelId: sessionContext.sessionDO.hotel.id };
     }
 
-    private getRoomAggregatorMetaDOFrom(sessionContext: SessionContext): RoomAggregatorMetaDO {
+    private getRoomAggregatorMetaDOFrom(sessionContext: SessionContext): RoomCategoryStatsAggregatorMetaDO {
         return { hotelId: sessionContext.sessionDO.hotel.id };
     }
 }

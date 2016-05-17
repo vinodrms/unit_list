@@ -63,14 +63,17 @@
 										{{ getItemValue(item, columnMeta.valueMeta) | translate }}
 									</small>
 								</span>
-					<span *ngIf="isCapacity(columnMeta.valueMeta)">
-									{{ getItemValue(item, columnMeta.valueMeta).maxAdults }} <span class="unitpal-font">{{columnMeta.valueMeta.fonts.adult}}</span>					{{ getItemValue(item, columnMeta.valueMeta).maxChildren }} <span class="unitpal-font">{{columnMeta.valueMeta.fonts.child}}</span>
-					</span>
 					<span *ngIf="isDateInterval(columnMeta.valueMeta)">
 									{{ getItemValue(item, columnMeta.valueMeta) | thdateinterval }}
 								</span>
 					<span *ngIf="isFontIcon(columnMeta.valueMeta)">
 									<span class="unitpal-font">{{getItemValue(item, columnMeta.valueMeta)}}</span>
+					</span>
+					<span *ngIf="isCapacity(columnMeta.valueMeta) && !isUndefinedOrNull(getItemValue(item, columnMeta.valueMeta).maxAdults) && !isUndefinedOrNull(getItemValue(item, columnMeta.valueMeta).maxChildren)">
+									{{ getItemValue(item, columnMeta.valueMeta).maxAdults }} <span class="unitpal-font">{{columnMeta.valueMeta.fonts.adult}}</span>					{{ getItemValue(item, columnMeta.valueMeta).maxChildren }} <span class="unitpal-font">{{columnMeta.valueMeta.fonts.child}}</span>
+					</span>
+					<span *ngIf="isCapacity(columnMeta.valueMeta) && isUndefinedOrNull(getItemValue(item, columnMeta.valueMeta).maxAdults) && isUndefinedOrNull(getItemValue(item, columnMeta.valueMeta).maxChildren)">
+									-
 					</span>
 				</td>
 				<td *ngIf="tableOptions.canCopy||tableOptions.canEdit||tableOptions.canDelete" class="table-item-action-group" [ngClass]="{'up-col-10p': !isCollapsed, 'up-col-30p': isCollapsed}">

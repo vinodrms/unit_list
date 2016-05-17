@@ -69,7 +69,7 @@ export class PricePerPersonDO extends BaseDO implements IPriceProductPrice {
 		if (!roomCategStat) {
 			return false;
 		}
-		var maxNoOfAdults: number = roomCategStat.maxNoAdults;
+		var maxNoOfAdults: number = roomCategStat.capacity.totalCapacity.maxNoAdults;
 		if (!this.priceListIsValidForMaxNoOfPersons(this.adultsPriceList, maxNoOfAdults)) {
 			return false;
 		}
@@ -78,7 +78,7 @@ export class PricePerPersonDO extends BaseDO implements IPriceProductPrice {
 			return false;
 		}
 
-		var maxNoOfChildren = roomCategStat.maxNoChildren;
+		var maxNoOfChildren = roomCategStat.capacity.totalCapacity.maxNoChildren;
 		return this.priceListIsValidForMaxNoOfPersons(this.childrenPriceList, (maxNoOfChildren + maxNoOfAdults));
 	}
 	private priceListIsValidForMaxNoOfPersons(priceList: PriceForFixedNumberOfPersonsDO[], maxNoOfPersons: number): boolean {

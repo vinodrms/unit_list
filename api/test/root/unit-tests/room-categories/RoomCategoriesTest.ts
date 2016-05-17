@@ -6,22 +6,28 @@ import {ThError} from '../../../../core/utils/th-responses/ThError';
 import {ThStatusCode} from '../../../../core/utils/th-responses/ThResponse';
 import {DefaultDataBuilder} from '../../../db-initializers/DefaultDataBuilder';
 import {TestContext} from '../../../helpers/TestContext';
+import {TestUtils} from '../../../../test/helpers/TestUtils';
 import {RoomCategoriesTestHelper} from './helpers/RoomCategoriesTestHelper';
 import {RoomCategoryDO, RoomCategoryStatus} from '../../../../core/data-layer/room-categories/data-objects/RoomCategoryDO';
 import {SaveRoomCategoryItem} from '../../../../core/domain-layer/room-categories/SaveRoomCategoryItem';
 import {DeleteRoomCategoryItem} from '../../../../core/domain-layer/room-categories/DeleteRoomCategoryItem';
 import {SaveRoomCategoryItemDO} from '../../../../core/domain-layer/room-categories/SaveRoomCategoryItemDO';
 import {RoomCategorySearchResultRepoDO} from '../../../../core/data-layer/room-categories/repositories/IRoomCategoryRepository';
+import {RoomCategoryStatsAggregator} from '../../../../core/domain-layer/room-categories/aggregators/RoomCategoryStatsAggregator';
+import {RoomCategoryStatsDO} from '../../../../core/data-layer/room-categories/data-objects/RoomCategoryStatsDO';
 
 describe("Hotel Room Categories Tests", function() {
+    var testUtils: TestUtils;
     var testContext: TestContext;
 	var testDataBuilder: DefaultDataBuilder;
     var roomCategoriesHelper: RoomCategoriesTestHelper;
     
+    var usedRoomCategoryIdList: string[];
     var createdRoomCategory: RoomCategoryDO;
     var numCreatedRoomCategories = 6;
     
 	before(function(done: any) {
+        testUtils = new TestUtils();
 		testContext = new TestContext();
 		testDataBuilder = new DefaultDataBuilder(testContext);
 		testDataBuilder.buildWithDoneCallback(done);
@@ -39,13 +45,43 @@ describe("Hotel Room Categories Tests", function() {
 				done();
 			});
         });
+        it("Should not create a room category with invalid beds", function(done) {
+            var saveRoomCategoryItemDO: SaveRoomCategoryItemDO = roomCategoriesHelper.getSaveRoomCategoryItemDOWithInvalidBeds();
+            var saveRoomCategoryItem = new SaveRoomCategoryItem(testContext.appContext, testContext.sessionContext);
+            saveRoomCategoryItem.save(saveRoomCategoryItemDO).then((result: RoomCategoryDO) => {
+                done(new Error("did manage to create a room category with invalid beds"));
+            }).catch((e: ThError) => {
+                should.notEqual(e.getThStatusCode(), ThStatusCode.Ok);
+                done();
+            });
+        });
+        
+        it("Should create a new room category item with empty bed list", function(done) {
+            var saveRoomCategoryItemDO: SaveRoomCategoryItemDO = roomCategoriesHelper.getValidWithEmptyBedListSaveRoomCategoryItemDO();
+            var saveRoomCategoryItem = new SaveRoomCategoryItem(testContext.appContext, testContext.sessionContext);
+            saveRoomCategoryItem.save(saveRoomCategoryItemDO).then((result: RoomCategoryDO) => {
+                should.equal(result.hotelId, testContext.sessionContext.sessionDO.hotel.id);
+                should.exist(result.id);
+                should.equal(result.displayName, saveRoomCategoryItemDO.displayName);
+                result.bedConfig.equals(saveRoomCategoryItemDO.bedConfig).should.be.true;
+                numCreatedRoomCategories++;
+                createdRoomCategory = result;
+                
+                done();    
+            }).catch((e: ThError) => {
+                done(e);    
+            });
+        });
+        
         it("Should create a new room category item", function(done) {
+            
             var saveRoomCategoryItemDO: SaveRoomCategoryItemDO = roomCategoriesHelper.getValidSaveRoomCategoryItemDO();
             var saveRoomCategoryItem = new SaveRoomCategoryItem(testContext.appContext, testContext.sessionContext);
             saveRoomCategoryItem.save(saveRoomCategoryItemDO).then((result: RoomCategoryDO) => {
                 should.equal(result.hotelId, testContext.sessionContext.sessionDO.hotel.id);
                 should.exist(result.id);
                 should.equal(result.displayName, saveRoomCategoryItemDO.displayName);
+                result.bedConfig.equals(saveRoomCategoryItemDO.bedConfig).should.be.true;
                 numCreatedRoomCategories++;
                 createdRoomCategory = result;
                 
@@ -57,13 +93,13 @@ describe("Hotel Room Categories Tests", function() {
         it("Should update the previously created room category", function(done) {
 			var roomCategoryToUpdate = roomCategoriesHelper.getSavedRoomCategoryItemDOFrom(createdRoomCategory);
             roomCategoryToUpdate.displayName = "YYYYYY";
-            
+            roomCategoryToUpdate.bedConfig = roomCategoriesHelper.getRandomBedConfig(testDataBuilder.bedList, 1);
             var saveRoomCategoryItem = new SaveRoomCategoryItem(testContext.appContext, testContext.sessionContext);
             saveRoomCategoryItem.save(roomCategoryToUpdate).then((result: RoomCategoryDO) => {
                 should.equal(result.hotelId, testContext.sessionContext.sessionDO.hotel.id);
                 should.exist(result.id);
                 should.equal(result.displayName, roomCategoryToUpdate.displayName);
-                
+                result.bedConfig.equals(roomCategoryToUpdate.bedConfig).should.be.true;
                 createdRoomCategory = result;
                 
                 done();
@@ -121,4 +157,30 @@ describe("Hotel Room Categories Tests", function() {
 			});
         });
 	});
+    
+    describe("Room Category - Room Categories Aggregator", function() {
+        it("Should get all the room categories for which the hotel assigned at least a room", function(done) {
+            var roomAggregator = new RoomCategoryStatsAggregator(testContext.appContext);
+            roomAggregator.getUsedRoomCategoryList({ hotelId: testContext.sessionContext.sessionDO.hotel.id }).then((roomCategoryList: RoomCategoryDO[]) => {
+                usedRoomCategoryIdList = roomCategoryList.map((roomCategory: RoomCategoryDO) => { return roomCategory.id });
+                if (testUtils.stringArraysAreEqual(roomCategoriesHelper.getDistinctRoomCategoriesFrom(testDataBuilder.roomList), usedRoomCategoryIdList))
+                    done();
+                else
+                    done(new Error("The used room categories query may be incorrect"));
+            }).catch((err: any) => {
+                done(err);
+            });
+        });
+
+        it("Should get the room category stats for each room category id passed as argument", function(done) {
+            var roomAggregator = new RoomCategoryStatsAggregator(testContext.appContext);
+            
+            roomAggregator.getRoomCategoryStatsList({ hotelId: testContext.sessionContext.sessionDO.hotel.id }, usedRoomCategoryIdList).then((roomCategoryStatsList: RoomCategoryStatsDO[]) => {
+                roomCategoriesHelper.validateRoomCategoryStatsList(roomCategoryStatsList);
+                done();
+            }).catch((err: any) => {
+                done(err);
+            });
+        });
+    });
 });
