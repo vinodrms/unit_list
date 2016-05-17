@@ -11,11 +11,12 @@ import {AmenityDO} from '../../../core/data-layer/common/data-objects/amenity/Am
 import {RoomAttributeDO} from '../../../core/data-layer/common/data-objects/room-attribute/RoomAttributeDO';
 import {TestContext} from '../../helpers/TestContext';
 import {ThError} from '../../../core/utils/th-responses/ThError';
+import {RoomCategoryType} from './DefaultRoomCategoryBuilder';
 
 import _ = require('underscore');
 
 export interface IRoomDataSource {
-    getRoomList(bedList: BedDO[], roomCategoryList: RoomCategoryDO[],
+    getRoomList(roomCategoryList: RoomCategoryDO[],
         roomAttributeList: RoomAttributeDO[], roomAmenityList: AmenityDO[]): RoomDO[];
 }
 
@@ -28,98 +29,138 @@ export class DefaultRoomBuilder implements IRoomDataSource {
         this._thUtils = new ThUtils();
     }
 
-    getRoomList(bedList: BedDO[], roomCategoryList: RoomCategoryDO[],
+    getRoomList(roomCategoryList: RoomCategoryDO[],
         roomAttributeList: RoomAttributeDO[], roomAmenityList: AmenityDO[]): RoomDO[] {
         var roomList = [];
         
-        roomList.push(this.getSingleRoom(bedList, roomCategoryList, roomAttributeList, roomAmenityList));
-        roomList.push(this.getDoubleRoom(bedList, roomCategoryList, roomAttributeList, roomAmenityList));
-        roomList.push(this.getTripleRoom(bedList, roomCategoryList, roomAttributeList, roomAmenityList));
+        roomList.push(this.getFirstSingleRoom(roomCategoryList, roomAttributeList, roomAmenityList));
+        roomList.push(this.getSecondSingleRoom(roomCategoryList, roomAttributeList, roomAmenityList));
+        roomList.push(this.getDoubleDoubleRoom(roomCategoryList, roomAttributeList, roomAmenityList));
+        roomList.push(this.getDoubleRoom(roomCategoryList, roomAttributeList, roomAmenityList));
+        roomList.push(this.getTwinRoom(roomCategoryList, roomAttributeList, roomAmenityList));
+        roomList.push(this.getStudioRoom(roomCategoryList, roomAttributeList, roomAmenityList));
+        roomList.push(this.getDoubleKingRoom(roomCategoryList, roomAttributeList, roomAmenityList));
         
         return roomList;
     }
     
-    private getSingleRoom(bedList: BedDO[], roomCategoryList: RoomCategoryDO[],
+    private getFirstSingleRoom(roomCategoryList: RoomCategoryDO[],
         roomAttributeList: RoomAttributeDO[], roomAmenityList: AmenityDO[]): RoomDO {
         var roomDO = new RoomDO();
-        roomDO.name = "201 Single Room";
-        roomDO.floor = 2;
-        if(!this._thUtils.isUndefinedOrNull(roomCategoryList[4])) {
-            roomDO.categoryId = roomCategoryList[4].id;
-        }
-        roomDO.bedIdList = [];
-        if(!this._thUtils.isUndefinedOrNull(bedList[2])) {
-            roomDO.bedIdList.push(bedList[2].id);
-        }
+        roomDO.name = "101 Single";
+        roomDO.floor = 1;
+        roomDO.categoryId = roomCategoryList[RoomCategoryType.Single].id;
         roomDO.amenityIdList = this._testUtils.getIdSampleFrom(roomAmenityList, 3);
         roomDO.attributeIdList = this._testUtils.getIdSampleFrom(roomAttributeList, 5);
-        roomDO.description = "Second floor single room description.";
-        roomDO.notes = "Second floor single room notes.";
+        roomDO.description = "First floor single room description.";
+        roomDO.notes = "First floor single room notes.";
         roomDO.maintenanceStatus = RoomMaintenanceStatus.CheckInReady;
         roomDO.status = RoomStatus.Active;
-        
         return roomDO;
     }
     
-    private getDoubleRoom(bedList: BedDO[], roomCategoryList: RoomCategoryDO[],
+    private getSecondSingleRoom(roomCategoryList: RoomCategoryDO[],
         roomAttributeList: RoomAttributeDO[], roomAmenityList: AmenityDO[]): RoomDO {
         var roomDO = new RoomDO();
-        roomDO.name = "101 Double Room";
+        roomDO.name = "102 Single";
         roomDO.floor = 1;
-        if(!this._thUtils.isUndefinedOrNull(roomCategoryList[0])) {
-            roomDO.categoryId = roomCategoryList[0].id;
-        }
-        roomDO.bedIdList = [];
-        if(!this._thUtils.isUndefinedOrNull(bedList[0])) {
-            roomDO.bedIdList.push(bedList[0].id);
-        }
+        roomDO.categoryId = roomCategoryList[RoomCategoryType.Single].id;
+        roomDO.amenityIdList = this._testUtils.getIdSampleFrom(roomAmenityList, 3);
+        roomDO.attributeIdList = this._testUtils.getIdSampleFrom(roomAttributeList, 5);
+        roomDO.description = "First floor second single room description.";
+        roomDO.notes = "First floor second single room notes.";
+        roomDO.maintenanceStatus = RoomMaintenanceStatus.CheckInReady;
+        roomDO.status = RoomStatus.Active;
+        return roomDO;
+    }
+    
+    private getDoubleDoubleRoom(roomCategoryList: RoomCategoryDO[],
+        roomAttributeList: RoomAttributeDO[], roomAmenityList: AmenityDO[]): RoomDO {
+        var roomDO = new RoomDO();
+        roomDO.name = "103 Double Double";
+        roomDO.floor = 1;
+        roomDO.categoryId = roomCategoryList[RoomCategoryType.DoubleDouble].id;
+        roomDO.amenityIdList = this._testUtils.getIdSampleFrom(roomAmenityList, 3);
+        roomDO.attributeIdList = this._testUtils.getIdSampleFrom(roomAttributeList, 5);
+        roomDO.description = "First floor double double room description.";
+        roomDO.notes = "First floor double double room notes.";
+        roomDO.maintenanceStatus = RoomMaintenanceStatus.CheckInReady;
+        roomDO.status = RoomStatus.Active;
+        return roomDO;
+    }
+    
+    private getDoubleRoom(roomCategoryList: RoomCategoryDO[],
+        roomAttributeList: RoomAttributeDO[], roomAmenityList: AmenityDO[]): RoomDO {
+        var roomDO = new RoomDO();
+        roomDO.name = "104 Double";
+        roomDO.floor = 1;
+        roomDO.categoryId = roomCategoryList[RoomCategoryType.Double].id;
         roomDO.amenityIdList = this._testUtils.getIdSampleFrom(roomAmenityList, 3);
         roomDO.attributeIdList = this._testUtils.getIdSampleFrom(roomAttributeList, 5);
         roomDO.description = "First floor double room description.";
         roomDO.notes = "First floor double room notes.";
         roomDO.maintenanceStatus = RoomMaintenanceStatus.CheckInReady;
         roomDO.status = RoomStatus.Active;
-        
         return roomDO;
     }
     
-    private getTripleRoom(bedList: BedDO[], roomCategoryList: RoomCategoryDO[],
+    private getTwinRoom(roomCategoryList: RoomCategoryDO[],
         roomAttributeList: RoomAttributeDO[], roomAmenityList: AmenityDO[]): RoomDO {
         var roomDO = new RoomDO();
-        var roomDO = new RoomDO();
-        roomDO.name = "102 Triple Room";
+        roomDO.name = "105 Twin";
         roomDO.floor = 1;
-        if(!this._thUtils.isUndefinedOrNull(roomCategoryList[5])) {
-            roomDO.categoryId = roomCategoryList[5].id;
-        }
-        roomDO.bedIdList = [];
-        if(!this._thUtils.isUndefinedOrNull(bedList[0])) {
-            roomDO.bedIdList.push(bedList[0].id);
-        }
-        if(!this._thUtils.isUndefinedOrNull(bedList[2])) {
-            roomDO.bedIdList.push(bedList[2].id);
-        }
-        roomDO.amenityIdList = this._testUtils.getIdSampleFrom(roomAmenityList, 4);
-        roomDO.attributeIdList = this._testUtils.getIdSampleFrom(roomAttributeList, 6);
-        roomDO.description = "First floor triple room description.";
-        roomDO.notes = "First floor triple room notes.";
+        roomDO.categoryId = roomCategoryList[RoomCategoryType.Twin].id;
+        roomDO.amenityIdList = this._testUtils.getIdSampleFrom(roomAmenityList, 3);
+        roomDO.attributeIdList = this._testUtils.getIdSampleFrom(roomAttributeList, 5);
+        roomDO.description = "First floor twin room description.";
+        roomDO.notes = "First floor twin room notes.";
         roomDO.maintenanceStatus = RoomMaintenanceStatus.CheckInReady;
         roomDO.status = RoomStatus.Active;
         return roomDO;
     }
     
-    public loadRooms(dataSource: IRoomDataSource, bedList: BedDO[], roomCategoryList: RoomCategoryDO[],
+    private getStudioRoom(roomCategoryList: RoomCategoryDO[],
+        roomAttributeList: RoomAttributeDO[], roomAmenityList: AmenityDO[]): RoomDO {
+        var roomDO = new RoomDO();
+        roomDO.name = "201 Studio";
+        roomDO.floor = 1;
+        roomDO.categoryId = roomCategoryList[RoomCategoryType.Studio].id;
+        roomDO.amenityIdList = this._testUtils.getIdSampleFrom(roomAmenityList, 3);
+        roomDO.attributeIdList = this._testUtils.getIdSampleFrom(roomAttributeList, 5);
+        roomDO.description = "Second floor studio room description.";
+        roomDO.notes = "Second floor studio room notes.";
+        roomDO.maintenanceStatus = RoomMaintenanceStatus.CheckInReady;
+        roomDO.status = RoomStatus.Active;
+        return roomDO;
+    }
+    
+    private getDoubleKingRoom(roomCategoryList: RoomCategoryDO[],
+        roomAttributeList: RoomAttributeDO[], roomAmenityList: AmenityDO[]): RoomDO {
+        var roomDO = new RoomDO();
+        roomDO.name = "202 Double King";
+        roomDO.floor = 1;
+        roomDO.categoryId = roomCategoryList[RoomCategoryType.DoubleKing].id;
+        roomDO.amenityIdList = this._testUtils.getIdSampleFrom(roomAmenityList, 3);
+        roomDO.attributeIdList = this._testUtils.getIdSampleFrom(roomAttributeList, 5);
+        roomDO.description = "Second floor double king room description.";
+        roomDO.notes = "Second floor double king room notes.";
+        roomDO.maintenanceStatus = RoomMaintenanceStatus.CheckInReady;
+        roomDO.status = RoomStatus.Active;
+        return roomDO;
+    }
+    
+    public loadRooms(dataSource: IRoomDataSource, roomCategoryList: RoomCategoryDO[],
         roomAttributeList: RoomAttributeDO[], roomAmenityList: AmenityDO[]): Promise<RoomDO[]> {
 
         return new Promise<RoomDO[]>((resolve: { (result: RoomDO[]): void }, reject: { (err: ThError): void }) => {
-            this.loadRoomsCore(resolve, reject, dataSource, bedList, roomCategoryList, roomAttributeList, roomAmenityList);
+            this.loadRoomsCore(resolve, reject, dataSource, roomCategoryList, roomAttributeList, roomAmenityList);
         });
 
     }
-    private loadRoomsCore(resolve: { (result: RoomDO[]): void }, reject: { (err: ThError): void }, dataSource: IRoomDataSource, bedList: BedDO[],
+    private loadRoomsCore(resolve: { (result: RoomDO[]): void }, reject: { (err: ThError): void }, dataSource: IRoomDataSource,
         roomCategoryList: RoomCategoryDO[], roomAttributeList: RoomAttributeDO[], roomAmenityList: AmenityDO[]) {
 
-        var roomListToBeAdded = dataSource.getRoomList(bedList, roomCategoryList, roomAttributeList, roomAmenityList);
+        var roomListToBeAdded = dataSource.getRoomList(roomCategoryList, roomAttributeList, roomAmenityList);
         var roomRepository = this._testContext.appContext.getRepositoryFactory().getRoomRepository();
         var addRoomsPromiseList: Promise<RoomDO>[] = [];
         roomListToBeAdded.forEach((roomToBeAdded: RoomDO) => {

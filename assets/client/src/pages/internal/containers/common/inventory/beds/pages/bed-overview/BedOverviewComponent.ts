@@ -3,6 +3,7 @@ import {BaseComponent} from '../../../../../../../../common/base/BaseComponent';
 import {TranslationPipe} from '../../../../../../../../common/utils/localization/TranslationPipe';
 import {BedVM} from '../../../../../../services/beds/view-models/BedVM';
 import {CustomScroll} from '../../../../../../../../common/utils/directives/CustomScroll';
+import {BedAccommodationType} from '../../../../../../services/beds/data-objects/BedDO';
 
 @Component({
     selector: 'bed-overview',
@@ -28,5 +29,9 @@ export class BedOverviewComponent extends BaseComponent {
     @Output() onEdit = new EventEmitter();
 	public editBed() {
 		this.onEdit.next(this._bedVM);
+	}
+	
+	public get accommodatesBabies(): boolean {
+		return this._bedVM.bed.accommodationType === BedAccommodationType.Babies;
 	}
 }

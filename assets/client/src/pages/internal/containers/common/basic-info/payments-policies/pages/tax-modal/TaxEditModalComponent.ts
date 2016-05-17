@@ -34,7 +34,7 @@ export class TaxEditModalComponent extends BaseComponent implements ICustomModal
 	}
 	private preprocessTaxValue() {
 		if (this.taxDO.valueType === TaxValueType.Percentage && this.taxDO.value) {
-			this.taxDO.value = this.taxDO.value * 100;
+			this.taxDO.value = Math.round(this.taxDO.value * 100);
 		}
 	}
 

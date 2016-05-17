@@ -60,6 +60,10 @@ export class ThDateDO extends BaseDO {
 		var thisMoment = thDateUtils.convertThDateDOToMoment(this);
 		return thisMoment.isoWeekday();
 	}
+	public getUtcTimestamp(): number {
+		return Date.UTC(this.year, this.month, this.day);
+	}
+
 	public buildPrototype(): ThDateDO {
 		return ThDateDO.buildThDateDO(this.year, this.month, this.day);
 	}
@@ -70,5 +74,19 @@ export class ThDateDO extends BaseDO {
 		outDate.month = month;
 		outDate.day = day;
 		return outDate;
+	}
+	
+	public toString(): string {
+		if (!_.isNumber(this.year) || !_.isNumber(this.month) || !_.isNumber(this.day)) {
+			return "";
+		}
+		return this.getDayString() + "/" + this.getMonthString() + "/" + this.year;
+	}
+	private getDayString(): string {
+		return this.day < 10 ? ("0" + this.day) : ("" + this.day);
+	}
+	private getMonthString(): string {
+		var actualMonth = this.month + 1;
+		return actualMonth < 10 ? ("0" + actualMonth) : ("" + actualMonth);
 	}
 }

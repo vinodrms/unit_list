@@ -6,8 +6,11 @@ import {SessionContext} from '../../utils/SessionContext';
 import {ThUtils} from '../../utils/ThUtils';
 import {ValidationResultParser} from '../common/ValidationResultParser';
 import {RoomCategoryDO} from '../../data-layer/room-categories/data-objects/RoomCategoryDO';
+import {BedMetaDO} from '../../data-layer/room-categories/data-objects/bed-config/BedMetaDO';
 import {RoomCategoryItemActionFactory} from './save-actions/RoomCategoryItemActionFactory';
 import {SaveRoomCategoryItemDO} from './SaveRoomCategoryItemDO';
+import {BedDO} from '../../data-layer/common/data-objects/bed/BedDO';
+import {BedSearchResultRepoDO} from '../../data-layer/beds/repositories/IBedRepository';
 
 import _ = require("underscore");
 
@@ -32,22 +35,50 @@ export class SaveRoomCategoryItem {
         });
     }
     private saveCore(resolve: { (result: RoomCategoryDO): void }, reject: { (err: ThError): void }) {
+        if (!this.submittedStructureIsValid(reject)) {
+            return;
+        }
+
+        if (this._thUtils.isUndefinedOrNull(this._roomCategoryDO.bedConfig)) {
+            this.saveRoomCategory().then((savedRoomCategory: RoomCategoryDO) => {
+                resolve(savedRoomCategory);
+            }).catch((error: any) => {
+                var thError = new ThError(ThStatusCode.SaveRoomCategoryItemError, error);
+                if (thError.isNativeError()) {
+                    ThLogger.getInstance().logError(ThLogLevel.Error, "error saving room category item", this._roomCategoryDO, thError);
+                }
+                reject(thError);
+            });
+        }
+        else {
+            var bedsRepository = this._appContext.getRepositoryFactory().getBedRepository();
+            bedsRepository.getBedList({ hotelId: this._sessionContext.sessionDO.hotel.id }).then((bedsResult: BedSearchResultRepoDO) => {
+                if (!this.bedListIsValid(bedsResult.bedList)) {
+                    var thError = new ThError(ThStatusCode.SaveRoomItemInvalidBedList, null);
+                    ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Invalid bed list", this._roomCategoryDO, thError);
+                    throw thError;
+                }
+                return this.saveRoomCategory();
+            }).then((savedRoomCategory: RoomCategoryDO) => {
+                resolve(savedRoomCategory);
+            }).catch((error: any) => {
+                var thError = new ThError(ThStatusCode.SaveRoomCategoryItemError, error);
+                if (thError.isNativeError()) {
+                    ThLogger.getInstance().logError(ThLogLevel.Error, "error saving room category item", this._roomCategoryDO, thError);
+                }
+                reject(thError);
+            });
+        }
+    }
+
+    private submittedStructureIsValid(reject: { (err: ThError): void }): boolean {
         var validationResult = SaveRoomCategoryItemDO.getValidationStructure().validateStructure(this._roomCategoryDO);
         if (!validationResult.isValid()) {
             var parser = new ValidationResultParser(validationResult, this._roomCategoryDO);
             parser.logAndReject("Error validating data for save room category", reject);
-            return;
+            return false;
         }
-
-        this.saveRoomCategory().then((savedRoomCategory: RoomCategoryDO) => {
-            resolve(savedRoomCategory);
-        }).catch((error: any) => {
-            var thError = new ThError(ThStatusCode.SaveRoomCategoryItemError, error);
-            if (thError.isNativeError()) {
-                ThLogger.getInstance().logError(ThLogLevel.Error, "error saving room category item", this._roomCategoryDO, thError);
-            }
-            reject(thError);
-        });
+        return true;
     }
 
     private saveRoomCategory(): Promise<RoomCategoryDO> {
@@ -59,6 +90,15 @@ export class SaveRoomCategoryItem {
         var actionFactory = new RoomCategoryItemActionFactory(this._appContext, this._sessionContext);
         var actionStrategy = actionFactory.getActionStrategy(this.buildRoomCategoryDO());
         actionStrategy.save(resolve, reject);
+    }
+
+    private bedListIsValid(bedList: BedDO[]): boolean {
+        var hotelBedIdList: string[] = _.map(bedList, (bed: BedDO) => { return bed.id; });
+        var roomCategoryBedIdList: string[] = _.map(this._roomCategoryDO.bedConfig.bedMetaList, (bedMeta: BedMetaDO) => {
+            return bedMeta.bedId;
+        });
+
+        return _.intersection(hotelBedIdList, roomCategoryBedIdList).length === roomCategoryBedIdList.length;
     }
 
     private buildRoomCategoryDO(): RoomCategoryDO {

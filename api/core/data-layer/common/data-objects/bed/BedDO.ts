@@ -5,6 +5,16 @@ export enum BedStatus {
 	Deleted
 }
 
+export enum BedStorageType {
+	Stationary,
+	Rollaway
+}
+
+export enum BedAccommodationType {
+	AdultsAndChildren,
+	Babies
+}
+
 export class BedSizeDO extends BaseDO {
     constructor() {
         super();
@@ -18,6 +28,19 @@ export class BedSizeDO extends BaseDO {
     }
 }
 
+export class BedCapacityDO extends BaseDO {
+    constructor() {
+        super();
+    }
+    
+    maxNoAdults: number;
+    maxNoChildren: number;
+    
+    protected getPrimitivePropertyKeys(): string[] {
+        return ["maxNoAdults", "maxNoChildren"];
+    }
+}
+
 export class BedDO extends BaseDO {
     constructor() {
         super();
@@ -27,15 +50,16 @@ export class BedDO extends BaseDO {
     versionId: number;
     hotelId: string;
     bedTemplateId: string;
+    storageType: BedStorageType;
+    accommodationType: BedAccommodationType;
     name: string;
     size: BedSizeDO;
-    maxNoAdults: number;
-    maxNoChildren: number;
+    capacity: BedCapacityDO;
     status: BedStatus;
 	notes: string;
     
     protected getPrimitivePropertyKeys(): string[] {
-        return ["id", "versionId", "hotelId", "bedTemplateId", "name", "maxNoAdults", "maxNoChildren", "status", "notes"];
+        return ["id", "versionId", "hotelId", "bedTemplateId", "storageType", "accommodationType", "name", "status", "notes"];
     }
     
     public buildFromObject(object: Object) {
@@ -43,6 +67,9 @@ export class BedDO extends BaseDO {
         
         this.size = new BedSizeDO();
 		this.size.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "size"));
+        
+        this.capacity = new BedCapacityDO();
+		this.capacity.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "capacity"));
 
     }
     

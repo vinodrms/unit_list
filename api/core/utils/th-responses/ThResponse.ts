@@ -125,6 +125,7 @@ export enum ThStatusCode {
     BedRepositoryErrorReadingDocumentCount,
     BedItemUpdateStrategyErrorUpdating,
     SaveBedItemError,
+    SaveBedItemInvalidSizeAndOrCapacity,
     SaveBedItemInvalidBedTemplateId,
     DeleteBedItemErrorDeleting,
     DeleteBedItemErrorValidating,
@@ -275,7 +276,10 @@ export enum ThStatusCode {
     AllotmentsControllerErrorSavingAllotment,
     AllotmentsControllerErrorArchivingAllotment,
     AllotmentsControllerErrorGettingCount,
-    AllotmentsControllerErrorGettingList
+    AllotmentsControllerErrorGettingList,
+    HotelDetailsRepositoryErrorGettingList,
+    HotelIteratorError,
+    AllotmentArchiverCronJobExecutorError
 }
 
 var ThMessage: { [index: number]: string; } = {};
@@ -360,6 +364,7 @@ ThMessage[ThStatusCode.BedRepositoryErrorUpdatingBed] = "Problem updating the be
 ThMessage[ThStatusCode.BedRepositoryErrorReadingDocumentCount] = "Error getting document count.";
 ThMessage[ThStatusCode.BedItemUpdateStrategyErrorUpdating] = "Error updating the bed.";
 ThMessage[ThStatusCode.SaveBedItemError] = "Error saving the bed item.";
+ThMessage[ThStatusCode.SaveBedItemInvalidSizeAndOrCapacity] = "Size and capacity mandatory for Adults/Children and should be null for Babies";
 ThMessage[ThStatusCode.SaveBedItemInvalidBedTemplateId] = "Invalid bed template id.";
 ThMessage[ThStatusCode.DeleteBedItemErrorDeleting] = "Error deleting bed item.";
 ThMessage[ThStatusCode.DeleteBedItemErrorValidating] = "Error validating the existing bed item.";
@@ -551,6 +556,9 @@ ThMessage[ThStatusCode.AllotmentsControllerErrorSavingAllotment] = "Error saving
 ThMessage[ThStatusCode.AllotmentsControllerErrorArchivingAllotment] = "Error archiving allotment.";
 ThMessage[ThStatusCode.AllotmentsControllerErrorGettingCount] = "Error getting the number of allotments.";
 ThMessage[ThStatusCode.AllotmentsControllerErrorGettingList] = "Error getting the list of allotments.";
+ThMessage[ThStatusCode.HotelDetailsRepositoryErrorGettingList] = "Error getting the list of hotels.";
+ThMessage[ThStatusCode.HotelIteratorError] = "Error iterating through the hotels.";
+ThMessage[ThStatusCode.AllotmentArchiverCronJobExecutorError] = "Error archiving allotments from the process.";
 
 export class ThResponse {
     statusCode: ThStatusCode;

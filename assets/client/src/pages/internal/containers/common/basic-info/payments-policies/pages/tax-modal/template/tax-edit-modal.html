@@ -28,7 +28,12 @@
 				<label *ngIf="taxDO.valueType === getFixedTaxValueType()">{{ 'Value' | translate }} {{ccyCode}}:</label>
 				<div class="form-group">
 					<div class="input-group" [ngClass]="{'form-warning': (!isValidValue() && didSubmitForm)}">
-						<input type="number" class="form-control" id="perval" placeholder="{{ 'Enter the value' | translate }}" [(ngModel)]="taxDO.value">
+						<input 
+							*ngIf="taxDO.valueType === getFixedTaxValueType()"
+							type="number" step="0.01" class="form-control" id="perval" placeholder="{{ 'Enter the value' | translate }}" [(ngModel)]="taxDO.value">
+						<input 
+							*ngIf="taxDO.valueType === getPercentageTaxValueType()"
+							type="number" class="form-control" id="perval" placeholder="{{ 'Enter the value' | translate }}" [(ngModel)]="taxDO.value">
 					</div>
 					<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter a valid value' | translate }}</small></label>
 				</div>

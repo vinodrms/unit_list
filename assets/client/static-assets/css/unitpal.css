@@ -172,10 +172,6 @@ header {
     color: #fc8333;
 }
 
-.page-info {
-    padding: 12px;
-}
-
 basic-information,
 beds,
 rooms,
@@ -183,6 +179,7 @@ breakfast,
 add-on-products,
 price-products,
 customer-register,
+allotments,
 beds {
     display: block;
     height: 100%;
@@ -214,6 +211,9 @@ price-products{
 
 customer-register{
     background: #fff url(/client/static-assets/images/background_07_customers.png) right bottom no-repeat !important;
+}
+allotments{
+    background: #fff url(/client/static-assets/images/background_08_allotment.png) right bottom no-repeat !important;
 }
 
 .signup-skip {
@@ -343,7 +343,7 @@ table .buttons,table button,table .btn {
 
 .overview-right {
     border-left: 1px solid #ccc;
-    padding: 0 0 0 24px;
+    padding: 5px 0 0 24px;
     height: 100%;
 }
 .overview-right h1 {
@@ -579,7 +579,7 @@ lazy-loading-table {
 .bed-add {
     float: right;
     width: 40px;
-    height: 160px;
+    height: 120px;
     margin: 0;
 }
 
@@ -601,7 +601,7 @@ lazy-loading-table {
 .bed-container {
     float: left;
     width: calc(100% - 40px);
-    height: 160px;
+    height: 120px;
     overflow-x: scroll;
     overflow-y: hidden;
     white-space: nowrap;
@@ -614,8 +614,8 @@ lazy-loading-table {
 }
 
 .bed-slot {
-    width: 140px;
-    height: 120px;
+    width: 80px;
+    height: 80px;
     display: inline-block;
     margin: 10px 5px;
     border: 1px solid #fc8433;
@@ -626,8 +626,12 @@ lazy-loading-table {
     color: #fc8433;
 }
 .bed-slot-icon {
-    font-size: 48px;
+    font-size: 30px !important;
 }
+.bed-slot-text {
+    font-size: 12px;
+}
+
 .bed-slot:hover {
     background-color: transparent;
 }
@@ -659,8 +663,8 @@ lazy-loading-table {
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%,-55%);
-    width: 100px;
+    transform: translate(-50%,-56%);
+    width: 80px;
     text-overflow: ellipsis;
     overflow: hidden;
     text-align: center;
@@ -688,6 +692,16 @@ lazy-loading-table {
     overflow: auto;
     overflow-x: hidden;
 }
+
+.modal .modal-body.table-selection {
+    min-height: 60vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-body lazy-loading-table {
+    flex-grow: 1;
+} 
 
 .selectable-row {
     cursor: pointer;
@@ -1062,4 +1076,55 @@ table.lazy-loading .th-pagination {
 
 .edit-form-container {
     padding: 10px;
+}
+
+.basic-info-settings-container {
+    height: 100%;
+    padding: 0px;
+    overflow: hidden;
+}
+
+.basic-info-settings-tabbar {
+    margin-top: 10px;            
+}
+
+.basic-info-settings-edit-container {
+    height: calc(100% - 53px);
+    padding: 5px 0 5px 0;       
+}
+
+.allotment-availability-overview {
+    margin-top: 5px;
+    margin-right: 5px;
+    margin-bottom: 5px !important;
+    width: 80%;
+}
+.disabled-text {
+    color: #7F8C8D;
+}
+.th-list-group {
+    margin-bottom: 0;
+}
+
+@media print {
+    @page {
+        size:297mm 210mm;
+    }
+    body * {
+        visibility:hidden;
+    }
+    .printable-section, .printable-section * {
+        visibility:visible;
+    }
+    .printable-section {
+        height: 100%;
+        width: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        margin: 0;
+        padding: 15px;
+        font-size: 10px;
+        line-height: 13px;
+    }
 }

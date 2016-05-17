@@ -137,6 +137,7 @@ describe("Hotel Allotments Tests", function () {
 			var saveAllotmentItem = new SaveAllotmentItem(testContext.appContext, testContext.sessionContext);
 			saveAllotmentItem.save(allotmentItem).then((savedAllotment: AllotmentDO) => {
 				should.exist(savedAllotment.id);
+				should.exist(savedAllotment.expiryUtcTimestamp);
 				should.equal(savedAllotment.priceProductId, allotmentItem.priceProductId);
 				should.equal(savedAllotment.customerId, allotmentItem.customerId);
 				should.equal(savedAllotment.roomCategoryId, allotmentItem.roomCategoryId);

@@ -11,13 +11,18 @@ import {BaseCorporateDetailsDO, CommissionType} from '../../../core/data-layer/c
 import {ICustomerDetailsDO} from '../../../core/data-layer/customers/data-objects/customer-details/ICustomerDetailsDO';
 import {AddressDO} from '../../../core/data-layer/common/data-objects/address/AddressDO';
 import {ThDateDO} from '../../../core/utils/th-dates/data-objects/ThDateDO';
+import {PriceProductDO} from '../../../core/data-layer/price-products/data-objects/PriceProductDO';
+import {TestUtils} from '../../helpers/TestUtils';
 
 export interface ICustomerDataSource {
 	getCustomerList(): CustomerDO[];
 }
 
 export class DefaultCustomerBuilder implements ICustomerDataSource {
-	constructor(private _testContext: TestContext) {
+	private _testUtils: TestUtils;
+	
+	constructor(private _testContext: TestContext, private _priceProductList: PriceProductDO[]) {
+		this._testUtils = new TestUtils();
 	}
 
 	getCustomerList(): CustomerDO[] {
@@ -25,6 +30,11 @@ export class DefaultCustomerBuilder implements ICustomerDataSource {
 		customerList.push(DefaultCustomerBuilder.buildCustomerDO(this._testContext, CustomerType.Individual, "Ionut Paraschiv", "Masina de Paine 20"));
 		customerList.push(DefaultCustomerBuilder.buildCustomerDO(this._testContext, CustomerType.TravelAgency, "booking.com", "23 Sunset Blvd"));
 		customerList.push(DefaultCustomerBuilder.buildCustomerDO(this._testContext, CustomerType.Company, "Threeangle Software Solutions SRL", "6D Regiei Blvd"));
+		customerList.forEach((customer: CustomerDO) => {
+			customer.priceProductDetails.priceProductIdList = [
+				this._testUtils.getRandomListElement(this._priceProductList).id
+			]
+		});
 		return customerList;
 	}
 

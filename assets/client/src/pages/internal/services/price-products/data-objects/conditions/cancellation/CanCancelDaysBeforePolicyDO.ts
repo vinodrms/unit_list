@@ -1,5 +1,6 @@
 import {BaseDO} from '../../../../../../../common/base/BaseDO';
 import {IPriceProductCancellationPolicy, CancellationPolicyDescription} from './IPriceProductCancellationPolicy';
+import {ThDataValidators} from '../../../../../../../common/utils/form-utils/utils/ThDataValidators';
 
 export class CanCancelDaysBeforePolicyDO extends BaseDO implements IPriceProductCancellationPolicy {
 	daysBefore: number;
@@ -19,7 +20,7 @@ export class CanCancelDaysBeforePolicyDO extends BaseDO implements IPriceProduct
 		return true;
 	}
 	public isValid(): boolean {
-		if (_.isNumber(this.daysBefore) && this.daysBefore >= 0) {
+		if (_.isNumber(this.daysBefore) && this.daysBefore >= 0 && ThDataValidators.isValidInteger(this.daysBefore)) {
 			return true;
 		}
 		return false;

@@ -19,9 +19,9 @@ export class RoomCategoriesStatsService {
 		}));
 	}
 	public getRoomCategoryStatsForRoomCategoryIdList(roomCategoryIdList: string[]): Observable<RoomCategoryStatsDO[]> {
-		if(!roomCategoryIdList || roomCategoryIdList.length == 0) {
-			return this.getEmptyResult();
-		}
+		// if(!roomCategoryIdList || roomCategoryIdList.length == 0) {
+		// 	return this.getEmptyResult();
+		// }
 		return this._appContext.thHttp.post(ThServerApi.RoomCategoriesStats, { roomCategoryIdList: roomCategoryIdList })
 			.map((requestResult: Object) => {
 				var roomCategoryStatsList: RoomCategoryStatsDO[] = [];
@@ -35,7 +35,7 @@ export class RoomCategoriesStatsService {
 					roomCategoryStatsList.push(roomCategoryStatDO);
 				});
 				return _.sortBy(roomCategoryStatsList, (roomCategoryStats: RoomCategoryStatsDO) => {
-					return - (roomCategoryStats.maxNoAdults + roomCategoryStats.maxNoChildren);
+					return - (roomCategoryStats.capacity.totalCapacity.maxNoAdults + roomCategoryStats.capacity.totalCapacity.maxNoChildren);
 				});
 			});
 	}

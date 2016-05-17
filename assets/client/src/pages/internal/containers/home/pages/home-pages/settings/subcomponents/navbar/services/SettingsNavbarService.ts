@@ -18,7 +18,8 @@ export class SettingsNavbarService {
 			new SettingsPageVM(SettingsPageType.Rooms, "SettingsRoomsComponent", "Rooms", "\""),
 			new SettingsPageVM(SettingsPageType.AddOnProducts, "SettingsAddOnProductsComponent", "Add-On Products", "$"),
 			new SettingsPageVM(SettingsPageType.PriceProducts, "SettingsPriceProductsComponent", "Price Products", "%"),
-			new SettingsPageVM(SettingsPageType.CustomerRegister, "SettingsCustomerRegisterComponent", "Customer Register", "&")
+			new SettingsPageVM(SettingsPageType.CustomerRegister, "SettingsCustomerRegisterComponent", "Customer Register", "&"),
+			new SettingsPageVM(SettingsPageType.Allotments, "SettingsAllotmentsComponent", "Allotments", "â")
 		]
 	}
 

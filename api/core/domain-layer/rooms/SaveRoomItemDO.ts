@@ -11,7 +11,6 @@ export class SaveRoomItemDO {
     name: string;
     floor: number;
     categoryId: string;
-    bedIdList: string[];
     amenityIdList: string[];
     attributeIdList: string[];
     fileUrlList: string[];
@@ -40,10 +39,6 @@ export class SaveRoomItemDO {
             {
                 key: "categoryId",
                 validationStruct: new PrimitiveValidationStructure(new StringValidationRule())
-            },
-            {
-                key: "bedIdList",
-                validationStruct: new ArrayValidationStructure(new PrimitiveValidationStructure(new StringValidationRule()))
             },
             {
                 key: "amenityIdList",

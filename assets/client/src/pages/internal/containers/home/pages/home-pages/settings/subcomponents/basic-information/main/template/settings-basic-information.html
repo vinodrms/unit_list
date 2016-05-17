@@ -1,5 +1,5 @@
-<div class="row card page-info">
-	<div class="col-xs-12 col-md-12 th-padding-bottom">
+<div class="basic-info-settings-container">
+	<div class="basic-info-settings-tabbar">
 		<ul class="nav nav-tabs">
 			<li *ngFor="let basicInfoPage of basicInfoPageList" [ngClass]="{'active': basicInfoPage.selected}">
 				<a (click)="changePage(basicInfoPage)">
@@ -8,8 +8,7 @@
 			</li>
 		</ul>
 	</div>
-	<div class="col-xs-12 col-md-12 basic-info-container th-padding-bottom">
+	<div class="basic-info-settings-edit-container">
 		<router-outlet></router-outlet>
-		<br/><br/>
 	</div>
 </div>

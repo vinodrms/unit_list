@@ -21,8 +21,12 @@ import {RoomAmenityVMContainer, RoomAmenityVM} from './services/utils/RoomAmenit
 import {ModalDialogRef} from '../../../../../../../../common/utils/modals/utils/ModalDialogRef';
 import {RoomCategoriesModalService} from '../../../modals/room-categories/services/RoomCategoriesModalService';
 import {BedVM} from '../../../../../../services/beds/view-models/BedVM';
+import {BedDO, BedStorageType} from '../../../../../../services/beds/data-objects/BedDO';
 import {BedSelectorComponent} from './components/bed-selector/BedSelectorComponent';
 import {CustomScroll} from '../../../../../../../../common/utils/directives/CustomScroll';
+import {BedMetaDO} from '../../../../../../services/room-categories/data-objects/bed-config/BedMetaDO';
+import {BedConfigDO} from '../../../../../../services/room-categories/data-objects/bed-config/BedConfigDO';
+import {RoomCategoriesService} from '../../../../../../services/room-categories/RoomCategoriesService';
 
 @Component({
     selector: 'room-edit',
@@ -36,10 +40,17 @@ export class RoomEditComponent extends BaseFormComponent implements OnInit {
 
     isLoading: boolean;
     isSavingRoom: boolean = false;
+    newRoomCategoryToSave = false;
 
     roomAmenities: RoomAmenityVMContainer;
     roomAttributes: RoomAttributeVMContainer;
+
     allAvailableBeds: BedVM[];
+    allAvailableStationaryBeds: BedVM[];
+    allAvailableRollawayBeds: BedVM[];
+    selectedStationaryBeds: BedVM[];
+    selectedRollawayBeds: BedVM[];
+
     emptySlots: Object[];
 
     private _roomVM: RoomVM;
@@ -62,9 +73,13 @@ export class RoomEditComponent extends BaseFormComponent implements OnInit {
         private _roomsService: RoomsService,
         private _roomAmenitiesService: RoomAmenitiesService,
         private _roomAttributesService: RoomAttributesService,
+        private _roomCategoriesService: RoomCategoriesService,
         private _roomCategoriesModalService: RoomCategoriesModalService,
         private _bedsEagerService: BedsEagerService) {
         super();
+
+        this.selectedStationaryBeds = [];
+        this.selectedRollawayBeds = [];
     }
 
     ngOnInit() {
@@ -78,8 +93,9 @@ export class RoomEditComponent extends BaseFormComponent implements OnInit {
             this.roomAmenities = new RoomAmenityVMContainer(result[0], this._roomVM.room.amenityIdList);
             this.roomAttributes = new RoomAttributeVMContainer(result[1], this._roomVM.room.attributeIdList);
             this.allAvailableBeds = result[2];
-
             this.initDefaultRoomData();
+            this.initAvailableBedsArrays();
+            this.initSelectedBedsArrays();
             this.isLoading = false;
         }, (error: ThError) => {
             this.isLoading = false;
@@ -88,8 +104,9 @@ export class RoomEditComponent extends BaseFormComponent implements OnInit {
     }
 
     private initDefaultRoomData() {
-        if (this._appContext.thUtils.isUndefinedOrNull(this.roomVM.bedList)) {
-            this.roomVM.bedList = [];
+        if (this._appContext.thUtils.isUndefinedOrNull(this._roomVM.category)) {
+            this.selectedRollawayBeds = [];
+            this.selectedStationaryBeds = [];
         }
         if (this._appContext.thUtils.isUndefinedOrNull(this.roomVM.room.maintenanceStatus)) {
             this.roomVM.room.maintenanceStatus = RoomMaintenanceStatus.CheckInReady;
@@ -106,6 +123,39 @@ export class RoomEditComponent extends BaseFormComponent implements OnInit {
     private initForm() {
         this.didSubmitForm = false;
         this._roomEditService.updateFormValues(this._roomVM);
+        this.initSelectedBedsArrays();
+    }
+
+    private initAvailableBedsArrays() {
+        this.allAvailableStationaryBeds = _.filter(this.allAvailableBeds, (bedVM: BedVM) => {
+            return bedVM.bed.storageType === BedStorageType.Stationary;
+        });
+
+        this.allAvailableRollawayBeds = _.filter(this.allAvailableBeds, (bedVM: BedVM) => {
+            return bedVM.bed.storageType === BedStorageType.Rollaway;
+        });
+    }
+
+    private initSelectedBedsArrays() {
+        if (!this._appContext.thUtils.isUndefinedOrNull(this._roomVM.category)) {
+            this.selectedRollawayBeds = [];
+            this.selectedStationaryBeds = [];
+            _.forEach(this.roomVM.category.bedConfig.bedMetaList, (bedMeta: BedMetaDO) => {
+                var bedVM = _.find(this.allAvailableBeds, (bedVM: BedVM) => {
+                    return bedVM.bed.id === bedMeta.bedId;
+                });
+                if (!this._appContext.thUtils.isUndefinedOrNull(bedVM)) {
+                    for (var i = 0; i < bedMeta.noOfInstances; ++i) {
+                        if (bedVM.bed.storageType === BedStorageType.Rollaway) {
+                            this.selectedRollawayBeds.push(bedVM);
+                        }
+                        else if (bedVM.bed.storageType === BedStorageType.Stationary) {
+                            this.selectedStationaryBeds.push(bedVM);
+                        }
+                    }
+                }
+            });
+        }
     }
 
     protected getDefaultControlGroup(): ControlGroup {
@@ -117,8 +167,9 @@ export class RoomEditComponent extends BaseFormComponent implements OnInit {
     }
 
     public saveRoom() {
+
         this.didSubmitForm = true;
-        if (!this._roomEditService.isValidForm() || this.roomCategoryNotSelected) {
+        if (!this._roomEditService.isValidForm() || this.roomCategoryNotSelected || !this.atLeastAStationaryOrARollawayBedWasAdded) {
             var errorMessage = this._appContext.thTranslation.translate("Please complete all the required fields");
             this._appContext.toaster.error(errorMessage);
             return;
@@ -129,21 +180,77 @@ export class RoomEditComponent extends BaseFormComponent implements OnInit {
         room.amenityIdList = this.roomAmenities.getSelectedRoomAmenityList();
         room.attributeIdList = this.roomAttributes.getSelectedRoomAttributeList();
         room.categoryId = this.roomVM.category.id;
-        room.bedIdList = [];
-
-        _.forEach(this.roomVM.bedList, (bedVM: BedVM) => {
-            room.bedIdList.push(bedVM.bed.id);
-        });
 
         this.isSavingRoom = true;
 
-        this._roomsService.saveRoomDO(room).subscribe((updatedRoom: RoomDO) => {
-            this.isSavingRoom = false;
-            this.showViewScreen();
-        }, (error: ThError) => {
-            this.isSavingRoom = false;
-            this._appContext.toaster.error(error.message);
+        if (this.newRoomCategoryToSave) {
+            this.prepareRoomCategoryForSave();
+            this._roomCategoriesService.saveRoomCategory(this.roomVM.category).subscribe((roomCategory: RoomCategoryDO) => {
+                this._roomsService.saveRoomDO(room).subscribe((updatedRoom: RoomDO) => {
+                    this.isSavingRoom = false;
+                    this.showViewScreen();
+                }, (error: ThError) => {
+                    this.isSavingRoom = false;
+                    this._appContext.toaster.error(error.message);
+                });
+            }, (error: ThError) => {
+                this.isSavingRoom = false;
+                this._appContext.toaster.error(error.message);
+            });
+        }
+        else {
+            this._roomsService.saveRoomDO(room).subscribe((updatedRoom: RoomDO) => {
+                this.isSavingRoom = false;
+                this.showViewScreen();
+            }, (error: ThError) => {
+                this.isSavingRoom = false;
+                this._appContext.toaster.error(error.message);
+            });
+        }
+    }
+
+    private prepareRoomCategoryForSave() {
+        if (this._appContext.thUtils.isUndefinedOrNull(this.roomVM.category.bedConfig)) {
+            this.roomVM.category.bedConfig = new BedConfigDO();
+        }
+        if (this._appContext.thUtils.isUndefinedOrNull(this.roomVM.category.bedConfig.bedMetaList) ||
+            _.isEmpty(this.roomVM.category.bedConfig.bedMetaList)) {
+            this.roomVM.category.bedConfig.bedMetaList = this.getBedMetaList();
+        }
+    }
+
+    private getBedMetaList(): BedMetaDO[] {
+        var bedMetaList: BedMetaDO[] = [];
+        _.forEach(this.selectedStationaryBeds, (bedVM: BedVM) => {
+            var foundBedMeta = _.find(bedMetaList, (bedMeta: BedMetaDO) => {
+                return bedMeta.bedId === bedVM.bed.id;
+            });
+            if (this._appContext.thUtils.isUndefinedOrNull(foundBedMeta)) {
+                var newBedMeta = new BedMetaDO();
+                newBedMeta.bedId = bedVM.bed.id;
+                newBedMeta.noOfInstances = 1;
+                bedMetaList.push(newBedMeta);
+            }
+            else {
+                foundBedMeta.noOfInstances++;
+            }
         });
+        _.forEach(this.selectedRollawayBeds, (bedVM: BedVM) => {
+            var foundBedMeta = _.find(bedMetaList, (bedMeta: BedMetaDO) => {
+                return bedMeta.bedId === bedVM.bed.id;
+            });
+            if (this._appContext.thUtils.isUndefinedOrNull(foundBedMeta)) {
+                var newBedMeta = new BedMetaDO();
+                newBedMeta.bedId = bedVM.bed.id;
+                newBedMeta.noOfInstances = 1;
+                bedMetaList.push(newBedMeta);
+            }
+            else {
+                foundBedMeta.noOfInstances++;
+            }
+        });
+
+        return bedMetaList;
     }
 
     public didUploadImage(imageUrl: string) {
@@ -153,8 +260,12 @@ export class RoomEditComponent extends BaseFormComponent implements OnInit {
     public openRoomCategorySelectModal() {
         this.getRoomCategoriesModalPromise().then((modalDialogInstance: ModalDialogRef<RoomCategoryDO[]>) => {
             modalDialogInstance.resultObservable.subscribe((selectedRoomCategoryList: RoomCategoryDO[]) => {
-                if(selectedRoomCategoryList.length > 0) {
-                    this.roomVM.category = selectedRoomCategoryList[0];   
+                if (selectedRoomCategoryList.length > 0) {
+                    if (this._appContext.thUtils.isUndefinedOrNull(this.roomVM.category) ||
+                        (!this._appContext.thUtils.isUndefinedOrNull(this.roomVM.category) && this.roomVM.category.id != selectedRoomCategoryList[0].id)) {
+                        this.roomVM.category = selectedRoomCategoryList[0];
+                        this.onRoomCategoryChanged();
+                    }
                 }
             });
         }).catch((e: any) => { });
@@ -172,8 +283,21 @@ export class RoomEditComponent extends BaseFormComponent implements OnInit {
     public get roomCategoryNotSelected(): boolean {
         return this._appContext.thUtils.isUndefinedOrNull(this.roomVM.category);
     }
-    
-    public diChangeSelectedBedList(savedBedVMList: BedVM[]) {
-        this.roomVM.bedList = savedBedVMList;
+
+    public onRoomCategoryChanged() {
+        this.initSelectedBedsArrays();
+    }
+
+    public get atLeastAStationaryOrARollawayBedWasAdded(): boolean {
+        return !_.isEmpty(this.selectedRollawayBeds) || !_.isEmpty(this.selectedStationaryBeds);
+    }
+
+    public diChangeStationarySelectedBedList(savedBedVMList: BedVM[]) {
+        this.selectedStationaryBeds = savedBedVMList;
+        this.newRoomCategoryToSave = true;
+    }
+    public diChangeRollawaySelectedBedList(savedBedVMList: BedVM[]) {
+        this.selectedRollawayBeds = savedBedVMList;
+        this.newRoomCategoryToSave = true;
     }
 }

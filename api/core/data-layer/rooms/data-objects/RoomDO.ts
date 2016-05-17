@@ -22,7 +22,6 @@ export class RoomDO extends BaseDO {
     name: string;
     floor: number;
     categoryId: string;
-    bedIdList: string[];
     amenityIdList: string[];
     attributeIdList: string[];
     fileUrlList: string[];
@@ -32,7 +31,7 @@ export class RoomDO extends BaseDO {
     status: RoomStatus;
 
     protected getPrimitivePropertyKeys(): string[] {
-        return ["id", "versionId", "hotelId", "name", "floor", "categoryId", "bedIdList", "amenityIdList",
+        return ["id", "versionId", "hotelId", "name", "floor", "categoryId", "amenityIdList",
             "attributeIdList", "fileUrlList", "description", "notes", "maintenanceStatus", "status"];
     }
 

@@ -9,7 +9,7 @@ export class AuthUtils {
 
 	constructor(private _unitPalConfig: UnitPalConfig) {
 	}
-	public encrypPassword(password: string) {
+	public encryptPassword(password: string) {
 		var saltSync = bcrypt.genSaltSync();
 		return bcrypt.hashSync(password, saltSync);
 	}

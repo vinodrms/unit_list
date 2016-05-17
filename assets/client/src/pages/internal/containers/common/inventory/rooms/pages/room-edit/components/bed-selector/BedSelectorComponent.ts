@@ -8,6 +8,7 @@ import {BedSelectionVM} from '../../../../../modals/beds/services/utils/BedSelec
 import {BedsModalService} from '../../../../../modals/beds/services/BedsModalService';
 import {BedVM} from '../../../../../../../../services/beds/view-models/BedVM';
 import {BaseComponent} from '../../../../../../../../../../common/base/BaseComponent';
+import {RoomCategoryDO} from '../../../../../../../../services/room-categories/data-objects/RoomCategoryDO';
 
 @Component({
     selector: 'bed-selector',
@@ -15,14 +16,13 @@ import {BaseComponent} from '../../../../../../../../../../common/base/BaseCompo
     providers: [BedsModalService],
     pipes: [TranslationPipe]
 })
-export class BedSelectorComponent extends BaseComponent implements OnInit {
+export class BedSelectorComponent extends BaseComponent {
     private MIN_BED_NO = 0;
     private MAX_BED_NO = 6;
     
-    private emptySlots: Object[];
-    
-    @Input() availableBedList: BedVM[];
-    @Input() selectedBedList: BedVM[];
+    @Input() availableBedList: BedVM[] = [];
+    @Input() selectedBedList: BedVM[] = [];
+    @Input() roomCategory: RoomCategoryDO;
     
     @Output() selectedBedListChanged: EventEmitter<BedVM[]> = new EventEmitter<BedVM[]>(); 
     
@@ -31,36 +31,26 @@ export class BedSelectorComponent extends BaseComponent implements OnInit {
         super();
     }
     
-    ngOnInit() {
-        this.resetEmptySlots();
-    }
-    
-    private resetEmptySlots() {
-        if (this._appContext.thUtils.isUndefinedOrNull(this.emptySlots)) {
-            this.emptySlots = [];
-        }
-        var emptySlotsNO = this.MAX_BED_NO - this.selectedBedList.length;
-        if (emptySlotsNO < this.emptySlots.length) {
-            while (emptySlotsNO != this.emptySlots.length) {
-                this.emptySlots.splice(0, 1);
-            }
-        }
-        else if (emptySlotsNO > this.emptySlots.length) {
-            while (emptySlotsNO != this.emptySlots.length) {
-                this.emptySlots.push(new Object());
-            }
-        }
-    }
     
     public get maximuNumberOfBedsReached(): boolean {
         return this.MAX_BED_NO === this.selectedBedList.length;
+    }
+    
+    public get emptySlots(): any[] {
+        var result = [];
+        var emptySlotsNO = this.MAX_BED_NO - this.selectedBedList.length;
+        if(emptySlotsNO > 0) {
+            for(var i = 0; i < emptySlotsNO; ++i)
+                result.push(i);
+        }
+        
+        return result;
     }
     
     public openBedsSelectModal() {
         this._bedsModalService.openAllBedsModal(this.availableBedList, this.selectedBedList, this.MIN_BED_NO, this.MAX_BED_NO).then((modalDialogInstance: ModalDialogRef<BedVM[]>) => {
             modalDialogInstance.resultObservable.subscribe((savedSelectedBedList: BedVM[]) => {
                 this.selectedBedList = savedSelectedBedList;
-                this.resetEmptySlots();
                 this.triggerSelectedBedListChanged();
             });
         }).catch((e: any) => { });
@@ -77,8 +67,12 @@ export class BedSelectorComponent extends BaseComponent implements OnInit {
         var negativeLabel = this._appContext.thTranslation.translate("No");
         this._appContext.modalService.confirm(title, content, { positive: positiveLabel, negative: negativeLabel }, () => {
             this.selectedBedList.splice(bedIndex, 1);
-            this.resetEmptySlots();
             this.triggerSelectedBedListChanged();
         });
+    }
+    
+    public get readonly(): boolean {
+        return !this._appContext.thUtils.isUndefinedOrNull(this.roomCategory) && !this._appContext.thUtils.isUndefinedOrNull(this.roomCategory.bedConfig) &&
+            !_.isEmpty(this.roomCategory.bedConfig.bedMetaList);
     }
 }

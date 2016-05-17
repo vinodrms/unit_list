@@ -2,11 +2,13 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import {BaseComponent} from '../../../../../../../../common/base/BaseComponent';
 import {TranslationPipe} from '../../../../../../../../common/utils/localization/TranslationPipe';
 import {RoomVM} from '../../../../../../services/rooms/view-models/RoomVM';
+import {CustomScroll} from '../../../../../../../../common/utils/directives/CustomScroll';
 
 @Component({
     selector: 'room-overview',
     templateUrl: '/client/src/pages/internal/containers/common/inventory/rooms/pages/room-overview/template/room-overview.html',
-    pipes: [TranslationPipe]
+    pipes: [TranslationPipe],
+	directives: [CustomScroll]
 })
 export class RoomOverviewComponent extends BaseComponent {
     constructor() { 

@@ -2,11 +2,17 @@ import {CustomerDO, CustomerType} from '../data-objects/CustomerDO';
 import {PriceProductDO} from '../../price-products/data-objects/PriceProductDO';
 import {CustomerDetailsFactory} from '../data-objects/customer-details/CustomerDetailsFactory';
 import {CustomerDetailsMeta} from '../data-objects/customer-details/ICustomerDetailsDO';
+import {AllotmentDO} from '../../allotments/data-objects/AllotmentDO';
 
 export class CustomerVM {
+	private static IndividualCustFont = "(";
+	private static CompanyCustFont = ")";
+	private static TravelAgentCustFont = "*";
+
 	private _customer: CustomerDO;
 	private _priceProductList: PriceProductDO[];
 	private _customerTypeString: string;
+	private _allotmentList: AllotmentDO[];
 
 	constructor() {
 		this._priceProductList = [];
@@ -27,6 +33,12 @@ export class CustomerVM {
 	public set priceProductList(priceProductList: PriceProductDO[]) {
 		this._priceProductList = priceProductList;
 	}
+	public get allotmentList(): AllotmentDO[] {
+		return this._allotmentList;
+	}
+	public set allotmentList(allotmentList: AllotmentDO[]) {
+		this._allotmentList = allotmentList;
+	}
 
 	public get customerNameString(): string {
 		return this._customer.customerDetails.getName();
@@ -37,6 +49,16 @@ export class CustomerVM {
 	public get customerTypeString(): string {
 		return this._customerTypeString;
 	}
+	public get customerTypeFont(): string {
+		switch (this._customer.type) {
+			case CustomerType.Individual:
+				return CustomerVM.IndividualCustFont;
+			case CustomerType.Company:
+				return CustomerVM.CompanyCustFont;
+			default:
+				return CustomerVM.TravelAgentCustFont;
+		}
+	}
 	public set customerTypeString(customerTypeString: string) {
 		this._customerTypeString = customerTypeString;
 	}
@@ -45,6 +67,16 @@ export class CustomerVM {
 	}
 	public get emailString(): string {
 		return this._customer.customerDetails.getEmail();
+	}
+
+	public isNewCustomer(): boolean {
+		return !this._customer.id;
+	}
+	public getNumberOfAllotmentsForPriceProduct(priceProduct: PriceProductDO): number {
+		var foundAllotmentList: AllotmentDO[] = _.filter(this._allotmentList, (allotment: AllotmentDO) => {
+			return allotment.priceProductId === priceProduct.id;
+		});
+		return foundAllotmentList.length;
 	}
 
 	public buildPrototype(): CustomerVM {

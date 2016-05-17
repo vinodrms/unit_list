@@ -23,21 +23,25 @@ class BedsEntity extends BasePersistentEntity {
                 type: 'string',
                 required: true
             },
+            storageType: {
+                type: 'integer',
+                required: true
+            },
+            accommodationType: {
+                type: 'integer',
+                required: true
+            },
             name: {
                 type: 'string',
                 required: true
             },
             size: {
                 type: 'json',
-                required: true
+                required: false
             },
-            maxNoAdults: {
-                type: 'integer',
-                required: true
-            },
-            maxNoChildren: {
-                type: 'integer',
-                required: true
+            capacity: {
+                type: 'json',
+                required: false
             },
             status: {
                 type: 'integer',

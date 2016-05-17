@@ -2,6 +2,18 @@ import {ThUtils} from '../../../utils/ThUtils';
 import {MongoQueryUtils} from './mongo-utils/MongoQueryUtils';
 import _ = require('underscore');
 
+export enum QueryComparisonOperator {
+	GreaterThan,
+	GreaterThanOrEqual,
+	LessThan,
+	LessThanOrEqual
+}
+var QueryComparisonOperatorSymbols: { [index: number]: string; } = {};
+QueryComparisonOperatorSymbols[QueryComparisonOperator.GreaterThan] = "$gt";
+QueryComparisonOperatorSymbols[QueryComparisonOperator.GreaterThanOrEqual] = "$gte";
+QueryComparisonOperatorSymbols[QueryComparisonOperator.LessThan] = "$lt";
+QueryComparisonOperatorSymbols[QueryComparisonOperator.LessThanOrEqual] = "$lte";
+
 export class MongoQueryBuilder {
 	private _thUtils: ThUtils;
 	private _mongoQueryUtils: MongoQueryUtils;
@@ -49,6 +61,19 @@ export class MongoQueryBuilder {
 			var preprocessedQuery = this._mongoQueryUtils.preprocessQueryValue(fieldName, value);
 			this._processedQuery[preprocessedQuery.fieldName] = preprocessedQuery.value;
 		} catch (e) { }
+	}
+
+	public addComparison<T>(queryComparisonOperator: QueryComparisonOperator, fieldName: string, value: T) {
+		if (this._thUtils.isUndefinedOrNull(value)) {
+			return;
+		}
+		try {
+			var preprocessedQuery = this._mongoQueryUtils.preprocessQueryValue(fieldName, value);
+			var comparisonSymbol: string = QueryComparisonOperatorSymbols[queryComparisonOperator];
+			var queryValue = {};
+			queryValue[comparisonSymbol] = preprocessedQuery.value;
+			this._processedQuery[preprocessedQuery.fieldName] = queryValue;
+		} catch (error) { }
 	}
 
 	public addTextIndexSearch(text: string) {

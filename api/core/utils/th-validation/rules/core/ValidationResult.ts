@@ -11,7 +11,10 @@ export enum InvalidConstraintType {
     VatNumber,
 	String,
 	NumberInList,
-	Boolean
+	Boolean,
+	
+	BedAccommodationType,
+	BedStorageType
 }
 
 export class ValidationResult {

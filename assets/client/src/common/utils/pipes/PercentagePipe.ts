@@ -5,10 +5,10 @@ import {Pipe, PipeTransform} from '@angular/core';
 })
 
 export class PercentagePipe implements PipeTransform {
-	transform(value: number) : any {
-		if(!value) {
+	transform(value: number): any {
+		if (!_.isNumber(value)) {
 			return "";
 		}
-		return (value * 100) + "%"; 
+		return Math.round(value * 100) + "%";
 	}
 }

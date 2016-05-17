@@ -22,6 +22,7 @@ import {AddOnProductCategorySettingDO} from '../../data-objects/add-on-product/A
 import {AddOnProductCategoryDO} from '../../../common/data-objects/add-on-product/AddOnProductCategoryDO';
 import {YieldFilterSettingDO} from '../../data-objects/yield-manager-filter/YieldManagerFilterSettingDO';
 import {YieldFilterDO} from '../../../common/data-objects/yield-filter/YieldFilterDO';
+import {BedTemplateSettingDO} from '../../data-objects/bed-template/BedTemplateSettingDO';
 
 import _ = require('underscore');
 
@@ -139,6 +140,7 @@ export class MongoSettingsRepository extends MongoRepository implements ISetting
             case SettingType.PaymentMethods: getSettingsResponseDO = new PaymentMethodSettingDO(); break;
 			case SettingType.AddOnProductCategory: getSettingsResponseDO = new AddOnProductCategorySettingDO(); break;
             case SettingType.YieldFilter: getSettingsResponseDO = new YieldFilterSettingDO(); break;
+            case SettingType.BedTemplates: getSettingsResponseDO = new BedTemplateSettingDO(); break;
             default: getSettingsResponseDO = new AmenitySettingDO();
         }
         getSettingsResponseDO.buildFromObject(queryResult);

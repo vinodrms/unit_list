@@ -11,7 +11,7 @@ export class PercentageFromBookingCancellationPenaltyDO extends BaseDO implement
 		return {
 			phrase: "Pay %percentage% from whole booking",
 			parameters: {
-				percentage: (this.percentage * 100) + "%" 
+				percentage: Math.round(this.percentage * 100) + "%" 
 			} 
 		}
 	}

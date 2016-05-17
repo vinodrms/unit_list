@@ -31,10 +31,6 @@ class RoomsEntity extends BasePersistentEntity {
                 type: "string",
                 required: true
             },
-            bedIdList: {
-                type: "array",
-                defaultsTo: []
-            },
             amenityIdList: {
                 type: "array",
                 defaultsTo: []

@@ -11,6 +11,7 @@ import {WizardBreakfastComponent} from '../pages/wizard-pages/breakfast/WizardBr
 import {WizardAddOnProductsComponent} from '../pages/wizard-pages/add-on-products/WizardAddOnProductsComponent';
 import {WizardPriceProductsComponent} from '../pages/wizard-pages/price-products/WizardPriceProductsComponent';
 import {WizardCustomerRegisterComponent} from '../pages/wizard-pages/customer-register/WizardCustomerRegisterComponent';
+import {WizardAllotmentsComponent} from '../pages/wizard-pages/allotments/WizardAllotmentsComponent';
 
 import {WIZARD_BASIC_INFO_PAGES_PROVIDERS} from '../pages/wizard-pages/basic-information/main/services/WizardBasicInfoPagesProvider';
 import {WizardBedsStateService} from '../pages/wizard-pages/beds/services/WizardBedsStateService';
@@ -19,6 +20,7 @@ import {WizardBreakfastStateService} from '../pages/wizard-pages/breakfast/servi
 import {WizardAddOnProductsStateService} from '../pages/wizard-pages/add-on-products/services/WizardAddOnProductsStateService';
 import {WizardPriceProductsStateService} from '../pages/wizard-pages/price-products/services/WizardPriceProductsStateService';
 import {WizardCustomerRegisterStateService} from '../pages/wizard-pages/customer-register/services/WizardCustomerRegisterStateService';
+import {WizardAllotmentsStateService} from '../pages/wizard-pages/allotments/services/WizardAllotmentsStateService';
 import {WizardService} from '../pages/wizard-pages/services/WizardService';
 import {SETTINGS_PROVIDERS} from '../../../services/settings/SettingsProviders';
 import {TaxService} from '../../../services/taxes/TaxService';
@@ -31,7 +33,8 @@ import {HOTEL_AGGREGATOR_PROVIDERS} from '../../../services/hotel/HotelProviders
 	{ path: '/breakfast', name: 'WizardBreakfastComponent', component: WizardBreakfastComponent },
 	{ path: '/add-on-products', name: 'WizardAddOnProductsComponent', component: WizardAddOnProductsComponent },
 	{ path: '/price-products', name: 'WizardPriceProductsComponent', component: WizardPriceProductsComponent },
-	{ path: '/customer-register', name: 'WizardCustomerRegisterComponent', component: WizardCustomerRegisterComponent }
+	{ path: '/customer-register', name: 'WizardCustomerRegisterComponent', component: WizardCustomerRegisterComponent },
+	{ path: '/allotments', name: 'WizardAllotmentsComponent', component: WizardAllotmentsComponent }
 ])
 
 @Component({
@@ -40,7 +43,8 @@ import {HOTEL_AGGREGATOR_PROVIDERS} from '../../../services/hotel/HotelProviders
 	directives: [RouterOutlet, WizardHeaderComponent, WizardNavbarComponent, WizardStepsComponent, WizardPriceProductsComponent],
 	providers: [SETTINGS_PROVIDERS, HOTEL_AGGREGATOR_PROVIDERS, TaxService, WIZARD_BASIC_INFO_PAGES_PROVIDERS,
 		WizardBedsStateService, WizardRoomsStateService, WizardBreakfastStateService,
-		WizardAddOnProductsStateService, WizardPriceProductsStateService, WizardCustomerRegisterStateService,
+		WizardAddOnProductsStateService, WizardPriceProductsStateService, 
+		WizardCustomerRegisterStateService, WizardAllotmentsStateService,
 		WizardService]
 })
 

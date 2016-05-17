@@ -4,11 +4,13 @@ import {TranslationPipe} from '../../../../../../../../common/utils/localization
 import {PercentagePipe} from '../../../../../../../../common/utils/pipes/PercentagePipe';
 import {PriceProductVM} from '../../../../../../services/price-products/view-models/PriceProductVM';
 import {PriceProductPriceConfigurationState} from '../../../../../../services/price-products/data-objects/price/IPriceProductPrice';
+import {CustomScroll} from '../../../../../../../../common/utils/directives/CustomScroll';
 
 @Component({
 	selector: 'price-product-overview',
 	templateUrl: '/client/src/pages/internal/containers/common/inventory/price-products/pages/price-product-overview/template/price-product-overview.html',
-	pipes: [TranslationPipe, PercentagePipe]
+	pipes: [TranslationPipe, PercentagePipe],
+	directives: [CustomScroll]
 })
 
 export class PriceProductOverviewComponent extends BaseComponent {
@@ -19,7 +21,6 @@ export class PriceProductOverviewComponent extends BaseComponent {
 	@Input()
 	public set priceProductVM(priceProductVM: PriceProductVM) {
 		this._priceProductVM = priceProductVM;
-		this._priceProductVM.priceProduct.isDraft;
 	}
 
 	@Output() onEdit = new EventEmitter();

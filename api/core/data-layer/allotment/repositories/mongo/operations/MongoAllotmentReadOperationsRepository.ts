@@ -2,7 +2,7 @@ import {ThLogger, ThLogLevel} from '../../../../../utils/logging/ThLogger';
 import {ThError} from '../../../../../utils/th-responses/ThError';
 import {ThStatusCode} from '../../../../../utils/th-responses/ThResponse';
 import {MongoRepository, MongoSearchCriteria} from '../../../../common/base/MongoRepository';
-import {MongoQueryBuilder} from '../../../../common/base/MongoQueryBuilder';
+import {MongoQueryBuilder, QueryComparisonOperator} from '../../../../common/base/MongoQueryBuilder';
 import {AllotmentMetaRepoDO, AllotmentSearchCriteriaRepoDO, AllotmentSearchResultRepoDO} from '../../IAllotmentRepository';
 import {AllotmentDO, AllotmentStatus} from '../../../data-objects/AllotmentDO';
 import {AllotmentRepositoryHelper} from './helpers/AllotmentRepositoryHelper';
@@ -72,8 +72,10 @@ export class MongoAllotmentReadOperationsRepository extends MongoRepository {
 			else {
 				mongoQueryBuilder.addExactMatch("priceProductId", searchCriteria.priceProductId);
 			}
+			mongoQueryBuilder.addComparison(QueryComparisonOperator.LessThanOrEqual, "expiryUtcTimestamp", searchCriteria.maxExpiryUtcTimestamp);
 			mongoQueryBuilder.addExactMatch("roomCategoryId", searchCriteria.roomCategoryId);
 			mongoQueryBuilder.addMultipleSelectOptionList("id", searchCriteria.allotmentIdList);
+			mongoQueryBuilder.addRegex("notes", searchCriteria.notes);
 		}
 		return mongoQueryBuilder.processedQuery;
 	}
