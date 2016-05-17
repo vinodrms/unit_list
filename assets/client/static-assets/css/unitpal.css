@@ -568,9 +568,9 @@ lazy-loading-table {
     margin: 5px 0px;
 }
 
-/*.bed-btn > span {
+.bed-btn > span {
     font-size: 48px;
-}*/
+}
 
 .bed-icon-overview {
     font-size: 75px;
@@ -626,7 +626,7 @@ lazy-loading-table {
     color: #fc8433;
 }
 .bed-slot-icon {
-    font-size: 30px;
+    font-size: 30px !important;
 }
 .bed-slot-text {
     font-size: 12px;

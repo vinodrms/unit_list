@@ -116,6 +116,7 @@ export class BedEditComponent extends BaseFormComponent implements OnInit {
     }
     
     public toggleStorageType() {
+        debugger
         if(this._bedVM.bed.storageType === BedStorageType.Rollaway) {
             this._bedVM.bed.storageType = BedStorageType.Stationary;
         }
