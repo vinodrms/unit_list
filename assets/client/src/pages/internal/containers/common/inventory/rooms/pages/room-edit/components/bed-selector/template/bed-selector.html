@@ -7,7 +7,7 @@
         <div *ngIf="!bedVM.accomodatesBabies" class="bed-slot-inner" [title]="bedVM.bed.name">
             <span class="bed-slot-icon unitpal-font">{{bedVM.template.iconUrl}}</span>
             <br/>
-            <small>{{bedVM.bed.name}}</small>
+            <small class="bed-slot-text">{{bedVM.bed.name}}</small>
             <br/> {{bedVM.capacity.maxAdults}}<span class="unitpal-font">:</span> {{bedVM.capacity.maxChildren}}<span class="unitpal-font">;</span>
         </div>
         

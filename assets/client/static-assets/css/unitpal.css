@@ -568,9 +568,9 @@ lazy-loading-table {
     margin: 5px 0px;
 }
 
-.bed-btn > span {
+/*.bed-btn > span {
     font-size: 48px;
-}
+}*/
 
 .bed-icon-overview {
     font-size: 75px;
@@ -579,7 +579,7 @@ lazy-loading-table {
 .bed-add {
     float: right;
     width: 40px;
-    height: 160px;
+    height: 120px;
     margin: 0;
 }
 
@@ -601,7 +601,7 @@ lazy-loading-table {
 .bed-container {
     float: left;
     width: calc(100% - 40px);
-    height: 160px;
+    height: 120px;
     overflow-x: scroll;
     overflow-y: hidden;
     white-space: nowrap;
@@ -614,8 +614,8 @@ lazy-loading-table {
 }
 
 .bed-slot {
-    width: 140px;
-    height: 120px;
+    width: 80px;
+    height: 80px;
     display: inline-block;
     margin: 10px 5px;
     border: 1px solid #fc8433;
@@ -626,8 +626,12 @@ lazy-loading-table {
     color: #fc8433;
 }
 .bed-slot-icon {
-    font-size: 48px;
+    font-size: 30px;
 }
+.bed-slot-text {
+    font-size: 12px;
+}
+
 .bed-slot:hover {
     background-color: transparent;
 }
@@ -659,8 +663,8 @@ lazy-loading-table {
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%,-55%);
-    width: 100px;
+    transform: translate(-50%,-56%);
+    width: 80px;
     text-overflow: ellipsis;
     overflow: hidden;
     text-align: center;

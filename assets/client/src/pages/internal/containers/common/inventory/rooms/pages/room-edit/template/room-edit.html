@@ -42,32 +42,6 @@
                         </table>
                     </div>
                 </div>
-
-                <div class="row">
-                    <div class="col-xs-12 col-md-12 form-group">
-                        <label class="control-label">{{ 'Stationary Beds' | translate }}</label>
-                    </div>
-                    <div class="col-xs-12 col-md-12 form-group">
-                        <bed-selector [availableBedList]="allAvailableStationaryBeds" [selectedBedList]="selectedStationaryBeds" [roomCategory]="roomVM.category"
-                            (selectedBedListChanged)="diChangeStationarySelectedBedList($event)"></bed-selector>
-                    </div>
-
-                </div>
-                <div class="row">
-                    <div class="col-xs-12 col-md-12 form-group">
-                        <label class="control-label">{{ 'Rollaway Beds' | translate }}</label>
-                    </div>
-                    <div class="col-xs-12 col-md-12 form-group">
-                        <bed-selector [availableBedList]="allAvailableRollawayBeds" [selectedBedList]="selectedRollawayBeds" [roomCategory]="roomVM.category"
-                            (selectedBedListChanged)="diChangeRollawaySelectedBedList($event)"></bed-selector>
-                    </div>
-                </div>
-
-                <div *ngIf="didSubmitForm && !atLeastAStationaryOrARollawayBedWasAdded" class="row">
-                    <div class="col-xs-12 col-md-12">
-                        <small class="text-warning"><i class="fa fa-info-circle"></i>{{ 'Add at least a stationary or a rollaway bed for the newly added category.' | translate }}</small>
-                    </div>
-                </div>
             </div>
 
             <div class="col-xs-12 col-md-4 form-group">
@@ -76,6 +50,38 @@
             </div>
 
         </div>
+
+        <div class="row">
+            <div class="col-xs-6 col-md-6 form-group">
+                <div class="row">
+                    <div class="col-xs-12 form-group">
+                        <label class="control-label">{{ 'Stationary Beds' | translate }}</label>
+                    </div>
+                    <div class="col-xs-12">
+                        <bed-selector [availableBedList]="allAvailableStationaryBeds" [selectedBedList]="selectedStationaryBeds" [roomCategory]="roomVM.category"
+                            (selectedBedListChanged)="diChangeStationarySelectedBedList($event)"></bed-selector>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-6 col-md-6 form-group">
+                <div class="row">
+                    <div class="col-xs-12 form-group">
+                        <label class="control-label">{{ 'Rollaway Beds' | translate }}</label>
+                    </div>
+                    <div class="col-xs-12">
+                        <bed-selector [availableBedList]="allAvailableRollawayBeds" [selectedBedList]="selectedRollawayBeds" [roomCategory]="roomVM.category"
+                            (selectedBedListChanged)="diChangeRollawaySelectedBedList($event)"></bed-selector>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="didSubmitForm && !atLeastAStationaryOrARollawayBedWasAdded" class="row">
+                <div class="col-xs-12 col-md-12 bed-selection-message">
+                    <small class="text-warning"><i class="fa fa-info-circle"></i>{{ 'Add at least a stationary or a rollaway bed for the newly added category.' | translate }}</small>
+                </div>
+            </div>
+        </div>
+
+
 
         <hr/>
 
