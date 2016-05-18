@@ -3,7 +3,6 @@ import {BaseComponent} from '../../../../../../../../../common/base/BaseComponen
 import {TranslationPipe} from '../../../../../../../../../common/utils/localization/TranslationPipe';
 import {AppContext, ThError} from '../../../../../../../../../common/utils/AppContext';
 import {CustomScroll} from '../../../../../../../../../common/utils/directives/CustomScroll';
-import {PrintableSection} from '../../../../../../../../../common/utils/directives/PrintableSection';
 import {AllotmentVM} from '../../../../../../../services/allotments/view-models/AllotmentVM';
 import {AllotmentDO, AllotmentStatus} from '../../../../../../../services/allotments/data-objects/AllotmentDO';
 import {CustomerDO} from '../../../../../../../services/customers/data-objects/CustomerDO';
@@ -18,11 +17,10 @@ import {AllotmentsService} from '../../../../../../../services/allotments/Allotm
 @Component({
 	selector: 'allotment-edit-container',
 	templateUrl: '/client/src/pages/internal/containers/common/inventory/allotments/pages/allotment-edit/container/template/allotment-edit-container.html',
-	directives: [CustomScroll, PrintableSection,
+	directives: [CustomScroll,
 		AllotmentEditTopSectionComponent, AllotmentOpenIntervalSectionComponent,
 		AllotmentAvailabilitySectionComponent, AllotmentEditConstraintsSectionComponent,
 		AllotmentNotesSectionComponent],
-	providers: [],
 	pipes: [TranslationPipe]
 })
 export class AllotmentEditContainerComponent extends BaseComponent implements AfterViewInit {
