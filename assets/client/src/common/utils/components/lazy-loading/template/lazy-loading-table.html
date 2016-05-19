@@ -107,8 +107,9 @@
 		<tfoot>
 			<tr>
 			<td [ngClass]="{'left up-col-30p': !isCollapsed, 'left up-col-45p': isCollapsed}">
-					<a class="btn btn-lg" *ngIf="tableOptions.canAdd" (click)="addItem()">
-						<i class="fa fa-plus"></i> {{ 'Add' | translate }}
+					<a class="btn btn-lg lazy-loading-table-btn-add" *ngIf="tableOptions.canAdd" (click)="addItem()">
+						<i class="fa fa-2x unitpal-font">'</i> 
+						<span>{{ 'Add' | translate }}</span>
 					</a>
 				</td>
 				<td [ngClass]="{'up-col-30p': !isCollapsed, 'up-col-0p': isCollapsed}">

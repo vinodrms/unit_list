@@ -4,14 +4,14 @@ import {HeaderPageType} from '../../../utils/header/services/HeaderPageType';
 import {AHomeContainerComponent} from '../../../utils/AHomeContainerComponent';
 
 @Component({
-	selector: 'hotel-operations-container',
-	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/container/template/hotel-operations-container.html'
+	selector: 'booking-history-container',
+	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/booking-history/container/template/booking-history-container.html'
 })
 
-export class HotelOperationsContainerComponent extends AHomeContainerComponent implements OnInit {
+export class BookingHistoryContainerComponent extends AHomeContainerComponent implements OnInit {
 
 	constructor(headerPageService: HeaderPageService) {
-		super(headerPageService, HeaderPageType.HotelOperations);
+		super(headerPageService, HeaderPageType.BookingHistory);
 	}
 
 	ngOnInit() {

@@ -1,14 +1,12 @@
-<div class="scroll-view">
-	<!-- sidebar menu -->
-	<div id="sidebar-menu" class="main_menu_side main_menu">
-		<div class="menu_section">
-			<ul class="nav side-menu">
-				<li *ngFor="let wizardStateMeta of wizardStateMetaList" [ngClass]="{'current-page': isCurrentState(wizardStateMeta.stateIndex), 'disabled-page': !wasVisited(wizardStateMeta.stateIndex)}">
-					<a (click)="moveToState(wizardStateMeta.stateIndex)">{{wizardStateMeta.meta.name}} 
-						<span class="pull-right unitpal-font">{{wizardStateMeta.meta.iconFontName}}</span>
-					</a>
-				</li>
-			</ul>
-		</div>
+<div class="main_menu_side" customScroll>
+	<div class="menu_section">
+		<ul class="nav side-menu">
+			<li *ngFor="let wizardStateMeta of wizardStateMetaList" [ngClass]="{'current-page': isCurrentState(wizardStateMeta.stateIndex), 'disabled-page': !wasVisited(wizardStateMeta.stateIndex)}">
+				<a (click)="moveToState(wizardStateMeta.stateIndex)">
+					<span class="side-menu-item">{{wizardStateMeta.meta.name}}</span>
+					<span class="pull-right unitpal-font">{{wizardStateMeta.meta.iconFontName}}</span>
+				</a>
+			</li>
+		</ul>
 	</div>
 </div>

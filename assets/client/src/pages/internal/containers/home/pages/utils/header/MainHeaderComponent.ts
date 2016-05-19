@@ -1,9 +1,15 @@
 import {Component, OnInit} from '@angular/core';
 import {RouterLink} from '@angular/router-deprecated';
+import {Observable} from 'rxjs/Observable';
+import 'rxjs/add/observable/combineLatest';
 import {BaseComponent} from '../../../../../../../common/base/BaseComponent';
-import {AppContext} from '../../../../../../../common/utils/AppContext';
+import {AppContext, ThError} from '../../../../../../../common/utils/AppContext';
 import {LoginStatusCode} from '../../../../../../../common/utils/responses/LoginStatusCode';
 import {TranslationPipe} from '../../../../../../../common/utils/localization/TranslationPipe';
+import {HotelDetailsDO} from '../../../../../services/hotel/data-objects/HotelDetailsDO';
+import {HotelService} from '../../../../../services/hotel/HotelService';
+import {HeaderPageService} from './services/HeaderPageService';
+import {HeaderPage} from './services/HeaderPage';
 
 @Component({
 	selector: 'main-header',
@@ -12,12 +18,30 @@ import {TranslationPipe} from '../../../../../../../common/utils/localization/Tr
 	pipes: [TranslationPipe]
 })
 
-export class MainHeaderComponent extends BaseComponent {
-	constructor(private _appContext: AppContext) {
+export class MainHeaderComponent extends BaseComponent implements OnInit {
+	hotelName: string = "";
+
+	constructor(private _appContext: AppContext,
+		private _hotelService: HotelService,
+		private _headerPageService: HeaderPageService) {
 		super();
 	}
-
+	public ngOnInit() {
+		Observable.combineLatest(
+			this._hotelService.getHotelDetailsDO()
+		).subscribe((result: [HotelDetailsDO]) => {
+			this.hotelName = result[0].hotel.contactDetails.name;
+		}, (error: ThError) => {
+		});
+	}
 	public logOut() {
 		this._appContext.logOut();
+	}
+
+	public get headerPageList(): HeaderPage[] {
+		return this._headerPageService.headerPageList;
+	}
+	public moveToPage(headerPage: HeaderPage) {
+		this._headerPageService.goToPage(headerPage.headerPageType);
 	}
 }
