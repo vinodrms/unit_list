@@ -22,6 +22,8 @@ import {IYieldFilterConfigurationRepository} from './hotel-configurations/reposi
 import {MongoYieldFilterConfigurationRepository} from './hotel-configurations/repositories/mongo/MongoYieldFilterConfigurationRepository';
 import {IAllotmentRepository} from './allotment/repositories/IAllotmentRepository';
 import {MongoAllotmentRepository} from './allotment/repositories/mongo/MongoAllotmentRepository';
+import {INotificationsRepository} from './notifications/repositories/INotificationsRepository';
+import {MongoNotificationsRepository} from './notifications/repositories/mongo/MongoNotificationsRepository';
 
 export class RepositoryFactory {
     private _databaseType: DatabaseType;
@@ -34,7 +36,7 @@ export class RepositoryFactory {
             default:
                 return [new MongoHotelRepository(), new MongoBedRepository(), new MongoTaxRepository(), new MongoAddOnProductRepository(),
                     new MongoRoomRepository(), new MongoRoomCategoryRepository(), new MongoCustomerRepository(), new MongoPriceProductRepository(),
-                    new MongoYieldFilterConfigurationRepository(), new MongoAllotmentRepository()];
+                    new MongoYieldFilterConfigurationRepository(), new MongoAllotmentRepository(), new MongoNotificationsRepository()];
         }
     }
 
@@ -111,6 +113,13 @@ export class RepositoryFactory {
         switch (this._databaseType) {
             default:
                 return new MongoAllotmentRepository();
+        }
+    }
+
+    getNotificationsRepository(): INotificationsRepository {
+        switch (this._databaseType) {
+            default:
+                return new MongoNotificationsRepository();
         }
     }
 }

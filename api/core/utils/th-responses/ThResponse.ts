@@ -275,7 +275,11 @@ export enum ThStatusCode {
     AllotmentsControllerErrorSavingAllotment,
     AllotmentsControllerErrorArchivingAllotment,
     AllotmentsControllerErrorGettingCount,
-    AllotmentsControllerErrorGettingList
+    AllotmentsControllerErrorGettingList,
+    
+    // Notifications
+    NotificationsRepositoryErrorAddingNotification,
+    NotificationsRepositoryErrorGettingUndelivered,
 }
 
 var ThMessage: { [index: number]: string; } = {};
@@ -551,6 +555,7 @@ ThMessage[ThStatusCode.AllotmentsControllerErrorSavingAllotment] = "Error saving
 ThMessage[ThStatusCode.AllotmentsControllerErrorArchivingAllotment] = "Error archiving allotment.";
 ThMessage[ThStatusCode.AllotmentsControllerErrorGettingCount] = "Error getting the number of allotments.";
 ThMessage[ThStatusCode.AllotmentsControllerErrorGettingList] = "Error getting the list of allotments.";
+ThMessage[ThStatusCode.NotificationsRepositoryErrorAddingNotification] = "Error adding a notification.";
 
 export class ThResponse {
     statusCode: ThStatusCode;
