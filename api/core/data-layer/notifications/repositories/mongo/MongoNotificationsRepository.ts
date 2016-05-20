@@ -41,12 +41,12 @@ export class MongoNotificationsRepository extends MongoRepository implements INo
 		);
     }
     
-    public getNotificationsCount(meta: NotificationRepoDO.Meta, searchCriteria?: NotificationRepoDO.SearchCriteria): Promise<LazyLoadMetaResponseRepoDO> {
+    public getNotificationsListCount(meta: NotificationRepoDO.Meta, searchCriteria?: NotificationRepoDO.SearchCriteria): Promise<LazyLoadMetaResponseRepoDO> {
         return new Promise<LazyLoadMetaResponseRepoDO>((resolve: { (meta: LazyLoadMetaResponseRepoDO): void }, reject: { (err: ThError): void }) => {
-            this.getNotificationsCountCore(resolve, reject, meta, searchCriteria);
+            this.getNotificationsListCountCore(resolve, reject, meta, searchCriteria);
         });
     }
-    private getNotificationsCountCore(
+    private getNotificationsListCountCore(
         resolve: { (meta: LazyLoadMetaResponseRepoDO): void }, 
         reject: { (err: ThError): void }, 
         meta: NotificationRepoDO.Meta, 
@@ -79,31 +79,33 @@ export class MongoNotificationsRepository extends MongoRepository implements INo
         lazyLoad?: LazyLoadRepoDO) {
 
         var searchQuery = this.getSearchQuery(meta, searchCriteria);
-        this.findMultipleDocuments({ criteria: searchQuery, lazyLoad: lazyLoad },
+        // Always sort from the most recent (largest timestamp) to the least 
+        // recent (smallest timestamp).
+        var sortCriteria = {timestamp: 1};
+        this.findMultipleDocuments({ criteria: searchQuery, sortCriteria: sortCriteria, lazyLoad: lazyLoad },
             (err: Error) => {
                 var thError = new ThError(ThStatusCode.NotificationsRepositoryErrorGettingList, err);
                 ThLogger.getInstance().logError(ThLogLevel.Error, "Error getting notifications list.", meta, thError);
                 reject(thError);
             },
             (dbNotificationsList: Array<Object>) => {
-                var resultDO = super.getQueryResult(NotificationDO, dbNotificationsList);
+                var resultDO = this.getQueryResult(NotificationDO, dbNotificationsList);
                 resolve({
                     notificationList: resultDO,
                     lazyLoad: lazyLoad
                 });
             }
         );
-        
     }
     
-    public getUndeliveredNotifications(hotelId: string): Promise<NotificationDO[]> {
+    public getUndeliveredNotifications(meta: NotificationRepoDO.Meta): Promise<NotificationDO[]> {
         return new Promise<NotificationDO[]>((resolve: { (result: NotificationDO[]): void }, reject: { (err: ThError): void }) => {
-            this.getUndeliveredNotificationsCore(resolve, reject, hotelId);
+            this.getUndeliveredNotificationsCore(resolve, reject, meta);
         });
     }
-	private getUndeliveredNotificationsCore(resolve: { (result: NotificationDO[]): void }, reject: { (err: ThError): void }, hotelId: string) {
+	private getUndeliveredNotificationsCore(resolve: { (result: NotificationDO[]): void }, reject: { (err: ThError): void }, meta: NotificationRepoDO.Meta) {
     	var notificationList: NotificationDO[] = [];
-        this.readUndeliveredNotifications(hotelId)
+        this.readUndeliveredNotifications(meta)
             .then((readNotificationList: NotificationDO[]) => {
                 notificationList = readNotificationList;
                 return this.markNotificationsAsDelivered(readNotificationList);
@@ -114,14 +116,14 @@ export class MongoNotificationsRepository extends MongoRepository implements INo
             });
 	}
     
-    private readUndeliveredNotifications(hotelId: string): Promise<NotificationDO[]> {
+    private readUndeliveredNotifications(meta: NotificationRepoDO.Meta): Promise<NotificationDO[]> {
         return new Promise<NotificationDO[]>((resolve: { (result: NotificationDO[]): void }, reject: { (err: ThError): void }) => {
-            this.readUndeliveredNotificationsCore(resolve, reject, hotelId); 
+            this.readUndeliveredNotificationsCore(resolve, reject, meta); 
         });
     }
-    private readUndeliveredNotificationsCore(resolve: { (result: NotificationDO[]) : void }, reject: { (err: ThError) : void }, hotelId: string) {
+    private readUndeliveredNotificationsCore(resolve: { (result: NotificationDO[]) : void }, reject: { (err: ThError) : void }, meta: NotificationRepoDO.Meta) {
         var mongoQueryBuilder = new MongoQueryBuilder();
-        mongoQueryBuilder.addExactMatch("hotelId", hotelId);
+        mongoQueryBuilder.addExactMatch("hotelId", meta.hotelId);
 		mongoQueryBuilder.addExactMatch("delivered", false);
 		        
         var mongoSearchCriteria: MongoSearchCriteria = {

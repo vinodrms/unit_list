@@ -3,7 +3,7 @@ import {INotificationService} from '../INotificationService';
 import {NotificationDO} from '../../../data-layer/common/data-objects/notifications/NotificationDO';
 import {ThError} from '../../../utils/th-responses/ThError';
 import {UnitPalConfig} from '../../../utils/environment/UnitPalConfig';
-import {INotificationsRepository} from '../../../data-layer/notifications/repositories/INotificationsRepository';
+import {INotificationsRepository, NotificationRepoDO} from '../../../data-layer/notifications/repositories/INotificationsRepository';
 
 export class NotificationService implements INotificationService {
 	private _notificationsRepo: INotificationsRepository;
@@ -17,7 +17,7 @@ export class NotificationService implements INotificationService {
 		return this._notificationsRepo.addNotification(notification);
 	}
 	
-	public getUndeliveredNotifications(hotelId: string): Promise<NotificationDO[]> {
-		return this._notificationsRepo.getUndeliveredNotifications(hotelId);
+	public getUndeliveredNotifications(meta: NotificationRepoDO.Meta): Promise<NotificationDO[]> {
+		return this._notificationsRepo.getUndeliveredNotifications(meta);
 	}
 }

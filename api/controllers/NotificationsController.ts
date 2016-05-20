@@ -2,41 +2,44 @@ import {BaseController} from './base/BaseController';
 import {ThStatusCode} from '../core/utils/th-responses/ThResponse';
 import {AppContext} from '../core/utils/AppContext';
 import {SessionContext} from '../core/utils/SessionContext';
-import {BedMetaRepoDO, BedSearchResultRepoDO} from '../core/data-layer/notifications/repositories/INotificationsRepository';
-import {DeleteBedItem} from '../core/domain-layer/beds/DeleteBedItem';
-import {BedDO} from '../core/data-layer/common/data-objects/bed/BedDO';
+import {NotificationRepoDO} from '../core/data-layer/notifications/repositories/INotificationsRepository';
 import {LazyLoadRepoDO, LazyLoadMetaResponseRepoDO} from '../core/data-layer/common/repo-data-objects/LazyLoadRepoDO';
+import {ThNotification} from '../core/services/notifications/ThNotification';
 
 class NotificationsController extends BaseController {
 	    
     public getNotificationList(req: Express.Request, res: Express.Response) {
 		var appContext: AppContext = req.appContext;
 		var sessionContext: SessionContext = req.sessionContext;
-        
-        var bedMeta = this.getBedMetaRepoDOFrom(sessionContext);
-        
-		var bedRepo = appContext.getRepositoryFactory().getBedRepository();
-		bedRepo.getBedList(bedMeta, req.body.searchCriteria, req.body.lazyLoad).then((beds: BedSearchResultRepoDO) => {
-			this.returnSuccesfulResponse(req, res, beds);
+
+        var meta = this.getNotificationsMetaFrom(sessionContext);        
+		var notificationsRepo = appContext.getRepositoryFactory().getNotificationsRepository();
+		
+		notificationsRepo.getNotificationList(meta, req.body.searchCriteria, req.body.lazyLoad).then((searchResult: NotificationRepoDO.SearchResult) => {
+			this.returnSuccesfulResponse(req, res, {
+				notificationList: ThNotification.buildThNotificationList(searchResult.notificationList, sessionContext.language),
+        		lazyLoad: searchResult.lazyLoad
+			});
 		}).catch((err: any) => {
-			this.returnErrorResponse(req, res, err, ThStatusCode.BedControllerErrorGettingBeds);
+			this.returnErrorResponse(req, res, err, ThStatusCode.NotificationsRepositoryErrorGettingList);
 		});
 	}
     
     public getNotificationListCount(req: Express.Request, res: Express.Response) {
 		var appContext: AppContext = req.appContext;
 		var sessionContext: SessionContext = req.sessionContext;
-        var hotelId: string = sessionContext.sessionDO.hotel.id;
-
+		
+        var meta = this.getNotificationsMetaFrom(sessionContext);
 		var notificationsRepo = appContext.getRepositoryFactory().getNotificationsRepository();
-		notificationsRepo.getNotificationsListCount(hotelId, req.body.searchCriteria).then((lazyLoadMeta: LazyLoadMetaResponseRepoDO) => {
+		
+		notificationsRepo.getNotificationsListCount(meta, req.body.searchCriteria).then((lazyLoadMeta: LazyLoadMetaResponseRepoDO) => {
 			this.returnSuccesfulResponse(req, res, lazyLoadMeta);
 		}).catch((err: any) => {
-			this.returnErrorResponse(req, res, err, ThStatusCode.BedsControllerErrorGettingCount);
+			this.returnErrorResponse(req, res, err, ThStatusCode.NotificationsRepositoryErrorGettingCount);
 		});
 	}
         
-    private getBedMetaRepoDOFrom(sessionContext: SessionContext): BedMetaRepoDO {
+    private getNotificationsMetaFrom(sessionContext: SessionContext): NotificationRepoDO.Meta {
 		return { hotelId: sessionContext.sessionDO.hotel.id };
 	}
 }

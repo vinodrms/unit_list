@@ -19,7 +19,7 @@ export module NotificationRepoDO {
 export interface INotificationsRepository {
 	addNotification(notification: NotificationDO): Promise<NotificationDO>;
 
-    getNotificationsCount(
+    getNotificationsListCount(
         meta: NotificationRepoDO.Meta,
         searchCriteria?: NotificationRepoDO.SearchCriteria): Promise<LazyLoadMetaResponseRepoDO>;
         
@@ -30,5 +30,5 @@ export interface INotificationsRepository {
     
     // Fetches all undelivered notifications for the given hotel id and then
     // marks them as delivered.
-    getUndeliveredNotifications(hotelId: string): Promise<NotificationDO[]>;
+    getUndeliveredNotifications(meta: NotificationRepoDO.Meta): Promise<NotificationDO[]>;
 }
