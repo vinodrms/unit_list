@@ -14,7 +14,7 @@ import {PassportLoginService} from './login/custom/PassportLoginService';
 import {MomentTimeZonesService} from './time-zones/providers/moment/MomentTimeZonesService';
 import {ITimeZonesService} from './time-zones/ITimeZonesService';
 import {INotificationService} from './notifications/INotificationService';
-import {MockNotificationService} from './notifications/providers/MockNotificationService';
+import {NotificationService} from './notifications/providers/NotificationService';
 
 export class ServiceFactory {
     constructor(private _unitPalConfig: UnitPalConfig) {
@@ -49,7 +49,6 @@ export class ServiceFactory {
         return new MomentTimeZonesService();
     }
     public getNotificationService(): INotificationService {
-        // TODO: implement real notifications service
-        return new MockNotificationService();
+        return new NotificationService(this._unitPalConfig);
     }
 }
