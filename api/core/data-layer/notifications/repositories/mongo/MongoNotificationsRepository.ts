@@ -3,7 +3,7 @@ import {LazyLoadRepoDO, LazyLoadMetaResponseRepoDO} from '../../../common/repo-d
 import {MongoQueryBuilder} from '../../../common/base/MongoQueryBuilder';
 import {MongoRepository, MongoErrorCodes, MongoSearchCriteria} from '../../../common/base/MongoRepository';
 import {NotificationDO} from '../../../common/data-objects/notifications/NotificationDO';
-import {NotificationMetaRepoDO, NotificationSearchCriteriaRepoDO, NotificationSearchResultRepoDO} from '../INotificationsRepository';
+import {NotificationRepoDO} from '../INotificationsRepository';
 import {ThError} from '../../../../utils/th-responses/ThError';
 import {ThLogger, ThLogLevel} from '../../../../utils/logging/ThLogger';
 import {ThStatusCode} from '../../../../utils/th-responses/ThResponse';
@@ -41,10 +41,65 @@ export class MongoNotificationsRepository extends MongoRepository implements INo
 		);
     }
     
+    public getNotificationsCount(meta: NotificationRepoDO.Meta, searchCriteria?: NotificationRepoDO.SearchCriteria): Promise<LazyLoadMetaResponseRepoDO> {
+        return new Promise<LazyLoadMetaResponseRepoDO>((resolve: { (meta: LazyLoadMetaResponseRepoDO): void }, reject: { (err: ThError): void }) => {
+            this.getNotificationsCountCore(resolve, reject, meta, searchCriteria);
+        });
+    }
+    private getNotificationsCountCore(
+        resolve: { (meta: LazyLoadMetaResponseRepoDO): void }, 
+        reject: { (err: ThError): void }, 
+        meta: NotificationRepoDO.Meta, 
+        searchCriteria?: NotificationRepoDO.SearchCriteria) {
+            
+        var searchQuery = this.getSearchQuery(meta, searchCriteria);
+        this.getDocumentCount(searchQuery,
+            (err: Error) => {
+				var errorCode = this.getMongoErrorCode(err);
+                var thError = new ThError(ThStatusCode.NotificationsRepositoryErrorGettingCount, err);
+                ThLogger.getInstance().logError(ThLogLevel.Error, "Error getting count",  { meta: meta, searchCriteria: searchCriteria }, thError);
+                reject(thError);
+			},
+			(meta: LazyLoadMetaResponseRepoDO) => {
+				resolve(meta);
+			}
+		);
+    }
+    
+    public getNotificationList(meta: NotificationRepoDO.Meta, searchCriteria?: NotificationRepoDO.SearchCriteria, lazyLoad?: LazyLoadRepoDO): Promise<NotificationRepoDO.SearchResult> {
+        return new Promise<NotificationRepoDO.SearchResult>((resolve: {(searchResult: NotificationRepoDO.SearchResult): void}, reject: { (err: ThError): void }) => {
+            this.getNotificationListCore(resolve, reject, meta, searchCriteria, lazyLoad);
+        });
+    }
+    private getNotificationListCore(
+        resolve: {(searchResult: NotificationRepoDO.SearchResult): void}, 
+        reject: { (err: ThError): void }, 
+        meta: NotificationRepoDO.Meta,
+        searchCriteria?: NotificationRepoDO.SearchCriteria, 
+        lazyLoad?: LazyLoadRepoDO) {
+
+        var searchQuery = this.getSearchQuery(meta, searchCriteria);
+        this.findMultipleDocuments({ criteria: searchQuery, lazyLoad: lazyLoad },
+            (err: Error) => {
+                var thError = new ThError(ThStatusCode.NotificationsRepositoryErrorGettingList, err);
+                ThLogger.getInstance().logError(ThLogLevel.Error, "Error getting notifications list.", meta, thError);
+                reject(thError);
+            },
+            (dbNotificationsList: Array<Object>) => {
+                var resultDO = super.getQueryResult(NotificationDO, dbNotificationsList);
+                resolve({
+                    notificationList: resultDO,
+                    lazyLoad: lazyLoad
+                });
+            }
+        );
+        
+    }
+    
     public getUndeliveredNotifications(hotelId: string): Promise<NotificationDO[]> {
         return new Promise<NotificationDO[]>((resolve: { (result: NotificationDO[]): void }, reject: { (err: ThError): void }) => {
             this.getUndeliveredNotificationsCore(resolve, reject, hotelId);
-        });   
+        });
     }
 	private getUndeliveredNotificationsCore(resolve: { (result: NotificationDO[]): void }, reject: { (err: ThError): void }, hotelId: string) {
     	var notificationList: NotificationDO[] = [];
@@ -121,5 +176,12 @@ export class MongoNotificationsRepository extends MongoRepository implements INo
         var thError = new ThError(ThStatusCode.NotificationsRepositoryErrorGettingUndelivered, cause);
         ThLogger.getInstance().logError(ThLogLevel.Error, "Error updating undelivered notifications", searchQuery, thError);
         return thError;
+    }
+    
+    private getSearchQuery(meta: NotificationRepoDO.Meta, searchCriteria: NotificationRepoDO.SearchCriteria): Object {
+        var mongoQueryBuilder = new MongoQueryBuilder();
+        mongoQueryBuilder.addExactMatch("hotelId", meta.hotelId);
+        mongoQueryBuilder.addExactMatch("read", searchCriteria.read);
+        return mongoQueryBuilder.processedQuery;
     }
 }

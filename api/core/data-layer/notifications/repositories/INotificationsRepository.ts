@@ -1,25 +1,32 @@
 import {NotificationDO} from '../../common/data-objects/notifications/NotificationDO';
 import {LazyLoadRepoDO, LazyLoadMetaResponseRepoDO} from '../../common/repo-data-objects/LazyLoadRepoDO';
 
-export interface NotificationMetaRepoDO {
-    hotelId: string;
-    userId: string;
-	versionId: number;
+export module NotificationRepoDO {
+    export interface Meta  {
+        hotelId: string;
+    }
+    
+    export interface SearchCriteria {
+        read?: boolean;
+    }
+    
+    export interface SearchResult {
+        notificationList: NotificationDO[];
+        lazyLoad?: LazyLoadRepoDO;
+    }
 }
 
-export interface NotificationSearchCriteriaRepoDO {
-	notificationIdList?: string[];
-    name?: string;
-}
-
-export interface NotificationSearchResultRepoDO {
-	lazyLoad?: LazyLoadRepoDO;
-	notificationList: NotificationDO[];
-}
-
-
-export interface INotificationsRepository {    
+export interface INotificationsRepository {
 	addNotification(notification: NotificationDO): Promise<NotificationDO>;
+
+    getNotificationsCount(
+        meta: NotificationRepoDO.Meta,
+        searchCriteria?: NotificationRepoDO.SearchCriteria): Promise<LazyLoadMetaResponseRepoDO>;
+        
+    getNotificationList(
+        meta: NotificationRepoDO.Meta,
+        searchCriteria?: NotificationRepoDO.SearchCriteria,
+        lazyLoad?: LazyLoadRepoDO): Promise<NotificationRepoDO.SearchResult>;
     
     // Fetches all undelivered notifications for the given hotel id and then
     // marks them as delivered.
