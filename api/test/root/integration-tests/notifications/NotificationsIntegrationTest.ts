@@ -2,6 +2,7 @@ require("sails-test-helper");
 import should = require('should');
 
 import {NotificationDO} from '../../../../core/data-layer/common/data-objects/notifications/NotificationDO';
+import {ThNotificationCode} from '../../../../core/data-layer/common/data-objects/notifications/ThNotificationCode';
 import {INotificationService} from '../../../../core/services/notifications/INotificationService';
 import {TestContext} from '../../../helpers/TestContext';
 import {TestUtils} from '../../../helpers/TestUtils';
@@ -26,40 +27,40 @@ describe("Notifications Integration Tests", function() {
         HOTEL_A_EXPIRED_ENTRIES = new NotificationDO();
         HOTEL_A_EXPIRED_ENTRIES.hotelId = 'HotelA';
         HOTEL_A_EXPIRED_ENTRIES.userId = 'johndoe';
-        HOTEL_A_EXPIRED_ENTRIES.code = 'You have %num_entries% expired entries';
-        HOTEL_A_EXPIRED_ENTRIES.parameterMap = { num_entries: 3 };
+        HOTEL_A_EXPIRED_ENTRIES.code = ThNotificationCode.AllotmentArchivedAutomatically;
+        HOTEL_A_EXPIRED_ENTRIES.parameterMap = { period: '01/01/2016 - 01/08/2016' };
         HOTEL_A_EXPIRED_ENTRIES.timestamp = BASE_TIMESTAMP + 1;
 
         HOTEL_A_UPDATED_PRODUCT = new NotificationDO();
         HOTEL_A_UPDATED_PRODUCT.hotelId = 'HotelA';
         HOTEL_A_UPDATED_PRODUCT.userId = 'johndoe';
-        HOTEL_A_UPDATED_PRODUCT.code = 'Your price product has been updated';
+        HOTEL_A_UPDATED_PRODUCT.code = ThNotificationCode.AllotmentArchivedAutomatically;
         HOTEL_A_UPDATED_PRODUCT.timestamp = BASE_TIMESTAMP + 2;
 
         HOTEL_A_PLEASE_PAY = new NotificationDO();
         HOTEL_A_PLEASE_PAY.hotelId = 'HotelA';
         HOTEL_A_PLEASE_PAY.userId = 'johndoe';
-        HOTEL_A_PLEASE_PAY.code = 'Please pay';
+        HOTEL_A_PLEASE_PAY.code = ThNotificationCode.AllotmentArchivedAutomatically;
         HOTEL_A_PLEASE_PAY.timestamp = BASE_TIMESTAMP + 3;
 
         HOTEL_B_NEW_MESSAGES = new NotificationDO();
         HOTEL_B_NEW_MESSAGES.hotelId = 'HotelB';
         HOTEL_B_NEW_MESSAGES.userId = 'johnniebravo';
-        HOTEL_B_NEW_MESSAGES.code = 'You have %num_msg% new messages';
-        HOTEL_B_NEW_MESSAGES.parameterMap = {num_msg: 10};
+        HOTEL_B_NEW_MESSAGES.code = ThNotificationCode.AllotmentArchivedAutomatically;
+        HOTEL_B_NEW_MESSAGES.parameterMap = { period: '01/01/2016 - 01/08/2016' };
         HOTEL_B_NEW_MESSAGES.timestamp = BASE_TIMESTAMP + 4;
 
         HOTEL_C_EXPIRED_ENTRIES = new NotificationDO();
         HOTEL_C_EXPIRED_ENTRIES.hotelId = 'HotelC';
         HOTEL_C_EXPIRED_ENTRIES.userId = 'bigboss';
-        HOTEL_C_EXPIRED_ENTRIES.code = 'You have between %from% and %to% expired entries';
-        HOTEL_C_EXPIRED_ENTRIES.parameterMap = { from: 5, to: 10 };
+        HOTEL_C_EXPIRED_ENTRIES.code = ThNotificationCode.AllotmentArchivedAutomatically;
+        HOTEL_C_EXPIRED_ENTRIES.parameterMap = { period: '01/01/2016 - 01/08/2016' };
         HOTEL_C_EXPIRED_ENTRIES.timestamp = BASE_TIMESTAMP + 5;
 
         HOTEL_Z_NOTIFICATION = new NotificationDO();
         HOTEL_Z_NOTIFICATION.hotelId = 'HotelZ';
         HOTEL_Z_NOTIFICATION.userId = 'myuser';
-        HOTEL_Z_NOTIFICATION.code = 'My dummy notification';
+        HOTEL_Z_NOTIFICATION.code = ThNotificationCode.AllotmentArchivedAutomatically;
         HOTEL_Z_NOTIFICATION.timestamp = BASE_TIMESTAMP + 6;
 
         notificationService = new TestContext().appContext.getServiceFactory().getNotificationService();
@@ -123,4 +124,4 @@ function expectEqual(actual: NotificationDO, expected: NotificationDO, message: 
     should.deepEqual(actual.userId, expected.userId, message + "#userId");
     should.deepEqual(actual.code, expected.code, message + "#code");
     should.deepEqual(actual.parameterMap, expected.parameterMap, message + "#parameterMap");
-}    
+}
