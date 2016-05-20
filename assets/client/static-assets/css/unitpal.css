@@ -703,6 +703,18 @@ lazy-loading-table {
     width: 15%;
 }
 
+td room-categ-capacity {
+    text-align: center;
+} 
+
+.modal-body td.operations {
+    text-align: right;
+}
+
+.modal-footer th-button {
+    padding: 0px;
+}
+
 /* Bootstrap img-responsive bug on Firefox */
 .img-responsive {
     width: 100%;
@@ -912,7 +924,8 @@ lazy-loading-table {
     flex-grow: 1;
 }
 .th-button-box {
-    padding-top: 7px;
+    padding-top: 0;
+    padding-bottom: 0;
 }
 .th-button-box>i {
     font-size: 30px;
