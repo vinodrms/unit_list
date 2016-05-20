@@ -909,15 +909,29 @@ lazy-loading-table {
     flex-direction: column;
     flex-grow: 1;
 }
-.lazy-loading-table-btn-add>i {
+.th-button-box {
+    padding-top: 7px;
+}
+.th-button-box>i {
     font-size: 30px;
 }
-.lazy-loading-table-btn-add>span {
-    font-size: 14px;
-    position: relative;
-    bottom: 5px;
+.th-button-box>span {
+    font-size: 12px;
+    height: 30px;
+    text-align: right;
+    white-space: nowrap;
+    overflow: hidden;
+    float: right;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 8px 0px 0px 2px;
+    max-width: 100px;
 }
-
+@media screen and (max-width: 650px) {
+    .th-button-box>span {
+        display: none;
+    }
+}
 .table-filter {
     margin: 0px 10px 5px 10px;
     flex-grow: 0;
@@ -1294,4 +1308,28 @@ table.lazy-loading .th-pagination {
     .home-header-name {
         display: none;
     }
+}
+
+.home-side-card {
+    height: 100%;
+    overflow-y: hidden;
+    background: #f3f3f3;
+    padding: 0px 0px 0px 0px;
+}
+.home-side-card-bottom-box {
+    position: absolute;
+    bottom: 0px;
+    width: 100%;
+    height: 50px;
+    background: white;
+    border-top: 1px solid #DBDBDB;
+    text-align: center;
+}
+
+.home-card {
+    height: 100%;
+    overflow-y: hidden;
+    background: #eeeeee;
+    border-left: 1px solid #DBDBDB;
+    border-right: 1px solid #DBDBDB;
 }

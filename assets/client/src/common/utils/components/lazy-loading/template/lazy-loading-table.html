@@ -107,31 +107,28 @@
 		<tfoot>
 			<tr>
 			<td [ngClass]="{'left up-col-30p': !isCollapsed, 'left up-col-45p': isCollapsed}">
-					<a class="btn btn-lg lazy-loading-table-btn-add" *ngIf="tableOptions.canAdd" (click)="addItem()">
-						<i class="fa fa-2x unitpal-font">'</i> 
-						<span>{{ 'Add' | translate }}</span>
-					</a>
-				</td>
-				<td [ngClass]="{'up-col-30p': !isCollapsed, 'up-col-0p': isCollapsed}">
-					{{paginationIndex.pageNumberStat}}
-				</td>
-				<td class="right pagination-container" [ngClass]="{'up-col-50p': !isCollapsed, 'up-col-55p': isCollapsed}">
-					<ul class="pagination th-pagination">
-						<li [ngClass]="{disabled: isFirstPage()}">
-							<a (click)="updatePageNumber(paginationIndex.firstPageNumber)">
-								<i class="fa fa-angle-double-left"></i>
-							</a>
-						</li>
-						<li *ngFor="let index of paginationIndex.indexList" [ngClass]="{active: index.isSelected}">
-							<a (click)="updatePageNumber(index.pageNumber)">{{index.displayNumber}}</a>
-						</li>
-						<li [ngClass]="{disabled: isLastPage()}">
-							<a (click)="updatePageNumber(paginationIndex.lastPageNumber)">
-								<i class="fa fa-angle-double-right"></i>
-							</a>
-						</li>
-					</ul>
-				</td>
+				<th-button *ngIf="tableOptions.canAdd" [upFont]="'\''" [text]="'Add'" (onButtonClick)="addItem()"></th-button>
+			</td>
+			<td [ngClass]="{'up-col-30p': !isCollapsed, 'up-col-0p': isCollapsed}">
+				{{paginationIndex.pageNumberStat}}
+			</td>
+			<td class="right pagination-container" [ngClass]="{'up-col-50p': !isCollapsed, 'up-col-55p': isCollapsed}">
+				<ul class="pagination th-pagination">
+					<li [ngClass]="{disabled: isFirstPage()}">
+						<a (click)="updatePageNumber(paginationIndex.firstPageNumber)">
+							<i class="fa fa-angle-double-left"></i>
+						</a>
+					</li>
+					<li *ngFor="let index of paginationIndex.indexList" [ngClass]="{active: index.isSelected}">
+						<a (click)="updatePageNumber(index.pageNumber)">{{index.displayNumber}}</a>
+					</li>
+					<li [ngClass]="{disabled: isLastPage()}">
+						<a (click)="updatePageNumber(paginationIndex.lastPageNumber)">
+							<i class="fa fa-angle-double-right"></i>
+						</a>
+					</li>
+				</ul>
+			</td>
 			</tr>
 		</tfoot>
 		
