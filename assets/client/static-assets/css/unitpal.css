@@ -613,8 +613,10 @@ lazy-loading-table {
 }
 
 .bed-remove-btn {
-    float: right;
-    margin: 0 0 10px 10px;
+    z-index: 1;
+    position: absolute;
+    top: 0px;
+    right: 0px;
 }
 
 .bed-container {
@@ -644,11 +646,22 @@ lazy-loading-table {
     position: relative;
     color: #fc8433;
 }
-.bed-slot-icon {
-    font-size: 30px !important;
+
+.bed-slot-info {
+    width: 80px;
+    height: 80px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%); 
+    text-overflow: ellipsis;
+    overflow: hidden;
+    text-align: center;
+    font-size: 14px;
 }
-.bed-slot-text {
-    font-size: 12px;
+
+.bed-slot-info .bed-icon {
+    font-size: 25px;
 }
 
 .bed-slot:hover {
@@ -676,17 +689,6 @@ lazy-loading-table {
 .bed-slot.unselected:hover {
     color: #fc8433;
     border: 1px solid #fc8433;
-}
-
-.bed-slot-inner {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%,-56%);
-    width: 80px;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    text-align: center;
 }
 
 .bed-selection-message {

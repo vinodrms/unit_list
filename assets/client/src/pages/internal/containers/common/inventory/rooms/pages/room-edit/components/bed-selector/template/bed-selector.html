@@ -3,26 +3,22 @@
         <a *ngIf="!readonly" class="btn btn-xs bed-remove-btn" (click)="removeBed(bedIndex)">
             <i class="fa unitpal-font">\</i>
         </a>
-        
-        <div *ngIf="!bedVM.accomodatesBabies" class="bed-slot-inner" [title]="bedVM.bed.name">
-            <span class="bed-slot-icon unitpal-font">{{bedVM.template.iconUrl}}</span>
-            <br/>
-            <small class="bed-slot-text">{{bedVM.bed.name}}</small>
-            <br/> {{bedVM.capacity.maxAdults}}<span class="unitpal-font">:</span> {{bedVM.capacity.maxChildren}}<span class="unitpal-font">;</span>
+        <div *ngIf="!bedVM.accomodatesBabies" class="bed-slot-info" [title]="bedVM.bed.name">
+            <span class="bed-icon unitpal-font">{{bedVM.template.iconUrl}}</span><br/>
+            <small>{{bedVM.bed.name}}</small>
+            <br/> {{bedVM.capacity.maxAdults}}<span class="unitpal-font">:</span> {{bedVM.capacity.maxChildren}}
+            <span class="unitpal-font">;</span>
         </div>
-        
-        <div *ngIf="bedVM.accomodatesBabies" class="bed-slot-inner" [title]="bedVM.bed.name">
-            <span class="bed-slot-icon unitpal-font">{{bedVM.template.iconUrl}}</span>
-            <br/>
+
+        <div *ngIf="bedVM.accomodatesBabies" class="bed-slot-info" [title]="bedVM.bed.name">
+            <span class="bed-icon unitpal-font">{{bedVM.template.iconUrl}}</span><br/>
             <small>{{bedVM.bed.name}}</small>
         </div>
-        
+
     </div>
-    
-    <div *ngFor="let item of emptySlots" class="bed-slot available">
-      
-   </div>
-    
+
+    <div *ngFor="let item of emptySlots" class="bed-slot available"></div>
+
 </div>
 <div class="bed-add">
     <button type="button" class="btn center-block btn-danger bed-add-btn" (click)="openBedsSelectModal()" [disabled]="maximuNumberOfBedsReached||readonly"><i class="fa fa-plus-circle"></i></button>
