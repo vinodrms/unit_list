@@ -1,17 +1,16 @@
 import {Component, OnInit} from '@angular/core';
 import {RouteConfig, RouterOutlet, ROUTER_DIRECTIVES} from '@angular/router-deprecated';
 import {BaseComponent} from '../../../../../common/base/BaseComponent';
-import {MainHeaderComponent} from '../pages/utils/header/MainHeaderComponent';
+import {MainHeaderComponent} from '../pages/utils/header/container/MainHeaderComponent';
+import {HeaderPageService} from '../pages/utils/header/container/services/HeaderPageService';
 import {SETTINGS_PROVIDERS} from '../../../services/settings/SettingsProviders';
 import {TaxService} from '../../../services/taxes/TaxService';
 import {HOTEL_AGGREGATOR_PROVIDERS} from '../../../services/hotel/HotelProviders';
-import {HeaderPageService} from '../pages/utils/header/services/HeaderPageService';
 
 import {HotelOperationsContainerComponent} from '../pages/home-pages/hotel-operations/container/HotelOperationsContainerComponent';
 import {YieldManagerContainerComponent} from '../pages/home-pages/yield-manager/container/YieldManagerContainerComponent';
 import {BookingHistoryContainerComponent} from '../pages/home-pages/booking-history/container/BookingHistoryContainerComponent';
 import {SettingsContainerComponent} from '../pages/home-pages/settings/container/SettingsContainerComponent';
-
 
 @RouteConfig([
 	{ path: '/operations', name: 'HotelOperationsContainerComponent', component: HotelOperationsContainerComponent, useAsDefault: true },

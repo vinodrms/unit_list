@@ -104,6 +104,7 @@ header {
 
 .navbar-right {
     margin-top: 0;
+    float: right;
 }
 
 .container-fluid {
@@ -743,6 +744,9 @@ td room-categ-capacity {
     min-height: 400px;
     min-width: 300px;
 }
+.modal-body-xl {
+    height: calc(100% - 121px);
+}
 
 .selectable-row {
     cursor: pointer;
@@ -1347,4 +1351,93 @@ table.lazy-loading .th-pagination {
     background: #eeeeee;
     border-left: 1px solid #DBDBDB;
     border-right: 1px solid #DBDBDB;
+}
+
+.dropdown-menu.msg_list {
+    width: 300px !important;
+}
+
+.dropdown-menu.msg_list span {
+    white-space: normal;
+}
+.dropdown-menu {
+    border: medium none;
+    border-radius: 3px;
+    box-shadow: 0 0 3px;
+    display: none;
+    float: left;
+    font-size: 12px;
+    left: 0;
+    list-style: none outside none;
+    padding: 0;
+    position: absolute;
+    text-shadow: none;
+    top: 100%;
+    z-index: 1000;
+    border-radius: 2px;
+    border-top: 1px solid #999999;
+}
+
+.dropdown-menu:after {
+    border-bottom: 6px solid #999999;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    content: "";
+    display: inline-block;
+    right: 6%;
+    position: absolute;
+    top: -6px;
+}
+
+.dropdown-menu>li>a {
+    color: #5A738E;
+}
+
+.info-number .badge {
+    font-size: 10px;
+    font-weight: normal;
+    line-height: 13px;
+    padding: 2px 6px;
+    position: absolute;
+    right: 12px;
+    top: 8px;
+    background: #fc8433 !important;
+    border: 1px solid #fc8433 !important;
+    color: #fff;
+}
+ul.msg_list li a .time {
+    font-size: 11px;
+    font-style: italic;
+}
+ul.msg_list li a .message {
+    display: block !important;
+    font-size: 11px;
+    cursor: pointer;
+}
+.message.unread {
+    font-weight: bold;
+}
+
+.dropdown {
+    width: 45px;
+    height: 60px;
+    float: left;
+}
+@media screen and (max-width: 430px) {
+    .dropdown {
+        width: 41px;
+    }
+}
+.dropdown-trigger-button {
+    padding-top: 19px;
+    color: white;
+}
+.dropdown-trigger-button:hover,
+.dropdown-trigger-button:focus {
+    background-color: transparent;
+    color: #DBDBDB !important;
+    cursor: pointer;
+}
+.open .dropdown-trigger-button {
+    color: #DBDBDB !important;
 }

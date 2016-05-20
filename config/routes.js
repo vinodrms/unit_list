@@ -105,6 +105,9 @@ module.exports.routes = {
 	'POST /api/allotments/archiveAllotmentItem': 'AllotmentsController.archiveAllotmentItem',
 	'GET /api/allotments/allotmentItem': 'AllotmentsController.getAllotmentById',
 
+	'POST /api/notifications': 'NotificationsController.getNotificationList',
+	'POST /api/notifications/count': 'NotificationsController.getNotificationListCount',
+
 
 	/*
 		Front End Views

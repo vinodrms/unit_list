@@ -2,19 +2,22 @@ import {Component, OnInit} from '@angular/core';
 import {RouterLink} from '@angular/router-deprecated';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/combineLatest';
-import {BaseComponent} from '../../../../../../../common/base/BaseComponent';
-import {AppContext, ThError} from '../../../../../../../common/utils/AppContext';
-import {LoginStatusCode} from '../../../../../../../common/utils/responses/LoginStatusCode';
-import {TranslationPipe} from '../../../../../../../common/utils/localization/TranslationPipe';
-import {HotelDetailsDO} from '../../../../../services/hotel/data-objects/HotelDetailsDO';
-import {HotelService} from '../../../../../services/hotel/HotelService';
+import {BaseComponent} from '../../../../../../../../common/base/BaseComponent';
+import {AppContext, ThError} from '../../../../../../../../common/utils/AppContext';
+import {LoginStatusCode} from '../../../../../../../../common/utils/responses/LoginStatusCode';
+import {TranslationPipe} from '../../../../../../../../common/utils/localization/TranslationPipe';
+import {HotelDetailsDO} from '../../../../../../services/hotel/data-objects/HotelDetailsDO';
+import {HotelService} from '../../../../../../services/hotel/HotelService';
 import {HeaderPageService} from './services/HeaderPageService';
 import {HeaderPage} from './services/HeaderPage';
+import {HeaderSettingsComponent} from '../subcomponents/settings/HeaderSettingsComponent';
+import {HeaderNotificationsComponent} from '../subcomponents/notifications/HeaderNotificationsComponent';
 
 @Component({
 	selector: 'main-header',
-	templateUrl: '/client/src/pages/internal/containers/home/pages/utils/header/template/main-header.html',
-	directives: [RouterLink],
+	templateUrl: '/client/src/pages/internal/containers/home/pages/utils/header/container/template/main-header.html',
+	directives: [RouterLink,
+		HeaderSettingsComponent, HeaderNotificationsComponent],
 	pipes: [TranslationPipe]
 })
 
@@ -34,9 +37,7 @@ export class MainHeaderComponent extends BaseComponent implements OnInit {
 		}, (error: ThError) => {
 		});
 	}
-	public logOut() {
-		this._appContext.logOut();
-	}
+
 
 	public get headerPageList(): HeaderPage[] {
 		return this._headerPageService.headerPageList;

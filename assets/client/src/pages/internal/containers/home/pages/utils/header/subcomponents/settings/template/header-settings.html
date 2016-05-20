@@ -1,0 +1,15 @@
+<a class="dropdown-toggle user-profile" data-toggle="dropdown" aria-expanded="false">
+	<span class="fa fa-gear fa-lg dropdown-trigger-button"></span>
+</a>
+<ul class="dropdown-menu animated fadeInDown pull-right">
+	<li>
+		<a [routerLink]="['/MainHomeComponent/SettingsContainerComponent']">
+									{{ 'Settings' | translate }}
+								</a>
+	</li>
+	<li>
+		<a href (click)="logOut()">
+			<i class="fa fa-sign-out pull-right"></i> {{ 'Log Out' | translate }}
+		</a>
+	</li>
+</ul>

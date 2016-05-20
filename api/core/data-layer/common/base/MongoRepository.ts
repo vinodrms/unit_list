@@ -1,3 +1,4 @@
+import {BaseDO} from './BaseDO';
 import {ThUtils} from '../../../utils/ThUtils';
 import {ThLogger, ThLogLevel} from '../../../utils/logging/ThLogger';
 import {ThError} from '../../../utils/th-responses/ThError';
@@ -114,4 +115,16 @@ export class MongoRepository implements IRepositoryCleaner {
 		docCount.successCallback = successCallback;
 		return docCount.getDocumentCount(searchCriteria);
 	}
+	
+	protected getQueryResult<T extends BaseDO>(type: { new(): T ;}, dbList: Object[]): T[] {
+        var resultList: T[] = [];
+        dbList.forEach((dbObject: Object) => {
+            var resultItem: T = new type();
+            resultItem.buildFromObject(dbObject);
+            resultList.push(resultItem);
+        });
+        return resultList;
+	}
+
+	protected 
 }

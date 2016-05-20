@@ -10,8 +10,8 @@ import {SettingsAddOnProductsComponent} from '../subcomponents/add-on-products/S
 import {SettingsPriceProductsComponent} from '../subcomponents/price-products/SettingsPriceProductsComponent';
 import {SettingsCustomerRegisterComponent} from '../subcomponents/customer-register/SettingsCustomerRegisterComponent';
 import {SettingsAllotmentsComponent} from '../subcomponents/allotments/SettingsAllotmentsComponent';
-import {HeaderPageService} from '../../../utils/header/services/HeaderPageService';
-import {HeaderPageType} from '../../../utils/header/services/HeaderPageType';
+import {HeaderPageService} from '../../../utils/header/container/services/HeaderPageService';
+import {HeaderPageType} from '../../../utils/header/container/services/HeaderPageType';
 import {AHomeContainerComponent} from '../../../utils/AHomeContainerComponent';
 
 @RouteConfig([

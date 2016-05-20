@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {HeaderPageService} from '../../../utils/header/services/HeaderPageService';
-import {HeaderPageType} from '../../../utils/header/services/HeaderPageType';
+import {HeaderPageService} from '../../../utils/header/container/services/HeaderPageService';
+import {HeaderPageType} from '../../../utils/header/container/services/HeaderPageType';
 import {AHomeContainerComponent} from '../../../utils/AHomeContainerComponent';
 
 @Component({

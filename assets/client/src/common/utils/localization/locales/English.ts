@@ -425,5 +425,8 @@ export var EnglishTranslations: Object = {
 	"Add at least a stationary or a rollaway bed for the newly added category.": "Add at least a stationary or a rollaway bed for the newly added category.",
 	"Hotel Operations": "Hotel Operations",
 	"Yield Manager": "Yield Manager",
-	"Booking History": "Booking History"
+	"Booking History": "Booking History",
+	"No notifications": "No notifications",
+	"See All Notifications": "See All Notifications",
+	"Notifications": "Notifications"
 };
