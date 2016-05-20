@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {TranslationPipe} from '../../../../../../../../common/utils/localization/TranslationPipe';
 import {ThButtonComponent} from '../../../../../../../../common/utils/components/ThButtonComponent';
-import {HeaderPageService} from '../../../utils/header/services/HeaderPageService';
-import {HeaderPageType} from '../../../utils/header/services/HeaderPageType';
+import {HeaderPageService} from '../../../utils/header/container/services/HeaderPageService';
+import {HeaderPageType} from '../../../utils/header/container/services/HeaderPageType';
 import {AHomeContainerComponent} from '../../../utils/AHomeContainerComponent';
 
 @Component({

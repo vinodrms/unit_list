@@ -1,0 +1,33 @@
+<a class="dropdown-toggle user-profile info-number" data-toggle="dropdown" aria-expanded="false">
+	<i class="fa fa-envelope-o fa-lg dropdown-trigger-button"></i>
+	<span class="badge bg-green">6</span>
+</a>
+<ul class="dropdown-menu list-unstyled msg_list animated fadeInDown">
+	<!-- Ng for for all the notifications -->
+	<li>
+		<a (click)="openNotificationsModal()">
+			<span class="time">07-03-2016 18:20</span>
+			<span class="message unread">   <!-- remove unread for read messages -->
+				Film festivals used to be do-or-die moments for movie makers. They were where...
+			</span>
+		</a>
+	</li>
+	
+	<!-- Next <li> only if no notifications -->
+	<li>
+		<a>
+			<span class="message">
+				{{ 'No notifications' | translate }}
+			</span>
+		</a>
+	</li>
+	
+	<li>
+		<div class="text-center">
+			<a class="btn" (click)="openNotificationsModal()">
+				{{ 'See All Notifications' | translate }}
+				<i class="fa unitpal-font">></i>
+			</a>
+		</div>
+	</li>
+</ul>

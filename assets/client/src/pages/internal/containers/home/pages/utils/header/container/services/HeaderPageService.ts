@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {AppContext} from '../../../../../../../../common/utils/AppContext';
+import {AppContext} from '../../../../../../../../../common/utils/AppContext';
 import {HeaderPage} from './HeaderPage';
 import {HeaderPageType} from './HeaderPageType';
 
@@ -13,7 +13,7 @@ export class HeaderPageService {
 	}
 	private initializeHeaderPageList() {
 		this._headerPageList = [
-			new HeaderPage(HeaderPageType.HotelOperations, "HotelOperationsContainerComponent", "Hotel Operations", "8"),
+			new HeaderPage(HeaderPageType.HotelOperations, "HotelOperationsContainerComponent", "Hotel Operations", "E"),
 			new HeaderPage(HeaderPageType.YieldManager, "YieldManagerContainerComponent", "Yield Manager", "F"),
 			new HeaderPage(HeaderPageType.BookingHistory, "BookingHistoryContainerComponent", "Booking History", "D")
 		]
