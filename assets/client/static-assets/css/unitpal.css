@@ -27,15 +27,16 @@
 body,html {
     height: 100%;
     background: #9ac6f8;
-    background: -moz-linear-gradient(-45deg,#9ac6f8 0%,#558bd0 50%,#2266b2 75%,#1d5899 100%);
-    background: -webkit-linear-gradient(-45deg,#9ac6f8 0%,#558bd0 50%,#2266b2 75%,#1d5899 100%);
-    background: linear-gradient(135deg,#9ac6f8 0%,#558bd0 50%,#2266b2 75%,#1d5899 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#9ac6f8',endColorstr='#1d5899',GradientType=1);
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#1d5899), to(#558bd0));
+    background-image: -webkit-linear-gradient(top, #1d5899, #558bd0);
+    background-image: -moz-linear-gradient(top, #1d5899, #558bd0);
+    background-image: linear-gradient(to bottom, #1d5899, #558bd0);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#1d5899',endColorstr='#558bd0',GradientType=1);
     background-size: cover;
     background-repeat: no-repeat;
     color: #0b2139;
     font-family: 'Raleway',sans-serif;
-    font-size: 15px;
+    font-size: 14px;
     overflow: hidden;
 }
 
@@ -129,6 +130,16 @@ header {
     padding: 13px 15px;
     margin: 0;
 }
+@media screen and (max-width: 450px) {
+    .side-menu-item {
+        display: none;   
+    }
+}
+@media screen and (max-width: 800px) and (min-width: 450px) {
+    .side-menu-item {
+        font-size: 12px;
+    }
+}
 
 .nav.side-menu>li>a:hover,
 .nav.side-menu>li>a:active{
@@ -147,11 +158,15 @@ header {
     color: #fff;
 }
 
-.nav .open>a.user-profile,
-.nav .open>a.user-profile:focus,
-.nav .open>a.user-profile:hover {
-    color: #0b2139 !important;
-    width: 62px;
+.nav a.user-profile:hover,
+.nav a.user-profile:focus {
+    background-color: transparent;
+    color: #DBDBDB !important;
+    cursor: pointer;
+}
+.nav .open>a.user-profile {
+  color: #DBDBDB !important;
+  background-color: transparent !important;
 }
 
 .card-header{
@@ -486,6 +501,10 @@ lazy-loading-table {
     overflow-y: hidden;
 }
 
+.main_menu_side {
+    height: 100%;
+ }
+
 .nav.side-menu> li.current-page,
 .nav.side-menu> li.active {
     border-right: 6px solid #fc8433;
@@ -703,6 +722,14 @@ lazy-loading-table {
     flex-grow: 1;
 } 
 
+.modal-xlg {
+    margin: 61px 30px 20px 30px;
+    height: calc(100% - 38px);
+    width: calc(100% - 60px);
+    min-height: 400px;
+    min-width: 300px;
+}
+
 .selectable-row {
     cursor: pointer;
 }
@@ -882,7 +909,29 @@ lazy-loading-table {
     flex-direction: column;
     flex-grow: 1;
 }
-
+.th-button-box {
+    padding-top: 7px;
+}
+.th-button-box>i {
+    font-size: 30px;
+}
+.th-button-box>span {
+    font-size: 12px;
+    height: 30px;
+    text-align: right;
+    white-space: nowrap;
+    overflow: hidden;
+    float: right;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 8px 0px 0px 2px;
+    max-width: 100px;
+}
+@media screen and (max-width: 650px) {
+    .th-button-box>span {
+        display: none;
+    }
+}
 .table-filter {
     margin: 0px 10px 5px 10px;
     flex-grow: 0;
@@ -1127,4 +1176,160 @@ table.lazy-loading .th-pagination {
         font-size: 10px;
         line-height: 13px;
     }
+}
+
+.home-header-button {
+    font-size: 24px;
+    color: white;
+    height: 61px;
+    cursor: pointer;
+    width: 130px;
+    display: inline-block;
+}
+.home-header-button.active {
+    border-bottom: 4px solid #fc8433 !important;
+}
+.home-header-button.active .left-separator {
+    opacity: 1.0;
+}
+.home-header-button.active>p {
+    opacity: 1.0;
+}
+.home-header-button.active>span  {
+    opacity: 1.0;
+}
+
+.home-header-button .left-separator {
+    width: 1px;
+    height: 34px;
+    position: relative;
+    left: 0px; top: 13px;
+    background-color: white;
+    opacity: 0.7;
+    display: inline-block;
+}
+.home-header-button>span {
+    position: relative;
+    left: 8px;
+    top: 7px;
+    width: 35px;
+    line-height: 100%;
+    color: white;
+    opacity: 0.7;
+}
+.home-header-button>p {
+    font-size: 11px;
+    display: inline-block;
+    white-space: normal;
+    text-align: left;
+    width: 65px;
+    position: relative;
+    left: 13px;
+    top: 7px;
+    line-height: 12px;
+    color: white;
+    opacity: 0.7;
+}
+
+@media screen and (max-width: 800px) {
+    .home-header-button>p {
+        display: none;   
+    }
+    .home-header-button {
+        width: 55px;
+    }
+}
+
+.home-header-logo {
+    display: inline-block;
+    height: 61px;
+    width: 130px;
+}
+.home-header-logo>img {
+    max-height: 25px;
+    display: inline-block;
+    position: relative;
+    left: 0px;
+    top: 12px;
+}
+.home-header-logo>p {
+    font-size: 22px;
+    display: inline-block;
+    color: white; 
+    position:relative;
+    top: 17px;  
+}
+@media screen and (max-width: 760px) {
+    .home-header-logo {
+        width: 40px;
+    }
+    .home-header-logo>img {
+        left: 13px;
+        top: 16px;
+    }
+    .home-header-logo>p {
+        display: none;
+    }
+}
+
+ .home-header-name {
+     display: inline-block;
+     float: right;
+     width: 300px;
+     text-align: right;
+     white-space: nowrap;
+     overflow: hidden;
+     text-overflow: ellipsis;
+     font-size: 19px;
+     color: white;
+     padding-top: 13px;
+ }
+@media screen and (min-width: 1700px) {
+    .home-header-name {
+        width: 500px;
+    }
+}
+@media screen and (min-width: 1400px) and (max-width: 1700px) {
+    .home-header-name {
+        width: 400px;
+    }
+}
+@media screen and (max-width: 1160px) and (min-width: 1000px) {
+    .home-header-name {
+        width: 200px;
+    }
+}
+@media screen and (max-width: 1000px) {
+    .home-header-name {
+        width: 150px;
+    }
+}
+@media screen and (max-width: 920px) {
+    .home-header-name {
+        display: none;
+    }
+}
+
+.home-side-card {
+    height: 100%;
+    overflow-y: hidden;
+    background: #f3f3f3;
+    padding: 0px 0px 0px 0px;
+}
+.home-side-card-bottom-box {
+    position: absolute;
+    bottom: 0px;
+    width: 100%;
+    height: 50px;
+    background: white;
+    border-top: 1px solid #DBDBDB;
+    text-align: center;
+}
+
+.home-card {
+    height: 100%;
+    overflow-y: hidden;
+    background: #eeeeee;
+    border-left: 1px solid #DBDBDB;
+    border-right: 1px solid #DBDBDB;
 }

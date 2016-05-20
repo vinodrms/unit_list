@@ -4,6 +4,7 @@ import {ActionTokenDO} from '../data-objects/user/ActionTokenDO';
 import {HotelContactDetailsDO} from '../data-objects/hotel-contact-details/HotelContactDetailsDO';
 import {GeoLocationDO} from '../../common/data-objects/geo-location/GeoLocationDO';
 import {OperationHoursDO} from '../data-objects/operation-hours/OperationHoursDO';
+import {LazyLoadRepoDO} from '../../common/repo-data-objects/LazyLoadRepoDO';
 
 export interface UserAccountActivationRepoDO {
 	email: string;
@@ -46,6 +47,7 @@ export interface IHotelRepository {
 
 	getHotelByUserEmail(email: string): Promise<HotelDO>;
 	getHotelById(id: string): Promise<HotelDO>;
+	getHotelList(lazyLoad: LazyLoadRepoDO): Promise<HotelDO[]>;
 
 	updateBasicInformation(hotelMeta: HotelMetaRepoDO, basicInfo: BasicHotelInfoRepoDO): Promise<HotelDO>;
 	updatePaymentsPolicies(hotelMeta: HotelMetaRepoDO, paymPoliciesParams: PaymentsPoliciesRepoDO): Promise<HotelDO>;

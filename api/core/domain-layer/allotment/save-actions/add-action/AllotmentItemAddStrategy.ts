@@ -53,5 +53,8 @@ export class AllotmentItemAddStrategy implements IAllotmentItemActionStrategy {
 			nextDate = this._thDateUtils.addDaysToThDateDO(nextDate, 1);
 			currentDate = nextDate;
 		}
+		
+		var expiryDate: ThDateDO = this._thDateUtils.addDaysToThDateDO(this._allotmentDO.openInterval.getEnd().buildPrototype(), 1);
+		this._allotmentDO.expiryUtcTimestamp = expiryDate.getUtcTimestamp();
 	}
 }

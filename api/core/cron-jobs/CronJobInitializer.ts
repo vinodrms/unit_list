@@ -1,21 +1,19 @@
-import {ICronJob} from './utils/ICronJob';
-import {AllotmentArchiverCronJob} from './jobs/allotment/AllotmentArchiverCronJob';
+import {ICronJobScheduler} from './utils/cron/scheduler/ICronJobScheduler';
+import {HotelHalfHourlyCronJob} from './jobs/HotelHalfHourlyCronJob';
 
-import _ = require('underscore');
-
-export class CronJobInitializer implements ICronJob {
+export class CronJobInitializer implements ICronJobScheduler {
 	public schedule() {
 		this.scheduleHourlyJobs();
 	}
 
 	private scheduleHourlyJobs() {
 		this.scheduleJobList([
-			new AllotmentArchiverCronJob()
+			new HotelHalfHourlyCronJob()
 		]);
 	}
 
-	private scheduleJobList(jobList: ICronJob[]) {
-		_.forEach(jobList, (job: ICronJob) => {
+	private scheduleJobList(jobList: ICronJobScheduler[]) {
+		jobList.forEach((job: ICronJobScheduler) => {
 			job.schedule();
 		});
 	}

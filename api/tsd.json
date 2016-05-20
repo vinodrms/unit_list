@@ -89,7 +89,7 @@
     "bcrypt/bcrypt.d.ts": {
       "commit": "6d0e826824da52204c1c93f92cecbc961ac84fa9"
     },
-    "node-schedule/node-schedule.d.ts": {
+    "cron/cron.d.ts": {
       "commit": "398bd742115e2b071ab3edf8b543b6df6fa62dc2"
     }
   }

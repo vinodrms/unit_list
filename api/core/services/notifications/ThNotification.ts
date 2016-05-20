@@ -5,7 +5,7 @@ export enum ThNotificationCode {
 }
 
 var ThNotificationMessage: { [index: number]: string; } = {};
-ThNotificationMessage[ThNotificationCode.AllotmentArchivedAutomatically] = "Your allotment for customer %customerName% has been automatically archived as it reached the expired date.";
+ThNotificationMessage[ThNotificationCode.AllotmentArchivedAutomatically] = "Your allotment for the period %period% has been automatically archived as it reached the expired date.";
 
 export class ThNotification {
 	private _code: ThNotificationCode;
@@ -13,7 +13,7 @@ export class ThNotification {
 	private _hotelId: string;
 	private _userId: string;
 
-	constructor(code: ThNotificationCode, parameters: Object, hotelId: string, userId: string) {
+	constructor(code: ThNotificationCode, parameters: Object, hotelId: string, userId?: string) {
 		this._code = code;
 		this._parameters = parameters;
 		this._hotelId = hotelId;

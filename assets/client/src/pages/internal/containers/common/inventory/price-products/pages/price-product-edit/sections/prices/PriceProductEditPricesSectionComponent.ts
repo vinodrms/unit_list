@@ -66,6 +66,10 @@ export class PriceProductEditPricesSectionComponent extends BaseComponent implem
 		this.pricePerPersonContainer.initializeFrom(priceProductVM.priceProduct.price.type, priceProductVM.priceProduct.price.priceList);
 	}
 	public updatePricesForRoomCategories(roomCategoryList: RoomCategoryDO[]) {
+		if (this._appContext.thUtils.isUndefinedOrNull(roomCategoryList) || (_.isArray(roomCategoryList) && roomCategoryList.length == 0)) {
+			this._currentRoomCategoryStatsList = [];
+			return;
+		}
 		this.isLoading = true;
 		this._roomCategoriesStatsService.getRoomCategoryStatsForRoomCategoryList(roomCategoryList).subscribe((roomCategoryStatsList: RoomCategoryStatsDO[]) => {
 			this.currentRoomCategoryStatsList = roomCategoryStatsList;

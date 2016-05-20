@@ -1,6 +1,7 @@
 import {Component, OnInit, Output, EventEmitter, Input, AfterViewChecked, Inject, ElementRef} from '@angular/core';
 import {Control} from '@angular/common';
 import {LoadingComponent} from '../LoadingComponent';
+import {ThButtonComponent} from '../ThButtonComponent';
 import {TranslationPipe} from '../../localization/TranslationPipe';
 import {PricePipe} from '../../pipes/PricePipe';
 import {PercentagePipe} from '../../pipes/PercentagePipe';
@@ -20,7 +21,7 @@ declare var jQuery:any;
 @Component({
 	selector: 'lazy-loading-table',
 	templateUrl: '/client/src/common/utils/components/lazy-loading/template/lazy-loading-table.html',
-	directives: [LoadingComponent, CustomScroll],
+	directives: [LoadingComponent, CustomScroll, ThButtonComponent],
 	pipes: [TranslationPipe, PricePipe, PercentagePipe, ThDateIntervalPipe]
 })
 export class LazyLoadingTableComponent<T> {

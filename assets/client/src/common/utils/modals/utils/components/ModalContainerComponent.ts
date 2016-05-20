@@ -13,7 +13,7 @@ import {ModalSize} from '../ICustomModalComponent';
 	},
 	template: `
 		<div class="vertical-alignment-helper">
-			<div class="modal-dialog vertical-align-center" [ngClass]="{'modal-lg': isLarge(), 'modal-sm': isSmall()}">
+			<div class="modal-dialog vertical-align-center" [ngClass]="{'modal-lg': isLarge(), 'modal-sm': isSmall(), 'modal-xlg': isExtraLarge()}">
 				<div class="modal-content" (click)="onContainerClick($event)">
 					<div style="display: none" #modalDialog>
 					</div>
@@ -24,8 +24,8 @@ import {ModalSize} from '../ICustomModalComponent';
 })
 
 export class ModalContainerComponent<T> {
-	@ViewChild('modalDialog', {read: ViewContainerRef}) viewContainerRef: ViewContainerRef;
-	
+	@ViewChild('modalDialog', { read: ViewContainerRef }) viewContainerRef: ViewContainerRef;
+
 	constructor(private _dialogInstance: ModalDialogRef<T>) {
 
 	}
@@ -35,6 +35,9 @@ export class ModalContainerComponent<T> {
 	}
 	public isSmall(): boolean {
 		return this._dialogInstance.modalSize === ModalSize.Small;
+	}
+	public isExtraLarge(): boolean {
+		return this._dialogInstance.modalSize === ModalSize.XLarge;
 	}
 
 	onContainerClick($event) {
