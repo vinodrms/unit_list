@@ -283,6 +283,8 @@ export enum ThStatusCode {
     
     // Notifications
     NotificationsRepositoryErrorAddingNotification,
+    NotificationsRepositoryErrorGettingCount,
+    NotificationsRepositoryErrorGettingList,
     NotificationsRepositoryErrorGettingUndelivered,
 }
 
