@@ -5,7 +5,8 @@ import {JobExecutorDO} from '../../utils/cron/executor/JobExecutorDO';
 import {ICronJobExecutor} from '../../utils/cron/executor/ICronJobExecutor';
 import {AllotmentDO} from '../../../data-layer/allotment/data-objects/AllotmentDO'
 import {AllotmentArchiverProcess} from '../../../domain-layer/allotment/processes/AllotmentArchiverProcess'
-import {ThNotification, ThNotificationCode} from '../../../services/notifications/ThNotification';
+import {NotificationDO} from '../../../data-layer/common/data-objects/notifications/NotificationDO';
+import {ThNotificationCode} from '../../../data-layer/common/data-objects/notifications/ThNotificationCode';
 
 import _ = require('underscore');
 
@@ -24,9 +25,18 @@ export class AllotmentArchiverCronJobExecutor implements ICronJobExecutor {
 	}
 	private sendNotificationsFor(archivedAllotmentList: AllotmentDO[]) {
 		_.forEach(archivedAllotmentList, (archivedAllotment: AllotmentDO) => {
-			var notification = new ThNotification(ThNotificationCode.AllotmentArchivedAutomatically, { period: archivedAllotment.openInterval.toString() }, this._executorDO.hotel.id);
+			var notification = this.buildNotificationFor(archivedAllotment);
 			var notificationsService = this._executorDO.appContext.getServiceFactory().getNotificationService();
-			notificationsService.sendNotification(notification).then((result: any) => { }).catch((error: any) => { });
+			notificationsService.addNotification(notification).then((result: any) => { }).catch((error: any) => { });
 		});
+	}
+	private buildNotificationFor(archivedAllotment: AllotmentDO): NotificationDO {
+		return NotificationDO.buildNotificationDO(
+			{
+				hotelId: this._executorDO.hotel.id,
+				code: ThNotificationCode.AllotmentArchivedAutomatically,
+				parameterMap: { period: archivedAllotment.openInterval.toString() }
+			}
+		);
 	}
 }

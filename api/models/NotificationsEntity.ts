@@ -18,7 +18,7 @@ class NotificationsEntity extends BasePersistentEntity {
                 required: true
             },            
             code: {
-                type: 'string',
+                type: 'integer',
                 required: true
             },
             parameterMap: {
