@@ -196,7 +196,8 @@ add-on-products,
 price-products,
 customer-register,
 allotments,
-beds {
+beds,
+new-booking-container {
     display: block;
     height: 100%;
 }
@@ -230,6 +231,9 @@ customer-register{
 }
 allotments{
     background: #fff url(/client/static-assets/images/background_08_allotment.png) right bottom no-repeat !important;
+}
+new-booking-container {
+    background: #fff url(/client/static-assets/images/background_operations.png) right bottom no-repeat !important;
 }
 
 .signup-skip {
@@ -925,11 +929,12 @@ lazy-loading-table {
     text-align: right;
     white-space: nowrap;
     overflow: hidden;
-    float: right;
+    position: relative;
+    bottom: 6px;
     overflow: hidden;
     text-overflow: ellipsis;
-    padding: 8px 0px 0px 2px;
-    max-width: 100px;
+    padding: 0px 0px 0px 2px;
+    max-width: 120px;
 }
 @media screen and (max-width: 650px) {
     .th-button-box>span {
@@ -1425,4 +1430,111 @@ ul.msg_list li a .message {
 }
 .open .dropdown-trigger-button {
     color: #DBDBDB !important;
+}
+
+.modal-lg-header {
+    height: 70px;
+    border-bottom: 1px solid #DBDBDB;
+    color: #fc8333 !important;
+    padding: 0 15px;
+}
+.modal-lg-header small {
+    color: #fc8333 !important;
+    font-weight: 300;
+}
+.modal-lg-header h1 {
+    font-size: 22px;
+    font-weight: 300;
+    padding: 23px 0px 0px 0px;
+}
+.modal-lg-header i {
+    font-size: 18px;
+    position: relative;
+    left: 3px;
+    margin-right: 8px;
+}
+
+.modal-lg-body {
+    height: calc(100% - 70px);
+}
+.oneline-text {
+    display: inline-block;
+    vertical-align: middle;
+    max-width: 100%;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.btn.btn-square {
+    width: 35px;
+    height: 35px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    text-align: center;
+    color: #fff;
+    border: 0;
+    font-size: 12px;
+    position: relative;
+    top: 16px;
+    background-color: #fc8333;
+}
+.btn-square.btn-square-next-prev {
+    background-color: #737373;    
+}
+
+a.btn.btn-square:hover,
+a.btn.btn-square:focus {
+    color: #DBDBDB !important;
+    cursor: pointer;
+}
+.btn-square-container {
+    width: 110px;
+    height: 100%;
+}
+.btn.btn-square.disabled {
+    background-color: #e7e7e7;   
+}
+.btn.btn-square>i {
+    font-size: 30px;  
+    position: relative;
+}
+.btn.btn-square>i {
+    position: absolute;
+    left: 5px;
+    bottom: 5px;
+}
+.btn.btn-square.btn-square-next-prev>i {
+    position: absolute;
+    left: 10px;
+    bottom: 4px;
+}
+
+.btn-err-container {
+    width: calc(100% - 110px);
+    height: 100%;
+    position: absolute;
+    left: 95px;
+    top: 10px;
+    display: flex;
+    align-items: center;
+}
+.btn-err-container>i {
+    display: inline;
+}
+.btn-err-container>span {
+    font-size: 9px;
+    font-weight: bold;
+    text-transform: uppercase;
+    overflow: hidden;
+    text-overflow: ellipsis;   
+ }
+ @media screen and (max-width: 630px) {
+    .btn-err-container>i {
+        display: none;
+    }
+}
+.float-right {
+    float: right;   
 }
