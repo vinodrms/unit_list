@@ -3,10 +3,32 @@
 	<h4 class="modal-title">{{ 'Notifications' | translate }}</h4>
 </div>
 <div class="modal-body modal-body-xl">
-	
+	<div class="overview-left col-xs-9">
+		<div class="lazy-loading-table-filter">
+			<ul class="nav nav-tabs">
+				<li [ngClass]="{active : isAllNotificationsTabSelected()}">
+					<a (click)="viewAllNotifications()">{{ 'All' | translate }}</a>
+				</li>
+				<li [ngClass]="{active : isUnreadNotificationsTabSelected()}">
+					<a (click)="viewUnreadNotifications()">{{ 'Unread' | translate }}</a>
+				</li>
+			</ul>
+		</div>
+		<lazy-loading-table (onSelect)="selectNotification($event)">
+		</lazy-loading-table>
+	</div>
+	<div class="col-xs-3 full-height">
+		<div *ngIf="selectedNotification" customScroll>
+			<div>
+				<kbd>{{ 'Selected' | translate }}</kbd>
+			</div>
+			<div>
+				<h1>{{selectedNotification.translatedMessage}}</h1>
+			</div>
+		</div>
+	</div>
 </div>
 <div class="modal-footer">
-	<button type="button" class="btn btn-primary" 
-		(click)="closeDialog()"> {{ 'Close' | translate }}
+	<button type="button" class="btn btn-primary" (click)="closeDialog()"> {{ 'Close' | translate }}
 	</button>
 </div>

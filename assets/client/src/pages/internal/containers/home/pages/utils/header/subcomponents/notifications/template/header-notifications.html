@@ -1,20 +1,23 @@
 <a class="dropdown-toggle user-profile info-number" data-toggle="dropdown" aria-expanded="false">
 	<i class="fa fa-envelope-o fa-lg dropdown-trigger-button"></i>
-	<span class="badge bg-green">6</span>
+	<span *ngIf="numUnread > 0" class="badge bg-green">{{numUnread}}</span>
 </a>
 <ul class="dropdown-menu list-unstyled msg_list animated fadeInDown">
 	<!-- Ng for for all the notifications -->
 	<li>
-		<a (click)="openNotificationsModal()">
-			<span class="time">07-03-2016 18:20</span>
-			<span class="message unread">   <!-- remove unread for read messages -->
-				Film festivals used to be do-or-die moments for movie makers. They were where...
+		<a *ngFor="let thNotification of lastNotificationsList" (click)="openNotificationsModal(thNotification)">
+			<span class="time">{{thNotification.notification.timestamp}}</span>
+			<span class="message" *ngIf="thNotification.notification.read">
+				{{thNotification.translatedMessage}}
+			</span>
+			<span class="message unread" *ngIf="!thNotification.notification.read">
+				{{thNotification.translatedMessage}}
 			</span>
 		</a>
 	</li>
 	
 	<!-- Next <li> only if no notifications -->
-	<li>
+	<li *ngIf="numUnread == 0">
 		<a>
 			<span class="message">
 				{{ 'No notifications' | translate }}

@@ -8,6 +8,7 @@ export module NotificationRepoDO {
     
     export interface SearchCriteria {
         read?: boolean;
+        notificationId?: string; 
     }
     
     export interface SearchResult {
@@ -27,6 +28,12 @@ export interface INotificationsRepository {
         meta: NotificationRepoDO.Meta,
         searchCriteria?: NotificationRepoDO.SearchCriteria,
         lazyLoad?: LazyLoadRepoDO): Promise<NotificationRepoDO.SearchResult>;
+    
+    // Marks all notifications satisfying the SearchCriteria as read. Returns a Promise
+    // with the number of updated notifications.
+    markNotificationsAsRead(
+        meta: NotificationRepoDO.Meta,
+        searchCriteria: NotificationRepoDO.SearchCriteria): Promise<number>;
     
     // Fetches all undelivered notifications for the given hotel id and then
     // marks them as delivered.

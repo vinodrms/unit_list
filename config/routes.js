@@ -107,7 +107,7 @@ module.exports.routes = {
 
 	'POST /api/notifications': 'NotificationsController.getNotificationList',
 	'POST /api/notifications/count': 'NotificationsController.getNotificationListCount',
-
+	'POST /api/notifications/markNotificationsAsRead': 'NotificationsController.markNotificationsAsRead',
 
 	/*
 		Front End Views

@@ -28,7 +28,6 @@ export class MongoNotificationsRepository extends MongoRepository implements INo
         notification.delivered = false;        
 		this.createDocument(notification,
 			(err: Error) => {
-				var errorCode = this.getMongoErrorCode(err);
                 var thError = new ThError(ThStatusCode.NotificationsRepositoryErrorAddingNotification, err);
                 ThLogger.getInstance().logError(ThLogLevel.Error, "Error adding notification", notification, thError);
                 reject(thError);
@@ -55,7 +54,6 @@ export class MongoNotificationsRepository extends MongoRepository implements INo
         var searchQuery = this.getSearchQuery(meta, searchCriteria);
         this.getDocumentCount(searchQuery,
             (err: Error) => {
-				var errorCode = this.getMongoErrorCode(err);
                 var thError = new ThError(ThStatusCode.NotificationsRepositoryErrorGettingCount, err);
                 ThLogger.getInstance().logError(ThLogLevel.Error, "Error getting count",  { meta: meta, searchCriteria: searchCriteria }, thError);
                 reject(thError);
@@ -64,6 +62,33 @@ export class MongoNotificationsRepository extends MongoRepository implements INo
 				resolve(meta);
 			}
 		);
+    }
+    
+    public markNotificationsAsRead(
+        meta: NotificationRepoDO.Meta,
+        searchCriteria: NotificationRepoDO.SearchCriteria): Promise<number> {
+        return new Promise<number>((resolve: { (result: number): void }, reject: { (err: ThError): void }) => {
+            return this.markNotificationsAsReadCore(resolve, reject, meta, searchCriteria);            
+        });
+    }
+    private markNotificationsAsReadCore(
+        resolve: { (result: number): void },
+        reject: { (err: ThError): void },
+        meta: NotificationRepoDO.Meta,
+        searchCriteria: NotificationRepoDO.SearchCriteria) {
+
+        var searchQuery = this.getSearchQuery(meta, searchCriteria);
+        this.updateMultipleDocuments(searchQuery, 
+            { read: true },
+            (err: Error) => {
+                var thError = new ThError(ThStatusCode.NotificationsRepositoryErrorMarkingAsRead, err);
+                ThLogger.getInstance().logError(ThLogLevel.Error, "Error marking notification as read", context, thError);
+                return thError;
+			},
+			(numUpdated: number) => {
+				resolve(numUpdated);
+			}
+        );
     }
     
     public getNotificationList(meta: NotificationRepoDO.Meta, searchCriteria?: NotificationRepoDO.SearchCriteria, lazyLoad?: LazyLoadRepoDO): Promise<NotificationRepoDO.SearchResult> {
@@ -81,7 +106,7 @@ export class MongoNotificationsRepository extends MongoRepository implements INo
         var searchQuery = this.getSearchQuery(meta, searchCriteria);
         // Always sort from the most recent (largest timestamp) to the least 
         // recent (smallest timestamp).
-        var sortCriteria = {timestamp: 1};
+        var sortCriteria = {timestamp: -1};
         this.findMultipleDocuments({ criteria: searchQuery, sortCriteria: sortCriteria, lazyLoad: lazyLoad },
             (err: Error) => {
                 var thError = new ThError(ThStatusCode.NotificationsRepositoryErrorGettingList, err);
@@ -163,27 +188,38 @@ export class MongoNotificationsRepository extends MongoRepository implements INo
          this.updateMultipleDocuments(searchQuery,
             updateQuery,
             (err: Error) => {
-				reject(this.getWrappedAndLogUndeliveredError(searchQuery, err));
+				reject(this.getWrappedAndLogUndeliveredError(
+                    searchQuery, 
+                    err));
 			},
             (numUpdated: number) => {
                 if (numUpdated < notifications.length) {
-                    reject(this.getWrappedAndLogUndeliveredError(searchQuery, new Error("Couldn't update all entries")));
+                    reject(this.getWrappedAndLogUndeliveredError(
+                        searchQuery, 
+                        new Error("Couldn't update all entries")));
                 } else {
                     resolve();
                 }
             });
     }
     
-    private getWrappedAndLogUndeliveredError(searchQuery: Object, cause: Error) {
+    private getWrappedAndLogUndeliveredError(context: Object, cause: Error) {
         var thError = new ThError(ThStatusCode.NotificationsRepositoryErrorGettingUndelivered, cause);
-        ThLogger.getInstance().logError(ThLogLevel.Error, "Error updating undelivered notifications", searchQuery, thError);
+        ThLogger.getInstance().logError(ThLogLevel.Error, "Error updating undelivered notifications", context, thError);
         return thError;
     }
     
-    private getSearchQuery(meta: NotificationRepoDO.Meta, searchCriteria: NotificationRepoDO.SearchCriteria): Object {
+    private getSearchQuery(meta: NotificationRepoDO.Meta, searchCriteria?: NotificationRepoDO.SearchCriteria): Object {
         var mongoQueryBuilder = new MongoQueryBuilder();
         mongoQueryBuilder.addExactMatch("hotelId", meta.hotelId);
-        mongoQueryBuilder.addExactMatch("read", searchCriteria.read);
+        if (searchCriteria) {
+            if (!this._thUtils.isUndefinedOrNull(searchCriteria.read)) {
+                mongoQueryBuilder.addExactMatch("read", searchCriteria.read);
+            }
+            if (!this._thUtils.isUndefinedOrNull(searchCriteria.notificationId)) {
+                mongoQueryBuilder.addExactMatch("id", searchCriteria.notificationId);
+            }
+        }
         return mongoQueryBuilder.processedQuery;
     }
 }

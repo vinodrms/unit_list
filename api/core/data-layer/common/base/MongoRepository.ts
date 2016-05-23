@@ -125,6 +125,4 @@ export class MongoRepository implements IRepositoryCleaner {
         });
         return resultList;
 	}
-
-	protected 
 }

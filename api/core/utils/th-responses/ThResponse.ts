@@ -286,6 +286,7 @@ export enum ThStatusCode {
     NotificationsRepositoryErrorGettingCount,
     NotificationsRepositoryErrorGettingList,
     NotificationsRepositoryErrorGettingUndelivered,
+    NotificationsRepositoryErrorMarkingAsRead,
 }
 
 var ThMessage: { [index: number]: string; } = {};
@@ -567,6 +568,7 @@ ThMessage[ThStatusCode.HotelIteratorError] = "Error iterating through the hotels
 ThMessage[ThStatusCode.AllotmentArchiverCronJobExecutorError] = "Error archiving allotments from the process.";
 ThMessage[ThStatusCode.NotificationsRepositoryErrorAddingNotification] = "Error adding a notification.";
 ThMessage[ThStatusCode.NotificationsRepositoryErrorGettingUndelivered] = "Error getting undelivered notifications.";
+ThMessage[ThStatusCode.NotificationsRepositoryErrorMarkingAsRead] = "Error marking notification as read.";
 
 export class ThResponse {
     statusCode: ThStatusCode;
