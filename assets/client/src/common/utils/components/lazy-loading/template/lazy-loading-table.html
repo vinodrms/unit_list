@@ -88,14 +88,14 @@
 					</a>
 				</td>
 			</tr>
-			<tr *ngIf="!noResultsExist()">
+			<tr *ngIf="!noResultsExist()" class="lazy-loading-table-last-row">
 				<td *ngFor="let columnMeta of columnMetaList" [ngClass]="getCellClasses(columnMeta.valueMeta, isCollapsed)">
 				</td>
 				<td *ngIf="tableOptions.canCopy||tableOptions.canEdit||tableOptions.canDelete" class="table-item-action-group" [ngClass]="{'up-col-10p': !isCollapsed, 'up-col-30p': isCollapsed}">
 					
 				</td>
 			</tr>
-			<tr *ngIf="noResultsExist()">
+			<tr *ngIf="noResultsExist()" class="lazy-loading-table-last-row">
 				<td class="up-col-100p">
 					<center>
 						{{ 'No items to display' | translate }}

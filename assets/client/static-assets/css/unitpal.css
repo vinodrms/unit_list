@@ -48,6 +48,9 @@ body,html {
     height: 100%;
     overflow-y: hidden;
 }
+.full-height-no-overflow {
+    height: 100%;
+}
 
 .card a {
     color: #fc8433;
@@ -291,6 +294,21 @@ input:focus {
 
 .input-group.form-warning + label.form-warning {
     display: block;
+}
+input.form-control:only-child {
+    border-radius: 4px !important;
+}
+.date-interval-picker-arrow {
+    position: absolute;
+    right: -5px;
+    top: 33px;
+    font-size: 20px;
+    color: #DBDBDB;
+}
+@media screen and (max-width: 1000px) {
+    .date-interval-picker-arrow {
+        display: none;
+    }
 }
 
 label.form-warning {
@@ -903,19 +921,23 @@ input[type="file"] {
     font-size: 12px;
     font-weight: bold;
 }
-
+.position-relative {
+    position: relative;
+}
 /**
     Lazy loading fixed header table css
 */
 lazy-loading-table {
     display: flex;
     flex-direction: column;
+    overflow-y: hidden;
 }
 
 .lazy-loading-table-container {
     display: flex;
     flex-direction: column;
     flex-grow: 1;
+    overflow-y: hidden;
 }
 .th-button-box {
     padding-top: 7px;
@@ -970,8 +992,12 @@ table.lazy-loading tbody {
   flex-shrink: 1;
 }
 
-table.lazy-loading tbody tr:last-child {
-  flex-grow: 1;
+tr.lazy-loading-table-last-row {
+    flex-grow: 1 !important;
+}
+tr.lazy-loading-table-last-row:hover,
+tr.lazy-loading-table-last-row:focus {
+    background-color: transparent !important;
 }
 
 table.lazy-loading tr {
@@ -1456,6 +1482,9 @@ ul.msg_list li a .message {
 
 .modal-lg-body {
     height: calc(100% - 70px);
+    position: absolute;
+    top: 70px;
+    padding: 0 15px;
 }
 .oneline-text {
     display: inline-block;
@@ -1478,7 +1507,7 @@ ul.msg_list li a .message {
     font-size: 12px;
     position: relative;
     top: 16px;
-    background-color: #fc8333;
+    background-color: #fb6708;
 }
 .btn-square.btn-square-next-prev {
     background-color: #737373;    
@@ -1537,4 +1566,82 @@ a.btn.btn-square:focus {
 }
 .float-right {
     float: right;   
+}
+.right-margin {
+    border-right: 1px solid #DBDBDB;
+}
+.th-addon-button {
+    background-color: #fb6708;
+    color: white;
+    font-size: 13px;
+}
+.th-addon-button:hover,
+.th-addon-button:focus {
+    color: #DBDBDB;
+    cursor: pointer;
+}
+.form-group-small {
+    padding-right: 0px;
+}
+.form-group-small>.form-group {
+    margin-bottom: 5px;
+}
+.form-group-small input {
+    height: 28px;
+    font-size: 13px;
+    padding-right: 0px;
+}
+.booking-configuration-container {
+    color: #59585f;
+}
+.booking-configuration {
+    background-color: #e7e7e7;
+    margin: 0px 0px;
+}
+.input-group-small>.input-group-addon {
+    background-color: white;
+    padding: 0 5px 0 5px;
+}
+.booking-configuration-container .search-button {
+    background-color: #fb6708;
+    color: white;
+    border-radius: 0px;
+    padding-top: 9px;
+    float: right;
+}
+.booking-configuration-container a.btn.search-button:hover,
+.booking-configuration-container a.btn.search-button:focus {
+    color: #DBDBDB;
+}
+.booking-search-container {
+    display: flex;
+    flex-direction: column;
+}
+.booking-search-inputs {
+    flex: 1;
+    overflow: hidden;
+    min-height: 205px;
+}
+@media screen and (max-width: 1000px) {
+    .booking-search-inputs {
+        min-height: 235px;
+    }
+}
+.booking-search-results {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    font-size: 11px;
+    overflow-y: hidden;
+    padding: 0 15px;
+}
+.padding-right-0px {
+    padding-right: 0px;
+}
+.padding-top-5px {
+    padding-top: 5px;
+}
+.no-padding {
+    padding: 0px 0px;
 }
