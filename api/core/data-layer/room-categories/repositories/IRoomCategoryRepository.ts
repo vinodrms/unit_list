@@ -12,7 +12,8 @@ export interface RoomCategoryItemMetaRepoDO {
 
 export interface RoomCategorySearchCriteriaMetaRepoDO {
     displayName?: string; 
-    categoryIdList?: string[];         
+    categoryIdList?: string[];
+    bedIdList?: string[];         
 }
 
 export interface RoomCategorySearchResultRepoDO {
