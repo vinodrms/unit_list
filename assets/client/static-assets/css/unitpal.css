@@ -1633,7 +1633,7 @@ a.btn.btn-square:focus {
     flex-direction: column;
 }
 .booking-search-inputs {
-    flex: 1;
+    flex: 0;
     overflow: hidden;
     min-height: 205px;
 }
@@ -1643,7 +1643,7 @@ a.btn.btn-square:focus {
     }
 }
 .booking-search-results {
-    flex: 2;
+    flex: 1;
     display: flex;
     flex-direction: column;
     height: 100%;
