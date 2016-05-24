@@ -1,0 +1,37 @@
+<div class="modal-lg-header container">
+	<div class="row full-height">
+		<div class="col-xs-7 col-md-7 full-height">
+			<h1 class="oneline-text full-height">
+				<i class="fa fa-2x unitpal-font">'</i>
+				{{ 'New Booking' | translate }} <small> {{ pathString }} </small>
+			</h1>
+		</div>
+		<div class="col-xs-5 col-md-5 full-height">
+			<div class="row full-height">
+				<div class="col-xs-8">
+					<p class="btn-square-container">
+						<a class="btn btn-square btn-square-next-prev" [ngClass]="{disabled: !hasPreviousPage()}" (click)="movePrevious()">
+							<i class="fa unitpal-font"><</i>
+						</a>
+						<a class="btn btn-square btn-square-next-prev" [ngClass]="{disabled: !canMoveNext()}" (click)="moveNext()" >
+							<i class="fa unitpal-font">></i>
+						</a>
+					</p>
+					<p class="btn-err-container">
+						<i class="fa unitpal-font">+</i>
+						<span>Insufficient Rooms to use these price products</span>
+					</p>
+				</div>
+				<div class="col-xs-4 full-height">
+					<a class="btn btn-square float-right" *ngIf="showCloseButton" (click)="triggerOnCloseButtonPressed()">
+						<i class="fa unitpal-font">C</i>
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal-lg-body container">
+	<new-booking-search class="full-height" *ngIf="isBookingSearch()"> </new-booking-search>
+	<new-booking-fill-details class="full-height" *ngIf="isFillDetails()"> </new-booking-fill-details>
+</div>

@@ -130,7 +130,7 @@ export enum ThStatusCode {
     DeleteBedItemErrorDeleting,
     DeleteBedItemErrorValidating,
     DeleteBedItemError,
-    DeleteBedItemErrorUsedInRooms,
+    DeleteBedItemErrorUsedInRoomCategories,
     BedControllerErrorGettingBeds,
     BedControllerErrorSavingBed,
     BedControllerErrorDeletingBed,
@@ -375,7 +375,7 @@ ThMessage[ThStatusCode.SaveBedItemInvalidSizeAndOrCapacity] = "Size and capacity
 ThMessage[ThStatusCode.SaveBedItemInvalidBedTemplateId] = "Invalid bed template id.";
 ThMessage[ThStatusCode.DeleteBedItemErrorDeleting] = "Error deleting bed item.";
 ThMessage[ThStatusCode.DeleteBedItemErrorValidating] = "Error validating the existing bed item.";
-ThMessage[ThStatusCode.DeleteBedItemErrorUsedInRooms] = "Cannot delete the bed because it was assigned to at least a room in your inventory.";
+ThMessage[ThStatusCode.DeleteBedItemErrorUsedInRoomCategories] = "Cannot delete the bed because it was assigned to at least a room category in your inventory.";
 ThMessage[ThStatusCode.BedControllerErrorGettingBeds] = "Error getting the beds.";
 ThMessage[ThStatusCode.BedControllerErrorSavingBed] = "Error saving bed.";
 ThMessage[ThStatusCode.BedControllerErrorDeletingBed] = "Error deleting bed.";

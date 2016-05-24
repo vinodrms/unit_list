@@ -8,7 +8,9 @@ import {ThDateUtils} from '../../../pages/internal/services/common/data-objects/
     selector: 'th-date-picker',
     template: `   
 		<div class="form-group">
-			<label>{{ label | translate }}</label>
+			<label>{{ label | translate }} 
+				<span *ngIf="labelFont" class="unitpal-font" style="font-size: 18px;">{{labelFont}}</span>
+			</label>
 			<div class="input-group">
 				<span class="input-group-addon"><small></small> <i class="fa fa-calendar-o"></i></span>
 				<span class="form-control" [ngClass]="{'disabled-text': readonly}">{{ selectedThDate | thdate }}</span>
@@ -20,6 +22,7 @@ import {ThDateUtils} from '../../../pages/internal/services/common/data-objects/
 
 export class ThDatePickerComponent implements AfterViewInit {
 	@Input() label: string = "Select a date";
+	@Input() labelFont: string;
 
 	private _initialThDate: ThDateDO;
 	public get initialThDate(): ThDateDO {

@@ -16,7 +16,7 @@ export class MongoRoomCategoryReadOperationsRepository extends MongoRepository {
         this._helper = new RoomCategoryRepositoryHelper();
     }
     
-        public getRoomCategoryList(roomMeta: RoomCategoryMetaRepoDO, searchCriteria?: RoomCategorySearchCriteriaMetaRepoDO, lazyLoad?: LazyLoadRepoDO): Promise<RoomCategorySearchResultRepoDO> {
+    public getRoomCategoryList(roomMeta: RoomCategoryMetaRepoDO, searchCriteria?: RoomCategorySearchCriteriaMetaRepoDO, lazyLoad?: LazyLoadRepoDO): Promise<RoomCategorySearchResultRepoDO> {
         return new Promise<RoomCategorySearchResultRepoDO>((resolve: { (result: RoomCategorySearchResultRepoDO): void }, reject: { (err: ThError): void }) => {
             this.getRoomCategoryListCore(resolve, reject, roomMeta, searchCriteria, lazyLoad);
         });
@@ -53,6 +53,9 @@ export class MongoRoomCategoryReadOperationsRepository extends MongoRepository {
             }
             if(searchCriteria.categoryIdList) {
                 mongoQueryBuilder.addMultipleSelectOptionList("id", searchCriteria.categoryIdList);
+            }
+            if (!this._thUtils.isUndefinedOrNull(searchCriteria.bedIdList)) {
+                mongoQueryBuilder.addMultipleSelectOptionList("bedConfig.bedMetaList.bedId", searchCriteria.bedIdList);    
             }
         }
         

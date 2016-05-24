@@ -34,8 +34,7 @@
 	<table [ngClass]="getTableClasses()">
 		<thead>
 			<tr>
-				<th *ngFor="let columnMeta of columnMetaList" 
-					[ngClass]="isCollapsed? columnMeta.valueMeta.collapsedStyle : columnMeta.valueMeta.normalStyle"
+				<th *ngFor="let columnMeta of columnMetaList" [ngClass]="isCollapsed? columnMeta.valueMeta.collapsedStyle : columnMeta.valueMeta.normalStyle"
 					title="{{ columnMeta.displayName | translate }}">
 					{{ columnMeta.displayName | translate }}
 				</th>
@@ -69,11 +68,8 @@
 					<span *ngIf="isFontIcon(columnMeta.valueMeta)">
 									<span class="unitpal-font">{{getItemValue(item, columnMeta.valueMeta)}}</span>
 					</span>
-					<span *ngIf="isCapacity(columnMeta.valueMeta) && !isUndefinedOrNull(getItemValue(item, columnMeta.valueMeta).maxAdults) && !isUndefinedOrNull(getItemValue(item, columnMeta.valueMeta).maxChildren)">
-									{{ getItemValue(item, columnMeta.valueMeta).maxAdults }} <span class="unitpal-font">{{columnMeta.valueMeta.fonts.adult}}</span>					{{ getItemValue(item, columnMeta.valueMeta).maxChildren }} <span class="unitpal-font">{{columnMeta.valueMeta.fonts.child}}</span>
-					</span>
-					<span *ngIf="isCapacity(columnMeta.valueMeta) && isUndefinedOrNull(getItemValue(item, columnMeta.valueMeta).maxAdults) && isUndefinedOrNull(getItemValue(item, columnMeta.valueMeta).maxChildren)">
-									-
+					<span *ngIf="isCapacity(columnMeta.valueMeta)">
+									{{ getItemValue(item, columnMeta.valueMeta).maxNoAdults }} <span class="unitpal-font">{{columnMeta.valueMeta.fonts.adult}}</span>					{{ getItemValue(item, columnMeta.valueMeta).maxNoChildren }} <span class="unitpal-font">{{columnMeta.valueMeta.fonts.child}}</span>					{{ getItemValue(item, columnMeta.valueMeta).maxNoBabies }} <span class="unitpal-font">{{columnMeta.valueMeta.fonts.baby}}</span>
 					</span>
 				</td>
 				<td *ngIf="tableOptions.canCopy||tableOptions.canEdit||tableOptions.canDelete" class="table-item-action-group" [ngClass]="{'up-col-10p': !isCollapsed, 'up-col-30p': isCollapsed}">
@@ -88,14 +84,14 @@
 					</a>
 				</td>
 			</tr>
-			<tr *ngIf="!noResultsExist()">
+			<tr *ngIf="!noResultsExist()" class="lazy-loading-table-last-row">
 				<td *ngFor="let columnMeta of columnMetaList" [ngClass]="getCellClasses(columnMeta.valueMeta, isCollapsed)">
 				</td>
 				<td *ngIf="tableOptions.canCopy||tableOptions.canEdit||tableOptions.canDelete" class="table-item-action-group" [ngClass]="{'up-col-10p': !isCollapsed, 'up-col-30p': isCollapsed}">
-					
+
 				</td>
 			</tr>
-			<tr *ngIf="noResultsExist()">
+			<tr *ngIf="noResultsExist()" class="lazy-loading-table-last-row">
 				<td class="up-col-100p">
 					<center>
 						{{ 'No items to display' | translate }}
@@ -106,31 +102,31 @@
 
 		<tfoot>
 			<tr>
-			<td [ngClass]="{'left up-col-30p': !isCollapsed, 'left up-col-45p': isCollapsed}">
-				<th-button *ngIf="tableOptions.canAdd" [upFont]="'\''" [text]="'Add'" (onButtonClick)="addItem()"></th-button>
-			</td>
-			<td [ngClass]="{'up-col-30p': !isCollapsed, 'up-col-0p': isCollapsed}">
-				{{paginationIndex.pageNumberStat}}
-			</td>
-			<td class="right pagination-container" [ngClass]="{'up-col-50p': !isCollapsed, 'up-col-55p': isCollapsed}">
-				<ul class="pagination th-pagination">
-					<li [ngClass]="{disabled: isFirstPage()}">
-						<a (click)="updatePageNumber(paginationIndex.firstPageNumber)">
-							<i class="fa fa-angle-double-left"></i>
-						</a>
-					</li>
-					<li *ngFor="let index of paginationIndex.indexList" [ngClass]="{active: index.isSelected}">
-						<a (click)="updatePageNumber(index.pageNumber)">{{index.displayNumber}}</a>
-					</li>
-					<li [ngClass]="{disabled: isLastPage()}">
-						<a (click)="updatePageNumber(paginationIndex.lastPageNumber)">
-							<i class="fa fa-angle-double-right"></i>
-						</a>
-					</li>
-				</ul>
-			</td>
+				<td [ngClass]="{'left up-col-30p': !isCollapsed, 'left up-col-45p': isCollapsed}">
+					<th-button *ngIf="tableOptions.canAdd" [upFont]="'\''" [text]="'Add'" (onButtonClick)="addItem()"></th-button>
+				</td>
+				<td [ngClass]="{'up-col-30p': !isCollapsed, 'up-col-0p': isCollapsed}">
+					{{paginationIndex.pageNumberStat}}
+				</td>
+				<td class="right pagination-container" [ngClass]="{'up-col-50p': !isCollapsed, 'up-col-55p': isCollapsed}">
+					<ul class="pagination th-pagination">
+						<li [ngClass]="{disabled: isFirstPage()}">
+							<a (click)="updatePageNumber(paginationIndex.firstPageNumber)">
+								<i class="fa fa-angle-double-left"></i>
+							</a>
+						</li>
+						<li *ngFor="let index of paginationIndex.indexList" [ngClass]="{active: index.isSelected}">
+							<a (click)="updatePageNumber(index.pageNumber)">{{index.displayNumber}}</a>
+						</li>
+						<li [ngClass]="{disabled: isLastPage()}">
+							<a (click)="updatePageNumber(paginationIndex.lastPageNumber)">
+								<i class="fa fa-angle-double-right"></i>
+							</a>
+						</li>
+					</ul>
+				</td>
 			</tr>
 		</tfoot>
-		
+
 	</table>
 </div>

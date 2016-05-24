@@ -1,3 +1,4 @@
+import {Observable} from 'rxjs/Observable';
 import {Component, OnInit, AfterViewChecked, ViewChild, ElementRef} from '@angular/core';
 import {BaseComponent} from '../../../../../../../common/base/BaseComponent';
 import {LoadingComponent} from '../../../../../../../common/utils/components/LoadingComponent';
@@ -8,14 +9,17 @@ import {TranslationPipe} from '../../../../../../../common/utils/localization/Tr
 import {RoomCategoriesModalService} from './services/RoomCategoriesModalService';
 import {RoomCategoriesModalInput} from './services/utils/RoomCategoriesModalInput';
 import {RoomCategoriesService} from '../../../../../services/room-categories/RoomCategoriesService';
+import {RoomCategoriesStatsService} from '../../../../../services/room-categories/RoomCategoriesStatsService';
 import {RoomCategoryDO} from '../../../../../services/room-categories/data-objects/RoomCategoryDO';
 import {RoomCategoryVM} from './services/view-models/RoomCategoryVM';
+import {RoomCategoryStatsDO} from '../../../../../services/room-categories/data-objects/RoomCategoryStatsDO';
+import {ThButtonComponent} from '../../../../../../../common/utils/components/ThButtonComponent';
 
 @Component({
 	selector: 'room-categories-modal',
 	templateUrl: "/client/src/pages/internal/containers/common/inventory/modals/room-categories/template/room-categories-modal.html",
-	providers: [RoomCategoriesService],
-	directives: [LoadingComponent],
+	providers: [RoomCategoriesService, RoomCategoriesStatsService],
+	directives: [LoadingComponent, ThButtonComponent],
 	pipes: [TranslationPipe]
 })
 export class RoomCategoriesModalComponent extends BaseComponent implements ICustomModalComponent, OnInit, AfterViewChecked {
@@ -31,18 +35,21 @@ export class RoomCategoriesModalComponent extends BaseComponent implements ICust
 	constructor(private _appContext: AppContext,
 		private _modalDialogRef: ModalDialogRef<RoomCategoryDO[]>,
 		private _roomCategModalInput: RoomCategoriesModalInput,
-		private _roomCategService: RoomCategoriesService) {
+		private _roomCategService: RoomCategoriesService,
+		private _roomCategStatsService: RoomCategoriesStatsService) {
 		super();
 		this.allowCategoryEdit = this._roomCategModalInput.allowCategoryEdit;
 		this._roomCategService.categoriesType = this._roomCategModalInput.roomCategoriesType;
 	}
 
 	public ngOnInit() {
-		this._roomCategService.getRoomCategoryList().subscribe((roomCategoryList: RoomCategoryDO[]) => {
+		
+		this._roomCategStatsService.getRoomCategoryStatsForRoomCategoryIdList().subscribe((roomCategoryStatsList: RoomCategoryStatsDO[]) => {
 			this.roomCategoryVMList = [];
-			_.forEach(roomCategoryList, (roomCategDO: RoomCategoryDO) => {
+			_.forEach(roomCategoryStatsList, (roomCategStatsDO: RoomCategoryStatsDO) => {
 				var roomCategVM = new RoomCategoryVM();
-				roomCategVM.roomCategory = roomCategDO;
+				roomCategVM.roomCategory = roomCategStatsDO.roomCategory;
+				roomCategVM.capacity = roomCategStatsDO.capacity;
 				this.roomCategoryVMList.push(roomCategVM);
 				if (this._roomCategModalInput.initialRoomCategoryId && roomCategVM.roomCategory.id === this._roomCategModalInput.initialRoomCategoryId) {
 					this.selectedCategoryVMList = [roomCategVM];
@@ -72,7 +79,7 @@ export class RoomCategoriesModalComponent extends BaseComponent implements ICust
 		return false;
 	}
 	public getSize(): ModalSize {
-		return ModalSize.Small;
+		return ModalSize.Medium;
 	}
 
 	public editRoomCategory(roomCategVM: RoomCategoryVM) {

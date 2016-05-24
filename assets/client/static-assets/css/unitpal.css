@@ -48,6 +48,9 @@ body,html {
     height: 100%;
     overflow-y: hidden;
 }
+.full-height-no-overflow {
+    height: 100%;
+}
 
 .card a {
     color: #fc8433;
@@ -196,7 +199,8 @@ add-on-products,
 price-products,
 customer-register,
 allotments,
-beds {
+beds,
+new-booking-container {
     display: block;
     height: 100%;
 }
@@ -230,6 +234,9 @@ customer-register{
 }
 allotments{
     background: #fff url(/client/static-assets/images/background_08_allotment.png) right bottom no-repeat !important;
+}
+new-booking-container {
+    background: #fff url(/client/static-assets/images/background_operations.png) right bottom no-repeat !important;
 }
 
 .signup-skip {
@@ -287,6 +294,21 @@ input:focus {
 
 .input-group.form-warning + label.form-warning {
     display: block;
+}
+input.form-control:only-child {
+    border-radius: 4px !important;
+}
+.date-interval-picker-arrow {
+    position: absolute;
+    right: -5px;
+    top: 33px;
+    font-size: 20px;
+    color: #DBDBDB;
+}
+@media screen and (max-width: 1000px) {
+    .date-interval-picker-arrow {
+        display: none;
+    }
 }
 
 label.form-warning {
@@ -614,8 +636,10 @@ lazy-loading-table {
 }
 
 .bed-remove-btn {
-    float: right;
-    margin: 0 0 10px 10px;
+    z-index: 1;
+    position: absolute;
+    top: 0px;
+    right: 0px;
 }
 
 .bed-container {
@@ -645,11 +669,22 @@ lazy-loading-table {
     position: relative;
     color: #fc8433;
 }
-.bed-slot-icon {
-    font-size: 30px !important;
+
+.bed-slot-info {
+    width: 80px;
+    height: 80px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%); 
+    text-overflow: ellipsis;
+    overflow: hidden;
+    text-align: center;
+    font-size: 14px;
 }
-.bed-slot-text {
-    font-size: 12px;
+
+.bed-slot-info .bed-icon {
+    font-size: 25px;
 }
 
 .bed-slot:hover {
@@ -679,17 +714,6 @@ lazy-loading-table {
     border: 1px solid #fc8433;
 }
 
-.bed-slot-inner {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%,-56%);
-    width: 80px;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    text-align: center;
-}
-
 .bed-selection-message {
     text-align: center;
 }
@@ -700,6 +724,18 @@ lazy-loading-table {
 
 .room-categ-select {
     width: 15%;
+}
+
+td room-categ-capacity {
+    text-align: center;
+} 
+
+.modal-body td.operations {
+    text-align: right;
+}
+
+.modal-footer th-button {
+    padding: 0px;
 }
 
 /* Bootstrap img-responsive bug on Firefox */
@@ -899,22 +935,27 @@ input[type="file"] {
     font-size: 12px;
     font-weight: bold;
 }
-
+.position-relative {
+    position: relative;
+}
 /**
     Lazy loading fixed header table css
 */
 lazy-loading-table {
     display: flex;
     flex-direction: column;
+    overflow-y: hidden;
 }
 
 .lazy-loading-table-container {
     display: flex;
     flex-direction: column;
     flex-grow: 1;
+    overflow-y: hidden;
 }
 .th-button-box {
-    padding-top: 7px;
+    padding-top: 0;
+    padding-bottom: 0;
 }
 .th-button-box>i {
     font-size: 30px;
@@ -925,11 +966,12 @@ lazy-loading-table {
     text-align: right;
     white-space: nowrap;
     overflow: hidden;
-    float: right;
+    position: relative;
+    bottom: 6px;
     overflow: hidden;
     text-overflow: ellipsis;
-    padding: 8px 0px 0px 2px;
-    max-width: 100px;
+    padding: 0px 0px 0px 2px;
+    max-width: 120px;
 }
 @media screen and (max-width: 650px) {
     .th-button-box>span {
@@ -965,8 +1007,12 @@ table.lazy-loading tbody {
   flex-shrink: 1;
 }
 
-table.lazy-loading tbody tr:last-child {
-  flex-grow: 1;
+tr.lazy-loading-table-last-row {
+    flex-grow: 1 !important;
+}
+tr.lazy-loading-table-last-row:hover,
+tr.lazy-loading-table-last-row:focus {
+    background-color: transparent !important;
 }
 
 table.lazy-loading tr {
@@ -1425,4 +1471,192 @@ ul.msg_list li a .message {
 }
 .open .dropdown-trigger-button {
     color: #DBDBDB !important;
+}
+
+.modal-lg-header {
+    height: 70px;
+    border-bottom: 1px solid #DBDBDB;
+    color: #fc8333 !important;
+    padding: 0 15px;
+}
+.modal-lg-header small {
+    color: #fc8333 !important;
+    font-weight: 300;
+}
+.modal-lg-header h1 {
+    font-size: 22px;
+    font-weight: 300;
+    padding: 23px 0px 0px 0px;
+}
+.modal-lg-header i {
+    font-size: 18px;
+    position: relative;
+    left: 3px;
+    margin-right: 8px;
+}
+
+.modal-lg-body {
+    height: calc(100% - 70px);
+    position: absolute;
+    top: 70px;
+    padding: 0 15px;
+}
+.oneline-text {
+    display: inline-block;
+    vertical-align: middle;
+    max-width: 100%;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.btn.btn-square {
+    width: 35px;
+    height: 35px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    text-align: center;
+    color: #fff;
+    border: 0;
+    font-size: 12px;
+    position: relative;
+    top: 16px;
+    background-color: #fb6708;
+}
+.btn-square.btn-square-next-prev {
+    background-color: #737373;    
+}
+
+a.btn.btn-square:hover,
+a.btn.btn-square:focus {
+    color: #DBDBDB !important;
+    cursor: pointer;
+}
+.btn-square-container {
+    width: 110px;
+    height: 100%;
+}
+.btn.btn-square.disabled {
+    background-color: #e7e7e7;   
+}
+.btn.btn-square>i {
+    font-size: 30px;  
+    position: relative;
+}
+.btn.btn-square>i {
+    position: absolute;
+    left: 5px;
+    bottom: 5px;
+}
+.btn.btn-square.btn-square-next-prev>i {
+    position: absolute;
+    left: 10px;
+    bottom: 4px;
+}
+
+.btn-err-container {
+    width: calc(100% - 110px);
+    height: 100%;
+    position: absolute;
+    left: 95px;
+    top: 10px;
+    display: flex;
+    align-items: center;
+}
+.btn-err-container>i {
+    display: inline;
+}
+.btn-err-container>span {
+    font-size: 9px;
+    font-weight: bold;
+    text-transform: uppercase;
+    overflow: hidden;
+    text-overflow: ellipsis;   
+ }
+ @media screen and (max-width: 630px) {
+    .btn-err-container>i {
+        display: none;
+    }
+}
+.float-right {
+    float: right;   
+}
+.right-margin {
+    border-right: 1px solid #DBDBDB;
+}
+.th-addon-button {
+    background-color: #fb6708;
+    color: white;
+    font-size: 13px;
+}
+.th-addon-button:hover,
+.th-addon-button:focus {
+    color: #DBDBDB;
+    cursor: pointer;
+}
+.form-group-small {
+    padding-right: 0px;
+}
+.form-group-small>.form-group {
+    margin-bottom: 5px;
+}
+.form-group-small input {
+    height: 28px;
+    font-size: 13px;
+    padding-right: 0px;
+}
+.booking-configuration-container {
+    color: #59585f;
+}
+.booking-configuration {
+    background-color: #e7e7e7;
+    margin: 0px 0px;
+}
+.input-group-small>.input-group-addon {
+    background-color: white;
+    padding: 0 5px 0 5px;
+}
+.booking-configuration-container .search-button {
+    background-color: #fb6708;
+    color: white;
+    border-radius: 0px;
+    padding-top: 9px;
+    float: right;
+}
+.booking-configuration-container a.btn.search-button:hover,
+.booking-configuration-container a.btn.search-button:focus {
+    color: #DBDBDB;
+}
+.booking-search-container {
+    display: flex;
+    flex-direction: column;
+}
+.booking-search-inputs {
+    flex: 0;
+    overflow: hidden;
+    min-height: 205px;
+}
+@media screen and (max-width: 1000px) {
+    .booking-search-inputs {
+        min-height: 235px;
+    }
+}
+.booking-search-results {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    font-size: 11px;
+    overflow-y: hidden;
+    padding: 0 15px;
+}
+.padding-right-0px {
+    padding-right: 0px;
+}
+.padding-top-5px {
+    padding-top: 5px;
+}
+.no-padding {
+    padding: 0px 0px;
 }

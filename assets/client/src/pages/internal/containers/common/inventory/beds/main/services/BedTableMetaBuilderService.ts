@@ -38,7 +38,8 @@ export class BedTableMetaBuilderService {
 						propertyType: TablePropertyType.CapacityType,
 						fonts: {
                             child: ";",
-                            adult: ":"    
+                            adult: ":",
+							baby: "B"    
                         },
 						showInCollapsedView: false,
 						normalStyle: "up-col-10p center"

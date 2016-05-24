@@ -1,7 +1,7 @@
 import {BaseDO} from '../../../../../common/base/BaseDO';
 import {BedDO, BedAccommodationType} from '../data-objects/BedDO';
 import {BedTemplateDO} from '../../common/data-objects/bed-template/BedTemplateDO';
-import {CapacityDO} from '../../common/data-objects/capacity/CapacityDO';
+import {RoomCategoryStatsDO, BedConfigCapacityDO} from '../../room-categories/data-objects/RoomCategoryStatsDO';
 
 export class BedVM extends BaseDO {
     private _bed: BedDO;
@@ -37,12 +37,24 @@ export class BedVM extends BaseDO {
     }
     public set template(template: BedTemplateDO) {
         this._template = template;
-    }                  
-    public get capacity(): CapacityDO {
-        return {
-            maxChildren: this._bed.capacity.maxNoChildren,
-            maxAdults: this._bed.capacity.maxNoAdults
+    }     
+    
+    public get capacity(): BedConfigCapacityDO {
+        var maxAdults = 0, maxChildren = 0, maxBabies = 0;
+        
+        var bedConfigCapacity = new BedConfigCapacityDO();
+        if(this._bed.accommodationType === BedAccommodationType.Babies) {
+            bedConfigCapacity.maxNoBabies = 1;
+            bedConfigCapacity.maxNoAdults = 0;
+            bedConfigCapacity.maxNoChildren = 0;    
         }
+        else {
+            bedConfigCapacity.maxNoAdults = this._bed.capacity.maxNoAdults;
+            bedConfigCapacity.maxNoChildren = this._bed.capacity.maxNoChildren;
+            bedConfigCapacity.maxNoBabies = 0;
+        }
+        
+        return bedConfigCapacity;
     }
     
     public get size(): string {

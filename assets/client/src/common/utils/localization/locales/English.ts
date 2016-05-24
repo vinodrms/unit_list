@@ -428,5 +428,15 @@ export var EnglishTranslations: Object = {
 	"Booking History": "Booking History",
 	"No notifications": "No notifications",
 	"See All Notifications": "See All Notifications",
-	"Notifications": "Notifications"
+	"Notifications": "Notifications",
+	"New Booking": "New Booking",
+	"Details": "Details",
+	"Booking Code": "Booking Code",
+	"Not a valid booking code": "Not a valid booking code",
+	"Not a valid customer": "Not a valid customer",
+	"Check In": "Check In",
+	"Check Out": "Check Out",
+	"Nights": "Nights",
+	"Enter a valid number of nights": "Enter a valid number of nights",
+	"Enter a valid number": "Enter a valid number"
 };
