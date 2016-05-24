@@ -428,5 +428,6 @@ export var EnglishTranslations: Object = {
 	"Booking History": "Booking History",
 	"No notifications": "No notifications",
 	"See All Notifications": "See All Notifications",
-	"Notifications": "Notifications"
+	"Notifications": "Notifications",
+	"New Booking": "New Booking"
 };
