@@ -636,8 +636,10 @@ lazy-loading-table {
 }
 
 .bed-remove-btn {
-    float: right;
-    margin: 0 0 10px 10px;
+    z-index: 1;
+    position: absolute;
+    top: 0px;
+    right: 0px;
 }
 
 .bed-container {
@@ -667,11 +669,22 @@ lazy-loading-table {
     position: relative;
     color: #fc8433;
 }
-.bed-slot-icon {
-    font-size: 30px !important;
+
+.bed-slot-info {
+    width: 80px;
+    height: 80px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%); 
+    text-overflow: ellipsis;
+    overflow: hidden;
+    text-align: center;
+    font-size: 14px;
 }
-.bed-slot-text {
-    font-size: 12px;
+
+.bed-slot-info .bed-icon {
+    font-size: 25px;
 }
 
 .bed-slot:hover {
@@ -701,17 +714,6 @@ lazy-loading-table {
     border: 1px solid #fc8433;
 }
 
-.bed-slot-inner {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%,-56%);
-    width: 80px;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    text-align: center;
-}
-
 .bed-selection-message {
     text-align: center;
 }
@@ -722,6 +724,18 @@ lazy-loading-table {
 
 .room-categ-select {
     width: 15%;
+}
+
+td room-categ-capacity {
+    text-align: center;
+} 
+
+.modal-body td.operations {
+    text-align: right;
+}
+
+.modal-footer th-button {
+    padding: 0px;
 }
 
 /* Bootstrap img-responsive bug on Firefox */
@@ -940,7 +954,8 @@ lazy-loading-table {
     overflow-y: hidden;
 }
 .th-button-box {
-    padding-top: 7px;
+    padding-top: 0;
+    padding-bottom: 0;
 }
 .th-button-box>i {
     font-size: 30px;

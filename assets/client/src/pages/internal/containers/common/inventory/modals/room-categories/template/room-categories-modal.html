@@ -11,18 +11,23 @@
 		</thead>
 		<tbody>
 			<tr *ngFor="let roomCategoryVM of roomCategoryVMList" [ngClass]="{active: isCategorySelected(roomCategoryVM)}">
-				<td class="selectable-row" 
-					*ngIf="!roomCategoryVM.isEditing" 
-					(click)="selectRoomCategory(roomCategoryVM)"> 
-					{{roomCategoryVM.roomCategory.displayName}} 
+				<td class="selectable-row" *ngIf="!roomCategoryVM.isEditing" (click)="selectRoomCategory(roomCategoryVM)">
+					{{roomCategoryVM.roomCategory.displayName}}
 				</td>
-				<td *ngIf="roomCategoryVM.isEditing"> 
-					<input type="text" class="form-control" 
-						[(ngModel)]="roomCategoryVM.roomCategory.displayName" 
-						(keyup.enter)="saveRoomCategory(roomCategoryVM)"
-						/>	 
+				<td *ngIf="roomCategoryVM.isEditing">
+					<input type="text" class="form-control" [(ngModel)]="roomCategoryVM.roomCategory.displayName" (keyup.enter)="saveRoomCategory(roomCategoryVM)"
+					/>
 				</td>
-				<td *ngIf="allowCategoryEdit">
+
+				<td *ngIf="roomCategoryVM.bedsConfigured" class="selectable-row room-categ-capacity" (click)="selectRoomCategory(roomCategoryVM)">
+					{{roomCategoryVM.capacity.totalCapacity.maxNoAdults}}<span class="unitpal-font">:</span> {{roomCategoryVM.capacity.totalCapacity.maxNoChildren}}<span class="unitpal-font">;</span> {{roomCategoryVM.capacity.totalCapacity.maxNoBabies}}<span class="unitpal-font">B</span>
+				</td>
+				
+				<td *ngIf="!roomCategoryVM.bedsConfigured" class="selectable-row room-categ-capacity" (click)="selectRoomCategory(roomCategoryVM)">
+					-<span class="unitpal-font">:</span> -<span class="unitpal-font">;</span> -<span class="unitpal-font">B</span>
+				</td>
+				
+				<td class="selectable-row operations" *ngIf="allowCategoryEdit" (click)="selectRoomCategory(roomCategoryVM)">
 					<a class="btn btn-xs" *ngIf="!roomCategoryVM.isEditing && !roomCategoryVM.isSaving" (click)="editRoomCategory(roomCategoryVM)">
 						<i class="fa unitpal-font">]</i>
 					</a>
@@ -38,14 +43,9 @@
 	</table>
 </div>
 <div class="modal-footer">
-	<div class="pull-left" *ngIf="allowCategoryEdit">
-		<a (click)="addRoomCategory()">
-			<span class="glyphicon glyphicon-plus-sign fa-2x"></span>
-		</a>
-	</div>
-	<button type="button" class="btn btn-primary" 
-		[disabled]="!didSelectCategory()"
-		(click)="triggerSelectedCategory()">
+	<th-button class="pull-left" *ngIf="allowCategoryEdit" [upFont]="'\''" [text]="'Add'" (onButtonClick)="addRoomCategory()"></th-button>
+	
+	<button type="button" class="btn btn-primary" [disabled]="!didSelectCategory()" (click)="triggerSelectedCategory()">
 		{{ 'Select' | translate }}
 	</button>
 </div>

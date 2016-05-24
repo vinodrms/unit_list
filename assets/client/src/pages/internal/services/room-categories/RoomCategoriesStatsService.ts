@@ -18,10 +18,7 @@ export class RoomCategoriesStatsService {
 			return roomCategory.id;
 		}));
 	}
-	public getRoomCategoryStatsForRoomCategoryIdList(roomCategoryIdList: string[]): Observable<RoomCategoryStatsDO[]> {
-		// if(!roomCategoryIdList || roomCategoryIdList.length == 0) {
-		// 	return this.getEmptyResult();
-		// }
+	public getRoomCategoryStatsForRoomCategoryIdList(roomCategoryIdList?: string[]): Observable<RoomCategoryStatsDO[]> {
 		return this._appContext.thHttp.post(ThServerApi.RoomCategoriesStats, { roomCategoryIdList: roomCategoryIdList })
 			.map((requestResult: Object) => {
 				var roomCategoryStatsList: RoomCategoryStatsDO[] = [];
@@ -38,11 +35,5 @@ export class RoomCategoriesStatsService {
 					return - (roomCategoryStats.capacity.totalCapacity.maxNoAdults + roomCategoryStats.capacity.totalCapacity.maxNoChildren);
 				});
 			});
-	}
-	private getEmptyResult(): Observable<RoomCategoryStatsDO[]> {
-		return new Observable<RoomCategoryStatsDO[]>((serviceObserver: Observer<RoomCategoryStatsDO[]>) => {
-			serviceObserver.next([]);
-			serviceObserver.complete();
-		});
 	}
 }

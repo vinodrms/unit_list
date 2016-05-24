@@ -4,9 +4,8 @@ import {PrimitiveValidationStructure} from '../../utils/th-validation/structure/
 import {ArrayValidationStructure} from '../../utils/th-validation/structure/ArrayValidationStructure';
 import {StringValidationRule} from '../../utils/th-validation/rules/StringValidationRule';
 import {NumberValidationRule} from '../../utils/th-validation/rules/NumberValidationRule';
-import {BedStorageTypeValidationRule} from '../../utils/th-validation/rules/BedStorageTypeValidationRule';
-import {BedAccommodationTypeValidationRule} from '../../utils/th-validation/rules/BedAccommodationTypeValidationRule';
-import {BedSizeDO, BedCapacityDO, BedAccommodationType} from '../../data-layer/common/data-objects/bed/BedDO';
+import {NumberInListValidationRule} from '../../utils/th-validation/rules/NumberInListValidationRule';
+import {BedSizeDO, BedCapacityDO, BedAccommodationType, BedStorageType} from '../../data-layer/common/data-objects/bed/BedDO';
 
 export class SaveBedItemDO {
 	bedTemplateId: string;
@@ -26,11 +25,11 @@ export class SaveBedItemDO {
 			},
 			{
 				key: "storageType",
-				validationStruct: new PrimitiveValidationStructure(new BedStorageTypeValidationRule())
+				validationStruct: new PrimitiveValidationStructure(new NumberInListValidationRule([BedStorageType.Rollaway, BedStorageType.Stationary]))
 			},
 			{
 				key: "accommodationType",
-				validationStruct: new PrimitiveValidationStructure(new BedAccommodationTypeValidationRule())
+				validationStruct: new PrimitiveValidationStructure(new NumberInListValidationRule([BedAccommodationType.AdultsAndChildren, BedAccommodationType.Babies]))
 			},
             {
 				key: "name",

@@ -10,15 +10,14 @@
             <div class="row">
                 <div class="col-xs-12 col-md-12 text-center">
                     <div class="btn bed-slot unselected" (click)="bedSelectionVM.numberOfInstances=bedSelectionVM.numberOfInstances+1">
-                        <div class="bed-slot-inner" [title]="bedSelectionVM.bedVM.bed.name">
-                            <div class="bed-btn">
-                                <span class="unitpal-font bed-slot-icon">{{bedSelectionVM.bedVM.template.iconUrl}}</span>
-                            </div>
-                            <small class="bed-slot-text">{{bedSelectionVM.bedVM.bed.name}}</small>
+                        <div class="bed-slot-info" [title]="bedSelectionVM.bedVM.bed.name">
+                            <span class="bed-icon unitpal-font">{{bedSelectionVM.bedVM.template.iconUrl}}</span><br/>
+                            <small>{{bedSelectionVM.bedVM.bed.name}}</small>
                             <br/> {{bedSelectionVM.bedVM.capacity.maxAdults}}
                             <span class="unitpal-font">:</span> {{bedSelectionVM.bedVM.capacity.maxChildren}}<span class="unitpal-font">;</span>
                         </div>
                     </div>
+
                 </div>
             </div>
             <div class="row">
