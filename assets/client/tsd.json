@@ -21,13 +21,16 @@
       "commit": "6766ed1d0faf02ede9e2edf2e66bbb2388c825ec"
     },
     "jquery/jquery.d.ts": {
-      "commit": "6766ed1d0faf02ede9e2edf2e66bbb2388c825ec"
+      "commit": "8d252184e421915fbc9f56a5debcb098e0d2d68d"
     },
     "es6-shim/es6-shim.d.ts": {
       "commit": "e05e1f6f83c6ac84e9d7ff8284e8089d53a788a6"
     },
     "jasmine/jasmine.d.ts": {
       "commit": "e05e1f6f83c6ac84e9d7ff8284e8089d53a788a6"
+    },
+    "select2/select2.d.ts": {
+      "commit": "8d252184e421915fbc9f56a5debcb098e0d2d68d"
     }
   }
 }

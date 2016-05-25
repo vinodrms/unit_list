@@ -6,9 +6,10 @@ import {ALazyLoadRequestService} from '../common/ALazyLoadRequestService';
 import {CustomerDO, CustomerType} from './data-objects/CustomerDO';
 import {CustomersDO} from './data-objects/CustomersDO';
 import {CustomerVM} from './view-models/CustomerVM';
+import {ITextSearchRequestService} from '../common/ITextSearchRequestService';
 
 @Injectable()
-export class CustomersService extends ALazyLoadRequestService<CustomerVM> {
+export class CustomersService extends ALazyLoadRequestService<CustomerVM> implements ITextSearchRequestService<CustomerVM> {
 	constructor(appContext: AppContext) {
 		super(appContext, ThServerApi.CustomersCount, ThServerApi.Customers);
 	}
@@ -30,7 +31,7 @@ export class CustomersService extends ALazyLoadRequestService<CustomerVM> {
 		});
 	}
 	public searchByText(text: string) {
-		if(!text || text.length == 0) {
+		if (!text || text.length == 0) {
 			this.updateSearchCriteria({});
 			return;
 		}
@@ -54,6 +55,16 @@ export class CustomersService extends ALazyLoadRequestService<CustomerVM> {
 			var updatedCustomerDO: CustomerDO = new CustomerDO();
 			updatedCustomerDO.buildFromObject(customerObject["customer"]);
 			return updatedCustomerDO;
+		});
+	}
+
+	public filterItemsByText(text: string) {
+		if (!text || text.length == 0) {
+			this.updateSearchCriteria({});
+			return;
+		}
+		this.updateSearchCriteria({
+			indexedName: text
 		});
 	}
 }

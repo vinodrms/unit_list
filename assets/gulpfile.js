@@ -87,6 +87,7 @@ gulp.task('copy-dist', ['pack-internal', 'pack-external', 'clean-dist'], functio
 		'node_modules/systemjs/dist/**/*',
 		'node_modules/zone.js/dist/**/*',
 		'node_modules/reflect-metadata/**/*',
+		'node_modules/select2/**/*',
 
 		'js/**/*',
 		'styles/**/*',
