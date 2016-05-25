@@ -50,7 +50,6 @@ export class NotificationsModalComponent extends BaseComponent implements ICusto
 		return this._selectedNotification;
 	}
 	public set selectedNotification(selectedNotification: ThNotificationDO) {
-		debugger
 		if(!selectedNotification) {
 			return;
 		}

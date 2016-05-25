@@ -21,5 +21,10 @@ export class ThNotificationDO extends BaseDO {
         this.notification = new NotificationDO();
         this.notification.buildFromObject(
             this.getObjectPropertyEnsureUndefined(object, "notification"));
-    }    
+        this.convertTimestamp();
+    } 
+    
+    private convertTimestamp() {
+        this.notification.timestamp
+    }
 }
