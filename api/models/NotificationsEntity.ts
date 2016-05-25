@@ -15,7 +15,7 @@ class NotificationsEntity extends BasePersistentEntity {
             },
 			userId: {
                 type: 'string',
-                required: true
+                defaultsTo: ""
             },            
             code: {
                 type: 'integer',
