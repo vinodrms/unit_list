@@ -77,7 +77,7 @@ export class NotificationsModalComponent extends BaseComponent implements ICusto
 		return false;
 	}
 	public getSize(): ModalSize {
-		return ModalSize.Large;
+		return ModalSize.XLarge;
 	}
 
 	public selectNotification(selectedNotification: ThNotificationDO) {
