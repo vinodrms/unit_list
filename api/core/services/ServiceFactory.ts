@@ -15,6 +15,8 @@ import {MomentTimeZonesService} from './time-zones/providers/moment/MomentTimeZo
 import {ITimeZonesService} from './time-zones/ITimeZonesService';
 import {INotificationService} from './notifications/INotificationService';
 import {NotificationService} from './notifications/providers/NotificationService';
+import {IHtmlToPdfConverterService} from './htmltopdf/IHtmlToPdfConverterService';
+import {PhantomHtmlToPdfConverterService} from './htmltopdf/providers/phantom/PhantomHtmlToPdfConverterService';
 
 export class ServiceFactory {
     constructor(private _unitPalConfig: UnitPalConfig) {
@@ -50,5 +52,8 @@ export class ServiceFactory {
     }
     public getNotificationService(): INotificationService {
         return new NotificationService(this._unitPalConfig);
+    }
+    public getHtmltoPdfConverterService(): IHtmlToPdfConverterService {
+        return new PhantomHtmlToPdfConverterService();   
     }
 }

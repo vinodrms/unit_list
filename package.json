@@ -31,6 +31,8 @@
     "node-uuid": "^1.4.7",
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",
+    "phantom": "2.1.2",
+    "phantomjs": "2.1.7",
     "rc": "1.1.6",
     "sails": "~0.12.3",
     "sails-disk": "~0.10.9",
