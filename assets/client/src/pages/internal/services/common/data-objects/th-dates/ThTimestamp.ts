@@ -3,15 +3,12 @@ import {ThHourDO} from './ThHourDO';
 import {ThDateUtils} from './ThDateUtils';
 
 export class ThTimestamp {
-	private static StartOfDayHour = 0;
-	private static StartOfDayMaxMinute = 30;
-
 	private _thDateDO: ThDateDO;
 	private _thHourDO: ThHourDO;
 
 	private _thDateUtils: ThDateUtils;
 
-	constructor() {
+	constructor(private _timestamp: number) {
 	}
 
 	public get thDateDO(): ThDateDO {
@@ -28,7 +25,10 @@ export class ThTimestamp {
 	}
     
     public toString(): string {
-		// TODO
-        return "";
+        return this._thDateDO.toString() + " " + this._thHourDO.toString();
     }
+	
+	public getTimeDistanceFromNowString(): string {
+		return moment(this._timestamp).fromNow();
+	}
 }

@@ -1162,6 +1162,9 @@ table.lazy-loading .th-pagination {
 .up-col-80p {
     flex-grow: 16 !important;   
 }
+.up-col-85p {
+    flex-grow: 17 !important;   
+}
 .up-col-90p {
     flex-grow: 18 !important;
 }
@@ -1678,4 +1681,8 @@ a.btn.btn-square:focus {
   margin-bottom: 0;
   display: table;
   table-layout: fixed;
+}
+
+.unread-notification {
+    font-weight: bold;
 }

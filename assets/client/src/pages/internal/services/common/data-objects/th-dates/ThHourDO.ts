@@ -35,4 +35,11 @@ export class ThHourDO extends BaseDO {
         }
 		return hourOrMinute + '';
 	}
+	
+	public static buildThHourDO(hour: number, minute): ThHourDO {
+		var outHour = new ThHourDO();
+		outHour.hour = hour;
+		outHour.minute = minute;
+		return outHour;
+	}
 }

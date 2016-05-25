@@ -1,6 +1,7 @@
 import {Component, OnInit, AfterViewInit, ViewChild} from '@angular/core';
 import {BaseComponent} from '../../../../../../../../common/base/BaseComponent';
 import {TranslationPipe} from '../../../../../../../../common/utils/localization/TranslationPipe';
+import {ThTimestampPipe} from '../../../../../../../../common/utils/pipes/ThTimestampPipe';
 import {CustomScroll} from '../../../../../../../../common/utils/directives/CustomScroll';
 import {LoadingComponent} from '../../../../../../../../common/utils/components/LoadingComponent';
 import {ThError, AppContext} from '../../../../../../../../common/utils/AppContext';
@@ -25,7 +26,7 @@ SelectedTabSearchCriteria[SelectedTab.UNREAD] = { read: false };
 	templateUrl: '/client/src/pages/internal/containers/home/pages/utils/notifications/modal/template/notifications-modal.html',
 	providers: [NotificationService, NotificationsTableMetaBuilderService],
 	directives: [CustomScroll, LazyLoadingTableComponent],
-	pipes: [TranslationPipe]
+	pipes: [TranslationPipe, ThTimestampPipe]
 })
 export class NotificationsModalComponent extends BaseComponent implements ICustomModalComponent, AfterViewInit {
 	@ViewChild(LazyLoadingTableComponent)
@@ -41,7 +42,7 @@ export class NotificationsModalComponent extends BaseComponent implements ICusto
 		private _tableBuilder: NotificationsTableMetaBuilderService) {
 		super();
 		this._selectedTab = SelectedTab.ALL;
-		this.selectedNotification = this._modalInput.preselectedNotification;	
+		this.selectedNotification = this._modalInput.preselectedNotification;
 	}
 
 	ngOnInit() { }
@@ -50,13 +51,13 @@ export class NotificationsModalComponent extends BaseComponent implements ICusto
 		return this._selectedNotification;
 	}
 	public set selectedNotification(selectedNotification: ThNotificationDO) {
-		if(!selectedNotification) {
+		if (!selectedNotification) {
 			return;
 		}
 		this._selectedNotification = selectedNotification;
 		this._notificationService
-			.markNotificationsAsRead({notificationId: selectedNotification.notification.id})
-			.subscribe((numUpdated : number) => {
+			.markNotificationsAsRead({ notificationId: selectedNotification.notification.id })
+			.subscribe((numUpdated: number) => {
 				this._modalDialogRef.addResult(true);
 				this._notificationService.refreshData();
 			});
@@ -67,6 +68,12 @@ export class NotificationsModalComponent extends BaseComponent implements ICusto
 		if (this._modalInput.preselectedNotification) {
 			this._notificationsTableComponent.selectItem(this.selectedNotification);
 		}
+		this._notificationsTableComponent.attachCustomRowClassGenerator((thNotification: ThNotificationDO) => {
+			if (!thNotification.notification.read) {
+				return "unread-notification";
+			}
+			return "";
+		});
 	}
 
 	public closeDialog() {

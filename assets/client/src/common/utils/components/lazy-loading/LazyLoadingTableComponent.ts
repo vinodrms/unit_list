@@ -16,7 +16,7 @@ import {TableOptions} from './utils/TableOptions';
 import {CustomScroll} from '../../directives/CustomScroll';
 import {ThUtils} from '../../ThUtils';
 
-declare var jQuery:any;
+declare var jQuery: any;
 
 @Component({
 	selector: 'lazy-loading-table',
@@ -27,6 +27,7 @@ declare var jQuery:any;
 export class LazyLoadingTableComponent<T> {
 	private _thUtils: ThUtils;
 	protected _isCollapsed: boolean;
+	private _rowClassGenerator: { (item: T): string };
 
 	protected get isCollapsed(): boolean {
 		return this._isCollapsed;
@@ -195,8 +196,8 @@ export class LazyLoadingTableComponent<T> {
 	}
 
 	protected didSelectItem(item: T) {
-		if(this.tableOptions.canMultiSelect) {
-			if(this.isSelected(item)) {
+		if (this.tableOptions.canMultiSelect) {
+			if (this.isSelected(item)) {
 				this.deselectItemIfNecessary(item);
 			}
 			else {
@@ -207,7 +208,7 @@ export class LazyLoadingTableComponent<T> {
 		else {
 			this.deselectItemIfNecessary(item);
 			this.selectTableItem(item);
-			this.onSelect.next(item);	
+			this.onSelect.next(item);
 		}
 	}
 
@@ -218,11 +219,11 @@ export class LazyLoadingTableComponent<T> {
 		}
 	}
 	public deselectItem(itemId?: string) {
-		if(!itemId) {
-			this.selectedItemList = [];	
+		if (!itemId) {
+			this.selectedItemList = [];
 		}
 		else {
-			this.selectedItemList = _.filter(this.selectedItemList, (innerItem: T) => { return this.getItemId(innerItem) !== itemId });	
+			this.selectedItemList = _.filter(this.selectedItemList, (innerItem: T) => { return this.getItemId(innerItem) !== itemId });
 		}
 	}
 	private selectTableItem(item: T) {
@@ -231,13 +232,13 @@ export class LazyLoadingTableComponent<T> {
 		}
 	}
 	public selectItem(item: T) {
-		if(this.tableOptions.canMultiSelect) {
-			if(!this.isSelected(item)) {
-				this.selectedItemList.push(item);	
+		if (this.tableOptions.canMultiSelect) {
+			if (!this.isSelected(item)) {
+				this.selectedItemList.push(item);
 			}
 		}
 		else {
-			this.selectedItemList = [item];	
+			this.selectedItemList = [item];
 		}
 	}
 	protected isSelected(item: T): boolean {
@@ -271,40 +272,50 @@ export class LazyLoadingTableComponent<T> {
 	private getTableElement(): any {
 		return $(this._elementRef.nativeElement).find("table.table");
 	}
-	
+
 	public getTableClasses(): string {
 		var classes = 'lazy-loading ';
-		if((this.columnMetaList.length + 1) % 2 == 0) {
+		if ((this.columnMetaList.length + 1) % 2 == 0) {
 			classes += 'even-columns';
 		}
 		else {
 			classes += 'odd-columns';
 		}
-		return classes;	
+		return classes;
 	}
-	
+
 	public getCellClasses(columnValueMeta: TableColumnValueMeta, isCollapsed: boolean): string {
 		var classes = '';
-		
-		if(isCollapsed) {
+
+		if (isCollapsed) {
 			classes += columnValueMeta.collapsedStyle;
 		}
 		else {
 			classes += columnValueMeta.normalStyle;
 		}
-		return classes;			
-	}
-	
-	public getRowClasses(item: T) {
-		var classes = '';
-		
-		if(this.isSelected(item) && (this.tableOptions.canSelect || this.tableOptions.canMultiSelect)) {
-			classes += 'active ';	
-		}
-		classes += 'selectable-row';
 		return classes;
 	}
-	
+
+	public getRowClasses(item: T) {
+		var classes = '';
+
+		if (this.isSelected(item) && (this.tableOptions.canSelect || this.tableOptions.canMultiSelect)) {
+			classes += 'active ';
+		}
+		classes += 'selectable-row';
+		if (this._rowClassGenerator) {
+			var classToAppend: string = this._rowClassGenerator(item);
+			if (_.isString(classToAppend) && classToAppend.length > 0) {
+				classes += " " + this._rowClassGenerator(item);
+			}
+		}
+		return classes;
+	}
+
+	public attachCustomRowClassGenerator(rowClassGenerator: { (item: T): string }) {
+		this._rowClassGenerator = rowClassGenerator;
+	}
+
 	public isUndefinedOrNull(value: any): boolean {
 		return this._thUtils.isUndefinedOrNull(value);
 	}

@@ -12,12 +12,21 @@ export class NotificationsTableMetaBuilderService {
 			autoSelectRows: true,
 			columnMetaList: [
 				{
+					displayName: "Date",
+					valueMeta: {
+						objectPropertyId: "thTimestampString",
+						propertyType: TablePropertyType.StringType,
+						showInCollapsedView: false,
+						normalStyle: "up-col-15p left"
+					}
+				},
+				{
 					displayName: "Message",
 					valueMeta: {
 						objectPropertyId: "translatedMessage",
-						propertyType: TablePropertyType.StringType,
+						propertyType: TablePropertyType.NotesType,
 						showInCollapsedView: true,
-						normalStyle: "up-col-70p left",
+						normalStyle: "up-col-85p left",
 						collapsedStyle: "up-col-70p left"
 					}
 				},

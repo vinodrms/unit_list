@@ -6,7 +6,7 @@
 	<!-- Ng for for all the notifications -->
 	<li>
 		<a *ngFor="let thNotification of lastNotificationsList" (click)="openNotificationsModal(thNotification)">
-			<span class="time">{{thNotification.notification.timestamp}}</span>
+			<span class="time">{{ thNotification.thTimestamp | thtimestampdistancefromnow }}</span>
 			<span class="message" *ngIf="thNotification.notification.read">
 				{{thNotification.translatedMessage}}
 			</span>
