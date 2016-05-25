@@ -440,5 +440,10 @@ export var EnglishTranslations: Object = {
 	"Enter a valid number of nights": "Enter a valid number of nights",
 	"Enter a valid number": "Enter a valid number",
 	"Insert a text": "Insert a text",
-	"Customer Name": "Customer Name"
+	"Customer Name": "Customer Name",
+	"All": "All",
+	"Unread": "Unread",
+	"Received": "Received",
+	"Message": "Message"
+	
 };

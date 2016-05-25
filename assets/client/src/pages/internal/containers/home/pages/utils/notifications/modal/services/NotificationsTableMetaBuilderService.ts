@@ -12,7 +12,7 @@ export class NotificationsTableMetaBuilderService {
 			autoSelectRows: true,
 			columnMetaList: [
 				{
-					displayName: "Date",
+					displayName: "Received",
 					valueMeta: {
 						objectPropertyId: "thTimestampString",
 						propertyType: TablePropertyType.StringType,
