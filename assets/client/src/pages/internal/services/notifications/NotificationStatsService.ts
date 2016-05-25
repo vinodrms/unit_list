@@ -60,4 +60,8 @@ export class NotificationStatsService extends ARequestService<NotificationStatsD
 	protected parseResult(result: Object): NotificationStatsDO {
         return <NotificationStatsDO> result;
 	}
+    
+    public refreshData() {
+		this.updateServiceResult();
+	}
 }

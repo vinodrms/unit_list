@@ -17,7 +17,7 @@
 	</li>
 	
 	<!-- Next <li> only if no notifications -->
-	<li *ngIf="numUnread == 0">
+	<li *ngIf="lastNotificationsList.length == 0">
 		<a>
 			<span class="message">
 				{{ 'No notifications' | translate }}

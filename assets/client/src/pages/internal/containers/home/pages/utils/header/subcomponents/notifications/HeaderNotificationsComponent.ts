@@ -38,7 +38,7 @@ export class HeaderNotificationsComponent extends BaseComponent implements OnIni
 	public openNotificationsModal(selectedNotification?: any) {
 		this._notificationsModalService.openNotificationsModal(selectedNotification).then((modalDialogInstance: ModalDialogRef<any>) => {
 			modalDialogInstance.resultObservable.subscribe((shouldRefresh: any) => {
-				// refresh
+				this._notificationsStatsService.refreshData();
 			});
 		}).catch((e: any) => { });
 	}
