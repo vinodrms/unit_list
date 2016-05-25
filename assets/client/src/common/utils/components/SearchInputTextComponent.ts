@@ -35,17 +35,14 @@ export class SearchInputTextComponent<T> implements AfterViewInit {
 		var jQueryElement: any = $(this._elementRef.nativeElement).find(".search-input-text");
 		jQueryElement.select2({
 			minimumInputLength: 2,
-			maximumSelectionLength: 1,
-			multiple: true,
 			width: "100%",
 			placeholder: this._appContext.thTranslation.translate(this.placeholder),
 			ajax: {
 				transport: ((params, success, failure) => {
 					if (!this._textSearchService) { return; }
-					this._textSearchService.filterItemsByText(params.data.term);
-					this._textSearchService.getDataObservable().subscribe((lazyLoadData: LazyLoadData<T>) => {
-						var valueArray = this.getStringArrayFromLazyLoadData(lazyLoadData);
-						success({ results: valueArray, more: false, error: null });
+					this._textSearchService.searchItemsByText(params.data.term).subscribe((itemList: T[]) => {
+						var selectResults = this.convertItemListToSelectResults(itemList);
+						success({ results: selectResults, more: false, error: null });
 					}, (err: any) => {
 						failure(err);
 					});
@@ -61,8 +58,8 @@ export class SearchInputTextComponent<T> implements AfterViewInit {
 			console.log(selectedItem.params.data.item);
 		}));
 	}
-	private getStringArrayFromLazyLoadData(lazyLoadData: LazyLoadData<T>): { id: string, text: string, item: T }[] {
-		return _.map(lazyLoadData.pageContent.pageItemList, (item: T) => {
+	private convertItemListToSelectResults(itemList: T[]): { id: string, text: string, item: T }[] {
+		return _.map(itemList, (item: T) => {
 			return {
 				id: this._appContext.thUtils.getObjectValueByPropertyStack(item, this._searchInputParams.objectPropertyId),
 				text: this._appContext.thUtils.getObjectValueByPropertyStack(item, this._searchInputParams.displayStringPropertyId),
@@ -70,6 +67,4 @@ export class SearchInputTextComponent<T> implements AfterViewInit {
 			};
 		});
 	}
-
-
 }
