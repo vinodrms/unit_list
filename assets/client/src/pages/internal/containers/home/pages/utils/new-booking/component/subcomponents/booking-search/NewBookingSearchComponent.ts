@@ -9,6 +9,9 @@ import {ThDateDO} from '../../../../../../../../services/common/data-objects/th-
 import {ThDateUtils} from '../../../../../../../../services/common/data-objects/th-dates/ThDateUtils';
 import {CustomerSearchService} from '../../../../../../../../services/customers/CustomerSearchService';
 import {CustomerVM} from '../../../../../../../../services/customers/view-models/CustomerVM';
+import {CustomerDO} from '../../../../../../../../services/customers/data-objects/CustomerDO';
+import {BookingControllerService} from '../utils/BookingControllerService';
+import {IBookingCustomerRegisterSelector} from '../utils/IBookingCustomerRegister';
 
 @Component({
 	selector: 'new-booking-search',
@@ -22,8 +25,12 @@ export class NewBookingSearchComponent extends BaseComponent implements AfterVie
 	@ViewChild(SearchInputTextComponent)
 	private _customerSearchTextInputComponent: SearchInputTextComponent<CustomerVM>;
 
-	constructor(private _customerSearchService: CustomerSearchService) {
+	private _customerRegisterSelector: IBookingCustomerRegisterSelector;
+
+	constructor(private _customerSearchService: CustomerSearchService,
+		private _bookingControllerService: BookingControllerService) {
 		super();
+		this._customerRegisterSelector = _bookingControllerService;
 		var thDateUtils = new ThDateUtils();
 		this.minDate = thDateUtils.getTodayThDayeDO();
 	}
@@ -31,10 +38,17 @@ export class NewBookingSearchComponent extends BaseComponent implements AfterVie
 	ngAfterViewInit() {
 		this._customerSearchTextInputComponent.bootstrap(this._customerSearchService, {
 			objectPropertyId: "customer.id",
-			displayStringPropertyId: "customerNameString"
+			displayStringPropertyId: "customerNameAndEmailString"
 		});
 	}
 
 	public didSelectBookingInterval(openInterval: ThDateIntervalDO) {
+	}
+	public selectCustomer() {
+		this._customerRegisterSelector.selectCustomerFromRegister().subscribe((selectedCustomer: CustomerDO) => {
+			// TODO
+			console.log('SELECTED!');
+			console.log(selectedCustomer);
+		});
 	}
 }

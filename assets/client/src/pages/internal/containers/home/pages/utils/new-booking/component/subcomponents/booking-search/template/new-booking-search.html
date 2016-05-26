@@ -15,7 +15,9 @@
 					<label>{{ 'Customer' | translate }}</label>
 					<div class="input-group">
 						<search-input-text [placeholder]="'Customer Name'"></search-input-text>
-						<span class="input-group-addon th-addon-button"><small></small> <i class="fa unitpal-font">(</i>  {{ 'Select' | translate }}</span>
+						<span class="input-group-addon th-addon-button" (click)="selectCustomer()"> 
+						<i class="fa unitpal-font">(</i>  {{ 'Register' | translate }}
+						</span>
 					</div>
 					<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Not a valid customer' | translate }}</small></label>
 				</div>

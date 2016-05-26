@@ -66,7 +66,19 @@ export class CustomerVM {
 		return this._customer.customerDetails.getPhone();
 	}
 	public get emailString(): string {
+		if (!this._customer.customerDetails.getEmail() ||
+			!_.isString(this._customer.customerDetails.getEmail())) {
+			return "";
+		}
 		return this._customer.customerDetails.getEmail();
+	}
+	public get customerNameAndEmailString(): string {
+		var custNameEmailStr = this.customerNameString;
+		var emailStr = this.emailString;
+		if (emailStr.length > 0) {
+			custNameEmailStr += " - " + emailStr;
+		}
+		return custNameEmailStr;
 	}
 
 	public isNewCustomer(): boolean {

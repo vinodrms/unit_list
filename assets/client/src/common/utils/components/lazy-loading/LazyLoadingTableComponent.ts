@@ -128,6 +128,9 @@ export class LazyLoadingTableComponent<T> {
 			this.lazyLoadingRequest.updatePageNumber(this.paginationIndex.lastPageNumber);
 		}
 	}
+	public updateTextSearchInput(text: string) {
+		this.textSearchControl.updateValue(text);
+	}
 	private registerSearchInputObservable() {
 		if (this.textSearchControl) {
 			return;

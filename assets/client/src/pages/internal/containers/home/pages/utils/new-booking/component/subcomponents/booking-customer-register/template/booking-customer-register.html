@@ -1,0 +1,8 @@
+<div class="card">
+	<customer-register
+		[allowCustomerSelection]="true" 
+		(onCustomerSelected)="didSelectCustomer($event)"
+		(onPageExit)="closeRegister()"
+		(onScreenStateTypeChanged)="didChangeScreenStateType($event)">
+	</customer-register>
+</div>

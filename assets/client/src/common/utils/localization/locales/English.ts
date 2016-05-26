@@ -444,6 +444,7 @@ export var EnglishTranslations: Object = {
 	"All": "All",
 	"Unread": "Unread",
 	"Received": "Received",
-	"Message": "Message"
+	"Message": "Message",
+	"Register": "Register"
 	
 };

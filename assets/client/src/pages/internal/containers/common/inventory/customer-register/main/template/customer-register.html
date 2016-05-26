@@ -24,9 +24,24 @@
 	<customer-register-edit-container
 		*ngIf="selectedCustomerVM && isEditing" 
 		[customerVM]="selectedCustomerVM"
-		(onExit)="showViewScreen()">
+		(onExit)="showViewScreen($event)">
 		>
 	</customer-register-edit-container>
 	<div #overviewBottom>
+	</div>
+	
+	<div class="wizard-pagination" align="center" *ngIf="allowCustomerSelection && !isEditing">
+		<div class="row">
+			<div class="col-xs-5 col-xs-offset-1">
+				<button type="button" class="btn btn-primary btn-block" [disabled]="!selectedCustomerVM" (click)="triggerCustomerSelected()">
+					{{ 'Select' | translate }}
+				</button>
+			</div>
+			<div class="col-xs-5">
+				<button type="button" class="btn btn-danger btn-block" (click)="triggerPageExit()">
+					{{ 'Cancel' | translate }}
+				</button>
+			</div>
+		</div>
 	</div>
 </div>

@@ -5,17 +5,19 @@ import {TranslationPipe} from '../../../../../../../../../common/utils/localizat
 import {BookingStepType} from '../subcomponents/utils/BookingStepType';
 import {BookingSearchStepService} from '../subcomponents/booking-search/services/BookingSearchStepService';
 import {BookingFillDetailsStepService} from '../subcomponents/booking-fill-details/services/BookingFillDetailsStepService';
+import {BookingCustomerRegisterStepService} from '../subcomponents/booking-customer-register/services/BookingCustomerRegisterStepService';
 import {BookingControllerService} from '../subcomponents/utils/BookingControllerService';
 
 import {NewBookingSearchComponent} from '../subcomponents/booking-search/NewBookingSearchComponent';
 import {NewBookingFillDetailsComponent} from '../subcomponents/booking-fill-details/NewBookingFillDetailsComponent';
+import {BookingCustomerRegisterComponent} from '../subcomponents/booking-customer-register/BookingCustomerRegisterComponent';
 
 @Component({
 	selector: 'new-booking-container',
 	templateUrl: '/client/src/pages/internal/containers/home/pages/utils/new-booking/component/container/template/new-booking-container.html',
-	providers: [BookingSearchStepService, BookingFillDetailsStepService,
+	providers: [BookingSearchStepService, BookingFillDetailsStepService, BookingCustomerRegisterStepService,
 		BookingControllerService],
-	directives: [NewBookingSearchComponent, NewBookingFillDetailsComponent],
+	directives: [NewBookingSearchComponent, NewBookingFillDetailsComponent, BookingCustomerRegisterComponent],
 	pipes: [TranslationPipe]
 })
 export class NewBookingContainerComponent extends BaseComponent {
@@ -35,6 +37,12 @@ export class NewBookingContainerComponent extends BaseComponent {
 	}
 	public isFillDetails(): boolean {
 		return this._bookingCtrlService.getBookingStepType() === BookingStepType.FillDetails;
+	}
+	public isCustomerRegister(): boolean {
+		return this._bookingCtrlService.getBookingStepType() === BookingStepType.CustomerRegister;
+	}
+	public get errorString(): string {
+		return this._bookingCtrlService.getErrorString();
 	}
 
 	public get pathString(): string {
