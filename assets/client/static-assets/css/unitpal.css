@@ -1309,7 +1309,8 @@ table.lazy-loading .th-pagination {
     display: inline-block;
     color: white; 
     position:relative;
-    top: 17px;  
+    top: 17px;
+    left: 3px;
 }
 @media screen and (max-width: 760px) {
     .home-header-logo {
@@ -1320,7 +1321,7 @@ table.lazy-loading .th-pagination {
         top: 16px;
     }
     .home-header-logo>p {
-        display: none;
+        font-size: 16px;
     }
 }
 
@@ -1666,12 +1667,12 @@ a.btn.btn-square:focus {
     display: block;
     width: 100%; 
     height: 34px !important;
-    font-size: 13px;
 }
 .input-group .select2-selection {
     min-height: 34px !important;
     height: 100% !important;
     border: 1px solid #ccc;
+    font-size: 12px;
 }
 .input-group .select2-container {
   position: relative;
