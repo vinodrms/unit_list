@@ -182,5 +182,28 @@ describe("Hotel Room Categories Tests", function() {
                 done(err);
             });
         });
+        
+        it("Should get the room category stats for all the room categories if udefined is passed as room category id list", function(done) {
+            var roomAggregator = new RoomCategoryStatsAggregator(testContext.appContext);
+            
+            roomAggregator.getRoomCategoryStatsList({ hotelId: testContext.sessionContext.sessionDO.hotel.id }, undefined).then((roomCategoryStatsList: RoomCategoryStatsDO[]) => {
+                should.equal(roomCategoryStatsList.length, numCreatedRoomCategories);
+                done();
+            }).catch((err: any) => {
+                done(err);
+            });
+        });
+        
+        it("Should get empty list of room category stats if empty array is passed as room category id list", function(done) {
+            var roomAggregator = new RoomCategoryStatsAggregator(testContext.appContext);
+            
+            roomAggregator.getRoomCategoryStatsList({ hotelId: testContext.sessionContext.sessionDO.hotel.id }, []).then((roomCategoryStatsList: RoomCategoryStatsDO[]) => {
+                _.isEmpty(roomCategoryStatsList).should.be.true;
+                done();
+            }).catch((err: any) => {
+                done(err);
+            });
+        });
+        
     });
 });

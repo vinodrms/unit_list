@@ -1,0 +1,35 @@
+<div class="row">
+	<div class="col-xs-2 col-md-2 text-center">
+		<div class="home-header-logo">
+			<img src="/client/static-assets/images/unit_pal_logo.png" />
+			<p><strong>Unit</strong>Pal</p>
+		</div>
+
+	</div>
+	<div class="col-xs-10 col-md-10">
+		<div class="row">
+			<div class="col-xs-9">
+				<div class="form-inline">
+					<div class="home-header-button" *ngFor="let headerPage of headerPageList" (click)="moveToPage(headerPage)" [ngClass]="{active: headerPage.selected}">
+						<div class="left-separator"></div>
+						<span class="unitpal-font">{{headerPage.pageFontName}}</span>
+						<p>{{ headerPage.pageName | translate }}</p>
+					</div>
+					<div class="home-header-name">
+						{{ hotelName }}
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-3">
+				<ul class="nav navbar-nav navbar-right">
+					<li class="dropdown">
+						<header-notifications></header-notifications>
+					</li>
+					<li class="dropdown">
+						<header-settings></header-settings>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>

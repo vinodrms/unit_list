@@ -1,21 +1,36 @@
-import {Directive, OnInit, OnDestroy, ElementRef} from '@angular/core';
+import {Directive, AfterViewInit, OnDestroy, ElementRef} from '@angular/core';
 
-declare var jQuery: any;
-
-@Directive({ selector: '[customScroll]' })
-export class CustomScroll implements OnInit, OnDestroy {
-
+@Directive({
+    selector: '[customScroll]',
+    host: {
+        '(window:resize)': "onResize($event)"
+    }
+})
+export class CustomScroll implements AfterViewInit, OnDestroy {
     constructor(private _el: ElementRef) {
-        
     }
 
-    ngOnInit() {
-        var jqElement = jQuery(this._el.nativeElement);
-        jqElement.simplebar();
-        jqElement.addClass('simplebar');
+    ngAfterViewInit() {
+        var jqElement = this.getjQueryElement();
+        jqElement.addClass('position-relative');
+        jqElement.perfectScrollbar({
+            wheelSpeed: 2,
+            wheelPropagation: true,
+            minScrollbarLength: 20
+        });
+        jqElement.perfectScrollbar('update');
     }
 
     ngOnDestroy() {
-        
+        var jqElement = this.getjQueryElement();
+        jqElement.perfectScrollbar('destroy');
+    }
+    onResize(event) {
+        var jqElement = this.getjQueryElement();
+        jqElement.perfectScrollbar('update');
+    }
+
+    private getjQueryElement(): any {
+        return $(this._el.nativeElement);
     }
 }

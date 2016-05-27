@@ -65,6 +65,7 @@ export class MongoCustomerCrudOperationsRepository extends MongoRepository {
 				"customerDetails": customer.customerDetails,
 				"fileAttachmentList": customer.fileAttachmentList,
 				"priceProductDetails": customer.priceProductDetails,
+				"indexedName": customer.indexedName,
 				"notes": customer.notes
 			});
 	}

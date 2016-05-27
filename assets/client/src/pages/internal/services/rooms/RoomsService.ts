@@ -37,7 +37,7 @@ export class RoomsService extends ALazyLoadRequestService<RoomVM> {
             this._roomAmenitiesService.getRoomAmenitiesDO(),
             this._roomAttributesService.getRoomAttributesDO(),
             this._roomCategoriesService.getRoomCategoryList(),
-            this._roomCategoriesStatsService.getRoomCategoryStatsForRoomCategoryIdList([]),
+            this._roomCategoriesStatsService.getRoomCategoryStatsForRoomCategoryIdList(),
             this._bedsEagerService.getBedAggregatedList()
         ).map((result: [RoomAmenitiesDO, RoomAttributesDO, RoomCategoryDO[], RoomCategoryStatsDO[], BedVM[]]) => {
             var roomAmenities = result[0];

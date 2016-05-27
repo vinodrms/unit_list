@@ -53,8 +53,8 @@ export class CustomerRegisterEditContainerComponent extends BaseComponent implem
 	customerDetailsContainer: CustomerDetailsContainer;
 
 	@Output() onExit = new EventEmitter();
-	public showViewScreen() {
-		this.onExit.next(true);
+	public showViewScreen(addedCustomer?: CustomerVM) {
+		this.onExit.next(addedCustomer);
 	}
 
 	private _customerVM: CustomerVM;
@@ -182,7 +182,8 @@ export class CustomerRegisterEditContainerComponent extends BaseComponent implem
 		this.isSavingCustomer = true;
 		this._customersService.saveCustomerDO(customer).subscribe((updatedCustomer: CustomerDO) => {
 			this.isSavingCustomer = false;
-			this.showViewScreen();
+			this._customerVM.customer = updatedCustomer;
+			this.showViewScreen(this._customerVM);
 		}, (error: ThError) => {
 			this.isSavingCustomer = false;
 			this._appContext.toaster.error(error.message);

@@ -262,7 +262,7 @@ export class RoomEditComponent extends BaseFormComponent implements OnInit {
             modalDialogInstance.resultObservable.subscribe((selectedRoomCategoryList: RoomCategoryDO[]) => {
                 if (selectedRoomCategoryList.length > 0) {
                     if (this._appContext.thUtils.isUndefinedOrNull(this.roomVM.category) ||
-                        (!this._appContext.thUtils.isUndefinedOrNull(this.roomVM.category) && this.roomVM.category.id != selectedRoomCategoryList[0].id)) {
+                        (!this._appContext.thUtils.isUndefinedOrNull(this.roomVM.category) && this.roomVM.category.displayName != selectedRoomCategoryList[0].displayName)) {
                         this.roomVM.category = selectedRoomCategoryList[0];
                         this.onRoomCategoryChanged();
                     }

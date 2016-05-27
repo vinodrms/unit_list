@@ -130,7 +130,7 @@ export enum ThStatusCode {
     DeleteBedItemErrorDeleting,
     DeleteBedItemErrorValidating,
     DeleteBedItemError,
-    DeleteBedItemErrorUsedInRooms,
+    DeleteBedItemErrorUsedInRoomCategories,
     BedControllerErrorGettingBeds,
     BedControllerErrorSavingBed,
     BedControllerErrorDeletingBed,
@@ -279,7 +279,14 @@ export enum ThStatusCode {
     AllotmentsControllerErrorGettingList,
     HotelDetailsRepositoryErrorGettingList,
     HotelIteratorError,
-    AllotmentArchiverCronJobExecutorError
+    AllotmentArchiverCronJobExecutorError,
+    
+    // Notifications
+    NotificationsRepositoryErrorAddingNotification,
+    NotificationsRepositoryErrorGettingCount,
+    NotificationsRepositoryErrorGettingList,
+    NotificationsRepositoryErrorGettingUndelivered,
+    NotificationsRepositoryErrorMarkingAsRead,
 }
 
 var ThMessage: { [index: number]: string; } = {};
@@ -368,7 +375,7 @@ ThMessage[ThStatusCode.SaveBedItemInvalidSizeAndOrCapacity] = "Size and capacity
 ThMessage[ThStatusCode.SaveBedItemInvalidBedTemplateId] = "Invalid bed template id.";
 ThMessage[ThStatusCode.DeleteBedItemErrorDeleting] = "Error deleting bed item.";
 ThMessage[ThStatusCode.DeleteBedItemErrorValidating] = "Error validating the existing bed item.";
-ThMessage[ThStatusCode.DeleteBedItemErrorUsedInRooms] = "Cannot delete the bed because it was assigned to at least a room in your inventory.";
+ThMessage[ThStatusCode.DeleteBedItemErrorUsedInRoomCategories] = "Cannot delete the bed because it was assigned to at least a room category in your inventory.";
 ThMessage[ThStatusCode.BedControllerErrorGettingBeds] = "Error getting the beds.";
 ThMessage[ThStatusCode.BedControllerErrorSavingBed] = "Error saving bed.";
 ThMessage[ThStatusCode.BedControllerErrorDeletingBed] = "Error deleting bed.";
@@ -559,6 +566,9 @@ ThMessage[ThStatusCode.AllotmentsControllerErrorGettingList] = "Error getting th
 ThMessage[ThStatusCode.HotelDetailsRepositoryErrorGettingList] = "Error getting the list of hotels.";
 ThMessage[ThStatusCode.HotelIteratorError] = "Error iterating through the hotels.";
 ThMessage[ThStatusCode.AllotmentArchiverCronJobExecutorError] = "Error archiving allotments from the process.";
+ThMessage[ThStatusCode.NotificationsRepositoryErrorAddingNotification] = "Error adding a notification.";
+ThMessage[ThStatusCode.NotificationsRepositoryErrorGettingUndelivered] = "Error getting undelivered notifications.";
+ThMessage[ThStatusCode.NotificationsRepositoryErrorMarkingAsRead] = "Error marking notification as read.";
 
 export class ThResponse {
     statusCode: ThStatusCode;

@@ -9,6 +9,7 @@ import {SaveRoomCategoryItem} from '../core/domain-layer/room-categories/SaveRoo
 import {RoomDO} from '../core/data-layer/rooms/data-objects/RoomDO';
 import {RoomCategoryDO} from '../core/data-layer/room-categories/data-objects/RoomCategoryDO';
 import {RoomCategoryMetaRepoDO, RoomCategorySearchResultRepoDO} from '../core/data-layer/room-categories/repositories/IRoomCategoryRepository';
+import {ThUtils} from '../core/utils/ThUtils';
 
 class RoomCategoriesController extends BaseController {
     
@@ -57,7 +58,7 @@ class RoomCategoriesController extends BaseController {
         
 		var roomCategoryId = req.query.id;
 		var roomCategoryMeta = this.getRoomCategoryMetaRepoDOFrom(sessionContext);
-
+        
 		var roomCategoryRepo = appContext.getRepositoryFactory().getRoomCategoryRepository();
 		roomCategoryRepo.getRoomCategoryById(roomCategoryMeta, roomCategoryId).then((roomCategory: RoomCategoryDO) => {
 			this.returnSuccesfulResponse(req, res, { roomCategory: roomCategory });
@@ -67,12 +68,13 @@ class RoomCategoriesController extends BaseController {
     }
 
     public getRoomCategoryStatsList(req: Express.Request, res: Express.Response) {
-        // if (!this.precheckPOSTParameters(req, res, 'roomCategoryIdList', [])) { return };
         var appContext: AppContext = req.appContext;
         var sessionContext: SessionContext = req.sessionContext;
         
         var roomCategStatsAggregator = new RoomCategoryStatsAggregator(appContext);
         var roomCategStatsAggregatorMeta = this.getRoomAggregatorMetaDOFrom(sessionContext);
+        var roomCategoryIdList = req.body.roomCategoryIdList;
+        
         roomCategStatsAggregator.getRoomCategoryStatsList(roomCategStatsAggregatorMeta, req.body.roomCategoryIdList).then((roomCategoryStatsList: RoomCategoryStatsDO[]) => {
             this.returnSuccesfulResponse(req, res, { roomCategoryStatsList: roomCategoryStatsList });
         }).catch((err: any) => {

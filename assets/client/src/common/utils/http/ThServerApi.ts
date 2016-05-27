@@ -52,7 +52,10 @@ export enum ThServerApi {
 	Allotments,
 	AllotmentsCount,
 	AllotmentsSaveItem,
-	AllotmentsArchiveItem
+	AllotmentsArchiveItem,
+	Notifications,
+	NotificationsCount,
+	NotificationsMarkAsRead,
 }
 
 var ThServerApiUrl: { [index: number]: string; } = {};
@@ -112,6 +115,9 @@ ThServerApiUrl[ThServerApi.Allotments] = "/allotments";
 ThServerApiUrl[ThServerApi.AllotmentsCount] = "/allotments/count";
 ThServerApiUrl[ThServerApi.AllotmentsSaveItem] = "/allotments/saveAllotmentItem";
 ThServerApiUrl[ThServerApi.AllotmentsArchiveItem] = "/allotments/archiveAllotmentItem";
+ThServerApiUrl[ThServerApi.Notifications] = "/notifications";
+ThServerApiUrl[ThServerApi.NotificationsCount] = "/notifications/count";
+ThServerApiUrl[ThServerApi.NotificationsMarkAsRead] = "/notifications/markNotificationsAsRead";
 
 export class ServerApiBuilder {
 	public static ApiRoot = "/api";

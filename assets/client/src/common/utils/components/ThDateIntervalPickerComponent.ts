@@ -1,4 +1,6 @@
 import {Component, Input, Output, EventEmitter} from '@angular/core';
+import {ThDataValidators} from '../form-utils/utils/ThDataValidators';
+import {TranslationPipe} from '../localization/TranslationPipe';
 import {ThDatePickerComponent} from './ThDatePickerComponent';
 import {ThDateDO} from '../../../pages/internal/services/common/data-objects/th-dates/ThDateDO';
 import {ThDateIntervalDO} from '../../../pages/internal/services/common/data-objects/th-dates/ThDateIntervalDO';
@@ -8,28 +10,41 @@ import {ThDateUtils} from '../../../pages/internal/services/common/data-objects/
 	selector: 'th-date-interval-picker',
 	template: `
 		<div class="row">
-			<div class="col-xs-12 col-sm-4">
+			<div class="col-md-4 col-sm-6 col-xs-12">
 				<th-date-picker
 					[readonly]="readonly"
 					[initialThDate]="dateInterval.start"
 					[minThDate]="minDate"
-					[label]="'Start Date'"
+					[label]="startDateLabel"
+					[labelFont]="startDateFont"
 					(didSelectThDate)="didSelectStartDate($event)"
 					>
 				</th-date-picker>
+				<span class="unitpal-font date-interval-picker-arrow">></span>
 			</div>
-			<div class="col-xs-12 col-sm-4">
+			<div class="col-md-4 col-sm-6 col-xs-12">
 				<th-date-picker
 					[readonly]="readonly"
 					[initialThDate]="dateInterval.end"
 					[minThDate]="minEndDate"
-					[label]="'End Date'"
+					[label]="endDateLabel"
+					[labelFont]="endDateFont"
 					(didSelectThDate)="didSelectEndDate($event)"
 					>
 				</th-date-picker>
 			</div>
+			<div class="col-md-2 col-sm-6 col-xs-12" *ngIf="showNoOfNights">
+				<div class="form-group" style="padding-top: 5px;">
+					<label>{{ 'Nights' | translate }}</label>
+					<div class="input-group" [ngClass]="{'form-warning': !noOfNightsIsValid()}">
+						<input type="number" class="form-control" [ngModel]="noOfNights" (ngModelChange)="didChangeNoOfNights($event)">
+					</div>
+					<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{'Enter a valid number of nights' | translate}}</small></label>
+				</div>
+			</div>
 		</div>
 	`,
+	pipes: [TranslationPipe],
 	directives: [ThDatePickerComponent]
 })
 export class ThDateIntervalPickerComponent {
@@ -62,6 +77,12 @@ export class ThDateIntervalPickerComponent {
 	public set readonly(readonly: boolean) {
 		this._readonly = readonly;
 	}
+	@Input() startDateLabel: string = "Start Date";
+	@Input() startDateFont: string;
+	@Input() endDateLabel: string = "End Date";
+	@Input() endDateFont: string;
+	@Input() showNoOfNights: boolean = false;
+	noOfNights: number = 0;
 
 	@Output() didSelectThDateInterval = new EventEmitter();
 	public triggerSelectedDateInterval() {
@@ -77,6 +98,7 @@ export class ThDateIntervalPickerComponent {
 	private setDefaultDateInterval(startDate: ThDateDO) {
 		this.dateInterval = this._dateUtils.getTodayToTomorrowInterval();
 		this.minEndDate = this._dateUtils.addDaysToThDateDO(startDate.buildPrototype(), 1);
+		this.updateNoOfNights();
 	}
 
 	private updateDateInterval() {
@@ -87,6 +109,7 @@ export class ThDateIntervalPickerComponent {
 			this.setDefaultDateInterval(this._dateUtils.getTodayThDayeDO());
 			this.triggerSelectedDateInterval();
 		}
+		this.updateNoOfNights();
 	}
 
 	didSelectStartDate(startDate: ThDateDO) {
@@ -95,11 +118,27 @@ export class ThDateIntervalPickerComponent {
 
 		if (this.dateInterval.end.isBefore(this.minEndDate)) {
 			this.dateInterval.end = this.minEndDate.buildPrototype();
+			this.updateNoOfNights();
 		}
 		this.triggerSelectedDateInterval();
 	}
 	didSelectEndDate(endDate: ThDateDO) {
 		this.dateInterval.end = endDate;
 		this.triggerSelectedDateInterval();
+		this.updateNoOfNights();
+	}
+	didChangeNoOfNights(noOfNights: number) {
+		this.noOfNights = noOfNights;
+		if (this.noOfNightsIsValid()) {
+			this.dateInterval.end = this.dateInterval.start.buildPrototype();
+			this.dateInterval.end = this._dateUtils.addDaysToThDateDO(this.dateInterval.end, this.noOfNights);
+			this.didSelectEndDate(this.dateInterval.end);
+		}
+	}
+	private updateNoOfNights() {
+		this.noOfNights = this.dateInterval.getNumberOfDays();
+	}
+	noOfNightsIsValid(): boolean {
+		return _.isNumber(this.noOfNights) && ThDataValidators.isValidInteger(this.noOfNights) && this.noOfNights >= 1;
 	}
 }

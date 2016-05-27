@@ -51,6 +51,10 @@ export class RoomCategoryCapacityDO extends BaseDO {
         if(this.totalCapacity.maxNoBabies < capacityToCheck.maxNoBabies) return false;
         return true;
     }
+    
+    public isEmpty(): boolean {
+        return this.totalCapacity.maxNoAdults === 0 && this.totalCapacity.maxNoChildren === 0 && this.totalCapacity.maxNoBabies === 0;
+    }
 }
 
 export class RoomCategoryStatsDO extends BaseDO {

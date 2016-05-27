@@ -1,4 +1,4 @@
-import {Component, Output, EventEmitter, ViewChild, AfterViewInit, DynamicComponentLoader, Type, ResolvedReflectiveProvider, ViewContainerRef} from '@angular/core';
+import {Component, Input, Output, EventEmitter, ViewChild, AfterViewInit, DynamicComponentLoader, Type, ResolvedReflectiveProvider, ViewContainerRef} from '@angular/core';
 import {BaseComponent} from '../../../../../../../common/base/BaseComponent';
 import {TranslationPipe} from '../../../../../../../common/utils/localization/TranslationPipe';
 import {AppContext, ThError} from '../../../../../../../common/utils/AppContext';
@@ -25,11 +25,24 @@ import {CustomerRegisterEditContainerComponent} from '../pages/customer-edit/con
 	pipes: [TranslationPipe]
 })
 export class CustomerRegisterComponent extends BaseComponent implements AfterViewInit {
+	@Input() allowCustomerSelection: boolean = false;
     @Output() protected onScreenStateTypeChanged = new EventEmitter();
-	@ViewChild('overviewBottom', {read: ViewContainerRef}) private _overviewBottomVCRef: ViewContainerRef;
+	@ViewChild('overviewBottom', { read: ViewContainerRef }) private _overviewBottomVCRef: ViewContainerRef;
 
 	@ViewChild(LazyLoadingTableComponent)
 	private _aopTableComponent: LazyLoadingTableComponent<CustomerVM>;
+
+	@Output() protected onCustomerSelected = new EventEmitter<CustomerDO>();
+	public triggerCustomerSelected() {
+		if (!this.allowCustomerSelection) { return };
+		if (this._appContext.thUtils.isUndefinedOrNull(this._inventoryStateManager.currentItem)) { return; }
+		this.onCustomerSelected.next(this._inventoryStateManager.currentItem.customer);
+	}
+
+	@Output() protected onPageExit = new EventEmitter();
+	public triggerPageExit() {
+		this.onPageExit.next(true);
+	}
 
 	private _inventoryStateManager: InventoryStateManager<CustomerVM>;
 	private _customerType: CustomerType;
@@ -89,10 +102,15 @@ export class CustomerRegisterComponent extends BaseComponent implements AfterVie
         }).catch((e: any) => { });
     }
 
-    protected showViewScreen() {
+    protected showViewScreen(customerToSelect?: CustomerVM) {
         this._aopTableComponent.deselectItem();
         this._inventoryStateManager.currentItem = null;
         this._inventoryStateManager.screenStateType = InventoryScreenStateType.View;
+		if (!this._appContext.thUtils.isUndefinedOrNull(customerToSelect, "customer") && this.allowCustomerSelection) {
+			this._inventoryStateManager.currentItem = customerToSelect;
+			this._aopTableComponent.selectItem(customerToSelect);
+			this._aopTableComponent.updateTextSearchInput(customerToSelect.customer.customerName);
+		}
     }
     protected buildNewCustomerVM(): CustomerVM {
         var vm = new CustomerVM();
@@ -109,7 +127,7 @@ export class CustomerRegisterComponent extends BaseComponent implements AfterVie
     }
 
 	protected get filterList(): CustomerDetailsMeta[] {
-		if(this.isEditing) {
+		if (this.isEditing) {
 			return [this._custTableFilterService.currentFilter];
 		}
 		return this._custTableFilterService.filterList;

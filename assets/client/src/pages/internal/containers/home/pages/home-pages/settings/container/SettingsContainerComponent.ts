@@ -10,6 +10,9 @@ import {SettingsAddOnProductsComponent} from '../subcomponents/add-on-products/S
 import {SettingsPriceProductsComponent} from '../subcomponents/price-products/SettingsPriceProductsComponent';
 import {SettingsCustomerRegisterComponent} from '../subcomponents/customer-register/SettingsCustomerRegisterComponent';
 import {SettingsAllotmentsComponent} from '../subcomponents/allotments/SettingsAllotmentsComponent';
+import {HeaderPageService} from '../../../utils/header/container/services/HeaderPageService';
+import {HeaderPageType} from '../../../utils/header/container/services/HeaderPageType';
+import {AHomeContainerComponent} from '../../../utils/AHomeContainerComponent';
 
 @RouteConfig([
 	{ path: '/basic-info/...', name: 'SettingsBasicInformationComponent', component: SettingsBasicInformationComponent, useAsDefault: true },
@@ -27,11 +30,15 @@ import {SettingsAllotmentsComponent} from '../subcomponents/allotments/SettingsA
 	providers: [SettingsNavbarService],
 	pipes: [TranslationPipe]
 })
-export class SettingsContainerComponent implements OnInit {
+export class SettingsContainerComponent extends AHomeContainerComponent implements OnInit {
 
-	constructor(private _navbarService: SettingsNavbarService) { }
+	constructor(private _navbarService: SettingsNavbarService,
+		headerPageService: HeaderPageService) {
+		super(headerPageService, HeaderPageType.None);
+	}
 
-	ngOnInit() { }
+	ngOnInit() {
+	}
 
 	public get pageName(): string {
 		return this._navbarService.getSelectedPage().pageName;

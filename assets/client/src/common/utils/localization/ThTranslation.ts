@@ -108,4 +108,7 @@ export class ThTranslation {
 			return parameters[actualKey];
 		});
 	}
+	public getLocaleString(): string {
+		return SupportedLocales[this._locale];
+	}
 }

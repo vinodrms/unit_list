@@ -1,3 +1,4 @@
+import {BaseDO} from './BaseDO';
 import {ThUtils} from '../../../utils/ThUtils';
 import {ThLogger, ThLogLevel} from '../../../utils/logging/ThLogger';
 import {ThError} from '../../../utils/th-responses/ThError';
@@ -11,6 +12,7 @@ import {MongoFindAndModifyDocument} from './mongo-utils/MongoFindAndModifyDocume
 import {MongoFindDocumentDistinctFieldValues} from './mongo-utils/MongoFindDocumentDistinctFieldValues';
 import {MongoFindMultipleDocuments} from './mongo-utils/MongoFindMultipleDocuments';
 import {MongoDocumentCount} from './mongo-utils/MongoDocumentCount';
+import {MongoUpdateMultipleDocuments} from './mongo-utils/MongoUpdateMultipleDocuments';
 
 import _ = require('underscore');
 import mongodb = require('mongodb');
@@ -100,10 +102,27 @@ export class MongoRepository implements IRepositoryCleaner {
 		return finder.findMultipleDocuments(searchCriteria);
 	}
 
+	protected updateMultipleDocuments(searchCriteria: Object, updates: Object, errorCallback: { (err: Error): void }, successCallback: { (numUpdated: number): void }) {
+		var updater = new MongoUpdateMultipleDocuments(this._sailsEntity);
+		updater.errorCallback = errorCallback;
+		updater.successCallback = successCallback;
+		return updater.updateMultipleDocuments(searchCriteria, updates);
+	}
+
 	protected getDocumentCount(searchCriteria: Object, errorCallback: { (err: Error): void }, successCallback: { (meta: LazyLoadMetaResponseRepoDO): void }) {
 		var docCount = new MongoDocumentCount(this._sailsEntity);
 		docCount.errorCallback = errorCallback;
 		docCount.successCallback = successCallback;
 		return docCount.getDocumentCount(searchCriteria);
+	}
+	
+	protected getQueryResult<T extends BaseDO>(type: { new(): T ;}, dbList: Object[]): T[] {
+        var resultList: T[] = [];
+        dbList.forEach((dbObject: Object) => {
+            var resultItem: T = new type();
+            resultItem.buildFromObject(dbObject);
+            resultList.push(resultItem);
+        });
+        return resultList;
 	}
 }

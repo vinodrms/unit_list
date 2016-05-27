@@ -1,51 +1,34 @@
 import {Locales, Translation} from '../../utils/localization/Translation';
+import {ThNotificationCode} from '../../data-layer/common/data-objects/notifications/ThNotificationCode';
+import {NotificationDO} from '../../data-layer/common/data-objects/notifications/NotificationDO';
 
-export enum ThNotificationCode {
-	AllotmentArchivedAutomatically
-}
+import _ = require('underscore');
 
 var ThNotificationMessage: { [index: number]: string; } = {};
 ThNotificationMessage[ThNotificationCode.AllotmentArchivedAutomatically] = "Your allotment for the period %period% has been automatically archived as it reached the expired date.";
 
 export class ThNotification {
-	private _code: ThNotificationCode;
-	private _parameters: Object;
-	private _hotelId: string;
-	private _userId: string;
+	notification: NotificationDO;
+	translatedMessage: string;
 
-	constructor(code: ThNotificationCode, parameters: Object, hotelId: string, userId?: string) {
-		this._code = code;
-		this._parameters = parameters;
-		this._hotelId = hotelId;
-		this._userId = userId;
+	constructor(notification: NotificationDO, locale: Locales) {
+		this.notification = notification;
+		this.buildTranslatedMessage(locale);
 	}
-    public getTranslatedNotificationMessage(locale: Locales) {
+    private buildTranslatedMessage(locale: Locales) {
         var translation = new Translation(locale);
-        return translation.getTranslation(ThNotificationMessage[this._code], this._parameters);
+        this.translatedMessage = translation.getTranslation(ThNotificationMessage[this.notification.code], this.notification.parameterMap);
     }
 
-	public get code(): ThNotificationCode {
-		return this._code;
-	}
-	public set code(code: ThNotificationCode) {
-		this._code = code;
-	}
-	public get parameters(): Object {
-		return this._parameters;
-	}
-	public set parameters(parameters: Object) {
-		this._parameters = parameters;
-	}
-	public get hotelId(): string {
-		return this._hotelId;
-	}
-	public set hotelId(hotelId: string) {
-		this._hotelId = hotelId;
-	}
-	public get userId(): string {
-		return this._userId;
-	}
-	public set userId(userId: string) {
-		this._userId = userId;
+	public static buildThNotificationList(notificationList: NotificationDO[], locale: Locales): ThNotification[] {
+		var convertedThNotificationList: ThNotification[] = [];
+		if (!_.isArray(notificationList)) {
+			return convertedThNotificationList;
+		}
+		_.forEach(notificationList, (notification: NotificationDO) => {
+			var thNotification: ThNotification = new ThNotification(notification, locale);
+			convertedThNotificationList.push(thNotification);
+		});
+		return convertedThNotificationList;
 	}
 }

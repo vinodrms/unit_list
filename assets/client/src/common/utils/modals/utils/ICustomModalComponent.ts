@@ -1,7 +1,8 @@
 export enum ModalSize {
 	Small,
+	Medium,
 	Large,
-	Medium
+	XLarge
 }
 
 export interface ICustomModalComponent {

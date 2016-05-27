@@ -14,6 +14,7 @@ export interface CustomerSearchCriteriaRepoDO {
 	customerIdList?: string[];
 	searchText?: string;
 	priceProductIdList?: string[];
+	indexedName?: string;
 }
 export interface CustomerSearchResultRepoDO {
 	lazyLoad?: LazyLoadRepoDO;

@@ -30,7 +30,7 @@ export class CustomersService extends ALazyLoadRequestService<CustomerVM> {
 		});
 	}
 	public searchByText(text: string) {
-		if(!text || text.length == 0) {
+		if (!text || text.length == 0) {
 			this.updateSearchCriteria({});
 			return;
 		}
