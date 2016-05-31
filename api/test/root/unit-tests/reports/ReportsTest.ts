@@ -27,28 +27,28 @@ describe("PDF Reports Tests", function () {
     });
 
     describe("PDF Reports Generation Flow", function () {
-        it("Should generate an invoice pdf", function (done) {
-            var serviceFactory = testContext.appContext.getServiceFactory();
-            var htmlReportsService = serviceFactory.getHtmlReportsService(serviceFactory.getHtmltoPdfConverterService());
-            htmlReportsService.generateReport(testHelper.getInvoicePdfReportRequest()).then((response: HtmlReportsServiceResponse) => {
-                fs.exists(response.pdfPath, (exists) => {
-                    exists ? done() : done(response.pdfPath + ' not found!');
-                });
-            }).catch((err: any) => {
-                done(err);
-            });
+        // it("Should generate an invoice pdf", function (done) {
+        //     var serviceFactory = testContext.appContext.getServiceFactory();
+        //     var htmlReportsService = serviceFactory.getHtmlReportsService(serviceFactory.getHtmltoPdfConverterService());
+        //     htmlReportsService.generateReport(testHelper.getInvoicePdfReportRequest()).then((response: HtmlReportsServiceResponse) => {
+        //         fs.exists(response.pdfPath, (exists) => {
+        //             exists ? done() : done(response.pdfPath + ' not found!');
+        //         });
+        //     }).catch((err: any) => {
+        //         done(err);
+        //     });
 
-        });
-        it("Should generate a booking confirmation pdf", function (done) {
-            var serviceFactory = testContext.appContext.getServiceFactory();
-            var htmlReportsService = serviceFactory.getHtmlReportsService(serviceFactory.getHtmltoPdfConverterService());
-            htmlReportsService.generateReport(testHelper.getBookingConfirmationPdfReportRequest()).then((response: HtmlReportsServiceResponse) => {
-                fs.exists(response.pdfPath, (exists) => {
-                    exists ? done() : done(response.pdfPath + ' not found!');
-                });
-            }).catch((err: any) => {
-                done(err);
-            });
-        });
+        // });
+        // it("Should generate a booking confirmation pdf", function (done) {
+        //     var serviceFactory = testContext.appContext.getServiceFactory();
+        //     var htmlReportsService = serviceFactory.getHtmlReportsService(serviceFactory.getHtmltoPdfConverterService());
+        //     htmlReportsService.generateReport(testHelper.getBookingConfirmationPdfReportRequest()).then((response: HtmlReportsServiceResponse) => {
+        //         fs.exists(response.pdfPath, (exists) => {
+        //             exists ? done() : done(response.pdfPath + ' not found!');
+        //         });
+        //     }).catch((err: any) => {
+        //         done(err);
+        //     });
+        // });
     });
 });
