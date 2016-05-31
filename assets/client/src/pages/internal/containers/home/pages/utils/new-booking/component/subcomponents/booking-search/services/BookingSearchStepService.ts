@@ -20,4 +20,7 @@ export class BookingSearchStepService implements IBookingStepService {
 	public getStepPath(): string[] {
 		return this._stepPath;
 	}
+	public getErrorString(): string {
+		return "";
+	}
 }

@@ -101,6 +101,7 @@ export class SaveCustomerItem {
 		var customer = new CustomerDO();
 		customer.buildFromObject(this._saveCustomerDO);
 		customer.hotelId = this._sessionContext.sessionDO.hotel.id;
+		customer.indexedName = customer.customerDetails.getName();
 		return customer;
 	}
 

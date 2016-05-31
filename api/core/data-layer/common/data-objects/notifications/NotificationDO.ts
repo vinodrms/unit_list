@@ -16,6 +16,7 @@ export class NotificationDO extends BaseDO {
     parameterMap: Object = {};
     timestamp: number;
     delivered: boolean = false;
+    read: boolean = false;
 
     protected getPrimitivePropertyKeys(): string[] {
         // Note: even though parameterMap is not of a primitive type, we want
@@ -23,7 +24,7 @@ export class NotificationDO extends BaseDO {
         // list.
         return [
             "id", "hotelId", "userId", "code", "parameterMap",
-            "timestamp", "delivered"];
+            "timestamp", "delivered", "read"];
     }
 
     public static buildNotificationDO(builderDO: NotificationBuilderDO): NotificationDO {

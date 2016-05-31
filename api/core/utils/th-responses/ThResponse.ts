@@ -286,11 +286,13 @@ export enum ThStatusCode {
     NotificationsRepositoryErrorGettingCount,
     NotificationsRepositoryErrorGettingList,
     NotificationsRepositoryErrorGettingUndelivered,
+    NotificationsRepositoryErrorMarkingAsRead,
     
     //Html to pdf converter service
     PhantomHtmlToPdfHtmlReportPageAccessError,
     PhantomHtmlToPdfGenerationError,
     HtmlReportsServiceHtmlExportError,
+    
 }
 
 var ThMessage: { [index: number]: string; } = {};
@@ -572,6 +574,7 @@ ThMessage[ThStatusCode.HotelIteratorError] = "Error iterating through the hotels
 ThMessage[ThStatusCode.AllotmentArchiverCronJobExecutorError] = "Error archiving allotments from the process.";
 ThMessage[ThStatusCode.NotificationsRepositoryErrorAddingNotification] = "Error adding a notification.";
 ThMessage[ThStatusCode.NotificationsRepositoryErrorGettingUndelivered] = "Error getting undelivered notifications.";
+ThMessage[ThStatusCode.NotificationsRepositoryErrorMarkingAsRead] = "Error marking notification as read.";
 ThMessage[ThStatusCode.PhantomHtmlToPdfHtmlReportPageAccessError] = "Error accessing the html report page.";
 ThMessage[ThStatusCode.PhantomHtmlToPdfGenerationError] = "Error generating pdf.";
 ThMessage[ThStatusCode.HtmlReportsServiceHtmlExportError] = "Error exporting html to pdf.";

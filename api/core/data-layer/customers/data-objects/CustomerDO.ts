@@ -26,12 +26,13 @@ export class CustomerDO extends BaseDO {
 	type: CustomerType;
 	status: CustomerStatus;
 	customerDetails: ICustomerDetailsDO;
+	indexedName: string;
 	fileAttachmentList: FileAttachmentDO[];
 	priceProductDetails: CustomerPriceProductDetailsDO;
 	notes: string;
 
 	protected getPrimitivePropertyKeys(): string[] {
-		return ["id", "hotelId", "versionId", "type", "status", "notes"];
+		return ["id", "hotelId", "versionId", "type", "status", "indexedName","notes"];
 	}
 
 	public buildFromObject(object: Object) {

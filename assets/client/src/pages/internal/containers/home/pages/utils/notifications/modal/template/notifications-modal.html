@@ -1,12 +1,52 @@
-<div class="modal-header text-center">
-	<button type="button" class="close" (click)="closeDialog()">&times;</button>
-	<h4 class="modal-title">{{ 'Notifications' | translate }}</h4>
-</div>
-<div class="modal-body modal-body-xl">
-	
-</div>
-<div class="modal-footer">
-	<button type="button" class="btn btn-primary" 
-		(click)="closeDialog()"> {{ 'Close' | translate }}
-	</button>
+<div class="card">
+	<div class="modal-lg-header container">
+		<div class="row full-height">
+			<div class="col-xs-7 col-md-7 full-height">
+				<h1 class="oneline-text full-height">
+				<i class="fa fa-2x unitpal-font">'</i>
+				{{ 'Notifications' | translate }}
+			</h1>
+			</div>
+			<div class="col-xs-5 col-md-5 full-height">
+				<div class="row full-height">
+					<div class="col-xs-4 col-xs-offset-8 full-height">
+						<a class="btn btn-square float-right" (click)="closeDialog()">
+							<i class="fa unitpal-font">C</i>
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal-lg-body container">
+		<div class="card">
+			<div class="overview-left col-xs-9">
+				<div class="lazy-loading-table-filter">
+					<ul class="nav nav-tabs">
+						<li [ngClass]="{active : isAllNotificationsTabSelected()}">
+							<a (click)="viewAllNotifications()">{{ 'All' | translate }}</a>
+						</li>
+						<li [ngClass]="{active : isUnreadNotificationsTabSelected()}">
+							<a (click)="viewUnreadNotifications()">{{ 'Unread' | translate }}</a>
+						</li>
+					</ul>
+				</div>
+				<lazy-loading-table (onSelect)="selectNotification($event)">
+				</lazy-loading-table>
+			</div>
+			<div class="col-xs-3 overview-right">
+				<div customScroll *ngIf="selectedNotification">
+					<div>
+						<kbd>{{ 'Selected' | translate }}</kbd>
+					</div>
+					<div>
+						<i class="fa fa-calendar"></i> <small>{{ selectedNotification.thTimestamp | thtimestamp }}</small>
+					</div>
+					<div>
+						<i class="fa fa-envelope"></i> <small>{{selectedNotification.translatedMessage}}</small>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>

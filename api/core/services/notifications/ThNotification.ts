@@ -15,9 +15,9 @@ export class ThNotification {
 		this.notification = notification;
 		this.buildTranslatedMessage(locale);
 	}
-    public buildTranslatedMessage(locale: Locales) {
+    private buildTranslatedMessage(locale: Locales) {
         var translation = new Translation(locale);
-        return translation.getTranslation(ThNotificationMessage[this.notification.code], this.notification.parameterMap);
+        this.translatedMessage = translation.getTranslation(ThNotificationMessage[this.notification.code], this.notification.parameterMap);
     }
 
 	public static buildThNotificationList(notificationList: NotificationDO[], locale: Locales): ThNotification[] {

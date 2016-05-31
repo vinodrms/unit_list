@@ -3,13 +3,14 @@ import {AppContext} from '../../../../../../../../../common/utils/AppContext';
 import {ModalDialogRef} from '../../../../../../../../../common/utils/modals/utils/ModalDialogRef';
 import {NotificationsModalInput} from './utils/NotificationsModalInput';
 import {NotificationsModalComponent} from '../NotificationsModalComponent';
+import {ThNotificationDO} from '../../../../../../../services/notifications/data-objects/ThNotificationDO';
 
 @Injectable()
 export class NotificationsModalService {
 
 	constructor(private _appContext: AppContext) { }
 
-	public openNotificationsModal(preselectedNotification?: any): Promise<ModalDialogRef<any>> {
+	public openNotificationsModal(preselectedNotification?: ThNotificationDO): Promise<ModalDialogRef<boolean>> {
 		var modalInput = new NotificationsModalInput();
 		modalInput.preselectedNotification = preselectedNotification;
 

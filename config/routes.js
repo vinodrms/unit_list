@@ -107,6 +107,7 @@ module.exports.routes = {
 
 	'POST /api/notifications': 'NotificationsController.getNotificationList',
 	'POST /api/notifications/count': 'NotificationsController.getNotificationListCount',
+	'POST /api/notifications/markNotificationsAsRead': 'NotificationsController.markNotificationsAsRead',
 	
 	'GET /api/reports/booking-confirmation': 'ReportsController.generateBookingConfirmationPage',
 	'GET /api/reports/invoice': 'ReportsController.generateInvoicePage',

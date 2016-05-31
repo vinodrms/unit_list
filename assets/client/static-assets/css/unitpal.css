@@ -954,8 +954,7 @@ lazy-loading-table {
     overflow-y: hidden;
 }
 .th-button-box {
-    padding-top: 0;
-    padding-bottom: 0;
+    padding-top: 7px;
 }
 .th-button-box>i {
     font-size: 30px;
@@ -1163,6 +1162,9 @@ table.lazy-loading .th-pagination {
 .up-col-80p {
     flex-grow: 16 !important;   
 }
+.up-col-85p {
+    flex-grow: 17 !important;   
+}
 .up-col-90p {
     flex-grow: 18 !important;
 }
@@ -1307,7 +1309,8 @@ table.lazy-loading .th-pagination {
     display: inline-block;
     color: white; 
     position:relative;
-    top: 17px;  
+    top: 17px;
+    left: 3px;
 }
 @media screen and (max-width: 760px) {
     .home-header-logo {
@@ -1318,7 +1321,7 @@ table.lazy-loading .th-pagination {
         top: 16px;
     }
     .home-header-logo>p {
-        display: none;
+        font-size: 16px;
     }
 }
 
@@ -1444,6 +1447,13 @@ ul.msg_list li a .message {
     display: block !important;
     font-size: 11px;
     cursor: pointer;
+    color: #737373;
+}
+ul.msg_list li .time {
+    color: #fc8433;
+}
+ul.msg_list li .text-center a {
+    color: #fc8433;
 }
 .message.unread {
     font-weight: bold;
@@ -1659,4 +1669,28 @@ a.btn.btn-square:focus {
 }
 .no-padding {
     padding: 0px 0px;
+}
+.search-input-text {
+    display: block;
+    width: 100%; 
+    height: 34px !important;
+}
+.input-group .select2-selection {
+    min-height: 34px !important;
+    height: 100% !important;
+    border: 1px solid #ccc;
+    font-size: 12px;
+}
+.input-group .select2-container {
+  position: relative;
+  z-index: 2;
+  float: left;
+  width: 100%;
+  margin-bottom: 0;
+  display: table;
+  table-layout: fixed;
+}
+
+.unread-notification {
+    font-weight: bold;
 }

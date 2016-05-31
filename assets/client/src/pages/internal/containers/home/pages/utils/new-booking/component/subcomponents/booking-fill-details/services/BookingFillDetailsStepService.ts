@@ -15,9 +15,12 @@ export class BookingFillDetailsStepService implements IBookingStepService {
 		return BookingStepType.FillDetails;
 	}
 	public canMoveNext(): boolean {
-		return true;
+		return false;
 	}
 	public getStepPath(): string[] {
 		return this._stepPath;
+	}
+	public getErrorString(): string {
+		return "";
 	}
 }

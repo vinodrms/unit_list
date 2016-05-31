@@ -38,7 +38,21 @@ class NotificationsController extends BaseController {
 			this.returnErrorResponse(req, res, err, ThStatusCode.NotificationsRepositoryErrorGettingCount);
 		});
 	}
-        
+    
+	public markNotificationsAsRead(req: Express.Request, res: Express.Response) {
+		var appContext: AppContext = req.appContext;
+		var sessionContext: SessionContext = req.sessionContext;
+	
+		var meta = this.getNotificationsMetaFrom(sessionContext);
+		var notificationsRepo = appContext.getRepositoryFactory().getNotificationsRepository();
+		
+		notificationsRepo.markNotificationsAsRead(meta, req.body.searchCriteria).then((numUpdated: number) => {
+			this.returnSuccesfulResponse(req, res, numUpdated);
+		}).catch((err: any) => {
+			this.returnErrorResponse(req, res, err, ThStatusCode.NotificationsRepositoryErrorMarkingAsRead);
+		});
+	}
+	
     private getNotificationsMetaFrom(sessionContext: SessionContext): NotificationRepoDO.Meta {
 		return { hotelId: sessionContext.sessionDO.hotel.id };
 	}
@@ -47,5 +61,6 @@ class NotificationsController extends BaseController {
 var notificationsController = new NotificationsController();
 module.exports = {
 	getNotificationList: notificationsController.getNotificationList.bind(notificationsController),
-    getNotificationListCount: notificationsController.getNotificationList.bind(notificationsController)
+    getNotificationListCount: notificationsController.getNotificationListCount.bind(notificationsController),
+	markNotificationsAsRead: notificationsController.markNotificationsAsRead.bind(notificationsController)
 }

@@ -31,6 +31,10 @@ class CustomersEntity extends BasePersistentEntity {
                 type: 'json',
                 required: true
             },
+            indexedName: {
+                type: 'string',
+                required: true
+            },
 			fileAttachmentList: {
 				type: 'array',
 				defaultsTo: []

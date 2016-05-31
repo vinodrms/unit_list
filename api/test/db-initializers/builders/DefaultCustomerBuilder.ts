@@ -57,6 +57,7 @@ export class DefaultCustomerBuilder implements ICustomerDataSource {
 		cust.type = customerType;
 		cust.versionId = 0;
 		cust.customerDetails = DefaultCustomerBuilder.buildCustomerDetails(customerType, individualOrCompanyName, streetAddress);
+		cust.indexedName = cust.customerDetails.getName();
 
 		return cust;
 	}
