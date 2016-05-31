@@ -6,7 +6,7 @@ export class BookingConfirmationHtmlReportConfig extends AHtmlReportConfig {
     constructor(unitPalConfig: UnitPalConfig) {
         super(unitPalConfig);
         
-        this._reportConfig = {
+        this._config = {
             htmlTemplateURLPath: 'api/reports/booking-confirmation',
             reportOutputPath: 'output/reports/booking-confirmations'
         }

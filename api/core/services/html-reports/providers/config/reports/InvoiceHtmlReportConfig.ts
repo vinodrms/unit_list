@@ -6,7 +6,7 @@ export class InvoiceHtmlReportConfig extends AHtmlReportConfig {
     constructor(unitPalConfig: UnitPalConfig) {
         super(unitPalConfig);
         
-        this._reportConfig = {
+        this._config = {
             htmlTemplateURLPath: 'api/reports/invoice',
             reportOutputPath: 'output/reports/invoices'
         }
