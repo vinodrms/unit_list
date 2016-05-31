@@ -1447,6 +1447,13 @@ ul.msg_list li a .message {
     display: block !important;
     font-size: 11px;
     cursor: pointer;
+    color: #737373;
+}
+ul.msg_list li .time {
+    color: #fc8433;
+}
+ul.msg_list li .text-center a {
+    color: #fc8433;
 }
 .message.unread {
     font-weight: bold;
