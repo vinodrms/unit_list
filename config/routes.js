@@ -107,11 +107,13 @@ module.exports.routes = {
 
 	'POST /api/notifications': 'NotificationsController.getNotificationList',
 	'POST /api/notifications/count': 'NotificationsController.getNotificationListCount',
-
-
+	
+	'GET /api/reports/booking-confirmation': 'ReportsController.generateBookingConfirmationPage',
+	'GET /api/reports/invoice': 'ReportsController.generateInvoicePage',
+	'GET /api/reports/test': 'ReportsController.testReportService',
+	
 	/*
-		Front End Views
-	*/
+		Front End Views	*/
 	'GET /home*': {
 		controller: 'AppViewsController',
 		action: 'getInternalView',

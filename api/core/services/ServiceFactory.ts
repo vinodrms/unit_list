@@ -17,6 +17,8 @@ import {INotificationService} from './notifications/INotificationService';
 import {NotificationService} from './notifications/providers/NotificationService';
 import {IHtmlToPdfConverterService} from './htmltopdf/IHtmlToPdfConverterService';
 import {PhantomHtmlToPdfConverterService} from './htmltopdf/providers/phantom/PhantomHtmlToPdfConverterService';
+import {IHtmlReportsService} from './html-reports/IHtmlReportsService';
+import {HtmlReportsService} from './html-reports/providers/HtmlReportsService';
 
 export class ServiceFactory {
     constructor(private _unitPalConfig: UnitPalConfig) {
@@ -55,5 +57,8 @@ export class ServiceFactory {
     }
     public getHtmltoPdfConverterService(): IHtmlToPdfConverterService {
         return new PhantomHtmlToPdfConverterService();   
+    }
+    public getHtmlReportsService(htmlToPdfConverterService: IHtmlToPdfConverterService): IHtmlReportsService {
+        return new HtmlReportsService(this._unitPalConfig, htmlToPdfConverterService);   
     }
 }
