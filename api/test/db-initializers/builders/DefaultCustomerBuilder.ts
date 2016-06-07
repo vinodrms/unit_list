@@ -20,7 +20,7 @@ export interface ICustomerDataSource {
 
 export class DefaultCustomerBuilder implements ICustomerDataSource {
 	private _testUtils: TestUtils;
-	
+
 	constructor(private _testContext: TestContext, private _priceProductList: PriceProductDO[]) {
 		this._testUtils = new TestUtils();
 	}
@@ -48,7 +48,7 @@ export class DefaultCustomerBuilder implements ICustomerDataSource {
 		cust.notes = "tes ttest test test";
 
 		var priceProductDetails = new CustomerPriceProductDetailsDO();
-		priceProductDetails.bookingCode = thUtils.generateUniqueID();
+		priceProductDetails.bookingCode = thUtils.generateShortId();
 		priceProductDetails.priceProductIdList = [];
 		priceProductDetails.allowPublicPriceProducts = true;
 		cust.priceProductDetails = priceProductDetails;

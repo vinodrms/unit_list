@@ -5,8 +5,10 @@
 		<!--TODO: Investigate if !isCollapsed && !tableOptions.canSearch then the total sum is 16 != 12-->
 		<div *ngIf="tableOptions.canSearch" [ngClass]="{'col-xs-4 col-md-4': !isCollapsed, 'col-xs-12 col-md-12': isCollapsed}">
 			<div class="input-group">
-				<input type="text" class="form-control" placeholder="{{tableMeta.searchInputPlaceholder}}" [ngFormControl]="textSearchControl"
-				/>
+				<debouncing-input-text
+					[textValue]="textToSearch" [inputPlaceholder]="tableMeta.searchInputPlaceholder" (onTextChanged)="updateTextSearchInput($event)"
+					>
+				</debouncing-input-text>
 				<span class="input-group-btn">
 						<button class="btn" type="button" (click)="searchByText()">
 							<i class="glyphicon glyphicon-search"></i>

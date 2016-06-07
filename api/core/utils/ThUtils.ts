@@ -1,8 +1,12 @@
 import _ = require('underscore');
 import uuid = require('node-uuid');
+import shortid = require('shortid');
 
 export class ThUtils {
+	private static ShortIdCharacters = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$@";
+	
 	constructor() {
+		shortid.characters(ThUtils.ShortIdCharacters);
 	}
 	public isUndefinedOrNull(object: Object, parameterStack?: string): boolean {
 		if (_.isUndefined(object) || _.isNull(object)) {
@@ -23,6 +27,9 @@ export class ThUtils {
 	}
 	public generateUniqueID(): string {
 		return uuid.v1();
+	}
+	public generateShortId(): string {
+		return shortid.generate();
 	}
 	public firstArrayIncludedInSecond<T>(firstArray: T[], secondArray: T[]): boolean {
         var diffArray: T[] = _.difference(firstArray, secondArray);

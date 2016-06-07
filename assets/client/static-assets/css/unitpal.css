@@ -935,6 +935,10 @@ input[type="file"] {
     font-size: 12px;
     font-weight: bold;
 }
+.form-group > label > small {
+    font-size: 11px;
+    font-weight: normal;
+}
 .position-relative {
     position: relative;
 }
@@ -1679,8 +1683,15 @@ a.btn.btn-square:focus {
     min-height: 34px !important;
     height: 100% !important;
     border: 1px solid #ccc;
-    font-size: 12px;
+    font-size: 14px;
 }
+.input-group .select2-selection__rendered {
+    margin-top: 2px;
+}
+.input-group .select2-selection__arrow {
+    margin-top: 3px;
+}
+
 .input-group .select2-container {
   position: relative;
   z-index: 2;
