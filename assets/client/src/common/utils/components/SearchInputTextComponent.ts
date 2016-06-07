@@ -66,6 +66,7 @@ export class SearchInputTextComponent<T> implements AfterViewInit {
 			this.onItemSelected.next(item);
 		}));
 		this.jQueryElement.on("select2:unselect", ((selectedItem) => {
+			this._currentSelectedItemId = "";
 			this.onItemDeselected.next(selectedItem.params.data.item);
 		}));
 	}
