@@ -59,21 +59,6 @@ class NotificationsController extends BaseController {
     private getNotificationsMetaFrom(sessionContext: SessionContext): NotificationRepoDO.Meta {
 		return { hotelId: sessionContext.sessionDO.hotel.id };
 	}
-
-	public testNotification(req: Express.Request, res: Express.Response) {
-		var appContext: AppContext = req.appContext;
-		var notificationService = appContext.getServiceFactory().getNotificationService();
-
-		
-		
-
-		var notification = NotificationDO.buildNotificationDO({ hotelId: req.body.hotelId, code: ThNotificationCode.AllotmentArchivedAutomatically, parameterMap: {period: req.body.period} })
-		notificationService.addNotification(notification).then((result: NotificationDO) => {
-			this.returnSuccesfulResponse(req, res, result);
-		}).catch((err: any) => {
-			this.returnErrorResponse(req, res, err, -1);
-		});
-	}
 }
 
 var notificationsController = new NotificationsController();
@@ -81,5 +66,4 @@ module.exports = {
 	getNotificationList: notificationsController.getNotificationList.bind(notificationsController),
     getNotificationListCount: notificationsController.getNotificationListCount.bind(notificationsController),
 	markNotificationsAsRead: notificationsController.markNotificationsAsRead.bind(notificationsController),
-	testNotification: notificationsController.testNotification.bind(notificationsController)
 }
