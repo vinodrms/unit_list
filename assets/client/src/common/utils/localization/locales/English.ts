@@ -163,6 +163,7 @@ export var EnglishTranslations: Object = {
 	"[Wizard Step 5] Price Products": "Price Products represent price packages that contain complex rules to increase your property's earnings. They can be yielded from the Yield Manager.",
 	"Select Room Category": "Select Room Category",
 	"The room category name you entered already exists" : "The room category name you entered already exists",
+	"The selected room category is not yet configured. You have to add at least a bed and save the current room in order to have the category configured. Warning: Once you will save the room you won\'t be able to edit the bed configuration for this room category anymore.": "The selected room category is not yet configured. You have to add at least a bed and save the current room in order to have the category configured. Warning: Once you will save the room you won\'t be able to edit the bed configuration for this room category anymore.",
     "Insert a valid max number of adults": "Insert a valid max number of adults",
     "Adults": "Adults",
     "Children": "Children",
