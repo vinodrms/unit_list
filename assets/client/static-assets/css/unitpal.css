@@ -1003,6 +1003,30 @@ table.lazy-loading tfoot {
   flex-grow: 0;
   flex-shrink: 0;
 }
+div.table-select-items {
+    display: inline;
+}
+div.table-select-items>label {
+    float: left;
+    font-weight: normal;
+    font-size: 14px;
+    padding-top: 6px;
+}
+div.table-select-items>div {
+    float: left;
+    padding-left: 3px;
+}
+@media screen and (max-width: 850px) {
+    div.table-select-items>label {
+        display: none;
+    }
+}
+table.lazy-loading>thead>tr>th:first-child {
+    padding-left: 12px;
+}
+table.lazy-loading>tbody>tr>td:first-child {
+    padding-left: 12px;
+}
 
 table.lazy-loading tbody {
   overflow-y: hidden;
@@ -1121,6 +1145,33 @@ table.lazy-loading .pagination-container {
 /* This is to override default pagination style */
 table.lazy-loading .th-pagination {
     margin: 5px 0px 0px 0px;
+}
+.btn.btn-pagination-square {
+    width: 35px;
+    height: 35px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    text-align: center;
+    color: #fff;
+    border: 0;
+    font-size: 12px;
+    background-color: #fb6708;
+}
+.btn.btn-pagination-square>i {
+    font-size: 30px;
+    position: relative;
+    bottom: 5px;
+    right: 3px;
+}
+.btn.btn-pagination-square.disabled {
+    background-color: #c1c1c1;
+}
+.pagination-container>ul>li.other-page>a {
+    color: #c1c1c1;
+}
+.pagination-container>ul {
+    padding-right: 10px;
 }
 
 .lazy-loading-table-filter {
@@ -1673,6 +1724,9 @@ a.btn.btn-square:focus {
 }
 .no-padding {
     padding: 0px 0px;
+}
+.no-margin {
+    margin: 0px 0px;
 }
 .search-input-text {
     display: block;
