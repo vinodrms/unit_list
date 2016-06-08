@@ -1,7 +1,7 @@
 import {Component, OnInit, Output, EventEmitter, Input, AfterViewChecked, Inject, ElementRef} from '@angular/core';
-import {Control} from '@angular/common';
 import {LoadingComponent} from '../LoadingComponent';
 import {ThButtonComponent} from '../ThButtonComponent';
+import {DebouncingInputTextComponent} from '../DebouncingInputTextComponent';
 import {TranslationPipe} from '../../localization/TranslationPipe';
 import {PricePipe} from '../../pipes/PricePipe';
 import {PercentagePipe} from '../../pipes/PercentagePipe';
@@ -16,12 +16,10 @@ import {TableOptions} from './utils/TableOptions';
 import {CustomScroll} from '../../directives/CustomScroll';
 import {ThUtils} from '../../ThUtils';
 
-declare var jQuery: any;
-
 @Component({
 	selector: 'lazy-loading-table',
 	templateUrl: '/client/src/common/utils/components/lazy-loading/template/lazy-loading-table.html',
-	directives: [LoadingComponent, CustomScroll, ThButtonComponent],
+	directives: [LoadingComponent, CustomScroll, ThButtonComponent, DebouncingInputTextComponent],
 	pipes: [TranslationPipe, PricePipe, PercentagePipe, ThDateIntervalPipe]
 })
 export class LazyLoadingTableComponent<T> {
@@ -87,7 +85,7 @@ export class LazyLoadingTableComponent<T> {
 	protected selectedItemList: T[] = [];
 
 	protected tableOptions: TableOptions;
-	protected textSearchControl: Control;
+	protected textToSearch: string = "";
 
 	protected paginationIndex: PaginationIndex;
 
@@ -116,7 +114,6 @@ export class LazyLoadingTableComponent<T> {
 
 			this.paginationIndex.buildPaginationOptions(this.totalCount, this.pageMeta);
 			this.checkInvalidPageNumber();
-			this.registerSearchInputObservable();
 			this.filterColumnMetaList();
 
 			this.didInit = true;
@@ -129,19 +126,8 @@ export class LazyLoadingTableComponent<T> {
 		}
 	}
 	public updateTextSearchInput(text: string) {
-		this.textSearchControl.updateValue(text);
-	}
-	private registerSearchInputObservable() {
-		if (this.textSearchControl) {
-			return;
-		}
-		this.textSearchControl = new Control("");
-		this.textSearchControl.valueChanges
-			.debounceTime(400)
-			.distinctUntilChanged()
-			.subscribe((text: string) => {
-				this.searchByText();
-			});
+		this.textToSearch = text;
+		this.searchByText();
 	}
 	private filterColumnMetaList() {
 		if (this.isCollapsed) {
@@ -153,7 +139,7 @@ export class LazyLoadingTableComponent<T> {
 	}
 
 	protected searchByText() {
-		this.lazyLoadingRequest.searchByText(this.textSearchControl.value);
+		this.lazyLoadingRequest.searchByText(this.textToSearch);
 	}
 
 	protected isFirstPage(): boolean {

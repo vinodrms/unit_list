@@ -81,6 +81,9 @@ export class VATComponent extends BaseComponent implements OnInit {
 			this.convertedCountryCode = vatPrefix;
 			this.vatDetails.fullVat = this.vatDetails.fullVat.substr(2);
 		}
+		else {
+			this.convertedCountryCode = "";
+		}
 	}
 
 	@Output() onVatDetailsChanged = new EventEmitter();

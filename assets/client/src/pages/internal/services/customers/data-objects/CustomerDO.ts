@@ -56,4 +56,19 @@ export class CustomerDO extends BaseDO {
 	public get customerName(): string {
 		return this.customerDetails.getName();
 	}
+	public get emailString(): string {
+		if (!this.customerDetails.getEmail() ||
+			!_.isString(this.customerDetails.getEmail())) {
+			return "";
+		}
+		return this.customerDetails.getEmail();
+	}
+	public get customerNameAndEmailString(): string {
+		var custNameEmailStr = this.customerDetails.getName();
+		var emailStr = this.emailString;
+		if (emailStr.length > 0) {
+			custNameEmailStr += " - " + emailStr;
+		}
+		return custNameEmailStr;
+	}
 }

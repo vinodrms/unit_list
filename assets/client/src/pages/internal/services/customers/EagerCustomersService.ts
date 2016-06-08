@@ -13,12 +13,23 @@ export class EagerCustomersService {
 		if (!customerIdList || customerIdList.length == 0) {
 			return this.getEmptyResult();
 		}
-		return this._appContext.thHttp.post(ThServerApi.Customers, { searchCriteria: { customerIdList: customerIdList } }).map((resultObject: Object) => {
+		return this.getCustomersBySearchCriteria({ customerIdList: customerIdList });
+	}
+	public getCustomersByBookingCode(bookingCode: string): Observable<CustomersDO> {
+		if (!bookingCode || !_.isString(bookingCode)) {
+			return this.getEmptyResult();
+		}
+		return this.getCustomersBySearchCriteria({ bookingCode: bookingCode });
+	}
+
+	private getCustomersBySearchCriteria(searchCriteria: Object): Observable<CustomersDO> {
+		return this._appContext.thHttp.post(ThServerApi.Customers, { searchCriteria: searchCriteria }).map((resultObject: Object) => {
 			var customers = new CustomersDO();
 			customers.buildFromObject(resultObject);
 			return customers;
 		});
 	}
+
 	private getEmptyResult(): Observable<CustomersDO> {
 		return new Observable<CustomersDO>((serviceObserver: Observer<CustomersDO>) => {
 			var customers = new CustomersDO();

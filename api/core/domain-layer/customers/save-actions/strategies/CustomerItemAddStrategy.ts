@@ -25,6 +25,6 @@ export class CustomerItemAddStrategy implements ICustomerItemActionStrategy {
 		});
 	}
 	private prepareCustomerForAdd() {
-		this._customerDO.priceProductDetails.bookingCode = this._thUtils.generateUniqueID();
+		this._customerDO.priceProductDetails.bookingCode = this._thUtils.generateShortId();
 	}
 }

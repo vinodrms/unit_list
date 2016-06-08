@@ -32,7 +32,8 @@
 	</div>
 </div>
 <div class="modal-lg-body container">
-	<new-booking-search class="full-height" *ngIf="isBookingSearch()"> </new-booking-search>
-	<new-booking-fill-details class="full-height" *ngIf="isFillDetails()"> </new-booking-fill-details>
+	<new-booking-search class="full-height" [hidden]="!isBookingSearch()"> </new-booking-search>
+	<new-booking-fill-details class="full-height" [hidden]="!isFillDetails()"> </new-booking-fill-details>
+	
 	<booking-customer-register class="full-height" *ngIf="isCustomerRegister()"> </booking-customer-register>
 </div>

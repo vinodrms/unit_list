@@ -1,4 +1,4 @@
-import {Component, AfterViewInit, Inject, ElementRef, Input} from '@angular/core';
+import {Component, AfterViewInit, Inject, Output, EventEmitter, ElementRef, Input} from '@angular/core';
 import {AppContext} from '../AppContext';
 import {LazyLoadData} from '../../../pages/internal/services/common/ILazyLoadRequestService';
 import {ITextSearchRequestService} from '../../../pages/internal/services/common/ITextSearchRequestService';
@@ -18,9 +18,17 @@ export interface SearchInputTextParams {
 export class SearchInputTextComponent<T> implements AfterViewInit {
 	public static Delay: number = 250;
 	@Input() placeholder: string = "Insert a text";
+	@Input() set preselectedItem(item: T) {
+		this.selectItem(item);
+	}
 
+	@Output() onItemSelected = new EventEmitter<T>();
+	@Output() onItemDeselected = new EventEmitter<T>();
+
+	private jQueryElement: any;
 	private _textSearchService: ITextSearchRequestService<T>;
 	private _searchInputParams: SearchInputTextParams;
+	private _currentSelectedItemId: string = "";
 
 	constructor( @Inject(ElementRef) private _elementRef: ElementRef,
 		private _appContext: AppContext) {
@@ -32,11 +40,12 @@ export class SearchInputTextComponent<T> implements AfterViewInit {
 	}
 
 	ngAfterViewInit() {
-		var jQueryElement: any = $(this._elementRef.nativeElement).find(".search-input-text");
-		jQueryElement.select2({
+		this.jQueryElement = $(this._elementRef.nativeElement).find(".search-input-text");
+		this.jQueryElement.select2({
 			minimumInputLength: 2,
 			width: "100%",
 			placeholder: this._appContext.thTranslation.translate(this.placeholder),
+			allowClear: true,
 			ajax: {
 				transport: ((params, success, failure) => {
 					if (!this._textSearchService) { return; }
@@ -51,20 +60,41 @@ export class SearchInputTextComponent<T> implements AfterViewInit {
 			},
 			language: this._appContext.thTranslation.getLocaleString()
 		});
-		jQueryElement.on("select2:select", ((selectedItem) => {
-			console.log(selectedItem.params.data.item);
+		this.jQueryElement.on("select2:select", ((selectedItem) => {
+			var item: T = selectedItem.params.data.item;
+			this._currentSelectedItemId = this.getItemId(item);
+			this.onItemSelected.next(item);
 		}));
-		jQueryElement.on("select2:unselect", ((selectedItem) => {
-			console.log(selectedItem.params.data.item);
+		this.jQueryElement.on("select2:unselect", ((selectedItem) => {
+			this._currentSelectedItemId = "";
+			this.onItemDeselected.next(selectedItem.params.data.item);
 		}));
 	}
 	private convertItemListToSelectResults(itemList: T[]): { id: string, text: string, item: T }[] {
 		return _.map(itemList, (item: T) => {
-			return {
-				id: this._appContext.thUtils.getObjectValueByPropertyStack(item, this._searchInputParams.objectPropertyId),
-				text: this._appContext.thUtils.getObjectValueByPropertyStack(item, this._searchInputParams.displayStringPropertyId),
-				item: item
-			};
+			return this.convertItemToSelectResults(item);
 		});
+	}
+	private convertItemToSelectResults(item: T): { id: string, text: string, item: T } {
+		return {
+			id: this.getItemId(item),
+			text: this._appContext.thUtils.getObjectValueByPropertyStack(item, this._searchInputParams.displayStringPropertyId),
+			item: item
+		};
+	}
+	private getItemId(item: T): string {
+		return this._appContext.thUtils.getObjectValueByPropertyStack(item, this._searchInputParams.objectPropertyId);
+	}
+
+	private selectItem(item: T) {
+		if (!item || !this.jQueryElement) {
+			return;
+		}
+		var convertedItem = this.convertItemToSelectResults(item);
+		var newSelectedId = this.getItemId(item);
+		if (newSelectedId !== this._currentSelectedItemId) {
+			this._currentSelectedItemId = newSelectedId;
+			this.jQueryElement.data('select2').trigger('select', { 'data': convertedItem });
+		}
 	}
 }

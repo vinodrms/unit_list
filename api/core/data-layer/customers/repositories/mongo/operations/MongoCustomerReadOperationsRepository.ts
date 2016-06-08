@@ -70,6 +70,7 @@ export class MongoCustomerReadOperationsRepository extends MongoRepository {
 			mongoQueryBuilder.addTextIndexSearch(searchCriteria.searchText);
 			mongoQueryBuilder.addExactMatch("type", searchCriteria.type);
 			mongoQueryBuilder.addMultipleSelectOptionList("priceProductDetails.priceProductIdList", searchCriteria.priceProductIdList);
+			mongoQueryBuilder.addExactMatch("priceProductDetails.bookingCode", searchCriteria.bookingCode);
 			mongoQueryBuilder.addRegex("indexedName", searchCriteria.indexedName);
 		}
 		return mongoQueryBuilder.processedQuery;

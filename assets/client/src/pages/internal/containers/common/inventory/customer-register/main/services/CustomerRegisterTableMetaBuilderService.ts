@@ -23,6 +23,15 @@ export class CustomerRegisterTableMetaBuilderService {
 					}
 				},
 				{
+					displayName: "Booking Code",
+					valueMeta: {
+						objectPropertyId: "customer.priceProductDetails.bookingCode",
+						propertyType: TablePropertyType.StringType,
+						showInCollapsedView: false,
+						normalStyle: "up-col-15p center"
+					}
+				},
+				{
 					displayName: "Type",
 					valueMeta: {
 						objectPropertyId: "customerTypeFont",
@@ -46,7 +55,7 @@ export class CustomerRegisterTableMetaBuilderService {
 						objectPropertyId: "customer.notes",
 						propertyType: TablePropertyType.NotesType,
 						showInCollapsedView: false,
-						normalStyle: "up-col-30p left"
+						normalStyle: "up-col-25p left"
 					}
 				}
 			]
