@@ -1,4 +1,4 @@
-import {Component, OnInit, Output, EventEmitter, Input, AfterViewChecked, Inject, ElementRef} from '@angular/core';
+import {Component, OnInit, Output, EventEmitter, Input, AfterViewChecked, Inject, ElementRef, ViewChild} from '@angular/core';
 import {LoadingComponent} from '../LoadingComponent';
 import {ThButtonComponent} from '../ThButtonComponent';
 import {DebouncingInputTextComponent} from '../DebouncingInputTextComponent';
@@ -81,6 +81,8 @@ export class LazyLoadingTableComponent<T> {
 
 	protected paginationIndex: PaginationIndex;
 
+	@ViewChild(CustomScroll) private _scrollableBodyRegion: CustomScroll;
+
 	constructor(private _appContext: AppContext,
 		@Inject(ElementRef) private _elementRef: ElementRef) {
 		this._thUtils = new ThUtils();
@@ -109,6 +111,7 @@ export class LazyLoadingTableComponent<T> {
 			this.filterColumnMetaList();
 
 			this.didInit = true;
+			this.scheduleScrollBodyRegionUpdate();
 		});
 		this.lazyLoadingRequest.refreshData();
 	}
@@ -128,6 +131,10 @@ export class LazyLoadingTableComponent<T> {
 		else {
 			this.columnMetaList = this.tableMeta.columnMetaList;
 		}
+	}
+	private scheduleScrollBodyRegionUpdate() {
+		if (!this._scrollableBodyRegion || !this._scrollableBodyRegion.scheduleScrollRegionUpdate) { return };
+		this._scrollableBodyRegion.scheduleScrollRegionUpdate();
 	}
 
 	protected searchByText() {
