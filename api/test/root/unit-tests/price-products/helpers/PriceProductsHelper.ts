@@ -83,13 +83,25 @@ export class PriceProductsHelper {
 					{
 						type: PriceProductConstraintType.MinimumLengthOfStay,
 						constraint: {
-							minLengthOfStay: 3
+							lengthOfStay: 3
 						}
 					},
 					{
 						type: PriceProductConstraintType.MinimumNumberOfRooms,
 						constraint: {
 							noOfRooms: 1
+						}
+					},
+					{
+						type: PriceProductConstraintType.MustArriveOnDaysFromWeek,
+						constraint: {
+							daysFromWeek: [ISOWeekDay.Monday]
+						}
+					},
+					{
+						type: PriceProductConstraintType.MinimumNumberOfAdults,
+						constraint: {
+							noOfAdults: 1
 						}
 					}
 				]

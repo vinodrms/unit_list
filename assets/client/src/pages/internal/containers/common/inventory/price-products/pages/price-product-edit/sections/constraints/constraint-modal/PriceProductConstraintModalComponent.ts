@@ -54,7 +54,9 @@ export class PriceProductConstraintModalComponent extends BaseComponent implemen
 	}
 	
 	public isDaysFromWeekConstraint() {
-		return this.constraintDO.type === PriceProductConstraintType.BookableOnlyOnDaysFromWeek || this.constraintDO.type === PriceProductConstraintType.IncludeDaysFromWeek;
+		return this.constraintDO.type === PriceProductConstraintType.BookableOnlyOnDaysFromWeek 
+			|| this.constraintDO.type === PriceProductConstraintType.IncludeDaysFromWeek
+			|| this.constraintDO.type === PriceProductConstraintType.MustArriveOnDaysFromWeek;
 	}
 	public isLeadDaysConstraint() {
 		return this.constraintDO.type === PriceProductConstraintType.MinimumLeadDays || this.constraintDO.type === PriceProductConstraintType.MaximumLeadDays;
@@ -64,6 +66,9 @@ export class PriceProductConstraintModalComponent extends BaseComponent implemen
 	}
 	public isNumberOfRoomsConstraint() {
 		return this.constraintDO.type === PriceProductConstraintType.MinimumNumberOfRooms;
+	}
+	public isNumberOfAdultsConstraint() {
+		return this.constraintDO.type === PriceProductConstraintType.MinimumNumberOfAdults;
 	}
 	
 	public addConstraint() {

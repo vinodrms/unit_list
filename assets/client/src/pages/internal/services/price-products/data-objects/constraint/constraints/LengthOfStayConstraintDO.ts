@@ -4,16 +4,16 @@ import {IPriceProductConstraint} from '../IPriceProductConstraint';
 import {ThTranslation} from '../../../../../../../common/utils/localization/ThTranslation';
 
 export class LengthOfStayConstraintDO extends BaseDO implements IPriceProductConstraint {
-	minLengthOfStay: number;
+	lengthOfStay: number;
 
 	protected getPrimitivePropertyKeys(): string[] {
-		return ["minLengthOfStay"];
+		return ["lengthOfStay"];
 	}
 	
 	public isValid() {
-		return ThDataValidators.isValidInteger(this.minLengthOfStay) && this.minLengthOfStay >= 1;
+		return ThDataValidators.isValidInteger(this.lengthOfStay) && this.lengthOfStay >= 1;
 	}
 	public getValueDisplayString(thTranslation: ThTranslation): string {
-		return thTranslation.translate("length of %noDays% days", {noDays: this.minLengthOfStay});		
+		return thTranslation.translate("length of %noDays% days", {noDays: this.lengthOfStay});		
 	}
 }
