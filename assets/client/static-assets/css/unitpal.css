@@ -1046,6 +1046,7 @@ table.lazy-loading tbody {
 
 tr.lazy-loading-table-last-row {
     flex-grow: 1 !important;
+    min-height: 0px;
 }
 tr.lazy-loading-table-last-row:hover,
 tr.lazy-loading-table-last-row:focus {
@@ -1082,7 +1083,7 @@ table.lazy-loading th {
 }
 
 table.lazy-loading thead tr,
-table.lazy-loading tbody tr {
+table.lazy-loading tbody tr:not(.lazy-loading-table-last-row) {
   height: 40px;
 }
 table.lazy-loading th,
