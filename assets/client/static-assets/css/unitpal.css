@@ -110,6 +110,16 @@ header {
     float: right;
 }
 
+.container-external {
+    margin: 0 auto;
+    height: 100%;
+    padding: 10px 0 10px 0;
+    overflow: hidden;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
 .container-fluid {
     margin: 0 auto;
     height: calc(100% - 71px);
