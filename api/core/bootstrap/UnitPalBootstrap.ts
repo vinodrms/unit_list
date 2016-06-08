@@ -8,6 +8,7 @@ import {ThLogger, ThLogLevel} from '../utils/logging/ThLogger';
 import {ThError} from '../utils/th-responses/ThError';
 import {ThStatusCode} from '../utils/th-responses/ThResponse';
 import {CronJobInitializer} from '../cron-jobs/CronJobInitializer';
+import {SocketsInitializer} from './sockets/SocketsInitializer';
 
 export class UnitPalBootstrap {
 	private _unitPalConfig: UnitPalConfig;
@@ -19,6 +20,7 @@ export class UnitPalBootstrap {
 	bootstrap(endCallback: { (): void; }) {
 		this.initializeLogger();
 		this.initializeLoginService();
+		this.initializeSockets();
 		this.initializeDatabase(endCallback);
 		this.initializeCronJobs();
 	}
@@ -60,5 +62,9 @@ export class UnitPalBootstrap {
 	private initializeCronJobs() {
 		var cronInitializer = new CronJobInitializer();
 		cronInitializer.schedule();
+	}
+	private initializeSockets() {
+		var socketsInitializer = new SocketsInitializer();
+		socketsInitializer.register();
 	}
 }
