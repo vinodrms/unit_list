@@ -12,7 +12,7 @@
         </div>
 
         <div class="row">
-            
+
             <div class="col-md-6 col-xs-12 form-group">
                 <label>{{ 'Type:' | translate }}</label>
                 <div class="input-group">
@@ -26,7 +26,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="col-md-6 col-xs-12 form-group">
                 <label>{{ 'Bed accomodates:' | translate }}</label>
                 <div class="input-group">
@@ -40,7 +40,7 @@
                     </div>
                 </div>
             </div>
-            
+
         </div>
 
         <div class="row">
@@ -75,7 +75,13 @@
                         <label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Insert a valid max number of children' | translate }}</small></label>
                     </div>
                 </div>
-                <label class="text-muted"><small><i class="fa fa-info-circle"></i> {{ 'Each adult is replaceable with a child. Max Adults: 2 Max Children: 1 OR Max Adults: 1 Max Children: 2 OR Max Children: 3' | translate }}</small></label>
+                <label class="text-muted">
+                    <small><i class="fa fa-info-circle"></i> {{ 'Each adult is replaceable with a child. Possible configurations:' | translate }} 
+                        <span *ngFor="let configuration of possibleConfigurations; let i = index">{{'Max Adults:' | translate}} {{configuration.maxNoAdults}} {{'Max Children:' | translate}} {{configuration.maxNoChildren}}
+                            <span *ngIf="i < possibleConfigurations.length - 1"> {{'OR' | translate}} </span>
+                        </span>
+                    </small>
+                </label>
             </div>
             <div class="col-xs-12 col-md-6 form-group">
                 <label>{{ 'Dimensions' | translate }}*</label>

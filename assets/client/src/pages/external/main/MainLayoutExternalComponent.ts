@@ -8,11 +8,12 @@ import {IToaster} from '../../../common/utils/toaster/IToaster';
 import {IModalService} from '../../../common/utils/modals/IModalService';
 import {UpdatePasswordComponent} from '../pages/update-password/UpdatePasswordComponent';
 import {SignUpComponent} from '../pages/sign-up/SignUpComponent';
+import {CustomScroll} from '../../../common/utils/directives/CustomScroll';
 
 @Component({
     selector: 'main-layout-external',
     templateUrl: '/client/src/pages/external/main/template/main-layout-external.html',
-	directives: [ROUTER_DIRECTIVES],
+	directives: [ROUTER_DIRECTIVES, CustomScroll],
 	pipes: [TranslationPipe]
 })
 
