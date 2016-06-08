@@ -21,14 +21,15 @@
 		<div class="col-xs-4 col-md-4" *ngIf="!isCollapsed">
 		</div>
 		<div class="col-xs-4 col-md-4" *ngIf="!isCollapsed">
-			<div>
-				<label>{{ 'Show' | translate }}
-						<select [ngModel]="paginationIndex.numOfItemsPerPage" (ngModelChange)="didChangeNumOfItemsPerPage($event)">
-							<option *ngFor="let nomPerPage of paginationIndex.nunOfItemsPerPageList" [value]="nomPerPage">
-								{{nomPerPage}}
-							</option>
-						</select> {{ 'items' | translate }}
-					</label>
+			<div class="table-select-items pull-right">
+				<label>{{ 'Show' | translate }}</label>
+				<div class="no-padding">
+					<select class="form-control" [ngModel]="paginationIndex.numOfItemsPerPage" (ngModelChange)="didChangeNumOfItemsPerPage($event)">
+						<option *ngFor="let nomPerPage of paginationIndex.nunOfItemsPerPageList" [value]="nomPerPage">
+							{{nomPerPage}} {{ 'items' | translate }}
+						</option>
+					</select> 
+				</div>
 			</div>
 		</div>
 	</div>
@@ -111,18 +112,16 @@
 					{{paginationIndex.pageNumberStat}}
 				</td>
 				<td class="right pagination-container" [ngClass]="{'up-col-50p': !isCollapsed, 'up-col-55p': isCollapsed}">
-					<ul class="pagination th-pagination">
-						<li [ngClass]="{disabled: isFirstPage()}">
-							<a (click)="updatePageNumber(paginationIndex.firstPageNumber)">
-								<i class="fa fa-angle-double-left"></i>
-							</a>
-						</li>
-						<li *ngFor="let index of paginationIndex.indexList" [ngClass]="{active: index.isSelected}">
+					<ul class="list-inline">
+						<li *ngFor="let index of paginationIndex.indexList" [ngClass]="{'other-page': !index.isSelected}">
 							<a (click)="updatePageNumber(index.pageNumber)">{{index.displayNumber}}</a>
 						</li>
-						<li [ngClass]="{disabled: isLastPage()}">
-							<a (click)="updatePageNumber(paginationIndex.lastPageNumber)">
-								<i class="fa fa-angle-double-right"></i>
+						<li>
+							<a class="btn btn-pagination-square" [ngClass]="{disabled: isFirstPage()}" (click)="movePrevious()">
+								<i class="fa unitpal-font"><</i>
+							</a>
+							<a class="btn btn-pagination-square" [ngClass]="{disabled: isLastPage()}" (click)="moveNext()">
+								<i class="fa unitpal-font">></i>
 							</a>
 						</li>
 					</ul>

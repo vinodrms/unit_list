@@ -67,14 +67,4 @@ export class PaginationIndex {
 		var indexOfFirstItemFromCurrentPage = pageMeta.pageNumber * pageMeta.pageSize;
 		return lastItemIndex < indexOfFirstItemFromCurrentPage;
 	}
-
-	public defaultNoOfItemsPerPageIsSelected() {
-		return this.numOfItemsPerPage === PaginationIndex.DefaultItemsPerPage;
-	}
-
-	public getUpdatedPageNumber(totalCount: TotalCountDO, pageMeta: PageMetaDO, selectedIndex: number): number {
-		var actualIndex = pageMeta.pageNumber * pageMeta.pageSize + selectedIndex;
-		return Math.floor(actualIndex / PaginationIndex.DefaultItemsPerPage);
-	}
-
 }

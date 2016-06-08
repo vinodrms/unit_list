@@ -37,14 +37,6 @@ export class LazyLoadingTableComponent<T> {
 			return;
 		}
 		this.filterColumnMetaList();
-
-		if (this._isCollapsed && !this.paginationIndex.defaultNoOfItemsPerPageIsSelected()) {
-			var selectedItemIndex = this.getSelectedItemIndexInPageItemList();
-			var newPageNumber = this.paginationIndex.getUpdatedPageNumber(this.totalCount, this.pageMeta, selectedItemIndex);
-
-			this.paginationIndex.numOfItemsPerPage = PaginationIndex.DefaultItemsPerPage;
-			this.lazyLoadingRequest.updatePageNumberAndPageSize(newPageNumber, PaginationIndex.DefaultItemsPerPage);
-		}
 	}
 
 	@Output() protected onAdd = new EventEmitter();
@@ -152,6 +144,12 @@ export class LazyLoadingTableComponent<T> {
 		if (pageNumber >= this.paginationIndex.firstPageNumber && pageNumber <= this.paginationIndex.lastPageNumber) {
 			this.lazyLoadingRequest.updatePageNumber(pageNumber);
 		}
+	}
+	protected moveNext() {
+		this.updatePageNumber(this.pageMeta.pageNumber + 1);
+	}
+	protected movePrevious() {
+		this.updatePageNumber(this.pageMeta.pageNumber - 1);
 	}
 
 	protected isPercentage(valueMeta: TableColumnValueMeta): boolean {
