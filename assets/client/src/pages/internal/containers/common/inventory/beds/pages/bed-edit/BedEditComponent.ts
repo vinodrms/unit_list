@@ -8,7 +8,7 @@ import {BaseFormComponent} from '../../../../../../../../common/base/BaseFormCom
 import {AppContext, ThError} from '../../../../../../../../common/utils/AppContext';
 import {BedTemplateDO} from '../../../../../../services/common/data-objects/bed-template/BedTemplateDO';
 import {BedVM} from '../../../../../../services/beds/view-models/BedVM';
-import {BedDO, BedStorageType, BedAccommodationType} from '../../../../../../services/beds/data-objects/BedDO';
+import {BedDO, BedStorageType, BedAccommodationType, BedCapacityDO} from '../../../../../../services/beds/data-objects/BedDO';
 import {BedsService} from '../../../../../../services/beds/BedsService';
 import {BedTemplatesService} from '../../../../../../services/settings/BedTemplatesService';
 import {BedTemplatesDO} from '../../../../../../services/settings/data-objects/BedTemplatesDO';
@@ -158,5 +158,9 @@ export class BedEditComponent extends BaseFormComponent implements OnInit {
     
     public get accomodatesBabies(): boolean {
         return this._bedVM.bed.accommodationType === BedAccommodationType.Babies
+    }
+
+    public get possibleConfigurations(): BedCapacityDO[] {
+        return this._bedVM.bed.capacity.possibleConfigurations;
     }
 }
