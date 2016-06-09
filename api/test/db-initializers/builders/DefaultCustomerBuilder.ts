@@ -9,6 +9,7 @@ import {CompanyDetailsDO} from '../../../core/data-layer/customers/data-objects/
 import {TravelAgencyDetailsDO} from '../../../core/data-layer/customers/data-objects/customer-details/corporate/TravelAgencyDetailsDO';
 import {BaseCorporateDetailsDO, CommissionType} from '../../../core/data-layer/customers/data-objects/customer-details/corporate/BaseCorporateDetailsDO';
 import {ICustomerDetailsDO} from '../../../core/data-layer/customers/data-objects/customer-details/ICustomerDetailsDO';
+import {CustomerItemAddStrategy} from '../../../core/domain-layer/customers/save-actions/strategies/CustomerItemAddStrategy';
 import {AddressDO} from '../../../core/data-layer/common/data-objects/address/AddressDO';
 import {ThDateDO} from '../../../core/utils/th-dates/data-objects/ThDateDO';
 import {PriceProductDO} from '../../../core/data-layer/price-products/data-objects/PriceProductDO';
@@ -48,7 +49,7 @@ export class DefaultCustomerBuilder implements ICustomerDataSource {
 		cust.notes = "tes ttest test test";
 
 		var priceProductDetails = new CustomerPriceProductDetailsDO();
-		priceProductDetails.bookingCode = thUtils.generateShortId();
+		priceProductDetails.bookingCode = CustomerItemAddStrategy.CustomerBookingCodePrefix + thUtils.generateShortId();
 		priceProductDetails.priceProductIdList = [];
 		priceProductDetails.allowPublicPriceProducts = true;
 		cust.priceProductDetails = priceProductDetails;
