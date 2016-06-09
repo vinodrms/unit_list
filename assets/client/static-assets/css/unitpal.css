@@ -391,7 +391,7 @@ table .buttons,table button,table .btn {
 
 .overview-right {
     border-left: 1px solid #ccc;
-    padding: 5px 0 0 24px;
+    padding: 12px 12px 0 12px;
     height: 100%;
 }
 .overview-right h1 {
