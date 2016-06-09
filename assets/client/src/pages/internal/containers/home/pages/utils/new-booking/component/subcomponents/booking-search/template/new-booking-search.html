@@ -5,10 +5,10 @@
 				<div class="form-group">
 					<label>{{ 'Booking Code' | translate }}
 						<small>
-							<span *ngIf="showBookingCodeMessage && !validBookingCode" title="{{ 'Not a valid booking code' | translate  }}">
+							<span *ngIf="showBookingCodeMessage && !validBookingCode" title="{{ 'Not a valid customer booking code' | translate  }}">
 								<i class="fa fa-exclamation-circle red-color"></i>
 							</span>
-							<span *ngIf="showBookingCodeMessage && validBookingCode" title="{{ 'Valid booking code' | translate  }}">
+							<span *ngIf="showBookingCodeMessage && validBookingCode" title="{{ 'Valid customer booking code' | translate  }}">
 								<i class="fa fa-check green-color"></i>
 							</span>
 							<i class="fa fa-refresh fa-spin" *ngIf="loadingCustomerByCode"></i>
