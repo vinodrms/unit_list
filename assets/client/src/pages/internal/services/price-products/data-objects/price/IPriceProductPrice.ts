@@ -12,4 +12,6 @@ export enum PriceProductPriceConfigurationState {
 }
 
 export interface IPriceProductPrice extends BaseDO {
+	getPriceBriefValue(): number;
+	getRoomCategoryId(): string;
 }

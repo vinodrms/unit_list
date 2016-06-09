@@ -20,4 +20,11 @@ export class SinglePriceDO extends BaseDO implements IPriceProductPrice {
 	public isValid(): boolean {
 		return ThDataValidators.isValidPrice(this.price);
 	}
+
+	getPriceBriefValue(): number {
+		return this.price;
+	}
+	getRoomCategoryId(): string {
+		return this.roomCategoryId;
+	}
 }

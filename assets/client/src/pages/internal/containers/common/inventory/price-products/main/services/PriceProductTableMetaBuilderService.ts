@@ -27,25 +27,16 @@ export class PriceProductTableMetaBuilderService {
 					displayName: "Room Categories",
 					valueMeta: {
 						objectPropertyId: "roomCategoriesString",
-						propertyType: TablePropertyType.StringType,
+						propertyType: TablePropertyType.NotesType,
 						showInCollapsedView: false,
 						normalStyle: "up-col-20p left"
 					}
 				},
 				{
-					displayName: "VAT",
+					displayName: "Price Brief",
 					valueMeta: {
-						objectPropertyId: "vatTax.value",
-						propertyType: TablePropertyType.PercentageType,
-						showInCollapsedView: false,
-						normalStyle: "up-col-5p center"
-					}
-				},
-				{
-					displayName: "Availability",
-					valueMeta: {
-						objectPropertyId: "availabilityString",
-						propertyType: TablePropertyType.StringType,
+						objectPropertyId: "priceBrief",
+						propertyType: TablePropertyType.NotesType,
 						showInCollapsedView: false,
 						normalStyle: "up-col-15p center"
 					}
@@ -54,6 +45,15 @@ export class PriceProductTableMetaBuilderService {
 					displayName: "Type of Price",
 					valueMeta: {
 						objectPropertyId: "priceTypeString",
+						propertyType: TablePropertyType.StringType,
+						showInCollapsedView: false,
+						normalStyle: "up-col-15p center"
+					}
+				},
+				{
+					displayName: "Availability",
+					valueMeta: {
+						objectPropertyId: "availabilityString",
 						propertyType: TablePropertyType.StringType,
 						showInCollapsedView: false,
 						normalStyle: "up-col-15p center"

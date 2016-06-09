@@ -10,6 +10,8 @@ import {RoomCategoriesService} from '../room-categories/RoomCategoriesService';
 import {RoomCategoryDO} from '../room-categories/data-objects/RoomCategoryDO';
 import {YieldFiltersService} from '../hotel-configurations/YieldFiltersService';
 import {YieldFiltersDO} from '../hotel-configurations/data-objects/YieldFiltersDO';
+import {HotelAggregatorService} from '../hotel/HotelAggregatorService';
+import {HotelAggregatedInfo} from '../hotel/utils/HotelAggregatedInfo';
 
 import {PriceProductsDO} from './data-objects/PriceProductsDO';
 import {PriceProductDO, PriceProductStatus, PriceProductAvailability} from './data-objects/PriceProductDO';
@@ -20,7 +22,8 @@ export class PriceProductsService extends ALazyLoadRequestService<PriceProductVM
 	constructor(appContext: AppContext,
 		private _taxService: TaxService,
 		private _roomCategoriesService: RoomCategoriesService,
-		private _yieldFiltersService: YieldFiltersService) {
+		private _yieldFiltersService: YieldFiltersService,
+		private _hotelAggregatorService: HotelAggregatorService) {
 		super(appContext, ThServerApi.PriceProductsCount, ThServerApi.PriceProducts);
 		this.defaultSearchCriteria = { status: PriceProductStatus.Active };
 	}
@@ -30,11 +33,13 @@ export class PriceProductsService extends ALazyLoadRequestService<PriceProductVM
 		return Observable.combineLatest(
 			this._taxService.getTaxContainerDO(),
 			this._roomCategoriesService.getRoomCategoryList(),
-			this._yieldFiltersService.getYieldFiltersDO()
-		).map((result: [TaxContainerDO, RoomCategoryDO[], YieldFiltersDO]) => {
+			this._yieldFiltersService.getYieldFiltersDO(),
+			this._hotelAggregatorService.getHotelAggregatedInfo()
+		).map((result: [TaxContainerDO, RoomCategoryDO[], YieldFiltersDO, HotelAggregatedInfo]) => {
 			var taxContainer: TaxContainerDO = result[0];
 			var roomCategoryList: RoomCategoryDO[] = result[1];
 			var yieldFilters: YieldFiltersDO = result[2];
+			var hotelInfo: HotelAggregatedInfo = result[3];
 
 			var priceProducts = new PriceProductsDO();
 			priceProducts.buildFromObject(pageDataObject);
@@ -43,6 +48,7 @@ export class PriceProductsService extends ALazyLoadRequestService<PriceProductVM
 			_.forEach(priceProducts.priceProductList, (priceProductDO: PriceProductDO) => {
 				var priceProductVM = new PriceProductVM(this._appContext.thTranslation);
 				priceProductVM.priceProduct = priceProductDO;
+				priceProductVM.ccy = hotelInfo.ccy;
 				priceProductVM.initFromTaxes(taxContainer);
 				priceProductVM.initFromRoomCategoryList(roomCategoryList);
 				priceProductVM.initFromYieldFilters(yieldFilters);
