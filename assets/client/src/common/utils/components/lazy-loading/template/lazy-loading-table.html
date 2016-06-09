@@ -105,13 +105,13 @@
 
 		<tfoot>
 			<tr>
-				<td [ngClass]="{'left up-col-30p': !isCollapsed, 'left up-col-45p': isCollapsed}">
+				<td [ngClass]="{'left up-col-30p': !isCollapsed, 'left up-col-40p': isCollapsed}">
 					<th-button *ngIf="tableOptions.canAdd" [upFont]="'\''" [text]="'Add'" (onButtonClick)="addItem()"></th-button>
 				</td>
 				<td [ngClass]="{'up-col-30p': !isCollapsed, 'up-col-0p': isCollapsed}">
 					{{paginationIndex.pageNumberStat}}
 				</td>
-				<td class="right pagination-container" [ngClass]="{'up-col-50p': !isCollapsed, 'up-col-55p': isCollapsed}">
+				<td class="right pagination-container" [ngClass]="{'up-col-50p': !isCollapsed, 'up-col-60p': isCollapsed}">
 					<ul class="list-inline">
 						<li *ngFor="let index of paginationIndex.indexList" [ngClass]="{'other-page': !index.isSelected}">
 							<a (click)="updatePageNumber(index.pageNumber)">{{index.displayNumber}}</a>
