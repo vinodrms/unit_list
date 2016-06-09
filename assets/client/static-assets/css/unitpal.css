@@ -769,6 +769,10 @@ td room-categ-capacity {
     flex-grow: 1;
 } 
 
+.modal-dialog.vertical-align-center:not(.modal-xlg) {
+    margin-top: 61px;
+}
+
 .modal-xlg {
     margin: 61px 30px 20px 30px;
     height: calc(100% - 38px);
