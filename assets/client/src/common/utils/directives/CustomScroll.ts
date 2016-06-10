@@ -26,11 +26,20 @@ export class CustomScroll implements AfterViewInit, OnDestroy {
         jqElement.perfectScrollbar('destroy');
     }
     onResize(event) {
+        this.updateScrollableRegion();
+    }
+    private updateScrollableRegion() {
         var jqElement = this.getjQueryElement();
         jqElement.perfectScrollbar('update');
     }
 
     private getjQueryElement(): any {
         return $(this._el.nativeElement);
+    }
+
+    public scheduleScrollRegionUpdate() {
+        setTimeout(() => {
+            this.updateScrollableRegion();
+        });
     }
 }

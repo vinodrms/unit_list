@@ -9,6 +9,7 @@ import {CustomerMetaRepoDO} from '../../../../data-layer/customers/repositories/
 import {ICustomerItemActionStrategy} from '../ICustomerItemActionStrategy';
 
 export class CustomerItemAddStrategy implements ICustomerItemActionStrategy {
+	public static CustomerBookingCodePrefix: string = "CC";
 	private _thUtils: ThUtils;
 
 	constructor(private _appContext: AppContext, private _sessionContext: SessionContext, private _customerDO: CustomerDO, private _customerMetaRepo: CustomerMetaRepoDO) {
@@ -25,6 +26,6 @@ export class CustomerItemAddStrategy implements ICustomerItemActionStrategy {
 		});
 	}
 	private prepareCustomerForAdd() {
-		this._customerDO.priceProductDetails.bookingCode = this._thUtils.generateUniqueID();
+		this._customerDO.priceProductDetails.bookingCode = CustomerItemAddStrategy.CustomerBookingCodePrefix + this._thUtils.generateShortId();
 	}
 }

@@ -6,6 +6,8 @@ import {MaximumLeadDaysConstraintDO} from './constraints/MaximumLeadDaysConstrai
 import {MinimumLeadDaysConstraintDO} from './constraints/MinimumLeadDaysConstraintDO';
 import {MinimumLengthOfStayConstraintDO} from './constraints/MinimumLengthOfStayConstraintDO';
 import {MinimumNumberOfRoomsConstraintDO} from './constraints/MinimumNumberOfRoomsConstraintDO';
+import {MustArriveOnDaysFromWeekConstraintDO} from './constraints/MustArriveOnDaysFromWeekConstraintDO';
+import {MinimumNumberOfAdultsConstraintDO} from './constraints/MinimumNumberOfAdultsConstraintDO';
 
 export class PriceProductConstraintDO extends BaseDO implements IPriceProductConstraint {
 	type: PriceProductConstraintType;
@@ -36,6 +38,12 @@ export class PriceProductConstraintDO extends BaseDO implements IPriceProductCon
 				break;
 			case PriceProductConstraintType.MinimumNumberOfRooms:
 				this.constraint = new MinimumNumberOfRoomsConstraintDO();
+				break;
+			case PriceProductConstraintType.MustArriveOnDaysFromWeek:
+				this.constraint = new MustArriveOnDaysFromWeekConstraintDO();
+				break;
+			case PriceProductConstraintType.MinimumNumberOfAdults:
+				this.constraint = new MinimumNumberOfAdultsConstraintDO();
 				break;
 		}
 		this.constraint.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "constraint"));

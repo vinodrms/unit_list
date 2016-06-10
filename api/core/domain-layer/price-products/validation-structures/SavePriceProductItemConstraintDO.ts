@@ -14,17 +14,21 @@ export class SavePriceProductItemConstraintDO {
 	public static getConstraintValidationStructure(constraintDO: SavePriceProductItemConstraintDO): IValidationStructure {
 		switch (constraintDO.type) {
 			case PriceProductConstraintType.BookableOnlyOnDaysFromWeek:
-				return SavePriceProductItemConstraintDO.getDaysFromWeekValidationStructure()
+				return SavePriceProductItemConstraintDO.getDaysFromWeekValidationStructure();
 			case PriceProductConstraintType.IncludeDaysFromWeek:
-				return SavePriceProductItemConstraintDO.getDaysFromWeekValidationStructure()
+				return SavePriceProductItemConstraintDO.getDaysFromWeekValidationStructure();
 			case PriceProductConstraintType.MaximumLeadDays:
 				return SavePriceProductItemConstraintDO.getLeadDaysValidationStructure();
 			case PriceProductConstraintType.MinimumLeadDays:
 				return SavePriceProductItemConstraintDO.getLeadDaysValidationStructure();
 			case PriceProductConstraintType.MinimumLengthOfStay:
-				return SavePriceProductItemConstraintDO.getMinLengthOfStayValidationStructure();
+				return SavePriceProductItemConstraintDO.getLengthOfStayValidationStructure();
 			case PriceProductConstraintType.MinimumNumberOfRooms:
-				return SavePriceProductItemConstraintDO.getMinNoOfRoomsValidationStructure();
+				return SavePriceProductItemConstraintDO.getNoOfRoomsValidationStructure();
+			case PriceProductConstraintType.MustArriveOnDaysFromWeek:
+				return SavePriceProductItemConstraintDO.getDaysFromWeekValidationStructure();
+			case PriceProductConstraintType.MinimumNumberOfAdults:
+				return SavePriceProductItemConstraintDO.getNoOfAdultsValidationStructure();
 		}
 	}
 
@@ -49,19 +53,27 @@ export class SavePriceProductItemConstraintDO {
 		]);
 	}
 
-	private static getMinLengthOfStayValidationStructure(): IValidationStructure {
+	private static getLengthOfStayValidationStructure(): IValidationStructure {
 		return new ObjectValidationStructure([
 			{
-				key: "minLengthOfStay",
+				key: "lengthOfStay",
 				validationStruct: new PrimitiveValidationStructure(NumberValidationRule.buildIntegerNumberRule(0))
 			}
 		]);
 	}
 
-	private static getMinNoOfRoomsValidationStructure(): IValidationStructure {
+	private static getNoOfRoomsValidationStructure(): IValidationStructure {
 		return new ObjectValidationStructure([
 			{
 				key: "noOfRooms",
+				validationStruct: new PrimitiveValidationStructure(NumberValidationRule.buildIntegerNumberRule(0))
+			}
+		]);
+	}
+	private static getNoOfAdultsValidationStructure(): IValidationStructure {
+		return new ObjectValidationStructure([
+			{
+				key: "noOfAdults",
 				validationStruct: new PrimitiveValidationStructure(NumberValidationRule.buildIntegerNumberRule(0))
 			}
 		]);

@@ -4,6 +4,7 @@ import {DaysFromWeekConstraintDO} from './constraints/DaysFromWeekConstraintDO';
 import {LeadDaysConstraintDO} from './constraints/LeadDaysConstraintDO';
 import {LengthOfStayConstraintDO} from './constraints/LengthOfStayConstraintDO';
 import {NumberOfRoomsConstraintDO} from './constraints/NumberOfRoomsConstraintDO';
+import {NumberOfAdultsConstraintDO} from './constraints/NumberOfAdultsConstraintDO';
 
 export class PriceProductConstraintFactory {
 	public getConstraintDOByType(constraintType: PriceProductConstraintType): PriceProductConstraintDO {
@@ -25,8 +26,12 @@ export class PriceProductConstraintFactory {
 				return new LeadDaysConstraintDO();
 			case PriceProductConstraintType.MinimumLengthOfStay:
 				return new LengthOfStayConstraintDO();
-			default:
+			case PriceProductConstraintType.MinimumNumberOfRooms:
 				return new NumberOfRoomsConstraintDO();
+			case PriceProductConstraintType.MustArriveOnDaysFromWeek:
+				return new DaysFromWeekConstraintDO();
+			default:
+				return new NumberOfAdultsConstraintDO();
 		}
 	}
 
@@ -41,6 +46,11 @@ export class PriceProductConstraintFactory {
 				constraintType: PriceProductConstraintType.IncludeDaysFromWeek,
 				title: "Include days from week",
 				description: "Bookings must include the days selected. (e.g. If you select Saturday, the booking must include a Saturday)"
+			},
+			{
+				constraintType: PriceProductConstraintType.MustArriveOnDaysFromWeek,
+				title: "Must arrive on days from week",
+				description: "Bookings must always start with a day from the ones selected. (e.g. If you select Monday, the booking must start on a Monday)"
 			},
 			{
 				constraintType: PriceProductConstraintType.MaximumLeadDays,
@@ -61,6 +71,11 @@ export class PriceProductConstraintFactory {
 				constraintType: PriceProductConstraintType.MinimumNumberOfRooms,
 				title: "Minimum number of rooms",
 				description: "The minimum number of rooms from the booking"
+			},
+			{
+				constraintType: PriceProductConstraintType.MinimumNumberOfAdults,
+				title: "Minimum number of adults",
+				description: "The minimum number of adults from the booking"
 			}
 		]
 	}

@@ -109,7 +109,8 @@ export class SavePriceProductItemDO {
 								validationStruct: new PrimitiveValidationStructure(new NumberInListValidationRule([
 									PriceProductConstraintType.BookableOnlyOnDaysFromWeek, PriceProductConstraintType.IncludeDaysFromWeek,
 									PriceProductConstraintType.MaximumLeadDays, PriceProductConstraintType.MinimumLeadDays,
-									PriceProductConstraintType.MinimumLengthOfStay, PriceProductConstraintType.MinimumNumberOfRooms]))
+									PriceProductConstraintType.MinimumLengthOfStay, PriceProductConstraintType.MinimumNumberOfRooms,
+									PriceProductConstraintType.MustArriveOnDaysFromWeek, PriceProductConstraintType.MinimumNumberOfAdults]))
 							},
 							{
 								key: "constraint",

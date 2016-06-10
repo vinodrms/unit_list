@@ -109,9 +109,11 @@ module.exports.routes = {
 	'POST /api/notifications/count': 'NotificationsController.getNotificationListCount',
 	'POST /api/notifications/markNotificationsAsRead': 'NotificationsController.markNotificationsAsRead',
 
-	/*
-		Front End Views
-	*/
+	'GET /api/reports/booking-confirmation': 'ReportsController.generateBookingConfirmationPage',
+	'GET /api/reports/invoice': 'ReportsController.generateInvoicePage',
+	'GET /api/reports/test': 'ReportsController.testReportService',
+	
+	/*Front End Views	*/
 	'GET /home*': {
 		controller: 'AppViewsController',
 		action: 'getInternalView',

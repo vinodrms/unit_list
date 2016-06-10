@@ -22,6 +22,7 @@ export class PriceProductVM {
 	private _yieldFilterVMValues: YieldFilterValueVM[];
 	private _ccy: CurrencyDO;
 	private _addOnProductList: AddOnProductDO[];
+	private _priceBrief: string;
 
 	constructor(private _thTranslation: ThTranslation) {
 		this._thUtils = new ThUtils();
@@ -42,6 +43,18 @@ export class PriceProductVM {
 		this._roomCategoryList = _.filter(roomCategoryList, (roomCategory: RoomCategoryDO) => {
 			return _.contains(this._priceProduct.roomCategoryIdList, roomCategory.id);
 		});
+		this.indexPriceBriefString();
+	}
+	private indexPriceBriefString() {
+		var priceBrief: string = "";
+		this._roomCategoryList.forEach((roomCategory: RoomCategoryDO) => {
+			var priceValue = this._priceProduct.price.getPriceBriefValueForRoomCategoryId(roomCategory.id);
+			if(priceBrief.length > 0) {
+				priceBrief += " ";
+			}
+			priceBrief += priceValue + this._ccy.nativeSymbol;
+		});
+		this._priceBrief = priceBrief;
 	}
 	public initFromYieldFilters(yieldFilters: YieldFiltersDO) {
 		this._yieldFilterVMValues = YieldFilterValueVM.buildYieldFilterValueVMList(yieldFilters, this.priceProduct.yieldFilterList);
@@ -122,6 +135,12 @@ export class PriceProductVM {
 		description += " / " + this._thTranslation.translate(penaltyDesc.phrase, penaltyDesc.parameters);
 		return description;
 	}
+	public get priceBrief(): string {
+		return this._priceBrief;
+	}
+	public set priceBrief(priceBrief: string) {
+		this._priceBrief = priceBrief;
+	}
 
 	public buildPrototype(): PriceProductVM {
 		var copy = new PriceProductVM(this._thTranslation);
@@ -130,6 +149,8 @@ export class PriceProductVM {
 		copy.vatTax = this.vatTax;
 		copy.otherTaxList = this.otherTaxList;
 		copy.roomCategoryList = this.roomCategoryList;
+		copy.ccy = this.ccy;
+		copy.priceBrief = this.priceBrief;
 		copy.yieldFilterVMValues = this.yieldFilterVMValues;
 		return copy;
 	}

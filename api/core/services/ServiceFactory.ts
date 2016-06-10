@@ -14,7 +14,14 @@ import {PassportLoginService} from './login/custom/PassportLoginService';
 import {MomentTimeZonesService} from './time-zones/providers/moment/MomentTimeZonesService';
 import {ITimeZonesService} from './time-zones/ITimeZonesService';
 import {INotificationService} from './notifications/INotificationService';
+import {NotificationServicePushDecorator} from './notifications/providers/NotificationServicePushDecorator';
 import {NotificationService} from './notifications/providers/NotificationService';
+import {ISocketsService} from './sockets/ISocketsService';
+import {SocketIoService} from './sockets/providers/SocketIoService';
+import {IHtmlToPdfConverterService} from './htmltopdf/IHtmlToPdfConverterService';
+import {PhantomHtmlToPdfConverterService} from './htmltopdf/providers/phantom/PhantomHtmlToPdfConverterService';
+import {IHtmlReportsService} from './html-reports/IHtmlReportsService';
+import {HtmlReportsService} from './html-reports/providers/HtmlReportsService';
 
 export class ServiceFactory {
     constructor(private _unitPalConfig: UnitPalConfig) {
@@ -23,7 +30,6 @@ export class ServiceFactory {
     public getVatProviderProxyService(): IVatProvider {
         return new VatProviderProxyService(this._unitPalConfig);
     }
-
     public getEmailService(emailHeaderDO: EmailHeaderDO, emailTemplate: BaseEmailTemplateDO): IEmailService {
         switch (this._unitPalConfig.getEmailProviderType()) {
             case EmailProviderType.Sendgrid:
@@ -48,7 +54,16 @@ export class ServiceFactory {
     public getTimeZonesService(): ITimeZonesService {
         return new MomentTimeZonesService();
     }
+    public getSocketsService(): ISocketsService {
+        return new SocketIoService(sails.config.ws);    
+    }
     public getNotificationService(): INotificationService {
-        return new NotificationService(this._unitPalConfig);
+        return new NotificationServicePushDecorator(new NotificationService(this._unitPalConfig), this.getSocketsService());
+    }
+    public getHtmltoPdfConverterService(): IHtmlToPdfConverterService {
+        return new PhantomHtmlToPdfConverterService();   
+    }
+    public getHtmlReportsService(htmlToPdfConverterService: IHtmlToPdfConverterService): IHtmlReportsService {
+        return new HtmlReportsService(this._unitPalConfig, htmlToPdfConverterService);   
     }
 }

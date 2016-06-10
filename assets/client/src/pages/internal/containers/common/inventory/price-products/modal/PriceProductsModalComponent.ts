@@ -14,11 +14,15 @@ import {PriceProductDO, PriceProductAvailability} from '../../../../../services/
 import {PriceProductVM} from '../../../../../services/price-products/view-models/PriceProductVM';
 import {PriceProductsService} from '../../../../../services/price-products/PriceProductsService';
 import {PriceProductsModalInput} from './services/utils/PriceProductsModalInput';
+import {SETTINGS_PROVIDERS} from '../../../../../services/settings/SettingsProviders';
+import {HotelAggregatorService} from '../../../../../services/hotel/HotelAggregatorService';
+import {HotelService} from '../../../../../services/hotel/HotelService';
 
 @Component({
 	selector: 'price-products-modal',
 	templateUrl: '/client/src/pages/internal/containers/common/inventory/price-products/modal/template/price-products-modal.html',
-	providers: [PriceProductTableMetaBuilderService, RoomCategoriesService, TaxService, YieldFiltersService, PriceProductsService],
+	providers: [SETTINGS_PROVIDERS, PriceProductTableMetaBuilderService, RoomCategoriesService,
+		TaxService, HotelService, HotelAggregatorService, YieldFiltersService, PriceProductsService],
 	directives: [LazyLoadingTableComponent],
 	pipes: [TranslationPipe]
 })
@@ -49,7 +53,7 @@ export class PriceProductsModalComponent extends BaseComponent implements ICusto
 		lazyLoadTableMeta.autoSelectRows = true;
 		this._aopTableComponent.bootstrap(this._priceProductsService, lazyLoadTableMeta);
 	}
-	
+
 	public closeDialog() {
 		this._modalDialogRef.closeForced();
 	}

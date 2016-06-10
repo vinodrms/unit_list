@@ -4,7 +4,7 @@ before_script:
 rspec:
   script:
    - npm run build-all
-   - npm run server-tests
+   - MONGO_USER=demothangle MONGO_PASSWD=Anisdy\$57m! npm run server-tests
    - ./azure_install.sh
-   - npm run forever-start
+   - MONGO_USER=demothangle MONGO_PASSWD=Anisdy\$57m! npm run forever-start
    - echo "Finished the build for the Production Branch"

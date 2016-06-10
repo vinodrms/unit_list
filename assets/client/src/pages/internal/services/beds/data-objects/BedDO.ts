@@ -39,6 +39,19 @@ export class BedCapacityDO extends BaseDO {
     protected getPrimitivePropertyKeys(): string[] {
         return ["maxNoAdults", "maxNoChildren"];
     }
+
+    public get possibleConfigurations(): BedCapacityDO[] {
+        var configurations = [];
+        
+        for(var i = this.maxNoAdults; i >= 0; i--) {
+            var possbileConfiguration = new BedCapacityDO();
+            possbileConfiguration.maxNoAdults = i;
+            possbileConfiguration.maxNoChildren = this.maxNoChildren + (this.maxNoAdults - i);
+            configurations.push(possbileConfiguration);
+        }
+
+        return configurations;
+    }
 }
 
 export class BedDO extends BaseDO {

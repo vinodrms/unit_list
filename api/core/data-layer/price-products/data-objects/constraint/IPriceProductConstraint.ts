@@ -6,7 +6,9 @@ export enum PriceProductConstraintType {
 	MinimumLeadDays,
 	MaximumLeadDays,
 	IncludeDaysFromWeek,
-	MinimumNumberOfRooms
+	MinimumNumberOfRooms,
+	MustArriveOnDaysFromWeek,
+	MinimumNumberOfAdults
 }
 
 export interface PriceProductConstraintDataDO {

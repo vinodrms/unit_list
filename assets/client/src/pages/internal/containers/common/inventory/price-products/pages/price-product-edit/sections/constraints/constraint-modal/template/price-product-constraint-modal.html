@@ -57,7 +57,7 @@
 		<div class="col-md-8 col-sm-8 col-xs-8 form-group">
 			<div class="input-group">
 				<input type="number" placeholder="{{ 'Enter a valid length of stay in days' | translate }}" class="form-control input-group-lg"
-				[(ngModel)]="constraintDO.constraint.minLengthOfStay" />
+				[(ngModel)]="constraintDO.constraint.lengthOfStay" />
 			</div>
 		</div>
 	</div>
@@ -69,6 +69,17 @@
 			<div class="input-group">
 				<input type="number" placeholder="{{ 'Enter a valid number of rooms' | translate }}" class="form-control input-group-lg"
 				[(ngModel)]="constraintDO.constraint.noOfRooms" />
+			</div>
+		</div>
+	</div>
+	<div class="row" *ngIf="isNumberOfAdultsConstraint()">
+		<div class="col-md-4 col-sm-4 col-xs-4 form-group">
+			<label>{{ 'Minimum Number of Adults' | translate }}</label>
+		</div>
+		<div class="col-md-8 col-sm-8 col-xs-8 form-group">
+			<div class="input-group">
+				<input type="number" placeholder="{{ 'Enter a valid number of adults' | translate }}" class="form-control input-group-lg"
+				[(ngModel)]="constraintDO.constraint.noOfAdults" />
 			</div>
 		</div>
 	</div>

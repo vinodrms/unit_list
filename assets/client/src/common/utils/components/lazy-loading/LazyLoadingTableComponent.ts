@@ -1,7 +1,7 @@
-import {Component, OnInit, Output, EventEmitter, Input, AfterViewChecked, Inject, ElementRef} from '@angular/core';
-import {Control} from '@angular/common';
+import {Component, OnInit, Output, EventEmitter, Input, AfterViewChecked, Inject, ElementRef, ViewChild} from '@angular/core';
 import {LoadingComponent} from '../LoadingComponent';
 import {ThButtonComponent} from '../ThButtonComponent';
+import {DebouncingInputTextComponent} from '../DebouncingInputTextComponent';
 import {TranslationPipe} from '../../localization/TranslationPipe';
 import {PricePipe} from '../../pipes/PricePipe';
 import {PercentagePipe} from '../../pipes/PercentagePipe';
@@ -16,12 +16,10 @@ import {TableOptions} from './utils/TableOptions';
 import {CustomScroll} from '../../directives/CustomScroll';
 import {ThUtils} from '../../ThUtils';
 
-declare var jQuery: any;
-
 @Component({
 	selector: 'lazy-loading-table',
 	templateUrl: '/client/src/common/utils/components/lazy-loading/template/lazy-loading-table.html',
-	directives: [LoadingComponent, CustomScroll, ThButtonComponent],
+	directives: [LoadingComponent, CustomScroll, ThButtonComponent, DebouncingInputTextComponent],
 	pipes: [TranslationPipe, PricePipe, PercentagePipe, ThDateIntervalPipe]
 })
 export class LazyLoadingTableComponent<T> {
@@ -39,14 +37,6 @@ export class LazyLoadingTableComponent<T> {
 			return;
 		}
 		this.filterColumnMetaList();
-
-		if (this._isCollapsed && !this.paginationIndex.defaultNoOfItemsPerPageIsSelected()) {
-			var selectedItemIndex = this.getSelectedItemIndexInPageItemList();
-			var newPageNumber = this.paginationIndex.getUpdatedPageNumber(this.totalCount, this.pageMeta, selectedItemIndex);
-
-			this.paginationIndex.numOfItemsPerPage = PaginationIndex.DefaultItemsPerPage;
-			this.lazyLoadingRequest.updatePageNumberAndPageSize(newPageNumber, PaginationIndex.DefaultItemsPerPage);
-		}
 	}
 
 	@Output() protected onAdd = new EventEmitter();
@@ -87,9 +77,11 @@ export class LazyLoadingTableComponent<T> {
 	protected selectedItemList: T[] = [];
 
 	protected tableOptions: TableOptions;
-	protected textSearchControl: Control;
+	protected textToSearch: string = "";
 
 	protected paginationIndex: PaginationIndex;
+
+	@ViewChild(CustomScroll) private _scrollableBodyRegion: CustomScroll;
 
 	constructor(private _appContext: AppContext,
 		@Inject(ElementRef) private _elementRef: ElementRef) {
@@ -116,10 +108,10 @@ export class LazyLoadingTableComponent<T> {
 
 			this.paginationIndex.buildPaginationOptions(this.totalCount, this.pageMeta);
 			this.checkInvalidPageNumber();
-			this.registerSearchInputObservable();
 			this.filterColumnMetaList();
 
 			this.didInit = true;
+			this.scheduleScrollBodyRegionUpdate();
 		});
 		this.lazyLoadingRequest.refreshData();
 	}
@@ -129,19 +121,8 @@ export class LazyLoadingTableComponent<T> {
 		}
 	}
 	public updateTextSearchInput(text: string) {
-		this.textSearchControl.updateValue(text);
-	}
-	private registerSearchInputObservable() {
-		if (this.textSearchControl) {
-			return;
-		}
-		this.textSearchControl = new Control("");
-		this.textSearchControl.valueChanges
-			.debounceTime(400)
-			.distinctUntilChanged()
-			.subscribe((text: string) => {
-				this.searchByText();
-			});
+		this.textToSearch = text;
+		this.searchByText();
 	}
 	private filterColumnMetaList() {
 		if (this.isCollapsed) {
@@ -151,9 +132,13 @@ export class LazyLoadingTableComponent<T> {
 			this.columnMetaList = this.tableMeta.columnMetaList;
 		}
 	}
+	private scheduleScrollBodyRegionUpdate() {
+		if (!this._scrollableBodyRegion || !this._scrollableBodyRegion.scheduleScrollRegionUpdate) { return };
+		this._scrollableBodyRegion.scheduleScrollRegionUpdate();
+	}
 
 	protected searchByText() {
-		this.lazyLoadingRequest.searchByText(this.textSearchControl.value);
+		this.lazyLoadingRequest.searchByText(this.textToSearch);
 	}
 
 	protected isFirstPage(): boolean {
@@ -166,6 +151,12 @@ export class LazyLoadingTableComponent<T> {
 		if (pageNumber >= this.paginationIndex.firstPageNumber && pageNumber <= this.paginationIndex.lastPageNumber) {
 			this.lazyLoadingRequest.updatePageNumber(pageNumber);
 		}
+	}
+	protected moveNext() {
+		this.updatePageNumber(this.pageMeta.pageNumber + 1);
+	}
+	protected movePrevious() {
+		this.updatePageNumber(this.pageMeta.pageNumber - 1);
 	}
 
 	protected isPercentage(valueMeta: TableColumnValueMeta): boolean {

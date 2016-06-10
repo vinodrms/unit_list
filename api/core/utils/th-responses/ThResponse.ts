@@ -287,6 +287,12 @@ export enum ThStatusCode {
     NotificationsRepositoryErrorGettingList,
     NotificationsRepositoryErrorGettingUndelivered,
     NotificationsRepositoryErrorMarkingAsRead,
+    
+    //Html to pdf converter service
+    PhantomHtmlToPdfHtmlReportPageAccessError,
+    PhantomHtmlToPdfGenerationError,
+    HtmlReportsServiceHtmlExportError,
+    
 }
 
 var ThMessage: { [index: number]: string; } = {};
@@ -569,6 +575,9 @@ ThMessage[ThStatusCode.AllotmentArchiverCronJobExecutorError] = "Error archiving
 ThMessage[ThStatusCode.NotificationsRepositoryErrorAddingNotification] = "Error adding a notification.";
 ThMessage[ThStatusCode.NotificationsRepositoryErrorGettingUndelivered] = "Error getting undelivered notifications.";
 ThMessage[ThStatusCode.NotificationsRepositoryErrorMarkingAsRead] = "Error marking notification as read.";
+ThMessage[ThStatusCode.PhantomHtmlToPdfHtmlReportPageAccessError] = "Error accessing the html report page.";
+ThMessage[ThStatusCode.PhantomHtmlToPdfGenerationError] = "Error generating pdf.";
+ThMessage[ThStatusCode.HtmlReportsServiceHtmlExportError] = "Error exporting html to pdf.";
 
 export class ThResponse {
     statusCode: ThStatusCode;

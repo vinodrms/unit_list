@@ -29,3 +29,5 @@
 /// <reference path="bcrypt-nodejs/bcrypt-nodejs.d.ts" />
 /// <reference path="bcrypt/bcrypt.d.ts" />
 /// <reference path="cron/cron.d.ts" />
+/// <reference path="phantom/phantom.d.ts" />
+/// <reference path="shortid/shortid.d.ts" />

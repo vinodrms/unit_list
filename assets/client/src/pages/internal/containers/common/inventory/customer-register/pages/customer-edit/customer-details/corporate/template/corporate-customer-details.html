@@ -82,7 +82,7 @@
 			<div class="form-group">
 				<label>{{ 'Phone' | translate }}</label>
 				<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('phone')}">
-					<input type="text" class="form-control" ngControl="phone">
+					<input type="text" placeholder="e.g.: +45 XX XX XX XX" class="form-control" ngControl="phone">
 				</div>
 				<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter a valid phone' | translate }}</small></label>
 			</div>

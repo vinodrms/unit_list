@@ -110,6 +110,16 @@ header {
     float: right;
 }
 
+.container-external {
+    margin: 0 auto;
+    height: 100%;
+    padding: 10px 0 10px 0;
+    overflow: hidden;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
 .container-fluid {
     margin: 0 auto;
     height: calc(100% - 71px);
@@ -381,7 +391,7 @@ table .buttons,table button,table .btn {
 
 .overview-right {
     border-left: 1px solid #ccc;
-    padding: 5px 0 0 24px;
+    padding: 12px 12px 0 12px;
     height: 100%;
 }
 .overview-right h1 {
@@ -759,6 +769,10 @@ td room-categ-capacity {
     flex-grow: 1;
 } 
 
+.modal-dialog.vertical-align-center:not(.modal-xlg) {
+    margin-top: 61px;
+}
+
 .modal-xlg {
     margin: 61px 30px 20px 30px;
     height: calc(100% - 38px);
@@ -935,6 +949,10 @@ input[type="file"] {
     font-size: 12px;
     font-weight: bold;
 }
+.form-group > label > small {
+    font-size: 11px;
+    font-weight: normal;
+}
 .position-relative {
     position: relative;
 }
@@ -999,6 +1017,30 @@ table.lazy-loading tfoot {
   flex-grow: 0;
   flex-shrink: 0;
 }
+div.table-select-items {
+    display: inline;
+}
+div.table-select-items>label {
+    float: left;
+    font-weight: normal;
+    font-size: 14px;
+    padding-top: 6px;
+}
+div.table-select-items>div {
+    float: left;
+    padding-left: 3px;
+}
+@media screen and (max-width: 850px) {
+    div.table-select-items>label {
+        display: none;
+    }
+}
+table.lazy-loading>thead>tr>th:first-child {
+    padding-left: 12px;
+}
+table.lazy-loading>tbody>tr>td:first-child {
+    padding-left: 12px;
+}
 
 table.lazy-loading tbody {
   overflow-y: hidden;
@@ -1008,6 +1050,7 @@ table.lazy-loading tbody {
 
 tr.lazy-loading-table-last-row {
     flex-grow: 1 !important;
+    min-height: 0px;
 }
 tr.lazy-loading-table-last-row:hover,
 tr.lazy-loading-table-last-row:focus {
@@ -1044,7 +1087,7 @@ table.lazy-loading th {
 }
 
 table.lazy-loading thead tr,
-table.lazy-loading tbody tr {
+table.lazy-loading tbody tr:not(.lazy-loading-table-last-row) {
   height: 40px;
 }
 table.lazy-loading th,
@@ -1117,6 +1160,33 @@ table.lazy-loading .pagination-container {
 /* This is to override default pagination style */
 table.lazy-loading .th-pagination {
     margin: 5px 0px 0px 0px;
+}
+.btn.btn-pagination-square {
+    width: 35px;
+    height: 35px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    text-align: center;
+    color: #fff;
+    border: 0;
+    font-size: 12px;
+    background-color: #fb6708;
+}
+.btn.btn-pagination-square>i {
+    font-size: 30px;
+    position: relative;
+    bottom: 5px;
+    right: 3px;
+}
+.btn.btn-pagination-square.disabled {
+    background-color: #c1c1c1;
+}
+.pagination-container>ul>li.other-page>a {
+    color: #c1c1c1;
+}
+.pagination-container>ul {
+    padding-right: 10px;
 }
 
 .lazy-loading-table-filter {
@@ -1447,6 +1517,13 @@ ul.msg_list li a .message {
     display: block !important;
     font-size: 11px;
     cursor: pointer;
+    color: #737373;
+}
+ul.msg_list li .time {
+    color: #fc8433;
+}
+ul.msg_list li .text-center a {
+    color: #fc8433;
 }
 .message.unread {
     font-weight: bold;
@@ -1663,6 +1740,9 @@ a.btn.btn-square:focus {
 .no-padding {
     padding: 0px 0px;
 }
+.no-margin {
+    margin: 0px 0px;
+}
 .search-input-text {
     display: block;
     width: 100%; 
@@ -1672,8 +1752,15 @@ a.btn.btn-square:focus {
     min-height: 34px !important;
     height: 100% !important;
     border: 1px solid #ccc;
-    font-size: 12px;
+    font-size: 14px;
 }
+.input-group .select2-selection__rendered {
+    margin-top: 2px;
+}
+.input-group .select2-selection__arrow {
+    margin-top: 3px;
+}
+
 .input-group .select2-container {
   position: relative;
   z-index: 2;

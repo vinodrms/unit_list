@@ -300,4 +300,7 @@ export class RoomEditComponent extends BaseFormComponent implements OnInit {
         this.selectedRollawayBeds = savedBedVMList;
         this.newRoomCategoryToSave = true;
     }
+    public get roomCategoryConfigured(): boolean {
+        return _.isEmpty(this.selectedStationaryBeds) && _.isEmpty(this.selectedRollawayBeds) && !this._appContext.thUtils.isUndefinedOrNull(this._roomVM.category); 
+    }
 }

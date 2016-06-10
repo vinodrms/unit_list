@@ -3,18 +3,36 @@
 		<div class="row booking-search-inputs" customScroll>
 			<div class="col-sm-4 col-xs-12">
 				<div class="form-group">
-					<label>{{ 'Booking Code' | translate }}</label>
+					<label>{{ 'Booking Code' | translate }}
+						<small>
+							<span *ngIf="showBookingCodeMessage && !validBookingCode" title="{{ 'Not a valid customer booking code' | translate  }}">
+								<i class="fa fa-exclamation-circle red-color"></i>
+							</span>
+							<span *ngIf="showBookingCodeMessage && validBookingCode" title="{{ 'Valid customer booking code' | translate  }}">
+								<i class="fa fa-check green-color"></i>
+							</span>
+							<i class="fa fa-refresh fa-spin" *ngIf="loadingCustomerByCode"></i>
+						</small>
+					</label>
 					<div class="input-group">
-						<input type="text" class="form-control">
+						<debouncing-input-text
+							[textValue]="bookingCode" (onTextChanged)="searchCustomerByBookingCode($event)"
+							>
+						</debouncing-input-text>
 					</div>
-					<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Not a valid booking code' | translate }}</small></label>
 				</div>
 			</div>
 			<div class="col-sm-8 col-xs-12">
 				<div class="form-group">
 					<label>{{ 'Customer' | translate }}</label>
 					<div class="input-group">
-						<search-input-text [placeholder]="'Customer Name'"></search-input-text>
+						<search-input-text 
+							[placeholder]="'Customer Name'"
+							[preselectedItem]="customer"
+							(onItemSelected)="didSelectCustomer($event)"
+							(onItemDeselected)="didDeselectCustomer()"
+							>
+						</search-input-text>
 						<span class="input-group-addon th-addon-button" (click)="selectCustomer()"> 
 						<i class="fa unitpal-font">(</i>  {{ 'Register' | translate }}
 						</span>
@@ -24,7 +42,9 @@
 			</div>
 			<div class="col-xs-12">
 				<th-date-interval-picker [minDate]="minDate" [startDateLabel]="'Check In'" [startDateFont]="'/'" [endDateLabel]="'Check Out'"
-					[endDateFont]="'.'" [showNoOfNights]="true" (didSelectThDateInterval)="didSelectBookingInterval($event)">
+					[endDateFont]="'.'" [showNoOfNights]="true" 
+					[initialThDateInterval]="bookingInterval"
+					(didSelectThDateInterval)="didSelectBookingInterval($event)">
 				</th-date-interval-picker>
 			</div>
 			<div class="col-xs-12 booking-configuration-container">

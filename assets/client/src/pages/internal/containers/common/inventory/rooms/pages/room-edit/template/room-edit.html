@@ -39,6 +39,9 @@
                                 </tr>
                             </tbody>
                             <label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Select a room category' | translate }}</small></label>
+                            <label *ngIf="roomCategoryConfigured" class="text-muted">
+                                <small class="text-warning"><i class="fa fa-info-circle"></i>{{ 'The selected room category is not yet configured. You have to add at least a bed and save the current room in order to have the category configured. Warning: Once you will save the room you won\'t be able to edit the bed configuration for this room category anymore.' | translate }}</small>
+                            </label>
                         </table>
                     </div>
                 </div>

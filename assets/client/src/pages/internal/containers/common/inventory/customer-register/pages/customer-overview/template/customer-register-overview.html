@@ -6,11 +6,14 @@
 		<h1>{{customerVM.customerNameString}}</h1>
 	</div>
 	<div>
+		<i class="fa fa-briefcase"></i> <small>{{customerVM.customer.priceProductDetails.bookingCode}}</small>
+	</div>
+	<div>
 		<span class="unitpal-font">{{ customerVM.customerTypeFont }}</span> 
 		<small>{{customerVM.customerTypeString}}</small>
 	</div>
 	<div>
-		<i class="fa fa-home" [ngClass]=""></i> <small>{{customerVM.customerAddressString}}</small>
+		<i class="fa fa-home"></i> <small>{{customerVM.customerAddressString}}</small>
 	</div>
 	<div>
 		<i class="fa fa-phone"></i> <small>{{customerVM.phoneString}}</small>
