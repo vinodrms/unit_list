@@ -16,7 +16,7 @@ gulp.task('set-unit-test-env', function () {
 	env({
 		vars: {
 			NODE_ENV: "test",
-			PORT: 9999
+			PORT: 8001
 		}
 	})
 });
