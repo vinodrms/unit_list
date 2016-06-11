@@ -33,6 +33,12 @@ module.exports = {
 				api_key: process.env.CLOUDINARY_API_KEY,
 				api_secret: process.env.CLOUDINARY_API_SECRET
 			}
+		},
+		slack: {
+			"webhookUri": process.env.SLACK_WEBHOOK_URI,
+			"channel": process.env.SLACK_CHANNEL,
+			"username": process.env.SLACK_USERNAME,
+			"enabled": process.env.SLACK_ENABLED
 		}
 	}
 };
