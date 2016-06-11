@@ -34,6 +34,9 @@ export class SlackAuditLogger implements IThAuditLogger {
     }
 
     log(auditMessage: ThAuditMessage) {
+        if (this.slackIsDisabled()) {
+            return;
+        }
         this.initParamsIfNecessary();
 
         this._slack.webhook({
@@ -49,5 +52,8 @@ export class SlackAuditLogger implements IThAuditLogger {
     }
     private getFullMessage(message: string): string {
         return util.format("%s %s", this._serverContextRoot, message);
+    }
+    private slackIsDisabled(): boolean {
+        return !sails.config.unitPalConfig.slack.enabled;
     }
 }
