@@ -35,9 +35,6 @@ export class PhantomHtmlToPdfConverterService extends AHtmlToPdfConverterService
             _page = page;
 
             _page.on('onResourceReceived', ((response) => {
-                console.log('onResourceReceived -> response status: ' + response.status);
-                console.log(JSON.stringify(response));
-
                 if (response.status == null) {
                     var thError = new ThError(ThStatusCode.PhantomHtmlToPdfHtmlReportPageAccessError, null);
                     ThLogger.getInstance().logError(ThLogLevel.Error, "Error accessing the html report page. HTTP Status: " + response.status, { htmlToPdfReq: htmlToPdfReq }, thError);
@@ -53,11 +50,8 @@ export class PhantomHtmlToPdfConverterService extends AHtmlToPdfConverterService
                     }
                     return false;
                 })).length > 0) {
-                    console.log('onResourceReceived status: ' + response.status);
                     if (response.status == "200") {
-                        console.log('before rendering');
                         _page.render(htmlToPdfReq.outputPath).then(() => {
-                            console.log('after rendering: ' + htmlToPdfReq.outputPath);
                             _page.close();
                             _ph.exit();
 
@@ -80,7 +74,6 @@ export class PhantomHtmlToPdfConverterService extends AHtmlToPdfConverterService
         }).then(() => {
             return _page.property('dpi', PhantomHtmlToPdfConverterService.DPI);
         }).then(() => {
-            console.log('before opening the page: ' + htmlToPdfReq.htmlUrl);
             return _page.open(htmlToPdfReq.htmlUrl);
         }).catch((err: Error) => {
             var thError = new ThError(ThStatusCode.PhantomHtmlToPdfGenerationError, err);
