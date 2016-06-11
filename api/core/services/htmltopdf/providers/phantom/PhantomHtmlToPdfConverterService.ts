@@ -27,7 +27,7 @@ export class PhantomHtmlToPdfConverterService extends AHtmlToPdfConverterService
     private generatePdfCore(resolve: { (result: HtmlToPdfResponseDO): void }, reject: { (err: ThError): void }, htmlToPdfReq: HtmlToPdfRequestDO) {
         var _page: any;
         var _ph: phantom.PhantomJS;
-        
+
         phantom.create(['--ignore-ssl-errors=yes']).then((ph: phantom.PhantomJS) => {
             _ph = ph;
             return _ph.createPage();
@@ -37,6 +37,13 @@ export class PhantomHtmlToPdfConverterService extends AHtmlToPdfConverterService
             _page.on('onResourceReceived', ((response) => {
                 console.log('onResourceReceived -> response status: ' + response.status);
                 console.log(JSON.stringify(response));
+
+                if (response.status == null) {
+                    var thError = new ThError(ThStatusCode.PhantomHtmlToPdfHtmlReportPageAccessError, null);
+                    ThLogger.getInstance().logError(ThLogLevel.Error, "Error accessing the html report page. HTTP Status: " + response.status, { htmlToPdfReq: htmlToPdfReq }, thError);
+                    reject(thError);
+                }
+
                 // check if the resource is done downloading 
                 if (response.stage !== "end") return;
 
@@ -64,7 +71,7 @@ export class PhantomHtmlToPdfConverterService extends AHtmlToPdfConverterService
                     }
                 }
             }));
-            
+
             return _page.property('customHeaders', { Cookie: this.getCookieStringFromReq(htmlToPdfReq) });
         }).then(() => {
             return _page.property('paperSize', PhantomHtmlToPdfConverterService.PAPER_SIZE);
@@ -81,11 +88,11 @@ export class PhantomHtmlToPdfConverterService extends AHtmlToPdfConverterService
             reject(thError);
         });
     }
-    
+
     private getCookieStringFromReq(req: HtmlToPdfRequestDO): string {
         var cookieStr = '';
-        if(!this._thUtils.isUndefinedOrNull(req.settings)) {
-            cookieStr = req.settings["cookie"];    
+        if (!this._thUtils.isUndefinedOrNull(req.settings)) {
+            cookieStr = req.settings["cookie"];
         }
         return cookieStr;
     }
