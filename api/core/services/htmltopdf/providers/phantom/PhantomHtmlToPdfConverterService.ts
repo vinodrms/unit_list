@@ -36,6 +36,7 @@ export class PhantomHtmlToPdfConverterService extends AHtmlToPdfConverterService
 
             _page.on('onResourceReceived', ((response) => {
                 console.log('onResourceReceived -> response status: ' + response.status);
+                console.log(JSON.stringify(response));
                 // check if the resource is done downloading 
                 if (response.stage !== "end") return;
 
