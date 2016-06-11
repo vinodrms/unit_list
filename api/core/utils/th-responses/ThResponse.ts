@@ -292,6 +292,8 @@ export enum ThStatusCode {
     PhantomHtmlToPdfHtmlReportPageAccessError,
     PhantomHtmlToPdfGenerationError,
     HtmlReportsServiceHtmlExportError,
+
+    SlackSendMessageError,
     
 }
 
