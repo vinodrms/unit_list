@@ -55,8 +55,7 @@ export class SendgridEmailService extends AEmailService {
             to: this._emailHeaderDO.destinationEmail,
             from: emailSettings.from,
             subject: this._emailHeaderDO.subject,
-            files: [],
-            html: `<p></p>`
+            files: []
         };
 
         if (!_.isEmpty(this._emailHeaderDO.attachments)) {
