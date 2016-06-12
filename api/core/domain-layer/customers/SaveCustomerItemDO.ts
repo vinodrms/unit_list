@@ -8,7 +8,7 @@ import {NumberInListValidationRule} from '../../utils/th-validation/rules/Number
 import {EmailValidationRule} from '../../utils/th-validation/rules/EmailValidationRule';
 import {BooleanValidationRule} from '../../utils/th-validation/rules/BooleanValidationRule';
 import {CustomerType} from '../../data-layer/customers/data-objects/CustomerDO';
-import {CommissionType} from '../../data-layer/customers/data-objects/customer-details/corporate/BaseCorporateDetailsDO';
+import {ICommissionDO, CommissionDO, CommissionType} from '../../data-layer/common/data-objects/commission/CommissionDO';
 import {PriceProductAvailability} from '../../data-layer/price-products/data-objects/PriceProductDO';
 
 export interface CustomerItemAddressDO {
@@ -45,8 +45,7 @@ interface CorporateCustomerItemDetailsDO extends CustomerItemDetailsDO {
 	payInvoiceByAgreement: boolean;
 	invoiceFee?: number;
 	accountNo?: string;
-	commissionType: CommissionType;
-	commission?: number;
+	commission: ICommissionDO;
 }
 export interface CompanyCustomerItemDetailsDO extends CorporateCustomerItemDetailsDO {
 }
@@ -225,12 +224,17 @@ export class SaveCustomerItemDO {
 				validationStruct: new PrimitiveValidationStructure(StringValidationRule.buildNullable(200))
 			},
 			{
-				key: "commissionType",
-				validationStruct: new PrimitiveValidationStructure(new NumberInListValidationRule([CommissionType.Fixed, CommissionType.Percentage]))
-			},
-			{
 				key: "commission",
-				validationStruct: new PrimitiveValidationStructure(NumberValidationRule.buildNullable())
+				validationStruct: new ObjectValidationStructure([
+					{
+						key: "type",
+						validationStruct: new PrimitiveValidationStructure(new NumberInListValidationRule([CommissionType.Fixed, CommissionType.Percentage]))
+					},
+					{
+						key: "amount",
+						validationStruct: new PrimitiveValidationStructure(NumberValidationRule.buildNullable())
+					}
+				])
 			}
 		]);
 	}

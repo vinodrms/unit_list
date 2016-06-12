@@ -1,7 +1,8 @@
 import {Injectable} from '@angular/core';
 import {FormBuilder, ControlGroup, Validators, AbstractControl, Control} from '@angular/common';
 import {ThValidators, ThFieldLengths} from '../../../../../../../../../../../common/utils/form-utils/ThFormUtils';
-import {CorporateDetailsDO, CommissionType} from '../../../../../../../../../services/customers/data-objects/customer-details/CorporateDetailsDO';
+import {CorporateDetailsDO} from '../../../../../../../../../services/customers/data-objects/customer-details/CorporateDetailsDO';
+import {CommissionType} from '../../../../../../../../../services/common/data-objects/commission/CommissionDO';
 
 @Injectable()
 export class CorporateDetailsFormBuilderService {
@@ -78,12 +79,12 @@ export class CorporateDetailsFormBuilderService {
 		this.payInvoiceByAgreement = corporateDetails.payInvoiceByAgreement;
 		this._invoiceFeeControl.updateValue(corporateDetails.invoiceFee);
 		
-		var isFixedCommission = corporateDetails.commissionType === CommissionType.Fixed;
+		var isFixedCommission = corporateDetails.commission.type === CommissionType.Fixed;
 		if (!corporateDetails.commission || isFixedCommission) {
-			this._commissionControl.updateValue(corporateDetails.commission);
+			this._commissionControl.updateValue(corporateDetails.commission.amount);
 		}
 		else {
-			this._commissionControl.updateValue(Math.round(corporateDetails.commission * 100));
+			this._commissionControl.updateValue(Math.round(corporateDetails.commission.amount * 100));
 		}
 		this.isFixedCommission = isFixedCommission;
 	}
@@ -101,13 +102,13 @@ export class CorporateDetailsFormBuilderService {
 		corporateDetails.invoiceFee = this._invoiceFeeControl.value;
 		corporateDetails.accountNo = this._accountNoControl.value;
 		corporateDetails.payInvoiceByAgreement = this._payInvoiceByAgreement;
-		corporateDetails.commissionType = this._isFixedCommission ? CommissionType.Fixed: CommissionType.Percentage;
+		corporateDetails.commission.type = this._isFixedCommission ? CommissionType.Fixed: CommissionType.Percentage;
 		
 		var commissionValue = this._commissionControl.value;
 		if(!this._isFixedCommission && commissionValue != null) {
 			commissionValue = commissionValue / 100;
 		}
-		corporateDetails.commission = commissionValue;
+		corporateDetails.commission.amount = commissionValue;
 	}
 
 	public get individualFormGroup(): ControlGroup {
