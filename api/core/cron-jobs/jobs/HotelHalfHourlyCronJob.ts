@@ -6,13 +6,19 @@ import {JobExecutorDO} from '../utils/cron/executor/JobExecutorDO';
 import {HotelIterator} from '../utils/hotel-iterator/HotelIterator';
 import {HotelDO} from '../../data-layer/hotel/data-objects/HotelDO';
 import {ThTimestamp} from '../../utils/th-dates/ThTimestamp';
-
+import {ThAuditLogger} from '../../utils/logging/ThAuditLogger';
 import {AllotmentArchiverCronJobExecutor} from './allotment/AllotmentArchiverCronJobExecutor';
+
+import util = require('util');
 
 export class HotelHalfHourlyCronJob extends AHalfHourlyCronJob {
 	private _appContext: AppContext;
 
 	protected executeCore(appContext: AppContext) {
+		ThAuditLogger.getInstance().log({
+			message: "*Half Hourly* process triggered succesfully"
+		});
+
 		this._appContext = appContext;
 		var hotelIterator = new HotelIterator(this._appContext);
 		hotelIterator.runForEachHotel((hotel: HotelDO) => {
@@ -33,6 +39,10 @@ export class HotelHalfHourlyCronJob extends AHalfHourlyCronJob {
 		if (thTimestamp.isStartOfDay()) {
 			var dailyExecutor = this.getDaylyCronJobExecutor(executorDO);
 			dailyExecutor.execute();
+			
+			ThAuditLogger.getInstance().log({
+				message: util.format("*Midnight process* triggered succesfully for hotel *%s*", hotel.contactDetails.name)
+			});
 		}
 
 		var halfHourlyExecutor = this.getHalfHourlyCronJobExecutor(executorDO);
