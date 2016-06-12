@@ -60,10 +60,9 @@ export class SendgridEmailService extends AEmailService {
         };
 
         if (!_.isEmpty(this._emailHeaderDO.attachments)) {
-            _.each(this._emailHeaderDO.attachments, (fileName) => {
+            _.each(this._emailHeaderDO.attachments, (filePath) => {
                 sendgridEmailInitData.files.push({
-                    filename: fileName,
-                    content: 'data'
+                    path: filePath
                 });
             });
         }
