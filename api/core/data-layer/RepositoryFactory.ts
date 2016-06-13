@@ -20,8 +20,8 @@ import {IPriceProductRepository} from './price-products/repositories/IPriceProdu
 import {MongoPriceProductRepository} from './price-products/repositories/mongo/MongoPriceProductRepository';
 import {IYieldFilterConfigurationRepository} from './hotel-configurations/repositories/IYieldFilterConfigurationRepository';
 import {MongoYieldFilterConfigurationRepository} from './hotel-configurations/repositories/mongo/MongoYieldFilterConfigurationRepository';
-import {IAllotmentRepository} from './allotment/repositories/IAllotmentRepository';
-import {MongoAllotmentRepository} from './allotment/repositories/mongo/MongoAllotmentRepository';
+import {IAllotmentRepository} from './allotments/repositories/IAllotmentRepository';
+import {MongoAllotmentRepository} from './allotments/repositories/mongo/MongoAllotmentRepository';
 import {INotificationsRepository} from './notifications/repositories/INotificationsRepository';
 import {MongoNotificationsRepository} from './notifications/repositories/mongo/MongoNotificationsRepository';
 import {IInvoiceGroupsRepository} from './invoices/repositories/IInvoiceGroupsRepository';

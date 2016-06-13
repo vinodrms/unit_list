@@ -3,7 +3,7 @@ import {ThError} from '../../../utils/th-responses/ThError';
 import {ThStatusCode} from '../../../utils/th-responses/ThResponse';
 import {AppContext} from '../../../utils/AppContext';
 import {SessionContext} from '../../../utils/SessionContext';
-import {AllotmentDO} from '../../../data-layer/allotment/data-objects/AllotmentDO';
+import {AllotmentDO} from '../../../data-layer/allotments/data-objects/AllotmentDO';
 import {CustomerDO} from '../../../data-layer/customers/data-objects/CustomerDO';
 import {PriceProductDO, PriceProductStatus} from '../../../data-layer/price-products/data-objects/PriceProductDO';
 

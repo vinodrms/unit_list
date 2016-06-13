@@ -7,7 +7,7 @@ import {ThDateIntervalDO} from '../../../../../core/utils/th-dates/data-objects/
 import {IAllotmentDataSource, DefaultAllotmentBuilder} from '../../../../db-initializers/builders/DefaultAllotmentBuilder';
 import {PriceProductDO} from '../../../../../core/data-layer/price-products/data-objects/PriceProductDO';
 import {CustomerDO} from '../../../../../core/data-layer/customers/data-objects/CustomerDO';
-import {AllotmentDO} from '../../../../../core/data-layer/allotment/data-objects/AllotmentDO';
+import {AllotmentDO} from '../../../../../core/data-layer/allotments/data-objects/AllotmentDO';
 
 import moment = require('moment');
 import _ = require('underscore');

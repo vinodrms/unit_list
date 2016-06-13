@@ -24,9 +24,9 @@ import {DraftPriceProductItem} from '../../../../core/domain-layer/price-product
 import {DeletePriceProductItem} from '../../../../core/domain-layer/price-products/DeletePriceProductItem';
 import {PriceProductSearchResultRepoDO} from '../../../../core/data-layer/price-products/repositories/IPriceProductRepository';
 import {AllotmentsHelper} from '../allotments/helpers/AllotmentsHelper';
-import {SaveAllotmentItem} from '../../../../core/domain-layer/allotment/SaveAllotmentItem';
-import {AllotmentDO, AllotmentStatus} from '../../../../core/data-layer/allotment/data-objects/AllotmentDO';
-import {ArchiveAllotmentItem} from '../../../../core/domain-layer/allotment/ArchiveAllotmentItem';
+import {SaveAllotmentItem} from '../../../../core/domain-layer/allotments/SaveAllotmentItem';
+import {AllotmentDO, AllotmentStatus} from '../../../../core/data-layer/allotments/data-objects/AllotmentDO';
+import {ArchiveAllotmentItem} from '../../../../core/domain-layer/allotments/ArchiveAllotmentItem';
 
 describe("Hotel Price Products Tests", function () {
 	var InvalidRoomCategoryId = "12121221211";
