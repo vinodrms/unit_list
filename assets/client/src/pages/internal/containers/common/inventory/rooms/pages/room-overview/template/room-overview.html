@@ -9,9 +9,8 @@
         <h1>{{ roomVM.room.name }}</h1>
     </div>
     <div>
-        <small>Accomodates {{ roomVM.capacity.maxAdults }} <span class="unitpal-font">:</span> {{ roomVM.capacity.maxChildren }} <i class="unitpal-font">;</i></small>
+        <small>Accomodates {{ roomVM.capacity.noAdults }} <span class="unitpal-font">:</span> {{ roomVM.capacity.noChildren }} <span class="unitpal-font">;</span> {{ roomVM.capacity.noBabies }} <span class="unitpal-font">B</span> </small>
     </div>
-
     <div>
         <small>{{ roomVM.room.notes }}</small>
     </div>

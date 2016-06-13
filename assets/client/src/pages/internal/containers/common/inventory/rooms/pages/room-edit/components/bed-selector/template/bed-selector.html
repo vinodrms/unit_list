@@ -3,16 +3,17 @@
         <a *ngIf="!readonly" class="btn btn-xs bed-remove-btn" (click)="removeBed(bedIndex)">
             <i class="fa unitpal-font">\</i>
         </a>
-        <div *ngIf="!bedVM.accomodatesBabies" class="bed-slot-info" [title]="bedVM.bed.name">
+        <div *ngIf="!bedVM.accommodatesBabies" class="bed-slot-info" [title]="bedVM.bed.name">
             <span class="bed-icon unitpal-font">{{bedVM.template.iconUrl}}</span><br/>
             <small>{{bedVM.bed.name}}</small>
-            <br/> {{bedVM.capacity.maxNoAdults}}<span class="unitpal-font">:</span> {{bedVM.capacity.maxNoChildren}}
+            <br/> {{bedVM.capacity.noAdults}}<span class="unitpal-font">:</span> {{bedVM.capacity.noChildren}}
             <span class="unitpal-font">;</span>
         </div>
 
-        <div *ngIf="bedVM.accomodatesBabies" class="bed-slot-info" [title]="bedVM.bed.name">
+        <div *ngIf="bedVM.accommodatesBabies" class="bed-slot-info" [title]="bedVM.bed.name">
             <span class="bed-icon unitpal-font">{{bedVM.template.iconUrl}}</span><br/>
             <small>{{bedVM.bed.name}}</small>
+            <br/> 1<span class="unitpal-font">B</span>
         </div>
 
     </div>

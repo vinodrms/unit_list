@@ -114,9 +114,9 @@ export class RoomCategoriesTestHelper {
     }
     
     public validateCapacity(capacity: ConfigCapacityDO, maxNoAdults: number, maxNoChildren: number, maxNoBabies: number) {
-         should.equal(capacity.maxNoAdults, maxNoAdults);
-         should.equal(capacity.maxNoChildren, maxNoChildren);
-         should.equal(capacity.maxNoBabies, maxNoBabies);   
+         should.equal(capacity.noAdults, maxNoAdults);
+         should.equal(capacity.noChildren, maxNoChildren);
+         should.equal(capacity.noBabies, maxNoBabies);   
     } 
     
     public getRandomBedConfig(bedList: BedDO[], noOfBeds: number): BedConfigDO {

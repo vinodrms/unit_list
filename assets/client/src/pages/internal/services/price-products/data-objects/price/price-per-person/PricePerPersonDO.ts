@@ -45,7 +45,7 @@ export class PricePerPersonDO extends BaseDO implements IPriceProductPrice {
 		var newPricePerPerson: PricePerPersonDO = new PricePerPersonDO();
 		newPricePerPerson.roomCategoryId = roomCategoryStats.roomCategory.id;
 
-		for (var noOfAdults = 1; noOfAdults <= roomCategoryStats.capacity.totalCapacity.maxNoAdults; noOfAdults++) {
+		for (var noOfAdults = 1; noOfAdults <= roomCategoryStats.capacity.totalCapacity.noAdults; noOfAdults++) {
 			var prevAdultsPrice = this.getPriceForNumberOfAdults(noOfAdults);
 			if (prevAdultsPrice) {
 				newPricePerPerson.adultsPriceList.push(prevAdultsPrice);
@@ -55,7 +55,7 @@ export class PricePerPersonDO extends BaseDO implements IPriceProductPrice {
 			}
 		}
 		newPricePerPerson.firstChildWithoutAdultPrice = this.firstChildWithoutAdultPrice;
-		for (var noOfChildren = 1; noOfChildren <= (roomCategoryStats.capacity.totalCapacity.maxNoAdults + roomCategoryStats.capacity.totalCapacity.maxNoChildren); noOfChildren++) {
+		for (var noOfChildren = 1; noOfChildren <= (roomCategoryStats.capacity.totalCapacity.noAdults + roomCategoryStats.capacity.totalCapacity.noChildren); noOfChildren++) {
 			var prevChildrenPrice = this.getPriceForNumberOfChildren(noOfChildren);
 			if (prevChildrenPrice) {
 				newPricePerPerson.childrenPriceList.push(prevChildrenPrice);

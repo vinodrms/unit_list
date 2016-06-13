@@ -72,7 +72,7 @@
 									<span class="unitpal-font">{{getItemValue(item, columnMeta.valueMeta)}}</span>
 					</span>
 					<span *ngIf="isCapacity(columnMeta.valueMeta)">
-									{{ getItemValue(item, columnMeta.valueMeta).maxNoAdults }} <span class="unitpal-font">{{columnMeta.valueMeta.fonts.adult}}</span>					{{ getItemValue(item, columnMeta.valueMeta).maxNoChildren }} <span class="unitpal-font">{{columnMeta.valueMeta.fonts.child}}</span>					{{ getItemValue(item, columnMeta.valueMeta).maxNoBabies }} <span class="unitpal-font">{{columnMeta.valueMeta.fonts.baby}}</span>
+									{{ getItemValue(item, columnMeta.valueMeta).noAdults }} <span class="unitpal-font">{{columnMeta.valueMeta.fonts.adult}}</span>					{{ getItemValue(item, columnMeta.valueMeta).noChildren }} <span class="unitpal-font">{{columnMeta.valueMeta.fonts.child}}</span>					{{ getItemValue(item, columnMeta.valueMeta).noBabies }} <span class="unitpal-font">{{columnMeta.valueMeta.fonts.baby}}</span>
 					</span>
 				</td>
 				<td *ngIf="tableOptions.canCopy||tableOptions.canEdit||tableOptions.canDelete" class="table-item-action-group" [ngClass]="{'up-col-10p': !isCollapsed, 'up-col-30p': isCollapsed}">

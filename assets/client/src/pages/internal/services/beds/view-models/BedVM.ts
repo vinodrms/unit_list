@@ -1,7 +1,8 @@
 import {BaseDO} from '../../../../../common/base/BaseDO';
 import {BedDO, BedAccommodationType} from '../data-objects/BedDO';
 import {BedTemplateDO} from '../../common/data-objects/bed-template/BedTemplateDO';
-import {RoomCategoryStatsDO, BedConfigCapacityDO} from '../../room-categories/data-objects/RoomCategoryStatsDO';
+import {RoomCategoryStatsDO} from '../../room-categories/data-objects/RoomCategoryStatsDO';
+import {ConfigCapacityDO} from '../../common/data-objects/bed-config/ConfigCapacityDO';
 
 export class BedVM extends BaseDO {
     private _bed: BedDO;
@@ -39,22 +40,22 @@ export class BedVM extends BaseDO {
         this._template = template;
     }     
     
-    public get capacity(): BedConfigCapacityDO {
+    public get capacity(): ConfigCapacityDO {
         var maxAdults = 0, maxChildren = 0, maxBabies = 0;
         
-        var bedConfigCapacity = new BedConfigCapacityDO();
+        var configCapacity = new ConfigCapacityDO();
         if(this._bed.accommodationType === BedAccommodationType.Babies) {
-            bedConfigCapacity.maxNoBabies = 1;
-            bedConfigCapacity.maxNoAdults = 0;
-            bedConfigCapacity.maxNoChildren = 0;    
+            configCapacity.noBabies = 1;
+            configCapacity.noAdults = 0;
+            configCapacity.noChildren = 0;    
         }
         else {
-            bedConfigCapacity.maxNoAdults = this._bed.capacity.maxNoAdults;
-            bedConfigCapacity.maxNoChildren = this._bed.capacity.maxNoChildren;
-            bedConfigCapacity.maxNoBabies = 0;
+            configCapacity.noAdults = this._bed.capacity.maxNoAdults;
+            configCapacity.noChildren = this._bed.capacity.maxNoChildren;
+            configCapacity.noBabies = 0;
         }
         
-        return bedConfigCapacity;
+        return configCapacity;
     }
     
     public get size(): string {
@@ -74,7 +75,7 @@ export class BedVM extends BaseDO {
 		return copy;
 	}
     
-    public get accomodatesBabies(): boolean {
+    public get accommodatesBabies(): boolean {
         return this._bed.accommodationType === BedAccommodationType.Babies;
     }
 }                                                                                                                                                                                                                                 

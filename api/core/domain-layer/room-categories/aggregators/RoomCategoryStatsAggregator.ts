@@ -154,10 +154,10 @@ export class RoomCategoryStatsAggregator {
 
     private getBedConfigCapacityByStorageType(bedConfig: BedConfigDO, bedList: BedDO[], bedStorageType: BedStorageType): ConfigCapacityDO {
 
-        var bedConfigCapacity = new ConfigCapacityDO();
-        bedConfigCapacity.maxNoBabies = 0;
-        bedConfigCapacity.maxNoAdults = 0;
-        bedConfigCapacity.maxNoChildren = 0;
+        var configCapacity = new ConfigCapacityDO();
+        configCapacity.noBabies = 0;
+        configCapacity.noAdults = 0;
+        configCapacity.noChildren = 0;
 
         var bedListToAggregate: BedDO[] = this.filterBedListByStorageType(bedList, bedStorageType);
 
@@ -165,15 +165,15 @@ export class RoomCategoryStatsAggregator {
             var bedMeta = _.findWhere(bedConfig.bedMetaList, { bedId: bed.id });
 
             if (bed.accommodationType === BedAccommodationType.Babies) {
-                bedConfigCapacity.maxNoBabies += bedMeta.noOfInstances;
+                configCapacity.noBabies += bedMeta.noOfInstances;
             }
             else {
-                bedConfigCapacity.maxNoAdults += bedMeta.noOfInstances * bed.capacity.maxNoAdults;
-                bedConfigCapacity.maxNoChildren += bedMeta.noOfInstances * bed.capacity.maxNoChildren;
+                configCapacity.noAdults += bedMeta.noOfInstances * bed.capacity.maxNoAdults;
+                configCapacity.noChildren += bedMeta.noOfInstances * bed.capacity.maxNoChildren;
             }
         });
 
-        return bedConfigCapacity;
+        return configCapacity;
     }
 
     private filterBedListByStorageType(bedList: BedDO[], bedStorageType: BedStorageType): BedDO[] {
@@ -200,9 +200,9 @@ export class RoomCategoryStatsAggregator {
         var zeroCapacity: RoomCategoryCapacityDO = new RoomCategoryCapacityDO();
         var emptyCapacity = new ConfigCapacityDO();
 
-        emptyCapacity.maxNoAdults = 0;
-        emptyCapacity.maxNoBabies = 0;
-        emptyCapacity.maxNoChildren = 0;
+        emptyCapacity.noAdults = 0;
+        emptyCapacity.noBabies = 0;
+        emptyCapacity.noChildren = 0;
         zeroCapacity.stationaryCapacity = emptyCapacity;
         zeroCapacity.rollawayCapacity = emptyCapacity;
 

@@ -26,16 +26,16 @@ export class RoomCategoryCapacityDO extends BaseDO {
     
     public get totalCapacity(): ConfigCapacityDO {
         var totalRoomCapacity = new ConfigCapacityDO();
-        totalRoomCapacity.maxNoBabies = this.stationaryCapacity.maxNoBabies + this.rollawayCapacity.maxNoBabies;
-        totalRoomCapacity.maxNoAdults = this.stationaryCapacity.maxNoAdults + this.rollawayCapacity.maxNoAdults;
-        totalRoomCapacity.maxNoChildren = this.stationaryCapacity.maxNoChildren + this.rollawayCapacity.maxNoChildren;
+        totalRoomCapacity.noBabies = this.stationaryCapacity.noBabies + this.rollawayCapacity.noBabies;
+        totalRoomCapacity.noAdults = this.stationaryCapacity.noAdults + this.rollawayCapacity.noAdults;
+        totalRoomCapacity.noChildren = this.stationaryCapacity.noChildren + this.rollawayCapacity.noChildren;
         return totalRoomCapacity;
     }
     
     public canFit(capacityToCheck: ConfigCapacityDO): boolean {
-        if(this.totalCapacity.maxNoAdults < capacityToCheck.maxNoAdults) return false;
-        if(this.totalCapacity.maxNoChildren < capacityToCheck.maxNoChildren) return false;
-        if(this.totalCapacity.maxNoBabies < capacityToCheck.maxNoBabies) return false;
+        if(this.totalCapacity.noAdults < capacityToCheck.noAdults) return false;
+        if(this.totalCapacity.noChildren < capacityToCheck.noChildren) return false;
+        if(this.totalCapacity.noBabies < capacityToCheck.noBabies) return false;
         return true;
     }
 }

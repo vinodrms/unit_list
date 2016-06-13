@@ -31,10 +31,10 @@
                 <label>{{ 'Bed accomodates:' | translate }}</label>
                 <div class="input-group">
                     <div class="btn-group" data-toggle="buttons">
-                        <button class="btn btn-default" (click)="toggleAccommodationType()" [ngClass]="{'active': !accomodatesBabies}" [disabled]="!isNewBed()">
+                        <button class="btn btn-default" (click)="toggleAccommodationType()" [ngClass]="{'active': !accommodatesBabies}" [disabled]="!isNewBed()">
 				{{ 'Adults / Children' | translate }}
 			</button>
-                        <button class="btn btn-default" (click)="toggleAccommodationType()" [ngClass]="{'active': accomodatesBabies}" [disabled]="!isNewBed()">
+                        <button class="btn btn-default" (click)="toggleAccommodationType()" [ngClass]="{'active': accommodatesBabies}" [disabled]="!isNewBed()">
 				{{ 'Babies' | translate }}
 			</button>
                     </div>
@@ -56,7 +56,7 @@
             </div>
         </div>
         <hr/>
-        <div *ngIf="!accomodatesBabies" class="row">
+        <div *ngIf="!accommodatesBabies" class="row">
             <div class="col-xs-12 col-md-6 form-group">
                 <label>{{ 'Capacity' | translate }}*</label>
                 <div class="row">
@@ -107,7 +107,7 @@
             </div>
         </div>
 
-        <hr *ngIf="!accomodatesBabies" />
+        <hr *ngIf="!accommodatesBabies" />
 
         <div class="row">
             <div class="col-xs-12 col-md-6 form-group">
