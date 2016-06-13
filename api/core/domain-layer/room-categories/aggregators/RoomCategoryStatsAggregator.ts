@@ -10,7 +10,8 @@ import {BedConfigDO} from '../../../data-layer/room-categories/data-objects/bed-
 import {BedMetaDO} from '../../../data-layer/room-categories/data-objects/bed-config/BedMetaDO';
 import {BedDO, BedStorageType, BedAccommodationType} from '../../../data-layer/common/data-objects/bed/BedDO';
 import {RoomCategorySearchResultRepoDO} from '../../../data-layer/room-categories/repositories/IRoomCategoryRepository';
-import {RoomCategoryStatsDO, RoomCategoryCapacityDO, BedConfigCapacityDO} from '../../../data-layer/room-categories/data-objects/RoomCategoryStatsDO';
+import {ConfigCapacityDO} from '../../../data-layer/common/data-objects/bed-config/ConfigCapacityDO';
+import {RoomCategoryStatsDO, RoomCategoryCapacityDO} from '../../../data-layer/room-categories/data-objects/RoomCategoryStatsDO';
 import {RoomMetaRepoDO, RoomSearchResultRepoDO} from '../../../data-layer/rooms/repositories/IRoomRepository';
 import {BedSearchResultRepoDO} from '../../../data-layer/beds/repositories/IBedRepository';
 
@@ -151,9 +152,9 @@ export class RoomCategoryStatsAggregator {
         });
     }
 
-    private getBedConfigCapacityByStorageType(bedConfig: BedConfigDO, bedList: BedDO[], bedStorageType: BedStorageType): BedConfigCapacityDO {
+    private getBedConfigCapacityByStorageType(bedConfig: BedConfigDO, bedList: BedDO[], bedStorageType: BedStorageType): ConfigCapacityDO {
 
-        var bedConfigCapacity = new BedConfigCapacityDO();
+        var bedConfigCapacity = new ConfigCapacityDO();
         bedConfigCapacity.maxNoBabies = 0;
         bedConfigCapacity.maxNoAdults = 0;
         bedConfigCapacity.maxNoChildren = 0;
@@ -197,7 +198,7 @@ export class RoomCategoryStatsAggregator {
 
     private getZeroCapacityCategoryStats(): RoomCategoryCapacityDO {
         var zeroCapacity: RoomCategoryCapacityDO = new RoomCategoryCapacityDO();
-        var emptyCapacity = new BedConfigCapacityDO();
+        var emptyCapacity = new ConfigCapacityDO();
 
         emptyCapacity.maxNoAdults = 0;
         emptyCapacity.maxNoBabies = 0;

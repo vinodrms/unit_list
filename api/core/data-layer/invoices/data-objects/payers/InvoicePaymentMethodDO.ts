@@ -5,20 +5,10 @@ export enum InvoicePaymentMethodType {
 }
 
 export class InvoicePaymentMethodDO extends BaseDO {
-    constructor() {
-        super();
-    }
-
     type: InvoicePaymentMethodType;
-    amount: number;
-    paymentMethodId: string;
+    value: string;
 
     protected getPrimitivePropertyKeys(): string[] {
-        return ["type", "amount", "paymentMethodId"];
+        return ["type", "value"];
     }
-    
-    public buildFromObject(object: Object) {
-		super.buildFromObject(object);
-        
-    }  
 }
