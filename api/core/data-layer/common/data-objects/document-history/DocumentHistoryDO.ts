@@ -23,6 +23,6 @@ export class DocumentHistoryDO extends BaseDO {
 
     public logDocumentAction(documentAction: DocumentActionDO) {
         this.actionList.unshift(documentAction);
-        this.actionList.slice(0, Math.min(this.actionList.length, DocumentHistoryDO.MAX_HISTORY_SIZE));
+        this.actionList = this.actionList.slice(0, Math.min(this.actionList.length, DocumentHistoryDO.MAX_HISTORY_SIZE));
     }
 }

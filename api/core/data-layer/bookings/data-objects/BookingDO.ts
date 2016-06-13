@@ -49,7 +49,36 @@ export class BookingDO extends BaseDO {
     bookingHistory: DocumentHistoryDO;
 
     protected getPrimitivePropertyKeys(): string[] {
-        // TODO
-        return [];
+        return ["groupBookingId", "groupBookingReference", "hotelId", "versionId", "status", "bookingId", "bookingReference", "confirmationStatus",
+            "customerIdList", "startUtcTimestamp", "endUtcTimestamp", "roomCategoryId", "roomId", "priceProductId", "allotmentId", "notes"];
+    }
+
+    public buildFromObject(object: Object) {
+        super.buildFromObject(object);
+
+        this.defaultBillingDetails = new DefaultBillingDetailsDO();
+        this.defaultBillingDetails.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "defaultBillingDetails"));
+
+        this.interval = new ThDateIntervalDO();
+        this.interval.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "interval"));
+
+        this.configCapacity = new ConfigCapacityDO();
+        this.configCapacity.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "configCapacity"));
+
+        this.priceProductSnapshot = new PriceProductDO();
+        this.priceProductSnapshot.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "priceProductSnapshot"));
+
+        this.cancellationTime = new BookingCancellationTimeDO();
+        this.cancellationTime.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "cancellationTime"));
+
+        this.fileAttachmentList = [];
+        this.forEachElementOf(this.getObjectPropertyEnsureUndefined(object, "fileAttachmentList"), (fileAttachmentObject: Object) => {
+            var fileAttachmentDO = new FileAttachmentDO();
+            fileAttachmentDO.buildFromObject(fileAttachmentObject);
+            this.fileAttachmentList.push(fileAttachmentDO);
+        });
+
+        this.bookingHistory = new DocumentHistoryDO();
+        this.bookingHistory.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "bookingHistory"));
     }
 }
