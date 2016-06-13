@@ -24,6 +24,8 @@ import {IAllotmentRepository} from './allotment/repositories/IAllotmentRepositor
 import {MongoAllotmentRepository} from './allotment/repositories/mongo/MongoAllotmentRepository';
 import {INotificationsRepository} from './notifications/repositories/INotificationsRepository';
 import {MongoNotificationsRepository} from './notifications/repositories/mongo/MongoNotificationsRepository';
+import {IInvoiceGroupsRepository} from './invoices/repositories/IInvoiceGroupsRepository';
+import {MongoInvoiceGroupsRepository} from './invoices/repositories/mongo/MongoInvoiceGroupsRepository';
 
 export class RepositoryFactory {
     private _databaseType: DatabaseType;
@@ -120,6 +122,13 @@ export class RepositoryFactory {
         switch (this._databaseType) {
             default:
                 return new MongoNotificationsRepository();
+        }
+    }
+
+    getInvoiceGroupsRepository(): IInvoiceGroupsRepository {
+        switch (this._databaseType) {
+            default:
+                return new MongoInvoiceGroupsRepository();
         }
     }
 }
