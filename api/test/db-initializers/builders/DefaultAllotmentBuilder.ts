@@ -6,12 +6,12 @@ import {ISOWeekDayUtils, ISOWeekDay} from '../../../core/utils/th-dates/data-obj
 import {ThDateIntervalDO} from '../../../core/utils/th-dates/data-objects/ThDateIntervalDO';
 import {PriceProductDO} from '../../../core/data-layer/price-products/data-objects/PriceProductDO';
 import {CustomerDO} from '../../../core/data-layer/customers/data-objects/CustomerDO';
-import {AllotmentDO, AllotmentStatus} from '../../../core/data-layer/allotment/data-objects/AllotmentDO';
-import {AllotmentAvailabilityDO} from '../../../core/data-layer/allotment/data-objects/availability/AllotmentAvailabilityDO';
-import {AllotmentAvailabilityForDayDO} from '../../../core/data-layer/allotment/data-objects/availability/AllotmentAvailabilityForDayDO';
-import {AllotmentInventoryDO} from '../../../core/data-layer/allotment/data-objects/inventory/AllotmentInventoryDO';
-import {AllotmentInventoryForDateDO} from '../../../core/data-layer/allotment/data-objects/inventory/AllotmentInventoryForDateDO';
-import {AllotmentConstraintWrapperDO} from '../../../core/data-layer/allotment/data-objects/constraint/AllotmentConstraintWrapperDO';
+import {AllotmentDO, AllotmentStatus} from '../../../core/data-layer/allotments/data-objects/AllotmentDO';
+import {AllotmentAvailabilityDO} from '../../../core/data-layer/allotments/data-objects/availability/AllotmentAvailabilityDO';
+import {AllotmentAvailabilityForDayDO} from '../../../core/data-layer/allotments/data-objects/availability/AllotmentAvailabilityForDayDO';
+import {AllotmentInventoryDO} from '../../../core/data-layer/allotments/data-objects/inventory/AllotmentInventoryDO';
+import {AllotmentInventoryForDateDO} from '../../../core/data-layer/allotments/data-objects/inventory/AllotmentInventoryForDateDO';
+import {AllotmentConstraintWrapperDO} from '../../../core/data-layer/allotments/data-objects/constraint/AllotmentConstraintWrapperDO';
 
 import moment = require('moment');
 

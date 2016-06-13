@@ -4,8 +4,8 @@ import {ThStatusCode} from '../../../utils/th-responses/ThResponse';
 import {AppContext} from '../../../utils/AppContext';
 import {HotelDO} from '../../../data-layer/hotel/data-objects/HotelDO';
 import {ThTimestamp} from '../../../utils/th-dates/ThTimestamp';
-import {AllotmentDO, AllotmentStatus} from '../../../data-layer/allotment/data-objects/AllotmentDO';
-import {AllotmentSearchResultRepoDO} from '../../../data-layer/allotment/repositories/IAllotmentRepository';
+import {AllotmentDO, AllotmentStatus} from '../../../data-layer/allotments/data-objects/AllotmentDO';
+import {AllotmentSearchResultRepoDO} from '../../../data-layer/allotments/repositories/IAllotmentRepository';
 import {ArchiveAllotmentItem} from '../ArchiveAllotmentItem';
 
 import _ = require('underscore');

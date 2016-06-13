@@ -4,9 +4,9 @@ import {ThStatusCode} from '../../utils/th-responses/ThResponse';
 import {AppContext} from '../../utils/AppContext';
 import {SessionContext} from '../../utils/SessionContext';
 import {SaveAllotmentItemDO} from './SaveAllotmentItemDO';
-import {AllotmentMetaRepoDO} from '../../data-layer/allotment/repositories/IAllotmentRepository';
-import {AllotmentDO} from '../../data-layer/allotment/data-objects/AllotmentDO';
-import {AllotmentConstraintDO} from '../../data-layer/allotment/data-objects/constraint/AllotmentConstraintDO';
+import {AllotmentMetaRepoDO} from '../../data-layer/allotments/repositories/IAllotmentRepository';
+import {AllotmentDO} from '../../data-layer/allotments/data-objects/AllotmentDO';
+import {AllotmentConstraintDO} from '../../data-layer/allotments/data-objects/constraint/AllotmentConstraintDO';
 import {ValidationResultParser} from '../common/ValidationResultParser';
 import {AllotmentItemActionFactory} from './save-actions/AllotmentItemActionFactory';
 

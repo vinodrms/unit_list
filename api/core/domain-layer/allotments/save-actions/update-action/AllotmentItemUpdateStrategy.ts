@@ -4,8 +4,8 @@ import {ThStatusCode} from '../../../../utils/th-responses/ThResponse';
 import {AppContext} from '../../../../utils/AppContext';
 import {SessionContext} from '../../../../utils/SessionContext';
 import {IAllotmentItemActionStrategy} from '../IAllotmentItemActionStrategy';
-import {AllotmentDO} from '../../../../data-layer/allotment/data-objects/AllotmentDO';
-import {AllotmentMetaRepoDO} from '../../../../data-layer/allotment/repositories/IAllotmentRepository';
+import {AllotmentDO} from '../../../../data-layer/allotments/data-objects/AllotmentDO';
+import {AllotmentMetaRepoDO} from '../../../../data-layer/allotments/repositories/IAllotmentRepository';
 
 export class AllotmentItemUpdateStrategy implements IAllotmentItemActionStrategy {
 	constructor(private _appContext: AppContext, private _sessionContext: SessionContext,

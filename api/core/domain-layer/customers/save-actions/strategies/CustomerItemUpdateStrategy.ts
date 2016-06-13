@@ -6,8 +6,8 @@ import {SessionContext} from '../../../../utils/SessionContext';
 import {CustomerDO} from '../../../../data-layer/customers/data-objects/CustomerDO';
 import {CustomerMetaRepoDO, CustomerItemMetaRepoDO} from '../../../../data-layer/customers/repositories/ICustomerRepository';
 import {ICustomerItemActionStrategy} from '../ICustomerItemActionStrategy';
-import {AllotmentStatus} from '../../../../data-layer/allotment/data-objects/AllotmentDO';
-import {AllotmentSearchResultRepoDO} from '../../../../data-layer/allotment/repositories/IAllotmentRepository';
+import {AllotmentStatus} from '../../../../data-layer/allotments/data-objects/AllotmentDO';
+import {AllotmentSearchResultRepoDO} from '../../../../data-layer/allotments/repositories/IAllotmentRepository';
 
 import _ = require("underscore");
 

@@ -13,11 +13,11 @@ import {CustomerDO} from '../../../../core/data-layer/customers/data-objects/Cus
 import {SaveCustomerItem} from '../../../../core/domain-layer/customers/SaveCustomerItem';
 import {AllotmentsHelper} from './helpers/AllotmentsHelper';
 import {PriceProductDO} from '../../../../core/data-layer/price-products/data-objects/PriceProductDO';
-import {SaveAllotmentItem} from '../../../../core/domain-layer/allotment/SaveAllotmentItem';
-import {AllotmentDO, AllotmentStatus} from '../../../../core/data-layer/allotment/data-objects/AllotmentDO';
-import {AllotmentAvailabilityForDayDO} from '../../../../core/data-layer/allotment/data-objects/availability/AllotmentAvailabilityForDayDO';
-import {AllotmentInventoryForDateDO} from '../../../../core/data-layer/allotment/data-objects/inventory/AllotmentInventoryForDateDO';
-import {ArchiveAllotmentItem} from '../../../../core/domain-layer/allotment/ArchiveAllotmentItem';
+import {SaveAllotmentItem} from '../../../../core/domain-layer/allotments/SaveAllotmentItem';
+import {AllotmentDO, AllotmentStatus} from '../../../../core/data-layer/allotments/data-objects/AllotmentDO';
+import {AllotmentAvailabilityForDayDO} from '../../../../core/data-layer/allotments/data-objects/availability/AllotmentAvailabilityForDayDO';
+import {AllotmentInventoryForDateDO} from '../../../../core/data-layer/allotments/data-objects/inventory/AllotmentInventoryForDateDO';
+import {ArchiveAllotmentItem} from '../../../../core/domain-layer/allotments/ArchiveAllotmentItem';
 
 describe("Hotel Allotments Tests", function () {
 	var InvalidId = "12121221211";

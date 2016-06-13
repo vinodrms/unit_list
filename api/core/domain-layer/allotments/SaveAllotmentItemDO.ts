@@ -7,10 +7,10 @@ import {NumberValidationRule} from '../../utils/th-validation/rules/NumberValida
 import {StringValidationRule} from '../../utils/th-validation/rules/StringValidationRule';
 import {ISOWeekDayUtils} from '../../utils/th-dates/data-objects/ISOWeekDay';
 import {NumberInListValidationRule} from '../../utils/th-validation/rules/NumberInListValidationRule';
-import {AllotmentStatus} from '../../data-layer/allotment/data-objects/AllotmentDO';
-import {AllotmentAvailabilityDO} from '../../data-layer/allotment/data-objects/availability/AllotmentAvailabilityDO';
-import {AllotmentConstraintType} from '../../data-layer/allotment/data-objects/constraint/IAllotmentConstraint';
-import {AllotmentConstraintWrapperDO} from '../../data-layer/allotment/data-objects/constraint/AllotmentConstraintWrapperDO';
+import {AllotmentStatus} from '../../data-layer/allotments/data-objects/AllotmentDO';
+import {AllotmentAvailabilityDO} from '../../data-layer/allotments/data-objects/availability/AllotmentAvailabilityDO';
+import {AllotmentConstraintType} from '../../data-layer/allotments/data-objects/constraint/IAllotmentConstraint';
+import {AllotmentConstraintWrapperDO} from '../../data-layer/allotments/data-objects/constraint/AllotmentConstraintWrapperDO';
 
 export class SaveAllotmentItemDO {
 	status: AllotmentStatus;

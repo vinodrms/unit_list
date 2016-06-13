@@ -3,10 +3,10 @@ import {ThStatusCode} from '../core/utils/th-responses/ThResponse';
 import {AppContext} from '../core/utils/AppContext';
 import {SessionContext} from '../core/utils/SessionContext';
 import {LazyLoadMetaResponseRepoDO} from '../core/data-layer/common/repo-data-objects/LazyLoadRepoDO';
-import {AllotmentMetaRepoDO, AllotmentSearchResultRepoDO} from '../core/data-layer/allotment/repositories/IAllotmentRepository';
-import {AllotmentDO} from '../core/data-layer/allotment/data-objects/AllotmentDO';
-import {SaveAllotmentItem} from '../core/domain-layer/allotment/SaveAllotmentItem';
-import {ArchiveAllotmentItem} from '../core/domain-layer/allotment/ArchiveAllotmentItem';
+import {AllotmentMetaRepoDO, AllotmentSearchResultRepoDO} from '../core/data-layer/allotments/repositories/IAllotmentRepository';
+import {AllotmentDO} from '../core/data-layer/allotments/data-objects/AllotmentDO';
+import {SaveAllotmentItem} from '../core/domain-layer/allotments/SaveAllotmentItem';
+import {ArchiveAllotmentItem} from '../core/domain-layer/allotments/ArchiveAllotmentItem';
 
 export class AllotmentsController extends BaseController {
 	public getAllotmentById(req: Express.Request, res: Express.Response) {

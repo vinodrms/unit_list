@@ -7,7 +7,7 @@ import {IValidationStructure} from '../../utils/th-validation/structure/core/IVa
 import {ObjectValidationStructure} from '../../utils/th-validation/structure/ObjectValidationStructure';
 import {PrimitiveValidationStructure} from '../../utils/th-validation/structure/PrimitiveValidationStructure';
 import {StringValidationRule} from '../../utils/th-validation/rules/StringValidationRule';
-import {AllotmentDO, AllotmentStatus} from '../../data-layer/allotment/data-objects/AllotmentDO';
+import {AllotmentDO, AllotmentStatus} from '../../data-layer/allotments/data-objects/AllotmentDO';
 import {ValidationResultParser} from '../common/ValidationResultParser';
 
 export class ArchiveAllotmentItemDO {

@@ -6,9 +6,9 @@ import {SessionContext} from '../../../../utils/SessionContext';
 import {ThDateUtils} from '../../../../utils/th-dates/ThDateUtils';
 import {ThDateDO} from '../../../../utils/th-dates/data-objects/ThDateDO';
 import {IAllotmentItemActionStrategy} from '../IAllotmentItemActionStrategy';
-import {AllotmentDO, AllotmentStatus} from '../../../../data-layer/allotment/data-objects/AllotmentDO';
-import {AllotmentMetaRepoDO} from '../../../../data-layer/allotment/repositories/IAllotmentRepository';
-import {AllotmentInventoryForDateDO} from '../../../../data-layer/allotment/data-objects/inventory/AllotmentInventoryForDateDO';
+import {AllotmentDO, AllotmentStatus} from '../../../../data-layer/allotments/data-objects/AllotmentDO';
+import {AllotmentMetaRepoDO} from '../../../../data-layer/allotments/repositories/IAllotmentRepository';
+import {AllotmentInventoryForDateDO} from '../../../../data-layer/allotments/data-objects/inventory/AllotmentInventoryForDateDO';
 import {AllotmentValidator} from '../../validators/AllotmentValidator';
 
 export class AllotmentItemAddStrategy implements IAllotmentItemActionStrategy {

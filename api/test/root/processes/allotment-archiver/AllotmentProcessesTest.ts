@@ -10,8 +10,8 @@ import {TestUtils} from '../../../helpers/TestUtils';
 import {DefaultAllotmentBuilder} from '../../../db-initializers/builders/DefaultAllotmentBuilder';
 import {ThDateUtils} from '../../../../core/utils/th-dates/ThDateUtils';
 import {AllotmentArchiverHelper} from './helpers/AllotmentArchiverHelper';
-import {AllotmentDO} from '../../../../core/data-layer/allotment/data-objects/AllotmentDO';
-import {AllotmentArchiverProcess} from '../../../../core/domain-layer/allotment/processes/AllotmentArchiverProcess';
+import {AllotmentDO} from '../../../../core/data-layer/allotments/data-objects/AllotmentDO';
+import {AllotmentArchiverProcess} from '../../../../core/domain-layer/allotments/processes/AllotmentArchiverProcess';
 
 describe("Allotment Processes Tests", function () {
 	var testContext: TestContext;

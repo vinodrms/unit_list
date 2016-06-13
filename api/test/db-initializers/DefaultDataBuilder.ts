@@ -28,7 +28,7 @@ import {PriceProductDO} from '../../core/data-layer/price-products/data-objects/
 import {HotelConfigurationsBootstrap} from '../../core/domain-layer/hotel-configurations/HotelConfigurationsBootstrap';
 import {YieldFilterConfigurationDO} from '../../core/data-layer/hotel-configurations/data-objects/yield-filter/YieldFilterConfigurationDO';
 import {DefaultAllotmentBuilder} from './builders/DefaultAllotmentBuilder';
-import {AllotmentDO} from '../../core/data-layer/allotment/data-objects/AllotmentDO';
+import {AllotmentDO} from '../../core/data-layer/allotments/data-objects/AllotmentDO';
 
 import _ = require("underscore");
 
