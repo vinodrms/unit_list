@@ -67,7 +67,7 @@ export class PriceProductEditPricesSectionComponent extends BaseComponent implem
 	}
 	public updatePricesForRoomCategories(roomCategoryList: RoomCategoryDO[]) {
 		if (this._appContext.thUtils.isUndefinedOrNull(roomCategoryList) || (_.isArray(roomCategoryList) && roomCategoryList.length == 0)) {
-			this._currentRoomCategoryStatsList = [];
+			this.currentRoomCategoryStatsList = [];
 			return;
 		}
 		this.isLoading = true;
