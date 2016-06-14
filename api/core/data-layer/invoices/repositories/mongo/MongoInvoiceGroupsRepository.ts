@@ -1,8 +1,9 @@
 import {MongoRepository, MongoErrorCodes, MongoSearchCriteria} from '../../../common/base/MongoRepository';
-import {IInvoiceGroupsRepository, InvoiceGroupItemMetaRepoDO} from'../IInvoiceGroupsRepository';
+import {IInvoiceGroupsRepository, InvoiceGroupMetaRepoDO, InvoiceGroupItemMetaRepoDO, InvoiceGroupSearchCriteriaRepoDO, InvoiceGroupSearchResultRepoDO} from'../IInvoiceGroupsRepository';
 import {InvoiceGroupDO} from '../../data-objects/InvoiceGroupDO';
 import {MongoInvoiceGroupsReadOperationsRepository} from './operations/MongoInvoiceGroupsReadOperationsRepository';
 import {MongoInvoiceGroupsEditOperationsRepository} from './operations/MongoInvoiceGroupsEditOperationsRepository';
+import {LazyLoadRepoDO, LazyLoadMetaResponseRepoDO} from '../../../common/repo-data-objects/LazyLoadRepoDO';
 
 export class MongoInvoiceGroupsRepository extends MongoRepository implements IInvoiceGroupsRepository {
     private _readRepository: MongoInvoiceGroupsReadOperationsRepository;
@@ -16,13 +17,19 @@ export class MongoInvoiceGroupsRepository extends MongoRepository implements IIn
         this._editRepository = new MongoInvoiceGroupsEditOperationsRepository(invoiceGroupsEntity);
     }
 
-    public addInvoiceGroup(invoiceGroup: InvoiceGroupDO): Promise<InvoiceGroupDO> {
-        return this._editRepository.addInvoiceGroup(invoiceGroup);
+    public getInvoiceGroupById(invoidGroupMeta: InvoiceGroupMetaRepoDO, invoiceGroupId: string): Promise<InvoiceGroupDO> {
+        return this._readRepository.getInvoiceGroupById(invoidGroupMeta, invoiceGroupId);
     }
-	public updateInvoiceGroup(invoiceGroupItemMeta: InvoiceGroupItemMetaRepoDO, invoiceGroup: InvoiceGroupDO): Promise<InvoiceGroupDO> {
-        return this._editRepository.addInvoiceGroup(invoiceGroup);
+    public getInvoiceGroupList(invoidGroupMeta: InvoiceGroupMetaRepoDO, searchCriteria?: InvoiceGroupSearchCriteriaRepoDO, lazyLoad?: LazyLoadRepoDO): Promise<InvoiceGroupSearchResultRepoDO> {
+        return this._readRepository.getInvoiceGroupList(invoidGroupMeta, searchCriteria, lazyLoad);
     }
-	public deleteInvoiceGroup(invoiceGroupItemMeta: InvoiceGroupItemMetaRepoDO): Promise<InvoiceGroupDO> {
-        return this._editRepository.deleteInvoiceGroup(invoiceGroupItemMeta);
+    public addInvoiceGroup(invoidGroupMeta: InvoiceGroupMetaRepoDO, invoiceGroup: InvoiceGroupDO): Promise<InvoiceGroupDO> {
+        return this._editRepository.addInvoiceGroup(invoidGroupMeta, invoiceGroup);
+    }
+	public updateInvoiceGroup(invoidGroupMeta: InvoiceGroupMetaRepoDO, invoiceGroupItemMeta: InvoiceGroupItemMetaRepoDO, invoiceGroup: InvoiceGroupDO): Promise<InvoiceGroupDO> {
+        return this._editRepository.updateInvoiceGroup(invoidGroupMeta, invoiceGroupItemMeta, invoiceGroup);
+    }
+	public deleteInvoiceGroup(invoidGroupMeta: InvoiceGroupMetaRepoDO, invoiceGroupItemMeta: InvoiceGroupItemMetaRepoDO): Promise<InvoiceGroupDO> {
+        return this._editRepository.deleteInvoiceGroup(invoidGroupMeta, invoiceGroupItemMeta);
     }
 }

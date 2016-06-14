@@ -295,6 +295,12 @@ export enum ThStatusCode {
 
     SlackSendMessageError,
     
+    InvoiceGroupsRepositoryErrorAddingInvoiceGroup,
+    InvoiceGroupsRepositoryProblemUpdatingInvoiceGroup,
+    InvoiceGroupsRepositoryErrorUpdatingInvoiceGroup,
+    InvoiceGroupsRepositoryErrorGettingInvoiceGroupList,
+    InvoiceGroupItemUpdateStrategyErrorUpdating,
+    SaveInvoiceGroupItem,
 }
 
 var ThMessage: { [index: number]: string; } = {};
@@ -580,6 +586,12 @@ ThMessage[ThStatusCode.NotificationsRepositoryErrorMarkingAsRead] = "Error marki
 ThMessage[ThStatusCode.PhantomHtmlToPdfHtmlReportPageAccessError] = "Error accessing the html report page.";
 ThMessage[ThStatusCode.PhantomHtmlToPdfGenerationError] = "Error generating pdf.";
 ThMessage[ThStatusCode.HtmlReportsServiceHtmlExportError] = "Error exporting html to pdf.";
+ThMessage[ThStatusCode.InvoiceGroupsRepositoryErrorAddingInvoiceGroup] = "Error adding the invoice group."; 
+ThMessage[ThStatusCode.InvoiceGroupsRepositoryProblemUpdatingInvoiceGroup] = "Problem updating the invoice group - concurrency.";
+ThMessage[ThStatusCode.InvoiceGroupsRepositoryErrorUpdatingInvoiceGroup] = "Error updating the invoice group.";
+ThMessage[ThStatusCode.InvoiceGroupsRepositoryErrorGettingInvoiceGroupList] = "Error getting the list of invoice groups.";
+ThMessage[ThStatusCode.InvoiceGroupItemUpdateStrategyErrorUpdating] = "Error updating the invoice group item.";
+ThMessage[ThStatusCode.SaveInvoiceGroupItem] = "Error saving the invoice group item.";
 
 export class ThResponse {
     statusCode: ThStatusCode;
