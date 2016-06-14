@@ -46,7 +46,7 @@ export class AllotmentArchiverHelper implements IAllotmentDataSource {
 	}
 
 	private getTimestamp(dataBuilder: DefaultDataBuilder, dayOffset: number): ThTimestamp {
-		var timestamp = new ThTimestamp(dataBuilder.defaultTimezone);
+		var timestamp = ThTimestamp.buildThTimestampForTimezone(dataBuilder.defaultTimezone);
 		timestamp.thDateDO = this._thDateUtils.convertMomentToThDateDO(moment());
 		timestamp.thDateDO = this._thDateUtils.addDaysToThDateDO(timestamp.thDateDO, dayOffset);
 		timestamp.thHourDO.hour = 0;

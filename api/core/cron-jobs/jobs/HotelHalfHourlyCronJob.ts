@@ -29,7 +29,7 @@ export class HotelHalfHourlyCronJob extends AHalfHourlyCronJob {
 		if (!hotel.configurationCompleted) {
 			return;
 		}
-		var thTimestamp = new ThTimestamp(hotel.timezone);
+		var thTimestamp = ThTimestamp.buildThTimestampForTimezone(hotel.timezone);
 		var executorDO: JobExecutorDO = {
 			appContext: this._appContext,
 			hotel: hotel,

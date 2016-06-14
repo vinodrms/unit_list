@@ -1,45 +1,45 @@
+import {BaseDO} from '../../data-layer/common/base/BaseDO';
 import {ThDateDO} from './data-objects/ThDateDO';
 import {ThHourDO} from './data-objects/ThHourDO';
 import {ThDateUtils} from './ThDateUtils';
 
 import moment = require('moment-timezone');
 
-export class ThTimestamp {
+export class ThTimestamp extends BaseDO {
 	private static StartOfDayHour = 0;
 	private static StartOfDayMaxMinute = 30;
 
-	private _thDateDO: ThDateDO;
-	private _thHourDO: ThHourDO;
+	thDateDO: ThDateDO;
+	thHourDO: ThHourDO;
 
-	private _thDateUtils: ThDateUtils;
-
-	constructor(private _timezoneString: string) {
-		this._thDateUtils = new ThDateUtils();
-		this.buildCurrentDateAndHour();
+	constructor() {
+		super();
 	}
-	private buildCurrentDateAndHour() {
-		var currentMoment: moment.Moment = moment.tz(this._timezoneString);
-		this._thDateDO = this._thDateUtils.convertMomentToThDateDO(currentMoment);
-		this._thHourDO = this._thDateUtils.convertMomentToThHourDO(currentMoment);
+	protected getPrimitivePropertyKeys(): string[] {
+		return [];
 	}
+	public buildFromObject(object: Object) {
+        super.buildFromObject(object);
 
+        this.thDateDO = new ThDateDO();
+        this.thDateDO.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "thDateDO"));
+
+		this.thHourDO = new ThHourDO();
+        this.thHourDO.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "thHourDO"));
+    }
 	public getUtcTimestamp(): number {
-		return Date.UTC(this._thDateDO.year, this._thDateDO.month, this._thDateDO.day, this._thHourDO.hour, this._thHourDO.minute);
+		return Date.UTC(this.thDateDO.year, this.thDateDO.month, this.thDateDO.day, this.thHourDO.hour, this.thHourDO.minute);
 	}
 	public isStartOfDay(): boolean {
-		return this._thHourDO.hour === ThTimestamp.StartOfDayHour && this._thHourDO.minute < ThTimestamp.StartOfDayMaxMinute;
+		return this.thHourDO.hour === ThTimestamp.StartOfDayHour && this.thHourDO.minute < ThTimestamp.StartOfDayMaxMinute;
 	}
 
-	public get thDateDO(): ThDateDO {
-		return this._thDateDO;
-	}
-	public set thDateDO(thDateDO: ThDateDO) {
-		this._thDateDO = thDateDO;
-	}
-	public get thHourDO(): ThHourDO {
-		return this._thHourDO;
-	}
-	public set thHourDO(thHourDO: ThHourDO) {
-		this._thHourDO = thHourDO;
+	public static buildThTimestampForTimezone(timezoneString: string): ThTimestamp {
+		var thDateUtils = new ThDateUtils();
+		var currentMoment: moment.Moment = moment.tz(timezoneString);
+		var thTimestamp = new ThTimestamp();
+		thTimestamp.thDateDO = thDateUtils.convertMomentToThDateDO(currentMoment);
+		thTimestamp.thHourDO = thDateUtils.convertMomentToThHourDO(currentMoment);
+		return thTimestamp;
 	}
 }
