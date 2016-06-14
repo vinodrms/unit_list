@@ -1,5 +1,5 @@
 import {BaseDO} from '../../common/base/BaseDO';
-import {InvoiceDO} from './InvoiceDO';
+import {InvoiceDO, InvoicePaymentStatus} from './InvoiceDO';
 
 export enum InvoiceGroupStatus {
 	Active,
@@ -13,13 +13,15 @@ export class InvoiceGroupDO extends BaseDO {
 
     id: string;
     versionId: number;
+    hotelId: string;
     bookingId: string;
     indexedCustomerIdList: string[];
     invoiceList: InvoiceDO[];
+    paymentStatus: InvoicePaymentStatus;
     status: InvoiceGroupStatus;
 
     protected getPrimitivePropertyKeys(): string[] {
-        return ["id", "versionId", "bookingId", "indexedCustomerIdList", "status"];
+        return ["id", "versionId", "bookingId", "indexedCustomerIdList", "paymentStatus", "status"];
     }
     
     public buildFromObject(object: Object) {

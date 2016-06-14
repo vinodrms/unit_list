@@ -2,7 +2,7 @@ import {BaseDO} from '../../common/base/BaseDO';
 import {PayerDO} from './payers/PayerDO';
 import {InvoiceItemDO} from './items/InvoiceItemDO';
 
-export enum InvoiceState {
+export enum InvoicePaymentStatus {
 	Open, Closed
 }
 
@@ -13,10 +13,10 @@ export class InvoiceDO extends BaseDO {
 
     payerList: PayerDO[];
     itemList: InvoiceItemDO[];
-    state: InvoiceState;
+    paymentStatus: InvoicePaymentStatus;
 
     protected getPrimitivePropertyKeys(): string[] {
-        return ["state"];
+        return ["paymentStatus"];
     }
     
     public buildFromObject(object: Object) {
