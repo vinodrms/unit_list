@@ -19,6 +19,9 @@ export enum BookingConfirmationStatus {
     CheckedIn,
     CheckedOut
 }
+export enum GroupBookingInputChannel {
+    PropertyManagementSystem
+}
 
 export class BookingDO extends BaseDO {
     // booking group
@@ -27,6 +30,7 @@ export class BookingDO extends BaseDO {
     hotelId: string;
     versionId: number;
     status: GroupBookingStatus;
+    inputChannel: GroupBookingInputChannel;
 
     // individual booking
     bookingId: string;
@@ -49,7 +53,7 @@ export class BookingDO extends BaseDO {
     bookingHistory: DocumentHistoryDO;
 
     protected getPrimitivePropertyKeys(): string[] {
-        return ["groupBookingId", "groupBookingReference", "hotelId", "versionId", "status", "bookingId", "bookingReference", "confirmationStatus",
+        return ["groupBookingId", "groupBookingReference", "hotelId", "versionId", "status", "inputChannel", "bookingId", "bookingReference", "confirmationStatus",
             "customerIdList", "startUtcTimestamp", "endUtcTimestamp", "roomCategoryId", "roomId", "priceProductId", "allotmentId", "notes"];
     }
 

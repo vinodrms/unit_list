@@ -55,6 +55,7 @@ export class MongoAddBookingsRepository extends MongoRepository {
         bookingGroup.hotelId = meta.hotelId;
         bookingGroup.versionId = 0;
         bookingGroup.groupBookingReference = bookingList[0].groupBookingReference;
+        bookingGroup.inputChannel = bookingList[0].inputChannel;
         bookingGroup.status = GroupBookingStatus.Active;
         bookingGroup.bookingList = [];
         _.forEach(bookingList, (booking: BookingDO) => {
@@ -63,6 +64,7 @@ export class MongoAddBookingsRepository extends MongoRepository {
             delete booking.versionId;
             delete booking.groupBookingReference;
             delete booking.status;
+            delete booking.inputChannel;
             bookingGroup.bookingList.push(booking);
         });
         return bookingGroup;
