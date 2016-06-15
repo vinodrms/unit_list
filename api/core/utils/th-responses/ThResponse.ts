@@ -294,6 +294,10 @@ export enum ThStatusCode {
     HtmlReportsServiceHtmlExportError,
 
     SlackSendMessageError,
+
+    AddBookingsRepositoryEmptyBookingList,
+    AddBookingsRepositoryNoBookingsLimitExceeded,
+    AddBookingsRepositoryErrorAddingBookingGroup,
     
     InvoiceGroupsRepositoryErrorAddingInvoiceGroup,
     InvoiceGroupsRepositoryProblemUpdatingInvoiceGroup,
@@ -592,6 +596,10 @@ ThMessage[ThStatusCode.InvoiceGroupsRepositoryErrorUpdatingInvoiceGroup] = "Erro
 ThMessage[ThStatusCode.InvoiceGroupsRepositoryErrorGettingInvoiceGroupList] = "Error getting the list of invoice groups.";
 ThMessage[ThStatusCode.InvoiceGroupItemUpdateStrategyErrorUpdating] = "Error updating the invoice group item.";
 ThMessage[ThStatusCode.SaveInvoiceGroupItem] = "Error saving the invoice group item.";
+ThMessage[ThStatusCode.SlackSendMessageError] = "Error sending the message using Slack.";
+ThMessage[ThStatusCode.AddBookingsRepositoryEmptyBookingList] = "Empty booking list.";
+ThMessage[ThStatusCode.AddBookingsRepositoryNoBookingsLimitExceeded] = "You can't create more than 50 bookings at once.";
+ThMessage[ThStatusCode.AddBookingsRepositoryErrorAddingBookingGroup] = "Error adding bookings.";
 
 export class ThResponse {
     statusCode: ThStatusCode;
