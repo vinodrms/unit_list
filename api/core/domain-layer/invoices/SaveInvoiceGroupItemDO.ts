@@ -11,7 +11,6 @@ import {CommissionType} from '../../data-layer/common/data-objects/commission/Co
 import {InvoiceItemType} from '../../data-layer/invoices/data-objects/items/InvoiceItemDO';
 
 export class SaveInvoiceGroupItemDO {
-    hotelId: string;
     bookingId: string;
     indexedCustomerIdList: string[];
     invoiceList: InvoiceDO[];
@@ -19,10 +18,6 @@ export class SaveInvoiceGroupItemDO {
 
     public static getValidationStructure(): IValidationStructure {
         return new ObjectValidationStructure([
-            {
-                key: "hotelId",
-                validationStruct: new PrimitiveValidationStructure(new StringValidationRule())
-            },
             {
                 key: "bookingId",
                 validationStruct: new PrimitiveValidationStructure(StringValidationRule.buildNullable())
