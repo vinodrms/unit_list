@@ -30,6 +30,8 @@ export class DefaultCustomerBuilder implements ICustomerDataSource {
 	getCustomerList(): CustomerDO[] {
 		var customerList = [];
 		customerList.push(DefaultCustomerBuilder.buildCustomerDO(this._testContext, CustomerType.Individual, "Ionut Paraschiv", "Masina de Paine 20"));
+		customerList.push(DefaultCustomerBuilder.buildCustomerDO(this._testContext, CustomerType.Individual, "Dragos Pricope", "Stefan Octavian Iosif 4"));
+		customerList.push(DefaultCustomerBuilder.buildCustomerDO(this._testContext, CustomerType.Individual, "Dobre Catalin", "Tineretului 32"));
 		customerList.push(DefaultCustomerBuilder.buildCustomerDO(this._testContext, CustomerType.TravelAgency, "booking.com", "23 Sunset Blvd"));
 		customerList.push(DefaultCustomerBuilder.buildCustomerDO(this._testContext, CustomerType.Company, "Threeangle Software Solutions SRL", "6D Regiei Blvd"));
 		customerList.forEach((customer: CustomerDO) => {
