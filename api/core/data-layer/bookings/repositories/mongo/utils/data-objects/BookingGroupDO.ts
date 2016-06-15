@@ -8,10 +8,11 @@ export class BookingGroupDO extends BaseDO {
     groupBookingReference: string;
     status: GroupBookingStatus;
     inputChannel: GroupBookingInputChannel;
+    noOfRooms: number;
     bookingList: BookingDO[];
 
     protected getPrimitivePropertyKeys(): string[] {
-        return ["id", "hotelId", "versionId", "groupBookingReference", "status", "inputChannel"];
+        return ["id", "hotelId", "versionId", "groupBookingReference", "status", "inputChannel", "noOfRooms"];
     }
 
     public buildFromObject(object: Object) {
@@ -27,6 +28,7 @@ export class BookingGroupDO extends BaseDO {
             bookingDO.versionId = this.versionId;
             bookingDO.status = this.status;
             bookingDO.inputChannel = this.inputChannel;
+            bookingDO.noOfRooms = this.noOfRooms;
             this.bookingList.push(bookingDO);
         });
     }
