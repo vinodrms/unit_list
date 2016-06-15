@@ -75,9 +75,14 @@ export class DefaultDataBuilder {
     private buildCore(resolve: { (result: boolean): void }, reject: { (err: any): void }) {
         this._repositoryCleaner.cleanRepository()
             .then((result: any) => {
-                var hotelBuilder = new DefaultHotelBuilder(this._testContext.appContext, this._email);
-                var hotel = hotelBuilder.getHotel();
+                var settingsRepository = this._testContext.appContext.getRepositoryFactory().getSettingsRepository();
 
+                return settingsRepository.getPaymentMethods();
+            }).then((paymentMethodList: PaymentMethodDO[]) => {
+                this._paymentMethodList = paymentMethodList;
+
+                var hotelBuilder = new DefaultHotelBuilder(this._testContext.appContext, this._email, this._paymentMethodList);
+                var hotel = hotelBuilder.getHotel();
                 return this._testContext.appContext.getRepositoryFactory().getHotelRepository().addHotel(hotel);
             }).then((savedHotel: HotelDO) => {
                 this._hotelDO = savedHotel;
@@ -86,12 +91,6 @@ export class DefaultDataBuilder {
 
                 return new Promise<boolean>((resolve: { (result: boolean): void }, reject: { (err: any): void }) => { resolve(true); });
             }).then((prevResult: any) => {
-                var settingsRepository = this._testContext.appContext.getRepositoryFactory().getSettingsRepository();
-
-                return settingsRepository.getPaymentMethods();
-            }).then((paymentMethodList: PaymentMethodDO[]) => {
-                this._paymentMethodList = paymentMethodList;
-
                 var settingsRepository = this._testContext.appContext.getRepositoryFactory().getSettingsRepository();
                 return settingsRepository.getDefaultYieldFilters();
             }).then((yieldFilterList: YieldFilterDO[]) => {
@@ -135,7 +134,7 @@ export class DefaultDataBuilder {
                 return bedBuilder.loadBeds(bedBuilder, bedTemplateList);
             }).then((addedBeds: BedDO[]) => {
                 this._bedList = addedBeds;
-                
+
                 var roomCategoryBuilder = new DefaultRoomCategoryBuilder(this._testContext);
                 return roomCategoryBuilder.loadRoomCategories(roomCategoryBuilder, this._bedList);
             }).then((addedRoomCategories: RoomCategoryDO[]) => {
@@ -150,16 +149,16 @@ export class DefaultDataBuilder {
                 return settingsRepository.getRoomAttributes();
             }).then((roomAttributeList: RoomAttributeDO[]) => {
                 this._roomAttributeList = roomAttributeList;
-                
+
                 var roomBuilder = new DefaultRoomBuilder(this._testContext);
                 return roomBuilder.loadRooms(roomBuilder, this._roomCategoryList, this._roomAttributeList, this._roomAmenityList);
             }).then((roomList: RoomDO[]) => {
                 this._roomList = roomList;
 
                 var roomCategoryIdList: string[] = _.map(this._roomList, (room: RoomDO) => { return room.categoryId });
-                var distinctRoomCategoryIdList = _.uniq(roomCategoryIdList, function(roomCategoryId) { return roomCategoryId; });
+                var distinctRoomCategoryIdList = _.uniq(roomCategoryIdList, function (roomCategoryId) { return roomCategoryId; });
                 var aggregator = new RoomCategoryStatsAggregator(this._testContext.appContext);
-                
+
                 return aggregator.getRoomCategoryStatsList({ hotelId: this._testContext.sessionContext.sessionDO.hotel.id }, distinctRoomCategoryIdList);
             }).then((roomCategoryStatsList: RoomCategoryStatsDO[]) => {
                 this._roomCategoryStatsList = roomCategoryStatsList;
