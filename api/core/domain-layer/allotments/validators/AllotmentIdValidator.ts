@@ -6,6 +6,7 @@ import {SessionContext} from '../../../utils/SessionContext';
 import {ThUtils} from '../../../utils/ThUtils';
 import {AllotmentDO, AllotmentStatus} from '../../../data-layer/allotments/data-objects/AllotmentDO';
 import {AllotmentSearchResultRepoDO} from '../../../data-layer/allotments/repositories/IAllotmentRepository';
+import {AllotmentsContainer} from './results/AllotmentsContainer';
 
 export class AllotmentIdValidator {
     private _thUtils: ThUtils;
@@ -15,15 +16,15 @@ export class AllotmentIdValidator {
         this._thUtils = new ThUtils();
     }
 
-    public validateAllotmentIdList(allotmentIdList: string[]): Promise<AllotmentDO[]> {
+    public validateAllotmentIdList(allotmentIdList: string[]): Promise<AllotmentsContainer> {
         this._allotmentIdList = allotmentIdList;
-        return new Promise<AllotmentDO[]>((resolve: { (result: AllotmentDO[]): void }, reject: { (err: ThError): void }) => {
+        return new Promise<AllotmentsContainer>((resolve: { (result: AllotmentsContainer): void }, reject: { (err: ThError): void }) => {
             this.validateAllotmentIdListCore(resolve, reject);
         });
     }
-    private validateAllotmentIdListCore(resolve: { (result: AllotmentDO[]): void }, reject: { (err: ThError): void }) {
+    private validateAllotmentIdListCore(resolve: { (result: AllotmentsContainer): void }, reject: { (err: ThError): void }) {
         if (this._allotmentIdList.length == 0) {
-            resolve([]);
+            resolve(new AllotmentsContainer([]));
             return;
         }
 
@@ -36,7 +37,7 @@ export class AllotmentIdValidator {
                     ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Invalid allotment id list", this._allotmentIdList, thError);
                     throw thError;
                 }
-                resolve(searchResult.allotmentList);
+                resolve(new AllotmentsContainer(searchResult.allotmentList));
             }).catch((error: any) => {
                 reject(error);
             });

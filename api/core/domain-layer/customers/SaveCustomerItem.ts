@@ -12,6 +12,7 @@ import {PriceProductAvailability, PriceProductDO} from '../../data-layer/price-p
 import {CustomerItemActionFactory} from './save-actions/CustomerItemActionFactory';
 import {ICustomerItemActionStrategy} from './save-actions/ICustomerItemActionStrategy';
 import {PriceProductIdValidator} from '../price-products/validators/PriceProductIdValidator';
+import {PriceProductsContainer} from '../price-products/validators/results/PriceProductsContainer';
 
 import _ = require("underscore");
 
@@ -80,7 +81,7 @@ export class SaveCustomerItem {
 		}
 
 		var ppIdValitator = new PriceProductIdValidator(this._appContext, this._sessionContext);
-		ppIdValitator.validatePriceProductIdList(priceProductDetails.priceProductIdList).then((priceProductList: PriceProductDO[]) => {
+		ppIdValitator.validatePriceProductIdList(priceProductDetails.priceProductIdList).then((priceProductsContainer: PriceProductsContainer) => {
 			resolve(true);
 		}).catch((error: any) => {
 			reject(error);

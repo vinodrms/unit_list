@@ -1,13 +1,16 @@
 import {AddBookingItemsDO, BookingItemDO} from '../AddBookingItemsDO';
 import {AppContext} from '../../../../utils/AppContext';
 import {SessionContext} from '../../../../utils/SessionContext';
+import {ThLogger, ThLogLevel} from '../../../../utils/logging/ThLogger';
 import {ThError} from '../../../../utils/th-responses/ThError';
+import {ThStatusCode} from '../../../../utils/th-responses/ThResponse';
 import {GroupBookingInputChannel, BookingDO, GroupBookingStatus, BookingConfirmationStatus} from '../../../../data-layer/bookings/data-objects/BookingDO';
 import {ThUtils} from '../../../../utils/ThUtils';
 import {IndexedBookingInterval} from '../../../../data-layer/price-products/utils/IndexedBookingInterval';
 import {DocumentHistoryDO} from '../../../../data-layer/common/data-objects/document-history/DocumentHistoryDO';
 import {DocumentActionDO} from '../../../../data-layer/common/data-objects/document-history/DocumentActionDO';
 import {PriceProductDO} from '../../../../data-layer/price-products/data-objects/PriceProductDO';
+import {PriceProductsContainer} from '../../../price-products/validators/results/PriceProductsContainer';
 import {BookingCancellationTimeDO} from '../../../../data-layer/bookings/data-objects/cancellation-time/BookingCancellationTimeDO';
 import {HotelDO} from '../../../../data-layer/hotel/data-objects/HotelDO';
 import {BookingUtils} from '../../utils/BookingUtils';
@@ -15,7 +18,7 @@ import {BookingUtils} from '../../utils/BookingUtils';
 import _ = require('underscore');
 
 export class BookingItemsConverterParams {
-    priceProductList: PriceProductDO[];
+    priceProductsContainer: PriceProductsContainer;
     hotelDO: HotelDO;
 }
 
@@ -38,7 +41,13 @@ export class BookingItemsConverter {
         this._inputChannel = inputChannel;
 
         return new Promise<BookingDO[]>((resolve: { (result: BookingDO[]): void }, reject: { (err: ThError): void }) => {
-            this.convertCore(resolve, reject);
+            try {
+                this.convertCore(resolve, reject);
+            } catch (error) {
+                var thError = new ThError(ThStatusCode.BookingItemsConverterError, error);
+                ThLogger.getInstance().logError(ThLogLevel.Error, "error converting booking items", this._bookingItems, thError);
+                reject(thError);
+            }
         });
     }
 
@@ -66,8 +75,14 @@ export class BookingItemsConverter {
             bookingDO.confirmationStatus = BookingConfirmationStatus.Confirmed;
             bookingDO.interval = this._bookingItems.interval;
 
-            var priceProduct = this.getPriceProductById(bookingDO.priceProductId);
-            bookingDO.priceProductSnapshot = priceProduct;
+            var priceProduct = this._converterParams.priceProductsContainer.getPriceProductById(bookingDO.priceProductId);
+            bookingDO.priceProductSnapshot = new PriceProductDO();
+            bookingDO.priceProductSnapshot.buildFromObject(priceProduct);
+
+            // remove the yield intervals on the snapshot to minimize the document size
+            bookingDO.priceProductSnapshot.openForArrivalIntervalList = [];
+            bookingDO.priceProductSnapshot.openForDepartureIntervalList = [];
+            bookingDO.priceProductSnapshot.openIntervalList = [];
 
             var indexedBookingInterval = new IndexedBookingInterval(bookingDO.interval);
             bookingDO.startUtcTimestamp = indexedBookingInterval.getStartUtcTimestamp();
@@ -92,10 +107,5 @@ export class BookingItemsConverter {
     }
     private generateIndividualBookingReference(): string {
         return BookingItemsConverter.IndividualBookingReferencePrefix + this._thUtils.generateShortId();
-    }
-    private getPriceProductById(priceProductId: string): PriceProductDO {
-        return _.find(this._converterParams.priceProductList, (priceProduct: PriceProductDO) => {
-            return priceProduct.id === priceProductId;
-        })
     }
 }

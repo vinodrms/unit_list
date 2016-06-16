@@ -7,14 +7,17 @@ import {GroupBookingInputChannel, BookingDO} from '../../../data-layer/bookings/
 import {AddBookingItemsDO, BookingItemDO} from './AddBookingItemsDO';
 import {ValidationResultParser} from '../../common/ValidationResultParser';
 import {HotelDO} from '../../../data-layer/hotel/data-objects/HotelDO';
-import {BookingIntervalValidator} from '../utils/BookingIntervalValidator';
+import {BookingIntervalValidator} from '../validators/BookingIntervalValidator';
 import {PriceProductDO} from '../../../data-layer/price-products/data-objects/PriceProductDO';
 import {PriceProductIdValidator} from '../../price-products/validators/PriceProductIdValidator';
+import {PriceProductsContainer} from '../../price-products/validators/results/PriceProductsContainer';
 import {BookingDOConstraints} from '../../../data-layer/bookings/data-objects/BookingDOConstraints';
 import {ThDateIntervalDO} from '../../../utils/th-dates/data-objects/ThDateIntervalDO';
 import {CustomerIdValidator} from '../../customers/validators/CustomerIdValidator';
 import {CustomerDO} from '../../../data-layer/customers/data-objects/CustomerDO';
+import {CustomersContainer} from '../../customers/validators/results/CustomersContainer';
 import {AllotmentIdValidator} from '../../allotments/validators/AllotmentIdValidator';
+import {AllotmentsContainer} from '../../allotments/validators/results/AllotmentsContainer';
 import {AllotmentDO} from '../../../data-layer/allotments/data-objects/AllotmentDO';
 import {BookingItemsConverter, BookingItemsConverterParams} from './utils/BookingItemsConverter';
 
@@ -25,9 +28,9 @@ export class AddBookingItems {
     private _inputChannel: GroupBookingInputChannel;
 
     private _loadedHotel: HotelDO;
-    private _loadedPriceProductList: PriceProductDO[];
-    private _loadedCustomerList: CustomerDO[];
-    private _loadedAllotmentList: AllotmentDO[];
+    private _loadedPriceProductsContainer: PriceProductsContainer;
+    private _loadedCustomersContainer: CustomersContainer;
+    private _loadedAllotmentsContainer: AllotmentsContainer;
 
     constructor(private _appContext: AppContext, private _sessionContext: SessionContext) {
     }
@@ -72,24 +75,24 @@ export class AddBookingItems {
                 var priceProductValidator = new PriceProductIdValidator(this._appContext, this._sessionContext);
                 var priceProductIdListToValidate = this.getPriceProductIdListForBookings();
                 return priceProductValidator.validatePriceProductIdList(priceProductIdListToValidate);
-            }).then((loadedPriceProductList: PriceProductDO[]) => {
-                this._loadedPriceProductList = loadedPriceProductList;
+            }).then((loadedPriceProductsContainer: PriceProductsContainer) => {
+                this._loadedPriceProductsContainer = loadedPriceProductsContainer;
 
                 var customerValidator = new CustomerIdValidator(this._appContext, this._sessionContext);
                 var customerIdListToValidate = this.getCustomerIdListForBookings();
                 return customerValidator.validateCustomerIdList(customerIdListToValidate);
-            }).then((loadedCustomerList: CustomerDO[]) => {
-                this._loadedCustomerList = loadedCustomerList;
+            }).then((loadedCustomersContainer: CustomersContainer) => {
+                this._loadedCustomersContainer = loadedCustomersContainer;
 
                 var allotmentValidator = new AllotmentIdValidator(this._appContext, this._sessionContext);
                 var allotmentIdListToValidate = this.getAllotmentIdListForBookings();
                 return allotmentValidator.validateAllotmentIdList(allotmentIdListToValidate);
-            }).then((loadedAllotmentList: AllotmentDO[]) => {
-                this._loadedAllotmentList = loadedAllotmentList;
+            }).then((loadedAllotmentsContainer: AllotmentsContainer) => {
+                this._loadedAllotmentsContainer = loadedAllotmentsContainer;
 
                 var bookingItemsConverter = new BookingItemsConverter(this._appContext, this._sessionContext, {
                     hotelDO: this._loadedHotel,
-                    priceProductList: this._loadedPriceProductList
+                    priceProductsContainer: this._loadedPriceProductsContainer
                 });
                 return bookingItemsConverter.convert(this._bookingItems, this._inputChannel);
             }).then((convertedBookingList: BookingDO[]) => {

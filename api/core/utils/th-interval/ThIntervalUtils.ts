@@ -5,7 +5,7 @@ import {ThOrdering} from '../th-comparator/ThOrdering';
 export abstract class ThIntervalUtils<T> {
 	private _thOrdering: ThOrdering<T>;
 
-	constructor(private _intervals: IThInterval<T>[], private _comparator: IThComparator<T>) {
+	constructor(private _intervals: IThInterval<T>[], protected _comparator: IThComparator<T>) {
 		this._thOrdering = new ThOrdering<T>(_comparator);
 	}
 

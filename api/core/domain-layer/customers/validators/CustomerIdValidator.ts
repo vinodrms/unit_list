@@ -6,6 +6,7 @@ import {SessionContext} from '../../../utils/SessionContext';
 import {ThUtils} from '../../../utils/ThUtils';
 import {CustomerDO, CustomerStatus} from '../../../data-layer/customers/data-objects/CustomerDO';
 import {CustomerSearchResultRepoDO} from '../../../data-layer/customers/repositories/ICustomerRepository';
+import {CustomersContainer} from './results/CustomersContainer';
 
 export class CustomerIdValidator {
     private _thUtils: ThUtils;
@@ -15,15 +16,15 @@ export class CustomerIdValidator {
         this._thUtils = new ThUtils();
     }
 
-    public validateCustomerIdList(customerIdList: string[]): Promise<CustomerDO[]> {
+    public validateCustomerIdList(customerIdList: string[]): Promise<CustomersContainer> {
         this._customerIdList = customerIdList;
-        return new Promise<CustomerDO[]>((resolve: { (result: CustomerDO[]): void }, reject: { (err: ThError): void }) => {
+        return new Promise<CustomersContainer>((resolve: { (result: CustomersContainer): void }, reject: { (err: ThError): void }) => {
             this.validateCustomerIdListCore(resolve, reject);
         });
     }
-    private validateCustomerIdListCore(resolve: { (result: CustomerDO[]): void }, reject: { (err: ThError): void }) {
+    private validateCustomerIdListCore(resolve: { (result: CustomersContainer): void }, reject: { (err: ThError): void }) {
         if (this._customerIdList.length == 0) {
-            resolve([]);
+            resolve(new CustomersContainer([]));
             return;
         }
 
@@ -36,7 +37,7 @@ export class CustomerIdValidator {
                     ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Invalid customer id list", this._customerIdList, thError);
                     throw thError;
                 }
-                resolve(searchResult.customerList);
+                resolve(new CustomersContainer(searchResult.customerList));
             }).catch((error: any) => {
                 reject(error);
             });

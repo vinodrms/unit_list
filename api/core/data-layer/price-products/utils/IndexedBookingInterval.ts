@@ -11,6 +11,8 @@ export class IndexedBookingInterval {
     public static DefaultUtcCheckOutHour = 12;
 
     private _bookingDateList: ThDateDO[];
+    private _indexedBookingInterval: ThDateIntervalDO;
+
     private _bookingISOWeekDayList: ISOWeekDay[];
     private _uniqueBookingISOWeekDayList: ISOWeekDay[];
 
@@ -22,6 +24,7 @@ export class IndexedBookingInterval {
         this._bookingDateList = this._bookingInterval.getThDateDOList();
         // the departure date is not considered a full staying day
         this._bookingDateList.pop();
+        this._indexedBookingInterval = ThDateIntervalDO.buildThDateIntervalDO(this._bookingDateList[0], this._bookingDateList[this._bookingDateList.length - 1]);
     }
     private indexBookingISOWeekDayList() {
         this._bookingISOWeekDayList = [];
@@ -79,6 +82,13 @@ export class IndexedBookingInterval {
     }
     public getEndUtcTimestamp(): number {
         return this.getUtcTimestamp(this._bookingInterval.end, IndexedBookingInterval.DefaultUtcCheckOutHour);
+    }
+
+    public get indexedBookingInterval(): ThDateIntervalDO {
+        return this._indexedBookingInterval;
+    }
+    public set indexedBookingInterval(indexedBookingInterval: ThDateIntervalDO) {
+        this._indexedBookingInterval = indexedBookingInterval;
     }
 
     private getUtcTimestamp(thDate: ThDateDO, defaultHour: number): number {

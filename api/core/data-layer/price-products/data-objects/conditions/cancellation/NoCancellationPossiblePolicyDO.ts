@@ -18,6 +18,6 @@ export class NoCancellationPossiblePolicyDO extends BaseDO implements IPriceProd
 	}
 	public generateBookingCancellationTimeDO(arrivalDate: ThDateDO, currentHotelDate: ThDateDO): BookingCancellationTimeDO {
 		var ccUtils = new CancellationPolicyUtils();
-		return ccUtils.generateBookingCancellationTimeDO(BookingCancellationTimeType.DependentOnCancellationHour, currentHotelDate, ThHourDO.buildThHourDO(0, 0));
+		return ccUtils.generateBookingCancellationTimeDO(BookingCancellationTimeType.ExactTimestamp, currentHotelDate, ThHourDO.buildThHourDO(0, 0));
 	}
 }
