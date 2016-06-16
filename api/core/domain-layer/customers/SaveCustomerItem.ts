@@ -8,7 +8,7 @@ import {ValidationResultParser} from '../common/ValidationResultParser';
 import {CustomerDO, CustomerType} from '../../data-layer/customers/data-objects/CustomerDO';
 import {SaveCustomerItemDO} from './SaveCustomerItemDO';
 import {CustomerMetaRepoDO, CustomerSearchResultRepoDO} from '../../data-layer/customers/repositories/ICustomerRepository';
-import {PriceProductAvailability} from '../../data-layer/price-products/data-objects/PriceProductDO';
+import {PriceProductAvailability, PriceProductDO} from '../../data-layer/price-products/data-objects/PriceProductDO';
 import {CustomerItemActionFactory} from './save-actions/CustomerItemActionFactory';
 import {ICustomerItemActionStrategy} from './save-actions/ICustomerItemActionStrategy';
 import {PriceProductIdValidator} from '../price-products/validators/PriceProductIdValidator';
@@ -80,7 +80,7 @@ export class SaveCustomerItem {
 		}
 
 		var ppIdValitator = new PriceProductIdValidator(this._appContext, this._sessionContext);
-		ppIdValitator.validatePriceProductIdList(priceProductDetails.priceProductIdList).then((result: boolean) => {
+		ppIdValitator.validatePriceProductIdList(priceProductDetails.priceProductIdList).then((priceProductList: PriceProductDO[]) => {
 			resolve(true);
 		}).catch((error: any) => {
 			reject(error);

@@ -1,7 +1,16 @@
 {
+	// booking history
+	"Booking was created": "Booking was created",
+
+
+	// ThResponse
+
 	"Ok" : "Ok",
 	"Problem checking the VAT": "Problem checking the VAT",
 	"The VAT is not in EU": "The VAT is not in EU",
 	"Invalid VAT format" : "Invalid VAT format",
 	"Error logging in. Please check your credentials and try again.": "Error logging in. Please check your credentials and try again."
+
+
+	// ThNotificationDO
 }

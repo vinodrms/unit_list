@@ -9,7 +9,6 @@ export class MinimumNumberOfAdultsConstraintDO extends BaseDO implements IPriceP
     }
 
     public appliesOn(data: PriceProductConstraintDataDO): boolean {
-        // TODO: apply constraint
-        return true;
+        return this.noOfAdults <= data.configCapacity.noAdults;
     }
 }

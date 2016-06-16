@@ -1,5 +1,5 @@
 import {BaseDO} from '../../../common/base/BaseDO';
-import {ThTimestamp} from '../../../../utils/th-dates/ThTimestamp';
+import {ThTimestampDO} from '../../../../utils/th-dates/data-objects/ThTimestampDO';
 
 export enum BookingCancellationTimeType {
     ExactTimestamp,
@@ -8,7 +8,7 @@ export enum BookingCancellationTimeType {
 
 export class BookingCancellationTimeDO extends BaseDO {
     type: BookingCancellationTimeType;
-    thTimestamp: ThTimestamp;
+    thTimestamp: ThTimestampDO;
     utcTimestamp: number;
 
     protected getPrimitivePropertyKeys(): string[] {
@@ -18,7 +18,7 @@ export class BookingCancellationTimeDO extends BaseDO {
     public buildFromObject(object: Object) {
         super.buildFromObject(object);
 
-        this.thTimestamp = new ThTimestamp();
+        this.thTimestamp = new ThTimestampDO();
         this.thTimestamp.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "thTimestamp"));
     }
 }

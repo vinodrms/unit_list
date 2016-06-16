@@ -1,11 +1,11 @@
-import {BaseDO} from '../../data-layer/common/base/BaseDO';
-import {ThDateDO} from './data-objects/ThDateDO';
-import {ThHourDO} from './data-objects/ThHourDO';
-import {ThDateUtils} from './ThDateUtils';
+import {BaseDO} from '../../../data-layer/common/base/BaseDO';
+import {ThDateDO} from './ThDateDO';
+import {ThHourDO} from './ThHourDO';
+import {ThDateUtils} from '../ThDateUtils';
 
 import moment = require('moment-timezone');
 
-export class ThTimestamp extends BaseDO {
+export class ThTimestampDO extends BaseDO {
 	private static StartOfDayHour = 0;
 	private static StartOfDayMaxMinute = 30;
 
@@ -31,13 +31,13 @@ export class ThTimestamp extends BaseDO {
 		return Date.UTC(this.thDateDO.year, this.thDateDO.month, this.thDateDO.day, this.thHourDO.hour, this.thHourDO.minute);
 	}
 	public isStartOfDay(): boolean {
-		return this.thHourDO.hour === ThTimestamp.StartOfDayHour && this.thHourDO.minute < ThTimestamp.StartOfDayMaxMinute;
+		return this.thHourDO.hour === ThTimestampDO.StartOfDayHour && this.thHourDO.minute < ThTimestampDO.StartOfDayMaxMinute;
 	}
 
-	public static buildThTimestampForTimezone(timezoneString: string): ThTimestamp {
+	public static buildThTimestampForTimezone(timezoneString: string): ThTimestampDO {
 		var thDateUtils = new ThDateUtils();
 		var currentMoment: moment.Moment = moment.tz(timezoneString);
-		var thTimestamp = new ThTimestamp();
+		var thTimestamp = new ThTimestampDO();
 		thTimestamp.thDateDO = thDateUtils.convertMomentToThDateDO(currentMoment);
 		thTimestamp.thHourDO = thDateUtils.convertMomentToThHourDO(currentMoment);
 		return thTimestamp;

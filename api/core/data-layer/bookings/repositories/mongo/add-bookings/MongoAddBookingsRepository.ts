@@ -5,12 +5,11 @@ import {ThStatusCode} from '../../../../../utils/th-responses/ThResponse';
 import {BookingDO, GroupBookingStatus} from '../../../data-objects/BookingDO';
 import {BookingMetaRepoDO} from '../../IBookingRepository';
 import {BookingGroupDO} from '../utils/data-objects/BookingGroupDO';
+import {BookingDOConstraints} from '../../../data-objects/BookingDOConstraints';
 
 import _ = require('underscore');
 
 export class MongoAddBookingsRepository extends MongoRepository {
-    public static NoBookingsLimit: number = 50;
-
     constructor(bookingGroupsEntity: Sails.Model) {
         super(bookingGroupsEntity);
     }
@@ -28,9 +27,9 @@ export class MongoAddBookingsRepository extends MongoRepository {
             reject(thError);
             return;
         }
-        if (bookingList.length > MongoAddBookingsRepository.NoBookingsLimit) {
+        if (bookingList.length > BookingDOConstraints.NoBookingsLimit) {
             var thError = new ThError(ThStatusCode.AddBookingsRepositoryNoBookingsLimitExceeded, null);
-            ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Tried to add more than " + MongoAddBookingsRepository.NoBookingsLimit + " bookings",
+            ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Tried to add more than " + BookingDOConstraints.NoBookingsLimit + " bookings",
                 { meta: meta, bookingList: bookingList }, thError);
             reject(thError);
             return;

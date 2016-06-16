@@ -44,7 +44,7 @@ export class NewBookingSearchComponent extends BaseComponent implements AfterVie
 		super();
 		this._customerRegisterSelector = _bookingControllerService;
 
-		this.minDate = this._dateUtils.getTodayThDayeDO();
+		this.minDate = this._dateUtils.addDaysToThDateDO(this._dateUtils.getTodayThDayeDO(), -1);
 		this.bookingInterval = this._dateUtils.getTodayToTomorrowInterval();
 	}
 	ngAfterViewInit() {

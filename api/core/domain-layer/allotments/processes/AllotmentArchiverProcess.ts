@@ -3,7 +3,7 @@ import {ThError} from '../../../utils/th-responses/ThError';
 import {ThStatusCode} from '../../../utils/th-responses/ThResponse';
 import {AppContext} from '../../../utils/AppContext';
 import {HotelDO} from '../../../data-layer/hotel/data-objects/HotelDO';
-import {ThTimestamp} from '../../../utils/th-dates/ThTimestamp';
+import {ThTimestampDO} from '../../../utils/th-dates/data-objects/ThTimestampDO';
 import {AllotmentDO, AllotmentStatus} from '../../../data-layer/allotments/data-objects/AllotmentDO';
 import {AllotmentSearchResultRepoDO} from '../../../data-layer/allotments/repositories/IAllotmentRepository';
 import {ArchiveAllotmentItem} from '../ArchiveAllotmentItem';
@@ -11,12 +11,12 @@ import {ArchiveAllotmentItem} from '../ArchiveAllotmentItem';
 import _ = require('underscore');
 
 export class AllotmentArchiverProcess {
-	private _referenceTimestamp: ThTimestamp;
+	private _referenceTimestamp: ThTimestampDO;
 
 	constructor(private _appContext: AppContext, private _hotel: HotelDO) {
 	}
 
-	public archive(referenceTimestamp: ThTimestamp): Promise<AllotmentDO[]> {
+	public archive(referenceTimestamp: ThTimestampDO): Promise<AllotmentDO[]> {
 		this._referenceTimestamp = referenceTimestamp;
 		return new Promise<AllotmentDO[]>((resolve: { (result: AllotmentDO[]): void }, reject: { (err: ThError): void }) => {
 			this.archiveCore(resolve, reject);

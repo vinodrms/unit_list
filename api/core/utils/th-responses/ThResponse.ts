@@ -197,6 +197,7 @@ export enum ThStatusCode {
     SaveCustomerItemError,
     SaveCustomerItemInvalidOrNullClientType,
     SaveCustomerItemCompOrTACannotBeLinkedToOtherCustomers,
+    CustomerIdValidatorInvalidId,
     CustomerItemUpdateStrategyError,
     CustomerItemUpdateStrategyCustTypeChanged,
     CustomerItemUpdateStrategyPriceProductUsedInAllotment,
@@ -270,6 +271,7 @@ export enum ThStatusCode {
     AllotmentValidatorInvalidPriceProductId,
     AllotmentValidatorNotActivePriceProduct,
     AllotmentValidatorInvalidRoomCategId,
+    AllotmentIdValidatorInvalidId,
     ArchiveAllotmentItemError,
     ArchiveAllotmentItemNotActiveAllotment,
     AllotmentsControllerErrorGettingAllotment,
@@ -306,6 +308,11 @@ export enum ThStatusCode {
     AddBookingsRepositoryNoBookingsLimitExceeded,
     AddBookingsRepositoryErrorAddingBookingGroup,
     AddBookingItemsError,
+    BookingIntervalValidatorError,
+    BookingIntervalValidatorInvalidInterval,
+    BookingIntervalValidatorInvalidStartDate,
+    BookingIntervalValidatorMaxSixMonths,
+    AddBookingItemsInvalidNoOfBookings,
     
 }
 
@@ -504,6 +511,7 @@ ThMessage[ThStatusCode.CustomerRepositoryErrorGettingList] = "Error getting cust
 ThMessage[ThStatusCode.SaveCustomerItemError] = "Error saving customer.";
 ThMessage[ThStatusCode.SaveCustomerItemInvalidOrNullClientType] = "Invalid client type.";
 ThMessage[ThStatusCode.SaveCustomerItemCompOrTACannotBeLinkedToOtherCustomers] = "Companies or travel agencies cannot be linked to other customers.";
+ThMessage[ThStatusCode.CustomerIdValidatorInvalidId] = "Invalid list of customers.";
 ThMessage[ThStatusCode.CustomerItemUpdateStrategyError] = "Error updating customer.";
 ThMessage[ThStatusCode.CustomerItemUpdateStrategyCustTypeChanged] = "The type of a customer cannot be changed.";
 ThMessage[ThStatusCode.CustomerItemUpdateStrategyPriceProductUsedInAllotment] = "You cannot remove price products used in allotments. Please archive the allotments first.";
@@ -576,6 +584,7 @@ ThMessage[ThStatusCode.SaveAllotmentItemInvalidAvailability] = "Please insert th
 ThMessage[ThStatusCode.AllotmentValidatorInvalidPriceProductId] = "Please select a price product that is attached to the customer.";
 ThMessage[ThStatusCode.AllotmentValidatorNotActivePriceProduct] = "Allotments can only be created on Active Price Products.";
 ThMessage[ThStatusCode.AllotmentValidatorInvalidRoomCategId] = "Allotments can only be created on a specific room category from the price product.";
+ThMessage[ThStatusCode.AllotmentIdValidatorInvalidId] = "Invalid allotments list.";
 ThMessage[ThStatusCode.ArchiveAllotmentItemError] = "Error archiving allotment.";
 ThMessage[ThStatusCode.ArchiveAllotmentItemNotActiveAllotment] = "Only active allotments can be archived.";
 ThMessage[ThStatusCode.AllotmentsControllerErrorGettingAllotment] = "Error getting allotment.";
@@ -603,7 +612,11 @@ ThMessage[ThStatusCode.AddBookingsRepositoryEmptyBookingList] = "Empty booking l
 ThMessage[ThStatusCode.AddBookingsRepositoryNoBookingsLimitExceeded] = "You can't create more than 50 bookings at once.";
 ThMessage[ThStatusCode.AddBookingsRepositoryErrorAddingBookingGroup] = "Error adding bookings.";
 ThMessage[ThStatusCode.AddBookingItemsError] = "Error adding bookings.";
-
+ThMessage[ThStatusCode.BookingIntervalValidatorError] = "Error validating booking interval.";
+ThMessage[ThStatusCode.BookingIntervalValidatorInvalidInterval] = "Invalid interval.";
+ThMessage[ThStatusCode.BookingIntervalValidatorInvalidStartDate] = "Invalid start date for bookings.";
+ThMessage[ThStatusCode.BookingIntervalValidatorMaxSixMonths] = "The maximum interval for a booking is 6 months.";
+ThMessage[ThStatusCode.AddBookingItemsInvalidNoOfBookings] = "The maximum number of bookings you can add is 50.";
 
 export class ThResponse {
     statusCode: ThStatusCode;

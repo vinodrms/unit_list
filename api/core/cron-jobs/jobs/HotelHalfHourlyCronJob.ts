@@ -5,7 +5,7 @@ import {BulkCronJobExecutor} from '../utils/cron/executor/BulkCronJobExecutor';
 import {JobExecutorDO} from '../utils/cron/executor/JobExecutorDO';
 import {HotelIterator} from '../utils/hotel-iterator/HotelIterator';
 import {HotelDO} from '../../data-layer/hotel/data-objects/HotelDO';
-import {ThTimestamp} from '../../utils/th-dates/ThTimestamp';
+import {ThTimestampDO} from '../../utils/th-dates/data-objects/ThTimestampDO';
 import {ThAuditLogger} from '../../utils/logging/ThAuditLogger';
 import {AllotmentArchiverCronJobExecutor} from './allotment/AllotmentArchiverCronJobExecutor';
 
@@ -29,7 +29,7 @@ export class HotelHalfHourlyCronJob extends AHalfHourlyCronJob {
 		if (!hotel.configurationCompleted) {
 			return;
 		}
-		var thTimestamp = ThTimestamp.buildThTimestampForTimezone(hotel.timezone);
+		var thTimestamp = ThTimestampDO.buildThTimestampForTimezone(hotel.timezone);
 		var executorDO: JobExecutorDO = {
 			appContext: this._appContext,
 			hotel: hotel,

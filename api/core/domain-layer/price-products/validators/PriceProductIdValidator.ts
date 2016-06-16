@@ -15,17 +15,28 @@ export class PriceProductIdValidator {
 		this._thUtils = new ThUtils();
 	}
 
-	public validatePriceProductId(priceProductId: string): Promise<boolean> {
-		return this.validatePriceProductIdList([priceProductId]);
+	public validatePriceProductId(priceProductId: string): Promise<PriceProductDO> {
+		return new Promise<PriceProductDO>((resolve: { (result: PriceProductDO): void }, reject: { (err: ThError): void }) => {
+			this.validatePriceProductIdList([priceProductId]).then((priceProductList: PriceProductDO[]) => {
+				resolve(priceProductList[0]);
+			}).catch((error: any) => {
+				reject(error);
+			});
+		});
 	}
 
-	public validatePriceProductIdList(priceProductIdList: string[]): Promise<boolean> {
+	public validatePriceProductIdList(priceProductIdList: string[]): Promise<PriceProductDO[]> {
 		this._priceProductIdList = priceProductIdList;
-		return new Promise<boolean>((resolve: { (result: boolean): void }, reject: { (err: ThError): void }) => {
+		return new Promise<PriceProductDO[]>((resolve: { (result: PriceProductDO[]): void }, reject: { (err: ThError): void }) => {
 			this.validatePriceProductIdListCore(resolve, reject);
 		});
 	}
-	private validatePriceProductIdListCore(resolve: { (result: boolean): void }, reject: { (err: ThError): void }) {
+	private validatePriceProductIdListCore(resolve: { (result: PriceProductDO[]): void }, reject: { (err: ThError): void }) {
+		if(this._priceProductIdList.length == 0) {
+			resolve([]);
+			return;
+		}
+
 		var priceProductRepo = this._appContext.getRepositoryFactory().getPriceProductRepository();
 		priceProductRepo.getPriceProductList({ hotelId: this._sessionContext.sessionDO.hotel.id }, { priceProductIdList: this._priceProductIdList, status: PriceProductStatus.Active })
 			.then((searchResult: PriceProductSearchResultRepoDO) => {
@@ -35,7 +46,7 @@ export class PriceProductIdValidator {
 					ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Invalid price product id list", this._priceProductIdList, thError);
 					throw thError;
 				}
-				resolve(true);
+				resolve(searchResult.priceProductList);
 			}).catch((error: any) => {
 				reject(error);
 			});

@@ -1,6 +1,9 @@
 import {BaseDO} from '../../../../common/base/BaseDO';
 import {IPriceProductCancellationPolicy} from './IPriceProductCancellationPolicy';
 import {ThHourDO} from '../../../../../utils/th-dates/data-objects/ThHourDO';
+import {CancellationPolicyUtils} from './utils/CancellationPolicyUtils';
+import {ThDateDO} from '../../../../../utils/th-dates/data-objects/ThDateDO';
+import {BookingCancellationTimeDO, BookingCancellationTimeType} from '../../../../bookings/data-objects/cancellation-time/BookingCancellationTimeDO';
 
 export class CanCancelBeforeTimeOnDayOfArrivalPolicyDO extends BaseDO implements IPriceProductCancellationPolicy {
 	timeOfArrival: ThHourDO;
@@ -20,5 +23,9 @@ export class CanCancelBeforeTimeOnDayOfArrivalPolicyDO extends BaseDO implements
 	}
 	public isValid(): boolean {
 		return this.timeOfArrival.isValid();
+	}
+	public generateBookingCancellationTimeDO(arrivalDate: ThDateDO, currentHotelDate: ThDateDO): BookingCancellationTimeDO {
+		var ccUtils = new CancellationPolicyUtils();
+		return ccUtils.generateBookingCancellationTimeDO(BookingCancellationTimeType.ExactTimestamp, arrivalDate, this.timeOfArrival);
 	}
 }

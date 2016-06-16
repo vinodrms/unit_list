@@ -9,7 +9,6 @@ export class MinimumLengthOfStayConstraintDO extends BaseDO implements IPricePro
 	}
 
 	public appliesOn(data: PriceProductConstraintDataDO): boolean {
-		// TODO: apply constraint
-		return true;
+		return this.lengthOfStay <= data.indexedBookingInterval.getLengthOfStay();
 	}
 }
