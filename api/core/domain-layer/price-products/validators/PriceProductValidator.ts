@@ -11,6 +11,7 @@ import {TaxIdValidator} from '../../taxes/validators/TaxIdValidator';
 import {AddOnProductIdValidator} from '../../add-on-products/validators/AddOnProductIdValidator';
 import {RoomCategoryStatsAggregator} from '../../room-categories/aggregators/RoomCategoryStatsAggregator';
 import {YieldManagerFilterValidator} from '../../hotel-configurations/validators/YieldManagerFilterValidator';
+import {AddOnProductsContainer} from '../../add-on-products/validators/results/AddOnProductsContainer';
 
 import _ = require("underscore");
 
@@ -42,7 +43,7 @@ export class PriceProductValidator {
 				var addOnProductIdValidator = new AddOnProductIdValidator(this._appContext, this._sessionContext);
 				return addOnProductIdValidator.validateAddOnProductIdList(this._priceProduct.addOnProductIdList);
 			})
-			.then((addOnProductValidationResult: boolean) => {
+			.then((addOnProductValidationResult: AddOnProductsContainer) => {
 				var roomAggregator = new RoomCategoryStatsAggregator(this._appContext);
 				return roomAggregator.getUsedRoomCategoryList({ hotelId: this._sessionContext.sessionDO.hotel.id });
 			})

@@ -6,6 +6,7 @@ import {SessionContext} from '../../../utils/SessionContext';
 import {ThUtils} from '../../../utils/ThUtils';
 import {AddOnProductSearchResultRepoDO} from '../../../data-layer/add-on-products/repositories/IAddOnProductRepository';
 import {AddOnProductDO} from '../../../data-layer/add-on-products/data-objects/AddOnProductDO';
+import {AddOnProductsContainer} from './results/AddOnProductsContainer';
 
 export class AddOnProductIdValidator {
 	private _thUtils: ThUtils;
@@ -15,18 +16,14 @@ export class AddOnProductIdValidator {
 		this._thUtils = new ThUtils();
 	}
 
-	public validateAddOnProductId(addOnProductId: string): Promise<boolean> {
-		return this.validateAddOnProductIdList([addOnProductId]);
-	}
-
-	public validateAddOnProductIdList(addOnProductIdList: string[]): Promise<boolean> {
+	public validateAddOnProductIdList(addOnProductIdList: string[]): Promise<AddOnProductsContainer> {
 		this._addOnProductIdList = addOnProductIdList;
-		return new Promise<boolean>((resolve: { (result: boolean): void }, reject: { (err: ThError): void }) => {
+		return new Promise<AddOnProductsContainer>((resolve: { (result: AddOnProductsContainer): void }, reject: { (err: ThError): void }) => {
 			this.validateAddOnProductIdListCore(resolve, reject);
 		});
 	}
 
-	private validateAddOnProductIdListCore(resolve: { (result: boolean): void }, reject: { (err: ThError): void }) {
+	private validateAddOnProductIdListCore(resolve: { (result: AddOnProductsContainer): void }, reject: { (err: ThError): void }) {
 		var addOnProductRepo = this._appContext.getRepositoryFactory().getAddOnProductRepository();
 		addOnProductRepo.getAddOnProductList({ hotelId: this._sessionContext.sessionDO.hotel.id }, { addOnProductIdList: this._addOnProductIdList })
 			.then((searchResult: AddOnProductSearchResultRepoDO) => {
@@ -36,7 +33,7 @@ export class AddOnProductIdValidator {
 					ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Invalid add on product id list", this._addOnProductIdList, thError);
 					throw thError;
 				}
-				resolve(true);
+				resolve(new AddOnProductsContainer(searchResult.addOnProductList));
 			}).catch((error: any) => {
 				reject(error);
 			});
