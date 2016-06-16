@@ -39,4 +39,7 @@ export class BaseCorporateDetailsDO extends BaseDO implements ICustomerDetailsDO
 	public getName(): string {
 		return this.name;
 	}
+	public canPayInvoiceByAgreement(): boolean {
+		return this.payInvoiceByAgreement;
+	}
 }

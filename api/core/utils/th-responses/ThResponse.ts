@@ -301,6 +301,10 @@ export enum ThStatusCode {
     InvoiceGroupsRepositoryErrorGettingInvoiceGroupList,
     InvoiceGroupItemUpdateStrategyErrorUpdating,
     SaveInvoiceGroupItem,
+    InvoicePaymentMethodValidatorError,
+    InvoicePaymentMethodValidatorInvalidPaymentMethod,
+    InvoicePaymentMethodValidatorUnsupportedPaymentMethod,
+    InvoicePaymentMethodValidatorCannotPayByAgreement,
 
     SlackSendMessageError,
 
@@ -315,6 +319,7 @@ export enum ThStatusCode {
     AddBookingItemsInvalidNoOfBookings,
     BookingItemsConverterError,
     BookingsValidatorYieldingClosed,
+    BookingsValidatorMissingPaymentGuarantee,
     
 }
 
@@ -609,6 +614,10 @@ ThMessage[ThStatusCode.InvoiceGroupsRepositoryErrorUpdatingInvoiceGroup] = "Erro
 ThMessage[ThStatusCode.InvoiceGroupsRepositoryErrorGettingInvoiceGroupList] = "Error getting the list of invoice groups.";
 ThMessage[ThStatusCode.InvoiceGroupItemUpdateStrategyErrorUpdating] = "Error updating the invoice group item.";
 ThMessage[ThStatusCode.SaveInvoiceGroupItem] = "Error saving the invoice group item.";
+ThMessage[ThStatusCode.InvoicePaymentMethodValidatorError] = "Error validating the payment methods.";
+ThMessage[ThStatusCode.InvoicePaymentMethodValidatorInvalidPaymentMethod] = "Unrecognized payment method.";
+ThMessage[ThStatusCode.InvoicePaymentMethodValidatorUnsupportedPaymentMethod] = "The payment method selected is not supported by the hotel.";
+ThMessage[ThStatusCode.InvoicePaymentMethodValidatorCannotPayByAgreement] = "You cannot pay the invoice by agreement as the selected customer does not support this method.";
 ThMessage[ThStatusCode.SlackSendMessageError] = "Error sending the message using Slack.";
 ThMessage[ThStatusCode.AddBookingsRepositoryEmptyBookingList] = "Empty booking list.";
 ThMessage[ThStatusCode.AddBookingsRepositoryNoBookingsLimitExceeded] = "You can't create more than 50 bookings at once.";
@@ -621,6 +630,7 @@ ThMessage[ThStatusCode.BookingIntervalValidatorMaxSixMonths] = "The maximum inte
 ThMessage[ThStatusCode.AddBookingItemsInvalidNoOfBookings] = "The maximum number of bookings you can add is 50.";
 ThMessage[ThStatusCode.BookingItemsConverterError] = "There was a problem while reading the bookings.";
 ThMessage[ThStatusCode.BookingsValidatorYieldingClosed] = "You cannot book a price product that is not opened in the Yield Manager for the selected interval.";
+ThMessage[ThStatusCode.BookingsValidatorMissingPaymentGuarantee] = "You need to set a payment guarantee for all the price products with cancellation conditions.";
 
 export class ThResponse {
     statusCode: ThStatusCode;
