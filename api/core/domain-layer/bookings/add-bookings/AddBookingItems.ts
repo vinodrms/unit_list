@@ -71,10 +71,9 @@ export class AddBookingItems {
                 this._loadedHotel = loadedHotel;
 
                 var intervalValidator = new BookingIntervalValidator(loadedHotel);
-                return intervalValidator.validateBookingInterval(this._bookingItems.interval);
-            }).then((validatedBookingInterval: ThDateIntervalDO) => {
-                this._bookingItems.interval = validatedBookingInterval;
-
+                var thDateIntervalDOList = this.getThDateIntervalDOListForBookings();
+                return intervalValidator.validateBookingIntervalList(thDateIntervalDOList);
+            }).then((validatedBookingIntervalList: ThDateIntervalDO[]) => {
                 var priceProductValidator = new PriceProductIdValidator(this._appContext, this._sessionContext);
                 var priceProductIdListToValidate = this.getPriceProductIdListForBookings();
                 return priceProductValidator.validatePriceProductIdList(priceProductIdListToValidate);
@@ -122,6 +121,9 @@ export class AddBookingItems {
                 }
                 reject(thError);
             });
+    }
+    private getThDateIntervalDOListForBookings(): ThDateIntervalDO[] {
+        return _.map(this._bookingItems.bookingList, (bookingItem: BookingItemDO) => { return bookingItem.interval });
     }
     private getPriceProductIdListForBookings(): string[] {
         return _.map(this._bookingItems.bookingList, (bookingItem: BookingItemDO) => { return bookingItem.priceProductId });

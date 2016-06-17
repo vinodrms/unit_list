@@ -78,7 +78,7 @@ export class BookingItemsConverter {
             bookingDO.priceProductId = bookingItem.priceProductId;
             bookingDO.allotmentId = bookingItem.allotmentId;
             bookingDO.notes = bookingItem.notes;
-            bookingDO.interval = this._bookingItems.interval;
+            bookingDO.interval = bookingItem.interval;
 
             var priceProduct = this._converterParams.priceProductsContainer.getPriceProductById(bookingDO.priceProductId);
             bookingDO.priceProductSnapshot = new PriceProductDO();
@@ -92,7 +92,7 @@ export class BookingItemsConverter {
             var indexedBookingInterval = new IndexedBookingInterval(bookingDO.interval);
             bookingDO.startUtcTimestamp = indexedBookingInterval.getStartUtcTimestamp();
             bookingDO.endUtcTimestamp = indexedBookingInterval.getEndUtcTimestamp();
-            bookingDO.configCapacity = this._bookingItems.configCapacity;
+            bookingDO.configCapacity = bookingItem.configCapacity;
             bookingDO.fileAttachmentList = [];
             bookingDO.bookingHistory = new DocumentHistoryDO();
             bookingDO.bookingHistory.logDocumentAction(DocumentActionDO.buildDocumentActionDO({

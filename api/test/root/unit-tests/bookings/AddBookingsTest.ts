@@ -80,10 +80,10 @@ describe("New Bookings Tests", function () {
 
 
                     var bookingItems: AddBookingItemsDO = {
-                        interval: bookingInterval,
-                        configCapacity: capacity,
                         bookingList: [
                             {
+                                interval: bookingInterval,
+                                configCapacity: capacity,
                                 customerIdList: [testDataBuilder.customerList[0].id],
                                 defaultBillingDetails: billingDetails,
                                 roomCategoryId: addedPriceProduct.roomCategoryIdList[0],
