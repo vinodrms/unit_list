@@ -51,7 +51,7 @@ export class PriceProductsHelper {
 			lastRoomAvailability: false,
 			addOnProductIdList: [this._testUtils.getRandomListElement(this._dataBuilder.addOnProductList).id],
 			roomCategoryIdList: [this.getRoomCategoryId()],
-			price: DefaultPriceProductBuilder.getPricePerPerson(this._roomCategoryStat),
+			price: DefaultPriceProductBuilder.getPricePerPerson([this._roomCategoryStat]),
 			taxIdList: [this._testUtils.getRandomListElement(this._dataBuilder.taxes.vatList).id],
 			yieldFilterList: this._validPPFilters,
 			constraints: {

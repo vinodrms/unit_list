@@ -101,7 +101,7 @@ describe("Hotel Price Products Tests", function () {
         });
 		it("Should not save price product with missing price per person", function (done) {
 			var priceProductItem = pphelper.getDraftSavePriceProductItemDO();
-			priceProductItem.price = DefaultPriceProductBuilder.getPricePerPerson(pphelper.roomCategoryStat);
+			priceProductItem.price = DefaultPriceProductBuilder.getPricePerPerson([pphelper.roomCategoryStat]);
 			priceProductItem.price.priceList[0]["adultsPriceList"] = [];
 
 			var savePPItem = new SavePriceProductItem(testContext.appContext, testContext.sessionContext);
