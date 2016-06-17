@@ -1,5 +1,5 @@
 import {BaseDO} from '../../../common/base/BaseDO';
-import {AllotmentConstraintType, IAllotmentConstraint} from './IAllotmentConstraint';
+import {AllotmentConstraintType, IAllotmentConstraint, AllotmentConstraintDataDO} from './IAllotmentConstraint';
 import {BookableOnlyOnDaysFromWeekConstraintDO} from './constraints/BookableOnlyOnDaysFromWeekConstraintDO';
 import {IncludeDaysFromWeekConstraintDO} from './constraints/IncludeDaysFromWeekConstraintDO';
 import {ReleaseTimeInDaysConstraintDO} from './constraints/ReleaseTimeInDaysConstraintDO';
@@ -27,5 +27,8 @@ export class AllotmentConstraintDO extends BaseDO implements IAllotmentConstrain
 				break;
 		}
 		this.constraint.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "constraint"));
+	}
+	public appliesOn(data: AllotmentConstraintDataDO): boolean {
+		return this.constraint.appliesOn(data);
 	}
 }

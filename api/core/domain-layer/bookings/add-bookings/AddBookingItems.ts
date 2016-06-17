@@ -20,6 +20,7 @@ import {AllotmentIdValidator} from '../../allotments/validators/AllotmentIdValid
 import {AllotmentsContainer} from '../../allotments/validators/results/AllotmentsContainer';
 import {AllotmentDO} from '../../../data-layer/allotments/data-objects/AllotmentDO';
 import {BookingItemsConverter, BookingItemsConverterParams} from './utils/BookingItemsConverter';
+import {NewBookingsValidationRules} from './utils/NewBookingsValidationRules';
 
 import _ = require('underscore');
 
@@ -31,6 +32,8 @@ export class AddBookingItems {
     private _loadedPriceProductsContainer: PriceProductsContainer;
     private _loadedCustomersContainer: CustomersContainer;
     private _loadedAllotmentsContainer: AllotmentsContainer;
+
+    private _bookingList: BookingDO[];
 
     constructor(private _appContext: AppContext, private _sessionContext: SessionContext) {
     }
@@ -96,9 +99,23 @@ export class AddBookingItems {
                 });
                 return bookingItemsConverter.convert(this._bookingItems, this._inputChannel);
             }).then((convertedBookingList: BookingDO[]) => {
-                // todo: business validations & send email & generate invoices for cancel < currentTimestamp
-            })
-            .catch((error: any) => {
+                this._bookingList = convertedBookingList;
+
+                var newBookingValidationRules = new NewBookingsValidationRules(this._appContext, this._sessionContext, {
+                    hotel: this._loadedHotel,
+                    priceProductsContainer: this._loadedPriceProductsContainer,
+                    customersContainer: this._loadedCustomersContainer,
+                    allotmentsContainer: this._loadedAllotmentsContainer
+                });
+                return newBookingValidationRules.validateBookingList(this._bookingList);
+            }).then((validatedBookingList: BookingDO[]) => {
+                var bookingsRepo = this._appContext.getRepositoryFactory().getBookingRepository();
+                return bookingsRepo.addBookings({ hotelId: this._sessionContext.sessionDO.hotel.id }, this._bookingList);
+            }).then((createdBookingList: BookingDO[]) => {
+                this._bookingList = createdBookingList;
+                resolve(this._bookingList);
+                // TODO: send email & generate invoices for bookings with cancel < currentTimestamp
+            }).catch((error: any) => {
                 var thError = new ThError(ThStatusCode.AddBookingItemsError, error);
                 if (thError.isNativeError()) {
                     ThLogger.getInstance().logError(ThLogLevel.Error, "error adding bookings", this._bookingItems, thError);

@@ -318,8 +318,14 @@ export enum ThStatusCode {
     BookingIntervalValidatorMaxSixMonths,
     AddBookingItemsInvalidNoOfBookings,
     BookingItemsConverterError,
+    BookingValidationError,
+    BookingsValidatorBillingCustomerMissing,
     BookingsValidatorYieldingClosed,
+    BookingsValidatorAllotmentCustomer,
+    BookingsValidatorAllotmentInvalidRoomCategory,
     BookingsValidatorMissingPaymentGuarantee,
+    BookingsValidatorConstraintsDoNotApply,
+    BookingsValidatorAllotmentConstraintsDoNotApply,
     
 }
 
@@ -629,8 +635,14 @@ ThMessage[ThStatusCode.BookingIntervalValidatorInvalidStartDate] = "Invalid star
 ThMessage[ThStatusCode.BookingIntervalValidatorMaxSixMonths] = "The maximum interval for a booking is 6 months.";
 ThMessage[ThStatusCode.AddBookingItemsInvalidNoOfBookings] = "The maximum number of bookings you can add is 50.";
 ThMessage[ThStatusCode.BookingItemsConverterError] = "There was a problem while reading the bookings.";
+ThMessage[ThStatusCode.BookingValidationError] = "There was a problem while validating the bookings.";
+ThMessage[ThStatusCode.BookingsValidatorBillingCustomerMissing] = "The billable customer must be in the customer list.";
 ThMessage[ThStatusCode.BookingsValidatorYieldingClosed] = "You cannot book a price product that is not opened in the Yield Manager for the selected interval.";
+ThMessage[ThStatusCode.BookingsValidatorAllotmentCustomer] = "The main customer from the booking must be the one from the allotment.";
+ThMessage[ThStatusCode.BookingsValidatorAllotmentInvalidRoomCategory] = "You can only book the room category selected within the allotment.";
 ThMessage[ThStatusCode.BookingsValidatorMissingPaymentGuarantee] = "You need to set a payment guarantee for all the price products with cancellation conditions.";
+ThMessage[ThStatusCode.BookingsValidatorConstraintsDoNotApply] = "The constraints from the price product do not apply for the booking.";
+ThMessage[ThStatusCode.BookingsValidatorAllotmentConstraintsDoNotApply] = "The constraints from the allotment do not apply for the booking.";
 
 export class ThResponse {
     statusCode: ThStatusCode;
