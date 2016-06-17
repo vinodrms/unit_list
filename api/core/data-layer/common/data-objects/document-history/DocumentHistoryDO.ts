@@ -6,6 +6,11 @@ export class DocumentHistoryDO extends BaseDO {
 
     actionList: DocumentActionDO[];
 
+    constructor() {
+        super();
+        this.actionList = [];
+    }
+
     protected getPrimitivePropertyKeys(): string[] {
         return [];
     }

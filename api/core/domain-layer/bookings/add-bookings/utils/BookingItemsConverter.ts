@@ -62,7 +62,6 @@ export class BookingItemsConverter {
 
         _.forEach(this._bookingItems.bookingList, (bookingItem: BookingItemDO) => {
             var bookingDO = new BookingDO();
-            bookingDO.buildFromObject(bookingItem);
 
             bookingDO.groupBookingReference = groupBookingReference;
             bookingDO.hotelId = hotelId;
@@ -73,6 +72,12 @@ export class BookingItemsConverter {
             bookingDO.bookingId = this._thUtils.generateUniqueID();
             bookingDO.bookingReference = this.generateIndividualBookingReference();
             bookingDO.confirmationStatus = BookingConfirmationStatus.Confirmed;
+            bookingDO.customerIdList = bookingItem.customerIdList;
+            bookingDO.defaultBillingDetails = bookingItem.defaultBillingDetails;
+            bookingDO.roomCategoryId = bookingItem.roomCategoryId;
+            bookingDO.priceProductId = bookingItem.priceProductId;
+            bookingDO.allotmentId = bookingItem.allotmentId;
+            bookingDO.notes = bookingItem.notes;
             bookingDO.interval = this._bookingItems.interval;
 
             var priceProduct = this._converterParams.priceProductsContainer.getPriceProductById(bookingDO.priceProductId);
