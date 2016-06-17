@@ -1,5 +1,5 @@
 import {BaseDO} from '../../../common/base/BaseDO';
-import {AllotmentConstraintType, IAllotmentConstraint} from './IAllotmentConstraint';
+import {AllotmentConstraintType, IAllotmentConstraint, AllotmentConstraintDataDO} from './IAllotmentConstraint';
 import {AllotmentConstraintDO} from './AllotmentConstraintDO';
 
 export class AllotmentConstraintWrapperDO extends BaseDO implements IAllotmentConstraint {
@@ -18,5 +18,15 @@ export class AllotmentConstraintWrapperDO extends BaseDO implements IAllotmentCo
 			constraintDO.buildFromObject(constraintObject);
 			this.constraintList.push(constraintDO);
 		});
+	}
+
+	public appliesOn(data: AllotmentConstraintDataDO): boolean {
+		for (var index = 0; index < this.constraintList.length; index++) {
+			var constraint = this.constraintList[index];
+			if (!constraint.appliesOn(data)) {
+				return false;
+			}
+		}
+		return true;
 	}
 }

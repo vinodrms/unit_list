@@ -1,4 +1,5 @@
 import {BaseDO} from '../../common/base/BaseDO';
+import {ThUtils} from '../../../utils/ThUtils';
 import {ThDateIntervalDO} from '../../../utils/th-dates/data-objects/ThDateIntervalDO';
 import {ConfigCapacityDO} from '../../common/data-objects/bed-config/ConfigCapacityDO';
 import {PriceProductDO} from '../../price-products/data-objects/PriceProductDO';
@@ -85,5 +86,10 @@ export class BookingDO extends BaseDO {
 
         this.bookingHistory = new DocumentHistoryDO();
         this.bookingHistory.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "bookingHistory"));
+    }
+
+    public isMadeThroughAllotment(): boolean {
+        var thUtils = new ThUtils();
+        return !thUtils.isUndefinedOrNull(this.allotmentId) && this.allotmentId.length > 0;
     }
 }
