@@ -14,9 +14,12 @@ class InvoiceGroupsEntity extends BasePersistentEntity {
 				required: true,
 				defaultsTo: 0
 			},
-            state: {
+            paymentStatus: {
                 type: 'integer',
                 required: true
+            },
+            hotelId: {
+                type: 'string'
             },
             bookingId: {
                 type: 'string'

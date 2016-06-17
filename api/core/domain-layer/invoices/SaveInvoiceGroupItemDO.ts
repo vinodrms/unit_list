@@ -23,33 +23,25 @@ export class SaveInvoiceGroupItemDO {
                 validationStruct: new PrimitiveValidationStructure(StringValidationRule.buildNullable())
             },
             {
-                key: "indexedCustomerIdList",
-                validationStruct: new ArrayValidationStructure(new PrimitiveValidationStructure(new StringValidationRule()))
-            },
-            {
                 key: "invoiceList",
                 validationStruct: new ArrayValidationStructure(new ObjectValidationStructure([
                     {
                         key: "payerList",
-                        validationStruct: new ObjectValidationStructure([
+                        validationStruct: new ArrayValidationStructure(new ObjectValidationStructure([
                             {
                                 key: "customerId",
                                 validationStruct: new PrimitiveValidationStructure(new StringValidationRule())
                             },
                             {
                                 key: "paymentMethod",
-                                validationStruct: new PrimitiveValidationStructure(new NumberInListValidationRule([InvoicePaymentMethodType.DefaultPaymentMethod, InvoicePaymentMethodType.PayInvoiceByAgreement]))
-                            },
-                            {
-                                key: "commissionSnapshot",
                                 validationStruct: new ObjectValidationStructure([
                                     {
                                         key: "type",
-                                        validationStruct: new PrimitiveValidationStructure(new NumberInListValidationRule([CommissionType.Fixed, CommissionType.Percentage]))
+                                        validationStruct: new PrimitiveValidationStructure(new NumberInListValidationRule([InvoicePaymentMethodType.DefaultPaymentMethod, InvoicePaymentMethodType.PayInvoiceByAgreement]))
                                     },
                                     {
-                                        key: "amount",
-                                        validationStruct: new PrimitiveValidationStructure(NumberValidationRule.buildPriceNumberRule())
+                                        key: "value",
+                                        validationStruct: new PrimitiveValidationStructure(new StringValidationRule())
                                     }
                                 ])
                             },
@@ -57,11 +49,11 @@ export class SaveInvoiceGroupItemDO {
                                 key: "priceToPay",
                                 validationStruct: new PrimitiveValidationStructure(NumberValidationRule.buildPriceNumberRule())
                             }
-                        ])
+                        ]))
                     },
                     {
                         key: "itemList",
-                        validationStruct: new ObjectValidationStructure([
+                        validationStruct:  new ArrayValidationStructure(new ObjectValidationStructure([
                             {
                                 key: "id",
                                 validationStruct: new PrimitiveValidationStructure(new StringValidationRule())
@@ -69,8 +61,12 @@ export class SaveInvoiceGroupItemDO {
                             {
                                 key: "type",
                                 validationStruct: new PrimitiveValidationStructure(new NumberInListValidationRule([InvoiceItemType.AddOnProduct, InvoiceItemType.InvoiceFee, InvoiceItemType.PriceProduct]))
+                            },
+                            {
+                                key: "qty",
+                                validationStruct: new PrimitiveValidationStructure(new NumberValidationRule())
                             }    
-                        ])
+                        ]))
                     },
                     {
                         key: "paymentStatus",

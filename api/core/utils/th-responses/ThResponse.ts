@@ -300,11 +300,16 @@ export enum ThStatusCode {
     InvoiceGroupsRepositoryErrorUpdatingInvoiceGroup,
     InvoiceGroupsRepositoryErrorGettingInvoiceGroupList,
     InvoiceGroupItemUpdateStrategyErrorUpdating,
+    InvoiceGroupsRepositoryInvoiceGroupNotFound,
+    InvoiceGroupsRepositoryErrorGettingInvoiceGroup,
     SaveInvoiceGroupItem,
     InvoicePaymentMethodValidatorError,
     InvoicePaymentMethodValidatorInvalidPaymentMethod,
     InvoicePaymentMethodValidatorUnsupportedPaymentMethod,
     InvoicePaymentMethodValidatorCannotPayByAgreement,
+    InvoicePaymentValidatorError,
+    InvoicePayersValidatorError,
+    InvoicePayersValidatorInvalidSplit,
 
     SlackSendMessageError,
 
@@ -613,11 +618,16 @@ ThMessage[ThStatusCode.InvoiceGroupsRepositoryProblemUpdatingInvoiceGroup] = "Pr
 ThMessage[ThStatusCode.InvoiceGroupsRepositoryErrorUpdatingInvoiceGroup] = "Error updating the invoice group.";
 ThMessage[ThStatusCode.InvoiceGroupsRepositoryErrorGettingInvoiceGroupList] = "Error getting the list of invoice groups.";
 ThMessage[ThStatusCode.InvoiceGroupItemUpdateStrategyErrorUpdating] = "Error updating the invoice group item.";
+ThMessage[ThStatusCode.InvoiceGroupsRepositoryInvoiceGroupNotFound] = "Invoice group not found.";
+ThMessage[ThStatusCode.InvoiceGroupsRepositoryErrorGettingInvoiceGroup] = "Error retrieving the invoice group from the database.";
 ThMessage[ThStatusCode.SaveInvoiceGroupItem] = "Error saving the invoice group item.";
 ThMessage[ThStatusCode.InvoicePaymentMethodValidatorError] = "Error validating the payment methods.";
 ThMessage[ThStatusCode.InvoicePaymentMethodValidatorInvalidPaymentMethod] = "Unrecognized payment method.";
 ThMessage[ThStatusCode.InvoicePaymentMethodValidatorUnsupportedPaymentMethod] = "The payment method selected is not supported by the hotel.";
 ThMessage[ThStatusCode.InvoicePaymentMethodValidatorCannotPayByAgreement] = "You cannot pay the invoice by agreement as the selected customer does not support this method.";
+ThMessage[ThStatusCode.InvoicePaymentValidatorError] = "Error validating the invoice payment.";
+ThMessage[ThStatusCode.InvoicePayersValidatorError] = "Error validating the payers that split the invoice payment.";
+ThMessage[ThStatusCode.InvoicePayersValidatorInvalidSplit] = "Error validating the payers that split the invoice payment.";
 ThMessage[ThStatusCode.SlackSendMessageError] = "Error sending the message using Slack.";
 ThMessage[ThStatusCode.AddBookingsRepositoryEmptyBookingList] = "Empty booking list.";
 ThMessage[ThStatusCode.AddBookingsRepositoryNoBookingsLimitExceeded] = "You can't create more than 50 bookings at once.";
