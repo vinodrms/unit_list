@@ -326,6 +326,8 @@ export enum ThStatusCode {
     BookingsValidatorMissingPaymentGuarantee,
     BookingsValidatorConstraintsDoNotApply,
     BookingsValidatorAllotmentConstraintsDoNotApply,
+    BookingsRepositoryProblemUpdatingBooking,
+    BookingsRepositoryErrorUpdatingBooking
     
 }
 
@@ -643,6 +645,8 @@ ThMessage[ThStatusCode.BookingsValidatorAllotmentInvalidRoomCategory] = "You can
 ThMessage[ThStatusCode.BookingsValidatorMissingPaymentGuarantee] = "You need to set a payment guarantee for all the price products with cancellation conditions.";
 ThMessage[ThStatusCode.BookingsValidatorConstraintsDoNotApply] = "The constraints from the price product do not apply for the booking.";
 ThMessage[ThStatusCode.BookingsValidatorAllotmentConstraintsDoNotApply] = "The constraints from the allotment do not apply for the booking.";
+ThMessage[ThStatusCode.BookingsRepositoryProblemUpdatingBooking] = "Error updating booking. It is possible that someone else changed it at the same time. Please refresh the page and try again.";
+ThMessage[ThStatusCode.BookingsRepositoryErrorUpdatingBooking] = "Error updating booking.";
 
 export class ThResponse {
     statusCode: ThStatusCode;

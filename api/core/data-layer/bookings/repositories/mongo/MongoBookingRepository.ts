@@ -3,17 +3,23 @@ import {LazyLoadRepoDO, LazyLoadMetaResponseRepoDO} from '../../../common/repo-d
 import {IBookingRepository, BookingMetaRepoDO, BookingItemMetaRepoDO, BookingSearchResultRepoDO} from '../IBookingRepository';
 import {BookingDO} from '../../data-objects/BookingDO';
 import {MongoAddBookingsRepository} from './add-bookings/MongoAddBookingsRepository';
+import {MongoUpdateBookingRepository} from './update-booking/MongoUpdateBookingRepository';
 
 export class MongoBookingRepository extends MongoRepository implements IBookingRepository {
     private _addBookingsRepo: MongoAddBookingsRepository;
+    private _updateBookingRepo: MongoUpdateBookingRepository;
 
     constructor() {
         var bookingGroupsEntity = sails.models.bookinggroupsentity;
         super(bookingGroupsEntity);
         this._addBookingsRepo = new MongoAddBookingsRepository(bookingGroupsEntity);
+        this._updateBookingRepo = new MongoUpdateBookingRepository(bookingGroupsEntity);
     }
 
     public addBookings(meta: BookingMetaRepoDO, bookingList: BookingDO[]): Promise<BookingDO[]> {
         return this._addBookingsRepo.addBookings(meta, bookingList);
+    }
+    public updateBooking(meta: BookingMetaRepoDO, itemMeta: BookingItemMetaRepoDO, booking: BookingDO): Promise<BookingDO> {
+        return this._updateBookingRepo.updateBooking(meta, itemMeta, booking);
     }
 }

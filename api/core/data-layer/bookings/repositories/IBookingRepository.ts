@@ -17,4 +17,5 @@ export interface BookingSearchResultRepoDO {
 
 export interface IBookingRepository {
     addBookings(meta: BookingMetaRepoDO, bookingList: BookingDO[]): Promise<BookingDO[]>;
+    updateBooking(meta: BookingMetaRepoDO, itemMeta: BookingItemMetaRepoDO, booking: BookingDO): Promise<BookingDO>;
 }
