@@ -5,11 +5,13 @@ import {BookingDO} from '../../data-objects/BookingDO';
 import {MongoAddBookingsRepository} from './add-bookings/MongoAddBookingsRepository';
 import {MongoUpdateBookingRepository} from './update-booking/MongoUpdateBookingRepository';
 import {MongoGetBookingsRepository} from './get-bookings/MongoGetBookingsRepository';
+import {MongoGetSingleBookingRepository} from './get-bookings/MongoGetSingleBookingRepository';
 
 export class MongoBookingRepository extends MongoRepository implements IBookingRepository {
     private _addBookingsRepo: MongoAddBookingsRepository;
     private _updateBookingRepo: MongoUpdateBookingRepository;
     private _getBookingsRepo: MongoGetBookingsRepository;
+    private _getSingleBooking: MongoGetSingleBookingRepository;
 
     constructor() {
         var bookingGroupsEntity = sails.models.bookinggroupsentity;
@@ -17,6 +19,7 @@ export class MongoBookingRepository extends MongoRepository implements IBookingR
         this._addBookingsRepo = new MongoAddBookingsRepository(bookingGroupsEntity);
         this._updateBookingRepo = new MongoUpdateBookingRepository(bookingGroupsEntity);
         this._getBookingsRepo = new MongoGetBookingsRepository(bookingGroupsEntity);
+        this._getSingleBooking = new MongoGetSingleBookingRepository(bookingGroupsEntity);
     }
 
     public addBookings(meta: BookingMetaRepoDO, bookingList: BookingDO[]): Promise<BookingDO[]> {
@@ -30,5 +33,8 @@ export class MongoBookingRepository extends MongoRepository implements IBookingR
     }
     public getBookingList(meta: BookingMetaRepoDO, searchCriteria: BookingSearchCriteriaRepoDO, lazyLoad?: LazyLoadRepoDO): Promise<BookingSearchResultRepoDO> {
         return this._getBookingsRepo.getBookingList(meta, searchCriteria, lazyLoad);
+    }
+    public getBookingById(meta: BookingMetaRepoDO, groupBookingId: string, bookingId: string): Promise<BookingDO> {
+        return this._getSingleBooking.getBookingById(meta, groupBookingId, bookingId);
     }
 }

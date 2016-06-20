@@ -330,6 +330,8 @@ export enum ThStatusCode {
     BookingsRepositoryErrorUpdatingBooking,
     BookingsRepositoryErrorGettingList,
     BookingRepositoryErrorReadingDocumentCount,
+    BookingRepositoryBookingNotFound,
+    BookingRepositoryErrorGettingBooking,
     
 }
 
@@ -651,6 +653,8 @@ ThMessage[ThStatusCode.BookingsRepositoryProblemUpdatingBooking] = "Error updati
 ThMessage[ThStatusCode.BookingsRepositoryErrorUpdatingBooking] = "Error updating booking.";
 ThMessage[ThStatusCode.BookingsRepositoryErrorGettingList] = "Error getting the list of bookings.";
 ThMessage[ThStatusCode.BookingRepositoryErrorReadingDocumentCount] = "Error getting the number of bookings.";
+ThMessage[ThStatusCode.BookingRepositoryBookingNotFound] = "Booking not found.";
+ThMessage[ThStatusCode.BookingRepositoryErrorGettingBooking] = "Error getting booking.";
 
 export class ThResponse {
     statusCode: ThStatusCode;

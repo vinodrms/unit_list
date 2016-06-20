@@ -7,6 +7,7 @@ import {ThError} from '../../../../core/utils/th-responses/ThError';
 import {ThStatusCode} from '../../../../core/utils/th-responses/ThResponse';
 import {DefaultDataBuilder} from '../../../db-initializers/DefaultDataBuilder';
 import {TestContext} from '../../../helpers/TestContext';
+import {TestUtils} from '../../../helpers/TestUtils';
 import {BookingTestHelper} from './helpers/BookingTestHelper';
 import {LazyLoadMetaResponseRepoDO} from '../../../../core/data-layer/common/repo-data-objects/LazyLoadRepoDO';
 import {PriceProductDO} from '../../../../core/data-layer/price-products/data-objects/PriceProductDO';
@@ -19,6 +20,7 @@ describe("New Bookings Tests", function () {
     var testContext: TestContext;
     var testDataBuilder: DefaultDataBuilder;
 
+    var testUtils: TestUtils = new TestUtils();
     var bookingTestHelper: BookingTestHelper;
     var genericPriceProduct: PriceProductDO;
 
@@ -92,6 +94,22 @@ describe("New Bookings Tests", function () {
                 }).catch((err: any) => {
                     done(err);
                 });
+        });
+        it("Should get booking by id", function (done) {
+            var randomBooking: BookingDO = testUtils.getRandomListElement(retrievedBookingList);
+            var bookingRepo = testContext.appContext.getRepositoryFactory().getBookingRepository();
+            bookingRepo.getBookingById({ hotelId: testContext.sessionContext.sessionDO.hotel.id }, randomBooking.groupBookingId, randomBooking.bookingId
+            ).then((foundBooking: BookingDO) => {
+                should.equal(randomBooking.bookingId, foundBooking.bookingId);
+                should.equal(randomBooking.bookingReference, foundBooking.bookingReference);
+                should.equal(randomBooking.groupBookingId, foundBooking.groupBookingId);
+                should.equal(randomBooking.groupBookingReference, foundBooking.groupBookingReference);
+                should.equal(randomBooking.roomCategoryId, foundBooking.roomCategoryId);
+                should.equal(randomBooking.priceProductId, foundBooking.priceProductId);
+                done();
+            }).catch((err: any) => {
+                done(err);
+            });
         });
     });
 });
