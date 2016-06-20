@@ -2,75 +2,79 @@ import {ThLogger, ThLogLevel} from '../../../utils/logging/ThLogger';
 import {ThError} from '../../../utils/th-responses/ThError';
 import {ThStatusCode} from '../../../utils/th-responses/ThResponse';
 import {HotelDO} from '../../../data-layer/hotel/data-objects/HotelDO';
-import {BookingUtils} from '../utils/BookingUtils';
+import {BookingUtils} from '../../../domain-layer/bookings/utils/BookingUtils';
 import {ThDateIntervalDO} from '../../../utils/th-dates/data-objects/ThDateIntervalDO';
 import {ThDateDO} from '../../../utils/th-dates/data-objects/ThDateDO';
 import {ThDateUtils} from '../../../utils/th-dates/ThDateUtils';
 import {BookingDOConstraints} from '../../../data-layer/bookings/data-objects/BookingDOConstraints';
 
-export class BookingIntervalValidator {
-    private _thDateUtils: ThDateUtils;
-    private _bookingUtils: BookingUtils;
-    private _bookingInterval: ThDateIntervalDO;
+import _ = require('underscore');
 
-    constructor(private _hotelDO: HotelDO) {
-        this._thDateUtils = new ThDateUtils();
-        this._bookingUtils = new BookingUtils();
+export class BookingIntervalValidator {
+    private _minimumBookableDate: ThDateDO;
+
+    constructor(hotelDO: HotelDO) {
+        this._minimumBookableDate = this.getMinimumBookableDate(hotelDO);
+    }
+    private getMinimumBookableDate(hotelDO: HotelDO): ThDateDO {
+        var bookingUtils = new BookingUtils();
+        var todayDate = bookingUtils.getCurrentThDateForHotel(hotelDO);
+        var thDateUtils = new ThDateUtils();
+        var yesterdayDate = thDateUtils.addDaysToThDateDO(todayDate, -1);
+        return yesterdayDate;
+    }
+
+    public validateBookingIntervalList(bookingIntervalList: ThDateIntervalDO[]): Promise<ThDateIntervalDO[]> {
+        var promiseList: Promise<ThDateIntervalDO>[] = [];
+        _.forEach(bookingIntervalList, (bookingInterval: ThDateIntervalDO) => {
+            promiseList.push(this.validateBookingInterval(bookingInterval));
+        });
+        return Promise.all(promiseList);
     }
 
     public validateBookingInterval(bookingInterval: ThDateIntervalDO): Promise<ThDateIntervalDO> {
-        this._bookingInterval = bookingInterval;
-
         return new Promise<ThDateIntervalDO>((resolve: { (result: ThDateIntervalDO): void }, reject: { (err: ThError): void }) => {
             try {
-                this.validateBookingIntervalCore(resolve, reject);
+                this.validateBookingIntervalCore(resolve, reject, bookingInterval);
             } catch (error) {
                 var thError = new ThError(ThStatusCode.BookingIntervalValidatorError, error);
-                ThLogger.getInstance().logError(ThLogLevel.Error, "error validating booking interval", this._bookingInterval, thError);
+                ThLogger.getInstance().logError(ThLogLevel.Error, "error validating booking interval", bookingInterval, thError);
                 reject(thError);
             }
         });
     }
 
-    private validateBookingIntervalCore(resolve: { (result: ThDateIntervalDO): void }, reject: { (err: ThError): void }) {
-        this.updateBookingInterval();
+    private validateBookingIntervalCore(resolve: { (result: ThDateIntervalDO): void }, reject: { (err: ThError): void }, bookingInterval: ThDateIntervalDO) {
+        var preprocessedInterval = this.preprocessThDateInterval(bookingInterval);
 
-        if (!this._bookingInterval.isValid()) {
+        if (!preprocessedInterval.isValid()) {
             var thError = new ThError(ThStatusCode.BookingIntervalValidatorInvalidInterval, null);
-            ThLogger.getInstance().logError(ThLogLevel.Warning, "invalid interval for bookings", this._bookingInterval, thError);
+            ThLogger.getInstance().logError(ThLogLevel.Warning, "invalid interval for bookings", preprocessedInterval, thError);
             reject(thError);
             return;
         }
 
-        var minBookableDate: ThDateDO = this.getMinimumBookableDate();
-        var bookingStartDate: ThDateDO = this._bookingInterval.start;
-        if (bookingStartDate.isBefore(minBookableDate)) {
+        var bookingStartDate: ThDateDO = preprocessedInterval.start;
+        if (bookingStartDate.isBefore(this._minimumBookableDate)) {
             var thError = new ThError(ThStatusCode.BookingIntervalValidatorInvalidStartDate, null);
-            ThLogger.getInstance().logError(ThLogLevel.Warning, "invalid start date for bookings", this._bookingInterval, thError);
+            ThLogger.getInstance().logError(ThLogLevel.Warning, "invalid start date for bookings", preprocessedInterval, thError);
             reject(thError);
             return;
         }
 
-        var numberOfDaysFromInterval = this._bookingInterval.getNumberOfDays();
+        var numberOfDaysFromInterval = preprocessedInterval.getNumberOfDays();
         if (numberOfDaysFromInterval > BookingDOConstraints.MaxBookingNoOfDays) {
             var thError = new ThError(ThStatusCode.BookingIntervalValidatorMaxSixMonths, null);
-            ThLogger.getInstance().logError(ThLogLevel.Warning, "too wide booking interval", this._bookingInterval, thError);
+            ThLogger.getInstance().logError(ThLogLevel.Warning, "too wide booking interval", preprocessedInterval, thError);
             reject(thError);
             return;
         }
 
-        resolve(this._bookingInterval);
+        resolve(preprocessedInterval);
     }
-
-    private updateBookingInterval() {
-        var bookingInterval = new ThDateIntervalDO();
-        bookingInterval.buildFromObject(this._bookingInterval);
-        this._bookingInterval = bookingInterval;
-    }
-
-    private getMinimumBookableDate(): ThDateDO {
-        var todayDate = this._bookingUtils.getCurrentThDateForHotel(this._hotelDO);
-        var yesterdayDate = this._thDateUtils.addDaysToThDateDO(todayDate, -1);
-        return yesterdayDate;
+    private preprocessThDateInterval(interval: ThDateIntervalDO): ThDateIntervalDO {
+        var convertedInterval = new ThDateIntervalDO();
+        convertedInterval.buildFromObject(interval);
+        return convertedInterval;
     }
 }
