@@ -327,7 +327,9 @@ export enum ThStatusCode {
     BookingsValidatorConstraintsDoNotApply,
     BookingsValidatorAllotmentConstraintsDoNotApply,
     BookingsRepositoryProblemUpdatingBooking,
-    BookingsRepositoryErrorUpdatingBooking
+    BookingsRepositoryErrorUpdatingBooking,
+    BookingsRepositoryErrorGettingList,
+    BookingRepositoryErrorReadingDocumentCount,
     
 }
 
@@ -647,6 +649,8 @@ ThMessage[ThStatusCode.BookingsValidatorConstraintsDoNotApply] = "The constraint
 ThMessage[ThStatusCode.BookingsValidatorAllotmentConstraintsDoNotApply] = "The constraints from the allotment do not apply for the booking.";
 ThMessage[ThStatusCode.BookingsRepositoryProblemUpdatingBooking] = "Error updating booking. It is possible that someone else changed it at the same time. Please refresh the page and try again.";
 ThMessage[ThStatusCode.BookingsRepositoryErrorUpdatingBooking] = "Error updating booking.";
+ThMessage[ThStatusCode.BookingsRepositoryErrorGettingList] = "Error getting the list of bookings.";
+ThMessage[ThStatusCode.BookingRepositoryErrorReadingDocumentCount] = "Error getting the number of bookings.";
 
 export class ThResponse {
     statusCode: ThStatusCode;

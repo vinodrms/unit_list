@@ -89,4 +89,11 @@ export class BookingTestHelper {
         var endDate = this._thDateUtils.addDaysToThDateDO(startDate.buildPrototype(), this._testUtils.getRandomIntBetween(1, 7));
         return ThDateIntervalDO.buildThDateIntervalDO(startDate, endDate);
     }
+
+    public getBookingSearchInterval(testDataBuilder: DefaultDataBuilder): ThDateIntervalDO {
+        var thTimestamp = ThTimestampDO.buildThTimestampForTimezone(testDataBuilder.hotelDO.timezone);
+        var startDate = thTimestamp.thDateDO;
+        var endDate = this._thDateUtils.addDaysToThDateDO(startDate.buildPrototype(), 207);
+        return ThDateIntervalDO.buildThDateIntervalDO(startDate, endDate);
+    }
 }

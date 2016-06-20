@@ -8,10 +8,12 @@ import {ThStatusCode} from '../../../../core/utils/th-responses/ThResponse';
 import {DefaultDataBuilder} from '../../../db-initializers/DefaultDataBuilder';
 import {TestContext} from '../../../helpers/TestContext';
 import {BookingTestHelper} from './helpers/BookingTestHelper';
+import {LazyLoadMetaResponseRepoDO} from '../../../../core/data-layer/common/repo-data-objects/LazyLoadRepoDO';
 import {PriceProductDO} from '../../../../core/data-layer/price-products/data-objects/PriceProductDO';
 import {AddBookingItems} from '../../../../core/domain-layer/bookings/add-bookings/AddBookingItems';
 import {AddBookingItemsDO} from '../../../../core/domain-layer/bookings/add-bookings/AddBookingItemsDO';
 import {BookingDO, GroupBookingInputChannel} from '../../../../core/data-layer/bookings/data-objects/BookingDO';
+import {BookingSearchResultRepoDO} from '../../../../core/data-layer/bookings/repositories/IBookingRepository';
 
 describe("New Bookings Tests", function () {
     var testContext: TestContext;
@@ -19,6 +21,8 @@ describe("New Bookings Tests", function () {
 
     var bookingTestHelper: BookingTestHelper;
     var genericPriceProduct: PriceProductDO;
+
+    var retrievedBookingList: BookingDO[];
 
     before(function (done: any) {
         testContext = new TestContext();
@@ -50,6 +54,44 @@ describe("New Bookings Tests", function () {
             }).catch((err: any) => {
                 done(err);
             });
+        });
+    });
+    describe("Bookings Repository Tests", function () {
+        it("Should the bookings filtered by a date interval", function (done) {
+            var bookingRepo = testContext.appContext.getRepositoryFactory().getBookingRepository();
+            bookingRepo.getBookingList({ hotelId: testContext.sessionContext.sessionDO.hotel.id }, {
+                interval: bookingTestHelper.getBookingSearchInterval(testDataBuilder)
+            }).then((bookingSearchResult: BookingSearchResultRepoDO) => {
+                retrievedBookingList = bookingSearchResult.bookingList;
+                done();
+            }).catch((err: any) => {
+                done(err);
+            });
+        });
+        it("Should the bookings count", function (done) {
+            var bookingRepo = testContext.appContext.getRepositoryFactory().getBookingRepository();
+            bookingRepo.getBookingListCount({ hotelId: testContext.sessionContext.sessionDO.hotel.id }, {
+                interval: bookingTestHelper.getBookingSearchInterval(testDataBuilder)
+            }).then((lazyLoadResponse: LazyLoadMetaResponseRepoDO) => {
+                should.equal(lazyLoadResponse.numOfItems, retrievedBookingList.length);
+                done();
+            }).catch((err: any) => {
+                done(err);
+            });
+        });
+        it("Should get the first " + BookingTestHelper.NoBookingGroups + " bookings", function (done) {
+            var bookingRepo = testContext.appContext.getRepositoryFactory().getBookingRepository();
+            bookingRepo.getBookingList({ hotelId: testContext.sessionContext.sessionDO.hotel.id }, {
+                interval: bookingTestHelper.getBookingSearchInterval(testDataBuilder)
+            }, {
+                    pageNumber: 0,
+                    pageSize: BookingTestHelper.NoBookingGroups
+                }).then((bookingSearchResult: BookingSearchResultRepoDO) => {
+                    should.equal(bookingSearchResult.bookingList.length, BookingTestHelper.NoBookingGroups);
+                    done();
+                }).catch((err: any) => {
+                    done(err);
+                });
         });
     });
 });

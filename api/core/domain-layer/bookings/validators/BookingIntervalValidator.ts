@@ -2,7 +2,7 @@ import {ThLogger, ThLogLevel} from '../../../utils/logging/ThLogger';
 import {ThError} from '../../../utils/th-responses/ThError';
 import {ThStatusCode} from '../../../utils/th-responses/ThResponse';
 import {HotelDO} from '../../../data-layer/hotel/data-objects/HotelDO';
-import {BookingUtils} from '../utils/BookingUtils';
+import {BookingUtils} from '../../../domain-layer/bookings/utils/BookingUtils';
 import {ThDateIntervalDO} from '../../../utils/th-dates/data-objects/ThDateIntervalDO';
 import {ThDateDO} from '../../../utils/th-dates/data-objects/ThDateDO';
 import {ThDateUtils} from '../../../utils/th-dates/ThDateUtils';
