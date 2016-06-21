@@ -62,7 +62,6 @@ export class BookingItemsConverter {
 
         _.forEach(this._bookingItems.bookingList, (bookingItem: BookingItemDO) => {
             var bookingDO = new BookingDO();
-            bookingDO.buildFromObject(bookingItem);
 
             bookingDO.groupBookingReference = groupBookingReference;
             bookingDO.hotelId = hotelId;
@@ -73,7 +72,13 @@ export class BookingItemsConverter {
             bookingDO.bookingId = this._thUtils.generateUniqueID();
             bookingDO.bookingReference = this.generateIndividualBookingReference();
             bookingDO.confirmationStatus = BookingConfirmationStatus.Confirmed;
-            bookingDO.interval = this._bookingItems.interval;
+            bookingDO.customerIdList = bookingItem.customerIdList;
+            bookingDO.defaultBillingDetails = bookingItem.defaultBillingDetails;
+            bookingDO.roomCategoryId = bookingItem.roomCategoryId;
+            bookingDO.priceProductId = bookingItem.priceProductId;
+            bookingDO.allotmentId = bookingItem.allotmentId;
+            bookingDO.notes = bookingItem.notes;
+            bookingDO.interval = bookingItem.interval;
 
             var priceProduct = this._converterParams.priceProductsContainer.getPriceProductById(bookingDO.priceProductId);
             bookingDO.priceProductSnapshot = new PriceProductDO();
@@ -87,7 +92,7 @@ export class BookingItemsConverter {
             var indexedBookingInterval = new IndexedBookingInterval(bookingDO.interval);
             bookingDO.startUtcTimestamp = indexedBookingInterval.getStartUtcTimestamp();
             bookingDO.endUtcTimestamp = indexedBookingInterval.getEndUtcTimestamp();
-            bookingDO.configCapacity = this._bookingItems.configCapacity;
+            bookingDO.configCapacity = bookingItem.configCapacity;
             bookingDO.fileAttachmentList = [];
             bookingDO.bookingHistory = new DocumentHistoryDO();
             bookingDO.bookingHistory.logDocumentAction(DocumentActionDO.buildDocumentActionDO({

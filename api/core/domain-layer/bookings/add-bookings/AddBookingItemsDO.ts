@@ -13,6 +13,8 @@ import {BooleanValidationRule} from '../../../utils/th-validation/rules/BooleanV
 import {NumberInListValidationRule} from '../../../utils/th-validation/rules/NumberInListValidationRule';
 
 export class BookingItemDO {
+    interval: ThDateIntervalDO;
+    configCapacity: ConfigCapacityDO;
     customerIdList: string[];
     defaultBillingDetails: DefaultBillingDetailsDO;
     roomCategoryId: string;
@@ -22,24 +24,22 @@ export class BookingItemDO {
 }
 
 export class AddBookingItemsDO {
-    interval: ThDateIntervalDO;
-    configCapacity: ConfigCapacityDO;
     bookingList: BookingItemDO[];
     confirmationEmailList: string[];
 
     public static getValidationStructure(): IValidationStructure {
         return new ObjectValidationStructure([
             {
-                key: "interval",
-                validationStruct: BookingValidationStructures.getThDateIntervalDOValidationStructure()
-            },
-            {
-                key: "configCapacity",
-                validationStruct: BookingValidationStructures.getConfigCapacityDOValidationStructure()
-            },
-            {
                 key: "bookingList",
                 validationStruct: new ArrayValidationStructure(new ObjectValidationStructure([
+                    {
+                        key: "interval",
+                        validationStruct: BookingValidationStructures.getThDateIntervalDOValidationStructure()
+                    },
+                    {
+                        key: "configCapacity",
+                        validationStruct: BookingValidationStructures.getConfigCapacityDOValidationStructure()
+                    },
                     {
                         key: "customerIdList",
                         validationStruct: new ArrayValidationStructure(new PrimitiveValidationStructure(new StringValidationRule()))

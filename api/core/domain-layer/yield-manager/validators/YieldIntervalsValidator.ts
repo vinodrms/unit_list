@@ -20,17 +20,21 @@ export class YieldIntervalsValidator {
     }
 
     public isOpenOnAllYieldAttributes(): boolean {
-        return this.isOpen() && this.isOpenForArrival() && this.isOpenForDeparture();
+        return this._priceProduct.lastRoomAvailability || (this.isOpen() && this.isOpenForArrival() && this.isOpenForDeparture());
     }
 
     public isOpen(): boolean {
-        return this._openIntervalUtils.containsThDateIntervalDO(this._indexedBookingInterval.indexedBookingInterval);
+        return this.skipYieldCheck() || this._openIntervalUtils.containsThDateIntervalDO(this._indexedBookingInterval.indexedBookingInterval);
     }
 
     public isOpenForArrival(): boolean {
-        return this._openForArrivalIntervalUtils.containsThDateDO(this._indexedBookingInterval.getArrivalDate());
+        return this.skipYieldCheck() || this._openForArrivalIntervalUtils.containsThDateDO(this._indexedBookingInterval.getArrivalDate());
     }
     public isOpenForDeparture(): boolean {
-        return this._openForDepartureIntervalUtils.containsThDateDO(this._indexedBookingInterval.getDepartureDate());
+        return this.skipYieldCheck() || this._openForDepartureIntervalUtils.containsThDateDO(this._indexedBookingInterval.getDepartureDate());
+    }
+
+    private skipYieldCheck(): boolean {
+        return this._priceProduct.lastRoomAvailability;
     }
 }

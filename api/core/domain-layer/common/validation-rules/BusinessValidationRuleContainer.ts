@@ -7,6 +7,10 @@ export class BusinessValidationRuleContainer<T> implements IBusinessValidationRu
     constructor(private _businessValidationRuleList: IBusinessValidationRule<T>[]) {
     }
 
+    public addBusinessValidationRule(businessValidationRule: IBusinessValidationRule<T>) {
+        this._businessValidationRuleList.push(businessValidationRule);
+    }
+
     public isValidOn(businessObject: T): Promise<T> {
         return new Promise<T>((resolve: { (result: T): void }, reject: { (err: ThError): void }) => {
             if (this._businessValidationRuleList.length === 0) {
