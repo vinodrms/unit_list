@@ -57,9 +57,12 @@ export class NewBookingsValidationRules {
         ]);
         bookingValidationRule.isValidOn(booking).then((validatedBooking: BookingDO) => {
             var priceProductValidationRule = new BusinessValidationRuleContainer([
-                new PriceProductConstraintsValidationRule(this.getPriceProductConstraintsParams(booking)),
-                new PriceProductYieldIntervalsValidationRule(booking.interval)
+                new PriceProductConstraintsValidationRule(this.getPriceProductConstraintsParams(booking))
             ]);
+            if (!booking.isMadeThroughAllotment()) {
+                priceProductValidationRule.addBusinessValidationRule(new PriceProductYieldIntervalsValidationRule(booking.interval));
+            }
+
             var priceProduct = this._validatorParams.priceProductsContainer.getPriceProductById(booking.priceProductId);
             return priceProductValidationRule.isValidOn(priceProduct);
         }).then((validatedPriceProduct: PriceProductDO) => {
