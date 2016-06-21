@@ -326,12 +326,14 @@ export enum ThStatusCode {
     BookingsValidatorMissingPaymentGuarantee,
     BookingsValidatorConstraintsDoNotApply,
     BookingsValidatorAllotmentConstraintsDoNotApply,
+    BookingsValidatorInvalidRoomCategoryId,
     BookingsRepositoryProblemUpdatingBooking,
     BookingsRepositoryErrorUpdatingBooking,
     BookingsRepositoryErrorGettingList,
     BookingRepositoryErrorReadingDocumentCount,
     BookingRepositoryBookingNotFound,
     BookingRepositoryErrorGettingBooking,
+    BookingSearchError,
     
 }
 
@@ -649,12 +651,14 @@ ThMessage[ThStatusCode.BookingsValidatorAllotmentInvalidRoomCategory] = "You can
 ThMessage[ThStatusCode.BookingsValidatorMissingPaymentGuarantee] = "You need to set a payment guarantee for all the price products with cancellation conditions.";
 ThMessage[ThStatusCode.BookingsValidatorConstraintsDoNotApply] = "The constraints from the price product do not apply for the booking.";
 ThMessage[ThStatusCode.BookingsValidatorAllotmentConstraintsDoNotApply] = "The constraints from the allotment do not apply for the booking.";
+ThMessage[ThStatusCode.BookingsValidatorInvalidRoomCategoryId] = "The room category is not valid.";
 ThMessage[ThStatusCode.BookingsRepositoryProblemUpdatingBooking] = "Error updating booking. It is possible that someone else changed it at the same time. Please refresh the page and try again.";
 ThMessage[ThStatusCode.BookingsRepositoryErrorUpdatingBooking] = "Error updating booking.";
 ThMessage[ThStatusCode.BookingsRepositoryErrorGettingList] = "Error getting the list of bookings.";
 ThMessage[ThStatusCode.BookingRepositoryErrorReadingDocumentCount] = "Error getting the number of bookings.";
 ThMessage[ThStatusCode.BookingRepositoryBookingNotFound] = "Booking not found.";
 ThMessage[ThStatusCode.BookingRepositoryErrorGettingBooking] = "Error getting booking.";
+ThMessage[ThStatusCode.BookingSearchError] = "Error searching for price products.";
 
 export class ThResponse {
     statusCode: ThStatusCode;

@@ -5,6 +5,8 @@ import {PriceProductConstraintWrapperDO} from './constraint/PriceProductConstrai
 import {PriceProductConditionsDO} from './conditions/PriceProductConditionsDO';
 import {PriceProductYieldFilterMetaDO} from './yield-filter/PriceProductYieldFilterDO';
 
+import _ = require('underscore');
+
 export enum PriceProductStatus {
 	Draft,
 	Deleted,
@@ -71,5 +73,8 @@ export class PriceProductDO extends BaseDO {
 			intervalList.push(intervalDO);
 		});
 		return intervalList;
+	}
+	public containsRoomCategoryId(roomCategoryId: string): boolean {
+		return _.contains(this.roomCategoryIdList, roomCategoryId);
 	}
 }

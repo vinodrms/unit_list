@@ -11,6 +11,7 @@ import {CustomersContainer} from '../../../customers/validators/results/Customer
 import {BusinessValidationRuleContainer} from '../../../common/validation-rules/BusinessValidationRuleContainer';
 import {BookingBillingDetailsValidationRule} from '../../validators/validation-rules/booking/BookingBillingDetailsValidationRule';
 import {BookingAllotmentValidationRule, BookingAllotmentValidationParams} from '../../validators/validation-rules/booking/BookingAllotmentValidationRule';
+import {BookingRoomCategoryValidationRule} from '../../validators/validation-rules/booking/BookingRoomCategoryValidationRule';
 import {PriceProductYieldIntervalsValidationRule} from '../../validators/validation-rules/price-product/PriceProductYieldIntervalsValidationRule';
 import {PriceProductConstraintsValidationRule, PriceProductConstraintsParams} from '../../validators/validation-rules/price-product/PriceProductConstraintsValidationRule';
 import {BookingUtils} from '../../utils/BookingUtils';
@@ -53,7 +54,8 @@ export class NewBookingsValidationRules {
     private validateBookingCore(resolve: { (result: BookingDO): void }, reject: { (err: ThError): void }, booking: BookingDO) {
         var bookingValidationRule = new BusinessValidationRuleContainer([
             new BookingBillingDetailsValidationRule(this._validatorParams.hotel, this._validatorParams.priceProductsContainer, this._validatorParams.customersContainer),
-            new BookingAllotmentValidationRule(this.getBookingAllotmentValidationParams(booking))
+            new BookingAllotmentValidationRule(this.getBookingAllotmentValidationParams(booking)),
+            new BookingRoomCategoryValidationRule(this._validatorParams.priceProductsContainer)
         ]);
         bookingValidationRule.isValidOn(booking).then((validatedBooking: BookingDO) => {
             var priceProductValidationRule = new BusinessValidationRuleContainer([
