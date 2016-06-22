@@ -1776,16 +1776,16 @@ a.btn.btn-square:focus {
 }
 
  /* Operationl */
-    hotel-operations-container{
+    hotel-operations-dashboard{
         width: 100%;
     }
-    hotel-operations-container .full-height{
+    hotel-operations-dashboard .full-height{
         /*width: 1024px;*/
         display:flex;
         align-items: stretch;
     }
 
-    hotel-operations-container .full-height * {
+    hotel-operations-dashboard .full-height * {
         font-family: Arial, Helvetica, sans-serif;
     }
 

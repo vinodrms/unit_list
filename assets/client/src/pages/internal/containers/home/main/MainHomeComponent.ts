@@ -9,13 +9,13 @@ import {HOTEL_AGGREGATOR_PROVIDERS} from '../../../services/hotel/HotelProviders
 import {ISocketsService} from '../../../../../common/utils/sockets/ISocketsService';
 import {SocketsService} from '../../../../../common/utils/sockets/SocketsService';
 
-import {HotelOperationsContainerComponent} from '../pages/home-pages/hotel-operations/container/HotelOperationsContainerComponent';
+import {HotelOperationsDashboardComponent} from '../pages/home-pages/hotel-operations/container/HotelOperationsDashboardComponent';
 import {YieldManagerContainerComponent} from '../pages/home-pages/yield-manager/container/YieldManagerContainerComponent';
 import {BookingHistoryContainerComponent} from '../pages/home-pages/booking-history/container/BookingHistoryContainerComponent';
 import {SettingsContainerComponent} from '../pages/home-pages/settings/container/SettingsContainerComponent';
 
 @RouteConfig([
-	{ path: '/operations', name: 'HotelOperationsContainerComponent', component: HotelOperationsContainerComponent, useAsDefault: true },
+	{ path: '/operations', name: 'HotelOperationsDashboardComponent', component: HotelOperationsDashboardComponent, useAsDefault: true },
 	{ path: '/yield-manager', name: 'YieldManagerContainerComponent', component: YieldManagerContainerComponent },
 	{ path: '/bookings', name: 'BookingHistoryContainerComponent', component: BookingHistoryContainerComponent },
 	{ path: '/settings/...', name: 'SettingsContainerComponent', component: SettingsContainerComponent }

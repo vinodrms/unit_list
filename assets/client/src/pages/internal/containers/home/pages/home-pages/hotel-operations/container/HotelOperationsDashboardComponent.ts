@@ -11,14 +11,14 @@ import {ModalDialogRef} from '../../../../../../../../common/utils/modals/utils/
 declare var $:any;
 
 @Component({
-	selector: 'hotel-operations-container',
-	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/container/template/hotel-operations-container.html',
+	selector: 'hotel-operations-dashboard',
+	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/container/template/hotel-operations-dashboard.html',
 	providers: [NewBookingModalService],
 	directives: [ThButtonComponent],
 	pipes: [TranslationPipe]
 })
 
-export class HotelOperationsContainerComponent extends AHomeContainerComponent implements OnInit {
+export class HotelOperationsDashboardComponent extends AHomeContainerComponent implements OnInit {
 	private roomVMList: any;
 	constructor(headerPageService: HeaderPageService,
 		private _newBookingModalService: NewBookingModalService) {
