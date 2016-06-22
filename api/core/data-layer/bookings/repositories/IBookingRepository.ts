@@ -14,6 +14,8 @@ export interface BookingItemMetaRepoDO {
 export interface BookingSearchCriteriaRepoDO {
     interval?: ThDateIntervalDO;
     confirmationStatusList?: BookingConfirmationStatus[];
+    groupBookingId?: string;
+    bookingIdList?: string[];
 }
 export interface BookingSearchResultRepoDO {
     lazyLoad?: LazyLoadRepoDO;
