@@ -14,6 +14,6 @@ export class MinimumNumberOfRoomsConstraintDO extends BaseDO implements IPricePr
 		if (thUtils.isUndefinedOrNull(data.indexedNumberOfRoomCategories) || thUtils.isUndefinedOrNull(data.roomCategoryIdListFromPriceProduct)) {
 			return true;
 		}
-		return this.noOfRooms <= data.indexedNumberOfRoomCategories.getNoOfRoomsForCategoriIdList(data.roomCategoryIdListFromPriceProduct);
+		return this.noOfRooms <= data.indexedNumberOfRoomCategories.getNoOfOccurenciesForElementList(data.roomCategoryIdListFromPriceProduct);
 	}
 }

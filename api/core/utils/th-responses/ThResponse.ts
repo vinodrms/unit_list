@@ -334,6 +334,9 @@ export enum ThStatusCode {
     BookingRepositoryBookingNotFound,
     BookingRepositoryErrorGettingBooking,
     BookingSearchError,
+    RoomInventoryAggregatorError,
+    BookingOccupancyCalculatorError,
+    BookingOccupancyCalculatorErrorIndexing,
     
 }
 
@@ -659,6 +662,9 @@ ThMessage[ThStatusCode.BookingRepositoryErrorReadingDocumentCount] = "Error gett
 ThMessage[ThStatusCode.BookingRepositoryBookingNotFound] = "Booking not found.";
 ThMessage[ThStatusCode.BookingRepositoryErrorGettingBooking] = "Error getting booking.";
 ThMessage[ThStatusCode.BookingSearchError] = "Error searching for price products.";
+ThMessage[ThStatusCode.RoomInventoryAggregatorError] = "Error aggregating the rooms from the inventory.";
+ThMessage[ThStatusCode.BookingOccupancyCalculatorError] = "Error computing booking occupancy.";
+ThMessage[ThStatusCode.BookingOccupancyCalculatorErrorIndexing] = "Error computing booking occupancy.";
 
 export class ThResponse {
     statusCode: ThStatusCode;

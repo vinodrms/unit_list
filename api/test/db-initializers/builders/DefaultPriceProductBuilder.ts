@@ -38,6 +38,9 @@ export class DefaultPriceProductBuilder implements IPriceProductDataSource {
 		var addOnProductId = this._testUtils.getRandomListElement(addOnProductList).id;
 		ppList.push(DefaultPriceProductBuilder.buildPriceProductDO(this._testContext, "Price Product 1", this._testUtils.getRandomListElement(roomCategoryStatsList), taxId, addOnProductId, PriceProductPriceType.PricePerPerson));
 		ppList.push(DefaultPriceProductBuilder.buildPriceProductDO(this._testContext, "Price Product 2", this._testUtils.getRandomListElement(roomCategoryStatsList), taxId, addOnProductId, PriceProductPriceType.SinglePrice));
+		var confidentialPriceProduct = DefaultPriceProductBuilder.buildPriceProductDO(this._testContext, "Price Product 3 (Private)", this._testUtils.getRandomListElement(roomCategoryStatsList), taxId, addOnProductId, PriceProductPriceType.SinglePrice);
+		confidentialPriceProduct.availability = PriceProductAvailability.Confidential;
+		ppList.push(confidentialPriceProduct);
 		return ppList;
 	}
 	public static buildPriceProductDO(testContext: TestContext, name: string, roomCategoryStat: RoomCategoryStatsDO, taxId: string, addOnProductId: string, priceType: PriceProductPriceType): PriceProductDO {

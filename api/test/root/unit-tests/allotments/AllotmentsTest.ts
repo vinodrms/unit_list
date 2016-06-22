@@ -12,7 +12,8 @@ import {CustomersTestHelper} from '../customers/helpers/CustomersTestHelper';
 import {CustomerDO} from '../../../../core/data-layer/customers/data-objects/CustomerDO';
 import {SaveCustomerItem} from '../../../../core/domain-layer/customers/SaveCustomerItem';
 import {AllotmentsHelper} from './helpers/AllotmentsHelper';
-import {PriceProductDO} from '../../../../core/data-layer/price-products/data-objects/PriceProductDO';
+import {PriceProductDO, PriceProductStatus, PriceProductAvailability} from '../../../../core/data-layer/price-products/data-objects/PriceProductDO';
+import {PriceProductSearchResultRepoDO} from '../../../../core/data-layer/price-products/repositories/IPriceProductRepository';
 import {SaveAllotmentItem} from '../../../../core/domain-layer/allotments/SaveAllotmentItem';
 import {AllotmentDO, AllotmentStatus} from '../../../../core/data-layer/allotments/data-objects/AllotmentDO';
 import {AllotmentAvailabilityForDayDO} from '../../../../core/data-layer/allotments/data-objects/availability/AllotmentAvailabilityForDayDO';
@@ -31,7 +32,7 @@ describe("Hotel Allotments Tests", function () {
 	var custHelper: CustomersTestHelper;
 
 	var addedCompanyCustomer: CustomerDO;
-	var addedPriceProduct: PriceProductDO;
+	var addedConfidentialPriceProduct: PriceProductDO;
 	var addedAllotment: AllotmentDO;
 
 	before(function (done: any) {
@@ -45,8 +46,11 @@ describe("Hotel Allotments Tests", function () {
 
 	describe("Allotments Validation Tests", function () {
 		it("Should attach a price product to a customer profile", function (done) {
-			addedPriceProduct = testDataBuilder.priceProductList[0];
-			var companyCustDO = custHelper.getCompanyCustomer(addedPriceProduct.id);
+			addedConfidentialPriceProduct = _.find(testDataBuilder.priceProductList, (priceProduct: PriceProductDO) => { return priceProduct.availability === PriceProductAvailability.Confidential });
+			should.exist(addedConfidentialPriceProduct);
+
+			var companyCustDO = custHelper.getCompanyCustomer(addedConfidentialPriceProduct.id);
+			companyCustDO.priceProductDetails.allowPublicPriceProducts = true;
 
 			var saveCustItem = new SaveCustomerItem(testContext.appContext, testContext.sessionContext);
 			saveCustItem.save(companyCustDO).then((cust: CustomerDO) => {
@@ -57,8 +61,23 @@ describe("Hotel Allotments Tests", function () {
 				done(error);
 			});
         });
+		it("Should get the attached price product from the repository using the customer price product details", function (done) {
+			var priceProductRepo = testContext.appContext.getRepositoryFactory().getPriceProductRepository();
+			priceProductRepo.getPriceProductList({ hotelId: testContext.sessionContext.sessionDO.hotel.id },
+				{
+					status: PriceProductStatus.Active,
+					customerPriceProductDetails: addedCompanyCustomer.priceProductDetails
+				})
+				.then((ppSearchResult: PriceProductSearchResultRepoDO) => {
+					var foundPriceProduct = _.find(ppSearchResult.priceProductList, (priceProduct: PriceProductDO) => { return priceProduct.id === addedConfidentialPriceProduct.id });
+					should.exist(foundPriceProduct);
+					done();
+				}).catch((error: any) => {
+					done(error);
+				});
+        });
 		it("Should not create allotment with invalid interval", function (done) {
-			var allotmentItem = allotmentsHelper.getSaveAllotmentItemDO(addedCompanyCustomer, addedPriceProduct);
+			var allotmentItem = allotmentsHelper.getSaveAllotmentItemDO(addedCompanyCustomer, addedConfidentialPriceProduct);
 			allotmentItem.openInterval.end = thDateUtils.getMinThDateDO();
 
 			var saveAllotmentItem = new SaveAllotmentItem(testContext.appContext, testContext.sessionContext);
@@ -70,7 +89,7 @@ describe("Hotel Allotments Tests", function () {
 			});
         });
 		it("Should not create allotment with too long interval", function (done) {
-			var allotmentItem = allotmentsHelper.getSaveAllotmentItemDO(addedCompanyCustomer, addedPriceProduct);
+			var allotmentItem = allotmentsHelper.getSaveAllotmentItemDO(addedCompanyCustomer, addedConfidentialPriceProduct);
 			allotmentItem.openInterval.end = thDateUtils.getMaxThDateDO();
 
 			var saveAllotmentItem = new SaveAllotmentItem(testContext.appContext, testContext.sessionContext);
@@ -82,7 +101,7 @@ describe("Hotel Allotments Tests", function () {
 			});
         });
 		it("Should not create allotment with invalid availability configuration for a day", function (done) {
-			var allotmentItem = allotmentsHelper.getSaveAllotmentItemDO(addedCompanyCustomer, addedPriceProduct);
+			var allotmentItem = allotmentsHelper.getSaveAllotmentItemDO(addedCompanyCustomer, addedConfidentialPriceProduct);
 			allotmentItem.availability.availabilityForDayList.pop();
 
 			var saveAllotmentItem = new SaveAllotmentItem(testContext.appContext, testContext.sessionContext);
@@ -94,7 +113,7 @@ describe("Hotel Allotments Tests", function () {
 			});
         });
 		it("Should not create allotment with invalid customer id", function (done) {
-			var allotmentItem = allotmentsHelper.getSaveAllotmentItemDO(addedCompanyCustomer, addedPriceProduct);
+			var allotmentItem = allotmentsHelper.getSaveAllotmentItemDO(addedCompanyCustomer, addedConfidentialPriceProduct);
 			allotmentItem.customerId = InvalidId;
 
 			var saveAllotmentItem = new SaveAllotmentItem(testContext.appContext, testContext.sessionContext);
@@ -106,7 +125,7 @@ describe("Hotel Allotments Tests", function () {
 			});
         });
 		it("Should not create allotment with invalid price product id", function (done) {
-			var allotmentItem = allotmentsHelper.getSaveAllotmentItemDO(addedCompanyCustomer, addedPriceProduct);
+			var allotmentItem = allotmentsHelper.getSaveAllotmentItemDO(addedCompanyCustomer, addedConfidentialPriceProduct);
 			allotmentItem.priceProductId = InvalidId;
 
 			var saveAllotmentItem = new SaveAllotmentItem(testContext.appContext, testContext.sessionContext);
@@ -118,7 +137,7 @@ describe("Hotel Allotments Tests", function () {
 			});
         });
 		it("Should not create allotment with invalid room category id", function (done) {
-			var allotmentItem = allotmentsHelper.getSaveAllotmentItemDO(addedCompanyCustomer, addedPriceProduct);
+			var allotmentItem = allotmentsHelper.getSaveAllotmentItemDO(addedCompanyCustomer, addedConfidentialPriceProduct);
 			allotmentItem.roomCategoryId = InvalidId;
 
 			var saveAllotmentItem = new SaveAllotmentItem(testContext.appContext, testContext.sessionContext);
@@ -133,7 +152,7 @@ describe("Hotel Allotments Tests", function () {
 
 	describe("Price Products CRUD Tests", function () {
 		it("Should save an allotment", function (done) {
-			var allotmentItem = allotmentsHelper.getSaveAllotmentItemDO(addedCompanyCustomer, addedPriceProduct);
+			var allotmentItem = allotmentsHelper.getSaveAllotmentItemDO(addedCompanyCustomer, addedConfidentialPriceProduct);
 			var saveAllotmentItem = new SaveAllotmentItem(testContext.appContext, testContext.sessionContext);
 			saveAllotmentItem.save(allotmentItem).then((savedAllotment: AllotmentDO) => {
 				should.exist(savedAllotment.id);
@@ -153,7 +172,7 @@ describe("Hotel Allotments Tests", function () {
 			});
         });
 		it("Should update the allotment", function (done) {
-			var allotmentItem = allotmentsHelper.getSaveAllotmentItemDO(addedCompanyCustomer, addedPriceProduct);
+			var allotmentItem = allotmentsHelper.getSaveAllotmentItemDO(addedCompanyCustomer, addedConfidentialPriceProduct);
 			allotmentItem["id"] = addedAllotment.id;
 			allotmentItem.notes = AllotmentNotes;
 
