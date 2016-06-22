@@ -3,8 +3,9 @@ import {ThError} from '../../../../../utils/th-responses/ThError';
 import {ThStatusCode} from '../../../../../utils/th-responses/ThResponse';
 import {MongoRepository, MongoSearchCriteria} from '../../../../common/base/MongoRepository';
 import {MongoQueryBuilder} from '../../../../common/base/MongoQueryBuilder';
+import {MongoQueryUtils} from '../../../../common/base/mongo-utils/MongoQueryUtils';
 import {PriceProductMetaRepoDO, PriceProductSearchCriteriaRepoDO, PriceProductSearchResultRepoDO} from '../../IPriceProductRepository';
-import {PriceProductDO, PriceProductStatus} from '../../../data-objects/PriceProductDO';
+import {PriceProductDO, PriceProductStatus, PriceProductAvailability} from '../../../data-objects/PriceProductDO';
 import {PriceProductRepositoryHelper} from './helpers/PriceProductRepositoryHelper';
 import {LazyLoadRepoDO, LazyLoadMetaResponseRepoDO} from '../../../../common/repo-data-objects/LazyLoadRepoDO';
 
@@ -66,20 +67,41 @@ export class MongoPriceProductReadOperationsRepository extends MongoRepository {
 	private buildSearchCriteria(meta: PriceProductMetaRepoDO, searchCriteria: PriceProductSearchCriteriaRepoDO): Object {
 		var mongoQueryBuilder = new MongoQueryBuilder();
 		mongoQueryBuilder.addExactMatch("hotelId", meta.hotelId);
-		if (!this._thUtils.isUndefinedOrNull(searchCriteria)) {
-			mongoQueryBuilder.addRegex("name", searchCriteria.name);
-
-			if (!this._thUtils.isUndefinedOrNull(searchCriteria.statusList) && _.isArray(searchCriteria.statusList)) {
-				mongoQueryBuilder.addMultipleSelectOptionList("status", searchCriteria.statusList);
-			}
-			else {
-				mongoQueryBuilder.addExactMatch("status", searchCriteria.status);
-			}
-			mongoQueryBuilder.addExactMatch("availability", searchCriteria.availability);
-			mongoQueryBuilder.addMultipleSelectOptionList("id", searchCriteria.priceProductIdList);
-			mongoQueryBuilder.addMultipleSelectOptionList("addOnProductIdList", searchCriteria.addOnProductIdList);
-			mongoQueryBuilder.addMultipleSelectOptionList("taxIdList", searchCriteria.taxIdList);
+		if (this._thUtils.isUndefinedOrNull(searchCriteria)) {
+			return mongoQueryBuilder.processedQuery;
 		}
+		mongoQueryBuilder.addRegex("name", searchCriteria.name);
+
+		if (!this._thUtils.isUndefinedOrNull(searchCriteria.statusList) && _.isArray(searchCriteria.statusList)) {
+			mongoQueryBuilder.addMultipleSelectOptionList("status", searchCriteria.statusList);
+		}
+		else {
+			mongoQueryBuilder.addExactMatch("status", searchCriteria.status);
+		}
+		mongoQueryBuilder.addExactMatch("availability", searchCriteria.availability);
+		mongoQueryBuilder.addMultipleSelectOptionList("id", searchCriteria.priceProductIdList);
+		mongoQueryBuilder.addMultipleSelectOptionList("addOnProductIdList", searchCriteria.addOnProductIdList);
+		mongoQueryBuilder.addMultipleSelectOptionList("taxIdList", searchCriteria.taxIdList);
+		this.appendCustomerPriceProductDetailsSearch(mongoQueryBuilder, searchCriteria);
 		return mongoQueryBuilder.processedQuery;
+	}
+	private appendCustomerPriceProductDetailsSearch(mongoQueryBuilder: MongoQueryBuilder, searchCriteria: PriceProductSearchCriteriaRepoDO) {
+		if (this._thUtils.isUndefinedOrNull(searchCriteria.customerPriceProductDetails)) {
+			return;
+		}
+		if (!searchCriteria.customerPriceProductDetails.allowPublicPriceProducts) {
+			mongoQueryBuilder.addMultipleSelectOptionList("id", searchCriteria.priceProductIdList);
+			return;
+		}
+		var mongoQueryUtils = new MongoQueryUtils();
+		var preprocessedQuery = mongoQueryUtils.preprocessQueryValueList("id", searchCriteria.customerPriceProductDetails.priceProductIdList);
+		var ppIdQuery = {};
+		ppIdQuery[preprocessedQuery.fieldName] = { '$in': preprocessedQuery.valueList };
+		mongoQueryBuilder.addCustomQuery("$or", [
+			ppIdQuery,
+			{
+				availability: PriceProductAvailability.Public
+			}
+		]);
 	}
 }
