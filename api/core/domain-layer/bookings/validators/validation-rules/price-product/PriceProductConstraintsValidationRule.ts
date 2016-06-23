@@ -9,7 +9,7 @@ import {ConfigCapacityDO} from '../../../../../data-layer/common/data-objects/be
 import {PriceProductConstraintDataDO} from '../../../../../data-layer/price-products/data-objects/constraint/IPriceProductConstraint';
 import {PriceProductDO} from '../../../../../data-layer/price-products/data-objects/PriceProductDO';
 import {IndexedBookingInterval} from '../../../../../data-layer/price-products/utils/IndexedBookingInterval';
-import {IndexedNumberOfRoomCategories} from '../../../../../data-layer/price-products/utils/IndexedNumberOfRoomCategories';
+import {StringOccurenciesIndexer} from '../../../../../utils/indexers/StringOccurenciesIndexer';
 
 import _ = require('underscore');
 
@@ -22,7 +22,7 @@ export interface PriceProductConstraintsParams {
 }
 
 export class PriceProductConstraintsValidationRule extends ABusinessValidationRule<PriceProductDO> implements IBusinessValidationRuleFilter<PriceProductDO> {
-    private _indexedNumberOfRoomCategories: IndexedNumberOfRoomCategories;
+    private _indexedNumberOfRoomCategories: StringOccurenciesIndexer;
     private _indexedBookingInterval: IndexedBookingInterval;
 
     constructor(private _constraintParams: PriceProductConstraintsParams) {
@@ -35,7 +35,7 @@ export class PriceProductConstraintsValidationRule extends ABusinessValidationRu
     private buildConstraintsParams() {
         var thUtils = new ThUtils();
         if (!thUtils.isUndefinedOrNull(this._constraintParams.roomCategoryIdListFromBookings) && _.isArray(this._constraintParams.roomCategoryIdListFromBookings)) {
-            this._indexedNumberOfRoomCategories = new IndexedNumberOfRoomCategories(this._constraintParams.roomCategoryIdListFromBookings);
+            this._indexedNumberOfRoomCategories = new StringOccurenciesIndexer(this._constraintParams.roomCategoryIdListFromBookings);
         }
         this._indexedBookingInterval = new IndexedBookingInterval(this._constraintParams.bookingInterval);
     }

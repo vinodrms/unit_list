@@ -16,9 +16,13 @@ export class IndexedBookingInterval {
     private _bookingISOWeekDayList: ISOWeekDay[];
     private _uniqueBookingISOWeekDayList: ISOWeekDay[];
 
+    private _startUtcTimestamp: number;
+    private _endUtcTimestamp: number;
+
     constructor(private _bookingInterval: ThDateIntervalDO) {
         this.indexBookingDateList();
         this.indexBookingISOWeekDayList();
+        this.computeTimestamps();
     }
     private indexBookingDateList() {
         this._bookingDateList = this._bookingInterval.getThDateDOList();
@@ -32,6 +36,16 @@ export class IndexedBookingInterval {
             this._bookingISOWeekDayList.push(bookingDate.getISOWeekDay());
         });
         this._uniqueBookingISOWeekDayList = _.uniq(this._bookingISOWeekDayList);
+    }
+    private computeTimestamps() {
+        this._startUtcTimestamp = this.getUtcTimestamp(this._bookingInterval.start, IndexedBookingInterval.DefaultUtcCheckInHour);
+        this._endUtcTimestamp = this.getUtcTimestamp(this._bookingInterval.end, IndexedBookingInterval.DefaultUtcCheckOutHour);
+    }
+    private getUtcTimestamp(thDate: ThDateDO, defaultHour: number): number {
+        var thTimestamp = new ThTimestampDO();
+        thTimestamp.thDateDO = thDate;
+        thTimestamp.thHourDO = ThHourDO.buildThHourDO(defaultHour, 0);
+        return thTimestamp.getUtcTimestamp();
     }
 
     public get bookingDateList(): ThDateDO[] {
@@ -78,10 +92,10 @@ export class IndexedBookingInterval {
     }
 
     public getStartUtcTimestamp(): number {
-        return this.getUtcTimestamp(this._bookingInterval.start, IndexedBookingInterval.DefaultUtcCheckInHour);
+        return this._startUtcTimestamp;
     }
     public getEndUtcTimestamp(): number {
-        return this.getUtcTimestamp(this._bookingInterval.end, IndexedBookingInterval.DefaultUtcCheckOutHour);
+        return this._endUtcTimestamp;
     }
 
     public get indexedBookingInterval(): ThDateIntervalDO {
@@ -91,10 +105,14 @@ export class IndexedBookingInterval {
         this._indexedBookingInterval = indexedBookingInterval;
     }
 
-    private getUtcTimestamp(thDate: ThDateDO, defaultHour: number): number {
-        var thTimestamp = new ThTimestampDO();
-        thTimestamp.thDateDO = thDate;
-        thTimestamp.thHourDO = ThHourDO.buildThHourDO(defaultHour, 0);
-        return thTimestamp.getUtcTimestamp();
+    public overlapsWith(otherIndexedBookingInterval: IndexedBookingInterval): boolean {
+        return (
+            (this._startUtcTimestamp <= otherIndexedBookingInterval.getStartUtcTimestamp() &&
+                this._endUtcTimestamp >= otherIndexedBookingInterval.getStartUtcTimestamp()
+            ) ||
+            (this._startUtcTimestamp >= otherIndexedBookingInterval.getStartUtcTimestamp() &&
+                this._startUtcTimestamp <= otherIndexedBookingInterval.getEndUtcTimestamp()
+            )
+        );
     }
 }

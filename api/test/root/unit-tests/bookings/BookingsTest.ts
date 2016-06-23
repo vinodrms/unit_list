@@ -16,6 +16,8 @@ import {AddBookingItemsDO} from '../../../../core/domain-layer/bookings/add-book
 import {BookingDO, GroupBookingInputChannel} from '../../../../core/data-layer/bookings/data-objects/BookingDO';
 import {BookingSearchResultRepoDO} from '../../../../core/data-layer/bookings/repositories/IBookingRepository';
 import {BookingConfirmationEmailSender} from '../../../../core/domain-layer/bookings/email/BookingConfirmationEmailSender';
+import {BookingOccupancyCalculator} from '../../../../core/domain-layer/bookings/search-bookings/utils/occupancy-calculator/BookingOccupancyCalculator';
+import {IBookingOccupancy} from '../../../../core/domain-layer/bookings/search-bookings/utils/occupancy-calculator/results/IBookingOccupancy';
 
 describe("New Bookings Tests", function () {
     var testContext: TestContext;
@@ -133,5 +135,16 @@ describe("New Bookings Tests", function () {
             });
         });
 
+    });
+    describe("Bookings Search Tests", function () {
+        it("Should invoke the booking occupancy calculator", function (done) {
+            var occupancyCalculator = new BookingOccupancyCalculator(testContext.appContext, testContext.sessionContext);
+            occupancyCalculator.compute(bookingTestHelper.getBookingSearchInterval(testDataBuilder))
+                .then((bookingOccupancy: IBookingOccupancy) => {
+                    done();
+                }).catch((err: any) => {
+                    done(err);
+                });
+        });
     });
 });

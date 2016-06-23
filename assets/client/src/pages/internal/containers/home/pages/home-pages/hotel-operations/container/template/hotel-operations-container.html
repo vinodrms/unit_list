@@ -1,15 +1,68 @@
-<div class="row full-height card">
-	<div class="col-xs-2 col-md-2 home-side-card">
-		
-		
-		<div class="home-side-card-bottom-box">
-			<th-button [upFont]="'\''" [text]="'Booking'" (onButtonClick)="openNewBookingModal()"></th-button>
-		</div>		
+<div class="full-height">
+	<div class="arrivals-pane">
+		<div class="header">
+    		Arrivals
+		</div>
+		<div class="body">
+			<div class="arrival-item">Robert Paulsen</div>
+			<div class="arrival-item">Dorel Mihai</div>
+			<div class="arrival-item">Mircea Dinu</div>
+			<div class="arrival-item">Filip Cristian Buruiana</div>
+			<div class="arrival-item">Paraschiv Ionut</div>
+		</div>
+		<div class="footer">
+			<div class="arrivals-side-pane-bottom-box">
+				<th-button [upFont]="'\''" [text]="'Booking'" (onButtonClick)="openNewBookingModal()"></th-button>
+			</div>		
+		</div>
 	</div>
-	<div class="col-xs-8 col-md-8 home-card">
-	
-	</div>
-	<div class="col-xs-2 col-md-2 home-side-card">
+	<div class="canvas">
+		<div class="header">
 
+		</div>
+		<div class="body rooms-canvas">
+			<div class="room-card occupied" *ngFor="let roomVM of roomVMList">
+				<div class="card-header">
+				<div class="section1">
+					<div class="room-number">{{ roomVM.Properties.Name }}</div>
+					<div class="room-details">{{ roomVM.Type }} {{roomVM.Properties.Booking.NumberOfPeople}} {{roomVM.Properties.Booking.NumberOfNights}}</div>
+				</div>
+				<div class="section2">
+					<div class="customer-name">{{ roomVM.Properties.Booking.ClientName}}</div>
+				</div>
+				</div>
+				<div class="card-footer">
+				<div class="arrival">
+					{{ roomVM.Properties.Booking.Arrival }}
+				</div>
+				<div class="arrow">></div>
+				<div class="departure">
+					{{ roomVM.Properties.Booking.Departure }}
+				</div>
+				</div>
+			</div>
+			<div class="room-card free">
+				<div class="card-header">
+				<div class="section1">
+					<div class="room-number">501</div>
+				</div>
+				<div class="section2">
+					<div class="customer-name">A</div>
+				</div>
+				</div>
+				<div class="card-footer">
+				<div class="arrival">
+					Wed 13.02.16
+				</div>
+				</div>
+			</div>			
+		</div>
+	</div>
+	<div class="departures-pane">
+		<div class="header">
+    		Departures
+		</div>
+		<div class="body">
+		</div>
 	</div>
 </div>
