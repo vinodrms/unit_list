@@ -1,22 +1,27 @@
 import {ThError} from '../../../../../utils/th-responses/ThError';
 import {ThStatusCode} from '../../../../../utils/th-responses/ThResponse';
+import {AppContext} from '../../../../../utils/AppContext';
+import {SessionContext} from '../../../../../utils/SessionContext';
 import {ThUtils} from '../../../../../utils/ThUtils';
 import {ABusinessValidationRule} from '../../../../common/validation-rules/ABusinessValidationRule';
 import {BookingDO} from '../../../../../data-layer/bookings/data-objects/BookingDO';
 import {AllotmentDO} from '../../../../../data-layer/allotments/data-objects/AllotmentDO';
 import {AllotmentsContainer} from '../../../../allotments/validators/results/AllotmentsContainer';
 import {AllotmentConstraintsParams, AllotmentConstraintsValidationRule} from '../allotment/AllotmentConstraintsValidationRule';
+import {BookingOccupancyCalculator} from '../../../search-bookings/utils/occupancy-calculator/BookingOccupancyCalculator';
+import {IBookingOccupancy} from '../../../search-bookings/utils/occupancy-calculator/results/IBookingOccupancy';
+import {IndexedBookingInterval} from '../../../../../data-layer/price-products/utils/IndexedBookingInterval';
 
 export interface BookingAllotmentValidationParams {
     allotmentsContainer: AllotmentsContainer;
-    checkAllotmentConstraints: boolean;
-    allotmentConstraintsParam?: AllotmentConstraintsParams;
+    allotmentConstraintsParam: AllotmentConstraintsParams;
+    transientBookingList: BookingDO[];
 }
 
 export class BookingAllotmentValidationRule extends ABusinessValidationRule<BookingDO> {
     private _thUtils: ThUtils;
 
-    constructor(private _validationParams: BookingAllotmentValidationParams) {
+    constructor(private _appContext: AppContext, private _sessionContext: SessionContext, private _validationParams: BookingAllotmentValidationParams) {
         super({
             statusCode: ThStatusCode.BookingValidationError,
             errorMessage: "error validating booking"
@@ -45,12 +50,21 @@ export class BookingAllotmentValidationRule extends ABusinessValidationRule<Book
             });
             return;
         }
-        if (!this._validationParams.checkAllotmentConstraints) {
-            resolve(booking);
-            return;
-        }
+
         var allotmentConstraintsValidationRule: AllotmentConstraintsValidationRule = new AllotmentConstraintsValidationRule(this._validationParams.allotmentConstraintsParam);
         allotmentConstraintsValidationRule.isValidOn(allotment).then((validatedAllotment: AllotmentDO) => {
+            var occupancyCalculator = new BookingOccupancyCalculator(this._appContext, this._sessionContext);
+            return occupancyCalculator.compute(booking.interval, this._validationParams.transientBookingList);
+        }).then((bookingOccupancy: IBookingOccupancy) => {
+            var allotmentOccupancyNo = bookingOccupancy.getOccupancyForAllotmentId(booking.allotmentId);
+            var allotmentAvailabilityNo = allotment.availability.getAllotmentAvailabilityForInterval(new IndexedBookingInterval(booking.interval));
+            if (allotmentOccupancyNo >= allotmentAvailabilityNo) {
+                this.logBusinessAndReject(reject, booking, {
+                    statusCode: ThStatusCode.BookingsValidatorAllotmentInsufficientInventory,
+                    errorMessage: "insufficient inventory to add booking with allotment"
+                });
+                return;
+            }
             resolve(booking);
         }).catch((error: ThError) => {
             reject(error);

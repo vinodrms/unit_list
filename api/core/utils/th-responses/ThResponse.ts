@@ -338,6 +338,7 @@ export enum ThStatusCode {
     BookingOccupancyCalculatorError,
     BookingOccupancyCalculatorErrorIndexing,
     BookingDependenciesFilterError,
+    BookingsValidatorAllotmentInsufficientInventory,
     
 }
 
@@ -667,6 +668,7 @@ ThMessage[ThStatusCode.RoomInventoryAggregatorError] = "Error aggregating the ro
 ThMessage[ThStatusCode.BookingOccupancyCalculatorError] = "Error computing booking occupancy.";
 ThMessage[ThStatusCode.BookingOccupancyCalculatorErrorIndexing] = "Error computing booking occupancy.";
 ThMessage[ThStatusCode.BookingDependenciesFilterError] = "Error filtering the price products.";
+ThMessage[ThStatusCode.BookingsValidatorAllotmentInsufficientInventory] = "Insufficient inventory for the selected allotments. It is possible that they were booked since the search.";
 
 export class ThResponse {
     statusCode: ThStatusCode;

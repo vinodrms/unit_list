@@ -28,6 +28,7 @@ export class ValidationParams {
 export class NewBookingsValidationRules {
     private _currentHotelThDate: ThDateDO;
     private _roomCategoryIdListFromBookings: string[];
+    private _transientBookingList: BookingDO[];
 
     constructor(private _appContext: AppContext, private _sessionContext: SessionContext, private _validatorParams: ValidationParams) {
         var bookingUtils = new BookingUtils();
@@ -35,6 +36,7 @@ export class NewBookingsValidationRules {
     }
 
     public validateBookingList(bookingList: BookingDO[]): Promise<BookingDO[]> {
+        this._transientBookingList = bookingList;
         this.indexRoomCategoryIdListFromBookings(bookingList);
         var individualBookingPromise: Promise<BookingDO>[] = [];
         _.forEach(bookingList, (booking: BookingDO) => {
@@ -54,7 +56,7 @@ export class NewBookingsValidationRules {
     private validateBookingCore(resolve: { (result: BookingDO): void }, reject: { (err: ThError): void }, booking: BookingDO) {
         var bookingValidationRule = new BusinessValidationRuleContainer([
             new BookingBillingDetailsValidationRule(this._validatorParams.hotel, this._validatorParams.priceProductsContainer, this._validatorParams.customersContainer),
-            new BookingAllotmentValidationRule(this.getBookingAllotmentValidationParams(booking)),
+            new BookingAllotmentValidationRule(this._appContext, this._sessionContext, this.getBookingAllotmentValidationParams(booking)),
             new BookingRoomCategoryValidationRule(this._validatorParams.priceProductsContainer)
         ]);
         bookingValidationRule.isValidOn(booking).then((validatedBooking: BookingDO) => {
@@ -77,11 +79,11 @@ export class NewBookingsValidationRules {
     private getBookingAllotmentValidationParams(booking: BookingDO): BookingAllotmentValidationParams {
         return {
             allotmentsContainer: this._validatorParams.allotmentsContainer,
-            checkAllotmentConstraints: true,
             allotmentConstraintsParam: {
                 bookingInterval: booking.interval,
                 currentHotelThDate: this._currentHotelThDate
-            }
+            },
+            transientBookingList: this._transientBookingList
         };
     }
     private getPriceProductConstraintsParams(booking: BookingDO): PriceProductConstraintsParams {
