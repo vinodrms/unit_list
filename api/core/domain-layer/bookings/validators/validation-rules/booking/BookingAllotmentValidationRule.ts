@@ -4,6 +4,7 @@ import {AppContext} from '../../../../../utils/AppContext';
 import {SessionContext} from '../../../../../utils/SessionContext';
 import {ThUtils} from '../../../../../utils/ThUtils';
 import {ABusinessValidationRule} from '../../../../common/validation-rules/ABusinessValidationRule';
+import {RoomDO} from '../../../../../data-layer/rooms/data-objects/RoomDO';
 import {BookingDO} from '../../../../../data-layer/bookings/data-objects/BookingDO';
 import {AllotmentDO} from '../../../../../data-layer/allotments/data-objects/AllotmentDO';
 import {AllotmentsContainer} from '../../../../allotments/validators/results/AllotmentsContainer';
@@ -16,6 +17,7 @@ export interface BookingAllotmentValidationParams {
     allotmentsContainer: AllotmentsContainer;
     allotmentConstraintsParam: AllotmentConstraintsParams;
     transientBookingList: BookingDO[];
+    roomList: RoomDO[];
 }
 
 export class BookingAllotmentValidationRule extends ABusinessValidationRule<BookingDO> {
@@ -53,7 +55,7 @@ export class BookingAllotmentValidationRule extends ABusinessValidationRule<Book
 
         var allotmentConstraintsValidationRule: AllotmentConstraintsValidationRule = new AllotmentConstraintsValidationRule(this._validationParams.allotmentConstraintsParam);
         allotmentConstraintsValidationRule.isValidOn(allotment).then((validatedAllotment: AllotmentDO) => {
-            var occupancyCalculator = new BookingOccupancyCalculator(this._appContext, this._sessionContext);
+            var occupancyCalculator = new BookingOccupancyCalculator(this._appContext, this._sessionContext, this._validationParams.roomList);
             return occupancyCalculator.compute(booking.interval, this._validationParams.transientBookingList);
         }).then((bookingOccupancy: IBookingOccupancy) => {
             var allotmentOccupancyNo = bookingOccupancy.getOccupancyForAllotmentId(booking.allotmentId);

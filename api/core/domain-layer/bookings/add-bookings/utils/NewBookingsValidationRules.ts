@@ -3,6 +3,7 @@ import {AppContext} from '../../../../utils/AppContext';
 import {SessionContext} from '../../../../utils/SessionContext';
 import {ThDateDO} from '../../../../utils/th-dates/data-objects/ThDateDO';
 import {HotelDO} from '../../../../data-layer/hotel/data-objects/HotelDO';
+import {RoomDO} from '../../../../data-layer/rooms/data-objects/RoomDO';
 import {PriceProductDO} from '../../../../data-layer/price-products/data-objects/PriceProductDO';
 import {PriceProductsContainer} from '../../../price-products/validators/results/PriceProductsContainer';
 import {AllotmentsContainer} from '../../../allotments/validators/results/AllotmentsContainer';
@@ -23,6 +24,7 @@ export class ValidationParams {
     priceProductsContainer: PriceProductsContainer;
     customersContainer: CustomersContainer;
     allotmentsContainer: AllotmentsContainer;
+    roomList: RoomDO[];
 }
 
 export class NewBookingsValidationRules {
@@ -83,7 +85,8 @@ export class NewBookingsValidationRules {
                 bookingInterval: booking.interval,
                 currentHotelThDate: this._currentHotelThDate
             },
-            transientBookingList: this._transientBookingList
+            transientBookingList: this._transientBookingList,
+            roomList: this._validatorParams.roomList
         };
     }
     private getPriceProductConstraintsParams(booking: BookingDO): PriceProductConstraintsParams {
