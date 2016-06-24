@@ -116,7 +116,7 @@ describe("New Bookings Tests", function () {
     });
     describe("Bookings Search Tests", function () {
         it("Should invoke the booking occupancy calculator", function (done) {
-            var occupancyCalculator = new BookingOccupancyCalculator(testContext.appContext, testContext.sessionContext);
+            var occupancyCalculator = new BookingOccupancyCalculator(testContext.appContext, testContext.sessionContext, testDataBuilder.roomList);
             occupancyCalculator.compute(bookingTestHelper.getBookingSearchInterval(testDataBuilder))
                 .then((bookingOccupancy: IBookingOccupancy) => {
                     done();

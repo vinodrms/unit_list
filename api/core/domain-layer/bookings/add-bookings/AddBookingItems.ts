@@ -8,6 +8,8 @@ import {AddBookingItemsDO, BookingItemDO} from './AddBookingItemsDO';
 import {ValidationResultParser} from '../../common/ValidationResultParser';
 import {HotelDO} from '../../../data-layer/hotel/data-objects/HotelDO';
 import {BookingIntervalValidator} from '../validators/BookingIntervalValidator';
+import {RoomDO} from '../../../data-layer/rooms/data-objects/RoomDO';
+import {RoomSearchResultRepoDO} from '../../../data-layer/rooms/repositories/IRoomRepository';
 import {PriceProductDO} from '../../../data-layer/price-products/data-objects/PriceProductDO';
 import {PriceProductIdValidator} from '../../price-products/validators/PriceProductIdValidator';
 import {PriceProductsContainer} from '../../price-products/validators/results/PriceProductsContainer';
@@ -32,6 +34,7 @@ export class AddBookingItems {
     private _loadedPriceProductsContainer: PriceProductsContainer;
     private _loadedCustomersContainer: CustomersContainer;
     private _loadedAllotmentsContainer: AllotmentsContainer;
+    private _loadedRoomList: RoomDO[];
 
     private _bookingList: BookingDO[];
 
@@ -92,6 +95,11 @@ export class AddBookingItems {
             }).then((loadedAllotmentsContainer: AllotmentsContainer) => {
                 this._loadedAllotmentsContainer = loadedAllotmentsContainer;
 
+                var roomsRepo = this._appContext.getRepositoryFactory().getRoomRepository();
+                return roomsRepo.getRoomList({ hotelId: this._sessionContext.sessionDO.hotel.id });
+            }).then((roomSearchResult: RoomSearchResultRepoDO) => {
+                this._loadedRoomList = roomSearchResult.roomList;
+
                 var bookingItemsConverter = new BookingItemsConverter(this._appContext, this._sessionContext, {
                     hotelDO: this._loadedHotel,
                     priceProductsContainer: this._loadedPriceProductsContainer
@@ -104,7 +112,8 @@ export class AddBookingItems {
                     hotel: this._loadedHotel,
                     priceProductsContainer: this._loadedPriceProductsContainer,
                     customersContainer: this._loadedCustomersContainer,
-                    allotmentsContainer: this._loadedAllotmentsContainer
+                    allotmentsContainer: this._loadedAllotmentsContainer,
+                    roomList: this._loadedRoomList
                 });
                 return newBookingValidationRules.validateBookingList(this._bookingList);
             }).then((validatedBookingList: BookingDO[]) => {
