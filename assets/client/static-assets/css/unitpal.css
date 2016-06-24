@@ -1829,14 +1829,14 @@ a.btn.btn-square:focus {
             color: tomato;
         }
 
-    .canvas {
+    rooms-canvas {
         background-color: #eeeeee;
         flex-basis: 100px;
         flex-grow: 8;
         border-left: 1px solid #DBDBDB;
         border-right: 1px solid #DBDBDB;
     }
-    .canvas .header{
+    rooms-canvas .header{
         background-color: white;
     }
 
