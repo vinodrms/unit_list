@@ -8,13 +8,18 @@ import {NewBookingModalService} from '../../../utils/new-booking/modal/services/
 import {NewBookingResult} from '../../../utils/new-booking/modal/services/utils/NewBookingResult';
 import {ModalDialogRef} from '../../../../../../../../common/utils/modals/utils/ModalDialogRef';
 
+// Page components
+import {ArrivalsPaneComponent} from './components/arrivals-pane/ArrivalsPaneComponent';
+import {DeparturesPaneComponent} from './components/departures-pane/DeparturesPaneComponent';
+import {RoomsCanvasComponent} from './components/rooms-canvas/RoomsCanvasComponent';
+
 declare var $:any;
 
 @Component({
 	selector: 'hotel-operations-dashboard',
 	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/container/template/hotel-operations-dashboard.html',
 	providers: [NewBookingModalService],
-	directives: [ThButtonComponent],
+	directives: [ThButtonComponent, ArrivalsPaneComponent, DeparturesPaneComponent],
 	pipes: [TranslationPipe]
 })
 
