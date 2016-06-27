@@ -58,7 +58,7 @@ export class RoomCategoryStatsAggregator {
         });
     }
 
-    public getRoomCategoryStatsListCore(resolve: { (result: RoomCategoryStatsDO[]): void }, reject: { (err: ThError): void }, roomCategoryAggregatorMeta: RoomCategoryStatsAggregatorMetaDO, roomCategoryIdList: string[]) {
+    private getRoomCategoryStatsListCore(resolve: { (result: RoomCategoryStatsDO[]): void }, reject: { (err: ThError): void }, roomCategoryAggregatorMeta: RoomCategoryStatsAggregatorMetaDO, roomCategoryIdList: string[]) {
         this.getRoomCategoryList(roomCategoryAggregatorMeta, roomCategoryIdList).then((result: RoomCategorySearchResultRepoDO) => {
             var computeCategoryStatsPromiseList = [];
             result.roomCategoryList.forEach((roomCategory) => {

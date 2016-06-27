@@ -12,6 +12,7 @@ import {ThDateIntervalDO} from '../../../utils/th-dates/data-objects/ThDateInter
 import {BookingDataLoaderFactory} from './utils/data-loader/BookingDataLoaderFactory';
 import {IBookingDataLoader} from './utils/data-loader/IBookingDataLoader';
 import {BookingSearchDependencies} from './utils/data-loader/results/BookingSearchDependencies';
+import {BookingDependenciesFilter} from './utils/data-filter/BookingDependenciesFilter';
 
 export class BookingSearch {
     private _searchParams: BookingSearchDO;
@@ -52,7 +53,15 @@ export class BookingSearch {
             }).then((bookingSearchData: BookingSearchDependencies) => {
                 this._loadedBookingSearchDependencies = bookingSearchData;
 
-                // TODO
+                var bookingDependenciesFilter = new BookingDependenciesFilter(this._appContext, this._sessionContext, {
+                    hotel: this._loadedHotel,
+                    interval: this._searchParams.interval,
+                    configCapacity: this._searchParams.configCapacity
+                })
+                return bookingDependenciesFilter.filterDependencies(this._loadedBookingSearchDependencies);
+            }).then((filteredBookingSearchData: BookingSearchDependencies) => {
+                this._loadedBookingSearchDependencies = filteredBookingSearchData;
+
 
             }).catch((error: any) => {
                 var thError = new ThError(ThStatusCode.BookingSearchError, error);

@@ -3,9 +3,11 @@ import {ThError} from '../../../../../utils/th-responses/ThError';
 import {ThStatusCode} from '../../../../../utils/th-responses/ThResponse';
 import {AppContext} from '../../../../../utils/AppContext';
 import {SessionContext} from '../../../../../utils/SessionContext';
+import {ThUtils} from '../../../../../utils/ThUtils';
 import {ThDateIntervalDO} from '../../../../../utils/th-dates/data-objects/ThDateIntervalDO';
 import {ThDateDO} from '../../../../../utils/th-dates/data-objects/ThDateDO';
 import {ThDateUtils} from '../../../../../utils/th-dates/ThDateUtils';
+import {RoomDO} from '../../../../../data-layer/rooms/data-objects/RoomDO';
 import {BookingDO} from '../../../../../data-layer/bookings/data-objects/BookingDO';
 import {BookingDOConstraints} from '../../../../../data-layer/bookings/data-objects/BookingDOConstraints';
 import {BookingSearchResultRepoDO} from '../../../../../data-layer/bookings/repositories/IBookingRepository';
@@ -19,18 +21,27 @@ import _ = require('underscore');
 
 export class BookingOccupancyCalculator {
     private _dateUtils: ThDateUtils;
-    private _interval: ThDateIntervalDO;
     private _bookingUtils: BookingUtils;
+    private _thUtils: ThUtils;
+    private _indexedRoomsById: { [id: string]: RoomDO; };
+
+    private _interval: ThDateIntervalDO;
+    private _transientBookingList: BookingDO[];
 
     private _bookingsContainer: BookingsContainer;
 
-    constructor(private _appContext: AppContext, private _sessionContext: SessionContext) {
+    constructor(private _appContext: AppContext, private _sessionContext: SessionContext, roomList: RoomDO[]) {
         this._dateUtils = new ThDateUtils();
         this._bookingUtils = new BookingUtils();
+        this._thUtils = new ThUtils();
+        this._indexedRoomsById = _.indexBy(roomList, (room: RoomDO) => { return room.id });
     }
 
-    public compute(interval: ThDateIntervalDO): Promise<IBookingOccupancy> {
+    // it computes the availability for the given period
+    // the transient booking list represents an array that is not persistet in the DB but should be considered when computing the occupancy
+    public compute(interval: ThDateIntervalDO, transientBookingList?: BookingDO[]): Promise<IBookingOccupancy> {
         this._interval = interval;
+        this._transientBookingList = transientBookingList;
         return new Promise<IBookingOccupancy>((resolve: { (result: IBookingOccupancy): void }, reject: { (err: ThError): void }) => {
             try {
                 this.computeCore(resolve, reject);
@@ -48,7 +59,12 @@ export class BookingOccupancyCalculator {
                 confirmationStatusList: BookingDOConstraints.ConfirmationStatuses_OccupyingRoomsFromInventory,
                 interval: this._interval
             }).then((bookingSearchResult: BookingSearchResultRepoDO) => {
-                this._bookingsContainer = new BookingsContainer(bookingSearchResult.bookingList);
+                var bookingList = bookingSearchResult.bookingList;
+                if (!this._thUtils.isUndefinedOrNull(this._transientBookingList) && _.isArray(this._transientBookingList)) {
+                    bookingList = bookingList.concat(this._transientBookingList);
+                }
+
+                this._bookingsContainer = new BookingsContainer(bookingList);
                 return this.computeBookingOccupancy();
             }).then((bookingOccupancy: BookingOccupancy) => {
                 this._bookingsContainer.destroy();
@@ -75,7 +91,7 @@ export class BookingOccupancyCalculator {
     }
     private computeBookingOccupancyCore(resolve: { (result: BookingOccupancy): void }, reject: { (err: ThError): void }) {
         var bookingInterval: IndexedBookingInterval = new IndexedBookingInterval(this._interval);
-        var aggregatedBookingOccupancy: BookingOccupancy = new BookingOccupancy();
+        var aggregatedBookingOccupancy: BookingOccupancy = new BookingOccupancy(this._indexedRoomsById);
         _.forEach(bookingInterval.bookingDateList, (bookingDate: ThDateDO) => {
             var bookingOccupancyForDate: BookingOccupancy = this.getBookingOccupancyForDate(bookingDate);
             aggregatedBookingOccupancy.combineWith(bookingOccupancyForDate);
@@ -85,7 +101,7 @@ export class BookingOccupancyCalculator {
     private getBookingOccupancyForDate(date: ThDateDO): BookingOccupancy {
         var indexedSingleDayInterval: IndexedBookingInterval = this.getSingleDayIntervalStartingFrom(date);
         var filteredBookingList: BookingDO[] = this._bookingsContainer.getBookingsFilteredByInterval(indexedSingleDayInterval);
-        var bookingOccupancy = new BookingOccupancy();
+        var bookingOccupancy = new BookingOccupancy(this._indexedRoomsById);
         bookingOccupancy.initializeFromBookings(filteredBookingList);
         return bookingOccupancy;
     }

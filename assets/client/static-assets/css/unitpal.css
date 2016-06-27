@@ -1873,26 +1873,28 @@ a.btn.btn-square:focus {
 }
 
  /* Operationl */
-    hotel-operations-container{
+    hotel-operations-dashboard{
         width: 100%;
+        height: 100%;
+        overflow-y: hidden;
     }
-    hotel-operations-container .full-height{
+    hotel-operations-dashboard{
         /*width: 1024px;*/
         display:flex;
         align-items: stretch;
     }
 
-    hotel-operations-container .full-height * {
+    hotel-operations-dashboard * {
         font-family: Arial, Helvetica, sans-serif;
     }
 
     /*Change*/
-    .full-height .header{
+    hotel-operations-dashboard .header{
         height: 70px;
         border-bottom: 1px solid #DBDBDB;
     }
 
-    .arrivals-pane {
+    arrivals-pane {
         display: flex;
         background-color: #f3f3f3;
         flex-basis: 100px;
@@ -1900,7 +1902,7 @@ a.btn.btn-square:focus {
         flex-grow: 2;
     }
 
-        .arrivals-pane .header{
+        arrivals-pane .header{
             display: flex;
             align-items: center;
             border-bottom: 1px solid #DBDBDB;
@@ -1908,11 +1910,11 @@ a.btn.btn-square:focus {
             padding-left: 15px;
         }
 
-        .arrivals-pane .body{
+        arrivals-pane .body{
             flex-grow: 1;
         }
 
-        .arrivals-pane .footer{
+        arrivals-pane .footer{
             display: flex;
             justify-content: center;
             align-items: center;
@@ -1920,28 +1922,28 @@ a.btn.btn-square:focus {
             background-color: white;
         }
 
-        .arrivals-pane .footer .th-button-box{
+        arrivals-pane .footer .th-button-box{
             color: tomato;
         }
 
-    .canvas {
+    rooms-canvas {
         background-color: #eeeeee;
         flex-basis: 100px;
         flex-grow: 8;
         border-left: 1px solid #DBDBDB;
         border-right: 1px solid #DBDBDB;
     }
-    .canvas .header{
+    rooms-canvas .header{
         background-color: white;
     }
 
-    .departures-pane{
+    departures-pane{
         background-color: #f3f3f3;
         flex-basis: 100px;
         flex-grow: 2
     }
 
-    .departures-pane .header{
+    departures-pane .header{
         display: flex;
         align-items: center;
         border-bottom: 1px solid #DBDBDB;
