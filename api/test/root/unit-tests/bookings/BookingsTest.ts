@@ -121,13 +121,15 @@ describe("New Bookings Tests", function () {
                 interval: bookingTestHelper.getBookingSearchInterval(testDataBuilder)
             }).then((bookingSearchResult: BookingSearchResultRepoDO) => {
                 var groupBookingReferenceList = _.chain(bookingSearchResult.bookingList).map((booking: BookingDO) => {
-                    return booking.groupBookingReference;
+                    return booking.groupBookingId;
                 }).uniq().value();
 
                 var groupBookingArr = _.where(bookingSearchResult.bookingList, { groupBookingReference: groupBookingReferenceList[0] });
 
-                var bookingConfirmationEmailSender = new BookingConfirmationEmailSender(testContext.appContext);
-                return bookingConfirmationEmailSender.sendBookingConfirmation({ bookingList: groupBookingArr, hotel: testDataBuilder.hotelDO });
+                var bookingConfirmationEmailSender = new BookingConfirmationEmailSender(testContext.appContext, testContext.sessionContext);
+                return bookingConfirmationEmailSender.sendBookingConfirmation({
+                    groupBookingId: groupBookingReferenceList[0]
+                });
             }).then((result: boolean) => {
                 done();
             }).catch((err: any) => {
