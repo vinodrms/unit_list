@@ -74,7 +74,7 @@ export class AllotmentsHelper {
 		];
 		return constraintsWrapper;
 	}
-	public getNoOfAvailableRoomsForDay(isoWeekDay: ISOWeekDay): number {
+	private getNoOfAvailableRoomsForDay(isoWeekDay: ISOWeekDay): number {
 		if (isoWeekDay === ISOWeekDay.Saturday || isoWeekDay === ISOWeekDay.Sunday) {
 			return 7;
 		}

@@ -81,7 +81,7 @@ export class BookingSearch {
 
                 var transientBookingList = TransientBookingItemDO.convertToBookingList(this._searchParams.transientBookingList);
                 var occupancyCalculator = new BookingOccupancyCalculator(this._appContext, this._sessionContext, this._loadedRoomList);
-                return occupancyCalculator.compute(this._searchParams.interval);
+                return occupancyCalculator.compute(this._searchParams.interval, transientBookingList);
             }).then((bookingOccupancy: IBookingOccupancy) => {
                 this._loadedBookingOccupancy = bookingOccupancy;
 

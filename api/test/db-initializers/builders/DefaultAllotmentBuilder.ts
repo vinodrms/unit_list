@@ -9,8 +9,6 @@ import {CustomerDO} from '../../../core/data-layer/customers/data-objects/Custom
 import {AllotmentDO, AllotmentStatus} from '../../../core/data-layer/allotments/data-objects/AllotmentDO';
 import {AllotmentAvailabilityDO} from '../../../core/data-layer/allotments/data-objects/availability/AllotmentAvailabilityDO';
 import {AllotmentAvailabilityForDayDO} from '../../../core/data-layer/allotments/data-objects/availability/AllotmentAvailabilityForDayDO';
-import {AllotmentInventoryDO} from '../../../core/data-layer/allotments/data-objects/inventory/AllotmentInventoryDO';
-import {AllotmentInventoryForDateDO} from '../../../core/data-layer/allotments/data-objects/inventory/AllotmentInventoryForDateDO';
 import {AllotmentConstraintWrapperDO} from '../../../core/data-layer/allotments/data-objects/constraint/AllotmentConstraintWrapperDO';
 
 import moment = require('moment');
@@ -55,16 +53,6 @@ export class DefaultAllotmentBuilder implements IAllotmentDataSource {
 		var endDate = startDate.buildPrototype();
 		endDate = thDateUtils.addDaysToThDateDO(endDate, 1);
 		allotment.openInterval = ThDateIntervalDO.buildThDateIntervalDO(startDate, endDate);
-
-		allotment.inventory = new AllotmentInventoryDO();
-		var startDateInventory = new AllotmentInventoryForDateDO();
-		startDateInventory.availableCount = 10;
-		startDateInventory.thDate = startDate;
-
-		var endDateInventory = new AllotmentInventoryForDateDO();
-		endDateInventory.availableCount = 10;
-		endDateInventory.thDate = endDate;
-		allotment.inventory.inventoryForDateList = [startDateInventory, endDateInventory];
 
 		allotment.availability = new AllotmentAvailabilityDO();
 		allotment.availability.availabilityForDayList = [];
