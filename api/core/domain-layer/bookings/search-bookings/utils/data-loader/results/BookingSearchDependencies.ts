@@ -57,4 +57,22 @@ export class BookingSearchDependencies {
     public set customer(customer: CustomerDO) {
         this._customer = customer;
     }
+
+    public getMergedPriceProductList(): PriceProductDO[] {
+        var mergedPriceProductList: PriceProductDO[] = [];
+        mergedPriceProductList = mergedPriceProductList.concat(this._priceProductList);
+        _.forEach(this._priceProductWithAllotmentList, (priceProductWithAllotment: PriceProductDO) => {
+            if (!this.containsPriceProductWithId(priceProductWithAllotment.id)) {
+                mergedPriceProductList.push(priceProductWithAllotment);
+            }
+        });
+        return mergedPriceProductList;
+    }
+    private containsPriceProductWithId(priceProductId: string) {
+        return !this._thUtils.isUndefinedOrNull(
+            _.find(this._priceProductList, (priceProduct: PriceProductDO) => {
+                return priceProduct.id === priceProductId;
+            })
+        );
+    }
 }

@@ -7,6 +7,7 @@ import {IPriceProductPrice, PriceProductPriceQueryDO} from '../IPriceProductPric
 import {PriceForFixedNumberOfPersonsDO} from './PriceForFixedNumberOfPersonsDO';
 import {RoomCategoryStatsDO} from '../../../../room-categories/data-objects/RoomCategoryStatsDO';
 import {NumberValidationRule} from '../../../../../utils/th-validation/rules/NumberValidationRule';
+import {ConfigCapacityDO} from '../../../../common/data-objects/bed-config/ConfigCapacityDO';
 
 import _ = require("underscore");
 
@@ -38,14 +39,14 @@ export class PricePerPersonDO extends BaseDO implements IPriceProductPrice {
 	public getPriceFor(query: PriceProductPriceQueryDO): number {
 		try {
 			var adultsPrice = 0;
-			for (var noOfAdults = 1; noOfAdults <= query.noOfAdults; noOfAdults++) {
+			for (var noOfAdults = 1; noOfAdults <= query.configCapacity.noAdults; noOfAdults++) {
 				adultsPrice += this.getPriceForNumberOfPersons(this.adultsPriceList, noOfAdults).price;
 			}
 
 			var childrenPrice = 0;
-			for (var noOfChildren = 1; noOfChildren <= query.noOfChildren; noOfChildren++) {
+			for (var noOfChildren = 1; noOfChildren <= query.configCapacity.noChildren; noOfChildren++) {
 				var priceForCurrentChild = this.getPriceForNumberOfPersons(this.childrenPriceList, noOfChildren).price;
-				if (noOfChildren === 1 && query.noOfAdults === 0) {
+				if (noOfChildren === 1 && query.configCapacity.noAdults === 0) {
 					priceForCurrentChild = this.firstChildWithoutAdultPrice;
 				}
 				childrenPrice += priceForCurrentChild;
