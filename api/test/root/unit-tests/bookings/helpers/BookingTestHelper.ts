@@ -1,6 +1,7 @@
 import {DefaultDataBuilder} from '../../../../db-initializers/DefaultDataBuilder';
 import {TestContext} from '../../../../helpers/TestContext';
 import {PriceProductDO, PriceProductStatus} from '../../../../../core/data-layer/price-products/data-objects/PriceProductDO';
+import {AllotmentDO} from '../../../../../core/data-layer/allotments/data-objects/AllotmentDO';
 import {RoomCategoryStatsDO} from '../../../../../core/data-layer/room-categories/data-objects/RoomCategoryStatsDO';
 import {PriceProductsHelper} from '../../price-products/helpers/PriceProductsHelper';
 import {SavePriceProductItem} from '../../../../../core/domain-layer/price-products/SavePriceProductItem';
@@ -13,6 +14,9 @@ import {ConfigCapacityDO} from '../../../../../core/data-layer/common/data-objec
 import {DefaultBillingDetailsDO} from '../../../../../core/data-layer/bookings/data-objects/default-billing/DefaultBillingDetailsDO';
 import {InvoicePaymentMethodType} from '../../../../../core/data-layer/invoices/data-objects/payers/InvoicePaymentMethodDO';
 import {DefaultPriceProductBuilder} from '../../../../db-initializers/builders/DefaultPriceProductBuilder';
+import {BookingSearchDO} from '../../../../../core/domain-layer/bookings/search-bookings/BookingSearchDO';
+import {CustomerDO} from '../../../../../core/data-layer/customers/data-objects/CustomerDO';
+import {TransientBookingItemDO} from '../../../../../core/domain-layer/bookings/search-bookings/TransientBookingItemDO';
 
 import _ = require('underscore');
 
@@ -42,11 +46,14 @@ export class BookingTestHelper {
         return savePPItem.save(priceProductItem);
     }
 
-    public getBookingItems(testDataBuilder: DefaultDataBuilder, priceProduct: PriceProductDO): AddBookingItemsDO {
+    public getBookingItems(testDataBuilder: DefaultDataBuilder, priceProduct: PriceProductDO, allotment?: AllotmentDO): AddBookingItemsDO {
         var noOfBookingItemDO = this._testUtils.getRandomIntBetween(BookingTestHelper.MinBookingsWithinGroup, BookingTestHelper.MaxBookingsWithinGroup);
+        if (allotment) {
+            noOfBookingItemDO = 1;
+        }
         var bookingItemList: BookingItemDO[] = [];
         for (var numItem = 0; numItem < noOfBookingItemDO; numItem++) {
-            bookingItemList.push(this.getBookingItemDO(testDataBuilder, priceProduct));
+            bookingItemList.push(this.getBookingItemDO(testDataBuilder, priceProduct, allotment));
         }
         return {
             bookingList: bookingItemList,
@@ -54,13 +61,16 @@ export class BookingTestHelper {
         }
     }
 
-    public getBookingItemDO(testDataBuilder: DefaultDataBuilder, priceProduct: PriceProductDO): BookingItemDO {
-        var capacity = new ConfigCapacityDO();
-        capacity.noAdults = 1;
-        capacity.noChildren = 0;
-        capacity.noBabies = 0;
-
+    public getBookingItemDO(testDataBuilder: DefaultDataBuilder, priceProduct: PriceProductDO, allotment?: AllotmentDO): BookingItemDO {
         var customerId = this._testUtils.getRandomListElement(testDataBuilder.customerList).id;
+        var roomCategoryId = this._testUtils.getRandomListElement(priceProduct.roomCategoryIdList);
+        var allotmentId = "";
+        if (allotment) {
+            customerId = allotment.customerId;
+            roomCategoryId = allotment.roomCategoryId;
+            allotmentId = allotment.id;
+        }
+
         var billingDetails = new DefaultBillingDetailsDO();
         billingDetails.buildFromObject({
             customerId: customerId,
@@ -73,19 +83,27 @@ export class BookingTestHelper {
 
         return {
             interval: this.generateRandomFutureInterval(testDataBuilder),
-            configCapacity: capacity,
+            configCapacity: this.getConfigCapacity(),
             customerIdList: [customerId],
             defaultBillingDetails: billingDetails,
-            roomCategoryId: this._testUtils.getRandomListElement(priceProduct.roomCategoryIdList),
+            roomCategoryId: roomCategoryId,
             priceProductId: priceProduct.id,
-            allotmentId: null,
+            allotmentId: allotmentId,
             notes: "This is an automatic booking"
         }
 
     }
+    private getConfigCapacity(): ConfigCapacityDO {
+        var capacity = new ConfigCapacityDO();
+        capacity.noAdults = 1;
+        capacity.noChildren = 0;
+        capacity.noBabies = 0;
+        return capacity;
+    }
+
     private generateRandomFutureInterval(testDataBuilder: DefaultDataBuilder): ThDateIntervalDO {
         var thTimestamp = ThTimestampDO.buildThTimestampForTimezone(testDataBuilder.hotelDO.timezone);
-        var startDate = this._thDateUtils.addDaysToThDateDO(thTimestamp.thDateDO, this._testUtils.getRandomIntBetween(0, 200));
+        var startDate = this._thDateUtils.addDaysToThDateDO(thTimestamp.thDateDO, this._testUtils.getRandomIntBetween(10, 200));
         var endDate = this._thDateUtils.addDaysToThDateDO(startDate.buildPrototype(), this._testUtils.getRandomIntBetween(1, 7));
         return ThDateIntervalDO.buildThDateIntervalDO(startDate, endDate);
     }
@@ -95,5 +113,36 @@ export class BookingTestHelper {
         var startDate = thTimestamp.thDateDO;
         var endDate = this._thDateUtils.addDaysToThDateDO(startDate.buildPrototype(), 207);
         return ThDateIntervalDO.buildThDateIntervalDO(startDate, endDate);
+    }
+
+    public getPublicBookingSearchDO(testDataBuilder: DefaultDataBuilder): BookingSearchDO {
+        var bookingSearchDO = new BookingSearchDO();
+        bookingSearchDO.configCapacity = this.getConfigCapacity();
+        bookingSearchDO.interval = this.getDefaultBookingSearchInterval(testDataBuilder);
+        bookingSearchDO.transientBookingList = [];
+        return bookingSearchDO;
+    }
+    private getDefaultBookingSearchInterval(testDataBuilder: DefaultDataBuilder): ThDateIntervalDO {
+        var thTimestamp = ThTimestampDO.buildThTimestampForTimezone(testDataBuilder.hotelDO.timezone);
+        var startDate = this._thDateUtils.addDaysToThDateDO(thTimestamp.thDateDO, 10);
+        var endDate = this._thDateUtils.addDaysToThDateDO(startDate.buildPrototype(), 100);
+        return ThDateIntervalDO.buildThDateIntervalDO(startDate, endDate);
+    }
+    public getPrivateBookingSearchDO(testDataBuilder: DefaultDataBuilder, customer: CustomerDO): BookingSearchDO {
+        var bookingSearchDO = this.getPublicBookingSearchDO(testDataBuilder);
+        bookingSearchDO.customerId = customer.id;
+        return bookingSearchDO;
+    }
+    public getPrivateBookingSearchWithTransientBookingDO(testDataBuilder: DefaultDataBuilder, customer: CustomerDO, priceProductId: string, roomCategoryId: string, allotmentId: string): BookingSearchDO {
+        var bookingSearchDO = this.getPrivateBookingSearchDO(testDataBuilder, customer);
+        var transientBookingItemDO = new TransientBookingItemDO();
+        transientBookingItemDO.configCapacity = bookingSearchDO.configCapacity;
+        transientBookingItemDO.interval = bookingSearchDO.interval;
+        transientBookingItemDO.priceProductId = priceProductId;
+        transientBookingItemDO.roomCategoryId = roomCategoryId;
+        transientBookingItemDO.allotmentId = allotmentId;
+        bookingSearchDO.transientBookingList.push(transientBookingItemDO);
+
+        return bookingSearchDO;
     }
 }

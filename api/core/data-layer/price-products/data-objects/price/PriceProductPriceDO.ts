@@ -34,7 +34,7 @@ export class PriceProductPriceDO extends BaseDO implements IPriceProductPrice {
 	}
 	public getPriceFor(query: PriceProductPriceQueryDO): number {
 		var priceItem: IPriceProductPrice = this.getPriceForSingleRoomCategory(query.roomCategoryId);
-		return priceItem.getPriceFor(query);
+		return priceItem.getPriceFor(query) * query.indexedBookingInterval.getLengthOfStay();
 	}
 	private getPriceForSingleRoomCategory(roomCategoryId: string): IPriceProductPrice {
 		return _.find(this.priceList, (price: IPriceProductPrice) => { return price.isConfiguredForRoomCategory(roomCategoryId) });

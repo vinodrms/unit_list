@@ -20,7 +20,7 @@ export class YieldIntervalsValidator {
     }
 
     public isOpenOnAllYieldAttributes(): boolean {
-        return this._priceProduct.lastRoomAvailability || (this.isOpen() && this.isOpenForArrival() && this.isOpenForDeparture());
+        return this.skipYieldCheck() || (this.isOpen() && this.isOpenForArrival() && this.isOpenForDeparture());
     }
 
     public isOpen(): boolean {
