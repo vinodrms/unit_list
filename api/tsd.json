@@ -60,7 +60,7 @@
       "commit": "4ec3c5bf291bc02f49eb30c1077340b235165c67"
     },
     "sendgrid/sendgrid.d.ts": {
-      "commit": "72f0056f69f9a2290d2589c1a692896d24406928"
+      "commit": "2743ece76d3b31df635afdc39c63ed13acf393ad"
     },
     "passport/passport.d.ts": {
       "commit": "c393f8974d44840a6c9cc6d5b5c0188a8f05143d"
@@ -97,6 +97,9 @@
     },
     "shortid/shortid.d.ts": {
       "commit": "26a1f8c44f5fe76168df717020bfb93839b63db3"
+    },
+    "smtpapi/smtpapi.d.ts": {
+      "commit": "2743ece76d3b31df635afdc39c63ed13acf393ad"
     }
   }
 }
