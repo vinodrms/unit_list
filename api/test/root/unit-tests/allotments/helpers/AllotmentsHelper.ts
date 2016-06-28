@@ -19,7 +19,7 @@ import {ReleaseTimeInDaysConstraintDO} from '../../../../../core/data-layer/allo
 import moment = require("moment");
 
 export class AllotmentsHelper {
-	public static IntervalNumberOfDays: number = 10;
+	public static IntervalNumberOfDays: number = 300;
 
 	private _thDateUtils: ThDateUtils;
 	private _testUtils: TestUtils;
@@ -74,7 +74,7 @@ export class AllotmentsHelper {
 		];
 		return constraintsWrapper;
 	}
-	public getNoOfAvailableRoomsForDay(isoWeekDay: ISOWeekDay): number {
+	private getNoOfAvailableRoomsForDay(isoWeekDay: ISOWeekDay): number {
 		if (isoWeekDay === ISOWeekDay.Saturday || isoWeekDay === ISOWeekDay.Sunday) {
 			return 7;
 		}

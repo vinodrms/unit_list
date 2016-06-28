@@ -1,7 +1,6 @@
 import {BaseDO} from '../../common/base/BaseDO';
 import {ThDateIntervalDO} from '../../../utils/th-dates/data-objects/ThDateIntervalDO';
 import {AllotmentAvailabilityDO} from './availability/AllotmentAvailabilityDO';
-import {AllotmentInventoryDO} from './inventory/AllotmentInventoryDO';
 import {AllotmentConstraintWrapperDO} from './constraint/AllotmentConstraintWrapperDO';
 
 export enum AllotmentStatus {
@@ -23,7 +22,6 @@ export class AllotmentDO extends BaseDO {
 	openInterval: ThDateIntervalDO;
 	expiryUtcTimestamp: number;
 	availability: AllotmentAvailabilityDO;
-	inventory: AllotmentInventoryDO;
 	constraints: AllotmentConstraintWrapperDO;
 	notes: string;
 
@@ -39,9 +37,6 @@ export class AllotmentDO extends BaseDO {
 
 		this.availability = new AllotmentAvailabilityDO();
 		this.availability.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "availability"));
-
-		this.inventory = new AllotmentInventoryDO();
-		this.inventory.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "inventory"));
 
 		this.constraints = new AllotmentConstraintWrapperDO();
 		this.constraints.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "constraints"));

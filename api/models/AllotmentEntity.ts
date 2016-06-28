@@ -46,10 +46,6 @@ class AllotmentEntity extends BasePersistentEntity {
 				type: 'json',
 				required: true
 			},
-			inventory: {
-				type: 'json',
-				required: true
-			},
 			constraints: {
 				type: 'json',
 				required: true

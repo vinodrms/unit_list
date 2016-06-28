@@ -17,7 +17,6 @@ import {PriceProductSearchResultRepoDO} from '../../../../core/data-layer/price-
 import {SaveAllotmentItem} from '../../../../core/domain-layer/allotments/SaveAllotmentItem';
 import {AllotmentDO, AllotmentStatus} from '../../../../core/data-layer/allotments/data-objects/AllotmentDO';
 import {AllotmentAvailabilityForDayDO} from '../../../../core/data-layer/allotments/data-objects/availability/AllotmentAvailabilityForDayDO';
-import {AllotmentInventoryForDateDO} from '../../../../core/data-layer/allotments/data-objects/inventory/AllotmentInventoryForDateDO';
 import {ArchiveAllotmentItem} from '../../../../core/domain-layer/allotments/ArchiveAllotmentItem';
 
 describe("Hotel Allotments Tests", function () {
@@ -161,10 +160,7 @@ describe("Hotel Allotments Tests", function () {
 				should.equal(savedAllotment.customerId, allotmentItem.customerId);
 				should.equal(savedAllotment.roomCategoryId, allotmentItem.roomCategoryId);
 				should.equal(savedAllotment.notes, allotmentItem.notes);
-				should.equal(savedAllotment.inventory.inventoryForDateList.length, AllotmentsHelper.IntervalNumberOfDays + 1);
-				savedAllotment.inventory.inventoryForDateList.forEach((inventoryForDay: AllotmentInventoryForDateDO) => {
-					should.equal(inventoryForDay.availableCount, allotmentsHelper.getNoOfAvailableRoomsForDay(inventoryForDay.thDate.getISOWeekDay()));
-				});
+
 				addedAllotment = savedAllotment;
 				done();
 			}).catch((e: ThError) => {

@@ -21,4 +21,10 @@ export class PriceProductsContainer {
             return priceProduct.id === priceProductId;
         });
     }
+
+    public getFilteredPriceProductsByRoomCategoryId(roomCategoryId: string): PriceProductDO[] {
+        return _.filter(this._priceProductList, (priceProduct: PriceProductDO) => {
+            return _.contains(priceProduct.roomCategoryIdList, roomCategoryId);
+        });
+    }
 }

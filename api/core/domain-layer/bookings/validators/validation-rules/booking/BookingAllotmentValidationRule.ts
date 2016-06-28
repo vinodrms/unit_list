@@ -9,6 +9,8 @@ import {BookingDO} from '../../../../../data-layer/bookings/data-objects/Booking
 import {AllotmentDO} from '../../../../../data-layer/allotments/data-objects/AllotmentDO';
 import {AllotmentsContainer} from '../../../../allotments/validators/results/AllotmentsContainer';
 import {AllotmentConstraintsParams, AllotmentConstraintsValidationRule} from '../allotment/AllotmentConstraintsValidationRule';
+import {AllotmentOpenIntervalValidationRule} from '../allotment/AllotmentOpenIntervalValidationRule';
+import {BusinessValidationRuleContainer} from '../../../../common/validation-rules/BusinessValidationRuleContainer';
 import {BookingOccupancyCalculator} from '../../../search-bookings/utils/occupancy-calculator/BookingOccupancyCalculator';
 import {IBookingOccupancy} from '../../../search-bookings/utils/occupancy-calculator/results/IBookingOccupancy';
 import {IndexedBookingInterval} from '../../../../../data-layer/price-products/utils/IndexedBookingInterval';
@@ -53,8 +55,11 @@ export class BookingAllotmentValidationRule extends ABusinessValidationRule<Book
             return;
         }
 
-        var allotmentConstraintsValidationRule: AllotmentConstraintsValidationRule = new AllotmentConstraintsValidationRule(this._validationParams.allotmentConstraintsParam);
-        allotmentConstraintsValidationRule.isValidOn(allotment).then((validatedAllotment: AllotmentDO) => {
+        var allotmentValidationRule = new BusinessValidationRuleContainer([
+            new AllotmentConstraintsValidationRule(this._validationParams.allotmentConstraintsParam),
+            new AllotmentOpenIntervalValidationRule({ bookingInterval: this._validationParams.allotmentConstraintsParam.bookingInterval })
+        ]);
+        allotmentValidationRule.isValidOn(allotment).then((validatedAllotment: AllotmentDO) => {
             var occupancyCalculator = new BookingOccupancyCalculator(this._appContext, this._sessionContext, this._validationParams.roomList);
             return occupancyCalculator.compute(booking.interval, this._validationParams.transientBookingList);
         }).then((bookingOccupancy: IBookingOccupancy) => {

@@ -8,7 +8,6 @@ import {ThDateDO} from '../../../../utils/th-dates/data-objects/ThDateDO';
 import {IAllotmentItemActionStrategy} from '../IAllotmentItemActionStrategy';
 import {AllotmentDO, AllotmentStatus} from '../../../../data-layer/allotments/data-objects/AllotmentDO';
 import {AllotmentMetaRepoDO} from '../../../../data-layer/allotments/repositories/IAllotmentRepository';
-import {AllotmentInventoryForDateDO} from '../../../../data-layer/allotments/data-objects/inventory/AllotmentInventoryForDateDO';
 import {AllotmentValidator} from '../../validators/AllotmentValidator';
 
 export class AllotmentItemAddStrategy implements IAllotmentItemActionStrategy {
@@ -24,7 +23,7 @@ export class AllotmentItemAddStrategy implements IAllotmentItemActionStrategy {
 		var allotmentValidator = new AllotmentValidator(this._appContext, this._sessionContext);
 		allotmentValidator.validateAllotment(this._allotmentDO)
 			.then((result: boolean) => {
-				this.populateDefaultAllotmentInventory();
+				this.populateAllotmentExpiryUtcTimestamp();
 
 				var allotmentRepo = this._appContext.getRepositoryFactory().getAllotmentRepository();
 				return allotmentRepo.addAllotment(this._allRepoMeta, this._allotmentDO);
@@ -35,25 +34,7 @@ export class AllotmentItemAddStrategy implements IAllotmentItemActionStrategy {
 				reject(error);
 			});
 	}
-	private populateDefaultAllotmentInventory() {
-		var intervalStart = this._allotmentDO.openInterval.getStart();
-		var intervalEnd = this._allotmentDO.openInterval.getEnd();
-
-		this._allotmentDO.inventory.inventoryForDateList = [];
-		var currentDate = intervalStart.buildPrototype();
-
-		while (!intervalEnd.isBefore(currentDate)) {
-			var allotmentForDate = new AllotmentInventoryForDateDO();
-			allotmentForDate.thDate = currentDate;
-			var allotmentAvailabilityForDay = this._allotmentDO.availability.getAllotmentAvailabilityForDay(currentDate.getISOWeekDay());
-			allotmentForDate.availableCount = allotmentAvailabilityForDay.availableCount;
-			this._allotmentDO.inventory.inventoryForDateList.push(allotmentForDate);
-
-			var nextDate = currentDate.buildPrototype();
-			nextDate = this._thDateUtils.addDaysToThDateDO(nextDate, 1);
-			currentDate = nextDate;
-		}
-		
+	private populateAllotmentExpiryUtcTimestamp() {
 		var expiryDate: ThDateDO = this._thDateUtils.addDaysToThDateDO(this._allotmentDO.openInterval.getEnd().buildPrototype(), 1);
 		this._allotmentDO.expiryUtcTimestamp = expiryDate.getUtcTimestamp();
 	}
