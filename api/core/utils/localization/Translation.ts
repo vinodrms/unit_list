@@ -25,6 +25,9 @@ export class Translation {
 			phrase: phrase,
 			locale: SupportedLocales[this._locale]
 		});
+		if(this._thUtils.isUndefinedOrNull(translatedPhrase) || !_.isString(translatedPhrase)) {
+			translatedPhrase = phrase;
+		}
 		return this.applyTemplateRegexToParams(translatedPhrase, parameters);
 	}
 	public parseLocale(possibleLocale: any): Locales {
