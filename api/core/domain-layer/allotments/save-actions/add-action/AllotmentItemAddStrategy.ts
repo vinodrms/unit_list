@@ -23,7 +23,7 @@ export class AllotmentItemAddStrategy implements IAllotmentItemActionStrategy {
 		var allotmentValidator = new AllotmentValidator(this._appContext, this._sessionContext);
 		allotmentValidator.validateAllotment(this._allotmentDO)
 			.then((result: boolean) => {
-				this.populateAllotmentExpirtyUtcTimestamp();
+				this.populateAllotmentExpiryUtcTimestamp();
 
 				var allotmentRepo = this._appContext.getRepositoryFactory().getAllotmentRepository();
 				return allotmentRepo.addAllotment(this._allRepoMeta, this._allotmentDO);
@@ -34,7 +34,7 @@ export class AllotmentItemAddStrategy implements IAllotmentItemActionStrategy {
 				reject(error);
 			});
 	}
-	private populateAllotmentExpirtyUtcTimestamp() {
+	private populateAllotmentExpiryUtcTimestamp() {
 		var expiryDate: ThDateDO = this._thDateUtils.addDaysToThDateDO(this._allotmentDO.openInterval.getEnd().buildPrototype(), 1);
 		this._allotmentDO.expiryUtcTimestamp = expiryDate.getUtcTimestamp();
 	}

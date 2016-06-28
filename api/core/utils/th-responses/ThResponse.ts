@@ -340,6 +340,7 @@ export enum ThStatusCode {
     BookingDependenciesFilterError,
     BookingsValidatorAllotmentInsufficientInventory,
     SearchResultBuilderError,
+    BookingsValidatorAllotmentOpenIntervalMismatch,
     
 }
 
@@ -671,6 +672,7 @@ ThMessage[ThStatusCode.BookingOccupancyCalculatorErrorIndexing] = "Error computi
 ThMessage[ThStatusCode.BookingDependenciesFilterError] = "Error filtering the price products.";
 ThMessage[ThStatusCode.BookingsValidatorAllotmentInsufficientInventory] = "Insufficient inventory for the selected allotments. It is possible that they were booked since the search.";
 ThMessage[ThStatusCode.SearchResultBuilderError] = "Error building the search results.";
+ThMessage[ThStatusCode.BookingsValidatorAllotmentOpenIntervalMismatch] = "The allotment is not open for the given period.";
 
 export class ThResponse {
     statusCode: ThStatusCode;

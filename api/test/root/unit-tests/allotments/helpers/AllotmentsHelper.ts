@@ -19,7 +19,7 @@ import {ReleaseTimeInDaysConstraintDO} from '../../../../../core/data-layer/allo
 import moment = require("moment");
 
 export class AllotmentsHelper {
-	public static IntervalNumberOfDays: number = 10;
+	public static IntervalNumberOfDays: number = 300;
 
 	private _thDateUtils: ThDateUtils;
 	private _testUtils: TestUtils;

@@ -185,6 +185,7 @@ describe("New Bookings Tests", function () {
             bookingSearch.search(bookingTestHelper.getPrivateBookingSearchDO(testDataBuilder, addedCompanyCustomer))
                 .then((searchResult: BookingSearchResult) => {
                     should.equal(searchResult.priceProductItemList.length > 0, true);
+                    should.equal(searchResult.allotmentItemList.length > 0, true);
                     should.equal(searchResult.roomCategoryItemList.length > 0, true);
                     roomCategoryItem = _.find(searchResult.roomCategoryItemList, (roomCategItem: RoomCategoryItem) => {
                         return _.contains(addedConfidentialPriceProduct.roomCategoryIdList, roomCategItem.stats.roomCategory.id);
