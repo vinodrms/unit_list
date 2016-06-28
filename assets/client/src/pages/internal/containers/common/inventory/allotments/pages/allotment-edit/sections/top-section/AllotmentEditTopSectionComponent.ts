@@ -65,6 +65,9 @@ export class AllotmentEditTopSectionComponent extends BaseComponent implements I
 			this.priceProductList = [allotmentVM.priceProduct];
 			this.roomCategoryList = [allotmentVM.roomCategory];
 		}
+		else {
+			this.clearDependentData();
+		}
 		this.loadDependentDataIfNecessary();
 	}
 	private loadDependentDataIfNecessary() {

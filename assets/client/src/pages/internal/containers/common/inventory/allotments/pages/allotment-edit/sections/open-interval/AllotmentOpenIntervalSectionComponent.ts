@@ -16,19 +16,24 @@ export class AllotmentOpenIntervalSectionComponent extends BaseComponent impleme
 	@Input() didSubmit: boolean;
 	readonly: boolean;
 
+	private _thDateUtils = new ThDateUtils();
+
 	dateInterval: ThDateIntervalDO;
 	minDate: ThDateDO;
 
 	constructor() {
 		super();
-		var thDateUtils = new ThDateUtils();
-		this.dateInterval = thDateUtils.getTodayToTomorrowInterval();
-		this.minDate = thDateUtils.getTodayThDayeDO();
+		this.dateInterval = this._thDateUtils.getTodayToTomorrowInterval();
+		this.minDate = this._thDateUtils.getTodayThDayeDO();
 	}
 	isValid(): boolean {
 		return this.dateInterval && this.dateInterval.isValid();
 	}
 	initializeFrom(allotmentVM: AllotmentVM) {
+		if (!allotmentVM.allotment.openInterval) {
+			this.dateInterval = this._thDateUtils.getTodayToTomorrowInterval();
+			return;
+		}
 		this.dateInterval = allotmentVM.allotment.openInterval;
 	}
 	updateDataOn(allotmentVM: AllotmentVM) {
