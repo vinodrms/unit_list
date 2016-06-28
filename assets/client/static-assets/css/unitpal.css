@@ -1781,6 +1781,7 @@ a.btn.btn-square:focus {
         height: 100%;
         overflow-y: hidden;
     }
+
     hotel-operations-dashboard{
         /*width: 1024px;*/
         display:flex;
@@ -1836,6 +1837,7 @@ a.btn.btn-square:focus {
         border-left: 1px solid #DBDBDB;
         border-right: 1px solid #DBDBDB;
     }
+
     rooms-canvas .header{
         background-color: white;
     }
@@ -1986,4 +1988,9 @@ a.btn.btn-square:focus {
         justify-content: space-between;
         border-top: 1px solid #b9b9b9;
         padding: 5px;
+        }
+
+        /* Arrivals Pane */
+        arrival-item{
+            display: block
         }

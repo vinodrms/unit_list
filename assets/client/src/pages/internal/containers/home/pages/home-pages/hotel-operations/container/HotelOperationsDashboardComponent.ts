@@ -12,6 +12,7 @@ import {RoomsCanvasComponent} from './components/rooms-canvas/RoomsCanvasCompone
 
 declare var $:any;
 
+
 @Component({
 	selector: 'hotel-operations-dashboard',
 	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/container/template/hotel-operations-dashboard.html',
@@ -19,7 +20,6 @@ declare var $:any;
 	directives: [ThButtonComponent, ArrivalsPaneComponent, DeparturesPaneComponent, RoomsCanvasComponent],
 	pipes: [TranslationPipe]
 })
-
 export class HotelOperationsDashboardComponent extends AHomeContainerComponent implements OnInit {
 	private roomVMList: any;
 	constructor(headerPageService: HeaderPageService
@@ -29,24 +29,5 @@ export class HotelOperationsDashboardComponent extends AHomeContainerComponent i
 
 	ngOnInit() {
 
-	}
-
-	ngAfterViewInit() {
-		$(".arrival-item").draggable(
-            {
-                revert:     'invalid', 
-                helper:     'clone', 
-                zIndex:     100
-            }			
-		);
-
-		$(".room-card").droppable(
-            {
-				accept: '.arrival-item',
-				drop: (event : Event, ui : Object) => {
-					alert("Room card -> dropped")
-				}
-            }			
-		);
 	}
 }
