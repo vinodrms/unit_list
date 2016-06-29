@@ -16,4 +16,7 @@ export class LengthOfStayConstraintDO extends BaseDO implements IPriceProductCon
 	public getValueDisplayString(thTranslation: ThTranslation): string {
 		return thTranslation.translate("length of %noDays% days", {noDays: this.lengthOfStay});		
 	}
+	public getBriefValueDisplayString(thTranslation: ThTranslation): string {
+		return this.getValueDisplayString(thTranslation);
+	}
 }

@@ -8,7 +8,7 @@ import {PercentagePipe} from '../../pipes/PercentagePipe';
 import {ThDateIntervalPipe} from '../../pipes/ThDateIntervalPipe';
 import {AppContext} from '../../AppContext';
 import {LazyLoadTableMeta, TableRowCommand, TableColumnValueMeta, TablePropertyType, TableViewOption, TableColumnMeta} from './utils/LazyLoadTableMeta';
-import {ILazyLoadRequestService, LazyLoadData, PageContent} from '../../../../pages/internal/services/common/ILazyLoadRequestService';
+import {ILazyLoadRequestService, LazyLoadData, PageContent, SortOrder, SortOptions} from '../../../../pages/internal/services/common/ILazyLoadRequestService';
 import {TotalCountDO} from '../../../../pages/internal/services/common/data-objects/lazy-load/TotalCountDO';
 import {PageMetaDO} from '../../../../pages/internal/services/common/data-objects/lazy-load/PageMetaDO';
 import {PaginationIndex} from './utils/PaginationIndex';
@@ -157,6 +157,34 @@ export class LazyLoadingTableComponent<T> {
 	}
 	protected movePrevious() {
 		this.updatePageNumber(this.pageMeta.pageNumber - 1);
+	}
+	protected showPagination() {
+		return this.lazyLoadingRequest.showPagination();
+	}
+
+	protected isNotOrdered(cellValueMeta: TableColumnValueMeta): boolean {
+		var sortedOptions = this.lazyLoadingRequest.getSortedOptions();
+		if (!sortedOptions) { return true; }
+		return sortedOptions.objectPropertyId !== cellValueMeta.objectPropertyId;
+	}
+	protected isOrderedAscending(cellValueMeta: TableColumnValueMeta): boolean {
+		return this.isOrdered(cellValueMeta, SortOrder.Ascending);
+	}
+	protected isOrderedDescending(cellValueMeta: TableColumnValueMeta): boolean {
+		return this.isOrdered(cellValueMeta, SortOrder.Descending);
+	}
+	private isOrdered(cellValueMeta: TableColumnValueMeta, sortOrder: SortOrder): boolean {
+		var sortedOptions = this.lazyLoadingRequest.getSortedOptions();
+		if (!sortedOptions) { return false; }
+		return sortedOptions.objectPropertyId === cellValueMeta.objectPropertyId && sortedOptions.sortOrder === sortOrder;
+	}
+	protected sortBy(cellValueMeta: TableColumnValueMeta) {
+		if (!cellValueMeta.isSortable) { return; }
+		var sortOptions: SortOptions = { objectPropertyId: cellValueMeta.objectPropertyId, sortOrder: SortOrder.Ascending };
+		if (this.isOrderedAscending(cellValueMeta)) {
+			sortOptions.sortOrder = SortOrder.Descending;
+		}
+		this.lazyLoadingRequest.sort(sortOptions);
 	}
 
 	protected isPercentage(valueMeta: TableColumnValueMeta): boolean {

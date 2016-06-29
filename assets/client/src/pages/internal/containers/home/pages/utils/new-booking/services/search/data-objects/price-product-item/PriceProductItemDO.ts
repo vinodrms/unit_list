@@ -27,4 +27,12 @@ export class PriceProductItemDO extends BaseDO {
             this.priceList.push(priceItemDO);
         });
     }
+
+    public getPriceForRoomCategory(roomCategoryId: string): number {
+        var price = _.find(this.priceList, (priceItem: PriceProductItemPriceDO) => { return priceItem.roomCategoryId === roomCategoryId });
+        if(!price) {
+            return 0.0;
+        }
+        return price.price;
+    }
 }

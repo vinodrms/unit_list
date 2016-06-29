@@ -1192,6 +1192,13 @@ table.lazy-loading .th-pagination {
 .lazy-loading-table-filter {
     margin-bottom: 5px;    
 }
+.lazy-loading-table-sort {
+    float: right;
+    top: 12px;
+    right: 3px;
+    color: gray;
+    cursor: pointer;
+}
 
 .up-col-0p {
     display: none !important;   

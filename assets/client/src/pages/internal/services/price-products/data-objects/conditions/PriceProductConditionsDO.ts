@@ -1,5 +1,6 @@
 import {BaseDO} from '../../../../../../common/base/BaseDO';
 
+import {ThTranslation} from '../../../../../../common/utils/localization/ThTranslation';
 import {IPriceProductCancellationPolicy, PriceProductCancellationPolicyType} from './cancellation/IPriceProductCancellationPolicy';
 import {NoCancellationPolicyDO} from './cancellation/NoCancellationPolicyDO';
 import {PriceProductCancellationPolicyFactory} from './cancellation/PriceProductCancellationPolicyFactory';
@@ -57,5 +58,13 @@ export class PriceProductConditionsDO extends BaseDO {
 		conditions.penaltyType = PriceProductCancellationPenaltyType.NoPenalty;
 		conditions.penalty = new NoCancellationPenaltyDO();
 		return conditions;
+	}
+
+	public getCancellationConditionsString(thTranslation: ThTranslation): string {
+		var policyDesc = this.policy.getDescription();
+		var description = thTranslation.translate(policyDesc.phrase, policyDesc.parameters);
+		var penaltyDesc = this.penalty.getDescription();
+		description += " / " + thTranslation.translate(penaltyDesc.phrase, penaltyDesc.parameters);
+		return description;
 	}
 }

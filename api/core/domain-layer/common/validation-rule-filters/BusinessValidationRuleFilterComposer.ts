@@ -9,7 +9,7 @@ export class BusinessValidationRuleFilterComposer<T> implements IBusinessValidat
     public filterSync(businessObjectList: T[]): T[] {
         var currentBusinessObjectList = businessObjectList;
         _.forEach(this._businessRuleFilterList, (validationRuleFilter: IBusinessValidationRuleFilter<T>) => {
-            currentBusinessObjectList = validationRuleFilter.filterSync(businessObjectList);
+            currentBusinessObjectList = validationRuleFilter.filterSync(currentBusinessObjectList);
         });
         return currentBusinessObjectList;
     }

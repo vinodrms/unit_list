@@ -21,7 +21,7 @@
 		<div class="col-xs-4 col-md-4" *ngIf="!isCollapsed">
 		</div>
 		<div class="col-xs-4 col-md-4" *ngIf="!isCollapsed">
-			<div class="table-select-items pull-right">
+			<div class="table-select-items pull-right" *ngIf="showPagination()">
 				<label>{{ 'Show' | translate }}</label>
 				<div class="no-padding">
 					<select class="form-control" [ngModel]="paginationIndex.numOfItemsPerPage" (ngModelChange)="didChangeNumOfItemsPerPage($event)">
@@ -40,6 +40,12 @@
 				<th *ngFor="let columnMeta of columnMetaList" [ngClass]="isCollapsed? columnMeta.valueMeta.collapsedStyle : columnMeta.valueMeta.normalStyle"
 					title="{{ columnMeta.displayName | translate }}">
 					{{ columnMeta.displayName | translate }}
+					<span *ngIf="columnMeta.valueMeta.isSortable"
+						class="lazy-loading-table-sort glyphicon"
+						[ngClass]="{'glyphicon-sort': isNotOrdered(columnMeta.valueMeta), 'glyphicon-sort-by-attributes': isOrderedAscending(columnMeta.valueMeta), 'glyphicon-sort-by-attributes-alt': isOrderedDescending(columnMeta.valueMeta)}"
+						(click)="sortBy(columnMeta.valueMeta)"
+						>
+					</span>
 				</th>
 				<th *ngIf="tableOptions.canCopy||tableOptions.canEdit||tableOptions.canDelete" [ngClass]="{'up-col-10p': !isCollapsed, 'up-col-30p': isCollapsed}">
 				</th>
@@ -109,10 +115,12 @@
 					<th-button *ngIf="tableOptions.canAdd" [upFont]="'\''" [text]="'Add'" (onButtonClick)="addItem()"></th-button>
 				</td>
 				<td [ngClass]="{'up-col-30p': !isCollapsed, 'up-col-0p': isCollapsed}">
-					{{paginationIndex.pageNumberStat}}
+					<span *ngIf="showPagination()">
+						{{paginationIndex.pageNumberStat}}
+					</span>
 				</td>
 				<td class="right pagination-container" [ngClass]="{'up-col-50p': !isCollapsed, 'up-col-60p': isCollapsed}">
-					<ul class="list-inline">
+					<ul class="list-inline" *ngIf="showPagination()">
 						<li *ngFor="let index of paginationIndex.indexList" [ngClass]="{'other-page': !index.isSelected}">
 							<a (click)="updatePageNumber(index.pageNumber)">{{index.displayNumber}}</a>
 						</li>

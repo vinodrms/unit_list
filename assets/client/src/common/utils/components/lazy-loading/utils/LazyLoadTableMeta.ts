@@ -32,6 +32,7 @@ export interface TableColumnValueMeta {
 	normalStyle?: string,
 	collapsedStyle?: string,
     showInCollapsedView: boolean;
+	isSortable?: boolean;
 }
 
 export class TableColumnMeta {

@@ -5,6 +5,7 @@ import {IAllotmentConstraint} from '../../../../allotments/data-objects/constrai
 import {ThTranslation} from '../../../../../../../common/utils/localization/ThTranslation';
 
 export class DaysFromWeekConstraintDO extends BaseDO implements IPriceProductConstraint, IAllotmentConstraint {
+	private static MaxWeekDayStringLength: number = 3;
 	daysFromWeek: ISOWeekDay[];
 
 	constructor() {
@@ -40,12 +41,19 @@ export class DaysFromWeekConstraintDO extends BaseDO implements IPriceProductCon
 		_.forEach(isoWeekDayVMList, (isoWeekDayVM: ISOWeekDayVM) => {
 			if (this.includesDay(isoWeekDayVM.iSOWeekDay)) {
 				if (displayString.length > 0) {
-					displayString += ", ";
+					displayString += " ";
 				}
-				displayString += thTranslation.translate(isoWeekDayVM.name);
+				var weekDayName = thTranslation.translate(isoWeekDayVM.name);
+				if (_.isString(weekDayName) && (weekDayName.length > DaysFromWeekConstraintDO.MaxWeekDayStringLength)) {
+					weekDayName = weekDayName.substr(0, 3);
+				}
+				displayString += weekDayName;
 			}
 		});
 
 		return displayString;
+	}
+	public getBriefValueDisplayString(thTranslation: ThTranslation): string {
+		return this.getValueDisplayString(thTranslation);
 	}
 }

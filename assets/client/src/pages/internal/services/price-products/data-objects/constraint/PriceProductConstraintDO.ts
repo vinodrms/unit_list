@@ -24,4 +24,9 @@ export class PriceProductConstraintDO extends BaseDO implements IPriceProductCon
 	public getValueDisplayString(thTranslation: ThTranslation): string {
 		return this.constraint.getValueDisplayString(thTranslation);
 	}
+	public getBriefValueDisplayString(thTranslation: ThTranslation): string {
+		var constraintFactory = new PriceProductConstraintFactory();
+		var constraintMeta = constraintFactory.getPriceProductConstraintMetaByType(this.type);
+		return thTranslation.translate(constraintMeta.brief) + " " + this.constraint.getBriefValueDisplayString(thTranslation);
+	}
 }
