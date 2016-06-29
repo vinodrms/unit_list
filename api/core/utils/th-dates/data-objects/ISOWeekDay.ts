@@ -7,7 +7,10 @@ export enum ISOWeekDay {
 	Saturday,
 	Sunday
 }
-
+export interface ISOWeekDayVM {
+	iSOWeekDay: ISOWeekDay,
+	name: string
+}
 export class ISOWeekDayUtils {
 	public getISOWeekDayList(): ISOWeekDay[] {
 		return [
@@ -19,5 +22,37 @@ export class ISOWeekDayUtils {
 			ISOWeekDay.Saturday,
 			ISOWeekDay.Sunday
 		];
+	}
+	public getISOWeekDayVMList(): ISOWeekDayVM[] {
+		return [
+			{
+				iSOWeekDay: ISOWeekDay.Monday,
+				name: "Monday"
+			},
+			{
+				iSOWeekDay: ISOWeekDay.Tuesday,
+				name: "Tuesday"
+			},
+			{
+				iSOWeekDay: ISOWeekDay.Wednesday,
+				name: "Wednesday"
+			},
+			{
+				iSOWeekDay: ISOWeekDay.Thursday,
+				name: "Thursday"
+			},
+			{
+				iSOWeekDay: ISOWeekDay.Friday,
+				name: "Friday"
+			},
+			{
+				iSOWeekDay: ISOWeekDay.Saturday,
+				name: "Saturday"
+			},
+			{
+				iSOWeekDay: ISOWeekDay.Sunday,
+				name: "Sunday"
+			}
+		]
 	}
 }
