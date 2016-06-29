@@ -1,4 +1,5 @@
 import {BaseDO} from '../../../../common/base/BaseDO';
+import {ThTranslation} from '../../../../../utils/localization/ThTranslation';
 import {IPriceProductCancellationPolicy} from './IPriceProductCancellationPolicy';
 import {CancellationPolicyUtils} from './utils/CancellationPolicyUtils';
 import {ThDateDO} from '../../../../../utils/th-dates/data-objects/ThDateDO';
@@ -19,5 +20,8 @@ export class NoCancellationPolicyDO extends BaseDO implements IPriceProductCance
 	public generateBookingCancellationTimeDO(arrivalDate: ThDateDO, currentHotelDate: ThDateDO): BookingCancellationTimeDO {
 		var ccUtils = new CancellationPolicyUtils();
 		return ccUtils.generateBookingCancellationTimeDO(BookingCancellationTimeType.DependentOnCancellationHour, arrivalDate, ThHourDO.buildThHourDO(0, 0));
+	}
+	public getValueDisplayString(thTranslation: ThTranslation): string {
+		return thTranslation.translate("Can cancel whenever");
 	}
 }

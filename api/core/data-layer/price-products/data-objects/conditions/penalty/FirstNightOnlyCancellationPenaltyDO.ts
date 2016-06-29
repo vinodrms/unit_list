@@ -1,5 +1,6 @@
 import {BaseDO} from '../../../../common/base/BaseDO';
 import {IPriceProductCancellationPenalty, PriceProductCancellationPenaltyQueryDO} from './IPriceProductCancellationPenalty';
+import {ThTranslation} from '../../../../../utils/localization/ThTranslation';
 
 export class FirstNightOnlyCancellationPenaltyDO extends BaseDO implements IPriceProductCancellationPenalty {
 	protected getPrimitivePropertyKeys(): string[] {
@@ -17,5 +18,8 @@ export class FirstNightOnlyCancellationPenaltyDO extends BaseDO implements IPric
 	}
 	public isValid(): boolean {
 		return true;
+	}
+	public getValueDisplayString(thTranslation: ThTranslation): string {
+		return thTranslation.translate("Pay first night");
 	}
 }

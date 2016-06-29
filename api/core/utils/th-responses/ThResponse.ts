@@ -1,4 +1,4 @@
-import {Locales, Translation} from '../localization/Translation';
+import {Locales, ThTranslation} from '../localization/ThTranslation';
 import {ThUtils} from '../ThUtils';
 
 export enum ThStatusCode {
@@ -706,7 +706,7 @@ export class ThResponse {
         return this;
     }
     private translateMessage(locale: Locales) {
-        var translation = new Translation(locale);
-        this.message = translation.getTranslation(this.message);
+        var translation = new ThTranslation(locale);
+        this.message = translation.translate(this.message);
     }
 }

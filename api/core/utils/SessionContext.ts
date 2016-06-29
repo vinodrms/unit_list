@@ -1,7 +1,7 @@
 import {ThLogger, ThLogLevel} from './logging/ThLogger';
 import {ThError} from './th-responses/ThError';
 import {ThStatusCode} from './th-responses/ThResponse';
-import {Locales} from './localization/Translation';
+import {Locales} from './localization/ThTranslation';
 import {UserRoles, UserDO} from '../data-layer/hotel/data-objects/user/UserDO';
 import {HotelDO} from '../data-layer/hotel/data-objects/HotelDO';
 

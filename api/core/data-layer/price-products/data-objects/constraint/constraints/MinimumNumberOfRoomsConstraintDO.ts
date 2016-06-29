@@ -1,6 +1,7 @@
 import {BaseDO} from '../../../../common/base/BaseDO';
 import {PriceProductConstraintType, PriceProductConstraintDataDO, IPriceProductConstraint} from '../IPriceProductConstraint';
 import {ThUtils} from '../../../../../utils/ThUtils';
+import {ThTranslation} from '../../../../../utils/localization/ThTranslation';
 
 export class MinimumNumberOfRoomsConstraintDO extends BaseDO implements IPriceProductConstraint {
 	noOfRooms: number;
@@ -15,5 +16,9 @@ export class MinimumNumberOfRoomsConstraintDO extends BaseDO implements IPricePr
 			return true;
 		}
 		return this.noOfRooms <= data.indexedNumberOfRoomCategories.getNoOfOccurenciesForElementList(data.roomCategoryIdListFromPriceProduct);
+	}
+
+	public getValueDisplayString(thTranslation: ThTranslation): string {
+		return thTranslation.translate("Minimum %noOfRooms% rooms", { noOfRooms: this.noOfRooms});
 	}
 }

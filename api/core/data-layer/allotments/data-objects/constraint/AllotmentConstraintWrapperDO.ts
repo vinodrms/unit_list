@@ -1,6 +1,7 @@
 import {BaseDO} from '../../../common/base/BaseDO';
 import {AllotmentConstraintType, IAllotmentConstraint, AllotmentConstraintDataDO} from './IAllotmentConstraint';
 import {AllotmentConstraintDO} from './AllotmentConstraintDO';
+import {ThTranslation} from '../../../../utils/localization/ThTranslation';
 
 export class AllotmentConstraintWrapperDO extends BaseDO implements IAllotmentConstraint {
 	constraintList: AllotmentConstraintDO[];
@@ -28,5 +29,17 @@ export class AllotmentConstraintWrapperDO extends BaseDO implements IAllotmentCo
 			}
 		}
 		return true;
+	}
+
+	public getValueDisplayString(thTranslation: ThTranslation): string {
+		return "";
+	}
+
+	public getValueDisplayStringList(thTranslation: ThTranslation): string[] {
+		var valueDisplayStringList: string[] = [];
+		_.forEach(this.constraintList, (constraint: AllotmentConstraintDO) => {
+			valueDisplayStringList.push(constraint.getValueDisplayString(thTranslation));
+		});
+		return valueDisplayStringList;
 	}
 }
