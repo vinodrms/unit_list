@@ -3,6 +3,7 @@ import {AllotmentConstraintType, IAllotmentConstraint, AllotmentConstraintDataDO
 import {BookableOnlyOnDaysFromWeekConstraintDO} from './constraints/BookableOnlyOnDaysFromWeekConstraintDO';
 import {IncludeDaysFromWeekConstraintDO} from './constraints/IncludeDaysFromWeekConstraintDO';
 import {ReleaseTimeInDaysConstraintDO} from './constraints/ReleaseTimeInDaysConstraintDO';
+import {ThTranslation} from '../../../../utils/localization/ThTranslation';
 
 export class AllotmentConstraintDO extends BaseDO implements IAllotmentConstraint {
 	type: AllotmentConstraintType;
@@ -30,5 +31,8 @@ export class AllotmentConstraintDO extends BaseDO implements IAllotmentConstrain
 	}
 	public appliesOn(data: AllotmentConstraintDataDO): boolean {
 		return this.constraint.appliesOn(data);
+	}
+	public getValueDisplayString(thTranslation: ThTranslation): string {
+		return this.constraint.getValueDisplayString(thTranslation);
 	}
 }

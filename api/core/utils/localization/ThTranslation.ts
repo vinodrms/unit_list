@@ -11,7 +11,7 @@ var SupportedLocales: { [index: number]: string; } = {};
 SupportedLocales[Locales.English] = "en";
 SupportedLocales[Locales.Danish] = "dk";
 
-export class Translation {
+export class ThTranslation {
 	private static TemplateVariableRegex: RegExp = /%\s?([^{}\s]*)\s?%/g;
 	private _thUtils: ThUtils;
 
@@ -20,11 +20,14 @@ export class Translation {
 	constructor(private _locale: Locales) {
 		this._thUtils = new ThUtils();
 	}
-	public getTranslation(phrase: string, parameters?: Object): string {
+	public translate(phrase: string, parameters?: Object): string {
 		var translatedPhrase: string = sails.__({
 			phrase: phrase,
 			locale: SupportedLocales[this._locale]
 		});
+		if(this._thUtils.isUndefinedOrNull(translatedPhrase) || !_.isString(translatedPhrase)) {
+			translatedPhrase = phrase;
+		}
 		return this.applyTemplateRegexToParams(translatedPhrase, parameters);
 	}
 	public parseLocale(possibleLocale: any): Locales {
@@ -47,7 +50,7 @@ export class Translation {
 		if (!_.isString(phrase)) {
 			return phrase;
 		}
-		return phrase.replace(Translation.TemplateVariableRegex, (substring: string, actualKey: string) => {
+		return phrase.replace(ThTranslation.TemplateVariableRegex, (substring: string, actualKey: string) => {
 			if (this._thUtils.isUndefinedOrNull(parameters, actualKey)) {
 				return "";
 			}

@@ -11,6 +11,7 @@ export interface ISOWeekDayVM {
 	iSOWeekDay: ISOWeekDay,
 	name: string
 }
+
 export class ISOWeekDayUtils {
 	public getISOWeekDayList(): ISOWeekDay[] {
 		return [

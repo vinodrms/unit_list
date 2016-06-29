@@ -5,7 +5,7 @@ import {RoomCategoryDO} from '../../../core/data-layer/room-categories/data-obje
 import {AuthUtils} from '../../../core/domain-layer/hotel-account/utils/AuthUtils';
 import {ThUtils} from '../../../core/utils/ThUtils';
 import {TestUtils} from '../../helpers/TestUtils';
-import {Locales} from '../../../core/utils/localization/Translation';
+import {Locales} from '../../../core/utils/localization/ThTranslation';
 import {AppContext} from '../../../core/utils/AppContext';
 import {AmenityDO} from '../../../core/data-layer/common/data-objects/amenity/AmenityDO';
 import {RoomAttributeDO} from '../../../core/data-layer/common/data-objects/room-attribute/RoomAttributeDO';

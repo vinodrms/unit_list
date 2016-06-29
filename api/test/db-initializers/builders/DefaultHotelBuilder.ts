@@ -9,7 +9,7 @@ import {PaymentMethodDO} from '../../../core/data-layer/common/data-objects/paym
 import {OperationHoursDO} from '../../../core/data-layer/hotel/data-objects/operation-hours/OperationHoursDO';
 import {ThHourDO} from '../../../core/utils/th-dates/data-objects/ThHourDO';
 import {ThUtils} from '../../../core/utils/ThUtils';
-import {Locales} from '../../../core/utils/localization/Translation';
+import {Locales} from '../../../core/utils/localization/ThTranslation';
 import {AppContext} from '../../../core/utils/AppContext';
 
 export class DefaultHotelBuilder {

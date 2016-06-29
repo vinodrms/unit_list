@@ -9,8 +9,34 @@
 	"Problem checking the VAT": "Problem checking the VAT",
 	"The VAT is not in EU": "The VAT is not in EU",
 	"Invalid VAT format" : "Invalid VAT format",
-	"Error logging in. Please check your credentials and try again.": "Error logging in. Please check your credentials and try again."
+	"Error logging in. Please check your credentials and try again.": "Error logging in. Please check your credentials and try again.",
 
 
 	// ThNotificationDO
+	"Monday": "Monday",
+	"Tuesday": "Tuesday",
+	"Wednesday": "Wednesday",
+	"Thursday": "Thursday",
+	"Friday": "Friday",
+	"Saturday": "Saturday",
+	"Sunday": "Sunday",
+	"Bookable only on %daysFromWeek%": "Bookable only on %daysFromWeek%",
+	"Must Include %daysFromWeek%": "Must Include %daysFromWeek%",
+	"Bookable from %leadDays% days prior to arrival": "Bookable from %leadDays% days prior to arrival",
+	"Bookable until %leadDays% days prior to arrival": "Bookable until %leadDays% days prior to arrival",
+	"Minimum %lengthOfStay% nights": "Minimum %lengthOfStay% nights",
+	"Minimum %noOfAdults% adults": "Minimum %noOfAdults% adults",
+	"Minimum %noOfRooms% rooms": "Minimum %noOfRooms% rooms",
+	"Must Arrive on %daysFromWeek%": "Must Arrive on %daysFromWeek%",
+	"Can cancel whenever": "Can cancel whenever",
+	"Can cancel until %hour% on day of arrival": "Can cancel until %hour% on day of arrival",
+	"Can cancel %daysBefore% days before arrival": "Can cancel %daysBefore% days before arrival",
+	"No cancellation possible": "No cancellation possible",
+	"Pay first night": "Pay first night",
+	"Pay full stay": "Pay full stay",
+	"No penalty": "No penalty",
+	"Pay %percentage% % from booking": "Pay %percentage% % from booking",
+	"%noOfDays% days release": "%noOfDays% days release"
+
+
 }

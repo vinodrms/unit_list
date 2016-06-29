@@ -1,4 +1,5 @@
 import {BaseDO} from '../../../../common/base/BaseDO';
+import {ThTranslation} from '../../../../../utils/localization/ThTranslation';
 import {IPriceProductCancellationPolicy} from './IPriceProductCancellationPolicy';
 import {NumberValidationRule} from '../../../../../utils/th-validation/rules/NumberValidationRule';
 import {CancellationPolicyUtils} from './utils/CancellationPolicyUtils';
@@ -28,5 +29,8 @@ export class CanCancelDaysBeforePolicyDO extends BaseDO implements IPriceProduct
 
 		var ccUtils = new CancellationPolicyUtils();
 		return ccUtils.generateBookingCancellationTimeDO(BookingCancellationTimeType.DependentOnCancellationHour, cancelDateDO, ThHourDO.buildThHourDO(0, 0));
+	}
+	public getValueDisplayString(thTranslation: ThTranslation): string {
+		return thTranslation.translate("Can cancel %daysBefore% days before arrival", { daysBefore: this.daysBefore });
 	}
 }

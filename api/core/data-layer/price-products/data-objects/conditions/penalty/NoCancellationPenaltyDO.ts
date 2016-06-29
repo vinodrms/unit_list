@@ -1,5 +1,6 @@
 import {BaseDO} from '../../../../common/base/BaseDO';
 import {IPriceProductCancellationPenalty, PriceProductCancellationPenaltyQueryDO} from './IPriceProductCancellationPenalty';
+import {ThTranslation} from '../../../../../utils/localization/ThTranslation';
 
 export class NoCancellationPenaltyDO extends BaseDO implements IPriceProductCancellationPenalty {
 	protected getPrimitivePropertyKeys(): string[] {
@@ -14,5 +15,8 @@ export class NoCancellationPenaltyDO extends BaseDO implements IPriceProductCanc
 	}
 	public isValid(): boolean {
 		return true;
+	}
+	public getValueDisplayString(thTranslation: ThTranslation): string {
+		return thTranslation.translate("No penalty");
 	}
 }

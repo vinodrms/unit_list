@@ -1,6 +1,6 @@
 import {UnitPalConfig, AppEnvironmentType} from '../core/utils/environment/UnitPalConfig';
 import {SessionContext} from '../core/utils/SessionContext';
-import {Locales} from '../core/utils/localization/Translation';
+import {Locales} from '../core/utils/localization/ThTranslation';
 import {UserRoles} from '../core/data-layer/hotel/data-objects/user/UserDO';
 
 module.exports = function (req: Express.Request, res: Express.Response, next: any) {

@@ -11,6 +11,7 @@ import {BookingUtils} from '../../../utils/BookingUtils';
 import {BookingSearchDependencies} from '../data-loader/results/BookingSearchDependencies';
 import {BusinessValidationRuleFilterComposer} from '../../../../common/validation-rule-filters/BusinessValidationRuleFilterComposer';
 import {AllotmentConstraintsValidationRule} from '../../../validators/validation-rules/allotment/AllotmentConstraintsValidationRule';
+import {AllotmentOpenIntervalValidationRule} from '../../../validators/validation-rules/allotment/AllotmentOpenIntervalValidationRule';
 import {PriceProductConstraintsValidationRule} from '../../../validators/validation-rules/price-product/PriceProductConstraintsValidationRule';
 import {PriceProductYieldIntervalsValidationRule} from '../../../validators/validation-rules/price-product/PriceProductYieldIntervalsValidationRule';
 import {AllotmentDO} from '../../../../../data-layer/allotments/data-objects/AllotmentDO';
@@ -55,6 +56,9 @@ export class BookingDependenciesFilter {
             new AllotmentConstraintsValidationRule({
                 bookingInterval: this._filterParams.interval,
                 currentHotelThDate: this._currentThHotelDate
+            }),
+            new AllotmentOpenIntervalValidationRule({
+                bookingInterval: this._filterParams.interval
             })
         ]);
         return allotmentFilter.filterSync(this._searchDependencies.allotmentList);

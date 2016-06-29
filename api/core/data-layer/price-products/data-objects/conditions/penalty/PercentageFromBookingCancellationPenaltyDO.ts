@@ -1,6 +1,7 @@
 import {BaseDO} from '../../../../common/base/BaseDO';
 import {IPriceProductCancellationPenalty, PriceProductCancellationPenaltyQueryDO} from './IPriceProductCancellationPenalty';
 import {NumberValidationRule} from '../../../../../utils/th-validation/rules/NumberValidationRule';
+import {ThTranslation} from '../../../../../utils/localization/ThTranslation';
 
 export class PercentageFromBookingCancellationPenaltyDO extends BaseDO implements IPriceProductCancellationPenalty {
 	percentage: number;
@@ -18,5 +19,8 @@ export class PercentageFromBookingCancellationPenaltyDO extends BaseDO implement
 	public isValid(): boolean {
 		var rule = NumberValidationRule.buildPercentageNumberRule();
 		return rule.validate(this.percentage).isValid();
+	}
+	public getValueDisplayString(thTranslation: ThTranslation): string {
+		return thTranslation.translate("Pay %percentage% % from booking", { percentage: this.percentage * 100 });
 	}
 }

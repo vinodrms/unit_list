@@ -1,0 +1,37 @@
+<div class="room-card occupied" *ngIf='roomVM.Status == "Occupied"'>
+	<div class="card-header">
+		<div class="section1">
+			<div class="room-number">{{ roomVM.Properties.Name }}</div>
+			<div class="room-details">{{ roomVM.Type }} {{roomVM.Properties.Booking.NumberOfPeople}} {{roomVM.Properties.Booking.NumberOfNights}}</div>
+		</div>
+		<div class="section2">
+			<div class="customer-name">{{ roomVM.Properties.Booking.ClientName}}</div>
+		</div>
+	</div>
+	<div class="card-footer">
+		<div class="arrival">
+			{{ roomVM.Properties.Booking.Arrival }}
+		</div>
+		<div class="arrow">></div>
+		<div class="departure">
+			{{ roomVM.Properties.Booking.Departure }}
+		</div>
+	</div>
+</div>
+<div *ngIf='roomVM.Status == "Free"'>
+	<div class="room-card free">
+		<div class="card-header">
+			<div class="section1">
+				<div class="room-number">501</div>
+			</div>
+			<div class="section2">
+				<div class="customer-name">A</div>
+			</div>
+		</div>
+		<div class="card-footer">
+			<div class="arrival">
+				Wed 13.02.16
+			</div>
+		</div>
+	</div>
+</div>

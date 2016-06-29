@@ -1,5 +1,6 @@
 import {BaseDO} from '../../../../common/base/BaseDO';
 import {IPriceProductCancellationPolicy} from './IPriceProductCancellationPolicy';
+import {ThTranslation} from '../../../../../utils/localization/ThTranslation';
 import {CancellationPolicyUtils} from './utils/CancellationPolicyUtils';
 import {ThDateDO} from '../../../../../utils/th-dates/data-objects/ThDateDO';
 import {ThHourDO} from '../../../../../utils/th-dates/data-objects/ThHourDO';
@@ -19,5 +20,8 @@ export class NoCancellationPossiblePolicyDO extends BaseDO implements IPriceProd
 	public generateBookingCancellationTimeDO(arrivalDate: ThDateDO, currentHotelDate: ThDateDO): BookingCancellationTimeDO {
 		var ccUtils = new CancellationPolicyUtils();
 		return ccUtils.generateBookingCancellationTimeDO(BookingCancellationTimeType.ExactTimestamp, currentHotelDate, ThHourDO.buildThHourDO(0, 0));
+	}
+	public getValueDisplayString(thTranslation: ThTranslation): string {
+		return thTranslation.translate("No cancellation possible");
 	}
 }
