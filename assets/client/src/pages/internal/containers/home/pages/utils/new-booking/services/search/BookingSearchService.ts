@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 import {Observer} from 'rxjs/Observer';
-import {AppContext, ThServerApi, ThError} from '../../../../../../../../../common/utils/AppContext';
+import {AppContext, ThServerApi} from '../../../../../../../../../common/utils/AppContext';
 import {SortOptions} from '../../../../../../../services/common/ILazyLoadRequestService';
 import {ASinglePageRequestService} from '../../../../../../../services/common/ASinglePageRequestService';
 import {BookingSearchResultDO} from './data-objects/BookingSearchResultDO';
@@ -40,23 +40,19 @@ export class BookingSearchService extends ASinglePageRequestService<BookingResul
         });
     }
 
-    public searchBookings(searchParams: BookingSearchParams) {
+    public searchBookings(searchParams: BookingSearchParams): Observable<BookingResultVM[]> {
         this._searchParams = searchParams;
         this._sortOptions = null;
 
-        this._appContext.thHttp.post(ThServerApi.BookingsSearch, { searchParams: searchParams })
+        return this._appContext.thHttp.post(ThServerApi.BookingsSearch, { searchParams: searchParams })
             .map((resultObject: Object) => {
                 var searchResult = new BookingSearchResultDO();
                 searchResult.buildFromObject(resultObject["searchResult"]);
                 return searchResult;
             })
             .map((bookingSearchResult: BookingSearchResultDO) => {
-                return this._bookingViewModelConverter.convertSearchResultToVMList(bookingSearchResult, this._searchParams);
-            })
-            .subscribe((bookingResultVMList: BookingResultVM[]) => {
-                this.bookingResultVMList = bookingResultVMList;
-            }, (error: ThError) => {
-                this._appContext.toaster.error(error.message);
+                this.bookingResultVMList = this._bookingViewModelConverter.convertSearchResultToVMList(bookingSearchResult, this._searchParams);
+                return this.bookingResultVMList;
             });
     }
 

@@ -77,7 +77,8 @@
                 </div>
                 <div class="col-md-3 col-xs-12 padding-right-0px">
                     <a class="btn search-button" (click)="searchBookings()">
-                        <i class="fa unitpal-font">=</i>
+                        <i class="fa unitpal-font" *ngIf="!isSearching">=</i>
+                        <i *ngIf="isSearching" class="fa fa-spinner fa-pulse"></i>
                         <span>{{'Search' | translate}}</span>
                     </a>
                 </div>

@@ -22,6 +22,8 @@ export class NewBookingSearchComponent extends BaseComponent {
 	@ViewChild(LazyLoadingTableComponent)
 	private _aopTableComponent: LazyLoadingTableComponent<BookingResultVM>;
 
+	isSearching: boolean = false;
+
 	constructor(private _appContext: AppContext, private _bookingSearchService: BookingSearchService, private _tableMetaBuilder: BookingSearchTableMetaBuilderService) {
 		super();
 	}
@@ -31,6 +33,13 @@ export class NewBookingSearchComponent extends BaseComponent {
 
 	public searchBookings(bookingSearchParams: BookingSearchParams) {
 		bookingSearchParams.transientBookingList = [];
-		this._bookingSearchService.searchBookings(bookingSearchParams);
+		this.isSearching = true;
+		this._bookingSearchService.searchBookings(bookingSearchParams)
+			.subscribe((bookingResultVMList: BookingResultVM[]) => {
+                this.isSearching = false;
+            }, (error: ThError) => {
+				this.isSearching = false;
+                this._appContext.toaster.error(error.message);
+            });
 	}
 }

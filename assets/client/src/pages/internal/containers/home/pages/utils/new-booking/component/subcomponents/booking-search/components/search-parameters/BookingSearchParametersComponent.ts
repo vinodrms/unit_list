@@ -1,4 +1,4 @@
-import {Component, ViewChild, AfterViewInit, Output, EventEmitter} from '@angular/core';
+import {Component, ViewChild, AfterViewInit, Input, Output, EventEmitter} from '@angular/core';
 import {BaseComponent} from '../../../../../../../../../../../../common/base/BaseComponent';
 import {TranslationPipe} from '../../../../../../../../../../../../common/utils/localization/TranslationPipe';
 import {SearchInputTextComponent} from '../../../../../../../../../../../../common/utils/components/SearchInputTextComponent';
@@ -23,6 +23,7 @@ import {BookingSearchParams} from '../../../../../services/data-objects/BookingS
     pipes: [TranslationPipe]
 })
 export class BookingSearchParametersComponent extends BaseComponent implements AfterViewInit {
+    @Input() isSearching: boolean;
     @Output() protected onBookingSearch = new EventEmitter<BookingSearchParams>();
 
     @ViewChild(SearchInputTextComponent)
@@ -101,7 +102,7 @@ export class BookingSearchParametersComponent extends BaseComponent implements A
     }
 
     public searchBookings() {
-        if (!this.searchParameters.areValid()) {
+        if (!this.searchParameters.areValid() || this.isSearching) {
             return;
         }
         this.onBookingSearch.next(this.searchParameters);

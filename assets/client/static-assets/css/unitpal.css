@@ -505,14 +505,6 @@ label small {
     margin: 0 auto;
 }
 
-/* Fixes Section */
-
-/* resolves the wrong padding on Chrome for input type="number" */
-input[type="number"].form-control {
-    padding-top: 0;
-}
-
-/* End Fixes Section */
 /* 3angle TECH */
 
 lazy-loading-table {
