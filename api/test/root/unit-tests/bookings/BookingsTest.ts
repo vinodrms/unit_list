@@ -21,7 +21,7 @@ import {AddBookingItems} from '../../../../core/domain-layer/bookings/add-bookin
 import {AddBookingItemsDO} from '../../../../core/domain-layer/bookings/add-bookings/AddBookingItemsDO';
 import {BookingDO, GroupBookingInputChannel} from '../../../../core/data-layer/bookings/data-objects/BookingDO';
 import {BookingSearchResultRepoDO} from '../../../../core/data-layer/bookings/repositories/IBookingRepository';
-import {BookingConfirmationEmailSender} from '../../../../core/domain-layer/bookings/email/BookingConfirmationEmailSender';
+import {BookingConfirmationEmailSender} from '../../../../core/domain-layer/bookings/booking-confirmations/BookingConfirmationEmailSender';
 import {BookingOccupancyCalculator} from '../../../../core/domain-layer/bookings/search-bookings/utils/occupancy-calculator/BookingOccupancyCalculator';
 import {IBookingOccupancy} from '../../../../core/domain-layer/bookings/search-bookings/utils/occupancy-calculator/results/IBookingOccupancy';
 import {BookingSearch} from '../../../../core/domain-layer/bookings/search-bookings/BookingSearch';
@@ -144,13 +144,11 @@ describe("New Bookings Tests", function () {
                 var groupBookingReferenceList = _.chain(bookingSearchResult.bookingList).map((booking: BookingDO) => {
                     return booking.groupBookingId;
                 }).uniq().value();
-
                 var groupBookingArr = _.where(bookingSearchResult.bookingList, { groupBookingReference: groupBookingReferenceList[0] });
-
                 var bookingConfirmationEmailSender = new BookingConfirmationEmailSender(testContext.appContext, testContext.sessionContext);
                 return bookingConfirmationEmailSender.sendBookingConfirmation({
                     groupBookingId: groupBookingReferenceList[0]
-                });
+                }, ['dragos.pricope@gmail.com']);
             }).then((result: boolean) => {
                 done();
             }).catch((err: any) => {

@@ -5,8 +5,8 @@ import {IEmailService, EmailHeaderDO} from './IEmailService';
 
 export abstract class AEmailService implements IEmailService {
 
-	constructor(protected _unitPalConfig: UnitPalConfig, protected _emailHeaderDO: EmailHeaderDO, protected _emailTemplate: BaseEmailTemplateDO) {
+	constructor(protected _unitPalConfig: UnitPalConfig) {
     }
 
-	public abstract sendEmail(): Promise<any>;
+	public abstract sendEmail(_emailHeaderDO: EmailHeaderDO, _emailTemplate: BaseEmailTemplateDO): Promise<any>;
 }

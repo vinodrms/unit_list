@@ -1,6 +1,6 @@
 export interface HtmlToPdfRequestDO {
     htmlUrl: string;
-    outputPath: string;
+    pdfReportOutputPath: string;
     settings?: Object;        
 }
 

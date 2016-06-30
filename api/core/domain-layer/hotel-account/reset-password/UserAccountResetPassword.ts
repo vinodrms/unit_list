@@ -50,8 +50,8 @@ export class UserAccountResetPassword {
 
 				var passwordWasResetEmailTemplateDO = this.getPasswordWasResetEmailTemplateDO();
 				var emailHeaderDO = this.getEmailHeaderDO();
-				var emailService: IEmailService = this._appContext.getServiceFactory().getEmailService(emailHeaderDO, passwordWasResetEmailTemplateDO);
-				return emailService.sendEmail();
+				var emailService: IEmailService = this._appContext.getServiceFactory().getEmailService();
+				return emailService.sendEmail(emailHeaderDO, passwordWasResetEmailTemplateDO);
 			})
 			.then((sendEmailResult: any) => {
 				resolve(this._updatedUser);
@@ -69,7 +69,7 @@ export class UserAccountResetPassword {
 	}
 	private getEmailHeaderDO(): EmailHeaderDO {
 		return {
-			destinationEmail: this._resetPasswdDO.email,
+			to: [this._resetPasswdDO.email],
 			subject: "[UnitPal] Password Was Reset",
             attachments: []
 		};
