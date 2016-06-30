@@ -68,14 +68,14 @@ export class BookingSearchResultBuilder {
         return searchParameters;
     }
 
-    private buildRoomCategoryItemList(publicPriceProductsContainer: PriceProductsContainer): RoomCategoryItem[] {
+    private buildRoomCategoryItemList(priceProductsContainer: PriceProductsContainer): RoomCategoryItem[] {
         var roomCategoryItemList: RoomCategoryItem[] = [];
         _.forEach(this._builderParams.roomCategoryStatsList, (roomCategoryStats: RoomCategoryStatsDO) => {
             var roomCategoryItem = new RoomCategoryItem();
             roomCategoryItem.stats = roomCategoryStats;
             roomCategoryItem.noOccupiedRooms = this._builderParams.bookingOccupancy.getOccupancyForRoomCategoryId(roomCategoryStats.roomCategory.id);
             roomCategoryItem.priceProductIdList = this.getIdListFromPriceProductList(
-                publicPriceProductsContainer.getFilteredPriceProductsByRoomCategoryId(roomCategoryStats.roomCategory.id)
+                priceProductsContainer.getFilteredPriceProductsByRoomCategoryId(roomCategoryStats.roomCategory.id)
             );
             roomCategoryItemList.push(roomCategoryItem);
         });

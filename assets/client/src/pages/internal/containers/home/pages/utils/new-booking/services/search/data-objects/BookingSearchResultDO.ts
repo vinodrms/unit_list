@@ -56,9 +56,9 @@ export class BookingSearchResultDO extends BaseDO {
             return allotmentItem.allotment.roomCategoryId === roomCategoryId;
         });
     }
-    public getPriceProductsFilteredByRoomCategory(roomCategoryId: string): PriceProductItemDO[] {
+    public getPriceProductsFilteredByIds(priceProductIdList: string[]): PriceProductItemDO[] {
         return _.filter(this.priceProductItemList, (priceProductItem: PriceProductItemDO) => {
-            return priceProductItem.priceProduct.containsRoomCategoryId(roomCategoryId);
+            return _.contains(priceProductIdList, priceProductItem.priceProduct.id);
         });
     }
     public getPriceProductItemById(priceProductId: string): PriceProductItemDO {

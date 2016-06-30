@@ -34,7 +34,7 @@ export class BookingViewModelConverter {
                 }
             }
         });
-        var priceProductItemList: PriceProductItemDO[] = bookingSearchResultDO.getPriceProductsFilteredByRoomCategory(roomCategoryItem.stats.roomCategory.id);
+        var priceProductItemList: PriceProductItemDO[] = bookingSearchResultDO.getPriceProductsFilteredByIds(roomCategoryItem.priceProductIdList);
         _.forEach(priceProductItemList, (priceProductItem: PriceProductItemDO) => {
             if (!addedPriceProductIdByRoomCateg[priceProductItem.priceProduct.id]
                 || addedPriceProductIdByRoomCateg[priceProductItem.priceProduct.id] != roomCategoryItem.stats.roomCategory.id) {
