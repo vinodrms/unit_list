@@ -75,7 +75,7 @@ export class BookingSearchTableMetaBuilderService {
                 {
                     displayName: "Price",
                     valueMeta: {
-                        objectPropertyId: "totalPrice",
+                        objectPropertyId: "totalPriceString",
                         propertyType: TablePropertyType.StringType,
                         showInCollapsedView: false,
                         normalStyle: "up-col-10p center selectable-row",

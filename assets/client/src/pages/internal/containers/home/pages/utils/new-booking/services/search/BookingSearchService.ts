@@ -1,9 +1,12 @@
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 import {Observer} from 'rxjs/Observer';
+import 'rxjs/add/observable/combineLatest';
 import {AppContext, ThServerApi} from '../../../../../../../../../common/utils/AppContext';
 import {SortOptions} from '../../../../../../../services/common/ILazyLoadRequestService';
 import {ASinglePageRequestService} from '../../../../../../../services/common/ASinglePageRequestService';
+import {HotelAggregatorService} from '../../../../../../../services/hotel/HotelAggregatorService';
+import {HotelAggregatedInfo} from '../../../../../../../services/hotel/utils/HotelAggregatedInfo';
 import {BookingSearchResultDO} from './data-objects/BookingSearchResultDO';
 import {BookingSearchParams} from '../data-objects/BookingSearchParams';
 import {BookingResultVM} from './view-models/BookingResultVM';
@@ -19,7 +22,7 @@ export class BookingSearchService extends ASinglePageRequestService<BookingResul
     private _bookingResultVMList: BookingResultVM[];
     private _sortOptions: SortOptions;
 
-    constructor(private _appContext: AppContext) {
+    constructor(private _appContext: AppContext, private _hotelAggregatorService: HotelAggregatorService) {
         super();
         this._bookingViewModelConverter = new BookingViewModelConverter(_appContext.thTranslation);
         this._bookingViewModelSorter = new BookingViewModelSorter();
@@ -44,15 +47,23 @@ export class BookingSearchService extends ASinglePageRequestService<BookingResul
         this._searchParams = searchParams;
         this._sortOptions = null;
 
+        return Observable.combineLatest(
+            this._hotelAggregatorService.getHotelAggregatedInfo(),
+            this.searchBookingsCore(searchParams)
+        ).map((result: [HotelAggregatedInfo, BookingSearchResultDO]) => {
+            var hotelAggregatedInfo: HotelAggregatedInfo = result[0];
+            var bookingSearchResult: BookingSearchResultDO = result[1];
+
+            this.bookingResultVMList = this._bookingViewModelConverter.convertSearchResultToVMList(bookingSearchResult, this._searchParams, hotelAggregatedInfo.ccy);
+            return this.bookingResultVMList;
+        });
+    }
+    private searchBookingsCore(searchParams: BookingSearchParams): Observable<BookingSearchResultDO> {
         return this._appContext.thHttp.post(ThServerApi.BookingsSearch, { searchParams: searchParams })
             .map((resultObject: Object) => {
                 var searchResult = new BookingSearchResultDO();
                 searchResult.buildFromObject(resultObject["searchResult"]);
                 return searchResult;
-            })
-            .map((bookingSearchResult: BookingSearchResultDO) => {
-                this.bookingResultVMList = this._bookingViewModelConverter.convertSearchResultToVMList(bookingSearchResult, this._searchParams);
-                return this.bookingResultVMList;
             });
     }
 

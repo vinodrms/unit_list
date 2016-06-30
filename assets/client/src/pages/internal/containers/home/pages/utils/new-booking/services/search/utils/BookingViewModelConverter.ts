@@ -1,4 +1,5 @@
 import {ThTranslation} from '../../../../../../../../../../common/utils/localization/ThTranslation';
+import {CurrencyDO} from '../../../../../../../../services/common/data-objects/currency/CurrencyDO';
 import {BookingSearchResultDO} from '../data-objects/BookingSearchResultDO';
 import {BookingResultVM} from '../view-models/BookingResultVM';
 import {RoomCategoryItemDO} from '../data-objects/room-category-item/RoomCategoryItemDO';
@@ -11,15 +12,15 @@ export class BookingViewModelConverter {
 
     constructor(private _thTranslation: ThTranslation) { }
 
-    public convertSearchResultToVMList(bookingSearchResultDO: BookingSearchResultDO, bookingSearchParams: BookingSearchParams): BookingResultVM[] {
+    public convertSearchResultToVMList(bookingSearchResultDO: BookingSearchResultDO, bookingSearchParams: BookingSearchParams, currency: CurrencyDO): BookingResultVM[] {
         var bookingResultVMList: BookingResultVM[] = [];
         _.forEach(bookingSearchResultDO.roomCategoryItemList, (roomCategoryItem: RoomCategoryItemDO) => {
-            bookingResultVMList = bookingResultVMList.concat(this.getBookingSearchResultForRoom(roomCategoryItem, bookingSearchResultDO, bookingSearchParams));
+            bookingResultVMList = bookingResultVMList.concat(this.getBookingSearchResultForRoom(roomCategoryItem, bookingSearchResultDO, bookingSearchParams, currency));
         });
         return bookingResultVMList;
     }
 
-    private getBookingSearchResultForRoom(roomCategoryItem: RoomCategoryItemDO, bookingSearchResultDO: BookingSearchResultDO, bookingSearchParams: BookingSearchParams): BookingResultVM[] {
+    private getBookingSearchResultForRoom(roomCategoryItem: RoomCategoryItemDO, bookingSearchResultDO: BookingSearchResultDO, bookingSearchParams: BookingSearchParams, currency: CurrencyDO): BookingResultVM[] {
         var bookingResultVMList: BookingResultVM[] = [];
 
         var addedPriceProductIdByRoomCateg: { [index: string]: string; } = {};
@@ -29,7 +30,7 @@ export class BookingViewModelConverter {
             if (allotmentItem.noOccupiedAllotments < allotmentItem.noTotalAllotments) {
                 var priceProductItem = bookingSearchResultDO.getPriceProductItemById(allotmentItem.priceProductId);
                 if (priceProductItem) {
-                    bookingResultVMList.push(this.createBookingResultVM(bookingSearchParams, roomCategoryItem, priceProductItem, allotmentItem));
+                    bookingResultVMList.push(this.createBookingResultVM(bookingSearchParams, roomCategoryItem, priceProductItem, currency, allotmentItem));
                     addedPriceProductIdByRoomCateg[priceProductItem.priceProduct.id] = roomCategoryItem.stats.roomCategory.id;
                 }
             }
@@ -38,7 +39,7 @@ export class BookingViewModelConverter {
         _.forEach(priceProductItemList, (priceProductItem: PriceProductItemDO) => {
             if (!addedPriceProductIdByRoomCateg[priceProductItem.priceProduct.id]
                 || addedPriceProductIdByRoomCateg[priceProductItem.priceProduct.id] != roomCategoryItem.stats.roomCategory.id) {
-                bookingResultVMList.push(this.createBookingResultVM(bookingSearchParams, roomCategoryItem, priceProductItem));
+                bookingResultVMList.push(this.createBookingResultVM(bookingSearchParams, roomCategoryItem, priceProductItem, currency));
                 addedPriceProductIdByRoomCateg[priceProductItem.priceProduct.id] = roomCategoryItem.stats.roomCategory.id;
             }
         });
@@ -46,7 +47,7 @@ export class BookingViewModelConverter {
         return bookingResultVMList;
     }
 
-    private createBookingResultVM(bookingSearchParams: BookingSearchParams, roomCategoryItem: RoomCategoryItemDO, priceProductItem: PriceProductItemDO, allotmentItem?: AllotmentItemDO): BookingResultVM {
+    private createBookingResultVM(bookingSearchParams: BookingSearchParams, roomCategoryItem: RoomCategoryItemDO, priceProductItem: PriceProductItemDO, currency: CurrencyDO, allotmentItem?: AllotmentItemDO): BookingResultVM {
         var bookingResultVM = new BookingResultVM();
         bookingResultVM.transientBookingItem = new TransientBookingItem();
 
@@ -65,6 +66,7 @@ export class BookingViewModelConverter {
             bookingResultVM.transientBookingItem.allotmentId = allotmentItem.allotment.id;
         }
         bookingResultVM.totalPrice = priceProductItem.getPriceForRoomCategory(roomCategoryItem.stats.roomCategory.id);
+        bookingResultVM.totalPriceString = bookingResultVM.totalPrice + currency.nativeSymbol;
         bookingResultVM.conditionsString = priceProductItem.priceProduct.conditions.getCancellationConditionsString(this._thTranslation);
         bookingResultVM.constraintsString = priceProductItem.priceProduct.constraints.getBriefValueDisplayString(this._thTranslation);
 

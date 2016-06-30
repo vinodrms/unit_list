@@ -9,6 +9,7 @@ export class BookingResultVM {
     noAvailableRooms: number;
     noAvailableAllotmentsString: string;
     totalPrice: number;
+    totalPriceString: string;
     conditionsString: string;
     constraintsString: string;
 

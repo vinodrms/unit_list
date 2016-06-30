@@ -12,6 +12,9 @@ export class BookingViewModelSorter {
                 var roomCapacity: ConfigCapacityDO = bookingSearchResultVM[sortOptions.objectPropertyId];
                 return (roomCapacity.noAdults * 2) + roomCapacity.noChildren;
             }
+            if (sortOptions.objectPropertyId === 'totalPriceString') {
+                return bookingSearchResultVM.totalPrice;
+            }
             return bookingSearchResultVM[sortOptions.objectPropertyId];
         });
         if (sortOptions.sortOrder === SortOrder.Descending) {

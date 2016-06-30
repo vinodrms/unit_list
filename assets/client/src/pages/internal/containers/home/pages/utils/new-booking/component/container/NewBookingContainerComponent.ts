@@ -2,6 +2,10 @@ import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import {BaseComponent} from '../../../../../../../../../common/base/BaseComponent';
 import {TranslationPipe} from '../../../../../../../../../common/utils/localization/TranslationPipe';
 
+import {SETTINGS_PROVIDERS} from '../../../../../../../services/settings/SettingsProviders';
+import {HotelService} from '../../../../../../../services/hotel/HotelService';
+import {HotelAggregatorService} from '../../../../../../../services/hotel/HotelAggregatorService';
+
 import {BookingStepType} from '../subcomponents/utils/BookingStepType';
 import {BookingSearchStepService} from '../subcomponents/booking-search/services/BookingSearchStepService';
 import {BookingFillDetailsStepService} from '../subcomponents/booking-fill-details/services/BookingFillDetailsStepService';
@@ -15,7 +19,8 @@ import {BookingCustomerRegisterComponent} from '../subcomponents/booking-custome
 @Component({
 	selector: 'new-booking-container',
 	templateUrl: '/client/src/pages/internal/containers/home/pages/utils/new-booking/component/container/template/new-booking-container.html',
-	providers: [BookingSearchStepService, BookingFillDetailsStepService, BookingCustomerRegisterStepService,
+	providers: [SETTINGS_PROVIDERS, HotelService, HotelAggregatorService,
+		BookingSearchStepService, BookingFillDetailsStepService, BookingCustomerRegisterStepService,
 		BookingControllerService],
 	directives: [NewBookingSearchComponent, NewBookingFillDetailsComponent, BookingCustomerRegisterComponent],
 	pipes: [TranslationPipe]
