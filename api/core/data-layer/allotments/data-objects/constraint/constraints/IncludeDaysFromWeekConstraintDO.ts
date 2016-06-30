@@ -14,9 +14,18 @@ export class IncludeDaysFromWeekConstraintDO extends BaseDO implements IAllotmen
 
 	public appliesOn(data: AllotmentConstraintDataDO): boolean {
 		var uniqueDaysFromWeekFromBooking: ISOWeekDay[] = data.indexedBookingInterval.uniqueBookingISOWeekDayList;
-		var thUtils = new ThUtils();
-		return thUtils.firstArrayIncludedInSecond(this.daysFromWeek, uniqueDaysFromWeekFromBooking);
+		var isValid: boolean = true;
+		_.forEach(uniqueDaysFromWeekFromBooking, (isoWeekDayFromBooking: ISOWeekDay) => {
+			if (!this.containsDayFromWeek(isoWeekDayFromBooking)) {
+				isValid = false;
+			}
+		});
+		return isValid;
 	}
+	private containsDayFromWeek(isoWeekDay: ISOWeekDay): boolean {
+		return _.contains(this.daysFromWeek, isoWeekDay);
+	}
+
 	public getValueDisplayString(thTranslation: ThTranslation): string {
 		var constraintUtils = new ConstraintUtils(thTranslation);
 		return thTranslation.translate("Must Include %daysFromWeek%", { daysFromWeek: constraintUtils.getDaysFromWeekDisplayString(this.daysFromWeek) });
