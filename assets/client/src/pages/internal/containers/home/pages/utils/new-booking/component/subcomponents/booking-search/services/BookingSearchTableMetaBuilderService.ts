@@ -1,102 +1,112 @@
 import {Injectable} from '@angular/core';
-import {LazyLoadTableMeta, TableRowCommand, TableColumnMeta, TablePropertyType} from '../../../../../../../../../../../common/utils/components/lazy-loading/utils/LazyLoadTableMeta';
+import {LazyLoadTableMeta, TableRowCommand, TableColumnMeta, TablePropertyType, TableColumnValueMeta} from '../../../../../../../../../../../common/utils/components/lazy-loading/utils/LazyLoadTableMeta';
+import {BookingResultVM} from '../../../../services/search/view-models/BookingResultVM';
 
 @Injectable()
 export class BookingSearchTableMetaBuilderService {
-	constructor() { }
+    constructor() { }
 
-	public buildLazyLoadTableMeta(): LazyLoadTableMeta {
-		return {
-			supportedRowCommandList: [],
-			rowIdPropertySelector: "uniqueId",
-			addButtonText: "",
-			autoSelectRows: false,
-			columnMetaList: [
-				{
-					displayName: "Price Prod",
-					valueMeta: {
-						objectPropertyId: "priceProductName",
-						propertyType: TablePropertyType.NotesType,
-						showInCollapsedView: true,
-						normalStyle: "up-col-15p center",
-						collapsedStyle: "up-col-70p center",
+    public buildLazyLoadTableMeta(): LazyLoadTableMeta {
+        return {
+            supportedRowCommandList: [],
+            rowIdPropertySelector: "uniqueId",
+            addButtonText: "",
+            autoSelectRows: false,
+            columnMetaList: [
+                {
+                    displayName: "Price Prod",
+                    valueMeta: {
+                        objectPropertyId: "priceProductName",
+                        propertyType: TablePropertyType.NotesType,
+                        showInCollapsedView: true,
+                        normalStyle: "up-col-15p left selectable-row",
+                        collapsedStyle: "up-col-70p left",
                         isSortable: true
-					}
-				},
-				{
-					displayName: "Room",
-					valueMeta: {
-						objectPropertyId: "roomCategoryName",
-						propertyType: TablePropertyType.NotesType,
-						showInCollapsedView: false,
-						normalStyle: "up-col-15p center",
+                    }
+                },
+                {
+                    displayName: "Room",
+                    valueMeta: {
+                        objectPropertyId: "roomCategoryName",
+                        propertyType: TablePropertyType.NotesType,
+                        showInCollapsedView: false,
+                        normalStyle: "up-col-15p left selectable-row",
                         isSortable: true
-					}
-				},
-				{
-					displayName: "Capacity",
-					valueMeta: {
-						objectPropertyId: "roomCapacity",
-						propertyType: TablePropertyType.CapacityType,
-						fonts: {
+                    }
+                },
+                {
+                    displayName: "Capacity",
+                    valueMeta: {
+                        objectPropertyId: "roomCapacity",
+                        propertyType: TablePropertyType.CapacityType,
+                        fonts: {
                             child: ";",
                             adult: ":",
-							baby: "B"    
+                            baby: "B"
                         },
-						showInCollapsedView: false,
-						normalStyle: "up-col-10p center",
+                        showInCollapsedView: false,
+                        normalStyle: "up-col-10p center selectable-row",
                         isSortable: true
-					}
-				},
-				{
-					displayName: "Avail",
-					valueMeta: {
-						objectPropertyId: "noAvailableRooms",
-						propertyType: TablePropertyType.StringType,
-						showInCollapsedView: false,
-						normalStyle: "up-col-5p center",
-                        isSortable: true
-					}
-				},
-				{
-					displayName: "Allot",
-					valueMeta: {
-						objectPropertyId: "noAvailableAllotmentsString",
-						propertyType: TablePropertyType.StringType,
-						showInCollapsedView: false,
-						normalStyle: "up-col-5p center",
-                        isSortable: true
-					}
-				},
+                    }
+                },
                 {
-					displayName: "Price",
-					valueMeta: {
-						objectPropertyId: "totalPrice",
-						propertyType: TablePropertyType.StringType,
-						showInCollapsedView: false,
-						normalStyle: "up-col-10p center",
+                    displayName: "Avail",
+                    valueMeta: {
+                        objectPropertyId: "noAvailableRooms",
+                        propertyType: TablePropertyType.StringType,
+                        showInCollapsedView: false,
+                        normalStyle: "up-col-5p center selectable-row",
                         isSortable: true
-					}
-				},
-				{
-					displayName: "Conditions",
-					valueMeta: {
-						objectPropertyId: "conditionsString",
-						propertyType: TablePropertyType.NotesType,
-						showInCollapsedView: false,
-						normalStyle: "up-col-20p center"
-					}
-				},
-				{
-					displayName: "Constraints",
-					valueMeta: {
-						objectPropertyId: "constraintsString",
-						propertyType: TablePropertyType.NotesType,
-						showInCollapsedView: false,
-						normalStyle: "up-col-20p center"
-					}
-				}
-			]
-		}
-	}
+                    }
+                },
+                {
+                    displayName: "Allot",
+                    valueMeta: {
+                        objectPropertyId: "noAvailableAllotmentsString",
+                        propertyType: TablePropertyType.StringType,
+                        showInCollapsedView: false,
+                        normalStyle: "up-col-5p center selectable-row",
+                        isSortable: true
+                    }
+                },
+                {
+                    displayName: "Price",
+                    valueMeta: {
+                        objectPropertyId: "totalPrice",
+                        propertyType: TablePropertyType.StringType,
+                        showInCollapsedView: false,
+                        normalStyle: "up-col-10p center selectable-row",
+                        isSortable: true
+                    }
+                },
+                {
+                    displayName: "Conditions",
+                    valueMeta: {
+                        objectPropertyId: "conditionsString",
+                        propertyType: TablePropertyType.NotesType,
+                        showInCollapsedView: false,
+                        normalStyle: "up-col-20p center"
+                    }
+                },
+                {
+                    displayName: "Constraints",
+                    valueMeta: {
+                        objectPropertyId: "constraintsString",
+                        propertyType: TablePropertyType.NotesType,
+                        showInCollapsedView: false,
+                        normalStyle: "up-col-20p center"
+                    }
+                }
+            ]
+        }
+    }
+    public customCellClassGenerator(bookingResult: BookingResultVM, columnValueMeta: TableColumnValueMeta): string {
+        if (columnValueMeta.objectPropertyId === 'noAvailableRooms' && bookingResult.noAvailableRooms <= 1) {
+            return "overbooking";
+        }
+        if (columnValueMeta.objectPropertyId === 'noAvailableAllotmentsString' && bookingResult.noAvailableAllotments > 0) {
+            return "allotment";
+        }
+        return "";
+    }
 }

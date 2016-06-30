@@ -57,9 +57,11 @@ export class BookingViewModelConverter {
         bookingResultVM.noAvailableRooms = roomCategoryItem.stats.noOfRooms - roomCategoryItem.noOccupiedRooms;
         if (!allotmentItem) {
             bookingResultVM.noAvailableAllotmentsString = "n/a";
+            bookingResultVM.noAvailableAllotments = 0;
         }
         else {
-            bookingResultVM.noAvailableAllotmentsString = (allotmentItem.noTotalAllotments - allotmentItem.noOccupiedAllotments) + "";
+            bookingResultVM.noAvailableAllotments = allotmentItem.noTotalAllotments - allotmentItem.noOccupiedAllotments;
+            bookingResultVM.noAvailableAllotmentsString = bookingResultVM.noAvailableAllotments + "";
             bookingResultVM.transientBookingItem.allotmentId = allotmentItem.allotment.id;
         }
         bookingResultVM.totalPrice = priceProductItem.getPriceForRoomCategory(roomCategoryItem.stats.roomCategory.id);

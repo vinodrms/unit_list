@@ -1186,10 +1186,8 @@ table.lazy-loading .th-pagination {
 }
 .lazy-loading-table-sort {
     float: right;
-    top: 12px;
-    right: 3px;
     color: gray;
-    cursor: pointer;
+    margin-right: 2px;
 }
 
 .up-col-0p {
@@ -1729,6 +1727,13 @@ a.btn.btn-square:focus {
     font-size: 11px;
     overflow-y: hidden;
     padding: 0px 15px 15px 15px;
+}
+.booking-search-results .overbooking {
+    color: #FF0000;
+    font-weight: bold;
+}
+.booking-search-results .allotment {
+    font-weight: bold;
 }
 .padding-right-0px {
     padding-right: 0px;

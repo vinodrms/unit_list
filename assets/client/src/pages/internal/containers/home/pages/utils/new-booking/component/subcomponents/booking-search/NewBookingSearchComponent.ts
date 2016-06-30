@@ -1,6 +1,7 @@
 import {Component, ViewChild} from '@angular/core';
 import {BaseComponent} from '../../../../../../../../../../common/base/BaseComponent';
 import {LazyLoadingTableComponent} from '../../../../../../../../../../common/utils/components/lazy-loading/LazyLoadingTableComponent';
+import {TableColumnValueMeta} from '../../../../../../../../../../common/utils/components/lazy-loading/utils/LazyLoadTableMeta';
 import {AppContext, ThError} from '../../../../../../../../../../common/utils/AppContext';
 import {CustomScroll} from '../../../../../../../../../../common/utils/directives/CustomScroll';
 import {TranslationPipe} from '../../../../../../../../../../common/utils/localization/TranslationPipe';
@@ -29,6 +30,7 @@ export class NewBookingSearchComponent extends BaseComponent {
 	}
 	public ngAfterViewInit() {
 		this._aopTableComponent.bootstrap(this._bookingSearchService, this._tableMetaBuilder.buildLazyLoadTableMeta());
+		this._aopTableComponent.attachCustomCellClassGenerator(this._tableMetaBuilder.customCellClassGenerator);
 	}
 
 	public searchBookings(bookingSearchParams: BookingSearchParams) {

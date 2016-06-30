@@ -38,13 +38,13 @@
 		<thead>
 			<tr>
 				<th *ngFor="let columnMeta of columnMetaList" [ngClass]="isCollapsed? columnMeta.valueMeta.collapsedStyle : columnMeta.valueMeta.normalStyle"
-					title="{{ columnMeta.displayName | translate }}">
+					title="{{ columnMeta.displayName | translate }}"
+					(click)="sortBy(columnMeta.valueMeta)">
 					{{ columnMeta.displayName | translate }}
-					<span *ngIf="columnMeta.valueMeta.isSortable"
-						class="lazy-loading-table-sort glyphicon"
-						[ngClass]="{'glyphicon-sort': isNotOrdered(columnMeta.valueMeta), 'glyphicon-sort-by-attributes': isOrderedAscending(columnMeta.valueMeta), 'glyphicon-sort-by-attributes-alt': isOrderedDescending(columnMeta.valueMeta)}"
-						(click)="sortBy(columnMeta.valueMeta)"
-						>
+					<span *ngIf="columnMeta.valueMeta.isSortable" class="lazy-loading-table-sort">
+						<i class="fa fa-sort" *ngIf="isNotOrdered(columnMeta.valueMeta)"></i>
+						<i class="fa fa-sort-desc" *ngIf="isOrderedAscending(columnMeta.valueMeta)"></i>
+						<i class="fa fa-sort-asc" *ngIf="isOrderedDescending(columnMeta.valueMeta)"></i>
 					</span>
 				</th>
 				<th *ngIf="tableOptions.canCopy||tableOptions.canEdit||tableOptions.canDelete" [ngClass]="{'up-col-10p': !isCollapsed, 'up-col-30p': isCollapsed}">
@@ -55,7 +55,7 @@
 		<tbody customScroll>
 			<tr *ngFor="let item of itemList" [ngClass]="getRowClasses(item)">
 				<td *ngFor="let columnMeta of columnMetaList" (click)="(tableOptions.canSelect || tableOptions.canMultiSelect) && didSelectItem(item)"
-					[ngClass]="getCellClasses(columnMeta.valueMeta, isCollapsed)">
+					[ngClass]="getCellClasses(columnMeta.valueMeta, isCollapsed, item)">
 					<span *ngIf="isPercentage(columnMeta.valueMeta)">
 									{{ getItemValue(item, columnMeta.valueMeta) | percentage }}
 								</span>

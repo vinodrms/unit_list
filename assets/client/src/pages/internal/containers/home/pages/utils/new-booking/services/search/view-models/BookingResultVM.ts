@@ -11,5 +11,7 @@ export class BookingResultVM {
     totalPrice: number;
     conditionsString: string;
     constraintsString: string;
+
     transientBookingItem: TransientBookingItem;
+    noAvailableAllotments: number;
 }

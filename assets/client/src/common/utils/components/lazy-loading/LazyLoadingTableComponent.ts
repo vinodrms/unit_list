@@ -26,6 +26,7 @@ export class LazyLoadingTableComponent<T> {
 	private _thUtils: ThUtils;
 	protected _isCollapsed: boolean;
 	private _rowClassGenerator: { (item: T): string };
+	private _cellClassGenerator: { (item: T, columnValueMeta: TableColumnValueMeta): string };
 
 	protected get isCollapsed(): boolean {
 		return this._isCollapsed;
@@ -309,7 +310,7 @@ export class LazyLoadingTableComponent<T> {
 		return classes;
 	}
 
-	public getCellClasses(columnValueMeta: TableColumnValueMeta, isCollapsed: boolean): string {
+	public getCellClasses(columnValueMeta: TableColumnValueMeta, isCollapsed: boolean, item?: T): string {
 		var classes = '';
 
 		if (isCollapsed) {
@@ -317,6 +318,12 @@ export class LazyLoadingTableComponent<T> {
 		}
 		else {
 			classes += columnValueMeta.normalStyle;
+		}
+		if (item && this._cellClassGenerator) {
+			var classToAppend: string = this._cellClassGenerator(item, columnValueMeta);
+			if (_.isString(classToAppend) && classToAppend.length > 0) {
+				classes += " " + classToAppend;
+			}
 		}
 		return classes;
 	}
@@ -331,7 +338,7 @@ export class LazyLoadingTableComponent<T> {
 		if (this._rowClassGenerator) {
 			var classToAppend: string = this._rowClassGenerator(item);
 			if (_.isString(classToAppend) && classToAppend.length > 0) {
-				classes += " " + this._rowClassGenerator(item);
+				classes += " " + classToAppend;
 			}
 		}
 		return classes;
@@ -339,6 +346,9 @@ export class LazyLoadingTableComponent<T> {
 
 	public attachCustomRowClassGenerator(rowClassGenerator: { (item: T): string }) {
 		this._rowClassGenerator = rowClassGenerator;
+	}
+	public attachCustomCellClassGenerator(cellClassGenerator: { (item: T, columnValueMeta: TableColumnValueMeta): string }) {
+		this._cellClassGenerator = cellClassGenerator;
 	}
 
 	public isUndefinedOrNull(value: any): boolean {
