@@ -101,7 +101,7 @@ export class BookingSearchTableMetaBuilderService {
         }
     }
     public customCellClassGenerator(bookingResult: BookingResultVM, columnValueMeta: TableColumnValueMeta): string {
-        if (columnValueMeta.objectPropertyId === 'noAvailableRooms' && bookingResult.noAvailableRooms <= 1) {
+        if (columnValueMeta.objectPropertyId === 'noAvailableRooms' && bookingResult.noAvailableRooms <= 0) {
             return "overbooking";
         }
         if (columnValueMeta.objectPropertyId === 'noAvailableAllotmentsString' && bookingResult.noAvailableAllotments > 0) {
