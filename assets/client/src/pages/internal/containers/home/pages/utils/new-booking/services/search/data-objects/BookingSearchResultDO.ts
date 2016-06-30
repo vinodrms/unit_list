@@ -66,4 +66,26 @@ export class BookingSearchResultDO extends BaseDO {
             return priceProductItem.priceProduct.id === priceProductId;
         });
     }
+    public decrementAvailability(roomCategoryId: string, allotmentId?: string) {
+        if (allotmentId && _.isString(allotmentId)) {
+            this.decrementAllotmentAvailability(allotmentId);
+        }
+        this.decrementRoomCategoryAvailability(roomCategoryId);
+    }
+    private decrementAllotmentAvailability(allotmentId: string) {
+        var allotmentItem: AllotmentItemDO = _.find(this.allotmentItemList, (currAllotmentItem: AllotmentItemDO) => {
+            return currAllotmentItem.allotment.id === allotmentId;
+        });
+        if (allotmentItem) {
+            allotmentItem.noOccupiedAllotments++;
+        }
+    }
+    private decrementRoomCategoryAvailability(roomCategoryId: string) {
+        var roomCategItem: RoomCategoryItemDO = _.find(this.roomCategoryItemList, (currRoomCateg: RoomCategoryItemDO) => {
+            return currRoomCateg.stats.roomCategory.id === roomCategoryId;
+        });
+        if (roomCategItem) {
+            roomCategItem.noOccupiedRooms++;
+        }
+    }
 }

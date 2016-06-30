@@ -5,6 +5,7 @@ import 'rxjs/add/observable/combineLatest';
 import {AppContext, ThServerApi} from '../../../../../../../../../common/utils/AppContext';
 import {SortOptions} from '../../../../../../../services/common/ILazyLoadRequestService';
 import {ABookingService} from './ABookingService';
+import {CurrencyDO} from '../../../../../../../services/common/data-objects/currency/CurrencyDO';
 import {RoomCategoriesService} from '../../../../../../../services/room-categories/RoomCategoriesService';
 import {RoomCategoryDO} from '../../../../../../../services/room-categories/data-objects/RoomCategoryDO';
 import {HotelAggregatorService} from '../../../../../../../services/hotel/HotelAggregatorService';
@@ -14,11 +15,15 @@ import {BookingSearchParams} from '../data-objects/BookingSearchParams';
 import {BookingItemVM} from './view-models/BookingItemVM';
 import {BookingViewModelConverter} from './utils/BookingViewModelConverter';
 import {BookingViewModelSorter} from './utils/BookingViewModelSorter';
+import {TransientBookingItem} from '../data-objects/TransientBookingItem';
 
 @Injectable()
 export class BookingSearchService extends ABookingService {
     private _bookingViewModelConverter: BookingViewModelConverter;
     private _bookingViewModelSorter: BookingViewModelSorter;
+
+    private _bookingSearchResult: BookingSearchResultDO;
+    private _currency: CurrencyDO;
 
     private _searchParams: BookingSearchParams;
     private _sortOptions: SortOptions;
@@ -45,11 +50,11 @@ export class BookingSearchService extends ABookingService {
             this.searchBookingsCore(searchParams),
             this._roomCategoriesService.getRoomCategoryList()
         ).map((result: [HotelAggregatedInfo, BookingSearchResultDO, RoomCategoryDO[]]) => {
-            var hotelAggregatedInfo: HotelAggregatedInfo = result[0];
-            var bookingSearchResult: BookingSearchResultDO = result[1];
+            this._currency = result[0].ccy;
+            this._bookingSearchResult = result[1];
             var roomCategoryList: RoomCategoryDO[] = result[2];
 
-            this.bookingItemVMList = this._bookingViewModelConverter.convertSearchResultToVMList(bookingSearchResult, this._searchParams, hotelAggregatedInfo.ccy);
+            this.bookingItemVMList = this._bookingViewModelConverter.convertSearchResultToVMList(this._bookingSearchResult, this._searchParams, this._currency);
 
             return {
                 roomCategoryList: roomCategoryList,
@@ -72,5 +77,17 @@ export class BookingSearchService extends ABookingService {
     }
     public getSortedOptions(): SortOptions {
         return this._sortOptions;
+    }
+
+    public decrementInventoryAvailability(transientBookingItem: TransientBookingItem) {
+        if (!this._bookingSearchResult) {
+            return;
+        }
+        this._bookingSearchResult.decrementAvailability(transientBookingItem.roomCategoryId, transientBookingItem.allotmentId);
+        var newBookingVMList = this._bookingViewModelConverter.convertSearchResultToVMList(this._bookingSearchResult, this._searchParams, this._currency);
+        if(this._sortOptions) {
+            newBookingVMList = this._bookingViewModelSorter.sortBookingSearchResultsBy(newBookingVMList, this._sortOptions);
+        }
+        this.bookingItemVMList = newBookingVMList;
     }
 }

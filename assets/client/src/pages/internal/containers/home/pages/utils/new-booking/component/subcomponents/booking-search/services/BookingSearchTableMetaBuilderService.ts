@@ -127,7 +127,7 @@ export class BookingSearchTableMetaBuilderService {
                         objectPropertyId: "roomCategoryName",
                         propertyType: TablePropertyType.NotesType,
                         showInCollapsedView: false,
-                        normalStyle: "up-col-25p left"
+                        normalStyle: "up-col-30p left"
                     }
                 },
                 {

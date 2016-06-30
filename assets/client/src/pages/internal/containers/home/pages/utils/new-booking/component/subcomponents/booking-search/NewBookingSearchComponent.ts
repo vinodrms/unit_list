@@ -55,6 +55,6 @@ export class NewBookingSearchComponent extends BaseComponent {
 	public addBookingVMInCart(bookingItemVM: BookingItemVM) {
 		this._inMemoryBookingService.addBookingItem(bookingItemVM);
 		this._wizardBookingSearchService.checkBookingCartValidity(this._inMemoryBookingService, this._roomCategoryList);
-		// TODO: decrement
+		this._bookingSearchService.decrementInventoryAvailability(bookingItemVM.transientBookingItem);
 	}
 }
