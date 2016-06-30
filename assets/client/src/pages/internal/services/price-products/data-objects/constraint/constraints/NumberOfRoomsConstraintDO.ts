@@ -15,4 +15,7 @@ export class NumberOfRoomsConstraintDO extends BaseDO implements IPriceProductCo
 	public getValueDisplayString(thTranslation: ThTranslation): string {
 		return thTranslation.translate("%noOfRooms% rooms", { noOfRooms: this.noOfRooms });
 	}
+	public getBriefValueDisplayString(thTranslation: ThTranslation): string {
+		return this.getValueDisplayString(thTranslation);
+	}
 }

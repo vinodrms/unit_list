@@ -3,9 +3,6 @@ import {AppContext} from '../../../../../../../../../../common/utils/AppContext'
 import {BaseComponent} from '../../../../../../../../../../common/base/BaseComponent';
 import {InventoryScreenStateType} from '../../../../../../../common/inventory/utils/state-manager/InventoryScreenStateType';
 import {CustomerRegisterComponent} from '../../../../../../../common/inventory/customer-register/main/CustomerRegisterComponent';
-import {SETTINGS_PROVIDERS} from '../../../../../../../../services/settings/SettingsProviders';
-import {HotelService} from '../../../../../../../../services/hotel/HotelService';
-import {HotelAggregatorService} from '../../../../../../../../services/hotel/HotelAggregatorService';
 import {BookingCustomerRegisterStepService} from './services/BookingCustomerRegisterStepService';
 import {CustomerDO} from '../../../../../../../../services/customers/data-objects/CustomerDO';
 import {BookingControllerService} from '../utils/BookingControllerService';
@@ -14,8 +11,7 @@ import {IBookingCustomerRegisterController} from '../utils/IBookingCustomerRegis
 @Component({
 	selector: 'booking-customer-register',
 	templateUrl: '/client/src/pages/internal/containers/home/pages/utils/new-booking/component/subcomponents/booking-customer-register/template/booking-customer-register.html',
-	directives: [CustomerRegisterComponent],
-	providers: [SETTINGS_PROVIDERS, HotelService, HotelAggregatorService]
+	directives: [CustomerRegisterComponent]
 })
 export class BookingCustomerRegisterComponent extends BaseComponent {
 	private _customerRegisterCtrl: IBookingCustomerRegisterController;

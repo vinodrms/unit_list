@@ -8,6 +8,7 @@ import {PriceProductDO} from '../../../../data-layer/price-products/data-objects
 import {PriceProductsContainer} from '../../../price-products/validators/results/PriceProductsContainer';
 import {AllotmentsContainer} from '../../../allotments/validators/results/AllotmentsContainer';
 import {BookingDO} from '../../../../data-layer/bookings/data-objects/BookingDO';
+import {RoomCategoryStatsDO} from '../../../../data-layer/room-categories/data-objects/RoomCategoryStatsDO';
 import {CustomersContainer} from '../../../customers/validators/results/CustomersContainer';
 import {BusinessValidationRuleContainer} from '../../../common/validation-rules/BusinessValidationRuleContainer';
 import {BookingBillingDetailsValidationRule} from '../../validators/validation-rules/booking/BookingBillingDetailsValidationRule';
@@ -25,6 +26,7 @@ export class ValidationParams {
     customersContainer: CustomersContainer;
     allotmentsContainer: AllotmentsContainer;
     roomList: RoomDO[];
+    roomCategoryStatsList: RoomCategoryStatsDO[];
 }
 
 export class NewBookingsValidationRules {
@@ -59,7 +61,10 @@ export class NewBookingsValidationRules {
         var bookingValidationRule = new BusinessValidationRuleContainer([
             new BookingBillingDetailsValidationRule(this._validatorParams.hotel, this._validatorParams.priceProductsContainer, this._validatorParams.customersContainer),
             new BookingAllotmentValidationRule(this._appContext, this._sessionContext, this.getBookingAllotmentValidationParams(booking)),
-            new BookingRoomCategoryValidationRule(this._validatorParams.priceProductsContainer)
+            new BookingRoomCategoryValidationRule({
+                priceProductsContainer: this._validatorParams.priceProductsContainer,
+                roomCategoryStatsList:  this._validatorParams.roomCategoryStatsList
+            })
         ]);
         bookingValidationRule.isValidOn(booking).then((validatedBooking: BookingDO) => {
             var priceProductValidationRule = new BusinessValidationRuleContainer([

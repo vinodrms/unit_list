@@ -6,9 +6,15 @@ import {PriceProductsContainer} from '../../../../price-products/validators/resu
 import {InvoicePaymentMethodValidator} from '../../../../invoices/validators/InvoicePaymentMethodValidator';
 import {HotelDO} from '../../../../../data-layer/hotel/data-objects/HotelDO';
 import {CustomersContainer} from '../../../../customers/validators/results/CustomersContainer';
+import {RoomCategoryStatsDO} from '../../../../../data-layer/room-categories/data-objects/RoomCategoryStatsDO';
+
+export interface BookingAllotmentValidationParams {
+    priceProductsContainer: PriceProductsContainer;
+    roomCategoryStatsList: RoomCategoryStatsDO[];
+}
 
 export class BookingRoomCategoryValidationRule extends ABusinessValidationRule<BookingDO> {
-    constructor(private _priceProductsContainer: PriceProductsContainer) {
+    constructor(private _validationParams: BookingAllotmentValidationParams) {
         super({
             statusCode: ThStatusCode.BookingValidationError,
             errorMessage: "error validating booking"
@@ -18,7 +24,7 @@ export class BookingRoomCategoryValidationRule extends ABusinessValidationRule<B
     protected isValidOnCore(resolve: { (result: BookingDO): void }, reject: { (err: ThError): void }, businessObject: BookingDO) {
         var booking = businessObject;
 
-        var priceProduct = this._priceProductsContainer.getPriceProductById(booking.priceProductId);
+        var priceProduct = this._validationParams.priceProductsContainer.getPriceProductById(booking.priceProductId);
         if (!priceProduct.containsRoomCategoryId(booking.roomCategoryId)) {
             this.logBusinessAndReject(reject, booking, {
                 statusCode: ThStatusCode.BookingsValidatorInvalidRoomCategoryId,
@@ -26,6 +32,24 @@ export class BookingRoomCategoryValidationRule extends ABusinessValidationRule<B
             });
             return;
         }
+        var roomCategoryStatsDO: RoomCategoryStatsDO = _.find(this._validationParams.roomCategoryStatsList, (roomCategStats: RoomCategoryStatsDO) => {
+            return roomCategStats.roomCategory.id === booking.roomCategoryId;
+        });
+        if (this._thUtils.isUndefinedOrNull(roomCategoryStatsDO)) {
+            this.logBusinessAndReject(reject, booking, {
+                statusCode: ThStatusCode.BookingsValidatorRoomCategoryNotFoundInActiveInventory,
+                errorMessage: "room category id not found in active room inventory"
+            });
+            return;
+        }
+        if (!roomCategoryStatsDO.capacity.canFit(booking.configCapacity)) {
+            this.logBusinessAndReject(reject, booking, {
+                statusCode: ThStatusCode.BookingsValidatorInsufficientRoomCategoryCapacity,
+                errorMessage: "insufficient room category capacity"
+            });
+            return;
+        }
+
         resolve(booking);
     }
 }

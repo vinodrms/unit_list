@@ -458,6 +458,17 @@ export var EnglishTranslations: Object = {
 	"Unread": "Unread",
 	"Received": "Received",
 	"Message": "Message",
-	"Register": "Register"
+	"Register": "Register",
+	"Bookable on": "Bookable on",
+	"Must include": "Must include",
+	"Arrive on": "Arrive on",
+	"Max Lead": "Max Lead",
+	"Min lead": "Min lead",
+	"Min": "Min",
+	"Price Prod": "Price Prod",
+	"Avail": "Avail",
+	"Allot": "Allot"
+
+
 	
 };

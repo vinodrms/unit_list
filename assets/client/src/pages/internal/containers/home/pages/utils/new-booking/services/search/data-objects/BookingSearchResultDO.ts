@@ -50,4 +50,20 @@ export class BookingSearchResultDO extends BaseDO {
         this.searchParameters = new SearchParametersDO();
         this.searchParameters.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "searchParameters"));
     }
+
+    public getAllotmentsFilteredByRoomCategory(roomCategoryId: string): AllotmentItemDO[] {
+        return _.filter(this.allotmentItemList, (allotmentItem: AllotmentItemDO) => {
+            return allotmentItem.allotment.roomCategoryId === roomCategoryId;
+        });
+    }
+    public getPriceProductsFilteredByIds(priceProductIdList: string[]): PriceProductItemDO[] {
+        return _.filter(this.priceProductItemList, (priceProductItem: PriceProductItemDO) => {
+            return _.contains(priceProductIdList, priceProductItem.priceProduct.id);
+        });
+    }
+    public getPriceProductItemById(priceProductId: string): PriceProductItemDO {
+        return _.find(this.priceProductItemList, (priceProductItem: PriceProductItemDO) => {
+            return priceProductItem.priceProduct.id === priceProductId;
+        });
+    }
 }

@@ -8,7 +8,7 @@ import {PercentagePipe} from '../../pipes/PercentagePipe';
 import {ThDateIntervalPipe} from '../../pipes/ThDateIntervalPipe';
 import {AppContext} from '../../AppContext';
 import {LazyLoadTableMeta, TableRowCommand, TableColumnValueMeta, TablePropertyType, TableViewOption, TableColumnMeta} from './utils/LazyLoadTableMeta';
-import {ILazyLoadRequestService, LazyLoadData, PageContent} from '../../../../pages/internal/services/common/ILazyLoadRequestService';
+import {ILazyLoadRequestService, LazyLoadData, PageContent, SortOrder, SortOptions} from '../../../../pages/internal/services/common/ILazyLoadRequestService';
 import {TotalCountDO} from '../../../../pages/internal/services/common/data-objects/lazy-load/TotalCountDO';
 import {PageMetaDO} from '../../../../pages/internal/services/common/data-objects/lazy-load/PageMetaDO';
 import {PaginationIndex} from './utils/PaginationIndex';
@@ -26,6 +26,7 @@ export class LazyLoadingTableComponent<T> {
 	private _thUtils: ThUtils;
 	protected _isCollapsed: boolean;
 	private _rowClassGenerator: { (item: T): string };
+	private _cellClassGenerator: { (item: T, columnValueMeta: TableColumnValueMeta): string };
 
 	protected get isCollapsed(): boolean {
 		return this._isCollapsed;
@@ -61,6 +62,12 @@ export class LazyLoadingTableComponent<T> {
 		this.deselectItemIfNecessary(item);
 		this.selectTableItem(item);
 		this.onEdit.next(item);
+	}
+
+	@Output() protected onAddExistingItem = new EventEmitter();
+	protected addExistingItem(item: T) {
+		this.deselectItemIfNecessary(item);
+		this.onAddExistingItem.next(item);
 	}
 
 	@Output() protected onSelect = new EventEmitter();
@@ -157,6 +164,37 @@ export class LazyLoadingTableComponent<T> {
 	}
 	protected movePrevious() {
 		this.updatePageNumber(this.pageMeta.pageNumber - 1);
+	}
+	protected showPagination() {
+		return this.lazyLoadingRequest.showPagination();
+	}
+	protected showTableFooter() {
+		return this.lazyLoadingRequest.showPagination() || this.tableOptions.canAdd;
+	}
+
+	protected isNotOrdered(cellValueMeta: TableColumnValueMeta): boolean {
+		var sortedOptions = this.lazyLoadingRequest.getSortedOptions();
+		if (!sortedOptions) { return true; }
+		return sortedOptions.objectPropertyId !== cellValueMeta.objectPropertyId;
+	}
+	protected isOrderedAscending(cellValueMeta: TableColumnValueMeta): boolean {
+		return this.isOrdered(cellValueMeta, SortOrder.Ascending);
+	}
+	protected isOrderedDescending(cellValueMeta: TableColumnValueMeta): boolean {
+		return this.isOrdered(cellValueMeta, SortOrder.Descending);
+	}
+	private isOrdered(cellValueMeta: TableColumnValueMeta, sortOrder: SortOrder): boolean {
+		var sortedOptions = this.lazyLoadingRequest.getSortedOptions();
+		if (!sortedOptions) { return false; }
+		return sortedOptions.objectPropertyId === cellValueMeta.objectPropertyId && sortedOptions.sortOrder === sortOrder;
+	}
+	protected sortBy(cellValueMeta: TableColumnValueMeta) {
+		if (!cellValueMeta.isSortable) { return; }
+		var sortOptions: SortOptions = { objectPropertyId: cellValueMeta.objectPropertyId, sortOrder: SortOrder.Ascending };
+		if (this.isOrderedAscending(cellValueMeta)) {
+			sortOptions.sortOrder = SortOrder.Descending;
+		}
+		this.lazyLoadingRequest.sort(sortOptions);
 	}
 
 	protected isPercentage(valueMeta: TableColumnValueMeta): boolean {
@@ -278,7 +316,7 @@ export class LazyLoadingTableComponent<T> {
 		return classes;
 	}
 
-	public getCellClasses(columnValueMeta: TableColumnValueMeta, isCollapsed: boolean): string {
+	public getCellClasses(columnValueMeta: TableColumnValueMeta, isCollapsed: boolean, item?: T): string {
 		var classes = '';
 
 		if (isCollapsed) {
@@ -286,6 +324,12 @@ export class LazyLoadingTableComponent<T> {
 		}
 		else {
 			classes += columnValueMeta.normalStyle;
+		}
+		if (item && this._cellClassGenerator) {
+			var classToAppend: string = this._cellClassGenerator(item, columnValueMeta);
+			if (_.isString(classToAppend) && classToAppend.length > 0) {
+				classes += " " + classToAppend;
+			}
 		}
 		return classes;
 	}
@@ -300,7 +344,7 @@ export class LazyLoadingTableComponent<T> {
 		if (this._rowClassGenerator) {
 			var classToAppend: string = this._rowClassGenerator(item);
 			if (_.isString(classToAppend) && classToAppend.length > 0) {
-				classes += " " + this._rowClassGenerator(item);
+				classes += " " + classToAppend;
 			}
 		}
 		return classes;
@@ -308,6 +352,9 @@ export class LazyLoadingTableComponent<T> {
 
 	public attachCustomRowClassGenerator(rowClassGenerator: { (item: T): string }) {
 		this._rowClassGenerator = rowClassGenerator;
+	}
+	public attachCustomCellClassGenerator(cellClassGenerator: { (item: T, columnValueMeta: TableColumnValueMeta): string }) {
+		this._cellClassGenerator = cellClassGenerator;
 	}
 
 	public isUndefinedOrNull(value: any): boolean {

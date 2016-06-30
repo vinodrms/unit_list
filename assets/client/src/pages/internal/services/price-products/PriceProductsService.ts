@@ -29,7 +29,6 @@ export class PriceProductsService extends ALazyLoadRequestService<PriceProductVM
 	}
 
 	protected parsePageDataCore(pageDataObject: Object): Observable<PriceProductVM[]> {
-		this._appContext.thTranslation
 		return Observable.combineLatest(
 			this._taxService.getTaxContainerDO(),
 			this._roomCategoriesService.getRoomCategoryList(),

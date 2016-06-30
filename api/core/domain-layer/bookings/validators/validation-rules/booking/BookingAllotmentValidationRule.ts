@@ -2,7 +2,6 @@ import {ThError} from '../../../../../utils/th-responses/ThError';
 import {ThStatusCode} from '../../../../../utils/th-responses/ThResponse';
 import {AppContext} from '../../../../../utils/AppContext';
 import {SessionContext} from '../../../../../utils/SessionContext';
-import {ThUtils} from '../../../../../utils/ThUtils';
 import {ABusinessValidationRule} from '../../../../common/validation-rules/ABusinessValidationRule';
 import {RoomDO} from '../../../../../data-layer/rooms/data-objects/RoomDO';
 import {BookingDO} from '../../../../../data-layer/bookings/data-objects/BookingDO';
@@ -23,14 +22,11 @@ export interface BookingAllotmentValidationParams {
 }
 
 export class BookingAllotmentValidationRule extends ABusinessValidationRule<BookingDO> {
-    private _thUtils: ThUtils;
-
     constructor(private _appContext: AppContext, private _sessionContext: SessionContext, private _validationParams: BookingAllotmentValidationParams) {
         super({
             statusCode: ThStatusCode.BookingValidationError,
             errorMessage: "error validating booking"
         });
-        this._thUtils = new ThUtils();
     }
 
     protected isValidOnCore(resolve: { (result: BookingDO): void }, reject: { (err: ThError): void }, businessObject: BookingDO) {

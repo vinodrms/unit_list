@@ -70,6 +70,7 @@ export class CustomerItemUpdateStrategy implements ICustomerItemActionStrategy {
 		var allotmentRepo = this._appContext.getRepositoryFactory().getAllotmentRepository();
 		allotmentRepo.getAllotmentList({ hotelId: this._sessionContext.sessionDO.hotel.id }, {
 			priceProductIdList: deletedPriceProductIdList,
+			customerId: this._loadedCustomer.id,
 			status: AllotmentStatus.Active
 		}).then((searchResult: AllotmentSearchResultRepoDO) => {
 			if (searchResult.allotmentList.length > 0) {

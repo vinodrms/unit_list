@@ -12,12 +12,12 @@ export class EagerAllotmentsService {
 	constructor(private _appContext: AppContext) {
 	}
 
-	public getAllotments(allotmentStatus: AllotmentStatus, priceProductIdList: string[]): Observable<AllotmentsDO> {
+	public getAllotments(allotmentStatus: AllotmentStatus, customerId: string, priceProductIdList?: string[]): Observable<AllotmentsDO> {
 		if (!priceProductIdList || priceProductIdList.length == 0) {
 			return this.getEmptyResult();
 		}
 		return this._appContext.thHttp.post(ThServerApi.Allotments,
-			{ searchCriteria: { priceProductIdList: priceProductIdList, status: allotmentStatus } }).map((resultObject: Object) => {
+			{ searchCriteria: { customerId: customerId, priceProductIdList: priceProductIdList, status: allotmentStatus } }).map((resultObject: Object) => {
 				var allotments = new AllotmentsDO();
 				allotments.buildFromObject(resultObject);
 				return allotments;

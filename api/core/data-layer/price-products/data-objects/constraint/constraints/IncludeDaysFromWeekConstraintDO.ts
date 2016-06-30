@@ -5,6 +5,8 @@ import {PriceProductConstraintType, PriceProductConstraintDataDO, IPriceProductC
 import {ThUtils} from '../../../../../utils/ThUtils';
 import {ConstraintUtils} from './utils/ConstraintUtils';
 
+import _ = require('underscore');
+
 export class IncludeDaysFromWeekConstraintDO extends BaseDO implements IPriceProductConstraint {
 	daysFromWeek: ISOWeekDay[];
 
@@ -14,9 +16,18 @@ export class IncludeDaysFromWeekConstraintDO extends BaseDO implements IPricePro
 
 	public appliesOn(data: PriceProductConstraintDataDO): boolean {
 		var uniqueDaysFromWeekFromBooking: ISOWeekDay[] = data.indexedBookingInterval.uniqueBookingISOWeekDayList;
-		var thUtils = new ThUtils();
-		return thUtils.firstArrayIncludedInSecond(this.daysFromWeek, uniqueDaysFromWeekFromBooking);
+		var isValid: boolean = true;
+		_.forEach(uniqueDaysFromWeekFromBooking, (isoWeekDayFromBooking: ISOWeekDay) => {
+			if (!this.containsDayFromWeek(isoWeekDayFromBooking)) {
+				isValid = false;
+			}
+		});
+		return isValid;
 	}
+	private containsDayFromWeek(isoWeekDay: ISOWeekDay): boolean {
+		return _.contains(this.daysFromWeek, isoWeekDay);
+	}
+
 	public getValueDisplayString(thTranslation: ThTranslation): string {
 		var constraintUtils = new ConstraintUtils(thTranslation);
 		return thTranslation.translate("Must Include %daysFromWeek%", { daysFromWeek: constraintUtils.getDaysFromWeekDisplayString(this.daysFromWeek) });

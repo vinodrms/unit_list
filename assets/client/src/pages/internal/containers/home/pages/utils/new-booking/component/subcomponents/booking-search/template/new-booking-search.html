@@ -2,11 +2,13 @@
 	<div class="col-xs-7 full-height right-margin booking-search-container">
 		<div class="row booking-search-inputs" customScroll>
 			<booking-search-parameters
+				[isSearching]="isSearching"
 				(onBookingSearch)="searchBookings($event)">
 			</booking-search-parameters>
 		</div>
 		<div class="row booking-search-results">
-			
+			<lazy-loading-table (onAddExistingItem)="addBookingVMInCart($event)">
+			</lazy-loading-table>
 		</div>
 	</div>
 	<div class="col-xs-5 full-height">

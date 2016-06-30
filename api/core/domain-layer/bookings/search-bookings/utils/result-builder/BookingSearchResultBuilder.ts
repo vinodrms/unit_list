@@ -46,16 +46,17 @@ export class BookingSearchResultBuilder {
     }
 
     private buildCore(resolve: { (result: BookingSearchResult): void }, reject: { (err: ThError): void }) {
-        var priceProductList = this._builderParams.bookingSearchDependencies.getMergedPriceProductList();
-        var priceProductsContainer = new PriceProductsContainer(priceProductList);
-
         var searchResult = new BookingSearchResult();
         searchResult.customer = this._builderParams.bookingSearchDependencies.customer;
         searchResult.searchParameters = this.buildSearchParameters();
-
-        searchResult.roomCategoryItemList = this.buildRoomCategoryItemList(priceProductsContainer);
         searchResult.allotmentItemList = this.buildAllotmentItemList();
-        searchResult.priceProductItemList = this.buildPriceProductItemList(priceProductsContainer);
+
+        var priceProductsContainer = new PriceProductsContainer(this._builderParams.bookingSearchDependencies.priceProductList);
+        searchResult.roomCategoryItemList = this.buildRoomCategoryItemList(priceProductsContainer);
+
+        var mergedPriceProductList = this._builderParams.bookingSearchDependencies.getMergedPriceProductList();
+        var mergedPriceProductsContainer = new PriceProductsContainer(mergedPriceProductList);
+        searchResult.priceProductItemList = this.buildPriceProductItemList(mergedPriceProductsContainer);
 
         resolve(searchResult);
     }

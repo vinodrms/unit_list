@@ -21,7 +21,7 @@
 		<div class="col-xs-4 col-md-4" *ngIf="!isCollapsed">
 		</div>
 		<div class="col-xs-4 col-md-4" *ngIf="!isCollapsed">
-			<div class="table-select-items pull-right">
+			<div class="table-select-items pull-right" *ngIf="showPagination()">
 				<label>{{ 'Show' | translate }}</label>
 				<div class="no-padding">
 					<select class="form-control" [ngModel]="paginationIndex.numOfItemsPerPage" (ngModelChange)="didChangeNumOfItemsPerPage($event)">
@@ -38,10 +38,16 @@
 		<thead>
 			<tr>
 				<th *ngFor="let columnMeta of columnMetaList" [ngClass]="isCollapsed? columnMeta.valueMeta.collapsedStyle : columnMeta.valueMeta.normalStyle"
-					title="{{ columnMeta.displayName | translate }}">
+					title="{{ columnMeta.displayName | translate }}"
+					(click)="sortBy(columnMeta.valueMeta)">
 					{{ columnMeta.displayName | translate }}
+					<span *ngIf="columnMeta.valueMeta.isSortable" class="lazy-loading-table-sort">
+						<i class="fa fa-sort" *ngIf="isNotOrdered(columnMeta.valueMeta)"></i>
+						<i class="fa fa-sort-desc" *ngIf="isOrderedAscending(columnMeta.valueMeta)"></i>
+						<i class="fa fa-sort-asc" *ngIf="isOrderedDescending(columnMeta.valueMeta)"></i>
+					</span>
 				</th>
-				<th *ngIf="tableOptions.canCopy||tableOptions.canEdit||tableOptions.canDelete" [ngClass]="{'up-col-10p': !isCollapsed, 'up-col-30p': isCollapsed}">
+				<th *ngIf="tableOptions.showRowActionsCell()" [ngClass]="tableOptions.getRowActionsCellClass(isCollapsed)">
 				</th>
 			</tr>
 		</thead>
@@ -49,7 +55,7 @@
 		<tbody customScroll>
 			<tr *ngFor="let item of itemList" [ngClass]="getRowClasses(item)">
 				<td *ngFor="let columnMeta of columnMetaList" (click)="(tableOptions.canSelect || tableOptions.canMultiSelect) && didSelectItem(item)"
-					[ngClass]="getCellClasses(columnMeta.valueMeta, isCollapsed)">
+					[ngClass]="getCellClasses(columnMeta.valueMeta, isCollapsed, item)">
 					<span *ngIf="isPercentage(columnMeta.valueMeta)">
 									{{ getItemValue(item, columnMeta.valueMeta) | percentage }}
 								</span>
@@ -75,7 +81,7 @@
 									{{ getItemValue(item, columnMeta.valueMeta).noAdults }} <span class="unitpal-font">{{columnMeta.valueMeta.fonts.adult}}</span>					{{ getItemValue(item, columnMeta.valueMeta).noChildren }} <span class="unitpal-font">{{columnMeta.valueMeta.fonts.child}}</span>					{{ getItemValue(item, columnMeta.valueMeta).noBabies }} <span class="unitpal-font">{{columnMeta.valueMeta.fonts.baby}}</span>
 					</span>
 				</td>
-				<td *ngIf="tableOptions.canCopy||tableOptions.canEdit||tableOptions.canDelete" class="table-item-action-group" [ngClass]="{'up-col-10p': !isCollapsed, 'up-col-30p': isCollapsed}">
+				<td *ngIf="tableOptions.showRowActionsCell()" class="table-item-action-group" [ngClass]="tableOptions.getRowActionsCellClass(isCollapsed)">
 					<a class="btn btn-xs" *ngIf="tableOptions.canCopy" (click)="copyItem(item)" title="{{ 'Clone' | translate }}">
 						<i class="fa unitpal-font">[</i>
 					</a>
@@ -85,12 +91,15 @@
 					<a class="btn btn-xs" *ngIf="tableOptions.canDelete" (click)="deleteItem(item)" title="{{ 'Delete' | translate }}">
 						<i class="fa unitpal-font">\</i>
 					</a>
+					<a class="btn btn-xs" *ngIf="tableOptions.canAddExistingRow" (click)="addExistingItem(item)" title="{{ 'Add' | translate }}">
+						<i class="fa unitpal-font">'</i>
+					</a>
 				</td>
 			</tr>
 			<tr *ngIf="!noResultsExist()" class="lazy-loading-table-last-row">
 				<td *ngFor="let columnMeta of columnMetaList" [ngClass]="getCellClasses(columnMeta.valueMeta, isCollapsed)">
 				</td>
-				<td *ngIf="tableOptions.canCopy||tableOptions.canEdit||tableOptions.canDelete" class="table-item-action-group" [ngClass]="{'up-col-10p': !isCollapsed, 'up-col-30p': isCollapsed}">
+				<td *ngIf="tableOptions.showRowActionsCell()" class="table-item-action-group" [ngClass]="tableOptions.getRowActionsCellClass(isCollapsed)">
 
 				</td>
 			</tr>
@@ -103,16 +112,18 @@
 			</tr>
 		</tbody>
 
-		<tfoot>
+		<tfoot *ngIf="showTableFooter()">
 			<tr>
 				<td [ngClass]="{'left up-col-30p': !isCollapsed, 'left up-col-40p': isCollapsed}">
 					<th-button *ngIf="tableOptions.canAdd" [upFont]="'\''" [text]="'Add'" (onButtonClick)="addItem()"></th-button>
 				</td>
 				<td [ngClass]="{'up-col-30p': !isCollapsed, 'up-col-0p': isCollapsed}">
-					{{paginationIndex.pageNumberStat}}
+					<span *ngIf="showPagination()">
+						{{paginationIndex.pageNumberStat}}
+					</span>
 				</td>
 				<td class="right pagination-container" [ngClass]="{'up-col-50p': !isCollapsed, 'up-col-60p': isCollapsed}">
-					<ul class="list-inline">
+					<ul class="list-inline" *ngIf="showPagination()">
 						<li *ngFor="let index of paginationIndex.indexList" [ngClass]="{'other-page': !index.isSelected}">
 							<a (click)="updatePageNumber(index.pageNumber)">{{index.displayNumber}}</a>
 						</li>

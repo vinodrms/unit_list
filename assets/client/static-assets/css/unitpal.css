@@ -602,14 +602,6 @@ label small {
     margin: 0 auto;
 }
 
-/* Fixes Section */
-
-/* resolves the wrong padding on Chrome for input type="number" */
-input[type="number"].form-control {
-    padding-top: 0;
-}
-
-/* End Fixes Section */
 /* 3angle TECH */
 
 lazy-loading-table {
@@ -1289,6 +1281,11 @@ table.lazy-loading .th-pagination {
 .lazy-loading-table-filter {
     margin-bottom: 5px;    
 }
+.lazy-loading-table-sort {
+    float: right;
+    color: gray;
+    margin-right: 2px;
+}
 
 .up-col-0p {
     display: none !important;   
@@ -1826,7 +1823,14 @@ a.btn.btn-square:focus {
     height: 100%;
     font-size: 11px;
     overflow-y: hidden;
-    padding: 0 15px;
+    padding: 0px 15px 15px 15px;
+}
+.booking-search-results .overbooking {
+    color: #FF0000;
+    font-weight: bold;
+}
+.booking-search-results .allotment {
+    font-weight: bold;
 }
 .padding-right-0px {
     padding-right: 0px;

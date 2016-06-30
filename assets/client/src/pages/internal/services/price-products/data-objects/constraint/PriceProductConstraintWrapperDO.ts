@@ -20,11 +20,11 @@ export class PriceProductConstraintWrapperDO extends BaseDO implements IPricePro
 			this.constraintList.push(constraintDO);
 		});
 	}
-	
+
 	public isValid(): boolean {
 		var isValid = true;
 		_.forEach(this.constraintList, (constraint: PriceProductConstraintDO) => {
-			if(!constraint.isValid()) {
+			if (!constraint.isValid()) {
 				isValid = false;
 			}
 		});
@@ -32,5 +32,15 @@ export class PriceProductConstraintWrapperDO extends BaseDO implements IPricePro
 	}
 	public getValueDisplayString(thTranslation: ThTranslation): string {
 		return "";
+	}
+
+	public getBriefValueDisplayString(thTranslation: ThTranslation): string {
+		var briefValue = "";
+		_.forEach(this.constraintList, (constraint: PriceProductConstraintDO) => {
+			if (briefValue.length > 0) { briefValue = briefValue + " "; };
+			briefValue = briefValue + constraint.getBriefValueDisplayString(thTranslation);
+		});
+		if (briefValue.length == 0) { briefValue = "n/a"; };
+		return briefValue;
 	}
 }
