@@ -327,6 +327,8 @@ export enum ThStatusCode {
     BookingsValidatorConstraintsDoNotApply,
     BookingsValidatorAllotmentConstraintsDoNotApply,
     BookingsValidatorInvalidRoomCategoryId,
+    BookingsValidatorRoomCategoryNotFoundInActiveInventory,
+    BookingsValidatorInsufficientRoomCategoryCapacity,
     BookingsRepositoryProblemUpdatingBooking,
     BookingsRepositoryErrorUpdatingBooking,
     BookingsRepositoryErrorGettingList,
@@ -664,6 +666,8 @@ ThMessage[ThStatusCode.BookingsValidatorMissingPaymentGuarantee] = "You need to 
 ThMessage[ThStatusCode.BookingsValidatorConstraintsDoNotApply] = "The constraints from the price product do not apply for the booking.";
 ThMessage[ThStatusCode.BookingsValidatorAllotmentConstraintsDoNotApply] = "The constraints from the allotment do not apply for the booking.";
 ThMessage[ThStatusCode.BookingsValidatorInvalidRoomCategoryId] = "The room category is not valid.";
+ThMessage[ThStatusCode.BookingsValidatorRoomCategoryNotFoundInActiveInventory] = "The room category was not found in the active room inventory.";
+ThMessage[ThStatusCode.BookingsValidatorInsufficientRoomCategoryCapacity] = "Insufficient capacity to fit into the selected room category.";
 ThMessage[ThStatusCode.BookingsRepositoryProblemUpdatingBooking] = "Error updating booking. It is possible that someone else changed it at the same time. Please refresh the page and try again.";
 ThMessage[ThStatusCode.BookingsRepositoryErrorUpdatingBooking] = "Error updating booking.";
 ThMessage[ThStatusCode.BookingsRepositoryErrorGettingList] = "Error getting the list of bookings.";

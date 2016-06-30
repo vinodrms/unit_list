@@ -23,6 +23,8 @@ import {AllotmentsContainer} from '../../allotments/validators/results/Allotment
 import {AllotmentDO} from '../../../data-layer/allotments/data-objects/AllotmentDO';
 import {BookingItemsConverter, BookingItemsConverterParams} from './utils/BookingItemsConverter';
 import {NewBookingsValidationRules} from './utils/NewBookingsValidationRules';
+import {RoomCategoryStatsAggregator} from '../../room-categories/aggregators/RoomCategoryStatsAggregator';
+import {RoomCategoryStatsDO} from '../../../data-layer/room-categories/data-objects/RoomCategoryStatsDO';
 
 import _ = require('underscore');
 
@@ -35,6 +37,7 @@ export class AddBookingItems {
     private _loadedCustomersContainer: CustomersContainer;
     private _loadedAllotmentsContainer: AllotmentsContainer;
     private _loadedRoomList: RoomDO[];
+    private _loadedRoomCategoryStatsList: RoomCategoryStatsDO[];
 
     private _bookingList: BookingDO[];
 
@@ -100,6 +103,11 @@ export class AddBookingItems {
             }).then((roomSearchResult: RoomSearchResultRepoDO) => {
                 this._loadedRoomList = roomSearchResult.roomList;
 
+                var roomCategStatsAggregator = new RoomCategoryStatsAggregator(this._appContext);
+                return roomCategStatsAggregator.getRoomCategoryStatsList({ hotelId: this._sessionContext.sessionDO.hotel.id });
+            }).then((roomCategoryStatsList: RoomCategoryStatsDO[]) => {
+                this._loadedRoomCategoryStatsList = roomCategoryStatsList;
+
                 var bookingItemsConverter = new BookingItemsConverter(this._appContext, this._sessionContext, {
                     hotelDO: this._loadedHotel,
                     priceProductsContainer: this._loadedPriceProductsContainer
@@ -113,7 +121,8 @@ export class AddBookingItems {
                     priceProductsContainer: this._loadedPriceProductsContainer,
                     customersContainer: this._loadedCustomersContainer,
                     allotmentsContainer: this._loadedAllotmentsContainer,
-                    roomList: this._loadedRoomList
+                    roomList: this._loadedRoomList,
+                    roomCategoryStatsList: this._loadedRoomCategoryStatsList
                 });
                 return newBookingValidationRules.validateBookingList(this._bookingList);
             }).then((validatedBookingList: BookingDO[]) => {

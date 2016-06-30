@@ -1,6 +1,7 @@
 import {ThLogger, ThLogLevel} from '../../../utils/logging/ThLogger';
 import {ThError} from '../../../utils/th-responses/ThError';
 import {ThStatusCode} from '../../../utils/th-responses/ThResponse';
+import {ThUtils} from '../../../utils/ThUtils';
 import {IBusinessValidationRule} from './IBusinessValidationRule';
 
 export interface BusinessValidationRuleError {
@@ -9,8 +10,10 @@ export interface BusinessValidationRuleError {
 }
 
 export abstract class ABusinessValidationRule<T> implements IBusinessValidationRule<T> {
+    protected _thUtils: ThUtils;
 
     constructor(private _defaultValidationRuleError: BusinessValidationRuleError) {
+        this._thUtils = new ThUtils();
     }
 
     public isValidOn(businessObject: T): Promise<T> {
