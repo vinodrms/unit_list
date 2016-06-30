@@ -171,6 +171,9 @@ export class LazyLoadingTableComponent<T> {
 	protected showTableFooter() {
 		return this.lazyLoadingRequest.showPagination() || this.tableOptions.canAdd;
 	}
+	protected getNoResultsPlaceholder() {
+		return this.tableMeta.noResultsPlaceholder || "No items to display";
+	}
 
 	protected isNotOrdered(cellValueMeta: TableColumnValueMeta): boolean {
 		var sortedOptions = this.lazyLoadingRequest.getSortedOptions();

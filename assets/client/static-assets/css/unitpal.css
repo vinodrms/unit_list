@@ -1735,6 +1735,9 @@ a.btn.btn-square:focus {
 .booking-search-results .allotment {
     font-weight: bold;
 }
+.booking-cart {
+    font-size: 11px;
+}
 .padding-right-0px {
     padding-right: 0px;
 }

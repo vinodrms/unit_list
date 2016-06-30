@@ -106,7 +106,7 @@
 			<tr *ngIf="noResultsExist()" class="lazy-loading-table-last-row">
 				<td class="up-col-100p">
 					<center>
-						{{ 'No items to display' | translate }}
+						{{ getNoResultsPlaceholder() | translate }}
 					</center>
 				</td>
 			</tr>

@@ -48,4 +48,5 @@ export interface LazyLoadTableMeta {
 	addButtonText?: string;
 	searchInputPlaceholder?: string;
 	autoSelectRows: boolean;
+	noResultsPlaceholder?: string;
 }

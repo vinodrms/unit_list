@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {LazyLoadTableMeta, TableRowCommand, TableColumnMeta, TablePropertyType, TableColumnValueMeta} from '../../../../../../../../../../../common/utils/components/lazy-loading/utils/LazyLoadTableMeta';
-import {BookingResultVM} from '../../../../services/search/view-models/BookingResultVM';
+import {BookingItemVM} from '../../../../services/search/view-models/BookingItemVM';
 
 @Injectable()
 export class BookingSearchTableMetaBuilderService {
@@ -9,7 +9,7 @@ export class BookingSearchTableMetaBuilderService {
 
     constructor() { }
 
-    public buildLazyLoadTableMeta(): LazyLoadTableMeta {
+    public buildSearchResultsTableMeta(): LazyLoadTableMeta {
         return {
             supportedRowCommandList: [TableRowCommand.AddExistingRow],
             rowIdPropertySelector: "uniqueId",
@@ -38,7 +38,7 @@ export class BookingSearchTableMetaBuilderService {
                     }
                 },
                 {
-                    displayName: "Capacity",
+                    displayName: "Max Cap",
                     valueMeta: {
                         objectPropertyId: "roomCapacity",
                         propertyType: TablePropertyType.CapacityType,
@@ -103,11 +103,66 @@ export class BookingSearchTableMetaBuilderService {
             ]
         }
     }
-    public customCellClassGenerator(bookingResult: BookingResultVM, columnValueMeta: TableColumnValueMeta): string {
-        if (columnValueMeta.objectPropertyId === 'noAvailableRooms' && bookingResult.noAvailableRooms <= 0) {
+    public buildBookingCartTableMeta(): LazyLoadTableMeta {
+        return {
+            supportedRowCommandList: [],
+            rowIdPropertySelector: "uniqueId",
+            addButtonText: "",
+            autoSelectRows: false,
+            noResultsPlaceholder: "Add at least one price product in the cart to continue",
+            columnMetaList: [
+                {
+                    displayName: "Price Product",
+                    valueMeta: {
+                        objectPropertyId: "priceProductName",
+                        propertyType: TablePropertyType.NotesType,
+                        showInCollapsedView: true,
+                        normalStyle: "up-col-35p left",
+                        collapsedStyle: "up-col-70p left"
+                    }
+                },
+                {
+                    displayName: "Room",
+                    valueMeta: {
+                        objectPropertyId: "roomCategoryName",
+                        propertyType: TablePropertyType.NotesType,
+                        showInCollapsedView: false,
+                        normalStyle: "up-col-25p left"
+                    }
+                },
+                {
+                    displayName: "Capacity",
+                    valueMeta: {
+                        objectPropertyId: "bookingCapacity",
+                        propertyType: TablePropertyType.CapacityType,
+                        fonts: {
+                            child: ";",
+                            adult: ":",
+                            baby: "B"
+                        },
+                        showInCollapsedView: false,
+                        normalStyle: "up-col-15p center"
+                    }
+                },
+                {
+                    displayName: "Price",
+                    valueMeta: {
+                        objectPropertyId: "totalPriceString",
+                        propertyType: TablePropertyType.StringType,
+                        showInCollapsedView: false,
+                        normalStyle: "up-col-15p center selectable-row"
+                    }
+                }
+            ]
+        }
+    }
+
+
+    public customCellClassGenerator(bookingItem: BookingItemVM, columnValueMeta: TableColumnValueMeta): string {
+        if (columnValueMeta.objectPropertyId === 'noAvailableRooms' && bookingItem.noAvailableRooms <= 0) {
             return BookingSearchTableMetaBuilderService.OverbookingClass;
         }
-        if (columnValueMeta.objectPropertyId === 'noAvailableAllotmentsString' && bookingResult.noAvailableAllotments > 0) {
+        if (columnValueMeta.objectPropertyId === 'noAvailableAllotmentsString' && bookingItem.noAvailableAllotments > 0) {
             return BookingSearchTableMetaBuilderService.AvailableAllotmentClass;
         }
         return "";

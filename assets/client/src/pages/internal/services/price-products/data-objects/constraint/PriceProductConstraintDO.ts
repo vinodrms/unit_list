@@ -2,8 +2,9 @@ import {BaseDO} from '../../../../../../common/base/BaseDO';
 import {PriceProductConstraintType, IPriceProductConstraint} from './IPriceProductConstraint';
 import {PriceProductConstraintFactory} from './PriceProductConstraintFactory';
 import {ThTranslation} from '../../../../../../common/utils/localization/ThTranslation';
+import {IPriceProductValidationRule, PriceProductValidationRuleDataDO, PriceProductValidationRuleResult} from './validation/IPriceProductValidationRule';
 
-export class PriceProductConstraintDO extends BaseDO implements IPriceProductConstraint {
+export class PriceProductConstraintDO extends BaseDO implements IPriceProductConstraint, IPriceProductValidationRule {
 	type: PriceProductConstraintType;
 	constraint: IPriceProductConstraint;
 
@@ -28,5 +29,11 @@ export class PriceProductConstraintDO extends BaseDO implements IPriceProductCon
 		var constraintFactory = new PriceProductConstraintFactory();
 		var constraintMeta = constraintFactory.getPriceProductConstraintMetaByType(this.type);
 		return thTranslation.translate(constraintMeta.brief) + " " + this.constraint.getBriefValueDisplayString(thTranslation);
+	}
+
+	public appliesOn(data: PriceProductValidationRuleDataDO): PriceProductValidationRuleResult {
+		var constraintFactory = new PriceProductConstraintFactory();
+		var constraintRule = constraintFactory.getValidationRuleByType(this.type, this.constraint);
+		return constraintRule.appliesOn(data);
 	}
 }

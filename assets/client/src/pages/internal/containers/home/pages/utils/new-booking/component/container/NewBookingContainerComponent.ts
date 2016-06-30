@@ -5,6 +5,8 @@ import {TranslationPipe} from '../../../../../../../../../common/utils/localizat
 import {SETTINGS_PROVIDERS} from '../../../../../../../services/settings/SettingsProviders';
 import {HotelService} from '../../../../../../../services/hotel/HotelService';
 import {HotelAggregatorService} from '../../../../../../../services/hotel/HotelAggregatorService';
+import {RoomCategoriesService} from '../../../../../../../services/room-categories/RoomCategoriesService';
+import {InMemoryBookingService} from '../../services/search/InMemoryBookingService';
 
 import {BookingStepType} from '../subcomponents/utils/BookingStepType';
 import {BookingSearchStepService} from '../subcomponents/booking-search/services/BookingSearchStepService';
@@ -19,9 +21,9 @@ import {BookingCustomerRegisterComponent} from '../subcomponents/booking-custome
 @Component({
 	selector: 'new-booking-container',
 	templateUrl: '/client/src/pages/internal/containers/home/pages/utils/new-booking/component/container/template/new-booking-container.html',
-	providers: [SETTINGS_PROVIDERS, HotelService, HotelAggregatorService,
+	providers: [SETTINGS_PROVIDERS, HotelService, HotelAggregatorService, RoomCategoriesService,
 		BookingSearchStepService, BookingFillDetailsStepService, BookingCustomerRegisterStepService,
-		BookingControllerService],
+		BookingControllerService, InMemoryBookingService],
 	directives: [NewBookingSearchComponent, NewBookingFillDetailsComponent, BookingCustomerRegisterComponent],
 	pipes: [TranslationPipe]
 })

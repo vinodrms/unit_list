@@ -29,4 +29,14 @@ export class BookingSearchParams {
     public areValid(): boolean {
         return this.validNoAdults() && this.validNoChildren() && this.validNoBabies();
     }
+
+    public buildPrototype(): BookingSearchParams {
+        var bookingSearchParams = new BookingSearchParams();
+        bookingSearchParams.customerId = this.customerId;
+        bookingSearchParams.interval = new ThDateIntervalDO();
+        bookingSearchParams.interval.buildFromObject(this.interval);
+        bookingSearchParams.configCapacity = new ConfigCapacityDO();
+        bookingSearchParams.configCapacity.buildFromObject(this.configCapacity);
+        return bookingSearchParams;
+    }
 }

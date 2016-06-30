@@ -1,7 +1,9 @@
 import {ThTranslation} from '../../../../../../../../../../common/utils/localization/ThTranslation';
 import {CurrencyDO} from '../../../../../../../../services/common/data-objects/currency/CurrencyDO';
+import {ConfigCapacityDO} from '../../../../../../../../services/common/data-objects/bed-config/ConfigCapacityDO';
+import {ThDateIntervalDO} from '../../../../../../../../services/common/data-objects/th-dates/ThDateIntervalDO';
 import {BookingSearchResultDO} from '../data-objects/BookingSearchResultDO';
-import {BookingResultVM} from '../view-models/BookingResultVM';
+import {BookingItemVM} from '../view-models/BookingItemVM';
 import {RoomCategoryItemDO} from '../data-objects/room-category-item/RoomCategoryItemDO';
 import {AllotmentItemDO} from '../data-objects/allotment-item/AllotmentItemDO';
 import {PriceProductItemDO} from '../data-objects/price-product-item/PriceProductItemDO';
@@ -12,16 +14,16 @@ export class BookingViewModelConverter {
 
     constructor(private _thTranslation: ThTranslation) { }
 
-    public convertSearchResultToVMList(bookingSearchResultDO: BookingSearchResultDO, bookingSearchParams: BookingSearchParams, currency: CurrencyDO): BookingResultVM[] {
-        var bookingResultVMList: BookingResultVM[] = [];
+    public convertSearchResultToVMList(bookingSearchResultDO: BookingSearchResultDO, bookingSearchParams: BookingSearchParams, currency: CurrencyDO): BookingItemVM[] {
+        var bookingItemVMList: BookingItemVM[] = [];
         _.forEach(bookingSearchResultDO.roomCategoryItemList, (roomCategoryItem: RoomCategoryItemDO) => {
-            bookingResultVMList = bookingResultVMList.concat(this.getBookingSearchResultForRoom(roomCategoryItem, bookingSearchResultDO, bookingSearchParams, currency));
+            bookingItemVMList = bookingItemVMList.concat(this.getBookingSearchResultForRoom(roomCategoryItem, bookingSearchResultDO, bookingSearchParams, currency));
         });
-        return bookingResultVMList;
+        return bookingItemVMList;
     }
 
-    private getBookingSearchResultForRoom(roomCategoryItem: RoomCategoryItemDO, bookingSearchResultDO: BookingSearchResultDO, bookingSearchParams: BookingSearchParams, currency: CurrencyDO): BookingResultVM[] {
-        var bookingResultVMList: BookingResultVM[] = [];
+    private getBookingSearchResultForRoom(roomCategoryItem: RoomCategoryItemDO, bookingSearchResultDO: BookingSearchResultDO, bookingSearchParams: BookingSearchParams, currency: CurrencyDO): BookingItemVM[] {
+        var bookingItemVMList: BookingItemVM[] = [];
 
         var addedPriceProductIdByRoomCateg: { [index: string]: string; } = {};
 
@@ -30,7 +32,7 @@ export class BookingViewModelConverter {
             if (allotmentItem.noOccupiedAllotments < allotmentItem.noTotalAllotments) {
                 var priceProductItem = bookingSearchResultDO.getPriceProductItemById(allotmentItem.priceProductId);
                 if (priceProductItem) {
-                    bookingResultVMList.push(this.createBookingResultVM(bookingSearchParams, roomCategoryItem, priceProductItem, currency, allotmentItem));
+                    bookingItemVMList.push(this.createBookingItemVM(bookingSearchParams, roomCategoryItem, priceProductItem, currency, allotmentItem));
                     addedPriceProductIdByRoomCateg[priceProductItem.priceProduct.id] = roomCategoryItem.stats.roomCategory.id;
                 }
             }
@@ -39,42 +41,49 @@ export class BookingViewModelConverter {
         _.forEach(priceProductItemList, (priceProductItem: PriceProductItemDO) => {
             if (!addedPriceProductIdByRoomCateg[priceProductItem.priceProduct.id]
                 || addedPriceProductIdByRoomCateg[priceProductItem.priceProduct.id] != roomCategoryItem.stats.roomCategory.id) {
-                bookingResultVMList.push(this.createBookingResultVM(bookingSearchParams, roomCategoryItem, priceProductItem, currency));
+                bookingItemVMList.push(this.createBookingItemVM(bookingSearchParams, roomCategoryItem, priceProductItem, currency));
                 addedPriceProductIdByRoomCateg[priceProductItem.priceProduct.id] = roomCategoryItem.stats.roomCategory.id;
             }
         });
 
-        return bookingResultVMList;
+        return bookingItemVMList;
     }
 
-    private createBookingResultVM(bookingSearchParams: BookingSearchParams, roomCategoryItem: RoomCategoryItemDO, priceProductItem: PriceProductItemDO, currency: CurrencyDO, allotmentItem?: AllotmentItemDO): BookingResultVM {
-        var bookingResultVM = new BookingResultVM();
-        bookingResultVM.transientBookingItem = new TransientBookingItem();
+    private createBookingItemVM(bookingSearchParams: BookingSearchParams, roomCategoryItem: RoomCategoryItemDO, priceProductItem: PriceProductItemDO, currency: CurrencyDO, allotmentItem?: AllotmentItemDO): BookingItemVM {
+        var bookingItemVM = new BookingItemVM();
+        bookingItemVM.transientBookingItem = new TransientBookingItem();
 
-        bookingResultVM.uniqueId = priceProductItem.priceProduct.id + roomCategoryItem.stats.roomCategory.id;
-        bookingResultVM.priceProductName = priceProductItem.priceProduct.name;
-        bookingResultVM.roomCategoryName = roomCategoryItem.stats.roomCategory.displayName;
-        bookingResultVM.roomCapacity = roomCategoryItem.stats.capacity.totalCapacity;
-        bookingResultVM.noAvailableRooms = roomCategoryItem.stats.noOfRooms - roomCategoryItem.noOccupiedRooms;
+        bookingItemVM.uniqueId = priceProductItem.priceProduct.id + roomCategoryItem.stats.roomCategory.id;
+        bookingItemVM.priceProductName = priceProductItem.priceProduct.name;
+        bookingItemVM.roomCategoryName = roomCategoryItem.stats.roomCategory.displayName;
+        bookingItemVM.roomCapacity = roomCategoryItem.stats.capacity.totalCapacity;
+        bookingItemVM.noAvailableRooms = roomCategoryItem.stats.noOfRooms - roomCategoryItem.noOccupiedRooms;
         if (!allotmentItem) {
-            bookingResultVM.noAvailableAllotmentsString = "n/a";
-            bookingResultVM.noAvailableAllotments = 0;
+            bookingItemVM.noAvailableAllotmentsString = "n/a";
+            bookingItemVM.noAvailableAllotments = 0;
         }
         else {
-            bookingResultVM.noAvailableAllotments = allotmentItem.noTotalAllotments - allotmentItem.noOccupiedAllotments;
-            bookingResultVM.noAvailableAllotmentsString = bookingResultVM.noAvailableAllotments + "";
-            bookingResultVM.transientBookingItem.allotmentId = allotmentItem.allotment.id;
+            bookingItemVM.noAvailableAllotments = allotmentItem.noTotalAllotments - allotmentItem.noOccupiedAllotments;
+            bookingItemVM.noAvailableAllotmentsString = bookingItemVM.noAvailableAllotments + "";
+            bookingItemVM.transientBookingItem.allotmentId = allotmentItem.allotment.id;
         }
-        bookingResultVM.totalPrice = priceProductItem.getPriceForRoomCategory(roomCategoryItem.stats.roomCategory.id);
-        bookingResultVM.totalPriceString = bookingResultVM.totalPrice + currency.nativeSymbol;
-        bookingResultVM.conditionsString = priceProductItem.priceProduct.conditions.getCancellationConditionsString(this._thTranslation);
-        bookingResultVM.constraintsString = priceProductItem.priceProduct.constraints.getBriefValueDisplayString(this._thTranslation);
+        bookingItemVM.totalPrice = priceProductItem.getPriceForRoomCategory(roomCategoryItem.stats.roomCategory.id);
+        bookingItemVM.totalPriceString = bookingItemVM.totalPrice + currency.nativeSymbol;
+        bookingItemVM.conditionsString = priceProductItem.priceProduct.conditions.getCancellationConditionsString(this._thTranslation);
+        bookingItemVM.constraintsString = priceProductItem.priceProduct.constraints.getBriefValueDisplayString(this._thTranslation);
 
-        bookingResultVM.transientBookingItem.configCapacity = bookingSearchParams.configCapacity;
-        bookingResultVM.transientBookingItem.interval = bookingSearchParams.interval;
-        bookingResultVM.transientBookingItem.roomCategoryId = roomCategoryItem.stats.roomCategory.id;
-        bookingResultVM.transientBookingItem.priceProductId = priceProductItem.priceProduct.id;
+        bookingItemVM.bookingCapacity = new ConfigCapacityDO();
+        bookingItemVM.bookingCapacity.buildFromObject(bookingSearchParams.configCapacity);
 
-        return bookingResultVM;
+        bookingItemVM.transientBookingItem.configCapacity = bookingItemVM.bookingCapacity;
+        bookingItemVM.transientBookingItem.interval = new ThDateIntervalDO();
+        bookingItemVM.transientBookingItem.interval.buildFromObject(bookingSearchParams.interval);
+
+        bookingItemVM.transientBookingItem.roomCategoryId = roomCategoryItem.stats.roomCategory.id;
+        bookingItemVM.transientBookingItem.priceProductId = priceProductItem.priceProduct.id;
+
+        bookingItemVM.priceProduct = priceProductItem.priceProduct;
+
+        return bookingItemVM;
     }
 }

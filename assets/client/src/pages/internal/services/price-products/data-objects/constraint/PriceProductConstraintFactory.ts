@@ -5,6 +5,9 @@ import {LeadDaysConstraintDO} from './constraints/LeadDaysConstraintDO';
 import {LengthOfStayConstraintDO} from './constraints/LengthOfStayConstraintDO';
 import {NumberOfRoomsConstraintDO} from './constraints/NumberOfRoomsConstraintDO';
 import {NumberOfAdultsConstraintDO} from './constraints/NumberOfAdultsConstraintDO';
+import {IPriceProductValidationRule} from './validation/IPriceProductValidationRule';
+import {GenericPriceProductValidationRuleStrategy} from './validation/GenericPriceProductValidationRuleStrategy';
+import {MinNoRoomsPriceProductValidationRuleStrategy} from './validation/MinNoRoomsPriceProductValidationRuleStrategy';
 
 export class PriceProductConstraintFactory {
 	public getConstraintDOByType(constraintType: PriceProductConstraintType): PriceProductConstraintDO {
@@ -94,6 +97,16 @@ export class PriceProductConstraintFactory {
 
 	public getPriceProductConstraintMetaByType(constraintType: PriceProductConstraintType): PriceProductConstraintMeta {
 		var constraintMetaList = this.getPriceProductConstraintMetaList();
-		return _.find(constraintMetaList, (constraintMeta: PriceProductConstraintMeta) => { return constraintMeta.constraintType === constraintType }); 
+		return _.find(constraintMetaList, (constraintMeta: PriceProductConstraintMeta) => { return constraintMeta.constraintType === constraintType });
+	}
+
+	public getValidationRuleByType(constraintType: PriceProductConstraintType, constraint: IPriceProductConstraint): IPriceProductValidationRule {
+		switch (constraintType) {
+			case PriceProductConstraintType.MinimumNumberOfRooms:
+				var minNoRoomsConstraint: NumberOfRoomsConstraintDO = <NumberOfRoomsConstraintDO>constraint;
+				return new MinNoRoomsPriceProductValidationRuleStrategy(minNoRoomsConstraint.noOfRooms);
+			default:
+				return new GenericPriceProductValidationRuleStrategy();
+		}
 	}
 }
