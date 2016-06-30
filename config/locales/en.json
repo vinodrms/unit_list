@@ -36,7 +36,29 @@
 	"Pay full stay": "Pay full stay",
 	"No penalty": "No penalty",
 	"Pay %percentage% % from booking": "Pay %percentage% % from booking",
-	"%noOfDays% days release": "%noOfDays% days release"
-
-
+	"%noOfDays% days release": "%noOfDays% days release",
+	"Booking Ref": "Booking Ref",
+	"Group Booking Ref": "Group Booking Ref",
+	"Booking Confirmation": "Booking Confirmation",
+	"Contact": "Contact",
+	"Address": "Address",
+	"Check-In": "Check-In",
+	"Check-Out": "Check-Out",
+	"Price": "Price",
+	"Room": "Room",
+	"room": "room",
+	"night(s)": "night(s)",
+	"Booked for": "Booked for",
+	"Bed size(s)": "Bed size(s)",
+	"Add-on-products": "Add-on-products",
+	"Breakast": "Breakast",
+	"Others": "Others",
+	"Guests": "Guests",
+	"Cancellation Policy": "Cancellation Policy",
+	"Constraints": "Constraints",
+	"the price includes": "the price includes",
+	"VAT": "VAT",
+	"%noAdults% adults, %noChildren% children, %noBabies% babies": "%noAdults% adults, %noChildren% children, %noBabies% babies",
+	"cm (wide)": "cm (wide)",
+	"n/a": "n/a"
 }

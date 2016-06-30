@@ -5,6 +5,7 @@ import {SendgridAccountActivationTemplate} from './templates/SendgridAccountActi
 import {SendgridEmptyTemplate} from './templates/SendgridEmptyTemplate';
 import {SendgridRequestResetPasswordTemplate} from './templates/SendgridRequestResetPasswordTemplate';
 import {SendgridPasswordWasResetTemplate} from './templates/SendgridPasswordWasResetTemplate';
+import {SendgridBookingConfirmationTemplate} from './templates/SendgridBookingConfirmationTemplate';
 
 export class SendgridTemplateFactory {
     public getTemplate(emailTemplate: BaseEmailTemplateDO): ISendgridTemplate {
@@ -15,6 +16,8 @@ export class SendgridTemplateFactory {
 				return new SendgridRequestResetPasswordTemplate(<any>emailTemplate);
 			case EmailTemplateTypes.AccountPasswordWasReset:
 				return new SendgridPasswordWasResetTemplate(<any>emailTemplate);
+            case EmailTemplateTypes.BookingConfirmation: 
+                return new SendgridBookingConfirmationTemplate(<any>emailTemplate);
             default:
                 return new SendgridEmptyTemplate(emailTemplate);
         }

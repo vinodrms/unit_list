@@ -115,9 +115,6 @@ module.exports.routes = {
 	'POST /api/bookings/search': 'BookingsController.searchBookings',
 	'POST /api/bookings/add': 'BookingsController.addBookings',
 
-	'GET /api/reports/booking-confirmation': 'ReportsController.generateBookingConfirmationPage',
-	'GET /api/reports/invoice': 'ReportsController.generateInvoicePage',
-	'GET /api/reports/test': 'ReportsController.testReportService',
 
 	/*Front End Views	*/
 	'GET /home*': {

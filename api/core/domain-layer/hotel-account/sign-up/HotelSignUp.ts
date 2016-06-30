@@ -60,8 +60,8 @@ export class HotelSignUp {
 			.then((bootstrapResult: boolean) => {
 				var activationEmailTemplateDO = this.getAccountActivationEmailTemplateDO();
 				var emailHeaderDO = this.getEmailHeaderDO();
-				var emailService: IEmailService = this._appContext.getServiceFactory().getEmailService(emailHeaderDO, activationEmailTemplateDO);
-				return emailService.sendEmail();
+				var emailService: IEmailService = this._appContext.getServiceFactory().getEmailService();
+				return emailService.sendEmail(emailHeaderDO, activationEmailTemplateDO);
 			})
 			.then((sendEmailResult: any) => {
 				resolve(this._savedHotel.userList[HotelSignUp.FirstUserIndex].accountActivationToken);
@@ -110,7 +110,7 @@ export class HotelSignUp {
 
 	private getEmailHeaderDO(): EmailHeaderDO {
 		return {
-			destinationEmail: this._signUpDO.email,
+			to: [this._signUpDO.email],
 			subject: "[UnitPal] Account Activation",
             attachments: []
 		};

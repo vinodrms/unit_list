@@ -15,14 +15,18 @@ export class PayerDO extends BaseDO {
     protected getPrimitivePropertyKeys(): string[] {
         return ["customerId", "priceToPay"];
     }
-    
+
     public buildFromObject(object: Object) {
-		super.buildFromObject(object);
-        
-        this.paymentMethod = new InvoicePaymentMethodDO();
-		this.paymentMethod.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "paymentMethod"));
-        
-        this.commissionSnapshot = new CommissionDO();
-        this.commissionSnapshot.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "commissionSnapshot"));
-    }   
+        super.buildFromObject(object);
+
+        if (this.getObjectPropertyEnsureUndefined(object, "paymentMethod") != null) {
+            this.paymentMethod = new InvoicePaymentMethodDO();
+            this.paymentMethod.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "paymentMethod"));
+        }
+
+        if (this.getObjectPropertyEnsureUndefined(object, "commissionSnapshot") != null) {
+            this.commissionSnapshot = new CommissionDO();
+            this.commissionSnapshot.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "commissionSnapshot"));
+        }
+    }
 }

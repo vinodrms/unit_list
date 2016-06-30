@@ -10,7 +10,7 @@ export class MongoInvoiceGroupsRepository extends MongoRepository implements IIn
     private _editRepository: MongoInvoiceGroupsEditOperationsRepository;
 
     constructor() {
-        var invoiceGroupsEntity = sails.model.invoicegroupsentity;
+        var invoiceGroupsEntity = sails.models.invoicegroupsentity;
         super(invoiceGroupsEntity);
 
         this._readRepository = new MongoInvoiceGroupsReadOperationsRepository(invoiceGroupsEntity);

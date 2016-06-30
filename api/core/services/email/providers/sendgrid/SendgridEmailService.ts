@@ -1,83 +1,48 @@
+import {UnitPalConfig} from '../../../../utils/environment/UnitPalConfig';
 import {ThLogger, ThLogLevel} from '../../../../utils/logging/ThLogger';
 import {ThError} from '../../../../utils/th-responses/ThError';
 import {ThStatusCode} from '../../../../utils/th-responses/ThResponse';
 import {AEmailService} from '../../AEmailService';
-import {SendgridTemplateFactory} from './SendgridTemplateFactory';
-
-import sendgrid = require("sendgrid");
-import _ = require("underscore");
+import {BaseEmailTemplateDO} from '../../data-objects/BaseEmailTemplateDO';
+import {EmailHeaderDO} from '../../IEmailService';
+import {SendgridMailObjectBuilder} from './SendgridMailObject';
 
 export class SendgridEmailService extends AEmailService {
+    private static SEND_MAIL_API_ENDPOINT = '/v3/mail/send';
+    private static SEND_MAIL_HTTP_METHOD = 'POST';
+    
+    private _emailProviderSettings: any;
+    private _sendgrid: any;
 
-    public sendEmail(): Promise<boolean> {
+    public sendEmail(emailHeaderDO: EmailHeaderDO, emailTemplate: BaseEmailTemplateDO): Promise<boolean> {
         return new Promise<boolean>((resolve: { (result: boolean): void }, reject: { (err: ThError): void }) => {
-            this.sendEmailCore(resolve, reject);
+            this.sendEmailCore(resolve, reject, emailHeaderDO, emailTemplate);
         });
     }
 
-    private sendEmailCore(resolve: { (result: boolean): void }, reject: { (err: ThError): void }) {
-        var server = this.initServer(sendgrid);
-        var message = this.buildEmailMessage(server);
-        this.trySendingEmail(server, message, resolve, reject);
-    }
-
-    private initServer(sendgrid: any): any {
-        var emailProviderSettings: any = this._unitPalConfig.getEmailProviderSettings();
-        return sendgrid(emailProviderSettings.apiKey);
-    }
-
-    private buildEmailMessage(server: any): any {
-        var templateFactory: SendgridTemplateFactory = new SendgridTemplateFactory();
-        var emailTemplate = templateFactory.getTemplate(this._emailTemplate);
-        var emailTemplateMetadata = emailTemplate.getTemplateMetadata();
-        var sendgridEmail = new server.Email(this.getSendgridEmailInitData());
-
-        for (var tag in emailTemplateMetadata.subs) {
-            sendgridEmail.addSubstitution(tag, emailTemplateMetadata.subs[tag]);
-        }
-
-        sendgridEmail.setFilters({
-            templates: {
-                settings: {
-                    enable: 1,
-                    template_id: emailTemplateMetadata.id
-                }
-            }
-        });
-
-        return sendgridEmail;
-    }
-
-    private getSendgridEmailInitData() {
-        var emailSettings: any = this._unitPalConfig.getEmailProviderSettings();
-
-        var sendgridEmailInitData = {
-            to: this._emailHeaderDO.destinationEmail,
-            from: emailSettings.from,
-            subject: this._emailHeaderDO.subject,
-            files: []
-        };
-
-        if (!_.isEmpty(this._emailHeaderDO.attachments)) {
-            _.each(this._emailHeaderDO.attachments, (filePath) => {
-                sendgridEmailInitData.files.push({
-                    path: filePath
-                });
-            });
-        }
-
-        return sendgridEmailInitData;
-    }
-
-    private trySendingEmail(server: any, message: Object, resolve: { (result: boolean): void }, reject: { (err: ThError): void }) {
-        server.send(message, ((err: Error, json) => {
-            if (err) {
-				var thError = new ThError(ThStatusCode.SendGridServiceErrorSendingEmail, err);
+    private sendEmailCore(resolve: { (result: boolean): void }, reject: { (err: ThError): void }, emailHeaderDO: EmailHeaderDO, emailTemplate: BaseEmailTemplateDO) {
+        this.init();
+        
+        var sendgridMailObject = new SendgridMailObjectBuilder(this._unitPalConfig, emailHeaderDO, emailTemplate);
+        var requestBody = sendgridMailObject.getSendgridMailObject().toJSON();
+        var request = this._sendgrid.emptyRequest();
+        request.method = SendgridEmailService.SEND_MAIL_HTTP_METHOD;
+        request.path = SendgridEmailService.SEND_MAIL_API_ENDPOINT;
+        request.body = requestBody;
+        
+        this._sendgrid.API(request, function (response) {
+            if (response.statusCode >= 400) {
+				var thError = new ThError(ThStatusCode.SendGridServiceErrorSendingEmail, response.body);
                 ThLogger.getInstance().logError(ThLogLevel.Error, "Error sending email", this._emailHeaderDO, thError);
                 reject(thError);
                 return;
             }
             resolve(true);
-        }));
+        });
+    }
+
+    private init() {
+        this._emailProviderSettings = this._unitPalConfig.getEmailProviderSettings();
+        this._sendgrid = require('sendgrid').SendGrid(this._emailProviderSettings.apiKey);
     }
 }

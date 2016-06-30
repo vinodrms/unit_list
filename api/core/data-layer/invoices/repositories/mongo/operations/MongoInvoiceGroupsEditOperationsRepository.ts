@@ -24,7 +24,7 @@ export class MongoInvoiceGroupsEditOperationsRepository extends MongoRepository 
         invoiceGroup.hotelId = invoiceGroupMeta.hotelId;
         invoiceGroup.versionId = 0;
         invoiceGroup.status = InvoiceGroupStatus.Active;
-
+        
         this.createDocument(invoiceGroup,
             (err: Error) => {
                 this.logAndReject(err, reject, { meta: invoiceGroupMeta, invoiceGroup: invoiceGroup }, ThStatusCode.InvoiceGroupsRepositoryErrorAddingInvoiceGroup);
