@@ -39,7 +39,7 @@ export class InvoicePriceCalculator {
     }
 
     private getFeeForInvoicePayment(): number {
-        this._customersContainer.getCustomerById();
+        // this._customersContainer.getCustomerById();
         
         return 0;
     }
