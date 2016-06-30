@@ -44,4 +44,7 @@ export class NewBookingSearchComponent extends BaseComponent {
                 this._appContext.toaster.error(error.message);
             });
 	}
+	public addBookingVMInCart(bookingResultVM: BookingResultVM) {
+		// TODO
+	}
 }

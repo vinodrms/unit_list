@@ -64,6 +64,12 @@ export class LazyLoadingTableComponent<T> {
 		this.onEdit.next(item);
 	}
 
+	@Output() protected onAddExistingItem = new EventEmitter();
+	protected addExistingItem(item: T) {
+		this.deselectItemIfNecessary(item);
+		this.onAddExistingItem.next(item);
+	}
+
 	@Output() protected onSelect = new EventEmitter();
 	@Output() protected onMultiSelect = new EventEmitter();
 

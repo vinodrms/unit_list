@@ -47,7 +47,7 @@
 						<i class="fa fa-sort-asc" *ngIf="isOrderedDescending(columnMeta.valueMeta)"></i>
 					</span>
 				</th>
-				<th *ngIf="tableOptions.canCopy||tableOptions.canEdit||tableOptions.canDelete" [ngClass]="{'up-col-10p': !isCollapsed, 'up-col-30p': isCollapsed}">
+				<th *ngIf="tableOptions.showRowActionsCell()" [ngClass]="tableOptions.getRowActionsCellClass(isCollapsed)">
 				</th>
 			</tr>
 		</thead>
@@ -81,7 +81,7 @@
 									{{ getItemValue(item, columnMeta.valueMeta).noAdults }} <span class="unitpal-font">{{columnMeta.valueMeta.fonts.adult}}</span>					{{ getItemValue(item, columnMeta.valueMeta).noChildren }} <span class="unitpal-font">{{columnMeta.valueMeta.fonts.child}}</span>					{{ getItemValue(item, columnMeta.valueMeta).noBabies }} <span class="unitpal-font">{{columnMeta.valueMeta.fonts.baby}}</span>
 					</span>
 				</td>
-				<td *ngIf="tableOptions.canCopy||tableOptions.canEdit||tableOptions.canDelete" class="table-item-action-group" [ngClass]="{'up-col-10p': !isCollapsed, 'up-col-30p': isCollapsed}">
+				<td *ngIf="tableOptions.showRowActionsCell()" class="table-item-action-group" [ngClass]="tableOptions.getRowActionsCellClass(isCollapsed)">
 					<a class="btn btn-xs" *ngIf="tableOptions.canCopy" (click)="copyItem(item)" title="{{ 'Clone' | translate }}">
 						<i class="fa unitpal-font">[</i>
 					</a>
@@ -91,12 +91,15 @@
 					<a class="btn btn-xs" *ngIf="tableOptions.canDelete" (click)="deleteItem(item)" title="{{ 'Delete' | translate }}">
 						<i class="fa unitpal-font">\</i>
 					</a>
+					<a class="btn btn-xs" *ngIf="tableOptions.canAddExistingRow" (click)="addExistingItem(item)" title="{{ 'Add' | translate }}">
+						<i class="fa unitpal-font">'</i>
+					</a>
 				</td>
 			</tr>
 			<tr *ngIf="!noResultsExist()" class="lazy-loading-table-last-row">
 				<td *ngFor="let columnMeta of columnMetaList" [ngClass]="getCellClasses(columnMeta.valueMeta, isCollapsed)">
 				</td>
-				<td *ngIf="tableOptions.canCopy||tableOptions.canEdit||tableOptions.canDelete" class="table-item-action-group" [ngClass]="{'up-col-10p': !isCollapsed, 'up-col-30p': isCollapsed}">
+				<td *ngIf="tableOptions.showRowActionsCell()" class="table-item-action-group" [ngClass]="tableOptions.getRowActionsCellClass(isCollapsed)">
 
 				</td>
 			</tr>

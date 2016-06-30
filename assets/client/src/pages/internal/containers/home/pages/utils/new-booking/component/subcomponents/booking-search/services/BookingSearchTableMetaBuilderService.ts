@@ -4,11 +4,14 @@ import {BookingResultVM} from '../../../../services/search/view-models/BookingRe
 
 @Injectable()
 export class BookingSearchTableMetaBuilderService {
+    public static OverbookingClass = "overbooking";
+    public static AvailableAllotmentClass = "allotment";
+
     constructor() { }
 
     public buildLazyLoadTableMeta(): LazyLoadTableMeta {
         return {
-            supportedRowCommandList: [],
+            supportedRowCommandList: [TableRowCommand.AddExistingRow],
             rowIdPropertySelector: "uniqueId",
             addButtonText: "",
             autoSelectRows: false,
@@ -102,10 +105,10 @@ export class BookingSearchTableMetaBuilderService {
     }
     public customCellClassGenerator(bookingResult: BookingResultVM, columnValueMeta: TableColumnValueMeta): string {
         if (columnValueMeta.objectPropertyId === 'noAvailableRooms' && bookingResult.noAvailableRooms <= 0) {
-            return "overbooking";
+            return BookingSearchTableMetaBuilderService.OverbookingClass;
         }
         if (columnValueMeta.objectPropertyId === 'noAvailableAllotmentsString' && bookingResult.noAvailableAllotments > 0) {
-            return "allotment";
+            return BookingSearchTableMetaBuilderService.AvailableAllotmentClass;
         }
         return "";
     }
