@@ -103,8 +103,8 @@ export class AddBookingItems {
             }).then((roomSearchResult: RoomSearchResultRepoDO) => {
                 this._loadedRoomList = roomSearchResult.roomList;
 
-                var roomCategStatsAggregator = new RoomCategoryStatsAggregator(this._appContext);
-                return roomCategStatsAggregator.getRoomCategoryStatsList({ hotelId: this._sessionContext.sessionDO.hotel.id });
+                var roomCategStatsAggregator = new RoomCategoryStatsAggregator(this._appContext, this._sessionContext);
+                return roomCategStatsAggregator.getRoomCategoryStatsList();
             }).then((roomCategoryStatsList: RoomCategoryStatsDO[]) => {
                 this._loadedRoomCategoryStatsList = roomCategoryStatsList;
 

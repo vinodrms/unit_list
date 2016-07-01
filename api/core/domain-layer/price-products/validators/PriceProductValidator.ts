@@ -44,8 +44,8 @@ export class PriceProductValidator {
 				return addOnProductIdValidator.validateAddOnProductIdList(this._priceProduct.addOnProductIdList);
 			})
 			.then((addOnProductValidationResult: AddOnProductsContainer) => {
-				var roomAggregator = new RoomCategoryStatsAggregator(this._appContext);
-				return roomAggregator.getUsedRoomCategoryList({ hotelId: this._sessionContext.sessionDO.hotel.id });
+				var roomAggregator = new RoomCategoryStatsAggregator(this._appContext, this._sessionContext);
+				return roomAggregator.getUsedRoomCategoryList();
 			})
 			.then((usedRoomCategoryList: RoomCategoryDO[]) => {
 				var validRoomCategoryIdList: string[] = this.getRoomCategoryIdList(usedRoomCategoryList);
@@ -54,8 +54,8 @@ export class PriceProductValidator {
 					ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Invalid room category id list", this._priceProduct, thError);
 					throw thError;
 				}
-				var roomAggregator = new RoomCategoryStatsAggregator(this._appContext);
-				return roomAggregator.getRoomCategoryStatsList({ hotelId: this._sessionContext.sessionDO.hotel.id }, this._priceProduct.roomCategoryIdList);
+				var roomAggregator = new RoomCategoryStatsAggregator(this._appContext, this._sessionContext);
+				return roomAggregator.getRoomCategoryStatsList(this._priceProduct.roomCategoryIdList);
 			})
 			.then((roomCategoryStats: RoomCategoryStatsDO[]) => {
 				if (!this._priceProduct.price.priceConfigurationIsValidFor(roomCategoryStats)) {

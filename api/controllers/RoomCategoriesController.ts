@@ -2,7 +2,7 @@ import {BaseController} from './base/BaseController';
 import {ThStatusCode} from '../core/utils/th-responses/ThResponse';
 import {AppContext} from '../core/utils/AppContext';
 import {SessionContext} from '../core/utils/SessionContext';
-import {RoomCategoryStatsAggregator, RoomCategoryStatsAggregatorMetaDO} from '../core/domain-layer/room-categories/aggregators/RoomCategoryStatsAggregator';
+import {RoomCategoryStatsAggregator} from '../core/domain-layer/room-categories/aggregators/RoomCategoryStatsAggregator';
 import {RoomCategoryStatsDO} from '../core/data-layer/room-categories/data-objects/RoomCategoryStatsDO';
 import {DeleteRoomCategoryItem} from '../core/domain-layer/room-categories/DeleteRoomCategoryItem';
 import {SaveRoomCategoryItem} from '../core/domain-layer/room-categories/SaveRoomCategoryItem';
@@ -12,24 +12,24 @@ import {RoomCategoryMetaRepoDO, RoomCategorySearchResultRepoDO} from '../core/da
 import {ThUtils} from '../core/utils/ThUtils';
 
 class RoomCategoriesController extends BaseController {
-    
+
     public getRoomCategoryList(req: Express.Request, res: Express.Response) {
         var appContext: AppContext = req.appContext;
         var sessionContext: SessionContext = req.sessionContext;
-        
+
         var roomCategoryMeta = this.getRoomCategoryMetaRepoDOFrom(sessionContext);
         var roomCategoryRepo = appContext.getRepositoryFactory().getRoomCategoryRepository();
-		roomCategoryRepo.getRoomCategoryList(roomCategoryMeta).then((result: RoomCategorySearchResultRepoDO) => {
-			this.returnSuccesfulResponse(req, res, { result: result });
-		}).catch((err: any) => {
-			this.returnErrorResponse(req, res, err, ThStatusCode.RoomsControllerErrorGettingRooms);
-		});
+        roomCategoryRepo.getRoomCategoryList(roomCategoryMeta).then((result: RoomCategorySearchResultRepoDO) => {
+            this.returnSuccesfulResponse(req, res, { result: result });
+        }).catch((err: any) => {
+            this.returnErrorResponse(req, res, err, ThStatusCode.RoomsControllerErrorGettingRooms);
+        });
     }
-    
+
     public saveRoomCategoryItem(req: Express.Request, res: Express.Response) {
         var appContext: AppContext = req.appContext;
         var sessionContext: SessionContext = req.sessionContext;
-        
+
         var saveRoomcategoryItem = new SaveRoomCategoryItem(appContext, sessionContext);
         saveRoomcategoryItem.save(req.body.roomCategory).then((updatedRoomCategory: RoomCategoryDO) => {
             this.returnSuccesfulResponse(req, res, { roomCategory: updatedRoomCategory });
@@ -41,7 +41,7 @@ class RoomCategoriesController extends BaseController {
     public deleteRoomCategoryItem(req: Express.Request, res: Express.Response) {
         var appContext: AppContext = req.appContext;
         var sessionContext: SessionContext = req.sessionContext;
-        
+
         var deleteRoomItem = new DeleteRoomCategoryItem(appContext, sessionContext);
         deleteRoomItem.delete(req.body.roomCategory).then((deletedRoomCategory: RoomCategoryDO) => {
             this.returnSuccesfulResponse(req, res, { roomCategory: deletedRoomCategory });
@@ -52,30 +52,29 @@ class RoomCategoriesController extends BaseController {
 
     public getRoomCategoryById(req: Express.Request, res: Express.Response) {
         if (!this.precheckGETParameters(req, res, ['id'])) { return };
-        
+
         var appContext: AppContext = req.appContext;
         var sessionContext: SessionContext = req.sessionContext;
-        
-		var roomCategoryId = req.query.id;
-		var roomCategoryMeta = this.getRoomCategoryMetaRepoDOFrom(sessionContext);
-        
-		var roomCategoryRepo = appContext.getRepositoryFactory().getRoomCategoryRepository();
-		roomCategoryRepo.getRoomCategoryById(roomCategoryMeta, roomCategoryId).then((roomCategory: RoomCategoryDO) => {
-			this.returnSuccesfulResponse(req, res, { roomCategory: roomCategory });
-		}).catch((err: any) => {
-			this.returnErrorResponse(req, res, err, ThStatusCode.RoomCategoriesControllerErrorGettingRoomCategoryById);
-		});
+
+        var roomCategoryId = req.query.id;
+        var roomCategoryMeta = this.getRoomCategoryMetaRepoDOFrom(sessionContext);
+
+        var roomCategoryRepo = appContext.getRepositoryFactory().getRoomCategoryRepository();
+        roomCategoryRepo.getRoomCategoryById(roomCategoryMeta, roomCategoryId).then((roomCategory: RoomCategoryDO) => {
+            this.returnSuccesfulResponse(req, res, { roomCategory: roomCategory });
+        }).catch((err: any) => {
+            this.returnErrorResponse(req, res, err, ThStatusCode.RoomCategoriesControllerErrorGettingRoomCategoryById);
+        });
     }
 
     public getRoomCategoryStatsList(req: Express.Request, res: Express.Response) {
         var appContext: AppContext = req.appContext;
         var sessionContext: SessionContext = req.sessionContext;
-        
-        var roomCategStatsAggregator = new RoomCategoryStatsAggregator(appContext);
-        var roomCategStatsAggregatorMeta = this.getRoomAggregatorMetaDOFrom(sessionContext);
+
+        var roomCategStatsAggregator = new RoomCategoryStatsAggregator(appContext, sessionContext);
         var roomCategoryIdList = req.body.roomCategoryIdList;
-        
-        roomCategStatsAggregator.getRoomCategoryStatsList(roomCategStatsAggregatorMeta, req.body.roomCategoryIdList).then((roomCategoryStatsList: RoomCategoryStatsDO[]) => {
+
+        roomCategStatsAggregator.getRoomCategoryStatsList(req.body.roomCategoryIdList).then((roomCategoryStatsList: RoomCategoryStatsDO[]) => {
             this.returnSuccesfulResponse(req, res, { roomCategoryStatsList: roomCategoryStatsList });
         }).catch((err: any) => {
             this.returnErrorResponse(req, res, err, ThStatusCode.RoomCategoriesControllerErrorGettingRoomCategoriesStats);
@@ -83,10 +82,6 @@ class RoomCategoriesController extends BaseController {
     }
 
     private getRoomCategoryMetaRepoDOFrom(sessionContext: SessionContext): RoomCategoryMetaRepoDO {
-        return { hotelId: sessionContext.sessionDO.hotel.id };
-    }
-
-    private getRoomAggregatorMetaDOFrom(sessionContext: SessionContext): RoomCategoryStatsAggregatorMetaDO {
         return { hotelId: sessionContext.sessionDO.hotel.id };
     }
 }
