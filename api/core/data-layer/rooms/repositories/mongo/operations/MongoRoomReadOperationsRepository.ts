@@ -94,6 +94,9 @@ export class MongoRoomReadOperationsRepository extends MongoRepository {
             if (!this._thUtils.isUndefinedOrNull(searchCriteria.categoryIdList)) {
                 mongoQueryBuilder.addMultipleSelectOptionList("categoryId", searchCriteria.categoryIdList);    
             }
+            if (!this._thUtils.isUndefinedOrNull(searchCriteria.maintenanceStatusList)) {
+                mongoQueryBuilder.addMultipleSelectOptionList("maintenanceStatus", searchCriteria.maintenanceStatusList);    
+            }
         }
         return mongoQueryBuilder.processedQuery;
     }

@@ -54,7 +54,7 @@ export class DefaultRoomBuilder implements IRoomDataSource {
         roomDO.attributeIdList = this._testUtils.getIdSampleFrom(roomAttributeList, 5);
         roomDO.description = "First floor single room description.";
         roomDO.notes = "First floor single room notes.";
-        roomDO.maintenanceStatus = RoomMaintenanceStatus.CheckInReady;
+        roomDO.maintenanceStatus = RoomMaintenanceStatus.Clean;
         roomDO.status = RoomStatus.Active;
         return roomDO;
     }
@@ -69,7 +69,7 @@ export class DefaultRoomBuilder implements IRoomDataSource {
         roomDO.attributeIdList = this._testUtils.getIdSampleFrom(roomAttributeList, 5);
         roomDO.description = "First floor second single room description.";
         roomDO.notes = "First floor second single room notes.";
-        roomDO.maintenanceStatus = RoomMaintenanceStatus.CheckInReady;
+        roomDO.maintenanceStatus = RoomMaintenanceStatus.Clean;
         roomDO.status = RoomStatus.Active;
         return roomDO;
     }
@@ -84,7 +84,7 @@ export class DefaultRoomBuilder implements IRoomDataSource {
         roomDO.attributeIdList = this._testUtils.getIdSampleFrom(roomAttributeList, 5);
         roomDO.description = "First floor double double room description.";
         roomDO.notes = "First floor double double room notes.";
-        roomDO.maintenanceStatus = RoomMaintenanceStatus.CheckInReady;
+        roomDO.maintenanceStatus = RoomMaintenanceStatus.Clean;
         roomDO.status = RoomStatus.Active;
         return roomDO;
     }
@@ -99,7 +99,7 @@ export class DefaultRoomBuilder implements IRoomDataSource {
         roomDO.attributeIdList = this._testUtils.getIdSampleFrom(roomAttributeList, 5);
         roomDO.description = "First floor double room description.";
         roomDO.notes = "First floor double room notes.";
-        roomDO.maintenanceStatus = RoomMaintenanceStatus.CheckInReady;
+        roomDO.maintenanceStatus = RoomMaintenanceStatus.Clean;
         roomDO.status = RoomStatus.Active;
         return roomDO;
     }
@@ -114,7 +114,7 @@ export class DefaultRoomBuilder implements IRoomDataSource {
         roomDO.attributeIdList = this._testUtils.getIdSampleFrom(roomAttributeList, 5);
         roomDO.description = "First floor twin room description.";
         roomDO.notes = "First floor twin room notes.";
-        roomDO.maintenanceStatus = RoomMaintenanceStatus.CheckInReady;
+        roomDO.maintenanceStatus = RoomMaintenanceStatus.Clean;
         roomDO.status = RoomStatus.Active;
         return roomDO;
     }
@@ -129,7 +129,7 @@ export class DefaultRoomBuilder implements IRoomDataSource {
         roomDO.attributeIdList = this._testUtils.getIdSampleFrom(roomAttributeList, 5);
         roomDO.description = "Second floor studio room description.";
         roomDO.notes = "Second floor studio room notes.";
-        roomDO.maintenanceStatus = RoomMaintenanceStatus.CheckInReady;
+        roomDO.maintenanceStatus = RoomMaintenanceStatus.Clean;
         roomDO.status = RoomStatus.Active;
         return roomDO;
     }
@@ -144,7 +144,7 @@ export class DefaultRoomBuilder implements IRoomDataSource {
         roomDO.attributeIdList = this._testUtils.getIdSampleFrom(roomAttributeList, 5);
         roomDO.description = "Second floor double king room description.";
         roomDO.notes = "Second floor double king room notes.";
-        roomDO.maintenanceStatus = RoomMaintenanceStatus.CheckInReady;
+        roomDO.maintenanceStatus = RoomMaintenanceStatus.Clean;
         roomDO.status = RoomStatus.Active;
         return roomDO;
     }
