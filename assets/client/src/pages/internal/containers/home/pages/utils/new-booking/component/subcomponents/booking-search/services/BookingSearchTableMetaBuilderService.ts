@@ -105,7 +105,7 @@ export class BookingSearchTableMetaBuilderService {
     }
     public buildBookingCartTableMeta(): LazyLoadTableMeta {
         return {
-            supportedRowCommandList: [],
+            supportedRowCommandList: [TableRowCommand.Delete],
             rowIdPropertySelector: "uniqueId",
             addButtonText: "",
             autoSelectRows: false,

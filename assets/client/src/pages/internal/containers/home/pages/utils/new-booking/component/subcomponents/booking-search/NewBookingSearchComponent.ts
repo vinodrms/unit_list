@@ -28,6 +28,7 @@ export class NewBookingSearchComponent extends BaseComponent {
 
 	private _roomCategoryList: RoomCategoryDO[];
 	isSearching: boolean = false;
+	private _bookingSearchParams: BookingSearchParams;
 
 	constructor(private _appContext: AppContext, private _wizardBookingSearchService: BookingSearchStepService,
 		private _bookingSearchService: BookingSearchService, private _tableMetaBuilder: BookingSearchTableMetaBuilderService,
@@ -41,9 +42,10 @@ export class NewBookingSearchComponent extends BaseComponent {
 	}
 
 	public searchBookings(bookingSearchParams: BookingSearchParams) {
-		bookingSearchParams.transientBookingList = this._inMemoryBookingService.getTransientBookingItemList();
+		this._bookingSearchParams = bookingSearchParams;
+		this._bookingSearchParams.transientBookingList = this._inMemoryBookingService.getTransientBookingItemList();
 		this.isSearching = true;
-		this._bookingSearchService.searchBookings(bookingSearchParams)
+		this._bookingSearchService.searchBookings(this._bookingSearchParams)
 			.subscribe((searchResult: { roomCategoryList: RoomCategoryDO[], bookingItemList: BookingItemVM[] }) => {
                 this._roomCategoryList = searchResult.roomCategoryList;
 				this.isSearching = false;
@@ -56,5 +58,19 @@ export class NewBookingSearchComponent extends BaseComponent {
 		this._inMemoryBookingService.addBookingItem(bookingItemVM);
 		this._wizardBookingSearchService.checkBookingCartValidity(this._inMemoryBookingService, this._roomCategoryList);
 		this._bookingSearchService.decrementInventoryAvailability(bookingItemVM.transientBookingItem);
+	}
+	public removeBookingVMFromCart(bookingItemVM: BookingItemVM) {
+		var title = this._appContext.thTranslation.translate("Delete Price Product");
+		var content = this._appContext.thTranslation.translate("Are you sure you want to remove %priceProductName% from the cart?", { priceProductName: bookingItemVM.priceProductName });
+		this._appContext.modalService.confirm(title, content, { positive: this._appContext.thTranslation.translate("Yes"), negative: this._appContext.thTranslation.translate("No") },
+			() => {
+				this.removeBookingVMFromCartCore(bookingItemVM);
+			}, () => { });
+	}
+	private removeBookingVMFromCartCore(bookingItemVM: BookingItemVM) {
+		if (!this._bookingSearchParams) { return; }
+		this._inMemoryBookingService.removeBookingItem(bookingItemVM);
+		this.searchBookings(this._bookingSearchParams);
+		this._wizardBookingSearchService.checkBookingCartValidity(this._inMemoryBookingService, this._roomCategoryList);
 	}
 }
