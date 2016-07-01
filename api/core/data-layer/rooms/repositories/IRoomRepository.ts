@@ -1,4 +1,4 @@
-import {RoomDO} from '../data-objects/RoomDO';
+import {RoomDO, RoomMaintenanceStatus} from '../data-objects/RoomDO';
 import {LazyLoadRepoDO, LazyLoadMetaResponseRepoDO} from '../../common/repo-data-objects/LazyLoadRepoDO';
 
 export interface RoomMetaRepoDO {
@@ -11,6 +11,7 @@ export interface RoomItemMetaRepoDO {
 export interface RoomSearchCriteriaRepoDO {
 	name?: string;
 	categoryIdList?: string[];
+	maintenanceStatusList?: RoomMaintenanceStatus[];
 }
 export interface RoomSearchResultRepoDO {
 	lazyLoad?: LazyLoadRepoDO;

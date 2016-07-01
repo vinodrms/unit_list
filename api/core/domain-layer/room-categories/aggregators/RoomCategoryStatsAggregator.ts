@@ -140,7 +140,7 @@ export class RoomCategoryStatsAggregator {
     }
     private getRoomListByRoomCategoryIdListCore(resolve: { (result: RoomDO[]): void }, reject: { (err: ThError): void }, roomCategoryIdList: string[]) {
         var roomRepository = this._appContext.getRepositoryFactory().getRoomRepository();
-        roomRepository.getRoomList({ hotelId: this._sessionContext.sessionDO.hotel.id }, { categoryIdList: roomCategoryIdList }).then((result: RoomSearchResultRepoDO) => {
+        roomRepository.getRoomList({ hotelId: this._sessionContext.sessionDO.hotel.id }, { categoryIdList: roomCategoryIdList, maintenanceStatusList: RoomDO.inInventoryMaintenanceStatusList }).then((result: RoomSearchResultRepoDO) => {
             resolve(result.roomList);
         }).catch((error: any) => {
             var thError = new ThError(ThStatusCode.RoomAggregatorGetRoomsByCategoryIdListError, error);
