@@ -3,7 +3,7 @@ import {CurrencyDO} from '../../../../../../../../services/common/data-objects/c
 import {ConfigCapacityDO} from '../../../../../../../../services/common/data-objects/bed-config/ConfigCapacityDO';
 import {ThDateIntervalDO} from '../../../../../../../../services/common/data-objects/th-dates/ThDateIntervalDO';
 import {BookingSearchResultDO} from '../data-objects/BookingSearchResultDO';
-import {BookingItemVM} from '../view-models/BookingItemVM';
+import {BookingItemVM, BookingItemVMType} from '../view-models/BookingItemVM';
 import {RoomCategoryItemDO} from '../data-objects/room-category-item/RoomCategoryItemDO';
 import {AllotmentItemDO} from '../data-objects/allotment-item/AllotmentItemDO';
 import {PriceProductItemDO} from '../data-objects/price-product-item/PriceProductItemDO';
@@ -51,8 +51,9 @@ export class BookingViewModelConverter {
 
     private createBookingItemVM(bookingSearchParams: BookingSearchParams, roomCategoryItem: RoomCategoryItemDO, priceProductItem: PriceProductItemDO, currency: CurrencyDO, allotmentItem?: AllotmentItemDO): BookingItemVM {
         var bookingItemVM = new BookingItemVM();
-        bookingItemVM.transientBookingItem = new TransientBookingItem();
+        bookingItemVM.transientBookingItem = new TransientBookingItem()
 
+        bookingItemVM.itemType = BookingItemVMType.NormalBooking;
         bookingItemVM.uniqueId = priceProductItem.priceProduct.id + roomCategoryItem.stats.roomCategory.id;
         bookingItemVM.priceProductName = priceProductItem.priceProduct.name;
         bookingItemVM.roomCategoryName = roomCategoryItem.stats.roomCategory.displayName;
@@ -84,6 +85,7 @@ export class BookingViewModelConverter {
         bookingItemVM.transientBookingItem.priceProductId = priceProductItem.priceProduct.id;
 
         bookingItemVM.priceProduct = priceProductItem.priceProduct;
+        bookingItemVM.ccy = currency;
 
         return bookingItemVM;
     }

@@ -484,5 +484,9 @@ export var EnglishTranslations: Object = {
 	"October": "October",
 	"November": "November",
 	"December": "December",
-	"You cannot add more that %noBookings% simultaneous bookings": "You cannot add more that %noBookings% simultaneous bookings"
+	"You cannot add more that %noBookings% simultaneous bookings": "You cannot add more that %noBookings% simultaneous bookings",
+	"Totals": "Totals",
+	"%noRooms% Rooms": "%noRooms% Rooms",
+	"%noRooms% Room": "%noRooms% Room",
+	
 };

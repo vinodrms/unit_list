@@ -14,6 +14,7 @@ export interface AddBookingResult {
 @Injectable()
 export class BookingCartService extends ABookingService {
     private _cartSequenceId: number = 0;
+    private _totalsBookingItem: BookingItemVM;
 
     constructor(private _appContext: AppContext) {
         super();
@@ -21,22 +22,25 @@ export class BookingCartService extends ABookingService {
     }
 
     protected getPageItemList(): Observable<BookingItemVM[]> {
-        return this.returnObservableWith(this._bookingItemVMList);
+        var itemList = this._bookingItemVMList;
+        if (!this._appContext.thUtils.isUndefinedOrNull(this.totalsBookingItem)) {
+            itemList = itemList.concat(this.totalsBookingItem);
+        }
+        return this.returnObservableWith(itemList);
     }
 
     public addBookingItem(bookingItemVM: BookingItemVM): AddBookingResult {
         var addTest = this.testIfcanAddBookingItem(bookingItemVM);
-        if(!addTest.success) { return addTest };
+        if (!addTest.success) { return addTest };
         bookingItemVM.cartSequenceId = this.getNextSequenceId();
         this._bookingItemVMList.push(bookingItemVM);
-        this.refreshData();
         return { success: true };
     }
     private testIfcanAddBookingItem(bookingItemVM: BookingItemVM): AddBookingResult {
-        if(this._bookingItemVMList.length >= BookingDOConstraints.NoBookingsLimit) {
+        if (this._bookingItemVMList.length >= BookingDOConstraints.NoBookingsLimit) {
             return {
                 success: false,
-                errorMessage: this._appContext.thTranslation.translate("You cannot add more that %noBookings% simultaneous bookings", {noBookings: BookingDOConstraints.NoBookingsLimit})
+                errorMessage: this._appContext.thTranslation.translate("You cannot add more that %noBookings% simultaneous bookings", { noBookings: BookingDOConstraints.NoBookingsLimit })
             }
         };
         return { success: true };
@@ -44,7 +48,6 @@ export class BookingCartService extends ABookingService {
 
     public removeBookingItem(bookingItemVM: BookingItemVM) {
         this._bookingItemVMList = _.filter(this._bookingItemVMList, (item: BookingItemVM) => { return item.cartSequenceId !== bookingItemVM.cartSequenceId });
-        this.refreshData();
     }
 
     private getNextSequenceId(): number {
@@ -55,5 +58,12 @@ export class BookingCartService extends ABookingService {
 
     public getTransientBookingItemList(): TransientBookingItem[] {
         return _.map(this._bookingItemVMList, (bookingItemVM: BookingItemVM) => { return bookingItemVM.transientBookingItem });
+    }
+
+    public get totalsBookingItem(): BookingItemVM {
+        return this._totalsBookingItem;
+    }
+    public set totalsBookingItem(totalsBookingItem: BookingItemVM) {
+        this._totalsBookingItem = totalsBookingItem;
     }
 }

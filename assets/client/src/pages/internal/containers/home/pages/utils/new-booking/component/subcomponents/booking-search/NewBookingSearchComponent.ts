@@ -11,6 +11,7 @@ import {BookingSearchParams} from '../../../services/data-objects/BookingSearchP
 import {BookingSearchService} from '../../../services/search/BookingSearchService';
 import {BookingItemVM} from '../../../services/search/view-models/BookingItemVM';
 import {BookingSearchTableMetaBuilderService} from './services/BookingSearchTableMetaBuilderService';
+import {BookingCartTableMetaBuilderService} from './services/BookingCartTableMetaBuilderService';
 import {BookingSearchStepService} from './services/BookingSearchStepService';
 import {BookingCartService} from '../../../services/search/BookingCartService';
 
@@ -19,7 +20,7 @@ import {BookingCartService} from '../../../services/search/BookingCartService';
 	templateUrl: '/client/src/pages/internal/containers/home/pages/utils/new-booking/component/subcomponents/booking-search/template/new-booking-search.html',
 	directives: [CustomScroll, LazyLoadingTableComponent,
 		BookingSearchParametersComponent],
-	providers: [BookingSearchService, BookingSearchTableMetaBuilderService],
+	providers: [BookingSearchService, BookingSearchTableMetaBuilderService, BookingCartTableMetaBuilderService],
 	pipes: [TranslationPipe]
 })
 export class NewBookingSearchComponent extends BaseComponent {
@@ -31,14 +32,19 @@ export class NewBookingSearchComponent extends BaseComponent {
 	private _bookingSearchParams: BookingSearchParams;
 
 	constructor(private _appContext: AppContext, private _wizardBookingSearchService: BookingSearchStepService,
-		private _bookingSearchService: BookingSearchService, private _tableMetaBuilder: BookingSearchTableMetaBuilderService,
+		private _bookingSearchService: BookingSearchService, private _searchTableMetaBuilder: BookingSearchTableMetaBuilderService,
+		private _cartTableMetaBuilder: BookingCartTableMetaBuilderService,
 		private _bookingCartService: BookingCartService) {
 		super();
 	}
 	public ngAfterViewInit() {
-		this._searchResultsTableComponent.bootstrap(this._bookingSearchService, this._tableMetaBuilder.buildSearchResultsTableMeta());
-		this._searchResultsTableComponent.attachCustomCellClassGenerator(this._tableMetaBuilder.customCellClassGenerator);
-		this._bookingCartTableComponent.bootstrap(this._bookingCartService, this._tableMetaBuilder.buildBookingCartTableMeta());
+		this._searchResultsTableComponent.bootstrap(this._bookingSearchService, this._searchTableMetaBuilder.buildSearchResultsTableMeta());
+		this._searchResultsTableComponent.attachCustomCellClassGenerator(this._searchTableMetaBuilder.customCellClassGenerator);
+
+		this._bookingCartTableComponent.bootstrap(this._bookingCartService, this._cartTableMetaBuilder.buildBookingCartTableMeta());
+		this._bookingCartTableComponent.attachCustomCellClassGenerator(this._cartTableMetaBuilder.customCellClassGenerator);
+		this._bookingCartTableComponent.attachCustomRowClassGenerator(this._cartTableMetaBuilder.customRowClassGenerator);
+		this._bookingCartTableComponent.attachCustomRowCommandPerformPolicy(this._cartTableMetaBuilder.canPerformCommandOnItem);
 	}
 
 	public searchBookings(bookingSearchParams: BookingSearchParams) {
@@ -60,6 +66,9 @@ export class NewBookingSearchComponent extends BaseComponent {
 			this._appContext.toaster.error(addResult.errorMessage);
 			return;
 		}
+		this._cartTableMetaBuilder.updateBookingCartTotalsRow(this._bookingCartService);
+		this._bookingCartService.refreshData();
+
 		this._wizardBookingSearchService.checkBookingCartValidity(this._bookingCartService, this._roomCategoryList);
 		this._bookingSearchService.decrementInventoryAvailability(bookingItemVM.transientBookingItem);
 	}
@@ -74,6 +83,9 @@ export class NewBookingSearchComponent extends BaseComponent {
 	private removeBookingVMFromCartCore(bookingItemVM: BookingItemVM) {
 		if (!this._bookingSearchParams) { return; }
 		this._bookingCartService.removeBookingItem(bookingItemVM);
+		this._cartTableMetaBuilder.updateBookingCartTotalsRow(this._bookingCartService);
+		this._bookingCartService.refreshData();
+
 		this.searchBookings(this._bookingSearchParams);
 		this._wizardBookingSearchService.checkBookingCartValidity(this._bookingCartService, this._roomCategoryList);
 	}

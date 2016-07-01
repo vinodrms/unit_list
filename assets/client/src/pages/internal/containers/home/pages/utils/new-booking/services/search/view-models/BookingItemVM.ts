@@ -2,8 +2,15 @@ import {ConfigCapacityDO} from '../../../../../../../../services/common/data-obj
 import {PriceProductDO} from '../../../../../../../../services/price-products/data-objects/PriceProductDO';
 import {TransientBookingItem} from '../../data-objects/TransientBookingItem';
 import {ThDateIntervalDO} from '../../../../../../../../services/common/data-objects/th-dates/ThDateIntervalDO';
+import {CurrencyDO} from '../../../../../../../../services/common/data-objects/currency/CurrencyDO';
+
+export enum BookingItemVMType {
+    NormalBooking,
+    Total
+}
 
 export class BookingItemVM {
+    itemType: BookingItemVMType;
     cartSequenceId: number;
     uniqueId: string;
     priceProductName: string;
@@ -21,4 +28,5 @@ export class BookingItemVM {
 
     transientBookingItem: TransientBookingItem;
     priceProduct: PriceProductDO;
+    ccy: CurrencyDO;
 }

@@ -27,6 +27,7 @@ export class LazyLoadingTableComponent<T> {
 	protected _isCollapsed: boolean;
 	private _rowClassGenerator: { (item: T): string };
 	private _cellClassGenerator: { (item: T, columnValueMeta: TableColumnValueMeta): string };
+	private _canPerformCommandOnItem: { (item: T, command: TableRowCommand): boolean };
 
 	protected get isCollapsed(): boolean {
 		return this._isCollapsed;
@@ -361,6 +362,27 @@ export class LazyLoadingTableComponent<T> {
 	}
 	public attachCustomCellClassGenerator(cellClassGenerator: { (item: T, columnValueMeta: TableColumnValueMeta): string }) {
 		this._cellClassGenerator = cellClassGenerator;
+	}
+	public attachCustomRowCommandPerformPolicy(canPerformCommandOnItem: { (item: T, command: TableRowCommand): boolean }) {
+		this._canPerformCommandOnItem = canPerformCommandOnItem;
+	}
+
+	protected canPerformCopyCommandOnItem(item: T): boolean {
+		return this.tableOptions.canCopy && this.canPerformCommandOnItem(item, TableRowCommand.Copy);
+	}
+	protected canPerformEditCommandOnItem(item: T): boolean {
+		return this.tableOptions.canEdit && this.canPerformCommandOnItem(item, TableRowCommand.Edit);
+	}
+	protected canPerformDeleteCommandOnItem(item: T): boolean {
+		return this.tableOptions.canDelete && this.canPerformCommandOnItem(item, TableRowCommand.Delete);
+	}
+	protected canPerformAddExistingRowCommandOnItem(item: T): boolean {
+		return this.tableOptions.canAddExistingRow && this.canPerformCommandOnItem(item, TableRowCommand.AddExistingRow);
+	}
+
+	private canPerformCommandOnItem(item: T, command: TableRowCommand): boolean {
+		if (!this._canPerformCommandOnItem) { return true; }
+		return this._canPerformCommandOnItem(item, command);
 	}
 
 	public isUndefinedOrNull(value: any): boolean {

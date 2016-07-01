@@ -90,16 +90,16 @@
 					</span>
 				</td>
 				<td *ngIf="tableOptions.showRowActionsCell()" class="table-item-action-group" [ngClass]="tableOptions.getRowActionsCellClass(isCollapsed)">
-					<a class="btn btn-xs" *ngIf="tableOptions.canCopy" (click)="copyItem(item)" title="{{ 'Clone' | translate }}">
+					<a class="btn btn-xs" *ngIf="canPerformCopyCommandOnItem(item)" (click)="copyItem(item)" title="{{ 'Clone' | translate }}">
 						<i class="fa unitpal-font">[</i>
 					</a>
-					<a class="btn btn-xs" *ngIf="tableOptions.canEdit" (click)="editItem(item)" title="{{ 'Edit' | translate }}">
+					<a class="btn btn-xs" *ngIf="canPerformEditCommandOnItem(item)" (click)="editItem(item)" title="{{ 'Edit' | translate }}">
 						<i class="fa unitpal-font">]</i>
 					</a>
-					<a class="btn btn-xs" *ngIf="tableOptions.canDelete" (click)="deleteItem(item)" title="{{ 'Delete' | translate }}">
+					<a class="btn btn-xs" *ngIf="canPerformDeleteCommandOnItem(item)" (click)="deleteItem(item)" title="{{ 'Delete' | translate }}">
 						<i class="fa unitpal-font">\</i>
 					</a>
-					<a class="btn btn-xs" *ngIf="tableOptions.canAddExistingRow" (click)="addExistingItem(item)" title="{{ 'Add' | translate }}">
+					<a class="btn btn-xs" *ngIf="canPerformAddExistingRowCommandOnItem(item)" (click)="addExistingItem(item)" title="{{ 'Add' | translate }}">
 						<i class="fa unitpal-font">'</i>
 					</a>
 				</td>

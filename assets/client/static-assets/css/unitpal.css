@@ -1136,6 +1136,21 @@ table.lazy-loading tbody {
   flex-grow: 1;
   flex-shrink: 1;
 }
+tr.lazy-loading-table-totals {
+    border-top: 1px solid #fc8433 !important;
+    background-color: #e7e7e7;
+}
+tr.lazy-loading-table-totals>td.important {
+    font-weight: bold;
+    color: #fc8433;
+}
+tr.lazy-loading-table-totals:hover,
+tr.lazy-loading-table-totals:focus {
+    background-color: #e7e7e7 !important;
+}
+.default-cursor {
+    cursor: default !important;
+}
 
 tr.lazy-loading-table-last-row {
     flex-grow: 1 !important;
