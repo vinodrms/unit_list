@@ -12,7 +12,7 @@ import {BookingSearchService} from '../../../services/search/BookingSearchServic
 import {BookingItemVM} from '../../../services/search/view-models/BookingItemVM';
 import {BookingSearchTableMetaBuilderService} from './services/BookingSearchTableMetaBuilderService';
 import {BookingSearchStepService} from './services/BookingSearchStepService';
-import {InMemoryBookingService} from '../../../services/search/InMemoryBookingService';
+import {BookingCartService} from '../../../services/search/BookingCartService';
 
 @Component({
 	selector: 'new-booking-search',
@@ -32,18 +32,18 @@ export class NewBookingSearchComponent extends BaseComponent {
 
 	constructor(private _appContext: AppContext, private _wizardBookingSearchService: BookingSearchStepService,
 		private _bookingSearchService: BookingSearchService, private _tableMetaBuilder: BookingSearchTableMetaBuilderService,
-		private _inMemoryBookingService: InMemoryBookingService) {
+		private _bookingCartService: BookingCartService) {
 		super();
 	}
 	public ngAfterViewInit() {
 		this._searchResultsTableComponent.bootstrap(this._bookingSearchService, this._tableMetaBuilder.buildSearchResultsTableMeta());
 		this._searchResultsTableComponent.attachCustomCellClassGenerator(this._tableMetaBuilder.customCellClassGenerator);
-		this._bookingCartTableComponent.bootstrap(this._inMemoryBookingService, this._tableMetaBuilder.buildBookingCartTableMeta());
+		this._bookingCartTableComponent.bootstrap(this._bookingCartService, this._tableMetaBuilder.buildBookingCartTableMeta());
 	}
 
 	public searchBookings(bookingSearchParams: BookingSearchParams) {
 		this._bookingSearchParams = bookingSearchParams;
-		this._bookingSearchParams.transientBookingList = this._inMemoryBookingService.getTransientBookingItemList();
+		this._bookingSearchParams.transientBookingList = this._bookingCartService.getTransientBookingItemList();
 		this.isSearching = true;
 		this._bookingSearchService.searchBookings(this._bookingSearchParams)
 			.subscribe((searchResult: { roomCategoryList: RoomCategoryDO[], bookingItemList: BookingItemVM[] }) => {
@@ -55,12 +55,12 @@ export class NewBookingSearchComponent extends BaseComponent {
             });
 	}
 	public addBookingVMInCart(bookingItemVM: BookingItemVM) {
-		var addResult = this._inMemoryBookingService.addBookingItem(bookingItemVM);
+		var addResult = this._bookingCartService.addBookingItem(bookingItemVM);
 		if (!addResult.success) {
 			this._appContext.toaster.error(addResult.errorMessage);
 			return;
 		}
-		this._wizardBookingSearchService.checkBookingCartValidity(this._inMemoryBookingService, this._roomCategoryList);
+		this._wizardBookingSearchService.checkBookingCartValidity(this._bookingCartService, this._roomCategoryList);
 		this._bookingSearchService.decrementInventoryAvailability(bookingItemVM.transientBookingItem);
 	}
 	public removeBookingVMFromCart(bookingItemVM: BookingItemVM) {
@@ -73,8 +73,8 @@ export class NewBookingSearchComponent extends BaseComponent {
 	}
 	private removeBookingVMFromCartCore(bookingItemVM: BookingItemVM) {
 		if (!this._bookingSearchParams) { return; }
-		this._inMemoryBookingService.removeBookingItem(bookingItemVM);
+		this._bookingCartService.removeBookingItem(bookingItemVM);
 		this.searchBookings(this._bookingSearchParams);
-		this._wizardBookingSearchService.checkBookingCartValidity(this._inMemoryBookingService, this._roomCategoryList);
+		this._wizardBookingSearchService.checkBookingCartValidity(this._bookingCartService, this._roomCategoryList);
 	}
 }

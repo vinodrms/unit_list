@@ -159,7 +159,7 @@ export class BookingSearchTableMetaBuilderService {
                         objectPropertyId: "totalPriceString",
                         propertyType: TablePropertyType.StringType,
                         showInCollapsedView: false,
-                        normalStyle: "up-col-10p center selectable-row"
+                        normalStyle: "up-col-10p center"
                     }
                 }
             ]

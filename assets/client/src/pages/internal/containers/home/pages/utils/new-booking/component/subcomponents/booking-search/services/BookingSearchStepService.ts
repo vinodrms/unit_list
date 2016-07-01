@@ -6,7 +6,7 @@ import {StringOccurenciesIndexer} from '../../../../../../../../../../../common/
 import {RoomCategoryDO} from '../../../../../../../../../services/room-categories/data-objects/RoomCategoryDO';
 import {PriceProductValidationRuleDataDO, PriceProductValidationRuleResult} from '../../../../../../../../../services/price-products/data-objects/constraint/validation/IPriceProductValidationRule';
 import {BookingItemVM} from '../../../../services/search/view-models/BookingItemVM';
-import {InMemoryBookingService} from '../../../../services/search/InMemoryBookingService';
+import {BookingCartService} from '../../../../services/search/BookingCartService';
 
 @Injectable()
 export class BookingSearchStepService implements IBookingStepService {
@@ -32,12 +32,12 @@ export class BookingSearchStepService implements IBookingStepService {
 		return this._errorString;
 	}
 
-	public checkBookingCartValidity(inMemoryBookingService: InMemoryBookingService, roomCategoryList: RoomCategoryDO[]) {
-		var indexedNumberOfRoomCategories: StringOccurenciesIndexer = this.getRoomCategoryIdOccurenciesStringIndexer(inMemoryBookingService);
+	public checkBookingCartValidity(bookingCartService: BookingCartService, roomCategoryList: RoomCategoryDO[]) {
+		var indexedNumberOfRoomCategories: StringOccurenciesIndexer = this.getRoomCategoryIdOccurenciesStringIndexer(bookingCartService);
 
 		var bookingCartIsValid: boolean = true;
 		var bookingCartMessage: string = "";
-		_.forEach(inMemoryBookingService.bookingItemVMList, (bookingItem: BookingItemVM) => {
+		_.forEach(bookingCartService.bookingItemVMList, (bookingItem: BookingItemVM) => {
 			var validationResult: PriceProductValidationRuleResult = bookingItem.priceProduct.constraints.appliesOn({
 				thTranslation: this._appContext.thTranslation,
 				roomCategoryList: roomCategoryList,
@@ -52,8 +52,8 @@ export class BookingSearchStepService implements IBookingStepService {
 		this._canGoToNextStep = bookingCartIsValid;
 		this._errorString = bookingCartMessage;
 	}
-	private getRoomCategoryIdOccurenciesStringIndexer(inMemoryBookingService: InMemoryBookingService): StringOccurenciesIndexer {
-		var roomCategoryIdList: string[] = _.map(inMemoryBookingService.bookingItemVMList, (bookingItem: BookingItemVM) => {
+	private getRoomCategoryIdOccurenciesStringIndexer(bookingCartService: BookingCartService): StringOccurenciesIndexer {
+		var roomCategoryIdList: string[] = _.map(bookingCartService.bookingItemVMList, (bookingItem: BookingItemVM) => {
 			return bookingItem.transientBookingItem.roomCategoryId;
 		});
 		return new StringOccurenciesIndexer(roomCategoryIdList);

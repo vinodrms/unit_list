@@ -12,7 +12,7 @@ export interface AddBookingResult {
 }
 
 @Injectable()
-export class InMemoryBookingService extends ABookingService {
+export class BookingCartService extends ABookingService {
     private _cartSequenceId: number = 0;
 
     constructor(private _appContext: AppContext) {
