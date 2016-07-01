@@ -470,7 +470,8 @@ export var EnglishTranslations: Object = {
 	"Allot": "Allot",
 	"Max Cap": "Max Cap",
 	"Add at least %noRooms% rooms: %roomCategories%": "Add at least %noRooms% rooms: %roomCategories%",
-	"Add at least one price product in the cart to continue": "Add at least one price product in the cart to continue"
+	"Add at least one price product in the cart to continue": "Add at least one price product in the cart to continue",
+	"Are you sure you want to remove %priceProductName% from the cart?": "Are you sure you want to remove %priceProductName% from the cart?"
 
 
 	

@@ -12,7 +12,7 @@
 		</div>
 	</div>
 	<div class="col-xs-5 full-height booking-cart">
-		<lazy-loading-table #bookingCart>
+		<lazy-loading-table #bookingCart (onDelete)="removeBookingVMFromCart($event)">
 		</lazy-loading-table>
 	</div>
 </div>

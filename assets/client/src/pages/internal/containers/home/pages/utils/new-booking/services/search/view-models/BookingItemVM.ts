@@ -3,6 +3,7 @@ import {PriceProductDO} from '../../../../../../../../services/price-products/da
 import {TransientBookingItem} from '../../data-objects/TransientBookingItem';
 
 export class BookingItemVM {
+    cartSequenceId: number;
     uniqueId: string;
     priceProductName: string;
     roomCategoryName: string;
