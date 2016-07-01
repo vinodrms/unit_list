@@ -45,9 +45,8 @@ describe("Invoices Tests", function () {
         it("Should update the previously created invoice group item", function (done) {
             var saveInvoiceGroupItemDO: SaveInvoiceGroupItemDO = invoiceGroupsHelper.getSaveInvoiceGroupItemDOFrom(createdInvoiceGroup);
             var saveInvoiceGroupItem = new SaveInvoiceGroupItem(testContext.appContext, testContext.sessionContext);
-            debugger
+            
             saveInvoiceGroupItem.save(saveInvoiceGroupItemDO).then((savedInvoiceGroup: InvoiceGroupDO) => {
-
                 done();
             }).catch((err: any) => {
                 done(err);
