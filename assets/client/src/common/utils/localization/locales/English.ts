@@ -471,8 +471,18 @@ export var EnglishTranslations: Object = {
 	"Max Cap": "Max Cap",
 	"Add at least %noRooms% rooms: %roomCategories%": "Add at least %noRooms% rooms: %roomCategories%",
 	"Add at least one price product in the cart to continue": "Add at least one price product in the cart to continue",
-	"Are you sure you want to remove %priceProductName% from the cart?": "Are you sure you want to remove %priceProductName% from the cart?"
-
-
+	"Are you sure you want to remove %priceProductName% from the cart?": "Are you sure you want to remove %priceProductName% from the cart?",
+	"January": "January",
+	"February": "February",
+	"March": "March",
+	"April": "April",
+	"May": "May",
+	"June": "June",
+	"July": "July",
+	"August": "August",
+	"September": "September",
+	"October": "October",
+	"November": "November",
+	"December": "December",
 	
 };

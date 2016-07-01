@@ -165,8 +165,11 @@ export class LazyLoadingTableComponent<T> {
 	protected movePrevious() {
 		this.updatePageNumber(this.pageMeta.pageNumber - 1);
 	}
-	protected showPagination() {
+	protected showPagination(): boolean {
 		return this.lazyLoadingRequest.showPagination();
+	}
+	protected showTableHeader(): boolean {
+		return this.tableOptions.canSearch || this.lazyLoadingRequest.showPagination();
 	}
 	protected showTableFooter() {
 		return this.lazyLoadingRequest.showPagination() || this.tableOptions.canAdd;

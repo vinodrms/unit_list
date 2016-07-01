@@ -1,6 +1,7 @@
 import {BaseDO} from '../../../../../../common/base/BaseDO';
 import {ThDateDO} from './ThDateDO';
 import {ThDateUtils} from './ThDateUtils';
+import {ThTranslation} from '../../../../../../common/utils/localization/ThTranslation';
 
 export class ThDateIntervalDO extends BaseDO {
 	start: ThDateDO;
@@ -44,5 +45,8 @@ export class ThDateIntervalDO extends BaseDO {
 
 	public toString(): string {
 		return this.start.toString() + " - " + this.end.toString();
+	}
+	public getShortDisplayString(thTranslation: ThTranslation): string {
+		return this.start.getShortDisplayString(thTranslation) + " - " + this.end.getShortDisplayString(thTranslation);
 	}
 }

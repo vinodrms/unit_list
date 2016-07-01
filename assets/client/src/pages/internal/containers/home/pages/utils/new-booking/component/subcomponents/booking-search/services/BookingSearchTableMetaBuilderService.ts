@@ -117,7 +117,7 @@ export class BookingSearchTableMetaBuilderService {
                         objectPropertyId: "priceProductName",
                         propertyType: TablePropertyType.NotesType,
                         showInCollapsedView: true,
-                        normalStyle: "up-col-35p left",
+                        normalStyle: "up-col-25p left",
                         collapsedStyle: "up-col-70p left"
                     }
                 },
@@ -126,6 +126,15 @@ export class BookingSearchTableMetaBuilderService {
                     valueMeta: {
                         objectPropertyId: "roomCategoryName",
                         propertyType: TablePropertyType.NotesType,
+                        showInCollapsedView: false,
+                        normalStyle: "up-col-20p left"
+                    }
+                },
+                {
+                    displayName: "Period",
+                    valueMeta: {
+                        objectPropertyId: "bookingInterval",
+                        propertyType: TablePropertyType.DateIntervalType,
                         showInCollapsedView: false,
                         normalStyle: "up-col-30p left"
                     }
@@ -141,7 +150,7 @@ export class BookingSearchTableMetaBuilderService {
                             baby: "B"
                         },
                         showInCollapsedView: false,
-                        normalStyle: "up-col-15p center"
+                        normalStyle: "up-col-10p center"
                     }
                 },
                 {
@@ -150,7 +159,7 @@ export class BookingSearchTableMetaBuilderService {
                         objectPropertyId: "totalPriceString",
                         propertyType: TablePropertyType.StringType,
                         showInCollapsedView: false,
-                        normalStyle: "up-col-15p center selectable-row"
+                        normalStyle: "up-col-10p center selectable-row"
                     }
                 }
             ]

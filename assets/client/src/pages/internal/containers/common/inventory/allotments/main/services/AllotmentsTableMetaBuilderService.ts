@@ -29,7 +29,7 @@ export class AllotmentsTableMetaBuilderService {
 						objectPropertyId: "priceProduct.name",
 						propertyType: TablePropertyType.StringType,
 						showInCollapsedView: false,
-						normalStyle: "up-col-15p left"
+						normalStyle: "up-col-20p left"
 					}
 				},
 				{
@@ -38,7 +38,7 @@ export class AllotmentsTableMetaBuilderService {
 						objectPropertyId: "roomCategory.displayName",
 						propertyType: TablePropertyType.StringType,
 						showInCollapsedView: false,
-						normalStyle: "up-col-15p left"
+						normalStyle: "up-col-20p left"
 					}
 				},
 				{
@@ -47,7 +47,7 @@ export class AllotmentsTableMetaBuilderService {
 						objectPropertyId: "allotment.openInterval",
 						propertyType: TablePropertyType.DateIntervalType,
 						showInCollapsedView: false,
-						normalStyle: "up-col-30p left"
+						normalStyle: "up-col-20p left"
 					}
 				},
 				{

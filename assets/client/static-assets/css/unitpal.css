@@ -1834,6 +1834,8 @@ a.btn.btn-square:focus {
 }
 .booking-cart {
     font-size: 11px;
+    padding-left: 0px;
+    padding-right: 0px;
 }
 .padding-right-0px {
     padding-right: 0px;

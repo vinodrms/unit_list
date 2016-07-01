@@ -1,7 +1,7 @@
 <loading-component [isLoading]="!didInit"></loading-component>
 
 <div *ngIf="didInit" class="lazy-loading-table-container">
-	<div class="row table-filter">
+	<div class="row table-filter" *ngIf="showTableHeader()">
 		<!--TODO: Investigate if !isCollapsed && !tableOptions.canSearch then the total sum is 16 != 12-->
 		<div *ngIf="tableOptions.canSearch" [ngClass]="{'col-xs-4 col-md-4': !isCollapsed, 'col-xs-12 col-md-12': isCollapsed}">
 			<div class="input-group">

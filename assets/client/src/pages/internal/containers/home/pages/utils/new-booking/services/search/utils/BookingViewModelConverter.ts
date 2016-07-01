@@ -78,6 +78,7 @@ export class BookingViewModelConverter {
         bookingItemVM.transientBookingItem.configCapacity = bookingItemVM.bookingCapacity;
         bookingItemVM.transientBookingItem.interval = new ThDateIntervalDO();
         bookingItemVM.transientBookingItem.interval.buildFromObject(bookingSearchParams.interval);
+        bookingItemVM.bookingInterval = bookingItemVM.transientBookingItem.interval;
 
         bookingItemVM.transientBookingItem.roomCategoryId = roomCategoryItem.stats.roomCategory.id;
         bookingItemVM.transientBookingItem.priceProductId = priceProductItem.priceProduct.id;
