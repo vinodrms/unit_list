@@ -10,8 +10,7 @@ export interface RoomItemMetaRepoDO {
 }
 export interface RoomSearchCriteriaRepoDO {
 	name?: string;
-    categoryId?: string;
-	bedIdList?: string[];
+	categoryIdList?: string[];
 }
 export interface RoomSearchResultRepoDO {
 	lazyLoad?: LazyLoadRepoDO;

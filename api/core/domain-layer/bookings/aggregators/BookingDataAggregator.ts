@@ -55,9 +55,9 @@ export class BookingDataAggregator {
             return bookingsRepo.getBookingList({ hotelId: this._hotel.id }, query);
         }).then((result: BookingSearchResultRepoDO) => {
             this._bookingList = result.bookingList;
-            var roomCategStatsAggregator = new RoomCategoryStatsAggregator(this._appContext);
+            var roomCategStatsAggregator = new RoomCategoryStatsAggregator(this._appContext, this._sessionContext);
 
-            return roomCategStatsAggregator.getRoomCategoryStatsList({ hotelId: this._sessionContext.sessionDO.hotel.id }, this.getDistinctRoomCategoryIdListFromBookingList());
+            return roomCategStatsAggregator.getRoomCategoryStatsList(this.getDistinctRoomCategoryIdListFromBookingList());
         }).then((result: RoomCategoryStatsDO[]) => {
             this._roomCategoryStatsList = result;
 

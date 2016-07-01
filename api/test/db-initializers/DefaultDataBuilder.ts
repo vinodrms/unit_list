@@ -157,9 +157,9 @@ export class DefaultDataBuilder {
 
                 var roomCategoryIdList: string[] = _.map(this._roomList, (room: RoomDO) => { return room.categoryId });
                 var distinctRoomCategoryIdList = _.uniq(roomCategoryIdList, function (roomCategoryId) { return roomCategoryId; });
-                var aggregator = new RoomCategoryStatsAggregator(this._testContext.appContext);
+                var aggregator = new RoomCategoryStatsAggregator(this._testContext.appContext, this._testContext.sessionContext);
 
-                return aggregator.getRoomCategoryStatsList({ hotelId: this._testContext.sessionContext.sessionDO.hotel.id }, distinctRoomCategoryIdList);
+                return aggregator.getRoomCategoryStatsList(distinctRoomCategoryIdList);
             }).then((roomCategoryStatsList: RoomCategoryStatsDO[]) => {
                 this._roomCategoryStatsList = roomCategoryStatsList;
 

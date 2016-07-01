@@ -85,8 +85,8 @@ export class BookingSearch {
             }).then((bookingOccupancy: IBookingOccupancy) => {
                 this._loadedBookingOccupancy = bookingOccupancy;
 
-                var roomCategStatsAggregator = new RoomCategoryStatsAggregator(this._appContext);
-                return roomCategStatsAggregator.getRoomCategoryStatsList({ hotelId: this._sessionContext.sessionDO.hotel.id });
+                var roomCategStatsAggregator = new RoomCategoryStatsAggregator(this._appContext, this._sessionContext);
+                return roomCategStatsAggregator.getRoomCategoryStatsList();
             }).then((roomCategoryStatsList: RoomCategoryStatsDO[]) => {
                 var roomCategoryStatsFilter = new RoomCategoryStatsFilter(this._searchParams.configCapacity);
                 this._loadedRoomCategoryStatsList = roomCategoryStatsFilter.filterSync(roomCategoryStatsList);
