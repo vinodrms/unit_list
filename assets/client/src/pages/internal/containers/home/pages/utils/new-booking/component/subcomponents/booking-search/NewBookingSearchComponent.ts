@@ -55,7 +55,11 @@ export class NewBookingSearchComponent extends BaseComponent {
             });
 	}
 	public addBookingVMInCart(bookingItemVM: BookingItemVM) {
-		this._inMemoryBookingService.addBookingItem(bookingItemVM);
+		var addResult = this._inMemoryBookingService.addBookingItem(bookingItemVM);
+		if (!addResult.success) {
+			this._appContext.toaster.error(addResult.errorMessage);
+			return;
+		}
 		this._wizardBookingSearchService.checkBookingCartValidity(this._inMemoryBookingService, this._roomCategoryList);
 		this._bookingSearchService.decrementInventoryAvailability(bookingItemVM.transientBookingItem);
 	}

@@ -1,13 +1,21 @@
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
+import {AppContext} from '../../../../../../../../../common/utils/AppContext';
 import {ABookingService} from './ABookingService';
 import {BookingItemVM} from './view-models/BookingItemVM';
 import {TransientBookingItem} from '../data-objects/TransientBookingItem';
+import {BookingDOConstraints} from '../../../../../../../services/bookings/data-objects/BookingDOConstraints';
+
+export interface AddBookingResult {
+    success: boolean;
+    errorMessage?: string;
+}
+
 @Injectable()
 export class InMemoryBookingService extends ABookingService {
     private _cartSequenceId: number = 0;
 
-    constructor() {
+    constructor(private _appContext: AppContext) {
         super();
         this._bookingItemVMList = [];
     }
@@ -16,10 +24,22 @@ export class InMemoryBookingService extends ABookingService {
         return this.returnObservableWith(this._bookingItemVMList);
     }
 
-    public addBookingItem(bookingItemVM: BookingItemVM) {
+    public addBookingItem(bookingItemVM: BookingItemVM): AddBookingResult {
+        var addTest = this.testIfcanAddBookingItem(bookingItemVM);
+        if(!addTest.success) { return addTest };
         bookingItemVM.cartSequenceId = this.getNextSequenceId();
         this._bookingItemVMList.push(bookingItemVM);
         this.refreshData();
+        return { success: true };
+    }
+    private testIfcanAddBookingItem(bookingItemVM: BookingItemVM): AddBookingResult {
+        if(this._bookingItemVMList.length >= BookingDOConstraints.NoBookingsLimit) {
+            return {
+                success: false,
+                errorMessage: this._appContext.thTranslation.translate("You cannot add more that %noBookings% simultaneous bookings", {noBookings: BookingDOConstraints.NoBookingsLimit})
+            }
+        };
+        return { success: true };
     }
 
     public removeBookingItem(bookingItemVM: BookingItemVM) {
