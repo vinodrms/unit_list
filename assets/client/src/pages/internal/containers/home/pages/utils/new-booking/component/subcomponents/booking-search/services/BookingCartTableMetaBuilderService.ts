@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {AppContext} from '../../../../../../../../../../../common/utils/AppContext';
 import {LazyLoadTableMeta, TableRowCommand, TableColumnMeta, TablePropertyType, TableColumnValueMeta} from '../../../../../../../../../../../common/utils/components/lazy-loading/utils/LazyLoadTableMeta';
-import {BookingItemVM, BookingItemVMType} from '../../../../services/search/view-models/BookingItemVM';
+import {BookingCartItemVM, BookingCartItemVMType} from '../../../../services/search/view-models/BookingCartItemVM';
 import {BookingCartService} from '../../../../services/search/BookingCartService';
 import {ConfigCapacityDO} from '../../../../../../../../../services/common/data-objects/bed-config/ConfigCapacityDO';
 import {CurrencyDO} from '../../../../../../../../../services/common/data-objects/currency/CurrencyDO';
@@ -75,8 +75,8 @@ export class BookingCartTableMetaBuilderService {
         }
     }
 
-    public customCellClassGenerator(bookingItem: BookingItemVM, columnValueMeta: TableColumnValueMeta): string {
-        if (bookingItem.itemType === BookingItemVMType.Total) {
+    public customCellClassGenerator(bookingCartItem: BookingCartItemVM, columnValueMeta: TableColumnValueMeta): string {
+        if (bookingCartItem.itemType === BookingCartItemVMType.Total) {
             var className = "default-cursor";
             if (columnValueMeta.objectPropertyId === "priceProductName" || columnValueMeta.objectPropertyId === "totalPriceString") {
                 className += " important";
@@ -85,14 +85,14 @@ export class BookingCartTableMetaBuilderService {
         }
         return "";
     }
-    public customRowClassGenerator(bookingItem: BookingItemVM): string {
-        if (bookingItem.itemType === BookingItemVMType.Total) {
+    public customRowClassGenerator(bookingCartItem: BookingCartItemVM): string {
+        if (bookingCartItem.itemType === BookingCartItemVMType.Total) {
             return BookingCartTableMetaBuilderService.TotalsClass;
         }
         return "";
     }
-    public canPerformCommandOnItem(bookingItem: BookingItemVM, command: TableRowCommand): boolean {
-        return bookingItem.itemType !== BookingItemVMType.Total;
+    public canPerformCommandOnItem(bookingCartItem: BookingCartItemVM, command: TableRowCommand): boolean {
+        return bookingCartItem.itemType !== BookingCartItemVMType.Total;
     }
 
     public updateBookingCartTotalsRow(bookingCartService: BookingCartService) {
@@ -101,8 +101,8 @@ export class BookingCartTableMetaBuilderService {
             bookingCartService.totalsBookingItem = null;
             return;
         }
-        var totalsBookingItem = new BookingItemVM();
-        totalsBookingItem.itemType = BookingItemVMType.Total;
+        var totalsBookingItem = new BookingCartItemVM();
+        totalsBookingItem.itemType = BookingCartItemVMType.Total;
         totalsBookingItem.uniqueId = "";
         totalsBookingItem.priceProductName = this._appContext.thTranslation.translate("Totals");
         totalsBookingItem.bookingCapacity = new ConfigCapacityDO();
@@ -110,7 +110,7 @@ export class BookingCartTableMetaBuilderService {
         totalsBookingItem.bookingCapacity.noChildren = 0;
         totalsBookingItem.bookingCapacity.noBabies = 0;
         var totalPrice = 0;
-        _.forEach(bookingCartService.bookingItemVMList, (bookingItem: BookingItemVM) => {
+        _.forEach(bookingCartService.bookingItemVMList, (bookingItem: BookingCartItemVM) => {
             totalPrice += bookingItem.totalPrice;
             totalsBookingItem.bookingCapacity.noAdults += bookingItem.bookingCapacity.noAdults;
             totalsBookingItem.bookingCapacity.noChildren += bookingItem.bookingCapacity.noChildren;

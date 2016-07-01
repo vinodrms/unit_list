@@ -5,7 +5,7 @@ import {BookingStepType} from '../../utils/BookingStepType';
 import {StringOccurenciesIndexer} from '../../../../../../../../../../../common/utils/indexers/StringOccurenciesIndexer';
 import {RoomCategoryDO} from '../../../../../../../../../services/room-categories/data-objects/RoomCategoryDO';
 import {PriceProductValidationRuleDataDO, PriceProductValidationRuleResult} from '../../../../../../../../../services/price-products/data-objects/constraint/validation/IPriceProductValidationRule';
-import {BookingItemVM} from '../../../../services/search/view-models/BookingItemVM';
+import {BookingCartItemVM} from '../../../../services/search/view-models/BookingCartItemVM';
 import {BookingCartService} from '../../../../services/search/BookingCartService';
 
 @Injectable()
@@ -37,12 +37,12 @@ export class BookingSearchStepService implements IBookingStepService {
 
 		var bookingCartIsValid: boolean = true;
 		var bookingCartMessage: string = "";
-		_.forEach(bookingCartService.bookingItemVMList, (bookingItem: BookingItemVM) => {
-			var validationResult: PriceProductValidationRuleResult = bookingItem.priceProduct.constraints.appliesOn({
+		_.forEach(bookingCartService.bookingItemVMList, (bookingCartItem: BookingCartItemVM) => {
+			var validationResult: PriceProductValidationRuleResult = bookingCartItem.priceProduct.constraints.appliesOn({
 				thTranslation: this._appContext.thTranslation,
 				roomCategoryList: roomCategoryList,
 				indexedNumberOfRoomCategories: indexedNumberOfRoomCategories,
-				roomCategoryIdListFromPriceProduct: bookingItem.priceProduct.roomCategoryIdList
+				roomCategoryIdListFromPriceProduct: bookingCartItem.priceProduct.roomCategoryIdList
 			});
 			if (!validationResult.valid) {
 				bookingCartIsValid = false;
@@ -53,7 +53,7 @@ export class BookingSearchStepService implements IBookingStepService {
 		this._errorString = bookingCartMessage;
 	}
 	private getRoomCategoryIdOccurenciesStringIndexer(bookingCartService: BookingCartService): StringOccurenciesIndexer {
-		var roomCategoryIdList: string[] = _.map(bookingCartService.bookingItemVMList, (bookingItem: BookingItemVM) => {
+		var roomCategoryIdList: string[] = _.map(bookingCartService.bookingItemVMList, (bookingItem: BookingCartItemVM) => {
 			return bookingItem.transientBookingItem.roomCategoryId;
 		});
 		return new StringOccurenciesIndexer(roomCategoryIdList);

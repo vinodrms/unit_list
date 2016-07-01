@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {LazyLoadTableMeta, TableRowCommand, TableColumnMeta, TablePropertyType, TableColumnValueMeta} from '../../../../../../../../../../../common/utils/components/lazy-loading/utils/LazyLoadTableMeta';
-import {BookingItemVM} from '../../../../services/search/view-models/BookingItemVM';
+import {BookingCartItemVM} from '../../../../services/search/view-models/BookingCartItemVM';
 
 @Injectable()
 export class BookingSearchTableMetaBuilderService {
@@ -104,11 +104,11 @@ export class BookingSearchTableMetaBuilderService {
         }
     }
 
-    public customCellClassGenerator(bookingItem: BookingItemVM, columnValueMeta: TableColumnValueMeta): string {
-        if (columnValueMeta.objectPropertyId === 'noAvailableRooms' && bookingItem.noAvailableRooms <= 0) {
+    public customCellClassGenerator(bookingCartItem: BookingCartItemVM, columnValueMeta: TableColumnValueMeta): string {
+        if (columnValueMeta.objectPropertyId === 'noAvailableRooms' && bookingCartItem.noAvailableRooms <= 0) {
             return BookingSearchTableMetaBuilderService.OverbookingClass;
         }
-        if (columnValueMeta.objectPropertyId === 'noAvailableAllotmentsString' && bookingItem.noAvailableAllotments > 0) {
+        if (columnValueMeta.objectPropertyId === 'noAvailableAllotmentsString' && bookingCartItem.noAvailableAllotments > 0) {
             return BookingSearchTableMetaBuilderService.AvailableAllotmentClass;
         }
         return "";

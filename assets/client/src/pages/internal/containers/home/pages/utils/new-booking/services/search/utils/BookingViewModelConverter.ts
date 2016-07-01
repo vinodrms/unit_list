@@ -3,7 +3,7 @@ import {CurrencyDO} from '../../../../../../../../services/common/data-objects/c
 import {ConfigCapacityDO} from '../../../../../../../../services/common/data-objects/bed-config/ConfigCapacityDO';
 import {ThDateIntervalDO} from '../../../../../../../../services/common/data-objects/th-dates/ThDateIntervalDO';
 import {BookingSearchResultDO} from '../data-objects/BookingSearchResultDO';
-import {BookingItemVM, BookingItemVMType} from '../view-models/BookingItemVM';
+import {BookingCartItemVM, BookingCartItemVMType} from '../view-models/BookingCartItemVM';
 import {RoomCategoryItemDO} from '../data-objects/room-category-item/RoomCategoryItemDO';
 import {AllotmentItemDO} from '../data-objects/allotment-item/AllotmentItemDO';
 import {PriceProductItemDO} from '../data-objects/price-product-item/PriceProductItemDO';
@@ -14,16 +14,18 @@ export class BookingViewModelConverter {
 
     constructor(private _thTranslation: ThTranslation) { }
 
-    public convertSearchResultToVMList(bookingSearchResultDO: BookingSearchResultDO, bookingSearchParams: BookingSearchParams, currency: CurrencyDO): BookingItemVM[] {
-        var bookingItemVMList: BookingItemVM[] = [];
+    public convertSearchResultToVMList(bookingSearchResultDO: BookingSearchResultDO, bookingSearchParams: BookingSearchParams, currency: CurrencyDO): BookingCartItemVM[] {
+        var bookingItemVMList: BookingCartItemVM[] = [];
         _.forEach(bookingSearchResultDO.roomCategoryItemList, (roomCategoryItem: RoomCategoryItemDO) => {
             bookingItemVMList = bookingItemVMList.concat(this.getBookingSearchResultForRoom(roomCategoryItem, bookingSearchResultDO, bookingSearchParams, currency));
         });
         return bookingItemVMList;
     }
 
-    private getBookingSearchResultForRoom(roomCategoryItem: RoomCategoryItemDO, bookingSearchResultDO: BookingSearchResultDO, bookingSearchParams: BookingSearchParams, currency: CurrencyDO): BookingItemVM[] {
-        var bookingItemVMList: BookingItemVM[] = [];
+    private getBookingSearchResultForRoom(roomCategoryItem: RoomCategoryItemDO, bookingSearchResultDO: BookingSearchResultDO,
+        bookingSearchParams: BookingSearchParams, currency: CurrencyDO): BookingCartItemVM[] {
+
+        var bookingItemVMList: BookingCartItemVM[] = [];
 
         var addedPriceProductIdByRoomCateg: { [index: string]: string; } = {};
 
@@ -49,11 +51,13 @@ export class BookingViewModelConverter {
         return bookingItemVMList;
     }
 
-    private createBookingItemVM(bookingSearchParams: BookingSearchParams, roomCategoryItem: RoomCategoryItemDO, priceProductItem: PriceProductItemDO, currency: CurrencyDO, allotmentItem?: AllotmentItemDO): BookingItemVM {
-        var bookingItemVM = new BookingItemVM();
+    private createBookingItemVM(bookingSearchParams: BookingSearchParams, roomCategoryItem: RoomCategoryItemDO,
+        priceProductItem: PriceProductItemDO, currency: CurrencyDO, allotmentItem?: AllotmentItemDO): BookingCartItemVM {
+
+        var bookingItemVM = new BookingCartItemVM();
         bookingItemVM.transientBookingItem = new TransientBookingItem()
 
-        bookingItemVM.itemType = BookingItemVMType.NormalBooking;
+        bookingItemVM.itemType = BookingCartItemVMType.NormalBooking;
         bookingItemVM.uniqueId = priceProductItem.priceProduct.id + roomCategoryItem.stats.roomCategory.id;
         bookingItemVM.priceProductName = priceProductItem.priceProduct.name;
         bookingItemVM.roomCategoryName = roomCategoryItem.stats.roomCategory.displayName;

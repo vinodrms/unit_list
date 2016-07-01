@@ -1,13 +1,13 @@
 import {SortOptions, SortOrder} from '../../../../../../../../services/common/ILazyLoadRequestService';
-import {BookingItemVM} from '../view-models/BookingItemVM';
+import {BookingCartItemVM} from '../view-models/BookingCartItemVM';
 import {ConfigCapacityDO} from '../../../../../../../../services/common/data-objects/bed-config/ConfigCapacityDO';
 
 export class BookingViewModelSorter {
     constructor() {
     }
 
-    public sortBookingSearchResultsBy(bookingItemVMList: BookingItemVM[], sortOptions: SortOptions): BookingItemVM[] {
-        var sortedResults = _.sortBy(bookingItemVMList, (bookingItemVM: BookingItemVM) => {
+    public sortBookingSearchResultsBy(bookingItemVMList: BookingCartItemVM[], sortOptions: SortOptions): BookingCartItemVM[] {
+        var sortedResults = _.sortBy(bookingItemVMList, (bookingItemVM: BookingCartItemVM) => {
             if (sortOptions.objectPropertyId === 'roomCapacity') {
                 var roomCapacity: ConfigCapacityDO = bookingItemVM[sortOptions.objectPropertyId];
                 return (roomCapacity.noAdults * 2) + roomCapacity.noChildren;

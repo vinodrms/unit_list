@@ -4,13 +4,13 @@ import {TransientBookingItem} from '../../data-objects/TransientBookingItem';
 import {ThDateIntervalDO} from '../../../../../../../../services/common/data-objects/th-dates/ThDateIntervalDO';
 import {CurrencyDO} from '../../../../../../../../services/common/data-objects/currency/CurrencyDO';
 
-export enum BookingItemVMType {
+export enum BookingCartItemVMType {
     NormalBooking,
     Total
 }
 
-export class BookingItemVM {
-    itemType: BookingItemVMType;
+export class BookingCartItemVM {
+    itemType: BookingCartItemVMType;
     cartSequenceId: number;
     uniqueId: string;
     priceProductName: string;

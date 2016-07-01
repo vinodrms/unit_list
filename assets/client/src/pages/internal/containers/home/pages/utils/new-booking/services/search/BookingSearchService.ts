@@ -12,7 +12,7 @@ import {HotelAggregatorService} from '../../../../../../../services/hotel/HotelA
 import {HotelAggregatedInfo} from '../../../../../../../services/hotel/utils/HotelAggregatedInfo';
 import {BookingSearchResultDO} from './data-objects/BookingSearchResultDO';
 import {BookingSearchParams} from '../data-objects/BookingSearchParams';
-import {BookingItemVM} from './view-models/BookingItemVM';
+import {BookingCartItemVM} from './view-models/BookingCartItemVM';
 import {BookingViewModelConverter} from './utils/BookingViewModelConverter';
 import {BookingViewModelSorter} from './utils/BookingViewModelSorter';
 import {TransientBookingItem} from '../data-objects/TransientBookingItem';
@@ -34,14 +34,14 @@ export class BookingSearchService extends ABookingService {
         this._bookingViewModelSorter = new BookingViewModelSorter();
     }
 
-    protected getPageItemList(): Observable<BookingItemVM[]> {
+    protected getPageItemList(): Observable<BookingCartItemVM[]> {
         if (!this._searchParams) {
             return this.returnEmptyResult();
         }
-        return this.returnObservableWith(this._bookingItemVMList);
+        return this.returnObservableWith(this._bookingCartItemVMList);
     }
 
-    public searchBookings(searchParams: BookingSearchParams): Observable<{ roomCategoryList: RoomCategoryDO[], bookingItemList: BookingItemVM[] }> {
+    public searchBookings(searchParams: BookingSearchParams): Observable<{ roomCategoryList: RoomCategoryDO[], bookingItemList: BookingCartItemVM[] }> {
         this._searchParams = searchParams.buildPrototype();
         this._sortOptions = null;
 
@@ -73,7 +73,7 @@ export class BookingSearchService extends ABookingService {
 
     public sort(sortOptions: SortOptions) {
         this._sortOptions = sortOptions;
-        this.bookingItemVMList = this._bookingViewModelSorter.sortBookingSearchResultsBy(this._bookingItemVMList, sortOptions);
+        this.bookingItemVMList = this._bookingViewModelSorter.sortBookingSearchResultsBy(this._bookingCartItemVMList, sortOptions);
     }
     public getSortedOptions(): SortOptions {
         return this._sortOptions;
@@ -85,7 +85,7 @@ export class BookingSearchService extends ABookingService {
         }
         this._bookingSearchResult.decrementAvailability(transientBookingItem.roomCategoryId, transientBookingItem.allotmentId);
         var newBookingVMList = this._bookingViewModelConverter.convertSearchResultToVMList(this._bookingSearchResult, this._searchParams, this._currency);
-        if(this._sortOptions) {
+        if (this._sortOptions) {
             newBookingVMList = this._bookingViewModelSorter.sortBookingSearchResultsBy(newBookingVMList, this._sortOptions);
         }
         this.bookingItemVMList = newBookingVMList;

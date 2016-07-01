@@ -9,7 +9,7 @@ import {RoomCategoryDO} from '../../../../../../../../services/room-categories/d
 import {BookingSearchParametersComponent} from './components/search-parameters/BookingSearchParametersComponent';
 import {BookingSearchParams} from '../../../services/data-objects/BookingSearchParams';
 import {BookingSearchService} from '../../../services/search/BookingSearchService';
-import {BookingItemVM} from '../../../services/search/view-models/BookingItemVM';
+import {BookingCartItemVM} from '../../../services/search/view-models/BookingCartItemVM';
 import {BookingSearchTableMetaBuilderService} from './services/BookingSearchTableMetaBuilderService';
 import {BookingCartTableMetaBuilderService} from './services/BookingCartTableMetaBuilderService';
 import {BookingSearchStepService} from './services/BookingSearchStepService';
@@ -24,8 +24,8 @@ import {BookingCartService} from '../../../services/search/BookingCartService';
 	pipes: [TranslationPipe]
 })
 export class NewBookingSearchComponent extends BaseComponent {
-	@ViewChild('searchResults') private _searchResultsTableComponent: LazyLoadingTableComponent<BookingItemVM>;
-	@ViewChild('bookingCart') private _bookingCartTableComponent: LazyLoadingTableComponent<BookingItemVM>;
+	@ViewChild('searchResults') private _searchResultsTableComponent: LazyLoadingTableComponent<BookingCartItemVM>;
+	@ViewChild('bookingCart') private _bookingCartTableComponent: LazyLoadingTableComponent<BookingCartItemVM>;
 
 	private _roomCategoryList: RoomCategoryDO[];
 	isSearching: boolean = false;
@@ -52,7 +52,7 @@ export class NewBookingSearchComponent extends BaseComponent {
 		this._bookingSearchParams.transientBookingList = this._bookingCartService.getTransientBookingItemList();
 		this.isSearching = true;
 		this._bookingSearchService.searchBookings(this._bookingSearchParams)
-			.subscribe((searchResult: { roomCategoryList: RoomCategoryDO[], bookingItemList: BookingItemVM[] }) => {
+			.subscribe((searchResult: { roomCategoryList: RoomCategoryDO[], bookingItemList: BookingCartItemVM[] }) => {
                 this._roomCategoryList = searchResult.roomCategoryList;
 				this.isSearching = false;
             }, (error: ThError) => {
@@ -60,8 +60,8 @@ export class NewBookingSearchComponent extends BaseComponent {
                 this._appContext.toaster.error(error.message);
             });
 	}
-	public addBookingVMInCart(bookingItemVM: BookingItemVM) {
-		var addResult = this._bookingCartService.addBookingItem(bookingItemVM);
+	public addBookingVMInCart(bookingCartItemVM: BookingCartItemVM) {
+		var addResult = this._bookingCartService.addBookingItem(bookingCartItemVM);
 		if (!addResult.success) {
 			this._appContext.toaster.error(addResult.errorMessage);
 			return;
@@ -70,19 +70,19 @@ export class NewBookingSearchComponent extends BaseComponent {
 		this._bookingCartService.refreshData();
 
 		this._wizardBookingSearchService.checkBookingCartValidity(this._bookingCartService, this._roomCategoryList);
-		this._bookingSearchService.decrementInventoryAvailability(bookingItemVM.transientBookingItem);
+		this._bookingSearchService.decrementInventoryAvailability(bookingCartItemVM.transientBookingItem);
 	}
-	public removeBookingVMFromCart(bookingItemVM: BookingItemVM) {
+	public removeBookingVMFromCart(bookingCartItemVM: BookingCartItemVM) {
 		var title = this._appContext.thTranslation.translate("Delete Price Product");
-		var content = this._appContext.thTranslation.translate("Are you sure you want to remove %priceProductName% from the cart?", { priceProductName: bookingItemVM.priceProductName });
+		var content = this._appContext.thTranslation.translate("Are you sure you want to remove %priceProductName% from the cart?", { priceProductName: bookingCartItemVM.priceProductName });
 		this._appContext.modalService.confirm(title, content, { positive: this._appContext.thTranslation.translate("Yes"), negative: this._appContext.thTranslation.translate("No") },
 			() => {
-				this.removeBookingVMFromCartCore(bookingItemVM);
+				this.removeBookingVMFromCartCore(bookingCartItemVM);
 			}, () => { });
 	}
-	private removeBookingVMFromCartCore(bookingItemVM: BookingItemVM) {
+	private removeBookingVMFromCartCore(bookingCartItemVM: BookingCartItemVM) {
 		if (!this._bookingSearchParams) { return; }
-		this._bookingCartService.removeBookingItem(bookingItemVM);
+		this._bookingCartService.removeBookingItem(bookingCartItemVM);
 		this._cartTableMetaBuilder.updateBookingCartTotalsRow(this._bookingCartService);
 		this._bookingCartService.refreshData();
 
