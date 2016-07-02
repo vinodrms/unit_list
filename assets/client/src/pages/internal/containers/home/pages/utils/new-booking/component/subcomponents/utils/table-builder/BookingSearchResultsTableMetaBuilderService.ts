@@ -3,7 +3,7 @@ import {LazyLoadTableMeta, TableRowCommand, TableColumnMeta, TablePropertyType, 
 import {BookingCartItemVM} from '../../../../services/search/view-models/BookingCartItemVM';
 
 @Injectable()
-export class BookingSearchTableMetaBuilderService {
+export class BookingSearchResultsTableMetaBuilderService {
     public static OverbookingClass = "overbooking";
     public static AvailableAllotmentClass = "allotment";
 
@@ -106,10 +106,10 @@ export class BookingSearchTableMetaBuilderService {
 
     public customCellClassGenerator(bookingCartItem: BookingCartItemVM, columnValueMeta: TableColumnValueMeta): string {
         if (columnValueMeta.objectPropertyId === 'noAvailableRooms' && bookingCartItem.noAvailableRooms <= 0) {
-            return BookingSearchTableMetaBuilderService.OverbookingClass;
+            return BookingSearchResultsTableMetaBuilderService.OverbookingClass;
         }
         if (columnValueMeta.objectPropertyId === 'noAvailableAllotmentsString' && bookingCartItem.noAvailableAllotments > 0) {
-            return BookingSearchTableMetaBuilderService.AvailableAllotmentClass;
+            return BookingSearchResultsTableMetaBuilderService.AvailableAllotmentClass;
         }
         return "";
     }
