@@ -1,4 +1,4 @@
-import {Component, ViewChild} from '@angular/core';
+import {Component, ViewChild, AfterViewInit} from '@angular/core';
 import {BaseComponent} from '../../../../../../../../../../common/base/BaseComponent';
 import {LazyLoadingTableComponent} from '../../../../../../../../../../common/utils/components/lazy-loading/LazyLoadingTableComponent';
 import {TableColumnValueMeta} from '../../../../../../../../../../common/utils/components/lazy-loading/utils/LazyLoadTableMeta';
@@ -9,9 +9,9 @@ import {RoomCategoryDO} from '../../../../../../../../services/room-categories/d
 import {BookingSearchParametersComponent} from './components/search-parameters/BookingSearchParametersComponent';
 import {BookingSearchParams} from '../../../services/data-objects/BookingSearchParams';
 import {BookingSearchService} from '../../../services/search/BookingSearchService';
-import {BookingCartItemVM} from '../../../services/search/view-models/BookingCartItemVM';
+import {BookingCartItemVM, BookingCartItemVMType} from '../../../services/search/view-models/BookingCartItemVM';
 import {BookingSearchResultsTableMetaBuilderService} from '../utils/table-builder/BookingSearchResultsTableMetaBuilderService';
-import {BookingCartPreviewTableMetaBuilderService} from '../utils/table-builder/BookingCartPreviewTableMetaBuilderService';
+import {BookingCartTableMetaBuilderService} from '../utils/table-builder/BookingCartTableMetaBuilderService';
 import {BookingTableUtilsService} from '../utils/table-builder/BookingTableUtilsService';
 import {BookingSearchStepService} from './services/BookingSearchStepService';
 import {BookingCartService} from '../../../services/search/BookingCartService';
@@ -22,10 +22,10 @@ import {BookingCartService} from '../../../services/search/BookingCartService';
 	directives: [CustomScroll, LazyLoadingTableComponent,
 		BookingSearchParametersComponent],
 	providers: [BookingSearchService, BookingSearchResultsTableMetaBuilderService,
-		BookingCartPreviewTableMetaBuilderService, BookingTableUtilsService],
+		BookingCartTableMetaBuilderService, BookingTableUtilsService],
 	pipes: [TranslationPipe]
 })
-export class NewBookingSearchComponent extends BaseComponent {
+export class NewBookingSearchComponent extends BaseComponent implements AfterViewInit {
 	@ViewChild('searchResults') private _searchResultsTableComponent: LazyLoadingTableComponent<BookingCartItemVM>;
 	@ViewChild('bookingCart') private _bookingCartTableComponent: LazyLoadingTableComponent<BookingCartItemVM>;
 
@@ -35,7 +35,7 @@ export class NewBookingSearchComponent extends BaseComponent {
 
 	constructor(private _appContext: AppContext, private _wizardBookingSearchService: BookingSearchStepService,
 		private _bookingSearchService: BookingSearchService, private _searchTableMetaBuilder: BookingSearchResultsTableMetaBuilderService,
-		private _cartTableMetaBuilder: BookingCartPreviewTableMetaBuilderService, private _bookingTableUtilsService: BookingTableUtilsService,
+		private _cartTableMetaBuilder: BookingCartTableMetaBuilderService, private _bookingTableUtilsService: BookingTableUtilsService,
 		private _bookingCartService: BookingCartService) {
 		super();
 	}
@@ -43,7 +43,7 @@ export class NewBookingSearchComponent extends BaseComponent {
 		this._searchResultsTableComponent.bootstrap(this._bookingSearchService, this._searchTableMetaBuilder.buildSearchResultsTableMeta());
 		this._searchResultsTableComponent.attachCustomCellClassGenerator(this._searchTableMetaBuilder.customCellClassGenerator);
 
-		this._bookingCartTableComponent.bootstrap(this._bookingCartService, this._cartTableMetaBuilder.buildBookingCartTableMeta());
+		this._bookingCartTableComponent.bootstrap(this._bookingCartService, this._cartTableMetaBuilder.buildBookingCartPreviewTableMeta());
 		this._bookingCartTableComponent.attachCustomCellClassGenerator(this._bookingTableUtilsService.customCellClassGeneratorForBookingCart);
 		this._bookingCartTableComponent.attachCustomRowClassGenerator(this._bookingTableUtilsService.customRowClassGeneratorForBookingCart);
 		this._bookingCartTableComponent.attachCustomRowCommandPerformPolicy(this._bookingTableUtilsService.canPerformCommandOnItemForBookingCart);
@@ -63,6 +63,7 @@ export class NewBookingSearchComponent extends BaseComponent {
             });
 	}
 	public addBookingVMInCart(bookingCartItemVM: BookingCartItemVM) {
+		if (bookingCartItemVM.itemType === BookingCartItemVMType.Total) { return; }
 		var addResult = this._bookingCartService.addBookingItem(bookingCartItemVM);
 		if (!addResult.success) {
 			this._appContext.toaster.error(addResult.errorMessage);

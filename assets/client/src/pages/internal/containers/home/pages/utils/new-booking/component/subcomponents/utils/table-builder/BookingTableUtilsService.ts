@@ -33,7 +33,6 @@ export class BookingTableUtilsService {
     }
 
     public updateBookingCartTotalsRow(bookingCartService: BookingCartService) {
-        console.log(bookingCartService.bookingItemVMList);
         if (bookingCartService.bookingItemVMList.length == 0) {
             bookingCartService.totalsBookingItem = null;
             return;

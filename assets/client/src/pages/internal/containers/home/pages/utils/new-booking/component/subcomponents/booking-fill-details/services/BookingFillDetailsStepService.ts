@@ -8,7 +8,7 @@ export class BookingFillDetailsStepService implements IBookingStepService {
 	private _stepPath: string[];
 
 	constructor(private _appContext: AppContext) {
-		this._stepPath = [this._appContext.thTranslation.translate("Details")];
+		this._stepPath = [this._appContext.thTranslation.translate("Billing Details")];
 	}
 
 	public getBookingStepType(): BookingStepType {

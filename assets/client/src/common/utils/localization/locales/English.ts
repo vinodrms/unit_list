@@ -488,5 +488,7 @@ export var EnglishTranslations: Object = {
 	"Totals": "Totals",
 	"%noRooms% Rooms": "%noRooms% Rooms",
 	"%noRooms% Room": "%noRooms% Room",
+	"No People": "No People",
+	"Billing Details": "Billing Details"
 	
 };

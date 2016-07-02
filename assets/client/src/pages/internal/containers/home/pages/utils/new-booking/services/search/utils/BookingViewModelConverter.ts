@@ -1,4 +1,5 @@
 import {ThTranslation} from '../../../../../../../../../../common/utils/localization/ThTranslation';
+import {ThUtils} from '../../../../../../../../../../common/utils/ThUtils';
 import {CurrencyDO} from '../../../../../../../../services/common/data-objects/currency/CurrencyDO';
 import {ConfigCapacityDO} from '../../../../../../../../services/common/data-objects/bed-config/ConfigCapacityDO';
 import {ThDateIntervalDO} from '../../../../../../../../services/common/data-objects/th-dates/ThDateIntervalDO';
@@ -11,8 +12,11 @@ import {TransientBookingItem} from '../../data-objects/TransientBookingItem';
 import {BookingSearchParams} from '../../data-objects/BookingSearchParams';
 
 export class BookingViewModelConverter {
+    private _thUtils: ThUtils;
 
-    constructor(private _thTranslation: ThTranslation) { }
+    constructor(private _thTranslation: ThTranslation) {
+        this._thUtils = new ThUtils();
+    }
 
     public convertSearchResultToVMList(bookingSearchResultDO: BookingSearchResultDO, bookingSearchParams: BookingSearchParams, currency: CurrencyDO): BookingCartItemVM[] {
         var bookingItemVMList: BookingCartItemVM[] = [];
@@ -34,7 +38,7 @@ export class BookingViewModelConverter {
             if (allotmentItem.noOccupiedAllotments < allotmentItem.noTotalAllotments) {
                 var priceProductItem = bookingSearchResultDO.getPriceProductItemById(allotmentItem.priceProductId);
                 if (priceProductItem) {
-                    bookingItemVMList.push(this.createBookingItemVM(bookingSearchParams, roomCategoryItem, priceProductItem, currency, allotmentItem));
+                    bookingItemVMList.push(this.createBookingItemVM(bookingSearchResultDO, bookingSearchParams, roomCategoryItem, priceProductItem, currency, allotmentItem));
                     addedPriceProductIdByRoomCateg[priceProductItem.priceProduct.id] = roomCategoryItem.stats.roomCategory.id;
                 }
             }
@@ -43,7 +47,7 @@ export class BookingViewModelConverter {
         _.forEach(priceProductItemList, (priceProductItem: PriceProductItemDO) => {
             if (!addedPriceProductIdByRoomCateg[priceProductItem.priceProduct.id]
                 || addedPriceProductIdByRoomCateg[priceProductItem.priceProduct.id] != roomCategoryItem.stats.roomCategory.id) {
-                bookingItemVMList.push(this.createBookingItemVM(bookingSearchParams, roomCategoryItem, priceProductItem, currency));
+                bookingItemVMList.push(this.createBookingItemVM(bookingSearchResultDO, bookingSearchParams, roomCategoryItem, priceProductItem, currency));
                 addedPriceProductIdByRoomCateg[priceProductItem.priceProduct.id] = roomCategoryItem.stats.roomCategory.id;
             }
         });
@@ -51,8 +55,9 @@ export class BookingViewModelConverter {
         return bookingItemVMList;
     }
 
-    private createBookingItemVM(bookingSearchParams: BookingSearchParams, roomCategoryItem: RoomCategoryItemDO,
-        priceProductItem: PriceProductItemDO, currency: CurrencyDO, allotmentItem?: AllotmentItemDO): BookingCartItemVM {
+    private createBookingItemVM(bookingSearchResultDO: BookingSearchResultDO, bookingSearchParams: BookingSearchParams,
+        roomCategoryItem: RoomCategoryItemDO, priceProductItem: PriceProductItemDO,
+        currency: CurrencyDO, allotmentItem?: AllotmentItemDO): BookingCartItemVM {
 
         var bookingItemVM = new BookingCartItemVM();
         bookingItemVM.transientBookingItem = new TransientBookingItem()
@@ -90,6 +95,12 @@ export class BookingViewModelConverter {
 
         bookingItemVM.priceProduct = priceProductItem.priceProduct;
         bookingItemVM.ccy = currency;
+
+        bookingItemVM.customerNameString = "";
+        if (!this._thUtils.isUndefinedOrNull(bookingSearchResultDO.customer)) {
+            bookingItemVM.customerNameString = bookingSearchResultDO.customer.customerName;
+            bookingItemVM.customer = bookingSearchResultDO.customer;
+        }
 
         return bookingItemVM;
     }

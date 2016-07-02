@@ -3,6 +3,7 @@ import {PriceProductDO} from '../../../../../../../../services/price-products/da
 import {TransientBookingItem} from '../../data-objects/TransientBookingItem';
 import {ThDateIntervalDO} from '../../../../../../../../services/common/data-objects/th-dates/ThDateIntervalDO';
 import {CurrencyDO} from '../../../../../../../../services/common/data-objects/currency/CurrencyDO';
+import {CustomerDO} from '../../../../../../../../services/customers/data-objects/CustomerDO';
 
 export enum BookingCartItemVMType {
     NormalBooking,
@@ -25,8 +26,10 @@ export class BookingCartItemVM {
     totalPriceString: string;
     conditionsString: string;
     constraintsString: string;
+    customerNameString: string;
 
     transientBookingItem: TransientBookingItem;
     priceProduct: PriceProductDO;
     ccy: CurrencyDO;
+    customer: CustomerDO;
 }

@@ -1,5 +1,7 @@
 import {Observer} from 'rxjs/Observer';
 import {Observable} from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/share';
 import {ILazyLoadRequestService, LazyLoadData, SortOrder, SortOptions} from './ILazyLoadRequestService';
 import {TotalCountDO} from './data-objects/lazy-load/TotalCountDO';
 import {PageMetaDO} from './data-objects/lazy-load/PageMetaDO';
@@ -14,7 +16,7 @@ export abstract class ASinglePageRequestService<T> implements ILazyLoadRequestSe
     private initPageDataObservable() {
         this._pageDataObservable = new Observable<T[]>((serviceObserver: Observer<T[]>) => {
             this._pageDataObserver = serviceObserver;
-        });
+        }).share();
     }
 
     public getDataObservable(): Observable<LazyLoadData<T>> {
