@@ -29,7 +29,13 @@ export class BookingCartItemVM {
     customerNameString: string;
 
     transientBookingItem: TransientBookingItem;
+    canChangeDefaultBillableCustomer: boolean;
+
     priceProduct: PriceProductDO;
     ccy: CurrencyDO;
-    customer: CustomerDO;
+    customerList: CustomerDO[];
+
+    public get billableCustomerIsConfigured(): boolean {
+        return this.customerList.length > 0 && _.isString(this.transientBookingItem.defaultBillingDetails.customerId);
+    }
 }

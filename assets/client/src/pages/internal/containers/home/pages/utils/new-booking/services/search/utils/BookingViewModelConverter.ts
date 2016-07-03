@@ -10,6 +10,9 @@ import {AllotmentItemDO} from '../data-objects/allotment-item/AllotmentItemDO';
 import {PriceProductItemDO} from '../data-objects/price-product-item/PriceProductItemDO';
 import {TransientBookingItem} from '../../data-objects/TransientBookingItem';
 import {BookingSearchParams} from '../../data-objects/BookingSearchParams';
+import {DefaultBillingDetailsDO} from '../../../../../../../../services/bookings/data-objects/default-billing/DefaultBillingDetailsDO';
+import {CustomerDO} from '../../../../../../../../services/customers/data-objects/CustomerDO';
+import {InvoicePaymentMethodDO, InvoicePaymentMethodType} from '../../../../../../../../services/invoices/data-objects/payers/InvoicePaymentMethodDO';
 
 export class BookingViewModelConverter {
     private _thUtils: ThUtils;
@@ -97,11 +100,26 @@ export class BookingViewModelConverter {
         bookingItemVM.ccy = currency;
 
         bookingItemVM.customerNameString = "";
+        bookingItemVM.canChangeDefaultBillableCustomer = true;
+
         if (!this._thUtils.isUndefinedOrNull(bookingSearchResultDO.customer)) {
             bookingItemVM.customerNameString = bookingSearchResultDO.customer.customerName;
-            bookingItemVM.customer = bookingSearchResultDO.customer;
+            bookingItemVM.customerList = [bookingSearchResultDO.customer];
+            bookingItemVM.transientBookingItem.customerIdList = [bookingSearchResultDO.customer.id];
+            bookingItemVM.transientBookingItem.defaultBillingDetails = this.getDefaultBillingDetails(priceProductItem, bookingSearchResultDO.customer);
+            bookingItemVM.canChangeDefaultBillableCustomer = false;
         }
 
         return bookingItemVM;
+    }
+    private getDefaultBillingDetails(priceProductItem: PriceProductItemDO, customer: CustomerDO): DefaultBillingDetailsDO {
+        var billingDetails = new DefaultBillingDetailsDO();
+        billingDetails.customerId = customer.id;
+        billingDetails.paymentGuarantee = false;
+        if (priceProductItem.priceProduct.conditions.policy.hasCancellationPolicy()) {
+            billingDetails.paymentGuarantee = true;
+        }
+        billingDetails.paymentMethod = new InvoicePaymentMethodDO();
+        return billingDetails;
     }
 }
