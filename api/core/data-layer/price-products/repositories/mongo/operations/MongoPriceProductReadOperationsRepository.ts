@@ -90,7 +90,7 @@ export class MongoPriceProductReadOperationsRepository extends MongoRepository {
 			return;
 		}
 		if (!searchCriteria.customerPriceProductDetails.allowPublicPriceProducts) {
-			mongoQueryBuilder.addMultipleSelectOptionList("id", searchCriteria.priceProductIdList);
+			mongoQueryBuilder.addMultipleSelectOptionList("id", searchCriteria.customerPriceProductDetails.priceProductIdList);
 			return;
 		}
 		var mongoQueryUtils = new MongoQueryUtils();
