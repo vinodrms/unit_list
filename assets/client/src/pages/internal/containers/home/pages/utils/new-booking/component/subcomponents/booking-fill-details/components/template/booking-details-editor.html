@@ -1,0 +1,69 @@
+<div class="col-xs-12" *ngIf="bookingCartItem">
+    <div class="row booking-details-container">
+        <div class="col-sm-12 col-xs-12 booking-details-period">
+            <span class="period"><i class="fa unitpal-font">8</i> {{ intervalString }}</span>
+            <span><i class="fa fa-moon-o"></i> {{ noOfNights }} </span>
+        </div>
+        <div class="col-xs-12 booking-details-row">
+            <i class="fa fa-calendar-check-o" title="{{ 'Conditions' | translate }}"></i> {{ bookingCartItem.conditionsString }}
+        </div>
+        <div class="col-xs-12 booking-details-row">
+            <i class="fa fa-lock" title="{{ 'Constraints' | translate }}"></i> {{ bookingCartItem.constraintsString }}
+        </div>
+        <div class="col-xs-12 booking-details-table">
+            <table class="table form-group">
+                <thead>
+                    <tr>
+                        <th>
+                           {{ 'Price Product' | translate }}
+                        </th>
+                        <th>
+                           {{ 'Room' | translate }}
+                        </th>
+                        <th>
+                           {{ 'No People' | translate }}
+                        </th>
+                        <th>
+                           {{ 'Allotment' | translate }}
+                        </th>
+                        <th>
+                           {{ 'Price' | translate }}
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td width="30%">{{ bookingCartItem.priceProductName }}</td>
+                        <td width="30%">{{ bookingCartItem.roomCategoryName }}</td>
+                        <td width="10%">
+                            <config-capacity [configCapacity]="bookingCartItem.bookingCapacity"></config-capacity>
+                        </td>
+                        <td width="10%">
+                            <span *ngIf="!madeThroughAllotment">{{ 'No' | translate }}</span>
+                            <span *ngIf="madeThroughAllotment">{{ 'Yes' | translate }}</span>
+                        </td>
+                        <td width="20%">{{ bookingCartItem.totalPriceString }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-xs-12 booking-details-table">
+            <table class="table form-group">
+                <thead>
+                    <tr>
+                        <th>
+                           {{ 'Customers' | translate }}
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td width="80%">Gigi Vasile</td>
+                        <td width="20%">test..</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -489,6 +489,14 @@ export var EnglishTranslations: Object = {
 	"%noRooms% Rooms": "%noRooms% Rooms",
 	"%noRooms% Room": "%noRooms% Room",
 	"No People": "No People",
-	"Billing Details": "Billing Details"
+	"Billing Details": "Billing Details",
+	"Select a customer for the booking": "Select a customer for the booking",
+	"Select a customer to bill the invoice to": "Select a customer to bill the invoice to",
+	"You must add a payment guarantee and a payment method because the price product has cancellation conditions.": "You must add a payment guarantee and a payment method because the price product has cancellation conditions.",
+	"The selected customer does not support to pay the invoice by agreement.": "The selected customer does not support to pay the invoice by agreement.",
+	"Add at least one customer for all the bookings": "Add at least one customer for all the bookings",
+	"%firstDate% to %secondDate%": "%firstDate% to %secondDate%",
+	"Customers": "Customers"
+
 	
 };

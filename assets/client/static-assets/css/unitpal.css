@@ -1714,7 +1714,7 @@ ul.msg_list li .text-center a {
     background-color: #fb6708;
 }
 .btn-square.btn-square-next-prev {
-    background-color: #737373;    
+    background-color: #fb6708;    
 }
 
 a.btn.btn-square:hover,
@@ -1727,7 +1727,7 @@ a.btn.btn-square:focus {
     height: 100%;
 }
 .btn.btn-square.disabled {
-    background-color: #e7e7e7;   
+    background-color: #c1c1c1;   
 }
 .btn.btn-square>i {
     font-size: 30px;  
@@ -1857,6 +1857,42 @@ a.btn.btn-square:focus {
     padding-top: 15px;
     padding-bottom: 15px;
 }
+.booking-details-period {
+    padding-top: 10px;
+    font-size: 15px;
+}
+.booking-details-period>.period {
+    color: #fb6708;
+}
+.booking-details-container {
+    font-size: 12px;
+}
+.booking-details-table {
+    padding-left: 0px;
+    padding-right: 0px;
+}
+.booking-details-table table {
+    table-layout:fixed;
+}
+booking-details-table table td {
+    overflow: hidden;
+}
+.booking-details-table>table>thead {
+    background-color: #E6E6E6;
+    font-size: 11px;
+}
+.booking-details-table>table>thead>tr>th {
+    font-weight: normal !important;
+}
+.booking-details-table>table>tbody {
+    background-color: #F5F5F5;
+    font-size: 10px;
+}
+.booking-details-row {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
 .padding-right-0px {
     padding-right: 0px;
 }

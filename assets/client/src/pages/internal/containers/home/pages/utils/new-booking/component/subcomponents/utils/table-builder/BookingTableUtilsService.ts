@@ -20,6 +20,9 @@ export class BookingTableUtilsService {
             }
             return className;
         }
+        if(columnValueMeta.objectPropertyId === 'validationColumnFontName') {
+            return bookingCartItem.validationColumnClassName;
+        }
         return "";
     }
     public customRowClassGeneratorForBookingCart(bookingCartItem: BookingCartItemVM): string {

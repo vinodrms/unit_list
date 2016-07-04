@@ -42,6 +42,8 @@ export class BookingControllerService implements IBookingStepService, IBookingCu
 	public getErrorString(): string {
 		return this.currentBookingStep.getErrorString();
 	}
+	public didAppear() { }
+	public didDisappear() { }
 	private get currentBookingStep(): IBookingStepService {
 		if (this.isCustomerRegister()) {
 			return this._custRegisterStep;
@@ -55,13 +57,18 @@ export class BookingControllerService implements IBookingStepService, IBookingCu
 			this._customerObserver = null;
 		}
 		else if (this.hasPreviousStep()) {
-			this._bookingStepIndex--;
+			this.modifyBookingStep(-1);
 		}
 	}
 	public moveNext() {
 		if (this.canMoveNext() && this._bookingStepIndex < this._bookingSteps.length - 1) {
-			this._bookingStepIndex++;
+			this.modifyBookingStep(1);
 		}
+	}
+	private modifyBookingStep(stepIndexOffset: number) {
+		this.currentBookingStep.didDisappear();
+		this._bookingStepIndex += stepIndexOffset;
+		this.currentBookingStep.didAppear();
 	}
 
 	public selectCustomerFromRegister(): Observable<CustomerDO> {

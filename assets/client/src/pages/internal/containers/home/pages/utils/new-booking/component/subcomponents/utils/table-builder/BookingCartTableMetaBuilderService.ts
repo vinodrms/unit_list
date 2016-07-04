@@ -10,6 +10,7 @@ interface BookingCartColumnMetas {
     conditions: TableColumnMeta;
     constrains: TableColumnMeta;
     customer: TableColumnMeta;
+    validationColumn: TableColumnMeta;
 }
 
 @Injectable()
@@ -24,7 +25,7 @@ export class BookingCartTableMetaBuilderService {
 
         return {
             supportedRowCommandList: [TableRowCommand.Delete],
-            rowIdPropertySelector: "uniqueId",
+            rowIdPropertySelector: "cartSequenceId",
             addButtonText: "",
             autoSelectRows: false,
             noResultsPlaceholder: "Add at least one price product in the cart to continue",
@@ -42,7 +43,7 @@ export class BookingCartTableMetaBuilderService {
         var bookingCartColumnMetas = this.getBookingCartColumnMetas();
         return {
             supportedRowCommandList: [TableRowCommand.Select],
-            rowIdPropertySelector: "uniqueId",
+            rowIdPropertySelector: "cartSequenceId",
             autoSelectRows: false,
             columnMetaList: [
                 bookingCartColumnMetas.priceProductName,
@@ -52,7 +53,8 @@ export class BookingCartTableMetaBuilderService {
                 bookingCartColumnMetas.price,
                 bookingCartColumnMetas.conditions,
                 bookingCartColumnMetas.constrains,
-                bookingCartColumnMetas.customer
+                bookingCartColumnMetas.customer,
+                bookingCartColumnMetas.validationColumn
             ]
         };
     }
@@ -143,7 +145,16 @@ export class BookingCartTableMetaBuilderService {
                     objectPropertyId: "customerNameString",
                     propertyType: TablePropertyType.NotesType,
                     showInCollapsedView: false,
-                    normalStyle: "up-col-10p center"
+                    normalStyle: "up-col-15p center"
+                }
+            },
+            validationColumn: {
+                displayName: "",
+                valueMeta: {
+                    objectPropertyId: "validationColumnFontName",
+                    propertyType: TablePropertyType.FontIconType,
+                    showInCollapsedView: false,
+                    normalStyle: "up-col-5p center"
                 }
             }
         }

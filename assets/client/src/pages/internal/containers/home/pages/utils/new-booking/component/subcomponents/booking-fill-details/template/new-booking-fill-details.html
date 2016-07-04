@@ -1,9 +1,11 @@
 <div class="row full-height">
 	<div class="col-xs-7 full-height right-margin booking-cart-full">
-		<lazy-loading-table #bookingCartSelectable>
+		<lazy-loading-table #bookingCartSelectable (onSelect)="selectBookingCartItem($event)">
 		</lazy-loading-table>
 	</div>
 	<div class="col-xs-5 full-height">
-
+		<div class="row" *ngIf="selectedBookingCartItemVM">
+			<booking-details-editor [bookingCartItem]="selectedBookingCartItemVM"></booking-details-editor>
+		</div>
 	</div>
 </div>

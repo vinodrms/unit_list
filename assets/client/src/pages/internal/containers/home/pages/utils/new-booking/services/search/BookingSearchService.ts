@@ -23,7 +23,7 @@ export class BookingSearchService extends ABookingService {
     private _bookingViewModelSorter: BookingViewModelSorter;
 
     private _bookingSearchResult: BookingSearchResultDO;
-    private _currency: CurrencyDO;
+    private _hotelAggregatedInfo: HotelAggregatedInfo;
 
     private _searchParams: BookingSearchParams;
     private _sortOptions: SortOptions;
@@ -50,11 +50,11 @@ export class BookingSearchService extends ABookingService {
             this.searchBookingsCore(searchParams),
             this._roomCategoriesService.getRoomCategoryList()
         ).map((result: [HotelAggregatedInfo, BookingSearchResultDO, RoomCategoryDO[]]) => {
-            this._currency = result[0].ccy;
+            this._hotelAggregatedInfo = result[0];
             this._bookingSearchResult = result[1];
             var roomCategoryList: RoomCategoryDO[] = result[2];
 
-            this.bookingItemVMList = this._bookingViewModelConverter.convertSearchResultToVMList(this._bookingSearchResult, this._searchParams, this._currency);
+            this.bookingItemVMList = this._bookingViewModelConverter.convertSearchResultToVMList(this._bookingSearchResult, this._searchParams, this._hotelAggregatedInfo);
 
             return {
                 roomCategoryList: roomCategoryList,
@@ -84,7 +84,7 @@ export class BookingSearchService extends ABookingService {
             return;
         }
         this._bookingSearchResult.decrementAvailability(transientBookingItem.roomCategoryId, transientBookingItem.allotmentId);
-        var newBookingVMList = this._bookingViewModelConverter.convertSearchResultToVMList(this._bookingSearchResult, this._searchParams, this._currency);
+        var newBookingVMList = this._bookingViewModelConverter.convertSearchResultToVMList(this._bookingSearchResult, this._searchParams, this._hotelAggregatedInfo);
         if (this._sortOptions) {
             newBookingVMList = this._bookingViewModelSorter.sortBookingSearchResultsBy(newBookingVMList, this._sortOptions);
         }
