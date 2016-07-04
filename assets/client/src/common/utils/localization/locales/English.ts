@@ -496,7 +496,11 @@ export var EnglishTranslations: Object = {
 	"The selected customer does not support to pay the invoice by agreement.": "The selected customer does not support to pay the invoice by agreement.",
 	"Add at least one customer for all the bookings": "Add at least one customer for all the bookings",
 	"%firstDate% to %secondDate%": "%firstDate% to %secondDate%",
-	"Customers": "Customers"
-
+	"Customers": "Customers",
+	"Number of Nights": "Number of Nights",
+	"Bill": "Bill",
+	"Generate the bill with this customer": "Generate the bill with this customer",
+	"The invoice will be generated with this customer": "The invoice will be generated with this customer",
+	"Billed To": "Billed To"
 	
 };

@@ -2,6 +2,7 @@ import {Component, ViewChild, AfterViewInit, OnInit, OnDestroy} from '@angular/c
 import {Subscription} from 'rxjs/Subscription';
 import {AppContext} from '../../../../../../../../../../common/utils/AppContext';
 import {BaseComponent} from '../../../../../../../../../../common/base/BaseComponent';
+import {CustomerDO} from '../../../../../../../../services/customers/data-objects/CustomerDO';
 import {LazyLoadingTableComponent} from '../../../../../../../../../../common/utils/components/lazy-loading/LazyLoadingTableComponent';
 import {BookingCartService} from '../../../services/search/BookingCartService';
 import {BookingCartItemVM, BookingCartItemVMType} from '../../../services/search/view-models/BookingCartItemVM';
@@ -69,5 +70,28 @@ export class NewBookingFillDetailsComponent extends BaseComponent implements Aft
 		this._selectedCartSequenceId = selectedBookingCartItemVM.cartSequenceId;
 		this._bookingCartTableComponent.selectItem(selectedBookingCartItemVM);
 		this._wizardBookingFillDetailsStepService.checkBookingCartValidity(this._bookingCartService);
+	}
+
+	public didUpdateBookingItem(changedBookingCartItemVM: BookingCartItemVM) {
+		_.forEach(this._bookingCartService.bookingItemVMList, (bookingCartItem: BookingCartItemVM) => {
+			if (bookingCartItem.cartSequenceId === changedBookingCartItemVM.cartSequenceId) {
+				bookingCartItem = changedBookingCartItemVM;
+				bookingCartItem.updateValidationColumn();
+			}
+			else if (changedBookingCartItemVM.customerList.length > 0) {
+				this.updateDefaultBilledCustomerIfNecessary(bookingCartItem, changedBookingCartItemVM.customerList[0]);
+			}
+		});
+		this._bookingCartService.refreshData();
+		this._wizardBookingFillDetailsStepService.checkBookingCartValidity(this._bookingCartService);
+	}
+	private updateDefaultBilledCustomerIfNecessary(bookingCartItem: BookingCartItemVM, customerToAdd: CustomerDO) {
+		if (!bookingCartItem.canChangeDefaultBilledCustomer || bookingCartItem.customerList.length > 0) {
+			return;
+		}
+		bookingCartItem.addCustomerIfNotExists(customerToAdd);
+		bookingCartItem.transientBookingItem.defaultBillingDetails.customerId = customerToAdd.id;
+		bookingCartItem.customerNameString = customerToAdd.customerName;
+		bookingCartItem.updateValidationColumn();
 	}
 }

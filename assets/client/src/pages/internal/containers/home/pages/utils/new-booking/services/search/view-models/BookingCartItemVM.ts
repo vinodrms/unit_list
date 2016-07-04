@@ -1,3 +1,4 @@
+import {ThUtils} from '../../../../../../../../../../common/utils/ThUtils';
 import {ConfigCapacityDO} from '../../../../../../../../services/common/data-objects/bed-config/ConfigCapacityDO';
 import {PriceProductDO} from '../../../../../../../../services/price-products/data-objects/PriceProductDO';
 import {TransientBookingItem} from '../../data-objects/TransientBookingItem';
@@ -43,7 +44,7 @@ export class BookingCartItemVM {
     validationColumnClassName: string;
 
     transientBookingItem: TransientBookingItem;
-    canChangeDefaultBillableCustomer: boolean;
+    canChangeDefaultBilledCustomer: boolean;
 
     priceProduct: PriceProductDO;
     ccy: CurrencyDO;
@@ -91,5 +92,28 @@ export class BookingCartItemVM {
         }
         this.validationColumnFontName = BookingCartItemVM.BadFontName;
         this.validationColumnClassName = BookingCartItemVM.BadClassName;
+    }
+
+    public addCustomerIfNotExists(customer: CustomerDO) {
+        if (this.containsCustomer(customer)) { return; }
+        this.customerList.push(customer);
+        this.updateBookingCustomers();
+    }
+    public replaceCustomer(oldCustomer: CustomerDO, newCustomer: CustomerDO) {
+        if (this.containsCustomer(newCustomer)) { return; }
+        var index = _.findIndex(this.customerList, (customer: CustomerDO) => { return customer.id === oldCustomer.id });
+        if (index >= 0 && index < this.customerList.length) {
+            this.customerList[index] = newCustomer;
+        }
+        this.updateBookingCustomers();
+    }
+    private containsCustomer(customer: CustomerDO): boolean {
+        var thUtils = new ThUtils();
+        var foundCustomer = this.getCustomerById(customer.id);
+        return !thUtils.isUndefinedOrNull(foundCustomer);
+    }
+
+    private updateBookingCustomers() {
+        this.transientBookingItem.customerIdList = _.map(this.customerList, (customer: CustomerDO) => { return customer.id });
     }
 }

@@ -1873,6 +1873,7 @@ a.btn.btn-square:focus {
 }
 .booking-details-table table {
     table-layout:fixed;
+    margin-bottom: 5px;
 }
 booking-details-table table td {
     overflow: hidden;
@@ -1881,12 +1882,23 @@ booking-details-table table td {
     background-color: #E6E6E6;
     font-size: 11px;
 }
+.booking-details-table>table>tfoot>td>a {
+    padding-left: 6px;
+    padding-top: 6px !important;
+}
 .booking-details-table>table>thead>tr>th {
     font-weight: normal !important;
 }
 .booking-details-table>table>tbody {
     background-color: #F5F5F5;
+    font-size: 11px;
+}
+.booking-details-action-button {
+    width: 80px;
     font-size: 10px;
+    float: right;
+    margin-right: 20px;
+    border-radius: 5px !important;
 }
 .booking-details-row {
     padding-top: 5px;

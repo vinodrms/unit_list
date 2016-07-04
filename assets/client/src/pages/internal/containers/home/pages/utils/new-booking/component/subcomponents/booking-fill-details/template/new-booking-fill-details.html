@@ -5,7 +5,10 @@
 	</div>
 	<div class="col-xs-5 full-height">
 		<div class="row" *ngIf="selectedBookingCartItemVM">
-			<booking-details-editor [bookingCartItem]="selectedBookingCartItemVM"></booking-details-editor>
+			<booking-details-editor 
+				[bookingCartItem]="selectedBookingCartItemVM" 
+				(onBookingItemChanged)="didUpdateBookingItem($event)">
+			</booking-details-editor>
 		</div>
 	</div>
 </div>
