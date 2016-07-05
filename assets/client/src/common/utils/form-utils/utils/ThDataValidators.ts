@@ -8,4 +8,8 @@ export class ThDataValidators {
 	public static isValidInteger(n: number): boolean {
 		return Number(n) === n && n % 1 === 0;
 	}
+	public static isValidEmail(email: string): boolean {
+		var emailRegex = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+		return _.isString(email) && emailRegex.test(email);
+	}
 }

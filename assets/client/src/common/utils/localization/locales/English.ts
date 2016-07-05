@@ -510,6 +510,7 @@ export var EnglishTranslations: Object = {
 	"Booking Notes": "Booking Notes",
 	"Recipients": "Recipients",
 	"Add Bookings": "Add Bookings",
-	
-	
+	"Recipient": "Recipient",
+	"Select All": "Select All",
+	"Not configured": "Not configured",
 };

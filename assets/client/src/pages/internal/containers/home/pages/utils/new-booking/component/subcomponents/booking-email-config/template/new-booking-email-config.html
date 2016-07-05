@@ -8,6 +8,32 @@
             <div class="col-sm-12 col-xs-12 booking-details-header">
                 <span class="first-line"><i class="fa fa-envelope"></i> {{ 'Recipients' | translate }}</span>
             </div>
+			<div class="col-xs-12 booking-details-table">
+				<table class="table form-group">
+					<thead>
+						<tr>
+							<th> {{ 'Recipient' | translate }} </th>
+							<th> {{ 'Email' | translate }} </th>
+							<th> <input type="checkbox" [(ngModel)]="selectAll">  {{ 'Select All' | translate }}</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr *ngFor="let emailRecipient of emailRecipientList">
+							<td width="45%">{{ emailRecipient.recipientName }}</td>
+							<td width="50%" *ngIf="emailRecipient.isValid">{{ emailRecipient.email }}</td>
+							<td width="50%" *ngIf="!emailRecipient.isValid"><i>{{ 'Not configured' | translate }}</i></td>
+							<td width="5%"><input type="checkbox" [(ngModel)]="emailRecipient.selected" [disabled]="!emailRecipient.isValid"></td>
+						</tr>
+					</tbody>
+					<tfoot>
+						<td>
+							<a (click)="addCustomer()">
+								<i class="fa unitpal-font">'</i> {{ 'Add Recipient' | translate }}
+							</a>
+						</td>
+					</tfoot>
+				</table>
+			</div>
 		</div>
 	</div>
 </div>

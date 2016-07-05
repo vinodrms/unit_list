@@ -39,6 +39,7 @@ export class BookingFillDetailsStepService implements IBookingStepService {
 	public didAppear() {
 		if (this._didAppearObserver) { this._didAppearObserver.next(true) };
 	}
+	public didDisappear() {}
 
 	public checkBookingCartValidity(bookingCartService: BookingCartService) {
 		if (bookingCartService.bookingItemVMList.length == 0) {

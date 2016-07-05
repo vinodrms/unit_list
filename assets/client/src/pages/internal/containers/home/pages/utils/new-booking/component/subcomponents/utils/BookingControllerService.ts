@@ -49,6 +49,7 @@ export class BookingControllerService implements IBookingStepService, IBookingCu
 		return this.currentBookingStep.getErrorString();
 	}
 	public didAppear() { }
+	public didDisappear() {}
 	private get currentBookingStep(): IBookingStepService {
 		if (this.isCustomerRegister()) {
 			return this._custRegisterStep;
@@ -71,6 +72,7 @@ export class BookingControllerService implements IBookingStepService, IBookingCu
 		}
 	}
 	private modifyBookingStep(stepIndexOffset: number) {
+		this.currentBookingStep.didDisappear();
 		this._bookingStepIndex += stepIndexOffset;
 		this.currentBookingStep.didAppear();
 	}

@@ -12,10 +12,16 @@ export class BookingEmailConfigStepService implements IBookingStepService {
     didAppearObservable: Observable<boolean>;
     private _didAppearObserver: Observer<boolean>;
 
+    didDisappearObservable: Observable<boolean>;
+    private _didDisappearObserver: Observer<boolean>;
+
     constructor(private _appContext: AppContext) {
         this._stepPath = [this._appContext.thTranslation.translate("Recipients")];
         this.didAppearObservable = new Observable<boolean>((didAppearObserver: Observer<boolean>) => {
             this._didAppearObserver = didAppearObserver;
+        });
+        this.didDisappearObservable = new Observable<boolean>((didDisappearObserver: Observer<boolean>) => {
+            this._didDisappearObserver = didDisappearObserver;
         });
     }
 
@@ -33,5 +39,8 @@ export class BookingEmailConfigStepService implements IBookingStepService {
     }
     public didAppear() {
         if (this._didAppearObserver) { this._didAppearObserver.next(true) };
+    }
+    public didDisappear() {
+        if (this._didDisappearObserver) { this._didDisappearObserver.next(true) };
     }
 }
