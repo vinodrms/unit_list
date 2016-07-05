@@ -38,8 +38,10 @@ export class PdfReportsService extends APdfReportsService {
             });
         }).then((converterRespone: HtmlToPdfResponseDO) => {
             resolve({ pdfPath: converterRespone.filePath });
-        }).catch((error: ThError) => {
-            reject(error);
+        }).catch((err: any) => {
+            var thError = new ThError(ThStatusCode.PdfReportServiceHtmlToPdfError, err);
+            ThLogger.getInstance().logError(ThLogLevel.Error, "error generating pdf from html file", this._reportsServiceRequest, thError);
+            reject(err);
         });
     }
 

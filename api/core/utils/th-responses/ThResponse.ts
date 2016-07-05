@@ -291,10 +291,9 @@ export enum ThStatusCode {
     NotificationsRepositoryErrorGettingUndelivered,
     NotificationsRepositoryErrorMarkingAsRead,
     
-    //Html to pdf converter service
-    PhantomHtmlToPdfHtmlReportPageAccessError,
-    PhantomHtmlToPdfGenerationError,
-    HtmlReportsServiceHtmlExportError,
+    //Pdf report service
+    PdfReportServiceHtmlToPdfError,
+    PhantomHtmlToPdfConverter,
 
     InvoiceGroupsRepositoryErrorAddingInvoiceGroup,
     InvoiceGroupsRepositoryProblemUpdatingInvoiceGroup,
@@ -346,6 +345,7 @@ export enum ThStatusCode {
     BookingRepositoryBookingNotFound,
     BookingRepositoryErrorGettingBooking,
     BookingConfirmationErrorGettingData,
+    BookingConfirmationEmailSenderErrorSendingEmail,
     BookingSearchError,
     RoomInventoryAggregatorError,
     BookingOccupancyCalculatorError,
@@ -645,9 +645,8 @@ ThMessage[ThStatusCode.AllotmentArchiverCronJobExecutorError] = "Error archiving
 ThMessage[ThStatusCode.NotificationsRepositoryErrorAddingNotification] = "Error adding a notification.";
 ThMessage[ThStatusCode.NotificationsRepositoryErrorGettingUndelivered] = "Error getting undelivered notifications.";
 ThMessage[ThStatusCode.NotificationsRepositoryErrorMarkingAsRead] = "Error marking notification as read.";
-ThMessage[ThStatusCode.PhantomHtmlToPdfHtmlReportPageAccessError] = "Error accessing the html report page.";
-ThMessage[ThStatusCode.PhantomHtmlToPdfGenerationError] = "Error generating pdf.";
-ThMessage[ThStatusCode.HtmlReportsServiceHtmlExportError] = "Error exporting html to pdf.";
+ThMessage[ThStatusCode.PdfReportServiceHtmlToPdfError] = "Error in the following flow: generate html -> convert html to pdf.";
+ThMessage[ThStatusCode.PhantomHtmlToPdfConverter] = "Error converting html to pdf with phantom js.";
 ThMessage[ThStatusCode.InvoiceGroupsRepositoryErrorAddingInvoiceGroup] = "Error adding the invoice group."; 
 ThMessage[ThStatusCode.InvoiceGroupsRepositoryProblemUpdatingInvoiceGroup] = "Problem updating the invoice group - concurrency.";
 ThMessage[ThStatusCode.InvoiceGroupsRepositoryErrorUpdatingInvoiceGroup] = "Error updating the invoice group.";
@@ -696,6 +695,7 @@ ThMessage[ThStatusCode.BookingRepositoryErrorReadingDocumentCount] = "Error gett
 ThMessage[ThStatusCode.BookingRepositoryBookingNotFound] = "Booking not found.";
 ThMessage[ThStatusCode.BookingRepositoryErrorGettingBooking] = "Error getting booking.";
 ThMessage[ThStatusCode.BookingConfirmationErrorGettingData] = "Error getting data for the booking confirmation.";
+ThMessage[ThStatusCode.BookingConfirmationEmailSenderErrorSendingEmail] = "Error sending booking confirmation by email.";
 ThMessage[ThStatusCode.BookingSearchError] = "Error searching for price products.";
 ThMessage[ThStatusCode.RoomInventoryAggregatorError] = "Error aggregating the rooms from the inventory.";
 ThMessage[ThStatusCode.BookingOccupancyCalculatorError] = "Error computing booking occupancy.";

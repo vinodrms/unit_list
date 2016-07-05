@@ -92,7 +92,9 @@ export class PhantomLocalHtmlToPdfConverterService extends AHtmlToPdfConverterSe
                     });
                 }, maxRenderWait);
             }
-        }).catch(function (error) {
+        }).catch((err) => {
+            var thError = new ThError(ThStatusCode.PhantomHtmlToPdfConverter, err);
+            ThLogger.getInstance().logError(ThLogLevel.Error, "error converting html to pdf with phantom js", this._htmlToPdfReq, thError);
             phInstance.exit();
         });
     }
