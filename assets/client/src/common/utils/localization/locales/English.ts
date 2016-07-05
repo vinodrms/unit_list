@@ -502,7 +502,7 @@ export var EnglishTranslations: Object = {
 	"Generate the bill with this customer": "Generate the bill with this customer",
 	"The invoice will be generated with this customer": "The invoice will be generated with this customer",
 	"Billed To": "Billed To",
-	"Mininum one customer": "Mininum one customer",
+	"Add at least one customer": "Add at least one customer",
 	"Payment Guarantee": "Payment Guarantee",
 	"Payment guarantee is required for this price product.": "Payment guarantee is required for this price product.",
 	"Payment Method": "Payment Method",
