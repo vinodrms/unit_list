@@ -513,4 +513,6 @@ export var EnglishTranslations: Object = {
 	"Recipient": "Recipient",
 	"Select All": "Select All",
 	"Not configured": "Not configured",
+	"The bookings have been added succesfully": "The bookings have been added succesfully",
+	
 };

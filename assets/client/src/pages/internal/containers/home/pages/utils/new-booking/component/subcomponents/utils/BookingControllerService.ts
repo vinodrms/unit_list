@@ -4,6 +4,7 @@ import {Observer} from 'rxjs/Observer';
 import {AppContext} from '../../../../../../../../../../common/utils/AppContext';
 import {BookingStepType} from './BookingStepType';
 import {IBookingStepService} from './IBookingStepService';
+import {ILastBookingStepService} from './ILastBookingStepService';
 import {IBookingCustomerRegisterSelector, IBookingCustomerRegisterController} from './IBookingCustomerRegister';
 import {BookingSearchStepService} from '../booking-search/services/BookingSearchStepService';
 import {BookingFillDetailsStepService} from '../booking-fill-details/services/BookingFillDetailsStepService';
@@ -17,7 +18,7 @@ export class BookingControllerService implements IBookingStepService, IBookingCu
 	private _bookingStepIndex: number;
 	private _customerObserver: Observer<CustomerDO>;
 
-	private _lastStep: IBookingStepService;
+	private _lastStep: ILastBookingStepService;
 
 	constructor(private _appContext: AppContext,
 		private _bookingSearchStep: BookingSearchStepService,
@@ -100,5 +101,8 @@ export class BookingControllerService implements IBookingStepService, IBookingCu
 	}
 	public isLastStep(): boolean {
 		return this.getBookingStepType() === this._lastStep.getBookingStepType();
+	}
+	public getLastStepService(): ILastBookingStepService {
+		return this._lastStep;
 	}
 }

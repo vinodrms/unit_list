@@ -31,7 +31,6 @@ export class NewBookingEmailConfigComponent extends BaseComponent implements OnI
     private _didAppearSubscription: Subscription;
     private _didDisappearSubscription: Subscription;
 
-    emailRecipientList: EmailRecipientVM[] = [];
     private _selectAll: boolean;
     private _cachedSelectedRecipientIdList: string[] = [];
 
@@ -113,5 +112,12 @@ export class NewBookingEmailConfigComponent extends BaseComponent implements OnI
         var recipient = new EmailRecipientVM(customer.id, customer.customerName, customer.emailString);
         recipient.selected = recipient.isValid;
         this.emailRecipientList.push(recipient);
+    }
+
+    public get emailRecipientList(): EmailRecipientVM[] {
+        return this._wizardEmailConfigStepService.emailRecipientList;
+    }
+    public set emailRecipientList(emailRecipientList: EmailRecipientVM[]) {
+        this._wizardEmailConfigStepService.emailRecipientList = emailRecipientList;
     }
 }
