@@ -71,13 +71,16 @@ export class PdfReportsService extends APdfReportsService {
 
             fs.exists(htmlOutputDir, (exists) => {
                 if (!exists) {
+                    console.log(htmlOutputDir + ' does not exist!');
                     mkdirp(htmlOutputDir, (err) => {
                         if (err) {
+                            console.log('error creating ' + htmlOutputDir + ': '+ err);
                             var thError = new ThError(ThStatusCode.PdfReportServiceErrorCreatingOutputFolder, err);
                             ThLogger.getInstance().logError(ThLogLevel.Error, "error creating output folder", { htmlOutputDir: htmlOutputDir }, thError);
                             reject(thError);
                         }
                         else {
+                            console.log(htmlOutputDir + ' created successfully!');
                             writeHtmlStringToFile(htmlOutputPath, str);
                         }
                     });
