@@ -29,6 +29,8 @@ import {HotelConfigurationsBootstrap} from '../../core/domain-layer/hotel-config
 import {YieldFilterConfigurationDO} from '../../core/data-layer/hotel-configurations/data-objects/yield-filter/YieldFilterConfigurationDO';
 import {DefaultAllotmentBuilder} from './builders/DefaultAllotmentBuilder';
 import {AllotmentDO} from '../../core/data-layer/allotments/data-objects/AllotmentDO';
+import {DefaultBookingBuilder} from './builders/DefaultBookingBuilder';
+import {BookingDO} from '../../core/data-layer/bookings/data-objects/BookingDO';
 
 import _ = require("underscore");
 
@@ -56,6 +58,7 @@ export class DefaultDataBuilder {
     private _yieldFilters: YieldFilterDO[];
     private _priceProductList: PriceProductDO[];
     private _allotmentList: AllotmentDO[];
+    private _bookingList: BookingDO[];
 
     constructor(private _testContext: TestContext) {
         this._repositoryCleaner = new RepositoryCleanerWrapper(this._testContext.appContext.getUnitPalConfig());
@@ -177,6 +180,11 @@ export class DefaultDataBuilder {
                 return allotmentBuilder.loadAllotments(allotmentBuilder, this._priceProductList, this._customerList);
             }).then((allotmentList: AllotmentDO[]) => {
                 this._allotmentList = allotmentList;
+                
+                var bookingBuilder = new DefaultBookingBuilder(this._testContext);
+                return bookingBuilder.loadBookings(bookingBuilder, this._hotelDO, this._customerList, this.roomCategoryList, this.priceProductList);
+            }).then((bookingList: BookingDO[]) => {
+                this._bookingList = bookingList;
 
                 resolve(true);
             }).catch((err: any) => {
@@ -244,8 +252,8 @@ export class DefaultDataBuilder {
     public get allotmentList(): AllotmentDO[] {
         return this._allotmentList;
     }
-    public set allotmentList(allotmentList: AllotmentDO[]) {
-        this._allotmentList = allotmentList;
+    public get bookingList(): BookingDO[] {
+        return this._bookingList;
     }
     public get defaultTimezone(): string {
         return this._hotelDO.timezone;
