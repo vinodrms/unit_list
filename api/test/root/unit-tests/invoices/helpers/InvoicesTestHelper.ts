@@ -1,7 +1,6 @@
 import {ThUtils} from '../../../../../core/utils/ThUtils';
 import {DefaultDataBuilder} from '../../../../db-initializers/DefaultDataBuilder';
 import {TestUtils} from '../../../../helpers/TestUtils';
-import {SaveInvoiceGroupItemDO} from '../../../../../core/domain-layer/invoices/SaveInvoiceGroupItemDO';
 import {InvoiceGroupDO} from '../../../../../core/data-layer/invoices/data-objects/InvoiceGroupDO';
 import {InvoiceDO, InvoicePaymentStatus} from '../../../../../core/data-layer/invoices/data-objects/InvoiceDO';
 import {PayerDO} from '../../../../../core/data-layer/invoices/data-objects/payers/PayerDO';
@@ -21,26 +20,26 @@ export class InvoicesTestHelper {
         this._thUtils = new ThUtils();
     }
 
-    public getValidSaveInvoiceGroupItemDO(): SaveInvoiceGroupItemDO {
-        return {
-            bookingId: "123451231",
-            indexedCustomerIdList: [],
-            invoiceList: this.getInvoiceList(),
-            paymentStatus: InvoicePaymentStatus.Open
-        }
-    }
+    // public getValidSaveInvoiceGroupItemDO(): SaveInvoiceGroupItemDO {
+    //     return {
+    //         bookingId: "123451231",
+    //         indexedCustomerIdList: [],
+    //         invoiceList: this.getInvoiceList(),
+    //         paymentStatus: InvoicePaymentStatus.Open
+    //     }
+    // }
 
-    public getSaveInvoiceGroupItemDOFrom(invoiceGroup: InvoiceGroupDO): SaveInvoiceGroupItemDO {
-        var result = {
-            bookingId: invoiceGroup.bookingId,
-            indexedCustomerIdList: invoiceGroup.indexedCustomerIdList,
-            invoiceList: invoiceGroup.invoiceList,
-            paymentStatus: invoiceGroup.paymentStatus
-        };
+    // public getSaveInvoiceGroupItemDOFrom(invoiceGroup: InvoiceGroupDO): SaveInvoiceGroupItemDO {
+    //     var result = {
+    //         bookingId: invoiceGroup.bookingId,
+    //         indexedCustomerIdList: invoiceGroup.indexedCustomerIdList,
+    //         invoiceList: invoiceGroup.invoiceList,
+    //         paymentStatus: invoiceGroup.paymentStatus
+    //     };
 
-        result["id"] = invoiceGroup.id;
-        return result;
-    }
+    //     result["id"] = invoiceGroup.id;
+    //     return result;
+    // }
     
     private getInvoiceList(): InvoiceDO[] {
         var invoiceList = [];

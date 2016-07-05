@@ -7,6 +7,9 @@ export enum InvoiceGroupStatus {
 	Deleted
 }
 
+//TODO
+//check validators: bookingValidator
+
 export class InvoiceGroupDO extends BaseDO {
     constructor() {
         super();

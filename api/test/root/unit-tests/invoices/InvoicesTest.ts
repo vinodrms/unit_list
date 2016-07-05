@@ -8,8 +8,6 @@ import {TestUtils} from '../../../../test/helpers/TestUtils';
 import {DefaultDataBuilder} from '../../../db-initializers/DefaultDataBuilder';
 import {TestContext} from '../../../helpers/TestContext';
 import {InvoicesTestHelper} from './helpers/InvoicesTestHelper';
-import {SaveInvoiceGroupItemDO} from '../../../../core/domain-layer/invoices/SaveInvoiceGroupItemDO';
-import {SaveInvoiceGroupItem} from '../../../../core/domain-layer/invoices/SaveInvoiceGroupItem';
 import {InvoiceGroupDO} from '../../../../core/data-layer/invoices/data-objects/InvoiceGroupDO';
 
 describe("Invoices Tests", function () {
@@ -30,27 +28,11 @@ describe("Invoices Tests", function () {
 
     describe("Invoice Groups Update Flow", function () {
         it("Should create a new invoice group item", function (done) {
-            var saveInvoiceGroupItemDO: SaveInvoiceGroupItemDO = invoiceGroupsHelper.getValidSaveInvoiceGroupItemDO();
-            var saveInvoiceGroupItem = new SaveInvoiceGroupItem(testContext.appContext, testContext.sessionContext);
-            
-            saveInvoiceGroupItem.save(saveInvoiceGroupItemDO).then((savedInvoiceGroup: InvoiceGroupDO) => {
-                createdInvoiceGroup = savedInvoiceGroup;
-
-                done();
-            }).catch((err: any) => {
-                done(err);
-            });
+            done();
         });
 
         it("Should update the previously created invoice group item", function (done) {
-            var saveInvoiceGroupItemDO: SaveInvoiceGroupItemDO = invoiceGroupsHelper.getSaveInvoiceGroupItemDOFrom(createdInvoiceGroup);
-            var saveInvoiceGroupItem = new SaveInvoiceGroupItem(testContext.appContext, testContext.sessionContext);
-            
-            saveInvoiceGroupItem.save(saveInvoiceGroupItemDO).then((savedInvoiceGroup: InvoiceGroupDO) => {
-                done();
-            }).catch((err: any) => {
-                done(err);
-            });
+            done();
         });
     });
 });

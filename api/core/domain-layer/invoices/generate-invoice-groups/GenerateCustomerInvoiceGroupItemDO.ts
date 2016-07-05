@@ -1,27 +1,20 @@
-import {IValidationStructure} from '../../utils/th-validation/structure/core/IValidationStructure';
-import {ObjectValidationStructure} from '../../utils/th-validation/structure/ObjectValidationStructure';
-import {PrimitiveValidationStructure} from '../../utils/th-validation/structure/PrimitiveValidationStructure';
-import {ArrayValidationStructure} from '../../utils/th-validation/structure/ArrayValidationStructure';
-import {StringValidationRule} from '../../utils/th-validation/rules/StringValidationRule';
-import {NumberValidationRule} from '../../utils/th-validation/rules/NumberValidationRule';
-import {NumberInListValidationRule} from '../../utils/th-validation/rules/NumberInListValidationRule';
-import {InvoiceDO, InvoicePaymentStatus} from '../../data-layer/invoices/data-objects/InvoiceDO';
-import {InvoicePaymentMethodType} from '../../data-layer/invoices/data-objects/payers/InvoicePaymentMethodDO';
-import {CommissionType} from '../../data-layer/common/data-objects/commission/CommissionDO';
-import {InvoiceItemType} from '../../data-layer/invoices/data-objects/items/InvoiceItemDO';
+import {IValidationStructure} from '../../../utils/th-validation/structure/core/IValidationStructure';
+import {ObjectValidationStructure} from '../../../utils/th-validation/structure/ObjectValidationStructure';
+import {PrimitiveValidationStructure} from '../../../utils/th-validation/structure/PrimitiveValidationStructure';
+import {ArrayValidationStructure} from '../../../utils/th-validation/structure/ArrayValidationStructure';
+import {StringValidationRule} from '../../../utils/th-validation/rules/StringValidationRule';
+import {NumberValidationRule} from '../../../utils/th-validation/rules/NumberValidationRule';
+import {NumberInListValidationRule} from '../../../utils/th-validation/rules/NumberInListValidationRule';
+import {InvoiceDO, InvoicePaymentStatus} from '../../../data-layer/invoices/data-objects/InvoiceDO';
+import {InvoicePaymentMethodType} from '../../../data-layer/invoices/data-objects/payers/InvoicePaymentMethodDO';
+import {CommissionType} from '../../../data-layer/common/data-objects/commission/CommissionDO';
+import {InvoiceItemType} from '../../../data-layer/invoices/data-objects/items/InvoiceItemDO';
 
-export class SaveInvoiceGroupItemDO {
-    bookingId: string;
-    indexedCustomerIdList: string[];
+export class GenerateCustomerInvoiceGroupItemDO {
     invoiceList: InvoiceDO[];
-    paymentStatus: InvoicePaymentStatus;
 
     public static getValidationStructure(): IValidationStructure {
         return new ObjectValidationStructure([
-            {
-                key: "bookingId",
-                validationStruct: new PrimitiveValidationStructure(StringValidationRule.buildNullable())
-            },
             {
                 key: "invoiceList",
                 validationStruct: new ArrayValidationStructure(new ObjectValidationStructure([
@@ -53,7 +46,7 @@ export class SaveInvoiceGroupItemDO {
                     },
                     {
                         key: "itemList",
-                        validationStruct:  new ArrayValidationStructure(new ObjectValidationStructure([
+                        validationStruct: new ArrayValidationStructure(new ObjectValidationStructure([
                             {
                                 key: "id",
                                 validationStruct: new PrimitiveValidationStructure(new StringValidationRule())
@@ -65,19 +58,11 @@ export class SaveInvoiceGroupItemDO {
                             {
                                 key: "qty",
                                 validationStruct: new PrimitiveValidationStructure(new NumberValidationRule())
-                            }    
+                            }
                         ]))
-                    },
-                    {
-                        key: "paymentStatus",
-                        validationStruct: new PrimitiveValidationStructure(new NumberInListValidationRule([InvoicePaymentStatus.Closed, InvoicePaymentStatus.Open]))
-                    },
+                    }
                 ]))
-            },
-            {
-                key: "paymentStatus",
-                validationStruct: new PrimitiveValidationStructure(new NumberInListValidationRule([InvoicePaymentStatus.Closed, InvoicePaymentStatus.Open]))
-            },
+            }
         ]);
     }
 }
