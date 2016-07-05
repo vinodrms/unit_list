@@ -97,7 +97,7 @@ export class BookingConfirmationVMContainer {
     }
 
     private initLogoSrcs() {
-        if (!this._thUtils.isUndefinedOrNull(this.hotelLogoSrcValue)) {
+        if (!this._thUtils.isUndefinedOrNull(this.hotel.logoUrl)) {
             this.hotelLogoSrcValue = this.hotel.logoUrl;
         }
         else {
