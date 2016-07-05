@@ -34,9 +34,9 @@ import {NewBookingEmailConfigComponent} from '../subcomponents/booking-email-con
 export class NewBookingContainerComponent extends BaseComponent {
 	@Input() showCloseButton: boolean = false;
 
-	@Output() onCloseButtonPressed = new EventEmitter();
-	public triggerOnCloseButtonPressed() {
-		this.onCloseButtonPressed.next(null);
+	@Output() onCloseButtonPressed = new EventEmitter<boolean>();
+	public triggerOnCloseButtonPressed(closeWithoutConfirmation: boolean) {
+		this.onCloseButtonPressed.next(closeWithoutConfirmation);
 	}
 
 	isAddingBookings: boolean = false;
@@ -94,7 +94,7 @@ export class NewBookingContainerComponent extends BaseComponent {
 		lastBookingStep.addBookings().subscribe((result: boolean) => {
 			this.isAddingBookings = false;
 			this._appContext.toaster.success(this._appContext.thTranslation.translate("The bookings have been added succesfully"));
-			this.triggerOnCloseButtonPressed();
+			this.triggerOnCloseButtonPressed(true);
 		}, (err: ThError) => {
 			this.isAddingBookings = false;
 			this._appContext.toaster.error(err.message);

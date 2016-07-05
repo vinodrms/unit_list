@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {BaseComponent} from '../../../../../../../../common/base/BaseComponent';
+import {AppContext} from '../../../../../../../../common/utils/AppContext';
 import {ICustomModalComponent, ModalSize} from '../../../../../../../../common/utils/modals/utils/ICustomModalComponent';
 import {ModalDialogRef} from '../../../../../../../../common/utils/modals/utils/ModalDialogRef';
 import {NewBookingContainerComponent} from '../component/container/NewBookingContainerComponent';
@@ -10,18 +11,27 @@ import {NewBookingContainerComponent} from '../component/container/NewBookingCon
 	directives: [NewBookingContainerComponent]
 })
 export class NewBookingModalComponent extends BaseComponent implements ICustomModalComponent {
-	constructor(private _modalDialogRef: ModalDialogRef<any>) {
+	constructor(private _modalDialogRef: ModalDialogRef<any>, private _appContext: AppContext) {
 		super();
 	}
 
 	ngOnInit() { }
 
-	public closeDialog() {
-		this._modalDialogRef.closeForced();
+	public closeDialog(closeWithoutConfirmation: boolean) {
+		if (closeWithoutConfirmation) {
+			this._modalDialogRef.closeForced();
+			return;
+		}
+		var title = this._appContext.thTranslation.translate("Close Wizard");
+		var content = this._appContext.thTranslation.translate("Are you sure you want to close the booking wizard?");
+		this._appContext.modalService.confirm(title, content, { positive: this._appContext.thTranslation.translate("Yes"), negative: this._appContext.thTranslation.translate("No") },
+			() => {
+				this._modalDialogRef.closeForced();
+			}, () => { });
 	}
 
 	public isBlocking(): boolean {
-		return false;
+		return true;
 	}
 	public getSize(): ModalSize {
 		return ModalSize.XLarge;

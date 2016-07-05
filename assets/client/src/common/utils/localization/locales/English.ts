@@ -514,5 +514,8 @@ export var EnglishTranslations: Object = {
 	"Select All": "Select All",
 	"Not configured": "Not configured",
 	"The bookings have been added succesfully": "The bookings have been added succesfully",
+	"Close Wizard": "Close Wizard",
+	"Are you sure you want to close the booking wizard?": "Are you sure you want to close the booking wizard?",
 	
+
 };
