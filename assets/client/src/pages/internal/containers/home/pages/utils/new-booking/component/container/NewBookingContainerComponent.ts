@@ -1,6 +1,7 @@
 import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import {BaseComponent} from '../../../../../../../../../common/base/BaseComponent';
 import {TranslationPipe} from '../../../../../../../../../common/utils/localization/TranslationPipe';
+import {AppContext, ThError} from '../../../../../../../../../common/utils/AppContext';
 
 import {SETTINGS_PROVIDERS} from '../../../../../../../services/settings/SettingsProviders';
 import {HotelService} from '../../../../../../../services/hotel/HotelService';
@@ -9,22 +10,25 @@ import {RoomCategoriesService} from '../../../../../../../services/room-categori
 import {BookingCartService} from '../../services/search/BookingCartService';
 
 import {BookingStepType} from '../subcomponents/utils/BookingStepType';
+import {ILastBookingStepService} from '../subcomponents/utils/ILastBookingStepService';
 import {BookingSearchStepService} from '../subcomponents/booking-search/services/BookingSearchStepService';
 import {BookingFillDetailsStepService} from '../subcomponents/booking-fill-details/services/BookingFillDetailsStepService';
 import {BookingCustomerRegisterStepService} from '../subcomponents/booking-customer-register/services/BookingCustomerRegisterStepService';
+import {BookingEmailConfigStepService} from '../subcomponents/booking-email-config/services/BookingEmailConfigStepService';
 import {BookingControllerService} from '../subcomponents/utils/BookingControllerService';
 
 import {NewBookingSearchComponent} from '../subcomponents/booking-search/NewBookingSearchComponent';
 import {NewBookingFillDetailsComponent} from '../subcomponents/booking-fill-details/NewBookingFillDetailsComponent';
 import {BookingCustomerRegisterComponent} from '../subcomponents/booking-customer-register/BookingCustomerRegisterComponent';
+import {NewBookingEmailConfigComponent} from '../subcomponents/booking-email-config/NewBookingEmailConfigComponent';
 
 @Component({
 	selector: 'new-booking-container',
 	templateUrl: '/client/src/pages/internal/containers/home/pages/utils/new-booking/component/container/template/new-booking-container.html',
-	providers: [SETTINGS_PROVIDERS, HotelService, HotelAggregatorService, RoomCategoriesService,
-		BookingSearchStepService, BookingFillDetailsStepService, BookingCustomerRegisterStepService,
-		BookingControllerService, BookingCartService],
-	directives: [NewBookingSearchComponent, NewBookingFillDetailsComponent, BookingCustomerRegisterComponent],
+	providers: [SETTINGS_PROVIDERS, HotelService, HotelAggregatorService, RoomCategoriesService, BookingCartService,
+		BookingSearchStepService, BookingFillDetailsStepService, BookingCustomerRegisterStepService, BookingEmailConfigStepService,
+		BookingControllerService],
+	directives: [NewBookingSearchComponent, NewBookingFillDetailsComponent, BookingCustomerRegisterComponent, NewBookingEmailConfigComponent],
 	pipes: [TranslationPipe]
 })
 export class NewBookingContainerComponent extends BaseComponent {
@@ -35,7 +39,9 @@ export class NewBookingContainerComponent extends BaseComponent {
 		this.onCloseButtonPressed.next(null);
 	}
 
-	constructor(private _bookingCtrlService: BookingControllerService) {
+	isAddingBookings: boolean = false;
+
+	constructor(private _bookingCtrlService: BookingControllerService, private _appContext: AppContext) {
 		super();
 	}
 
@@ -44,6 +50,9 @@ export class NewBookingContainerComponent extends BaseComponent {
 	}
 	public isFillDetails(): boolean {
 		return this._bookingCtrlService.getBookingStepType() === BookingStepType.FillDetails;
+	}
+	public isEmailConfig(): boolean {
+		return this._bookingCtrlService.getBookingStepType() === BookingStepType.EmailConfig;
 	}
 	public isCustomerRegister(): boolean {
 		return this._bookingCtrlService.getBookingStepType() === BookingStepType.CustomerRegister;
@@ -73,5 +82,22 @@ export class NewBookingContainerComponent extends BaseComponent {
 	}
 	public moveNext() {
 		this._bookingCtrlService.moveNext();
+	}
+	public isLastStep(): boolean {
+		return this._bookingCtrlService.isLastStep();
+	}
+
+	public addBookings() {
+		if (this.isAddingBookings) { return; }
+		this.isAddingBookings = true;
+		var lastBookingStep: ILastBookingStepService = this._bookingCtrlService.getLastStepService();
+		lastBookingStep.addBookings().subscribe((result: boolean) => {
+			this.isAddingBookings = false;
+			this._appContext.toaster.success(this._appContext.thTranslation.translate("The bookings have been added succesfully"));
+			this.triggerOnCloseButtonPressed();
+		}, (err: ThError) => {
+			this.isAddingBookings = false;
+			this._appContext.toaster.error(err.message);
+		})
 	}
 }

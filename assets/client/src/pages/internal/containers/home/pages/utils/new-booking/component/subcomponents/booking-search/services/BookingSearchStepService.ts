@@ -31,8 +31,16 @@ export class BookingSearchStepService implements IBookingStepService {
 	public getErrorString(): string {
 		return this._errorString;
 	}
+	public didAppear() { }
+	public didDisappear() {}
 
 	public checkBookingCartValidity(bookingCartService: BookingCartService, roomCategoryList: RoomCategoryDO[]) {
+		if (bookingCartService.bookingItemVMList.length == 0) {
+			this._canGoToNextStep = false;
+			this._errorString = "";
+			return;
+		}
+
 		var indexedNumberOfRoomCategories: StringOccurenciesIndexer = this.getRoomCategoryIdOccurenciesStringIndexer(bookingCartService);
 
 		var bookingCartIsValid: boolean = true;

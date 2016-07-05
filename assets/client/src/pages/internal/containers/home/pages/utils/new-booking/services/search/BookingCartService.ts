@@ -66,4 +66,8 @@ export class BookingCartService extends ABookingService {
     public set totalsBookingItem(totalsBookingItem: BookingCartItemVM) {
         this._totalsBookingItem = totalsBookingItem;
     }
+
+    public getBookingCartItemByCartSequenceId(cartSequenceId: number): BookingCartItemVM {
+        return _.find(this._bookingCartItemVMList, (bookingCartItem: BookingCartItemVM) => { return bookingCartItem.cartSequenceId === cartSequenceId });
+    }
 }

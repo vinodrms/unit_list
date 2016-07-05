@@ -1,0 +1,126 @@
+<div class="col-xs-12 full-height" *ngIf="bookingCartItem">
+    <div class="row booking-details-container full-height" customScroll>
+        <div class="col-sm-12 col-xs-12 booking-details-header">
+            <span class="first-line"><i class="fa unitpal-font" title="{{'Period' | translate}}">8</i> {{ intervalString }}</span>
+            <span><i class="fa unitpal-font" title="{{'Number of Nights' | translate}}">Y</i> {{ noOfNights }} </span>
+        </div>
+        <div class="col-xs-12 booking-details-row">
+            <i class="fa fa-calendar-check-o" title="{{ 'Conditions' | translate }}"></i> {{ bookingCartItem.conditionsString
+            }}
+        </div>
+        <div class="col-xs-12 booking-details-row">
+            <i class="fa fa-lock" title="{{ 'Constraints' | translate }}"></i> {{ bookingCartItem.constraintsString }}
+        </div>
+        <div class="col-xs-12 booking-details-table">
+            <table class="table form-group">
+                <thead>
+                    <tr>
+                        <th> {{ 'Price Product' | translate }} </th>
+                        <th> {{ 'Room' | translate }} </th>
+                        <th> {{ 'No People' | translate }} </th>
+                        <th> {{ 'Allotment' | translate }} </th>
+                        <th> {{ 'Price' | translate }} </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td width="30%">{{ bookingCartItem.priceProductName }}</td>
+                        <td width="30%">{{ bookingCartItem.roomCategoryName }}</td>
+                        <td width="10%">
+                            <config-capacity [configCapacity]="bookingCartItem.bookingCapacity"></config-capacity>
+                        </td>
+                        <td width="10%">
+                            <span *ngIf="!madeThroughAllotment">{{ 'No' | translate }}</span>
+                            <span *ngIf="madeThroughAllotment">{{ 'Yes' | translate }}</span>
+                        </td>
+                        <td width="20%">{{ bookingCartItem.totalPriceString }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-xs-12 booking-details-table">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            {{ 'Customers' | translate }}
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let customer of bookingCartItem.customerList">
+                        <td width="80%" class="booking-details-action-description">{{ customer.customerName }}</td>
+                        <td width="20%">
+                            <span *ngIf="(isBilledCustomer(customer) && bookingCartItem.canChangeDefaultBilledCustomer) || !isBilledCustomer(customer)"
+                                (click)="changeCustomer(customer)">
+                                <span class="booking-details-action-button input-group-addon th-addon-button"> 
+                                    <i class="fa unitpal-font">(</i>  {{ 'Change' | translate }}
+                                </span>
+                            </span>
+
+                            <span *ngIf="isBilledCustomer(customer)" title="{{'The invoice will be generated with this customer' | translate}}" class="booking-details-action-button booking-details-action-readonly-button">
+                                {{ 'Billed To' | translate }}  <i class="fa unitpal-font">D</i>
+                            </span>
+
+                            <span *ngIf="!isBilledCustomer(customer) && bookingCartItem.canChangeDefaultBilledCustomer" title="{{'Generate the bill with this customer' | translate}}"
+                                (click)="markBilledCustomerFromTemplate(customer)">
+                                <span class="booking-details-action-button input-group-addon th-addon-button"> 
+                                    {{ 'Bill' | translate }}  <i class="fa unitpal-font">D</i>
+                                </span>
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <td>
+                        <a (click)="addCustomer()">
+                            <i class="fa unitpal-font">'</i> {{ 'Add Customer' | translate }}
+                        </a>
+                    </td>
+                </tfoot>
+            </table>
+            <small class="text-muted booking-details-table-text-muted" *ngIf="!didSelectBilledToCustomer()">
+                <i class="fa fa-info-circle"></i>  {{ 'Mininum one customer' | translate }}
+            </small>
+        </div>
+        <div class="col-xs-12">
+            <hr>
+            <div class="row" *ngIf="didSelectBilledToCustomer()">
+                <div class="col-md-6 col-xs-6 form-group">
+                    <label>{{ 'Payment Guarantee' | translate }}</label>
+                    <div class="input-group" [ngClass]="{'form-warning': !paymentGuarantee && needsPaymentGuarantee()}">
+                        <div class="btn-group" data-toggle="buttons">
+                            <button class="btn btn-default" (click)="paymentGuarantee=true" [ngClass]="{'active': paymentGuarantee}"
+                                [disabled]="readonly">
+                                {{ 'Yes' | translate }}
+                            </button>
+                            <button class="btn btn-default" (click)="paymentGuarantee=false" [ngClass]="{'active': !paymentGuarantee}"
+                                [disabled]="readonly">
+                                {{ 'No' | translate }}
+                            </button>
+                        </div>
+                    </div>
+                    <label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Payment guarantee is required for this price product.' | translate }}</small></label>
+                </div>
+                <div class="col-md-6 col-xs-6 form-group" *ngIf="paymentGuarantee">
+                    <label>{{ 'Payment Method' | translate }}</label>
+                    <div class="input-group">
+                        <select class="form-control" [ngModel]="paymentMethod" (ngModelChange)="paymentMethod=$event">
+                            <option *ngFor="let paymentMethodVM of paymentMethodVMList" [ngValue]="paymentMethodVM.paymentMethod">{{paymentMethodVM.displayName | translate}}</option>
+                        </select>
+                    </div>
+                    <small class="text-muted"><i class="fa fa-info-circle"></i> {{ 'This confirms that you have acquired all the necessary information to bill the customer' | translate }} </small>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 col-xs-12 form-group">
+                    <label>{{ 'Booking Notes' | translate }}</label>
+                    <div class="input-group">
+		                <textarea class="form-control" [(ngModel)]="bookingNotes"></textarea>
+	                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

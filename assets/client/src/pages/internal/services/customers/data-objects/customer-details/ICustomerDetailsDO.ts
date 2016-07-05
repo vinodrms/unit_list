@@ -7,6 +7,7 @@ export interface ICustomerDetailsDO extends BaseDO {
 	getName(): string;
 	getEmail(): string;
 	getPhone(): string;
+	canPayInvoiceByAgreement(): boolean;
 }
 
 export interface CustomerDetailsMeta {

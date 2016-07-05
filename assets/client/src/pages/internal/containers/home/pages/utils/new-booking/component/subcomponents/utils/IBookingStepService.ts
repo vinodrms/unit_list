@@ -5,4 +5,6 @@ export interface IBookingStepService {
 	canMoveNext(): boolean;
 	getStepPath(): string[];
 	getErrorString(): string;
+	didAppear();
+	didDisappear();
 }

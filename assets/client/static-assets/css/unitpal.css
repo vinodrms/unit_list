@@ -1714,7 +1714,7 @@ ul.msg_list li .text-center a {
     background-color: #fb6708;
 }
 .btn-square.btn-square-next-prev {
-    background-color: #737373;    
+    background-color: #fb6708;    
 }
 
 a.btn.btn-square:hover,
@@ -1723,11 +1723,16 @@ a.btn.btn-square:focus {
     cursor: pointer;
 }
 .btn-square-container {
-    width: 110px;
     height: 100%;
 }
+.btn-square-container.small {
+    width: 110px;
+}
+.btn-square-container.large {
+    width: 190px;
+}
 .btn.btn-square.disabled {
-    background-color: #e7e7e7;   
+    background-color: #c1c1c1;   
 }
 .btn.btn-square>i {
     font-size: 30px;  
@@ -1742,6 +1747,19 @@ a.btn.btn-square:focus {
     position: absolute;
     left: 10px;
     bottom: 4px;
+}
+.btn.btn-square.btn-square-finalize {
+    width: 115px;
+    height: 35px;
+    background-color: #1ccd8c;
+    padding-top: 9px;
+    padding-left: 25px;
+}
+.btn.btn-square.btn-square-finalize>i {
+    position: absolute;
+    left: 10px;
+    bottom: 14px;
+    font-size: 10px;
 }
 
 .btn-err-container {
@@ -1857,6 +1875,66 @@ a.btn.btn-square:focus {
     padding-top: 15px;
     padding-bottom: 15px;
 }
+.booking-details-header {
+    padding-top: 10px;
+    font-size: 15px;
+}
+.booking-details-header>.first-line {
+    color: #fb6708;
+}
+.booking-details-container {
+    font-size: 12px;
+}
+.booking-details-table {
+    padding-left: 0px;
+    padding-right: 0px;
+}
+.booking-details-table table {
+    table-layout:fixed;
+    margin-bottom: 5px;
+}
+.booking-details-table table td {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.booking-details-table>table>thead {
+    background-color: #E6E6E6;
+    font-size: 11px;
+}
+.booking-details-table>table>tfoot>td>a {
+    padding-left: 6px;
+    padding-top: 6px !important;
+}
+.booking-details-table>table>thead>tr>th {
+    font-weight: normal !important;
+}
+.booking-details-table>table>tbody {
+    background-color: #F5F5F5;
+    font-size: 11px;
+}
+.booking-details-action-button {
+    width: 80px;
+    font-size: 10px;
+    float: right;
+    margin-right: 20px;
+    border-radius: 5px !important;
+}
+.booking-details-action-description {
+    padding-top: 15px !important;
+}
+.booking-details-action-readonly-button {
+    padding-top: 7px !important;
+    padding-left: 13px;
+}
+.booking-details-row {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+.booking-details-table-text-muted {
+    padding-left: 6px;
+}
+
 .padding-right-0px {
     padding-right: 0px;
 }

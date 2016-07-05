@@ -13,6 +13,7 @@ import {BookingSearchParams} from '../../data-objects/BookingSearchParams';
 import {DefaultBillingDetailsDO} from '../../../../../../../../services/bookings/data-objects/default-billing/DefaultBillingDetailsDO';
 import {CustomerDO} from '../../../../../../../../services/customers/data-objects/CustomerDO';
 import {InvoicePaymentMethodDO, InvoicePaymentMethodType} from '../../../../../../../../services/invoices/data-objects/payers/InvoicePaymentMethodDO';
+import {HotelAggregatedInfo} from '../../../../../../../../services/hotel/utils/HotelAggregatedInfo';
 
 export class BookingViewModelConverter {
     private _thUtils: ThUtils;
@@ -21,16 +22,16 @@ export class BookingViewModelConverter {
         this._thUtils = new ThUtils();
     }
 
-    public convertSearchResultToVMList(bookingSearchResultDO: BookingSearchResultDO, bookingSearchParams: BookingSearchParams, currency: CurrencyDO): BookingCartItemVM[] {
+    public convertSearchResultToVMList(bookingSearchResultDO: BookingSearchResultDO, bookingSearchParams: BookingSearchParams, hotelAggregatedInfo: HotelAggregatedInfo): BookingCartItemVM[] {
         var bookingItemVMList: BookingCartItemVM[] = [];
         _.forEach(bookingSearchResultDO.roomCategoryItemList, (roomCategoryItem: RoomCategoryItemDO) => {
-            bookingItemVMList = bookingItemVMList.concat(this.getBookingSearchResultForRoom(roomCategoryItem, bookingSearchResultDO, bookingSearchParams, currency));
+            bookingItemVMList = bookingItemVMList.concat(this.getBookingSearchResultForRoom(roomCategoryItem, bookingSearchResultDO, bookingSearchParams, hotelAggregatedInfo));
         });
         return bookingItemVMList;
     }
 
     private getBookingSearchResultForRoom(roomCategoryItem: RoomCategoryItemDO, bookingSearchResultDO: BookingSearchResultDO,
-        bookingSearchParams: BookingSearchParams, currency: CurrencyDO): BookingCartItemVM[] {
+        bookingSearchParams: BookingSearchParams, hotelAggregatedInfo: HotelAggregatedInfo): BookingCartItemVM[] {
 
         var bookingItemVMList: BookingCartItemVM[] = [];
 
@@ -41,7 +42,7 @@ export class BookingViewModelConverter {
             if (allotmentItem.noOccupiedAllotments < allotmentItem.noTotalAllotments) {
                 var priceProductItem = bookingSearchResultDO.getPriceProductItemById(allotmentItem.priceProductId);
                 if (priceProductItem) {
-                    bookingItemVMList.push(this.createBookingItemVM(bookingSearchResultDO, bookingSearchParams, roomCategoryItem, priceProductItem, currency, allotmentItem));
+                    bookingItemVMList.push(this.createBookingItemVM(bookingSearchResultDO, bookingSearchParams, roomCategoryItem, priceProductItem, hotelAggregatedInfo, allotmentItem));
                     addedPriceProductIdByRoomCateg[priceProductItem.priceProduct.id] = roomCategoryItem.stats.roomCategory.id;
                 }
             }
@@ -50,7 +51,7 @@ export class BookingViewModelConverter {
         _.forEach(priceProductItemList, (priceProductItem: PriceProductItemDO) => {
             if (!addedPriceProductIdByRoomCateg[priceProductItem.priceProduct.id]
                 || addedPriceProductIdByRoomCateg[priceProductItem.priceProduct.id] != roomCategoryItem.stats.roomCategory.id) {
-                bookingItemVMList.push(this.createBookingItemVM(bookingSearchResultDO, bookingSearchParams, roomCategoryItem, priceProductItem, currency));
+                bookingItemVMList.push(this.createBookingItemVM(bookingSearchResultDO, bookingSearchParams, roomCategoryItem, priceProductItem, hotelAggregatedInfo));
                 addedPriceProductIdByRoomCateg[priceProductItem.priceProduct.id] = roomCategoryItem.stats.roomCategory.id;
             }
         });
@@ -60,7 +61,7 @@ export class BookingViewModelConverter {
 
     private createBookingItemVM(bookingSearchResultDO: BookingSearchResultDO, bookingSearchParams: BookingSearchParams,
         roomCategoryItem: RoomCategoryItemDO, priceProductItem: PriceProductItemDO,
-        currency: CurrencyDO, allotmentItem?: AllotmentItemDO): BookingCartItemVM {
+        hotelAggregatedInfo: HotelAggregatedInfo, allotmentItem?: AllotmentItemDO): BookingCartItemVM {
 
         var bookingItemVM = new BookingCartItemVM();
         bookingItemVM.transientBookingItem = new TransientBookingItem()
@@ -81,7 +82,7 @@ export class BookingViewModelConverter {
             bookingItemVM.transientBookingItem.allotmentId = allotmentItem.allotment.id;
         }
         bookingItemVM.totalPrice = priceProductItem.getPriceForRoomCategory(roomCategoryItem.stats.roomCategory.id);
-        bookingItemVM.totalPriceString = bookingItemVM.totalPrice + currency.nativeSymbol;
+        bookingItemVM.totalPriceString = bookingItemVM.totalPrice + hotelAggregatedInfo.ccy.nativeSymbol;
         bookingItemVM.conditionsString = priceProductItem.priceProduct.conditions.getCancellationConditionsString(this._thTranslation);
         bookingItemVM.constraintsString = priceProductItem.priceProduct.constraints.getBriefValueDisplayString(this._thTranslation);
 
@@ -91,35 +92,39 @@ export class BookingViewModelConverter {
         bookingItemVM.transientBookingItem.configCapacity = bookingItemVM.bookingCapacity;
         bookingItemVM.transientBookingItem.interval = new ThDateIntervalDO();
         bookingItemVM.transientBookingItem.interval.buildFromObject(bookingSearchParams.interval);
+        bookingItemVM.transientBookingItem.notes = "";
         bookingItemVM.bookingInterval = bookingItemVM.transientBookingItem.interval;
 
         bookingItemVM.transientBookingItem.roomCategoryId = roomCategoryItem.stats.roomCategory.id;
         bookingItemVM.transientBookingItem.priceProductId = priceProductItem.priceProduct.id;
 
         bookingItemVM.priceProduct = priceProductItem.priceProduct;
-        bookingItemVM.ccy = currency;
+        bookingItemVM.ccy = hotelAggregatedInfo.ccy;
+        bookingItemVM.allowedPaymentMethods = hotelAggregatedInfo.allowedPaymentMethods;
 
         bookingItemVM.customerNameString = "";
-        bookingItemVM.canChangeDefaultBillableCustomer = true;
+        bookingItemVM.canChangeDefaultBilledCustomer = true;
+        bookingItemVM.customerList = [];
+        bookingItemVM.transientBookingItem.customerIdList = [];
+        bookingItemVM.transientBookingItem.defaultBillingDetails = this.getDefaultBillingDetails(hotelAggregatedInfo, priceProductItem);
 
         if (!this._thUtils.isUndefinedOrNull(bookingSearchResultDO.customer)) {
             bookingItemVM.customerNameString = bookingSearchResultDO.customer.customerName;
             bookingItemVM.customerList = [bookingSearchResultDO.customer];
             bookingItemVM.transientBookingItem.customerIdList = [bookingSearchResultDO.customer.id];
-            bookingItemVM.transientBookingItem.defaultBillingDetails = this.getDefaultBillingDetails(priceProductItem, bookingSearchResultDO.customer);
-            bookingItemVM.canChangeDefaultBillableCustomer = false;
+            bookingItemVM.canChangeDefaultBilledCustomer = false;
+            bookingItemVM.transientBookingItem.defaultBillingDetails.customerId = bookingSearchResultDO.customer.id;
         }
+        bookingItemVM.updateValidationColumn();
 
         return bookingItemVM;
     }
-    private getDefaultBillingDetails(priceProductItem: PriceProductItemDO, customer: CustomerDO): DefaultBillingDetailsDO {
+    private getDefaultBillingDetails(hotelAggregatedInfo: HotelAggregatedInfo, priceProductItem: PriceProductItemDO): DefaultBillingDetailsDO {
         var billingDetails = new DefaultBillingDetailsDO();
-        billingDetails.customerId = customer.id;
         billingDetails.paymentGuarantee = false;
-        if (priceProductItem.priceProduct.conditions.policy.hasCancellationPolicy()) {
-            billingDetails.paymentGuarantee = true;
-        }
         billingDetails.paymentMethod = new InvoicePaymentMethodDO();
+        billingDetails.paymentMethod.type = InvoicePaymentMethodType.DefaultPaymentMethod;
+        billingDetails.paymentMethod.value = hotelAggregatedInfo.allowedPaymentMethods.paymentMethodList[0].id;
         return billingDetails;
     }
 }

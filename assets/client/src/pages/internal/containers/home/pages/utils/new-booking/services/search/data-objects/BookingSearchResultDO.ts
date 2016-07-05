@@ -1,4 +1,5 @@
 import {BaseDO} from '../../../../../../../../../../common/base/BaseDO';
+import {ThUtils} from '../../../../../../../../../../common/utils/ThUtils';
 import {RoomCategoryItemDO} from './room-category-item/RoomCategoryItemDO';
 import {AllotmentItemDO} from './allotment-item/AllotmentItemDO';
 import {PriceProductItemDO} from './price-product-item/PriceProductItemDO';
@@ -44,8 +45,11 @@ export class BookingSearchResultDO extends BaseDO {
             this.priceProductItemList.push(priceProductItemDO);
         });
 
-        this.customer = new CustomerDO();
-        this.customer.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "customer"));
+        var thUtils = new ThUtils();
+        if (!thUtils.isUndefinedOrNull(object["customer"])) {
+            this.customer = new CustomerDO();
+            this.customer.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "customer"));
+        }
 
         this.searchParameters = new SearchParametersDO();
         this.searchParameters.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "searchParameters"));

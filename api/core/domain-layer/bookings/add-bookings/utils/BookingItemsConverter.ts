@@ -14,6 +14,7 @@ import {PriceProductsContainer} from '../../../price-products/validators/results
 import {BookingCancellationTimeDO} from '../../../../data-layer/bookings/data-objects/cancellation-time/BookingCancellationTimeDO';
 import {HotelDO} from '../../../../data-layer/hotel/data-objects/HotelDO';
 import {BookingUtils} from '../../utils/BookingUtils';
+import {ThDateIntervalDO} from '../../../../utils/th-dates/data-objects/ThDateIntervalDO';
 
 import _ = require('underscore');
 
@@ -63,6 +64,9 @@ export class BookingItemsConverter {
         _.forEach(this._bookingItems.bookingList, (bookingItem: BookingItemDO) => {
             var bookingDO = new BookingDO();
 
+            var bookingInterval = new ThDateIntervalDO();
+            bookingInterval.buildFromObject(bookingItem.interval);
+
             bookingDO.groupBookingReference = groupBookingReference;
             bookingDO.hotelId = hotelId;
             bookingDO.status = groupBookingStatus;
@@ -78,7 +82,7 @@ export class BookingItemsConverter {
             bookingDO.priceProductId = bookingItem.priceProductId;
             bookingDO.allotmentId = bookingItem.allotmentId;
             bookingDO.notes = bookingItem.notes;
-            bookingDO.interval = bookingItem.interval;
+            bookingDO.interval = bookingInterval;
 
             var priceProduct = this._converterParams.priceProductsContainer.getPriceProductById(bookingDO.priceProductId);
             bookingDO.priceProductSnapshot = new PriceProductDO();

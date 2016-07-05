@@ -25,6 +25,8 @@ import {BookingItemsConverter, BookingItemsConverterParams} from './utils/Bookin
 import {NewBookingsValidationRules} from './utils/NewBookingsValidationRules';
 import {RoomCategoryStatsAggregator} from '../../room-categories/aggregators/RoomCategoryStatsAggregator';
 import {RoomCategoryStatsDO} from '../../../data-layer/room-categories/data-objects/RoomCategoryStatsDO';
+import {BookingConfirmationEmailSender} from '../booking-confirmations/BookingConfirmationEmailSender';
+import {BookingDataAggregatorQuery} from '../aggregators/BookingDataAggregator';
 
 import _ = require('underscore');
 
@@ -130,6 +132,7 @@ export class AddBookingItems {
                 return bookingsRepo.addBookings({ hotelId: this._sessionContext.sessionDO.hotel.id }, this._bookingList);
             }).then((createdBookingList: BookingDO[]) => {
                 this._bookingList = createdBookingList;
+                this.sendConfirmationsAsync(createdBookingList);
                 resolve(this._bookingList);
                 // TODO: send email & generate invoices for bookings with cancel < currentTimestamp
             }).catch((error: any) => {
@@ -161,5 +164,16 @@ export class AddBookingItems {
             }
         });
         return allotmentIdList;
+    }
+    private sendConfirmationsAsync(groupBookingList: BookingDO[]) {
+        if (groupBookingList.length == 0) {
+            return;
+        }
+        var groupBookingId = groupBookingList[0].groupBookingId;
+        var emailSender: BookingConfirmationEmailSender = new BookingConfirmationEmailSender(this._appContext, this._sessionContext);
+        var bookingQuery: BookingDataAggregatorQuery = {
+            groupBookingId: groupBookingId
+        };
+        emailSender.sendBookingConfirmation(bookingQuery, this._bookingItems.confirmationEmailList);
     }
 }
