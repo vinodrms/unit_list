@@ -89,7 +89,7 @@
             <div class="row" *ngIf="didSelectBilledToCustomer()">
                 <div class="col-md-6 col-xs-6 form-group">
                     <label>{{ 'Payment Guarantee' | translate }}</label>
-                    <div class="input-group" [ngClass]="{'form-warning': !paymentGuarantee && needsPaymentGuarantee()}">
+                    <div class="input-group">
                         <div class="btn-group" data-toggle="buttons">
                             <button class="btn btn-default" (click)="paymentGuarantee=true" [ngClass]="{'active': paymentGuarantee}"
                                 [disabled]="readonly">
@@ -101,7 +101,7 @@
                             </button>
                         </div>
                     </div>
-                    <label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Payment guarantee is required for this price product.' | translate }}</small></label>
+                    <small class="text-muted booking-details-table-text-muted" *ngIf="!paymentGuarantee && needsPaymentGuarantee()"><i class="fa fa-info-circle"></i> {{ 'Payment guarantee is required for this price product.' | translate }} </small>
                 </div>
                 <div class="col-md-6 col-xs-6 form-group" *ngIf="paymentGuarantee">
                     <label>{{ 'Payment Method' | translate }}</label>

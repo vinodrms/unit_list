@@ -52,19 +52,45 @@ export class BookingEmailConfigStepService implements IBookingStepService, ILast
     }
 
     public addBookings(): Observable<boolean> {
+        return new Observable<boolean>((addBookingsObserver: Observer<boolean>) => {
+            this.addBookingsCore(addBookingsObserver);
+        });
+    }
+    private addBookingsCore(addBookingsObserver: Observer<boolean>) {
+        var bookingItems = this.getAddBookingItemsDO();
+        if (bookingItems.confirmationEmailList.length > 0) {
+            this.postBookingsToServer(addBookingsObserver, bookingItems);
+            return;
+        }
+        var title = this._appContext.thTranslation.translate("Booking Confirmation");
+        var content = this._appContext.thTranslation.translate("Are you sure you want to add the bookings without sending email confirmations?");
+        this._appContext.modalService.confirm(title, content, { positive: this._appContext.thTranslation.translate("Yes"), negative: this._appContext.thTranslation.translate("No") },
+            () => {
+                this.postBookingsToServer(addBookingsObserver, bookingItems);
+            }, () => {
+                addBookingsObserver.complete();
+            });
+    }
+    private postBookingsToServer(addBookingsObserver: Observer<boolean>, bookingItems: AddBookingItemsDO) {
+        this._appContext.thHttp.post(ThServerApi.BookingsAdd, { bookingItems: bookingItems })
+            .subscribe((result: any) => {
+                addBookingsObserver.next(true);
+                addBookingsObserver.complete();
+            }, (err: ThError) => {
+                addBookingsObserver.error(err);
+                addBookingsObserver.complete();
+            });
+    }
+
+    private getAddBookingItemsDO(): AddBookingItemsDO {
         var transientBookingItemList: TransientBookingItem[] = _.map(this._bookingCartService.bookingItemVMList, (bookingItemVM: BookingCartItemVM) => {
             return bookingItemVM.transientBookingItem;
         });
         var bookingItems = new AddBookingItemsDO();
         bookingItems.bookingList = transientBookingItemList;
         bookingItems.confirmationEmailList = this.getRecipientEmailList();
-
-        return this._appContext.thHttp.post(ThServerApi.BookingsAdd, { bookingItems: bookingItems })
-            .map((resultObject: Object) => {
-                return true;
-            });
+        return bookingItems;
     }
-
     private getRecipientEmailList(): string[] {
         var recipientList: EmailRecipientVM[] = _.filter(this.emailRecipientList, (emailRecipient: EmailRecipientVM) => {
             return emailRecipient.isValid && emailRecipient.selected;

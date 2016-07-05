@@ -516,6 +516,7 @@ export var EnglishTranslations: Object = {
 	"The bookings have been added succesfully": "The bookings have been added succesfully",
 	"Close Wizard": "Close Wizard",
 	"Are you sure you want to close the booking wizard?": "Are you sure you want to close the booking wizard?",
+	"Booking Confirmation": "Booking Confirmation",
+	"Are you sure you want to add the bookings without sending email confirmations?": "Are you sure you want to add the bookings without sending email confirmations?",
 	
-
 };

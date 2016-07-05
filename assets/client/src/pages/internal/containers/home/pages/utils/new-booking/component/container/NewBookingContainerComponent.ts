@@ -92,12 +92,12 @@ export class NewBookingContainerComponent extends BaseComponent {
 		this.isAddingBookings = true;
 		var lastBookingStep: ILastBookingStepService = this._bookingCtrlService.getLastStepService();
 		lastBookingStep.addBookings().subscribe((result: boolean) => {
-			this.isAddingBookings = false;
 			this._appContext.toaster.success(this._appContext.thTranslation.translate("The bookings have been added succesfully"));
 			this.triggerOnCloseButtonPressed(true);
 		}, (err: ThError) => {
-			this.isAddingBookings = false;
 			this._appContext.toaster.error(err.message);
-		})
+		}, () => {
+			this.isAddingBookings = false;
+		});
 	}
 }

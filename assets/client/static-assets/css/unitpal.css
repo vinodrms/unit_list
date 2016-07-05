@@ -1960,6 +1960,8 @@ a.btn.btn-square:focus {
 }
 .booking-details-table-text-muted {
     padding-left: 6px;
+    color: #fc8333;
+    font-size: 12px;
 }
 
 .padding-right-0px {
