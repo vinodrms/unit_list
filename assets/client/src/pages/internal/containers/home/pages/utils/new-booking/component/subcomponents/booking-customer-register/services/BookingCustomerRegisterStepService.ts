@@ -28,7 +28,6 @@ export class BookingCustomerRegisterStepService implements IBookingStepService {
 		return "";
 	}
 	public didAppear() {}
-	public didDisappear() {}
 
 	public get basePathList(): string[] {
 		return this._basePathList;

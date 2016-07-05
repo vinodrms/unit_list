@@ -494,13 +494,19 @@ export var EnglishTranslations: Object = {
 	"Select a customer to bill the invoice to": "Select a customer to bill the invoice to",
 	"You must add a payment guarantee and a payment method because the price product has cancellation conditions.": "You must add a payment guarantee and a payment method because the price product has cancellation conditions.",
 	"The selected customer does not support to pay the invoice by agreement.": "The selected customer does not support to pay the invoice by agreement.",
-	"Add at least one customer for all the bookings": "Add at least one customer for all the bookings",
+	"Configure billing details for all the bookings": "Configure billing details for all the bookings",
 	"%firstDate% to %secondDate%": "%firstDate% to %secondDate%",
 	"Customers": "Customers",
 	"Number of Nights": "Number of Nights",
 	"Bill": "Bill",
 	"Generate the bill with this customer": "Generate the bill with this customer",
 	"The invoice will be generated with this customer": "The invoice will be generated with this customer",
-	"Billed To": "Billed To"
+	"Billed To": "Billed To",
+	"Mininum one customer": "Mininum one customer",
+	"Payment Guarantee": "Payment Guarantee",
+	"Payment guarantee is required for this price product.": "Payment guarantee is required for this price product.",
+	"Payment Method": "Payment Method",
+	"This confirms that you have acquired all the necessary information to bill the customer": "This confirms that you have acquired all the necessary information to bill the customer",
+	"Booking Notes": "Booking Notes",
 	
 };

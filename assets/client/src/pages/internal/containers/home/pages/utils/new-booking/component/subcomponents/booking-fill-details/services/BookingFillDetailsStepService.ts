@@ -39,8 +39,6 @@ export class BookingFillDetailsStepService implements IBookingStepService {
 	public didAppear() {
 		if (this._didAppearObserver) { this._didAppearObserver.next(true) };
 	}
-	public didDisappear() {
-	}
 
 	public checkBookingCartValidity(bookingCartService: BookingCartService) {
 		if (bookingCartService.bookingItemVMList.length == 0) {
@@ -53,9 +51,10 @@ export class BookingFillDetailsStepService implements IBookingStepService {
 			var validationResult: BillingValidationResult = bookingCartItem.checkValidity();
 			if(!validationResult.valid) {
 				bookingCartIsValid = false;
-				this._errorString = "Add at least one customer for all the bookings";
+				this._errorString = "Configure billing details for all the bookings";
 			}
 		});
 		this._canGoToNextStep = bookingCartIsValid;
+		if(this._canGoToNextStep) { this._errorString = ""; }
 	}
 }

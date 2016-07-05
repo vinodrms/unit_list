@@ -32,7 +32,6 @@ export class BookingSearchStepService implements IBookingStepService {
 		return this._errorString;
 	}
 	public didAppear() { }
-	public didDisappear() { }
 
 	public checkBookingCartValidity(bookingCartService: BookingCartService, roomCategoryList: RoomCategoryDO[]) {
 		if (bookingCartService.bookingItemVMList.length == 0) {

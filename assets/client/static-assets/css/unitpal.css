@@ -1875,8 +1875,10 @@ a.btn.btn-square:focus {
     table-layout:fixed;
     margin-bottom: 5px;
 }
-booking-details-table table td {
+.booking-details-table table td {
     overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 .booking-details-table>table>thead {
     background-color: #E6E6E6;
@@ -1900,9 +1902,19 @@ booking-details-table table td {
     margin-right: 20px;
     border-radius: 5px !important;
 }
+.booking-details-action-description {
+    padding-top: 15px !important;
+}
+.booking-details-action-readonly-button {
+    padding-top: 7px !important;
+    padding-left: 13px;
+}
 .booking-details-row {
     padding-top: 5px;
     padding-bottom: 5px;
+}
+.booking-details-table-text-muted {
+    padding-left: 6px;
 }
 
 .padding-right-0px {

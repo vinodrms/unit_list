@@ -6,5 +6,4 @@ export interface IBookingStepService {
 	getStepPath(): string[];
 	getErrorString(): string;
 	didAppear();
-	didDisappear();
 }
