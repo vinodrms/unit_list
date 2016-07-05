@@ -25,6 +25,7 @@ import {BookingSearchParams} from '../../../../../services/data-objects/BookingS
 export class BookingSearchParametersComponent extends BaseComponent implements AfterViewInit {
     @Input() isSearching: boolean;
     @Output() protected onBookingSearch = new EventEmitter<BookingSearchParams>();
+    private _didSearchForBookings: boolean = false;
 
     @ViewChild(SearchInputTextComponent)
     private _customerSearchTextInputComponent: SearchInputTextComponent<CustomerDO>;
@@ -84,6 +85,7 @@ export class BookingSearchParametersComponent extends BaseComponent implements A
     }
     public didSelectBookingInterval(bookingInterval: ThDateIntervalDO) {
         this.searchParameters.interval = bookingInterval;
+        this.updateSearchResultsIfNecessary();
     }
     public selectCustomer() {
         this._customerRegisterSelector.selectCustomerFromRegister().subscribe((selectedCustomer: CustomerDO) => {
@@ -99,13 +101,19 @@ export class BookingSearchParametersComponent extends BaseComponent implements A
         this.showBookingCodeMessage = false;
         this.bookingCode = "";
         delete this.searchParameters.customerId;
+        this.updateSearchResultsIfNecessary();
     }
 
     public searchBookings() {
         if (!this.searchParameters.areValid() || this.isSearching) {
             return;
         }
+        this._didSearchForBookings = true;
         this.onBookingSearch.next(this.searchParameters);
+    }
+    private updateSearchResultsIfNecessary() {
+        if (!this._didSearchForBookings) { return; }
+        this.searchBookings();
     }
 
     public get customer(): CustomerDO {
@@ -117,5 +125,6 @@ export class BookingSearchParametersComponent extends BaseComponent implements A
         this.showBookingCodeMessage = true;
         this.validBookingCode = true;
         this.searchParameters.customerId = customer.id;
+        this.updateSearchResultsIfNecessary();
     }
 }
