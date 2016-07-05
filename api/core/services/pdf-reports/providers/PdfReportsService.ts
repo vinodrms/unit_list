@@ -52,18 +52,27 @@ export class PdfReportsService extends APdfReportsService {
     }
 
     private generateHtmlCore(resolve: { (generatedHtmlPath: string): void }, reject: { (err: ThError): void }) {
+        console.log('this._reportConfig.getHtmlTemplateUrl()>' + this._reportConfig.getHtmlTemplateUrl());
         ejs.renderFile(this._reportConfig.getHtmlTemplateUrl(), this._reportsServiceRequest.reportData, {}, (err, str) => {
             var htmlOutputPath = this._reportConfig.getOutputHtmlAbsolutePath(this._reportsServiceRequest.reportData);
             var htmlOutputDir = path.parse(htmlOutputPath).dir;
 
+            console.log('htmlOutputPath>' + htmlOutputPath);
+            console.log('htmlOutputDir>' + path.parse(htmlOutputPath).dir);
+
             var writeHtmlStringToFile = (outputPath: string, htmlStr: string) => {
                 fs.writeFile(outputPath, htmlStr, (err) => {
-                    if (err) return console.log(err);
+                    if (err) {
+                        var thError = new ThError(ThStatusCode.PdfReportServiceErrorWritingHtmlToFile, err);
+                        ThLogger.getInstance().logError(ThLogLevel.Error, "error writing html file on disk", { outputPath: outputPath }, thError);
+                        reject(thError);
+                    }
                     resolve(outputPath);
                 });
             }
 
             fs.exists(htmlOutputDir, (exists) => {
+                console.log('htmlOutputDir->' + htmlOutputDir + ' exists:' + exists);
                 if (!exists) {
                     fs.mkdir(htmlOutputDir, (err) => {
                         writeHtmlStringToFile(htmlOutputPath, str);
