@@ -12,7 +12,7 @@ SupportedLocales[Locales.English] = "en";
 SupportedLocales[Locales.Danish] = "dk";
 
 export class ThTranslation {
-	private static TemplateVariableRegex: RegExp = /%\s?([^{}\s]*)\s?%/g;
+	private static TemplateVariableRegex: RegExp = /%([^{}\s]*)%/g;
 	private _thUtils: ThUtils;
 
 	public static DefaultLocale = Locales.English;
