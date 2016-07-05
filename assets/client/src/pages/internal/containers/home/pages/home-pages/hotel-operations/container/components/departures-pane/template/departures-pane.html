@@ -1,5 +1,20 @@
 <div class="header">
-	Departures
+	<div class="pane-title">
+		<span class="f-24">Departures</span>
+		<i class="fa fa-suitcase green-color p-l-12 f-16"></i>
+	</div>
+
+	<div class="pane-search-bar">
+		<input class="remove-auto-border" type="text" placeholder="Search here">
+		<i class="fa fa-search gray-color p-l-6"></i>
+	</div>
+
 </div>
 <div class="body">
+	<departure-item class="selected p-6"
+		*ngFor="let departureItemVM of departureItemsVMList"
+		[ngClass]="{'selected': isDepartureItemSelected(departureItemVM)}" 
+		[departureItemVM] = "departureItemVM" 
+		(click) = "selectDepartureItem(departureItemVM)">
+	</departure-item>
 </div>

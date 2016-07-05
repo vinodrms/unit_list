@@ -1,10 +1,25 @@
-	<div class="canvas">
-		<div class="header">
-
+<div class="header">
+	<div class="rooms-controller p-12">
+		<div class="group-1 flex-row flex-center-v">
+			<i class="fa fa-angle-left p-r-12 f-48"></i>
+			<div class="current-date p-r-12 f-32"><b>Wednesday 13.01.2016</b></div>
+			<button class="btn btn-sm btn-danger f-12">Change date</button>
 		</div>
-		<div class="body rooms-canvas">
-			<div *ngFor="let roomVM of roomVMList">
-				<room-card [roomVM]="roomVM" (dropped)="dropHandled($event)"></room-card>
-			</div>
+		<div class="group-2 flex-row flex-center-v">
+			<select class="rooms-filter p-r-12 f-12">
+						<option>Free</option>
+						<option>Ocupied</option>
+						<option>Reserved</option>
+						<option>OutOfService</option>
+						<option>All</option>
+					</select>
+			<i class="fa fa-angle-right p-l-12 f-48"></i>
 		</div>
 	</div>
+	<div class="notification">SHOWING ONLY <b> EMPTY ROOMS</b> </div>
+</div>
+<div class="body rooms-canvas">
+	<div *ngFor="let roomVM of roomVMList">
+		<room-card [roomVM]="roomVM" (dropped)="dropHandled($event)"></room-card>
+	</div>
+</div>

@@ -1,4 +1,5 @@
 import {Component, Input, Output, NgZone, ElementRef, EventEmitter} from '@angular/core';
+import {RoomDropHandlerFactory} from './drop-handlers/RoomDropHandlerFactory';
 
 // import {HeaderPageService} from '../../../utils/header/container/services/HeaderPageService';
 
@@ -11,7 +12,7 @@ declare var $: any;
 export class RoomCardComponent {
 	@Input() roomVM: any;
 	@Output() dropped = new EventEmitter();
-
+	
 	constructor(private _zone: NgZone, private _root: ElementRef) {
 	}
 
@@ -21,8 +22,19 @@ export class RoomCardComponent {
 				accept: 'arrival-item',
 				drop: (event : Event, ui : Object) => {
 					this._zone.run(()=>{
-						this.roomVM.Status = "Free";
-						this.dropped.emit({ accepted: true })
+						var dropHandler = RoomDropHandlerFactory.get(this.roomVM.Status);
+						var outcome = {
+							accepted : dropHandler.handle("test"),
+							roomVM: this.roomVM
+						}
+
+						if (outcome.accepted == true){
+							this.roomVM.Status = "Occupied";
+							this.dropped.emit(outcome)
+						}
+						else {
+							this.dropped.emit(outcome)
+						}
 					})
 				}
 			}

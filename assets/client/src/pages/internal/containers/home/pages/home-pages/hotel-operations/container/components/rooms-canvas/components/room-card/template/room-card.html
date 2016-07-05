@@ -2,36 +2,110 @@
 	<div class="card-header">
 		<div class="section1">
 			<div class="room-number">{{ roomVM.Properties.Name }}</div>
-			<div class="room-details">{{ roomVM.Type }} {{roomVM.Properties.Booking.NumberOfPeople}} {{roomVM.Properties.Booking.NumberOfNights}}</div>
+			<div class="room-details">{{ roomVM.Type }}</div>
 		</div>
-		<div class="section2">
+		<div class="section2 flex-row flex-jc-sb">
 			<div class="customer-name">{{ roomVM.Properties.Booking.ClientName}}</div>
+			<div class="room-stats flex-row flex-center-v">
+				<div class="circle-sm stat-yellow">
+					<span class="unitpal-font">E</span>
+				</div>
+				<div class="circle-sm stat-tomato">
+					<span class="unitpal-font">F</span>
+				</div>
+			</div>
 		</div>
 	</div>
 	<div class="card-footer">
-		<div class="arrival">
-			{{ roomVM.Properties.Booking.Arrival }}
+		<div class="period flex-row flex-center-v">
+			<div class="start-date">{{ roomVM.Properties.Booking.Arrival }}</div>
+			<i class="fa fa-arrow-right"></i>
+			<div class="end-date">{{ roomVM.Properties.Booking.Departure }}</div>
 		</div>
-		<div class="arrow">></div>
-		<div class="departure">
-			{{ roomVM.Properties.Booking.Departure }}
+		<div class="other-details gray-color flex-row flex-center-v">
+			<span class="unitpal-font">:</span> {{roomVM.Properties.Booking.NumberOfPeople}}
+			<span class="unitpal-font">A</span> {{roomVM.Properties.Booking.NumberOfNights}}
 		</div>
 	</div>
 </div>
-<div *ngIf='roomVM.Status == "Free"'>
-	<div class="room-card free">
-		<div class="card-header">
-			<div class="section1">
-				<div class="room-number">501</div>
-			</div>
-			<div class="section2">
-				<div class="customer-name">A</div>
+
+<div class="room-card free" *ngIf='roomVM.Status == "Free"'>
+	<div class="card-header">
+		<div class="section1">
+			<div class="room-number">{{ roomVM.Properties.Name }}</div>
+			<div class="room-details">{{ roomVM.Type }}</div>
+		</div>
+		<div class="section2 flex-row flex-jc-sb">
+			<div class="customer-name"></div>
+			<div class="room-stats flex-row flex-center-v">
+				<div class="circle-sm stat-yellow">
+					<span class="unitpal-font">E</span>
+				</div>
+				<div class="circle-sm stat-tomato">
+					<span class="unitpal-font">F</span>
+				</div>
 			</div>
 		</div>
-		<div class="card-footer">
-			<div class="arrival">
-				Wed 13.02.16
+	</div>
+	<div class="card-footer">
+		<div class="period flex-row flex-center-v">
+			No booking this month
+		</div>
+		<div class="other-details">
+		</div>
+	</div>
+</div>
+
+<div class="room-card out-of-service" *ngIf='roomVM.Status == "OutOfService"'>
+	<div class="card-header">
+		<div class="section1">
+			<div class="room-number">{{ roomVM.Properties.Name }}</div>
+			<div class="room-details">{{ roomVM.Type }}</div>
+		</div>
+		<div class="section2 flex-row flex-jc-sb">
+			<div class="customer-name"></div>
+			<div class="room-stats flex-row flex-center-v">
+				<div class="circle-sm stat-yellow">
+					<span class="unitpal-font">E</span>
+				</div>
+				<div class="circle-sm stat-tomato">
+					<span class="unitpal-font">F</span>
+				</div>
 			</div>
+		</div>
+	</div>
+	<div class="card-footer">
+		<div class="period flex-row flex-center-v">
+			Out of service
+		</div>
+		<div class="other-details">
+		</div>
+	</div>
+</div>
+
+<div class="room-card reserved" *ngIf='roomVM.Status == "Reserved"'>
+	<div class="card-header">
+		<div class="section1">
+			<div class="room-number">{{ roomVM.Properties.Name }}</div>
+			<div class="room-details">{{ roomVM.Type }}</div>
+		</div>
+		<div class="section2 flex-row flex-jc-sb">
+			<div class="customer-name"></div>
+			<div class="room-stats flex-row flex-center-v">
+				<div class="circle-sm stat-yellow">
+					<span class="unitpal-font">E</span>
+				</div>
+				<div class="circle-sm stat-tomato">
+					<span class="unitpal-font">F</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="card-footer">
+		<div class="period flex-row flex-center-v">
+			Arriving Today
+		</div>
+		<div class="other-details">
 		</div>
 	</div>
 </div>

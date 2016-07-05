@@ -12,19 +12,74 @@ import {RoomsCanvasComponent} from './components/rooms-canvas/RoomsCanvasCompone
 
 declare var $:any;
 
+export interface IHotelOperationsDashboardArrivalsPaneMediator{
+	registerArrivalsPane(arrivalsPane:ArrivalsPaneComponent);
+
+	startedDragging(arrivalItemVM);
+	getSelectedArrivalItem():any;
+	clickedArrivalItem(arrivalItemVM);
+}
+
+export interface IHotelOperationsDashboardRoomsCanvasMediator{
+	registerRoomsCanvas(arrivalsPane:RoomsCanvasComponent);
+
+	getSelectedArrivalItem():any;
+	checkInArrivalItem(arrivalItem)
+}
+
+export interface IHotelOperationsDashboardDeparturesMediator{
+	registerDeparturesPane(departuresPane:DeparturesPaneComponent);
+}
 
 @Component({
 	selector: 'hotel-operations-dashboard',
 	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/container/template/hotel-operations-dashboard.html',
-
 	directives: [ThButtonComponent, ArrivalsPaneComponent, DeparturesPaneComponent, RoomsCanvasComponent],
 	pipes: [TranslationPipe]
 })
-export class HotelOperationsDashboardComponent extends AHomeContainerComponent implements OnInit {
+export class HotelOperationsDashboardComponent extends AHomeContainerComponent implements OnInit, IHotelOperationsDashboardArrivalsPaneMediator, IHotelOperationsDashboardRoomsCanvasMediator, IHotelOperationsDashboardDeparturesMediator {
+	public self: IHotelOperationsDashboardRoomsCanvasMediator;
 	private roomVMList: any;
+	private _arrivalsPane: ArrivalsPaneComponent;
+	private _roomsCanvas: RoomsCanvasComponent;
+	private _departuresPane: DeparturesPaneComponent;
+
+	private _selectedArrivalItem = null;
 	constructor(headerPageService: HeaderPageService
 		) {
 		super(headerPageService, HeaderPageType.HotelOperations);
+		this.self = this;
+	}
+
+	public registerArrivalsPane(arrivalsPane:ArrivalsPaneComponent){
+		this._arrivalsPane = arrivalsPane;
+	}
+
+	public registerRoomsCanvas(roomsCanvas:RoomsCanvasComponent){
+		this._roomsCanvas = roomsCanvas;
+	}
+
+	public registerDeparturesPane(departuresPane:DeparturesPaneComponent){
+		this._departuresPane = departuresPane;
+	}
+
+	public startedDragging(arrivalItemVM){
+		this._selectedArrivalItem = arrivalItemVM;
+		this._roomsCanvas.startedDragging(arrivalItemVM);
+	}
+	
+
+	public clickedArrivalItem(arrivalItemVM){
+		this._selectedArrivalItem = arrivalItemVM;
+	}
+	
+	public getSelectedArrivalItem(){
+		return this._selectedArrivalItem;
+	}
+
+	public checkInArrivalItem(arrivalItemVM){
+		debugger;
+		this._arrivalsPane.removeArrivalItem(arrivalItemVM);
 	}
 
 	ngOnInit() {
