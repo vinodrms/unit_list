@@ -25,6 +25,7 @@
     "grunt-sails-linker": "~0.10.1",
     "grunt-sync": "0.2.4",
     "include-all": "~0.1.6",
+    "mkdirp": "^0.5.1",
     "moment": "^2.13.0",
     "moment-timezone": "^0.5.4",
     "mongodb": "^2.1.18",

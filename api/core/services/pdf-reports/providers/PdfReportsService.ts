@@ -8,6 +8,7 @@ import {PdfReportConfigFactory} from './config/PdfReportConfigFactory';
 import {HtmlToPdfResponseDO} from '../../html-to-pdf/IHtmlToPdfConverterService';
 
 var ejs = require('ejs');
+var mkdirp = require('mkdirp');
 import fs = require('fs');
 import path = require('path');
 import url = require('url');
@@ -52,13 +53,10 @@ export class PdfReportsService extends APdfReportsService {
     }
 
     private generateHtmlCore(resolve: { (generatedHtmlPath: string): void }, reject: { (err: ThError): void }) {
-        console.log('this._reportConfig.getHtmlTemplateUrl()>' + this._reportConfig.getHtmlTemplateUrl());
+
         ejs.renderFile(this._reportConfig.getHtmlTemplateUrl(), this._reportsServiceRequest.reportData, {}, (err, str) => {
             var htmlOutputPath = this._reportConfig.getOutputHtmlAbsolutePath(this._reportsServiceRequest.reportData);
             var htmlOutputDir = path.parse(htmlOutputPath).dir;
-
-            console.log('htmlOutputPath>' + htmlOutputPath);
-            console.log('htmlOutputDir>' + path.parse(htmlOutputPath).dir);
 
             var writeHtmlStringToFile = (outputPath: string, htmlStr: string) => {
                 fs.writeFile(outputPath, htmlStr, (err) => {
@@ -72,10 +70,16 @@ export class PdfReportsService extends APdfReportsService {
             }
 
             fs.exists(htmlOutputDir, (exists) => {
-                console.log('htmlOutputDir->' + htmlOutputDir + ' exists:' + exists);
                 if (!exists) {
-                    fs.mkdir(htmlOutputDir, (err) => {
-                        writeHtmlStringToFile(htmlOutputPath, str);
+                    mkdirp(htmlOutputDir, (err) => {
+                        if (err) {
+                            var thError = new ThError(ThStatusCode.PdfReportServiceErrorCreatingOutputFolder, err);
+                            ThLogger.getInstance().logError(ThLogLevel.Error, "error creating output folder", { htmlOutputDir: htmlOutputDir }, thError);
+                            reject(thError);
+                        }
+                        else {
+                            writeHtmlStringToFile(htmlOutputPath, str);
+                        }
                     });
                 }
                 else {
