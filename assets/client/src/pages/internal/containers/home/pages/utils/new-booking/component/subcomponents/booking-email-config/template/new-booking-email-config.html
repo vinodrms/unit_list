@@ -4,8 +4,10 @@
 		</lazy-loading-table>
 	</div>
 	<div class="col-xs-5 full-height">
-		<div class="row full-height" *ngIf="selectedBookingCartItemVM">
-			
+		<div class="row full-height" customScroll>
+            <div class="col-sm-12 col-xs-12 booking-details-header">
+                <span class="first-line"><i class="fa fa-envelope"></i> {{ 'Recipients' | translate }}</span>
+            </div>
 		</div>
 	</div>
 </div>

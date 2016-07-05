@@ -1875,11 +1875,11 @@ a.btn.btn-square:focus {
     padding-top: 15px;
     padding-bottom: 15px;
 }
-.booking-details-period {
+.booking-details-header {
     padding-top: 10px;
     font-size: 15px;
 }
-.booking-details-period>.period {
+.booking-details-header>.first-line {
     color: #fb6708;
 }
 .booking-details-container {
