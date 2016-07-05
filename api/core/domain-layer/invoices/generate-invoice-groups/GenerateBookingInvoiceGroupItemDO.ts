@@ -4,10 +4,15 @@ import {PrimitiveValidationStructure} from '../../../utils/th-validation/structu
 import {StringValidationRule} from '../../../utils/th-validation/rules/StringValidationRule';
 
 export class GenerateBookingInvoiceGroupItemDO {
+    groupBookingId: string;
     bookingId: string;
 
     public static getValidationStructure(): IValidationStructure {
         return new ObjectValidationStructure([
+            {
+                key: "groupBookingId",
+                validationStruct: new PrimitiveValidationStructure(new StringValidationRule())
+            },
             {
                 key: "bookingId",
                 validationStruct: new PrimitiveValidationStructure(new StringValidationRule())

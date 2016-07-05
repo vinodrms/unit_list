@@ -1,6 +1,6 @@
 import {BaseDO} from '../../common/base/BaseDO';
 import {InvoiceDO, InvoicePaymentStatus} from './InvoiceDO';
-import {PayerDO} from './payers/PayerDO';
+import {InvoicePayerDO} from './payers/InvoicePayerDO';
 
 export enum InvoiceGroupStatus {
 	Active,
@@ -18,6 +18,7 @@ export class InvoiceGroupDO extends BaseDO {
     id: string;
     versionId: number;
     hotelId: string;
+    groupBookingId: string;
     bookingId: string;
     indexedCustomerIdList: string[];
     invoiceList: InvoiceDO[];
@@ -57,7 +58,7 @@ export class InvoiceGroupDO extends BaseDO {
         }, []);
     }
 
-    public getAggregatedPayerList(): PayerDO[] {
+    public getAggregatedPayerList(): InvoicePayerDO[] {
         return _.reduce(this.invoiceList, (result, invoice: InvoiceDO) => {
             return _.union(result, invoice.payerList);
         }, []);

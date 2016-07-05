@@ -306,6 +306,7 @@ export enum ThStatusCode {
     SaveInvoiceGroupItem,
     GenerateCustomerInvoiceGroupItemError,
     GenerateBookingInvoiceGroupItemError,
+    AddBookingInvoiceGroupItemError,
     UpdateInvoiceGroupItemError,
     InvoicePaymentMethodValidatorError,
     InvoicePaymentMethodValidatorInvalidPaymentMethod,
@@ -658,6 +659,7 @@ ThMessage[ThStatusCode.SaveInvoiceGroupItem] = "Error saving the invoice group i
 ThMessage[ThStatusCode.UpdateInvoiceGroupItemError] = "Error updating invoice group.";
 ThMessage[ThStatusCode.GenerateCustomerInvoiceGroupItemError] = "Error generating customer related invoice group.";
 ThMessage[ThStatusCode.GenerateBookingInvoiceGroupItemError] = "Error generating booking related invoice group.";
+ThMessage[ThStatusCode.AddBookingInvoiceGroupItemError] = "Error adding booking related invoice group.";
 ThMessage[ThStatusCode.InvoicePaymentMethodValidatorError] = "Error validating the payment methods.";
 ThMessage[ThStatusCode.InvoicePaymentMethodValidatorInvalidPaymentMethod] = "Unrecognized payment method.";
 ThMessage[ThStatusCode.InvoicePaymentMethodValidatorUnsupportedPaymentMethod] = "The payment method selected is not supported by the hotel.";

@@ -3,7 +3,7 @@ import {DefaultDataBuilder} from '../../../../db-initializers/DefaultDataBuilder
 import {TestUtils} from '../../../../helpers/TestUtils';
 import {InvoiceGroupDO} from '../../../../../core/data-layer/invoices/data-objects/InvoiceGroupDO';
 import {InvoiceDO, InvoicePaymentStatus} from '../../../../../core/data-layer/invoices/data-objects/InvoiceDO';
-import {PayerDO} from '../../../../../core/data-layer/invoices/data-objects/payers/PayerDO';
+import {InvoicePayerDO} from '../../../../../core/data-layer/invoices/data-objects/payers/InvoicePayerDO';
 import {InvoicePaymentMethodType, InvoicePaymentMethodDO} from '../../../../../core/data-layer/invoices/data-objects/payers/InvoicePaymentMethodDO';
 import {InvoiceItemDO, InvoiceItemType} from '../../../../../core/data-layer/invoices/data-objects/items/InvoiceItemDO';
 import {CommissionDO} from '../../../../../core/data-layer/common/data-objects/commission/CommissionDO';
@@ -60,14 +60,14 @@ export class InvoicesTestHelper {
         return invoiceList;
     }
 
-    private getPayerListForTheFirstInvoice(): PayerDO[] {
+    private getPayerListForTheFirstInvoice(): InvoicePayerDO[] {
         var payerList = [];
 
         var companies = this.getCompanyCustomers();
         var paymentMethods = this._defaultDataBuilder.hotelDO.paymentMethodIdList;
 
         if (companies.length > 0) {
-            var payer = new PayerDO();
+            var payer = new InvoicePayerDO();
             payer.customerId = companies[0].id;
             var paymentMethod = new InvoicePaymentMethodDO();
             paymentMethod.type = InvoicePaymentMethodType.DefaultPaymentMethod;
@@ -83,14 +83,14 @@ export class InvoicesTestHelper {
         return payerList;
     }
 
-    private getPayerListForTheSecondInvoice(): PayerDO[] {
+    private getPayerListForTheSecondInvoice(): InvoicePayerDO[] {
         var payerList = [];
 
         var individuals = this.getIndividualCustomers();
         var paymentMethods = this._defaultDataBuilder.hotelDO.paymentMethodIdList;
 
         if (individuals.length >= 2) {
-            var payerOne = new PayerDO();
+            var payerOne = new InvoicePayerDO();
             payerOne.customerId = individuals[0].id;
             var paymentMethodForPayerOne = new InvoicePaymentMethodDO();
             paymentMethodForPayerOne.type = InvoicePaymentMethodType.DefaultPaymentMethod;
@@ -100,7 +100,7 @@ export class InvoicesTestHelper {
             payerOne.paymentMethod = paymentMethodForPayerOne;
             payerOne.priceToPay = 100;
 
-            var payerTwo = new PayerDO();
+            var payerTwo = new InvoicePayerDO();
             payerTwo.customerId = individuals[1].id;
             var paymentMethodForPayerTwo = new InvoicePaymentMethodDO();
             paymentMethodForPayerTwo.type = InvoicePaymentMethodType.DefaultPaymentMethod;

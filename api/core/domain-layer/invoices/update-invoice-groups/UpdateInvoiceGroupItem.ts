@@ -14,7 +14,7 @@ import {CustomersContainer} from '../../../domain-layer/customers/validators/res
 import {CustomerDO} from '../../../data-layer/customers/data-objects/CustomerDO';
 import {InvoicePaymentMethodValidator} from '../validators/InvoicePaymentMethodValidator';
 import {InvoicePaymentMethodDO} from '../../../data-layer/invoices/data-objects/payers/InvoicePaymentMethodDO';
-import {PayerDO} from '../../../data-layer/invoices/data-objects/payers/PayerDO';
+import {InvoicePayerDO} from '../../../data-layer/invoices/data-objects/payers/InvoicePayerDO';
 import {AddOnProductIdValidator} from '../../../domain-layer/add-on-products/validators/AddOnProductIdValidator';
 import {AddOnProductsContainer} from '../../../domain-layer/add-on-products/validators/results/AddOnProductsContainer';
 import {AddOnProductDO} from '../../../data-layer/add-on-products/data-objects/AddOnProductDO';
@@ -74,7 +74,7 @@ export class UpdateInvoiceGroupItem {
                 return ppIdValidator.validatePriceProductIdList(invoiceGroupDO.getAggregatedPriceProductIdList());
             }).then((ppContainer: PriceProductsContainer) => {
                 return Promise.all(_.chain(invoiceGroupDO.getAggregatedPayerList())
-                    .map((payer: PayerDO) => {
+                    .map((payer: InvoicePayerDO) => {
                         return new InvoicePaymentMethodValidator(this._hotel, this._customersContainer.getCustomerById(payer.customerId)).validate(payer.paymentMethod);
                     }).value());
             }).then((validatedPaymentMethods: InvoicePaymentMethodDO[]) => {

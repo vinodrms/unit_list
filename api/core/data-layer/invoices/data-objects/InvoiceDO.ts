@@ -1,5 +1,5 @@
 import {BaseDO} from '../../common/base/BaseDO';
-import {PayerDO} from './payers/PayerDO';
+import {InvoicePayerDO} from './payers/InvoicePayerDO';
 import {InvoiceItemDO, InvoiceItemType} from './items/InvoiceItemDO';
 
 export enum InvoicePaymentStatus {
@@ -11,7 +11,7 @@ export class InvoiceDO extends BaseDO {
         super();
     }
 
-    payerList: PayerDO[];
+    payerList: InvoicePayerDO[];
     itemList: InvoiceItemDO[];
     paymentStatus: InvoicePaymentStatus;
 
@@ -24,7 +24,7 @@ export class InvoiceDO extends BaseDO {
 
         this.payerList = [];
         this.forEachElementOf(this.getObjectPropertyEnsureUndefined(object, "payerList"), (payerObject: Object) => {
-            var payerDO = new PayerDO();
+            var payerDO = new InvoicePayerDO();
             payerDO.buildFromObject(payerObject);
             this.payerList.push(payerDO);
         });
@@ -39,7 +39,7 @@ export class InvoiceDO extends BaseDO {
 
     public getPayerCustomerIdList(): string[] {
         return _.chain(this.payerList)
-            .map((payerDO: PayerDO) => {
+            .map((payerDO: InvoicePayerDO) => {
                 return payerDO.customerId;
             })
             .uniq().value();

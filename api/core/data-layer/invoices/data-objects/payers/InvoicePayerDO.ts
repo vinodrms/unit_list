@@ -2,8 +2,7 @@ import {BaseDO} from '../../../common/base/BaseDO';
 import {InvoicePaymentMethodDO} from './InvoicePaymentMethodDO';
 import {CommissionDO} from '../../../common/data-objects/commission/CommissionDO';
 
-//TODO customerIdValidator
-export class PayerDO extends BaseDO {
+export class InvoicePayerDO extends BaseDO {
     constructor() {
         super();
     }

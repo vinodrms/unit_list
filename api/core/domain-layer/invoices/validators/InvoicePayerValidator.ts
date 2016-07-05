@@ -3,7 +3,7 @@ import {ThLogger, ThLogLevel} from '../../../utils/logging/ThLogger';
 import {ThError} from '../../../utils/th-responses/ThError';
 import {ThStatusCode} from '../../../utils/th-responses/ThResponse';
 import {CustomerDO} from '../../../data-layer/customers/data-objects/CustomerDO';
-import {PayerDO} from '../../../data-layer/invoices/data-objects/payers/PayerDO';
+import {InvoicePayerDO} from '../../../data-layer/invoices/data-objects/payers/InvoicePayerDO';
 
 export class InvoicePayersValidator {
     private _invoice: InvoiceDO;
@@ -36,7 +36,7 @@ export class InvoicePayersValidator {
     }
 
     private getTheNumberOfPayersThatCanPayInvoiceByAgreement(): number {
-        return _.chain(this._invoice.payerList).map((payer: PayerDO) => {
+        return _.chain(this._invoice.payerList).map((payer: InvoicePayerDO) => {
             return payer.customerId;
         }).map((customerId: string) => {
             return this._customersContainer.getCustomerById(customerId);
