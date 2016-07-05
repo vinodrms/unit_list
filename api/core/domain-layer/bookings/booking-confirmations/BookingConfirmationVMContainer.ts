@@ -37,7 +37,7 @@ export class BookingConfirmationVMContainer {
     bodyRoomLabel: string;
     bodyRoomNoItemsLabel: string;
     bodyNightsNoLabel: string;
-    bodyBookingPeriodLabel: string;
+    bodyBookingCapacityLabel: string;
     bodyBedSizesLabel: string;
     bodyAddOnProductsLabel: string;
     bodyBreakfastAopLabel: string;
@@ -86,7 +86,7 @@ export class BookingConfirmationVMContainer {
         this.bodyRoomLabel = this._thTranslation.translate('Room');
         this.bodyRoomNoItemsLabel = this._thTranslation.translate('room');
         this.bodyNightsNoLabel = this._thTranslation.translate('night(s)');
-        this.bodyBookingPeriodLabel = this._thTranslation.translate('Booked for');
+        this.bodyBookingCapacityLabel = this._thTranslation.translate('Booked for');
         this.bodyBedSizesLabel = this._thTranslation.translate('Bed size(s)');
         this.bodyAddOnProductsLabel = this._thTranslation.translate('Add-on-products');
         this.bodyBreakfastAopLabel = this._thTranslation.translate('Breakast');

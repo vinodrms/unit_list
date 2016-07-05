@@ -114,7 +114,7 @@ export class BookingConfirmationVM {
     }
     private initBookedRoomDetails() {
         this.roomCategoryName = this._bookingAggregatedData.roomCategoryStats.roomCategory.displayName;
-        this.bookedCapacity += this._thTranslation.translate("%noAdults% adults, %noChildren% children, %noBabies% babies", { 
+        this.bookedCapacity = this._thTranslation.translate("%noAdults% adults, %noChildren% children, %noBabies% babies", { 
             noAdults: this._bookingAggregatedData.booking.configCapacity.noAdults, 
             noChildren: this._bookingAggregatedData.booking.configCapacity.noChildren, 
             noBabies: this._bookingAggregatedData.booking.configCapacity.noBabies 
