@@ -62,6 +62,8 @@ export class BookingConfirmationEmailSender {
         }).then((result: any) => {
             resolve(true);
         }).catch((err: any) => {
+            var thError = new ThError(ThStatusCode.BookingConfirmationEmailSenderErrorSendingEmail, err);
+            ThLogger.getInstance().logError(ThLogLevel.Error, "error sending booking confirmation by email", { bookingQuery: bookingsQuery, distributionList: emailDistributionList }, thError);
             resolve(false);
         });
     }
