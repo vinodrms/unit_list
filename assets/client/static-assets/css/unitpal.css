@@ -1723,8 +1723,13 @@ a.btn.btn-square:focus {
     cursor: pointer;
 }
 .btn-square-container {
-    width: 110px;
     height: 100%;
+}
+.btn-square-container.small {
+    width: 110px;
+}
+.btn-square-container.large {
+    width: 190px;
 }
 .btn.btn-square.disabled {
     background-color: #c1c1c1;   
@@ -1742,6 +1747,19 @@ a.btn.btn-square:focus {
     position: absolute;
     left: 10px;
     bottom: 4px;
+}
+.btn.btn-square.btn-square-finalize {
+    width: 115px;
+    height: 35px;
+    background-color: #1ccd8c;
+    padding-top: 9px;
+    padding-left: 25px;
+}
+.btn.btn-square.btn-square-finalize>i {
+    position: absolute;
+    left: 10px;
+    bottom: 14px;
+    font-size: 10px;
 }
 
 .btn-err-container {

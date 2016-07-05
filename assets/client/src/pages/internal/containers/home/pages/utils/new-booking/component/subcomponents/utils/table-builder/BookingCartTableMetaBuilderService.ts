@@ -59,6 +59,25 @@ export class BookingCartTableMetaBuilderService {
         };
     }
 
+    public buildReadOnlyBookingCartTableMeta(): LazyLoadTableMeta {
+        var bookingCartColumnMetas = this.getBookingCartColumnMetas();
+        return {
+            supportedRowCommandList: [TableRowCommand.Select],
+            rowIdPropertySelector: "cartSequenceId",
+            autoSelectRows: false,
+            columnMetaList: [
+                bookingCartColumnMetas.priceProductName,
+                bookingCartColumnMetas.roomName,
+                bookingCartColumnMetas.period,
+                bookingCartColumnMetas.noPeople,
+                bookingCartColumnMetas.price,
+                bookingCartColumnMetas.conditions,
+                bookingCartColumnMetas.constrains,
+                bookingCartColumnMetas.customer
+            ]
+        };
+    }
+
     private getBookingCartColumnMetas(): BookingCartColumnMetas {
         return {
             priceProductName: {

@@ -12,19 +12,21 @@ import {BookingStepType} from '../subcomponents/utils/BookingStepType';
 import {BookingSearchStepService} from '../subcomponents/booking-search/services/BookingSearchStepService';
 import {BookingFillDetailsStepService} from '../subcomponents/booking-fill-details/services/BookingFillDetailsStepService';
 import {BookingCustomerRegisterStepService} from '../subcomponents/booking-customer-register/services/BookingCustomerRegisterStepService';
+import {BookingEmailConfigStepService} from '../subcomponents/booking-email-config/services/BookingEmailConfigStepService';
 import {BookingControllerService} from '../subcomponents/utils/BookingControllerService';
 
 import {NewBookingSearchComponent} from '../subcomponents/booking-search/NewBookingSearchComponent';
 import {NewBookingFillDetailsComponent} from '../subcomponents/booking-fill-details/NewBookingFillDetailsComponent';
 import {BookingCustomerRegisterComponent} from '../subcomponents/booking-customer-register/BookingCustomerRegisterComponent';
+import {NewBookingEmailConfigComponent} from '../subcomponents/booking-email-config/NewBookingEmailConfigComponent';
 
 @Component({
 	selector: 'new-booking-container',
 	templateUrl: '/client/src/pages/internal/containers/home/pages/utils/new-booking/component/container/template/new-booking-container.html',
 	providers: [SETTINGS_PROVIDERS, HotelService, HotelAggregatorService, RoomCategoriesService,
-		BookingSearchStepService, BookingFillDetailsStepService, BookingCustomerRegisterStepService,
+		BookingSearchStepService, BookingFillDetailsStepService, BookingCustomerRegisterStepService, BookingEmailConfigStepService,
 		BookingControllerService, BookingCartService],
-	directives: [NewBookingSearchComponent, NewBookingFillDetailsComponent, BookingCustomerRegisterComponent],
+	directives: [NewBookingSearchComponent, NewBookingFillDetailsComponent, BookingCustomerRegisterComponent, NewBookingEmailConfigComponent],
 	pipes: [TranslationPipe]
 })
 export class NewBookingContainerComponent extends BaseComponent {
@@ -44,6 +46,9 @@ export class NewBookingContainerComponent extends BaseComponent {
 	}
 	public isFillDetails(): boolean {
 		return this._bookingCtrlService.getBookingStepType() === BookingStepType.FillDetails;
+	}
+	public isEmailConfig(): boolean {
+		return this._bookingCtrlService.getBookingStepType() === BookingStepType.EmailConfig;
 	}
 	public isCustomerRegister(): boolean {
 		return this._bookingCtrlService.getBookingStepType() === BookingStepType.CustomerRegister;
@@ -73,5 +78,8 @@ export class NewBookingContainerComponent extends BaseComponent {
 	}
 	public moveNext() {
 		this._bookingCtrlService.moveNext();
+	}
+	public isLastStep(): boolean {
+		return this._bookingCtrlService.isLastStep();
 	}
 }

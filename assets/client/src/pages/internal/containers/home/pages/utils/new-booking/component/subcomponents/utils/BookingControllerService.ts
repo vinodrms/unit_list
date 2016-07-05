@@ -8,6 +8,7 @@ import {IBookingCustomerRegisterSelector, IBookingCustomerRegisterController} fr
 import {BookingSearchStepService} from '../booking-search/services/BookingSearchStepService';
 import {BookingFillDetailsStepService} from '../booking-fill-details/services/BookingFillDetailsStepService';
 import {BookingCustomerRegisterStepService} from '../booking-customer-register/services/BookingCustomerRegisterStepService';
+import {BookingEmailConfigStepService} from '../booking-email-config/services/BookingEmailConfigStepService';
 import {CustomerDO} from '../../../../../../../../services/customers/data-objects/CustomerDO';
 
 @Injectable()
@@ -16,15 +17,20 @@ export class BookingControllerService implements IBookingStepService, IBookingCu
 	private _bookingStepIndex: number;
 	private _customerObserver: Observer<CustomerDO>;
 
+	private _lastStep: IBookingStepService;
+
 	constructor(private _appContext: AppContext,
 		private _bookingSearchStep: BookingSearchStepService,
 		private _fillDetailsStep: BookingFillDetailsStepService,
-		private _custRegisterStep: BookingCustomerRegisterStepService) {
+		private _custRegisterStep: BookingCustomerRegisterStepService,
+		private _emailConfigStep: BookingEmailConfigStepService) {
 		this._bookingSteps = [
 			_bookingSearchStep,
-			_fillDetailsStep
+			_fillDetailsStep,
+			_emailConfigStep
 		];
 		this._bookingStepIndex = 0;
+		this._lastStep = _emailConfigStep;
 	}
 
 	public getBookingStepType(): BookingStepType {
@@ -89,5 +95,8 @@ export class BookingControllerService implements IBookingStepService, IBookingCu
 			this._customerObserver.next(customer);
 			this.closeCustomerRegister();
 		}
+	}
+	public isLastStep(): boolean {
+		return this.getBookingStepType() === this._lastStep.getBookingStepType();
 	}
 }
