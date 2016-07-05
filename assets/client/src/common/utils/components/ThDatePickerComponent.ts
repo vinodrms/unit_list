@@ -1,6 +1,6 @@
 import {Component, Input, Output, EventEmitter, ElementRef, AfterViewInit, Inject} from '@angular/core';
 import {TranslationPipe} from '../localization/TranslationPipe';
-import {ThDateDO} from '../../../pages/internal/services/common/data-objects/th-dates/ThDateDO';
+import {ThDateDO, ThMonth} from '../../../pages/internal/services/common/data-objects/th-dates/ThDateDO';
 import {ThDatePipe} from '../pipes/ThDatePipe';
 import {ThDateUtils} from '../../../pages/internal/services/common/data-objects/th-dates/ThDateUtils';
 
@@ -35,7 +35,7 @@ export class ThDatePickerComponent implements AfterViewInit {
 		this.initializeDatePicker();
 	}
 
-	private _minThDate: ThDateDO;
+	private _minThDate: ThDateDO = ThDateDO.buildThDateDO(1900, ThMonth.January, 1);
 	public get minThDate(): ThDateDO {
 		return this._minThDate;
 	}
