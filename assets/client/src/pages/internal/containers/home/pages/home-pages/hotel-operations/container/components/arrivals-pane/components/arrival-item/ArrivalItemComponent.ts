@@ -19,7 +19,8 @@ export class ArrivalItemComponent {
 	ngAfterViewInit() {
 		$(this._root.nativeElement).draggable(
             {
-                revert:     'invalid', 
+                revert:     'invalid',
+				cursorAt: { left: 12 , bottom: 6 },
 				helper: () => {
 					var helperHtml = `
 					<arrival-helper class=" flex-row flex-center-v">
