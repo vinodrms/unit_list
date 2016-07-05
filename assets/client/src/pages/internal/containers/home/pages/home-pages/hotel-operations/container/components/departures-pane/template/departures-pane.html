@@ -11,7 +11,7 @@
 
 </div>
 <div class="body">
-	<departure-item class="selected p-6"
+	<departure-item
 		*ngFor="let departureItemVM of departureItemsVMList"
 		[ngClass]="{'selected': isDepartureItemSelected(departureItemVM)}" 
 		[departureItemVM] = "departureItemVM" 
