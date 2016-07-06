@@ -66,7 +66,19 @@ export class NewBookingEmailConfigComponent extends BaseComponent implements OnI
         this._selectAll = false;
     }
     public viewDidDisappear() {
-        this._cachedSelectedRecipientIdList = _.map(this.emailRecipientList, (emailRecipient: EmailRecipientVM) => { return emailRecipient.recipientId; });
+        this.cacheSelectedRecipients();
+    }
+    private cacheSelectedRecipients() {
+        this._cachedSelectedRecipientIdList = this.getSelectedRecipientIdList();
+    }
+    private getSelectedRecipientIdList(): string[] {
+        var recipientIdList: string[] = [];
+        _.forEach(this.emailRecipientList, (emailRecipient: EmailRecipientVM) => {
+            if (emailRecipient.selected && emailRecipient.isValid) {
+                recipientIdList.push(emailRecipient.recipientId);
+            }
+        });
+        return recipientIdList;
     }
 
     private getCustomerList(): CustomerDO[] {
