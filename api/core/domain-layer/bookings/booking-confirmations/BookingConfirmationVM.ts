@@ -59,6 +59,7 @@ export class BookingConfirmationVM {
         this.initCheckInAndCheckOutDates();
         this.initPricingDetails();
         this.initBookedRoomDetails();
+        this.initAddOnProducts();
         this.initGuests();
         this.initConstraintsDisplayText();
         this.initCancellationPolicy();
