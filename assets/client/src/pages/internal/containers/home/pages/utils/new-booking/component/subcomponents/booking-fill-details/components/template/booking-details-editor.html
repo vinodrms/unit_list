@@ -39,16 +39,16 @@
             </table>
         </div>
         <div class="col-xs-12 booking-details-table">
-            <table class="table form-group">
-                <thead class="input-group" [ngClass]="{'form-warning': !didSelectBilledToCustomer()}">
+            <table class="table">
+                <thead [ngClass]="{'input-group form-warning': !didSelectBilledToCustomer()}">
                     <tr>
                         <th>
                             {{ 'Customers' | translate }}
                         </th>
-                        <th></th>
+                        <th>&nbsp;</th>
                     </tr>
                 </thead>
-                <label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Add at least one customer' | translate }}</small></label>
+                <label class="form-warning" *ngIf="!didSelectBilledToCustomer()"><small><i class="fa fa-info-circle"></i> {{ 'Add at least one customer' | translate }}</small></label>
                 <tbody>
                     <tr *ngFor="let customer of bookingCartItem.customerList">
                         <td width="80%" class="booking-details-action-description">{{ customer.customerName }}</td>
