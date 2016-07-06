@@ -94,8 +94,10 @@ export class NewBookingContainerComponent extends BaseComponent {
 		lastBookingStep.addBookings().subscribe((result: boolean) => {
 			this._appContext.toaster.success(this._appContext.thTranslation.translate("The bookings have been added succesfully"));
 			this.triggerOnCloseButtonPressed(true);
+			this.isAddingBookings = false;
 		}, (err: ThError) => {
 			this._appContext.toaster.error(err.message);
+			this.isAddingBookings = false;
 		}, () => {
 			this.isAddingBookings = false;
 		});
