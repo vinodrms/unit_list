@@ -2,7 +2,8 @@ import {Observer} from 'rxjs/Observer';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/combineLatest';
-import {ILazyLoadRequestService, PageContent, LazyLoadData} from './ILazyLoadRequestService';
+import 'rxjs/add/operator/share';
+import {ILazyLoadRequestService, PageContent, LazyLoadData, SortOptions} from './ILazyLoadRequestService';
 import {AppContext, ThServerApi} from '../../../../common/utils/AppContext';
 import {PageMetaDO} from './data-objects/lazy-load/PageMetaDO';
 import {TotalCountDO} from './data-objects/lazy-load/TotalCountDO';
@@ -38,12 +39,12 @@ export abstract class ALazyLoadRequestService<T> implements ILazyLoadRequestServ
 	private initCountObservable() {
 		this._countObservable = new Observable<TotalCountDO>((serviceObserver: Observer<TotalCountDO>) => {
 			this._countObserver = serviceObserver;
-		});
+		}).share();
 	}
 	private initPageDataObservable() {
 		this._pageDataObservable = new Observable<T[]>((serviceObserver: Observer<T[]>) => {
 			this._pageDataObserver = serviceObserver;
-		});
+		}).share();
 	}
 
 	public refreshData() {
@@ -134,11 +135,18 @@ export abstract class ALazyLoadRequestService<T> implements ILazyLoadRequestServ
 	}
 	protected abstract parsePageDataCore(pageDataObject: Object): Observable<T[]>;
 	public abstract searchByText(text: string);
-	
+
 	protected get defaultSearchCriteria(): Object {
 		return this._defaultSearchCriteria;
 	}
 	protected set defaultSearchCriteria(defaultSearchCriteria: Object) {
 		this._defaultSearchCriteria = defaultSearchCriteria;
 	}
+	public showPagination(): boolean {
+		return true;
+	}
+
+	// override if require sort
+	public sort(sortOptions: SortOptions) { }
+	public getSortedOptions(): SortOptions { return null; }
 }

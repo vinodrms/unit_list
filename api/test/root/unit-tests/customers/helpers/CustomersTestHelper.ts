@@ -4,7 +4,7 @@ import {SaveCustomerItemDO, CompanyCustomerItemDetailsDO, CustomerItemAddressDO,
 	TravelAgencyCustomerItemDetailsDO, IndividualCustomerItemDetailsDO} from '../../../../../core/domain-layer/customers/SaveCustomerItemDO';
 import {CustomerDO, CustomerType} from '../../../../../core/data-layer/customers/data-objects/CustomerDO';
 import {PriceProductAvailability} from '../../../../../core/data-layer/price-products/data-objects/PriceProductDO';
-import {CommissionType} from '../../../../../core/data-layer/customers/data-objects/customer-details/corporate/BaseCorporateDetailsDO';
+import {CommissionType} from '../../../../../core/data-layer/common/data-objects/commission/CommissionDO';
 
 export class CustomersTestHelper {
 	constructor(private _dataBuilder: DefaultDataBuilder, private _testContext: TestContext) {
@@ -54,8 +54,10 @@ export class CustomersTestHelper {
 				postalCode: "3276831",
 				streetAddress: "6D Regiei Boulevard"
 			},
-			commissionType: CommissionType.Percentage,
-			commission: 0.2,
+			commission: {
+				type: CommissionType.Percentage,
+				amount: 0.2
+			},
 			contactName: "Ionut Paraschiv",
 			email: "ionut.paraschiv@3angle.tech",
 			payInvoiceByAgreement: false,

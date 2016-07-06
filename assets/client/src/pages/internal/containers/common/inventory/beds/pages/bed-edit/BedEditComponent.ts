@@ -156,7 +156,7 @@ export class BedEditComponent extends BaseFormComponent implements OnInit {
         return this._bedVM.bed.storageType === BedStorageType.Stationary;
     }
     
-    public get accomodatesBabies(): boolean {
+    public get accommodatesBabies(): boolean {
         return this._bedVM.bed.accommodationType === BedAccommodationType.Babies
     }
 

@@ -24,4 +24,18 @@ export class ThDateIntervalUtils extends ThIntervalUtils<ThDateDO> {
 		newInterval.end = ThDateDO.buildThDateDO(end.year, end.month, end.day);
 		return newInterval;
 	}
+
+	public containsThDateDO(thDate: ThDateDO): boolean {
+		var interval: ThDateIntervalDO = ThDateIntervalDO.buildThDateIntervalDO(thDate, thDate);
+		return this.containsThDateIntervalDO(interval);
+	}
+	public containsThDateIntervalDO(thDateInterval: ThDateIntervalDO): boolean {
+		for (var index = 0; index < this._dayInYearIntervals.length; index++) {
+			var innerInterval: ThDateIntervalDO = this._dayInYearIntervals[index];
+			if (this._comparator.compare(innerInterval.start, thDateInterval.start) <= 0 && this._comparator.compare(thDateInterval.end, innerInterval.end) <= 0) {
+				return true;
+			}
+		}
+		return false;
+	}
 }

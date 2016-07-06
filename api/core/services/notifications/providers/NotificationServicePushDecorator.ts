@@ -7,7 +7,7 @@ import {UnitPalConfig} from '../../../utils/environment/UnitPalConfig';
 import {INotificationsRepository, NotificationRepoDO} from '../../../data-layer/notifications/repositories/INotificationsRepository';
 import {ISocketsService, SocketSendMessageReq} from '../../sockets/ISocketsService';
 import {ThNotification} from '../ThNotification';
-import {Locales} from '../../../utils/localization/Translation';
+import {Locales} from '../../../utils/localization/ThTranslation';
 
 export class NotificationServicePushDecorator implements INotificationService {
 

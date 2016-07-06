@@ -7,19 +7,19 @@ import {ThDateIntervalDO} from '../../../../../core/utils/th-dates/data-objects/
 import {ThDateDO, ThMonth} from '../../../../../core/utils/th-dates/data-objects/ThDateDO';
 import {ISOWeekDayUtils, ISOWeekDay} from '../../../../../core/utils/th-dates/data-objects/ISOWeekDay';
 import {ThDateUtils} from '../../../../../core/utils/th-dates/ThDateUtils';
-import {SaveAllotmentItemDO} from '../../../../../core/domain-layer/allotment/SaveAllotmentItemDO';
-import {AllotmentStatus} from '../../../../../core/data-layer/allotment/data-objects/AllotmentDO';
-import {AllotmentAvailabilityDO} from '../../../../../core/data-layer/allotment/data-objects/availability/AllotmentAvailabilityDO';
-import {AllotmentAvailabilityForDayDO} from '../../../../../core/data-layer/allotment/data-objects/availability/AllotmentAvailabilityForDayDO';
-import {AllotmentConstraintWrapperDO} from '../../../../../core/data-layer/allotment/data-objects/constraint/AllotmentConstraintWrapperDO';
-import {AllotmentConstraintDO} from '../../../../../core/data-layer/allotment/data-objects/constraint/AllotmentConstraintDO';
-import {AllotmentConstraintType} from '../../../../../core/data-layer/allotment/data-objects/constraint/IAllotmentConstraint';
-import {ReleaseTimeInDaysConstraintDO} from '../../../../../core/data-layer/allotment/data-objects/constraint/constraints/ReleaseTimeInDaysConstraintDO';
+import {SaveAllotmentItemDO} from '../../../../../core/domain-layer/allotments/SaveAllotmentItemDO';
+import {AllotmentStatus} from '../../../../../core/data-layer/allotments/data-objects/AllotmentDO';
+import {AllotmentAvailabilityDO} from '../../../../../core/data-layer/allotments/data-objects/availability/AllotmentAvailabilityDO';
+import {AllotmentAvailabilityForDayDO} from '../../../../../core/data-layer/allotments/data-objects/availability/AllotmentAvailabilityForDayDO';
+import {AllotmentConstraintWrapperDO} from '../../../../../core/data-layer/allotments/data-objects/constraint/AllotmentConstraintWrapperDO';
+import {AllotmentConstraintDO} from '../../../../../core/data-layer/allotments/data-objects/constraint/AllotmentConstraintDO';
+import {AllotmentConstraintType} from '../../../../../core/data-layer/allotments/data-objects/constraint/IAllotmentConstraint';
+import {ReleaseTimeInDaysConstraintDO} from '../../../../../core/data-layer/allotments/data-objects/constraint/constraints/ReleaseTimeInDaysConstraintDO';
 
 import moment = require("moment");
 
 export class AllotmentsHelper {
-	public static IntervalNumberOfDays: number = 10;
+	public static IntervalNumberOfDays: number = 300;
 
 	private _thDateUtils: ThDateUtils;
 	private _testUtils: TestUtils;
@@ -74,7 +74,7 @@ export class AllotmentsHelper {
 		];
 		return constraintsWrapper;
 	}
-	public getNoOfAvailableRoomsForDay(isoWeekDay: ISOWeekDay): number {
+	private getNoOfAvailableRoomsForDay(isoWeekDay: ISOWeekDay): number {
 		if (isoWeekDay === ISOWeekDay.Saturday || isoWeekDay === ISOWeekDay.Sunday) {
 			return 7;
 		}

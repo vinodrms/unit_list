@@ -1,100 +1,95 @@
-import {Component, AfterViewInit, ViewChild} from '@angular/core';
+import {Component, ViewChild, AfterViewInit} from '@angular/core';
 import {BaseComponent} from '../../../../../../../../../../common/base/BaseComponent';
+import {LazyLoadingTableComponent} from '../../../../../../../../../../common/utils/components/lazy-loading/LazyLoadingTableComponent';
+import {TableColumnValueMeta} from '../../../../../../../../../../common/utils/components/lazy-loading/utils/LazyLoadTableMeta';
+import {AppContext, ThError} from '../../../../../../../../../../common/utils/AppContext';
 import {CustomScroll} from '../../../../../../../../../../common/utils/directives/CustomScroll';
 import {TranslationPipe} from '../../../../../../../../../../common/utils/localization/TranslationPipe';
-import {SearchInputTextComponent} from '../../../../../../../../../../common/utils/components/SearchInputTextComponent';
-import {DebouncingInputTextComponent} from '../../../../../../../../../../common/utils/components/DebouncingInputTextComponent';
-import {ThDateIntervalPickerComponent} from '../../../../../../../../../../common/utils/components/ThDateIntervalPickerComponent';
-import {ThDateIntervalDO} from '../../../../../../../../services/common/data-objects/th-dates/ThDateIntervalDO';
-import {ThDateDO} from '../../../../../../../../services/common/data-objects/th-dates/ThDateDO';
-import {ThDateUtils} from '../../../../../../../../services/common/data-objects/th-dates/ThDateUtils';
-import {CustomerSearchService} from '../../../../../../../../services/customers/CustomerSearchService';
-import {CustomerDO} from '../../../../../../../../services/customers/data-objects/CustomerDO';
-import {CustomersDO} from '../../../../../../../../services/customers/data-objects/CustomersDO';
-import {EagerCustomersService} from '../../../../../../../../services/customers/EagerCustomersService';
-import {BookingControllerService} from '../utils/BookingControllerService';
-import {IBookingCustomerRegisterSelector} from '../utils/IBookingCustomerRegister';
+import {RoomCategoryDO} from '../../../../../../../../services/room-categories/data-objects/RoomCategoryDO';
+import {BookingSearchParametersComponent} from './components/search-parameters/BookingSearchParametersComponent';
+import {BookingSearchParams} from '../../../services/data-objects/BookingSearchParams';
+import {BookingSearchService} from '../../../services/search/BookingSearchService';
+import {BookingCartItemVM, BookingCartItemVMType} from '../../../services/search/view-models/BookingCartItemVM';
+import {BookingSearchResultsTableMetaBuilderService} from '../utils/table-builder/BookingSearchResultsTableMetaBuilderService';
+import {BookingCartTableMetaBuilderService} from '../utils/table-builder/BookingCartTableMetaBuilderService';
+import {BookingTableUtilsService} from '../utils/table-builder/BookingTableUtilsService';
+import {BookingSearchStepService} from './services/BookingSearchStepService';
+import {BookingCartService} from '../../../services/search/BookingCartService';
 
 @Component({
 	selector: 'new-booking-search',
 	templateUrl: '/client/src/pages/internal/containers/home/pages/utils/new-booking/component/subcomponents/booking-search/template/new-booking-search.html',
-	directives: [CustomScroll, ThDateIntervalPickerComponent, SearchInputTextComponent, DebouncingInputTextComponent],
-	providers: [CustomerSearchService, EagerCustomersService],
+	directives: [CustomScroll, LazyLoadingTableComponent,
+		BookingSearchParametersComponent],
+	providers: [BookingSearchService, BookingSearchResultsTableMetaBuilderService,
+		BookingCartTableMetaBuilderService, BookingTableUtilsService],
 	pipes: [TranslationPipe]
 })
 export class NewBookingSearchComponent extends BaseComponent implements AfterViewInit {
-	private _dateUtils: ThDateUtils = new ThDateUtils();
+	@ViewChild('searchResults') private _searchResultsTableComponent: LazyLoadingTableComponent<BookingCartItemVM>;
+	@ViewChild('bookingCart') private _bookingCartTableComponent: LazyLoadingTableComponent<BookingCartItemVM>;
 
-	minDate: ThDateDO;
-	@ViewChild(SearchInputTextComponent)
-	private _customerSearchTextInputComponent: SearchInputTextComponent<CustomerDO>;
+	private _roomCategoryList: RoomCategoryDO[];
+	isSearching: boolean = false;
+	private _bookingSearchParams: BookingSearchParams;
 
-	bookingCode: string = "";
-	loadingCustomerByCode: boolean = false;
-	showBookingCodeMessage: boolean = false;
-	validBookingCode: boolean = false;
-
-	private _customerRegisterSelector: IBookingCustomerRegisterSelector;
-	private _customer: CustomerDO;
-	bookingInterval: ThDateIntervalDO;
-
-	constructor(private _customerSearchService: CustomerSearchService,
-		private _bookingControllerService: BookingControllerService,
-		private _eagerCustomersService: EagerCustomersService) {
+	constructor(private _appContext: AppContext, private _wizardBookingSearchService: BookingSearchStepService,
+		private _bookingSearchService: BookingSearchService, private _searchTableMetaBuilder: BookingSearchResultsTableMetaBuilderService,
+		private _cartTableMetaBuilder: BookingCartTableMetaBuilderService, private _bookingTableUtilsService: BookingTableUtilsService,
+		private _bookingCartService: BookingCartService) {
 		super();
-		this._customerRegisterSelector = _bookingControllerService;
-
-		this.minDate = this._dateUtils.getTodayThDayeDO();
-		this.bookingInterval = this._dateUtils.getTodayToTomorrowInterval();
 	}
-	ngAfterViewInit() {
-		this._customerSearchTextInputComponent.bootstrap(this._customerSearchService, {
-			objectPropertyId: "id",
-			displayStringPropertyId: "customerNameAndEmailString"
-		});
+	public ngAfterViewInit() {
+		this._searchResultsTableComponent.bootstrap(this._bookingSearchService, this._searchTableMetaBuilder.buildSearchResultsTableMeta());
+		this._searchResultsTableComponent.attachCustomCellClassGenerator(this._searchTableMetaBuilder.customCellClassGenerator);
+
+		this._bookingCartTableComponent.bootstrap(this._bookingCartService, this._cartTableMetaBuilder.buildBookingCartPreviewTableMeta());
+		this._bookingCartTableComponent.attachCustomCellClassGenerator(this._bookingTableUtilsService.customCellClassGeneratorForBookingCart);
+		this._bookingCartTableComponent.attachCustomRowClassGenerator(this._bookingTableUtilsService.customRowClassGeneratorForBookingCart);
+		this._bookingCartTableComponent.attachCustomRowCommandPerformPolicy(this._bookingTableUtilsService.canPerformCommandOnItemForBookingCart);
 	}
 
-	private searchCustomerByBookingCode(bookingCode: string) {
-		if (bookingCode.length == 0) {
-			this.showBookingCodeMessage = false;
+	public searchBookings(bookingSearchParams: BookingSearchParams) {
+		this._bookingSearchParams = bookingSearchParams;
+		this._bookingSearchParams.transientBookingList = this._bookingCartService.getTransientBookingItemList();
+		this.isSearching = true;
+		this._bookingSearchService.searchBookings(this._bookingSearchParams)
+			.subscribe((searchResult: { roomCategoryList: RoomCategoryDO[], bookingItemList: BookingCartItemVM[] }) => {
+                this._roomCategoryList = searchResult.roomCategoryList;
+				this.isSearching = false;
+            }, (error: ThError) => {
+				this.isSearching = false;
+                this._appContext.toaster.error(error.message);
+            });
+	}
+	public addBookingVMInCart(bookingCartItemVM: BookingCartItemVM) {
+		if (bookingCartItemVM.itemType === BookingCartItemVMType.Total) { return; }
+		var addResult = this._bookingCartService.addBookingItem(bookingCartItemVM);
+		if (!addResult.success) {
+			this._appContext.toaster.error(addResult.errorMessage);
 			return;
 		}
-		this.loadingCustomerByCode = true;
-		this._eagerCustomersService.getCustomersByBookingCode(bookingCode).subscribe((customers: CustomersDO) => {
-			this.loadingCustomerByCode = false;
-			this.showBookingCodeMessage = true;
-			if (customers.customerList.length == 0) {
-				this.validBookingCode = false;
-				return;
-			}
-			this.customer = customers.customerList[0];
-		});
-	}
+		this._bookingTableUtilsService.updateBookingCartTotalsRow(this._bookingCartService);
+		this._bookingCartService.refreshData();
 
-	public didSelectBookingInterval(bookingInterval: ThDateIntervalDO) {
-		this.bookingInterval = bookingInterval;
+		this._wizardBookingSearchService.checkBookingCartValidity(this._bookingCartService, this._roomCategoryList);
+		this._bookingSearchService.decrementInventoryAvailability(bookingCartItemVM.transientBookingItem);
 	}
-	public selectCustomer() {
-		this._customerRegisterSelector.selectCustomerFromRegister().subscribe((selectedCustomer: CustomerDO) => {
-			this.customer = selectedCustomer;
-		});
+	public removeBookingVMFromCart(bookingCartItemVM: BookingCartItemVM) {
+		var title = this._appContext.thTranslation.translate("Delete Price Product");
+		var content = this._appContext.thTranslation.translate("Are you sure you want to remove %priceProductName% from the cart?", { priceProductName: bookingCartItemVM.priceProductName });
+		this._appContext.modalService.confirm(title, content, { positive: this._appContext.thTranslation.translate("Yes"), negative: this._appContext.thTranslation.translate("No") },
+			() => {
+				this.removeBookingVMFromCartCore(bookingCartItemVM);
+			}, () => { });
 	}
-	public didSelectCustomer(customer: CustomerDO) {
-		this.customer = customer;
-	}
-	public didDeselectCustomer() {
-		this._customer = null;
-		this.showBookingCodeMessage = false;
-		this.bookingCode = "";
-	}
+	private removeBookingVMFromCartCore(bookingCartItemVM: BookingCartItemVM) {
+		if (!this._bookingSearchParams) { return; }
+		this._bookingCartService.removeBookingItem(bookingCartItemVM);
+		this._bookingTableUtilsService.updateBookingCartTotalsRow(this._bookingCartService);
+		this._bookingCartService.refreshData();
 
-	public get customer(): CustomerDO {
-		return this._customer;
-	}
-	public set customer(customer: CustomerDO) {
-		this._customer = customer;
-		this.bookingCode = customer.priceProductDetails.bookingCode;
-		this.showBookingCodeMessage = true;
-		this.validBookingCode = true;
+		this.searchBookings(this._bookingSearchParams);
+		this._wizardBookingSearchService.checkBookingCartValidity(this._bookingCartService, this._roomCategoryList);
 	}
 }

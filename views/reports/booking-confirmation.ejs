@@ -1,22 +1,161 @@
 <html>
-<header>
-    <title>This is title</title>
-</header>
 
-<body>
-    <!--<div style="page-break-after:always;">-->
-    <div style="page-break-after:always;">
-        <h1>Booking Confirmation - Page 1</h1>
+<head>
+    <base href="../../../">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <% if (user) { %>
-            <h2><%= user.email %></h2>
-            <% } %>
+    <title>UnitPal</title>
 
-    </div>
+    <!-- CSS -->
+    <link href="assets/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/node_modules/font-awesome/css/font-awesome.min.css" rel="stylesheet">
 
-    <div>
-        <h1>Booking Confirmation - Page 2</h1>
-    </div>
+    <!-- Custom CSS -->
+    <link href="assets/client/static-assets/css/custom.css" rel="stylesheet">
+    <link href="assets/client/static-assets/css/unitpal-print.css" rel="stylesheet">
+
+    <!-- JS Libraries -->
+    <script src="assets/node_modules/jquery.1/node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="assets/node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+
+</head>
+
+<body style="overflow:visible;">
+
+    <% bookingConfirmationVMList.forEach(function(bookingConfirmationVM){ %>
+        <div style="page-break-after:always; margin: 15px;">
+            <div class="row" style="margin-bottom:20px">
+                <div class="col-md-4" style="height:60px">
+                    <table>
+                        <tr style="height:60px">
+                            <td><img src="<%= unitpalLogoSrcValue %>" style="height:60px"></td>
+                            <td valign="bottom"><b style="font-size: 25px;margin-left: 10px;"><%= headerUnitPal %></b></td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="col-md-8" style="height:60px">
+                    <div class="row" style="height:30px">
+                        <div class="col-md-12" style="height:100%">
+                            <i style="position: absolute; right: 15px; bottom: 0;"><%= headerTitle %></i><br><br>
+                        </div>
+                    </div>
+                    <div class="row" style="height:40px">
+                        <div class="col-md-12" style="height:100%">
+                            <p style="position: absolute; right:12px; bottom: 0; margin: 0; text-align: right;"><%= headerBookingRefLabel %>: <b><%= bookingConfirmationVM.bookingReference %></b><br><%= headerGroupBookingRefLabel %>: <b><%= bookingConfirmationVM.groupBookingReference %></b></p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <hr/>
+
+            <div class="row" style="margin-bottom:20px">
+                <div class="col-md-2">
+                    <img src="<%= hotelLogoSrcValue %>"/>
+                </div>
+                <div class="col-md-8">
+                    <p><b style="font-size: 18px;"><%= hotelNameValue %></b></p>
+                    <p><b><%= hotelAddressLabel %>:</b>
+                        <%= hotelAddressValue %>
+                    </p>
+                    <p><b><%= hotelContactLabel %>:</b>
+                        <%= hotelContactValue %>
+                    </p>
+                </div>
+            </div>
+
+            <hr/>
+
+            <div class="row">
+                <div class="col-md-3" style="text-align: center">
+                    <div style="padding-left: 15px;">
+                        <span style="font-size: 18px;"><b><%= bodyCheckInLabel %></b></span><br>
+                        <span style="font-size: 25px;"><b><%= bookingConfirmationVM.checkInDay %></b></span><br>
+                        <span style="font-size: 20px;"><b><%= bookingConfirmationVM.checkInMonth %></b></span><br>
+                        <span style="font-size: 15px;"><%= bookingConfirmationVM.checkInSOWeekDay %></span><br>
+                    </div>
+                </div>
+                <div class="col-md-1" style="text-align: center">
+                    <span style="font-size: 25px; position: absolute; bottom: -80px;">-</span>
+                </div>
+                <div class="col-md-3" style="text-align: center">
+                    <div style="border-right: black solid; border-right-width: 1px; padding-right: 15px;">
+                        <span style="font-size: 18px;"><b><%= bodyCheckOutLabel %></b></span><br>
+                        <span style="font-size: 25px;"><b><%= bookingConfirmationVM.checkOutDay %></b></span><br>
+                        <span style="font-size: 20px;"><b><%= bookingConfirmationVM.checkOutMonth %></b></span><br>
+                        <span style="font-size: 15px;"><%= bookingConfirmationVM.checkOutISOWeekDay %></span><br>
+                    </div>
+                </div>
+                <div class="col-md-5" style="text-align: center">
+                    <span style="font-size: 18px;"><b><%= bodyPriceLabel %></b></span><br>
+                    <span style="font-size: 20px;"><b><%= hotel.ccyCode %> <%= bookingConfirmationVM.totalPrice %></b></span><br>
+                    <span style="font-size: 15px;">1 <%= bodyRoomNoItemsLabel %> / <%= bookingConfirmationVM.lengthOfStay %> <%= bodyNightsNoLabel %></span><br>
+                    <span style="font-size: 15px;"><%= bookingConfirmationVM.includedTaxes %></span>
+                </div>
+            </div>
+
+            <hr/>
+
+            <div class="row" style="min-height: 50px;">
+                <div class="col-md-3">
+                    <b><%= bodyRoomLabel %></b>
+                </div>
+                <div class="col-md-9">
+                    <b><%= bookingConfirmationVM.roomCategoryName %></b><br>
+                    <span><%= bodyBookingCapacityLabel %>: <%= bookingConfirmationVM.bookedCapacity %></span><br>
+                    <span><%= bodyBedSizesLabel %>: <%= bookingConfirmationVM.bedSizes %></span>
+                </div>
+            </div>
+
+            <hr/>
+
+            <div class="row" style="min-height: 50px;">
+                <div class="col-md-3">
+                    <b><%= bodyAddOnProductsLabel %></b><br>
+                    <span style="font-size: 10px;">(included)</span>
+                </div>
+                <div class="col-md-9">
+                    <span><%= bodyBreakfastAopLabel %>: <%= bookingConfirmationVM.breakfastAop %></span><br>
+                    <span><%= bodyOthersAopLabel %>: <%= bookingConfirmationVM.otherAops %></span>
+                </div>
+            </div>
+
+            <hr/>
+
+            <div class="row" style="min-height: 50px;">
+                <div class="col-md-3">
+                    <b><%= bodyGuestsLabel %></b>
+                </div>
+                <div class="col-md-9">
+                    <span><%= bookingConfirmationVM.guests %></span>
+                </div>
+            </div>
+
+            <hr/>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div style="border-right: black solid; border-right-width: 1px; padding-right: 10px; min-height: 100px;"> 
+                        <span style="font-size: 15px;"><b><%= bodyCancellationPolicyLabel %></b></span><br>
+                        <span style="font-size: 10px;"><%= bookingConfirmationVM.cancellationPolicyAndPenalty %></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div style="min-height: 100px;">
+                        <span style="font-size: 15px;"><b><%= bodyConstraintsLabel %></b></span><br>
+                        <span style="font-size: 10px;"><%= bookingConfirmationVM.constraints %></span>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+        <% }); %>
 
 </body>
 

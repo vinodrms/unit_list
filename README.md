@@ -29,6 +29,9 @@ To run the server tests
 
 =========================================
 
+> npm run build-all
+
+=========================================
 To run the e2e tests
  - Terminal 1
 	> npm run test

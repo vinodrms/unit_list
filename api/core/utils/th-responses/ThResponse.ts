@@ -1,4 +1,4 @@
-import {Locales, Translation} from '../localization/Translation';
+import {Locales, ThTranslation} from '../localization/ThTranslation';
 import {ThUtils} from '../ThUtils';
 
 export enum ThStatusCode {
@@ -99,6 +99,7 @@ export enum ThStatusCode {
     RoomAggregatorGetUsedCategoriesError,
     RoomAggregatorCategoryStatsListInvalidCatgoryIdListError,
     RoomAggregatorCategoryStatsListError,
+    RoomAggregatorGetRoomsByCategoryIdListError,
     RoomAggregatorCategoryStatsError,
     RoomAggregatorRoomStatsError,
     RoomCategoryRepositoryErrorGettingRoomCategoryList,
@@ -197,6 +198,7 @@ export enum ThStatusCode {
     SaveCustomerItemError,
     SaveCustomerItemInvalidOrNullClientType,
     SaveCustomerItemCompOrTACannotBeLinkedToOtherCustomers,
+    CustomerIdValidatorInvalidId,
     CustomerItemUpdateStrategyError,
     CustomerItemUpdateStrategyCustTypeChanged,
     CustomerItemUpdateStrategyPriceProductUsedInAllotment,
@@ -270,6 +272,7 @@ export enum ThStatusCode {
     AllotmentValidatorInvalidPriceProductId,
     AllotmentValidatorNotActivePriceProduct,
     AllotmentValidatorInvalidRoomCategId,
+    AllotmentIdValidatorInvalidId,
     ArchiveAllotmentItemError,
     ArchiveAllotmentItemNotActiveAllotment,
     AllotmentsControllerErrorGettingAllotment,
@@ -288,12 +291,76 @@ export enum ThStatusCode {
     NotificationsRepositoryErrorGettingUndelivered,
     NotificationsRepositoryErrorMarkingAsRead,
     
-    //Html to pdf converter service
-    PhantomHtmlToPdfHtmlReportPageAccessError,
-    PhantomHtmlToPdfGenerationError,
-    HtmlReportsServiceHtmlExportError,
+    //Pdf report service
+    PdfReportServiceErrorCreatingOutputFolder,
+    PdfReportServiceErrorWritingHtmlToFile,
+    PdfReportServiceHtmlToPdfError,
+    PhantomHtmlToPdfConverter,
+
+    InvoiceGroupsRepositoryErrorAddingInvoiceGroup,
+    InvoiceGroupsRepositoryProblemUpdatingInvoiceGroup,
+    InvoiceGroupsRepositoryErrorUpdatingInvoiceGroup,
+    InvoiceGroupsRepositoryErrorGettingInvoiceGroupList,
+    InvoiceGroupItemUpdateStrategyErrorUpdating,
+    InvoiceGroupsRepositoryInvoiceGroupNotFound,
+    InvoiceGroupsRepositoryErrorGettingInvoiceGroup,
+    SaveInvoiceGroupItem,
+    GenerateCustomerInvoiceGroupItemError,
+    GenerateBookingInvoiceGroupItemError,
+    AddBookingInvoiceGroupItemError,
+    UpdateInvoiceGroupItemError,
+    InvoicePaymentMethodValidatorError,
+    InvoicePaymentMethodValidatorInvalidPaymentMethod,
+    InvoicePaymentMethodValidatorUnsupportedPaymentMethod,
+    InvoicePaymentMethodValidatorCannotPayByAgreement,
+    InvoicePaymentValidatorError,
+    InvoicePayersValidatorError,
+    InvoicePayersValidatorInvalidSplit,
 
     SlackSendMessageError,
+
+    AddBookingsRepositoryEmptyBookingList,
+    AddBookingsRepositoryNoBookingsLimitExceeded,
+    AddBookingsRepositoryErrorAddingBookingGroup,
+    AddBookingItemsError,
+    BookingIntervalValidatorError,
+    BookingIntervalValidatorInvalidInterval,
+    BookingIntervalValidatorInvalidStartDate,
+    BookingIntervalValidatorMaxSixMonths,
+    AddBookingItemsInvalidNoOfBookings,
+    BookingItemsConverterError,
+    BookingValidationError,
+    BookingsValidatorBillingCustomerMissing,
+    BookingsValidatorYieldingClosed,
+    BookingsValidatorAllotmentCustomer,
+    BookingsValidatorAllotmentInvalidRoomCategory,
+    BookingsValidatorMissingPaymentGuarantee,
+    BookingsValidatorConstraintsDoNotApply,
+    BookingsValidatorAllotmentConstraintsDoNotApply,
+    BookingsValidatorInvalidRoomCategoryId,
+    BookingsValidatorRoomCategoryNotFoundInActiveInventory,
+    BookingsValidatorInsufficientRoomCategoryCapacity,
+    BookingsRepositoryProblemUpdatingBooking,
+    BookingsRepositoryErrorUpdatingBooking,
+    BookingsRepositoryErrorGettingList,
+    BookingRepositoryErrorReadingDocumentCount,
+    BookingRepositoryBookingNotFound,
+    BookingRepositoryErrorGettingBooking,
+    BookingConfirmationErrorGettingData,
+    BookingConfirmationEmailSenderErrorSendingEmail,
+    BookingSearchError,
+    RoomInventoryAggregatorError,
+    BookingOccupancyCalculatorError,
+    BookingOccupancyCalculatorErrorIndexing,
+    BookingDependenciesFilterError,
+    BookingsValidatorAllotmentInsufficientInventory,
+    SearchResultBuilderError,
+    BookingsValidatorAllotmentOpenIntervalMismatch,
+    BookingsControllerErrorGettingBookingById,
+    BookingsControllerErrorGettingBookings,
+    BookingsControllerErrorGettingCount,
+    BookingsControllerErrorSearchingBookings,
+    BookingsControllerErrorAddingBookings,
     
 }
 
@@ -413,6 +480,7 @@ ThMessage[ThStatusCode.SaveRoomItemInvalidAttributeList] = "Invalid attribute li
 ThMessage[ThStatusCode.SaveRoomItemInvalidBedList] = "Invalid bed list.";
 ThMessage[ThStatusCode.RoomAggregatorGetUsedCategoriesError] = "Error getting the room categories that have at least a room associated.";
 ThMessage[ThStatusCode.RoomAggregatorCategoryStatsListInvalidCatgoryIdListError] = "Invalid category id list";
+ThMessage[ThStatusCode.RoomAggregatorGetRoomsByCategoryIdListError] = "Error getting rooms by category id list";
 ThMessage[ThStatusCode.RoomAggregatorCategoryStatsListError] = "Error computing the room category stats list.";
 ThMessage[ThStatusCode.RoomAggregatorCategoryStatsError] = "Error computing the room category stats.";
 ThMessage[ThStatusCode.RoomAggregatorRoomStatsError] = "Error computing the room stats.";
@@ -492,6 +560,7 @@ ThMessage[ThStatusCode.CustomerRepositoryErrorGettingList] = "Error getting cust
 ThMessage[ThStatusCode.SaveCustomerItemError] = "Error saving customer.";
 ThMessage[ThStatusCode.SaveCustomerItemInvalidOrNullClientType] = "Invalid client type.";
 ThMessage[ThStatusCode.SaveCustomerItemCompOrTACannotBeLinkedToOtherCustomers] = "Companies or travel agencies cannot be linked to other customers.";
+ThMessage[ThStatusCode.CustomerIdValidatorInvalidId] = "Invalid list of customers.";
 ThMessage[ThStatusCode.CustomerItemUpdateStrategyError] = "Error updating customer.";
 ThMessage[ThStatusCode.CustomerItemUpdateStrategyCustTypeChanged] = "The type of a customer cannot be changed.";
 ThMessage[ThStatusCode.CustomerItemUpdateStrategyPriceProductUsedInAllotment] = "You cannot remove price products used in allotments. Please archive the allotments first.";
@@ -564,6 +633,7 @@ ThMessage[ThStatusCode.SaveAllotmentItemInvalidAvailability] = "Please insert th
 ThMessage[ThStatusCode.AllotmentValidatorInvalidPriceProductId] = "Please select a price product that is attached to the customer.";
 ThMessage[ThStatusCode.AllotmentValidatorNotActivePriceProduct] = "Allotments can only be created on Active Price Products.";
 ThMessage[ThStatusCode.AllotmentValidatorInvalidRoomCategId] = "Allotments can only be created on a specific room category from the price product.";
+ThMessage[ThStatusCode.AllotmentIdValidatorInvalidId] = "Invalid allotments list.";
 ThMessage[ThStatusCode.ArchiveAllotmentItemError] = "Error archiving allotment.";
 ThMessage[ThStatusCode.ArchiveAllotmentItemNotActiveAllotment] = "Only active allotments can be archived.";
 ThMessage[ThStatusCode.AllotmentsControllerErrorGettingAllotment] = "Error getting allotment.";
@@ -577,9 +647,72 @@ ThMessage[ThStatusCode.AllotmentArchiverCronJobExecutorError] = "Error archiving
 ThMessage[ThStatusCode.NotificationsRepositoryErrorAddingNotification] = "Error adding a notification.";
 ThMessage[ThStatusCode.NotificationsRepositoryErrorGettingUndelivered] = "Error getting undelivered notifications.";
 ThMessage[ThStatusCode.NotificationsRepositoryErrorMarkingAsRead] = "Error marking notification as read.";
-ThMessage[ThStatusCode.PhantomHtmlToPdfHtmlReportPageAccessError] = "Error accessing the html report page.";
-ThMessage[ThStatusCode.PhantomHtmlToPdfGenerationError] = "Error generating pdf.";
-ThMessage[ThStatusCode.HtmlReportsServiceHtmlExportError] = "Error exporting html to pdf.";
+ThMessage[ThStatusCode.PdfReportServiceErrorCreatingOutputFolder] = "Error creating report output directory.";
+ThMessage[ThStatusCode.PdfReportServiceErrorWritingHtmlToFile] = "Error writing html file on disk.";
+ThMessage[ThStatusCode.PdfReportServiceHtmlToPdfError] = "Error in the following flow: generate html -> convert html to pdf.";
+ThMessage[ThStatusCode.PhantomHtmlToPdfConverter] = "Error converting html to pdf with phantom js.";
+ThMessage[ThStatusCode.InvoiceGroupsRepositoryErrorAddingInvoiceGroup] = "Error adding the invoice group."; 
+ThMessage[ThStatusCode.InvoiceGroupsRepositoryProblemUpdatingInvoiceGroup] = "Problem updating the invoice group - concurrency.";
+ThMessage[ThStatusCode.InvoiceGroupsRepositoryErrorUpdatingInvoiceGroup] = "Error updating the invoice group.";
+ThMessage[ThStatusCode.InvoiceGroupsRepositoryErrorGettingInvoiceGroupList] = "Error getting the list of invoice groups.";
+ThMessage[ThStatusCode.InvoiceGroupItemUpdateStrategyErrorUpdating] = "Error updating the invoice group item.";
+ThMessage[ThStatusCode.InvoiceGroupsRepositoryInvoiceGroupNotFound] = "Invoice group not found.";
+ThMessage[ThStatusCode.InvoiceGroupsRepositoryErrorGettingInvoiceGroup] = "Error retrieving the invoice group from the database.";
+ThMessage[ThStatusCode.SaveInvoiceGroupItem] = "Error saving the invoice group item.";
+ThMessage[ThStatusCode.UpdateInvoiceGroupItemError] = "Error updating invoice group.";
+ThMessage[ThStatusCode.GenerateCustomerInvoiceGroupItemError] = "Error generating customer related invoice group.";
+ThMessage[ThStatusCode.GenerateBookingInvoiceGroupItemError] = "Error generating booking related invoice group.";
+ThMessage[ThStatusCode.AddBookingInvoiceGroupItemError] = "Error adding booking related invoice group.";
+ThMessage[ThStatusCode.InvoicePaymentMethodValidatorError] = "Error validating the payment methods.";
+ThMessage[ThStatusCode.InvoicePaymentMethodValidatorInvalidPaymentMethod] = "Unrecognized payment method.";
+ThMessage[ThStatusCode.InvoicePaymentMethodValidatorUnsupportedPaymentMethod] = "The payment method selected is not supported by the hotel.";
+ThMessage[ThStatusCode.InvoicePaymentMethodValidatorCannotPayByAgreement] = "You cannot pay the invoice by agreement as the selected customer does not support this method.";
+ThMessage[ThStatusCode.InvoicePaymentValidatorError] = "Error validating the invoice payment.";
+ThMessage[ThStatusCode.InvoicePayersValidatorError] = "Error validating the payers that split the invoice payment.";
+ThMessage[ThStatusCode.InvoicePayersValidatorInvalidSplit] = "Error validating the payers that split the invoice payment.";
+ThMessage[ThStatusCode.SlackSendMessageError] = "Error sending the message using Slack.";
+ThMessage[ThStatusCode.AddBookingsRepositoryEmptyBookingList] = "Empty booking list.";
+ThMessage[ThStatusCode.AddBookingsRepositoryNoBookingsLimitExceeded] = "You can't create more than 50 bookings at once.";
+ThMessage[ThStatusCode.AddBookingsRepositoryErrorAddingBookingGroup] = "Error adding bookings.";
+ThMessage[ThStatusCode.AddBookingItemsError] = "Error adding bookings.";
+ThMessage[ThStatusCode.BookingIntervalValidatorError] = "Error validating booking interval.";
+ThMessage[ThStatusCode.BookingIntervalValidatorInvalidInterval] = "Invalid interval.";
+ThMessage[ThStatusCode.BookingIntervalValidatorInvalidStartDate] = "Invalid start date for bookings.";
+ThMessage[ThStatusCode.BookingIntervalValidatorMaxSixMonths] = "The maximum interval for a booking is 6 months.";
+ThMessage[ThStatusCode.AddBookingItemsInvalidNoOfBookings] = "The maximum number of bookings you can add is 50.";
+ThMessage[ThStatusCode.BookingItemsConverterError] = "There was a problem while reading the bookings.";
+ThMessage[ThStatusCode.BookingValidationError] = "There was a problem while validating the bookings.";
+ThMessage[ThStatusCode.BookingsValidatorBillingCustomerMissing] = "The billable customer must be in the customer list.";
+ThMessage[ThStatusCode.BookingsValidatorYieldingClosed] = "You cannot book a price product that is not opened in the Yield Manager for the selected interval.";
+ThMessage[ThStatusCode.BookingsValidatorAllotmentCustomer] = "The main customer from the booking must be the one from the allotment.";
+ThMessage[ThStatusCode.BookingsValidatorAllotmentInvalidRoomCategory] = "You can only book the room category selected within the allotment.";
+ThMessage[ThStatusCode.BookingsValidatorMissingPaymentGuarantee] = "You need to set a payment guarantee for all the price products with cancellation conditions.";
+ThMessage[ThStatusCode.BookingsValidatorConstraintsDoNotApply] = "The constraints from the price product do not apply for the booking.";
+ThMessage[ThStatusCode.BookingsValidatorAllotmentConstraintsDoNotApply] = "The constraints from the allotment do not apply for the booking.";
+ThMessage[ThStatusCode.BookingsValidatorInvalidRoomCategoryId] = "The room category is not valid.";
+ThMessage[ThStatusCode.BookingsValidatorRoomCategoryNotFoundInActiveInventory] = "The room category was not found in the active room inventory.";
+ThMessage[ThStatusCode.BookingsValidatorInsufficientRoomCategoryCapacity] = "Insufficient capacity to fit into the selected room category.";
+ThMessage[ThStatusCode.BookingsRepositoryProblemUpdatingBooking] = "Error updating booking. It is possible that someone else changed it at the same time. Please refresh the page and try again.";
+ThMessage[ThStatusCode.BookingsRepositoryErrorUpdatingBooking] = "Error updating booking.";
+ThMessage[ThStatusCode.BookingsRepositoryErrorGettingList] = "Error getting the list of bookings.";
+ThMessage[ThStatusCode.BookingRepositoryErrorReadingDocumentCount] = "Error getting the number of bookings.";
+ThMessage[ThStatusCode.BookingRepositoryBookingNotFound] = "Booking not found.";
+ThMessage[ThStatusCode.BookingRepositoryErrorGettingBooking] = "Error getting booking.";
+ThMessage[ThStatusCode.BookingConfirmationErrorGettingData] = "Error getting data for the booking confirmation.";
+ThMessage[ThStatusCode.BookingConfirmationEmailSenderErrorSendingEmail] = "Error sending booking confirmation by email.";
+ThMessage[ThStatusCode.BookingSearchError] = "Error searching for price products.";
+ThMessage[ThStatusCode.RoomInventoryAggregatorError] = "Error aggregating the rooms from the inventory.";
+ThMessage[ThStatusCode.BookingOccupancyCalculatorError] = "Error computing booking occupancy.";
+ThMessage[ThStatusCode.BookingOccupancyCalculatorErrorIndexing] = "Error computing booking occupancy.";
+ThMessage[ThStatusCode.BookingDependenciesFilterError] = "Error filtering the price products.";
+ThMessage[ThStatusCode.BookingsValidatorAllotmentInsufficientInventory] = "Insufficient inventory for the selected allotments. It is possible that they were booked since the search.";
+ThMessage[ThStatusCode.SearchResultBuilderError] = "Error building the search results.";
+ThMessage[ThStatusCode.BookingsValidatorAllotmentOpenIntervalMismatch] = "The allotment is not open for the given period.";
+ThMessage[ThStatusCode.BookingsControllerErrorGettingBookingById] = "Error getting booking by id.";
+ThMessage[ThStatusCode.BookingsControllerErrorGettingBookings] = "Error getting bookings.";
+ThMessage[ThStatusCode.BookingsControllerErrorGettingCount] = "Error getting the number of bookings.";
+ThMessage[ThStatusCode.BookingsControllerErrorSearchingBookings] = "Error searching for bookings.";
+ThMessage[ThStatusCode.BookingsControllerErrorAddingBookings] = "Error adding bookings.";
 
 export class ThResponse {
     statusCode: ThStatusCode;
@@ -603,7 +736,7 @@ export class ThResponse {
         return this;
     }
     private translateMessage(locale: Locales) {
-        var translation = new Translation(locale);
-        this.message = translation.getTranslation(this.message);
+        var translation = new ThTranslation(locale);
+        this.message = translation.translate(this.message);
     }
 }

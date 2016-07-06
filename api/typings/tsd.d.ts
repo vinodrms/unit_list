@@ -31,3 +31,4 @@
 /// <reference path="cron/cron.d.ts" />
 /// <reference path="phantom/phantom.d.ts" />
 /// <reference path="shortid/shortid.d.ts" />
+/// <reference path="smtpapi/smtpapi.d.ts" />

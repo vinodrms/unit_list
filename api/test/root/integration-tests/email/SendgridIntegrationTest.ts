@@ -12,7 +12,7 @@ describe("Email Integration Tests", function() {
     before(function(done: any) {
 		testContext = new TestContext();
         var emailHeaderDO: EmailHeaderDO = {
-            destinationEmail: 'dragos.pricope@gmail.com',
+            to: ['dragos.pricope@gmail.com'],
             subject: 'Test',
             attachments: []
         };
@@ -22,9 +22,9 @@ describe("Email Integration Tests", function() {
         emailTemplateDO.firstName = 'Dragos';
         emailTemplateDO.lastName = 'Pricope';
         emailTemplateDO.email = 'dragos.pricope@gmail.com';
-
-        this.emailService = testContext.appContext.getServiceFactory().getEmailService(emailHeaderDO, emailTemplateDO);
-        this.emailService.sendEmail().then((result: any) => {
+        
+        this.emailService = testContext.appContext.getServiceFactory().getEmailService();
+        this.emailService.sendEmail(emailHeaderDO, emailTemplateDO).then((result: any) => {
             done();
         }).catch((error: any) => {
             done(error);

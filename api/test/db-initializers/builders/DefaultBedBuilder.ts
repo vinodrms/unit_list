@@ -2,7 +2,7 @@ import {BedTemplateDO} from '../../../core/data-layer/common/data-objects/bed-te
 import {BedDO, BedSizeDO, BedStatus, BedCapacityDO, BedStorageType, BedAccommodationType} from '../../../core/data-layer/common/data-objects/bed/BedDO';
 import {AuthUtils} from '../../../core/domain-layer/hotel-account/utils/AuthUtils';
 import {ThUtils} from '../../../core/utils/ThUtils';
-import {Locales} from '../../../core/utils/localization/Translation';
+import {Locales} from '../../../core/utils/localization/ThTranslation';
 import {ThError} from '../../../core/utils/th-responses/ThError';
 import {TestContext} from '../../helpers/TestContext';
 

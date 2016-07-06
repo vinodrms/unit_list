@@ -6,6 +6,7 @@ import {SessionContext} from '../../../utils/SessionContext';
 import {ThUtils} from '../../../utils/ThUtils';
 import {PriceProductDO, PriceProductStatus} from '../../../data-layer/price-products/data-objects/PriceProductDO';
 import {PriceProductSearchResultRepoDO} from '../../../data-layer/price-products/repositories/IPriceProductRepository';
+import {PriceProductsContainer} from './results/PriceProductsContainer';
 
 export class PriceProductIdValidator {
 	private _thUtils: ThUtils;
@@ -15,17 +16,22 @@ export class PriceProductIdValidator {
 		this._thUtils = new ThUtils();
 	}
 
-	public validatePriceProductId(priceProductId: string): Promise<boolean> {
+	public validatePriceProductId(priceProductId: string): Promise<PriceProductsContainer> {
 		return this.validatePriceProductIdList([priceProductId]);
 	}
 
-	public validatePriceProductIdList(priceProductIdList: string[]): Promise<boolean> {
+	public validatePriceProductIdList(priceProductIdList: string[]): Promise<PriceProductsContainer> {
 		this._priceProductIdList = priceProductIdList;
-		return new Promise<boolean>((resolve: { (result: boolean): void }, reject: { (err: ThError): void }) => {
+		return new Promise<PriceProductsContainer>((resolve: { (result: PriceProductsContainer): void }, reject: { (err: ThError): void }) => {
 			this.validatePriceProductIdListCore(resolve, reject);
 		});
 	}
-	private validatePriceProductIdListCore(resolve: { (result: boolean): void }, reject: { (err: ThError): void }) {
+	private validatePriceProductIdListCore(resolve: { (result: PriceProductsContainer): void }, reject: { (err: ThError): void }) {
+		if (this._priceProductIdList.length == 0) {
+			resolve(new PriceProductsContainer([]));
+			return;
+		}
+
 		var priceProductRepo = this._appContext.getRepositoryFactory().getPriceProductRepository();
 		priceProductRepo.getPriceProductList({ hotelId: this._sessionContext.sessionDO.hotel.id }, { priceProductIdList: this._priceProductIdList, status: PriceProductStatus.Active })
 			.then((searchResult: PriceProductSearchResultRepoDO) => {
@@ -35,7 +41,7 @@ export class PriceProductIdValidator {
 					ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Invalid price product id list", this._priceProductIdList, thError);
 					throw thError;
 				}
-				resolve(true);
+				resolve(new PriceProductsContainer(searchResult.priceProductList));
 			}).catch((error: any) => {
 				reject(error);
 			});

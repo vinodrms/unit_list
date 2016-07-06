@@ -1,4 +1,4 @@
-import {Locales, Translation} from '../../utils/localization/Translation';
+import {Locales, ThTranslation} from '../../utils/localization/ThTranslation';
 import {ThNotificationCode} from '../../data-layer/common/data-objects/notifications/ThNotificationCode';
 import {NotificationDO} from '../../data-layer/common/data-objects/notifications/NotificationDO';
 
@@ -16,8 +16,8 @@ export class ThNotification {
 		this.buildTranslatedMessage(locale);
 	}
     private buildTranslatedMessage(locale: Locales) {
-        var translation = new Translation(locale);
-        this.translatedMessage = translation.getTranslation(ThNotificationMessage[this.notification.code], this.notification.parameterMap);
+        var translation = new ThTranslation(locale);
+        this.translatedMessage = translation.translate(ThNotificationMessage[this.notification.code], this.notification.parameterMap);
     }
 
 	public static buildThNotificationList(notificationList: NotificationDO[], locale: Locales): ThNotification[] {

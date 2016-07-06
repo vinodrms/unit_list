@@ -15,4 +15,7 @@ export class NumberOfAdultsConstraintDO extends BaseDO implements IPriceProductC
     public getValueDisplayString(thTranslation: ThTranslation): string {
         return thTranslation.translate("%noOfAdults% adults", { noOfAdults: this.noOfAdults });
     }
+    public getBriefValueDisplayString(thTranslation: ThTranslation): string {
+		return this.getValueDisplayString(thTranslation);
+	}
 }

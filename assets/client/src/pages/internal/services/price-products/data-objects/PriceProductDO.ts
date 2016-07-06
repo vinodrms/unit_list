@@ -73,4 +73,7 @@ export class PriceProductDO extends BaseDO {
 	public isArchived(): boolean {
 		return this.status === PriceProductStatus.Archived;
 	}
+	public containsRoomCategoryId(roomCategoryId: string): boolean {
+		return _.contains(this.roomCategoryIdList, roomCategoryId);
+	}
 }

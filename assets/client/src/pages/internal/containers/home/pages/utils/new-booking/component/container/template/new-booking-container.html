@@ -9,12 +9,17 @@
 		<div class="col-xs-5 col-md-5 full-height">
 			<div class="row full-height">
 				<div class="col-xs-8">
-					<p class="btn-square-container">
+					<p class="btn-square-container" [ngClass]="{small: !isLastStep(), large: isLastStep()}">
 						<a class="btn btn-square btn-square-next-prev" [ngClass]="{disabled: !hasPreviousPage()}" (click)="movePrevious()">
 							<i class="fa unitpal-font"><</i>
 						</a>
-						<a class="btn btn-square btn-square-next-prev" [ngClass]="{disabled: !canMoveNext()}" (click)="moveNext()" >
+						<a class="btn btn-square btn-square-next-prev" *ngIf="!isLastStep()" [ngClass]="{disabled: !canMoveNext()}" (click)="moveNext()" >
 							<i class="fa unitpal-font">></i>
+						</a>
+						<a class="btn btn-square btn-square-finalize" *ngIf="isLastStep()" [ngClass]="{disabled: !canMoveNext()}" (click)="addBookings()" >
+							<i *ngIf="!isAddingBookings" class="fa fa-envelope"></i> 
+							<i *ngIf="isAddingBookings" class="fa fa-spinner fa-pulse"></i>
+							{{'Add Bookings' | translate}}
 						</a>
 					</p>
 					<p class="btn-err-container" *ngIf="errorString">
@@ -23,7 +28,7 @@
 					</p>
 				</div>
 				<div class="col-xs-4 full-height">
-					<a class="btn btn-square float-right" *ngIf="showCloseButton" (click)="triggerOnCloseButtonPressed()">
+					<a class="btn btn-square float-right" *ngIf="showCloseButton" (click)="triggerOnCloseButtonPressed(false)">
 						<i class="fa unitpal-font">C</i>
 					</a>
 				</div>
@@ -34,6 +39,7 @@
 <div class="modal-lg-body container">
 	<new-booking-search class="full-height" [hidden]="!isBookingSearch()"> </new-booking-search>
 	<new-booking-fill-details class="full-height" [hidden]="!isFillDetails()"> </new-booking-fill-details>
+	<new-booking-email-config class="full-height" [hidden]="!isEmailConfig()"></new-booking-email-config>
 	
 	<booking-customer-register class="full-height" *ngIf="isCustomerRegister()"> </booking-customer-register>
 </div>

@@ -1,27 +1,14 @@
 import {BaseDO} from '../../../../../common/base/BaseDO';
+import {ConfigCapacityDO} from '../../common/data-objects/bed-config/ConfigCapacityDO';
 import {RoomCategoryDO} from './RoomCategoryDO';
-
-export class BedConfigCapacityDO extends BaseDO {
-    constructor() {
-        super();
-    }
-    
-    maxNoBabies: number;
-    maxNoAdults: number;
-    maxNoChildren: number;
-    
-    protected getPrimitivePropertyKeys(): string[] {
-        return ["maxNoBabies", "maxNoAdults", "maxNoChildren"];
-    }
-}
 
 export class RoomCategoryCapacityDO extends BaseDO {
     constructor() {
         super();
     }
     
-    stationaryCapacity: BedConfigCapacityDO;
-    rollawayCapacity: BedConfigCapacityDO;
+    stationaryCapacity: ConfigCapacityDO;
+    rollawayCapacity: ConfigCapacityDO;
     
     protected getPrimitivePropertyKeys(): string[] {
         return [];
@@ -30,30 +17,30 @@ export class RoomCategoryCapacityDO extends BaseDO {
     public buildFromObject(object: Object) {
         super.buildFromObject(object);
         
-        this.stationaryCapacity = new BedConfigCapacityDO();
+        this.stationaryCapacity = new ConfigCapacityDO();
         this.stationaryCapacity.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "stationaryCapacity"));
         
-        this.rollawayCapacity = new BedConfigCapacityDO();
+        this.rollawayCapacity = new ConfigCapacityDO();
         this.rollawayCapacity.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "rollawayCapacity"));
     }
     
-    public get totalCapacity(): BedConfigCapacityDO {
-        var totalRoomCapacity = new BedConfigCapacityDO();
-        totalRoomCapacity.maxNoBabies = this.stationaryCapacity.maxNoBabies + this.rollawayCapacity.maxNoBabies;
-        totalRoomCapacity.maxNoAdults = this.stationaryCapacity.maxNoAdults + this.rollawayCapacity.maxNoAdults;
-        totalRoomCapacity.maxNoChildren = this.stationaryCapacity.maxNoChildren + this.rollawayCapacity.maxNoChildren;
+    public get totalCapacity(): ConfigCapacityDO {
+        var totalRoomCapacity = new ConfigCapacityDO();
+        totalRoomCapacity.noBabies = this.stationaryCapacity.noBabies + this.rollawayCapacity.noBabies;
+        totalRoomCapacity.noAdults = this.stationaryCapacity.noAdults + this.rollawayCapacity.noAdults;
+        totalRoomCapacity.noChildren = this.stationaryCapacity.noChildren + this.rollawayCapacity.noChildren;
         return totalRoomCapacity;
     }
     
-    public canFit(capacityToCheck: BedConfigCapacityDO): boolean {
-        if(this.totalCapacity.maxNoAdults < capacityToCheck.maxNoAdults) return false;
-        if(this.totalCapacity.maxNoChildren < capacityToCheck.maxNoChildren) return false;
-        if(this.totalCapacity.maxNoBabies < capacityToCheck.maxNoBabies) return false;
+    public canFit(capacityToCheck: ConfigCapacityDO): boolean {
+        if(this.totalCapacity.noAdults < capacityToCheck.noAdults) return false;
+        if(this.totalCapacity.noChildren < capacityToCheck.noChildren) return false;
+        if(this.totalCapacity.noBabies < capacityToCheck.noBabies) return false;
         return true;
     }
     
     public isEmpty(): boolean {
-        return this.totalCapacity.maxNoAdults === 0 && this.totalCapacity.maxNoChildren === 0 && this.totalCapacity.maxNoBabies === 0;
+        return this.totalCapacity.noAdults === 0 && this.totalCapacity.noChildren === 0 && this.totalCapacity.noBabies === 0;
     }
 }
 

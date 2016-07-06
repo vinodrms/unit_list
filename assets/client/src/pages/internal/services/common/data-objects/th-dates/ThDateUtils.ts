@@ -44,7 +44,7 @@ export class ThDateUtils {
 		return ThHourDO.buildThHourDO(day.hour(), day.minute());
 	}
 	public convertTimestampToThTimestamp(timestamp: number): ThTimestamp {
-		var thTimestamp = new ThTimestamp(timestamp);
+		var thTimestamp = new ThTimestamp();
 		var convertedMoment: moment.Moment = moment(timestamp);
 		thTimestamp.thDateDO = this.convertMomentToThDateDO(convertedMoment);
 		thTimestamp.thHourDO = this.convertMomentToThHourDO(convertedMoment);

@@ -1,9 +1,13 @@
-export class EmailHeaderDO {
-	destinationEmail: string;
+import {BaseEmailTemplateDO} from './data-objects/BaseEmailTemplateDO';
+
+export interface EmailHeaderDO {
+	to?: string[];
+	cc?: string[];
+	bcc?: string[];
 	subject: string;
     attachments: string[];
 }
 
 export interface IEmailService {
-	sendEmail(): Promise<any>;
+	sendEmail(emailHeaderDO: EmailHeaderDO, emailTemplate: BaseEmailTemplateDO): Promise<any>;
 }

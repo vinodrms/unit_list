@@ -17,4 +17,7 @@ export class LeadDaysConstraintDO extends BaseDO implements IPriceProductConstra
 	public getValueDisplayString(thTranslation: ThTranslation): string {
 		return thTranslation.translate("%noDays% days", { noDays: this.leadDays });
 	}
+	public getBriefValueDisplayString(thTranslation: ThTranslation): string {
+		return this.getValueDisplayString(thTranslation);
+	}
 }

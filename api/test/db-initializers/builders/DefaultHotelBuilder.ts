@@ -5,16 +5,17 @@ import {UserDO, AccountStatus, UserRoles} from '../../../core/data-layer/hotel/d
 import {UserContactDetailsDO} from '../../../core/data-layer/hotel/data-objects/user/UserContactDetailsDO';
 import {AddressDO} from '../../../core/data-layer/common/data-objects/address/AddressDO';
 import {CountryDO} from '../../../core/data-layer/common/data-objects/country/CountryDO';
+import {PaymentMethodDO} from '../../../core/data-layer/common/data-objects/payment-method/PaymentMethodDO';
 import {OperationHoursDO} from '../../../core/data-layer/hotel/data-objects/operation-hours/OperationHoursDO';
 import {ThHourDO} from '../../../core/utils/th-dates/data-objects/ThHourDO';
 import {ThUtils} from '../../../core/utils/ThUtils';
-import {Locales} from '../../../core/utils/localization/Translation';
+import {Locales} from '../../../core/utils/localization/ThTranslation';
 import {AppContext} from '../../../core/utils/AppContext';
 
 export class DefaultHotelBuilder {
 	private _thUtils;
 
-	constructor(private _appContext: AppContext, private _email: string) {
+	constructor(private _appContext: AppContext, private _email: string, private _paymentMethodList: PaymentMethodDO[]) {
 		this._thUtils = new ThUtils();
 	}
 
@@ -64,8 +65,14 @@ export class DefaultHotelBuilder {
 		hotel.userList.push(user);
 		hotel.amenityIdList = [];
 		hotel.customAmenityList = [];
-		hotel.paymentMethodIdList = [];
+		hotel.paymentMethodIdList = this.getPaymentIdList();
 		hotel.configurationCompleted = false;
 		return hotel;
+	}
+
+	private getPaymentIdList(): string[] {
+		return _.map(this._paymentMethodList, (paymentMethod: PaymentMethodDO) => {
+			return paymentMethod.id;
+		});
 	}
 }

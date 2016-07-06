@@ -28,7 +28,9 @@ import {PriceProductDO} from '../../core/data-layer/price-products/data-objects/
 import {HotelConfigurationsBootstrap} from '../../core/domain-layer/hotel-configurations/HotelConfigurationsBootstrap';
 import {YieldFilterConfigurationDO} from '../../core/data-layer/hotel-configurations/data-objects/yield-filter/YieldFilterConfigurationDO';
 import {DefaultAllotmentBuilder} from './builders/DefaultAllotmentBuilder';
-import {AllotmentDO} from '../../core/data-layer/allotment/data-objects/AllotmentDO';
+import {AllotmentDO} from '../../core/data-layer/allotments/data-objects/AllotmentDO';
+import {DefaultBookingBuilder} from './builders/DefaultBookingBuilder';
+import {BookingDO} from '../../core/data-layer/bookings/data-objects/BookingDO';
 
 import _ = require("underscore");
 
@@ -56,6 +58,7 @@ export class DefaultDataBuilder {
     private _yieldFilters: YieldFilterDO[];
     private _priceProductList: PriceProductDO[];
     private _allotmentList: AllotmentDO[];
+    private _bookingList: BookingDO[];
 
     constructor(private _testContext: TestContext) {
         this._repositoryCleaner = new RepositoryCleanerWrapper(this._testContext.appContext.getUnitPalConfig());
@@ -75,9 +78,14 @@ export class DefaultDataBuilder {
     private buildCore(resolve: { (result: boolean): void }, reject: { (err: any): void }) {
         this._repositoryCleaner.cleanRepository()
             .then((result: any) => {
-                var hotelBuilder = new DefaultHotelBuilder(this._testContext.appContext, this._email);
-                var hotel = hotelBuilder.getHotel();
+                var settingsRepository = this._testContext.appContext.getRepositoryFactory().getSettingsRepository();
 
+                return settingsRepository.getPaymentMethods();
+            }).then((paymentMethodList: PaymentMethodDO[]) => {
+                this._paymentMethodList = paymentMethodList;
+
+                var hotelBuilder = new DefaultHotelBuilder(this._testContext.appContext, this._email, this._paymentMethodList);
+                var hotel = hotelBuilder.getHotel();
                 return this._testContext.appContext.getRepositoryFactory().getHotelRepository().addHotel(hotel);
             }).then((savedHotel: HotelDO) => {
                 this._hotelDO = savedHotel;
@@ -86,12 +94,6 @@ export class DefaultDataBuilder {
 
                 return new Promise<boolean>((resolve: { (result: boolean): void }, reject: { (err: any): void }) => { resolve(true); });
             }).then((prevResult: any) => {
-                var settingsRepository = this._testContext.appContext.getRepositoryFactory().getSettingsRepository();
-
-                return settingsRepository.getPaymentMethods();
-            }).then((paymentMethodList: PaymentMethodDO[]) => {
-                this._paymentMethodList = paymentMethodList;
-
                 var settingsRepository = this._testContext.appContext.getRepositoryFactory().getSettingsRepository();
                 return settingsRepository.getDefaultYieldFilters();
             }).then((yieldFilterList: YieldFilterDO[]) => {
@@ -135,7 +137,7 @@ export class DefaultDataBuilder {
                 return bedBuilder.loadBeds(bedBuilder, bedTemplateList);
             }).then((addedBeds: BedDO[]) => {
                 this._bedList = addedBeds;
-                
+
                 var roomCategoryBuilder = new DefaultRoomCategoryBuilder(this._testContext);
                 return roomCategoryBuilder.loadRoomCategories(roomCategoryBuilder, this._bedList);
             }).then((addedRoomCategories: RoomCategoryDO[]) => {
@@ -150,17 +152,17 @@ export class DefaultDataBuilder {
                 return settingsRepository.getRoomAttributes();
             }).then((roomAttributeList: RoomAttributeDO[]) => {
                 this._roomAttributeList = roomAttributeList;
-                
+
                 var roomBuilder = new DefaultRoomBuilder(this._testContext);
                 return roomBuilder.loadRooms(roomBuilder, this._roomCategoryList, this._roomAttributeList, this._roomAmenityList);
             }).then((roomList: RoomDO[]) => {
                 this._roomList = roomList;
 
                 var roomCategoryIdList: string[] = _.map(this._roomList, (room: RoomDO) => { return room.categoryId });
-                var distinctRoomCategoryIdList = _.uniq(roomCategoryIdList, function(roomCategoryId) { return roomCategoryId; });
-                var aggregator = new RoomCategoryStatsAggregator(this._testContext.appContext);
-                
-                return aggregator.getRoomCategoryStatsList({ hotelId: this._testContext.sessionContext.sessionDO.hotel.id }, distinctRoomCategoryIdList);
+                var distinctRoomCategoryIdList = _.uniq(roomCategoryIdList, function (roomCategoryId) { return roomCategoryId; });
+                var aggregator = new RoomCategoryStatsAggregator(this._testContext.appContext, this._testContext.sessionContext);
+
+                return aggregator.getRoomCategoryStatsList(distinctRoomCategoryIdList);
             }).then((roomCategoryStatsList: RoomCategoryStatsDO[]) => {
                 this._roomCategoryStatsList = roomCategoryStatsList;
 
@@ -178,6 +180,11 @@ export class DefaultDataBuilder {
                 return allotmentBuilder.loadAllotments(allotmentBuilder, this._priceProductList, this._customerList);
             }).then((allotmentList: AllotmentDO[]) => {
                 this._allotmentList = allotmentList;
+                
+                var bookingBuilder = new DefaultBookingBuilder(this._testContext);
+                return bookingBuilder.loadBookings(bookingBuilder, this._hotelDO, this._customerList, this.roomCategoryList, this.priceProductList);
+            }).then((bookingList: BookingDO[]) => {
+                this._bookingList = bookingList;
 
                 resolve(true);
             }).catch((err: any) => {
@@ -245,8 +252,8 @@ export class DefaultDataBuilder {
     public get allotmentList(): AllotmentDO[] {
         return this._allotmentList;
     }
-    public set allotmentList(allotmentList: AllotmentDO[]) {
-        this._allotmentList = allotmentList;
+    public get bookingList(): BookingDO[] {
+        return this._bookingList;
     }
     public get defaultTimezone(): string {
         return this._hotelDO.timezone;

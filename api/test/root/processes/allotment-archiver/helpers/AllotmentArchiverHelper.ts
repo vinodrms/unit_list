@@ -2,12 +2,12 @@ import {TestContext} from '../../../../helpers/TestContext';
 import {TestUtils} from '../../../../helpers/TestUtils';
 import {DefaultDataBuilder} from '../../../../db-initializers/DefaultDataBuilder';
 import {ThDateUtils} from '../../../../../core/utils/th-dates/ThDateUtils';
-import {ThTimestamp} from '../../../../../core/utils/th-dates/ThTimestamp';
+import {ThTimestampDO} from '../../../../../core/utils/th-dates/data-objects/ThTimestampDO';
 import {ThDateIntervalDO} from '../../../../../core/utils/th-dates/data-objects/ThDateIntervalDO';
 import {IAllotmentDataSource, DefaultAllotmentBuilder} from '../../../../db-initializers/builders/DefaultAllotmentBuilder';
 import {PriceProductDO} from '../../../../../core/data-layer/price-products/data-objects/PriceProductDO';
 import {CustomerDO} from '../../../../../core/data-layer/customers/data-objects/CustomerDO';
-import {AllotmentDO} from '../../../../../core/data-layer/allotment/data-objects/AllotmentDO';
+import {AllotmentDO} from '../../../../../core/data-layer/allotments/data-objects/AllotmentDO';
 
 import moment = require('moment');
 import _ = require('underscore');
@@ -38,15 +38,15 @@ export class AllotmentArchiverHelper implements IAllotmentDataSource {
 		return [allotment];
 	}
 
-	public getTimestampThatShouldNotArchive(dataBuilder: DefaultDataBuilder): ThTimestamp {
+	public getTimestampThatShouldNotArchive(dataBuilder: DefaultDataBuilder): ThTimestampDO {
 		return this.getTimestamp(dataBuilder, -1);
 	}
-	public getTimestampThatShouldArchive(dataBuilder: DefaultDataBuilder): ThTimestamp {
+	public getTimestampThatShouldArchive(dataBuilder: DefaultDataBuilder): ThTimestampDO {
 		return this.getTimestamp(dataBuilder, 0);
 	}
 
-	private getTimestamp(dataBuilder: DefaultDataBuilder, dayOffset: number): ThTimestamp {
-		var timestamp = new ThTimestamp(dataBuilder.defaultTimezone);
+	private getTimestamp(dataBuilder: DefaultDataBuilder, dayOffset: number): ThTimestampDO {
+		var timestamp = ThTimestampDO.buildThTimestampForTimezone(dataBuilder.defaultTimezone);
 		timestamp.thDateDO = this._thDateUtils.convertMomentToThDateDO(moment());
 		timestamp.thDateDO = this._thDateUtils.addDaysToThDateDO(timestamp.thDateDO, dayOffset);
 		timestamp.thHourDO.hour = 0;

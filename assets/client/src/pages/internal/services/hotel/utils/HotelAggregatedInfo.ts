@@ -4,9 +4,10 @@ import {HotelPaymentMethodsDO} from '../../settings/data-objects/HotelPaymentMet
 import {CurrencyDO} from '../../common/data-objects/currency/CurrencyDO';
 
 export class HotelAggregatedInfo {
-	private _hotelDetails;
-	private _hotelAmenities;
-	private _paymentMethods;
+	private _hotelDetails: HotelDetailsDO;
+	private _hotelAmenities: HotelAmenitiesDO;
+	private _paymentMethods: HotelPaymentMethodsDO;
+	private _allowedPaymentMethods: HotelPaymentMethodsDO;
 	private _ccy: CurrencyDO;
 
 	public get hotelDetails(): HotelDetailsDO {
@@ -26,6 +27,12 @@ export class HotelAggregatedInfo {
 	}
 	public set paymentMethods(paymentMethods: HotelPaymentMethodsDO) {
 		this._paymentMethods = paymentMethods;
+	}
+	public get allowedPaymentMethods(): HotelPaymentMethodsDO {
+		return this._allowedPaymentMethods;
+	}
+	public set allowedPaymentMethods(allowedPaymentMethods: HotelPaymentMethodsDO) {
+		this._allowedPaymentMethods = allowedPaymentMethods;
 	}
 	public get ccy(): CurrencyDO {
 		return this._ccy;

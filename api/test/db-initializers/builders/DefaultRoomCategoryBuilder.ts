@@ -3,7 +3,7 @@ import {BedConfigDO} from '../../../core/data-layer/room-categories/data-objects
 import {BedMetaDO} from '../../../core/data-layer/room-categories/data-objects/bed-config/BedMetaDO';
 import {AuthUtils} from '../../../core/domain-layer/hotel-account/utils/AuthUtils';
 import {ThUtils} from '../../../core/utils/ThUtils';
-import {Locales} from '../../../core/utils/localization/Translation';
+import {Locales} from '../../../core/utils/localization/ThTranslation';
 import {AppContext} from '../../../core/utils/AppContext';
 import {ThError} from '../../../core/utils/th-responses/ThError';
 import {TestContext} from '../../helpers/TestContext';

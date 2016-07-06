@@ -83,6 +83,10 @@ export class MongoQueryBuilder {
 		this._processedQuery["$text"] = { $search: "\"" + text + "\"" };
 	}
 
+	public addCustomQuery(queryKey: string, queryValue: Object) {
+		this._processedQuery[queryKey] = queryValue;
+	}
+
 	public get processedQuery() {
 		return this._processedQuery;
 	}

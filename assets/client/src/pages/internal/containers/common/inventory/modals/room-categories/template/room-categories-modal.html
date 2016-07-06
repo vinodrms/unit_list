@@ -20,7 +20,7 @@
 				</td>
 
 				<td *ngIf="roomCategoryVM.bedsConfigured" class="selectable-row room-categ-capacity" (click)="selectRoomCategory(roomCategoryVM)">
-					{{roomCategoryVM.capacity.totalCapacity.maxNoAdults}}<span class="unitpal-font">:</span> {{roomCategoryVM.capacity.totalCapacity.maxNoChildren}}<span class="unitpal-font">;</span> {{roomCategoryVM.capacity.totalCapacity.maxNoBabies}}<span class="unitpal-font">B</span>
+					{{roomCategoryVM.capacity.totalCapacity.noAdults}}<span class="unitpal-font">:</span> {{roomCategoryVM.capacity.totalCapacity.noChildren}}<span class="unitpal-font">;</span> {{roomCategoryVM.capacity.totalCapacity.noBabies}}<span class="unitpal-font">B</span>
 				</td>
 				
 				<td *ngIf="!roomCategoryVM.bedsConfigured" class="selectable-row room-categ-capacity" (click)="selectRoomCategory(roomCategoryVM)">

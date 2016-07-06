@@ -2,7 +2,7 @@ import {IThLogger, ThLogLevel} from './ThLogger';
 import {ThUtils} from '../ThUtils';
 import {ThError} from '../th-responses/ThError';
 import {ThResponse, ThStatusCode} from '../th-responses/ThResponse';
-import {Locales} from '../localization/Translation';
+import {Locales} from '../localization/ThTranslation';
 
 import _ = require('underscore');
 import winston = require('winston');

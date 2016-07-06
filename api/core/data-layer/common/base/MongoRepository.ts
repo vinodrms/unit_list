@@ -13,6 +13,8 @@ import {MongoFindDocumentDistinctFieldValues} from './mongo-utils/MongoFindDocum
 import {MongoFindMultipleDocuments} from './mongo-utils/MongoFindMultipleDocuments';
 import {MongoDocumentCount} from './mongo-utils/MongoDocumentCount';
 import {MongoUpdateMultipleDocuments} from './mongo-utils/MongoUpdateMultipleDocuments';
+import {MongoDocumentListAggregation} from './mongo-utils/aggregations/MongoDocumentListAggregation';
+import {MongoDocumentCountAggregation} from './mongo-utils/aggregations/MongoDocumentCountAggregation';
 
 import _ = require('underscore');
 import mongodb = require('mongodb');
@@ -30,6 +32,10 @@ export interface MongoSearchCriteria {
 	criteria: Object;
 	sortCriteria?: Object;
 	lazyLoad?: LazyLoadRepoDO;
+}
+export interface MongoAggregationOptions {
+	unwind: boolean;
+	unwindParam?: string;
 }
 
 export class MongoRepository implements IRepositoryCleaner {
@@ -59,7 +65,7 @@ export class MongoRepository implements IRepositoryCleaner {
         }
         return outErrorCode;
     }
-	
+
     public getNativeMongoCollection(): Promise<Collection> {
 		var mongoUtils = new MongoUtils();
         return mongoUtils.getNativeMongoCollection(this._sailsEntity);
@@ -115,8 +121,21 @@ export class MongoRepository implements IRepositoryCleaner {
 		docCount.successCallback = successCallback;
 		return docCount.getDocumentCount(searchCriteria);
 	}
-	
-	protected getQueryResult<T extends BaseDO>(type: { new(): T ;}, dbList: Object[]): T[] {
+
+	protected getAggregationDocumentList(searchCriteria: MongoSearchCriteria, aggregateOptions: MongoAggregationOptions, errorCallback: { (err: Error): void }, successCallback: { (foundDocumentList: Array<Object>): void }) {
+		var aggregation = new MongoDocumentListAggregation(this._sailsEntity);
+		aggregation.errorCallback = errorCallback;
+		aggregation.successCallback = successCallback;
+		return aggregation.aggregateDocuments(searchCriteria, aggregateOptions);
+	}
+	protected getAggregationDocumentCount(searchCriteria: MongoSearchCriteria, aggregateOptions: MongoAggregationOptions, errorCallback: { (err: Error): void }, successCallback: { (meta: LazyLoadMetaResponseRepoDO): void }) {
+		var aggCount = new MongoDocumentCountAggregation(this._sailsEntity);
+		aggCount.errorCallback = errorCallback;
+		aggCount.successCallback = successCallback;
+		return aggCount.aggregateDocuments(searchCriteria, aggregateOptions);
+	}
+
+	protected getQueryResult<T extends BaseDO>(type: { new (): T; }, dbList: Object[]): T[] {
         var resultList: T[] = [];
         dbList.forEach((dbObject: Object) => {
             var resultItem: T = new type();

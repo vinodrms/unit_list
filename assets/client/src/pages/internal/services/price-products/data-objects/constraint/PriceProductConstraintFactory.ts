@@ -5,6 +5,9 @@ import {LeadDaysConstraintDO} from './constraints/LeadDaysConstraintDO';
 import {LengthOfStayConstraintDO} from './constraints/LengthOfStayConstraintDO';
 import {NumberOfRoomsConstraintDO} from './constraints/NumberOfRoomsConstraintDO';
 import {NumberOfAdultsConstraintDO} from './constraints/NumberOfAdultsConstraintDO';
+import {IPriceProductValidationRule} from './validation/IPriceProductValidationRule';
+import {GenericPriceProductValidationRuleStrategy} from './validation/GenericPriceProductValidationRuleStrategy';
+import {MinNoRoomsPriceProductValidationRuleStrategy} from './validation/MinNoRoomsPriceProductValidationRuleStrategy';
 
 export class PriceProductConstraintFactory {
 	public getConstraintDOByType(constraintType: PriceProductConstraintType): PriceProductConstraintDO {
@@ -40,47 +43,70 @@ export class PriceProductConstraintFactory {
 			{
 				constraintType: PriceProductConstraintType.BookableOnlyOnDaysFromWeek,
 				title: "Bookable only on days from week",
-				description: "Bookings can only be made on specific days from week (e.g. It you select Monday, the price product will apply only to bookings made from Monday to Tuesday.)"
+				description: "Bookings can only be made on specific days from week (e.g. It you select Monday, the price product will apply only to bookings made from Monday to Tuesday.)",
+				brief: "Bookable on"
 			},
 			{
 				constraintType: PriceProductConstraintType.IncludeDaysFromWeek,
 				title: "Include days from week",
-				description: "Bookings must include the days selected. (e.g. If you select Saturday, the booking must include a Saturday)"
+				description: "Bookings must include the days selected. (e.g. If you select Saturday, the booking must include a Saturday)",
+				brief: "Must include"
 			},
 			{
 				constraintType: PriceProductConstraintType.MustArriveOnDaysFromWeek,
 				title: "Must arrive on days from week",
-				description: "Bookings must always start with a day from the ones selected. (e.g. If you select Monday, the booking must start on a Monday)"
+				description: "Bookings must always start with a day from the ones selected. (e.g. If you select Monday, the booking must start on a Monday)",
+				brief: "Arrive on"
 			},
 			{
 				constraintType: PriceProductConstraintType.MaximumLeadDays,
 				title: "Maximum lead days",
-				description: "The maximum number of days between the time of the booking and arrival date. (e.g. If selected 1 day and want to book today, the booking must start either today or tomorrow.)"
+				description: "The maximum number of days between the time of the booking and arrival date. (e.g. If selected 1 day and want to book today, the booking must start either today or tomorrow.)",
+				brief: "Max Lead"
 			},
 			{
 				constraintType: PriceProductConstraintType.MinimumLeadDays,
 				title: "Minimum lead days",
-				description: "The minimum number of days between the time of the booking and arrival date. (e.g. If selected 40 days, the price product will be available only for minimum 40 days between the booking and arrival)"
+				description: "The minimum number of days between the time of the booking and arrival date. (e.g. If selected 40 days, the price product will be available only for minimum 40 days between the booking and arrival)",
+				brief: "Min lead"
 			},
 			{
 				constraintType: PriceProductConstraintType.MinimumLengthOfStay,
 				title: "Minimum length of stay",
-				description: "The minimum number of days for the booking"
+				description: "The minimum number of days for the booking",
+				brief: "Min"
 			},
 			{
 				constraintType: PriceProductConstraintType.MinimumNumberOfRooms,
 				title: "Minimum number of rooms",
-				description: "The minimum number of rooms from the booking"
+				description: "The minimum number of rooms from the booking",
+				brief: "Min"
 			},
 			{
 				constraintType: PriceProductConstraintType.MinimumNumberOfAdults,
 				title: "Minimum number of adults",
-				description: "The minimum number of adults from the booking"
+				description: "The minimum number of adults from the booking",
+				brief: "Min"
 			}
 		]
 	}
 
 	public getDefaultConstraintDO(): PriceProductConstraintDO {
 		return this.getConstraintDOByType(PriceProductConstraintType.BookableOnlyOnDaysFromWeek);
+	}
+
+	public getPriceProductConstraintMetaByType(constraintType: PriceProductConstraintType): PriceProductConstraintMeta {
+		var constraintMetaList = this.getPriceProductConstraintMetaList();
+		return _.find(constraintMetaList, (constraintMeta: PriceProductConstraintMeta) => { return constraintMeta.constraintType === constraintType });
+	}
+
+	public getValidationRuleByType(constraintType: PriceProductConstraintType, constraint: IPriceProductConstraint): IPriceProductValidationRule {
+		switch (constraintType) {
+			case PriceProductConstraintType.MinimumNumberOfRooms:
+				var minNoRoomsConstraint: NumberOfRoomsConstraintDO = <NumberOfRoomsConstraintDO>constraint;
+				return new MinNoRoomsPriceProductValidationRuleStrategy(minNoRoomsConstraint.noOfRooms);
+			default:
+				return new GenericPriceProductValidationRuleStrategy();
+		}
 	}
 }

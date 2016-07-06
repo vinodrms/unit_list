@@ -160,8 +160,8 @@ describe("Hotel Room Categories Tests", function() {
     
     describe("Room Category - Room Categories Aggregator", function() {
         it("Should get all the room categories for which the hotel assigned at least a room", function(done) {
-            var roomAggregator = new RoomCategoryStatsAggregator(testContext.appContext);
-            roomAggregator.getUsedRoomCategoryList({ hotelId: testContext.sessionContext.sessionDO.hotel.id }).then((roomCategoryList: RoomCategoryDO[]) => {
+            var roomAggregator = new RoomCategoryStatsAggregator(testContext.appContext, testContext.sessionContext);
+            roomAggregator.getUsedRoomCategoryList().then((roomCategoryList: RoomCategoryDO[]) => {
                 usedRoomCategoryIdList = roomCategoryList.map((roomCategory: RoomCategoryDO) => { return roomCategory.id });
                 if (testUtils.stringArraysAreEqual(roomCategoriesHelper.getDistinctRoomCategoriesFrom(testDataBuilder.roomList), usedRoomCategoryIdList))
                     done();
@@ -173,9 +173,9 @@ describe("Hotel Room Categories Tests", function() {
         });
 
         it("Should get the room category stats for each room category id passed as argument", function(done) {
-            var roomAggregator = new RoomCategoryStatsAggregator(testContext.appContext);
+            var roomAggregator = new RoomCategoryStatsAggregator(testContext.appContext, testContext.sessionContext);
             
-            roomAggregator.getRoomCategoryStatsList({ hotelId: testContext.sessionContext.sessionDO.hotel.id }, usedRoomCategoryIdList).then((roomCategoryStatsList: RoomCategoryStatsDO[]) => {
+            roomAggregator.getRoomCategoryStatsList(usedRoomCategoryIdList).then((roomCategoryStatsList: RoomCategoryStatsDO[]) => {
                 roomCategoriesHelper.validateRoomCategoryStatsList(roomCategoryStatsList);
                 done();
             }).catch((err: any) => {
@@ -184,9 +184,9 @@ describe("Hotel Room Categories Tests", function() {
         });
         
         it("Should get the room category stats for all the room categories if udefined is passed as room category id list", function(done) {
-            var roomAggregator = new RoomCategoryStatsAggregator(testContext.appContext);
+            var roomAggregator = new RoomCategoryStatsAggregator(testContext.appContext, testContext.sessionContext);
             
-            roomAggregator.getRoomCategoryStatsList({ hotelId: testContext.sessionContext.sessionDO.hotel.id }, undefined).then((roomCategoryStatsList: RoomCategoryStatsDO[]) => {
+            roomAggregator.getRoomCategoryStatsList(undefined).then((roomCategoryStatsList: RoomCategoryStatsDO[]) => {
                 should.equal(roomCategoryStatsList.length, numCreatedRoomCategories);
                 done();
             }).catch((err: any) => {
@@ -195,9 +195,9 @@ describe("Hotel Room Categories Tests", function() {
         });
         
         it("Should get empty list of room category stats if empty array is passed as room category id list", function(done) {
-            var roomAggregator = new RoomCategoryStatsAggregator(testContext.appContext);
+            var roomAggregator = new RoomCategoryStatsAggregator(testContext.appContext, testContext.sessionContext);
             
-            roomAggregator.getRoomCategoryStatsList({ hotelId: testContext.sessionContext.sessionDO.hotel.id }, []).then((roomCategoryStatsList: RoomCategoryStatsDO[]) => {
+            roomAggregator.getRoomCategoryStatsList([]).then((roomCategoryStatsList: RoomCategoryStatsDO[]) => {
                 _.isEmpty(roomCategoryStatsList).should.be.true;
                 done();
             }).catch((err: any) => {

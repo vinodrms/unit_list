@@ -97,7 +97,7 @@ export class CustomerRegisterEditContainerComponent extends BaseComponent implem
 		}
 		this._dependentDataSubscription = Observable.combineLatest(
 			this._eagerPriceProductsService.getPriceProducts(PriceProductStatus.Active, this._customerVM.customer.priceProductDetails.priceProductIdList),
-			this._eagerAllotmentsService.getAllotments(AllotmentStatus.Active, this._customerVM.customer.priceProductDetails.priceProductIdList),
+			this._eagerAllotmentsService.getAllotments(AllotmentStatus.Active, this._customerVM.customer.id, this._customerVM.customer.priceProductDetails.priceProductIdList),
 			this._countriesService.getCountriesDO(),
 			this._hotelAggregatorService.getHotelAggregatedInfo()
 		).subscribe((result: [PriceProductsDO, AllotmentsDO, CountriesDO, HotelAggregatedInfo]) => {

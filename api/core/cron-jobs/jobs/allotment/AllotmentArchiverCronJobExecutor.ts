@@ -4,8 +4,8 @@ import {ThStatusCode} from '../../../utils/th-responses/ThResponse';
 import {ThAuditLogger} from '../../../utils/logging/ThAuditLogger';
 import {JobExecutorDO} from '../../utils/cron/executor/JobExecutorDO';
 import {ICronJobExecutor} from '../../utils/cron/executor/ICronJobExecutor';
-import {AllotmentDO} from '../../../data-layer/allotment/data-objects/AllotmentDO'
-import {AllotmentArchiverProcess} from '../../../domain-layer/allotment/processes/AllotmentArchiverProcess'
+import {AllotmentDO} from '../../../data-layer/allotments/data-objects/AllotmentDO'
+import {AllotmentArchiverProcess} from '../../../domain-layer/allotments/processes/AllotmentArchiverProcess'
 import {NotificationDO} from '../../../data-layer/common/data-objects/notifications/NotificationDO';
 import {ThNotificationCode} from '../../../data-layer/common/data-objects/notifications/ThNotificationCode';
 

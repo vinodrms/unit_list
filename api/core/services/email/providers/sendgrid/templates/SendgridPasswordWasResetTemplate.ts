@@ -9,12 +9,8 @@ export class SendgridPasswordWasResetTemplate implements ISendgridTemplate {
         return {
             id: 'f8ecf097-b87a-4439-a8b2-eb0b4fa9af09',
             subs: {
-                "%firstName%": [
-                    this._emailTemplateDO.firstName
-                ],
-                "%lastName%": [
-                    this._emailTemplateDO.lastName
-                ]
+                "%firstName%": this._emailTemplateDO.firstName,
+                "%lastName%": this._emailTemplateDO.lastName
             }
         };
     }

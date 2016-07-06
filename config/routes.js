@@ -98,7 +98,7 @@ module.exports.routes = {
 
     'GET /api/hotelConfigurations/yieldFilters': 'HotelConfigurationsController.getYieldFilterConfiguration',
     'POST /api/hotelConfigurations/saveYieldFilterValue': 'HotelConfigurationsController.saveYieldFilterValue',
-	
+
 	'POST /api/allotments': 'AllotmentsController.getAllotmentList',
 	'POST /api/allotments/count': 'AllotmentsController.getAllotmentListCount',
 	'POST /api/allotments/saveAllotmentItem': 'AllotmentsController.saveAllotmentItem',
@@ -109,10 +109,13 @@ module.exports.routes = {
 	'POST /api/notifications/count': 'NotificationsController.getNotificationListCount',
 	'POST /api/notifications/markNotificationsAsRead': 'NotificationsController.markNotificationsAsRead',
 
-	'GET /api/reports/booking-confirmation': 'ReportsController.generateBookingConfirmationPage',
-	'GET /api/reports/invoice': 'ReportsController.generateInvoicePage',
-	'GET /api/reports/test': 'ReportsController.testReportService',
-	
+	'POST /api/bookings': 'BookingsController.getBookingList',
+	'POST /api/bookings/count': 'BookingsController.getBookingListCount',
+	'GET /api/bookings/bookingItem': 'BookingsController.getBookingById',
+	'POST /api/bookings/search': 'BookingsController.searchBookings',
+	'POST /api/bookings/add': 'BookingsController.addBookings',
+
+
 	/*Front End Views	*/
 	'GET /home*': {
 		controller: 'AppViewsController',

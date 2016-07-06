@@ -11,6 +11,7 @@ import {TaxIdValidator} from '../../taxes/validators/TaxIdValidator';
 import {AddOnProductIdValidator} from '../../add-on-products/validators/AddOnProductIdValidator';
 import {RoomCategoryStatsAggregator} from '../../room-categories/aggregators/RoomCategoryStatsAggregator';
 import {YieldManagerFilterValidator} from '../../hotel-configurations/validators/YieldManagerFilterValidator';
+import {AddOnProductsContainer} from '../../add-on-products/validators/results/AddOnProductsContainer';
 
 import _ = require("underscore");
 
@@ -42,9 +43,9 @@ export class PriceProductValidator {
 				var addOnProductIdValidator = new AddOnProductIdValidator(this._appContext, this._sessionContext);
 				return addOnProductIdValidator.validateAddOnProductIdList(this._priceProduct.addOnProductIdList);
 			})
-			.then((addOnProductValidationResult: boolean) => {
-				var roomAggregator = new RoomCategoryStatsAggregator(this._appContext);
-				return roomAggregator.getUsedRoomCategoryList({ hotelId: this._sessionContext.sessionDO.hotel.id });
+			.then((addOnProductValidationResult: AddOnProductsContainer) => {
+				var roomAggregator = new RoomCategoryStatsAggregator(this._appContext, this._sessionContext);
+				return roomAggregator.getUsedRoomCategoryList();
 			})
 			.then((usedRoomCategoryList: RoomCategoryDO[]) => {
 				var validRoomCategoryIdList: string[] = this.getRoomCategoryIdList(usedRoomCategoryList);
@@ -53,8 +54,8 @@ export class PriceProductValidator {
 					ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Invalid room category id list", this._priceProduct, thError);
 					throw thError;
 				}
-				var roomAggregator = new RoomCategoryStatsAggregator(this._appContext);
-				return roomAggregator.getRoomCategoryStatsList({ hotelId: this._sessionContext.sessionDO.hotel.id }, this._priceProduct.roomCategoryIdList);
+				var roomAggregator = new RoomCategoryStatsAggregator(this._appContext, this._sessionContext);
+				return roomAggregator.getRoomCategoryStatsList(this._priceProduct.roomCategoryIdList);
 			})
 			.then((roomCategoryStats: RoomCategoryStatsDO[]) => {
 				if (!this._priceProduct.price.priceConfigurationIsValidFor(roomCategoryStats)) {

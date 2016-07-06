@@ -10,6 +10,14 @@ export interface LazyLoadData<T> {
 	totalCount: TotalCountDO;
 	pageContent: PageContent<T>;
 }
+export enum SortOrder {
+	Descending = -1,
+	Ascending = 1
+}
+export interface SortOptions {
+	objectPropertyId: string;
+	sortOrder: SortOrder;
+}
 
 export interface ILazyLoadRequestService<T> {
 	updateSearchCriteria(searchCriteria: Object);
@@ -19,4 +27,7 @@ export interface ILazyLoadRequestService<T> {
 	getDataObservable(): Observable<LazyLoadData<T>>;
 	searchByText(text: string);
 	refreshData();
+	showPagination(): boolean;
+	sort(sortOptions: SortOptions);
+	getSortedOptions(): SortOptions;
 }

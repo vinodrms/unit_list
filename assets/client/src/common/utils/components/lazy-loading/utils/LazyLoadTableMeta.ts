@@ -5,7 +5,8 @@ export enum TableRowCommand {
 	Select,
 	Add,
 	Search,
-	MultipleSelect
+	MultipleSelect,
+	AddExistingRow
 }
 
 export enum TableViewOption {
@@ -32,6 +33,7 @@ export interface TableColumnValueMeta {
 	normalStyle?: string,
 	collapsedStyle?: string,
     showInCollapsedView: boolean;
+	isSortable?: boolean;
 }
 
 export class TableColumnMeta {
@@ -46,4 +48,5 @@ export interface LazyLoadTableMeta {
 	addButtonText?: string;
 	searchInputPlaceholder?: string;
 	autoSelectRows: boolean;
+	noResultsPlaceholder?: string;
 }

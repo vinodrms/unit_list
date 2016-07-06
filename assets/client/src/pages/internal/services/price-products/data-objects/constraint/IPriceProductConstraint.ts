@@ -15,10 +15,12 @@ export enum PriceProductConstraintType {
 export interface IPriceProductConstraint extends BaseDO {
 	isValid(): boolean;
 	getValueDisplayString(thTranslation: ThTranslation): string;
+	getBriefValueDisplayString(thTranslation: ThTranslation): string;
 }
 
 export interface PriceProductConstraintMeta {
 	title: string;
 	description: string;
+	brief: string;
 	constraintType: PriceProductConstraintType;
 }

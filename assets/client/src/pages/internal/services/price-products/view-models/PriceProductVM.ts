@@ -129,11 +129,7 @@ export class PriceProductVM {
 		);
 	}
 	public get cancellationConditionsString(): string {
-		var policyDesc = this._priceProduct.conditions.policy.getDescription();
-		var description = this._thTranslation.translate(policyDesc.phrase, policyDesc.parameters);
-		var penaltyDesc = this._priceProduct.conditions.penalty.getDescription();
-		description += " / " + this._thTranslation.translate(penaltyDesc.phrase, penaltyDesc.parameters);
-		return description;
+		return this._priceProduct.conditions.getCancellationConditionsString(this._thTranslation);
 	}
 	public get priceBrief(): string {
 		return this._priceBrief;

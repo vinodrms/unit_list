@@ -1,0 +1,88 @@
+<div class="col-sm-4 col-xs-12">
+    <div class="form-group">
+        <label>{{ 'Booking Code' | translate }}
+            <small>
+                <span *ngIf="showBookingCodeMessage && !validBookingCode" title="{{ 'Not a valid customer booking code' | translate  }}">
+                    <i class="fa fa-exclamation-circle red-color"></i>
+                </span>
+                <span *ngIf="showBookingCodeMessage && validBookingCode" title="{{ 'Valid customer booking code' | translate  }}">
+                    <i class="fa fa-check green-color"></i>
+                </span>
+                <i class="fa fa-refresh fa-spin" *ngIf="loadingCustomerByCode"></i>
+            </small>
+        </label>
+        <div class="input-group">
+            <debouncing-input-text [textValue]="bookingCode" (onTextChanged)="searchCustomerByBookingCode($event)">
+            </debouncing-input-text>
+        </div>
+    </div>
+</div>
+<div class="col-sm-8 col-xs-12">
+    <div class="form-group">
+        <label>{{ 'Customer' | translate }}</label>
+        <div class="input-group">
+            <search-input-text [placeholder]="'Customer Name'" [preselectedItem]="customer" (onItemSelected)="didSelectCustomer($event)"
+                (onItemDeselected)="didDeselectCustomer()">
+            </search-input-text>
+            <span class="input-group-addon th-addon-button" (click)="selectCustomer()"> 
+                <i class="fa unitpal-font">(</i>  {{ 'Register' | translate }}
+            </span>
+        </div>
+        <label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Not a valid customer' | translate }}</small></label>
+    </div>
+</div>
+<div class="col-xs-12">
+    <th-date-interval-picker [minDate]="minDate" [startDateLabel]="'Check In'" [startDateFont]="'/'" [endDateLabel]="'Check Out'"
+        [endDateFont]="'.'" [showNoOfNights]="true" [initialThDateInterval]="searchParameters.interval" (didSelectThDateInterval)="didSelectBookingInterval($event)">
+    </th-date-interval-picker>
+</div>
+<div class="col-xs-12 booking-configuration-container">
+    <div class="row booking-configuration">
+        <div class="col-xs-12">
+            <div class="row">
+                <div class="col-md-4 col-xs-12 padding-top-5px">
+                    <span class="unitpal-font">-</span>
+                    <small>{{ 'Configuration' | translate }}</small>
+                </div>
+                <div class="col-md-5 col-xs-12 padding-top-5px">
+                    <div class="row">
+                        <div class="col-sm-4 col-xs-12 form-group-small">
+                            <div class="form-group">
+                                <div class="input-group input-group-small" [ngClass]="{'form-warning': !searchParameters.validNoAdults()}">
+                                    <span class="input-group-addon"><small></small> <i class="fa unitpal-font">:</i></span>
+                                    <input type="number" class="form-control" [(ngModel)]="searchParameters.configCapacity.noAdults">
+                                </div>
+                                <label class="form-warning"><small><i class="fa fa-info-circle"></i> {{'Enter a valid number' | translate}}</small></label>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 col-xs-12 form-group-small">
+                            <div class="form-group">
+                                <div class="input-group input-group-small" [ngClass]="{'form-warning': !searchParameters.validNoChildren()}">
+                                    <span class="input-group-addon"><small></small> <i class="fa unitpal-font">;</i></span>
+                                    <input type="number" class="form-control" [(ngModel)]="searchParameters.configCapacity.noChildren">
+                                </div>
+                                <label class="form-warning"><small><i class="fa fa-info-circle"></i> {{'Enter a valid number' | translate}}</small></label>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 col-xs-12 form-group-small">
+                            <div class="form-group">
+                                <div class="input-group input-group-small" [ngClass]="{'form-warning': !searchParameters.validNoBabies()}">
+                                    <span class="input-group-addon"><small></small> <i class="fa unitpal-font">B</i></span>
+                                    <input type="number" class="form-control" [(ngModel)]="searchParameters.configCapacity.noBabies">
+                                </div>
+                                <label class="form-warning"><small><i class="fa fa-info-circle"></i> {{'Enter a valid number' | translate}}</small></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-xs-12 padding-right-0px">
+                    <a class="btn search-button" (click)="searchBookings()">
+                        <i class="fa unitpal-font" *ngIf="!isSearching">=</i>
+                        <i *ngIf="isSearching" class="fa fa-spinner fa-pulse"></i>
+                        <span>{{'Search' | translate}}</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

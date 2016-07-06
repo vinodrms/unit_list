@@ -2,6 +2,7 @@ import {PriceProductDO, PriceProductStatus, PriceProductAvailability} from '../d
 import {PriceProductYieldFilterMetaDO} from '../data-objects/yield-filter/PriceProductYieldFilterDO';
 import {ThDateIntervalDO} from '../../../utils/th-dates/data-objects/ThDateIntervalDO';
 import {LazyLoadRepoDO, LazyLoadMetaResponseRepoDO} from '../../common/repo-data-objects/LazyLoadRepoDO';
+import {CustomerPriceProductDetailsDO} from '../../customers/data-objects/price-product-details/CustomerPriceProductDetailsDO';
 
 export interface PriceProductMetaRepoDO {
 	hotelId: string;
@@ -28,6 +29,7 @@ export interface PriceProductSearchCriteriaRepoDO {
 	addOnProductIdList?: string[];
 	taxIdList?: string[];
 	availability?: PriceProductAvailability;
+	customerPriceProductDetails?: CustomerPriceProductDetailsDO;
 }
 export interface PriceProductSearchResultRepoDO {
 	lazyLoad?: LazyLoadRepoDO;

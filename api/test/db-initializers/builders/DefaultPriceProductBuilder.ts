@@ -19,6 +19,8 @@ import {PriceProductPriceType} from '../../../core/data-layer/price-products/dat
 import {SinglePriceDO} from '../../../core/data-layer/price-products/data-objects/price/single-price/SinglePriceDO';
 import {RoomCategoryStatsDO} from '../../../core/data-layer/room-categories/data-objects/RoomCategoryStatsDO';
 
+import _ = require('underscore');
+
 export interface IPriceProductDataSource {
 	getPriceProductList(roomCategoryStatsList: RoomCategoryStatsDO[], taxes: TaxResponseRepoDO, addOnProductList: AddOnProductDO[]): PriceProductDO[];
 }
@@ -36,6 +38,9 @@ export class DefaultPriceProductBuilder implements IPriceProductDataSource {
 		var addOnProductId = this._testUtils.getRandomListElement(addOnProductList).id;
 		ppList.push(DefaultPriceProductBuilder.buildPriceProductDO(this._testContext, "Price Product 1", this._testUtils.getRandomListElement(roomCategoryStatsList), taxId, addOnProductId, PriceProductPriceType.PricePerPerson));
 		ppList.push(DefaultPriceProductBuilder.buildPriceProductDO(this._testContext, "Price Product 2", this._testUtils.getRandomListElement(roomCategoryStatsList), taxId, addOnProductId, PriceProductPriceType.SinglePrice));
+		var confidentialPriceProduct = DefaultPriceProductBuilder.buildPriceProductDO(this._testContext, "Price Product 3 (Private)", this._testUtils.getRandomListElement(roomCategoryStatsList), taxId, addOnProductId, PriceProductPriceType.SinglePrice);
+		confidentialPriceProduct.availability = PriceProductAvailability.Confidential;
+		ppList.push(confidentialPriceProduct);
 		return ppList;
 	}
 	public static buildPriceProductDO(testContext: TestContext, name: string, roomCategoryStat: RoomCategoryStatsDO, taxId: string, addOnProductId: string, priceType: PriceProductPriceType): PriceProductDO {
@@ -55,7 +60,7 @@ export class DefaultPriceProductBuilder implements IPriceProductDataSource {
 		priceProduct.name = name;
 		switch (priceType) {
 			case PriceProductPriceType.PricePerPerson:
-				priceProduct.price = DefaultPriceProductBuilder.getPricePerPerson(roomCategoryStat);
+				priceProduct.price = DefaultPriceProductBuilder.getPricePerPerson([roomCategoryStat]);
 				break;
 			case PriceProductPriceType.SinglePrice:
 				priceProduct.price = DefaultPriceProductBuilder.getPricePerRoomCategory(roomCategoryStat);
@@ -70,16 +75,22 @@ export class DefaultPriceProductBuilder implements IPriceProductDataSource {
 		return priceProduct;
 	}
 
-	public static getPricePerPerson(roomCategoryStat: RoomCategoryStatsDO): PriceProductPriceDO {
+	public static getPricePerPerson(roomCategoryStatList: RoomCategoryStatsDO[]): PriceProductPriceDO {
 		var outPrice = new PriceProductPriceDO();
 		outPrice.type = PriceProductPriceType.PricePerPerson;
 		outPrice.priceConfigurationState = PriceProductPriceConfigurationState.Valid;
-		var pricePerPerson = new PricePerPersonDO();
-		pricePerPerson.roomCategoryId = roomCategoryStat.roomCategory.id;
-		pricePerPerson.adultsPriceList = DefaultPriceProductBuilder.getPriceForFixedNumberOfPersonsDOList(roomCategoryStat.capacity.totalCapacity.maxNoAdults);
-		pricePerPerson.childrenPriceList = DefaultPriceProductBuilder.getPriceForFixedNumberOfPersonsDOList(roomCategoryStat.capacity.totalCapacity.maxNoChildren + roomCategoryStat.capacity.totalCapacity.maxNoAdults);
-		pricePerPerson.firstChildWithoutAdultPrice = 50.0;
-		outPrice.priceList = [pricePerPerson];
+
+		outPrice.priceList = [];
+		_.forEach(roomCategoryStatList, (roomCategoryStat: RoomCategoryStatsDO) => {
+			var pricePerPerson = new PricePerPersonDO();
+			pricePerPerson.roomCategoryId = roomCategoryStat.roomCategory.id;
+			pricePerPerson.adultsPriceList = DefaultPriceProductBuilder.getPriceForFixedNumberOfPersonsDOList(roomCategoryStat.capacity.totalCapacity.noAdults);
+			pricePerPerson.childrenPriceList = DefaultPriceProductBuilder.getPriceForFixedNumberOfPersonsDOList(roomCategoryStat.capacity.totalCapacity.noChildren + roomCategoryStat.capacity.totalCapacity.noAdults);
+			pricePerPerson.firstChildWithoutAdultPrice = 50.0;
+
+			outPrice.priceList.push(pricePerPerson);
+		});
+
 		return outPrice;
 	}
 	private static getPriceForFixedNumberOfPersonsDOList(maxNoOfPersons: number): PriceForFixedNumberOfPersonsDO[] {

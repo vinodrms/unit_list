@@ -2,8 +2,7 @@ import {UnitPalConfig, EmailProviderType, ImageStorageProviderType} from '../uti
 import {IVatProvider} from './vat/IVatProvider';
 import {VatProviderProxyService} from './vat/VatProviderProxyService';
 import {VIESVatProviderAdapter} from './vat/providers/VIESVatProviderAdapter';
-import {IEmailService, EmailHeaderDO} from './email/IEmailService';
-import {BaseEmailTemplateDO} from './email/data-objects/BaseEmailTemplateDO'
+import {IEmailService} from './email/IEmailService';
 import {MockEmailService} from './email/providers/mock/MockEmailService';
 import {SendgridEmailService} from './email/providers/sendgrid/SendgridEmailService';
 import {ILoginService} from './login/ILoginService';
@@ -18,10 +17,10 @@ import {NotificationServicePushDecorator} from './notifications/providers/Notifi
 import {NotificationService} from './notifications/providers/NotificationService';
 import {ISocketsService} from './sockets/ISocketsService';
 import {SocketIoService} from './sockets/providers/SocketIoService';
-import {IHtmlToPdfConverterService} from './htmltopdf/IHtmlToPdfConverterService';
-import {PhantomHtmlToPdfConverterService} from './htmltopdf/providers/phantom/PhantomHtmlToPdfConverterService';
-import {IHtmlReportsService} from './html-reports/IHtmlReportsService';
-import {HtmlReportsService} from './html-reports/providers/HtmlReportsService';
+import {IHtmlToPdfConverterService} from './html-to-pdf/IHtmlToPdfConverterService';
+import {PhantomLocalHtmlToPdfConverterService} from './html-to-pdf/providers/phantom/PhantomLocalHtmlToPdfConverterService';
+import {IPdfReportsService} from './pdf-reports/IPdfReportsService';
+import {PdfReportsService} from './pdf-reports/providers/PdfReportsService';
 
 export class ServiceFactory {
     constructor(private _unitPalConfig: UnitPalConfig) {
@@ -30,12 +29,12 @@ export class ServiceFactory {
     public getVatProviderProxyService(): IVatProvider {
         return new VatProviderProxyService(this._unitPalConfig);
     }
-    public getEmailService(emailHeaderDO: EmailHeaderDO, emailTemplate: BaseEmailTemplateDO): IEmailService {
+    public getEmailService(): IEmailService {
         switch (this._unitPalConfig.getEmailProviderType()) {
             case EmailProviderType.Sendgrid:
-                return new SendgridEmailService(this._unitPalConfig, emailHeaderDO, emailTemplate);
+                return new SendgridEmailService(this._unitPalConfig);
             default:
-                return new MockEmailService(this._unitPalConfig, emailHeaderDO, emailTemplate);
+                return new MockEmailService(this._unitPalConfig);
         }
     }
     public getImageStorageService(): IImageStorageService {
@@ -60,10 +59,10 @@ export class ServiceFactory {
     public getNotificationService(): INotificationService {
         return new NotificationServicePushDecorator(new NotificationService(this._unitPalConfig), this.getSocketsService());
     }
-    public getHtmltoPdfConverterService(): IHtmlToPdfConverterService {
-        return new PhantomHtmlToPdfConverterService();   
+    public getPdfReportsService(): IPdfReportsService {
+        return new PdfReportsService(this._unitPalConfig, this.getHtmltoPdfConverterService());   
     }
-    public getHtmlReportsService(htmlToPdfConverterService: IHtmlToPdfConverterService): IHtmlReportsService {
-        return new HtmlReportsService(this._unitPalConfig, htmlToPdfConverterService);   
+    public getHtmltoPdfConverterService(): IHtmlToPdfConverterService {
+        return new PhantomLocalHtmlToPdfConverterService();   
     }
 }

@@ -4,7 +4,8 @@ import {BedDO} from '../../beds/data-objects/BedDO';
 import {BedVM} from '../../beds/view-models/BedVM';
 import {AmenityDO} from '../../common/data-objects/amenity/AmenityDO';
 import {RoomAttributeDO} from '../../common/data-objects/room-attribute/RoomAttributeDO';
-import {RoomCategoryStatsDO, BedConfigCapacityDO} from '../../room-categories/data-objects/RoomCategoryStatsDO';
+import {RoomCategoryStatsDO} from '../../room-categories/data-objects/RoomCategoryStatsDO';
+import {ConfigCapacityDO} from '../../common/data-objects/bed-config/ConfigCapacityDO';
 import {ThUtils} from '../../../../../common/utils/ThUtils';
 
 export class RoomVM {
@@ -81,15 +82,12 @@ export class RoomVM {
         }
     }
 
-    public get capacity(): BedConfigCapacityDO {
-        var maxAdults = 0, maxChildren = 0, maxBabies = 0;
+    public get capacity(): ConfigCapacityDO {
+        var bedConfigCapacity = new ConfigCapacityDO();
         
-        var bedConfigCapacity = new BedConfigCapacityDO();
-        
-        (this._thUtils.isUndefinedOrNull(this._categoryStats.capacity.totalCapacity.maxNoAdults))? bedConfigCapacity.maxNoAdults = 0 : bedConfigCapacity.maxNoAdults = this._categoryStats.capacity.totalCapacity.maxNoAdults;
-        (this._thUtils.isUndefinedOrNull(this._categoryStats.capacity.totalCapacity.maxNoChildren))? bedConfigCapacity.maxNoChildren = 0 : bedConfigCapacity.maxNoChildren = this._categoryStats.capacity.totalCapacity.maxNoChildren;
-        (this._thUtils.isUndefinedOrNull(this._categoryStats.capacity.totalCapacity.maxNoBabies))? bedConfigCapacity.maxNoAdults = 0 : bedConfigCapacity.maxNoBabies = this._categoryStats.capacity.totalCapacity.maxNoBabies;
-        
+        (this._thUtils.isUndefinedOrNull(this._categoryStats.capacity.totalCapacity.noAdults))? bedConfigCapacity.noAdults = 0 : bedConfigCapacity.noAdults = this._categoryStats.capacity.totalCapacity.noAdults;
+        (this._thUtils.isUndefinedOrNull(this._categoryStats.capacity.totalCapacity.noChildren))? bedConfigCapacity.noChildren = 0 : bedConfigCapacity.noChildren = this._categoryStats.capacity.totalCapacity.noChildren;
+        (this._thUtils.isUndefinedOrNull(this._categoryStats.capacity.totalCapacity.noBabies))? bedConfigCapacity.noBabies = 0 : bedConfigCapacity.noBabies = this._categoryStats.capacity.totalCapacity.noBabies;
 
         return bedConfigCapacity;
     }

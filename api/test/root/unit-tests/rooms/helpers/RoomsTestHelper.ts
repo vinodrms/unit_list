@@ -27,7 +27,7 @@ export class RoomsTestHelper {
             fileUrlList: [],
             description: "Demo description",
             notes: "Demo notes",
-            maintenanceStatus: RoomMaintenanceStatus.CheckInReady
+            maintenanceStatus: RoomMaintenanceStatus.Clean
         };
     }
     
@@ -41,7 +41,7 @@ export class RoomsTestHelper {
             fileUrlList: [],
             description: "Demo description",
             notes: "Demo notes",
-            maintenanceStatus: RoomMaintenanceStatus.CheckInReady
+            maintenanceStatus: RoomMaintenanceStatus.Clean
         };
     }
 
@@ -55,7 +55,7 @@ export class RoomsTestHelper {
             fileUrlList: [],
             description: "Demo description",
             notes: "Demo notes",
-            maintenanceStatus: RoomMaintenanceStatus.CheckInReady
+            maintenanceStatus: RoomMaintenanceStatus.Clean
         };
     }
 
@@ -69,7 +69,7 @@ export class RoomsTestHelper {
             fileUrlList: [],
             description: "Demo description",
             notes: "Demo notes",
-            maintenanceStatus: RoomMaintenanceStatus.CheckInReady
+            maintenanceStatus: RoomMaintenanceStatus.Clean
         };
     }
 

@@ -1,7 +1,7 @@
 import {BaseDO} from '../../../common/base/BaseDO';
 import {UserContactDetailsDO} from './UserContactDetailsDO';
 import {ActionTokenDO} from './ActionTokenDO';
-import {Locales} from '../../../../utils/localization/Translation';
+import {Locales} from '../../../../utils/localization/ThTranslation';
 
 export enum AccountStatus {
 	Active,

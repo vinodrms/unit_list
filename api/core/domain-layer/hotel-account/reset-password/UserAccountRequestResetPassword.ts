@@ -57,8 +57,8 @@ export class UserAccountRequestResetPassword {
 
 				var requestResetPasswordEmailTemplateDO = this.getRequestResetPasswordEmailTemplateDO();
 				var emailHeaderDO = this.getEmailHeaderDO();
-				var emailService: IEmailService = this._appContext.getServiceFactory().getEmailService(emailHeaderDO, requestResetPasswordEmailTemplateDO);
-				return emailService.sendEmail();
+				var emailService: IEmailService = this._appContext.getServiceFactory().getEmailService();
+				return emailService.sendEmail(emailHeaderDO, requestResetPasswordEmailTemplateDO);
 			})
 			.then((sendEmailResult: any) => {
 				resolve(this._generatedToken);
@@ -84,7 +84,7 @@ export class UserAccountRequestResetPassword {
 	}
 	private getEmailHeaderDO(): EmailHeaderDO {
 		return {
-			destinationEmail: this._resetPasswdDO.email,
+			to: [this._resetPasswdDO.email],
 			subject: "[UnitPal] Password Reset Request",
             attachments: []
 		};

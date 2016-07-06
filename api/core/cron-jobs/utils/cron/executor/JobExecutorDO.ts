@@ -1,9 +1,9 @@
 import {AppContext} from '../../../../utils/AppContext';
 import {HotelDO} from '../../../../data-layer/hotel/data-objects/HotelDO';
-import {ThTimestamp} from '../../../../utils/th-dates/ThTimestamp';
+import {ThTimestampDO} from '../../../../utils/th-dates/data-objects/ThTimestampDO';
 
 export interface JobExecutorDO {
 	appContext: AppContext;
 	hotel?: HotelDO;
-	thTimestamp?: ThTimestamp;
+	thTimestamp?: ThTimestampDO;
 }

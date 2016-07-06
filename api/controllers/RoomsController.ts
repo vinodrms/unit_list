@@ -3,7 +3,7 @@ import {ThStatusCode} from '../core/utils/th-responses/ThResponse';
 import {AppContext} from '../core/utils/AppContext';
 import {SessionContext} from '../core/utils/SessionContext';
 import {SaveRoomItem} from '../core/domain-layer/rooms/SaveRoomItem';
-import {RoomCategoryStatsAggregator, RoomCategoryStatsAggregatorMetaDO} from '../core/domain-layer/room-categories/aggregators/RoomCategoryStatsAggregator';
+import {RoomCategoryStatsAggregator} from '../core/domain-layer/room-categories/aggregators/RoomCategoryStatsAggregator';
 import {DeleteRoomItem} from '../core/domain-layer/rooms/DeleteRoomItem';
 import {RoomMetaRepoDO, RoomSearchResultRepoDO} from '../core/data-layer/rooms/repositories/IRoomRepository';
 import {RoomDO} from '../core/data-layer/rooms/data-objects/RoomDO';
@@ -84,10 +84,9 @@ class RoomsController extends BaseController {
         var appContext: AppContext = req.appContext;
         var sessionContext: SessionContext = req.sessionContext;
 
-        var roomAggregator = new RoomCategoryStatsAggregator(appContext);
-        var roomAggregatorMeta = this.getRoomAggregatorMetaDOFrom(sessionContext);
+        var roomAggregator = new RoomCategoryStatsAggregator(appContext, sessionContext);
 
-        roomAggregator.getUsedRoomCategoryList(roomAggregatorMeta).then((roomCategoryList: RoomCategoryDO[]) => {
+        roomAggregator.getUsedRoomCategoryList().then((roomCategoryList: RoomCategoryDO[]) => {
 			this.returnSuccesfulResponse(req, res, { result: { roomCategoryList: roomCategoryList } });
 		}).catch((err: any) => {
 			this.returnErrorResponse(req, res, err, ThStatusCode.RoomsControllerErrorGettingRoomCategories);
@@ -97,10 +96,6 @@ class RoomsController extends BaseController {
     private getRoomMetaRepoDOFrom(sessionContext: SessionContext): RoomMetaRepoDO {
 		return { hotelId: sessionContext.sessionDO.hotel.id };
 	}
-
-    private getRoomAggregatorMetaDOFrom(sessionContext: SessionContext): RoomCategoryStatsAggregatorMetaDO {
-        return { hotelId: sessionContext.sessionDO.hotel.id };
-    }
 }
 
 var roomsController = new RoomsController();

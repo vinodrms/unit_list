@@ -1,5 +1,6 @@
 import {BaseDO} from '../../../../common/base/BaseDO';
 import {PriceProductConstraintDataDO, IPriceProductConstraint} from '../IPriceProductConstraint';
+import {ThTranslation} from '../../../../../utils/localization/ThTranslation';
 
 export class MinimumNumberOfAdultsConstraintDO extends BaseDO implements IPriceProductConstraint {
     noOfAdults: number;
@@ -9,7 +10,10 @@ export class MinimumNumberOfAdultsConstraintDO extends BaseDO implements IPriceP
     }
 
     public appliesOn(data: PriceProductConstraintDataDO): boolean {
-        // TODO: apply constraint
-        return true;
+        return this.noOfAdults <= data.configCapacity.noAdults;
     }
+
+    public getValueDisplayString(thTranslation: ThTranslation): string {
+		return thTranslation.translate("Minimum %noOfAdults% adults", { noOfAdults: this.noOfAdults});
+	}
 }

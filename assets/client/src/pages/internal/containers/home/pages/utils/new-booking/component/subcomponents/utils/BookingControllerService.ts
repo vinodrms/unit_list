@@ -4,10 +4,12 @@ import {Observer} from 'rxjs/Observer';
 import {AppContext} from '../../../../../../../../../../common/utils/AppContext';
 import {BookingStepType} from './BookingStepType';
 import {IBookingStepService} from './IBookingStepService';
+import {ILastBookingStepService} from './ILastBookingStepService';
 import {IBookingCustomerRegisterSelector, IBookingCustomerRegisterController} from './IBookingCustomerRegister';
 import {BookingSearchStepService} from '../booking-search/services/BookingSearchStepService';
 import {BookingFillDetailsStepService} from '../booking-fill-details/services/BookingFillDetailsStepService';
 import {BookingCustomerRegisterStepService} from '../booking-customer-register/services/BookingCustomerRegisterStepService';
+import {BookingEmailConfigStepService} from '../booking-email-config/services/BookingEmailConfigStepService';
 import {CustomerDO} from '../../../../../../../../services/customers/data-objects/CustomerDO';
 
 @Injectable()
@@ -16,15 +18,20 @@ export class BookingControllerService implements IBookingStepService, IBookingCu
 	private _bookingStepIndex: number;
 	private _customerObserver: Observer<CustomerDO>;
 
+	private _lastStep: ILastBookingStepService;
+
 	constructor(private _appContext: AppContext,
 		private _bookingSearchStep: BookingSearchStepService,
 		private _fillDetailsStep: BookingFillDetailsStepService,
-		private _custRegisterStep: BookingCustomerRegisterStepService) {
+		private _custRegisterStep: BookingCustomerRegisterStepService,
+		private _emailConfigStep: BookingEmailConfigStepService) {
 		this._bookingSteps = [
 			_bookingSearchStep,
-			_fillDetailsStep
+			_fillDetailsStep,
+			_emailConfigStep
 		];
 		this._bookingStepIndex = 0;
+		this._lastStep = _emailConfigStep;
 	}
 
 	public getBookingStepType(): BookingStepType {
@@ -42,6 +49,8 @@ export class BookingControllerService implements IBookingStepService, IBookingCu
 	public getErrorString(): string {
 		return this.currentBookingStep.getErrorString();
 	}
+	public didAppear() { }
+	public didDisappear() {}
 	private get currentBookingStep(): IBookingStepService {
 		if (this.isCustomerRegister()) {
 			return this._custRegisterStep;
@@ -55,13 +64,18 @@ export class BookingControllerService implements IBookingStepService, IBookingCu
 			this._customerObserver = null;
 		}
 		else if (this.hasPreviousStep()) {
-			this._bookingStepIndex--;
+			this.modifyBookingStep(-1);
 		}
 	}
 	public moveNext() {
 		if (this.canMoveNext() && this._bookingStepIndex < this._bookingSteps.length - 1) {
-			this._bookingStepIndex++;
+			this.modifyBookingStep(1);
 		}
+	}
+	private modifyBookingStep(stepIndexOffset: number) {
+		this.currentBookingStep.didDisappear();
+		this._bookingStepIndex += stepIndexOffset;
+		this.currentBookingStep.didAppear();
 	}
 
 	public selectCustomerFromRegister(): Observable<CustomerDO> {
@@ -84,5 +98,11 @@ export class BookingControllerService implements IBookingStepService, IBookingCu
 			this._customerObserver.next(customer);
 			this.closeCustomerRegister();
 		}
+	}
+	public isLastStep(): boolean {
+		return this.getBookingStepType() === this._lastStep.getBookingStepType();
+	}
+	public getLastStepService(): ILastBookingStepService {
+		return this._lastStep;
 	}
 }

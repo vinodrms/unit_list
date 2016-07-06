@@ -35,4 +35,14 @@ export class ThHourDO extends BaseDO {
 		hourDO.minute = minute;
 		return hourDO;
 	}
+
+	public toString(): string {
+		return this.addLeftPaddingIfNeccessary(this.hour) + ":" + this.addLeftPaddingIfNeccessary(this.minute);
+    }
+	private addLeftPaddingIfNeccessary(hourOrMinute: number): string {
+		if (hourOrMinute < 10) {
+            return '0' + hourOrMinute;
+        }
+		return hourOrMinute + '';
+	}
 }

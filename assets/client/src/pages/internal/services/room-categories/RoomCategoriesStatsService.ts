@@ -32,7 +32,7 @@ export class RoomCategoriesStatsService {
 					roomCategoryStatsList.push(roomCategoryStatDO);
 				});
 				return _.sortBy(roomCategoryStatsList, (roomCategoryStats: RoomCategoryStatsDO) => {
-					return - (roomCategoryStats.capacity.totalCapacity.maxNoAdults + roomCategoryStats.capacity.totalCapacity.maxNoChildren);
+					return - (roomCategoryStats.capacity.totalCapacity.noAdults + roomCategoryStats.capacity.totalCapacity.noChildren);
 				});
 			});
 	}

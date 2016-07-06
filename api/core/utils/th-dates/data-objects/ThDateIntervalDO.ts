@@ -40,6 +40,19 @@ export class ThDateIntervalDO extends BaseDO implements IThInterval<ThDateDO> {
 	public getEnd(): ThDateDO {
 		return this.end;
 	}
+	public getThDateDOList(): ThDateDO[] {
+		var dateList: ThDateDO[] = [];
+		if (!this.isValid()) {
+			return dateList;
+		}
+		var thDateUtils = new ThDateUtils();
+		var currentDate = this.start.buildPrototype();
+		while (!currentDate.isAfter(this.end)) {
+			dateList.push(currentDate);
+			currentDate = thDateUtils.addDaysToThDateDO(currentDate.buildPrototype(), 1);
+		}
+		return dateList;
+	}
 
 	public static buildThDateIntervalDO(start: ThDateDO, end: ThDateDO): ThDateIntervalDO {
 		var outInterval = new ThDateIntervalDO();
@@ -47,7 +60,7 @@ export class ThDateIntervalDO extends BaseDO implements IThInterval<ThDateDO> {
 		outInterval.end = end;
 		return outInterval;
 	}
-	
+
 	public toString(): string {
 		return this.start.toString() + " - " + this.end.toString();
 	}

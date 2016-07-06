@@ -12,6 +12,8 @@ import {FullStayCancellationPenaltyDO} from './penalty/FullStayCancellationPenal
 import {FirstNightOnlyCancellationPenaltyDO} from './penalty/FirstNightOnlyCancellationPenaltyDO';
 import {PercentageFromBookingCancellationPenaltyDO} from './penalty/PercentageFromBookingCancellationPenaltyDO';
 
+import {ThTranslation, Locales} from '../../../../utils/localization/ThTranslation';
+
 export class PriceProductConditionsDO extends BaseDO {
 	policyType: PriceProductCancellationPolicyType;
 	policy: IPriceProductCancellationPolicy;
@@ -70,5 +72,9 @@ export class PriceProductConditionsDO extends BaseDO {
 			return false;
 		}
 		return this.policy.isValid() && this.penalty.isValid();
+	}
+
+	public getValueDisplayString(thTranslation: ThTranslation): string {
+		return this.policy.getValueDisplayString(thTranslation) + '/' + this.penalty.getValueDisplayString(thTranslation);
 	}
 }
