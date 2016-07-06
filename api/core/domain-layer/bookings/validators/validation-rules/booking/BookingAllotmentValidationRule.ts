@@ -61,7 +61,7 @@ export class BookingAllotmentValidationRule extends ABusinessValidationRule<Book
         }).then((bookingOccupancy: IBookingOccupancy) => {
             var allotmentOccupancyNo = bookingOccupancy.getOccupancyForAllotmentId(booking.allotmentId);
             var allotmentAvailabilityNo = allotment.availability.getAllotmentAvailabilityForInterval(new IndexedBookingInterval(booking.interval));
-            if (allotmentOccupancyNo >= allotmentAvailabilityNo) {
+            if (allotmentOccupancyNo > allotmentAvailabilityNo) {
                 this.logBusinessAndReject(reject, booking, {
                     statusCode: ThStatusCode.BookingsValidatorAllotmentInsufficientInventory,
                     errorMessage: "insufficient inventory to add booking with allotment"
