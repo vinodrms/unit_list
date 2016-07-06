@@ -49,7 +49,7 @@ export class BookingConfirmationEmailSender {
             var sendEmailPromiseList: Promise<boolean>[] = [];
             _.forEach(emailDistributionList, (emailAddress: string) => {
                 sendEmailPromiseList.push(emailService.sendEmail({
-                    to: emailDistributionList,
+                    to: [emailAddress],
                     subject: emailSubject,
                     attachments: [generatedPdfAbsolutePath]
                 }, new BaseEmailTemplateDO(EmailTemplateTypes.BookingConfirmation)));
