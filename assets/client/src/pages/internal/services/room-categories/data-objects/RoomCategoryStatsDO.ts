@@ -32,13 +32,6 @@ export class RoomCategoryCapacityDO extends BaseDO {
         return totalRoomCapacity;
     }
     
-    public canFit(capacityToCheck: ConfigCapacityDO): boolean {
-        if(this.totalCapacity.noAdults < capacityToCheck.noAdults) return false;
-        if(this.totalCapacity.noChildren < capacityToCheck.noChildren) return false;
-        if(this.totalCapacity.noBabies < capacityToCheck.noBabies) return false;
-        return true;
-    }
-    
     public isEmpty(): boolean {
         return this.totalCapacity.noAdults === 0 && this.totalCapacity.noChildren === 0 && this.totalCapacity.noBabies === 0;
     }
