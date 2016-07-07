@@ -48,9 +48,6 @@ export class InvoiceDO extends BaseDO {
     public getAddOnProductIdList(): string[] {
         return this.getItemIdListByItemType(InvoiceItemType.AddOnProduct);
     }
-    public getPriceProductIdList(): string[] {
-        return this.getItemIdListByItemType(InvoiceItemType.PriceProduct);
-    }
     private getItemIdListByItemType(itemType: InvoiceItemType): string[] {
         return _.chain(this.itemList)
             .filter((invoiceItem: InvoiceItemDO) => {

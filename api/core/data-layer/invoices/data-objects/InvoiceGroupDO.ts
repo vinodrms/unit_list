@@ -49,12 +49,6 @@ export class InvoiceGroupDO extends BaseDO {
         }, []);
     }
 
-    public getAggregatedPriceProductIdList(): string[] {
-        return _.reduce(this.invoiceList, (result, invoice: InvoiceDO) => {
-            return _.union(result, invoice.getPriceProductIdList());
-        }, []);
-    }
-
     public getAggregatedPayerList(): InvoicePayerDO[] {
         return _.reduce(this.invoiceList, (result, invoice: InvoiceDO) => {
             return _.union(result, invoice.payerList);

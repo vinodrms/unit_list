@@ -3,7 +3,7 @@ import {AddOnProductDO} from '../../../add-on-products/data-objects/AddOnProduct
 import {PriceProductDO} from '../../../price-products/data-objects/PriceProductDO';
 
 export enum InvoiceItemType {
-    AddOnProduct, PriceProduct, InvoiceFee
+    AddOnProduct, Booking
 }
 
 export class InvoiceItemDO extends BaseDO {
@@ -31,11 +31,6 @@ export class InvoiceItemDO extends BaseDO {
             var addOnProduct = new AddOnProductDO();
             addOnProduct.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "snapshot"));
             this.snapshot = addOnProduct;
-        }
-        else if (this.type === InvoiceItemType.PriceProduct) {
-            var priceProduct = new PriceProductDO();
-            priceProduct.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "snapshot"));
-            this.snapshot = priceProduct;
         }
     }
 }

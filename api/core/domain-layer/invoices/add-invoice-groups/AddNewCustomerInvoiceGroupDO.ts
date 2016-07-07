@@ -53,7 +53,7 @@ export class AddNewCustomerInvoiceGroupDO {
                             },
                             {
                                 key: "type",
-                                validationStruct: new PrimitiveValidationStructure(new NumberInListValidationRule([InvoiceItemType.AddOnProduct, InvoiceItemType.InvoiceFee, InvoiceItemType.PriceProduct]))
+                                validationStruct: new PrimitiveValidationStructure(new NumberInListValidationRule([InvoiceItemType.AddOnProduct, InvoiceItemType.Booking]))
                             },
                             {
                                 key: "qty",

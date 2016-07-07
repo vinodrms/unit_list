@@ -92,7 +92,6 @@ export class AddNewBookingInvoiceGroup {
         var invoice = new InvoiceDO;
 
         invoice.itemList = [];
-        invoice.itemList.push(this.getPriceProductInvoiceItemFromBooking());
 
         invoice.payerList = [];
         var defaultInvoicePayer = this.getDefaultInvoicePayerFromBooking();
@@ -121,13 +120,5 @@ export class AddNewBookingInvoiceGroup {
         }
 
         return invoicePayer;
-    }
-
-    private getPriceProductInvoiceItemFromBooking(): InvoiceItemDO {
-        var ppInvoiceItem = new InvoiceItemDO();
-        ppInvoiceItem.type = InvoiceItemType.PriceProduct;
-        ppInvoiceItem.snapshot = this._loadedBooking.priceProductSnapshot;
-        ppInvoiceItem.qty = 1;
-        return ppInvoiceItem;
     }
 }
