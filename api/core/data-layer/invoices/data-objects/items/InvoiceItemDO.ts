@@ -7,14 +7,14 @@ export enum InvoiceItemType {
 }
 
 export class InvoiceItemDO extends BaseDO {
-    constructor() {
-        super();
-    }
-
     id: string;
     type: InvoiceItemType;
     qty: number;
     snapshot: Object;
+
+    constructor() {
+        super();
+    }
 
     protected getPrimitivePropertyKeys(): string[] {
         return ["id", "type", "qty"];
