@@ -20,7 +20,7 @@ export class InvoicePriceCalculator {
     public getTotalPrice(priceProductPriceQuery?: PriceProductPriceQueryDO): number {
         return _.reduce(this._invoice.itemList, (totalPrice, invoiceItem: InvoiceItemDO) => {
             var invoiceItemPriceCalculator = new InvoiceItemPriceCalculator(invoiceItem, this._billingCustomer);
-            return totalPrice + invoiceItemPriceCalculator.getPrice();
+            return totalPrice + invoiceItemPriceCalculator.getPrice(priceProductPriceQuery);
         }, 0);
     }
 }

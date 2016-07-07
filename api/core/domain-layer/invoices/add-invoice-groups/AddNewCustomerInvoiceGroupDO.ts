@@ -10,7 +10,7 @@ import {InvoicePaymentMethodType} from '../../../data-layer/invoices/data-object
 import {CommissionType} from '../../../data-layer/common/data-objects/commission/CommissionDO';
 import {InvoiceItemType} from '../../../data-layer/invoices/data-objects/items/InvoiceItemDO';
 
-export class GenerateCustomerInvoiceGroupItemDO {
+export class AddNewCustomerInvoiceGroupDO {
     invoiceList: InvoiceDO[];
 
     public static getValidationStructure(): IValidationStructure {

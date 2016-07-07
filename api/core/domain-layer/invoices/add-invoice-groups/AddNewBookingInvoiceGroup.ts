@@ -5,7 +5,7 @@ import {ThStatusCode} from '../../../utils/th-responses/ThResponse';
 import {AppContext} from '../../../utils/AppContext';
 import {SessionContext} from '../../../utils/SessionContext';
 import {ValidationResultParser} from '../../common/ValidationResultParser';
-import {AddNewBookingInvoiceGroupDO} from './GenerateBookingInvoiceGroupItemDO';
+import {AddNewBookingInvoiceGroupDO} from './AddNewBookingInvoiceGroupDO';
 import {InvoiceGroupDO} from '../../../data-layer/invoices/data-objects/InvoiceGroupDO';
 import {BookingIdValidator} from '../validators/BookingIdValidator';
 import {BookingDO} from '../../../data-layer/bookings/data-objects/BookingDO';
@@ -21,7 +21,7 @@ import {IndexedBookingInterval} from '../../../data-layer/price-products/utils/I
 
 export class AddNewBookingInvoiceGroup {
     private _thUtils: ThUtils;
-    private _generateBookingInvoiceGroupDO: AddNewBookingInvoiceGroupDO;
+    private _addNewBookingInvoiceGroupDO: AddNewBookingInvoiceGroupDO;
 
     private _loadedBooking: BookingDO;
     private _loadedDefaultBillingCustomer: CustomerDO;
@@ -30,30 +30,30 @@ export class AddNewBookingInvoiceGroup {
         this._thUtils = new ThUtils();
     }
 
-    public generate(generateBookingInvoiceGroupDO: AddNewBookingInvoiceGroupDO): Promise<InvoiceGroupDO> {
-        this._generateBookingInvoiceGroupDO = generateBookingInvoiceGroupDO;
+    public addNewBookingInvoiceGroup(addNewBookingInvoiceGroupDO: AddNewBookingInvoiceGroupDO): Promise<InvoiceGroupDO> {
+        this._addNewBookingInvoiceGroupDO = addNewBookingInvoiceGroupDO;
 
         return new Promise<InvoiceGroupDO>((resolve: { (result: InvoiceGroupDO): void }, reject: { (err: ThError): void }) => {
             try {
-                this.generateCore(resolve, reject);
+                this.addNewBookingInvoiceGroupCore(resolve, reject);
             } catch (error) {
                 var thError = new ThError(ThStatusCode.AddNewBookingInvoiceGroupError, error);
-                ThLogger.getInstance().logError(ThLogLevel.Error, "error generating booking related invoice gorup", this._generateBookingInvoiceGroupDO, thError);
+                ThLogger.getInstance().logError(ThLogLevel.Error, "error adding new booking related invoice gorup", this._addNewBookingInvoiceGroupDO, thError);
                 reject(thError);
             }
         });
     }
 
-    private generateCore(resolve: { (result: InvoiceGroupDO): void }, reject: { (err: ThError): void }) {
-        var validationResult = AddNewBookingInvoiceGroupDO.getValidationStructure().validateStructure(this._generateBookingInvoiceGroupDO);
+    private addNewBookingInvoiceGroupCore(resolve: { (result: InvoiceGroupDO): void }, reject: { (err: ThError): void }) {
+        var validationResult = AddNewBookingInvoiceGroupDO.getValidationStructure().validateStructure(this._addNewBookingInvoiceGroupDO);
         if (!validationResult.isValid()) {
-            var parser = new ValidationResultParser(validationResult, this._generateBookingInvoiceGroupDO);
-            parser.logAndReject("Error validating data for generating booking related invoice group", reject);
+            var parser = new ValidationResultParser(validationResult, this._addNewBookingInvoiceGroupDO);
+            parser.logAndReject("Error validating data for adding new booking related invoice group", reject);
             return;
         }
 
         var bookingIdValidator = new BookingIdValidator(this._appContext, this._sessionContext);
-        bookingIdValidator.validateBookingId(this._generateBookingInvoiceGroupDO.groupBookingId, this._generateBookingInvoiceGroupDO.bookingId).then((booking: BookingDO) => {
+        bookingIdValidator.validateBookingId(this._addNewBookingInvoiceGroupDO.groupBookingId, this._addNewBookingInvoiceGroupDO.bookingId).then((booking: BookingDO) => {
             this._loadedBooking = booking;
 
             var customerIdValidator = new CustomerIdValidator(this._appContext, this._sessionContext);
@@ -68,7 +68,7 @@ export class AddNewBookingInvoiceGroup {
         }).catch((error: any) => {
             var thError = new ThError(ThStatusCode.AddBookingInvoiceGroupItemError, error);
             if (thError.isNativeError()) {
-                ThLogger.getInstance().logError(ThLogLevel.Error, "error adding invoice group related to booking", this._generateBookingInvoiceGroupDO, thError);
+                ThLogger.getInstance().logError(ThLogLevel.Error, "error adding invoice group related to booking", this._addNewBookingInvoiceGroupDO, thError);
             }
             reject(thError);
         });
