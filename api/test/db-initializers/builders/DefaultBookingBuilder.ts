@@ -83,6 +83,7 @@ export class DefaultBookingBuilder implements IBookingDataSource {
             configCapacity: booking.configCapacity,
             roomCategoryId: booking.roomCategoryId
         });
+        booking.price.totalPrice = booking.price.numberOfItems * booking.price.pricePerItem;
 
         return booking;
     }

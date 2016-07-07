@@ -114,6 +114,7 @@ export class BookingItemsConverter {
                 configCapacity: bookingDO.configCapacity,
                 roomCategoryId: bookingDO.roomCategoryId
             });
+            bookingDO.price.totalPrice = bookingDO.price.numberOfItems * bookingDO.price.pricePerItem;
             bookingList.push(bookingDO);
         });
         resolve(bookingList);

@@ -88,10 +88,7 @@ export class BookingConfirmationVM {
         var indexedBookingInterval = new IndexedBookingInterval(this._bookingAggregatedData.booking.interval);
 
         this.lengthOfStay = indexedBookingInterval.getLengthOfStay();
-        this.totalPrice = this.lengthOfStay * this._bookingAggregatedData.booking.priceProductSnapshot.price.getPricePerNightFor({
-            roomCategoryId: this._bookingAggregatedData.booking.roomCategoryId,
-            configCapacity: this._bookingAggregatedData.booking.configCapacity
-        });
+        this.totalPrice = this._bookingAggregatedData.booking.price.totalPrice;
         this.totalPrice = Math.round(this.totalPrice);
         this.initIncludedTaxesString(this._bookingAggregatedData.vatList, this._bookingAggregatedData.otherTaxes);
     }
@@ -115,10 +112,10 @@ export class BookingConfirmationVM {
     }
     private initBookedRoomDetails() {
         this.roomCategoryName = this._bookingAggregatedData.roomCategoryStats.roomCategory.displayName;
-        this.bookedCapacity = this._thTranslation.translate("%noAdults% adults, %noChildren% children, %noBabies% babies", { 
-            noAdults: this._bookingAggregatedData.booking.configCapacity.noAdults, 
-            noChildren: this._bookingAggregatedData.booking.configCapacity.noChildren, 
-            noBabies: this._bookingAggregatedData.booking.configCapacity.noBabies 
+        this.bookedCapacity = this._thTranslation.translate("%noAdults% adults, %noChildren% children, %noBabies% babies", {
+            noAdults: this._bookingAggregatedData.booking.configCapacity.noAdults,
+            noChildren: this._bookingAggregatedData.booking.configCapacity.noChildren,
+            noBabies: this._bookingAggregatedData.booking.configCapacity.noBabies
         }) + '.';
         this.initBedSizesDisplayText();
     }
@@ -126,7 +123,7 @@ export class BookingConfirmationVM {
         this.bedSizes = '';
 
         _.forEach(this._bookingAggregatedData.bedList, (bed: BedDO) => {
-            this.bedSizes += bed.name + ' ' + bed.size.lengthCm + 'x' + bed.size.widthCm + ' ' 
+            this.bedSizes += bed.name + ' ' + bed.size.lengthCm + 'x' + bed.size.widthCm + ' '
                 + this._thTranslation.translate('cm (wide)') + '; ';
         })
     }

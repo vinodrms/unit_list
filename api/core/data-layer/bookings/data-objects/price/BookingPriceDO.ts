@@ -11,9 +11,10 @@ export class BookingPriceDO extends BaseDO implements IInvoiceItemMeta {
     priceType: BookingPriceType;
     pricePerItem: number;
     numberOfItems: number;
+    totalPrice: number;
 
     protected getPrimitivePropertyKeys(): string[] {
-        return ["priceType", "pricePerItem", "numberOfItems"];
+        return ["priceType", "pricePerItem", "numberOfItems", "totalPrice"];
     }
 
     public getPriceForItem(): number {
