@@ -353,7 +353,7 @@ export var EnglishTranslations: Object = {
 	"Public Price Products": "Public Price Products",
 	"Allow": "Allow",
 	"Disable": "Disable",
-	"If allowed, public price products will be available for this customer.": "If allowed, public price products will be available for this customer.",
+	"If allowed, all public price products will be available for this customer.": "If allowed, all public price products will be available for this customer.",
 	"Confidential Price Products": "Confidential Price Products",
 	"Allow this customer to make reservations using specific price products.": "Allow this customer to make reservations using specific price products.",
 	"Select Price Product": "Select Price Product",
