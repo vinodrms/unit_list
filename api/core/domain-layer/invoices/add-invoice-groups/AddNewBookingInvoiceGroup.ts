@@ -96,11 +96,11 @@ export class AddNewBookingInvoiceGroup {
         invoice.payerList = [];
         var defaultInvoicePayer = this.getDefaultInvoicePayerFromBooking();
         var invoicePriceCalculator = new InvoicePriceCalculator(invoice, this._loadedDefaultBillingCustomer);
-        defaultInvoicePayer.priceToPay = invoicePriceCalculator.getTotalPrice({
-            roomCategoryId: this._loadedBooking.roomCategoryId,
-            configCapacity: this._loadedBooking.configCapacity,
-            indexedBookingInterval: new IndexedBookingInterval(this._loadedBooking.interval)
-        });
+        // defaultInvoicePayer.priceToPay = invoicePriceCalculator.getTotalPrice({
+        //     roomCategoryId: this._loadedBooking.roomCategoryId,
+        //     configCapacity: this._loadedBooking.configCapacity,
+        //     indexedBookingInterval: new IndexedBookingInterval(this._loadedBooking.interval)
+        // });
         invoice.payerList.push(defaultInvoicePayer);
         invoice.paymentStatus = InvoicePaymentStatus.Open;
 

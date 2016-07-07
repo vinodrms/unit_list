@@ -86,13 +86,13 @@ export class BookingConfirmationVM {
     }
     private initPricingDetails() {
         var indexedBookingInterval = new IndexedBookingInterval(this._bookingAggregatedData.booking.interval);
-        this.totalPrice = this._bookingAggregatedData.booking.priceProductSnapshot.price.getPriceFor({
+
+        this.lengthOfStay = indexedBookingInterval.getLengthOfStay();
+        this.totalPrice = this.lengthOfStay * this._bookingAggregatedData.booking.priceProductSnapshot.price.getPricePerNightFor({
             roomCategoryId: this._bookingAggregatedData.booking.roomCategoryId,
-            configCapacity: this._bookingAggregatedData.booking.configCapacity,
-            indexedBookingInterval: indexedBookingInterval
+            configCapacity: this._bookingAggregatedData.booking.configCapacity
         });
         this.totalPrice = Math.round(this.totalPrice);
-        this.lengthOfStay = indexedBookingInterval.getLengthOfStay();
         this.initIncludedTaxesString(this._bookingAggregatedData.vatList, this._bookingAggregatedData.otherTaxes);
     }
     private initIncludedTaxesString(vatList: TaxDO[], otherTaxes: TaxDO[]) {

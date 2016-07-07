@@ -1,6 +1,7 @@
 import {ThError} from '../../../core/utils/th-responses/ThError';
 import {TestContext} from '../../helpers/TestContext';
 import {BookingDO, GroupBookingInputChannel, BookingConfirmationStatus} from '../../../core/data-layer/bookings/data-objects/BookingDO';
+import {BookingPriceDO, BookingPriceType} from '../../../core/data-layer/bookings/data-objects/price/BookingPriceDO';
 import {HotelDO} from '../../../core/data-layer/hotel/data-objects/HotelDO';
 import {CustomerDO} from '../../../core/data-layer/customers/data-objects/CustomerDO';
 import {RoomCategoryDO} from '../../../core/data-layer/room-categories/data-objects/RoomCategoryDO';
@@ -74,6 +75,14 @@ export class DefaultBookingBuilder implements IBookingDataSource {
         booking.cancellationTime = priceProduct.conditions.policy.generateBookingCancellationTimeDO(indexedBookingInterval.getArrivalDate(), currentHotelDate);
         booking.fileAttachmentList = [];
         booking.notes = "This is an automatic booking";
+
+        booking.price = new BookingPriceDO();
+        booking.price.priceType = BookingPriceType.BookingStay;
+        booking.price.numberOfItems = indexedBookingInterval.getLengthOfStay();
+        booking.price.pricePerItem = priceProduct.price.getPricePerNightFor({
+            configCapacity: booking.configCapacity,
+            roomCategoryId: booking.roomCategoryId
+        });
 
         return booking;
     }

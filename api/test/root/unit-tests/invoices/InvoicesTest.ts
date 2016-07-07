@@ -41,13 +41,13 @@ describe("Invoices Tests", function () {
 			});
         });
 
-        it("Should get the previosly created booking related invoice group", function (done) {
-            var updateInvoiceGroup = new UpdateInvoiceGroup(testContext.appContext, testContext.sessionContext);
-            updateInvoiceGroup.update(invoiceGroupsHelper.getUpdateInvoiceGroupDO(createdInvoiceGroup)).then((updatedInvoiceGroup: InvoiceGroupDO) => {
-                done();
-            }).catch((e: ThError) => {
-                done(e);
-            });
-        });
+        // it("Should get the previosly created booking related invoice group", function (done) {
+        //     var updateInvoiceGroup = new UpdateInvoiceGroup(testContext.appContext, testContext.sessionContext);
+        //     updateInvoiceGroup.update(invoiceGroupsHelper.getUpdateInvoiceGroupDO(createdInvoiceGroup)).then((updatedInvoiceGroup: InvoiceGroupDO) => {
+        //         done();
+        //     }).catch((e: ThError) => {
+        //         done(e);
+        //     });
+        // });
     });
 });
