@@ -7,6 +7,7 @@ import {ThButtonComponent} from '../../../../../../../../../../common/utils/comp
 
 import {ArrivalItemComponent} from './components/arrival-item/ArrivalItemComponent';
 
+import {HotelOperationsDashboardService} from '../../services/HotelOperationsDashboardService';
 import {IHotelOperationsDashboardArrivalsPaneMediator} from '../../HotelOperationsDashboardComponent';
 
 declare var _ : any;
@@ -25,41 +26,19 @@ export class ArrivalsPaneComponent implements OnInit {
 	@Output() dragStarted = new EventEmitter();
 	@Output() dragCanceled = new EventEmitter();
 
-	constructor(private _newBookingModalService: NewBookingModalService) {
+	constructor(private _newBookingModalService: NewBookingModalService, private _hotelOperationsDashboardService: HotelOperationsDashboardService) {
 	}
 
 	ngOnInit() {
-		this.arrivalItemsVMList = [
-			{
-				ClientName: "Robert Paulsen",
-				NumberOfPeople: 2,
-				NumberOfNights: 7,
-				Arrival: "Wed 13.02.16",
-				Departure: "Sat 20.02.16",
-			},
-			{
-				ClientName: "John Snow",
-				NumberOfPeople: 2,
-				NumberOfNights: 5,
-				Arrival: "Wed 13.02.16",
-				Departure: "Sat 18.02.16",
-			},		
-			{
-				ClientName: "Erika Einstein",
-				NumberOfPeople: 2,
-				NumberOfNights: 6,
-				Arrival: "Wed 13.02.16",
-				Departure: "Sat 19.02.16",
-			},
-			{
-				ClientName: "Dragos Pricope",
-				NumberOfPeople: 1,
-				NumberOfNights: 3,
-				Arrival: "Wed 13.02.16",
-				Departure: "Sat 16.02.16",
-			}
-		]
 		this.hotelOperationsDashboard.registerArrivalsPane(this);
+		this.refresh();
+	}
+
+	public refresh(){
+		var date = this.hotelOperationsDashboard.getDate(); 
+		this._hotelOperationsDashboardService.getArrivals(date).then((arrivals:any[]) =>{
+			this.arrivalItemsVMList = arrivals;
+		});
 	}
 
 	openNewBookingModal() {

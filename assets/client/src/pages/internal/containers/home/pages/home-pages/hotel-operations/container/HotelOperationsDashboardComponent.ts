@@ -10,6 +10,8 @@ import {ArrivalsPaneComponent} from './components/arrivals-pane/ArrivalsPaneComp
 import {DeparturesPaneComponent} from './components/departures-pane/DeparturesPaneComponent';
 import {RoomsCanvasComponent} from './components/rooms-canvas/RoomsCanvasComponent';
 
+import {HotelOperationsDashboardService} from './services/HotelOperationsDashboardService';
+
 declare var $:any;
 
 export interface IHotelOperationsDashboardArrivalsPaneMediator{
@@ -18,6 +20,7 @@ export interface IHotelOperationsDashboardArrivalsPaneMediator{
 	startedDragging(arrivalItemVM);
 	getSelectedArrivalItem():any;
 	clickedArrivalItem(arrivalItemVM);
+	getDate();
 }
 
 export interface IHotelOperationsDashboardRoomsCanvasMediator{
@@ -25,18 +28,25 @@ export interface IHotelOperationsDashboardRoomsCanvasMediator{
 
 	getSelectedArrivalItem():any;
 	checkInArrivalItem(arrivalItem)
+	getDate();
+	setDate(date);
+	refresh();
 }
 
 export interface IHotelOperationsDashboardDeparturesMediator{
 	registerDeparturesPane(departuresPane:DeparturesPaneComponent);
+	getDate();
+	refresh();
 }
 
 @Component({
 	selector: 'hotel-operations-dashboard',
 	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/container/template/hotel-operations-dashboard.html',
 	directives: [ThButtonComponent, ArrivalsPaneComponent, DeparturesPaneComponent, RoomsCanvasComponent],
+	providers: [HotelOperationsDashboardService],
 	pipes: [TranslationPipe]
 })
+
 export class HotelOperationsDashboardComponent extends AHomeContainerComponent implements OnInit, IHotelOperationsDashboardArrivalsPaneMediator, IHotelOperationsDashboardRoomsCanvasMediator, IHotelOperationsDashboardDeparturesMediator {
 	public self: IHotelOperationsDashboardRoomsCanvasMediator;
 	private roomVMList: any;
@@ -44,11 +54,21 @@ export class HotelOperationsDashboardComponent extends AHomeContainerComponent i
 	private _roomsCanvas: RoomsCanvasComponent;
 	private _departuresPane: DeparturesPaneComponent;
 
+	private _currentDate;
+
 	private _selectedArrivalItem = null;
+
 	constructor(headerPageService: HeaderPageService
 		) {
 		super(headerPageService, HeaderPageType.HotelOperations);
 		this.self = this;
+		this._currentDate = 0;
+	}
+
+	public refresh(){
+		this._arrivalsPane.refresh();
+		this._roomsCanvas.refresh();
+		this._departuresPane.refresh();
 	}
 
 	public registerArrivalsPane(arrivalsPane:ArrivalsPaneComponent){
@@ -68,6 +88,13 @@ export class HotelOperationsDashboardComponent extends AHomeContainerComponent i
 		this._roomsCanvas.startedDragging(arrivalItemVM);
 	}
 	
+	public getDate(){
+		return this._currentDate;
+	}
+
+	public setDate(date){
+		this._currentDate = date;
+	}
 
 	public clickedArrivalItem(arrivalItemVM){
 		this._selectedArrivalItem = arrivalItemVM;
@@ -78,7 +105,6 @@ export class HotelOperationsDashboardComponent extends AHomeContainerComponent i
 	}
 
 	public checkInArrivalItem(arrivalItemVM){
-		debugger;
 		this._arrivalsPane.removeArrivalItem(arrivalItemVM);
 	}
 
