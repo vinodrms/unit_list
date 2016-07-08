@@ -38,7 +38,7 @@ export class HotelOperationsDashboardService{
 				Type: "Double",
 				Properties: {
 					Name: "502",
-					MaintenanceStatus: "PickUp",
+					MaintenanceStatus: "Dirty",
 					Booking: {
 						ClientName: "Robert Paulsen",
 						NumberOfPeople: 2,
@@ -111,7 +111,7 @@ export class HotelOperationsDashboardService{
 				Type: "Single",
 				Properties: {
 					Name: "505",
-					MaintenanceStatus: "PickUp",
+					MaintenanceStatus: "Dirty",
 					Booking: {
 						ClientName: "Paul Paulsen",
 						NumberOfPeople: 2,
@@ -638,7 +638,6 @@ export class HotelOperationsDashboardService{
 		var p = new Promise((resolve, reject) => {
 			setTimeout(() => {
 				var allRooms = this._roomsList[date];
-				debugger;
 				if (roomState == 'All'){
 					resolve(allRooms);
 				}

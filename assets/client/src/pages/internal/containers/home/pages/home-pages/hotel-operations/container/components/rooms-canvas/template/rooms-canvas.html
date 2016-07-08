@@ -3,7 +3,9 @@
 		<div class="group-1 flex-row flex-center-v">
 			<i class="fa fa-angle-left p-r-12 f-48" (click)="previousDay()"></i>
 			<div class="current-date p-r-12 f-24"><b>Wednesday 13.01.2016</b></div>
-			<button class="btn btn-sm btn-danger f-12">Change date</button>
+			<button class="btn btn-sm btn-danger f-12">
+				<i class="fa fa-calendar f-12 p-r-6"></i> Change date
+			</button>
 		</div>
 		<div class="group-2 flex-row flex-center-v">
 			<select class="rooms-filter p-r-12 f-12" [ngModel]="filterType.currentValue" (ngModelChange)="filterTypeChanged($event)">
@@ -18,7 +20,9 @@
 	</div>
 	<div class="notification {{filterNotification.Properties.cssColor}}" *ngIf="isNotificationBarVisible()">
 		<div class="notification-message">{{filterNotification.Properties.textFirstPart}} &nbsp;<b> {{filterNotification.Properties.textSecondPart}}</b></div>
-		<div class="notification-close clickable f-24" (click)="closeNotificationBar()">X</div>
+		<div class="notification-close clickable f-20" (click)="closeNotificationBar()">
+			<span class="unitpal-font f-20">\</span>
+		</div>
 	</div>
 </div>
 <div class="body rooms-canvas">

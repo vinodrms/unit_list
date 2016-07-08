@@ -132,7 +132,8 @@ body,html {
     background-size: cover;
     background-repeat: no-repeat;
     color: #0b2139;
-    font-family: 'Raleway',sans-serif;
+    font-family: 'Roboto', sans-serif;
+    /*font-family: 'Open Sans', sans-serif;*/
     font-size: 14px;
     overflow: hidden;
 }
@@ -2771,8 +2772,12 @@ a.btn.btn-square:focus {
   font-size: 16px !important;
 }
 
-.f-16 {
+.f-18 {
   font-size: 18px !important;
+}
+
+.f-20 {
+  font-size: 20px !important;
 }
 
 .f-24 {

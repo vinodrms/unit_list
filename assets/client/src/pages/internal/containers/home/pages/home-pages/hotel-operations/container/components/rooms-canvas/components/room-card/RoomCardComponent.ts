@@ -29,9 +29,9 @@ export class RoomCardComponent {
 		switch (maintenanceStatus) {
 			case MaintenanceStatusType.Dirty:
 				this.maintenance = {
-					cssClass: 'stat-yellow',
+					cssClass: 'orange-color',
 					title: 'Dirty',
-					icon: 'E',
+					icon: ',',
 					clickHandler: () => {
 						alert("Dirty clicked");
 					}
@@ -39,16 +39,16 @@ export class RoomCardComponent {
 
 				break;
 
-			case MaintenanceStatusType.PickUp:
-				this.maintenance = {
-					cssClass: 'stat-tomato',
-					title: 'Pickup',
-					icon: 'F',
-					clickHandler: () => {
-						alert("Pickup clicked");
-					}
-				}
-				break;
+			// case MaintenanceStatusType.PickUp:
+			// 	this.maintenance = {
+			// 		cssClass: 'stat-tomato',
+			// 		title: 'Pickup',
+			// 		icon: 'F',
+			// 		clickHandler: () => {
+			// 			alert("Pickup clicked");
+			// 		}
+			// 	}
+			// 	break;
 			default:
 				this.maintenance = undefined
 				break;

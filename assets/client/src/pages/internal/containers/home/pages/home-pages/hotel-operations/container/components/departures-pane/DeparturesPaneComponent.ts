@@ -39,7 +39,6 @@ export class DeparturesPaneComponent implements OnInit {
 	}
 
 	public selectDepartureItem(departureItemVM){
-		debugger;
 		this.selectedDepartureItem = departureItemVM;
 	}
 	
