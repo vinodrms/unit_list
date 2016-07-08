@@ -95,6 +95,6 @@ export class BookingEmailConfigStepService implements IBookingStepService, ILast
         var recipientList: EmailRecipientVM[] = _.filter(this.emailRecipientList, (emailRecipient: EmailRecipientVM) => {
             return emailRecipient.isValid && emailRecipient.selected;
         });
-        return _.map(recipientList, (recipient: EmailRecipientVM) => { return recipient.email });
+        return _.uniq(_.map(recipientList, (recipient: EmailRecipientVM) => { return recipient.email }));
     }
 }
