@@ -10,8 +10,7 @@ export class BookingAggregationResultDO extends BaseDO {
     inputChannel: GroupBookingInputChannel;
     noOfRooms: number;
 
-    // the aggregation transforms the array into an object and keeps the initial name of the field
-    bookingList: BookingDO;
+    booking: BookingDO;
 
     protected getPrimitivePropertyKeys(): string[] {
         return ["id", "hotelId", "versionId", "groupBookingReference", "status", "inputChannel", "noOfRooms"];
@@ -20,14 +19,16 @@ export class BookingAggregationResultDO extends BaseDO {
     public buildFromObject(object: Object) {
         super.buildFromObject(object);
 
-        this.bookingList = new BookingDO();
-        this.bookingList.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "bookingList"));
-        this.bookingList.groupBookingId = this.id;
-        this.bookingList.groupBookingReference = this.groupBookingReference;
-        this.bookingList.hotelId = this.hotelId;
-        this.bookingList.versionId = this.versionId;
-        this.bookingList.status = this.status;
-        this.bookingList.inputChannel = this.inputChannel;
-        this.bookingList.noOfRooms = this.noOfRooms;
+        this.booking = new BookingDO();
+
+        // the aggregation transforms the array into an object and keeps the initial name of the field
+        this.booking.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "bookingList"));
+        this.booking.groupBookingId = this.id;
+        this.booking.groupBookingReference = this.groupBookingReference;
+        this.booking.hotelId = this.hotelId;
+        this.booking.versionId = this.versionId;
+        this.booking.status = this.status;
+        this.booking.inputChannel = this.inputChannel;
+        this.booking.noOfRooms = this.noOfRooms;
     }
 }

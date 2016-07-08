@@ -305,8 +305,8 @@ export enum ThStatusCode {
     InvoiceGroupsRepositoryInvoiceGroupNotFound,
     InvoiceGroupsRepositoryErrorGettingInvoiceGroup,
     SaveInvoiceGroupItem,
-    GenerateCustomerInvoiceGroupItemError,
-    GenerateBookingInvoiceGroupItemError,
+    AddNewCustomerInvoiceGroupError,
+    AddNewBookingInvoiceGroupError,
     AddBookingInvoiceGroupItemError,
     UpdateInvoiceGroupItemError,
     InvoicePaymentMethodValidatorError,
@@ -660,8 +660,8 @@ ThMessage[ThStatusCode.InvoiceGroupsRepositoryInvoiceGroupNotFound] = "Invoice g
 ThMessage[ThStatusCode.InvoiceGroupsRepositoryErrorGettingInvoiceGroup] = "Error retrieving the invoice group from the database.";
 ThMessage[ThStatusCode.SaveInvoiceGroupItem] = "Error saving the invoice group item.";
 ThMessage[ThStatusCode.UpdateInvoiceGroupItemError] = "Error updating invoice group.";
-ThMessage[ThStatusCode.GenerateCustomerInvoiceGroupItemError] = "Error generating customer related invoice group.";
-ThMessage[ThStatusCode.GenerateBookingInvoiceGroupItemError] = "Error generating booking related invoice group.";
+ThMessage[ThStatusCode.AddNewCustomerInvoiceGroupError] = "Error adding new customer related invoice group.";
+ThMessage[ThStatusCode.AddNewBookingInvoiceGroupError] = "Error adding new booking related invoice group.";
 ThMessage[ThStatusCode.AddBookingInvoiceGroupItemError] = "Error adding booking related invoice group.";
 ThMessage[ThStatusCode.InvoicePaymentMethodValidatorError] = "Error validating the payment methods.";
 ThMessage[ThStatusCode.InvoicePaymentMethodValidatorInvalidPaymentMethod] = "Unrecognized payment method.";

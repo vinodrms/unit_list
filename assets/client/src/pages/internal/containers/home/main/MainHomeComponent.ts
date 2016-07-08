@@ -11,13 +11,13 @@ import {SocketsService} from '../../../../../common/utils/sockets/SocketsService
 
 import {HotelOperationsDashboardComponent} from '../pages/home-pages/hotel-operations/container/HotelOperationsDashboardComponent';
 import {YieldManagerContainerComponent} from '../pages/home-pages/yield-manager/container/YieldManagerContainerComponent';
-import {BookingHistoryContainerComponent} from '../pages/home-pages/booking-history/container/BookingHistoryContainerComponent';
+import {BookingHistoryDashboardComponent} from '../pages/home-pages/booking-history/BookingHistoryDashboardComponent';
 import {SettingsContainerComponent} from '../pages/home-pages/settings/container/SettingsContainerComponent';
 
 @RouteConfig([
 	{ path: '/operations', name: 'HotelOperationsDashboardComponent', component: HotelOperationsDashboardComponent, useAsDefault: true },
 	{ path: '/yield-manager', name: 'YieldManagerContainerComponent', component: YieldManagerContainerComponent },
-	{ path: '/bookings', name: 'BookingHistoryContainerComponent', component: BookingHistoryContainerComponent },
+	{ path: '/bookings', name: 'BookingHistoryDashboardComponent', component: BookingHistoryDashboardComponent },
 	{ path: '/settings/...', name: 'SettingsContainerComponent', component: SettingsContainerComponent }
 ])
 

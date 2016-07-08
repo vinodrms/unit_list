@@ -36,7 +36,7 @@ export class PricePerPersonDO extends BaseDO implements IPriceProductPrice {
 		return priceList;
 	}
 
-	public getPriceFor(query: PriceProductPriceQueryDO): number {
+	public getPricePerNightFor(query: PriceProductPriceQueryDO): number {
 		try {
 			var adultsPrice = 0;
 			for (var noOfAdults = 1; noOfAdults <= query.configCapacity.noAdults; noOfAdults++) {

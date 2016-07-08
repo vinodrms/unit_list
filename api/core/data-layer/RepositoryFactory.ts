@@ -41,7 +41,7 @@ export class RepositoryFactory {
                 return [new MongoHotelRepository(), new MongoBedRepository(), new MongoTaxRepository(), new MongoAddOnProductRepository(),
                     new MongoRoomRepository(), new MongoRoomCategoryRepository(), new MongoCustomerRepository(), new MongoPriceProductRepository(),
                     new MongoYieldFilterConfigurationRepository(), new MongoAllotmentRepository(), new MongoNotificationsRepository(),
-                    new MongoBookingRepository()];
+                    new MongoBookingRepository(), new MongoInvoiceGroupsRepository()];
         }
     }
 

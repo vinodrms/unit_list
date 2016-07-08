@@ -5,7 +5,7 @@ import {ThStatusCode} from '../../../utils/th-responses/ThResponse';
 import {AppContext} from '../../../utils/AppContext';
 import {SessionContext} from '../../../utils/SessionContext';
 import {ValidationResultParser} from '../../common/ValidationResultParser';
-import {GenerateBookingInvoiceGroupItemDO} from './GenerateBookingInvoiceGroupItemDO';
+import {AddNewBookingInvoiceGroupDO} from './AddNewBookingInvoiceGroupDO';
 import {InvoiceGroupDO} from '../../../data-layer/invoices/data-objects/InvoiceGroupDO';
 import {BookingIdValidator} from '../validators/BookingIdValidator';
 import {BookingDO} from '../../../data-layer/bookings/data-objects/BookingDO';
@@ -19,9 +19,9 @@ import {BaseCorporateDetailsDO} from '../../../data-layer/customers/data-objects
 import {InvoicePriceCalculator} from '../utils/InvoicePriceCalculator';
 import {IndexedBookingInterval} from '../../../data-layer/price-products/utils/IndexedBookingInterval';
 
-export class GenerateBookingInvoiceGroupItem {
+export class AddNewBookingInvoiceGroup {
     private _thUtils: ThUtils;
-    private _generateBookingInvoiceGroupDO: GenerateBookingInvoiceGroupItemDO;
+    private _addNewBookingInvoiceGroupDO: AddNewBookingInvoiceGroupDO;
 
     private _loadedBooking: BookingDO;
     private _loadedDefaultBillingCustomer: CustomerDO;
@@ -30,30 +30,30 @@ export class GenerateBookingInvoiceGroupItem {
         this._thUtils = new ThUtils();
     }
 
-    public generate(generateBookingInvoiceGroupDO: GenerateBookingInvoiceGroupItemDO): Promise<InvoiceGroupDO> {
-        this._generateBookingInvoiceGroupDO = generateBookingInvoiceGroupDO;
+    public addNewBookingInvoiceGroup(addNewBookingInvoiceGroupDO: AddNewBookingInvoiceGroupDO): Promise<InvoiceGroupDO> {
+        this._addNewBookingInvoiceGroupDO = addNewBookingInvoiceGroupDO;
 
         return new Promise<InvoiceGroupDO>((resolve: { (result: InvoiceGroupDO): void }, reject: { (err: ThError): void }) => {
             try {
-                this.generateCore(resolve, reject);
+                this.addNewBookingInvoiceGroupCore(resolve, reject);
             } catch (error) {
-                var thError = new ThError(ThStatusCode.GenerateBookingInvoiceGroupItemError, error);
-                ThLogger.getInstance().logError(ThLogLevel.Error, "error generating booking related invoice gorup", this._generateBookingInvoiceGroupDO, thError);
+                var thError = new ThError(ThStatusCode.AddNewBookingInvoiceGroupError, error);
+                ThLogger.getInstance().logError(ThLogLevel.Error, "error adding new booking related invoice gorup", this._addNewBookingInvoiceGroupDO, thError);
                 reject(thError);
             }
         });
     }
 
-    private generateCore(resolve: { (result: InvoiceGroupDO): void }, reject: { (err: ThError): void }) {
-        var validationResult = GenerateBookingInvoiceGroupItemDO.getValidationStructure().validateStructure(this._generateBookingInvoiceGroupDO);
+    private addNewBookingInvoiceGroupCore(resolve: { (result: InvoiceGroupDO): void }, reject: { (err: ThError): void }) {
+        var validationResult = AddNewBookingInvoiceGroupDO.getValidationStructure().validateStructure(this._addNewBookingInvoiceGroupDO);
         if (!validationResult.isValid()) {
-            var parser = new ValidationResultParser(validationResult, this._generateBookingInvoiceGroupDO);
-            parser.logAndReject("Error validating data for generating booking related invoice group", reject);
+            var parser = new ValidationResultParser(validationResult, this._addNewBookingInvoiceGroupDO);
+            parser.logAndReject("Error validating data for adding new booking related invoice group", reject);
             return;
         }
 
         var bookingIdValidator = new BookingIdValidator(this._appContext, this._sessionContext);
-        bookingIdValidator.validateBookingId(this._generateBookingInvoiceGroupDO.groupBookingId, this._generateBookingInvoiceGroupDO.bookingId).then((booking: BookingDO) => {
+        bookingIdValidator.validateBookingId(this._addNewBookingInvoiceGroupDO.groupBookingId, this._addNewBookingInvoiceGroupDO.bookingId).then((booking: BookingDO) => {
             this._loadedBooking = booking;
 
             var customerIdValidator = new CustomerIdValidator(this._appContext, this._sessionContext);
@@ -68,7 +68,7 @@ export class GenerateBookingInvoiceGroupItem {
         }).catch((error: any) => {
             var thError = new ThError(ThStatusCode.AddBookingInvoiceGroupItemError, error);
             if (thError.isNativeError()) {
-                ThLogger.getInstance().logError(ThLogLevel.Error, "error adding invoice group related to booking", this._generateBookingInvoiceGroupDO, thError);
+                ThLogger.getInstance().logError(ThLogLevel.Error, "error adding invoice group related to booking", this._addNewBookingInvoiceGroupDO, thError);
             }
             reject(thError);
         });
@@ -92,16 +92,15 @@ export class GenerateBookingInvoiceGroupItem {
         var invoice = new InvoiceDO;
 
         invoice.itemList = [];
-        invoice.itemList.push(this.getPriceProductInvoiceItemFromBooking());
 
         invoice.payerList = [];
         var defaultInvoicePayer = this.getDefaultInvoicePayerFromBooking();
         var invoicePriceCalculator = new InvoicePriceCalculator(invoice, this._loadedDefaultBillingCustomer);
-        defaultInvoicePayer.priceToPay = invoicePriceCalculator.getTotalPrice({
-            roomCategoryId: this._loadedBooking.roomCategoryId,
-            configCapacity: this._loadedBooking.configCapacity,
-            indexedBookingInterval: new IndexedBookingInterval(this._loadedBooking.interval)
-        });
+        // defaultInvoicePayer.priceToPay = invoicePriceCalculator.getTotalPrice({
+        //     roomCategoryId: this._loadedBooking.roomCategoryId,
+        //     configCapacity: this._loadedBooking.configCapacity,
+        //     indexedBookingInterval: new IndexedBookingInterval(this._loadedBooking.interval)
+        // });
         invoice.payerList.push(defaultInvoicePayer);
         invoice.paymentStatus = InvoicePaymentStatus.Open;
 
@@ -121,13 +120,5 @@ export class GenerateBookingInvoiceGroupItem {
         }
 
         return invoicePayer;
-    }
-
-    private getPriceProductInvoiceItemFromBooking(): InvoiceItemDO {
-        var ppInvoiceItem = new InvoiceItemDO();
-        ppInvoiceItem.type = InvoiceItemType.PriceProduct;
-        ppInvoiceItem.snapshot = this._loadedBooking.priceProductSnapshot;
-        ppInvoiceItem.qty = 1;
-        return ppInvoiceItem;
     }
 }

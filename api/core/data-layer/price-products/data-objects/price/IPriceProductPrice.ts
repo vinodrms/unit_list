@@ -16,11 +16,10 @@ export enum PriceProductPriceConfigurationState {
 export interface PriceProductPriceQueryDO {
 	roomCategoryId: string;
 	configCapacity: ConfigCapacityDO;
-	indexedBookingInterval: IndexedBookingInterval;
 }
 
 export interface IPriceProductPrice extends BaseDO {
-	getPriceFor(query: PriceProductPriceQueryDO): number;
+	getPricePerNightFor(query: PriceProductPriceQueryDO): number;
 	priceConfigurationIsValidFor(roomCategoryStatList: RoomCategoryStatsDO[]): boolean;
 	isConfiguredForRoomCategory(roomCategoryId: string): boolean;
 }

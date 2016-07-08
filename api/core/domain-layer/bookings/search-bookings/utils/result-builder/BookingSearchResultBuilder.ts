@@ -108,10 +108,10 @@ export class BookingSearchResultBuilder {
             _.forEach(priceProduct.roomCategoryIdList, (roomCategoryId: string) => {
                 var itemPrice = new PriceProductItemPrice();
                 itemPrice.roomCategoryId = roomCategoryId;
-                itemPrice.price = priceProduct.price.getPriceFor({
+                var noOfNights = this._indexedBookingInterval.getLengthOfStay();
+                itemPrice.price = noOfNights * priceProduct.price.getPricePerNightFor({
                     roomCategoryId: roomCategoryId,
-                    configCapacity: this._builderParams.searchParams.configCapacity,
-                    indexedBookingInterval: this._indexedBookingInterval
+                    configCapacity: this._builderParams.searchParams.configCapacity
                 });
                 priceProductItem.priceList.push(itemPrice);
             });

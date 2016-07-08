@@ -136,25 +136,25 @@ describe("New Bookings Tests", function () {
             });
         });
 
-        // it("Should send booking confirmation email", function (done) {
-        //     var bookingRepo = testContext.appContext.getRepositoryFactory().getBookingRepository();
-        //     bookingRepo.getBookingList({ hotelId: testContext.sessionContext.sessionDO.hotel.id }, {
-        //         interval: bookingTestHelper.getBookingSearchInterval(testDataBuilder)
-        //     }).then((bookingSearchResult: BookingSearchResultRepoDO) => {
-        //         var groupBookingReferenceList = _.chain(bookingSearchResult.bookingList).map((booking: BookingDO) => {
-        //             return booking.groupBookingId;
-        //         }).uniq().value();
-        //         var groupBookingArr = _.where(bookingSearchResult.bookingList, { groupBookingReference: groupBookingReferenceList[0] });
-        //         var bookingConfirmationEmailSender = new BookingConfirmationEmailSender(testContext.appContext, testContext.sessionContext);
-        //         return bookingConfirmationEmailSender.sendBookingConfirmation({
-        //             groupBookingId: groupBookingReferenceList[0]
-        //         }, ['dragos.pricope@gmail.com']);
-        //     }).then((result: boolean) => {
-        //         done();
-        //     }).catch((err: any) => {
-        //         done(err);
-        //     });
-        // });
+        it("Should send booking confirmation email", function (done) {
+            var bookingRepo = testContext.appContext.getRepositoryFactory().getBookingRepository();
+            bookingRepo.getBookingList({ hotelId: testContext.sessionContext.sessionDO.hotel.id }, {
+                interval: bookingTestHelper.getBookingSearchInterval(testDataBuilder)
+            }).then((bookingSearchResult: BookingSearchResultRepoDO) => {
+                var groupBookingReferenceList = _.chain(bookingSearchResult.bookingList).map((booking: BookingDO) => {
+                    return booking.groupBookingId;
+                }).uniq().value();
+                var groupBookingArr = _.where(bookingSearchResult.bookingList, { groupBookingReference: groupBookingReferenceList[0] });
+                var bookingConfirmationEmailSender = new BookingConfirmationEmailSender(testContext.appContext, testContext.sessionContext);
+                return bookingConfirmationEmailSender.sendBookingConfirmation({
+                    groupBookingId: groupBookingReferenceList[0]
+                }, ['dragos.pricope@gmail.com']);
+            }).then((result: boolean) => {
+                done();
+            }).catch((err: any) => {
+                done(err);
+            });
+        });
 
     });
     describe("Bookings Search Tests", function () {

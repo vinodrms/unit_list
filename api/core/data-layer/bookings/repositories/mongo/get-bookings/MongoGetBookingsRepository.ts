@@ -55,7 +55,7 @@ export class MongoGetBookingsRepository extends MongoRepository {
             (foundBookingList: Object[]) => {
                 var aggregationResultList: BookingAggregationResultDO[] = this.getQueryResult(BookingAggregationResultDO, foundBookingList);
                 resolve({
-                    bookingList: _.map(aggregationResultList, (aggregationResult: BookingAggregationResultDO) => { return aggregationResult.bookingList }),
+                    bookingList: _.map(aggregationResultList, (aggregationResult: BookingAggregationResultDO) => { return aggregationResult.booking }),
                     lazyLoad: lazyLoad
                 });
             }

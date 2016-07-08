@@ -3,7 +3,7 @@ import {ObjectValidationStructure} from '../../../utils/th-validation/structure/
 import {PrimitiveValidationStructure} from '../../../utils/th-validation/structure/PrimitiveValidationStructure';
 import {StringValidationRule} from '../../../utils/th-validation/rules/StringValidationRule';
 
-export class GenerateBookingInvoiceGroupItemDO {
+export class AddNewBookingInvoiceGroupDO {
     groupBookingId: string;
     bookingId: string;
 
