@@ -2110,12 +2110,24 @@ a.btn.btn-square:focus {
 
     rooms-canvas > .header > .notification{
         display: flex;
+        flex-direction: row;
         align-items: center;
-        justify-content: center;
+        justify-content: space-between;
         height: 48px;
-        background-color: #5cb85c;
         color: white;
     }
+
+    rooms-canvas > .header > .notification .notification-message{
+        text-align: center;
+        flex-grow: 1;
+    }
+    
+    rooms-canvas > .header > .notification .notification-close{
+        flex-basis: 32;
+        flex-grow: 0;
+        padding: 12px;
+    }
+    
 
         /* Room cards */
         
@@ -2168,6 +2180,7 @@ a.btn.btn-square:focus {
         }
 
         .room-card {
+            cursor: default;
             height: 112px;
             width: 216px;
             background-color: white;
@@ -2247,6 +2260,7 @@ a.btn.btn-square:focus {
         /* Arrivals Pane */
 
         arrival-item {
+            cursor: default;
             background-color: #f3f3f3;
             border-bottom: 1px solid #f3f3f3;
             display: flex;
@@ -2335,6 +2349,7 @@ a.btn.btn-square:focus {
         /* Departures Pane */
 
         departure-item {
+            cursor: default;
             background-color: #f3f3f3;
             border-bottom: 1px solid #f3f3f3;
             display: flex;
@@ -2399,6 +2414,10 @@ a.btn.btn-square:focus {
         }
 
         /* Helpers */
+        .clickable{
+            cursor: pointer;
+        }
+
         .flex-row {
             display: flex;
             flex-direction: row;

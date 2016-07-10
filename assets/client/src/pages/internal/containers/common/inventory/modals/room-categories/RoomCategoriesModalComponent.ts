@@ -43,8 +43,12 @@ export class RoomCategoriesModalComponent extends BaseComponent implements ICust
 	}
 
 	public ngOnInit() {
-		
-		this._roomCategStatsService.getRoomCategoryStatsForRoomCategoryIdList().subscribe((roomCategoryStatsList: RoomCategoryStatsDO[]) => {
+		this._roomCategService.getRoomCategoryList().switchMap((roomCategoryList: RoomCategoryDO[]) => {
+			var roomCategoryIdList = _.map(roomCategoryList, (roomCategoryDO: RoomCategoryDO) => {
+				return roomCategoryDO.id;
+			})
+			return this._roomCategStatsService.getRoomCategoryStatsForRoomCategoryIdList(roomCategoryIdList);
+		}).subscribe((roomCategoryStatsList: RoomCategoryStatsDO[]) => {
 			this.roomCategoryVMList = [];
 			_.forEach(roomCategoryStatsList, (roomCategStatsDO: RoomCategoryStatsDO) => {
 				var roomCategVM = new RoomCategoryVM();
