@@ -518,5 +518,9 @@ export var EnglishTranslations: Object = {
 	"Are you sure you want to close the booking wizard?": "Are you sure you want to close the booking wizard?",
 	"Booking Confirmation": "Booking Confirmation",
 	"Are you sure you want to add the bookings without sending email confirmations?": "Are you sure you want to add the bookings without sending email confirmations?",
+	"Add at least one billed customer": "Add at least one billed customer",
+	"%customerName% has no access on this price product": "%customerName% has no access on this price product",
+	"No access to bill": "No access to bill",
+	"You cannot have more than %noCompOrTa% Company or Travel Agent on a booking": "You cannot have more than %noCompOrTa% Company or Travel Agent on a booking",
 	
 };

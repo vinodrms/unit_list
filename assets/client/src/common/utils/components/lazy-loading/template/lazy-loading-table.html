@@ -99,7 +99,7 @@
 					<a class="btn btn-xs" *ngIf="canPerformDeleteCommandOnItem(item)" (click)="deleteItem(item)" title="{{ 'Delete' | translate }}">
 						<i class="fa unitpal-font">\</i>
 					</a>
-					<a class="btn btn-xs" *ngIf="canPerformAddExistingRowCommandOnItem(item)" (click)="addExistingItem(item)" title="{{ 'Add' | translate }}">
+					<a class="btn btn-xs lazy-loading-table-row-command" *ngIf="canPerformAddExistingRowCommandOnItem(item)" (click)="addExistingItem(item)" title="{{ 'Add' | translate }}">
 						<i class="fa unitpal-font">G</i>
 					</a>
 				</td>

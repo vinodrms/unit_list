@@ -79,14 +79,26 @@ export class NewBookingFillDetailsComponent extends BaseComponent implements Aft
 				bookingCartItem.updateValidationColumn();
 			}
 			else if (changedBookingCartItemVM.customerList.length > 0) {
-				this.updateDefaultBilledCustomerIfNecessary(bookingCartItem, changedBookingCartItemVM.customerList[0]);
+				var lastCustomerIndex = changedBookingCartItemVM.customerList.length - 1;
+				this.updateDefaultBilledCustomerIfNecessary(bookingCartItem, changedBookingCartItemVM.customerList[lastCustomerIndex]);
 			}
 		});
 		this._bookingCartService.refreshData();
 		this._wizardBookingFillDetailsStepService.checkBookingCartValidity(this._bookingCartService);
 	}
 	private updateDefaultBilledCustomerIfNecessary(bookingCartItem: BookingCartItemVM, customerToAdd: CustomerDO) {
-		if (!bookingCartItem.canChangeDefaultBilledCustomer || bookingCartItem.customerList.length > 0) {
+		if (!bookingCartItem.canChangeDefaultBilledCustomer) {
+			return;
+		}
+		bookingCartItem.updateCustomerIfExists(customerToAdd);
+		if (!customerToAdd.hasAccessOnPriceProduct(bookingCartItem.priceProduct)) {
+			if (bookingCartItem.transientBookingItem.defaultBillingDetails.customerId === customerToAdd.id) {
+				bookingCartItem.removeBilledToCustomer();
+				bookingCartItem.updateValidationColumn();
+			}
+			return;
+		}
+		if (bookingCartItem.didSelectBilledToCustomer() || bookingCartItem.customerList.length > 0) {
 			return;
 		}
 		bookingCartItem.addCustomerIfNotExists(customerToAdd);

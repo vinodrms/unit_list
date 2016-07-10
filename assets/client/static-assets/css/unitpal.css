@@ -1216,6 +1216,9 @@ table.lazy-loading th {
   white-space: nowrap;
   text-overflow: ellipsis;
 }
+.lazy-loading-table-row-command {
+    font-size: 16px;
+}
 
 table.lazy-loading thead tr,
 table.lazy-loading tbody tr:not(.lazy-loading-table-last-row) {
