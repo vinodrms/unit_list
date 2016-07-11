@@ -50,6 +50,8 @@ import {ThDateUtils} from '../../../pages/internal/services/common/data-objects/
 	directives: [ThDatePickerComponent]
 })
 export class ThDateIntervalPickerComponent {
+	public static MaxNoOfDaysFromInterval = 186;
+
 	private _dateUtils: ThDateUtils = new ThDateUtils();
 
 	private _initialThDateInterval: ThDateIntervalDO;
@@ -124,10 +126,19 @@ export class ThDateIntervalPickerComponent {
 			this.dateInterval.end = this.minEndDate.buildPrototype();
 			this.updateNoOfNights();
 		}
+		else if (this.dateInterval.getNumberOfDays() > ThDateIntervalPickerComponent.MaxNoOfDaysFromInterval) {
+			this.dateInterval.end = this.dateInterval.start.buildPrototype();
+			this.dateInterval.end = this._dateUtils.addDaysToThDateDO(this.dateInterval.end, ThDateIntervalPickerComponent.MaxNoOfDaysFromInterval);
+			this.updateNoOfNights();
+		}
 		this.triggerSelectedDateInterval();
 	}
 	didSelectEndDate(endDate: ThDateDO) {
 		this.dateInterval.end = endDate;
+		if (this.dateInterval.getNumberOfDays() > ThDateIntervalPickerComponent.MaxNoOfDaysFromInterval) {
+			this.dateInterval.start = this.dateInterval.end.buildPrototype();
+			this.dateInterval.start = this._dateUtils.addDaysToThDateDO(this.dateInterval.start, -ThDateIntervalPickerComponent.MaxNoOfDaysFromInterval);
+		}
 		this.triggerSelectedDateInterval();
 		this.updateNoOfNights();
 	}
@@ -143,6 +154,6 @@ export class ThDateIntervalPickerComponent {
 		this.noOfNights = this.dateInterval.getNumberOfDays();
 	}
 	noOfNightsIsValid(): boolean {
-		return _.isNumber(this.noOfNights) && ThDataValidators.isValidInteger(this.noOfNights) && this.noOfNights >= 1;
+		return _.isNumber(this.noOfNights) && ThDataValidators.isValidInteger(this.noOfNights) && this.noOfNights >= 1 && this.noOfNights <= ThDateIntervalPickerComponent.MaxNoOfDaysFromInterval;
 	}
 }
