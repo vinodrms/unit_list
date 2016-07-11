@@ -522,5 +522,7 @@ export var EnglishTranslations: Object = {
 	"%customerName% has no access on this price product": "%customerName% has no access on this price product",
 	"No access to bill": "No access to bill",
 	"You cannot have more than %noCompOrTa% Company or Travel Agent on a booking": "You cannot have more than %noCompOrTa% Company or Travel Agent on a booking",
+	"Booking": "Booking",
+	
 	
 };

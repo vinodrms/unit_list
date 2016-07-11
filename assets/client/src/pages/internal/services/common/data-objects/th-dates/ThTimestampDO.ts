@@ -3,7 +3,7 @@ import {ThDateDO} from './ThDateDO';
 import {ThHourDO} from './ThHourDO';
 import {ThDateUtils} from './ThDateUtils';
 
-export class ThTimestamp extends BaseDO {
+export class ThTimestampDO extends BaseDO {
 	thDateDO: ThDateDO;
 	thHourDO: ThHourDO;
 
