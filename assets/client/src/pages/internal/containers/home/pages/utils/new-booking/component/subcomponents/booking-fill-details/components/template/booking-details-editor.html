@@ -39,8 +39,8 @@
             </table>
         </div>
         <div class="col-xs-12 booking-details-table">
-            <table class="table">
-                <thead [ngClass]="{'input-group form-warning': !didSelectBilledToCustomer()}">
+            <table class="table form-group">
+                <thead class="input-group">
                     <tr>
                         <th>
                             {{ 'Customers' | translate }}
@@ -48,11 +48,11 @@
                         <th>&nbsp;</th>
                     </tr>
                 </thead>
-                <label class="form-warning" *ngIf="!didSelectBilledToCustomer()"><small><i class="fa fa-info-circle"></i> {{ 'Add at least one customer' | translate }}</small></label>
-                <tbody>
+                <tbody class="input-group" [ngClass]="{'form-warning': !didSelectBilledToCustomer()}">
                     <tr *ngFor="let customer of bookingCartItem.customerList">
-                        <td width="80%" class="booking-details-action-description">{{ customer.customerName }}</td>
-                        <td width="20%">
+                        <td width="50%" class="booking-details-action-description">{{ customer.customerName }}</td>
+                        <td width="50%">
+                            <!-- Change customer -->
                             <span *ngIf="(isBilledCustomer(customer) && bookingCartItem.canChangeDefaultBilledCustomer) || !isBilledCustomer(customer)"
                                 (click)="changeCustomer(customer)">
                                 <span class="booking-details-action-button input-group-addon th-addon-button"> 
@@ -60,19 +60,25 @@
                                 </span>
                             </span>
 
+                            <!-- Billing details -->
                             <span *ngIf="isBilledCustomer(customer)" title="{{'The invoice will be generated with this customer' | translate}}" class="booking-details-action-button booking-details-action-readonly-button">
                                 {{ 'Billed To' | translate }}  <i class="fa unitpal-font">D</i>
                             </span>
-
-                            <span *ngIf="!isBilledCustomer(customer) && bookingCartItem.canChangeDefaultBilledCustomer" title="{{'Generate the bill with this customer' | translate}}"
-                                (click)="markBilledCustomerFromTemplate(customer)">
+                            <span *ngIf="!isBilledCustomer(customer) && canBeBilledCustomer(customer) && bookingCartItem.canChangeDefaultBilledCustomer" title="{{'Generate the bill with this customer' | translate}}"
+                                (click)="updateBilledCustomerFromTemplate(customer)">
                                 <span class="booking-details-action-button input-group-addon th-addon-button"> 
                                     {{ 'Bill' | translate }}  <i class="fa unitpal-font">D</i>
+                                </span>
+                            </span>
+                            <span  *ngIf="!isBilledCustomer(customer) && !canBeBilledCustomer(customer) && bookingCartItem.canChangeDefaultBilledCustomer">
+                                <span class="booking-details-action-button booking-details-action-readonly-button">
+                                    <i>{{ 'No access to bill' | translate }}</i>
                                 </span>
                             </span>
                         </td>
                     </tr>
                 </tbody>
+                <label class="form-warning" *ngIf="!didSelectBilledToCustomer()"><small><i class="fa fa-info-circle"></i> {{ 'Add at least one billed customer' | translate }}</small></label>
                 <tfoot>
                     <td>
                         <a (click)="addCustomer()">

@@ -3,6 +3,7 @@ import {BookingConfirmationStatus} from './BookingDO';
 export class BookingDOConstraints {
     public static NoBookingsLimit: number = 50;
     public static MaxBookingNoOfDays = 186;
+    public static MaxNoOfCompaniesOrTravelAgenciesOnBooking: number = 1;
 
     public static ConfirmationStatuses_OccupyingRoomsFromInventory: BookingConfirmationStatus[] = [
         BookingConfirmationStatus.Confirmed,

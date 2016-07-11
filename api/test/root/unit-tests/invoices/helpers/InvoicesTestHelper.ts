@@ -10,11 +10,11 @@ import {CommissionDO} from '../../../../../core/data-layer/common/data-objects/c
 import {CustomerType, CustomerDO} from '../../../../../core/data-layer/customers/data-objects/CustomerDO';
 import {PaymentMethodDO} from '../../../../../core/data-layer/common/data-objects/payment-method/PaymentMethodDO';
 import {CompanyDetailsDO} from '../../../../../core/data-layer/customers/data-objects/customer-details/corporate/CompanyDetailsDO';
-import {AddNewBookingInvoiceGroupDO} from '../../../../../core/domain-layer/invoices/add-invoice-groups/AddNewBookingInvoiceGroupDO';
+import {AddNewBookingInvoiceDO} from '../../../../../core/domain-layer/invoices/add-invoice/bookings/AddNewBookingInvoiceDO';
 import {UpdateInvoiceGroupDO} from '../../../../../core/domain-layer/invoices/update-invoice-groups/UpdateInvoiceGroupDO';
 
 export class InvoicesTestHelper {
-    private _testUtils: TestUtils;
+    private _testUtils: TestUtils; 
     private _thUtils: ThUtils;
 
     constructor(private _defaultDataBuilder: DefaultDataBuilder) {
@@ -22,8 +22,8 @@ export class InvoicesTestHelper {
         this._thUtils = new ThUtils();
     }
 
-    public getAddNewBookingInvoiceGroupDO(): AddNewBookingInvoiceGroupDO {
-        var generateBookingInvoiceGroupItemDO = new AddNewBookingInvoiceGroupDO();
+    public getAddNewBookingInvoiceGroupDO(): AddNewBookingInvoiceDO {
+        var generateBookingInvoiceGroupItemDO = new AddNewBookingInvoiceDO();
 		var bookingList = this._defaultDataBuilder.bookingList;
         var booking = bookingList[0];
 

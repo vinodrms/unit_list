@@ -94,6 +94,7 @@ export class MongoGetBookingsRepository extends MongoRepository {
         mongoQueryBuilder.addMultipleSelectOptionList("bookingList.confirmationStatus", searchCriteria.confirmationStatusList);
         mongoQueryBuilder.addExactMatch("id", searchCriteria.groupBookingId);
         mongoQueryBuilder.addMultipleSelectOptionList("bookingList.bookingId", searchCriteria.bookingIdList);
+        mongoQueryBuilder.addRegex("bookingList.indexedSearchTerms", searchCriteria.searchTerm);
         return mongoQueryBuilder.processedQuery;
     }
     private getAggregationOptions(): MongoAggregationOptions {

@@ -1,16 +1,16 @@
-import {IValidationStructure} from '../../../utils/th-validation/structure/core/IValidationStructure';
-import {ObjectValidationStructure} from '../../../utils/th-validation/structure/ObjectValidationStructure';
-import {PrimitiveValidationStructure} from '../../../utils/th-validation/structure/PrimitiveValidationStructure';
-import {ArrayValidationStructure} from '../../../utils/th-validation/structure/ArrayValidationStructure';
-import {StringValidationRule} from '../../../utils/th-validation/rules/StringValidationRule';
-import {NumberValidationRule} from '../../../utils/th-validation/rules/NumberValidationRule';
-import {NumberInListValidationRule} from '../../../utils/th-validation/rules/NumberInListValidationRule';
-import {InvoiceDO, InvoicePaymentStatus} from '../../../data-layer/invoices/data-objects/InvoiceDO';
-import {InvoicePaymentMethodType} from '../../../data-layer/invoices/data-objects/payers/InvoicePaymentMethodDO';
-import {CommissionType} from '../../../data-layer/common/data-objects/commission/CommissionDO';
-import {InvoiceItemType} from '../../../data-layer/invoices/data-objects/items/InvoiceItemDO';
+import {IValidationStructure} from '../../../../utils/th-validation/structure/core/IValidationStructure';
+import {ObjectValidationStructure} from '../../../../utils/th-validation/structure/ObjectValidationStructure';
+import {PrimitiveValidationStructure} from '../../../../utils/th-validation/structure/PrimitiveValidationStructure';
+import {ArrayValidationStructure} from '../../../../utils/th-validation/structure/ArrayValidationStructure';
+import {StringValidationRule} from '../../../../utils/th-validation/rules/StringValidationRule';
+import {NumberValidationRule} from '../../../../utils/th-validation/rules/NumberValidationRule';
+import {NumberInListValidationRule} from '../../../../utils/th-validation/rules/NumberInListValidationRule';
+import {InvoiceDO, InvoicePaymentStatus} from '../../../../data-layer/invoices/data-objects/InvoiceDO';
+import {InvoicePaymentMethodType} from '../../../../data-layer/invoices/data-objects/payers/InvoicePaymentMethodDO';
+import {CommissionType} from '../../../../data-layer/common/data-objects/commission/CommissionDO';
+import {InvoiceItemType} from '../../../../data-layer/invoices/data-objects/items/InvoiceItemDO';
 
-export class AddNewCustomerInvoiceGroupDO {
+export class AddNewCustomerInvoiceDO {
     invoiceList: InvoiceDO[];
 
     public static getValidationStructure(): IValidationStructure {

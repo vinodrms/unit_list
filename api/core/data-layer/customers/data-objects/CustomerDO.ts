@@ -5,6 +5,7 @@ import {IndividualDetailsDO} from './customer-details/individual/IndividualDetai
 import {CompanyDetailsDO} from './customer-details/corporate/CompanyDetailsDO';
 import {TravelAgencyDetailsDO} from './customer-details/corporate/TravelAgencyDetailsDO';
 import {ICustomerDetailsDO} from './customer-details/ICustomerDetailsDO';
+import {PriceProductDO, PriceProductAvailability} from '../../price-products/data-objects/PriceProductDO';
 
 export enum CustomerType {
 	Individual,
@@ -32,7 +33,7 @@ export class CustomerDO extends BaseDO {
 	notes: string;
 
 	protected getPrimitivePropertyKeys(): string[] {
-		return ["id", "hotelId", "versionId", "type", "status", "indexedName","notes"];
+		return ["id", "hotelId", "versionId", "type", "status", "indexedName", "notes"];
 	}
 
 	public buildFromObject(object: Object) {
@@ -66,5 +67,11 @@ export class CustomerDO extends BaseDO {
 	}
 	public isIndividual(): boolean {
 		return this.type === CustomerType.Individual;
+	}
+	public hasAccessOnPriceProduct(priceProduct: PriceProductDO): boolean {
+		if (this.priceProductDetails.allowPublicPriceProducts && priceProduct.availability === PriceProductAvailability.Public) {
+			return true;
+		}
+		return _.contains(this.priceProductDetails.priceProductIdList, priceProduct.id);
 	}
 }

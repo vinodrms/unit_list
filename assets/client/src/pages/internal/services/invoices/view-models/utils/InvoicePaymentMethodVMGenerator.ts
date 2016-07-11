@@ -12,6 +12,7 @@ export class InvoicePaymentMethodVMGenerator {
         var paymentMethodList: InvoicePaymentMethodVM[] = [];
         if (customer.customerDetails.canPayInvoiceByAgreement()) {
             paymentMethodList.push(this.generatePayInvoiceByAgreementPaymentMethodVM());
+            return paymentMethodList;
         }
         _.forEach(this._allowedPaymentMethods.paymentMethodList, (paymentMethod: PaymentMethodDO) => {
             paymentMethodList.push(this.generatePaymentMethodVMFor(paymentMethod));

@@ -112,7 +112,8 @@ export class AddBookingItems {
 
                 var bookingItemsConverter = new BookingItemsConverter(this._appContext, this._sessionContext, {
                     hotelDO: this._loadedHotel,
-                    priceProductsContainer: this._loadedPriceProductsContainer
+                    priceProductsContainer: this._loadedPriceProductsContainer,
+                    customersContainer: this._loadedCustomersContainer
                 });
                 return bookingItemsConverter.convert(this._bookingItems, this._inputChannel);
             }).then((convertedBookingList: BookingDO[]) => {

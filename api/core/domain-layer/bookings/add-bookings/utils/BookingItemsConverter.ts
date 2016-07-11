@@ -16,12 +16,14 @@ import {HotelDO} from '../../../../data-layer/hotel/data-objects/HotelDO';
 import {BookingUtils} from '../../utils/BookingUtils';
 import {ThDateIntervalDO} from '../../../../utils/th-dates/data-objects/ThDateIntervalDO';
 import {BookingPriceDO, BookingPriceType} from '../../../../data-layer/bookings/data-objects/price/BookingPriceDO';
+import {CustomersContainer} from '../../../customers/validators/results/CustomersContainer';
 
 import _ = require('underscore');
 
 export class BookingItemsConverterParams {
     priceProductsContainer: PriceProductsContainer;
     hotelDO: HotelDO;
+    customersContainer: CustomersContainer;
 }
 
 export class BookingItemsConverter {
@@ -115,6 +117,8 @@ export class BookingItemsConverter {
                 roomCategoryId: bookingDO.roomCategoryId
             });
             bookingDO.price.totalPrice = bookingDO.price.numberOfItems * bookingDO.price.pricePerItem;
+            this._bookingUtils.updateIndexedSearchTerms(bookingDO, this._converterParams.customersContainer);
+
             bookingList.push(bookingDO);
         });
         resolve(bookingList);

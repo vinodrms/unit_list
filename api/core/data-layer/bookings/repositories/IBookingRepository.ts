@@ -16,6 +16,7 @@ export interface BookingSearchCriteriaRepoDO {
     confirmationStatusList?: BookingConfirmationStatus[];
     groupBookingId?: string;
     bookingIdList?: string[];
+    searchTerm?: string;
 }
 export interface BookingSearchResultRepoDO {
     lazyLoad?: LazyLoadRepoDO;

@@ -3,6 +3,7 @@ import {ThError} from '../../core/utils/th-responses/ThError';
 import {ThStatusCode, ThResponse} from '../../core/utils/th-responses/ThResponse';
 import {ThUtils} from '../../core/utils/ThUtils';
 import {SessionContext} from '../../core/utils/SessionContext';
+import {ThTranslation} from '../../core/utils/localization/ThTranslation';
 
 import _ = require("underscore");
 
@@ -51,4 +52,8 @@ export class BaseController {
 		var sessionContext: SessionContext = req.sessionContext;
 		return res.json(thResponse.buildJson(sessionContext.language));
 	}
+
+	protected getThTranslation(sessionContext: SessionContext): ThTranslation {
+        return new ThTranslation(sessionContext.language);
+    }
 }

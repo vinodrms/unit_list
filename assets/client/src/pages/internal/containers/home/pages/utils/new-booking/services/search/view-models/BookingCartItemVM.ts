@@ -51,6 +51,12 @@ export class BookingCartItemVM {
     customerList: CustomerDO[];
     allowedPaymentMethods: HotelPaymentMethodsDO;
 
+    private _thUtils: ThUtils;
+
+    constructor() {
+        this._thUtils = new ThUtils();
+    }
+
     public checkValidity(): BillingValidationResult {
         if (this.customerList.length == 0) {
             return this.buildBillingValidationResult(false, "Select a customer for the booking");
@@ -99,8 +105,16 @@ export class BookingCartItemVM {
         this.customerList.push(customer);
         this.updateBookingCustomers();
     }
-    public replaceCustomer(oldCustomer: CustomerDO, newCustomer: CustomerDO) {
+    public replaceCustomerIfNewOneNotExists(oldCustomer: CustomerDO, newCustomer: CustomerDO) {
         if (this.containsCustomer(newCustomer)) { return; }
+        this.replaceCustomer(oldCustomer, newCustomer);
+    }
+
+    public updateCustomerIfExists(customer: CustomerDO) {
+        if (!this.containsCustomer(customer)) { return; }
+        this.replaceCustomer(customer, customer);
+    }
+    private replaceCustomer(oldCustomer: CustomerDO, newCustomer: CustomerDO) {
         var index = _.findIndex(this.customerList, (customer: CustomerDO) => { return customer.id === oldCustomer.id });
         if (index >= 0 && index < this.customerList.length) {
             this.customerList[index] = newCustomer;
@@ -108,12 +122,28 @@ export class BookingCartItemVM {
         this.updateBookingCustomers();
     }
     private containsCustomer(customer: CustomerDO): boolean {
-        var thUtils = new ThUtils();
         var foundCustomer = this.getCustomerById(customer.id);
-        return !thUtils.isUndefinedOrNull(foundCustomer);
+        return !this._thUtils.isUndefinedOrNull(foundCustomer);
+    }
+    public didSelectBilledToCustomer(): boolean {
+        return !this._thUtils.isUndefinedOrNull(this.transientBookingItem.defaultBillingDetails.customerId)
+            && this.customerList.length > 0;
+    }
+    public removeBilledToCustomer() {
+        this.transientBookingItem.defaultBillingDetails.customerId = null;
     }
 
     private updateBookingCustomers() {
         this.transientBookingItem.customerIdList = _.map(this.customerList, (customer: CustomerDO) => { return customer.id });
+    }
+
+    public getNumberOfCompaniesOrTravelAgencies(): number {
+        var count = 0;
+        _.forEach(this.customerList, (customer: CustomerDO) => {
+            if (customer.isCompanyOrTravelAgency()) {
+                count++;
+            }
+        });
+        return count;
     }
 }

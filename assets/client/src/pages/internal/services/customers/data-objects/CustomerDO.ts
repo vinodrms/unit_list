@@ -3,6 +3,7 @@ import {FileAttachmentDO} from '../../common/data-objects/file/FileAttachmentDO'
 import {CustomerPriceProductDetailsDO} from './price-product-details/CustomerPriceProductDetailsDO';
 import {ICustomerDetailsDO} from './customer-details/ICustomerDetailsDO';
 import {CustomerDetailsFactory} from './customer-details/CustomerDetailsFactory';
+import {PriceProductDO, PriceProductAvailability} from '../../price-products/data-objects/PriceProductDO';
 
 export enum CustomerType {
 	Individual,
@@ -43,7 +44,7 @@ export class CustomerDO extends BaseDO {
 		this.priceProductDetails = new CustomerPriceProductDetailsDO();
 		this.priceProductDetails.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "priceProductDetails"));
 	}
-	
+
 	public isIndividual(): boolean {
 		return this.type === CustomerType.Individual;
 	}
@@ -52,6 +53,9 @@ export class CustomerDO extends BaseDO {
 	}
 	public isTravelAgency(): boolean {
 		return this.type === CustomerType.TravelAgency;
+	}
+	public isCompanyOrTravelAgency(): boolean {
+		return this.type === CustomerType.Company || this.type === CustomerType.TravelAgency;
 	}
 	public get customerName(): string {
 		return this.customerDetails.getName();
@@ -70,5 +74,12 @@ export class CustomerDO extends BaseDO {
 			custNameEmailStr += " - " + emailStr;
 		}
 		return custNameEmailStr;
+	}
+
+	public hasAccessOnPriceProduct(priceProduct: PriceProductDO): boolean {
+		if (this.priceProductDetails.allowPublicPriceProducts && priceProduct.availability === PriceProductAvailability.Public) {
+			return true;
+		}
+		return _.contains(this.priceProductDetails.priceProductIdList, priceProduct.id);
 	}
 }

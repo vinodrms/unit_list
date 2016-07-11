@@ -1,7 +1,7 @@
 import {BaseDO} from '../../../../../common/base/BaseDO';
 import {NotificationDO, ThNotificationCode} from './NotificationDO';
 import {ThDateUtils} from '../../common/data-objects/th-dates/ThDateUtils';
-import {ThTimestamp} from '../../common/data-objects/th-dates/ThTimestamp';
+import {ThTimestampDO} from '../../common/data-objects/th-dates/ThTimestampDO';
 
 var ThNotificationMessage: { [index: number]: string; } = {};
 ThNotificationMessage[ThNotificationCode.AllotmentArchivedAutomatically] = "Your allotment for the period %period% has been automatically archived as it reached the expired date.";
@@ -9,7 +9,7 @@ ThNotificationMessage[ThNotificationCode.AllotmentArchivedAutomatically] = "Your
 export class ThNotificationDO extends BaseDO {
     notification: NotificationDO;
     translatedMessage: string;
-    thTimestamp: ThTimestamp;
+    thTimestamp: ThTimestampDO;
 
     constructor() {
         super();

@@ -7,6 +7,7 @@ import {TranslationPipe} from '../../../../../../../../../../../common/utils/loc
 import {BookingCartItemVM} from '../../../../services/search/view-models/BookingCartItemVM';
 import {BookingControllerService} from '../../utils/BookingControllerService';
 import {CustomerDO} from '../../../../../../../../../services/customers/data-objects/CustomerDO';
+import {BookingDOConstraints} from '../../../../../../../../../services/bookings/data-objects/BookingDOConstraints';
 import {IBookingCustomerRegisterSelector} from '../../utils/IBookingCustomerRegister';
 import {InvoicePaymentMethodVMGenerator} from '../../../../../../../../../services/invoices/view-models/utils/InvoicePaymentMethodVMGenerator';
 import {InvoicePaymentMethodVM} from '../../../../../../../../../services/invoices/view-models/InvoicePaymentMethodVM';
@@ -58,38 +59,70 @@ export class BookingDetailsEditorComponent extends BaseComponent {
     public isBilledCustomer(customer: CustomerDO): boolean {
         return this._bookingCartItem.transientBookingItem.defaultBillingDetails.customerId === customer.id;
     }
+    protected canBeBilledCustomer(customer: CustomerDO): boolean {
+        return customer.hasAccessOnPriceProduct(this._bookingCartItem.priceProduct);
+    }
 
     public addCustomer() {
-        this._customerRegisterSelector.selectCustomerFromRegister().subscribe((selectedCustomer: CustomerDO) => {
+        this.getAllowedCustomerFromRegister((selectedCustomer: CustomerDO) => {
+            if (selectedCustomer.isCompanyOrTravelAgency() && this._bookingCartItem.getNumberOfCompaniesOrTravelAgencies() >= BookingDOConstraints.MaxNoOfCompaniesOrTravelAgenciesOnBooking) {
+                var errorMessage = this._appContext.thTranslation.translate("You cannot have more than %noCompOrTa% Company or Travel Agent on a booking", { noCompOrTa: BookingDOConstraints.MaxNoOfCompaniesOrTravelAgenciesOnBooking });
+                this._appContext.toaster.error(errorMessage);
+                return;
+            }
             this._bookingCartItem.addCustomerIfNotExists(selectedCustomer);
-            if (this._bookingCartItem.customerList.length == 1) {
-                this.markBilledCustomer(selectedCustomer);
+            if (!this.didSelectBilledToCustomer()) {
+                this.updateBilledCustomer(selectedCustomer);
             }
             this.triggerBookingCartItemChange();
         });
     }
     public changeCustomer(previousCustomer: CustomerDO) {
-        this._customerRegisterSelector.selectCustomerFromRegister().subscribe((selectedCustomer: CustomerDO) => {
-            this._bookingCartItem.replaceCustomer(previousCustomer, selectedCustomer);
-            if (this._bookingCartItem.transientBookingItem.defaultBillingDetails.customerId === previousCustomer.id) {
-                this.markBilledCustomer(selectedCustomer);
+        this.getAllowedCustomerFromRegister((selectedCustomer: CustomerDO) => {
+            this._bookingCartItem.replaceCustomerIfNewOneNotExists(previousCustomer, selectedCustomer);
+            if (this.isBilledCustomer(previousCustomer) || !this.didSelectBilledToCustomer()) {
+                if (!this.updateBilledCustomer(selectedCustomer)) {
+                    this._bookingCartItem.removeBilledToCustomer();
+                }
             }
             this.triggerBookingCartItemChange();
         });
     }
-    public markBilledCustomerFromTemplate(customer: CustomerDO) {
-        this.markBilledCustomer(customer);
-        this.triggerBookingCartItemChange();
+    private getAllowedCustomerFromRegister(callback: { (selectedCustomer: CustomerDO): void }) {
+        this._customerRegisterSelector.selectCustomerFromRegister().subscribe((selectedCustomer: CustomerDO) => {
+            this._bookingCartItem.updateCustomerIfExists(selectedCustomer);
+
+            if (!selectedCustomer.hasAccessOnPriceProduct(this._bookingCartItem.priceProduct)) {
+                if (this.isBilledCustomer(selectedCustomer)) {
+                    this._bookingCartItem.removeBilledToCustomer();
+                }
+                if (selectedCustomer.isCompanyOrTravelAgency()) {
+                    var errorMessage = this._appContext.thTranslation.translate("%customerName% has no access on this price product", { customerName: selectedCustomer.customerName });
+                    this._appContext.toaster.error(errorMessage);
+                    return;
+                }
+            }
+            callback(selectedCustomer);
+        });
     }
-    private markBilledCustomer(customer: CustomerDO) {
+
+    public updateBilledCustomerFromTemplate(customer: CustomerDO) {
+        if (this.updateBilledCustomer(customer)) {
+            this.triggerBookingCartItemChange();
+        }
+    }
+    private updateBilledCustomer(customer: CustomerDO): boolean {
+        if (!this.canBeBilledCustomer(customer)) {
+            return false;
+        }
         this._bookingCartItem.transientBookingItem.defaultBillingDetails.customerId = customer.id;
         this._bookingCartItem.customerNameString = customer.customerName;
         this.buildPaymentMethodVMList();
+        return true;
     }
 
     public didSelectBilledToCustomer(): boolean {
-        return !this._appContext.thUtils.isUndefinedOrNull(this._bookingCartItem.transientBookingItem.defaultBillingDetails.customerId)
-            && this._bookingCartItem.customerList.length > 0;
+        return this._bookingCartItem.didSelectBilledToCustomer();
     }
     public get paymentGuarantee(): boolean {
         return this._bookingCartItem.transientBookingItem.defaultBillingDetails.paymentGuarantee;
@@ -132,9 +165,8 @@ export class BookingDetailsEditorComponent extends BaseComponent {
         return false;
     }
     private setDefaultPaymentMethodReference(): boolean {
-        var defaultPM = _.find(this.paymentMethodVMList, (pm: InvoicePaymentMethodVM) => { return pm.paymentMethod.type == InvoicePaymentMethodType.DefaultPaymentMethod; });
-        if (defaultPM) {
-            this._bookingCartItem.transientBookingItem.defaultBillingDetails.paymentMethod = defaultPM.paymentMethod;
+        if (this.paymentMethodVMList.length > 0) {
+            this._bookingCartItem.transientBookingItem.defaultBillingDetails.paymentMethod = this.paymentMethodVMList[0].paymentMethod;
             return true;
         }
         return false;

@@ -31,7 +31,8 @@ export class MongoUpdateBookingRepository extends MongoRepository {
                 "bookingList.$.cancellationTime": booking.cancellationTime,
                 "bookingList.$.notes": booking.notes,
                 "bookingList.$.fileAttachmentList": booking.fileAttachmentList,
-                "bookingList.$.bookingHistory": booking.bookingHistory
+                "bookingList.$.bookingHistory": booking.bookingHistory,
+                "bookingList.$.indexedSearchTerms": booking.indexedSearchTerms,
             });
     }
 

@@ -1,6 +1,6 @@
-import {BaseDO} from '../../common/base/BaseDO';
-import {ThUtils} from '../../../utils/ThUtils';
-import {ThDateIntervalDO} from '../../../utils/th-dates/data-objects/ThDateIntervalDO';
+import {BaseDO} from '../../../../../common/base/BaseDO';
+import {ThUtils} from '../../../../../common/utils/ThUtils';
+import {ThDateIntervalDO} from '../../common/data-objects/th-dates/ThDateIntervalDO';
 import {ConfigCapacityDO} from '../../common/data-objects/bed-config/ConfigCapacityDO';
 import {PriceProductDO} from '../../price-products/data-objects/PriceProductDO';
 import {FileAttachmentDO} from '../../common/data-objects/file/FileAttachmentDO';
@@ -30,7 +30,6 @@ export class BookingDO extends BaseDO {
     // booking group
     groupBookingId: string;
     groupBookingReference: string;
-    hotelId: string;
     versionId: number;
     status: GroupBookingStatus;
     inputChannel: GroupBookingInputChannel;
@@ -59,7 +58,7 @@ export class BookingDO extends BaseDO {
     indexedSearchTerms: string[];
 
     protected getPrimitivePropertyKeys(): string[] {
-        return ["groupBookingId", "groupBookingReference", "hotelId", "versionId", "status", "inputChannel", "noOfRooms", "bookingId", "bookingReference", "confirmationStatus",
+        return ["groupBookingId", "groupBookingReference", "versionId", "status", "inputChannel", "noOfRooms", "bookingId", "bookingReference", "confirmationStatus",
             "customerIdList", "startUtcTimestamp", "endUtcTimestamp", "roomCategoryId", "roomId", "priceProductId", "allotmentId", "notes", "indexedSearchTerms"];
     }
 

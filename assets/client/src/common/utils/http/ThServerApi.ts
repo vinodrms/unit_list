@@ -65,6 +65,9 @@ export enum ThServerApi {
 	NotificationsMarkAsRead,
 	BookingsSearch,
 	BookingsAdd,
+	Bookings,
+	BookingsCount,
+
 }
 
 var ThServerApiUrl: { [index: number]: string; } = {};
@@ -136,6 +139,8 @@ ThServerApiUrl[ThServerApi.NotificationsCount] = "/notifications/count";
 ThServerApiUrl[ThServerApi.NotificationsMarkAsRead] = "/notifications/markNotificationsAsRead";
 ThServerApiUrl[ThServerApi.BookingsSearch] = "/bookings/search";
 ThServerApiUrl[ThServerApi.BookingsAdd] = "/bookings/add";
+ThServerApiUrl[ThServerApi.Bookings] = "/bookings";
+ThServerApiUrl[ThServerApi.BookingsCount] = "/bookings/count";
 
 export class ServerApiBuilder {
 	public static ApiRoot = "/api";
