@@ -4,6 +4,8 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/combineLatest';
 import {AppContext, ThServerApi} from '../../../../common/utils/AppContext';
 import {ALazyLoadRequestService} from '../common/ALazyLoadRequestService';
+import {ThDateIntervalDO} from '../common/data-objects/th-dates/ThDateIntervalDO';
+import {ThDateUtils} from '../common/data-objects/th-dates/ThDateUtils';
 import {BookingDO} from './data-objects/BookingDO';
 import {BookingsDO} from './data-objects/BookingsDO';
 import {BookingVM} from './view-models/BookingVM';
@@ -17,7 +19,10 @@ import {BookingMetaFactory} from './data-objects/BookingMetaFactory';
 
 @Injectable()
 export class BookingsService extends ALazyLoadRequestService<BookingVM> {
+    public static DefaultDayOffset = 60;
     private _bookingMetaFactory: BookingMetaFactory;
+
+    private _interval: ThDateIntervalDO;
 
     constructor(appContext: AppContext,
         private _eagerCustomersService: EagerCustomersService,
@@ -25,6 +30,13 @@ export class BookingsService extends ALazyLoadRequestService<BookingVM> {
         private _roomCategoriesService: RoomCategoriesService) {
         super(appContext, ThServerApi.BookingsCount, ThServerApi.Bookings);
         this._bookingMetaFactory = new BookingMetaFactory();
+        this.buildDefaultSearchInterval();
+        this.defaultSearchCriteria = { interval: this._interval };
+    }
+    private buildDefaultSearchInterval() {
+        var dateUtils = new ThDateUtils();
+        this._interval = dateUtils.getTodayToTomorrowInterval();
+        this._interval.end = dateUtils.addDaysToThDateDO(this._interval.end, BookingsService.DefaultDayOffset);
     }
 
     protected parsePageDataCore(pageDataObject: Object): Observable<BookingVM[]> {
@@ -69,5 +81,14 @@ export class BookingsService extends ALazyLoadRequestService<BookingVM> {
         this.updateSearchCriteria({
             searchTerm: text
         });
+    }
+
+    public get interval(): ThDateIntervalDO {
+        return this._interval;
+    }
+    public set interval(interval: ThDateIntervalDO) {
+        this._interval = interval;
+        this.defaultSearchCriteria = { interval: this._interval };
+        this.refreshData();
     }
 }

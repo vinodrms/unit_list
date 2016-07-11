@@ -70,26 +70,28 @@ export class MongoGetBookingsRepository extends MongoRepository {
             return mongoQueryBuilder.processedQuery;
         }
 
-        if (!this._thUtils.isUndefinedOrNull(searchCriteria.interval)
-            && !this._thUtils.isUndefinedOrNull(searchCriteria.interval.isValid)
-            && searchCriteria.interval.isValid()) {
-            var indexedBookingInterval = new IndexedBookingInterval(searchCriteria.interval);
-            var queryStartUtcTimestamp = indexedBookingInterval.getStartUtcTimestamp();
-            var queryEndUtcTimestamp = indexedBookingInterval.getEndUtcTimestamp();
-            mongoQueryBuilder.addCustomQuery("$or", [
-                {
-                    $and: [
-                        { "bookingList.startUtcTimestamp": { $lte: queryStartUtcTimestamp } },
-                        { "bookingList.endUtcTimestamp": { $gte: queryStartUtcTimestamp } }
-                    ]
-                },
-                {
-                    $and: [
-                        { "bookingList.startUtcTimestamp": { $gte: queryStartUtcTimestamp } },
-                        { "bookingList.startUtcTimestamp": { $lte: queryEndUtcTimestamp } }
-                    ]
-                }
-            ]);
+        if (!this._thUtils.isUndefinedOrNull(searchCriteria.interval)) {
+            var searchInterval = new ThDateIntervalDO();
+            searchInterval.buildFromObject(searchCriteria.interval);
+            if (searchInterval.isValid()) {
+                var indexedBookingInterval = new IndexedBookingInterval(searchInterval);
+                var queryStartUtcTimestamp = indexedBookingInterval.getStartUtcTimestamp();
+                var queryEndUtcTimestamp = indexedBookingInterval.getEndUtcTimestamp();
+                mongoQueryBuilder.addCustomQuery("$or", [
+                    {
+                        $and: [
+                            { "bookingList.startUtcTimestamp": { $lte: queryStartUtcTimestamp } },
+                            { "bookingList.endUtcTimestamp": { $gte: queryStartUtcTimestamp } }
+                        ]
+                    },
+                    {
+                        $and: [
+                            { "bookingList.startUtcTimestamp": { $gte: queryStartUtcTimestamp } },
+                            { "bookingList.startUtcTimestamp": { $lte: queryEndUtcTimestamp } }
+                        ]
+                    }
+                ]);
+            }
         }
         mongoQueryBuilder.addMultipleSelectOptionList("bookingList.confirmationStatus", searchCriteria.confirmationStatusList);
         mongoQueryBuilder.addExactMatch("id", searchCriteria.groupBookingId);

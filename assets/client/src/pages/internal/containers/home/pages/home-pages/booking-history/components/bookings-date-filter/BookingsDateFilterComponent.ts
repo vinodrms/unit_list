@@ -1,6 +1,7 @@
 import {Component} from '@angular/core';
 import {ThDateIntervalPickerComponent} from '../../../../../../../../../common/utils/components/ThDateIntervalPickerComponent';
 import {BookingsService} from '../../../../../../../services/bookings/BookingsService';
+import {ThDateIntervalDO} from '../../../../../../../services/common/data-objects/th-dates/ThDateIntervalDO';
 
 @Component({
     selector: 'bookings-date-filter',
@@ -8,6 +9,14 @@ import {BookingsService} from '../../../../../../../services/bookings/BookingsSe
     directives: [ThDateIntervalPickerComponent]
 })
 export class BookingsDateFilterComponent {
-    constructor(private _bookingsService: BookingsService) { }
+    searchInterval: ThDateIntervalDO;
+
+    constructor(private _bookingsService: BookingsService) {
+        this.searchInterval = this._bookingsService.interval;
+    }
+
+    public didSelectSearchInterval(interval: ThDateIntervalDO) {
+        this._bookingsService.interval = interval;
+    }
 
 }
