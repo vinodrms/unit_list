@@ -2797,3 +2797,7 @@ a.btn.btn-square:focus {
 .f-128 {
   font-size: 128px !important;
 }
+
+.operational-box {
+    background-color: white;
+}
