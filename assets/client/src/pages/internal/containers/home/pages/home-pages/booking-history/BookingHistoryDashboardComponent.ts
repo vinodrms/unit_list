@@ -44,6 +44,7 @@ export class BookingHistoryDashboardComponent extends AHomeContainerComponent im
 	public openNewBookingModal() {
 		this._newBookingModalService.openNewBookingModal().then((modalDialogInstance: ModalDialogRef<NewBookingResult>) => {
 			modalDialogInstance.resultObservable.subscribe((newBookingResult: NewBookingResult) => {
+				this._bookingsService.refreshData();
 			});
 		}).catch((e: any) => { });
 	}
