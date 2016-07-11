@@ -56,10 +56,11 @@ export class BookingDO extends BaseDO {
     notes: string;
     fileAttachmentList: FileAttachmentDO[];
     bookingHistory: DocumentHistoryDO;
+    indexedSearchTerms: string[];
 
     protected getPrimitivePropertyKeys(): string[] {
         return ["groupBookingId", "groupBookingReference", "hotelId", "versionId", "status", "inputChannel", "noOfRooms", "bookingId", "bookingReference", "confirmationStatus",
-            "customerIdList", "startUtcTimestamp", "endUtcTimestamp", "roomCategoryId", "roomId", "priceProductId", "allotmentId", "notes"];
+            "customerIdList", "startUtcTimestamp", "endUtcTimestamp", "roomCategoryId", "roomId", "priceProductId", "allotmentId", "notes", "indexedSearchTerms"];
     }
 
     public buildFromObject(object: Object) {
