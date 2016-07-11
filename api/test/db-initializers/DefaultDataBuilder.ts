@@ -142,12 +142,12 @@ export class DefaultDataBuilder {
                 return roomCategoryBuilder.loadRoomCategories(roomCategoryBuilder, this._bedList);
             }).then((addedRoomCategories: RoomCategoryDO[]) => {
                 this._roomCategoryList = addedRoomCategories;
-                console.log('before reading the new room categories');
+                console.log('before reading the new bed id list');
                 
-                var roomCategoryIdList: string[] = _.map(this._roomCategoryList, (roomCategory: RoomCategoryDO) => { return roomCategory.id });
-                return this._testContext.appContext.getRepositoryFactory().getRoomCategoryRepository().getRoomCategoryList({ hotelId: this._testContext.sessionContext.sessionDO.hotel.id }, { categoryIdList: roomCategoryIdList });
+                var bedIdList: string[] = _.map(this._bedList, (bed: BedDO) => { return bed.id });
+                return this._testContext.appContext.getRepositoryFactory().getBedRepository().getBedList({ hotelId: this._testContext.sessionContext.sessionDO.hotel.id }, { bedIdList: bedIdList });
             }).then((result: any) => {
-                console.log('after reading the new room categories:  ' + JSON.stringify(result));
+                console.log('after reading the new bed list:  ' + JSON.stringify(result));
                 
                 var settingsRepository = this._testContext.appContext.getRepositoryFactory().getSettingsRepository();
                 return settingsRepository.getRoomAmenities();
