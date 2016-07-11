@@ -1,0 +1,73 @@
+<div class="booking-details-container full-height" customScroll>
+    <div class="col-sm-12 col-xs-12 booking-details-header">
+        <span class="first-line"><i class="fa unitpal-font" title="{{'Booking/Group Booking References' | translate}}">8</i> {{ bookingVM.booking.bookingReference }} / {{ bookingVM.booking.groupBookingReference }}</span>
+    </div>
+    <div class="col-xs-12 booking-details-row"> 
+        <i class="fa unitpal-font" title="{{'Status' | translate}}">+</i> {{ bookingVM.bookingMeta.displayName }}
+    </div>
+    <div class="col-xs-12 booking-details-row">
+        <i class="fa fa-calendar" title="{{ 'Period' | translate }}"></i> {{ intervalString }}
+        <span><i class="fa unitpal-font" title="{{'Number of Nights' | translate}}">Y</i> {{ noOfNights }} </span>
+    </div>
+    <div class="col-xs-12 booking-details-row">
+        <i class="fa fa-calendar-check-o" title="{{ 'Conditions' | translate }}"></i> {{ bookingVM.conditionsString }}
+    </div>
+    <div class="col-xs-12 booking-details-row">
+        <i class="fa fa-lock" title="{{ 'Constraints' | translate }}"></i> {{ bookingVM.constraintsString }}
+    </div>
+    <div class="col-xs-12 booking-details-table">
+        <table class="table form-group">
+            <thead>
+                <tr>
+                    <th> {{ 'Price Product' | translate }} </th>
+                    <th> {{ 'Room' | translate }} </th>
+                    <th> {{ 'No People' | translate }} </th>
+                    <th> {{ 'Allotment' | translate }} </th>
+                    <th> {{ 'Price' | translate }} </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td width="30%">{{ bookingVM.booking.priceProductSnapshot.name }}</td>
+                    <td width="30%">{{ bookingVM.roomCategory.displayName }}</td>
+                    <td width="10%">
+                        <config-capacity [configCapacity]="bookingVM.booking.configCapacity"></config-capacity>
+                    </td>
+                    <td width="10%">
+                        <span *ngIf="!bookingVM.booking.isMadeThroughAllotment()">{{ 'No' | translate }}</span>
+                        <span *ngIf="bookingVM.booking.isMadeThroughAllotment()">{{ 'Yes' | translate }}</span>
+                    </td>
+                    <td width="20%">{{ bookingVM.totalPriceString }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="col-xs-12 booking-details-table">
+        <table class="table form-group">
+            <thead class="input-group">
+                <tr>
+                    <th>
+                        {{ 'Customers' | translate }}
+                    </th>
+                    <th>&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody class="input-group">
+                <tr *ngFor="let customer of bookingVM.customerList">
+                    <td width="50%" class="booking-details-action-description">{{ customer.customerName }}</td>
+                    <td width="50%">
+                        <!-- Billing details -->
+                        <span *ngIf="bookingVM.isBilledCustomer(customer)" title="{{'The invoice will be generated with this customer' | translate}}" class="booking-details-action-button booking-details-action-readonly-button">
+                            {{ 'Billed To' | translate }}  <i class="fa unitpal-font">D</i>
+                        </span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="col-xs-12">
+		<a class="btn btn-lg" (click)="editBooking()">
+			<i class="fa fa-pencil"></i> {{ 'Edit' | translate }}
+		</a>
+    </div>
+</div>

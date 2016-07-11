@@ -1,4 +1,5 @@
-import {Component, OnInit, Output, EventEmitter, Input, AfterViewChecked, Inject, ElementRef, ViewChild} from '@angular/core';
+import {Component, OnInit, Output, EventEmitter, Input, Inject, ElementRef,
+	ViewChild, ViewContainerRef, Type, ResolvedReflectiveProvider, DynamicComponentLoader, OnChanges} from '@angular/core';
 import {LoadingComponent} from '../LoadingComponent';
 import {ThButtonComponent} from '../ThButtonComponent';
 import {DebouncingInputTextComponent} from '../DebouncingInputTextComponent';
@@ -23,6 +24,10 @@ import {ThUtils} from '../../ThUtils';
 	pipes: [TranslationPipe, PricePipe, PercentagePipe, ThDateIntervalPipe]
 })
 export class LazyLoadingTableComponent<T> {
+	@ViewChild('topTableCenter', { read: ViewContainerRef }) private _topTableCenterVCRef: ViewContainerRef;
+	private _didInitTopTableCenterRegion: boolean = false;
+	private _bootstrapTopTableCenterCallback: { (): { componentToInject: Type, providers: ResolvedReflectiveProvider[] } };
+
 	private _thUtils: ThUtils;
 	protected _isCollapsed: boolean;
 	private _rowClassGenerator: { (item: T): string };
@@ -91,7 +96,8 @@ export class LazyLoadingTableComponent<T> {
 
 	@ViewChild(CustomScroll) private _scrollableBodyRegion: CustomScroll;
 
-	constructor(private _appContext: AppContext,
+	constructor(private _dynamicComponentLoader: DynamicComponentLoader,
+		private _appContext: AppContext,
 		@Inject(ElementRef) private _elementRef: ElementRef) {
 		this._thUtils = new ThUtils();
 		this.paginationIndex = new PaginationIndex(_appContext);
@@ -120,6 +126,7 @@ export class LazyLoadingTableComponent<T> {
 
 			this.didInit = true;
 			this.scheduleScrollBodyRegionUpdate();
+			setTimeout(() => { this.registerTopCenterComponentIfNecessary(); });
 		});
 		this.lazyLoadingRequest.refreshData();
 	}
@@ -143,6 +150,15 @@ export class LazyLoadingTableComponent<T> {
 	private scheduleScrollBodyRegionUpdate() {
 		if (!this._scrollableBodyRegion || !this._scrollableBodyRegion.scheduleScrollRegionUpdate) { return };
 		this._scrollableBodyRegion.scheduleScrollRegionUpdate();
+	}
+	private registerTopCenterComponentIfNecessary() {
+		if (!this.didInit || !this._bootstrapTopTableCenterCallback || this._didInitTopTableCenterRegion || !this._topTableCenterVCRef) { return; }
+		var topCenterComp = this._bootstrapTopTableCenterCallback();
+		this._dynamicComponentLoader.loadNextToLocation(topCenterComp.componentToInject, this._topTableCenterVCRef, topCenterComp.providers);
+		this._didInitTopTableCenterRegion = true;
+	}
+	public attachTopTableCenterBootstrap(bootstrapCallback: { (): { componentToInject: Type, providers: ResolvedReflectiveProvider[] } }) {
+		this._bootstrapTopTableCenterCallback = bootstrapCallback;
 	}
 
 	protected searchByText() {
@@ -312,7 +328,7 @@ export class LazyLoadingTableComponent<T> {
 		return $(this._elementRef.nativeElement).find("table.table");
 	}
 
-	public getTableClasses(): string {
+	protected getTableClasses(): string {
 		var classes = 'lazy-loading ';
 		if ((this.columnMetaList.length + 1) % 2 == 0) {
 			classes += 'even-columns';
@@ -323,7 +339,7 @@ export class LazyLoadingTableComponent<T> {
 		return classes;
 	}
 
-	public getCellClasses(columnValueMeta: TableColumnValueMeta, isCollapsed: boolean, item?: T): string {
+	protected getCellClasses(columnValueMeta: TableColumnValueMeta, isCollapsed: boolean, item?: T): string {
 		var classes = '';
 
 		if (isCollapsed) {
@@ -341,7 +357,7 @@ export class LazyLoadingTableComponent<T> {
 		return classes;
 	}
 
-	public getRowClasses(item: T) {
+	protected getRowClasses(item: T) {
 		var classes = '';
 
 		if (this.isSelected(item) && (this.tableOptions.canSelect || this.tableOptions.canMultiSelect)) {
@@ -385,7 +401,7 @@ export class LazyLoadingTableComponent<T> {
 		return this._canPerformCommandOnItem(item, command);
 	}
 
-	public isUndefinedOrNull(value: any): boolean {
+	protected isUndefinedOrNull(value: any): boolean {
 		return this._thUtils.isUndefinedOrNull(value);
 	}
 }

@@ -408,10 +408,16 @@ input.form-control:only-child {
 }
 .date-interval-picker-arrow {
     position: absolute;
-    right: -5px;
-    top: 33px;
     font-size: 20px;
     color: #DBDBDB;
+}
+.date-interval-picker-arrow.normal {
+    right: -10px;
+    top: 33px;
+}
+.date-interval-picker-arrow.expanded {
+    right: -14px;
+    top: 3px;
 }
 @media screen and (max-width: 1000px) {
     .date-interval-picker-arrow {
@@ -2801,4 +2807,13 @@ a.btn.btn-square:focus {
 
 .f-128 {
   font-size: 128px !important;
+}
+
+.operational-box {
+    background-color: white;
+}
+.operational-overview-right {
+    border-left: 1px solid #ccc;
+    padding: 12px 15px 0 15px;
+    height: 100%;
 }
