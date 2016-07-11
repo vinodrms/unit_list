@@ -6,6 +6,9 @@ import {DepartureItemComponent} from './components/departure-item/DepartureItemC
 import {HotelOperationsDashboardService} from '../../services/HotelOperationsDashboardService';
 // import {HeaderPageService} from '../../../utils/header/container/services/HeaderPageService';
 
+import {AppContext} from '../../../../../../../../../../common/utils/AppContext';
+import {ThError} from '../../../../../../../../../../common/utils/responses/ThError';
+
 declare var $:any;
 @Component({
 	selector: 'departures-pane',
@@ -19,7 +22,9 @@ export class DeparturesPaneComponent implements OnInit {
 	
 	@Input() hotelOperationsDashboard: IHotelOperationsDashboardDeparturesMediator;
 
-	constructor(private _hotelOperationsDashboardService: HotelOperationsDashboardService){
+	constructor(
+		private _hotelOperationsDashboardService: HotelOperationsDashboardService,
+		private _appContext: AppContext){
 	}
 
 	ngOnInit() {
@@ -29,9 +34,13 @@ export class DeparturesPaneComponent implements OnInit {
 
 	public refresh(){
 		var date = this.hotelOperationsDashboard.getDate(); 
-		this._hotelOperationsDashboardService.getDepartures(date).then((departures:any[]) =>{
+
+		this._hotelOperationsDashboardService.getDepartures(date)
+		.subscribe((departures: any) => {
 			this.departureItemsVMList = departures;
-		});
+			}, (error: ThError) => {
+				this._appContext.toaster.error(error.message);
+			});		
 	}
 
 	public isDepartureItemSelected(departureItemVM){

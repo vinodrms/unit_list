@@ -10,6 +10,9 @@ import {ArrivalItemComponent} from './components/arrival-item/ArrivalItemCompone
 import {HotelOperationsDashboardService} from '../../services/HotelOperationsDashboardService';
 import {IHotelOperationsDashboardArrivalsPaneMediator} from '../../HotelOperationsDashboardComponent';
 
+import {AppContext} from '../../../../../../../../../../common/utils/AppContext';
+import {ThError} from '../../../../../../../../../../common/utils/responses/ThError';
+
 declare var _ : any;
 
 @Component({
@@ -26,7 +29,10 @@ export class ArrivalsPaneComponent implements OnInit {
 	@Output() dragStarted = new EventEmitter();
 	@Output() dragCanceled = new EventEmitter();
 
-	constructor(private _newBookingModalService: NewBookingModalService, private _hotelOperationsDashboardService: HotelOperationsDashboardService) {
+	constructor(
+		private _newBookingModalService: NewBookingModalService, 
+		private _hotelOperationsDashboardService: HotelOperationsDashboardService,
+		private _appContext:AppContext) {
 	}
 
 	ngOnInit() {
@@ -36,9 +42,14 @@ export class ArrivalsPaneComponent implements OnInit {
 
 	public refresh(){
 		var date = this.hotelOperationsDashboard.getDate(); 
-		this._hotelOperationsDashboardService.getArrivals(date).then((arrivals:any[]) =>{
+
+		this._hotelOperationsDashboardService.getArrivals(date)
+		.subscribe((arrivals: any) => {
 			this.arrivalItemsVMList = arrivals;
-		});
+			}, (error: ThError) => {
+				this._appContext.toaster.error(error.message);
+			});
+		
 	}
 
 	openNewBookingModal() {

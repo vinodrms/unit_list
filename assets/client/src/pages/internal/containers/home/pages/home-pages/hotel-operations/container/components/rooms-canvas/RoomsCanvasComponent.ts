@@ -4,7 +4,11 @@ import {RoomCardComponent} from './components/room-card/RoomCardComponent';
 import {HotelOperationsDashboardService} from '../../services/HotelOperationsDashboardService';
 import {IHotelOperationsDashboardRoomsCanvasMediator} from '../../HotelOperationsDashboardComponent';
 
+
 import {RoomStatusType} from '../../shared/RoomStatusType';
+
+import {AppContext} from '../../../../../../../../../../common/utils/AppContext';
+import {ThError} from '../../../../../../../../../../common/utils/responses/ThError';
 
 declare var $: any;
 
@@ -24,7 +28,10 @@ export class RoomsCanvasComponent implements OnInit {
 
 	private _showNotificationBar;
 	
-	constructor(private _zone: NgZone, private _hotelOperationsDashboardService: HotelOperationsDashboardService) {
+	constructor(
+		private _zone: NgZone,
+		private _hotelOperationsDashboardService: HotelOperationsDashboardService,
+		private _appContext: AppContext) {
 		this.filterType = {
 			currentValue : "All",
 			newValue : "All"	
@@ -67,12 +74,15 @@ export class RoomsCanvasComponent implements OnInit {
 
 	public refresh(){
 		var date = this.hotelOperationsDashboard.getDate();
-		this._hotelOperationsDashboardService.getRooms(this.filterType.newValue, date).then((rooms:any[]) =>{
-			this.filterType.currentValue = this.filterType.newValue;
-			this._showNotificationBar = true;
-			this.roomVMList = rooms;
-			this.updateFilterNotification();
-		});
+		this._hotelOperationsDashboardService.getRooms(this.filterType.newValue, date)
+		.subscribe((rooms: any) => {
+				this.filterType.currentValue = this.filterType.newValue;
+				this._showNotificationBar = true;
+				this.roomVMList = rooms;
+				this.updateFilterNotification();
+			}, (error: ThError) => {
+				this._appContext.toaster.error(error.message);
+			});
 	}
 
 	public updateFilterNotification(){

@@ -105,6 +105,13 @@ module.exports.routes = {
 	'POST /api/allotments/archiveAllotmentItem': 'AllotmentsController.archiveAllotmentItem',
 	'GET /api/allotments/allotmentItem': 'AllotmentsController.getAllotmentById',
 
+	'GET /api/hotelOperations/rooms': 'HotelOperationsController.getRooms',
+	'GET /api/hotelOperations/arrivals': 'HotelOperationsController.getArrivals',
+	'GET /api/hotelOperations/departures': 'HotelOperationsController.getDepartures',
+	'POST /api/hotelOperations/checkIn': 'HotelOperationsController.getCheckIn',
+	'POST /api/hotelOperations/checkOut': 'HotelOperationsController.getCheckOut',
+	
+
 	'POST /api/notifications': 'NotificationsController.getNotificationList',
 	'POST /api/notifications/count': 'NotificationsController.getNotificationListCount',
 	'POST /api/notifications/markNotificationsAsRead': 'NotificationsController.markNotificationsAsRead',

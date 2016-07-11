@@ -53,6 +53,13 @@ export enum ThServerApi {
 	AllotmentsCount,
 	AllotmentsSaveItem,
 	AllotmentsArchiveItem,
+
+	HotelOperationsRooms,
+	HotelOperationsArrivals,
+	HotelOperationsDepartures,
+	HotelOperationsCheckIn,
+	HotelOperationsCheckOut,
+	
 	Notifications,
 	NotificationsCount,
 	NotificationsMarkAsRead,
@@ -117,6 +124,13 @@ ThServerApiUrl[ThServerApi.Allotments] = "/allotments";
 ThServerApiUrl[ThServerApi.AllotmentsCount] = "/allotments/count";
 ThServerApiUrl[ThServerApi.AllotmentsSaveItem] = "/allotments/saveAllotmentItem";
 ThServerApiUrl[ThServerApi.AllotmentsArchiveItem] = "/allotments/archiveAllotmentItem";
+
+ThServerApiUrl[ThServerApi.HotelOperationsRooms] = "/hotelOperations/rooms";
+ThServerApiUrl[ThServerApi.HotelOperationsArrivals] = "/hotelOperations/arrivals";
+ThServerApiUrl[ThServerApi.HotelOperationsDepartures] = "/hotelOperations/departures";
+ThServerApiUrl[ThServerApi.HotelOperationsCheckIn] = "/hotelOperations/checkIn";
+ThServerApiUrl[ThServerApi.HotelOperationsCheckOut] = "/hotelOperations/checkOut";
+
 ThServerApiUrl[ThServerApi.Notifications] = "/notifications";
 ThServerApiUrl[ThServerApi.NotificationsCount] = "/notifications/count";
 ThServerApiUrl[ThServerApi.NotificationsMarkAsRead] = "/notifications/markNotificationsAsRead";
