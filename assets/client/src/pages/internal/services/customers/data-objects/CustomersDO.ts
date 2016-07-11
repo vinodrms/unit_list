@@ -17,4 +17,8 @@ export class CustomersDO extends BaseDO {
 			this.customerList.push(custDO);
 		});
 	}
+
+	public getCustomerById(customerId: string): CustomerDO {
+		return _.find(this.customerList, (customer: CustomerDO) => { return customer.id === customerId });
+	}
 }
