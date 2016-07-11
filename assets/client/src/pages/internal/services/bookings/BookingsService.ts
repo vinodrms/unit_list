@@ -13,14 +13,18 @@ import {HotelAggregatorService} from '../hotel/HotelAggregatorService';
 import {HotelAggregatedInfo} from '../hotel/utils/HotelAggregatedInfo';
 import {RoomCategoriesService} from '../room-categories/RoomCategoriesService';
 import {RoomCategoryDO} from '../room-categories/data-objects/RoomCategoryDO';
+import {BookingMetaFactory} from './data-objects/BookingMetaFactory';
 
 @Injectable()
 export class BookingsService extends ALazyLoadRequestService<BookingVM> {
+    private _bookingMetaFactory: BookingMetaFactory;
+
     constructor(appContext: AppContext,
         private _eagerCustomersService: EagerCustomersService,
         private _hotelAggregatorService: HotelAggregatorService,
         private _roomCategoriesService: RoomCategoriesService) {
         super(appContext, ThServerApi.BookingsCount, ThServerApi.Bookings);
+        this._bookingMetaFactory = new BookingMetaFactory();
     }
 
     protected parsePageDataCore(pageDataObject: Object): Observable<BookingVM[]> {
@@ -49,6 +53,7 @@ export class BookingsService extends ALazyLoadRequestService<BookingVM> {
                 bookingVM.roomCategory = _.find(roomCategoryList, (roomCategory: RoomCategoryDO) => {
                     return roomCategory.id === booking.roomCategoryId;
                 });
+                bookingVM.bookingMeta = this._bookingMetaFactory.getBookingMetaByStatus(booking.confirmationStatus);
                 bookingVM.totalPriceString = booking.price.totalPrice + bookingVM.ccy.nativeSymbol;
                 bookingVM.conditionsString = booking.priceProductSnapshot.conditions.getCancellationConditionsString(this._appContext.thTranslation);
                 bookingVM.constraintsString = booking.priceProductSnapshot.constraints.getBriefValueDisplayString(this._appContext.thTranslation);

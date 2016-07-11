@@ -4,6 +4,7 @@ import {BookingDO} from '../data-objects/BookingDO';
 import {CustomerDO} from '../../customers/data-objects/CustomerDO';
 import {CurrencyDO} from '../../common/data-objects/currency/CurrencyDO';
 import {RoomCategoryDO} from '../../room-categories/data-objects/RoomCategoryDO';
+import {BookingMeta} from '../data-objects/BookingMeta';
 
 export class BookingVM {
     private _thUtils: ThUtils;
@@ -12,6 +13,7 @@ export class BookingVM {
     private _customerList: CustomerDO[];
     private _ccy: CurrencyDO;
     private _roomCategory: RoomCategoryDO;
+    private _bookingMeta: BookingMeta;
     
     totalPriceString: string;
     conditionsString: string;
@@ -45,5 +47,15 @@ export class BookingVM {
     }
     public set roomCategory(roomCategory: RoomCategoryDO) {
         this._roomCategory = roomCategory;
+    }
+    public get bookingMeta(): BookingMeta {
+        return this._bookingMeta;
+    }
+    public set bookingMeta(bookingMeta: BookingMeta) {
+        this._bookingMeta = bookingMeta;
+    }
+
+    public isBilledCustomer(customer: CustomerDO): boolean {
+        return customer.id === this.booking.defaultBillingDetails.customerId;
     }
 }

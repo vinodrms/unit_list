@@ -2801,3 +2801,8 @@ a.btn.btn-square:focus {
 .operational-box {
     background-color: white;
 }
+.operational-overview-right {
+    border-left: 1px solid #ccc;
+    padding: 12px 15px 0 15px;
+    height: 100%;
+}

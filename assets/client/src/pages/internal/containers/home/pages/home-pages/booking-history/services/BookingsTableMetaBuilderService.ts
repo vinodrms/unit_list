@@ -38,7 +38,7 @@ export class BookingsTableMetaBuilderService {
                         objectPropertyId: "booking.interval",
                         propertyType: TablePropertyType.DateIntervalType,
                         showInCollapsedView: false,
-                        normalStyle: "up-col-15p left"
+                        normalStyle: "up-col-20p left"
                     }
                 },
                 {
@@ -66,33 +66,24 @@ export class BookingsTableMetaBuilderService {
                     }
                 },
                 {
-
-                    displayName: "Conditions",
-                    valueMeta: {
-                        objectPropertyId: "conditionsString",
-                        propertyType: TablePropertyType.NotesType,
-                        showInCollapsedView: false,
-                        normalStyle: "up-col-15p center"
-                    }
-                },
-                {
-                    displayName: "Constraints",
-                    valueMeta: {
-                        objectPropertyId: "constraintsString",
-                        propertyType: TablePropertyType.NotesType,
-                        showInCollapsedView: false,
-                        normalStyle: "up-col-15p center"
-                    }
-                },
-                {
                     displayName: "Customer",
                     valueMeta: {
                         objectPropertyId: "customerNameString",
                         propertyType: TablePropertyType.NotesType,
                         showInCollapsedView: false,
-                        normalStyle: "up-col-15p center"
+                        normalStyle: "up-col-20p center"
                     }
-                }
+                },
+                {
+
+                    displayName: "Status",
+                    valueMeta: {
+                        objectPropertyId: "bookingMeta.displayName",
+                        propertyType: TablePropertyType.NotesType,
+                        showInCollapsedView: false,
+                        normalStyle: "up-col-10p center"
+                    }
+                },
             ]
         }
     }

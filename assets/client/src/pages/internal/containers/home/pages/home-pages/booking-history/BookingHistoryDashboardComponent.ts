@@ -7,25 +7,45 @@ import {BookingsService} from '../../../../../services/bookings/BookingsService'
 import {BookingVM} from '../../../../../services/bookings/view-models/BookingVM';
 import {EagerCustomersService} from '../../../../../services/customers/EagerCustomersService';
 import {BookingsTableMetaBuilderService} from './services/BookingsTableMetaBuilderService';
+import {NewBookingModalService} from '../../utils/new-booking/modal/services/NewBookingModalService';
+import {NewBookingResult} from '../../utils/new-booking/modal/services/utils/NewBookingResult';
+import {ModalDialogRef} from '../../../../../../../common/utils/modals/utils/ModalDialogRef';
+import {BookingOverviewComponent} from './components/booking-overview/BookingOverviewComponent';
 
 @Component({
 	selector: 'booking-history-dashboard',
 	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/booking-history/template/booking-history-dashboard.html',
-	providers: [EagerCustomersService, BookingsService, BookingsTableMetaBuilderService],
-	directives: [LazyLoadingTableComponent]
+	providers: [EagerCustomersService, BookingsService, BookingsTableMetaBuilderService, NewBookingModalService],
+	directives: [LazyLoadingTableComponent, BookingOverviewComponent]
 })
 
 export class BookingHistoryDashboardComponent extends AHomeContainerComponent implements AfterViewInit {
 	@ViewChild(LazyLoadingTableComponent)
 	private _bookingsTableComponent: LazyLoadingTableComponent<BookingVM>;
 
+	selectedBookingVM: BookingVM;
+
 	constructor(headerPageService: HeaderPageService,
 		private _bookingsService: BookingsService,
-		private _tableBuilder: BookingsTableMetaBuilderService) {
+		private _tableBuilder: BookingsTableMetaBuilderService,
+		private _newBookingModalService: NewBookingModalService) {
 		super(headerPageService, HeaderPageType.BookingHistory);
 	}
 
 	public ngAfterViewInit() {
 		this._bookingsTableComponent.bootstrap(this._bookingsService, this._tableBuilder.buildLazyLoadTableMeta());
+	}
+
+	public openNewBookingModal() {
+		this._newBookingModalService.openNewBookingModal().then((modalDialogInstance: ModalDialogRef<NewBookingResult>) => {
+            modalDialogInstance.resultObservable.subscribe((newBookingResult: NewBookingResult) => {
+            });
+        }).catch((e: any) => { });
+	}
+	public selectBooking(bookingVM: BookingVM) {
+		this.selectedBookingVM = bookingVM;
+	}
+	public editBooking(bookingVM: BookingVM) {
+		// TODO: Open booking operations modal
 	}
 }
