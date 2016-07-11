@@ -142,7 +142,13 @@ export class DefaultDataBuilder {
                 return roomCategoryBuilder.loadRoomCategories(roomCategoryBuilder, this._bedList);
             }).then((addedRoomCategories: RoomCategoryDO[]) => {
                 this._roomCategoryList = addedRoomCategories;
-
+                console.log('before reading the new room categories');
+                
+                var roomCategoryIdList: string[] = _.map(this._roomCategoryList, (roomCategory: RoomCategoryDO) => { return roomCategory.id });
+                return this._testContext.appContext.getRepositoryFactory().getRoomCategoryRepository().getRoomCategoryList({ hotelId: this._testContext.sessionContext.sessionDO.hotel.id }, { categoryIdList: roomCategoryIdList });
+            }).then((result: any) => {
+                console.log('after reading the new room categories:  ' + JSON.stringify(result));
+                
                 var settingsRepository = this._testContext.appContext.getRepositoryFactory().getSettingsRepository();
                 return settingsRepository.getRoomAmenities();
             }).then((roomAmenityList: AmenityDO[]) => {
@@ -168,7 +174,8 @@ export class DefaultDataBuilder {
 
                 var priceProductBuilder = new DefaultPriceProductBuilder(this._testContext);
                 return priceProductBuilder.loadPriceProducts(priceProductBuilder, this._roomCategoryStatsList, this._taxes, this._addOnProductList);
-            }).then((priceProductList: PriceProductDO[]) => {
+            })
+            .then((priceProductList: PriceProductDO[]) => {
                 this._priceProductList = priceProductList;
 
                 var customerBuilder = new DefaultCustomerBuilder(this._testContext, this._priceProductList);
@@ -180,11 +187,11 @@ export class DefaultDataBuilder {
                 return allotmentBuilder.loadAllotments(allotmentBuilder, this._priceProductList, this._customerList);
             }).then((allotmentList: AllotmentDO[]) => {
                 this._allotmentList = allotmentList;
-                
-            //     var bookingBuilder = new DefaultBookingBuilder(this._testContext);
-            //     return bookingBuilder.loadBookings(bookingBuilder, this._hotelDO, this._customerList, this.roomCategoryList, this.priceProductList);
-            // }).then((bookingList: BookingDO[]) => {
-            //     this._bookingList = bookingList;
+
+                //     var bookingBuilder = new DefaultBookingBuilder(this._testContext);
+                //     return bookingBuilder.loadBookings(bookingBuilder, this._hotelDO, this._customerList, this.roomCategoryList, this.priceProductList);
+                // }).then((bookingList: BookingDO[]) => {
+                //     this._bookingList = bookingList;
 
                 resolve(true);
             }).catch((err: any) => {
