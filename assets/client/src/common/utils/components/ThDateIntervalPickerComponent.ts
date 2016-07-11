@@ -10,25 +10,27 @@ import {ThDateUtils} from '../../../pages/internal/services/common/data-objects/
 	selector: 'th-date-interval-picker',
 	template: `
 		<div class="row">
-			<div class="col-md-4 col-sm-6 col-xs-12">
+			<div [ngClass]="{'col-md-4 col-sm-6 col-xs-12': !showExpandedView, 'col-xs-6': showExpandedView}">
 				<th-date-picker
 					[readonly]="readonly"
 					[initialThDate]="dateInterval.start"
 					[minThDate]="minDate"
 					[label]="startDateLabel"
 					[labelFont]="startDateFont"
+					[showLabel]="showLabels"
 					(didSelectThDate)="didSelectStartDate($event)"
 					>
 				</th-date-picker>
-				<span class="unitpal-font date-interval-picker-arrow">></span>
+				<span class="unitpal-font date-interval-picker-arrow" [ngClass]="{'normal': !showExpandedView, 'expanded': showExpandedView}">></span>
 			</div>
-			<div class="col-md-4 col-sm-6 col-xs-12">
+			<div [ngClass]="{'col-md-4 col-sm-6 col-xs-12': !showExpandedView, 'col-xs-6': showExpandedView}">
 				<th-date-picker
 					[readonly]="readonly"
 					[initialThDate]="dateInterval.end"
 					[minThDate]="minEndDate"
 					[label]="endDateLabel"
 					[labelFont]="endDateFont"
+					[showLabel]="showLabels"
 					(didSelectThDate)="didSelectEndDate($event)"
 					>
 				</th-date-picker>
@@ -82,6 +84,8 @@ export class ThDateIntervalPickerComponent {
 	@Input() endDateLabel: string = "End Date";
 	@Input() endDateFont: string;
 	@Input() showNoOfNights: boolean = false;
+	@Input() showExpandedView: boolean = false;
+	@Input() showLabels: boolean = true;
 	noOfNights: number = 0;
 
 	@Output() didSelectThDateInterval = new EventEmitter();

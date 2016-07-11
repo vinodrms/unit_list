@@ -18,7 +18,9 @@
 		</div>
 		<div class="col-xs-4 col-md-4" *ngIf="!tableOptions.canSearch && !isCollapsed">
 		</div>
-		<div class="col-xs-4 col-md-4" *ngIf="!isCollapsed">
+		<div class="col-xs-4 col-md-4" [hidden]="isCollapsed">
+			<div #topTableCenter>
+			</div>
 		</div>
 		<div class="col-xs-4 col-md-4" *ngIf="!isCollapsed">
 			<div class="table-select-items pull-right" *ngIf="showPagination()">

@@ -8,7 +8,7 @@ import {ThDateUtils} from '../../../pages/internal/services/common/data-objects/
     selector: 'th-date-picker',
     template: `   
 		<div class="form-group">
-			<label>{{ label | translate }} 
+			<label *ngIf="showLabel">{{ label | translate }} 
 				<span *ngIf="labelFont" class="unitpal-font" style="font-size: 18px;">{{labelFont}}</span>
 			</label>
 			<div class="input-group">
@@ -21,6 +21,7 @@ import {ThDateUtils} from '../../../pages/internal/services/common/data-objects/
 })
 
 export class ThDatePickerComponent implements AfterViewInit {
+	@Input() showLabel: boolean = true;
 	@Input() label: string = "Select a date";
 	@Input() labelFont: string;
 

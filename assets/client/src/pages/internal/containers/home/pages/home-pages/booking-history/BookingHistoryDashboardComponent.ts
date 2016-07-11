@@ -1,4 +1,4 @@
-import {Component, AfterViewInit, ViewChild} from '@angular/core';
+import {Component, AfterViewInit, ViewChild, ReflectiveInjector, provide, Type, ResolvedReflectiveProvider} from '@angular/core';
 import {LazyLoadingTableComponent} from '../../../../../../../common/utils/components/lazy-loading/LazyLoadingTableComponent';
 import {HeaderPageService} from '../../utils/header/container/services/HeaderPageService';
 import {HeaderPageType} from '../../utils/header/container/services/HeaderPageType';
@@ -11,6 +11,7 @@ import {NewBookingModalService} from '../../utils/new-booking/modal/services/New
 import {NewBookingResult} from '../../utils/new-booking/modal/services/utils/NewBookingResult';
 import {ModalDialogRef} from '../../../../../../../common/utils/modals/utils/ModalDialogRef';
 import {BookingOverviewComponent} from './components/booking-overview/BookingOverviewComponent';
+import {BookingsDateFilterComponent} from './components/bookings-date-filter/BookingsDateFilterComponent';
 
 @Component({
 	selector: 'booking-history-dashboard',
@@ -33,14 +34,21 @@ export class BookingHistoryDashboardComponent extends AHomeContainerComponent im
 	}
 
 	public ngAfterViewInit() {
+		this._bookingsTableComponent.attachTopTableCenterBootstrap(this.topTableCenterBootstrap);
 		this._bookingsTableComponent.bootstrap(this._bookingsService, this._tableBuilder.buildLazyLoadTableMeta());
+	}
+	private topTableCenterBootstrap(): { componentToInject: Type, providers: ResolvedReflectiveProvider[] } {
+		return {
+			componentToInject: BookingsDateFilterComponent,
+			providers: ReflectiveInjector.resolve([provide(BookingsService, { useValue: this._bookingsService })])
+		}
 	}
 
 	public openNewBookingModal() {
 		this._newBookingModalService.openNewBookingModal().then((modalDialogInstance: ModalDialogRef<NewBookingResult>) => {
-            modalDialogInstance.resultObservable.subscribe((newBookingResult: NewBookingResult) => {
-            });
-        }).catch((e: any) => { });
+			modalDialogInstance.resultObservable.subscribe((newBookingResult: NewBookingResult) => {
+			});
+		}).catch((e: any) => { });
 	}
 	public selectBooking(bookingVM: BookingVM) {
 		this.selectedBookingVM = bookingVM;

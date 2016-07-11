@@ -407,10 +407,16 @@ input.form-control:only-child {
 }
 .date-interval-picker-arrow {
     position: absolute;
-    right: -5px;
-    top: 33px;
     font-size: 20px;
     color: #DBDBDB;
+}
+.date-interval-picker-arrow.normal {
+    right: -10px;
+    top: 33px;
+}
+.date-interval-picker-arrow.expanded {
+    right: -14px;
+    top: 3px;
 }
 @media screen and (max-width: 1000px) {
     .date-interval-picker-arrow {
