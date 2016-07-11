@@ -3,10 +3,10 @@ module.exports = {
     connections: {
         mongodbtest: {
             adapter: 'sails-mongo',
-            host: 'demo.3angletech.com',
+            host: 'localhost',
             port: 27017,
-            user: 'demothangle',
-            password: 'Anisdy$57m!',
+            user: process.env.MONGO_USER || "",
+            password: process.env.MONGO_PASSWD || "",
             database: 'UnitPalTest'
         }
     },
