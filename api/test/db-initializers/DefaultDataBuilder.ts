@@ -181,10 +181,10 @@ export class DefaultDataBuilder {
             }).then((allotmentList: AllotmentDO[]) => {
                 this._allotmentList = allotmentList;
                 
-                var bookingBuilder = new DefaultBookingBuilder(this._testContext);
-                return bookingBuilder.loadBookings(bookingBuilder, this._hotelDO, this._customerList, this.roomCategoryList, this.priceProductList);
-            }).then((bookingList: BookingDO[]) => {
-                this._bookingList = bookingList;
+            //     var bookingBuilder = new DefaultBookingBuilder(this._testContext);
+            //     return bookingBuilder.loadBookings(bookingBuilder, this._hotelDO, this._customerList, this.roomCategoryList, this.priceProductList);
+            // }).then((bookingList: BookingDO[]) => {
+            //     this._bookingList = bookingList;
 
                 resolve(true);
             }).catch((err: any) => {
