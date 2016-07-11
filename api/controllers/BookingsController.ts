@@ -8,6 +8,9 @@ import {LazyLoadMetaResponseRepoDO} from '../core/data-layer/common/repo-data-ob
 import {BookingSearch} from '../core/domain-layer/bookings/search-bookings/BookingSearch';
 import {BookingSearchResult} from '../core/domain-layer/bookings/search-bookings/utils/result-builder/BookingSearchResult';
 import {AddBookingItems} from '../core/domain-layer/bookings/add-bookings/AddBookingItems';
+import {ThTranslation} from '../core/utils/localization/ThTranslation';
+
+import _ = require('underscore');
 
 class BookingsController extends BaseController {
     public getBookingById(req: Express.Request, res: Express.Response) {
@@ -22,6 +25,7 @@ class BookingsController extends BaseController {
 
         var bookingRepo = appContext.getRepositoryFactory().getBookingRepository();
         bookingRepo.getBookingById(bookingMeta, groupBookingId, bookingId).then((booking: BookingDO) => {
+            this.translateBookingHistory(booking, this.getThTranslation(sessionContext));
             this.returnSuccesfulResponse(req, res, { booking: booking });
         }).catch((err: any) => {
             this.returnErrorResponse(req, res, err, ThStatusCode.BookingsControllerErrorGettingBookingById);
@@ -35,6 +39,7 @@ class BookingsController extends BaseController {
         var bookingMeta = this.getBookingMetaRepoDOFrom(sessionContext);
         var bookingRepo = appContext.getRepositoryFactory().getBookingRepository();
         bookingRepo.getBookingList(bookingMeta, req.body.searchCriteria, req.body.lazyLoad).then((bookingSearchResult: BookingSearchResultRepoDO) => {
+            this.translateSearchResult(bookingSearchResult, sessionContext);
             this.returnSuccesfulResponse(req, res, bookingSearchResult);
         }).catch((err: any) => {
             this.returnErrorResponse(req, res, err, ThStatusCode.BookingsControllerErrorGettingBookings);
@@ -80,6 +85,15 @@ class BookingsController extends BaseController {
 
     private getBookingMetaRepoDOFrom(sessionContext: SessionContext): BookingMetaRepoDO {
         return { hotelId: sessionContext.sessionDO.hotel.id };
+    }
+    private translateSearchResult(bookingSearchResult: BookingSearchResultRepoDO, sessionContext: SessionContext) {
+        var thTranslation = this.getThTranslation(sessionContext);
+        _.forEach(bookingSearchResult.bookingList, (booking: BookingDO) => {
+            this.translateBookingHistory(booking, thTranslation);
+        });
+    }
+    private translateBookingHistory(booking: BookingDO, thTranslation: ThTranslation) {
+        booking.bookingHistory.translateActions(thTranslation);
     }
 }
 

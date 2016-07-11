@@ -1,7 +1,7 @@
 import {ThDateDO} from './ThDateDO';
 import {ThDateIntervalDO} from './ThDateIntervalDO';
 import {ThHourDO} from './ThHourDO';
-import {ThTimestamp} from './ThTimestamp';
+import {ThTimestampDO} from './ThTimestampDO';
 
 export class ThDateUtils {
 	private static MinDateMillis = 0;
@@ -43,8 +43,8 @@ export class ThDateUtils {
 	public convertMomentToThHourDO(day: moment.Moment): ThHourDO {
 		return ThHourDO.buildThHourDO(day.hour(), day.minute());
 	}
-	public convertTimestampToThTimestamp(timestamp: number): ThTimestamp {
-		var thTimestamp = new ThTimestamp();
+	public convertTimestampToThTimestamp(timestamp: number): ThTimestampDO {
+		var thTimestamp = new ThTimestampDO();
 		var convertedMoment: moment.Moment = moment(timestamp);
 		thTimestamp.thDateDO = this.convertMomentToThDateDO(convertedMoment);
 		thTimestamp.thHourDO = this.convertMomentToThHourDO(convertedMoment);

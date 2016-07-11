@@ -6,18 +6,19 @@ import {HeaderPageService} from '../pages/utils/header/container/services/Header
 import {SETTINGS_PROVIDERS} from '../../../services/settings/SettingsProviders';
 import {TaxService} from '../../../services/taxes/TaxService';
 import {HOTEL_AGGREGATOR_PROVIDERS} from '../../../services/hotel/HotelProviders';
+import {RoomCategoriesService} from '../../../services/room-categories/RoomCategoriesService';
 import {ISocketsService} from '../../../../../common/utils/sockets/ISocketsService';
 import {SocketsService} from '../../../../../common/utils/sockets/SocketsService';
 
 import {HotelOperationsDashboardComponent} from '../pages/home-pages/hotel-operations/container/HotelOperationsDashboardComponent';
 import {YieldManagerContainerComponent} from '../pages/home-pages/yield-manager/container/YieldManagerContainerComponent';
-import {BookingHistoryContainerComponent} from '../pages/home-pages/booking-history/container/BookingHistoryContainerComponent';
+import {BookingHistoryDashboardComponent} from '../pages/home-pages/booking-history/BookingHistoryDashboardComponent';
 import {SettingsContainerComponent} from '../pages/home-pages/settings/container/SettingsContainerComponent';
 
 @RouteConfig([
 	{ path: '/operations', name: 'HotelOperationsDashboardComponent', component: HotelOperationsDashboardComponent, useAsDefault: true },
 	{ path: '/yield-manager', name: 'YieldManagerContainerComponent', component: YieldManagerContainerComponent },
-	{ path: '/bookings', name: 'BookingHistoryContainerComponent', component: BookingHistoryContainerComponent },
+	{ path: '/bookings', name: 'BookingHistoryDashboardComponent', component: BookingHistoryDashboardComponent },
 	{ path: '/settings/...', name: 'SettingsContainerComponent', component: SettingsContainerComponent }
 ])
 
@@ -25,7 +26,7 @@ import {SettingsContainerComponent} from '../pages/home-pages/settings/container
 	selector: 'main-home-component',
 	templateUrl: '/client/src/pages/internal/containers/home/main/template/main-home-component.html',
 	providers: [HeaderPageService, provide(ISocketsService, { useClass: SocketsService }),
-		SETTINGS_PROVIDERS, HOTEL_AGGREGATOR_PROVIDERS, TaxService],
+		SETTINGS_PROVIDERS, HOTEL_AGGREGATOR_PROVIDERS, TaxService, RoomCategoriesService],
 	directives: [MainHeaderComponent, ROUTER_DIRECTIVES]
 })
 

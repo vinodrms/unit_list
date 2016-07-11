@@ -7,9 +7,6 @@ export enum InvoiceGroupStatus {
 	Deleted
 }
 
-//TODO
-//check validators: bookingValidator
-
 export class InvoiceGroupDO extends BaseDO {
     constructor() {
         super();
@@ -49,12 +46,6 @@ export class InvoiceGroupDO extends BaseDO {
     public getAggregatedAddOnProductIdList(): string[] {
         return _.reduce(this.invoiceList, (result, invoice: InvoiceDO) => {
             return _.union(result, invoice.getAddOnProductIdList());
-        }, []);
-    }
-
-    public getAggregatedPriceProductIdList(): string[] {
-        return _.reduce(this.invoiceList, (result, invoice: InvoiceDO) => {
-            return _.union(result, invoice.getPriceProductIdList());
         }, []);
     }
 

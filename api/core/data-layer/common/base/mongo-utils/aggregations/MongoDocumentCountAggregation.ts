@@ -20,7 +20,7 @@ export class MongoDocumentCountAggregation extends AMongoAggregation<LazyLoadMet
         }
         var aggregationResultArray: Object[] = aggregationResult;
         if (aggregationResultArray.length == 0) {
-            this.errorCallback(new Error("did receive an empty array"));
+            this.successCallback({ numOfItems: 0 });
             return;
         }
         var aggregationObject = aggregationResultArray[0];

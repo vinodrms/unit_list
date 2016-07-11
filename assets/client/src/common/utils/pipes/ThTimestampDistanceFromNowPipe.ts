@@ -1,12 +1,12 @@
 import {Pipe, PipeTransform} from '@angular/core';
-import {ThTimestamp} from '../../../pages/internal/services/common/data-objects/th-dates/ThTimestamp';
+import {ThTimestampDO} from '../../../pages/internal/services/common/data-objects/th-dates/ThTimestampDO';
 
 @Pipe({
     name: 'thtimestampdistancefromnow'
 })
 
 export class ThTimestampDistanceFromNowPipe implements PipeTransform {
-    transform(thTimestamp: ThTimestamp): any {
+    transform(thTimestamp: ThTimestampDO): any {
         if (thTimestamp != null && thTimestamp.getTimeDistanceFromNowString) {
             return thTimestamp.getTimeDistanceFromNowString();
         }

@@ -26,11 +26,13 @@ export class MongoUpdateBookingRepository extends MongoRepository {
                 "bookingList.$.roomCategoryId": booking.roomCategoryId,
                 "bookingList.$.roomId": booking.roomId,
                 "bookingList.$.priceProductId": booking.priceProductId,
+                "bookingList.$.price": booking.price,
                 "bookingList.$.allotmentId": booking.allotmentId,
                 "bookingList.$.cancellationTime": booking.cancellationTime,
                 "bookingList.$.notes": booking.notes,
                 "bookingList.$.fileAttachmentList": booking.fileAttachmentList,
-                "bookingList.$.bookingHistory": booking.bookingHistory
+                "bookingList.$.bookingHistory": booking.bookingHistory,
+                "bookingList.$.indexedSearchTerms": booking.indexedSearchTerms,
             });
     }
 

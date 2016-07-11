@@ -12,14 +12,15 @@ export interface InvoiceGroupItemMetaRepoDO {
 
 export interface InvoiceGroupSearchCriteriaRepoDO {
     invoiceGroupIdList?: string[];
+    groupBookingId?: string;
     bookingId?: string;
+    customerIdList?: string[];
 }
 
 export interface InvoiceGroupSearchResultRepoDO {
 	lazyLoad?: LazyLoadRepoDO;
 	invoiceGroupList: InvoiceGroupDO[];
 }
-
 
 export interface IInvoiceGroupsRepository {
     getInvoiceGroupById(invoidGroupMeta: InvoiceGroupMetaRepoDO, invoiceGroupId: string): Promise<InvoiceGroupDO>;

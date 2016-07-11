@@ -10,9 +10,11 @@ import {CommissionDO} from '../../../../../core/data-layer/common/data-objects/c
 import {CustomerType, CustomerDO} from '../../../../../core/data-layer/customers/data-objects/CustomerDO';
 import {PaymentMethodDO} from '../../../../../core/data-layer/common/data-objects/payment-method/PaymentMethodDO';
 import {CompanyDetailsDO} from '../../../../../core/data-layer/customers/data-objects/customer-details/corporate/CompanyDetailsDO';
+import {AddNewBookingInvoiceDO} from '../../../../../core/domain-layer/invoices/add-invoice/bookings/AddNewBookingInvoiceDO';
+import {UpdateInvoiceGroupDO} from '../../../../../core/domain-layer/invoices/update-invoice-groups/UpdateInvoiceGroupDO';
 
 export class InvoicesTestHelper {
-    private _testUtils: TestUtils;
+    private _testUtils: TestUtils; 
     private _thUtils: ThUtils;
 
     constructor(private _defaultDataBuilder: DefaultDataBuilder) {
@@ -20,149 +22,37 @@ export class InvoicesTestHelper {
         this._thUtils = new ThUtils();
     }
 
-    // public getValidSaveInvoiceGroupItemDO(): SaveInvoiceGroupItemDO {
-    //     return {
-    //         bookingId: "123451231",
-    //         indexedCustomerIdList: [],
-    //         invoiceList: this.getInvoiceList(),
-    //         paymentStatus: InvoicePaymentStatus.Open
-    //     }
-    // }
+    public getAddNewBookingInvoiceGroupDO(): AddNewBookingInvoiceDO {
+        var generateBookingInvoiceGroupItemDO = new AddNewBookingInvoiceDO();
+		var bookingList = this._defaultDataBuilder.bookingList;
+        var booking = bookingList[0];
 
-    // public getSaveInvoiceGroupItemDOFrom(invoiceGroup: InvoiceGroupDO): SaveInvoiceGroupItemDO {
-    //     var result = {
-    //         bookingId: invoiceGroup.bookingId,
-    //         indexedCustomerIdList: invoiceGroup.indexedCustomerIdList,
-    //         invoiceList: invoiceGroup.invoiceList,
-    //         paymentStatus: invoiceGroup.paymentStatus
-    //     };
+        return {
+        groupBookingId: booking.groupBookingId,
+            bookingId: booking.bookingId
+        };
+	}
 
-    //     result["id"] = invoiceGroup.id;
-    //     return result;
-    // }
-    
-    private getInvoiceList(): InvoiceDO[] {
-        var invoiceList = [];
+    public getUpdateInvoiceGroupDO(existingInvoiceGroup: InvoiceGroupDO): UpdateInvoiceGroupDO {
 
-        var firstInvoice = new InvoiceDO();
-        firstInvoice.payerList = this.getPayerListForTheFirstInvoice();
-        firstInvoice.itemList = this.getItemListForTheFirstInvoice();
-        firstInvoice.paymentStatus = InvoicePaymentStatus.Open;
+        var currentInvoiceGroupId = existingInvoiceGroup.id;
+        var currentInvoiceList = existingInvoiceGroup.invoiceList;
+        var currentPaymentStatus = existingInvoiceGroup.paymentStatus;
 
-        var secondInvoice = new InvoiceDO();
-        secondInvoice.payerList = this.getPayerListForTheSecondInvoice();
-        secondInvoice.itemList = this.getItemListForTheSecondInvoice();
-        secondInvoice.paymentStatus = InvoicePaymentStatus.Open;
+        currentInvoiceList.push(this.getNewInvoice());
 
-        invoiceList.push(firstInvoice);
-        invoiceList.push(secondInvoice);
+        return {
+            id: currentInvoiceGroupId,
+            invoiceList: currentInvoiceList,
+            paymentStatus: currentPaymentStatus
+        };
+	}
 
-        return invoiceList;
-    }
-
-    private getPayerListForTheFirstInvoice(): InvoicePayerDO[] {
-        var payerList = [];
-
-        var companies = this.getCompanyCustomers();
-        var paymentMethods = this._defaultDataBuilder.hotelDO.paymentMethodIdList;
-
-        if (companies.length > 0) {
-            var payer = new InvoicePayerDO();
-            payer.customerId = companies[0].id;
-            var paymentMethod = new InvoicePaymentMethodDO();
-            paymentMethod.type = InvoicePaymentMethodType.DefaultPaymentMethod;
-            if (paymentMethods.length > 0) {
-                paymentMethod.value = this._defaultDataBuilder.hotelDO.paymentMethodIdList[0];
-            }
-            payer.paymentMethod = paymentMethod;
-            payer.priceToPay = 100;
-
-            payerList.push(payer);
-        }
-
-        return payerList;
-    }
-
-    private getPayerListForTheSecondInvoice(): InvoicePayerDO[] {
-        var payerList = [];
-
-        var individuals = this.getIndividualCustomers();
-        var paymentMethods = this._defaultDataBuilder.hotelDO.paymentMethodIdList;
-
-        if (individuals.length >= 2) {
-            var payerOne = new InvoicePayerDO();
-            payerOne.customerId = individuals[0].id;
-            var paymentMethodForPayerOne = new InvoicePaymentMethodDO();
-            paymentMethodForPayerOne.type = InvoicePaymentMethodType.DefaultPaymentMethod;
-            if (paymentMethods.length > 0) {
-                paymentMethodForPayerOne.value = this._defaultDataBuilder.hotelDO.paymentMethodIdList[0];
-            }
-            payerOne.paymentMethod = paymentMethodForPayerOne;
-            payerOne.priceToPay = 100;
-
-            var payerTwo = new InvoicePayerDO();
-            payerTwo.customerId = individuals[1].id;
-            var paymentMethodForPayerTwo = new InvoicePaymentMethodDO();
-            paymentMethodForPayerTwo.type = InvoicePaymentMethodType.DefaultPaymentMethod;
-            if (paymentMethods.length > 1) {
-                paymentMethodForPayerTwo.value = this._defaultDataBuilder.hotelDO.paymentMethodIdList[1];
-            }
-            payerTwo.paymentMethod = paymentMethodForPayerTwo;
-            payerTwo.priceToPay = 200;
-
-            payerList.push(payerOne);
-            payerList.push(payerTwo);
-        }
-
-        return payerList;
-    }
-
-    private getItemListForTheFirstInvoice(): InvoiceItemDO[] {
-        var itemList = [];
-
-        var priceProductList = this._defaultDataBuilder.priceProductList;
-        if (priceProductList.length > 0) {
-            var ppInvoiceItem = new InvoiceItemDO();
-            ppInvoiceItem.id = priceProductList[0].id;
-            ppInvoiceItem.type = InvoiceItemType.PriceProduct;
-            ppInvoiceItem.qty = 1;
-            itemList.push(ppInvoiceItem);
-        }
-
-        return itemList;
-    }
-
-    private getItemListForTheSecondInvoice(): InvoiceItemDO[] {
-        var itemList = [];
-
-        var addOnProductList = this._defaultDataBuilder.addOnProductList;
-        
-        if (addOnProductList.length > 1) {
-            var aopInvoiceItemOne = new InvoiceItemDO();
-            aopInvoiceItemOne.id = addOnProductList[0].id;
-            aopInvoiceItemOne.type = InvoiceItemType.AddOnProduct;
-            aopInvoiceItemOne.qty = -1;
-            var aopInvoiceItemTwo = new InvoiceItemDO();
-            aopInvoiceItemTwo.id = addOnProductList[1].id;
-            aopInvoiceItemTwo.type = InvoiceItemType.AddOnProduct;
-            aopInvoiceItemTwo.qty = 2;
-
-            itemList.push(aopInvoiceItemOne);
-            itemList.push(aopInvoiceItemTwo);
-        }
-
-        return itemList;
-    }
-
-    private getIndividualCustomers(): CustomerDO[] {
-        return _.filter(this._defaultDataBuilder.customerList, ((customer: CustomerDO) => {
-            return customer.type === CustomerType.Individual;
-        }));
-    }
-
-    private getCompanyCustomers(): CustomerDO[] {
-        return _.filter(this._defaultDataBuilder.customerList, ((customer: CustomerDO) => {
-            return customer.type === CustomerType.Company;
-        }));
+    public getNewInvoice(): InvoiceDO {
+        var newInvoice = new InvoiceDO();
+        newInvoice.payerList = [];
+        newInvoice.itemList = [];
+        newInvoice.paymentStatus = InvoicePaymentStatus.Open;
+        return newInvoice;
     }
 }

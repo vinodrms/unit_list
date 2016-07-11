@@ -1,0 +1,19 @@
+<div class="row full-height operational-box card">
+    <div class="col-xs-9 overview-left full-height">
+        <lazy-loading-table 
+            (onAdd)="openNewBookingModal()"
+            (onSelect)="selectBooking($event)"
+            (onEdit)="editBooking($event)"
+            >
+        </lazy-loading-table>
+    </div>
+    <div class="col-xs-3 operational-overview-right full-height">
+        <div class="row full-height" *ngIf="selectedBookingVM">
+            <booking-overview
+                [bookingVM]="selectedBookingVM"
+                (onEdit)="editBooking($event)"
+                >
+            </booking-overview>
+        </div>
+    </div>
+</div>

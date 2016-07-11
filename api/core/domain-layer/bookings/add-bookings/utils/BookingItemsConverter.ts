@@ -15,12 +15,15 @@ import {BookingCancellationTimeDO} from '../../../../data-layer/bookings/data-ob
 import {HotelDO} from '../../../../data-layer/hotel/data-objects/HotelDO';
 import {BookingUtils} from '../../utils/BookingUtils';
 import {ThDateIntervalDO} from '../../../../utils/th-dates/data-objects/ThDateIntervalDO';
+import {BookingPriceDO, BookingPriceType} from '../../../../data-layer/bookings/data-objects/price/BookingPriceDO';
+import {CustomersContainer} from '../../../customers/validators/results/CustomersContainer';
 
 import _ = require('underscore');
 
 export class BookingItemsConverterParams {
     priceProductsContainer: PriceProductsContainer;
     hotelDO: HotelDO;
+    customersContainer: CustomersContainer;
 }
 
 export class BookingItemsConverter {
@@ -105,6 +108,16 @@ export class BookingItemsConverter {
                 userId: this._sessionContext.sessionDO.user.id
             }));
             bookingDO.cancellationTime = priceProduct.conditions.policy.generateBookingCancellationTimeDO(indexedBookingInterval.getArrivalDate(), currentHotelDate);
+
+            bookingDO.price = new BookingPriceDO();
+            bookingDO.price.priceType = BookingPriceType.BookingStay;
+            bookingDO.price.numberOfItems = indexedBookingInterval.getLengthOfStay();
+            bookingDO.price.pricePerItem = priceProduct.price.getPricePerNightFor({
+                configCapacity: bookingDO.configCapacity,
+                roomCategoryId: bookingDO.roomCategoryId
+            });
+            bookingDO.price.totalPrice = bookingDO.price.numberOfItems * bookingDO.price.pricePerItem;
+            this._bookingUtils.updateIndexedSearchTerms(bookingDO, this._converterParams.customersContainer);
 
             bookingList.push(bookingDO);
         });

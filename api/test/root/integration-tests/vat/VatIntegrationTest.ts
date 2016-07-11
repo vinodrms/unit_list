@@ -53,7 +53,7 @@ describe("VAT Integration Tests", function() {
 		});
         it("Should return invalid country code", function(done) {
 			vatProvider.checkVAT("ZZ", "9999999").then((vatDetails: VatDetailsDO) => {
-				done("Error: got company details even though the country code is invalid!");
+				done(new Error("Error: got company details even though the country code is invalid!"));
 			}).catch((error: ThError) => {
 				should.equal(error.getThStatusCode(), ThStatusCode.VatProviderInvalidCountryCode);
 				done();

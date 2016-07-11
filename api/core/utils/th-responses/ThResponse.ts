@@ -305,8 +305,8 @@ export enum ThStatusCode {
     InvoiceGroupsRepositoryInvoiceGroupNotFound,
     InvoiceGroupsRepositoryErrorGettingInvoiceGroup,
     SaveInvoiceGroupItem,
-    GenerateCustomerInvoiceGroupItemError,
-    GenerateBookingInvoiceGroupItemError,
+    AddNewCustomerInvoiceGroupError,
+    AddNewBookingInvoiceGroupError,
     AddBookingInvoiceGroupItemError,
     UpdateInvoiceGroupItemError,
     InvoicePaymentMethodValidatorError,
@@ -335,6 +335,8 @@ export enum ThStatusCode {
     BookingsValidatorAllotmentCustomer,
     BookingsValidatorAllotmentInvalidRoomCategory,
     BookingsValidatorMissingPaymentGuarantee,
+    BookingsValidatorNoCompaniesOrTALimit,
+    BookingsValidatorBilledCustomerInvalidRightsOnPriceProduct,
     BookingsValidatorConstraintsDoNotApply,
     BookingsValidatorAllotmentConstraintsDoNotApply,
     BookingsValidatorInvalidRoomCategoryId,
@@ -660,8 +662,8 @@ ThMessage[ThStatusCode.InvoiceGroupsRepositoryInvoiceGroupNotFound] = "Invoice g
 ThMessage[ThStatusCode.InvoiceGroupsRepositoryErrorGettingInvoiceGroup] = "Error retrieving the invoice group from the database.";
 ThMessage[ThStatusCode.SaveInvoiceGroupItem] = "Error saving the invoice group item.";
 ThMessage[ThStatusCode.UpdateInvoiceGroupItemError] = "Error updating invoice group.";
-ThMessage[ThStatusCode.GenerateCustomerInvoiceGroupItemError] = "Error generating customer related invoice group.";
-ThMessage[ThStatusCode.GenerateBookingInvoiceGroupItemError] = "Error generating booking related invoice group.";
+ThMessage[ThStatusCode.AddNewCustomerInvoiceGroupError] = "Error adding new customer related invoice group.";
+ThMessage[ThStatusCode.AddNewBookingInvoiceGroupError] = "Error adding new booking related invoice group.";
 ThMessage[ThStatusCode.AddBookingInvoiceGroupItemError] = "Error adding booking related invoice group.";
 ThMessage[ThStatusCode.InvoicePaymentMethodValidatorError] = "Error validating the payment methods.";
 ThMessage[ThStatusCode.InvoicePaymentMethodValidatorInvalidPaymentMethod] = "Unrecognized payment method.";
@@ -687,6 +689,8 @@ ThMessage[ThStatusCode.BookingsValidatorYieldingClosed] = "You cannot book a pri
 ThMessage[ThStatusCode.BookingsValidatorAllotmentCustomer] = "The main customer from the booking must be the one from the allotment.";
 ThMessage[ThStatusCode.BookingsValidatorAllotmentInvalidRoomCategory] = "You can only book the room category selected within the allotment.";
 ThMessage[ThStatusCode.BookingsValidatorMissingPaymentGuarantee] = "You need to set a payment guarantee for all the price products with cancellation conditions.";
+ThMessage[ThStatusCode.BookingsValidatorNoCompaniesOrTALimit] = "You cannot have more than 1 Company or Travel Agent on a booking";
+ThMessage[ThStatusCode.BookingsValidatorBilledCustomerInvalidRightsOnPriceProduct] = "All the billed customers must have access on the price products.";
 ThMessage[ThStatusCode.BookingsValidatorConstraintsDoNotApply] = "The constraints from the price product do not apply for the booking.";
 ThMessage[ThStatusCode.BookingsValidatorAllotmentConstraintsDoNotApply] = "The constraints from the allotment do not apply for the booking.";
 ThMessage[ThStatusCode.BookingsValidatorInvalidRoomCategoryId] = "The room category is not valid.";

@@ -407,10 +407,16 @@ input.form-control:only-child {
 }
 .date-interval-picker-arrow {
     position: absolute;
-    right: -5px;
-    top: 33px;
     font-size: 20px;
     color: #DBDBDB;
+}
+.date-interval-picker-arrow.normal {
+    right: -10px;
+    top: 33px;
+}
+.date-interval-picker-arrow.expanded {
+    right: -14px;
+    top: 3px;
 }
 @media screen and (max-width: 1000px) {
     .date-interval-picker-arrow {
@@ -1215,6 +1221,9 @@ table.lazy-loading th {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+}
+.lazy-loading-table-row-command {
+    font-size: 16px;
 }
 
 table.lazy-loading thead tr,
@@ -2107,12 +2116,24 @@ a.btn.btn-square:focus {
 
     rooms-canvas > .header > .notification{
         display: flex;
+        flex-direction: row;
         align-items: center;
-        justify-content: center;
+        justify-content: space-between;
         height: 48px;
-        background-color: #5cb85c;
         color: white;
     }
+
+    rooms-canvas > .header > .notification .notification-message{
+        text-align: center;
+        flex-grow: 1;
+    }
+    
+    rooms-canvas > .header > .notification .notification-close{
+        flex-basis: 32;
+        flex-grow: 0;
+        padding: 12px;
+    }
+    
 
         /* Room cards */
         
@@ -2165,6 +2186,7 @@ a.btn.btn-square:focus {
         }
 
         .room-card {
+            cursor: default;
             height: 112px;
             width: 216px;
             background-color: white;
@@ -2244,6 +2266,7 @@ a.btn.btn-square:focus {
         /* Arrivals Pane */
 
         arrival-item {
+            cursor: default;
             background-color: #f3f3f3;
             border-bottom: 1px solid #f3f3f3;
             display: flex;
@@ -2332,6 +2355,7 @@ a.btn.btn-square:focus {
         /* Departures Pane */
 
         departure-item {
+            cursor: default;
             background-color: #f3f3f3;
             border-bottom: 1px solid #f3f3f3;
             display: flex;
@@ -2396,6 +2420,10 @@ a.btn.btn-square:focus {
         }
 
         /* Helpers */
+        .clickable{
+            cursor: pointer;
+        }
+
         .flex-row {
             display: flex;
             flex-direction: row;
@@ -2774,4 +2802,13 @@ a.btn.btn-square:focus {
 
 .f-128 {
   font-size: 128px !important;
+}
+
+.operational-box {
+    background-color: white;
+}
+.operational-overview-right {
+    border-left: 1px solid #ccc;
+    padding: 12px 15px 0 15px;
+    height: 100%;
 }

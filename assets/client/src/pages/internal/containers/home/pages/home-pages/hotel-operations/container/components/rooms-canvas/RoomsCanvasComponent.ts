@@ -1,129 +1,122 @@
 import {Component, Input, OnInit, NgZone} from '@angular/core';
 import {RoomCardComponent} from './components/room-card/RoomCardComponent';
 
+import {HotelOperationsDashboardService} from '../../services/HotelOperationsDashboardService';
 import {IHotelOperationsDashboardRoomsCanvasMediator} from '../../HotelOperationsDashboardComponent';
+
+import {RoomStatusType} from '../../shared/RoomStatusType';
 
 declare var $: any;
 
 @Component({
 	selector: 'rooms-canvas',
 	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/container/components/rooms-canvas/template/rooms-canvas.html',
+	providers: [HotelOperationsDashboardService],
 	directives: [RoomCardComponent]
 })
 
 export class RoomsCanvasComponent implements OnInit {
 	@Input() hotelOperationsDashboard: IHotelOperationsDashboardRoomsCanvasMediator;
 
+	public filterType;
 	public roomVMList: any[];
-	constructor(private _zone: NgZone) {
+	public filterNotification; 
+
+	private _showNotificationBar;
+	
+	constructor(private _zone: NgZone, private _hotelOperationsDashboardService: HotelOperationsDashboardService) {
+		this.filterType = {
+			currentValue : "All",
+			newValue : "All"	
+		};
+
+		this._showNotificationBar = true;
+		this.filterNotification = {
+			Properties: {
+				cssColor: 'green',
+				textFirstPart: 'SHOWING ',
+				textSecondPart: 'ALL ROOMS'
+			}
+		};
 	}
 
 	ngOnInit() {
 		this.hotelOperationsDashboard.registerRoomsCanvas(this);
-		this.roomVMList = [
-			{
-				Status: "Occupied",
-				Type: "Double",
-				Properties: {
-					Name: "501",
-					Booking: {
-						ClientName: "Robert Paulsen",
-						NumberOfPeople: 2,
-						NumberOfNights: 7,
-						Arrival: "Wed 13.02.16",
-						Departure: "Sat 17.02.16",
-					}
+		this.refresh();
+	}
+
+	public filterTypeChanged(value){
+		this.filterType.newValue = value;
+		this.refresh();
+	}
+
+	public isNotificationBarVisible(){
+		if (!this._showNotificationBar){
+			return false;
+		}
+		else if (this.filterType.currentValue == "All") {
+			return false;
+		}
+		return true;
+	}
+	
+	public closeNotificationBar(){
+		this._showNotificationBar = false;
+		this.updateFilterNotification();
+	}
+
+	public refresh(){
+		var date = this.hotelOperationsDashboard.getDate();
+		this._hotelOperationsDashboardService.getRooms(this.filterType.newValue, date).then((rooms:any[]) =>{
+			this.filterType.currentValue = this.filterType.newValue;
+			this._showNotificationBar = true;
+			this.roomVMList = rooms;
+			this.updateFilterNotification();
+		});
+	}
+
+	public updateFilterNotification(){
+		switch (this.filterType.currentValue) {
+			case RoomStatusType.Free:
+				this.filterNotification.Properties = {
+					cssColor: 'green',
+					textFirstPart: 'SHOWING ONLY ',
+					textSecondPart: 'FREE ROOMS'
 				}
-			},
-			{
-				Status: "Occupied",
-				Type: "Double",
-				Properties: {
-					Name: "502",
-					Booking: {
-						ClientName: "Robert Paulsen",
-						NumberOfPeople: 2,
-						NumberOfNights: 7,
-						Arrival: "Wed 13.02.16",
-						Departure: "Sat 17.02.16"
-					}
+				break;
+			case RoomStatusType.Occupied:
+				this.filterNotification.Properties = {
+					cssColor: 'orange',
+					textFirstPart: 'SHOWING ONLY ',
+					textSecondPart: 'OCCUPIED ROOMS'
 				}
-			},
-			{
-				Status: "Free",
-				Type: "Double",
-				Properties: {
-					Name: "503",
-					Booking: {
-						ClientName: "Robert Paulsen",
-						NumberOfPeople: 2,
-						NumberOfNights: 7,
-						Arrival: "Wed 13.02.16",
-						Departure: "Sat 17.02.16"
-					}
+				break;
+			case RoomStatusType.Reserved:
+				this.filterNotification.Properties = {
+					cssColor: 'yellow',
+					textFirstPart: 'SHOWING ONLY ',
+					textSecondPart: 'RESERVED ROOMS'
 				}
-			},
-			{
-				Status: "Free",
-				Type: "Double",
-				Properties: {
-					Name: "504",
-					Booking: {
-						ClientName: "Paul Paulsen",
-						NumberOfPeople: 2,
-						NumberOfNights: 7,
-						Arrival: "Wed 13.02.16",
-						Departure: "Sat 17.02.16"
-					}
+				break;
+			case RoomStatusType.OutOfService:
+				this.filterNotification.Properties = {
+					cssColor: 'gray',
+					textFirstPart: 'SHOWING ONLY ',
+					textSecondPart: 'OUT OF SERVICE ROOMS'
 				}
-			},
-			{
-				Status: "Free",
-				Type: "Double",
-				Properties: {
-					Name: "505",
-					Booking: {
-						ClientName: "Paul Paulsen",
-						NumberOfPeople: 2,
-						NumberOfNights: 7,
-						Arrival: "Wed 13.02.16",
-						Departure: "Sat 17.02.16"
-					}
+				break;
+			default:
+				this.filterNotification.Properties = {
+					cssColor: 'green',
+					textFirstPart: 'SHOWING ',
+					textSecondPart: 'ALL ROOMS'
 				}
-			},
-			{
-				Status: "OutOfService",
-				Type: "Double",
-				Properties: {
-					Name: "505",
-					Booking: {
-						ClientName: "Paul Paulsen",
-						NumberOfPeople: 2,
-						NumberOfNights: 7,
-						Arrival: "Wed 13.02.16",
-						Departure: "Sat 17.02.16"
-					}
-				}
-			},
-			{
-				Status: "Reserved",
-				Type: "Single",
-				Properties: {
-					Name: "505",
-					Booking: {
-						ClientName: "Paul Paulsen",
-						NumberOfPeople: 2,
-						NumberOfNights: 7,
-						Arrival: "Wed 13.02.16",
-						Departure: "Sat 17.02.16"
-					}
-				}
-			}			
-		]
+				break;
+		}
 	}
 
 	public startedDragging(arrivalItemVM){
-		console.log("started dragging");
+
 	}
 
 	public dropHandled(event){
@@ -137,5 +130,17 @@ export class RoomsCanvasComponent implements OnInit {
 			roomVM.Properties.Booking.Departure = arrivalItem.Departure;
 			this.hotelOperationsDashboard.checkInArrivalItem(arrivalItem);
 		}
+	}
+
+	public nextDay(){
+		var date = Math.abs(this.hotelOperationsDashboard.getDate() + 1) % 3;
+		this.hotelOperationsDashboard.setDate(date);
+		this.hotelOperationsDashboard.refresh();
+	}
+
+	public previousDay(){
+		var date = Math.abs(this.hotelOperationsDashboard.getDate() - 1) % 3;
+		this.hotelOperationsDashboard.setDate(date);
+		this.hotelOperationsDashboard.refresh();
 	}
 }

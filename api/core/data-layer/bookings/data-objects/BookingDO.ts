@@ -7,6 +7,8 @@ import {FileAttachmentDO} from '../../common/data-objects/file/FileAttachmentDO'
 import {BookingCancellationTimeDO} from './cancellation-time/BookingCancellationTimeDO';
 import {DefaultBillingDetailsDO} from './default-billing/DefaultBillingDetailsDO';
 import {DocumentHistoryDO} from '../../common/data-objects/document-history/DocumentHistoryDO';
+import {BookingPriceDO} from './price/BookingPriceDO';
+import {IInvoiceItemMeta} from '../../invoices/data-objects/items/IInvoiceItemMeta';
 
 export enum GroupBookingStatus {
     Active,
@@ -48,15 +50,17 @@ export class BookingDO extends BaseDO {
     roomId: string;
     priceProductId: string;
     priceProductSnapshot: PriceProductDO;
+    price: BookingPriceDO;
     allotmentId: string;
     cancellationTime: BookingCancellationTimeDO;
     notes: string;
     fileAttachmentList: FileAttachmentDO[];
     bookingHistory: DocumentHistoryDO;
+    indexedSearchTerms: string[];
 
     protected getPrimitivePropertyKeys(): string[] {
         return ["groupBookingId", "groupBookingReference", "hotelId", "versionId", "status", "inputChannel", "noOfRooms", "bookingId", "bookingReference", "confirmationStatus",
-            "customerIdList", "startUtcTimestamp", "endUtcTimestamp", "roomCategoryId", "roomId", "priceProductId", "allotmentId", "notes"];
+            "customerIdList", "startUtcTimestamp", "endUtcTimestamp", "roomCategoryId", "roomId", "priceProductId", "allotmentId", "notes", "indexedSearchTerms"];
     }
 
     public buildFromObject(object: Object) {
@@ -70,6 +74,9 @@ export class BookingDO extends BaseDO {
 
         this.configCapacity = new ConfigCapacityDO();
         this.configCapacity.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "configCapacity"));
+
+        this.price = new BookingPriceDO();
+        this.price.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "price"));
 
         this.priceProductSnapshot = new PriceProductDO();
         this.priceProductSnapshot.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "priceProductSnapshot"));
@@ -91,5 +98,9 @@ export class BookingDO extends BaseDO {
     public isMadeThroughAllotment(): boolean {
         var thUtils = new ThUtils();
         return !thUtils.isUndefinedOrNull(this.allotmentId) && this.allotmentId.length > 0;
+    }
+
+    public getInvoiceItemMeta(): IInvoiceItemMeta {
+        return this.price;
     }
 }

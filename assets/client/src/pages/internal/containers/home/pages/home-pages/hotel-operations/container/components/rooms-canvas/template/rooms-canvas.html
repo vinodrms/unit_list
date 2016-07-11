@@ -1,22 +1,25 @@
 <div class="header">
 	<div class="rooms-controller p-12">
 		<div class="group-1 flex-row flex-center-v">
-			<i class="fa fa-angle-left p-r-12 f-48"></i>
+			<i class="fa fa-angle-left p-r-12 f-48" (click)="previousDay()"></i>
 			<div class="current-date p-r-12 f-24"><b>Wednesday 13.01.2016</b></div>
 			<button class="btn btn-sm btn-danger f-12">Change date</button>
 		</div>
 		<div class="group-2 flex-row flex-center-v">
-			<select class="rooms-filter p-r-12 f-12">
-						<option>Free</option>
-						<option>Ocupied</option>
-						<option>Reserved</option>
-						<option>OutOfService</option>
-						<option>All</option>
-					</select>
-			<i class="fa fa-angle-right p-l-12 f-48"></i>
+			<select class="rooms-filter p-r-12 f-12" [ngModel]="filterType.currentValue" (ngModelChange)="filterTypeChanged($event)">
+				<option value="All">All</option>
+				<option value="Free">Free</option>
+				<option value="Occupied">Occupied</option>
+				<option value="Reserved">Reserved</option>
+				<option value="OutOfService">OutOfService</option>
+			</select>
+			<i class="fa fa-angle-right p-l-12 f-48" (click)="nextDay()"></i>
 		</div>
 	</div>
-	<div class="notification">SHOWING ONLY <b> EMPTY ROOMS</b> </div>
+	<div class="notification {{filterNotification.Properties.cssColor}}" *ngIf="isNotificationBarVisible()">
+		<div class="notification-message">{{filterNotification.Properties.textFirstPart}} &nbsp;<b> {{filterNotification.Properties.textSecondPart}}</b></div>
+		<div class="notification-close clickable f-24" (click)="closeNotificationBar()">X</div>
+	</div>
 </div>
 <div class="body rooms-canvas">
 	<div *ngFor="let roomVM of roomVMList">

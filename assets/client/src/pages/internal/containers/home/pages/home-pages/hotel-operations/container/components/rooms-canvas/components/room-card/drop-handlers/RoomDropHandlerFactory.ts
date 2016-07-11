@@ -1,9 +1,4 @@
-export class RoomStatusType{
-	static Free = 'Free';
-	static Occupied = 'Occupied';
-	static Reserved = 'Reserved';
-	static OutOfService = 'OutOfService';
-}
+import {RoomStatusType} from '../../../../../shared/RoomStatusType';
 
 export class RoomDropHandlerFactory{
 	public static get(roomStatus: RoomStatusType){

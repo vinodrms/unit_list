@@ -60,5 +60,9 @@
 	"VAT": "VAT",
 	"%noAdults% adults, %noChildren% children, %noBabies% babies": "%noAdults% adults, %noChildren% children, %noBabies% babies",
 	"cm (wide)": "cm (wide)",
-	"n/a": "n/a"
+	"n/a": "n/a",
+
+	// BookingPriceDO
+	"Booking": "Booking",
+	"Cancellation Penalty": "Cancellation Penalty"
 }
