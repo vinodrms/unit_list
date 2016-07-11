@@ -638,7 +638,6 @@ export class HotelOperationsDashboardService{
 		var p = new Promise((resolve, reject) => {
 			setTimeout(() => {
 				var allRooms = this._roomsList[date];
-				debugger;
 				if (roomState == 'All'){
 					resolve(allRooms);
 				}
