@@ -2019,18 +2019,18 @@ a.btn.btn-square:focus {
 }
 
  /* Operationl */
-    hotel-operations-dashboard{
+    .hotel-operations-dashboard{
         width: 100%;
         height: 100%;
         overflow-y: hidden;
     }
 
-    hotel-operations-dashboard{
+    .hotel-operations-dashboard{
         display:flex;
         align-items: stretch;
     }
 
-    hotel-operations-dashboard .pane {
+    .hotel-operations-dashboard .pane {
         display: flex;
         background-color: #f3f3f3;
         flex-basis: 225px;
@@ -2038,18 +2038,18 @@ a.btn.btn-square:focus {
         flex-grow: 0;
     }
 
-    hotel-operations-dashboard .pane > .header{
+    .hotel-operations-dashboard .pane > .header{
         height: 118px;
         border-bottom: 1px solid #DBDBDB;
     }
 
         
-        hotel-operations-dashboard .pane > .header{
+        .hotel-operations-dashboard .pane > .header{
             display: flex;
             flex-direction: column;
         }
         
-        hotel-operations-dashboard .header .pane-title{
+        .hotel-operations-dashboard .header .pane-title{
             display: flex;
             align-items: center;
             border-bottom: 1px solid #DBDBDB;
@@ -2057,7 +2057,7 @@ a.btn.btn-square:focus {
             flex-basis: 70px;
         }
 
-        hotel-operations-dashboard .pane-search-bar{
+        .hotel-operations-dashboard .pane-search-bar{
             justify-content: space-between;
             display: flex;
             align-items: center;
@@ -2066,11 +2066,11 @@ a.btn.btn-square:focus {
             background-color: white;
         }
 
-        hotel-operations-dashboard .pane-search-bar input{
+        .hotel-operations-dashboard .pane-search-bar input{
             flex-grow: 1;
         }
 
-        hotel-operations-dashboard .pane > .footer{
+        .hotel-operations-dashboard .pane > .footer{
             display: flex;
             justify-content: center;
             align-items: center;
