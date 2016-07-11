@@ -531,6 +531,6 @@ export var EnglishTranslations: Object = {
 	"Cancelled": "Cancelled",
 	"Checked In": "Checked In",
 	"Checked Out": "Checked Out",
-	"Booking/Group Booking References": "Booking/Group Booking References",
+	"Group/Individual Booking References": "Group/Individual Booking References",
 	
 };
