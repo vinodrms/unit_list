@@ -1,12 +1,12 @@
 import {BaseDO} from '../../../../common/base/BaseDO';
 import {ThTranslation} from '../../../../../utils/localization/ThTranslation';
-import {IPriceProductCancellationPolicy} from './IPriceProductCancellationPolicy';
+import {IPriceProductCancellationPolicy, PolicyTriggerTimeParams} from './IPriceProductCancellationPolicy';
 import {NumberValidationRule} from '../../../../../utils/th-validation/rules/NumberValidationRule';
 import {CancellationPolicyUtils} from './utils/CancellationPolicyUtils';
 import {ThDateDO} from '../../../../../utils/th-dates/data-objects/ThDateDO';
 import {ThHourDO} from '../../../../../utils/th-dates/data-objects/ThHourDO';
 import {ThDateUtils} from '../../../../../utils/th-dates/ThDateUtils';
-import {BookingCancellationTimeDO, BookingCancellationTimeType} from '../../../../bookings/data-objects/cancellation-time/BookingCancellationTimeDO';
+import {BookingStateChangeTriggerTimeDO, BookingStateChangeTriggerType} from '../../../../bookings/data-objects/state-change-time/BookingStateChangeTriggerTimeDO';
 
 export class CanCancelDaysBeforePolicyDO extends BaseDO implements IPriceProductCancellationPolicy {
 	daysBefore: number;
@@ -22,15 +22,18 @@ export class CanCancelDaysBeforePolicyDO extends BaseDO implements IPriceProduct
 		var rule = NumberValidationRule.buildIntegerNumberRule(0);
 		return rule.validate(this.daysBefore).isValid();
 	}
-	public generateBookingCancellationTimeDO(arrivalDate: ThDateDO, currentHotelDate: ThDateDO): BookingCancellationTimeDO {
-		var thDateUtils = new ThDateUtils();
-		var cancelDateDO = arrivalDate.buildPrototype();
-		cancelDateDO = thDateUtils.addDaysToThDateDO(cancelDateDO, (-1 * this.daysBefore));
-
-		var ccUtils = new CancellationPolicyUtils();
-		return ccUtils.generateBookingCancellationTimeDO(BookingCancellationTimeType.DependentOnCancellationHour, cancelDateDO, ThHourDO.buildThHourDO(0, 0));
-	}
 	public getValueDisplayString(thTranslation: ThTranslation): string {
 		return thTranslation.translate("Can cancel %daysBefore% days before arrival", { daysBefore: this.daysBefore });
+	}
+
+	public generateGuaranteedTriggerTime(triggerParams: PolicyTriggerTimeParams): BookingStateChangeTriggerTimeDO {
+		var ccUtils = new CancellationPolicyUtils();
+		var cancelDateDO = triggerParams.arrivalDate.buildPrototype();
+		cancelDateDO = ccUtils.thDateUtils.addDaysToThDateDO(cancelDateDO, (-1 * this.daysBefore));
+		return ccUtils.generateStateChangeTriggerTimeDO(BookingStateChangeTriggerType.DependentOnCancellationHour, cancelDateDO, ThHourDO.buildThHourDO(0, 0));
+	}
+	public generateNoShowTriggerTime(triggerParams: PolicyTriggerTimeParams): BookingStateChangeTriggerTimeDO {
+		var ccUtils = new CancellationPolicyUtils();
+		return ccUtils.generateMidnightStateChangeTriggerTimeDO(triggerParams.arrivalDate);
 	}
 }

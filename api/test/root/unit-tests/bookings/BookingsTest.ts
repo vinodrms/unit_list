@@ -77,6 +77,7 @@ describe("New Bookings Tests", function () {
             }
             Promise.all(promiseList).then((groupBookingsList: BookingDO[][]) => {
                 should.equal(groupBookingsList.length, BookingTestHelper.NoBookingGroups);
+                randomBookingReference = groupBookingsList[0][0].bookingReference;
                 done();
             }).catch((err: any) => {
                 done(err);
@@ -90,7 +91,6 @@ describe("New Bookings Tests", function () {
                 interval: bookingTestHelper.getBookingSearchInterval(testDataBuilder)
             }).then((bookingSearchResult: BookingSearchResultRepoDO) => {
                 retrievedBookingList = bookingSearchResult.bookingList;
-                randomBookingReference = testUtils.getRandomListElement(retrievedBookingList).bookingReference;
                 done();
             }).catch((err: any) => {
                 done(err);

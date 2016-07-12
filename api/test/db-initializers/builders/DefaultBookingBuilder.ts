@@ -73,7 +73,16 @@ export class DefaultBookingBuilder implements IBookingDataSource {
         booking.startUtcTimestamp = indexedBookingInterval.getStartUtcTimestamp();
         booking.endUtcTimestamp = indexedBookingInterval.getEndUtcTimestamp();
         var currentHotelDate = this._bookingUtils.getCurrentThDateForHotel(hotelDO);
-        booking.cancellationTime = priceProduct.conditions.policy.generateBookingCancellationTimeDO(indexedBookingInterval.getArrivalDate(), currentHotelDate);
+        booking.guaranteedTime = priceProduct.conditions.policy.generateGuaranteedTriggerTime({ arrivalDate: indexedBookingInterval.getArrivalDate() });
+        if (booking.guaranteedTime.isInThePast({
+            cancellationHour: hotelDO.operationHours.cancellationHour,
+            currentHotelTimestamp: ThTimestampDO.buildThTimestampForTimezone(hotelDO.timezone)
+        })) {
+            booking.confirmationStatus = BookingConfirmationStatus.Guaranteed;
+        }
+
+        booking.noShowTime = priceProduct.conditions.policy.generateNoShowTriggerTime({ arrivalDate: indexedBookingInterval.getArrivalDate() });
+
         booking.fileAttachmentList = [];
         booking.notes = "This is an automatic booking";
 

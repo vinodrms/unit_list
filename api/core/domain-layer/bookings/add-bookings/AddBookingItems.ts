@@ -3,6 +3,7 @@ import {ThError} from '../../../utils/th-responses/ThError';
 import {ThStatusCode} from '../../../utils/th-responses/ThResponse';
 import {AppContext} from '../../../utils/AppContext';
 import {SessionContext} from '../../../utils/SessionContext';
+import {ThTimestampDO} from '../../../utils/th-dates/data-objects/ThTimestampDO';
 import {GroupBookingInputChannel, BookingDO} from '../../../data-layer/bookings/data-objects/BookingDO';
 import {AddBookingItemsDO, BookingItemDO} from './AddBookingItemsDO';
 import {ValidationResultParser} from '../../common/ValidationResultParser';
@@ -112,6 +113,7 @@ export class AddBookingItems {
 
                 var bookingItemsConverter = new BookingItemsConverter(this._appContext, this._sessionContext, {
                     hotelDO: this._loadedHotel,
+                    currentHotelTimestamp: ThTimestampDO.buildThTimestampForTimezone(this._loadedHotel.timezone),
                     priceProductsContainer: this._loadedPriceProductsContainer,
                     customersContainer: this._loadedCustomersContainer
                 });
