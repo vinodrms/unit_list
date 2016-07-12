@@ -9,7 +9,6 @@ import {HotelUpdateBasicInfo} from '../core/domain-layer/hotel-details/basic-inf
 import {HotelUpdatePaymentsPolicies} from '../core/domain-layer/hotel-details/payment-policies/HotelUpdatePaymentsPolicies';
 import {HotelUpdatePropertyDetails} from '../core/domain-layer/hotel-details/property-details/HotelUpdatePropertyDetails';
 import {HotelConfigurations} from '../core/domain-layer/hotel-details/config-completed/HotelConfigurations';
-import {SessionContext, SessionManager} from '../core/utils/SessionContext';
 
 class HotelDetailsController extends BaseController {
 	public getDetails(req: Express.Request, res: Express.Response) {
@@ -39,13 +38,7 @@ class HotelDetailsController extends BaseController {
 	public updatePropertyDetails(req: Express.Request, res: Express.Response) {
 		var updatePropDetails = new HotelUpdatePropertyDetails(req.appContext, req.sessionContext, req.body.propertyDetails);
 		updatePropDetails.update().then((result: { user: UserDO, hotel: HotelDO }) => {
-			// reinitialize the session because the timezone may have changed
-			var sessionManager: SessionManager = new SessionManager(req);
-			sessionManager.initializeSession(result).then((sessionContext: SessionContext) => {
-				this.returnSuccesfulResponse(req, res, { details: result });
-			}).catch((err: any) => {
-				this.returnErrorResponse(req, res, err, ThStatusCode.AccControllerErrorInitializingSession);
-			});
+			this.returnSuccesfulResponse(req, res, { details: result });
 		}).catch((err: any) => {
 			this.returnErrorResponse(req, res, err, ThStatusCode.HotelDetailsControllerErrorUpdatingPropertyDetails);
 		});
