@@ -4,6 +4,7 @@ import {SessionContext} from '../../../../utils/SessionContext';
 import {ThLogger, ThLogLevel} from '../../../../utils/logging/ThLogger';
 import {ThError} from '../../../../utils/th-responses/ThError';
 import {ThStatusCode} from '../../../../utils/th-responses/ThResponse';
+import {ThTimestampDO} from '../../../../utils/th-dates/data-objects/ThTimestampDO';
 import {GroupBookingInputChannel, BookingDO, GroupBookingStatus, BookingConfirmationStatus} from '../../../../data-layer/bookings/data-objects/BookingDO';
 import {ThUtils} from '../../../../utils/ThUtils';
 import {IndexedBookingInterval} from '../../../../data-layer/price-products/utils/IndexedBookingInterval';
@@ -11,7 +12,6 @@ import {DocumentHistoryDO} from '../../../../data-layer/common/data-objects/docu
 import {DocumentActionDO} from '../../../../data-layer/common/data-objects/document-history/DocumentActionDO';
 import {PriceProductDO} from '../../../../data-layer/price-products/data-objects/PriceProductDO';
 import {PriceProductsContainer} from '../../../price-products/validators/results/PriceProductsContainer';
-import {BookingCancellationTimeDO} from '../../../../data-layer/bookings/data-objects/cancellation-time/BookingCancellationTimeDO';
 import {HotelDO} from '../../../../data-layer/hotel/data-objects/HotelDO';
 import {BookingUtils} from '../../utils/BookingUtils';
 import {ThDateIntervalDO} from '../../../../utils/th-dates/data-objects/ThDateIntervalDO';
@@ -23,6 +23,7 @@ import _ = require('underscore');
 export class BookingItemsConverterParams {
     priceProductsContainer: PriceProductsContainer;
     hotelDO: HotelDO;
+    currentHotelTimestamp: ThTimestampDO;
     customersContainer: CustomersContainer;
 }
 
@@ -107,7 +108,15 @@ export class BookingItemsConverter {
                 actionString: "Booking was created",
                 userId: this._sessionContext.sessionDO.user.id
             }));
-            bookingDO.cancellationTime = priceProduct.conditions.policy.generateBookingCancellationTimeDO(indexedBookingInterval.getArrivalDate(), currentHotelDate);
+            bookingDO.guaranteedTime = priceProduct.conditions.policy.generateGuaranteedTriggerTime({ arrivalDate: indexedBookingInterval.getArrivalDate() });
+            if (bookingDO.guaranteedTime.isInThePast({
+                cancellationHour: this._converterParams.hotelDO.operationHours.cancellationHour,
+                currentHotelTimestamp: this._converterParams.currentHotelTimestamp
+            })) {
+                bookingDO.confirmationStatus = BookingConfirmationStatus.Guaranteed;
+            }
+
+            bookingDO.noShowTime = priceProduct.conditions.policy.generateNoShowTriggerTime({ arrivalDate: indexedBookingInterval.getArrivalDate() });
 
             bookingDO.price = new BookingPriceDO();
             bookingDO.price.priceType = BookingPriceType.BookingStay;
