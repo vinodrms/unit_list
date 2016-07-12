@@ -18,6 +18,7 @@ export enum BookingConfirmationStatus {
     Confirmed,
     Guaranteed,
     NoShow,
+    NoShowWithPenalty,
     Cancelled,
     CheckedIn,
     CheckedOut

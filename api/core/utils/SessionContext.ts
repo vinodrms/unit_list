@@ -12,7 +12,8 @@ export class SessionDO {
 		roleList: UserRoles[]
 	}
 	hotel: {
-		id: string
+		id: string,
+		timezone: string
 	}
 }
 export class SessionContext {
@@ -49,7 +50,8 @@ export class SessionManager {
 				roleList: loginData.user.roleList
 			},
 			hotel: {
-				id: loginData.hotel.id
+				id: loginData.hotel.id,
+				timezone: loginData.hotel.timezone
 			}
 		};
 		return {
