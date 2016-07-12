@@ -35,11 +35,12 @@ export class DefaultBookingBuilder implements IBookingDataSource {
 
     public getBookingList(hotelDO: HotelDO, customerList: CustomerDO[], roomCategoryList: RoomCategoryDO[], priceProductList: PriceProductDO[]): BookingDO[] {
         var bookingsList = [];
-        bookingsList.push(this.getFirstBooking(hotelDO, customerList, roomCategoryList, priceProductList));
+        bookingsList.push(this.buildBooking("2", hotelDO, customerList, roomCategoryList, priceProductList));
+        bookingsList.push(this.buildBooking("3", hotelDO, customerList, roomCategoryList, priceProductList));
         return bookingsList;
     }
 
-    private getFirstBooking(hotelDO: HotelDO, customerList: CustomerDO[], roomCategoryList: RoomCategoryDO[], priceProductList: PriceProductDO[]): BookingDO {
+    private buildBooking(bookingId: string, hotelDO: HotelDO, customerList: CustomerDO[], roomCategoryList: RoomCategoryDO[], priceProductList: PriceProductDO[]): BookingDO {
         var priceProduct = priceProductList[0];
         var customerId = this._testUtils.getRandomListElement(customerList).id;
         var roomCategoryId = this._testUtils.getRandomListElement(priceProduct.roomCategoryIdList);
@@ -58,7 +59,7 @@ export class DefaultBookingBuilder implements IBookingDataSource {
         booking.inputChannel = GroupBookingInputChannel.PropertyManagementSystem;
         booking.noOfRooms = 1;
 
-        booking.bookingId = "2";
+        booking.bookingId = bookingId;
         booking.bookingReference = "ref2";
         booking.confirmationStatus = BookingConfirmationStatus.Guaranteed;
         booking.customerIdList = [customerId];
