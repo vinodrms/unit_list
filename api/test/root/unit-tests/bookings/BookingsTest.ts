@@ -20,6 +20,7 @@ import {PriceProductDO, PriceProductAvailability} from '../../../../core/data-la
 import {AddBookingItems} from '../../../../core/domain-layer/bookings/add-bookings/AddBookingItems';
 import {AddBookingItemsDO} from '../../../../core/domain-layer/bookings/add-bookings/AddBookingItemsDO';
 import {BookingDO, GroupBookingInputChannel, BookingConfirmationStatus} from '../../../../core/data-layer/bookings/data-objects/BookingDO';
+import {BookingPriceType} from '../../../../core/data-layer/bookings/data-objects/price/BookingPriceDO';
 import {BookingSearchResultRepoDO} from '../../../../core/data-layer/bookings/repositories/IBookingRepository';
 import {BookingConfirmationEmailSender} from '../../../../core/domain-layer/bookings/booking-confirmations/BookingConfirmationEmailSender';
 import {BookingOccupancyCalculator} from '../../../../core/domain-layer/bookings/search-bookings/utils/occupancy-calculator/BookingOccupancyCalculator';
@@ -27,7 +28,8 @@ import {IBookingOccupancy} from '../../../../core/domain-layer/bookings/search-b
 import {BookingSearch} from '../../../../core/domain-layer/bookings/search-bookings/BookingSearch';
 import {TransientBookingItemDO} from '../../../../core/domain-layer/bookings/search-bookings/TransientBookingItemDO';
 import {BookingSearchResult, RoomCategoryItem} from '../../../../core/domain-layer/bookings/search-bookings/utils/result-builder/BookingSearchResult';
-import {MarkBookingsAsGuaranteedProcess} from '../../../../core/domain-layer/bookings/processes/MarkBookingsAsGuaranteedProcess';
+import {BookingProcessFactory, BookingStatusChangerProcessType} from '../../../../core/domain-layer/bookings/processes/BookingProcessFactory';
+import {IBookingStatusChangerProcess} from '../../../../core/domain-layer/bookings/processes/IBookingStatusChangerProcess';
 
 describe("New Bookings Tests", function () {
     var testContext: TestContext;
@@ -253,12 +255,33 @@ describe("New Bookings Tests", function () {
 
     describe("Booking Processes Tests", function () {
         it("Should mark some bookings as Guaranteed", function (done) {
-            var process = new MarkBookingsAsGuaranteedProcess(testContext.appContext, testDataBuilder.hotelDO);
-            process.markBookingsAsGuaranteed(bookingTestHelper.getMaxTimestamp())
+            var bookingProcessFactory = new BookingProcessFactory(testContext.appContext, testDataBuilder.hotelDO);
+            var markBookingsAsGuaranteeProcess: IBookingStatusChangerProcess = bookingProcessFactory.getBookingStatusChangerProcess(BookingStatusChangerProcessType.MarkBookingsAsGuaranteed);
+            markBookingsAsGuaranteeProcess.changeStatuses(bookingTestHelper.getMaxTimestamp())
                 .then((bookingList: BookingDO[]) => {
                     bookingList.forEach((booking: BookingDO) => {
                         should.equal(booking.confirmationStatus, BookingConfirmationStatus.Guaranteed);
-                        should.equal(booking.bookingHistory.actionList.length > 1, true);
+                        should.equal(booking.bookingHistory.actionList.length > 0, true);
+                    });
+                    done();
+                }).catch((err: any) => {
+                    done(err);
+                });
+        });
+        it("Should mark some bookings as No Show", function (done) {
+            var bookingProcessFactory = new BookingProcessFactory(testContext.appContext, testDataBuilder.hotelDO);
+            var markBookingsAsNoShowProcess: IBookingStatusChangerProcess = bookingProcessFactory.getBookingStatusChangerProcess(BookingStatusChangerProcessType.MarkBookingsAsNoShow);
+            markBookingsAsNoShowProcess.changeStatuses(bookingTestHelper.getMaxTimestamp())
+                .then((bookingList: BookingDO[]) => {
+                    bookingList.forEach((booking: BookingDO) => {
+                        should.equal((booking.confirmationStatus === BookingConfirmationStatus.NoShow || booking.confirmationStatus === BookingConfirmationStatus.NoShowWithPenalty), true);
+                        should.equal(booking.bookingHistory.actionList.length > 0, true);
+                        if (booking.confirmationStatus === BookingConfirmationStatus.NoShow) {
+                            should.equal(booking.price.priceType, BookingPriceType.BookingStay);
+                        }
+                        else {
+                            should.equal(booking.price.priceType, BookingPriceType.Penalty);
+                        }
                     });
                     done();
                 }).catch((err: any) => {
