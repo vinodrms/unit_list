@@ -30,4 +30,18 @@ export class BookingUtils {
             }
         });
     }
+    public updateDisplayCustomerId(booking: BookingDO, customersContainer: CustomersContainer) {
+        booking.displayCustomerId = booking.defaultBillingDetails.customerId;
+        var customer = customersContainer.getCustomerById(booking.displayCustomerId);
+        if (customer.isIndividual()) {
+            return;
+        }
+        for (var custIndex = 0; custIndex < booking.customerIdList.length; custIndex++) {
+            var currentCustomer = customersContainer.getCustomerById(booking.customerIdList[custIndex]);
+            if (currentCustomer.isIndividual()) {
+                booking.displayCustomerId = currentCustomer.id;
+                return;
+            }
+        }
+    }
 }
