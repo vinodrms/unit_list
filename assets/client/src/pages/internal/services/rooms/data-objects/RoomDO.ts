@@ -6,9 +6,11 @@ export enum RoomStatus {
 }
 
 export enum RoomMaintenanceStatus {
-    Cleaning,
+    Clean,
     Dirty,
-    CheckInReady
+    PickUp,
+    OutOfOrder,
+    OutOfService
 }
 
 export class RoomDO extends BaseDO {
@@ -37,5 +39,14 @@ export class RoomDO extends BaseDO {
 
     public buildFromObject(object: Object) {
         super.buildFromObject(object);
+    }
+
+    public static get inInventoryMaintenanceStatusList(): RoomMaintenanceStatus[] {
+        return [
+            RoomMaintenanceStatus.Clean,
+            RoomMaintenanceStatus.Dirty,
+            RoomMaintenanceStatus.PickUp,
+            RoomMaintenanceStatus.OutOfService
+            ];
     }
 }

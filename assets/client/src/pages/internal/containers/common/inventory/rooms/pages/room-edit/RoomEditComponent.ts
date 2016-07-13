@@ -109,7 +109,7 @@ export class RoomEditComponent extends BaseFormComponent implements OnInit {
             this.selectedStationaryBeds = [];
         }
         if (this._appContext.thUtils.isUndefinedOrNull(this.roomVM.room.maintenanceStatus)) {
-            this.roomVM.room.maintenanceStatus = RoomMaintenanceStatus.CheckInReady;
+            this.roomVM.room.maintenanceStatus = RoomMaintenanceStatus.Clean;
         }
         if (this._appContext.thUtils.isUndefinedOrNull(this._roomVM.room.amenityIdList) &&
             !this._appContext.thUtils.isUndefinedOrNull(this.roomAmenities)) {
