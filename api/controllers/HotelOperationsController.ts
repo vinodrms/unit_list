@@ -23,22 +23,32 @@ class HotelOperationsController extends BaseController {
         super();
 		var roomsDay0 = [
 			{
-				status: "Occupied",
-				type: "Single",
+				status: {
+					displayName:"Occupied"
+				},
+				roomCategory: {
+					displayName: "Single"
+				},
 				properties: {
 					name: "501",
 					booking: {
 						clientName: "Allan Paulsen",
 						numberOfPeople: 2,
 						numberOfNights: 7,
-						arrival: "Wed 13.02.16",
-						departure: "Sat 17.02.16",
+						arrivalLabel: "Wed 13.02.16",
+						arrivalDate: "",
+						departureLabel: "Sat 17.02.16",
+						departureDate: ""
 					}
 				}
 			},
 			{
-				status: "Occupied",
-				type: "Double",
+				status: {
+					displayName:"Occupied"
+				},
+				roomCategory: {
+					displayName: "Double"
+				},
 				properties: {
 					name: "502",
 					maintenanceStatus: "Dirty",
@@ -46,14 +56,20 @@ class HotelOperationsController extends BaseController {
 						clientName: "Robert Paulsen",
 						numberOfPeople: 2,
 						numberOfNights: 7,
-						arrival: "Wed 13.02.16",
-						departure: "Sat 17.02.16"
+						arrivalLabel: "Wed 13.02.16",
+						arrivalDate: "",
+						departureLabel: "Sat 17.02.16",
+						departureDate: ""
 					}
 				}
 			},
 			{
-				status: "Free",
-				type: "Single",
+				status: {
+					displayName:"Free"
+				},
+				roomCategory: {
+					displayName: "Single"
+				},
 				properties: {
 					name: "503",
 					maintenanceStatus: "Dirty",
@@ -61,14 +77,20 @@ class HotelOperationsController extends BaseController {
 						clientName: "Robert Paulsen Catalin Andrei",
 						numberOfPeople: 2,
 						numberOfNights: 7,
-						arrival: "Wed 13.02.16",
-						departure: "Sat 17.02.16"
+						arrivalLabel: "Wed 13.02.16",
+						arrivalDate: "",
+						departureLabel: "Sat 17.02.16",
+						departureDate: ""
 					}
 				}
 			},
 			{
-				status: "Free",
-				type: "Double",
+				status: {
+					displayName:"Free"
+				},
+				roomCategory: {
+					displayName: "Double"
+				},
 				properties: {
 					name: "504",
 					maintenanceStatus: "PickUp",
@@ -76,42 +98,60 @@ class HotelOperationsController extends BaseController {
 						clientName: "Paul Paulsen",
 						numberOfPeople: 2,
 						numberOfNights: 7,
-						arrival: "Wed 13.02.16",
-						departure: "Sat 17.02.16"
+						arrivalLabel: "Wed 13.02.16",
+						arrivalDate: "",
+						departureLabel: "Sat 17.02.16",
+						departureDate: ""
 					}
 				}
 			},
 			{
-				status: "Free",
-				type: "Double",
+				status: {
+					displayName:"Free"
+				},
+				roomCategory: {
+					displayName: "Double"
+				},
 				properties: {
 					name: "505",
 					booking: {
 						clientName: "Paul Paulsen",
 						numberOfPeople: 2,
 						numberOfNights: 7,
-						arrival: "Wed 13.02.16",
-						departure: "Sat 17.02.16"
+						arrivalLabel: "Wed 13.02.16",
+						arrivalDate: "",
+						departureLabel: "Sat 17.02.16",
+						departureDate: ""
 					}
 				}
 			},
 			{
-				status: "OutOfService",
-				type: "Single",
+				status: {
+					displayName:"OutOfService"
+				},
+				roomCategory: {
+					displayName: "Single"
+				},
 				properties: {
 					name: "505",
 					booking: {
 						clientName: "Paul Paulsen",
 						numberOfPeople: 2,
 						numberOfNights: 7,
-						arrival: "Wed 13.02.16",
-						departure: "Sat 17.02.16"
+						arrivalLabel: "Wed 13.02.16",
+						arrivalDate: "",
+						departureLabel: "Sat 17.02.16",
+						departureDate: ""
 					}
 				}
 			},
 			{
-				status: "Reserved",
-				type: "Single",
+				status: {
+					displayName:"Reserved"
+				},
+				roomCategory: {
+					displayName: "Single"
+				},
 				properties: {
 					name: "505",
 					maintenanceStatus: "Dirty",
@@ -119,30 +159,42 @@ class HotelOperationsController extends BaseController {
 						clientName: "Paul Paulsen",
 						numberOfPeople: 2,
 						numberOfNights: 7,
-						arrival: "Wed 13.02.16",
-						departure: "Sat 17.02.16"
+						arrivalLabel: "Wed 13.02.16",
+						arrivalDate: "",
+						departureLabel: "Sat 17.02.16",
+						departureDate: ""
 					}
 				}
 			}			
 		];
 		var roomsDay1 = [
 			{
-				status: "Occupied",
-				type: "Double",
+				status: {
+					displayName:"Occupied"
+				},
+				roomCategory: {
+					displayName: "Double"
+				},
 				properties: {
 					name: "501",
 					booking: {
 						clientName: "Aaaaaaaaaaaa",
 						numberOfPeople: 2,
 						numberOfNights: 7,
-						arrival: "Wed 14.02.16",
-						departure: "Sat 17.02.16",
+						arrivalLabel: "Wed 14.02.16",
+						arrivalDate: "",
+						departureLabel: "Sat 17.02.16",
+						departureDate: ""
 					}
 				}
 			},
 			{
-				status: "Occupied",
-				type: "Double",
+				status: {
+					displayName:"Occupied"
+				},
+				roomCategory: {
+					displayName: "Double"
+				},
 				properties: {
 					name: "502",
 					maintenanceStatus: "PickUp",
@@ -150,14 +202,20 @@ class HotelOperationsController extends BaseController {
 						clientName: "BBbbbbbbbbbb",
 						numberOfPeople: 2,
 						numberOfNights: 7,
-						arrival: "Wed 14.02.16",
-						departure: "Sat 17.02.16"
+						arrivalLabel: "Wed 14.02.16",
+						arrivalDate: "",
+						departureLabel: "Sat 17.02.16",
+						departureDate: ""
 					}
 				}
 			},
 			{
-				status: "Free",
-				type: "Double",
+				status: {
+					displayName:"Free"
+				},
+				roomCategory: {
+					displayName: "Double"
+				},
 				properties: {
 					name: "503",
 					maintenanceStatus: "Dirty",
@@ -165,14 +223,20 @@ class HotelOperationsController extends BaseController {
 						clientName: "Ccccccccccc",
 						numberOfPeople: 2,
 						numberOfNights: 7,
-						arrival: "Wed 14.02.16",
-						departure: "Sat 17.02.16"
+						arrivalLabel: "Wed 14.02.16",
+						arrivalDate: "",
+						departureLabel: "Sat 17.02.16",
+						departureDate: ""
 					}
 				}
 			},
 			{
-				status: "Free",
-				type: "Double",
+				status: {
+					displayName:"Free"
+				},
+				roomCategory: {
+					displayName: "Double"
+				},
 				properties: {
 					name: "504",
 					maintenanceStatus: "PickUp",
@@ -180,42 +244,60 @@ class HotelOperationsController extends BaseController {
 						clientName: "Ddddddddddd",
 						numberOfPeople: 2,
 						numberOfNights: 7,
-						arrival: "Wed 14.02.16",
-						departure: "Sat 17.02.16"
+						arrivalLabel: "Wed 14.02.16",
+						arrivalDate: "",
+						departureLabel: "Sat 17.02.16",
+						departureDate: ""
 					}
 				}
 			},
 			{
-				status: "Free",
-				type: "Double",
+				status: {
+					displayName:"Free"
+				},
+				roomCategory: {
+					displayName: "Double"
+				},
 				properties: {
 					name: "505",
 					booking: {
 						clientName: "Eeeeeeeeeeee",
 						numberOfPeople: 2,
 						numberOfNights: 7,
-						arrival: "Wed 14.02.16",
-						departure: "Sat 17.02.16"
+						arrivalLabel: "Wed 14.02.16",
+						arrivalDate: "",
+						departureLabel: "Sat 17.02.16",
+						departureDate: ""
 					}
 				}
 			},
 			{
-				status: "OutOfService",
-				type: "Double",
+				status: {
+					displayName:"OutOfService"
+				},
+				roomCategory: {
+					displayName: "Double"
+				},
 				properties: {
 					name: "505",
 					booking: {
 						clientName: "Fffffffffffff",
 						numberOfPeople: 2,
 						numberOfNights: 7,
-						arrival: "Wed 14.02.16",
-						departure: "Sat 17.02.16"
+						arrivalLabel: "Wed 14.02.16",
+						arrivalDate: "",
+						departureLabel: "Sat 17.02.16",
+						departureDate: ""
 					}
 				}
 			},
 			{
-				status: "Reserved",
-				type: "Single",
+				status: {
+					displayName:"Reserved"
+				},
+				roomCategory: {
+					displayName: "Single"
+				},
 				properties: {
 					name: "505",
 					maintenanceStatus: "PickUp",
@@ -223,8 +305,10 @@ class HotelOperationsController extends BaseController {
 						clientName: "Gggggggggggggggg",
 						numberOfPeople: 2,
 						numberOfNights: 7,
-						arrival: "Wed 14.02.16",
-						departure: "Sat 17.02.16"
+						arrivalLabel: "Wed 14.02.16",
+						arrivalDate: "",
+						departureLabel: "Sat 17.02.16",
+						departureDate: ""
 					}
 				}
 			}			
@@ -232,22 +316,32 @@ class HotelOperationsController extends BaseController {
 
 		var roomsDay2 = [
 			{
-				status: "Occupied",
-				type: "Double",
+				status: {
+					displayName:"Occupied"
+				},
+				roomCategory: {
+					displayName: "Double"
+				},
 				properties: {
 					name: "501",
 					booking: {
 						clientName: "Hhhhhhhhhhhhhhhhhh",
 						numberOfPeople: 2,
 						numberOfNights: 7,
-						arrival: "Wed 14.02.16",
-						departure: "Sat 17.02.16",
+						arrivalLabel: "Wed 14.02.16",
+						arrivalDate: "",
+						departureLabel: "Sat 17.02.16",
+						departureDate: ""
 					}
 				}
 			},
 			{
-				status: "Occupied",
-				type: "Double",
+				status: {
+					displayName:"Occupied"
+				},
+				roomCategory: {
+					displayName: "Double"
+				},
 				properties: {
 					name: "502",
 					maintenanceStatus: "PickUp",
@@ -255,14 +349,20 @@ class HotelOperationsController extends BaseController {
 						clientName: "Iiiiiiiiiiiiiiiiiiii",
 						numberOfPeople: 2,
 						numberOfNights: 7,
-						arrival: "Wed 14.02.16",
-						departure: "Sat 17.02.16"
+						arrivalLabel: "Wed 14.02.16",
+						arrivalDate: "",
+						departureLabel: "Sat 17.02.16",
+						departureDate: ""
 					}
 				}
 			},
 			{
-				status: "Free",
-				type: "Double",
+				status: {
+					displayName:"Free"
+				},
+				roomCategory: {
+					displayName: "Double"
+				},
 				properties: {
 					name: "503",
 					maintenanceStatus: "Dirty",
@@ -270,14 +370,20 @@ class HotelOperationsController extends BaseController {
 						clientName: "Jjjjjjjjjjjjjjjjjjjjj",
 						numberOfPeople: 2,
 						numberOfNights: 7,
-						arrival: "Wed 14.02.16",
-						departure: "Sat 17.02.16"
+						arrivalLabel: "Wed 14.02.16",
+						arrivalDate: "",
+						departureLabel: "Sat 17.02.16",
+						departureDate: ""
 					}
 				}
 			},
 			{
-				status: "Free",
-				type: "Double",
+				status: {
+					displayName:"Free"
+				},
+				roomCategory: {
+					displayName: "Double"
+				},
 				properties: {
 					name: "504",
 					maintenanceStatus: "PickUp",
@@ -285,42 +391,60 @@ class HotelOperationsController extends BaseController {
 						clientName: "Kkkkkkkkkkkkkkkkkkk",
 						numberOfPeople: 2,
 						numberOfNights: 7,
-						arrival: "Wed 14.02.16",
-						departure: "Sat 17.02.16"
+						arrivalLabel: "Wed 14.02.16",
+						arrivalDate: "",
+						departureLabel: "Sat 17.02.16",
+						departureDate: ""
 					}
 				}
 			},
 			{
-				status: "Free",
-				type: "Double",
+				status: {
+					displayName:"Free"
+				},
+				roomCategory: {
+					displayName: "Double"
+				},
 				properties: {
 					name: "505",
 					booking: {
 						clientName: "Lllllllllllllllllllll",
 						numberOfPeople: 2,
 						numberOfNights: 7,
-						arrival: "Wed 14.02.16",
-						departure: "Sat 17.02.16"
+						arrivalLabel: "Wed 14.02.16",
+						arrivalDate: "",
+						departureLabel: "Sat 17.02.16",
+						departureDate: ""
 					}
 				}
 			},
 			{
-				status: "OutOfService",
-				type: "Double",
+				status: {
+					displayName:"OutOfService"
+				},
+				roomCategory: {
+					displayName: "Double"
+				},
 				properties: {
 					name: "505",
 					booking: {
 						clientName: "MMmmmmmmmmmmmmmm",
 						numberOfPeople: 2,
 						numberOfNights: 7,
-						arrival: "Wed 14.02.16",
-						departure: "Sat 17.02.16"
+						arrivalLabel: "Wed 14.02.16",
+						arrivalDate: "",
+						departureLabel: "Sat 17.02.16",
+						departureDate: ""
 					}
 				}
 			},
 			{
-				status: "Reserved",
-				type: "Single",
+				status: {
+					displayName:"Reserved"
+				},
+				roomCategory: {
+					displayName: "Single"
+				},
 				properties: {
 					name: "505",
 					maintenanceStatus: "PickUp",
@@ -328,8 +452,10 @@ class HotelOperationsController extends BaseController {
 						clientName: "Nnnnnnnnnnnnnnnnnn",
 						numberOfPeople: 2,
 						numberOfNights: 7,
-						arrival: "Wed 14.02.16",
-						departure: "Sat 17.02.16"
+						arrivalLabel: "Wed 14.02.16",
+						arrivalDate: "",
+						departureLabel: "Sat 17.02.16",
+						departureDate: ""
 					}
 				}
 			}			
@@ -338,22 +464,32 @@ class HotelOperationsController extends BaseController {
 		this._roomsList = [roomsDay0, roomsDay1, roomsDay2];
 		this._rooms = [
 			{
-				status: "Occupied",
-				type: "Double",
+				status: {
+					displayName:"Occupied"
+				},
+				roomCategory: {
+					displayName: "Double"
+				},
 				properties: {
 					name: "501",
 					booking: {
 						clientName: "Tudor Nechifor",
 						numberOfPeople: 2,
 						numberOfNights: 7,
-						arrival: "Wed 13.02.16",
-						departure: "Sat 17.02.16",
+						arrivalLabel: "Wed 13.02.16",
+						arrivalDate: "",
+						departureLabel: "Sat 17.02.16",
+						departureDate: ""
 					}
 				}
 			},
 			{
-				status: "Occupied",
-				type: "Double",
+				status: {
+					displayName:"Occupied"
+				},
+				roomCategory: {
+					displayName: "Double"
+				},
 				properties: {
 					name: "502",
 					maintenanceStatus: "PickUp",
@@ -361,14 +497,20 @@ class HotelOperationsController extends BaseController {
 						clientName: "Adrian Potcovaru",
 						numberOfPeople: 2,
 						numberOfNights: 7,
-						arrival: "Wed 13.02.16",
-						departure: "Sat 17.02.16"
+						arrivalLabel: "Wed 13.02.16",
+						arrivalDate: "",
+						departureLabel: "Sat 17.02.16",
+						departureDate: ""
 					}
 				}
 			},
 			{
-				status: "Free",
-				type: "Double",
+				status: {
+					displayName:"Free"
+				},
+				roomCategory: {
+					displayName: "Double"
+				},
 				properties: {
 					name: "503",
 					maintenanceStatus: "Dirty",
@@ -376,14 +518,20 @@ class HotelOperationsController extends BaseController {
 						clientName: "Iiiiiiiiiiiiiiii",
 						numberOfPeople: 2,
 						numberOfNights: 7,
-						arrival: "Wed 13.02.16",
-						departure: "Sat 17.02.16"
+						arrivalLabel: "Wed 13.02.16",
+						arrivalDate: "",
+						departureLabel: "Sat 17.02.16",
+						departureDate: ""
 					}
 				}
 			},
 			{
-				status: "Free",
-				type: "Double",
+				status: {
+					displayName:"Free"
+				},
+				roomCategory: {
+					displayName: "Double"
+				},
 				properties: {
 					name: "504",
 					maintenanceStatus: "PickUp",
@@ -391,42 +539,60 @@ class HotelOperationsController extends BaseController {
 						clientName: "Jjjjjjjjjjjjjj",
 						numberOfPeople: 2,
 						numberOfNights: 7,
-						arrival: "Wed 13.02.16",
-						departure: "Sat 17.02.16"
+						arrivalLabel: "Wed 13.02.16",
+						arrivalDate: "",
+						departureLabel: "Sat 17.02.16",
+						departureDate: ""
 					}
 				}
 			},
 			{
-				status: "Free",
-				type: "Double",
+				status: {
+					displayName:"Free"
+				},
+				roomCategory: {
+					displayName: "Double"
+				},
 				properties: {
 					name: "505",
 					booking: {
 						clientName: "Kkkkkkkkkkkkkkk",
 						numberOfPeople: 2,
 						numberOfNights: 7,
-						arrival: "Wed 13.02.16",
-						departure: "Sat 17.02.16"
+						arrivalLabel: "Wed 13.02.16",
+						arrivalDate: "",
+						departureLabel: "Sat 17.02.16",
+						departureDate: ""
 					}
 				}
 			},
 			{
-				status: "OutOfService",
-				type: "Double",
+				status: {
+					displayName:"OutOfService"
+				},
+				roomCategory: {
+					displayName: "Double"
+				},
 				properties: {
 					name: "505",
 					booking: {
 						clientName: "Lllllllllllll",
 						numberOfPeople: 2,
 						numberOfNights: 7,
-						arrival: "Wed 13.02.16",
-						departure: "Sat 17.02.16"
+						arrivalLabel: "Wed 13.02.16",
+						arrivalDate: "",
+						departureLabel: "Sat 17.02.16",
+						departureDate: ""
 					}
 				}
 			},
 			{
-				status: "Reserved",
-				type: "Single",
+				status: {
+					displayName:"Reserved"
+				},
+				roomCategory: {
+					displayName: "Single"
+				},
 				properties: {
 					name: "505",
 					maintenanceStatus: "PickUp",
@@ -434,8 +600,10 @@ class HotelOperationsController extends BaseController {
 						clientName: "MMMMMMMmmmmmmmm",
 						numberOfPeople: 2,
 						numberOfNights: 7,
-						arrival: "Wed 13.02.16",
-						departure: "Sat 17.02.16"
+						arrivalLabel: "Wed 13.02.16",
+						arrivalDate: "",
+						departureLabel: "Sat 17.02.16",
+						departureDate: ""
 					}
 				}
 			}			
@@ -447,32 +615,40 @@ class HotelOperationsController extends BaseController {
 				roomType: "Double",
 				numberOfPeople: 2,
 				numberOfNights: 7,
-				arrival: "Wed 13.02.16",
-				departure: "Sat 20.02.16",
+				arrivalLabel: "Wed 13.02.16",
+				arrivalDate: "",
+				departureLabel: "Sat 20.02.16",
+				departureDate: ""
 			},
 			{
 				clientName: "John Snow",
 				roomType: "Double",
 				numberOfPeople: 2,
 				numberOfNights: 5,
-				arrival: "Wed 13.02.16",
-				departure: "Sat 18.02.16",
+				arrivalLabel: "Wed 13.02.16",
+				arrivalDate: "",
+				departureLabel: "Sat 18.02.16",
+				departureDate: ""
 			},
 			{
 				clientName: "Erika Einstein",
 				roomType: "Single",
 				numberOfPeople: 2,
 				numberOfNights: 6,
-				arrival: "Wed 13.02.16",
-				departure: "Sat 19.02.16",
+				arrivalLabel: "Wed 13.02.16",
+				arrivalDate: "",
+				departureLabel: "Sat 19.02.16",
+				departureDate: ""
 			},
 			{
 				clientName: "Dragos Pricope",
 				roomType: "Double",
 				numberOfPeople: 1,
 				numberOfNights: 3,
-				arrival: "Wed 13.02.16",
-				departure: "Sat 16.02.16",
+				arrivalLabel: "Wed 13.02.16",
+				arrivalDate: "",
+				departureLabel: "Sat 16.02.16",
+				departureDate: ""
 			}
 		];
 
@@ -482,16 +658,20 @@ class HotelOperationsController extends BaseController {
 				roomType: "Double",
 				numberOfPeople: 2,
 				numberOfNights: 7,
-				arrival: "Wed 14.02.16",
-				departure: "Sat 20.02.16",
+				arrivalLabel: "Wed 14.02.16",
+				arrivalDate: "",
+				departureLabel: "Sat 20.02.16",
+				departureDate: ""
 			},
 			{
 				clientName: "Bbbbb",
 				roomType: "Double",
 				numberOfPeople: 2,
 				numberOfNights: 5,
-				arrival: "Wed 14.02.16",
-				departure: "Sat 18.02.16",
+				arrivalLabel: "Wed 14.02.16",
+				arrivalDate: "",
+				departureLabel: "Sat 18.02.16",
+				departureDate: ""
 			}
 		];
 
@@ -501,60 +681,34 @@ class HotelOperationsController extends BaseController {
 				roomType: "Double",
 				numberOfPeople: 2,
 				numberOfNights: 7,
-				arrival: "Wed 13.02.16",
-				departure: "Sat 20.02.16",
+				arrivalLabel: "Wed 13.02.16",
+				arrivalDate: "",
+				departureLabel: "Sat 20.02.16",
+				departureDate: ""
 			},
 			{
 				clientName: "DDDddddd",
 				roomType: "Double",
 				numberOfPeople: 2,
 				numberOfNights: 5,
-				arrival: "Wed 13.02.16",
-				departure: "Sat 18.02.16",
+				arrivalLabel: "Wed 13.02.16",
+				arrivalDate: "",
+				departureLabel: "Sat 18.02.16",
+				departureDate: ""
 			},
 			{
 				clientName: "EEEeeeeee",
 				roomType: "Double",
 				numberOfPeople: 2,
 				numberOfNights: 5,
-				arrival: "Wed 13.02.16",
-				departure: "Sat 18.02.16",
+				arrivalLabel: "Wed 13.02.16",
+				arrivalDate: "",
+				departureLabel: "Sat 18.02.16",
+				departureDate: ""
 			}			
 		];
 
 		this._arrivalsList = [arrivalsDay0, arrivalsDay1, arrivalsDay2];
-
-		this._arrivals = [
-			{
-				clientName: "Robert Paulsen",
-				numberOfPeople: 2,
-				numberOfNights: 7,
-				arrival: "Wed 13.02.16",
-				departure: "Sat 20.02.16",
-			},
-			{
-				clientName: "John Snow",
-				numberOfPeople: 2,
-				numberOfNights: 5,
-				arrival: "Wed 13.02.16",
-				departure: "Sat 18.02.16",
-			},		
-			{
-				clientName: "Erika Einstein",
-				numberOfPeople: 2,
-				numberOfNights: 6,
-				arrival: "Wed 13.02.16",
-				departure: "Sat 19.02.16",
-			},
-			{
-				clientName: "Dragos Pricope",
-				numberOfPeople: 1,
-				numberOfNights: 3,
-				arrival: "Wed 13.02.16",
-				departure: "Sat 16.02.16",
-			}
-		];
-
 
 		var departureDay0 = [
 			{
@@ -563,8 +717,10 @@ class HotelOperationsController extends BaseController {
 				roomType: "Double",
 				numberOfPeople: 2,
 				numberOfNights: 7,
-				arrival: "Wed 13.02.16",
-				departure: "Sat 20.02.16",
+				arrivalLabel: "Wed 13.02.16",
+				arrivalDate: "",
+				departureLabel: "Sat 20.02.16",
+				departureDate: ""
 			},
 			{
 				clientName: "John Snow",
@@ -572,8 +728,10 @@ class HotelOperationsController extends BaseController {
 				roomType: "Double",
 				numberOfPeople: 2,
 				numberOfNights: 5,
-				arrival: "Wed 13.02.16",
-				departure: "Sat 18.02.16",
+				arrivalLabel: "Wed 13.02.16",
+				arrivalDate: "",
+				departureLabel: "Sat 18.02.16",
+				departureDate: ""
 			},		
 			{
 				clientName: "Erika Einstein",
@@ -581,8 +739,10 @@ class HotelOperationsController extends BaseController {
 				roomType: "Double",
 				numberOfPeople: 2,
 				numberOfNights: 6,
-				arrival: "Wed 13.02.16",
-				departure: "Sat 19.02.16",
+				arrivalLabel: "Wed 13.02.16",
+				arrivalDate: "",
+				departureLabel: "Sat 19.02.16",
+				departureDate: ""
 			},
 			{
 				clientName: "Dragos Pricope",
@@ -590,8 +750,10 @@ class HotelOperationsController extends BaseController {
 				roomType: "Double",
 				numberOfPeople: 1,
 				numberOfNights: 3,
-				arrival: "Wed 13.02.16",
-				departure: "Sat 16.02.16",
+				arrivalLabel: "Wed 13.02.16",
+				arrivalDate: "",
+				departureLabel: "Sat 16.02.16",
+				departureDate: ""
 			}
 		];
 		var departureDay1 = [
@@ -601,8 +763,10 @@ class HotelOperationsController extends BaseController {
 				roomType: "Double",
 				numberOfPeople: 2,
 				numberOfNights: 7,
-				arrival: "Wed 14.02.16",
-				departure: "Sat 20.02.16",
+				arrivalLabel: "Wed 14.02.16",
+				arrivalDate: "",
+				departureLabel: "Sat 20.02.16",
+				departureDate: ""
 			}
 		];
 		var departureDay2 = [
@@ -612,8 +776,10 @@ class HotelOperationsController extends BaseController {
 				roomType: "Double",
 				numberOfPeople: 2,
 				numberOfNights: 7,
-				arrival: "Wed 15.02.16",
-				departure: "Sat 20.02.16",
+				arrivalLabel: "Wed 15.02.16",
+				arrivalDate: "",
+				departureLabel: "Sat 20.02.16",
+				departureDate: ""
 			},
 			{
 				clientName: "Tttttttttttt",
@@ -621,65 +787,34 @@ class HotelOperationsController extends BaseController {
 				roomType: "Double",
 				numberOfPeople: 2,
 				numberOfNights: 5,
-				arrival: "Wed 15.02.16",
-				departure: "Sat 18.02.16",
+				arrivalLabel: "Wed 15.02.16",
+				arrivalDate: "",
+				departureLabel: "Sat 18.02.16",
+				departureDate: ""
 			}
 		];
 
 		this._departuresList = [departureDay0, departureDay1, departureDay2];
-
-		this._departures = [
-			{
-				clientName: "Robert Paulsen",
-				roomName: "502",
-				roomType: "Double",
-				numberOfPeople: 2,
-				numberOfNights: 7,
-				arrival: "Wed 13.02.16",
-				departure: "Sat 20.02.16",
-			},
-			{
-				clientName: "John Snow",
-				roomName: "502",
-				roomType: "Double",
-				numberOfPeople: 2,
-				numberOfNights: 5,
-				arrival: "Wed 13.02.16",
-				departure: "Sat 18.02.16",
-			},		
-			{
-				clientName: "Erika Einstein",
-				roomName: "502",
-				roomType: "Double",
-				numberOfPeople: 2,
-				numberOfNights: 6,
-				arrival: "Wed 13.02.16",
-				departure: "Sat 19.02.16",
-			},
-			{
-				clientName: "Dragos Pricope",
-				roomName: "502",
-				roomType: "Double",
-				numberOfPeople: 1,
-				numberOfNights: 3,
-				arrival: "Wed 13.02.16",
-				departure: "Sat 16.02.16",
-			}
-		]
 	}
 
 	private buildRoomVM(room){
 		return {
-				status: "Occupied",
-				type: "Single",
+				status: {
+					displayName:"Occupied"
+				},
+				roomCategory: {
+					displayName: "Single"
+				},
 				properties: {
 					name: "501",
 					booking: {
 						clientName: "Allan Paulsen",
 						numberOfPeople: 2,
 						numberOfNights: 7,
-						arrival: "Wed 13.02.16",
-						departure: "Sat 17.02.16",
+						arrivalLabel: "Wed 13.02.16",
+						arrivalDate: "",
+						departureLabel: "Sat 17.02.16",
+						departureDate: ""
 					}
 				}
 			};
@@ -688,38 +823,38 @@ class HotelOperationsController extends BaseController {
     public getRooms(req: Express.Request, res: Express.Response){
 		if (!this.precheckGETParameters(req, res, ['state', 'date'])) { return };
 
-		var roomVMList = [];
-        var appContext: AppContext = req.appContext;
-        var sessionContext: SessionContext = req.sessionContext;
+		// var roomVMList = [];
+        // var appContext: AppContext = req.appContext;
+        // var sessionContext: SessionContext = req.sessionContext;
 
-        var roomMeta = this.getRoomMetaRepoDOFrom(sessionContext);
+        // var roomMeta = this.getRoomMetaRepoDOFrom(sessionContext);
 
-		var roomRepo = appContext.getRepositoryFactory().getRoomRepository();
-		roomRepo.getRoomList(roomMeta, {},  { pageNumber: 0, pageSize: 100}).then((rooms: RoomSearchResultRepoDO) => {
-			var category = roomRepo.getRoomCategoryIdList(roomMeta);
-			rooms.roomList.forEach((room) =>{
-				var vm = this.buildRoomVM(room);
-				roomVMList.push(vm);
-			});
+		// var roomRepo = appContext.getRepositoryFactory().getRoomRepository();
+		// roomRepo.getRoomList(roomMeta, {},  { pageNumber: 0, pageSize: 100}).then((rooms: RoomSearchResultRepoDO) => {
+		// 	var category = roomRepo.getRoomCategoryIdList(roomMeta);
+		// 	rooms.roomList.forEach((room) =>{
+		// 		var vm = this.buildRoomVM(room);
+		// 		roomVMList.push(vm);
+		// 	});
 
-			this.returnSuccesfulResponse(req, res, roomVMList);
-		}).catch((err: any) => {
-			this.returnErrorResponse(req, res, err, ThStatusCode.RoomsControllerErrorGettingRooms);
-		});
+		// 	this.returnSuccesfulResponse(req, res, roomVMList);
+		// }).catch((err: any) => {
+		// 	this.returnErrorResponse(req, res, err, ThStatusCode.RoomsControllerErrorGettingRooms);
+		// });
 
-		// var state = req.query.state;
-        // var date = req.query.date;
+		var state = req.query.state;
+        var date = req.query.date;
 
-        // var allRooms = this._roomsList[date];
-        // //TODO: Build enum
-        // if (state == 'All'){
-        //     // TODO: Update format to respect format
-        //     this.returnSuccesfulResponse(req, res, allRooms);
-        // }
-        // else {
-        //     var filteredResults = this.filterRoomsByStateType(state, allRooms);
-        //     this.returnSuccesfulResponse(req, res, filteredResults);
-        // }
+        var allRooms = this._roomsList[date];
+        //TODO: Build enum
+        if (state == 'All'){
+            // TODO: Update format to respect format
+            this.returnSuccesfulResponse(req, res, allRooms);
+        }
+        else {
+            var filteredResults = this.filterRoomsByStateType(state, allRooms);
+            this.returnSuccesfulResponse(req, res, filteredResults);
+        }
     }
 
     private getRoomMetaRepoDOFrom(sessionContext: SessionContext): RoomMetaRepoDO {
@@ -740,7 +875,7 @@ class HotelOperationsController extends BaseController {
     public getDepartures(req: Express.Request, res: Express.Response){
         if (!this.precheckGETParameters(req, res, ['date'])) { return };
         var date = req.query.date;
-        this.returnSuccesfulResponse(req, res, this._arrivalsList[date]);
+        this.returnSuccesfulResponse(req, res, this._departuresList[date]);
 
     }
 
