@@ -363,6 +363,7 @@ export enum ThStatusCode {
     BookingsControllerErrorGettingCount,
     BookingsControllerErrorSearchingBookings,
     BookingsControllerErrorAddingBookings,
+    BookingStatusChangerCronJobExecutorError,
     
 }
 
@@ -717,6 +718,7 @@ ThMessage[ThStatusCode.BookingsControllerErrorGettingBookings] = "Error getting 
 ThMessage[ThStatusCode.BookingsControllerErrorGettingCount] = "Error getting the number of bookings.";
 ThMessage[ThStatusCode.BookingsControllerErrorSearchingBookings] = "Error searching for bookings.";
 ThMessage[ThStatusCode.BookingsControllerErrorAddingBookings] = "Error adding bookings.";
+ThMessage[ThStatusCode.BookingStatusChangerCronJobExecutorError] = "Error changing booking statuses from the process.";
 
 export class ThResponse {
     statusCode: ThStatusCode;
