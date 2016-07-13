@@ -10,17 +10,12 @@ import {InvoicePaymentMethodType} from '../../../data-layer/invoices/data-object
 import {CommissionType} from '../../../data-layer/common/data-objects/commission/CommissionDO';
 import {InvoiceItemType} from '../../../data-layer/invoices/data-objects/items/InvoiceItemDO';
 
-export class UpdateInvoiceGroupDO {
-    id: string;
+export class SaveCustomerInvoiceGroupDO {
     invoiceList: InvoiceDO[];
     paymentStatus: InvoicePaymentStatus;
 
     public static getValidationStructure(): IValidationStructure {
         return new ObjectValidationStructure([
-            {
-                key: "id",
-                validationStruct: new PrimitiveValidationStructure(new StringValidationRule())
-            },
             {
                 key: "invoiceList",
                 validationStruct: new ArrayValidationStructure(new ObjectValidationStructure([
@@ -70,13 +65,13 @@ export class UpdateInvoiceGroupDO {
                     {
                         key: "paymentStatus",
                         validationStruct: new PrimitiveValidationStructure(new NumberInListValidationRule([InvoicePaymentStatus.Closed, InvoicePaymentStatus.Open]))
-                    },
+                    }
                 ]))
             },
             {
                 key: "paymentStatus",
                 validationStruct: new PrimitiveValidationStructure(new NumberInListValidationRule([InvoicePaymentStatus.Closed, InvoicePaymentStatus.Open]))
-            },
+            }
         ]);
     }
 }

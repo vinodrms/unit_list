@@ -297,6 +297,7 @@ export enum ThStatusCode {
     PdfReportServiceHtmlToPdfError,
     PhantomHtmlToPdfConverter,
 
+    GeneratInvoiceGroupActionFactoryError,
     InvoiceGroupsRepositoryErrorAddingInvoiceGroup,
     InvoiceGroupsRepositoryProblemUpdatingInvoiceGroup,
     InvoiceGroupsRepositoryErrorUpdatingInvoiceGroup,
@@ -304,10 +305,11 @@ export enum ThStatusCode {
     InvoiceGroupItemUpdateStrategyErrorUpdating,
     InvoiceGroupsRepositoryInvoiceGroupNotFound,
     InvoiceGroupsRepositoryErrorGettingInvoiceGroup,
+    InvoiceGroupRepositoryErrorReadingDocumentCount,
     SaveInvoiceGroupItem,
     AddNewCustomerInvoiceGroupError,
     AddNewBookingInvoiceGroupError,
-    AddBookingInvoiceGroupItemError,
+    GenerateBookingInvoiceError,
     UpdateInvoiceGroupItemError,
     InvoicePaymentMethodValidatorError,
     InvoicePaymentMethodValidatorInvalidPaymentMethod,
@@ -653,6 +655,7 @@ ThMessage[ThStatusCode.PdfReportServiceErrorCreatingOutputFolder] = "Error creat
 ThMessage[ThStatusCode.PdfReportServiceErrorWritingHtmlToFile] = "Error writing html file on disk.";
 ThMessage[ThStatusCode.PdfReportServiceHtmlToPdfError] = "Error in the following flow: generate html -> convert html to pdf.";
 ThMessage[ThStatusCode.PhantomHtmlToPdfConverter] = "Error converting html to pdf with phantom js.";
+ThMessage[ThStatusCode.GeneratInvoiceGroupActionFactoryError] = "Error getting the invoice group generation action (update or add new invoice group).";
 ThMessage[ThStatusCode.InvoiceGroupsRepositoryErrorAddingInvoiceGroup] = "Error adding the invoice group."; 
 ThMessage[ThStatusCode.InvoiceGroupsRepositoryProblemUpdatingInvoiceGroup] = "Problem updating the invoice group - concurrency.";
 ThMessage[ThStatusCode.InvoiceGroupsRepositoryErrorUpdatingInvoiceGroup] = "Error updating the invoice group.";
@@ -661,10 +664,11 @@ ThMessage[ThStatusCode.InvoiceGroupItemUpdateStrategyErrorUpdating] = "Error upd
 ThMessage[ThStatusCode.InvoiceGroupsRepositoryInvoiceGroupNotFound] = "Invoice group not found.";
 ThMessage[ThStatusCode.InvoiceGroupsRepositoryErrorGettingInvoiceGroup] = "Error retrieving the invoice group from the database.";
 ThMessage[ThStatusCode.SaveInvoiceGroupItem] = "Error saving the invoice group item.";
+ThMessage[ThStatusCode.InvoiceGroupRepositoryErrorReadingDocumentCount] = "Error reading invoice grupt document count.";
 ThMessage[ThStatusCode.UpdateInvoiceGroupItemError] = "Error updating invoice group.";
 ThMessage[ThStatusCode.AddNewCustomerInvoiceGroupError] = "Error adding new customer related invoice group.";
 ThMessage[ThStatusCode.AddNewBookingInvoiceGroupError] = "Error adding new booking related invoice group.";
-ThMessage[ThStatusCode.AddBookingInvoiceGroupItemError] = "Error adding booking related invoice group.";
+ThMessage[ThStatusCode.GenerateBookingInvoiceError] = "Error adding booking related invoice group.";
 ThMessage[ThStatusCode.InvoicePaymentMethodValidatorError] = "Error validating the payment methods.";
 ThMessage[ThStatusCode.InvoicePaymentMethodValidatorInvalidPaymentMethod] = "Unrecognized payment method.";
 ThMessage[ThStatusCode.InvoicePaymentMethodValidatorUnsupportedPaymentMethod] = "The payment method selected is not supported by the hotel.";

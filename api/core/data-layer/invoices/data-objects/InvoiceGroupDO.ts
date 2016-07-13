@@ -16,14 +16,13 @@ export class InvoiceGroupDO extends BaseDO {
     versionId: number;
     hotelId: string;
     groupBookingId: string;
-    bookingId: string;
     indexedCustomerIdList: string[];
     invoiceList: InvoiceDO[];
     paymentStatus: InvoicePaymentStatus;
     status: InvoiceGroupStatus;
 
     protected getPrimitivePropertyKeys(): string[] {
-        return ["id", "versionId", "bookingId", "indexedCustomerIdList", "paymentStatus", "status"];
+        return ["id", "versionId", "groupBookingId", "indexedCustomerIdList", "paymentStatus", "status"];
     }
     
     public buildFromObject(object: Object) {

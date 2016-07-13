@@ -41,8 +41,28 @@ export class MongoInvoiceGroupsReadOperationsRepository extends MongoRepository 
         );
     }
 
+    public getInvoiceGroupListCount(meta: InvoiceGroupMetaRepoDO, searchCriteria: InvoiceGroupSearchCriteriaRepoDO): Promise<LazyLoadMetaResponseRepoDO> {
+		return new Promise<LazyLoadMetaResponseRepoDO>((resolve: { (result: LazyLoadMetaResponseRepoDO): void }, reject: { (err: ThError): void }) => {
+			this.getInvoiceGroupListCountCore(resolve, reject, meta, searchCriteria);
+		});
+	}
+	private getInvoiceGroupListCountCore(resolve: { (result: LazyLoadMetaResponseRepoDO): void }, reject: { (err: ThError): void }, meta: InvoiceGroupMetaRepoDO, searchCriteria: InvoiceGroupSearchCriteriaRepoDO) {
+		var query = this.buildSearchCriteria(meta, searchCriteria);
+		return this.getDocumentCount(query,
+			(err: Error) => {
+				var thError = new ThError(ThStatusCode.InvoiceGroupRepositoryErrorReadingDocumentCount, err);
+				ThLogger.getInstance().logError(ThLogLevel.Error, "error reading document count", { meta: meta, searchCriteria: searchCriteria }, thError);
+				reject(thError);
+			},
+			(meta: LazyLoadMetaResponseRepoDO) => {
+				resolve(meta);
+			});
+	}
+
     public getInvoiceGroupList(invoidGroupMeta: InvoiceGroupMetaRepoDO, searchCriteria?: InvoiceGroupSearchCriteriaRepoDO, lazyLoad?: LazyLoadRepoDO): Promise<InvoiceGroupSearchResultRepoDO> {
-        return null;
+        return new Promise<InvoiceGroupSearchResultRepoDO>((resolve: { (result: InvoiceGroupSearchResultRepoDO): void }, reject: { (err: ThError): void }) => {
+            this.getInvoiceGroupListCore(resolve, reject, invoidGroupMeta, searchCriteria, lazyLoad);
+        });
     }
     private getInvoiceGroupListCore(resolve: { (result: InvoiceGroupSearchResultRepoDO): void }, reject: { (err: ThError): void }, invoiceGroupMeta: InvoiceGroupMetaRepoDO, searchCriteria?: InvoiceGroupSearchCriteriaRepoDO, lazyLoad?: LazyLoadRepoDO) {
 
@@ -76,7 +96,9 @@ export class MongoInvoiceGroupsReadOperationsRepository extends MongoRepository 
         mongoQueryBuilder.addExactMatch("status", InvoiceGroupStatus.Active);
 
         if (!this._thUtils.isUndefinedOrNull(searchCriteria)) {
-
+            if(!this._thUtils.isUndefinedOrNull(searchCriteria.groupBookingId)) {
+                mongoQueryBuilder.addExactMatch("groupBookingId", searchCriteria.groupBookingId); searchCriteria.groupBookingId;
+            }
         }
 
         return mongoQueryBuilder.processedQuery;
