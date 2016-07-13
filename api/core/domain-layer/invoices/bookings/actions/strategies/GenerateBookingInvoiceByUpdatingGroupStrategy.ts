@@ -30,7 +30,7 @@ export class GenerateBookingInvoiceByUpdatingGroupStrategy implements IGenerateB
                 resolve(result);
             })
             .catch((error: any) => {
-               var thError = new ThError(ThStatusCode.InvoiceGroupItemUpdateStrategyErrorUpdating, error);
+               var thError = new ThError(ThStatusCode.InvoiceGroupsItemUpdateStrategyErrorUpdating, error);
 				if (thError.isNativeError()) {
 					ThLogger.getInstance().logError(ThLogLevel.Error, "error updating invoice group item", this._invoiceGroupDO, thError);
 				}

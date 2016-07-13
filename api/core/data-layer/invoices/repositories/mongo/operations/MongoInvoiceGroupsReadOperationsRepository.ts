@@ -50,7 +50,7 @@ export class MongoInvoiceGroupsReadOperationsRepository extends MongoRepository 
 		var query = this.buildSearchCriteria(meta, searchCriteria);
 		return this.getDocumentCount(query,
 			(err: Error) => {
-				var thError = new ThError(ThStatusCode.InvoiceGroupRepositoryErrorReadingDocumentCount, err);
+				var thError = new ThError(ThStatusCode.InvoiceGroupsRepositoryErrorReadingDocumentCount, err);
 				ThLogger.getInstance().logError(ThLogLevel.Error, "error reading document count", { meta: meta, searchCriteria: searchCriteria }, thError);
 				reject(thError);
 			},

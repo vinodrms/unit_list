@@ -302,10 +302,13 @@ export enum ThStatusCode {
     InvoiceGroupsRepositoryProblemUpdatingInvoiceGroup,
     InvoiceGroupsRepositoryErrorUpdatingInvoiceGroup,
     InvoiceGroupsRepositoryErrorGettingInvoiceGroupList,
-    InvoiceGroupItemUpdateStrategyErrorUpdating,
+    InvoiceGroupsItemUpdateStrategyErrorUpdating,
     InvoiceGroupsRepositoryInvoiceGroupNotFound,
     InvoiceGroupsRepositoryErrorGettingInvoiceGroup,
-    InvoiceGroupRepositoryErrorReadingDocumentCount,
+    InvoiceGroupsRepositoryErrorReadingDocumentCount,
+    InvoiceGroupsControllerErrorGettingInvoiceGroupById,
+    InvoiceGroupsControllerErrorGettingInvoiceGroups,
+    InvoiceGroupsControllerErrorGettingInvoiceGroupsCount,
     SaveInvoiceGroupItem,
     AddNewCustomerInvoiceGroupError,
     AddNewBookingInvoiceGroupError,
@@ -365,7 +368,6 @@ export enum ThStatusCode {
     BookingsControllerErrorGettingCount,
     BookingsControllerErrorSearchingBookings,
     BookingsControllerErrorAddingBookings,
-    
 }
 
 var ThMessage: { [index: number]: string; } = {};
@@ -660,11 +662,15 @@ ThMessage[ThStatusCode.InvoiceGroupsRepositoryErrorAddingInvoiceGroup] = "Error 
 ThMessage[ThStatusCode.InvoiceGroupsRepositoryProblemUpdatingInvoiceGroup] = "Problem updating the invoice group - concurrency.";
 ThMessage[ThStatusCode.InvoiceGroupsRepositoryErrorUpdatingInvoiceGroup] = "Error updating the invoice group.";
 ThMessage[ThStatusCode.InvoiceGroupsRepositoryErrorGettingInvoiceGroupList] = "Error getting the list of invoice groups.";
-ThMessage[ThStatusCode.InvoiceGroupItemUpdateStrategyErrorUpdating] = "Error updating the invoice group item.";
+ThMessage[ThStatusCode.InvoiceGroupsItemUpdateStrategyErrorUpdating] = "Error updating the invoice group item.";
 ThMessage[ThStatusCode.InvoiceGroupsRepositoryInvoiceGroupNotFound] = "Invoice group not found.";
 ThMessage[ThStatusCode.InvoiceGroupsRepositoryErrorGettingInvoiceGroup] = "Error retrieving the invoice group from the database.";
+ThMessage[ThStatusCode.InvoiceGroupsControllerErrorGettingInvoiceGroupById] = "Error getting invoice group by id.";
+ThMessage[ThStatusCode.InvoiceGroupsControllerErrorGettingInvoiceGroups] = "Error getting the invoice group list.";
+ThMessage[ThStatusCode.InvoiceGroupsControllerErrorGettingInvoiceGroupsCount] = "Error getting the total number of invoice groups matching the search criteria.";
+
 ThMessage[ThStatusCode.SaveInvoiceGroupItem] = "Error saving the invoice group item.";
-ThMessage[ThStatusCode.InvoiceGroupRepositoryErrorReadingDocumentCount] = "Error reading invoice grupt document count.";
+ThMessage[ThStatusCode.InvoiceGroupsRepositoryErrorReadingDocumentCount] = "Error reading invoice grupt document count.";
 ThMessage[ThStatusCode.UpdateInvoiceGroupItemError] = "Error updating invoice group.";
 ThMessage[ThStatusCode.AddNewCustomerInvoiceGroupError] = "Error adding new customer related invoice group.";
 ThMessage[ThStatusCode.AddNewBookingInvoiceGroupError] = "Error adding new booking related invoice group.";
