@@ -19,7 +19,7 @@ import {SaveCustomerItem} from '../../../../core/domain-layer/customers/SaveCust
 import {PriceProductDO, PriceProductAvailability} from '../../../../core/data-layer/price-products/data-objects/PriceProductDO';
 import {AddBookingItems} from '../../../../core/domain-layer/bookings/add-bookings/AddBookingItems';
 import {AddBookingItemsDO} from '../../../../core/domain-layer/bookings/add-bookings/AddBookingItemsDO';
-import {BookingDO, GroupBookingInputChannel} from '../../../../core/data-layer/bookings/data-objects/BookingDO';
+import {BookingDO, GroupBookingInputChannel, BookingConfirmationStatus} from '../../../../core/data-layer/bookings/data-objects/BookingDO';
 import {BookingSearchResultRepoDO} from '../../../../core/data-layer/bookings/repositories/IBookingRepository';
 import {BookingConfirmationEmailSender} from '../../../../core/domain-layer/bookings/booking-confirmations/BookingConfirmationEmailSender';
 import {BookingOccupancyCalculator} from '../../../../core/domain-layer/bookings/search-bookings/utils/occupancy-calculator/BookingOccupancyCalculator';
@@ -27,6 +27,7 @@ import {IBookingOccupancy} from '../../../../core/domain-layer/bookings/search-b
 import {BookingSearch} from '../../../../core/domain-layer/bookings/search-bookings/BookingSearch';
 import {TransientBookingItemDO} from '../../../../core/domain-layer/bookings/search-bookings/TransientBookingItemDO';
 import {BookingSearchResult, RoomCategoryItem} from '../../../../core/domain-layer/bookings/search-bookings/utils/result-builder/BookingSearchResult';
+import {MarkBookingsAsGuaranteedProcess} from '../../../../core/domain-layer/bookings/processes/MarkBookingsAsGuaranteedProcess';
 
 describe("New Bookings Tests", function () {
     var testContext: TestContext;
@@ -91,18 +92,6 @@ describe("New Bookings Tests", function () {
                 interval: bookingTestHelper.getBookingSearchInterval(testDataBuilder)
             }).then((bookingSearchResult: BookingSearchResultRepoDO) => {
                 retrievedBookingList = bookingSearchResult.bookingList;
-                done();
-            }).catch((err: any) => {
-                done(err);
-            });
-        });
-        it("Should get a booking filtered by a booking reference", function (done) {
-            var bookingRepo = testContext.appContext.getRepositoryFactory().getBookingRepository();
-            bookingRepo.getBookingList({ hotelId: testContext.sessionContext.sessionDO.hotel.id }, {
-                searchTerm: randomBookingReference
-            }).then((bookingSearchResult: BookingSearchResultRepoDO) => {
-                should.equal(bookingSearchResult.bookingList.length, 1);
-                should.equal(bookingSearchResult.bookingList[0].bookingReference, randomBookingReference);
                 done();
             }).catch((err: any) => {
                 done(err);
@@ -255,6 +244,22 @@ describe("New Bookings Tests", function () {
             var bookingItems = bookingTestHelper.getBookingItems(testDataBuilder, addedConfidentialPriceProduct, addedAllotment);
             addBookings.add(bookingItems, GroupBookingInputChannel.PropertyManagementSystem)
                 .then((booking: BookingDO[]) => {
+                    done();
+                }).catch((err: any) => {
+                    done(err);
+                });
+        });
+    });
+
+    describe("Booking Processes Tests", function () {
+        it("Should mark some bookings as Guaranteed", function (done) {
+            var process = new MarkBookingsAsGuaranteedProcess(testContext.appContext, testDataBuilder.hotelDO);
+            process.markBookingsAsGuaranteed(bookingTestHelper.getMaxTimestamp())
+                .then((bookingList: BookingDO[]) => {
+                    bookingList.forEach((booking: BookingDO) => {
+                        should.equal(booking.confirmationStatus, BookingConfirmationStatus.Guaranteed);
+                        should.equal(booking.bookingHistory.actionList.length > 1, true);
+                    });
                     done();
                 }).catch((err: any) => {
                     done(err);
