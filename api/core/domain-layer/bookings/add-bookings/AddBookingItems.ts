@@ -135,10 +135,9 @@ export class AddBookingItems {
                 return bookingsRepo.addBookings({ hotelId: this._sessionContext.sessionDO.hotel.id }, this._bookingList);
             }).then((createdBookingList: BookingDO[]) => {
                 this._bookingList = createdBookingList;
-                return this.sendConfirmation(createdBookingList);
-            }).then((emailResult: boolean) => {
+                this.sendConfirmationAsync(createdBookingList);
+
                 resolve(this._bookingList);
-                // TODO: send email & generate invoices for bookings with cancel < currentTimestamp
             }).catch((error: any) => {
                 var thError = new ThError(ThStatusCode.AddBookingItemsError, error);
                 if (thError.isNativeError()) {
@@ -169,12 +168,12 @@ export class AddBookingItems {
         });
         return allotmentIdList;
     }
-    private sendConfirmation(groupBookingList: BookingDO[]): Promise<boolean> {
+    private sendConfirmationAsync(groupBookingList: BookingDO[]) {
         var groupBookingId = groupBookingList[0].groupBookingId;
         var emailSender: BookingConfirmationEmailSender = new BookingConfirmationEmailSender(this._appContext, this._sessionContext);
         var bookingQuery: BookingDataAggregatorQuery = {
             groupBookingId: groupBookingId
         };
-        return emailSender.sendBookingConfirmation(bookingQuery, this._bookingItems.confirmationEmailList);
+        return emailSender.sendBookingConfirmation(bookingQuery, this._bookingItems.confirmationEmailList).then((emailResult: boolean) => { }).catch((err: any) => { });
     }
 }
