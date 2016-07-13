@@ -1,7 +1,10 @@
 {
 	// booking history
 	"Booking was created": "Booking was created",
-
+	"Booking was marked as Guaranteed by the System": "Booking was marked as Guaranteed by the System",
+	"Booking was marked as No Show by the System": "Booking was marked as No Show by the System",
+	"Booking was marked as No Show by the System. The booking has a penalty on the attached invoice.": "Booking was marked as No Show by the System. The booking has a penalty on the attached invoice.",
+	
 
 	// ThResponse
 

@@ -3,6 +3,7 @@ import {ThError} from '../../../utils/th-responses/ThError';
 import {ThStatusCode} from '../../../utils/th-responses/ThResponse';
 import {AppContext} from '../../../utils/AppContext';
 import {SessionContext} from '../../../utils/SessionContext';
+import {ThTimestampDO} from '../../../utils/th-dates/data-objects/ThTimestampDO';
 import {GroupBookingInputChannel, BookingDO} from '../../../data-layer/bookings/data-objects/BookingDO';
 import {AddBookingItemsDO, BookingItemDO} from './AddBookingItemsDO';
 import {ValidationResultParser} from '../../common/ValidationResultParser';
@@ -112,6 +113,7 @@ export class AddBookingItems {
 
                 var bookingItemsConverter = new BookingItemsConverter(this._appContext, this._sessionContext, {
                     hotelDO: this._loadedHotel,
+                    currentHotelTimestamp: ThTimestampDO.buildThTimestampForTimezone(this._loadedHotel.timezone),
                     priceProductsContainer: this._loadedPriceProductsContainer,
                     customersContainer: this._loadedCustomersContainer
                 });
@@ -133,9 +135,9 @@ export class AddBookingItems {
                 return bookingsRepo.addBookings({ hotelId: this._sessionContext.sessionDO.hotel.id }, this._bookingList);
             }).then((createdBookingList: BookingDO[]) => {
                 this._bookingList = createdBookingList;
-                this.sendConfirmationsAsync(createdBookingList);
+                this.sendConfirmationAsync(createdBookingList);
+
                 resolve(this._bookingList);
-                // TODO: send email & generate invoices for bookings with cancel < currentTimestamp
             }).catch((error: any) => {
                 var thError = new ThError(ThStatusCode.AddBookingItemsError, error);
                 if (thError.isNativeError()) {
@@ -166,15 +168,12 @@ export class AddBookingItems {
         });
         return allotmentIdList;
     }
-    private sendConfirmationsAsync(groupBookingList: BookingDO[]) {
-        if (groupBookingList.length == 0) {
-            return;
-        }
+    private sendConfirmationAsync(groupBookingList: BookingDO[]) {
         var groupBookingId = groupBookingList[0].groupBookingId;
         var emailSender: BookingConfirmationEmailSender = new BookingConfirmationEmailSender(this._appContext, this._sessionContext);
         var bookingQuery: BookingDataAggregatorQuery = {
             groupBookingId: groupBookingId
         };
-        emailSender.sendBookingConfirmation(bookingQuery, this._bookingItems.confirmationEmailList);
+        return emailSender.sendBookingConfirmation(bookingQuery, this._bookingItems.confirmationEmailList).then((emailResult: boolean) => { }).catch((err: any) => { });
     }
 }

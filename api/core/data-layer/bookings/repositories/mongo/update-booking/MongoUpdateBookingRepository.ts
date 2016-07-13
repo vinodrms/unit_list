@@ -5,10 +5,11 @@ import {ThStatusCode} from '../../../../../utils/th-responses/ThResponse';
 import {BookingDO, GroupBookingStatus} from '../../../data-objects/BookingDO';
 import {BookingMetaRepoDO, BookingItemMetaRepoDO} from '../../IBookingRepository';
 import {BookingGroupDO} from '../utils/data-objects/BookingGroupDO';
+import {IUpdateSingleBookingRepository} from './IUpdateSingleBookingRepository';
 
 import _ = require('underscore');
 
-export class MongoUpdateBookingRepository extends MongoRepository {
+export class MongoUpdateBookingRepository extends MongoRepository implements IUpdateSingleBookingRepository {
     constructor(bookingGroupsEntity: Sails.Model) {
         super(bookingGroupsEntity);
     }
@@ -28,7 +29,8 @@ export class MongoUpdateBookingRepository extends MongoRepository {
                 "bookingList.$.priceProductId": booking.priceProductId,
                 "bookingList.$.price": booking.price,
                 "bookingList.$.allotmentId": booking.allotmentId,
-                "bookingList.$.cancellationTime": booking.cancellationTime,
+                "bookingList.$.guaranteedTime": booking.guaranteedTime,
+                "bookingList.$.noShowTime": booking.noShowTime,
                 "bookingList.$.notes": booking.notes,
                 "bookingList.$.fileAttachmentList": booking.fileAttachmentList,
                 "bookingList.$.bookingHistory": booking.bookingHistory,
@@ -62,11 +64,10 @@ export class MongoUpdateBookingRepository extends MongoRepository {
             (updatedDBBookingGroup: Object) => {
                 var bookingGroupDO = new BookingGroupDO();
                 bookingGroupDO.buildFromObject(updatedDBBookingGroup);
-                resolve(
-                    _.find(bookingGroupDO.bookingList, (booking: BookingDO) => {
-                        return booking.bookingId === itemMeta.bookingId;
-                    })
-                )
+                var updatedBooking = _.find(bookingGroupDO.bookingList, (booking: BookingDO) => {
+                    return booking.bookingId === itemMeta.bookingId;
+                });
+                resolve(updatedBooking);
             }
         );
     }

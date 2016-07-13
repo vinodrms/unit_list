@@ -4,12 +4,14 @@ import {IBookingRepository, BookingMetaRepoDO, BookingItemMetaRepoDO, BookingSea
 import {BookingDO} from '../../data-objects/BookingDO';
 import {MongoAddBookingsRepository} from './add-bookings/MongoAddBookingsRepository';
 import {MongoUpdateBookingRepository} from './update-booking/MongoUpdateBookingRepository';
+import {MongoUpdateMultipleBookingsRepository} from './update-booking/MongoUpdateMultipleBookingsRepository';
 import {MongoGetBookingsRepository} from './get-bookings/MongoGetBookingsRepository';
 import {MongoGetSingleBookingRepository} from './get-bookings/MongoGetSingleBookingRepository';
 
 export class MongoBookingRepository extends MongoRepository implements IBookingRepository {
     private _addBookingsRepo: MongoAddBookingsRepository;
     private _updateBookingRepo: MongoUpdateBookingRepository;
+    private _updateMultipleBookingsRepo: MongoUpdateMultipleBookingsRepository;
     private _getBookingsRepo: MongoGetBookingsRepository;
     private _getSingleBooking: MongoGetSingleBookingRepository;
 
@@ -18,6 +20,7 @@ export class MongoBookingRepository extends MongoRepository implements IBookingR
         super(bookingGroupsEntity);
         this._addBookingsRepo = new MongoAddBookingsRepository(bookingGroupsEntity);
         this._updateBookingRepo = new MongoUpdateBookingRepository(bookingGroupsEntity);
+        this._updateMultipleBookingsRepo = new MongoUpdateMultipleBookingsRepository(this._updateBookingRepo);
         this._getBookingsRepo = new MongoGetBookingsRepository(bookingGroupsEntity);
         this._getSingleBooking = new MongoGetSingleBookingRepository(bookingGroupsEntity);
     }
@@ -27,6 +30,9 @@ export class MongoBookingRepository extends MongoRepository implements IBookingR
     }
     public updateBooking(meta: BookingMetaRepoDO, itemMeta: BookingItemMetaRepoDO, booking: BookingDO): Promise<BookingDO> {
         return this._updateBookingRepo.updateBooking(meta, itemMeta, booking);
+    }
+    public updateMultipleBookings(meta: BookingMetaRepoDO, bookingList: BookingDO[]): Promise<BookingDO[]> {
+        return this._updateMultipleBookingsRepo.updateMultipleBookings(meta, bookingList);
     }
     public getBookingListCount(meta: BookingMetaRepoDO, searchCriteria: BookingSearchCriteriaRepoDO): Promise<LazyLoadMetaResponseRepoDO> {
         return this._getBookingsRepo.getBookingListCount(meta, searchCriteria);

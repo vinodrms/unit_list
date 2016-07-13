@@ -8,6 +8,7 @@ import {HotelDO} from '../../data-layer/hotel/data-objects/HotelDO';
 import {ThTimestampDO} from '../../utils/th-dates/data-objects/ThTimestampDO';
 import {ThAuditLogger} from '../../utils/logging/ThAuditLogger';
 import {AllotmentArchiverCronJobExecutor} from './allotment/AllotmentArchiverCronJobExecutor';
+import {BookingStatusChangerCronJobExecutor} from './booking/BookingStatusChangerCronJobExecutor';
 
 import util = require('util');
 
@@ -39,7 +40,7 @@ export class HotelHalfHourlyCronJob extends AHalfHourlyCronJob {
 		if (thTimestamp.isStartOfDay()) {
 			var dailyExecutor = this.getDaylyCronJobExecutor(executorDO);
 			dailyExecutor.execute();
-			
+
 			ThAuditLogger.getInstance().log({
 				message: util.format("*Midnight process* triggered succesfully for hotel *%s*", hotel.contactDetails.name)
 			});
@@ -56,6 +57,7 @@ export class HotelHalfHourlyCronJob extends AHalfHourlyCronJob {
 	}
 	private getHalfHourlyCronJobExecutor(executorDO: JobExecutorDO): BulkCronJobExecutor {
 		return new BulkCronJobExecutor([
+			new BookingStatusChangerCronJobExecutor(executorDO)
 		]);
 	}
 }

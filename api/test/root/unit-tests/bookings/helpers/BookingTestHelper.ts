@@ -7,6 +7,7 @@ import {PriceProductsHelper} from '../../price-products/helpers/PriceProductsHel
 import {SavePriceProductItem} from '../../../../../core/domain-layer/price-products/SavePriceProductItem';
 import {AddBookingItemsDO, BookingItemDO} from '../../../../../core/domain-layer/bookings/add-bookings/AddBookingItemsDO';
 import {ThTimestampDO} from '../../../../../core/utils/th-dates/data-objects/ThTimestampDO';
+import {ThHourDO} from '../../../../../core/utils/th-dates/data-objects/ThHourDO';
 import {ThDateIntervalDO} from '../../../../../core/utils/th-dates/data-objects/ThDateIntervalDO';
 import {TestUtils} from '../../../../helpers/TestUtils';
 import {ThDateUtils} from '../../../../../core/utils/th-dates/ThDateUtils';
@@ -144,5 +145,12 @@ export class BookingTestHelper {
         bookingSearchDO.transientBookingList.push(transientBookingItemDO);
 
         return bookingSearchDO;
+    }
+
+    public getMaxTimestamp(): ThTimestampDO {
+        var maxTimestamp = new ThTimestampDO();
+        maxTimestamp.thDateDO = this._thDateUtils.getMaxThDateDO();
+        maxTimestamp.thHourDO = ThHourDO.buildThHourDO(0, 0);
+        return maxTimestamp;
     }
 }

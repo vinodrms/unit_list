@@ -23,6 +23,9 @@ export class MongoInvoiceGroupsRepository extends MongoRepository implements IIn
     public getInvoiceGroupList(invoidGroupMeta: InvoiceGroupMetaRepoDO, searchCriteria?: InvoiceGroupSearchCriteriaRepoDO, lazyLoad?: LazyLoadRepoDO): Promise<InvoiceGroupSearchResultRepoDO> {
         return this._readRepository.getInvoiceGroupList(invoidGroupMeta, searchCriteria, lazyLoad);
     }
+    public getInvoiceGroupListCount(invoidGroupMeta: InvoiceGroupMetaRepoDO, searchCriteria?: InvoiceGroupSearchCriteriaRepoDO): Promise<LazyLoadMetaResponseRepoDO> {
+        return this._readRepository.getInvoiceGroupListCount(invoidGroupMeta, searchCriteria);
+    }
     public addInvoiceGroup(invoidGroupMeta: InvoiceGroupMetaRepoDO, invoiceGroup: InvoiceGroupDO): Promise<InvoiceGroupDO> {
         return this._editRepository.addInvoiceGroup(invoidGroupMeta, invoiceGroup);
     }

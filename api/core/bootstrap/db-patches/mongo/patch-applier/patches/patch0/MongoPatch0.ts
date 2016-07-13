@@ -67,6 +67,11 @@ export class MongoPatch0 extends ATransactionalMongoPatch {
 			},
 			type: IndexType.Text
         });
+        this._indexList.push({
+            entity: sails.models.bookinggroupsentity,
+            fields: { "bookingList.bookingId": 1 },
+			type: IndexType.Unique
+        });
     }
     public getPatchType(): MongoPatcheType {
         return MongoPatcheType.CreateUniqueIndexOnHotel;

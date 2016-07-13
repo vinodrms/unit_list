@@ -3,6 +3,9 @@ import {BaseDO} from '../../../data-layer/common/base/BaseDO';
 import _ = require("underscore");
 
 export class ThHourDO extends BaseDO {
+	private static NoMillisInAnHour = 3600000;
+	private static NoMillisInAMinute = 60000;
+
 	private static MinHourOfDay = 0;
 	private static MaxHourOfDay = 23;
 
@@ -44,5 +47,9 @@ export class ThHourDO extends BaseDO {
             return '0' + hourOrMinute;
         }
 		return hourOrMinute + '';
+	}
+
+	public getMillis(): number {
+		return (this.hour * ThHourDO.NoMillisInAnHour) + (this.minute * ThHourDO.NoMillisInAMinute);
 	}
 }

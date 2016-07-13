@@ -13,7 +13,6 @@ export interface InvoiceGroupItemMetaRepoDO {
 export interface InvoiceGroupSearchCriteriaRepoDO {
     invoiceGroupIdList?: string[];
     groupBookingId?: string;
-    bookingId?: string;
     customerIdList?: string[];
 }
 
@@ -25,7 +24,8 @@ export interface InvoiceGroupSearchResultRepoDO {
 export interface IInvoiceGroupsRepository {
     getInvoiceGroupById(invoidGroupMeta: InvoiceGroupMetaRepoDO, invoiceGroupId: string): Promise<InvoiceGroupDO>;
     getInvoiceGroupList(invoidGroupMeta: InvoiceGroupMetaRepoDO, searchCriteria?: InvoiceGroupSearchCriteriaRepoDO, lazyLoad?: LazyLoadRepoDO): Promise<InvoiceGroupSearchResultRepoDO>;
-
+    getInvoiceGroupListCount(invoidGroupMeta: InvoiceGroupMetaRepoDO, searchCriteria?: InvoiceGroupSearchCriteriaRepoDO): Promise<LazyLoadMetaResponseRepoDO>;
+    
     addInvoiceGroup(invoidGroupMeta: InvoiceGroupMetaRepoDO, invoiceGroup: InvoiceGroupDO): Promise<InvoiceGroupDO>;
 	updateInvoiceGroup(invoidGroupMeta: InvoiceGroupMetaRepoDO, invoiceGroupItemMeta: InvoiceGroupItemMetaRepoDO, invoiceGroup: InvoiceGroupDO): Promise<InvoiceGroupDO>;    
 }

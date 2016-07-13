@@ -1,6 +1,8 @@
 import {BookingDO, BookingConfirmationStatus} from '../data-objects/BookingDO';
 import {LazyLoadRepoDO, LazyLoadMetaResponseRepoDO} from '../../common/repo-data-objects/LazyLoadRepoDO';
 import {ThDateIntervalDO} from '../../../utils/th-dates/data-objects/ThDateIntervalDO';
+import {ThHourDO} from '../../../utils/th-dates/data-objects/ThHourDO';
+import {ThTimestampDO} from '../../../utils/th-dates/data-objects/ThTimestampDO';
 
 export interface BookingMetaRepoDO {
     hotelId: string;
@@ -17,6 +19,11 @@ export interface BookingSearchCriteriaRepoDO {
     groupBookingId?: string;
     bookingIdList?: string[];
     searchTerm?: string;
+    triggerParams?: {
+        triggerName: string;
+        cancellationHour: ThHourDO;
+        currentHotelTimestamp: ThTimestampDO;
+    }
 }
 export interface BookingSearchResultRepoDO {
     lazyLoad?: LazyLoadRepoDO;
@@ -31,4 +38,5 @@ export interface IBookingRepository {
 
     addBookings(meta: BookingMetaRepoDO, bookingList: BookingDO[]): Promise<BookingDO[]>;
     updateBooking(meta: BookingMetaRepoDO, itemMeta: BookingItemMetaRepoDO, booking: BookingDO): Promise<BookingDO>;
+    updateMultipleBookings(meta: BookingMetaRepoDO, bookingList: BookingDO[]): Promise<BookingDO[]>;
 }

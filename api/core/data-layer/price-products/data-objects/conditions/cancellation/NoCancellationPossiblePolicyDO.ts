@@ -1,10 +1,11 @@
 import {BaseDO} from '../../../../common/base/BaseDO';
-import {IPriceProductCancellationPolicy} from './IPriceProductCancellationPolicy';
+import {IPriceProductCancellationPolicy, PolicyTriggerTimeParams} from './IPriceProductCancellationPolicy';
 import {ThTranslation} from '../../../../../utils/localization/ThTranslation';
 import {CancellationPolicyUtils} from './utils/CancellationPolicyUtils';
 import {ThDateDO} from '../../../../../utils/th-dates/data-objects/ThDateDO';
+import {ThDateUtils} from '../../../../../utils/th-dates/ThDateUtils';
 import {ThHourDO} from '../../../../../utils/th-dates/data-objects/ThHourDO';
-import {BookingCancellationTimeDO, BookingCancellationTimeType} from '../../../../bookings/data-objects/cancellation-time/BookingCancellationTimeDO';
+import {BookingStateChangeTriggerTimeDO, BookingStateChangeTriggerType} from '../../../../bookings/data-objects/state-change-time/BookingStateChangeTriggerTimeDO';
 
 export class NoCancellationPossiblePolicyDO extends BaseDO implements IPriceProductCancellationPolicy {
 	protected getPrimitivePropertyKeys(): string[] {
@@ -17,11 +18,17 @@ export class NoCancellationPossiblePolicyDO extends BaseDO implements IPriceProd
 	public isValid(): boolean {
 		return true;
 	}
-	public generateBookingCancellationTimeDO(arrivalDate: ThDateDO, currentHotelDate: ThDateDO): BookingCancellationTimeDO {
-		var ccUtils = new CancellationPolicyUtils();
-		return ccUtils.generateBookingCancellationTimeDO(BookingCancellationTimeType.ExactTimestamp, currentHotelDate, ThHourDO.buildThHourDO(0, 0));
-	}
 	public getValueDisplayString(thTranslation: ThTranslation): string {
 		return thTranslation.translate("No cancellation possible");
+	}
+
+	public generateGuaranteedTriggerTime(triggerParams: PolicyTriggerTimeParams): BookingStateChangeTriggerTimeDO {
+		var ccUtils = new CancellationPolicyUtils();
+		var minDate: ThDateDO = ccUtils.thDateUtils.getMinThDateDO();
+		return ccUtils.generateStateChangeTriggerTimeDO(BookingStateChangeTriggerType.ExactTimestamp, minDate, ThHourDO.buildThHourDO(0, 0));
+	}
+	public generateNoShowTriggerTime(triggerParams: PolicyTriggerTimeParams): BookingStateChangeTriggerTimeDO {
+		var ccUtils = new CancellationPolicyUtils();
+		return ccUtils.generateMidnightStateChangeTriggerTimeDO(triggerParams.arrivalDate);
 	}
 }

@@ -1,3 +1,7 @@
 export enum ThNotificationCode {
-	AllotmentArchivedAutomatically
+	AllotmentArchivedAutomatically,
+	BookingsMarkedAsGuaranteed,
+	BookingsMarkedAsNoShow,
+	BookingsMarkedAsNoShowWithPenalty,
+
 }

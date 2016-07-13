@@ -35,11 +35,12 @@ export class DefaultBookingBuilder implements IBookingDataSource {
 
     public getBookingList(hotelDO: HotelDO, customerList: CustomerDO[], roomCategoryList: RoomCategoryDO[], priceProductList: PriceProductDO[]): BookingDO[] {
         var bookingsList = [];
-        bookingsList.push(this.getFirstBooking(hotelDO, customerList, roomCategoryList, priceProductList));
+        bookingsList.push(this.buildBooking("2", hotelDO, customerList, roomCategoryList, priceProductList));
+        bookingsList.push(this.buildBooking("3", hotelDO, customerList, roomCategoryList, priceProductList));
         return bookingsList;
     }
 
-    private getFirstBooking(hotelDO: HotelDO, customerList: CustomerDO[], roomCategoryList: RoomCategoryDO[], priceProductList: PriceProductDO[]): BookingDO {
+    private buildBooking(bookingId: string, hotelDO: HotelDO, customerList: CustomerDO[], roomCategoryList: RoomCategoryDO[], priceProductList: PriceProductDO[]): BookingDO {
         var priceProduct = priceProductList[0];
         var customerId = this._testUtils.getRandomListElement(customerList).id;
         var roomCategoryId = this._testUtils.getRandomListElement(priceProduct.roomCategoryIdList);
@@ -58,9 +59,9 @@ export class DefaultBookingBuilder implements IBookingDataSource {
         booking.inputChannel = GroupBookingInputChannel.PropertyManagementSystem;
         booking.noOfRooms = 1;
 
-        booking.bookingId = "2";
+        booking.bookingId = bookingId;
         booking.bookingReference = "ref2";
-        booking.confirmationStatus = BookingConfirmationStatus.Guaranteed;
+        booking.confirmationStatus = BookingConfirmationStatus.Confirmed;
         booking.customerIdList = [customerId];
         booking.defaultBillingDetails = billingDetails;
         booking.interval = this.generateRandomFutureInterval(hotelDO);
@@ -72,7 +73,16 @@ export class DefaultBookingBuilder implements IBookingDataSource {
         booking.startUtcTimestamp = indexedBookingInterval.getStartUtcTimestamp();
         booking.endUtcTimestamp = indexedBookingInterval.getEndUtcTimestamp();
         var currentHotelDate = this._bookingUtils.getCurrentThDateForHotel(hotelDO);
-        booking.cancellationTime = priceProduct.conditions.policy.generateBookingCancellationTimeDO(indexedBookingInterval.getArrivalDate(), currentHotelDate);
+        booking.guaranteedTime = priceProduct.conditions.policy.generateGuaranteedTriggerTime({ arrivalDate: indexedBookingInterval.getArrivalDate() });
+        if (booking.guaranteedTime.isInThePast({
+            cancellationHour: hotelDO.operationHours.cancellationHour,
+            currentHotelTimestamp: ThTimestampDO.buildThTimestampForTimezone(hotelDO.timezone)
+        })) {
+            booking.confirmationStatus = BookingConfirmationStatus.Guaranteed;
+        }
+
+        booking.noShowTime = priceProduct.conditions.policy.generateNoShowTriggerTime({ arrivalDate: indexedBookingInterval.getArrivalDate() });
+
         booking.fileAttachmentList = [];
         booking.notes = "This is an automatic booking";
 
