@@ -1,6 +1,7 @@
 import {BaseDO} from '../../../../common/base/BaseDO';
-import {IPriceProductCancellationPenalty, PriceProductCancellationPenaltyQueryDO} from './IPriceProductCancellationPenalty';
+import {IPriceProductCancellationPenalty} from './IPriceProductCancellationPenalty';
 import {ThTranslation} from '../../../../../utils/localization/ThTranslation';
+import {BookingPriceDO, BookingPriceType} from '../../../../bookings/data-objects/price/BookingPriceDO';
 
 export class FirstNightOnlyCancellationPenaltyDO extends BaseDO implements IPriceProductCancellationPenalty {
 	protected getPrimitivePropertyKeys(): string[] {
@@ -10,16 +11,18 @@ export class FirstNightOnlyCancellationPenaltyDO extends BaseDO implements IPric
 	public hasCancellationPenalty(): boolean {
 		return true;
 	}
-	public getPenaltyPriceFor(query: PriceProductCancellationPenaltyQueryDO): number {
-		if (query.noOfNights <= 0) {
-			return 0.0;
-		}
-		return query.totalPrice / query.noOfNights;
-	}
 	public isValid(): boolean {
 		return true;
 	}
 	public getValueDisplayString(thTranslation: ThTranslation): string {
 		return thTranslation.translate("Pay first night");
+	}
+	public computePenaltyPrice(bookingPrice: BookingPriceDO): BookingPriceDO {
+		var penaltyPrice = new BookingPriceDO();
+		penaltyPrice.priceType = BookingPriceType.Penalty;
+		penaltyPrice.pricePerItem = bookingPrice.pricePerItem;
+		penaltyPrice.numberOfItems = 1;
+		penaltyPrice.totalPrice = penaltyPrice.pricePerItem;
+		return penaltyPrice;
 	}
 }
