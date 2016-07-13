@@ -15,7 +15,9 @@
 		[ngClass]="{'selected': isArrivalItemSelected(arrivalItemVM)}" 
 		[arrivalItemVM] = "arrivalItemVM" 
 		(click) = "selectArrivalItem(arrivalItemVM)"
-		(startedDragging)="startedDragging($event)">
+		(startedDragging)="startedDragging($event)"
+		(stoppedDragging)="stoppedDragging($event)"
+		>
 	</arrival-item>
 </div>
 <div class="footer">

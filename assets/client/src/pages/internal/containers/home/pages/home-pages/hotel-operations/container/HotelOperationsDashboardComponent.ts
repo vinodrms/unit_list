@@ -18,6 +18,7 @@ export interface IHotelOperationsDashboardArrivalsPaneMediator{
 	registerArrivalsPane(arrivalsPane:ArrivalsPaneComponent);
 
 	startedDragging(arrivalItemVM);
+	stoppedDragging(arrivalItemVM);
 	getSelectedArrivalItem():any;
 	clickedArrivalItem(arrivalItemVM);
 	getDate();
@@ -86,6 +87,10 @@ export class HotelOperationsDashboardComponent extends AHomeContainerComponent i
 	public startedDragging(arrivalItemVM){
 		this._selectedArrivalItem = arrivalItemVM;
 		this._roomsCanvas.startedDragging(arrivalItemVM);
+	}
+
+	public stoppedDragging(arrivalItemVM){
+		this._roomsCanvas.stoppedDragging(arrivalItemVM);
 	}
 	
 	public getDate(){

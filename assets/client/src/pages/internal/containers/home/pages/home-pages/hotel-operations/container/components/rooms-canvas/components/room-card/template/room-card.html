@@ -1,11 +1,13 @@
-<div class="room-card occupied" *ngIf='roomVM.Status == "Occupied"'>
+<div class="room-card occupied" *ngIf='roomVM.status == "Occupied"'
+	[ngClass]="{'ghost': roomVM.UI.ghost , 'tick-border': roomVM.UI.tickBorder}"
+>
 	<div class="card-header">
 		<div class="section1">
-			<div class="room-number clickable">{{ roomVM.Properties.Name }}</div>
-			<div class="room-details">{{ roomVM.Type }}</div>
+			<div class="room-number clickable">{{ roomVM.properties.name }}</div>
+			<div class="room-details">{{ roomVM.type }}</div>
 		</div>
 		<div class="section2 flex-row flex-jc-sb">
-			<div class="customer-name clickable">{{ roomVM.Properties.Booking.ClientName }}</div>
+			<div class="customer-name clickable">{{ roomVM.properties.booking.clientName }}</div>
 			<div class="room-stats flex-row flex-center-v">
 				<div *ngIf="maintenance" class="clickable f-18" [ngClass]="maintenance.cssClass" (click)="maintenance.clickHandler()" title="{{maintenance.title}}">
 					<span class="unitpal-font">{{maintenance.icon}}</span>
@@ -15,22 +17,24 @@
 	</div>
 	<div class="card-footer">
 		<div class="period flex-row flex-center-v">
-			<div class="start-date">{{ roomVM.Properties.Booking.Arrival }}</div>
+			<div class="start-date">{{ roomVM.properties.booking.arrival }}</div>
 			<i class="fa fa-arrow-right"></i>
-			<div class="end-date">{{ roomVM.Properties.Booking.Departure }}</div>
+			<div class="end-date">{{ roomVM.properties.booking.departure }}</div>
 		</div>
 		<div class="other-details gray-color flex-row flex-center-v f-12">
-			<span class="unitpal-font f-12">(</span> {{roomVM.Properties.Booking.NumberOfPeople}}
-			<span class="unitpal-font f-12">Y</span> {{roomVM.Properties.Booking.NumberOfNights}}
+			<span class="unitpal-font f-12">(</span> {{roomVM.properties.booking.numberOfPeople}}
+			<span class="unitpal-font f-12">Y</span> {{roomVM.properties.booking.numberOfNights}}
 		</div>
 	</div>
 </div>
 
-<div class="room-card free" *ngIf='roomVM.Status == "Free"'>
+<div class="room-card free" *ngIf='roomVM.status == "Free"'
+	[ngClass]="{'ghost': roomVM.UI.ghost , 'tick-border': roomVM.UI.tickBorder}"
+>
 	<div class="card-header">
 		<div class="section1">
-			<div class="room-number clickable">{{ roomVM.Properties.Name }}</div>
-			<div class="room-details">{{ roomVM.Type }}</div>
+			<div class="room-number clickable">{{ roomVM.properties.name }}</div>
+			<div class="room-details">{{ roomVM.type }}</div>
 		</div>
 		<div class="section2 flex-row flex-jc-sb">
 			<div class="customer-name clickable"></div>
@@ -50,11 +54,13 @@
 	</div>
 </div>
 
-<div class="room-card out-of-service" *ngIf='roomVM.Status == "OutOfService"'>
+<div class="room-card out-of-service" *ngIf='roomVM.status == "OutOfService"'
+	[ngClass]="{'ghost': roomVM.UI.ghost , 'tick-border': roomVM.UI.tickBorder}"
+>
 	<div class="card-header">
 		<div class="section1">
-			<div class="room-number clickable">{{ roomVM.Properties.Name }}</div>
-			<div class="room-details">{{ roomVM.Type }}</div>
+			<div class="room-number clickable">{{ roomVM.properties.name }}</div>
+			<div class="room-details">{{ roomVM.type }}</div>
 		</div>
 		<div class="section2 flex-row flex-jc-sb">
 			<div class="customer-name clickable"></div>
@@ -74,11 +80,13 @@
 	</div>
 </div>
 
-<div class="room-card reserved" *ngIf='roomVM.Status == "Reserved"'>
+<div class="room-card reserved" *ngIf='roomVM.status == "Reserved"'
+	[ngClass]="{'ghost': roomVM.UI.ghost , 'tick-border': roomVM.UI.tickBorder}"
+>
 	<div class="card-header">
 		<div class="section1">
-			<div class="room-number clickable">{{ roomVM.Properties.Name }}</div>
-			<div class="room-details">{{ roomVM.Type }}</div>
+			<div class="room-number clickable">{{ roomVM.properties.name }}</div>
+			<div class="room-details">{{ roomVM.type }}</div>
 		</div>
 		<div class="section2 flex-row flex-jc-sb">
 			<div class="customer-name clickable"></div>

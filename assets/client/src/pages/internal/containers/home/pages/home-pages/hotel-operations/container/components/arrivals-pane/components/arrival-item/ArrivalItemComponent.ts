@@ -12,6 +12,7 @@ declare var $: any;
 export class ArrivalItemComponent {
 	@Input() arrivalItemVM: any;
 	@Output() startedDragging = new EventEmitter();
+	@Output() stoppedDragging = new EventEmitter();
 
 	constructor(private _zone: NgZone, private _root: ElementRef) {
 	}
@@ -44,7 +45,14 @@ export class ArrivalItemComponent {
 				},
 				zIndex:     100,
 				start: (event, ui) =>{
-					this.startedDragging.emit(this.arrivalItemVM);
+					this._zone.run(() => {
+						this.startedDragging.emit(this.arrivalItemVM);
+					});
+				},
+				stop: (event, ui) => {
+					this._zone.run(() => {
+						this.stoppedDragging.emit(this.arrivalItemVM);
+					});
 				}
             }
 		);

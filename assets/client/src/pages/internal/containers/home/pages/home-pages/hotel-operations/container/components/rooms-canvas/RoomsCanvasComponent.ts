@@ -11,6 +11,7 @@ import {AppContext} from '../../../../../../../../../../common/utils/AppContext'
 import {ThError} from '../../../../../../../../../../common/utils/responses/ThError';
 
 declare var $: any;
+declare var _: any;
 
 @Component({
 	selector: 'rooms-canvas',
@@ -24,17 +25,18 @@ export class RoomsCanvasComponent implements OnInit {
 
 	public filterType;
 	public roomVMList: any[];
-	public filterNotification; 
+	public filterNotification;
 
 	private _showNotificationBar;
-	
+	private dragStyles;
+
 	constructor(
 		private _zone: NgZone,
 		private _hotelOperationsDashboardService: HotelOperationsDashboardService,
 		private _appContext: AppContext) {
 		this.filterType = {
-			currentValue : "All",
-			newValue : "All"	
+			currentValue: "All",
+			newValue: "All"
 		};
 
 		this._showNotificationBar = true;
@@ -45,6 +47,30 @@ export class RoomsCanvasComponent implements OnInit {
 				textSecondPart: 'ALL ROOMS'
 			}
 		};
+
+		this.dragStyles = {
+			canCheckIn : {
+				tickBorder : true,
+				ghost: false,
+				acceptDrop: true
+			},
+			canUpgrade : {
+				tickBorder : false,
+				ghost: true,
+				acceptDrop: true
+			},
+			canNotCheckIn : {
+				tickBorder : false,
+				ghost: true,
+				acceptDrop: false
+			},
+			default: {
+				tickBorder : false,
+				ghost: false,
+				acceptDrop: false
+			}
+		}
+
 	}
 
 	ngOnInit() {
@@ -52,13 +78,13 @@ export class RoomsCanvasComponent implements OnInit {
 		this.refresh();
 	}
 
-	public filterTypeChanged(value){
+	public filterTypeChanged(value) {
 		this.filterType.newValue = value;
 		this.refresh();
 	}
 
-	public isNotificationBarVisible(){
-		if (!this._showNotificationBar){
+	public isNotificationBarVisible() {
+		if (!this._showNotificationBar) {
 			return false;
 		}
 		else if (this.filterType.currentValue == "All") {
@@ -66,16 +92,19 @@ export class RoomsCanvasComponent implements OnInit {
 		}
 		return true;
 	}
-	
-	public closeNotificationBar(){
+
+	public closeNotificationBar() {
 		this._showNotificationBar = false;
 		this.updateFilterNotification();
 	}
 
-	public refresh(){
+	public refresh() {
+		console.log("Refresh");
 		var date = this.hotelOperationsDashboard.getDate();
 		this._hotelOperationsDashboardService.getRooms(this.filterType.newValue, date)
-		.subscribe((rooms: any) => {
+			.subscribe((rooms: any) => {
+				console.log("Refresh callback");
+				this.setRoomsUIHighlight(rooms, this.dragStyles.default);
 				this.filterType.currentValue = this.filterType.newValue;
 				this._showNotificationBar = true;
 				this.roomVMList = rooms;
@@ -85,7 +114,17 @@ export class RoomsCanvasComponent implements OnInit {
 			});
 	}
 
-	public updateFilterNotification(){
+	private setRoomsUIHighlight(rooms, value:any) {
+		rooms.forEach(room => {
+			room["UI"] = {
+				tickBorder : value.tickBorder,
+				ghost: value.ghost,
+				acceptDrop: value.acceptDrop
+			}
+		});
+	}
+
+	public updateFilterNotification() {
 		switch (this.filterType.currentValue) {
 			case RoomStatusType.Free:
 				this.filterNotification.Properties = {
@@ -125,30 +164,54 @@ export class RoomsCanvasComponent implements OnInit {
 		}
 	}
 
-	public startedDragging(arrivalItemVM){
+	public startedDragging(arrivalItemVM) {
+		var canCheckInRoomVmList = [];
+		var canNotCheckInRoomVmList = [];
+		var canUpgradeCheckInRoomVMList = [];
 
+		this.roomVMList.forEach(currentRoom => {
+			if (currentRoom.Type == arrivalItemVM.roomType && currentRoom.status == "Free") {
+				canCheckInRoomVmList.push(currentRoom);
+			}
+			else if (currentRoom.Type != arrivalItemVM.roomType && currentRoom.status == "Free") {
+				canUpgradeCheckInRoomVMList.push(currentRoom);
+			}
+			else {
+				canNotCheckInRoomVmList.push(currentRoom);
+			}
+		});
+
+		// Default
+		this.setRoomsUIHighlight(canCheckInRoomVmList, this.dragStyles.canCheckIn);
+		this.setRoomsUIHighlight(canUpgradeCheckInRoomVMList, this.dragStyles.canUpgrade);
+		this.setRoomsUIHighlight(canNotCheckInRoomVmList, this.dragStyles.canNotCheckIn);
 	}
 
-	public dropHandled(event){
+	public dropHandled(event) {
 		var arrivalItem = this.hotelOperationsDashboard.getSelectedArrivalItem();
 		var roomVM = event.roomVM;
-		if (event.accepted){
-			roomVM.Properties.Booking.ClientName = arrivalItem.ClientName;
-			roomVM.Properties.Booking.NumberOfPeople = arrivalItem.NumberOfPeople;
-			roomVM.Properties.Booking.NumberOfNights = arrivalItem.NumberOfNights;
-			roomVM.Properties.Booking.Arrival = arrivalItem.Arrival;
-			roomVM.Properties.Booking.Departure = arrivalItem.Departure;
+		if (event.accepted) {
+			roomVM.properties.booking.clientName = arrivalItem.clientName;
+			roomVM.properties.booking.numberOfPeople = arrivalItem.numberOfPeople;
+			roomVM.properties.booking.numberOfNights = arrivalItem.numberOfNights;
+			roomVM.properties.booking.arrival = arrivalItem.arrival;
+			roomVM.properties.booking.departure = arrivalItem.departure;
 			this.hotelOperationsDashboard.checkInArrivalItem(arrivalItem);
+			this.setRoomsUIHighlight(this.roomVMList, this.dragStyles.default);
 		}
 	}
 
-	public nextDay(){
+	public stoppedDragging(arrivalItemVM){
+		this.setRoomsUIHighlight(this.roomVMList, this.dragStyles.default);
+	}
+
+	public nextDay() {
 		var date = Math.abs(this.hotelOperationsDashboard.getDate() + 1) % 3;
 		this.hotelOperationsDashboard.setDate(date);
 		this.hotelOperationsDashboard.refresh();
 	}
 
-	public previousDay(){
+	public previousDay() {
 		var date = Math.abs(this.hotelOperationsDashboard.getDate() - 1) % 3;
 		this.hotelOperationsDashboard.setDate(date);
 		this.hotelOperationsDashboard.refresh();

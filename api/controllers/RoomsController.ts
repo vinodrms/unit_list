@@ -17,7 +17,6 @@ class RoomsController extends BaseController {
         var sessionContext: SessionContext = req.sessionContext;
 
         var roomMeta = this.getRoomMetaRepoDOFrom(sessionContext);
-
 		var roomRepo = appContext.getRepositoryFactory().getRoomRepository();
 		roomRepo.getRoomList(roomMeta, req.body.searchCriteria, req.body.lazyLoad).then((rooms: RoomSearchResultRepoDO) => {
 			this.returnSuccesfulResponse(req, res, rooms);

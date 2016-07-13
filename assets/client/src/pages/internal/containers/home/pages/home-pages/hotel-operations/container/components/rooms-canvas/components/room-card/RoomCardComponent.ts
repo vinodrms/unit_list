@@ -56,7 +56,7 @@ export class RoomCardComponent {
 	}
 
 	ngOnInit() {
-		this.buildMaintenanceObject(this.roomVM.Properties.MaintenanceStatus);
+		this.buildMaintenanceObject(this.roomVM.properties.maintenanceStatus);
 	}
 
 	ngAfterViewInit() {
@@ -65,14 +65,14 @@ export class RoomCardComponent {
 				accept: 'arrival-item',
 				drop: (event: Event, ui: Object) => {
 					this._zone.run(() => {
-						var dropHandler = RoomDropHandlerFactory.get(this.roomVM.Status);
+						var dropHandler = RoomDropHandlerFactory.get(this.roomVM.status);
 						var outcome = {
 							accepted: dropHandler.handle("test"),
 							roomVM: this.roomVM
 						}
 
 						if (outcome.accepted == true) {
-							this.roomVM.Status = "Occupied";
+							this.roomVM.status = "Occupied";
 							this.dropped.emit(outcome)
 						}
 						else {

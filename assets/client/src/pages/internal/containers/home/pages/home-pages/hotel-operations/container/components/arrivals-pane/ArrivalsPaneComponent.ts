@@ -64,6 +64,10 @@ export class ArrivalsPaneComponent implements OnInit {
 		this.hotelOperationsDashboard.startedDragging(arrivalItemVM);
 	}
 
+	public stoppedDragging(arrivalItemVM){
+		this.hotelOperationsDashboard.stoppedDragging(arrivalItemVM);
+	}
+
 	public removeArrivalItem(arrivalItemVM){
 		var index = _.findIndex(this.arrivalItemsVMList, arrivalItemVM);
 
