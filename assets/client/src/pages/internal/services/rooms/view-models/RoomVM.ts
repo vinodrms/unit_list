@@ -85,9 +85,9 @@ export class RoomVM {
     public get capacity(): ConfigCapacityDO {
         var bedConfigCapacity = new ConfigCapacityDO();
         
-        (this._thUtils.isUndefinedOrNull(this._categoryStats.capacity.totalCapacity.noAdults))? bedConfigCapacity.noAdults = 0 : bedConfigCapacity.noAdults = this._categoryStats.capacity.totalCapacity.noAdults;
-        (this._thUtils.isUndefinedOrNull(this._categoryStats.capacity.totalCapacity.noChildren))? bedConfigCapacity.noChildren = 0 : bedConfigCapacity.noChildren = this._categoryStats.capacity.totalCapacity.noChildren;
-        (this._thUtils.isUndefinedOrNull(this._categoryStats.capacity.totalCapacity.noBabies))? bedConfigCapacity.noBabies = 0 : bedConfigCapacity.noBabies = this._categoryStats.capacity.totalCapacity.noBabies;
+        (this._thUtils.isUndefinedOrNull(this._categoryStats) || this._thUtils.isUndefinedOrNull(this._categoryStats.capacity.totalCapacity.noAdults))? bedConfigCapacity.noAdults = 0 : bedConfigCapacity.noAdults = this._categoryStats.capacity.totalCapacity.noAdults;
+        (this._thUtils.isUndefinedOrNull(this._categoryStats) || this._thUtils.isUndefinedOrNull(this._categoryStats.capacity.totalCapacity.noChildren))? bedConfigCapacity.noChildren = 0 : bedConfigCapacity.noChildren = this._categoryStats.capacity.totalCapacity.noChildren;
+        (this._thUtils.isUndefinedOrNull(this._categoryStats) || this._thUtils.isUndefinedOrNull(this._categoryStats.capacity.totalCapacity.noBabies))? bedConfigCapacity.noBabies = 0 : bedConfigCapacity.noBabies = this._categoryStats.capacity.totalCapacity.noBabies;
 
         return bedConfigCapacity;
     }
