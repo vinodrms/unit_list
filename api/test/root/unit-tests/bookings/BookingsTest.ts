@@ -268,6 +268,17 @@ describe("New Bookings Tests", function () {
                     done(err);
                 });
         });
+        it("Should not mark other bookings as Guaranteed", function (done) {
+            var bookingProcessFactory = new BookingProcessFactory(testContext.appContext, testDataBuilder.hotelDO);
+            var markBookingsAsGuaranteeProcess: IBookingStatusChangerProcess = bookingProcessFactory.getBookingStatusChangerProcess(BookingStatusChangerProcessType.MarkBookingsAsGuaranteed);
+            markBookingsAsGuaranteeProcess.changeStatuses(bookingTestHelper.getMaxTimestamp())
+                .then((bookingList: BookingDO[]) => {
+                    should.equal(bookingList.length, 0);
+                    done();
+                }).catch((err: any) => {
+                    done(err);
+                });
+        });
         it("Should mark some bookings as No Show", function (done) {
             var bookingProcessFactory = new BookingProcessFactory(testContext.appContext, testDataBuilder.hotelDO);
             var markBookingsAsNoShowProcess: IBookingStatusChangerProcess = bookingProcessFactory.getBookingStatusChangerProcess(BookingStatusChangerProcessType.MarkBookingsAsNoShow);
@@ -283,6 +294,17 @@ describe("New Bookings Tests", function () {
                             should.equal(booking.price.priceType, BookingPriceType.Penalty);
                         }
                     });
+                    done();
+                }).catch((err: any) => {
+                    done(err);
+                });
+        });
+        it("Should not mark other bookings as No Show", function (done) {
+            var bookingProcessFactory = new BookingProcessFactory(testContext.appContext, testDataBuilder.hotelDO);
+            var markBookingsAsNoShowProcess: IBookingStatusChangerProcess = bookingProcessFactory.getBookingStatusChangerProcess(BookingStatusChangerProcessType.MarkBookingsAsNoShow);
+            markBookingsAsNoShowProcess.changeStatuses(bookingTestHelper.getMaxTimestamp())
+                .then((bookingList: BookingDO[]) => {
+                    should.equal(bookingList.length, 0);
                     done();
                 }).catch((err: any) => {
                     done(err);

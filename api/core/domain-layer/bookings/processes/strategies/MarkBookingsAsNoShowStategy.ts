@@ -2,6 +2,7 @@ import {IBookingProcessStrategy, BookingStrategyMatchParams} from './IBookingPro
 import {BookingSearchCriteriaRepoDO} from '../../../../data-layer/bookings/repositories/IBookingRepository';
 import {BookingDO, BookingConfirmationStatus} from '../../../../data-layer/bookings/data-objects/BookingDO';
 import {DocumentActionDO} from '../../../../data-layer/common/data-objects/document-history/DocumentActionDO';
+import {BookingPriceType} from '../../../../data-layer/bookings/data-objects/price/BookingPriceDO';
 
 export class MarkBookingsAsNoShowStategy implements IBookingProcessStrategy {
     constructor() {
@@ -40,7 +41,9 @@ export class MarkBookingsAsNoShowStategy implements IBookingProcessStrategy {
     }
     private updateBookingAsNoShowWithPenalty(bookingDO: BookingDO) {
         bookingDO.confirmationStatus = BookingConfirmationStatus.NoShowWithPenalty;
-        bookingDO.price = bookingDO.priceProductSnapshot.conditions.penalty.computePenaltyPrice(bookingDO.price);
+        if (bookingDO.price.priceType === BookingPriceType.BookingStay) {
+            bookingDO.price = bookingDO.priceProductSnapshot.conditions.penalty.computePenaltyPrice(bookingDO.price);
+        }
         bookingDO.bookingHistory.logDocumentAction(DocumentActionDO.buildDocumentActionDO({
             actionParameterMap: {},
             actionString: "Booking was marked as No Show by the System. The booking has a penalty on the attached invoice."
