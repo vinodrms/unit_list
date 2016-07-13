@@ -13,7 +13,6 @@ export interface InvoiceGroupItemMetaRepoDO {
 export interface InvoiceGroupSearchCriteriaRepoDO {
     invoiceGroupIdList?: string[];
     groupBookingId?: string;
-    bookingId?: string;
     customerIdList?: string[];
 }
 
