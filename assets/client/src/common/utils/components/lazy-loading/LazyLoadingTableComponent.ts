@@ -26,7 +26,7 @@ import {ThUtils} from '../../ThUtils';
 export class LazyLoadingTableComponent<T> {
 	@ViewChild('topTableCenter', { read: ViewContainerRef }) private _topTableCenterVCRef: ViewContainerRef;
 	private _didInitTopTableCenterRegion: boolean = false;
-	private _bootstrapTopTableCenterCallback: { (): { componentToInject: Type, providers: ResolvedReflectiveProvider[] } };
+	private _topTableCenterData: { componentToInject: Type, providers: ResolvedReflectiveProvider[] };
 
 	private _thUtils: ThUtils;
 	protected _isCollapsed: boolean;
@@ -152,13 +152,12 @@ export class LazyLoadingTableComponent<T> {
 		this._scrollableBodyRegion.scheduleScrollRegionUpdate();
 	}
 	private registerTopCenterComponentIfNecessary() {
-		if (!this.didInit || !this._bootstrapTopTableCenterCallback || this._didInitTopTableCenterRegion || !this._topTableCenterVCRef) { return; }
-		var topCenterComp = this._bootstrapTopTableCenterCallback();
-		this._dynamicComponentLoader.loadNextToLocation(topCenterComp.componentToInject, this._topTableCenterVCRef, topCenterComp.providers);
+		if (!this.didInit || !this._topTableCenterData || this._didInitTopTableCenterRegion || !this._topTableCenterVCRef) { return; }
+		this._dynamicComponentLoader.loadNextToLocation(this._topTableCenterData.componentToInject, this._topTableCenterVCRef, this._topTableCenterData.providers);
 		this._didInitTopTableCenterRegion = true;
 	}
-	public attachTopTableCenterBootstrap(bootstrapCallback: { (): { componentToInject: Type, providers: ResolvedReflectiveProvider[] } }) {
-		this._bootstrapTopTableCenterCallback = bootstrapCallback;
+	public attachTopTableCenterBootstrapData(topTableCenterData: { componentToInject: Type, providers: ResolvedReflectiveProvider[] }) {
+		this._topTableCenterData = topTableCenterData;
 	}
 
 	protected searchByText() {

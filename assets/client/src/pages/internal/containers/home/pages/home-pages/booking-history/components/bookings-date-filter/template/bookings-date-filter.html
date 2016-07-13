@@ -1,1 +1,8 @@
-<th-date-interval-picker [showExpandedView]="true" [showLabels]="false"></th-date-interval-picker>
+<th-date-interval-picker 
+    [showExpandedView]="true" 
+    [showLabels]="false"
+    [initialThDateInterval]="searchInterval" 
+    [restrictedInterval]="true"
+    (didSelectThDateInterval)="didSelectSearchInterval($event)"
+    >
+</th-date-interval-picker>

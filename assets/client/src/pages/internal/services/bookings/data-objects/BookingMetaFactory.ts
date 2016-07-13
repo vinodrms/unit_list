@@ -17,6 +17,10 @@ export class BookingMetaFactory {
                 displayName: "No Show"
             },
             {
+                confirmationStatus: BookingConfirmationStatus.NoShowWithPenalty,
+                displayName: "No Show With Penalty"
+            },
+            {
                 confirmationStatus: BookingConfirmationStatus.Cancelled,
                 displayName: "Cancelled"
             },

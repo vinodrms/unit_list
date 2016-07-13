@@ -4,7 +4,7 @@ import {ThDateIntervalDO} from '../../common/data-objects/th-dates/ThDateInterva
 import {ConfigCapacityDO} from '../../common/data-objects/bed-config/ConfigCapacityDO';
 import {PriceProductDO} from '../../price-products/data-objects/PriceProductDO';
 import {FileAttachmentDO} from '../../common/data-objects/file/FileAttachmentDO';
-import {BookingCancellationTimeDO} from './cancellation-time/BookingCancellationTimeDO';
+import {BookingStateChangeTriggerTimeDO} from './state-change-time/BookingStateChangeTriggerTimeDO';
 import {DefaultBillingDetailsDO} from './default-billing/DefaultBillingDetailsDO';
 import {DocumentHistoryDO} from '../../common/data-objects/document-history/DocumentHistoryDO';
 import {BookingPriceDO} from './price/BookingPriceDO';
@@ -18,6 +18,7 @@ export enum BookingConfirmationStatus {
     Confirmed,
     Guaranteed,
     NoShow,
+    NoShowWithPenalty,
     Cancelled,
     CheckedIn,
     CheckedOut
@@ -51,7 +52,8 @@ export class BookingDO extends BaseDO {
     priceProductSnapshot: PriceProductDO;
     price: BookingPriceDO;
     allotmentId: string;
-    cancellationTime: BookingCancellationTimeDO;
+    guaranteedTime: BookingStateChangeTriggerTimeDO;
+    noShowTime: BookingStateChangeTriggerTimeDO;
     notes: string;
     fileAttachmentList: FileAttachmentDO[];
     bookingHistory: DocumentHistoryDO;
@@ -80,8 +82,11 @@ export class BookingDO extends BaseDO {
         this.priceProductSnapshot = new PriceProductDO();
         this.priceProductSnapshot.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "priceProductSnapshot"));
 
-        this.cancellationTime = new BookingCancellationTimeDO();
-        this.cancellationTime.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "cancellationTime"));
+        this.guaranteedTime = new BookingStateChangeTriggerTimeDO();
+        this.guaranteedTime.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "guaranteedTime"));
+
+        this.noShowTime = new BookingStateChangeTriggerTimeDO();
+        this.noShowTime.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "noShowTime"));
 
         this.fileAttachmentList = [];
         this.forEachElementOf(this.getObjectPropertyEnsureUndefined(object, "fileAttachmentList"), (fileAttachmentObject: Object) => {

@@ -523,7 +523,7 @@ export var EnglishTranslations: Object = {
 	"No access to bill": "No access to bill",
 	"You cannot have more than %noCompOrTa% Company or Travel Agent on a booking": "You cannot have more than %noCompOrTa% Company or Travel Agent on a booking",
 	"Booking": "Booking",
-	"Search by customer name or booking references": "Search by customer name or booking references",
+	"Customer Name or References": "Customer Name or References",
 	"Status": "Status",
 	"Confirmed": "Confirmed",
 	"Guaranteed": "Guaranteed",
@@ -531,6 +531,6 @@ export var EnglishTranslations: Object = {
 	"Cancelled": "Cancelled",
 	"Checked In": "Checked In",
 	"Checked Out": "Checked Out",
-	"Booking/Group Booking References": "Booking/Group Booking References",
+	"Group/Individual Booking References": "Group/Individual Booking References",
 	
 };

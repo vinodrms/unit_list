@@ -15,6 +15,9 @@ module.exports.unitPalConfig = {
             api_secret: 'V5Cr6imHfTPXitvr0bKtxcum3EA'
         }
     },
+    pdfReportsService: {
+        type: "real",
+    },
     slack: {
         "webhookUri": "https://hooks.slack.com/services/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",
         "channel": "#unitpal-audit",

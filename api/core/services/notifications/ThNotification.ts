@@ -6,6 +6,9 @@ import _ = require('underscore');
 
 var ThNotificationMessage: { [index: number]: string; } = {};
 ThNotificationMessage[ThNotificationCode.AllotmentArchivedAutomatically] = "Your allotment for the period %period% has been automatically archived as it reached the expired date.";
+ThNotificationMessage[ThNotificationCode.BookingsMarkedAsGuaranteed] = "The system has changed automatically some of your bookings. The number of bookings marked as Guaranteed is: %noBookings%.";
+ThNotificationMessage[ThNotificationCode.BookingsMarkedAsNoShow] = "The system has changed automatically some of your bookings. The number of bookings marked as No Show is: %noBookings%.";
+ThNotificationMessage[ThNotificationCode.BookingsMarkedAsNoShowWithPenalty] = "The system has changed automatically some of your bookings. The number of bookings marked as No Show is: %noBookings% / %noBookingsWithPenalty% with penalty.";
 
 export class ThNotification {
 	notification: NotificationDO;

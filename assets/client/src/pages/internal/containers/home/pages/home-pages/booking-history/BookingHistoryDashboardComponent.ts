@@ -34,19 +34,17 @@ export class BookingHistoryDashboardComponent extends AHomeContainerComponent im
 	}
 
 	public ngAfterViewInit() {
-		this._bookingsTableComponent.attachTopTableCenterBootstrap(this.topTableCenterBootstrap);
-		this._bookingsTableComponent.bootstrap(this._bookingsService, this._tableBuilder.buildLazyLoadTableMeta());
-	}
-	private topTableCenterBootstrap(): { componentToInject: Type, providers: ResolvedReflectiveProvider[] } {
-		return {
+		this._bookingsTableComponent.attachTopTableCenterBootstrapData({
 			componentToInject: BookingsDateFilterComponent,
 			providers: ReflectiveInjector.resolve([provide(BookingsService, { useValue: this._bookingsService })])
-		}
+		});
+		this._bookingsTableComponent.bootstrap(this._bookingsService, this._tableBuilder.buildLazyLoadTableMeta());
 	}
 
 	public openNewBookingModal() {
 		this._newBookingModalService.openNewBookingModal().then((modalDialogInstance: ModalDialogRef<NewBookingResult>) => {
 			modalDialogInstance.resultObservable.subscribe((newBookingResult: NewBookingResult) => {
+				this._bookingsService.refreshData();
 			});
 		}).catch((e: any) => { });
 	}

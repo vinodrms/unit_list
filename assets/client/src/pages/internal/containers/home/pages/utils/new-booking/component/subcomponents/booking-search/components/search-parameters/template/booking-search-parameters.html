@@ -32,7 +32,7 @@
     </div>
 </div>
 <div class="col-xs-12">
-    <th-date-interval-picker [minDate]="minDate" [startDateLabel]="'Check In'" [startDateFont]="'/'" [endDateLabel]="'Check Out'"
+    <th-date-interval-picker [minDate]="minDate" [startDateLabel]="'Check In'" [startDateFont]="'/'" [endDateLabel]="'Check Out'" [restrictedInterval]="true"
         [endDateFont]="'.'" [showNoOfNights]="true" [initialThDateInterval]="searchParameters.interval" (didSelectThDateInterval)="didSelectBookingInterval($event)">
     </th-date-interval-picker>
 </div>

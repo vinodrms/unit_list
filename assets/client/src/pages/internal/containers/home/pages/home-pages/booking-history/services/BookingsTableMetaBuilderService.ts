@@ -10,7 +10,7 @@ export class BookingsTableMetaBuilderService {
             supportedRowCommandList: [TableRowCommand.Edit, TableRowCommand.Select, TableRowCommand.Add, TableRowCommand.Search],
             rowIdPropertySelector: "booking.bookingId",
             addButtonText: "Booking",
-            searchInputPlaceholder: "Search by customer name or booking references",
+            searchInputPlaceholder: "Customer Name or References",
             autoSelectRows: true,
             columnMetaList: [
                 {
@@ -38,7 +38,7 @@ export class BookingsTableMetaBuilderService {
                         objectPropertyId: "booking.interval",
                         propertyType: TablePropertyType.DateIntervalType,
                         showInCollapsedView: false,
-                        normalStyle: "up-col-20p left"
+                        normalStyle: "up-col-20p center"
                     }
                 },
                 {

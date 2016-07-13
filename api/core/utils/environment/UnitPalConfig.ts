@@ -10,6 +10,10 @@ export enum ImageStorageProviderType {
     Cloudinary,
     Mock
 }
+export enum PdfReportsProviderType {
+    Real,
+    Mock
+}
 export enum AppEnvironmentType {
     Development,
     Test,
@@ -23,6 +27,8 @@ export class UnitPalConfig {
     private _emailProviderSettings: Object;
     private _imageStorageProviderType: ImageStorageProviderType;
     private _imageStorageProviderSettings: Object;
+    private _pdfReportsProviderType: PdfReportsProviderType;
+    private _pdfReportsProviderSettings: Object;
     private _appContextRoot: string;
 
     constructor() {
@@ -30,6 +36,7 @@ export class UnitPalConfig {
         this.updateDatabaseType();
         this.updateEmailProvider();
         this.updateImageStorageProvider();
+        this.updatePdfReportsProvider();
         this.updateAppContextRoot();
     }
     private updateAppEnvironment() {
@@ -80,6 +87,20 @@ export class UnitPalConfig {
         }
         this._imageStorageProviderSettings = sails.config.unitPalConfig.imageUploadService.settings;
     }
+    private updatePdfReportsProvider() {
+        switch (sails.config.unitPalConfig.pdfReportsService.type) {
+            case 'mock':
+                this._pdfReportsProviderType = PdfReportsProviderType.Mock;
+                break;
+            case 'real':
+                this._pdfReportsProviderType = PdfReportsProviderType.Real;
+                break;
+            default:
+                this._pdfReportsProviderType = PdfReportsProviderType.Real;
+                break;
+        }
+        this._pdfReportsProviderSettings = sails.config.unitPalConfig.pdfReportsService.settings;
+    }
     private updateAppContextRoot() {
         this._appContextRoot = sails.config.unitPalConfig.appContextRoot;
     }
@@ -100,6 +121,12 @@ export class UnitPalConfig {
     }
     public getImageStorageProviderSettings(): Object {
         return this._imageStorageProviderSettings;
+    }
+    public getPdfReportsProviderType(): PdfReportsProviderType {
+        return this._pdfReportsProviderType;
+    }
+    public getPdfReportsProviderSettings(): Object {
+        return this._pdfReportsProviderSettings;
     }
     public getAppContextRoot(): string {
         return this._appContextRoot;

@@ -5,8 +5,8 @@ import {ThStatusCode} from '../../../utils/th-responses/ThResponse';
 import {AppContext} from '../../../utils/AppContext';
 import {SessionContext} from '../../../utils/SessionContext';
 import {ValidationResultParser} from '../../common/ValidationResultParser';
-import {UpdateInvoiceGroupDO} from './UpdateInvoiceGroupDO';
 import {InvoiceGroupDO} from '../../../data-layer/invoices/data-objects/InvoiceGroupDO';
+import {SaveCustomerInvoiceGroupDO} from './SaveCustomerInvoiceGroupDO';
 import {HotelDO} from '../../../data-layer/hotel/data-objects/HotelDO';
 import {BookingDO} from '../../../data-layer/bookings/data-objects/BookingDO';
 import {CustomerIdValidator} from '../../../domain-layer/customers/validators/CustomerIdValidator';
@@ -20,9 +20,9 @@ import {AddOnProductIdValidator} from '../../../domain-layer/add-on-products/val
 import {AddOnProductsContainer} from '../../../domain-layer/add-on-products/validators/results/AddOnProductsContainer';
 import {AddOnProductDO} from '../../../data-layer/add-on-products/data-objects/AddOnProductDO';
 
-export class UpdateInvoiceGroup {
+export class SaveCustomerInvoiceGroup {
     private _thUtils: ThUtils;
-    private _updateInvoiceGroupDO: UpdateInvoiceGroupDO;
+    private _updateInvoiceGroupDO: SaveCustomerInvoiceGroupDO;
 
     private _hotel: HotelDO;
     private _customersContainer: CustomersContainer;
@@ -34,7 +34,7 @@ export class UpdateInvoiceGroup {
         this._thUtils = new ThUtils();
     }
 
-    public update(updateInvoiceGroupDO: UpdateInvoiceGroupDO): Promise<InvoiceGroupDO> {
+    public update(updateInvoiceGroupDO: SaveCustomerInvoiceGroupDO): Promise<InvoiceGroupDO> {
         this._updateInvoiceGroupDO = updateInvoiceGroupDO;
 
         return new Promise<InvoiceGroupDO>((resolve: { (result: InvoiceGroupDO): void }, reject: { (err: ThError): void }) => {
@@ -49,7 +49,7 @@ export class UpdateInvoiceGroup {
     }
 
     private updateCore(resolve: { (result: InvoiceGroupDO): void }, reject: { (err: ThError): void }) {
-        var validationResult = UpdateInvoiceGroupDO.getValidationStructure().validateStructure(this._updateInvoiceGroupDO);
+        var validationResult = SaveCustomerInvoiceGroupDO.getValidationStructure().validateStructure(this._updateInvoiceGroupDO);
         if (!validationResult.isValid()) {
             var parser = new ValidationResultParser(validationResult, this._updateInvoiceGroupDO);
             parser.logAndReject("Error validating data for updating invoice group", reject);
@@ -71,13 +71,13 @@ export class UpdateInvoiceGroup {
                 var aopIdValidator = new AddOnProductIdValidator(this._appContext, this._sessionContext);
                 return aopIdValidator.validateAddOnProductIdList(invoiceGroupDO.getAggregatedAddOnProductIdList());
             }).then((aopContainer: AddOnProductsContainer) => {
-               return Promise.all(_.chain(invoiceGroupDO.getAggregatedPayerList())
+                return Promise.all(_.chain(invoiceGroupDO.getAggregatedPayerList())
                     .map((payer: InvoicePayerDO) => {
                         return new InvoicePaymentMethodValidator(this._hotel, this._customersContainer.getCustomerById(payer.customerId)).validate(payer.paymentMethod);
                     }).value());
             }).then((validatedPaymentMethods: InvoicePaymentMethodDO[]) => {
                 this._invoicePaymentMethodList = validatedPaymentMethods;
-                
+
                 return invoiceGroupRepo.getInvoiceGroupById({ hotelId: this.hotelId }, invoiceGroupDO.id);
             }).then((loadedInvoiceGroup: InvoiceGroupDO) => {
                 this._loadedInvoiceGroup = loadedInvoiceGroup;
@@ -100,16 +100,16 @@ export class UpdateInvoiceGroup {
         return invoiceGroup;
     }
     private buildInvoiceGroupMeta(): InvoiceGroupMetaRepoDO {
-		return {
-			hotelId: this.hotelId
-		};
-	}
-	private buildInvoiceGroupItemMeta(): InvoiceGroupItemMetaRepoDO {
-		return {
-			id: this._loadedInvoiceGroup.id,
-			versionId: this._loadedInvoiceGroup.versionId
-		};
-	}
+        return {
+            hotelId: this.hotelId
+        };
+    }
+    private buildInvoiceGroupItemMeta(): InvoiceGroupItemMetaRepoDO {
+        return {
+            id: this._loadedInvoiceGroup.id,
+            versionId: this._loadedInvoiceGroup.versionId
+        };
+    }
 
     private get hotelId(): string {
         return this._sessionContext.sessionDO.hotel.id;

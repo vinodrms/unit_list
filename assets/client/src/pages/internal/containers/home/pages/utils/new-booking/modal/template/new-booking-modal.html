@@ -1,6 +1,7 @@
 <div class="card">
 	<new-booking-container 
 		showCloseButton="true"
+		(onBookingsAdded)="didAddBookings($event)"
 		(onCloseButtonPressed)="closeDialog($event)">	
 	</new-booking-container>
 </div>

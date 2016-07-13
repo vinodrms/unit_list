@@ -23,6 +23,9 @@ module.exports = {
         },
         imageUploadService: {
             type: "mock"
-        }
+        },
+        pdfReportsService: {
+            type: "mock"
+        },
     }
 };

@@ -1,13 +1,14 @@
 import {BaseDO} from '../../../../../../common/base/BaseDO';
 import {ThTimestampDO} from '../../../common/data-objects/th-dates/ThTimestampDO';
 
-export enum BookingCancellationTimeType {
+export enum BookingStateChangeTriggerType {
     ExactTimestamp,
-    DependentOnCancellationHour
+    DependentOnCancellationHour,
+    Never
 }
 
-export class BookingCancellationTimeDO extends BaseDO {
-    type: BookingCancellationTimeType;
+export class BookingStateChangeTriggerTimeDO extends BaseDO {
+    type: BookingStateChangeTriggerType;
     thTimestamp: ThTimestampDO;
     utcTimestamp: number;
 

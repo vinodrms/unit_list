@@ -4,6 +4,7 @@ import {AppContext} from '../../../../../../../../common/utils/AppContext';
 import {ICustomModalComponent, ModalSize} from '../../../../../../../../common/utils/modals/utils/ICustomModalComponent';
 import {ModalDialogRef} from '../../../../../../../../common/utils/modals/utils/ModalDialogRef';
 import {NewBookingContainerComponent} from '../component/container/NewBookingContainerComponent';
+import {NewBookingResult} from './services/utils/NewBookingResult';
 
 @Component({
 	selector: 'new-booking-modal',
@@ -11,7 +12,7 @@ import {NewBookingContainerComponent} from '../component/container/NewBookingCon
 	directives: [NewBookingContainerComponent]
 })
 export class NewBookingModalComponent extends BaseComponent implements ICustomModalComponent {
-	constructor(private _modalDialogRef: ModalDialogRef<any>, private _appContext: AppContext) {
+	constructor(private _modalDialogRef: ModalDialogRef<NewBookingResult>, private _appContext: AppContext) {
 		super();
 	}
 
@@ -28,6 +29,10 @@ export class NewBookingModalComponent extends BaseComponent implements ICustomMo
 			() => {
 				this._modalDialogRef.closeForced();
 			}, () => { });
+	}
+
+	public didAddBookings(result: boolean) {
+		this._modalDialogRef.addResult(new NewBookingResult());
 	}
 
 	public isBlocking(): boolean {

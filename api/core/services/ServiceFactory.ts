@@ -1,4 +1,4 @@
-import {UnitPalConfig, EmailProviderType, ImageStorageProviderType} from '../utils/environment/UnitPalConfig';
+import {UnitPalConfig, EmailProviderType, ImageStorageProviderType, PdfReportsProviderType} from '../utils/environment/UnitPalConfig';
 import {IVatProvider} from './vat/IVatProvider';
 import {VatProviderProxyService} from './vat/VatProviderProxyService';
 import {VIESVatProviderAdapter} from './vat/providers/VIESVatProviderAdapter';
@@ -21,6 +21,7 @@ import {IHtmlToPdfConverterService} from './html-to-pdf/IHtmlToPdfConverterServi
 import {PhantomLocalHtmlToPdfConverterService} from './html-to-pdf/providers/phantom/PhantomLocalHtmlToPdfConverterService';
 import {IPdfReportsService} from './pdf-reports/IPdfReportsService';
 import {PdfReportsService} from './pdf-reports/providers/PdfReportsService';
+import {MockPdfReportsService} from './pdf-reports/providers/MockPdfReportsService';
 
 export class ServiceFactory {
     constructor(private _unitPalConfig: UnitPalConfig) {
@@ -60,7 +61,15 @@ export class ServiceFactory {
         return new NotificationServicePushDecorator(new NotificationService(this._unitPalConfig), this.getSocketsService());
     }
     public getPdfReportsService(): IPdfReportsService {
-        return new PdfReportsService(this._unitPalConfig, this.getHtmltoPdfConverterService());   
+        switch (this._unitPalConfig.getPdfReportsProviderType()) {
+            case PdfReportsProviderType.Real:
+                return new PdfReportsService(this._unitPalConfig, this.getHtmltoPdfConverterService());
+            case PdfReportsProviderType.Mock:
+                return new MockPdfReportsService(this._unitPalConfig, this.getHtmltoPdfConverterService());
+            default:
+                return new PdfReportsService(this._unitPalConfig, this.getHtmltoPdfConverterService());
+        }
+           
     }
     public getHtmltoPdfConverterService(): IHtmlToPdfConverterService {
         return new PhantomLocalHtmlToPdfConverterService();   
