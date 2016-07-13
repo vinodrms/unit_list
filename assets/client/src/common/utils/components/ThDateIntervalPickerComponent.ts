@@ -88,6 +88,7 @@ export class ThDateIntervalPickerComponent {
 	@Input() showNoOfNights: boolean = false;
 	@Input() showExpandedView: boolean = false;
 	@Input() showLabels: boolean = true;
+	@Input() restrictedInterval: boolean = false;
 	noOfNights: number = 0;
 
 	@Output() didSelectThDateInterval = new EventEmitter();
@@ -126,7 +127,7 @@ export class ThDateIntervalPickerComponent {
 			this.dateInterval.end = this.minEndDate.buildPrototype();
 			this.updateNoOfNights();
 		}
-		else if (this.dateInterval.getNumberOfDays() > ThDateIntervalPickerComponent.MaxNoOfDaysFromInterval) {
+		else if (this.dateInterval.getNumberOfDays() > ThDateIntervalPickerComponent.MaxNoOfDaysFromInterval && this.restrictedInterval) {
 			this.dateInterval.end = this.dateInterval.start.buildPrototype();
 			this.dateInterval.end = this._dateUtils.addDaysToThDateDO(this.dateInterval.end, ThDateIntervalPickerComponent.MaxNoOfDaysFromInterval);
 			this.updateNoOfNights();
@@ -135,7 +136,7 @@ export class ThDateIntervalPickerComponent {
 	}
 	didSelectEndDate(endDate: ThDateDO) {
 		this.dateInterval.end = endDate;
-		if (this.dateInterval.getNumberOfDays() > ThDateIntervalPickerComponent.MaxNoOfDaysFromInterval) {
+		if (this.dateInterval.getNumberOfDays() > ThDateIntervalPickerComponent.MaxNoOfDaysFromInterval && this.restrictedInterval) {
 			this.dateInterval.start = this.dateInterval.end.buildPrototype();
 			this.dateInterval.start = this._dateUtils.addDaysToThDateDO(this.dateInterval.start, -ThDateIntervalPickerComponent.MaxNoOfDaysFromInterval);
 		}
