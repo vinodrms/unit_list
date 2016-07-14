@@ -35,12 +35,14 @@ export class DefaultBookingBuilder implements IBookingDataSource {
 
     public getBookingList(hotelDO: HotelDO, customerList: CustomerDO[], roomCategoryList: RoomCategoryDO[], priceProductList: PriceProductDO[]): BookingDO[] {
         var bookingsList = [];
-        bookingsList.push(this.buildBooking("2", hotelDO, customerList, roomCategoryList, priceProductList));
-        bookingsList.push(this.buildBooking("3", hotelDO, customerList, roomCategoryList, priceProductList));
+        bookingsList.push(this.buildBooking("1", "2", "groupRef1", "ref1", hotelDO, customerList, roomCategoryList, priceProductList));
+        bookingsList.push(this.buildBooking("1", "3", "groupRef1", "ref2", hotelDO, customerList, roomCategoryList, priceProductList));
+        bookingsList.push(this.buildBooking("2", "4", "groupRef2", "ref3", hotelDO, customerList, roomCategoryList, priceProductList));
+        
         return bookingsList;
     }
 
-    private buildBooking(bookingId: string, hotelDO: HotelDO, customerList: CustomerDO[], roomCategoryList: RoomCategoryDO[], priceProductList: PriceProductDO[]): BookingDO {
+    private buildBooking(groupBookingId: string, bookingId: string, groupBookingRef: string, bookingRef: string, hotelDO: HotelDO, customerList: CustomerDO[], roomCategoryList: RoomCategoryDO[], priceProductList: PriceProductDO[]): BookingDO {
         var priceProduct = priceProductList[0];
         var customerId = this._testUtils.getRandomListElement(customerList).id;
         var roomCategoryId = this._testUtils.getRandomListElement(priceProduct.roomCategoryIdList);
@@ -54,13 +56,13 @@ export class DefaultBookingBuilder implements IBookingDataSource {
             }
         });
         var booking = new BookingDO();
-        booking.groupBookingId = "1";
-        booking.groupBookingReference = "ref1";
+        booking.groupBookingId = groupBookingId;
+        booking.groupBookingReference = groupBookingRef;
         booking.inputChannel = GroupBookingInputChannel.PropertyManagementSystem;
         booking.noOfRooms = 1;
 
         booking.bookingId = bookingId;
-        booking.bookingReference = "ref2";
+        booking.bookingReference = bookingRef;
         booking.confirmationStatus = BookingConfirmationStatus.Confirmed;
         booking.customerIdList = [customerId];
         booking.defaultBillingDetails = billingDetails;
@@ -121,10 +123,25 @@ export class DefaultBookingBuilder implements IBookingDataSource {
     private loadBookingsCore(resolve: { (result: BookingDO[]): void }, reject: { (err: ThError): void },
         dataSource: IBookingDataSource, hotelDO: HotelDO, customerList: CustomerDO[], roomCategoryList: RoomCategoryDO[], priceProductList: PriceProductDO[]) {
         var bookingsRepo = this._testContext.appContext.getRepositoryFactory().getBookingRepository();
-        bookingsRepo.addBookings({ hotelId: hotelDO.id }, dataSource.getBookingList(hotelDO, customerList, roomCategoryList, priceProductList)).then((bookingList: BookingDO[]) => {
-            resolve(bookingList);
+
+        var bookingList = dataSource.getBookingList(hotelDO, customerList, roomCategoryList, priceProductList);
+        var groupedBookingsByGroupBookingRef = _.groupBy(bookingList, (booking: BookingDO) => {
+            return booking.groupBookingReference;
+        });
+        var addBookingGroupPromiseList = [];
+        for(var groupBookingRef in groupedBookingsByGroupBookingRef) {       
+            addBookingGroupPromiseList.push(bookingsRepo.addBookings({ hotelId: hotelDO.id }, groupedBookingsByGroupBookingRef[groupBookingRef]));
+        }
+        
+        Promise.all(addBookingGroupPromiseList).then((result: BookingDO[][]) => {
+            resolve(_.flatten(result));
         }).catch((error: any) => {
             reject(error);
         });
+
+
+        bookingsRepo.addBookings({ hotelId: hotelDO.id }, dataSource.getBookingList(hotelDO, customerList, roomCategoryList, priceProductList)).then((bookingList: BookingDO[]) => {
+            resolve(bookingList);
+        })
     }
 }
