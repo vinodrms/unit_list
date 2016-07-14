@@ -31,6 +31,8 @@ import {DefaultAllotmentBuilder} from './builders/DefaultAllotmentBuilder';
 import {AllotmentDO} from '../../core/data-layer/allotments/data-objects/AllotmentDO';
 import {DefaultBookingBuilder} from './builders/DefaultBookingBuilder';
 import {BookingDO} from '../../core/data-layer/bookings/data-objects/BookingDO';
+import {DefaultInvoiceGroupBuilder} from './builders/DefaultInvoiceGroupBuilder';
+import {InvoiceGroupDO} from '../../core/data-layer/invoices/data-objects/InvoiceGroupDO';
 
 import _ = require("underscore");
 
@@ -59,6 +61,7 @@ export class DefaultDataBuilder {
     private _priceProductList: PriceProductDO[];
     private _allotmentList: AllotmentDO[];
     private _bookingList: BookingDO[];
+    private _invoiceGroupList: InvoiceGroupDO[];
 
     constructor(private _testContext: TestContext) {
         this._repositoryCleaner = new RepositoryCleanerWrapper(this._testContext.appContext.getUnitPalConfig());
@@ -186,6 +189,11 @@ export class DefaultDataBuilder {
             }).then((bookingList: BookingDO[]) => {
                 this._bookingList = bookingList;
 
+                var invoiceGroupBuilder = new DefaultInvoiceGroupBuilder(this._testContext);
+                return invoiceGroupBuilder.loadInvoiceGroups(invoiceGroupBuilder, this._customerList, this._addOnProductList, this._bookingList);
+            }).then((invoiceGroupList: InvoiceGroupDO[]) => {
+                this._invoiceGroupList = invoiceGroupList;
+                
                 resolve(true);
             }).catch((err: any) => {
                 reject(err);
@@ -254,6 +262,9 @@ export class DefaultDataBuilder {
     }
     public get bookingList(): BookingDO[] {
         return this._bookingList;
+    }
+    public get invoiceGroupList(): InvoiceGroupDO[] {
+        return this._invoiceGroupList;
     }
     public get defaultTimezone(): string {
         return this._hotelDO.timezone;

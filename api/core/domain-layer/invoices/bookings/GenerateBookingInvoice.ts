@@ -82,24 +82,11 @@ export class GenerateBookingInvoice {
         bookingInvoiceItem.type = InvoiceItemType.Booking;
         invoice.itemList.push(bookingInvoiceItem);
         invoice.payerList = [];
-        var defaultInvoicePayer = this.getDefaultInvoicePayerFromBooking();
+        var defaultInvoicePayer = 
+            InvoicePayerDO.buildFromCustomerDOAndPaymentMethod(this._loadedDefaultBillingCustomer, this._loadedBooking.defaultBillingDetails.paymentMethod);
         invoice.payerList.push(defaultInvoicePayer);
         invoice.paymentStatus = InvoicePaymentStatus.Open;
         return invoice;
     }
 
-    private getDefaultInvoicePayerFromBooking(): InvoicePayerDO {
-        var invoicePayer = new InvoicePayerDO();
-
-        invoicePayer.customerId = this._loadedBooking.defaultBillingDetails.customerId;
-        invoicePayer.paymentMethod = this._loadedBooking.defaultBillingDetails.paymentMethod;
-
-        if (this._loadedDefaultBillingCustomer.isCompanyOrTravelAgency()) {
-            var baseCorporateDetails = new BaseCorporateDetailsDO();
-            baseCorporateDetails.buildFromObject(this._loadedDefaultBillingCustomer.customerDetails);
-            invoicePayer.commissionSnapshot = baseCorporateDetails.commission;
-        }
-
-        return invoicePayer;
-    }
 }
