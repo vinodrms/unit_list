@@ -865,7 +865,7 @@ td room-categ-capacity {
 }
 
 .modal .modal-body {
-    max-height: 80vh;
+    max-height: 70vh;
     overflow: auto;
     overflow-x: hidden;
 }
