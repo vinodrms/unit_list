@@ -322,7 +322,8 @@ export enum ThStatusCode {
     InvoicePaymentValidatorError,
     InvoicePayersValidatorError,
     InvoicePayersValidatorInvalidSplit,
-
+    InvoiceEmailSenderErrorSendingEmail,
+    
     SlackSendMessageError,
 
     AddBookingsRepositoryEmptyBookingList,
@@ -672,7 +673,6 @@ ThMessage[ThStatusCode.InvoiceGroupsRepositoryErrorGettingInvoiceGroup] = "Error
 ThMessage[ThStatusCode.InvoiceGroupsControllerErrorGettingInvoiceGroupById] = "Error getting invoice group by id.";
 ThMessage[ThStatusCode.InvoiceGroupsControllerErrorGettingInvoiceGroups] = "Error getting the invoice group list.";
 ThMessage[ThStatusCode.InvoiceGroupsControllerErrorGettingInvoiceGroupsCount] = "Error getting the total number of invoice groups matching the search criteria.";
-
 ThMessage[ThStatusCode.SaveInvoiceGroupItem] = "Error saving the invoice group item.";
 ThMessage[ThStatusCode.InvoiceGroupsRepositoryErrorReadingDocumentCount] = "Error reading invoice grupt document count.";
 ThMessage[ThStatusCode.UpdateInvoiceGroupItemError] = "Error updating invoice group.";
@@ -686,6 +686,7 @@ ThMessage[ThStatusCode.InvoicePaymentMethodValidatorCannotPayByAgreement] = "You
 ThMessage[ThStatusCode.InvoicePaymentValidatorError] = "Error validating the invoice payment.";
 ThMessage[ThStatusCode.InvoicePayersValidatorError] = "Error validating the payers that split the invoice payment.";
 ThMessage[ThStatusCode.InvoicePayersValidatorInvalidSplit] = "Error validating the payers that split the invoice payment.";
+ThMessage[ThStatusCode.InvoiceEmailSenderErrorSendingEmail] = "Error sending invoice by email.";
 ThMessage[ThStatusCode.SlackSendMessageError] = "Error sending the message using Slack.";
 ThMessage[ThStatusCode.AddBookingsRepositoryEmptyBookingList] = "Empty booking list.";
 ThMessage[ThStatusCode.AddBookingsRepositoryNoBookingsLimitExceeded] = "You can't create more than 50 bookings at once.";

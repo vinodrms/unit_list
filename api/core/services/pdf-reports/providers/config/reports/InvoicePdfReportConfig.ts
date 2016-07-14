@@ -7,12 +7,12 @@ export class InvoicePdfReportConfig extends APdfReportConfig {
         super(unitPalConfig);
         
         this._config = {
-            htmlTemplateUrl: 'api/reports/invoice',
+            htmlTemplateUrl: 'views/reports/invoice.ejs',
             reportOutputFolder: 'output/reports/invoices'
         }
     }
     
     protected getReportFileName(reportParans: Object): string {
-        return 'invoice' + reportParans['id'];
+        return 'invoice';
     }
 }
