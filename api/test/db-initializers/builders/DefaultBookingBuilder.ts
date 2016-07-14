@@ -65,6 +65,7 @@ export class DefaultBookingBuilder implements IBookingDataSource {
         booking.bookingReference = bookingRef;
         booking.confirmationStatus = BookingConfirmationStatus.Confirmed;
         booking.customerIdList = [customerId];
+        booking.displayCustomerId = customerId;
         booking.defaultBillingDetails = billingDetails;
         booking.interval = this.generateRandomFutureInterval(hotelDO);
         booking.configCapacity = this.getConfigCapacity();

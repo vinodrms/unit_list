@@ -127,6 +127,7 @@ export class BookingItemsConverter {
             });
             bookingDO.price.totalPrice = bookingDO.price.numberOfItems * bookingDO.price.pricePerItem;
             this._bookingUtils.updateIndexedSearchTerms(bookingDO, this._converterParams.customersContainer);
+            this._bookingUtils.updateDisplayCustomerId(bookingDO, this._converterParams.customersContainer);
 
             bookingList.push(bookingDO);
         });
