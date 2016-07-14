@@ -42,4 +42,10 @@ export class ThTimestampDO extends BaseDO {
 		thTimestamp.thHourDO = thDateUtils.convertMomentToThHourDO(currentMoment);
 		return thTimestamp;
 	}
+	public static buildThTimestampDO(thDateDO: ThDateDO, thHourDO: ThHourDO): ThTimestampDO {
+		var thTimestamp = new ThTimestampDO();
+		thTimestamp.thDateDO = thDateDO;
+		thTimestamp.thHourDO = thHourDO;
+		return thTimestamp;
+	}
 }

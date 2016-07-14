@@ -369,6 +369,11 @@ export enum ThStatusCode {
     BookingsControllerErrorSearchingBookings,
     BookingsControllerErrorAddingBookings,
     BookingStatusChangerCronJobExecutorError,
+    HotelTimeNullTimezone,
+    HotelTimeError,
+    HotelOperationsRoomInfoReaderError,
+    HotelOperationsArrivalsReaderError,
+    HotelOperationsDeparturesReaderError,
     
 }
 
@@ -730,6 +735,11 @@ ThMessage[ThStatusCode.BookingsControllerErrorGettingCount] = "Error getting the
 ThMessage[ThStatusCode.BookingsControllerErrorSearchingBookings] = "Error searching for bookings.";
 ThMessage[ThStatusCode.BookingsControllerErrorAddingBookings] = "Error adding bookings.";
 ThMessage[ThStatusCode.BookingStatusChangerCronJobExecutorError] = "Error changing booking statuses from the process.";
+ThMessage[ThStatusCode.HotelTimeNullTimezone] = "The timezone for the hotel is not set.";
+ThMessage[ThStatusCode.HotelTimeError] = "Error getting the current time for your hotel.";
+ThMessage[ThStatusCode.HotelOperationsRoomInfoReaderError] = "Error getting the hotel operations data.";
+ThMessage[ThStatusCode.HotelOperationsArrivalsReaderError] = "Error getting the information for the arrivals.";
+ThMessage[ThStatusCode.HotelOperationsDeparturesReaderError] = "Error getting the information for the departures.";
 
 export class ThResponse {
     statusCode: ThStatusCode;

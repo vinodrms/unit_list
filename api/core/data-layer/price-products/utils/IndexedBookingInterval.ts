@@ -7,8 +7,10 @@ import {ISOWeekDay} from '../../../utils/th-dates/data-objects/ISOWeekDay';
 import _ = require('underscore');
 
 export class IndexedBookingInterval {
-    public static DefaultUtcCheckInHour = 14;
-    public static DefaultUtcCheckOutHour = 12;
+    private static DefaultUtcCheckInHour = 14;
+    private static DefaultUtcCheckOutHour = 12;
+    private static MinUtcOverlappingHour = 10;
+    private static MaxUtcOverlappingHour = 16;
 
     private _bookingDateList: ThDateDO[];
     private _indexedBookingInterval: ThDateIntervalDO;
@@ -114,5 +116,13 @@ export class IndexedBookingInterval {
                 this._startUtcTimestamp <= otherIndexedBookingInterval.getEndUtcTimestamp()
             )
         );
+    }
+    public static getOverlappingUtcTimestampIntervalForDate(thDate: ThDateDO): { minUtcTimestamp: number, maxUtcTimestamp: number } {
+        var minTimestampDO = ThTimestampDO.buildThTimestampDO(thDate.buildPrototype(), ThHourDO.buildThHourDO(IndexedBookingInterval.MinUtcOverlappingHour, 0));
+        var maxTimestampDO = ThTimestampDO.buildThTimestampDO(thDate.buildPrototype(), ThHourDO.buildThHourDO(IndexedBookingInterval.MaxUtcOverlappingHour, 0));
+        return {
+            minUtcTimestamp: minTimestampDO.getUtcTimestamp(),
+            maxUtcTimestamp: maxTimestampDO.getUtcTimestamp()
+        }
     }
 }

@@ -30,6 +30,8 @@ export enum GroupBookingInputChannel {
 export class BookingDO extends BaseDO {
     public static GuaranteedTriggerName: string = "guaranteedTime";
     public static NoShowTriggerName: string = "noShowTime";
+    public static StartUtcTimestampName: string = "startUtcTimestamp";
+    public static EndUtcTimestampName: string = "endUtcTimestamp";
 
     // booking group
     groupBookingId: string;
