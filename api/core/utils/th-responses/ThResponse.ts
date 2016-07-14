@@ -117,6 +117,7 @@ export enum ThStatusCode {
     RoomCategoriesControllerErrorDeletingRoomCategory,
     RoomCategoriesControllerErrorGettingRoomCategoryById,
     RoomCategoriesControllerErrorGettingRoomCategoriesStats,
+    RoomCategoriesControllerErrorGettingUsedRoomCategoriesStats,
     BedRepositoryErrorGettingBedList,
     BedRepositoryErrorGettingBed,
     BedRepositoryBedNotFound,
@@ -507,6 +508,7 @@ ThMessage[ThStatusCode.RoomCategoriesControllerErrorSavingRoomCategory] = "Error
 ThMessage[ThStatusCode.RoomCategoriesControllerErrorDeletingRoomCategory] = "Error deleting room category.";
 ThMessage[ThStatusCode.RoomCategoriesControllerErrorGettingRoomCategoryById] = "Error getting room category by id.";
 ThMessage[ThStatusCode.RoomCategoriesControllerErrorGettingRoomCategoriesStats] = "Error getting room categories stats.";
+ThMessage[ThStatusCode.RoomCategoriesControllerErrorGettingUsedRoomCategoriesStats] = "Error getting used room categories stats.";
 ThMessage[ThStatusCode.HotelUpdatePaymentsPoliciesErrorPrecheckingConstraints] = "There was a problem while checking the payments and policies submitted.";
 ThMessage[ThStatusCode.HotelUpdatePaymentPoliciesInvalidTaxes] = "Invalid taxes sent.";
 ThMessage[ThStatusCode.HotelUpdatePaymentsPoliciesError] = "Error adding the payments and policies.";

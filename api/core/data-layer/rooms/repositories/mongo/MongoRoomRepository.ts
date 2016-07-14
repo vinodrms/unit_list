@@ -18,7 +18,7 @@ export class MongoRoomRepository extends MongoRepository implements IRoomReposit
         this._editRepository = new MongoRoomEditOperationsRepository(roomsEntity);
     }
     
-    public getRoomCategoryIdList(meta: RoomMetaRepoDO): Promise<string[]> {
+    public getUsedRoomCategoryIdList(meta: RoomMetaRepoDO): Promise<string[]> {
         return this._readRepository.getRoomCategoryIdList(meta);
     }
 

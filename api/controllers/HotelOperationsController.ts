@@ -696,7 +696,7 @@ class HotelOperationsController extends BaseController {
 
 		var roomRepo = appContext.getRepositoryFactory().getRoomRepository();
 		roomRepo.getRoomList(roomMeta, {},  { pageNumber: 0, pageSize: 100}).then((rooms: RoomSearchResultRepoDO) => {
-			var category = roomRepo.getRoomCategoryIdList(roomMeta);
+			
 			rooms.roomList.forEach((room) =>{
 				var vm = this.buildRoomVM(room);
 				roomVMList.push(vm);

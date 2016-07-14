@@ -19,12 +19,12 @@ export interface RoomSearchResultRepoDO {
 }
 
 export interface IRoomRepository {
-    getRoomCategoryIdList(meta: RoomMetaRepoDO): Promise<string[]>;
-    
+    getUsedRoomCategoryIdList(meta: RoomMetaRepoDO): Promise<string[]>;
+
 	getRoomList(roomMeta: RoomMetaRepoDO, searchCriteria?: RoomSearchCriteriaRepoDO, lazyLoad?: LazyLoadRepoDO): Promise<RoomSearchResultRepoDO>;
     getRoomListCount(meta: RoomMetaRepoDO, searchCriteria: RoomSearchCriteriaRepoDO): Promise<LazyLoadMetaResponseRepoDO>;
 	getRoomById(roomMeta: RoomMetaRepoDO, roomId: string): Promise<RoomDO>;
-    
+
     addRoom(meta: RoomMetaRepoDO, roomCategory: RoomDO): Promise<RoomDO>;
     updateRoom(meta: RoomMetaRepoDO, itemMeta: RoomItemMetaRepoDO, addOnProduct: RoomDO): Promise<RoomDO>;
 	deleteRoom(meta: RoomMetaRepoDO, itemMeta: RoomItemMetaRepoDO): Promise<RoomDO>;
