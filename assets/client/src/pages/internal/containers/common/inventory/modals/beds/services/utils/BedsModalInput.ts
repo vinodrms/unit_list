@@ -1,4 +1,4 @@
-import {RoomCategoriesType} from '../../../../../../../services/room-categories/RoomCategoriesService';
+import {RoomCategoriesType} from '../../../../../../../services/room-categories/RoomCategoriesType';
 import {BedVM} from '../../../../../../../services/beds/view-models/BedVM';
 
 export class BedsModalInput {

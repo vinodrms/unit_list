@@ -2,7 +2,8 @@ export enum EmailTemplateTypes {
     AccountActivation,
 	AccountRequestResetPassword,
 	AccountPasswordWasReset,
-    BookingConfirmation
+    BookingConfirmation,
+    Invoice
 }
 
 export class BaseEmailTemplateDO {

@@ -1,14 +1,16 @@
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 import {Observer} from 'rxjs/Observer';
-import 'rxjs/add/operator/map';
+
 import {AppContext, ThServerApi} from '../../../../common/utils/AppContext';
 import {ARequestService} from '../common/ARequestService';
 import {RoomCategoryDO} from './data-objects/RoomCategoryDO';
 import {RoomCategoryStatsDO} from './data-objects/RoomCategoryStatsDO';
+import {RoomCategoriesType} from './RoomCategoriesType';
 
 @Injectable()
 export class RoomCategoriesStatsService extends ARequestService<RoomCategoryStatsDO[]> {
+	private _categoriesType: RoomCategoriesType;
 	private _roomCategoryIdList: string[];
 
 	constructor(private _appContext: AppContext) {
@@ -16,12 +18,18 @@ export class RoomCategoriesStatsService extends ARequestService<RoomCategoryStat
 	}
 
 	protected sendRequest(): Observable<Object> {
-		var reqParams = {};
-		if(!this._appContext.thUtils.isUndefinedOrNull(this._roomCategoryIdList)) {
-			reqParams['roomCategoryIdList'] = this._roomCategoryIdList;
+		switch (this._categoriesType) {
+			case RoomCategoriesType.UsedInRooms:
+				return this._appContext.thHttp.post(ThServerApi.UsedRoomCategoriesStats, {});
+			default:
+				var reqParams = {};
+				if (!this._appContext.thUtils.isUndefinedOrNull(this._roomCategoryIdList)) {
+					reqParams['roomCategoryIdList'] = this._roomCategoryIdList;
+				}
+				return this._appContext.thHttp.post(ThServerApi.RoomCategoriesStats, reqParams);
 		}
-		return this._appContext.thHttp.post(ThServerApi.RoomCategoriesStats, reqParams);
 	}
+	
 	protected parseResult(result: Object): RoomCategoryStatsDO[] {
 		var roomCategoryStatsList: RoomCategoryStatsDO[] = [];
 		if (!result || !_.isArray(result["roomCategoryStatsList"])) {
@@ -50,5 +58,12 @@ export class RoomCategoriesStatsService extends ARequestService<RoomCategoryStat
 	}
 	public refreshData() {
 		this.updateServiceResult();
+	}
+
+	public get categoriesType(): RoomCategoriesType {
+		return this._categoriesType;
+	}
+	public set categoriesType(categoriesType: RoomCategoriesType) {
+		this._categoriesType = categoriesType;
 	}
 }

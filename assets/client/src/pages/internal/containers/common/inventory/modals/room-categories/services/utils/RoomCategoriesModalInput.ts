@@ -1,4 +1,4 @@
-import {RoomCategoriesType} from '../../../../../../../services/room-categories/RoomCategoriesService';
+import {RoomCategoriesType} from '../../../../../../../services/room-categories/RoomCategoriesType';
 
 export class RoomCategoriesModalInput {
 	private _allowCategoryEdit: boolean;

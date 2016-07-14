@@ -11,6 +11,7 @@ import {InvoicesTestHelper} from './helpers/InvoicesTestHelper';
 import {InvoiceGroupDO} from '../../../../core/data-layer/invoices/data-objects/InvoiceGroupDO';
 import {GenerateBookingInvoice} from '../../../../core/domain-layer/invoices/bookings/GenerateBookingInvoice';
 import {InvoiceGroupSearchResultRepoDO} from '../../../../core/data-layer/invoices/repositories/IInvoiceGroupsRepository';
+import {InvoiceEmailSender} from '../../../../core/domain-layer/invoices/email/InvoiceEmailSender';
 
 describe("Invoices Tests", function () {
     var testUtils: TestUtils;
@@ -90,6 +91,15 @@ describe("Invoices Tests", function () {
                 }).catch((e: ThError) => {
                     done(e);
                 });
+        });
+
+        it("Should send the invoice by email", function (done) {
+            var invoiceEmailSender = new InvoiceEmailSender(testContext.appContext, testContext.sessionContext);
+            invoiceEmailSender.sendInvoice({}, ['dragos.pricope@gmail.com']).then((result: boolean) => {
+                done();
+            }).catch((err: any) => {
+                done(err);
+            });
         });
     });
 });

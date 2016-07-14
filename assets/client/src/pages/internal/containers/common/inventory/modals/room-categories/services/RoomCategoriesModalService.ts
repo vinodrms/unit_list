@@ -4,7 +4,7 @@ import {ModalDialogRef} from '../../../../../../../../common/utils/modals/utils/
 import {RoomCategoriesModalComponent} from '../RoomCategoriesModalComponent';
 import {RoomCategoriesModalInput} from './utils/RoomCategoriesModalInput';
 import {RoomCategoryDO} from '../../../../../../services/room-categories/data-objects/RoomCategoryDO';
-import {RoomCategoriesType} from '../../../../../../services/room-categories/RoomCategoriesService';
+import {RoomCategoriesType} from '../../../../../../services/room-categories/RoomCategoriesType';
 
 @Injectable()
 export class RoomCategoriesModalService {

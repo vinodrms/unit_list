@@ -81,6 +81,18 @@ class RoomCategoriesController extends BaseController {
         });
     }
 
+    public geUsedRoomCategoryStatsList(req: Express.Request, res: Express.Response) {
+        var appContext: AppContext = req.appContext;
+        var sessionContext: SessionContext = req.sessionContext;
+
+        var roomCategStatsAggregator = new RoomCategoryStatsAggregator(appContext, sessionContext);
+        roomCategStatsAggregator.getUsedRoomCategoryStatsList().then((roomCategoryStatsList: RoomCategoryStatsDO[]) => {
+            this.returnSuccesfulResponse(req, res, { roomCategoryStatsList: roomCategoryStatsList });
+        }).catch((err: any) => {
+            this.returnErrorResponse(req, res, err, ThStatusCode.RoomCategoriesControllerErrorGettingUsedRoomCategoriesStats);
+        });
+    }
+
     private getRoomCategoryMetaRepoDOFrom(sessionContext: SessionContext): RoomCategoryMetaRepoDO {
         return { hotelId: sessionContext.sessionDO.hotel.id };
     }
@@ -92,5 +104,6 @@ module.exports = {
     saveRoomCategoryItem: roomCategoriesController.saveRoomCategoryItem.bind(roomCategoriesController),
     deleteRoomCategoryItem: roomCategoriesController.deleteRoomCategoryItem.bind(roomCategoriesController),
     getRoomCategoryById: roomCategoriesController.getRoomCategoryById.bind(roomCategoriesController),
-    getRoomCategoryStatsList: roomCategoriesController.getRoomCategoryStatsList.bind(roomCategoriesController)
+    getRoomCategoryStatsList: roomCategoriesController.getRoomCategoryStatsList.bind(roomCategoriesController),
+    geUsedRoomCategoryStatsList: roomCategoriesController.geUsedRoomCategoryStatsList.bind(roomCategoriesController),
 }
