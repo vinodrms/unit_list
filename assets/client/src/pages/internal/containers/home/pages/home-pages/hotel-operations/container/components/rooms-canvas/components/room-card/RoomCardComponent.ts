@@ -65,14 +65,14 @@ export class RoomCardComponent {
 				accept: 'arrival-item',
 				drop: (event: Event, ui: Object) => {
 					this._zone.run(() => {
-						var dropHandler = RoomDropHandlerFactory.get(this.roomVM.status);
+						var dropHandler = RoomDropHandlerFactory.get(this.roomVM.status.displayName);
 						var outcome = {
 							accepted: dropHandler.handle("test"),
 							roomVM: this.roomVM
 						}
 
 						if (outcome.accepted == true) {
-							this.roomVM.status = "Occupied";
+							this.roomVM.status.value = "Occupied";
 							this.dropped.emit(outcome)
 						}
 						else {

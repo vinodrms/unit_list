@@ -31,11 +31,11 @@ export class ArrivalItemComponent {
 						</div>
 						<div class="right flex-row flex-jc-sb p-6">
 							<div class="client-name">`
-								+ this.arrivalItemVM.ClientName +
+								+ this.arrivalItemVM.clientName +
 							`</div>
 							<div class="other-details gray-color">
-								<span class="unitpal-font">:</span>` + this.arrivalItemVM.NumberOfPeople + 
-								`<span class="unitpal-font">A</span>`+ this.arrivalItemVM.NumberOfNights +
+								<span class="unitpal-font">:</span>` + this.arrivalItemVM.numberOfPeople + 
+								`<span class="unitpal-font">A</span>`+ this.arrivalItemVM.numberOfNights +
 							`</div>
 						</div>
 					</arrival-helper>
