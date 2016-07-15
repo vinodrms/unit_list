@@ -60,4 +60,7 @@ export abstract class ARequestService<T> {
 	protected updateResult(result: T) {
 		this._serviceObserver.next(result);
 	}
+	public refresh() {
+		this.updateServiceResult();
+	}
 }
