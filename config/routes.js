@@ -106,13 +106,6 @@ module.exports.routes = {
 	'POST /api/allotments/archiveAllotmentItem': 'AllotmentsController.archiveAllotmentItem',
 	'GET /api/allotments/allotmentItem': 'AllotmentsController.getAllotmentById',
 
-	'GET /api/hotelOperations/rooms': 'HotelOperationsController.getRooms',
-	'GET /api/hotelOperations/arrivals': 'HotelOperationsController.getArrivals',
-	'GET /api/hotelOperations/departures': 'HotelOperationsController.getDepartures',
-	'POST /api/hotelOperations/checkIn': 'HotelOperationsController.getCheckIn',
-	'POST /api/hotelOperations/checkOut': 'HotelOperationsController.getCheckOut',
-	
-
 	'POST /api/notifications': 'NotificationsController.getNotificationList',
 	'POST /api/notifications/count': 'NotificationsController.getNotificationListCount',
 	'POST /api/notifications/markNotificationsAsRead': 'NotificationsController.markNotificationsAsRead',
@@ -126,6 +119,15 @@ module.exports.routes = {
 	'POST /api/invoiceGroups': 'InvoiceGroupsController.getInvoiceGroupList',
     'POST /api/invoiceGroups/count': 'InvoiceGroupsController.getInvoiceGroupListCount',
     'GET /api/invoiceGroups/invoiceGroupItem': 'InvoiceGroupsController.getInvoiceGroupById',
+
+	'POST /api/hotelOperations/dashboard/arrivals': 'HotelDashboardOperationsController.getArrivals',
+	'POST /api/hotelOperations/dashboard/departures': 'HotelDashboardOperationsController.getDepartures',
+	'POST /api/hotelOperations/dashboard/rooms': 'HotelDashboardOperationsController.getRooms',
+
+	'POST /api/hotelOperations/room/checkIn': 'HotelRoomOperationsController.checkIn',
+	'POST /api/hotelOperations/room/reserve': 'HotelRoomOperationsController.reserveRoom',
+	'POST /api/hotelOperations/room/change': 'HotelRoomOperationsController.changeRoom',
+	'POST /api/hotelOperations/room/checkOut': 'HotelRoomOperationsController.checkOut',
 
 	/*Front End Views	*/
 	'GET /home*': {

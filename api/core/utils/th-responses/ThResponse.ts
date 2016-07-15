@@ -385,6 +385,13 @@ export enum ThStatusCode {
     ReserveRoomStrategyOnlyConfirmedOrGuaranteed,
     CheckOutRoomError,
     CheckOutRoomBookingNotCheckedIn,
+    HotelOperationsDashboardControllerErrorGettingArrivals,
+    HotelOperationsDashboardControllerErrorGettingDepartures,
+    HotelOperationsDashboardControllerErrorGettingRooms,
+    HotelRoomOperationsControllerErrorCheckingIn,
+    HotelRoomOperationsControllerErrorCheckingOut,
+    HotelRoomOperationsControllerErrorReservingRoom,
+    HotelRoomOperationsControllerErrorChangingRoom,
 
 }
 
@@ -761,6 +768,13 @@ ThMessage[ThStatusCode.CheckInStrategyNoPaymentGuarantee] = "You cannot check in
 ThMessage[ThStatusCode.ReserveRoomStrategyOnlyConfirmedOrGuaranteed] = "Only Confirmed or Guaranteed bookings can be reserved for specific rooms.";
 ThMessage[ThStatusCode.CheckOutRoomError] = "Error checking out the room.";
 ThMessage[ThStatusCode.CheckOutRoomBookingNotCheckedIn] = "Error checking out the room. The booking does not appear as checked in.";
+ThMessage[ThStatusCode.HotelOperationsDashboardControllerErrorGettingArrivals] = "Error getting the arrivals.";
+ThMessage[ThStatusCode.HotelOperationsDashboardControllerErrorGettingDepartures] = "Error getting the departures.";
+ThMessage[ThStatusCode.HotelOperationsDashboardControllerErrorGettingRooms] = "Error getting rooms.";
+ThMessage[ThStatusCode.HotelRoomOperationsControllerErrorCheckingIn] = "Error checking in the room.";
+ThMessage[ThStatusCode.HotelRoomOperationsControllerErrorCheckingOut] = "Error checking out the room.";
+ThMessage[ThStatusCode.HotelRoomOperationsControllerErrorReservingRoom] = "Error reserving room.";
+ThMessage[ThStatusCode.HotelRoomOperationsControllerErrorChangingRoom] = "Error changing room.";
 
 export class ThResponse {
     statusCode: ThStatusCode;
