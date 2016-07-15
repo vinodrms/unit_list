@@ -117,6 +117,7 @@ export enum ThStatusCode {
     RoomCategoriesControllerErrorDeletingRoomCategory,
     RoomCategoriesControllerErrorGettingRoomCategoryById,
     RoomCategoriesControllerErrorGettingRoomCategoriesStats,
+    RoomCategoriesControllerErrorGettingUsedRoomCategoriesStats,
     BedRepositoryErrorGettingBedList,
     BedRepositoryErrorGettingBed,
     BedRepositoryBedNotFound,
@@ -238,7 +239,7 @@ export enum ThStatusCode {
     PriceProductsControllerErrorArchivingProduct,
     PriceProductsControllerErrorGettingCount,
     PriceProductsControllerErrorGettingList,
-	PricePerPersonForSingleRoomCategoryDOInvalidPriceConfiguration,
+    PricePerPersonForSingleRoomCategoryDOInvalidPriceConfiguration,
     YieldManagerControllerErrorClosing,
     YieldManagerControllerErrorOpening,
     HotelConfigurationRepositoryNotFound,
@@ -247,7 +248,7 @@ export enum ThStatusCode {
     HotelConfigurationRepositoryAlreadyExists,
     HotelConfigurationRepositoryProblemUpdatingConfiguration,
     HotelConfigurationRepositoryErrorUpdatingConfiguration,
-	YieldFilterValidatorInvalidFilters,
+    YieldFilterValidatorInvalidFilters,
     HotelConfigurationControlllerErrorGettingYieldFilterConfig,
     HotelConfigurationControlllerErrorSavingYieldFilterValue,
     SaveYieldFilterValueError,
@@ -283,14 +284,14 @@ export enum ThStatusCode {
     HotelDetailsRepositoryErrorGettingList,
     HotelIteratorError,
     AllotmentArchiverCronJobExecutorError,
-    
+
     // Notifications
     NotificationsRepositoryErrorAddingNotification,
     NotificationsRepositoryErrorGettingCount,
     NotificationsRepositoryErrorGettingList,
     NotificationsRepositoryErrorGettingUndelivered,
     NotificationsRepositoryErrorMarkingAsRead,
-    
+
     //Pdf report service
     PdfReportServiceErrorCreatingOutputFolder,
     PdfReportServiceErrorWritingHtmlToFile,
@@ -310,6 +311,7 @@ export enum ThStatusCode {
     InvoiceGroupsControllerErrorGettingInvoiceGroups,
     InvoiceGroupsControllerErrorGettingInvoiceGroupsCount,
     SaveInvoiceGroupItem,
+    UpdateInvoiceGroupError,
     AddNewCustomerInvoiceGroupError,
     AddNewBookingInvoiceGroupError,
     GenerateBookingInvoiceError,
@@ -321,6 +323,10 @@ export enum ThStatusCode {
     InvoicePaymentValidatorError,
     InvoicePayersValidatorError,
     InvoicePayersValidatorInvalidSplit,
+    CustomerInvoiceGroupUpdateStrategyErrorUpdating,
+    CustomerInvoiceGroupAddStrategyErrorAdding,
+    BookingInvoiceGroupUpdateStrategyErrorUpdating,
+    InvoiceEmailSenderErrorSendingEmail,
 
     SlackSendMessageError,
 
@@ -345,6 +351,7 @@ export enum ThStatusCode {
     BookingsValidatorConstraintsDoNotApply,
     BookingsValidatorAllotmentConstraintsDoNotApply,
     BookingsValidatorInvalidRoomCategoryId,
+    BookingsValidatorInvalidRoomId,
     BookingsValidatorRoomCategoryNotFoundInActiveInventory,
     BookingsValidatorInsufficientRoomCategoryCapacity,
     BookingsRepositoryProblemUpdatingBooking,
@@ -369,7 +376,27 @@ export enum ThStatusCode {
     BookingsControllerErrorSearchingBookings,
     BookingsControllerErrorAddingBookings,
     BookingStatusChangerCronJobExecutorError,
-    
+    HotelTimeNullTimezone,
+    HotelTimeError,
+    HotelOperationsRoomInfoReaderError,
+    HotelOperationsArrivalsReaderError,
+    HotelOperationsDeparturesReaderError,
+    AssignRoomError,
+    AssignRoomOccupied,
+    ChangeRoomStrategyOnlyWhenCheckedIn,
+    CheckInStrategyOnlyConfirmedOrGuaranteed,
+    CheckInStrategyNoPaymentGuarantee,
+    ReserveRoomStrategyOnlyConfirmedOrGuaranteed,
+    CheckOutRoomError,
+    CheckOutRoomBookingNotCheckedIn,
+    HotelOperationsDashboardControllerErrorGettingArrivals,
+    HotelOperationsDashboardControllerErrorGettingDepartures,
+    HotelOperationsDashboardControllerErrorGettingRooms,
+    HotelRoomOperationsControllerErrorCheckingIn,
+    HotelRoomOperationsControllerErrorCheckingOut,
+    HotelRoomOperationsControllerErrorReservingRoom,
+    HotelRoomOperationsControllerErrorChangingRoom,
+
 }
 
 var ThMessage: { [index: number]: string; } = {};
@@ -507,6 +534,7 @@ ThMessage[ThStatusCode.RoomCategoriesControllerErrorSavingRoomCategory] = "Error
 ThMessage[ThStatusCode.RoomCategoriesControllerErrorDeletingRoomCategory] = "Error deleting room category.";
 ThMessage[ThStatusCode.RoomCategoriesControllerErrorGettingRoomCategoryById] = "Error getting room category by id.";
 ThMessage[ThStatusCode.RoomCategoriesControllerErrorGettingRoomCategoriesStats] = "Error getting room categories stats.";
+ThMessage[ThStatusCode.RoomCategoriesControllerErrorGettingUsedRoomCategoriesStats] = "Error getting used room categories stats.";
 ThMessage[ThStatusCode.HotelUpdatePaymentsPoliciesErrorPrecheckingConstraints] = "There was a problem while checking the payments and policies submitted.";
 ThMessage[ThStatusCode.HotelUpdatePaymentPoliciesInvalidTaxes] = "Invalid taxes sent.";
 ThMessage[ThStatusCode.HotelUpdatePaymentsPoliciesError] = "Error adding the payments and policies.";
@@ -660,7 +688,7 @@ ThMessage[ThStatusCode.PdfReportServiceErrorWritingHtmlToFile] = "Error writing 
 ThMessage[ThStatusCode.PdfReportServiceHtmlToPdfError] = "Error in the following flow: generate html -> convert html to pdf.";
 ThMessage[ThStatusCode.PhantomHtmlToPdfConverter] = "Error converting html to pdf with phantom js.";
 ThMessage[ThStatusCode.GeneratInvoiceGroupActionFactoryError] = "Error getting the invoice group generation action (update or add new invoice group).";
-ThMessage[ThStatusCode.InvoiceGroupsRepositoryErrorAddingInvoiceGroup] = "Error adding the invoice group."; 
+ThMessage[ThStatusCode.InvoiceGroupsRepositoryErrorAddingInvoiceGroup] = "Error adding the invoice group.";
 ThMessage[ThStatusCode.InvoiceGroupsRepositoryProblemUpdatingInvoiceGroup] = "Problem updating the invoice group - concurrency.";
 ThMessage[ThStatusCode.InvoiceGroupsRepositoryErrorUpdatingInvoiceGroup] = "Error updating the invoice group.";
 ThMessage[ThStatusCode.InvoiceGroupsRepositoryErrorGettingInvoiceGroupList] = "Error getting the list of invoice groups.";
@@ -670,8 +698,8 @@ ThMessage[ThStatusCode.InvoiceGroupsRepositoryErrorGettingInvoiceGroup] = "Error
 ThMessage[ThStatusCode.InvoiceGroupsControllerErrorGettingInvoiceGroupById] = "Error getting invoice group by id.";
 ThMessage[ThStatusCode.InvoiceGroupsControllerErrorGettingInvoiceGroups] = "Error getting the invoice group list.";
 ThMessage[ThStatusCode.InvoiceGroupsControllerErrorGettingInvoiceGroupsCount] = "Error getting the total number of invoice groups matching the search criteria.";
-
 ThMessage[ThStatusCode.SaveInvoiceGroupItem] = "Error saving the invoice group item.";
+ThMessage[ThStatusCode.UpdateInvoiceGroupError] = "Error updating the invoice group.";
 ThMessage[ThStatusCode.InvoiceGroupsRepositoryErrorReadingDocumentCount] = "Error reading invoice grupt document count.";
 ThMessage[ThStatusCode.UpdateInvoiceGroupItemError] = "Error updating invoice group.";
 ThMessage[ThStatusCode.AddNewCustomerInvoiceGroupError] = "Error adding new customer related invoice group.";
@@ -684,6 +712,10 @@ ThMessage[ThStatusCode.InvoicePaymentMethodValidatorCannotPayByAgreement] = "You
 ThMessage[ThStatusCode.InvoicePaymentValidatorError] = "Error validating the invoice payment.";
 ThMessage[ThStatusCode.InvoicePayersValidatorError] = "Error validating the payers that split the invoice payment.";
 ThMessage[ThStatusCode.InvoicePayersValidatorInvalidSplit] = "Error validating the payers that split the invoice payment.";
+ThMessage[ThStatusCode.CustomerInvoiceGroupUpdateStrategyErrorUpdating] = "Error updating the invoice group.";
+ThMessage[ThStatusCode.CustomerInvoiceGroupAddStrategyErrorAdding] = "Error adding the invoice group.";
+ThMessage[ThStatusCode.BookingInvoiceGroupUpdateStrategyErrorUpdating] = "Error updating the invoice group.";
+ThMessage[ThStatusCode.InvoiceEmailSenderErrorSendingEmail] = "Error sending invoice by email.";
 ThMessage[ThStatusCode.SlackSendMessageError] = "Error sending the message using Slack.";
 ThMessage[ThStatusCode.AddBookingsRepositoryEmptyBookingList] = "Empty booking list.";
 ThMessage[ThStatusCode.AddBookingsRepositoryNoBookingsLimitExceeded] = "You can't create more than 50 bookings at once.";
@@ -705,7 +737,8 @@ ThMessage[ThStatusCode.BookingsValidatorNoCompaniesOrTALimit] = "You cannot have
 ThMessage[ThStatusCode.BookingsValidatorBilledCustomerInvalidRightsOnPriceProduct] = "All the billed customers must have access on the price products.";
 ThMessage[ThStatusCode.BookingsValidatorConstraintsDoNotApply] = "The constraints from the price product do not apply for the booking.";
 ThMessage[ThStatusCode.BookingsValidatorAllotmentConstraintsDoNotApply] = "The constraints from the allotment do not apply for the booking.";
-ThMessage[ThStatusCode.BookingsValidatorInvalidRoomCategoryId] = "The room category is not valid.";
+ThMessage[ThStatusCode.BookingsValidatorInvalidRoomCategoryId] = "The room category is not valid within the price product from the booking.";
+ThMessage[ThStatusCode.BookingsValidatorInvalidRoomId] = "The room was not found.";
 ThMessage[ThStatusCode.BookingsValidatorRoomCategoryNotFoundInActiveInventory] = "The room category was not found in the active room inventory.";
 ThMessage[ThStatusCode.BookingsValidatorInsufficientRoomCategoryCapacity] = "Insufficient capacity to fit into the selected room category.";
 ThMessage[ThStatusCode.BookingsRepositoryProblemUpdatingBooking] = "Error updating booking. It is possible that someone else changed it at the same time. Please refresh the page and try again.";
@@ -730,6 +763,26 @@ ThMessage[ThStatusCode.BookingsControllerErrorGettingCount] = "Error getting the
 ThMessage[ThStatusCode.BookingsControllerErrorSearchingBookings] = "Error searching for bookings.";
 ThMessage[ThStatusCode.BookingsControllerErrorAddingBookings] = "Error adding bookings.";
 ThMessage[ThStatusCode.BookingStatusChangerCronJobExecutorError] = "Error changing booking statuses from the process.";
+ThMessage[ThStatusCode.HotelTimeNullTimezone] = "The timezone for the hotel is not set.";
+ThMessage[ThStatusCode.HotelTimeError] = "Error getting the current time for your hotel.";
+ThMessage[ThStatusCode.HotelOperationsRoomInfoReaderError] = "Error getting the hotel operations data.";
+ThMessage[ThStatusCode.HotelOperationsArrivalsReaderError] = "Error getting the information for the arrivals.";
+ThMessage[ThStatusCode.HotelOperationsDeparturesReaderError] = "Error getting the information for the departures.";
+ThMessage[ThStatusCode.AssignRoomError] = "Error assigning the room.";
+ThMessage[ThStatusCode.AssignRoomOccupied] = "Error assigning the room. It's possible that the room is already occupied or reserved for another customer during this period.";
+ThMessage[ThStatusCode.ChangeRoomStrategyOnlyWhenCheckedIn] = "The room can be changed only to checked in bookings.";
+ThMessage[ThStatusCode.CheckInStrategyOnlyConfirmedOrGuaranteed] = "Only Confirmed or Guaranteed bookings can be checked in.";
+ThMessage[ThStatusCode.CheckInStrategyNoPaymentGuarantee] = "You cannot check in a booking without first adding a Patment Guarantee on it.";
+ThMessage[ThStatusCode.ReserveRoomStrategyOnlyConfirmedOrGuaranteed] = "Only Confirmed or Guaranteed bookings can be reserved for specific rooms.";
+ThMessage[ThStatusCode.CheckOutRoomError] = "Error checking out the room.";
+ThMessage[ThStatusCode.CheckOutRoomBookingNotCheckedIn] = "Error checking out the room. The booking does not appear as checked in.";
+ThMessage[ThStatusCode.HotelOperationsDashboardControllerErrorGettingArrivals] = "Error getting the arrivals.";
+ThMessage[ThStatusCode.HotelOperationsDashboardControllerErrorGettingDepartures] = "Error getting the departures.";
+ThMessage[ThStatusCode.HotelOperationsDashboardControllerErrorGettingRooms] = "Error getting rooms.";
+ThMessage[ThStatusCode.HotelRoomOperationsControllerErrorCheckingIn] = "Error checking in the room.";
+ThMessage[ThStatusCode.HotelRoomOperationsControllerErrorCheckingOut] = "Error checking out the room.";
+ThMessage[ThStatusCode.HotelRoomOperationsControllerErrorReservingRoom] = "Error reserving room.";
+ThMessage[ThStatusCode.HotelRoomOperationsControllerErrorChangingRoom] = "Error changing room.";
 
 export class ThResponse {
     statusCode: ThStatusCode;

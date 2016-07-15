@@ -1,6 +1,7 @@
 import {BookingDO, BookingConfirmationStatus} from '../data-objects/BookingDO';
 import {LazyLoadRepoDO, LazyLoadMetaResponseRepoDO} from '../../common/repo-data-objects/LazyLoadRepoDO';
 import {ThDateIntervalDO} from '../../../utils/th-dates/data-objects/ThDateIntervalDO';
+import {ThDateDO} from '../../../utils/th-dates/data-objects/ThDateDO';
 import {ThHourDO} from '../../../utils/th-dates/data-objects/ThHourDO';
 import {ThTimestampDO} from '../../../utils/th-dates/data-objects/ThTimestampDO';
 
@@ -23,7 +24,10 @@ export interface BookingSearchCriteriaRepoDO {
         triggerName: string;
         cancellationHour: ThHourDO;
         currentHotelTimestamp: ThTimestampDO;
-    }
+    };
+    startDate?: ThDateDO;
+    endDate?: ThDateDO;
+    beforeStartDate?: ThDateDO;
 }
 export interface BookingSearchResultRepoDO {
     lazyLoad?: LazyLoadRepoDO;

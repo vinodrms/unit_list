@@ -69,7 +69,7 @@ export class BookingsService extends ALazyLoadRequestService<BookingVM> {
                 bookingVM.totalPriceString = booking.price.totalPrice + bookingVM.ccy.nativeSymbol;
                 bookingVM.conditionsString = booking.priceProductSnapshot.conditions.getCancellationConditionsString(this._appContext.thTranslation);
                 bookingVM.constraintsString = booking.priceProductSnapshot.constraints.getBriefValueDisplayString(this._appContext.thTranslation);
-                bookingVM.customerNameString = customers.getCustomerById(booking.defaultBillingDetails.customerId).customerName;
+                bookingVM.customerNameString = customers.getCustomerById(booking.displayCustomerId).customerName;
 
                 bookingVMList.push(bookingVM);
             });

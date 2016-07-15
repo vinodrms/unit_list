@@ -32,7 +32,7 @@ export class RoomCategoryStatsAggregator {
         var roomRepository = this._appContext.getRepositoryFactory().getRoomRepository();
         var roomCategoryRepository = this._appContext.getRepositoryFactory().getRoomCategoryRepository();
 
-        roomRepository.getRoomCategoryIdList({ hotelId: this._sessionContext.sessionDO.hotel.id }).then((categoryIdList: string[]) => {
+        roomRepository.getUsedRoomCategoryIdList({ hotelId: this._sessionContext.sessionDO.hotel.id }).then((categoryIdList: string[]) => {
             return roomCategoryRepository.getRoomCategoryList({ hotelId: this.hotelId }, { categoryIdList: categoryIdList });
         }).then((result: RoomCategorySearchResultRepoDO) => {
             resolve(result.roomCategoryList);
@@ -42,6 +42,22 @@ export class RoomCategoryStatsAggregator {
                 ThLogger.getInstance().logError(ThLogLevel.Error, "error retrieving distinct room categories for the hotel", { hotelId: this.hotelId }, thError);
             }
             reject(thError);
+        });
+    }
+    
+    public getUsedRoomCategoryStatsList(): Promise<RoomCategoryStatsDO[]> {
+        return new Promise<RoomCategoryStatsDO[]>((resolve: { (result: RoomCategoryStatsDO[]): void }, reject: { (err: ThError): void }) => {
+            this.getUsedRoomCategoryStatsListCore(resolve, reject);
+        });
+    }
+    private getUsedRoomCategoryStatsListCore(resolve: { (result: RoomCategoryStatsDO[]): void }, reject: { (err: ThError): void }) {
+        var roomRepository = this._appContext.getRepositoryFactory().getRoomRepository();
+        roomRepository.getUsedRoomCategoryIdList({ hotelId: this._sessionContext.sessionDO.hotel.id }).then((usedCategoryIdList: string[]) => {
+            return this.getRoomCategoryStatsList(usedCategoryIdList);
+        }).then((roomCategoryStatsList: RoomCategoryStatsDO[]) => {
+            resolve(roomCategoryStatsList);
+        }).catch((error: any) => {
+            reject(error);      
         });
     }
     public getRoomCategoryStatsList(roomCategoryIdList?: string[]): Promise<RoomCategoryStatsDO[]> {
