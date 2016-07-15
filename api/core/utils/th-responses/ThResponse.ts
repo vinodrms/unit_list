@@ -311,6 +311,7 @@ export enum ThStatusCode {
     InvoiceGroupsControllerErrorGettingInvoiceGroups,
     InvoiceGroupsControllerErrorGettingInvoiceGroupsCount,
     SaveInvoiceGroupItem,
+    UpdateInvoiceGroupError,
     AddNewCustomerInvoiceGroupError,
     AddNewBookingInvoiceGroupError,
     GenerateBookingInvoiceError,
@@ -322,6 +323,9 @@ export enum ThStatusCode {
     InvoicePaymentValidatorError,
     InvoicePayersValidatorError,
     InvoicePayersValidatorInvalidSplit,
+    CustomerInvoiceGroupUpdateStrategyErrorUpdating,
+    CustomerInvoiceGroupAddStrategyErrorAdding,
+    BookingInvoiceGroupUpdateStrategyErrorUpdating,
     InvoiceEmailSenderErrorSendingEmail,
     
     SlackSendMessageError,
@@ -679,6 +683,7 @@ ThMessage[ThStatusCode.InvoiceGroupsControllerErrorGettingInvoiceGroupById] = "E
 ThMessage[ThStatusCode.InvoiceGroupsControllerErrorGettingInvoiceGroups] = "Error getting the invoice group list.";
 ThMessage[ThStatusCode.InvoiceGroupsControllerErrorGettingInvoiceGroupsCount] = "Error getting the total number of invoice groups matching the search criteria.";
 ThMessage[ThStatusCode.SaveInvoiceGroupItem] = "Error saving the invoice group item.";
+ThMessage[ThStatusCode.UpdateInvoiceGroupError] = "Error updating the invoice group.";
 ThMessage[ThStatusCode.InvoiceGroupsRepositoryErrorReadingDocumentCount] = "Error reading invoice grupt document count.";
 ThMessage[ThStatusCode.UpdateInvoiceGroupItemError] = "Error updating invoice group.";
 ThMessage[ThStatusCode.AddNewCustomerInvoiceGroupError] = "Error adding new customer related invoice group.";
@@ -691,6 +696,9 @@ ThMessage[ThStatusCode.InvoicePaymentMethodValidatorCannotPayByAgreement] = "You
 ThMessage[ThStatusCode.InvoicePaymentValidatorError] = "Error validating the invoice payment.";
 ThMessage[ThStatusCode.InvoicePayersValidatorError] = "Error validating the payers that split the invoice payment.";
 ThMessage[ThStatusCode.InvoicePayersValidatorInvalidSplit] = "Error validating the payers that split the invoice payment.";
+ThMessage[ThStatusCode.CustomerInvoiceGroupUpdateStrategyErrorUpdating] = "Error updating the invoice group.";
+ThMessage[ThStatusCode.CustomerInvoiceGroupAddStrategyErrorAdding] = "Error adding the invoice group.";
+ThMessage[ThStatusCode.BookingInvoiceGroupUpdateStrategyErrorUpdating] = "Error updating the invoice group.";
 ThMessage[ThStatusCode.InvoiceEmailSenderErrorSendingEmail] = "Error sending invoice by email.";
 ThMessage[ThStatusCode.SlackSendMessageError] = "Error sending the message using Slack.";
 ThMessage[ThStatusCode.AddBookingsRepositoryEmptyBookingList] = "Empty booking list.";
