@@ -37,7 +37,7 @@ export class InvoicePayerDO extends BaseDO {
 
         invoicePayer.customerId = customer.id;
         invoicePayer.paymentMethod = paymentMethod;
-
+        invoicePayer.priceToPay = 0;
         if (customer.isCompanyOrTravelAgency()) {
             var baseCorporateDetails = new BaseCorporateDetailsDO();
             baseCorporateDetails.buildFromObject(customer.customerDetails);

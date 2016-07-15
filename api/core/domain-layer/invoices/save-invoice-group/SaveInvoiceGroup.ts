@@ -17,6 +17,8 @@ import {InvoiceGroupMetaRepoDO, InvoiceGroupItemMetaRepoDO} from '../../../data-
 import {InvoicePaymentMethodValidator} from '../validators/InvoicePaymentMethodValidator';
 import {InvoicePaymentMethodDO} from '../../../data-layer/invoices/data-objects/payers/InvoicePaymentMethodDO';
 import {InvoicePayerDO} from '../../../data-layer/invoices/data-objects/payers/InvoicePayerDO';
+import {InvoiceItemDO} from '../../../data-layer/invoices/data-objects/items/InvoiceItemDO';
+import {InvoiceDO} from '../../../data-layer/invoices/data-objects/InvoiceDO';
 import {AddOnProductIdValidator} from '../../../domain-layer/add-on-products/validators/AddOnProductIdValidator';
 import {AddOnProductsContainer} from '../../../domain-layer/add-on-products/validators/results/AddOnProductsContainer';
 import {AddOnProductDO} from '../../../data-layer/add-on-products/data-objects/AddOnProductDO';
@@ -96,6 +98,22 @@ export class SaveInvoiceGroup {
     private getInvoiceGroupDO(): InvoiceGroupDO {
         var invoiceGroup = new InvoiceGroupDO();
         invoiceGroup.buildFromObject(this._saveInvoiceGroup);
+        if (invoiceGroup.id == null) {
+            delete invoiceGroup.id;
+        }
+        if (invoiceGroup.groupBookingId == null) {
+            delete invoiceGroup.groupBookingId;
+        }
+        _.forEach(invoiceGroup.invoiceList, (invoice: InvoiceDO) => {
+            if (invoice.bookingId == null) {
+                delete invoice.bookingId;
+            }
+            _.forEach(invoice.itemList, (invoiceItem: InvoiceItemDO) => {
+                if(invoiceItem.meta == null) {
+                    delete invoiceItem.meta;
+                }     
+            });
+        });
         return invoiceGroup;
     }
 }
