@@ -5,7 +5,7 @@ import {ThUtils} from '../../../../utils/ThUtils';
 import {HotelOperationsQueryDO} from './HotelOperationsQueryDO';
 import {ThDateDO} from '../../../../utils/th-dates/data-objects/ThDateDO';
 import {ThTimestampDO} from '../../../../utils/th-dates/data-objects/ThTimestampDO';
-import {HotelTime} from '../hotel-time/HotelTime';
+import {HotelTime} from '../../common/hotel-time/HotelTime';
 
 export class HotelOperationsQueryDOParser {
     private _thUtils: ThUtils;

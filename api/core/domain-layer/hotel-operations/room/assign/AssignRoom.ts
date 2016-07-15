@@ -17,7 +17,7 @@ import {IAssignRoomStrategy} from './strategies/IAssignRoomStrategy';
 import {CheckInStrategy} from './strategies/CheckInStrategy';
 import {ReserveRoomStrategy} from './strategies/ReserveRoomStrategy';
 import {ChangeRoomStrategy} from './strategies/ChangeRoomStrategy';
-import {HotelTime} from '../../dashboard/hotel-time/HotelTime';
+import {HotelTime} from '../../common/hotel-time/HotelTime';
 import {BusinessValidationRuleContainer} from '../../../common/validation-rules/BusinessValidationRuleContainer';
 import {BookingRoomCategoryValidationRule} from '../../../bookings/validators/validation-rules/booking/BookingRoomCategoryValidationRule';
 import {BookingOccupancyCalculator} from '../../../bookings/search-bookings/utils/occupancy-calculator/BookingOccupancyCalculator';

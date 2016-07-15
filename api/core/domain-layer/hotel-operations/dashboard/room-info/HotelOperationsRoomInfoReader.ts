@@ -7,7 +7,7 @@ import {ThTimestampDO} from '../../../../utils/th-dates/data-objects/ThTimestamp
 import {BookingDO} from '../../../../data-layer/bookings/data-objects/BookingDO';
 import {BookingDOConstraints} from '../../../../data-layer/bookings/data-objects/BookingDOConstraints';
 import {BookingSearchResultRepoDO} from '../../../../data-layer/bookings/repositories/IBookingRepository';
-import {HotelTime} from '../hotel-time/HotelTime';
+import {HotelTime} from '../../common/hotel-time/HotelTime';
 import {CustomerIdValidator} from '../../../customers/validators/CustomerIdValidator';
 import {CustomersContainer} from '../../../customers/validators/results/CustomersContainer';
 import {HotelOperationsRoomInfo} from './utils/HotelOperationsRoomInfo';

@@ -2,7 +2,7 @@ import {BaseController} from './base/BaseController';
 import {ThStatusCode} from '../core/utils/th-responses/ThResponse';
 import {AppContext} from '../core/utils/AppContext';
 import {SessionContext} from '../core/utils/SessionContext';
-import {HotelTime} from '../core/domain-layer/hotel-operations/dashboard/hotel-time/HotelTime';
+import {HotelTime} from '../core/domain-layer/hotel-operations/common/hotel-time/HotelTime';
 import {ThTimestampDO} from '../core/utils/th-dates/data-objects/ThTimestampDO';
 
 class HotelCommonOperationsController extends BaseController {
