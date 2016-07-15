@@ -11,14 +11,29 @@ import {CommissionType} from '../../../data-layer/common/data-objects/commission
 import {InvoiceItemType} from '../../../data-layer/invoices/data-objects/items/InvoiceItemDO';
 
 export class SaveInvoiceGroupDO {
+    id: string;
+    groupBookingId: string;
     invoiceList: InvoiceDO[];
     paymentStatus: InvoicePaymentStatus;
 
     public static getValidationStructure(): IValidationStructure {
+        
         return new ObjectValidationStructure([
             {
+				key: "id",
+				validationStruct: new PrimitiveValidationStructure(StringValidationRule.buildNullable())
+			},
+            {
+				key: "groupBookingId",
+				validationStruct: new PrimitiveValidationStructure(StringValidationRule.buildNullable())
+			},
+            {   
                 key: "invoiceList",
                 validationStruct: new ArrayValidationStructure(new ObjectValidationStructure([
+                    {
+				        key: "bookingId",
+				        validationStruct: new PrimitiveValidationStructure(StringValidationRule.buildNullable())
+			        },
                     {
                         key: "payerList",
                         validationStruct: new ArrayValidationStructure(new ObjectValidationStructure([
@@ -50,15 +65,11 @@ export class SaveInvoiceGroupDO {
                         validationStruct: new ArrayValidationStructure(new ObjectValidationStructure([
                             {
                                 key: "id",
-                                validationStruct: new PrimitiveValidationStructure(new StringValidationRule())
+                                validationStruct: new PrimitiveValidationStructure(StringValidationRule.buildNullable())
                             },
                             {
                                 key: "type",
                                 validationStruct: new PrimitiveValidationStructure(new NumberInListValidationRule([InvoiceItemType.AddOnProduct, InvoiceItemType.Booking]))
-                            },
-                            {
-                                key: "qty",
-                                validationStruct: new PrimitiveValidationStructure(new NumberValidationRule())
                             }
                         ]))
                     },
