@@ -193,12 +193,8 @@ export class RoomsCanvasComponent implements OnInit {
 		var roomVM = event.roomVM;
 		if (event.accepted) {
 			roomVM.properties.booking.clientName = arrivalItem.clientName;
-			roomVM.properties.booking.numberOfPeople = arrivalItem.numberOfPeople;
-			roomVM.properties.booking.numberOfNights = arrivalItem.numberOfNights;
-			roomVM.properties.booking.arrivalLabel = arrivalItem.arrivalLabel;
-			roomVM.properties.booking.arrivalDate = arrivalItem.arrivalDate;
-			roomVM.properties.booking.departureLabel = arrivalItem.departureLabel;
-			roomVM.properties.booking.departureDate = arrivalItem.departureDate;
+			roomVM.properties.booking.interval = arrivalItem.interval;
+			roomVM.properties.booking.config = arrivalItem.config;
 			this.hotelOperationsDashboard.checkInArrivalItem(arrivalItem);
 			this.setRoomsUIHighlight(this.roomVMList, this.dragStyles.default);
 		}

@@ -72,7 +72,7 @@ export class RoomCardComponent {
 						}
 
 						if (outcome.accepted == true) {
-							this.roomVM.status.displayName = "Occupied";
+							this.roomVM.status.value = "Occupied";
 							this.dropped.emit(outcome)
 						}
 						else {
