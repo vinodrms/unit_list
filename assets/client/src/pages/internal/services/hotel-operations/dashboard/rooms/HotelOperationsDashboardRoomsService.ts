@@ -57,7 +57,7 @@ export class HotelOperationsDashboardRoomsService extends ARequestService<RoomIt
         return this.getServiceObservable().map((roomItemVMList: RoomItemInfoVM[]) => {
             var sortedRoomItemVMList = roomItemVMList.sort((firstItem: RoomItemInfoVM, secondItem: RoomItemInfoVM) => {
                 if (firstItem.roomVM.room.floor === secondItem.roomVM.room.floor) {
-                    return (firstItem.roomVM.room.name > secondItem.roomVM.room.name) ? -1 : 1;
+                    return (firstItem.roomVM.room.name > secondItem.roomVM.room.name) ? 1 : -1;
                 }
                 return firstItem.roomVM.room.floor - secondItem.roomVM.room.floor;
             });

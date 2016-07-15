@@ -6,6 +6,7 @@ export class RoomItemsIndexer {
     private _indexedRoomCategStatsById: { [id: string]: RoomCategoryStatsDO; };
 
     constructor(roomCategoryStatsList: RoomCategoryStatsDO[], roomVMList: RoomVM[]) {
+        this.indexRoomList(roomVMList);
         this.indexRoomCategoryStatsList(roomCategoryStatsList);
     }
     private indexRoomList(roomVMList: RoomVM[]) {

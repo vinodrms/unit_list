@@ -5,8 +5,6 @@ import {BaseComponent} from '../../../../../../../common/base/BaseComponent';
 import {AppContext, ThError} from '../../../../../../../common/utils/AppContext';
 import {LazyLoadingTableComponent} from '../../../../../../../common/utils/components/lazy-loading/LazyLoadingTableComponent';
 import {LazyLoadRoomsService} from '../../../../../services/rooms/LazyLoadRoomsService';
-import {RoomCategoriesService} from '../../../../../services/room-categories/RoomCategoriesService';
-import {RoomCategoriesStatsService} from '../../../../../services/room-categories/RoomCategoriesStatsService';
 import {RoomTableMetaBuilderService} from './services/RoomTableMetaBuilderService';
 import {InventoryStateManager} from '../../utils/state-manager/InventoryStateManager';
 import {InventoryScreenStateType} from '../../utils/state-manager/InventoryScreenStateType';
@@ -20,7 +18,7 @@ import {BedsEagerService} from '../../../../../services/beds/BedsEagerService';
 @Component({
     selector: 'rooms',
     templateUrl: '/client/src/pages/internal/containers/common/inventory/rooms/main/template/rooms.html',
-    providers: [BedsEagerService, LazyLoadRoomsService, RoomCategoriesService, RoomCategoriesStatsService, RoomTableMetaBuilderService],
+    providers: [BedsEagerService, LazyLoadRoomsService, RoomTableMetaBuilderService],
     directives: [LazyLoadingTableComponent, RoomOverviewComponent, RoomEditComponent]
 })
 export class RoomsComponent extends BaseComponent implements AfterViewInit {
