@@ -129,6 +129,8 @@ module.exports.routes = {
 	'POST /api/hotelOperations/room/change': 'HotelRoomOperationsController.changeRoom',
 	'POST /api/hotelOperations/room/checkOut': 'HotelRoomOperationsController.checkOut',
 
+	'GET /api/hotelOperations/common/hotelTimestamp': 'HotelCommonOperationsController.getCurrentHotelTimestamp',
+
 	/*Front End Views	*/
 	'GET /home*': {
 		controller: 'AppViewsController',

@@ -396,6 +396,7 @@ export enum ThStatusCode {
     HotelRoomOperationsControllerErrorCheckingOut,
     HotelRoomOperationsControllerErrorReservingRoom,
     HotelRoomOperationsControllerErrorChangingRoom,
+    HotelCommonOperationsControllerErrorGettingTimestamp,
 
 }
 
@@ -783,6 +784,7 @@ ThMessage[ThStatusCode.HotelRoomOperationsControllerErrorCheckingIn] = "Error ch
 ThMessage[ThStatusCode.HotelRoomOperationsControllerErrorCheckingOut] = "Error checking out the room.";
 ThMessage[ThStatusCode.HotelRoomOperationsControllerErrorReservingRoom] = "Error reserving room.";
 ThMessage[ThStatusCode.HotelRoomOperationsControllerErrorChangingRoom] = "Error changing room.";
+ThMessage[ThStatusCode.HotelCommonOperationsControllerErrorGettingTimestamp] = "Error getting current hotel timestamp.";
 
 export class ThResponse {
     statusCode: ThStatusCode;

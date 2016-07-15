@@ -72,6 +72,8 @@ export enum ThServerApi {
 	HotelOperationsRoomChange,
 	HotelOperationsRoomCheckOut,
 
+	HotelOperationsCommonHotelTimestamp,
+
 }
 
 var ThServerApiUrl: { [index: number]: string; } = {};
@@ -150,6 +152,7 @@ ThServerApiUrl[ThServerApi.HotelOperationsRoomReserve] = "/hotelOperations/room/
 ThServerApiUrl[ThServerApi.HotelOperationsRoomChange] = "/hotelOperations/room/change";
 ThServerApiUrl[ThServerApi.HotelOperationsRoomCheckOut] = "/hotelOperations/room/checkOut";
 
+ThServerApiUrl[ThServerApi.HotelOperationsCommonHotelTimestamp] = "/hotelOperations/common/hotelTimestamp";
 
 export class ServerApiBuilder {
 	public static ApiRoot = "/api";
