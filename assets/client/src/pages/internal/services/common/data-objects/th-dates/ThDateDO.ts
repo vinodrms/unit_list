@@ -111,12 +111,14 @@ export class ThDateDO extends BaseDO {
 		}
 		return this.day + " " + this.getShortMonthDisplayString(thTranslation) + " " + this.getShortYearDisplayString();
 	}
+	
 	public getLongDisplayString(thTranslation: ThTranslation): string {
 		if (!this.isPrintable()) {
 			return "";
 		}
 		return this.day + " " + thTranslation.translate(ThMonthDisplayString[this.month]) + " " + this.year;
 	}
+
 	private getShortMonthDisplayString(thTranslation: ThTranslation) {
 		var monthName: string = thTranslation.translate(ThMonthDisplayString[this.month]);
 		if (monthName.length > ThDateDO.MaxMonthLength) {
@@ -124,6 +126,7 @@ export class ThDateDO extends BaseDO {
 		}
 		return monthName;
 	}
+
 	private getShortYearDisplayString(): string {
 		var year = this.year + "";
 		if (year.length < ThDateDO.MaxYearLength) {

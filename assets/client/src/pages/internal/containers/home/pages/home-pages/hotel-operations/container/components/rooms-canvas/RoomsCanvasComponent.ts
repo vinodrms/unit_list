@@ -103,6 +103,7 @@ export class RoomsCanvasComponent implements OnInit {
 		var date = this.hotelOperationsDashboard.getDate();
 		this._hotelOperationsDashboardService.getRooms(this.filterType.newValue, date)
 			.subscribe((rooms: any) => {
+				debugger;
 				console.log("Refresh callback");
 				this.setRoomsUIHighlight(rooms, this.dragStyles.default);
 				this.filterType.currentValue = this.filterType.newValue;
@@ -170,10 +171,10 @@ export class RoomsCanvasComponent implements OnInit {
 		var canUpgradeCheckInRoomVMList = [];
 
 		this.roomVMList.forEach(currentRoom => {
-			if (currentRoom.Type == arrivalItemVM.roomType && currentRoom.status == "Free") {
+			if (currentRoom.roomCategory.displayName == arrivalItemVM.roomType && currentRoom.status.displayName == "Free") {
 				canCheckInRoomVmList.push(currentRoom);
 			}
-			else if (currentRoom.Type != arrivalItemVM.roomType && currentRoom.status == "Free") {
+			else if (currentRoom.roomCategory.displayName != arrivalItemVM.roomType && currentRoom.status.displayName == "Free") {
 				canUpgradeCheckInRoomVMList.push(currentRoom);
 			}
 			else {
@@ -192,10 +193,8 @@ export class RoomsCanvasComponent implements OnInit {
 		var roomVM = event.roomVM;
 		if (event.accepted) {
 			roomVM.properties.booking.clientName = arrivalItem.clientName;
-			roomVM.properties.booking.numberOfPeople = arrivalItem.numberOfPeople;
-			roomVM.properties.booking.numberOfNights = arrivalItem.numberOfNights;
-			roomVM.properties.booking.arrival = arrivalItem.arrival;
-			roomVM.properties.booking.departure = arrivalItem.departure;
+			roomVM.properties.booking.interval = arrivalItem.interval;
+			roomVM.properties.booking.config = arrivalItem.config;
 			this.hotelOperationsDashboard.checkInArrivalItem(arrivalItem);
 			this.setRoomsUIHighlight(this.roomVMList, this.dragStyles.default);
 		}

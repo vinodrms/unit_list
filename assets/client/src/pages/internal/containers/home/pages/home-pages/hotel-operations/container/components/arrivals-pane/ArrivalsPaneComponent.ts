@@ -49,7 +49,6 @@ export class ArrivalsPaneComponent implements OnInit {
 			}, (error: ThError) => {
 				this._appContext.toaster.error(error.message);
 			});
-		
 	}
 
 	openNewBookingModal() {

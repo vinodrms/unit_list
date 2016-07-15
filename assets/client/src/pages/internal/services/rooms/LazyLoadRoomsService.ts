@@ -4,8 +4,8 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/combineLatest';
 
 import {AppContext, ThServerApi} from '../../../../common/utils/AppContext';
-import {ARequestService} from '../common/ARequestService';
-import {RoomsDO} from './data-objects/RoomsDO';
+import {ALazyLoadRequestService} from '../common/ALazyLoadRequestService';
+import {RoomDO} from './data-objects/RoomDO';
 import {RoomVM} from './view-models/RoomVM';
 import {RoomAmenitiesDO} from '../settings/data-objects/RoomAmenitiesDO';
 import {RoomAttributesDO} from '../settings/data-objects/RoomAttributesDO';
@@ -16,36 +16,51 @@ import {RoomCategoryStatsDO} from '../room-categories/data-objects/RoomCategoryS
 import {RoomVMBuilder} from './view-models/RoomVMBuilder';
 
 @Injectable()
-export class RoomsService extends ARequestService<RoomVM[]> {
-
-    constructor(private _appContext: AppContext,
+export class LazyLoadRoomsService extends ALazyLoadRequestService<RoomVM> {
+    constructor(appContext: AppContext,
         private _roomCategoriesStatsService: RoomCategoriesStatsService, private _roomAmenitiesService: RoomAmenitiesService,
         private _roomAttributesService: RoomAttributesService) {
-        super();
+        super(appContext, ThServerApi.RoomsCount, ThServerApi.Rooms);
     }
 
-    protected sendRequest(): Observable<Object> {
+    protected parsePageDataCore(pageDataObject: Object): Observable<RoomVM[]> {
         return Observable.combineLatest(
             this._roomAmenitiesService.getRoomAmenitiesDO(),
             this._roomAttributesService.getRoomAttributesDO(),
-            this._roomCategoriesStatsService.getRoomCategoryStatsForRoomCategoryIdList(),
-            this._appContext.thHttp.post(ThServerApi.Rooms, {})
-        ).map((result: [RoomAmenitiesDO, RoomAttributesDO, RoomCategoryStatsDO[], Object]) => {
+            this._roomCategoriesStatsService.getRoomCategoryStatsForRoomCategoryIdList()
+        ).map((result: [RoomAmenitiesDO, RoomAttributesDO, RoomCategoryStatsDO[]]) => {
             var roomAmenities = result[0];
             var roomAttributes = result[1];
             var roomCategoriesStats = result[2];
-            var pageDataObject = result[3];
 
             var vmBuilder = new RoomVMBuilder(roomAmenities, roomAttributes, roomCategoriesStats);
             return vmBuilder.buildRoomVMListFrom(pageDataObject);
         });
     }
-
-    protected parseResult(result: Object): RoomVM[] {
-        return <RoomVM[]>result;
+    public searchByText(text: string) {
+        this.updateSearchCriteria({
+            name: text
+        });
+    }
+    public saveRoomDO(room: RoomDO): Observable<RoomDO> {
+        return this.runServerPostActionOnRoom(ThServerApi.RoomsSaveItem, room);
+    }
+    public deleteRoomDO(room: RoomDO): Observable<RoomDO> {
+        return this.runServerPostActionOnRoom(ThServerApi.RoomsDeleteItem, room);
     }
 
-    public getRoomList(): Observable<RoomVM[]> {
-        return this.getServiceObservable();
+    private runServerPostActionOnRoom(apiAction: ThServerApi, room: RoomDO): Observable<RoomDO> {
+        return this._appContext.thHttp.post(apiAction, { room: room }).map((roomObject: Object) => {
+            this.runRefreshOnDependencies();
+            this.refreshData();
+
+            var updatedRoomDO: RoomDO = new RoomDO();
+            updatedRoomDO.buildFromObject(roomObject["room"]);
+            return updatedRoomDO;
+        });
+    }
+
+    private runRefreshOnDependencies() {
+        this._roomCategoriesStatsService.refreshData();
     }
 }
