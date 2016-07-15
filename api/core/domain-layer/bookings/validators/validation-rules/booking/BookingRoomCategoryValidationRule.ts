@@ -7,10 +7,14 @@ import {InvoicePaymentMethodValidator} from '../../../../invoices/validators/Inv
 import {HotelDO} from '../../../../../data-layer/hotel/data-objects/HotelDO';
 import {CustomersContainer} from '../../../../customers/validators/results/CustomersContainer';
 import {RoomCategoryStatsDO} from '../../../../../data-layer/room-categories/data-objects/RoomCategoryStatsDO';
+import {RoomDO} from '../../../../../data-layer/rooms/data-objects/RoomDO';
+
+import _ = require('underscore');
 
 export interface BookingAllotmentValidationParams {
     priceProductsContainer: PriceProductsContainer;
     roomCategoryStatsList: RoomCategoryStatsDO[];
+    roomList: RoomDO[];
 }
 
 export class BookingRoomCategoryValidationRule extends ABusinessValidationRule<BookingDO> {
@@ -32,8 +36,21 @@ export class BookingRoomCategoryValidationRule extends ABusinessValidationRule<B
             });
             return;
         }
+        var actualRoomCategoryId: string = booking.roomCategoryId;
+        if (!this._thUtils.isUndefinedOrNull(booking.roomId) && _.isString(booking.roomId)) {
+            var foundRoom = _.find(this._validationParams.roomList, (room: RoomDO) => { return room.id === booking.roomId });
+            if (this._thUtils.isUndefinedOrNull(foundRoom)) {
+                this.logBusinessAndReject(reject, booking, {
+                    statusCode: ThStatusCode.BookingsValidatorInvalidRoomId,
+                    errorMessage: "room id not found"
+                });
+                return;
+            }
+            actualRoomCategoryId = foundRoom.categoryId;
+        }
+
         var roomCategoryStatsDO: RoomCategoryStatsDO = _.find(this._validationParams.roomCategoryStatsList, (roomCategStats: RoomCategoryStatsDO) => {
-            return roomCategStats.roomCategory.id === booking.roomCategoryId;
+            return roomCategStats.roomCategory.id === actualRoomCategoryId;
         });
         if (this._thUtils.isUndefinedOrNull(roomCategoryStatsDO)) {
             this.logBusinessAndReject(reject, booking, {

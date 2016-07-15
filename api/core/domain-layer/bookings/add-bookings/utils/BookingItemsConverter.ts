@@ -118,14 +118,7 @@ export class BookingItemsConverter {
 
             bookingDO.noShowTime = priceProduct.conditions.policy.generateNoShowTriggerTime({ arrivalDate: indexedBookingInterval.getArrivalDate() });
 
-            bookingDO.price = new BookingPriceDO();
-            bookingDO.price.priceType = BookingPriceType.BookingStay;
-            bookingDO.price.numberOfItems = indexedBookingInterval.getLengthOfStay();
-            bookingDO.price.pricePerItem = priceProduct.price.getPricePerNightFor({
-                configCapacity: bookingDO.configCapacity,
-                roomCategoryId: bookingDO.roomCategoryId
-            });
-            bookingDO.price.totalPrice = bookingDO.price.numberOfItems * bookingDO.price.pricePerItem;
+            this._bookingUtils.updateBookingPriceUsingRoomCategory(bookingDO);
             this._bookingUtils.updateIndexedSearchTerms(bookingDO, this._converterParams.customersContainer);
             this._bookingUtils.updateDisplayCustomerId(bookingDO, this._converterParams.customersContainer);
 

@@ -55,7 +55,9 @@ export class HotelOperationsRoomInfoReader {
         }).then((customersContainer: CustomersContainer) => {
             roomInfoBuilder.appendCustomerInformation(customersContainer);
 
-            resolve(roomInfoBuilder.getBuiltHotelOperationsRoomInfo());
+            var roomInfo = roomInfoBuilder.getBuiltHotelOperationsRoomInfo();
+            roomInfo.referenceDate = this._currentHotelTimestamp.thDateDO;
+            resolve(roomInfo);
         }).catch((error: any) => {
             var thError = new ThError(ThStatusCode.HotelOperationsRoomInfoReaderError, error);
             if (thError.isNativeError()) {

@@ -63,7 +63,8 @@ export class NewBookingsValidationRules {
             new BookingAllotmentValidationRule(this._appContext, this._sessionContext, this.getBookingAllotmentValidationParams(booking)),
             new BookingRoomCategoryValidationRule({
                 priceProductsContainer: this._validatorParams.priceProductsContainer,
-                roomCategoryStatsList:  this._validatorParams.roomCategoryStatsList
+                roomCategoryStatsList:  this._validatorParams.roomCategoryStatsList,
+                roomList: this._validatorParams.roomList
             })
         ]);
         bookingValidationRule.isValidOn(booking).then((validatedBooking: BookingDO) => {

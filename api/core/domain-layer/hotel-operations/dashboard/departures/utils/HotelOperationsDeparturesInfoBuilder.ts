@@ -1,5 +1,5 @@
-import {HotelOperationsDeparturesInfo, DeparturelItemInfo} from './HotelOperationsDeparturesInfo';
-import {BookingDO} from '../../../../../data-layer/bookings/data-objects/BookingDO';
+import {HotelOperationsDeparturesInfo, DeparturelItemInfo, DeparturelItemBookingStatus} from './HotelOperationsDeparturesInfo';
+import {BookingDO, BookingConfirmationStatus} from '../../../../../data-layer/bookings/data-objects/BookingDO';
 import {CustomersContainer} from '../../../../customers/validators/results/CustomersContainer';
 
 import _ = require('underscore');
@@ -17,12 +17,17 @@ export class HotelOperationsDeparturesInfoBuilder {
         });
     }
     private appendInformationFromBooking(booking: BookingDO) {
+        var departureItemStatus = DeparturelItemBookingStatus.CanNotCheckOut;
+        if (booking.confirmationStatus === BookingConfirmationStatus.CheckedIn) {
+            departureItemStatus = DeparturelItemBookingStatus.CanCheckOut;
+        }
         var departureItemInfo: DeparturelItemInfo = {
             customerId: booking.displayCustomerId,
             bookingId: booking.bookingId,
             groupBookingId: booking.groupBookingId,
             bookingInterval: booking.interval,
             bookingCapacity: booking.configCapacity,
+            bookingItemStatus: departureItemStatus,
             roomCategoryId: booking.roomCategoryId,
             roomId: booking.roomId,
         }

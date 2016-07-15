@@ -1,3 +1,4 @@
+import {ThDateDO} from '../../../../../utils/th-dates/data-objects/ThDateDO';
 import {ThDateIntervalDO} from '../../../../../utils/th-dates/data-objects/ThDateIntervalDO';
 import {ConfigCapacityDO} from '../../../../../data-layer/common/data-objects/bed-config/ConfigCapacityDO';
 
@@ -22,6 +23,7 @@ export interface RoomItemInfo {
 
 export class HotelOperationsRoomInfo {
     roomInfoList: RoomItemInfo[];
+    referenceDate: ThDateDO;
 
     constructor() {
         this.roomInfoList = [];
