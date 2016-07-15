@@ -9,6 +9,8 @@ import {BookingSearch} from '../core/domain-layer/bookings/search-bookings/Booki
 import {BookingSearchResult} from '../core/domain-layer/bookings/search-bookings/utils/result-builder/BookingSearchResult';
 import {AddBookingItems} from '../core/domain-layer/bookings/add-bookings/AddBookingItems';
 import {ThTranslation} from '../core/utils/localization/ThTranslation';
+import {BookingOccupancyCalculatorWrapper} from '../core/domain-layer/bookings/search-bookings/utils/occupancy-calculator/wrapper/BookingOccupancyCalculatorWrapper';
+import {BookingOccupancyDO} from '../core/domain-layer/bookings/search-bookings/utils/occupancy-calculator/results/BookingOccupancyDO';
 
 import _ = require('underscore');
 
@@ -83,6 +85,18 @@ class BookingsController extends BaseController {
         });
     }
 
+    public getOccupancy(req: Express.Request, res: Express.Response) {
+        var appContext: AppContext = req.appContext;
+        var sessionContext: SessionContext = req.sessionContext;
+
+        var occupancyCalculator = new BookingOccupancyCalculatorWrapper(appContext, sessionContext);
+        occupancyCalculator.compute(req.body.filters).then((bookingOccupancy: BookingOccupancyDO) => {
+            this.returnSuccesfulResponse(req, res, { bookingOccupancy: bookingOccupancy });
+        }).catch((err: any) => {
+            this.returnErrorResponse(req, res, err, ThStatusCode.BookingsControllerErrorAddingBookings);
+        });
+    }
+
     private getBookingMetaRepoDOFrom(sessionContext: SessionContext): BookingMetaRepoDO {
         return { hotelId: sessionContext.sessionDO.hotel.id };
     }
@@ -103,5 +117,6 @@ module.exports = {
     getBookingList: bookingsController.getBookingList.bind(bookingsController),
     getBookingListCount: bookingsController.getBookingListCount.bind(bookingsController),
     searchBookings: bookingsController.searchBookings.bind(bookingsController),
-    addBookings: bookingsController.addBookings.bind(bookingsController)
+    addBookings: bookingsController.addBookings.bind(bookingsController),
+    getOccupancy: bookingsController.getOccupancy.bind(bookingsController)
 }

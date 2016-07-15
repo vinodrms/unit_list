@@ -2,6 +2,7 @@ import {ThUtils} from '../../../../../../utils/ThUtils';
 import {RoomDO} from '../../../../../../data-layer/rooms/data-objects/RoomDO';
 import {BookingDO} from '../../../../../../data-layer/bookings/data-objects/BookingDO';
 import {IBookingOccupancy} from './IBookingOccupancy';
+import {BookingOccupancyDO} from './BookingOccupancyDO';
 import {BookingUtils} from '../utils/BookingUtils';
 
 import _ = require('underscore');
@@ -56,5 +57,12 @@ export class BookingOccupancy implements IBookingOccupancy {
     }
     public getOccupancyForAllotmentId(allotmentId: string): number {
         return this._bookingUtils.getOccupancyForObjectKey(allotmentId, this.indexedAllotmentIdOccupancy);
+    }
+    public getBookingOccupancyDO(): BookingOccupancyDO {
+        var occupancyDO = new BookingOccupancyDO();
+        occupancyDO.indexedAllotmentIdOccupancy = this.indexedAllotmentIdOccupancy;
+        occupancyDO.indexedRoomCategoryIdOccupancy = this.indexedRoomCategoryIdOccupancy;
+        occupancyDO.indexedRoomIdOccupancy = this.indexedRoomIdOccupancy;
+        return occupancyDO;
     }
 }

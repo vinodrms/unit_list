@@ -115,6 +115,7 @@ module.exports.routes = {
 	'GET /api/bookings/bookingItem': 'BookingsController.getBookingById',
 	'POST /api/bookings/search': 'BookingsController.searchBookings',
 	'POST /api/bookings/add': 'BookingsController.addBookings',
+	'POST /api/bookings/occupancy': 'BookingsController.getOccupancy',
 
 	'POST /api/invoiceGroups': 'InvoiceGroupsController.getInvoiceGroupList',
     'POST /api/invoiceGroups/count': 'InvoiceGroupsController.getInvoiceGroupListCount',

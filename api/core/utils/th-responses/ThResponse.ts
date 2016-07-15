@@ -397,6 +397,8 @@ export enum ThStatusCode {
     HotelRoomOperationsControllerErrorReservingRoom,
     HotelRoomOperationsControllerErrorChangingRoom,
     HotelCommonOperationsControllerErrorGettingTimestamp,
+    BookingOccupancyCalculatorWrapperError,
+    BookingOccupancyCalculatorWrapperInvalidInterval,
 
 }
 
@@ -785,6 +787,8 @@ ThMessage[ThStatusCode.HotelRoomOperationsControllerErrorCheckingOut] = "Error c
 ThMessage[ThStatusCode.HotelRoomOperationsControllerErrorReservingRoom] = "Error reserving room.";
 ThMessage[ThStatusCode.HotelRoomOperationsControllerErrorChangingRoom] = "Error changing room.";
 ThMessage[ThStatusCode.HotelCommonOperationsControllerErrorGettingTimestamp] = "Error getting current hotel timestamp.";
+ThMessage[ThStatusCode.BookingOccupancyCalculatorWrapperError] = "Error getting occupancy.";
+ThMessage[ThStatusCode.BookingOccupancyCalculatorWrapperInvalidInterval] = "Invalid submitted interval.";
 
 export class ThResponse {
     statusCode: ThStatusCode;

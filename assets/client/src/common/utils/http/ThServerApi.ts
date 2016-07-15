@@ -62,6 +62,7 @@ export enum ThServerApi {
 	BookingsAdd,
 	Bookings,
 	BookingsCount,
+	BookingsOccupancy,
 
 	HotelOperationsDashboardArrivals,
 	HotelOperationsDashboardDepartures,
@@ -142,6 +143,7 @@ ThServerApiUrl[ThServerApi.BookingsSearch] = "/bookings/search";
 ThServerApiUrl[ThServerApi.BookingsAdd] = "/bookings/add";
 ThServerApiUrl[ThServerApi.Bookings] = "/bookings";
 ThServerApiUrl[ThServerApi.BookingsCount] = "/bookings/count";
+ThServerApiUrl[ThServerApi.BookingsOccupancy] = "/bookings/occupancy";
 
 ThServerApiUrl[ThServerApi.HotelOperationsDashboardArrivals] = "/hotelOperations/dashboard/arrivals";
 ThServerApiUrl[ThServerApi.HotelOperationsDashboardDepartures] = "/hotelOperations/dashboard/departures";
