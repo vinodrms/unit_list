@@ -9,7 +9,7 @@ import {DefaultDataBuilder} from '../../../db-initializers/DefaultDataBuilder';
 import {TestContext} from '../../../helpers/TestContext';
 import {InvoicesTestHelper} from './helpers/InvoicesTestHelper';
 import {InvoiceGroupDO} from '../../../../core/data-layer/invoices/data-objects/InvoiceGroupDO';
-import {GenerateBookingInvoice} from '../../../../core/domain-layer/invoices/bookings/GenerateBookingInvoice';
+import {GenerateBookingInvoice} from '../../../../core/domain-layer/invoices/generate-booking-invoice/GenerateBookingInvoice';
 import {InvoiceGroupSearchResultRepoDO} from '../../../../core/data-layer/invoices/repositories/IInvoiceGroupsRepository';
 import {InvoiceEmailSender} from '../../../../core/domain-layer/invoices/email/InvoiceEmailSender';
 
@@ -29,7 +29,7 @@ describe("Invoices Tests", function () {
         invoiceGroupsHelper = new InvoicesTestHelper(testDataBuilder);
     });
 
-    describe("Invoice Groups Generation Flow", function () {
+    describe("Booking Invoice Groups Flow", function () {
         it("Should generate a new booking invoice (new invoice group)", function (done) {
             var generateBookingInvoice = new GenerateBookingInvoice(testContext.appContext, testContext.sessionContext);
             var generateBookingInvoiceDO = invoiceGroupsHelper.getGenerateBookingInvoiceDOForNewInvoiceGroup();
@@ -59,7 +59,7 @@ describe("Invoices Tests", function () {
             });
         });
 
-        it("Should get the previosly created booking invoice group by invoice group id", function (done) {
+        it("Should get the previosly created booking invoice group by INVOICE GROUP id", function (done) {
             var invoiceGroupsRepo = testContext.appContext.getRepositoryFactory().getInvoiceGroupsRepository();
             invoiceGroupsRepo.getInvoiceGroupById({ hotelId: testContext.sessionContext.sessionDO.hotel.id }, createdInvoiceGroup.id)
                 .then((loadedInvoiceGroup: InvoiceGroupDO) => {
@@ -75,7 +75,7 @@ describe("Invoices Tests", function () {
                 });
         });
 
-        it("Should get the previosly created booking invoice group by group booking id", function (done) {
+        it("Should get the previosly created booking invoice group by GROUP BOOKING id", function (done) {
             var invoiceGroupsRepo = testContext.appContext.getRepositoryFactory().getInvoiceGroupsRepository();
             invoiceGroupsRepo.getInvoiceGroupList({ hotelId: testContext.sessionContext.sessionDO.hotel.id }, { groupBookingId: createdInvoiceGroup.groupBookingId })
                 .then((result: InvoiceGroupSearchResultRepoDO) => {
@@ -93,6 +93,25 @@ describe("Invoices Tests", function () {
                 });
         });
 
+        it("Should update the previously created booking invoice group by adding a new invoice to it", function (done) {
+            var invoiceGroupsRepo = testContext.appContext.getRepositoryFactory().getInvoiceGroupsRepository();
+            done();
+        });
+    });
+
+    describe("Customer Invoice Groups Flow", function () {
+        it("Should add a new customer invoice group with one invoice", function (done) {
+            var invoiceGroupsRepo = testContext.appContext.getRepositoryFactory().getInvoiceGroupsRepository();
+            done();
+        });
+
+        it("Should update the previously created customer invoice group by adding a new invoice to it", function (done) {
+            var invoiceGroupsRepo = testContext.appContext.getRepositoryFactory().getInvoiceGroupsRepository();
+            done();
+        });
+    });
+
+    describe("Invoice Email Sender Flow", function () {
         it("Should send the invoice by email", function (done) {
             var invoiceEmailSender = new InvoiceEmailSender(testContext.appContext, testContext.sessionContext);
             invoiceEmailSender.sendInvoice({}, ['dragos.pricope@gmail.com']).then((result: boolean) => {

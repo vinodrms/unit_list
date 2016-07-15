@@ -5,8 +5,9 @@ import {ThStatusCode} from '../../../utils/th-responses/ThResponse';
 import {AppContext} from '../../../utils/AppContext';
 import {SessionContext} from '../../../utils/SessionContext';
 import {ValidationResultParser} from '../../common/ValidationResultParser';
+
 import {InvoiceGroupDO} from '../../../data-layer/invoices/data-objects/InvoiceGroupDO';
-import {SaveCustomerInvoiceGroupDO} from './SaveCustomerInvoiceGroupDO';
+import {SaveInvoiceGroupDO} from './SaveInvoiceGroupDO';
 import {HotelDO} from '../../../data-layer/hotel/data-objects/HotelDO';
 import {BookingDO} from '../../../data-layer/bookings/data-objects/BookingDO';
 import {CustomerIdValidator} from '../../../domain-layer/customers/validators/CustomerIdValidator';
@@ -20,9 +21,11 @@ import {AddOnProductIdValidator} from '../../../domain-layer/add-on-products/val
 import {AddOnProductsContainer} from '../../../domain-layer/add-on-products/validators/results/AddOnProductsContainer';
 import {AddOnProductDO} from '../../../data-layer/add-on-products/data-objects/AddOnProductDO';
 
-export class SaveCustomerInvoiceGroup {
+import {SaveInvoiceGroupActionFactory} from './actions/SaveInvoiceGroupActionFactory';
+
+export class SaveInvoiceGroup {
     private _thUtils: ThUtils;
-    private _updateInvoiceGroupDO: SaveCustomerInvoiceGroupDO;
+    private _saveInvoiceGroup: SaveInvoiceGroupDO;
 
     private _hotel: HotelDO;
     private _customersContainer: CustomersContainer;
@@ -34,24 +37,24 @@ export class SaveCustomerInvoiceGroup {
         this._thUtils = new ThUtils();
     }
 
-    public update(updateInvoiceGroupDO: SaveCustomerInvoiceGroupDO): Promise<InvoiceGroupDO> {
-        this._updateInvoiceGroupDO = updateInvoiceGroupDO;
+    public save(saveInvoiceItemDO: SaveInvoiceGroupDO): Promise<InvoiceGroupDO> {
+        this._saveInvoiceGroup = saveInvoiceItemDO;
 
         return new Promise<InvoiceGroupDO>((resolve: { (result: InvoiceGroupDO): void }, reject: { (err: ThError): void }) => {
             try {
-                this.updateCore(resolve, reject);
+                this.saveCore(resolve, reject);
             } catch (error) {
-                var thError = new ThError(ThStatusCode.UpdateInvoiceGroupItemError, error);
-                ThLogger.getInstance().logError(ThLogLevel.Error, "error saving invoice gorup", this._updateInvoiceGroupDO, thError);
+                var thError = new ThError(ThStatusCode.UpdateInvoiceGroupError, error);
+                ThLogger.getInstance().logError(ThLogLevel.Error, "error updating invoice group", this._saveInvoiceGroup, thError);
                 reject(thError);
             }
         });
     }
 
-    private updateCore(resolve: { (result: InvoiceGroupDO): void }, reject: { (err: ThError): void }) {
-        var validationResult = SaveCustomerInvoiceGroupDO.getValidationStructure().validateStructure(this._updateInvoiceGroupDO);
+    private saveCore(resolve: { (result: InvoiceGroupDO): void }, reject: { (err: ThError): void }) {
+        var validationResult = SaveInvoiceGroupDO.getValidationStructure().validateStructure(this._saveInvoiceGroup);
         if (!validationResult.isValid()) {
-            var parser = new ValidationResultParser(validationResult, this._updateInvoiceGroupDO);
+            var parser = new ValidationResultParser(validationResult, this._saveInvoiceGroup);
             parser.logAndReject("Error validating data for updating invoice group", reject);
             return;
         }
@@ -78,17 +81,13 @@ export class SaveCustomerInvoiceGroup {
             }).then((validatedPaymentMethods: InvoicePaymentMethodDO[]) => {
                 this._invoicePaymentMethodList = validatedPaymentMethods;
 
-                return invoiceGroupRepo.getInvoiceGroupById({ hotelId: this.hotelId }, invoiceGroupDO.id);
-            }).then((loadedInvoiceGroup: InvoiceGroupDO) => {
-                this._loadedInvoiceGroup = loadedInvoiceGroup;
-
-                return invoiceGroupRepo.updateInvoiceGroup(this.buildInvoiceGroupMeta(), this.buildInvoiceGroupItemMeta(), this._loadedInvoiceGroup);
-            }).then((updatedInvoiceGroup: InvoiceGroupDO) => {
-                resolve(updatedInvoiceGroup);
+                var actionFactory = new SaveInvoiceGroupActionFactory(this._appContext, this._sessionContext);
+                var actionStrategy = actionFactory.getActionStrategy(invoiceGroupDO);
+                actionStrategy.saveInvoiceGroup(resolve, reject);
             }).catch((error: any) => {
                 var thError = new ThError(ThStatusCode.SaveInvoiceGroupItem, error);
                 if (thError.isNativeError()) {
-                    ThLogger.getInstance().logError(ThLogLevel.Error, "error updating invoice group item", this._updateInvoiceGroupDO, thError);
+                    ThLogger.getInstance().logError(ThLogLevel.Error, "error updating invoice group item", this._saveInvoiceGroup, thError);
                 }
                 reject(thError);
             });
@@ -96,22 +95,7 @@ export class SaveCustomerInvoiceGroup {
 
     private getInvoiceGroupDO(): InvoiceGroupDO {
         var invoiceGroup = new InvoiceGroupDO();
-        invoiceGroup.buildFromObject(this._updateInvoiceGroupDO);
+        invoiceGroup.buildFromObject(this._saveInvoiceGroup);
         return invoiceGroup;
-    }
-    private buildInvoiceGroupMeta(): InvoiceGroupMetaRepoDO {
-        return {
-            hotelId: this.hotelId
-        };
-    }
-    private buildInvoiceGroupItemMeta(): InvoiceGroupItemMetaRepoDO {
-        return {
-            id: this._loadedInvoiceGroup.id,
-            versionId: this._loadedInvoiceGroup.versionId
-        };
-    }
-
-    private get hotelId(): string {
-        return this._sessionContext.sessionDO.hotel.id;
     }
 }

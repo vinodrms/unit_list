@@ -2,7 +2,7 @@ import {ThUtils} from '../../../../../core/utils/ThUtils';
 import {DefaultDataBuilder} from '../../../../db-initializers/DefaultDataBuilder';
 import {TestUtils} from '../../../../helpers/TestUtils';
 
-import {GenerateBookingInvoiceDO} from '../../../../../../api/core/domain-layer/invoices/bookings/GenerateBookingInvoiceDO';
+import {GenerateBookingInvoiceDO} from '../../../../../../api/core/domain-layer/invoices/generate-booking-invoice/GenerateBookingInvoiceDO';
 
 export class InvoicesTestHelper {
     private _testUtils: TestUtils;
