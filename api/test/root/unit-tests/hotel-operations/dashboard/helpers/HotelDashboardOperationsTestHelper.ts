@@ -3,6 +3,11 @@ import {ThDateIntervalDO} from '../../../../../../core/utils/th-dates/data-objec
 import {ThTimestampDO} from '../../../../../../core/utils/th-dates/data-objects/ThTimestampDO';
 import {ThDateUtils} from '../../../../../../core/utils/th-dates/ThDateUtils';
 import {HotelOperationsQueryDO} from '../../../../../../core/domain-layer/hotel-operations/dashboard/utils/HotelOperationsQueryDO';
+import {AssignRoomDO} from '../../../../../../core/domain-layer/hotel-operations/room/assign/AssignRoomDO';
+import {BookingDO} from '../../../../../../core/data-layer/bookings/data-objects/BookingDO';
+import {RoomDO} from '../../../../../../core/data-layer/rooms/data-objects/RoomDO';
+
+import _ = require('underscore');
 
 export class HotelDashboardOperationsTestHelper {
     private _thDateUtils: ThDateUtils;
@@ -22,7 +27,16 @@ export class HotelDashboardOperationsTestHelper {
         query.referenceDate = this.getTimestampForTimezone(testDataBuilder.hotelDO.timezone).thDateDO;
         return query;
     }
+    public getQueryForTomorrow(testDataBuilder: DefaultDataBuilder): HotelOperationsQueryDO {
+        var query = new HotelOperationsQueryDO();
+        query.referenceDate = this._thDateUtils.addDaysToThDateDO(this.getTimestampForTimezone(testDataBuilder.hotelDO.timezone).thDateDO, 1);
+        return query;
+    }
     private getTimestampForTimezone(timezone: string): ThTimestampDO {
         return ThTimestampDO.buildThTimestampForTimezone(timezone);
+    }
+
+    public getRoomForSameRoomCategoryFromBooking(testDataBuilder: DefaultDataBuilder, booking: BookingDO): RoomDO {
+        return _.find(testDataBuilder.roomList, (room: RoomDO) => { return room.categoryId === booking.roomCategoryId });
     }
 }

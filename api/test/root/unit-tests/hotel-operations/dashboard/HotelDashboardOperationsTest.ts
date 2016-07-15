@@ -15,6 +15,14 @@ import {BookingDO, GroupBookingInputChannel, BookingConfirmationStatus} from '..
 import {HotelDashboardOperationsTestHelper} from './helpers/HotelDashboardOperationsTestHelper';
 import {HotelOperationsArrivalsReader} from '../../../../../core/domain-layer/hotel-operations/dashboard/arrivals/HotelOperationsArrivalsReader';
 import {HotelOperationsArrivalsInfo, ArrivalItemInfo} from '../../../../../core/domain-layer/hotel-operations/dashboard/arrivals/utils/HotelOperationsArrivalsInfo';
+import {HotelOperationsRoomInfoReader} from '../../../../../core/domain-layer/hotel-operations/dashboard/room-info/HotelOperationsRoomInfoReader';
+import {HotelOperationsRoomInfo, RoomItemStatus} from '../../../../../core/domain-layer/hotel-operations/dashboard/room-info/utils/HotelOperationsRoomInfo';
+import {AssignRoom} from '../../../../../core/domain-layer/hotel-operations/room/assign/AssignRoom';
+import {AssignRoomDO} from '../../../../../core/domain-layer/hotel-operations/room/assign/AssignRoomDO';
+import {HotelOperationsDeparturesReader} from '../../../../../core/domain-layer/hotel-operations/dashboard/departures/HotelOperationsDeparturesReader';
+import {HotelOperationsDeparturesInfo, DeparturelItemInfo, DeparturelItemBookingStatus} from '../../../../../core/domain-layer/hotel-operations/dashboard/departures/utils/HotelOperationsDeparturesInfo';
+import {CheckOutRoom} from '../../../../../core/domain-layer/hotel-operations/room/check-out/CheckOutRoom';
+import {CheckOutRoomDO} from '../../../../../core/domain-layer/hotel-operations/room/check-out/CheckOutRoomDO';
 
 function checkArrivals(createdBookingList: BookingDO[], arrivalsInfo: HotelOperationsArrivalsInfo) {
     should.equal(arrivalsInfo.arrivalInfoList.length >= createdBookingList.length, true);
@@ -34,6 +42,7 @@ describe("Hotel Dashboard Operations Tests", function () {
     var dashboardHelper: HotelDashboardOperationsTestHelper;
 
     var createdBookingList: BookingDO[];
+    var booking: BookingDO;
 
     before(function (done: any) {
         testContext = new TestContext();
@@ -75,6 +84,159 @@ describe("Hotel Dashboard Operations Tests", function () {
             var emptyDateRefParam: any = {};
             arrivalsReader.read(emptyDateRefParam).then((arrivalsInfo: HotelOperationsArrivalsInfo) => {
                 checkArrivals(createdBookingList, arrivalsInfo);
+                done();
+            }).catch((error: any) => {
+                done(error);
+            });
+        });
+        it("Should get an empty room info array for today", function (done) {
+            var roomInfoReader = new HotelOperationsRoomInfoReader(testContext.appContext, testContext.sessionContext);
+            roomInfoReader.read().then((arrivalsInfo: HotelOperationsRoomInfo) => {
+                should.equal(arrivalsInfo.roomInfoList.length, 0);
+                done();
+            }).catch((error: any) => {
+                done(error);
+            });
+        });
+        it("Should reserve a room for one of the added bookings", function (done) {
+            booking = createdBookingList[0];
+            var room = dashboardHelper.getRoomForSameRoomCategoryFromBooking(testDataBuilder, booking);
+            var assignRoomDO = new AssignRoomDO();
+            assignRoomDO.bookingId = booking.bookingId;
+            assignRoomDO.groupBookingId = booking.groupBookingId;
+            assignRoomDO.roomId = room.id;
+            var assignRoom = new AssignRoom(testContext.appContext, testContext.sessionContext);
+            assignRoom.reserveRoom(assignRoomDO).then((updatedBooking: BookingDO) => {
+                should.equal(updatedBooking.roomId, room.id);
+                should.equal(updatedBooking.confirmationStatus, booking.confirmationStatus);
+                booking = updatedBooking;
+                done();
+            }).catch((error: any) => {
+                done(error);
+            });
+        });
+        it("Should get the reserved booking in the room info", function (done) {
+            var roomInfoReader = new HotelOperationsRoomInfoReader(testContext.appContext, testContext.sessionContext);
+            roomInfoReader.read().then((arrivalsInfo: HotelOperationsRoomInfo) => {
+                should.equal(arrivalsInfo.roomInfoList.length, 1);
+                should.equal(arrivalsInfo.roomInfoList[0].roomStatus, RoomItemStatus.Reserved);
+                should.equal(arrivalsInfo.roomInfoList[0].bookingId, booking.bookingId);
+                done();
+            }).catch((error: any) => {
+                done(error);
+            });
+        });
+        it("Should still see the room in the arrivals section", function (done) {
+            var arrivalsReader = new HotelOperationsArrivalsReader(testContext.appContext, testContext.sessionContext);
+            arrivalsReader.read(dashboardHelper.getQueryForToday(testDataBuilder)).then((arrivalsInfo: HotelOperationsArrivalsInfo) => {
+                checkArrivals(createdBookingList, arrivalsInfo);
+                done();
+            }).catch((error: any) => {
+                done(error);
+            });
+        });
+        it("Should not see any departures for today", function (done) {
+            var departuresReader = new HotelOperationsDeparturesReader(testContext.appContext, testContext.sessionContext);
+            departuresReader.read(dashboardHelper.getQueryForToday(testDataBuilder)).then((departuresInfo: HotelOperationsDeparturesInfo) => {
+                should.equal(departuresInfo.departureInfoList.length, 0);
+                done();
+            }).catch((error: any) => {
+                done(error);
+            });
+        });
+        it("Should see all the bookings as departures tomorrow", function (done) {
+            var departuresReader = new HotelOperationsDeparturesReader(testContext.appContext, testContext.sessionContext);
+            departuresReader.read(dashboardHelper.getQueryForTomorrow(testDataBuilder)).then((departuresInfo: HotelOperationsDeparturesInfo) => {
+                departuresInfo.departureInfoList.forEach((departureItem: DeparturelItemInfo) => {
+                    should.equal(departureItem.bookingItemStatus, DeparturelItemBookingStatus.CanNotCheckOut);
+                });
+                should.equal(departuresInfo.departureInfoList.length, createdBookingList.length);
+                done();
+            }).catch((error: any) => {
+                done(error);
+            });
+        });
+        it("Should check in the reserved booking", function (done) {
+            createdBookingList = _.filter(createdBookingList, (createdBooking: BookingDO) => { return createdBooking.bookingId !== booking.bookingId });
+
+            var assignRoomDO = new AssignRoomDO();
+            assignRoomDO.bookingId = booking.bookingId;
+            assignRoomDO.groupBookingId = booking.groupBookingId;
+            assignRoomDO.roomId = booking.roomId;
+            var assignRoom = new AssignRoom(testContext.appContext, testContext.sessionContext);
+            assignRoom.checkIn(assignRoomDO).then((updatedBooking: BookingDO) => {
+                should.equal(updatedBooking.confirmationStatus, BookingConfirmationStatus.CheckedIn);
+                booking = updatedBooking;
+                done();
+            }).catch((error: any) => {
+                done(error);
+            });
+        });
+        it("Should get the checked in booking in the room info", function (done) {
+            var roomInfoReader = new HotelOperationsRoomInfoReader(testContext.appContext, testContext.sessionContext);
+            roomInfoReader.read().then((arrivalsInfo: HotelOperationsRoomInfo) => {
+                should.equal(arrivalsInfo.roomInfoList.length, 1);
+                should.equal(arrivalsInfo.roomInfoList[0].roomStatus, RoomItemStatus.Occupied);
+                should.equal(arrivalsInfo.roomInfoList[0].bookingId, booking.bookingId);
+                done();
+            }).catch((error: any) => {
+                done(error);
+            });
+        });
+        it("Should not see the room in the arrivals section any more", function (done) {
+            var arrivalsReader = new HotelOperationsArrivalsReader(testContext.appContext, testContext.sessionContext);
+            arrivalsReader.read(dashboardHelper.getQueryForToday(testDataBuilder)).then((arrivalsInfo: HotelOperationsArrivalsInfo) => {
+                checkArrivals(createdBookingList, arrivalsInfo);
+                done();
+            }).catch((error: any) => {
+                done(error);
+            });
+        });
+        it("Should still see all the bookings as departures tomorrow even though we checked in one booking", function (done) {
+            var departuresReader = new HotelOperationsDeparturesReader(testContext.appContext, testContext.sessionContext);
+            departuresReader.read(dashboardHelper.getQueryForTomorrow(testDataBuilder)).then((departuresInfo: HotelOperationsDeparturesInfo) => {
+                should.equal(departuresInfo.departureInfoList.length, createdBookingList.length + 1);
+                departuresInfo.departureInfoList.forEach((departureItem: DeparturelItemInfo) => {
+                    if (departureItem.bookingId === booking.bookingId) {
+                        should.equal(departureItem.bookingItemStatus, DeparturelItemBookingStatus.CanCheckOut);
+                    }
+                    else {
+                        should.equal(departureItem.bookingItemStatus, DeparturelItemBookingStatus.CanNotCheckOut);
+                    }
+                });
+                done();
+            }).catch((error: any) => {
+                done(error);
+            });
+        });
+        it("Should check out the room", function (done) {
+            var checkOutDO = new CheckOutRoomDO();
+            checkOutDO.bookingId = booking.bookingId;
+            checkOutDO.groupBookingId = booking.groupBookingId;
+            var checkOutRoomOp = new CheckOutRoom(testContext.appContext, testContext.sessionContext);
+            checkOutRoomOp.checkOut(checkOutDO).then((checkedOutBooking: BookingDO) => {
+                should.equal(checkedOutBooking.confirmationStatus, BookingConfirmationStatus.CheckedOut);
+                done();
+            }).catch((error: any) => {
+                done(error);
+            });
+        });
+        it("Should not see the checked out booking in the departures", function (done) {
+            var departuresReader = new HotelOperationsDeparturesReader(testContext.appContext, testContext.sessionContext);
+            departuresReader.read(dashboardHelper.getQueryForTomorrow(testDataBuilder)).then((departuresInfo: HotelOperationsDeparturesInfo) => {
+                should.equal(departuresInfo.departureInfoList.length, createdBookingList.length);
+                departuresInfo.departureInfoList.forEach((departureItem: DeparturelItemInfo) => {
+                    should.equal(departureItem.bookingItemStatus, DeparturelItemBookingStatus.CanNotCheckOut);
+                });
+                done();
+            }).catch((error: any) => {
+                done(error);
+            });
+        });
+        it("Should get an empty room info array for today because the booking was checked out", function (done) {
+            var roomInfoReader = new HotelOperationsRoomInfoReader(testContext.appContext, testContext.sessionContext);
+            roomInfoReader.read().then((arrivalsInfo: HotelOperationsRoomInfo) => {
+                should.equal(arrivalsInfo.roomInfoList.length, 0);
                 done();
             }).catch((error: any) => {
                 done(error);

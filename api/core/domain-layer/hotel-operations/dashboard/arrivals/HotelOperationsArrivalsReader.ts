@@ -55,7 +55,9 @@ export class HotelOperationsArrivalsReader {
         }).then((customersContainer: CustomersContainer) => {
             arrivalsInfoBuilder.appendCustomerInformation(customersContainer);
 
-            resolve(arrivalsInfoBuilder.getBuiltHotelOperationsArrivalsInfo());
+            var arrivalsInfo = arrivalsInfoBuilder.getBuiltHotelOperationsArrivalsInfo();
+            arrivalsInfo.referenceDate = this._parsedQuery.referenceDate;
+            resolve(arrivalsInfo);
         }).catch((error: any) => {
             var thError = new ThError(ThStatusCode.HotelOperationsArrivalsReaderError, error);
             if (thError.isNativeError()) {
