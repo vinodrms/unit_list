@@ -60,7 +60,7 @@ export enum ThServerApi {
 	HotelOperationsDepartures,
 	HotelOperationsCheckIn,
 	HotelOperationsCheckOut,
-	
+
 	Notifications,
 	NotificationsCount,
 	NotificationsMarkAsRead,
@@ -68,6 +68,15 @@ export enum ThServerApi {
 	BookingsAdd,
 	Bookings,
 	BookingsCount,
+
+	HotelOperationsDashboardArrivals,
+	HotelOperationsDashboardDepartures,
+	HotelOperationsDashboardRooms,
+
+	HotelOperationsRoomCheckIn,
+	HotelOperationsRoomReserve,
+	HotelOperationsRoomChange,
+	HotelOperationsRoomCheckOut,
 
 }
 
@@ -143,6 +152,16 @@ ThServerApiUrl[ThServerApi.BookingsSearch] = "/bookings/search";
 ThServerApiUrl[ThServerApi.BookingsAdd] = "/bookings/add";
 ThServerApiUrl[ThServerApi.Bookings] = "/bookings";
 ThServerApiUrl[ThServerApi.BookingsCount] = "/bookings/count";
+
+ThServerApiUrl[ThServerApi.HotelOperationsDashboardArrivals] = "/hotelOperations/dashboard/arrivals";
+ThServerApiUrl[ThServerApi.HotelOperationsDashboardDepartures] = "/hotelOperations/dashboard/departures";
+ThServerApiUrl[ThServerApi.HotelOperationsDashboardRooms] = "/hotelOperations/dashboard/rooms";
+
+ThServerApiUrl[ThServerApi.HotelOperationsRoomCheckIn] = "/hotelOperations/room/checkIn";
+ThServerApiUrl[ThServerApi.HotelOperationsRoomReserve] = "/hotelOperations/room/reserve";
+ThServerApiUrl[ThServerApi.HotelOperationsRoomChange] = "/hotelOperations/room/change";
+ThServerApiUrl[ThServerApi.HotelOperationsRoomCheckOut] = "/hotelOperations/room/checkOut";
+
 
 export class ServerApiBuilder {
 	public static ApiRoot = "/api";

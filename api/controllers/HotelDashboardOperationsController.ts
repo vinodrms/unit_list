@@ -17,7 +17,7 @@ class HotelDashboardOperationsController extends BaseController {
 
 		var arrivalsReader = new HotelOperationsArrivalsReader(appContext, sessionContext);
 		arrivalsReader.read(req.body.query).then((arrivalsInfo: HotelOperationsArrivalsInfo) => {
-			this.returnSuccesfulResponse(req, res, { arrivalsInfo: arrivalsInfo });
+			this.returnSuccesfulResponse(req, res, arrivalsInfo);
 		}).catch((error: any) => {
 			this.returnErrorResponse(req, res, error, ThStatusCode.HotelOperationsDashboardControllerErrorGettingArrivals);
 		});
@@ -29,7 +29,7 @@ class HotelDashboardOperationsController extends BaseController {
 
 		var departuresReader = new HotelOperationsDeparturesReader(appContext, sessionContext);
 		departuresReader.read(req.body.query).then((departuresInfo: HotelOperationsDeparturesInfo) => {
-			this.returnSuccesfulResponse(req, res, { departuresInfo: departuresInfo });
+			this.returnSuccesfulResponse(req, res, departuresInfo);
 		}).catch((error: any) => {
 			this.returnErrorResponse(req, res, error, ThStatusCode.HotelOperationsDashboardControllerErrorGettingDepartures);
 		});
@@ -41,7 +41,7 @@ class HotelDashboardOperationsController extends BaseController {
 
 		var roomReader = new HotelOperationsRoomInfoReader(appContext, sessionContext);
 		roomReader.read().then((roomsInfo: HotelOperationsRoomInfo) => {
-			this.returnSuccesfulResponse(req, res, { roomsInfo: roomsInfo });
+			this.returnSuccesfulResponse(req, res, roomsInfo);
 		}).catch((error: any) => {
 			this.returnErrorResponse(req, res, error, ThStatusCode.HotelOperationsDashboardControllerErrorGettingRooms);
 		});

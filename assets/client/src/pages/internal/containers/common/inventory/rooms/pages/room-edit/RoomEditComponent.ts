@@ -11,7 +11,7 @@ import {RoomDO, RoomMaintenanceStatus} from '../../../../../../services/rooms/da
 import {RoomAmenitiesDO} from '../../../../../../services/settings/data-objects/RoomAmenitiesDO';
 import {RoomAttributesDO} from '../../../../../../services/settings/data-objects/RoomAttributesDO';
 import {RoomCategoryDO} from '../../../../../../services/room-categories/data-objects/RoomCategoryDO';
-import {RoomsService} from '../../../../../../services/rooms/RoomsService';
+import {LazyLoadRoomsService} from '../../../../../../services/rooms/LazyLoadRoomsService';
 import {BedsEagerService} from '../../../../../../services/beds/BedsEagerService';
 import {RoomEditService} from './services/RoomEditService';
 import {RoomAmenitiesService} from '../../../../../../services/settings/RoomAmenitiesService';
@@ -70,7 +70,7 @@ export class RoomEditComponent extends BaseFormComponent implements OnInit {
 
     constructor(private _appContext: AppContext,
         private _roomEditService: RoomEditService,
-        private _roomsService: RoomsService,
+        private _lazyLoadRoomsService: LazyLoadRoomsService,
         private _roomAmenitiesService: RoomAmenitiesService,
         private _roomAttributesService: RoomAttributesService,
         private _roomCategoriesService: RoomCategoriesService,
@@ -186,7 +186,7 @@ export class RoomEditComponent extends BaseFormComponent implements OnInit {
         if (this.newRoomCategoryToSave) {
             this.prepareRoomCategoryForSave();
             this._roomCategoriesService.saveRoomCategory(this.roomVM.category).subscribe((roomCategory: RoomCategoryDO) => {
-                this._roomsService.saveRoomDO(room).subscribe((updatedRoom: RoomDO) => {
+                this._lazyLoadRoomsService.saveRoomDO(room).subscribe((updatedRoom: RoomDO) => {
                     this.isSavingRoom = false;
                     this.showViewScreen();
                 }, (error: ThError) => {
@@ -199,7 +199,7 @@ export class RoomEditComponent extends BaseFormComponent implements OnInit {
             });
         }
         else {
-            this._roomsService.saveRoomDO(room).subscribe((updatedRoom: RoomDO) => {
+            this._lazyLoadRoomsService.saveRoomDO(room).subscribe((updatedRoom: RoomDO) => {
                 this.isSavingRoom = false;
                 this.showViewScreen();
             }, (error: ThError) => {
