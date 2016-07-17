@@ -14,6 +14,13 @@ export class SinglePriceDO extends BaseDO implements IPriceProductPrice {
 		return ["roomCategoryId", "price"];
 	}
 
+	public hasPriceConfiguredFor(query: PriceProductPriceQueryDO): boolean {
+		if (query.roomCategoryId === this.roomCategoryId) {
+			return true;
+		}
+		return false;
+	}
+
 	public getPricePerNightFor(query: PriceProductPriceQueryDO): number {
 		if (query.roomCategoryId === this.roomCategoryId) {
 			return this.price;

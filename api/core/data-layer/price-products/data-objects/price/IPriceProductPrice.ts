@@ -19,6 +19,7 @@ export interface PriceProductPriceQueryDO {
 }
 
 export interface IPriceProductPrice extends BaseDO {
+	hasPriceConfiguredFor(query: PriceProductPriceQueryDO): boolean;
 	getPricePerNightFor(query: PriceProductPriceQueryDO): number;
 	priceConfigurationIsValidFor(roomCategoryStatList: RoomCategoryStatsDO[]): boolean;
 	isConfiguredForRoomCategory(roomCategoryId: string): boolean;
