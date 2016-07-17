@@ -56,7 +56,8 @@ export class RoomCardComponent {
 	}
 
 	ngOnInit() {
-		this.buildMaintenanceObject(this.roomVM.properties.maintenanceStatus);
+		debugger;
+		// this.buildMaintenanceObject(this.roomVM.properties.maintenanceStatus);
 	}
 
 	ngAfterViewInit() {

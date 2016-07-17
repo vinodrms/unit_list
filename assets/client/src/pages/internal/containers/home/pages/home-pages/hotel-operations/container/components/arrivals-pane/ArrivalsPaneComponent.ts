@@ -7,7 +7,7 @@ import {ThButtonComponent} from '../../../../../../../../../../common/utils/comp
 
 import {ArrivalItemComponent} from './components/arrival-item/ArrivalItemComponent';
 
-import {HotelOperationsDashboardService} from '../../services/HotelOperationsDashboardService';
+import {HotelOperationsDashboardServiceDeprecated} from '../../services/HotelOperationsDashboardService';
 import {IHotelOperationsDashboardArrivalsPaneMediator} from '../../HotelOperationsDashboardComponent';
 
 import {AppContext} from '../../../../../../../../../../common/utils/AppContext';
@@ -31,7 +31,7 @@ export class ArrivalsPaneComponent implements OnInit {
 
 	constructor(
 		private _newBookingModalService: NewBookingModalService, 
-		private _hotelOperationsDashboardService: HotelOperationsDashboardService,
+		private _hotelOperationsDashboardService: HotelOperationsDashboardServiceDeprecated,
 		private _appContext:AppContext) {
 	}
 

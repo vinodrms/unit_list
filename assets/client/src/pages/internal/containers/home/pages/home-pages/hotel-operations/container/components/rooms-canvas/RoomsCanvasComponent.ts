@@ -1,7 +1,8 @@
 import {Component, Input, OnInit, NgZone} from '@angular/core';
 import {RoomCardComponent} from './components/room-card/RoomCardComponent';
 
-import {HotelOperationsDashboardService} from '../../services/HotelOperationsDashboardService';
+import {HotelOperationsDashboardService} from '../../../../../../../../services/hotel-operations/dashboard/HotelOperationsDashboardService';
+
 import {IHotelOperationsDashboardRoomsCanvasMediator} from '../../HotelOperationsDashboardComponent';
 
 
@@ -16,7 +17,6 @@ declare var _: any;
 @Component({
 	selector: 'rooms-canvas',
 	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/container/components/rooms-canvas/template/rooms-canvas.html',
-	providers: [HotelOperationsDashboardService],
 	directives: [RoomCardComponent]
 })
 
@@ -101,18 +101,20 @@ export class RoomsCanvasComponent implements OnInit {
 	public refresh() {
 		console.log("Refresh");
 		var date = this.hotelOperationsDashboard.getDate();
-		this._hotelOperationsDashboardService.getRooms(this.filterType.newValue, date)
-			.subscribe((rooms: any) => {
-				debugger;
-				console.log("Refresh callback");
-				this.setRoomsUIHighlight(rooms, this.dragStyles.default);
-				this.filterType.currentValue = this.filterType.newValue;
-				this._showNotificationBar = true;
-				this.roomVMList = rooms;
-				this.updateFilterNotification();
-			}, (error: ThError) => {
-				this._appContext.toaster.error(error.message);
-			});
+		this._hotelOperationsDashboardService.getRoomItems().subscribe((r: any) =>{
+			this.roomVMList = r;
+		}, (err:any) => { console.log(err)});		
+		// this._hotelOperationsDashboardService.getRooms(this.filterType.newValue, date)
+		// 	.subscribe((rooms: any) => {
+		// 		console.log("Refresh callback");
+		// 		this.setRoomsUIHighlight(rooms, this.dragStyles.default);
+		// 		this.filterType.currentValue = this.filterType.newValue;
+		// 		this._showNotificationBar = true;
+		// 		this.roomVMList = rooms;
+		// 		this.updateFilterNotification();
+		// 	}, (error: ThError) => {
+		// 		this._appContext.toaster.error(error.message);
+		// 	});
 	}
 
 	private setRoomsUIHighlight(rooms, value:any) {

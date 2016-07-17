@@ -10,7 +10,8 @@ import {ArrivalsPaneComponent} from './components/arrivals-pane/ArrivalsPaneComp
 import {DeparturesPaneComponent} from './components/departures-pane/DeparturesPaneComponent';
 import {RoomsCanvasComponent} from './components/rooms-canvas/RoomsCanvasComponent';
 
-import {HotelOperationsDashboardService} from './services/HotelOperationsDashboardService';
+import {HotelOperationsDashboardServiceDeprecated} from './services/HotelOperationsDashboardService';
+import {HOTEL_OPERATIONS_DASHBOARD_PROVIDERS} from '../../../../../../services/hotel-operations/dashboard/HotelOperationsDashboardProviders';
 
 declare var $:any;
 
@@ -44,7 +45,7 @@ export interface IHotelOperationsDashboardDeparturesMediator{
 	selector: 'hotel-operations-dashboard',
 	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/container/template/hotel-operations-dashboard.html',
 	directives: [ThButtonComponent, ArrivalsPaneComponent, DeparturesPaneComponent, RoomsCanvasComponent],
-	providers: [HotelOperationsDashboardService],
+	providers: [HOTEL_OPERATIONS_DASHBOARD_PROVIDERS, HotelOperationsDashboardServiceDeprecated],
 	pipes: [TranslationPipe]
 })
 
@@ -59,7 +60,8 @@ export class HotelOperationsDashboardComponent extends AHomeContainerComponent i
 
 	private _selectedArrivalItem = null;
 
-	constructor(headerPageService: HeaderPageService
+	constructor(
+		headerPageService: HeaderPageService
 		) {
 		super(headerPageService, HeaderPageType.HotelOperations);
 		this.self = this;

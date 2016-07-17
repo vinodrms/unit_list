@@ -22,7 +22,7 @@ declare var $: any;
 declare var _: any;
 
 @Injectable()
-export class HotelOperationsDashboardService{
+export class HotelOperationsDashboardServiceDeprecated{
 	private _roomsList;
 	private _arrivalsList;
 	private _departuresList;

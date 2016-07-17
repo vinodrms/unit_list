@@ -3,8 +3,7 @@ import {Component, OnInit, Input} from '@angular/core';
 import {IHotelOperationsDashboardDeparturesMediator} from '../../HotelOperationsDashboardComponent';
 import {DepartureItemComponent} from './components/departure-item/DepartureItemComponent';
 
-import {HotelOperationsDashboardService} from '../../services/HotelOperationsDashboardService';
-// import {HeaderPageService} from '../../../utils/header/container/services/HeaderPageService';
+import {HotelOperationsDashboardServiceDeprecated} from '../../services/HotelOperationsDashboardService';
 
 import {AppContext} from '../../../../../../../../../../common/utils/AppContext';
 import {ThError} from '../../../../../../../../../../common/utils/responses/ThError';
@@ -23,7 +22,7 @@ export class DeparturesPaneComponent implements OnInit {
 	@Input() hotelOperationsDashboard: IHotelOperationsDashboardDeparturesMediator;
 
 	constructor(
-		private _hotelOperationsDashboardService: HotelOperationsDashboardService,
+		private _hotelOperationsDashboardService: HotelOperationsDashboardServiceDeprecated,
 		private _appContext: AppContext){
 	}
 
