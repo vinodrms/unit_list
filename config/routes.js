@@ -115,6 +115,7 @@ module.exports.routes = {
 	'GET /api/bookings/bookingItem': 'BookingsController.getBookingById',
 	'POST /api/bookings/search': 'BookingsController.searchBookings',
 	'POST /api/bookings/add': 'BookingsController.addBookings',
+	'POST /api/bookings/occupancy': 'BookingsController.getOccupancy',
 
 	'POST /api/invoiceGroups': 'InvoiceGroupsController.getInvoiceGroupList',
     'POST /api/invoiceGroups/count': 'InvoiceGroupsController.getInvoiceGroupListCount',
@@ -128,6 +129,8 @@ module.exports.routes = {
 	'POST /api/hotelOperations/room/reserve': 'HotelRoomOperationsController.reserveRoom',
 	'POST /api/hotelOperations/room/change': 'HotelRoomOperationsController.changeRoom',
 	'POST /api/hotelOperations/room/checkOut': 'HotelRoomOperationsController.checkOut',
+
+	'GET /api/hotelOperations/common/hotelTimestamp': 'HotelCommonOperationsController.getCurrentHotelTimestamp',
 
 	/*Front End Views	*/
 	'GET /home*': {

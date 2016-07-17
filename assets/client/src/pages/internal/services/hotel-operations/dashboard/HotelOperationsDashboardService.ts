@@ -19,10 +19,21 @@ export class HotelOperationsDashboardService {
     public getArrivalItems(referenceDate?: ThDateDO): Observable<ArrivalItemInfoVM[]> {
         return this._arrivalsService.getArrivalItems(referenceDate);
     }
+    public refreshArrivals() {
+        this._arrivalsService.refresh();
+    }
+
     public getDepartureItems(referenceDate?: ThDateDO): Observable<DepartureItemInfoVM[]> {
         return this._departuresService.getDepartureItems(referenceDate);
     }
+    public refreshDepartures() {
+        this._departuresService.refresh();
+    }
+
     public getRoomItems(): Observable<RoomItemInfoVM[]> {
         return this._roomsService.getRoomItems();
+    }
+    public refreshRooms() {
+        this._roomsService.refresh();
     }
 }
