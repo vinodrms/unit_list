@@ -11,7 +11,6 @@ import {RoomCategoriesType} from './RoomCategoriesType';
 @Injectable()
 export class RoomCategoriesStatsService extends ARequestService<RoomCategoryStatsDO[]> {
 	private _categoriesType: RoomCategoriesType;
-	private _roomCategoryIdList: string[];
 
 	constructor(private _appContext: AppContext) {
 		super();
@@ -22,14 +21,10 @@ export class RoomCategoriesStatsService extends ARequestService<RoomCategoryStat
 			case RoomCategoriesType.UsedInRooms:
 				return this._appContext.thHttp.post(ThServerApi.UsedRoomCategoriesStats, {});
 			default:
-				var reqParams = {};
-				if (!this._appContext.thUtils.isUndefinedOrNull(this._roomCategoryIdList)) {
-					reqParams['roomCategoryIdList'] = this._roomCategoryIdList;
-				}
-				return this._appContext.thHttp.post(ThServerApi.RoomCategoriesStats, reqParams);
+				return this._appContext.thHttp.post(ThServerApi.RoomCategoriesStats, {});
 		}
 	}
-	
+
 	protected parseResult(result: Object): RoomCategoryStatsDO[] {
 		var roomCategoryStatsList: RoomCategoryStatsDO[] = [];
 		if (!result || !_.isArray(result["roomCategoryStatsList"])) {
@@ -47,14 +42,18 @@ export class RoomCategoriesStatsService extends ARequestService<RoomCategoryStat
 	}
 
 	public getRoomCategoryStatsForRoomCategoryList(roomCategoryList: RoomCategoryDO[]): Observable<RoomCategoryStatsDO[]> {
-		this._roomCategoryIdList = _.map(roomCategoryList, (roomCategory: RoomCategoryDO) => {
-			return roomCategory.id;
-		});
-		return this.getServiceObservable();
+		var roomCategoryIdList = _.map(roomCategoryList, (roomCategory: RoomCategoryDO) => { return roomCategory.id; });
+		return this.getRoomCategoryStatsForRoomCategoryIdList(roomCategoryIdList);
 	}
 	public getRoomCategoryStatsForRoomCategoryIdList(roomCategoryIdList?: string[]): Observable<RoomCategoryStatsDO[]> {
-		this._roomCategoryIdList = roomCategoryIdList;
-		return this.getServiceObservable();
+		if (this._appContext.thUtils.isUndefinedOrNull(roomCategoryIdList) || !_.isArray(roomCategoryIdList)) {
+			return this.getServiceObservable();
+		}
+		return this.getServiceObservable().map((roomCategoryStatsList: RoomCategoryStatsDO[]) => {
+			return _.filter(roomCategoryStatsList, (roomCategoryStats: RoomCategoryStatsDO) => {
+				return _.contains(roomCategoryIdList, roomCategoryStats.roomCategory.id);
+			});
+		});
 	}
 	public refreshData() {
 		this.updateServiceResult();
