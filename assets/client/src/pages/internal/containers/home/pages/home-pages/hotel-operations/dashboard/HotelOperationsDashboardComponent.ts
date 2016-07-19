@@ -43,7 +43,7 @@ export interface IHotelOperationsDashboardDeparturesMediator{
 
 @Component({
 	selector: 'hotel-operations-dashboard',
-	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/container/template/hotel-operations-dashboard.html',
+	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/dashboard/template/hotel-operations-dashboard.html',
 	directives: [ThButtonComponent, ArrivalsPaneComponent, DeparturesPaneComponent, RoomsCanvasComponent],
 	providers: [HOTEL_OPERATIONS_DASHBOARD_PROVIDERS, HotelOperationsDashboardServiceDeprecated],
 	pipes: [TranslationPipe]

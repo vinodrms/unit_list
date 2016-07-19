@@ -15,7 +15,7 @@ export class MaintenanceStatusType {
 
 @Component({
 	selector: 'room-card',
-	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/container/components/rooms-canvas/components/room-card/template/room-card.html'
+	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/dashboard/components/rooms-canvas/components/room-card/template/room-card.html'
 })
 
 export class RoomCardComponent {

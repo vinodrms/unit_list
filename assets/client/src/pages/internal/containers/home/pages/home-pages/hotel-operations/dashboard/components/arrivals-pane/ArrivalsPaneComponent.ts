@@ -19,7 +19,7 @@ declare var _ : any;
 
 @Component({
 	selector: 'arrivals-pane',
-	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/container/components/arrivals-pane/template/arrivals-pane.html',
+	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/dashboard/components/arrivals-pane/template/arrivals-pane.html',
 	providers: [NewBookingModalService],
 	directives: [ThButtonComponent, ArrivalItemComponent]
 })

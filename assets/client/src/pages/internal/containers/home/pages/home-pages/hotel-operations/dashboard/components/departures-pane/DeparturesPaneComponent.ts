@@ -11,7 +11,7 @@ import {ThError} from '../../../../../../../../../../common/utils/responses/ThEr
 declare var $:any;
 @Component({
 	selector: 'departures-pane',
-	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/container/components/departures-pane/template/departures-pane.html',
+	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/dashboard/components/departures-pane/template/departures-pane.html',
 	directives: [DepartureItemComponent]
 })
 

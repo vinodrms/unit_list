@@ -21,7 +21,7 @@ declare var _: any;
 
 @Component({
 	selector: 'rooms-canvas',
-	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/container/components/rooms-canvas/template/rooms-canvas.html',
+	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/dashboard/components/rooms-canvas/template/rooms-canvas.html',
 	directives: [RoomCardComponent]
 })
 
