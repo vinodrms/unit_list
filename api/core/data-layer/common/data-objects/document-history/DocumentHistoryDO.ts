@@ -5,7 +5,7 @@ import {ThTranslation} from '../../../../utils/localization/ThTranslation';
 import _ = require('underscore');
 
 export class DocumentHistoryDO extends BaseDO {
-    public static MAX_HISTORY_SIZE: number = 50;
+    public static MAX_HISTORY_SIZE: number = 25;
 
     actionList: DocumentActionDO[];
 

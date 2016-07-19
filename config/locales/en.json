@@ -9,6 +9,22 @@
 	"Room %roomName% was reserved for this booking.": "Room %roomName% was reserved for this booking.",
 	"The room was checked out.": "The room was checked out.",
 
+	// room maintenance history
+	"The room was marked as Clean": "The room was marked as Clean",
+	"The room was marked as Dirty": "The room was marked as Dirty",
+	"The room was marked as Pick Up": "The room was marked as Pick Up",
+	"The room was marked as Out Of Order": "The room was marked as Out Of Order",
+	"The room was marked as Out Of Service": "The room was marked as Out Of Service",
+	
+	"The room was marked as Clean (%maintenanceMessage%)": "The room was marked as Clean (%maintenanceMessage%)",
+	"The room was marked as Dirty (%maintenanceMessage%)": "The room was marked as Dirty (%maintenanceMessage%)",
+	"The room was marked as Pick Up (%maintenanceMessage%)": "The room was marked as Pick Up (%maintenanceMessage%)",
+	"The room was marked as Out Of Order (%maintenanceMessage%)": "The room was marked as Out Of Order (%maintenanceMessage%)",
+	"The room was marked as Out Of Service (%maintenanceMessage%)": "The room was marked as Out Of Service (%maintenanceMessage%)",
+	
+	"The room was marked as Dirty (Checked Out)": "The room was marked as Dirty (Checked Out)",
+	"The room was marked as Dirty (Occupied)": "The room was marked as Dirty (Occupied)",
+
 	// ThResponse
 
 	"Ok" : "Ok",

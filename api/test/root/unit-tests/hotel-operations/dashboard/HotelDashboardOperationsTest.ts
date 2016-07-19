@@ -26,6 +26,8 @@ import {CheckOutRoomDO} from '../../../../../core/domain-layer/hotel-operations/
 import {BookingPossiblePrices} from '../../../../../core/domain-layer/hotel-operations/booking/possible-prices/BookingPossiblePrices';
 import {BookingPossiblePricesDO} from '../../../../../core/domain-layer/hotel-operations/booking/possible-prices/BookingPossiblePricesDO';
 import {BookingPossiblePriceItems, BookingPriceItem} from '../../../../../core/domain-layer/hotel-operations/booking/possible-prices/utils/BookingPossiblePriceItems';
+import {MarkOccupiedCleanRoomsAsDirtyProcess} from '../../../../../core/domain-layer/hotel-operations/room/processes/MarkOccupiedCleanRoomsAsDirtyProcess';
+import {RoomDO, RoomMaintenanceStatus} from '../../../../../core/data-layer/rooms/data-objects/RoomDO';
 
 function checkArrivals(createdBookingList: BookingDO[], arrivalsInfo: HotelOperationsArrivalsInfo) {
     should.equal(arrivalsInfo.arrivalInfoList.length >= createdBookingList.length, true);
@@ -175,6 +177,16 @@ describe("Hotel Dashboard Operations Tests", function () {
                 done(error);
             });
         });
+
+        it("Should not mark any rooms as dirty (no checked in booking)", function (done) {
+            var roomProcess = new MarkOccupiedCleanRoomsAsDirtyProcess(testContext.appContext, testDataBuilder.hotelDO);
+            roomProcess.runProcess().then((updatedRoomList: RoomDO[]) => {
+                should.equal(updatedRoomList.length, 0);
+                done();
+            }).catch((error: any) => {
+                done(error);
+            });
+        });
         it("Should check in the reserved booking", function (done) {
             createdBookingList = _.filter(createdBookingList, (createdBooking: BookingDO) => { return createdBooking.bookingId !== booking.bookingId });
 
@@ -186,6 +198,18 @@ describe("Hotel Dashboard Operations Tests", function () {
             assignRoom.checkIn(assignRoomDO).then((updatedBooking: BookingDO) => {
                 should.equal(updatedBooking.confirmationStatus, BookingConfirmationStatus.CheckedIn);
                 booking = updatedBooking;
+                done();
+            }).catch((error: any) => {
+                done(error);
+            });
+        });
+
+        it("Should mark the checked in room as dirty", function (done) {
+            var roomProcess = new MarkOccupiedCleanRoomsAsDirtyProcess(testContext.appContext, testDataBuilder.hotelDO);
+            roomProcess.runProcess().then((updatedRoomList: RoomDO[]) => {
+                should.equal(updatedRoomList.length, 1);
+                should.equal(updatedRoomList[0].maintenanceHistory.actionList.length > 0, true);
+                should.equal(updatedRoomList[0].maintenanceStatus, RoomMaintenanceStatus.Dirty);
                 done();
             }).catch((error: any) => {
                 done(error);
