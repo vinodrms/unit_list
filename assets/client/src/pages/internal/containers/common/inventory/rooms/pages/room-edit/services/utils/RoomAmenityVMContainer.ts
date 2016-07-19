@@ -22,10 +22,12 @@ export class RoomAmenityVMContainer {
             this._roomAmenityList.push(roomAmenityVM);
         });
     }
-    
     public resetRoomAmenitySelection() {
-        this._roomAmenityList.forEach((roomAmenity: RoomAmenityVM) => {
-            roomAmenity.isSelected = false;        
+        this.updateRoomAmenitySelection([]);
+    }
+    public updateRoomAmenitySelection(amenityIdList: string[]) {
+        this._roomAmenityList.forEach((roomAmenityVM: RoomAmenityVM) => {
+            roomAmenityVM.isSelected = _.contains(amenityIdList, roomAmenityVM.roomAmenity.id);
         });
     }
     

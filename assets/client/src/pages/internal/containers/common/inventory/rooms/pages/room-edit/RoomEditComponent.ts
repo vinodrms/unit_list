@@ -111,14 +111,24 @@ export class RoomEditComponent extends BaseFormComponent implements OnInit {
         if (this._appContext.thUtils.isUndefinedOrNull(this.roomVM.room.maintenanceStatus)) {
             this.roomVM.room.maintenanceStatus = RoomMaintenanceStatus.Clean;
         }
-        if (this._appContext.thUtils.isUndefinedOrNull(this._roomVM.room.amenityIdList) &&
-            !this._appContext.thUtils.isUndefinedOrNull(this.roomAmenities)) {
+        this.initAmenities();
+        this.initAttributes();
+    }
+    private initAmenities() {
+        if (this._appContext.thUtils.isUndefinedOrNull(this.roomAmenities)) { return; }
+        if (this._appContext.thUtils.isUndefinedOrNull(this._roomVM.room.amenityIdList)) {
             this.roomAmenities.resetRoomAmenitySelection();
+            return;
         }
-        if (this._appContext.thUtils.isUndefinedOrNull(this._roomVM.room.attributeIdList) &&
-            !this._appContext.thUtils.isUndefinedOrNull(this.roomAttributes)) {
+        this.roomAmenities.updateRoomAmenitySelection(this._roomVM.room.amenityIdList);
+    }
+    private initAttributes() {
+        if (this._appContext.thUtils.isUndefinedOrNull(this.roomAttributes)) { return; }
+        if (this._appContext.thUtils.isUndefinedOrNull(this._roomVM.room.attributeIdList)) {
             this.roomAttributes.resetRoomAttributeSelection();
-        };
+            return;
+        }
+        this.roomAttributes.updateRoomAttributeSelection(this._roomVM.room.attributeIdList);
     }
     private initForm() {
         this.didSubmitForm = false;
@@ -301,6 +311,6 @@ export class RoomEditComponent extends BaseFormComponent implements OnInit {
         this.newRoomCategoryToSave = true;
     }
     public get roomCategoryConfigured(): boolean {
-        return _.isEmpty(this.selectedStationaryBeds) && _.isEmpty(this.selectedRollawayBeds) && !this._appContext.thUtils.isUndefinedOrNull(this._roomVM.category); 
+        return _.isEmpty(this.selectedStationaryBeds) && _.isEmpty(this.selectedRollawayBeds) && !this._appContext.thUtils.isUndefinedOrNull(this._roomVM.category);
     }
 }
