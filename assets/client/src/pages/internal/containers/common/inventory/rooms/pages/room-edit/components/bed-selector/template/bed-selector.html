@@ -6,8 +6,9 @@
         <div *ngIf="!bedVM.accommodatesBabies" class="bed-slot-info" [title]="bedVM.bed.name">
             <span class="bed-icon unitpal-font">{{bedVM.template.iconUrl}}</span><br/>
             <small>{{bedVM.bed.name}}</small>
-            <br/> {{bedVM.capacity.noAdults}}<span class="unitpal-font">:</span> {{bedVM.capacity.noChildren}}
-            <span class="unitpal-font">;</span>
+            <br/> 
+            <span *ngIf="bedVM.capacity.noAdults>0">{{bedVM.capacity.noAdults}}<span class="unitpal-font">:</span></span> 
+            <span *ngIf="bedVM.capacity.noChildren>0">{{bedVM.capacity.noChildren}}<span class="unitpal-font">;</span></span>
         </div>
 
         <div *ngIf="bedVM.accommodatesBabies" class="bed-slot-info" [title]="bedVM.bed.name">
