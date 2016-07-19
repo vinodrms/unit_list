@@ -23,6 +23,9 @@ import {HotelOperationsDeparturesReader} from '../../../../../core/domain-layer/
 import {HotelOperationsDeparturesInfo, DeparturelItemInfo, DeparturelItemBookingStatus} from '../../../../../core/domain-layer/hotel-operations/dashboard/departures/utils/HotelOperationsDeparturesInfo';
 import {CheckOutRoom} from '../../../../../core/domain-layer/hotel-operations/room/check-out/CheckOutRoom';
 import {CheckOutRoomDO} from '../../../../../core/domain-layer/hotel-operations/room/check-out/CheckOutRoomDO';
+import {BookingPossiblePrices} from '../../../../../core/domain-layer/hotel-operations/booking/possible-prices/BookingPossiblePrices';
+import {BookingPossiblePricesDO} from '../../../../../core/domain-layer/hotel-operations/booking/possible-prices/BookingPossiblePricesDO';
+import {BookingPossiblePriceItems, BookingPriceItem} from '../../../../../core/domain-layer/hotel-operations/booking/possible-prices/utils/BookingPossiblePriceItems';
 
 function checkArrivals(createdBookingList: BookingDO[], arrivalsInfo: HotelOperationsArrivalsInfo) {
     should.equal(arrivalsInfo.arrivalInfoList.length >= createdBookingList.length, true);
@@ -115,6 +118,22 @@ describe("Hotel Dashboard Operations Tests", function () {
                 done(error);
             });
         });
+        it("Should get the possible prices for the booking and include the current price", function (done) {
+            var possiblePrices = new BookingPossiblePrices(testContext.appContext, testContext.sessionContext);
+            var possiblePricesDO = new BookingPossiblePricesDO();
+            possiblePricesDO.bookingId = booking.bookingId;
+            possiblePricesDO.groupBookingId = booking.groupBookingId;
+            possiblePrices.getPossiblePrices(possiblePricesDO).then((priceItems: BookingPossiblePriceItems) => {
+                should.equal(priceItems.priceItemList.length > 0, true);
+                var priceItem: BookingPriceItem = _.find(priceItems.priceItemList, (item: BookingPriceItem) => { return item.roomCategoryId === booking.roomCategoryId });
+                should.exist(priceItem);
+                should.equal(priceItem.price, booking.price.totalPrice);
+                done();
+            }).catch((error: any) => {
+                done(error);
+            });
+        });
+
         it("Should get the reserved booking in the room info", function (done) {
             var roomInfoReader = new HotelOperationsRoomInfoReader(testContext.appContext, testContext.sessionContext);
             roomInfoReader.read().then((arrivalsInfo: HotelOperationsRoomInfo) => {

@@ -22,7 +22,8 @@ export enum TablePropertyType {
     CapacityType,
 	NotesType,
     FontIconType,
-	DateIntervalType
+	DateIntervalType,
+	FontIconWithTextType,
 }
 
 export interface TableColumnValueMeta {

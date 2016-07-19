@@ -63,6 +63,7 @@ export enum ThServerApi {
 	Bookings,
 	BookingsCount,
 	BookingsOccupancy,
+	BookingsItem,
 
 	HotelOperationsDashboardArrivals,
 	HotelOperationsDashboardDepartures,
@@ -72,6 +73,8 @@ export enum ThServerApi {
 	HotelOperationsRoomReserve,
 	HotelOperationsRoomChange,
 	HotelOperationsRoomCheckOut,
+
+	HotelOperationsBookingPossiblePrices,
 
 	HotelOperationsCommonHotelTimestamp,
 
@@ -144,6 +147,7 @@ ThServerApiUrl[ThServerApi.BookingsAdd] = "/bookings/add";
 ThServerApiUrl[ThServerApi.Bookings] = "/bookings";
 ThServerApiUrl[ThServerApi.BookingsCount] = "/bookings/count";
 ThServerApiUrl[ThServerApi.BookingsOccupancy] = "/bookings/occupancy";
+ThServerApiUrl[ThServerApi.BookingsItem] = "/bookings/bookingItem";
 
 ThServerApiUrl[ThServerApi.HotelOperationsDashboardArrivals] = "/hotelOperations/dashboard/arrivals";
 ThServerApiUrl[ThServerApi.HotelOperationsDashboardDepartures] = "/hotelOperations/dashboard/departures";
@@ -153,6 +157,8 @@ ThServerApiUrl[ThServerApi.HotelOperationsRoomCheckIn] = "/hotelOperations/room/
 ThServerApiUrl[ThServerApi.HotelOperationsRoomReserve] = "/hotelOperations/room/reserve";
 ThServerApiUrl[ThServerApi.HotelOperationsRoomChange] = "/hotelOperations/room/change";
 ThServerApiUrl[ThServerApi.HotelOperationsRoomCheckOut] = "/hotelOperations/room/checkOut";
+
+ThServerApiUrl[ThServerApi.HotelOperationsBookingPossiblePrices] = "/hotelOperations/booking/possiblePrices";
 
 ThServerApiUrl[ThServerApi.HotelOperationsCommonHotelTimestamp] = "/hotelOperations/common/hotelTimestamp";
 
