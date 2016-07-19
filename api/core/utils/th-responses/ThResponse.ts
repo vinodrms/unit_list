@@ -351,6 +351,7 @@ export enum ThStatusCode {
     BookingsValidatorConstraintsDoNotApply,
     BookingsValidatorAllotmentConstraintsDoNotApply,
     BookingsValidatorInvalidRoomCategoryId,
+    BookingsValidatorInvalidPriceForRoomCategoryId,
     BookingsValidatorInvalidRoomId,
     BookingsValidatorRoomCategoryNotFoundInActiveInventory,
     BookingsValidatorInsufficientRoomCategoryCapacity,
@@ -399,6 +400,8 @@ export enum ThStatusCode {
     HotelCommonOperationsControllerErrorGettingTimestamp,
     BookingOccupancyCalculatorWrapperError,
     BookingOccupancyCalculatorWrapperInvalidInterval,
+    BookingPossiblePricesError,
+    HotelBookingOperationsControllerErrorGettingPossiblePrices,
 
 }
 
@@ -741,6 +744,7 @@ ThMessage[ThStatusCode.BookingsValidatorBilledCustomerInvalidRightsOnPriceProduc
 ThMessage[ThStatusCode.BookingsValidatorConstraintsDoNotApply] = "The constraints from the price product do not apply for the booking.";
 ThMessage[ThStatusCode.BookingsValidatorAllotmentConstraintsDoNotApply] = "The constraints from the allotment do not apply for the booking.";
 ThMessage[ThStatusCode.BookingsValidatorInvalidRoomCategoryId] = "The room category is not valid within the price product from the booking.";
+ThMessage[ThStatusCode.BookingsValidatorInvalidPriceForRoomCategoryId] = "The selected room category does not have a price configuration in the Price Product for the number of people from the booking.";
 ThMessage[ThStatusCode.BookingsValidatorInvalidRoomId] = "The room was not found.";
 ThMessage[ThStatusCode.BookingsValidatorRoomCategoryNotFoundInActiveInventory] = "The room category was not found in the active room inventory.";
 ThMessage[ThStatusCode.BookingsValidatorInsufficientRoomCategoryCapacity] = "Insufficient capacity to fit into the selected room category.";
@@ -789,6 +793,8 @@ ThMessage[ThStatusCode.HotelRoomOperationsControllerErrorChangingRoom] = "Error 
 ThMessage[ThStatusCode.HotelCommonOperationsControllerErrorGettingTimestamp] = "Error getting current hotel timestamp.";
 ThMessage[ThStatusCode.BookingOccupancyCalculatorWrapperError] = "Error getting occupancy.";
 ThMessage[ThStatusCode.BookingOccupancyCalculatorWrapperInvalidInterval] = "Invalid submitted interval.";
+ThMessage[ThStatusCode.BookingPossiblePricesError] = "Error getting all the possible prices for the booking.";
+ThMessage[ThStatusCode.HotelBookingOperationsControllerErrorGettingPossiblePrices] = "Error getting all the possible prices for the booking.";
 
 export class ThResponse {
     statusCode: ThStatusCode;

@@ -240,6 +240,9 @@ export class LazyLoadingTableComponent<T> {
 	protected isDateInterval(valueMeta: TableColumnValueMeta): boolean {
 		return valueMeta.propertyType === TablePropertyType.DateIntervalType;
 	}
+	protected isFontIconWithText(valueMeta: TableColumnValueMeta) : boolean {
+		return valueMeta.propertyType === TablePropertyType.FontIconWithTextType;
+	}
 	protected noResultsExist(): boolean {
 		return this.totalCount.numOfItems === 0 && this.itemList.length === 0;
 	}

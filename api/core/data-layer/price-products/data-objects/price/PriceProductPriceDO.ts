@@ -32,6 +32,13 @@ export class PriceProductPriceDO extends BaseDO implements IPriceProductPrice {
 			this.priceList.push(price);
 		});
 	}
+	public hasPriceConfiguredFor(query: PriceProductPriceQueryDO): boolean {
+		var priceItem: IPriceProductPrice = this.getPriceForSingleRoomCategory(query.roomCategoryId);
+		if (!priceItem) {
+			return false;
+		}
+		return priceItem.hasPriceConfiguredFor(query);
+	}
 	public getPricePerNightFor(query: PriceProductPriceQueryDO): number {
 		var priceItem: IPriceProductPrice = this.getPriceForSingleRoomCategory(query.roomCategoryId);
 		return priceItem.getPricePerNightFor(query);

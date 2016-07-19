@@ -1,0 +1,12 @@
+<loading-component [isLoading]="!didInit"></loading-component>
+
+<div class="row lazy-loading-table-filter operational-important-field" *ngIf="didInit">
+    <div class="col-md-12">
+        <p><i class="fa fa-info-circle"></i> {{ pageMessage | translate }}</p>
+    </div>
+</div>
+
+<lazy-loading-table
+    [hidden]="!didInit" 
+    (onSelect)="didSelectPriceSelection($event)" >
+</lazy-loading-table>

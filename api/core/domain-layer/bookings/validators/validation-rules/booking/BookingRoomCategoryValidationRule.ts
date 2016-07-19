@@ -36,6 +36,17 @@ export class BookingRoomCategoryValidationRule extends ABusinessValidationRule<B
             });
             return;
         }
+        if (!priceProduct.price.hasPriceConfiguredFor({
+            configCapacity: booking.configCapacity,
+            roomCategoryId: booking.roomCategoryId
+        })) {
+            this.logBusinessAndReject(reject, booking, {
+                statusCode: ThStatusCode.BookingsValidatorInvalidPriceForRoomCategoryId,
+                errorMessage: "invalid room category id - no price"
+            });
+            return;
+        }
+
         var actualRoomCategoryId: string = booking.roomCategoryId;
         if (!this._thUtils.isUndefinedOrNull(booking.roomId) && _.isString(booking.roomId)) {
             var foundRoom = _.find(this._validationParams.roomList, (room: RoomDO) => { return room.id === booking.roomId });

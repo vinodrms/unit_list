@@ -36,6 +36,22 @@ export class PricePerPersonDO extends BaseDO implements IPriceProductPrice {
 		return priceList;
 	}
 
+	public hasPriceConfiguredFor(query: PriceProductPriceQueryDO): boolean {
+		for (var noOfAdults = 1; noOfAdults <= query.configCapacity.noAdults; noOfAdults++) {
+			var priceForFixedNoOfPers = this.getPriceForNumberOfPersons(this.adultsPriceList, noOfAdults);
+			if(!priceForFixedNoOfPers) {
+				return false;
+			}
+		}
+		for (var noOfChildren = 1; noOfChildren <= query.configCapacity.noChildren; noOfChildren++) {
+			var priceForFixedNoOfPers = this.getPriceForNumberOfPersons(this.childrenPriceList, noOfChildren);
+			if(!priceForFixedNoOfPers) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 	public getPricePerNightFor(query: PriceProductPriceQueryDO): number {
 		try {
 			var adultsPrice = 0;
