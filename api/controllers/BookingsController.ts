@@ -41,7 +41,7 @@ class BookingsController extends BaseController {
         var bookingMeta = this.getBookingMetaRepoDOFrom(sessionContext);
         var bookingRepo = appContext.getRepositoryFactory().getBookingRepository();
         bookingRepo.getBookingList(bookingMeta, req.body.searchCriteria, req.body.lazyLoad).then((bookingSearchResult: BookingSearchResultRepoDO) => {
-            this.translateSearchResult(bookingSearchResult, sessionContext);
+            this.translateBookingListHistory(bookingSearchResult.bookingList, sessionContext);
             this.returnSuccesfulResponse(req, res, bookingSearchResult);
         }).catch((err: any) => {
             this.returnErrorResponse(req, res, err, ThStatusCode.BookingsControllerErrorGettingBookings);
@@ -79,6 +79,7 @@ class BookingsController extends BaseController {
 
         var addBookingItems = new AddBookingItems(appContext, sessionContext);
         addBookingItems.add(req.body.bookingItems, GroupBookingInputChannel.PropertyManagementSystem).then((addedBookingList: BookingDO[]) => {
+            this.translateBookingListHistory(addedBookingList, sessionContext);
             this.returnSuccesfulResponse(req, res, { bookingList: addedBookingList });
         }).catch((err: any) => {
             this.returnErrorResponse(req, res, err, ThStatusCode.BookingsControllerErrorAddingBookings);
@@ -100,9 +101,9 @@ class BookingsController extends BaseController {
     private getBookingMetaRepoDOFrom(sessionContext: SessionContext): BookingMetaRepoDO {
         return { hotelId: sessionContext.sessionDO.hotel.id };
     }
-    private translateSearchResult(bookingSearchResult: BookingSearchResultRepoDO, sessionContext: SessionContext) {
+    private translateBookingListHistory(bookingList: BookingDO[], sessionContext: SessionContext) {
         var thTranslation = this.getThTranslation(sessionContext);
-        _.forEach(bookingSearchResult.bookingList, (booking: BookingDO) => {
+        _.forEach(bookingList, (booking: BookingDO) => {
             this.translateBookingHistory(booking, thTranslation);
         });
     }

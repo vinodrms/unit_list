@@ -5,6 +5,7 @@ import {AppContext, ThServerApi} from '../../../../../common/utils/AppContext';
 import {BookingDO} from '../../bookings/data-objects/BookingDO';
 import {AssignRoomParam} from './utils/AssignRoomParam';
 import {CheckOutRoomParam} from './utils/CheckOutRoomParam';
+import {RoomDO} from '../../rooms/data-objects/RoomDO';
 
 @Injectable()
 export class HotelOperationsRoomService {
@@ -23,6 +24,13 @@ export class HotelOperationsRoomService {
     }
     public checkOut(checkOutRoomParam: AssignRoomParam): Observable<BookingDO> {
         return this.applyRoomChange(ThServerApi.HotelOperationsRoomCheckOut, { checkOutRoom: checkOutRoomParam });
+    }
+    public updateMaintenanceStatus(room: RoomDO): Observable<RoomDO> {
+        return this._appContext.thHttp.post(ThServerApi.HotelOperationsRoomChangeMaintenanceStatus, { room: room }).map((roomObject: Object) => {
+            var roomDO = new RoomDO();
+            roomDO.buildFromObject(roomObject["room"]);
+            return roomDO;
+        });
     }
 
     private applyRoomChange(roomChangeApi: ThServerApi, postData: Object): Observable<BookingDO> {

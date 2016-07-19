@@ -26,8 +26,7 @@ export class RoomsTestHelper {
             attributeIdList: this._testUtils.getIdSampleFrom(this._defaultDataBuilder.roomAttributeList, 3),
             fileUrlList: [],
             description: "Demo description",
-            notes: "Demo notes",
-            maintenanceStatus: RoomMaintenanceStatus.Clean
+            notes: "Demo notes"
         };
     }
     
@@ -40,8 +39,7 @@ export class RoomsTestHelper {
             attributeIdList: this._testUtils.getIdSampleFrom(this._defaultDataBuilder.roomAttributeList, 3),
             fileUrlList: [],
             description: "Demo description",
-            notes: "Demo notes",
-            maintenanceStatus: RoomMaintenanceStatus.Clean
+            notes: "Demo notes"
         };
     }
 
@@ -54,8 +52,7 @@ export class RoomsTestHelper {
             attributeIdList: this._testUtils.getIdSampleFrom(this._defaultDataBuilder.roomAttributeList, 3),
             fileUrlList: [],
             description: "Demo description",
-            notes: "Demo notes",
-            maintenanceStatus: RoomMaintenanceStatus.Clean
+            notes: "Demo notes"
         };
     }
 
@@ -68,8 +65,7 @@ export class RoomsTestHelper {
             attributeIdList: ["X"],
             fileUrlList: [],
             description: "Demo description",
-            notes: "Demo notes",
-            maintenanceStatus: RoomMaintenanceStatus.Clean
+            notes: "Demo notes"
         };
     }
 
