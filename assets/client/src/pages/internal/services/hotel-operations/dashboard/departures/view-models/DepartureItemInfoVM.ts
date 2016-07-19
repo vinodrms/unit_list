@@ -1,5 +1,6 @@
 import {DepartureItemInfoDO} from '../data-objects/DepartureItemInfoDO';
 import {RoomVM} from '../../../../rooms/view-models/RoomVM';
+import {ThTranslation} from '../../../../../../../common/utils/localization/ThTranslation';
 
 export class DepartureItemInfoVM {
     private _departureItemDO: DepartureItemInfoDO;
@@ -8,7 +9,7 @@ export class DepartureItemInfoVM {
     private _isStayingInRoom: boolean;
     private _stayingRoomVM: RoomVM;
 
-    constructor() {
+    constructor(private _thTranslation:ThTranslation) {
     }
 
     public get departureItemDO(): DepartureItemInfoDO {

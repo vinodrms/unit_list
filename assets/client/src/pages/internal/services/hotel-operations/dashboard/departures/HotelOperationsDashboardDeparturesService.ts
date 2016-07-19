@@ -13,11 +13,17 @@ import {RoomsService} from '../../../rooms/RoomsService';
 import {RoomVM} from '../../../rooms/view-models/RoomVM';
 import {RoomItemsIndexer} from '../utils/RoomItemsIndexer';
 
+import {ThTranslation} from '../../../../../../common/utils/localization/ThTranslation';
+
 @Injectable()
 export class HotelOperationsDashboardDeparturesService extends ARequestService<DepartureItemInfoVM[]> {
     private _referenceDate: ThDateDO;
 
-    constructor(private _appContext: AppContext, private _roomsService: RoomsService) {
+    constructor(
+        private _appContext: AppContext,
+        private _roomsService: RoomsService,
+        private _thTranslation: ThTranslation
+        ) {
         super();
     }
 
@@ -36,7 +42,7 @@ export class HotelOperationsDashboardDeparturesService extends ARequestService<D
 
             var departureItemVMList: DepartureItemInfoVM[] = [];
             _.forEach(departuresInfo.departureInfoList, (departureItemDO: DepartureItemInfoDO) => {
-                var departureItemVM = new DepartureItemInfoVM();
+                var departureItemVM = new DepartureItemInfoVM(this._thTranslation);
                 departureItemVM.departureItemDO = departureItemDO;
                 departureItemVM.hasInvoice = !this._appContext.thUtils.isUndefinedOrNull(departureItemDO.invoiceGroupId);
                 departureItemVM.hasBooking = !this._appContext.thUtils.isUndefinedOrNull(departureItemDO.bookingId)

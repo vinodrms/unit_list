@@ -57,8 +57,8 @@
 <div class="room-card free" *ngIf='roomVM.roomItemDO.roomStatus == 2'>
 	<div class="card-header">
 		<div class="section1">
-			<div class="room-number clickable">{{ roomVM.roomVM.room.name }}</div>
-			<div class="room-details">{{ roomVM.roomVM.categoryStats.roomCategory.displayName }}</div>
+			<div class="room-number clickable">{{ roomVM.name }}</div>
+			<div class="room-details">{{ roomVM.categoryLabel }}</div>
 		</div>
 		<div class="section2 flex-row flex-jc-sb">
 			<div class="customer-name clickable"></div>

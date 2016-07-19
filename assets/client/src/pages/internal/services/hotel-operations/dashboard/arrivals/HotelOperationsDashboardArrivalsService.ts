@@ -15,12 +15,18 @@ import {RoomsService} from '../../../rooms/RoomsService';
 import {RoomVM} from '../../../rooms/view-models/RoomVM';
 import {RoomItemsIndexer} from '../utils/RoomItemsIndexer';
 
+import {ThTranslation} from '../../../../../../common/utils/localization/ThTranslation';
+
 @Injectable()
 export class HotelOperationsDashboardArrivalsService extends ARequestService<ArrivalItemInfoVM[]> {
     private _referenceDate: ThDateDO;
 
-    constructor(private _appContext: AppContext, private _roomsService: RoomsService,
-        private _roomCategoriesStatsService: RoomCategoriesStatsService) {
+    constructor(
+        private _appContext: AppContext,
+        private _roomsService: RoomsService,
+        private _roomCategoriesStatsService: RoomCategoriesStatsService,
+        private _thTranslate: ThTranslation
+        ) {
         super();
     }
 
@@ -41,7 +47,7 @@ export class HotelOperationsDashboardArrivalsService extends ARequestService<Arr
 
             var arrivalItemVMList: ArrivalItemInfoVM[] = [];
             _.forEach(arrivalsInfo.arrivalInfoList, (arrivalItemDO: ArrivalItemInfoDO) => {
-                var arrivalItemVM = new ArrivalItemInfoVM();
+                var arrivalItemVM = new ArrivalItemInfoVM(this._thTranslate);
                 arrivalItemVM.arrivalItemDO = arrivalItemDO;
                 arrivalItemVM.reservedRoomCategoryStats = roomItemIndexer.getRoomCategoryStatsDOById(arrivalItemDO.roomCategoryId);
                 arrivalItemVM.hasReservedRoom = false;

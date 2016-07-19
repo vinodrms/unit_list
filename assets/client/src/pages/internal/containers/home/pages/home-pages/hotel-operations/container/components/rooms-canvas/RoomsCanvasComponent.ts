@@ -5,8 +5,13 @@ import {HotelOperationsDashboardService} from '../../../../../../../../services/
 
 import {IHotelOperationsDashboardRoomsCanvasMediator} from '../../HotelOperationsDashboardComponent';
 
-
 import {RoomStatusType} from '../../shared/RoomStatusType';
+
+import {RoomItemInfoDO, RoomItemStatus} from '../../../../../../../../services/hotel-operations/dashboard/rooms/data-objects/RoomItemInfoDO';
+
+import {ArrivalItemInfoVM} from '../../../../../../../../services/hotel-operations/dashboard/arrivals/view-models/ArrivalItemInfoVM';
+import {RoomItemInfoVM, RoomItemInfoVM_UI_Properties} from '../../../../../../../../services/hotel-operations/dashboard/rooms/view-models/RoomItemInfoVM';
+
 
 import {AppContext} from '../../../../../../../../../../common/utils/AppContext';
 import {ThError} from '../../../../../../../../../../common/utils/responses/ThError';
@@ -24,7 +29,7 @@ export class RoomsCanvasComponent implements OnInit {
 	@Input() hotelOperationsDashboard: IHotelOperationsDashboardRoomsCanvasMediator;
 
 	public filterType;
-	public roomVMList: any[];
+	public roomVMList: RoomItemInfoVM[];
 	public filterNotification;
 
 	private _showNotificationBar;
@@ -49,28 +54,11 @@ export class RoomsCanvasComponent implements OnInit {
 		};
 
 		this.dragStyles = {
-			canCheckIn : {
-				tickBorder : true,
-				ghost: false,
-				acceptDrop: true
-			},
-			canUpgrade : {
-				tickBorder : false,
-				ghost: true,
-				acceptDrop: true
-			},
-			canNotCheckIn : {
-				tickBorder : false,
-				ghost: true,
-				acceptDrop: false
-			},
-			default: {
-				tickBorder : false,
-				ghost: false,
-				acceptDrop: false
-			}
+			canCheckIn : new RoomItemInfoVM_UI_Properties(true, false, true),
+			canUpgrade : new RoomItemInfoVM_UI_Properties(false,true,true),
+			canNotCheckIn : new RoomItemInfoVM_UI_Properties(false,true,false),
+			default: new RoomItemInfoVM_UI_Properties(false,false,false)
 		}
-
 	}
 
 	ngOnInit() {
@@ -167,16 +155,16 @@ export class RoomsCanvasComponent implements OnInit {
 		}
 	}
 
-	public startedDragging(arrivalItemVM) {
+	public startedDragging(arrivalItemVM: ArrivalItemInfoVM) {
 		var canCheckInRoomVmList = [];
 		var canNotCheckInRoomVmList = [];
 		var canUpgradeCheckInRoomVMList = [];
 
 		this.roomVMList.forEach(currentRoom => {
-			if (currentRoom.roomCategory.displayName == arrivalItemVM.roomType && currentRoom.status.displayName == "Free") {
+			if (currentRoom.categoryLabel == arrivalItemVM.roomCategory && currentRoom.status == RoomItemStatus.Free) {
 				canCheckInRoomVmList.push(currentRoom);
 			}
-			else if (currentRoom.roomCategory.displayName != arrivalItemVM.roomType && currentRoom.status.displayName == "Free") {
+			else if (currentRoom.categoryLabel != arrivalItemVM.roomCategory && currentRoom.status == RoomItemStatus.Free) {
 				canUpgradeCheckInRoomVMList.push(currentRoom);
 			}
 			else {
@@ -185,9 +173,9 @@ export class RoomsCanvasComponent implements OnInit {
 		});
 
 		// Default
-		this.setRoomsUIHighlight(canCheckInRoomVmList, this.dragStyles.canCheckIn);
-		this.setRoomsUIHighlight(canUpgradeCheckInRoomVMList, this.dragStyles.canUpgrade);
-		this.setRoomsUIHighlight(canNotCheckInRoomVmList, this.dragStyles.canNotCheckIn);
+		// this.setRoomsUIHighlight(canCheckInRoomVmList, this.dragStyles.canCheckIn);
+		// this.setRoomsUIHighlight(canUpgradeCheckInRoomVMList, this.dragStyles.canUpgrade);
+		// this.setRoomsUIHighlight(canNotCheckInRoomVmList, this.dragStyles.canNotCheckIn);
 	}
 
 	public dropHandled(event) {

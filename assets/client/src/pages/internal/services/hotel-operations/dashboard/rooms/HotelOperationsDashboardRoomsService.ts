@@ -12,9 +12,15 @@ import {RoomItemInfoVM} from './view-models/RoomItemInfoVM';
 import {RoomsService} from '../../../rooms/RoomsService';
 import {RoomVM} from '../../../rooms/view-models/RoomVM';
 
+import {ThTranslation} from '../../../../../../common/utils/localization/ThTranslation';
+
 @Injectable()
 export class HotelOperationsDashboardRoomsService extends ARequestService<RoomItemInfoVM[]> {
-    constructor(private _appContext: AppContext, private _roomsService: RoomsService) {
+    constructor(
+        private _appContext: AppContext,
+        private _roomsService: RoomsService,
+        private _thTranslation: ThTranslation
+        ) {
         super();
     }
 
@@ -31,7 +37,7 @@ export class HotelOperationsDashboardRoomsService extends ARequestService<RoomIt
 
             var roomItemInfoVMList: RoomItemInfoVM[] = [];
             _.forEach(roomVMList, (roomVM: RoomVM) => {
-                var roomItemInfoVM = new RoomItemInfoVM();
+                var roomItemInfoVM = new RoomItemInfoVM(this._thTranslation);
                 roomItemInfoVM.roomVM = roomVM;
 
                 var roomItemDO: RoomItemInfoDO = roomsInfo.getRoomItemInfoDOByRoomId(roomVM.room.id);

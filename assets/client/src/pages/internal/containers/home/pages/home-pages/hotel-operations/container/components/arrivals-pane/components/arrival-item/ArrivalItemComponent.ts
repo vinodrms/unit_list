@@ -31,7 +31,7 @@ export class ArrivalItemComponent {
 						</div>
 						<div class="right flex-row flex-jc-sb p-6">
 							<div class="client-name">`
-								+ this.arrivalItemVM.clientName +
+								+ this.arrivalItemVM.customerName +
 							`</div>
 							<div class="other-details gray-color">
 								<span class="unitpal-font">:</span>` + this.arrivalItemVM.numberOfPeople + 

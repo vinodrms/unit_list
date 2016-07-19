@@ -1,6 +1,8 @@
 import {Component, Input, Output, NgZone, ElementRef, EventEmitter} from '@angular/core';
 import {RoomDropHandlerFactory} from './drop-handlers/RoomDropHandlerFactory';
 
+import {HotelOperationsRoomService} from '../../../../../../../../../../services/hotel-operations/room/HotelOperationsRoomService';
+
 // import {HeaderPageService} from '../../../utils/header/container/services/HeaderPageService';
 
 declare var $: any;
@@ -21,7 +23,11 @@ export class RoomCardComponent {
 	@Input() roomVM: any;
 	@Output() dropped = new EventEmitter();
 
-	constructor(private _zone: NgZone, private _root: ElementRef) {
+	constructor(
+		private _zone: NgZone,
+		private _root: ElementRef
+		// private _operationRoomService: HotelOperationsRoomService
+		) {
 		this.maintenance = undefined;
 	}
 
@@ -56,7 +62,6 @@ export class RoomCardComponent {
 	}
 
 	ngOnInit() {
-		debugger;
 		// this.buildMaintenanceObject(this.roomVM.properties.maintenanceStatus);
 	}
 
@@ -74,7 +79,8 @@ export class RoomCardComponent {
 
 						if (outcome.accepted == true) {
 							this.roomVM.status.value = "Occupied";
-							this.dropped.emit(outcome)
+							this.dropped.emit(outcome);
+							// this._operationRoomService.checkIn();
 						}
 						else {
 							this.dropped.emit(outcome)

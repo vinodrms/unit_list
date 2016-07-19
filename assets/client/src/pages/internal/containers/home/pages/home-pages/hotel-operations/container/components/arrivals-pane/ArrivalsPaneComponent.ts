@@ -7,7 +7,9 @@ import {ThButtonComponent} from '../../../../../../../../../../common/utils/comp
 
 import {ArrivalItemComponent} from './components/arrival-item/ArrivalItemComponent';
 
-import {HotelOperationsDashboardServiceDeprecated} from '../../services/HotelOperationsDashboardService';
+// import {HotelOperationsDashboardServiceDeprecated} from '../../services/HotelOperationsDashboardService';
+import {HotelOperationsDashboardService} from '../../../../../../../../services/hotel-operations/dashboard/HotelOperationsDashboardService';
+
 import {IHotelOperationsDashboardArrivalsPaneMediator} from '../../HotelOperationsDashboardComponent';
 
 import {AppContext} from '../../../../../../../../../../common/utils/AppContext';
@@ -31,7 +33,7 @@ export class ArrivalsPaneComponent implements OnInit {
 
 	constructor(
 		private _newBookingModalService: NewBookingModalService, 
-		private _hotelOperationsDashboardService: HotelOperationsDashboardServiceDeprecated,
+		private _hotelOperationsDashboardService: HotelOperationsDashboardService,
 		private _appContext:AppContext) {
 	}
 
@@ -42,9 +44,9 @@ export class ArrivalsPaneComponent implements OnInit {
 
 	public refresh(){
 		var date = this.hotelOperationsDashboard.getDate(); 
-
-		this._hotelOperationsDashboardService.getArrivals(date)
+		this._hotelOperationsDashboardService.getArrivalItems()
 		.subscribe((arrivals: any) => {
+			debugger;
 			this.arrivalItemsVMList = arrivals;
 			}, (error: ThError) => {
 				this._appContext.toaster.error(error.message);
