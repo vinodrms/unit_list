@@ -52,12 +52,12 @@ body,html {
 }
 
 .card a {
-    color: #fc8433;
+    color: #fb6708;
     cursor: pointer;
 }
 
 .card a:hover {
-    color: #1E3A6A;
+    color: #C44D00;
     cursor: pointer;
 }
 
@@ -298,7 +298,7 @@ input:focus {
 }
 
 .form-warning .form-control {
-    border: 1px solid #fc8433 !important;
+    border: 1px solid #fb6708 !important;
 }
 
 .input-group.form-warning + label.form-warning {
@@ -337,7 +337,7 @@ label.form-warning {
     display: none;
     width: 100% !important;
     z-index: 99;
-    background: #fc8433;
+    background: #fb6708;
 }
 
 .input-group {
@@ -355,8 +355,24 @@ textarea {
 }
 
 .button-items .btn-default {
-    width: 128px;
-    padding: 12px 12px 6px;
+    width: 80px;
+    height: 80px;
+    border-radius: 0px;
+}
+.button-items .btn-default > div {
+    font-size: 40px;
+}
+
+.button-items .btn-default.active {
+    color: white;
+    background-color: #fb6708;
+    border: 0px solid;
+}
+
+.btn-group .btn-default.active {
+    color: white;
+    background-color: #fb6708;
+    border-color: #fb6708;
 }
 
 .button-radio {
@@ -376,7 +392,14 @@ textarea {
 
 .button-check .btn-default {
     width: 48px;
-    padding: 12px 6px;
+    height: 48px;
+    padding: 6px 6px;
+    border-radius: 0px;
+}
+.button-check .btn-default.active {
+    color: white;
+    background-color: #fb6708;
+    border: 0px solid;
 }
 
 .fileinput-preview > img {
@@ -537,7 +560,7 @@ lazy-loading-table {
 
 .nav.side-menu> li.current-page,
 .nav.side-menu> li.active {
-    border-right: 6px solid #fc8433;
+    border-right: 6px solid #fb6708;
     background: #fff;
 }
 
@@ -595,8 +618,8 @@ lazy-loading-table {
 .btn-primary:active,
 .btn-primary:visited,
 .btn-primary:focus {
-    background-color: #6098D1 !important;
-    border-color: #6098D1 !important;
+    background-color: #36ce8d !important;
+    border-color: #36ce8d !important;
 }
 
 .btn-danger,
@@ -604,8 +627,8 @@ lazy-loading-table {
 .btn-danger:active,
 .btn-danger:visited,
 .btn-danger:focus {
-    background-color: #fc8433 !important;
-    border-color: #fc8433 !important;
+    background-color: #fb6708 !important;
+    border-color: #fb6708 !important;
 }
 
 .btn-green,
@@ -613,8 +636,8 @@ lazy-loading-table {
 .btn-green:active,
 .btn-green:visited,
 .btn-green:focus {
-    background-color: #5CB85C !important;
-    border-color: #5CB85C !important;
+    background-color: #6098D1 !important;
+    border-color: #6098D1 !important;
     color: white;
 }
 
@@ -667,7 +690,7 @@ lazy-loading-table {
 .bed-container {
     float: left;
     width: calc(100% - 40px);
-    height: 120px;
+    height: 105px;
     overflow-x: scroll;
     overflow-y: hidden;
     white-space: nowrap;
@@ -684,12 +707,12 @@ lazy-loading-table {
     height: 80px;
     display: inline-block;
     margin: 10px 5px;
-    border: 1px solid #fc8433;
+    border: 1px solid #fb6708;
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
     border-radius: 4px;
     position: relative;
-    color: #fc8433;
+    color: #fb6708;
 }
 
 .bed-slot-info {
@@ -714,7 +737,7 @@ lazy-loading-table {
 }
 
 .btn.bed-slot:hover {
-    color: #fc8433;
+    color: #fb6708;
 }
 
 .bed-slot.available {
@@ -732,8 +755,8 @@ lazy-loading-table {
 }
 
 .bed-slot.unselected:hover {
-    color: #fc8433;
-    border: 1px solid #fc8433;
+    color: #fb6708;
+    border: 1px solid #fb6708;
 }
 
 .bed-selection-message {
@@ -801,7 +824,7 @@ td room-categ-capacity {
 }
 
 .modal a {
-    color: #fc8433;
+    color: #fb6708;
 }
 
 .modal a:hover {
@@ -821,7 +844,7 @@ td room-categ-capacity {
 }
 
 .text-warning {
-    color:#fc8433;
+    color:#fb6708;
 }
 
 .table-item-action-group {
@@ -877,7 +900,7 @@ td room-categ-capacity {
 }
 
 .orange-color{
-    color: #fc8433
+    color: #fb6708
 }
 
 .olive {
@@ -959,7 +982,7 @@ input[type="file"] {
 }
 
 .pace .pace-progress {
-  background: #fc8433;
+  background: #fb6708;
   position: fixed;
   z-index: 2000;
   top: 0;
@@ -1076,12 +1099,12 @@ table.lazy-loading tbody {
   flex-shrink: 1;
 }
 tr.lazy-loading-table-totals {
-    border-top: 1px solid #fc8433 !important;
+    border-top: 1px solid #fb6708 !important;
     background-color: #e7e7e7;
 }
 tr.lazy-loading-table-totals>td.important {
     font-weight: bold;
-    color: #fc8433;
+    color: #fb6708;
 }
 tr.lazy-loading-table-totals:hover,
 tr.lazy-loading-table-totals:focus {
@@ -1360,7 +1383,7 @@ table.lazy-loading .th-pagination {
     display: inline-block;
 }
 .home-header-button.active {
-    border-bottom: 4px solid #fc8433 !important;
+    border-bottom: 4px solid #fb6708 !important;
 }
 .home-header-button.active .left-separator {
     opacity: 1.0;
@@ -1556,8 +1579,8 @@ table.lazy-loading .th-pagination {
     position: absolute;
     right: 12px;
     top: 8px;
-    background: #fc8433 !important;
-    border: 1px solid #fc8433 !important;
+    background: #fb6708 !important;
+    border: 1px solid #fb6708 !important;
     color: #fff;
 }
 ul.msg_list li a .time {
@@ -1571,10 +1594,10 @@ ul.msg_list li a .message {
     color: #737373;
 }
 ul.msg_list li .time {
-    color: #fc8433;
+    color: #fb6708;
 }
 ul.msg_list li .text-center a {
-    color: #fc8433;
+    color: #fb6708;
 }
 .message.unread {
     font-weight: bold;
@@ -1996,7 +2019,7 @@ a.btn.btn-square:focus {
         }
 
         arrivals-pane > .footer .th-button-box{
-            color: #fc8433;
+            color: #fb6708;
         }
 
     rooms-canvas {
@@ -2045,12 +2068,12 @@ a.btn.btn-square:focus {
         
         /* Occupied */
         .room-card.occupied {
-            border-left: 6px solid #fc8433;
+            border-left: 6px solid #fb6708;
             line-height: normal;
         }
        
         .room-card.occupied .card-header .section1 .room-number{
-            color: #fc8433;  
+            color: #fb6708;  
         }
 
         /* Free */
@@ -2264,7 +2287,7 @@ a.btn.btn-square:focus {
         }
 
         arrival-helper{
-            border: 3px solid #fc8433;
+            border: 3px solid #fb6708;
             border-radius: 4px;
             width: 216px;
             background: white;
@@ -2273,7 +2296,7 @@ a.btn.btn-square:focus {
         arrival-helper .left{
             display: flex;
             flex-direction: column; 
-            background-color: #fc8433;
+            background-color: #fb6708;
             color: white;
         }
 
@@ -2384,7 +2407,7 @@ a.btn.btn-square:focus {
         }
 
         .stat-tomato{
-            background-color: #fc8433;
+            background-color: #fb6708;
             color: white;
         }
 
@@ -2746,5 +2769,5 @@ a.btn.btn-square:focus {
     height: 100%;
 }
 .operational-important-field {
-    color: #fc8433;
+    color: #fb6708;
 }
