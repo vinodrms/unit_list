@@ -197,7 +197,7 @@ header {
 .card-header h2,
 .card-header h3,
 .card-header h1 small {
-    color: #fc8333;
+    color: #fb6708;
 }
 
 basic-information,
@@ -739,6 +739,8 @@ lazy-loading-table {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    padding-left: 2px;
+    padding-right: 2px;
 }
 .bed-slot-info .bed-slot-property.type {
     font-size: 9px;
@@ -1656,11 +1658,11 @@ ul.msg_list li .text-center a {
 .modal-lg-header {
     height: 70px;
     border-bottom: 1px solid #DBDBDB;
-    color: #fc8333 !important;
+    color: #fb6708 !important;
     padding: 0 15px;
 }
 .modal-lg-header small {
-    color: #fc8333 !important;
+    color: #fb6708 !important;
     font-weight: 300;
 }
 .modal-lg-header h1 {
@@ -1703,6 +1705,9 @@ ul.msg_list li .text-center a {
     position: relative;
     top: 16px;
     background-color: #fb6708;
+}
+.btn.btn-square.back {
+    top: 0px;
 }
 .btn-square.btn-square-next-prev {
     background-color: #fb6708;    
@@ -1924,7 +1929,7 @@ a.btn.btn-square:focus {
 }
 .booking-details-table-text-muted {
     padding-left: 6px;
-    color: #fc8333;
+    color: #fb6708;
     font-size: 12px;
 }
 
@@ -2796,4 +2801,13 @@ a.btn.btn-square:focus {
 }
 .operational-important-field {
     color: #fb6708;
+}
+.operational-page-font-container {
+    position: relative;
+    top: 9px;
+    left: 8px;
+}
+.operational-page-font-container > i {
+    font-size: 40px;
+    margin-right: 10px;
 }

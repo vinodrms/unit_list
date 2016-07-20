@@ -1,0 +1,11 @@
+import {AHotelOperationsPageParam} from '../../../../../services/utils/AHotelOperationsPageParam';
+import {HotelOperationsPageType} from '../../../../../services/utils/HotelOperationsPageType';
+
+export class HotelRoomOperationsPageParam extends AHotelOperationsPageParam {
+    private static RoomFontName = "@";
+    roomId: string;
+
+    constructor() {
+        super(HotelOperationsPageType.RoomOperations, HotelRoomOperationsPageParam.RoomFontName);
+    }
+}
