@@ -8,6 +8,9 @@ import {BookingDO} from '../core/data-layer/bookings/data-objects/BookingDO';
 import {CheckOutRoom} from '../core/domain-layer/hotel-operations/room/check-out/CheckOutRoom';
 import {ChangeRoomMaintenanceStatus} from '../core/domain-layer/hotel-operations/room/change-maintenance-status/ChangeRoomMaintenanceStatus';
 import {RoomDO} from '../core/data-layer/rooms/data-objects/RoomDO';
+import {RoomAttachedBooking} from '../core/domain-layer/hotel-operations/room/attached-booking/RoomAttachedBooking';
+import {RoomAttachedBookingDO} from '../core/domain-layer/hotel-operations/room/attached-booking/RoomAttachedBookingDO';
+import {RoomAttachedBookingResult, RoomAttachedBookingResultType} from '../core/domain-layer/hotel-operations/room/attached-booking/utils/RoomAttachedBookingResult';
 
 class HotelRoomOperationsController extends BaseController {
 
@@ -75,6 +78,24 @@ class HotelRoomOperationsController extends BaseController {
             this.returnErrorResponse(req, res, error, ThStatusCode.HotelRoomOperationsControllerErrorChangingMaintenanceStatus);
         });
     }
+
+    public getAttachedBooking(req: Express.Request, res: Express.Response) {
+        if (!this.precheckGETParameters(req, res, ['roomId'])) { return };
+
+        var appContext: AppContext = req.appContext;
+        var sessionContext: SessionContext = req.sessionContext;
+        var roomId = req.query.roomId;
+
+        var roomAttachedBooking = new RoomAttachedBooking(appContext, sessionContext);
+        roomAttachedBooking.getBooking(new RoomAttachedBookingDO(roomId)).then((attachedBookingResult: RoomAttachedBookingResult) => {
+            if (attachedBookingResult.resultType != RoomAttachedBookingResultType.NoBooking && attachedBookingResult.booking) {
+                attachedBookingResult.booking.bookingHistory.translateActions(this.getThTranslation(sessionContext));
+            }
+            this.returnSuccesfulResponse(req, res, { attachedBookingResult: attachedBookingResult });
+        }).catch((error: any) => {
+            this.returnErrorResponse(req, res, error, ThStatusCode.HotelRoomOperationsControllerErrorGettingAttachedBooking);
+        });
+    }
 }
 
 var hotelRoomOperationsController = new HotelRoomOperationsController();
@@ -83,5 +104,6 @@ module.exports = {
     reserveRoom: hotelRoomOperationsController.reserveRoom.bind(hotelRoomOperationsController),
     changeRoom: hotelRoomOperationsController.changeRoom.bind(hotelRoomOperationsController),
     checkOut: hotelRoomOperationsController.checkOut.bind(hotelRoomOperationsController),
-    changeMaintenanceStatus: hotelRoomOperationsController.changeMaintenanceStatus.bind(hotelRoomOperationsController)
+    changeMaintenanceStatus: hotelRoomOperationsController.changeMaintenanceStatus.bind(hotelRoomOperationsController),
+    getAttachedBooking: hotelRoomOperationsController.getAttachedBooking.bind(hotelRoomOperationsController),
 }

@@ -6,6 +6,7 @@ import {BookingDO} from '../../bookings/data-objects/BookingDO';
 import {AssignRoomParam} from './utils/AssignRoomParam';
 import {CheckOutRoomParam} from './utils/CheckOutRoomParam';
 import {RoomDO} from '../../rooms/data-objects/RoomDO';
+import {RoomAttachedBookingResultDO} from './data-objects/RoomAttachedBookingResultDO';
 
 @Injectable()
 export class HotelOperationsRoomService {
@@ -25,6 +26,14 @@ export class HotelOperationsRoomService {
     public checkOut(checkOutRoomParam: AssignRoomParam): Observable<BookingDO> {
         return this.applyRoomChange(ThServerApi.HotelOperationsRoomCheckOut, { checkOutRoom: checkOutRoomParam });
     }
+    private applyRoomChange(roomChangeApi: ThServerApi, postData: Object): Observable<BookingDO> {
+        return this._appContext.thHttp.post(roomChangeApi, postData).map((bookingObject: Object) => {
+            var bookingDO = new BookingDO();
+            bookingDO.buildFromObject(bookingObject["booking"]);
+            return bookingDO;
+        });
+    }
+
     public updateMaintenanceStatus(room: RoomDO): Observable<RoomDO> {
         return this._appContext.thHttp.post(ThServerApi.HotelOperationsRoomChangeMaintenanceStatus, { room: room }).map((roomObject: Object) => {
             var roomDO = new RoomDO();
@@ -33,11 +42,11 @@ export class HotelOperationsRoomService {
         });
     }
 
-    private applyRoomChange(roomChangeApi: ThServerApi, postData: Object): Observable<BookingDO> {
-        return this._appContext.thHttp.post(roomChangeApi, postData).map((bookingObject: Object) => {
-            var bookingDO = new BookingDO();
-            bookingDO.buildFromObject(bookingObject["booking"]);
-            return bookingDO;
+    public getAttachedBooking(roomId: string): Observable<RoomAttachedBookingResultDO> {
+        return this._appContext.thHttp.get(ThServerApi.HotelOperationsRoomGetAttachedBooking, { roomId: roomId }).map((resultObject: Object) => {
+            var attachedBookingResultDO = new RoomAttachedBookingResultDO();
+            attachedBookingResultDO.buildFromObject(resultObject["attachedBookingResult"]);
+            return attachedBookingResultDO;
         });
     }
 }

@@ -405,6 +405,8 @@ export enum ThStatusCode {
     MarkOccupiedRoomsAsDirtyCronJobExecutorError,
     ChangeRoomMaintenanceStatusError,
     HotelRoomOperationsControllerErrorChangingMaintenanceStatus,
+    RoomAttachedBookingError,
+    HotelRoomOperationsControllerErrorGettingAttachedBooking,
 
 }
 
@@ -801,6 +803,8 @@ ThMessage[ThStatusCode.HotelBookingOperationsControllerErrorGettingPossiblePrice
 ThMessage[ThStatusCode.MarkOccupiedRoomsAsDirtyCronJobExecutorError] = "Error marking rooms as dirty.";
 ThMessage[ThStatusCode.ChangeRoomMaintenanceStatusError] = "Error changing the maintenance status of the room.";
 ThMessage[ThStatusCode.HotelRoomOperationsControllerErrorChangingMaintenanceStatus] = "Error changing the maintenance status of the room.";
+ThMessage[ThStatusCode.RoomAttachedBookingError] = "Error getting attached booking for the room.";
+ThMessage[ThStatusCode.HotelRoomOperationsControllerErrorGettingAttachedBooking] = "Error getting attached booking for the room.";
 
 export class ThResponse {
     statusCode: ThStatusCode;

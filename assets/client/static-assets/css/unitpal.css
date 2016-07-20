@@ -2127,11 +2127,11 @@ a.btn.btn-square:focus {
 
         /* Reseved */
         .room-card.reserved {
-            border-left: 6px solid #ffe800;
+            border-left: 6px solid #ffec40;
         }
     
         .room-card.reserved .card-header .section1 .room-number{
-            color: #ffe800;
+            color: #ffec40;
         }
 
         .page{
@@ -2181,7 +2181,7 @@ a.btn.btn-square:focus {
         }
 
         .room-card.reserved.tick-border{
-            border-color: #ffe800;
+            border-color: #ffec40;
         }
 
         .room-card .card-header{
@@ -2433,7 +2433,7 @@ a.btn.btn-square:focus {
         }
 
         .stat-yellow{
-            background-color: #ffe800;
+            background-color: #ffec40;
             color: white;
         }
 

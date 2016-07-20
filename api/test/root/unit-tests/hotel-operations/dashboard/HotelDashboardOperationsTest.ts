@@ -28,6 +28,9 @@ import {BookingPossiblePricesDO} from '../../../../../core/domain-layer/hotel-op
 import {BookingPossiblePriceItems, BookingPriceItem} from '../../../../../core/domain-layer/hotel-operations/booking/possible-prices/utils/BookingPossiblePriceItems';
 import {MarkOccupiedCleanRoomsAsDirtyProcess} from '../../../../../core/domain-layer/hotel-operations/room/processes/MarkOccupiedCleanRoomsAsDirtyProcess';
 import {RoomDO, RoomMaintenanceStatus} from '../../../../../core/data-layer/rooms/data-objects/RoomDO';
+import {RoomAttachedBooking} from '../../../../../core/domain-layer/hotel-operations/room/attached-booking/RoomAttachedBooking';
+import {RoomAttachedBookingDO} from '../../../../../core/domain-layer/hotel-operations/room/attached-booking/RoomAttachedBookingDO';
+import {RoomAttachedBookingResult, RoomAttachedBookingResultType} from '../../../../../core/domain-layer/hotel-operations/room/attached-booking/utils/RoomAttachedBookingResult';
 
 function checkArrivals(createdBookingList: BookingDO[], arrivalsInfo: HotelOperationsArrivalsInfo) {
     should.equal(arrivalsInfo.arrivalInfoList.length >= createdBookingList.length, true);
@@ -48,6 +51,7 @@ describe("Hotel Dashboard Operations Tests", function () {
 
     var createdBookingList: BookingDO[];
     var booking: BookingDO;
+    var attachedRoom: RoomDO;
 
     before(function (done: any) {
         testContext = new TestContext();
@@ -103,18 +107,40 @@ describe("Hotel Dashboard Operations Tests", function () {
                 done(error);
             });
         });
-        it("Should reserve a room for one of the added bookings", function (done) {
+        it("Should not get any checked or reserved bookings for a room", function (done) {
             booking = createdBookingList[0];
-            var room = dashboardHelper.getRoomForSameRoomCategoryFromBooking(testDataBuilder, booking);
+            attachedRoom = dashboardHelper.getRoomForSameRoomCategoryFromBooking(testDataBuilder, booking);
+            var roomAttachedBooking = new RoomAttachedBooking(testContext.appContext, testContext.sessionContext);
+            roomAttachedBooking.getBooking(new RoomAttachedBookingDO(attachedRoom.id)).then((attachedBookingResult: RoomAttachedBookingResult) => {
+                should.equal(attachedBookingResult.resultType, RoomAttachedBookingResultType.NoBooking);
+                done();
+            }).catch((error: any) => {
+                done(error);
+            });
+        });
+
+        it("Should reserve a room for one of the added bookings", function (done) {
             var assignRoomDO = new AssignRoomDO();
             assignRoomDO.bookingId = booking.bookingId;
             assignRoomDO.groupBookingId = booking.groupBookingId;
-            assignRoomDO.roomId = room.id;
+            assignRoomDO.roomId = attachedRoom.id;
             var assignRoom = new AssignRoom(testContext.appContext, testContext.sessionContext);
             assignRoom.reserveRoom(assignRoomDO).then((updatedBooking: BookingDO) => {
-                should.equal(updatedBooking.roomId, room.id);
+                should.equal(updatedBooking.roomId, attachedRoom.id);
                 should.equal(updatedBooking.confirmationStatus, booking.confirmationStatus);
                 booking = updatedBooking;
+                done();
+            }).catch((error: any) => {
+                done(error);
+            });
+        });
+        it("Should get the attached booking for the room as Reserved", function (done) {
+            var roomAttachedBooking = new RoomAttachedBooking(testContext.appContext, testContext.sessionContext);
+            roomAttachedBooking.getBooking(new RoomAttachedBookingDO(attachedRoom.id)).then((attachedBookingResult: RoomAttachedBookingResult) => {
+                should.equal(attachedBookingResult.resultType, RoomAttachedBookingResultType.ReservedBooking);
+                should.exist(attachedBookingResult.booking);
+                should.equal(attachedBookingResult.booking.bookingId, booking.bookingId);
+                should.equal(attachedBookingResult.booking.groupBookingId, booking.groupBookingId);
                 done();
             }).catch((error: any) => {
                 done(error);
@@ -198,6 +224,19 @@ describe("Hotel Dashboard Operations Tests", function () {
             assignRoom.checkIn(assignRoomDO).then((updatedBooking: BookingDO) => {
                 should.equal(updatedBooking.confirmationStatus, BookingConfirmationStatus.CheckedIn);
                 booking = updatedBooking;
+                done();
+            }).catch((error: any) => {
+                done(error);
+            });
+        });
+
+        it("Should get the attached booking for the room as CheckedIn", function (done) {
+            var roomAttachedBooking = new RoomAttachedBooking(testContext.appContext, testContext.sessionContext);
+            roomAttachedBooking.getBooking(new RoomAttachedBookingDO(attachedRoom.id)).then((attachedBookingResult: RoomAttachedBookingResult) => {
+                should.equal(attachedBookingResult.resultType, RoomAttachedBookingResultType.CheckedInBooking);
+                should.exist(attachedBookingResult.booking);
+                should.equal(attachedBookingResult.booking.bookingId, booking.bookingId);
+                should.equal(attachedBookingResult.booking.groupBookingId, booking.groupBookingId);
                 done();
             }).catch((error: any) => {
                 done(error);
