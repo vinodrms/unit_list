@@ -1939,6 +1939,9 @@ a.btn.btn-square:focus {
 .padding-top-5px {
     padding-top: 5px;
 }
+.padding-top-10px {
+    padding-top: 10px;
+}
 .no-padding {
     padding: 0px 0px;
 }
@@ -2810,4 +2813,22 @@ a.btn.btn-square:focus {
 .operational-page-font-container > i {
     font-size: 40px;
     margin-right: 10px;
+}
+
+.operational-page-container {
+    font-size: 14px;
+    color: #848282;
+}
+.operational-page-container .field-value {
+    font-weight: 500;
+    color: black;
+}
+.operational-page-container .text-field>p {
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.operational-page-container .field-value.capacity {
+    margin-top: -4px;
 }
