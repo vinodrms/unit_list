@@ -689,47 +689,64 @@ lazy-loading-table {
 
 .bed-container {
     float: left;
-    width: calc(100% - 40px);
-    height: 105px;
+    height: 120px;
     overflow-x: scroll;
     overflow-y: hidden;
     white-space: nowrap;
-    -webkit-border-radius: 4px;
-    -moz-border-radius: 4px;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
     border: 1px solid #ccc;
-    border-radius: 4px;
+    border-radius: 2px;
     padding-left: 5px;
     padding-right: 5px;
+    padding-top: 4px;
+}
+.bed-container.smaller-width {
+    width: calc(100% - 40px);
+}
+.bed-container.full-width {
+    width: 100%;
 }
 
 .bed-slot {
     width: 80px;
-    height: 80px;
+    height: 95px;
     display: inline-block;
-    margin: 10px 5px;
+    margin: 6px 5px;
     border: 1px solid #fb6708;
-    -webkit-border-radius: 4px;
-    -moz-border-radius: 4px;
-    border-radius: 4px;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
     position: relative;
     color: #fb6708;
 }
 
 .bed-slot-info {
-    width: 80px;
-    height: 80px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%,-50%); 
-    text-overflow: ellipsis;
-    overflow: hidden;
+    width: 78px;
+    height: 93px;
     text-align: center;
-    font-size: 14px;
+    position: absolute;
 }
 
 .bed-slot-info .bed-icon {
-    font-size: 25px;
+    font-size: 35px;
+    display: block;
+}
+.bed-slot-info .bed-slot-property {
+    display: block;
+    font-size: 12px;
+    line-height: 130%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.bed-slot-info .bed-slot-property.type {
+    font-size: 9px;
+    font-weight: 200;
+}
+.bed-slot-info .bed-slot-property.info {
+    color: #7d7878;
+    font-size: 9px;
 }
 
 .bed-slot:hover {
@@ -742,11 +759,16 @@ lazy-loading-table {
 
 .bed-slot.available {
     border: none;
-    background: #ccc;
+    background: #f5f5f5;
 }
-
+.bed-slot.available>div {
+    width: 80px;
+    height: 95px;
+    overflow: hidden;
+    position: absolute;
+}
 .bed-slot.available:hover {
-    background-color: #ccc;
+    background-color: #f5f5f5;
 }
 
 .bed-slot.unselected {
@@ -757,6 +779,7 @@ lazy-loading-table {
 .bed-slot.unselected:hover {
     color: #fb6708;
     border: 1px solid #fb6708;
+    cursor: pointer;
 }
 
 .bed-selection-message {
@@ -771,9 +794,12 @@ lazy-loading-table {
     width: 15%;
 }
 
-td room-categ-capacity {
+td .room-categ-capacity {
     text-align: center;
-} 
+}
+.room-categ-capacity.not-configured {
+    color: #fb6708;
+}
 
 .modal-body td.operations {
     text-align: right;

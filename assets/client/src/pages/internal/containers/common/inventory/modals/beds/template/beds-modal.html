@@ -9,18 +9,25 @@
         <div class="col-xs-6 col-md-4" *ngFor="let bedSelectionVM of bedSelectionVMList">
             <div class="row">
                 <div class="col-xs-12 col-md-12 text-center">
-                    <div class="btn bed-slot unselected" (click)="bedSelectionVM.numberOfInstances=bedSelectionVM.numberOfInstances+1">
+                    <div class="bed-slot unselected" (click)="bedSelectionVM.numberOfInstances=bedSelectionVM.numberOfInstances+1">
                         <div *ngIf="!bedSelectionVM.bedVM.accommodatesBabies" class="bed-slot-info" [title]="bedSelectionVM.bedVM.bed.name">
-                            <span class="bed-icon unitpal-font">{{bedSelectionVM.bedVM.template.iconUrl}}</span><br/>
-                            <small>{{bedSelectionVM.bedVM.bed.name}}</small>
-                            <br/> 
-                            {{bedSelectionVM.bedVM.capacity.noAdults}}<span class="unitpal-font">:</span> {{bedSelectionVM.bedVM.capacity.noChildren}}<span class="unitpal-font">;</span>
+                            <span class="bed-icon unitpal-font">{{bedSelectionVM.bedVM.template.iconUrl}}</span>
+                            <small class="bed-slot-property">{{bedSelectionVM.bedVM.bed.name}}</small>
+                            <small class="bed-slot-property type">
+                                {{ bedSelectionVM.bedVM.bedStorageTypeString | translate }}
+                            </small>
+                            <small class="bed-slot-property info">
+                                <span *ngIf="bedSelectionVM.bedVM.capacity.noAdults>0">{{bedSelectionVM.bedVM.capacity.noAdults}}<span class="unitpal-font">:</span></span> 
+                                <span *ngIf="bedSelectionVM.bedVM.capacity.noChildren>0">{{bedSelectionVM.bedVM.capacity.noChildren}}<span class="unitpal-font">;</span></span>
+                            </small>
                         </div>
                         <div *ngIf="bedSelectionVM.bedVM.accommodatesBabies" class="bed-slot-info" [title]="bedSelectionVM.bedVM.bed.name">
-                            <span class="bed-icon unitpal-font">{{bedSelectionVM.bedVM.template.iconUrl}}</span><br/>
-                            <small>{{bedSelectionVM.bedVM.bed.name}}</small>
-                            <br/>
-                            {{bedSelectionVM.bedVM.capacity.noBabies}}<span class="unitpal-font">B</span>
+                            <span class="bed-icon unitpal-font">{{bedSelectionVM.bedVM.template.iconUrl}}</span>
+                            <small class="bed-slot-property">{{bedSelectionVM.bedVM.bed.name}}</small>
+                            <small class="bed-slot-property type">
+                                 {{ bedSelectionVM.bedVM.bedStorageTypeString | translate }}
+                            </small>
+                            <small class="bed-slot-property info">{{bedSelectionVM.bedVM.capacity.noBabies}}<span class="unitpal-font">B</span></small>
                         </div>
                     </div>
 

@@ -1,27 +1,33 @@
-<div class="bed-container">
+<div class="bed-container" [ngClass]="{'smaller-width': !readonly, 'full-width': readonly}">
     <div *ngFor="let bedVM of selectedBedList; let bedIndex = index" class="bed-slot">
         <a *ngIf="!readonly" class="btn btn-xs bed-remove-btn" (click)="removeBed(bedIndex)">
             <i class="fa unitpal-font">\</i>
         </a>
         <div *ngIf="!bedVM.accommodatesBabies" class="bed-slot-info" [title]="bedVM.bed.name">
-            <span class="bed-icon unitpal-font">{{bedVM.template.iconUrl}}</span><br/>
-            <small>{{bedVM.bed.name}}</small>
-            <br/> 
-            <span *ngIf="bedVM.capacity.noAdults>0">{{bedVM.capacity.noAdults}}<span class="unitpal-font">:</span></span> 
-            <span *ngIf="bedVM.capacity.noChildren>0">{{bedVM.capacity.noChildren}}<span class="unitpal-font">;</span></span>
+            <span class="bed-icon unitpal-font">{{bedVM.template.iconUrl}}</span>
+            <small class="bed-slot-property">{{bedVM.bed.name}}</small>
+            <small class="bed-slot-property type">
+                {{ bedVM.bedStorageTypeString | translate }}
+            </small>
+            <small class="bed-slot-property info">
+                <span *ngIf="bedVM.capacity.noAdults>0">{{bedVM.capacity.noAdults}}<span class="unitpal-font">:</span></span> 
+                <span *ngIf="bedVM.capacity.noChildren>0">{{bedVM.capacity.noChildren}}<span class="unitpal-font">;</span></span>
+            </small>
         </div>
 
         <div *ngIf="bedVM.accommodatesBabies" class="bed-slot-info" [title]="bedVM.bed.name">
-            <span class="bed-icon unitpal-font">{{bedVM.template.iconUrl}}</span><br/>
-            <small>{{bedVM.bed.name}}</small>
-            <br/> 1<span class="unitpal-font">B</span>
+            <span class="bed-icon unitpal-font">{{bedVM.template.iconUrl}}</span>
+            <small class="bed-slot-property">{{bedVM.bed.name}}</small>
+            <small class="bed-slot-property type">
+                {{ bedVM.bedStorageTypeString | translate }}
+            </small>
+            <small class="bed-slot-property info">{{bedVM.capacity.noBabies}}<span class="unitpal-font">B</span></small>
         </div>
-
     </div>
 
-    <div *ngFor="let item of emptySlots" class="bed-slot available"></div>
+    <div *ngFor="let item of emptySlots" class="bed-slot available"><div></div></div>
 
 </div>
-<div class="bed-add">
+<div class="bed-add" *ngIf="!readonly">
     <button type="button" class="btn center-block btn-danger bed-add-btn" (click)="openBedsSelectModal()" [disabled]="maximuNumberOfBedsReached||readonly"><i class="fa fa-plus-circle"></i></button>
 </div>

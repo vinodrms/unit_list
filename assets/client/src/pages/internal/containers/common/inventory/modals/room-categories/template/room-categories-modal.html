@@ -25,8 +25,8 @@
 					<span *ngIf="roomCategoryVM.capacity.totalCapacity.noBabies>0">{{roomCategoryVM.capacity.totalCapacity.noBabies}}<span class="unitpal-font">B</span></span>
 				</td>
 				
-				<td *ngIf="!roomCategoryVM.bedsConfigured" class="selectable-row room-categ-capacity" (click)="selectRoomCategory(roomCategoryVM)">
-					-<span class="unitpal-font">:</span> -<span class="unitpal-font">;</span> -<span class="unitpal-font">B</span>
+				<td *ngIf="!roomCategoryVM.bedsConfigured" class="selectable-row room-categ-capacity not-configured" (click)="selectRoomCategory(roomCategoryVM)">
+					{{ 'Beds Not Configured' | translate }}
 				</td>
 				
 				<td class="selectable-row operations" *ngIf="allowCategoryEdit" (click)="selectRoomCategory(roomCategoryVM)">

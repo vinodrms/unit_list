@@ -435,6 +435,7 @@ export var EnglishTranslations: Object = {
 	"Stationary Beds": "Stationary Beds",
 	"Rollaway Beds": "Rollaway Beds",
 	"Add at least a stationary or a rollaway bed for the newly added category.": "Add at least a stationary or a rollaway bed for the newly added category.",
+	"Beds Not Configured": "Beds Not Configured",
 	"Hotel Operations": "Hotel Operations",
 	"Yield Manager": "Yield Manager",
 	"Booking History": "Booking History",
