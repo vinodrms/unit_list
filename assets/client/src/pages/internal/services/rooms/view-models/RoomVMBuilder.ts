@@ -31,7 +31,7 @@ export class RoomVMBuilder {
                     return roomAmenity.id === amenityId;
                 });
                 if (!this._thUtils.isUndefinedOrNull(roomAmenity)) {
-                    roomVM.roomAmenityList.push();
+                    roomVM.roomAmenityList.push(roomAmenity);
                 }
             });
 

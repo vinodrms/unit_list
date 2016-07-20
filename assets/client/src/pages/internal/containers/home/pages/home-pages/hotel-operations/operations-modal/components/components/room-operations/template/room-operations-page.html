@@ -1,12 +1,12 @@
 <loading-component [isLoading]="isLoading"></loading-component>
 
 <div class="row full-height" *ngIf="didLoadPageData">
-	<div class="col-xs-8 full-height right-margin padding-top-10px">
+	<div class="col-xs-9 full-height right-margin padding-top-10px" customScroll>
 		<div class="row">
-			<room-preview [bedVMList]="bedVMList" [roomVM]="roomVM"></room-preview>
+			<room-preview [roomPreviewInput]="roomPreviewInput"></room-preview>
 		</div>
 	</div>
-	<div class="col-xs-4 full-height">
+	<div class="col-xs-3 full-height">
 		<div class="row full-height">
 			
 		</div>

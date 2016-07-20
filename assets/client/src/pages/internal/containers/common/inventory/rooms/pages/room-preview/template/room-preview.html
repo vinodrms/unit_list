@@ -34,14 +34,64 @@
     <div class="row">
         <div class="col-xs-12 col-sm-8">
             <div class="row">
-                <div class="col-xs-2">
+                <div class="col-xs-12 col-sm-2 text-field padding-top-15px">
                     <p>{{'Beds' | translate}}</p>
                 </div>
-                <div class="col-xs-10">
+                <div class="col-xs-12 col-sm-10">
                     <bed-selector [availableBedList]="bedVMList" [selectedBedList]="bedVMList" [roomCategory]="roomVM.category"></bed-selector>
                 </div>
             </div>
         </div>
-
+        <div class="col-xs-12 col-sm-4">
+            <image-upload [imageUrl]="roomVM.imageUrl" [readonly]="true"></image-upload>
+        </div>
     </div>
+    <div class="row padding-top-5px">
+        <div class="col-xs-12 col-sm-1 padding-top-15px">
+            <p>{{'Amenities' | translate}}</p>
+        </div>
+        <div class="col-xs-12 col-sm-11 form-group room-page-left-padding">
+            <div class="btn-group amenities-group" role="group">
+                <div class="button-check th-grid-btn" *ngFor="let roomAmenityVM of roomAmenities.roomAmenityList">
+                    <div class="info-block block-info clearfix" title="{{ roomAmenityVM.roomAmenity.name }}">
+                        <div data-toggle="buttons">
+                            <label class="btn btn-default readonly disabled" [ngClass]="{active: roomAmenityVM.isSelected}">
+                            <span class="unitpal-font unitpal-large">{{roomAmenityVM.roomAmenity.iconUrl}}</span>
+                        </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr/>
+    <div class="row padding-top-5px">
+        <div class="col-xs-12 col-sm-1 padding-top-15px">
+            <p>{{'Attributes' | translate}}</p>
+        </div>
+        <div class="col-xs-12 col-sm-11 form-group room-page-left-padding">
+            <div class="btn-group amenities-group" role="group">
+                <div class="button-check th-grid-btn" *ngFor="let roomAttributeVM of roomAttributes.roomAttributeList">
+                    <div class="info-block block-info clearfix" title="{{ roomAttributeVM.roomAttribute.name }}">
+                        <div data-toggle="buttons">
+                            <label class="btn btn-default readonly disabled" [ngClass]="{active: roomAttributeVM.isSelected}">
+                            <span class="unitpal-font unitpal-large">{{roomAttributeVM.roomAttribute.iconUrl}}</span>
+                        </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr/>
+    <div class="row padding-top-5px">
+        <div class="col-xs-12 col-sm-1">
+            <p>{{'Notes' | translate}}</p>
+        </div>
+        <div class="col-xs-12 col-sm-11 field-value text-field room-page-left-padding">
+            <p>{{roomVM.room.notes}}</p>
+        </div>
+    </div>
+    <hr/>
+    
 </div>

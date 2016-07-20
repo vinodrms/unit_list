@@ -1,7 +1,7 @@
 <div class="modal-lg-header container">
 	<div class="row full-height">
 		<div class="col-xs-7 col-md-7 full-height">
-            <a class="btn btn-square btn-square-next-prev back"  (click)="goBack()">
+            <a class="btn btn-square btn-square-next-prev back" *ngIf="canGoBack()" (click)="goBack()">
                 <i class="fa unitpal-font"><</i>
             </a>
             <span class="operational-page-font-container"><i class="fa fa-2x unitpal-font">{{ titleMeta.fontName }}</i></span>

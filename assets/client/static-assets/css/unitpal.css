@@ -209,7 +209,8 @@ price-products,
 customer-register,
 allotments,
 beds,
-new-booking-container {
+new-booking-container,
+room-operations-page>div {
     display: block;
     height: 100%;
 }
@@ -223,6 +224,9 @@ beds{
 }
 
 rooms{
+    background: #fff url(/client/static-assets/images/background_03_rooms.png) right bottom no-repeat !important;
+}
+room-operations-page>div{
     background: #fff url(/client/static-assets/images/background_03_rooms.png) right bottom no-repeat !important;
 }
 
@@ -374,6 +378,10 @@ textarea {
     background-color: #fb6708;
     border-color: #fb6708;
 }
+.btn-default.readonly.disabled {
+    cursor: default;
+    opacity: 1.0;
+}
 
 .button-radio {
     display: inline-block;
@@ -391,8 +399,8 @@ textarea {
 }
 
 .button-check .btn-default {
-    width: 48px;
-    height: 48px;
+    width: 45px;
+    height: 45px;
     padding: 6px 6px;
     border-radius: 0px;
 }
@@ -965,7 +973,7 @@ input[type="file"] {
 
 .th-img-upload-preview {
     width: 100%;
-    height: 142px;
+    height: 122px;
     margin-bottom: 5px;
     text-align: center;
 }
@@ -1031,6 +1039,9 @@ input[type="file"] {
 .form-group > label > small {
     font-size: 11px;
     font-weight: normal;
+}
+.form-group {
+    margin-bottom: 10px !important;
 }
 .position-relative {
     position: relative;
@@ -1667,7 +1678,7 @@ ul.msg_list li .text-center a {
 }
 .modal-lg-header h1 {
     font-size: 22px;
-    font-weight: 300;
+    font-weight: 400;
     padding: 23px 0px 0px 0px;
 }
 .modal-lg-header i {
@@ -1941,6 +1952,9 @@ a.btn.btn-square:focus {
 }
 .padding-top-10px {
     padding-top: 10px;
+}
+.padding-top-15px {
+    padding-top: 15px;
 }
 .no-padding {
     padding: 0px 0px;
@@ -2816,8 +2830,8 @@ a.btn.btn-square:focus {
 }
 
 .operational-page-container {
-    font-size: 14px;
-    color: #848282;
+    font-size: 13px;
+    color: #7d7878;
 }
 .operational-page-container .field-value {
     font-weight: 500;
@@ -2831,4 +2845,11 @@ a.btn.btn-square:focus {
 }
 .operational-page-container .field-value.capacity {
     margin-top: -4px;
+}
+.room-page-left-padding {
+    padding-left: 37px;
+}
+.operational-page-container hr {
+    margin-top: 0px;
+    margin-bottom: 5px;
 }

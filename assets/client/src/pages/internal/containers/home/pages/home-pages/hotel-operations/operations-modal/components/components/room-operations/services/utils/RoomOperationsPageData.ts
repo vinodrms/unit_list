@@ -1,12 +1,15 @@
 import {RoomVM} from '../../../../../../../../../../../services/rooms/view-models/RoomVM';
 import {RoomAttachedBookingResultDO} from '../../../../../../../../../../../services/hotel-operations/room/data-objects/RoomAttachedBookingResultDO';
 import {BedVM} from '../../../../../../../../../../../services/beds/view-models/BedVM';
+import {RoomAmenitiesDO} from '../../../../../../../../../../../services/settings/data-objects/RoomAmenitiesDO';
+import {RoomAttributesDO} from '../../../../../../../../../../../services/settings/data-objects/RoomAttributesDO';
 
 export class RoomOperationsPageData {
     private _roomVM: RoomVM;
     private _bedVMList: BedVM[];
-
     private _attachedBookingResult: RoomAttachedBookingResultDO;
+    private _allRoomAmenities: RoomAmenitiesDO;
+    private _allRoomAttributes: RoomAttributesDO;
 
     constructor(roomVM: RoomVM, bedVMList: BedVM[], attachedBookingResult: RoomAttachedBookingResultDO) {
         this._roomVM = roomVM;
@@ -33,5 +36,19 @@ export class RoomOperationsPageData {
     }
     public set attachedBookingResult(attachedBookingResult: RoomAttachedBookingResultDO) {
         this._attachedBookingResult = attachedBookingResult;
+    }
+
+    public get allRoomAmenities(): RoomAmenitiesDO {
+        return this._allRoomAmenities;
+    }
+    public set allRoomAmenities(allRoomAmenities: RoomAmenitiesDO) {
+        this._allRoomAmenities = allRoomAmenities;
+    }
+
+    public get allRoomAttributes(): RoomAttributesDO {
+        return this._allRoomAttributes;
+    }
+    public set allRoomAttributes(allRoomAttributes: RoomAttributesDO) {
+        this._allRoomAttributes = allRoomAttributes;
     }
 }

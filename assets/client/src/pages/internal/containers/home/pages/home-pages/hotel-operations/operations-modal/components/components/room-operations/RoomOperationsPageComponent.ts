@@ -1,5 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {LoadingComponent} from '../../../../../../../../../../../common/utils/components/LoadingComponent';
+import {CustomScroll} from '../../../../../../../../../../../common/utils/directives/CustomScroll';
 import {ThError, AppContext} from '../../../../../../../../../../../common/utils/AppContext';
 import {RoomVM} from '../../../../../../../../../services/rooms/view-models/RoomVM';
 import {BedVM} from '../../../../../../../../../services/beds/view-models/BedVM';
@@ -8,11 +9,12 @@ import {HotelRoomOperationsPageParam} from './services/utils/HotelRoomOperations
 import {RoomOperationsPageService} from './services/RoomOperationsPageService';
 import {RoomOperationsPageData} from './services/utils/RoomOperationsPageData';
 import {RoomPreviewComponent} from '../../../../../../../../common/inventory/rooms/pages/room-preview/RoomPreviewComponent';
+import {RoomPreviewInput} from '../../../../../../../../common/inventory/rooms/pages/room-preview/utils/RoomPreviewInput';
 
 @Component({
     selector: 'room-operations-page',
     templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/room-operations/template/room-operations-page.html',
-    directives: [LoadingComponent, RoomPreviewComponent],
+    directives: [LoadingComponent, CustomScroll, RoomPreviewComponent],
     providers: [RoomOperationsPageService]
 })
 export class RoomOperationsPageComponent implements OnInit {
@@ -21,6 +23,7 @@ export class RoomOperationsPageComponent implements OnInit {
     isLoading: boolean;
 
     private _roomOperationsPageData: RoomOperationsPageData;
+    roomPreviewInput: RoomPreviewInput;
 
     constructor(private _appContext: AppContext,
         private _roomOperationsPageService: RoomOperationsPageService) { }
@@ -41,6 +44,11 @@ export class RoomOperationsPageComponent implements OnInit {
     }
     private updateContainerData() {
         this.roomOperationsPageParam.pageTitleText = this.roomVM.room.name;
+        this.roomPreviewInput = new RoomPreviewInput();
+        this.roomPreviewInput.roomVM = this.roomVM;
+        this.roomPreviewInput.bedVMList = this.bedVMList;
+        this.roomPreviewInput.allRoomAmenities = this._roomOperationsPageData.allRoomAmenities;
+        this.roomPreviewInput.allRoomAttributes = this._roomOperationsPageData.allRoomAttributes;
     }
 
     public get roomVM(): RoomVM {
