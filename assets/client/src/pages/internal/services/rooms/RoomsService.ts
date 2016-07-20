@@ -48,4 +48,9 @@ export class RoomsService extends ARequestService<RoomVM[]> {
     public getRoomList(): Observable<RoomVM[]> {
         return this.getServiceObservable();
     }
+    public getRoomById(roomId: string): Observable<RoomVM> {
+        return this.getServiceObservable().map((roomList: RoomVM[]) => {
+            return _.find(roomList, (roomVM: RoomVM) => { return roomVM.room.id === roomId });
+        });
+    }
 }
