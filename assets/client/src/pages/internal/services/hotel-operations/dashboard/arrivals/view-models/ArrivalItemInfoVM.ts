@@ -2,6 +2,8 @@ import {ArrivalItemInfoDO} from '../data-objects/ArrivalItemInfoDO';
 import {RoomVM} from '../../../../rooms/view-models/RoomVM';
 import {RoomCategoryStatsDO} from '../../../../room-categories/data-objects/RoomCategoryStatsDO';
 
+import {ConfigCapacityDO} from '../../../../common/data-objects/bed-config/ConfigCapacityDO';
+
 import {ThTranslation} from '../../../../../../../common/utils/localization/ThTranslation';
 
 export class ArrivalItemInfoVM {
@@ -30,6 +32,7 @@ export class ArrivalItemInfoVM {
     public get hasReservedRoom(): boolean {
         return this._hasReservedRoom;
     }
+
     public set hasReservedRoom(hasReservedRoom: boolean) {
         this._hasReservedRoom = hasReservedRoom;
     }
@@ -46,8 +49,8 @@ export class ArrivalItemInfoVM {
         return this.arrivalItemDO.customerName;
     }
 
-    public get roomCategory() : string {
-        return "Double";
+    public get roomCategoryLabel() : string {
+        return this._reservedRoomCategoryStats.roomCategory.displayName;
     }
 
     public get numberOfPeople() : number {
@@ -65,5 +68,11 @@ export class ArrivalItemInfoVM {
     public get departureLabel() : string {
         return this.arrivalItemDO.bookingInterval.end.getShortDisplayString(this._thTranslation) 
     }
+
+    
+    public get bookingCapacity() : ConfigCapacityDO {
+        return this.arrivalItemDO.bookingCapacity;
+    }
+    
 
 }

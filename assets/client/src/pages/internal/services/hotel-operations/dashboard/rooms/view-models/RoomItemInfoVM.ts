@@ -4,6 +4,8 @@ import {RoomVM} from '../../../../rooms/view-models/RoomVM';
 import {RoomMaintenanceStatus} from '../../../../rooms/data-objects/RoomDO';
 import {ThTranslation} from '../../../../../../../common/utils/localization/ThTranslation';
 
+import {ConfigCapacityDO} from '../../../../common/data-objects/bed-config/ConfigCapacityDO';
+
 export class RoomItemInfoVM_UI_Properties{
     constructor(
         public tickBorder: boolean,
@@ -18,8 +20,9 @@ export class RoomItemInfoVM {
     private _UI : RoomItemInfoVM_UI_Properties;
 
     constructor(
-        private _thTranslation: ThTranslation 
+        private _thTranslation: ThTranslation
     ) {
+        this._UI = new RoomItemInfoVM_UI_Properties(false,false,false);
     }
 
     public get roomItemDO(): RoomItemInfoDO {
@@ -72,6 +75,10 @@ export class RoomItemInfoVM {
 
     public get departureLabel() : string {
         return this.roomItemDO.bookingInterval.end.getShortDisplayString(this._thTranslation);
+    }
+
+    public canFit(capacityToCheck: ConfigCapacityDO){
+        return this.roomVM.categoryStats.capacity.canFit(capacityToCheck);
     }
 
     public get UI() : RoomItemInfoVM_UI_Properties {

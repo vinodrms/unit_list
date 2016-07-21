@@ -10,8 +10,11 @@ import {ArrivalsPaneComponent} from './components/arrivals-pane/ArrivalsPaneComp
 import {DeparturesPaneComponent} from './components/departures-pane/DeparturesPaneComponent';
 import {RoomsCanvasComponent} from './components/rooms-canvas/RoomsCanvasComponent';
 
+import {ArrivalItemInfoVM} from '../../../../../../services/hotel-operations/dashboard/arrivals/view-models/ArrivalItemInfoVM';
+
 import {HotelOperationsDashboardServiceDeprecated} from './services/HotelOperationsDashboardService';
 import {HOTEL_OPERATIONS_DASHBOARD_PROVIDERS} from '../../../../../../services/hotel-operations/dashboard/HotelOperationsDashboardProviders';
+import {HotelOperationsRoomService} from '../../../../../../services/hotel-operations/room/HotelOperationsRoomService';
 
 declare var $:any;
 
@@ -28,7 +31,7 @@ export interface IHotelOperationsDashboardArrivalsPaneMediator{
 export interface IHotelOperationsDashboardRoomsCanvasMediator{
 	registerRoomsCanvas(arrivalsPane:RoomsCanvasComponent);
 
-	getSelectedArrivalItem():any;
+	getSelectedArrivalItem():ArrivalItemInfoVM;
 	checkInArrivalItem(arrivalItem)
 	getDate();
 	setDate(date);
@@ -41,11 +44,12 @@ export interface IHotelOperationsDashboardDeparturesMediator{
 	refresh();
 }
 
+
 @Component({
 	selector: 'hotel-operations-dashboard',
 	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/dashboard/template/hotel-operations-dashboard.html',
 	directives: [ThButtonComponent, ArrivalsPaneComponent, DeparturesPaneComponent, RoomsCanvasComponent],
-	providers: [HOTEL_OPERATIONS_DASHBOARD_PROVIDERS, HotelOperationsDashboardServiceDeprecated],
+	providers: [HOTEL_OPERATIONS_DASHBOARD_PROVIDERS, HotelOperationsRoomService, HotelOperationsDashboardServiceDeprecated],
 	pipes: [TranslationPipe]
 })
 
@@ -107,12 +111,13 @@ export class HotelOperationsDashboardComponent extends AHomeContainerComponent i
 		this._selectedArrivalItem = arrivalItemVM;
 	}
 	
-	public getSelectedArrivalItem(){
+	public getSelectedArrivalItem():ArrivalItemInfoVM{
 		return this._selectedArrivalItem;
 	}
 
 	public checkInArrivalItem(arrivalItemVM){
-		this._arrivalsPane.removeArrivalItem(arrivalItemVM);
+		// this._arrivalsPane.removeArrivalItem(arrivalItemVM);
+		this.refresh();
 	}
 
 	ngOnInit() {

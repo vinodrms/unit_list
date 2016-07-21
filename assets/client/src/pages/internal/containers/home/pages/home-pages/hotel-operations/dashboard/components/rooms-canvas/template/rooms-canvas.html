@@ -8,12 +8,12 @@
 			</button>
 		</div>
 		<div class="group-2 flex-row flex-center-v">
-			<select class="rooms-filter p-r-12 f-12" [ngModel]="filterType.currentValue" (ngModelChange)="filterTypeChanged($event)">
-				<option value="All">All</option>
-				<option value="Free">Free</option>
-				<option value="Occupied">Occupied</option>
-				<option value="Reserved">Reserved</option>
-				<option value="OutOfService">OutOfService</option>
+			<select class="rooms-filter p-r-12 f-12" [ngModel]="filterValue.currentValue" (ngModelChange)="filterValueChanged($event)">
+				<option value="{{ enums.FilterValueType.All }}">All</option>
+				<option value="{{ enums.FilterValueType.Free }}">Free</option>
+				<option value="{{ enums.FilterValueType.Occupied }}">Occupied</option>
+				<option value="{{ enums.FilterValueType.Reserved }}">Reserved</option>
+				<option value="{{ enums.FilterValueType.OutOfService }}">OutOfService</option>
 			</select>
 			<i class="fa fa-angle-right p-l-12 f-48" (click)="nextDay()"></i>
 		</div>
@@ -26,7 +26,7 @@
 	</div>
 </div>
 <div class="body rooms-canvas">
-	<div *ngFor="let roomVM of roomVMList">
-		<room-card [roomVM]="roomVM" (dropped)="dropHandled($event)"></room-card>
+	<div *ngFor="let roomVM of filteredRoomVMList">
+		<room-card [roomVM]="roomVM" [roomCanvas]="self" (dropped)="dropHandled($event)"></room-card>
 	</div>
 </div>
