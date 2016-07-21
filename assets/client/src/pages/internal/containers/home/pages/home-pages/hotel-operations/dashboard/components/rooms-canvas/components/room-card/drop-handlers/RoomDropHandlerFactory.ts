@@ -1,23 +1,22 @@
-import {RoomStatusType} from '../../../../../shared/RoomStatusType';
+import{RoomItemStatus} from '../../../../../../../../../../../services/hotel-operations/dashboard/rooms/data-objects/RoomItemInfoDO';
 
 export class RoomDropHandlerFactory{
-	public static get(roomStatus: RoomStatusType){
+	public static get(roomStatus: RoomItemStatus){
 		switch(roomStatus) {
-			case RoomStatusType.Free : {
+			case RoomItemStatus.Free : {
 				return new FreeRoomDropHandler();
 			}
 
-			case RoomStatusType.Occupied : {
+			case RoomItemStatus.Occupied : {
 				return new OccupiedRoomDropHandler();
 			}
 
-			case RoomStatusType.Reserved : {
+			case RoomItemStatus.Reserved : {
 				return new ReservedRoomDropHandler();
 			}
-
-			case RoomStatusType.OutOfService : {
-				return new OutOfServiceDropHandler();
-			}
+			// case RoomItemStatus.OutOfService : {
+			// 	return new OutOfServiceDropHandler();
+			// }
 		}
 	}
 }

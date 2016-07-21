@@ -17,6 +17,12 @@ export class HotelOperationsDashboardService {
     }
 
     public getArrivalItems(referenceDate?: ThDateDO): Observable<ArrivalItemInfoVM[]> {
+        if (!referenceDate){
+        }
+        referenceDate = new ThDateDO();
+        referenceDate.day = 18;
+        referenceDate.month = 6;
+        referenceDate.year = 2016;
         return this._arrivalsService.getArrivalItems(referenceDate);
     }
     public refreshArrivals() {
@@ -24,8 +30,13 @@ export class HotelOperationsDashboardService {
     }
 
     public getDepartureItems(referenceDate?: ThDateDO): Observable<DepartureItemInfoVM[]> {
+        referenceDate = new ThDateDO();
+        referenceDate.day = 18;
+        referenceDate.month = 6;
+        referenceDate.year = 2016;        
         return this._departuresService.getDepartureItems(referenceDate);
     }
+
     public refreshDepartures() {
         this._departuresService.refresh();
     }

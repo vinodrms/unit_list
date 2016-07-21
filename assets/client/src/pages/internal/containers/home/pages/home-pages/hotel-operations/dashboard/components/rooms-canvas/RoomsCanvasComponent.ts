@@ -2,16 +2,14 @@ import {Component, Input, OnInit, NgZone} from '@angular/core';
 import {RoomCardComponent} from './components/room-card/RoomCardComponent';
 
 import {HotelOperationsDashboardService} from '../../../../../../../../services/hotel-operations/dashboard/HotelOperationsDashboardService';
-
 import {IHotelOperationsDashboardRoomsCanvasMediator} from '../../HotelOperationsDashboardComponent';
-
-import {RoomStatusType} from '../../shared/RoomStatusType';
-
-import {RoomItemInfoDO, RoomItemStatus} from '../../../../../../../../services/hotel-operations/dashboard/rooms/data-objects/RoomItemInfoDO';
 
 import {ArrivalItemInfoVM} from '../../../../../../../../services/hotel-operations/dashboard/arrivals/view-models/ArrivalItemInfoVM';
 import {RoomItemInfoVM, RoomItemInfoVM_UI_Properties} from '../../../../../../../../services/hotel-operations/dashboard/rooms/view-models/RoomItemInfoVM';
+import {RoomItemInfoDO, RoomItemStatus} from '../../../../../../../../services/hotel-operations/dashboard/rooms/data-objects/RoomItemInfoDO';
 
+import {FilterValueType, IDragStyles, IFilterNotificationProperties, IFilterNotification, IFilterValue} from './utils/RoomsCanvasInterfaces';
+import {RoomsCanvasUtils} from './utils/RoomsCanvasUtils';
 
 import {AppContext} from '../../../../../../../../../../common/utils/AppContext';
 import {ThError} from '../../../../../../../../../../common/utils/responses/ThError';
@@ -22,52 +20,121 @@ declare var _: any;
 @Component({
 	selector: 'rooms-canvas',
 	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/dashboard/components/rooms-canvas/template/rooms-canvas.html',
+	providers: [RoomsCanvasUtils],
 	directives: [RoomCardComponent]
 })
 
 export class RoomsCanvasComponent implements OnInit {
 	@Input() hotelOperationsDashboard: IHotelOperationsDashboardRoomsCanvasMediator;
 
-	public filterType;
-	public roomVMList: RoomItemInfoVM[];
-	public filterNotification;
+	public self:RoomsCanvasComponent;
+	public filterValue: IFilterValue;
+	public filteredRoomVMList: RoomItemInfoVM[];
+	public filterNotification: IFilterNotification;
 
-	private _showNotificationBar;
-	private dragStyles;
+	public enums;
+	private dragStyles: IDragStyles;
+
+	private _showNotificationBar:boolean;
 
 	constructor(
 		private _zone: NgZone,
 		private _hotelOperationsDashboardService: HotelOperationsDashboardService,
+		private _utils: RoomsCanvasUtils,
 		private _appContext: AppContext) {
-		this.filterType = {
-			currentValue: "All",
-			newValue: "All"
-		};
-
+		
 		this._showNotificationBar = true;
-		this.filterNotification = {
-			Properties: {
-				cssColor: 'green',
-				textFirstPart: 'SHOWING ',
-				textSecondPart: 'ALL ROOMS'
-			}
+		this.self = this;
+		
+		this.filterValue = {
+			currentValue: FilterValueType.All,
+			newValue: FilterValueType.All
 		};
 
-		this.dragStyles = {
-			canCheckIn : new RoomItemInfoVM_UI_Properties(true, false, true),
-			canUpgrade : new RoomItemInfoVM_UI_Properties(false,true,true),
-			canNotCheckIn : new RoomItemInfoVM_UI_Properties(false,true,false),
-			default: new RoomItemInfoVM_UI_Properties(false,false,false)
+		this.dragStyles = this._utils.dragStyles;
+
+		this.enums = {
+			FilterValueType: FilterValueType
 		}
+
+		this.updateFilterNotification();
 	}
 
 	ngOnInit() {
 		this.hotelOperationsDashboard.registerRoomsCanvas(this);
 		this.refresh();
+	}	
+
+	public refresh() {
+		this._hotelOperationsDashboardService.getRoomItems().subscribe((r: any) =>{
+			this._utils.setRoomsUIHighlight(r, this.dragStyles.default);
+			this.filterValue.currentValue = this.filterValue.newValue;
+			this._showNotificationBar = true;
+			this.filteredRoomVMList = this._utils.filterRoomsByStateType(this.filterValue.currentValue, r);
+			this.updateFilterNotification();
+		}, (error:any) => {
+			this._appContext.toaster.error(error.message);
+		});
 	}
 
-	public filterTypeChanged(value) {
-		this.filterType.newValue = value;
+	public startedDragging(arrivalItemVM: ArrivalItemInfoVM) {
+		var canCheckInRoomVmList:RoomItemInfoVM[] = [];
+		var canNotCheckInRoomVmList:RoomItemInfoVM[] = [];
+		var canUpgradeCheckInRoomVMList:RoomItemInfoVM[] = [];
+
+		this.filteredRoomVMList.forEach(currentRoom => {
+			if (this.testCanCheckIn(currentRoom, arrivalItemVM)){
+				canCheckInRoomVmList.push(currentRoom);
+			}
+			else if (this.testCanUpgrade(currentRoom, arrivalItemVM)){
+				canUpgradeCheckInRoomVMList.push(currentRoom);
+			}
+			else {
+				canNotCheckInRoomVmList.push(currentRoom);
+			}
+		});
+		
+		this._utils.setRoomsUIHighlight(canCheckInRoomVmList, this.dragStyles.canCheckIn);
+		this._utils.setRoomsUIHighlight(canUpgradeCheckInRoomVMList, this.dragStyles.canUpgrade);
+		this._utils.setRoomsUIHighlight(canNotCheckInRoomVmList, this.dragStyles.canNotCheckIn);
+	}
+
+	private testCanCheckIn(room:RoomItemInfoVM, arrivalItem: ArrivalItemInfoVM){
+		if (
+			room.canFit(arrivalItem.bookingCapacity) &&
+			room.roomVM.category.id == arrivalItem.reservedRoomCategoryStats.roomCategory.id &&
+			room.status == RoomItemStatus.Free
+		){
+			return true;
+		}
+		return false;
+	}
+
+	private testCanUpgrade(room:RoomItemInfoVM, arrivalItem: ArrivalItemInfoVM){
+		if (
+			room.canFit(arrivalItem.bookingCapacity) &&
+			room.status == RoomItemStatus.Free
+		){
+			return true;
+		}
+		return false;
+	}
+
+	public dropHandled(event) {
+		var arrivalItem = this.hotelOperationsDashboard.getSelectedArrivalItem();
+		var roomVM = event.roomVM;
+		if (event.accepted) {
+			this.hotelOperationsDashboard.checkInArrivalItem(arrivalItem);
+			this._utils.setRoomsUIHighlight(this.filteredRoomVMList, this.dragStyles.default);
+		}
+	}
+
+	public getSelectedArrivalItem():ArrivalItemInfoVM{
+		return this.hotelOperationsDashboard.getSelectedArrivalItem();
+	}	
+
+	public filterValueChanged(value) {
+		this.filterValue.newValue = parseInt(value);
 		this.refresh();
 	}
 
@@ -75,7 +142,7 @@ export class RoomsCanvasComponent implements OnInit {
 		if (!this._showNotificationBar) {
 			return false;
 		}
-		else if (this.filterType.currentValue == "All") {
+		else if (this.filterValue.currentValue == FilterValueType.All) {
 			return false;
 		}
 		return true;
@@ -86,112 +153,20 @@ export class RoomsCanvasComponent implements OnInit {
 		this.updateFilterNotification();
 	}
 
-	public refresh() {
-		console.log("Refresh");
-		var date = this.hotelOperationsDashboard.getDate();
-		this._hotelOperationsDashboardService.getRoomItems().subscribe((r: any) =>{
-			this.roomVMList = r;
-		}, (err:any) => { console.log(err)});		
-		// this._hotelOperationsDashboardService.getRooms(this.filterType.newValue, date)
-		// 	.subscribe((rooms: any) => {
-		// 		console.log("Refresh callback");
-		// 		this.setRoomsUIHighlight(rooms, this.dragStyles.default);
-		// 		this.filterType.currentValue = this.filterType.newValue;
-		// 		this._showNotificationBar = true;
-		// 		this.roomVMList = rooms;
-		// 		this.updateFilterNotification();
-		// 	}, (error: ThError) => {
-		// 		this._appContext.toaster.error(error.message);
-		// 	});
-	}
-
-	private setRoomsUIHighlight(rooms, value:any) {
-		rooms.forEach(room => {
-			room["UI"] = {
-				tickBorder : value.tickBorder,
-				ghost: value.ghost,
-				acceptDrop: value.acceptDrop
-			}
-		});
-	}
-
 	public updateFilterNotification() {
-		switch (this.filterType.currentValue) {
-			case RoomStatusType.Free:
-				this.filterNotification.Properties = {
-					cssColor: 'green',
-					textFirstPart: 'SHOWING ONLY ',
-					textSecondPart: 'FREE ROOMS'
-				}
-				break;
-			case RoomStatusType.Occupied:
-				this.filterNotification.Properties = {
-					cssColor: 'orange',
-					textFirstPart: 'SHOWING ONLY ',
-					textSecondPart: 'OCCUPIED ROOMS'
-				}
-				break;
-			case RoomStatusType.Reserved:
-				this.filterNotification.Properties = {
-					cssColor: 'yellow',
-					textFirstPart: 'SHOWING ONLY ',
-					textSecondPart: 'RESERVED ROOMS'
-				}
-				break;
-			case RoomStatusType.OutOfService:
-				this.filterNotification.Properties = {
-					cssColor: 'gray',
-					textFirstPart: 'SHOWING ONLY ',
-					textSecondPart: 'OUT OF SERVICE ROOMS'
-				}
-				break;
-			default:
-				this.filterNotification.Properties = {
-					cssColor: 'green',
-					textFirstPart: 'SHOWING ',
-					textSecondPart: 'ALL ROOMS'
-				}
-				break;
+		var properties = this._utils.getfilterNotificationProperties(this.filterValue.currentValue);
+		if (!this.filterNotification){
+			this.filterNotification = {
+				Properties : properties
+			}
 		}
-	}
-
-	public startedDragging(arrivalItemVM: ArrivalItemInfoVM) {
-		var canCheckInRoomVmList = [];
-		var canNotCheckInRoomVmList = [];
-		var canUpgradeCheckInRoomVMList = [];
-
-		this.roomVMList.forEach(currentRoom => {
-			if (currentRoom.categoryLabel == arrivalItemVM.roomCategory && currentRoom.status == RoomItemStatus.Free) {
-				canCheckInRoomVmList.push(currentRoom);
-			}
-			else if (currentRoom.categoryLabel != arrivalItemVM.roomCategory && currentRoom.status == RoomItemStatus.Free) {
-				canUpgradeCheckInRoomVMList.push(currentRoom);
-			}
-			else {
-				canNotCheckInRoomVmList.push(currentRoom);
-			}
-		});
-
-		// Default
-		// this.setRoomsUIHighlight(canCheckInRoomVmList, this.dragStyles.canCheckIn);
-		// this.setRoomsUIHighlight(canUpgradeCheckInRoomVMList, this.dragStyles.canUpgrade);
-		// this.setRoomsUIHighlight(canNotCheckInRoomVmList, this.dragStyles.canNotCheckIn);
-	}
-
-	public dropHandled(event) {
-		var arrivalItem = this.hotelOperationsDashboard.getSelectedArrivalItem();
-		var roomVM = event.roomVM;
-		if (event.accepted) {
-			roomVM.properties.booking.clientName = arrivalItem.clientName;
-			roomVM.properties.booking.interval = arrivalItem.interval;
-			roomVM.properties.booking.config = arrivalItem.config;
-			this.hotelOperationsDashboard.checkInArrivalItem(arrivalItem);
-			this.setRoomsUIHighlight(this.roomVMList, this.dragStyles.default);
-		}
+		else{
+			this.filterNotification.Properties = properties;
+		} 
 	}
 
 	public stoppedDragging(arrivalItemVM){
-		this.setRoomsUIHighlight(this.roomVMList, this.dragStyles.default);
+		this._utils.setRoomsUIHighlight(this.filteredRoomVMList, this.dragStyles.default);
 	}
 
 	public nextDay() {

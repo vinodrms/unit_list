@@ -1,8 +1,13 @@
 import {Component, Input, Output, NgZone, ElementRef, EventEmitter} from '@angular/core';
 import {RoomDropHandlerFactory} from './drop-handlers/RoomDropHandlerFactory';
 
+import {RoomItemInfoVM} from '../../../../../../../../../../services/hotel-operations/dashboard/rooms/view-models/RoomItemInfoVM';
+import {ArrivalItemInfoVM} from '../../../../../../../../../../services/hotel-operations/dashboard/arrivals/view-models/ArrivalItemInfoVM';
+
+import {AssignRoomParam} from '../../../../../../../../../../services/hotel-operations/room/utils/AssignRoomParam';
 import {HotelOperationsRoomService} from '../../../../../../../../../../services/hotel-operations/room/HotelOperationsRoomService';
 
+import {RoomsCanvasComponent} from '../../../rooms-canvas/RoomsCanvasComponent';
 // import {HeaderPageService} from '../../../utils/header/container/services/HeaderPageService';
 
 declare var $: any;
@@ -20,13 +25,14 @@ export class MaintenanceStatusType {
 
 export class RoomCardComponent {
 	public maintenance;
-	@Input() roomVM: any;
+	@Input() roomCanvas: RoomsCanvasComponent;
+	@Input() roomVM: RoomItemInfoVM;
 	@Output() dropped = new EventEmitter();
 
 	constructor(
 		private _zone: NgZone,
-		private _root: ElementRef
-		// private _operationRoomService: HotelOperationsRoomService
+		private _root: ElementRef,
+		private _operationRoomService: HotelOperationsRoomService
 		) {
 		this.maintenance = undefined;
 	}
@@ -71,16 +77,23 @@ export class RoomCardComponent {
 				accept: 'arrival-item',
 				drop: (event: Event, ui: Object) => {
 					this._zone.run(() => {
-						var dropHandler = RoomDropHandlerFactory.get(this.roomVM.status.displayName);
+						var arrivalItem:ArrivalItemInfoVM = this.roomCanvas.getSelectedArrivalItem();
+						var dropHandler = RoomDropHandlerFactory.get(this.roomVM.status);
 						var outcome = {
-							accepted: dropHandler.handle("test"),
+							accepted: dropHandler.handle(arrivalItem),
 							roomVM: this.roomVM
 						}
 
 						if (outcome.accepted == true) {
-							this.roomVM.status.value = "Occupied";
-							this.dropped.emit(outcome);
-							// this._operationRoomService.checkIn();
+							var assignRoomParams:AssignRoomParam = {
+								groupBookingId: arrivalItem.arrivalItemDO.groupBookingId,
+								bookingId: arrivalItem.arrivalItemDO.bookingId,
+								roomId: this.roomVM.roomVM.room.id,
+								roomCategoryId: this.roomVM.roomVM.room.categoryId
+							};
+							this._operationRoomService.checkIn(assignRoomParams).subscribe((r)=>{
+								this.dropped.emit(outcome);
+							})
 						}
 						else {
 							this.dropped.emit(outcome)

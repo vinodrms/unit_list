@@ -46,7 +46,6 @@ export class ArrivalsPaneComponent implements OnInit {
 		var date = this.hotelOperationsDashboard.getDate(); 
 		this._hotelOperationsDashboardService.getArrivalItems()
 		.subscribe((arrivals: any) => {
-			debugger;
 			this.arrivalItemsVMList = arrivals;
 			}, (error: ThError) => {
 				this._appContext.toaster.error(error.message);
