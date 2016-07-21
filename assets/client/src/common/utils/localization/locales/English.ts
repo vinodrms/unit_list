@@ -559,6 +559,8 @@ export var EnglishTranslations: Object = {
 	"Out Of Service": "Out Of Service",
 	"No Details": "No Details",
 	"This action will remove this room from your active inventory. Are you sure you want to mark the room as Out of Service?": "This action will remove this room from your active inventory. Are you sure you want to mark the room as Out of Service?",
-	
+	"History": "History",
+	"Expand": "Expand",
+	"Less": "Less",
 	
 };

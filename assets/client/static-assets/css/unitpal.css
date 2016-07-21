@@ -1956,6 +1956,9 @@ a.btn.btn-square:focus {
 .padding-top-15px {
     padding-top: 15px;
 }
+.padding-bottom-10px {
+    padding-bottom: 10px;
+}
 .no-padding {
     padding: 0px 0px;
 }
@@ -2892,4 +2895,7 @@ a.btn.btn-square:focus {
 .edit-save-button-group-container .cancel-btn>i {
     position: relative;
     right: 3px;
+}
+.increased-font-weight {
+    font-weight: 600;
 }

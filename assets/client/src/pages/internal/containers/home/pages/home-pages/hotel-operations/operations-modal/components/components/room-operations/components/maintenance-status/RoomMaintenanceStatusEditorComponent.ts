@@ -62,7 +62,7 @@ export class RoomMaintenanceStatusEditorComponent implements OnInit {
         this.currentMaintenanceText = this._roomVM.room.maintenanceMessage;
         this.lastChangeTimestamp = null;
         if (this._roomVM.room.maintenanceHistory.hasActionHistory()) {
-            this.lastChangeTimestamp = this._roomVM.room.maintenanceHistory.getLastAction().getThTimestampDO();
+            this.lastChangeTimestamp = this._roomVM.room.maintenanceHistory.getLastAction().thTimestampDO;
         }
         this.isSaving = false;
     }

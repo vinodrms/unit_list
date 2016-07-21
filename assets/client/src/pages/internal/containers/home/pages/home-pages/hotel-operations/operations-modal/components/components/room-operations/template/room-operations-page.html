@@ -9,6 +9,14 @@
 			<room-maintenance-status-editor [roomVM]="roomVM" (onMaintenanceStatusChanged)="triggerOnRoomChanged($event)"></room-maintenance-status-editor>
 		</div>
 		<hr/>
+		<div class="row padding-bottom-10px">
+			<div class="col-xs-12 col-sm-1 padding-top-10px">
+				{{'History' | translate}}
+			</div>
+			<div class="col-xs-12 col-sm-11">
+				<document-history-viewer [documentHistory]="roomVM.room.maintenanceHistory"></document-history-viewer>
+			</div>
+		</div>		
 	</div>
 	<div class="col-xs-3 full-height">
 		<div class="row full-height">

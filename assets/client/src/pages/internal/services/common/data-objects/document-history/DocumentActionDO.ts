@@ -3,6 +3,7 @@ import {ThDateUtils} from '../../../common/data-objects/th-dates/ThDateUtils';
 import {ThTimestampDO} from '../../../common/data-objects/th-dates/ThTimestampDO';
 
 export class DocumentActionDO extends BaseDO {
+    private _thTimestampDO: ThTimestampDO;
     actionString: string;
     userId: string;
     timestamp: number;
@@ -11,7 +12,10 @@ export class DocumentActionDO extends BaseDO {
         return ["actionString", "userId", "timestamp"];
     }
 
-    public getThTimestampDO(): ThTimestampDO {
-        return (new ThDateUtils()).convertTimestampToThTimestamp(this.timestamp);
+    public get thTimestampDO(): ThTimestampDO {
+        return this._thTimestampDO;
+    }
+    public set thTimestampDO(thTimestampDO: ThTimestampDO) {
+        this._thTimestampDO = thTimestampDO;
     }
 }

@@ -13,11 +13,12 @@ import {RoomOperationsPageData} from './services/utils/RoomOperationsPageData';
 import {RoomPreviewComponent} from '../../../../../../../../common/inventory/rooms/pages/room-preview/RoomPreviewComponent';
 import {RoomPreviewInput} from '../../../../../../../../common/inventory/rooms/pages/room-preview/utils/RoomPreviewInput';
 import {RoomMaintenanceStatusEditorComponent} from './components/maintenance-status/RoomMaintenanceStatusEditorComponent';
+import {DocumentHistoryViewerComponent} from '../../../../../../../../../../../common/utils/components/document-history/DocumentHistoryViewerComponent';
 
 @Component({
     selector: 'room-operations-page',
     templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/room-operations/template/room-operations-page.html',
-    directives: [LoadingComponent, CustomScroll, RoomPreviewComponent, RoomMaintenanceStatusEditorComponent],
+    directives: [LoadingComponent, CustomScroll, RoomPreviewComponent, RoomMaintenanceStatusEditorComponent, DocumentHistoryViewerComponent],
     providers: [RoomOperationsPageService],
     pipes: [TranslationPipe]
 })
