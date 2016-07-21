@@ -2833,6 +2833,10 @@ a.btn.btn-square:focus {
     font-size: 13px;
     color: #7d7878;
 }
+.operational-page-container .important-field {
+    font-weight: 500;
+    color: black;
+}
 .operational-page-container .field-value {
     font-weight: 500;
     color: black;
@@ -2849,4 +2853,43 @@ a.btn.btn-square:focus {
 .operational-page-container hr {
     margin-top: 0px;
     margin-bottom: 5px;
+}
+.form-control.maintenance-status {
+    background-color: #eee;
+    display: flex;
+    flex-direction: row;
+}
+.form-control.maintenance-status>span.unitpal-font {
+    position: relative;
+    bottom: 7px;
+}
+.form-control.maintenance-status>span.name {
+    flex: 1;
+    padding-left: 8px;
+    padding-top: 0px;
+}
+.form-control.maintenance-status>span.timestamp {
+    font-size: 12px;
+    position: relative;
+    top: 3px;
+}
+.uppercase {
+    text-transform: uppercase;
+}
+.edit-save-button-group-container {
+    width: 95px;
+}
+.edit-save-button-group-container .save-btn {
+    width: 70px;
+    float: left;
+}
+.edit-save-button-group-container .cancel-btn {
+    width: 20px;
+    float: left;
+    margin-left: 5px;
+    margin-top: 0px;
+}
+.edit-save-button-group-container .cancel-btn>i {
+    position: relative;
+    right: 3px;
 }

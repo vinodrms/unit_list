@@ -21,7 +21,7 @@ class HotelRoomOperationsController extends BaseController {
         var assignRoom = new AssignRoom(appContext, sessionContext);
         assignRoom.checkIn(req.body.assignRoom).then((booking: BookingDO) => {
             booking.bookingHistory.translateActions(this.getThTranslation(sessionContext));
-            this.returnSuccesfulResponse(req, res, { booking: BookingDO });
+            this.returnSuccesfulResponse(req, res, { booking: booking });
         }).catch((error: any) => {
             this.returnErrorResponse(req, res, error, ThStatusCode.HotelRoomOperationsControllerErrorCheckingIn);
         });
@@ -34,7 +34,7 @@ class HotelRoomOperationsController extends BaseController {
         var assignRoom = new AssignRoom(appContext, sessionContext);
         assignRoom.reserveRoom(req.body.assignRoom).then((booking: BookingDO) => {
             booking.bookingHistory.translateActions(this.getThTranslation(sessionContext));
-            this.returnSuccesfulResponse(req, res, { booking: BookingDO });
+            this.returnSuccesfulResponse(req, res, { booking: booking });
         }).catch((error: any) => {
             this.returnErrorResponse(req, res, error, ThStatusCode.HotelRoomOperationsControllerErrorReservingRoom);
         });
@@ -47,7 +47,7 @@ class HotelRoomOperationsController extends BaseController {
         var assignRoom = new AssignRoom(appContext, sessionContext);
         assignRoom.changeRoom(req.body.assignRoom).then((booking: BookingDO) => {
             booking.bookingHistory.translateActions(this.getThTranslation(sessionContext));
-            this.returnSuccesfulResponse(req, res, { booking: BookingDO });
+            this.returnSuccesfulResponse(req, res, { booking: booking });
         }).catch((error: any) => {
             this.returnErrorResponse(req, res, error, ThStatusCode.HotelRoomOperationsControllerErrorChangingRoom);
         });
@@ -60,7 +60,7 @@ class HotelRoomOperationsController extends BaseController {
         var checkOutRoom = new CheckOutRoom(appContext, sessionContext);
         checkOutRoom.checkOut(req.body.checkOutRoom).then((booking: BookingDO) => {
             booking.bookingHistory.translateActions(this.getThTranslation(sessionContext));
-            this.returnSuccesfulResponse(req, res, { booking: BookingDO });
+            this.returnSuccesfulResponse(req, res, { booking: booking });
         }).catch((error: any) => {
             this.returnErrorResponse(req, res, error, ThStatusCode.HotelRoomOperationsControllerErrorCheckingOut);
         });
@@ -73,7 +73,7 @@ class HotelRoomOperationsController extends BaseController {
         var changeMaintenanceStatus = new ChangeRoomMaintenanceStatus(appContext, sessionContext);
         changeMaintenanceStatus.changeStatus(req.body.room).then((updatedRoom: RoomDO) => {
             updatedRoom.maintenanceHistory.translateActions(this.getThTranslation(sessionContext));
-            this.returnSuccesfulResponse(req, res, { room: RoomDO });
+            this.returnSuccesfulResponse(req, res, { room: updatedRoom });
         }).catch((error: any) => {
             this.returnErrorResponse(req, res, error, ThStatusCode.HotelRoomOperationsControllerErrorChangingMaintenanceStatus);
         });

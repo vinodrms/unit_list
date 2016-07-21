@@ -1,8 +1,10 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, Output, EventEmitter} from '@angular/core';
+import {TranslationPipe} from '../../../../../../../../../../../common/utils/localization/TranslationPipe';
 import {LoadingComponent} from '../../../../../../../../../../../common/utils/components/LoadingComponent';
 import {CustomScroll} from '../../../../../../../../../../../common/utils/directives/CustomScroll';
 import {ThError, AppContext} from '../../../../../../../../../../../common/utils/AppContext';
 import {RoomVM} from '../../../../../../../../../services/rooms/view-models/RoomVM';
+import {RoomDO} from '../../../../../../../../../services/rooms/data-objects/RoomDO';
 import {BedVM} from '../../../../../../../../../services/beds/view-models/BedVM';
 import {RoomAttachedBookingResultDO} from '../../../../../../../../../services/hotel-operations/room/data-objects/RoomAttachedBookingResultDO';
 import {HotelRoomOperationsPageParam} from './services/utils/HotelRoomOperationsPageParam';
@@ -10,14 +12,21 @@ import {RoomOperationsPageService} from './services/RoomOperationsPageService';
 import {RoomOperationsPageData} from './services/utils/RoomOperationsPageData';
 import {RoomPreviewComponent} from '../../../../../../../../common/inventory/rooms/pages/room-preview/RoomPreviewComponent';
 import {RoomPreviewInput} from '../../../../../../../../common/inventory/rooms/pages/room-preview/utils/RoomPreviewInput';
+import {RoomMaintenanceStatusEditorComponent} from './components/maintenance-status/RoomMaintenanceStatusEditorComponent';
 
 @Component({
     selector: 'room-operations-page',
     templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/room-operations/template/room-operations-page.html',
-    directives: [LoadingComponent, CustomScroll, RoomPreviewComponent],
-    providers: [RoomOperationsPageService]
+    directives: [LoadingComponent, CustomScroll, RoomPreviewComponent, RoomMaintenanceStatusEditorComponent],
+    providers: [RoomOperationsPageService],
+    pipes: [TranslationPipe]
 })
 export class RoomOperationsPageComponent implements OnInit {
+    @Output() onRoomChanged = new EventEmitter<boolean>();
+    public triggerOnRoomChanged(roomDO: RoomDO) {
+        this.onRoomChanged.next(true);
+    }
+
     @Input() roomOperationsPageParam: HotelRoomOperationsPageParam;
 
     isLoading: boolean;

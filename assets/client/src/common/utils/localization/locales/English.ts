@@ -552,6 +552,13 @@ export var EnglishTranslations: Object = {
 	"The check in was made succesfully. If you changed the default room and want to bill this, you can add on the invoice Upgrade/Downgrade Add On Products.": "The check in was made succesfully. If you changed the default room and want to bill this, you can add on the invoice Upgrade/Downgrade Add On Products.",
 	"The room was reserved succesfully.": "The room was reserved succesfully.",
 	"Floor %floorNumber%": "Floor %floorNumber%",
-	 
+	"Clean": "Clean",
+	"Dirty": "Dirty",
+	"Pick Up": "Pick Up",
+	"Out Of Order": "Out Of Order",
+	"Out Of Service": "Out Of Service",
+	"No Details": "No Details",
+	"This action will remove this room from your active inventory. Are you sure you want to mark the room as Out of Service?": "This action will remove this room from your active inventory. Are you sure you want to mark the room as Out of Service?",
+	
 	
 };

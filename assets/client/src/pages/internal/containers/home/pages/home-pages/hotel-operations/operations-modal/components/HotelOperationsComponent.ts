@@ -19,6 +19,9 @@ import {BedsEagerService} from '../../../../../../../services/beds/BedsEagerServ
 })
 export class HotelOperationsComponent {
     @Output() onRoomChanged = new EventEmitter<boolean>();
+    public triggerOnRoomChanged() {
+        this.onRoomChanged.next(true);
+    }
     @Output() onBookingChanged = new EventEmitter<boolean>();
     @Output() onInvoiceChanged = new EventEmitter<boolean>();
     @Output() onExit = new EventEmitter<boolean>();

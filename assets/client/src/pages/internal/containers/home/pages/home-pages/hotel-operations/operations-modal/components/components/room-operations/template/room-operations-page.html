@@ -5,6 +5,10 @@
 		<div class="row">
 			<room-preview [roomPreviewInput]="roomPreviewInput"></room-preview>
 		</div>
+		<div class="row">
+			<room-maintenance-status-editor [roomVM]="roomVM" (onMaintenanceStatusChanged)="triggerOnRoomChanged($event)"></room-maintenance-status-editor>
+		</div>
+		<hr/>
 	</div>
 	<div class="col-xs-3 full-height">
 		<div class="row full-height">

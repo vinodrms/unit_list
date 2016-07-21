@@ -7,11 +7,14 @@ import {AssignRoomParam} from './utils/AssignRoomParam';
 import {CheckOutRoomParam} from './utils/CheckOutRoomParam';
 import {RoomDO} from '../../rooms/data-objects/RoomDO';
 import {RoomAttachedBookingResultDO} from './data-objects/RoomAttachedBookingResultDO';
+import {ChangeRoomMaintenanceStatusParam} from './utils/ChangeRoomMaintenanceStatusParam';
+import {RoomsService} from '../../rooms/RoomsService';
 
 @Injectable()
 export class HotelOperationsRoomService {
 
-    constructor(private _appContext: AppContext) {
+    constructor(private _appContext: AppContext,
+        private _roomsService: RoomsService) {
     }
 
     public checkIn(assignRoomParam: AssignRoomParam): Observable<BookingDO> {
@@ -34,8 +37,9 @@ export class HotelOperationsRoomService {
         });
     }
 
-    public updateMaintenanceStatus(room: RoomDO): Observable<RoomDO> {
-        return this._appContext.thHttp.post(ThServerApi.HotelOperationsRoomChangeMaintenanceStatus, { room: room }).map((roomObject: Object) => {
+    public updateMaintenanceStatus(roomMaintenanceStatusParam: ChangeRoomMaintenanceStatusParam): Observable<RoomDO> {
+        return this._appContext.thHttp.post(ThServerApi.HotelOperationsRoomChangeMaintenanceStatus, { room: roomMaintenanceStatusParam }).map((roomObject: Object) => {
+            this._roomsService.refresh();
             var roomDO = new RoomDO();
             roomDO.buildFromObject(roomObject["room"]);
             return roomDO;

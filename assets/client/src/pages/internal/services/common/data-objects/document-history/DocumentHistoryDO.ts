@@ -23,4 +23,11 @@ export class DocumentHistoryDO extends BaseDO {
             this.actionList.push(actionDO);
         });
     }
+
+    public hasActionHistory(): boolean {
+        return this.actionList.length > 0;
+    }
+    public getLastAction(): DocumentActionDO {
+        return this.actionList[0];
+    }
 }
