@@ -402,6 +402,11 @@ export enum ThStatusCode {
     BookingOccupancyCalculatorWrapperInvalidInterval,
     BookingPossiblePricesError,
     HotelBookingOperationsControllerErrorGettingPossiblePrices,
+    MarkOccupiedRoomsAsDirtyCronJobExecutorError,
+    ChangeRoomMaintenanceStatusError,
+    HotelRoomOperationsControllerErrorChangingMaintenanceStatus,
+    RoomAttachedBookingError,
+    HotelRoomOperationsControllerErrorGettingAttachedBooking,
 
 }
 
@@ -795,6 +800,11 @@ ThMessage[ThStatusCode.BookingOccupancyCalculatorWrapperError] = "Error getting 
 ThMessage[ThStatusCode.BookingOccupancyCalculatorWrapperInvalidInterval] = "Invalid submitted interval.";
 ThMessage[ThStatusCode.BookingPossiblePricesError] = "Error getting all the possible prices for the booking.";
 ThMessage[ThStatusCode.HotelBookingOperationsControllerErrorGettingPossiblePrices] = "Error getting all the possible prices for the booking.";
+ThMessage[ThStatusCode.MarkOccupiedRoomsAsDirtyCronJobExecutorError] = "Error marking rooms as dirty.";
+ThMessage[ThStatusCode.ChangeRoomMaintenanceStatusError] = "Error changing the maintenance status of the room.";
+ThMessage[ThStatusCode.HotelRoomOperationsControllerErrorChangingMaintenanceStatus] = "Error changing the maintenance status of the room.";
+ThMessage[ThStatusCode.RoomAttachedBookingError] = "Error getting attached booking for the room.";
+ThMessage[ThStatusCode.HotelRoomOperationsControllerErrorGettingAttachedBooking] = "Error getting attached booking for the room.";
 
 export class ThResponse {
     statusCode: ThStatusCode;

@@ -20,11 +20,13 @@
 				</td>
 
 				<td *ngIf="roomCategoryVM.bedsConfigured" class="selectable-row room-categ-capacity" (click)="selectRoomCategory(roomCategoryVM)">
-					{{roomCategoryVM.capacity.totalCapacity.noAdults}}<span class="unitpal-font">:</span> {{roomCategoryVM.capacity.totalCapacity.noChildren}}<span class="unitpal-font">;</span> {{roomCategoryVM.capacity.totalCapacity.noBabies}}<span class="unitpal-font">B</span>
+					<span *ngIf="roomCategoryVM.capacity.totalCapacity.noAdults>0">{{roomCategoryVM.capacity.totalCapacity.noAdults}}<span class="unitpal-font">:</span></span> 
+					<span *ngIf="roomCategoryVM.capacity.totalCapacity.noChildren>0">{{roomCategoryVM.capacity.totalCapacity.noChildren}}<span class="unitpal-font">;</span> </span>
+					<span *ngIf="roomCategoryVM.capacity.totalCapacity.noBabies>0">{{roomCategoryVM.capacity.totalCapacity.noBabies}}<span class="unitpal-font">B</span></span>
 				</td>
 				
-				<td *ngIf="!roomCategoryVM.bedsConfigured" class="selectable-row room-categ-capacity" (click)="selectRoomCategory(roomCategoryVM)">
-					-<span class="unitpal-font">:</span> -<span class="unitpal-font">;</span> -<span class="unitpal-font">B</span>
+				<td *ngIf="!roomCategoryVM.bedsConfigured" class="selectable-row room-categ-capacity not-configured" (click)="selectRoomCategory(roomCategoryVM)">
+					{{ 'Beds Not Configured' | translate }}
 				</td>
 				
 				<td class="selectable-row operations" *ngIf="allowCategoryEdit" (click)="selectRoomCategory(roomCategoryVM)">

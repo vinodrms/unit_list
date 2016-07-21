@@ -435,6 +435,7 @@ export var EnglishTranslations: Object = {
 	"Stationary Beds": "Stationary Beds",
 	"Rollaway Beds": "Rollaway Beds",
 	"Add at least a stationary or a rollaway bed for the newly added category.": "Add at least a stationary or a rollaway bed for the newly added category.",
+	"Beds Not Configured": "Beds Not Configured",
 	"Hotel Operations": "Hotel Operations",
 	"Yield Manager": "Yield Manager",
 	"Booking History": "Booking History",
@@ -550,6 +551,7 @@ export var EnglishTranslations: Object = {
 	"Room was changed succesfully": "Room was changed succesfully",
 	"The check in was made succesfully. If you changed the default room and want to bill this, you can add on the invoice Upgrade/Downgrade Add On Products.": "The check in was made succesfully. If you changed the default room and want to bill this, you can add on the invoice Upgrade/Downgrade Add On Products.",
 	"The room was reserved succesfully.": "The room was reserved succesfully.",
+	"Floor %floorNumber%": "Floor %floorNumber%",
 	 
 	
 };

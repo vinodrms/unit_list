@@ -12,6 +12,7 @@ export interface RoomSearchCriteriaRepoDO {
 	name?: string;
 	categoryIdList?: string[];
 	maintenanceStatusList?: RoomMaintenanceStatus[];
+	roomIdList?: string[];
 }
 export interface RoomSearchResultRepoDO {
 	lazyLoad?: LazyLoadRepoDO;

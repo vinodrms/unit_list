@@ -45,6 +45,13 @@ class RoomsEntity extends BasePersistentEntity {
             maintenanceStatus: {
                 type: "integer"  
             },
+            maintenanceMessage: {
+                type: "string",
+                defaultsTo: ""
+            },
+            maintenanceHistory: {
+                type: "json"
+            },
             status: {
                 type: 'integer',
                 required: true    

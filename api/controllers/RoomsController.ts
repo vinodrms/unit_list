@@ -10,6 +10,8 @@ import {RoomDO} from '../core/data-layer/rooms/data-objects/RoomDO';
 import {RoomCategoryDO} from '../core/data-layer/room-categories/data-objects/RoomCategoryDO';
 import {LazyLoadRepoDO, LazyLoadMetaResponseRepoDO} from '../core/data-layer/common/repo-data-objects/LazyLoadRepoDO';
 
+import _ = require('underscore');
+
 class RoomsController extends BaseController {
 
     public getRoomList(req: Express.Request, res: Express.Response) {
@@ -19,9 +21,16 @@ class RoomsController extends BaseController {
         var roomMeta = this.getRoomMetaRepoDOFrom(sessionContext);
 		var roomRepo = appContext.getRepositoryFactory().getRoomRepository();
 		roomRepo.getRoomList(roomMeta, req.body.searchCriteria, req.body.lazyLoad).then((rooms: RoomSearchResultRepoDO) => {
+			this.translateRoomSearchResult(sessionContext, rooms);
 			this.returnSuccesfulResponse(req, res, rooms);
 		}).catch((err: any) => {
 			this.returnErrorResponse(req, res, err, ThStatusCode.RoomsControllerErrorGettingRooms);
+		});
+	}
+	private translateRoomSearchResult(sessionContext: SessionContext, roomSearchResult: RoomSearchResultRepoDO) {
+		var thTranslation = this.getThTranslation(sessionContext);
+		_.forEach(roomSearchResult.roomList, (room: RoomDO) => {
+			room.maintenanceHistory.translateActions(thTranslation);
 		});
 	}
 
@@ -44,6 +53,7 @@ class RoomsController extends BaseController {
 
 		var saveRoomItem = new SaveRoomItem(appContext, sessionContext);
 		saveRoomItem.save(req.body.room).then((updatedRoom: RoomDO) => {
+			updatedRoom.maintenanceHistory.translateActions(this.getThTranslation(sessionContext));
 			this.returnSuccesfulResponse(req, res, { room: updatedRoom });
 		}).catch((err: any) => {
 			this.returnErrorResponse(req, res, err, ThStatusCode.RoomsControllerErrorSavingRoom);
@@ -56,6 +66,7 @@ class RoomsController extends BaseController {
 
 		var deleteRoomItem = new DeleteRoomItem(appContext, sessionContext);
 		deleteRoomItem.delete(req.body.room).then((deletedRoom: RoomDO) => {
+			deletedRoom.maintenanceHistory.translateActions(this.getThTranslation(sessionContext));
 			this.returnSuccesfulResponse(req, res, { room: deletedRoom });
 		}).catch((err: any) => {
 			this.returnErrorResponse(req, res, err, ThStatusCode.RoomsControllerErrorDeletingRoom);
@@ -73,6 +84,7 @@ class RoomsController extends BaseController {
 
 		var roomRepo = appContext.getRepositoryFactory().getRoomRepository();
 		roomRepo.getRoomById(roomMeta, roomId).then((room: RoomDO) => {
+			room.maintenanceHistory.translateActions(this.getThTranslation(sessionContext));
 			this.returnSuccesfulResponse(req, res, { room: room });
 		}).catch((err: any) => {
 			this.returnErrorResponse(req, res, err, ThStatusCode.RoomsControllerErrorGettingRoomById);

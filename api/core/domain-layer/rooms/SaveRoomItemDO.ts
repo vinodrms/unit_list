@@ -16,7 +16,6 @@ export class SaveRoomItemDO {
     fileUrlList: string[];
     description: string;
     notes: string;
-    maintenanceStatus: RoomMaintenanceStatus;
     
     public static getValidationStructure(): IValidationStructure {
         return new ObjectValidationStructure([
@@ -59,10 +58,6 @@ export class SaveRoomItemDO {
             {
                 key: "notes",
                 validationStruct: new PrimitiveValidationStructure(StringValidationRule.buildNullable())
-            },
-            {
-                key: "maintenanceStatus",
-                validationStruct: new PrimitiveValidationStructure(new NumberValidationRule())
             }
         ])
     }

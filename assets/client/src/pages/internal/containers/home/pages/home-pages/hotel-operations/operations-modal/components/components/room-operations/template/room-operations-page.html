@@ -1,0 +1,14 @@
+<loading-component [isLoading]="isLoading"></loading-component>
+
+<div class="row full-height" *ngIf="didLoadPageData">
+	<div class="col-xs-9 full-height right-margin padding-top-10px" customScroll>
+		<div class="row">
+			<room-preview [roomPreviewInput]="roomPreviewInput"></room-preview>
+		</div>
+	</div>
+	<div class="col-xs-3 full-height">
+		<div class="row full-height">
+			
+		</div>
+	</div>
+</div>

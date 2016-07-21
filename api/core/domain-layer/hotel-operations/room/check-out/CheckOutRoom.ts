@@ -47,8 +47,7 @@ export class CheckOutRoom {
                 return roomRepository.getRoomById({ hotelId: this._sessionContext.sessionDO.hotel.id }, this._loadedBooking.roomId);
             }).then((room: RoomDO) => {
                 this._loadedRoom = room;
-
-                this.markLoadedRoomAsDirty();
+                this.markLoadedRoomAsDirtyIfClean();
 
                 var bookingsRepo = this._appContext.getRepositoryFactory().getBookingRepository();
                 return bookingsRepo.updateBooking({ hotelId: this._sessionContext.sessionDO.hotel.id }, {
@@ -82,7 +81,18 @@ export class CheckOutRoom {
             actionString: "The room was checked out."
         }));
     }
-    private markLoadedRoomAsDirty() {
+    private markLoadedRoomAsDirtyIfClean() {
+        if (this._loadedRoom.maintenanceStatus !== RoomMaintenanceStatus.Clean) {
+            return;
+        }
         this._loadedRoom.maintenanceStatus = RoomMaintenanceStatus.Dirty;
+        this._loadedRoom.maintenanceMessage = "";
+
+        var maintenanceAction = DocumentActionDO.buildDocumentActionDO({
+            actionParameterMap: {},
+            actionString: "The room was marked as Dirty (Checked Out)",
+            userId: this._sessionContext.sessionDO.user.id
+        });
+        this._loadedRoom.logCurrentMaintenanceHistory(maintenanceAction);
     }
 }

@@ -15,6 +15,7 @@ export class ImageUploadComponent {
 	isLoading: boolean = false;
 
 	@Input() imageUrl: string;
+	@Input() readonly: boolean = false;
 	@Output() onImageUpload = new EventEmitter();
 
 	constructor(private _appContext: AppContext) {

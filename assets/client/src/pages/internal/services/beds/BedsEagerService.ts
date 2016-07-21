@@ -15,23 +15,23 @@ export class BedsEagerService extends ARequestService<BedsDO> {
 
     constructor(private _appContext: AppContext,
         private _bedTemplatesService: BedTemplatesService) {
-            super();
+        super();
     }
 
     protected sendRequest(): Observable<Object> {
         return this._appContext.thHttp.post(ThServerApi.Beds, {});
     }
-    
+
     protected parseResult(result: Object): BedsDO {
-		var beds = new BedsDO();
+        var beds = new BedsDO();
         beds.buildFromObject(result);
-		return beds;
-	}
-    
+        return beds;
+    }
+
     public getBedList(): Observable<BedsDO> {
         return this.getServiceObservable();
     }
-    
+
     public getBedAggregatedList(): Observable<BedVM[]> {
         return Observable.combineLatest(
             this.getBedList(),
@@ -39,18 +39,18 @@ export class BedsEagerService extends ARequestService<BedsDO> {
         ).map((result: [BedsDO, BedTemplatesDO]) => {
             var beds: BedsDO = result[0];
             var bedTemplates: BedTemplatesDO = result[1];
-            
+
             var bedVMList: BedVM[] = [];
             _.forEach(beds.bedList, (bed: BedDO) => {
                 var bedVM = new BedVM();
                 bedVM.bed = bed;
                 bedVM.template = _.find(bedTemplates.bedTemplateList, (bedTemplateDO: BedTemplateDO) => {
-                    return bedTemplateDO.id === bed.bedTemplateId;    
+                    return bedTemplateDO.id === bed.bedTemplateId;
                 });
-                bedVMList.push(bedVM);            
+                bedVMList.push(bedVM);
             });
-            
-            return bedVMList;    
-        });    
+
+            return bedVMList;
+        });
     }
 }
