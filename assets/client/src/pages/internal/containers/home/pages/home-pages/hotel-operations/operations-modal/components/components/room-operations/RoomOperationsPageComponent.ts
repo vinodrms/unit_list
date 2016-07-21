@@ -43,12 +43,12 @@ export class RoomOperationsPageComponent implements OnInit {
         });
     }
     private updateContainerData() {
-        this.roomOperationsPageParam.pageTitleText = this.roomVM.room.name;
         this.roomPreviewInput = new RoomPreviewInput();
         this.roomPreviewInput.roomVM = this.roomVM;
         this.roomPreviewInput.bedVMList = this.bedVMList;
         this.roomPreviewInput.allRoomAmenities = this._roomOperationsPageData.allRoomAmenities;
         this.roomPreviewInput.allRoomAttributes = this._roomOperationsPageData.allRoomAttributes;
+        this.roomOperationsPageParam.updateTitle(this.roomVM.room.name, this._appContext.thTranslation.translate("Floor %floorNumber%", { floorNumber: this.roomVM.room.floor }));
     }
 
     public get roomVM(): RoomVM {

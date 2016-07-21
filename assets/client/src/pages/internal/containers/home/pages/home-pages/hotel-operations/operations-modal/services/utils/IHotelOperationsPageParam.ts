@@ -2,8 +2,9 @@ import {OpaqueToken} from '@angular/core';
 import {HotelOperationsPageType} from './HotelOperationsPageType';
 
 export interface HotelOperationsPageTitleMeta {
-    title;
-    fontName;
+    title: string;
+    subtitle: string;
+    fontName: string;
 }
 
 export interface IHotelOperationsPageParam {

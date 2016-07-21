@@ -1,46 +1,32 @@
 <div class="col-xs-12">
     <div class="row">
-        <div class="col-xs-12 col-sm-4">
-            <div class="row">
-                <div class="col-xs-4 text-field">
-                    <p>{{'Name' | translate}}</p>
-                </div>
-                <div class="col-xs-8 field-value text-field">
-                    <p>{{roomVM.room.name}}</p>
-                </div>
-            </div>
+        <div class="col-xs-12 col-sm-1">
+            <p>{{'Name' | translate}}</p>
         </div>
-       <div class="col-xs-12 col-sm-4">
-            <div class="row">
-                <div class="col-xs-4 text-field">
-                    <p>{{'Category' | translate}}</p>
-                </div>
-                <div class="col-xs-8 field-value text-field">
-                    <p>{{roomVM.category.displayName}}</p>
-                </div>
-            </div>
+        <div class="col-xs-12 col-sm-3 field-value text-field">
+            <p>{{roomVM.room.name}}</p>
         </div>
-        <div class="col-xs-12 col-sm-4">
-            <div class="row">
-                <div class="col-xs-4 text-field">
-                    <p>{{'Capacity' | translate}}</p>
-                </div>
-                <div class="col-xs-8 field-value capacity">
-                    <p><config-capacity [configCapacity]="roomVM.capacity"></config-capacity></p>
-                </div>
-            </div>
+
+        <div class="col-xs-12 col-sm-1">
+            <p>{{'Category' | translate}}</p>
+        </div>
+        <div class="col-xs-12 col-sm-3 field-value text-field">
+            <p>{{roomVM.category.displayName}}</p>
+        </div>
+
+        <div class="col-xs-12 col-sm-1">
+            <p>{{'Capacity' | translate}}</p>
+        </div>
+        <div class="col-xs-12 col-sm-3 field-value capacity">
+            <p><config-capacity [configCapacity]="roomVM.capacity"></config-capacity></p>
         </div>
     </div>
     <div class="row">
-        <div class="col-xs-12 col-sm-8">
-            <div class="row">
-                <div class="col-xs-12 col-sm-2 text-field padding-top-15px">
-                    <p>{{'Beds' | translate}}</p>
-                </div>
-                <div class="col-xs-12 col-sm-10">
-                    <bed-selector [availableBedList]="bedVMList" [selectedBedList]="bedVMList" [roomCategory]="roomVM.category"></bed-selector>
-                </div>
-            </div>
+        <div class="col-xs-12 col-sm-1 text-field">
+            <p>{{'Beds' | translate}}</p>
+        </div>
+        <div class="col-xs-12 col-sm-7">
+            <bed-selector [availableBedList]="bedVMList" [selectedBedList]="bedVMList" [roomCategory]="roomVM.category"></bed-selector>
         </div>
         <div class="col-xs-12 col-sm-4">
             <image-upload [imageUrl]="roomVM.imageUrl" [readonly]="true"></image-upload>
@@ -50,7 +36,7 @@
         <div class="col-xs-12 col-sm-1 padding-top-15px">
             <p>{{'Amenities' | translate}}</p>
         </div>
-        <div class="col-xs-12 col-sm-11 form-group room-page-left-padding">
+        <div class="col-xs-12 col-sm-11 form-group">
             <div class="btn-group amenities-group" role="group">
                 <div class="button-check th-grid-btn" *ngFor="let roomAmenityVM of roomAmenities.roomAmenityList">
                     <div class="info-block block-info clearfix" title="{{ roomAmenityVM.roomAmenity.name }}">
@@ -69,7 +55,7 @@
         <div class="col-xs-12 col-sm-1 padding-top-15px">
             <p>{{'Attributes' | translate}}</p>
         </div>
-        <div class="col-xs-12 col-sm-11 form-group room-page-left-padding">
+        <div class="col-xs-12 col-sm-11 form-group">
             <div class="btn-group amenities-group" role="group">
                 <div class="button-check th-grid-btn" *ngFor="let roomAttributeVM of roomAttributes.roomAttributeList">
                     <div class="info-block block-info clearfix" title="{{ roomAttributeVM.roomAttribute.name }}">
@@ -88,7 +74,7 @@
         <div class="col-xs-12 col-sm-1">
             <p>{{'Notes' | translate}}</p>
         </div>
-        <div class="col-xs-12 col-sm-11 field-value text-field room-page-left-padding">
+        <div class="col-xs-12 col-sm-11 field-value text-field">
             <p>{{roomVM.room.notes}}</p>
         </div>
     </div>

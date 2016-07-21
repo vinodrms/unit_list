@@ -551,6 +551,7 @@ export var EnglishTranslations: Object = {
 	"Room was changed succesfully": "Room was changed succesfully",
 	"The check in was made succesfully. If you changed the default room and want to bill this, you can add on the invoice Upgrade/Downgrade Add On Products.": "The check in was made succesfully. If you changed the default room and want to bill this, you can add on the invoice Upgrade/Downgrade Add On Products.",
 	"The room was reserved succesfully.": "The room was reserved succesfully.",
+	"Floor %floorNumber%": "Floor %floorNumber%",
 	 
 	
 };

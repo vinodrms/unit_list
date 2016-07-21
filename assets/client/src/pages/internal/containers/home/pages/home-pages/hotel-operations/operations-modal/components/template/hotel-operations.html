@@ -7,6 +7,7 @@
             <span class="operational-page-font-container"><i class="fa fa-2x unitpal-font">{{ titleMeta.fontName }}</i></span>
 			<h1 class="oneline-text full-height">
 				{{ titleMeta.title }}
+				<small>{{ titleMeta.subtitle }}</small>
 			</h1>
 		</div>
 		<div class="col-xs-5 col-md-5 full-height">
@@ -25,6 +26,5 @@
 	<room-operations-page class="full-height" 
         *ngIf="isRoomOperationsPage()"
         [roomOperationsPageParam]="currentHotelOperationsPageParam"> 
-
     </room-operations-page>
 </div>
