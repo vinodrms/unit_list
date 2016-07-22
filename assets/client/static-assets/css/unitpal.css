@@ -2929,3 +2929,6 @@ a.btn.btn-square:focus {
  .unitpal-font.checkin {
      color: #36ce8d;
  }
+ .unitpal-font.checkout {
+     color: #fb6708;
+ }
