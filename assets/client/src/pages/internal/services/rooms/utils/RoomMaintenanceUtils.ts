@@ -10,11 +10,11 @@ export class RoomMaintenanceUtils {
 
     private buildMaintenanceMetaList() {
         this._maintenanceMetaList = [
-            RoomMaintenanceMeta.buildRoomMaintenanceMeta(RoomMaintenanceStatus.Clean, "Clean", ","),
-            RoomMaintenanceMeta.buildRoomMaintenanceMeta(RoomMaintenanceStatus.Dirty, "Dirty", ","),
-            RoomMaintenanceMeta.buildRoomMaintenanceMeta(RoomMaintenanceStatus.PickUp, "Pick Up", ","),
-            RoomMaintenanceMeta.buildRoomMaintenanceMeta(RoomMaintenanceStatus.OutOfOrder, "Out Of Order", ","),
-            RoomMaintenanceMeta.buildRoomMaintenanceMeta(RoomMaintenanceStatus.OutOfService, "Out Of Service", ","),
+            RoomMaintenanceMeta.buildRoomMaintenanceMeta(RoomMaintenanceStatus.Clean, "Clean", "Z"),
+            RoomMaintenanceMeta.buildRoomMaintenanceMeta(RoomMaintenanceStatus.Dirty, "Dirty", "H"),
+            RoomMaintenanceMeta.buildRoomMaintenanceMeta(RoomMaintenanceStatus.PickUp, "Pick Up", "J"),
+            RoomMaintenanceMeta.buildRoomMaintenanceMeta(RoomMaintenanceStatus.OutOfOrder, "Out Of Order", "K"),
+            RoomMaintenanceMeta.buildRoomMaintenanceMeta(RoomMaintenanceStatus.OutOfService, "Out Of Service", "+"),
         ];
     }
 
