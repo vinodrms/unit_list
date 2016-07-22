@@ -1,14 +1,23 @@
 import {Component, Input, Output, NgZone, ElementRef, EventEmitter} from '@angular/core';
 import {RoomDropHandlerFactory} from './drop-handlers/RoomDropHandlerFactory';
 
+import {ModalDialogRef} from '../../../../../../../../../../../../common/utils/modals/utils/ModalDialogRef';
+
 import {RoomItemInfoVM} from '../../../../../../../../../../services/hotel-operations/dashboard/rooms/view-models/RoomItemInfoVM';
 import {ArrivalItemInfoVM} from '../../../../../../../../../../services/hotel-operations/dashboard/arrivals/view-models/ArrivalItemInfoVM';
 
+import {HotelOperationsResult} from '../../../../../operations-modal/services/utils/HotelOperationsResult';
+
+import {HotelOperationsModalService} from '../../../../../operations-modal/services/HotelOperationsModalService';
+
 import {AssignRoomParam} from '../../../../../../../../../../services/hotel-operations/room/utils/AssignRoomParam';
+
+import {HotelOperationsDashboardService} from '../../../../../../../../../../services/hotel-operations/dashboard/HotelOperationsDashboardService';
 import {HotelOperationsRoomService} from '../../../../../../../../../../services/hotel-operations/room/HotelOperationsRoomService';
 
 import {RoomsCanvasComponent} from '../../../rooms-canvas/RoomsCanvasComponent';
-// import {HeaderPageService} from '../../../utils/header/container/services/HeaderPageService';
+
+import {HotelDashboardModalService} from '../../../../services/HotelDashboardModalService';
 
 declare var $: any;
 
@@ -32,7 +41,10 @@ export class RoomCardComponent {
 	constructor(
 		private _zone: NgZone,
 		private _root: ElementRef,
-		private _operationRoomService: HotelOperationsRoomService
+		private _operationRoomService: HotelOperationsRoomService,
+		private _hotelOperationsDashboardService: HotelOperationsDashboardService,
+		private _hotelOperationsModalService: HotelOperationsModalService,
+		private _modalService: HotelDashboardModalService
 		) {
 		this.maintenance = undefined;
 	}
@@ -102,5 +114,15 @@ export class RoomCardComponent {
 				}
 			}
 		);
+	}
+
+	public openCustomerModal(){
+		var customerId = this.roomVM.roomItemDO.customerId;
+		this._modalService.openCustomerModal(customerId);
+	}
+
+	public openRoomModal(){
+		var roomId = this.roomVM.roomItemDO.roomId;
+		this._modalService.openRoomModal(roomId);
 	}
 }

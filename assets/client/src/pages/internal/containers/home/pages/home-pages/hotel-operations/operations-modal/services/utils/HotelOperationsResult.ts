@@ -27,4 +27,9 @@ export class HotelOperationsResult {
     public set didChangeInvoice(didChangeInvoice: boolean) {
         this._didChangeInvoice = didChangeInvoice;
     }
+
+    public get didSomethingChange() : boolean {
+        return this._didChangeBooking || this._didChangeInvoice || this._didChangeRoom;
+    }
+    
 }

@@ -1,7 +1,8 @@
 import {Component, Input, Output, NgZone, ElementRef, EventEmitter} from '@angular/core';
 
-// import {HeaderPageService} from '../../../utils/header/container/services/HeaderPageService';
-// client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/dashboard/components/arrivals-pane/components/arrival-item/template/arrival-item.html
+import {ArrivalItemInfoVM} from '../../../../../../../../../../services/hotel-operations/dashboard/arrivals/view-models/ArrivalItemInfoVM';
+
+import {HotelDashboardModalService} from '../../../../services/HotelDashboardModalService';
 
 declare var $: any;
 @Component({
@@ -10,11 +11,15 @@ declare var $: any;
 })
 
 export class ArrivalItemComponent {
-	@Input() arrivalItemVM: any;
+	@Input() arrivalItemVM: ArrivalItemInfoVM;
 	@Output() startedDragging = new EventEmitter();
 	@Output() stoppedDragging = new EventEmitter();
 
-	constructor(private _zone: NgZone, private _root: ElementRef) {
+	constructor(
+		private _zone: NgZone,
+		private _root: ElementRef,
+		private _modalService: HotelDashboardModalService
+		) {
 	}
 
 	ngAfterViewInit() {
@@ -56,5 +61,22 @@ export class ArrivalItemComponent {
 				}
             }
 		);
+	}
+
+	public openCustomerModal(){
+		var customerId = this.arrivalItemVM.arrivalItemDO.customerId;
+		this._modalService.openCustomerModal(customerId);
+	}
+
+	public openBookingModal(){
+		var bookingId = this.arrivalItemVM.arrivalItemDO.bookingId;
+		var groupBookingId = this.arrivalItemVM.arrivalItemDO.groupBookingId;
+		this._modalService.openBookingModal(bookingId, groupBookingId);
+	}
+
+	public openCheckInModal(){
+		var bookingId = this.arrivalItemVM.arrivalItemDO.bookingId;
+		var groupBookingId = this.arrivalItemVM.arrivalItemDO.groupBookingId;
+		this._modalService.openCheckInModal(bookingId, groupBookingId);
 	}
 }

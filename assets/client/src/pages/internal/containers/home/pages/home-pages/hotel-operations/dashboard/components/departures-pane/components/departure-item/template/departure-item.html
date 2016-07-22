@@ -1,7 +1,7 @@
 <div *ngIf="departureItemVM.isStayingInRoom">
-	<div class="header clickable"s>
-		<span><b class="green-color">{{departureItemVM.roomName}}</b></span>
-		<span>{{departureItemVM.customerName}}</span>
+	<div class="header">
+		<span class="clickable"><b class="green-color" (click)="openRoomModal()">{{departureItemVM.roomName}}</b></span>
+		<span class="clickable" (click)="openCustomerModal()">{{departureItemVM.customerName}}</span>
 		<div class="room-type">{{ departureItemVM.roomCategoryLabel}}</div>
 	</div>
 	<div class="body">
@@ -17,7 +17,7 @@
 		</div>
 	</div>
 	<div class="footer">
-		<button class="btn btn-sm btn-green ">
+		<button class="btn btn-sm btn-green" (click)="openRoomModal()">
 			<span class="unitpal-font p-r-6">.</span> CHECK OUT 
 		</button>
 	</div>

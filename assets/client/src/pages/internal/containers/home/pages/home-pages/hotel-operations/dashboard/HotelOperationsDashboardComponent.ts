@@ -12,10 +12,14 @@ import {RoomsCanvasComponent} from './components/rooms-canvas/RoomsCanvasCompone
 
 import {ArrivalItemInfoVM} from '../../../../../../services/hotel-operations/dashboard/arrivals/view-models/ArrivalItemInfoVM';
 
-import {HotelOperationsDashboardServiceDeprecated} from './services/HotelOperationsDashboardService';
 import {HOTEL_OPERATIONS_DASHBOARD_PROVIDERS} from '../../../../../../services/hotel-operations/dashboard/HotelOperationsDashboardProviders';
 import {EagerCustomersService} from '../../../../../../services/customers/EagerCustomersService';
 import {HotelOperationsRoomService} from '../../../../../../services/hotel-operations/room/HotelOperationsRoomService';
+
+import {AssignRoomModalService} from '../assign-room/services/AssignRoomModalService';
+import {HotelOperationsModalService} from '../operations-modal/services/HotelOperationsModalService';
+
+import {HotelDashboardModalService} from './services/HotelDashboardModalService';
 
 declare var $:any;
 
@@ -50,7 +54,8 @@ export interface IHotelOperationsDashboardDeparturesMediator{
 	selector: 'hotel-operations-dashboard',
 	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/dashboard/template/hotel-operations-dashboard.html',
 	directives: [ThButtonComponent, ArrivalsPaneComponent, DeparturesPaneComponent, RoomsCanvasComponent],
-	providers: [HOTEL_OPERATIONS_DASHBOARD_PROVIDERS, EagerCustomersService, HotelOperationsRoomService, HotelOperationsDashboardServiceDeprecated],
+	providers: [HOTEL_OPERATIONS_DASHBOARD_PROVIDERS, EagerCustomersService, HotelOperationsRoomService,
+	AssignRoomModalService, HotelOperationsModalService, HotelDashboardModalService],
 	pipes: [TranslationPipe]
 })
 
