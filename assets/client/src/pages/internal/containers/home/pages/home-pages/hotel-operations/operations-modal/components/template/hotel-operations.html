@@ -23,9 +23,29 @@
 	</div>
 </div>
 <div class="modal-lg-body container operational-page-container">
+
 	<room-operations-page class="full-height" 
         *ngIf="isRoomOperationsPage()"
         [roomOperationsPageParam]="currentHotelOperationsPageParam"
 		>
     </room-operations-page>
+
+	<booking-operations-page class="full-height" 
+		*ngIf="isBookingOperationsPage()"
+		[bookingOperationsPageParam]="currentHotelOperationsPageParam"
+		>
+	</booking-operations-page>
+
+	<customer-operations-page class="full-height" 
+		*ngIf="isCustomerOperationsPage()"
+		[customerOperationsPageParam]="currentHotelOperationsPageParam"
+		>
+	</customer-operations-page>
+
+	<invoice-operations-page class="full-height" 
+		*ngIf="isInvoiceOperationsPage()"
+		[invoiceOperationsPageParam]="currentHotelOperationsPageParam"
+		>
+	</invoice-operations-page>
+
 </div>

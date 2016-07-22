@@ -1,22 +1,31 @@
 import {Component, OnInit, Output, EventEmitter, Inject} from '@angular/core';
 import {TranslationPipe} from '../../../../../../../../../common/utils/localization/TranslationPipe';
+
+import {SETTINGS_PROVIDERS} from '../../../../../../../services/settings/SettingsProviders';
+import {RoomCategoriesStatsService} from '../../../../../../../services/room-categories/RoomCategoriesStatsService';
+import {BedsEagerService} from '../../../../../../../services/beds/BedsEagerService';
+import {RoomsService} from '../../../../../../../services/rooms/RoomsService';
+import {EagerCustomersService} from '../../../../../../../services/customers/EagerCustomersService';
+
+import {HotelOperationsRoomService} from '../../../../../../../services/hotel-operations/room/HotelOperationsRoomService';
+import {HotelOperationsBookingService} from '../../../../../../../services/hotel-operations/booking/HotelOperationsBookingService';
+
+import {RoomOperationsPageComponent} from './components/room-operations/RoomOperationsPageComponent';
+import {BookingOperationsPageComponent} from './components/booking-operations/BookingOperationsPageComponent';
+import {CustomerOperationsPageComponent} from './components/customer-operations/CustomerOperationsPageComponent';
+import {InvoiceOperationsPageComponent} from './components/invoice-operations/InvoiceOperationsPageComponent';
+
 import {HotelOperationsPageControllerService} from './services/HotelOperationsPageControllerService';
 import {IHotelOperationsPageParam, HotelOperationsPageTitleMeta} from '../services/utils/IHotelOperationsPageParam';
 import {HotelOperationsPageType} from '../services/utils/HotelOperationsPageType';
-import {RoomOperationsPageComponent} from './components/room-operations/RoomOperationsPageComponent';
-import {SETTINGS_PROVIDERS} from '../../../../../../../services/settings/SettingsProviders';
-import {RoomCategoriesStatsService} from '../../../../../../../services/room-categories/RoomCategoriesStatsService';
-import {RoomsService} from '../../../../../../../services/rooms/RoomsService';
-import {HotelOperationsRoomService} from '../../../../../../../services/hotel-operations/room/HotelOperationsRoomService';
-import {BedsEagerService} from '../../../../../../../services/beds/BedsEagerService';
-import {EagerCustomersService} from '../../../../../../../services/customers/EagerCustomersService';
 
 @Component({
     selector: 'hotel-operations',
     templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/template/hotel-operations.html',
-    directives: [RoomOperationsPageComponent],
+    directives: [RoomOperationsPageComponent, BookingOperationsPageComponent, CustomerOperationsPageComponent, InvoiceOperationsPageComponent],
     providers: [SETTINGS_PROVIDERS,
-        RoomCategoriesStatsService, BedsEagerService, RoomsService, EagerCustomersService, HotelOperationsRoomService,
+        RoomCategoriesStatsService, BedsEagerService, RoomsService, EagerCustomersService,
+        HotelOperationsRoomService, HotelOperationsBookingService,
         HotelOperationsPageControllerService],
     pipes: [TranslationPipe]
 })
@@ -44,6 +53,15 @@ export class HotelOperationsComponent {
 
     public isRoomOperationsPage(): boolean {
         return this.currentHotelOperationsPageParam.pageType === HotelOperationsPageType.RoomOperations;
+    }
+    public isBookingOperationsPage(): boolean {
+        return this.currentHotelOperationsPageParam.pageType === HotelOperationsPageType.BookingOperations;
+    }
+    public isCustomerOperationsPage(): boolean {
+        return this.currentHotelOperationsPageParam.pageType === HotelOperationsPageType.CustomerOperations;
+    }
+    public isInvoiceOperationsPage(): boolean {
+        return this.currentHotelOperationsPageParam.pageType === HotelOperationsPageType.InvoiceOperations;
     }
 
     private get currentHotelOperationsPageParam(): IHotelOperationsPageParam {

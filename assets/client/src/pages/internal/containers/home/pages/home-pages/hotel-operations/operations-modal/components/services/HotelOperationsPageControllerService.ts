@@ -3,6 +3,7 @@ import {IHotelOperationsPageParam} from '../../services/utils/IHotelOperationsPa
 import {HotelRoomOperationsPageParam} from '../components/room-operations/utils/HotelRoomOperationsPageParam';
 import {HotelBookingOperationsPageParam} from '../components/booking-operations/utils/HotelBookingOperationsPageParam';
 import {HotelCustomerOperationsPageParam} from '../components/customer-operations/utils/HotelCustomerOperationsPageParam';
+import {HotelInvoiceOperationsPageParam, HotelInvoiceOperationsPageFilterParam} from '../components/invoice-operations/utils/HotelInvoiceOperationsPageParam';
 
 @Injectable()
 export class HotelOperationsPageControllerService {
@@ -35,6 +36,10 @@ export class HotelOperationsPageControllerService {
     public goToCustomer(customerId: string) {
         var custOperationsPageParam = new HotelCustomerOperationsPageParam(customerId);
         this.goToPage(custOperationsPageParam);
+    }
+    public goToInvoice(invoiceGroupId: string, invoiceFilter: HotelInvoiceOperationsPageFilterParam) {
+        var invoiceOperationsPageParam = new HotelInvoiceOperationsPageParam(invoiceGroupId, invoiceFilter);
+        this.goToPage(invoiceOperationsPageParam);
     }
     private goToPage(operationsPageParam: IHotelOperationsPageParam) {
         this._hotelOperationsPageParamList.push(operationsPageParam);
