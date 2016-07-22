@@ -9,11 +9,12 @@ import {HotelBookingOperationsPageParam} from './utils/HotelBookingOperationsPag
 import {BookingOperationsPageService} from './services/BookingOperationsPageService';
 import {BookingOperationsPageData} from './services/utils/BookingOperationsPageData';
 import {BookingPeriodEditorComponent} from './components/period-editor/BookingPeriodEditorComponent';
+import {DocumentHistoryViewerComponent} from '../../../../../../../../../../../common/utils/components/document-history/DocumentHistoryViewerComponent';
 
 @Component({
     selector: 'booking-operations-page',
     templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/booking-operations/template/booking-operations-page.html',
-    directives: [LoadingComponent, CustomScroll, BookingPeriodEditorComponent],
+    directives: [LoadingComponent, CustomScroll, BookingPeriodEditorComponent, DocumentHistoryViewerComponent],
     providers: [BookingOperationsPageService],
     pipes: [TranslationPipe]
 })

@@ -5,7 +5,16 @@
 		<div class="row">
 			<booking-period-editor [bookingOperationsPageData]="bookingOperationsPageData"></booking-period-editor>
 		</div>
-				
+
+
+		<div class="row padding-bottom-10px">
+			<div class="col-xs-12 col-sm-1 padding-top-10px">
+				{{'History' | translate}}
+			</div>
+			<div class="col-xs-12 col-sm-11">
+				<document-history-viewer [documentHistory]="bookingDO.bookingHistory"></document-history-viewer>
+			</div>
+		</div>
 	</div>
 	<div class="col-xs-3 full-height right-sidebar">
 		
