@@ -1,0 +1,31 @@
+<div class="row">
+    <div class="col-xs-12">
+        <div class="booking-details-table">
+            <table class="table table-striped" *ngIf="didInit">
+                <thead></thead>
+                <tbody>
+                    <tr *ngFor="let documentAction of filteredActionList">
+                        <td width="20%" class="increased-font-weight">{{ documentAction.thTimestampDO | thtimestamp }}</td>
+                        <td width="70%">{{ documentAction.actionString }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12">
+        <span class="pull-right edit-save-button-group-container">
+            <span *ngIf="canShowExpandButton">
+                <button type="button" class="btn btn-default btn-block btn-xs uppercase" (click)="showAllActions()">
+                    <i class="fa fa-info-circle"></i> {{ 'Expand' | translate }}
+                </button>
+            </span>
+            <span *ngIf="didExpand">
+                <button type="button" class="btn btn-default btn-block btn-xs uppercase" (click)="showLessActions()">
+                    <i class="fa fa-info-circle"></i> {{ 'Less' | translate }}
+                </button>
+            </span>
+        </span>
+    </div>
+</div>

@@ -15,6 +15,7 @@ import {BookingOccupancyService} from '../../../../../../services/bookings/occup
 import {HotelService} from '../../../../../../services/hotel/HotelService';
 import {HotelAggregatorService} from '../../../../../../services/hotel/HotelAggregatorService';
 import {HotelOperationsRoomService} from '../../../../../../services/hotel-operations/room/HotelOperationsRoomService';
+import {EagerCustomersService} from '../../../../../../services/customers/EagerCustomersService';
 import {AssignRoomParam} from '../../../../../../services/hotel-operations/room/utils/AssignRoomParam';
 import {RoomSelectionComponent} from './components/room-selection/RoomSelectionComponent';
 import {PriceSelectionComponent} from './components/price-selection/PriceSelectionComponent';
@@ -25,7 +26,7 @@ import {AssignRoomModalInput} from './services/utils/AssignRoomModalInput';
     templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/assign-room/template/assign-room-modal.html',
     directives: [RoomSelectionComponent, PriceSelectionComponent],
     providers: [SETTINGS_PROVIDERS, HotelService, HotelAggregatorService,
-        RoomCategoriesStatsService, RoomsService,
+        RoomCategoriesStatsService, RoomsService, EagerCustomersService,
         HotelOperationsBookingService, BookingOccupancyService,
         HotelOperationsRoomService],
     pipes: [TranslationPipe]

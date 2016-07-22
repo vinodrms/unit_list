@@ -1,31 +1,41 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, Output, EventEmitter} from '@angular/core';
+import {TranslationPipe} from '../../../../../../../../../../../common/utils/localization/TranslationPipe';
 import {LoadingComponent} from '../../../../../../../../../../../common/utils/components/LoadingComponent';
 import {CustomScroll} from '../../../../../../../../../../../common/utils/directives/CustomScroll';
 import {ThError, AppContext} from '../../../../../../../../../../../common/utils/AppContext';
 import {RoomVM} from '../../../../../../../../../services/rooms/view-models/RoomVM';
+import {RoomDO} from '../../../../../../../../../services/rooms/data-objects/RoomDO';
 import {BedVM} from '../../../../../../../../../services/beds/view-models/BedVM';
-import {RoomAttachedBookingResultDO} from '../../../../../../../../../services/hotel-operations/room/data-objects/RoomAttachedBookingResultDO';
-import {HotelRoomOperationsPageParam} from './services/utils/HotelRoomOperationsPageParam';
+import {BookingDO} from '../../../../../../../../../services/bookings/data-objects/BookingDO';
+import {RoomAttachedBookingResultVM} from '../../../../../../../../../services/hotel-operations/room/view-models/RoomAttachedBookingResultVM';
+import {HotelRoomOperationsPageParam} from './utils/HotelRoomOperationsPageParam';
 import {RoomOperationsPageService} from './services/RoomOperationsPageService';
 import {RoomOperationsPageData} from './services/utils/RoomOperationsPageData';
 import {RoomPreviewComponent} from '../../../../../../../../common/inventory/rooms/pages/room-preview/RoomPreviewComponent';
 import {RoomPreviewInput} from '../../../../../../../../common/inventory/rooms/pages/room-preview/utils/RoomPreviewInput';
+import {RoomMaintenanceStatusEditorComponent} from './components/maintenance-status/RoomMaintenanceStatusEditorComponent';
+import {DocumentHistoryViewerComponent} from '../../../../../../../../../../../common/utils/components/document-history/DocumentHistoryViewerComponent';
+import {RoomBookingPreviewComponent} from './components/booking-preview/RoomBookingPreviewComponent';
+import {HotelOperationsResultService} from '../../../services/HotelOperationsResultService';
 
 @Component({
     selector: 'room-operations-page',
     templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/room-operations/template/room-operations-page.html',
-    directives: [LoadingComponent, CustomScroll, RoomPreviewComponent],
-    providers: [RoomOperationsPageService]
+    directives: [LoadingComponent, CustomScroll, DocumentHistoryViewerComponent,
+        RoomPreviewComponent, RoomMaintenanceStatusEditorComponent, RoomBookingPreviewComponent],
+    providers: [RoomOperationsPageService],
+    pipes: [TranslationPipe]
 })
 export class RoomOperationsPageComponent implements OnInit {
     @Input() roomOperationsPageParam: HotelRoomOperationsPageParam;
 
     isLoading: boolean;
-
+    didInitOnce: boolean = false;
     private _roomOperationsPageData: RoomOperationsPageData;
     roomPreviewInput: RoomPreviewInput;
 
     constructor(private _appContext: AppContext,
+        private _hotelOperationsResultService: HotelOperationsResultService,
         private _roomOperationsPageService: RoomOperationsPageService) { }
 
     public ngOnInit() {
@@ -36,6 +46,7 @@ export class RoomOperationsPageComponent implements OnInit {
         this._roomOperationsPageService.getPageData(this.roomOperationsPageParam).subscribe((pageData: RoomOperationsPageData) => {
             this._roomOperationsPageData = pageData;
             this.isLoading = false;
+            this.didInitOnce = true;
             this.updateContainerData();
         }, (err: ThError) => {
             this._appContext.toaster.error(err.message);
@@ -57,10 +68,18 @@ export class RoomOperationsPageComponent implements OnInit {
     public get bedVMList(): BedVM[] {
         return this._roomOperationsPageData.bedVMList;
     }
-    public get attachedBookingResult(): RoomAttachedBookingResultDO {
-        return this._roomOperationsPageData.attachedBookingResult;
+    public get attachedBookingResultVM(): RoomAttachedBookingResultVM {
+        return this._roomOperationsPageData.attachedBookingResultVM;
     }
     public get didLoadPageData(): boolean {
         return !this._appContext.thUtils.isUndefinedOrNull(this._roomOperationsPageData);
+    }
+
+    public didChangeBooking(booking: BookingDO) {
+        this.loadPageData();
+        this._hotelOperationsResultService.markBookingChanged(booking);
+    }
+    public didChangeRoom(roomDO: RoomDO) {
+        this._hotelOperationsResultService.markRoomChanged(roomDO);
     }
 }

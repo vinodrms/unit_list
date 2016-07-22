@@ -1,4 +1,4 @@
-export class HotelOperationsModalResult {
+export class HotelOperationsResult {
     private _didChangeRoom: boolean;
     private _didChangeBooking: boolean;
     private _didChangeInvoice: boolean;
