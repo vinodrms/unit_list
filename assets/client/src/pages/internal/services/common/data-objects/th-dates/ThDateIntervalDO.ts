@@ -42,6 +42,9 @@ export class ThDateIntervalDO extends BaseDO {
 		outInterval.end = end;
 		return outInterval;
 	}
+	public buildPrototype(): ThDateIntervalDO {
+		return ThDateIntervalDO.buildThDateIntervalDO(this.start.buildPrototype(), this.end.buildPrototype());
+	}
 
 	public toString(): string {
 		return this.start.toString() + " - " + this.end.toString();
@@ -50,6 +53,6 @@ export class ThDateIntervalDO extends BaseDO {
 		return this.start.getShortDisplayString(thTranslation) + " - " + this.end.getShortDisplayString(thTranslation);
 	}
 	public getLongDisplayString(thTranslation: ThTranslation): string {
-		return thTranslation.translate("%firstDate% to %secondDate%", {firstDate: this.start.getLongDisplayString(thTranslation), secondDate: this.end.getLongDisplayString(thTranslation)})
+		return thTranslation.translate("%firstDate% to %secondDate%", { firstDate: this.start.getLongDisplayString(thTranslation), secondDate: this.end.getLongDisplayString(thTranslation) })
 	}
 }

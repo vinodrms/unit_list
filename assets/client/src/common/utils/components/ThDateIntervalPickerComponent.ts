@@ -10,7 +10,7 @@ import {ThDateUtils} from '../../../pages/internal/services/common/data-objects/
 	selector: 'th-date-interval-picker',
 	template: `
 		<div class="row">
-			<div [ngClass]="{'col-md-4 col-sm-6 col-xs-12': !showExpandedView, 'col-xs-6': showExpandedView}">
+			<div [ngClass]="{'col-md-4 col-sm-6 col-xs-12': !showExpandedView, 'col-xs-12 col-sm-6': showExpandedView}">
 				<th-date-picker
 					[readonly]="readonly"
 					[initialThDate]="dateInterval.start"
@@ -23,7 +23,7 @@ import {ThDateUtils} from '../../../pages/internal/services/common/data-objects/
 				</th-date-picker>
 				<span class="unitpal-font date-interval-picker-arrow" [ngClass]="{'normal': !showExpandedView, 'expanded': showExpandedView}">></span>
 			</div>
-			<div [ngClass]="{'col-md-4 col-sm-6 col-xs-12': !showExpandedView, 'col-xs-6': showExpandedView}">
+			<div [ngClass]="{'col-md-4 col-sm-6 col-xs-12': !showExpandedView, 'col-xs-12 col-sm-6': showExpandedView}">
 				<th-date-picker
 					[readonly]="readonly"
 					[initialThDate]="dateInterval.end"
