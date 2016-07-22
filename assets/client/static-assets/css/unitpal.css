@@ -644,8 +644,8 @@ lazy-loading-table {
 .btn-green:active,
 .btn-green:visited,
 .btn-green:focus {
-    background-color: #6098D1 !important;
-    border-color: #6098D1 !important;
+    background-color: #5CB85C !important;
+    border-color: #5CB85C !important;
     color: white;
 }
 
@@ -2301,7 +2301,7 @@ a.btn.btn-square:focus {
             font-size: 16px;
         }
 
-        arrival-item .body .room-type {
+        .room-type {
             font-size: 12px;
             color: #999;
         }
@@ -2423,6 +2423,13 @@ a.btn.btn-square:focus {
             color: white;
             border-radius: 3px;
             padding : 3px;
+        }
+
+        /* Misc */
+        .other-details {
+            display: flex;
+            flex-basis: 40px;
+            justify-content: space-around;
         }
 
         /* Helpers */

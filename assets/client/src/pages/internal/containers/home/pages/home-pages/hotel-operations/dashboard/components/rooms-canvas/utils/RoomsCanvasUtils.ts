@@ -72,7 +72,6 @@ export class RoomsCanvasUtils{
 	}
 
 	public getMappedRoomItemStatusFromFilter(filterType:FilterValueType):RoomItemStatus{
-		debugger;
 		var statusType;
 		switch (filterType) {
 			case FilterValueType.Free:

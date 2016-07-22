@@ -1,8 +1,12 @@
 <div class="header">
 	<div class="pane-title">
-		<span class="f-24">Departures</span>
-		<!--<i class="fa fa-suitcase green-color p-l-12 f-16"></i>-->
-		<span class="unitpal-font green-color p-l-12 f-24">.</span>
+		<span class="unitpal-font f-12 p-r-12 f-48 clickable" (click)="previousDay()">&lt;</span>
+			<span class="unitpal-font green-color p-r-12 f-48">.</span>
+			<div>
+				<span class="f-12">Departures</span>
+				<span class="current-date f-16"><b>13.01.2016</b></span>			
+			</div>
+		<span class="unitpal-font f-12 p-r-12 f-48 clickable" (click)="nextDay()">&gt;</span>
 	</div>
 
 	<div class="pane-search-bar">

@@ -31,7 +31,7 @@ export class HotelOperationsDashboardService {
 
     public getDepartureItems(referenceDate?: ThDateDO): Observable<DepartureItemInfoVM[]> {
         referenceDate = new ThDateDO();
-        referenceDate.day = 18;
+        referenceDate.day = 23;
         referenceDate.month = 6;
         referenceDate.year = 2016;        
         return this._departuresService.getDepartureItems(referenceDate);
