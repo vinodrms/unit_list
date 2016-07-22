@@ -9,10 +9,10 @@
 		</select>
     </div>
     <div class="form-group" *ngIf="readonly">
-        <div class="form-control maintenance-status">
+        <div class="form-control operational-input-group">
             <span class="unitpal-font unitpal-large">{{currentMaintenanceMeta.fontName}}</span>
             <span class="name field-value">{{currentMaintenanceMeta.maintenanceMessage | translate}}</span>
-            <span class="timestamp text-field"><p>{{ lastChangeTimestamp | thtimestampdistancefromnow }}</p></span>
+            <span class="details text-field"><p>{{ lastChangeTimestamp | thtimestampdistancefromnow }}</p></span>
 		</div>
     </div>
 </div>

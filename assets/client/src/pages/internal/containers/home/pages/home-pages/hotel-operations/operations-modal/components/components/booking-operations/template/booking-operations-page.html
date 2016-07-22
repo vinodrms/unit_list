@@ -1,0 +1,13 @@
+<loading-component [isLoading]="isLoading && !didInitOnce"></loading-component>
+
+<div class="row full-height" *ngIf="didInitOnce">
+	<div class="col-xs-9 full-height right-margin padding-top-10px" customScroll>
+		<div class="row">
+			<booking-period-editor [bookingOperationsPageData]="bookingOperationsPageData"></booking-period-editor>
+		</div>
+				
+	</div>
+	<div class="col-xs-3 full-height right-sidebar">
+		
+	</div>
+</div>
