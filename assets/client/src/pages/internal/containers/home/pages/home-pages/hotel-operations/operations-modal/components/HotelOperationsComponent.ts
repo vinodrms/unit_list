@@ -6,6 +6,9 @@ import {RoomCategoriesStatsService} from '../../../../../../../services/room-cat
 import {BedsEagerService} from '../../../../../../../services/beds/BedsEagerService';
 import {RoomsService} from '../../../../../../../services/rooms/RoomsService';
 import {EagerCustomersService} from '../../../../../../../services/customers/EagerCustomersService';
+import {EagerBookingsService} from '../../../../../../../services/bookings/EagerBookingsService';
+import {HotelService} from '../../../../../../../services/hotel/HotelService';
+import {HotelAggregatorService} from '../../../../../../../services/hotel/HotelAggregatorService';
 
 import {HotelOperationsRoomService} from '../../../../../../../services/hotel-operations/room/HotelOperationsRoomService';
 import {HotelOperationsBookingService} from '../../../../../../../services/hotel-operations/booking/HotelOperationsBookingService';
@@ -25,6 +28,7 @@ import {HotelOperationsPageType} from '../services/utils/HotelOperationsPageType
     directives: [RoomOperationsPageComponent, BookingOperationsPageComponent, CustomerOperationsPageComponent, InvoiceOperationsPageComponent],
     providers: [SETTINGS_PROVIDERS,
         RoomCategoriesStatsService, BedsEagerService, RoomsService, EagerCustomersService,
+        HotelService, HotelAggregatorService, EagerBookingsService,
         HotelOperationsRoomService, HotelOperationsBookingService,
         HotelOperationsPageControllerService],
     pipes: [TranslationPipe]

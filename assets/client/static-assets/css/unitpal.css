@@ -1690,6 +1690,9 @@ ul.msg_list li .text-center a {
     left: 3px;
     margin-right: 8px;
 }
+.modal-lg-header h1.oneline-text {
+    width: calc(100% - 120px);
+}
 
 .modal-lg-body {
     height: calc(100% - 70px);
@@ -2868,24 +2871,31 @@ a.btn.btn-square:focus {
     margin-top: 0px;
     margin-bottom: 5px;
 }
-.form-control.maintenance-status {
+.form-control.operational-input-group {
     background-color: #eee;
     display: flex;
     flex-direction: row;
 }
-.form-control.maintenance-status>span.unitpal-font {
+.form-control.operational-input-group>span.unitpal-font {
     position: relative;
-    bottom: 7px;
+    bottom: 6px;
+    font-size: 28px;
 }
-.form-control.maintenance-status>span.name {
+.form-control.operational-input-group>span.name {
     flex: 1;
     padding-left: 8px;
     padding-top: 0px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
-.form-control.maintenance-status>span.timestamp {
+.form-control.operational-input-group>span.details {
     font-size: 12px;
     position: relative;
     top: 3px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 .uppercase {
     text-transform: uppercase;

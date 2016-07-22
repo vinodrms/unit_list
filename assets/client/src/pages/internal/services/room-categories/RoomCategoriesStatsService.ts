@@ -55,6 +55,13 @@ export class RoomCategoriesStatsService extends ARequestService<RoomCategoryStat
 			});
 		});
 	}
+	public getRoomCategoryStatsForRoomCategoryId(roomCategoryId: string): Observable<RoomCategoryStatsDO> {
+		return this.getRoomCategoryStatsForRoomCategoryIdList([roomCategoryId])
+			.map((roomCategoryStatsList: RoomCategoryStatsDO[]) => {
+				return roomCategoryStatsList[0];
+			});
+	}
+
 	public refreshData() {
 		this.updateServiceResult();
 	}
