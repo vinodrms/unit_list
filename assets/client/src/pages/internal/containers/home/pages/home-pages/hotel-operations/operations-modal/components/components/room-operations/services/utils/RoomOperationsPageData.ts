@@ -1,5 +1,5 @@
 import {RoomVM} from '../../../../../../../../../../../services/rooms/view-models/RoomVM';
-import {RoomAttachedBookingResultDO} from '../../../../../../../../../../../services/hotel-operations/room/data-objects/RoomAttachedBookingResultDO';
+import {RoomAttachedBookingResultVM} from '../../../../../../../../../../../services/hotel-operations/room/view-models/RoomAttachedBookingResultVM';
 import {BedVM} from '../../../../../../../../../../../services/beds/view-models/BedVM';
 import {RoomAmenitiesDO} from '../../../../../../../../../../../services/settings/data-objects/RoomAmenitiesDO';
 import {RoomAttributesDO} from '../../../../../../../../../../../services/settings/data-objects/RoomAttributesDO';
@@ -7,13 +7,13 @@ import {RoomAttributesDO} from '../../../../../../../../../../../services/settin
 export class RoomOperationsPageData {
     private _roomVM: RoomVM;
     private _bedVMList: BedVM[];
-    private _attachedBookingResult: RoomAttachedBookingResultDO;
+    private _attachedBookingResultVM: RoomAttachedBookingResultVM;
     private _allRoomAmenities: RoomAmenitiesDO;
     private _allRoomAttributes: RoomAttributesDO;
 
-    constructor(roomVM: RoomVM, bedVMList: BedVM[], attachedBookingResult: RoomAttachedBookingResultDO) {
+    constructor(roomVM: RoomVM, bedVMList: BedVM[], attachedBookingResult: RoomAttachedBookingResultVM) {
         this._roomVM = roomVM;
-        this._attachedBookingResult = attachedBookingResult;
+        this._attachedBookingResultVM = attachedBookingResult;
         this._bedVMList = bedVMList;
     }
 
@@ -31,11 +31,11 @@ export class RoomOperationsPageData {
         this._bedVMList = bedVMList;
     }
 
-    public get attachedBookingResult(): RoomAttachedBookingResultDO {
-        return this._attachedBookingResult;
+    public get attachedBookingResultVM(): RoomAttachedBookingResultVM {
+        return this._attachedBookingResultVM;
     }
-    public set attachedBookingResult(attachedBookingResult: RoomAttachedBookingResultDO) {
-        this._attachedBookingResult = attachedBookingResult;
+    public set attachedBookingResultVM(attachedBookingResult: RoomAttachedBookingResultVM) {
+        this._attachedBookingResultVM = attachedBookingResult;
     }
 
     public get allRoomAmenities(): RoomAmenitiesDO {

@@ -749,14 +749,17 @@ lazy-loading-table {
     text-overflow: ellipsis;
     padding-left: 2px;
     padding-right: 2px;
+    font-weight: 500;
 }
 .bed-slot-info .bed-slot-property.type {
     font-size: 9px;
     font-weight: 200;
+    font-weight: 300;
 }
 .bed-slot-info .bed-slot-property.info {
     color: #7d7878;
     font-size: 9px;
+    font-weight: 300;
 }
 
 .bed-slot:hover {
@@ -2834,7 +2837,8 @@ a.btn.btn-square:focus {
 
 .operational-page-container {
     font-size: 13px;
-    color: #7d7878;
+    color: #5a5a5a;
+    font-weight: 300;
 }
 .operational-page-container .important-field {
     font-weight: 500;
@@ -2899,3 +2903,29 @@ a.btn.btn-square:focus {
 .increased-font-weight {
     font-weight: 600;
 }
+.operational-page-container .clickable-item {
+    cursor: pointer;
+    font-weight: 500;
+    color: #fb6708;
+    font-size: 15px;
+}
+.operational-page-container .clickable-item:hover {
+    color: #C44D00;
+}
+.reserved-booking kbd {
+    background-color: #ffec40;
+    color: black;
+}
+.checked-in kbd {
+    background-color: #fb6708;
+    color: white;
+ }
+ .operational-page-container .right-sidebar .unitpal-font {
+     font-size: 20px;
+ }
+ .operational-page-container .right-sidebar .notes {
+     font-size: 11px; 
+ }
+ .unitpal-font.checkin {
+     color: #36ce8d;
+ }

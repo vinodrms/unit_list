@@ -1,0 +1,61 @@
+<div class="col-xs-12" *ngIf="hasNoAttachedBooking()">
+    <span class="first-line"><i class="fa unitpal-font" title="{{'Booking' | translate}}">8</i> {{ 'No Booking' | translate }}</span>
+</div>
+
+<div class="col-xs-12" *ngIf="!hasNoAttachedBooking()">
+    <div class="row">
+        <div class="col-xs-12" [ngClass]="{'reserved-booking': hasReservedBooking(), 'checked-in': hasCheckedInBooking()}">
+		    <kbd>{{ attachedBookingResultVM.roomAttachedBookingResultDO.bookingTypeString | translate }}</kbd>
+        </div>
+        <div class="col-xs-12 padding-top-5px">
+            <span class="clickable-item">
+                <i class="fa unitpal-font" title="{{'Group/Individual Booking References' | translate}}">8</i> 
+                {{bookingDO.groupBookingReference}} / {{bookingDO.bookingReference}}
+            </span> 
+        </div>
+    </div>
+    <hr/>
+    <div class="row">
+        <div class="col-xs-12">
+            <span>
+                <i class="fa unitpal-font checkin" title="{{'Start Date' | translate}}">/</i> 
+                {{ startDateLongString }}
+            </span> 
+        </div>
+        <div class="col-xs-12">
+            <span>
+                <i class="fa unitpal-font" title="{{'End Date' | translate}}">.</i> 
+                {{ endDateLongString }}
+            </span> 
+        </div>
+    </div>
+    <hr/>
+    <div class="row">
+        <div class="col-xs-12 padding-top-5px">
+            <span class="clickable-item">
+                <i class="fa unitpal-font" title="{{'Customer' | translate}}">(</i> 
+                {{customer.customerName}}
+            </span> 
+        </div>
+    </div>
+    
+    <div class="row" *ngIf="hasNotes">
+        <hr/>
+        <div class="col-xs-12 padding-top-5px">
+            <p>{{'Notes' | translate}}</p>
+        </div>
+        <div class="col-xs-12 padding-top-5px notes">
+            {{bookingDO.notes}}
+        </div>
+    </div>
+    <hr/>
+    <div class="row">
+        <div class="col-xs-12 padding-top-5px" *ngIf="hasCheckedInBooking()">
+            <button type="button" class="btn btn-primary btn-block" (click)="checkOut()">
+				<i *ngIf="isCheckingOut" class="fa fa-spinner fa-pulse"></i> 
+                <i *ngIf="!isCheckingOut" class="fa unitpal-font">.</i> 
+                {{ 'Check Out' | translate }}
+			</button>
+        </div>
+    </div>
+</div>

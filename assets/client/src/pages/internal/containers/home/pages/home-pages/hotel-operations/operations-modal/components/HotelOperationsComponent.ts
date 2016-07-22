@@ -9,21 +9,16 @@ import {RoomCategoriesStatsService} from '../../../../../../../services/room-cat
 import {RoomsService} from '../../../../../../../services/rooms/RoomsService';
 import {HotelOperationsRoomService} from '../../../../../../../services/hotel-operations/room/HotelOperationsRoomService';
 import {BedsEagerService} from '../../../../../../../services/beds/BedsEagerService';
+import {EagerCustomersService} from '../../../../../../../services/customers/EagerCustomersService';
 
 @Component({
     selector: 'hotel-operations',
     templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/template/hotel-operations.html',
     directives: [RoomOperationsPageComponent],
-    providers: [SETTINGS_PROVIDERS, RoomCategoriesStatsService, RoomsService, HotelOperationsRoomService, BedsEagerService],
+    providers: [SETTINGS_PROVIDERS, RoomCategoriesStatsService, BedsEagerService, RoomsService, EagerCustomersService, HotelOperationsRoomService],
     pipes: [TranslationPipe]
 })
 export class HotelOperationsComponent {
-    @Output() onRoomChanged = new EventEmitter<boolean>();
-    public triggerOnRoomChanged() {
-        this.onRoomChanged.next(true);
-    }
-    @Output() onBookingChanged = new EventEmitter<boolean>();
-    @Output() onInvoiceChanged = new EventEmitter<boolean>();
     @Output() onExit = new EventEmitter<boolean>();
     public triggerOnExit() {
         this.onExit.next(true);

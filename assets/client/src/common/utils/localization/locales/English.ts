@@ -562,5 +562,9 @@ export var EnglishTranslations: Object = {
 	"History": "History",
 	"Expand": "Expand",
 	"Less": "Less",
+	"No Booking": "No Booking",
+	"Reserved": "Reserved",
+	"Are you sure you want to check out this room?": "Are you sure you want to check out this room?",
+	
 	
 };

@@ -1,4 +1,4 @@
-<loading-component [isLoading]="isLoading"></loading-component>
+<loading-component [isLoading]="isLoading && !didInitOnce"></loading-component>
 
 <div class="row full-height" *ngIf="didLoadPageData">
 	<div class="col-xs-9 full-height right-margin padding-top-10px" customScroll>
@@ -6,7 +6,7 @@
 			<room-preview [roomPreviewInput]="roomPreviewInput"></room-preview>
 		</div>
 		<div class="row">
-			<room-maintenance-status-editor [roomVM]="roomVM" (onMaintenanceStatusChanged)="triggerOnRoomChanged($event)"></room-maintenance-status-editor>
+			<room-maintenance-status-editor [roomVM]="roomVM" (onMaintenanceStatusChanged)="didChangeRoom($event)"></room-maintenance-status-editor>
 		</div>
 		<hr/>
 		<div class="row padding-bottom-10px">
@@ -18,9 +18,9 @@
 			</div>
 		</div>		
 	</div>
-	<div class="col-xs-3 full-height">
-		<div class="row full-height">
-			
+	<div class="col-xs-3 full-height right-sidebar">
+		<div class="row padding-top-10px full-height" customScroll>
+			<room-booking-preview [attachedBookingResultVM]="attachedBookingResultVM" (onCheckedOut)="didChangeBooking($event)"></room-booking-preview>
 		</div>
 	</div>
 </div>

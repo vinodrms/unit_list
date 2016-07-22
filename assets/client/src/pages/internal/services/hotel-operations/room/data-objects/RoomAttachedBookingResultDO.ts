@@ -25,7 +25,7 @@ export class RoomAttachedBookingResultDO extends BaseDO {
         this.booking.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "booking"));
     }
 
-    public hasAttachedBooking(): boolean {
+    public hasNoAttachedBooking(): boolean {
         return this.resultType === RoomAttachedBookingResultType.NoBooking;
     }
     public hasReservedBooking(): boolean {
@@ -33,5 +33,16 @@ export class RoomAttachedBookingResultDO extends BaseDO {
     }
     public hasCheckedInBooking(): boolean {
         return this.resultType === RoomAttachedBookingResultType.CheckedInBooking;
+    }
+    public getCustomerIdList(): string[] {
+        if(this.hasNoAttachedBooking() || !this.booking || !this.booking.customerIdList) {
+            return [];
+        }
+        return this.booking.customerIdList;
+    }
+
+    public get bookingTypeString(): string {
+        if(this.hasReservedBooking()) { return "Reserved"; }
+        return "Checked In";
     }
 }

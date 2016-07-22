@@ -44,6 +44,7 @@ export class EditSaveButtonGroupComponent {
 
     @Output() onSavePressed = new EventEmitter<boolean>();
     public triggerSavePressed() {
+        if(this.isSaving) { return; }
         this.onSavePressed.next(true);
     }
 
