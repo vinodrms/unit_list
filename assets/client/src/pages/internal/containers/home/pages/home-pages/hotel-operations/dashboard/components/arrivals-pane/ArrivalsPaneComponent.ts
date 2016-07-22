@@ -7,7 +7,6 @@ import {ThButtonComponent} from '../../../../../../../../../../common/utils/comp
 
 import {ArrivalItemComponent} from './components/arrival-item/ArrivalItemComponent';
 
-// import {HotelOperationsDashboardServiceDeprecated} from '../../services/HotelOperationsDashboardService';
 import {HotelOperationsDashboardService} from '../../../../../../../../services/hotel-operations/dashboard/HotelOperationsDashboardService';
 
 import {IHotelOperationsDashboardArrivalsPaneMediator} from '../../HotelOperationsDashboardComponent';

@@ -42,4 +42,25 @@ export class DepartureItemInfoVM {
     public set stayingRoomVM(stayingRoomVM: RoomVM) {
         this._stayingRoomVM = stayingRoomVM;
     }
+
+    public get roomName() : string {
+        return this._stayingRoomVM.room.name;
+    }
+    
+    public get customerName():string{
+        return this._departureItemDO.customerName;
+    }
+
+    public get roomCategoryLabel() : string {
+        return this._stayingRoomVM.category.displayName;
+    }
+
+    public get numberOfPeople() : number {
+        return this.departureItemDO.bookingCapacity.noAdults + this.departureItemDO.bookingCapacity.noChildren; 
+    }
+
+    public get numberOfNights() : number {
+        return this.departureItemDO.bookingInterval.getNumberOfDays();
+    }
+
 }
