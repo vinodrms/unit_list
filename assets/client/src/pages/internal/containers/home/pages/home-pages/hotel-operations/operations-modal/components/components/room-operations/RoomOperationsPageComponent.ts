@@ -8,7 +8,7 @@ import {RoomDO} from '../../../../../../../../../services/rooms/data-objects/Roo
 import {BedVM} from '../../../../../../../../../services/beds/view-models/BedVM';
 import {BookingDO} from '../../../../../../../../../services/bookings/data-objects/BookingDO';
 import {RoomAttachedBookingResultVM} from '../../../../../../../../../services/hotel-operations/room/view-models/RoomAttachedBookingResultVM';
-import {HotelRoomOperationsPageParam} from './services/utils/HotelRoomOperationsPageParam';
+import {HotelRoomOperationsPageParam} from './utils/HotelRoomOperationsPageParam';
 import {RoomOperationsPageService} from './services/RoomOperationsPageService';
 import {RoomOperationsPageData} from './services/utils/RoomOperationsPageData';
 import {RoomPreviewComponent} from '../../../../../../../../common/inventory/rooms/pages/room-preview/RoomPreviewComponent';

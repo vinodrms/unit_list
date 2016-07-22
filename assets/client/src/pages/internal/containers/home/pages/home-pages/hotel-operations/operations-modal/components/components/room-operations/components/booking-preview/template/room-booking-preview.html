@@ -8,7 +8,7 @@
 		    <kbd>{{ attachedBookingResultVM.roomAttachedBookingResultDO.bookingTypeString | translate }}</kbd>
         </div>
         <div class="col-xs-12 padding-top-5px">
-            <span class="clickable-item">
+            <span class="clickable-item" (click)="goToBooking(bookingDO)">
                 <i class="fa unitpal-font" title="{{'Group/Individual Booking References' | translate}}">8</i> 
                 {{bookingDO.groupBookingReference}} / {{bookingDO.bookingReference}}
             </span> 
@@ -32,7 +32,7 @@
     <hr/>
     <div class="row">
         <div class="col-xs-12 padding-top-5px">
-            <span class="clickable-item">
+            <span class="clickable-item" (click)="goToCustomer(customer)">
                 <i class="fa unitpal-font" title="{{'Customer' | translate}}">(</i> 
                 {{customer.customerName}}
             </span> 

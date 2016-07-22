@@ -14,7 +14,7 @@ import {RoomAmenitiesService} from '../../../../../../../../../../services/setti
 import {RoomAttributesService} from '../../../../../../../../../../services/settings/RoomAttributesService';
 import {RoomAmenitiesDO} from '../../../../../../../../../../services/settings/data-objects/RoomAmenitiesDO';
 import {RoomAttributesDO} from '../../../../../../../../../../services/settings/data-objects/RoomAttributesDO';
-import {HotelRoomOperationsPageParam} from './utils/HotelRoomOperationsPageParam';
+import {HotelRoomOperationsPageParam} from '../utils/HotelRoomOperationsPageParam';
 import {RoomOperationsPageData} from './utils/RoomOperationsPageData';
 
 @Injectable()

@@ -6,6 +6,7 @@ import {BookingDO} from '../../../../../../../../../../../services/bookings/data
 import {CustomerDO} from '../../../../../../../../../../../services/customers/data-objects/CustomerDO';
 import {HotelOperationsRoomService} from '../../../../../../../../../../../services/hotel-operations/room/HotelOperationsRoomService';
 import {CheckOutRoomParam} from '../../../../../../../../../../../services/hotel-operations/room/utils/CheckOutRoomParam';
+import {HotelOperationsPageControllerService} from '../../../../services/HotelOperationsPageControllerService';
 
 @Component({
     selector: 'room-booking-preview',
@@ -33,6 +34,7 @@ export class RoomBookingPreviewComponent implements OnInit {
     }
 
     constructor(private _appContext: AppContext,
+        private _operationsPageControllerService: HotelOperationsPageControllerService,
         private _hotelOperationsRoomService: HotelOperationsRoomService) { }
 
     ngOnInit() {
@@ -96,5 +98,12 @@ export class RoomBookingPreviewComponent implements OnInit {
             this.isCheckingOut = false;
             this._appContext.toaster.error(error.message);
         });
+    }
+
+    public goToCustomer(customer: CustomerDO) {
+        this._operationsPageControllerService.goToCustomer(customer.id);
+    }
+    public goToBooking(booking: BookingDO) {
+        this._operationsPageControllerService.goToBooking(booking.groupBookingId, booking.bookingId);
     }
 }

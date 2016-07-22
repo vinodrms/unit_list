@@ -1,6 +1,6 @@
 import {Component, OnInit, Output, EventEmitter, Inject} from '@angular/core';
 import {TranslationPipe} from '../../../../../../../../../common/utils/localization/TranslationPipe';
-import {HotelOperationsPageController} from './services/utils/HotelOperationsPageController';
+import {HotelOperationsPageControllerService} from './services/HotelOperationsPageControllerService';
 import {IHotelOperationsPageParam, HotelOperationsPageTitleMeta} from '../services/utils/IHotelOperationsPageParam';
 import {HotelOperationsPageType} from '../services/utils/HotelOperationsPageType';
 import {RoomOperationsPageComponent} from './components/room-operations/RoomOperationsPageComponent';
@@ -15,7 +15,9 @@ import {EagerCustomersService} from '../../../../../../../services/customers/Eag
     selector: 'hotel-operations',
     templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/template/hotel-operations.html',
     directives: [RoomOperationsPageComponent],
-    providers: [SETTINGS_PROVIDERS, RoomCategoriesStatsService, BedsEagerService, RoomsService, EagerCustomersService, HotelOperationsRoomService],
+    providers: [SETTINGS_PROVIDERS,
+        RoomCategoriesStatsService, BedsEagerService, RoomsService, EagerCustomersService, HotelOperationsRoomService,
+        HotelOperationsPageControllerService],
     pipes: [TranslationPipe]
 })
 export class HotelOperationsComponent {
@@ -24,10 +26,9 @@ export class HotelOperationsComponent {
         this.onExit.next(true);
     }
 
-    private _hotelOperationsPageController: HotelOperationsPageController;
-
-    constructor( @Inject(IHotelOperationsPageParam) public hotelOperationsPageParam: IHotelOperationsPageParam) {
-        this._hotelOperationsPageController = new HotelOperationsPageController(hotelOperationsPageParam);
+    constructor( @Inject(IHotelOperationsPageParam) public hotelOperationsPageParam: IHotelOperationsPageParam,
+        private _hotelOperationsPageController: HotelOperationsPageControllerService) {
+        this._hotelOperationsPageController.bootstrap(hotelOperationsPageParam);
     }
 
     public canGoBack() {
