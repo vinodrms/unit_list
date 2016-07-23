@@ -10,11 +10,11 @@ export class MaximumLeadDaysConstraintDO extends BaseDO implements IPriceProduct
 	}
 
 	public appliesOn(data: PriceProductConstraintDataDO): boolean {
-		var noLeadDaysOfBooking = data.indexedBookingInterval.getNoLeadDays(data.currentHotelThDate);
+		var noLeadDaysOfBooking = data.indexedBookingInterval.getNoLeadDays(data.bookingCreationDate);
 		return this.leadDays >= noLeadDaysOfBooking;
 	}
 
 	public getValueDisplayString(thTranslation: ThTranslation): string {
-		return thTranslation.translate("Bookable from %leadDays% days prior to arrival", { leadDays: this.leadDays});
+		return thTranslation.translate("Bookable from %leadDays% days prior to arrival", { leadDays: this.leadDays });
 	}
 }

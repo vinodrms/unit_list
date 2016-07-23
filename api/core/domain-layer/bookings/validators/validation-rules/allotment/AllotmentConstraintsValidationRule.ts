@@ -12,7 +12,7 @@ import _ = require('underscore');
 
 export interface AllotmentConstraintsParams {
     bookingInterval: ThDateIntervalDO;
-    currentHotelThDate: ThDateDO;
+    bookingCreationDate: ThDateDO;
 }
 
 export class AllotmentConstraintsValidationRule extends ABusinessValidationRule<AllotmentDO> implements IBusinessValidationRuleFilter<AllotmentDO> {
@@ -51,7 +51,7 @@ export class AllotmentConstraintsValidationRule extends ABusinessValidationRule<
     private allotmentHasValidConstraints(allotment: AllotmentDO): boolean {
         var allotmentConstraintDataDO: AllotmentConstraintDataDO = {
             indexedBookingInterval: this._indexedBookingInterval,
-            currentHotelThDate: this._constraintParams.currentHotelThDate
+            bookingCreationDate: this._constraintParams.bookingCreationDate
         };
         return allotment.constraints.appliesOn(allotmentConstraintDataDO);
     }

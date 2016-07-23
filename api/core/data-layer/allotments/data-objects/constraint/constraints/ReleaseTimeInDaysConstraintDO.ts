@@ -10,7 +10,7 @@ export class ReleaseTimeInDaysConstraintDO extends BaseDO implements IAllotmentC
 	}
 
 	public appliesOn(data: AllotmentConstraintDataDO): boolean {
-		var noLeadDaysOfBooking = data.indexedBookingInterval.getNoLeadDays(data.currentHotelThDate);
+		var noLeadDaysOfBooking = data.indexedBookingInterval.getNoLeadDays(data.bookingCreationDate);
 		return this.noOfDays < noLeadDaysOfBooking;
 	}
 	public getValueDisplayString(thTranslation: ThTranslation): string {

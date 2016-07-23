@@ -18,7 +18,7 @@ export enum PriceProductConstraintType {
 
 export interface PriceProductConstraintDataDO {
 	indexedBookingInterval: IndexedBookingInterval;
-	currentHotelThDate: ThDateDO;
+	bookingCreationDate: ThDateDO;
 	configCapacity: ConfigCapacityDO;
 
 	indexedNumberOfRoomCategories?: StringOccurenciesIndexer;

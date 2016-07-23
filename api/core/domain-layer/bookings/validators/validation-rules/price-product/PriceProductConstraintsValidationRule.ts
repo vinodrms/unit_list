@@ -15,7 +15,7 @@ import _ = require('underscore');
 
 export interface PriceProductConstraintsParams {
     bookingInterval: ThDateIntervalDO;
-    currentHotelThDate: ThDateDO;
+    bookingCreationDate: ThDateDO;
     configCapacity: ConfigCapacityDO;
 
     roomCategoryIdListFromBookings?: string[];
@@ -60,9 +60,9 @@ export class PriceProductConstraintsValidationRule extends ABusinessValidationRu
     }
 
     private priceProductHasValidConstraints(priceProduct: PriceProductDO): boolean {
-        var priceProductConstraintDataDO = {
+        var priceProductConstraintDataDO: PriceProductConstraintDataDO = {
             indexedBookingInterval: this._indexedBookingInterval,
-            currentHotelThDate: this._constraintParams.currentHotelThDate,
+            bookingCreationDate: this._constraintParams.bookingCreationDate,
             configCapacity: this._constraintParams.configCapacity,
             indexedNumberOfRoomCategories: this._indexedNumberOfRoomCategories,
             roomCategoryIdListFromPriceProduct: priceProduct.roomCategoryIdList
