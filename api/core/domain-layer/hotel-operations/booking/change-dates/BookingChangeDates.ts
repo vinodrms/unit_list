@@ -19,6 +19,7 @@ import {BookingAllotmentValidationRule, BookingAllotmentValidationParams} from '
 import {PriceProductConstraintsValidationRule, PriceProductConstraintsParams} from '../../../bookings/validators/validation-rules/price-product/PriceProductConstraintsValidationRule';
 import {PriceProductYieldIntervalsValidationRule} from '../../../bookings/validators/validation-rules/price-product/PriceProductYieldIntervalsValidationRule';
 import {PriceProductDO} from '../../../../data-layer/price-products/data-objects/PriceProductDO';
+import {IndexedBookingInterval} from '../../../../data-layer/price-products/utils/IndexedBookingInterval';
 
 import _ = require('underscore');
 
@@ -106,7 +107,7 @@ export class BookingChangeDates {
         return _.contains(BookingDOConstraints.ConfirmationStatuses_CanChangeDates, this._bookingWithDependencies.bookingDO.confirmationStatus);
     }
     private updateBooking() {
-        var oldInterval: ThDateIntervalDO = this._bookingWithDependencies.bookingDO.interval;
+        var oldInterval: ThDateIntervalDO = this._bookingWithDependencies.bookingDO.interval.buildPrototype();
         var oldPrice: number = this._bookingWithDependencies.bookingDO.price.totalPrice;
 
         this._bookingWithDependencies.bookingDO.interval.end = this._newBookingInterval.end;
@@ -117,6 +118,17 @@ export class BookingChangeDates {
 
         var newInterval: ThDateIntervalDO = this._bookingWithDependencies.bookingDO.interval;
         var newPrice: number = this._bookingWithDependencies.bookingDO.price.totalPrice;
+
+        if (!newInterval.start.isSame(oldInterval.start)) {
+            this._bookingUtils.updateBookingGuaranteedAndNoShowTimes(this._bookingWithDependencies.bookingDO, {
+                priceProduct: this._bookingWithDependencies.priceProductDO,
+                hotel: this._loadedHotel,
+                currentHotelTimestamp: this._bookingUtils.getCurrentThTimestampForHotel(this._loadedHotel)
+            });
+        }
+        var indexedBookingInterval = new IndexedBookingInterval(this._bookingWithDependencies.bookingDO.interval);
+        this._bookingWithDependencies.bookingDO.startUtcTimestamp = indexedBookingInterval.getStartUtcTimestamp();
+        this._bookingWithDependencies.bookingDO.endUtcTimestamp = indexedBookingInterval.getEndUtcTimestamp();
 
         this._bookingWithDependencies.bookingDO.bookingHistory.logDocumentAction(DocumentActionDO.buildDocumentActionDO({
             actionParameterMap: { oldInterval: oldInterval.toString(), newInterval: newInterval.toString(), oldPrice: oldPrice, newPrice: newPrice },

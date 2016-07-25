@@ -58,7 +58,7 @@ describe("Hotel Booking Operations Tests", function () {
             var bookingChangeDatesDO = new BookingChangeDatesDO();
             bookingChangeDatesDO.groupBookingId = bookingToChange.groupBookingId;
             bookingChangeDatesDO.bookingId = bookingToChange.bookingId;
-            bookingChangeDatesDO.interval = dashboardHelper.getTodayToDayAfterTomorrowInterval(testDataBuilder);
+            bookingChangeDatesDO.interval = dashboardHelper.getFromTomorrowTwoDaysInterval(testDataBuilder);
             var bookingChangeDates = new BookingChangeDates(testContext.appContext, testContext.sessionContext);
             bookingChangeDates.changeDates(bookingChangeDatesDO).then((updatedBooking: BookingDO) => {
                 should.equal(updatedBooking.price.totalPrice, bookingToChange.price.totalPrice * 2);

@@ -108,16 +108,12 @@ export class BookingItemsConverter {
                 actionString: "Booking was created",
                 userId: this._sessionContext.sessionDO.user.id
             }));
-            bookingDO.guaranteedTime = priceProduct.conditions.policy.generateGuaranteedTriggerTime({ arrivalDate: indexedBookingInterval.getArrivalDate() });
-            if (bookingDO.guaranteedTime.isInThePast({
-                cancellationHour: this._converterParams.hotelDO.operationHours.cancellationHour,
+
+            this._bookingUtils.updateBookingGuaranteedAndNoShowTimes(bookingDO, {
+                priceProduct: priceProduct,
+                hotel: this._converterParams.hotelDO,
                 currentHotelTimestamp: this._converterParams.currentHotelTimestamp
-            })) {
-                bookingDO.confirmationStatus = BookingConfirmationStatus.Guaranteed;
-            }
-
-            bookingDO.noShowTime = priceProduct.conditions.policy.generateNoShowTriggerTime({ arrivalDate: indexedBookingInterval.getArrivalDate() });
-
+            });
             this._bookingUtils.updateBookingPriceUsingRoomCategory(bookingDO);
             this._bookingUtils.updateIndexedSearchTerms(bookingDO, this._converterParams.customersContainer);
             this._bookingUtils.updateDisplayCustomerId(bookingDO, this._converterParams.customersContainer);
