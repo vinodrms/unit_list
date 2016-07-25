@@ -59,6 +59,8 @@ export class BookingHistoryDashboardComponent extends AHomeContainerComponent im
 			modalDialogRef.resultObservable
 				.subscribe((result: HotelOperationsResult) => {
 					if (result.didChangeBooking) {
+						this._bookingsTableComponent.deselectItem();
+						this.selectedBookingVM = null;
 						this._bookingsService.refreshData();
 					}
 				}, (err: any) => {
