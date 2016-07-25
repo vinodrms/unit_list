@@ -4,6 +4,8 @@ import {AppContext} from '../core/utils/AppContext';
 import {SessionContext} from '../core/utils/SessionContext';
 import {BookingPossiblePrices} from '../core/domain-layer/hotel-operations/booking/possible-prices/BookingPossiblePrices';
 import {BookingPossiblePriceItems} from '../core/domain-layer/hotel-operations/booking/possible-prices/utils/BookingPossiblePriceItems';
+import {BookingChangeDates} from '../core/domain-layer/hotel-operations/booking/change-dates/BookingChangeDates';
+import {BookingDO} from '../core/data-layer/bookings/data-objects/BookingDO';
 
 class HotelBookingOperationsController extends BaseController {
     public getPossiblePrices(req: Express.Request, res: Express.Response) {
@@ -17,9 +19,22 @@ class HotelBookingOperationsController extends BaseController {
             this.returnErrorResponse(req, res, error, ThStatusCode.HotelBookingOperationsControllerErrorGettingPossiblePrices);
         });
     }
+    public changeDates(req: Express.Request, res: Express.Response) {
+        var appContext: AppContext = req.appContext;
+        var sessionContext: SessionContext = req.sessionContext;
+
+        var bookingChangeDates = new BookingChangeDates(appContext, sessionContext);
+        bookingChangeDates.changeDates(req.body.booking).then((booking: BookingDO) => {
+            booking.bookingHistory.translateActions(this.getThTranslation(sessionContext));
+            this.returnSuccesfulResponse(req, res, { booking: booking });
+        }).catch((error: any) => {
+            this.returnErrorResponse(req, res, error, ThStatusCode.HotelBookingOperationsControllerErrorChangingDates);
+        });
+    }
 }
 
 var hotelBookingOperationsController = new HotelBookingOperationsController();
 module.exports = {
-    getPossiblePrices: hotelBookingOperationsController.getPossiblePrices.bind(hotelBookingOperationsController)
+    getPossiblePrices: hotelBookingOperationsController.getPossiblePrices.bind(hotelBookingOperationsController),
+    changeDates: hotelBookingOperationsController.changeDates.bind(hotelBookingOperationsController)
 }

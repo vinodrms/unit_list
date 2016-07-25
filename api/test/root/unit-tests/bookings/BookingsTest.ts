@@ -30,6 +30,8 @@ import {TransientBookingItemDO} from '../../../../core/domain-layer/bookings/sea
 import {BookingSearchResult, RoomCategoryItem} from '../../../../core/domain-layer/bookings/search-bookings/utils/result-builder/BookingSearchResult';
 import {BookingProcessFactory, BookingStatusChangerProcessType} from '../../../../core/domain-layer/bookings/processes/BookingProcessFactory';
 import {IBookingStatusChangerProcess} from '../../../../core/domain-layer/bookings/processes/IBookingStatusChangerProcess';
+import {BookingChangeDates} from '../../../../core/domain-layer/hotel-operations/booking/change-dates/BookingChangeDates';
+import {BookingChangeDatesDO} from '../../../../core/domain-layer/hotel-operations/booking/change-dates/BookingChangeDatesDO';
 
 describe("New Bookings Tests", function () {
     var testContext: TestContext;
@@ -48,6 +50,7 @@ describe("New Bookings Tests", function () {
     var addedCompanyCustomer: CustomerDO;
     var addedConfidentialPriceProduct: PriceProductDO;
     var addedAllotment: AllotmentDO;
+    var addedBooking: BookingDO;
 
     var roomCategoryItem: RoomCategoryItem;
 
@@ -245,11 +248,24 @@ describe("New Bookings Tests", function () {
             var addBookings = new AddBookingItems(testContext.appContext, testContext.sessionContext);
             var bookingItems = bookingTestHelper.getBookingItems(testDataBuilder, addedConfidentialPriceProduct, addedAllotment);
             addBookings.add(bookingItems, GroupBookingInputChannel.PropertyManagementSystem)
-                .then((booking: BookingDO[]) => {
+                .then((bookingList: BookingDO[]) => {
+                    addedBooking = bookingList[0];
                     done();
                 }).catch((err: any) => {
                     done(err);
                 });
+        });
+        it("Should change the dates for the booking made with allotment", function (done) {
+            var bookingChangeDatesDO = new BookingChangeDatesDO();
+            bookingChangeDatesDO.groupBookingId = addedBooking.groupBookingId;
+            bookingChangeDatesDO.bookingId = addedBooking.bookingId;
+            bookingChangeDatesDO.interval = bookingTestHelper.generateRandomFutureInterval(testDataBuilder);
+            var bookingChangeDates = new BookingChangeDates(testContext.appContext, testContext.sessionContext);
+            bookingChangeDates.changeDates(bookingChangeDatesDO).then((updatedBooking: BookingDO) => {
+                done();
+            }).catch((error: any) => {
+                done(error);
+            });
         });
     });
 

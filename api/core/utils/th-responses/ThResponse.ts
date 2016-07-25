@@ -407,6 +407,10 @@ export enum ThStatusCode {
     HotelRoomOperationsControllerErrorChangingMaintenanceStatus,
     RoomAttachedBookingError,
     HotelRoomOperationsControllerErrorGettingAttachedBooking,
+    BookingWithDependenciesLoaderError,
+    BookingChangeDatesError,
+    BookingChangeDatesInvalidState,
+    HotelBookingOperationsControllerErrorChangingDates,
 
 }
 
@@ -805,6 +809,10 @@ ThMessage[ThStatusCode.ChangeRoomMaintenanceStatusError] = "Error changing the m
 ThMessage[ThStatusCode.HotelRoomOperationsControllerErrorChangingMaintenanceStatus] = "Error changing the maintenance status of the room.";
 ThMessage[ThStatusCode.RoomAttachedBookingError] = "Error getting attached booking for the room.";
 ThMessage[ThStatusCode.HotelRoomOperationsControllerErrorGettingAttachedBooking] = "Error getting attached booking for the room.";
+ThMessage[ThStatusCode.BookingWithDependenciesLoaderError] = "Error loading booking dependencies.";
+ThMessage[ThStatusCode.BookingChangeDatesError] = "Error changing booking dates.";
+ThMessage[ThStatusCode.BookingChangeDatesInvalidState] = "The date can be changed only for Confirmed, Guaranteed or Checked In bookings.";
+ThMessage[ThStatusCode.HotelBookingOperationsControllerErrorChangingDates] = "Error changing booking dates.";
 
 export class ThResponse {
     statusCode: ThStatusCode;

@@ -102,7 +102,7 @@ export class BookingTestHelper {
         return capacity;
     }
 
-    private generateRandomFutureInterval(testDataBuilder: DefaultDataBuilder): ThDateIntervalDO {
+    public generateRandomFutureInterval(testDataBuilder: DefaultDataBuilder): ThDateIntervalDO {
         var thTimestamp = ThTimestampDO.buildThTimestampForTimezone(testDataBuilder.hotelDO.timezone);
         var startDate = this._thDateUtils.addDaysToThDateDO(thTimestamp.thDateDO, this._testUtils.getRandomIntBetween(10, 200));
         var endDate = this._thDateUtils.addDaysToThDateDO(startDate.buildPrototype(), this._testUtils.getRandomIntBetween(1, 7));

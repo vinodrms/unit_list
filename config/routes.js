@@ -133,6 +133,7 @@ module.exports.routes = {
 	'GET /api/hotelOperations/room/attachedBooking': 'HotelRoomOperationsController.getAttachedBooking',
 
 	'POST /api/hotelOperations/booking/possiblePrices': 'HotelBookingOperationsController.getPossiblePrices',
+	'POST /api/hotelOperations/booking/changeDates': 'HotelBookingOperationsController.changeDates',
 
 	'GET /api/hotelOperations/common/hotelTimestamp': 'HotelCommonOperationsController.getCurrentHotelTimestamp',
 

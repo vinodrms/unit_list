@@ -63,7 +63,6 @@ export class BookingItemsConverter {
         var hotelId = this._sessionContext.sessionDO.hotel.id;
         var groupBookingStatus = GroupBookingStatus.Active;
         var noOfRooms = this._bookingItems.bookingList.length;
-        var currentHotelDate = this._bookingUtils.getCurrentThDateForHotel(this._converterParams.hotelDO);
 
         _.forEach(this._bookingItems.bookingList, (bookingItem: BookingItemDO) => {
             var bookingDO = new BookingDO();

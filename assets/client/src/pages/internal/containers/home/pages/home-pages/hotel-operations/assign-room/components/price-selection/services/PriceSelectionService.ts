@@ -7,13 +7,13 @@ import {AppContext} from '../../../../../../../../../../../common/utils/AppConte
 import {ASinglePageRequestService} from '../../../../../../../../../services/common/ASinglePageRequestService';
 import {RoomCategoriesStatsService} from '../../../../../../../../../services/room-categories/RoomCategoriesStatsService';
 import {RoomCategoryStatsDO} from '../../../../../../../../../services/room-categories/data-objects/RoomCategoryStatsDO';
-import {HotelOperationsBookingService} from '../../../../../../../../../services/hotel-operations/booking/HotelOperationsBookingService';
+import {EagerBookingsService} from '../../../../../../../../../services/bookings/EagerBookingsService';
 import {RoomsService} from '../../../../../../../../../services/rooms/RoomsService';
 import {RoomVM} from '../../../../../../../../../services/rooms/view-models/RoomVM';
 import {HotelAggregatorService} from '../../../../../../../../../services/hotel/HotelAggregatorService';
 import {HotelAggregatedInfo} from '../../../../../../../../../services/hotel/utils/HotelAggregatedInfo';
 import {CurrencyDO} from '../../../../../../../../../services/common/data-objects/currency/CurrencyDO';
-import {HotelOperationsBookingPossiblePricesService} from '../../../../../../../../../services/hotel-operations/booking/HotelOperationsBookingPossiblePricesService';
+import {HotelOperationsBookingService} from '../../../../../../../../../services/hotel-operations/booking/HotelOperationsBookingService';
 import {BookingPossiblePriceItemsDO, BookingPriceItemDO} from '../../../../../../../../../services/hotel-operations/booking/data-objects/BookingPossiblePriceItemsDO';
 import {AssignRoomModalInput} from '../../../services/utils/AssignRoomModalInput';
 import {BookingDO} from '../../../../../../../../../services/bookings/data-objects/BookingDO';
@@ -37,9 +37,9 @@ export class PriceSelectionService extends ASinglePageRequestService<PriceSelect
         private _modalInput: AssignRoomModalInput,
         private _roomCategoriesStatsService: RoomCategoriesStatsService,
         private _hotelAggregatorService: HotelAggregatorService,
-        private _hotelOperationsBookingService: HotelOperationsBookingService,
+        private _eagerBookingsService: EagerBookingsService,
         private _roomsService: RoomsService,
-        private _possiblePricesService: HotelOperationsBookingPossiblePricesService) {
+        private _operationsBookingService: HotelOperationsBookingService) {
         super();
         this._priceSelectionList = [];
     }
@@ -54,8 +54,8 @@ export class PriceSelectionService extends ASinglePageRequestService<PriceSelect
             this._roomCategoriesStatsService.getRoomCategoryStatsForRoomCategoryIdList(),
             this._hotelAggregatorService.getHotelAggregatedInfo(),
             this._roomsService.getRoomList(),
-            this._hotelOperationsBookingService.getBooking(this._modalInput.assignRoomParam.groupBookingId, this._modalInput.assignRoomParam.bookingId),
-            this._possiblePricesService.getPossiblePrices(this._modalInput.assignRoomParam.groupBookingId, this._modalInput.assignRoomParam.bookingId)
+            this._eagerBookingsService.getBooking(this._modalInput.assignRoomParam.groupBookingId, this._modalInput.assignRoomParam.bookingId),
+            this._operationsBookingService.getPossiblePrices(this._modalInput.assignRoomParam.groupBookingId, this._modalInput.assignRoomParam.bookingId)
         ).map((result: [RoomCategoryStatsDO[], HotelAggregatedInfo, RoomVM[], BookingDO, BookingPossiblePriceItemsDO]) => {
             var roomCategoryStatsList: RoomCategoryStatsDO[] = result[0];
             var ccy: CurrencyDO = result[1].ccy;
