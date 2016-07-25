@@ -2879,8 +2879,8 @@ a.btn.btn-square:focus {
 }
 .form-control.operational-input-group>span.unitpal-font {
     position: relative;
-    bottom: 6px;
-    font-size: 28px;
+    bottom: 3px;
+    font-size: 21px;
 }
 .form-control.operational-input-group>span.name {
     flex: 1;
@@ -2898,6 +2898,18 @@ a.btn.btn-square:focus {
     overflow: hidden;
     text-overflow: ellipsis;
 }
+.form-control.operational-input-group.checkedin {
+     color: white;
+     background-color: #36ce8d;
+}
+.form-control.operational-input-group.noshow {
+    color: white;
+    background-color: #fb6708;
+}
+.form-control.operational-input-group.non-editable {
+    border: 1px solid white;
+}
+
 .uppercase {
     text-transform: uppercase;
 }
@@ -2949,4 +2961,4 @@ a.btn.btn-square:focus {
  }
  .unitpal-font.checkout {
      color: #fb6708;
- }
+}

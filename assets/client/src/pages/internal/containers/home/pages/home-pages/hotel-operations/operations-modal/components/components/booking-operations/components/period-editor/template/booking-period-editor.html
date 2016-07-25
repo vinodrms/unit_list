@@ -1,9 +1,8 @@
 <div class="col-xs-12 col-sm-1 padding-top-10px">
     {{'Period' | translate}}
 </div>
-
 <div class="col-xs-12 col-sm-8">
-    <div class="row">
+    <div class="row" *ngIf="readonly">
         <div class="col-xs-12 col-sm-6">
             <div class="form-group">
                 <div class="form-control operational-input-group">
@@ -21,6 +20,30 @@
             </div>
         </div>
     </div>
+    <div class="row" *ngIf="!readonly && editIntervalAccess">
+        <div class="col-xs-12">
+            <th-date-interval-picker [minDate]="minIntervalStartDate" [restrictedInterval]="true" [showLabels]="false" [showExpandedView]="true"
+                [initialThDateInterval]="bookingInterval" (didSelectThDateInterval)="didSelectBookingInterval($event)">
+            </th-date-interval-picker>
+        </div>
+    </div>
+    <div class="row" *ngIf="!readonly && editEndDateAccess">
+        <div class="col-xs-12 col-sm-6">
+            <div class="form-group">
+                <div class="form-control operational-input-group">
+                    <span class="unitpal-font unitpal-large checkin">/</span>
+                    <span class="name field-value">{{startDateLongString}}</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-6">
+            <th-date-picker
+				[initialThDate]="bookingInterval.end" [minThDate]="minIntervalEndDate" [showLabel]="false"
+				(didSelectThDate)="didSelectBookingEndDate($event)"
+				>
+			</th-date-picker>
+        </div>
+    </div>
 </div>
 <div class="col-xs-12 col-sm-3 padding-top-5px" *ngIf="!noIntervalEditAccess">
     <edit-save-button-group
@@ -32,34 +55,3 @@
         >
     </edit-save-button-group>
 </div>
-
-<!--<div class="col-xs-12 col-sm-4 padding-top-5px">
-    <div class="form-group" *ngIf="!readonly">
-        <select class="form-control" [ngModel]="currentMaintenanceMeta" (ngModelChange)="currentMaintenanceMeta=$event" [disabled]="readonly">
-			<option *ngFor="let roomMaintenanceMeta of roomMaintenanceMetaList" [ngValue]="roomMaintenanceMeta">{{roomMaintenanceMeta.maintenanceMessage}}</option>
-		</select>
-    </div>
-    <div class="form-group" *ngIf="readonly">
-        <div class="form-control operational-input-group">
-            <span class="unitpal-font unitpal-large">{{currentMaintenanceMeta.fontName}}</span>
-            <span class="name field-value">{{currentMaintenanceMeta.maintenanceMessage | translate}}</span>
-            <span class="timestamp text-field"><p>{{ lastChangeTimestamp | thtimestampdistancefromnow }}</p></span>
-		</div>
-    </div>
-</div>
-
-<div class="col-xs-12 col-sm-4 padding-top-5px">
-    <div class="input-group">
-		<input type="text" class="form-control input-group-lg" [(ngModel)]="currentMaintenanceText" [readonly]="readonly" placeholder="{{'No Details' | translate}}">
-	</div>
-</div>
-<div class="col-xs-12 col-sm-3 padding-top-10px">
-    <edit-save-button-group
-        (onEditStart)="startEdit()"
-        (onEditEnd)="endEdit()"
-        (onSavePressed)="saveMaintenanceStatus()"
-        [isSaving]="isSaving"
-        [isEditing]="!readonly"
-        >
-    </edit-save-button-group>
-</div>-->

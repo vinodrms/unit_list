@@ -11,7 +11,7 @@ export class MinimumLeadDaysConstraintDO extends BaseDO implements IPriceProduct
 	}
 
 	public appliesOn(data: PriceProductConstraintDataDO): boolean {
-		var noLeadDaysOfBooking = data.indexedBookingInterval.getNoLeadDays(data.currentHotelThDate);
+		var noLeadDaysOfBooking = data.indexedBookingInterval.getNoLeadDays(data.bookingCreationDate);
 		return this.leadDays <= noLeadDaysOfBooking;
 	}
 

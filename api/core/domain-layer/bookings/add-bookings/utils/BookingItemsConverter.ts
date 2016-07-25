@@ -87,6 +87,7 @@ export class BookingItemsConverter {
             bookingDO.allotmentId = bookingItem.allotmentId;
             bookingDO.notes = bookingItem.notes;
             bookingDO.interval = bookingInterval;
+            bookingDO.creationDate = this._converterParams.currentHotelTimestamp.thDateDO;
 
             var priceProduct = this._converterParams.priceProductsContainer.getPriceProductById(bookingDO.priceProductId);
             bookingDO.priceProductSnapshot = new PriceProductDO();

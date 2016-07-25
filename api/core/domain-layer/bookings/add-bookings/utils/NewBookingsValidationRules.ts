@@ -63,7 +63,7 @@ export class NewBookingsValidationRules {
             new BookingAllotmentValidationRule(this._appContext, this._sessionContext, this.getBookingAllotmentValidationParams(booking)),
             new BookingRoomCategoryValidationRule({
                 priceProductsContainer: this._validatorParams.priceProductsContainer,
-                roomCategoryStatsList:  this._validatorParams.roomCategoryStatsList,
+                roomCategoryStatsList: this._validatorParams.roomCategoryStatsList,
                 roomList: this._validatorParams.roomList
             })
         ]);
@@ -89,7 +89,7 @@ export class NewBookingsValidationRules {
             allotmentsContainer: this._validatorParams.allotmentsContainer,
             allotmentConstraintsParam: {
                 bookingInterval: booking.interval,
-                currentHotelThDate: this._currentHotelThDate
+                bookingCreationDate: booking.creationDate
             },
             transientBookingList: this._transientBookingList,
             roomList: this._validatorParams.roomList
@@ -98,7 +98,7 @@ export class NewBookingsValidationRules {
     private getPriceProductConstraintsParams(booking: BookingDO): PriceProductConstraintsParams {
         return {
             bookingInterval: booking.interval,
-            currentHotelThDate: this._currentHotelThDate,
+            bookingCreationDate: booking.creationDate,
             configCapacity: booking.configCapacity,
             roomCategoryIdListFromBookings: this._roomCategoryIdListFromBookings
         };

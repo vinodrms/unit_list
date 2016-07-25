@@ -5,7 +5,29 @@
 		<div class="row">
 			<booking-period-editor [bookingOperationsPageData]="bookingOperationsPageData"></booking-period-editor>
 		</div>
-				
+
+		<div class="row">
+			<div class="col-xs-12 col-sm-1 padding-top-10px">
+				{{'Status' | translate}}
+			</div>
+			<div class="col-xs-12 col-sm-4">
+            <div class="form-group">
+					<div class="form-control operational-input-group non-editable" [ngClass]="bookingMeta.displayClassName">
+						<span class="unitpal-font unitpal-large">{{ bookingMeta.fontName }}</span>
+						<span class="name">{{ bookingMeta.displayName | translate }}</span>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row padding-bottom-10px">
+			<div class="col-xs-12 col-sm-1 padding-top-10px">
+				{{'History' | translate}}
+			</div>
+			<div class="col-xs-12 col-sm-11">
+				<document-history-viewer [documentHistory]="bookingDO.bookingHistory"></document-history-viewer>
+			</div>
+		</div>
 	</div>
 	<div class="col-xs-3 full-height right-sidebar">
 		
