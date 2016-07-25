@@ -29,5 +29,5 @@ export class DepartureItemComponent {
 	public openRoomModal(){
 		var roomId = this.departureItemVM.departureItemDO.roomId;
 		this._modalService.openRoomModal(roomId);
-	}	
+	}
 }

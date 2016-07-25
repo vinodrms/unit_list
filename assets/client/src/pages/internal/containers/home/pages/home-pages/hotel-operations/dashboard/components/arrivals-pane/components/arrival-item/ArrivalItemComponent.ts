@@ -38,9 +38,9 @@ export class ArrivalItemComponent {
 							<div class="client-name">`
 								+ this.arrivalItemVM.customerName +
 							`</div>
-							<div class="other-details gray-color">
-								<span class="unitpal-font">:</span>` + this.arrivalItemVM.numberOfPeople + 
-								`<span class="unitpal-font">A</span>`+ this.arrivalItemVM.numberOfNights +
+							<div class="other-details gray-color f-12">
+								<span class="unitpal-font f-12">(</span>` + this.arrivalItemVM.numberOfPeople + 
+								`<span class="unitpal-font f-12">Y</span>`+ this.arrivalItemVM.numberOfNights +
 							`</div>
 						</div>
 					</arrival-helper>

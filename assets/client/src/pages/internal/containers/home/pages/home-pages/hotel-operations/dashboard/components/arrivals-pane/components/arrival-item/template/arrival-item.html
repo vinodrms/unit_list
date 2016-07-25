@@ -1,10 +1,9 @@
-<div class="left p-6">
-	<i class="fa fa-ellipsis-v"></i>
-	<i class="fa fa-ellipsis-v"></i>
+<div class="left">
+	<span class="unitpal-font f-16">I</span>
 </div>
 <div class="right p-6">
 	<div class="header" >
-		<span class="clickable" (click)="openCustomerModal()">{{arrivalItemVM.customerName}}</span>
+		<span class="customer-name" (click)="openCustomerModal()">{{arrivalItemVM.customerName}}</span>
 	</div>
 	<div class="body">
 		<div class="room-type">{{ arrivalItemVM.roomCategoryLabel}}</div>
