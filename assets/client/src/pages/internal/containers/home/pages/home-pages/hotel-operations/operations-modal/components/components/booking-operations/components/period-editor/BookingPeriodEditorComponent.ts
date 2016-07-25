@@ -1,4 +1,4 @@
-import {Component, OnInit, Input} from '@angular/core';
+import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import {TranslationPipe} from '../../../../../../../../../../../../../common/utils/localization/TranslationPipe';
 import {AppContext, ThError} from '../../../../../../../../../../../../../common/utils/AppContext';
 import {EditSaveButtonGroupComponent} from '../../../../../../../../../../../../../common/utils/components/button-groups/EditSaveButtonGroupComponent';
@@ -10,6 +10,7 @@ import {ThDateUtils} from '../../../../../../../../../../../services/common/data
 import {BookingOperationsPageData} from '../../services/utils/BookingOperationsPageData';
 import {BookingIntervalEditRight} from '../../../../../../../../../../../services/bookings/data-objects/BookingEditRights';
 import {BookingDO} from '../../../../../../../../../../../services/bookings/data-objects/BookingDO';
+import {HotelOperationsBookingService} from '../../../../../../../../../../../services/hotel-operations/booking/HotelOperationsBookingService';
 
 @Component({
     selector: 'booking-period-editor',
@@ -18,6 +19,11 @@ import {BookingDO} from '../../../../../../../../../../../services/bookings/data
     pipes: [TranslationPipe]
 })
 export class BookingPeriodEditorComponent implements OnInit {
+    @Output() onBookingPeriodChanged = new EventEmitter<BookingDO>();
+    public triggerOnBookingPeriodChanged(updatedBooking: BookingDO) {
+        this.onBookingPeriodChanged.next(updatedBooking);
+    }
+
     private _bookingOperationsPageData: BookingOperationsPageData;
     public get bookingOperationsPageData(): BookingOperationsPageData {
         return this._bookingOperationsPageData;
@@ -38,7 +44,8 @@ export class BookingPeriodEditorComponent implements OnInit {
     minIntervalStartDate: ThDateDO;
     minIntervalEndDate: ThDateDO;
 
-    constructor(private _appContext: AppContext) { }
+    constructor(private _appContext: AppContext,
+        private _hotelOperationsBookingService: HotelOperationsBookingService) { }
 
     ngOnInit() {
         this._didInit = true;
@@ -48,6 +55,7 @@ export class BookingPeriodEditorComponent implements OnInit {
     private loadDependentData() {
         if (!this._didInit || this._appContext.thUtils.isUndefinedOrNull(this._bookingOperationsPageData)) { return; }
         this.readonly = true;
+        this.isSaving = false;
         this.minIntervalStartDate = this._dateUtils.addDaysToThDateDO(this._dateUtils.getTodayThDayeDO(), -1);
         this.minIntervalEndDate = this._dateUtils.addDaysToThDateDO(this.bookingDO.interval.start, 1);
     }
@@ -92,7 +100,25 @@ export class BookingPeriodEditorComponent implements OnInit {
         this.bookingDO.interval.end = endDate;
     }
     public saveBookingPeriod() {
-        // TODO
-
+        if (this._bookingIntervalCopy.isSame(this.bookingDO.interval)) {
+            this.endEdit();
+            return;
+        }
+        var title = this._appContext.thTranslation.translate("Change Dates");
+        var content = this._appContext.thTranslation.translate("Are you sure you want to change the dates for this booking? The price will be recomputed using thew new period.");
+        this._appContext.modalService.confirm(title, content, { positive: this._appContext.thTranslation.translate("Yes"), negative: this._appContext.thTranslation.translate("No") },
+            () => {
+                this.saveBookingPeriodCore();
+            }, () => { });
+    }
+    private saveBookingPeriodCore() {
+        this._hotelOperationsBookingService.changeDates(this.bookingDO).subscribe((updatedBooking: BookingDO) => {
+            this.readonly = true;
+            this.isSaving = false;
+            this.triggerOnBookingPeriodChanged(updatedBooking);
+        }, (error: ThError) => {
+            this.isSaving = false;
+            this._appContext.toaster.error(error.message);
+        });
     }
 }

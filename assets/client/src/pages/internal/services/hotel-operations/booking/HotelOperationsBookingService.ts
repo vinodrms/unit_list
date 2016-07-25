@@ -25,7 +25,7 @@ export class HotelOperationsBookingService {
     }
 
     public changeDates(booking: BookingDO): Observable<BookingDO> {
-        return this._appContext.thHttp.get(ThServerApi.HotelOperationsBookingChangeDates, {
+        return this._appContext.thHttp.post(ThServerApi.HotelOperationsBookingChangeDates, {
             booking: booking
         }).map((bookingObject: Object) => {
             var bookingDO = new BookingDO();

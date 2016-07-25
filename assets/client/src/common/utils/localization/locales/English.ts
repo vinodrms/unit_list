@@ -565,6 +565,9 @@ export var EnglishTranslations: Object = {
 	"No Booking": "No Booking",
 	"Reserved": "Reserved",
 	"Are you sure you want to check out this room?": "Are you sure you want to check out this room?",
+	"Change Dates": "Change Dates",
+	"Are you sure you want to change the dates for this booking? The price will be recomputed using thew new period.": "Are you sure you want to change the dates for this booking? The price will be recomputed using thew new period.",
+
 	
 	
 };

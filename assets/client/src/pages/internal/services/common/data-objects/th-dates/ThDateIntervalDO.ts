@@ -36,6 +36,10 @@ export class ThDateIntervalDO extends BaseDO {
 		return this.end;
 	}
 
+	public isSame(otherDateInterval: ThDateIntervalDO): boolean {
+		return this.start.isSame(otherDateInterval.start) && this.end.isSame(otherDateInterval.end);
+	}
+
 	public static buildThDateIntervalDO(start: ThDateDO, end: ThDateDO): ThDateIntervalDO {
 		var outInterval = new ThDateIntervalDO();
 		outInterval.start = start;

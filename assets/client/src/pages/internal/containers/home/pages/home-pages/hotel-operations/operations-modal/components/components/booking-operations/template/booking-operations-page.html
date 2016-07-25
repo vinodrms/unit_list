@@ -3,7 +3,7 @@
 <div class="row full-height" *ngIf="didInitOnce">
 	<div class="col-xs-9 full-height right-margin padding-top-10px" customScroll>
 		<div class="row">
-			<booking-period-editor [bookingOperationsPageData]="bookingOperationsPageData"></booking-period-editor>
+			<booking-period-editor [bookingOperationsPageData]="bookingOperationsPageData" (onBookingPeriodChanged)="didChangeBooking($event)"></booking-period-editor>
 		</div>
 
 		<div class="row">

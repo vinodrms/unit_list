@@ -12,11 +12,13 @@ import {NewBookingResult} from '../../utils/new-booking/modal/services/utils/New
 import {ModalDialogRef} from '../../../../../../../common/utils/modals/utils/ModalDialogRef';
 import {BookingOverviewComponent} from './components/booking-overview/BookingOverviewComponent';
 import {BookingsDateFilterComponent} from './components/bookings-date-filter/BookingsDateFilterComponent';
+import {HotelOperationsModalService} from '../hotel-operations/operations-modal/services/HotelOperationsModalService';
+import {HotelOperationsResult} from '../hotel-operations/operations-modal/services/utils/HotelOperationsResult';
 
 @Component({
 	selector: 'booking-history-dashboard',
 	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/booking-history/template/booking-history-dashboard.html',
-	providers: [EagerCustomersService, BookingsService, BookingsTableMetaBuilderService, NewBookingModalService],
+	providers: [EagerCustomersService, BookingsService, BookingsTableMetaBuilderService, NewBookingModalService, HotelOperationsModalService],
 	directives: [LazyLoadingTableComponent, BookingOverviewComponent]
 })
 
@@ -29,7 +31,8 @@ export class BookingHistoryDashboardComponent extends AHomeContainerComponent im
 	constructor(headerPageService: HeaderPageService,
 		private _bookingsService: BookingsService,
 		private _tableBuilder: BookingsTableMetaBuilderService,
-		private _newBookingModalService: NewBookingModalService) {
+		private _newBookingModalService: NewBookingModalService,
+		private _hotelOperationsModalService: HotelOperationsModalService) {
 		super(headerPageService, HeaderPageType.BookingHistory);
 	}
 
@@ -52,6 +55,14 @@ export class BookingHistoryDashboardComponent extends AHomeContainerComponent im
 		this.selectedBookingVM = bookingVM;
 	}
 	public editBooking(bookingVM: BookingVM) {
-		// TODO: Open booking operations modal
+		this._hotelOperationsModalService.openBookingOperationsModal(bookingVM.booking.groupBookingId, bookingVM.booking.bookingId).then((modalDialogRef: ModalDialogRef<HotelOperationsResult>) => {
+			modalDialogRef.resultObservable
+				.subscribe((result: HotelOperationsResult) => {
+					if (result.didChangeBooking) {
+						this._bookingsService.refreshData();
+					}
+				}, (err: any) => {
+				});
+		}).catch((err: any) => { });
 	}
 }

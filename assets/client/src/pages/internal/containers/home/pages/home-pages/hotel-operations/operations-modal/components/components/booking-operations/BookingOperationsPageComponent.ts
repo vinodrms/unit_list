@@ -10,6 +10,7 @@ import {BookingOperationsPageService} from './services/BookingOperationsPageServ
 import {BookingOperationsPageData} from './services/utils/BookingOperationsPageData';
 import {BookingPeriodEditorComponent} from './components/period-editor/BookingPeriodEditorComponent';
 import {DocumentHistoryViewerComponent} from '../../../../../../../../../../../common/utils/components/document-history/DocumentHistoryViewerComponent';
+import {HotelOperationsResultService} from '../../../services/HotelOperationsResultService';
 
 @Component({
     selector: 'booking-operations-page',
@@ -27,6 +28,7 @@ export class BookingOperationsPageComponent implements OnInit {
     bookingOperationsPageData: BookingOperationsPageData;
 
     constructor(private _appContext: AppContext,
+        private _hotelOperationsResultService: HotelOperationsResultService,
         private _bookingOperationsPageService: BookingOperationsPageService) { }
 
     ngOnInit() {
@@ -54,4 +56,8 @@ export class BookingOperationsPageComponent implements OnInit {
         return this.bookingOperationsPageData.bookingMeta;
     }
 
+    public didChangeBooking(booking: BookingDO) {
+        this.bookingOperationsPageData.bookingDO = booking;
+        this._hotelOperationsResultService.markBookingChanged(booking);
+    }
 }
