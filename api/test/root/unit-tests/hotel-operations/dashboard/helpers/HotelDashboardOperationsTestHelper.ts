@@ -22,9 +22,10 @@ export class HotelDashboardOperationsTestHelper {
         var endDate = this._thDateUtils.addDaysToThDateDO(startDate.buildPrototype(), 1);
         return ThDateIntervalDO.buildThDateIntervalDO(startDate, endDate);
     }
-    public getTodayToDayAfterTomorrowInterval(testDataBuilder: DefaultDataBuilder): ThDateIntervalDO {
+    public getFromTomorrowTwoDaysInterval(testDataBuilder: DefaultDataBuilder): ThDateIntervalDO {
         var interval = this.getTodayToTomorrowInterval(testDataBuilder);
-        interval.end = this._thDateUtils.addDaysToThDateDO(interval.end, 1);
+        interval.start = this._thDateUtils.addDaysToThDateDO(interval.start, 1);
+        interval.end = this._thDateUtils.addDaysToThDateDO(interval.end, 2);
         return interval;
     }
     public getQueryForToday(testDataBuilder: DefaultDataBuilder): HotelOperationsQueryDO {
