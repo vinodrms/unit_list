@@ -12,12 +12,13 @@ import {BookingPeriodEditorComponent} from './components/period-editor/BookingPe
 import {DocumentHistoryViewerComponent} from '../../../../../../../../../../../common/utils/components/document-history/DocumentHistoryViewerComponent';
 import {HotelOperationsResultService} from '../../../services/HotelOperationsResultService';
 import {BookingNoShowEditorComponent} from './components/no-show-edit/BookingNoShowEditorComponent';
+import {BookingRoomEditorComponent} from './components/room-edit/BookingRoomEditorComponent';
 
 @Component({
     selector: 'booking-operations-page',
     templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/booking-operations/template/booking-operations-page.html',
     directives: [LoadingComponent, CustomScroll,
-        BookingPeriodEditorComponent, BookingNoShowEditorComponent,
+        BookingPeriodEditorComponent, BookingNoShowEditorComponent, BookingRoomEditorComponent,
         DocumentHistoryViewerComponent],
     providers: [BookingOperationsPageService],
     pipes: [TranslationPipe]
@@ -35,6 +36,9 @@ export class BookingOperationsPageComponent implements OnInit {
         private _bookingOperationsPageService: BookingOperationsPageService) { }
 
     ngOnInit() {
+        this.loadPageData();
+    }
+    private loadPageData() {
         this.isLoading = true;
         this._bookingOperationsPageService.getPageData(this.bookingOperationsPageParam).subscribe((pageData: BookingOperationsPageData) => {
             this.bookingOperationsPageData = pageData;
@@ -63,5 +67,9 @@ export class BookingOperationsPageComponent implements OnInit {
         this.bookingOperationsPageData.bookingDO = booking;
         this.bookingOperationsPageData = this.bookingOperationsPageData.buildPrototype();
         this._hotelOperationsResultService.markBookingChanged(booking);
+    }
+    public didChangeRoomForBooking(booking: BookingDO) {
+        this.didChangeBooking(booking);
+        this.loadPageData();
     }
 }

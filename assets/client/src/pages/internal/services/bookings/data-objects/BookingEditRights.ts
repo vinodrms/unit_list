@@ -7,3 +7,8 @@ export enum BookingNoShowEditRight {
     EditNoShow,
     None
 }
+export enum BookingAssignRoomRight {
+    Reserve,
+    Change,
+    None
+}

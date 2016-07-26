@@ -1,5 +1,5 @@
 import {BookingConfirmationStatus} from './BookingDO';
-import {BookingIntervalEditRight, BookingNoShowEditRight} from './BookingEditRights';
+import {BookingIntervalEditRight, BookingNoShowEditRight, BookingAssignRoomRight} from './BookingEditRights';
 
 export interface BookingMetaOptions {
     confirmationStatus: BookingConfirmationStatus;
@@ -8,6 +8,7 @@ export interface BookingMetaOptions {
     fontName: string;
     intervalEditRight: BookingIntervalEditRight;
     noShowEditRight: BookingNoShowEditRight;
+    assignRoomRight: BookingAssignRoomRight;
 }
 
 export class BookingMeta {
@@ -17,6 +18,7 @@ export class BookingMeta {
     fontName: string;
     intervalEditRight: BookingIntervalEditRight;
     noShowEditRight: BookingNoShowEditRight;
+    assignRoomRight: BookingAssignRoomRight;
 
     constructor(metaOptions: BookingMetaOptions) {
         this.confirmationStatus = metaOptions.confirmationStatus;
@@ -25,5 +27,6 @@ export class BookingMeta {
         this.fontName = metaOptions.fontName;
         this.intervalEditRight = metaOptions.intervalEditRight;
         this.noShowEditRight = metaOptions.noShowEditRight;
+        this.assignRoomRight = metaOptions.assignRoomRight;
     }
 }
