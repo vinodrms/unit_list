@@ -411,6 +411,10 @@ export enum ThStatusCode {
     BookingChangeDatesError,
     BookingChangeDatesInvalidState,
     HotelBookingOperationsControllerErrorChangingDates,
+    BookingChangeNoShowTimeError,
+    BookingChangeNoShowTimeInvalidTime,
+    BookingChangeNoShowTimeInvalidState,
+    HotelBookingOperationsControllerErrorChangingNoShowTime,
 
 }
 
@@ -813,6 +817,10 @@ ThMessage[ThStatusCode.BookingWithDependenciesLoaderError] = "Error loading book
 ThMessage[ThStatusCode.BookingChangeDatesError] = "Error changing booking dates.";
 ThMessage[ThStatusCode.BookingChangeDatesInvalidState] = "The date can be changed only for Confirmed, Guaranteed or Checked In bookings.";
 ThMessage[ThStatusCode.HotelBookingOperationsControllerErrorChangingDates] = "Error changing booking dates.";
+ThMessage[ThStatusCode.BookingChangeNoShowTimeError] = "Error changing the no show time.";
+ThMessage[ThStatusCode.BookingChangeNoShowTimeInvalidTime] = "Invalid submitted time.";
+ThMessage[ThStatusCode.BookingChangeNoShowTimeInvalidState] = "The no show time can be changed only for confirmed or guaranteed bookings.";
+ThMessage[ThStatusCode.HotelBookingOperationsControllerErrorChangingNoShowTime] = "Error changing the no show time.";
 
 export class ThResponse {
     statusCode: ThStatusCode;

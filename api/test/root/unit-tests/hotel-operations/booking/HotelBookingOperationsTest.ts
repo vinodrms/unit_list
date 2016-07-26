@@ -16,6 +16,11 @@ import {BookingItemDO} from '../../../../../core/domain-layer/bookings/add-booki
 import {BookingDO, GroupBookingInputChannel, BookingConfirmationStatus} from '../../../../../core/data-layer/bookings/data-objects/BookingDO';
 import {BookingChangeDates} from '../../../../../core/domain-layer/hotel-operations/booking/change-dates/BookingChangeDates';
 import {BookingChangeDatesDO} from '../../../../../core/domain-layer/hotel-operations/booking/change-dates/BookingChangeDatesDO';
+import {BookingChangeNoShowTime} from '../../../../../core/domain-layer/hotel-operations/booking/change-no-show-time/BookingChangeNoShowTime';
+import {BookingChangeNoShowTimeDO} from '../../../../../core/domain-layer/hotel-operations/booking/change-no-show-time/BookingChangeNoShowTimeDO';
+import {ThTimestampDO} from '../../../../../core/utils/th-dates/data-objects/ThTimestampDO';
+import {ThHourDO} from '../../../../../core/utils/th-dates/data-objects/ThHourDO';
+import {BookingStateChangeTriggerType} from '../../../../../core/data-layer/bookings/data-objects/state-change-time/BookingStateChangeTriggerTimeDO';
 
 describe("Hotel Booking Operations Tests", function () {
     var testContext: TestContext;
@@ -63,6 +68,28 @@ describe("Hotel Booking Operations Tests", function () {
             bookingChangeDates.changeDates(bookingChangeDatesDO).then((updatedBooking: BookingDO) => {
                 should.equal(updatedBooking.price.totalPrice, bookingToChange.price.totalPrice * 2);
                 should.equal(updatedBooking.bookingHistory.actionList.length > 1, true);
+                done();
+            }).catch((error: any) => {
+                done(error);
+            });
+        });
+        it("Should change no show time for one of the added bookings", function (done) {
+            var bookingToChange = testUtils.getRandomListElement(createdBookingList);
+            var noShowTimeDO = new BookingChangeNoShowTimeDO();
+            noShowTimeDO.groupBookingId = bookingToChange.groupBookingId;
+            noShowTimeDO.bookingId = bookingToChange.bookingId;
+            noShowTimeDO.noShowTimestamp = new ThTimestampDO();
+            noShowTimeDO.noShowTimestamp.thDateDO = bookingToChange.interval.start;
+            noShowTimeDO.noShowTimestamp.thHourDO = ThHourDO.buildThHourDO(23, 30);
+
+            var bookingChangeNoShowTime = new BookingChangeNoShowTime(testContext.appContext, testContext.sessionContext);
+            bookingChangeNoShowTime.changeNoShowTime(noShowTimeDO).then((updatedBooking: BookingDO) => {
+                should.equal(updatedBooking.noShowTime.type, BookingStateChangeTriggerType.ExactTimestamp);
+                should.equal(updatedBooking.noShowTime.thTimestamp.thHourDO.hour, noShowTimeDO.noShowTimestamp.thHourDO.hour);
+                should.equal(updatedBooking.noShowTime.thTimestamp.thHourDO.minute, noShowTimeDO.noShowTimestamp.thHourDO.minute);
+                should.equal(updatedBooking.noShowTime.thTimestamp.thDateDO.day, noShowTimeDO.noShowTimestamp.thDateDO.day);
+                should.equal(updatedBooking.noShowTime.thTimestamp.thDateDO.month, noShowTimeDO.noShowTimestamp.thDateDO.month);
+                should.equal(updatedBooking.noShowTime.thTimestamp.thDateDO.year, noShowTimeDO.noShowTimestamp.thDateDO.year);
                 done();
             }).catch((error: any) => {
                 done(error);

@@ -132,7 +132,8 @@ export class BookingChangeDates {
 
         this._bookingWithDependencies.bookingDO.bookingHistory.logDocumentAction(DocumentActionDO.buildDocumentActionDO({
             actionParameterMap: { oldInterval: oldInterval.toString(), newInterval: newInterval.toString(), oldPrice: oldPrice, newPrice: newPrice },
-            actionString: "The booking interval was changed from %oldInterval% to %newInterval%. The old price %oldPrice% has become %newPrice%."
+            actionString: "The booking interval was changed from %oldInterval% to %newInterval%. The old price %oldPrice% has become %newPrice%.",
+            userId: this._sessionContext.sessionDO.user.id
         }));
     }
 
