@@ -16,6 +16,32 @@ export class BookingValidationStructures {
             }
         ]);
     }
+
+    public static getThTimestampDOValidationStructure(): IValidationStructure {
+        return new ObjectValidationStructure([
+            {
+                key: "thDateDO",
+                validationStruct: BookingValidationStructures.getThDateDOValidationStructure()
+            },
+            {
+                key: "thHourDO",
+                validationStruct: BookingValidationStructures.getThHourDOValidationStructure()
+            }
+        ]);
+    }
+    private static getThHourDOValidationStructure(): IValidationStructure {
+        return new ObjectValidationStructure([
+            {
+                key: "hour",
+                validationStruct: new PrimitiveValidationStructure(NumberValidationRule.buildIntegerNumberRule(0))
+            },
+            {
+                key: "minute",
+                validationStruct: new PrimitiveValidationStructure(NumberValidationRule.buildIntegerNumberRule(0))
+            }
+        ]);
+    }
+
     public static getThDateDOValidationStructure(): IValidationStructure {
         return new ObjectValidationStructure([
             {

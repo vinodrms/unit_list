@@ -8,8 +8,8 @@ import {BookingDO, BookingConfirmationStatus} from '../../../../../data-layer/bo
 import {AAssignRoomStrategy} from './AAssignRoomStrategy';
 
 export class ReserveRoomStrategy extends AAssignRoomStrategy {
-    constructor(private _appContext: AppContext, private _sessionContext: SessionContext) {
-        super();
+    constructor(private _appContext: AppContext, sessionContext: SessionContext) {
+        super(sessionContext);
     }
 
     protected updateAdditionalFieldsCore(resolve: { (result: BookingDO): void }, reject: { (err: ThError): void }, validationDO: AssignRoomValidationDO) {

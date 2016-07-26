@@ -8,6 +8,9 @@
 	"The customers were checked in room %roomName%": "The customers were checked in room %roomName%",
 	"Room %roomName% was reserved for this booking.": "Room %roomName% was reserved for this booking.",
 	"The room was checked out.": "The room was checked out.",
+	"The booking interval was changed from %oldInterval% to %newInterval%. The old price %oldPrice% has become %newPrice%.": "The booking interval was changed from %oldInterval% to %newInterval%. The old price %oldPrice% has become %newPrice%.",
+	"The booking was marked as a late arrival and will be marked as no show at %noShowTime%.": "The booking was marked as a late arrival and will be marked as no show at %noShowTime%.",
+	
 
 	// room maintenance history
 	"The room was marked as Clean": "The room was marked as Clean",

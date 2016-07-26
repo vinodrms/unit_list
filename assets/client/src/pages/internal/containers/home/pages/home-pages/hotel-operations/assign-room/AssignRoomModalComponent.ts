@@ -5,7 +5,7 @@ import {TranslationPipe} from '../../../../../../../../common/utils/localization
 import {ICustomModalComponent, ModalSize} from '../../../../../../../../common/utils/modals/utils/ICustomModalComponent';
 import {ModalDialogRef} from '../../../../../../../../common/utils/modals/utils/ModalDialogRef';
 import {PriceSelectionVM} from './components/price-selection/services/view-models/PriceSelectionVM';
-import {HotelOperationsBookingService} from '../../../../../../services/hotel-operations/booking/HotelOperationsBookingService';
+import {EagerBookingsService} from '../../../../../../services/bookings/EagerBookingsService';
 import {BookingDO} from '../../../../../../services/bookings/data-objects/BookingDO';
 import {RoomsService} from '../../../../../../services/rooms/RoomsService';
 import {RoomVM} from '../../../../../../services/rooms/view-models/RoomVM';
@@ -27,7 +27,7 @@ import {AssignRoomModalInput} from './services/utils/AssignRoomModalInput';
     directives: [RoomSelectionComponent, PriceSelectionComponent],
     providers: [SETTINGS_PROVIDERS, HotelService, HotelAggregatorService,
         RoomCategoriesStatsService, RoomsService, EagerCustomersService,
-        HotelOperationsBookingService, BookingOccupancyService,
+        EagerBookingsService, BookingOccupancyService,
         HotelOperationsRoomService],
     pipes: [TranslationPipe]
 })

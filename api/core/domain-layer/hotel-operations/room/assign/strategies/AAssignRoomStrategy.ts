@@ -1,4 +1,5 @@
 import {ThError} from '../../../../../utils/th-responses/ThError';
+import {SessionContext} from '../../../../../utils/SessionContext';
 import {IAssignRoomStrategy, AssignRoomValidationDO} from './IAssignRoomStrategy';
 import {BookingDO} from '../../../../../data-layer/bookings/data-objects/BookingDO';
 import {DocumentActionDO} from '../../../../../data-layer/common/data-objects/document-history/DocumentActionDO';
@@ -10,7 +11,7 @@ import _ = require('underscore');
 export abstract class AAssignRoomStrategy implements IAssignRoomStrategy {
     protected _thUtils: ThUtils;
 
-    constructor() {
+    constructor(protected _sessionContext: SessionContext) {
         this._thUtils = new ThUtils();
     }
 
@@ -28,7 +29,8 @@ export abstract class AAssignRoomStrategy implements IAssignRoomStrategy {
         }
         bookingDO.bookingHistory.logDocumentAction(DocumentActionDO.buildDocumentActionDO({
             actionParameterMap: { roomName: room.name },
-            actionString: logMessageWithRoomNameParam
+            actionString: logMessageWithRoomNameParam,
+            userId: this._sessionContext.sessionDO.user.id
         }));
     }
 }

@@ -80,6 +80,7 @@ export class RoomOperationsPageComponent implements OnInit {
         this._hotelOperationsResultService.markBookingChanged(booking);
     }
     public didChangeRoom(roomDO: RoomDO) {
+        this._roomOperationsPageData.roomVM.room = roomDO;
         this._hotelOperationsResultService.markRoomChanged(roomDO);
     }
 }

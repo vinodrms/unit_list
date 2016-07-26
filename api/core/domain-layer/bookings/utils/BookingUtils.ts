@@ -1,7 +1,9 @@
 import {ThUtils} from '../../../utils/ThUtils';
 import {HotelDO} from '../../../data-layer/hotel/data-objects/HotelDO';
-import {BookingDO} from '../../../data-layer/bookings/data-objects/BookingDO';
+import {BookingDO, BookingConfirmationStatus} from '../../../data-layer/bookings/data-objects/BookingDO';
+import {PriceProductDO} from '../../../data-layer/price-products/data-objects/PriceProductDO';
 import {ThDateDO} from '../../../utils/th-dates/data-objects/ThDateDO';
+import {ThHourDO} from '../../../utils/th-dates/data-objects/ThHourDO';
 import {ThTimestampDO} from '../../../utils/th-dates/data-objects/ThTimestampDO';
 import {CustomersContainer} from '../../customers/validators/results/CustomersContainer';
 import {BookingPriceDO, BookingPriceType} from '../../../data-layer/bookings/data-objects/price/BookingPriceDO';
@@ -45,6 +47,21 @@ export class BookingUtils {
                 return;
             }
         }
+    }
+    public updateBookingGuaranteedAndNoShowTimes(bookingDO: BookingDO, params: {
+        priceProduct: PriceProductDO,
+        hotel: HotelDO,
+        currentHotelTimestamp: ThTimestampDO
+    }) {
+        var indexedBookingInterval = new IndexedBookingInterval(bookingDO.interval);
+        bookingDO.guaranteedTime = params.priceProduct.conditions.policy.generateGuaranteedTriggerTime({ arrivalDate: indexedBookingInterval.getArrivalDate() });
+        if (bookingDO.guaranteedTime.isInThePast({
+            cancellationHour: params.hotel.operationHours.cancellationHour,
+            currentHotelTimestamp: params.currentHotelTimestamp
+        })) {
+            bookingDO.confirmationStatus = BookingConfirmationStatus.Guaranteed;
+        }
+        bookingDO.noShowTime = params.priceProduct.conditions.policy.generateNoShowTriggerTime({ arrivalDate: indexedBookingInterval.getArrivalDate() });
     }
     public updateBookingPriceUsingRoomCategory(bookingDO: BookingDO) {
         var indexedBookingInterval = new IndexedBookingInterval(bookingDO.interval);
