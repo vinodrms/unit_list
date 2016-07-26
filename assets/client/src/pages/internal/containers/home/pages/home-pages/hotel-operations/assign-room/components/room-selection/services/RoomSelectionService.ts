@@ -8,7 +8,7 @@ import {ASinglePageRequestService} from '../../../../../../../../../services/com
 import {RoomCategoriesStatsService} from '../../../../../../../../../services/room-categories/RoomCategoriesStatsService';
 import {RoomCategoryStatsDO} from '../../../../../../../../../services/room-categories/data-objects/RoomCategoryStatsDO';
 import {AssignRoomModalInput} from '../../../services/utils/AssignRoomModalInput';
-import {HotelOperationsBookingService} from '../../../../../../../../../services/hotel-operations/booking/HotelOperationsBookingService';
+import {EagerBookingsService} from '../../../../../../../../../services/bookings/EagerBookingsService';
 import {RoomsService} from '../../../../../../../../../services/rooms/RoomsService';
 import {RoomVM} from '../../../../../../../../../services/rooms/view-models/RoomVM';
 import {BookingOccupancyService} from '../../../../../../../../../services/bookings/occupancy/BookingOccupancyService';
@@ -28,7 +28,7 @@ export class RoomSelectionService extends ASinglePageRequestService<AssignableRo
     constructor(private _appContext: AppContext,
         private _modalInput: AssignRoomModalInput,
         private _roomCategoriesStatsService: RoomCategoriesStatsService,
-        private _hotelOperationsBookingService: HotelOperationsBookingService,
+        private _eagerBookingsService: EagerBookingsService,
         private _roomsService: RoomsService,
         private _bookingOccupancyService: BookingOccupancyService) {
         super();
@@ -44,7 +44,7 @@ export class RoomSelectionService extends ASinglePageRequestService<AssignableRo
     public getRoomsWithOccupancyVM(): Observable<AssignableRoomVMContainer> {
         return Observable.combineLatest(
             this._roomsService.getRoomList(),
-            this._hotelOperationsBookingService.getBooking(this._modalInput.assignRoomParam.groupBookingId, this._modalInput.assignRoomParam.bookingId)
+            this._eagerBookingsService.getBooking(this._modalInput.assignRoomParam.groupBookingId, this._modalInput.assignRoomParam.bookingId)
         ).flatMap((result: [RoomVM[], BookingDO]) => {
             this._roomVMList = result[0];
             this._bookingDO = result[1];

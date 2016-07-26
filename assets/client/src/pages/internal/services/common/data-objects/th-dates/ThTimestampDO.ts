@@ -22,10 +22,20 @@ export class ThTimestampDO extends BaseDO {
 		this.thHourDO = new ThHourDO();
         this.thHourDO.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "thHourDO"));
     }
+	public isSame(otherTimestamp: ThTimestampDO): boolean {
+		return this.thDateDO.isSame(otherTimestamp.thDateDO) && this.thHourDO.isSame(otherTimestamp.thHourDO);
+	}
 
     public toString(): string {
         return this.thDateDO.toString() + " " + this.thHourDO.toString();
     }
+
+	public buildPrototype(): ThTimestampDO {
+		var thTimestamp = new ThTimestampDO();
+		thTimestamp.thDateDO = this.thDateDO.buildPrototype();
+		thTimestamp.thHourDO = this.thHourDO.buildPrototype();
+		return thTimestamp;
+	}
 
 	public getTimeDistanceFromNowString(): string {
 		return moment([this.thDateDO.year, this.thDateDO.month, this.thDateDO.day, this.thHourDO.hour, this.thHourDO.minute]).fromNow();

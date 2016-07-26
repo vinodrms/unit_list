@@ -81,7 +81,10 @@ export class AddBookingItems {
 
                 var intervalValidator = new BookingIntervalValidator(loadedHotel);
                 var thDateIntervalDOList = this.getThDateIntervalDOListForBookings();
-                return intervalValidator.validateBookingIntervalList(thDateIntervalDOList);
+                return intervalValidator.validateBookingIntervalList({
+                    bookingIntervalList: thDateIntervalDOList,
+                    isNewBooking: true
+                });
             }).then((validatedBookingIntervalList: ThDateIntervalDO[]) => {
                 var priceProductValidator = new PriceProductIdValidator(this._appContext, this._sessionContext);
                 var priceProductIdListToValidate = this.getPriceProductIdListForBookings();
@@ -97,7 +100,10 @@ export class AddBookingItems {
 
                 var allotmentValidator = new AllotmentIdValidator(this._appContext, this._sessionContext);
                 var allotmentIdListToValidate = this.getAllotmentIdListForBookings();
-                return allotmentValidator.validateAllotmentIdList(allotmentIdListToValidate);
+                return allotmentValidator.validateAllotmentIdList({
+                    allotmentIdList: allotmentIdListToValidate,
+                    onlyActive: true
+                });
             }).then((loadedAllotmentsContainer: AllotmentsContainer) => {
                 this._loadedAllotmentsContainer = loadedAllotmentsContainer;
 

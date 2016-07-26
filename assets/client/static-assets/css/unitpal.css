@@ -1962,6 +1962,9 @@ a.btn.btn-square:focus {
 .padding-top-15px {
     padding-top: 15px;
 }
+.padding-bottom-5px {
+    padding-bottom: 5px;
+}
 .padding-bottom-10px {
     padding-bottom: 10px;
 }
@@ -2920,6 +2923,7 @@ a.btn.btn-square:focus {
 }
 .edit-save-button-group-container {
     width: 95px;
+    height: 34px;
 }
 .edit-save-button-group-container .save-btn {
     width: 70px;
@@ -2943,6 +2947,19 @@ a.btn.btn-square:focus {
     font-weight: 500;
     color: #fb6708;
     font-size: 15px;
+}
+.operational-page-container .clickable-item>span {
+    width: 20%;
+    float: left;
+}
+.operational-page-container .clickable-item>p {
+    width: 80%;
+    float: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    position: relative;
+    top: 9px;
 }
 .operational-page-container .clickable-item:hover {
     color: #C44D00;

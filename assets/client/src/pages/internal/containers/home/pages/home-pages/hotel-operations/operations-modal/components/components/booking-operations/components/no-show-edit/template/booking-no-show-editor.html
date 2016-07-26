@@ -1,0 +1,35 @@
+<div class="col-xs-12" *ngIf="canEditNoShow">
+    <div class="row">
+        <div class="col-xs-12 col-sm-1">
+            {{'No Show' | translate}}
+        </div>
+
+        <div class="col-xs-12 col-sm-4" *ngIf="readonly">
+            <div class="form-group">
+                <div class="form-control operational-input-group">
+                    <span class="unitpal-font unitpal-large">M</span>
+                    <span class="name field-value">{{ noShowTimestamp | thtimestamp }}</span>
+                </div>
+                <small class="text-muted"><i class="fa fa-info-circle"></i> {{ 'Time when booking will be marked as No Show' | translate }} </small>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-4" *ngIf="!readonly">
+            <div class="form-group">
+                <select class="form-control" [ngModel]="noShowTimestamp" (ngModelChange)="noShowTimestamp=$event">
+			        <option *ngFor="let thTimestamp of noShowTimestampList" [ngValue]="thTimestamp">{{ thTimestamp | thtimestamp }}</option>
+		        </select>
+                <small class="text-muted"><i class="fa fa-info-circle"></i> {{ 'Time when booking will be marked as No Show' | translate }} </small>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-3 padding-top-5px">
+            <edit-save-button-group
+                (onEditStart)="startEdit()"
+                (onEditEnd)="endEdit()"
+                (onSavePressed)="saveNoShowTimestamp()"
+                [isSaving]="isSaving"
+                [isEditing]="!readonly"
+                >
+            </edit-save-button-group>
+        </div>
+    </div>
+</div>

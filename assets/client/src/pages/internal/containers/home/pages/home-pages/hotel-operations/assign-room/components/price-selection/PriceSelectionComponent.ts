@@ -4,14 +4,14 @@ import {LoadingComponent} from '../../../../../../../../../../common/utils/compo
 import {LazyLoadingTableComponent} from '../../../../../../../../../../common/utils/components/lazy-loading/LazyLoadingTableComponent';
 import {AppContext} from '../../../../../../../../../../common/utils/AppContext';
 import {PriceSelectionTableMetaBuilderService} from './services/PriceSelectionTableMetaBuilderService';
-import {HotelOperationsBookingPossiblePricesService} from '../../../../../../../../services/hotel-operations/booking/HotelOperationsBookingPossiblePricesService';
+import {HotelOperationsBookingService} from '../../../../../../../../services/hotel-operations/booking/HotelOperationsBookingService';
 import {PriceSelectionService, PriceSelectionType} from './services/PriceSelectionService';
 import {PriceSelectionVM} from './services/view-models/PriceSelectionVM';
 
 @Component({
     selector: 'price-selection',
     templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/assign-room/components/price-selection/template/price-selection.html',
-    providers: [HotelOperationsBookingPossiblePricesService, PriceSelectionService, PriceSelectionTableMetaBuilderService],
+    providers: [HotelOperationsBookingService, PriceSelectionService, PriceSelectionTableMetaBuilderService],
     directives: [LoadingComponent, LazyLoadingTableComponent],
     pipes: [TranslationPipe]
 })

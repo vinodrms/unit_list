@@ -33,6 +33,12 @@ export class ThTimestampDO extends BaseDO {
 	public isStartOfDay(): boolean {
 		return this.thHourDO.hour === ThTimestampDO.StartOfDayHour && this.thHourDO.minute < ThTimestampDO.StartOfDayMaxMinute;
 	}
+	public isValid(): boolean {
+		return this.thDateDO.isValid() && this.thHourDO.isValid();
+	}
+	public toString(): string {
+		return this.thDateDO.toString() + " " + this.thHourDO.toString();
+    }
 
 	public static buildThTimestampForTimezone(timezoneString: string): ThTimestampDO {
 		var thDateUtils = new ThDateUtils();

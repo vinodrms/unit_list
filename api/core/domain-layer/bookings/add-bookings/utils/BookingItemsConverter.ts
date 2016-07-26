@@ -63,7 +63,6 @@ export class BookingItemsConverter {
         var hotelId = this._sessionContext.sessionDO.hotel.id;
         var groupBookingStatus = GroupBookingStatus.Active;
         var noOfRooms = this._bookingItems.bookingList.length;
-        var currentHotelDate = this._bookingUtils.getCurrentThDateForHotel(this._converterParams.hotelDO);
 
         _.forEach(this._bookingItems.bookingList, (bookingItem: BookingItemDO) => {
             var bookingDO = new BookingDO();
@@ -109,16 +108,12 @@ export class BookingItemsConverter {
                 actionString: "Booking was created",
                 userId: this._sessionContext.sessionDO.user.id
             }));
-            bookingDO.guaranteedTime = priceProduct.conditions.policy.generateGuaranteedTriggerTime({ arrivalDate: indexedBookingInterval.getArrivalDate() });
-            if (bookingDO.guaranteedTime.isInThePast({
-                cancellationHour: this._converterParams.hotelDO.operationHours.cancellationHour,
+
+            this._bookingUtils.updateBookingGuaranteedAndNoShowTimes(bookingDO, {
+                priceProduct: priceProduct,
+                hotel: this._converterParams.hotelDO,
                 currentHotelTimestamp: this._converterParams.currentHotelTimestamp
-            })) {
-                bookingDO.confirmationStatus = BookingConfirmationStatus.Guaranteed;
-            }
-
-            bookingDO.noShowTime = priceProduct.conditions.policy.generateNoShowTriggerTime({ arrivalDate: indexedBookingInterval.getArrivalDate() });
-
+            });
             this._bookingUtils.updateBookingPriceUsingRoomCategory(bookingDO);
             this._bookingUtils.updateIndexedSearchTerms(bookingDO, this._converterParams.customersContainer);
             this._bookingUtils.updateDisplayCustomerId(bookingDO, this._converterParams.customersContainer);
