@@ -49,7 +49,6 @@ export interface IHotelOperationsDashboardDeparturesMediator{
 	refresh();
 }
 
-
 @Component({
 	selector: 'hotel-operations-dashboard',
 	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/dashboard/template/hotel-operations-dashboard.html',

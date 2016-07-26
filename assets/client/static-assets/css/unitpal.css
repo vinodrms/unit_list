@@ -2299,8 +2299,12 @@ a.btn.btn-square:focus {
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            color: #777;
-            background-color: #ccc
+            color: #ccc;
+            background-color: #949494;
+        }
+
+        arrival-item .left>span {
+            text-shadow: 1px 1px #5b5b62;
         }
 
         arrival-item .right{
@@ -2352,13 +2356,14 @@ a.btn.btn-square:focus {
         arrival-helper{
             border: 3px solid #fb6708;
             border-radius: 4px;
-            width: 216px;
+            width: 236px;
             background: white;
         }
 
         arrival-helper .left{
             display: flex;
-            flex-direction: column; 
+            flex-direction: column;
+            justify-content: center;
             background-color: #fb6708;
             color: white;
         }
@@ -2432,7 +2437,7 @@ a.btn.btn-square:focus {
         /* Misc */
         .other-details {
             display: flex;
-            flex-basis: 40px;
+            flex-basis: 50px;
             justify-content: space-around;
         }
 

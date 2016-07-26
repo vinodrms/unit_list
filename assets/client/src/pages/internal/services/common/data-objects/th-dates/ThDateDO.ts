@@ -76,8 +76,17 @@ export class ThDateDO extends BaseDO {
 		var thisMoment = thDateUtils.convertThDateDOToMoment(this);
 		return thisMoment.isoWeekday();
 	}
+	
 	public buildPrototype(): ThDateDO {
 		return ThDateDO.buildThDateDO(this.year, this.month, this.day);
+	}
+
+	public addDays(days: number): void {
+		var thDateUtils = new ThDateUtils();
+		var thisMoment = thDateUtils.addDaysToThDateDO(this, days);
+		this.year = thisMoment.year;
+		this.month = thisMoment.month;
+		this.day = thisMoment.day;
 	}
 
 	public static buildThDateDO(year: number, month: number, day: number): ThDateDO {

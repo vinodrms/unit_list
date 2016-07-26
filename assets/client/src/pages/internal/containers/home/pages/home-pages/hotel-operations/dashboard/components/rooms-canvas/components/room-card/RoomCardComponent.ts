@@ -86,7 +86,18 @@ export class RoomCardComponent {
 	ngAfterViewInit() {
 		$(this._root.nativeElement).find('.room-card').droppable(
 			{
-				accept: 'arrival-item',
+				accept: () => {
+					this._zone.run(() => {
+						debugger;
+						var arrivalItem:ArrivalItemInfoVM = this.roomCanvas.getSelectedArrivalItem();
+						var dropHandler = RoomDropHandlerFactory.get(this.roomVM.status);
+						var outcome = {
+							accepted: dropHandler.handle(arrivalItem),
+							roomVM: this.roomVM
+						}
+						return outcome.accepted;
+					});
+				},
 				drop: (event: Event, ui: Object) => {
 					this._zone.run(() => {
 						var arrivalItem:ArrivalItemInfoVM = this.roomCanvas.getSelectedArrivalItem();

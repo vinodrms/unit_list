@@ -1,6 +1,7 @@
 <div class="header">
 	<div class="rooms-controller p-12">
 		<div class="group-1 flex-row flex-center-v">
+			<i class="fa fa-calendar orange-color f-24 p-r-6" aria-hidden="true"></i>
 			<div class="current-date p-r-12 f-24"><b>Wednesday 13.01.2016</b></div>
 		</div>
 		<div class="group-2 flex-row flex-center-v">
@@ -11,7 +12,6 @@
 				<option value="{{ enums.FilterValueType.Reserved }}">RESERVED ROOMS</option>
 				<option value="{{ enums.FilterValueType.OutOfService }}">OUT OF SERVICE ROOMS</option>
 			</select>
-			<i class="fa fa-angle-right p-l-12 f-48" (click)="nextDay()"></i>
 		</div>
 	</div>
 	<div class="notification {{filterNotification.Properties.cssColor}}" *ngIf="isNotificationBarVisible()">

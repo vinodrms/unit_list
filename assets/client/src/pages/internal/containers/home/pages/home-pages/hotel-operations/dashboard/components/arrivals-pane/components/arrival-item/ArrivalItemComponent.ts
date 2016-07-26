@@ -29,9 +29,8 @@ export class ArrivalItemComponent {
 				cursorAt: { left: 12 , bottom: 6 },
 				helper: () => {
 					var helperHtml = `
-					<arrival-helper class=" flex-row flex-center-v">
+					<arrival-helper class=" flex-row">
 						<div class="left p-6 orange">
-							<i class="fa fa-ellipsis-v"></i>
 							<i class="fa fa-ellipsis-v"></i>
 						</div>
 						<div class="right flex-row flex-jc-sb p-6">
@@ -39,9 +38,11 @@ export class ArrivalItemComponent {
 								+ this.arrivalItemVM.customerName +
 							`</div>
 							<div class="other-details gray-color f-12">
-								<span class="unitpal-font f-12">(</span>` + this.arrivalItemVM.numberOfPeople + 
-								`<span class="unitpal-font f-12">Y</span>`+ this.arrivalItemVM.numberOfNights +
-							`</div>
+								<div>
+									<span class="unitpal-font f-12">(</span> ` + this.arrivalItemVM.numberOfPeople + 
+									` <span class="unitpal-font f-12">Y</span> `+ this.arrivalItemVM.numberOfNights +
+							`	</div>
+							</div>
 						</div>
 					</arrival-helper>
 				`
