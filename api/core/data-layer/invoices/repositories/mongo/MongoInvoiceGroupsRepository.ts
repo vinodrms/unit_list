@@ -4,17 +4,17 @@ import {InvoiceGroupDO} from '../../data-objects/InvoiceGroupDO';
 import {MongoInvoiceGroupsReadOperationsRepository} from './operations/MongoInvoiceGroupsReadOperationsRepository';
 import {MongoInvoiceGroupsEditOperationsRepository} from './operations/MongoInvoiceGroupsEditOperationsRepository';
 import {LazyLoadRepoDO, LazyLoadMetaResponseRepoDO} from '../../../common/repo-data-objects/LazyLoadRepoDO';
+import {MongoBookingRepository} from '../../../bookings/repositories/mongo/MongoBookingRepository';
 
 export class MongoInvoiceGroupsRepository extends MongoRepository implements IInvoiceGroupsRepository {
     private _readRepository: MongoInvoiceGroupsReadOperationsRepository;
     private _editRepository: MongoInvoiceGroupsEditOperationsRepository;
 
-    constructor() {
-        var invoiceGroupsEntity = sails.models.invoicegroupsentity;
-        super(invoiceGroupsEntity);
+    constructor(private _bookingsRepo: MongoBookingRepository) {
+        super(sails.models.invoicegroupsentity);
 
-        this._readRepository = new MongoInvoiceGroupsReadOperationsRepository(invoiceGroupsEntity);
-        this._editRepository = new MongoInvoiceGroupsEditOperationsRepository(invoiceGroupsEntity);
+        this._readRepository = new MongoInvoiceGroupsReadOperationsRepository(sails.models.invoicegroupsentity, _bookingsRepo);
+        this._editRepository = new MongoInvoiceGroupsEditOperationsRepository(sails.models.invoicegroupsentity, _bookingsRepo);
     }
 
     public getInvoiceGroupById(invoidGroupMeta: InvoiceGroupMetaRepoDO, invoiceGroupId: string): Promise<InvoiceGroupDO> {

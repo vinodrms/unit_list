@@ -11,8 +11,10 @@ export class AddOnProductInvoiceItemMetaDO extends BaseDO implements IInvoiceIte
         return ["pricePerItem", "numberOfItems", "aopDisplayName"];
     }
 
-    public getPriceForItem(): number {
-        return this.pricePerItem;
+    public getPrice(): Promise<number> {
+        return new Promise<number>((resolve: { (result: number): void }, reject: { (err: any): void }) => {
+            resolve(this.pricePerItem);    
+        });
     }
     public getNumberOfItems(): number {
         return this.numberOfItems;

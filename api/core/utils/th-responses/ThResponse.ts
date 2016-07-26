@@ -299,6 +299,8 @@ export enum ThStatusCode {
     PhantomHtmlToPdfConverter,
 
     GeneratInvoiceGroupActionFactoryError,
+    GenerateBookingInvoiceError,
+    GenerateBookingInvoiceErrorBuildingDefaultInvoice,
     InvoiceGroupsRepositoryErrorAddingInvoiceGroup,
     InvoiceGroupsRepositoryProblemUpdatingInvoiceGroup,
     InvoiceGroupsRepositoryErrorUpdatingInvoiceGroup,
@@ -310,12 +312,10 @@ export enum ThStatusCode {
     InvoiceGroupsControllerErrorGettingInvoiceGroupById,
     InvoiceGroupsControllerErrorGettingInvoiceGroups,
     InvoiceGroupsControllerErrorGettingInvoiceGroupsCount,
+    InvoiceGroupsControllerErrorGettingInvoiceGroupsBrief,
+    InvoiceGroupsBriefDataAggregatorErrorGettingInvoiceGroupsBrief,
     SaveInvoiceGroupItem,
-    UpdateInvoiceGroupError,
-    AddNewCustomerInvoiceGroupError,
-    AddNewBookingInvoiceGroupError,
-    GenerateBookingInvoiceError,
-    UpdateInvoiceGroupItemError,
+    SaveInvoiceGroupError,
     InvoicePaymentMethodValidatorError,
     InvoicePaymentMethodValidatorInvalidPaymentMethod,
     InvoicePaymentMethodValidatorUnsupportedPaymentMethod,
@@ -323,6 +323,7 @@ export enum ThStatusCode {
     InvoicePaymentValidatorError,
     InvoicePayersValidatorError,
     InvoicePayersValidatorInvalidSplit,
+    GetInvoiceGroupBriefDataError,
     CustomerInvoiceGroupUpdateStrategyErrorUpdating,
     CustomerInvoiceGroupAddStrategyErrorAdding,
     BookingInvoiceGroupUpdateStrategyErrorUpdating,
@@ -699,6 +700,8 @@ ThMessage[ThStatusCode.PdfReportServiceErrorWritingHtmlToFile] = "Error writing 
 ThMessage[ThStatusCode.PdfReportServiceHtmlToPdfError] = "Error in the following flow: generate html -> convert html to pdf.";
 ThMessage[ThStatusCode.PhantomHtmlToPdfConverter] = "Error converting html to pdf with phantom js.";
 ThMessage[ThStatusCode.GeneratInvoiceGroupActionFactoryError] = "Error getting the invoice group generation action (update or add new invoice group).";
+ThMessage[ThStatusCode.GenerateBookingInvoiceError] = "Error adding booking related invoice group.";
+ThMessage[ThStatusCode.GenerateBookingInvoiceErrorBuildingDefaultInvoice] = "Error building the default booking invoice object.";
 ThMessage[ThStatusCode.InvoiceGroupsRepositoryErrorAddingInvoiceGroup] = "Error adding the invoice group.";
 ThMessage[ThStatusCode.InvoiceGroupsRepositoryProblemUpdatingInvoiceGroup] = "Problem updating the invoice group - concurrency.";
 ThMessage[ThStatusCode.InvoiceGroupsRepositoryErrorUpdatingInvoiceGroup] = "Error updating the invoice group.";
@@ -707,20 +710,19 @@ ThMessage[ThStatusCode.InvoiceGroupsItemUpdateStrategyErrorUpdating] = "Error up
 ThMessage[ThStatusCode.InvoiceGroupsRepositoryInvoiceGroupNotFound] = "Invoice group not found.";
 ThMessage[ThStatusCode.InvoiceGroupsRepositoryErrorGettingInvoiceGroup] = "Error retrieving the invoice group from the database.";
 ThMessage[ThStatusCode.InvoiceGroupsControllerErrorGettingInvoiceGroupById] = "Error getting invoice group by id.";
+ThMessage[ThStatusCode.InvoiceGroupsRepositoryErrorReadingDocumentCount] = "Error reading invoice grupt document count.";
 ThMessage[ThStatusCode.InvoiceGroupsControllerErrorGettingInvoiceGroups] = "Error getting the invoice group list.";
 ThMessage[ThStatusCode.InvoiceGroupsControllerErrorGettingInvoiceGroupsCount] = "Error getting the total number of invoice groups matching the search criteria.";
+ThMessage[ThStatusCode.InvoiceGroupsControllerErrorGettingInvoiceGroupsBrief] = "Error getting brief info about the required invoices.";
+ThMessage[ThStatusCode.InvoiceGroupsBriefDataAggregatorErrorGettingInvoiceGroupsBrief] = "Error getting brief info about the required invoices.";
 ThMessage[ThStatusCode.SaveInvoiceGroupItem] = "Error saving the invoice group item.";
-ThMessage[ThStatusCode.UpdateInvoiceGroupError] = "Error updating the invoice group.";
-ThMessage[ThStatusCode.InvoiceGroupsRepositoryErrorReadingDocumentCount] = "Error reading invoice grupt document count.";
-ThMessage[ThStatusCode.UpdateInvoiceGroupItemError] = "Error updating invoice group.";
-ThMessage[ThStatusCode.AddNewCustomerInvoiceGroupError] = "Error adding new customer related invoice group.";
-ThMessage[ThStatusCode.AddNewBookingInvoiceGroupError] = "Error adding new booking related invoice group.";
-ThMessage[ThStatusCode.GenerateBookingInvoiceError] = "Error adding booking related invoice group.";
+ThMessage[ThStatusCode.SaveInvoiceGroupError] = "Error updating the invoice group.";
 ThMessage[ThStatusCode.InvoicePaymentMethodValidatorError] = "Error validating the payment methods.";
 ThMessage[ThStatusCode.InvoicePaymentMethodValidatorInvalidPaymentMethod] = "Unrecognized payment method.";
 ThMessage[ThStatusCode.InvoicePaymentMethodValidatorUnsupportedPaymentMethod] = "The payment method selected is not supported by the hotel.";
 ThMessage[ThStatusCode.InvoicePaymentMethodValidatorCannotPayByAgreement] = "You cannot pay the invoice by agreement as the selected customer does not support this method.";
 ThMessage[ThStatusCode.InvoicePaymentValidatorError] = "Error validating the invoice payment.";
+ThMessage[ThStatusCode.GetInvoiceGroupBriefDataError] = "Error getting the invoice group brief data.";
 ThMessage[ThStatusCode.InvoicePayersValidatorError] = "Error validating the payers that split the invoice payment.";
 ThMessage[ThStatusCode.InvoicePayersValidatorInvalidSplit] = "Error validating the payers that split the invoice payment.";
 ThMessage[ThStatusCode.CustomerInvoiceGroupUpdateStrategyErrorUpdating] = "Error updating the invoice group.";

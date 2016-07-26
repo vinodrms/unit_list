@@ -14,7 +14,13 @@ import {GenerateBookingInvoice} from '../../../../core/domain-layer/invoices/gen
 import {InvoiceGroupSearchResultRepoDO} from '../../../../core/data-layer/invoices/repositories/IInvoiceGroupsRepository';
 import {InvoiceEmailSender} from '../../../../core/domain-layer/invoices/email/InvoiceEmailSender';
 import {SaveInvoiceGroup} from '../../../../core/domain-layer/invoices/save-invoice-group/SaveInvoiceGroup';
+import {SaveInvoiceGroupDO} from '../../../../core/domain-layer/invoices/save-invoice-group/SaveInvoiceGroupDO';
 import {InvoiceTestUtils} from './utils/InvoiceTestUtils';
+import {InvoiceDO} from '../../../../core/data-layer/invoices/data-objects/InvoiceDO';
+import {InvoiceGroupBriefDO} from '../../../../core/data-layer/invoices/data-objects/brief/InvoiceGroupBriefDO';
+import {InvoiceGroupBriefContainerDO} from '../../../../core/data-layer/invoices/data-objects/brief/InvoiceGroupBriefContainerDO';
+import {InvoiceGroupsBriefDataAggregator} from '../../../../core/domain-layer/invoices/aggregators/InvoiceGroupsBriefDataAggregator';
+import {InvoicePayerDO} from '../../../../core/data-layer/invoices/data-objects/payers/InvoicePayerDO';
 
 describe("Invoices Tests", function () {
     var testUtils: TestUtils;
@@ -101,14 +107,34 @@ describe("Invoices Tests", function () {
                 });
         });
 
-        it("Should update the previously created booking invoice group by adding a new invoice to it", function (done) {
-            var saveInvoiceGroupDO = bookingInvoiceGroupsHelper.buildSaveInvoiceGroupDOForUpdatingBookingInvoiceGroup(createdBookingInvoiceGroup);
-            var saveInvoiceGroup = new SaveInvoiceGroup(testContext.appContext, testContext.sessionContext);
+        it("[query by CUSTOMER ID LIST] Should get the invoice groups which contain at least an invoice which has one of the customers passed as arguments as payer", function (done) {
+            var invoiceGroupsRepo = testContext.appContext.getRepositoryFactory().getInvoiceGroupsRepository();
+            invoiceGroupsRepo.getInvoiceGroupList({ hotelId: testContext.sessionContext.sessionDO.hotel.id }).then((result: InvoiceGroupSearchResultRepoDO) => {
+                var allInvoiceGroups = result.invoiceGroupList;
+                var customerIdQueryList = invoiceTestUtils.getDistinctCustomerIdListFromInvoiceGroupList(allInvoiceGroups)
+                invoiceGroupsRepo.getInvoiceGroupList({ hotelId: testContext.sessionContext.sessionDO.hotel.id }, { customerIdList: customerIdQueryList })
+                    .then((result: InvoiceGroupSearchResultRepoDO) => {
+                        should.equal(allInvoiceGroups.length, result.invoiceGroupList.length);
+                        done();
+                    }).catch((e: ThError) => {
+                        done(e);
+                    });
+            }).catch((e: ThError) => {
+                done(e);
+            });
+        });
 
-            saveInvoiceGroup.save(saveInvoiceGroupDO).then((savedInvoiceGroup: InvoiceGroupDO) => {
-                createdBookingInvoiceGroup = savedInvoiceGroup;
-                invoiceTestUtils.testInvoiceGroupEquality(savedInvoiceGroup, saveInvoiceGroupDO);
-                done();   
+        it("Should update the previously created booking invoice group by adding a new invoice to it", function (done) {
+
+            var saveInvoiceGroup = new SaveInvoiceGroup(testContext.appContext, testContext.sessionContext);
+            bookingInvoiceGroupsHelper.buildSaveInvoiceGroupDOForUpdatingBookingInvoiceGroup(createdBookingInvoiceGroup).then((saveInvoiceGroupDO: SaveInvoiceGroupDO) => {
+                saveInvoiceGroup.save(saveInvoiceGroupDO).then((savedInvoiceGroup: InvoiceGroupDO) => {
+                    createdBookingInvoiceGroup = savedInvoiceGroup;
+                    invoiceTestUtils.testInvoiceGroupEquality(savedInvoiceGroup, saveInvoiceGroupDO);
+                    done();
+                }).catch((err: any) => {
+                    done(err);
+                });
             }).catch((err: any) => {
                 done(err);
             });
@@ -120,11 +146,11 @@ describe("Invoices Tests", function () {
         it("Should add a new customer invoice group with one invoice", function (done) {
             var saveInvoiceGroupDO = customerInvoiceGroupsHelper.buildSaveInvoiceGroupDOForAddingNewCustomerInvoiceGroup();
             var saveInvoiceGroup = new SaveInvoiceGroup(testContext.appContext, testContext.sessionContext);
-            
+
             saveInvoiceGroup.save(saveInvoiceGroupDO).then((savedInvoiceGroup: InvoiceGroupDO) => {
                 createdCustomerInvoiceGroup = savedInvoiceGroup;
                 invoiceTestUtils.testInvoiceGroupEquality(savedInvoiceGroup, saveInvoiceGroupDO);
-                done();   
+                done();
             }).catch((err: any) => {
                 done(err);
             });
@@ -133,14 +159,47 @@ describe("Invoices Tests", function () {
         it("Should update the previously created customer invoice group by adding a new invoice to it", function (done) {
             var saveInvoiceGroupDO = customerInvoiceGroupsHelper.buildSaveInvoiceGroupDOForUpdatingCustomerInvoiceGroup(createdCustomerInvoiceGroup);
             var saveInvoiceGroup = new SaveInvoiceGroup(testContext.appContext, testContext.sessionContext);
-            
+
             saveInvoiceGroup.save(saveInvoiceGroupDO).then((savedInvoiceGroup: InvoiceGroupDO) => {
                 createdCustomerInvoiceGroup = savedInvoiceGroup;
                 invoiceTestUtils.testInvoiceGroupEquality(savedInvoiceGroup, saveInvoiceGroupDO);
-                done();   
+                done();
             }).catch((err: any) => {
                 done(err);
             });
+        });
+    });
+
+    describe("Invoice Aggregators", function () {
+        it("Should aggregate invoice groups data (brief) by customer id", function (done) {
+            var invoiceGroupBriefDataAggregator = new InvoiceGroupsBriefDataAggregator(testContext.appContext, testContext.sessionContext);
+            var invoiceGroupsRepo = testContext.appContext.getRepositoryFactory().getInvoiceGroupsRepository();
+            invoiceGroupsRepo.getInvoiceGroupList({ hotelId: testContext.sessionContext.sessionDO.hotel.id }).then((result: InvoiceGroupSearchResultRepoDO) => {
+                var allInvoiceGroups = result.invoiceGroupList;
+                var customerIdList = invoiceTestUtils.getDistinctCustomerIdListFromInvoiceGroupList(allInvoiceGroups);
+                
+                invoiceGroupBriefDataAggregator.getBriefDataByCustomerList(customerIdList).then((invoiceGroupBriefContainerList: InvoiceGroupBriefContainerDO[]) => {
+                    should.equal(invoiceGroupBriefContainerList.length, customerIdList.length);
+                    
+                    should.equal(invoiceGroupBriefContainerList[0].invoiceGroupBriefList.length, 2);
+                    should.equal(invoiceGroupBriefContainerList[1].invoiceGroupBriefList.length, 1);
+                    should.equal(invoiceGroupBriefContainerList[2].invoiceGroupBriefList.length, 1);
+
+                    _.chain(invoiceGroupBriefContainerList).map((invoiceGroupBriefContainerDO: InvoiceGroupBriefContainerDO) => {
+                        return invoiceGroupBriefContainerDO.invoiceGroupBriefList;
+                    }).flatten().map((invoiceBriefDO: InvoiceGroupBriefDO) => {
+                        return invoiceBriefDO.price;
+                    }).forEach((price: number) => {
+                        should.notEqual(price, 0);
+                    });
+                    
+                    done();
+                }).catch((error) => {
+                    done(error);
+                });                
+            }).catch((error) => {
+                done(error);
+            });     
         });
     });
 
@@ -148,6 +207,7 @@ describe("Invoices Tests", function () {
         it("Should send the invoice by email", function (done) {
             var invoiceEmailSender = new InvoiceEmailSender(testContext.appContext, testContext.sessionContext);
             invoiceEmailSender.sendInvoice({}, ['dragos.pricope@gmail.com']).then((result: boolean) => {
+
                 done();
             }).catch((err: any) => {
                 done(err);
