@@ -6,7 +6,7 @@ import {TranslationPipe} from '../../localization/TranslationPipe';
     template: `
         <div class="row">
             <div class="col-xs-12">
-                <span class="pull-right edit-save-button-group-container">
+                <span class="pull-left edit-save-button-group-container">
                     <span *ngIf="!isEditing">
                         <button type="button" class="btn btn-danger btn-block btn-xs uppercase" (click)="triggerEditStart()">
                             <i class="fa unitpal-font">]</i> {{ 'Change' | translate }}

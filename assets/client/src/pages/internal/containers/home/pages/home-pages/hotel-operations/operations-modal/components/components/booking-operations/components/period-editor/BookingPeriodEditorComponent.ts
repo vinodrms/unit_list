@@ -112,6 +112,7 @@ export class BookingPeriodEditorComponent implements OnInit {
             }, () => { });
     }
     private saveBookingPeriodCore() {
+        this.isSaving = true;
         this._hotelOperationsBookingService.changeDates(this.bookingDO).subscribe((updatedBooking: BookingDO) => {
             this.readonly = true;
             this.isSaving = false;

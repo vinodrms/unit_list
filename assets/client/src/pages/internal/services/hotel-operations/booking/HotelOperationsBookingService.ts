@@ -4,6 +4,7 @@ import 'rxjs/add/operator/map';
 import {AppContext, ThServerApi} from '../../../../../common/utils/AppContext';
 import {BookingPossiblePriceItemsDO} from './data-objects/BookingPossiblePriceItemsDO';
 import {BookingDO} from '../../bookings/data-objects/BookingDO';
+import {ThTimestampDO} from '../../common/data-objects/th-dates/ThTimestampDO';
 
 @Injectable()
 export class HotelOperationsBookingService {
@@ -27,6 +28,19 @@ export class HotelOperationsBookingService {
     public changeDates(booking: BookingDO): Observable<BookingDO> {
         return this._appContext.thHttp.post(ThServerApi.HotelOperationsBookingChangeDates, {
             booking: booking
+        }).map((bookingObject: Object) => {
+            var bookingDO = new BookingDO();
+            bookingDO.buildFromObject(bookingObject["booking"]);
+            return bookingDO;
+        });
+    }
+    public changeNoShowTime(booking: BookingDO, noShowTimestamp: ThTimestampDO): Observable<BookingDO> {
+        return this._appContext.thHttp.post(ThServerApi.HotelOperationsBookingChangeNoShowTime, {
+            booking: {
+                groupBookingId: booking.groupBookingId,
+                bookingId: booking.bookingId,
+                noShowTimestamp: noShowTimestamp
+            }
         }).map((bookingObject: Object) => {
             var bookingDO = new BookingDO();
             bookingDO.buildFromObject(bookingObject["booking"]);

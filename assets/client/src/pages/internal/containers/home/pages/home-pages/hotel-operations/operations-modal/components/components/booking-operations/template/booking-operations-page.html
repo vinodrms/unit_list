@@ -5,6 +5,9 @@
 		<div class="row">
 			<booking-period-editor [bookingOperationsPageData]="bookingOperationsPageData" (onBookingPeriodChanged)="didChangeBooking($event)"></booking-period-editor>
 		</div>
+		<div class="row">
+			<booking-no-show-editor [bookingOperationsPageData]="bookingOperationsPageData" (onBookingNoShowTimestampChanged)="didChangeBooking($event)"></booking-no-show-editor>
+		</div>
 
 		<div class="row">
 			<div class="col-xs-12 col-sm-1 padding-top-10px">

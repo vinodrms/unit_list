@@ -3,3 +3,7 @@ export enum BookingIntervalEditRight {
     EditEndDate,
     NoIntervalEdit
 }
+export enum BookingNoShowEditRight {
+    EditNoShow,
+    None
+}

@@ -36,6 +36,7 @@ export class BookingOperationsPageService {
             var pageData = new BookingOperationsPageData();
             pageData.bookingDO = result[0];
             pageData.ccy = result[1].ccy;
+            pageData.operationHours = result[1].hotelDetails.hotel.operationHours;
 
             return Observable.combineLatest(
                 Observable.from([pageData]),

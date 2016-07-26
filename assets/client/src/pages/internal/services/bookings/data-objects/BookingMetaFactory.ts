@@ -1,6 +1,6 @@
 import {BookingMeta} from './BookingMeta';
 import {BookingConfirmationStatus} from './BookingDO';
-import {BookingIntervalEditRight} from './BookingEditRights';
+import {BookingIntervalEditRight, BookingNoShowEditRight} from './BookingEditRights';
 
 export class BookingMetaFactory {
     public getBookingMetaList(): BookingMeta[] {
@@ -9,6 +9,7 @@ export class BookingMetaFactory {
                 confirmationStatus: BookingConfirmationStatus.Confirmed,
                 displayName: "Confirmed",
                 intervalEditRight: BookingIntervalEditRight.EditInterval,
+                noShowEditRight: BookingNoShowEditRight.EditNoShow,
                 displayClassName: "upcoming",
                 fontName: "Z"
             }),
@@ -16,6 +17,7 @@ export class BookingMetaFactory {
                 confirmationStatus: BookingConfirmationStatus.Guaranteed,
                 displayName: "Guaranteed",
                 intervalEditRight: BookingIntervalEditRight.EditInterval,
+                noShowEditRight: BookingNoShowEditRight.EditNoShow,
                 displayClassName: "upcoming",
                 fontName: "Z"
             }),
@@ -23,6 +25,7 @@ export class BookingMetaFactory {
                 confirmationStatus: BookingConfirmationStatus.NoShow,
                 displayName: "No Show",
                 intervalEditRight: BookingIntervalEditRight.NoIntervalEdit,
+                noShowEditRight: BookingNoShowEditRight.None,
                 displayClassName: "noshow",
                 fontName: "+"
             }),
@@ -30,6 +33,7 @@ export class BookingMetaFactory {
                 confirmationStatus: BookingConfirmationStatus.NoShowWithPenalty,
                 displayName: "No Show With Penalty",
                 intervalEditRight: BookingIntervalEditRight.NoIntervalEdit,
+                noShowEditRight: BookingNoShowEditRight.None,
                 displayClassName: "noshow",
                 fontName: "+"
             }),
@@ -37,6 +41,7 @@ export class BookingMetaFactory {
                 confirmationStatus: BookingConfirmationStatus.Cancelled,
                 displayName: "Cancelled",
                 intervalEditRight: BookingIntervalEditRight.NoIntervalEdit,
+                noShowEditRight: BookingNoShowEditRight.None,
                 displayClassName: "",
                 fontName: "C"
             }),
@@ -44,6 +49,7 @@ export class BookingMetaFactory {
                 confirmationStatus: BookingConfirmationStatus.CheckedIn,
                 displayName: "Checked In",
                 intervalEditRight: BookingIntervalEditRight.EditEndDate,
+                noShowEditRight: BookingNoShowEditRight.None,
                 displayClassName: "checkedin",
                 fontName: "("
             }),
@@ -51,6 +57,7 @@ export class BookingMetaFactory {
                 confirmationStatus: BookingConfirmationStatus.CheckedOut,
                 displayName: "Checked Out",
                 intervalEditRight: BookingIntervalEditRight.NoIntervalEdit,
+                noShowEditRight: BookingNoShowEditRight.None,
                 displayClassName: "checkedout",
                 fontName: "*"
             })

@@ -11,11 +11,14 @@ import {BookingOperationsPageData} from './services/utils/BookingOperationsPageD
 import {BookingPeriodEditorComponent} from './components/period-editor/BookingPeriodEditorComponent';
 import {DocumentHistoryViewerComponent} from '../../../../../../../../../../../common/utils/components/document-history/DocumentHistoryViewerComponent';
 import {HotelOperationsResultService} from '../../../services/HotelOperationsResultService';
+import {BookingNoShowEditorComponent} from './components/no-show-edit/BookingNoShowEditorComponent';
 
 @Component({
     selector: 'booking-operations-page',
     templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/booking-operations/template/booking-operations-page.html',
-    directives: [LoadingComponent, CustomScroll, BookingPeriodEditorComponent, DocumentHistoryViewerComponent],
+    directives: [LoadingComponent, CustomScroll,
+        BookingPeriodEditorComponent, BookingNoShowEditorComponent,
+        DocumentHistoryViewerComponent],
     providers: [BookingOperationsPageService],
     pipes: [TranslationPipe]
 })
@@ -58,6 +61,7 @@ export class BookingOperationsPageComponent implements OnInit {
 
     public didChangeBooking(booking: BookingDO) {
         this.bookingOperationsPageData.bookingDO = booking;
+        this.bookingOperationsPageData = this.bookingOperationsPageData.buildPrototype();
         this._hotelOperationsResultService.markBookingChanged(booking);
     }
 }

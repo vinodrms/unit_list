@@ -33,6 +33,21 @@ export class ThDateUtils {
 		inMoment = inMoment.add(days, "day");
 		return this.convertMomentToThDateDO(inMoment);
 	}
+	public addThirtyMinutesToThTimestampDO(thTimestamp: ThTimestampDO): ThTimestampDO {
+		var newTimestamp = thTimestamp.buildPrototype();
+		newTimestamp.thHourDO.minute += 30;
+		if (newTimestamp.thHourDO.minute < 60) {
+			return newTimestamp;
+		}
+		newTimestamp.thHourDO.minute = 60 - newTimestamp.thHourDO.minute;
+		newTimestamp.thHourDO.hour++;
+		if (newTimestamp.thHourDO.hour < 24) {
+			return newTimestamp;
+		}
+		newTimestamp.thHourDO.hour = 24 - newTimestamp.thHourDO.hour;
+		newTimestamp.thDateDO = this.addDaysToThDateDO(newTimestamp.thDateDO, 1);
+		return newTimestamp;
+	}
 
 	public convertThDateDOToMoment(inDate: ThDateDO): moment.Moment {
 		return moment([inDate.year, inDate.month, inDate.day]);
