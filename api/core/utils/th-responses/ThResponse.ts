@@ -351,6 +351,7 @@ export enum ThStatusCode {
     BookingsValidatorConstraintsDoNotApply,
     BookingsValidatorAllotmentConstraintsDoNotApply,
     BookingsValidatorInvalidRoomCategoryId,
+    BookingsValidatorInvalidBookingCapacity,
     BookingsValidatorInvalidPriceForRoomCategoryId,
     BookingsValidatorInvalidRoomId,
     BookingsValidatorRoomCategoryNotFoundInActiveInventory,
@@ -415,6 +416,9 @@ export enum ThStatusCode {
     BookingChangeNoShowTimeInvalidTime,
     BookingChangeNoShowTimeInvalidState,
     HotelBookingOperationsControllerErrorChangingNoShowTime,
+    BookingChangeCapacityInvalidState,
+    BookingChangeCapacityError,
+    HotelBookingOperationsControllerErrorChangingCapacity,
 
 }
 
@@ -757,6 +761,7 @@ ThMessage[ThStatusCode.BookingsValidatorBilledCustomerInvalidRightsOnPriceProduc
 ThMessage[ThStatusCode.BookingsValidatorConstraintsDoNotApply] = "The constraints from the price product do not apply for the booking.";
 ThMessage[ThStatusCode.BookingsValidatorAllotmentConstraintsDoNotApply] = "The constraints from the allotment do not apply for the booking.";
 ThMessage[ThStatusCode.BookingsValidatorInvalidRoomCategoryId] = "The room category is not valid within the price product from the booking.";
+ThMessage[ThStatusCode.BookingsValidatorInvalidBookingCapacity] = "Each booking must have at least one adult or one child.";
 ThMessage[ThStatusCode.BookingsValidatorInvalidPriceForRoomCategoryId] = "The selected room category does not have a price configuration in the Price Product for the number of people from the booking.";
 ThMessage[ThStatusCode.BookingsValidatorInvalidRoomId] = "The room was not found.";
 ThMessage[ThStatusCode.BookingsValidatorRoomCategoryNotFoundInActiveInventory] = "The room category was not found in the active room inventory.";
@@ -821,6 +826,9 @@ ThMessage[ThStatusCode.BookingChangeNoShowTimeError] = "Error changing the no sh
 ThMessage[ThStatusCode.BookingChangeNoShowTimeInvalidTime] = "Invalid submitted time.";
 ThMessage[ThStatusCode.BookingChangeNoShowTimeInvalidState] = "The no show time can be changed only for confirmed or guaranteed bookings.";
 ThMessage[ThStatusCode.HotelBookingOperationsControllerErrorChangingNoShowTime] = "Error changing the no show time.";
+ThMessage[ThStatusCode.BookingChangeCapacityInvalidState] = "The capacity can be changed only for confirmed, guaranteed or no show bookings.";
+ThMessage[ThStatusCode.BookingChangeCapacityError] = "Error changing booking capacity.";
+ThMessage[ThStatusCode.HotelBookingOperationsControllerErrorChangingCapacity] = "Error changing booking capacity.";
 
 export class ThResponse {
     statusCode: ThStatusCode;

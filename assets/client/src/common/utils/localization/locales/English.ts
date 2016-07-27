@@ -570,6 +570,10 @@ export var EnglishTranslations: Object = {
 	"Time when booking will be marked as No Show": "Time when booking will be marked as No Show",
 	"No Room": "No Room",
 	"Reserve": "Reserve",
+	"Guests": "Guests",
+	"Change Capacity": "Change Capacity",
+	"Are you sure you want to change the capacity for this booking? This can affect the total price.": "Are you sure you want to change the capacity for this booking? This can affect the total price.",
+	
 
 	
 };

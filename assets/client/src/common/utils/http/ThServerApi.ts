@@ -79,6 +79,7 @@ export enum ThServerApi {
 	HotelOperationsBookingPossiblePrices,
 	HotelOperationsBookingChangeDates,
 	HotelOperationsBookingChangeNoShowTime,
+	HotelOperationsBookingChangeCapacity,
 
 	HotelOperationsCommonHotelTimestamp,
 
@@ -167,6 +168,7 @@ ThServerApiUrl[ThServerApi.HotelOperationsRoomGetAttachedBooking] = "/hotelOpera
 ThServerApiUrl[ThServerApi.HotelOperationsBookingPossiblePrices] = "/hotelOperations/booking/possiblePrices";
 ThServerApiUrl[ThServerApi.HotelOperationsBookingChangeDates] = "/hotelOperations/booking/changeDates";
 ThServerApiUrl[ThServerApi.HotelOperationsBookingChangeNoShowTime] = "/hotelOperations/booking/changeNoShowTime";
+ThServerApiUrl[ThServerApi.HotelOperationsBookingChangeCapacity] = "/hotelOperations/booking/changeCapacity";
 
 ThServerApiUrl[ThServerApi.HotelOperationsCommonHotelTimestamp] = "/hotelOperations/common/hotelTimestamp";
 

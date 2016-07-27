@@ -11,14 +11,14 @@ import {RoomDO} from '../../../../../data-layer/rooms/data-objects/RoomDO';
 
 import _ = require('underscore');
 
-export interface BookingAllotmentValidationParams {
+export interface BookingRoomCategoryValidationParams {
     priceProductsContainer: PriceProductsContainer;
     roomCategoryStatsList: RoomCategoryStatsDO[];
     roomList: RoomDO[];
 }
 
 export class BookingRoomCategoryValidationRule extends ABusinessValidationRule<BookingDO> {
-    constructor(private _validationParams: BookingAllotmentValidationParams) {
+    constructor(private _validationParams: BookingRoomCategoryValidationParams) {
         super({
             statusCode: ThStatusCode.BookingValidationError,
             errorMessage: "error validating booking"
@@ -33,6 +33,13 @@ export class BookingRoomCategoryValidationRule extends ABusinessValidationRule<B
             this.logBusinessAndReject(reject, booking, {
                 statusCode: ThStatusCode.BookingsValidatorInvalidRoomCategoryId,
                 errorMessage: "invalid room category id"
+            });
+            return;
+        }
+        if (booking.configCapacity.noAdults === 0 && booking.configCapacity.noChildren === 0) {
+            this.logBusinessAndReject(reject, booking, {
+                statusCode: ThStatusCode.BookingsValidatorInvalidBookingCapacity,
+                errorMessage: "invalid booking capacity (noAd == noBab == 0)"
             });
             return;
         }

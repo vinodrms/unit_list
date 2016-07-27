@@ -1817,6 +1817,7 @@ a.btn.btn-square:focus {
 }
 .form-group-small {
     padding-right: 0px;
+    padding-left: 10px;
 }
 .form-group-small>.form-group {
     margin-bottom: 5px;
@@ -1967,6 +1968,12 @@ a.btn.btn-square:focus {
 }
 .padding-bottom-10px {
     padding-bottom: 10px;
+}
+.padding-left-10px {
+    padding-left: 10px;
+}
+.padding-left-5px {
+    padding-left: 5px;
 }
 .no-padding {
     padding: 0px 0px;
@@ -2917,7 +2924,7 @@ a.btn.btn-square:focus {
 }
 .edit-save-button-group-container {
     width: 95px;
-    height: 34px;
+    height: 38px;
 }
 .edit-save-button-group-container .save-btn {
     width: 70px;

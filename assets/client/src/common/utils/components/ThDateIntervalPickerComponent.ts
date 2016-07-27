@@ -61,7 +61,7 @@ export class ThDateIntervalPickerComponent {
 	@Input()
 	public set initialThDateInterval(initialThDateInterval: ThDateIntervalDO) {
 		this._initialThDateInterval = initialThDateInterval;
-		this.updateDateInterval();
+		this.initDateInterval();
 	}
 
 	private _minDate: ThDateDO;
@@ -100,20 +100,21 @@ export class ThDateIntervalPickerComponent {
 	minEndDate: ThDateDO;
 
 	constructor() {
-		this.setDefaultDateInterval(this._dateUtils.getTodayThDayeDO());
+		this.initDefaultDateInterval(this._dateUtils.getTodayThDayeDO());
 	}
-	private setDefaultDateInterval(startDate: ThDateDO) {
+	private initDefaultDateInterval(startDate: ThDateDO) {
 		this.dateInterval = this._dateUtils.getTodayToTomorrowInterval();
 		this.minEndDate = this._dateUtils.addDaysToThDateDO(startDate.buildPrototype(), 1);
 		this.updateNoOfNights();
 	}
 
-	private updateDateInterval() {
+	private initDateInterval() {
 		if (this._initialThDateInterval && this._initialThDateInterval.isValid()) {
 			this.dateInterval = this._initialThDateInterval;
+			this.minEndDate = this._dateUtils.addDaysToThDateDO(this._initialThDateInterval.start.buildPrototype(), 1);
 		}
 		else {
-			this.setDefaultDateInterval(this._dateUtils.getTodayThDayeDO());
+			this.initDefaultDateInterval(this._dateUtils.getTodayThDayeDO());
 			this.triggerSelectedDateInterval();
 		}
 		this.updateNoOfNights();

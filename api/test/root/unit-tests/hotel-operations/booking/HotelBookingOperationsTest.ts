@@ -21,6 +21,8 @@ import {BookingChangeNoShowTimeDO} from '../../../../../core/domain-layer/hotel-
 import {ThTimestampDO} from '../../../../../core/utils/th-dates/data-objects/ThTimestampDO';
 import {ThHourDO} from '../../../../../core/utils/th-dates/data-objects/ThHourDO';
 import {BookingStateChangeTriggerType} from '../../../../../core/data-layer/bookings/data-objects/state-change-time/BookingStateChangeTriggerTimeDO';
+import {BookingChangeCapacity} from '../../../../../core/domain-layer/hotel-operations/booking/change-capacity/BookingChangeCapacity';
+import {BookingChangeCapacityDO} from '../../../../../core/domain-layer/hotel-operations/booking/change-capacity/BookingChangeCapacityDO';
 
 describe("Hotel Booking Operations Tests", function () {
     var testContext: TestContext;
@@ -90,6 +92,26 @@ describe("Hotel Booking Operations Tests", function () {
                 should.equal(updatedBooking.noShowTime.thTimestamp.thDateDO.day, noShowTimeDO.noShowTimestamp.thDateDO.day);
                 should.equal(updatedBooking.noShowTime.thTimestamp.thDateDO.month, noShowTimeDO.noShowTimestamp.thDateDO.month);
                 should.equal(updatedBooking.noShowTime.thTimestamp.thDateDO.year, noShowTimeDO.noShowTimestamp.thDateDO.year);
+                done();
+            }).catch((error: any) => {
+                done(error);
+            });
+        });
+        it("Should change the capacity for one of the added bookings", function (done) {
+            var bookingToChange = testUtils.getRandomListElement(createdBookingList);
+
+            bookingToChange.configCapacity.noAdults--;
+            bookingToChange.configCapacity.noChildren++;
+            var changeCapacityDO = new BookingChangeCapacityDO();
+            changeCapacityDO.groupBookingId = bookingToChange.groupBookingId;
+            changeCapacityDO.bookingId = bookingToChange.bookingId;
+            changeCapacityDO.configCapacity = bookingToChange.configCapacity;
+
+            var bookingChangeCapacity = new BookingChangeCapacity(testContext.appContext, testContext.sessionContext);
+            bookingChangeCapacity.changeCapacity(changeCapacityDO).then((updatedBooking: BookingDO) => {
+                should.equal(updatedBooking.configCapacity.noAdults, bookingToChange.configCapacity.noAdults);
+                should.equal(updatedBooking.configCapacity.noChildren, bookingToChange.configCapacity.noChildren);
+                should.equal(updatedBooking.configCapacity.noBabies, bookingToChange.configCapacity.noBabies);
                 done();
             }).catch((error: any) => {
                 done(error);
