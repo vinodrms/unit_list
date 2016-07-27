@@ -12,3 +12,7 @@ export enum BookingAssignRoomRight {
     Change,
     None
 }
+export enum BookingCapacityEditRight {
+    EditCapacity,
+    None
+}

@@ -13,12 +13,14 @@ import {DocumentHistoryViewerComponent} from '../../../../../../../../../../../c
 import {HotelOperationsResultService} from '../../../services/HotelOperationsResultService';
 import {BookingNoShowEditorComponent} from './components/no-show-edit/BookingNoShowEditorComponent';
 import {BookingRoomEditorComponent} from './components/room-edit/BookingRoomEditorComponent';
+import {BookingCapacityEditorComponent} from './components/capacity-edit/BookingCapacityEditorComponent';
 
 @Component({
     selector: 'booking-operations-page',
     templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/booking-operations/template/booking-operations-page.html',
     directives: [LoadingComponent, CustomScroll,
         BookingPeriodEditorComponent, BookingNoShowEditorComponent, BookingRoomEditorComponent,
+        BookingCapacityEditorComponent,
         DocumentHistoryViewerComponent],
     providers: [BookingOperationsPageService],
     pipes: [TranslationPipe]

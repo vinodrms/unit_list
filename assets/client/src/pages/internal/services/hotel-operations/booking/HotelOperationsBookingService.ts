@@ -26,22 +26,34 @@ export class HotelOperationsBookingService {
     }
 
     public changeDates(booking: BookingDO): Observable<BookingDO> {
-        return this._appContext.thHttp.post(ThServerApi.HotelOperationsBookingChangeDates, {
-            booking: booking
-        }).map((bookingObject: Object) => {
-            var bookingDO = new BookingDO();
-            bookingDO.buildFromObject(bookingObject["booking"]);
-            return bookingDO;
-        });
+        return this.mapToBookingObservable(
+            this._appContext.thHttp.post(ThServerApi.HotelOperationsBookingChangeDates, {
+                booking: booking
+            })
+        );
     }
     public changeNoShowTime(booking: BookingDO, noShowTimestamp: ThTimestampDO): Observable<BookingDO> {
-        return this._appContext.thHttp.post(ThServerApi.HotelOperationsBookingChangeNoShowTime, {
-            booking: {
-                groupBookingId: booking.groupBookingId,
-                bookingId: booking.bookingId,
-                noShowTimestamp: noShowTimestamp
-            }
-        }).map((bookingObject: Object) => {
+        return this.mapToBookingObservable(
+            this._appContext.thHttp.post(ThServerApi.HotelOperationsBookingChangeNoShowTime, {
+                booking: {
+                    groupBookingId: booking.groupBookingId,
+                    bookingId: booking.bookingId,
+                    noShowTimestamp: noShowTimestamp
+                }
+            })
+        );
+    }
+
+    public changeCapacity(booking: BookingDO): Observable<BookingDO> {
+        return this.mapToBookingObservable(
+            this._appContext.thHttp.post(ThServerApi.HotelOperationsBookingChangeCapacity, {
+                booking: booking
+            })
+        );
+    }
+
+    private mapToBookingObservable(bookingObjectObservable: Observable<Object>): Observable<BookingDO> {
+        return bookingObjectObservable.map((bookingObject: Object) => {
             var bookingDO = new BookingDO();
             bookingDO.buildFromObject(bookingObject["booking"]);
             return bookingDO;

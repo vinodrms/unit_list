@@ -10,6 +10,8 @@
 	"The room was checked out.": "The room was checked out.",
 	"The booking interval was changed from %oldInterval% to %newInterval%. The old price %oldPrice% has become %newPrice%.": "The booking interval was changed from %oldInterval% to %newInterval%. The old price %oldPrice% has become %newPrice%.",
 	"The booking was marked as a late arrival and will be marked as no show at %noShowTime%.": "The booking was marked as a late arrival and will be marked as no show at %noShowTime%.",
+	"The booking capacity was changed from %oldAdults% ad %oldChildren% ch %oldBabies% b to %newAdults% ad %newChildren% ch %newBabies% b. The old price %oldPrice% has become %newPrice%.": "The booking capacity was changed from %oldAdults% ad %oldChildren% ch %oldBabies% b to %newAdults% ad %newChildren% ch %newBabies% b. The old price %oldPrice% has become %newPrice%.",
+	
 	
 
 	// room maintenance history

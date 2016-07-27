@@ -33,6 +33,9 @@
 					<booking-room-editor [bookingOperationsPageData]="bookingOperationsPageData" (onBookingRoomChanged)="didChangeRoomForBooking($event)"></booking-room-editor>
 				</div>
 			</div>
+			<div class="col-xs-12 col-sm-7">
+				<booking-capacity-editor [bookingOperationsPageData]="bookingOperationsPageData" (onBookingCapacityChanged)="didChangeBooking($event)"></booking-capacity-editor>
+			</div>
 
 		</div>
 		<hr/>
