@@ -1,7 +1,7 @@
 <div *ngIf="departureItemVM.isStayingInRoom">
 	<div class="header">
-		<span class="clickable"><b class="green-color" (click)="openRoomModal()">{{departureItemVM.roomName}}</b></span>
-		<span class="customer-name" (click)="openCustomerModal()">{{departureItemVM.customerName}}</span>
+		<span class="clickable green-color"><b (click)="openRoomModal()">{{departureItemVM.roomName}}</b></span>
+		<span class="customer-name clickable" (click)="openCustomerModal()">{{departureItemVM.customerName}}</span>
 	</div>
 	<div class="body">
 		<div class="room-type">{{departureItemVM.roomCategoryLabel}}</div>

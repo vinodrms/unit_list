@@ -2,7 +2,7 @@
 	<div class="rooms-controller p-12">
 		<div class="group-1 flex-row flex-center-v">
 			<i class="fa fa-calendar orange-color f-24 p-r-6" aria-hidden="true"></i>
-			<div class="current-date p-r-12 f-24"><b>Wednesday 13.01.2016</b></div>
+			<div class="current-date p-r-12 f-24"><b>{{getDateShortString()}}</b></div>
 		</div>
 		<div class="group-2 flex-row flex-center-v">
 			<select class="form-control rooms-filter p-r-12 f-12" [ngModel]="filterValue.currentValue" (ngModelChange)="filterValueChanged($event)">

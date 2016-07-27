@@ -88,7 +88,11 @@ export class DeparturesPaneComponent implements OnInit {
 	public selectDepartureItem(departureItemVM){
 		this.selectedDepartureItem = departureItemVM;
 	}
-	
+
+	public getDateShortString() {
+		return this.selectedDate.getShortDisplayString(this._appContext.thTranslation);
+	}
+
 	ngAfterViewInit() {
 	}
 }

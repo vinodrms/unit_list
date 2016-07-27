@@ -1,12 +1,14 @@
 <div class="header">
-	<div class="pane-title">
-		<span class="unitpal-font f-12 p-r-12 f-32 clickable" (click)="previousDay()">&lt;</span>
+	<div class="pane-title p-t-6">
+		<div class="unitpal-font f-12 f-32 clickable" (click)="previousDay()">&lt;</div>
+		<div class="flex-row">
 			<span class="unitpal-font orange-color p-r-12 f-32">/</span>
-			<div>
-				<span class="f-12">Arrivals</span>
-				<span class="current-date f-16"><b>{{getDayShortString()}}</b></span>			
+			<div class="">
+				<div class="f-12">Arrivals</div>
+				<div class="current-date f-16"><b>{{getDateShortString()}}</b></div>
 			</div>
-		<span class="unitpal-font f-12 p-r-12 f-32 clickable" (click)="nextDay()">&gt;</span>
+		</div>
+		<div class="unitpal-font f-12 p-r-12 f-32 clickable" (click)="nextDay()">&gt;</div>
 	</div>
 	<div class="pane-search-bar">
 		<input class="remove-auto-border" type="text" placeholder="Search here" [ngModel]="searchText" (ngModelChange)="searchTextChangeHandler($event)">
@@ -23,9 +25,12 @@
 		(stoppedDragging)="stoppedDragging($event)"
 		>
 	</arrival-item>
+
 </div>
 <div class="footer">
 	<div class="arrivals-side-pane-bottom-box">
 		<th-button [upFont]="'\''" [text]="'Booking'" (onButtonClick)="openNewBookingModal()"></th-button>
 	</div>
 </div>
+
+
