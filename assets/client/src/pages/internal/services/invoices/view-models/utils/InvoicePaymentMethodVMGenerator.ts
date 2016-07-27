@@ -22,6 +22,7 @@ export class InvoicePaymentMethodVMGenerator {
     private generatePayInvoiceByAgreementPaymentMethodVM(): InvoicePaymentMethodVM {
         var pmVM = new InvoicePaymentMethodVM();
         pmVM.displayName = "Pay Invoice By Agreement";
+        pmVM.iconUrl = "fa-file-text-o";
         pmVM.paymentMethod = new InvoicePaymentMethodDO();
         pmVM.paymentMethod.type = InvoicePaymentMethodType.PayInvoiceByAgreement;
         pmVM.paymentMethod.value = "";
@@ -30,6 +31,7 @@ export class InvoicePaymentMethodVMGenerator {
     private generatePaymentMethodVMFor(paymentMethod: PaymentMethodDO): InvoicePaymentMethodVM {
         var pmVM = new InvoicePaymentMethodVM();
         pmVM.displayName = paymentMethod.name;
+        pmVM.iconUrl = paymentMethod.iconUrl;
         pmVM.paymentMethod = new InvoicePaymentMethodDO();
         pmVM.paymentMethod.type = InvoicePaymentMethodType.DefaultPaymentMethod;
         pmVM.paymentMethod.value = paymentMethod.id;

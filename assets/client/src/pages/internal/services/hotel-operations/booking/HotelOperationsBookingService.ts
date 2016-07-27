@@ -5,6 +5,7 @@ import {AppContext, ThServerApi} from '../../../../../common/utils/AppContext';
 import {BookingPossiblePriceItemsDO} from './data-objects/BookingPossiblePriceItemsDO';
 import {BookingDO} from '../../bookings/data-objects/BookingDO';
 import {ThTimestampDO} from '../../common/data-objects/th-dates/ThTimestampDO';
+import {InvoicePaymentMethodDO} from '../../invoices/data-objects/payers/InvoicePaymentMethodDO';
 
 @Injectable()
 export class HotelOperationsBookingService {
@@ -48,6 +49,18 @@ export class HotelOperationsBookingService {
         return this.mapToBookingObservable(
             this._appContext.thHttp.post(ThServerApi.HotelOperationsBookingChangeCapacity, {
                 booking: booking
+            })
+        );
+    }
+
+    public addPaymentGuarantee(booking: BookingDO, paymentMethod: InvoicePaymentMethodDO): Observable<BookingDO> {
+        return this.mapToBookingObservable(
+            this._appContext.thHttp.post(ThServerApi.HotelOperationsBookingAddPaymentGuarantee, {
+                booking: {
+                    groupBookingId: booking.groupBookingId,
+                    bookingId: booking.bookingId,
+                    paymentMethod: paymentMethod
+                }
             })
         );
     }

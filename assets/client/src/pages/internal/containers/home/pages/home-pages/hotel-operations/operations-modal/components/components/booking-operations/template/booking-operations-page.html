@@ -9,6 +9,7 @@
 			<booking-no-show-editor [bookingOperationsPageData]="bookingOperationsPageData" (onBookingNoShowTimestampChanged)="didChangeBooking($event)"></booking-no-show-editor>
 		</div>
 
+		<hr/>
 		<div class="row">
 			<div class="col-xs-12 col-sm-1 padding-top-10px">
 				{{'Status' | translate}}
@@ -21,6 +22,9 @@
 					</div>
 				</div>
 			</div>
+		</div>
+		<div class="row">
+			<booking-payment-guarantee-editor [bookingOperationsPageData]="bookingOperationsPageData" (onBookingPaymentGuaranteeChanged)="didChangeBooking($event)"></booking-payment-guarantee-editor>
 		</div>
 
 		<hr/>

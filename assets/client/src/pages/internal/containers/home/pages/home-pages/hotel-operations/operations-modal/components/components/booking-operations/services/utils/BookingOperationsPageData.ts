@@ -3,6 +3,7 @@ import {BookingMeta} from '../../../../../../../../../../../services/bookings/da
 import {BookingMetaFactory} from '../../../../../../../../../../../services/bookings/data-objects/BookingMetaFactory';
 import {CurrencyDO} from '../../../../../../../../../../../services/common/data-objects/currency/CurrencyDO';
 import {OperationHoursDO} from '../../../../../../../../../../../services/hotel/data-objects/hotel/operation-hours/OperationHoursDO';
+import {HotelPaymentMethodsDO} from '../../../../../../../../../../../services/settings/data-objects/HotelPaymentMethodsDO';
 import {CustomersDO} from '../../../../../../../../../../../services/customers/data-objects/CustomersDO';
 import {RoomVM} from '../../../../../../../../../../../services/rooms/view-models/RoomVM';
 import {RoomCategoryStatsDO} from '../../../../../../../../../../../services/room-categories/data-objects/RoomCategoryStatsDO';
@@ -12,6 +13,7 @@ export class BookingOperationsPageData {
     private _bookingMeta: BookingMeta;
     private _ccy: CurrencyDO;
     private _operationHours: OperationHoursDO;
+    private _hotelPaymentMethods: HotelPaymentMethodsDO;
     private _customersContainer: CustomersDO;
     private _roomVM: RoomVM;
     private _roomCategoryStats: RoomCategoryStatsDO;
@@ -35,6 +37,12 @@ export class BookingOperationsPageData {
     }
     public set operationHours(operationHours: OperationHoursDO) {
         this._operationHours = operationHours;
+    }
+    public get hotelPaymentMethods(): HotelPaymentMethodsDO {
+        return this._hotelPaymentMethods;
+    }
+    public set hotelPaymentMethods(hotelPaymentMethods: HotelPaymentMethodsDO) {
+        this._hotelPaymentMethods = hotelPaymentMethods;
     }
     public get customersContainer(): CustomersDO {
         return this._customersContainer;
@@ -65,6 +73,7 @@ export class BookingOperationsPageData {
         var pageData = new BookingOperationsPageData();
         pageData.bookingDO = this.bookingDO;
         pageData.ccy = this.ccy;
+        pageData.hotelPaymentMethods = this.hotelPaymentMethods;
         pageData.operationHours = this.operationHours;
         pageData.customersContainer = this.customersContainer;
         pageData.roomVM = this.roomVM;

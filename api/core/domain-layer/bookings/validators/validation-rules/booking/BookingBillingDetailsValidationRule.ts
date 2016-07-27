@@ -47,15 +47,15 @@ export class BookingBillingDetailsValidationRule extends ABusinessValidationRule
             return;
         }
 
-        if (!priceProduct.conditions.policy.hasCancellationPolicy()) {
-            resolve(booking);
-            return;
-        }
-        if (!booking.defaultBillingDetails.paymentGuarantee) {
+        if (priceProduct.conditions.policy.hasCancellationPolicy() && !booking.defaultBillingDetails.paymentGuarantee) {
             this.logBusinessAndReject(reject, booking, {
                 statusCode: ThStatusCode.BookingsValidatorMissingPaymentGuarantee,
                 errorMessage: "payment guarantee missing"
             });
+            return;
+        }
+        if (!booking.defaultBillingDetails.paymentGuarantee) {
+            resolve(booking);
             return;
         }
         var invoicePMValidator = new InvoicePaymentMethodValidator(this._hotelDO, billedCustomer);

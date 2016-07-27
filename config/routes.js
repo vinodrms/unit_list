@@ -136,6 +136,7 @@ module.exports.routes = {
 	'POST /api/hotelOperations/booking/changeDates': 'HotelBookingOperationsController.changeDates',
 	'POST /api/hotelOperations/booking/changeNoShowTime': 'HotelBookingOperationsController.changeNoShowTime',
 	'POST /api/hotelOperations/booking/changeCapacity': 'HotelBookingOperationsController.changeCapacity',
+	'POST /api/hotelOperations/booking/addPaymentGuarantee': 'HotelBookingOperationsController.addPaymentGuarantee',
 
 	'GET /api/hotelOperations/common/hotelTimestamp': 'HotelCommonOperationsController.getCurrentHotelTimestamp',
 

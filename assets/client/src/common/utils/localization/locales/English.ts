@@ -573,7 +573,9 @@ export var EnglishTranslations: Object = {
 	"Guests": "Guests",
 	"Change Capacity": "Change Capacity",
 	"Are you sure you want to change the capacity for this booking? This can affect the total price.": "Are you sure you want to change the capacity for this booking? This can affect the total price.",
-	
+	"Payment": "Payment",
+	"Guarantee added": "Guarantee added",
+	"No guarantee": "No guarantee",
 
 	
 };

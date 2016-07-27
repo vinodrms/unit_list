@@ -419,6 +419,9 @@ export enum ThStatusCode {
     BookingChangeCapacityInvalidState,
     BookingChangeCapacityError,
     HotelBookingOperationsControllerErrorChangingCapacity,
+    BookingPaymentGuaranteeError,
+    BookingPaymentGuaranteeInvalidState,
+    HotelBookingOperationsControllerErrorAddingPaymentGuarantee,
 
 }
 
@@ -829,6 +832,9 @@ ThMessage[ThStatusCode.HotelBookingOperationsControllerErrorChangingNoShowTime] 
 ThMessage[ThStatusCode.BookingChangeCapacityInvalidState] = "The capacity can be changed only for confirmed, guaranteed or no show bookings.";
 ThMessage[ThStatusCode.BookingChangeCapacityError] = "Error changing booking capacity.";
 ThMessage[ThStatusCode.HotelBookingOperationsControllerErrorChangingCapacity] = "Error changing booking capacity.";
+ThMessage[ThStatusCode.BookingPaymentGuaranteeError] = "Error adding payment guarantee.";
+ThMessage[ThStatusCode.BookingPaymentGuaranteeInvalidState] = "A payment guarantee can be added only for confirmed or guaranteed bookings.";
+ThMessage[ThStatusCode.HotelBookingOperationsControllerErrorAddingPaymentGuarantee] = "Error adding payment guarantee.";
 
 export class ThResponse {
     statusCode: ThStatusCode;

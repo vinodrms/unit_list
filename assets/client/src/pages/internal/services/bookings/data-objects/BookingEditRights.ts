@@ -16,3 +16,7 @@ export enum BookingCapacityEditRight {
     EditCapacity,
     None
 }
+export enum BookingPaymentGuaranteeEditRight {
+    EditPaymentGuarantee,
+    None
+}

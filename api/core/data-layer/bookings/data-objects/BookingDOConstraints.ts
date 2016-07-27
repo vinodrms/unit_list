@@ -40,6 +40,10 @@ export class BookingDOConstraints {
         BookingConfirmationStatus.Guaranteed,
         BookingConfirmationStatus.CheckedIn
     ];
+    public static ConfirmationStatuses_CanAddPaymentGuarantee: BookingConfirmationStatus[] = [
+        BookingConfirmationStatus.Confirmed,
+        BookingConfirmationStatus.Guaranteed
+    ];
 
     public static ConfirmationStatuses_BookingsConsideredInYieldManager: BookingConfirmationStatus[] = [
         BookingConfirmationStatus.Confirmed,
