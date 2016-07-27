@@ -891,7 +891,7 @@ td .room-categ-capacity {
 }
 
 .white {
-    background: white;
+    background: white !important;
 }
 
 .red {
@@ -904,6 +904,10 @@ td .room-categ-capacity {
 
 .yellow {
     background: #ffbe01;
+}
+
+.yellow-color {
+    color: #ffbe01;
 }
 
 .green {
@@ -2064,6 +2068,7 @@ a.btn.btn-square:focus {
         .hotel-operations-dashboard .header .pane-title{
             display: flex;
             align-items: center;
+            justify-content: space-between;
             border-bottom: 1px solid #DBDBDB;
             padding-left: 15px;
             flex-basis: 48px;
@@ -2296,10 +2301,10 @@ a.btn.btn-square:focus {
 
         /* Arrivals Pane */
 
-        arrival-item {
+        arrival-item > div{
             cursor: default;
             background-color: #f3f3f3;
-            border-bottom: 1px solid #f3f3f3;
+            border: 1px solid #dbdbdb;
             display: flex;
             flex-direction: row;
         }
@@ -2309,19 +2314,30 @@ a.btn.btn-square:focus {
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            border-right: 1px solid #dbdbdb;
+            width: 13px;
+        }
+
+        arrival-item .left.can-check-in{
             color: #ccc;
             background-color: #949494;
         }
 
-        arrival-item .left>span {
+        arrival-item .left.can-check-in:hover{
+            opacity: 0.5;
+            cursor: -webkit-grab
+        }
+
+        arrival-item .left.can-check-in > span {
             text-shadow: 1px 1px #5b5b62;
         }
 
         arrival-item .right{
             flex-grow: 1;
+            padding: 6px 6px 0px 6px;
         }
 
-        arrival-item.selected {
+        arrival-item.selected > div {
             background-color: white;
         }
 
@@ -2357,7 +2373,6 @@ a.btn.btn-square:focus {
 
         arrival-item.selected .footer{
             display: flex;
-            justify-content: flex-end;
             align-items: center;
             border-top: 1px solid #999;
             height: 30px;
@@ -2376,6 +2391,10 @@ a.btn.btn-square:focus {
             justify-content: center;
             background-color: #fb6708;
             color: white;
+        }
+
+        arrival-helper {
+            cursor: -webkit-grabbing;
         }
 
         arrival-helper .right{
@@ -2456,10 +2475,13 @@ a.btn.btn-square:focus {
             cursor: pointer;
         }
 
+        .clickable:hover{
+            opacity: 0.5
+        }
+
         .flex-row {
             display: flex;
             flex-direction: row;
-            /*align-items: center;*/
         }
 
         .flex-center-v{
@@ -2467,7 +2489,15 @@ a.btn.btn-square:focus {
         }
 
         .flex-jc-sb{
-            justify-content: space-between;
+            justify-content: space-between !important;
+        }
+
+        .flex-jc-start{
+            justify-content: flex-start !important;
+        }
+
+        .flex-jc-end{
+            justify-content: flex-end !important;
         }
 
         .circle-sm {

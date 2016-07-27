@@ -9,9 +9,9 @@
 		<div class="section2 flex-row flex-jc-sb">
 			<div class="customer-name clickable" (click)="openCustomerModal()">{{ roomVM.customerName }}</div>
 			<div class="room-stats flex-row flex-center-v">
-				<!--<div *ngIf="maintenance" class="clickable f-18" [ngClass]="maintenance.cssClass" (click)="maintenance.clickHandler()" title="{{maintenance.title}}">
+				<div *ngIf="maintenance" class="clickable f-18" [ngClass]="maintenance.cssClass" (click)="maintenance.clickHandler()" title="{{maintenance.title}}">
 					<span class="unitpal-font">{{maintenance.icon}}</span>
-				</div>-->
+				</div>
 			</div>
 		</div>
 	</div>

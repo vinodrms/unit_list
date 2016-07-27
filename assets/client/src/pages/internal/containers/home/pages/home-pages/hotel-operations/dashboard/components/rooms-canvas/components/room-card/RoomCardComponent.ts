@@ -2,8 +2,9 @@ import {Component, Input, Output, NgZone, ElementRef, EventEmitter} from '@angul
 import {RoomDropHandlerFactory} from './drop-handlers/RoomDropHandlerFactory';
 
 import {ModalDialogRef} from '../../../../../../../../../../../../common/utils/modals/utils/ModalDialogRef';
-
 import {RoomItemInfoVM} from '../../../../../../../../../../services/hotel-operations/dashboard/rooms/view-models/RoomItemInfoVM';
+
+import {RoomMaintenanceStatus} from '../../../../../../../../../../services/rooms/data-objects/RoomDO';
 import {ArrivalItemInfoVM} from '../../../../../../../../../../services/hotel-operations/dashboard/arrivals/view-models/ArrivalItemInfoVM';
 
 import {HotelOperationsResult} from '../../../../../operations-modal/services/utils/HotelOperationsResult';
@@ -34,6 +35,7 @@ export class MaintenanceStatusType {
 
 export class RoomCardComponent {
 	public maintenance;
+	public enums;
 	@Input() roomCanvas: RoomsCanvasComponent;
 	@Input() roomVM: RoomItemInfoVM;
 	@Output() dropped = new EventEmitter();
@@ -46,33 +48,38 @@ export class RoomCardComponent {
 		private _hotelOperationsModalService: HotelOperationsModalService,
 		private _modalService: HotelDashboardModalService
 		) {
+
+		this.enums = {
+			RoomMaintenanceStatus: RoomMaintenanceStatus
+		}
+
 		this.maintenance = undefined;
 	}
 
-	private buildMaintenanceObject(maintenanceStatus) {
-		switch (maintenanceStatus) {
-			case MaintenanceStatusType.Dirty:
+	private buildMaintenanceObject(status:RoomMaintenanceStatus) {
+		switch (status) {
+			case RoomMaintenanceStatus.Dirty:
 				this.maintenance = {
 					cssClass: 'orange-color',
 					title: 'Dirty',
-					icon: ',',
+					icon: 'H',
 					clickHandler: () => {
 						alert("Dirty clicked");
 					}
 				}
-
 				break;
 
-			// case MaintenanceStatusType.PickUp:
-			// 	this.maintenance = {
-			// 		cssClass: 'stat-tomato',
-			// 		title: 'Pickup',
-			// 		icon: 'F',
-			// 		clickHandler: () => {
-			// 			alert("Pickup clicked");
-			// 		}
-			// 	}
-			// 	break;
+			case RoomMaintenanceStatus.PickUp:
+				this.maintenance = {
+					cssClass: 'orange-color',
+					title: 'Pickup',
+					icon: 'J',
+					clickHandler: () => {
+						alert("Pickup clicked");
+					}
+				}
+				break;
+
 			default:
 				this.maintenance = undefined
 				break;
@@ -80,7 +87,8 @@ export class RoomCardComponent {
 	}
 
 	ngOnInit() {
-		// this.buildMaintenanceObject(this.roomVM.properties.maintenanceStatus);
+		debugger;
+		this.buildMaintenanceObject(this.roomVM.maintenanceStatus);		
 	}
 
 	ngAfterViewInit() {
@@ -88,7 +96,6 @@ export class RoomCardComponent {
 			{
 				accept: () => {
 					this._zone.run(() => {
-						debugger;
 						var arrivalItem:ArrivalItemInfoVM = this.roomCanvas.getSelectedArrivalItem();
 						var dropHandler = RoomDropHandlerFactory.get(this.roomVM.status);
 						var outcome = {

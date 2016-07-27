@@ -1,6 +1,7 @@
 import {Component, Input, Output, NgZone, ElementRef, EventEmitter} from '@angular/core';
 
 import {ArrivalItemInfoVM} from '../../../../../../../../../../services/hotel-operations/dashboard/arrivals/view-models/ArrivalItemInfoVM';
+import {ArrivalItemStatus} from '../../../../../../../../../../services/hotel-operations/dashboard/arrivals/data-objects/ArrivalItemInfoDO';
 
 import {HotelDashboardModalService} from '../../../../services/HotelDashboardModalService';
 
@@ -11,6 +12,8 @@ declare var $: any;
 })
 
 export class ArrivalItemComponent {
+	public enums;
+
 	@Input() arrivalItemVM: ArrivalItemInfoVM;
 	@Output() startedDragging = new EventEmitter();
 	@Output() stoppedDragging = new EventEmitter();
@@ -20,6 +23,10 @@ export class ArrivalItemComponent {
 		private _root: ElementRef,
 		private _modalService: HotelDashboardModalService
 		) {
+		
+		this.enums = {
+			ArrivalItemStatus: ArrivalItemStatus
+		};
 	}
 
 	ngAfterViewInit() {

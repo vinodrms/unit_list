@@ -39,7 +39,7 @@ export class ArrivalsPaneComponent implements OnInit {
 		private _newBookingModalService: NewBookingModalService,
 		private _hotelOperationsDashboardService: HotelOperationsDashboardService,
 		private _appContext: AppContext) {
-		this.selectedDate = ThDateDO.buildThDateDO(2016, 6, 18);
+		this.selectedDate = ThDateDO.buildThDateDO(2016, 6, 30);
 	}
 
 	ngOnInit() {
@@ -79,8 +79,7 @@ export class ArrivalsPaneComponent implements OnInit {
 		this.refresh();
 	}
 
-
-	public getDayShortString() {
+	public getDateShortString() {
 		return this.selectedDate.getShortDisplayString(this._appContext.thTranslation);
 	}
 

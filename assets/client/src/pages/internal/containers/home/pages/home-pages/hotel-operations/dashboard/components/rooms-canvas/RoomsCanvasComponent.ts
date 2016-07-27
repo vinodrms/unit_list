@@ -14,6 +14,8 @@ import {RoomsCanvasUtils} from './utils/RoomsCanvasUtils';
 import {AppContext} from '../../../../../../../../../../common/utils/AppContext';
 import {ThError} from '../../../../../../../../../../common/utils/responses/ThError';
 
+import {ThDateDO} from '../../../../../../../../services/common/data-objects/th-dates/ThDateDO';
+
 declare var $: any;
 declare var _: any;
 
@@ -31,6 +33,7 @@ export class RoomsCanvasComponent implements OnInit {
 	public filterValue: IFilterValue;
 	public filteredRoomVMList: RoomItemInfoVM[];
 	public filterNotification: IFilterNotification;
+	public currentDate: ThDateDO;
 
 	public enums;
 	private dragStyles: IDragStyles;
@@ -56,6 +59,8 @@ export class RoomsCanvasComponent implements OnInit {
 		this.enums = {
 			FilterValueType: FilterValueType
 		}
+
+		this.currentDate = ThDateDO.buildThDateDO(2016, 6, 27);
 
 		this.updateFilterNotification();
 	}
@@ -180,4 +185,8 @@ export class RoomsCanvasComponent implements OnInit {
 		this.hotelOperationsDashboard.setDate(date);
 		this.hotelOperationsDashboard.refresh();
 	}
+
+	public getDateShortString() {
+		return this.currentDate.getShortDisplayString(this._appContext.thTranslation);
+	}	
 }
