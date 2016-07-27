@@ -2323,6 +2323,11 @@ a.btn.btn-square:focus {
             background-color: #949494;
         }
 
+        arrival-item .left.can-check-in:hover{
+            opacity: 0.5;
+            cursor: -webkit-grab
+        }
+
         arrival-item .left.can-check-in > span {
             text-shadow: 1px 1px #5b5b62;
         }
@@ -2386,6 +2391,10 @@ a.btn.btn-square:focus {
             justify-content: center;
             background-color: #fb6708;
             color: white;
+        }
+
+        arrival-helper {
+            cursor: -webkit-grabbing;
         }
 
         arrival-helper .right{

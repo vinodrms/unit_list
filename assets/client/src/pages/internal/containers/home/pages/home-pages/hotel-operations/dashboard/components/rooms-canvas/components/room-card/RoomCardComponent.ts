@@ -62,7 +62,7 @@ export class RoomCardComponent {
 				this.maintenance = {
 					cssClass: 'orange-color',
 					title: 'Dirty',
-					icon: ',',
+					icon: 'H',
 					clickHandler: () => {
 						alert("Dirty clicked");
 					}
