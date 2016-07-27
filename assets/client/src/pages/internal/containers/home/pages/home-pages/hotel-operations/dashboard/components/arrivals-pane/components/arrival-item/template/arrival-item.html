@@ -1,27 +1,28 @@
-<div class="left p-6">
-	<i class="fa fa-ellipsis-v"></i>
-	<i class="fa fa-ellipsis-v"></i>
+<div class="left">
+	<span class="unitpal-font f-32">I</span>
 </div>
 <div class="right p-6">
-	<div class="header clickable">
-		{{arrivalItemVM.customerName}}
+	<div class="header" >
+		<span class="customer-name" (click)="openCustomerModal()">{{arrivalItemVM.customerName}}</span>
 	</div>
 	<div class="body">
 		<div class="room-type">{{ arrivalItemVM.roomCategoryLabel}}</div>
 		<div class="booking-quick-details">
-			<div class="period">
+			<div class="period clickable" (click)="openBookingModal()" >
 				<div class="start-date">{{arrivalItemVM.arrivalLabel}}</div>
 				<i class="fa fa-arrow-right"></i>
 				<div class="end-date">{{arrivalItemVM.departureLabel}}</div>
 			</div>
 			<div class="other-details gray-color f-12">
-				<span class="unitpal-font f-12">(</span> {{arrivalItemVM.numberOfPeople}}
-				<span class="unitpal-font f-12">Y</span> {{arrivalItemVM.numberOfNights}}
+				<div>
+					<span class="unitpal-font f-12">(</span> {{arrivalItemVM.numberOfPeople}}
+					<span class="unitpal-font f-12">Y</span> {{arrivalItemVM.numberOfNights}}
+				</div>
 			</div>
 		</div>
 	</div>
 	<div class="footer">
-		<button class="btn btn-sm btn-danger">
+		<button class="btn btn-sm btn-danger" (click)="openCheckInModal()" >
 			CHECK IN <span class="unitpal-font">/</span>
 		</button>
 	</div>

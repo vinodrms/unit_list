@@ -71,4 +71,12 @@ export class HotelOperationsDashboardDeparturesService extends ARequestService<D
         this._referenceDate = referenceDate;
         return this.getServiceObservable();
     }
+    
+    public refresh(referenceDate?: ThDateDO) {
+        if (!this._appContext.thUtils.isUndefinedOrNull(referenceDate)) {
+            this._referenceDate = referenceDate;
+        }
+        super.refresh();
+    }
+    
 }

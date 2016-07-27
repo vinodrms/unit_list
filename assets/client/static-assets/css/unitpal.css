@@ -644,8 +644,8 @@ lazy-loading-table {
 .btn-green:active,
 .btn-green:visited,
 .btn-green:focus {
-    background-color: #5CB85C !important;
-    border-color: #5CB85C !important;
+    background-color: #1dcd8c !important;
+    border-color: #1dcd8c !important;
     color: white;
 }
 
@@ -903,15 +903,15 @@ td .room-categ-capacity {
 }
 
 .yellow {
-    background: #D1D100;
+    background: #ffbe01;
 }
 
 .green {
-    background: #5CB85C;
+    background: #1dcd8c;
 }
 
 .green-color {
-    color: #5CB85C;
+    color: #1dcd8c;
 }
 
 .blue {
@@ -919,11 +919,11 @@ td .room-categ-capacity {
 }
 
 .gray {
-    background: #7F8C8D; /* Should we change this color?*/
+    background: #bbbbbb;
 }
 
 .gray-color {
-    color: #808080;
+    color: #bbbbbb;
 }
 
 .brown {
@@ -935,7 +935,7 @@ td .room-categ-capacity {
 }
 
 .orange {
-    background: #F0AD4E;
+    background: #fb6708;
 }
 
 .orange-color{
@@ -2028,16 +2028,33 @@ a.btn.btn-square:focus {
     .hotel-operations-dashboard .pane {
         display: flex;
         background-color: #f3f3f3;
-        flex-basis: 225px;
+        flex-basis: 236px;
         flex-direction: column;
         flex-grow: 0;
     }
 
     .hotel-operations-dashboard .pane > .header{
-        height: 118px;
         border-bottom: 1px solid #DBDBDB;
     }
 
+    .hotel-operations-dashboard .customer-name{
+        font-size: 16px;
+        color: #7c7c81;
+        cursor: pointer;
+    }
+
+    .hotel-operations-dashboard .room-type{
+        font-size: 12px;
+        color: #a9a9ac;  
+    }
+
+    .hotel-operations-dashboard .period{
+            display: flex;
+            flex-direction: row;
+            color: #7c7c81
+        }
+
+    
         
         .hotel-operations-dashboard .pane > .header{
             display: flex;
@@ -2049,7 +2066,8 @@ a.btn.btn-square:focus {
             align-items: center;
             border-bottom: 1px solid #DBDBDB;
             padding-left: 15px;
-            flex-basis: 70px;
+            flex-basis: 48px;
+            color: #5b5b62;
         }
 
         .hotel-operations-dashboard .pane-search-bar{
@@ -2089,6 +2107,14 @@ a.btn.btn-square:focus {
             color: #fb6708;
         }
 
+    .hotel-operations-dashboard .rooms-filter {
+        color: #7c7c81;
+    }
+
+    .rooms-controller {
+        color: #5b5b62;
+    }
+
     rooms-canvas {
         background-color: #eeeeee;
         flex-basis: 100px;
@@ -2102,12 +2128,12 @@ a.btn.btn-square:focus {
     }
 
     rooms-canvas > .header > .rooms-controller{
-        height: 70px;
+        height: 48px;
         background-color: white;
         border-bottom: 1px solid #DBDBDB;
         display: flex;
         align-items: center;
-        justify-content: space-between;
+        justify-content: center;
     }
 
     rooms-canvas > .header > .notification{
@@ -2145,11 +2171,11 @@ a.btn.btn-square:focus {
 
         /* Free */
         .room-card.free {
-            border-left: 6px solid #5cb85c;
+            border-left: 6px solid #1dcd8c;
         }
     
         .room-card.free .card-header .section1 .room-number{
-            color: #5cb85c;  
+            color: #1dcd8c;  
         }
 
         /*Out of service */
@@ -2163,11 +2189,11 @@ a.btn.btn-square:focus {
 
         /* Reseved */
         .room-card.reserved {
-            border-left: 6px solid #ffec40;
+            border-left: 6px solid #ffbe01;
         }
     
         .room-card.reserved .card-header .section1 .room-number{
-            color: #ffec40;
+            color: #ffbe01;
         }
 
         .page{
@@ -2213,11 +2239,11 @@ a.btn.btn-square:focus {
         }
 
         .room-card.free.tick-border{
-            border-color: #5cb85c;
+            border-color: #1dcd8c;
         }
 
         .room-card.reserved.tick-border{
-            border-color: #ffec40;
+            border-color: #ffbe01;
         }
 
         .room-card .card-header{
@@ -2234,19 +2260,10 @@ a.btn.btn-square:focus {
                 font-size: 24px;
             }
 
-            .room-card .card-header .section1 .room-details{
-                font-size: 12px;
-                color: #b9b9b9;  
-            }
-            
         .room-card .card-header .section2{
             display: flex;
             flex-direction: row;
             justify-content: space-between;
-        }
-
-        .room-card .card-header .section2 .customer-name{
-            font-size: 16px;
         }
 
         .rooms-canvas {
@@ -2272,11 +2289,6 @@ a.btn.btn-square:focus {
             font-size: 11px;
         }
 
-        .room-card.card-footer .period{
-            display: flex;
-            flex-direction: row;
-        }
-
         .room-card .card-footer .period > i{
             padding: 0px 6px 0px 6px;
         }
@@ -2297,8 +2309,12 @@ a.btn.btn-square:focus {
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            color: #777;
-            background-color: #ccc
+            color: #ccc;
+            background-color: #949494;
+        }
+
+        arrival-item .left>span {
+            text-shadow: 1px 1px #5b5b62;
         }
 
         arrival-item .right{
@@ -2312,11 +2328,6 @@ a.btn.btn-square:focus {
         arrival-item .header{
             padding-top: 10px;
             font-size: 16px;
-        }
-
-        .room-type {
-            font-size: 12px;
-            color: #999;
         }
 
         arrival-item .body .period {
@@ -2338,7 +2349,6 @@ a.btn.btn-square:focus {
             display: flex;
             flex-direction: row;
             justify-content: space-between;
-            font-weight: bold;
         }
 
         arrival-item .footer{
@@ -2356,13 +2366,14 @@ a.btn.btn-square:focus {
         arrival-helper{
             border: 3px solid #fb6708;
             border-radius: 4px;
-            width: 216px;
+            width: 236px;
             background: white;
         }
 
         arrival-helper .left{
             display: flex;
-            flex-direction: column; 
+            flex-direction: column;
+            justify-content: center;
             background-color: #fb6708;
             color: white;
         }
@@ -2391,11 +2402,6 @@ a.btn.btn-square:focus {
             font-size: 16px;
         }
 
-        departure-item .body .room-type {
-            font-size: 0px;
-            color: #999;
-        }
-
         departure-item .body .period {
             font-size: 11px;
             align-items: center;
@@ -2411,7 +2417,7 @@ a.btn.btn-square:focus {
             justify-content: space-between;
         }
 
-        departure-item .booking-quick-details .period{
+        departure-item .booking-quick-details .stats{
             display: flex;
             flex-direction: row;
             justify-content: space-between;
@@ -2441,7 +2447,7 @@ a.btn.btn-square:focus {
         /* Misc */
         .other-details {
             display: flex;
-            flex-basis: 40px;
+            flex-basis: 50px;
             justify-content: space-around;
         }
 
@@ -2476,7 +2482,7 @@ a.btn.btn-square:focus {
         }
 
         .stat-yellow{
-            background-color: #ffec40;
+            background-color: #ffbe01;
             color: white;
         }
 
@@ -2966,7 +2972,7 @@ a.btn.btn-square:focus {
     color: #C44D00;
 }
 .reserved-booking kbd {
-    background-color: #ffec40;
+    background-color: #ffbe01;
     color: black;
 }
 .checked-in kbd {

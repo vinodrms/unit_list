@@ -1,21 +1,17 @@
 <div class="header">
 	<div class="rooms-controller p-12">
 		<div class="group-1 flex-row flex-center-v">
-			<i class="fa fa-angle-left p-r-12 f-48" (click)="previousDay()"></i>
+			<i class="fa fa-calendar orange-color f-24 p-r-6" aria-hidden="true"></i>
 			<div class="current-date p-r-12 f-24"><b>Wednesday 13.01.2016</b></div>
-			<button class="btn btn-sm btn-danger f-12">
-				<i class="fa fa-calendar f-12 p-r-6"></i> Change date
-			</button>
 		</div>
 		<div class="group-2 flex-row flex-center-v">
-			<select class="rooms-filter p-r-12 f-12" [ngModel]="filterValue.currentValue" (ngModelChange)="filterValueChanged($event)">
-				<option value="{{ enums.FilterValueType.All }}">All</option>
-				<option value="{{ enums.FilterValueType.Free }}">Free</option>
-				<option value="{{ enums.FilterValueType.Occupied }}">Occupied</option>
-				<option value="{{ enums.FilterValueType.Reserved }}">Reserved</option>
-				<option value="{{ enums.FilterValueType.OutOfService }}">OutOfService</option>
+			<select class="form-control rooms-filter p-r-12 f-12" [ngModel]="filterValue.currentValue" (ngModelChange)="filterValueChanged($event)">
+				<option value="{{ enums.FilterValueType.All }}">ALL ROOMS</option>
+				<option value="{{ enums.FilterValueType.Free }}">FREE ROOMS</option>
+				<option value="{{ enums.FilterValueType.Occupied }}">OCCUPIED ROOMS</option>
+				<option value="{{ enums.FilterValueType.Reserved }}">RESERVED ROOMS</option>
+				<option value="{{ enums.FilterValueType.OutOfService }}">OUT OF SERVICE ROOMS</option>
 			</select>
-			<i class="fa fa-angle-right p-l-12 f-48" (click)="nextDay()"></i>
 		</div>
 	</div>
 	<div class="notification {{filterNotification.Properties.cssColor}}" *ngIf="isNotificationBarVisible()">

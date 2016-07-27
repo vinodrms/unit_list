@@ -6,6 +6,7 @@ import {ModalDialogRef} from '../../../../../../../../../../common/utils/modals/
 import {ThButtonComponent} from '../../../../../../../../../../common/utils/components/ThButtonComponent';
 
 import {ArrivalItemComponent} from './components/arrival-item/ArrivalItemComponent';
+import {ArrivalItemInfoVM} from '../../../../../../../../services/hotel-operations/dashboard/arrivals/view-models/ArrivalItemInfoVM';
 
 import {HotelOperationsDashboardService} from '../../../../../../../../services/hotel-operations/dashboard/HotelOperationsDashboardService';
 
@@ -14,7 +15,8 @@ import {IHotelOperationsDashboardArrivalsPaneMediator} from '../../HotelOperatio
 import {AppContext} from '../../../../../../../../../../common/utils/AppContext';
 import {ThError} from '../../../../../../../../../../common/utils/responses/ThError';
 
-declare var _ : any;
+import {ThDateDO} from '../../../../../../../../services/common/data-objects/th-dates/ThDateDO';
+declare var _: any;
 
 @Component({
 	selector: 'arrivals-pane',
@@ -24,31 +26,70 @@ declare var _ : any;
 })
 
 export class ArrivalsPaneComponent implements OnInit {
-	public arrivalItemsVMList;
+	public arrivalItemsVMList: ArrivalItemInfoVM[];
+	public filteredArrivalsVMList: ArrivalItemInfoVM[];
+	public selectedDate: ThDateDO;
+	public searchText: string = "";
 
 	@Input() hotelOperationsDashboard: IHotelOperationsDashboardArrivalsPaneMediator;
 	@Output() dragStarted = new EventEmitter();
 	@Output() dragCanceled = new EventEmitter();
 
 	constructor(
-		private _newBookingModalService: NewBookingModalService, 
+		private _newBookingModalService: NewBookingModalService,
 		private _hotelOperationsDashboardService: HotelOperationsDashboardService,
-		private _appContext:AppContext) {
+		private _appContext: AppContext) {
+		this.selectedDate = ThDateDO.buildThDateDO(2016, 6, 18);
 	}
 
 	ngOnInit() {
 		this.hotelOperationsDashboard.registerArrivalsPane(this);
-		this.refresh();
-	}
-
-	public refresh(){
-		var date = this.hotelOperationsDashboard.getDate(); 
-		this._hotelOperationsDashboardService.getArrivalItems()
-		.subscribe((arrivals: any) => {
-			this.arrivalItemsVMList = arrivals;
+		this._hotelOperationsDashboardService.getArrivalItems(this.selectedDate)
+			.subscribe((arrivals: ArrivalItemInfoVM[]) => {
+				this.arrivalItemsVMList = arrivals;
+				this.updateFilterArrivals();
 			}, (error: ThError) => {
 				this._appContext.toaster.error(error.message);
 			});
+	}
+
+	private updateFilterArrivals(){
+		if (this.searchText == ""){
+			this.filteredArrivalsVMList = this.arrivalItemsVMList;
+		}
+		else {
+			this.filteredArrivalsVMList = _.filter(this.arrivalItemsVMList, (item: ArrivalItemInfoVM) => {
+				return (item.customerName.toLowerCase().indexOf(this.searchText.toLowerCase()) > -1);
+			});
+		}
+	}
+
+	public searchTextChangeHandler(value){
+		this.searchText = value;
+		this.updateFilterArrivals();
+	}
+	
+	public nextDay() {
+		this.selectedDate.addDays(1);
+		this.refresh();
+	}
+
+	public previousDay() {
+		this.selectedDate.addDays(-1);
+		this.refresh();
+	}
+
+
+	public getDayShortString() {
+		return this.selectedDate.getShortDisplayString(this._appContext.thTranslation);
+	}
+
+	public refresh() {
+		//TODO: FIX THIS
+		if (!this.selectedDate) {
+			this.selectedDate = ThDateDO.buildThDateDO(2016, 6, 18);
+		}
+		this._hotelOperationsDashboardService.refreshArrivals(this.selectedDate);
 	}
 
 	openNewBookingModal() {
@@ -59,28 +100,28 @@ export class ArrivalsPaneComponent implements OnInit {
         }).catch((e: any) => { });
 	}
 
-	public startedDragging(arrivalItemVM){
+	public startedDragging(arrivalItemVM) {
 		this.hotelOperationsDashboard.startedDragging(arrivalItemVM);
 	}
 
-	public stoppedDragging(arrivalItemVM){
+	public stoppedDragging(arrivalItemVM) {
 		this.hotelOperationsDashboard.stoppedDragging(arrivalItemVM);
 	}
 
-	public removeArrivalItem(arrivalItemVM){
+	public removeArrivalItem(arrivalItemVM) {
 		var index = _.findIndex(this.arrivalItemsVMList, arrivalItemVM);
 
-		if (index > - 1){
+		if (index > - 1) {
 			this.arrivalItemsVMList.splice(index, 1);
 		}
 	}
 
-	public isArrivalItemSelected(arrivalItemVM){
+	public isArrivalItemSelected(arrivalItemVM) {
 		var currentSelection = this.hotelOperationsDashboard.getSelectedArrivalItem();
 		return currentSelection == arrivalItemVM;
 	}
 
-	public selectArrivalItem(arrivalItemVM){
+	public selectArrivalItem(arrivalItemVM) {
 		this.hotelOperationsDashboard.clickedArrivalItem(arrivalItemVM);
 	}
 }
