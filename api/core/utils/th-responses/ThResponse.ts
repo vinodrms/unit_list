@@ -398,7 +398,6 @@ export enum ThStatusCode {
     HotelRoomOperationsControllerErrorCheckingOut,
     HotelRoomOperationsControllerErrorReservingRoom,
     HotelRoomOperationsControllerErrorChangingRoom,
-    HotelCommonOperationsControllerErrorGettingTimestamp,
     BookingOccupancyCalculatorWrapperError,
     BookingOccupancyCalculatorWrapperInvalidInterval,
     BookingPossiblePricesError,
@@ -811,7 +810,6 @@ ThMessage[ThStatusCode.HotelRoomOperationsControllerErrorCheckingIn] = "Error ch
 ThMessage[ThStatusCode.HotelRoomOperationsControllerErrorCheckingOut] = "Error checking out the room.";
 ThMessage[ThStatusCode.HotelRoomOperationsControllerErrorReservingRoom] = "Error reserving room.";
 ThMessage[ThStatusCode.HotelRoomOperationsControllerErrorChangingRoom] = "Error changing room.";
-ThMessage[ThStatusCode.HotelCommonOperationsControllerErrorGettingTimestamp] = "Error getting current hotel timestamp.";
 ThMessage[ThStatusCode.BookingOccupancyCalculatorWrapperError] = "Error getting occupancy.";
 ThMessage[ThStatusCode.BookingOccupancyCalculatorWrapperInvalidInterval] = "Invalid submitted interval.";
 ThMessage[ThStatusCode.BookingPossiblePricesError] = "Error getting all the possible prices for the booking.";

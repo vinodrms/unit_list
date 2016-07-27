@@ -82,8 +82,6 @@ export enum ThServerApi {
 	HotelOperationsBookingChangeCapacity,
 	HotelOperationsBookingAddPaymentGuarantee,
 
-	HotelOperationsCommonHotelTimestamp,
-
 }
 
 var ThServerApiUrl: { [index: number]: string; } = {};
@@ -171,8 +169,6 @@ ThServerApiUrl[ThServerApi.HotelOperationsBookingChangeDates] = "/hotelOperation
 ThServerApiUrl[ThServerApi.HotelOperationsBookingChangeNoShowTime] = "/hotelOperations/booking/changeNoShowTime";
 ThServerApiUrl[ThServerApi.HotelOperationsBookingChangeCapacity] = "/hotelOperations/booking/changeCapacity";
 ThServerApiUrl[ThServerApi.HotelOperationsBookingAddPaymentGuarantee] = "/hotelOperations/booking/addPaymentGuarantee";
-
-ThServerApiUrl[ThServerApi.HotelOperationsCommonHotelTimestamp] = "/hotelOperations/common/hotelTimestamp";
 
 export class ServerApiBuilder {
 	public static ApiRoot = "/api";

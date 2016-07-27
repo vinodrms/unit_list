@@ -138,8 +138,6 @@ module.exports.routes = {
 	'POST /api/hotelOperations/booking/changeCapacity': 'HotelBookingOperationsController.changeCapacity',
 	'POST /api/hotelOperations/booking/addPaymentGuarantee': 'HotelBookingOperationsController.addPaymentGuarantee',
 
-	'GET /api/hotelOperations/common/hotelTimestamp': 'HotelCommonOperationsController.getCurrentHotelTimestamp',
-
 	/*Front End Views	*/
 	'GET /home*': {
 		controller: 'AppViewsController',
