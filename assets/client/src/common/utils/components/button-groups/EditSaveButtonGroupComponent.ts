@@ -15,7 +15,7 @@ import {TranslationPipe} from '../../localization/TranslationPipe';
                     <span *ngIf="isEditing">
                         <button type="button" class="btn btn-primary btn-block btn-xs uppercase save-btn" (click)="triggerSavePressed()">
                             <i *ngIf="isSaving" class="fa fa-spinner fa-pulse"></i>
-                            <i *ngIf="!isSaving" class="fa fa-save">]</i> 
+                            <i *ngIf="!isSaving" class="fa fa-save"></i> 
                             {{ 'Save' | translate }}
                         </button>
                         <button type="button" class="btn btn-danger btn-block btn-xs cancel-btn" (click)="triggerEditEnd()">
