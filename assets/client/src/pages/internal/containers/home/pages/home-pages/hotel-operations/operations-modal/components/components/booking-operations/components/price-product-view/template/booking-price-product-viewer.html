@@ -1,0 +1,28 @@
+<div class="col-xs-12 important-header padding-top-10px">
+    <div class="row">
+        <div class="col-xs-12 col-sm-1 text-field">
+            <p>{{'Price Product' | translate}}</p>
+        </div>
+        <div class="col-xs-12 col-sm-4 field-value text-field">
+            <p>{{priceProductDO.name}}</p>
+        </div>
+        <div class="col-xs-12 col-sm-2">
+            <p>{{'Cost' | translate}}</p>
+        </div>
+        <div class="col-xs-12 col-sm-2 field-value text-field">
+            <p>{{currencySymbolString}} {{totalPrice}} 
+            </p>
+        </div>
+        <div class="col-xs-12 col-sm-3 field-value text-field" *ngIf="isPenaltyPrice">
+            <span class="operational-important-field"> <i class="fa unitpal-font">+</i> {{'Penalty' | translate}}</span>
+        </div>
+    </div>
+</div>
+
+<div class="col-xs-12 col-sm-offset-1 col-sm-11 field-value text-field padding-top-5px">
+    <p class="notes"><i class="fa fa-calendar-check-o" title="{{ 'Conditions' | translate }}"></i> {{ conditionsString }}</p>
+</div>
+
+<div class="col-xs-12 col-sm-offset-1 col-sm-11 field-value text-field">
+    <p class="notes"><i class="fa fa-lock" title="{{ 'Constraints' | translate }}"></i> {{ constraintsString }}</p>
+</div>

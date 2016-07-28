@@ -578,6 +578,11 @@ export var EnglishTranslations: Object = {
 	"No guarantee": "No guarantee",
 	"Files": "Files",
 	"None": "None",
+	"Cost": "Cost",
+	"Penalty": "Penalty",
+	"Archived": "Archived",
+	"Release": "Release",
+	
 
 	
 };

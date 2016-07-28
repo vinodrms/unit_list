@@ -17,4 +17,7 @@ export class ReleaseTimeInDaysConstraintDO extends BaseDO implements IAllotmentC
 	public getValueDisplayString(thTranslation: ThTranslation): string {
 		return thTranslation.translate("%noDays% days", { noDays: this.noOfDays });
 	}
+	public getBriefValueDisplayString(thTranslation: ThTranslation): string {
+		return this.getValueDisplayString(thTranslation);
+	}
 }

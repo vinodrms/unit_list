@@ -24,4 +24,9 @@ export class AllotmentConstraintDO extends BaseDO implements IAllotmentConstrain
 	public getValueDisplayString(thTranslation: ThTranslation): string {
 		return this.constraint.getValueDisplayString(thTranslation);
 	}
+	public getBriefValueDisplayString(thTranslation: ThTranslation): string {
+		var constraintFactory = new AllotmentConstraintFactory();
+		var constraintMeta = constraintFactory.getAllotmentConstraintMetaByType(this.type);
+		return thTranslation.translate(constraintMeta.brief) + " " + this.constraint.getBriefValueDisplayString(thTranslation);
+	}
 }

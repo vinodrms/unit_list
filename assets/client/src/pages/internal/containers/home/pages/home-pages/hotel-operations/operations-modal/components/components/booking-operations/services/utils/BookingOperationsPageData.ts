@@ -7,10 +7,12 @@ import {HotelPaymentMethodsDO} from '../../../../../../../../../../../services/s
 import {CustomersDO} from '../../../../../../../../../../../services/customers/data-objects/CustomersDO';
 import {RoomVM} from '../../../../../../../../../../../services/rooms/view-models/RoomVM';
 import {RoomCategoryStatsDO} from '../../../../../../../../../../../services/room-categories/data-objects/RoomCategoryStatsDO';
+import {AllotmentDO} from '../../../../../../../../../../../services/allotments/data-objects/AllotmentDO';
 
 export class BookingOperationsPageData {
     private _bookingDO: BookingDO;
     private _bookingMeta: BookingMeta;
+    private _allotmentDO: AllotmentDO;
     private _ccy: CurrencyDO;
     private _operationHours: OperationHoursDO;
     private _allPaymentMethods: HotelPaymentMethodsDO;
@@ -75,10 +77,17 @@ export class BookingOperationsPageData {
     public set bookingMeta(bookingMeta: BookingMeta) {
         this._bookingMeta = bookingMeta;
     }
+    public get allotmentDO(): AllotmentDO {
+        return this._allotmentDO;
+    }
+    public set allotmentDO(allotmentDO: AllotmentDO) {
+        this._allotmentDO = allotmentDO;
+    }
 
     public buildPrototype(): BookingOperationsPageData {
         var pageData = new BookingOperationsPageData();
         pageData.bookingDO = this.bookingDO;
+        pageData.allotmentDO = this.allotmentDO;
         pageData.ccy = this.ccy;
         pageData.allPaymentMethods = this.allPaymentMethods;
         pageData.allowedPaymentMethods = this.allowedPaymentMethods;

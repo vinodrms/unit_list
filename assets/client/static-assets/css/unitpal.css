@@ -2918,6 +2918,9 @@ a.btn.btn-square:focus {
     font-size: 11px;
     font-weight: 400;
 }
+.operational-page-container .text-field.archived {
+    opacity: 0.6;
+}
 .operational-page-container .text-field>p.placeholder {
     opacity: 0.5;
 }
@@ -2927,6 +2930,9 @@ a.btn.btn-square:focus {
 .operational-page-container hr {
     margin-top: 0px;
     margin-bottom: 5px;
+}
+.operational-page-container .important-header {
+    background: #f5f5f5;
 }
 .form-control.operational-input-group {
     background-color: #eee;

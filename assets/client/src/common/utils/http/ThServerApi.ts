@@ -51,6 +51,7 @@ export enum ThServerApi {
 	CustomersCount,
 	CustomersSaveItem,
 	Allotments,
+	AllotmentItem,
 	AllotmentsCount,
 	AllotmentsSaveItem,
 	AllotmentsArchiveItem,
@@ -140,6 +141,7 @@ ThServerApiUrl[ThServerApi.Customers] = "/customers";
 ThServerApiUrl[ThServerApi.CustomersCount] = "/customers/count";
 ThServerApiUrl[ThServerApi.CustomersSaveItem] = "/customers/saveCustomerItem";
 ThServerApiUrl[ThServerApi.Allotments] = "/allotments";
+ThServerApiUrl[ThServerApi.AllotmentItem] = "/allotments/allotmentItem";
 ThServerApiUrl[ThServerApi.AllotmentsCount] = "/allotments/count";
 ThServerApiUrl[ThServerApi.AllotmentsSaveItem] = "/allotments/saveAllotmentItem";
 ThServerApiUrl[ThServerApi.AllotmentsArchiveItem] = "/allotments/archiveAllotmentItem";
