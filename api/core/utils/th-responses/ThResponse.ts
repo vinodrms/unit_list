@@ -421,6 +421,9 @@ export enum ThStatusCode {
     BookingPaymentGuaranteeError,
     BookingPaymentGuaranteeInvalidState,
     HotelBookingOperationsControllerErrorAddingPaymentGuarantee,
+    BookingChangeDetailsInvalidState,
+    BookingChangeDetailsError,
+    HotelBookingOperationsControllerErrorChangingDetails,
 
 }
 
@@ -833,6 +836,9 @@ ThMessage[ThStatusCode.HotelBookingOperationsControllerErrorChangingCapacity] = 
 ThMessage[ThStatusCode.BookingPaymentGuaranteeError] = "Error adding payment guarantee.";
 ThMessage[ThStatusCode.BookingPaymentGuaranteeInvalidState] = "A payment guarantee can be added only for confirmed or guaranteed bookings.";
 ThMessage[ThStatusCode.HotelBookingOperationsControllerErrorAddingPaymentGuarantee] = "Error adding payment guarantee.";
+ThMessage[ThStatusCode.BookingChangeDetailsInvalidState] = "You cannot change details for checked out or cancelled bookings.";
+ThMessage[ThStatusCode.BookingChangeDetailsError] = "Error changing booking details.";
+ThMessage[ThStatusCode.HotelBookingOperationsControllerErrorChangingDetails] = "Error changing booking details.";
 
 export class ThResponse {
     statusCode: ThStatusCode;

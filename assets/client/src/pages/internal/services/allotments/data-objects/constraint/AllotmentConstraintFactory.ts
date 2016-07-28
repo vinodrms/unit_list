@@ -25,22 +25,30 @@ export class AllotmentConstraintFactory {
 			{
 				constraintType: AllotmentConstraintType.ReleaseTimeInDays,
 				title: "Release time in days",
-				description: "The number of days before the allotment is released"
+				description: "The number of days before the allotment is released",
+				brief: "Release"
 			},
 			{
 				constraintType: AllotmentConstraintType.BookableOnlyOnDaysFromWeek,
 				title: "Bookable only on days from week",
-				description: "Bookings can only be made on specific days from week (e.g. It you select Monday, the allotment will apply only to bookings made from Monday to Tuesday.)"
+				description: "Bookings can only be made on specific days from week (e.g. It you select Monday, the allotment will apply only to bookings made from Monday to Tuesday.)",
+				brief: "Bookable on",
 			},
 			{
 				constraintType: AllotmentConstraintType.IncludeDaysFromWeek,
 				title: "Include days from week",
-				description: "Bookings must include the days selected. (e.g. If you select Saturday, the booking must include a Saturday)"
+				description: "Bookings must include the days selected. (e.g. If you select Saturday, the booking must include a Saturday)",
+				brief: "Must include"
 			}
 		]
 	}
 
 	public getDefaultConstraintDO(): AllotmentConstraintDO {
 		return this.getConstraintDOByType(AllotmentConstraintType.ReleaseTimeInDays);
+	}
+
+	public getAllotmentConstraintMetaByType(constraintType: AllotmentConstraintType): AllotmentConstraintMeta {
+		var constraintMetaList = this.getAllotmentConstraintMetaList();
+		return _.find(constraintMetaList, (constraintMeta: AllotmentConstraintMeta) => { return constraintMeta.constraintType === constraintType });
 	}
 }

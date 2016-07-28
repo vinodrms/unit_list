@@ -20,12 +20,15 @@ import {BookingChangeNoShowTime} from '../../../../../core/domain-layer/hotel-op
 import {BookingChangeNoShowTimeDO} from '../../../../../core/domain-layer/hotel-operations/booking/change-no-show-time/BookingChangeNoShowTimeDO';
 import {ThTimestampDO} from '../../../../../core/utils/th-dates/data-objects/ThTimestampDO';
 import {ThHourDO} from '../../../../../core/utils/th-dates/data-objects/ThHourDO';
+import {InvoicePaymentMethodDO, InvoicePaymentMethodType} from '../../../../../core/data-layer/invoices/data-objects/payers/InvoicePaymentMethodDO';
+import {FileAttachmentDO} from '../../../../../core/data-layer/common/data-objects/file/FileAttachmentDO';
 import {BookingStateChangeTriggerType} from '../../../../../core/data-layer/bookings/data-objects/state-change-time/BookingStateChangeTriggerTimeDO';
 import {BookingChangeCapacity} from '../../../../../core/domain-layer/hotel-operations/booking/change-capacity/BookingChangeCapacity';
 import {BookingChangeCapacityDO} from '../../../../../core/domain-layer/hotel-operations/booking/change-capacity/BookingChangeCapacityDO';
 import {BookingPaymentGuarantee} from '../../../../../core/domain-layer/hotel-operations/booking/payment-guarantee/BookingPaymentGuarantee';
 import {BookingPaymentGuaranteeDO} from '../../../../../core/domain-layer/hotel-operations/booking/payment-guarantee/BookingPaymentGuaranteeDO';
-import {InvoicePaymentMethodDO, InvoicePaymentMethodType} from '../../../../../core/data-layer/invoices/data-objects/payers/InvoicePaymentMethodDO';
+import {BookingChangeDetails} from '../../../../../core/domain-layer/hotel-operations/booking/change-details/BookingChangeDetails';
+import {BookingChangeDetailsDO} from '../../../../../core/domain-layer/hotel-operations/booking/change-details/BookingChangeDetailsDO';
 
 describe("Hotel Booking Operations Tests", function () {
     var testContext: TestContext;
@@ -136,6 +139,29 @@ describe("Hotel Booking Operations Tests", function () {
                 should.equal(updatedBooking.defaultBillingDetails.paymentGuarantee, true);
                 should.equal(updatedBooking.defaultBillingDetails.paymentMethod.type, InvoicePaymentMethodType.DefaultPaymentMethod);
                 should.equal(updatedBooking.defaultBillingDetails.paymentMethod.value, paymentMethod.id);
+                bookingToChange = updatedBooking;
+                done();
+            }).catch((error: any) => {
+                done(error);
+            });
+        });
+
+        it("Should change the details on a booking", function (done) {
+            var bookingChangeDetailsDO = new BookingChangeDetailsDO();
+            bookingChangeDetailsDO.groupBookingId = bookingToChange.groupBookingId;
+            bookingChangeDetailsDO.bookingId = bookingToChange.bookingId;
+            bookingChangeDetailsDO.notes = "test test test!";
+            var fileAttachment: FileAttachmentDO = new FileAttachmentDO();
+            fileAttachment.name = "Supra File";
+            fileAttachment.url = "3angle.tech/suprafile";
+            bookingChangeDetailsDO.fileAttachmentList = [fileAttachment];
+
+            var bookingChangeDetails = new BookingChangeDetails(testContext.appContext, testContext.sessionContext);
+            bookingChangeDetails.changeDetails(bookingChangeDetailsDO).then((updatedBooking: BookingDO) => {
+                should.equal(updatedBooking.notes, bookingChangeDetailsDO.notes);
+                should.equal(bookingChangeDetailsDO.fileAttachmentList.length, 1);
+                should.equal(bookingChangeDetailsDO.fileAttachmentList[0].name, fileAttachment.name);
+                should.equal(bookingChangeDetailsDO.fileAttachmentList[0].url, fileAttachment.url);
                 bookingToChange = updatedBooking;
                 done();
             }).catch((error: any) => {

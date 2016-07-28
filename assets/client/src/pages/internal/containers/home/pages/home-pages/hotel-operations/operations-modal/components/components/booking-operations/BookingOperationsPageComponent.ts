@@ -15,14 +15,17 @@ import {BookingNoShowEditorComponent} from './components/no-show-edit/BookingNoS
 import {BookingRoomEditorComponent} from './components/room-edit/BookingRoomEditorComponent';
 import {BookingCapacityEditorComponent} from './components/capacity-edit/BookingCapacityEditorComponent';
 import {BookingPaymentGuaranteeEditorComponent} from './components/payment-guarantee-edit/BookingPaymentGuaranteeEditorComponent';
+import {BookingDetailsEditorComponent} from './components/booking-details/BookingDetailsEditorComponent';
+import {BookingPriceProductViewerComponent} from './components/price-product-view/BookingPriceProductViewerComponent';
+import {BookingAllotmentViewerComponent} from './components/allotment-view/BookingAllotmentViewerComponent';
 
 @Component({
     selector: 'booking-operations-page',
     templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/booking-operations/template/booking-operations-page.html',
     directives: [LoadingComponent, CustomScroll,
         BookingPeriodEditorComponent, BookingNoShowEditorComponent, BookingRoomEditorComponent,
-        BookingCapacityEditorComponent, BookingPaymentGuaranteeEditorComponent,
-        DocumentHistoryViewerComponent],
+        BookingCapacityEditorComponent, BookingPaymentGuaranteeEditorComponent, BookingDetailsEditorComponent,
+        BookingPriceProductViewerComponent, BookingAllotmentViewerComponent, DocumentHistoryViewerComponent],
     providers: [BookingOperationsPageService],
     pipes: [TranslationPipe]
 })
