@@ -1,19 +1,22 @@
-<div class="row">
+<div class="row" *ngIf="!hideLabel">
 	<div class="col-md-6 col-xs-6 form-group">
 		<label>{{ 'File Attachments' | translate }}</label>
-		<i class="fa fa-spinner fa-pulse" *ngIf="isLoading"></i>
 	</div>
 	<div class="col-md-6 col-xs-6">
 
 	</div>
 </div>
 <div class="row">
-	<div class="col-md-8 col-xs-8">
-		<p class="text-muted small"> <i class="fa fa-info-circle"></i> pdf, doc, docx, txt, jpg ...</p>
+	<div class="col-md-8 col-xs-8" *ngIf="!readonly">
+		<p class="text-muted small"> 
+			<i class="fa fa-info-circle" *ngIf="!isLoading"></i>
+			<i class="fa fa-spinner fa-pulse" *ngIf="isLoading"></i> 
+			pdf, doc, docx, txt, jpg ...
+		</p>
 	</div>
 </div>
 
-<table class="table table-striped projects">
+<table class="table table-striped projects small-margin">
 	<tbody>
 		<tr *ngFor="let fileAttachment of fileAttachmentList">
 			<td class="th-file-label">
@@ -25,14 +28,14 @@
 				<a class="btn btn-xs" [download]="fileAttachment.name" [href]="fileAttachment.url" target="_blank">
 					<i class="fa fa-download"></i>
 				</a>
-				<a class="btn btn-xs">
+				<a class="btn btn-xs" *ngIf="!readonly">
 					<i class="fa unitpal-font" (click)="removeFileAttachment(fileAttachment)">\</i>
 				</a>
 			</td>
 		</tr>
-		<tr>
+		<tr *ngIf="!readonly">
 			<td class="th-file-label">
-				<label class="btn btn-primary btn-block th-file-add">
+				<label class="btn btn-primary btn-block th-file-add" [ngClass]="attachButtonClasses">
 					<input type="file" (change)="didSelectFile($event)"/><i class="fa fa-paperclip" aria-hidden="true"></i>  {{ 'Attach file' | translate }}
 				</label>
 			</td>

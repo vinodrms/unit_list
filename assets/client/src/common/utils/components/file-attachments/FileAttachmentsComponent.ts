@@ -11,6 +11,10 @@ import {UploadedFileResponse} from '../../http/IThHttp';
 	pipes: [TranslationPipe]
 })
 export class FileAttachmentsComponent extends BaseComponent {
+	@Input() readonly: boolean = false;
+	@Input() hideLabel: boolean = false;
+	@Input() attachButtonClasses: string = "";
+
 	private _fileAttachmentList: FileAttachmentDO[] = [];
 	public get fileAttachmentList(): FileAttachmentDO[] {
 		return this._fileAttachmentList;

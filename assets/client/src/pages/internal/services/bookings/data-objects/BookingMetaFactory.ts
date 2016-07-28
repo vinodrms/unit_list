@@ -1,7 +1,7 @@
 import {BookingMeta} from './BookingMeta';
 import {BookingConfirmationStatus} from './BookingDO';
 import {BookingIntervalEditRight, BookingNoShowEditRight, BookingAssignRoomRight,
-    BookingCapacityEditRight, BookingPaymentGuaranteeEditRight} from './BookingEditRights';
+    BookingCapacityEditRight, BookingPaymentGuaranteeEditRight, BookingDetailsEditRight} from './BookingEditRights';
 
 export class BookingMetaFactory {
     public getBookingMetaList(): BookingMeta[] {
@@ -14,6 +14,7 @@ export class BookingMetaFactory {
                 assignRoomRight: BookingAssignRoomRight.Reserve,
                 capacityEditRight: BookingCapacityEditRight.EditCapacity,
                 paymentGuaranteeEditRight: BookingPaymentGuaranteeEditRight.EditPaymentGuarantee,
+                detailsEditRight: BookingDetailsEditRight.EditDetails,
                 displayClassName: "upcoming",
                 fontName: "Z"
             }),
@@ -25,6 +26,7 @@ export class BookingMetaFactory {
                 assignRoomRight: BookingAssignRoomRight.Reserve,
                 capacityEditRight: BookingCapacityEditRight.EditCapacity,
                 paymentGuaranteeEditRight: BookingPaymentGuaranteeEditRight.EditPaymentGuarantee,
+                detailsEditRight: BookingDetailsEditRight.EditDetails,
                 displayClassName: "upcoming",
                 fontName: "Z"
             }),
@@ -36,6 +38,7 @@ export class BookingMetaFactory {
                 assignRoomRight: BookingAssignRoomRight.None,
                 capacityEditRight: BookingCapacityEditRight.None,
                 paymentGuaranteeEditRight: BookingPaymentGuaranteeEditRight.None,
+                detailsEditRight: BookingDetailsEditRight.EditDetails,
                 displayClassName: "noshow",
                 fontName: "+"
             }),
@@ -47,6 +50,7 @@ export class BookingMetaFactory {
                 assignRoomRight: BookingAssignRoomRight.None,
                 capacityEditRight: BookingCapacityEditRight.None,
                 paymentGuaranteeEditRight: BookingPaymentGuaranteeEditRight.None,
+                detailsEditRight: BookingDetailsEditRight.EditDetails,
                 displayClassName: "noshow",
                 fontName: "+"
             }),
@@ -58,6 +62,7 @@ export class BookingMetaFactory {
                 assignRoomRight: BookingAssignRoomRight.None,
                 capacityEditRight: BookingCapacityEditRight.None,
                 paymentGuaranteeEditRight: BookingPaymentGuaranteeEditRight.None,
+                detailsEditRight: BookingDetailsEditRight.None,
                 displayClassName: "",
                 fontName: "C"
             }),
@@ -69,6 +74,7 @@ export class BookingMetaFactory {
                 assignRoomRight: BookingAssignRoomRight.Change,
                 capacityEditRight: BookingCapacityEditRight.EditCapacity,
                 paymentGuaranteeEditRight: BookingPaymentGuaranteeEditRight.None,
+                detailsEditRight: BookingDetailsEditRight.EditDetails,
                 displayClassName: "checkedin",
                 fontName: "("
             }),
@@ -80,6 +86,7 @@ export class BookingMetaFactory {
                 assignRoomRight: BookingAssignRoomRight.None,
                 capacityEditRight: BookingCapacityEditRight.None,
                 paymentGuaranteeEditRight: BookingPaymentGuaranteeEditRight.None,
+                detailsEditRight: BookingDetailsEditRight.None,
                 displayClassName: "checkedout",
                 fontName: "*"
             })

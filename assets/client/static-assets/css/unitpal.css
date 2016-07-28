@@ -1979,6 +1979,9 @@ a.btn.btn-square:focus {
 .padding-left-5px {
     padding-left: 5px;
 }
+.padding-left-11px {
+    padding-left: 11px;
+}
 .no-padding {
     padding: 0px 0px;
 }
@@ -2910,6 +2913,14 @@ a.btn.btn-square:focus {
     overflow: hidden;
     text-overflow: ellipsis;
 }
+.operational-page-container .text-field>p.notes {
+    white-space: inherit;
+    font-size: 11px;
+    font-weight: 400;
+}
+.operational-page-container .text-field>p.placeholder {
+    opacity: 0.5;
+}
 .operational-page-container .field-value.capacity {
     margin-top: -4px;
 }
@@ -2976,6 +2987,9 @@ a.btn.btn-square:focus {
     position: relative;
     right: 3px;
 }
+.container-button {
+    width: 95px;
+}
 .increased-font-weight {
     font-weight: 600;
 }
@@ -3015,9 +3029,15 @@ a.btn.btn-square:focus {
  .operational-page-container .right-sidebar .notes {
      font-size: 11px; 
  }
+ textarea.notes {
+     font-size: 11px;
+ }
  .unitpal-font.checkin {
      color: #36ce8d;
  }
  .unitpal-font.checkout {
      color: #fb6708;
+}
+table.small-margin {
+    margin-bottom: 5px;
 }

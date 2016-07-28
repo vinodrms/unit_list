@@ -576,6 +576,8 @@ export var EnglishTranslations: Object = {
 	"Payment": "Payment",
 	"Guarantee added": "Guarantee added",
 	"No guarantee": "No guarantee",
+	"Files": "Files",
+	"None": "None",
 
 	
 };

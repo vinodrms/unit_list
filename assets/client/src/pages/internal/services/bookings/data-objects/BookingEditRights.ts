@@ -20,3 +20,7 @@ export enum BookingPaymentGuaranteeEditRight {
     EditPaymentGuarantee,
     None
 }
+export enum BookingDetailsEditRight {
+    EditDetails,
+    None
+}

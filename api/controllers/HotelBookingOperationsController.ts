@@ -9,6 +9,7 @@ import {BookingChangeDates} from '../core/domain-layer/hotel-operations/booking/
 import {BookingChangeNoShowTime} from '../core/domain-layer/hotel-operations/booking/change-no-show-time/BookingChangeNoShowTime';
 import {BookingChangeCapacity} from '../core/domain-layer/hotel-operations/booking/change-capacity/BookingChangeCapacity';
 import {BookingPaymentGuarantee} from '../core/domain-layer/hotel-operations/booking/payment-guarantee/BookingPaymentGuarantee';
+import {BookingChangeDetails} from '../core/domain-layer/hotel-operations/booking/change-details/BookingChangeDetails';
 
 class HotelBookingOperationsController extends BaseController {
     public getPossiblePrices(req: Express.Request, res: Express.Response) {
@@ -73,6 +74,19 @@ class HotelBookingOperationsController extends BaseController {
             this.returnErrorResponse(req, res, error, ThStatusCode.HotelBookingOperationsControllerErrorAddingPaymentGuarantee);
         });
     }
+
+    public changeDetails(req: Express.Request, res: Express.Response) {
+        var appContext: AppContext = req.appContext;
+        var sessionContext: SessionContext = req.sessionContext;
+
+        var bookingChangeDetails = new BookingChangeDetails(appContext, sessionContext);
+        bookingChangeDetails.changeDetails(req.body.booking).then((booking: BookingDO) => {
+            booking.bookingHistory.translateActions(this.getThTranslation(sessionContext));
+            this.returnSuccesfulResponse(req, res, { booking: booking });
+        }).catch((error: any) => {
+            this.returnErrorResponse(req, res, error, ThStatusCode.HotelBookingOperationsControllerErrorChangingDetails);
+        });
+    }
 }
 
 var hotelBookingOperationsController = new HotelBookingOperationsController();
@@ -82,4 +96,5 @@ module.exports = {
     changeNoShowTime: hotelBookingOperationsController.changeNoShowTime.bind(hotelBookingOperationsController),
     changeCapacity: hotelBookingOperationsController.changeCapacity.bind(hotelBookingOperationsController),
     addPaymentGuarantee: hotelBookingOperationsController.addPaymentGuarantee.bind(hotelBookingOperationsController),
+    changeDetails: hotelBookingOperationsController.changeDetails.bind(hotelBookingOperationsController),
 }
