@@ -50,4 +50,7 @@ export class BookingPriceProductViewerComponent implements OnInit {
     public get isPenaltyPrice(): boolean {
         return this._bookingOperationsPageData.bookingDO.price.isPenalty();
     }
+    public get roomCategoryName(): string {
+        return this._bookingOperationsPageData.roomCategoryStats.roomCategory.displayName;
+    }
 }
