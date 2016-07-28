@@ -13,7 +13,8 @@ export class BookingOperationsPageData {
     private _bookingMeta: BookingMeta;
     private _ccy: CurrencyDO;
     private _operationHours: OperationHoursDO;
-    private _hotelPaymentMethods: HotelPaymentMethodsDO;
+    private _allPaymentMethods: HotelPaymentMethodsDO;
+    private _allowedPaymentMethods: HotelPaymentMethodsDO;
     private _customersContainer: CustomersDO;
     private _roomVM: RoomVM;
     private _roomCategoryStats: RoomCategoryStatsDO;
@@ -38,11 +39,17 @@ export class BookingOperationsPageData {
     public set operationHours(operationHours: OperationHoursDO) {
         this._operationHours = operationHours;
     }
-    public get hotelPaymentMethods(): HotelPaymentMethodsDO {
-        return this._hotelPaymentMethods;
+    public get allPaymentMethods(): HotelPaymentMethodsDO {
+        return this._allPaymentMethods;
     }
-    public set hotelPaymentMethods(hotelPaymentMethods: HotelPaymentMethodsDO) {
-        this._hotelPaymentMethods = hotelPaymentMethods;
+    public set allPaymentMethods(allPaymentMethods: HotelPaymentMethodsDO) {
+        this._allPaymentMethods = allPaymentMethods;
+    }
+    public get allowedPaymentMethods(): HotelPaymentMethodsDO {
+        return this._allowedPaymentMethods;
+    }
+    public set allowedPaymentMethods(allowedPaymentMethods: HotelPaymentMethodsDO) {
+        this._allowedPaymentMethods = allowedPaymentMethods;
     }
     public get customersContainer(): CustomersDO {
         return this._customersContainer;
@@ -73,7 +80,8 @@ export class BookingOperationsPageData {
         var pageData = new BookingOperationsPageData();
         pageData.bookingDO = this.bookingDO;
         pageData.ccy = this.ccy;
-        pageData.hotelPaymentMethods = this.hotelPaymentMethods;
+        pageData.allPaymentMethods = this.allPaymentMethods;
+        pageData.allowedPaymentMethods = this.allowedPaymentMethods;
         pageData.operationHours = this.operationHours;
         pageData.customersContainer = this.customersContainer;
         pageData.roomVM = this.roomVM;

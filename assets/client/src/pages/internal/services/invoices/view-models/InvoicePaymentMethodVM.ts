@@ -23,4 +23,12 @@ export class InvoicePaymentMethodVM {
     public set iconUrl(iconUrl: string) {
         this._iconUrl = iconUrl;
     }
+
+    public buildPrototype(): InvoicePaymentMethodVM {
+        var pmVM = new InvoicePaymentMethodVM();
+        pmVM.paymentMethod = this.paymentMethod.buildPrototype();
+        pmVM.displayName = this.displayName;
+        pmVM.iconUrl = this.iconUrl;
+        return pmVM;
+    }
 }

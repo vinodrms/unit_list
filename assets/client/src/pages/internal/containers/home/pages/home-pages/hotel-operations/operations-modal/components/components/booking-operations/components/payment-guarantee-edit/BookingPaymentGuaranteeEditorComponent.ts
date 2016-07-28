@@ -39,7 +39,7 @@ export class BookingPaymentGuaranteeEditorComponent implements OnInit {
 
     paymentMethodVMList: InvoicePaymentMethodVM[] = [];
     selectedPaymentMethodVM: InvoicePaymentMethodVM;
-    private _paymentMethodDOCopy: InvoicePaymentMethodDO;
+    private _selectedPaymentMethodVMCopy: InvoicePaymentMethodVM;
 
     constructor(private _appContext: AppContext,
         private _hotelOperationsBookingService: HotelOperationsBookingService) { }
@@ -53,42 +53,27 @@ export class BookingPaymentGuaranteeEditorComponent implements OnInit {
         if (!this._didInit || this._appContext.thUtils.isUndefinedOrNull(this._bookingOperationsPageData)) { return; }
         this.readonly = true;
         this.isSaving = false;
-        var pmGenerator = new InvoicePaymentMethodVMGenerator(this._bookingOperationsPageData.hotelPaymentMethods);
-        var billableCustomerId = this.defaultBillingDetailsDO.customerId;
-        var billableCustomer = this._bookingOperationsPageData.customersContainer.getCustomerById(billableCustomerId);
-        this.paymentMethodVMList = pmGenerator.generatePaymentMethodsFor(billableCustomer);
-        this.updateSelectedPaymentMethod();
-    }
-    private updateSelectedPaymentMethod() {
-        if (!this.hasPaymentGuarantee) {
-            this.setDefaultPaymentMethod();
-            return;
-        }
-        var foundPaymentMethodVM = _.find(this.paymentMethodVMList, (pm: InvoicePaymentMethodVM) => {
-            return pm.paymentMethod.type === this.defaultBillingDetailsDO.paymentMethod.type && pm.paymentMethod.value === this.defaultBillingDetailsDO.paymentMethod.value;
-        });
-        if (this._appContext.thUtils.isUndefinedOrNull(foundPaymentMethodVM)) {
-            this.setDefaultPaymentMethod();
-            return;
-        }
-        this.selectedPaymentMethodVM = foundPaymentMethodVM;
-    }
-    private setDefaultPaymentMethod() {
-        this.selectedPaymentMethodVM = this.paymentMethodVMList[0];
+        var pmGenerator = new InvoicePaymentMethodVMGenerator(this._bookingOperationsPageData.allowedPaymentMethods);
+        var billedCustomerId = this.defaultBillingDetailsDO.customerId;
+        var billedCustomer = this._bookingOperationsPageData.customersContainer.getCustomerById(billedCustomerId);
+        this.paymentMethodVMList = pmGenerator.generatePaymentMethodsFor(billedCustomer);
+        this.selectedPaymentMethodVM = pmGenerator.generatePaymentMethodVMForPaymentMethod(this.defaultBillingDetailsDO.paymentMethod, this._bookingOperationsPageData.allPaymentMethods);
     }
 
     public get hasPaymentGuaranteeEditAccess(): boolean {
         return this._bookingOperationsPageData.bookingMeta.paymentGuaranteeEditRight === BookingPaymentGuaranteeEditRight.EditPaymentGuarantee;
     }
+    public get hasPaymentGuarantee(): boolean {
+        return this.defaultBillingDetailsDO.paymentGuarantee && !this._appContext.thUtils.isUndefinedOrNull(this.defaultBillingDetailsDO.paymentMethod);
+    }
+
     public get bookingDO(): BookingDO {
         return this._bookingOperationsPageData.bookingDO;
     }
     public get defaultBillingDetailsDO(): DefaultBillingDetailsDO {
         return this.bookingDO.defaultBillingDetails;
     }
-    public get hasPaymentGuarantee(): boolean {
-        return this.bookingDO.defaultBillingDetails.paymentGuarantee;
-    }
+
     public get buttonChangeText(): string {
         if (!this.hasPaymentGuarantee) { return "Add"; }
         return "Change";
@@ -97,16 +82,21 @@ export class BookingPaymentGuaranteeEditorComponent implements OnInit {
     public startEdit() {
         if (!this.hasPaymentGuaranteeEditAccess) { return; };
         this.readonly = false;
-        this._paymentMethodDOCopy = this.selectedPaymentMethodVM.paymentMethod.buildPrototype();
+        this._selectedPaymentMethodVMCopy = this.selectedPaymentMethodVM.buildPrototype();
+        this.selectedPaymentMethodVM = _.find(this.paymentMethodVMList, (paymentMethodVM: InvoicePaymentMethodVM) => {
+            return paymentMethodVM.paymentMethod.type === this.selectedPaymentMethodVM.paymentMethod.type &&
+                paymentMethodVM.paymentMethod.value === this.selectedPaymentMethodVM.paymentMethod.value;
+        });
+        if (this._appContext.thUtils.isUndefinedOrNull(this.selectedPaymentMethodVM)) {
+            this.selectedPaymentMethodVM = this.paymentMethodVMList[0];
+        }
     }
     public endEdit() {
         this.readonly = true;
-        this.selectedPaymentMethodVM = _.find(this.paymentMethodVMList, (pm: InvoicePaymentMethodVM) => {
-            return pm.paymentMethod.isSame(this._paymentMethodDOCopy);
-        });
+        this.selectedPaymentMethodVM = this._selectedPaymentMethodVMCopy;
     }
     public savePaymentGuarantee() {
-        if (!this.hasPaymentGuaranteeEditAccess || this._paymentMethodDOCopy.isSame(this.selectedPaymentMethodVM.paymentMethod)) {
+        if (!this.hasPaymentGuaranteeEditAccess || this._selectedPaymentMethodVMCopy.paymentMethod.isSame(this.selectedPaymentMethodVM.paymentMethod)) {
             this.endEdit();
             return;
         }

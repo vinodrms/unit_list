@@ -37,4 +37,16 @@ export class InvoicePaymentMethodVMGenerator {
         pmVM.paymentMethod.value = paymentMethod.id;
         return pmVM;
     }
+    public generatePaymentMethodVMForPaymentMethod(invoicePaymentMethodDO: InvoicePaymentMethodDO, allPaymentMethods: HotelPaymentMethodsDO): InvoicePaymentMethodVM {
+        if (invoicePaymentMethodDO.type === InvoicePaymentMethodType.PayInvoiceByAgreement) {
+            return this.generatePayInvoiceByAgreementPaymentMethodVM();
+        }
+        var foundPaymentMethodDO: PaymentMethodDO = _.find(allPaymentMethods.paymentMethodList, (paymentMethodDO: PaymentMethodDO) => {
+            return paymentMethodDO.id === invoicePaymentMethodDO.value;
+        });
+        if (!foundPaymentMethodDO) {
+            foundPaymentMethodDO = allPaymentMethods.paymentMethodList[0];
+        }
+        return this.generatePaymentMethodVMFor(foundPaymentMethodDO);
+    }
 }
