@@ -6,17 +6,22 @@ import {DepartureItemComponent} from './components/departure-item/DepartureItemC
 import {DepartureItemInfoVM} from '../../../../../../../../services/hotel-operations/dashboard/departures/view-models/DepartureItemInfoVM';
 
 import {HotelOperationsDashboardService} from '../../../../../../../../services/hotel-operations/dashboard/HotelOperationsDashboardService';
+import {HotelService} from '../../../../../../../../services/hotel/HotelService';
+
+import {HotelDetailsDO} from '../../../../../../../../services/hotel/data-objects/HotelDetailsDO';
 
 import {AppContext} from '../../../../../../../../../../common/utils/AppContext';
 import {ThError} from '../../../../../../../../../../common/utils/responses/ThError';
 
 import {ThDateDO} from '../../../../../../../../services/common/data-objects/th-dates/ThDateDO';
 
+import {CustomScroll} from '../../../../../../../../../../../src/common/utils/directives/CustomScroll';
+
 declare var $:any;
 @Component({
 	selector: 'departures-pane',
 	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/dashboard/components/departures-pane/template/departures-pane.html',
-	directives: [DepartureItemComponent]
+	directives: [CustomScroll, DepartureItemComponent]
 })
 
 export class DeparturesPaneComponent implements OnInit {
@@ -30,19 +35,26 @@ export class DeparturesPaneComponent implements OnInit {
 
 	constructor(
 		private _hotelOperationsDashboardService: HotelOperationsDashboardService,
+		private _hotelService:HotelService,
 		private _appContext: AppContext){
 	}
 
 	ngOnInit() {
 		this.hotelOperationsDashboard.registerDeparturesPane(this);
-		this.selectedDate = ThDateDO.buildThDateDO(2016, 6, 23);
-		this._hotelOperationsDashboardService.getDepartureItems(this.selectedDate)
-			.subscribe((departures: DepartureItemInfoVM[]) => {
-				this.departureItemsVMList = departures;
-				this.updateFilterDepartures();
-			}, (error: ThError) => {
-				this._appContext.toaster.error(error.message);
-			});		
+		this._hotelService.getHotelDetailsDO().subscribe((details: HotelDetailsDO)=>{
+			this.selectedDate = details.currentThTimestamp.thDateDO.buildPrototype();
+			//TODO: Remove
+			this.selectedDate = ThDateDO.buildThDateDO(2016, 6, 23);
+			
+			this._hotelOperationsDashboardService.getDepartureItems(this.selectedDate)
+				.subscribe((departures: DepartureItemInfoVM[]) => {
+					this.departureItemsVMList = departures;
+					this.updateFilterDepartures();
+				}, (error: ThError) => {
+					this._appContext.toaster.error(error.message);
+				});
+		
+		});
 	}
 
 	private updateFilterDepartures(){
@@ -72,7 +84,6 @@ export class DeparturesPaneComponent implements OnInit {
 	}
 
 	public refresh(){
-		debugger;
 		//TODO: FIX THIS
 		if (!this.selectedDate) {
 			this.selectedDate = ThDateDO.buildThDateDO(2016, 6, 23);

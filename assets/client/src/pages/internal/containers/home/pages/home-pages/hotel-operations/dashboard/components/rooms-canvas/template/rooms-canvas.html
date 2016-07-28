@@ -2,7 +2,7 @@
 	<div class="rooms-controller p-12">
 		<div class="group-1 flex-row flex-center-v">
 			<i class="fa fa-calendar orange-color f-24 p-r-6" aria-hidden="true"></i>
-			<div class="current-date p-r-12 f-24"><b>{{getDateShortString()}}</b></div>
+			<div *ngIf="currentDate" class="current-date p-r-12 f-24"><b>{{getDateShortString()}}</b></div>
 		</div>
 		<div class="group-2 flex-row flex-center-v">
 			<select class="form-control rooms-filter p-r-12 f-12" [ngModel]="filterValue.currentValue" (ngModelChange)="filterValueChanged($event)">
@@ -21,7 +21,7 @@
 		</div>
 	</div>
 </div>
-<div class="body rooms-canvas">
+<div customScroll class="body rooms-canvas">
 	<div *ngFor="let roomVM of filteredRoomVMList">
 		<room-card [roomVM]="roomVM" [roomCanvas]="self" (dropped)="dropHandled($event)"></room-card>
 	</div>

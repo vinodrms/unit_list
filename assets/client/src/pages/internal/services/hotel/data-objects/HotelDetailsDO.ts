@@ -11,6 +11,7 @@ export class HotelDetailsDO extends BaseDO {
 	protected getPrimitivePropertyKeys(): string[] {
 		return [];
 	}
+	
 	public buildFromObject(object: Object) {
 		super.buildFromObject(object);
 

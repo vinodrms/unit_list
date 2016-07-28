@@ -2032,6 +2032,10 @@ a.btn.btn-square:focus {
         width: 100%;
         height: 100%;
         overflow-y: hidden;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        cursor: default;
     }
 
     .hotel-operations-dashboard{
@@ -2115,6 +2119,7 @@ a.btn.btn-square:focus {
         }
 
         .pane > .body{
+            height: 100px;
             flex-grow: 1;
         }
 
@@ -2170,7 +2175,11 @@ a.btn.btn-square:focus {
         flex-grow: 0;
         padding: 12px;
     }
-    
+
+    rooms-canvas .body {
+        overflow-y: hidden;
+        height: calc(100% - 49px);
+    }
 
         /* Room cards */
         
@@ -2238,8 +2247,8 @@ a.btn.btn-square:focus {
             border-bottom: 2px solid #b9b9b9;
         }
 
-        .room-card.ghost{
-            opacity: 0.65
+        .ghost{
+            opacity: 0.5
         }
 
         .room-card.accepts-drop{
@@ -2310,6 +2319,9 @@ a.btn.btn-square:focus {
 
 
         /* Arrivals Pane */
+        arrival-item{
+            display: block;
+        }
 
         arrival-item > div{
             cursor: default;
@@ -2326,6 +2338,10 @@ a.btn.btn-square:focus {
             justify-content: center;
             border-right: 1px solid #dbdbdb;
             width: 13px;
+        }
+
+        arrival-item .right:hover{
+            background-color: #fafafa;
         }
 
         arrival-item .left.can-check-in{
@@ -2354,6 +2370,10 @@ a.btn.btn-square:focus {
         arrival-item .header{
             padding-top: 10px;
             font-size: 16px;
+        }
+
+        arrival-item .body{
+            overflow-y: hidden;
         }
 
         arrival-item .body .period {
@@ -2412,23 +2432,34 @@ a.btn.btn-square:focus {
         }
 
         /* Departures Pane */
-
         departure-item {
+            display: block;
+        }
+
+        departure-item > div {
             cursor: default;
             background-color: #f3f3f3;
-            border-bottom: 1px solid #f3f3f3;
+            border-bottom: 1px solid #dbdbdb;
             display: flex;
             flex-direction: column;
             padding: 6px 12px 6px 12px;
         }
 
-        departure-item.selected {
+        departure-item > div:hover{
+            background-color: #fafafa;
+        }
+
+        departure-item.selected > div {
             background-color: white;
         }
 
         departure-item .header{
             padding-top: 10px;
             font-size: 16px;
+        }
+
+        departure-item .body{
+            overflow-y: hidden;
         }
 
         departure-item .body .period {

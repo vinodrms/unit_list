@@ -11,18 +11,24 @@ import {ArrivalItemInfoVM} from '../../../../../../../../services/hotel-operatio
 import {HotelOperationsDashboardService} from '../../../../../../../../services/hotel-operations/dashboard/HotelOperationsDashboardService';
 
 import {IHotelOperationsDashboardArrivalsPaneMediator} from '../../HotelOperationsDashboardComponent';
+import {HotelService} from '../../../../../../../../services/hotel/HotelService';
+
+import {HotelDetailsDO} from '../../../../../../../../services/hotel/data-objects/HotelDetailsDO';
 
 import {AppContext} from '../../../../../../../../../../common/utils/AppContext';
 import {ThError} from '../../../../../../../../../../common/utils/responses/ThError';
 
 import {ThDateDO} from '../../../../../../../../services/common/data-objects/th-dates/ThDateDO';
+
+import {CustomScroll} from '../../../../../../../../../../../src/common/utils/directives/CustomScroll';
+
 declare var _: any;
 
 @Component({
 	selector: 'arrivals-pane',
 	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/dashboard/components/arrivals-pane/template/arrivals-pane.html',
 	providers: [NewBookingModalService],
-	directives: [ThButtonComponent, ArrivalItemComponent]
+	directives: [CustomScroll, ThButtonComponent, ArrivalItemComponent]
 })
 
 export class ArrivalsPaneComponent implements OnInit {
@@ -38,19 +44,26 @@ export class ArrivalsPaneComponent implements OnInit {
 	constructor(
 		private _newBookingModalService: NewBookingModalService,
 		private _hotelOperationsDashboardService: HotelOperationsDashboardService,
+		private _hotelService:HotelService,
 		private _appContext: AppContext) {
-		this.selectedDate = ThDateDO.buildThDateDO(2016, 6, 30);
 	}
 
 	ngOnInit() {
 		this.hotelOperationsDashboard.registerArrivalsPane(this);
-		this._hotelOperationsDashboardService.getArrivalItems(this.selectedDate)
-			.subscribe((arrivals: ArrivalItemInfoVM[]) => {
-				this.arrivalItemsVMList = arrivals;
-				this.updateFilterArrivals();
-			}, (error: ThError) => {
-				this._appContext.toaster.error(error.message);
-			});
+		this._hotelService.getHotelDetailsDO().subscribe((details: HotelDetailsDO)=>{
+			this.selectedDate = details.currentThTimestamp.thDateDO.buildPrototype();
+			// TODO: Remove
+			this.selectedDate = ThDateDO.buildThDateDO(2016, 6, 30);
+
+			this._hotelOperationsDashboardService.getArrivalItems(this.selectedDate)
+				.subscribe((arrivals: ArrivalItemInfoVM[]) => {
+					this.arrivalItemsVMList = arrivals;
+					this.updateFilterArrivals();
+				}, (error: ThError) => {
+					this._appContext.toaster.error(error.message);
+				});
+		})
+
 	}
 
 	private updateFilterArrivals(){

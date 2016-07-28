@@ -5,7 +5,7 @@
 			<span class="unitpal-font green-color p-r-12 f-32">.</span>
 			<div>
 				<div class="f-12">Departures</div>
-				<div class="current-date f-16"><b>{{getDateShortString()}}</b></div>			
+				<div *ngIf="selectedDate" class="current-date f-16"><b>{{getDateShortString()}}</b></div>			
 			</div>
 		</div>
 		<div class="unitpal-font f-12 p-r-12 f-32 clickable" (click)="nextDay()">&gt;</div>
@@ -17,11 +17,41 @@
 	</div>
 
 </div>
-<div class="body">
+<div customScroll class="body">
 	<departure-item
 		*ngFor="let departureItemVM of filteredDeparturesVMList"
 		[ngClass]="{'selected': isDepartureItemSelected(departureItemVM)}" 
 		[departureItemVM] = "departureItemVM" 
 		(click) = "selectDepartureItem(departureItemVM)">
 	</departure-item>
+	<departure-item
+		*ngFor="let departureItemVM of filteredDeparturesVMList"
+		[ngClass]="{'selected': isDepartureItemSelected(departureItemVM)}" 
+		[departureItemVM] = "departureItemVM" 
+		(click) = "selectDepartureItem(departureItemVM)">
+	</departure-item>
+	<departure-item
+		*ngFor="let departureItemVM of filteredDeparturesVMList"
+		[ngClass]="{'selected': isDepartureItemSelected(departureItemVM)}" 
+		[departureItemVM] = "departureItemVM" 
+		(click) = "selectDepartureItem(departureItemVM)">
+	</departure-item>
+	<departure-item
+		*ngFor="let departureItemVM of filteredDeparturesVMList"
+		[ngClass]="{'selected': isDepartureItemSelected(departureItemVM)}" 
+		[departureItemVM] = "departureItemVM" 
+		(click) = "selectDepartureItem(departureItemVM)">
+	</departure-item>
+	<departure-item
+		*ngFor="let departureItemVM of filteredDeparturesVMList"
+		[ngClass]="{'selected': isDepartureItemSelected(departureItemVM)}" 
+		[departureItemVM] = "departureItemVM" 
+		(click) = "selectDepartureItem(departureItemVM)">
+	</departure-item>
+	<departure-item
+		*ngFor="let departureItemVM of filteredDeparturesVMList"
+		[ngClass]="{'selected': isDepartureItemSelected(departureItemVM)}" 
+		[departureItemVM] = "departureItemVM" 
+		(click) = "selectDepartureItem(departureItemVM)">
+	</departure-item>					
 </div>
