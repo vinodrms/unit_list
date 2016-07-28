@@ -424,6 +424,10 @@ export enum ThStatusCode {
     BookingChangeDetailsInvalidState,
     BookingChangeDetailsError,
     HotelBookingOperationsControllerErrorChangingDetails,
+    BookingChangeCustomersInvalidState,
+    BookingChangeCustomersError,
+    BookingChangeCustomersBilledCustomerMisssing,
+    HotelBookingOperationsControllerErrorChangingCustomers,
 
 }
 
@@ -839,6 +843,10 @@ ThMessage[ThStatusCode.HotelBookingOperationsControllerErrorAddingPaymentGuarant
 ThMessage[ThStatusCode.BookingChangeDetailsInvalidState] = "You cannot change details for checked out or cancelled bookings.";
 ThMessage[ThStatusCode.BookingChangeDetailsError] = "Error changing booking details.";
 ThMessage[ThStatusCode.HotelBookingOperationsControllerErrorChangingDetails] = "Error changing booking details.";
+ThMessage[ThStatusCode.BookingChangeCustomersInvalidState] = "The customers can be changed only for checked in, confirmed or guaranteed bookings.";
+ThMessage[ThStatusCode.BookingChangeCustomersError] = "Error changing customers from booking.";
+ThMessage[ThStatusCode.BookingChangeCustomersBilledCustomerMisssing] = "The billed customer is missing from the list.";
+ThMessage[ThStatusCode.HotelBookingOperationsControllerErrorChangingCustomers] = "Error changing customers from booking.";
 
 export class ThResponse {
     statusCode: ThStatusCode;

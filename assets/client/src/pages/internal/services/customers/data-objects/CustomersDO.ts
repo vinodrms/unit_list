@@ -21,4 +21,18 @@ export class CustomersDO extends BaseDO {
 	public getCustomerById(customerId: string): CustomerDO {
 		return _.find(this.customerList, (customer: CustomerDO) => { return customer.id === customerId });
 	}
+
+	public appendCustomerList(customerListToAppend: CustomerDO[]) {
+		_.forEach(customerListToAppend, (customerToAppend: CustomerDO) => {
+			this.appendCustomer(customerToAppend);
+		});
+	}
+	private appendCustomer(customerToAppend: CustomerDO) {
+		if(!this.getCustomerById(customerToAppend.id)) {
+			this.customerList.push(customerToAppend);
+		}
+	}
+	public removeCustomer(customer: CustomerDO) {
+		this.customerList = _.filter(this.customerList, (currentCustomer: CustomerDO) => { return currentCustomer.id !== customer.id });
+	}
 }

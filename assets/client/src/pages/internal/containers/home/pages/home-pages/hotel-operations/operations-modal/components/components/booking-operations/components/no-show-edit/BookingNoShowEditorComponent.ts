@@ -67,7 +67,7 @@ export class BookingNoShowEditorComponent implements OnInit {
     }
 
     public get canEditNoShow(): boolean {
-        return this._bookingOperationsPageData.bookingMeta.noShowEditRight === BookingNoShowEditRight.EditNoShow;
+        return this._bookingOperationsPageData.bookingMeta.noShowEditRight === BookingNoShowEditRight.Edit;
     }
 
     public startEdit() {

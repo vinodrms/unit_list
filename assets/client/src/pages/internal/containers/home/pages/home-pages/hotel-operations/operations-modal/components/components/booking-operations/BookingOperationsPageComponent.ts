@@ -18,6 +18,7 @@ import {BookingPaymentGuaranteeEditorComponent} from './components/payment-guara
 import {BookingDetailsEditorComponent} from './components/booking-details/BookingDetailsEditorComponent';
 import {BookingPriceProductViewerComponent} from './components/price-product-view/BookingPriceProductViewerComponent';
 import {BookingAllotmentViewerComponent} from './components/allotment-view/BookingAllotmentViewerComponent';
+import {BookingCustomerEditorComponent} from './components/customers-edit/BookingCustomerEditorComponent';
 
 @Component({
     selector: 'booking-operations-page',
@@ -25,7 +26,8 @@ import {BookingAllotmentViewerComponent} from './components/allotment-view/Booki
     directives: [LoadingComponent, CustomScroll,
         BookingPeriodEditorComponent, BookingNoShowEditorComponent, BookingRoomEditorComponent,
         BookingCapacityEditorComponent, BookingPaymentGuaranteeEditorComponent, BookingDetailsEditorComponent,
-        BookingPriceProductViewerComponent, BookingAllotmentViewerComponent, DocumentHistoryViewerComponent],
+        BookingPriceProductViewerComponent, BookingAllotmentViewerComponent, DocumentHistoryViewerComponent,
+        BookingCustomerEditorComponent],
     providers: [BookingOperationsPageService],
     pipes: [TranslationPipe]
 })

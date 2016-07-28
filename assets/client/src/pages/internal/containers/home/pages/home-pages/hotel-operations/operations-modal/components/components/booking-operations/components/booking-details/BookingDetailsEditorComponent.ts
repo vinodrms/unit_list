@@ -61,7 +61,7 @@ export class BookingDetailsEditorComponent implements OnInit {
         return this.bookingDO.fileAttachmentList.length == 0;
     }
     public get hasDetailsEditRight(): boolean {
-        return this._bookingOperationsPageData.bookingMeta.detailsEditRight === BookingDetailsEditRight.EditDetails;
+        return this._bookingOperationsPageData.bookingMeta.detailsEditRight === BookingDetailsEditRight.Edit;
     }
 
     public startEdit() {

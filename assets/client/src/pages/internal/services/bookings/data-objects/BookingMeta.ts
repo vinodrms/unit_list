@@ -1,6 +1,7 @@
 import {BookingConfirmationStatus} from './BookingDO';
 import {BookingIntervalEditRight, BookingNoShowEditRight, BookingAssignRoomRight, 
-        BookingCapacityEditRight, BookingPaymentGuaranteeEditRight, BookingDetailsEditRight} from './BookingEditRights';
+        BookingCapacityEditRight, BookingPaymentGuaranteeEditRight, BookingDetailsEditRight,
+        BookingCustomerEditRight} from './BookingEditRights';
 
 export interface BookingMetaOptions {
     confirmationStatus: BookingConfirmationStatus;
@@ -13,6 +14,7 @@ export interface BookingMetaOptions {
     capacityEditRight: BookingCapacityEditRight;
     paymentGuaranteeEditRight: BookingPaymentGuaranteeEditRight;
     detailsEditRight: BookingDetailsEditRight;
+    customerEditRight: BookingCustomerEditRight;
 }
 
 export class BookingMeta {
@@ -26,6 +28,7 @@ export class BookingMeta {
     capacityEditRight: BookingCapacityEditRight;
     paymentGuaranteeEditRight: BookingPaymentGuaranteeEditRight;
     detailsEditRight: BookingDetailsEditRight;
+    customerEditRight: BookingCustomerEditRight;
 
     constructor(metaOptions: BookingMetaOptions) {
         this.confirmationStatus = metaOptions.confirmationStatus;
@@ -38,5 +41,6 @@ export class BookingMeta {
         this.capacityEditRight = metaOptions.capacityEditRight;
         this.paymentGuaranteeEditRight = metaOptions.paymentGuaranteeEditRight;
         this.detailsEditRight = metaOptions.detailsEditRight;
+        this.customerEditRight = metaOptions.customerEditRight;
     }
 }

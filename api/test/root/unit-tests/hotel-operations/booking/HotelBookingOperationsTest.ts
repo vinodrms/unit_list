@@ -13,6 +13,7 @@ import {HotelDashboardOperationsTestHelper} from '../dashboard/helpers/HotelDash
 import {PriceProductDO} from '../../../../../core/data-layer/price-products/data-objects/PriceProductDO';
 import {AddBookingItems} from '../../../../../core/domain-layer/bookings/add-bookings/AddBookingItems';
 import {BookingItemDO} from '../../../../../core/domain-layer/bookings/add-bookings/AddBookingItemsDO';
+import {CustomerDO, CustomerType} from '../../../../../core/data-layer/customers/data-objects/CustomerDO';
 import {BookingDO, GroupBookingInputChannel, BookingConfirmationStatus} from '../../../../../core/data-layer/bookings/data-objects/BookingDO';
 import {BookingChangeDates} from '../../../../../core/domain-layer/hotel-operations/booking/change-dates/BookingChangeDates';
 import {BookingChangeDatesDO} from '../../../../../core/domain-layer/hotel-operations/booking/change-dates/BookingChangeDatesDO';
@@ -29,6 +30,8 @@ import {BookingPaymentGuarantee} from '../../../../../core/domain-layer/hotel-op
 import {BookingPaymentGuaranteeDO} from '../../../../../core/domain-layer/hotel-operations/booking/payment-guarantee/BookingPaymentGuaranteeDO';
 import {BookingChangeDetails} from '../../../../../core/domain-layer/hotel-operations/booking/change-details/BookingChangeDetails';
 import {BookingChangeDetailsDO} from '../../../../../core/domain-layer/hotel-operations/booking/change-details/BookingChangeDetailsDO';
+import {BookingChangeCustomers} from '../../../../../core/domain-layer/hotel-operations/booking/change-customers/BookingChangeCustomers';
+import {BookingChangeCustomersDO} from '../../../../../core/domain-layer/hotel-operations/booking/change-customers/BookingChangeCustomersDO';
 
 describe("Hotel Booking Operations Tests", function () {
     var testContext: TestContext;
@@ -162,6 +165,28 @@ describe("Hotel Booking Operations Tests", function () {
                 should.equal(bookingChangeDetailsDO.fileAttachmentList.length, 1);
                 should.equal(bookingChangeDetailsDO.fileAttachmentList[0].name, fileAttachment.name);
                 should.equal(bookingChangeDetailsDO.fileAttachmentList[0].url, fileAttachment.url);
+                bookingToChange = updatedBooking;
+                done();
+            }).catch((error: any) => {
+                done(error);
+            });
+        });
+
+        it("Should change the customers on a booking", function (done) {
+            var changeCustomersDO = new BookingChangeCustomersDO();
+            changeCustomersDO.groupBookingId = bookingToChange.groupBookingId;
+            changeCustomersDO.bookingId = bookingToChange.bookingId;
+
+            var individualCustomerList = _.filter(testDataBuilder.customerList, (customer: CustomerDO) => {
+                return customer.type === CustomerType.Individual;
+            });
+            var customerIdList = _.map(individualCustomerList, (customer: CustomerDO) => { return customer.id });
+            customerIdList.push(bookingToChange.defaultBillingDetails.customerId);
+            changeCustomersDO.customerIdList = _.uniq(customerIdList);
+
+            var bookingChangeCustomers = new BookingChangeCustomers(testContext.appContext, testContext.sessionContext);
+            bookingChangeCustomers.changeCustomers(changeCustomersDO).then((updatedBooking: BookingDO) => {
+                should.equal(testUtils.stringArraysAreEqual(updatedBooking.customerIdList, changeCustomersDO.customerIdList), true);
                 bookingToChange = updatedBooking;
                 done();
             }).catch((error: any) => {
