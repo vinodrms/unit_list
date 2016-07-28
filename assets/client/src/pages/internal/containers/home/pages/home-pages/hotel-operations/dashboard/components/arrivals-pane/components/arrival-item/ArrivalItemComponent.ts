@@ -30,45 +30,50 @@ export class ArrivalItemComponent {
 	}
 
 	ngAfterViewInit() {
-		$(this._root.nativeElement).draggable(
-            {
-                revert:     'invalid',
-				cursorAt: { left: 12 , bottom: 6 },
-				helper: () => {
-					var helperHtml = `
-					<arrival-helper class=" flex-row">
-						<div class="left p-6 orange">
-							<i class="fa fa-ellipsis-v"></i>
-						</div>
-						<div class="right flex-row flex-jc-sb p-6">
-							<div class="client-name">`
-								+ this.arrivalItemVM.customerName +
-							`</div>
-							<div class="other-details gray-color f-12">
-								<div>
-									<span class="unitpal-font f-12">(</span> ` + this.arrivalItemVM.numberOfPeople + 
-									` <span class="unitpal-font f-12">Y</span> `+ this.arrivalItemVM.numberOfNights +
-							`	</div>
+		if (this.arrivalItemVM.arrivalItemDO.itemStatus == ArrivalItemStatus.CanCheckIn){
+			$(this._root.nativeElement).find('.left').draggable(
+				{
+					revert: 'invalid',
+					appendTo: 'arrivals-pane',
+					cursorAt: { left: 12 , bottom: 6 },
+					helper: () => {
+						var helperHtml = `
+						<arrival-helper class="flex-row">
+							<div class="left p-6 orange">
+								<i class="fa fa-ellipsis-v"></i>
 							</div>
-						</div>
-					</arrival-helper>
-				`
+							<div class="right flex-row flex-jc-sb p-6">
+								<div class="client-name">`
+									+ this.arrivalItemVM.customerName +
+								`</div>
+								<div class="other-details gray-color f-12">
+									<div>
+										<span class="unitpal-font f-12">(</span> ` + this.arrivalItemVM.numberOfPeople + 
+										` <span class="unitpal-font f-12">Y</span> `+ this.arrivalItemVM.numberOfNights +
+								`	</div>
+								</div>
+							</div>
+						</arrival-helper>
+					`
 
-					return $(helperHtml);
-				},
-				zIndex:     100,
-				start: (event, ui) =>{
-					this._zone.run(() => {
-						this.startedDragging.emit(this.arrivalItemVM);
-					});
-				},
-				stop: (event, ui) => {
-					this._zone.run(() => {
-						this.stoppedDragging.emit(this.arrivalItemVM);
-					});
+						return $(helperHtml);
+					},
+					zIndex:     100,
+					start: (event, ui) =>{
+						this._zone.run(() => {
+							$(this._root.nativeElement).addClass('ghost');
+							this.startedDragging.emit(this.arrivalItemVM);
+						});
+					},
+					stop: (event, ui) => {
+						this._zone.run(() => {
+							$(this._root.nativeElement).removeClass('ghost');
+							this.stoppedDragging.emit(this.arrivalItemVM);
+						});
+					}
 				}
-            }
-		);
+			);
+		}
 	}
 
 	public openCustomerModal(){

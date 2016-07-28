@@ -3,7 +3,9 @@ import {RoomCardComponent} from './components/room-card/RoomCardComponent';
 
 import {HotelOperationsDashboardService} from '../../../../../../../../services/hotel-operations/dashboard/HotelOperationsDashboardService';
 import {IHotelOperationsDashboardRoomsCanvasMediator} from '../../HotelOperationsDashboardComponent';
+import {HotelService} from '../../../../../../../../services/hotel/HotelService';
 
+import {HotelDetailsDO} from '../../../../../../../../services/hotel/data-objects/HotelDetailsDO';
 import {ArrivalItemInfoVM} from '../../../../../../../../services/hotel-operations/dashboard/arrivals/view-models/ArrivalItemInfoVM';
 import {RoomItemInfoVM, RoomItemInfoVM_UI_Properties} from '../../../../../../../../services/hotel-operations/dashboard/rooms/view-models/RoomItemInfoVM';
 import {RoomItemInfoDO, RoomItemStatus} from '../../../../../../../../services/hotel-operations/dashboard/rooms/data-objects/RoomItemInfoDO';
@@ -16,6 +18,8 @@ import {ThError} from '../../../../../../../../../../common/utils/responses/ThEr
 
 import {ThDateDO} from '../../../../../../../../services/common/data-objects/th-dates/ThDateDO';
 
+import {CustomScroll} from '../../../../../../../../../../../src/common/utils/directives/CustomScroll';
+
 declare var $: any;
 declare var _: any;
 
@@ -23,9 +27,8 @@ declare var _: any;
 	selector: 'rooms-canvas',
 	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/dashboard/components/rooms-canvas/template/rooms-canvas.html',
 	providers: [RoomsCanvasUtils],
-	directives: [RoomCardComponent]
+	directives: [CustomScroll, RoomCardComponent]
 })
-
 export class RoomsCanvasComponent implements OnInit {
 	@Input() hotelOperationsDashboard: IHotelOperationsDashboardRoomsCanvasMediator;
 
@@ -43,6 +46,7 @@ export class RoomsCanvasComponent implements OnInit {
 	constructor(
 		private _zone: NgZone,
 		private _hotelOperationsDashboardService: HotelOperationsDashboardService,
+		private _hotelService:HotelService,
 		private _utils: RoomsCanvasUtils,
 		private _appContext: AppContext) {
 		
@@ -60,26 +64,30 @@ export class RoomsCanvasComponent implements OnInit {
 			FilterValueType: FilterValueType
 		}
 
-		this.currentDate = ThDateDO.buildThDateDO(2016, 6, 27);
+		// this.currentDate = ThDateDO.buildThDateDO(2016, 6, 27);
 
 		this.updateFilterNotification();
 	}
 
 	ngOnInit() {
 		this.hotelOperationsDashboard.registerRoomsCanvas(this);
-		this.refresh();
+		this._hotelService.getHotelDetailsDO().subscribe((details: HotelDetailsDO)=>{
+			this.currentDate = details.currentThTimestamp.thDateDO.buildPrototype();
+			this._hotelOperationsDashboardService.getRoomItems().subscribe((r: any) =>{
+				this._utils.setRoomsUIHighlight(r, this.dragStyles.default);
+				this.filterValue.currentValue = this.filterValue.newValue;
+				this._showNotificationBar = true;
+				this.filteredRoomVMList = this._utils.filterRoomsByStateType(this.filterValue.currentValue, r);
+				this.updateFilterNotification();
+			}, (error:any) => {
+				this._appContext.toaster.error(error.message);
+			});
+
+		})
 	}	
 
 	public refresh() {
-		this._hotelOperationsDashboardService.getRoomItems().subscribe((r: any) =>{
-			this._utils.setRoomsUIHighlight(r, this.dragStyles.default);
-			this.filterValue.currentValue = this.filterValue.newValue;
-			this._showNotificationBar = true;
-			this.filteredRoomVMList = this._utils.filterRoomsByStateType(this.filterValue.currentValue, r);
-			this.updateFilterNotification();
-		}, (error:any) => {
-			this._appContext.toaster.error(error.message);
-		});
+		this._hotelOperationsDashboardService.refreshRooms();
 	}
 
 	public startedDragging(arrivalItemVM: ArrivalItemInfoVM) {
