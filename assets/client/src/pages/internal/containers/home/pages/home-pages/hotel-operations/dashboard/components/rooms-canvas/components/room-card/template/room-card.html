@@ -16,7 +16,7 @@
 		</div>
 	</div>
 	<div class="card-footer">
-		<div class="period flex-row flex-center-v">
+		<div class="period flex-row flex-center-v clickable" (click)="openBookingModal()">
 			<div class="start-date">{{ roomVM.arrivalLabel }}</div>
 			<i class="fa fa-arrow-right"></i>
 			<div class="end-date">{{ roomVM.departureLabel }}</div>
@@ -75,7 +75,7 @@
 		</div>
 	</div>
 	<div class="card-footer">
-		<div class="period flex-row flex-center-v">
+		<div class="period flex-row flex-center-v clickable" (click)="openBookingModal()">
 			Arriving Today
 		</div>
 		<div class="other-details">

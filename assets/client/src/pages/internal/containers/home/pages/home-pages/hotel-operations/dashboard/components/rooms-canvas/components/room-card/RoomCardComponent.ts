@@ -172,6 +172,13 @@ export class RoomCardComponent {
 	public openCheckInModal(arrivalItemVM:ArrivalItemInfoVM){
 		var bookingId = arrivalItemVM.arrivalItemDO.bookingId;
 		var groupBookingId = arrivalItemVM.arrivalItemDO.groupBookingId;
-		this._modalService.openCheckInModal(bookingId, groupBookingId);
-	}	
+		this._modalService.openCheckInModal(bookingId, groupBookingId, this.roomVM.roomItemDO.roomId);
+	}
+
+	public openBookingModal(){
+		var bookingId = this.roomVM.roomItemDO.bookingId;
+		var groupBookingId = this.roomVM.roomItemDO.groupBookingId;
+		this._modalService.openBookingModal(bookingId, groupBookingId);
+	}
+	
 }

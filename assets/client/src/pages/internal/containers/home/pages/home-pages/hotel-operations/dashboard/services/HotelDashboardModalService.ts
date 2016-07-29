@@ -32,10 +32,11 @@ export class HotelDashboardModalService{
 		this.handleHotelOperationsModalPromise(p)
 	}
 
-	public openCheckInModal(bookingId:string, groupBookingId:string){
+	public openCheckInModal(bookingId:string, groupBookingId:string, roomId?:string){
 		this._assignRoomModalService.checkIn({
 			bookingId: bookingId,
 			groupBookingId: groupBookingId,
+			roomId : roomId
 		}).then((modalDialogRef: ModalDialogRef<BookingDO>) => {
 			modalDialogRef.resultObservable.subscribe((updatedBooking: BookingDO) => {
 				this._hotelOperationsDashboardService.refreshArrivals();
