@@ -26,6 +26,18 @@ export class CheckInStrategy extends AAssignRoomStrategy {
             reject(thError);
             return;
         }
+        if (bookingDO.interval.start.isAfter(validationDO.currentHotelTimestamp.thDateDO)) {
+            var thError = new ThError(ThStatusCode.CheckInStrategyStartDateInFuture, null);
+            ThLogger.getInstance().logBusiness(ThLogLevel.Error, "Tried to check in a booking that starts in the future", { sessionContext: this._sessionContext, bookingId: bookingDO.bookingId }, thError);
+            reject(thError);
+            return;
+        }
+        if (bookingDO.interval.end.isBefore(validationDO.currentHotelTimestamp.thDateDO)) {
+            var thError = new ThError(ThStatusCode.CheckInStrategyEndDateInPast, null);
+            ThLogger.getInstance().logBusiness(ThLogLevel.Error, "Tried to check in a booking that has end date in the past", { sessionContext: this._sessionContext, bookingId: bookingDO.bookingId }, thError);
+            reject(thError);
+            return;
+        }
         bookingDO.confirmationStatus = BookingConfirmationStatus.CheckedIn;
         this.logRoomChangedOnBooking(bookingDO, "The customers were checked in room %roomName%", validationDO.roomList);
         resolve(bookingDO);
