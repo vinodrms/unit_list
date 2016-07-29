@@ -174,16 +174,18 @@ describe("Invoices Tests", function () {
         it("Should aggregate invoice groups data (brief) by customer id", function (done) {
             var invoiceGroupBriefDataAggregator = new InvoiceGroupsBriefDataAggregator(testContext.appContext, testContext.sessionContext);
             var invoiceGroupsRepo = testContext.appContext.getRepositoryFactory().getInvoiceGroupsRepository();
+
             invoiceGroupsRepo.getInvoiceGroupList({ hotelId: testContext.sessionContext.sessionDO.hotel.id }).then((result: InvoiceGroupSearchResultRepoDO) => {
                 var allInvoiceGroups = result.invoiceGroupList;
+                var defaultInvoiceIndex = _.findIndex(allInvoiceGroups, (invoiceGroup: InvoiceGroupDO) => {
+                    return invoiceGroup.id === testDataBuilder.invoiceGroupList[0].id;
+                });
+                allInvoiceGroups.splice(defaultInvoiceIndex, 1);
+
                 var customerIdList = invoiceTestUtils.getDistinctCustomerIdListFromInvoiceGroupList(allInvoiceGroups);
                 
                 invoiceGroupBriefDataAggregator.getBriefDataByCustomerList(customerIdList).then((invoiceGroupBriefContainerList: InvoiceGroupBriefContainerDO[]) => {
                     should.equal(invoiceGroupBriefContainerList.length, customerIdList.length);
-                    
-                    should.equal(invoiceGroupBriefContainerList[0].invoiceGroupBriefList.length, 2);
-                    should.equal(invoiceGroupBriefContainerList[1].invoiceGroupBriefList.length, 1);
-                    should.equal(invoiceGroupBriefContainerList[2].invoiceGroupBriefList.length, 1);
 
                     _.chain(invoiceGroupBriefContainerList).map((invoiceGroupBriefContainerDO: InvoiceGroupBriefContainerDO) => {
                         return invoiceGroupBriefContainerDO.invoiceGroupBriefList;
