@@ -38,6 +38,9 @@ import {BookingReactivate} from '../../../../../core/domain-layer/hotel-operatio
 import {BookingReactivateDO} from '../../../../../core/domain-layer/hotel-operations/booking/reactivate-booking/BookingReactivateDO';
 import {BookingCancel} from '../../../../../core/domain-layer/hotel-operations/booking/cancel-booking/BookingCancel';
 import {BookingCancelDO} from '../../../../../core/domain-layer/hotel-operations/booking/cancel-booking/BookingCancelDO';
+import {EmailConfirmation} from '../../../../../core/domain-layer/hotel-operations/common/email-confirmations/EmailConfirmation';
+import {EmailConfirmationDO, EmailConfirmationType} from '../../../../../core/domain-layer/hotel-operations/common/email-confirmations/EmailConfirmationDO';
+import {BookingConfirmationEmailParameters} from '../../../../../core/domain-layer/hotel-operations/common/email-confirmations/utils/strategies/BookingEmailConfirmationStrategy';
 
 describe("Hotel Booking Operations Tests", function () {
     var testContext: TestContext;
@@ -76,8 +79,25 @@ describe("Hotel Booking Operations Tests", function () {
                 done(error);
             });
         });
-        it("Should change the date for a booking and double the price", function (done) {
+        it("Should send an email confirmation for the booking", function (done) {
             bookingToChange = testUtils.getRandomListElement(createdBookingList);
+            var emailConfirmationDO = new EmailConfirmationDO();
+            emailConfirmationDO.type = EmailConfirmationType.Booking;
+            emailConfirmationDO.emailList = ["ionut.paraschiv@3angle.tech"];
+            var parameters: BookingConfirmationEmailParameters = {
+                bookingId: bookingToChange.bookingId,
+                groupBookingId: bookingToChange.groupBookingId
+            }
+            emailConfirmationDO.parameters = parameters;
+
+            var emailConfirmation = new EmailConfirmation(testContext.appContext, testContext.sessionContext);
+            emailConfirmation.send(emailConfirmationDO).then((sendResult: boolean) => {
+                done();
+            }).catch((error: any) => {
+                done(error);
+            });
+        });
+        it("Should change the date for a booking and double the price", function (done) {
             var bookingChangeDatesDO = new BookingChangeDatesDO();
             bookingChangeDatesDO.groupBookingId = bookingToChange.groupBookingId;
             bookingChangeDatesDO.bookingId = bookingToChange.bookingId;

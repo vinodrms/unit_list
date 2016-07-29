@@ -435,6 +435,8 @@ export enum ThStatusCode {
     BookingReactivateError,
     HotelBookingOperationsControllerErrorCancelling,
     HotelBookingOperationsControllerErrorReactivating,
+    EmailConfirmationError,
+    HotelCommonOperationsControllerEmailError,
 
 }
 
@@ -861,6 +863,8 @@ ThMessage[ThStatusCode.BookingReactivateEndDateInThePast] = "You cannot reactiva
 ThMessage[ThStatusCode.BookingReactivateError] = "Error reactivating booking.";
 ThMessage[ThStatusCode.HotelBookingOperationsControllerErrorCancelling] = "Error cancelling booking.";
 ThMessage[ThStatusCode.HotelBookingOperationsControllerErrorReactivating] = "Error reactivating booking.";
+ThMessage[ThStatusCode.EmailConfirmationError] = "Error sending email.";
+ThMessage[ThStatusCode.HotelCommonOperationsControllerEmailError] = "Error sending email.";
 
 export class ThResponse {
     statusCode: ThStatusCode;
