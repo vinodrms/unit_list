@@ -1,0 +1,34 @@
+<div class="col-xs-12 booking-details-table">
+    <table class="table form-group">
+        <thead>
+            <tr>
+                <th> {{ 'Recipient' | translate }} </th>
+                <th> {{ 'Email' | translate }} </th>
+                <th> <input type="checkbox" [(ngModel)]="selectAll">  {{ 'Select All' | translate }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let emailRecipient of emailRecipientList">
+                <td width="45%">{{ emailRecipient.recipientName }}</td>
+                <td width="50%" *ngIf="emailRecipient.isValid">{{ emailRecipient.email }}</td>
+                <td width="50%" *ngIf="!emailRecipient.isValid"><i>{{ 'Not configured' | translate }}</i></td>
+                <td width="5%"><input type="checkbox" [ngModel]="emailRecipient.selected" (ngModelChange)="didChangeRecipient(emailRecipient)" [disabled]="!emailRecipient.isValid"></td>
+            </tr>
+        </tbody>
+        <tfoot>
+        </tfoot>
+    </table>
+</div>
+<div class="col-xs-6">
+    <div class="form-group">
+        <div class="input-group" [ngClass]="{'form-warning': dirtyNewEmail && !validNewEmail}">
+            <input type="text" class="form-control" placeholder="{{'Insert a different email' | translate}}" [(ngModel)]="newEmail">
+        </div>
+        <label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Invalid email' | translate }}</small></label>
+    </div>
+</div>
+<div class="col-xs-6">
+    <button  type="button" class="btn btn-primary" [disabled]="!validNewEmail" (click)="addNewEmail()">
+        {{ 'Add' | translate }}
+    </button>
+</div>
