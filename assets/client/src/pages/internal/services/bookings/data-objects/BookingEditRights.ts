@@ -36,3 +36,7 @@ export enum BookingReactivateRight {
     Reactivate,
     None
 }
+export enum BookingSendConfirmationRight {
+    Send,
+    None
+}

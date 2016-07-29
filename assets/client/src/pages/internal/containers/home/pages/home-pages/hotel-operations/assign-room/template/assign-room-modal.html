@@ -3,7 +3,7 @@
 	<h4 class="modal-title" *ngIf="!didSelectRoom()">{{ 'Select Room' | translate }}</h4>
 	<h4 class="modal-title" *ngIf="didSelectRoom()">{{ 'Select Price' | translate }}</h4>
 </div>
-<div>
+<div class="modal-body">
     <room-selection *ngIf="!didSelectRoom()" (onRoomSelected)="updateCurrentSelectedRoom($event)" class="modal-body table-selection"></room-selection>
 	<price-selection *ngIf="didSelectRoom()" (onPriceSelection)="didChangePriceSelection($event)" class="modal-body table-selection"></price-selection>
 	

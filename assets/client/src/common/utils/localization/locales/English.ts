@@ -586,6 +586,12 @@ export var EnglishTranslations: Object = {
 	"Reactivate": "Reactivate",
 	"Are you sure you want to reactivate this booking?": "Are you sure you want to reactivate this booking?",
 	"Are you sure you want to cancel this booking? An invoice with a penalty can be generated depending on the policy set on the price product.": "Are you sure you want to cancel this booking? An invoice with a penalty can be generated depending on the policy set on the price product.",
+	"Send Email": "Send Email",
+	"Send Confirmation": "Send Confirmation",
+	"Send": "Send",
+	"Add Email": "Add Email",
+	"Insert email": "Insert email",
+	"Email(s) sent succesfully": "Email(s) sent succesfully",
 	
 
 	
