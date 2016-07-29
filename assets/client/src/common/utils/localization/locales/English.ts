@@ -583,7 +583,9 @@ export var EnglishTranslations: Object = {
 	"Archived": "Archived",
 	"Release": "Release",
 	"Some customers (%omittedCustomers%) have not been added because they do not have access on the price product": "Some customers (%omittedCustomers%) have not been added because they do not have access on the price product",
-	
+	"Reactivate": "Reactivate",
+	"Are you sure you want to reactivate this booking?": "Are you sure you want to reactivate this booking?",
+	"Are you sure you want to cancel this booking? An invoice with a penalty can be generated depending on the policy set on the price product.": "Are you sure you want to cancel this booking? An invoice with a penalty can be generated depending on the policy set on the price product.",
 	
 
 	

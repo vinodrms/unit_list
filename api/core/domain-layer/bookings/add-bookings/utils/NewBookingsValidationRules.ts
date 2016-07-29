@@ -4,6 +4,7 @@ import {SessionContext} from '../../../../utils/SessionContext';
 import {ThDateDO} from '../../../../utils/th-dates/data-objects/ThDateDO';
 import {HotelDO} from '../../../../data-layer/hotel/data-objects/HotelDO';
 import {RoomDO} from '../../../../data-layer/rooms/data-objects/RoomDO';
+import {AllotmentStatus} from '../../../../data-layer/allotments/data-objects/AllotmentDO';
 import {PriceProductDO} from '../../../../data-layer/price-products/data-objects/PriceProductDO';
 import {PriceProductsContainer} from '../../../price-products/validators/results/PriceProductsContainer';
 import {AllotmentsContainer} from '../../../allotments/validators/results/AllotmentsContainer';
@@ -75,6 +76,12 @@ export class NewBookingsValidationRules {
             ]);
             if (!booking.isMadeThroughAllotment()) {
                 priceProductValidationRule.addBusinessValidationRule(new PriceProductYieldIntervalsValidationRule(booking.interval));
+            }
+            else {
+                var allotment = this._validatorParams.allotmentsContainer.getAllotmentById(booking.allotmentId);
+                if (allotment.status === AllotmentStatus.Archived) {
+                    priceProductValidationRule.addBusinessValidationRule(new PriceProductYieldIntervalsValidationRule(booking.interval));
+                }
             }
 
             var priceProduct = this._validatorParams.priceProductsContainer.getPriceProductById(booking.priceProductId);

@@ -28,3 +28,11 @@ export enum BookingCustomerEditRight {
     Edit,
     None
 }
+export enum BookingCancelRight {
+    Cancel,
+    None
+}
+export enum BookingReactivateRight {
+    Reactivate,
+    None
+}

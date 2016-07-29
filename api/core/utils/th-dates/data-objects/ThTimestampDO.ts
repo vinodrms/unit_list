@@ -54,4 +54,7 @@ export class ThTimestampDO extends BaseDO {
 		thTimestamp.thHourDO = thHourDO;
 		return thTimestamp;
 	}
+	public buildPrototype(): ThTimestampDO {
+		return ThTimestampDO.buildThTimestampDO(this.thDateDO.buildPrototype(), this.thHourDO.buildPrototype());
+	}
 }

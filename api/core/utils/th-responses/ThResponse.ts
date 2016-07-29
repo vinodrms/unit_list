@@ -428,6 +428,13 @@ export enum ThStatusCode {
     BookingChangeCustomersError,
     BookingChangeCustomersBilledCustomerMisssing,
     HotelBookingOperationsControllerErrorChangingCustomers,
+    BookingCancelInvalidState,
+    BookingCancelError,
+    BookingReactivateInvalidState,
+    BookingReactivateEndDateInThePast,
+    BookingReactivateError,
+    HotelBookingOperationsControllerErrorCancelling,
+    HotelBookingOperationsControllerErrorReactivating,
 
 }
 
@@ -847,6 +854,13 @@ ThMessage[ThStatusCode.BookingChangeCustomersInvalidState] = "The customers can 
 ThMessage[ThStatusCode.BookingChangeCustomersError] = "Error changing customers from booking.";
 ThMessage[ThStatusCode.BookingChangeCustomersBilledCustomerMisssing] = "The billed customer is missing from the list.";
 ThMessage[ThStatusCode.HotelBookingOperationsControllerErrorChangingCustomers] = "Error changing customers from booking.";
+ThMessage[ThStatusCode.BookingCancelInvalidState] = "Only confirmed, guaranteed or no show bookings can be cancelled.";
+ThMessage[ThStatusCode.BookingCancelError] = "Error cancelling booking.";
+ThMessage[ThStatusCode.BookingReactivateInvalidState] = "Only no show bookings can be reactivated.";
+ThMessage[ThStatusCode.BookingReactivateEndDateInThePast] = "You cannot reactivate a booking that ends in the past.";
+ThMessage[ThStatusCode.BookingReactivateError] = "Error reactivating booking.";
+ThMessage[ThStatusCode.HotelBookingOperationsControllerErrorCancelling] = "Error cancelling booking.";
+ThMessage[ThStatusCode.HotelBookingOperationsControllerErrorReactivating] = "Error reactivating booking.";
 
 export class ThResponse {
     statusCode: ThStatusCode;

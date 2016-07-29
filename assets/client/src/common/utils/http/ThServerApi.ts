@@ -84,6 +84,8 @@ export enum ThServerApi {
 	HotelOperationsBookingAddPaymentGuarantee,
 	HotelOperationsBookingChangeDetails,
 	HotelOperationsBookingChangeCustomers,
+	HotelOperationsBookingCancel,
+	HotelOperationsBookingReactivate,
 
 }
 
@@ -175,6 +177,8 @@ ThServerApiUrl[ThServerApi.HotelOperationsBookingChangeCapacity] = "/hotelOperat
 ThServerApiUrl[ThServerApi.HotelOperationsBookingAddPaymentGuarantee] = "/hotelOperations/booking/addPaymentGuarantee";
 ThServerApiUrl[ThServerApi.HotelOperationsBookingChangeDetails] = "/hotelOperations/booking/changeDetails";
 ThServerApiUrl[ThServerApi.HotelOperationsBookingChangeCustomers] = "/hotelOperations/booking/changeCustomers";
+ThServerApiUrl[ThServerApi.HotelOperationsBookingCancel] = "/hotelOperations/booking/cancel";
+ThServerApiUrl[ThServerApi.HotelOperationsBookingReactivate] = "/hotelOperations/booking/reactivate";
 
 export class ServerApiBuilder {
 	public static ApiRoot = "/api";
