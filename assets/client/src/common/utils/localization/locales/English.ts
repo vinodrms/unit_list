@@ -582,6 +582,8 @@ export var EnglishTranslations: Object = {
 	"Penalty": "Penalty",
 	"Archived": "Archived",
 	"Release": "Release",
+	"Some customers (%omittedCustomers%) have not been added because they do not have access on the price product": "Some customers (%omittedCustomers%) have not been added because they do not have access on the price product",
+	
 	
 
 	

@@ -89,11 +89,30 @@ export class BookingCustomerEditorComponent implements OnInit {
     public addCustomers() {
         this._customerRegisterModal.openCustomerRegisterModal(true).then((modalDialogInstance: ModalDialogRef<CustomerDO[]>) => {
             modalDialogInstance.resultObservable.subscribe((selectedCustomerList: CustomerDO[]) => {
-                this.customerContainer.appendCustomerList(selectedCustomerList);
-                this._didMakeChanges = true;
+                this.appendCustomerList(selectedCustomerList);
             });
         }).catch((e: any) => { });
     }
+    private appendCustomerList(customerList: CustomerDO[]) {
+        var didOmitCustomers: boolean = false;
+        var omittedCustomerString: string = "";
+        _.forEach(customerList, (customerToAppend: CustomerDO) => {
+            if (customerToAppend.hasAccessOnPriceProduct(this.bookingDO.priceProductSnapshot)) {
+                this.customerContainer.appendCustomer(customerToAppend);
+                this._didMakeChanges = true;
+            }
+            else {
+                didOmitCustomers = true;
+                if (omittedCustomerString.length > 0) { omittedCustomerString += ", " };
+                omittedCustomerString += customerToAppend.customerName;
+            }
+        });
+        if (didOmitCustomers) {
+            var errorMessage = this._appContext.thTranslation.translate("Some customers (%omittedCustomers%) have not been added because they do not have access on the price product", { omittedCustomers: omittedCustomerString });
+            this._appContext.toaster.error(errorMessage);
+        }
+    }
+
     public removeCustomer(customer: CustomerDO) {
         if (this.isBilledCustomer(customer)) { return; }
         this.customerContainer.removeCustomer(customer);
