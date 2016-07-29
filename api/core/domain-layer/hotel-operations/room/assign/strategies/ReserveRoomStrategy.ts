@@ -29,4 +29,7 @@ export class ReserveRoomStrategy extends AAssignRoomStrategy {
         this.logRoomChangedOnBooking(bookingDO, "Room %roomName% was reserved for this booking.", validationDO.roomList);
         resolve(bookingDO);
     }
+    public validateAlreadyCheckedInBooking(): boolean {
+        return false;
+    }
 }
