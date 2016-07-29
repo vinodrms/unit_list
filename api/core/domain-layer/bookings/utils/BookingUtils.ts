@@ -1,6 +1,7 @@
 import {ThUtils} from '../../../utils/ThUtils';
 import {HotelDO} from '../../../data-layer/hotel/data-objects/HotelDO';
 import {BookingDO, BookingConfirmationStatus} from '../../../data-layer/bookings/data-objects/BookingDO';
+import {TriggerTimeParams} from '../../../data-layer/bookings/data-objects/state-change-time/BookingStateChangeTriggerTimeDO';
 import {PriceProductDO} from '../../../data-layer/price-products/data-objects/PriceProductDO';
 import {ThDateDO} from '../../../utils/th-dates/data-objects/ThDateDO';
 import {ThHourDO} from '../../../utils/th-dates/data-objects/ThHourDO';
@@ -73,5 +74,10 @@ export class BookingUtils {
             roomCategoryId: bookingDO.roomCategoryId
         });
         bookingDO.price.totalPrice = bookingDO.price.numberOfItems * bookingDO.price.pricePerItem;
+    }
+
+    public hasPenalty(booking: BookingDO, triggerParams: TriggerTimeParams): boolean {
+        return booking.priceProductSnapshot.conditions.policy.hasCancellationPolicy() &&
+            booking.guaranteedTime.isInThePast(triggerParams);
     }
 }

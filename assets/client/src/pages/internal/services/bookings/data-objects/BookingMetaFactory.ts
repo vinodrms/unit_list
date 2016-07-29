@@ -1,7 +1,8 @@
 import {BookingMeta} from './BookingMeta';
 import {BookingConfirmationStatus} from './BookingDO';
 import {BookingIntervalEditRight, BookingNoShowEditRight, BookingAssignRoomRight,
-    BookingCapacityEditRight, BookingPaymentGuaranteeEditRight, BookingDetailsEditRight} from './BookingEditRights';
+    BookingCapacityEditRight, BookingPaymentGuaranteeEditRight, BookingDetailsEditRight,
+    BookingCustomerEditRight, BookingCancelRight, BookingReactivateRight} from './BookingEditRights';
 
 export class BookingMetaFactory {
     public getBookingMetaList(): BookingMeta[] {
@@ -10,11 +11,14 @@ export class BookingMetaFactory {
                 confirmationStatus: BookingConfirmationStatus.Confirmed,
                 displayName: "Confirmed",
                 intervalEditRight: BookingIntervalEditRight.EditInterval,
-                noShowEditRight: BookingNoShowEditRight.EditNoShow,
+                noShowEditRight: BookingNoShowEditRight.Edit,
                 assignRoomRight: BookingAssignRoomRight.Reserve,
-                capacityEditRight: BookingCapacityEditRight.EditCapacity,
-                paymentGuaranteeEditRight: BookingPaymentGuaranteeEditRight.EditPaymentGuarantee,
-                detailsEditRight: BookingDetailsEditRight.EditDetails,
+                capacityEditRight: BookingCapacityEditRight.Edit,
+                paymentGuaranteeEditRight: BookingPaymentGuaranteeEditRight.Edit,
+                detailsEditRight: BookingDetailsEditRight.Edit,
+                customerEditRight: BookingCustomerEditRight.Edit,
+                cancelRight: BookingCancelRight.Cancel,
+                reactivateRight: BookingReactivateRight.None,
                 displayClassName: "upcoming",
                 fontName: "Z"
             }),
@@ -22,11 +26,14 @@ export class BookingMetaFactory {
                 confirmationStatus: BookingConfirmationStatus.Guaranteed,
                 displayName: "Guaranteed",
                 intervalEditRight: BookingIntervalEditRight.EditInterval,
-                noShowEditRight: BookingNoShowEditRight.EditNoShow,
+                noShowEditRight: BookingNoShowEditRight.Edit,
                 assignRoomRight: BookingAssignRoomRight.Reserve,
-                capacityEditRight: BookingCapacityEditRight.EditCapacity,
-                paymentGuaranteeEditRight: BookingPaymentGuaranteeEditRight.EditPaymentGuarantee,
-                detailsEditRight: BookingDetailsEditRight.EditDetails,
+                capacityEditRight: BookingCapacityEditRight.Edit,
+                paymentGuaranteeEditRight: BookingPaymentGuaranteeEditRight.Edit,
+                detailsEditRight: BookingDetailsEditRight.Edit,
+                customerEditRight: BookingCustomerEditRight.Edit,
+                cancelRight: BookingCancelRight.Cancel,
+                reactivateRight: BookingReactivateRight.None,
                 displayClassName: "upcoming",
                 fontName: "Z"
             }),
@@ -38,7 +45,10 @@ export class BookingMetaFactory {
                 assignRoomRight: BookingAssignRoomRight.None,
                 capacityEditRight: BookingCapacityEditRight.None,
                 paymentGuaranteeEditRight: BookingPaymentGuaranteeEditRight.None,
-                detailsEditRight: BookingDetailsEditRight.EditDetails,
+                detailsEditRight: BookingDetailsEditRight.Edit,
+                customerEditRight: BookingCustomerEditRight.None,
+                cancelRight: BookingCancelRight.Cancel,
+                reactivateRight: BookingReactivateRight.Reactivate,
                 displayClassName: "noshow",
                 fontName: "+"
             }),
@@ -50,7 +60,10 @@ export class BookingMetaFactory {
                 assignRoomRight: BookingAssignRoomRight.None,
                 capacityEditRight: BookingCapacityEditRight.None,
                 paymentGuaranteeEditRight: BookingPaymentGuaranteeEditRight.None,
-                detailsEditRight: BookingDetailsEditRight.EditDetails,
+                detailsEditRight: BookingDetailsEditRight.Edit,
+                customerEditRight: BookingCustomerEditRight.None,
+                cancelRight: BookingCancelRight.Cancel,
+                reactivateRight: BookingReactivateRight.Reactivate,
                 displayClassName: "noshow",
                 fontName: "+"
             }),
@@ -63,6 +76,9 @@ export class BookingMetaFactory {
                 capacityEditRight: BookingCapacityEditRight.None,
                 paymentGuaranteeEditRight: BookingPaymentGuaranteeEditRight.None,
                 detailsEditRight: BookingDetailsEditRight.None,
+                customerEditRight: BookingCustomerEditRight.None,
+                cancelRight: BookingCancelRight.None,
+                reactivateRight: BookingReactivateRight.None,
                 displayClassName: "",
                 fontName: "C"
             }),
@@ -72,9 +88,12 @@ export class BookingMetaFactory {
                 intervalEditRight: BookingIntervalEditRight.EditEndDate,
                 noShowEditRight: BookingNoShowEditRight.None,
                 assignRoomRight: BookingAssignRoomRight.Change,
-                capacityEditRight: BookingCapacityEditRight.EditCapacity,
+                capacityEditRight: BookingCapacityEditRight.Edit,
                 paymentGuaranteeEditRight: BookingPaymentGuaranteeEditRight.None,
-                detailsEditRight: BookingDetailsEditRight.EditDetails,
+                detailsEditRight: BookingDetailsEditRight.Edit,
+                customerEditRight: BookingCustomerEditRight.Edit,
+                cancelRight: BookingCancelRight.None,
+                reactivateRight: BookingReactivateRight.None,
                 displayClassName: "checkedin",
                 fontName: "("
             }),
@@ -87,6 +106,9 @@ export class BookingMetaFactory {
                 capacityEditRight: BookingCapacityEditRight.None,
                 paymentGuaranteeEditRight: BookingPaymentGuaranteeEditRight.None,
                 detailsEditRight: BookingDetailsEditRight.None,
+                customerEditRight: BookingCustomerEditRight.None,
+                cancelRight: BookingCancelRight.None,
+                reactivateRight: BookingReactivateRight.None,
                 displayClassName: "checkedout",
                 fontName: "*"
             })

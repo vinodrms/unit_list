@@ -81,8 +81,9 @@
                 <label class="form-warning" *ngIf="!didSelectBilledToCustomer()"><small><i class="fa fa-info-circle"></i> {{ 'Add at least one billed customer' | translate }}</small></label>
                 <tfoot>
                     <td>
-                        <a (click)="addCustomer()">
-                            <i class="fa unitpal-font">'</i> {{ 'Add Customer' | translate }}
+                        <a class="link-with-unitpal-font-icon" (click)="addCustomer()">
+                            <i class="fa unitpal-font">'</i> 
+                            <span>{{ 'Add Customer' | translate }}</span>
                         </a>
                     </td>
                 </tfoot>

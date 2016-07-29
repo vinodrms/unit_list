@@ -10,6 +10,9 @@ import {BookingChangeNoShowTime} from '../core/domain-layer/hotel-operations/boo
 import {BookingChangeCapacity} from '../core/domain-layer/hotel-operations/booking/change-capacity/BookingChangeCapacity';
 import {BookingPaymentGuarantee} from '../core/domain-layer/hotel-operations/booking/payment-guarantee/BookingPaymentGuarantee';
 import {BookingChangeDetails} from '../core/domain-layer/hotel-operations/booking/change-details/BookingChangeDetails';
+import {BookingChangeCustomers} from '../core/domain-layer/hotel-operations/booking/change-customers/BookingChangeCustomers';
+import {BookingCancel} from '../core/domain-layer/hotel-operations/booking/cancel-booking/BookingCancel';
+import {BookingReactivate} from '../core/domain-layer/hotel-operations/booking/reactivate-booking/BookingReactivate';
 
 class HotelBookingOperationsController extends BaseController {
     public getPossiblePrices(req: Express.Request, res: Express.Response) {
@@ -87,6 +90,45 @@ class HotelBookingOperationsController extends BaseController {
             this.returnErrorResponse(req, res, error, ThStatusCode.HotelBookingOperationsControllerErrorChangingDetails);
         });
     }
+
+    public changeCustomers(req: Express.Request, res: Express.Response) {
+        var appContext: AppContext = req.appContext;
+        var sessionContext: SessionContext = req.sessionContext;
+
+        var bookingChangeCustomers = new BookingChangeCustomers(appContext, sessionContext);
+        bookingChangeCustomers.changeCustomers(req.body.booking).then((booking: BookingDO) => {
+            booking.bookingHistory.translateActions(this.getThTranslation(sessionContext));
+            this.returnSuccesfulResponse(req, res, { booking: booking });
+        }).catch((error: any) => {
+            this.returnErrorResponse(req, res, error, ThStatusCode.HotelBookingOperationsControllerErrorChangingCustomers);
+        });
+    }
+
+    public cancel(req: Express.Request, res: Express.Response) {
+        var appContext: AppContext = req.appContext;
+        var sessionContext: SessionContext = req.sessionContext;
+
+        var bookingCancel = new BookingCancel(appContext, sessionContext);
+        bookingCancel.cancel(req.body.booking).then((booking: BookingDO) => {
+            booking.bookingHistory.translateActions(this.getThTranslation(sessionContext));
+            this.returnSuccesfulResponse(req, res, { booking: booking });
+        }).catch((error: any) => {
+            this.returnErrorResponse(req, res, error, ThStatusCode.HotelBookingOperationsControllerErrorCancelling);
+        });
+    }
+
+    public reactivate(req: Express.Request, res: Express.Response) {
+        var appContext: AppContext = req.appContext;
+        var sessionContext: SessionContext = req.sessionContext;
+
+        var bookingReactivate = new BookingReactivate(appContext, sessionContext);
+        bookingReactivate.reactivate(req.body.booking).then((booking: BookingDO) => {
+            booking.bookingHistory.translateActions(this.getThTranslation(sessionContext));
+            this.returnSuccesfulResponse(req, res, { booking: booking });
+        }).catch((error: any) => {
+            this.returnErrorResponse(req, res, error, ThStatusCode.HotelBookingOperationsControllerErrorReactivating);
+        });
+    }
 }
 
 var hotelBookingOperationsController = new HotelBookingOperationsController();
@@ -97,4 +139,7 @@ module.exports = {
     changeCapacity: hotelBookingOperationsController.changeCapacity.bind(hotelBookingOperationsController),
     addPaymentGuarantee: hotelBookingOperationsController.addPaymentGuarantee.bind(hotelBookingOperationsController),
     changeDetails: hotelBookingOperationsController.changeDetails.bind(hotelBookingOperationsController),
+    changeCustomers: hotelBookingOperationsController.changeCustomers.bind(hotelBookingOperationsController),
+    cancel: hotelBookingOperationsController.cancel.bind(hotelBookingOperationsController),
+    reactivate: hotelBookingOperationsController.reactivate.bind(hotelBookingOperationsController),
 }

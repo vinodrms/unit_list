@@ -61,7 +61,7 @@ export class BookingPaymentGuaranteeEditorComponent implements OnInit {
     }
 
     public get hasPaymentGuaranteeEditAccess(): boolean {
-        return this._bookingOperationsPageData.bookingMeta.paymentGuaranteeEditRight === BookingPaymentGuaranteeEditRight.EditPaymentGuarantee;
+        return this._bookingOperationsPageData.bookingMeta.paymentGuaranteeEditRight === BookingPaymentGuaranteeEditRight.Edit;
     }
     public get hasPaymentGuarantee(): boolean {
         return this.defaultBillingDetailsDO.paymentGuarantee && !this._appContext.thUtils.isUndefinedOrNull(this.defaultBillingDetailsDO.paymentMethod);
@@ -96,7 +96,8 @@ export class BookingPaymentGuaranteeEditorComponent implements OnInit {
         this.selectedPaymentMethodVM = this._selectedPaymentMethodVMCopy;
     }
     public savePaymentGuarantee() {
-        if (!this.hasPaymentGuaranteeEditAccess || this._selectedPaymentMethodVMCopy.paymentMethod.isSame(this.selectedPaymentMethodVM.paymentMethod)) {
+        if (!this.hasPaymentGuaranteeEditAccess ||
+            (this._selectedPaymentMethodVMCopy.paymentMethod.isSame(this.selectedPaymentMethodVM.paymentMethod) && this.hasPaymentGuarantee)) {
             this.endEdit();
             return;
         }

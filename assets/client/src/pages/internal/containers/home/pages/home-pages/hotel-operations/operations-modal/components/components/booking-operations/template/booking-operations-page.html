@@ -62,7 +62,17 @@
 			</div>
 		</div>
 	</div>
-	<div class="col-xs-3 full-height right-sidebar">
+	<div class="col-xs-3 full-height right-sidebar padding-top-10px" customScroll>
+		<div class="row">
+			<booking-customer-editor [bookingOperationsPageData]="bookingOperationsPageData" (onCustomersChanged)="didChangeBooking($event)"></booking-customer-editor>
+		</div>
+		<hr/>
+		<div class="row">
+			<booking-reactivate [bookingOperationsPageData]="bookingOperationsPageData" (onBookingReactivate)="didChangeBooking($event)"></booking-reactivate>
+		</div>
+		<div class="row">
+			<booking-cancel [bookingOperationsPageData]="bookingOperationsPageData" (onBookingCancel)="didChangeBooking($event)"></booking-cancel>
+		</div>
 		
 	</div>
 </div>

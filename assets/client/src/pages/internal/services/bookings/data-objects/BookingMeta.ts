@@ -1,6 +1,7 @@
 import {BookingConfirmationStatus} from './BookingDO';
 import {BookingIntervalEditRight, BookingNoShowEditRight, BookingAssignRoomRight, 
-        BookingCapacityEditRight, BookingPaymentGuaranteeEditRight, BookingDetailsEditRight} from './BookingEditRights';
+        BookingCapacityEditRight, BookingPaymentGuaranteeEditRight, BookingDetailsEditRight,
+        BookingCustomerEditRight, BookingCancelRight, BookingReactivateRight} from './BookingEditRights';
 
 export interface BookingMetaOptions {
     confirmationStatus: BookingConfirmationStatus;
@@ -13,6 +14,9 @@ export interface BookingMetaOptions {
     capacityEditRight: BookingCapacityEditRight;
     paymentGuaranteeEditRight: BookingPaymentGuaranteeEditRight;
     detailsEditRight: BookingDetailsEditRight;
+    customerEditRight: BookingCustomerEditRight;
+    cancelRight: BookingCancelRight;
+    reactivateRight: BookingReactivateRight;
 }
 
 export class BookingMeta {
@@ -26,6 +30,9 @@ export class BookingMeta {
     capacityEditRight: BookingCapacityEditRight;
     paymentGuaranteeEditRight: BookingPaymentGuaranteeEditRight;
     detailsEditRight: BookingDetailsEditRight;
+    customerEditRight: BookingCustomerEditRight;
+    cancelRight: BookingCancelRight;
+    reactivateRight: BookingReactivateRight;
 
     constructor(metaOptions: BookingMetaOptions) {
         this.confirmationStatus = metaOptions.confirmationStatus;
@@ -38,5 +45,8 @@ export class BookingMeta {
         this.capacityEditRight = metaOptions.capacityEditRight;
         this.paymentGuaranteeEditRight = metaOptions.paymentGuaranteeEditRight;
         this.detailsEditRight = metaOptions.detailsEditRight;
+        this.customerEditRight = metaOptions.customerEditRight;
+        this.cancelRight = metaOptions.cancelRight;
+        this.reactivateRight = metaOptions.reactivateRight;
     }
 }

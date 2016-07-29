@@ -1809,6 +1809,9 @@ a.btn.btn-square:focus {
 .right-margin {
     border-right: 1px solid #DBDBDB;
 }
+.bottom-margin {
+    border-bottom: 1px solid #DBDBDB;
+}
 .th-addon-button {
     background-color: #fb6708;
     color: white;
@@ -1931,6 +1934,10 @@ a.btn.btn-square:focus {
     background-color: #F5F5F5;
     font-size: 11px;
 }
+.booking-details-table td.name-field {
+    padding-top: 11px;
+}
+
 .booking-details-action-button {
     width: 80px;
     font-size: 10px;
@@ -3024,6 +3031,10 @@ a.btn.btn-square:focus {
     position: relative;
     right: 3px;
 }
+.edit-save-button-group-container button>i.unitpal-font {
+    font-size: larger !important;
+}
+
 .container-button {
     width: 95px;
 }
@@ -3034,7 +3045,7 @@ a.btn.btn-square:focus {
     cursor: pointer;
     font-weight: 500;
     color: #fb6708;
-    font-size: 15px;
+    font-size: 14px;
 }
 .operational-page-container .clickable-item>span {
     width: 20%;
@@ -3047,10 +3058,22 @@ a.btn.btn-square:focus {
     overflow: hidden;
     text-overflow: ellipsis;
     position: relative;
-    top: 9px;
+    top: 10px;
 }
 .operational-page-container .clickable-item:hover {
-    color: #C44D00;
+    opacity: 0.6;
+}
+.link-with-unitpal-font-icon {
+    font-size: 12px; 
+}
+.link-with-unitpal-font-icon:hover {
+    text-decoration: none;
+    opacity: 0.6;
+}
+.link-with-unitpal-font-icon>i {
+    font-size: 20px;
+    position: relative;
+    top: 3px;
 }
 .reserved-booking kbd {
     background-color: #ffbe01;

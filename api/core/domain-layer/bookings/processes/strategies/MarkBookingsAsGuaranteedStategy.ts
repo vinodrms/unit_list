@@ -18,7 +18,7 @@ export class MarkBookingsAsGuaranteedStategy implements IBookingProcessStrategy 
         };
     }
 
-    public updateMatchedBooking(bookingDO: BookingDO) {
+    public updateMatchedBooking(bookingDO: BookingDO, params: BookingStrategyMatchParams) {
         if (bookingDO.confirmationStatus !== BookingConfirmationStatus.Confirmed || !bookingDO.priceProductSnapshot.conditions.policy.hasCancellationPolicy()) {
             return;
         }
