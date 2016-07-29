@@ -1,3 +1,5 @@
+import {ArrivalItemInfoVM} from '../../arrivals/view-models/ArrivalItemInfoVM';
+
 import {RoomItemInfoDO, RoomItemStatus} from '../data-objects/RoomItemInfoDO';
 import {RoomVM} from '../../../../rooms/view-models/RoomVM';
 
@@ -10,7 +12,7 @@ export class RoomItemInfoVM_UI_Properties{
     constructor(
         public tickBorder: boolean,
         public ghost: boolean,
-        public acceptDrop: boolean){
+        public highlightForDrop: boolean){
     }
 }
 
@@ -84,7 +86,6 @@ export class RoomItemInfoVM {
     public get UI() : RoomItemInfoVM_UI_Properties {
         return this._UI;
     }
-    
 
     public isFree(): boolean {
         if (this.maintenanceStatus != RoomMaintenanceStatus.OutOfService &&
@@ -116,6 +117,27 @@ export class RoomItemInfoVM {
         }
         return false;
     }
+
+	public canCheckIn( arrivalItem: ArrivalItemInfoVM){
+		if (
+			this.canFit(arrivalItem.bookingCapacity) &&
+			this.roomVM.category.id == arrivalItem.reservedRoomCategoryStats.roomCategory.id &&
+			this.isFree()
+		){
+			return true;
+		}
+		return false;
+	}
+
+	public canUpgrade( arrivalItem: ArrivalItemInfoVM){
+		if (
+			this.canFit(arrivalItem.bookingCapacity) &&
+			this.isFree()
+		){
+			return true;
+		}
+		return false;
+	}    
     
     public set UI(v : RoomItemInfoVM_UI_Properties) {
         this._UI = v;

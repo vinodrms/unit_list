@@ -108,7 +108,7 @@ export class RoomsCanvasComponent implements OnInit {
 		});
 		
 		this._utils.setRoomsUIHighlight(canCheckInRoomVmList, this.dragStyles.canCheckIn);
-		this._utils.setRoomsUIHighlight(canUpgradeCheckInRoomVMList, this.dragStyles.canUpgrade);
+		// this._utils.setRoomsUIHighlight(canUpgradeCheckInRoomVMList, this.dragStyles.canUpgrade);
 		this._utils.setRoomsUIHighlight(canNotCheckInRoomVmList, this.dragStyles.canNotCheckIn);
 	}
 
@@ -116,7 +116,7 @@ export class RoomsCanvasComponent implements OnInit {
 		if (
 			room.canFit(arrivalItem.bookingCapacity) &&
 			room.roomVM.category.id == arrivalItem.reservedRoomCategoryStats.roomCategory.id &&
-			room.status == RoomItemStatus.Free
+			room.isFree()
 		){
 			return true;
 		}
@@ -126,7 +126,7 @@ export class RoomsCanvasComponent implements OnInit {
 	private testCanUpgrade(room:RoomItemInfoVM, arrivalItem: ArrivalItemInfoVM){
 		if (
 			room.canFit(arrivalItem.bookingCapacity) &&
-			room.status == RoomItemStatus.Free
+			room.isFree()
 		){
 			return true;
 		}

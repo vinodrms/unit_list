@@ -11,7 +11,7 @@ export class RoomsCanvasUtils{
 	public get dragStyles(): IDragStyles{
 		var dragStyles = {
 			canCheckIn : new RoomItemInfoVM_UI_Properties(true, false, true),
-			canUpgrade : new RoomItemInfoVM_UI_Properties(false,true,true),
+			canUpgrade : new RoomItemInfoVM_UI_Properties(false,true,false),
 			canNotCheckIn : new RoomItemInfoVM_UI_Properties(false,true,false),
 			default: new RoomItemInfoVM_UI_Properties(false,false,false)
 		}
@@ -94,7 +94,7 @@ export class RoomsCanvasUtils{
 		rooms.forEach(room => {
 			room.UI.tickBorder = value.tickBorder;
 			room.UI.ghost = value.ghost;
-			room.UI.acceptDrop = value.acceptDrop;
+			room.UI.highlightForDrop = value.highlightForDrop;
 		});
 	}	
 }

@@ -1,5 +1,5 @@
 <div class="room-card occupied" *ngIf='roomVM.isOccupied()'
-	[ngClass]="{'ghost': roomVM.UI.ghost , 'tick-border': roomVM.UI.tickBorder}"
+	[ngClass]="{'ghost': roomVM.UI.ghost , 'highlight-for-drop': roomVM.UI.highlightForDrop}"
 >
 	<div class="card-header">
 		<div class="section1">
@@ -31,7 +31,7 @@
 </div>
 
 <div class="room-card free" *ngIf='roomVM.isFree()'
-	[ngClass]="{'ghost': roomVM.UI.ghost , 'tick-border': roomVM.UI.tickBorder}"
+	[ngClass]="{'ghost': roomVM.UI.ghost , 'highlight-for-drop': roomVM.UI.highlightForDrop}"
 >
 	<div class="card-header">
 		<div class="section1">
@@ -58,7 +58,7 @@
 
 
 <div class="room-card reserved" *ngIf='roomVM.isReserved()'
-	[ngClass]="{'ghost': roomVM.UI.ghost , 'tick-border': roomVM.UI.tickBorder}"
+	[ngClass]="{'ghost': roomVM.UI.ghost , 'highlight-for-drop': roomVM.UI.highlightForDrop}"
 >
 	<div class="card-header">
 		<div class="section1">
@@ -84,7 +84,7 @@
 </div>
 
 <div class="room-card out-of-service" *ngIf='roomVM.isOutOfService()'
-	[ngClass]="{'ghost': roomVM.UI.ghost , 'tick-border': roomVM.UI.tickBorder}"
+	[ngClass]="{'ghost': roomVM.UI.ghost , 'highlight-for-drop': roomVM.UI.highlightForDrop}"
 >
 	<div class="card-header">
 		<div class="section1">

@@ -2278,6 +2278,14 @@ a.btn.btn-square:focus {
             border-color: #ffbe01;
         }
 
+        .room-card.free.highlight-for-drop{
+            background-color: #ccffec;
+        }
+
+        .room-card.free.hover{
+            background-color: #97fcd6;
+        }
+
         .room-card .card-header{
            padding: 6px 12px 6px 12px;
         }
