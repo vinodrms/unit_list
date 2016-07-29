@@ -6,10 +6,10 @@ import {TranslationPipe} from '../../localization/TranslationPipe';
     template: `
         <div class="row">
             <div class="col-xs-12">
-                <span class="pull-left edit-save-button-group-container">
+                <span class="edit-save-button-group-container" [ngClass]="{'pull-right': pullRight, 'pull-left': !pullRight}">
                     <span *ngIf="!isEditing">
                         <button type="button" class="btn btn-danger btn-block btn-xs uppercase" (click)="triggerEditStart()">
-                            <i class="fa unitpal-font">]</i> {{ 'Change' | translate }}
+                            <i class="fa unitpal-font">]</i> {{ changeText | translate }}
                         </button>
                     </span>
                     <span *ngIf="isEditing">
@@ -29,6 +29,8 @@ import {TranslationPipe} from '../../localization/TranslationPipe';
     pipes: [TranslationPipe]
 })
 export class EditSaveButtonGroupComponent {
+    @Input() pullRight: boolean = false;
+    @Input() changeText: string = "Change";
     @Input() isSaving: boolean = false;
     @Input() isEditing: boolean = false;
 

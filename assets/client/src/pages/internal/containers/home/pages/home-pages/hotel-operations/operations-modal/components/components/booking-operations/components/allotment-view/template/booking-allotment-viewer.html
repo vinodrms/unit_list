@@ -1,0 +1,28 @@
+<div class="col-xs-12" *ngIf="hasAllotment">
+    <div class="row">
+        <div class="col-xs-12 important-header padding-top-10px">
+            <div class="row">
+                <div class="col-xs-12 col-sm-1 text-field">
+                    <p>{{'Allotment' | translate}}</p>
+                </div>
+                <div class="col-xs-12 col-sm-4 field-value text-field" [ngClass]="{'archived': isArchived}">
+                    <p>{{allotmentDO.openInterval | thdateinterval}}</p>
+                </div>
+                <div class="col-xs-12 col-sm-2">
+                    <p>{{'Status' | translate}}</p>
+                </div>
+                <div class="col-xs-12 col-sm-2 field-value text-field">
+                    <p *ngIf="!isArchived">{{'Active' | translate}}
+                    </p>
+                    <p *ngIf="isArchived" class="operational-important-field"> 
+                        <i class="fa unitpal-font">+</i> {{'Archived' | translate}}
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-offset-1 col-sm-11 field-value text-field padding-top-5px" [ngClass]="{'archived': isArchived}">
+            <p class="notes"><i class="fa fa-lock" title="{{ 'Constraints' | translate }}"></i> {{ constraintsString }}</p>
+        </div>
+    </div>
+</div>

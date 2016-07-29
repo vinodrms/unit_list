@@ -12,6 +12,8 @@ import {RoomCategoryStatsDO} from '../../../../../../../../../../services/room-c
 import {RoomsService} from '../../../../../../../../../../services/rooms/RoomsService';
 import {RoomVM} from '../../../../../../../../../../services/rooms/view-models/RoomVM';
 import {EagerCustomersService} from '../../../../../../../../../../services/customers/EagerCustomersService';
+import {EagerAllotmentsService} from '../../../../../../../../../../services/allotments/EagerAllotmentsService';
+import {AllotmentDO} from '../../../../../../../../../../services/allotments/data-objects/AllotmentDO';
 import {CustomersDO} from '../../../../../../../../../../services/customers/data-objects/CustomersDO';
 import {BookingOperationsPageData} from './utils/BookingOperationsPageData';
 import {HotelBookingOperationsPageParam} from '../utils/HotelBookingOperationsPageParam';
@@ -24,7 +26,8 @@ export class BookingOperationsPageService {
         private _hotelAggregatorService: HotelAggregatorService,
         private _roomCategoriesStatsService: RoomCategoriesStatsService,
         private _roomsService: RoomsService,
-        private _eagerCustomersService: EagerCustomersService) {
+        private _eagerCustomersService: EagerCustomersService,
+        private _eagerAllotmentsService: EagerAllotmentsService) {
     }
 
 
@@ -36,19 +39,23 @@ export class BookingOperationsPageService {
             var pageData = new BookingOperationsPageData();
             pageData.bookingDO = result[0];
             pageData.ccy = result[1].ccy;
+            pageData.allowedPaymentMethods = result[1].allowedPaymentMethods;
+            pageData.allPaymentMethods = result[1].paymentMethods;
             pageData.operationHours = result[1].hotelDetails.hotel.operationHours;
 
             return Observable.combineLatest(
                 Observable.from([pageData]),
                 this._eagerCustomersService.getCustomersById(pageData.bookingDO.customerIdList),
                 this.getAttachedRoom(pageData.bookingDO),
-                this._roomCategoriesStatsService.getRoomCategoryStatsForRoomCategoryId(pageData.bookingDO.roomCategoryId)
+                this._roomCategoriesStatsService.getRoomCategoryStatsForRoomCategoryId(pageData.bookingDO.roomCategoryId),
+                this.getAttachedAllotment(pageData.bookingDO)
             );
-        }).map((result: [BookingOperationsPageData, CustomersDO, RoomVM, RoomCategoryStatsDO]) => {
+        }).map((result: [BookingOperationsPageData, CustomersDO, RoomVM, RoomCategoryStatsDO, AllotmentDO]) => {
             var pageData = result[0];
             pageData.customersContainer = result[1];
             pageData.roomVM = result[2];
             pageData.roomCategoryStats = result[3];
+            pageData.allotmentDO = result[4];
             return pageData;
         });
     }
@@ -58,5 +65,11 @@ export class BookingOperationsPageService {
             return Observable.from([new RoomVM()]);
         }
         return this._roomsService.getRoomById(bookingDO.roomId);
+    }
+    private getAttachedAllotment(booking: BookingDO): Observable<AllotmentDO> {
+        if (!booking.isMadeThroughAllotment()) {
+            return Observable.from([new AllotmentDO()]);
+        }
+        return this._eagerAllotmentsService.getAllotmentById(booking.allotmentId);
     }
 }

@@ -570,6 +570,21 @@ export var EnglishTranslations: Object = {
 	"Time when booking will be marked as No Show": "Time when booking will be marked as No Show",
 	"No Room": "No Room",
 	"Reserve": "Reserve",
+	"Guests": "Guests",
+	"Change Capacity": "Change Capacity",
+	"Are you sure you want to change the capacity for this booking? This can affect the total price.": "Are you sure you want to change the capacity for this booking? This can affect the total price.",
+	"Payment": "Payment",
+	"Guarantee added": "Guarantee added",
+	"No guarantee": "No guarantee",
+	"Files": "Files",
+	"None": "None",
+	"Cost": "Cost",
+	"Penalty": "Penalty",
+	"Archived": "Archived",
+	"Release": "Release",
+	"Some customers (%omittedCustomers%) have not been added because they do not have access on the price product": "Some customers (%omittedCustomers%) have not been added because they do not have access on the price product",
+	
+	
 
 	
 };

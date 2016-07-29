@@ -67,7 +67,6 @@ export class BookingRoomEditorComponent {
                 .subscribe((updatedBooking: BookingDO) => {
                     this.triggerOnBookingRoomChanged(updatedBooking);
                 }, (err: any) => {
-                    console.log(err)
                 });
         }).catch((err: any) => { });
     }

@@ -1,17 +1,23 @@
 <div class="header">
-	<div class="pane-title">
-		<span class="f-24">Arrival</span>
-		<!--<i class="fa fa-suitcase orange-color p-l-12 f-16"></i>-->
-		<span class="unitpal-font orange-color p-l-12 f-24">/</span>
+	<div class="pane-title p-t-6">
+		<div class="unitpal-font f-12 f-32 clickable" (click)="previousDay()">&lt;</div>
+		<div class="flex-row">
+			<span class="unitpal-font orange-color p-r-12 f-32">/</span>
+			<div class="">
+				<div class="f-12">Arrivals</div>
+				<div *ngIf="selectedDate" class="current-date f-16"><b>{{getDateShortString()}}</b></div>
+			</div>
+		</div>
+		<div class="unitpal-font f-12 p-r-12 f-32 clickable" (click)="nextDay()">&gt;</div>
 	</div>
 	<div class="pane-search-bar">
-		<input class="remove-auto-border" type="text" placeholder="Search here">
+		<input class="remove-auto-border" type="text" placeholder="Search here" [ngModel]="searchText" (ngModelChange)="searchTextChangeHandler($event)">
 		<i class="fa fa-search gray-color p-l-6"></i>
 	</div>
 </div>
-<div class="body">
+<div customScroll class="body">
 	<arrival-item
-		*ngFor="let arrivalItemVM of arrivalItemsVMList"
+		*ngFor="let arrivalItemVM of filteredArrivalsVMList"
 		[ngClass]="{'selected': isArrivalItemSelected(arrivalItemVM)}" 
 		[arrivalItemVM] = "arrivalItemVM" 
 		(click) = "selectArrivalItem(arrivalItemVM)"
@@ -19,9 +25,39 @@
 		(stoppedDragging)="stoppedDragging($event)"
 		>
 	</arrival-item>
+
+	<arrival-item
+		*ngFor="let arrivalItemVM of filteredArrivalsVMList"
+		[ngClass]="{'selected': isArrivalItemSelected(arrivalItemVM)}" 
+		[arrivalItemVM] = "arrivalItemVM" 
+		(click) = "selectArrivalItem(arrivalItemVM)"
+		(startedDragging)="startedDragging($event)"
+		(stoppedDragging)="stoppedDragging($event)"
+		>
+	</arrival-item>
+		<arrival-item
+		*ngFor="let arrivalItemVM of filteredArrivalsVMList"
+		[ngClass]="{'selected': isArrivalItemSelected(arrivalItemVM)}" 
+		[arrivalItemVM] = "arrivalItemVM" 
+		(click) = "selectArrivalItem(arrivalItemVM)"
+		(startedDragging)="startedDragging($event)"
+		(stoppedDragging)="stoppedDragging($event)"
+		>
+	</arrival-item>
+		<arrival-item
+		*ngFor="let arrivalItemVM of filteredArrivalsVMList"
+		[ngClass]="{'selected': isArrivalItemSelected(arrivalItemVM)}" 
+		[arrivalItemVM] = "arrivalItemVM" 
+		(click) = "selectArrivalItem(arrivalItemVM)"
+		(startedDragging)="startedDragging($event)"
+		(stoppedDragging)="stoppedDragging($event)"
+		>
+	</arrival-item>	
 </div>
 <div class="footer">
 	<div class="arrivals-side-pane-bottom-box">
 		<th-button [upFont]="'\''" [text]="'Booking'" (onButtonClick)="openNewBookingModal()"></th-button>
 	</div>
 </div>
+
+

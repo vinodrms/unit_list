@@ -23,6 +23,14 @@ export class EagerAllotmentsService {
 				return allotments;
 			});
 	}
+	public getAllotmentById(allotmentId: string): Observable<AllotmentDO> {
+		return this._appContext.thHttp.get(ThServerApi.AllotmentItem, { id: allotmentId }).map((allotmentObject: Object) => {
+			var allotment = new AllotmentDO();
+			allotment.buildFromObject(allotmentObject["allotment"]);
+			return allotment;
+		});
+	}
+
 	private getEmptyResult(): Observable<AllotmentsDO> {
 		return new Observable<AllotmentsDO>((serviceObserver: Observer<AllotmentsDO>) => {
 			var allotments = new AllotmentsDO();

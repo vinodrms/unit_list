@@ -3,15 +3,15 @@
 >
 	<div class="card-header">
 		<div class="section1">
-			<div class="room-number clickable">{{ roomVM.name }}</div>
-			<div class="room-details">{{ roomVM.categoryLabel }}</div>
+			<div class="room-number clickable" (click)="openRoomModal()">{{ roomVM.name }}</div>
+			<div class="room-type">{{ roomVM.categoryLabel }}</div>
 		</div>
 		<div class="section2 flex-row flex-jc-sb">
-			<div class="customer-name clickable">{{ roomVM.customerName }}</div>
+			<div class="customer-name clickable" (click)="openCustomerModal()">{{ roomVM.customerName }}</div>
 			<div class="room-stats flex-row flex-center-v">
-				<!--<div *ngIf="maintenance" class="clickable f-18" [ngClass]="maintenance.cssClass" (click)="maintenance.clickHandler()" title="{{maintenance.title}}">
+				<div *ngIf="maintenance" class="clickable f-18" [ngClass]="maintenance.cssClass" (click)="maintenance.clickHandler()" title="{{maintenance.title}}">
 					<span class="unitpal-font">{{maintenance.icon}}</span>
-				</div>-->
+				</div>
 			</div>
 		</div>
 	</div>
@@ -22,8 +22,10 @@
 			<div class="end-date">{{ roomVM.departureLabel }}</div>
 		</div>
 		<div class="other-details gray-color flex-row flex-center-v f-12">
-			<span class="unitpal-font f-12">(</span> {{roomVM.numberOfPeople}}
-			<span class="unitpal-font f-12">Y</span> {{roomVM.numberOfNights}}
+			<div>
+				<span class="unitpal-font f-12">(</span> {{roomVM.numberOfPeople}}
+				<span class="unitpal-font f-12">Y</span> {{roomVM.numberOfNights}}
+			</div>
 		</div>
 	</div>
 </div>
@@ -33,8 +35,8 @@
 >
 	<div class="card-header">
 		<div class="section1">
-			<div class="room-number clickable">{{ roomVM.name }}</div>
-			<div class="room-details">{{ roomVM.categoryLabel }}</div>
+			<div class="room-number clickable" (click)="openRoomModal()">{{ roomVM.name }}</div>
+			<div class="room-type">{{ roomVM.categoryLabel }}</div>
 		</div>
 		<div class="section2 flex-row flex-jc-sb">
 			<div class="customer-name clickable"></div>
@@ -60,8 +62,8 @@
 >
 	<div class="card-header">
 		<div class="section1">
-			<div class="room-number clickable">{{ roomVM.name }}</div>
-			<div class="room-details">{{ roomVM.categoryLabel }}</div>
+			<div class="room-number clickable" (click)="openRoomModal()">{{ roomVM.name }}</div>
+			<div class="room-type">{{ roomVM.categoryLabel }}</div>
 		</div>
 		<div class="section2 flex-row flex-jc-sb">
 			<div class="customer-name clickable"></div>
@@ -86,8 +88,8 @@
 >
 	<div class="card-header">
 		<div class="section1">
-			<div class="room-number clickable">{{ roomVM.properties.name }}</div>
-			<div class="room-details">{{ roomVM.roomCategory.displayName }}</div>
+			<div class="room-number clickable" (click)="openRoomModal()">{{ roomVM.properties.name }}</div>
+			<div class="room-type">{{ roomVM.roomCategory.displayName }}</div>
 		</div>
 		<div class="section2 flex-row flex-jc-sb">
 			<div class="customer-name clickable"></div>

@@ -35,6 +35,27 @@ export class BookingDOConstraints {
         BookingConfirmationStatus.Confirmed,
         BookingConfirmationStatus.Guaranteed
     ];
+    public static ConfirmationStatuses_CanChangeCapacity: BookingConfirmationStatus[] = [
+        BookingConfirmationStatus.Confirmed,
+        BookingConfirmationStatus.Guaranteed,
+        BookingConfirmationStatus.CheckedIn
+    ];
+    public static ConfirmationStatuses_CanAddPaymentGuarantee: BookingConfirmationStatus[] = [
+        BookingConfirmationStatus.Confirmed,
+        BookingConfirmationStatus.Guaranteed
+    ];
+    public static ConfirmationStatuses_CanChangeDetails: BookingConfirmationStatus[] = [
+        BookingConfirmationStatus.Confirmed,
+        BookingConfirmationStatus.Guaranteed,
+        BookingConfirmationStatus.NoShow,
+        BookingConfirmationStatus.NoShowWithPenalty,
+        BookingConfirmationStatus.CheckedIn
+    ];
+    public static ConfirmationStatuses_CanChangeCustomers: BookingConfirmationStatus[] = [
+        BookingConfirmationStatus.Confirmed,
+        BookingConfirmationStatus.Guaranteed,
+        BookingConfirmationStatus.CheckedIn
+    ];
 
     public static ConfirmationStatuses_BookingsConsideredInYieldManager: BookingConfirmationStatus[] = [
         BookingConfirmationStatus.Confirmed,

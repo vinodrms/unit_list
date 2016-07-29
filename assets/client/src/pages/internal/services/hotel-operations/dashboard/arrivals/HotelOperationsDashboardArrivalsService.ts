@@ -26,7 +26,7 @@ export class HotelOperationsDashboardArrivalsService extends ARequestService<Arr
         private _roomsService: RoomsService,
         private _roomCategoriesStatsService: RoomCategoriesStatsService,
         private _thTranslate: ThTranslation
-        ) {
+    ) {
         super();
     }
 
@@ -71,5 +71,12 @@ export class HotelOperationsDashboardArrivalsService extends ARequestService<Arr
     public getArrivalItems(referenceDate?: ThDateDO): Observable<ArrivalItemInfoVM[]> {
         this._referenceDate = referenceDate;
         return this.getServiceObservable();
+    }
+
+    public refresh(referenceDate?: ThDateDO) {
+        if (!this._appContext.thUtils.isUndefinedOrNull(referenceDate)) {
+            this._referenceDate = referenceDate;
+        }
+        super.refresh();
     }
 }

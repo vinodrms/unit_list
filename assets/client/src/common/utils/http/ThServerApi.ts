@@ -51,6 +51,7 @@ export enum ThServerApi {
 	CustomersCount,
 	CustomersSaveItem,
 	Allotments,
+	AllotmentItem,
 	AllotmentsCount,
 	AllotmentsSaveItem,
 	AllotmentsArchiveItem,
@@ -79,8 +80,10 @@ export enum ThServerApi {
 	HotelOperationsBookingPossiblePrices,
 	HotelOperationsBookingChangeDates,
 	HotelOperationsBookingChangeNoShowTime,
-
-	HotelOperationsCommonHotelTimestamp,
+	HotelOperationsBookingChangeCapacity,
+	HotelOperationsBookingAddPaymentGuarantee,
+	HotelOperationsBookingChangeDetails,
+	HotelOperationsBookingChangeCustomers,
 
 }
 
@@ -139,6 +142,7 @@ ThServerApiUrl[ThServerApi.Customers] = "/customers";
 ThServerApiUrl[ThServerApi.CustomersCount] = "/customers/count";
 ThServerApiUrl[ThServerApi.CustomersSaveItem] = "/customers/saveCustomerItem";
 ThServerApiUrl[ThServerApi.Allotments] = "/allotments";
+ThServerApiUrl[ThServerApi.AllotmentItem] = "/allotments/allotmentItem";
 ThServerApiUrl[ThServerApi.AllotmentsCount] = "/allotments/count";
 ThServerApiUrl[ThServerApi.AllotmentsSaveItem] = "/allotments/saveAllotmentItem";
 ThServerApiUrl[ThServerApi.AllotmentsArchiveItem] = "/allotments/archiveAllotmentItem";
@@ -167,8 +171,10 @@ ThServerApiUrl[ThServerApi.HotelOperationsRoomGetAttachedBooking] = "/hotelOpera
 ThServerApiUrl[ThServerApi.HotelOperationsBookingPossiblePrices] = "/hotelOperations/booking/possiblePrices";
 ThServerApiUrl[ThServerApi.HotelOperationsBookingChangeDates] = "/hotelOperations/booking/changeDates";
 ThServerApiUrl[ThServerApi.HotelOperationsBookingChangeNoShowTime] = "/hotelOperations/booking/changeNoShowTime";
-
-ThServerApiUrl[ThServerApi.HotelOperationsCommonHotelTimestamp] = "/hotelOperations/common/hotelTimestamp";
+ThServerApiUrl[ThServerApi.HotelOperationsBookingChangeCapacity] = "/hotelOperations/booking/changeCapacity";
+ThServerApiUrl[ThServerApi.HotelOperationsBookingAddPaymentGuarantee] = "/hotelOperations/booking/addPaymentGuarantee";
+ThServerApiUrl[ThServerApi.HotelOperationsBookingChangeDetails] = "/hotelOperations/booking/changeDetails";
+ThServerApiUrl[ThServerApi.HotelOperationsBookingChangeCustomers] = "/hotelOperations/booking/changeCustomers";
 
 export class ServerApiBuilder {
 	public static ApiRoot = "/api";

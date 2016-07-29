@@ -1,25 +1,57 @@
 <div class="header">
-	<div class="pane-title">
-		<span class="unitpal-font f-12 p-r-12 f-48 clickable" (click)="previousDay()">&lt;</span>
-			<span class="unitpal-font green-color p-r-12 f-48">.</span>
+	<div class="pane-title p-t-6">
+		<div class="unitpal-font f-12 f-32 clickable" (click)="previousDay()">&lt;</div>
+		<div class="flex-row">
+			<span class="unitpal-font green-color p-r-12 f-32">.</span>
 			<div>
-				<span class="f-12">Departures</span>
-				<span class="current-date f-16"><b>13.01.2016</b></span>			
+				<div class="f-12">Departures</div>
+				<div *ngIf="selectedDate" class="current-date f-16"><b>{{getDateShortString()}}</b></div>			
 			</div>
-		<span class="unitpal-font f-12 p-r-12 f-48 clickable" (click)="nextDay()">&gt;</span>
+		</div>
+		<div class="unitpal-font f-12 p-r-12 f-32 clickable" (click)="nextDay()">&gt;</div>
 	</div>
 
 	<div class="pane-search-bar">
-		<input class="remove-auto-border" type="text" placeholder="Search here">
+		<input class="remove-auto-border" type="text" placeholder="Search here" [ngModel]="searchText" (ngModelChange)="searchTextChangeHandler($event)">
 		<i class="fa fa-search gray-color p-l-6"></i>
 	</div>
 
 </div>
-<div class="body">
+<div customScroll class="body">
 	<departure-item
-		*ngFor="let departureItemVM of departureItemsVMList"
+		*ngFor="let departureItemVM of filteredDeparturesVMList"
 		[ngClass]="{'selected': isDepartureItemSelected(departureItemVM)}" 
 		[departureItemVM] = "departureItemVM" 
 		(click) = "selectDepartureItem(departureItemVM)">
 	</departure-item>
+	<departure-item
+		*ngFor="let departureItemVM of filteredDeparturesVMList"
+		[ngClass]="{'selected': isDepartureItemSelected(departureItemVM)}" 
+		[departureItemVM] = "departureItemVM" 
+		(click) = "selectDepartureItem(departureItemVM)">
+	</departure-item>
+	<departure-item
+		*ngFor="let departureItemVM of filteredDeparturesVMList"
+		[ngClass]="{'selected': isDepartureItemSelected(departureItemVM)}" 
+		[departureItemVM] = "departureItemVM" 
+		(click) = "selectDepartureItem(departureItemVM)">
+	</departure-item>
+	<departure-item
+		*ngFor="let departureItemVM of filteredDeparturesVMList"
+		[ngClass]="{'selected': isDepartureItemSelected(departureItemVM)}" 
+		[departureItemVM] = "departureItemVM" 
+		(click) = "selectDepartureItem(departureItemVM)">
+	</departure-item>
+	<departure-item
+		*ngFor="let departureItemVM of filteredDeparturesVMList"
+		[ngClass]="{'selected': isDepartureItemSelected(departureItemVM)}" 
+		[departureItemVM] = "departureItemVM" 
+		(click) = "selectDepartureItem(departureItemVM)">
+	</departure-item>
+	<departure-item
+		*ngFor="let departureItemVM of filteredDeparturesVMList"
+		[ngClass]="{'selected': isDepartureItemSelected(departureItemVM)}" 
+		[departureItemVM] = "departureItemVM" 
+		(click) = "selectDepartureItem(departureItemVM)">
+	</departure-item>					
 </div>

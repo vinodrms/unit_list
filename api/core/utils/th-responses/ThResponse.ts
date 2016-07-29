@@ -352,6 +352,7 @@ export enum ThStatusCode {
     BookingsValidatorConstraintsDoNotApply,
     BookingsValidatorAllotmentConstraintsDoNotApply,
     BookingsValidatorInvalidRoomCategoryId,
+    BookingsValidatorInvalidBookingCapacity,
     BookingsValidatorInvalidPriceForRoomCategoryId,
     BookingsValidatorInvalidRoomId,
     BookingsValidatorRoomCategoryNotFoundInActiveInventory,
@@ -398,7 +399,6 @@ export enum ThStatusCode {
     HotelRoomOperationsControllerErrorCheckingOut,
     HotelRoomOperationsControllerErrorReservingRoom,
     HotelRoomOperationsControllerErrorChangingRoom,
-    HotelCommonOperationsControllerErrorGettingTimestamp,
     BookingOccupancyCalculatorWrapperError,
     BookingOccupancyCalculatorWrapperInvalidInterval,
     BookingPossiblePricesError,
@@ -416,6 +416,19 @@ export enum ThStatusCode {
     BookingChangeNoShowTimeInvalidTime,
     BookingChangeNoShowTimeInvalidState,
     HotelBookingOperationsControllerErrorChangingNoShowTime,
+    BookingChangeCapacityInvalidState,
+    BookingChangeCapacityError,
+    HotelBookingOperationsControllerErrorChangingCapacity,
+    BookingPaymentGuaranteeError,
+    BookingPaymentGuaranteeInvalidState,
+    HotelBookingOperationsControllerErrorAddingPaymentGuarantee,
+    BookingChangeDetailsInvalidState,
+    BookingChangeDetailsError,
+    HotelBookingOperationsControllerErrorChangingDetails,
+    BookingChangeCustomersInvalidState,
+    BookingChangeCustomersError,
+    BookingChangeCustomersBilledCustomerMisssing,
+    HotelBookingOperationsControllerErrorChangingCustomers,
 
 }
 
@@ -759,6 +772,7 @@ ThMessage[ThStatusCode.BookingsValidatorBilledCustomerInvalidRightsOnPriceProduc
 ThMessage[ThStatusCode.BookingsValidatorConstraintsDoNotApply] = "The constraints from the price product do not apply for the booking.";
 ThMessage[ThStatusCode.BookingsValidatorAllotmentConstraintsDoNotApply] = "The constraints from the allotment do not apply for the booking.";
 ThMessage[ThStatusCode.BookingsValidatorInvalidRoomCategoryId] = "The room category is not valid within the price product from the booking.";
+ThMessage[ThStatusCode.BookingsValidatorInvalidBookingCapacity] = "Each booking must have at least one adult or one child.";
 ThMessage[ThStatusCode.BookingsValidatorInvalidPriceForRoomCategoryId] = "The selected room category does not have a price configuration in the Price Product for the number of people from the booking.";
 ThMessage[ThStatusCode.BookingsValidatorInvalidRoomId] = "The room was not found.";
 ThMessage[ThStatusCode.BookingsValidatorRoomCategoryNotFoundInActiveInventory] = "The room category was not found in the active room inventory.";
@@ -805,7 +819,6 @@ ThMessage[ThStatusCode.HotelRoomOperationsControllerErrorCheckingIn] = "Error ch
 ThMessage[ThStatusCode.HotelRoomOperationsControllerErrorCheckingOut] = "Error checking out the room.";
 ThMessage[ThStatusCode.HotelRoomOperationsControllerErrorReservingRoom] = "Error reserving room.";
 ThMessage[ThStatusCode.HotelRoomOperationsControllerErrorChangingRoom] = "Error changing room.";
-ThMessage[ThStatusCode.HotelCommonOperationsControllerErrorGettingTimestamp] = "Error getting current hotel timestamp.";
 ThMessage[ThStatusCode.BookingOccupancyCalculatorWrapperError] = "Error getting occupancy.";
 ThMessage[ThStatusCode.BookingOccupancyCalculatorWrapperInvalidInterval] = "Invalid submitted interval.";
 ThMessage[ThStatusCode.BookingPossiblePricesError] = "Error getting all the possible prices for the booking.";
@@ -823,6 +836,19 @@ ThMessage[ThStatusCode.BookingChangeNoShowTimeError] = "Error changing the no sh
 ThMessage[ThStatusCode.BookingChangeNoShowTimeInvalidTime] = "Invalid submitted time.";
 ThMessage[ThStatusCode.BookingChangeNoShowTimeInvalidState] = "The no show time can be changed only for confirmed or guaranteed bookings.";
 ThMessage[ThStatusCode.HotelBookingOperationsControllerErrorChangingNoShowTime] = "Error changing the no show time.";
+ThMessage[ThStatusCode.BookingChangeCapacityInvalidState] = "The capacity can be changed only for confirmed, guaranteed or no show bookings.";
+ThMessage[ThStatusCode.BookingChangeCapacityError] = "Error changing booking capacity.";
+ThMessage[ThStatusCode.HotelBookingOperationsControllerErrorChangingCapacity] = "Error changing booking capacity.";
+ThMessage[ThStatusCode.BookingPaymentGuaranteeError] = "Error adding payment guarantee.";
+ThMessage[ThStatusCode.BookingPaymentGuaranteeInvalidState] = "A payment guarantee can be added only for confirmed or guaranteed bookings.";
+ThMessage[ThStatusCode.HotelBookingOperationsControllerErrorAddingPaymentGuarantee] = "Error adding payment guarantee.";
+ThMessage[ThStatusCode.BookingChangeDetailsInvalidState] = "You cannot change details for checked out or cancelled bookings.";
+ThMessage[ThStatusCode.BookingChangeDetailsError] = "Error changing booking details.";
+ThMessage[ThStatusCode.HotelBookingOperationsControllerErrorChangingDetails] = "Error changing booking details.";
+ThMessage[ThStatusCode.BookingChangeCustomersInvalidState] = "The customers can be changed only for checked in, confirmed or guaranteed bookings.";
+ThMessage[ThStatusCode.BookingChangeCustomersError] = "Error changing customers from booking.";
+ThMessage[ThStatusCode.BookingChangeCustomersBilledCustomerMisssing] = "The billed customer is missing from the list.";
+ThMessage[ThStatusCode.HotelBookingOperationsControllerErrorChangingCustomers] = "Error changing customers from booking.";
 
 export class ThResponse {
     statusCode: ThStatusCode;

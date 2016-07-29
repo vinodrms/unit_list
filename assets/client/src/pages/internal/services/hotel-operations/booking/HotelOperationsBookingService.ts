@@ -5,6 +5,7 @@ import {AppContext, ThServerApi} from '../../../../../common/utils/AppContext';
 import {BookingPossiblePriceItemsDO} from './data-objects/BookingPossiblePriceItemsDO';
 import {BookingDO} from '../../bookings/data-objects/BookingDO';
 import {ThTimestampDO} from '../../common/data-objects/th-dates/ThTimestampDO';
+import {InvoicePaymentMethodDO} from '../../invoices/data-objects/payers/InvoicePaymentMethodDO';
 
 @Injectable()
 export class HotelOperationsBookingService {
@@ -26,22 +27,62 @@ export class HotelOperationsBookingService {
     }
 
     public changeDates(booking: BookingDO): Observable<BookingDO> {
-        return this._appContext.thHttp.post(ThServerApi.HotelOperationsBookingChangeDates, {
-            booking: booking
-        }).map((bookingObject: Object) => {
-            var bookingDO = new BookingDO();
-            bookingDO.buildFromObject(bookingObject["booking"]);
-            return bookingDO;
-        });
+        return this.mapToBookingObservable(
+            this._appContext.thHttp.post(ThServerApi.HotelOperationsBookingChangeDates, {
+                booking: booking
+            })
+        );
     }
     public changeNoShowTime(booking: BookingDO, noShowTimestamp: ThTimestampDO): Observable<BookingDO> {
-        return this._appContext.thHttp.post(ThServerApi.HotelOperationsBookingChangeNoShowTime, {
-            booking: {
-                groupBookingId: booking.groupBookingId,
-                bookingId: booking.bookingId,
-                noShowTimestamp: noShowTimestamp
-            }
-        }).map((bookingObject: Object) => {
+        return this.mapToBookingObservable(
+            this._appContext.thHttp.post(ThServerApi.HotelOperationsBookingChangeNoShowTime, {
+                booking: {
+                    groupBookingId: booking.groupBookingId,
+                    bookingId: booking.bookingId,
+                    noShowTimestamp: noShowTimestamp
+                }
+            })
+        );
+    }
+
+    public changeCapacity(booking: BookingDO): Observable<BookingDO> {
+        return this.mapToBookingObservable(
+            this._appContext.thHttp.post(ThServerApi.HotelOperationsBookingChangeCapacity, {
+                booking: booking
+            })
+        );
+    }
+
+    public addPaymentGuarantee(booking: BookingDO, paymentMethod: InvoicePaymentMethodDO): Observable<BookingDO> {
+        return this.mapToBookingObservable(
+            this._appContext.thHttp.post(ThServerApi.HotelOperationsBookingAddPaymentGuarantee, {
+                booking: {
+                    groupBookingId: booking.groupBookingId,
+                    bookingId: booking.bookingId,
+                    paymentMethod: paymentMethod
+                }
+            })
+        );
+    }
+
+    public changeDetails(booking: BookingDO): Observable<BookingDO> {
+        return this.mapToBookingObservable(
+            this._appContext.thHttp.post(ThServerApi.HotelOperationsBookingChangeDetails, {
+                booking: booking
+            })
+        );
+    }
+
+    public changeCustomers(booking: BookingDO): Observable<BookingDO> {
+        return this.mapToBookingObservable(
+            this._appContext.thHttp.post(ThServerApi.HotelOperationsBookingChangeCustomers, {
+                booking: booking
+            })
+        );
+    }
+
+    private mapToBookingObservable(bookingObjectObservable: Observable<Object>): Observable<BookingDO> {
+        return bookingObjectObservable.map((bookingObject: Object) => {
             var bookingDO = new BookingDO();
             bookingDO.buildFromObject(bookingObject["booking"]);
             return bookingDO;

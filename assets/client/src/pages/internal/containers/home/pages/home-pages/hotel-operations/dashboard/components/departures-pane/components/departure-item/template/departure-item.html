@@ -1,23 +1,26 @@
 <div *ngIf="departureItemVM.isStayingInRoom">
-	<div class="header clickable"s>
-		<span><b class="green-color">{{departureItemVM.roomName}}</b></span>
-		<span>{{departureItemVM.customerName}}</span>
-		<div class="room-type">{{ departureItemVM.roomCategoryLabel}}</div>
+	<div class="header">
+		<span class="clickable green-color"><b (click)="openRoomModal()">{{departureItemVM.roomName}}</b></span>
+		<span class="customer-name clickable" (click)="openCustomerModal()">{{departureItemVM.customerName}}</span>
 	</div>
 	<div class="body">
 		<div class="room-type">{{departureItemVM.roomCategoryLabel}}</div>
 		<div class="booking-quick-details">
-			<div class="period orange-color f-12">
+			<div class="stats orange-color f-12">
+				<div>
 				<span class="unitpal-font clickable f-12 p-r-6">-</span><span>203 euro</span>
+				</div>
 			</div>
 			<div class="other-details gray-color f-12">
-				<span class="unitpal-font f-12">(</span> <span>{{departureItemVM.numberOfPeople}}</span>
-				<span class="unitpal-font f-12">Y</span> <span>{{departureItemVM.numberOfNights}}</span>
+				<div>
+					<span class="unitpal-font f-12">(</span> <span>{{departureItemVM.numberOfPeople}}</span>
+					<span class="unitpal-font f-12">Y</span> <span>{{departureItemVM.numberOfNights}}</span>
+				</div>
 			</div>
 		</div>
 	</div>
 	<div class="footer">
-		<button class="btn btn-sm btn-green ">
+		<button class="btn btn-sm btn-green" (click)="openRoomModal()">
 			<span class="unitpal-font p-r-6">.</span> CHECK OUT 
 		</button>
 	</div>

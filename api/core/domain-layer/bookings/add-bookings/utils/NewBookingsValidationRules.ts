@@ -12,6 +12,7 @@ import {RoomCategoryStatsDO} from '../../../../data-layer/room-categories/data-o
 import {CustomersContainer} from '../../../customers/validators/results/CustomersContainer';
 import {BusinessValidationRuleContainer} from '../../../common/validation-rules/BusinessValidationRuleContainer';
 import {BookingBillingDetailsValidationRule} from '../../validators/validation-rules/booking/BookingBillingDetailsValidationRule';
+import {BookingCustomersValidationRule} from '../../validators/validation-rules/booking/BookingCustomersValidationRule';
 import {BookingAllotmentValidationRule, BookingAllotmentValidationParams} from '../../validators/validation-rules/booking/BookingAllotmentValidationRule';
 import {BookingRoomCategoryValidationRule} from '../../validators/validation-rules/booking/BookingRoomCategoryValidationRule';
 import {PriceProductYieldIntervalsValidationRule} from '../../validators/validation-rules/price-product/PriceProductYieldIntervalsValidationRule';
@@ -59,6 +60,7 @@ export class NewBookingsValidationRules {
     }
     private validateBookingCore(resolve: { (result: BookingDO): void }, reject: { (err: ThError): void }, booking: BookingDO) {
         var bookingValidationRule = new BusinessValidationRuleContainer([
+            new BookingCustomersValidationRule(this._validatorParams.customersContainer),
             new BookingBillingDetailsValidationRule(this._validatorParams.hotel, this._validatorParams.priceProductsContainer, this._validatorParams.customersContainer),
             new BookingAllotmentValidationRule(this._appContext, this._sessionContext, this.getBookingAllotmentValidationParams(booking)),
             new BookingRoomCategoryValidationRule({

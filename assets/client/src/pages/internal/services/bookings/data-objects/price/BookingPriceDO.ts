@@ -34,4 +34,7 @@ export class BookingPriceDO extends BaseDO implements IInvoiceItemMeta {
                 return "Cancellation Penalty";
         }
     }
+    public isPenalty(): boolean {
+        return this.priceType === BookingPriceType.Penalty;
+    }
 }

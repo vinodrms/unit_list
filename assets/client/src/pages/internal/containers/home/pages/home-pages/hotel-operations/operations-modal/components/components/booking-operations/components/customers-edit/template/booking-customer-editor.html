@@ -1,0 +1,34 @@
+<div class="col-xs-12 col-sm-12" *ngIf="hasCustomerEditRight">
+    <edit-save-button-group
+        [pullRight]="true"
+        (onEditStart)="startEdit()"
+        (onEditEnd)="endEdit()"
+        (onSavePressed)="saveCustomers()"
+        [isSaving]="isSaving"
+        [isEditing]="!readonly"
+        >
+    </edit-save-button-group>
+</div>
+<div class="col-xs-12 booking-details-table">
+    <table class="table form-group bottom-margin">
+        <tbody>
+            <tr *ngFor="let customer of customerList" class="operational-box" [ngClass]="{'important-header': isBilledCustomer(customer)}">
+                <td width="10%"> <i class="fa unitpal-font">(</i>  </td>
+                <td width="70%" class="clickable-item name-field" (click)="goToCustomer(customer)">
+                    {{ customer.customerName }}
+                </td>
+                <td width="20%"> 
+                    <span class="unitpal-font clickable-item" *ngIf="!isBilledCustomer(customer) && !readonly" (click)="removeCustomer(customer)">\</span>
+                    <span class="unitpal-font" *ngIf="isBilledCustomer(customer)">D</span>
+                </td>
+            </tr>
+        </tbody>
+        <tfoot></tfoot>
+    </table>
+</div>
+<div class="col-xs-12" *ngIf="!readonly">
+    <a class="link-with-unitpal-font-icon" (click)="addCustomers()">
+        <i class="fa unitpal-font">'</i> 
+        <span>{{ 'Add Customer' | translate }}</span>
+    </a>
+</div>

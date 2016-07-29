@@ -24,7 +24,7 @@
 					<ul class="list-group checked-list-box">
 						<div class="checkbox" *ngFor="let paymentMethodVM of paymentMethods.paymentMethodList">
 							<label>
-							<input type="checkbox" [(ngModel)]="paymentMethodVM.isSelected"><i class="fa" [ngClass]="paymentMethodVM.paymentMethod.iconUrl"></i> {{paymentMethodVM.paymentMethod.name}}
+							<input type="checkbox" [(ngModel)]="paymentMethodVM.isSelected"><i class="fa" [ngClass]="paymentMethodVM.paymentMethod.iconUrl"></i> {{paymentMethodVM.paymentMethod.name | translate}}
 						</label>
 						</div>
 					</ul>

@@ -4,11 +4,27 @@ export enum BookingIntervalEditRight {
     NoIntervalEdit
 }
 export enum BookingNoShowEditRight {
-    EditNoShow,
+    Edit,
     None
 }
 export enum BookingAssignRoomRight {
     Reserve,
     Change,
+    None
+}
+export enum BookingCapacityEditRight {
+    Edit,
+    None
+}
+export enum BookingPaymentGuaranteeEditRight {
+    Edit,
+    None
+}
+export enum BookingDetailsEditRight {
+    Edit,
+    None
+}
+export enum BookingCustomerEditRight {
+    Edit,
     None
 }

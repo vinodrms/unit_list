@@ -10,10 +10,12 @@ export enum AllotmentConstraintType {
 export interface IAllotmentConstraint extends BaseDO {
 	isValid(): boolean;
 	getValueDisplayString(thTranslation: ThTranslation): string;
+	getBriefValueDisplayString(thTranslation: ThTranslation): string;
 }
 
 export interface AllotmentConstraintMeta {
 	title: string;
 	description: string;
+	brief: string;
 	constraintType: AllotmentConstraintType;
 }

@@ -136,8 +136,10 @@ module.exports.routes = {
 	'POST /api/hotelOperations/booking/possiblePrices': 'HotelBookingOperationsController.getPossiblePrices',
 	'POST /api/hotelOperations/booking/changeDates': 'HotelBookingOperationsController.changeDates',
 	'POST /api/hotelOperations/booking/changeNoShowTime': 'HotelBookingOperationsController.changeNoShowTime',
-
-	'GET /api/hotelOperations/common/hotelTimestamp': 'HotelCommonOperationsController.getCurrentHotelTimestamp',
+	'POST /api/hotelOperations/booking/changeCapacity': 'HotelBookingOperationsController.changeCapacity',
+	'POST /api/hotelOperations/booking/addPaymentGuarantee': 'HotelBookingOperationsController.addPaymentGuarantee',
+	'POST /api/hotelOperations/booking/changeDetails': 'HotelBookingOperationsController.changeDetails',
+	'POST /api/hotelOperations/booking/changeCustomers': 'HotelBookingOperationsController.changeCustomers',
 
 	/*Front End Views	*/
 	'GET /home*': {

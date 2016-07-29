@@ -4,10 +4,14 @@ import {ThStatusCode} from '../../../utils/th-responses/ThResponse';
 import {SessionContext} from '../../../utils/SessionContext';
 import {UserDO} from '../../../data-layer/hotel/data-objects/user/UserDO';
 import {HotelDO} from '../../../data-layer/hotel/data-objects/HotelDO';
+import {ThTimestampDO} from '../../../utils/th-dates/data-objects/ThTimestampDO';
+
+import _ = require('underscore');
 
 export interface HotelDetailsDO {
 	user: UserDO;
 	hotel: HotelDO;
+	currentThTimestamp: ThTimestampDO;
 }
 
 export class HotelDetailsBuilder {
@@ -41,8 +45,12 @@ export class HotelDetailsBuilder {
 		delete user.password;
 		delete user.accountActivationToken;
 		delete user.resetPasswordToken;
+		var currentThTimestamp: ThTimestampDO;
+		if (_.isString(this._hotel.timezone) && this._hotel.timezone.length > 0) {
+			currentThTimestamp = ThTimestampDO.buildThTimestampForTimezone(this._hotel.timezone);
+		}
 		process.nextTick(() => {
-			resolve({ user: user, hotel: this._hotel });
+			resolve({ user: user, hotel: this._hotel, currentThTimestamp: currentThTimestamp });
 		});
 	}
 }

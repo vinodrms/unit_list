@@ -2,11 +2,15 @@ import {BaseController} from './base/BaseController';
 import {ThStatusCode} from '../core/utils/th-responses/ThResponse';
 import {AppContext} from '../core/utils/AppContext';
 import {SessionContext} from '../core/utils/SessionContext';
+import {BookingDO} from '../core/data-layer/bookings/data-objects/BookingDO';
 import {BookingPossiblePrices} from '../core/domain-layer/hotel-operations/booking/possible-prices/BookingPossiblePrices';
 import {BookingPossiblePriceItems} from '../core/domain-layer/hotel-operations/booking/possible-prices/utils/BookingPossiblePriceItems';
 import {BookingChangeDates} from '../core/domain-layer/hotel-operations/booking/change-dates/BookingChangeDates';
 import {BookingChangeNoShowTime} from '../core/domain-layer/hotel-operations/booking/change-no-show-time/BookingChangeNoShowTime';
-import {BookingDO} from '../core/data-layer/bookings/data-objects/BookingDO';
+import {BookingChangeCapacity} from '../core/domain-layer/hotel-operations/booking/change-capacity/BookingChangeCapacity';
+import {BookingPaymentGuarantee} from '../core/domain-layer/hotel-operations/booking/payment-guarantee/BookingPaymentGuarantee';
+import {BookingChangeDetails} from '../core/domain-layer/hotel-operations/booking/change-details/BookingChangeDetails';
+import {BookingChangeCustomers} from '../core/domain-layer/hotel-operations/booking/change-customers/BookingChangeCustomers';
 
 class HotelBookingOperationsController extends BaseController {
     public getPossiblePrices(req: Express.Request, res: Express.Response) {
@@ -45,11 +49,67 @@ class HotelBookingOperationsController extends BaseController {
             this.returnErrorResponse(req, res, error, ThStatusCode.HotelBookingOperationsControllerErrorChangingNoShowTime);
         });
     }
+
+    public changeCapacity(req: Express.Request, res: Express.Response) {
+        var appContext: AppContext = req.appContext;
+        var sessionContext: SessionContext = req.sessionContext;
+
+        var bookingCapacity = new BookingChangeCapacity(appContext, sessionContext);
+        bookingCapacity.changeCapacity(req.body.booking).then((booking: BookingDO) => {
+            booking.bookingHistory.translateActions(this.getThTranslation(sessionContext));
+            this.returnSuccesfulResponse(req, res, { booking: booking });
+        }).catch((error: any) => {
+            this.returnErrorResponse(req, res, error, ThStatusCode.HotelBookingOperationsControllerErrorChangingCapacity);
+        });
+    }
+
+    public addPaymentGuarantee(req: Express.Request, res: Express.Response) {
+        var appContext: AppContext = req.appContext;
+        var sessionContext: SessionContext = req.sessionContext;
+
+        var paymentGuarantee = new BookingPaymentGuarantee(appContext, sessionContext);
+        paymentGuarantee.addPaymentGuarantee(req.body.booking).then((booking: BookingDO) => {
+            booking.bookingHistory.translateActions(this.getThTranslation(sessionContext));
+            this.returnSuccesfulResponse(req, res, { booking: booking });
+        }).catch((error: any) => {
+            this.returnErrorResponse(req, res, error, ThStatusCode.HotelBookingOperationsControllerErrorAddingPaymentGuarantee);
+        });
+    }
+
+    public changeDetails(req: Express.Request, res: Express.Response) {
+        var appContext: AppContext = req.appContext;
+        var sessionContext: SessionContext = req.sessionContext;
+
+        var bookingChangeDetails = new BookingChangeDetails(appContext, sessionContext);
+        bookingChangeDetails.changeDetails(req.body.booking).then((booking: BookingDO) => {
+            booking.bookingHistory.translateActions(this.getThTranslation(sessionContext));
+            this.returnSuccesfulResponse(req, res, { booking: booking });
+        }).catch((error: any) => {
+            this.returnErrorResponse(req, res, error, ThStatusCode.HotelBookingOperationsControllerErrorChangingDetails);
+        });
+    }
+
+    public changeCustomers(req: Express.Request, res: Express.Response) {
+        var appContext: AppContext = req.appContext;
+        var sessionContext: SessionContext = req.sessionContext;
+
+        var bookingChangeCustomers = new BookingChangeCustomers(appContext, sessionContext);
+        bookingChangeCustomers.changeCustomers(req.body.booking).then((booking: BookingDO) => {
+            booking.bookingHistory.translateActions(this.getThTranslation(sessionContext));
+            this.returnSuccesfulResponse(req, res, { booking: booking });
+        }).catch((error: any) => {
+            this.returnErrorResponse(req, res, error, ThStatusCode.HotelBookingOperationsControllerErrorChangingCustomers);
+        });
+    }
 }
 
 var hotelBookingOperationsController = new HotelBookingOperationsController();
 module.exports = {
     getPossiblePrices: hotelBookingOperationsController.getPossiblePrices.bind(hotelBookingOperationsController),
     changeDates: hotelBookingOperationsController.changeDates.bind(hotelBookingOperationsController),
-    changeNoShowTime: hotelBookingOperationsController.changeNoShowTime.bind(hotelBookingOperationsController)
+    changeNoShowTime: hotelBookingOperationsController.changeNoShowTime.bind(hotelBookingOperationsController),
+    changeCapacity: hotelBookingOperationsController.changeCapacity.bind(hotelBookingOperationsController),
+    addPaymentGuarantee: hotelBookingOperationsController.addPaymentGuarantee.bind(hotelBookingOperationsController),
+    changeDetails: hotelBookingOperationsController.changeDetails.bind(hotelBookingOperationsController),
+    changeCustomers: hotelBookingOperationsController.changeCustomers.bind(hotelBookingOperationsController),
 }
