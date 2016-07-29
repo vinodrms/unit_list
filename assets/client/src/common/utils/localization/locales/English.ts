@@ -545,7 +545,7 @@ export var EnglishTranslations: Object = {
 	"Price for the new room": "Price for the new room",
 	"You chose a room with the same category like the booking. The price will remain unchanged.": "You chose a room with the same category like the booking. The price will remain unchanged.",
 	"You chose a room category that is priced differently in the booking's Price Product. Select the desired price of the booking (you can leave it unchanged).": "You chose a room category that is priced differently in the booking's Price Product. Select the desired price of the booking (you can leave it unchanged).",
-	"You chose a room category that does not have a price in the booking's Price Product. Select the desired price of the booking (you can leave it unchanged).": "You chose a room category that does not have a price in the booking's Price Product. Select the desired price of the booking (you can leave it unchanged).",
+	"You chose a room category that does not have a price defined in the booking's Price Product. Select the desired price of the booking (you can leave it unchanged).": "You chose a room category that does not have a price defined in the booking's Price Product. Select the desired price of the booking (you can leave it unchanged).",
 	"Change Price": "Change Price",
 	"Are you sure you want to change the price for this booking?": "Are you sure you want to change the price for this booking?",
 	"Room was changed succesfully": "Room was changed succesfully",
