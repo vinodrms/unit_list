@@ -590,9 +590,8 @@ export var EnglishTranslations: Object = {
 	"Send Confirmation": "Send Confirmation",
 	"Send": "Send",
 	"Add Email": "Add Email",
-	"Insert email": "Insert email",
+	"Insert a different email": "Insert a different email",
 	"Email(s) sent succesfully": "Email(s) sent succesfully",
 	
 
-	
 };
