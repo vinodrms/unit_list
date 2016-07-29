@@ -96,7 +96,8 @@ export class BookingPaymentGuaranteeEditorComponent implements OnInit {
         this.selectedPaymentMethodVM = this._selectedPaymentMethodVMCopy;
     }
     public savePaymentGuarantee() {
-        if (!this.hasPaymentGuaranteeEditAccess || this._selectedPaymentMethodVMCopy.paymentMethod.isSame(this.selectedPaymentMethodVM.paymentMethod)) {
+        if (!this.hasPaymentGuaranteeEditAccess ||
+            (this._selectedPaymentMethodVMCopy.paymentMethod.isSame(this.selectedPaymentMethodVM.paymentMethod) && this.hasPaymentGuarantee)) {
             this.endEdit();
             return;
         }
