@@ -22,12 +22,6 @@ import {HotelDashboardModalService} from '../../../../services/HotelDashboardMod
 
 declare var $: any;
 
-export class MaintenanceStatusType {
-	static Dirty = "Dirty";
-	static PickUp = "PickUp";
-	static None = "None"
-}
-
 @Component({
 	selector: 'room-card',
 	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/dashboard/components/rooms-canvas/components/room-card/template/room-card.html'
@@ -64,7 +58,7 @@ export class RoomCardComponent {
 					title: 'Dirty',
 					icon: 'H',
 					clickHandler: () => {
-						alert("Dirty clicked");
+						this.openRoomModal();
 					}
 				}
 				break;
@@ -75,7 +69,29 @@ export class RoomCardComponent {
 					title: 'Pickup',
 					icon: 'J',
 					clickHandler: () => {
-						alert("Pickup clicked");
+						this.openRoomModal();
+					}
+				}
+				break;
+
+			case RoomMaintenanceStatus.OutOfOrder:
+				this.maintenance = {
+					cssClass: 'orange-color',
+					title: 'Out of order',
+					icon: 'K',
+					clickHandler: () => {
+						this.openRoomModal();
+					}
+				}
+				break;
+
+			case RoomMaintenanceStatus.OutOfService:
+				this.maintenance = {
+					cssClass: 'orange-color',
+					title: 'Out of service',
+					icon: '+',
+					clickHandler: () => {
+						alert("Out of service");
 					}
 				}
 				break;
@@ -87,7 +103,7 @@ export class RoomCardComponent {
 	}
 
 	ngOnInit() {
-		this.buildMaintenanceObject(this.roomVM.maintenanceStatus);		
+		this.buildMaintenanceObject(this.roomVM.maintenanceStatus);
 	}
 
 	ngAfterViewInit() {

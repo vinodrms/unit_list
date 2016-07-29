@@ -28,6 +28,10 @@ class InvoiceGroupsEntity extends BasePersistentEntity {
                 type: 'array',
                 defaultsTo: []
             },
+            indexedCustomerIdList: {
+                type: 'array',
+                defaultsTo: []
+            },
             status: {
                 type: 'integer',
                 required: true

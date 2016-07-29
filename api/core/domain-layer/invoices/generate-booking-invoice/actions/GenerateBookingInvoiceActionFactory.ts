@@ -4,11 +4,9 @@ import {ThUtils} from '../../../../utils/ThUtils';
 import {ThError} from '../../../../utils/th-responses/ThError';
 import {ThLogger, ThLogLevel} from '../../../../utils/logging/ThLogger';
 import {ThStatusCode} from '../../../../utils/th-responses/ThResponse';
-
 import {InvoiceGroupDO} from '../../../../data-layer/invoices/data-objects/InvoiceGroupDO';
 import {InvoiceDO, InvoicePaymentStatus} from '../../../../data-layer/invoices/data-objects/InvoiceDO';
 import {InvoiceGroupMetaRepoDO, InvoiceGroupSearchResultRepoDO} from '../../../../data-layer/invoices/repositories/IInvoiceGroupsRepository';
-
 import {GenerateBookingInvoiceByUpdatingGroupStrategy} from './strategies/GenerateBookingInvoiceByUpdatingGroupStrategy';
 import {GenerateBookingInvoiceByAddingGroupStrategy} from './strategies/GenerateBookingInvoiceByAddingGroupStrategy';
 import {IGenerateBookingInvoiceActionStrategy} from './IGenerateBookingInvoiceActionStrategy';
@@ -60,7 +58,6 @@ export class GenerateBookingInvoiceActionFactory {
             newInvoiceGroup.invoiceList = [];
         }
         newInvoiceGroup.invoiceList.push(bookingInvoice);
-
         return newInvoiceGroup;
     }
 

@@ -1,10 +1,9 @@
-import {InvoiceItemDO, InvoiceItemType} from '../../../../../../api/core/data-layer/invoices/data-objects/items/InvoiceItemDO';
-import {IInvoiceItemMeta} from '../../../../../../api/core/data-layer/invoices/data-objects/items/IInvoiceItemMeta';
+import {InvoiceItemDO, InvoiceItemType, IInvoiceItemDO} from '../../../../../../api/core/data-layer/invoices/data-objects/items/InvoiceItemDO';
 
 export class InvoiceItemBuilder {
     private _id: string;
     private _type: InvoiceItemType;
-    private _meta: IInvoiceItemMeta
+    private _metaObject: Object;
 
     public withId(id: string): InvoiceItemBuilder {
         this._id = id;
@@ -14,16 +13,16 @@ export class InvoiceItemBuilder {
         this._type = type;
         return this;
     }
-    public withMeta(meta: IInvoiceItemMeta): InvoiceItemBuilder {
-        this._meta = meta;
+    public withMetaObject(meta: Object): InvoiceItemBuilder {
+        this._metaObject = meta;
         return this;
     }
     
-    public build(): InvoiceItemDO {
-        var invoiceItemDO = new InvoiceItemDO();
+    public build(bookingInvoiceItemMeta?: IInvoiceItemDO): InvoiceItemDO {
+        var invoiceItemDO = new InvoiceItemDO(bookingInvoiceItemMeta);
         invoiceItemDO.id = this._id;
         invoiceItemDO.type = this._type;
-        invoiceItemDO.meta = this._meta;
+        invoiceItemDO._metaObject = this._metaObject;
         return invoiceItemDO;
     }
 }

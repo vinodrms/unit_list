@@ -85,8 +85,39 @@ export class RoomItemInfoVM {
         return this._UI;
     }
     
-    public set UI(v : RoomItemInfoVM_UI_Properties) {
-        this._UI = v;
+
+    public isFree(): boolean {
+        if (this.maintenanceStatus != RoomMaintenanceStatus.OutOfService &&
+            this._roomItemDO.roomStatus == RoomItemStatus.Free ) {
+            return true;
+        }
+        return false;
+    }
+
+    public isOccupied(): boolean {
+        if (this.maintenanceStatus != RoomMaintenanceStatus.OutOfService &&
+            this._roomItemDO.roomStatus == RoomItemStatus.Occupied ) {
+            return true;
+        }
+        return false;
+    }
+
+    public isReserved(): boolean {
+        if (this.maintenanceStatus != RoomMaintenanceStatus.OutOfService &&
+            this._roomItemDO.roomStatus == RoomItemStatus.Reserved ) {
+            return true;
+        }
+        return false;
+    }
+
+    public isOutOfService(): boolean {
+        if (this.maintenanceStatus == RoomMaintenanceStatus.OutOfService) {
+            return true;
+        }
+        return false;
     }
     
+    public set UI(v : RoomItemInfoVM_UI_Properties) {
+        this._UI = v;
+    }    
 }

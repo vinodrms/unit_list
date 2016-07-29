@@ -1,4 +1,4 @@
-<div class="room-card occupied" *ngIf='roomVM.roomItemDO.roomStatus == 0'
+<div class="room-card occupied" *ngIf='roomVM.isOccupied()'
 	[ngClass]="{'ghost': roomVM.UI.ghost , 'tick-border': roomVM.UI.tickBorder}"
 >
 	<div class="card-header">
@@ -30,7 +30,7 @@
 	</div>
 </div>
 
-<div class="room-card free" *ngIf='roomVM.roomItemDO.roomStatus == 2'
+<div class="room-card free" *ngIf='roomVM.isFree()'
 	[ngClass]="{'ghost': roomVM.UI.ghost , 'tick-border': roomVM.UI.tickBorder}"
 >
 	<div class="card-header">
@@ -57,7 +57,7 @@
 </div>
 
 
-<div class="room-card reserved" *ngIf='roomVM.roomItemDO.roomStatus == 1'
+<div class="room-card reserved" *ngIf='roomVM.isReserved()'
 	[ngClass]="{'ghost': roomVM.UI.ghost , 'tick-border': roomVM.UI.tickBorder}"
 >
 	<div class="card-header">
@@ -83,13 +83,13 @@
 	</div>
 </div>
 
-<!--<div class="room-card out-of-service" *ngIf='roomVM.status.displayName == "OutOfService"'
+<div class="room-card out-of-service" *ngIf='roomVM.isOutOfService()'
 	[ngClass]="{'ghost': roomVM.UI.ghost , 'tick-border': roomVM.UI.tickBorder}"
 >
 	<div class="card-header">
 		<div class="section1">
-			<div class="room-number clickable" (click)="openRoomModal()">{{ roomVM.properties.name }}</div>
-			<div class="room-type">{{ roomVM.roomCategory.displayName }}</div>
+			<div class="room-number clickable" (click)="openRoomModal()">{{ roomVM.name }}</div>
+			<div class="room-type">{{ roomVM.categoryLabel }}</div>
 		</div>
 		<div class="section2 flex-row flex-jc-sb">
 			<div class="customer-name clickable"></div>
@@ -107,5 +107,5 @@
 		<div class="other-details">
 		</div>
 	</div>
-</div>-->
+</div>
 

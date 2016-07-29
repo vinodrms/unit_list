@@ -43,13 +43,7 @@ export class SaveInvoiceGroup {
         this._saveInvoiceGroup = saveInvoiceItemDO;
 
         return new Promise<InvoiceGroupDO>((resolve: { (result: InvoiceGroupDO): void }, reject: { (err: ThError): void }) => {
-            try {
-                this.saveCore(resolve, reject);
-            } catch (error) {
-                var thError = new ThError(ThStatusCode.UpdateInvoiceGroupError, error);
-                ThLogger.getInstance().logError(ThLogLevel.Error, "error updating invoice group", this._saveInvoiceGroup, thError);
-                reject(thError);
-            }
+            this.saveCore(resolve, reject);
         });
     }
 
@@ -87,16 +81,14 @@ export class SaveInvoiceGroup {
                 var actionStrategy = actionFactory.getActionStrategy(invoiceGroupDO);
                 actionStrategy.saveInvoiceGroup(resolve, reject);
             }).catch((error: any) => {
-                var thError = new ThError(ThStatusCode.SaveInvoiceGroupItem, error);
-                if (thError.isNativeError()) {
-                    ThLogger.getInstance().logError(ThLogLevel.Error, "error updating invoice group item", this._saveInvoiceGroup, thError);
-                }
+                var thError = new ThError(ThStatusCode.SaveInvoiceGroupError, error);
+                ThLogger.getInstance().logError(ThLogLevel.Error, "error saving invoice group", this._saveInvoiceGroup, thError);
                 reject(thError);
             });
     }
 
     private getInvoiceGroupDO(): InvoiceGroupDO {
-        var invoiceGroup = new InvoiceGroupDO();
+        var invoiceGroup = new InvoiceGroupDO(this._appContext.getRepositoryFactory().getBookingRepository());
         invoiceGroup.buildFromObject(this._saveInvoiceGroup);
         if (invoiceGroup.id == null) {
             delete invoiceGroup.id;
@@ -108,11 +100,6 @@ export class SaveInvoiceGroup {
             if (invoice.bookingId == null) {
                 delete invoice.bookingId;
             }
-            _.forEach(invoice.itemList, (invoiceItem: InvoiceItemDO) => {
-                if(invoiceItem.meta == null) {
-                    delete invoiceItem.meta;
-                }     
-            });
         });
         return invoiceGroup;
     }

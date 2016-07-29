@@ -119,7 +119,8 @@ module.exports.routes = {
 
 	'POST /api/invoiceGroups': 'InvoiceGroupsController.getInvoiceGroupList',
     'POST /api/invoiceGroups/count': 'InvoiceGroupsController.getInvoiceGroupListCount',
-    'GET /api/invoiceGroups/invoiceGroupItem': 'InvoiceGroupsController.getInvoiceGroupById',
+    'POST /api/invoiceGroups/brief': 'InvoiceGroupsController.getInvoiceGroupsBriefDataByCustomerList',
+	'GET /api/invoiceGroups/invoiceGroupItem': 'InvoiceGroupsController.getInvoiceGroupById',
 
 	'POST /api/hotelOperations/dashboard/arrivals': 'HotelDashboardOperationsController.getArrivals',
 	'POST /api/hotelOperations/dashboard/departures': 'HotelDashboardOperationsController.getDepartures',
