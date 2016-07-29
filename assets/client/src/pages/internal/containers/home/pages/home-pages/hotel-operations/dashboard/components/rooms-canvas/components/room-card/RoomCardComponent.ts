@@ -58,7 +58,7 @@ export class RoomCardComponent {
 					title: 'Dirty',
 					icon: 'H',
 					clickHandler: () => {
-						alert("Dirty clicked");
+						this.openRoomModal();
 					}
 				}
 				break;
@@ -69,7 +69,7 @@ export class RoomCardComponent {
 					title: 'Pickup',
 					icon: 'J',
 					clickHandler: () => {
-						alert("Pickup clicked");
+						this.openRoomModal();
 					}
 				}
 				break;
@@ -80,7 +80,7 @@ export class RoomCardComponent {
 					title: 'Out of order',
 					icon: 'K',
 					clickHandler: () => {
-						alert("Out of order");
+						this.openRoomModal();
 					}
 				}
 				break;

@@ -21,94 +21,74 @@ export class RoomsCanvasUtils{
 
 	public getfilterNotificationProperties(filterType: FilterValueType):IFilterNotificationProperties{
 		var properties: IFilterNotificationProperties;
-		if (filterType == FilterValueType.All){
-			properties = {
-				cssColor: 'green',
-				textFirstPart: 'SHOWING ',
-				textSecondPart: 'ALL ROOMS'
-			}
-		}
-		else {
-			var statusType = this.getMappedRoomItemStatusFromFilter(filterType);
-			switch (statusType) {
-				case RoomItemStatus.Free:
-					properties = {
-						cssColor: 'green',
-						textFirstPart: 'SHOWING ONLY ',
-						textSecondPart: 'FREE ROOMS'
-					}
-					break;
-				case RoomItemStatus.Occupied:
-					properties = {
-						cssColor: 'orange',
-						textFirstPart: 'SHOWING ONLY ',
-						textSecondPart: 'OCCUPIED ROOMS'
-					}
-					break;
-				case RoomItemStatus.Reserved:
-					properties = {
-						cssColor: 'yellow',
-						textFirstPart: 'SHOWING ONLY ',
-						textSecondPart: 'RESERVED ROOMS'
-					}
-					break;
-				// case RoomStatusType.OutOfService:
-				// 	properties = {
-				// 		cssColor: 'gray',
-				// 		textFirstPart: 'SHOWING ONLY ',
-				// 		textSecondPart: 'OUT OF SERVICE ROOMS'
-				// 	}
-				// 	break;
-				default:
-					properties = {
-						cssColor: 'green',
-						textFirstPart: 'SHOWING ',
-						textSecondPart: 'ALL ROOMS'
-					}
-					break;
-			}
+
+		switch (filterType) {
+			case FilterValueType.All:
+				properties = {
+					cssColor: 'green',
+					textFirstPart: 'SHOWING ',
+					textSecondPart: 'ALL ROOMS'
+				}
+			case FilterValueType.Free:
+				properties = {
+					cssColor: 'green',
+					textFirstPart: 'SHOWING ONLY ',
+					textSecondPart: 'FREE ROOMS'
+				}
+				break;
+			case FilterValueType.Occupied:
+				properties = {
+					cssColor: 'orange',
+					textFirstPart: 'SHOWING ONLY ',
+					textSecondPart: 'OCCUPIED ROOMS'
+				}
+				break;
+			case FilterValueType.Reserved:
+				properties = {
+					cssColor: 'yellow',
+					textFirstPart: 'SHOWING ONLY ',
+					textSecondPart: 'RESERVED ROOMS'
+				}
+				break;
+			case FilterValueType.OutOfService:
+				properties = {
+					cssColor: 'gray',
+					textFirstPart: 'SHOWING ONLY ',
+					textSecondPart: 'OUT OF SERVICE ROOMS'
+				}
+				break;
+			default:
+				properties = {
+					cssColor: 'green',
+					textFirstPart: 'SHOWING ',
+					textSecondPart: 'ALL ROOMS'
+				}
+				break;
 		}
 		return properties;
 	}
 
-	public getMappedRoomItemStatusFromFilter(filterType:FilterValueType):RoomItemStatus{
-		var statusType;
-		switch (filterType) {
-			case FilterValueType.Free:
-				statusType = RoomItemStatus.Free;
-				break;
-			case FilterValueType.Occupied:
-				statusType = RoomItemStatus.Occupied;
-				break;
-			case FilterValueType.Reserved:
-				statusType = RoomItemStatus.Reserved;
-				break;
-			case FilterValueType.OutOfService:
-				// TODO: add out of service to RoomItemStatus
-				statusType = RoomItemStatus.Free;
-				break;
-			default:
-				statusType = RoomItemStatus.Free;
-				break;
-		}
-		return statusType;
-	}
-
 	public filterRoomsByStateType(filterType: FilterValueType, rooms:RoomItemInfoVM[]):any{
 		if (filterType != FilterValueType.All){
-			var roomStatus = this.getMappedRoomItemStatusFromFilter(filterType);
-			var filteredRooms = _.filter(rooms, function(room:RoomItemInfoVM){ return room.status == roomStatus; });
+			var filteredRooms = _.filter(rooms, function(room:RoomItemInfoVM){
+				switch (filterType) {
+					case FilterValueType.Free:
+						return room.isFree();
+					case FilterValueType.Occupied:
+						return room.isOccupied();
+					case FilterValueType.Reserved:
+						return room.isReserved();
+					case FilterValueType.OutOfService:
+						return room.isOutOfService();
+					default:
+						return false;
+				}
+			});
 			return filteredRooms;
 		}
 		
 		return rooms;
 	}
-
-
-	// public filterRoomsByStateType(roomStatus: RoomItemStatus, rooms:RoomItemInfoVM[]):any{
-	// 	var filteredRooms = _.filter(rooms, function(room:RoomItemInfoVM){ return room.status == roomStatus; });
-	// 	return filteredRooms;
-	// }
 
 	public setRoomsUIHighlight(rooms: RoomItemInfoVM[], value:RoomItemInfoVM_UI_Properties) {
 		rooms.forEach(room => {
