@@ -132,7 +132,7 @@ export class AssignRoom {
                     roomId: this._assignRoomDO.roomId
                 });
             }).then((searchResult: BookingSearchResultRepoDO) => {
-                if (searchResult.bookingList.length > 0) {
+                if (searchResult.bookingList.length > 0 && this._assignRoomStrategy.validateAlreadyCheckedInBooking()) {
                     var thError = new ThError(ThStatusCode.AssignRoomCheckedInWrongInterval, null);
                     ThLogger.getInstance().logBusiness(ThLogLevel.Info, "assigned checked in room on a different interval", this._assignRoomDO, thError);
                     throw thError;

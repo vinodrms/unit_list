@@ -42,4 +42,7 @@ export class CheckInStrategy extends AAssignRoomStrategy {
         this.logRoomChangedOnBooking(bookingDO, "The customers were checked in room %roomName%", validationDO.roomList);
         resolve(bookingDO);
     }
+    public validateAlreadyCheckedInBooking(): boolean {
+        return true;
+    }
 }

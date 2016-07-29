@@ -33,4 +33,5 @@ export abstract class AAssignRoomStrategy implements IAssignRoomStrategy {
             userId: this._sessionContext.sessionDO.user.id
         }));
     }
+    public abstract validateAlreadyCheckedInBooking(): boolean;
 }
