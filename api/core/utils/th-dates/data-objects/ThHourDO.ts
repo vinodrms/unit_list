@@ -52,4 +52,7 @@ export class ThHourDO extends BaseDO {
 	public getMillis(): number {
 		return (this.hour * ThHourDO.NoMillisInAnHour) + (this.minute * ThHourDO.NoMillisInAMinute);
 	}
+	public buildPrototype(): ThHourDO {
+		return ThHourDO.buildThHourDO(this.hour, this.minute);
+	}
 }

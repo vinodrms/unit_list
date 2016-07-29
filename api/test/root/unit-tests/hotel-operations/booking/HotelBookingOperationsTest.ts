@@ -32,6 +32,12 @@ import {BookingChangeDetails} from '../../../../../core/domain-layer/hotel-opera
 import {BookingChangeDetailsDO} from '../../../../../core/domain-layer/hotel-operations/booking/change-details/BookingChangeDetailsDO';
 import {BookingChangeCustomers} from '../../../../../core/domain-layer/hotel-operations/booking/change-customers/BookingChangeCustomers';
 import {BookingChangeCustomersDO} from '../../../../../core/domain-layer/hotel-operations/booking/change-customers/BookingChangeCustomersDO';
+import {BookingProcessFactory, BookingStatusChangerProcessType} from '../../../../../core/domain-layer/bookings/processes/BookingProcessFactory';
+import {IBookingStatusChangerProcess} from '../../../../../core/domain-layer/bookings/processes/IBookingStatusChangerProcess';
+import {BookingReactivate} from '../../../../../core/domain-layer/hotel-operations/booking/reactivate-booking/BookingReactivate';
+import {BookingReactivateDO} from '../../../../../core/domain-layer/hotel-operations/booking/reactivate-booking/BookingReactivateDO';
+import {BookingCancel} from '../../../../../core/domain-layer/hotel-operations/booking/cancel-booking/BookingCancel';
+import {BookingCancelDO} from '../../../../../core/domain-layer/hotel-operations/booking/cancel-booking/BookingCancelDO';
 
 describe("Hotel Booking Operations Tests", function () {
     var testContext: TestContext;
@@ -187,6 +193,51 @@ describe("Hotel Booking Operations Tests", function () {
             var bookingChangeCustomers = new BookingChangeCustomers(testContext.appContext, testContext.sessionContext);
             bookingChangeCustomers.changeCustomers(changeCustomersDO).then((updatedBooking: BookingDO) => {
                 should.equal(testUtils.stringArraysAreEqual(updatedBooking.customerIdList, changeCustomersDO.customerIdList), true);
+                bookingToChange = updatedBooking;
+                done();
+            }).catch((error: any) => {
+                done(error);
+            });
+        });
+        it("Should mark the booking as No Show", function (done) {
+            var bookingProcessFactory = new BookingProcessFactory(testContext.appContext, testDataBuilder.hotelDO);
+            var markBookingsAsNoShowProcess: IBookingStatusChangerProcess = bookingProcessFactory.getBookingStatusChangerProcess(BookingStatusChangerProcessType.MarkBookingsAsNoShow);
+            markBookingsAsNoShowProcess.changeStatuses(bookingTestHelper.getMaxTimestamp())
+                .then((bookingList: BookingDO[]) => {
+                    bookingToChange = _.find(bookingList, (booking: BookingDO) => {
+                        return booking.bookingId === bookingToChange.bookingId && booking.groupBookingId === bookingToChange.groupBookingId;
+                    });
+                    should.exist(bookingToChange);
+                    should.equal(bookingToChange.confirmationStatus === BookingConfirmationStatus.NoShow
+                        || bookingToChange.confirmationStatus === BookingConfirmationStatus.NoShowWithPenalty, true);
+                    done();
+                }).catch((err: any) => {
+                    done(err);
+                });
+        });
+        it("Should reactivate the booking", function (done) {
+            var bookingReactivateDO = new BookingReactivateDO();
+            bookingReactivateDO.groupBookingId = bookingToChange.groupBookingId;
+            bookingReactivateDO.bookingId = bookingToChange.bookingId;
+
+            var bookingReactivate = new BookingReactivate(testContext.appContext, testContext.sessionContext);
+            bookingReactivate.reactivate(bookingReactivateDO).then((updatedBooking: BookingDO) => {
+                should.equal(updatedBooking.confirmationStatus === BookingConfirmationStatus.Confirmed
+                    || updatedBooking.confirmationStatus === BookingConfirmationStatus.Guaranteed, true);
+                bookingToChange = updatedBooking;
+                done();
+            }).catch((error: any) => {
+                done(error);
+            });
+        });
+        it("Should cancel the booking", function (done) {
+            var bookingCancelDO = new BookingCancelDO();
+            bookingCancelDO.groupBookingId = bookingToChange.groupBookingId;
+            bookingCancelDO.bookingId = bookingToChange.bookingId;
+
+            var bookingCancel = new BookingCancel(testContext.appContext, testContext.sessionContext);
+            bookingCancel.cancel(bookingCancelDO).then((updatedBooking: BookingDO) => {
+                should.equal(updatedBooking.confirmationStatus, BookingConfirmationStatus.Cancelled);
                 bookingToChange = updatedBooking;
                 done();
             }).catch((error: any) => {

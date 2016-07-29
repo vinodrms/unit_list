@@ -19,6 +19,8 @@ import {BookingDetailsEditorComponent} from './components/booking-details/Bookin
 import {BookingPriceProductViewerComponent} from './components/price-product-view/BookingPriceProductViewerComponent';
 import {BookingAllotmentViewerComponent} from './components/allotment-view/BookingAllotmentViewerComponent';
 import {BookingCustomerEditorComponent} from './components/customers-edit/BookingCustomerEditorComponent';
+import {BookingReactivateComponent} from './components/reactivate/BookingReactivateComponent';
+import {BookingCancelComponent} from './components/cancel/BookingCancelComponent';
 
 @Component({
     selector: 'booking-operations-page',
@@ -27,7 +29,7 @@ import {BookingCustomerEditorComponent} from './components/customers-edit/Bookin
         BookingPeriodEditorComponent, BookingNoShowEditorComponent, BookingRoomEditorComponent,
         BookingCapacityEditorComponent, BookingPaymentGuaranteeEditorComponent, BookingDetailsEditorComponent,
         BookingPriceProductViewerComponent, BookingAllotmentViewerComponent, DocumentHistoryViewerComponent,
-        BookingCustomerEditorComponent],
+        BookingCustomerEditorComponent, BookingReactivateComponent, BookingCancelComponent],
     providers: [BookingOperationsPageService],
     pipes: [TranslationPipe]
 })
@@ -75,6 +77,7 @@ export class BookingOperationsPageComponent implements OnInit {
         this.bookingOperationsPageData.bookingDO = booking;
         this.bookingOperationsPageData = this.bookingOperationsPageData.buildPrototype();
         this._hotelOperationsResultService.markBookingChanged(booking);
+        this.updateContainerData();
     }
     public didChangeRoomForBooking(booking: BookingDO) {
         this.didChangeBooking(booking);

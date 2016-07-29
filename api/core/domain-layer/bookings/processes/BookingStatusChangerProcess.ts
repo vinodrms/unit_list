@@ -4,7 +4,7 @@ import {ThTimestampDO} from '../../../utils/th-dates/data-objects/ThTimestampDO'
 import {HotelDO} from '../../../data-layer/hotel/data-objects/HotelDO';
 import {BookingDO} from '../../../data-layer/bookings/data-objects/BookingDO';
 import {BookingSearchResultRepoDO} from '../../../data-layer/bookings/repositories/IBookingRepository';
-import {IBookingProcessStrategy} from './strategies/IBookingProcessStrategy';
+import {IBookingProcessStrategy, BookingStrategyMatchParams} from './strategies/IBookingProcessStrategy';
 import {IBookingStatusChangerProcess} from './IBookingStatusChangerProcess';
 
 import _ = require('underscore');
@@ -24,23 +24,27 @@ export class BookingStatusChangerProcess implements IBookingStatusChangerProcess
 
     private changeStatusesCore(resolve: { (result: BookingDO[]): void }, reject: { (err: ThError): void }) {
         var bookingsRepo = this._appContext.getRepositoryFactory().getBookingRepository();
-        bookingsRepo.getBookingList({ hotelId: this._hotel.id }, this._processStrategy.getMatchingSearchCriteria({
-            cancellationHour: this._hotel.operationHours.cancellationHour,
-            referenceTimestamp: this._referenceTimestamp
-        })).then((bookingSearchResult: BookingSearchResultRepoDO) => {
-            var bookingList: BookingDO[] = bookingSearchResult.bookingList;
-            this.updateBookingList(bookingList);
-            var bookingsRepo = this._appContext.getRepositoryFactory().getBookingRepository();
-            return bookingsRepo.updateMultipleBookings({ hotelId: this._hotel.id }, bookingList);
-        }).then((updatedBookingList: BookingDO[]) => {
-            resolve(updatedBookingList);
-        }).catch((error: any) => {
-            reject(error);
-        });
+        bookingsRepo.getBookingList({ hotelId: this._hotel.id }, this._processStrategy.getMatchingSearchCriteria(this.getBookingStrategyMatchParams()))
+            .then((bookingSearchResult: BookingSearchResultRepoDO) => {
+                var bookingList: BookingDO[] = bookingSearchResult.bookingList;
+                this.updateBookingList(bookingList);
+                var bookingsRepo = this._appContext.getRepositoryFactory().getBookingRepository();
+                return bookingsRepo.updateMultipleBookings({ hotelId: this._hotel.id }, bookingList);
+            }).then((updatedBookingList: BookingDO[]) => {
+                resolve(updatedBookingList);
+            }).catch((error: any) => {
+                reject(error);
+            });
     }
     private updateBookingList(bookingList: BookingDO[]) {
         _.forEach(bookingList, (bookingDO: BookingDO) => {
-            this._processStrategy.updateMatchedBooking(bookingDO);
+            this._processStrategy.updateMatchedBooking(bookingDO, this.getBookingStrategyMatchParams());
         });
+    }
+    private getBookingStrategyMatchParams(): BookingStrategyMatchParams {
+        return {
+            cancellationHour: this._hotel.operationHours.cancellationHour,
+            referenceTimestamp: this._referenceTimestamp
+        };
     }
 }

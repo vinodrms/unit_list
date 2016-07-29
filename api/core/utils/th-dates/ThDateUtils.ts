@@ -1,5 +1,6 @@
 import {ThDateDO} from './data-objects/ThDateDO';
 import {ThHourDO} from './data-objects/ThHourDO';
+import {ThTimestampDO} from './data-objects/ThTimestampDO';
 
 import moment = require('moment-timezone');
 
@@ -39,5 +40,20 @@ export class ThDateUtils {
 	}
 	public convertMomentToThHourDO(day: moment.Moment): ThHourDO {
 		return ThHourDO.buildThHourDO(day.hour(), day.minute());
+	}
+	public addThirtyMinutesToThTimestampDO(thTimestamp: ThTimestampDO): ThTimestampDO {
+		var newTimestamp = thTimestamp.buildPrototype();
+		newTimestamp.thHourDO.minute += 30;
+		if (newTimestamp.thHourDO.minute < 60) {
+			return newTimestamp;
+		}
+		newTimestamp.thHourDO.minute = 60 - newTimestamp.thHourDO.minute;
+		newTimestamp.thHourDO.hour++;
+		if (newTimestamp.thHourDO.hour < 24) {
+			return newTimestamp;
+		}
+		newTimestamp.thHourDO.hour = 24 - newTimestamp.thHourDO.hour;
+		newTimestamp.thDateDO = this.addDaysToThDateDO(newTimestamp.thDateDO, 1);
+		return newTimestamp;
 	}
 }
