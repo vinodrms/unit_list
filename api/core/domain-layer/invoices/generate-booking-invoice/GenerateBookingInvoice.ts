@@ -15,11 +15,10 @@ import {InvoicePayerDO} from '../../../data-layer/invoices/data-objects/payers/I
 import {CustomerIdValidator} from '../../customers/validators/CustomerIdValidator';
 import {CustomerDO, CustomerType} from '../../../data-layer/customers/data-objects/CustomerDO';
 import {CustomersContainer} from '../../customers/validators/results/CustomersContainer';
-import {BaseCorporateDetailsDO} from '../../../data-layer/customers/data-objects/customer-details/corporate/BaseCorporateDetailsDO';
 import {GenerateBookingInvoiceActionFactory} from './actions/GenerateBookingInvoiceActionFactory';
 import {IGenerateBookingInvoiceActionStrategy} from './actions/IGenerateBookingInvoiceActionStrategy';
 
-export class GenerateBookingInvoice { 
+export class GenerateBookingInvoice {
     private _thUtils: ThUtils;
     private _generateBookingInvoiceDO: GenerateBookingInvoiceDO;
 
@@ -30,17 +29,11 @@ export class GenerateBookingInvoice {
         this._thUtils = new ThUtils();
     }
 
-    public generate(addNewBookingInvoiceItemDO: GenerateBookingInvoiceDO): Promise<InvoiceGroupDO> {
-        this._generateBookingInvoiceDO = addNewBookingInvoiceItemDO;
+    public generate(generateBookingInvoiceItemDO: GenerateBookingInvoiceDO): Promise<InvoiceGroupDO> {
+        this._generateBookingInvoiceDO = generateBookingInvoiceItemDO;
 
         return new Promise<InvoiceGroupDO>((resolve: { (result: InvoiceGroupDO): void }, reject: { (err: ThError): void }) => {
-            try {
-                this.generateCore(resolve, reject);
-            } catch (error) {
-                var thError = new ThError(ThStatusCode.AddNewBookingInvoiceGroupError, error);
-                ThLogger.getInstance().logError(ThLogLevel.Error, "error adding new booking related invoice gorup", this._generateBookingInvoiceDO, thError);
-                reject(thError);
-            }
+            this.generateCore(resolve, reject);
         });
     }
 
@@ -61,32 +54,55 @@ export class GenerateBookingInvoice {
         }).then((loadedCustomersContainer: CustomersContainer) => {
             this._loadedDefaultBillingCustomer = loadedCustomersContainer.customerList[0];
 
+            return this.getDefaultInvoiceDO();
+        }).then((defaultInvoice: InvoiceDO) => {
             var generateBookingInvoiceActionFactory = new GenerateBookingInvoiceActionFactory(this._appContext, this._sessionContext);
-            return generateBookingInvoiceActionFactory.getActionStrategy(this._loadedBooking.groupBookingId, this.getDefaultInvoiceDO());
+            return generateBookingInvoiceActionFactory.getActionStrategy(this._loadedBooking.groupBookingId, defaultInvoice);
         }).then((actionStrategy: IGenerateBookingInvoiceActionStrategy) => {
             actionStrategy.generateBookingInvoice(resolve, reject);
         }).catch((error: any) => {
             var thError = new ThError(ThStatusCode.GenerateBookingInvoiceError, error);
-            if (thError.isNativeError()) {
-                ThLogger.getInstance().logError(ThLogLevel.Error, "error adding invoice related to booking", this._generateBookingInvoiceDO, thError);
-            }
+            ThLogger.getInstance().logError(ThLogLevel.Error, "error generating invoice related to booking", this._generateBookingInvoiceDO, thError);
             reject(thError);
         });
     }
 
-    private getDefaultInvoiceDO(): InvoiceDO {
-        var invoice = new InvoiceDO;
-        invoice.bookingId = this._loadedBooking.bookingId;
-        invoice.itemList = [];
-        var bookingInvoiceItem = new InvoiceItemDO();
-        bookingInvoiceItem.type = InvoiceItemType.Booking;
-        invoice.itemList.push(bookingInvoiceItem);
-        invoice.payerList = [];
-        var defaultInvoicePayer = 
-            InvoicePayerDO.buildFromCustomerDOAndPaymentMethod(this._loadedDefaultBillingCustomer, this._loadedBooking.defaultBillingDetails.paymentMethod);
-        invoice.payerList.push(defaultInvoicePayer);
-        invoice.paymentStatus = InvoicePaymentStatus.Open;
-        return invoice;
+    private getDefaultInvoiceDO(): Promise<InvoiceDO> {
+        return new Promise<InvoiceDO>((resolve: { (result: InvoiceDO): void }, reject: { (err: ThError): void }) => {
+            this.getDefaultInvoiceDOCore(resolve, reject);
+        });
     }
 
+    private getDefaultInvoiceDOCore(resolve: { (result: InvoiceDO): void }, reject: { (err: ThError): void }) {
+        var invoice = new InvoiceDO({
+            bookingRepo: this._appContext.getRepositoryFactory().getBookingRepository(),
+            hotelId: this._sessionContext.sessionDO.hotel.id,
+            groupBookingId: this._loadedBooking.groupBookingId
+        });
+        invoice.bookingId = this._loadedBooking.bookingId;
+        invoice.itemList = [];
+        var bookingInvoiceItem = new InvoiceItemDO({
+            bookingRepo: this._appContext.getRepositoryFactory().getBookingRepository(),
+            hotelId: this._sessionContext.sessionDO.hotel.id,
+            groupBookingId: this._loadedBooking.groupBookingId,
+            bookingId: invoice.bookingId
+        });
+        bookingInvoiceItem.type = InvoiceItemType.Booking;
+        bookingInvoiceItem.id = this._loadedBooking.bookingId;
+        invoice.itemList.push(bookingInvoiceItem);
+
+        invoice.getPrice().then((totalPrice: number) => {
+            invoice.payerList = [];
+            var defaultInvoicePayer =
+                InvoicePayerDO.buildFromCustomerDOAndPaymentMethod(this._loadedDefaultBillingCustomer, this._loadedBooking.defaultBillingDetails.paymentMethod);
+            defaultInvoicePayer.priceToPay = totalPrice;
+            invoice.payerList.push(defaultInvoicePayer);
+            invoice.paymentStatus = InvoicePaymentStatus.Open;
+            resolve(invoice);
+        }).catch((error) => {
+            var thError = new ThError(ThStatusCode.GenerateBookingInvoiceErrorBuildingDefaultInvoice, error);
+            ThLogger.getInstance().logError(ThLogLevel.Error, "error building the default booking invoice object", this._generateBookingInvoiceDO, thError);
+            reject(thError);
+        });
+    }
 }

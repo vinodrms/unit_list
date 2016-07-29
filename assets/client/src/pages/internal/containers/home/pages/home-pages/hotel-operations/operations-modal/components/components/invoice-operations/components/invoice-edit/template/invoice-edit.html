@@ -1,0 +1,79 @@
+<div class="invoice-edit-container full-height">
+    <p class="invoice-title">
+        Invoice #1
+    </p>
+
+    <invoice-payer></invoice-payer>
+    <p class="btn-add-invoice-payer">
+        <th-button [upFont]="'\''" [text]="'Add Payer'" (onButtonClick)="addInvoicePayer()"></th-button>
+    </p>
+    <table class="table table-invoice-items">
+        <thead>
+            <tr>
+                <th>
+                </th>
+                <th>
+                    Item Name
+                </th>
+                <th>
+                    Qty
+                </th>
+                <th>
+                    Cost
+                </th>
+                <th>
+                </th>
+            </tr>
+        </thead>
+        <tfoot>
+            <tr>
+                <td></td>
+                <td><b>Total</b></td>
+                <td></td>
+                <td><b>1850</b> EUR</td>
+                <td></td>
+            </tr>
+        </tfoot>
+        <tbody>
+            <tr>
+                <td width="10%"></td>
+                <td width="40%">Minibar Soda</td>
+                <td width="10%">1</td>
+                <td width="30%"><b>5</b> EUR</td>
+                <td width="10%"></td>
+            </tr>
+            <tr class="selected-invoice-item">
+                <td class="move-left-invoice-item-cell" style="">
+                    <label class="btn btn-default move-invoice-item-btn">
+                        <i class="fa fa-arrow-left" aria-hidden="true"></i>
+                    </label>
+                </td>
+                <td>Minibar Soda</td>
+                <td>1</td>
+                <td><b>5</b> EUR</td>
+                <td class="move-right-invoice-item-cell" style="">
+                    <label class="btn btn-default move-invoice-item-btn">
+                        <i class="fa fa-arrow-right" aria-hidden="true"></i>
+                    </label>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>Minibar Soda</td>
+                <td>1</td>
+                <td><b>5</b> EUR</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td colspan="2" class='add-item-cell'>
+                    <th-button [upFont]="'\''" [text]="'Add Item'" (onButtonClick)="addInvoicePayer()"></th-button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <button type="button" class="btn btn-primary center-absolute">
+        <i class="fa fa-save"></i> {{ 'Pay Invoice' | translate }}
+    </button>
+
+</div>

@@ -3098,6 +3098,171 @@ a.btn.btn-square:focus {
  .unitpal-font.checkout {
      color: #fb6708;
 }
+.invoice-container {
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    height: 90%;
+    padding: 10px 0 15px 0;
+}
+.invoice-edit-container {
+    position: relative;
+    text-align: center;
+    margin: 0 5px;
+    padding: 5px;
+    border: 1px solid #DBDBDB;
+}
+.center-absolute {
+    position: absolute;
+    bottom: 0;
+    transform: translate(-50%, -50%);
+}
+.invoice-operations-footer {
+    position: relative;
+    border-top: 1px solid #DBDBDB;
+    height: 10%;
+}
+.add-invoice-btn {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translate(0, -50%);
+}
+.invoice-pagination-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+invoice-edit {
+    display: block;
+    flex-grow: 1;
+}
+.invoice-title {
+    color: #fb6708;
+    font-size: 18px;
+    margin-left: 15px;
+    text-align: left;
+}
+.table-invoice-payer {
+    margin: 0;
+}
+.table-invoice-payer > tbody > tr.row-actions {
+   background-color: #fb6708;
+   color: white;
+}
+.table-invoice-payer > tbody > tr.row-actions > .customer-container {
+   text-align: left;
+}
+.table-invoice-payer > tbody > tr.row-actions > .print-container {
+   text-align: right;
+}
+.table-invoice-payer > tbody > tr.row-payment {
+   background-color: #fcf0e6;
+   color: #fb6708;
+}
+.table-invoice-payer > tbody > tr.row-payment * {
+   color: #fb6708;
+}
+
+.btn-add-invoice-payer {
+    text-align: left;
+    margin: 0 0 5px 0;
+}
+.table-invoice-items > thead > tr {
+    width: 100%;
+    background-color: #9d9ca1;
+    color: white;
+}
+.table-invoice-items > tbody > tr, .table-invoice-items > tfoot > tr {
+    text-align: left;
+}
+.table-invoice-items > tbody > tr:not(:last-child) {
+    border-bottom: 1px solid #DBDBDB;
+}
+.table-invoice-items > tfoot > tr {
+    border-top: 2px solid #DBDBDB;
+}
+.table-invoice-items .add-item-cell {
+    padding: 0;
+    margin: 0;
+}
+.table-invoice-items .th-button-box, .btn-add-invoice-payer .th-button-box {
+    padding-top:0; 
+    padding-bottom:0;
+}
+.move-invoice-item-btn {
+    padding: 3px 6px;
+    background-color: #fb6708;
+    color: white;
+    border: none;
+}
+.move-invoice-item-btn:hover {
+    background-color: #fcf0e6;
+    color: #fb6708;
+}
+.move-invoice-item-btn:active {
+    background-color: #fcf0e6;
+    color: #fb6708;
+}
+
+tr.selected-invoice-item {
+    background-color: #ededed;        
+}
+.move-left-invoice-item-cell {
+    text-align: left;
+    padding: 0 0 0 5px !important;
+    vertical-align: middle !important;
+}
+.move-right-invoice-item-cell {
+    text-align: right;
+    padding: 0 5px 0 0 !important;
+    vertical-align: middle !important;
+}
+.invoice-pagination-container .page-index {
+    color: #c1c1c1;
+    padding: 0 5px;
+}
+.invoice-pagination-container .page-index.selected {
+    color: #fb6708;
+}
+.payment-method-container {
+    vertical-align: middle !important;
+    padding: 4px 4px !important;
+}
+.amount-paid-container {
+    padding: 0px;
+    vertical-align: middle !important;
+    text-align: right;
+}
+.row-payment input {
+    text-align: right;
+}
+.row-payment input::-webkit-outer-spin-button,
+.row-payment input::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+
+.row-payment input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+.more-items-container {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+.more-items-container a {
+    pointer-events: none;
+    cursor: default;
+}
+.first {
+    padding-left: 0 !important;
+}
+.last {
+    padding-right: 0 !important;
+}
 table.small-margin {
     margin-bottom: 5px;
 }

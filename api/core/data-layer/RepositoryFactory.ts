@@ -41,7 +41,7 @@ export class RepositoryFactory {
                 return [new MongoHotelRepository(), new MongoBedRepository(), new MongoTaxRepository(), new MongoAddOnProductRepository(),
                     new MongoRoomRepository(), new MongoRoomCategoryRepository(), new MongoCustomerRepository(), new MongoPriceProductRepository(),
                     new MongoYieldFilterConfigurationRepository(), new MongoAllotmentRepository(), new MongoNotificationsRepository(),
-                    new MongoBookingRepository(), new MongoInvoiceGroupsRepository()];
+                    new MongoBookingRepository(), new MongoInvoiceGroupsRepository(new MongoBookingRepository())];
         }
     }
 
@@ -131,7 +131,7 @@ export class RepositoryFactory {
     getInvoiceGroupsRepository(): IInvoiceGroupsRepository {
         switch (this._databaseType) {
             default:
-                return new MongoInvoiceGroupsRepository();
+                return new MongoInvoiceGroupsRepository(new MongoBookingRepository());
         }
     }
 

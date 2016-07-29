@@ -7,12 +7,12 @@ import {MongoQueryBuilder} from '../../../../common/base/MongoQueryBuilder';
 import {IInvoiceGroupsRepository, InvoiceGroupMetaRepoDO, InvoiceGroupItemMetaRepoDO, InvoiceGroupSearchCriteriaRepoDO, InvoiceGroupSearchResultRepoDO} from'../../IInvoiceGroupsRepository';
 import {InvoiceGroupDO, InvoiceGroupStatus} from '../../../data-objects/InvoiceGroupDO';
 import {LazyLoadRepoDO, LazyLoadMetaResponseRepoDO} from '../../../../common/repo-data-objects/LazyLoadRepoDO';
+import {MongoBookingRepository} from '../../../../bookings/repositories/mongo/MongoBookingRepository';
 
 export class MongoInvoiceGroupsReadOperationsRepository extends MongoRepository {
 
-    constructor(invoiceGroupsEntity: Sails.Model) {
+    constructor(invoiceGroupsEntity: Sails.Model, private _bookingsRepo: MongoBookingRepository) {
         super(invoiceGroupsEntity);
-
     }
 
     public getInvoiceGroupById(invoidGroupMeta: InvoiceGroupMetaRepoDO, invoiceGroupId: string): Promise<InvoiceGroupDO> {
@@ -34,7 +34,7 @@ export class MongoInvoiceGroupsReadOperationsRepository extends MongoRepository 
                 reject(thError);
             },
             (foundInvoiceGroup: Object) => {
-                var invoiceGroup: InvoiceGroupDO = new InvoiceGroupDO();
+                var invoiceGroup: InvoiceGroupDO = new InvoiceGroupDO(this._bookingsRepo);
                 invoiceGroup.buildFromObject(foundInvoiceGroup);
                 resolve(invoiceGroup);
             }
@@ -84,7 +84,7 @@ export class MongoInvoiceGroupsReadOperationsRepository extends MongoRepository 
     private getQueryResultDO(dbInvoiceGroupList: Array<Object>): InvoiceGroupDO[] {
         var invoiceGroupList: InvoiceGroupDO[] = [];
         dbInvoiceGroupList.forEach((dbInvoiceGroup: Object) => {
-            var invoiceGroup = new InvoiceGroupDO();
+            var invoiceGroup = new InvoiceGroupDO(this._bookingsRepo);
             invoiceGroup.buildFromObject(dbInvoiceGroup);
             invoiceGroupList.push(invoiceGroup);
         });
@@ -97,7 +97,10 @@ export class MongoInvoiceGroupsReadOperationsRepository extends MongoRepository 
 
         if (!this._thUtils.isUndefinedOrNull(searchCriteria)) {
             if(!this._thUtils.isUndefinedOrNull(searchCriteria.groupBookingId)) {
-                mongoQueryBuilder.addExactMatch("groupBookingId", searchCriteria.groupBookingId); searchCriteria.groupBookingId;
+                mongoQueryBuilder.addExactMatch("groupBookingId", searchCriteria.groupBookingId);
+            }
+            if(!this._thUtils.isUndefinedOrNull(searchCriteria.customerIdList)) {
+                mongoQueryBuilder.addMultipleSelectOptionList("indexedCustomerIdList", searchCriteria.customerIdList);
             }
         }
 
