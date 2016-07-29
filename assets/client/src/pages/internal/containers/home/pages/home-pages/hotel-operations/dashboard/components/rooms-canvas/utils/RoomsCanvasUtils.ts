@@ -52,7 +52,7 @@ export class RoomsCanvasUtils{
 				break;
 			case FilterValueType.OutOfService:
 				properties = {
-					cssColor: 'gray',
+					cssColor: 'dark-gray',
 					textFirstPart: 'SHOWING ONLY ',
 					textSecondPart: 'OUT OF SERVICE ROOMS'
 				}

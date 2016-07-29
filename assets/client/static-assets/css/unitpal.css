@@ -930,6 +930,14 @@ td .room-categ-capacity {
     color: #bbbbbb;
 }
 
+.dark-gray {
+    background: #555;
+}
+
+.dark-gray-color {
+    color: #555;
+}
+
 .brown {
     background: #AD8D43;
 }
