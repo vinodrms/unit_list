@@ -1,0 +1,16 @@
+<ul class="list-inline invoice-pagination-container">
+    <li>
+        <a class="btn btn-pagination-square" [class.disabled]="previousItemsButtonDisabled" (click)="prev()">
+            <i class="fa unitpal-font">&lt;</i>
+        </a>
+    </li>
+
+    <li *ngFor="let value of interval.values;" [class.first]="value==0" [class.last]="value==numberOfItems - 1">
+        <b><a class="page-index" [class.selected]="itemSelected(value)" (click)="selectItem(value)">{{ value + 1 }}</a></b>
+    </li>
+    <li>
+        <a class="btn btn-pagination-square" [class.disabled]="nextItemsButtonDisabled" (click)="next()">
+            <i class="fa unitpal-font">&gt;</i>
+        </a>
+    </li>
+</ul>
