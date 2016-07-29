@@ -7,6 +7,7 @@ import {IHotelOperationsPageParam} from './utils/IHotelOperationsPageParam';
 import {HotelRoomOperationsPageParam} from '../components/components/room-operations/utils/HotelRoomOperationsPageParam';
 import {HotelBookingOperationsPageParam} from '../components/components/booking-operations/utils/HotelBookingOperationsPageParam';
 import {HotelCustomerOperationsPageParam} from '../components/components/customer-operations/utils/HotelCustomerOperationsPageParam';
+import {HotelInvoiceOperationsPageParam} from '../components/components/invoice-operations/utils/HotelInvoiceOperationsPageParam';
 
 @Injectable()
 export class HotelOperationsModalService {
@@ -25,6 +26,11 @@ export class HotelOperationsModalService {
     public openCustomerOperationsModal(customerId: string): Promise<ModalDialogRef<HotelOperationsResult>> {
         var custOperationsPageParam = new HotelCustomerOperationsPageParam(customerId);
         return this.openOperationsModal(custOperationsPageParam);
+    }
+
+    public openInvoiceGroupOperationsModal(invoiceGroupId: string): Promise<ModalDialogRef<HotelOperationsResult>> {
+        var invoiceOperationsPageParam = new HotelInvoiceOperationsPageParam(invoiceGroupId, {});
+        return this.openOperationsModal(invoiceOperationsPageParam);
     }
 
     private openOperationsModal(pageParam: IHotelOperationsPageParam): Promise<ModalDialogRef<HotelOperationsResult>> {
