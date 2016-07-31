@@ -14,6 +14,7 @@ import {RoomVM} from '../../../../../../../../../services/rooms/view-models/Room
 import {BookingOccupancyService} from '../../../../../../../../../services/bookings/occupancy/BookingOccupancyService';
 import {BookingOccupancyDO} from '../../../../../../../../../services/bookings/occupancy/data-objects/BookingOccupancyDO';
 import {BookingDO} from '../../../../../../../../../services/bookings/data-objects/BookingDO';
+import {BookingsDO} from '../../../../../../../../../services/bookings/data-objects/BookingsDO';
 import {AssignableRoomVMContainer} from './view-models/AssignableRoomVMContainer';
 import {AssignableRoomVMBuilder} from './view-models/AssignableRoomVMBuilder';
 import {AssignableRoomVM} from './view-models/AssignableRoomVM';
@@ -22,6 +23,7 @@ import {AssignableRoomVM} from './view-models/AssignableRoomVM';
 export class RoomSelectionService extends ASinglePageRequestService<AssignableRoomVM> {
     private _roomVMList: RoomVM[];
     private _bookingDO: BookingDO;
+    private _checkedInBookings: BookingsDO;
     private _bookingRoomCategoryStats: RoomCategoryStatsDO;
     private _assignableRoomVMContainer: AssignableRoomVMContainer;
 
@@ -44,10 +46,12 @@ export class RoomSelectionService extends ASinglePageRequestService<AssignableRo
     public getRoomsWithOccupancyVM(): Observable<AssignableRoomVMContainer> {
         return Observable.combineLatest(
             this._roomsService.getRoomList(),
-            this._eagerBookingsService.getBooking(this._modalInput.assignRoomParam.groupBookingId, this._modalInput.assignRoomParam.bookingId)
-        ).flatMap((result: [RoomVM[], BookingDO]) => {
+            this._eagerBookingsService.getBooking(this._modalInput.assignRoomParam.groupBookingId, this._modalInput.assignRoomParam.bookingId),
+            this._eagerBookingsService.getCheckedInBookings()
+        ).flatMap((result: [RoomVM[], BookingDO, BookingsDO]) => {
             this._roomVMList = result[0];
             this._bookingDO = result[1];
+            this._checkedInBookings = result[2];
 
             return Observable.combineLatest(
                 this._bookingOccupancyService.getBookingOccupancyFor(this._bookingDO.interval, this._bookingDO.bookingId),
@@ -59,8 +63,13 @@ export class RoomSelectionService extends ASinglePageRequestService<AssignableRo
             this._bookingRoomCategoryStats = _.find(roomCategoryStatsList, (roomCategoryStats: RoomCategoryStatsDO) => {
                 return roomCategoryStats.roomCategory.id === this._bookingDO.roomCategoryId;
             });
-
-            var vmBuilder = new AssignableRoomVMBuilder(this._roomVMList, this._bookingDO, bookingOccupancyDO);
+            var vmBuilder = new AssignableRoomVMBuilder({
+                roomList: this._roomVMList,
+                booking: this._bookingDO,
+                bookingOccupancy: bookingOccupancyDO,
+                checkedInBookings: this._checkedInBookings,
+                validateAlreadyCheckedInBooking: this._modalInput.assignRoomStrategy.validateAlreadyCheckedInBooking()
+            });
             this._assignableRoomVMContainer = vmBuilder.build(this._appContext.thTranslation);
             this._assignableRoomVMContainer.filterRoomCategoryId(this._bookingDO.roomCategoryId);
             return this._assignableRoomVMContainer;
@@ -78,6 +87,12 @@ export class RoomSelectionService extends ASinglePageRequestService<AssignableRo
     }
     public set bookingDO(bookingDO: BookingDO) {
         this._bookingDO = bookingDO;
+    }
+    public get checkedInBookings(): BookingsDO {
+        return this._checkedInBookings;
+    }
+    public set checkedInBookings(checkedInBookings: BookingsDO) {
+        this._checkedInBookings = checkedInBookings;
     }
     public get bookingRoomCategoryStats(): RoomCategoryStatsDO {
         return this._bookingRoomCategoryStats;

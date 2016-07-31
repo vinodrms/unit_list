@@ -14,4 +14,7 @@ export class CheckInStrategy extends AAssignRoomStrategy {
     public getStrategySuccessResultString(): string {
         return "The check in was made succesfully. If you changed the default room and want to bill this, you can add on the invoice Upgrade/Downgrade Add On Products.";
     }
+    public validateAlreadyCheckedInBooking(): boolean {
+        return true;
+    }
 }

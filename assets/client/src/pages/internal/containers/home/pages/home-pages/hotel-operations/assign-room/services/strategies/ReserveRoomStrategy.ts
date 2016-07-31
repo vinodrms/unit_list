@@ -14,4 +14,7 @@ export class ReserveRoomStrategy extends AAssignRoomStrategy {
     public getStrategySuccessResultString(): string {
         return "The room was reserved succesfully.";
     }
+    public validateAlreadyCheckedInBooking(): boolean {
+        return false;
+    }
 }
