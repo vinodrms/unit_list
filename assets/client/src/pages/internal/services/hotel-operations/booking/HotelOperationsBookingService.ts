@@ -97,6 +97,14 @@ export class HotelOperationsBookingService {
         );
     }
 
+    public removeRollawayCapacityWarning(booking: BookingDO): Observable<BookingDO> {
+        return this.mapToBookingObservable(
+            this._appContext.thHttp.post(ThServerApi.HotelOperationsBookingReactivateRollawayCapacity, {
+                booking: booking
+            })
+        );
+    }
+    
     private mapToBookingObservable(bookingObjectObservable: Observable<Object>): Observable<BookingDO> {
         return bookingObjectObservable.map((bookingObject: Object) => {
             var bookingDO = new BookingDO();

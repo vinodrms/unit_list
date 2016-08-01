@@ -15,6 +15,25 @@
         </div>
     </div>
     <hr/>
+
+    <div class="row padding-bottom-10px" *ngIf="needsRollawayBeds">
+        <div class="col-xs-12 form-group">
+            <div class="input-group form-warning">
+                {{'Booking Capacity' | translate}}: 
+                <config-capacity [configCapacity]="bookingDO.configCapacity"></config-capacity>
+                <span class="pull-right edit-save-button-group-container padding-top-5px">
+                    <button type="button" class="btn btn-danger btn-block btn-xs uppercase" (click)="markRollawayBeds()">
+                        <i *ngIf="isRemovingRollawayCapacityWarning" class="fa fa-spinner fa-pulse"></i> 
+                        <i *ngIf="!isRemovingRollawayCapacityWarning" class="fa unitpal-font">A</i>
+                         {{ 'Add' | translate }}
+                    </button>
+                </span>
+            </div>
+            <label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'The room needs rollaway beds to fit entire capacity' | translate }}</small></label>
+        </div>
+    </div>
+    <hr *ngIf="needsRollawayBeds"/>
+
     <div class="row">
         <div class="col-xs-12">
             <span>

@@ -13,6 +13,7 @@ import {BookingChangeDetails} from '../core/domain-layer/hotel-operations/bookin
 import {BookingChangeCustomers} from '../core/domain-layer/hotel-operations/booking/change-customers/BookingChangeCustomers';
 import {BookingCancel} from '../core/domain-layer/hotel-operations/booking/cancel-booking/BookingCancel';
 import {BookingReactivate} from '../core/domain-layer/hotel-operations/booking/reactivate-booking/BookingReactivate';
+import {BookingRemoveRollawayCapacityWarning} from '../core/domain-layer/hotel-operations/booking/rollaway-capacity/BookingRemoveRollawayCapacityWarning';
 
 class HotelBookingOperationsController extends BaseController {
     public getPossiblePrices(req: Express.Request, res: Express.Response) {
@@ -129,6 +130,19 @@ class HotelBookingOperationsController extends BaseController {
             this.returnErrorResponse(req, res, error, ThStatusCode.HotelBookingOperationsControllerErrorReactivating);
         });
     }
+
+    public removeRollawayCapacityWarning(req: Express.Request, res: Express.Response) {
+        var appContext: AppContext = req.appContext;
+        var sessionContext: SessionContext = req.sessionContext;
+
+        var rollawayCapacity = new BookingRemoveRollawayCapacityWarning(appContext, sessionContext);
+        rollawayCapacity.removeRollawayCapacityWarning(req.body.booking).then((booking: BookingDO) => {
+            booking.bookingHistory.translateActions(this.getThTranslation(sessionContext));
+            this.returnSuccesfulResponse(req, res, { booking: booking });
+        }).catch((error: any) => {
+            this.returnErrorResponse(req, res, error, ThStatusCode.HotelBookingOperationsControllerErrorReactivating);
+        });
+    }
 }
 
 var hotelBookingOperationsController = new HotelBookingOperationsController();
@@ -142,4 +156,5 @@ module.exports = {
     changeCustomers: hotelBookingOperationsController.changeCustomers.bind(hotelBookingOperationsController),
     cancel: hotelBookingOperationsController.cancel.bind(hotelBookingOperationsController),
     reactivate: hotelBookingOperationsController.reactivate.bind(hotelBookingOperationsController),
+    removeRollawayCapacityWarning: hotelBookingOperationsController.removeRollawayCapacityWarning.bind(hotelBookingOperationsController),
 }

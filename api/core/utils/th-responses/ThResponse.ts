@@ -444,6 +444,7 @@ export enum ThStatusCode {
     HotelBookingOperationsControllerErrorReactivating,
     EmailConfirmationError,
     HotelCommonOperationsControllerEmailError,
+    BookingRemoveRollawayCapacityWarningError,
 
 }
 
@@ -879,6 +880,7 @@ ThMessage[ThStatusCode.HotelBookingOperationsControllerErrorCancelling] = "Error
 ThMessage[ThStatusCode.HotelBookingOperationsControllerErrorReactivating] = "Error reactivating booking.";
 ThMessage[ThStatusCode.EmailConfirmationError] = "Error sending email.";
 ThMessage[ThStatusCode.HotelCommonOperationsControllerEmailError] = "Error sending email.";
+ThMessage[ThStatusCode.BookingRemoveRollawayCapacityWarningError] = "Error updating the rollaway capacity flag on the booking.";
 
 export class ThResponse {
     statusCode: ThStatusCode;
