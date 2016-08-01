@@ -100,7 +100,8 @@ export class AssignRoom {
                     assignRoomDO: this._assignRoomDO,
                     currentHotelTimestamp: this._currentHotelTimestamp,
                     booking: this._booking,
-                    roomList: this._loadedRoomList
+                    roomList: this._loadedRoomList,
+                    roomCategoryStatsList: this._loadedRoomCategoryStatsList
                 });
             }).then((updatedBooking: BookingDO) => {
                 this._booking = updatedBooking;

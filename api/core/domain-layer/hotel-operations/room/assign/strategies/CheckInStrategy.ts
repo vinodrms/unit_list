@@ -42,6 +42,7 @@ export class CheckInStrategy extends AAssignRoomStrategy {
         }
         bookingDO.confirmationStatus = BookingConfirmationStatus.CheckedIn;
         this.logRoomChangedOnBooking(bookingDO, "The customers were checked in room %roomName%", validationDO.roomList);
+        this.updateRollawayBedStatusOnBooking(validationDO);
         resolve(bookingDO);
     }
     public validateAlreadyCheckedInBooking(): boolean {

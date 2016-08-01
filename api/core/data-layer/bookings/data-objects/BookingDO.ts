@@ -57,6 +57,7 @@ export class BookingDO extends BaseDO {
     configCapacity: ConfigCapacityDO;
     roomCategoryId: string;
     roomId: string;
+    needsRollawayBeds: boolean;
     priceProductId: string;
     priceProductSnapshot: PriceProductDO;
     price: BookingPriceDO;
@@ -70,7 +71,7 @@ export class BookingDO extends BaseDO {
 
     protected getPrimitivePropertyKeys(): string[] {
         return ["groupBookingId", "groupBookingReference", "hotelId", "versionId", "status", "inputChannel", "noOfRooms", "bookingId", "bookingReference", "confirmationStatus",
-            "customerIdList", "displayCustomerId", "startUtcTimestamp", "endUtcTimestamp", "roomCategoryId", "roomId", "priceProductId", "allotmentId", "notes", "indexedSearchTerms"];
+            "customerIdList", "displayCustomerId", "startUtcTimestamp", "endUtcTimestamp", "roomCategoryId", "roomId", "needsRollawayBeds", "priceProductId", "allotmentId", "notes", "indexedSearchTerms"];
     }
 
     public buildFromObject(object: Object) {
