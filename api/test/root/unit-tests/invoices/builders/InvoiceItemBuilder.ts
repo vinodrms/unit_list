@@ -1,4 +1,4 @@
-import {InvoiceItemDO, InvoiceItemType, IInvoiceItemDO} from '../../../../../../api/core/data-layer/invoices/data-objects/items/InvoiceItemDO';
+import {InvoiceItemDO, InvoiceItemType} from '../../../../../../api/core/data-layer/invoices/data-objects/items/InvoiceItemDO';
 import {IInvoiceItemMeta} from '../../../../../../api/core/data-layer/invoices/data-objects/items/IInvoiceItemMeta';
 
 export class InvoiceItemBuilder {
