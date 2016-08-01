@@ -17,11 +17,11 @@
             <button type="button" class="btn btn-primary btn-block oneline-text" (click)="viewInvoice()"> 
                 <i class="fa unitpal-font">L</i> 
                 {{ 'Invoice' | translate }}
-                <small *ngIf="invoiceIsPaid">
+                <small class="uppercase" *ngIf="invoiceIsPaid">
                     ({{ 'Paid' | translate }})
                 </small>
-                <small *ngIf="!invoiceIsPaid">
-                    {{ 'Unpaid' | translate }}
+                <small class="uppercase" *ngIf="!invoiceIsPaid">
+                    ({{ 'Unpaid' | translate }})
                 </small>
 			</button>
         </div>
