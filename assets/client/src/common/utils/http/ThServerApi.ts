@@ -87,6 +87,9 @@ export enum ThServerApi {
 	HotelOperationsBookingCancel,
 	HotelOperationsBookingReactivate,
 
+	InvoiceGroups,
+	InvoiceGroupsCount,
+	InvoiceGroupItem,
 }
 
 var ThServerApiUrl: { [index: number]: string; } = {};
@@ -179,6 +182,10 @@ ThServerApiUrl[ThServerApi.HotelOperationsBookingChangeDetails] = "/hotelOperati
 ThServerApiUrl[ThServerApi.HotelOperationsBookingChangeCustomers] = "/hotelOperations/booking/changeCustomers";
 ThServerApiUrl[ThServerApi.HotelOperationsBookingCancel] = "/hotelOperations/booking/cancel";
 ThServerApiUrl[ThServerApi.HotelOperationsBookingReactivate] = "/hotelOperations/booking/reactivate";
+
+ThServerApiUrl[ThServerApi.InvoiceGroups] = "/invoiceGroups";
+ThServerApiUrl[ThServerApi.InvoiceGroupsCount] = "/invoiceGroups/count";
+ThServerApiUrl[ThServerApi.InvoiceGroupItem] = "/invoiceGroups/invoiceGroupItem";
 
 export class ServerApiBuilder {
 	public static ApiRoot = "/api";

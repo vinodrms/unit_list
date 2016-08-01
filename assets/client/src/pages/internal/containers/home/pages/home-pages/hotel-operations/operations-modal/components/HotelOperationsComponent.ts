@@ -8,6 +8,7 @@ import {RoomsService} from '../../../../../../../services/rooms/RoomsService';
 import {EagerCustomersService} from '../../../../../../../services/customers/EagerCustomersService';
 import {EagerAllotmentsService} from '../../../../../../../services/allotments/EagerAllotmentsService';
 import {EagerBookingsService} from '../../../../../../../services/bookings/EagerBookingsService';
+import {EagerInvoiceGroupsService} from '../../../../../../../services/invoices/EagerInvoiceGroupsService';
 import {HotelService} from '../../../../../../../services/hotel/HotelService';
 import {HotelAggregatorService} from '../../../../../../../services/hotel/HotelAggregatorService';
 
@@ -31,8 +32,8 @@ import {HotelOperationsPageType} from '../services/utils/HotelOperationsPageType
         RoomCategoriesStatsService, BedsEagerService, RoomsService, 
         EagerCustomersService, EagerAllotmentsService,
         HotelService, HotelAggregatorService, EagerBookingsService,
-        HotelOperationsRoomService, HotelOperationsBookingService,
-        HotelOperationsPageControllerService],
+        EagerInvoiceGroupsService, HotelOperationsRoomService, 
+        HotelOperationsBookingService, HotelOperationsPageControllerService],
     pipes: [TranslationPipe]
 })
 export class HotelOperationsComponent {
