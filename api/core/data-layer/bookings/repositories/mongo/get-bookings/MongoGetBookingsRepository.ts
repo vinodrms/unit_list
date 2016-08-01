@@ -43,9 +43,14 @@ export class MongoGetBookingsRepository extends MongoRepository {
         });
     }
     private getBookingListCore(resolve: { (result: BookingSearchResultRepoDO): void }, reject: { (err: ThError): void }, meta: BookingMetaRepoDO, searchCriteria: BookingSearchCriteriaRepoDO, lazyLoad?: LazyLoadRepoDO) {
+        var sortCriteria = 1;
+        if (!this._thUtils.isUndefinedOrNull(searchCriteria) && _.isBoolean(searchCriteria.descendentSortOrder) && searchCriteria.descendentSortOrder) {
+            sortCriteria = -1;
+        }
+
         var mongoSearchCriteria: MongoSearchCriteria = {
             criteria: this.buildSearchCriteria(meta, searchCriteria),
-            sortCriteria: { "bookingList.startUtcTimestamp": 1 },
+            sortCriteria: { "bookingList.startUtcTimestamp": sortCriteria },
             lazyLoad: lazyLoad
         };
         this.getAggregationDocumentList(mongoSearchCriteria, this.getAggregationOptions(),

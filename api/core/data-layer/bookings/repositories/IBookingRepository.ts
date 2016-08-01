@@ -30,6 +30,7 @@ export interface BookingSearchCriteriaRepoDO {
     beforeStartDate?: ThDateDO;
     roomId?: string;
     customerId?: string;
+    descendentSortOrder?: boolean;
 }
 export interface BookingSearchResultRepoDO {
     lazyLoad?: LazyLoadRepoDO;

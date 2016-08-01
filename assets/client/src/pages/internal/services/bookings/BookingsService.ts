@@ -39,7 +39,7 @@ export class BookingsService extends ALazyLoadRequestService<BookingVM> {
         this._interval.end = dateUtils.addDaysToThDateDO(this._interval.end, BookingsService.DefaultDayOffset);
     }
     public setCustomerIdFilter(customerId: string) {
-        this.defaultSearchCriteria = { customerId: customerId };
+        this.defaultSearchCriteria = { customerId: customerId, descendentSortOrder: true };
     }
 
     protected parsePageDataCore(pageDataObject: Object): Observable<BookingVM[]> {
