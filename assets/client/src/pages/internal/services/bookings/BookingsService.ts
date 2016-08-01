@@ -38,6 +38,9 @@ export class BookingsService extends ALazyLoadRequestService<BookingVM> {
         this._interval = dateUtils.getTodayToTomorrowInterval();
         this._interval.end = dateUtils.addDaysToThDateDO(this._interval.end, BookingsService.DefaultDayOffset);
     }
+    public setCustomerIdFilter(customerId: string) {
+        this.defaultSearchCriteria = { customerId: customerId };
+    }
 
     protected parsePageDataCore(pageDataObject: Object): Observable<BookingVM[]> {
         var bookings = new BookingsDO();

@@ -1945,6 +1945,9 @@ a.btn.btn-square:focus {
 .booking-details-table td.name-field {
     padding-top: 11px;
 }
+.booking-details-table .font-size-small {
+    font-size: 11px !important;
+}
 
 .booking-details-action-button {
     width: 80px;

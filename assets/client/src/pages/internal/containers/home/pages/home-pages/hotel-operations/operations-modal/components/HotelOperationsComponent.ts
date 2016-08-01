@@ -11,6 +11,7 @@ import {EagerBookingsService} from '../../../../../../../services/bookings/Eager
 import {HotelService} from '../../../../../../../services/hotel/HotelService';
 import {HotelAggregatorService} from '../../../../../../../services/hotel/HotelAggregatorService';
 import {EagerPriceProductsService} from '../../../../../../../services/price-products/EagerPriceProductsService';
+import {RoomCategoriesService} from '../../../../../../../services/room-categories/RoomCategoriesService';
 
 import {HotelOperationsRoomService} from '../../../../../../../services/hotel-operations/room/HotelOperationsRoomService';
 import {HotelOperationsBookingService} from '../../../../../../../services/hotel-operations/booking/HotelOperationsBookingService';
@@ -32,7 +33,7 @@ import {HotelOperationsPageType} from '../services/utils/HotelOperationsPageType
     providers: [SETTINGS_PROVIDERS,
         RoomCategoriesStatsService, BedsEagerService, RoomsService,
         EagerCustomersService, EagerAllotmentsService, EagerPriceProductsService,
-        HotelService, HotelAggregatorService, EagerBookingsService,
+        HotelService, HotelAggregatorService, EagerBookingsService, RoomCategoriesService,
         HotelOperationsRoomService, HotelOperationsBookingService,
         HotelOperationsCustomerService,
         HotelOperationsPageControllerService],

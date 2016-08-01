@@ -10,7 +10,24 @@
 			<customer-details-editor [customerOperationsPageData]="customerOperationsPageData" (onCustomerDetailsChanged)="didChangeCustomer($event)"></customer-details-editor>
 		</div>
 		<hr/>
-				
+		<div class="row">
+			<div class="col-xs-12">
+				<ul class="nav nav-tabs">
+					<li [ngClass]="{active : showBookingHistory}">
+						<a (click)="showBookingHistory=true"><i class="fa unitpal-font">E</i> {{'Booking History' | translate}}</a>
+					</li>
+					<li [ngClass]="{active : !showBookingHistory}">
+						<a (click)="showBookingHistory=false"><i class="fa unitpal-font">L</i> {{'Invoice History' | translate}}</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="row" [hidden]="!showBookingHistory">
+			<customer-booking-history [customerOperationsPageData]="customerOperationsPageData"></customer-booking-history>
+		</div>
+		<div class="row" [hidden]="showBookingHistory">
+			<customer-invoice-history [customerOperationsPageData]="customerOperationsPageData"></customer-invoice-history>
+		</div>
 	</div>
 	<div class="col-xs-3 full-height right-sidebar">
 		

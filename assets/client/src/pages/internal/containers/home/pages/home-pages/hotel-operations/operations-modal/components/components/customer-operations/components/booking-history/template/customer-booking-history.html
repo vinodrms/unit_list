@@ -1,0 +1,38 @@
+<div class="col-xs-12">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="booking-details-table">
+                <table class="table table-striped">
+                    <thead></thead>
+                    <tbody>
+                        <tr *ngFor="let bookingVM of bookingVMList">
+                            <td width="30%" class="increased-font-weight clickable-item font-size-small">
+                                <span (click)="goToBooking(bookingVM)"> 
+                                    {{ bookingVM.booking.groupBookingReference }} / {{ bookingVM.booking.bookingReference }}
+                                </span>
+                            </td>
+                            <td width="70%">{{ bookingVM.booking.interval | thlongdateinterval }} / 
+                                <span>
+                                    {{ bookingVM.bookingMeta.displayName | translate }} 
+                                    <i class="fa unitpal-font p-l-6">{{ bookingVM.bookingMeta.fontName }}</i>
+                                </span> 
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <span class="pull-right edit-save-button-group-container">
+                <span *ngIf="canLoadMore">
+                    <button type="button" class="btn btn-default btn-block btn-xs uppercase" (click)="loadMore()" *ngIf="!isLoading">
+                        <i class="fa fa-info-circle"></i> {{ 'Expand' | translate }}
+                    </button>
+                    <i class="fa fa-spinner fa-pulse" *ngIf="isLoading"></i> 
+                </span>
+            </span>
+        </div>
+    </div>
+</div>

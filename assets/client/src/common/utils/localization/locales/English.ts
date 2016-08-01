@@ -595,6 +595,7 @@ export var EnglishTranslations: Object = {
 	"Prices": "Prices",
 	"Allow Public Price Products": "Allow Public Price Products",
 	"Only Confidential Price Products": "Only Confidential Price Products",
+	"Invoice History": "Invoice History",
 
 	
 

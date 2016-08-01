@@ -103,6 +103,7 @@ export class MongoGetBookingsRepository extends MongoRepository {
         mongoQueryBuilder.addMultipleSelectOptionList("bookingList.bookingId", searchCriteria.bookingIdList);
         mongoQueryBuilder.addRegex("bookingList.indexedSearchTerms", searchCriteria.searchTerm);
         mongoQueryBuilder.addExactMatch("bookingList.roomId", searchCriteria.roomId);
+        mongoQueryBuilder.addMultipleSelectOption("bookingList.customerIdList", searchCriteria.customerId);
         return mongoQueryBuilder.processedQuery;
     }
     private appendTriggerParamsIfNecessary(mongoQueryBuilder: MongoQueryBuilder, searchCriteria: BookingSearchCriteriaRepoDO) {

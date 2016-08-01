@@ -10,11 +10,14 @@ import {CustomerVM} from '../../../../../../../../../services/customers/view-mod
 import {CustomerDO} from '../../../../../../../../../services/customers/data-objects/CustomerDO';
 import {CustomerPreviewComponent} from '../../../../../../../../common/inventory/customer-register/pages/customer-preview/CustomerPreviewComponent';
 import {CustomerDetailsEditorComponent} from './components/customer-details/CustomerDetailsEditorComponent';
+import {CustomerBookingHistoryComponent} from './components/booking-history/CustomerBookingHistoryComponent';
+import {CustomerInvoiceHistoryComponent} from './components/invoice-history/CustomerInvoiceHistoryComponent';
 
 @Component({
     selector: 'customer-operations-page',
     templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/customer-operations/template/customer-operations-page.html',
-    directives: [LoadingComponent, CustomScroll, CustomerPreviewComponent, CustomerDetailsEditorComponent],
+    directives: [LoadingComponent, CustomScroll, CustomerPreviewComponent, CustomerDetailsEditorComponent,
+        CustomerBookingHistoryComponent, CustomerInvoiceHistoryComponent],
     providers: [CustomerOperationsPageService],
     pipes: [TranslationPipe]
 })
@@ -25,6 +28,7 @@ export class CustomerOperationsPageComponent implements OnInit {
     didInitOnce: boolean = false;
 
     customerOperationsPageData: CustomerOperationsPageData;
+    showBookingHistory: boolean = true;
 
     constructor(private _appContext: AppContext,
         private _custOpPageService: CustomerOperationsPageService) { }
