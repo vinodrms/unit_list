@@ -210,7 +210,10 @@ customer-register,
 allotments,
 beds,
 new-booking-container,
-room-operations-page>div {
+room-operations-page>div,
+booking-operations-page>div,
+customer-operations-page>div,
+invoice-operations-page>div {
     display: block;
     height: 100%;
 }
@@ -241,14 +244,23 @@ add-on-products{
 price-products{
     background: #fff url(/client/static-assets/images/background_06_pproducts.png) right bottom no-repeat !important;
 }
+invoice-operations-page>div {
+    background: #fff url(/client/static-assets/images/background_06_pproducts.png) right bottom no-repeat !important;
+}
 
 customer-register{
+    background: #fff url(/client/static-assets/images/background_07_customers.png) right bottom no-repeat !important;
+}
+customer-operations-page>div {
     background: #fff url(/client/static-assets/images/background_07_customers.png) right bottom no-repeat !important;
 }
 allotments{
     background: #fff url(/client/static-assets/images/background_08_allotment.png) right bottom no-repeat !important;
 }
 new-booking-container {
+    background: #fff url(/client/static-assets/images/background_operations.png) right bottom no-repeat !important;
+}
+booking-operations-page>div {
     background: #fff url(/client/static-assets/images/background_operations.png) right bottom no-repeat !important;
 }
 
