@@ -1,6 +1,7 @@
 import {MongoRepository, MongoErrorCodes, MongoSearchCriteria} from '../../../common/base/MongoRepository';
-import {IInvoiceGroupsRepository, InvoiceGroupMetaRepoDO, InvoiceGroupItemMetaRepoDO, InvoiceGroupSearchCriteriaRepoDO, InvoiceGroupSearchResultRepoDO} from'../IInvoiceGroupsRepository';
+import {IInvoiceGroupsRepository, InvoiceGroupMetaRepoDO, InvoiceGroupItemMetaRepoDO, InvoiceGroupSearchCriteriaRepoDO, InvoiceGroupSearchResultRepoDO, InvoiceSearchCriteriaRepoDO} from'../IInvoiceGroupsRepository';
 import {InvoiceGroupDO} from '../../data-objects/InvoiceGroupDO';
+import {InvoiceDO} from '../../data-objects/InvoiceDO';
 import {MongoInvoiceGroupsReadOperationsRepository} from './operations/MongoInvoiceGroupsReadOperationsRepository';
 import {MongoInvoiceGroupsEditOperationsRepository} from './operations/MongoInvoiceGroupsEditOperationsRepository';
 import {LazyLoadRepoDO, LazyLoadMetaResponseRepoDO} from '../../../common/repo-data-objects/LazyLoadRepoDO';
@@ -25,6 +26,9 @@ export class MongoInvoiceGroupsRepository extends MongoRepository implements IIn
     }
     public getInvoiceGroupListCount(invoidGroupMeta: InvoiceGroupMetaRepoDO, searchCriteria?: InvoiceGroupSearchCriteriaRepoDO): Promise<LazyLoadMetaResponseRepoDO> {
         return this._readRepository.getInvoiceGroupListCount(invoidGroupMeta, searchCriteria);
+    }
+    public getInvoice(invoidGroupMeta: InvoiceGroupMetaRepoDO, searchCriteria: InvoiceSearchCriteriaRepoDO): Promise<InvoiceDO> {
+        return this._readRepository.getInvoice(invoidGroupMeta, searchCriteria);
     }
     public addInvoiceGroup(invoidGroupMeta: InvoiceGroupMetaRepoDO, invoiceGroup: InvoiceGroupDO): Promise<InvoiceGroupDO> {
         return this._editRepository.addInvoiceGroup(invoidGroupMeta, invoiceGroup);

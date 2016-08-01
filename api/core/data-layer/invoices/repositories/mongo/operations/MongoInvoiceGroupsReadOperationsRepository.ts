@@ -4,8 +4,9 @@ import {ThUtils} from '../../../../../utils/ThUtils';
 import {ThStatusCode} from '../../../../../utils/th-responses/ThResponse';
 import {MongoRepository, MongoErrorCodes, MongoSearchCriteria} from '../../../../common/base/MongoRepository';
 import {MongoQueryBuilder} from '../../../../common/base/MongoQueryBuilder';
-import {IInvoiceGroupsRepository, InvoiceGroupMetaRepoDO, InvoiceGroupItemMetaRepoDO, InvoiceGroupSearchCriteriaRepoDO, InvoiceGroupSearchResultRepoDO} from'../../IInvoiceGroupsRepository';
+import {IInvoiceGroupsRepository, InvoiceGroupMetaRepoDO, InvoiceGroupItemMetaRepoDO, InvoiceGroupSearchCriteriaRepoDO, InvoiceGroupSearchResultRepoDO, InvoiceSearchCriteriaRepoDO} from'../../IInvoiceGroupsRepository';
 import {InvoiceGroupDO, InvoiceGroupStatus} from '../../../data-objects/InvoiceGroupDO';
+import {InvoiceDO} from '../../../data-objects/InvoiceDO';
 import {LazyLoadRepoDO, LazyLoadMetaResponseRepoDO} from '../../../../common/repo-data-objects/LazyLoadRepoDO';
 import {MongoBookingRepository} from '../../../../bookings/repositories/mongo/MongoBookingRepository';
 
@@ -42,22 +43,22 @@ export class MongoInvoiceGroupsReadOperationsRepository extends MongoRepository 
     }
 
     public getInvoiceGroupListCount(meta: InvoiceGroupMetaRepoDO, searchCriteria: InvoiceGroupSearchCriteriaRepoDO): Promise<LazyLoadMetaResponseRepoDO> {
-		return new Promise<LazyLoadMetaResponseRepoDO>((resolve: { (result: LazyLoadMetaResponseRepoDO): void }, reject: { (err: ThError): void }) => {
-			this.getInvoiceGroupListCountCore(resolve, reject, meta, searchCriteria);
-		});
-	}
-	private getInvoiceGroupListCountCore(resolve: { (result: LazyLoadMetaResponseRepoDO): void }, reject: { (err: ThError): void }, meta: InvoiceGroupMetaRepoDO, searchCriteria: InvoiceGroupSearchCriteriaRepoDO) {
-		var query = this.buildSearchCriteria(meta, searchCriteria);
-		return this.getDocumentCount(query,
-			(err: Error) => {
-				var thError = new ThError(ThStatusCode.InvoiceGroupsRepositoryErrorReadingDocumentCount, err);
-				ThLogger.getInstance().logError(ThLogLevel.Error, "error reading document count", { meta: meta, searchCriteria: searchCriteria }, thError);
-				reject(thError);
-			},
-			(meta: LazyLoadMetaResponseRepoDO) => {
-				resolve(meta);
-			});
-	}
+        return new Promise<LazyLoadMetaResponseRepoDO>((resolve: { (result: LazyLoadMetaResponseRepoDO): void }, reject: { (err: ThError): void }) => {
+            this.getInvoiceGroupListCountCore(resolve, reject, meta, searchCriteria);
+        });
+    }
+    private getInvoiceGroupListCountCore(resolve: { (result: LazyLoadMetaResponseRepoDO): void }, reject: { (err: ThError): void }, meta: InvoiceGroupMetaRepoDO, searchCriteria: InvoiceGroupSearchCriteriaRepoDO) {
+        var query = this.buildSearchCriteria(meta, searchCriteria);
+        return this.getDocumentCount(query,
+            (err: Error) => {
+                var thError = new ThError(ThStatusCode.InvoiceGroupsRepositoryErrorReadingDocumentCount, err);
+                ThLogger.getInstance().logError(ThLogLevel.Error, "error reading document count", { meta: meta, searchCriteria: searchCriteria }, thError);
+                reject(thError);
+            },
+            (meta: LazyLoadMetaResponseRepoDO) => {
+                resolve(meta);
+            });
+    }
 
     public getInvoiceGroupList(invoidGroupMeta: InvoiceGroupMetaRepoDO, searchCriteria?: InvoiceGroupSearchCriteriaRepoDO, lazyLoad?: LazyLoadRepoDO): Promise<InvoiceGroupSearchResultRepoDO> {
         return new Promise<InvoiceGroupSearchResultRepoDO>((resolve: { (result: InvoiceGroupSearchResultRepoDO): void }, reject: { (err: ThError): void }) => {
@@ -69,7 +70,7 @@ export class MongoInvoiceGroupsReadOperationsRepository extends MongoRepository 
         this.findMultipleDocuments({ criteria: this.buildSearchCriteria(invoiceGroupMeta, searchCriteria), lazyLoad: lazyLoad },
             (err: Error) => {
                 var thError = new ThError(ThStatusCode.InvoiceGroupsRepositoryErrorGettingInvoiceGroupList, err);
-                ThLogger.getInstance().logError(ThLogLevel.Error, "Error getting invoice group list.", invoiceGroupMeta, thError);
+                ThLogger.getInstance().logError(ThLogLevel.Error, "Error getting invoice group list.", searchCriteria, thError);
                 reject(thError);
             },
             (dbInvoiceGroupList: Array<Object>) => {
@@ -81,6 +82,33 @@ export class MongoInvoiceGroupsReadOperationsRepository extends MongoRepository 
             }
         );
     }
+    public getInvoice(invoidGroupMeta: InvoiceGroupMetaRepoDO, searchCriteria: InvoiceSearchCriteriaRepoDO): Promise<InvoiceDO> {
+        return new Promise<InvoiceDO>((resolve: { (result: InvoiceDO): void }, reject: { (err: ThError): void }) => {
+            this.getInvoiceCore(resolve, reject, invoidGroupMeta, searchCriteria);
+        });
+    }
+    private getInvoiceCore(resolve: { (result: InvoiceDO): void }, reject: { (err: ThError): void }, invoiceGroupMeta: InvoiceGroupMetaRepoDO, searchCriteria: InvoiceSearchCriteriaRepoDO) {
+        this.getInvoiceGroupList(invoiceGroupMeta, { groupBookingId: searchCriteria.groupBookingId }).then((result: InvoiceGroupSearchResultRepoDO) => {
+            var invoiceGroupList = result.invoiceGroupList;
+            if (!_.isEmpty(invoiceGroupList)) {
+                var invoiceGroup = invoiceGroupList[0];
+                var foundinvoice = _.find(invoiceGroup.invoiceList, (invoice: InvoiceDO) => {
+                    return invoice.bookingId === searchCriteria.bookingId;
+                });
+                resolve(foundinvoice);
+            }
+            else {
+                var thError = new ThError(ThStatusCode.InvoiceGroupsRepositoryErrorGettingInvoice, null);
+                ThLogger.getInstance().logError(ThLogLevel.Error, "No invoice found.", searchCriteria, thError);
+                reject(thError);
+            }
+        }).catch((error) => {
+            var thError = new ThError(ThStatusCode.InvoiceGroupsRepositoryErrorGettingInvoice, error);
+            ThLogger.getInstance().logError(ThLogLevel.Error, "Error getting invoice.", searchCriteria, thError);
+            reject(thError);
+        });
+    }
+
     private getQueryResultDO(dbInvoiceGroupList: Array<Object>): InvoiceGroupDO[] {
         var invoiceGroupList: InvoiceGroupDO[] = [];
         dbInvoiceGroupList.forEach((dbInvoiceGroup: Object) => {
@@ -96,10 +124,10 @@ export class MongoInvoiceGroupsReadOperationsRepository extends MongoRepository 
         mongoQueryBuilder.addExactMatch("status", InvoiceGroupStatus.Active);
 
         if (!this._thUtils.isUndefinedOrNull(searchCriteria)) {
-            if(!this._thUtils.isUndefinedOrNull(searchCriteria.groupBookingId)) {
+            if (!this._thUtils.isUndefinedOrNull(searchCriteria.groupBookingId)) {
                 mongoQueryBuilder.addExactMatch("groupBookingId", searchCriteria.groupBookingId);
             }
-            if(!this._thUtils.isUndefinedOrNull(searchCriteria.customerIdList)) {
+            if (!this._thUtils.isUndefinedOrNull(searchCriteria.customerIdList)) {
                 mongoQueryBuilder.addMultipleSelectOptionList("indexedCustomerIdList", searchCriteria.customerIdList);
             }
         }

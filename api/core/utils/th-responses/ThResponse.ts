@@ -311,6 +311,7 @@ export enum ThStatusCode {
     InvoiceGroupsRepositoryErrorReadingDocumentCount,
     InvoiceGroupsControllerErrorGettingInvoiceGroupById,
     InvoiceGroupsControllerErrorGettingInvoiceGroups,
+    InvoiceGroupsRepositoryErrorGettingInvoice,
     InvoiceGroupsControllerErrorGettingInvoiceGroupsCount,
     InvoiceGroupsControllerErrorGettingInvoiceGroupsBrief,
     InvoiceGroupsBriefDataAggregatorErrorGettingInvoiceGroupsBrief,
@@ -742,6 +743,7 @@ ThMessage[ThStatusCode.InvoiceGroupsRepositoryErrorAddingInvoiceGroup] = "Error 
 ThMessage[ThStatusCode.InvoiceGroupsRepositoryProblemUpdatingInvoiceGroup] = "Problem updating the invoice group - concurrency.";
 ThMessage[ThStatusCode.InvoiceGroupsRepositoryErrorUpdatingInvoiceGroup] = "Error updating the invoice group.";
 ThMessage[ThStatusCode.InvoiceGroupsRepositoryErrorGettingInvoiceGroupList] = "Error getting the list of invoice groups.";
+ThMessage[ThStatusCode.InvoiceGroupsRepositoryErrorGettingInvoice] = "Error getting invoice.";
 ThMessage[ThStatusCode.InvoiceGroupsItemUpdateStrategyErrorUpdating] = "Error updating the invoice group item.";
 ThMessage[ThStatusCode.InvoiceGroupsRepositoryInvoiceGroupNotFound] = "Invoice group not found.";
 ThMessage[ThStatusCode.InvoiceGroupsRepositoryErrorGettingInvoiceGroup] = "Error retrieving the invoice group from the database.";
