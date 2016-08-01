@@ -32,4 +32,7 @@ export class ChangeRoomStrategy extends AAssignRoomStrategy {
     public validateAlreadyCheckedInBooking(): boolean {
         return true;
     }
+    protected generateInvoiceIfNecessaryCore(resolve: { (result: BookingDO): void }, reject: { (err: ThError): void }, booking: BookingDO) {
+        resolve(booking);
+    }
 }

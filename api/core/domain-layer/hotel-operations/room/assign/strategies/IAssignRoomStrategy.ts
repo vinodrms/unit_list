@@ -13,4 +13,5 @@ export interface AssignRoomValidationDO {
 export interface IAssignRoomStrategy {
     updateAdditionalFields(validationDO: AssignRoomValidationDO): Promise<BookingDO>;
     validateAlreadyCheckedInBooking(): boolean;
+    generateInvoiceIfNecessary(booking: BookingDO): Promise<BookingDO>;
 }

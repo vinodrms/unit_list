@@ -6,6 +6,8 @@ import {SessionContext} from '../../../../../utils/SessionContext';
 import {IAssignRoomStrategy, AssignRoomValidationDO} from './IAssignRoomStrategy';
 import {BookingDO, BookingConfirmationStatus} from '../../../../../data-layer/bookings/data-objects/BookingDO';
 import {AAssignRoomStrategy} from './AAssignRoomStrategy';
+import {GenerateBookingInvoice} from '../../../../invoices/generate-booking-invoice/GenerateBookingInvoice';
+import {InvoiceGroupDO} from '../../../../../data-layer/invoices/data-objects/InvoiceGroupDO';
 
 export class CheckInStrategy extends AAssignRoomStrategy {
     constructor(private _appContext: AppContext, sessionContext: SessionContext) {
@@ -44,5 +46,16 @@ export class CheckInStrategy extends AAssignRoomStrategy {
     }
     public validateAlreadyCheckedInBooking(): boolean {
         return true;
+    }
+    protected generateInvoiceIfNecessaryCore(resolve: { (result: BookingDO): void }, reject: { (err: ThError): void }, booking: BookingDO) {
+        var generateBookingInvoice = new GenerateBookingInvoice(this._appContext, this._sessionContext);
+        generateBookingInvoice.generate({
+            groupBookingId: booking.groupBookingId,
+            bookingId: booking.bookingId
+        }).then((invoiceGroup: InvoiceGroupDO) => {
+            resolve(booking);
+        }).catch((error: ThError) => {
+            reject(error);
+        });
     }
 }

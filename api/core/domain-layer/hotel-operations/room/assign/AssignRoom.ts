@@ -138,6 +138,8 @@ export class AssignRoom {
                     throw thError;
                 }
 
+                return this._assignRoomStrategy.generateInvoiceIfNecessary(this._booking);
+            }).then((bookingWithInvoice: BookingDO) => {
                 var bookingsRepo = this._appContext.getRepositoryFactory().getBookingRepository();
                 return bookingsRepo.updateBooking({ hotelId: this._sessionContext.sessionDO.hotel.id }, {
                     groupBookingId: this._booking.groupBookingId,

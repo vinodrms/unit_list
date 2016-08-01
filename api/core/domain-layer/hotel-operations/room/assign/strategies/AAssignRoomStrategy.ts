@@ -34,4 +34,10 @@ export abstract class AAssignRoomStrategy implements IAssignRoomStrategy {
         }));
     }
     public abstract validateAlreadyCheckedInBooking(): boolean;
+    public generateInvoiceIfNecessary(booking: BookingDO): Promise<BookingDO> {
+        return new Promise<BookingDO>((resolve: { (result: BookingDO): void }, reject: { (err: ThError): void }) => {
+            this.generateInvoiceIfNecessaryCore(resolve, reject, booking);
+        });
+    }
+    protected abstract generateInvoiceIfNecessaryCore(resolve: { (result: BookingDO): void }, reject: { (err: ThError): void }, booking: BookingDO);
 }
