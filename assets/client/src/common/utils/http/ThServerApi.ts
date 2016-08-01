@@ -92,6 +92,7 @@ export enum ThServerApi {
 	InvoiceGroups,
 	InvoiceGroupsCount,
 	InvoiceGroupItem,
+	Invoice,
 }
 
 var ThServerApiUrl: { [index: number]: string; } = {};
@@ -191,6 +192,7 @@ ThServerApiUrl[ThServerApi.HotelOperationsCommonSendEmail] = "/hotelOperations/c
 ThServerApiUrl[ThServerApi.InvoiceGroups] = "/invoiceGroups";
 ThServerApiUrl[ThServerApi.InvoiceGroupsCount] = "/invoiceGroups/count";
 ThServerApiUrl[ThServerApi.InvoiceGroupItem] = "/invoiceGroups/invoiceGroupItem";
+ThServerApiUrl[ThServerApi.Invoice] = "/invoice";
 
 export class ServerApiBuilder {
 	public static ApiRoot = "/api";

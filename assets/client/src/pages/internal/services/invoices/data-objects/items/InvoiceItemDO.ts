@@ -1,7 +1,8 @@
-import {ThUtils} from '../../../../utils/ThUtils';
-import {BaseDO} from '../../../common/base/BaseDO';
+import {BaseDO} from '../../../../../../common/base/BaseDO';
+import {ThUtils} from '../../../../../../common/utils/ThUtils';
 import {IInvoiceItemMeta} from './IInvoiceItemMeta';
 import {AddOnProductInvoiceItemMetaDO} from './add-on-products/AddOnProductInvoiceItemMetaDO';
+import {BookingPriceDO} from '../../../bookings/data-objects/price/BookingPriceDO';
 
 export enum InvoiceItemType {
     AddOnProduct, Booking
@@ -25,6 +26,13 @@ export class InvoiceItemDO extends BaseDO {
             var addOnProductInvoiceItemMetaDO = new AddOnProductInvoiceItemMetaDO();
             addOnProductInvoiceItemMetaDO.buildFromObject(metaObject);
             this.meta = addOnProductInvoiceItemMetaDO;
-        }   
+        } 
+        else if(this.type === InvoiceItemType.Booking) {
+            var metaObject = this.getObjectPropertyEnsureUndefined(object, "meta");
+
+            var bookingPrice = new BookingPriceDO();
+            bookingPrice.buildFromObject(metaObject);
+            this.meta = bookingPrice;
+        }  
     }
 }

@@ -1,19 +1,14 @@
-import {ThError} from '../../../utils/th-responses/ThError';
-import {BaseDO} from '../../common/base/BaseDO';
-import {InvoicePayerDO} from './payers/InvoicePayerDO';
-import {InvoiceItemDO, InvoiceItemType} from './items/InvoiceItemDO';
+import {BaseDO} from '../../../../../common/base/BaseDO';
+import {ThUtils} from '../../../../../common/utils/ThUtils';
 import {IPriceableEntity} from './price/IPriceableEntity';
-import {IInvoiceItemMeta} from './items/IInvoiceItemMeta';
-import {BookingDO} from '../../bookings/data-objects/BookingDO';
+import {InvoiceItemDO, InvoiceItemType} from './items/InvoiceItemDO';
+import {InvoicePayerDO} from './payers/InvoicePayerDO';
 
 export enum InvoicePaymentStatus {
     Open, Closed
 }
 
 export class InvoiceDO extends BaseDO implements IPriceableEntity {
-    constructor() {
-        super();
-    }
 
     bookingId: string;
     payerList: InvoicePayerDO[];
@@ -62,17 +57,6 @@ export class InvoiceDO extends BaseDO implements IPriceableEntity {
                 return invoiceItem.id;
             })
             .value();
-    }
-
-    public linkBookingPrices(bookingList: BookingDO[]) {
-        _.forEach(this.itemList, (item: InvoiceItemDO) => {
-            if(item.type === InvoiceItemType.Booking) {
-                var booking = _.find(bookingList, (booking: BookingDO) => {
-                    return booking.bookingId === item.id;
-                });
-                item.meta = booking.price;
-            }
-        });             
     }
 
     public getPrice(): number {
