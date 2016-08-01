@@ -38,20 +38,6 @@ export class MongoInvoiceGroupsRepositoryWithBookingPriceLink extends MongoInvoi
             });
         });
     }
-    public getInvoice(invoidGroupMeta: InvoiceGroupMetaRepoDO, searchCriteria: InvoiceSearchCriteriaRepoDO): Promise<InvoiceDO> {
-        return new Promise<InvoiceDO>((resolve: { (result: InvoiceDO): void }, reject: { (err: ThError): void }) => {
-            this._invoiceGroupsRepo.getInvoice(invoidGroupMeta, searchCriteria).then((invoice: InvoiceDO) => {
-                this.linkBookingPricesToInvoice(invoidGroupMeta, searchCriteria, invoice).then((invoice: InvoiceDO) => {
-                    resolve(invoice);
-                }).catch((error: ThError) => {
-                    reject(error);
-                });
-            }).catch((error: ThError) => {
-                reject(error);
-            });
-        });
-
-    }
 
     public addInvoiceGroup(invoiceGroupMeta: InvoiceGroupMetaRepoDO, invoiceGroup: InvoiceGroupDO): Promise<InvoiceGroupDO> {
         return new Promise<InvoiceGroupDO>((resolve: { (result: InvoiceGroupDO): void }, reject: { (err: ThError): void }) => {
@@ -80,33 +66,6 @@ export class MongoInvoiceGroupsRepositoryWithBookingPriceLink extends MongoInvoi
                     resolve(invoiceGroup);
                 });
             });
-        });
-    }
-
-    private linkBookingPricesToInvoice(invoiceGroupMeta: InvoiceGroupMetaRepoDO, searchCriteria: InvoiceSearchCriteriaRepoDO, invoice: InvoiceDO): Promise<InvoiceDO> {
-        return new Promise<InvoiceDO>((resolve: { (result: InvoiceDO): void }, reject: { (err: ThError): void }) => {
-            this.linkBookingPricesToInvoiceCore(resolve, reject, invoiceGroupMeta, searchCriteria, invoice);
-        });
-    }
-
-    private linkBookingPricesToInvoiceCore(resolve: { (result: InvoiceDO): void }, reject: { (err: ThError): void },
-        invoiceGroupMeta: InvoiceGroupMetaRepoDO, searchCriteria: InvoiceSearchCriteriaRepoDO, invoice: InvoiceDO) {
-        this._bookingsRepo.getBookingList(this.buildBookingMetaFromInvoiceGroupMeta(invoiceGroupMeta), { groupBookingId: searchCriteria.groupBookingId }).then((result: BookingSearchResultRepoDO) => {
-            var bookingList = result.bookingList;
-
-            var foundBooking = _.find(bookingList, (booking: BookingDO) => {
-                return booking.bookingId === searchCriteria.bookingId;
-            });
-            _.forEach(invoice.itemList, (invoiceItem: InvoiceItemDO) => {
-                if (invoiceItem.type === InvoiceItemType.Booking && invoiceItem.id === searchCriteria.bookingId) {
-                    invoiceItem.meta = foundBooking.price;
-                }
-            });
-            resolve(invoice);
-        }).catch((error: any) => {
-            var thError = new ThError(ThStatusCode.InvoiceGroupsRepositoryBookingPriceLinkError, error);
-            ThLogger.getInstance().logError(ThLogLevel.Error, "Error linking the booking prices with the invoice", context, thError);
-            reject(thError);
         });
     }
 

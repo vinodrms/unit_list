@@ -23,9 +23,6 @@ export class MongoInvoiceGroupsRepositoryDecorator extends MongoRepository imple
     public getInvoiceGroupListCount(invoidGroupMeta: InvoiceGroupMetaRepoDO, searchCriteria?: InvoiceGroupSearchCriteriaRepoDO): Promise<LazyLoadMetaResponseRepoDO> {
         return this._invoiceGroupsRepo.getInvoiceGroupListCount(invoidGroupMeta, searchCriteria);
     }
-    public getInvoice(invoidGroupMeta: InvoiceGroupMetaRepoDO, searchCriteria?: InvoiceSearchCriteriaRepoDO): Promise<InvoiceDO> {
-        return this._invoiceGroupsRepo.getInvoice(invoidGroupMeta, searchCriteria);
-    }
     public addInvoiceGroup(invoidGroupMeta: InvoiceGroupMetaRepoDO, invoiceGroup: InvoiceGroupDO): Promise<InvoiceGroupDO> {
         return this._invoiceGroupsRepo.addInvoiceGroup(invoidGroupMeta, invoiceGroup);
     }

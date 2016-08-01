@@ -11,10 +11,7 @@ export enum InvoicePaymentStatus {
 }
 
 export class InvoiceDO extends BaseDO implements IPriceableEntity {
-    constructor() {
-        super();
-    }
-
+    
     bookingId: string;
     payerList: InvoicePayerDO[];
     itemList: InvoiceItemDO[];

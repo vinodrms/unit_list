@@ -82,32 +82,6 @@ export class MongoInvoiceGroupsReadOperationsRepository extends MongoRepository 
             }
         );
     }
-    public getInvoice(invoidGroupMeta: InvoiceGroupMetaRepoDO, searchCriteria: InvoiceSearchCriteriaRepoDO): Promise<InvoiceDO> {
-        return new Promise<InvoiceDO>((resolve: { (result: InvoiceDO): void }, reject: { (err: ThError): void }) => {
-            this.getInvoiceCore(resolve, reject, invoidGroupMeta, searchCriteria);
-        });
-    }
-    private getInvoiceCore(resolve: { (result: InvoiceDO): void }, reject: { (err: ThError): void }, invoiceGroupMeta: InvoiceGroupMetaRepoDO, searchCriteria: InvoiceSearchCriteriaRepoDO) {
-        this.getInvoiceGroupList(invoiceGroupMeta, { groupBookingId: searchCriteria.groupBookingId }).then((result: InvoiceGroupSearchResultRepoDO) => {
-            var invoiceGroupList = result.invoiceGroupList;
-            if (!_.isEmpty(invoiceGroupList)) {
-                var invoiceGroup = invoiceGroupList[0];
-                var foundinvoice = _.find(invoiceGroup.invoiceList, (invoice: InvoiceDO) => {
-                    return invoice.bookingId === searchCriteria.bookingId;
-                });
-                resolve(foundinvoice);
-            }
-            else {
-                var thError = new ThError(ThStatusCode.InvoiceGroupsRepositoryErrorGettingInvoice, null);
-                ThLogger.getInstance().logError(ThLogLevel.Error, "No invoice found.", searchCriteria, thError);
-                reject(thError);
-            }
-        }).catch((error) => {
-            var thError = new ThError(ThStatusCode.InvoiceGroupsRepositoryErrorGettingInvoice, error);
-            ThLogger.getInstance().logError(ThLogLevel.Error, "Error getting invoice.", searchCriteria, thError);
-            reject(thError);
-        });
-    }
 
     private getQueryResultDO(dbInvoiceGroupList: Array<Object>): InvoiceGroupDO[] {
         var invoiceGroupList: InvoiceGroupDO[] = [];
@@ -126,6 +100,9 @@ export class MongoInvoiceGroupsReadOperationsRepository extends MongoRepository 
         if (!this._thUtils.isUndefinedOrNull(searchCriteria)) {
             if (!this._thUtils.isUndefinedOrNull(searchCriteria.groupBookingId)) {
                 mongoQueryBuilder.addExactMatch("groupBookingId", searchCriteria.groupBookingId);
+            }
+            if (!this._thUtils.isUndefinedOrNull(searchCriteria.bookingId)) {
+                mongoQueryBuilder.addExactMatch("invoiceList.bookingId", searchCriteria.bookingId);
             }
             if (!this._thUtils.isUndefinedOrNull(searchCriteria.customerIdList)) {
                 mongoQueryBuilder.addMultipleSelectOptionList("indexedCustomerIdList", searchCriteria.customerIdList);

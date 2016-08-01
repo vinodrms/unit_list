@@ -4,6 +4,7 @@ import 'rxjs/add/operator/map';
 import {AppContext, ThServerApi} from '../../../../common/utils/AppContext';
 import {InvoiceGroupDO} from './data-objects/InvoiceGroupDO';
 import {InvoiceDO} from './data-objects/InvoiceDO';
+import {InvoiceGroupSearchCriteriaRepoDO} from './InvoiceGroupsService';
 
 @Injectable()
 export class EagerInvoiceGroupsService {
@@ -20,16 +21,18 @@ export class EagerInvoiceGroupsService {
         });
     }
 
-    public getInvoice(groupBookingId: string, bookingId: string): Observable<InvoiceDO> {
-        return this._appContext.thHttp.post(ThServerApi.Invoice, {
-            searchCriteria: {
-                groupBookingId: groupBookingId,
-                bookingId: bookingId
-            }
+    public getInvoiceGroupList(searchCriteria: InvoiceGroupSearchCriteriaRepoDO): Observable<InvoiceGroupDO[]> {
+        return this._appContext.thHttp.post(ThServerApi.InvoiceGroups, {
+            searchCriteria: searchCriteria
         }).map((invoiceObject: Object) => {
-            var invoiceDO = new InvoiceDO();
-            invoiceDO.buildFromObject(invoiceObject);
-            return invoiceDO;
+            var invoiceGroupList = [];
+            var invoiceGroupObjectArray: Object[] = invoiceObject["invoiceGroupList"];
+            _.forEach(invoiceGroupObjectArray, (invoiceGroupObject: Object) => {
+                var invoiceGroupDO = new InvoiceGroupDO();
+                invoiceGroupDO.buildFromObject(invoiceGroupObject);
+                invoiceGroupList.push(invoiceGroupDO);
+            });
+            return invoiceGroupList;    
         });
     }
 }

@@ -9,6 +9,11 @@ import {EagerCustomersService} from '../customers/EagerCustomersService';
 import {CustomersDO} from '../customers/data-objects/CustomersDO';
 import {InvoiceGroupVM} from './view-models/InvoiceGroupVM';
 
+export interface InvoiceGroupSearchCriteriaRepoDO {
+    groupBookingId?: string;
+    bookingId?: string;
+}
+
 @Injectable()
 export class InvoiceGroupsService extends ALazyLoadRequestService<InvoiceGroupVM> {
 

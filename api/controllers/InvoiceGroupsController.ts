@@ -11,19 +11,6 @@ import {LazyLoadRepoDO, LazyLoadMetaResponseRepoDO} from '../core/data-layer/com
 
 export class InvoiceGroupsController extends BaseController {
 
-    public getInvoice(req: Express.Request, res: Express.Response) {
-        var appContext: AppContext = req.appContext;
-        var sessionContext: SessionContext = req.sessionContext;
-        var invoiceGroupMeta = this.getInvoiceGroupMetaRepoDOFrom(sessionContext);
-        var invoiceGroupRepo = appContext.getRepositoryFactory().getInvoiceGroupsRepository();
-
-        invoiceGroupRepo.getInvoice(invoiceGroupMeta, req.body.searchCriteria).then((result: InvoiceDO) => {
-            this.returnSuccesfulResponse(req, res, result);
-        }).catch((err: any) => {
-            this.returnErrorResponse(req, res, err, ThStatusCode.InvoiceGroupsControllerErrorGettingInvoiceGroups);
-        });
-    }
-
     public getInvoiceGroupById(req: Express.Request, res: Express.Response) {
         if (!this.precheckGETParameters(req, res, ['id'])) { return };
 
@@ -86,7 +73,6 @@ export class InvoiceGroupsController extends BaseController {
 
 var invoiceGroupsController = new InvoiceGroupsController();
 module.exports = {
-    getInvoice: invoiceGroupsController.getInvoice.bind(invoiceGroupsController),
     getInvoiceGroupById: invoiceGroupsController.getInvoiceGroupById.bind(invoiceGroupsController),
     getInvoiceGroupList: invoiceGroupsController.getInvoiceGroupList.bind(invoiceGroupsController),
     getInvoiceGroupListCount: invoiceGroupsController.getInvoiceGroupListCount.bind(invoiceGroupsController),
