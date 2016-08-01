@@ -5,6 +5,11 @@
 		<div class="row">
 			<customer-preview [customerVM]="customerVM"></customer-preview>
 		</div>
+		<hr/>
+		<div class="row padding-top-5px">
+			<customer-details-editor [customerOperationsPageData]="customerOperationsPageData" (onCustomerDetailsChanged)="didChangeCustomer($event)"></customer-details-editor>
+		</div>
+		<hr/>
 				
 	</div>
 	<div class="col-xs-3 full-height right-sidebar">

@@ -7,12 +7,14 @@ import {HotelCustomerOperationsPageParam} from './utils/HotelCustomerOperationsP
 import {CustomerOperationsPageService} from './services/CustomerOperationsPageService';
 import {CustomerOperationsPageData} from './services/utils/CustomerOperationsPageData';
 import {CustomerVM} from '../../../../../../../../../services/customers/view-models/CustomerVM';
+import {CustomerDO} from '../../../../../../../../../services/customers/data-objects/CustomerDO';
 import {CustomerPreviewComponent} from '../../../../../../../../common/inventory/customer-register/pages/customer-preview/CustomerPreviewComponent';
+import {CustomerDetailsEditorComponent} from './components/customer-details/CustomerDetailsEditorComponent';
 
 @Component({
     selector: 'customer-operations-page',
     templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/customer-operations/template/customer-operations-page.html',
-    directives: [LoadingComponent, CustomScroll, CustomerPreviewComponent],
+    directives: [LoadingComponent, CustomScroll, CustomerPreviewComponent, CustomerDetailsEditorComponent],
     providers: [CustomerOperationsPageService],
     pipes: [TranslationPipe]
 })
@@ -50,5 +52,11 @@ export class CustomerOperationsPageComponent implements OnInit {
 
     public get customerVM(): CustomerVM {
         return this.customerOperationsPageData.customerVM;
+    }
+
+    public didChangeCustomer(customer: CustomerDO) {
+        this.customerOperationsPageData.customerVM.customer = customer;
+        this.customerOperationsPageData = this.customerOperationsPageData.buildPrototype();
+        this.updateContainerData();
     }
 }

@@ -14,6 +14,7 @@ import {EagerPriceProductsService} from '../../../../../../../services/price-pro
 
 import {HotelOperationsRoomService} from '../../../../../../../services/hotel-operations/room/HotelOperationsRoomService';
 import {HotelOperationsBookingService} from '../../../../../../../services/hotel-operations/booking/HotelOperationsBookingService';
+import {HotelOperationsCustomerService} from '../../../../../../../services/hotel-operations/customer/HotelOperationsCustomerService';
 
 import {RoomOperationsPageComponent} from './components/room-operations/RoomOperationsPageComponent';
 import {BookingOperationsPageComponent} from './components/booking-operations/BookingOperationsPageComponent';
@@ -33,6 +34,7 @@ import {HotelOperationsPageType} from '../services/utils/HotelOperationsPageType
         EagerCustomersService, EagerAllotmentsService, EagerPriceProductsService,
         HotelService, HotelAggregatorService, EagerBookingsService,
         HotelOperationsRoomService, HotelOperationsBookingService,
+        HotelOperationsCustomerService,
         HotelOperationsPageControllerService],
     pipes: [TranslationPipe]
 })
