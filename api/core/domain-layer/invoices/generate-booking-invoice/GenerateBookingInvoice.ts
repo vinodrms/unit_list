@@ -88,7 +88,7 @@ export class GenerateBookingInvoice {
             invoice.payerList = [];
             var defaultInvoicePayer =
                 InvoicePayerDO.buildFromCustomerDOAndPaymentMethod(this._loadedDefaultBillingCustomer, this._loadedBooking.defaultBillingDetails.paymentMethod);
-            defaultInvoicePayer.priceToPay = booking.price.getPrice();
+            defaultInvoicePayer.priceToPay = booking.price.getPrice() * booking.price.getNumberOfItems();
             invoice.payerList.push(defaultInvoicePayer);
             
             resolve(invoice);
