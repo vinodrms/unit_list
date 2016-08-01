@@ -1,3 +1,4 @@
+import {ThUtils} from '../../../../../../../../../../../../../common/utils/ThUtils';
 import {BookingDO} from '../../../../../../../../../../../services/bookings/data-objects/BookingDO';
 import {BookingMeta} from '../../../../../../../../../../../services/bookings/data-objects/BookingMeta';
 import {BookingMetaFactory} from '../../../../../../../../../../../services/bookings/data-objects/BookingMetaFactory';
@@ -8,8 +9,12 @@ import {CustomersDO} from '../../../../../../../../../../../services/customers/d
 import {RoomVM} from '../../../../../../../../../../../services/rooms/view-models/RoomVM';
 import {RoomCategoryStatsDO} from '../../../../../../../../../../../services/room-categories/data-objects/RoomCategoryStatsDO';
 import {AllotmentDO} from '../../../../../../../../../../../services/allotments/data-objects/AllotmentDO';
+import {InvoiceGroupDO} from '../../../../../../../../../../../services/invoices/data-objects/InvoiceGroupDO';
+import {InvoiceDO} from '../../../../../../../../../../../services/invoices/data-objects/InvoiceDO';
 
 export class BookingOperationsPageData {
+    private _thUtils: ThUtils;
+
     private _bookingDO: BookingDO;
     private _bookingMeta: BookingMeta;
     private _allotmentDO: AllotmentDO;
@@ -20,6 +25,12 @@ export class BookingOperationsPageData {
     private _customersContainer: CustomersDO;
     private _roomVM: RoomVM;
     private _roomCategoryStats: RoomCategoryStatsDO;
+    private _invoiceGroupDO: InvoiceGroupDO;
+    private _invoiceDO: InvoiceDO;
+
+    constructor() {
+        this._thUtils = new ThUtils();
+    }
 
     public get bookingDO(): BookingDO {
         return this._bookingDO;
@@ -83,6 +94,28 @@ export class BookingOperationsPageData {
     public set allotmentDO(allotmentDO: AllotmentDO) {
         this._allotmentDO = allotmentDO;
     }
+    public get invoiceGroupDO(): InvoiceGroupDO {
+        return this._invoiceGroupDO;
+    }
+    public set invoiceGroupDO(invoiceGroupDO: InvoiceGroupDO) {
+        this._invoiceGroupDO = invoiceGroupDO;
+    }
+    public get invoiceDO(): InvoiceDO {
+        return this._invoiceDO;
+    }
+    public set invoiceDO(invoiceDO: InvoiceDO) {
+        this._invoiceDO = invoiceDO;
+    }
+
+    public get hasInvoice(): boolean {
+        return !this._thUtils.isUndefinedOrNull(this.invoiceDO) &&
+            !this._thUtils.isUndefinedOrNull(this.invoiceGroupDO);
+    }
+    public get hasRoom(): boolean {
+        return !this._thUtils.isUndefinedOrNull(this.roomVM) &&
+            !this._thUtils.isUndefinedOrNull(this.roomVM.room) &&
+            !this._thUtils.isUndefinedOrNull(this.bookingDO.roomId);
+    }
 
     public buildPrototype(): BookingOperationsPageData {
         var pageData = new BookingOperationsPageData();
@@ -95,6 +128,8 @@ export class BookingOperationsPageData {
         pageData.customersContainer = this.customersContainer;
         pageData.roomVM = this.roomVM;
         pageData.roomCategoryStats = this.roomCategoryStats;
+        pageData.invoiceGroupDO = this.invoiceGroupDO;
+        pageData.invoiceDO = this.invoiceDO;
         return pageData;
     }
 }

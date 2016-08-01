@@ -600,7 +600,10 @@ export var EnglishTranslations: Object = {
 	"Booking Capacity": "Booking Capacity",
 	"The room needs rollaway beds to fit entire capacity": "The room needs rollaway beds to fit entire capacity",
 	"Are you sure you've added the necessary rollaway beds to fit the booking's capacity?": "Are you sure you've added the necessary rollaway beds to fit the booking's capacity?",
-
+	"Invoice": "Invoice",
+	"Paid": "Paid",
+	"Unpaid": "Unpaid",
+	"View": "View",
 	
 
 };

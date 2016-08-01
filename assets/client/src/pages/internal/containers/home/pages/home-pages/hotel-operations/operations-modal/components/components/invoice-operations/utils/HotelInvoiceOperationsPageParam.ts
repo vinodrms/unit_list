@@ -8,7 +8,7 @@ export interface HotelInvoiceOperationsPageFilterParam {
 }
 
 export class HotelInvoiceOperationsPageParam extends AHotelOperationsPageParam {
-    private static InvoiceFontName = "Æ";
+    private static InvoiceFontName = "L";
     invoiceGroupId: string;
     invoiceFilter: HotelInvoiceOperationsPageFilterParam;
 

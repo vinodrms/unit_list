@@ -22,6 +22,7 @@ import {BookingCustomerEditorComponent} from './components/customers-edit/Bookin
 import {BookingReactivateComponent} from './components/reactivate/BookingReactivateComponent';
 import {BookingCancelComponent} from './components/cancel/BookingCancelComponent';
 import {BookingSendConfirmationComponent} from './components/send-confirmation/BookingSendConfirmationComponent';
+import {BookingLinksComponent} from './components/booking-links/BookingLinksComponent';
 
 @Component({
     selector: 'booking-operations-page',
@@ -31,7 +32,7 @@ import {BookingSendConfirmationComponent} from './components/send-confirmation/B
         BookingCapacityEditorComponent, BookingPaymentGuaranteeEditorComponent, BookingDetailsEditorComponent,
         BookingPriceProductViewerComponent, BookingAllotmentViewerComponent, DocumentHistoryViewerComponent,
         BookingCustomerEditorComponent, BookingReactivateComponent, BookingCancelComponent,
-        BookingSendConfirmationComponent],
+        BookingSendConfirmationComponent, BookingLinksComponent],
     providers: [BookingOperationsPageService],
     pipes: [TranslationPipe]
 })
@@ -50,7 +51,7 @@ export class BookingOperationsPageComponent implements OnInit {
     ngOnInit() {
         this.loadPageData();
     }
-    private loadPageData() {
+    public loadPageData() {
         this.isLoading = true;
         this._bookingOperationsPageService.getPageData(this.bookingOperationsPageParam).subscribe((pageData: BookingOperationsPageData) => {
             this.bookingOperationsPageData = pageData;
@@ -75,14 +76,11 @@ export class BookingOperationsPageComponent implements OnInit {
         return this.bookingOperationsPageData.bookingMeta;
     }
 
-    public didChangeBooking(booking: BookingDO) {
+    public didChangeBooking(booking: BookingDO): boolean {
         this.bookingOperationsPageData.bookingDO = booking;
         this.bookingOperationsPageData = this.bookingOperationsPageData.buildPrototype();
         this._hotelOperationsResultService.markBookingChanged(booking);
         this.updateContainerData();
-    }
-    public didChangeRoomForBooking(booking: BookingDO) {
-        this.didChangeBooking(booking);
-        this.loadPageData();
+        return true;
     }
 }
