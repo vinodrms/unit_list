@@ -100,6 +100,7 @@ export class MongoGetBookingsRepository extends MongoRepository {
         this.appendBeforeStartDateParamIfNecessary(mongoQueryBuilder, searchCriteria);
         mongoQueryBuilder.addMultipleSelectOptionList("bookingList.confirmationStatus", searchCriteria.confirmationStatusList);
         mongoQueryBuilder.addExactMatch("id", searchCriteria.groupBookingId);
+        mongoQueryBuilder.addMultipleSelectOptionList("id", searchCriteria.groupBookingIdList);
         mongoQueryBuilder.addMultipleSelectOptionList("bookingList.bookingId", searchCriteria.bookingIdList);
         mongoQueryBuilder.addRegex("bookingList.indexedSearchTerms", searchCriteria.searchTerm);
         mongoQueryBuilder.addExactMatch("bookingList.roomId", searchCriteria.roomId);

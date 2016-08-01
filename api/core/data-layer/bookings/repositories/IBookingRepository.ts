@@ -18,6 +18,7 @@ export interface BookingSearchCriteriaRepoDO {
     interval?: ThDateIntervalDO;
     confirmationStatusList?: BookingConfirmationStatus[];
     groupBookingId?: string;
+    groupBookingIdList?: string[];
     bookingIdList?: string[];
     searchTerm?: string;
     triggerParams?: {

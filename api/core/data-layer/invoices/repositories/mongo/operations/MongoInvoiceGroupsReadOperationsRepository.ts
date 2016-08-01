@@ -11,7 +11,7 @@ import {MongoBookingRepository} from '../../../../bookings/repositories/mongo/Mo
 
 export class MongoInvoiceGroupsReadOperationsRepository extends MongoRepository {
 
-    constructor(invoiceGroupsEntity: Sails.Model, private _bookingsRepo: MongoBookingRepository) {
+    constructor(invoiceGroupsEntity: Sails.Model) {
         super(invoiceGroupsEntity);
     }
 
@@ -34,7 +34,7 @@ export class MongoInvoiceGroupsReadOperationsRepository extends MongoRepository 
                 reject(thError);
             },
             (foundInvoiceGroup: Object) => {
-                var invoiceGroup: InvoiceGroupDO = new InvoiceGroupDO(this._bookingsRepo);
+                var invoiceGroup: InvoiceGroupDO = new InvoiceGroupDO();
                 invoiceGroup.buildFromObject(foundInvoiceGroup);
                 resolve(invoiceGroup);
             }
@@ -84,7 +84,7 @@ export class MongoInvoiceGroupsReadOperationsRepository extends MongoRepository 
     private getQueryResultDO(dbInvoiceGroupList: Array<Object>): InvoiceGroupDO[] {
         var invoiceGroupList: InvoiceGroupDO[] = [];
         dbInvoiceGroupList.forEach((dbInvoiceGroup: Object) => {
-            var invoiceGroup = new InvoiceGroupDO(this._bookingsRepo);
+            var invoiceGroup = new InvoiceGroupDO();
             invoiceGroup.buildFromObject(dbInvoiceGroup);
             invoiceGroupList.push(invoiceGroup);
         });

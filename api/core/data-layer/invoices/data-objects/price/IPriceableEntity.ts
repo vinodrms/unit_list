@@ -1,3 +1,3 @@
 export interface IPriceableEntity {
-    getPrice(): Promise<number>;
+    getPrice(): number;
 }

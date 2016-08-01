@@ -88,7 +88,7 @@ export class SaveInvoiceGroup {
     }
 
     private getInvoiceGroupDO(): InvoiceGroupDO {
-        var invoiceGroup = new InvoiceGroupDO(this._appContext.getRepositoryFactory().getBookingRepository());
+        var invoiceGroup = new InvoiceGroupDO();
         invoiceGroup.buildFromObject(this._saveInvoiceGroup);
         if (invoiceGroup.id == null) {
             delete invoiceGroup.id;

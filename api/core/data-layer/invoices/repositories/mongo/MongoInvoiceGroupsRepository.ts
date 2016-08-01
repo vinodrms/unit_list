@@ -10,11 +10,11 @@ export class MongoInvoiceGroupsRepository extends MongoRepository implements IIn
     private _readRepository: MongoInvoiceGroupsReadOperationsRepository;
     private _editRepository: MongoInvoiceGroupsEditOperationsRepository;
 
-    constructor(private _bookingsRepo: MongoBookingRepository) {
+    constructor() {
         super(sails.models.invoicegroupsentity);
 
-        this._readRepository = new MongoInvoiceGroupsReadOperationsRepository(sails.models.invoicegroupsentity, _bookingsRepo);
-        this._editRepository = new MongoInvoiceGroupsEditOperationsRepository(sails.models.invoicegroupsentity, _bookingsRepo);
+        this._readRepository = new MongoInvoiceGroupsReadOperationsRepository(sails.models.invoicegroupsentity);
+        this._editRepository = new MongoInvoiceGroupsEditOperationsRepository(sails.models.invoicegroupsentity);
     }
 
     public getInvoiceGroupById(invoidGroupMeta: InvoiceGroupMetaRepoDO, invoiceGroupId: string): Promise<InvoiceGroupDO> {

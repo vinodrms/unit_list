@@ -159,7 +159,7 @@ describe("Invoices Tests", function () {
         it("Should update the previously created customer invoice group by adding a new invoice to it", function (done) {
             var saveInvoiceGroupDO = customerInvoiceGroupsHelper.buildSaveInvoiceGroupDOForUpdatingCustomerInvoiceGroup(createdCustomerInvoiceGroup);
             var saveInvoiceGroup = new SaveInvoiceGroup(testContext.appContext, testContext.sessionContext);
-
+            
             saveInvoiceGroup.save(saveInvoiceGroupDO).then((savedInvoiceGroup: InvoiceGroupDO) => {
                 createdCustomerInvoiceGroup = savedInvoiceGroup;
                 invoiceTestUtils.testInvoiceGroupEquality(savedInvoiceGroup, saveInvoiceGroupDO);
@@ -174,7 +174,7 @@ describe("Invoices Tests", function () {
         it("Should aggregate invoice groups data (brief) by customer id", function (done) {
             var invoiceGroupBriefDataAggregator = new InvoiceGroupsBriefDataAggregator(testContext.appContext, testContext.sessionContext);
             var invoiceGroupsRepo = testContext.appContext.getRepositoryFactory().getInvoiceGroupsRepository();
-
+            debugger
             invoiceGroupsRepo.getInvoiceGroupList({ hotelId: testContext.sessionContext.sessionDO.hotel.id }).then((result: InvoiceGroupSearchResultRepoDO) => {
                 var allInvoiceGroups = result.invoiceGroupList;
                 var defaultInvoiceIndex = _.findIndex(allInvoiceGroups, (invoiceGroup: InvoiceGroupDO) => {
@@ -194,7 +194,6 @@ describe("Invoices Tests", function () {
                     }).forEach((price: number) => {
                         should.notEqual(price, 0);
                     });
-                    
                     done();
                 }).catch((error) => {
                     done(error);
