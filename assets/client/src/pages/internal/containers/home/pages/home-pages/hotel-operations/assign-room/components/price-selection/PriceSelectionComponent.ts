@@ -55,7 +55,7 @@ export class PriceSelectionComponent implements AfterViewInit {
                 this.pageMessage = "You chose a room category that is priced differently in the booking's Price Product. Select the desired price of the booking (you can leave it unchanged).";
                 break;
             case PriceSelectionType.RoomDoesNotHaveRoomCategoryInPriceProduct:
-                this.pageMessage = "You chose a room category that does not have a price in the booking's Price Product. Select the desired price of the booking (you can leave it unchanged).";
+                this.pageMessage = "You chose a room category that does not have a price defined in the booking's Price Product. Select the desired price of the booking (you can leave it unchanged).";
                 break;
         }
     }

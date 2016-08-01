@@ -11,9 +11,12 @@ import {EagerBookingsService} from '../../../../../../../services/bookings/Eager
 import {EagerInvoiceGroupsService} from '../../../../../../../services/invoices/EagerInvoiceGroupsService';
 import {HotelService} from '../../../../../../../services/hotel/HotelService';
 import {HotelAggregatorService} from '../../../../../../../services/hotel/HotelAggregatorService';
+import {EagerPriceProductsService} from '../../../../../../../services/price-products/EagerPriceProductsService';
+import {RoomCategoriesService} from '../../../../../../../services/room-categories/RoomCategoriesService';
 
 import {HotelOperationsRoomService} from '../../../../../../../services/hotel-operations/room/HotelOperationsRoomService';
 import {HotelOperationsBookingService} from '../../../../../../../services/hotel-operations/booking/HotelOperationsBookingService';
+import {HotelOperationsCustomerService} from '../../../../../../../services/hotel-operations/customer/HotelOperationsCustomerService';
 
 import {RoomOperationsPageComponent} from './components/room-operations/RoomOperationsPageComponent';
 import {BookingOperationsPageComponent} from './components/booking-operations/BookingOperationsPageComponent';
@@ -30,10 +33,10 @@ import {HotelOperationsPageType} from '../services/utils/HotelOperationsPageType
     directives: [RoomOperationsPageComponent, BookingOperationsPageComponent, CustomerOperationsPageComponent, InvoiceOperationsPageComponent],
     providers: [SETTINGS_PROVIDERS,
         RoomCategoriesStatsService, BedsEagerService, RoomsService, 
-        EagerCustomersService, EagerAllotmentsService,
-        HotelService, HotelAggregatorService, EagerBookingsService,
+        EagerCustomersService, EagerAllotmentsService, EagerPriceProductsService,
+        HotelService, HotelAggregatorService, EagerBookingsService, RoomCategoriesService,
         EagerInvoiceGroupsService, HotelOperationsRoomService, 
-        HotelOperationsBookingService, HotelOperationsPageControllerService],
+        HotelOperationsBookingService, HotelOperationsCustomerService, HotelOperationsPageControllerService],
     pipes: [TranslationPipe]
 })
 export class HotelOperationsComponent {

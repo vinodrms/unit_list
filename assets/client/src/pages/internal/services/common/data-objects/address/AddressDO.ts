@@ -22,16 +22,18 @@ export class AddressDO extends BaseDO {
 		var addressString = "";
 		addressString = this.appendString(addressString, this.city);
 		addressString = this.appendString(addressString, this.streetAddress);
-		if(this.country) {
+		addressString = this.appendString(addressString, this.postalCode);
+		if (this.country) {
 			addressString = this.appendString(addressString, this.country.name);
 		}
+		if (addressString.length == 0) { addressString = "n/a"; }
 		return addressString;
 	}
 	private appendString(initialString: string, toAppendString: string): string {
-		if(!toAppendString) {
+		if (!toAppendString) {
 			return initialString;
 		}
-		if(initialString.length > 0) {
+		if (initialString.length > 0) {
 			initialString += ", ";
 		}
 		initialString += toAppendString;

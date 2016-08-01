@@ -8,6 +8,8 @@ import {ThTimestampDO} from '../../../../utils/th-dates/data-objects/ThTimestamp
 import {ValidationResultParser} from '../../../common/ValidationResultParser';
 import {AssignRoomDO} from './AssignRoomDO';
 import {BookingDO} from '../../../../data-layer/bookings/data-objects/BookingDO';
+import {BookingDOConstraints} from '../../../../data-layer/bookings/data-objects/BookingDOConstraints';
+import {BookingSearchResultRepoDO} from '../../../../data-layer/bookings/repositories/IBookingRepository';
 import {RoomCategoryStatsAggregator} from '../../../room-categories/aggregators/RoomCategoryStatsAggregator';
 import {RoomCategoryStatsDO} from '../../../../data-layer/room-categories/data-objects/RoomCategoryStatsDO';
 import {RoomDO} from '../../../../data-layer/rooms/data-objects/RoomDO';
@@ -121,6 +123,18 @@ export class AssignRoom {
                 if (bookingOccupancy.getOccupancyForRoomId(this._assignRoomDO.roomId) > 0) {
                     var thError = new ThError(ThStatusCode.AssignRoomOccupied, null);
                     ThLogger.getInstance().logBusiness(ThLogLevel.Info, "assigned occupied room", this._assignRoomDO, thError);
+                    throw thError;
+                }
+
+                var bookingRepository = this._appContext.getRepositoryFactory().getBookingRepository();
+                return bookingRepository.getBookingList({ hotelId: this._sessionContext.sessionDO.hotel.id }, {
+                    confirmationStatusList: BookingDOConstraints.ConfirmationStatuses_CheckedId,
+                    roomId: this._assignRoomDO.roomId
+                });
+            }).then((searchResult: BookingSearchResultRepoDO) => {
+                if (searchResult.bookingList.length > 0 && this._assignRoomStrategy.validateAlreadyCheckedInBooking()) {
+                    var thError = new ThError(ThStatusCode.AssignRoomCheckedInWrongInterval, null);
+                    ThLogger.getInstance().logBusiness(ThLogLevel.Info, "assigned checked in room on a different interval", this._assignRoomDO, thError);
                     throw thError;
                 }
 

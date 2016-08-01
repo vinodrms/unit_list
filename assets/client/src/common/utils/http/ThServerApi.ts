@@ -86,6 +86,7 @@ export enum ThServerApi {
 	HotelOperationsBookingChangeCustomers,
 	HotelOperationsBookingCancel,
 	HotelOperationsBookingReactivate,
+	HotelOperationsCommonSendEmail,
 
 	InvoiceGroups,
 	InvoiceGroupsCount,
@@ -183,9 +184,13 @@ ThServerApiUrl[ThServerApi.HotelOperationsBookingChangeCustomers] = "/hotelOpera
 ThServerApiUrl[ThServerApi.HotelOperationsBookingCancel] = "/hotelOperations/booking/cancel";
 ThServerApiUrl[ThServerApi.HotelOperationsBookingReactivate] = "/hotelOperations/booking/reactivate";
 
+<<<<<<< HEAD
 ThServerApiUrl[ThServerApi.InvoiceGroups] = "/invoiceGroups";
 ThServerApiUrl[ThServerApi.InvoiceGroupsCount] = "/invoiceGroups/count";
 ThServerApiUrl[ThServerApi.InvoiceGroupItem] = "/invoiceGroups/invoiceGroupItem";
+=======
+ThServerApiUrl[ThServerApi.HotelOperationsCommonSendEmail] = "/hotelOperations/common/sendEmail";
+>>>>>>> e80f09cf44ebd6be9588477fdb50638b3615ae10
 
 export class ServerApiBuilder {
 	public static ApiRoot = "/api";

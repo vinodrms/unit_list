@@ -387,10 +387,15 @@ export enum ThStatusCode {
     HotelOperationsDeparturesReaderError,
     AssignRoomError,
     AssignRoomOccupied,
+    AssignRoomCheckedInWrongInterval,
     ChangeRoomStrategyOnlyWhenCheckedIn,
+    ChangeRoomStrategyEndDateInPast,
     CheckInStrategyOnlyConfirmedOrGuaranteed,
     CheckInStrategyNoPaymentGuarantee,
+    CheckInStrategyStartDateInFuture,
+    CheckInStrategyEndDateInPast,
     ReserveRoomStrategyOnlyConfirmedOrGuaranteed,
+    ReserveRoomStrategyEndDateInPast,
     CheckOutRoomError,
     CheckOutRoomBookingNotCheckedIn,
     HotelOperationsDashboardControllerErrorGettingArrivals,
@@ -437,6 +442,8 @@ export enum ThStatusCode {
     BookingReactivateError,
     HotelBookingOperationsControllerErrorCancelling,
     HotelBookingOperationsControllerErrorReactivating,
+    EmailConfirmationError,
+    HotelCommonOperationsControllerEmailError,
 
 }
 
@@ -815,10 +822,15 @@ ThMessage[ThStatusCode.HotelOperationsArrivalsReaderError] = "Error getting the 
 ThMessage[ThStatusCode.HotelOperationsDeparturesReaderError] = "Error getting the information for the departures.";
 ThMessage[ThStatusCode.AssignRoomError] = "Error assigning the room.";
 ThMessage[ThStatusCode.AssignRoomOccupied] = "Error assigning the room. It's possible that the room is already occupied or reserved for another customer during this period.";
+ThMessage[ThStatusCode.AssignRoomCheckedInWrongInterval] = "There is already a checked in booking on this room that has the wrong interval. Please check out the room first.";
 ThMessage[ThStatusCode.ChangeRoomStrategyOnlyWhenCheckedIn] = "The room can be changed only to checked in bookings.";
+ThMessage[ThStatusCode.ChangeRoomStrategyEndDateInPast] = "You cannot change the room for a booking that has the end date in the past. Please check out the room.";
 ThMessage[ThStatusCode.CheckInStrategyOnlyConfirmedOrGuaranteed] = "Only Confirmed or Guaranteed bookings can be checked in.";
 ThMessage[ThStatusCode.CheckInStrategyNoPaymentGuarantee] = "You cannot check in a booking without first adding a Patment Guarantee on it.";
+ThMessage[ThStatusCode.CheckInStrategyStartDateInFuture] = "You cannot check in a booking that starts in the future.";
+ThMessage[ThStatusCode.CheckInStrategyEndDateInPast] = "You cannot check in a booking that has the end date in the past. Please cancel the booking.";
 ThMessage[ThStatusCode.ReserveRoomStrategyOnlyConfirmedOrGuaranteed] = "Only Confirmed or Guaranteed bookings can be reserved for specific rooms.";
+ThMessage[ThStatusCode.ReserveRoomStrategyEndDateInPast] = "You cannot reserve a room for a booking that has the end date in the past. Please cancel the booking.";
 ThMessage[ThStatusCode.CheckOutRoomError] = "Error checking out the room.";
 ThMessage[ThStatusCode.CheckOutRoomBookingNotCheckedIn] = "Error checking out the room. The booking does not appear as checked in.";
 ThMessage[ThStatusCode.HotelOperationsDashboardControllerErrorGettingArrivals] = "Error getting the arrivals.";
@@ -861,10 +873,12 @@ ThMessage[ThStatusCode.HotelBookingOperationsControllerErrorChangingCustomers] =
 ThMessage[ThStatusCode.BookingCancelInvalidState] = "Only confirmed, guaranteed or no show bookings can be cancelled.";
 ThMessage[ThStatusCode.BookingCancelError] = "Error cancelling booking.";
 ThMessage[ThStatusCode.BookingReactivateInvalidState] = "Only no show bookings can be reactivated.";
-ThMessage[ThStatusCode.BookingReactivateEndDateInThePast] = "You cannot reactivate a booking that ends in the past.";
+ThMessage[ThStatusCode.BookingReactivateEndDateInThePast] = "You cannot reactivate a booking that ends in the past. Please cancel it.";
 ThMessage[ThStatusCode.BookingReactivateError] = "Error reactivating booking.";
 ThMessage[ThStatusCode.HotelBookingOperationsControllerErrorCancelling] = "Error cancelling booking.";
 ThMessage[ThStatusCode.HotelBookingOperationsControllerErrorReactivating] = "Error reactivating booking.";
+ThMessage[ThStatusCode.EmailConfirmationError] = "Error sending email.";
+ThMessage[ThStatusCode.HotelCommonOperationsControllerEmailError] = "Error sending email.";
 
 export class ThResponse {
     statusCode: ThStatusCode;

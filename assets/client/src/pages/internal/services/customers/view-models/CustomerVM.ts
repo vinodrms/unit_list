@@ -5,13 +5,10 @@ import {CustomerDetailsMeta} from '../data-objects/customer-details/ICustomerDet
 import {AllotmentDO} from '../../allotments/data-objects/AllotmentDO';
 
 export class CustomerVM {
-	private static IndividualCustFont = "(";
-	private static CompanyCustFont = ")";
-	private static TravelAgentCustFont = "*";
-
 	private _customer: CustomerDO;
 	private _priceProductList: PriceProductDO[];
 	private _customerTypeString: string;
+	private _fontName: string;
 	private _allotmentList: AllotmentDO[];
 
 	constructor() {
@@ -26,6 +23,7 @@ export class CustomerVM {
 		var custDetailsFactory = new CustomerDetailsFactory();
 		var foundDetailsMeta = _.find(custDetailsFactory.getCustomerDetailsMetaList(), (meta: CustomerDetailsMeta) => { return meta.customerType === customer.type });
 		this._customerTypeString = !foundDetailsMeta ? "" : foundDetailsMeta.customerTypeName;
+		this._fontName = foundDetailsMeta.fontName;
 	}
 	public get priceProductList(): PriceProductDO[] {
 		return this._priceProductList;
@@ -50,14 +48,7 @@ export class CustomerVM {
 		return this._customerTypeString;
 	}
 	public get customerTypeFont(): string {
-		switch (this._customer.type) {
-			case CustomerType.Individual:
-				return CustomerVM.IndividualCustFont;
-			case CustomerType.Company:
-				return CustomerVM.CompanyCustFont;
-			default:
-				return CustomerVM.TravelAgentCustFont;
-		}
+		return this._fontName;
 	}
 	public set customerTypeString(customerTypeString: string) {
 		this._customerTypeString = customerTypeString;

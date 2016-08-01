@@ -58,7 +58,7 @@ export class RoomCardComponent {
 					title: 'Dirty',
 					icon: 'H',
 					clickHandler: () => {
-						alert("Dirty clicked");
+						this.openRoomModal();
 					}
 				}
 				break;
@@ -69,7 +69,7 @@ export class RoomCardComponent {
 					title: 'Pickup',
 					icon: 'J',
 					clickHandler: () => {
-						alert("Pickup clicked");
+						this.openRoomModal();
 					}
 				}
 				break;
@@ -80,7 +80,7 @@ export class RoomCardComponent {
 					title: 'Out of order',
 					icon: 'K',
 					clickHandler: () => {
-						alert("Out of order");
+						this.openRoomModal();
 					}
 				}
 				break;
@@ -109,36 +109,36 @@ export class RoomCardComponent {
 	ngAfterViewInit() {
 		$(this._root.nativeElement).find('.room-card').droppable(
 			{
+				hoverClass: () =>{
+					var outcome = this.canDrop();
+					if (outcome.accepted) {
+						return "hover";
+					}
+					return ""
+				},
 				accept: () => {
-					this._zone.run(() => {
-						var arrivalItem:ArrivalItemInfoVM = this.roomCanvas.getSelectedArrivalItem();
-						var dropHandler = RoomDropHandlerFactory.get(this.roomVM.status);
-						var outcome = {
-							accepted: dropHandler.handle(arrivalItem),
-							roomVM: this.roomVM
-						}
-						return outcome.accepted;
-					});
+					return this.canDrop().accepted;
 				},
 				drop: (event: Event, ui: Object) => {
 					this._zone.run(() => {
 						var arrivalItem:ArrivalItemInfoVM = this.roomCanvas.getSelectedArrivalItem();
-						var dropHandler = RoomDropHandlerFactory.get(this.roomVM.status);
-						var outcome = {
-							accepted: dropHandler.handle(arrivalItem),
-							roomVM: this.roomVM
-						}
+						var outcome = this.canDrop();
 
 						if (outcome.accepted == true) {
-							var assignRoomParams:AssignRoomParam = {
-								groupBookingId: arrivalItem.arrivalItemDO.groupBookingId,
-								bookingId: arrivalItem.arrivalItemDO.bookingId,
-								roomId: this.roomVM.roomVM.room.id,
-								roomCategoryId: this.roomVM.roomVM.room.categoryId
-							};
-							this._operationRoomService.checkIn(assignRoomParams).subscribe((r)=>{
-								this.dropped.emit(outcome);
-							})
+							if (this.roomVM.canCheckIn(arrivalItem)){
+								var assignRoomParams:AssignRoomParam = {
+									groupBookingId: arrivalItem.arrivalItemDO.groupBookingId,
+									bookingId: arrivalItem.arrivalItemDO.bookingId,
+									roomId: this.roomVM.roomVM.room.id,
+									roomCategoryId: this.roomVM.roomVM.room.categoryId
+								};
+								this._operationRoomService.checkIn(assignRoomParams).subscribe((r)=>{
+									this.dropped.emit(outcome);
+								})
+							}
+							else if (this.roomVM.canUpgrade(arrivalItem)){
+								this.openCheckInModal(arrivalItem);
+							}
 						}
 						else {
 							this.dropped.emit(outcome)
@@ -147,6 +147,16 @@ export class RoomCardComponent {
 				}
 			}
 		);
+	}
+
+	private canDrop():{ accepted: boolean, roomVM: RoomItemInfoVM}{
+		var arrivalItem: ArrivalItemInfoVM = this.roomCanvas.getSelectedArrivalItem();
+		var dropHandler = RoomDropHandlerFactory.get(this.roomVM);
+		var outcome = {
+			accepted: dropHandler.handle(arrivalItem),
+			roomVM: this.roomVM
+		}
+		return outcome;
 	}
 
 	public openCustomerModal(){
@@ -158,4 +168,17 @@ export class RoomCardComponent {
 		var roomId = this.roomVM.roomItemDO.roomId;
 		this._modalService.openRoomModal(roomId);
 	}
+
+	public openCheckInModal(arrivalItemVM:ArrivalItemInfoVM){
+		var bookingId = arrivalItemVM.arrivalItemDO.bookingId;
+		var groupBookingId = arrivalItemVM.arrivalItemDO.groupBookingId;
+		this._modalService.openCheckInModal(bookingId, groupBookingId, this.roomVM.roomItemDO.roomId);
+	}
+
+	public openBookingModal(){
+		var bookingId = this.roomVM.roomItemDO.bookingId;
+		var groupBookingId = this.roomVM.roomItemDO.groupBookingId;
+		this._modalService.openBookingModal(bookingId, groupBookingId);
+	}
+	
 }

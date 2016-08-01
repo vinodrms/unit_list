@@ -930,6 +930,14 @@ td .room-categ-capacity {
     color: #bbbbbb;
 }
 
+.dark-gray {
+    background: #555;
+}
+
+.dark-gray-color {
+    color: #555;
+}
+
 .brown {
     background: #AD8D43;
 }
@@ -1937,6 +1945,9 @@ a.btn.btn-square:focus {
 .booking-details-table td.name-field {
     padding-top: 11px;
 }
+.booking-details-table .font-size-small {
+    font-size: 11px !important;
+}
 
 .booking-details-action-button {
     width: 80px;
@@ -2268,6 +2279,14 @@ a.btn.btn-square:focus {
 
         .room-card.reserved.tick-border{
             border-color: #ffbe01;
+        }
+
+        .room-card.free.highlight-for-drop{
+            background-color: #ccffec;
+        }
+
+        .room-card.free.hover{
+            background-color: #97fcd6;
         }
 
         .room-card .card-header{

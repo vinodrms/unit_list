@@ -21,6 +21,7 @@ import {BookingAllotmentViewerComponent} from './components/allotment-view/Booki
 import {BookingCustomerEditorComponent} from './components/customers-edit/BookingCustomerEditorComponent';
 import {BookingReactivateComponent} from './components/reactivate/BookingReactivateComponent';
 import {BookingCancelComponent} from './components/cancel/BookingCancelComponent';
+import {BookingSendConfirmationComponent} from './components/send-confirmation/BookingSendConfirmationComponent';
 
 @Component({
     selector: 'booking-operations-page',
@@ -29,7 +30,8 @@ import {BookingCancelComponent} from './components/cancel/BookingCancelComponent
         BookingPeriodEditorComponent, BookingNoShowEditorComponent, BookingRoomEditorComponent,
         BookingCapacityEditorComponent, BookingPaymentGuaranteeEditorComponent, BookingDetailsEditorComponent,
         BookingPriceProductViewerComponent, BookingAllotmentViewerComponent, DocumentHistoryViewerComponent,
-        BookingCustomerEditorComponent, BookingReactivateComponent, BookingCancelComponent],
+        BookingCustomerEditorComponent, BookingReactivateComponent, BookingCancelComponent,
+        BookingSendConfirmationComponent],
     providers: [BookingOperationsPageService],
     pipes: [TranslationPipe]
 })

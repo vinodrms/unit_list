@@ -545,7 +545,7 @@ export var EnglishTranslations: Object = {
 	"Price for the new room": "Price for the new room",
 	"You chose a room with the same category like the booking. The price will remain unchanged.": "You chose a room with the same category like the booking. The price will remain unchanged.",
 	"You chose a room category that is priced differently in the booking's Price Product. Select the desired price of the booking (you can leave it unchanged).": "You chose a room category that is priced differently in the booking's Price Product. Select the desired price of the booking (you can leave it unchanged).",
-	"You chose a room category that does not have a price in the booking's Price Product. Select the desired price of the booking (you can leave it unchanged).": "You chose a room category that does not have a price in the booking's Price Product. Select the desired price of the booking (you can leave it unchanged).",
+	"You chose a room category that does not have a price defined in the booking's Price Product. Select the desired price of the booking (you can leave it unchanged).": "You chose a room category that does not have a price defined in the booking's Price Product. Select the desired price of the booking (you can leave it unchanged).",
 	"Change Price": "Change Price",
 	"Are you sure you want to change the price for this booking?": "Are you sure you want to change the price for this booking?",
 	"Room was changed succesfully": "Room was changed succesfully",
@@ -586,7 +586,17 @@ export var EnglishTranslations: Object = {
 	"Reactivate": "Reactivate",
 	"Are you sure you want to reactivate this booking?": "Are you sure you want to reactivate this booking?",
 	"Are you sure you want to cancel this booking? An invoice with a penalty can be generated depending on the policy set on the price product.": "Are you sure you want to cancel this booking? An invoice with a penalty can be generated depending on the policy set on the price product.",
-	
+	"Send Email": "Send Email",
+	"Send Confirmation": "Send Confirmation",
+	"Send": "Send",
+	"Add Email": "Add Email",
+	"Insert a different email": "Insert a different email",
+	"Email(s) sent succesfully": "Email(s) sent succesfully",
+	"Prices": "Prices",
+	"Allow Public Price Products": "Allow Public Price Products",
+	"Only Confidential Price Products": "Only Confidential Price Products",
+	"Invoice History": "Invoice History",
 
 	
+
 };

@@ -1,4 +1,4 @@
-<div class="bed-container" [ngClass]="{'smaller-width': !readonly, 'full-width': readonly}">
+<div class="bed-container" [ngClass]="{'smaller-width': !readonly, 'full-width': readonly}" customScroll>
     <div *ngFor="let bedVM of selectedBedList; let bedIndex = index" class="bed-slot">
         <a *ngIf="!readonly" class="btn btn-xs bed-remove-btn" (click)="removeBed(bedIndex)">
             <i class="fa unitpal-font">\</i>
