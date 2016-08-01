@@ -86,6 +86,7 @@ export enum ThServerApi {
 	HotelOperationsBookingChangeCustomers,
 	HotelOperationsBookingCancel,
 	HotelOperationsBookingReactivate,
+	HotelOperationsBookingReactivateRollawayCapacity,
 	HotelOperationsCommonSendEmail,
 
 	InvoiceGroups,
@@ -183,6 +184,7 @@ ThServerApiUrl[ThServerApi.HotelOperationsBookingChangeDetails] = "/hotelOperati
 ThServerApiUrl[ThServerApi.HotelOperationsBookingChangeCustomers] = "/hotelOperations/booking/changeCustomers";
 ThServerApiUrl[ThServerApi.HotelOperationsBookingCancel] = "/hotelOperations/booking/cancel";
 ThServerApiUrl[ThServerApi.HotelOperationsBookingReactivate] = "/hotelOperations/booking/reactivate";
+ThServerApiUrl[ThServerApi.HotelOperationsBookingReactivateRollawayCapacity] = "/hotelOperations/booking/removeRollawayCapacityWarning";
 
 ThServerApiUrl[ThServerApi.HotelOperationsCommonSendEmail] = "/hotelOperations/common/sendEmail";
 

@@ -20,7 +20,7 @@
 	</div>
 	<div class="col-xs-3 full-height right-sidebar">
 		<div class="row padding-top-10px full-height" customScroll>
-			<room-booking-preview [attachedBookingResultVM]="attachedBookingResultVM" (onCheckedOut)="didChangeBooking($event)"></room-booking-preview>
+			<room-booking-preview [attachedBookingResultVM]="attachedBookingResultVM" (onBookingChanged)="didChangeBooking($event)"></room-booking-preview>
 		</div>
 	</div>
 </div>
