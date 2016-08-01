@@ -1,9 +1,9 @@
 <loading-component [isLoading]="isLoading && !didInitOnce"></loading-component>
 
-<div class="row full-height" *ngIf="didLoadPageData">
+<div class="row full-height" *ngIf="didInitOnce">
 	<div class="col-xs-9 full-height right-margin padding-top-10px" customScroll>
 		<div class="row">
-			
+			<customer-preview [customerVM]="customerVM"></customer-preview>
 		</div>
 				
 	</div>

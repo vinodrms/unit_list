@@ -13,4 +13,5 @@ export interface ICustomerDetailsDO extends BaseDO {
 export interface CustomerDetailsMeta {
 	customerTypeName: string;
 	customerType: CustomerType;
+	fontName: string;
 }

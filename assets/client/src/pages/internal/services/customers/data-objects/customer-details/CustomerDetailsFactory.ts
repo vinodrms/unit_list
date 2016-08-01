@@ -39,15 +39,18 @@ export class CustomerDetailsFactory {
 		return [
 			{
 				customerType: CustomerType.Individual,
-				customerTypeName: "Individual"
+				customerTypeName: "Individual",
+				fontName: "("
 			},
 			{
 				customerType: CustomerType.Company,
-				customerTypeName: "Company"
+				customerTypeName: "Company",
+				fontName: ")"
 			},
 			{
 				customerType: CustomerType.TravelAgency,
-				customerTypeName: "Travel Agency"
+				customerTypeName: "Travel Agency",
+				fontName: "*"
 			}
 		];
 	}

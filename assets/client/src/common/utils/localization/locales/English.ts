@@ -592,6 +592,10 @@ export var EnglishTranslations: Object = {
 	"Add Email": "Add Email",
 	"Insert a different email": "Insert a different email",
 	"Email(s) sent succesfully": "Email(s) sent succesfully",
+	"Prices": "Prices",
+	"Allow Public Price Products": "Allow Public Price Products",
+	"Only Confidential Price Products": "Only Confidential Price Products",
+
 	
 
 };
