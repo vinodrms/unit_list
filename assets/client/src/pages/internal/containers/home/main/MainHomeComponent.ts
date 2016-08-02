@@ -1,5 +1,5 @@
 import {Component, OnInit, OnDestroy, Inject, provide} from '@angular/core';
-import {RouteConfig, RouterOutlet, ROUTER_DIRECTIVES} from '@angular/router-deprecated';
+import {ROUTER_DIRECTIVES} from '@angular/router';
 import {BaseComponent} from '../../../../../common/base/BaseComponent';
 import {MainHeaderComponent} from '../pages/utils/header/container/MainHeaderComponent';
 import {HeaderPageService} from '../pages/utils/header/container/services/HeaderPageService';
@@ -16,25 +16,20 @@ import {YieldManagerDashboardComponent} from '../pages/home-pages/yield-manager/
 import {BookingHistoryDashboardComponent} from '../pages/home-pages/booking-history/BookingHistoryDashboardComponent';
 import {SettingsContainerComponent} from '../pages/home-pages/settings/container/SettingsContainerComponent';
 
-@RouteConfig([
-	{ path: '/operations', name: 'HotelOperationsDashboardComponent', component: HotelOperationsDashboardComponent, useAsDefault: true },
-	{ path: '/yield-manager', name: 'YieldManagerDashboardComponent', component: YieldManagerDashboardComponent },
-	{ path: '/bookings', name: 'BookingHistoryDashboardComponent', component: BookingHistoryDashboardComponent },
-	{ path: '/settings/...', name: 'SettingsContainerComponent', component: SettingsContainerComponent }
-])
-
 @Component({
 	selector: 'main-home-component',
 	templateUrl: '/client/src/pages/internal/containers/home/main/template/main-home-component.html',
 	providers: [HeaderPageService, provide(ISocketsService, { useClass: SocketsService }),
-		SETTINGS_PROVIDERS, HOTEL_AGGREGATOR_PROVIDERS, TaxService, RoomCategoriesService, 
+		SETTINGS_PROVIDERS, HOTEL_AGGREGATOR_PROVIDERS, TaxService, RoomCategoriesService,
 		RoomCategoriesStatsService],
-	directives: [MainHeaderComponent, ROUTER_DIRECTIVES]
+	directives: [MainHeaderComponent, ROUTER_DIRECTIVES],
+	precompile: [HotelOperationsDashboardComponent, YieldManagerDashboardComponent,
+		BookingHistoryDashboardComponent, SettingsContainerComponent]
 })
 
 export class MainHomeComponent extends BaseComponent implements OnDestroy {
 
-	constructor(@Inject(ISocketsService) private _sockets: ISocketsService) {
+	constructor( @Inject(ISocketsService) private _sockets: ISocketsService) {
 		super();
 
 		this._sockets.init();

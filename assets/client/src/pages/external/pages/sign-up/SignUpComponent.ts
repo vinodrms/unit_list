@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {ControlGroup} from '@angular/common';
-import {RouterLink, Router, RouteParams} from '@angular/router-deprecated';
+import {ROUTER_DIRECTIVES} from '@angular/router';
 import {AppContext} from '../../../../common/utils/AppContext';
 import {ThError} from '../../../../common/utils/responses/ThError';
 import {BaseFormComponent} from '../../../../common/base/BaseFormComponent';
@@ -13,7 +13,7 @@ import {LoadingButtonComponent} from '../../../../common/utils/components/Loadin
 @Component({
 	selector: 'sign-up-component',
 	templateUrl: '/client/src/pages/external/pages/sign-up/template/sign-up-component.html',
-	directives: [RouterLink, ExternalFooterComponent, LoadingButtonComponent],
+	directives: [ROUTER_DIRECTIVES, ExternalFooterComponent, LoadingButtonComponent],
 	providers: [SignUpService],
 	pipes: [TranslationPipe]
 })
@@ -39,7 +39,7 @@ export class SignUpComponent extends BaseFormComponent {
 		this.isLoading = true;
 		this._signUpService.signUp().subscribe((result: Object) => {
 			this.isLoading = false;
-			this._appContext.routerNavigator.navigateTo("LogInComponent", { loginStatusCode: LoginStatusCode.SignUpOk });
+			this._appContext.routerNavigator.navigateTo("/login", LoginStatusCode.SignUpOk);
 		}, (error: ThError) => {
 			this.isLoading = false;
 			this._appContext.toaster.error(error.message);

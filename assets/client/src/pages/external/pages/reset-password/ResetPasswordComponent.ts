@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {ControlGroup} from '@angular/common';
-import {RouterLink} from '@angular/router-deprecated';
+import {ROUTER_DIRECTIVES} from '@angular/router';
 import {BaseFormComponent} from '../../../../common/base/BaseFormComponent';
 import {ExternalFooterComponent} from '../common/footer/ExternalFooterComponent';
 import {TranslationPipe} from '../../../../common/utils/localization/TranslationPipe';
@@ -13,7 +13,7 @@ import {LoadingButtonComponent} from '../../../../common/utils/components/Loadin
 @Component({
 	selector: 'reset-password-component',
 	templateUrl: '/client/src/pages/external/pages/reset-password/template/reset-password-component.html',
-	directives: [RouterLink, ExternalFooterComponent, LoadingButtonComponent],
+	directives: [ROUTER_DIRECTIVES, ExternalFooterComponent, LoadingButtonComponent],
 	pipes: [TranslationPipe],
 	providers: [ResetPasswordService]
 })
@@ -41,7 +41,7 @@ export class ResetPasswordComponent extends BaseFormComponent {
 		this.isLoading = true;
 		this._resetPasswdService.resetPassword().subscribe((result: Object) => {
 			this.isLoading = false;
-			this._appContext.routerNavigator.navigateTo("LogInComponent", { loginStatusCode: LoginStatusCode.RequestResetPasswordOk });
+			this._appContext.routerNavigator.navigateTo("/login", LoginStatusCode.RequestResetPasswordOk);
 		}, (error: ThError) => {
 			this.isLoading = false;
 			this._appContext.toaster.error(error.message);

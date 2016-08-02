@@ -6,20 +6,20 @@ import {SettingsPageType} from './utils/SettingsPageType';
 @Injectable()
 export class SettingsNavbarService {
 	private _numberOfItems: number;
-	public static BaseSettingsPath = "/MainHomeComponent/SettingsContainerComponent/";
+	public static BaseSettingsPath = "/settings/";
 
 	private _settingsPageList: SettingsPageVM[];
 
 	constructor(private _appContext: AppContext) {
 		this._numberOfItems = -1;
 		this._settingsPageList = [
-			new SettingsPageVM(SettingsPageType.BasicInformation, "SettingsBasicInformationComponent", "Basic Information", "8"),
-			new SettingsPageVM(SettingsPageType.Beds, "SettingsBedsComponent", "Beds", "!"),
-			new SettingsPageVM(SettingsPageType.Rooms, "SettingsRoomsComponent", "Rooms", "\""),
-			new SettingsPageVM(SettingsPageType.AddOnProducts, "SettingsAddOnProductsComponent", "Add-On Products", "$"),
-			new SettingsPageVM(SettingsPageType.PriceProducts, "SettingsPriceProductsComponent", "Price Products", "%"),
-			new SettingsPageVM(SettingsPageType.CustomerRegister, "SettingsCustomerRegisterComponent", "Customer Register", "&"),
-			new SettingsPageVM(SettingsPageType.Allotments, "SettingsAllotmentsComponent", "Allotments", "â")
+			new SettingsPageVM(SettingsPageType.BasicInformation, "basic-info", "Basic Information", "8"),
+			new SettingsPageVM(SettingsPageType.Beds, "beds", "Beds", "!"),
+			new SettingsPageVM(SettingsPageType.Rooms, "rooms", "Rooms", "\""),
+			new SettingsPageVM(SettingsPageType.AddOnProducts, "add-on-products", "Add-On Products", "$"),
+			new SettingsPageVM(SettingsPageType.PriceProducts, "price-products", "Price Products", "%"),
+			new SettingsPageVM(SettingsPageType.CustomerRegister, "customer-register", "Customer Register", "&"),
+			new SettingsPageVM(SettingsPageType.Allotments, "allotments", "Allotments", "â")
 		]
 	}
 

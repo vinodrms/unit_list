@@ -63,8 +63,8 @@ export class WizardBreakfastStateService extends AWizardState {
     }
     public getMeta(): WizardStateMeta {
         return {
-            startRelativeComponentPath: "WizardBreakfastComponent",
-            endRelativeComponentPath: "WizardBreakfastComponent",
+            startRelativeComponentPath: "breakfast",
+            endRelativeComponentPath: "breakfast",
             iconFontName: "#",
             name: "Breakfast"
         };

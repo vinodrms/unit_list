@@ -13,8 +13,8 @@ import {WizardAllotmentsStateService} from '../allotments/services/WizardAllotme
 
 @Injectable()
 export class WizardService implements IWizardState, IWizardController {
-	private static WizardNavigationBasePath = "/MainWizardComponent/";
-	private static HomeNavigationPath = "/MainHomeComponent/";
+	private static WizardNavigationBasePath = "/wizard/";
+	private static HomeNavigationPath = "/operations";
 
 	private _stateList: IWizardState[];
 	private _currentState: IWizardState;

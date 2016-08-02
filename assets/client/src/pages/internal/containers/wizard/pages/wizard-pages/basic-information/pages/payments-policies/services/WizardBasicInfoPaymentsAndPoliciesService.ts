@@ -24,7 +24,7 @@ export class WizardBasicInfoPaymentsAndPoliciesService implements IBasicInfoStep
 			});
 		});
 	}
-	public getComponentName(): string {
-		return "WizardBasicInfoPaymentsAndPoliciesComponent";
+	public getComponentPath(): string {
+		return "payments-policies";
 	}
 }
