@@ -596,7 +596,16 @@ export var EnglishTranslations: Object = {
 	"Allow Public Price Products": "Allow Public Price Products",
 	"Only Confidential Price Products": "Only Confidential Price Products",
 	"Invoice History": "Invoice History",
-
-	
-
+	"No Payment Guarantee" : "No Payment Guarantee",
+	"Arrivals" : "Arrivals",
+	"No booking" : "No booking",
+	"Arriving Today" : "Arriving Today",
+	"Out Of Service" : "Out Of Service",
+	"All Rooms" : "All Rooms",
+	"Free Rooms" : "Free Rooms",
+	"Occupied Rooms" : "Occupied Rooms",
+	"Reserved Rooms" : "Reserved Rooms",
+	"Out Of Service Rooms" : "Out Of Service Rooms",
+	"Showing" : "Showing",
+	"Showing Only" : "Showing Only"
 };

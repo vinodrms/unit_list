@@ -3,11 +3,11 @@
 >
 	<div class="card-header">
 		<div class="section1">
-			<div class="room-number clickable" (click)="openRoomModal()">{{ roomVM.name }}</div>
-			<div class="room-type">{{ roomVM.categoryLabel }}</div>
+			<div class="room-number ellipsis-text clickable" (click)="openRoomModal()" title="{{ roomVM.name }}">{{ roomVM.name }}</div>
+			<div class="room-type ellipsis-text" title="{{ roomVM.categoryLabel }}">{{ roomVM.categoryLabel }}</div>
 		</div>
 		<div class="section2 flex-row flex-jc-sb">
-			<div class="customer-name clickable" (click)="openCustomerModal()">{{ roomVM.customerName }}</div>
+			<div class="customer-name ellipsis-text clickable" (click)="openCustomerModal()" title="{{ roomVM.customerName }}">{{ roomVM.customerName }}</div>
 			<div class="room-stats flex-row flex-center-v">
 				<div *ngIf="maintenance" class="clickable f-18" [ngClass]="maintenance.cssClass" (click)="maintenance.clickHandler()" title="{{maintenance.title}}">
 					<span class="unitpal-font">{{maintenance.icon}}</span>
@@ -35,11 +35,11 @@
 >
 	<div class="card-header">
 		<div class="section1">
-			<div class="room-number clickable" (click)="openRoomModal()">{{ roomVM.name }}</div>
-			<div class="room-type">{{ roomVM.categoryLabel }}</div>
+			<div class="room-number ellipsis-text clickable" (click)="openRoomModal()" title="{{ roomVM.name }}">{{ roomVM.name }}</div>
+			<div class="room-type ellipsis-text" title="{{ roomVM.categoryLabel }}">{{ roomVM.categoryLabel }}</div>
 		</div>
 		<div class="section2 flex-row flex-jc-sb">
-			<div class="customer-name clickable"></div>
+			<div class="customer-name ellipsis-text clickable"></div>
 			<div class="room-stats flex-row flex-center-v">
 				<div *ngIf="maintenance" class="clickable f-18" [ngClass]="maintenance.cssClass" (click)="maintenance.clickHandler()" title="{{maintenance.title}}">
 					<span class="unitpal-font">{{maintenance.icon}}</span>
@@ -49,7 +49,7 @@
 	</div>
 	<div class="card-footer">
 		<div class="period flex-row flex-center-v">
-			No booking this month
+			{{ 'No booking' | translate }}
 		</div>
 		<div class="other-details">
 		</div>
@@ -62,11 +62,11 @@
 >
 	<div class="card-header">
 		<div class="section1">
-			<div class="room-number clickable" (click)="openRoomModal()">{{ roomVM.name }}</div>
-			<div class="room-type">{{ roomVM.categoryLabel }}</div>
+			<div class="room-number ellipsis-text clickable" (click)="openRoomModal()" title="{{ roomVM.name }}">{{ roomVM.name }}</div>
+			<div class="room-type ellipsis-text" title="{{ roomVM.categoryLabel }}">{{ roomVM.categoryLabel }}</div>
 		</div>
 		<div class="section2 flex-row flex-jc-sb">
-			<div class="customer-name clickable"></div>
+			<div class="customer-name ellipsis-text clickable"></div>
 			<div class="room-stats flex-row flex-center-v">
 				<div *ngIf="maintenance" class="clickable f-18" [ngClass]="maintenance.cssClass" (click)="maintenance.clickHandler()" title="{{maintenance.title}}">
 					<span class="unitpal-font">{{maintenance.icon}}</span>
@@ -75,8 +75,8 @@
 		</div>
 	</div>
 	<div class="card-footer">
-		<div class="period flex-row flex-center-v clickable" (click)="openBookingModal()">
-			Arriving Today
+		<div class="period flex-row flex-center-v clickable yellow-color" (click)="openBookingModal()">
+			{{ 'Arriving Today' | translate }}
 		</div>
 		<div class="other-details">
 		</div>
@@ -88,11 +88,11 @@
 >
 	<div class="card-header">
 		<div class="section1">
-			<div class="room-number clickable" (click)="openRoomModal()">{{ roomVM.name }}</div>
-			<div class="room-type">{{ roomVM.categoryLabel }}</div>
+			<div class="room-number ellipsis-text clickable" (click)="openRoomModal()" title="{{ roomVM.name }}">{{ roomVM.name }}</div>
+			<div class="room-type ellipsis-text" title="{{ roomVM.categoryLabel }}">{{ roomVM.categoryLabel }}</div>
 		</div>
 		<div class="section2 flex-row flex-jc-sb">
-			<div class="customer-name clickable"></div>
+			<div class="customer-name ellipsis-text clickable"></div>
 			<div class="room-stats flex-row flex-center-v">
 				<div *ngIf="maintenance" class="clickable f-18" [ngClass]="maintenance.cssClass" (click)="maintenance.clickHandler()" title="{{maintenance.title}}">
 					<span class="unitpal-font">{{maintenance.icon}}</span>
@@ -102,7 +102,7 @@
 	</div>
 	<div class="card-footer">
 		<div class="period flex-row flex-center-v">
-			Out of service
+			{{ 'Out Of Service' | translate }}
 		</div>
 		<div class="other-details">
 		</div>

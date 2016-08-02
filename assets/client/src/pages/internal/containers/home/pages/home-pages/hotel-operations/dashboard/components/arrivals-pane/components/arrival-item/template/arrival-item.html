@@ -4,10 +4,11 @@
 	</div>
 	<div class="right p-6">
 		<div class="header" >
-			<span class="customer-name clickable" (click)="openCustomerModal()">{{arrivalItemVM.customerName}}</span>
+			<span *ngIf="arrivalItemVM.hasReservedRoom" class="reserved-room ellipsis-text yellow-color" title="{{arrivalItemVM.reservedRoomVM.room.name}}">{{arrivalItemVM.reservedRoomVM.room.name}} TTTTTTTTTTTTTTdsadasTTTTT</span>
+			<span class="customer-name ellipsis-text clickable" (click)="openCustomerModal()" title="{{arrivalItemVM.customerName}}">{{arrivalItemVM.customerName}}</span>
 		</div>
 		<div class="body">
-			<div class="room-type">{{ arrivalItemVM.roomCategoryLabel}}</div>
+			<div class="room-type ellipsis-text " title="{{arrivalItemVM.roomCategoryLabel}}">{{arrivalItemVM.roomCategoryLabel}}</div>
 			<div class="booking-quick-details">
 				<div class="period clickable" (click)="openBookingModal()" >
 					<div class="start-date">{{arrivalItemVM.arrivalLabel}}</div>
@@ -24,7 +25,7 @@
 		</div>
 		<div class="footer flex-jc-end">
 			<button class="btn btn-sm btn-danger" (click)="openCheckInModal()" >
-				CHECK IN <span class="unitpal-font">/</span>
+				<span class="uppercase"> {{ 'Check In' | translate }} </span> <span class="unitpal-font">/</span>
 			</button>
 		</div>
 	</div>
@@ -35,10 +36,10 @@
 	</div>
 	<div class="right">
 		<div class="header" >
-			<span class="customer-name clickable" (click)="openCustomerModal()">{{arrivalItemVM.customerName}}</span>
+			<span class="customer-name ellipsis-text clickable" (click)="openCustomerModal()" title="{{arrivalItemVM.customerName}}">{{arrivalItemVM.customerName}}</span>
 		</div>
 		<div class="body">
-			<div class="room-type">{{ arrivalItemVM.roomCategoryLabel}}</div>
+			<div class="room-type ellipsis-text " title="{{arrivalItemVM.roomCategoryLabel}}">{{arrivalItemVM.roomCategoryLabel}}</div>
 			<div class="booking-quick-details">
 				<div class="period clickable" (click)="openBookingModal()" >
 					<div class="start-date">{{arrivalItemVM.arrivalLabel}}</div>
@@ -56,7 +57,7 @@
 		<div class="footer flex-jc-left">
 			<div class="flex-row flex-center-v yellow-color">
 				<span class="unitpal-font f-14 p-r-6">+</span>
-				<span class="f-11">No Payment Guaranteed</span>
+				<span class="f-11">{{ 'No Payment Guarantee' | translate }}</span>
 			</div>
 		</div>
 	</div>
@@ -67,10 +68,10 @@
 	</div>
 	<div class="right">
 		<div class="header" >
-			<span class="customer-name clickable" (click)="openCustomerModal()">{{arrivalItemVM.customerName}}</span>
+			<span class="customer-name ellipsis-text clickable" (click)="openCustomerModal()" title="{{arrivalItemVM.customerName}}">{{arrivalItemVM.customerName}}</span>
 		</div>
 		<div class="body">
-			<div class="room-type">{{ arrivalItemVM.roomCategoryLabel}}</div>
+			<div class="room-type ellipsis-text" title="{{arrivalItemVM.roomCategoryLabel}}">{{arrivalItemVM.roomCategoryLabel}}</div>
 			<div class="booking-quick-details">
 				<div class="period clickable" (click)="openBookingModal()" >
 					<div class="start-date">{{arrivalItemVM.arrivalLabel}}</div>
@@ -88,7 +89,7 @@
 		<div class="footer">
 			<div class="flex-row flex-center-v yellow-color">
 				<span class="unitpal-font f-14 p-r-6">+</span>
-				<span class="f-11">No Show</span>
+				<span class="f-11">{{ 'No Show' | translate }}</span>
 			</div>
 		</div>
 	</div>

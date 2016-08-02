@@ -6,11 +6,11 @@
 		</div>
 		<div class="group-2 flex-row flex-center-v">
 			<select class="form-control rooms-filter p-r-12 f-12" [ngModel]="filterValue.currentValue" (ngModelChange)="filterValueChanged($event)">
-				<option value="{{ enums.FilterValueType.All }}">ALL ROOMS</option>
-				<option value="{{ enums.FilterValueType.Free }}">FREE ROOMS</option>
-				<option value="{{ enums.FilterValueType.Occupied }}">OCCUPIED ROOMS</option>
-				<option value="{{ enums.FilterValueType.Reserved }}">RESERVED ROOMS</option>
-				<option value="{{ enums.FilterValueType.OutOfService }}">OUT OF SERVICE ROOMS</option>
+				<option value="{{ enums.FilterValueType.All }}">{{'All Rooms' | translate }}</option>
+				<option value="{{ enums.FilterValueType.Free }}">{{'Free Rooms' | translate }}</option>
+				<option value="{{ enums.FilterValueType.Occupied }}">{{'Occupied Rooms' | translate }}</option>
+				<option value="{{ enums.FilterValueType.Reserved }}">{{'Reserved Rooms' | translate }}</option>
+				<option value="{{ enums.FilterValueType.OutOfService }}">{{'Out of Service Rooms' | translate }}</option>
 			</select>
 		</div>
 	</div>

@@ -1,27 +1,27 @@
-<div *ngIf="departureItemVM.isStayingInRoom">
-	<div class="header">
-		<span class="clickable green-color"><b (click)="openRoomModal()">{{departureItemVM.roomName}}</b></span>
-		<span class="customer-name clickable" (click)="openCustomerModal()">{{departureItemVM.customerName}}</span>
+<div *ngIf="departureItemVM.isStayingInRoom" >
+	<div class="header" >
+		<span class="reserved-room clickable ellipsis-text green-color" (click)="openRoomModal()" title="{{departureItemVM.roomName}}">{{departureItemVM.roomName}}</span>
+		<span class="customer-name ellipsis-text clickable" (click)="openCustomerModal()" title="{{departureItemVM.customerName}}">{{departureItemVM.customerName}}</span>
 	</div>
-	<div class="body">
-		<div class="room-type">{{departureItemVM.roomCategoryLabel}}</div>
-		<div class="booking-quick-details">
-			<div class="stats orange-color f-12">
+	<div class="body" >
+		<div class="room-type ellipsis-text" title="{{departureItemVM.roomCategoryLabel}}">{{departureItemVM.roomCategoryLabel}}</div>
+		<div class="booking-quick-details" >
+			<div class="stats orange-color f-12" >
 				<div>
-				<span class="unitpal-font clickable f-12 p-r-6">-</span><span>203 euro</span>
+				<span class="unitpal-font ellipsis-text clickable f-12 p-r-6" >-</span><span>203 euro</span>
 				</div>
 			</div>
-			<div class="other-details gray-color f-12">
+			<div class="other-details gray-color f-12" >
 				<div>
-					<span class="unitpal-font f-12">(</span> <span>{{departureItemVM.numberOfPeople}}</span>
-					<span class="unitpal-font f-12">Y</span> <span>{{departureItemVM.numberOfNights}}</span>
+					<span class="unitpal-font f-12" >(</span> <span>{{departureItemVM.numberOfPeople}}</span>
+					<span class="unitpal-font f-12" >Y</span> <span>{{departureItemVM.numberOfNights}}</span>
 				</div>
 			</div>
 		</div>
 	</div>
-	<div class="footer">
-		<button class="btn btn-sm btn-green" (click)="openRoomModal()">
-			<span class="unitpal-font p-r-6">.</span> CHECK OUT 
+	<div class="footer" >
+		<button class="btn btn-sm btn-green" (click)="openRoomModal()" >
+			<span class="unitpal-font p-r-6" >.</span> <span class="uppercase">{{ 'Check Out' | translate }}</span>
 		</button>
 	</div>
 </div>

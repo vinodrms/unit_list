@@ -20,11 +20,15 @@ import {RoomsCanvasComponent} from '../../../rooms-canvas/RoomsCanvasComponent';
 
 import {HotelDashboardModalService} from '../../../../services/HotelDashboardModalService';
 
+import {TranslationPipe} from '../../../../../../../../../../../../common/utils/localization/TranslationPipe';
+import {AppContext} from '../../../../../../../../../../../../common/utils/AppContext';
+
 declare var $: any;
 
 @Component({
 	selector: 'room-card',
-	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/dashboard/components/rooms-canvas/components/room-card/template/room-card.html'
+	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/dashboard/components/rooms-canvas/components/room-card/template/room-card.html',
+	pipes: [TranslationPipe]	
 })
 
 export class RoomCardComponent {
@@ -40,7 +44,8 @@ export class RoomCardComponent {
 		private _operationRoomService: HotelOperationsRoomService,
 		private _hotelOperationsDashboardService: HotelOperationsDashboardService,
 		private _hotelOperationsModalService: HotelOperationsModalService,
-		private _modalService: HotelDashboardModalService
+		private _modalService: HotelDashboardModalService,
+		private _appContext: AppContext
 		) {
 
 		this.enums = {
@@ -134,6 +139,8 @@ export class RoomCardComponent {
 								};
 								this._operationRoomService.checkIn(assignRoomParams).subscribe((r)=>{
 									this.dropped.emit(outcome);
+								}, (e : any) =>{
+									this._appContext.toaster.error(e.message);
 								})
 							}
 							else if (this.roomVM.canUpgrade(arrivalItem)){
