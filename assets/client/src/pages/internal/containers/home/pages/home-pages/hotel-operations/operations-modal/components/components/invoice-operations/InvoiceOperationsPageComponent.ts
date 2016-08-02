@@ -6,11 +6,14 @@ import {ThError, AppContext} from '../../../../../../../../../../../common/utils
 import {HotelInvoiceOperationsPageParam} from './utils/HotelInvoiceOperationsPageParam';
 import {InvoiceEditComponent} from './components/invoice-edit/InvoiceEditComponent';
 import {ItemListNavigatorComponent} from '../../../../../../../../../../../common/utils/components/item-list-navigator/ItemListNavigatorComponent';
+import {InvoiceOperationsPageService} from './services/InvoiceOperationsPageService';
+import {InvoiceOperationsPageData} from './services/utils/InvoiceOperationsPageData';
 
 @Component({
     selector: 'invoice-operations-page',
     templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/invoice-operations/template/invoice-operations-page.html',
     directives: [LoadingComponent, CustomScroll, ItemListNavigatorComponent, InvoiceEditComponent],
+    providers: [InvoiceOperationsPageService],
     pipes: [TranslationPipe]
 })
 export class InvoiceOperationsPageComponent implements OnInit {
@@ -23,14 +26,31 @@ export class InvoiceOperationsPageComponent implements OnInit {
     invoiceNavigatorWindowSize = 10;
     numberOfSimultaneouslyDisplayedInvoices = 2;
 
-    constructor() {
+    invoiceOperationsPageData: InvoiceOperationsPageData;
+
+    constructor(private _appContext: AppContext,
+        private _invoiceOperationsPageService: InvoiceOperationsPageService) {
         
     }
 
     ngOnInit() {
-        this.updateContainerData();
+        this.loadPageData();
     }
+    private loadPageData() {
+        this.isLoading = true;
 
+        this.invoiceOperationsPageParam = new HotelInvoiceOperationsPageParam('57975aeea33e4cc434fc42cb', {});
+
+        this._invoiceOperationsPageService.getPageData(this.invoiceOperationsPageParam).subscribe((pageData: InvoiceOperationsPageData) => {
+            this.invoiceOperationsPageData = pageData;
+            this.isLoading = false;
+            this.didInitOnce = true;
+            this.updateContainerData();
+        }, (err: ThError) => {
+            this._appContext.toaster.error(err.message);
+            this.isLoading = false;
+        });
+    }
     private updateContainerData() {
         var title = "Invoices";
         var subtitle = "";

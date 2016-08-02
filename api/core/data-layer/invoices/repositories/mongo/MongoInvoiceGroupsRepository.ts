@@ -1,6 +1,7 @@
 import {MongoRepository, MongoErrorCodes, MongoSearchCriteria} from '../../../common/base/MongoRepository';
-import {IInvoiceGroupsRepository, InvoiceGroupMetaRepoDO, InvoiceGroupItemMetaRepoDO, InvoiceGroupSearchCriteriaRepoDO, InvoiceGroupSearchResultRepoDO} from'../IInvoiceGroupsRepository';
+import {IInvoiceGroupsRepository, InvoiceGroupMetaRepoDO, InvoiceGroupItemMetaRepoDO, InvoiceGroupSearchCriteriaRepoDO, InvoiceGroupSearchResultRepoDO, InvoiceSearchCriteriaRepoDO} from'../IInvoiceGroupsRepository';
 import {InvoiceGroupDO} from '../../data-objects/InvoiceGroupDO';
+import {InvoiceDO} from '../../data-objects/InvoiceDO';
 import {MongoInvoiceGroupsReadOperationsRepository} from './operations/MongoInvoiceGroupsReadOperationsRepository';
 import {MongoInvoiceGroupsEditOperationsRepository} from './operations/MongoInvoiceGroupsEditOperationsRepository';
 import {LazyLoadRepoDO, LazyLoadMetaResponseRepoDO} from '../../../common/repo-data-objects/LazyLoadRepoDO';
@@ -10,11 +11,11 @@ export class MongoInvoiceGroupsRepository extends MongoRepository implements IIn
     private _readRepository: MongoInvoiceGroupsReadOperationsRepository;
     private _editRepository: MongoInvoiceGroupsEditOperationsRepository;
 
-    constructor(private _bookingsRepo: MongoBookingRepository) {
+    constructor() {
         super(sails.models.invoicegroupsentity);
 
-        this._readRepository = new MongoInvoiceGroupsReadOperationsRepository(sails.models.invoicegroupsentity, _bookingsRepo);
-        this._editRepository = new MongoInvoiceGroupsEditOperationsRepository(sails.models.invoicegroupsentity, _bookingsRepo);
+        this._readRepository = new MongoInvoiceGroupsReadOperationsRepository(sails.models.invoicegroupsentity);
+        this._editRepository = new MongoInvoiceGroupsEditOperationsRepository(sails.models.invoicegroupsentity);
     }
 
     public getInvoiceGroupById(invoidGroupMeta: InvoiceGroupMetaRepoDO, invoiceGroupId: string): Promise<InvoiceGroupDO> {

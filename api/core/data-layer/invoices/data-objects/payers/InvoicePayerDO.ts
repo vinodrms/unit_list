@@ -5,9 +5,6 @@ import {CustomerDO, CustomerType} from '../../../customers/data-objects/Customer
 import {BaseCorporateDetailsDO} from '../../../customers/data-objects/customer-details/corporate/BaseCorporateDetailsDO';
 
 export class InvoicePayerDO extends BaseDO {
-    constructor() {
-        super();
-    }
 
     customerId: string;
     paymentMethod: InvoicePaymentMethodDO;

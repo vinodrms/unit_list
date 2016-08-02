@@ -74,35 +74,30 @@ export class GenerateBookingInvoice {
     }
 
     private getDefaultInvoiceDOCore(resolve: { (result: InvoiceDO): void }, reject: { (err: ThError): void }) {
-        var invoice = new InvoiceDO({
-            bookingRepo: this._appContext.getRepositoryFactory().getBookingRepository(),
-            hotelId: this._sessionContext.sessionDO.hotel.id,
-            groupBookingId: this._loadedBooking.groupBookingId
-        });
+        var invoice = new InvoiceDO();
         invoice.bookingId = this._loadedBooking.bookingId;
         invoice.itemList = [];
-        var bookingInvoiceItem = new InvoiceItemDO({
-            bookingRepo: this._appContext.getRepositoryFactory().getBookingRepository(),
-            hotelId: this._sessionContext.sessionDO.hotel.id,
-            groupBookingId: this._loadedBooking.groupBookingId,
-            bookingId: invoice.bookingId
-        });
+        var bookingInvoiceItem = new InvoiceItemDO();
         bookingInvoiceItem.type = InvoiceItemType.Booking;
         bookingInvoiceItem.id = this._loadedBooking.bookingId;
         invoice.itemList.push(bookingInvoiceItem);
-
-        invoice.getPrice().then((totalPrice: number) => {
+        invoice.paymentStatus = InvoicePaymentStatus.Open;
+        
+        this._appContext.getRepositoryFactory().getBookingRepository().getBookingById({ hotelId: this.hotelId }, this._generateBookingInvoiceDO.groupBookingId, 
+            this._generateBookingInvoiceDO.bookingId).then((booking: BookingDO) => {
             invoice.payerList = [];
             var defaultInvoicePayer =
                 InvoicePayerDO.buildFromCustomerDOAndPaymentMethod(this._loadedDefaultBillingCustomer, this._loadedBooking.defaultBillingDetails.paymentMethod);
-            defaultInvoicePayer.priceToPay = totalPrice;
+            defaultInvoicePayer.priceToPay = booking.price.getPrice() * booking.price.getNumberOfItems();
             invoice.payerList.push(defaultInvoicePayer);
-            invoice.paymentStatus = InvoicePaymentStatus.Open;
+            
             resolve(invoice);
-        }).catch((error) => {
-            var thError = new ThError(ThStatusCode.GenerateBookingInvoiceErrorBuildingDefaultInvoice, error);
-            ThLogger.getInstance().logError(ThLogLevel.Error, "error building the default booking invoice object", this._generateBookingInvoiceDO, thError);
-            reject(thError);
         });
+
+
+    }
+
+    private get hotelId(): string {
+        return this._sessionContext.sessionDO.hotel.id;
     }
 }

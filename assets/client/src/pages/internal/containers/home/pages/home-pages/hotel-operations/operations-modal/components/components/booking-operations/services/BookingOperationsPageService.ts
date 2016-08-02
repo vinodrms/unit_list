@@ -13,6 +13,9 @@ import {RoomsService} from '../../../../../../../../../../services/rooms/RoomsSe
 import {RoomVM} from '../../../../../../../../../../services/rooms/view-models/RoomVM';
 import {EagerCustomersService} from '../../../../../../../../../../services/customers/EagerCustomersService';
 import {EagerAllotmentsService} from '../../../../../../../../../../services/allotments/EagerAllotmentsService';
+import {EagerInvoiceGroupsService} from '../../../../../../../../../../services/invoices/EagerInvoiceGroupsService';
+import {InvoiceGroupDO} from '../../../../../../../../../../services/invoices/data-objects/InvoiceGroupDO';
+import {InvoiceDO} from '../../../../../../../../../../services/invoices/data-objects/InvoiceDO';
 import {AllotmentDO} from '../../../../../../../../../../services/allotments/data-objects/AllotmentDO';
 import {CustomersDO} from '../../../../../../../../../../services/customers/data-objects/CustomersDO';
 import {BookingOperationsPageData} from './utils/BookingOperationsPageData';
@@ -27,7 +30,8 @@ export class BookingOperationsPageService {
         private _roomCategoriesStatsService: RoomCategoriesStatsService,
         private _roomsService: RoomsService,
         private _eagerCustomersService: EagerCustomersService,
-        private _eagerAllotmentsService: EagerAllotmentsService) {
+        private _eagerAllotmentsService: EagerAllotmentsService,
+        private _eagerInvoiceGroupsService: EagerInvoiceGroupsService) {
     }
 
 
@@ -48,14 +52,25 @@ export class BookingOperationsPageService {
                 this._eagerCustomersService.getCustomersById(pageData.bookingDO.customerIdList),
                 this.getAttachedRoom(pageData.bookingDO),
                 this._roomCategoriesStatsService.getRoomCategoryStatsForRoomCategoryId(pageData.bookingDO.roomCategoryId),
-                this.getAttachedAllotment(pageData.bookingDO)
+                this.getAttachedAllotment(pageData.bookingDO),
+                this._eagerInvoiceGroupsService.getInvoiceGroupList({
+                    groupBookingId: pageData.bookingDO.groupBookingId,
+                    bookingId: pageData.bookingDO.bookingId
+                })
             );
-        }).map((result: [BookingOperationsPageData, CustomersDO, RoomVM, RoomCategoryStatsDO, AllotmentDO]) => {
+        }).map((result: [BookingOperationsPageData, CustomersDO, RoomVM, RoomCategoryStatsDO, AllotmentDO, InvoiceGroupDO[]]) => {
             var pageData = result[0];
             pageData.customersContainer = result[1];
             pageData.roomVM = result[2];
             pageData.roomCategoryStats = result[3];
             pageData.allotmentDO = result[4];
+            var invoiceGroupList: InvoiceGroupDO[] = result[5];
+            if (invoiceGroupList.length > 0) {
+                pageData.invoiceGroupDO = invoiceGroupList[0];
+                pageData.invoiceDO = _.find(pageData.invoiceGroupDO.invoiceList, (invoice: InvoiceDO) => {
+                    return invoice.bookingId === pageData.bookingDO.bookingId;
+                });
+            }
             return pageData;
         });
     }

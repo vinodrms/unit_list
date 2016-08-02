@@ -11,9 +11,9 @@ import {MongoBookingRepository} from '../../../../bookings/repositories/mongo/Mo
 export class MongoInvoiceGroupsEditOperationsRepository extends MongoRepository {
     private _helper: InvoiceGroupsRepositoryHelper;
 
-    constructor(invoiceGroupsEntity: Sails.Model, private _bookingsRepo: MongoBookingRepository) {
+    constructor(invoiceGroupsEntity: Sails.Model) {
         super(invoiceGroupsEntity);
-        this._helper = new InvoiceGroupsRepositoryHelper(_bookingsRepo);
+        this._helper = new InvoiceGroupsRepositoryHelper();
     }
 
     public addInvoiceGroup(invoiceGroupMeta: InvoiceGroupMetaRepoDO, invoiceGroup: InvoiceGroupDO): Promise<InvoiceGroupDO> {
@@ -26,8 +26,8 @@ export class MongoInvoiceGroupsEditOperationsRepository extends MongoRepository 
         invoiceGroup.versionId = 0;
         invoiceGroup.status = InvoiceGroupStatus.Active;
         invoiceGroup.reindexByCustomerId();
-        invoiceGroup.removeMetaObjectAttributeIfNull();
-        this.createDocument(invoiceGroup.getCleanInvoiceGroupDOForDBSave(),
+        
+        this.createDocument(invoiceGroup,
             (err: Error) => {
                 this.logAndReject(err, reject, { meta: invoiceGroupMeta, invoiceGroup: invoiceGroup }, ThStatusCode.InvoiceGroupsRepositoryErrorAddingInvoiceGroup);
             },
@@ -39,8 +39,8 @@ export class MongoInvoiceGroupsEditOperationsRepository extends MongoRepository 
 
     public updateInvoiceGroup(invoiceGroupMeta: InvoiceGroupMetaRepoDO, invoiceGroupItemMeta: InvoiceGroupItemMetaRepoDO, invoiceGroup: InvoiceGroupDO): Promise<InvoiceGroupDO> {
         invoiceGroup.reindexByCustomerId();
-        invoiceGroup.removeMetaObjectAttributeIfNull();
-        return this.findAndModifyInvoiceGroup(invoiceGroupMeta, invoiceGroupItemMeta, invoiceGroup.getCleanInvoiceGroupDOForDBSave());
+        
+        return this.findAndModifyInvoiceGroup(invoiceGroupMeta, invoiceGroupItemMeta, invoiceGroup);
     }
     public deleteInvoiceGroup(invoiceGroupMeta: InvoiceGroupMetaRepoDO, invoiceGroupItemMeta: InvoiceGroupItemMetaRepoDO): Promise<InvoiceGroupDO> {
         return this.findAndModifyInvoiceGroup(invoiceGroupMeta, invoiceGroupItemMeta,
@@ -72,7 +72,7 @@ export class MongoInvoiceGroupsEditOperationsRepository extends MongoRepository 
                 this.logAndReject(err, reject, { invoiceGroupItemMeta: invoiceGroupItemMeta, updateQuery: updateQuery }, ThStatusCode.InvoiceGroupsRepositoryErrorUpdatingInvoiceGroup);
             },
             (updatedDBInvoiceGroup: Object) => {
-                var invoiceGroup: InvoiceGroupDO = new InvoiceGroupDO(this._bookingsRepo);
+                var invoiceGroup: InvoiceGroupDO = new InvoiceGroupDO();
                 invoiceGroup.buildFromObject(updatedDBInvoiceGroup);
                 resolve(invoiceGroup);
             }

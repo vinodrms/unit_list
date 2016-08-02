@@ -100,7 +100,8 @@ export class AssignRoom {
                     assignRoomDO: this._assignRoomDO,
                     currentHotelTimestamp: this._currentHotelTimestamp,
                     booking: this._booking,
-                    roomList: this._loadedRoomList
+                    roomList: this._loadedRoomList,
+                    roomCategoryStatsList: this._loadedRoomCategoryStatsList
                 });
             }).then((updatedBooking: BookingDO) => {
                 this._booking = updatedBooking;
@@ -138,6 +139,8 @@ export class AssignRoom {
                     throw thError;
                 }
 
+                return this._assignRoomStrategy.generateInvoiceIfNecessary(this._booking);
+            }).then((bookingWithInvoice: BookingDO) => {
                 var bookingsRepo = this._appContext.getRepositoryFactory().getBookingRepository();
                 return bookingsRepo.updateBooking({ hotelId: this._sessionContext.sessionDO.hotel.id }, {
                     groupBookingId: this._booking.groupBookingId,

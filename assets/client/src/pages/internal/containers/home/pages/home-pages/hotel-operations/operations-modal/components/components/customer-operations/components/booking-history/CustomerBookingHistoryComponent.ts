@@ -1,4 +1,4 @@
-import {Component, OnInit, Input} from '@angular/core';
+import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import {TranslationPipe} from '../../../../../../../../../../../../../common/utils/localization/TranslationPipe';
 import {ThLongDateIntervalPipe} from '../../../../../../../../../../../../../common/utils/pipes/ThLongDateIntervalPipe';
 import {AppContext, ThError} from '../../../../../../../../../../../../../common/utils/AppContext';
@@ -15,11 +15,12 @@ import {HotelOperationsPageControllerService} from '../../../../services/HotelOp
     pipes: [TranslationPipe, ThLongDateIntervalPipe]
 })
 export class CustomerBookingHistoryComponent implements OnInit {
+    @Output() totalBookingsCountEmitter = new EventEmitter<number>();
     @Input() customerOperationsPageData: CustomerOperationsPageData;
 
     isLoading: boolean = false;
     private _pageNumber = 0;
-    private _totalCount: number = 0;
+    private _totalCount: number;
 
     bookingVMList: BookingVM[] = [];
 
@@ -32,7 +33,7 @@ export class CustomerBookingHistoryComponent implements OnInit {
         this._bookingsService.setCustomerIdFilter(this.customerOperationsPageData.customerVM.customer.id);
         this._bookingsService.getDataObservable().subscribe((lazyLoadData: LazyLoadData<BookingVM>) => {
             this.bookingVMList = this.bookingVMList.concat(lazyLoadData.pageContent.pageItemList);
-            this._totalCount = lazyLoadData.totalCount.numOfItems;
+            this.totalCount = lazyLoadData.totalCount.numOfItems;
             this.isLoading = false;
         });
         this._bookingsService.refreshData();
@@ -50,5 +51,13 @@ export class CustomerBookingHistoryComponent implements OnInit {
 
     public goToBooking(bookingVM: BookingVM) {
         this._operationsPageControllerService.goToBooking(bookingVM.booking.groupBookingId, bookingVM.booking.bookingId);
+    }
+
+    public get totalCount(): number {
+        return this._totalCount;
+    }
+    public set totalCount(totalCount: number) {
+        this.totalBookingsCountEmitter.next(totalCount);
+        this._totalCount = totalCount;
     }
 }

@@ -17,7 +17,7 @@ export class BookingPriceDO extends BaseDO implements IInvoiceItemMeta {
         return ["priceType", "pricePerItem", "numberOfItems", "totalPrice"];
     }
 
-    public getPriceForItem(): number {
+    public getPrice(): number {
         return this.pricePerItem;
     }
     public getNumberOfItems(): number {

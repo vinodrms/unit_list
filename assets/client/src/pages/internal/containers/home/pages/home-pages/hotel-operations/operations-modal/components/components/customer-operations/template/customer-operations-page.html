@@ -9,12 +9,11 @@
 		<div class="row padding-top-5px">
 			<customer-details-editor [customerOperationsPageData]="customerOperationsPageData" (onCustomerDetailsChanged)="didChangeCustomer($event)"></customer-details-editor>
 		</div>
-		<hr/>
 		<div class="row">
 			<div class="col-xs-12">
 				<ul class="nav nav-tabs">
 					<li [ngClass]="{active : showBookingHistory}">
-						<a (click)="showBookingHistory=true"><i class="fa unitpal-font">E</i> {{'Booking History' | translate}}</a>
+						<a (click)="showBookingHistory=true"><i class="fa unitpal-font">E</i> {{'Booking History' | translate}} ({{ totalBookingsCount }})</a>
 					</li>
 					<li [ngClass]="{active : !showBookingHistory}">
 						<a (click)="showBookingHistory=false"><i class="fa unitpal-font">L</i> {{'Invoice History' | translate}}</a>
@@ -23,7 +22,7 @@
 			</div>
 		</div>
 		<div class="row" [hidden]="!showBookingHistory">
-			<customer-booking-history [customerOperationsPageData]="customerOperationsPageData"></customer-booking-history>
+			<customer-booking-history [customerOperationsPageData]="customerOperationsPageData" (totalBookingsCountEmitter)="totalBookingsCount=$event"></customer-booking-history>
 		</div>
 		<div class="row" [hidden]="showBookingHistory">
 			<customer-invoice-history [customerOperationsPageData]="customerOperationsPageData"></customer-invoice-history>

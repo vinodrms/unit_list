@@ -18,6 +18,7 @@ export interface BookingSearchCriteriaRepoDO {
     interval?: ThDateIntervalDO;
     confirmationStatusList?: BookingConfirmationStatus[];
     groupBookingId?: string;
+    groupBookingIdList?: string[];
     bookingIdList?: string[];
     searchTerm?: string;
     triggerParams?: {
@@ -30,6 +31,7 @@ export interface BookingSearchCriteriaRepoDO {
     beforeStartDate?: ThDateDO;
     roomId?: string;
     customerId?: string;
+    descendentSortOrder?: boolean;
 }
 export interface BookingSearchResultRepoDO {
     lazyLoad?: LazyLoadRepoDO;

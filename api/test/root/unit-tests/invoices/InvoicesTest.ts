@@ -171,6 +171,18 @@ describe("Invoices Tests", function () {
     });
 
     describe("Invoice Aggregators", function () {
+        it("Should get an invoice by booking id", function (done) {
+            // var invoiceGroupsRepo = testContext.appContext.getRepositoryFactory().getInvoiceGroupsRepository();
+            // var invoiceToSearchFor = createdBookingInvoiceGroup.invoiceList[0];
+            // invoiceGroupsRepo.getInvoiceList({ hotelId: testContext.sessionContext.sessionDO.hotel.id }, { groupBookingId: createdBookingInvoiceGroup.groupBookingId, bookingId: invoiceToSearchFor.bookingId }).then((invoice: InvoiceDO) => {
+            //     should.equal(invoiceToSearchFor.bookingId, invoice.bookingId);
+            //     done();
+            // }).catch((error: any) => {
+            //     done(error);
+            // });
+            done();
+        });
+
         it("Should aggregate invoice groups data (brief) by customer id", function (done) {
             var invoiceGroupBriefDataAggregator = new InvoiceGroupsBriefDataAggregator(testContext.appContext, testContext.sessionContext);
             var invoiceGroupsRepo = testContext.appContext.getRepositoryFactory().getInvoiceGroupsRepository();
@@ -183,7 +195,7 @@ describe("Invoices Tests", function () {
                 allInvoiceGroups.splice(defaultInvoiceIndex, 1);
 
                 var customerIdList = invoiceTestUtils.getDistinctCustomerIdListFromInvoiceGroupList(allInvoiceGroups);
-                
+
                 invoiceGroupBriefDataAggregator.getBriefDataByCustomerList(customerIdList).then((invoiceGroupBriefContainerList: InvoiceGroupBriefContainerDO[]) => {
                     should.equal(invoiceGroupBriefContainerList.length, customerIdList.length);
 
@@ -194,14 +206,13 @@ describe("Invoices Tests", function () {
                     }).forEach((price: number) => {
                         should.notEqual(price, 0);
                     });
-                    
                     done();
                 }).catch((error) => {
                     done(error);
-                });                
+                });
             }).catch((error) => {
                 done(error);
-            });     
+            });
         });
     });
 

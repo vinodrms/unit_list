@@ -4,6 +4,7 @@ import {AppContext} from '../core/utils/AppContext';
 import {SessionContext} from '../core/utils/SessionContext';
 import {InvoiceGroupMetaRepoDO, InvoiceGroupSearchCriteriaRepoDO} from '../core/data-layer/invoices/repositories/IInvoiceGroupsRepository';
 import {InvoiceGroupDO} from '../core/data-layer/invoices/data-objects/InvoiceGroupDO';
+import {InvoiceDO} from '../core/data-layer/invoices/data-objects/InvoiceDO';
 import {InvoiceGroupBriefContainerDO} from '../core/data-layer/invoices/data-objects/brief/InvoiceGroupBriefContainerDO';
 import {InvoiceGroupsBriefDataAggregator} from '../core/domain-layer/invoices/aggregators/InvoiceGroupsBriefDataAggregator';
 import {LazyLoadRepoDO, LazyLoadMetaResponseRepoDO} from '../core/data-layer/common/repo-data-objects/LazyLoadRepoDO';

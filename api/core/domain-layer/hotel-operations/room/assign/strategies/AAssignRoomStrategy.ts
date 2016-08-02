@@ -4,6 +4,7 @@ import {IAssignRoomStrategy, AssignRoomValidationDO} from './IAssignRoomStrategy
 import {BookingDO} from '../../../../../data-layer/bookings/data-objects/BookingDO';
 import {DocumentActionDO} from '../../../../../data-layer/common/data-objects/document-history/DocumentActionDO';
 import {RoomDO} from '../../../../../data-layer/rooms/data-objects/RoomDO';
+import {RoomCategoryStatsDO} from '../../../../../data-layer/room-categories/data-objects/RoomCategoryStatsDO';
 import {ThUtils} from '../../../../../utils/ThUtils';
 
 import _ = require('underscore');
@@ -34,4 +35,29 @@ export abstract class AAssignRoomStrategy implements IAssignRoomStrategy {
         }));
     }
     public abstract validateAlreadyCheckedInBooking(): boolean;
+    public generateInvoiceIfNecessary(booking: BookingDO): Promise<BookingDO> {
+        return new Promise<BookingDO>((resolve: { (result: BookingDO): void }, reject: { (err: ThError): void }) => {
+            this.generateInvoiceIfNecessaryCore(resolve, reject, booking);
+        });
+    }
+    protected abstract generateInvoiceIfNecessaryCore(resolve: { (result: BookingDO): void }, reject: { (err: ThError): void }, booking: BookingDO);
+
+    protected updateRollawayBedStatusOnBooking(validationDO: AssignRoomValidationDO): RoomCategoryStatsDO {
+        validationDO.booking.needsRollawayBeds = false;
+
+        var room = _.find(validationDO.roomList, (room: RoomDO) => { return room.id === validationDO.booking.roomId });
+        if (this._thUtils.isUndefinedOrNull(room)) {
+            return;
+        }
+
+        var roomCategoryStats = _.find(validationDO.roomCategoryStatsList, (roomCategoryStats: RoomCategoryStatsDO) => {
+            return roomCategoryStats.roomCategory.id === room.categoryId;
+        });
+        if (this._thUtils.isUndefinedOrNull(roomCategoryStats)) {
+            return;
+        }
+        if (!roomCategoryStats.capacity.canFitInStationaryBeds(validationDO.booking.configCapacity)) {
+            validationDO.booking.needsRollawayBeds = true;
+        }
+    }
 }

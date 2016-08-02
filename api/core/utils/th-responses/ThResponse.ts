@@ -311,6 +311,7 @@ export enum ThStatusCode {
     InvoiceGroupsRepositoryErrorReadingDocumentCount,
     InvoiceGroupsControllerErrorGettingInvoiceGroupById,
     InvoiceGroupsControllerErrorGettingInvoiceGroups,
+    InvoiceGroupsRepositoryErrorGettingInvoice,
     InvoiceGroupsControllerErrorGettingInvoiceGroupsCount,
     InvoiceGroupsControllerErrorGettingInvoiceGroupsBrief,
     InvoiceGroupsBriefDataAggregatorErrorGettingInvoiceGroupsBrief,
@@ -327,6 +328,7 @@ export enum ThStatusCode {
     CustomerInvoiceGroupUpdateStrategyErrorUpdating,
     CustomerInvoiceGroupAddStrategyErrorAdding,
     BookingInvoiceGroupUpdateStrategyErrorUpdating,
+    InvoiceGroupsRepositoryBookingPriceLinkError,
     InvoiceEmailSenderErrorSendingEmail,
 
     SlackSendMessageError,
@@ -443,6 +445,7 @@ export enum ThStatusCode {
     HotelBookingOperationsControllerErrorReactivating,
     EmailConfirmationError,
     HotelCommonOperationsControllerEmailError,
+    BookingRemoveRollawayCapacityWarningError,
 
 }
 
@@ -741,6 +744,7 @@ ThMessage[ThStatusCode.InvoiceGroupsRepositoryErrorAddingInvoiceGroup] = "Error 
 ThMessage[ThStatusCode.InvoiceGroupsRepositoryProblemUpdatingInvoiceGroup] = "Problem updating the invoice group - concurrency.";
 ThMessage[ThStatusCode.InvoiceGroupsRepositoryErrorUpdatingInvoiceGroup] = "Error updating the invoice group.";
 ThMessage[ThStatusCode.InvoiceGroupsRepositoryErrorGettingInvoiceGroupList] = "Error getting the list of invoice groups.";
+ThMessage[ThStatusCode.InvoiceGroupsRepositoryErrorGettingInvoice] = "Error getting invoice.";
 ThMessage[ThStatusCode.InvoiceGroupsItemUpdateStrategyErrorUpdating] = "Error updating the invoice group item.";
 ThMessage[ThStatusCode.InvoiceGroupsRepositoryInvoiceGroupNotFound] = "Invoice group not found.";
 ThMessage[ThStatusCode.InvoiceGroupsRepositoryErrorGettingInvoiceGroup] = "Error retrieving the invoice group from the database.";
@@ -763,6 +767,7 @@ ThMessage[ThStatusCode.InvoicePayersValidatorInvalidSplit] = "Error validating t
 ThMessage[ThStatusCode.CustomerInvoiceGroupUpdateStrategyErrorUpdating] = "Error updating the invoice group.";
 ThMessage[ThStatusCode.CustomerInvoiceGroupAddStrategyErrorAdding] = "Error adding the invoice group.";
 ThMessage[ThStatusCode.BookingInvoiceGroupUpdateStrategyErrorUpdating] = "Error updating the invoice group.";
+ThMessage[ThStatusCode.InvoiceGroupsRepositoryBookingPriceLinkError] = "Error linking booking prices with the invoice groups.";
 ThMessage[ThStatusCode.InvoiceEmailSenderErrorSendingEmail] = "Error sending invoice by email.";
 ThMessage[ThStatusCode.SlackSendMessageError] = "Error sending the message using Slack.";
 ThMessage[ThStatusCode.AddBookingsRepositoryEmptyBookingList] = "Empty booking list.";
@@ -877,6 +882,7 @@ ThMessage[ThStatusCode.HotelBookingOperationsControllerErrorCancelling] = "Error
 ThMessage[ThStatusCode.HotelBookingOperationsControllerErrorReactivating] = "Error reactivating booking.";
 ThMessage[ThStatusCode.EmailConfirmationError] = "Error sending email.";
 ThMessage[ThStatusCode.HotelCommonOperationsControllerEmailError] = "Error sending email.";
+ThMessage[ThStatusCode.BookingRemoveRollawayCapacityWarningError] = "Error updating the rollaway capacity flag on the booking.";
 
 export class ThResponse {
     statusCode: ThStatusCode;

@@ -1,32 +1,17 @@
 import {ThError} from '../../../utils/th-responses/ThError';
-import {ThUtils} from '../../../utils/ThUtils';
 import {BaseDO} from '../../common/base/BaseDO';
 import {InvoicePayerDO} from './payers/InvoicePayerDO';
 import {InvoiceItemDO, InvoiceItemType} from './items/InvoiceItemDO';
 import {IPriceableEntity} from './price/IPriceableEntity';
-import {IBookingRepository} from '../../bookings/repositories/IBookingRepository';
 import {IInvoiceItemMeta} from './items/IInvoiceItemMeta';
+import {BookingDO} from '../../bookings/data-objects/BookingDO';
 
 export enum InvoicePaymentStatus {
     Open, Closed
 }
 
-export interface IInvoiceDO {
-    bookingRepo: IBookingRepository,
-    hotelId: string,
-    groupBookingId: string
-}
-
 export class InvoiceDO extends BaseDO implements IPriceableEntity {
-    constructor(public bookingInvoiceMeta?: IInvoiceDO) {
-        super();
-
-        var thUtils = new ThUtils();
-        if (thUtils.isUndefinedOrNull(bookingInvoiceMeta)) {
-            delete this.bookingInvoiceMeta;
-        }
-    }
-
+    
     bookingId: string;
     payerList: InvoicePayerDO[];
     itemList: InvoiceItemDO[];
@@ -47,12 +32,7 @@ export class InvoiceDO extends BaseDO implements IPriceableEntity {
         });
         this.itemList = [];
         this.forEachElementOf(this.getObjectPropertyEnsureUndefined(object, "itemList"), (itemObject: Object) => {
-            var itemDO = new InvoiceItemDO({
-                bookingRepo: this.bookingInvoiceMeta.bookingRepo,
-                hotelId: this.bookingInvoiceMeta.hotelId,
-                groupBookingId: this.bookingInvoiceMeta.groupBookingId,
-                bookingId: this.bookingId
-            });
+            var itemDO = new InvoiceItemDO();
             itemDO.buildFromObject(itemObject);
             this.itemList.push(itemDO);
         });
@@ -81,38 +61,18 @@ export class InvoiceDO extends BaseDO implements IPriceableEntity {
             .value();
     }
 
-    public getPrice(): Promise<number> {
-        return new Promise<number>((resolve: { (result: number): void }, reject: { (err: ThError): void }) => {
-            try {
-                this.getPriceCore(resolve, reject);
-            } catch (error) {
-                reject(error);
+    public linkBookingPrices(bookingList: BookingDO[]) {
+        _.forEach(this.itemList, (item: InvoiceItemDO) => {
+            if(item.type === InvoiceItemType.Booking) {
+                var booking = _.find(bookingList, (booking: BookingDO) => {
+                    return booking.bookingId === item.id;
+                });
+                item.meta = booking.price;
             }
-        });
+        });             
     }
 
-    private getPriceCore(resolve: { (result: number): void }, reject: { (err: ThError): void }) {
-        var getItemMetaPromiseList = [];
-        _.forEach(this.itemList, (invoiceItem: InvoiceItemDO) => {
-            getItemMetaPromiseList.push(invoiceItem.meta);
-        });
-
-        Promise.all(getItemMetaPromiseList).then((invoiceItemMetaList: IInvoiceItemMeta[]) => {
-            var totalPrice = 0;
-            var getPricePromiseList = [];
-            _.forEach(invoiceItemMetaList, (invoiceItemMeta: IInvoiceItemMeta) => {
-                getPricePromiseList.push(invoiceItemMeta.getPrice());
-            });
-            Promise.all(getPricePromiseList).then((pricePerItemList: number[]) => {
-                for (var i = 0; i < pricePerItemList.length; ++i) {
-                    totalPrice += pricePerItemList[i] * invoiceItemMetaList[i].getNumberOfItems();
-                }
-                resolve(totalPrice);
-            }).catch((error: any) => {
-                reject(error);
-            });
-        }).catch((error: any) => {
-            reject(error);
-        });
+    public getPrice(): number {
+        return _.reduce(this.itemList, function(memo: number, item: InvoiceItemDO){ return memo + item.meta.getNumberOfItems() * item.meta.getPrice(); }, 0);
     }
 }

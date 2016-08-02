@@ -188,7 +188,7 @@ export class DefaultDataBuilder {
                 return bookingBuilder.loadBookings(bookingBuilder, this._hotelDO, this._customerList, this.roomCategoryList, this.priceProductList);
             }).then((bookingList: BookingDO[]) => {
                 this._bookingList = bookingList;
-
+                
                 var invoiceGroupBuilder = new DefaultInvoiceGroupBuilder(this._testContext);
                 return invoiceGroupBuilder.loadInvoiceGroups(invoiceGroupBuilder, this._customerList, this._addOnProductList, this._bookingList);
             }).then((invoiceGroupList: InvoiceGroupDO[]) => {

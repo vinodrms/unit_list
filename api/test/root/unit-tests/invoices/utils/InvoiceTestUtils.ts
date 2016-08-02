@@ -8,6 +8,7 @@ import {AddOnProductDO} from '../../../../../core/data-layer/add-on-products/dat
 import {ThUtils} from '../../../../../core/utils/ThUtils';
 import {IInvoiceItemMeta} from '../../../../../core/data-layer/invoices/data-objects/items/IInvoiceItemMeta';
 import {InvoicePayerDO} from '../../../../../core/data-layer/invoices/data-objects/payers/InvoicePayerDO';
+import {AddOnProductInvoiceItemMetaDO} from '../../../../../core/data-layer/invoices/data-objects/items/add-on-products/AddOnProductInvoiceItemMetaDO';
 
 import should = require('should');
 
@@ -28,15 +29,17 @@ export class InvoiceTestUtils {
             var aop = _.find(aopList, (aop: AddOnProductDO) => {
                 return aop.id === aopId;
             });
+            
+            var aopItem = new AddOnProductInvoiceItemMetaDO();
+            aopItem.pricePerItem = aop.price;
+            aopItem.numberOfItems = 3;
+            aopItem.aopDisplayName = aop.name;
+
             itemList.push(
                 new InvoiceItemBuilder()
                     .withId(aop.id)
                     .withType(InvoiceItemType.AddOnProduct)
-                    .withMetaObject({
-                        pricePerItem: aop.price,
-                        numberOfItems: 3,
-                        aopDisplayName: aop.name
-                    })
+                    .withMetaObject(aopItem)
                     .build()
             );
         });

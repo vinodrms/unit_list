@@ -1,3 +1,4 @@
+import {InvoiceDO} from '../data-objects/InvoiceDO';
 import {InvoiceGroupDO} from '../data-objects/InvoiceGroupDO';
 import {LazyLoadRepoDO, LazyLoadMetaResponseRepoDO} from '../../common/repo-data-objects/LazyLoadRepoDO';
 
@@ -13,7 +14,13 @@ export interface InvoiceGroupItemMetaRepoDO {
 export interface InvoiceGroupSearchCriteriaRepoDO {
     invoiceGroupIdList?: string[];
     groupBookingId?: string;
+    bookingId?: string;
     customerIdList?: string[];
+}
+
+export interface InvoiceSearchCriteriaRepoDO {
+    groupBookingId: string;
+    bookingId: string; 
 }
 
 export interface InvoiceGroupSearchResultRepoDO {

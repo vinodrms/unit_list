@@ -26,6 +26,7 @@ import {INotificationsRepository} from './notifications/repositories/INotificati
 import {MongoNotificationsRepository} from './notifications/repositories/mongo/MongoNotificationsRepository';
 import {IInvoiceGroupsRepository} from './invoices/repositories/IInvoiceGroupsRepository';
 import {MongoInvoiceGroupsRepository} from './invoices/repositories/mongo/MongoInvoiceGroupsRepository';
+import {MongoInvoiceGroupsRepositoryWithBookingPriceLink} from './invoices/repositories/mongo/decorators/MongoInvoiceGroupsRepositoryWithBookingPriceLink';
 import {IBookingRepository} from './bookings/repositories/IBookingRepository';
 import {MongoBookingRepository} from './bookings/repositories/mongo/MongoBookingRepository';
 
@@ -41,7 +42,7 @@ export class RepositoryFactory {
                 return [new MongoHotelRepository(), new MongoBedRepository(), new MongoTaxRepository(), new MongoAddOnProductRepository(),
                     new MongoRoomRepository(), new MongoRoomCategoryRepository(), new MongoCustomerRepository(), new MongoPriceProductRepository(),
                     new MongoYieldFilterConfigurationRepository(), new MongoAllotmentRepository(), new MongoNotificationsRepository(),
-                    new MongoBookingRepository(), new MongoInvoiceGroupsRepository(new MongoBookingRepository())];
+                    new MongoBookingRepository(), new MongoInvoiceGroupsRepository()];
         }
     }
 
@@ -131,7 +132,7 @@ export class RepositoryFactory {
     getInvoiceGroupsRepository(): IInvoiceGroupsRepository {
         switch (this._databaseType) {
             default:
-                return new MongoInvoiceGroupsRepository(new MongoBookingRepository());
+                return new MongoInvoiceGroupsRepositoryWithBookingPriceLink(new MongoInvoiceGroupsRepository(), new MongoBookingRepository());
         }
     }
 
