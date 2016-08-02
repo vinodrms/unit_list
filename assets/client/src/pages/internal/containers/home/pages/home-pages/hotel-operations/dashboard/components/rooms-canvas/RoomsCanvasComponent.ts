@@ -19,6 +19,7 @@ import {ThError} from '../../../../../../../../../../common/utils/responses/ThEr
 import {ThDateDO} from '../../../../../../../../services/common/data-objects/th-dates/ThDateDO';
 
 import {CustomScroll} from '../../../../../../../../../../../src/common/utils/directives/CustomScroll';
+import {TranslationPipe} from '../../../../../../../../../../common/utils/localization/TranslationPipe';
 
 declare var $: any;
 declare var _: any;
@@ -27,7 +28,8 @@ declare var _: any;
 	selector: 'rooms-canvas',
 	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/dashboard/components/rooms-canvas/template/rooms-canvas.html',
 	providers: [RoomsCanvasUtils],
-	directives: [CustomScroll, RoomCardComponent]
+	directives: [CustomScroll, RoomCardComponent],
+	pipes: [TranslationPipe]
 })
 export class RoomsCanvasComponent implements OnInit {
 	@Input() hotelOperationsDashboard: IHotelOperationsDashboardRoomsCanvasMediator;
@@ -64,8 +66,6 @@ export class RoomsCanvasComponent implements OnInit {
 			FilterValueType: FilterValueType
 		}
 
-		// this.currentDate = ThDateDO.buildThDateDO(2016, 6, 27);
-
 		this.updateFilterNotification();
 	}
 
@@ -96,10 +96,10 @@ export class RoomsCanvasComponent implements OnInit {
 		var canUpgradeCheckInRoomVMList:RoomItemInfoVM[] = [];
 
 		this.filteredRoomVMList.forEach(currentRoom => {
-			if (this.testCanCheckIn(currentRoom, arrivalItemVM)){
+			if (currentRoom.canCheckIn(arrivalItemVM)){
 				canCheckInRoomVmList.push(currentRoom);
 			}
-			else if (this.testCanUpgrade(currentRoom, arrivalItemVM)){
+			else if (currentRoom.canUpgrade(arrivalItemVM)){
 				canUpgradeCheckInRoomVMList.push(currentRoom);
 			}
 			else {
@@ -108,7 +108,6 @@ export class RoomsCanvasComponent implements OnInit {
 		});
 		
 		this._utils.setRoomsUIHighlight(canCheckInRoomVmList, this.dragStyles.canCheckIn);
-		// this._utils.setRoomsUIHighlight(canUpgradeCheckInRoomVMList, this.dragStyles.canUpgrade);
 		this._utils.setRoomsUIHighlight(canNotCheckInRoomVmList, this.dragStyles.canNotCheckIn);
 	}
 
@@ -167,7 +166,7 @@ export class RoomsCanvasComponent implements OnInit {
 	}
 
 	public updateFilterNotification() {
-		var properties = this._utils.getfilterNotificationProperties(this.filterValue.currentValue);
+		var properties = this._utils.getfilterNotificationProperties(this.filterValue.currentValue, this._appContext.thTranslation);
 		if (!this.filterNotification){
 			this.filterNotification = {
 				Properties : properties
@@ -180,18 +179,6 @@ export class RoomsCanvasComponent implements OnInit {
 
 	public stoppedDragging(arrivalItemVM){
 		this._utils.setRoomsUIHighlight(this.filteredRoomVMList, this.dragStyles.default);
-	}
-
-	public nextDay() {
-		var date = Math.abs(this.hotelOperationsDashboard.getDate() + 1) % 3;
-		this.hotelOperationsDashboard.setDate(date);
-		this.hotelOperationsDashboard.refresh();
-	}
-
-	public previousDay() {
-		var date = Math.abs(this.hotelOperationsDashboard.getDate() - 1) % 3;
-		this.hotelOperationsDashboard.setDate(date);
-		this.hotelOperationsDashboard.refresh();
 	}
 
 	public getDateShortString() {

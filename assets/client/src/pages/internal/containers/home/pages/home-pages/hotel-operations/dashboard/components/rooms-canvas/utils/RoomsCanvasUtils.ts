@@ -6,6 +6,8 @@ import {RoomItemInfoVM, RoomItemInfoVM_UI_Properties} from '../../../../../../..
 
 import {FilterValueType, IDragStyles, IFilterNotificationProperties, IFilterNotification, IFilterValue} from './RoomsCanvasInterfaces';
 
+import {ThTranslation} from '../../../../../../../../../../../common/utils/localization/ThTranslation';
+
 @Injectable()
 export class RoomsCanvasUtils{
 	public get dragStyles(): IDragStyles{
@@ -19,49 +21,48 @@ export class RoomsCanvasUtils{
 		return dragStyles;
 	}
 
-	public getfilterNotificationProperties(filterType: FilterValueType):IFilterNotificationProperties{
+	public getfilterNotificationProperties(filterType: FilterValueType, translator: ThTranslation):IFilterNotificationProperties{
 		var properties: IFilterNotificationProperties;
-
 		switch (filterType) {
 			case FilterValueType.All:
 				properties = {
 					cssColor: 'green',
-					textFirstPart: 'SHOWING ',
-					textSecondPart: 'ALL ROOMS'
+					textFirstPart: translator.translate('Showing').toUpperCase(),
+					textSecondPart: translator.translate('All Rooms').toUpperCase()
 				}
 			case FilterValueType.Free:
 				properties = {
 					cssColor: 'green',
-					textFirstPart: 'SHOWING ONLY ',
-					textSecondPart: 'FREE ROOMS'
+					textFirstPart: translator.translate('Showing Only').toUpperCase(),
+					textSecondPart: translator.translate('Free Rooms').toUpperCase()
 				}
 				break;
 			case FilterValueType.Occupied:
 				properties = {
 					cssColor: 'orange',
-					textFirstPart: 'SHOWING ONLY ',
-					textSecondPart: 'OCCUPIED ROOMS'
+					textFirstPart: translator.translate('Showing Only').toUpperCase(),
+					textSecondPart: translator.translate('Occupied Rooms').toUpperCase()
 				}
 				break;
 			case FilterValueType.Reserved:
 				properties = {
 					cssColor: 'yellow',
-					textFirstPart: 'SHOWING ONLY ',
-					textSecondPart: 'RESERVED ROOMS'
+					textFirstPart: translator.translate('Showing Only').toUpperCase(),
+					textSecondPart: translator.translate('Reserved Rooms').toUpperCase()
 				}
 				break;
 			case FilterValueType.OutOfService:
 				properties = {
 					cssColor: 'dark-gray',
-					textFirstPart: 'SHOWING ONLY ',
-					textSecondPart: 'OUT OF SERVICE ROOMS'
+					textFirstPart: translator.translate('Showing Only').toUpperCase(),
+					textSecondPart: translator.translate('Out Of Service Rooms').toUpperCase()
 				}
 				break;
 			default:
 				properties = {
 					cssColor: 'green',
-					textFirstPart: 'SHOWING ',
-					textSecondPart: 'ALL ROOMS'
+					textFirstPart: translator.translate('Showing').toUpperCase(),
+					textSecondPart: translator.translate('All Rooms').toUpperCase()
 				}
 				break;
 		}

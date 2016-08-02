@@ -16,12 +16,14 @@ import {ThError} from '../../../../../../../../../../common/utils/responses/ThEr
 import {ThDateDO} from '../../../../../../../../services/common/data-objects/th-dates/ThDateDO';
 
 import {CustomScroll} from '../../../../../../../../../../../src/common/utils/directives/CustomScroll';
+import {TranslationPipe} from '../../../../../../../../../../common/utils/localization/TranslationPipe';
 
 declare var $:any;
 @Component({
 	selector: 'departures-pane',
 	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/dashboard/components/departures-pane/template/departures-pane.html',
-	directives: [CustomScroll, DepartureItemComponent]
+	directives: [CustomScroll, DepartureItemComponent],
+	pipes: [TranslationPipe]
 })
 
 export class DeparturesPaneComponent implements OnInit {
@@ -57,14 +59,23 @@ export class DeparturesPaneComponent implements OnInit {
 		});
 	}
 
+	private sortByName(arrivalItemsVMList:DepartureItemInfoVM[]){
+		var sortedItems = arrivalItemsVMList.sort((a:DepartureItemInfoVM, b:DepartureItemInfoVM) =>{
+			return a.customerName.localeCompare(b.customerName);
+		})
+		return sortedItems;
+	}
+
 	private updateFilterDepartures(){
 		if (this.searchText == ""){
-			this.filteredDeparturesVMList = this.departureItemsVMList;
+			this.filteredDeparturesVMList = this.sortByName(this.departureItemsVMList);
 		}
 		else {
-			this.filteredDeparturesVMList = _.filter(this.departureItemsVMList, (item: DepartureItemInfoVM) => {
+			 var filteredItems = _.filter(this.departureItemsVMList, (item: DepartureItemInfoVM) => {
 				return (item.customerName.toLowerCase().indexOf(this.searchText.toLowerCase()) > -1);
 			});
+
+			this.filteredDeparturesVMList = this.sortByName(filteredItems);
 		}
 	}
 	

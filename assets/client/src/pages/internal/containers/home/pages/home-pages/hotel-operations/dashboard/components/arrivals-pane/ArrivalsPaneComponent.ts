@@ -22,13 +22,16 @@ import {ThDateDO} from '../../../../../../../../services/common/data-objects/th-
 
 import {CustomScroll} from '../../../../../../../../../../../src/common/utils/directives/CustomScroll';
 
+import {TranslationPipe} from '../../../../../../../../../../common/utils/localization/TranslationPipe';
+
 declare var _: any;
 
 @Component({
 	selector: 'arrivals-pane',
 	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/dashboard/components/arrivals-pane/template/arrivals-pane.html',
 	providers: [NewBookingModalService],
-	directives: [CustomScroll, ThButtonComponent, ArrivalItemComponent]
+	directives: [CustomScroll, ThButtonComponent, ArrivalItemComponent],
+	pipes: [TranslationPipe]
 })
 
 export class ArrivalsPaneComponent implements OnInit {
@@ -52,8 +55,6 @@ export class ArrivalsPaneComponent implements OnInit {
 		this.hotelOperationsDashboard.registerArrivalsPane(this);
 		this._hotelService.getHotelDetailsDO().subscribe((details: HotelDetailsDO)=>{
 			this.selectedDate = details.currentThTimestamp.thDateDO.buildPrototype();
-			// TODO: Remove
-			this.selectedDate = ThDateDO.buildThDateDO(2016, 6, 30);
 
 			this._hotelOperationsDashboardService.getArrivalItems(this.selectedDate)
 				.subscribe((arrivals: ArrivalItemInfoVM[]) => {
@@ -66,14 +67,22 @@ export class ArrivalsPaneComponent implements OnInit {
 
 	}
 
+	private sortByName(arrivalItemsVMList:ArrivalItemInfoVM[]){
+		var sortedItems = arrivalItemsVMList.sort((a:ArrivalItemInfoVM, b:ArrivalItemInfoVM) =>{
+			return a.customerName.localeCompare(b.customerName);
+		})
+		return sortedItems;
+	}
+
 	private updateFilterArrivals(){
 		if (this.searchText == ""){
-			this.filteredArrivalsVMList = this.arrivalItemsVMList;
+			this.filteredArrivalsVMList = this.sortByName(this.arrivalItemsVMList);
 		}
 		else {
-			this.filteredArrivalsVMList = _.filter(this.arrivalItemsVMList, (item: ArrivalItemInfoVM) => {
+			var filteredItems = _.filter(this.arrivalItemsVMList, (item: ArrivalItemInfoVM) => {
 				return (item.customerName.toLowerCase().indexOf(this.searchText.toLowerCase()) > -1);
 			});
+			this.filteredArrivalsVMList = this.sortByName(filteredItems); 
 		}
 	}
 
@@ -97,19 +106,17 @@ export class ArrivalsPaneComponent implements OnInit {
 	}
 
 	public refresh() {
-		//TODO: FIX THIS
-		if (!this.selectedDate) {
-			this.selectedDate = ThDateDO.buildThDateDO(2016, 6, 18);
-		}
 		this._hotelOperationsDashboardService.refreshArrivals(this.selectedDate);
 	}
 
-	openNewBookingModal() {
+	public openNewBookingModal() {
 		this._newBookingModalService.openNewBookingModal().then((modalDialogInstance: ModalDialogRef<NewBookingResult>) => {
             modalDialogInstance.resultObservable.subscribe((newBookingResult: NewBookingResult) => {
-
+				this.refresh();
             });
-        }).catch((e: any) => { });
+        }).catch((e: any) => { 
+			this._appContext.toaster.error(e.message);
+		});
 	}
 
 	public startedDragging(arrivalItemVM) {

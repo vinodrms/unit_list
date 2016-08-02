@@ -919,7 +919,7 @@ td .room-categ-capacity {
 }
 
 .yellow-color {
-    color: #ffbe01;
+    color: #ffbe01 !important;
 }
 
 .green {
@@ -1724,15 +1724,21 @@ ul.msg_list li .text-center a {
     top: 70px;
     padding: 0 15px;
 }
-.oneline-text {
+.oneline-text,
+.ellipsis-text
+{
     display: inline-block;
-    vertical-align: middle;
-    max-width: 100%;
-    margin: 0;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
+.oneline-text {
+    vertical-align: middle;
+    max-width: 100%;
+    margin: 0;
+}
+
 .btn.btn-square {
     width: 35px;
     height: 35px;
@@ -2084,9 +2090,14 @@ a.btn.btn-square:focus {
         cursor: pointer;
     }
 
+    .hotel-operations-dashboard .customer-name{
+        max-width: 150px;
+    }
+
     .hotel-operations-dashboard .room-type{
         font-size: 12px;
-        color: #a9a9ac;  
+        color: #a9a9ac;
+        width: 150px;
     }
 
     .hotel-operations-dashboard .period{
@@ -2129,7 +2140,7 @@ a.btn.btn-square:focus {
             display: flex;
             justify-content: center;
             align-items: center;
-            flex-basis: 70px;
+            flex-basis: 48px;
             background-color: white;
         }
 
@@ -2256,7 +2267,7 @@ a.btn.btn-square:focus {
 
         .room-card {
             cursor: default;
-            height: 112px;
+            height: 120px;
             width: 216px;
             background-color: white;
             display: flex;
@@ -2301,6 +2312,14 @@ a.btn.btn-square:focus {
             background-color: #97fcd6;
         }
 
+        .room-card.reserved.highlight-for-drop{
+            background-color: #fff7cc;
+        }
+
+        .room-card.reserved.hover{
+            background-color: #ffeca8;
+        }
+
         .room-card .card-header{
            padding: 6px 12px 6px 12px;
         }
@@ -2313,6 +2332,7 @@ a.btn.btn-square:focus {
         
             .room-card .card-header .section1 .room-number{
                 font-size: 24px;
+                max-width: 150px;
             }
 
         .room-card .card-header .section2{
@@ -2535,7 +2555,15 @@ a.btn.btn-square:focus {
             padding : 3px;
         }
 
+        arrival-item .header .reserved-room,
+        departure-item .header .reserved-room
+        {
+            max-width: 50px;
+            font-weight: bold;
+        }
+
         /* Misc */
+        
         .other-details {
             display: flex;
             flex-basis: 50px;

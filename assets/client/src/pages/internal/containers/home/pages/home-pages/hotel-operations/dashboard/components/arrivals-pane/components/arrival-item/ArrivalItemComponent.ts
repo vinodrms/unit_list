@@ -4,11 +4,14 @@ import {ArrivalItemInfoVM} from '../../../../../../../../../../services/hotel-op
 import {ArrivalItemStatus} from '../../../../../../../../../../services/hotel-operations/dashboard/arrivals/data-objects/ArrivalItemInfoDO';
 
 import {HotelDashboardModalService} from '../../../../services/HotelDashboardModalService';
+import {TranslationPipe} from '../../../../../../../../../../../../common/utils/localization/TranslationPipe';
 
 declare var $: any;
+
 @Component({
 	selector: 'arrival-item',
-	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/dashboard/components/arrivals-pane/components/arrival-item/template/arrival-item.html'
+	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/dashboard/components/arrivals-pane/components/arrival-item/template/arrival-item.html',
+	pipes: [TranslationPipe]
 })
 
 export class ArrivalItemComponent {

@@ -119,13 +119,26 @@ export class RoomItemInfoVM {
     }
 
 	public canCheckIn( arrivalItem: ArrivalItemInfoVM){
-		if (
-			this.canFit(arrivalItem.bookingCapacity) &&
-			this.roomVM.category.id == arrivalItem.reservedRoomCategoryStats.roomCategory.id &&
-			this.isFree()
-		){
-			return true;
-		}
+		if (this.isFree()){
+            if (
+                this.canFit(arrivalItem.bookingCapacity) &&
+                this.roomVM.category.id == arrivalItem.reservedRoomCategoryStats.roomCategory.id
+            ){
+                return true;
+            }
+        }
+        else if (this.isReserved()){
+            if (
+                this.canFit(arrivalItem.bookingCapacity) &&
+                arrivalItem.hasReservedRoom &&
+                arrivalItem.reservedRoomVM.room.name &&
+                this.roomVM.category.id == arrivalItem.reservedRoomCategoryStats.roomCategory.id &&
+                this._roomItemDO.bookingId == arrivalItem.arrivalItemDO.bookingId
+            ){
+                return true;
+            }
+        }
+
 		return false;
 	}
 

@@ -5,68 +5,58 @@ import {RoomItemInfoDO, RoomItemStatus} from '../../../../../../../../../../../s
 
 
 export class RoomDropHandlerFactory{
-	public static get(room: RoomItemInfoVM){
+	public static get(room: RoomItemInfoVM): IDropHandler{
 		if (room.isFree){
 			return new FreeRoomDropHandler(room);
 		}
 		if (room.isOccupied){
-			return new FreeRoomDropHandler(room);
+			return new OccupiedRoomDropHandler(room);
 		}
 		if (room.isReserved){
-			return new FreeRoomDropHandler(room);
+			return new ReservedRoomDropHandler(room);
 		}
 		if (room.isOutOfService){
-			return new FreeRoomDropHandler(room);
+			return new OutOfServiceDropHandler(room);
 		}
 	}
 }
 
+export interface IDropHandler{
+	handle(arrivalItem:ArrivalItemInfoVM):boolean;
+}
 
-export class FreeRoomDropHandler{
+export class FreeRoomDropHandler implements IDropHandler{
 	constructor(private room:RoomItemInfoVM){
 	}
 	
-	public handle(arrivalItem:ArrivalItemInfoVM){
-		if (
-			this.room.canFit(arrivalItem.bookingCapacity) &&
-			this.room.isFree()
-		){
-			return true;
-		}
+	public handle(arrivalItem:ArrivalItemInfoVM):boolean{
+		return this.room.canCheckIn(arrivalItem) || this.room.canUpgrade(arrivalItem);
+	}
+}
+
+export class OccupiedRoomDropHandler implements IDropHandler{
+	constructor(private room:RoomItemInfoVM){
+	}
+
+	public handle(arrivalItem:ArrivalItemInfoVM):boolean{
 		return false;
 	}
 }
 
-export class OccupiedRoomDropHandler{
+export class ReservedRoomDropHandler implements IDropHandler{
 	constructor(private room:RoomItemInfoVM){
 	}
 
-	public handle(arrivalItem:ArrivalItemInfoVM){
-		return false;
+	public handle(arrivalItem:ArrivalItemInfoVM):boolean{
+		return this.room.canCheckIn(arrivalItem);
 	}
 }
 
-export class ReservedRoomDropHandler{
+export class OutOfServiceDropHandler implements IDropHandler{
 	constructor(private room:RoomItemInfoVM){
 	}
 
-	public handle(arrivalItem:ArrivalItemInfoVM){
-		if (
-			this.room.canFit(arrivalItem.bookingCapacity) &&
-			this.room.isFree() &&
-			this.room.roomItemDO.bookingId == arrivalItem.arrivalItemDO.bookingId
-		){
-			return true;
-		}
-		return false;
-	}
-}
-
-export class OutOfServiceDropHandler{
-	constructor(private room:RoomItemInfoVM){
-	}
-
-	public handle(arrivalItem:ArrivalItemInfoVM){
+	public handle(arrivalItem:ArrivalItemInfoVM):boolean{
 		return false;
 	}
 }
