@@ -612,7 +612,6 @@ export var EnglishTranslations: Object = {
 	"Arrivals" : "Arrivals",
 	"No booking" : "No booking",
 	"Arriving Today" : "Arriving Today",
-	"Out Of Service" : "Out Of Service",
 	"All Rooms" : "All Rooms",
 	"Free Rooms" : "Free Rooms",
 	"Occupied Rooms" : "Occupied Rooms",
