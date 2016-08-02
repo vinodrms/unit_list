@@ -17,9 +17,6 @@ import {SaveInvoiceGroup} from '../../../../core/domain-layer/invoices/save-invo
 import {SaveInvoiceGroupDO} from '../../../../core/domain-layer/invoices/save-invoice-group/SaveInvoiceGroupDO';
 import {InvoiceTestUtils} from './utils/InvoiceTestUtils';
 import {InvoiceDO} from '../../../../core/data-layer/invoices/data-objects/InvoiceDO';
-import {InvoiceGroupBriefDO} from '../../../../core/data-layer/invoices/data-objects/brief/InvoiceGroupBriefDO';
-import {InvoiceGroupBriefContainerDO} from '../../../../core/data-layer/invoices/data-objects/brief/InvoiceGroupBriefContainerDO';
-import {InvoiceGroupsBriefDataAggregator} from '../../../../core/domain-layer/invoices/aggregators/InvoiceGroupsBriefDataAggregator';
 import {InvoicePayerDO} from '../../../../core/data-layer/invoices/data-objects/payers/InvoicePayerDO';
 
 describe("Invoices Tests", function () {
@@ -183,37 +180,6 @@ describe("Invoices Tests", function () {
             done();
         });
 
-        it("Should aggregate invoice groups data (brief) by customer id", function (done) {
-            var invoiceGroupBriefDataAggregator = new InvoiceGroupsBriefDataAggregator(testContext.appContext, testContext.sessionContext);
-            var invoiceGroupsRepo = testContext.appContext.getRepositoryFactory().getInvoiceGroupsRepository();
-
-            invoiceGroupsRepo.getInvoiceGroupList({ hotelId: testContext.sessionContext.sessionDO.hotel.id }).then((result: InvoiceGroupSearchResultRepoDO) => {
-                var allInvoiceGroups = result.invoiceGroupList;
-                var defaultInvoiceIndex = _.findIndex(allInvoiceGroups, (invoiceGroup: InvoiceGroupDO) => {
-                    return invoiceGroup.id === testDataBuilder.invoiceGroupList[0].id;
-                });
-                allInvoiceGroups.splice(defaultInvoiceIndex, 1);
-
-                var customerIdList = invoiceTestUtils.getDistinctCustomerIdListFromInvoiceGroupList(allInvoiceGroups);
-
-                invoiceGroupBriefDataAggregator.getBriefDataByCustomerList(customerIdList).then((invoiceGroupBriefContainerList: InvoiceGroupBriefContainerDO[]) => {
-                    should.equal(invoiceGroupBriefContainerList.length, customerIdList.length);
-
-                    _.chain(invoiceGroupBriefContainerList).map((invoiceGroupBriefContainerDO: InvoiceGroupBriefContainerDO) => {
-                        return invoiceGroupBriefContainerDO.invoiceGroupBriefList;
-                    }).flatten().map((invoiceBriefDO: InvoiceGroupBriefDO) => {
-                        return invoiceBriefDO.price;
-                    }).forEach((price: number) => {
-                        should.notEqual(price, 0);
-                    });
-                    done();
-                }).catch((error) => {
-                    done(error);
-                });
-            }).catch((error) => {
-                done(error);
-            });
-        });
     });
 
     describe("Invoice Email Sender Flow", function () {

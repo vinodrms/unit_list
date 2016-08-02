@@ -27,6 +27,7 @@ export class CustomerOperationsPageComponent implements OnInit {
     isLoading: boolean;
     didInitOnce: boolean = false;
     totalBookingsCount: number;
+    totalInvoiceGroupsCount: number;
 
     customerOperationsPageData: CustomerOperationsPageData;
     showBookingHistory: boolean = true;

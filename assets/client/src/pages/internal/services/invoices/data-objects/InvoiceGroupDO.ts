@@ -62,4 +62,25 @@ export class InvoiceGroupDO extends BaseDO {
             .uniq()
             .value();
     }
+
+    public getAmountUnpaid(customerId: string): number {
+        return this.getAmount(customerId, InvoicePaymentStatus.Open);
+    }
+    public getAmountPaid(customerId: string): number {
+        return this.getAmount(customerId, InvoicePaymentStatus.Closed);
+    }
+    private getAmount(customerId: string, type: InvoicePaymentStatus): number {
+        return _.chain(this.invoiceList)
+            .filter((invoice: InvoiceDO) => {
+                return invoice.paymentStatus === type;
+            }).map((invoice: InvoiceDO) => {
+                return invoice.payerList;
+            }).flatten().filter((invoicePayer: InvoicePayerDO) => {
+                return invoicePayer.customerId === customerId;
+            }).map((invoicePayer: InvoicePayerDO) => {
+                return invoicePayer.priceToPay;
+            }).reduce((totalPriceToPay, individualPrice) => {
+                return totalPriceToPay + individualPrice;
+            }, 0).value();
+    }
 }

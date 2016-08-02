@@ -604,6 +604,8 @@ export var EnglishTranslations: Object = {
 	"Paid": "Paid",
 	"Unpaid": "Unpaid",
 	"View": "View",
-	
-
+	"Amount paid": "Amount paid",
+	"Amount unpaid": "Amount unpaid",
+	"Invoice group payment status": "Invoice group payment status",
+	"Open invoice group": "Open invoice group",
 };

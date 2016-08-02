@@ -107,6 +107,9 @@ export class MongoInvoiceGroupsReadOperationsRepository extends MongoRepository 
             if (!this._thUtils.isUndefinedOrNull(searchCriteria.customerIdList)) {
                 mongoQueryBuilder.addMultipleSelectOptionList("indexedCustomerIdList", searchCriteria.customerIdList);
             }
+            if (!this._thUtils.isUndefinedOrNull(searchCriteria.groupBookingId)) {
+                mongoQueryBuilder.addExactMatch("paymentStatus", searchCriteria.invoiceGroupPaymentStatus);
+            }
         }
 
         return mongoQueryBuilder.processedQuery;

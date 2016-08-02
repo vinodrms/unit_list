@@ -16,7 +16,7 @@
 						<a (click)="showBookingHistory=true"><i class="fa unitpal-font">E</i> {{'Booking History' | translate}} ({{ totalBookingsCount }})</a>
 					</li>
 					<li [ngClass]="{active : !showBookingHistory}">
-						<a (click)="showBookingHistory=false"><i class="fa unitpal-font">L</i> {{'Invoice History' | translate}}</a>
+						<a (click)="showBookingHistory=false"><i class="fa unitpal-font">L</i> {{'Invoice History' | translate}} ({{ totalInvoiceGroupsCount }})</a>
 					</li>
 				</ul>
 			</div>
@@ -25,7 +25,7 @@
 			<customer-booking-history [customerOperationsPageData]="customerOperationsPageData" (totalBookingsCountEmitter)="totalBookingsCount=$event"></customer-booking-history>
 		</div>
 		<div class="row" [hidden]="showBookingHistory">
-			<customer-invoice-history [customerOperationsPageData]="customerOperationsPageData"></customer-invoice-history>
+			<customer-invoice-history [customerOperationsPageData]="customerOperationsPageData" (totalInvoiceGroupsCountEmitter)="totalInvoiceGroupsCount=$event"></customer-invoice-history>
 		</div>
 	</div>
 	<div class="col-xs-3 full-height right-sidebar">
