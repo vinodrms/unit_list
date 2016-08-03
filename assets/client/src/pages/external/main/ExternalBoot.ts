@@ -2,8 +2,8 @@
 
 import {bootstrap} from '@angular/platform-browser-dynamic';
 import {provide, enableProdMode} from '@angular/core';
-import {ROUTER_PROVIDERS} from '@angular/router-deprecated';
 import {MainLayoutExternalComponent} from './MainLayoutExternalComponent';
+import {ExternalRouterConfig} from './ExternalRouterConfig';
 import {HTTP_PROVIDERS} from '@angular/http';
 import {IThCookie} from '../../../common/utils/cookies/IThCookie';
 import {ThCookie} from '../../../common/utils/cookies/ThCookie';
@@ -18,11 +18,13 @@ import {Toaster} from '../../../common/utils/toaster/Toaster';
 import {IModalService} from '../../../common/utils/modals/IModalService';
 import {ModalService} from '../../../common/utils/modals/ModalService';
 import {ThTranslation} from '../../../common/utils/localization/ThTranslation';
+import {GoogleAnalytics} from '../../../common/utils/analytics/GoogleAnalytics';
+import {IAnalytics} from '../../../common/utils/analytics/IAnalytics';
 import {AppContext} from '../../../common/utils/AppContext';
 
 bootstrap(MainLayoutExternalComponent,
     [
-		ROUTER_PROVIDERS,
+		ExternalRouterConfig,
 		provide(IThCookie, { useClass: ThCookie }),
 		provide(IBrowserLocation, { useClass: BrowserLocation }),
 		provide(IRouterNavigator, { useClass: RouterNavigator }),
@@ -31,6 +33,7 @@ bootstrap(MainLayoutExternalComponent,
 		provide(IThHttp, { useClass: ThHttp }),
 		provide(IToaster, { useClass: Toaster }),
 		provide(IModalService, { useClass: ModalService }),
+		provide(IAnalytics, { useClass: GoogleAnalytics }),
 		AppContext
     ]
 );

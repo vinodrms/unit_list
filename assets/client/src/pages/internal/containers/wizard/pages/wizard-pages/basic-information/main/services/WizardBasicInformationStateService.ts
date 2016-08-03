@@ -11,7 +11,7 @@ import {WizardBasicInfoPropertyDetailsService} from '../../pages/property-detail
 
 @Injectable()
 export class WizardBasicInformationStateService extends AWizardState {
-	private static NavigationBase = "/MainWizardComponent/WizardBasicInformationComponent/";
+	private static NavigationBase = "/wizard/basic-info/";
 	private _basicInfoController: WizardBasicInformationController;
 
 	constructor(private _appContext: AppContext,
@@ -53,7 +53,7 @@ export class WizardBasicInformationStateService extends AWizardState {
 	}
 	private goToCurrentBasicInfoStep() {
 		var currentBasicInfoStep: IBasicInfoStep = this._basicInfoController.getCurrentBasicInformationStep();
-		this._appContext.routerNavigator.navigateTo(WizardBasicInformationStateService.NavigationBase + currentBasicInfoStep.getComponentName());
+		this._appContext.routerNavigator.navigateTo(WizardBasicInformationStateService.NavigationBase + currentBasicInfoStep.getComponentPath());
 	}
 
 	public handlePreviousPressed(): Promise<any> {
@@ -77,8 +77,8 @@ export class WizardBasicInformationStateService extends AWizardState {
 	}
 	public getMeta(): WizardStateMeta {
 		return {
-			startRelativeComponentPath: "WizardBasicInformationComponent/WizardBasicInfoIntroComponent",
-			endRelativeComponentPath: "WizardBasicInformationComponent/WizardBasicInfoPropertyDetailsComponent",
+			startRelativeComponentPath: "basic-info/intro",
+			endRelativeComponentPath: "basic-info/property-details",
 			iconFontName: "8",
 			name: "Basic Information"
 		};

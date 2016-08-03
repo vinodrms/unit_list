@@ -5,8 +5,6 @@ import {SessionContext} from '../core/utils/SessionContext';
 import {InvoiceGroupMetaRepoDO, InvoiceGroupSearchCriteriaRepoDO} from '../core/data-layer/invoices/repositories/IInvoiceGroupsRepository';
 import {InvoiceGroupDO} from '../core/data-layer/invoices/data-objects/InvoiceGroupDO';
 import {InvoiceDO} from '../core/data-layer/invoices/data-objects/InvoiceDO';
-import {InvoiceGroupBriefContainerDO} from '../core/data-layer/invoices/data-objects/brief/InvoiceGroupBriefContainerDO';
-import {InvoiceGroupsBriefDataAggregator} from '../core/domain-layer/invoices/aggregators/InvoiceGroupsBriefDataAggregator';
 import {LazyLoadRepoDO, LazyLoadMetaResponseRepoDO} from '../core/data-layer/common/repo-data-objects/LazyLoadRepoDO';
 
 export class InvoiceGroupsController extends BaseController {
@@ -53,19 +51,6 @@ export class InvoiceGroupsController extends BaseController {
         });
     }
 
-    public getInvoiceGroupsBriefDataByCustomerList(req: Express.Request, res: Express.Response) {
-        var appContext: AppContext = req.appContext;
-        var sessionContext: SessionContext = req.sessionContext;
-        var customerIdList = req.body.customerIdList;
-        var invoiceGroupBriefDataAggregator = new InvoiceGroupsBriefDataAggregator(appContext, sessionContext);
-        
-        invoiceGroupBriefDataAggregator.getBriefDataByCustomerList(customerIdList).then((invoiceGroupBriefContainerList: InvoiceGroupBriefContainerDO[]) => {
-            this.returnSuccesfulResponse(req, res, { invoiceGroupBriefContainerList: invoiceGroupBriefContainerList });    
-        }).catch((err: any) => {
-            this.returnErrorResponse(req, res, err, ThStatusCode.InvoiceGroupsControllerErrorGettingInvoiceGroupsBrief);
-        });
-    }
-
     private getInvoiceGroupMetaRepoDOFrom(sessionContext: SessionContext): InvoiceGroupMetaRepoDO {
         return { hotelId: sessionContext.sessionDO.hotel.id };
     }
@@ -76,5 +61,4 @@ module.exports = {
     getInvoiceGroupById: invoiceGroupsController.getInvoiceGroupById.bind(invoiceGroupsController),
     getInvoiceGroupList: invoiceGroupsController.getInvoiceGroupList.bind(invoiceGroupsController),
     getInvoiceGroupListCount: invoiceGroupsController.getInvoiceGroupListCount.bind(invoiceGroupsController),
-    getInvoiceGroupsBriefDataByCustomerList: invoiceGroupsController.getInvoiceGroupsBriefDataByCustomerList.bind(invoiceGroupsController),
 }

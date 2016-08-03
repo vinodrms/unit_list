@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {RouterLink} from '@angular/router-deprecated';
+import {ROUTER_DIRECTIVES} from '@angular/router';
 import {BaseComponent} from '../../../../../../../../../common/base/BaseComponent';
 import {TranslationPipe} from '../../../../../../../../../common/utils/localization/TranslationPipe';
 import {AppContext} from '../../../../../../../../../common/utils/AppContext';
@@ -7,7 +7,7 @@ import {AppContext} from '../../../../../../../../../common/utils/AppContext';
 @Component({
 	selector: 'header-settings',
 	templateUrl: '/client/src/pages/internal/containers/home/pages/utils/header/subcomponents/settings/template/header-settings.html',
-	directives: [RouterLink],
+	directives: [ROUTER_DIRECTIVES],
 	pipes: [TranslationPipe]
 })
 export class HeaderSettingsComponent extends BaseComponent {

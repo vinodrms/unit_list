@@ -59,8 +59,8 @@ export class WizardAllotmentsStateService extends AWizardState {
     }
     public getMeta(): WizardStateMeta {
         return {
-            startRelativeComponentPath: "WizardAllotmentsComponent",
-            endRelativeComponentPath: "WizardAllotmentsComponent",
+            startRelativeComponentPath: "allotments",
+            endRelativeComponentPath: "allotments",
             iconFontName: "â",
             name: "Allotments"
         };

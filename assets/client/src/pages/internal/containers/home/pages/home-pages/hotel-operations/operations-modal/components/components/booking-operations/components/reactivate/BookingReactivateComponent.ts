@@ -58,6 +58,7 @@ export class BookingReactivateComponent implements OnInit {
     private reactivateCore() {
         this.isSaving = true;
         this._hotelOperationsBookingService.reactivate(this._bookingOperationsPageData.bookingDO).subscribe((updatedBooking: BookingDO) => {
+            this._appContext.analytics.logEvent("booking", "reactivate", "Reactivated a no show booking");
             this.isSaving = false;
             this.triggerOnBookingReactivate(updatedBooking);
         }, (error: ThError) => {

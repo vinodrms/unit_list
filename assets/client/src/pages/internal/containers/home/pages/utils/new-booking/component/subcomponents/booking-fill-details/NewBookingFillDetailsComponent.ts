@@ -44,6 +44,7 @@ export class NewBookingFillDetailsComponent extends BaseComponent implements Aft
 		this._didAppearSubscription = this._wizardBookingFillDetailsStepService.didAppearObservable.subscribe((didAppear: boolean) => {
 			this.viewDidAppear();
         });
+		this._appContext.analytics.logPageView("/operations/new-booking/fill-details");
 	}
 	public ngOnDestroy() {
 		if (this._didAppearSubscription) { this._didAppearSubscription.unsubscribe(); }

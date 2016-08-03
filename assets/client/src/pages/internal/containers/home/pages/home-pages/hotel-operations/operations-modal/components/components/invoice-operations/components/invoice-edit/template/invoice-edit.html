@@ -5,7 +5,7 @@
 
     <invoice-payer></invoice-payer>
     <p class="btn-add-invoice-payer">
-        <th-button [upFont]="'\''" [text]="'Add Payer'" (onButtonClick)="addInvoicePayer()"></th-button>
+        <th-button [upFont]="'\''" [text]="'Add Payer'" (onButtonClick)="openCustomerSelectModal()"></th-button>
     </p>
     <table class="table table-invoice-items">
         <thead>
@@ -66,7 +66,7 @@
             </tr>
             <tr>
                 <td colspan="2" class='add-item-cell'>
-                    <th-button [upFont]="'\''" [text]="'Add Item'" (onButtonClick)="addInvoicePayer()"></th-button>
+                    <th-button [upFont]="'\''" [text]="'Add Item'" (onButtonClick)="openAddOnProductSelectModal()"></th-button>
                 </td>
             </tr>
         </tbody>

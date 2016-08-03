@@ -47,6 +47,7 @@ export class NewBookingEmailConfigComponent extends BaseComponent implements OnI
         this._didDisappearSubscription = this._wizardEmailConfigStepService.didDisappearObservable.subscribe((didDisappear: boolean) => {
             this.viewDidDisappear();
         });
+        this._appContext.analytics.logPageView("/operations/new-booking/email-config");
     }
     public ngOnDestroy() {
         if (this._didAppearSubscription) { this._didAppearSubscription.unsubscribe(); }

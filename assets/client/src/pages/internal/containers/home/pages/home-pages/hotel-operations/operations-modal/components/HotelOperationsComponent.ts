@@ -9,6 +9,7 @@ import {EagerCustomersService} from '../../../../../../../services/customers/Eag
 import {EagerAllotmentsService} from '../../../../../../../services/allotments/EagerAllotmentsService';
 import {EagerBookingsService} from '../../../../../../../services/bookings/EagerBookingsService';
 import {EagerInvoiceGroupsService} from '../../../../../../../services/invoices/EagerInvoiceGroupsService';
+import {InvoiceGroupsService} from '../../../../../../../services/invoices/InvoiceGroupsService';
 import {HotelService} from '../../../../../../../services/hotel/HotelService';
 import {HotelAggregatorService} from '../../../../../../../services/hotel/HotelAggregatorService';
 import {EagerPriceProductsService} from '../../../../../../../services/price-products/EagerPriceProductsService';
@@ -35,7 +36,7 @@ import {HotelOperationsPageType} from '../services/utils/HotelOperationsPageType
         RoomCategoriesStatsService, BedsEagerService, RoomsService, 
         EagerCustomersService, EagerAllotmentsService, EagerPriceProductsService,
         HotelService, HotelAggregatorService, EagerBookingsService, RoomCategoriesService,
-        EagerInvoiceGroupsService, HotelOperationsRoomService, 
+        EagerInvoiceGroupsService, InvoiceGroupsService, HotelOperationsRoomService, 
         HotelOperationsBookingService, HotelOperationsCustomerService, HotelOperationsPageControllerService],
     pipes: [TranslationPipe]
 })

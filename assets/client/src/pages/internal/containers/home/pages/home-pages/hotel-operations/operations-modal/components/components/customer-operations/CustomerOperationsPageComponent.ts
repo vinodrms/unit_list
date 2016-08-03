@@ -27,6 +27,7 @@ export class CustomerOperationsPageComponent implements OnInit {
     isLoading: boolean;
     didInitOnce: boolean = false;
     totalBookingsCount: number;
+    totalInvoiceGroupsCount: number;
 
     customerOperationsPageData: CustomerOperationsPageData;
     showBookingHistory: boolean = true;
@@ -36,6 +37,7 @@ export class CustomerOperationsPageComponent implements OnInit {
 
     ngOnInit() {
         this.loadPageData();
+        this._appContext.analytics.logPageView("/operations/customer");
     }
     private loadPageData() {
         this.isLoading = true;

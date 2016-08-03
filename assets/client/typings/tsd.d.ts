@@ -8,3 +8,4 @@
 /// <reference path="jasmine/jasmine.d.ts" />
 /// <reference path="select2/select2.d.ts" />
 /// <reference path="socket.io-client/socket.io-client.d.ts" />
+/// <reference path="google.analytics/ga.d.ts" />

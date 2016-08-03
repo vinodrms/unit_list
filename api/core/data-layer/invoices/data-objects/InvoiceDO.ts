@@ -1,3 +1,4 @@
+import {ThUtils} from '../../../utils/ThUtils';
 import {ThError} from '../../../utils/th-responses/ThError';
 import {BaseDO} from '../../common/base/BaseDO';
 import {InvoicePayerDO} from './payers/InvoicePayerDO';
@@ -62,12 +63,15 @@ export class InvoiceDO extends BaseDO implements IPriceableEntity {
     }
 
     public linkBookingPrices(bookingList: BookingDO[]) {
+        var thUtils = new ThUtils();
         _.forEach(this.itemList, (item: InvoiceItemDO) => {
             if(item.type === InvoiceItemType.Booking) {
                 var booking = _.find(bookingList, (booking: BookingDO) => {
                     return booking.bookingId === item.id;
                 });
-                item.meta = booking.price;
+                if(!thUtils.isUndefinedOrNull(booking)) {
+                    item.meta = booking.price;
+                }
             }
         });             
     }

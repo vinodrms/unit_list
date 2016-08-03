@@ -604,11 +604,14 @@ export var EnglishTranslations: Object = {
 	"Paid": "Paid",
 	"Unpaid": "Unpaid",
 	"View": "View",
+	"Amount paid": "Amount paid",
+	"Amount unpaid": "Amount unpaid",
+	"Invoice group payment status": "Invoice group payment status",
+	"Open invoice group": "Open invoice group",
 	"No Payment Guarantee" : "No Payment Guarantee",
 	"Arrivals" : "Arrivals",
 	"No booking" : "No booking",
 	"Arriving Today" : "Arriving Today",
-	"Out Of Service" : "Out Of Service",
 	"All Rooms" : "All Rooms",
 	"Free Rooms" : "Free Rooms",
 	"Occupied Rooms" : "Occupied Rooms",
@@ -616,5 +619,4 @@ export var EnglishTranslations: Object = {
 	"Out Of Service Rooms" : "Out Of Service Rooms",
 	"Showing" : "Showing",
 	"Showing Only" : "Showing Only"	
-
 };

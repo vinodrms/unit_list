@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AppContext} from '../../../../../../../../../../common/utils/AppContext';
 import {BaseComponent} from '../../../../../../../../../../common/base/BaseComponent';
 import {InventoryScreenStateType} from '../../../../../../../common/inventory/utils/state-manager/InventoryScreenStateType';
@@ -13,7 +13,7 @@ import {IBookingCustomerRegisterController} from '../utils/IBookingCustomerRegis
 	templateUrl: '/client/src/pages/internal/containers/home/pages/utils/new-booking/component/subcomponents/booking-customer-register/template/booking-customer-register.html',
 	directives: [CustomerRegisterComponent]
 })
-export class BookingCustomerRegisterComponent extends BaseComponent {
+export class BookingCustomerRegisterComponent extends BaseComponent implements OnInit {
 	private _customerRegisterCtrl: IBookingCustomerRegisterController;
 
 	constructor(private _appContext: AppContext,
@@ -22,6 +22,10 @@ export class BookingCustomerRegisterComponent extends BaseComponent {
 		super();
 		this.updateCustRegisterStepPath(InventoryScreenStateType.View);
 		this._customerRegisterCtrl = _bookingControllerService;
+	}
+
+	public ngOnInit() {
+		this._appContext.analytics.logPageView("/operations/new-booking/customer-register");
 	}
 
 	public didChangeScreenStateType(screenStateType: InventoryScreenStateType) {

@@ -97,7 +97,12 @@ export class MongoInvoiceGroupsRepositoryWithBookingPriceLink extends MongoInvoi
             var bookingList = result.bookingList;
 
             _.forEach(invoiceGroupList, (invoiceGroup: InvoiceGroupDO) => {
-                invoiceGroup.linkBookingPrices(bookingList);
+                var bookingListFilteredByGroupBookingId = _.filter(bookingList, (booking: BookingDO) => {
+                    return booking.groupBookingId === invoiceGroup.groupBookingId;
+                });
+                if (!_.isEmpty(bookingListFilteredByGroupBookingId)) {
+                    invoiceGroup.linkBookingPrices(bookingListFilteredByGroupBookingId);
+                }
             });
 
             resolve(invoiceGroupList);
@@ -125,4 +130,5 @@ export class MongoInvoiceGroupsRepositoryWithBookingPriceLink extends MongoInvoi
             }).value()
         };
     }
+
 }

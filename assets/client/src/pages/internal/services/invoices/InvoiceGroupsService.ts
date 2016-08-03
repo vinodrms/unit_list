@@ -7,37 +7,48 @@ import {ALazyLoadRequestService} from '../common/ALazyLoadRequestService';
 
 import {EagerCustomersService} from '../customers/EagerCustomersService';
 import {CustomersDO} from '../customers/data-objects/CustomersDO';
-import {InvoiceGroupVM} from './view-models/InvoiceGroupVM';
+import {InvoicePaymentStatus} from './data-objects/InvoiceDO';
+import {InvoiceGroupPayerStatsDO} from './data-objects/stats/InvoiceGroupPayerStatsDO';
+import {InvoiceGroupsDO} from './data-objects/InvoiceGroupsDO';
 
-export interface InvoiceGroupSearchCriteriaRepoDO {
-    groupBookingId?: string;
-    bookingId?: string;
+export interface InvoiceGroupsQuery {
+    groupBookingId: string;
+    bookingId: string;
+}
+
+export interface InvoiceGroupPayerStatsQuery {
+    invoiceGroupPaymentStatus: InvoicePaymentStatus;
+    customerIdList: string[];
 }
 
 @Injectable()
-export class InvoiceGroupsService extends ALazyLoadRequestService<InvoiceGroupVM> {
+export class InvoiceGroupsService extends ALazyLoadRequestService<InvoiceGroupPayerStatsDO> {
+    
+    private _customerIdListFilter: string[];
 
-    constructor(appContext: AppContext,
-        private _eagerCustomersService: EagerCustomersService) {
+    constructor(appContext: AppContext) {
         super(appContext, ThServerApi.InvoiceGroupsCount, ThServerApi.InvoiceGroups);
     }
 
-    protected parsePageDataCore(pageDataObject: Object): Observable<InvoiceGroupVM[]> {
-        var customerIdList = [];
-        
-        return Observable.combineLatest(
-            this._eagerCustomersService.getCustomersById(customerIdList)
-        ).map((result: [CustomersDO]) => {
+    protected parsePageDataCore(pageDataObject: Object): Observable<InvoiceGroupPayerStatsDO[]> {
+        var invoiceGroupsDO = new InvoiceGroupsDO();
+        invoiceGroupsDO.buildFromObject(pageDataObject);
 
-            var invoiceGroupVMList: InvoiceGroupVM[] = [];
+        var invoiceGroupPayerStatsList = [];
+        _.forEach(this._customerIdListFilter, (customerId: string) => {
+            invoiceGroupPayerStatsList =
+                _.union(invoiceGroupPayerStatsList, InvoiceGroupPayerStatsDO.buildInvoiceGroupPayerStatsListFromInvoiceGroupList(invoiceGroupsDO.invoiceGroupList, customerId));
+        })
 
-            return invoiceGroupVMList;
-        });
+        return Observable.from(invoiceGroupPayerStatsList);
+    }
+
+    public setCustomerIdFilter(customerId: string) {
+        this._customerIdListFilter = [customerId];
+        this.defaultSearchCriteria = { customerIdList: this._customerIdListFilter };
     }
 
     public searchByText(text: string) {
-        this.updateSearchCriteria({
-            searchTerm: text
-        });
+
     }
 }
