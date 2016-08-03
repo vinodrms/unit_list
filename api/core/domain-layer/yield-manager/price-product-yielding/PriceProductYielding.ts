@@ -1,34 +1,34 @@
-import {ThLogger, ThLogLevel} from '../../utils/logging/ThLogger';
-import {ThError} from '../../utils/th-responses/ThError';
-import {ThStatusCode} from '../../utils/th-responses/ThResponse';
-import {AppContext} from '../../utils/AppContext';
-import {SessionContext} from '../../utils/SessionContext';
-import {PriceProductsYieldManagementDO, PriceProductYieldAttribute} from './PriceProductsYieldManagementDO';
-import {PriceProductDO} from '../../data-layer/price-products/data-objects/PriceProductDO';
-import {ThDateIntervalDO} from '../../utils/th-dates/data-objects/ThDateIntervalDO';
-import {ValidationResultParser} from '../common/ValidationResultParser';
-import {PriceProductMetaRepoDO, PriceProductItemMetaRepoDO} from '../../data-layer/price-products/repositories/IPriceProductRepository';
+import {ThLogger, ThLogLevel} from '../../../utils/logging/ThLogger';
+import {ThError} from '../../../utils/th-responses/ThError';
+import {ThStatusCode} from '../../../utils/th-responses/ThResponse';
+import {AppContext} from '../../../utils/AppContext';
+import {SessionContext} from '../../../utils/SessionContext';
+import {PriceProductYieldingDO, PriceProductYieldAttribute} from './PriceProductYieldingDO';
+import {PriceProductDO} from '../../../data-layer/price-products/data-objects/PriceProductDO';
+import {ThDateIntervalDO} from '../../../utils/th-dates/data-objects/ThDateIntervalDO';
+import {ValidationResultParser} from '../../common/ValidationResultParser';
+import {PriceProductMetaRepoDO, PriceProductItemMetaRepoDO} from '../../../data-layer/price-products/repositories/IPriceProductRepository';
 import {IPriceProductIntervalStrategy} from './interval-strategies/IPriceProductIntervalStrategy';
 import {PriceProductAddIntervalStrategy} from './interval-strategies/PriceProductAddIntervalStrategy';
 import {PriceProductRemoveIntervalStrategy} from './interval-strategies/PriceProductRemoveIntervalStrategy';
 
-export class PriceProductsYieldManagement {
-	private _yieldData: PriceProductsYieldManagementDO;
+export class PriceProductYielding {
+	private _yieldData: PriceProductYieldingDO;
 	private _yieldInterval: ThDateIntervalDO;
 	private _intervalStrategy: IPriceProductIntervalStrategy;
 
 	constructor(private _appContext: AppContext, private _sessionContext: SessionContext) {
 	}
 
-	public open(yieldData: PriceProductsYieldManagementDO): Promise<PriceProductDO[]> {
+	public open(yieldData: PriceProductYieldingDO): Promise<PriceProductDO[]> {
 		return this.yield(yieldData, new PriceProductAddIntervalStrategy());
 	}
 
-	public close(yieldData: PriceProductsYieldManagementDO): Promise<PriceProductDO[]> {
+	public close(yieldData: PriceProductYieldingDO): Promise<PriceProductDO[]> {
 		return this.yield(yieldData, new PriceProductRemoveIntervalStrategy());
 	}
 
-	private yield(yieldData: PriceProductsYieldManagementDO, intervalStrategy: IPriceProductIntervalStrategy): Promise<PriceProductDO[]> {
+	private yield(yieldData: PriceProductYieldingDO, intervalStrategy: IPriceProductIntervalStrategy): Promise<PriceProductDO[]> {
 		this._yieldData = yieldData;
 		this._intervalStrategy = intervalStrategy;
 		return new Promise<PriceProductDO[]>((resolve: { (result: PriceProductDO[]): void }, reject: { (err: ThError): void }) => {
@@ -36,7 +36,7 @@ export class PriceProductsYieldManagement {
 		});
 	}
 	private yieldCore(resolve: { (result: PriceProductDO[]): void }, reject: { (err: ThError): void }) {
-		var validationResult = PriceProductsYieldManagementDO.getValidationStructure().validateStructure(this._yieldData);
+		var validationResult = PriceProductYieldingDO.getValidationStructure().validateStructure(this._yieldData);
 		if (!validationResult.isValid()) {
 			var parser = new ValidationResultParser(validationResult, this._yieldData);
 			parser.logAndReject("Error validating data for yield price products", reject);

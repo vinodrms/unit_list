@@ -1,11 +1,11 @@
-import {ThDateIntervalDO} from '../../utils/th-dates/data-objects/ThDateIntervalDO';
-import {IValidationStructure} from '../../utils/th-validation/structure/core/IValidationStructure';
-import {ObjectValidationStructure} from '../../utils/th-validation/structure/ObjectValidationStructure';
-import {PrimitiveValidationStructure} from '../../utils/th-validation/structure/PrimitiveValidationStructure';
-import {ArrayValidationStructure} from '../../utils/th-validation/structure/ArrayValidationStructure';
-import {StringValidationRule} from '../../utils/th-validation/rules/StringValidationRule';
-import {NumberValidationRule} from '../../utils/th-validation/rules/NumberValidationRule';
-import {NumberInListValidationRule} from '../../utils/th-validation/rules/NumberInListValidationRule';
+import {ThDateIntervalDO} from '../../../utils/th-dates/data-objects/ThDateIntervalDO';
+import {IValidationStructure} from '../../../utils/th-validation/structure/core/IValidationStructure';
+import {ObjectValidationStructure} from '../../../utils/th-validation/structure/ObjectValidationStructure';
+import {PrimitiveValidationStructure} from '../../../utils/th-validation/structure/PrimitiveValidationStructure';
+import {ArrayValidationStructure} from '../../../utils/th-validation/structure/ArrayValidationStructure';
+import {StringValidationRule} from '../../../utils/th-validation/rules/StringValidationRule';
+import {NumberValidationRule} from '../../../utils/th-validation/rules/NumberValidationRule';
+import {NumberInListValidationRule} from '../../../utils/th-validation/rules/NumberInListValidationRule';
 
 export enum PriceProductYieldAttribute {
 	OpenPeriod,
@@ -13,7 +13,7 @@ export enum PriceProductYieldAttribute {
 	OpenForDeparturePeriod
 }
 
-export class PriceProductsYieldManagementDO {
+export class PriceProductYieldingDO {
 	priceProductIdList: string[];
 	interval: ThDateIntervalDO;
 	attribute: PriceProductYieldAttribute;
@@ -29,11 +29,11 @@ export class PriceProductsYieldManagementDO {
 				validationStruct: new ObjectValidationStructure([
 					{
 						key: "start",
-						validationStruct: PriceProductsYieldManagementDO.getThDateDOValidationStructure()
+						validationStruct: PriceProductYieldingDO.getThDateDOValidationStructure()
 					},
 					{
 						key: "end",
-						validationStruct: PriceProductsYieldManagementDO.getThDateDOValidationStructure()
+						validationStruct: PriceProductYieldingDO.getThDateDOValidationStructure()
 					}
 				])
 			},

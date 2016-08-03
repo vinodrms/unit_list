@@ -10,8 +10,8 @@ import {ThDateIntervalDO} from '../../../../core/utils/th-dates/data-objects/ThD
 import {ThDateIntervalUtils} from '../../../../core/utils/th-dates/ThDateIntervalUtils';
 import {ThDateUtils} from '../../../../core/utils/th-dates/ThDateUtils';
 import {PriceProductDO} from '../../../../core/data-layer/price-products/data-objects/PriceProductDO';
-import {PriceProductsYieldManagement} from '../../../../core/domain-layer/yield-manager/PriceProductsYieldManagement';
-import {PriceProductsYieldManagementDO, PriceProductYieldAttribute} from '../../../../core/domain-layer/yield-manager/PriceProductsYieldManagementDO';
+import {PriceProductYielding} from '../../../../core/domain-layer/yield-manager/price-product-yielding/PriceProductYielding';
+import {PriceProductYieldingDO, PriceProductYieldAttribute} from '../../../../core/domain-layer/yield-manager/price-product-yielding/PriceProductYieldingDO';
 
 function testPriceProductOpenInterval(priceProduct: PriceProductDO, firstIntervalEnd: ThDateDO, secondIntervalStart: ThDateDO) {
 	should.equal(priceProduct.openIntervalList.length >= 2, true);
@@ -252,7 +252,7 @@ describe("Price Products Interval Tests", function() {
 
 	describe("Yield Management Tests", function() {
 		it("Should close interval on price products", function(done) {
-			var yieldData: PriceProductsYieldManagementDO = {
+			var yieldData: PriceProductYieldingDO = {
 				attribute: PriceProductYieldAttribute.OpenPeriod,
 				priceProductIdList: _.map(testDataBuilder.priceProductList, (priceProduct: PriceProductDO) => { return priceProduct.id }),
 				interval: ThDateIntervalDO.buildThDateIntervalDO(
@@ -260,7 +260,7 @@ describe("Price Products Interval Tests", function() {
 					ThDateDO.buildThDateDO(2016, ThMonth.July, 1)
 				)
 			};
-			var ppYm = new PriceProductsYieldManagement(testContext.appContext, testContext.sessionContext);
+			var ppYm = new PriceProductYielding(testContext.appContext, testContext.sessionContext);
 			ppYm.close(yieldData).then((yieldedPriceProducts: PriceProductDO[]) => {
 				yieldedPriceProducts.forEach((priceProduct: PriceProductDO) => {
 					testPriceProductOpenInterval(priceProduct, ThDateDO.buildThDateDO(2015, ThMonth.December, 31), ThDateDO.buildThDateDO(2016, ThMonth.July, 2));
@@ -271,7 +271,7 @@ describe("Price Products Interval Tests", function() {
 			});
         });
 		it("Should open interval on price products", function(done) {
-			var yieldData: PriceProductsYieldManagementDO = {
+			var yieldData: PriceProductYieldingDO = {
 				attribute: PriceProductYieldAttribute.OpenPeriod,
 				priceProductIdList: _.map(testDataBuilder.priceProductList, (priceProduct: PriceProductDO) => { return priceProduct.id }),
 				interval: ThDateIntervalDO.buildThDateIntervalDO(
@@ -279,7 +279,7 @@ describe("Price Products Interval Tests", function() {
 					ThDateDO.buildThDateDO(2016, ThMonth.July, 1)
 				)
 			};
-			var ppYm = new PriceProductsYieldManagement(testContext.appContext, testContext.sessionContext);
+			var ppYm = new PriceProductYielding(testContext.appContext, testContext.sessionContext);
 			ppYm.open(yieldData).then((yieldedPriceProducts: PriceProductDO[]) => {
 				yieldedPriceProducts.forEach((priceProduct: PriceProductDO) => {
 					testPriceProductOpenInterval(priceProduct, ThDateDO.buildThDateDO(2015, ThMonth.December, 31), ThDateDO.buildThDateDO(2016, ThMonth.June, 1));
