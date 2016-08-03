@@ -30,7 +30,10 @@ export class FreeRoomDropHandler implements IDropHandler{
 	}
 	
 	public handle(arrivalItem:ArrivalItemInfoVM):boolean{
-		return this.room.canCheckIn(arrivalItem) || this.room.canUpgrade(arrivalItem);
+		if (arrivalItem){
+			return this.room.canCheckIn(arrivalItem) || this.room.canUpgrade(arrivalItem);
+		}
+		return false;
 	}
 }
 
@@ -48,7 +51,10 @@ export class ReservedRoomDropHandler implements IDropHandler{
 	}
 
 	public handle(arrivalItem:ArrivalItemInfoVM):boolean{
-		return this.room.canCheckIn(arrivalItem);
+		if (arrivalItem){
+			return this.room.canCheckIn(arrivalItem);
+		}
+		return false;
 	}
 }
 
