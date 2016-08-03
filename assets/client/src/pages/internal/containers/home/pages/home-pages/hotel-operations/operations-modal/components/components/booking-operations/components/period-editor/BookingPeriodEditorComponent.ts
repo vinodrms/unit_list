@@ -68,13 +68,16 @@ export class BookingPeriodEditorComponent implements OnInit {
     }
 
     public get noIntervalEditAccess(): boolean {
-        return this._bookingOperationsPageData.bookingMeta.intervalEditRight === BookingIntervalEditRight.NoIntervalEdit;
+        return this._bookingOperationsPageData.bookingMeta.intervalEditRight === BookingIntervalEditRight.NoIntervalEdit
+            || this._bookingOperationsPageData.hasPaidInvoice;
     }
     public get editIntervalAccess(): boolean {
-        return this._bookingOperationsPageData.bookingMeta.intervalEditRight === BookingIntervalEditRight.EditInterval;
+        return this._bookingOperationsPageData.bookingMeta.intervalEditRight === BookingIntervalEditRight.EditInterval
+            && !this._bookingOperationsPageData.hasPaidInvoice;;
     }
     public get editEndDateAccess(): boolean {
-        return this._bookingOperationsPageData.bookingMeta.intervalEditRight === BookingIntervalEditRight.EditEndDate;
+        return this._bookingOperationsPageData.bookingMeta.intervalEditRight === BookingIntervalEditRight.EditEndDate
+            && !this._bookingOperationsPageData.hasPaidInvoice;
     }
 
     public get startDateLongString(): string {
