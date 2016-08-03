@@ -1,5 +1,5 @@
 module.exports = {
-    port: process.env.PORT || 1337,
+	port: process.env.PORT || 1337,
 	connections: {
 		mongodbazure: {
 			adapter: 'sails-mongo',
@@ -10,13 +10,13 @@ module.exports = {
 			database: process.env.MONGO_DB
 		}
 	},
-    models: {
-        connection: 'mongodbazure'
-    },
-    hookTimeout: 40000,
-    log: {
-        level: "silent"
-    },
+	models: {
+		connection: 'mongodbazure'
+	},
+	hookTimeout: 40000,
+	log: {
+		level: "silent"
+	},
 	unitPalConfig: {
 		appContextRoot: process.env.APP_CONTEXT_ROOT,
 		emailService: {
@@ -43,6 +43,6 @@ module.exports = {
 		googleAnalytics: {
 			enabled: process.env.GOOGLE_ANALYTICS_ENABLED,
 			trackingId: process.env.GOOGLE_ANALYTICS_TRACKING_ID
-        }
+		}
 	}
 };
