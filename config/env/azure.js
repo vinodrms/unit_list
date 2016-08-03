@@ -35,10 +35,14 @@ module.exports = {
 			}
 		},
 		slack: {
-			"webhookUri": process.env.SLACK_WEBHOOK_URI,
-			"channel": process.env.SLACK_CHANNEL,
-			"username": process.env.SLACK_USERNAME,
-			"enabled": process.env.SLACK_ENABLED
-		}
+			webhookUri: process.env.SLACK_WEBHOOK_URI,
+			channel: process.env.SLACK_CHANNEL,
+			username: process.env.SLACK_USERNAME,
+			enabled: process.env.SLACK_ENABLED
+		},
+		googleAnalytics: {
+            enabled: process.env.GOOGLE_ANALYTICS_ENABLED,
+            trackingId: process.env.GOOGLE_ANALYTICS_TRACKING_ID
+        }
 	}
 };
