@@ -73,6 +73,11 @@ export class BookingReactivate {
                     ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "reactivate: end date in the past", this._reactivateDO, thError);
                     throw thError;
                 }
+                if (this._bookingWithDependencies.hasPaidInvoice()) {
+                    var thError = new ThError(ThStatusCode.BookingReactivatePaidInvoice, null);
+                    ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "reactivate: paid invoice", this._reactivateDO, thError);
+                    throw thError;
+                }
 
                 this.updateBooking();
 
