@@ -41,8 +41,8 @@ module.exports = {
 			enabled: process.env.SLACK_ENABLED
 		},
 		googleAnalytics: {
-            enabled: process.env.GOOGLE_ANALYTICS_ENABLED,
-            trackingId: process.env.GOOGLE_ANALYTICS_TRACKING_ID
+			enabled: process.env.GOOGLE_ANALYTICS_ENABLED,
+			trackingId: process.env.GOOGLE_ANALYTICS_TRACKING_ID
         }
 	}
 };
