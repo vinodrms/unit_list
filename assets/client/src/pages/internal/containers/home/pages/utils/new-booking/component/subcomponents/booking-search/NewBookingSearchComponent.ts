@@ -1,4 +1,4 @@
-import {Component, ViewChild, AfterViewInit} from '@angular/core';
+import {Component, ViewChild, AfterViewInit, OnInit} from '@angular/core';
 import {BaseComponent} from '../../../../../../../../../../common/base/BaseComponent';
 import {LazyLoadingTableComponent} from '../../../../../../../../../../common/utils/components/lazy-loading/LazyLoadingTableComponent';
 import {TableColumnValueMeta} from '../../../../../../../../../../common/utils/components/lazy-loading/utils/LazyLoadTableMeta';
@@ -25,7 +25,7 @@ import {BookingCartService} from '../../../services/search/BookingCartService';
 		BookingCartTableMetaBuilderService, BookingTableUtilsService],
 	pipes: [TranslationPipe]
 })
-export class NewBookingSearchComponent extends BaseComponent implements AfterViewInit {
+export class NewBookingSearchComponent extends BaseComponent implements AfterViewInit, OnInit {
 	@ViewChild('searchResults') private _searchResultsTableComponent: LazyLoadingTableComponent<BookingCartItemVM>;
 	@ViewChild('bookingCart') private _bookingCartTableComponent: LazyLoadingTableComponent<BookingCartItemVM>;
 
@@ -38,6 +38,9 @@ export class NewBookingSearchComponent extends BaseComponent implements AfterVie
 		private _cartTableMetaBuilder: BookingCartTableMetaBuilderService, private _bookingTableUtilsService: BookingTableUtilsService,
 		private _bookingCartService: BookingCartService) {
 		super();
+	}
+	public ngOnInit() {
+		this._appContext.analytics.logPageView("/operations/new-booking/search");
 	}
 	public ngAfterViewInit() {
 		this._searchResultsTableComponent.bootstrap(this._bookingSearchService, this._searchTableMetaBuilder.buildSearchResultsTableMeta());

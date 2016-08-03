@@ -80,6 +80,7 @@ export class AssignRoomModalComponent extends BaseComponent implements ICustomMo
             roomCategoryId: this.selectedRoomCategoryId
         };
         this._modalInput.assignRoomStrategy.applyStrategy(this._hotelOperationsRoomService, assignRoomParams).subscribe((updatedBooking: BookingDO) => {
+            this._appContext.analytics.logEvent("assign-room", this._modalInput.assignRoomStrategy.getEventAction());
             this.isAssigningRoom = false;
 
             var successResultString = this._appContext.thTranslation.translate(this._modalInput.assignRoomStrategy.getStrategySuccessResultString());

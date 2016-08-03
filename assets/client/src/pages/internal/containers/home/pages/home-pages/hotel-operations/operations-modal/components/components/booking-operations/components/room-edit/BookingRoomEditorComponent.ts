@@ -65,6 +65,7 @@ export class BookingRoomEditorComponent {
         this.getAssignRoomModalPromise().then((modalDialogRef: ModalDialogRef<BookingDO>) => {
             modalDialogRef.resultObservable
                 .subscribe((updatedBooking: BookingDO) => {
+                    this._appContext.analytics.logEvent("booking", "assign-room", "assigned a room for a booking");
                     this.triggerOnBookingRoomChanged(updatedBooking);
                 }, (err: any) => {
                 });

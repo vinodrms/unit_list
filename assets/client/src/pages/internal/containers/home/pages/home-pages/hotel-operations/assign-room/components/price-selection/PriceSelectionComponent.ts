@@ -1,4 +1,4 @@
-import {Component, AfterViewInit, ViewChild, Output, EventEmitter} from '@angular/core';
+import {Component, AfterViewInit, ViewChild, Output, EventEmitter, OnInit} from '@angular/core';
 import {TranslationPipe} from '../../../../../../../../../../common/utils/localization/TranslationPipe';
 import {LoadingComponent} from '../../../../../../../../../../common/utils/components/LoadingComponent';
 import {LazyLoadingTableComponent} from '../../../../../../../../../../common/utils/components/lazy-loading/LazyLoadingTableComponent';
@@ -15,7 +15,7 @@ import {PriceSelectionVM} from './services/view-models/PriceSelectionVM';
     directives: [LoadingComponent, LazyLoadingTableComponent],
     pipes: [TranslationPipe]
 })
-export class PriceSelectionComponent implements AfterViewInit {
+export class PriceSelectionComponent implements AfterViewInit, OnInit {
     @Output() onPriceSelection = new EventEmitter<PriceSelectionVM>();
 
     didInit: boolean = false;
@@ -27,6 +27,9 @@ export class PriceSelectionComponent implements AfterViewInit {
         private _priceSelectionService: PriceSelectionService,
         private _tableMetaBuilder: PriceSelectionTableMetaBuilderService) { }
 
+    public ngOnInit() {
+        this._appContext.analytics.logPageView("/operations/assign-room/price-selection");
+    }
     public ngAfterViewInit() {
         this.bootstrapTable();
         this._priceSelectionService.buildPossiblePrices().subscribe((priceSelectionVMList: PriceSelectionVM[]) => {

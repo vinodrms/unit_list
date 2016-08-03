@@ -17,4 +17,7 @@ export class CheckInStrategy extends AAssignRoomStrategy {
     public validateAlreadyCheckedInBooking(): boolean {
         return true;
     }
+    public getEventAction(): string {
+        return "check-in";
+    }
 }

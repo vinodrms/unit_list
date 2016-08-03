@@ -9,4 +9,5 @@ export abstract class AAssignRoomStrategy implements IAssignRoomStrategy {
     public abstract applyStrategy(operationsRoomService: HotelOperationsRoomService, assignRoomParams: AssignRoomParam): Observable<BookingDO>;
     public abstract getStrategySuccessResultString(): string;
     public abstract validateAlreadyCheckedInBooking(): boolean;
+    public abstract getEventAction(): string;
 }

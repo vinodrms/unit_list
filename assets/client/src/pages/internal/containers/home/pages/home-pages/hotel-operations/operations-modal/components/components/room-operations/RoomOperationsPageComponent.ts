@@ -40,6 +40,7 @@ export class RoomOperationsPageComponent implements OnInit {
 
     public ngOnInit() {
         this.loadPageData();
+        this._appContext.analytics.logPageView("/operations/room");
     }
     private loadPageData() {
         this.isLoading = true;

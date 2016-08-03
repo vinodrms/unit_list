@@ -114,6 +114,7 @@ export class BookingPeriodEditorComponent implements OnInit {
     private saveBookingPeriodCore() {
         this.isSaving = true;
         this._hotelOperationsBookingService.changeDates(this.bookingDO).subscribe((updatedBooking: BookingDO) => {
+            this._appContext.analytics.logEvent("booking", "change-period", "Changed the period for a booking");
             this.readonly = true;
             this.isSaving = false;
             this.triggerOnBookingPeriodChanged(updatedBooking);

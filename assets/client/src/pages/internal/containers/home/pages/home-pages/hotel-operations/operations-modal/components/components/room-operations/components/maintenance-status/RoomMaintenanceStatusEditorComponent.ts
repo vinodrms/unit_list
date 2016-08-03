@@ -98,6 +98,7 @@ export class RoomMaintenanceStatusEditorComponent implements OnInit {
             maintenanceMessage: this.currentMaintenanceText,
             maintenanceStatus: this.currentMaintenanceMeta.maintenanceStatus
         }).subscribe((updatedRoom: RoomDO) => {
+            this._appContext.analytics.logEvent("room", "maintenance-status", "Changed the maintenance status for a room");
             this.readonly = true;
             this.isSaving = false;
             this.triggerOnMaintenanceStatusChanged(updatedRoom);
