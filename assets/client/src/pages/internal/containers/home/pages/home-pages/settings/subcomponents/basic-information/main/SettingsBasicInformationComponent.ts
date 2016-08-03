@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {RouteConfig, RouterOutlet, ROUTER_DIRECTIVES} from '@angular/router-deprecated';
+import {ROUTER_DIRECTIVES} from '@angular/router';
 import {BaseComponent} from '../../../../../../../../../../common/base/BaseComponent';
 import {TranslationPipe} from '../../../../../../../../../../common/utils/localization/TranslationPipe';
 import {SettingsNavbarService} from '../../navbar/services/SettingsNavbarService';
@@ -11,17 +11,14 @@ import {SettingsBasicInfoPaymentsAndPoliciesComponent} from '../pages/payments-p
 import {SettingsBasicInfoPropertyDetailsComponent} from '../pages/property-details/SettingsBasicInfoPropertyDetailsComponent';
 import {TimezoneService} from '../../../../../../../../services/timezones/TimezoneService';
 
-@RouteConfig([
-	{ path: '/overview', name: 'SettingsBasicInfoOverviewComponent', component: SettingsBasicInfoOverviewComponent, useAsDefault: true },
-    { path: '/payments-policies', name: 'SettingsBasicInfoPaymentsAndPoliciesComponent', component: SettingsBasicInfoPaymentsAndPoliciesComponent },
-    { path: '/property-details', name: 'SettingsBasicInfoPropertyDetailsComponent', component: SettingsBasicInfoPropertyDetailsComponent }
-])
 @Component({
 	selector: 'settings-basic-information',
 	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/settings/subcomponents/basic-information/main/template/settings-basic-information.html',
 	directives: [ROUTER_DIRECTIVES],
 	providers: [TimezoneService, SettingsBasicInformationService],
-	pipes: [TranslationPipe]
+	pipes: [TranslationPipe],
+	precompile: [SettingsBasicInfoOverviewComponent, SettingsBasicInfoPaymentsAndPoliciesComponent,
+		SettingsBasicInfoPropertyDetailsComponent]
 })
 export class SettingsBasicInformationComponent extends BaseComponent {
 

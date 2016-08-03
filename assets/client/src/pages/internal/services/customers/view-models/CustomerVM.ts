@@ -23,7 +23,7 @@ export class CustomerVM {
 		var custDetailsFactory = new CustomerDetailsFactory();
 		var foundDetailsMeta = _.find(custDetailsFactory.getCustomerDetailsMetaList(), (meta: CustomerDetailsMeta) => { return meta.customerType === customer.type });
 		this._customerTypeString = !foundDetailsMeta ? "" : foundDetailsMeta.customerTypeName;
-		this._fontName = foundDetailsMeta.fontName;
+		this._fontName = !foundDetailsMeta ? "" : foundDetailsMeta.fontName;
 	}
 	public get priceProductList(): PriceProductDO[] {
 		return this._priceProductList;

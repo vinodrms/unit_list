@@ -6,14 +6,14 @@ import {SettingsBasicInfoPageType} from './utils/SettingsBasicInfoPageType';
 
 @Injectable()
 export class SettingsBasicInformationService {
-	public static BaseSettingsBasicInfoPath = SettingsNavbarService.BaseSettingsPath + "SettingsBasicInformationComponent/";
+	public static BaseSettingsBasicInfoPath = SettingsNavbarService.BaseSettingsPath + "basic-info/";
 	private _basicInfoPageList: SettingsBasicInfoPageVM[];
 
 	constructor(private _appContext: AppContext) {
 		this._basicInfoPageList = [
-			new SettingsBasicInfoPageVM("SettingsBasicInfoOverviewComponent", SettingsBasicInfoPageType.Overview, "Overview"),
-			new SettingsBasicInfoPageVM("SettingsBasicInfoPaymentsAndPoliciesComponent", SettingsBasicInfoPageType.PaymentsAndPolicies, "Payments & Policies"),
-			new SettingsBasicInfoPageVM("SettingsBasicInfoPropertyDetailsComponent", SettingsBasicInfoPageType.PropertyDetails, "Property Details")
+			new SettingsBasicInfoPageVM("overview", SettingsBasicInfoPageType.Overview, "Overview"),
+			new SettingsBasicInfoPageVM("payments-policies", SettingsBasicInfoPageType.PaymentsAndPolicies, "Payments & Policies"),
+			new SettingsBasicInfoPageVM("property-details", SettingsBasicInfoPageType.PropertyDetails, "Property Details")
 		];
 	}
 	public bootstrap(pageType: SettingsBasicInfoPageType) {

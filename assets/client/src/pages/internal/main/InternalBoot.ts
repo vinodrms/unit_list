@@ -2,9 +2,9 @@
 
 import {bootstrap} from '@angular/platform-browser-dynamic';
 import {provide, enableProdMode} from '@angular/core';
-import {ROUTER_PROVIDERS} from '@angular/router-deprecated';
 import {APP_BASE_HREF} from '@angular/common';
 import {MainLayoutInternalComponent} from './MainLayoutInternalComponent';
+import {InternalRouterConfig} from './InternalRouterConfig';
 import {HTTP_PROVIDERS} from '@angular/http';
 import {IThCookie} from '../../../common/utils/cookies/IThCookie';
 import {ThCookie} from '../../../common/utils/cookies/ThCookie';
@@ -23,7 +23,7 @@ import {AppContext} from '../../../common/utils/AppContext';
 
 bootstrap(MainLayoutInternalComponent,
     [
-		ROUTER_PROVIDERS,
+		InternalRouterConfig,
 		provide(APP_BASE_HREF, { useValue: '/home' }),
 		provide(IThCookie, { useClass: ThCookie }),
 		provide(IBrowserLocation, { useClass: BrowserLocation }),

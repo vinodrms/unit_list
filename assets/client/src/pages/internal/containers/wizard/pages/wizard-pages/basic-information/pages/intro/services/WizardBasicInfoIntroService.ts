@@ -12,7 +12,7 @@ export class WizardBasicInfoIntroService implements IBasicInfoStep {
 			resolve(true);
 		});
 	}
-	public getComponentName(): string {
-		return "WizardBasicInfoIntroComponent";
+	public getComponentPath(): string {
+		return "intro";
 	}
 }

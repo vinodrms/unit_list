@@ -15,12 +15,12 @@
 	<div>
 		<loading-button [isLoading]="isLoading" title="Log In"></loading-button>
 		<br/>
-		<a class="reset_pass" [routerLink]="['/ResetPasswordComponent']">{{ 'Lost your password?' | translate }}</a>
+		<a class="reset_pass" [routerLink]="['/reset']">{{ 'Lost your password?' | translate }}</a>
 	</div>
 	<div class="clearfix"></div>
 	<div class="separator">
 		<p class="change_link">New to site?
-			<a class="to_register" [routerLink]="['/SignUpComponent']"> {{ 'Create Account' | translate }} </a>
+			<a class="to_register" [routerLink]="['/sign-up']"> {{ 'Create Account' | translate }} </a>
 		</p>
 		<external-footer-component></external-footer-component>
 	</div>

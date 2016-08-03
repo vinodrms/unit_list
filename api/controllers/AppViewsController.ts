@@ -16,7 +16,7 @@ class AppViewsController extends BaseController {
 		var sessionManager = new SessionManager(req);
 		if (!isDevelopmentEnvironment && !sessionManager.sessionExists()) {
 			var appContext: AppContext = req.appContext;
-			return res.redirect(appContext.getUnitPalConfig().getAppContextRoot() + "/?loginStatusCode=" + LoginStatusCode.SessionTimeout);
+			return res.redirect(appContext.getUnitPalConfig().getAppContextRoot() + "/login/" + LoginStatusCode.SessionTimeout);
 		}
         return res.view("internal", {
 			isDevelopmentEnvironment: isDevelopmentEnvironment
