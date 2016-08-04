@@ -3303,9 +3303,14 @@ tr.selected-invoice-item {
     -webkit-appearance: none;
     margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
 }
-
 .row-payment input[type="number"] {
     -moz-appearance: textfield;
+}
+.invoice-payer-container .clickable-item {
+    cursor: pointer;
+    font-weight: 500;
+    color: white;
+    font-size: 14px;
 }
 
 .more-items-container {

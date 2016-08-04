@@ -618,5 +618,7 @@ export var EnglishTranslations: Object = {
 	"Reserved Rooms" : "Reserved Rooms",
 	"Out Of Service Rooms" : "Out Of Service Rooms",
 	"Showing" : "Showing",
-	"Showing Only" : "Showing Only"	
+	"Showing Only" : "Showing Only",
+	"Print & Send": "Print & Send",
+	"of": "of",
 };

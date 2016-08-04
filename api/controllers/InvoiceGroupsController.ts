@@ -19,7 +19,7 @@ export class InvoiceGroupsController extends BaseController {
         var invoiceGroupRepo = appContext.getRepositoryFactory().getInvoiceGroupsRepository();
 
         invoiceGroupRepo.getInvoiceGroupById(this.getInvoiceGroupMetaRepoDOFrom(sessionContext), invoiceGroupId).then((invoiceGroup: InvoiceGroupDO) => {
-            this.returnSuccesfulResponse(req, res, { invoiceGroup: invoiceGroup });
+            this.returnSuccesfulResponse(req, res, invoiceGroup);
         }).catch((err: any) => {
             this.returnErrorResponse(req, res, err, ThStatusCode.InvoiceGroupsControllerErrorGettingInvoiceGroupById);
         });

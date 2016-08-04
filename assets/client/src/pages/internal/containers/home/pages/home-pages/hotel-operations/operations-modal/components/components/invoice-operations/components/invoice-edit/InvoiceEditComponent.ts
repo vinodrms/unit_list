@@ -8,6 +8,10 @@ import {AddOnProductDO} from '../../../../../../../../../../../services/add-on-p
 import {ModalDialogRef} from '../../../../../../../../../../../../../common/utils/modals/utils/ModalDialogRef';
 import {CustomerRegisterModalService} from '../../../../../../../../../../common/inventory/customer-register/modal/services/CustomerRegisterModalService';
 import {CustomerDO} from '../../../../../../../../../../../services/customers/data-objects/CustomerDO';
+import {InvoiceDO} from '../../../../../../../../../../../services/invoices/data-objects/InvoiceDO';
+import {InvoiceGroupDO} from '../../../../../../../../../../../services/invoices/data-objects/InvoiceGroupDO';
+import {InvoiceGroupControllerService} from '../../services/InvoiceGroupControllerService';
+import {InvoicePayerDO} from '../../../../../../../../../../../services/invoices/data-objects/payers/InvoicePayerDO';
 
 @Component({
     selector: 'invoice-edit',
@@ -16,11 +20,17 @@ import {CustomerDO} from '../../../../../../../../../../../services/customers/da
     providers: [AddOnProductsModalService, CustomerRegisterModalService],
     pipes: [TranslationPipe]
 })
-export class InvoiceEditComponent {
+export class InvoiceEditComponent implements OnInit {
+    @Input() invoiceIndex: number;
 
     constructor(private _addOnProductsModalService: AddOnProductsModalService,
-        private _customerRegisterModalService: CustomerRegisterModalService) {
+        private _customerRegisterModalService: CustomerRegisterModalService,
+        private _invoiceGroupControllerService: InvoiceGroupControllerService) {
 	}
+
+    ngOnInit() {
+            
+    }
 
     public openAddOnProductSelectModal() {
 		this._addOnProductsModalService.openAddOnProductsModal().then((modalDialogInstance: ModalDialogRef<AddOnProductDO[]>) => {
@@ -38,5 +48,15 @@ export class InvoiceEditComponent {
                 
             });
         }).catch((e: any) => { });
+    }
+
+    private get invoiceGroupDO(): InvoiceGroupDO {
+        return this._invoiceGroupControllerService.invoiceOperationsPageData.invoiceGroupDO;
+    }
+    private get invoiceDO(): InvoiceDO {
+        return this.invoiceGroupDO.invoiceList[this.invoiceIndex];
+    }
+    private get invoicePayerList(): InvoicePayerDO[] {
+        return this.invoiceDO.payerList;
     }
 }

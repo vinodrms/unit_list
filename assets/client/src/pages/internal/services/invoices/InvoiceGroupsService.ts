@@ -16,11 +16,6 @@ export interface InvoiceGroupsQuery {
     bookingId: string;
 }
 
-export interface InvoiceGroupPayerStatsQuery {
-    invoiceGroupPaymentStatus: InvoicePaymentStatus;
-    customerIdList: string[];
-}
-
 @Injectable()
 export class InvoiceGroupsService extends ALazyLoadRequestService<InvoiceGroupPayerStatsDO> {
     

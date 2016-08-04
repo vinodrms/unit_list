@@ -24,6 +24,7 @@ export class ItemListNavigatorComponent implements OnInit {
 
     ngOnInit() {
         this.firstSelectedItemIndex = 0;
+        this.maxNumberOfDisplayedItems = Math.min(this.maxNumberOfDisplayedItems, this.totalNumberOfItems);
         this.interval = new Interval(this.maxNumberOfDisplayedItems, 0, this.totalNumberOfItems - 1);
     }
 

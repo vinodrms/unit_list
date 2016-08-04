@@ -1,9 +1,10 @@
 <div class="invoice-edit-container full-height">
     <p class="invoice-title">
-        Invoice #1
+        Invoice #{{ invoiceIndex + 1 }}
     </p>
 
-    <invoice-payer></invoice-payer>
+    <invoice-payer *ngFor="let invoicePayer of invoicePayerList; let invoicePayerIndex = index" [invoiceIndex]="invoiceIndex" [invoicePayerIndex]="invoicePayerIndex"></invoice-payer>
+    
     <p class="btn-add-invoice-payer">
         <th-button [upFont]="'\''" [text]="'Add Payer'" (onButtonClick)="openCustomerSelectModal()"></th-button>
     </p>
