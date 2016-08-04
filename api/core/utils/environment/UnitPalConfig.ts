@@ -19,6 +19,10 @@ export enum AppEnvironmentType {
     Test,
     Production
 }
+export interface GoogleAnalyticsSettings {
+    enabled: boolean;
+    trackingId: string;
+}
 
 export class UnitPalConfig {
     private _appEnvironment: AppEnvironmentType;
@@ -29,6 +33,7 @@ export class UnitPalConfig {
     private _imageStorageProviderSettings: Object;
     private _pdfReportsProviderType: PdfReportsProviderType;
     private _pdfReportsProviderSettings: Object;
+    private _googleAnalyticsSettings: GoogleAnalyticsSettings;
     private _appContextRoot: string;
 
     constructor() {
@@ -37,6 +42,7 @@ export class UnitPalConfig {
         this.updateEmailProvider();
         this.updateImageStorageProvider();
         this.updatePdfReportsProvider();
+        this.updateGoogleAnalyticsSettings();
         this.updateAppContextRoot();
     }
     private updateAppEnvironment() {
@@ -101,6 +107,9 @@ export class UnitPalConfig {
         }
         this._pdfReportsProviderSettings = sails.config.unitPalConfig.pdfReportsService.settings;
     }
+    private updateGoogleAnalyticsSettings() {
+        this._googleAnalyticsSettings = sails.config.unitPalConfig.googleAnalytics;
+    }
     private updateAppContextRoot() {
         this._appContextRoot = sails.config.unitPalConfig.appContextRoot;
     }
@@ -130,5 +139,8 @@ export class UnitPalConfig {
     }
     public getAppContextRoot(): string {
         return this._appContextRoot;
+    }
+    public getGoogleAnalyticsSettings(): GoogleAnalyticsSettings {
+        return this._googleAnalyticsSettings;
     }
 }

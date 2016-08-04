@@ -49,6 +49,7 @@ export class BookingSendConfirmationComponent implements OnInit {
 
         this._emailSenderModalService.sendBookingConfirmation(customerList, groupBookingId, bookingId).then((modalDialogRef: ModalDialogRef<boolean>) => {
             modalDialogRef.resultObservable.subscribe((sendResult: boolean) => {
+                this._appContext.analytics.logEvent("booking", "send-confirmation", "Sent a booking confirmation by email");
             }, (err: any) => { });
         }).catch((err: any) => { });
     }

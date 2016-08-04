@@ -132,6 +132,7 @@ export class BookingCustomerEditorComponent implements OnInit {
         this.isSaving = true;
         this._bookingOperationsPageData.bookingDO.customerIdList = _.map(this.customerList, (customer: CustomerDO) => { return customer.id });
         this._hotelOperationsBookingService.changeCustomers(this._bookingOperationsPageData.bookingDO).subscribe((updatedBooking: BookingDO) => {
+            this._appContext.analytics.logEvent("booking", "edit-customers", "Changed the customers for a booking");
             this.readonly = true;
             this.isSaving = false;
             this.triggerOnCustomersChanged(updatedBooking);

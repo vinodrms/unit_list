@@ -79,4 +79,8 @@ export class InvoiceDO extends BaseDO implements IPriceableEntity {
     public getPrice(): number {
         return _.reduce(this.itemList, function(memo: number, item: InvoiceItemDO){ return memo + item.meta.getNumberOfItems() * item.meta.getPrice(); }, 0);
     }
+    
+    public get isPaid(): boolean {
+        return this.paymentStatus === InvoicePaymentStatus.Closed;
+    }
 }

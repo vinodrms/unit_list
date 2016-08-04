@@ -58,6 +58,7 @@ export class BookingCancelComponent implements OnInit {
     private cancelCore() {
         this.isSaving = true;
         this._hotelOperationsBookingService.cancel(this._bookingOperationsPageData.bookingDO).subscribe((updatedBooking: BookingDO) => {
+            this._appContext.analytics.logEvent("booking", "cancel", "Cancelled a booking");
             this.isSaving = false;
             this.triggerOnBookingCancel(updatedBooking);
         }, (error: ThError) => {

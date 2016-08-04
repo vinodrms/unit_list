@@ -25,6 +25,8 @@ import {BookingRoomCategoryValidationRule} from '../../../bookings/validators/va
 import {BookingOccupancyCalculator} from '../../../bookings/search-bookings/utils/occupancy-calculator/BookingOccupancyCalculator';
 import {IBookingOccupancy} from '../../../bookings/search-bookings/utils/occupancy-calculator/results/IBookingOccupancy';
 import {BookingUtils} from '../../../bookings/utils/BookingUtils';
+import {BookingWithDependencies} from '../../booking/utils/BookingWithDependencies';
+import {BookingWithDependenciesLoader} from '../../booking/utils/BookingWithDependenciesLoader';
 
 import _ = require('underscore');
 
@@ -37,11 +39,8 @@ export class AssignRoom {
 
     private _needsPriceRecomputing: boolean;
 
-    private _booking: BookingDO;
-    private _priceProductsContainer: PriceProductsContainer;
+    private _bookingWithDependencies: BookingWithDependencies;
     private _currentHotelTimestamp: ThTimestampDO;
-    private _loadedRoomCategoryStatsList: RoomCategoryStatsDO[];
-    private _loadedRoomList: RoomDO[];
 
     constructor(private _appContext: AppContext, private _sessionContext: SessionContext) {
         this._thUtils = new ThUtils();
@@ -74,52 +73,46 @@ export class AssignRoom {
             parser.logAndReject("Error validating assign room fields", reject);
             return;
         }
-        var bookingsRepo = this._appContext.getRepositoryFactory().getBookingRepository();
-        bookingsRepo.getBookingById({ hotelId: this._sessionContext.sessionDO.hotel.id }, this._assignRoomDO.groupBookingId, this._assignRoomDO.bookingId)
-            .then((booking: BookingDO) => {
-                this._booking = booking;
-                this._priceProductsContainer = new PriceProductsContainer([this._booking.priceProductSnapshot]);
+        var bookingLoader = new BookingWithDependenciesLoader(this._appContext, this._sessionContext);
+        return bookingLoader.load(this._assignRoomDO.groupBookingId, this._assignRoomDO.bookingId)
+            .then((bookingWithDependencies: BookingWithDependencies) => {
+                this._bookingWithDependencies = bookingWithDependencies;
 
                 var hotelTime = new HotelTime(this._appContext, this._sessionContext);
                 return hotelTime.getTimestamp();
             }).then((timestamp: ThTimestampDO) => {
                 this._currentHotelTimestamp = timestamp;
 
-                var roomCategStatsAggregator = new RoomCategoryStatsAggregator(this._appContext, this._sessionContext);
-                return roomCategStatsAggregator.getRoomCategoryStatsList();
-            }).then((roomCategoryStatsList: RoomCategoryStatsDO[]) => {
-                this._loadedRoomCategoryStatsList = roomCategoryStatsList;
-
-                var roomsRepo = this._appContext.getRepositoryFactory().getRoomRepository();
-                return roomsRepo.getRoomList({ hotelId: this._sessionContext.sessionDO.hotel.id });
-            }).then((roomSearchResult: RoomSearchResultRepoDO) => {
-                this._loadedRoomList = roomSearchResult.roomList;
-
                 this.updateBookingWithInputParams();
                 return this._assignRoomStrategy.updateAdditionalFields({
                     assignRoomDO: this._assignRoomDO,
                     currentHotelTimestamp: this._currentHotelTimestamp,
-                    booking: this._booking,
-                    roomList: this._loadedRoomList,
-                    roomCategoryStatsList: this._loadedRoomCategoryStatsList
+                    booking: this._bookingWithDependencies.bookingDO,
+                    roomList: this._bookingWithDependencies.roomList,
+                    roomCategoryStatsList: this._bookingWithDependencies.roomCategoryStatsList
                 });
             }).then((updatedBooking: BookingDO) => {
-                this._booking = updatedBooking;
+                this._bookingWithDependencies.bookingDO = updatedBooking;
 
                 var bookingValidationRule = new BusinessValidationRuleContainer([
                     new BookingRoomCategoryValidationRule({
-                        priceProductsContainer: this._priceProductsContainer,
-                        roomCategoryStatsList: this._loadedRoomCategoryStatsList,
-                        roomList: this._loadedRoomList
+                        priceProductsContainer: this._bookingWithDependencies.priceProductsContainer,
+                        roomCategoryStatsList: this._bookingWithDependencies.roomCategoryStatsList,
+                        roomList: this._bookingWithDependencies.roomList
                     })
                 ]);
-                return bookingValidationRule.isValidOn(this._booking);
+                return bookingValidationRule.isValidOn(this._bookingWithDependencies.bookingDO);
             }).then((validatedBooking: BookingDO) => {
-                this._booking = validatedBooking;
+                this._bookingWithDependencies.bookingDO = validatedBooking;
+                if (this._needsPriceRecomputing && this._bookingWithDependencies.hasPaidInvoice()) {
+                    var thError = new ThError(ThStatusCode.AssignRoomPaidInvoice, null);
+                    ThLogger.getInstance().logBusiness(ThLogLevel.Info, "assign room: paid invoice", this._assignRoomDO, thError);
+                    throw thError;
+                }
                 this.updateBookingPriceIfNecessary();
 
-                var occupancyCalculator = new BookingOccupancyCalculator(this._appContext, this._sessionContext, this._loadedRoomList);
-                return occupancyCalculator.compute(this._booking.interval, [], this._booking.bookingId);
+                var occupancyCalculator = new BookingOccupancyCalculator(this._appContext, this._sessionContext, this._bookingWithDependencies.roomList);
+                return occupancyCalculator.compute(this._bookingWithDependencies.bookingDO.interval, [], this._bookingWithDependencies.bookingDO.bookingId);
             }).then((bookingOccupancy: IBookingOccupancy) => {
                 if (bookingOccupancy.getOccupancyForRoomId(this._assignRoomDO.roomId) > 0) {
                     var thError = new ThError(ThStatusCode.AssignRoomOccupied, null);
@@ -139,14 +132,14 @@ export class AssignRoom {
                     throw thError;
                 }
 
-                return this._assignRoomStrategy.generateInvoiceIfNecessary(this._booking);
+                return this._assignRoomStrategy.generateInvoiceIfNecessary(this._bookingWithDependencies.bookingDO);
             }).then((bookingWithInvoice: BookingDO) => {
                 var bookingsRepo = this._appContext.getRepositoryFactory().getBookingRepository();
                 return bookingsRepo.updateBooking({ hotelId: this._sessionContext.sessionDO.hotel.id }, {
-                    groupBookingId: this._booking.groupBookingId,
-                    bookingId: this._booking.bookingId,
-                    versionId: this._booking.versionId
-                }, this._booking);
+                    groupBookingId: this._bookingWithDependencies.bookingDO.groupBookingId,
+                    bookingId: this._bookingWithDependencies.bookingDO.bookingId,
+                    versionId: this._bookingWithDependencies.bookingDO.versionId
+                }, this._bookingWithDependencies.bookingDO);
             }).then((updatedBooking: BookingDO) => {
                 resolve(updatedBooking);
             }).catch((error: any) => {
@@ -160,10 +153,10 @@ export class AssignRoom {
 
     private updateBookingWithInputParams() {
         this._needsPriceRecomputing = false;
-        this._booking.roomId = this._assignRoomDO.roomId;
+        this._bookingWithDependencies.bookingDO.roomId = this._assignRoomDO.roomId;
         if (!this._thUtils.isUndefinedOrNull(this._assignRoomDO.roomCategoryId) && _.isString(this._assignRoomDO.roomCategoryId)) {
-            if (this._assignRoomDO.roomCategoryId !== this._booking.roomCategoryId) {
-                this._booking.roomCategoryId = this._assignRoomDO.roomCategoryId;
+            if (this._assignRoomDO.roomCategoryId !== this._bookingWithDependencies.bookingDO.roomCategoryId) {
+                this._bookingWithDependencies.bookingDO.roomCategoryId = this._assignRoomDO.roomCategoryId;
                 this._needsPriceRecomputing = true;
             }
         }
@@ -172,6 +165,6 @@ export class AssignRoom {
         if (!this._needsPriceRecomputing) {
             return;
         }
-        this._bookingUtils.updateBookingPriceUsingRoomCategory(this._booking);
+        this._bookingUtils.updateBookingPriceUsingRoomCategory(this._bookingWithDependencies.bookingDO);
     }
 }

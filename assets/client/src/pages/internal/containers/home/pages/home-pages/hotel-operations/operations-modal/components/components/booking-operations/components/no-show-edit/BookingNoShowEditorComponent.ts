@@ -111,6 +111,7 @@ export class BookingNoShowEditorComponent implements OnInit {
         }
         this.isSaving = true;
         this._hotelOperationsBookingService.changeNoShowTime(this._bookingOperationsPageData.bookingDO, this.noShowTimestamp).subscribe((updatedBooking: BookingDO) => {
+            this._appContext.analytics.logEvent("booking", "no-show", "Changed the no show time for a booking");
             this.readonly = true;
             this.isSaving = false;
             this.triggerOnBookingNoShowTimestampChanged(updatedBooking);

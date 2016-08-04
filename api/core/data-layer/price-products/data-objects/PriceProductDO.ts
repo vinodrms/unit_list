@@ -77,4 +77,9 @@ export class PriceProductDO extends BaseDO {
 	public containsRoomCategoryId(roomCategoryId: string): boolean {
 		return _.contains(this.roomCategoryIdList, roomCategoryId);
 	}
+	public prepareForClient() {
+        delete this.openForArrivalIntervalList;
+        delete this.openForDepartureIntervalList;
+        delete this.openIntervalList;
+    }
 }

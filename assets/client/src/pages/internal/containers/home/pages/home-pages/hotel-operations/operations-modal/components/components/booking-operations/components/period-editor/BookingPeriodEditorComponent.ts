@@ -68,13 +68,16 @@ export class BookingPeriodEditorComponent implements OnInit {
     }
 
     public get noIntervalEditAccess(): boolean {
-        return this._bookingOperationsPageData.bookingMeta.intervalEditRight === BookingIntervalEditRight.NoIntervalEdit;
+        return this._bookingOperationsPageData.bookingMeta.intervalEditRight === BookingIntervalEditRight.NoIntervalEdit
+            || this._bookingOperationsPageData.hasPaidInvoice;
     }
     public get editIntervalAccess(): boolean {
-        return this._bookingOperationsPageData.bookingMeta.intervalEditRight === BookingIntervalEditRight.EditInterval;
+        return this._bookingOperationsPageData.bookingMeta.intervalEditRight === BookingIntervalEditRight.EditInterval
+            && !this._bookingOperationsPageData.hasPaidInvoice;;
     }
     public get editEndDateAccess(): boolean {
-        return this._bookingOperationsPageData.bookingMeta.intervalEditRight === BookingIntervalEditRight.EditEndDate;
+        return this._bookingOperationsPageData.bookingMeta.intervalEditRight === BookingIntervalEditRight.EditEndDate
+            && !this._bookingOperationsPageData.hasPaidInvoice;
     }
 
     public get startDateLongString(): string {
@@ -114,6 +117,7 @@ export class BookingPeriodEditorComponent implements OnInit {
     private saveBookingPeriodCore() {
         this.isSaving = true;
         this._hotelOperationsBookingService.changeDates(this.bookingDO).subscribe((updatedBooking: BookingDO) => {
+            this._appContext.analytics.logEvent("booking", "change-period", "Changed the period for a booking");
             this.readonly = true;
             this.isSaving = false;
             this.triggerOnBookingPeriodChanged(updatedBooking);

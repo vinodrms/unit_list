@@ -58,6 +58,7 @@ export class EmailSenderModalComponent extends BaseComponent implements ICustomM
         this._hotelOperationsCommonService.sendEmail(this._modalInput.emailConfirmationParams).subscribe((result: boolean) => {
             this.isSending = false;
             this._appContext.toaster.success(this._appContext.thTranslation.translate("Email(s) sent succesfully"));
+            this._modalDialogRef.addResult(true);
             this.closeDialog();
         }, (error: ThError) => {
             this.isSending = false;

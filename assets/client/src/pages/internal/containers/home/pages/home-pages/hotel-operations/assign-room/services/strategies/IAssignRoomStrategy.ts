@@ -8,4 +8,5 @@ export interface IAssignRoomStrategy {
     applyStrategy(operationsRoomService: HotelOperationsRoomService, assignRoomParams: AssignRoomParam): Observable<BookingDO>;
     getStrategySuccessResultString(): string;
     validateAlreadyCheckedInBooking(): boolean;
+    getEventAction(): string;
 }

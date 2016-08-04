@@ -17,4 +17,7 @@ export class ReserveRoomStrategy extends AAssignRoomStrategy {
     public validateAlreadyCheckedInBooking(): boolean {
         return false;
     }
+    public getEventAction(): string {
+        return "reserve-room";
+    }
 }

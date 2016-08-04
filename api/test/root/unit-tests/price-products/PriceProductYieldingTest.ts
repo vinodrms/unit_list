@@ -10,8 +10,11 @@ import {ThDateIntervalDO} from '../../../../core/utils/th-dates/data-objects/ThD
 import {ThDateIntervalUtils} from '../../../../core/utils/th-dates/ThDateIntervalUtils';
 import {ThDateUtils} from '../../../../core/utils/th-dates/ThDateUtils';
 import {PriceProductDO} from '../../../../core/data-layer/price-products/data-objects/PriceProductDO';
-import {PriceProductsYieldManagement} from '../../../../core/domain-layer/yield-manager/PriceProductsYieldManagement';
-import {PriceProductsYieldManagementDO, PriceProductYieldAttribute} from '../../../../core/domain-layer/yield-manager/PriceProductsYieldManagementDO';
+import {PriceProductYielding} from '../../../../core/domain-layer/yield-manager/price-product-yielding/PriceProductYielding';
+import {PriceProductYieldingDO, PriceProductYieldAttribute} from '../../../../core/domain-layer/yield-manager/price-product-yielding/PriceProductYieldingDO';
+import {PriceProductReader} from '../../../../core/domain-layer/yield-manager/price-product-reader/PriceProductReader';
+import {PriceProductReaderDO} from '../../../../core/domain-layer/yield-manager/price-product-reader/PriceProductReaderDO';
+import {PriceProductYieldResult, PriceProductYieldItem, YieldItemStateType, YieldItemState} from '../../../../core/domain-layer/yield-manager/price-product-reader/utils/PriceProductYieldItem';
 
 function testPriceProductOpenInterval(priceProduct: PriceProductDO, firstIntervalEnd: ThDateDO, secondIntervalStart: ThDateDO) {
 	should.equal(priceProduct.openIntervalList.length >= 2, true);
@@ -23,20 +26,20 @@ function testPriceProductOpenInterval(priceProduct: PriceProductDO, firstInterva
 	should.equal(priceProduct.openIntervalList[1].getStart().year, secondIntervalStart.year);
 }
 
-describe("Price Products Interval Tests", function() {
+describe("Price Products Interval Tests", function () {
     var testContext: TestContext;
 	var thDateUtils: ThDateUtils;
 	var testDataBuilder: DefaultDataBuilder;
 
-	before(function(done: any) {
+	before(function (done: any) {
 		testContext = new TestContext();
 		testDataBuilder = new DefaultDataBuilder(testContext);
 		thDateUtils = new ThDateUtils();
 		testDataBuilder.buildWithDoneCallback(done);
     });
 
-	describe("DayInYear Merge Tests", function() {
-        it("Should merge into one interval", function(done) {
+	describe("DayInYear Merge Tests", function () {
+        it("Should merge into one interval", function (done) {
 
 			var intervalList: ThDateIntervalDO[] = [
 				ThDateIntervalDO.buildThDateIntervalDO(
@@ -72,7 +75,7 @@ describe("Price Products Interval Tests", function() {
 			done();
         });
 
-		it("Should add one interval and merge", function(done) {
+		it("Should add one interval and merge", function (done) {
 			var intervalList: ThDateIntervalDO[] = [
 				ThDateIntervalDO.buildThDateIntervalDO(
 					ThDateDO.buildThDateDO(2016, ThMonth.January, 1),
@@ -101,7 +104,7 @@ describe("Price Products Interval Tests", function() {
         });
 
 
-		it("Should not substract interval", function(done) {
+		it("Should not substract interval", function (done) {
 			var intervalList: ThDateIntervalDO[] = [
 				ThDateIntervalDO.buildThDateIntervalDO(
 					ThDateDO.buildThDateDO(2016, ThMonth.February, 1),
@@ -124,7 +127,7 @@ describe("Price Products Interval Tests", function() {
 			done();
         });
 
-		it("Should not substract interval", function(done) {
+		it("Should not substract interval", function (done) {
 			var intervalList: ThDateIntervalDO[] = [
 				ThDateIntervalDO.buildThDateIntervalDO(
 					ThDateDO.buildThDateDO(2016, ThMonth.February, 1),
@@ -147,7 +150,7 @@ describe("Price Products Interval Tests", function() {
 			done();
         });
 
-		it("Should substract all active intervals", function(done) {
+		it("Should substract all active intervals", function (done) {
 			var intervalList: ThDateIntervalDO[] = [
 				ThDateIntervalDO.buildThDateIntervalDO(
 					ThDateDO.buildThDateDO(2016, ThMonth.February, 1),
@@ -166,7 +169,7 @@ describe("Price Products Interval Tests", function() {
 			done();
         });
 
-		it("Should split the interval into two subintervals", function(done) {
+		it("Should split the interval into two subintervals", function (done) {
 			var minDate = thDateUtils.getMinThDateDO();
 			var maxDate = thDateUtils.getMaxThDateDO();
 
@@ -199,7 +202,7 @@ describe("Price Products Interval Tests", function() {
 			done();
 		});
 
-		it("Should keep a left subinterval", function(done) {
+		it("Should keep a left subinterval", function (done) {
 			var intervalList: ThDateIntervalDO[] = [
 				ThDateIntervalDO.buildThDateIntervalDO(
 					ThDateDO.buildThDateDO(2016, ThMonth.February, 1),
@@ -224,7 +227,7 @@ describe("Price Products Interval Tests", function() {
 			done();
 		});
 
-		it("Should keep a right subinterval", function(done) {
+		it("Should keep a right subinterval", function (done) {
 			var intervalList: ThDateIntervalDO[] = [
 				ThDateIntervalDO.buildThDateIntervalDO(
 					ThDateDO.buildThDateDO(2016, ThMonth.February, 1),
@@ -250,17 +253,17 @@ describe("Price Products Interval Tests", function() {
 
     });
 
-	describe("Yield Management Tests", function() {
-		it("Should close interval on price products", function(done) {
-			var yieldData: PriceProductsYieldManagementDO = {
+	describe("Yield Management Tests", function () {
+		it("Should close price products from 1 Jan to 1 July", function (done) {
+			var yieldData: PriceProductYieldingDO = {
 				attribute: PriceProductYieldAttribute.OpenPeriod,
 				priceProductIdList: _.map(testDataBuilder.priceProductList, (priceProduct: PriceProductDO) => { return priceProduct.id }),
 				interval: ThDateIntervalDO.buildThDateIntervalDO(
 					ThDateDO.buildThDateDO(2016, ThMonth.January, 1),
-					ThDateDO.buildThDateDO(2016, ThMonth.July, 1)
+					ThDateDO.buildThDateDO(2016, ThMonth.July, 2)
 				)
 			};
-			var ppYm = new PriceProductsYieldManagement(testContext.appContext, testContext.sessionContext);
+			var ppYm = new PriceProductYielding(testContext.appContext, testContext.sessionContext);
 			ppYm.close(yieldData).then((yieldedPriceProducts: PriceProductDO[]) => {
 				yieldedPriceProducts.forEach((priceProduct: PriceProductDO) => {
 					testPriceProductOpenInterval(priceProduct, ThDateDO.buildThDateDO(2015, ThMonth.December, 31), ThDateDO.buildThDateDO(2016, ThMonth.July, 2));
@@ -270,8 +273,33 @@ describe("Price Products Interval Tests", function() {
 				done(error);
 			});
         });
-		it("Should open interval on price products", function(done) {
-			var yieldData: PriceProductsYieldManagementDO = {
+		it("Should read the Yielded values on the Price Product", function (done) {
+			var readerDO = new PriceProductReaderDO();
+			readerDO.interval = ThDateIntervalDO.buildThDateIntervalDO(
+				ThDateDO.buildThDateDO(2016, ThMonth.June, 30),
+				ThDateDO.buildThDateDO(2016, ThMonth.July, 2)
+			);
+			var ppReader = new PriceProductReader(testContext.appContext, testContext.sessionContext);
+			ppReader.getYieldItems(readerDO).then((yieldResult: PriceProductYieldResult) => {
+				should.equal(yieldResult.dateList.length, 2);
+				_.forEach(testDataBuilder.priceProductList, (priceProduct: PriceProductDO) => {
+					var yieldItem: PriceProductYieldItem = _.find(yieldResult.itemList, (item: PriceProductYieldItem) => { return item.priceProductId === priceProduct.id });
+					should.exist(yieldItem);
+					should.equal(yieldItem.priceProductName, priceProduct.name);
+					should.equal(yieldItem.stateList.length, 2);
+					_.forEach(yieldItem.stateList, (state: YieldItemState) => {
+						should.equal(state.open, YieldItemStateType.Closed);
+						should.equal(state.openForArrival, YieldItemStateType.Open);
+						should.equal(state.openForDeparture, YieldItemStateType.Open);
+					});
+				});
+				done();
+			}).catch((error: any) => {
+				done(error);
+			});
+        });
+		it("Should open interval on price products", function (done) {
+			var yieldData: PriceProductYieldingDO = {
 				attribute: PriceProductYieldAttribute.OpenPeriod,
 				priceProductIdList: _.map(testDataBuilder.priceProductList, (priceProduct: PriceProductDO) => { return priceProduct.id }),
 				interval: ThDateIntervalDO.buildThDateIntervalDO(
@@ -279,10 +307,37 @@ describe("Price Products Interval Tests", function() {
 					ThDateDO.buildThDateDO(2016, ThMonth.July, 1)
 				)
 			};
-			var ppYm = new PriceProductsYieldManagement(testContext.appContext, testContext.sessionContext);
+			var ppYm = new PriceProductYielding(testContext.appContext, testContext.sessionContext);
 			ppYm.open(yieldData).then((yieldedPriceProducts: PriceProductDO[]) => {
 				yieldedPriceProducts.forEach((priceProduct: PriceProductDO) => {
 					testPriceProductOpenInterval(priceProduct, ThDateDO.buildThDateDO(2015, ThMonth.December, 31), ThDateDO.buildThDateDO(2016, ThMonth.June, 1));
+				});
+				done();
+			}).catch((error: any) => {
+				done(error);
+			});
+        });
+		it("Should read the Yielded values on the Price Product", function (done) {
+			var readerDO = new PriceProductReaderDO();
+			readerDO.interval = ThDateIntervalDO.buildThDateIntervalDO(
+				ThDateDO.buildThDateDO(2016, ThMonth.May, 31),
+				ThDateDO.buildThDateDO(2016, ThMonth.June, 2)
+			);
+			var ppReader = new PriceProductReader(testContext.appContext, testContext.sessionContext);
+			ppReader.getYieldItems(readerDO).then((yieldResult: PriceProductYieldResult) => {
+				should.equal(yieldResult.dateList.length, 2);
+				_.forEach(testDataBuilder.priceProductList, (priceProduct: PriceProductDO) => {
+					var yieldItem: PriceProductYieldItem = _.find(yieldResult.itemList, (item: PriceProductYieldItem) => { return item.priceProductId === priceProduct.id });
+					should.exist(yieldItem);
+					should.equal(yieldItem.priceProductName, priceProduct.name);
+					should.equal(yieldItem.stateList.length, 2);
+
+					should.equal(yieldItem.stateList[0].open, YieldItemStateType.Closed);
+					should.equal(yieldItem.stateList[0].openForArrival, YieldItemStateType.Open);
+					should.equal(yieldItem.stateList[0].openForDeparture, YieldItemStateType.Open);
+					should.equal(yieldItem.stateList[1].open, YieldItemStateType.Open);
+					should.equal(yieldItem.stateList[1].openForArrival, YieldItemStateType.Open);
+					should.equal(yieldItem.stateList[1].openForDeparture, YieldItemStateType.Open);
 				});
 				done();
 			}).catch((error: any) => {

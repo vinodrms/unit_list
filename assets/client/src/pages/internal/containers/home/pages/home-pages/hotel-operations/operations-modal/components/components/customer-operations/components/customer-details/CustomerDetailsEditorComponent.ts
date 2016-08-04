@@ -76,6 +76,7 @@ export class CustomerDetailsEditorComponent implements OnInit {
     public saveCustomerDetails() {
         this.isSaving = true;
         this._hotelOperationsCustomerService.changeDetails(this.customerDO).subscribe((updatedCustomer: CustomerDO) => {
+            this._appContext.analytics.logEvent("customer", "change-details", "Changed the details for a customer");
             this.readonly = true;
             this.isSaving = false;
             this.triggerOnCustomerDetailsChanged(updatedCustomer);

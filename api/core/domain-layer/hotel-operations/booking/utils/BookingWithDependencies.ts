@@ -5,7 +5,11 @@ import {AllotmentDO, AllotmentStatus} from '../../../../data-layer/allotments/da
 import {AllotmentsContainer} from '../../../allotments/validators/results/AllotmentsContainer';
 import {RoomDO} from '../../../../data-layer/rooms/data-objects/RoomDO';
 import {RoomCategoryStatsDO} from '../../../../data-layer/room-categories/data-objects/RoomCategoryStatsDO';
+import {InvoiceGroupDO} from '../../../../data-layer/invoices/data-objects/InvoiceGroupDO';
+import {InvoiceDO, InvoicePaymentStatus} from '../../../../data-layer/invoices/data-objects/InvoiceDO';
 import {ThUtils} from '../../../../utils/ThUtils';
+
+import _ = require('underscore');
 
 export class BookingWithDependencies {
     private _thUtils: ThUtils;
@@ -19,6 +23,8 @@ export class BookingWithDependencies {
 
     private _roomList: RoomDO[];
     private _roomCategoryStatsList: RoomCategoryStatsDO[];
+
+    private _invoiceGroupList: InvoiceGroupDO[];
 
     constructor() {
         this._thUtils = new ThUtils();
@@ -74,10 +80,31 @@ export class BookingWithDependencies {
     public set roomCategoryStatsList(roomCategoryStatsList: RoomCategoryStatsDO[]) {
         this._roomCategoryStatsList = roomCategoryStatsList;
     }
+    public get invoiceGroupList(): InvoiceGroupDO[] {
+        return this._invoiceGroupList;
+    }
+    public set invoiceGroupList(invoiceGroupList: InvoiceGroupDO[]) {
+        this._invoiceGroupList = invoiceGroupList;
+    }
 
     public isMadeThroughActiveAllotment(): boolean {
         return this._bookingDO.isMadeThroughAllotment()
             && !this._thUtils.isUndefinedOrNull(this._allotmentDO)
             && this.allotmentDO.status === AllotmentStatus.Active;
+    }
+
+    public hasPaidInvoice(): boolean {
+        if (this._invoiceGroupList.length == 0) { return false; }
+        var foundInvoiceGroup: InvoiceGroupDO = _.find(this._invoiceGroupList, (groupInvoice: InvoiceGroupDO) => {
+            return groupInvoice.groupBookingId === this._bookingDO.groupBookingId;
+        });
+        if (this._thUtils.isUndefinedOrNull(foundInvoiceGroup)) { return false; }
+
+        var foundInvoice: InvoiceDO = _.find(foundInvoiceGroup.invoiceList, (innerInvoice: InvoiceDO) => {
+            return innerInvoice.bookingId === this._bookingDO.bookingId;
+        });
+        if (this._thUtils.isUndefinedOrNull(foundInvoice)) { return false; }
+
+        return foundInvoice.isPaid;
     }
 }

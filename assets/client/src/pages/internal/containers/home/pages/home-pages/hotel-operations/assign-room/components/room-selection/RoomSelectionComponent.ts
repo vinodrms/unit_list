@@ -1,5 +1,6 @@
-import {Component, AfterViewInit, ViewChild, Output, EventEmitter} from '@angular/core';
+import {Component, AfterViewInit, ViewChild, Output, EventEmitter, OnInit} from '@angular/core';
 import {TranslationPipe} from '../../../../../../../../../../common/utils/localization/TranslationPipe';
+import {AppContext} from '../../../../../../../../../../common/utils/AppContext';
 import {LoadingComponent} from '../../../../../../../../../../common/utils/components/LoadingComponent';
 import {LazyLoadingTableComponent} from '../../../../../../../../../../common/utils/components/lazy-loading/LazyLoadingTableComponent';
 import {RoomSelectionService} from './services/RoomSelectionService';
@@ -14,7 +15,7 @@ import {RoomVM} from '../../../../../../../../services/rooms/view-models/RoomVM'
     directives: [LoadingComponent, LazyLoadingTableComponent],
     pipes: [TranslationPipe]
 })
-export class RoomSelectionComponent implements AfterViewInit {
+export class RoomSelectionComponent implements AfterViewInit, OnInit {
     @Output() onRoomSelected = new EventEmitter<RoomVM>();
     public triggerOnRoomSelected(assignableRoom: AssignableRoomVM) {
         this.onRoomSelected.next(assignableRoom.roomVM);
@@ -26,9 +27,13 @@ export class RoomSelectionComponent implements AfterViewInit {
     protected bookingRoomCategoryName: string;
     private _filterByBookingRoomCategory: boolean;
 
-    constructor(private _roomSelectionService: RoomSelectionService,
+    constructor(private _appContext: AppContext,
+        private _roomSelectionService: RoomSelectionService,
         private _tableMetaBuilder: RoomSelectionTableMetaBuilderService) { }
 
+    public ngOnInit() {
+        this._appContext.analytics.logPageView("/operations/assign-room/room-selection");
+    }
     public ngAfterViewInit() {
         this.bootstrapTable();
         this._roomSelectionService.getRoomsWithOccupancyVM().subscribe((roomContainer: any) => {

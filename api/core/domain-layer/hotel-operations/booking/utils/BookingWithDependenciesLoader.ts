@@ -12,6 +12,7 @@ import {AllotmentsContainer} from '../../../allotments/validators/results/Allotm
 import {RoomSearchResultRepoDO} from '../../../../data-layer/rooms/repositories/IRoomRepository';
 import {RoomCategoryStatsAggregator} from '../../../room-categories/aggregators/RoomCategoryStatsAggregator';
 import {RoomCategoryStatsDO} from '../../../../data-layer/room-categories/data-objects/RoomCategoryStatsDO';
+import {InvoiceGroupSearchResultRepoDO} from '../../../../data-layer/invoices/repositories/IInvoiceGroupsRepository';
 
 export class BookingWithDependenciesLoader {
     private _groupBookingId: string;
@@ -61,6 +62,14 @@ export class BookingWithDependenciesLoader {
                 return roomCategStatsAggregator.getRoomCategoryStatsList();
             }).then((roomCategoryStatsList: RoomCategoryStatsDO[]) => {
                 bookingWithDependencies.roomCategoryStatsList = roomCategoryStatsList;
+
+                var invoiceGroupsRepo = this._appContext.getRepositoryFactory().getInvoiceGroupsRepository();
+                return invoiceGroupsRepo.getInvoiceGroupList({ hotelId: this._sessionContext.sessionDO.hotel.id }, {
+                    groupBookingId: this._groupBookingId,
+                    bookingId: this._bookingId
+                });
+            }).then((invoiceGroupSearchResult: InvoiceGroupSearchResultRepoDO) => {
+                bookingWithDependencies.invoiceGroupList = invoiceGroupSearchResult.invoiceGroupList;
 
                 resolve(bookingWithDependencies);
             }).catch((error: any) => {

@@ -55,9 +55,9 @@ export class BookingCapacityEditorComponent implements OnInit {
         return this._bookingOperationsPageData.bookingDO.configCapacity;
     }
     public get canEditCapacity(): boolean {
-        return this._bookingOperationsPageData.bookingMeta.capacityEditRight === BookingCapacityEditRight.Edit;
+        return this._bookingOperationsPageData.bookingMeta.capacityEditRight === BookingCapacityEditRight.Edit
+            && !this._bookingOperationsPageData.hasPaidInvoice;
     }
-
 
     public startEdit() {
         if (!this.canEditCapacity) { return; };
@@ -85,6 +85,7 @@ export class BookingCapacityEditorComponent implements OnInit {
     private saveBookingCapacityCore() {
         this.isSaving = true;
         this._hotelOperationsBookingService.changeCapacity(this._bookingOperationsPageData.bookingDO).subscribe((updatedBooking: BookingDO) => {
+            this._appContext.analytics.logEvent("booking", "change-capacity", "Changed the capacity for a booking");
             this.readonly = true;
             this.isSaving = false;
             this.triggerOnBookingCapacityChanged(updatedBooking);

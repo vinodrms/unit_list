@@ -42,6 +42,7 @@ export class InvoiceOperationsPageComponent implements OnInit {
 
     ngOnInit() {
         this.loadPageData();
+        this._appContext.analytics.logPageView("/operations/invoice");
     }
     private loadPageData() {
         this.isLoading = true;

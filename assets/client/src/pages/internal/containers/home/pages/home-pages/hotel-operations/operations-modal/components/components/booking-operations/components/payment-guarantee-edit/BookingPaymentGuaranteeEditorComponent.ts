@@ -103,6 +103,7 @@ export class BookingPaymentGuaranteeEditorComponent implements OnInit {
         }
         this.isSaving = true;
         this._hotelOperationsBookingService.addPaymentGuarantee(this.bookingDO, this.selectedPaymentMethodVM.paymentMethod).subscribe((updatedBooking: BookingDO) => {
+            this._appContext.analytics.logEvent("booking", "payment-guarantee", "Added a payment guarantee on a booking");
             this.readonly = true;
             this.isSaving = false;
             this.triggerOnBookingPaymentGuaranteeChanged(updatedBooking);

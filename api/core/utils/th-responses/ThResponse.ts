@@ -389,6 +389,7 @@ export enum ThStatusCode {
     AssignRoomError,
     AssignRoomOccupied,
     AssignRoomCheckedInWrongInterval,
+    AssignRoomPaidInvoice,
     ChangeRoomStrategyOnlyWhenCheckedIn,
     ChangeRoomStrategyEndDateInPast,
     CheckInStrategyOnlyConfirmedOrGuaranteed,
@@ -418,12 +419,14 @@ export enum ThStatusCode {
     BookingWithDependenciesLoaderError,
     BookingChangeDatesError,
     BookingChangeDatesInvalidState,
+    BookingChangeDatesPaidInvoice,
     HotelBookingOperationsControllerErrorChangingDates,
     BookingChangeNoShowTimeError,
     BookingChangeNoShowTimeInvalidTime,
     BookingChangeNoShowTimeInvalidState,
     HotelBookingOperationsControllerErrorChangingNoShowTime,
     BookingChangeCapacityInvalidState,
+    BookingChangeCapacityPaidInvoice,
     BookingChangeCapacityError,
     HotelBookingOperationsControllerErrorChangingCapacity,
     BookingPaymentGuaranteeError,
@@ -440,12 +443,16 @@ export enum ThStatusCode {
     BookingCancelError,
     BookingReactivateInvalidState,
     BookingReactivateEndDateInThePast,
+    BookingReactivatePaidInvoice,
     BookingReactivateError,
     HotelBookingOperationsControllerErrorCancelling,
     HotelBookingOperationsControllerErrorReactivating,
     EmailConfirmationError,
     HotelCommonOperationsControllerEmailError,
     BookingRemoveRollawayCapacityWarningError,
+    PriceProductReaderInvalidInterval,
+    PriceProductReaderError,
+    YieldManagerControllerErrorGettingYieldItems,
 
 }
 
@@ -826,6 +833,7 @@ ThMessage[ThStatusCode.HotelOperationsDeparturesReaderError] = "Error getting th
 ThMessage[ThStatusCode.AssignRoomError] = "Error assigning the room.";
 ThMessage[ThStatusCode.AssignRoomOccupied] = "Error assigning the room. It's possible that the room is already occupied or reserved for another customer during this period.";
 ThMessage[ThStatusCode.AssignRoomCheckedInWrongInterval] = "There is already a checked in booking on this room that has the wrong interval. Please check out the room first.";
+ThMessage[ThStatusCode.AssignRoomPaidInvoice] = "You cannot change the price for this booking because the invoice has been already paid.";
 ThMessage[ThStatusCode.ChangeRoomStrategyOnlyWhenCheckedIn] = "The room can be changed only to checked in bookings.";
 ThMessage[ThStatusCode.ChangeRoomStrategyEndDateInPast] = "You cannot change the room for a booking that has the end date in the past. Please check out the room.";
 ThMessage[ThStatusCode.CheckInStrategyOnlyConfirmedOrGuaranteed] = "Only Confirmed or Guaranteed bookings can be checked in.";
@@ -855,12 +863,14 @@ ThMessage[ThStatusCode.HotelRoomOperationsControllerErrorGettingAttachedBooking]
 ThMessage[ThStatusCode.BookingWithDependenciesLoaderError] = "Error loading booking dependencies.";
 ThMessage[ThStatusCode.BookingChangeDatesError] = "Error changing booking dates.";
 ThMessage[ThStatusCode.BookingChangeDatesInvalidState] = "The date can be changed only for Confirmed, Guaranteed or Checked In bookings.";
+ThMessage[ThStatusCode.BookingChangeDatesPaidInvoice] = "The dates cannot be changed because the invoice for this booking was paid.";
 ThMessage[ThStatusCode.HotelBookingOperationsControllerErrorChangingDates] = "Error changing booking dates.";
 ThMessage[ThStatusCode.BookingChangeNoShowTimeError] = "Error changing the no show time.";
 ThMessage[ThStatusCode.BookingChangeNoShowTimeInvalidTime] = "Invalid submitted time.";
 ThMessage[ThStatusCode.BookingChangeNoShowTimeInvalidState] = "The no show time can be changed only for confirmed or guaranteed bookings.";
 ThMessage[ThStatusCode.HotelBookingOperationsControllerErrorChangingNoShowTime] = "Error changing the no show time.";
 ThMessage[ThStatusCode.BookingChangeCapacityInvalidState] = "The capacity can be changed only for confirmed, guaranteed or no show bookings.";
+ThMessage[ThStatusCode.BookingChangeCapacityPaidInvoice] = "The capacity cannot be changed because the invoice for this booking was paid.";
 ThMessage[ThStatusCode.BookingChangeCapacityError] = "Error changing booking capacity.";
 ThMessage[ThStatusCode.HotelBookingOperationsControllerErrorChangingCapacity] = "Error changing booking capacity.";
 ThMessage[ThStatusCode.BookingPaymentGuaranteeError] = "Error adding payment guarantee.";
@@ -877,12 +887,16 @@ ThMessage[ThStatusCode.BookingCancelInvalidState] = "Only confirmed, guaranteed 
 ThMessage[ThStatusCode.BookingCancelError] = "Error cancelling booking.";
 ThMessage[ThStatusCode.BookingReactivateInvalidState] = "Only no show bookings can be reactivated.";
 ThMessage[ThStatusCode.BookingReactivateEndDateInThePast] = "You cannot reactivate a booking that ends in the past. Please cancel it.";
+ThMessage[ThStatusCode.BookingReactivatePaidInvoice] = "You cannot reactivate a booking that has the invoice paid.";
 ThMessage[ThStatusCode.BookingReactivateError] = "Error reactivating booking.";
 ThMessage[ThStatusCode.HotelBookingOperationsControllerErrorCancelling] = "Error cancelling booking.";
 ThMessage[ThStatusCode.HotelBookingOperationsControllerErrorReactivating] = "Error reactivating booking.";
 ThMessage[ThStatusCode.EmailConfirmationError] = "Error sending email.";
 ThMessage[ThStatusCode.HotelCommonOperationsControllerEmailError] = "Error sending email.";
 ThMessage[ThStatusCode.BookingRemoveRollawayCapacityWarningError] = "Error updating the rollaway capacity flag on the booking.";
+ThMessage[ThStatusCode.PriceProductReaderInvalidInterval] = "Invalid interval.";
+ThMessage[ThStatusCode.PriceProductReaderError] = "Error getting price products.";
+ThMessage[ThStatusCode.YieldManagerControllerErrorGettingYieldItems] = "Error getting price products.";
 
 export class ThResponse {
     statusCode: ThStatusCode;

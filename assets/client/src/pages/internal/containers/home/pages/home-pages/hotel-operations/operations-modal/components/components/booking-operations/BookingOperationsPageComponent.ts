@@ -50,6 +50,7 @@ export class BookingOperationsPageComponent implements OnInit {
 
     ngOnInit() {
         this.loadPageData();
+        this._appContext.analytics.logPageView("/operations/bookings");
     }
     public loadPageData() {
         this.isLoading = true;
