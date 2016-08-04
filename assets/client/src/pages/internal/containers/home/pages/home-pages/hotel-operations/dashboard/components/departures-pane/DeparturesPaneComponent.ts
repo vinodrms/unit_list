@@ -45,8 +45,6 @@ export class DeparturesPaneComponent implements OnInit {
 		this.hotelOperationsDashboard.registerDeparturesPane(this);
 		this._hotelService.getHotelDetailsDO().subscribe((details: HotelDetailsDO)=>{
 			this.selectedDate = details.currentThTimestamp.thDateDO.buildPrototype();
-			//TODO: Remove
-			this.selectedDate = ThDateDO.buildThDateDO(2016, 6, 23);
 			
 			this._hotelOperationsDashboardService.getDepartureItems(this.selectedDate)
 				.subscribe((departures: DepartureItemInfoVM[]) => {
@@ -95,11 +93,6 @@ export class DeparturesPaneComponent implements OnInit {
 	}
 
 	public refresh(){
-		//TODO: FIX THIS
-		if (!this.selectedDate) {
-			this.selectedDate = ThDateDO.buildThDateDO(2016, 6, 23);
-		}
-
 		this._hotelOperationsDashboardService.refreshDepartures(this.selectedDate);
 	}
 

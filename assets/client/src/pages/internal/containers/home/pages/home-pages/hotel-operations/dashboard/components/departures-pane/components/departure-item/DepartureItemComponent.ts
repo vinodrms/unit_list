@@ -16,21 +16,27 @@ export class DepartureItemComponent {
 	@Input() departureItemVM: DepartureItemInfoVM;
 
 	constructor(private _zone: NgZone,
-	private _root: ElementRef,
-	private _modalService: HotelDashboardModalService
+		private _root: ElementRef,
+		private _modalService: HotelDashboardModalService
 	) {
 	}
 
 	ngAfterViewInit() {
 	}
 
-	public openCustomerModal(){
+	public openCustomerModal() {
 		var customerId = this.departureItemVM.departureItemDO.customerId;
 		this._modalService.openCustomerModal(customerId);
 	}
 
-	public openRoomModal(){
+	public openRoomModal() {
 		var roomId = this.departureItemVM.departureItemDO.roomId;
 		this._modalService.openRoomModal(roomId);
+	}
+
+	public openInvoiceModal() {
+		var invoiceGroupId = this.departureItemVM.departureItemDO.invoiceGroupId;
+		var customerId = this.departureItemVM.departureItemDO.customerId;
+		this._modalService.openInvoiceModal(invoiceGroupId, customerId);
 	}
 }
