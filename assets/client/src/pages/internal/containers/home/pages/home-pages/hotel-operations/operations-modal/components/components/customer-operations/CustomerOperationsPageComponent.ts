@@ -12,6 +12,7 @@ import {CustomerPreviewComponent} from '../../../../../../../../common/inventory
 import {CustomerDetailsEditorComponent} from './components/customer-details/CustomerDetailsEditorComponent';
 import {CustomerBookingHistoryComponent} from './components/booking-history/CustomerBookingHistoryComponent';
 import {CustomerInvoiceHistoryComponent} from './components/invoice-history/CustomerInvoiceHistoryComponent';
+import {HotelOperationsPageControllerService} from '../../services/HotelOperationsPageControllerService';
 
 @Component({
     selector: 'customer-operations-page',
@@ -33,7 +34,8 @@ export class CustomerOperationsPageComponent implements OnInit {
     showBookingHistory: boolean = true;
 
     constructor(private _appContext: AppContext,
-        private _custOpPageService: CustomerOperationsPageService) { }
+        private _custOpPageService: CustomerOperationsPageService,
+        private _operationsPageControllerService: HotelOperationsPageControllerService) { }
 
     ngOnInit() {
         this.loadPageData();
@@ -65,5 +67,11 @@ export class CustomerOperationsPageComponent implements OnInit {
         this.customerOperationsPageData.customerVM.customer = customer;
         this.customerOperationsPageData = this.customerOperationsPageData.buildPrototype();
         this.updateContainerData();
+    }
+
+    public createInvoice() {
+        this._operationsPageControllerService.goToInvoice(null, {
+            customerId: this.customerVM.customer.id
+        });
     }
 }

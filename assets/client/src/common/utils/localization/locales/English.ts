@@ -622,5 +622,6 @@ export var EnglishTranslations: Object = {
 	"Print & Send": "Print & Send",
 	"of": "of",
 	"Pay": "Pay",
+	"Create Invoice": "Create Invoice",
 	
 };
