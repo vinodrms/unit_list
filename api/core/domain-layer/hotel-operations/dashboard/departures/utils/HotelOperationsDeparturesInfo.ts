@@ -20,6 +20,7 @@ export interface DeparturelItemInfo {
     bookingItemStatus: DeparturelItemBookingStatus;
 
     invoiceGroupId?: string;
+    invoicePrice?: number;
 }
 
 export class HotelOperationsDeparturesInfo {

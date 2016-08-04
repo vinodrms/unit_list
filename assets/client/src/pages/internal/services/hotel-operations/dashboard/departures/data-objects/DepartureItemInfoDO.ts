@@ -20,9 +20,10 @@ export class DepartureItemInfoDO extends BaseDO {
     bookingItemStatus: DepartureItemBookingStatus;
 
     invoiceGroupId: string;
+    invoicePrice: number;
 
     protected getPrimitivePropertyKeys(): string[] {
-        return ["customerId", "customerName", "bookingId", "groupBookingId", "roomCategoryId", "roomId", "bookingItemStatus", "invoiceGroupId"];
+        return ["customerId", "customerName", "bookingId", "groupBookingId", "roomCategoryId", "roomId", "bookingItemStatus", "invoiceGroupId", "invoicePrice"];
     }
     public buildFromObject(object: Object) {
         super.buildFromObject(object);

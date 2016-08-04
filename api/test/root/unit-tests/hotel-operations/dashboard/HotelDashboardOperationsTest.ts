@@ -185,7 +185,7 @@ describe("Hotel Dashboard Operations Tests", function () {
         it("Should not see any departures for today", function (done) {
             var departuresReader = new HotelOperationsDeparturesReader(testContext.appContext, testContext.sessionContext);
             departuresReader.read(dashboardHelper.getQueryForToday(testDataBuilder)).then((departuresInfo: HotelOperationsDeparturesInfo) => {
-                should.equal(departuresInfo.departureInfoList.length, 0);
+                should.equal(departuresInfo.departureInfoList.length, testDataBuilder.getNoUnpaidInvoices());
                 done();
             }).catch((error: any) => {
                 done(error);
@@ -197,7 +197,7 @@ describe("Hotel Dashboard Operations Tests", function () {
                 departuresInfo.departureInfoList.forEach((departureItem: DeparturelItemInfo) => {
                     should.equal(departureItem.bookingItemStatus, DeparturelItemBookingStatus.CanNotCheckOut);
                 });
-                should.equal(departuresInfo.departureInfoList.length, createdBookingList.length);
+                should.equal(departuresInfo.departureInfoList.length, createdBookingList.length + testDataBuilder.getNoUnpaidInvoices());
                 done();
             }).catch((error: any) => {
                 done(error);
@@ -277,7 +277,7 @@ describe("Hotel Dashboard Operations Tests", function () {
         it("Should still see all the bookings as departures tomorrow even though we checked in one booking", function (done) {
             var departuresReader = new HotelOperationsDeparturesReader(testContext.appContext, testContext.sessionContext);
             departuresReader.read(dashboardHelper.getQueryForTomorrow(testDataBuilder)).then((departuresInfo: HotelOperationsDeparturesInfo) => {
-                should.equal(departuresInfo.departureInfoList.length, createdBookingList.length + 1);
+                should.equal(departuresInfo.departureInfoList.length, createdBookingList.length + 1 + testDataBuilder.getNoUnpaidInvoices());
                 departuresInfo.departureInfoList.forEach((departureItem: DeparturelItemInfo) => {
                     if (departureItem.bookingId === booking.bookingId) {
                         should.equal(departureItem.bookingItemStatus, DeparturelItemBookingStatus.CanCheckOut);
@@ -306,7 +306,7 @@ describe("Hotel Dashboard Operations Tests", function () {
         it("Should not see the checked out booking in the departures", function (done) {
             var departuresReader = new HotelOperationsDeparturesReader(testContext.appContext, testContext.sessionContext);
             departuresReader.read(dashboardHelper.getQueryForTomorrow(testDataBuilder)).then((departuresInfo: HotelOperationsDeparturesInfo) => {
-                should.equal(departuresInfo.departureInfoList.length, createdBookingList.length);
+                should.equal(departuresInfo.departureInfoList.length, createdBookingList.length + 1 + testDataBuilder.getNoUnpaidInvoices());
                 departuresInfo.departureInfoList.forEach((departureItem: DeparturelItemInfo) => {
                     should.equal(departureItem.bookingItemStatus, DeparturelItemBookingStatus.CanNotCheckOut);
                 });

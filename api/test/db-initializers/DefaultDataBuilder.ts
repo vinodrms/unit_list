@@ -33,6 +33,7 @@ import {DefaultBookingBuilder} from './builders/DefaultBookingBuilder';
 import {BookingDO} from '../../core/data-layer/bookings/data-objects/BookingDO';
 import {DefaultInvoiceGroupBuilder} from './builders/DefaultInvoiceGroupBuilder';
 import {InvoiceGroupDO} from '../../core/data-layer/invoices/data-objects/InvoiceGroupDO';
+import {InvoiceDO} from '../../core/data-layer/invoices/data-objects/InvoiceDO';
 
 import _ = require("underscore");
 
@@ -183,17 +184,17 @@ export class DefaultDataBuilder {
                 return allotmentBuilder.loadAllotments(allotmentBuilder, this._priceProductList, this._customerList);
             }).then((allotmentList: AllotmentDO[]) => {
                 this._allotmentList = allotmentList;
-                
+
                 var bookingBuilder = new DefaultBookingBuilder(this._testContext);
                 return bookingBuilder.loadBookings(bookingBuilder, this._hotelDO, this._customerList, this.roomCategoryList, this.priceProductList);
             }).then((bookingList: BookingDO[]) => {
                 this._bookingList = bookingList;
-                
+
                 var invoiceGroupBuilder = new DefaultInvoiceGroupBuilder(this._testContext);
                 return invoiceGroupBuilder.loadInvoiceGroups(invoiceGroupBuilder, this._customerList, this._addOnProductList, this._bookingList);
             }).then((invoiceGroupList: InvoiceGroupDO[]) => {
                 this._invoiceGroupList = invoiceGroupList;
-                
+
                 resolve(true);
             }).catch((err: any) => {
                 reject(err);
@@ -265,6 +266,15 @@ export class DefaultDataBuilder {
     }
     public get invoiceGroupList(): InvoiceGroupDO[] {
         return this._invoiceGroupList;
+    }
+    public getNoUnpaidInvoices(): number {
+        var noUnpaidInvoices = 0;
+        _.forEach(this._invoiceGroupList, (invoiceGroup: InvoiceGroupDO) => {
+            _.forEach(invoiceGroup.invoiceList, (invoice: InvoiceDO) => {
+                if (!invoice.isPaid) { noUnpaidInvoices++; };
+            });
+        });
+        return noUnpaidInvoices;
     }
     public get defaultTimezone(): string {
         return this._hotelDO.timezone;
