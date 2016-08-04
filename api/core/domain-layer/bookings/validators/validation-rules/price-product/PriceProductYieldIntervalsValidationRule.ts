@@ -4,7 +4,7 @@ import {ABusinessValidationRule} from '../../../../common/validation-rules/ABusi
 import {IBusinessValidationRuleFilter} from '../../../../common/validation-rule-filters/IBusinessValidationRuleFilter';
 import {PriceProductDO} from '../../../../../data-layer/price-products/data-objects/PriceProductDO';
 import {ThDateIntervalDO} from '../../../../../utils/th-dates/data-objects/ThDateIntervalDO';
-import {YieldIntervalsValidator} from '../../../../yield-manager/price-product-yielding/validators/YieldIntervalsValidator';
+import {YieldIntervalsValidator} from '../../../../yield-manager/validators/YieldIntervalsValidator';
 
 import _ = require('underscore');
 

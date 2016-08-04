@@ -4,8 +4,8 @@ import {ObjectValidationStructure} from '../../../utils/th-validation/structure/
 import {PrimitiveValidationStructure} from '../../../utils/th-validation/structure/PrimitiveValidationStructure';
 import {ArrayValidationStructure} from '../../../utils/th-validation/structure/ArrayValidationStructure';
 import {StringValidationRule} from '../../../utils/th-validation/rules/StringValidationRule';
-import {NumberValidationRule} from '../../../utils/th-validation/rules/NumberValidationRule';
 import {NumberInListValidationRule} from '../../../utils/th-validation/rules/NumberInListValidationRule';
+import {BookingValidationStructures} from '../../bookings/validators/BookingValidationStructures';
 
 export enum PriceProductYieldAttribute {
 	OpenPeriod,
@@ -26,36 +26,11 @@ export class PriceProductYieldingDO {
 			},
 			{
 				key: "interval",
-				validationStruct: new ObjectValidationStructure([
-					{
-						key: "start",
-						validationStruct: PriceProductYieldingDO.getThDateDOValidationStructure()
-					},
-					{
-						key: "end",
-						validationStruct: PriceProductYieldingDO.getThDateDOValidationStructure()
-					}
-				])
+				validationStruct: BookingValidationStructures.getThDateIntervalDOValidationStructure()
 			},
 			{
 				key: "attribute",
 				validationStruct: new PrimitiveValidationStructure(new NumberInListValidationRule([PriceProductYieldAttribute.OpenPeriod, PriceProductYieldAttribute.OpenForArrivalPeriod, PriceProductYieldAttribute.OpenForDeparturePeriod]))
-			}
-		]);
-	}
-	private static getThDateDOValidationStructure(): IValidationStructure {
-		return new ObjectValidationStructure([
-			{
-				key: "year",
-				validationStruct: new PrimitiveValidationStructure(NumberValidationRule.buildIntegerNumberRule(0))
-			},
-			{
-				key: "month",
-				validationStruct: new PrimitiveValidationStructure(NumberValidationRule.buildIntegerNumberRule(0))
-			},
-			{
-				key: "day",
-				validationStruct: new PrimitiveValidationStructure(NumberValidationRule.buildIntegerNumberRule(1))
 			}
 		]);
 	}

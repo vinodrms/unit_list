@@ -11,6 +11,7 @@ import {PriceProductMetaRepoDO, PriceProductItemMetaRepoDO} from '../../../data-
 import {IPriceProductIntervalStrategy} from './interval-strategies/IPriceProductIntervalStrategy';
 import {PriceProductAddIntervalStrategy} from './interval-strategies/PriceProductAddIntervalStrategy';
 import {PriceProductRemoveIntervalStrategy} from './interval-strategies/PriceProductRemoveIntervalStrategy';
+import {IndexedBookingInterval} from '../../../data-layer/price-products/utils/IndexedBookingInterval';
 
 export class PriceProductYielding {
 	private _yieldData: PriceProductYieldingDO;
@@ -42,14 +43,17 @@ export class PriceProductYielding {
 			parser.logAndReject("Error validating data for yield price products", reject);
 			return false;
 		}
-		this._yieldInterval = new ThDateIntervalDO();
-		this._yieldInterval.buildFromObject(this._yieldData.interval);
-		if (!this._yieldInterval.isValid()) {
+		var yieldInterval = new ThDateIntervalDO();
+		yieldInterval.buildFromObject(this._yieldData.interval);
+		if (!yieldInterval.isValid()) {
 			var thError = new ThError(ThStatusCode.PriceProductsYieldManagementInvalidInterval, null);
 			ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Invalid interval submitted to Price Products Yield Management", this._yieldData, thError);
 			reject(thError);
 			return;
 		}
+		var indexedInterval = new IndexedBookingInterval(yieldInterval);
+		this._yieldInterval = indexedInterval.indexedBookingInterval;
+
 		var ppPromiseList: Promise<PriceProductDO>[] = [];
 		this._yieldData.priceProductIdList.forEach((priceProductId: string) => {
 			ppPromiseList.push(this.yieldPriceProduct(priceProductId));

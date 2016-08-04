@@ -450,6 +450,9 @@ export enum ThStatusCode {
     EmailConfirmationError,
     HotelCommonOperationsControllerEmailError,
     BookingRemoveRollawayCapacityWarningError,
+    PriceProductReaderInvalidInterval,
+    PriceProductReaderError,
+    YieldManagerControllerErrorGettingYieldItems,
 
 }
 
@@ -891,6 +894,9 @@ ThMessage[ThStatusCode.HotelBookingOperationsControllerErrorReactivating] = "Err
 ThMessage[ThStatusCode.EmailConfirmationError] = "Error sending email.";
 ThMessage[ThStatusCode.HotelCommonOperationsControllerEmailError] = "Error sending email.";
 ThMessage[ThStatusCode.BookingRemoveRollawayCapacityWarningError] = "Error updating the rollaway capacity flag on the booking.";
+ThMessage[ThStatusCode.PriceProductReaderInvalidInterval] = "Invalid interval.";
+ThMessage[ThStatusCode.PriceProductReaderError] = "Error getting price products.";
+ThMessage[ThStatusCode.YieldManagerControllerErrorGettingYieldItems] = "Error getting price products.";
 
 export class ThResponse {
     statusCode: ThStatusCode;
