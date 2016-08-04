@@ -59,6 +59,7 @@ body,html {
 .card a:hover {
     color: #C44D00;
     cursor: pointer;
+    text-decoration: none;
 }
 
 header {

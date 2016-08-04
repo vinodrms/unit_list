@@ -11,6 +11,7 @@
 <div [ngClass]="{'col-xs-3 overview-right': !isEditing, 'col-xs-9 edit-container': isEditing}">
 	<room-overview
 		*ngIf="selectedRoomVM && !isEditing" 
+		[showLinkToOperationalModal]="showLinkToOperationalModal"
 		[roomVM]="selectedRoomVM"
 		(onEdit)="editRoom($event)">
 	</room-overview>
