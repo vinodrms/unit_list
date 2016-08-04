@@ -1,6 +1,7 @@
 import {DepartureItemInfoDO} from '../data-objects/DepartureItemInfoDO';
 import {RoomVM} from '../../../../rooms/view-models/RoomVM';
 import {ThTranslation} from '../../../../../../../common/utils/localization/ThTranslation';
+import {CurrencyDO} from '../../../../common/data-objects/currency/CurrencyDO';
 
 export class DepartureItemInfoVM {
     private _departureItemDO: DepartureItemInfoDO;
@@ -8,8 +9,9 @@ export class DepartureItemInfoVM {
     private _hasBooking: boolean;
     private _isStayingInRoom: boolean;
     private _stayingRoomVM: RoomVM;
+    private _currency: CurrencyDO;
 
-    constructor(private _thTranslation:ThTranslation) {
+    constructor(private _thTranslation: ThTranslation) {
     }
 
     public get departureItemDO(): DepartureItemInfoDO {
@@ -42,25 +44,34 @@ export class DepartureItemInfoVM {
     public set stayingRoomVM(stayingRoomVM: RoomVM) {
         this._stayingRoomVM = stayingRoomVM;
     }
+    public get currency(): CurrencyDO {
+        return this._currency;
+    }
+    public set currency(currency: CurrencyDO) {
+        this._currency = currency;
+    }
 
-    public get roomName() : string {
+    public get roomName(): string {
         return this._stayingRoomVM.room.name;
     }
-    
-    public get customerName():string{
+
+    public get customerName(): string {
         return this._departureItemDO.customerName;
     }
 
-    public get roomCategoryLabel() : string {
+    public get roomCategoryLabel(): string {
         return this._stayingRoomVM.category.displayName;
     }
 
-    public get numberOfPeople() : number {
-        return this.departureItemDO.bookingCapacity.noAdults + this.departureItemDO.bookingCapacity.noChildren; 
+    public get numberOfPeople(): number {
+        return this.departureItemDO.bookingCapacity.noAdults + this.departureItemDO.bookingCapacity.noChildren;
     }
 
-    public get numberOfNights() : number {
+    public get numberOfNights(): number {
         return this.departureItemDO.bookingInterval.getNumberOfDays();
     }
 
+    public get priceString(): string {
+        return this._departureItemDO.invoicePrice + this.currency.nativeSymbol;
+    }
 }

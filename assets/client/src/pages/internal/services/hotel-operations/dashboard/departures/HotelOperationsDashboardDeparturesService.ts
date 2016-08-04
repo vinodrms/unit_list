@@ -12,6 +12,8 @@ import {DepartureItemInfoVM} from './view-models/DepartureItemInfoVM';
 import {RoomsService} from '../../../rooms/RoomsService';
 import {RoomVM} from '../../../rooms/view-models/RoomVM';
 import {RoomItemsIndexer} from '../utils/RoomItemsIndexer';
+import {HotelAggregatorService} from '../../../hotel/HotelAggregatorService';
+import {HotelAggregatedInfo} from '../../../hotel/utils/HotelAggregatedInfo';
 
 import {ThTranslation} from '../../../../../../common/utils/localization/ThTranslation';
 
@@ -22,18 +24,21 @@ export class HotelOperationsDashboardDeparturesService extends ARequestService<D
     constructor(
         private _appContext: AppContext,
         private _roomsService: RoomsService,
+        private _hotelAggregatorService: HotelAggregatorService,
         private _thTranslation: ThTranslation
-        ) {
+    ) {
         super();
     }
 
     protected sendRequest(): Observable<Object> {
         return Observable.combineLatest(
             this._roomsService.getRoomList(),
+            this._hotelAggregatorService.getHotelAggregatedInfo(),
             this._appContext.thHttp.post(ThServerApi.HotelOperationsDashboardDepartures, { query: { referenceDate: this._referenceDate } })
-        ).map((result: [RoomVM[], Object]) => {
+        ).map((result: [RoomVM[], HotelAggregatedInfo, Object]) => {
             var roomVMList: RoomVM[] = result[0];
-            var departuresInfoObject = result[1];
+            var hotelAggregatedInfo: HotelAggregatedInfo = result[1];
+            var departuresInfoObject = result[2];
 
             var roomItemIndexer = new RoomItemsIndexer([], roomVMList);
 
@@ -57,6 +62,7 @@ export class HotelOperationsDashboardDeparturesService extends ARequestService<D
                         departureItemVM.stayingRoomVM = stayingRoomVM;
                     }
                 }
+                departureItemVM.currency = hotelAggregatedInfo.ccy;
                 departureItemVMList.push(departureItemVM);
             });
             return departureItemVMList;
@@ -71,12 +77,12 @@ export class HotelOperationsDashboardDeparturesService extends ARequestService<D
         this._referenceDate = referenceDate;
         return this.getServiceObservable();
     }
-    
+
     public refresh(referenceDate?: ThDateDO) {
         if (!this._appContext.thUtils.isUndefinedOrNull(referenceDate)) {
             this._referenceDate = referenceDate;
         }
         super.refresh();
     }
-    
+
 }
