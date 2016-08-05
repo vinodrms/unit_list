@@ -5,4 +5,5 @@ import {IPriceableEntity} from '../price/IPriceableEntity';
 export interface IInvoiceItemMeta extends BaseDO, IPriceableEntity {
     getNumberOfItems(): number;
     getDisplayName(thTranslation: ThTranslation): string;
+    isMovable(): boolean;
 }

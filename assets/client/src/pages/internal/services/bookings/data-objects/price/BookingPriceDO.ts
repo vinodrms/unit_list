@@ -14,7 +14,8 @@ export class BookingPriceDO extends BaseDO implements IInvoiceItemMeta {
     pricePerItem: number;
     numberOfItems: number;
     totalPrice: number;
-
+    movable: boolean;
+    
     breakfast: InvoiceItemDO;
     includedInvoiceItemList: InvoiceItemDO[];
 
@@ -77,5 +78,9 @@ export class BookingPriceDO extends BaseDO implements IInvoiceItemMeta {
             roomPrice = roomPrice - invoiceItem.meta.getPrice();
         });
         return roomPrice;
+    }
+
+    public isMovable(): boolean {
+        return this.movable;
     }
 }

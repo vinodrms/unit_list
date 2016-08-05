@@ -7,6 +7,7 @@ export class AddOnProductInvoiceItemMetaDO extends BaseDO implements IInvoiceIte
     pricePerItem: number;
     numberOfItems: number;
     aopDisplayName: string;
+    movable: boolean;
 
     protected getPrimitivePropertyKeys(): string[] {
         return ["pricePerItem", "numberOfItems", "aopDisplayName"];
@@ -20,5 +21,8 @@ export class AddOnProductInvoiceItemMetaDO extends BaseDO implements IInvoiceIte
     }
     public getDisplayName(thTranslation: ThTranslation): string {
         return this.aopDisplayName;
+    }
+    public isMovable(): boolean {
+        return this.movable;
     }
 }
