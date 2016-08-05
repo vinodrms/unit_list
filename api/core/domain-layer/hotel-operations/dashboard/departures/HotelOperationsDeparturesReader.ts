@@ -44,7 +44,7 @@ export class HotelOperationsDeparturesReader {
 
             var invoiceRepo = this._appContext.getRepositoryFactory().getInvoiceGroupsRepository();
             return invoiceRepo.getInvoiceGroupList({ hotelId: this._sessionContext.sessionDO.hotel.id }, {
-                invoicePaymentStatus: InvoicePaymentStatus.Open
+                invoicePaymentStatus: InvoicePaymentStatus.Unpaid
             });
         }).then((invoiceSearchResult: InvoiceGroupSearchResultRepoDO) => {
             departuresInfoBuilder.appendInvoiceInformation(invoiceSearchResult.invoiceGroupList);

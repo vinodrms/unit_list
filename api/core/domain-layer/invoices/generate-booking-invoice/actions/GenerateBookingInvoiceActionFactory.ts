@@ -54,7 +54,6 @@ export class GenerateBookingInvoiceActionFactory {
             newInvoiceGroup = new InvoiceGroupDO();
             newInvoiceGroup.hotelId = this._sessionContext.sessionDO.hotel.id;
             newInvoiceGroup.groupBookingId = this._groupBookingId;
-            newInvoiceGroup.paymentStatus = InvoicePaymentStatus.Open;
             newInvoiceGroup.invoiceList = [];
         }
         newInvoiceGroup.invoiceList.push(bookingInvoice);

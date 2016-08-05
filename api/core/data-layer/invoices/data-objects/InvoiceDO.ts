@@ -8,7 +8,7 @@ import {IInvoiceItemMeta} from './items/IInvoiceItemMeta';
 import {BookingDO} from '../../bookings/data-objects/BookingDO';
 
 export enum InvoicePaymentStatus {
-    Open, Closed
+    Unpaid, Paid
 }
 
 export class InvoiceDO extends BaseDO implements IPriceableEntity {
@@ -81,6 +81,6 @@ export class InvoiceDO extends BaseDO implements IPriceableEntity {
     }
     
     public get isPaid(): boolean {
-        return this.paymentStatus === InvoicePaymentStatus.Closed;
+        return this.paymentStatus === InvoicePaymentStatus.Paid;
     }
 }

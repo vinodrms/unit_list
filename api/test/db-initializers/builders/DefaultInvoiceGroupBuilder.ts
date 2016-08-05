@@ -32,7 +32,6 @@ export class DefaultInvoiceGroupBuilder implements IInvoiceGroupDataSource {
         var groupBookingId = groupBookingIdList[1];
         bookingInvoiceGroup.groupBookingId = groupBookingId;
         bookingInvoiceGroup.invoiceList = [];
-        bookingInvoiceGroup.paymentStatus = InvoicePaymentStatus.Open;
 
         var invoiceBuilderPromiseList = [];
         _.forEach(groupedBookings[groupBookingId], (booking: BookingDO) => {
@@ -55,7 +54,7 @@ export class DefaultInvoiceGroupBuilder implements IInvoiceGroupDataSource {
         bookingInvoiceItem.id = booking.bookingId;
         invoice.itemList.push(bookingInvoiceItem);
         invoice.payerList = [];
-        invoice.paymentStatus = InvoicePaymentStatus.Open;
+        invoice.paymentStatus = InvoicePaymentStatus.Unpaid;
         var defaultBillingCustomer = _.find(customerList, ((customer: CustomerDO) => {
             return customer.id === booking.defaultBillingDetails.customerId;
         }));
@@ -87,7 +86,7 @@ export class DefaultInvoiceGroupBuilder implements IInvoiceGroupDataSource {
             totalAmountToPay += aop.price;
         });
         
-        invoice.paymentStatus = InvoicePaymentStatus.Open;
+        invoice.paymentStatus = InvoicePaymentStatus.Unpaid;
         invoice.payerList = [];
         payerCustomer.priceToPay = totalAmountToPay;
         invoice.payerList.push(payerCustomer);

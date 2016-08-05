@@ -50,7 +50,7 @@ export class BookingInvoicesTestHelper {
 
     public buildSaveInvoiceGroupDOForUpdatingBookingInvoiceGroupCore(invoiceGroupToUpdate: InvoiceGroupDO,
         resolve: { (result: SaveInvoiceGroupDO): void }, reject: { (err: any): void }) {
-        invoiceGroupToUpdate.invoiceList[0].paymentStatus = InvoicePaymentStatus.Closed;
+        invoiceGroupToUpdate.invoiceList[0].paymentStatus = InvoicePaymentStatus.Paid;
 
         var aopItemList = this._invoiceTestUtils.buildRandomItemListOfAddOnProducts(this._defaultDataBuilder.addOnProductList, 2);
         var aopItemMetaPromiseList = [];
@@ -68,14 +68,13 @@ export class BookingInvoicesTestHelper {
                 invoiceGroupToUpdate.invoiceList.push(new InvoiceBuilder()
                     .withItemList(aopItemList)
                     .withPayerList([invoicePayerWithUpdatedPricetoPay])
-                    .withPaymentStatus(InvoicePaymentStatus.Open)
+                    .withPaymentStatus(InvoicePaymentStatus.Unpaid)
                     .build());
                 resolve(
                     new SaveInvoiceGroupBuilder()
                         .withId(invoiceGroupToUpdate.id)
                         .withGroupBookingId(invoiceGroupToUpdate.groupBookingId)
                         .withInvoiceList(invoiceGroupToUpdate.invoiceList)
-                        .withPaymentStatus(InvoicePaymentStatus.Open)
                         .build()
                 );
             });

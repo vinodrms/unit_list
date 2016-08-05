@@ -89,7 +89,6 @@ export class InvoiceTestUtils {
         if (!this._thUtils.isUndefinedOrNull(saveInvoiceGroupDO.groupBookingId)) {
             should.equal(invoiceGroup.groupBookingId, saveInvoiceGroupDO.groupBookingId);
         }
-        should.equal(invoiceGroup.paymentStatus, saveInvoiceGroupDO.paymentStatus);
         should.equal(invoiceGroup.invoiceList.length, saveInvoiceGroupDO.invoiceList.length);
         for (var i = 0; i < invoiceGroup.invoiceList.length; ++i) {
             this.testInvoiceEquality(invoiceGroup.invoiceList[i], saveInvoiceGroupDO.invoiceList[i]);

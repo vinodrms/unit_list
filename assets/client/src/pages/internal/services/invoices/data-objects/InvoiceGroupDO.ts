@@ -15,11 +15,10 @@ export class InvoiceGroupDO extends BaseDO {
     groupBookingId: string;
     indexedCustomerIdList: string[];
     invoiceList: InvoiceDO[];
-    paymentStatus: InvoicePaymentStatus;
     status: InvoiceGroupStatus;
 
     protected getPrimitivePropertyKeys(): string[] {
-        return ["id", "versionId", "hotelId", "groupBookingId", "indexedCustomerIdList", "paymentStatus", "status"];
+        return ["id", "versionId", "hotelId", "groupBookingId", "indexedCustomerIdList", "status"];
     }
 
     public buildFromObject(object: Object) {
@@ -64,10 +63,10 @@ export class InvoiceGroupDO extends BaseDO {
     }
 
     public getAmountUnpaid(customerId: string): number {
-        return this.getAmount(customerId, InvoicePaymentStatus.Open);
+        return this.getAmount(customerId, InvoicePaymentStatus.Unpaid);
     }
     public getAmountPaid(customerId: string): number {
-        return this.getAmount(customerId, InvoicePaymentStatus.Closed);
+        return this.getAmount(customerId, InvoicePaymentStatus.Paid);
     }
     private getAmount(customerId: string, type: InvoicePaymentStatus): number {
         return _.chain(this.invoiceList)
