@@ -26,7 +26,7 @@ import {AddOnProductCategoryDO} from '../../../../../services/common/data-object
 export class AddOnProductsComponent extends BaseComponent implements AfterViewInit {
     @Input() protected filterBreakfastCategory: boolean = false;
     filteredCategory: AddOnProductCategoryDO;
-    @ViewChild('overviewBottom', {read: ViewContainerRef}) private _overviewBottomVCRef: ViewContainerRef;
+    @ViewChild('overviewBottom', { read: ViewContainerRef }) private _overviewBottomVCRef: ViewContainerRef;
 
     @Output() protected onScreenStateTypeChanged = new EventEmitter();
     @Output() protected onItemDeleted = new EventEmitter();
@@ -58,15 +58,14 @@ export class AddOnProductsComponent extends BaseComponent implements AfterViewIn
     }
 
     public ngAfterViewInit() {
-        if (!this.filterBreakfastCategory) {
-            this.bootstrapTableComponent();
-            return;
-        }
         this._addOnProductCategoriesService.getAddOnProductCategoriesDO().subscribe((addOnProductCategoriesDO: AddOnProductCategoriesDO) => {
             var breakfastCategory: AddOnProductCategoryDO = addOnProductCategoriesDO.getBreakfastCategory();
-            if (breakfastCategory && breakfastCategory.id) {
+            if (this.filterBreakfastCategory) {
                 this.filteredCategory = breakfastCategory;
                 this._addOnProductsService.setDefaultCategory(breakfastCategory);
+            }
+            else {
+                this._addOnProductsService.setDefaultNotEqualWithCategory(breakfastCategory);
             }
             this.bootstrapTableComponent();
         });

@@ -99,5 +99,7 @@
 
 	// BookingPriceDO
 	"Booking": "Booking",
-	"Cancellation Penalty": "Cancellation Penalty"
+	"Cancellation Penalty": "Cancellation Penalty",
+	"Booking (includes %breakfastName%)": "Booking (includes %breakfastName%)"
+	
 }

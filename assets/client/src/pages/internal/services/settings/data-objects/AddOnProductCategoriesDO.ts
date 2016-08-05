@@ -22,6 +22,11 @@ export class AddOnProductCategoriesDO extends BaseDO {
 			return aopCateg.type === AddOnProductCategoryType.Breakfast;
 		});
 	}
+	public getAddOnProductCategoryList(): AddOnProductCategoryDO[] {
+		return _.filter(this.addOnProductCategoryList, (aopCateg: AddOnProductCategoryDO) => {
+			return aopCateg.type !== AddOnProductCategoryType.Breakfast;
+		});
+	}
 	public getCategoryById(categoryId: string): AddOnProductCategoryDO {
 		return _.find(this.addOnProductCategoryList, (aopCategory: AddOnProductCategoryDO) => { return aopCategory.id === categoryId });
 	}

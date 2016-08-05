@@ -62,6 +62,15 @@ export class MongoQueryBuilder {
 			this._processedQuery[preprocessedQuery.fieldName] = preprocessedQuery.value;
 		} catch (e) { }
 	}
+	public addNotEqualMatch<T>(fieldName: string, value: T) {
+		if (this._thUtils.isUndefinedOrNull(value)) {
+			return;
+		}
+		try {
+			var preprocessedQuery = this._mongoQueryUtils.preprocessQueryValue(fieldName, value);
+			this._processedQuery[preprocessedQuery.fieldName] = { $ne: preprocessedQuery.value };
+		} catch (e) { }
+	}
 
 	public addComparison<T>(queryComparisonOperator: QueryComparisonOperator, fieldName: string, value: T) {
 		if (this._thUtils.isUndefinedOrNull(value)) {

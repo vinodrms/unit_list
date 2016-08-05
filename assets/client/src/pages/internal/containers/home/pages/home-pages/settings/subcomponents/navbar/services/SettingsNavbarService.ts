@@ -16,6 +16,7 @@ export class SettingsNavbarService {
 			new SettingsPageVM(SettingsPageType.BasicInformation, "basic-info", "Basic Information", "8"),
 			new SettingsPageVM(SettingsPageType.Beds, "beds", "Beds", "!"),
 			new SettingsPageVM(SettingsPageType.Rooms, "rooms", "Rooms", "\""),
+			new SettingsPageVM(SettingsPageType.Breakfast, "breakfast", "Breakfast", "#"),
 			new SettingsPageVM(SettingsPageType.AddOnProducts, "add-on-products", "Add-On Products", "$"),
 			new SettingsPageVM(SettingsPageType.PriceProducts, "price-products", "Price Products", "%"),
 			new SettingsPageVM(SettingsPageType.CustomerRegister, "customer-register", "Customer Register", "&"),
@@ -48,12 +49,12 @@ export class SettingsNavbarService {
 		var page: SettingsPageVM = _.find(this._settingsPageList, (page: SettingsPageVM) => {
 			return page.selected === true;
 		});
-		if(!page) {
+		if (!page) {
 			page = this._settingsPageList[0];
 		}
 		return page;
 	}
-	
+
 	public get numberOfItems(): number {
 		return this._numberOfItems;
 	}

@@ -48,7 +48,7 @@ export class AddOnProductEditComponent extends BaseFormComponent implements OnIn
 	public showCategorySelector(): boolean {
 		return !this.filteredCategory;
 	}
-	
+
 	private _addOnProductVM: AddOnProductVM;
 	public get addOnProductVM(): AddOnProductVM {
 		return this._addOnProductVM;
@@ -56,14 +56,14 @@ export class AddOnProductEditComponent extends BaseFormComponent implements OnIn
 	@Input()
 	public set addOnProductVM(addOnProductVM: AddOnProductVM) {
 		this._addOnProductVM = addOnProductVM;
-		if(this.filteredCategory) {
+		if (this.filteredCategory) {
 			this._addOnProductVM.addOnProduct.categoryId = this.filteredCategory.id;
 		}
-		
+
 		this.initDefaultAddOnProductData();
 		this.initForm();
 	}
-	
+
 	@Output() onExit = new EventEmitter();
 	public showViewScreen() {
 		this.onExit.next(true);
@@ -85,8 +85,7 @@ export class AddOnProductEditComponent extends BaseFormComponent implements OnIn
 			this._taxService.getTaxContainerDO(),
 			this._hotelAggregatorService.getHotelAggregatedInfo()
 		).subscribe((result: [AddOnProductCategoriesDO, TaxContainerDO, HotelAggregatedInfo]) => {
-			result[0].addOnProductCategoryList
-			this.addOnProductCategoryList = result[0].addOnProductCategoryList;
+			this.addOnProductCategoryList = result[0].getAddOnProductCategoryList();
 			this.vatList = result[1].vatList;
 			this.ccy = result[2].ccy;
 			this.isLoading = false;
