@@ -81,7 +81,7 @@ export class GenerateBookingInvoice {
         bookingInvoiceItem.type = InvoiceItemType.Booking;
         bookingInvoiceItem.id = this._loadedBooking.bookingId;
         invoice.itemList.push(bookingInvoiceItem);
-        invoice.paymentStatus = InvoicePaymentStatus.Open;
+        invoice.paymentStatus = InvoicePaymentStatus.Unpaid;
         
         this._appContext.getRepositoryFactory().getBookingRepository().getBookingById({ hotelId: this.hotelId }, this._generateBookingInvoiceDO.groupBookingId, 
             this._generateBookingInvoiceDO.bookingId).then((booking: BookingDO) => {

@@ -14,7 +14,6 @@ export class SaveInvoiceGroupDO {
     id: string;
     groupBookingId: string;
     invoiceList: InvoiceDO[];
-    paymentStatus: InvoicePaymentStatus;
 
     public static getValidationStructure(): IValidationStructure {
         
@@ -75,13 +74,9 @@ export class SaveInvoiceGroupDO {
                     },
                     {
                         key: "paymentStatus",
-                        validationStruct: new PrimitiveValidationStructure(new NumberInListValidationRule([InvoicePaymentStatus.Closed, InvoicePaymentStatus.Open]))
+                        validationStruct: new PrimitiveValidationStructure(new NumberInListValidationRule([InvoicePaymentStatus.Paid, InvoicePaymentStatus.Unpaid]))
                     }
                 ]))
-            },
-            {
-                key: "paymentStatus",
-                validationStruct: new PrimitiveValidationStructure(new NumberInListValidationRule([InvoicePaymentStatus.Closed, InvoicePaymentStatus.Open]))
             }
         ]);
     }

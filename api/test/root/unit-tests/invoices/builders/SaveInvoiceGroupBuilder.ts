@@ -5,7 +5,6 @@ export class SaveInvoiceGroupBuilder {
     private _id: string;
     private _groupBookingId: string;
     private _invoiceList: InvoiceDO[];
-    private _paymentStatus: InvoicePaymentStatus;
 
     public withId(id: string): SaveInvoiceGroupBuilder {
         this._id = id;
@@ -19,17 +18,12 @@ export class SaveInvoiceGroupBuilder {
         this._invoiceList = invoiceList;
         return this;
     }
-    public withPaymentStatus(paymentStatus: InvoicePaymentStatus): SaveInvoiceGroupBuilder {
-        this._paymentStatus = paymentStatus;
-        return this;
-    }
 
     public build(): SaveInvoiceGroupDO {
         var saveInvoiceGroupDO = new SaveInvoiceGroupDO();
         saveInvoiceGroupDO.id = this._id;
         saveInvoiceGroupDO.groupBookingId = this._groupBookingId;
         saveInvoiceGroupDO.invoiceList = this._invoiceList;
-        saveInvoiceGroupDO.paymentStatus = this._paymentStatus;
         return saveInvoiceGroupDO;
     }
 }

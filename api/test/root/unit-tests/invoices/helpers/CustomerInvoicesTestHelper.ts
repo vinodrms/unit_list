@@ -32,7 +32,6 @@ export class CustomerInvoicesTestHelper {
     public buildSaveInvoiceGroupDOForAddingNewCustomerInvoiceGroup(): SaveInvoiceGroupDO {
         return new SaveInvoiceGroupBuilder()
             .withInvoiceList(this.buildInvoiceListForAddingNewCustomerInvoiceGroup())
-            .withPaymentStatus(InvoicePaymentStatus.Open)
             .build();
     }
     private buildInvoiceListForAddingNewCustomerInvoiceGroup(): InvoiceDO[] {
@@ -40,7 +39,7 @@ export class CustomerInvoicesTestHelper {
             new InvoiceBuilder()
                 .withItemList(this._invoiceTestUtils.buildRandomItemListOfAddOnProducts(this._defaultDataBuilder.addOnProductList, 2))
                 .withPayerList(this.buildOnePayerList())
-                .withPaymentStatus(InvoicePaymentStatus.Open)
+                .withPaymentStatus(InvoicePaymentStatus.Unpaid)
                 .build()
         ];
     }
@@ -74,12 +73,11 @@ export class CustomerInvoicesTestHelper {
         invoiceGroupToUpdate.invoiceList.push(new InvoiceBuilder()
                 .withItemList(this._invoiceTestUtils.buildRandomItemListOfAddOnProducts(this._defaultDataBuilder.addOnProductList, 1))
                 .withPayerList(invoiceGroupToUpdate.invoiceList[0].payerList)
-                .withPaymentStatus(InvoicePaymentStatus.Open)
+                .withPaymentStatus(InvoicePaymentStatus.Unpaid)
                 .build());
         return new SaveInvoiceGroupBuilder()
             .withId(invoiceGroupToUpdate.id)
             .withInvoiceList(invoiceGroupToUpdate.invoiceList)   
-            .withPaymentStatus(InvoicePaymentStatus.Open)
             .build();
     }
 
