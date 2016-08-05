@@ -25,6 +25,7 @@ import {SettingsBasicInfoPaymentsAndPoliciesComponent} from '../containers/home/
 import {SettingsBasicInfoPropertyDetailsComponent} from '../containers/home/pages/home-pages/settings/subcomponents/basic-information/pages/property-details/SettingsBasicInfoPropertyDetailsComponent';
 import {SettingsBedsComponent} from '../containers/home/pages/home-pages/settings/subcomponents/beds/SettingsBedsComponent';
 import {SettingsRoomsComponent} from '../containers/home/pages/home-pages/settings/subcomponents/rooms/SettingsRoomsComponent';
+import {SettingsBreakfastComponent} from '../containers/home/pages/home-pages/settings/subcomponents/breakfast/SettingsBreakfastComponent';
 import {SettingsAddOnProductsComponent} from '../containers/home/pages/home-pages/settings/subcomponents/add-on-products/SettingsAddOnProductsComponent';
 import {SettingsPriceProductsComponent} from '../containers/home/pages/home-pages/settings/subcomponents/price-products/SettingsPriceProductsComponent';
 import {SettingsCustomerRegisterComponent} from '../containers/home/pages/home-pages/settings/subcomponents/customer-register/SettingsCustomerRegisterComponent';
@@ -51,6 +52,7 @@ const routes: RouterConfig = [
                     },
                     { path: 'beds', component: SettingsBedsComponent },
                     { path: 'rooms', component: SettingsRoomsComponent },
+                    { path: 'breakfast', component: SettingsBreakfastComponent },
                     { path: 'add-on-products', component: SettingsAddOnProductsComponent },
                     { path: 'price-products', component: SettingsPriceProductsComponent },
                     { path: 'customer-register', component: SettingsCustomerRegisterComponent },

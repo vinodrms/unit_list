@@ -55,7 +55,10 @@ export class AddOnProductsService extends ALazyLoadRequestService<AddOnProductVM
 		});
 	}
 	public setDefaultCategory(addOnProductCategory: AddOnProductCategoryDO) {
-		this.defaultSearchCriteria = { categoryIdList: [ addOnProductCategory.id ] };
+		this.defaultSearchCriteria = { categoryIdList: [addOnProductCategory.id] };
+	}
+	public setDefaultNotEqualWithCategory(addOnProductCategory: AddOnProductCategoryDO) {
+		this.defaultSearchCriteria = { notEqualCategoryId: addOnProductCategory.id };
 	}
 
 	public saveAddOnProductDO(addOnProduct: AddOnProductDO): Observable<AddOnProductDO> {

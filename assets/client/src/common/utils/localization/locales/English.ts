@@ -151,7 +151,7 @@ export var EnglishTranslations: Object = {
 	"Skip Breakfast": "Skip Breakfast",
 	"Are you sure you want to skip adding a breakfast ?": "Are you sure you want to skip adding a breakfast ?",
 	"Are you sure you want to go forward without adding a Breakfast ?": "Are you sure you want to go forward without adding a Breakfast ?",
-	"[Wizard Step 3] Breakfast text": "Here you can add different types of Breakfast that you can sell. Breakfast represents an Add On Product from the Breakfast category.",
+	"[Wizard Step 3] Breakfast text": "Here you can add different types of Breakfast that you can later add in Price Products. These cannot be sold separately. If you want to sell them separately, you can add Add on Products in the next section.",
 	"Breakfast Name": "Breakfast Name",
 	"Price Charged": "Price Charged",
 	"Enter a valid price that will be charged": "Enter a valid price that will be charged",
