@@ -630,4 +630,5 @@ export var EnglishTranslations: Object = {
 	"Item Name": "Item Name",
 	"Qty": "Qty",
 	"Total": "Total",
+	"Included in the price": "Included in the price",
 };

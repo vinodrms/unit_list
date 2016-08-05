@@ -3,6 +3,8 @@ import {TranslationPipe} from '../../../../../../../../../../../../../common/uti
 import {AppContext, ThError} from '../../../../../../../../../../../../../common/utils/AppContext';
 import {BookingOperationsPageData} from '../../services/utils/BookingOperationsPageData';
 import {PriceProductDO} from '../../../../../../../../../../../services/price-products/data-objects/PriceProductDO';
+import {BookingDO} from '../../../../../../../../../../../services/bookings/data-objects/BookingDO';
+import {InvoiceItemDO} from '../../../../../../../../../../../services/invoices/data-objects/items/InvoiceItemDO';
 
 @Component({
     selector: 'booking-price-product-viewer',
@@ -22,6 +24,7 @@ export class BookingPriceProductViewerComponent implements OnInit {
 
     private _didInit: boolean = false;
 
+    includedString: string = "";
     conditionsString: string = "";
     constraintsString: string = "";
 
@@ -34,21 +37,31 @@ export class BookingPriceProductViewerComponent implements OnInit {
 
     private loadDependentData() {
         if (!this._didInit || this._appContext.thUtils.isUndefinedOrNull(this._bookingOperationsPageData)) { return; }
+        if (this.bookingDO.price.hasBreakfast()) {
+            this.includedString = this.bookingDO.price.breakfast.meta.getDisplayName(this._appContext.thTranslation);
+        }
+        _.forEach(this.bookingDO.price.includedInvoiceItemList, (invoiceItem: InvoiceItemDO) => {
+            if (this.includedString.length > 0) { this.includedString += ", "; }
+            this.includedString += invoiceItem.meta.getDisplayName(this._appContext.thTranslation);
+        });
         this.conditionsString = this.priceProductDO.conditions.getCancellationConditionsString(this._appContext.thTranslation);
         this.constraintsString = this.priceProductDO.constraints.getBriefValueDisplayString(this._appContext.thTranslation);
     }
 
+    public get bookingDO(): BookingDO {
+        return this._bookingOperationsPageData.bookingDO;
+    }
     public get priceProductDO(): PriceProductDO {
-        return this._bookingOperationsPageData.bookingDO.priceProductSnapshot;
+        return this.bookingDO.priceProductSnapshot;
     }
     public get currencySymbolString(): string {
         return this._bookingOperationsPageData.ccy.nativeSymbol;
     }
     public get totalPrice(): number {
-        return this._bookingOperationsPageData.bookingDO.price.totalPrice;
+        return this.bookingDO.price.totalPrice;
     }
     public get isPenaltyPrice(): boolean {
-        return this._bookingOperationsPageData.bookingDO.price.isPenalty();
+        return this.bookingDO.price.isPenalty();
     }
     public get roomCategoryName(): string {
         return this._bookingOperationsPageData.roomCategoryStats.roomCategory.displayName;
