@@ -1,5 +1,6 @@
 import {IPriceProductEditSection} from '../../sections/utils/IPriceProductEditSection';
 import {PriceProductVM} from '../../../../../../../../services/price-products/view-models/PriceProductVM';
+import {AddOnProductCategoriesDO} from '../../../../../../../../services/settings/data-objects/AddOnProductCategoriesDO';
 
 export class PriceProductEditSectionContainer implements IPriceProductEditSection {
 	private _priceProductEditSectionList: IPriceProductEditSection[];
@@ -30,9 +31,9 @@ export class PriceProductEditSectionContainer implements IPriceProductEditSectio
 		});
 		return isValid;
 	}
-	public initializeFrom(priceProductVM: PriceProductVM) {
+	public initializeFrom(priceProductVM: PriceProductVM, addOnProductCategories: AddOnProductCategoriesDO) {
 		_.forEach(this._priceProductEditSectionList, (section: IPriceProductEditSection) => {
-			section.initializeFrom(priceProductVM);
+			section.initializeFrom(priceProductVM, addOnProductCategories);
 		});
 	}
 	public updateDataOn(priceProductVM: PriceProductVM) {
