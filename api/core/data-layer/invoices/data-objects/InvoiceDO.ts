@@ -71,8 +71,10 @@ export class InvoiceDO extends BaseDO implements IPriceableEntity {
                 });
                 if(!thUtils.isUndefinedOrNull(booking)) {
                     item.meta = booking.price;
+                    item.meta.setMovable(false);
                 }
                 _.forEach(booking.price.includedInvoiceItemList, (invoiceItem: InvoiceItemDO) => {
+                    invoiceItem.meta.setMovable(false);
                     this.itemList.push(invoiceItem);            
                 });
             }
