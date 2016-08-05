@@ -78,11 +78,13 @@ export class GenerateBookingInvoice {
         invoice.itemList.push(bookingInvoiceItem);
         invoice.paymentStatus = InvoicePaymentStatus.Unpaid;
         
-        _.forEach(this._generateBookingInvoiceDO.addOnProductDOList, (aop: AddOnProductDO) => {
-            var invoiceItem = new InvoiceItemDO();
-            invoiceItem.buildFromAddOnProductDO(aop);
-            invoice.itemList.push(invoiceItem);
-        });
+        if(!this._thUtils.isUndefinedOrNull(this._generateBookingInvoiceDO.addOnProductDOList)) {
+            _.forEach(this._generateBookingInvoiceDO.addOnProductDOList, (aop: AddOnProductDO) => {
+                var invoiceItem = new InvoiceItemDO();
+                invoiceItem.buildFromAddOnProductDO(aop);
+                invoice.itemList.push(invoiceItem);
+            });
+        }
 
         this._appContext.getRepositoryFactory().getBookingRepository().getBookingById({ hotelId: this.hotelId }, this._generateBookingInvoiceDO.groupBookingId, 
             this._generateBookingInvoiceDO.bookingId).then((booking: BookingDO) => {
@@ -94,8 +96,6 @@ export class GenerateBookingInvoice {
             
             resolve(invoice);
         });
-
-
     }
 
     private get hotelId(): string {
