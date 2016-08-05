@@ -3089,7 +3089,8 @@ a.btn.btn-square:focus {
 }
 .edit-save-button-group-container .cancel-btn>i {
     position: relative;
-    right: 3px;
+    right: 2px;
+    top: 1px;
 }
 .edit-save-button-group-container button>i.unitpal-font {
     font-size: larger !important;
