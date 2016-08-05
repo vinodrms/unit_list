@@ -23,6 +23,8 @@ export class FirstNightOnlyCancellationPenaltyDO extends BaseDO implements IPric
 		penaltyPrice.pricePerItem = bookingPrice.pricePerItem;
 		penaltyPrice.numberOfItems = 1;
 		penaltyPrice.totalPrice = penaltyPrice.pricePerItem;
+		penaltyPrice.breakfast = bookingPrice.breakfast;
+		penaltyPrice.includedInvoiceItemList = bookingPrice.includedInvoiceItemList;
 		return penaltyPrice;
 	}
 }

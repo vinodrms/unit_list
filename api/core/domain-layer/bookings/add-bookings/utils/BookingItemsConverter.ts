@@ -17,6 +17,10 @@ import {BookingUtils} from '../../utils/BookingUtils';
 import {ThDateIntervalDO} from '../../../../utils/th-dates/data-objects/ThDateIntervalDO';
 import {BookingPriceDO, BookingPriceType} from '../../../../data-layer/bookings/data-objects/price/BookingPriceDO';
 import {CustomersContainer} from '../../../customers/validators/results/CustomersContainer';
+import {AddOnProductItemContainer, AddOnProductItem} from '../../../add-on-products/validators/AddOnProductLoader';
+import {AddOnProductDO} from '../../../../data-layer/add-on-products/data-objects/AddOnProductDO';
+import {InvoiceItemDO, InvoiceItemType} from '../../../../data-layer/invoices/data-objects/items/InvoiceItemDO';
+import {AddOnProductInvoiceItemMetaDO} from '../../../../data-layer/invoices/data-objects/items/add-on-products/AddOnProductInvoiceItemMetaDO';
 
 import _ = require('underscore');
 
@@ -25,6 +29,7 @@ export class BookingItemsConverterParams {
     hotelDO: HotelDO;
     currentHotelTimestamp: ThTimestampDO;
     customersContainer: CustomersContainer;
+    addOnProductItemContainer: AddOnProductItemContainer;
 }
 
 export class BookingItemsConverter {
@@ -114,6 +119,7 @@ export class BookingItemsConverter {
                 hotel: this._converterParams.hotelDO,
                 currentHotelTimestamp: this._converterParams.currentHotelTimestamp
             });
+            bookingDO.price = this.generateDefaultBookingPriceDO(priceProduct);
             this._bookingUtils.updateBookingPriceUsingRoomCategory(bookingDO);
             this._bookingUtils.updateIndexedSearchTerms(bookingDO, this._converterParams.customersContainer);
             this._bookingUtils.updateDisplayCustomerId(bookingDO, this._converterParams.customersContainer);
@@ -121,6 +127,36 @@ export class BookingItemsConverter {
             bookingList.push(bookingDO);
         });
         resolve(bookingList);
+    }
+
+    private generateDefaultBookingPriceDO(priceProduct: PriceProductDO): BookingPriceDO {
+        var bookingPrice = new BookingPriceDO();
+        bookingPrice.includedInvoiceItemList = [];
+
+        _.forEach(priceProduct.addOnProductIdList, (addOnProductId: string) => {
+            var addOnProductItem: AddOnProductItem = this._converterParams.addOnProductItemContainer.getAddOnProductItemById(addOnProductId);
+            if (!this._thUtils.isUndefinedOrNull(addOnProductItem)) {
+                var invoiceItem = this.convertAddOnProductToInvoiceItem(addOnProductItem.addOnProduct);
+                if (addOnProductItem.category.isBreakfast()) {
+                    bookingPrice.breakfast = invoiceItem;
+                }
+                else {
+                    bookingPrice.includedInvoiceItemList.push(invoiceItem);
+                }
+            }
+        });
+        return bookingPrice;
+    }
+    private convertAddOnProductToInvoiceItem(addOnProductDO: AddOnProductDO): InvoiceItemDO {
+        var invoiceItem = new InvoiceItemDO();
+        invoiceItem.id = addOnProductDO.id;
+        invoiceItem.type = InvoiceItemType.AddOnProduct;
+        var itemMeta = new AddOnProductInvoiceItemMetaDO();
+        itemMeta.aopDisplayName = addOnProductDO.name;
+        itemMeta.numberOfItems = 1;
+        itemMeta.pricePerItem = addOnProductDO.price;
+        invoiceItem.meta = itemMeta;
+        return invoiceItem;
     }
 
     private generateGroupBookingReference(): string {

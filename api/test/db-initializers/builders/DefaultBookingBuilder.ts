@@ -38,7 +38,7 @@ export class DefaultBookingBuilder implements IBookingDataSource {
         bookingsList.push(this.buildBooking("1", "2", "groupRef1", "ref1", hotelDO, customerList, roomCategoryList, priceProductList));
         bookingsList.push(this.buildBooking("1", "3", "groupRef1", "ref2", hotelDO, customerList, roomCategoryList, priceProductList));
         bookingsList.push(this.buildBooking("2", "4", "groupRef2", "ref3", hotelDO, customerList, roomCategoryList, priceProductList));
-        
+
         return bookingsList;
     }
 
@@ -97,6 +97,7 @@ export class DefaultBookingBuilder implements IBookingDataSource {
             roomCategoryId: booking.roomCategoryId
         });
         booking.price.totalPrice = booking.price.numberOfItems * booking.price.pricePerItem;
+        booking.price.includedInvoiceItemList = [];
 
         return booking;
     }
@@ -130,10 +131,10 @@ export class DefaultBookingBuilder implements IBookingDataSource {
             return booking.groupBookingReference;
         });
         var addBookingGroupPromiseList = [];
-        for(var groupBookingRef in groupedBookingsByGroupBookingRef) {       
+        for (var groupBookingRef in groupedBookingsByGroupBookingRef) {
             addBookingGroupPromiseList.push(bookingsRepo.addBookings({ hotelId: hotelDO.id }, groupedBookingsByGroupBookingRef[groupBookingRef]));
         }
-        
+
         Promise.all(addBookingGroupPromiseList).then((result: BookingDO[][]) => {
             resolve(_.flatten(result));
         }).catch((error: any) => {

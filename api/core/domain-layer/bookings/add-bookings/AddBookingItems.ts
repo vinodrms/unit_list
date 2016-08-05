@@ -28,6 +28,7 @@ import {RoomCategoryStatsAggregator} from '../../room-categories/aggregators/Roo
 import {RoomCategoryStatsDO} from '../../../data-layer/room-categories/data-objects/RoomCategoryStatsDO';
 import {BookingConfirmationEmailSender} from '../booking-confirmations/BookingConfirmationEmailSender';
 import {BookingDataAggregatorQuery} from '../aggregators/BookingDataAggregator';
+import {AddOnProductLoader, AddOnProductItemContainer} from '../../add-on-products/validators/AddOnProductLoader';
 
 import _ = require('underscore');
 
@@ -117,11 +118,15 @@ export class AddBookingItems {
             }).then((roomCategoryStatsList: RoomCategoryStatsDO[]) => {
                 this._loadedRoomCategoryStatsList = roomCategoryStatsList;
 
+                var addOnProductLoader = new AddOnProductLoader(this._appContext, this._sessionContext);
+                return addOnProductLoader.load(this._loadedPriceProductsContainer.getAddOnProductIdList());
+            }).then((addOnProductItemContainer: AddOnProductItemContainer) => {
                 var bookingItemsConverter = new BookingItemsConverter(this._appContext, this._sessionContext, {
                     hotelDO: this._loadedHotel,
                     currentHotelTimestamp: ThTimestampDO.buildThTimestampForTimezone(this._loadedHotel.timezone),
                     priceProductsContainer: this._loadedPriceProductsContainer,
-                    customersContainer: this._loadedCustomersContainer
+                    customersContainer: this._loadedCustomersContainer,
+                    addOnProductItemContainer: addOnProductItemContainer
                 });
                 return bookingItemsConverter.convert(this._bookingItems, this._inputChannel);
             }).then((convertedBookingList: BookingDO[]) => {

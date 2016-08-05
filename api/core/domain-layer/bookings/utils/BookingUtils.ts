@@ -65,6 +65,9 @@ export class BookingUtils {
         bookingDO.noShowTime = params.priceProduct.conditions.policy.generateNoShowTriggerTime({ arrivalDate: indexedBookingInterval.getArrivalDate() });
     }
     public updateBookingPriceUsingRoomCategory(bookingDO: BookingDO) {
+        var breakfastCopy = bookingDO.price.breakfast;
+        var includedInvoiceItemListCopy = bookingDO.price.includedInvoiceItemList;
+        
         var indexedBookingInterval = new IndexedBookingInterval(bookingDO.interval);
         bookingDO.price = new BookingPriceDO();
         bookingDO.price.priceType = BookingPriceType.BookingStay;
@@ -74,6 +77,9 @@ export class BookingUtils {
             roomCategoryId: bookingDO.roomCategoryId
         });
         bookingDO.price.totalPrice = bookingDO.price.numberOfItems * bookingDO.price.pricePerItem;
+
+        bookingDO.price.breakfast = breakfastCopy;
+        bookingDO.price.includedInvoiceItemList = includedInvoiceItemListCopy;
     }
 
     public hasPenalty(booking: BookingDO, triggerParams: TriggerTimeParams): boolean {

@@ -27,6 +27,8 @@ export class PercentageFromBookingCancellationPenaltyDO extends BaseDO implement
 		penaltyPrice.pricePerItem = bookingPrice.totalPrice * this.percentage;
 		penaltyPrice.numberOfItems = 1;
 		penaltyPrice.totalPrice = penaltyPrice.pricePerItem;
+		penaltyPrice.breakfast = bookingPrice.breakfast;
+		penaltyPrice.includedInvoiceItemList = bookingPrice.includedInvoiceItemList;
 		return penaltyPrice;
 	}
 }
