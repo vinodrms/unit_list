@@ -623,5 +623,7 @@ export var EnglishTranslations: Object = {
 	"of": "of",
 	"Pay": "Pay",
 	"Create Invoice": "Create Invoice",
-	
+	"Item Name": "Item Name",
+	"Qty": "Qty",
+	"Total": "Total",
 };
