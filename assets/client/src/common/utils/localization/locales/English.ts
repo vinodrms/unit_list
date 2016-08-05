@@ -201,6 +201,7 @@ export var EnglishTranslations: Object = {
 	"Purple": "Purple",
 	"Filter Value": "Filter Value",
 	"Select Add-On Product": "Select Add-On Product",
+	"Select Breakfast": "Select Breakfast",
 	"Select Tax": "Select Tax",
 	"Price Product": "Price Product",
 	"Price Product Name": "Price Product Name",
