@@ -17,6 +17,7 @@ import {CustomerDO, CustomerType} from '../../../data-layer/customers/data-objec
 import {CustomersContainer} from '../../customers/validators/results/CustomersContainer';
 import {GenerateBookingInvoiceActionFactory} from './actions/GenerateBookingInvoiceActionFactory';
 import {IGenerateBookingInvoiceActionStrategy} from './actions/IGenerateBookingInvoiceActionStrategy';
+import {AddOnProductDO} from '../../../data-layer/add-on-products/data-objects/AddOnProductDO';
 
 export class GenerateBookingInvoice {
     private _thUtils: ThUtils;
@@ -38,12 +39,6 @@ export class GenerateBookingInvoice {
     }
 
     private generateCore(resolve: { (result: InvoiceGroupDO): void }, reject: { (err: ThError): void }) {
-        var validationResult = GenerateBookingInvoiceDO.getValidationStructure().validateStructure(this._generateBookingInvoiceDO);
-        if (!validationResult.isValid()) {
-            var parser = new ValidationResultParser(validationResult, this._generateBookingInvoiceDO);
-            parser.logAndReject("Error validating data for adding new booking related invoice group", reject);
-            return;
-        }
 
         var bookingIdValidator = new BookingIdValidator(this._appContext, this._sessionContext);
         bookingIdValidator.validateBookingId(this._generateBookingInvoiceDO.groupBookingId, this._generateBookingInvoiceDO.bookingId).then((booking: BookingDO) => {
@@ -83,6 +78,14 @@ export class GenerateBookingInvoice {
         invoice.itemList.push(bookingInvoiceItem);
         invoice.paymentStatus = InvoicePaymentStatus.Unpaid;
         
+        if(!this._thUtils.isUndefinedOrNull(this._generateBookingInvoiceDO.addOnProductDOList)) {
+            _.forEach(this._generateBookingInvoiceDO.addOnProductDOList, (aop: AddOnProductDO) => {
+                var invoiceItem = new InvoiceItemDO();
+                invoiceItem.buildFromAddOnProductDO(aop);
+                invoice.itemList.push(invoiceItem);
+            });
+        }
+
         this._appContext.getRepositoryFactory().getBookingRepository().getBookingById({ hotelId: this.hotelId }, this._generateBookingInvoiceDO.groupBookingId, 
             this._generateBookingInvoiceDO.bookingId).then((booking: BookingDO) => {
             invoice.payerList = [];
@@ -93,8 +96,6 @@ export class GenerateBookingInvoice {
             
             resolve(invoice);
         });
-
-
     }
 
     private get hotelId(): string {

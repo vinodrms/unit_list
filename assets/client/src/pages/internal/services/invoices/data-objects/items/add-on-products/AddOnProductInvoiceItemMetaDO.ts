@@ -4,12 +4,13 @@ import {ThTranslation} from '../../../../../../../common/utils/localization/ThTr
 import {IInvoiceItemMeta} from '../IInvoiceItemMeta';
 
 export class AddOnProductInvoiceItemMetaDO extends BaseDO implements IInvoiceItemMeta {
+    movable: boolean;
     pricePerItem: number;
     numberOfItems: number;
     aopDisplayName: string;
 
     protected getPrimitivePropertyKeys(): string[] {
-        return ["pricePerItem", "numberOfItems", "aopDisplayName"];
+        return ["movable", "pricePerItem", "numberOfItems", "aopDisplayName"];
     }
 
     public getPrice(): number {
@@ -20,5 +21,12 @@ export class AddOnProductInvoiceItemMetaDO extends BaseDO implements IInvoiceIte
     }
     public getDisplayName(thTranslation: ThTranslation): string {
         return this.aopDisplayName;
+    }
+    public isMovable(): boolean {
+        var thUtils = new ThUtils();
+        if(thUtils.isUndefinedOrNull(this.movable)) {
+            return true;
+        }
+        return this.movable;
     }
 }
