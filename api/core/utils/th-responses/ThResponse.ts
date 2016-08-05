@@ -450,9 +450,13 @@ export enum ThStatusCode {
     EmailConfirmationError,
     HotelCommonOperationsControllerEmailError,
     BookingRemoveRollawayCapacityWarningError,
+    HotelBookingOperationsControllerErrorRemovingRollawayCapacity,
     PriceProductReaderInvalidInterval,
     PriceProductReaderError,
     YieldManagerControllerErrorGettingYieldItems,
+    BookingReserveAddOnProductsInvalidState,
+    BookingReserveAddOnProductsError,
+    HotelBookingOperationsControllerErrorReservingAddOnProducts,
 
 }
 
@@ -894,9 +898,13 @@ ThMessage[ThStatusCode.HotelBookingOperationsControllerErrorReactivating] = "Err
 ThMessage[ThStatusCode.EmailConfirmationError] = "Error sending email.";
 ThMessage[ThStatusCode.HotelCommonOperationsControllerEmailError] = "Error sending email.";
 ThMessage[ThStatusCode.BookingRemoveRollawayCapacityWarningError] = "Error updating the rollaway capacity flag on the booking.";
+ThMessage[ThStatusCode.HotelBookingOperationsControllerErrorRemovingRollawayCapacity] = "Error updating the rollaway capacity flag on the booking.";
 ThMessage[ThStatusCode.PriceProductReaderInvalidInterval] = "Invalid interval.";
 ThMessage[ThStatusCode.PriceProductReaderError] = "Error getting price products.";
 ThMessage[ThStatusCode.YieldManagerControllerErrorGettingYieldItems] = "Error getting price products.";
+ThMessage[ThStatusCode.BookingReserveAddOnProductsInvalidState] = "Add on products can be reserved only for confirmed or guaranteed bookings.";
+ThMessage[ThStatusCode.BookingReserveAddOnProductsError] = "Error reserving add on products for the booking.";
+ThMessage[ThStatusCode.HotelBookingOperationsControllerErrorReservingAddOnProducts] = "Error reserving add on products for the booking.";
 
 export class ThResponse {
     statusCode: ThStatusCode;

@@ -104,6 +104,14 @@ export class HotelOperationsBookingService {
             })
         );
     }
+
+    public reserveAddOnProducts(booking: BookingDO): Observable<BookingDO> {
+        return this.mapToBookingObservable(
+            this._appContext.thHttp.post(ThServerApi.HotelOperationsBookingReserveAddOnProducts, {
+                booking: booking
+            })
+        );
+    }
     
     private mapToBookingObservable(bookingObjectObservable: Observable<Object>): Observable<BookingDO> {
         return bookingObjectObservable.map((bookingObject: Object) => {

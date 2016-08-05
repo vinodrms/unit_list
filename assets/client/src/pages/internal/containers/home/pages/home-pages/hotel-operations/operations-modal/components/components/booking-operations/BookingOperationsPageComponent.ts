@@ -23,6 +23,7 @@ import {BookingReactivateComponent} from './components/reactivate/BookingReactiv
 import {BookingCancelComponent} from './components/cancel/BookingCancelComponent';
 import {BookingSendConfirmationComponent} from './components/send-confirmation/BookingSendConfirmationComponent';
 import {BookingLinksComponent} from './components/booking-links/BookingLinksComponent';
+import {BookingReserveAddOnProductEditorComponent} from './components/reserve-add-on-product/BookingReserveAddOnProductEditorComponent';
 
 @Component({
     selector: 'booking-operations-page',
@@ -32,7 +33,7 @@ import {BookingLinksComponent} from './components/booking-links/BookingLinksComp
         BookingCapacityEditorComponent, BookingPaymentGuaranteeEditorComponent, BookingDetailsEditorComponent,
         BookingPriceProductViewerComponent, BookingAllotmentViewerComponent, DocumentHistoryViewerComponent,
         BookingCustomerEditorComponent, BookingReactivateComponent, BookingCancelComponent,
-        BookingSendConfirmationComponent, BookingLinksComponent],
+        BookingSendConfirmationComponent, BookingLinksComponent, BookingReserveAddOnProductEditorComponent],
     providers: [BookingOperationsPageService],
     pipes: [TranslationPipe]
 })

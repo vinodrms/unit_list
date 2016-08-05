@@ -60,6 +60,7 @@ export class BookingDO extends BaseDO {
     needsRollawayBeds: boolean;
     priceProductId: string;
     priceProductSnapshot: PriceProductDO;
+    reservedAddOnProductIdList: string[];
     price: BookingPriceDO;
     allotmentId: string;
     guaranteedTime: BookingStateChangeTriggerTimeDO;
@@ -71,7 +72,8 @@ export class BookingDO extends BaseDO {
 
     protected getPrimitivePropertyKeys(): string[] {
         return ["groupBookingId", "groupBookingReference", "hotelId", "versionId", "status", "inputChannel", "noOfRooms", "bookingId", "bookingReference", "confirmationStatus",
-            "customerIdList", "displayCustomerId", "startUtcTimestamp", "endUtcTimestamp", "roomCategoryId", "roomId", "needsRollawayBeds", "priceProductId", "allotmentId", "notes", "indexedSearchTerms"];
+            "customerIdList", "displayCustomerId", "startUtcTimestamp", "endUtcTimestamp", "roomCategoryId", "roomId", "needsRollawayBeds", "priceProductId", 
+            "reservedAddOnProductIdList", "allotmentId", "notes", "indexedSearchTerms"];
     }
 
     public buildFromObject(object: Object) {

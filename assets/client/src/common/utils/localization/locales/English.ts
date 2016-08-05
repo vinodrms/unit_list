@@ -628,5 +628,9 @@ export var EnglishTranslations: Object = {
 	"Pay": "Pay",
 	"Create Invoice": "Create Invoice",
 	"Included in the price": "Included in the price",
+	"Reserve Add-On-Product": "Reserve Add-On-Product",
+	"No reserved Add-On-Products": "No reserved Add-On-Products",
+	"These will be generated as a separate item on the invoice": "These will be generated as a separate item on the invoice",
+	
 	
 };

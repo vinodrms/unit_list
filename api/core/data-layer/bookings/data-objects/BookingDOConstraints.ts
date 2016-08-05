@@ -66,6 +66,10 @@ export class BookingDOConstraints {
         BookingConfirmationStatus.NoShow,
         BookingConfirmationStatus.NoShowWithPenalty,
     ];
+    public static ConfirmationStatuses_CanReserveAddOnProducts: BookingConfirmationStatus[] = [
+        BookingConfirmationStatus.Confirmed,
+        BookingConfirmationStatus.Guaranteed
+    ];
 
     public static ConfirmationStatuses_BookingsConsideredInYieldManager: BookingConfirmationStatus[] = [
         BookingConfirmationStatus.Confirmed,

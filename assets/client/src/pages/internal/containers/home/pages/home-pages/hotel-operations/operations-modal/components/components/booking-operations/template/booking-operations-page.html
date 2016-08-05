@@ -68,6 +68,10 @@
 		</div>
 		<hr/>
 		<div class="row">
+			<booking-reserve-add-on-product [bookingOperationsPageData]="bookingOperationsPageData" (onAddOnProductsChanged)="didChangeBooking($event)"></booking-reserve-add-on-product>
+		</div>
+		<hr/>
+		<div class="row">
 			<booking-reactivate [bookingOperationsPageData]="bookingOperationsPageData" (onBookingReactivate)="didChangeBooking($event)"></booking-reactivate>
 		</div>
 		<div class="row">

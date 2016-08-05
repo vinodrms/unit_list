@@ -17,4 +17,8 @@ export class AddOnProductsDO extends BaseDO {
 			this.addOnProductList.push(aopDO);
 		});
 	}
+
+	public addAddOnProduct(addOnProductDO: AddOnProductDO) {
+		this.addOnProductList.push(addOnProductDO);
+	}
 }

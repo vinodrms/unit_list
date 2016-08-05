@@ -1,0 +1,41 @@
+<div class="col-xs-12 col-sm-12" *ngIf="hasAddOnProductEditRight">
+    <edit-save-button-group
+        [pullRight]="true"
+        [changeText]="'Reserve'"
+        (onEditStart)="startEdit()"
+        (onEditEnd)="endEdit()"
+        (onSavePressed)="saveAddOnProducts()"
+        [isSaving]="isSaving"
+        [isEditing]="!readonly"
+        >
+    </edit-save-button-group>
+</div>
+<div class="col-xs-12 booking-details-table">
+    <table class="table form-group bottom-margin">
+        <tbody>
+            <tr *ngFor="let addOnProduct of addOnProductList" class="operational-box">
+                <td width="10%"> <i class="fa unitpal-font">$</i>  </td>
+                <td width="70%" class="name-field">
+                    {{ addOnProduct.name }}
+                </td>
+                <td width="20%"> 
+                    <span class="unitpal-font clickable-item" *ngIf="!readonly">\</span>
+                </td>
+            </tr>
+            <tr *ngIf="addOnProductListIsEmpty">
+                <td width="100%">
+                    <small> {{'No reserved Add-On-Products' | translate}} </small>
+                </td>
+            </tr>
+        </tbody>
+        <tfoot></tfoot>
+    </table>
+</div>
+<div class="col-xs-12" *ngIf="!readonly">
+    <a class="link-with-unitpal-font-icon" (click)="addAddOnProducts()">
+        <i class="fa unitpal-font">'</i> 
+        <span>{{ 'Reserve Add-On-Product' | translate }}</span>
+    </a>
+    <br/>
+    <small class="text-muted"><i class="fa fa-info-circle"></i> {{ 'These will be generated as a separate item on the invoice' | translate }}</small>
+</div>

@@ -11,6 +11,7 @@ import {RoomCategoryStatsDO} from '../../../../../../../../../../../services/roo
 import {AllotmentDO} from '../../../../../../../../../../../services/allotments/data-objects/AllotmentDO';
 import {InvoiceGroupDO} from '../../../../../../../../../../../services/invoices/data-objects/InvoiceGroupDO';
 import {InvoiceDO} from '../../../../../../../../../../../services/invoices/data-objects/InvoiceDO';
+import {AddOnProductsDO} from '../../../../../../../../../../../services/add-on-products/data-objects/AddOnProductsDO';
 
 export class BookingOperationsPageData {
     private _thUtils: ThUtils;
@@ -27,6 +28,7 @@ export class BookingOperationsPageData {
     private _roomCategoryStats: RoomCategoryStatsDO;
     private _invoiceGroupDO: InvoiceGroupDO;
     private _invoiceDO: InvoiceDO;
+    private _reservedAddOnProductsContainer: AddOnProductsDO;
 
     constructor() {
         this._thUtils = new ThUtils();
@@ -106,6 +108,12 @@ export class BookingOperationsPageData {
     public set invoiceDO(invoiceDO: InvoiceDO) {
         this._invoiceDO = invoiceDO;
     }
+    public get reservedAddOnProductsContainer(): AddOnProductsDO {
+        return this._reservedAddOnProductsContainer;
+    }
+    public set reservedAddOnProductsContainer(reservedAddOnProductsContainer: AddOnProductsDO) {
+        this._reservedAddOnProductsContainer = reservedAddOnProductsContainer;
+    }
 
     public get hasInvoice(): boolean {
         return !this._thUtils.isUndefinedOrNull(this.invoiceDO) &&
@@ -133,6 +141,7 @@ export class BookingOperationsPageData {
         pageData.roomCategoryStats = this.roomCategoryStats;
         pageData.invoiceGroupDO = this.invoiceGroupDO;
         pageData.invoiceDO = this.invoiceDO;
+        pageData.reservedAddOnProductsContainer = this.reservedAddOnProductsContainer;
         return pageData;
     }
 }
