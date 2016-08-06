@@ -88,6 +88,7 @@ export class BookingItemsConverter {
             bookingDO.defaultBillingDetails = bookingItem.defaultBillingDetails;
             bookingDO.roomCategoryId = bookingItem.roomCategoryId;
             bookingDO.priceProductId = bookingItem.priceProductId;
+            bookingDO.reservedAddOnProductIdList = [];
             bookingDO.allotmentId = bookingItem.allotmentId;
             bookingDO.notes = bookingItem.notes;
             bookingDO.interval = bookingInterval;

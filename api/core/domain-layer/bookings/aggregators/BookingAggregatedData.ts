@@ -15,4 +15,5 @@ export class BookingAggregatedData {
     addOnProductCategoyList: AddOnProductCategoryDO[];
     vatList: TaxDO[];
     otherTaxes: TaxDO[];
+    ccyCode: string;
 }

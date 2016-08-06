@@ -23,6 +23,9 @@ export class AddOnProductItemContainer {
             return item.addOnProduct.id === addOnProductId;
         });
     }
+    public getAddOnProductList(): AddOnProductDO[] {
+        return _.map(this.itemList, (item: AddOnProductItem) => { return item.addOnProduct });
+    }
 }
 
 export class AddOnProductLoader {
