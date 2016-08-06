@@ -4,44 +4,68 @@ import {Observable} from 'rxjs/Observable';
 import {YieldGroupItemVM} from './view-models/YieldGroupItemVM';
 import {YieldLevelItemVM} from './view-models/YieldLevelItemVM';
 
+import {YieldFiltersService} from '../../../hotel-configurations/YieldFiltersService';
+import {YieldFiltersDO} from '../../../hotel-configurations/data-objects/YieldFiltersDO';
+import {YieldFilterDO, YieldFilterType} from '../../../common/data-objects/yield-filter/YieldFilterDO';
+import {YieldFilterValueDO} from '../../../common/data-objects/yield-filter/YieldFilterValueDO';
+import {ColorFilter, ColorMeta} from '../../../common/data-objects/yield-filter/ColorFilter';
+
+
+
 @Injectable()
 export class YieldManagerDashboardFilterService {
 
-	constructor() { }
+	constructor(private _yieldFiltersService: YieldFiltersService) { }
 
-	public getYieldGroups(): Observable<YieldGroupItemVM[]>{
-		var yieldGroups: YieldGroupItemVM[];
-		yieldGroups = [
-			new YieldGroupItemVM("red", "red", "red"),
-			new YieldGroupItemVM("yellow", "yellow", "yellow"),
-			new YieldGroupItemVM("green", "green", "green"),
-			new YieldGroupItemVM("blue", "blue", "blue"),
-			new YieldGroupItemVM("gray", "gray", "gray"),
-			new YieldGroupItemVM("brown", "brown", "brown"),
-			new YieldGroupItemVM("violet", "violet", "violet"),
-			new YieldGroupItemVM("orange", "orange", "orange"),
-			new YieldGroupItemVM("olive", "olive", "olive"),
-			new YieldGroupItemVM("purple", "purple", "purple")
-		]
+	public getYieldGroups(): Observable<YieldGroupItemVM[]> {
+		return this.getYieldFilterDO(YieldFilterType.Color).map((yieldFilterDO: YieldFilterDO) => {
+			var ygItemVMList: YieldGroupItemVM[] = [];
+			var colorFilter = new ColorFilter();
+			_.forEach(yieldFilterDO.values, (yieldValue: YieldFilterValueDO) => {
+				var colorMeta: ColorMeta = colorFilter.getColorMetaByColorCode(yieldValue.colorCode);
 
-		return Observable.of(yieldGroups);
+				var ygItemVM = new YieldGroupItemVM({
+					filterId: yieldFilterDO.id,
+					valueId: yieldValue.id,
+					colorName: colorMeta.displayName,
+					cssClass: colorMeta.cssClass,
+					description: yieldValue.description,
+					filterName: yieldFilterDO.label
+				});
+				ygItemVMList.push(ygItemVM);
+			});
+			return ygItemVMList;
+		});
 	}
 
-	public getYieldLevels(): Observable<YieldLevelItemVM[]>{
-		var yieldLevel: YieldLevelItemVM[];
-		yieldLevel = [
-			new YieldLevelItemVM("1", ".1"),
-			new YieldLevelItemVM("2", ".2"),
-			new YieldLevelItemVM("3", ".3"),
-			new YieldLevelItemVM("4", ".4"),
-			new YieldLevelItemVM("5", ".5"),
-			new YieldLevelItemVM("6", ".6"),
-			new YieldLevelItemVM("7", ".7"),
-			new YieldLevelItemVM("8", ".8"),
-			new YieldLevelItemVM("9", ".9"),
-			new YieldLevelItemVM("10", ".10")
-		]
 
-		return Observable.of(yieldLevel);
+	public getYieldLevels(): Observable<YieldLevelItemVM[]> {
+		return this.getYieldFilterDO(YieldFilterType.Text).map((yieldFilterDO: YieldFilterDO) => {
+			var ygItemVMList: YieldLevelItemVM[] = [];
+
+			_.forEach(yieldFilterDO.values, (yieldValue: YieldFilterValueDO) => {
+				var ygItemVM = new YieldLevelItemVM({
+					filterId: yieldFilterDO.id,
+					valueId: yieldValue.id,
+					displayName: yieldValue.label,
+					description: yieldValue.description,
+					filterName: yieldFilterDO.label
+				});
+				ygItemVMList.push(ygItemVM);
+			});
+			return ygItemVMList;
+		});
+	}
+
+	private getYieldFilterDO(filterType: YieldFilterType): Observable<YieldFilterDO> {
+		return Observable.combineLatest(
+            this._yieldFiltersService.getYieldFiltersDO()
+        ).map((result: [YieldFiltersDO]) => {
+            var yieldFilters: YieldFiltersDO = result[0];
+			var foundYieldFilter: YieldFilterDO = _.find(yieldFilters.yieldFilterList, (yieldFilter: YieldFilterDO) => {
+				return yieldFilter.type === filterType;
+			});
+			return foundYieldFilter;
+        });
 	}
 }
