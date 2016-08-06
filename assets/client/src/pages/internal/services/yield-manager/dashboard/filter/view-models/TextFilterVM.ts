@@ -1,3 +1,6 @@
+import {IFilterVM} from './IFilterVM';
+import {YieldFilterType} from '../../../../common/data-objects/yield-filter/YieldFilterDO';
+
 export interface TextFilterVMParams {
 	filterId: string;
 	valueId: string;
@@ -6,13 +9,22 @@ export interface TextFilterVMParams {
 	filterName: string;
 }
 
-export class TextFilterVM {
+export class TextFilterVM implements IFilterVM {
 	constructor(ygParams: TextFilterVMParams) {
+		this._filterType = YieldFilterType.Text;
 		this._filterId = ygParams.filterId;
 		this._valueId = ygParams.valueId;
 		this._displayName = ygParams.displayName;
 		this._description = ygParams.description;
 		this._filterName = ygParams.filterName;
+	}
+
+	private _filterType: YieldFilterType;
+	public get filterType(): YieldFilterType {
+		return this._filterType;
+	}
+	public set filterType(filterType: YieldFilterType) {
+		this._filterType = filterType;
 	}
 
 	private _filterId: string;

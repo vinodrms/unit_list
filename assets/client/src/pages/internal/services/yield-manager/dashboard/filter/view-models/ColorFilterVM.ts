@@ -1,3 +1,6 @@
+import {IFilterVM} from './IFilterVM';
+import {YieldFilterType} from '../../../../common/data-objects/yield-filter/YieldFilterDO';
+
 export interface ColorFilterVMParams {
 	filterId: string;
 	valueId: string;
@@ -7,15 +10,24 @@ export interface ColorFilterVMParams {
 	filterName: string;
 }
 
-export class ColorFilterVM {
+export class ColorFilterVM implements IFilterVM {
 
 	constructor(ygParams: ColorFilterVMParams) {
+		this._filterType = YieldFilterType.Color;
 		this._filterId = ygParams.filterId;
 		this._valueId = ygParams.valueId;
 		this._colorName = ygParams.colorName;
 		this._cssClass = ygParams.cssClass;
 		this._description = ygParams.description;
 		this._filterName = ygParams.filterName;
+	}
+
+	private _filterType: YieldFilterType;
+	public get filterType(): YieldFilterType {
+		return this._filterType;
+	}
+	public set filterType(filterType: YieldFilterType) {
+		this._filterType = filterType;
 	}
 
 	private _filterId: string;

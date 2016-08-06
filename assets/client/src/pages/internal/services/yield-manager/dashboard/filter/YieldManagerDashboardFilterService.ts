@@ -3,6 +3,7 @@ import {Observable} from 'rxjs/Observable';
 
 import {ColorFilterVM} from './view-models/ColorFilterVM';
 import {TextFilterVM} from './view-models/TextFilterVM';
+import {IFilterVM} from './view-models/IFilterVM';
 import {YieldFiltersService} from '../../../hotel-configurations/YieldFiltersService';
 import {YieldFiltersDO} from '../../../hotel-configurations/data-objects/YieldFiltersDO';
 import {YieldFilterDO, YieldFilterType} from '../../../common/data-objects/yield-filter/YieldFilterDO';
@@ -26,7 +27,7 @@ export class YieldManagerDashboardFilterService {
 		return this.getFilterCollections<ColorFilterVM>(YieldFilterType.Color, this._filterConverter.convertToColorFilter.bind(this._filterConverter));
 	}
 
-	private getFilterCollections<T>(filterType: YieldFilterType, conversionStrategy: { (yieldFilterDO: YieldFilterDO, yieldValue: YieldFilterValueDO): T }): Observable<FilterVMCollection<T>[]> {
+	private getFilterCollections<T extends IFilterVM>(filterType: YieldFilterType, conversionStrategy: { (yieldFilterDO: YieldFilterDO, yieldValue: YieldFilterValueDO): T }): Observable<FilterVMCollection<T>[]> {
 		return this.getYieldFilterList(filterType).map((yieldFilterList: YieldFilterDO[]) => {
 			var filterCollectionList: FilterVMCollection<T>[] = [];
 
