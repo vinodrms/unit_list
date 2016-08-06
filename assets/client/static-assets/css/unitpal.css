@@ -3124,6 +3124,9 @@ a.btn.btn-square:focus {
 .operational-page-container .clickable-item:hover {
     opacity: 0.6;
 }
+.f-s-14 {
+    font-size: 14px;
+}
 .link-with-unitpal-font-icon {
     font-size: 12px; 
 }

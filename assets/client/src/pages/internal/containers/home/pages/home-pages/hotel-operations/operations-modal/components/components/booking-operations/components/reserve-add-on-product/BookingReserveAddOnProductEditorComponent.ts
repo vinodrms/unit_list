@@ -8,6 +8,8 @@ import {BookingReserveAddOnProductRight} from '../../../../../../../../../../../
 import {BookingDO} from '../../../../../../../../../../../services/bookings/data-objects/BookingDO';
 import {AddOnProductDO} from '../../../../../../../../../../../services/add-on-products/data-objects/AddOnProductDO';
 import {AddOnProductsDO} from '../../../../../../../../../../../services/add-on-products/data-objects/AddOnProductsDO';
+import {AddOnProductItemVMContainer} from './view-model/AddOnProductItemVMContainer';
+import {AddOnProductItemVM} from './view-model/AddOnProductItemVM';
 import {HotelOperationsBookingService} from '../../../../../../../../../../../services/hotel-operations/booking/HotelOperationsBookingService';
 import {AddOnProductsModalService} from '../../../../../../../../../../common/inventory/add-on-products/modal/services/AddOnProductsModalService';
 
@@ -38,7 +40,8 @@ export class BookingReserveAddOnProductEditorComponent implements OnInit {
     readonly: boolean = true;
     isSaving: boolean = false;
 
-    private _addOnProductsContainerCopy: AddOnProductsDO;
+    private itemContainer: AddOnProductItemVMContainer;
+    private _itemContainerCopy: AddOnProductItemVMContainer;
     private _didMakeChanges: boolean = false;
 
     constructor(private _appContext: AppContext,
@@ -52,30 +55,30 @@ export class BookingReserveAddOnProductEditorComponent implements OnInit {
 
     private loadDependentData() {
         if (!this._didInit || this._appContext.thUtils.isUndefinedOrNull(this._bookingOperationsPageData)) { return; }
+        this.itemContainer = new AddOnProductItemVMContainer(this._bookingOperationsPageData.ccy.nativeSymbol);
+        this.itemContainer.initItemList(this._bookingOperationsPageData.reservedAddOnProductsContainer, this._bookingOperationsPageData.bookingDO.reservedAddOnProductIdList);
         this.readonly = true;
         this.isSaving = false;
     }
-    public get bookingDO(): BookingDO {
-        return this._bookingOperationsPageData.bookingDO;
-    }
-    public get addOnProductsContainer(): AddOnProductsDO {
-        return this._bookingOperationsPageData.reservedAddOnProductsContainer;
-    }
-    public get addOnProductList(): AddOnProductDO[] {
-        return this.addOnProductsContainer.addOnProductList;
-    }
-    public get addOnProductListIsEmpty(): boolean {
-        return this.addOnProductList.length == 0;
+
+    public get addOnProductItemVMList(): AddOnProductItemVM[] {
+        return this.itemContainer.addOnProductVMList;
     }
 
+    public get addOnProductListIsEmpty(): boolean {
+        return this.itemContainer.addOnProductVMList.length == 0;
+    }
     public get hasAddOnProductEditRight(): boolean {
         return this._bookingOperationsPageData.bookingMeta.reserveAddOnProductRight === BookingReserveAddOnProductRight.Edit;
+    }
+    public get changeBtnLabel(): string {
+        if (this.addOnProductListIsEmpty) { return "Reserve"; }
+        return "Change";
     }
 
     public startEdit() {
         if (!this.hasAddOnProductEditRight) { return; };
-        this._addOnProductsContainerCopy = new AddOnProductsDO();
-        this._addOnProductsContainerCopy.addOnProductList = _.map(this.addOnProductList, (addOnProduct: AddOnProductDO) => { return addOnProduct });
+        this._itemContainerCopy = this.itemContainer.buildPrototype();
         this._didMakeChanges = false;
         this.readonly = false;
     }
@@ -90,13 +93,17 @@ export class BookingReserveAddOnProductEditorComponent implements OnInit {
     private appendAddOnProductList(addOnProductList: AddOnProductDO[]) {
         _.forEach(addOnProductList, (addOnProduct: AddOnProductDO) => {
             this._didMakeChanges = true;
-            this.addOnProductsContainer.addAddOnProduct(addOnProduct);
+            this.itemContainer.addAddOnProduct(addOnProduct);
         });
+    }
+    public removeAddOnProduct(addOnProduct: AddOnProductDO) {
+        this._didMakeChanges = true;
+        this.itemContainer.removeAddOnProduct(addOnProduct);
     }
 
     public endEdit() {
         this.readonly = true;
-        this._bookingOperationsPageData.reservedAddOnProductsContainer = this._addOnProductsContainerCopy;
+        this.itemContainer = this._itemContainerCopy;
     }
 
     public saveAddOnProducts() {
@@ -105,7 +112,9 @@ export class BookingReserveAddOnProductEditorComponent implements OnInit {
             return;
         }
         this.isSaving = true;
-        this._bookingOperationsPageData.bookingDO.reservedAddOnProductIdList = _.map(this.addOnProductList, (addOnProduct: AddOnProductDO) => { return addOnProduct.id });
+        this._bookingOperationsPageData.bookingDO.reservedAddOnProductIdList = this.itemContainer.getAddOnProductIdList();
+        this._bookingOperationsPageData.reservedAddOnProductsContainer = new AddOnProductsDO();
+        this._bookingOperationsPageData.reservedAddOnProductsContainer.addOnProductList = this.itemContainer.getAddOnProductList();
         this._hotelOperationsBookingService.reserveAddOnProducts(this._bookingOperationsPageData.bookingDO).subscribe((updatedBooking: BookingDO) => {
             this._appContext.analytics.logEvent("booking", "reserve-add-on-products", "Reserved some Add-On-Products for a booking");
             this.readonly = true;
