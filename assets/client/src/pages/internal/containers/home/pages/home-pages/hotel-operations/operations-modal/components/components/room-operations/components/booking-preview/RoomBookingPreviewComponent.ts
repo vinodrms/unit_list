@@ -9,6 +9,7 @@ import {HotelOperationsRoomService} from '../../../../../../../../../../../servi
 import {HotelOperationsBookingService} from '../../../../../../../../../../../services/hotel-operations/booking/HotelOperationsBookingService';
 import {CheckOutRoomParam} from '../../../../../../../../../../../services/hotel-operations/room/utils/CheckOutRoomParam';
 import {HotelOperationsPageControllerService} from '../../../../services/HotelOperationsPageControllerService';
+import {RoomOperationsPageData} from '../../services/utils/RoomOperationsPageData';
 
 @Component({
     selector: 'room-booking-preview',
@@ -27,13 +28,13 @@ export class RoomBookingPreviewComponent implements OnInit {
     isCheckingOut: boolean = false;
     isRemovingRollawayCapacityWarning: boolean = false;
 
-    private _attachedBookingResultVM: RoomAttachedBookingResultVM;
-    public get attachedBookingResultVM(): RoomAttachedBookingResultVM {
-        return this._attachedBookingResultVM;
+    private _roomOperationsPageData: RoomOperationsPageData;
+    public get roomOperationsPageData(): RoomOperationsPageData {
+        return this._roomOperationsPageData;
     }
     @Input()
-    public set attachedBookingResultVM(attachedBookingResultVM: RoomAttachedBookingResultVM) {
-        this._attachedBookingResultVM = attachedBookingResultVM;
+    public set roomOperationsPageData(roomOperationsPageData: RoomOperationsPageData) {
+        this._roomOperationsPageData = roomOperationsPageData;
         this.loadDependentData();
     }
 
@@ -48,22 +49,37 @@ export class RoomBookingPreviewComponent implements OnInit {
     }
 
     private loadDependentData() {
-        if (!this._didInit || this._appContext.thUtils.isUndefinedOrNull(this._attachedBookingResultVM)) { return; }
+        if (!this._didInit || this._appContext.thUtils.isUndefinedOrNull(this._roomOperationsPageData)
+            || this._appContext.thUtils.isUndefinedOrNull(this._roomOperationsPageData.attachedBookingResultVM)) { return; }
     }
 
+    public get roomAttachedBookingResultVM(): RoomAttachedBookingResultVM {
+        return this._roomOperationsPageData.attachedBookingResultVM;
+    }
     public hasNoAttachedBooking(): boolean {
-        return this._attachedBookingResultVM.roomAttachedBookingResultDO.hasNoAttachedBooking();
+        return this.roomAttachedBookingResultVM.roomAttachedBookingResultDO.hasNoAttachedBooking();
     }
-
     public hasReservedBooking(): boolean {
-        return this._attachedBookingResultVM.roomAttachedBookingResultDO.hasReservedBooking();
+        return this.roomAttachedBookingResultVM.roomAttachedBookingResultDO.hasReservedBooking();
     }
     public hasCheckedInBooking(): boolean {
-        return this._attachedBookingResultVM.roomAttachedBookingResultDO.hasCheckedInBooking();
+        return this.roomAttachedBookingResultVM.roomAttachedBookingResultDO.hasCheckedInBooking();
+    }
+    public get bookingTypeString(): string {
+        return this.roomAttachedBookingResultVM.roomAttachedBookingResultDO.bookingTypeString;
+    }
+    public hasUnpaidInvoice(): boolean {
+        return this._roomOperationsPageData.hasUnpaidInvoice();
+    }
+    public viewInvoice() {
+        if (!this.hasUnpaidInvoice()) { return; }
+        this._operationsPageControllerService.goToInvoice(this._roomOperationsPageData.invoiceGroupDO.id, {
+            bookingId: this.roomAttachedBookingResultVM.roomAttachedBookingResultDO.booking.bookingId
+        });
     }
 
     public get bookingDO(): BookingDO {
-        return this._attachedBookingResultVM.roomAttachedBookingResultDO.booking;
+        return this.roomAttachedBookingResultVM.roomAttachedBookingResultDO.booking;
     }
     public get hasNotes(): boolean {
         return _.isString(this.bookingDO.notes) && this.bookingDO.notes.length > 0;
@@ -79,7 +95,7 @@ export class RoomBookingPreviewComponent implements OnInit {
         return this.bookingDO.interval.end.getLongDisplayString(this._appContext.thTranslation);
     }
     public get customer(): CustomerDO {
-        return this._attachedBookingResultVM.customersContainer.getCustomerById(this.bookingDO.displayCustomerId);
+        return this.roomAttachedBookingResultVM.customersContainer.getCustomerById(this.bookingDO.displayCustomerId);
     }
 
     public checkOut() {

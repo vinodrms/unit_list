@@ -31,7 +31,7 @@ export class RoomOperationsPageComponent implements OnInit {
 
     isLoading: boolean;
     didInitOnce: boolean = false;
-    private _roomOperationsPageData: RoomOperationsPageData;
+    roomOperationsPageData: RoomOperationsPageData;
     roomPreviewInput: RoomPreviewInput;
 
     constructor(private _appContext: AppContext,
@@ -45,7 +45,7 @@ export class RoomOperationsPageComponent implements OnInit {
     private loadPageData() {
         this.isLoading = true;
         this._roomOperationsPageService.getPageData(this.roomOperationsPageParam).subscribe((pageData: RoomOperationsPageData) => {
-            this._roomOperationsPageData = pageData;
+            this.roomOperationsPageData = pageData;
             this.isLoading = false;
             this.didInitOnce = true;
             this.updateContainerData();
@@ -58,22 +58,23 @@ export class RoomOperationsPageComponent implements OnInit {
         this.roomPreviewInput = new RoomPreviewInput();
         this.roomPreviewInput.roomVM = this.roomVM;
         this.roomPreviewInput.bedVMList = this.bedVMList;
-        this.roomPreviewInput.allRoomAmenities = this._roomOperationsPageData.allRoomAmenities;
-        this.roomPreviewInput.allRoomAttributes = this._roomOperationsPageData.allRoomAttributes;
+        this.roomPreviewInput.allRoomAmenities = this.roomOperationsPageData.allRoomAmenities;
+        this.roomPreviewInput.allRoomAttributes = this.roomOperationsPageData.allRoomAttributes;
         this.roomOperationsPageParam.updateTitle(this.roomVM.room.name, this._appContext.thTranslation.translate("Floor %floorNumber%", { floorNumber: this.roomVM.room.floor }));
     }
 
     public get roomVM(): RoomVM {
-        return this._roomOperationsPageData.roomVM;
+        return this.roomOperationsPageData.roomVM;
     }
     public get bedVMList(): BedVM[] {
-        return this._roomOperationsPageData.bedVMList;
+        return this.roomOperationsPageData.bedVMList;
     }
     public get attachedBookingResultVM(): RoomAttachedBookingResultVM {
-        return this._roomOperationsPageData.attachedBookingResultVM;
+        return this.roomOperationsPageData.attachedBookingResultVM;
     }
     public get didLoadPageData(): boolean {
-        return !this._appContext.thUtils.isUndefinedOrNull(this._roomOperationsPageData);
+        return !this._appContext.thUtils.isUndefinedOrNull(this.roomOperationsPageData)
+            && !this._appContext.thUtils.isUndefinedOrNull(this.roomOperationsPageData.attachedBookingResultVM);
     }
 
     public didChangeBooking(booking: BookingDO) {
@@ -81,7 +82,7 @@ export class RoomOperationsPageComponent implements OnInit {
         this._hotelOperationsResultService.markBookingChanged(booking);
     }
     public didChangeRoom(roomDO: RoomDO) {
-        this._roomOperationsPageData.roomVM.room = roomDO;
+        this.roomOperationsPageData.roomVM.room = roomDO;
         this._hotelOperationsResultService.markRoomChanged(roomDO);
     }
 }
