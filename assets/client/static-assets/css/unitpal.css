@@ -59,6 +59,7 @@ body,html {
 .card a:hover {
     color: #C44D00;
     cursor: pointer;
+    text-decoration: none;
 }
 
 header {
@@ -3143,7 +3144,8 @@ a.btn.btn-square:focus {
 }
 .edit-save-button-group-container .cancel-btn>i {
     position: relative;
-    right: 3px;
+    right: 2px;
+    top: 1px;
 }
 .edit-save-button-group-container button>i.unitpal-font {
     font-size: larger !important;
@@ -3176,6 +3178,9 @@ a.btn.btn-square:focus {
 }
 .operational-page-container .clickable-item:hover {
     opacity: 0.6;
+}
+.f-s-14 {
+    font-size: 14px;
 }
 .link-with-unitpal-font-icon {
     font-size: 12px; 
@@ -3358,9 +3363,14 @@ tr.selected-invoice-item {
     -webkit-appearance: none;
     margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
 }
-
 .row-payment input[type="number"] {
     -moz-appearance: textfield;
+}
+.invoice-payer-container .clickable-item {
+    cursor: pointer;
+    font-weight: 500;
+    color: white;
+    font-size: 14px;
 }
 
 .more-items-container {

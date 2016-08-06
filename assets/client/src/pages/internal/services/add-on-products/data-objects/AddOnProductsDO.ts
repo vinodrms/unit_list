@@ -17,4 +17,11 @@ export class AddOnProductsDO extends BaseDO {
 			this.addOnProductList.push(aopDO);
 		});
 	}
+
+	public addAddOnProduct(addOnProductDO: AddOnProductDO) {
+		this.addOnProductList.push(addOnProductDO);
+	}
+	public getAddOnProductById(addOnProductId: string): AddOnProductDO {
+		return _.find(this.addOnProductList, (addOnProduct: AddOnProductDO) => { return addOnProduct.id === addOnProductId });
+	}
 }

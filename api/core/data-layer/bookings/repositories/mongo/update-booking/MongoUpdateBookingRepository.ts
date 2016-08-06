@@ -29,6 +29,7 @@ export class MongoUpdateBookingRepository extends MongoRepository implements IUp
                 "bookingList.$.roomId": booking.roomId,
                 "bookingList.$.needsRollawayBeds": booking.needsRollawayBeds,
                 "bookingList.$.priceProductId": booking.priceProductId,
+                "bookingList.$.reservedAddOnProductIdList": booking.reservedAddOnProductIdList,
                 "bookingList.$.price": booking.price,
                 "bookingList.$.allotmentId": booking.allotmentId,
                 "bookingList.$.guaranteedTime": booking.guaranteedTime,

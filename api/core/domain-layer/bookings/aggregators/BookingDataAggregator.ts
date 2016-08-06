@@ -21,6 +21,7 @@ import {AddOnProductSearchResultRepoDO} from '../../../data-layer/add-on-product
 import {AddOnProductCategoryDO} from '../../../data-layer/common/data-objects/add-on-product/AddOnProductCategoryDO';
 import {BookingAggregatedDataContainer} from './BookingAggregatedDataContainer';
 import {BookingAggregatedData} from './BookingAggregatedData';
+import {AddOnProductLoader, AddOnProductItemContainer} from '../../add-on-products/validators/AddOnProductLoader';
 
 export interface BookingDataAggregatorQuery {
     groupBookingId?: string;
@@ -76,14 +77,16 @@ export class BookingDataAggregator {
                 return bed.storageType === BedStorageType.Stationary;
             });
 
-            return this._appContext.getRepositoryFactory().getAddOnProductRepository().getAddOnProductList({ hotelId: this._hotel.id }, { addOnProductIdList: this.getDistinctAddOnProductIdListFromBookingList() });
-        }).then((result: AddOnProductSearchResultRepoDO) => {
-            this._addOnProductList = result.addOnProductList;
+            var addOnProductLoader = new AddOnProductLoader(this._appContext, this._sessionContext);
+            return addOnProductLoader.load(this.getDistinctAddOnProductIdListFromBookingList());
+        }).then((result: AddOnProductItemContainer) => {
+            this._addOnProductList = result.getAddOnProductList();
+            var addOnProductLoader = new AddOnProductLoader(this._appContext, this._sessionContext);
 
             return this._appContext.getRepositoryFactory().getSettingsRepository().getAddOnProductCategories();
         }).then((result: AddOnProductCategoryDO[]) => {
             this._addOnProductCategoryList = result;
-            
+
             resolve(this.buildBookingAggregatedDataContainerFromLoadedData());
         }).catch((error: any) => {
             var thError = new ThError(ThStatusCode.BookingConfirmationErrorGettingData, error);
@@ -94,26 +97,30 @@ export class BookingDataAggregator {
         });
     }
 
-    private getDistinctRoomCategoryIdListFromBookingList():string[] {
+    private getDistinctRoomCategoryIdListFromBookingList(): string[] {
         return _.chain(this._bookingList).map((booking: BookingDO) => {
             return booking.roomCategoryId;
         }).uniq().value();
     }
-    private getDistinctCustomerIdListFromBookingList():string[] {
+    private getDistinctCustomerIdListFromBookingList(): string[] {
         return _.chain(this._bookingList).map((booking: BookingDO) => {
             return booking.customerIdList;
         }).flatten().uniq().value();
     }
-    private getDistinctBedIdListFromBookingList():string[] {
+    private getDistinctBedIdListFromBookingList(): string[] {
         return _.chain(this._roomCategoryStatsList).map((roomCategoryStats: RoomCategoryStatsDO) => {
             return _.map(roomCategoryStats.roomCategory.bedConfig.bedMetaList, (bedMeta: BedMetaDO) => {
                 return bedMeta.bedId;
             });
         }).flatten().uniq().value();
     }
-    private getDistinctAddOnProductIdListFromBookingList():string[] {
+    private getDistinctAddOnProductIdListFromBookingList(): string[] {
         return _.chain(this._bookingList).map((booking: BookingDO) => {
-            return booking.priceProductSnapshot.addOnProductIdList;
+            var addOnProductIdList = _.map(booking.priceProductSnapshot.addOnProductIdList, (aopId: string) => { return aopId });
+            if (booking.reservedAddOnProductIdList) {
+                addOnProductIdList = addOnProductIdList.concat(booking.reservedAddOnProductIdList);
+            }
+            return addOnProductIdList;
         }).flatten().uniq().value();
     }
 
@@ -145,13 +152,18 @@ export class BookingDataAggregator {
                 return _.contains(bookingBedIdList, bed.id);
             });
             bookingAggregatedData.addOnProductList = _.filter(this._addOnProductList, (aop: AddOnProductDO) => {
-                return _.contains(booking.priceProductSnapshot.addOnProductIdList, aop.id);
+                var addOnProductIdList = booking.priceProductSnapshot.addOnProductIdList;
+                if (booking.reservedAddOnProductIdList) {
+                    addOnProductIdList = addOnProductIdList.concat(booking.reservedAddOnProductIdList);
+                }
+                return _.contains(addOnProductIdList, aop.id);
             });
             bookingAggregatedData.addOnProductCategoyList = this._addOnProductCategoryList;
+            bookingAggregatedData.ccyCode = this._hotel.ccyCode;
             bookingAggregatedDataList.push(bookingAggregatedData);
         });
         bookingAggregatedDataContainer.bookingAggregatedDataList = bookingAggregatedDataList;
-        
+
         return bookingAggregatedDataContainer;
     }
 }

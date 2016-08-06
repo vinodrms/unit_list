@@ -5,7 +5,7 @@
 <div class="col-xs-12" *ngIf="!hasNoAttachedBooking()">
     <div class="row">
         <div class="col-xs-12" [ngClass]="{'reserved-booking': hasReservedBooking(), 'checked-in': hasCheckedInBooking()}">
-		    <kbd>{{ attachedBookingResultVM.roomAttachedBookingResultDO.bookingTypeString | translate }}</kbd>
+		    <kbd>{{ bookingTypeString | translate }}</kbd>
         </div>
         <div class="col-xs-12 padding-top-5px">
             <span class="clickable-item" (click)="goToBooking(bookingDO)">
@@ -69,8 +69,19 @@
     </div>
     <hr/>
     <div class="row">
+        <div class="col-xs-12 padding-top-5px" *ngIf="hasUnpaidInvoice()">
+            <button type="button" class="btn btn-primary btn-block oneline-text" (click)="viewInvoice()"> 
+                <i class="fa unitpal-font">L</i> 
+                {{ 'Invoice' | translate }}
+                <small class="uppercase" *ngIf="!invoiceIsPaid">
+                    ({{ 'Unpaid' | translate }})
+                </small>
+            </button>
+        </div>
+    </div>
+    <div class="row">
         <div class="col-xs-12 padding-top-5px" *ngIf="hasCheckedInBooking()">
-            <button type="button" class="btn btn-primary btn-block oneline-text" (click)="checkOut()">
+            <button type="button" class="btn btn-danger btn-block oneline-text" (click)="checkOut()">
 				<i *ngIf="isCheckingOut" class="fa fa-spinner fa-pulse"></i> 
                 <i *ngIf="!isCheckingOut" class="fa unitpal-font">.</i> 
                 {{ 'Check Out' | translate }}

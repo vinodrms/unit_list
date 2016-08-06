@@ -6,7 +6,14 @@
         <kbd>{{ 'Selected' | translate }}</kbd>
     </div>
     <div>
-        <h1>{{ roomVM.room.name }}</h1>
+        <h1 *ngIf="!showLinkToOperationalModal">
+            {{ roomVM.room.name }}
+        </h1>
+        <h1 *ngIf="showLinkToOperationalModal">
+            <a (click)="openRoomOperationsModal()">
+                {{ roomVM.room.name }}
+            </a>
+        </h1>
     </div>
     <div>
         <small>Accomodates {{ roomVM.capacity.noAdults }} <span class="unitpal-font">:</span> {{ roomVM.capacity.noChildren }} <span class="unitpal-font">;</span> {{ roomVM.capacity.noBabies }} <span class="unitpal-font">B</span> </small>

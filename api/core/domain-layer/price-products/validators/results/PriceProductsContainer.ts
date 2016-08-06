@@ -21,6 +21,13 @@ export class PriceProductsContainer {
             return priceProduct.id === priceProductId;
         });
     }
+    public getAddOnProductIdList(): string[] {
+        var addOnProductIdList: string[] = [];
+        _.forEach(this._priceProductList, (priceProduct: PriceProductDO) => {
+            addOnProductIdList = addOnProductIdList.concat(priceProduct.addOnProductIdList);
+        });
+        return _.uniq(addOnProductIdList);
+    }
 
     public getFilteredPriceProductsByRoomCategoryId(roomCategoryId: string): PriceProductDO[] {
         return _.filter(this._priceProductList, (priceProduct: PriceProductDO) => {

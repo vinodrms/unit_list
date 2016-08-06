@@ -3,7 +3,14 @@
 		<kbd>{{ 'Selected' | translate }}</kbd>
 	</div>
 	<div>
-		<h1>{{customerVM.customerNameString}}</h1>
+		<h1 *ngIf="!showLinkToOperationalModal">
+            {{customerVM.customerNameString}}
+        </h1>
+        <h1 *ngIf="showLinkToOperationalModal">
+            <a (click)="openCustomerOperationsModal()">
+                {{customerVM.customerNameString}}
+            </a>
+        </h1>
 	</div>
 	<div>
 		<i class="fa fa-briefcase"></i> <small>{{customerVM.customer.priceProductDetails.bookingCode}}</small>

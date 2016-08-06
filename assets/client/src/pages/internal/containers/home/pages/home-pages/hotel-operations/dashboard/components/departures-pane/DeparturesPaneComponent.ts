@@ -18,7 +18,7 @@ import {ThDateDO} from '../../../../../../../../services/common/data-objects/th-
 import {CustomScroll} from '../../../../../../../../../../../src/common/utils/directives/CustomScroll';
 import {TranslationPipe} from '../../../../../../../../../../common/utils/localization/TranslationPipe';
 
-declare var $:any;
+declare var $: any;
 @Component({
 	selector: 'departures-pane',
 	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/dashboard/components/departures-pane/template/departures-pane.html',
@@ -37,17 +37,15 @@ export class DeparturesPaneComponent implements OnInit {
 
 	constructor(
 		private _hotelOperationsDashboardService: HotelOperationsDashboardService,
-		private _hotelService:HotelService,
-		private _appContext: AppContext){
+		private _hotelService: HotelService,
+		private _appContext: AppContext) {
 	}
 
 	ngOnInit() {
 		this.hotelOperationsDashboard.registerDeparturesPane(this);
-		this._hotelService.getHotelDetailsDO().subscribe((details: HotelDetailsDO)=>{
+		this._hotelService.getHotelDetailsDO().subscribe((details: HotelDetailsDO) => {
 			this.selectedDate = details.currentThTimestamp.thDateDO.buildPrototype();
-			//TODO: Remove
-			this.selectedDate = ThDateDO.buildThDateDO(2016, 6, 23);
-			
+
 			this._hotelOperationsDashboardService.getDepartureItems(this.selectedDate)
 				.subscribe((departures: DepartureItemInfoVM[]) => {
 					this.departureItemsVMList = departures;
@@ -55,35 +53,41 @@ export class DeparturesPaneComponent implements OnInit {
 				}, (error: ThError) => {
 					this._appContext.toaster.error(error.message);
 				});
-		
+
 		});
 	}
 
-	private sortByName(arrivalItemsVMList:DepartureItemInfoVM[]){
-		var sortedItems = arrivalItemsVMList.sort((a:DepartureItemInfoVM, b:DepartureItemInfoVM) =>{
+	private sortArrivalItems(arrivalItemsVMList: DepartureItemInfoVM[]) {
+		var sortedItems = arrivalItemsVMList.sort((a: DepartureItemInfoVM, b: DepartureItemInfoVM) => {
+			if (a.hasAttachedRoom && !b.hasAttachedRoom) {
+				return -1;
+			}
+			if (!a.hasAttachedRoom && b.hasAttachedRoom) {
+				return 1;
+			}
 			return a.customerName.localeCompare(b.customerName);
 		})
 		return sortedItems;
 	}
 
-	private updateFilterDepartures(){
-		if (this.searchText == ""){
-			this.filteredDeparturesVMList = this.sortByName(this.departureItemsVMList);
+	private updateFilterDepartures() {
+		if (this.searchText == "") {
+			this.filteredDeparturesVMList = this.sortArrivalItems(this.departureItemsVMList);
 		}
 		else {
-			 var filteredItems = _.filter(this.departureItemsVMList, (item: DepartureItemInfoVM) => {
+			var filteredItems = _.filter(this.departureItemsVMList, (item: DepartureItemInfoVM) => {
 				return (item.customerName.toLowerCase().indexOf(this.searchText.toLowerCase()) > -1);
 			});
 
-			this.filteredDeparturesVMList = this.sortByName(filteredItems);
+			this.filteredDeparturesVMList = this.sortArrivalItems(filteredItems);
 		}
 	}
-	
-	public searchTextChangeHandler(value){
+
+	public searchTextChangeHandler(value) {
 		this.searchText = value;
 		this.updateFilterDepartures();
 	}
-	
+
 	public nextDay() {
 		this.selectedDate.addDays(1);
 		this.refresh();
@@ -94,20 +98,15 @@ export class DeparturesPaneComponent implements OnInit {
 		this.refresh();
 	}
 
-	public refresh(){
-		//TODO: FIX THIS
-		if (!this.selectedDate) {
-			this.selectedDate = ThDateDO.buildThDateDO(2016, 6, 23);
-		}
-
+	public refresh() {
 		this._hotelOperationsDashboardService.refreshDepartures(this.selectedDate);
 	}
 
-	public isDepartureItemSelected(departureItemVM:DepartureItemInfoVM){
+	public isDepartureItemSelected(departureItemVM: DepartureItemInfoVM) {
 		return this.selectedDepartureItem == departureItemVM;
 	}
 
-	public selectDepartureItem(departureItemVM){
+	public selectDepartureItem(departureItemVM) {
 		this.selectedDepartureItem = departureItemVM;
 	}
 

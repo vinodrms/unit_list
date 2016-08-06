@@ -4,15 +4,21 @@ import {TranslationPipe} from '../../../../../../../../common/utils/localization
 import {PercentagePipe} from '../../../../../../../../common/utils/pipes/PercentagePipe';
 import {CustomerVM} from '../../../../../../services/customers/view-models/CustomerVM';
 import {CustomScroll} from '../../../../../../../../common/utils/directives/CustomScroll';
+import {ModalDialogRef} from '../../../../../../../../common/utils/modals/utils/ModalDialogRef';
+import {HotelOperationsModalService} from '../../../../../home/pages/home-pages/hotel-operations/operations-modal/services/HotelOperationsModalService';
+import {HotelOperationsResult} from '../../../../../home/pages/home-pages/hotel-operations/operations-modal/services/utils/HotelOperationsResult';
 
 @Component({
 	selector: 'customer-register-overview',
 	templateUrl: '/client/src/pages/internal/containers/common/inventory/customer-register/pages/customer-overview/template/customer-register-overview.html',
+	providers: [HotelOperationsModalService],
 	pipes: [TranslationPipe, PercentagePipe],
 	directives: [CustomScroll]
 })
 
 export class CustomerRegisterOverviewComponent extends BaseComponent {
+	@Input() showLinkToOperationalModal: boolean = false;
+
 	private _customerVM: CustomerVM;
 	public get customerVM(): CustomerVM {
 		return this._customerVM;
@@ -27,7 +33,16 @@ export class CustomerRegisterOverviewComponent extends BaseComponent {
 		this.onEdit.next(this._customerVM);
 	}
 
-	constructor() {
+	constructor(private _hotelOperationsModalService: HotelOperationsModalService) {
 		super();
+	}
+
+	public openCustomerOperationsModal() {
+		this._hotelOperationsModalService.openCustomerOperationsModal(this._customerVM.customer.id).then((modalDialogRef: ModalDialogRef<HotelOperationsResult>) => {
+			modalDialogRef.resultObservable
+				.subscribe((result: HotelOperationsResult) => {
+				}, (err: any) => {
+				});
+		}).catch((err: any) => { });
 	}
 }

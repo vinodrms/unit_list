@@ -101,6 +101,8 @@ export class BookingSearchResultBuilder {
     private buildPriceProductItemList(priceProductsContainer: PriceProductsContainer): PriceProductItem[] {
         var priceProductItemList: PriceProductItem[] = [];
         _.forEach(priceProductsContainer.priceProductList, (priceProduct: PriceProductDO) => {
+            priceProduct.prepareForClient();
+
             var priceProductItem = new PriceProductItem();
             priceProductItem.priceProduct = priceProduct;
             priceProductItem.priceList = [];

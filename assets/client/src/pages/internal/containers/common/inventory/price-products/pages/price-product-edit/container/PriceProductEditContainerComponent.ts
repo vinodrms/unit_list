@@ -4,6 +4,7 @@ import {Subscription} from 'rxjs/Subscription';
 import 'rxjs/add/observable/combineLatest';
 import {BaseComponent} from '../../../../../../../../../common/base/BaseComponent';
 import {AppContext, ThError} from '../../../../../../../../../common/utils/AppContext';
+import {CustomScroll} from '../../../../../../../../../common/utils/directives/CustomScroll';
 import {LoadingComponent} from '../../../../../../../../../common/utils/components/LoadingComponent';
 import {TranslationPipe} from '../../../../../../../../../common/utils/localization/TranslationPipe';
 import {PriceProductVM} from '../../../../../../../services/price-products/view-models/PriceProductVM';
@@ -25,7 +26,9 @@ import {PriceProductEditFiltersSectionComponent} from '../sections/filters/Price
 import {PriceProductEditCancellationSectionComponent} from '../sections/cancellation/PriceProductEditCancellationSectionComponent';
 import {PriceProductEditConstraintsSectionComponent} from '../sections/constraints/constraints-list/PriceProductEditConstraintsSectionComponent';
 import {PriceProductEditNotesSectionComponent} from '../sections/notes/PriceProductEditNotesSectionComponent';
-import {CustomScroll} from '../../../../../../../../../common/utils/directives/CustomScroll';
+import {AddOnProductCategoriesService} from '../../../../../../../services/settings/AddOnProductCategoriesService';
+import {AddOnProductCategoriesDO} from '../../../../../../../services/settings/data-objects/AddOnProductCategoriesDO';
+import {AddOnProductCategoryDO} from '../../../../../../../services/common/data-objects/add-on-product/AddOnProductCategoryDO';
 
 @Component({
 	selector: 'price-product-edit-container',
@@ -79,7 +82,8 @@ export class PriceProductEditContainerComponent extends BaseComponent implements
 		private _yieldFiltersService: YieldFiltersService,
 		private _eagerAddOnProductsService: EagerAddOnProductsService,
 		private _hotelAggregatorService: HotelAggregatorService,
-		private _priceProductsService: PriceProductsService) {
+		private _priceProductsService: PriceProductsService,
+		private _addOnProductCategoriesService: AddOnProductCategoriesService) {
 		super();
 	}
 	ngAfterViewInit() {
@@ -113,12 +117,13 @@ export class PriceProductEditContainerComponent extends BaseComponent implements
 		}
 		this._dependentDataSubscription = Observable.combineLatest(
 			this._eagerAddOnProductsService.getAddOnProductsById(this._priceProductVM.priceProduct.addOnProductIdList),
-			this._hotelAggregatorService.getHotelAggregatedInfo()
-		).subscribe((result: [AddOnProductsDO, HotelAggregatedInfo]) => {
+			this._hotelAggregatorService.getHotelAggregatedInfo(),
+			this._addOnProductCategoriesService.getAddOnProductCategoriesDO()
+		).subscribe((result: [AddOnProductsDO, HotelAggregatedInfo, AddOnProductCategoriesDO]) => {
 			this._priceProductVM.addOnProductList = result[0].addOnProductList;
 			this._priceProductVM.ccy = result[1].ccy;
 
-			this._editSectionContainer.initializeFrom(this._priceProductVM);
+			this._editSectionContainer.initializeFrom(this._priceProductVM, result[2]);
 			this._editSectionContainer.readonly = this.isReadOnly();
 			this._editFiltersSection.readonly = this.yieldFiltersAreReadOnly();
 			this._editNotesSection.readonly = this.yieldFiltersAreReadOnly();

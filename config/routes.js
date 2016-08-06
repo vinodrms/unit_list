@@ -94,8 +94,8 @@ module.exports.routes = {
 	'POST /api/priceProducts/draftPriceProductItem': 'PriceProductsController.draftPriceProductItem',
 	'GET /api/priceProducts/priceProductItem': 'PriceProductsController.getPriceProductById',
 
-	'POST /api/yieldManager/closePriceProducts': 'YieldManagerController.closePriceProducts',
-	'POST /api/yieldManager/openPriceProducts': 'YieldManagerController.openPriceProducts',
+	'POST /api/yieldManager/yieldPriceProducts': 'YieldManagerController.yieldPriceProducts',
+	'POST /api/yieldManager/getPriceProductYieldItems': 'YieldManagerController.getPriceProductYieldItems',
 
     'GET /api/hotelConfigurations/yieldFilters': 'HotelConfigurationsController.getYieldFilterConfiguration',
     'POST /api/hotelConfigurations/saveYieldFilterValue': 'HotelConfigurationsController.saveYieldFilterValue',
@@ -142,6 +142,7 @@ module.exports.routes = {
 	'POST /api/hotelOperations/booking/cancel': 'HotelBookingOperationsController.cancel',
 	'POST /api/hotelOperations/booking/reactivate': 'HotelBookingOperationsController.reactivate',
 	'POST /api/hotelOperations/booking/removeRollawayCapacityWarning': 'HotelBookingOperationsController.removeRollawayCapacityWarning',
+	'POST /api/hotelOperations/booking/reserveAddOnProducts': 'HotelBookingOperationsController.reserveAddOnProducts',
 
 	'POST /api/hotelOperations/common/sendEmail': 'HotelCommonOperationsController.sendEmail',
 

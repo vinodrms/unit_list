@@ -23,6 +23,8 @@ export class FullStayCancellationPenaltyDO extends BaseDO implements IPriceProdu
 		penaltyPrice.pricePerItem = bookingPrice.pricePerItem;
 		penaltyPrice.numberOfItems = bookingPrice.numberOfItems;
 		penaltyPrice.totalPrice = bookingPrice.totalPrice;
+		penaltyPrice.breakfast = bookingPrice.breakfast;
+		penaltyPrice.includedInvoiceItemList = bookingPrice.includedInvoiceItemList;
 		return penaltyPrice;
 	}
 }

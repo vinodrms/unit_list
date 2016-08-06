@@ -5,6 +5,7 @@ import {InvoicePayerDO} from '../../../core/data-layer/invoices/data-objects/pay
 import {BookingDO} from '../../../core/data-layer/bookings/data-objects/BookingDO';
 import {CustomerDO} from '../../../core/data-layer/customers/data-objects/CustomerDO';
 import {AddOnProductDO} from '../../../core/data-layer/add-on-products/data-objects/AddOnProductDO'
+import {AddOnProductInvoiceItemMetaDO} from '../../../core/data-layer/invoices/data-objects/items/add-on-products/AddOnProductInvoiceItemMetaDO';
 import {TestContext} from '../../helpers/TestContext';
 
 export interface IInvoiceGroupDataSource {
@@ -31,11 +32,14 @@ export class DefaultInvoiceGroupBuilder implements IInvoiceGroupDataSource {
         var groupBookingId = groupBookingIdList[1];
         bookingInvoiceGroup.groupBookingId = groupBookingId;
         bookingInvoiceGroup.invoiceList = [];
-        bookingInvoiceGroup.paymentStatus = InvoicePaymentStatus.Open;
 
         var invoiceBuilderPromiseList = [];
         _.forEach(groupedBookings[groupBookingId], (booking: BookingDO) => {
-            bookingInvoiceGroup.invoiceList.push(this.buildBookingInvoiceFromBooking(booking, customerList));
+            var bookingInvoice = this.buildBookingInvoiceFromBooking(booking, customerList);
+            var invoicePayer = bookingInvoice.payerList[0];
+            var aopOnlyInvoice = this.buildInvoiceWithTwoAddOnProducts(invoicePayer, aopList);
+            bookingInvoiceGroup.invoiceList.push(bookingInvoice);
+            bookingInvoiceGroup.invoiceList.push(aopOnlyInvoice);
         });
 
         return bookingInvoiceGroup;   
@@ -50,7 +54,7 @@ export class DefaultInvoiceGroupBuilder implements IInvoiceGroupDataSource {
         bookingInvoiceItem.id = booking.bookingId;
         invoice.itemList.push(bookingInvoiceItem);
         invoice.payerList = [];
-        invoice.paymentStatus = InvoicePaymentStatus.Open;
+        invoice.paymentStatus = InvoicePaymentStatus.Unpaid;
         var defaultBillingCustomer = _.find(customerList, ((customer: CustomerDO) => {
             return customer.id === booking.defaultBillingDetails.customerId;
         }));
@@ -58,6 +62,35 @@ export class DefaultInvoiceGroupBuilder implements IInvoiceGroupDataSource {
             InvoicePayerDO.buildFromCustomerDOAndPaymentMethod(defaultBillingCustomer, booking.defaultBillingDetails.paymentMethod);
         defaultInvoicePayer.priceToPay = booking.price.getPrice() * booking.price.getNumberOfItems();
         invoice.payerList.push(defaultInvoicePayer);
+        return invoice;
+    }
+
+    private buildInvoiceWithTwoAddOnProducts(payerCustomer: InvoicePayerDO, aopList: AddOnProductDO[]): InvoiceDO {
+        var invoice = new InvoiceDO();
+        invoice.itemList = [];
+        
+        var totalAmountToPay = 0;
+        var aopSample = _.sample(aopList, 2);
+        _.forEach(aopSample, (aop: AddOnProductDO) => {
+            var aopInvoiceItem = new InvoiceItemDO();
+            aopInvoiceItem.type = InvoiceItemType.AddOnProduct;
+            aopInvoiceItem.id = aop.id;
+
+            var aopItemMeta = new AddOnProductInvoiceItemMetaDO();
+            aopItemMeta.aopDisplayName = aop.name;
+            aopItemMeta.numberOfItems = 1;
+            aopItemMeta.pricePerItem = aop.price;
+            aopInvoiceItem.meta = aopItemMeta;
+            
+            invoice.itemList.push(aopInvoiceItem);
+            totalAmountToPay += aop.price;
+        });
+        
+        invoice.paymentStatus = InvoicePaymentStatus.Unpaid;
+        invoice.payerList = [];
+        payerCustomer.priceToPay = totalAmountToPay;
+        invoice.payerList.push(payerCustomer);
+        
         return invoice;
     }
 

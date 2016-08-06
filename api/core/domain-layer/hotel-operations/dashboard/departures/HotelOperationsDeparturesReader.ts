@@ -5,6 +5,8 @@ import {AppContext} from '../../../../utils/AppContext';
 import {SessionContext} from '../../../../utils/SessionContext';
 import {BookingDOConstraints} from '../../../../data-layer/bookings/data-objects/BookingDOConstraints';
 import {BookingSearchResultRepoDO} from '../../../../data-layer/bookings/repositories/IBookingRepository';
+import {InvoicePaymentStatus} from '../../../../data-layer/invoices/data-objects/InvoiceDO';
+import {InvoiceGroupSearchResultRepoDO} from '../../../../data-layer/invoices/repositories/IInvoiceGroupsRepository';
 import {CustomerIdValidator} from '../../../customers/validators/CustomerIdValidator';
 import {CustomersContainer} from '../../../customers/validators/results/CustomersContainer';
 import {HotelOperationsQueryDO} from '../utils/HotelOperationsQueryDO';
@@ -39,6 +41,13 @@ export class HotelOperationsDeparturesReader {
         }).then((bookingSearchResult: BookingSearchResultRepoDO) => {
             var bookingList = bookingSearchResult.bookingList;
             departuresInfoBuilder.appendBookingList(bookingList);
+
+            var invoiceRepo = this._appContext.getRepositoryFactory().getInvoiceGroupsRepository();
+            return invoiceRepo.getInvoiceGroupList({ hotelId: this._sessionContext.sessionDO.hotel.id }, {
+                invoicePaymentStatus: InvoicePaymentStatus.Unpaid
+            });
+        }).then((invoiceSearchResult: InvoiceGroupSearchResultRepoDO) => {
+            departuresInfoBuilder.appendInvoiceInformation(invoiceSearchResult.invoiceGroupList);
 
             var customerIdList: string[] = departuresInfoBuilder.getCustomerIdList();
             var customerValidator = new CustomerIdValidator(this._appContext, this._sessionContext);

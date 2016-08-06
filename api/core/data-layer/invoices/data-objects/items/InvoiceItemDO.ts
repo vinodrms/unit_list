@@ -2,6 +2,7 @@ import {ThUtils} from '../../../../utils/ThUtils';
 import {BaseDO} from '../../../common/base/BaseDO';
 import {IInvoiceItemMeta} from './IInvoiceItemMeta';
 import {AddOnProductInvoiceItemMetaDO} from './add-on-products/AddOnProductInvoiceItemMetaDO';
+import {AddOnProductDO} from '../../../add-on-products/data-objects/AddOnProductDO';
 
 export enum InvoiceItemType {
     AddOnProduct, Booking
@@ -26,5 +27,14 @@ export class InvoiceItemDO extends BaseDO {
             addOnProductInvoiceItemMetaDO.buildFromObject(metaObject);
             this.meta = addOnProductInvoiceItemMetaDO;
         }   
+    }
+
+    public buildFromAddOnProductDO(aop: AddOnProductDO, numberOfItems: number) {
+        var aopInvoiceItemMeta = new AddOnProductInvoiceItemMetaDO(); 
+        aopInvoiceItemMeta.aopDisplayName = aop.name;
+        aopInvoiceItemMeta.numberOfItems = numberOfItems;
+        aopInvoiceItemMeta.pricePerItem = aop.price;
+        this.meta = aopInvoiceItemMeta;
+        this.type = InvoiceItemType.AddOnProduct;
     }
 }

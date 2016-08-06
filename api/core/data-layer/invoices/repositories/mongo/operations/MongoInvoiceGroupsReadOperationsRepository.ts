@@ -98,18 +98,10 @@ export class MongoInvoiceGroupsReadOperationsRepository extends MongoRepository 
         mongoQueryBuilder.addExactMatch("status", InvoiceGroupStatus.Active);
 
         if (!this._thUtils.isUndefinedOrNull(searchCriteria)) {
-            if (!this._thUtils.isUndefinedOrNull(searchCriteria.groupBookingId)) {
-                mongoQueryBuilder.addExactMatch("groupBookingId", searchCriteria.groupBookingId);
-            }
-            if (!this._thUtils.isUndefinedOrNull(searchCriteria.bookingId)) {
-                mongoQueryBuilder.addExactMatch("invoiceList.bookingId", searchCriteria.bookingId);
-            }
-            if (!this._thUtils.isUndefinedOrNull(searchCriteria.customerIdList)) {
-                mongoQueryBuilder.addMultipleSelectOptionList("indexedCustomerIdList", searchCriteria.customerIdList);
-            }
-            if (!this._thUtils.isUndefinedOrNull(searchCriteria.groupBookingId)) {
-                mongoQueryBuilder.addExactMatch("paymentStatus", searchCriteria.invoiceGroupPaymentStatus);
-            }
+            mongoQueryBuilder.addExactMatch("groupBookingId", searchCriteria.groupBookingId);
+            mongoQueryBuilder.addExactMatch("invoiceList.bookingId", searchCriteria.bookingId);
+            mongoQueryBuilder.addMultipleSelectOptionList("indexedCustomerIdList", searchCriteria.customerIdList);
+            mongoQueryBuilder.addExactMatch("invoiceList.paymentStatus", searchCriteria.invoicePaymentStatus);
         }
 
         return mongoQueryBuilder.processedQuery;

@@ -28,7 +28,6 @@ export class InvoiceGroupPayerStatsDO extends BaseDO {
     private static buildInvoiceGroupPayerStatsFromInvoiceGroupDO(invoiceGroupDO: InvoiceGroupDO, customerId: string): InvoiceGroupPayerStatsDO {
         var invoiceGroupPayerStats = new InvoiceGroupPayerStatsDO();
         invoiceGroupPayerStats.invoiceGroupId = invoiceGroupDO.id;
-        invoiceGroupPayerStats.invoiceGroupPaymentStatus = invoiceGroupDO.paymentStatus;
         invoiceGroupPayerStats.groupBookingId = invoiceGroupDO.groupBookingId;
         invoiceGroupPayerStats.amountUnpaid = invoiceGroupDO.getAmountUnpaid(customerId);
         invoiceGroupPayerStats.amountPaid = invoiceGroupDO.getAmountPaid(customerId);
@@ -36,6 +35,6 @@ export class InvoiceGroupPayerStatsDO extends BaseDO {
     }
 
     public get invoiceGroupPaid(): boolean {
-        return this.invoiceGroupPaymentStatus === InvoicePaymentStatus.Closed;
+        return this.invoiceGroupPaymentStatus === InvoicePaymentStatus.Paid;
     }
 }

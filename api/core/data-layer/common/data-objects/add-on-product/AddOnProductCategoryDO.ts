@@ -17,4 +17,8 @@ export class AddOnProductCategoryDO extends BaseDO {
 	protected getPrimitivePropertyKeys(): string[] {
 		return ["id", "type", "name", "iconUrl"];
 	}
+
+	public isBreakfast(): boolean {
+		return this.type === AddOnProductCategoryType.Breakfast;
+	}
 }

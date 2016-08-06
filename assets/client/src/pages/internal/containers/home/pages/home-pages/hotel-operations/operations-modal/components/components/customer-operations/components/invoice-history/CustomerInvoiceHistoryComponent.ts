@@ -15,7 +15,7 @@ import 'rxjs/add/observable/combineLatest';
 @Component({
     selector: 'customer-invoice-history',
     templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/customer-operations/components/invoice-history/template/customer-invoice-history.html',
-    providers: [InvoiceGroupsService, HotelAggregatorService],
+    providers: [],
     pipes: [TranslationPipe]
 })
 export class CustomerInvoiceHistoryComponent implements OnInit {
@@ -47,8 +47,6 @@ export class CustomerInvoiceHistoryComponent implements OnInit {
             this.ccySymbol = result[1].ccy.symbol;
             this.isLoading = false;
         });
-        
-        this._hotelAggregatorService.refresh();
         this._invoiceGroupsService.refreshData();
     }
     public get canLoadMore() {

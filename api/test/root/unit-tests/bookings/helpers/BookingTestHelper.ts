@@ -17,6 +17,7 @@ import {InvoicePaymentMethodType} from '../../../../../core/data-layer/invoices/
 import {DefaultPriceProductBuilder} from '../../../../db-initializers/builders/DefaultPriceProductBuilder';
 import {BookingSearchDO} from '../../../../../core/domain-layer/bookings/search-bookings/BookingSearchDO';
 import {CustomerDO} from '../../../../../core/data-layer/customers/data-objects/CustomerDO';
+import {AddOnProductDO} from '../../../../../core/data-layer/add-on-products/data-objects/AddOnProductDO';
 import {TransientBookingItemDO} from '../../../../../core/domain-layer/bookings/search-bookings/TransientBookingItemDO';
 
 import _ = require('underscore');
@@ -43,6 +44,7 @@ export class BookingTestHelper {
         priceProductItem.status = PriceProductStatus.Active;
         priceProductItem.roomCategoryIdList = roomCategoryIdList;
         priceProductItem.price = DefaultPriceProductBuilder.getPricePerPerson(testDataBuilder.roomCategoryStatsList);
+        priceProductItem.addOnProductIdList = _.map(testDataBuilder.addOnProductList, (addOnProduct: AddOnProductDO) => { return addOnProduct.id });
         var savePPItem = new SavePriceProductItem(testContext.appContext, testContext.sessionContext);
         return savePPItem.save(priceProductItem);
     }

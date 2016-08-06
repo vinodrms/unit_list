@@ -8,7 +8,7 @@ import {IInvoiceItemMeta} from './items/IInvoiceItemMeta';
 import {BookingDO} from '../../bookings/data-objects/BookingDO';
 
 export enum InvoicePaymentStatus {
-    Open, Closed
+    Unpaid, Paid
 }
 
 export class InvoiceDO extends BaseDO implements IPriceableEntity {
@@ -71,12 +71,21 @@ export class InvoiceDO extends BaseDO implements IPriceableEntity {
                 });
                 if(!thUtils.isUndefinedOrNull(booking)) {
                     item.meta = booking.price;
+                    item.meta.setMovable(false);
                 }
+                _.forEach(booking.price.includedInvoiceItemList, (invoiceItem: InvoiceItemDO) => {
+                    invoiceItem.meta.setMovable(false);
+                    this.itemList.push(invoiceItem);            
+                });
             }
         });             
     }
 
     public getPrice(): number {
         return _.reduce(this.itemList, function(memo: number, item: InvoiceItemDO){ return memo + item.meta.getNumberOfItems() * item.meta.getPrice(); }, 0);
+    }
+    
+    public get isPaid(): boolean {
+        return this.paymentStatus === InvoicePaymentStatus.Paid;
     }
 }

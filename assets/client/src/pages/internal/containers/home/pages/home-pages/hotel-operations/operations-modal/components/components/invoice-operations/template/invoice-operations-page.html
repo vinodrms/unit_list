@@ -2,13 +2,14 @@
 
 <div class="full-height" *ngIf="didInitOnce">
 	<div class="invoice-container">
-		<invoice-edit></invoice-edit>
-		<invoice-edit></invoice-edit>
+
+		<invoice-edit *ngFor="let invoice of invoiceList; let invoiceIndex = index" [invoiceIndex]="invoiceIndex"></invoice-edit>
+
 	</div>
 	<div class="invoice-operations-footer">
 
 		<item-list-navigator [totalNumberOfItems]="totalNumberOfInvoices" [maxNumberOfDisplayedItems]="invoiceNavigatorWindowSize"
-			[numberOfSimultaneouslySelectedItems]="numberOfSimultaneouslyDisplayedInvoices" (displayedItemsUpdated)="displayedInvoicesUpdated($event)">
+			[numberOfSimultaneouslySelectedItems]="numberOfSimultaneouslyDisplayedInvoices">
 		</item-list-navigator>
 
 		<button class="btn btn-danger add-invoice-btn" type="button"><i class="fa fa-save"></i> {{ 'Add Invoice' | translate }}</button>

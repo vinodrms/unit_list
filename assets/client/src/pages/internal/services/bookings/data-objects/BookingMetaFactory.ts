@@ -3,7 +3,7 @@ import {BookingConfirmationStatus} from './BookingDO';
 import {BookingIntervalEditRight, BookingNoShowEditRight, BookingAssignRoomRight,
     BookingCapacityEditRight, BookingPaymentGuaranteeEditRight, BookingDetailsEditRight,
     BookingCustomerEditRight, BookingCancelRight, BookingReactivateRight,
-    BookingSendConfirmationRight} from './BookingEditRights';
+    BookingSendConfirmationRight, BookingReserveAddOnProductRight} from './BookingEditRights';
 
 export class BookingMetaFactory {
     public getBookingMetaList(): BookingMeta[] {
@@ -21,6 +21,7 @@ export class BookingMetaFactory {
                 cancelRight: BookingCancelRight.Cancel,
                 reactivateRight: BookingReactivateRight.None,
                 sendConfirmationRight: BookingSendConfirmationRight.Send,
+                reserveAddOnProductRight: BookingReserveAddOnProductRight.Edit,
                 displayClassName: "upcoming",
                 fontName: "Z"
             }),
@@ -37,6 +38,7 @@ export class BookingMetaFactory {
                 cancelRight: BookingCancelRight.Cancel,
                 reactivateRight: BookingReactivateRight.None,
                 sendConfirmationRight: BookingSendConfirmationRight.Send,
+                reserveAddOnProductRight: BookingReserveAddOnProductRight.Edit,
                 displayClassName: "upcoming",
                 fontName: "Z"
             }),
@@ -53,6 +55,7 @@ export class BookingMetaFactory {
                 cancelRight: BookingCancelRight.Cancel,
                 reactivateRight: BookingReactivateRight.Reactivate,
                 sendConfirmationRight: BookingSendConfirmationRight.None,
+                reserveAddOnProductRight: BookingReserveAddOnProductRight.None,
                 displayClassName: "noshow",
                 fontName: "+"
             }),
@@ -69,6 +72,7 @@ export class BookingMetaFactory {
                 cancelRight: BookingCancelRight.Cancel,
                 reactivateRight: BookingReactivateRight.Reactivate,
                 sendConfirmationRight: BookingSendConfirmationRight.None,
+                reserveAddOnProductRight: BookingReserveAddOnProductRight.None,
                 displayClassName: "noshow",
                 fontName: "+"
             }),
@@ -85,6 +89,7 @@ export class BookingMetaFactory {
                 cancelRight: BookingCancelRight.None,
                 reactivateRight: BookingReactivateRight.None,
                 sendConfirmationRight: BookingSendConfirmationRight.None,
+                reserveAddOnProductRight: BookingReserveAddOnProductRight.None,
                 displayClassName: "",
                 fontName: "C"
             }),
@@ -101,6 +106,7 @@ export class BookingMetaFactory {
                 cancelRight: BookingCancelRight.None,
                 reactivateRight: BookingReactivateRight.None,
                 sendConfirmationRight: BookingSendConfirmationRight.None,
+                reserveAddOnProductRight: BookingReserveAddOnProductRight.None,
                 displayClassName: "checkedin",
                 fontName: "("
             }),
@@ -117,6 +123,7 @@ export class BookingMetaFactory {
                 cancelRight: BookingCancelRight.None,
                 reactivateRight: BookingReactivateRight.None,
                 sendConfirmationRight: BookingSendConfirmationRight.None,
+                reserveAddOnProductRight: BookingReserveAddOnProductRight.None,
                 displayClassName: "checkedout",
                 fontName: "*"
             })

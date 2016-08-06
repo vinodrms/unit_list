@@ -68,6 +68,10 @@
 		</div>
 		<hr/>
 		<div class="row">
+			<booking-reserve-add-on-product [bookingOperationsPageData]="bookingOperationsPageData" (onAddOnProductsChanged)="didChangeBooking($event)"></booking-reserve-add-on-product>
+		</div>
+		<hr/>
+		<div class="row">
 			<booking-reactivate [bookingOperationsPageData]="bookingOperationsPageData" (onBookingReactivate)="didChangeBooking($event)"></booking-reactivate>
 		</div>
 		<div class="row">
@@ -76,7 +80,7 @@
 		<div class="row">
 			<booking-send-confirmation [bookingOperationsPageData]="bookingOperationsPageData"></booking-send-confirmation>
 		</div>
-		<div class="row">
+		<div class="row padding-bottom-10px">
 			<booking-links [bookingOperationsPageData]="bookingOperationsPageData"></booking-links>
 		</div>
 	</div>

@@ -12,6 +12,7 @@ import {EagerInvoiceGroupsService} from '../../../../../../../services/invoices/
 import {InvoiceGroupsService} from '../../../../../../../services/invoices/InvoiceGroupsService';
 import {HotelService} from '../../../../../../../services/hotel/HotelService';
 import {HotelAggregatorService} from '../../../../../../../services/hotel/HotelAggregatorService';
+import {EagerAddOnProductsService} from '../../../../../../../services/add-on-products/EagerAddOnProductsService';
 import {EagerPriceProductsService} from '../../../../../../../services/price-products/EagerPriceProductsService';
 import {RoomCategoriesService} from '../../../../../../../services/room-categories/RoomCategoriesService';
 
@@ -34,7 +35,7 @@ import {HotelOperationsPageType} from '../services/utils/HotelOperationsPageType
     directives: [RoomOperationsPageComponent, BookingOperationsPageComponent, CustomerOperationsPageComponent, InvoiceOperationsPageComponent],
     providers: [SETTINGS_PROVIDERS,
         RoomCategoriesStatsService, BedsEagerService, RoomsService, 
-        EagerCustomersService, EagerAllotmentsService, EagerPriceProductsService,
+        EagerCustomersService, EagerAllotmentsService, EagerAddOnProductsService, EagerPriceProductsService,
         HotelService, HotelAggregatorService, EagerBookingsService, RoomCategoriesService,
         EagerInvoiceGroupsService, InvoiceGroupsService, HotelOperationsRoomService, 
         HotelOperationsBookingService, HotelOperationsCustomerService, HotelOperationsPageControllerService],

@@ -6,6 +6,7 @@ import {SettingsNavbarService} from '../subcomponents/navbar/services/SettingsNa
 import {SettingsBasicInformationComponent} from '../subcomponents/basic-information/main/SettingsBasicInformationComponent';
 import {SettingsBedsComponent} from '../subcomponents/beds/SettingsBedsComponent';
 import {SettingsRoomsComponent} from '../subcomponents/rooms/SettingsRoomsComponent';
+import {SettingsBreakfastComponent} from '../subcomponents/breakfast/SettingsBreakfastComponent';
 import {SettingsAddOnProductsComponent} from '../subcomponents/add-on-products/SettingsAddOnProductsComponent';
 import {SettingsPriceProductsComponent} from '../subcomponents/price-products/SettingsPriceProductsComponent';
 import {SettingsCustomerRegisterComponent} from '../subcomponents/customer-register/SettingsCustomerRegisterComponent';
@@ -21,8 +22,8 @@ import {AHomeContainerComponent} from '../../../utils/AHomeContainerComponent';
 	providers: [SettingsNavbarService],
 	pipes: [TranslationPipe],
 	precompile: [SettingsBasicInformationComponent, SettingsBedsComponent, SettingsRoomsComponent,
-		SettingsAddOnProductsComponent, SettingsPriceProductsComponent, SettingsCustomerRegisterComponent,
-		SettingsAllotmentsComponent]
+		SettingsBreakfastComponent, SettingsAddOnProductsComponent, SettingsPriceProductsComponent, 
+		SettingsCustomerRegisterComponent, SettingsAllotmentsComponent]
 })
 export class SettingsContainerComponent extends AHomeContainerComponent implements OnInit {
 

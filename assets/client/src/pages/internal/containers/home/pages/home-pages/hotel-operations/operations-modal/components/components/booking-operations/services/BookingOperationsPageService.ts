@@ -18,6 +18,8 @@ import {InvoiceGroupDO} from '../../../../../../../../../../services/invoices/da
 import {InvoiceDO} from '../../../../../../../../../../services/invoices/data-objects/InvoiceDO';
 import {AllotmentDO} from '../../../../../../../../../../services/allotments/data-objects/AllotmentDO';
 import {CustomersDO} from '../../../../../../../../../../services/customers/data-objects/CustomersDO';
+import {EagerAddOnProductsService} from '../../../../../../../../../../services/add-on-products/EagerAddOnProductsService';
+import {AddOnProductsDO} from '../../../../../../../../../../services/add-on-products/data-objects/AddOnProductsDO';
 import {BookingOperationsPageData} from './utils/BookingOperationsPageData';
 import {HotelBookingOperationsPageParam} from '../utils/HotelBookingOperationsPageParam';
 
@@ -31,7 +33,8 @@ export class BookingOperationsPageService {
         private _roomsService: RoomsService,
         private _eagerCustomersService: EagerCustomersService,
         private _eagerAllotmentsService: EagerAllotmentsService,
-        private _eagerInvoiceGroupsService: EagerInvoiceGroupsService) {
+        private _eagerInvoiceGroupsService: EagerInvoiceGroupsService,
+        private _eagerAddOnProductsService: EagerAddOnProductsService) {
     }
 
 
@@ -56,9 +59,10 @@ export class BookingOperationsPageService {
                 this._eagerInvoiceGroupsService.getInvoiceGroupList({
                     groupBookingId: pageData.bookingDO.groupBookingId,
                     bookingId: pageData.bookingDO.bookingId
-                })
+                }),
+                this._eagerAddOnProductsService.getAddOnProductsById(pageData.bookingDO.reservedAddOnProductIdList)
             );
-        }).map((result: [BookingOperationsPageData, CustomersDO, RoomVM, RoomCategoryStatsDO, AllotmentDO, InvoiceGroupDO[]]) => {
+        }).map((result: [BookingOperationsPageData, CustomersDO, RoomVM, RoomCategoryStatsDO, AllotmentDO, InvoiceGroupDO[], AddOnProductsDO]) => {
             var pageData = result[0];
             pageData.customersContainer = result[1];
             pageData.roomVM = result[2];
@@ -71,6 +75,7 @@ export class BookingOperationsPageService {
                     return invoice.bookingId === pageData.bookingDO.bookingId;
                 });
             }
+            pageData.reservedAddOnProductsContainer = result[6];
             return pageData;
         });
     }

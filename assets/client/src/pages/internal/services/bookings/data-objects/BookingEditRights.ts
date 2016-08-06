@@ -40,3 +40,7 @@ export enum BookingSendConfirmationRight {
     Send,
     None
 }
+export enum BookingReserveAddOnProductRight {
+    Edit,
+    None
+}
