@@ -1,0 +1,26 @@
+<div class="header">
+	<div class="pane-title p-t-6">
+		<div class="unitpal-font f-12 f-32 clickable" (click)="previousDay()">&lt;</div>
+		<div class="flex-row">
+			<i class="fa fa-calendar orange-color p-r-12 f-32" aria-hidden="true"></i>
+			<div class="">
+				<div *ngIf="selectedDate" class="current-date f-16"><b>{{getDateShortString()}}</b></div>
+				<div class="f-12">{{ 'Showing 20 days' | translate}}</div>
+			</div>
+		</div>
+		<div class="unitpal-font f-12 p-r-12 f-32 clickable" (click)="nextDay()">&gt;</div>
+	</div>
+	<div class="pane-search-bar">
+		<input class="remove-auto-border" type="text" placeholder="Search here" [ngModel]="searchText" (ngModelChange)="searchTextChangeHandler($event)">
+		<i class="fa fa-search gray-color p-l-6"></i>
+	</div>
+</div>
+<div customScroll class="body">
+	<yield-group-item
+		*ngFor="let yieldGroupItemVM of yieldGroups" 
+		[yieldGroupItemVM] = "yieldGroupItemVM" 
+		>
+	</yield-group-item>
+</div>
+
+
