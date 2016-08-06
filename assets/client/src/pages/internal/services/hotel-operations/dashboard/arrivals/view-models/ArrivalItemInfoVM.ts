@@ -18,6 +18,7 @@ export class ArrivalItemInfoVM {
     public get arrivalItemDO(): ArrivalItemInfoDO {
         return this._arrivalItemDO;
     }
+    
     public set arrivalItemDO(arrivalItemDO: ArrivalItemInfoDO) {
         this._arrivalItemDO = arrivalItemDO;
     }

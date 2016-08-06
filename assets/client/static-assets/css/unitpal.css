@@ -2058,7 +2058,7 @@ a.btn.btn-square:focus {
 }
 
  /* Operationl */
-    .hotel-operations-dashboard{
+    .operations-dashboard{
         width: 100%;
         height: 100%;
         overflow-y: hidden;
@@ -2068,12 +2068,12 @@ a.btn.btn-square:focus {
         cursor: default;
     }
 
-    .hotel-operations-dashboard{
+    .operations-dashboard{
         display:flex;
         align-items: stretch;
     }
 
-    .hotel-operations-dashboard .pane {
+    .operations-dashboard .pane {
         display: flex;
         background-color: #f3f3f3;
         flex-basis: 236px;
@@ -2081,10 +2081,47 @@ a.btn.btn-square:focus {
         flex-grow: 0;
     }
 
-    .hotel-operations-dashboard .pane > .header{
+    .operations-dashboard .pane > .header{
         border-bottom: 1px solid #DBDBDB;
     }
 
+
+        .operations-dashboard .pane > .header{
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .operations-dashboard .header .pane-title{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #DBDBDB;
+            padding-left: 15px;
+            flex-basis: 48px;
+            color: #5b5b62;
+        }
+
+        .operations-dashboard .pane-search-bar{
+            justify-content: space-between;
+            display: flex;
+            align-items: center;
+            flex-basis: 48px;
+            padding: 6px 12px 6px 30px;
+            background-color: white;
+        }
+
+        .operations-dashboard .pane-search-bar input{
+            flex-grow: 1;
+        }
+
+        .operations-dashboard .pane > .footer{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-basis: 48px;
+            background-color: white;
+        }
+        
     .hotel-operations-dashboard .customer-name{
         font-size: 16px;
         color: #7c7c81;
@@ -2105,44 +2142,6 @@ a.btn.btn-square:focus {
             display: flex;
             flex-direction: row;
             color: #7c7c81
-        }
-
-    
-        
-        .hotel-operations-dashboard .pane > .header{
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .hotel-operations-dashboard .header .pane-title{
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border-bottom: 1px solid #DBDBDB;
-            padding-left: 15px;
-            flex-basis: 48px;
-            color: #5b5b62;
-        }
-
-        .hotel-operations-dashboard .pane-search-bar{
-            justify-content: space-between;
-            display: flex;
-            align-items: center;
-            flex-basis: 48px;
-            padding: 6px 12px 6px 30px;
-            background-color: white;
-        }
-
-        .hotel-operations-dashboard .pane-search-bar input{
-            flex-grow: 1;
-        }
-
-        .hotel-operations-dashboard .pane > .footer{
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-basis: 48px;
-            background-color: white;
         }
 
         .remove-auto-border{
@@ -2562,6 +2561,57 @@ a.btn.btn-square:focus {
             max-width: 50px;
             font-weight: bold;
         }
+/* Yield Manager */
+    .yield-manager-dashboard{
+        width: 100%;
+        height: 100%;
+        overflow-y: hidden;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        cursor: default;
+    }
+
+    .yield-manager-dashboard{
+        display:flex;
+        align-items: stretch;
+    }
+
+    /*.yield-manager-dashboard .pane {
+        display: flex;
+        background-color: #f3f3f3;
+        flex-basis: 236px;
+        flex-direction: column;
+        flex-grow: 0;
+    }*/
+
+    .yield-manager-dashboard .pane > .header{
+        border-bottom: 1px solid #DBDBDB;
+    }
+
+    .yield-manager-dashboard .main{
+        background-color: #eeeeee;
+        flex-basis: 100px;
+        flex-grow: 8;
+        border-left: 1px solid #DBDBDB;
+        border-right: 1px solid #DBDBDB;
+    }
+
+    .yield-manager-dashboard yield-key-metrics,
+    .yield-manager-dashboard yield-price-products
+    {
+        display: flex;
+        background-color: white;
+        border: 1px solid #DBDBDB;
+        flex-grow: 1;
+    }
+    .yield-manager-dashboard yield-key-metrics{
+        margin: 24px 24px 6px 24px;
+    }
+
+    .yield-manager-dashboard yield-price-products{
+        margin: 6px 24px 24px 24px;
+    }
 
         /* Misc */
         
@@ -2583,6 +2633,11 @@ a.btn.btn-square:focus {
         .flex-row {
             display: flex;
             flex-direction: row;
+        }
+
+        .flex-column {
+            display: flex;
+            flex-direction: column;
         }
 
         .flex-center-v{
