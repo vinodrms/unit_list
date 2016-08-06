@@ -5,18 +5,23 @@ import {PrimitiveValidationStructure} from '../../../utils/th-validation/structu
 import {ArrayValidationStructure} from '../../../utils/th-validation/structure/ArrayValidationStructure';
 import {StringValidationRule} from '../../../utils/th-validation/rules/StringValidationRule';
 import {NumberInListValidationRule} from '../../../utils/th-validation/rules/NumberInListValidationRule';
+import {BooleanValidationRule} from '../../../utils/th-validation/rules/BooleanValidationRule';
 import {BookingValidationStructures} from '../../bookings/validators/BookingValidationStructures';
 
-export enum PriceProductYieldAttribute {
-	OpenPeriod,
-	OpenForArrivalPeriod,
-	OpenForDeparturePeriod
+export enum PriceProductYieldAction {
+	Open,
+	Close,
+	OpenForArrival,
+	CloseForArrival,
+	OpenForDeparture,
+	CloseForDeparture
 }
 
 export class PriceProductYieldingDO {
 	priceProductIdList: string[];
+	action: PriceProductYieldAction;
+	forever: boolean;
 	interval: ThDateIntervalDO;
-	attribute: PriceProductYieldAttribute;
 
 	public static getValidationStructure(): IValidationStructure {
 		return new ObjectValidationStructure([
@@ -25,13 +30,20 @@ export class PriceProductYieldingDO {
 				validationStruct: new ArrayValidationStructure(new PrimitiveValidationStructure(new StringValidationRule()))
 			},
 			{
-				key: "interval",
-				validationStruct: BookingValidationStructures.getThDateIntervalDOValidationStructure()
+				key: "action",
+				validationStruct: new PrimitiveValidationStructure(new NumberInListValidationRule([
+					PriceProductYieldAction.Open, PriceProductYieldAction.Close,
+					PriceProductYieldAction.OpenForArrival, PriceProductYieldAction.CloseForArrival,
+					PriceProductYieldAction.OpenForDeparture, PriceProductYieldAction.CloseForDeparture]))
 			},
 			{
-				key: "attribute",
-				validationStruct: new PrimitiveValidationStructure(new NumberInListValidationRule([PriceProductYieldAttribute.OpenPeriod, PriceProductYieldAttribute.OpenForArrivalPeriod, PriceProductYieldAttribute.OpenForDeparturePeriod]))
+				key: "forever",
+				validationStruct: new PrimitiveValidationStructure(new BooleanValidationRule())
 			}
 		]);
+	}
+
+	public static getIntervalValidationStructure(): IValidationStructure {
+		return BookingValidationStructures.getThDateIntervalDOValidationStructure();
 	}
 }

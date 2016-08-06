@@ -6,20 +6,13 @@ import {PriceProductReader} from '../core/domain-layer/yield-manager/price-produ
 import {PriceProductYieldResult} from '../core/domain-layer/yield-manager/price-product-reader/utils/PriceProductYieldItem';
 
 export class YieldManagerController extends BaseController {
-	public closePriceProducts(req: Express.Request, res: Express.Response) {
+	public yieldPriceProducts(req: Express.Request, res: Express.Response) {
 		var ppYM = new PriceProductYielding(req.appContext, req.sessionContext);
-		ppYM.close(req.body.yieldData).then((priceProductList: PriceProductDO[]) => {
+		ppYM.yield(req.body.yieldData).then((priceProductList: PriceProductDO[]) => {
+			priceProductList.forEach((priceProduct: PriceProductDO) => { priceProduct.prepareForClient() });
 			this.returnSuccesfulResponse(req, res, { priceProductList: priceProductList });
 		}).catch((err: any) => {
 			this.returnErrorResponse(req, res, err, ThStatusCode.YieldManagerControllerErrorClosing);
-		});
-	}
-	public openPriceProducts(req: Express.Request, res: Express.Response) {
-		var ppYM = new PriceProductYielding(req.appContext, req.sessionContext);
-		ppYM.open(req.body.yieldData).then((priceProductList: PriceProductDO[]) => {
-			this.returnSuccesfulResponse(req, res, { priceProductList: priceProductList });
-		}).catch((err: any) => {
-			this.returnErrorResponse(req, res, err, ThStatusCode.YieldManagerControllerErrorOpening);
 		});
 	}
 	public getPriceProductYieldItems(req: Express.Request, res: Express.Response) {
@@ -34,7 +27,6 @@ export class YieldManagerController extends BaseController {
 
 var ymController = new YieldManagerController();
 module.exports = {
-	closePriceProducts: ymController.closePriceProducts.bind(ymController),
-	openPriceProducts: ymController.openPriceProducts.bind(ymController),
+	yieldPriceProducts: ymController.yieldPriceProducts.bind(ymController),
 	getPriceProductYieldItems: ymController.getPriceProductYieldItems.bind(ymController),
 }

@@ -15,6 +15,7 @@ export class YieldItemState {
 export class PriceProductYieldItem {
     priceProductId: string;
     priceProductName: string;
+    lastRoomAvailability: boolean;
     yieldFilterList: PriceProductYieldFilterMetaDO[];
     stateList: YieldItemState[];
 }

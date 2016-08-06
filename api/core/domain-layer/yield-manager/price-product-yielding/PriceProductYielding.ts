@@ -3,35 +3,29 @@ import {ThError} from '../../../utils/th-responses/ThError';
 import {ThStatusCode} from '../../../utils/th-responses/ThResponse';
 import {AppContext} from '../../../utils/AppContext';
 import {SessionContext} from '../../../utils/SessionContext';
-import {PriceProductYieldingDO, PriceProductYieldAttribute} from './PriceProductYieldingDO';
+import {PriceProductYieldingDO} from './PriceProductYieldingDO';
 import {PriceProductDO} from '../../../data-layer/price-products/data-objects/PriceProductDO';
 import {ThDateIntervalDO} from '../../../utils/th-dates/data-objects/ThDateIntervalDO';
+import {ThDateUtils} from '../../../utils/th-dates/ThDateUtils';
 import {ValidationResultParser} from '../../common/ValidationResultParser';
-import {PriceProductMetaRepoDO, PriceProductItemMetaRepoDO} from '../../../data-layer/price-products/repositories/IPriceProductRepository';
-import {IPriceProductIntervalStrategy} from './interval-strategies/IPriceProductIntervalStrategy';
-import {PriceProductAddIntervalStrategy} from './interval-strategies/PriceProductAddIntervalStrategy';
-import {PriceProductRemoveIntervalStrategy} from './interval-strategies/PriceProductRemoveIntervalStrategy';
-import {IndexedBookingInterval} from '../../../data-layer/price-products/utils/IndexedBookingInterval';
+import {PriceProductMetaRepoDO, PriceProductItemMetaRepoDO, PriceProductSearchResultRepoDO} from '../../../data-layer/price-products/repositories/IPriceProductRepository';
+import {PriceProductYieldStrategyFactory} from './utils/PriceProductYieldStrategyFactory';
+import {IPriceProductYieldStrategy} from './utils/IPriceProductYieldStrategy';
+
+import _ = require('underscore');
 
 export class PriceProductYielding {
+	private _thDateUtils: ThDateUtils;
+
 	private _yieldData: PriceProductYieldingDO;
 	private _yieldInterval: ThDateIntervalDO;
-	private _intervalStrategy: IPriceProductIntervalStrategy;
 
 	constructor(private _appContext: AppContext, private _sessionContext: SessionContext) {
+		this._thDateUtils = new ThDateUtils();
 	}
 
-	public open(yieldData: PriceProductYieldingDO): Promise<PriceProductDO[]> {
-		return this.yield(yieldData, new PriceProductAddIntervalStrategy());
-	}
-
-	public close(yieldData: PriceProductYieldingDO): Promise<PriceProductDO[]> {
-		return this.yield(yieldData, new PriceProductRemoveIntervalStrategy());
-	}
-
-	private yield(yieldData: PriceProductYieldingDO, intervalStrategy: IPriceProductIntervalStrategy): Promise<PriceProductDO[]> {
+	public yield(yieldData: PriceProductYieldingDO): Promise<PriceProductDO[]> {
 		this._yieldData = yieldData;
-		this._intervalStrategy = intervalStrategy;
 		return new Promise<PriceProductDO[]>((resolve: { (result: PriceProductDO[]): void }, reject: { (err: ThError): void }) => {
 			this.yieldCore(resolve, reject);
 		});
@@ -43,44 +37,48 @@ export class PriceProductYielding {
 			parser.logAndReject("Error validating data for yield price products", reject);
 			return false;
 		}
-		var yieldInterval = new ThDateIntervalDO();
-		yieldInterval.buildFromObject(this._yieldData.interval);
-		if (!yieldInterval.isValid()) {
-			var thError = new ThError(ThStatusCode.PriceProductsYieldManagementInvalidInterval, null);
-			ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Invalid interval submitted to Price Products Yield Management", this._yieldData, thError);
-			reject(thError);
+		if (!this.buildYieldInterval(reject)) { return; }
+		if (this._yieldData.priceProductIdList.length == 0) {
+			resolve([]);
 			return;
 		}
-		var indexedInterval = new IndexedBookingInterval(yieldInterval);
-		this._yieldInterval = indexedInterval.indexedBookingInterval;
 
-		var ppPromiseList: Promise<PriceProductDO>[] = [];
-		this._yieldData.priceProductIdList.forEach((priceProductId: string) => {
-			ppPromiseList.push(this.yieldPriceProduct(priceProductId));
-		});
-		Promise.all(ppPromiseList).then((priceProductList: PriceProductDO[]) => {
-			resolve(priceProductList);
+		var ppRepo = this._appContext.getRepositoryFactory().getPriceProductRepository();
+		ppRepo.getPriceProductList({ hotelId: this._sessionContext.sessionDO.hotel.id }, {
+			priceProductIdList: this._yieldData.priceProductIdList
+		}).then((searchResult: PriceProductSearchResultRepoDO) => {
+			var priceProductList: PriceProductDO[] = searchResult.priceProductList;
+			var ppPromiseList: Promise<PriceProductDO>[] = [];
+			priceProductList.forEach((priceProduct: PriceProductDO) => {
+				ppPromiseList.push(this.yieldPriceProduct(priceProduct));
+			});
+			return Promise.all(ppPromiseList);
+		}).then((yieldedPriceProductList: PriceProductDO[]) => {
+			resolve(yieldedPriceProductList);
 		}).catch((error: any) => {
 			reject(error);
 		});
 	}
 
-	private yieldPriceProduct(priceProductId: string): Promise<PriceProductDO> {
+	private yieldPriceProduct(priceProduct: PriceProductDO): Promise<PriceProductDO> {
 		return new Promise<PriceProductDO>((resolve: { (result: PriceProductDO): void }, reject: { (err: ThError): void }) => {
-			this.yieldPriceProductCore(resolve, reject, priceProductId);
+			this.yieldPriceProductCore(resolve, reject, priceProduct);
 		});
 	}
-	private yieldPriceProductCore(resolve: { (result: PriceProductDO): void }, reject: { (err: ThError): void }, priceProductId: string) {
+	private yieldPriceProductCore(resolve: { (result: PriceProductDO): void }, reject: { (err: ThError): void }, priceProduct: PriceProductDO) {
+		var yieldFactory = new PriceProductYieldStrategyFactory();
+		var yieldStrategy = yieldFactory.getYieldStrategy(this._yieldData);
+		var yieldedPriceProduct = yieldStrategy.yield(priceProduct, this._yieldInterval);
+
 		var ppRepo = this._appContext.getRepositoryFactory().getPriceProductRepository();
-		ppRepo.getPriceProductById(this.buildPriceProductMetaRepoDO(), priceProductId)
-			.then((loadedPriceProduct: PriceProductDO) => {
-				var updatedPriceProduct = this.updateIntervalsOn(loadedPriceProduct);
-				return ppRepo.updatePriceProductYieldManagerIntervals(this.buildPriceProductMetaRepoDO(), this.buildPriceProductItemMetaRepoDO(loadedPriceProduct),
-					{
-						openIntervalList: updatedPriceProduct.openIntervalList,
-						openForArrivalIntervalList: updatedPriceProduct.openForArrivalIntervalList,
-						openForDepartureIntervalList: updatedPriceProduct.openForDepartureIntervalList
-					})
+		ppRepo.updatePriceProductYieldManagerIntervals({ hotelId: this._sessionContext.sessionDO.hotel.id },
+			{
+				id: yieldedPriceProduct.id,
+				versionId: yieldedPriceProduct.versionId
+			}, {
+				openIntervalList: yieldedPriceProduct.openIntervalList,
+				openForArrivalIntervalList: yieldedPriceProduct.openForArrivalIntervalList,
+				openForDepartureIntervalList: yieldedPriceProduct.openForDepartureIntervalList
 			})
 			.then((updatedPriceProduct: PriceProductDO) => {
 				resolve(updatedPriceProduct);
@@ -89,31 +87,34 @@ export class PriceProductYielding {
 				reject(error);
 			});
 	}
-	private updateIntervalsOn(priceProduct: PriceProductDO): PriceProductDO {
-		switch (this._yieldData.attribute) {
-			case PriceProductYieldAttribute.OpenPeriod:
-				priceProduct.openIntervalList = this._intervalStrategy.apply(priceProduct.openIntervalList, this._yieldInterval);
-				break;
-			case PriceProductYieldAttribute.OpenForArrivalPeriod:
-				priceProduct.openForArrivalIntervalList = this._intervalStrategy.apply(priceProduct.openForArrivalIntervalList, this._yieldInterval);
-				break;
-			case PriceProductYieldAttribute.OpenForDeparturePeriod:
-				priceProduct.openForDepartureIntervalList = this._intervalStrategy.apply(priceProduct.openForDepartureIntervalList, this._yieldInterval);
-				break;
-			default:
-				break;
+
+	private buildYieldInterval(reject: { (err: ThError): void }): boolean {
+		if (this._yieldData.forever) {
+			return this.buildForeverYieldInterval();
 		}
-		return priceProduct;
+		return this.buildCustomYieldInterval(reject);
 	}
-	private buildPriceProductMetaRepoDO(): PriceProductMetaRepoDO {
-		return {
-			hotelId: this._sessionContext.sessionDO.hotel.id
-		}
+	private buildForeverYieldInterval(): boolean {
+		var minDate = this._thDateUtils.getMinThDateDO();
+		var maxDate = this._thDateUtils.getMaxThDateDO();
+		this._yieldInterval = ThDateIntervalDO.buildThDateIntervalDO(minDate, maxDate);
+		return true;
 	}
-	private buildPriceProductItemMetaRepoDO(priceProduct: PriceProductDO): PriceProductItemMetaRepoDO {
-		return {
-			id: priceProduct.id,
-			versionId: priceProduct.versionId
+	private buildCustomYieldInterval(reject: { (err: ThError): void }): boolean {
+		var validationResult = PriceProductYieldingDO.getIntervalValidationStructure().validateStructure(this._yieldData.interval);
+		if (!validationResult.isValid()) {
+			var parser = new ValidationResultParser(validationResult, this._yieldData);
+			parser.logAndReject("Error validating submitted interval", reject);
+			return false;
 		}
+		this._yieldInterval = new ThDateIntervalDO();
+		this._yieldInterval.buildFromObject(this._yieldData.interval);
+		if (!this._yieldInterval.isValid() && !this._yieldInterval.start.isSame(this._yieldInterval.end)) {
+			var thError = new ThError(ThStatusCode.PriceProductsYieldManagementInvalidInterval, null);
+			ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Invalid interval submitted to Price Products Yield Management", this._yieldData, thError);
+			reject(thError);
+			return false;
+		}
+		return true;
 	}
 }

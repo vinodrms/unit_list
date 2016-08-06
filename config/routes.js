@@ -94,8 +94,7 @@ module.exports.routes = {
 	'POST /api/priceProducts/draftPriceProductItem': 'PriceProductsController.draftPriceProductItem',
 	'GET /api/priceProducts/priceProductItem': 'PriceProductsController.getPriceProductById',
 
-	'POST /api/yieldManager/closePriceProducts': 'YieldManagerController.closePriceProducts',
-	'POST /api/yieldManager/openPriceProducts': 'YieldManagerController.openPriceProducts',
+	'POST /api/yieldManager/yieldPriceProducts': 'YieldManagerController.yieldPriceProducts',
 	'POST /api/yieldManager/getPriceProductYieldItems': 'YieldManagerController.getPriceProductYieldItems',
 
     'GET /api/hotelConfigurations/yieldFilters': 'HotelConfigurationsController.getYieldFilterConfiguration',

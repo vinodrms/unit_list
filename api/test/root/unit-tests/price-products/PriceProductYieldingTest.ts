@@ -11,9 +11,9 @@ import {ThDateIntervalUtils} from '../../../../core/utils/th-dates/ThDateInterva
 import {ThDateUtils} from '../../../../core/utils/th-dates/ThDateUtils';
 import {PriceProductDO} from '../../../../core/data-layer/price-products/data-objects/PriceProductDO';
 import {PriceProductYielding} from '../../../../core/domain-layer/yield-manager/price-product-yielding/PriceProductYielding';
-import {PriceProductYieldingDO, PriceProductYieldAttribute} from '../../../../core/domain-layer/yield-manager/price-product-yielding/PriceProductYieldingDO';
+import {PriceProductYieldingDO, PriceProductYieldAction} from '../../../../core/domain-layer/yield-manager/price-product-yielding/PriceProductYieldingDO';
 import {PriceProductReader} from '../../../../core/domain-layer/yield-manager/price-product-reader/PriceProductReader';
-import {PriceProductReaderDO} from '../../../../core/domain-layer/yield-manager/price-product-reader/PriceProductReaderDO';
+import {YieldManagerPeriodDO} from '../../../../core/domain-layer/yield-manager/utils/YieldManagerPeriodDO';
 import {PriceProductYieldResult, PriceProductYieldItem, YieldItemStateType, YieldItemState} from '../../../../core/domain-layer/yield-manager/price-product-reader/utils/PriceProductYieldItem';
 
 function testPriceProductOpenInterval(priceProduct: PriceProductDO, firstIntervalEnd: ThDateDO, secondIntervalStart: ThDateDO) {
@@ -254,90 +254,120 @@ describe("Price Products Interval Tests", function () {
     });
 
 	describe("Yield Management Tests", function () {
-		it("Should close price products from 1 Jan to 1 July", function (done) {
+		it("Should close price products from 1 Jan to 1 Jan (only one day)", function (done) {
 			var yieldData: PriceProductYieldingDO = {
-				attribute: PriceProductYieldAttribute.OpenPeriod,
 				priceProductIdList: _.map(testDataBuilder.priceProductList, (priceProduct: PriceProductDO) => { return priceProduct.id }),
+				action: PriceProductYieldAction.Close,
+				forever: false,
 				interval: ThDateIntervalDO.buildThDateIntervalDO(
 					ThDateDO.buildThDateDO(2016, ThMonth.January, 1),
-					ThDateDO.buildThDateDO(2016, ThMonth.July, 2)
+					ThDateDO.buildThDateDO(2016, ThMonth.January, 1)
 				)
 			};
 			var ppYm = new PriceProductYielding(testContext.appContext, testContext.sessionContext);
-			ppYm.close(yieldData).then((yieldedPriceProducts: PriceProductDO[]) => {
+			ppYm.yield(yieldData).then((yieldedPriceProducts: PriceProductDO[]) => {
 				yieldedPriceProducts.forEach((priceProduct: PriceProductDO) => {
-					testPriceProductOpenInterval(priceProduct, ThDateDO.buildThDateDO(2015, ThMonth.December, 31), ThDateDO.buildThDateDO(2016, ThMonth.July, 2));
+					testPriceProductOpenInterval(priceProduct, ThDateDO.buildThDateDO(2015, ThMonth.December, 31), ThDateDO.buildThDateDO(2016, ThMonth.January, 2));
 				});
 				done();
 			}).catch((error: any) => {
 				done(error);
 			});
         });
-		it("Should read the Yielded values on the Price Product", function (done) {
-			var readerDO = new PriceProductReaderDO();
-			readerDO.interval = ThDateIntervalDO.buildThDateIntervalDO(
-				ThDateDO.buildThDateDO(2016, ThMonth.June, 30),
-				ThDateDO.buildThDateDO(2016, ThMonth.July, 2)
-			);
-			var ppReader = new PriceProductReader(testContext.appContext, testContext.sessionContext);
-			ppReader.getYieldItems(readerDO).then((yieldResult: PriceProductYieldResult) => {
-				should.equal(yieldResult.dateList.length, 2);
-				_.forEach(testDataBuilder.priceProductList, (priceProduct: PriceProductDO) => {
-					var yieldItem: PriceProductYieldItem = _.find(yieldResult.itemList, (item: PriceProductYieldItem) => { return item.priceProductId === priceProduct.id });
-					should.exist(yieldItem);
-					should.equal(yieldItem.priceProductName, priceProduct.name);
-					should.equal(yieldItem.stateList.length, 2);
-					_.forEach(yieldItem.stateList, (state: YieldItemState) => {
-						should.equal(state.open, YieldItemStateType.Closed);
-						should.equal(state.openForArrival, YieldItemStateType.Open);
-						should.equal(state.openForDeparture, YieldItemStateType.Open);
-					});
-				});
-				done();
-			}).catch((error: any) => {
-				done(error);
-			});
-        });
-		it("Should open interval on price products", function (done) {
-			var yieldData: PriceProductYieldingDO = {
-				attribute: PriceProductYieldAttribute.OpenPeriod,
+		it("Should close for arrival price products forever", function (done) {
+			var yieldData: PriceProductYieldingDO = <any>{
 				priceProductIdList: _.map(testDataBuilder.priceProductList, (priceProduct: PriceProductDO) => { return priceProduct.id }),
-				interval: ThDateIntervalDO.buildThDateIntervalDO(
-					ThDateDO.buildThDateDO(2016, ThMonth.June, 1),
-					ThDateDO.buildThDateDO(2016, ThMonth.July, 1)
-				)
+				action: PriceProductYieldAction.CloseForArrival,
+				forever: true
 			};
 			var ppYm = new PriceProductYielding(testContext.appContext, testContext.sessionContext);
-			ppYm.open(yieldData).then((yieldedPriceProducts: PriceProductDO[]) => {
+			ppYm.yield(yieldData).then((yieldedPriceProducts: PriceProductDO[]) => {
 				yieldedPriceProducts.forEach((priceProduct: PriceProductDO) => {
-					testPriceProductOpenInterval(priceProduct, ThDateDO.buildThDateDO(2015, ThMonth.December, 31), ThDateDO.buildThDateDO(2016, ThMonth.June, 1));
+					should.equal(priceProduct.openForArrivalIntervalList.length, 0);
 				});
 				done();
 			}).catch((error: any) => {
 				done(error);
 			});
         });
-		it("Should read the Yielded values on the Price Product", function (done) {
-			var readerDO = new PriceProductReaderDO();
-			readerDO.interval = ThDateIntervalDO.buildThDateIntervalDO(
-				ThDateDO.buildThDateDO(2016, ThMonth.May, 31),
-				ThDateDO.buildThDateDO(2016, ThMonth.June, 2)
-			);
+		it("Should read the Yielded values of the Price Products", function (done) {
+			var yieldPeriodDO = new YieldManagerPeriodDO();
+			yieldPeriodDO.referenceDate = ThDateDO.buildThDateDO(2015, ThMonth.December, 31);
+			yieldPeriodDO.noDays = 3;
+
 			var ppReader = new PriceProductReader(testContext.appContext, testContext.sessionContext);
-			ppReader.getYieldItems(readerDO).then((yieldResult: PriceProductYieldResult) => {
-				should.equal(yieldResult.dateList.length, 2);
+			ppReader.getYieldItems(yieldPeriodDO).then((yieldResult: PriceProductYieldResult) => {
+				should.equal(yieldResult.dateList.length, 3);
 				_.forEach(testDataBuilder.priceProductList, (priceProduct: PriceProductDO) => {
 					var yieldItem: PriceProductYieldItem = _.find(yieldResult.itemList, (item: PriceProductYieldItem) => { return item.priceProductId === priceProduct.id });
 					should.exist(yieldItem);
 					should.equal(yieldItem.priceProductName, priceProduct.name);
-					should.equal(yieldItem.stateList.length, 2);
+					should.equal(yieldItem.lastRoomAvailability, priceProduct.lastRoomAvailability);
+					should.equal(yieldItem.stateList.length, 3);
 
-					should.equal(yieldItem.stateList[0].open, YieldItemStateType.Closed);
-					should.equal(yieldItem.stateList[0].openForArrival, YieldItemStateType.Open);
+					should.equal(yieldItem.stateList[0].open, YieldItemStateType.Open);
+					should.equal(yieldItem.stateList[1].open, YieldItemStateType.Closed);
+					should.equal(yieldItem.stateList[2].open, YieldItemStateType.Open);
+
+					should.equal(yieldItem.stateList[0].openForArrival, YieldItemStateType.Closed);
+					should.equal(yieldItem.stateList[1].openForArrival, YieldItemStateType.Closed);
+					should.equal(yieldItem.stateList[2].openForArrival, YieldItemStateType.Closed);
+
 					should.equal(yieldItem.stateList[0].openForDeparture, YieldItemStateType.Open);
-					should.equal(yieldItem.stateList[1].open, YieldItemStateType.Open);
-					should.equal(yieldItem.stateList[1].openForArrival, YieldItemStateType.Open);
 					should.equal(yieldItem.stateList[1].openForDeparture, YieldItemStateType.Open);
+					should.equal(yieldItem.stateList[2].openForDeparture, YieldItemStateType.Open);
+				});
+				done();
+			}).catch((error: any) => {
+				done(error);
+			});
+        });
+		it("Should open the price products on the previously closed day", function (done) {
+			var yieldData: PriceProductYieldingDO = {
+				priceProductIdList: _.map(testDataBuilder.priceProductList, (priceProduct: PriceProductDO) => { return priceProduct.id }),
+				action: PriceProductYieldAction.Open,
+				forever: false,
+				interval: ThDateIntervalDO.buildThDateIntervalDO(
+					ThDateDO.buildThDateDO(2016, ThMonth.January, 1),
+					ThDateDO.buildThDateDO(2016, ThMonth.January, 1)
+				)
+			};
+			var ppYm = new PriceProductYielding(testContext.appContext, testContext.sessionContext);
+			ppYm.yield(yieldData).then((yieldedPriceProducts: PriceProductDO[]) => {
+				yieldedPriceProducts.forEach((priceProduct: PriceProductDO) => {
+					should.equal(priceProduct.openIntervalList.length, 1);
+				});
+				done();
+			}).catch((error: any) => {
+				done(error);
+			});
+        });
+		it("Should read the Yielded values of the Price Products", function (done) {
+			var yieldPeriodDO = new YieldManagerPeriodDO();
+			yieldPeriodDO.referenceDate = ThDateDO.buildThDateDO(2015, ThMonth.December, 31);
+			yieldPeriodDO.noDays = 3;
+
+			var ppReader = new PriceProductReader(testContext.appContext, testContext.sessionContext);
+			ppReader.getYieldItems(yieldPeriodDO).then((yieldResult: PriceProductYieldResult) => {
+				should.equal(yieldResult.dateList.length, 3);
+				_.forEach(testDataBuilder.priceProductList, (priceProduct: PriceProductDO) => {
+					var yieldItem: PriceProductYieldItem = _.find(yieldResult.itemList, (item: PriceProductYieldItem) => { return item.priceProductId === priceProduct.id });
+					should.exist(yieldItem);
+					should.equal(yieldItem.priceProductName, priceProduct.name);
+					should.equal(yieldItem.lastRoomAvailability, priceProduct.lastRoomAvailability);
+					should.equal(yieldItem.stateList.length, 3);
+
+					should.equal(yieldItem.stateList[0].open, YieldItemStateType.Open);
+					should.equal(yieldItem.stateList[1].open, YieldItemStateType.Open);
+					should.equal(yieldItem.stateList[2].open, YieldItemStateType.Open);
+
+					should.equal(yieldItem.stateList[0].openForArrival, YieldItemStateType.Closed);
+					should.equal(yieldItem.stateList[1].openForArrival, YieldItemStateType.Closed);
+					should.equal(yieldItem.stateList[2].openForArrival, YieldItemStateType.Closed);
+
+					should.equal(yieldItem.stateList[0].openForDeparture, YieldItemStateType.Open);
+					should.equal(yieldItem.stateList[1].openForDeparture, YieldItemStateType.Open);
+					should.equal(yieldItem.stateList[2].openForDeparture, YieldItemStateType.Open);
 				});
 				done();
 			}).catch((error: any) => {
