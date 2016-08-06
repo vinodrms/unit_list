@@ -5,7 +5,7 @@ import {ThStatusCode} from '../../../utils/th-responses/ThResponse';
 import {AppContext} from '../../../utils/AppContext';
 import {SessionContext} from '../../../utils/SessionContext';
 import {ValidationResultParser} from '../../common/ValidationResultParser';
-import {GenerateBookingInvoiceDO} from './GenerateBookingInvoiceDO';
+import {GenerateBookingInvoiceDO, GenerateBookingInvoiceAopMeta} from './GenerateBookingInvoiceDO';
 import {InvoiceGroupDO} from '../../../data-layer/invoices/data-objects/InvoiceGroupDO';
 import {BookingIdValidator} from '../validators/BookingIdValidator';
 import {BookingDO} from '../../../data-layer/bookings/data-objects/BookingDO';
@@ -18,6 +18,8 @@ import {CustomersContainer} from '../../customers/validators/results/CustomersCo
 import {GenerateBookingInvoiceActionFactory} from './actions/GenerateBookingInvoiceActionFactory';
 import {IGenerateBookingInvoiceActionStrategy} from './actions/IGenerateBookingInvoiceActionStrategy';
 import {AddOnProductDO} from '../../../data-layer/add-on-products/data-objects/AddOnProductDO';
+
+import _ = require('underscore');
 
 export class GenerateBookingInvoice {
     private _thUtils: ThUtils;
@@ -77,25 +79,26 @@ export class GenerateBookingInvoice {
         bookingInvoiceItem.id = this._loadedBooking.bookingId;
         invoice.itemList.push(bookingInvoiceItem);
         invoice.paymentStatus = InvoicePaymentStatus.Unpaid;
-        
-        if(!this._thUtils.isUndefinedOrNull(this._generateBookingInvoiceDO.addOnProductDOList)) {
-            _.forEach(this._generateBookingInvoiceDO.addOnProductDOList, (aop: AddOnProductDO) => {
+
+        if (!this._thUtils.isUndefinedOrNull(this._generateBookingInvoiceDO.initialAddOnProducts)
+            && _.isArray(this._generateBookingInvoiceDO.initialAddOnProducts)) {
+            _.forEach(this._generateBookingInvoiceDO.initialAddOnProducts, (aop: GenerateBookingInvoiceAopMeta) => {
                 var invoiceItem = new InvoiceItemDO();
-                invoiceItem.buildFromAddOnProductDO(aop);
+                invoiceItem.buildFromAddOnProductDO(aop.addOnProductDO, aop.noOfItems);
                 invoice.itemList.push(invoiceItem);
             });
         }
 
-        this._appContext.getRepositoryFactory().getBookingRepository().getBookingById({ hotelId: this.hotelId }, this._generateBookingInvoiceDO.groupBookingId, 
+        this._appContext.getRepositoryFactory().getBookingRepository().getBookingById({ hotelId: this.hotelId }, this._generateBookingInvoiceDO.groupBookingId,
             this._generateBookingInvoiceDO.bookingId).then((booking: BookingDO) => {
-            invoice.payerList = [];
-            var defaultInvoicePayer =
-                InvoicePayerDO.buildFromCustomerDOAndPaymentMethod(this._loadedDefaultBillingCustomer, this._loadedBooking.defaultBillingDetails.paymentMethod);
-            defaultInvoicePayer.priceToPay = booking.price.getPrice() * booking.price.getNumberOfItems();
-            invoice.payerList.push(defaultInvoicePayer);
-            
-            resolve(invoice);
-        });
+                invoice.payerList = [];
+                var defaultInvoicePayer =
+                    InvoicePayerDO.buildFromCustomerDOAndPaymentMethod(this._loadedDefaultBillingCustomer, this._loadedBooking.defaultBillingDetails.paymentMethod);
+                defaultInvoicePayer.priceToPay = booking.price.getPrice() * booking.price.getNumberOfItems();
+                invoice.payerList.push(defaultInvoicePayer);
+
+                resolve(invoice);
+            });
     }
 
     private get hotelId(): string {

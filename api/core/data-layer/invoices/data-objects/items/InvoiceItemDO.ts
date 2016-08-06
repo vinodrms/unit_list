@@ -29,10 +29,10 @@ export class InvoiceItemDO extends BaseDO {
         }   
     }
 
-    public buildFromAddOnProductDO(aop: AddOnProductDO) {
+    public buildFromAddOnProductDO(aop: AddOnProductDO, numberOfItems: number) {
         var aopInvoiceItemMeta = new AddOnProductInvoiceItemMetaDO(); 
         aopInvoiceItemMeta.aopDisplayName = aop.name;
-        aopInvoiceItemMeta.numberOfItems = 1;
+        aopInvoiceItemMeta.numberOfItems = numberOfItems;
         aopInvoiceItemMeta.pricePerItem = aop.price;
         this.meta = aopInvoiceItemMeta;
         this.type = InvoiceItemType.AddOnProduct;
