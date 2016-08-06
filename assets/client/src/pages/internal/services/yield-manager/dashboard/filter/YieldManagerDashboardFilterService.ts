@@ -1,68 +1,54 @@
 import { Injectable } from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 
-import {YieldGroupItemVM} from './view-models/YieldGroupItemVM';
-import {YieldLevelItemVM} from './view-models/YieldLevelItemVM';
-
+import {ColorFilterVM} from './view-models/ColorFilterVM';
+import {TextFilterVM} from './view-models/TextFilterVM';
 import {YieldFiltersService} from '../../../hotel-configurations/YieldFiltersService';
 import {YieldFiltersDO} from '../../../hotel-configurations/data-objects/YieldFiltersDO';
 import {YieldFilterDO, YieldFilterType} from '../../../common/data-objects/yield-filter/YieldFilterDO';
 import {YieldFilterValueDO} from '../../../common/data-objects/yield-filter/YieldFilterValueDO';
-import {ColorFilter, ColorMeta} from '../../../common/data-objects/yield-filter/ColorFilter';
-
-
+import {FilterConverter} from './utils/FilterConverter';
+import {FilterVMCollection} from './utils/FilterVMCollection';
 
 @Injectable()
 export class YieldManagerDashboardFilterService {
+	private _filterConverter: FilterConverter;
 
-	constructor(private _yieldFiltersService: YieldFiltersService) { }
-
-	public getYieldGroups(): Observable<YieldGroupItemVM[]> {
-		return this.getYieldFilterDO(YieldFilterType.Color).map((yieldFilterDO: YieldFilterDO) => {
-			var ygItemVMList: YieldGroupItemVM[] = [];
-			var colorFilter = new ColorFilter();
-			_.forEach(yieldFilterDO.values, (yieldValue: YieldFilterValueDO) => {
-				var colorMeta: ColorMeta = colorFilter.getColorMetaByColorCode(yieldValue.colorCode);
-
-				var ygItemVM = new YieldGroupItemVM({
-					filterId: yieldFilterDO.id,
-					valueId: yieldValue.id,
-					colorName: colorMeta.displayName,
-					cssClass: colorMeta.cssClass,
-					description: yieldValue.description,
-					filterName: yieldFilterDO.label
-				});
-				ygItemVMList.push(ygItemVM);
-			});
-			return ygItemVMList;
-		});
+	constructor(private _yieldFiltersService: YieldFiltersService) {
+		this._filterConverter = new FilterConverter();
 	}
 
-
-	public getYieldLevels(): Observable<YieldLevelItemVM[]> {
-		return this.getYieldFilterDO(YieldFilterType.Text).map((yieldFilterDO: YieldFilterDO) => {
-			var ygItemVMList: YieldLevelItemVM[] = [];
-
-			_.forEach(yieldFilterDO.values, (yieldValue: YieldFilterValueDO) => {
-				var ygItemVM = new YieldLevelItemVM({
-					filterId: yieldFilterDO.id,
-					valueId: yieldValue.id,
-					displayName: yieldValue.label,
-					description: yieldValue.description,
-					filterName: yieldFilterDO.label
-				});
-				ygItemVMList.push(ygItemVM);
-			});
-			return ygItemVMList;
-		});
+	public getTextFilterCollections(): Observable<FilterVMCollection<TextFilterVM>[]> {
+		return this.getFilterCollections<TextFilterVM>(YieldFilterType.Text, this._filterConverter.convertToTextFilter.bind(this._filterConverter));
 	}
 
-	private getYieldFilterDO(filterType: YieldFilterType): Observable<YieldFilterDO> {
+	public getColorFilterCollections(): Observable<FilterVMCollection<ColorFilterVM>[]> {
+		return this.getFilterCollections<ColorFilterVM>(YieldFilterType.Color, this._filterConverter.convertToColorFilter.bind(this._filterConverter));
+	}
+
+	private getFilterCollections<T>(filterType: YieldFilterType, conversionStrategy: { (yieldFilterDO: YieldFilterDO, yieldValue: YieldFilterValueDO): T }): Observable<FilterVMCollection<T>[]> {
+		return this.getYieldFilterList(filterType).map((yieldFilterList: YieldFilterDO[]) => {
+			var filterCollectionList: FilterVMCollection<T>[] = [];
+
+			_.forEach(yieldFilterList, (yieldFilter: YieldFilterDO) => {
+				var filterVMCollection: FilterVMCollection<T> = new FilterVMCollection<T>();
+				var filterVMList: T[] = [];
+				_.forEach(yieldFilter.values, (yieldValue: YieldFilterValueDO) => {
+					var filterVM: T = conversionStrategy(yieldFilter, yieldValue);
+					filterVMList.push(filterVM);
+				});
+				filterVMCollection.filterVMList = filterVMList;
+				filterCollectionList.push(filterVMCollection);
+			});
+			return filterCollectionList;
+		});
+	}
+	private getYieldFilterList(filterType: YieldFilterType): Observable<YieldFilterDO[]> {
 		return Observable.combineLatest(
             this._yieldFiltersService.getYieldFiltersDO()
         ).map((result: [YieldFiltersDO]) => {
             var yieldFilters: YieldFiltersDO = result[0];
-			var foundYieldFilter: YieldFilterDO = _.find(yieldFilters.yieldFilterList, (yieldFilter: YieldFilterDO) => {
+			var foundYieldFilter: YieldFilterDO[] = _.filter(yieldFilters.yieldFilterList, (yieldFilter: YieldFilterDO) => {
 				return yieldFilter.type === filterType;
 			});
 			return foundYieldFilter;

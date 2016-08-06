@@ -1,19 +1,16 @@
-export interface YieldGroupItemVMParams {
+export interface TextFilterVMParams {
 	filterId: string;
 	valueId: string;
-	colorName: string;
-	cssClass: string;
+	displayName: string;
 	description: string;
 	filterName: string;
 }
 
-export class YieldGroupItemVM {
-
-	constructor(ygParams: YieldGroupItemVMParams) {
+export class TextFilterVM {
+	constructor(ygParams: TextFilterVMParams) {
 		this._filterId = ygParams.filterId;
 		this._valueId = ygParams.valueId;
-		this._colorName = ygParams.colorName;
-		this._cssClass = ygParams.cssClass;
+		this._displayName = ygParams.displayName;
 		this._description = ygParams.description;
 		this._filterName = ygParams.filterName;
 	}
@@ -35,21 +32,12 @@ export class YieldGroupItemVM {
 	}
 
 
-	private _colorName: string;
-	public get colorName(): string {
-		return this._colorName;
+	private _displayName: string;
+	public get displayName(): string {
+		return this._displayName;
 	}
-	public set colorName(v: string) {
-		this._colorName = v;
-	}
-
-
-	private _cssClass: string;
-	public get cssClass(): string {
-		return this._cssClass;
-	}
-	public set cssClass(v: string) {
-		this._cssClass = v;
+	public set displayName(v: string) {
+		this._displayName = v;
 	}
 
 	private _description: string;

@@ -4,8 +4,8 @@ import {ThDateDO} from '../../../../../../../services/common/data-objects/th-dat
 import {AppContext} from '../../../../../../../../../common/utils/AppContext';
 import {TranslationPipe} from '../../../../../../../../../common/utils/localization/TranslationPipe'
 
-import {YieldGroupItemVM} from '../../../../../../../services/yield-manager/dashboard/filter/view-models/YieldGroupItemVM';
-import {YieldLevelItemVM} from '../../../../../../../services/yield-manager/dashboard/filter/view-models/YieldLevelItemVM';
+import {ColorFilterVM} from '../../../../../../../services/yield-manager/dashboard/filter/view-models/ColorFilterVM';
+import {TextFilterVM} from '../../../../../../../services/yield-manager/dashboard/filter/view-models/TextFilterVM';
 import {YieldManagerDashboardFilterService} from '../../../../../../../services/yield-manager/dashboard/filter/YieldManagerDashboardFilterService';
 
 import {YieldGroupItemComponent} from './components/yield-group-item/YieldGroupItemComponent';
@@ -24,36 +24,36 @@ export class YieldFilterPaneComponent implements OnInit {
 	public selectedDate: ThDateDO;
 	public searchText: string;
 
-	public yieldGroups: YieldGroupItemVM[];
-	public yieldLevels: YieldLevelItemVM[];
+	public yieldGroups: ColorFilterVM[];
+	public yieldLevels: TextFilterVM[];
 
-	private _yieldManager : IYieldManagerDashboardFilter;
+	private _yieldManager: IYieldManagerDashboardFilter;
 
 	constructor(
 		private _appContext: AppContext,
-		private _filterService: YieldManagerDashboardFilterService) { 
+		private _filterService: YieldManagerDashboardFilterService) {
 		this.selectedDate = ThDateDO.buildThDateDO(2016, 11, 30);
 	}
 
-	ngOnInit() { 
-		this._filterService.getYieldGroups().subscribe((groups)=>{
-			this.yieldGroups = groups;
+	ngOnInit() {
+		this._filterService.getColorFilterCollections().subscribe((groups) => {
+			this.yieldGroups = groups[0].filterVMList;
 		}, (e) => {
 			console.log(e);
 		})
 
-		this._filterService.getYieldLevels().subscribe((levels)=>{
-			this.yieldLevels = levels;
+		this._filterService.getTextFilterCollections().subscribe((levels) => {
+			this.yieldLevels = levels[0].filterVMList;
 		}, (e) => {
 			console.log(e);
 		})
 	}
 
-	public get yieldManager() : IYieldManagerDashboardFilter {
+	public get yieldManager(): IYieldManagerDashboardFilter {
 		return this._yieldManager;
 	}
 
-	public set yieldManager(v : IYieldManagerDashboardFilter) {
+	public set yieldManager(v: IYieldManagerDashboardFilter) {
 		this._yieldManager = v;
 	}
 
@@ -67,10 +67,10 @@ export class YieldFilterPaneComponent implements OnInit {
 		this.refresh();
 	}
 
-	public getDateShortString(){
+	public getDateShortString() {
 		return this.selectedDate.getShortDisplayString(this._appContext.thTranslation);
 	}
-	
+
 	public refresh() {
 		//TODO: 
 	}
