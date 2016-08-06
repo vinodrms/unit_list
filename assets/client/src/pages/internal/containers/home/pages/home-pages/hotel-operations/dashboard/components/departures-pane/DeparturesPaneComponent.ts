@@ -59,10 +59,10 @@ export class DeparturesPaneComponent implements OnInit {
 
 	private sortArrivalItems(arrivalItemsVMList: DepartureItemInfoVM[]) {
 		var sortedItems = arrivalItemsVMList.sort((a: DepartureItemInfoVM, b: DepartureItemInfoVM) => {
-			if (a.isStayingInRoom && !b.isStayingInRoom) {
+			if (a.hasAttachedRoom && !b.hasAttachedRoom) {
 				return -1;
 			}
-			if (!a.isStayingInRoom && b.isStayingInRoom) {
+			if (!a.hasAttachedRoom && b.hasAttachedRoom) {
 				return 1;
 			}
 			return a.customerName.localeCompare(b.customerName);

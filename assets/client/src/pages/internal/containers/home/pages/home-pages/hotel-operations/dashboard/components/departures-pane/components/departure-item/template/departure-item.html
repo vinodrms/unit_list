@@ -1,17 +1,17 @@
 <div>
 	<div class="header" >
-		<span *ngIf="departureItemVM.isStayingInRoom" class="reserved-room clickable ellipsis-text green-color" (click)="openRoomModal()" title="{{departureItemVM.roomName}}">{{departureItemVM.roomName}}</span>
+		<span *ngIf="departureItemVM.hasAttachedRoom" class="reserved-room clickable ellipsis-text green-color" (click)="openRoomModal()" title="{{departureItemVM.roomName}}">{{departureItemVM.roomName}}</span>
 		<span class="customer-name ellipsis-text clickable" (click)="openCustomerModal()" title="{{departureItemVM.customerName}}">{{departureItemVM.customerName}}</span>
 	</div>
 	<div class="body" >
-		<div *ngIf="departureItemVM.isStayingInRoom" class="room-type ellipsis-text" title="{{departureItemVM.roomCategoryLabel}}">{{departureItemVM.roomCategoryLabel}}</div>
+		<div *ngIf="departureItemVM.hasBooking" class="room-type ellipsis-text" title="{{departureItemVM.roomCategoryLabel}}">{{departureItemVM.roomCategoryLabel}}</div>
 		<div class="booking-quick-details" >
 			<div class="stats orange-color f-12">
 				<div *ngIf="departureItemVM.hasInvoice">
 					<span class="unitpal-font ellipsis-text clickable f-12 p-r-6" (click)="openInvoiceModal()">-</span><span>{{departureItemVM.priceString}}</span>
 				</div>
 			</div>
-			<div class="other-details gray-color f-12" *ngIf="departureItemVM.isStayingInRoom">
+			<div class="other-details gray-color f-12" *ngIf="departureItemVM.hasBooking">
 				<div>
 					<span class="unitpal-font f-12" >(</span> <span>{{departureItemVM.numberOfPeople}}</span>
 					<span class="unitpal-font f-12" >Y</span> <span>{{departureItemVM.numberOfNights}}</span>
@@ -19,12 +19,16 @@
 			</div>
 		</div>
 	</div>
-	<div class="footer" >
-		<button class="btn btn-sm btn-green m-r-6" (click)="openRoomModal()" *ngIf="departureItemVM.isStayingInRoom">
+	<div class="footer">
+		<button class="btn btn-sm btn-green m-r-6" (click)="openRoomModal()" *ngIf="departureItemVM.canCheckOut">
 			<span class="unitpal-font p-r-6" >.</span> <span class="uppercase">{{ 'Check Out' | translate }}</span>
 		</button>
 		<button class="btn btn-sm btn-danger" (click)="openInvoiceModal()" *ngIf="departureItemVM.hasInvoice">
 			<span class="unitpal-font p-r-6" >L</span> <span class="uppercase">{{ 'Pay' | translate }}</span>
 		</button>
+		<div class="flex-row flex-center-v yellow-color" *ngIf="!departureItemVM.hasInvoice && !departureItemVM.canCheckOut">
+			<span class="unitpal-font f-14 p-r-6">+</span>
+			<span class="f-11">{{ 'Future Booking' | translate }}</span>
+		</div>
 	</div>
 </div>

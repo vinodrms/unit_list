@@ -14,6 +14,8 @@ import {RoomVM} from '../../../rooms/view-models/RoomVM';
 import {RoomItemsIndexer} from '../utils/RoomItemsIndexer';
 import {HotelAggregatorService} from '../../../hotel/HotelAggregatorService';
 import {HotelAggregatedInfo} from '../../../hotel/utils/HotelAggregatedInfo';
+import {RoomCategoriesStatsService} from '../../../room-categories/RoomCategoriesStatsService';
+import {RoomCategoryStatsDO} from '../../../room-categories/data-objects/RoomCategoryStatsDO';
 
 import {ThTranslation} from '../../../../../../common/utils/localization/ThTranslation';
 
@@ -25,6 +27,7 @@ export class HotelOperationsDashboardDeparturesService extends ARequestService<D
         private _appContext: AppContext,
         private _roomsService: RoomsService,
         private _hotelAggregatorService: HotelAggregatorService,
+        private _roomCategoriesStatsService: RoomCategoriesStatsService,
         private _thTranslation: ThTranslation
     ) {
         super();
@@ -34,11 +37,13 @@ export class HotelOperationsDashboardDeparturesService extends ARequestService<D
         return Observable.combineLatest(
             this._roomsService.getRoomList(),
             this._hotelAggregatorService.getHotelAggregatedInfo(),
+            this._roomCategoriesStatsService.getRoomCategoryStatsForRoomCategoryIdList(),
             this._appContext.thHttp.post(ThServerApi.HotelOperationsDashboardDepartures, { query: { referenceDate: this._referenceDate } })
-        ).map((result: [RoomVM[], HotelAggregatedInfo, Object]) => {
+        ).map((result: [RoomVM[], HotelAggregatedInfo, RoomCategoryStatsDO[], Object]) => {
             var roomVMList: RoomVM[] = result[0];
             var hotelAggregatedInfo: HotelAggregatedInfo = result[1];
-            var departuresInfoObject = result[2];
+            var roomCategStatsList: RoomCategoryStatsDO[] = result[2];
+            var departuresInfoObject = result[3];
 
             var roomItemIndexer = new RoomItemsIndexer([], roomVMList);
 
@@ -52,14 +57,21 @@ export class HotelOperationsDashboardDeparturesService extends ARequestService<D
                 departureItemVM.hasInvoice = !this._appContext.thUtils.isUndefinedOrNull(departureItemDO.invoiceGroupId);
                 departureItemVM.hasBooking = !this._appContext.thUtils.isUndefinedOrNull(departureItemDO.bookingId)
                     && !this._appContext.thUtils.isUndefinedOrNull(departureItemDO.groupBookingId);
-                departureItemVM.isStayingInRoom = departureItemVM.hasBooking
-                    && !this._appContext.thUtils.isUndefinedOrNull(departureItemDO.roomId)
-                    && departureItemDO.bookingItemStatus === DepartureItemBookingStatus.CanCheckOut;
 
-                if (departureItemVM.isStayingInRoom) {
-                    var stayingRoomVM = roomItemIndexer.getRoomVMById(departureItemDO.roomId);
-                    if (!this._appContext.thUtils.isUndefinedOrNull(stayingRoomVM)) {
-                        departureItemVM.stayingRoomVM = stayingRoomVM;
+                if (departureItemVM.hasBooking) {
+                    var attachedRoomVM = roomItemIndexer.getRoomVMById(departureItemDO.roomId);
+                    if (!this._appContext.thUtils.isUndefinedOrNull(attachedRoomVM)) {
+                        departureItemVM.attachedRoomVM = attachedRoomVM;
+                        departureItemVM.hasAttachedRoom = true;
+                        departureItemVM.roomCategory = attachedRoomVM.category;
+                    }
+                    else {
+                        var roomCategStats: RoomCategoryStatsDO = _.find(roomCategStatsList, (stat: RoomCategoryStatsDO) => {
+                            return stat.roomCategory.id === departureItemDO.roomCategoryId;
+                        });
+                        if (!this._appContext.thUtils.isUndefinedOrNull(roomCategStats)) {
+                            departureItemVM.roomCategory = roomCategStats.roomCategory;
+                        }
                     }
                 }
                 departureItemVM.currency = hotelAggregatedInfo.ccy;
