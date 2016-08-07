@@ -635,5 +635,7 @@ export var EnglishTranslations: Object = {
 	"No reserved Add-On-Products": "No reserved Add-On-Products",
 	"These will be generated as separate items on the invoice during Check In": "These will be generated as separate items on the invoice during Check In",
 	"Future Booking": "Future Booking",
+	"You need some rollaway beds to fit all the people from this booking": "You need some rollaway beds to fit all the people from this booking",
+
 
 };

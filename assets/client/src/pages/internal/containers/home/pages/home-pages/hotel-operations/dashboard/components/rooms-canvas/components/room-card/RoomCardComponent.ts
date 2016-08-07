@@ -28,7 +28,7 @@ declare var $: any;
 @Component({
 	selector: 'room-card',
 	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/dashboard/components/rooms-canvas/components/room-card/template/room-card.html',
-	pipes: [TranslationPipe]	
+	pipes: [TranslationPipe]
 })
 
 export class RoomCardComponent {
@@ -46,7 +46,7 @@ export class RoomCardComponent {
 		private _hotelOperationsModalService: HotelOperationsModalService,
 		private _modalService: HotelDashboardModalService,
 		private _appContext: AppContext
-		) {
+	) {
 
 		this.enums = {
 			RoomMaintenanceStatus: RoomMaintenanceStatus
@@ -55,7 +55,7 @@ export class RoomCardComponent {
 		this.maintenance = undefined;
 	}
 
-	private buildMaintenanceObject(status:RoomMaintenanceStatus) {
+	private buildMaintenanceObject(status: RoomMaintenanceStatus) {
 		switch (status) {
 			case RoomMaintenanceStatus.Dirty:
 				this.maintenance = {
@@ -96,13 +96,13 @@ export class RoomCardComponent {
 					title: 'Out of service',
 					icon: '+',
 					clickHandler: () => {
-						alert("Out of service");
+						this.openRoomModal();
 					}
 				}
 				break;
 
 			default:
-				this.maintenance = undefined
+				this.maintenance = undefined;
 				break;
 		}
 	}
@@ -110,11 +110,14 @@ export class RoomCardComponent {
 	ngOnInit() {
 		this.buildMaintenanceObject(this.roomVM.maintenanceStatus);
 	}
+	public get needsRollawayBeds(): boolean {
+		return this.roomVM.roomItemDO.needsRollawayBeds;
+	}
 
 	ngAfterViewInit() {
 		$(this._root.nativeElement).find('.room-card').droppable(
 			{
-				hoverClass: () =>{
+				hoverClass: () => {
 					var outcome = this.canDrop();
 					if (outcome.accepted) {
 						return "hover";
@@ -126,24 +129,24 @@ export class RoomCardComponent {
 				},
 				drop: (event: Event, ui: Object) => {
 					this._zone.run(() => {
-						var arrivalItem:ArrivalItemInfoVM = this.roomCanvas.getSelectedArrivalItem();
+						var arrivalItem: ArrivalItemInfoVM = this.roomCanvas.getSelectedArrivalItem();
 						var outcome = this.canDrop();
 
 						if (outcome.accepted == true) {
-							if (this.roomVM.canCheckIn(arrivalItem)){
-								var assignRoomParams:AssignRoomParam = {
+							if (this.roomVM.canCheckIn(arrivalItem)) {
+								var assignRoomParams: AssignRoomParam = {
 									groupBookingId: arrivalItem.arrivalItemDO.groupBookingId,
 									bookingId: arrivalItem.arrivalItemDO.bookingId,
 									roomId: this.roomVM.roomVM.room.id,
 									roomCategoryId: this.roomVM.roomVM.room.categoryId
 								};
-								this._operationRoomService.checkIn(assignRoomParams).subscribe((r)=>{
+								this._operationRoomService.checkIn(assignRoomParams).subscribe((r) => {
 									this.dropped.emit(outcome);
-								}, (e : any) =>{
+								}, (e: any) => {
 									this._appContext.toaster.error(e.message);
 								})
 							}
-							else if (this.roomVM.canUpgrade(arrivalItem)){
+							else if (this.roomVM.canUpgrade(arrivalItem)) {
 								this.openCheckInModal(arrivalItem);
 							}
 						}
@@ -156,7 +159,7 @@ export class RoomCardComponent {
 		);
 	}
 
-	private canDrop():{ accepted: boolean, roomVM: RoomItemInfoVM}{
+	private canDrop(): { accepted: boolean, roomVM: RoomItemInfoVM } {
 		var arrivalItem: ArrivalItemInfoVM = this.roomCanvas.getSelectedArrivalItem();
 		var dropHandler = RoomDropHandlerFactory.get(this.roomVM);
 		var outcome = {
@@ -166,26 +169,26 @@ export class RoomCardComponent {
 		return outcome;
 	}
 
-	public openCustomerModal(){
+	public openCustomerModal() {
 		var customerId = this.roomVM.roomItemDO.customerId;
 		this._modalService.openCustomerModal(customerId);
 	}
 
-	public openRoomModal(){
+	public openRoomModal() {
 		var roomId = this.roomVM.roomItemDO.roomId;
 		this._modalService.openRoomModal(roomId);
 	}
 
-	public openCheckInModal(arrivalItemVM:ArrivalItemInfoVM){
+	public openCheckInModal(arrivalItemVM: ArrivalItemInfoVM) {
 		var bookingId = arrivalItemVM.arrivalItemDO.bookingId;
 		var groupBookingId = arrivalItemVM.arrivalItemDO.groupBookingId;
 		this._modalService.openCheckInModal(bookingId, groupBookingId, this.roomVM.roomItemDO.roomId);
 	}
 
-	public openBookingModal(){
+	public openBookingModal() {
 		var bookingId = this.roomVM.roomItemDO.bookingId;
 		var groupBookingId = this.roomVM.roomItemDO.groupBookingId;
 		this._modalService.openBookingModal(bookingId, groupBookingId);
 	}
-	
+
 }
