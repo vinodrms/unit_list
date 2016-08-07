@@ -562,6 +562,7 @@ export var EnglishTranslations: Object = {
 	"Out Of Order": "Out Of Order",
 	"Out Of Service": "Out Of Service",
 	"No Details": "No Details",
+	"Please check out the room first or move the booking to another room": "Please check out the room first or move the booking to another room",
 	"This action is used to signal long maintenances on this room and will remove it from your active inventory. Are you sure you want to mark the room as Out of Order?": "This action is used to signal long maintenances on this room and will remove it from your active inventory. Are you sure you want to mark the room as Out of Order?",
 	"This action means that the room requires some maintenance and you can't check in customers. Are you sure you want to mark the room as Out of Service?": "This action means that the room requires some maintenance and you can't check in customers. Are you sure you want to mark the room as Out of Service?",
 	"History": "History",

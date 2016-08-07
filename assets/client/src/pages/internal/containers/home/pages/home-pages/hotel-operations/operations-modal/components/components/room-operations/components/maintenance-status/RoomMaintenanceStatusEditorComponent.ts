@@ -17,6 +17,7 @@ import {HotelOperationsRoomService} from '../../../../../../../../../../../servi
     pipes: [TranslationPipe, ThTimestampDistanceFromNowPipe]
 })
 export class RoomMaintenanceStatusEditorComponent implements OnInit {
+    @Input() hasCheckedInBooking: boolean = false;
     @Output() onMaintenanceStatusChanged = new EventEmitter<RoomDO>();
     public triggerOnMaintenanceStatusChanged(updatedRoom: RoomDO) {
         this.onMaintenanceStatusChanged.next(updatedRoom);
@@ -84,6 +85,12 @@ export class RoomMaintenanceStatusEditorComponent implements OnInit {
             this.saveMaintenanceStatusCore();
             return;
         }
+        if(this.hasCheckedInBooking) {
+            var errMessage = this._appContext.thTranslation.translate("Please check out the room first or move the booking to another room");
+            this._appContext.toaster.error(errMessage);
+            return;
+        }
+
         var message = "This action is used to signal long maintenances on this room and will remove it from your active inventory. Are you sure you want to mark the room as Out of Order?";
         var title = "Out of Order";
         if (this.currentMaintenanceMeta.maintenanceStatus === RoomMaintenanceStatus.OutOfService) {

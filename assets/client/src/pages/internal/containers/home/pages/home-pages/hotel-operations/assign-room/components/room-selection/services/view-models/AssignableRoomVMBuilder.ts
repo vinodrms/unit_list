@@ -34,6 +34,9 @@ export class AssignableRoomVMBuilder {
             if (roomVM.room.maintenanceStatus === RoomMaintenanceStatus.OutOfService) {
                 roomWithOccupancyVM.errorMessage = thTranslation.translate("Out of Service");
             }
+            else if (roomVM.room.maintenanceStatus === RoomMaintenanceStatus.OutOfOrder) {
+                roomWithOccupancyVM.errorMessage = thTranslation.translate("Out of Order");
+            }
             else if (this._params.bookingOccupancy.getOccupancyForRoomId(roomVM.room.id) > 0) {
                 roomWithOccupancyVM.errorMessage = thTranslation.translate("Room is occupied or reserved");
             }
