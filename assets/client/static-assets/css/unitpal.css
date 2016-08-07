@@ -3216,10 +3216,10 @@ a.btn.btn-square:focus {
      font-size: 11px;
  }
  .unitpal-font.checkin {
-     color: #36ce8d;
+     color: #fb6708;
  }
  .unitpal-font.checkout {
-     color: #fb6708;
+     color: #36ce8d;
 }
 .invoice-container {
     display: flex;
