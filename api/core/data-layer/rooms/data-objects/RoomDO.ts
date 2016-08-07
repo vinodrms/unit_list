@@ -3,6 +3,8 @@ import {IRoom} from './IRoom';
 import {DocumentHistoryDO} from '../../common/data-objects/document-history/DocumentHistoryDO';
 import {DocumentActionDO} from '../../common/data-objects/document-history/DocumentActionDO';
 
+import _ = require('underscore');
+
 export enum RoomStatus {
     Active,
     Deleted
@@ -71,5 +73,8 @@ export class RoomDO extends BaseDO implements IRoom {
     }
     public getMaintenanceStatusDisplayString(): string {
         return RoomMaintenanceStatusDisplayStrings[this.maintenanceStatus];
+    }
+    public get isInInventory(): boolean {
+        return _.contains(RoomDO.inInventoryMaintenanceStatusList, this.maintenanceStatus);
     }
 }
