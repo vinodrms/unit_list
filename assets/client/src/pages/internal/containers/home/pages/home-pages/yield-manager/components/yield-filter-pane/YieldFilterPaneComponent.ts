@@ -17,7 +17,6 @@ import {IYieldManagerDashboardFilter} from '../../YieldManagerDashboardComponent
 	selector: 'yield-filter-pane',
 	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/yield-manager/components/yield-filter-pane/template/yield-filter-pane.html',
 	directives: [YieldGroupItemComponent, YieldLevelItemComponent],
-	providers: [YieldManagerDashboardFilterService],
 	pipes: [TranslationPipe]
 })
 export class YieldFilterPaneComponent implements OnInit {

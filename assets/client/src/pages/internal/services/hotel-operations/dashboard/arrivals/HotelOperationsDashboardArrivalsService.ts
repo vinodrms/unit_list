@@ -77,6 +77,6 @@ export class HotelOperationsDashboardArrivalsService extends ARequestService<Arr
         if (!this._appContext.thUtils.isUndefinedOrNull(referenceDate)) {
             this._referenceDate = referenceDate;
         }
-        super.refresh();
+		this.updateServiceResult();
     }
 }

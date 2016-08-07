@@ -70,4 +70,7 @@ export class HotelOperationsDashboardRoomsService extends ARequestService<RoomIt
             return sortedRoomItemVMList;
         });
     }
+    public refresh() {
+		this.updateServiceResult();
+	}
 }

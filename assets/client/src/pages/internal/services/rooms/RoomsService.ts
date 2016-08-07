@@ -53,4 +53,7 @@ export class RoomsService extends ARequestService<RoomVM[]> {
             return _.find(roomList, (roomVM: RoomVM) => { return roomVM.room.id === roomId });
         });
     }
+    public refresh() {
+		this.updateServiceResult();
+	}
 }

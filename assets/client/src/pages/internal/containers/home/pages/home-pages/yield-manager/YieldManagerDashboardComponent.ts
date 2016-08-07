@@ -9,20 +9,23 @@ import {YieldKeyMetricsComponent} from './components/yield-key-metrics/YieldKeyM
 import {YieldPriceProductsComponent} from './components/yield-price-products/YieldPriceProductsComponent';
 
 import {YieldFiltersService} from '../../../../../services/hotel-configurations/YieldFiltersService';
+import {YieldManagerDashboardFilterService} from '../../../../../services/yield-manager/dashboard/filter/YieldManagerDashboardFilterService';
+import {YieldManagerDashboardPriceProductsService} from '../../../../../services/yield-manager/dashboard/price-products/YieldManagerDashboardPriceProductsService';
 
-export interface IYieldManagerDashboardFilter{
+export interface IYieldManagerDashboardFilter {
 
 }
 
-export interface IYieldManagerDashboardPriceProducts{
+export interface IYieldManagerDashboardPriceProducts {
 
 }
 
 @Component({
 	selector: 'yield-manager-dashboard',
 	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/yield-manager/template/yield-manager-dashboard.html',
-	directives : [LazyLoadingTableComponent, YieldFilterPaneComponent, YieldKeyMetricsComponent, YieldPriceProductsComponent],
-	providers: [YieldFiltersService]
+	directives: [LazyLoadingTableComponent, YieldFilterPaneComponent, YieldKeyMetricsComponent, YieldPriceProductsComponent],
+	providers: [YieldFiltersService,
+		YieldManagerDashboardFilterService, YieldManagerDashboardPriceProductsService]
 })
 export class YieldManagerDashboardComponent extends AHomeContainerComponent implements OnInit, IYieldManagerDashboardFilter, IYieldManagerDashboardPriceProducts {
 
