@@ -79,12 +79,20 @@ export class RoomMaintenanceStatusEditorComponent implements OnInit {
         this.currentMaintenanceText = this.currentMaintenanceTextCopy;
     }
     public saveMaintenanceStatus() {
-        if (this.currentMaintenanceMeta.maintenanceStatus !== RoomMaintenanceStatus.OutOfService) {
+        if (this.currentMaintenanceMeta.maintenanceStatus !== RoomMaintenanceStatus.OutOfService
+            && this.currentMaintenanceMeta.maintenanceStatus !== RoomMaintenanceStatus.OutOfOrder) {
             this.saveMaintenanceStatusCore();
             return;
         }
-        var title = this._appContext.thTranslation.translate("Out Of Service");
-        var content = this._appContext.thTranslation.translate("This action will remove this room from your active inventory. Are you sure you want to mark the room as Out of Service?");
+        var message = "This action is used to signal long maintenances on this room and will remove it from your active inventory. Are you sure you want to mark the room as Out of Order?";
+        var title = "Out of Order";
+        if (this.currentMaintenanceMeta.maintenanceStatus === RoomMaintenanceStatus.OutOfService) {
+            message = "This action means that the room requires some maintenance and you can't check in customers. Are you sure you want to mark the room as Out of Service?";
+            title = "Out of Service";
+        }
+
+        var title = this._appContext.thTranslation.translate(title);
+        var content = this._appContext.thTranslation.translate(message);
         this._appContext.modalService.confirm(title, content, { positive: this._appContext.thTranslation.translate("Yes"), negative: this._appContext.thTranslation.translate("No") },
             () => {
                 this.saveMaintenanceStatusCore();

@@ -12,16 +12,16 @@ export enum RoomMaintenanceStatus {
     Clean,
     Dirty,
     PickUp,
-    OutOfOrder,
-    OutOfService
+    OutOfService,
+    OutOfOrder
 }
 
 var RoomMaintenanceStatusDisplayStrings: { [index: number]: string; } = {};
 RoomMaintenanceStatusDisplayStrings[RoomMaintenanceStatus.Clean] = "Clean";
 RoomMaintenanceStatusDisplayStrings[RoomMaintenanceStatus.Dirty] = "Dirty";
 RoomMaintenanceStatusDisplayStrings[RoomMaintenanceStatus.PickUp] = "Pick Up";
-RoomMaintenanceStatusDisplayStrings[RoomMaintenanceStatus.OutOfOrder] = "Out Of Order";
 RoomMaintenanceStatusDisplayStrings[RoomMaintenanceStatus.OutOfService] = "Out Of Service";
+RoomMaintenanceStatusDisplayStrings[RoomMaintenanceStatus.OutOfOrder] = "Out Of Order";
 
 export class RoomDO extends BaseDO implements IRoom {
     constructor() {
@@ -61,7 +61,7 @@ export class RoomDO extends BaseDO implements IRoom {
             RoomMaintenanceStatus.Clean,
             RoomMaintenanceStatus.Dirty,
             RoomMaintenanceStatus.PickUp,
-            RoomMaintenanceStatus.OutOfOrder
+            RoomMaintenanceStatus.OutOfService
         ];
     }
 

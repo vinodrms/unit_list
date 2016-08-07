@@ -112,3 +112,27 @@
 	</div>
 </div>
 
+<div class="room-card out-of-order" *ngIf='roomVM.isOutOfOrder()'
+	[ngClass]="{'ghost': roomVM.UI.ghost , 'highlight-for-drop': roomVM.UI.highlightForDrop}">
+	<div class="card-header">
+		<div class="section1">
+			<div class="room-number ellipsis-text clickable" (click)="openRoomModal()" title="{{ roomVM.name }}">{{ roomVM.name }}</div>
+			<div class="room-type ellipsis-text" title="{{ roomVM.categoryLabel }}">{{ roomVM.categoryLabel }}</div>
+		</div>
+		<div class="section2 flex-row flex-jc-sb">
+			<div class="customer-name ellipsis-text clickable"></div>
+			<div class="room-stats flex-row flex-center-v">
+				<div *ngIf="maintenance" class="clickable f-18" [ngClass]="maintenance.cssClass" (click)="maintenance.clickHandler()" title="{{maintenance.title}}">
+					<span class="unitpal-font">{{maintenance.icon}}</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="card-footer">
+		<div class="period flex-row flex-center-v">
+			{{ 'Out Of Order' | translate }}
+		</div>
+		<div class="other-details">
+		</div>
+	</div>
+</div>

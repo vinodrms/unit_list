@@ -10,8 +10,8 @@ export enum RoomMaintenanceStatus {
     Clean,
     Dirty,
     PickUp,
-    OutOfOrder,
-    OutOfService
+    OutOfService,
+    OutOfOrder
 }
 
 export class RoomDO extends BaseDO {
@@ -52,7 +52,7 @@ export class RoomDO extends BaseDO {
             RoomMaintenanceStatus.Clean,
             RoomMaintenanceStatus.Dirty,
             RoomMaintenanceStatus.PickUp,
-            RoomMaintenanceStatus.OutOfOrder
+            RoomMaintenanceStatus.OutOfService
         ];
     }
 }

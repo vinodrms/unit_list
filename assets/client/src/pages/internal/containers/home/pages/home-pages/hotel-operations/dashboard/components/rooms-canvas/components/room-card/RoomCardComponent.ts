@@ -83,7 +83,7 @@ export class RoomCardComponent {
 				this.maintenance = {
 					cssClass: 'orange-color',
 					title: 'Out of order',
-					icon: 'K',
+					icon: '+',
 					clickHandler: () => {
 						this.openRoomModal();
 					}
@@ -94,7 +94,7 @@ export class RoomCardComponent {
 				this.maintenance = {
 					cssClass: 'orange-color',
 					title: 'Out of service',
-					icon: '+',
+					icon: 'K',
 					clickHandler: () => {
 						this.openRoomModal();
 					}

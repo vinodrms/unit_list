@@ -13,8 +13,8 @@ export class RoomMaintenanceUtils {
             RoomMaintenanceMeta.buildRoomMaintenanceMeta(RoomMaintenanceStatus.Clean, "Clean", "Z"),
             RoomMaintenanceMeta.buildRoomMaintenanceMeta(RoomMaintenanceStatus.Dirty, "Dirty", "H"),
             RoomMaintenanceMeta.buildRoomMaintenanceMeta(RoomMaintenanceStatus.PickUp, "Pick Up", "J"),
-            RoomMaintenanceMeta.buildRoomMaintenanceMeta(RoomMaintenanceStatus.OutOfOrder, "Out Of Order", "K"),
-            RoomMaintenanceMeta.buildRoomMaintenanceMeta(RoomMaintenanceStatus.OutOfService, "Out Of Service", "+"),
+            RoomMaintenanceMeta.buildRoomMaintenanceMeta(RoomMaintenanceStatus.OutOfService, "Out Of Service", "K"),
+            RoomMaintenanceMeta.buildRoomMaintenanceMeta(RoomMaintenanceStatus.OutOfOrder, "Out Of Order", "+")
         ];
     }
 

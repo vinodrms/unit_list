@@ -5,7 +5,8 @@ export enum FilterValueType{
 	Free,
 	Occupied,
 	Reserved,
-	OutOfService
+	OutOfService,
+	OutOfOrder
 }
 
 export interface IDragStyles {
