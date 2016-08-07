@@ -1,5 +1,5 @@
 import {ThUtils} from '../../../../../../utils/ThUtils';
-import {RoomDO} from '../../../../../../data-layer/rooms/data-objects/RoomDO';
+import {IRoom} from '../../../../../../data-layer/rooms/data-objects/IRoom';
 import {BookingDO} from '../../../../../../data-layer/bookings/data-objects/BookingDO';
 import {IBookingOccupancy} from './IBookingOccupancy';
 import {BookingOccupancyDO} from './BookingOccupancyDO';
@@ -15,7 +15,7 @@ export class BookingOccupancy implements IBookingOccupancy {
     indexedRoomIdOccupancy: { [id: string]: number; };
     indexedAllotmentIdOccupancy: { [id: string]: number; };
 
-    constructor(private _indexedRoomsById: { [id: string]: RoomDO; }) {
+    constructor(private _indexedRoomsById: { [id: string]: IRoom; }) {
         this._thUtils = new ThUtils();
         this._bookingUtils = new BookingUtils();
 
@@ -29,7 +29,7 @@ export class BookingOccupancy implements IBookingOccupancy {
             if (this._thUtils.isUndefinedOrNull(booking.roomId) || !_.isString(booking.roomId)) {
                 return this._bookingUtils.transformToEmptyStringIfNull(booking.roomCategoryId);
             }
-            var actualRoom: RoomDO = this._indexedRoomsById[booking.roomId];
+            var actualRoom: IRoom = this._indexedRoomsById[booking.roomId];
             if (this._thUtils.isUndefinedOrNull(actualRoom)) {
                 return this._bookingUtils.transformToEmptyStringIfNull(booking.roomCategoryId);
             }

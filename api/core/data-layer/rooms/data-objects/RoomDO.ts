@@ -1,4 +1,5 @@
 import {BaseDO} from '../../common/base/BaseDO';
+import {IRoom} from './IRoom';
 import {DocumentHistoryDO} from '../../common/data-objects/document-history/DocumentHistoryDO';
 import {DocumentActionDO} from '../../common/data-objects/document-history/DocumentActionDO';
 
@@ -22,7 +23,7 @@ RoomMaintenanceStatusDisplayStrings[RoomMaintenanceStatus.PickUp] = "Pick Up";
 RoomMaintenanceStatusDisplayStrings[RoomMaintenanceStatus.OutOfOrder] = "Out Of Order";
 RoomMaintenanceStatusDisplayStrings[RoomMaintenanceStatus.OutOfService] = "Out Of Service";
 
-export class RoomDO extends BaseDO {
+export class RoomDO extends BaseDO implements IRoom {
     constructor() {
         super();
     }
