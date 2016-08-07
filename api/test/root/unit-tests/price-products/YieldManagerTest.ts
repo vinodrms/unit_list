@@ -384,8 +384,8 @@ describe("Price Products Interval Tests", function () {
 	describe("Inventory Snapshot Process Tests", function () {
 		it("Should create a snapshot of the inventory", function (done) {
 			var snapshotProcess = new HotelInventorySnapshotProcess(testContext.appContext, testDataBuilder.hotelDO);
-			var referenceTimestamp = ThTimestampDO.buildThTimestampForTimezone(testDataBuilder.hotelDO.timezone);
-			snapshotProcess.createSnapshot(referenceTimestamp).then((snapshotResult: InventorySnapshotProcessResult) => {
+			var referenceDate = ThTimestampDO.buildThTimestampForTimezone(testDataBuilder.hotelDO.timezone).thDateDO;
+			snapshotProcess.createSnapshot(referenceDate).then((snapshotResult: InventorySnapshotProcessResult) => {
 				should.equal(snapshotResult.type, InventorySnapshotType.New);
 				var snapshot = snapshotResult.snapshot;
 				should.exist(snapshot);
@@ -398,8 +398,8 @@ describe("Price Products Interval Tests", function () {
 		});
 		it("Should not create the same snapshot twice", function (done) {
 			var snapshotProcess = new HotelInventorySnapshotProcess(testContext.appContext, testDataBuilder.hotelDO);
-			var referenceTimestamp = ThTimestampDO.buildThTimestampForTimezone(testDataBuilder.hotelDO.timezone);
-			snapshotProcess.createSnapshot(referenceTimestamp).then((snapshotResult: InventorySnapshotProcessResult) => {
+			var referenceDate = ThTimestampDO.buildThTimestampForTimezone(testDataBuilder.hotelDO.timezone).thDateDO;
+			snapshotProcess.createSnapshot(referenceDate).then((snapshotResult: InventorySnapshotProcessResult) => {
 				should.equal(snapshotResult.type, InventorySnapshotType.Existing);
 				var snapshot = snapshotResult.snapshot;
 				should.exist(snapshot);

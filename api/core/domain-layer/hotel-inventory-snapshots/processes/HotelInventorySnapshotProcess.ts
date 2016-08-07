@@ -3,7 +3,7 @@ import {ThError} from '../../../utils/th-responses/ThError';
 import {ThStatusCode} from '../../../utils/th-responses/ThResponse';
 import {AppContext} from '../../../utils/AppContext';
 import {HotelDO} from '../../../data-layer/hotel/data-objects/HotelDO';
-import {ThTimestampDO} from '../../../utils/th-dates/data-objects/ThTimestampDO';
+import {ThDateDO} from '../../../utils/th-dates/data-objects/ThDateDO';
 import {RoomSnapshotDO} from '../../../data-layer/hotel-inventory-snapshots/data-objects/room/RoomSnapshotDO';
 import {HotelInventorySnapshotDO} from '../../../data-layer/hotel-inventory-snapshots/data-objects/HotelInventorySnapshotDO';
 import {HotelInventorySnapshotSearchResultRepoDO} from '../../../data-layer/hotel-inventory-snapshots/repositories/IHotelInventorySnapshotRepository';
@@ -22,13 +22,13 @@ export interface InventorySnapshotProcessResult {
 }
 
 export class HotelInventorySnapshotProcess {
-    private _referenceTimestamp: ThTimestampDO;
+    private _referenceDate: ThDateDO;
 
     constructor(private _appContext: AppContext, private _hotel: HotelDO) {
     }
 
-    public createSnapshot(referenceTimestamp: ThTimestampDO): Promise<InventorySnapshotProcessResult> {
-        this._referenceTimestamp = referenceTimestamp;
+    public createSnapshot(referenceDate: ThDateDO): Promise<InventorySnapshotProcessResult> {
+        this._referenceDate = referenceDate;
         return new Promise<InventorySnapshotProcessResult>((resolve: { (result: InventorySnapshotProcessResult): void }, reject: { (err: ThError): void }) => {
             this.createSnapshotCore(resolve, reject);
         });
@@ -36,7 +36,7 @@ export class HotelInventorySnapshotProcess {
 
     private createSnapshotCore(resolve: { (result: InventorySnapshotProcessResult): void }, reject: { (err: ThError): void }) {
         var snapshotRepo = this._appContext.getRepositoryFactory().getSnapshotRepository();
-        snapshotRepo.getSnapshotList({ hotelId: this._hotel.id }, { thDateUtcTimestamp: this._referenceTimestamp.thDateDO.getUtcTimestamp() })
+        snapshotRepo.getSnapshotList({ hotelId: this._hotel.id }, { thDateUtcTimestamp: this._referenceDate.getUtcTimestamp() })
             .then((searchResult: HotelInventorySnapshotSearchResultRepoDO) => {
                 if (searchResult.snapshotList.length > 0) {
                     resolve({
@@ -72,7 +72,7 @@ export class HotelInventorySnapshotProcess {
     private getSnapshot(roomList: RoomDO[]): HotelInventorySnapshotDO {
         var snapshot = new HotelInventorySnapshotDO();
         snapshot.hotelId = this._hotel.id;
-        snapshot.thDate = this._referenceTimestamp.thDateDO.buildPrototype();
+        snapshot.thDate = this._referenceDate.buildPrototype();
         snapshot.thDateUtcTimestamp = snapshot.thDate.getUtcTimestamp();
         snapshot.roomList = [];
         _.forEach(roomList, (roomDO: RoomDO) => {
