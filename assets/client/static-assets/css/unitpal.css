@@ -2254,6 +2254,10 @@ a.btn.btn-square:focus {
             color: #ffbe01;
         }
 
+        .room-card .info-icon {
+            padding-left: 3px;   
+        }
+
         .page{
             width: 500px;
             height: 500px;
