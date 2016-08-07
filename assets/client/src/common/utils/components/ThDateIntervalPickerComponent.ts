@@ -1,4 +1,4 @@
-import {Component, Input, Output, EventEmitter} from '@angular/core';
+import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import {ThDataValidators} from '../form-utils/utils/ThDataValidators';
 import {TranslationPipe} from '../localization/TranslationPipe';
 import {ThDatePickerComponent} from './ThDatePickerComponent';
@@ -49,10 +49,12 @@ import {ThDateUtils} from '../../../pages/internal/services/common/data-objects/
 	pipes: [TranslationPipe],
 	directives: [ThDatePickerComponent]
 })
-export class ThDateIntervalPickerComponent {
+export class ThDateIntervalPickerComponent implements OnInit {
 	public static MaxNoOfDaysFromInterval = 186;
 
 	private _dateUtils: ThDateUtils = new ThDateUtils();
+	private _didReceiveInitialInterval = false;
+	private _didInit = false;
 
 	private _initialThDateInterval: ThDateIntervalDO;
 	public get initialThDateInterval(): ThDateIntervalDO {
@@ -60,6 +62,7 @@ export class ThDateIntervalPickerComponent {
 	}
 	@Input()
 	public set initialThDateInterval(initialThDateInterval: ThDateIntervalDO) {
+		this._didReceiveInitialInterval = true;
 		this._initialThDateInterval = initialThDateInterval;
 		this.initDateInterval();
 	}
@@ -89,6 +92,7 @@ export class ThDateIntervalPickerComponent {
 	@Input() showExpandedView: boolean = false;
 	@Input() showLabels: boolean = true;
 	@Input() restrictedInterval: boolean = false;
+	@Input() allowSameEndDateAsStartDate: boolean = false;
 	noOfNights: number = 0;
 
 	@Output() didSelectThDateInterval = new EventEmitter();
@@ -104,14 +108,20 @@ export class ThDateIntervalPickerComponent {
 	}
 	private initDefaultDateInterval(startDate: ThDateDO) {
 		this.dateInterval = this._dateUtils.getTodayToTomorrowInterval();
-		this.minEndDate = this._dateUtils.addDaysToThDateDO(startDate.buildPrototype(), 1);
+		this.minEndDate = this._dateUtils.addDaysToThDateDO(startDate.buildPrototype(), this.allowSameEndDateAsStartDate ? 0 : 1);
 		this.updateNoOfNights();
 	}
 
+	public ngOnInit() {
+		this._didInit = true;
+		this.initDateInterval();
+	}
+
 	private initDateInterval() {
+		if (!this._didReceiveInitialInterval || !this._didInit) { return; }
 		if (this._initialThDateInterval && this._initialThDateInterval.isValid()) {
 			this.dateInterval = this._initialThDateInterval;
-			this.minEndDate = this._dateUtils.addDaysToThDateDO(this._initialThDateInterval.start.buildPrototype(), 1);
+			this.minEndDate = this._dateUtils.addDaysToThDateDO(this._initialThDateInterval.start.buildPrototype(), this.allowSameEndDateAsStartDate ? 0 : 1);
 		}
 		else {
 			this.initDefaultDateInterval(this._dateUtils.getTodayThDayeDO());
@@ -122,7 +132,7 @@ export class ThDateIntervalPickerComponent {
 
 	didSelectStartDate(startDate: ThDateDO) {
 		this.dateInterval.start = startDate;
-		this.minEndDate = this._dateUtils.addDaysToThDateDO(startDate.buildPrototype(), 1);
+		this.minEndDate = this._dateUtils.addDaysToThDateDO(startDate.buildPrototype(), this.allowSameEndDateAsStartDate ? 0 : 1);
 
 		if (this.dateInterval.end.isBefore(this.minEndDate)) {
 			this.dateInterval.end = this.minEndDate.buildPrototype();
