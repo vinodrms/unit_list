@@ -97,7 +97,7 @@ export class BookingCustomerEditorComponent implements OnInit {
         var didOmitCustomers: boolean = false;
         var omittedCustomerString: string = "";
         _.forEach(customerList, (customerToAppend: CustomerDO) => {
-            if (customerToAppend.hasAccessOnPriceProduct(this.bookingDO.priceProductSnapshot)) {
+            if (customerToAppend.hasAccessOnPriceProduct(this.bookingDO.priceProductSnapshot) || customerToAppend.isIndividual()) {
                 this.customerContainer.appendCustomer(customerToAppend);
                 this._didMakeChanges = true;
             }
