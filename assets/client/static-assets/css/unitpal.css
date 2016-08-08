@@ -3376,7 +3376,50 @@ tr.selected-invoice-item {
     color: white;
     font-size: 14px;
 }
+.invoice-edit-wrap {
+    min-height: 100%;
+	margin-bottom: -40px; 
+}
+.invoice-edit-wrap:after {
+    content: "";
+    display: block;
+}
+.invoice-edit-footer, .invoice-edit-wrap:after {
+	height: 40px; 
+}
 
+.filter-tag {
+    width: 80px;
+    height: 30px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    text-align: center;
+    color: #fff;
+    border: 0;
+    font-size: 12px;
+    position: relative;
+    top: 16px;
+    background-color: #fb6708;
+}
+
+.rotate-45 {
+    /* Safari */
+    -webkit-transform: rotate(45deg);
+
+    /* Firefox */
+    -moz-transform: rotate(45deg);
+
+    /* IE */
+    -ms-transform: rotate(45deg);
+
+    /* Opera */
+    -o-transform: rotate(45deg);
+
+    /* Internet Explorer */
+    filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+
+}
 .more-items-container {
     padding-left: 0 !important;
     padding-right: 0 !important;
@@ -3393,4 +3436,11 @@ tr.selected-invoice-item {
 }
 table.small-margin {
     margin-bottom: 5px;
+}
+.table-invoice-items .selectable .selected {
+    background-color: #ededed;
+}
+.table-invoice-items .selectable:hover {
+    background-color: #ededed;
+    cursor: pointer;
 }
