@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChildren } from '@angular/core';
 
 import {ThDateDO} from '../../../../../../../services/common/data-objects/th-dates/ThDateDO';
 import {AppContext} from '../../../../../../../../../common/utils/AppContext';
@@ -22,6 +22,7 @@ import {FilterVMCollection} from '../../../../../../../services/yield-manager/da
 	pipes: [TranslationPipe]
 })
 export class YieldFilterPaneComponent implements OnInit {
+	@ViewChildren(YieldColorFitlerItemComponent) colorFilterComponents: YieldColorFitlerItemComponent[]
 	public selectedDate: ThDateDO;
 	public searchText: string;
 
@@ -78,6 +79,15 @@ export class YieldFilterPaneComponent implements OnInit {
 
 	public searchTextChangeHandler(value) {
 		this.searchText = value;
-		alert(value);
+	}
+
+	public colorItemSelected(selectedItem: YieldColorFitlerItemComponent){
+		var itemsToDeselect = this.colorFilterComponents.filter((item: YieldColorFitlerItemComponent) => {
+			return item != selectedItem;
+		});
+
+		itemsToDeselect.forEach( (item:YieldColorFitlerItemComponent) => {
+			item.deselect();
+		});
 	}
 }

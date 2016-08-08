@@ -52,7 +52,7 @@ body,html {
 }
 
 .card a {
-    color: #fb6708;
+    color: rgb(251, 103, 8);
     cursor: pointer;
 }
 
@@ -198,7 +198,7 @@ header {
 .card-header h2,
 .card-header h3,
 .card-header h1 small {
-    color: #fb6708;
+    color: rgb(251, 103, 8);
 }
 
 basic-information,
@@ -382,14 +382,14 @@ textarea {
 
 .button-items .btn-default.active {
     color: white;
-    background-color: #fb6708;
+    background-color: rgb(251, 103, 8);
     border: 0px solid;
 }
 
 .btn-group .btn-default.active {
     color: white;
-    background-color: #fb6708;
-    border-color: #fb6708;
+    background-color: rgb(251, 103, 8);
+    border-color: rgb(251, 103, 8);
 }
 .btn-default.readonly.disabled {
     cursor: default;
@@ -419,7 +419,7 @@ textarea {
 }
 .button-check .btn-default.active {
     color: white;
-    background-color: #fb6708;
+    background-color: rgb(251, 103, 8);
     border: 0px solid;
 }
 
@@ -581,7 +581,7 @@ lazy-loading-table {
 
 .nav.side-menu> li.current-page,
 .nav.side-menu> li.active {
-    border-right: 6px solid #fb6708;
+    border-right: 6px solid rgb(251, 103, 8);
     background: #fff;
 }
 
@@ -648,8 +648,8 @@ lazy-loading-table {
 .btn-danger:active,
 .btn-danger:visited,
 .btn-danger:focus {
-    background-color: #fb6708 !important;
-    border-color: #fb6708 !important;
+    background-color: rgb(251, 103, 8) !important;
+    border-color: rgb(251, 103, 8) !important;
 }
 
 .btn-green,
@@ -657,8 +657,8 @@ lazy-loading-table {
 .btn-green:active,
 .btn-green:visited,
 .btn-green:focus {
-    background-color: #1dcd8c !important;
-    border-color: #1dcd8c !important;
+    background-color: rgb(29, 205, 140) !important;
+    border-color: rgb(29, 205, 140) !important;
     color: white;
 }
 
@@ -734,12 +734,12 @@ lazy-loading-table {
     height: 95px;
     display: inline-block;
     margin: 6px 5px;
-    border: 1px solid #fb6708;
+    border: 1px solid rgb(251, 103, 8);
     -webkit-border-radius: 2px;
     -moz-border-radius: 2px;
     border-radius: 2px;
     position: relative;
-    color: #fb6708;
+    color: rgb(251, 103, 8);
 }
 
 .bed-slot-info {
@@ -780,7 +780,7 @@ lazy-loading-table {
 }
 
 .btn.bed-slot:hover {
-    color: #fb6708;
+    color: rgb(251, 103, 8);
 }
 
 .bed-slot.available {
@@ -803,8 +803,8 @@ lazy-loading-table {
 }
 
 .bed-slot.unselected:hover {
-    color: #fb6708;
-    border: 1px solid #fb6708;
+    color: rgb(251, 103, 8);
+    border: 1px solid rgb(251, 103, 8);
     cursor: pointer;
 }
 
@@ -824,7 +824,7 @@ td .room-categ-capacity {
     text-align: center;
 }
 .room-categ-capacity.not-configured {
-    color: #fb6708;
+    color: rgb(251, 103, 8);
 }
 
 .modal-body td.operations {
@@ -876,7 +876,7 @@ td .room-categ-capacity {
 }
 
 .modal a {
-    color: #fb6708;
+    color: rgb(251, 103, 8);
 }
 
 .modal a:hover {
@@ -896,7 +896,7 @@ td .room-categ-capacity {
 }
 
 .text-warning {
-    color:#fb6708;
+    color:rgb(251, 103, 8);
 }
 
 .table-item-action-group {
@@ -908,39 +908,63 @@ td .room-categ-capacity {
 }
 
 .red {
-    background: #FF0000;
+    background: rgb(255, 0, 0);
+}
+
+.red-alpha-1 {
+    background: rgba(255, 0, 0, 0.1);
 }
 
 .red-color {
-    color: #FF0000;
+    color: rgb(255, 0, 0);
 }
 
 .yellow {
-    background: #ffbe01;
+    background: rgb(255, 190, 1);
+}
+
+.yellow-alpha-1 {
+    background: rgba(255, 190, 1, 0.1);
 }
 
 .yellow-color {
-    color: #ffbe01 !important;
+    color: rgb(255, 190, 1) !important;
 }
 
 .green {
-    background: #1dcd8c;
+    background: rgb(29, 205, 140);
+}
+
+.green-alpha-1 {
+    background: rgba(29, 205, 140, 0.1);
 }
 
 .green-color {
-    color: #1dcd8c;
+    color: rgb(29, 205, 140);
 }
 
 .blue {
-    background: #428BCA;
+    background: rgb(66, 139, 202);
+}
+
+.blue-alpha-1 {
+    background: rgba(66, 139, 202, 0.1);
+}
+
+.blue-color {
+    color: rgb(66, 139, 202);
 }
 
 .gray {
-    background: #bbbbbb;
+    background: rgb(187, 187, 187);
+}
+
+.gray-alpha-1 {
+    background: rgba(187, 187, 187, 0.1);
 }
 
 .gray-color {
-    color: #bbbbbb;
+    color: rgb(187, 187, 187);
 }
 
 .dark-gray {
@@ -950,6 +974,7 @@ td .room-categ-capacity {
 .dark-gray-color {
     color: #555;
 }
+
 .light-gray {
     background: #9A9A9A;
 }
@@ -957,28 +982,65 @@ td .room-categ-capacity {
 .light-gray-color {
     color: #9A9A9A;
 }
+
 .brown {
-    background: #AD8D43;
+    background: rgb(173, 141, 67);
+}
+
+.brown-alpha-1 {
+    background: rgba(173, 141, 67, 0.1);
+}
+
+.brown-color {
+    color: rgb(173, 141, 67);
 }
 
 .violet {
-    background: #A295D6;
+    background: rgb(162, 149, 214);
+}
+
+.violet-alpha-1 {
+    background: rgba(162, 149, 214, 0.1);
+}
+
+.violet-color {
+    color: rgb(162, 149, 214);
 }
 
 .orange {
-    background: #fb6708;
+    background: rgb(251, 103, 8);
+}
+
+.orange-alpha-1 {
+    background: rgba(251, 103, 8, 0.1);
 }
 
 .orange-color{
-    color: #fb6708
+    color: rgb(251, 103, 8)
 }
 
 .olive {
-    background: #D1D100;
+    background: rgb(209, 209, 0);
+}
+
+.olive-alpha-1 {
+    background: rgba(209, 209, 0, 0.1);
+}
+
+.olive-color {
+    color: rgb(209, 209, 0);
 }
 
 .purple {
-    background: #8E44AD;
+    background: rgb(142, 68, 173);
+}
+
+.purple-alpha-1 {
+    background: rgba(142, 68, 173, 0.1);
+}
+
+.purple-color {
+    color: rgb(142, 68, 173);
 }
 
 .dimmed-item {
@@ -1052,7 +1114,7 @@ input[type="file"] {
 }
 
 .pace .pace-progress {
-  background: #fb6708;
+  background: rgb(251, 103, 8);
   position: fixed;
   z-index: 2000;
   top: 0;
@@ -1172,12 +1234,12 @@ table.lazy-loading tbody {
   flex-shrink: 1;
 }
 tr.lazy-loading-table-totals {
-    border-top: 1px solid #fb6708 !important;
+    border-top: 1px solid rgb(251, 103, 8) !important;
     background-color: #e7e7e7;
 }
 tr.lazy-loading-table-totals>td.important {
     font-weight: bold;
-    color: #fb6708;
+    color: rgb(251, 103, 8);
 }
 tr.lazy-loading-table-totals:hover,
 tr.lazy-loading-table-totals:focus {
@@ -1313,7 +1375,7 @@ table.lazy-loading .th-pagination {
     color: #fff;
     border: 0;
     font-size: 12px;
-    background-color: #fb6708;
+    background-color: rgb(251, 103, 8);
 }
 .btn.btn-pagination-square>i {
     font-size: 30px;
@@ -1456,7 +1518,7 @@ table.lazy-loading .th-pagination {
     display: inline-block;
 }
 .home-header-button.active {
-    border-bottom: 4px solid #fb6708 !important;
+    border-bottom: 4px solid rgb(251, 103, 8) !important;
 }
 .home-header-button.active .left-separator {
     opacity: 1.0;
@@ -1652,8 +1714,8 @@ table.lazy-loading .th-pagination {
     position: absolute;
     right: 12px;
     top: 8px;
-    background: #fb6708 !important;
-    border: 1px solid #fb6708 !important;
+    background: rgb(251, 103, 8) !important;
+    border: 1px solid rgb(251, 103, 8) !important;
     color: #fff;
 }
 ul.msg_list li a .time {
@@ -1667,10 +1729,10 @@ ul.msg_list li a .message {
     color: #737373;
 }
 ul.msg_list li .time {
-    color: #fb6708;
+    color: rgb(251, 103, 8);
 }
 ul.msg_list li .text-center a {
-    color: #fb6708;
+    color: rgb(251, 103, 8);
 }
 .message.unread {
     font-weight: bold;
@@ -1703,11 +1765,11 @@ ul.msg_list li .text-center a {
 .modal-lg-header {
     height: 70px;
     border-bottom: 1px solid #DBDBDB;
-    color: #fb6708 !important;
+    color: rgb(251, 103, 8) !important;
     padding: 0 15px;
 }
 .modal-lg-header small {
-    color: #fb6708 !important;
+    color: rgb(251, 103, 8) !important;
     font-weight: 300;
 }
 .modal-lg-header h1 {
@@ -1758,13 +1820,13 @@ ul.msg_list li .text-center a {
     font-size: 12px;
     position: relative;
     top: 16px;
-    background-color: #fb6708;
+    background-color: rgb(251, 103, 8);
 }
 .btn.btn-square.back {
     top: 0px;
 }
 .btn-square.btn-square-next-prev {
-    background-color: #fb6708;    
+    background-color: rgb(251, 103, 8);    
 }
 
 a.btn.btn-square:hover,
@@ -1846,7 +1908,7 @@ a.btn.btn-square:focus {
     border-bottom: 1px solid #DBDBDB;
 }
 .th-addon-button {
-    background-color: #fb6708;
+    background-color: rgb(251, 103, 8);
     color: white;
     font-size: 13px;
 }
@@ -1879,7 +1941,7 @@ a.btn.btn-square:focus {
     padding: 0 5px 0 5px;
 }
 .booking-configuration-container .search-button {
-    background-color: #fb6708;
+    background-color: rgb(251, 103, 8);
     color: white;
     border-radius: 0px;
     padding-top: 9px;
@@ -1913,7 +1975,7 @@ a.btn.btn-square:focus {
     padding: 0px 15px 15px 15px;
 }
 .booking-search-results .overbooking {
-    color: #FF0000;
+    color: rgb(255, 0, 0);
     font-weight: bold;
 }
 .booking-search-results .allotment {
@@ -1934,7 +1996,7 @@ a.btn.btn-square:focus {
     font-size: 15px;
 }
 .booking-details-header>.first-line {
-    color: #fb6708;
+    color: rgb(251, 103, 8);
 }
 .booking-details-container {
     font-size: 12px;
@@ -1994,7 +2056,7 @@ a.btn.btn-square:focus {
 }
 .booking-details-table-text-muted {
     padding-left: 6px;
-    color: #fb6708;
+    color: rgb(251, 103, 8);
     font-size: 12px;
 }
 
@@ -2164,7 +2226,7 @@ a.btn.btn-square:focus {
         }
 
         arrivals-pane > .footer .th-button-box{
-            color: #fb6708;
+            color: rgb(251, 103, 8);
         }
 
     .hotel-operations-dashboard .rooms-filter {
@@ -2225,21 +2287,21 @@ a.btn.btn-square:focus {
         
         /* Occupied */
         .room-card.occupied {
-            border-left: 6px solid #fb6708;
+            border-left: 6px solid rgb(251, 103, 8);
             line-height: normal;
         }
        
         .room-card.occupied .card-header .section1 .room-number{
-            color: #fb6708;  
+            color: rgb(251, 103, 8);  
         }
 
         /* Free */
         .room-card.free {
-            border-left: 6px solid #1dcd8c;
+            border-left: 6px solid rgb(29, 205, 140);
         }
     
         .room-card.free .card-header .section1 .room-number{
-            color: #1dcd8c;  
+            color: rgb(29, 205, 140);  
         }
 
         /*Out of service */
@@ -2262,11 +2324,11 @@ a.btn.btn-square:focus {
 
         /* Reseved */
         .room-card.reserved {
-            border-left: 6px solid #ffbe01;
+            border-left: 6px solid rgb(255, 190, 1);
         }
     
         .room-card.reserved .card-header .section1 .room-number{
-            color: #ffbe01;
+            color: rgb(255, 190, 1);
         }
 
         .room-card .info-icon {
@@ -2316,11 +2378,11 @@ a.btn.btn-square:focus {
         }
 
         .room-card.free.tick-border{
-            border-color: #1dcd8c;
+            border-color: rgb(29, 205, 140);
         }
 
         .room-card.reserved.tick-border{
-            border-color: #ffbe01;
+            border-color: rgb(255, 190, 1);
         }
 
         .room-card.free.highlight-for-drop{
@@ -2479,7 +2541,7 @@ a.btn.btn-square:focus {
         }
 
         arrival-helper{
-            border: 3px solid #fb6708;
+            border: 3px solid rgb(251, 103, 8);
             border-radius: 4px;
             width: 236px;
             background: white;
@@ -2489,7 +2551,7 @@ a.btn.btn-square:focus {
             display: flex;
             flex-direction: column;
             justify-content: center;
-            background-color: #fb6708;
+            background-color: rgb(251, 103, 8);
             color: white;
         }
 
@@ -2632,6 +2694,35 @@ a.btn.btn-square:focus {
         margin: 6px 24px 24px 24px;
     }
 
+        .yield-manager-dashboard yield-color-filter-item > div {
+            border-bottom: 1px solid #DBDBDB;
+            height: 50px;
+        }
+
+        .yield-manager-dashboard yield-color-filter-item .left{
+            width: 12px;
+        }
+
+        .yield-manager-dashboard yield-color-filter-item .right{
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .yield-manager-dashboard yield-color-filter-item .right{
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .yield-manager-dashboard yield-color-filter-item div.selected {
+            background: white;
+        }
+
+        .yield-manager-dashboard yield-color-filter-item div:not(.selected) .right:hover {
+            background-color: #fafafa;
+        }
+
         /* Misc */
         
         .other-details {
@@ -2687,12 +2778,12 @@ a.btn.btn-square:focus {
         }
 
         .stat-yellow{
-            background-color: #ffbe01;
+            background-color: rgb(255, 190, 1);
             color: white;
         }
 
         .stat-tomato{
-            background-color: #fb6708;
+            background-color: rgb(251, 103, 8);
             color: white;
         }
 
@@ -3054,7 +3145,7 @@ a.btn.btn-square:focus {
     height: 100%;
 }
 .operational-important-field {
-    color: #fb6708;
+    color: rgb(251, 103, 8);
 }
 .operational-page-font-container {
     position: relative;
@@ -3138,7 +3229,7 @@ a.btn.btn-square:focus {
 }
 .form-control.operational-input-group.noshow {
     color: white;
-    background-color: #fb6708;
+    background-color: rgb(251, 103, 8);
 }
 .form-control.operational-input-group.non-editable {
     border: 1px solid white;
@@ -3179,7 +3270,7 @@ a.btn.btn-square:focus {
 .operational-page-container .clickable-item {
     cursor: pointer;
     font-weight: 500;
-    color: #fb6708;
+    color: rgb(251, 103, 8);
     font-size: 14px;
 }
 .operational-page-container .clickable-item>span {
@@ -3214,11 +3305,11 @@ a.btn.btn-square:focus {
     top: 3px;
 }
 .reserved-booking kbd {
-    background-color: #ffbe01;
+    background-color: rgb(255, 190, 1);
     color: black;
 }
 .checked-in kbd {
-    background-color: #fb6708;
+    background-color: rgb(251, 103, 8);
     color: white;
  }
  .operational-page-container .right-sidebar .unitpal-font {
@@ -3231,7 +3322,7 @@ a.btn.btn-square:focus {
      font-size: 11px;
  }
  .unitpal-font.checkin {
-     color: #fb6708;
+     color: rgb(251, 103, 8);
  }
  .unitpal-font.checkout {
      color: #36ce8d;
@@ -3277,7 +3368,7 @@ invoice-edit {
     flex-grow: 1;
 }
 .invoice-title {
-    color: #fb6708;
+    color: rgb(251, 103, 8);
     font-size: 18px;
     margin-left: 15px;
     text-align: left;
@@ -3286,7 +3377,7 @@ invoice-edit {
     margin: 0;
 }
 .table-invoice-payer > tbody > tr.row-actions {
-   background-color: #fb6708;
+   background-color: rgb(251, 103, 8);
    color: white;
 }
 .table-invoice-payer > tbody > tr.row-actions > .customer-container {
@@ -3297,10 +3388,10 @@ invoice-edit {
 }
 .table-invoice-payer > tbody > tr.row-payment {
    background-color: #fcf0e6;
-   color: #fb6708;
+   color: rgb(251, 103, 8);
 }
 .table-invoice-payer > tbody > tr.row-payment * {
-   color: #fb6708;
+   color: rgb(251, 103, 8);
 }
 
 .btn-add-invoice-payer {
@@ -3331,17 +3422,17 @@ invoice-edit {
 }
 .move-invoice-item-btn {
     padding: 3px 6px;
-    background-color: #fb6708;
+    background-color: rgb(251, 103, 8);
     color: white;
     border: none;
 }
 .move-invoice-item-btn:hover {
     background-color: #fcf0e6;
-    color: #fb6708;
+    color: rgb(251, 103, 8);
 }
 .move-invoice-item-btn:active {
     background-color: #fcf0e6;
-    color: #fb6708;
+    color: rgb(251, 103, 8);
 }
 
 tr.selected-invoice-item {
@@ -3362,7 +3453,7 @@ tr.selected-invoice-item {
     padding: 0 5px;
 }
 .invoice-pagination-container .page-index.selected {
-    color: #fb6708;
+    color: rgb(251, 103, 8);
 }
 .payment-method-container {
     vertical-align: middle !important;

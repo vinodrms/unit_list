@@ -20,6 +20,7 @@
 		<yield-color-filter-item
 			*ngFor="let yieldColorFilterItemVM of yieldColorFilterCollection.filterVMList" 
 			[yieldColorFilterItemVM] = "yieldColorFilterItemVM" 
+			(onSelect)="colorItemSelected($event)"
 			>
 		</yield-color-filter-item>
 	</div>

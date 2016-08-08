@@ -1,5 +1,13 @@
-<div class="{{yieldColorFilterItemVM.cssClass}}"  [ngClass] = "{'selected' : selected }" (click)="toggleSelection()">
-	{{yieldColorFilterItemVM.cssClass}} {{selected}}
+<div class="flex-row" [ngClass] = "{'selected' : selected }" (click)="toggleSelection()">
+	<div class="left {{yieldColorFilterItemVM.cssClass}}">
+	</div>
+	<div class="right p-6" [ngClass]="getRightClasses()">
+		<div class="flex-row flex-jc-sb">
+			<span class="dark-gray-color f-16">{{ yieldColorFilterItemVM.colorName }}</span>
+			<span class="f-12 p-r-6" [ngClass]="getFilterNameClasses()">{{ yieldColorFilterItemVM.filterName }}</span>
+		</div>
+		<div>
+			<span class="gray-color f-12">{{ yieldColorFilterItemVM.description }}</span>
+		</div>
+	</div>
 </div>
-
-<!--[ngClass]="{'selected': selected}"-->

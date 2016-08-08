@@ -1,4 +1,4 @@
-import { Component, OnInit, Input} from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 
 import {ColorFilterVM}  from '../../../../../../../../../services/yield-manager/dashboard/filter/view-models/ColorFilterVM';
 
@@ -8,8 +8,11 @@ import {ColorFilterVM}  from '../../../../../../../../../services/yield-manager/
 })
 export class YieldColorFitlerItemComponent implements OnInit {
 	@Input() yieldColorFilterItemVM: ColorFilterVM;
+	@Output() onSelect = new EventEmitter<YieldColorFitlerItemComponent>();
+	
 	public selected: boolean;
-	constructor() { }
+	constructor() { 
+	}
 
 	ngOnInit() {
 		this.selected = false;
@@ -17,5 +20,24 @@ export class YieldColorFitlerItemComponent implements OnInit {
 
 	public toggleSelection() {
 		this.selected = !this.selected;
+		if (this.selected){
+			this.onSelect.emit(this);
+		}
+	}
+
+	public deselect(){
+		this.selected = false;
+	}
+
+	public getFilterNameClasses(){
+		var classes = {};
+		classes[this.yieldColorFilterItemVM.cssClass + '-color'] = this.selected;
+		return classes;
+	}
+
+	public getRightClasses(){
+		var classes = {};
+		classes[this.yieldColorFilterItemVM.cssClass + '-alpha-1'] = this.selected;
+		return classes;
 	}
 }
