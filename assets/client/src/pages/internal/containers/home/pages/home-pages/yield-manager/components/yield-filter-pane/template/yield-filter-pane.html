@@ -16,11 +16,13 @@
 	</div>
 </div>
 <div customScroll class="body">
-	<yield-group-item
-		*ngFor="let yieldGroupItemVM of yieldGroups" 
-		[yieldGroupItemVM] = "yieldGroupItemVM" 
-		>
-	</yield-group-item>
+	<div *ngIf="yieldColorFilterCollection">
+		<yield-color-filter-item
+			*ngFor="let yieldColorFilterItemVM of yieldColorFilterCollection.filterVMList" 
+			[yieldColorFilterItemVM] = "yieldColorFilterItemVM" 
+			>
+		</yield-color-filter-item>
+	</div>
 </div>
 
 
