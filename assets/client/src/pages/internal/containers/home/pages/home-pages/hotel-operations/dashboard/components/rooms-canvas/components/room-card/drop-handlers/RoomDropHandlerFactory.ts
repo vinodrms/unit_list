@@ -6,17 +6,20 @@ import {RoomItemInfoDO, RoomItemStatus} from '../../../../../../../../../../../s
 
 export class RoomDropHandlerFactory{
 	public static get(room: RoomItemInfoVM): IDropHandler{
-		if (room.isFree){
+		if (room.isFree()){
 			return new FreeRoomDropHandler(room);
 		}
-		if (room.isOccupied){
+		if (room.isOccupied()){
 			return new OccupiedRoomDropHandler(room);
 		}
-		if (room.isReserved){
+		if (room.isReserved()){
 			return new ReservedRoomDropHandler(room);
 		}
-		if (room.isOutOfService){
+		if (room.isOutOfService()){
 			return new OutOfServiceDropHandler(room);
+		}
+		if (room.isOutOfOrder()){
+			return new OutOfOrderDropHandler(room);
 		}
 	}
 }
@@ -59,6 +62,14 @@ export class ReservedRoomDropHandler implements IDropHandler{
 }
 
 export class OutOfServiceDropHandler implements IDropHandler{
+	constructor(private room:RoomItemInfoVM){
+	}
+
+	public handle(arrivalItem:ArrivalItemInfoVM):boolean{
+		return false;
+	}
+}
+export class OutOfOrderDropHandler implements IDropHandler{
 	constructor(private room:RoomItemInfoVM){
 	}
 

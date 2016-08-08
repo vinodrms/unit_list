@@ -89,6 +89,7 @@ export class RoomItemInfoVM {
 
     public isFree(): boolean {
         if (this.maintenanceStatus != RoomMaintenanceStatus.OutOfService &&
+            this.maintenanceStatus != RoomMaintenanceStatus.OutOfOrder &&
             this._roomItemDO.roomStatus == RoomItemStatus.Free ) {
             return true;
         }
@@ -97,6 +98,7 @@ export class RoomItemInfoVM {
 
     public isOccupied(): boolean {
         if (this.maintenanceStatus != RoomMaintenanceStatus.OutOfService &&
+            this.maintenanceStatus != RoomMaintenanceStatus.OutOfOrder &&
             this._roomItemDO.roomStatus == RoomItemStatus.Occupied ) {
             return true;
         }
@@ -105,6 +107,7 @@ export class RoomItemInfoVM {
 
     public isReserved(): boolean {
         if (this.maintenanceStatus != RoomMaintenanceStatus.OutOfService &&
+            this.maintenanceStatus != RoomMaintenanceStatus.OutOfOrder &&
             this._roomItemDO.roomStatus == RoomItemStatus.Reserved ) {
             return true;
         }
@@ -113,6 +116,12 @@ export class RoomItemInfoVM {
 
     public isOutOfService(): boolean {
         if (this.maintenanceStatus == RoomMaintenanceStatus.OutOfService) {
+            return true;
+        }
+        return false;
+    }
+    public isOutOfOrder(): boolean {
+        if (this.maintenanceStatus == RoomMaintenanceStatus.OutOfOrder) {
             return true;
         }
         return false;

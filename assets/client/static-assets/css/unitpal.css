@@ -950,7 +950,13 @@ td .room-categ-capacity {
 .dark-gray-color {
     color: #555;
 }
+.light-gray {
+    background: #9A9A9A;
+}
 
+.light-gray-color {
+    color: #9A9A9A;
+}
 .brown {
     background: #AD8D43;
 }
@@ -2243,6 +2249,15 @@ a.btn.btn-square:focus {
     
         .room-card.out-of-service .card-header .section1 .room-number{
             color: #555;
+        }
+
+        /*Out of order */
+        .room-card.out-of-order {
+            border-left: 6px solid #9A9A9A;
+        }
+    
+        .room-card.out-of-order .card-header .section1 .room-number{
+            color: #9A9A9A;
         }
 
         /* Reseved */

@@ -76,6 +76,9 @@ export class RoomOperationsPageComponent implements OnInit {
         return !this._appContext.thUtils.isUndefinedOrNull(this.roomOperationsPageData)
             && !this._appContext.thUtils.isUndefinedOrNull(this.roomOperationsPageData.attachedBookingResultVM);
     }
+    public get hasCheckedInBooking(): boolean {
+        return this.roomOperationsPageData.attachedBookingResultVM.roomAttachedBookingResultDO.hasCheckedInBooking();
+    }
 
     public didChangeBooking(booking: BookingDO) {
         this.loadPageData();

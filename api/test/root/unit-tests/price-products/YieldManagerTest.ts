@@ -6,6 +6,7 @@ import _ = require("underscore");
 import {TestContext} from '../../../helpers/TestContext';
 import {DefaultDataBuilder} from '../../../db-initializers/DefaultDataBuilder';
 import {ThDateDO, ThMonth} from '../../../../core/utils/th-dates/data-objects/ThDateDO';
+import {ThTimestampDO} from '../../../../core/utils/th-dates/data-objects/ThTimestampDO';
 import {ThDateIntervalDO} from '../../../../core/utils/th-dates/data-objects/ThDateIntervalDO';
 import {ThDateIntervalUtils} from '../../../../core/utils/th-dates/ThDateIntervalUtils';
 import {ThDateUtils} from '../../../../core/utils/th-dates/ThDateUtils';
@@ -15,6 +16,8 @@ import {PriceProductYieldingDO, PriceProductYieldAction} from '../../../../core/
 import {PriceProductReader} from '../../../../core/domain-layer/yield-manager/price-product-reader/PriceProductReader';
 import {YieldManagerPeriodDO} from '../../../../core/domain-layer/yield-manager/utils/YieldManagerPeriodDO';
 import {PriceProductYieldResult, PriceProductYieldItem, YieldItemStateType, YieldItemState} from '../../../../core/domain-layer/yield-manager/price-product-reader/utils/PriceProductYieldItem';
+import {HotelInventorySnapshotProcess, InventorySnapshotProcessResult, InventorySnapshotType} from '../../../../core/domain-layer/hotel-inventory-snapshots/processes/HotelInventorySnapshotProcess';
+import {HotelInventorySnapshotDO} from '../../../../core/data-layer/hotel-inventory-snapshots/data-objects/HotelInventorySnapshotDO';
 
 function testPriceProductOpenInterval(priceProduct: PriceProductDO, firstIntervalEnd: ThDateDO, secondIntervalStart: ThDateDO) {
 	should.equal(priceProduct.openIntervalList.length >= 2, true);
@@ -30,6 +33,8 @@ describe("Price Products Interval Tests", function () {
     var testContext: TestContext;
 	var thDateUtils: ThDateUtils;
 	var testDataBuilder: DefaultDataBuilder;
+
+	var createdSnapshot: HotelInventorySnapshotDO
 
 	before(function (done: any) {
 		testContext = new TestContext();
@@ -374,5 +379,38 @@ describe("Price Products Interval Tests", function () {
 				done(error);
 			});
         });
+	});
+
+	describe("Inventory Snapshot Process Tests", function () {
+		it("Should create a snapshot of the inventory", function (done) {
+			var snapshotProcess = new HotelInventorySnapshotProcess(testContext.appContext, testDataBuilder.hotelDO);
+			var referenceDate = ThTimestampDO.buildThTimestampForTimezone(testDataBuilder.hotelDO.timezone).thDateDO;
+			snapshotProcess.createSnapshot(referenceDate).then((snapshotResult: InventorySnapshotProcessResult) => {
+				should.equal(snapshotResult.type, InventorySnapshotType.New);
+				var snapshot = snapshotResult.snapshot;
+				should.exist(snapshot);
+				should.equal(snapshot.roomList.length, testDataBuilder.roomList.length);
+				createdSnapshot = snapshot;
+				done();
+			}).catch((error: any) => {
+				done(error);
+			});
+		});
+		it("Should not create the same snapshot twice", function (done) {
+			var snapshotProcess = new HotelInventorySnapshotProcess(testContext.appContext, testDataBuilder.hotelDO);
+			var referenceDate = ThTimestampDO.buildThTimestampForTimezone(testDataBuilder.hotelDO.timezone).thDateDO;
+			snapshotProcess.createSnapshot(referenceDate).then((snapshotResult: InventorySnapshotProcessResult) => {
+				should.equal(snapshotResult.type, InventorySnapshotType.Existing);
+				var snapshot = snapshotResult.snapshot;
+				should.exist(snapshot);
+				should.equal(snapshot.roomList.length, testDataBuilder.roomList.length);
+				should.equal(snapshot.id, createdSnapshot.id);
+				should.equal(snapshot.thDateUtcTimestamp, createdSnapshot.thDateUtcTimestamp);
+				createdSnapshot = snapshot;
+				done();
+			}).catch((error: any) => {
+				done(error);
+			});
+		});
 	});
 });

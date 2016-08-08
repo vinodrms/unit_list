@@ -58,6 +58,13 @@ export class RoomsCanvasUtils{
 					textSecondPart: translator.translate('Out Of Service Rooms').toUpperCase()
 				}
 				break;
+			case FilterValueType.OutOfOrder:
+				properties = {
+					cssColor: 'light-gray',
+					textFirstPart: translator.translate('Showing Only').toUpperCase(),
+					textSecondPart: translator.translate('Out Of Order Rooms').toUpperCase()
+				}
+				break;
 			default:
 				properties = {
 					cssColor: 'green',
@@ -81,6 +88,8 @@ export class RoomsCanvasUtils{
 						return room.isReserved();
 					case FilterValueType.OutOfService:
 						return room.isOutOfService();
+					case FilterValueType.OutOfOrder:
+						return room.isOutOfOrder();
 					default:
 						return false;
 				}

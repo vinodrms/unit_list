@@ -6,7 +6,10 @@
 			<room-preview [roomPreviewInput]="roomPreviewInput"></room-preview>
 		</div>
 		<div class="row">
-			<room-maintenance-status-editor [roomVM]="roomVM" (onMaintenanceStatusChanged)="didChangeRoom($event)"></room-maintenance-status-editor>
+			<room-maintenance-status-editor 
+				[hasCheckedInBooking]="hasCheckedInBooking"
+				[roomVM]="roomVM" 
+				(onMaintenanceStatusChanged)="didChangeRoom($event)"></room-maintenance-status-editor>
 		</div>
 		<hr/>
 		<div class="row padding-bottom-10px">

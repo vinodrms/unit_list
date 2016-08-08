@@ -1,6 +1,9 @@
 import {BaseDO} from '../../common/base/BaseDO';
+import {IRoom} from './IRoom';
 import {DocumentHistoryDO} from '../../common/data-objects/document-history/DocumentHistoryDO';
 import {DocumentActionDO} from '../../common/data-objects/document-history/DocumentActionDO';
+
+import _ = require('underscore');
 
 export enum RoomStatus {
     Active,
@@ -11,18 +14,18 @@ export enum RoomMaintenanceStatus {
     Clean,
     Dirty,
     PickUp,
-    OutOfOrder,
-    OutOfService
+    OutOfService,
+    OutOfOrder
 }
 
 var RoomMaintenanceStatusDisplayStrings: { [index: number]: string; } = {};
 RoomMaintenanceStatusDisplayStrings[RoomMaintenanceStatus.Clean] = "Clean";
 RoomMaintenanceStatusDisplayStrings[RoomMaintenanceStatus.Dirty] = "Dirty";
 RoomMaintenanceStatusDisplayStrings[RoomMaintenanceStatus.PickUp] = "Pick Up";
-RoomMaintenanceStatusDisplayStrings[RoomMaintenanceStatus.OutOfOrder] = "Out Of Order";
 RoomMaintenanceStatusDisplayStrings[RoomMaintenanceStatus.OutOfService] = "Out Of Service";
+RoomMaintenanceStatusDisplayStrings[RoomMaintenanceStatus.OutOfOrder] = "Out Of Order";
 
-export class RoomDO extends BaseDO {
+export class RoomDO extends BaseDO implements IRoom {
     constructor() {
         super();
     }
@@ -60,7 +63,7 @@ export class RoomDO extends BaseDO {
             RoomMaintenanceStatus.Clean,
             RoomMaintenanceStatus.Dirty,
             RoomMaintenanceStatus.PickUp,
-            RoomMaintenanceStatus.OutOfOrder
+            RoomMaintenanceStatus.OutOfService
         ];
     }
 
@@ -70,5 +73,8 @@ export class RoomDO extends BaseDO {
     }
     public getMaintenanceStatusDisplayString(): string {
         return RoomMaintenanceStatusDisplayStrings[this.maintenanceStatus];
+    }
+    public get isInInventory(): boolean {
+        return _.contains(RoomDO.inInventoryMaintenanceStatusList, this.maintenanceStatus);
     }
 }

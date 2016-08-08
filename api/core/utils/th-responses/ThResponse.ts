@@ -457,6 +457,10 @@ export enum ThStatusCode {
     BookingReserveAddOnProductsInvalidState,
     BookingReserveAddOnProductsError,
     HotelBookingOperationsControllerErrorReservingAddOnProducts,
+    MongoHotelInventorySnapshotRepositoryDuplicate,
+    MongoHotelInventorySnapshotRepositoryError,
+    MongoHotelInventorySnapshotRepositoryErrorGettingSnapshots,
+    HotelInventorySnapshotCronJobExecutorError,
 
 }
 
@@ -905,6 +909,10 @@ ThMessage[ThStatusCode.YieldManagerControllerErrorGettingYieldItems] = "Error ge
 ThMessage[ThStatusCode.BookingReserveAddOnProductsInvalidState] = "Add on products can be reserved only for confirmed or guaranteed bookings.";
 ThMessage[ThStatusCode.BookingReserveAddOnProductsError] = "Error reserving add on products for the booking.";
 ThMessage[ThStatusCode.HotelBookingOperationsControllerErrorReservingAddOnProducts] = "Error reserving add on products for the booking.";
+ThMessage[ThStatusCode.MongoHotelInventorySnapshotRepositoryDuplicate] = "Snapshot already exists.";
+ThMessage[ThStatusCode.MongoHotelInventorySnapshotRepositoryError] = "Error adding snapshot.";
+ThMessage[ThStatusCode.MongoHotelInventorySnapshotRepositoryErrorGettingSnapshots] = "Error getting snapshots.";
+ThMessage[ThStatusCode.HotelInventorySnapshotCronJobExecutorError] = "Error creating snapshot from the process.";
 
 export class ThResponse {
     statusCode: ThStatusCode;
