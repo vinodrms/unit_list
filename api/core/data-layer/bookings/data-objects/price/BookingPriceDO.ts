@@ -78,7 +78,11 @@ export class BookingPriceDO extends BaseDO implements IInvoiceItemMeta {
         _.forEach(this.includedInvoiceItemList, (invoiceItem: InvoiceItemDO) => {
             roomPrice = roomPrice - invoiceItem.meta.getPrice();
         });
+        if (roomPrice < 0) { roomPrice = 0; }
         return roomPrice;
+    }
+    public getOtherPrice(): number {
+        return this.totalPrice - this.getRoomPrice();
     }
     public setMovable(movable: boolean) {
         this.movable = movable;

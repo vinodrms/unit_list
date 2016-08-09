@@ -14,10 +14,14 @@ export class BookingsContainer {
         });
     }
 
-    public getBookingsFilteredByInterval(indexedBookingInterval: IndexedBookingInterval): BookingDO[] {
-        var filteredSingleBookingContainerList: BookingItemContainer[] = _.filter(this._bookingItemContainerList, (bookingContainer: BookingItemContainer) => {
+    public getBookingItemContainersFilteredByInterval(indexedBookingInterval: IndexedBookingInterval): BookingItemContainer[] {
+        return _.filter(this._bookingItemContainerList, (bookingContainer: BookingItemContainer) => {
             return bookingContainer.indexedBookingInterval.overlapsWith(indexedBookingInterval);
         });
+    }
+
+    public getBookingsFilteredByInterval(indexedBookingInterval: IndexedBookingInterval): BookingDO[] {
+        var filteredSingleBookingContainerList = this.getBookingItemContainersFilteredByInterval(indexedBookingInterval);
         return _.map(filteredSingleBookingContainerList, (bookingContainer: BookingItemContainer) => {
             return bookingContainer.booking;
         });

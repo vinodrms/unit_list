@@ -65,4 +65,23 @@ export class BookingOccupancy implements IBookingOccupancy {
         occupancyDO.indexedRoomIdOccupancy = this.indexedRoomIdOccupancy;
         return occupancyDO;
     }
+
+    public getTotalRoomOccupancy(): number {
+        return this.getTotalOccupancy(this.indexedRoomCategoryIdOccupancy);
+    }
+    public getTotalAllotmentOccupancy(): number {
+        return this.getTotalOccupancy(this.indexedAllotmentIdOccupancy);
+    }
+    private getTotalOccupancy(indexedOccupancy: { [id: string]: number; }): number {
+        var occupancy: number = 0;
+        var objectKeyArray: string[] = Object.keys(indexedOccupancy);
+        _.forEach(objectKeyArray, (objectKey: string) => {
+            if (!this._thUtils.isUndefinedOrNull(objectKey)
+                && _.isString(objectKey)
+                && objectKey.length > 0) {
+                occupancy += indexedOccupancy[objectKey];
+            }
+        });
+        return occupancy;
+    }
 }

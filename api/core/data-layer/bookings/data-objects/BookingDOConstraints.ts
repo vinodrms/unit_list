@@ -74,6 +74,8 @@ export class BookingDOConstraints {
     public static ConfirmationStatuses_BookingsConsideredInYieldManager: BookingConfirmationStatus[] = [
         BookingConfirmationStatus.Confirmed,
         BookingConfirmationStatus.Guaranteed,
+        BookingConfirmationStatus.NoShowWithPenalty,
+        BookingConfirmationStatus.Cancelled,
         BookingConfirmationStatus.CheckedIn,
         BookingConfirmationStatus.CheckedOut
     ];
