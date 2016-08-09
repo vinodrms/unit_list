@@ -4,6 +4,8 @@ import {PriceProductYielding} from '../core/domain-layer/yield-manager/price-pro
 import {PriceProductDO} from '../core/data-layer/price-products/data-objects/PriceProductDO';
 import {PriceProductReader} from '../core/domain-layer/yield-manager/price-product-reader/PriceProductReader';
 import {PriceProductYieldResult} from '../core/domain-layer/yield-manager/price-product-reader/utils/PriceProductYieldItem';
+import {KeyMetricReader} from '../core/domain-layer/yield-manager/key-metrics/KeyMetricReader';
+import {KeyMetricsResult} from '../core/domain-layer/yield-manager/key-metrics/utils/KeyMetricsResult';
 
 export class YieldManagerController extends BaseController {
 	public yieldPriceProducts(req: Express.Request, res: Express.Response) {
@@ -23,10 +25,20 @@ export class YieldManagerController extends BaseController {
 			this.returnErrorResponse(req, res, err, ThStatusCode.YieldManagerControllerErrorGettingYieldItems);
 		});
 	}
+
+	public getKeyMetrics(req: Express.Request, res: Express.Response) {
+		var keyMetricReader = new KeyMetricReader(req.appContext, req.sessionContext);
+		keyMetricReader.getKeyMetrics(req.body.yieldParams).then((keyMetricsResult: KeyMetricsResult) => {
+			this.returnSuccesfulResponse(req, res, { keyMetricsResult: keyMetricsResult });
+		}).catch((err: any) => {
+			this.returnErrorResponse(req, res, err, ThStatusCode.YieldManagerControllerErrorGettingKeyMetrics);
+		});
+	}
 }
 
 var ymController = new YieldManagerController();
 module.exports = {
 	yieldPriceProducts: ymController.yieldPriceProducts.bind(ymController),
 	getPriceProductYieldItems: ymController.getPriceProductYieldItems.bind(ymController),
+	getKeyMetrics: ymController.getKeyMetrics.bind(ymController)
 }

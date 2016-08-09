@@ -639,6 +639,14 @@ export var EnglishTranslations: Object = {
 	"These will be generated as separate items on the invoice during Check In": "These will be generated as separate items on the invoice during Check In",
 	"Future Booking": "Future Booking",
 	"You need some rollaway beds to fit all the people from this booking": "You need some rollaway beds to fit all the people from this booking",
+	"Total Occupancy": "Total Occupancy",
+	"Confirmed Occupancy": "Confirmed Occupancy",
+	"Total RevPar": "Total RevPar",
+	"Confirmed RevPar": "Confirmed RevPar",
+	"Total AvgRate": "Total AvgRate",
+	"Confirmed AvgRate": "Confirmed AvgRate",
+	"Room Revenue": "Room Revenue",
+	"Other Revenue": "Other Revenue",
 
 
 };

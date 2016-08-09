@@ -96,6 +96,7 @@ module.exports.routes = {
 
 	'POST /api/yieldManager/yieldPriceProducts': 'YieldManagerController.yieldPriceProducts',
 	'POST /api/yieldManager/getPriceProductYieldItems': 'YieldManagerController.getPriceProductYieldItems',
+	'POST /api/yieldManager/getKeyMetrics': 'YieldManagerController.getKeyMetrics',
 
     'GET /api/hotelConfigurations/yieldFilters': 'HotelConfigurationsController.getYieldFilterConfiguration',
     'POST /api/hotelConfigurations/saveYieldFilterValue': 'HotelConfigurationsController.saveYieldFilterValue',
