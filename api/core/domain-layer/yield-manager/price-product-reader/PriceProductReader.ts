@@ -4,51 +4,37 @@ import {ThStatusCode} from '../../../utils/th-responses/ThResponse';
 import {AppContext} from '../../../utils/AppContext';
 import {SessionContext} from '../../../utils/SessionContext';
 import {ThDateDO} from '../../../utils/th-dates/data-objects/ThDateDO';
-import {ThDateIntervalDO} from '../../../utils/th-dates/data-objects/ThDateIntervalDO';
-import {ThDateUtils} from '../../../utils/th-dates/ThDateUtils';
 import {ThDateIntervalUtils} from '../../../utils/th-dates/ThDateIntervalUtils';
 import {IndexedBookingInterval} from '../../../data-layer/price-products/utils/IndexedBookingInterval';
 import {PriceProductDO, PriceProductStatus} from '../../../data-layer/price-products/data-objects/PriceProductDO';
 import {PriceProductSearchResultRepoDO} from '../../../data-layer/price-products/repositories/IPriceProductRepository';
 import {ValidationResultParser} from '../../common/ValidationResultParser';
 import {YieldManagerPeriodDO} from '../utils/YieldManagerPeriodDO';
+import {YieldManagerPeriodParser} from '../utils/YieldManagerPeriodParser';
 import {PriceProductYieldResult, PriceProductYieldItem, YieldItemState, YieldItemStateType} from './utils/PriceProductYieldItem';
 
 import _ = require('underscore');
 
 export class PriceProductReader {
-    private _thDateUtils: ThDateUtils;
-
-    private _yieldManagerPeriodDO: YieldManagerPeriodDO;
     private _indexedInterval: IndexedBookingInterval;
 
     constructor(private _appContext: AppContext, private _sessionContext: SessionContext) {
-        this._thDateUtils = new ThDateUtils();
     }
 
     public getYieldItems(yieldManagerPeriodDO: YieldManagerPeriodDO): Promise<PriceProductYieldResult> {
-        this._yieldManagerPeriodDO = yieldManagerPeriodDO;
         return new Promise<PriceProductYieldResult>((resolve: { (result: PriceProductYieldResult): void }, reject: { (err: ThError): void }) => {
-            this.getYieldItemsCore(resolve, reject);
+            this.getYieldItemsCore(resolve, reject, yieldManagerPeriodDO);
         });
     }
-    private getYieldItemsCore(resolve: { (result: PriceProductYieldResult): void }, reject: { (err: ThError): void }) {
-        var validationResult = YieldManagerPeriodDO.getValidationStructure().validateStructure(this._yieldManagerPeriodDO);
-        if (!validationResult.isValid()) {
-            var parser = new ValidationResultParser(validationResult, this._yieldManagerPeriodDO);
-            parser.logAndReject("Error validating price product yield reader params", reject);
-            return;
-        }
-        var referenceDate = this.getPreprocessedReferenceThDate();
-        if (!referenceDate.isValid()) {
+    private getYieldItemsCore(resolve: { (result: PriceProductYieldResult): void }, reject: { (err: ThError): void }, yieldManagerPeriodDO: YieldManagerPeriodDO) {
+        var ymPeriodParser = new YieldManagerPeriodParser(yieldManagerPeriodDO);
+        if (!ymPeriodParser.isValid()) {
             var thError = new ThError(ThStatusCode.PriceProductReaderInvalidInterval, null);
-            ThLogger.getInstance().logError(ThLogLevel.Warning, "invalid interval for yield reader", this._yieldManagerPeriodDO, thError);
+            ThLogger.getInstance().logError(ThLogLevel.Warning, "invalid interval for yield reader", yieldManagerPeriodDO, thError);
             reject(thError);
             return;
         }
-        var intervalEndDate = this._thDateUtils.addDaysToThDateDO(referenceDate, this._yieldManagerPeriodDO.noDays);
-        var referenceInterval = ThDateIntervalDO.buildThDateIntervalDO(referenceDate, intervalEndDate);
-        this._indexedInterval = new IndexedBookingInterval(referenceInterval);
+        this._indexedInterval = ymPeriodParser.getIndexedInterval();
 
         var priceProductRepo = this._appContext.getRepositoryFactory().getPriceProductRepository();
         priceProductRepo.getPriceProductList({ hotelId: this._sessionContext.sessionDO.hotel.id }, {
@@ -64,15 +50,10 @@ export class PriceProductReader {
         }).catch((error: any) => {
             var thError = new ThError(ThStatusCode.PriceProductReaderError, error);
             if (thError.isNativeError()) {
-                ThLogger.getInstance().logError(ThLogLevel.Error, "error getting price products for yield", this._yieldManagerPeriodDO, thError);
+                ThLogger.getInstance().logError(ThLogLevel.Error, "error getting price products for yield", this._indexedInterval.indexedBookingInterval, thError);
             }
             reject(thError);
         });
-    }
-    private getPreprocessedReferenceThDate(): ThDateDO {
-        var referenceDate = new ThDateDO();
-        referenceDate.buildFromObject(this._yieldManagerPeriodDO.referenceDate);
-        return referenceDate;
     }
 
     private getYieldItemList(priceProductList: PriceProductDO[]): Promise<PriceProductYieldItem[]> {

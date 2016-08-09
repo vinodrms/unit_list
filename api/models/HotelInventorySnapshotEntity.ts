@@ -23,6 +23,10 @@ class HotelInventorySnapshotEntity extends BasePersistentEntity {
                 type: "array",
                 defaultsTo: []
             },
+            allotments: {
+                type: 'json',
+                required: true
+            },
             thDate: {
                 type: 'json',
                 required: true

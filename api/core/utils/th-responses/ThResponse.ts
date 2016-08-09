@@ -461,6 +461,10 @@ export enum ThStatusCode {
     MongoHotelInventorySnapshotRepositoryError,
     MongoHotelInventorySnapshotRepositoryErrorGettingSnapshots,
     HotelInventorySnapshotCronJobExecutorError,
+    BookingsIndexerError,
+    HotelInventoryStatsReaderError,
+    KeyMetricReaderInvalidInterval,
+    KeyMetricReaderError,
 
 }
 
@@ -913,6 +917,10 @@ ThMessage[ThStatusCode.MongoHotelInventorySnapshotRepositoryDuplicate] = "Snapsh
 ThMessage[ThStatusCode.MongoHotelInventorySnapshotRepositoryError] = "Error adding snapshot.";
 ThMessage[ThStatusCode.MongoHotelInventorySnapshotRepositoryErrorGettingSnapshots] = "Error getting snapshots.";
 ThMessage[ThStatusCode.HotelInventorySnapshotCronJobExecutorError] = "Error creating snapshot from the process.";
+ThMessage[ThStatusCode.BookingsIndexerError] = "Error indexing bookings.";
+ThMessage[ThStatusCode.HotelInventoryStatsReaderError] = "Error reading the stats.";
+ThMessage[ThStatusCode.KeyMetricReaderInvalidInterval] = "Invalid interval.";
+ThMessage[ThStatusCode.KeyMetricReaderError] = "Error reading key metrics.";
 
 export class ThResponse {
     statusCode: ThStatusCode;

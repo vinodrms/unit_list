@@ -18,6 +18,8 @@ import {YieldManagerPeriodDO} from '../../../../core/domain-layer/yield-manager/
 import {PriceProductYieldResult, PriceProductYieldItem, YieldItemStateType, YieldItemState} from '../../../../core/domain-layer/yield-manager/price-product-reader/utils/PriceProductYieldItem';
 import {HotelInventorySnapshotProcess, InventorySnapshotProcessResult, InventorySnapshotType} from '../../../../core/domain-layer/hotel-inventory-snapshots/processes/HotelInventorySnapshotProcess';
 import {HotelInventorySnapshotDO} from '../../../../core/data-layer/hotel-inventory-snapshots/data-objects/HotelInventorySnapshotDO';
+import {KeyMetricReader} from '../../../../core/domain-layer/yield-manager/key-metrics/KeyMetricReader';
+import {KeyMetricsResult, KeyMetric} from '../../../../core/domain-layer/yield-manager/key-metrics/utils/KeyMetricsResult';
 
 function testPriceProductOpenInterval(priceProduct: PriceProductDO, firstIntervalEnd: ThDateDO, secondIntervalStart: ThDateDO) {
 	should.equal(priceProduct.openIntervalList.length >= 2, true);
@@ -390,6 +392,7 @@ describe("Price Products Interval Tests", function () {
 				var snapshot = snapshotResult.snapshot;
 				should.exist(snapshot);
 				should.equal(snapshot.roomList.length, testDataBuilder.roomList.length);
+				should.equal(snapshot.allotments.activeAllotmentIdList.length, testDataBuilder.allotmentList.length);
 				createdSnapshot = snapshot;
 				done();
 			}).catch((error: any) => {
@@ -407,6 +410,28 @@ describe("Price Products Interval Tests", function () {
 				should.equal(snapshot.id, createdSnapshot.id);
 				should.equal(snapshot.thDateUtcTimestamp, createdSnapshot.thDateUtcTimestamp);
 				createdSnapshot = snapshot;
+				done();
+			}).catch((error: any) => {
+				done(error);
+			});
+		});
+	});
+
+	describe("Key Metrics Tests", function () {
+		it("Should get the key metrics for 14 days", function (done) {
+			var yieldPeriodDO = new YieldManagerPeriodDO();
+			yieldPeriodDO.referenceDate = ThDateDO.buildThDateDO(2015, ThMonth.December, 31);
+			yieldPeriodDO.noDays = 14;
+			var keyMetricReader = new KeyMetricReader(testContext.appContext, testContext.sessionContext);
+			keyMetricReader.getKeyMetrics(yieldPeriodDO).then((keyMetricsResult: KeyMetricsResult) => {
+				should.equal(keyMetricsResult.currentItem.dateList.length, 14);
+				keyMetricsResult.currentItem.metricList.forEach((metric: KeyMetric) => {
+					should.equal(metric.valueList.length, 14);
+				});
+				should.equal(keyMetricsResult.previousItem.dateList.length, 14);
+				keyMetricsResult.previousItem.metricList.forEach((metric: KeyMetric) => {
+					should.equal(metric.valueList.length, 14);
+				});
 				done();
 			}).catch((error: any) => {
 				done(error);

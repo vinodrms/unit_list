@@ -1,5 +1,6 @@
 import {BaseDO} from '../../common/base/BaseDO';
 import {RoomSnapshotDO} from './room/RoomSnapshotDO';
+import {AllotmentsSnapshotDO} from './allotment/AllotmentsSnapshotDO';
 import {ThDateDO} from '../../../utils/th-dates/data-objects/ThDateDO';
 
 export class HotelInventorySnapshotDO extends BaseDO {
@@ -7,6 +8,7 @@ export class HotelInventorySnapshotDO extends BaseDO {
     versionId: number;
     hotelId: string;
     roomList: RoomSnapshotDO[];
+    allotments: AllotmentsSnapshotDO;
     thDate: ThDateDO;
     thDateUtcTimestamp: number;
 
@@ -23,6 +25,9 @@ export class HotelInventorySnapshotDO extends BaseDO {
             roomDO.buildFromObject(roomObject);
             this.roomList.push(roomDO);
         });
+
+        this.allotments = new AllotmentsSnapshotDO();
+        this.allotments.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "allotments"));
 
         this.thDate = new ThDateDO();
         this.thDate.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "thDate"));
