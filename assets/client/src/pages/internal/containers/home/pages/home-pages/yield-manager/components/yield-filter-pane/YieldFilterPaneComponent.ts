@@ -14,15 +14,17 @@ import {YieldTextFilterItemComponent} from './components/yield-text-filter-item/
 import {IYieldManagerDashboardFilter} from '../../YieldManagerDashboardComponent'
 
 import {FilterVMCollection} from '../../../../../../../services/yield-manager/dashboard/filter/utils/FilterVMCollection';
+import {CustomScroll} from '../../../../../../../../../../src/common/utils/directives/CustomScroll';
 
 @Component({
 	selector: 'yield-filter-pane',
 	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/yield-manager/components/yield-filter-pane/template/yield-filter-pane.html',
-	directives: [YieldColorFitlerItemComponent, YieldTextFilterItemComponent],
+	directives: [CustomScroll, YieldColorFitlerItemComponent, YieldTextFilterItemComponent],
 	pipes: [TranslationPipe]
 })
 export class YieldFilterPaneComponent implements OnInit {
-	@ViewChildren(YieldColorFitlerItemComponent) colorFilterComponents: YieldColorFitlerItemComponent[]
+	@ViewChildren(YieldColorFitlerItemComponent) colorFilterComponents: YieldColorFitlerItemComponent[];
+	@ViewChildren(YieldTextFilterItemComponent) textFilterComponents: YieldTextFilterItemComponent[];
 	public selectedDate: ThDateDO;
 	public searchText: string;
 
@@ -90,4 +92,24 @@ export class YieldFilterPaneComponent implements OnInit {
 			item.deselect();
 		});
 	}
+
+	public textItemSelected(selectedItem: YieldTextFilterItemComponent){
+		var itemsToDeselect = this.textFilterComponents.filter((item: YieldTextFilterItemComponent) => {
+			return item != selectedItem;
+		});
+
+		itemsToDeselect.forEach( (item:YieldTextFilterItemComponent) => {
+			item.deselect();
+		});
+	}	
+	
+	public colorTextSelected(selectedItem: YieldTextFilterItemComponent){
+		var itemsToDeselect = this.textFilterComponents.filter((item: YieldTextFilterItemComponent) => {
+			return item != selectedItem;
+		});
+
+		itemsToDeselect.forEach( (item:YieldTextFilterItemComponent) => {
+			// item.deselect();
+		});
+	}	
 }

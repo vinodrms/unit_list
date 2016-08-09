@@ -2694,32 +2694,42 @@ a.btn.btn-square:focus {
         margin: 6px 24px 24px 24px;
     }
 
-        .yield-manager-dashboard yield-color-filter-item > div {
+        .yield-filter-collection{
+            border-top: 1px solid #DBDBDB;
+        }
+
+        .yield-manager-dashboard .yield-filter-item {
             border-bottom: 1px solid #DBDBDB;
             height: 50px;
         }
 
-        .yield-manager-dashboard yield-color-filter-item .left{
+        .yield-manager-dashboard .yield-filter-item .left{
             width: 12px;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-left: 1px solid #DBDBDB;
+            border-right: 1px solid #DBDBDB;
         }
 
-        .yield-manager-dashboard yield-color-filter-item .right{
+        .yield-manager-dashboard .yield-filter-item .right{
             width: 100%;
             display: flex;
             flex-direction: column;
         }
 
-        .yield-manager-dashboard yield-color-filter-item .right{
+        .yield-manager-dashboard .yield-filter-item .right{
             width: 100%;
             display: flex;
             flex-direction: column;
         }
 
-        .yield-manager-dashboard yield-color-filter-item div.selected {
+        .yield-manager-dashboard .yield-filter-item.selected {
             background: white;
         }
 
-        .yield-manager-dashboard yield-color-filter-item div:not(.selected) .right:hover {
+        .yield-manager-dashboard .yield-filter-item:not(.selected) .right:hover {
             background-color: #fafafa;
         }
 

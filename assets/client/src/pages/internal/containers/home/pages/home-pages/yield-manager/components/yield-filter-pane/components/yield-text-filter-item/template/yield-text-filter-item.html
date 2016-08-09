@@ -1,3 +1,20 @@
-<div [ngClass]="{'selected': selected}" (click)="toggleSelection()">
-	Yield-Level-Item {{selected}}
+<div class="yield-filter-item flex-row" [ngClass] = "{'selected' : selected }" (click)="toggleSelection()">
+	<div class="left white">
+		<span class="dark-gray-color f-11">T</span>
+	</div>
+	<div class="right p-6">
+		<div class="flex-row flex-jc-sb">
+			<span class="dark-gray-color f-16">{{ yieldTextFilterItemVM.displayName }}</span>
+			<span class="f-12 p-r-6">{{ yieldTextFilterItemVM.filterName }}</span>
+		</div>
+		<div>
+			<span class="gray-color f-12">{{ yieldTextFilterItemVM.description }}</span>
+		</div>
+	</div>
 </div>
+
+<!--
+<div [ngClass]="{'selected': selected}" (click)="toggleSelection()">
+	{{ yieldTextFilterItemVM.displayName }}
+	{{ yieldTextFilterItemVM.description }}
+</div>-->

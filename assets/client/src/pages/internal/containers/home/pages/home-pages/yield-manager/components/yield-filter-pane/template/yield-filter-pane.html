@@ -15,7 +15,7 @@
 		<i class="fa fa-search gray-color p-l-6"></i>
 	</div>
 </div>
-<div customScroll class="body">
+<div customScroll class="body full-height">
 	<div *ngIf="yieldColorFilterCollection">
 		<yield-color-filter-item
 			*ngFor="let yieldColorFilterItemVM of yieldColorFilterCollection.filterVMList" 
@@ -24,6 +24,14 @@
 			>
 		</yield-color-filter-item>
 	</div>
+	<div class="yield-filter-collection m-t-24 m-b-24" *ngIf="yieldTextFilterCollection">
+		<yield-text-filter-item
+			*ngFor="let yieldTextFilterItemVM of yieldTextFilterCollection.filterVMList" 
+			[yieldTextFilterItemVM] = "yieldTextFilterItemVM" 
+			(onSelect)="textItemSelected($event)"
+			>
+		</yield-text-filter-item>
+	</div>	
 </div>
 
 
