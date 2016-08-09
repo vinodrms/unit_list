@@ -8,6 +8,8 @@ import {ColorFilterVM} from '../../../../../../../services/yield-manager/dashboa
 import {TextFilterVM} from '../../../../../../../services/yield-manager/dashboard/filter/view-models/TextFilterVM';
 import {YieldManagerDashboardFilterService} from '../../../../../../../services/yield-manager/dashboard/filter/YieldManagerDashboardFilterService';
 
+import {AYieldFilterItemComponent} from './components/common/AYieldFilterItemComponent';
+
 import {YieldColorFitlerItemComponent} from './components/yield-color-filter-item/YieldColorFilterItemComponent';
 import {YieldTextFilterItemComponent} from './components/yield-text-filter-item/YieldTextFilterItemComponent';
 
@@ -83,33 +85,21 @@ export class YieldFilterPaneComponent implements OnInit {
 		this.searchText = value;
 	}
 
-	public colorItemSelected(selectedItem: YieldColorFitlerItemComponent){
-		var itemsToDeselect = this.colorFilterComponents.filter((item: YieldColorFitlerItemComponent) => {
+	public colorItemSelected(selectedItemComponent: YieldColorFitlerItemComponent){
+		this.filtersDeselect<YieldColorFitlerItemComponent>(this.colorFilterComponents, selectedItemComponent);
+	}
+
+	public textItemSelected(selectedItemComponent: YieldTextFilterItemComponent){
+		this.filtersDeselect<YieldTextFilterItemComponent>(this.textFilterComponents, selectedItemComponent);
+	}
+
+	private filtersDeselect<T extends AYieldFilterItemComponent>(filterComponents: T[], selectedItem: T){
+		var itemsToDeselect = filterComponents.filter((item: T) => {
 			return item != selectedItem;
 		});
 
-		itemsToDeselect.forEach( (item:YieldColorFitlerItemComponent) => {
+		itemsToDeselect.forEach( (item:T) => {
 			item.deselect();
 		});
 	}
-
-	public textItemSelected(selectedItem: YieldTextFilterItemComponent){
-		var itemsToDeselect = this.textFilterComponents.filter((item: YieldTextFilterItemComponent) => {
-			return item != selectedItem;
-		});
-
-		itemsToDeselect.forEach( (item:YieldTextFilterItemComponent) => {
-			item.deselect();
-		});
-	}	
-	
-	public colorTextSelected(selectedItem: YieldTextFilterItemComponent){
-		var itemsToDeselect = this.textFilterComponents.filter((item: YieldTextFilterItemComponent) => {
-			return item != selectedItem;
-		});
-
-		itemsToDeselect.forEach( (item:YieldTextFilterItemComponent) => {
-			// item.deselect();
-		});
-	}	
 }
