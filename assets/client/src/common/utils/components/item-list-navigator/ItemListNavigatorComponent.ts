@@ -1,6 +1,7 @@
-import {Component, Input, Output, EventEmitter, OnInit} from '@angular/core';
+import {Component, Input, Output, EventEmitter, OnInit, SimpleChange} from '@angular/core';
 import {AppContext, ThError} from '../../AppContext';
 import {Interval} from './Interval';
+import {Observable} from 'rxjs/Observable';
 
 @Component({
     selector: 'item-list-navigator',
@@ -11,9 +12,11 @@ import {Interval} from './Interval';
 export class ItemListNavigatorComponent implements OnInit {
     public interval: Interval;
 
-    @Input() totalNumberOfItems: number;
     @Input() maxNumberOfDisplayedItems: number;
     @Input() numberOfSimultaneouslySelectedItems: number;
+    
+    @Input() totalNumberOfItems: number;
+    @Input() totalNumberOfinvoicesChangedObservable: Observable<number>;
 
     @Output() displayedItemsUpdated = new EventEmitter();
 
@@ -24,8 +27,21 @@ export class ItemListNavigatorComponent implements OnInit {
 
     ngOnInit() {
         this.firstSelectedItemIndex = 0;
-        this.maxNumberOfDisplayedItems = Math.min(this.maxNumberOfDisplayedItems, this.totalNumberOfItems);
-        this.interval = new Interval(this.maxNumberOfDisplayedItems, 0, this.totalNumberOfItems - 1);
+        this.interval = new Interval(Math.min(this.maxNumberOfDisplayedItems, this.totalNumberOfItems),
+            this.maxNumberOfDisplayedItems, 0, this.totalNumberOfItems - 1);
+
+        this.totalNumberOfinvoicesChangedObservable.subscribe((totalNumberOfItems: number) => {
+            if (this.totalNumberOfItems < totalNumberOfItems) {
+                this.totalNumberOfItems = totalNumberOfItems;
+                this.interval.addValue();
+                this.selectItem(this.interval.maxValue);
+            }
+            else {
+                // this.totalNumberOfItems = totalNumberOfItems;
+                // this.interval.removeValue();
+                // this.selectItem(this.interval.maxValue);
+            }
+        });
     }
 
     public itemSelected(index: number): boolean {
@@ -56,7 +72,6 @@ export class ItemListNavigatorComponent implements OnInit {
     }
     public next() {
         this.firstSelectedItemIndex++;
-
         if (this.interval.lastWindowElement == this.firstSelectedItemIndex + this.numberOfSimultaneouslySelectedItems - 1) {
             this.interval.shiftWindowRight();
         }
@@ -69,8 +84,6 @@ export class ItemListNavigatorComponent implements OnInit {
         }
     }
     public selectItem(selectedItemIndex: number) {
-        if (this.totalNumberOfItemsLowerOrEqThanMaxNumberOfSimulatenouslyDisplayedItems())
-            return;
         if (selectedItemIndex + this.numberOfSimultaneouslySelectedItems > this.numberOfItems) {
             if (!this.itemSelected(selectedItemIndex)) {
                 this.firstSelectedItemIndex = this.numberOfItems - this.numberOfSimultaneouslySelectedItems;

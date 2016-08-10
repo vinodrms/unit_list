@@ -6,12 +6,20 @@ import {CustomScroll} from '../../../../../../../../../../../common/utils/direct
 import {ThError, AppContext} from '../../../../../../../../../../../common/utils/AppContext';
 import {ThUtils} from '../../../../../../../../../../../common/utils/ThUtils';
 import {HotelInvoiceOperationsPageParam} from './utils/HotelInvoiceOperationsPageParam';
+import {HotelOperationsPageFilterMeta} from '../../../services/utils/IHotelOperationsPageParam';
+import {IHotelOperationsOnFilterRemovedHandler} from '../../../services/utils/IHotelOperationsOnFilterRemovedHandler';
 import {InvoiceEditComponent} from './components/invoice-edit/InvoiceEditComponent';
 import {ItemListNavigatorComponent} from '../../../../../../../../../../../common/utils/components/item-list-navigator/ItemListNavigatorComponent';
 import {InvoiceOperationsPageService} from './services/InvoiceOperationsPageService';
 import {InvoiceOperationsPageData} from './services/utils/InvoiceOperationsPageData';
-import {InvoiceGroupControllerService, InvoiceItemMoveAction, InvoiceItemMoveActionType} from './services/InvoiceGroupControllerService';
+import {InvoiceGroupControllerService} from './services/InvoiceGroupControllerService';
 import {InvoiceDO} from '../../../../../../../../../services/invoices/data-objects/InvoiceDO';
+import {InvoiceGroupVM} from '../../../../../../../../../services/invoices/view-models/InvoiceGroupVM';
+import {InvoiceVM} from '../../../../../../../../../services/invoices/view-models/InvoiceVM';
+import {InvoicePayerVM} from '../../../../../../../../../services/invoices/view-models/InvoicePayerVM';
+import {CustomerDO} from '../../../../../../../../../services/customers/data-objects/CustomerDO';
+import { Subject } from 'rxjs/Subject';
+import {Observable} from 'rxjs/Observable';
 
 @Component({
     selector: 'invoice-operations-page',
@@ -24,20 +32,25 @@ export class InvoiceOperationsPageComponent implements OnInit {
     @Input() invoiceOperationsPageParam: HotelInvoiceOperationsPageParam;
 
     private _thUtils: ThUtils;
-
+    
     isLoading: boolean;
     didInitOnce: boolean = false;
 
-    invoiceNavigatorWindowSize = 10;
+    invoiceNavigatorWindowSize = 6;
     numberOfSimultaneouslyDisplayedInvoices = 2;
 
-    moveInvoiceItemSubscription: Subscription;
+    firstDisplayedInvoiceIndex = 0;
+
+    totalNumberOfInvoicesChanged: Subject<number>;
+    totalNumberOfinvoicesChangedObservable: Observable<number>; 
 
     constructor(private _appContext: AppContext,
         private _invoiceOperationsPageService: InvoiceOperationsPageService,
         private _invoiceGroupControllerService: InvoiceGroupControllerService) {
-        
+
         this._thUtils = new ThUtils();
+        this.totalNumberOfInvoicesChanged = new Subject<number>();
+        this.totalNumberOfinvoicesChangedObservable = this.totalNumberOfInvoicesChanged.asObservable();
     }
 
     ngOnInit() {
@@ -46,12 +59,10 @@ export class InvoiceOperationsPageComponent implements OnInit {
     }
     private loadPageData() {
         this.isLoading = true;
-
-        this.invoiceOperationsPageParam = new HotelInvoiceOperationsPageParam('57a1c08d67e668b81f2bbd1b', {});
-
+        
         this._invoiceOperationsPageService.getPageData(this.invoiceOperationsPageParam).subscribe((pageData: InvoiceOperationsPageData) => {
             this._invoiceGroupControllerService.invoiceOperationsPageData = pageData;
-            
+
             this.isLoading = false;
             this.didInitOnce = true;
             this.updateContainerData();
@@ -62,18 +73,104 @@ export class InvoiceOperationsPageComponent implements OnInit {
         });
     }
     private updateContainerData() {
-        var title = "Invoices";
+        var title = "Invoice Group";
         var subtitle = "";
-        this.invoiceOperationsPageParam.updateTitle(title, subtitle);
+
+        this.invoiceOperationsPageParam.onFilterRemovedHandler = (() => {
+            this.invoiceOperationsPageParam.updateTitle(title, subtitle, this.filterMetaForDisabledFilter);
+        });
+
+        if (!this._thUtils.isUndefinedOrNull(this.invoiceOperationsPageParam.invoiceFilter.customerId)) {
+            this.invoiceOperationsPageParam.updateTitle(title, subtitle, this.filterMetaForEnabledFilter);
+        }
+        else {
+            this.invoiceOperationsPageParam.updateTitle(title, subtitle, this.filterMetaForDisabledFilter);
+        }
     }
 
-    public get invoiceOperationsPageData(): InvoiceOperationsPageData {
-        return this._invoiceGroupControllerService.invoiceOperationsPageData;
+    public onEdit() {
+        this.invoiceGroupVM.editMode = true;
     }
-    public get invoiceList(): InvoiceDO[] {
-        return this.invoiceOperationsPageData.invoiceGroupDO.invoiceList;        
+    public onSave() {
+        this.invoiceGroupVM.editMode = false;
+    }
+    public onCancel() {
+        this.invoiceGroupVM.editMode = false;
+    }
+    public onAddInvoice() {
+        var invoiceVM = new InvoiceVM(this._appContext.thTranslation);
+        invoiceVM.buildCleanInvoiceVM();
+        this.invoiceGroupVM.invoiceVMList.push(invoiceVM);
+
+        this.totalNumberOfInvoicesChanged.next(this.totalNumberOfInvoices);
+    }
+
+
+    public displayedItemsUpdated(firstDisplayedInvoiceIndex) {
+        this.firstDisplayedInvoiceIndex = firstDisplayedInvoiceIndex;
+    }
+
+    public newlyAddedInvoiceRemoved(newlyAddedinvoiceIndex) {
+        console.log(newlyAddedinvoiceIndex);
+    }
+
+    public get displayedInvoiceIndexList(): number[] {
+        var indexList = [];
+        for(var index = this.firstDisplayedInvoiceIndex; index < this.firstDisplayedInvoiceIndex + this.numberOfSimultaneouslyDisplayedInvoices; ++index) {
+            indexList.push(index);
+        }
+        return indexList;  
+    }
+
+    public get filterMetaForEnabledFilter(): HotelOperationsPageFilterMeta {
+        return {
+            filterInfo: 'filtered by:',
+            filterValue: this.invoiceFilterValue
+        }
+    }
+
+    public get filterMetaForDisabledFilter(): HotelOperationsPageFilterMeta {
+        return {
+            filterInfo: 'no filter enabled',
+        };
+    }
+
+    public get invoiceFilterValue(): string {
+        var customerDO = _.chain(this.invoiceGroupVM.invoiceVMList).map((invoiceVM: InvoiceVM) => {
+            return invoiceVM.invoicePayerVMList;
+        }).flatten().map((invoicePayerVM: InvoicePayerVM) => {
+            return invoicePayerVM.customerDO;
+        }).find((customerDO: CustomerDO) => {
+            return customerDO.id === this.invoiceOperationsPageParam.invoiceFilter.customerId;
+        }).value();
+
+        if (!this._thUtils.isUndefinedOrNull(customerDO)) {
+            return customerDO.customerName;
+        }
+        return null;
+    }
+
+    public get invoiceGroupVM(): InvoiceGroupVM {
+        return this._invoiceGroupControllerService.invoiceGroupVM;
+    }
+    public get invoiceVMList(): InvoiceVM[] {
+        return this.invoiceGroupVM.invoiceVMList;
     }
     public get totalNumberOfInvoices(): number {
-        return this.invoiceList.length;        
+        return this.invoiceVMList.length;
+    }
+
+    public get filterEnabled(): boolean {
+        return !this._thUtils.isUndefinedOrNull(this.invoiceOperationsPageParam.titleMeta.filterMeta.filterValue);
+    }
+
+    public get payOnlyMode(): boolean {
+        return this.filterEnabled;
+    }
+    public get editMode(): boolean {
+        return !this.filterEnabled && this.invoiceGroupVM.editMode;
+    }
+    public get payOnlyModeWithEditOption(): boolean {
+        return !this.filterEnabled && !this.invoiceGroupVM.editMode;
     }
 }

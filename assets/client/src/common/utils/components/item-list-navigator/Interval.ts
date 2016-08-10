@@ -1,9 +1,9 @@
 export class Interval {
     values: number[];
 
-    constructor(windowSize: number, private _minValue: number, private _maxValue: number) {
+    constructor(currentWindowSize: number, private _maxWindowsSize: number, private _minValue: number, private _maxValue: number) {
         this.values = [];
-        for (var i = 0; i < windowSize; ++i) {
+        for (var i = 0; i < currentWindowSize; ++i) {
             this.values.push(i);
         }
     }
@@ -28,5 +28,29 @@ export class Interval {
         }
         this.values.splice(0, 1);
         this.values.splice(this.values.length, 0, this.lastWindowElement + 1);
+    }
+
+    public addValue() {
+        if(this.values.length < this._maxWindowsSize) {
+            this.values.push(this.lastWindowElement + 1);    
+        }
+        this._maxValue++;
+    }
+
+    public removeValue(value: number) {
+        var index = this.values.indexOf(value);
+        if(index != -1) {
+            if(value != this.lastWindowElement) {
+                for(var i = index + 1; i < this.values.length; ++i) {
+                    this.values[i]--;
+                }
+            }
+            this.values.splice(index, 1); 
+        }
+        this._maxValue--;
+    }
+
+    public get maxValue(): number {
+        return this._maxValue;
     }
 }

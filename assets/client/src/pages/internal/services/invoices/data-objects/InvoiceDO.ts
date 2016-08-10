@@ -36,6 +36,14 @@ export class InvoiceDO extends BaseDO implements IPriceableEntity {
         });
     }
 
+    public buildCleanInvoice() {
+        this.payerList = [];
+        var cleanInvoicePayerDO = new InvoicePayerDO();
+        this.payerList.push(cleanInvoicePayerDO);
+        this.itemList = [];
+        this.paymentStatus = InvoicePaymentStatus.Unpaid;
+    }
+
     public getPayerCustomerIdList(): string[] {
         return _.chain(this.payerList)
             .map((payerDO: InvoicePayerDO) => {
