@@ -3388,8 +3388,6 @@ invoice-edit {
     flex-grow: 1;
     overflow: hidden;
 }
-<<<<<<< HEAD
-
 .invoice-title-container {
     position: relative;
     text-align: left;
@@ -3400,10 +3398,6 @@ invoice-edit {
 }
 .invoice-title-container .invoice-title {
     color: #fb6708;
-=======
-.invoice-title {
-    color: rgb(251, 103, 8);
->>>>>>> 904a7a0fd0943ed4cb96bf63ab7d492506d84799
     font-size: 18px;
     margin-left: 15px;
 }
@@ -3424,17 +3418,6 @@ invoice-edit {
 .table-invoice-payer > tbody > tr.row-actions > .print-container {
    text-align: right;
 }
-<<<<<<< HEAD
-=======
-.table-invoice-payer > tbody > tr.row-payment {
-   background-color: #fcf0e6;
-   color: rgb(251, 103, 8);
-}
-.table-invoice-payer > tbody > tr.row-payment * {
-   color: rgb(251, 103, 8);
-}
-
->>>>>>> 904a7a0fd0943ed4cb96bf63ab7d492506d84799
 .btn-add-invoice-payer {
     text-align: left;
     margin: 0 0 5px 0;
