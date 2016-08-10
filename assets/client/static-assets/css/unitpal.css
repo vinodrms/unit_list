@@ -2671,6 +2671,7 @@ a.btn.btn-square:focus {
     }
 
     .yield-manager-dashboard .main{
+        width: 100px; /* Need to force a width as flex behaves odd on small resolutions, the width is acutally not taken into account.*/
         background-color: #eeeeee;
         flex-basis: 100px;
         flex-grow: 8;
@@ -2686,12 +2687,13 @@ a.btn.btn-square:focus {
         border: 1px solid #DBDBDB;
         flex-grow: 1;
     }
+
     .yield-manager-dashboard yield-key-metrics{
-        margin: 24px 24px 6px 24px;
+        margin: 12px 12px 3px 12px;
     }
 
     .yield-manager-dashboard yield-price-products{
-        margin: 6px 24px 24px 24px;
+        margin: 3px 12px 12px 12px;
     }
 
         .yield-filter-collection{
@@ -2733,8 +2735,58 @@ a.btn.btn-square:focus {
             background-color: #fafafa;
         }
 
+        .yield-manager-dashboard .key-metrics-table {
+            width: 100%;
+        }
+
+        .yield-manager-dashboard .key-metrics-row {
+            justify-content: space-between;
+            border-bottom: 1px solid #DBDBDB;
+        }
+
+        .yield-manager-dashboard .key-metrics-col {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-basis: 32px;
+            flex-grow: 1;
+            height: 32px;
+            padding: 6px;
+            overflow: hidden;
+        }
+
+        .key-metrics-col .percentage-metric{
+            border-left: 3px solid;
+            /*border-left-color: red;*/
+            padding-left: 3px;
+            display: inline-block;
+            width: 50px;
+            text-align: center;
+        }
+
+        .key-metrics-col.wide {
+            flex-basis: 170px;
+            flex-shrink: 0;
+            /*white-space: nowrap;*/
+            flex-wrap: nowrap;
+            overflow: hidden;
+        }
+
+        .key-metrics-table .key-metrics-col:nth-child(even),
+        .key-metrics-table .key-metrics-row:nth-child(odd)
+        {
+            background-color:rgba(187, 187, 187, 0.1);
+        }
+
         /* Misc */
-        
+        .w-100{
+            width: 100%;
+        }
+
+        .h-100{
+            height: 100%;
+        }
+
         .other-details {
             display: flex;
             flex-basis: 50px;
