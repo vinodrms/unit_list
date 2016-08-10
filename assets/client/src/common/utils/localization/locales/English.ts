@@ -644,4 +644,12 @@ export var EnglishTranslations: Object = {
 	"Are you sure you want to remove this recently added payer?": "Are you sure you want to remove this recently added payer?",
 	"Remove Invoice": "Remove Invoice",
 	"Are you sure you want to remove this recently added invoice?": "Are you sure you want to remove this recently added invoice?",
+	"Total Occupancy": "Total Occupancy",
+	"Confirmed Occupancy": "Confirmed Occupancy",
+	"Total RevPar": "Total RevPar",
+	"Confirmed RevPar": "Confirmed RevPar",
+	"Total AvgRate": "Total AvgRate",
+	"Confirmed AvgRate": "Confirmed AvgRate",
+	"Room Revenue": "Room Revenue",
+	"Other Revenue": "Other Revenue",
 };

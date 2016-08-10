@@ -96,6 +96,7 @@ export enum ThServerApi {
 
 	YieldManagerYieldPriceProducts,
 	YieldManagerYieldGetPriceProductItems,
+	YieldManagerGetKeyMetrics,
 
 }
 
@@ -200,6 +201,7 @@ ThServerApiUrl[ThServerApi.InvoiceGroupItem] = "/invoiceGroups/invoiceGroupItem"
 
 ThServerApiUrl[ThServerApi.YieldManagerYieldPriceProducts] = "/yieldManager/yieldPriceProducts";
 ThServerApiUrl[ThServerApi.YieldManagerYieldGetPriceProductItems] = "/yieldManager/getPriceProductYieldItems";
+ThServerApiUrl[ThServerApi.YieldManagerGetKeyMetrics] = "/yieldManager/getKeyMetrics";
 
 export class ServerApiBuilder {
 	public static ApiRoot = "/api";

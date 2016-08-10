@@ -31,6 +31,11 @@ export class ThDateUtils {
 		inMoment = inMoment.add(days, "day");
 		return this.convertMomentToThDateDO(inMoment);
 	}
+	public addYearsToThDateDO(inDate: ThDateDO, years: number): ThDateDO {
+		var inMoment = this.convertThDateDOToMoment(inDate);
+		inMoment = inMoment.add(years, "year");
+		return this.convertMomentToThDateDO(inMoment);
+	}
 
 	public convertThDateDOToMoment(inDate: ThDateDO): moment.Moment {
 		return moment([inDate.year, inDate.month, inDate.day]);

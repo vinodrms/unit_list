@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChildren } from '@angular/core';
 
 import {ThDateDO} from '../../../../../../../services/common/data-objects/th-dates/ThDateDO';
 import {AppContext} from '../../../../../../../../../common/utils/AppContext';
@@ -8,23 +8,30 @@ import {ColorFilterVM} from '../../../../../../../services/yield-manager/dashboa
 import {TextFilterVM} from '../../../../../../../services/yield-manager/dashboard/filter/view-models/TextFilterVM';
 import {YieldManagerDashboardFilterService} from '../../../../../../../services/yield-manager/dashboard/filter/YieldManagerDashboardFilterService';
 
-import {YieldGroupItemComponent} from './components/yield-group-item/YieldGroupItemComponent';
-import {YieldLevelItemComponent} from './components/yield-level-item/YieldLevelItemComponent';
+import {AYieldFilterItemComponent} from './components/common/AYieldFilterItemComponent';
+
+import {YieldColorFitlerItemComponent} from './components/yield-color-filter-item/YieldColorFilterItemComponent';
+import {YieldTextFilterItemComponent} from './components/yield-text-filter-item/YieldTextFilterItemComponent';
 
 import {IYieldManagerDashboardFilter} from '../../YieldManagerDashboardComponent'
+
+import {FilterVMCollection} from '../../../../../../../services/yield-manager/dashboard/filter/utils/FilterVMCollection';
+import {CustomScroll} from '../../../../../../../../../../src/common/utils/directives/CustomScroll';
 
 @Component({
 	selector: 'yield-filter-pane',
 	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/yield-manager/components/yield-filter-pane/template/yield-filter-pane.html',
-	directives: [YieldGroupItemComponent, YieldLevelItemComponent],
+	directives: [CustomScroll, YieldColorFitlerItemComponent, YieldTextFilterItemComponent],
 	pipes: [TranslationPipe]
 })
 export class YieldFilterPaneComponent implements OnInit {
+	@ViewChildren(YieldColorFitlerItemComponent) colorFilterComponents: YieldColorFitlerItemComponent[];
+	@ViewChildren(YieldTextFilterItemComponent) textFilterComponents: YieldTextFilterItemComponent[];
 	public selectedDate: ThDateDO;
 	public searchText: string;
 
-	public yieldGroups: ColorFilterVM[];
-	public yieldLevels: TextFilterVM[];
+	public yieldColorFilterCollection: FilterVMCollection<ColorFilterVM>;
+	public yieldTextFilterCollection: FilterVMCollection<TextFilterVM>;
 
 	private _yieldManager: IYieldManagerDashboardFilter;
 
@@ -35,14 +42,14 @@ export class YieldFilterPaneComponent implements OnInit {
 	}
 
 	ngOnInit() {
-		this._filterService.getColorFilterCollections().subscribe((groups) => {
-			this.yieldGroups = groups[0].filterVMList;
+		this._filterService.getColorFilterCollections().subscribe((colorFilters) => {
+			this.yieldColorFilterCollection = colorFilters[0];
 		}, (e) => {
 			console.log(e);
 		})
 
-		this._filterService.getTextFilterCollections().subscribe((levels) => {
-			this.yieldLevels = levels[0].filterVMList;
+		this._filterService.getTextFilterCollections().subscribe((textFilters) => {
+			this.yieldTextFilterCollection = textFilters[0];
 		}, (e) => {
 			console.log(e);
 		})
@@ -76,6 +83,23 @@ export class YieldFilterPaneComponent implements OnInit {
 
 	public searchTextChangeHandler(value) {
 		this.searchText = value;
-		alert(value);
+	}
+
+	public colorItemSelected(selectedItemComponent: YieldColorFitlerItemComponent){
+		this.filtersDeselect<YieldColorFitlerItemComponent>(this.colorFilterComponents, selectedItemComponent);
+	}
+
+	public textItemSelected(selectedItemComponent: YieldTextFilterItemComponent){
+		this.filtersDeselect<YieldTextFilterItemComponent>(this.textFilterComponents, selectedItemComponent);
+	}
+
+	private filtersDeselect<T extends AYieldFilterItemComponent>(filterComponents: T[], selectedItem: T){
+		var itemsToDeselect = filterComponents.filter((item: T) => {
+			return item != selectedItem;
+		});
+
+		itemsToDeselect.forEach( (item:T) => {
+			item.deselect();
+		});
 	}
 }
