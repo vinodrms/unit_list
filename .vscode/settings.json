@@ -3,5 +3,6 @@
 	"files.exclude": {
 		"assets/client/src/**/*.js": { "when": "$(basename).ts"},
 		"api/**/*.js": { "when": "$(basename).ts"}
-	}
+	},
+	"workbench.editor.showTabs": false
 }
