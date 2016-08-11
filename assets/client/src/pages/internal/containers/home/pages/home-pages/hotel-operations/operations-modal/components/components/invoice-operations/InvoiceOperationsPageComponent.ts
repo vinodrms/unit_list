@@ -41,16 +41,22 @@ export class InvoiceOperationsPageComponent implements OnInit {
 
     firstDisplayedInvoiceIndex = 0;
 
-    totalNumberOfInvoicesChanged: Subject<number>;
-    totalNumberOfinvoicesChangedObservable: Observable<number>; 
+    itemsAdded: Subject<number>;
+    itemsAddedObservable: Observable<number>;
+    itemRemoved: Subject<number>;
+    itemRemovedObservable: Observable<number>;
+
 
     constructor(private _appContext: AppContext,
         private _invoiceOperationsPageService: InvoiceOperationsPageService,
         private _invoiceGroupControllerService: InvoiceGroupControllerService) {
 
         this._thUtils = new ThUtils();
-        this.totalNumberOfInvoicesChanged = new Subject<number>();
-        this.totalNumberOfinvoicesChangedObservable = this.totalNumberOfInvoicesChanged.asObservable();
+
+        this.itemsAdded = new Subject<number>();
+        this.itemsAddedObservable = this.itemsAdded.asObservable();
+        this.itemRemoved = new Subject<number>();
+        this.itemRemovedObservable = this.itemRemoved.asObservable();
     }
 
     ngOnInit() {
@@ -102,7 +108,7 @@ export class InvoiceOperationsPageComponent implements OnInit {
         invoiceVM.buildCleanInvoiceVM();
         this.invoiceGroupVM.invoiceVMList.push(invoiceVM);
 
-        this.totalNumberOfInvoicesChanged.next(this.totalNumberOfInvoices);
+        this.itemsAdded.next(1);
     }
 
 
@@ -111,7 +117,8 @@ export class InvoiceOperationsPageComponent implements OnInit {
     }
 
     public newlyAddedInvoiceRemoved(newlyAddedinvoiceIndex) {
-        console.log(newlyAddedinvoiceIndex);
+        this.itemRemoved.next(newlyAddedinvoiceIndex);
+        this.invoiceVMList.splice(newlyAddedinvoiceIndex, 1);
     }
 
     public get displayedInvoiceIndexList(): number[] {

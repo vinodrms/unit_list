@@ -14,9 +14,10 @@ export class ItemListNavigatorComponent implements OnInit {
 
     @Input() maxNumberOfDisplayedItems: number;
     @Input() numberOfSimultaneouslySelectedItems: number;
+    @Input() initialNumberOfItems: number;
     
-    @Input() totalNumberOfItems: number;
-    @Input() totalNumberOfinvoicesChangedObservable: Observable<number>;
+    @Input() itemsAdded: Observable<number>;
+    @Input() itemRemoved: Observable<number>;
 
     @Output() displayedItemsUpdated = new EventEmitter();
 
@@ -27,20 +28,23 @@ export class ItemListNavigatorComponent implements OnInit {
 
     ngOnInit() {
         this.firstSelectedItemIndex = 0;
-        this.interval = new Interval(Math.min(this.maxNumberOfDisplayedItems, this.totalNumberOfItems),
-            this.maxNumberOfDisplayedItems, 0, this.totalNumberOfItems - 1);
-
-        this.totalNumberOfinvoicesChangedObservable.subscribe((totalNumberOfItems: number) => {
-            if (this.totalNumberOfItems < totalNumberOfItems) {
-                this.totalNumberOfItems = totalNumberOfItems;
+        this.interval = new Interval(Math.min(this.maxNumberOfDisplayedItems, this.initialNumberOfItems),
+            this.maxNumberOfDisplayedItems, 0, this.initialNumberOfItems - 1);
+        
+        this.itemsAdded.subscribe((noOfItems: number) => {
+            
+            for(var i = 0; i < noOfItems; ++i) {
                 this.interval.addValue();
-                this.selectItem(this.interval.maxValue);
             }
-            else {
-                // this.totalNumberOfItems = totalNumberOfItems;
-                // this.interval.removeValue();
-                // this.selectItem(this.interval.maxValue);
-            }
+            
+            this.selectItem(this.interval.maxValue);
+        });
+
+        this.itemRemoved.subscribe((itemToBeRemovedIndex: number) => {
+            this.interval.removeValue(itemToBeRemovedIndex);
+            if(this.firstSelectedItemIndex + this.numberOfSimultaneouslySelectedItems > this.interval.lastWindowElement) {
+                this.selectItem(this.interval.lastWindowElement - this.numberOfSimultaneouslySelectedItems + 1);
+            }            
         });
     }
 
@@ -68,7 +72,7 @@ export class ItemListNavigatorComponent implements OnInit {
         return this.numberOfItems <= this.numberOfSimultaneouslySelectedItems;
     }
     private get numberOfItems(): number {
-        return this.totalNumberOfItems;
+        return this.interval.size;
     }
     public next() {
         this.firstSelectedItemIndex++;
@@ -110,7 +114,7 @@ export class ItemListNavigatorComponent implements OnInit {
         }
     }
 
-    private set firstSelectedItemIndex(newSelectedItemIndex: number) {
+    private set firstSelectedItemIndex(newSelectedItemIndex: number) {        
         this._firstSelectedItemIndex = newSelectedItemIndex;
         this.displayedItemsUpdated.emit(this._firstSelectedItemIndex);
     }

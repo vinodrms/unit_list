@@ -40,7 +40,6 @@ export class InvoicePayerComponent implements OnInit {
     }
 
     public openCustomerSelectModal() {
-        debugger
         this._customerRegisterModalService.openCustomerRegisterModal(false).then((modalDialogInstance: ModalDialogRef<CustomerDO[]>) => {
             modalDialogInstance.resultObservable.subscribe((selectedCustomerList: CustomerDO[]) => {
                 var newInvoicePayer = new InvoicePayerDO();

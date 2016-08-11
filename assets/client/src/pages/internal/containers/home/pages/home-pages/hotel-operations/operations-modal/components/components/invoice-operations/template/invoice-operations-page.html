@@ -8,8 +8,8 @@
 	</div>
 	<div class="invoice-operations-footer">
 
-		<item-list-navigator (displayedItemsUpdated)="displayedItemsUpdated($event)" [totalNumberOfItems]="totalNumberOfInvoices" [maxNumberOfDisplayedItems]="invoiceNavigatorWindowSize"
-			[numberOfSimultaneouslySelectedItems]="numberOfSimultaneouslyDisplayedInvoices" [totalNumberOfinvoicesChangedObservable]="totalNumberOfinvoicesChangedObservable">
+		<item-list-navigator (displayedItemsUpdated)="displayedItemsUpdated($event)" [initialNumberOfItems]="totalNumberOfInvoices" [maxNumberOfDisplayedItems]="invoiceNavigatorWindowSize"
+			[numberOfSimultaneouslySelectedItems]="numberOfSimultaneouslyDisplayedInvoices" [itemsAdded]="itemsAddedObservable" [itemRemoved]="itemRemovedObservable">
 		</item-list-navigator>
 
 		<div *ngIf="editMode" class="invoice-operations-btn-group">

@@ -8,13 +8,18 @@ export class Interval {
         }
     }
 
+    public get windowSize(): number {
+        return this.values.length;
+    }
     public get firstWindowElement(): number {
         return _.first(this.values);
     }
     public get lastWindowElement(): number {
         return _.last(this.values);
     }
-
+    public get size(): number {
+        return this._maxValue - this._minValue + 1;
+    }
     public shiftWindowLeft() {
         if(this.firstWindowElement === this._minValue) {
             return;
@@ -48,6 +53,14 @@ export class Interval {
             this.values.splice(index, 1); 
         }
         this._maxValue--;
+        if(this._maxValue - this._minValue + 1 > this.windowSize && this._maxWindowsSize > this.windowSize) {
+            if(this._maxValue > this.lastWindowElement) {
+                this.values.push(this.lastWindowElement + 1);
+            }   
+            else if(this._minValue < this.firstWindowElement) {
+                this.values.splice(0, 0, this.firstWindowElement - 1);
+            } 
+        }
     }
 
     public get maxValue(): number {
