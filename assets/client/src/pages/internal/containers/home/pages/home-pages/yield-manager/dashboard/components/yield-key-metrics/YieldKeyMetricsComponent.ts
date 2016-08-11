@@ -61,10 +61,28 @@ export class YieldKeyMetricsComponent implements OnInit {
 			red = Math.round((PERCENTAGE_MAX - ((percentage - PERCENTAGE_MID) / PERCENTAGE_MID)) * 255);
 			rgbStr = "rgb(" + red + ", 255, 0)";
 		}
-		
+
 		return {
 			"border-left-color" : rgbStr
 		};
+	}
+
+	public getInventoryStyles(value):Object{
+		if (value.available < 0){
+			return {
+				'font-weight' : 'bold',
+			}
+		}
+		return {}
+	}
+
+	public getInventoryAvailableStyles(value):Object{
+		if (value.available < 0){
+			return {
+				'color' : 'red'
+			}
+		}
+		return {}
 	}
 
 	public openKeyMetricModal(keyMetricVM: KeyMetricVM) {

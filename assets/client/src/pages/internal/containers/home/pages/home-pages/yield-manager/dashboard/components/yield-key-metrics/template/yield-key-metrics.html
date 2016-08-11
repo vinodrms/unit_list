@@ -22,7 +22,9 @@
 				<span class="percentage-metric dark-gray-color oneline-text f-12" [ngStyle]="getPercentageStyles(value.percentage)" title="{{ value.percentage }}%">{{ value.percentage * 100}}%</span> 
 			</span>
 			<span class="w-100" *ngIf="metric.keyMetricDO.valueType == 2">
-				<span class="dark-gray-color oneline-text f-12 w-100" title="{{ value.available }}/{{ value.total }}">{{ value.available }}/{{ value.total }}</span>
+				<span class="dark-gray-color oneline-text f-12 w-100" [ngStyle]="getInventoryStyles(value)" title="{{ value.available }}/{{ value.total }}">
+					<span [ngStyle]="getInventoryAvailableStyles(value)">{{ value.available }}</span>/{{ value.total }}
+				</span>
 			</span>
 		</div>
 	</div>
