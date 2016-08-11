@@ -9,11 +9,11 @@ import {BookingControllerService} from '../utils/BookingControllerService';
 import {IBookingCustomerRegisterController} from '../utils/IBookingCustomerRegister';
 
 @Component({
-	selector: 'booking-customer-register',
-	templateUrl: '/client/src/pages/internal/containers/home/pages/utils/new-booking/component/subcomponents/booking-customer-register/template/booking-customer-register.html',
+	selector: 'new-booking-customer-register',
+	templateUrl: '/client/src/pages/internal/containers/home/pages/utils/new-booking/component/subcomponents/booking-customer-register/template/new-booking-customer-register.html',
 	directives: [CustomerRegisterComponent]
 })
-export class BookingCustomerRegisterComponent extends BaseComponent implements OnInit {
+export class NewBookingCustomerRegisterComponent extends BaseComponent implements OnInit {
 	private _customerRegisterCtrl: IBookingCustomerRegisterController;
 
 	constructor(private _appContext: AppContext,

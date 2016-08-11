@@ -19,7 +19,7 @@ import {BookingControllerService} from '../subcomponents/utils/BookingController
 
 import {NewBookingSearchComponent} from '../subcomponents/booking-search/NewBookingSearchComponent';
 import {NewBookingFillDetailsComponent} from '../subcomponents/booking-fill-details/NewBookingFillDetailsComponent';
-import {BookingCustomerRegisterComponent} from '../subcomponents/booking-customer-register/BookingCustomerRegisterComponent';
+import {NewBookingCustomerRegisterComponent} from '../subcomponents/booking-customer-register/NewBookingCustomerRegisterComponent';
 import {NewBookingEmailConfigComponent} from '../subcomponents/booking-email-config/NewBookingEmailConfigComponent';
 
 @Component({
@@ -28,7 +28,7 @@ import {NewBookingEmailConfigComponent} from '../subcomponents/booking-email-con
 	providers: [SETTINGS_PROVIDERS, HotelService, HotelAggregatorService, RoomCategoriesService, BookingCartService,
 		BookingSearchStepService, BookingFillDetailsStepService, BookingCustomerRegisterStepService, BookingEmailConfigStepService,
 		BookingControllerService],
-	directives: [NewBookingSearchComponent, NewBookingFillDetailsComponent, BookingCustomerRegisterComponent, NewBookingEmailConfigComponent],
+	directives: [NewBookingSearchComponent, NewBookingFillDetailsComponent, NewBookingCustomerRegisterComponent, NewBookingEmailConfigComponent],
 	pipes: [TranslationPipe]
 })
 export class NewBookingContainerComponent extends BaseComponent {
