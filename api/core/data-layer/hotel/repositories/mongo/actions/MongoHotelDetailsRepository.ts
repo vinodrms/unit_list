@@ -8,6 +8,7 @@ import {HotelContactDetailsDO} from '../../../data-objects/hotel-contact-details
 import {GeoLocationDO} from '../../../../common/data-objects/geo-location/GeoLocationDO';
 import {HotelMetaRepoDO, BasicHotelInfoRepoDO, PaymentsPoliciesRepoDO, PropertyDetailsRepoDO} from '../../IHotelRepository';
 import {LazyLoadRepoDO} from '../../../../common/repo-data-objects/LazyLoadRepoDO';
+import {ThTimestampDO} from '../../../../../utils/th-dates/data-objects/ThTimestampDO';
 
 import _ = require("underscore");
 
@@ -60,9 +61,10 @@ export class MongoHotelDetailsRepository extends MongoRepository {
 			"timezone": propertyDetails.timezone
 		});
 	}
-	public markConfigurationCompleted(hotelMeta: HotelMetaRepoDO): Promise<HotelDO> {
+	public markConfigurationCompleted(hotelMeta: HotelMetaRepoDO, hotel: HotelDO): Promise<HotelDO> {
 		return this.findAndModifyHotel(hotelMeta, {
-			"configurationCompleted": true
+			"configurationCompleted": true,
+			"configurationCompletedTimestamp": ThTimestampDO.buildThTimestampForTimezone(hotel.timezone)
 		});
 	}
 

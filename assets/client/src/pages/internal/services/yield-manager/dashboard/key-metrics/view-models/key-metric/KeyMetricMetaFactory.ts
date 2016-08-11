@@ -7,61 +7,61 @@ export class KeyMetricMetaFactory {
             type: KeyMetricType.TotalOccupancy,
             displayName: "Total Occupancy",
             measureUnit: "%",
-            fontName: "8"
+            fontName: "Q"
         },
         {
             type: KeyMetricType.ConfirmedOccupancy,
             displayName: "Confirmed Occupancy",
             measureUnit: "%",
-            fontName: "8"
+            fontName: "Q"
         },
         {
             type: KeyMetricType.TotalRevPar,
             displayName: "Total RevPar",
             measureUnit: "",
-            fontName: "L"
+            fontName: "O"
         },
         {
             type: KeyMetricType.ConfirmedRevPar,
             displayName: "Confirmed RevPar",
             measureUnit: "",
-            fontName: "L"
+            fontName: "O"
         },
         {
             type: KeyMetricType.TotalAvgRate,
             displayName: "Total AvgRate",
             measureUnit: "",
-            fontName: "L"
+            fontName: "R"
         },
         {
             type: KeyMetricType.ConfirmedAvgRate,
             displayName: "Confirmed AvgRate",
             measureUnit: "",
-            fontName: "L"
+            fontName: "R"
         },
         {
             type: KeyMetricType.Rooms,
             displayName: "Rooms",
-            measureUnit: "Available Rooms",
+            measureUnit: "",
             fontName: "@"
         },
         {
             type: KeyMetricType.Allotments,
             displayName: "Allotments",
-            measureUnit: "Available Allotments",
+            measureUnit: "",
             fontName: "â"
         },
         {
             type: KeyMetricType.RoomRevenue,
             displayName: "Room Revenue",
             measureUnit: "",
-            fontName: "L"
+            fontName: "S"
         },
         {
             type: KeyMetricType.OtherRevenue,
             displayName: "Other Revenue",
             measureUnit: "",
-            fontName: "L"
+            fontName: "T"
         }
     ];
 

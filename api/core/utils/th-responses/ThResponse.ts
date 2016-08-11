@@ -59,6 +59,7 @@ export enum ThStatusCode {
     HotelGetDetailsErrorFormattingResponse,
     HotelGetDetailsErrorFindingUserByEmail,
     HotelConfigurationsErrorMarkingAsCompleted,
+    HotelConfigurationsNullTimezone,
     HotelDetailsControllerErrorGettingDetails,
     HotelDetailsControllerErrorUpdatingBasicInfo,
     HotelDetailsControllerErrorAddingPaymentsAndPolicies,
@@ -528,6 +529,7 @@ ThMessage[ThStatusCode.HotelGetDetailsError] = "Error getting details for the ho
 ThMessage[ThStatusCode.HotelGetDetailsErrorFormattingResponse] = "Error updating the details for the hotel. Please try again.";
 ThMessage[ThStatusCode.HotelGetDetailsErrorFindingUserByEmail] = "Error getting the details for the hotel. Please try again.";
 ThMessage[ThStatusCode.HotelConfigurationsErrorMarkingAsCompleted] = "Error marking the configurations as completed.";
+ThMessage[ThStatusCode.HotelConfigurationsNullTimezone] = "You cannot finish the wizard without selecting a timezone.";
 ThMessage[ThStatusCode.HotelDetailsControllerErrorGettingDetails] = "Error getting the details for your hotel. Please try again.";
 ThMessage[ThStatusCode.HotelDetailsControllerErrorUpdatingBasicInfo] = "Error updating the basic information. Please try again.";
 ThMessage[ThStatusCode.HotelDetailsControllerErrorAddingPaymentsAndPolicies] = "Error adding payments and policies. Please try again.";

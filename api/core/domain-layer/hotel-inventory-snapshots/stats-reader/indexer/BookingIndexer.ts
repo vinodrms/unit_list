@@ -60,6 +60,8 @@ export class BookingIndexer {
             }).then((bookingSearchResult: BookingSearchResultRepoDO) => {
                 this.indexBookingsByType(bookingSearchResult.bookingList);
 
+                // TODO: load invoice indexer (step 1)
+
                 resolve(true);
             }).catch((error: any) => {
                 var thError = new ThError(ThStatusCode.BookingsIndexerError, error);
@@ -114,6 +116,7 @@ export class BookingIndexer {
         var guaranteedRev = this.getRevenue(this._guaranteedBookingsContainer, thDate);
         var penaltyRev = this.getRevenue(this._penaltyBookingsContainer, thDate);
         guaranteedRev.addRevenue(penaltyRev);
+        // TODO: get invoice price and append to guaranteedRev.otherRevenue (step 2)
         return guaranteedRev;
     }
     private getRevenue(bookingsContainer: BookingsContainer, thDate: ThDateDO): RevenueForDate {

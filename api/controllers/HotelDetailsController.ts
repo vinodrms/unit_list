@@ -45,8 +45,8 @@ class HotelDetailsController extends BaseController {
 	}
 	public markConfigurationCompleted(req: Express.Request, res: Express.Response) {
 		var hotelConfigurationStatus = new HotelConfigurations(req.appContext, req.sessionContext);
-		hotelConfigurationStatus.markAsCompleted().then((configurationCompleted: boolean) => {
-			this.returnSuccesfulResponse(req, res, { configurationCompleted: configurationCompleted });
+		hotelConfigurationStatus.markAsCompleted().then((updatedHotel: HotelDO) => {
+			this.returnSuccesfulResponse(req, res, { configurationCompleted: updatedHotel.configurationCompleted });
 		}).catch((err: any) => {
 			this.returnErrorResponse(req, res, err, ThStatusCode.HotelDetailsControllerErrorUpdatingPropertyDetails);
 		});
