@@ -21,7 +21,7 @@ import {AHomeContainerComponent} from '../../../utils/AHomeContainerComponent';
 	directives: [ROUTER_DIRECTIVES, SettingsNavbarComponent],
 	providers: [SettingsNavbarService],
 	pipes: [TranslationPipe],
-	precompile: [SettingsBasicInformationComponent, SettingsBedsComponent, SettingsRoomsComponent,
+	entryComponents: [SettingsBasicInformationComponent, SettingsBedsComponent, SettingsRoomsComponent,
 		SettingsBreakfastComponent, SettingsAddOnProductsComponent, SettingsPriceProductsComponent, 
 		SettingsCustomerRegisterComponent, SettingsAllotmentsComponent]
 })

@@ -17,7 +17,7 @@ import {TimezoneService} from '../../../../../../../../services/timezones/Timezo
 	directives: [ROUTER_DIRECTIVES],
 	providers: [TimezoneService, SettingsBasicInformationService],
 	pipes: [TranslationPipe],
-	precompile: [SettingsBasicInfoOverviewComponent, SettingsBasicInfoPaymentsAndPoliciesComponent,
+	entryComponents: [SettingsBasicInfoOverviewComponent, SettingsBasicInfoPaymentsAndPoliciesComponent,
 		SettingsBasicInfoPropertyDetailsComponent]
 })
 export class SettingsBasicInformationComponent extends BaseComponent {
