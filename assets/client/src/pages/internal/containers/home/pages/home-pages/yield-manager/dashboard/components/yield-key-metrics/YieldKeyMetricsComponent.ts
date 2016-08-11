@@ -43,7 +43,7 @@ export class YieldKeyMetricsComponent implements OnInit {
 		});
 	}
 
-	public getPercentageStyles(percentage) {
+	public getPercentageStyles(percentage):Object {
 		const PERCENTAGE_MID = 0.5;
 		const PERCENTAGE_MIN = 0;
 		const PERCENTAGE_MAX = 1;
@@ -61,6 +61,10 @@ export class YieldKeyMetricsComponent implements OnInit {
 			red = Math.round((PERCENTAGE_MAX - ((percentage - PERCENTAGE_MID) / PERCENTAGE_MID)) * 255);
 			rgbStr = "rgb(" + red + ", 255, 0)";
 		}
+		
+		return {
+			"border-left-color" : rgbStr
+		};
 	}
 
 	public openKeyMetricModal(keyMetricVM: KeyMetricVM) {
