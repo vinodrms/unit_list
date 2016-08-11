@@ -4,6 +4,7 @@ import {GeoLocationDO} from '../../common/data-objects/geo-location/GeoLocationD
 import {UserDO} from './user/UserDO';
 import {AmenityDO} from '../../common/data-objects/amenity/AmenityDO';
 import {OperationHoursDO} from './operation-hours/OperationHoursDO';
+import {ThTimestampDO} from '../../../utils/th-dates/data-objects/ThTimestampDO';
 
 export class HotelDO extends BaseDO {
 	constructor() {
@@ -20,6 +21,7 @@ export class HotelDO extends BaseDO {
 	customAmenityList: AmenityDO[];
 	paymentMethodIdList: string[];
 	configurationCompleted: boolean;
+	configurationCompletedTimestamp: ThTimestampDO;
 	timezone: string;
 	operationHours: OperationHoursDO;
 
@@ -48,6 +50,9 @@ export class HotelDO extends BaseDO {
 			amenityDO.buildFromObject(amenityObject);
 			this.customAmenityList.push(amenityDO);
 		});
+
+		this.configurationCompletedTimestamp = new ThTimestampDO();
+		this.configurationCompletedTimestamp.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "configurationCompletedTimestamp"));
 
 		this.operationHours = new OperationHoursDO();
 		this.operationHours.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "operationHours"));

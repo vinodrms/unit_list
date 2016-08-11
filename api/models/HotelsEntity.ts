@@ -47,6 +47,9 @@ class HotelsEntity extends BasePersistentEntity {
 			configurationCompleted: {
 				type: 'boolean',
 			},
+			configurationCompletedTimestamp: {
+				type: 'json'
+			},
 			timezone: {
 				type: 'string'
 			},

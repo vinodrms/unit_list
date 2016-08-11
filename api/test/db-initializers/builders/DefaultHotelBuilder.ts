@@ -8,6 +8,7 @@ import {CountryDO} from '../../../core/data-layer/common/data-objects/country/Co
 import {PaymentMethodDO} from '../../../core/data-layer/common/data-objects/payment-method/PaymentMethodDO';
 import {OperationHoursDO} from '../../../core/data-layer/hotel/data-objects/operation-hours/OperationHoursDO';
 import {ThHourDO} from '../../../core/utils/th-dates/data-objects/ThHourDO';
+import {ThTimestampDO} from '../../../core/utils/th-dates/data-objects/ThTimestampDO';
 import {ThUtils} from '../../../core/utils/ThUtils';
 import {Locales} from '../../../core/utils/localization/ThTranslation';
 import {AppContext} from '../../../core/utils/AppContext';
@@ -67,6 +68,7 @@ export class DefaultHotelBuilder {
 		hotel.customAmenityList = [];
 		hotel.paymentMethodIdList = this.getPaymentIdList();
 		hotel.configurationCompleted = false;
+		hotel.configurationCompletedTimestamp = ThTimestampDO.buildThTimestampForTimezone(hotel.timezone);
 		return hotel;
 	}
 
