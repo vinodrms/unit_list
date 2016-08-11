@@ -1,12 +1,12 @@
 import { Component, OnInit, AfterViewInit, ViewChildren } from '@angular/core';
 
-import {ThDateDO} from '../../../../../../../services/common/data-objects/th-dates/ThDateDO';
-import {AppContext} from '../../../../../../../../../common/utils/AppContext';
-import {TranslationPipe} from '../../../../../../../../../common/utils/localization/TranslationPipe'
+import {ThDateDO} from '../../../../../../../../services/common/data-objects/th-dates/ThDateDO';
+import {AppContext} from '../../../../../../../../../../common/utils/AppContext';
+import {TranslationPipe} from '../../../../../../../../../../common/utils/localization/TranslationPipe'
 
-import {ColorFilterVM} from '../../../../../../../services/yield-manager/dashboard/filter/view-models/ColorFilterVM';
-import {TextFilterVM} from '../../../../../../../services/yield-manager/dashboard/filter/view-models/TextFilterVM';
-import {YieldManagerDashboardFilterService} from '../../../../../../../services/yield-manager/dashboard/filter/YieldManagerDashboardFilterService';
+import {ColorFilterVM} from '../../../../../../../../services/yield-manager/dashboard/filter/view-models/ColorFilterVM';
+import {TextFilterVM} from '../../../../../../../../services/yield-manager/dashboard/filter/view-models/TextFilterVM';
+import {YieldManagerDashboardFilterService} from '../../../../../../../../services/yield-manager/dashboard/filter/YieldManagerDashboardFilterService';
 
 import {AYieldFilterItemComponent} from './components/common/AYieldFilterItemComponent';
 
@@ -15,12 +15,12 @@ import {YieldTextFilterItemComponent} from './components/yield-text-filter-item/
 
 import {IYieldManagerDashboardFilter} from '../../YieldManagerDashboardComponent'
 
-import {FilterVMCollection} from '../../../../../../../services/yield-manager/dashboard/filter/utils/FilterVMCollection';
-import {CustomScroll} from '../../../../../../../../../../src/common/utils/directives/CustomScroll';
+import {FilterVMCollection} from '../../../../../../../../services/yield-manager/dashboard/filter/utils/FilterVMCollection';
+import {CustomScroll} from '../../../../../../../../../../../src/common/utils/directives/CustomScroll';
 
 @Component({
 	selector: 'yield-filter-pane',
-	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/yield-manager/components/yield-filter-pane/template/yield-filter-pane.html',
+	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/yield-manager/dashboard/components/yield-filter-pane/template/yield-filter-pane.html',
 	directives: [CustomScroll, YieldColorFitlerItemComponent, YieldTextFilterItemComponent],
 	pipes: [TranslationPipe]
 })

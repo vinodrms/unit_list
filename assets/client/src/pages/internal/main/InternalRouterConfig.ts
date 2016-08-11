@@ -16,7 +16,7 @@ import {WizardAllotmentsComponent} from '../containers/wizard/pages/wizard-pages
 
 import {MainHomeComponent} from '../containers/home/main/MainHomeComponent';
 import {HotelOperationsDashboardComponent} from '../containers/home/pages/home-pages/hotel-operations/dashboard/HotelOperationsDashboardComponent';
-import {YieldManagerDashboardComponent} from '../containers/home/pages/home-pages/yield-manager/YieldManagerDashboardComponent';
+import {YieldManagerDashboardComponent} from '../containers/home/pages/home-pages/yield-manager/dashboard/YieldManagerDashboardComponent';
 import {BookingHistoryDashboardComponent} from '../containers/home/pages/home-pages/booking-history/BookingHistoryDashboardComponent';
 import {SettingsContainerComponent} from '../containers/home/pages/home-pages/settings/container/SettingsContainerComponent';
 import {SettingsBasicInformationComponent} from '../containers/home/pages/home-pages/settings/subcomponents/basic-information/main/SettingsBasicInformationComponent';

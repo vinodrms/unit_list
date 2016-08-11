@@ -12,7 +12,7 @@ import {ISocketsService} from '../../../../../common/utils/sockets/ISocketsServi
 import {SocketsService} from '../../../../../common/utils/sockets/SocketsService';
 
 import {HotelOperationsDashboardComponent} from '../pages/home-pages/hotel-operations/dashboard/HotelOperationsDashboardComponent';
-import {YieldManagerDashboardComponent} from '../pages/home-pages/yield-manager/YieldManagerDashboardComponent';
+import {YieldManagerDashboardComponent} from '../pages/home-pages/yield-manager/dashboard/YieldManagerDashboardComponent';
 import {BookingHistoryDashboardComponent} from '../pages/home-pages/booking-history/BookingHistoryDashboardComponent';
 import {SettingsContainerComponent} from '../pages/home-pages/settings/container/SettingsContainerComponent';
 
