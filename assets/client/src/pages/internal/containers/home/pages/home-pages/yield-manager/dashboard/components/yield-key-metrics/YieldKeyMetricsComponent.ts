@@ -38,14 +38,13 @@ export class YieldKeyMetricsComponent implements OnInit {
 		});
 	}
 
-	public getPercentageStyles(p) {
+	public getPercentageStyles(percentage) {
        const PERCENTAGE_MID = 0.5;
 	   const PERCENTAGE_MIN = 0;
 	   const PERCENTAGE_MAX = 1;
        var red, green;
 
 	   var rgbStr = "";
-	   var percentage = p / 100;
        if(percentage < PERCENTAGE_MIN || percentage > PERCENTAGE_MAX) {
            rgbStr = "rgb(0, 255, 0)";
        }

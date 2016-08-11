@@ -19,10 +19,10 @@
 				<span class="dark-gray-color oneline-text f-12 w-100" title="{{ value.price }}">{{ value.price }}</span> 
 			</span>
 			<span class="w-100" *ngIf="metric.keyMetricDO.valueType == 1">
-				<span class="percentage-metric dark-gray-color oneline-text f-12" [ngStyle]="getPercentageStyles(value.percentage)" title="{{ value.percentage }}%">{{ value.percentage }}%</span> 
+				<span class="percentage-metric dark-gray-color oneline-text f-12" [ngStyle]="getPercentageStyles(value.percentage)" title="{{ value.percentage }}%">{{ value.percentage * 100}}%</span> 
 			</span>
 			<span class="w-100" *ngIf="metric.keyMetricDO.valueType == 2">
-				<span class="dark-gray-color oneline-text f-12 w-100" title="{{ value.total }}/{{ value.available }}">{{ value.total }}/{{ value.available }}</span>
+				<span class="dark-gray-color oneline-text f-12 w-100" title="{{ value.available }}/{{ value.total }}">{{ value.available }}/{{ value.total }}</span>
 			</span>
 		</div>
 	</div>
