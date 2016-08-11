@@ -1,1 +1,29 @@
-table
+<div class="key-metrics-table p-12" *ngIf="metricsResults">
+	<div class="key-metrics-row flex-row">
+		<div class="key-metrics-col wide" >
+			<span class="dark-gray-color oneline-text f-11">Key Metrics</span>
+		</div>
+		<div class="key-metrics-col" *ngFor="let date of metricsResults.currentItemVM.dateList">
+			<span class="dark-gray-color oneline-text f-11" title="{{getDateLabel(date)}}">{{getDateLabel(date)}}</span>
+		</div>
+	</div>
+	<div class="key-metrics-row flex-row" *ngFor="let metric of metricsResults.currentItemVM.metricVMList">
+		<div class="key-metrics-col flex-jc-start wide" >
+			<span>
+				<span class="unitpal-font dark-gray-color f-11">{{metric.meta.fontName}}</span> 
+				<span class="dark-gray-color f-11" title="{{ metric.meta.displayName }}">{{ metric.meta.displayName }}</span>
+			</span>
+		</div>
+		<div class="key-metrics-col" *ngFor="let value of metric.keyMetricDO.valueList">
+			<span class="w-100" *ngIf="metric.keyMetricDO.valueType == 0">
+				<span class="dark-gray-color oneline-text f-11 w-100" title="{{ value.price }}">{{ value.price }}</span> 
+			</span>
+			<span class="w-100" *ngIf="metric.keyMetricDO.valueType == 1">
+				<span class="percentage-metric dark-gray-color oneline-text f-11" [ngStyle]="getPercentageStyles(value.percentage)" title="{{ value.percentage }}%">{{ value.percentage }}%</span> 
+			</span>
+			<span class="w-100" *ngIf="metric.keyMetricDO.valueType == 2">
+				<span class="dark-gray-color oneline-text f-11 w-100" title="{{ value.total }}/{{ value.available }}">{{ value.total }}/{{ value.available }}</span>
+			</span>
+		</div>
+	</div>
+</div>
