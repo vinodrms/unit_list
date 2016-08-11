@@ -8,7 +8,7 @@
 		</div>
 	</div>
 	<div class="key-metrics-row flex-row" *ngFor="let metric of metricsResults.currentItemVM.metricVMList">
-		<div class="key-metrics-col flex-jc-start wide" >
+		<div class="key-metrics-col flex-jc-start wide" (click)="openKeyMetricModal(metric)">
 			<span>
 				<span class="unitpal-font dark-gray-color f-12">{{metric.meta.fontName}}</span> 
 				<span class="dark-gray-color f-12" title="{{ metric.meta.displayName }}">{{ metric.meta.displayName }}</span>
