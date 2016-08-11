@@ -114,11 +114,15 @@ export class ThDateDO extends BaseDO {
 		return actualMonth < 10 ? ("0" + actualMonth) : ("" + actualMonth);
 	}
 
-	public getShortDisplayString(thTranslation: ThTranslation): string {
+	public getShortDisplayString(thTranslation: ThTranslation, omitYear?: boolean): string {
 		if (!this.isPrintable()) {
 			return "";
 		}
-		return this.day + " " + this.getShortMonthDisplayString(thTranslation) + " " + this.getShortYearDisplayString();
+		var displayString = this.day + " " + this.getShortMonthDisplayString(thTranslation);
+		if(!omitYear) {
+			displayString += " " + this.getShortYearDisplayString();
+		}
+		return displayString;
 	}
 	
 	public getLongDisplayString(thTranslation: ThTranslation): string {

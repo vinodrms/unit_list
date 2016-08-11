@@ -27,6 +27,7 @@
     "animate.css": "^3.5.1",
     "bootstrap": "^3.3.6",
     "bootstrap-daterangepicker": "^2.1.19",
+    "echarts": "^3.2.2",
     "es6-shim": "^0.35.0",
     "font-awesome": "^4.6.1",
     "jquery.1": "^1.0.0",

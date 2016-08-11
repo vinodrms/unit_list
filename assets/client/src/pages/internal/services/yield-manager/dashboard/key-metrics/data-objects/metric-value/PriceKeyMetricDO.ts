@@ -7,4 +7,8 @@ export class PriceKeyMetricDO extends BaseDO implements IKeyMetricValue {
     protected getPrimitivePropertyKeys(): string[] {
         return ["price"];
     }
+
+    public getValue(): number {
+        return this.price;
+    }
 }
