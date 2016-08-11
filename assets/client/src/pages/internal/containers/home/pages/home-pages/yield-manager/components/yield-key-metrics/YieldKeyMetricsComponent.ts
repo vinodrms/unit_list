@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import {LazyLoadingTableComponent} from '../../../../../../../../../common/utils/components/lazy-loading/LazyLoadingTableComponent';
 import {ThDateDO} from '../../../../../../../services/common/data-objects/th-dates/ThDateDO';
 import {AppContext} from '../../../../../../../../../common/utils/AppContext';
 
@@ -7,13 +6,15 @@ import {YieldManagerDashboardKeyMetricsService} from '../../../../../../../servi
 import {KeyMetricsResultVM} from '../../../../../../../services/yield-manager/dashboard/key-metrics/view-models/KeyMetricsResultVM';
 import {YieldManagerPeriodParam} from '../../../../../../../services/yield-manager/dashboard/common/YieldManagerPeriodParam';
 
-import {TranslationPipe} from '../../../../../../../../../common/utils/localization/TranslationPipe'
+import {CustomScroll} from '../../../../../../../../../common/utils/directives/CustomScroll';
+import {TranslationPipe} from '../../../../../../../../../common/utils/localization/TranslationPipe';
+
 @Component({
 	selector: 'yield-key-metrics',
 	// templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/yield-manager/components/yield-key-metrics/template/yield-key-metrics.html',
 	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/yield-manager/components/yield-key-metrics/template/yield-key-metrics.html',
 	providers: [YieldManagerDashboardKeyMetricsService],
-	directives : [LazyLoadingTableComponent]
+	directives : [CustomScroll]
 })
 export class YieldKeyMetricsComponent implements OnInit {
 	public matrix: string[][];

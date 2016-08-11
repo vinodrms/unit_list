@@ -2674,7 +2674,7 @@ a.btn.btn-square:focus {
         width: 100px; /* Need to force a width as flex behaves odd on small resolutions, the width is acutally not taken into account.*/
         background-color: #eeeeee;
         flex-basis: 100px;
-        flex-grow: 8;
+        flex-grow: 1;
         border-left: 1px solid #DBDBDB;
         border-right: 1px solid #DBDBDB;
     }
@@ -2685,10 +2685,12 @@ a.btn.btn-square:focus {
         display: flex;
         background-color: white;
         border: 1px solid #DBDBDB;
-        flex-grow: 1;
+        height: 50%;
     }
 
     .yield-manager-dashboard yield-key-metrics{
+        display: block;
+        overflow: hidden;
         margin: 12px 12px 3px 12px;
     }
 

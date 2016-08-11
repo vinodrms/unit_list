@@ -8,10 +8,13 @@ import {YieldFilterPaneComponent} from './components/yield-filter-pane/YieldFilt
 import {YieldKeyMetricsComponent} from './components/yield-key-metrics/YieldKeyMetricsComponent';
 import {YieldPriceProductsComponent} from './components/yield-price-products/YieldPriceProductsComponent';
 
+
 import {YieldFiltersService} from '../../../../../services/hotel-configurations/YieldFiltersService';
 import {YieldManagerDashboardFilterService} from '../../../../../services/yield-manager/dashboard/filter/YieldManagerDashboardFilterService';
 import {YieldManagerDashboardPriceProductsService} from '../../../../../services/yield-manager/dashboard/price-products/YieldManagerDashboardPriceProductsService';
 import {YieldManagerDashboardKeyMetricsService} from '../../../../../services/yield-manager/dashboard/key-metrics/YieldManagerDashboardKeyMetricsService';
+
+import {CustomScroll} from '../../../../../../../common/utils/directives/CustomScroll';
 
 export interface IYieldManagerDashboardFilter {
 
@@ -24,7 +27,7 @@ export interface IYieldManagerDashboardPriceProducts {
 @Component({
 	selector: 'yield-manager-dashboard',
 	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/yield-manager/template/yield-manager-dashboard.html',
-	directives: [LazyLoadingTableComponent, YieldFilterPaneComponent, YieldKeyMetricsComponent, YieldPriceProductsComponent],
+	directives: [CustomScroll, LazyLoadingTableComponent, YieldFilterPaneComponent, YieldKeyMetricsComponent, YieldPriceProductsComponent],
 	providers: [YieldFiltersService,
 		YieldManagerDashboardFilterService, YieldManagerDashboardPriceProductsService, YieldManagerDashboardKeyMetricsService]
 })
