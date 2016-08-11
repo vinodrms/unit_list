@@ -894,6 +894,12 @@ td .room-categ-capacity {
 .text-center {
     text-align: center;
 }
+.text-left {
+    text-align: left;
+}
+.text-right {
+    text-align: right;
+}
 
 .text-warning {
     color:rgb(251, 103, 8);
@@ -3413,11 +3419,14 @@ a.btn.btn-square:focus {
     border-top: 1px solid #DBDBDB;
     height: 10%;
 }
-.add-invoice-btn {
+.invoice-operations-btn-group {
     position: absolute;
     right: 20px;
     top: 50%;
     transform: translate(0, -50%);
+}
+.invoice-operations-btn-group button {
+    width: 150px;
 }
 .invoice-pagination-container {
     position: absolute;
@@ -3427,14 +3436,27 @@ a.btn.btn-square:focus {
 }
 invoice-edit {
     display: block;
+    flex-basis: 0;
     flex-grow: 1;
+    overflow: hidden;
 }
-.invoice-title {
-    color: rgb(251, 103, 8);
-    font-size: 18px;
-    margin-left: 15px;
+.invoice-title-container {
+    position: relative;
     text-align: left;
 }
+.invoice-title-container .invoice-remove {
+    position: absolute;
+    right: 0;
+}
+.invoice-title-container .invoice-title {
+    color: #fb6708;
+    font-size: 18px;
+    margin-left: 15px;
+}
+.invoice-title-container .invoice-title.read-only {
+    color: #9d9ca1;
+}
+
 .table-invoice-payer {
     margin: 0;
 }
@@ -3448,14 +3470,6 @@ invoice-edit {
 .table-invoice-payer > tbody > tr.row-actions > .print-container {
    text-align: right;
 }
-.table-invoice-payer > tbody > tr.row-payment {
-   background-color: #fcf0e6;
-   color: rgb(251, 103, 8);
-}
-.table-invoice-payer > tbody > tr.row-payment * {
-   color: rgb(251, 103, 8);
-}
-
 .btn-add-invoice-payer {
     text-align: left;
     margin: 0 0 5px 0;
@@ -3496,7 +3510,6 @@ invoice-edit {
     background-color: #fcf0e6;
     color: rgb(251, 103, 8);
 }
-
 tr.selected-invoice-item {
     background-color: #ededed;        
 }
@@ -3526,25 +3539,41 @@ tr.selected-invoice-item {
     vertical-align: middle !important;
     text-align: right;
 }
-.row-payment input {
-    text-align: right;
-}
-.row-payment input::-webkit-outer-spin-button,
-.row-payment input::-webkit-inner-spin-button {
-    /* display: none; <- Crashes Chrome on hover */
-    -webkit-appearance: none;
-    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
-}
-.row-payment input[type="number"] {
-    -moz-appearance: textfield;
-}
 .invoice-payer-container .clickable-item {
     cursor: pointer;
     font-weight: 500;
     color: white;
     font-size: 14px;
 }
+.invoice-edit-wrap {
+    min-height: 100%;
+	margin-bottom: -40px; 
+}
+.invoice-edit-wrap:after {
+    content: "";
+    display: block;
+}
+.invoice-edit-footer, .invoice-edit-wrap:after {
+	height: 40px; 
+}
 
+.rotate-45 {
+    /* Safari */
+    -webkit-transform: rotate(45deg);
+
+    /* Firefox */
+    -moz-transform: rotate(45deg);
+
+    /* IE */
+    -ms-transform: rotate(45deg);
+
+    /* Opera */
+    -o-transform: rotate(45deg);
+
+    /* Internet Explorer */
+    filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+
+}
 .more-items-container {
     padding-left: 0 !important;
     padding-right: 0 !important;
@@ -3561,4 +3590,64 @@ tr.selected-invoice-item {
 }
 table.small-margin {
     margin-bottom: 5px;
+}
+
+.table-invoice-items tr.selected {
+    background-color: #ededed;
+}
+.table-invoice-items tr.selectable:hover {
+    cursor: pointer;
+    background-color: #ededed;
+}
+
+.filter {
+    font-size: 14px;
+}
+
+.filter-label {
+    background: #fb6708;
+    color: white;
+    padding: 6px;
+    border-radius: 3px;
+}
+
+.filter-label .clickable-item {
+    cursor: pointer;
+    font-weight: 500;
+    color: white;
+    font-size: 14px;
+}
+.filter-label .clickable-item:hover {
+    opacity: 0.6;
+}
+.read-only-invoice {
+    background: #f0f0f0;
+}
+.payment-container {
+    display: flex;
+    justify-content: flex-end;
+}
+.payment-container input {
+    text-align: right;
+    width: 120px !important;
+}
+.payment-container input::-webkit-outer-spin-button,
+.payment-container input::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+.payment-container input[type="number"] {
+    -moz-appearance: textfield;
+}
+.payment-container {
+   background-color: #fcf0e6;
+   color: #fb6708;
+   text-align: right;
+}
+.payment-container * {
+   color: #fb6708;
+}
+.payment-container.read-only {
+    background: white;
 }

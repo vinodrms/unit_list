@@ -1,4 +1,4 @@
-import {Component, OnInit, Output, EventEmitter, Inject} from '@angular/core';
+import {Component, OnInit, Output, EventEmitter, Inject, Input} from '@angular/core';
 import {TranslationPipe} from '../../../../../../../../../common/utils/localization/TranslationPipe';
 
 import {SETTINGS_PROVIDERS} from '../../../../../../../services/settings/SettingsProviders';
@@ -42,6 +42,11 @@ import {HotelOperationsPageType} from '../services/utils/HotelOperationsPageType
     pipes: [TranslationPipe]
 })
 export class HotelOperationsComponent {
+    
+    public removeHeaderFilter() {
+        this.currentHotelOperationsPageParam.onFilterRemovedHandler();
+    };
+
     @Output() onExit = new EventEmitter<boolean>();
     public triggerOnExit() {
         this.onExit.next(true);

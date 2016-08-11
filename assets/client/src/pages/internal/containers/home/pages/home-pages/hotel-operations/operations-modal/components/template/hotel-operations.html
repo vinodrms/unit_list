@@ -8,6 +8,13 @@
 			<h1 class="oneline-text full-height">
 				{{ titleMeta.title }}
 				<small>{{ titleMeta.subtitle }}</small>
+				<small *ngIf="titleMeta.filterMeta && titleMeta.filterMeta.filterValue" class="filter">{{ titleMeta.filterMeta.filterInfo }}</small>
+				<span *ngIf="titleMeta.filterMeta && titleMeta.filterMeta.filterValue" class="filter filter-label">
+					<i class="fa fa-2x unitpal-font">(</i> {{ titleMeta.filterMeta.filterValue }} 
+					<a class="clickable-item" (click)="removeHeaderFilter()">
+						<i class="fa unitpal-font">C</i>
+					</a>
+				</span>	
 			</h1>
 		</div>
 		<div class="col-xs-5 col-md-5 full-height">

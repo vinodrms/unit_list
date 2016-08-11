@@ -3,15 +3,29 @@
 <div class="full-height" *ngIf="didInitOnce">
 	<div class="invoice-container">
 
-		<invoice-edit *ngFor="let invoice of invoiceList; let invoiceIndex = index" [invoiceIndex]="invoiceIndex"></invoice-edit>
+		<invoice-edit *ngFor="let displayedInvoiceIndex of displayedInvoiceIndexList" [invoiceVMIndex]="displayedInvoiceIndex" (newlyAddedInvoiceRemoved)="newlyAddedInvoiceRemoved($event)"></invoice-edit>
 
 	</div>
 	<div class="invoice-operations-footer">
 
-		<item-list-navigator [totalNumberOfItems]="totalNumberOfInvoices" [maxNumberOfDisplayedItems]="invoiceNavigatorWindowSize"
-			[numberOfSimultaneouslySelectedItems]="numberOfSimultaneouslyDisplayedInvoices">
+		<item-list-navigator (displayedItemsUpdated)="displayedItemsUpdated($event)" [initialNumberOfItems]="totalNumberOfInvoices" [maxNumberOfDisplayedItems]="invoiceNavigatorWindowSize"
+			[numberOfSimultaneouslySelectedItems]="numberOfSimultaneouslyDisplayedInvoices" [itemsAdded]="itemsAddedObservable" [itemRemoved]="itemRemovedObservable">
 		</item-list-navigator>
 
-		<button class="btn btn-danger add-invoice-btn" type="button"><i class="fa fa-save"></i> {{ 'Add Invoice' | translate }}</button>
+		<div *ngIf="editMode" class="invoice-operations-btn-group">
+			<th-button>
+				<a class="btn th-button-box" (click)="onAddInvoice()">
+					<i class="fa fa-2x unitpal-font">'</i>
+					<span>{{ 'Add Invoice' | translate }}</span>
+				</a>
+			</th-button>
+			<button class="btn btn-primary" type="button" (click)="onSave()"> {{ 'Save Changes' | translate }}</button>
+			<button class="btn btn-danger" type="button" (click)="onCancel()"> {{ 'Cancel' | translate }}</button>
+		</div>
+
+		<div *ngIf="payOnlyModeWithEditOption" class="invoice-operations-btn-group">
+			<button class="btn btn-danger" type="button" (click)="onEdit()"> {{ 'Edit' | translate }}</button>
+		</div>
+
 	</div>
 </div>
