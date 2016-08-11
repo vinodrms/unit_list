@@ -8,4 +8,7 @@ export class InventoryKeyMetricDO extends BaseDO implements IKeyMetricValue {
     protected getPrimitivePropertyKeys(): string[] {
         return ["total", "available"];
     }
+    public getValue(): number {
+        return this.available;
+    }
 }

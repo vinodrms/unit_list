@@ -13,7 +13,6 @@ import {InvoiceOperationsPageData} from './utils/InvoiceOperationsPageData';
 import {HotelAggregatedInfo} from '../../../../../../../../../../services/hotel/utils/HotelAggregatedInfo';
 import {CustomersDO} from '../../../../../../../../../../services/customers/data-objects/CustomersDO';
 import {InvoiceDO, InvoicePaymentStatus} from '../../../../../../../../../../services/invoices/data-objects/InvoiceDO';
-import {InvoiceGroupPayerStatsDO} from '../../../../../../../../../../services/invoices/data-objects/stats/InvoiceGroupPayerStatsDO';
 
 @Injectable()
 export class InvoiceOperationsPageService {
@@ -28,7 +27,7 @@ export class InvoiceOperationsPageService {
     public getPageData(pageParam: HotelInvoiceOperationsPageParam): Observable<InvoiceOperationsPageData> {
         return Observable.combineLatest(
             // this._eagerInvoiceGroupsService.getInvoiceGroup(pageParam.invoiceGroupId),
-            this._eagerInvoiceGroupsService.getInvoiceGroup('57a1c08d67e668b81f2bbd1b'),
+            this._eagerInvoiceGroupsService.getInvoiceGroup('57a4be2f3b5367b4324d667e'),
             this._hotelAggregatorService.getHotelAggregatedInfo()
         ).flatMap((result: [InvoiceGroupDO, HotelAggregatedInfo]) => {
             var pageData = new InvoiceOperationsPageData();
