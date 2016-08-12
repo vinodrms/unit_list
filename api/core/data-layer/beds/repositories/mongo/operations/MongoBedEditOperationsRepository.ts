@@ -8,10 +8,10 @@ import {BedDO, BedStatus} from '../../../../common/data-objects/bed/BedDO';
 import {MongoQueryBuilder} from '../../../../common/base/MongoQueryBuilder';
 
 export class MongoBedEditOperationsRepository extends MongoRepository {
-	constructor(bedEntity: Sails.Model) {
+    constructor(bedEntity: Sails.Model) {
         super(bedEntity);
     }
-	
+
     public addBed(bedMeta: BedMetaRepoDO, bed: BedDO): Promise<BedDO> {
         return new Promise<BedDO>((resolve: { (result: BedDO): void }, reject: { (err: ThError): void }) => {
             this.addBedCore(bedMeta, bed, resolve, reject);
@@ -48,10 +48,11 @@ export class MongoBedEditOperationsRepository extends MongoRepository {
     public updateBed(bedMeta: BedMetaRepoDO, bedItemMeta: BedItemMetaRepoDO, bed: BedDO): Promise<BedDO> {
         return this.findAndModifyBed(bedMeta, bedItemMeta, bed);
     }
-    public deleteBed(bedMeta: BedMetaRepoDO, bedItemMeta: BedItemMetaRepoDO): Promise<BedDO> {
+    public deleteBed(bedMeta: BedMetaRepoDO, bedItemMeta: BedItemMetaRepoDO, bed: BedDO): Promise<BedDO> {
         return this.findAndModifyBed(bedMeta, bedItemMeta,
             {
-                "status": BedStatus.Deleted
+                "status": BedStatus.Deleted,
+                "name": this.appendUniqueSuffix(bed.name)
             });
     }
     private findAndModifyBed(bedMeta: BedMetaRepoDO, bedItemMeta: BedItemMetaRepoDO, updateQuery: Object): Promise<BedDO> {

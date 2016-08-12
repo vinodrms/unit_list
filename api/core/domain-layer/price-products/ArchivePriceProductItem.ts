@@ -16,6 +16,7 @@ export class ArchivePriceProductItem {
 
 	private _ppRepoMeta: PriceProductMetaRepoDO;
 	private _ppItemRepoMeta: PriceProductItemMetaRepoDO;
+	private _loadedPriceProduct: PriceProductDO;
 
 	constructor(private _appContext: AppContext, private _sessionContext: SessionContext) {
 		this._ppRepoMeta = { hotelId: this._sessionContext.sessionDO.hotel.id };
@@ -49,6 +50,7 @@ export class ArchivePriceProductItem {
 					ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "cannot archive non active price product", this._inputDO, thError);
 					throw thError;
 				}
+				this._loadedPriceProduct = loadedPriceProduct;
 				this._ppItemRepoMeta = {
 					id: loadedPriceProduct.id,
 					versionId: loadedPriceProduct.versionId
@@ -78,7 +80,8 @@ export class ArchivePriceProductItem {
 				var ppRepo = this._appContext.getRepositoryFactory().getPriceProductRepository();
 				return ppRepo.updatePriceProductStatus(this._ppRepoMeta, this._ppItemRepoMeta, {
 					oldStatus: PriceProductStatus.Active,
-					newStatus: PriceProductStatus.Archived
+					newStatus: PriceProductStatus.Archived,
+					priceProduct: this._loadedPriceProduct
 				});
 			})
 			.then((updatedPriceProduct: PriceProductDO) => {

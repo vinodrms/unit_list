@@ -38,7 +38,7 @@ export class MongoAddOnProductRepository extends MongoRepository implements IAdd
 	public updateAddOnProduct(meta: AddOnProductMetaRepoDO, itemMeta: AddOnProductItemMetaRepoDO, addOnProduct: AddOnProductDO): Promise<AddOnProductDO> {
 		return this._crudRepository.updateAddOnProduct(meta, itemMeta, addOnProduct);
 	}
-	public deleteAddOnProduct(meta: AddOnProductMetaRepoDO, itemMeta: AddOnProductItemMetaRepoDO): Promise<AddOnProductDO> {
-		return this._crudRepository.deleteAddOnProduct(meta, itemMeta);
+	public deleteAddOnProduct(meta: AddOnProductMetaRepoDO, itemMeta: AddOnProductItemMetaRepoDO, addOnProduct: AddOnProductDO): Promise<AddOnProductDO> {
+		return this._crudRepository.deleteAddOnProduct(meta, itemMeta, addOnProduct);
 	}
 }

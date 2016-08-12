@@ -1,7 +1,7 @@
 import {ThLogger, ThLogLevel} from '../../../../../utils/logging/ThLogger';
 import {ThError} from '../../../../../utils/th-responses/ThError';
 import {ThStatusCode} from '../../../../../utils/th-responses/ThResponse';
-import {MongoRepository} from '../../../../common/base/MongoRepository';
+import {MongoRepository, MongoErrorCodes} from '../../../../common/base/MongoRepository';
 import {PriceProductMetaRepoDO, PriceProductItemMetaRepoDO, PriceProductUpdateStatusParamsRepoDO, PriceProductUpdateYMIntervalsParamsRepoDO} from '../../IPriceProductRepository';
 import {PriceProductDO, PriceProductStatus} from '../../../data-objects/PriceProductDO';
 import {PriceProductYieldFilterMetaDO} from '../../../data-objects/yield-filter/PriceProductYieldFilterDO';
@@ -26,6 +26,13 @@ export class MongoPriceProductCrudOperationsRepository extends MongoRepository {
 
 		this.createDocument(priceProduct,
 			(err: Error) => {
+				var errorCode = this.getMongoErrorCode(err);
+				if (errorCode == MongoErrorCodes.DuplicateKeyError) {
+					var thError = new ThError(ThStatusCode.PriceProductRepositoryNameAlreadyExists, err);
+					ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Price product name already exists", { meat: meta, priceProduct: priceProduct }, thError);
+					reject(thError);
+					return;
+				}
 				var thError = new ThError(ThStatusCode.PriceProductRepositoryErrorAddingPriceProduct, err);
 				ThLogger.getInstance().logError(ThLogLevel.Error, "Error adding price product", { meat: meta, priceProduct: priceProduct }, thError);
 				reject(thError);
@@ -80,13 +87,17 @@ export class MongoPriceProductCrudOperationsRepository extends MongoRepository {
 			});
 	}
 	public updatePriceProductStatus(meta: PriceProductMetaRepoDO, itemMeta: PriceProductItemMetaRepoDO, params: PriceProductUpdateStatusParamsRepoDO): Promise<PriceProductDO> {
+		var updateQuery = {
+			"status": params.newStatus
+		};
+		if (params.newStatus === PriceProductStatus.Deleted) {
+			updateQuery["name"] = this.appendUniqueSuffix(params.priceProduct.name);
+		}
 		return this.findAndModifyPriceProduct(meta, itemMeta,
 			{
 				"status": params.oldStatus
 			},
-			{
-				"status": params.newStatus
-			});
+			updateQuery);
 	}
 	public updatePriceProductYieldFiltersAndNotes(meta: PriceProductMetaRepoDO, itemMeta: PriceProductItemMetaRepoDO, filterList: PriceProductYieldFilterMetaDO[], notes: string): Promise<PriceProductDO> {
 		return this.findAndModifyPriceProduct(meta, itemMeta, {},

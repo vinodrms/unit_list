@@ -67,10 +67,11 @@ export class MongoAddOnProductCrudOperationsRepository extends MongoRepository {
 				"notes": addOnProduct.notes
 			});
 	}
-	public deleteAddOnProduct(meta: AddOnProductMetaRepoDO, itemMeta: AddOnProductItemMetaRepoDO): Promise<AddOnProductDO> {
+	public deleteAddOnProduct(meta: AddOnProductMetaRepoDO, itemMeta: AddOnProductItemMetaRepoDO, addOnProduct: AddOnProductDO): Promise<AddOnProductDO> {
 		return this.findAndModifyAddOnProduct(meta, itemMeta,
 			{
-				"status": AddOnProductStatus.Deleted
+				"status": AddOnProductStatus.Deleted,
+				"name": this.appendUniqueSuffix(addOnProduct.name)
 			});
 	}
 	private findAndModifyAddOnProduct(meta: AddOnProductMetaRepoDO, itemMeta: AddOnProductItemMetaRepoDO, updateQuery: Object): Promise<AddOnProductDO> {

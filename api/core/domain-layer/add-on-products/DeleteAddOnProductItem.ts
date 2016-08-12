@@ -69,7 +69,7 @@ export class DeleteAddOnProductItem {
 			.then((validationResult: boolean) => {
 				var addOnProductRepo = this._appContext.getRepositoryFactory().getAddOnProductRepository();
 				var itemMeta = this.buildAddOnProductItemMetaRepoDO();
-				return addOnProductRepo.deleteAddOnProduct(this._aopMeta, itemMeta);
+				return addOnProductRepo.deleteAddOnProduct(this._aopMeta, itemMeta, this._loadedAddOnProduct);
 			})
 			.then((deletedAddOnProduct: AddOnProductDO) => {
 				resolve(deletedAddOnProduct);

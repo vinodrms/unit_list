@@ -19,5 +19,5 @@ export interface ITaxRepository {
 
 	addTax(taxMeta: TaxMetaRepoDO, tax: TaxDO): Promise<TaxDO>;
 	updateTax(taxMeta: TaxMetaRepoDO, taxItemMeta: TaxItemMetaRepoDO, tax: TaxDO): Promise<TaxDO>;
-	deleteTax(taxMeta: TaxMetaRepoDO, taxItemMeta: TaxItemMetaRepoDO): Promise<TaxDO>;
+	deleteTax(taxMeta: TaxMetaRepoDO, taxItemMeta: TaxItemMetaRepoDO, tax: TaxDO): Promise<TaxDO>;
 }

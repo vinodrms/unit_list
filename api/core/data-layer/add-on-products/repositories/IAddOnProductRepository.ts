@@ -29,5 +29,5 @@ export interface IAddOnProductRepository {
 
 	addAddOnProduct(meta: AddOnProductMetaRepoDO, addOnProduct: AddOnProductDO): Promise<AddOnProductDO>;
 	updateAddOnProduct(meta: AddOnProductMetaRepoDO, itemMeta: AddOnProductItemMetaRepoDO, addOnProduct: AddOnProductDO): Promise<AddOnProductDO>;
-	deleteAddOnProduct(meta: AddOnProductMetaRepoDO, itemMeta: AddOnProductItemMetaRepoDO): Promise<AddOnProductDO>;
+	deleteAddOnProduct(meta: AddOnProductMetaRepoDO, itemMeta: AddOnProductItemMetaRepoDO, addOnProduct: AddOnProductDO): Promise<AddOnProductDO>;
 }

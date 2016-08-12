@@ -210,6 +210,7 @@ export enum ThStatusCode {
     CustomersControllerErrorGettingCount,
     CustomersControllerErrorGettingList,
     PriceProductRepositoryErrorAddingPriceProduct,
+    PriceProductRepositoryNameAlreadyExists,
     PriceProductRepositoryProductNotFound,
     PriceProductRepositoryErrorGettingPriceProduct,
     PriceProductRepositoryProblemUpdatingPriceProduct,
@@ -680,6 +681,7 @@ ThMessage[ThStatusCode.CustomersControllerErrorSavingCustomer] = "Error saving c
 ThMessage[ThStatusCode.CustomersControllerErrorGettingCount] = "Error getting the number of customers.";
 ThMessage[ThStatusCode.CustomersControllerErrorGettingList] = "Error getting the list of customers.";
 ThMessage[ThStatusCode.PriceProductRepositoryErrorAddingPriceProduct] = "Error adding price product.";
+ThMessage[ThStatusCode.PriceProductRepositoryNameAlreadyExists] = "A price product with this name already exists.";
 ThMessage[ThStatusCode.PriceProductRepositoryProductNotFound] = "Price product not found.";
 ThMessage[ThStatusCode.PriceProductRepositoryErrorGettingPriceProduct] = "Error getting price product.";
 ThMessage[ThStatusCode.PriceProductRepositoryProblemUpdatingPriceProduct] = "Problem updating price product. It is possible that someone else changed it at the same time. Please refresh the page and try again.";
