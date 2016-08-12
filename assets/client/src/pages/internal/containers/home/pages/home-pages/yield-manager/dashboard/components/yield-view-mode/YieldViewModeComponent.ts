@@ -57,7 +57,9 @@ export class YieldViewModeComponent implements OnInit {
 		this.buttonRight = new ViewModeButton(YieldViewModeState.ExpandedYieldPriceProducts, false);
 	}
 
-	ngOnInit() { }
+	ngOnInit() { 
+		this.changeState(this.buttonRight);
+	}
 
 	public changeState(button:ViewModeButton){
 		var oldState = this.buttonMiddle.state;

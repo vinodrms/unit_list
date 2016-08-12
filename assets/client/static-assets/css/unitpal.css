@@ -2812,17 +2812,19 @@ a.btn.btn-square:focus {
 
         .key-metrics-col .percentage-metric{
             border-left: 3px solid;
-            /*border-left-color: red;*/
             padding-left: 3px;
             display: inline-block;
             width: 50px;
+        }
+        
+        .key-metrics-col .key-metric-value{
+            color: #555;
             text-align: center;
         }
 
         .key-metrics-col.wide {
             flex-basis: 170px;
             flex-shrink: 0;
-            /*white-space: nowrap;*/
             flex-wrap: nowrap;
             overflow: hidden;
         }

@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChildren} from '@angular/core';
 import {LazyLoadingTableComponent} from '../../../../../../../../common/utils/components/lazy-loading/LazyLoadingTableComponent';
 import {HeaderPageService} from '../../../utils/header/container/services/HeaderPageService';
 import {HeaderPageType} from '../../../utils/header/container/services/HeaderPageType';
@@ -42,6 +42,8 @@ export class YieldManagerDashboardComponent extends AHomeContainerComponent impl
 	public keyMetricsViewModeDecoratorClass =  ViewModeDecoratorClass.Default;
 	public priceProductsViewModeDecoratorClass =  ViewModeDecoratorClass.Default;
 
+	@ViewChildren(CustomScroll) scrollBars: CustomScroll[];
+
 	constructor(headerPageService: HeaderPageService) {
 		super(headerPageService, HeaderPageType.YieldManager);
 	}
@@ -66,6 +68,12 @@ export class YieldManagerDashboardComponent extends AHomeContainerComponent impl
 				this.priceProductsViewModeDecoratorClass = ViewModeDecoratorClass.Expanded;
 				break;
 			}
+		}
+		debugger;
+		if (this.scrollBars){
+			this.scrollBars.forEach((scrollBar) =>{
+				scrollBar.forceRecreate();
+			})
 		}
 	}
 }

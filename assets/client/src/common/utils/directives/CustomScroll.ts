@@ -11,6 +11,18 @@ export class CustomScroll implements AfterViewInit, OnDestroy {
     }
 
     ngAfterViewInit() {
+        this.create();
+    }
+
+    ngOnDestroy() {
+        this.destroy();
+    }
+
+    onResize(event) {
+        this.updateScrollableRegion();
+    }
+
+    private create(){
         var jqElement = this.getjQueryElement();
         jqElement.addClass('position-relative');
         jqElement.perfectScrollbar({
@@ -21,13 +33,11 @@ export class CustomScroll implements AfterViewInit, OnDestroy {
         jqElement.perfectScrollbar('update');
     }
 
-    ngOnDestroy() {
+    private destroy(){
         var jqElement = this.getjQueryElement();
         jqElement.perfectScrollbar('destroy');
     }
-    onResize(event) {
-        this.updateScrollableRegion();
-    }
+
     private updateScrollableRegion() {
         var jqElement = this.getjQueryElement();
         jqElement.perfectScrollbar('update');
@@ -40,6 +50,16 @@ export class CustomScroll implements AfterViewInit, OnDestroy {
     public scheduleScrollRegionUpdate() {
         setTimeout(() => {
             this.updateScrollableRegion();
+        });
+    }
+
+    /* Note: This is needed on yield-manager,
+    *  scroll update does not seem to work, only forcing a destroy and recreating makes it work properly.
+    */
+    public forceRecreate(){
+        this.destroy();
+        setTimeout(()=>{
+            this.create();
         });
     }
 }
