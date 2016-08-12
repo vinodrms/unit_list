@@ -1,4 +1,4 @@
-import {Component, OnInit } from '@angular/core';
+import {Component, OnInit, Input } from '@angular/core';
 import {ThDateDO} from '../../../../../../../../services/common/data-objects/th-dates/ThDateDO';
 import {AppContext} from '../../../../../../../../../../common/utils/AppContext';
 import {CustomScroll} from '../../../../../../../../../../common/utils/directives/CustomScroll';
@@ -13,18 +13,18 @@ import {IYieldManagerDashboardPriceProducts} from '../../YieldManagerDashboardCo
 	pipes: [TranslationPipe]
 })
 export class YieldPriceProductsComponent implements OnInit {
-	private _yieldManager : IYieldManagerDashboardPriceProducts;
+	private _yieldManager: IYieldManagerDashboardPriceProducts;
 
 	constructor() { }
 
 	ngOnInit() { }
-	
-	public get yield_manager() : IYieldManagerDashboardPriceProducts {
+
+	public get yieldManager(): IYieldManagerDashboardPriceProducts {
 		return this._yieldManager;
 	}
 
-	public set yield_manager(yieldManager : IYieldManagerDashboardPriceProducts) {
+	@Input()
+	public set yieldManager(yieldManager: IYieldManagerDashboardPriceProducts) {
 		this._yieldManager = yieldManager;
 	}
-	
 }

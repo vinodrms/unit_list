@@ -37,7 +37,7 @@ function packCompiledFiles(configFileName, outFileName, appConfigName, endCallba
 			var outputFile = 'client/build/' + outFileName;
 			return builder.buildStatic(appConfigName, outputFile, {
 				minify: true,
-				mangle: true
+				mangle: false
 			});
 		})
 		.then(function () {

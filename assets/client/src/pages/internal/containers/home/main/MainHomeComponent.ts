@@ -23,7 +23,7 @@ import {SettingsContainerComponent} from '../pages/home-pages/settings/container
 		SETTINGS_PROVIDERS, HOTEL_AGGREGATOR_PROVIDERS, TaxService, RoomCategoriesService,
 		RoomCategoriesStatsService],
 	directives: [MainHeaderComponent, ROUTER_DIRECTIVES],
-	precompile: [HotelOperationsDashboardComponent, YieldManagerDashboardComponent,
+	entryComponents: [HotelOperationsDashboardComponent, YieldManagerDashboardComponent,
 		BookingHistoryDashboardComponent, SettingsContainerComponent]
 })
 

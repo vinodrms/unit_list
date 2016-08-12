@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ViewChildren } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChildren, Input } from '@angular/core';
 
 import {ThDateDO} from '../../../../../../../../services/common/data-objects/th-dates/ThDateDO';
 import {AppContext} from '../../../../../../../../../../common/utils/AppContext';
@@ -59,6 +59,7 @@ export class YieldFilterPaneComponent implements OnInit {
 		return this._yieldManager;
 	}
 
+	@Input()
 	public set yieldManager(v: IYieldManagerDashboardFilter) {
 		this._yieldManager = v;
 	}

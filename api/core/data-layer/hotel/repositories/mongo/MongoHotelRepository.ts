@@ -50,7 +50,7 @@ export class MongoHotelRepository extends MongoRepository implements IHotelRepos
 	public updatePropertyDetails(hotelMeta: HotelMetaRepoDO, propertyDetails: PropertyDetailsRepoDO): Promise<HotelDO> {
 		return this._hotelDetailsRepository.updatePropertyDetails(hotelMeta, propertyDetails);
 	}
-	public markConfigurationCompleted(hotelMeta: HotelMetaRepoDO): Promise<HotelDO> {
-		return this._hotelDetailsRepository.markConfigurationCompleted(hotelMeta);
+	public markConfigurationCompleted(hotelMeta: HotelMetaRepoDO, hotel: HotelDO): Promise<HotelDO> {
+		return this._hotelDetailsRepository.markConfigurationCompleted(hotelMeta, hotel);
 	}
 }

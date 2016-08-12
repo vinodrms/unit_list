@@ -655,8 +655,6 @@ export var EnglishTranslations: Object = {
 	"Average value for this period": "Average value for this period",
 	"Minimum value for this period": "Minimum value for this period",
 	"Maximum value for this period": "Maximum value for this period",
-	"Available Rooms": "Available Rooms",
-	"Available Allotments": "Available Allotments",
 
 
 };

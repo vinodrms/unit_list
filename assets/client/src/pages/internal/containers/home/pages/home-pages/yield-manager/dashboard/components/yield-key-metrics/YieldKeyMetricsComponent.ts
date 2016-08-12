@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import {ThDateDO} from '../../../../../../../../services/common/data-objects/th-dates/ThDateDO';
 import {AppContext} from '../../../../../../../../../../common/utils/AppContext';
+
+import {IYieldManagerDashboardFilter} from '../../YieldManagerDashboardComponent'
 
 import {YieldManagerDashboardKeyMetricsService} from '../../../../../../../../services/yield-manager/dashboard/key-metrics/YieldManagerDashboardKeyMetricsService';
 import {KeyMetricsResultVM} from '../../../../../../../../services/yield-manager/dashboard/key-metrics/view-models/KeyMetricsResultVM';
@@ -22,6 +24,8 @@ import {ModalDialogRef} from '../../../../../../../../../../common/utils/modals/
 export class YieldKeyMetricsComponent implements OnInit {
 	public matrix: string[][];
 	public metricsResults: KeyMetricsResultVM;
+
+	private _yieldManager: IYieldManagerDashboardFilter;
 
 	constructor(
 		private _keyMetricsService: YieldManagerDashboardKeyMetricsService,
@@ -91,5 +95,13 @@ export class YieldKeyMetricsComponent implements OnInit {
 			modalDialogRef.resultObservable.subscribe((result: boolean) => {
 			}, (err: any) => { });
 		}).catch((err: any) => { });
+	}
+
+	public get yieldManager(): IYieldManagerDashboardFilter {
+		return this._yieldManager;
+	}
+	@Input()
+	public set yieldManager(yieldManager: IYieldManagerDashboardFilter) {
+		this._yieldManager = yieldManager;
 	}
 }

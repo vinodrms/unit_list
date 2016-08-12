@@ -14,12 +14,12 @@ import {InvoicePaymentMethodVM} from '../../../../../../../../../services/invoic
 import {InvoicePaymentMethodDO, InvoicePaymentMethodType} from '../../../../../../../../../services/invoices/data-objects/payers/InvoicePaymentMethodDO';
 
 @Component({
-    selector: 'booking-details-editor',
-    templateUrl: '/client/src/pages/internal/containers/home/pages/utils/new-booking/component/subcomponents/booking-fill-details/components/template/booking-details-editor.html',
+    selector: 'new-booking-details-editor',
+    templateUrl: '/client/src/pages/internal/containers/home/pages/utils/new-booking/component/subcomponents/booking-fill-details/components/template/new-booking-details-editor.html',
     directives: [CustomScroll, ConfigCapacityComponent],
     pipes: [TranslationPipe]
 })
-export class BookingDetailsEditorComponent extends BaseComponent {
+export class NewBookingDetailsEditorComponent extends BaseComponent {
     @Output() protected onBookingItemChanged = new EventEmitter<BookingCartItemVM>();
 
     private _bookingCartItem: BookingCartItemVM;

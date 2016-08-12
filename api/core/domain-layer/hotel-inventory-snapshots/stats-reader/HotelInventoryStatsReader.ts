@@ -7,6 +7,7 @@ import {ThUtils} from '../../../utils/ThUtils';
 import {ThDateDO} from '../../../utils/th-dates/data-objects/ThDateDO';
 import {ThHourDO} from '../../../utils/th-dates/data-objects/ThHourDO';
 import {ThTimestampDO} from '../../../utils/th-dates/data-objects/ThTimestampDO';
+import {ThDateUtils} from '../../../utils/th-dates/ThDateUtils';
 import {IndexedBookingInterval} from '../../../data-layer/price-products/utils/IndexedBookingInterval';
 import {RoomDO} from '../../../data-layer/rooms/data-objects/RoomDO';
 import {HotelInventorySnapshotDO} from '../../../data-layer/hotel-inventory-snapshots/data-objects/HotelInventorySnapshotDO';
@@ -24,9 +25,11 @@ export interface HotelInventoryStatsParams {
     currentAllotmentList: AllotmentDO[];
     cancellationHour: ThHourDO;
     currentHotelTimestamp: ThTimestampDO;
+    configurationCompletedTimestamp: ThTimestampDO;
 }
 export class HotelInventoryStatsReader {
     private _thUtils: ThUtils;
+    private _thDateUtils: ThDateUtils;
     private _snapshotUtils: SnapshotUtils;
 
     private _indexedInterval: IndexedBookingInterval;
@@ -34,13 +37,24 @@ export class HotelInventoryStatsReader {
     private _loadedSnapshotList: HotelInventorySnapshotDO[];
     private _currentRoomSnapshots: RoomSnapshotDO[];
     private _bookingIndexer: BookingIndexer;
+    private _minInventoryDate: ThDateDO;
 
     constructor(private _appContext: AppContext,
         private _sessionContext: SessionContext,
         private _readerParams: HotelInventoryStatsParams) {
         this._thUtils = new ThUtils();
+        this._thDateUtils = new ThDateUtils();
         this._snapshotUtils = new SnapshotUtils();
         this._currentRoomSnapshots = this._snapshotUtils.buildRoomSnapshots(this._readerParams.currentRoomList);
+        this.buildMinInventoryDate();
+    }
+    private buildMinInventoryDate() {
+        var configCompletedTimestamp: ThTimestampDO = this._readerParams.configurationCompletedTimestamp;
+        if (this._thUtils.isUndefinedOrNull(configCompletedTimestamp) || !configCompletedTimestamp.isValid()) {
+            this._minInventoryDate = this._thDateUtils.getMinThDateDO();
+            return;
+        }
+        this._minInventoryDate = this._thDateUtils.addDaysToThDateDO(configCompletedTimestamp.thDateDO, -1);
     }
 
     public readInventoryForInterval(indexedInterval: IndexedBookingInterval): Promise<IHotelInventoryStats> {
@@ -95,6 +109,11 @@ export class HotelInventoryStatsReader {
         if (!this._thUtils.isUndefinedOrNull(snapshot)) {
             totalInventoryForDate.noOfRooms = snapshot.roomList.length;
             totalInventoryForDate.noOfRoomsWithAllotment = snapshot.allotments.totalNoOfRooms;
+            return totalInventoryForDate;
+        }
+        if (date.isBefore(this._minInventoryDate)) {
+            totalInventoryForDate.noOfRooms = 0;
+            totalInventoryForDate.noOfRoomsWithAllotment = 0;
             return totalInventoryForDate;
         }
         totalInventoryForDate.noOfRooms = this._currentRoomSnapshots.length;

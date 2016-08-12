@@ -65,8 +65,9 @@ describe("Hotel Details Tests", function () {
         });
 		it("Should mark the hotel's configurationCompleted as true", function (done) {
 			var hotelConfigurationStatus = new HotelConfigurations(testContext.appContext, testContext.sessionContext);
-			hotelConfigurationStatus.markAsCompleted().then((configurationCompleted: boolean) => {
-				should.equal(configurationCompleted, true);
+			hotelConfigurationStatus.markAsCompleted().then((updatedHotel: HotelDO) => {
+				should.equal(updatedHotel.configurationCompleted, true);
+				should.exist(updatedHotel.configurationCompletedTimestamp);
 				done();
 			}).catch((e: any) => {
 				done(e);

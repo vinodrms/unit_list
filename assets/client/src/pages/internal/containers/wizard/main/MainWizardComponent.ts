@@ -38,7 +38,7 @@ import {RoomCategoriesStatsService} from '../../../services/room-categories/Room
 		WizardAddOnProductsStateService, WizardPriceProductsStateService,
 		WizardCustomerRegisterStateService, WizardAllotmentsStateService,
 		WizardService],
-	precompile: [
+	entryComponents: [
 		WizardBasicInformationComponent, WizardBedsComponent, WizardRoomsComponent, WizardBreakfastComponent,
 		WizardAddOnProductsComponent, WizardPriceProductsComponent, WizardCustomerRegisterComponent, WizardAllotmentsComponent
 	]
