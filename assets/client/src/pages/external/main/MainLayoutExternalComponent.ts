@@ -17,7 +17,7 @@ import {SignUpComponent} from '../pages/sign-up/SignUpComponent';
     templateUrl: '/client/src/pages/external/main/template/main-layout-external.html',
 	directives: [ROUTER_DIRECTIVES, CustomScroll],
 	pipes: [TranslationPipe],
-	precompile: [LogInComponent, ResetPasswordComponent, UpdatePasswordComponent, SignUpComponent]
+	entryComponents: [LogInComponent, ResetPasswordComponent, UpdatePasswordComponent, SignUpComponent]
 })
 export class MainLayoutExternalComponent extends BaseComponent {
 	constructor(viewContainerRef: ViewContainerRef, @Inject(IToaster) toaster: IToaster, @Inject(IModalService) modalService: IModalService) {

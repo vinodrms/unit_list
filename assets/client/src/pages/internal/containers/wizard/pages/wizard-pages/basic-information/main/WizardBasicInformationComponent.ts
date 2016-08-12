@@ -19,7 +19,7 @@ import {WizardStepsComponent} from '../../../utils/wizard-steps/WizardStepsCompo
 	templateUrl: '/client/src/pages/internal/containers/wizard/pages/wizard-pages/basic-information/main/template/wizard-basic-information.html',
 	directives: [ROUTER_DIRECTIVES],
 	providers: [TimezoneService],
-	precompile: [WizardBasicInfoIntroComponent, WizardBasicInfoOverviewComponent, WizardBasicInfoPaymentsAndPoliciesComponent, WizardBasicInfoPropertyDetailsComponent]
+	entryComponents: [WizardBasicInfoIntroComponent, WizardBasicInfoOverviewComponent, WizardBasicInfoPaymentsAndPoliciesComponent, WizardBasicInfoPropertyDetailsComponent]
 })
 export class WizardBasicInformationComponent extends BaseComponent {
 	constructor(wizardService: WizardService, basicInfoStateService: WizardBasicInformationStateService) {

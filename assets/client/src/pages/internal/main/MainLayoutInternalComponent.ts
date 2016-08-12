@@ -13,7 +13,7 @@ import {MainWizardComponent} from '../containers/wizard/main/MainWizardComponent
 		<router-outlet></router-outlet>
 	`,
 	directives: [ROUTER_DIRECTIVES],
-	precompile: [MainHomeComponent, MainWizardComponent]
+	entryComponents: [MainHomeComponent, MainWizardComponent]
 })
 export class MainLayoutInternalComponent extends BaseComponent {
 	constructor(viewContainerRef: ViewContainerRef, @Inject(IToaster) toaster: IToaster, @Inject(IModalService) modalService: IModalService) {

@@ -10,12 +10,12 @@ import {BookingCartTableMetaBuilderService} from '../utils/table-builder/Booking
 import {BookingTableUtilsService} from '../utils/table-builder/BookingTableUtilsService';
 import {BookingFillDetailsStepService} from './services/BookingFillDetailsStepService';
 import {LazyLoadTableMeta} from '../../../../../../../../../../common/utils/components/lazy-loading/utils/LazyLoadTableMeta';
-import {BookingDetailsEditorComponent} from './components/BookingDetailsEditorComponent';
+import {NewBookingDetailsEditorComponent} from './components/NewBookingDetailsEditorComponent';
 
 @Component({
 	selector: 'new-booking-fill-details',
 	templateUrl: '/client/src/pages/internal/containers/home/pages/utils/new-booking/component/subcomponents/booking-fill-details/template/new-booking-fill-details.html',
-	directives: [LazyLoadingTableComponent, BookingDetailsEditorComponent],
+	directives: [LazyLoadingTableComponent, NewBookingDetailsEditorComponent],
 	providers: [BookingCartTableMetaBuilderService, BookingTableUtilsService],
 })
 export class NewBookingFillDetailsComponent extends BaseComponent implements AfterViewInit, OnInit, OnDestroy {

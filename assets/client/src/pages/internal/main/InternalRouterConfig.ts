@@ -1,4 +1,4 @@
-import {provideRouter, RouterConfig} from '@angular/router';
+import {Routes, RouterModule} from '@angular/router';
 
 import {MainWizardComponent} from '../containers/wizard/main/MainWizardComponent';
 import {WizardBasicInformationComponent} from '../containers/wizard/pages/wizard-pages/basic-information/main/WizardBasicInformationComponent';
@@ -31,7 +31,26 @@ import {SettingsPriceProductsComponent} from '../containers/home/pages/home-page
 import {SettingsCustomerRegisterComponent} from '../containers/home/pages/home-pages/settings/subcomponents/customer-register/SettingsCustomerRegisterComponent';
 import {SettingsAllotmentsComponent} from '../containers/home/pages/home-pages/settings/subcomponents/allotments/SettingsAllotmentsComponent';
 
-const routes: RouterConfig = [
+export const InternalRouterModules = [
+    MainHomeComponent,
+    HotelOperationsDashboardComponent,
+    YieldManagerDashboardComponent,
+    BookingHistoryDashboardComponent,
+    SettingsContainerComponent,
+    SettingsBasicInformationComponent,
+    SettingsBasicInfoOverviewComponent, SettingsBasicInfoPaymentsAndPoliciesComponent,
+    SettingsBasicInfoPropertyDetailsComponent,
+    SettingsBedsComponent, SettingsRoomsComponent, SettingsBreakfastComponent,
+    SettingsAddOnProductsComponent, SettingsPriceProductsComponent,
+    SettingsCustomerRegisterComponent, SettingsAllotmentsComponent,
+    MainWizardComponent, WizardBasicInformationComponent, WizardBasicInfoIntroComponent,
+    WizardBasicInfoOverviewComponent, WizardBasicInfoPaymentsAndPoliciesComponent,
+    WizardBasicInfoPropertyDetailsComponent, WizardBedsComponent, WizardRoomsComponent,
+    WizardBreakfastComponent, WizardAddOnProductsComponent, WizardPriceProductsComponent,
+    WizardCustomerRegisterComponent, WizardAllotmentsComponent
+]
+
+const internalRoutes: Routes = [
     {
         path: '', component: MainHomeComponent,
         children: [
@@ -86,6 +105,4 @@ const routes: RouterConfig = [
         ]
     }
 ];
-export const InternalRouterConfig = [
-    provideRouter(routes)
-];
+export const InternalRouting = RouterModule.forRoot(internalRoutes);
