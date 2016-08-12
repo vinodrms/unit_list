@@ -79,4 +79,19 @@ export class BookingDOConstraints {
         BookingConfirmationStatus.CheckedIn,
         BookingConfirmationStatus.CheckedOut
     ];
+
+    public static ConfirmationStatuses_AddOnProductForbidDeletion: BookingConfirmationStatus[] = [
+        BookingConfirmationStatus.Confirmed,
+        BookingConfirmationStatus.Guaranteed,
+        BookingConfirmationStatus.NoShow,
+        BookingConfirmationStatus.NoShowWithPenalty
+    ];
+
+    public static ConfirmationStatuses_PriceProductForbidArchive: BookingConfirmationStatus[] = [
+        BookingConfirmationStatus.Confirmed,
+        BookingConfirmationStatus.Guaranteed,
+        BookingConfirmationStatus.NoShow,
+        BookingConfirmationStatus.NoShowWithPenalty,
+        BookingConfirmationStatus.CheckedIn
+    ];
 }

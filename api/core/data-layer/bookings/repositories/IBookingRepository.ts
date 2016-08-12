@@ -32,6 +32,8 @@ export interface BookingSearchCriteriaRepoDO {
     roomId?: string;
     customerId?: string;
     descendentSortOrder?: boolean;
+    reservedAddOnProductId?: string;
+    priceProductId?: string;
 }
 export interface BookingSearchResultRepoDO {
     lazyLoad?: LazyLoadRepoDO;

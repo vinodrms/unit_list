@@ -110,6 +110,8 @@ export class MongoGetBookingsRepository extends MongoRepository {
         mongoQueryBuilder.addRegex("bookingList.indexedSearchTerms", searchCriteria.searchTerm);
         mongoQueryBuilder.addExactMatch("bookingList.roomId", searchCriteria.roomId);
         mongoQueryBuilder.addMultipleSelectOption("bookingList.customerIdList", searchCriteria.customerId);
+        mongoQueryBuilder.addMultipleSelectOption("bookingList.reservedAddOnProductIdList", searchCriteria.reservedAddOnProductId);
+        mongoQueryBuilder.addExactMatch("bookingList.priceProductId", searchCriteria.priceProductId);
         return mongoQueryBuilder.processedQuery;
     }
     private appendTriggerParamsIfNecessary(mongoQueryBuilder: MongoQueryBuilder, searchCriteria: BookingSearchCriteriaRepoDO) {

@@ -12,6 +12,8 @@ import {AddOnProductMetaRepoDO, AddOnProductItemMetaRepoDO} from '../../data-lay
 import {AddOnProductDO} from '../../data-layer/add-on-products/data-objects/AddOnProductDO';
 import {PriceProductStatus} from '../../data-layer/price-products/data-objects/PriceProductDO';
 import {PriceProductSearchResultRepoDO} from '../../data-layer/price-products/repositories/IPriceProductRepository';
+import {LazyLoadMetaResponseRepoDO} from '../../data-layer/common/repo-data-objects/LazyLoadRepoDO';
+import {BookingDOConstraints} from '../../data-layer/bookings/data-objects/BookingDOConstraints';
 
 export class DeleteAddOnProductItemDO {
 	id: string;
@@ -107,9 +109,20 @@ export class DeleteAddOnProductItem {
 				if (priceProductSearchResult.priceProductList.length > 0) {
 					var thError = new ThError(ThStatusCode.DeleteAddOnProductItemUsedInDraftOrActivePriceProducts, null);
 					ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Add on product delete error: used in price products", this._deleteItemDO, thError);
-					reject(thError);
+					throw thError;
 				}
-				// TODO: add validations for deleting addon product (eg: if it is used in open invoices)
+				var bookingsRepo = this._appContext.getRepositoryFactory().getBookingRepository();
+				return bookingsRepo.getBookingListCount({ hotelId: this._sessionContext.sessionDO.hotel.id },
+					{
+						confirmationStatusList: BookingDOConstraints.ConfirmationStatuses_AddOnProductForbidDeletion,
+						reservedAddOnProductId: this._deleteItemDO.id
+					});
+			}).then((bookingMetaRsp: LazyLoadMetaResponseRepoDO) => {
+				if (bookingMetaRsp.numOfItems > 0) {
+					var thError = new ThError(ThStatusCode.DeleteAddOnProductItemReservedInBookings, null);
+					ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Add on product delete error: reserved in bookings", this._deleteItemDO, thError);
+					throw thError;
+				}
 				resolve(true);
 			}).catch((error: any) => {
 				reject(error);

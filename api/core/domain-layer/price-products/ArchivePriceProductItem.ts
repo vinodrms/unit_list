@@ -8,6 +8,8 @@ import {CustomerSearchResultRepoDO} from '../../data-layer/customers/repositorie
 import {PriceProductInputIdDO} from './validation-structures/PriceProductInputIdDO';
 import {PriceProductDO, PriceProductStatus} from '../../data-layer/price-products/data-objects/PriceProductDO';
 import {ValidationResultParser} from '../common/ValidationResultParser';
+import {LazyLoadMetaResponseRepoDO} from '../../data-layer/common/repo-data-objects/LazyLoadRepoDO';
+import {BookingDOConstraints} from '../../data-layer/bookings/data-objects/BookingDOConstraints';
 
 export class ArchivePriceProductItem {
 	private _inputDO: PriceProductInputIdDO;
@@ -61,8 +63,18 @@ export class ArchivePriceProductItem {
 					ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "price product used by customers", this._inputDO, thError);
 					throw thError;
 				}
-				// TODO: add other validations (e.g.: used in active bookings)
-
+				var bookingsRepo = this._appContext.getRepositoryFactory().getBookingRepository();
+				return bookingsRepo.getBookingListCount({ hotelId: this._sessionContext.sessionDO.hotel.id },
+					{
+						confirmationStatusList: BookingDOConstraints.ConfirmationStatuses_AddOnProductForbidDeletion,
+						priceProductId: this._inputDO.id
+					});
+			}).then((bookingMetaRsp: LazyLoadMetaResponseRepoDO) => {
+				if (bookingMetaRsp.numOfItems > 0) {
+					var thError = new ThError(ThStatusCode.ArchivePriceProductItemUsedInBookingsError, null);
+					ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "price product used in bookings", this._inputDO, thError);
+					throw thError;
+				}
 				var ppRepo = this._appContext.getRepositoryFactory().getPriceProductRepository();
 				return ppRepo.updatePriceProductStatus(this._ppRepoMeta, this._ppItemRepoMeta, {
 					oldStatus: PriceProductStatus.Active,

@@ -183,6 +183,7 @@ export enum ThStatusCode {
     DeleteAddOnProductItemError,
     DeleteAddOnProductItemErrorValidating,
     DeleteAddOnProductItemUsedInDraftOrActivePriceProducts,
+    DeleteAddOnProductItemReservedInBookings,
     AddOnProductsControllerErrorGettingAddOnProduct,
     AddOnProductsControllerErrorSavingAddOnProduct,
     AddOnProductsControllerErrorDeletingAddOnProduct,
@@ -227,6 +228,7 @@ export enum ThStatusCode {
     ArchivePriceProductItemError,
     ArchivePriceProductItemNonActiveStatus,
     ArchivePriceProductItemUsedInCustomersError,
+    ArchivePriceProductItemUsedInBookingsError,
     UpdatePriceProductItemStatusError,
     UpdatePriceProductItemStatusWrongStatus,
     DraftPriceProductItemOnlyArchived,
@@ -651,6 +653,7 @@ ThMessage[ThStatusCode.AddOnProductItemUpdateStrategyErrorUpdating] = "Error upd
 ThMessage[ThStatusCode.DeleteAddOnProductItemError] = "Error deleting add on product.";
 ThMessage[ThStatusCode.DeleteAddOnProductItemErrorValidating] = "Error validating add on product.";
 ThMessage[ThStatusCode.DeleteAddOnProductItemUsedInDraftOrActivePriceProducts] = "Cannot delete the add on product because it was added in active or draft price products.";
+ThMessage[ThStatusCode.DeleteAddOnProductItemReservedInBookings] = "Cannot delete the add on product because it is reserved in one or more bookings.";
 ThMessage[ThStatusCode.AddOnProductsControllerErrorGettingAddOnProduct] = "Error getting add on product.";
 ThMessage[ThStatusCode.AddOnProductsControllerErrorSavingAddOnProduct] = "Error saving add on product.";
 ThMessage[ThStatusCode.AddOnProductsControllerErrorDeletingAddOnProduct] = "Error deleting add on product.";
@@ -695,6 +698,7 @@ ThMessage[ThStatusCode.PriceProductValidatorInvalidPrices] = "Please complete al
 ThMessage[ThStatusCode.ArchivePriceProductItemError] = "Please while archiving the price product.";
 ThMessage[ThStatusCode.ArchivePriceProductItemNonActiveStatus] = "Please while archiving the price product.";
 ThMessage[ThStatusCode.ArchivePriceProductItemUsedInCustomersError] = "Could not archive the price product because it is assigned to customers.";
+ThMessage[ThStatusCode.ArchivePriceProductItemUsedInBookingsError] = "Could not archive the price product because it is used in active bookings. Please close it forever from the Yield Manager and you'll be able to archive it when it's not used anymore.";
 ThMessage[ThStatusCode.UpdatePriceProductItemStatusError] = "Error updating the status of the price product.";
 ThMessage[ThStatusCode.UpdatePriceProductItemStatusWrongStatus] = "Cannot run this action on the current price product.";
 ThMessage[ThStatusCode.DraftPriceProductItemOnlyArchived] = "Only archived price products can be marked as drafts.";
