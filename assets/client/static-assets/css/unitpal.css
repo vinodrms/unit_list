@@ -391,6 +391,7 @@ textarea {
     background-color: rgb(251, 103, 8);
     border-color: rgb(251, 103, 8);
 }
+
 .btn-default.readonly.disabled {
     cursor: default;
     opacity: 1.0;
@@ -2664,14 +2665,6 @@ a.btn.btn-square:focus {
         align-items: stretch;
     }
 
-    /*.yield-manager-dashboard .pane {
-        display: flex;
-        background-color: #f3f3f3;
-        flex-basis: 236px;
-        flex-direction: column;
-        flex-grow: 0;
-    }*/
-
     .yield-manager-dashboard .pane > .header{
         border-bottom: 1px solid #DBDBDB;
     }
@@ -2694,6 +2687,18 @@ a.btn.btn-square:focus {
         height: 50%;
     }
 
+    .yield-manager-dashboard yield-key-metrics.shrinked,
+    .yield-manager-dashboard yield-price-products.shrinked
+    {
+        height: 30%;
+    }
+
+    .yield-manager-dashboard yield-key-metrics.expanded,
+    .yield-manager-dashboard yield-price-products.expanded
+    {
+        height: 70%;
+    }
+
     .yield-manager-dashboard yield-key-metrics{
         display: block;
         overflow: hidden;
@@ -2702,6 +2707,48 @@ a.btn.btn-square:focus {
 
     .yield-manager-dashboard yield-price-products{
         margin: 3px 12px 12px 12px;
+    }
+
+    yield-view-mode{
+        display: flex;
+        justify-content: center;
+    }
+
+    .yield-manager-dashboard .view-mode-toggle-container{
+        display: flex;
+        position: absolute;
+        z-index: 1;
+        margin-top: -12px;
+    }    
+
+    .yield-manager-dashboard .view-mode-toggle-container .view-mode-button{
+        position: relative !important;
+        color: rgb(29,29,29);
+        background: white;
+        border-radius: 50%;
+        border: 2px solid #DBDBDB;
+        position: absolute;
+        height: 25px;
+        width: 25px;
+        text-align: center;
+        opacity: 0.6;
+    }
+
+    .yield-manager-dashboard .view-mode-toggle-container .view-mode-button.active{
+        opacity: 0.7;
+        background-color: white;
+    }
+
+    .yield-manager-dashboard .view-mode-toggle-container .view-mode-button.active:hover{
+        opacity: 0.9;
+    }
+
+    .yield-manager-dashboard .view-mode-toggle-container .view-mode-button:not(.active){
+        background-color: #eeeeee;
+    }
+
+    .yield-manager-dashboard .view-mode-toggle-container .view-mode-button:not(.active):hover{
+        background-color: white;
     }
 
         .yield-filter-collection{
@@ -2765,17 +2812,19 @@ a.btn.btn-square:focus {
 
         .key-metrics-col .percentage-metric{
             border-left: 3px solid;
-            /*border-left-color: red;*/
             padding-left: 3px;
             display: inline-block;
             width: 50px;
+        }
+        
+        .key-metrics-col .key-metric-value{
+            color: #555;
             text-align: center;
         }
 
         .key-metrics-col.wide {
             flex-basis: 170px;
             flex-shrink: 0;
-            /*white-space: nowrap;*/
             flex-wrap: nowrap;
             overflow: hidden;
         }

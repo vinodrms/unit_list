@@ -69,7 +69,7 @@ export class DeleteBedItem {
 				var bedRepo = this._appContext.getRepositoryFactory().getBedRepository();
 				var itemMeta = this.buildBedItemMetaRepoDO();
 
-				return bedRepo.deleteBed(this._bedMeta, itemMeta);
+				return bedRepo.deleteBed(this._bedMeta, itemMeta, this._loadedBed);
 			})
 			.then((deletedBed: BedDO) => {
 				resolve(deletedBed);
@@ -100,7 +100,7 @@ export class DeleteBedItem {
 		});
 	}
 	private validateLoadedBedCore(resolve: { (result: boolean): void }, reject: { (err: ThError): void }) {
-		
+
 		var roomCategoriesRepo = this._appContext.getRepositoryFactory().getRoomCategoryRepository();
 		roomCategoriesRepo.getRoomCategoryList({ hotelId: this._sessionContext.sessionDO.hotel.id },
 			{

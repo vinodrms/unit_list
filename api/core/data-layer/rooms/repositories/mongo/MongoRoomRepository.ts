@@ -42,7 +42,7 @@ export class MongoRoomRepository extends MongoRepository implements IRoomReposit
         return this._editRepository.updateRoom(meta, itemMeta, room);
     }
 
-    public deleteRoom(meta: RoomMetaRepoDO, itemMeta: RoomItemMetaRepoDO): Promise<RoomDO> {
-        return this._editRepository.deleteRoom(meta, itemMeta);
+    public deleteRoom(meta: RoomMetaRepoDO, itemMeta: RoomItemMetaRepoDO, room: RoomDO): Promise<RoomDO> {
+        return this._editRepository.deleteRoom(meta, itemMeta, room);
     }
 }

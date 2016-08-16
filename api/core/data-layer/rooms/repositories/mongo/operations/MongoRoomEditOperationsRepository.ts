@@ -8,20 +8,20 @@ import {LazyLoadRepoDO, LazyLoadMetaResponseRepoDO} from '../../../../common/rep
 import {RoomDO, RoomStatus} from '../../../data-objects/RoomDO';
 import {RoomRepositoryHelper} from '../helpers/RoomRepositoryHelper';
 
-export class MongoRoomEditOperationsRepository extends MongoRepository { 
+export class MongoRoomEditOperationsRepository extends MongoRepository {
     private _helper: RoomRepositoryHelper;
-    
+
     constructor(roomsEntity: Sails.Model) {
         super(roomsEntity);
         this._helper = new RoomRepositoryHelper();
     }
-    
+
     public addRoom(meta: RoomMetaRepoDO, room: RoomDO): Promise<RoomDO> {
         return new Promise<RoomDO>((resolve: { (result: RoomDO): void }, reject: { (err: ThError): void }) => {
             this.addRoomCore(meta, room, resolve, reject);
         });
     }
-        
+
     private addRoomCore(meta: RoomMetaRepoDO, room: RoomDO, resolve: { (result: RoomDO): void }, reject: { (err: ThError): void }) {
         room.hotelId = meta.hotelId;
         room.versionId = 0;
@@ -41,10 +41,11 @@ export class MongoRoomEditOperationsRepository extends MongoRepository {
         return this.findAndModifyRoom(meta, itemMeta, room);
     }
 
-    public deleteRoom(meta: RoomMetaRepoDO, itemMeta: RoomItemMetaRepoDO): Promise<RoomDO> {
+    public deleteRoom(meta: RoomMetaRepoDO, itemMeta: RoomItemMetaRepoDO, room: RoomDO): Promise<RoomDO> {
         return this.findAndModifyRoom(meta, itemMeta,
             {
-                "status": RoomStatus.Deleted
+                "status": RoomStatus.Deleted,
+                "name": this.appendUniqueSuffix(room.name)
             });
     }
 

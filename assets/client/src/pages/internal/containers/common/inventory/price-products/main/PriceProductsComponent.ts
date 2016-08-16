@@ -102,6 +102,7 @@ export class PriceProductsComponent extends BaseComponent implements AfterViewIn
     protected copyPriceProduct(priceProductVM: PriceProductVM) {
         var newPriceProductVM = priceProductVM.buildPrototype();
         delete newPriceProductVM.priceProduct.id;
+		newPriceProductVM.priceProduct.name = "";
 		newPriceProductVM.priceProduct.status = PriceProductStatus.Draft;
         this._inventoryStateManager.canPerformAction(InventoryScreenAction.Copy, newPriceProductVM).then((newState: InventoryScreenStateType) => {
             this._aopTableComponent.deselectItem();

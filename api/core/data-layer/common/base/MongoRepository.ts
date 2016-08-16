@@ -144,4 +144,8 @@ export class MongoRepository implements IRepositoryCleaner {
         });
         return resultList;
 	}
+
+	protected appendUniqueSuffix(stringValue: string): string {
+		return stringValue + (new Date()).getTime();
+	}
 }

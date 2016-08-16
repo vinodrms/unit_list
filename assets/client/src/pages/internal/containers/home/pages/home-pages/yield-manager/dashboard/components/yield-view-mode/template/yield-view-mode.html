@@ -1,0 +1,12 @@
+<div class="view-mode-toggle-container" *ngIf="!mouseHover"
+	(mouseover)="mouseOver()"
+	(mouseleave)="mouseLeave()">
+	<span class="view-mode-button unitpal-font active f-16" >{{buttonMiddle.getIcon()}}</span>
+</div>
+<div class="view-mode-toggle-container" *ngIf="mouseHover" 
+	(mouseover)="mouseOver()"
+	(mouseleave)="mouseLeave()">
+	<span class="view-mode-button unitpal-font f-16" (click)="changeState(buttonLeft)">{{buttonLeft.getIcon()}}</span>
+	<span class="view-mode-button unitpal-font active m-l-6 m-r-6 f-16" (click)="changeState(buttonMiddle)">{{buttonMiddle.getIcon()}}</span>
+	<span class="view-mode-button unitpal-font f-16" (click)="changeState(buttonRight)">{{buttonRight.getIcon()}}</span>
+</div>

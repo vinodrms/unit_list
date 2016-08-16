@@ -58,7 +58,8 @@ export class UpdatePriceProductItemStatus {
 				var ppRepo = this._appContext.getRepositoryFactory().getPriceProductRepository();
 				return ppRepo.updatePriceProductStatus(this._ppRepoMeta, ppItemRepoMeta, {
 					oldStatus: this._oldStatus,
-					newStatus: this._newStatus
+					newStatus: this._newStatus,
+					priceProduct: loadedPriceProduct
 				});
 			})
 			.then((updatedPriceProduct: PriceProductDO) => {

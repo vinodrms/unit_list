@@ -43,7 +43,7 @@ export class MongoBedRepository extends MongoRepository implements IBedRepositor
     public updateBed(bedMeta: BedMetaRepoDO, bedItemMeta: BedItemMetaRepoDO, bed: BedDO): Promise<BedDO> {
         return this._editRepository.updateBed(bedMeta, bedItemMeta, bed);
     }
-    public deleteBed(bedMeta: BedMetaRepoDO, bedItemMeta: BedItemMetaRepoDO): Promise<BedDO> {
-        return this._editRepository.deleteBed(bedMeta, bedItemMeta);
+    public deleteBed(bedMeta: BedMetaRepoDO, bedItemMeta: BedItemMetaRepoDO, bed: BedDO): Promise<BedDO> {
+        return this._editRepository.deleteBed(bedMeta, bedItemMeta, bed);
     }
 }

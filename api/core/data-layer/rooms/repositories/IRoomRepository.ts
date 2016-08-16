@@ -27,6 +27,6 @@ export interface IRoomRepository {
 	getRoomById(roomMeta: RoomMetaRepoDO, roomId: string): Promise<RoomDO>;
 
     addRoom(meta: RoomMetaRepoDO, roomCategory: RoomDO): Promise<RoomDO>;
-    updateRoom(meta: RoomMetaRepoDO, itemMeta: RoomItemMetaRepoDO, addOnProduct: RoomDO): Promise<RoomDO>;
-	deleteRoom(meta: RoomMetaRepoDO, itemMeta: RoomItemMetaRepoDO): Promise<RoomDO>;
+    updateRoom(meta: RoomMetaRepoDO, itemMeta: RoomItemMetaRepoDO, room: RoomDO): Promise<RoomDO>;
+	deleteRoom(meta: RoomMetaRepoDO, itemMeta: RoomItemMetaRepoDO, room: RoomDO): Promise<RoomDO>;
 }
