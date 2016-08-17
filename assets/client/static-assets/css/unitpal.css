@@ -2835,6 +2835,48 @@ a.btn.btn-square:focus {
             background-color:rgba(187, 187, 187, 0.1);
         }
 
+        price-product-state{
+            display: flex;
+            justify-content: center;
+        }
+
+        price-product-state .open-for-arrival,
+        price-product-state .open,
+        price-product-state .open-for-departure
+        {
+            color: white;
+            background-color: rgb(187, 187, 187);
+            padding: 0px 1px 0px 1px;
+            font-size: 12px;
+        }
+
+        price-product-state .open-for-arrival{
+            border-radius: 25% 0% 0% 25%;
+        }
+
+        price-product-state .open-for-arrival.active{
+            background-color: rgb(251, 103, 8);
+        }
+
+        price-product-state .open{
+            border-radius: 0%;
+            margin: 0px 1px 0px 1px;
+        }
+
+        price-product-state .open.active{
+            background-color: rgb(66, 139, 202);
+        }
+
+        price-product-state .open-for-departure{
+            border-radius: 0% 25% 25% 0%;
+        }
+
+        price-product-state .open-for-departure.active{
+            background-color: rgb(29, 205, 140);
+        }
+        
+
+
         /* Misc */
         .w-100{
             width: 100%;
