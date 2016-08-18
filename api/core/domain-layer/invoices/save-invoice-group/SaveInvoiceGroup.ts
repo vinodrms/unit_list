@@ -100,6 +100,9 @@ export class SaveInvoiceGroup {
             if (invoice.bookingId == null) {
                 delete invoice.bookingId;
             }
+            if (invoice.paidDate == null) {
+                delete invoice.paidDate;
+            }
         });
         return invoiceGroup;
     }

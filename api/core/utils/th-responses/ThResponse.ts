@@ -319,6 +319,7 @@ export enum ThStatusCode {
     InvoiceGroupsControllerErrorGettingInvoiceGroupsCount,
     InvoiceGroupsControllerErrorGettingInvoiceGroupsBrief,
     InvoiceGroupsBriefDataAggregatorErrorGettingInvoiceGroupsBrief,
+    InvoiceGroupsControllerErrorsavingInvoiceGroup,
     SaveInvoiceGroupItem,
     SaveInvoiceGroupError,
     InvoicePaymentMethodValidatorError,
@@ -332,6 +333,7 @@ export enum ThStatusCode {
     CustomerInvoiceGroupUpdateStrategyErrorUpdating,
     CustomerInvoiceGroupAddStrategyErrorAdding,
     BookingInvoiceGroupUpdateStrategyErrorUpdating,
+    BookingInvoiceGroupUpdateStrategyErrorSavingPaymentDate,
     InvoiceGroupsRepositoryBookingPriceLinkError,
     InvoiceEmailSenderErrorSendingEmail,
 
@@ -781,6 +783,7 @@ ThMessage[ThStatusCode.InvoiceGroupsRepositoryErrorReadingDocumentCount] = "Erro
 ThMessage[ThStatusCode.InvoiceGroupsControllerErrorGettingInvoiceGroups] = "Error getting the invoice group list.";
 ThMessage[ThStatusCode.InvoiceGroupsControllerErrorGettingInvoiceGroupsCount] = "Error getting the total number of invoice groups matching the search criteria.";
 ThMessage[ThStatusCode.InvoiceGroupsControllerErrorGettingInvoiceGroupsBrief] = "Error getting brief info about the required invoices.";
+ThMessage[ThStatusCode.InvoiceGroupsControllerErrorsavingInvoiceGroup] = "Error saving invoice group.";
 ThMessage[ThStatusCode.InvoiceGroupsBriefDataAggregatorErrorGettingInvoiceGroupsBrief] = "Error getting brief info about the required invoices.";
 ThMessage[ThStatusCode.SaveInvoiceGroupItem] = "Error saving the invoice group item.";
 ThMessage[ThStatusCode.SaveInvoiceGroupError] = "Error updating the invoice group.";
@@ -795,6 +798,7 @@ ThMessage[ThStatusCode.InvoicePayersValidatorInvalidSplit] = "Error validating t
 ThMessage[ThStatusCode.CustomerInvoiceGroupUpdateStrategyErrorUpdating] = "Error updating the invoice group.";
 ThMessage[ThStatusCode.CustomerInvoiceGroupAddStrategyErrorAdding] = "Error adding the invoice group.";
 ThMessage[ThStatusCode.BookingInvoiceGroupUpdateStrategyErrorUpdating] = "Error updating the invoice group.";
+ThMessage[ThStatusCode.BookingInvoiceGroupUpdateStrategyErrorSavingPaymentDate] = "Error saving the payment date an timestamp.";
 ThMessage[ThStatusCode.InvoiceGroupsRepositoryBookingPriceLinkError] = "Error linking booking prices with the invoice groups.";
 ThMessage[ThStatusCode.InvoiceEmailSenderErrorSendingEmail] = "Error sending invoice by email.";
 ThMessage[ThStatusCode.SlackSendMessageError] = "Error sending the message using Slack.";

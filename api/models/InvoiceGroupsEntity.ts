@@ -9,6 +9,10 @@ class InvoiceGroupsEntity extends BasePersistentEntity {
     }
     private buildCustomAttributes() {
         this.attributes = {
+            invoiceGroupReference: {
+                type: 'string',
+                required: true
+            },
             versionId: {
 				type: 'integer',
 				required: true,

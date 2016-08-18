@@ -6,6 +6,7 @@ import {HotelOperationsPageControllerService} from '../../../../services/HotelOp
 import {CustomerOperationsPageData} from '../../services/utils/CustomerOperationsPageData';
 import {LazyLoadData} from '../../../../../../../../../../../services/common/ILazyLoadRequestService';
 import {InvoiceGroupPayerStatsDO} from '../../../../../../../../../../../services/invoices/data-objects/stats/InvoiceGroupPayerStatsDO';
+import {InvoiceGroupDO} from '../../../../../../../../../../../services/invoices/data-objects/InvoiceGroupDO';
 import {HotelAggregatorService} from '../../../../../../../../../../../services/hotel/HotelAggregatorService';
 import {HotelAggregatedInfo} from '../../../../../../../../../../../services/hotel/utils/HotelAggregatedInfo';
 import {Observable} from 'rxjs/Observable';
@@ -41,8 +42,9 @@ export class CustomerInvoiceHistoryComponent implements OnInit {
         Observable.combineLatest(
             this._invoiceGroupsService.getDataObservable(),
             this._hotelAggregatorService.getHotelAggregatedInfo()
-        ).subscribe((result: [LazyLoadData<InvoiceGroupPayerStatsDO>, HotelAggregatedInfo]) => {
-            this.invoiceGroupPayerStatsList = this.invoiceGroupPayerStatsList.concat(result[0].pageContent.pageItemList);
+        ).subscribe((result: [LazyLoadData<InvoiceGroupDO>, HotelAggregatedInfo]) => {
+            this.invoiceGroupPayerStatsList = InvoiceGroupPayerStatsDO.buildInvoiceGroupPayerStatsListFromInvoiceGroupList(result[0].pageContent.pageItemList,
+                this.customerOperationsPageData.customerVM.customer.id);
             this.totalCount = result[0].totalCount.numOfItems;
             this.ccySymbol = result[1].ccy.symbol;
             this.isLoading = false;

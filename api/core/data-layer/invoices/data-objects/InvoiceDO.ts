@@ -1,6 +1,7 @@
 import {ThUtils} from '../../../utils/ThUtils';
 import {ThError} from '../../../utils/th-responses/ThError';
 import {BaseDO} from '../../common/base/BaseDO';
+import {ThDateDO} from '../../../utils/th-dates/data-objects/ThDateDO';
 import {InvoicePayerDO} from './payers/InvoicePayerDO';
 import {InvoiceItemDO, InvoiceItemType} from './items/InvoiceItemDO';
 import {IPriceableEntity} from './price/IPriceableEntity';
@@ -12,14 +13,17 @@ export enum InvoicePaymentStatus {
 }
 
 export class InvoiceDO extends BaseDO implements IPriceableEntity {
-    
     bookingId: string;
+    invoiceReference: string;
     payerList: InvoicePayerDO[];
     itemList: InvoiceItemDO[];
     paymentStatus: InvoicePaymentStatus;
 
+    paidDate: ThDateDO;
+    paidUtcTimestamp: number;
+
     protected getPrimitivePropertyKeys(): string[] {
-        return ["bookingId", "paymentStatus"];
+        return ["bookingId", "invoiceReference", "paymentStatus", "paidUtcTimestamp"];
     }
 
     public buildFromObject(object: Object) {
@@ -37,6 +41,15 @@ export class InvoiceDO extends BaseDO implements IPriceableEntity {
             itemDO.buildFromObject(itemObject);
             this.itemList.push(itemDO);
         });
+
+        this.paidDate = new ThDateDO();
+        this.paidDate.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "paidDate"));
+        
+        var thUtils = new ThUtils();
+        if(thUtils.isUndefinedOrNull(this.paidDate.day) && thUtils.isUndefinedOrNull(this.paidDate.month) && 
+            thUtils.isUndefinedOrNull(this.paidDate.year)) {
+                delete this.paidDate;
+            }
     }
 
     public getPayerCustomerIdList(): string[] {
@@ -85,7 +98,7 @@ export class InvoiceDO extends BaseDO implements IPriceableEntity {
         return _.reduce(this.itemList, function(memo: number, item: InvoiceItemDO){ return memo + item.meta.getNumberOfItems() * item.meta.getPrice(); }, 0);
     }
     
-    public get isPaid(): boolean {
+    public isPaid(): boolean {
         return this.paymentStatus === InvoicePaymentStatus.Paid;
     }
 }

@@ -5,7 +5,6 @@ import {AppContext, ThServerApi} from '../../../../common/utils/AppContext';
 import {InvoiceGroupDO} from './data-objects/InvoiceGroupDO';
 import {InvoiceDO, InvoicePaymentStatus} from './data-objects/InvoiceDO';
 import {InvoiceGroupsQuery} from './InvoiceGroupsService';
-import {InvoiceGroupPayerStatsDO} from './data-objects/stats/InvoiceGroupPayerStatsDO';
 import {InvoiceGroupsDO} from './data-objects/InvoiceGroupsDO';
 
 @Injectable()

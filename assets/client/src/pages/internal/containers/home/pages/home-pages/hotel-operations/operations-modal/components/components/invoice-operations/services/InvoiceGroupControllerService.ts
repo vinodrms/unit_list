@@ -15,6 +15,9 @@ export class InvoiceGroupControllerService {
     public get invoiceGroupVM(): InvoiceGroupVM {
         return this._invoiceGroupVM;
     }
+    public set invoiceGroupVM(invoiceGroupVM: InvoiceGroupVM) {
+        this._invoiceGroupVM = invoiceGroupVM;
+    }
 
     public get invoiceOperationsPageData(): InvoiceOperationsPageData {
         return this._invoiceOperationsPageData;

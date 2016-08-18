@@ -48,7 +48,7 @@ export class HotelOperationsDeparturesInfoBuilder {
     }
     private filterUnpaidInvoices(invoiceGroupList: InvoiceGroupDO[]): InvoiceGroupDO[] {
         _.forEach(invoiceGroupList, (invoiceGroup: InvoiceGroupDO) => {
-            invoiceGroup.invoiceList = _.filter(invoiceGroup.invoiceList, (invoice: InvoiceDO) => { return !invoice.isPaid });
+            invoiceGroup.invoiceList = _.filter(invoiceGroup.invoiceList, (invoice: InvoiceDO) => { return !invoice.isPaid() });
         });
         return invoiceGroupList;
     }

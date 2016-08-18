@@ -26,4 +26,19 @@ export class InvoicePayerVM {
     public get isNewlyAdded(): boolean {
         return this.newlyAdded;
     }
+
+    public buildPrototype(): InvoicePayerVM {
+        var invoicePayerVMCopy = new InvoicePayerVM(this._thTranslation);
+        invoicePayerVMCopy.newlyAdded = this.newlyAdded;
+
+        var customerDOCopy = new CustomerDO();
+        customerDOCopy.buildFromObject(this.customerDO);
+        invoicePayerVMCopy.customerDO = customerDOCopy;
+
+        var invoicePayerDOCopy = new InvoicePayerDO();
+        invoicePayerDOCopy.buildFromObject(this.invoicePayerDO);
+        invoicePayerVMCopy.invoicePayerDO = invoicePayerDOCopy;
+        
+        return invoicePayerVMCopy;
+    }
 }

@@ -23,4 +23,12 @@ export class InvoiceItemVM {
     public isMovable():boolean {
         return this.invoiceItemDO.meta.isMovable();
     }
+
+    public buildPrototype(): InvoiceItemVM {
+        var invoiceItemVMCopy = new InvoiceItemVM(this._thTranslation);
+        var invoiceItemDOCopy = new InvoiceItemDO();
+        invoiceItemDOCopy.buildFromObject(this.invoiceItemDO);
+        invoiceItemVMCopy.invoiceItemDO = invoiceItemDOCopy;
+        return invoiceItemVMCopy;
+    }
 }

@@ -50,7 +50,7 @@
                 </div>
             </div>
             
-            <div *ngIf="editMode && isNewlyAdded" class="form-group m-0">
+            <div *ngIf="editMode && isNewlyAdded && !isTheSinglePayer" class="form-group m-0">
                 <div class="input-group">
                     <span>
                         <a class="btn btn-xs" title="{{ 'Delete' | translate}}" (click)="onDelete()"><i class="fa unitpal-font">\</i></a>

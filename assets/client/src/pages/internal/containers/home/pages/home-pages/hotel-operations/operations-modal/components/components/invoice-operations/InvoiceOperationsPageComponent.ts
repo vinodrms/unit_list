@@ -18,7 +18,7 @@ import {InvoiceGroupVM} from '../../../../../../../../../services/invoices/view-
 import {InvoiceVM} from '../../../../../../../../../services/invoices/view-models/InvoiceVM';
 import {InvoicePayerVM} from '../../../../../../../../../services/invoices/view-models/InvoicePayerVM';
 import {CustomerDO} from '../../../../../../../../../services/customers/data-objects/CustomerDO';
-import { Subject } from 'rxjs/Subject';
+import {Subject} from 'rxjs/Subject';
 import {Observable} from 'rxjs/Observable';
 
 @Component({
@@ -32,7 +32,8 @@ export class InvoiceOperationsPageComponent implements OnInit {
     @Input() invoiceOperationsPageParam: HotelInvoiceOperationsPageParam;
 
     private _thUtils: ThUtils;
-    
+    private _invoiceGroupVMCopy: InvoiceGroupVM;
+
     isLoading: boolean;
     didInitOnce: boolean = false;
 
@@ -45,7 +46,6 @@ export class InvoiceOperationsPageComponent implements OnInit {
     itemsAddedObservable: Observable<number>;
     itemRemoved: Subject<number>;
     itemRemovedObservable: Observable<number>;
-
 
     constructor(private _appContext: AppContext,
         private _invoiceOperationsPageService: InvoiceOperationsPageService,
@@ -65,7 +65,7 @@ export class InvoiceOperationsPageComponent implements OnInit {
     }
     private loadPageData() {
         this.isLoading = true;
-        
+
         this._invoiceOperationsPageService.getPageData(this.invoiceOperationsPageParam).subscribe((pageData: InvoiceOperationsPageData) => {
             this._invoiceGroupControllerService.invoiceOperationsPageData = pageData;
 
@@ -84,6 +84,7 @@ export class InvoiceOperationsPageComponent implements OnInit {
 
         this.invoiceOperationsPageParam.onFilterRemovedHandler = (() => {
             this.invoiceOperationsPageParam.updateTitle(title, subtitle, this.filterMetaForDisabledFilter);
+            this.editMode = true;
         });
 
         if (!this._thUtils.isUndefinedOrNull(this.invoiceOperationsPageParam.invoiceFilter.customerId)) {
@@ -95,13 +96,17 @@ export class InvoiceOperationsPageComponent implements OnInit {
     }
 
     public onEdit() {
-        this.invoiceGroupVM.editMode = true;
+        this.editMode = true;
     }
     public onSave() {
-        this.invoiceGroupVM.editMode = false;
+        var firstInvalidInvoice = this.invoiceGroupVM.checkValidations();
+        if (firstInvalidInvoice === -1) {
+            this.editMode = false;
+        }
     }
     public onCancel() {
-        this.invoiceGroupVM.editMode = false;
+        this.invoiceGroupVM = this._invoiceGroupVMCopy;
+        this.editMode = false;
     }
     public onAddInvoice() {
         var invoiceVM = new InvoiceVM(this._appContext.thTranslation);
@@ -123,22 +128,23 @@ export class InvoiceOperationsPageComponent implements OnInit {
 
     public get displayedInvoiceIndexList(): number[] {
         var indexList = [];
-        for(var index = this.firstDisplayedInvoiceIndex; index < this.firstDisplayedInvoiceIndex + this.numberOfSimultaneouslyDisplayedInvoices; ++index) {
+        for (var index = this.firstDisplayedInvoiceIndex; index < this.firstDisplayedInvoiceIndex + this.numberOfSimultaneouslyDisplayedInvoices; ++index) {
             indexList.push(index);
         }
-        return indexList;  
+        return indexList;
     }
 
     public get filterMetaForEnabledFilter(): HotelOperationsPageFilterMeta {
         return {
             filterInfo: 'filtered by:',
-            filterValue: this.invoiceFilterValue
+            filterValue: this.invoiceFilterValue,
+            filterRemoveInfo: 'Remove filter in order to edit.',
         }
     }
 
     public get filterMetaForDisabledFilter(): HotelOperationsPageFilterMeta {
         return {
-            filterInfo: 'no filter enabled',
+            filterInfo: 'no active filter',
         };
     }
 
@@ -160,6 +166,9 @@ export class InvoiceOperationsPageComponent implements OnInit {
     public get invoiceGroupVM(): InvoiceGroupVM {
         return this._invoiceGroupControllerService.invoiceGroupVM;
     }
+    public set invoiceGroupVM(invoiceGroupVM: InvoiceGroupVM) {
+        this._invoiceGroupControllerService.invoiceGroupVM = invoiceGroupVM;
+    }
     public get invoiceVMList(): InvoiceVM[] {
         return this.invoiceGroupVM.invoiceVMList;
     }
@@ -174,10 +183,17 @@ export class InvoiceOperationsPageComponent implements OnInit {
     public get payOnlyMode(): boolean {
         return this.filterEnabled;
     }
+    public get payOnlyModeWithEditOption(): boolean {
+        return !this.filterEnabled && !this.invoiceGroupVM.editMode;
+    }
+
     public get editMode(): boolean {
         return !this.filterEnabled && this.invoiceGroupVM.editMode;
     }
-    public get payOnlyModeWithEditOption(): boolean {
-        return !this.filterEnabled && !this.invoiceGroupVM.editMode;
+    public set editMode(editMode: boolean) {
+        if(editMode) {
+            this._invoiceGroupVMCopy = this.invoiceGroupVM.buildPrototype();
+        }
+        this.invoiceGroupVM.editMode = editMode;
     }
 }

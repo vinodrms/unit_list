@@ -655,6 +655,15 @@ export var EnglishTranslations: Object = {
 	"Average value for this period": "Average value for this period",
 	"Minimum value for this period": "Minimum value for this period",
 	"Maximum value for this period": "Maximum value for this period",
-
-
+	"Select Qty": "Select Qty",
+	"Add On Product": "Add On Product",
+	"filtered by:": "filtered by:",
+	"Remove filter in order to edit.": "Remove filter in order to edit.",
+	"no active filter": "no active filter",
+	"Add at least an item.": "Add at least an item.",
+	"Add at least a payer.": "Add at least a payer.",
+	"Select a customer for each payer entry.": "Select a customer for each payer entry.",
+	"More than one payer company.": "More than one payer company.",
+	"Total amount paid should equal total price.": "Total amount paid should equal total price.",
+	
 };
