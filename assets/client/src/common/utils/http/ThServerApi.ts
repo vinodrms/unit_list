@@ -93,6 +93,7 @@ export enum ThServerApi {
 	InvoiceGroups,
 	InvoiceGroupsCount,
 	InvoiceGroupItem,
+	InvoiceGroupsSaveItem,
 
 	YieldManagerYieldPriceProducts,
 	YieldManagerYieldGetPriceProductItems,
@@ -198,6 +199,7 @@ ThServerApiUrl[ThServerApi.HotelOperationsCommonSendEmail] = "/hotelOperations/c
 ThServerApiUrl[ThServerApi.InvoiceGroups] = "/invoiceGroups";
 ThServerApiUrl[ThServerApi.InvoiceGroupsCount] = "/invoiceGroups/count";
 ThServerApiUrl[ThServerApi.InvoiceGroupItem] = "/invoiceGroups/invoiceGroupItem";
+ThServerApiUrl[ThServerApi.InvoiceGroupsSaveItem] = "/invoiceGroups/saveInvoicegroupItem";
 
 ThServerApiUrl[ThServerApi.YieldManagerYieldPriceProducts] = "/yieldManager/yieldPriceProducts";
 ThServerApiUrl[ThServerApi.YieldManagerYieldGetPriceProductItems] = "/yieldManager/getPriceProductYieldItems";

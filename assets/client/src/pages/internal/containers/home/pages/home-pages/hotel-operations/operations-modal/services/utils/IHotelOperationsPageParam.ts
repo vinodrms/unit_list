@@ -5,6 +5,7 @@ import {IHotelOperationsOnFilterRemovedHandler} from './IHotelOperationsOnFilter
 export interface HotelOperationsPageFilterMeta {
     filterInfo: string;
     filterValue?: string;
+    filterRemoveInfo?: string;
 }
 
 export interface HotelOperationsPageTitleMeta {

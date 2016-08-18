@@ -3502,7 +3502,6 @@ invoice-edit {
 .invoice-title-container .invoice-title {
     color: #fb6708;
     font-size: 18px;
-    margin-left: 15px;
 }
 .invoice-title-container .invoice-title.read-only {
     color: #9d9ca1;
@@ -3652,7 +3651,7 @@ table.small-margin {
 }
 
 .filter {
-    font-size: 14px;
+    font-size: 16px;
 }
 
 .filter-label {
@@ -3670,6 +3669,10 @@ table.small-margin {
 }
 .filter-label .clickable-item:hover {
     opacity: 0.6;
+}
+.filter-remove-info {
+    color: black !important;
+    font-size: 11px;
 }
 .read-only-invoice {
     background: #f0f0f0;

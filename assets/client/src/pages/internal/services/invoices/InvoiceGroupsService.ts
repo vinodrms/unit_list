@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
+import {Observer} from 'rxjs/Observer';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/combineLatest';
 import {AppContext, ThServerApi} from '../../../../common/utils/AppContext';
@@ -10,6 +11,7 @@ import {CustomersDO} from '../customers/data-objects/CustomersDO';
 import {InvoicePaymentStatus} from './data-objects/InvoiceDO';
 import {InvoiceGroupPayerStatsDO} from './data-objects/stats/InvoiceGroupPayerStatsDO';
 import {InvoiceGroupsDO} from './data-objects/InvoiceGroupsDO';
+import {InvoiceGroupDO} from './data-objects/InvoiceGroupDO';
 
 export interface InvoiceGroupsQuery {
     groupBookingId: string;
@@ -17,7 +19,7 @@ export interface InvoiceGroupsQuery {
 }
 
 @Injectable()
-export class InvoiceGroupsService extends ALazyLoadRequestService<InvoiceGroupPayerStatsDO> {
+export class InvoiceGroupsService extends ALazyLoadRequestService<InvoiceGroupDO> {
     
     private _customerIdListFilter: string[];
 
@@ -25,23 +27,31 @@ export class InvoiceGroupsService extends ALazyLoadRequestService<InvoiceGroupPa
         super(appContext, ThServerApi.InvoiceGroupsCount, ThServerApi.InvoiceGroups);
     }
 
-    protected parsePageDataCore(pageDataObject: Object): Observable<InvoiceGroupPayerStatsDO[]> {
-        var invoiceGroupsDO = new InvoiceGroupsDO();
-        invoiceGroupsDO.buildFromObject(pageDataObject);
-
-        var invoiceGroupPayerStatsList = [];
-        _.forEach(this._customerIdListFilter, (customerId: string) => {
-            invoiceGroupPayerStatsList =
-                _.union(invoiceGroupPayerStatsList, InvoiceGroupPayerStatsDO.buildInvoiceGroupPayerStatsListFromInvoiceGroupList(invoiceGroupsDO.invoiceGroupList, customerId));
-        })
-
-        return Observable.from(invoiceGroupPayerStatsList);
+    protected parsePageDataCore(pageDataObject: Object): Observable<InvoiceGroupDO[]> {
+        return new Observable<InvoiceGroupDO[]>((invoiceGroupObserver: Observer<InvoiceGroupDO[]>) => {
+			var invoiceGroupsDO = new InvoiceGroupsDO();
+            invoiceGroupsDO.buildFromObject(pageDataObject);
+			invoiceGroupObserver.next(invoiceGroupsDO.invoiceGroupList);
+			invoiceGroupObserver.complete();
+		});
     }
 
     public setCustomerIdFilter(customerId: string) {
         this._customerIdListFilter = [customerId];
         this.defaultSearchCriteria = { customerIdList: this._customerIdListFilter };
     }
+
+    public saveInvoiceGroupDO(invoiceGroup: InvoiceGroupDO): Observable<InvoiceGroupDO> {
+		return this.runServerPostActionOnInvoiceGroup(ThServerApi.InvoiceGroupsSaveItem, invoiceGroup);
+	}
+
+    private runServerPostActionOnInvoiceGroup(apiAction: ThServerApi, invoiceGroup: InvoiceGroupDO): Observable<InvoiceGroupDO> {
+        return this._appContext.thHttp.post(apiAction, { invoiceGroup: invoiceGroup }).map((invoiceGroupObject: Object) => {
+			var updatedInvoiceGroupDO = new InvoiceGroupDO();
+			updatedInvoiceGroupDO.buildFromObject(invoiceGroupObject["invoiceGroup"]);
+			return updatedInvoiceGroupDO;
+		});
+	}
 
     public searchByText(text: string) {
 

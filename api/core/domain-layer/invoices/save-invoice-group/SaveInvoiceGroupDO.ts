@@ -23,6 +23,10 @@ export class SaveInvoiceGroupDO {
 				validationStruct: new PrimitiveValidationStructure(StringValidationRule.buildNullable())
 			},
             {
+				key: "invoiceGroupReference",
+				validationStruct: new PrimitiveValidationStructure(StringValidationRule.buildNullable())
+			},
+            {
 				key: "groupBookingId",
 				validationStruct: new PrimitiveValidationStructure(StringValidationRule.buildNullable())
 			},
@@ -33,6 +37,10 @@ export class SaveInvoiceGroupDO {
 				        key: "bookingId",
 				        validationStruct: new PrimitiveValidationStructure(StringValidationRule.buildNullable())
 			        },
+                    {
+                        key: "invoiceReference",
+                        validationStruct: new PrimitiveValidationStructure(StringValidationRule.buildNullable())
+                    },
                     {
                         key: "payerList",
                         validationStruct: new ArrayValidationStructure(new ObjectValidationStructure([

@@ -15,11 +15,9 @@
                                 {{ 'Amount unpaid' | translate }}: <b>{{ invoicePayerStats.amountUnpaid }}{{ ccySymbol }}</b> / {{ 'Amount paid' | translate }}: <b>{{invoicePayerStats.amountUnpaid}}{{ ccySymbol }}</b> / {{ 'Invoice group payment status' | translate }}:  
                                 <span *ngIf="invoicePayerStats.invoiceGroupPaid">
                                     <b>{{ 'Paid' | translate }}</b>
-                                    <i class="fa unitpal-font p-l-6">Z</i>
                                 </span>
                                 <span *ngIf="!invoicePayerStats.invoiceGroupPaid">  
                                     <b>{{ 'Unpaid' | translate }}</b>
-                                    <i class="fa unitpal-font p-l-6">C</i>
                                 </span> 
                             </td>
                         </tr>

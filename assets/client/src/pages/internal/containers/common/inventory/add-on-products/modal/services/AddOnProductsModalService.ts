@@ -9,8 +9,11 @@ import {AddOnProductsModalInput} from './utils/AddOnProductsModalInput';
 export class AddOnProductsModalService {
 	constructor(private _appContext: AppContext) { }
 
-	public openAddOnProductsModal(): Promise<ModalDialogRef<AddOnProductDO[]>> {
-		return this.openModal(false, true);
+	public openAddOnProductsModal(multiSelection?: boolean): Promise<ModalDialogRef<AddOnProductDO[]>> {
+		if(this._appContext.thUtils.isUndefinedOrNull(multiSelection)) {
+			return this.openModal(false, true);
+		}
+		return this.openModal(false, multiSelection);
 	}
 	public openBreakfastModal(): Promise<ModalDialogRef<AddOnProductDO[]>> {
 		return this.openModal(true, false);

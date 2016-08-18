@@ -36,7 +36,6 @@ export class InvoicePayerComponent implements OnInit {
     }
 
     ngOnInit() {
-
     }
 
     public openCustomerSelectModal() {
@@ -44,8 +43,17 @@ export class InvoicePayerComponent implements OnInit {
             modalDialogInstance.resultObservable.subscribe((selectedCustomerList: CustomerDO[]) => {
                 var newInvoicePayer = new InvoicePayerDO();
                 newInvoicePayer.customerId = selectedCustomerList[0].id;
+                
+                if(newInvoicePayer.priceToPay === 0 && this.invoiceVM.invoicePayerVMList.length === 1) {
+                    newInvoicePayer.priceToPay = this.invoiceVM.invoiceDO.getRemainingAmountToBePaid();
+                }
+                else {
+                    newInvoicePayer.priceToPay = this.invoicePayerVM.invoicePayerDO.priceToPay;
+                }
                 this.invoicePayerVM.invoicePayerDO = newInvoicePayer;
                 this.invoicePayerVM.customerDO = selectedCustomerList[0];
+
+                this.invoiceVM.isValid();
             });
         }).catch((e: any) => { });
     }
@@ -60,10 +68,14 @@ export class InvoicePayerComponent implements OnInit {
         var positiveLabel = this._appContext.thTranslation.translate("Yes");
         var negativeLabel = this._appContext.thTranslation.translate("No");
         this._appContext.modalService.confirm(title, content, { positive: positiveLabel, negative: negativeLabel }, () => {
-            this.invoiceVM.invoicePayerVMList.splice(this.invoicePayerVMIndex, 1);            
+            this.invoiceVM.invoicePayerVMList.splice(this.invoicePayerVMIndex, 1);
+            this.invoiceVM.isValid();            
         });
     }
 
+    public get isTheSinglePayer(): boolean {
+        return this.invoiceVM.invoicePayerVMList.length === 1;
+    }
     public get ccySymbol(): string {
         return this.invoiceGroupVM.ccySymbol;
     }

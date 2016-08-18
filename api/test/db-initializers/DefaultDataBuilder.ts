@@ -271,7 +271,7 @@ export class DefaultDataBuilder {
         var noUnpaidInvoices = 0;
         _.forEach(this._invoiceGroupList, (invoiceGroup: InvoiceGroupDO) => {
             _.forEach(invoiceGroup.invoiceList, (invoice: InvoiceDO) => {
-                if (!invoice.isPaid) { noUnpaidInvoices++; };
+                if (!invoice.isPaid()) { noUnpaidInvoices++; };
             });
         });
         return noUnpaidInvoices;

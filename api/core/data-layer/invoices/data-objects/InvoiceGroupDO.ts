@@ -12,6 +12,7 @@ export enum InvoiceGroupStatus {
 
 export class InvoiceGroupDO extends BaseDO {
     id: string;
+    invoiceGroupReference: string;
     versionId: number;
     hotelId: string;
     groupBookingId: string;
@@ -20,7 +21,7 @@ export class InvoiceGroupDO extends BaseDO {
     status: InvoiceGroupStatus;
 
     protected getPrimitivePropertyKeys(): string[] {
-        return ["id", "versionId", "hotelId", "groupBookingId", "indexedCustomerIdList", "status"];
+        return ["id", "invoiceGroupReference", "versionId", "hotelId", "groupBookingId", "indexedCustomerIdList", "status"];
     }
 
     public buildFromObject(object: Object) {

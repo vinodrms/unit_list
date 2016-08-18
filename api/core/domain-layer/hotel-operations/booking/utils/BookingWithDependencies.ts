@@ -105,6 +105,6 @@ export class BookingWithDependencies {
         });
         if (this._thUtils.isUndefinedOrNull(foundInvoice)) { return false; }
 
-        return foundInvoice.isPaid;
+        return foundInvoice.isPaid();
     }
 }

@@ -1,0 +1,26 @@
+<div class="modal-header text-center">
+	<button type="button" class="close" (click)="closeDialog()">&times;</button>
+	<h4 class="modal-title">{{ pageTitle | translate }}</h4>
+</div>
+<div class="modal-body">
+
+	<div class="col-xs-12 form-group">
+		<label>{{'Add On Product' | translate}}</label>
+		<div class="input-group">
+			<span *ngIf="numberOfAddOnProductsModalOutput.aop">{{numberOfAddOnProductsModalOutput.aop.name}}</span>
+		</div>
+	</div>
+
+	<div class="col-xs-12 form-group">
+		<label>{{'Qty' | translate}}</label>
+		<div class="input-group">
+			<input type="number" class="form-control" [(ngModel)]="numberOfAddOnProductsModalOutput.noOfItems">
+		</div>
+	</div>
+
+</div>
+<div class="modal-footer">
+	<button type="button" class="btn btn-primary" [disabled]="!didSelectQtyGreaterOrLowerThanZero()" (click)="triggerSelectedQty()">
+		{{ 'Select' | translate }}
+	</button>
+</div>
