@@ -1,1 +1,23 @@
-Yield-Price-Products
+<div class="key-metrics-table p-12" *ngIf="priceProductResults">
+	<div class="key-metrics-row flex-row">
+		<div class="key-metrics-col wide" >
+			<span class="dark-gray-color oneline-text f-14">Price Products</span>
+		</div>
+		<div class="key-metrics-col" *ngFor="let date of priceProductResults.dateList">
+			<span class="dark-gray-color oneline-text f-14" title="{{getDateLabel(date)}}">{{getDateLabel(date)}}</span>
+		</div>
+	</div>
+	<div class="key-metrics-row flex-row" *ngFor="let priceProduct of priceProductResults.priceProductYieldItemVM">
+		<div class="key-metrics-col flex-jc-start wide">
+			<span>
+				<input type="checkbox" class="ng-pristine ng-valid ng-touched">
+				<span class="dark-gray-color f-14">{{priceProduct.priceProductYieldItemDO.priceProductName}}</span>
+			</span>
+		</div>
+		<div class="key-metrics-col" *ngFor="let value of priceProduct.priceProductYieldItemDO.stateList; let currentIndex = index">
+			<span class="w-100">
+				<price-product-state [model]="getYieldStateModel(priceProductResults, priceProduct, currentIndex)" (stateChanged)="handleStateChange($event)"></price-product-state>
+			</span>
+		</div>
+	</div>
+</div>

@@ -69,7 +69,7 @@ export class YieldManagerDashboardComponent extends AHomeContainerComponent impl
 				break;
 			}
 		}
-		debugger;
+		
 		if (this.scrollBars){
 			this.scrollBars.forEach((scrollBar) =>{
 				scrollBar.forceRecreate();

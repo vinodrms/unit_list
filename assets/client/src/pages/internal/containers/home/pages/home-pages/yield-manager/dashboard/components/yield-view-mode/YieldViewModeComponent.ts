@@ -28,17 +28,18 @@ class ViewModeButton{
 	public getIcon():string{
 		switch(this._state){
 			case YieldViewModeState.Default : {
-				return '-';
+				return 'a';
 			}
 			case YieldViewModeState.ExpandedYieldKeyMetrics :{
-				return ',';
+				return 'c';
 			}
 			case YieldViewModeState.ExpandedYieldPriceProducts: {
-				return '/';
+				return 'b';
 			}
 		}
 	}
 }
+
 @Component({
 	selector: 'yield-view-mode',
 	templateUrl: 'client/src/pages/internal/containers/home/pages/home-pages/yield-manager/dashboard/components/yield-view-mode/template/yield-view-mode.html'
