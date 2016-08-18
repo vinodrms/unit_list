@@ -26,7 +26,7 @@ export class CustomScroll implements AfterViewInit, OnDestroy {
         var jqElement = this.getjQueryElement();
         jqElement.addClass('position-relative');
         jqElement.perfectScrollbar({
-            wheelSpeed: 2,
+            wheelSpeed: 1,
             wheelPropagation: true,
             minScrollbarLength: 20
         });

@@ -919,7 +919,7 @@ td .room-categ-capacity {
 }
 
 .red-alpha-1 {
-    background: rgba(255, 0, 0, 0.1);
+    background: rgba(255, 0, 0, 0.1) !important;
 }
 
 .red-color {
@@ -931,7 +931,7 @@ td .room-categ-capacity {
 }
 
 .yellow-alpha-1 {
-    background: rgba(255, 190, 1, 0.1);
+    background: rgba(255, 190, 1, 0.1) !important;
 }
 
 .yellow-color {
@@ -943,7 +943,7 @@ td .room-categ-capacity {
 }
 
 .green-alpha-1 {
-    background: rgba(29, 205, 140, 0.1);
+    background: rgba(29, 205, 140, 0.1) !important;
 }
 
 .green-color {
@@ -955,7 +955,7 @@ td .room-categ-capacity {
 }
 
 .blue-alpha-1 {
-    background: rgba(66, 139, 202, 0.1);
+    background: rgba(66, 139, 202, 0.1) !important;
 }
 
 .blue-color {
@@ -967,7 +967,7 @@ td .room-categ-capacity {
 }
 
 .gray-alpha-1 {
-    background: rgba(187, 187, 187, 0.1);
+    background: rgba(187, 187, 187, 0.1) !important;
 }
 
 .gray-color {
@@ -995,7 +995,7 @@ td .room-categ-capacity {
 }
 
 .brown-alpha-1 {
-    background: rgba(173, 141, 67, 0.1);
+    background: rgba(173, 141, 67, 0.1) !important;
 }
 
 .brown-color {
@@ -1007,7 +1007,7 @@ td .room-categ-capacity {
 }
 
 .violet-alpha-1 {
-    background: rgba(162, 149, 214, 0.1);
+    background: rgba(162, 149, 214, 0.1) !important;
 }
 
 .violet-color {
@@ -1019,7 +1019,7 @@ td .room-categ-capacity {
 }
 
 .orange-alpha-1 {
-    background: rgba(251, 103, 8, 0.1);
+    background: rgba(251, 103, 8, 0.1) !important;
 }
 
 .orange-color{
@@ -1031,7 +1031,7 @@ td .room-categ-capacity {
 }
 
 .olive-alpha-1 {
-    background: rgba(209, 209, 0, 0.1);
+    background: rgba(209, 209, 0, 0.1) !important;
 }
 
 .olive-color {
@@ -1043,7 +1043,7 @@ td .room-categ-capacity {
 }
 
 .purple-alpha-1 {
-    background: rgba(142, 68, 173, 0.1);
+    background: rgba(142, 68, 173, 0.1) !important;
 }
 
 .purple-color {
@@ -2681,7 +2681,7 @@ a.btn.btn-square:focus {
     .yield-manager-dashboard yield-key-metrics,
     .yield-manager-dashboard yield-price-products
     {
-        display: flex;
+        /*display: flex;*/
         background-color: white;
         border: 1px solid #DBDBDB;
         height: 50%;
@@ -2790,16 +2790,35 @@ a.btn.btn-square:focus {
             background-color: #fafafa;
         }
 
-        .yield-manager-dashboard .key-metrics-table {
+        .yield-manager-dashboard .key-metrics-table,
+        .yield-manager-dashboard .price-products-table{
             width: 100%;
         }
 
-        .yield-manager-dashboard .key-metrics-row {
+        .yield-manager-dashboard .key-metrics-row,
+        .yield-manager-dashboard .price-products-row {
             justify-content: space-between;
             border-bottom: 1px solid #DBDBDB;
         }
+        
+        .yield-manager-dashboard .price-products-table .default-row-select-color{
+            background-color: #FFFAD8; 
+        }
 
-        .yield-manager-dashboard .key-metrics-col {
+        .yield-manager-dashboard .price-products-table .selected-indicator{
+            width: 12px;
+            border-left: 1px solid #DBDBDB;
+            border-right: 1px solid #DBDBDB;
+            height: 100%;
+        }
+
+        /* This is a quick way to accomodate the selected-indicator*/
+        .yield-manager-dashboard .price-products-row .price-products-col.wide {
+            padding: 0px; 
+        }
+
+        .yield-manager-dashboard .key-metrics-col,
+        .yield-manager-dashboard .price-products-col {
             display: flex;
             justify-content: center;
             align-items: center;
@@ -2814,7 +2833,8 @@ a.btn.btn-square:focus {
             border-left: 3px solid;
             padding-left: 3px;
             display: inline-block;
-            width: 50px;
+            /*width: 50px;*/
+            width: 100%;
         }
         
         .key-metrics-col .key-metric-value{
@@ -2822,7 +2842,8 @@ a.btn.btn-square:focus {
             text-align: center;
         }
 
-        .key-metrics-col.wide {
+        .key-metrics-col.wide,
+        .price-products-col.wide {
             flex-basis: 170px;
             flex-shrink: 0;
             flex-wrap: nowrap;
@@ -2830,9 +2851,23 @@ a.btn.btn-square:focus {
         }
 
         .key-metrics-table .key-metrics-col:nth-child(even),
-        .key-metrics-table .key-metrics-row:nth-child(odd)
+        .key-metrics-table .key-metrics-row:nth-child(odd),
+        .price-products-table .price-products-col:nth-child(even),
+        .price-products-table .price-products-row:nth-child(odd)
         {
             background-color:rgba(187, 187, 187, 0.1);
+        }
+        
+        .yield-actions-control {
+            padding: 24px 12px 12px 12px;
+        }
+
+        .yield-actions-control .yield-action{
+            width: 180px;
+        }
+
+        .yield-actions-control th-date-picker div.input-group{
+            width: 180px !important;
         }
 
         price-product-state{
@@ -2874,8 +2909,6 @@ a.btn.btn-square:focus {
         price-product-state .open-for-departure.active{
             background-color: rgb(29, 205, 140);
         }
-        
-
 
         /* Misc */
         .w-100{

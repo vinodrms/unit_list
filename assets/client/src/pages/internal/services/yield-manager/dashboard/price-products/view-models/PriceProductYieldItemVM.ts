@@ -30,4 +30,10 @@ export class PriceProductYieldItemVM {
     public set textFilterList(textFilterList: TextFilterVM[]) {
         this._textFilterList = textFilterList;
     }
+    public get id(){
+        return this._priceProductYieldItemDO.priceProductId;
+    }
+    public get name(){
+        return this._priceProductYieldItemDO.priceProductName;
+    }
 }
