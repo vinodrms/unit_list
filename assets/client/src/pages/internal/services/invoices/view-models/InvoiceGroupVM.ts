@@ -88,14 +88,63 @@ export class InvoiceGroupVM {
         this._invoiceVMList.push(newInvoiceVM);
     }
     public removeInvoiceVMByReference(reference: string) {
-        for(var i = 0; i < this._invoiceVMList.length; ++i) {
-            if(this._invoiceVMList[i].invoiceDO.invoiceReference === reference) {
-                this._invoiceVMList.splice(i, 1);
-                return;
-            }
+        var index = this.getInvoiceIndexByRefInTheEntireInvoiceList(reference);
+        if(index != -1) {
+            this._invoiceVMList.splice(index, 1);
         }
     }
+    private getInvoiceIndexByRefInTheEntireInvoiceList(reference: string): number {
+        for (var i = 0; i < this._invoiceVMList.length; ++i) {
+            if (this._invoiceVMList[i].invoiceDO.invoiceReference === reference) {
+                return i;
+            }
+        }
+        return -1;
+    }
+    private getInvoiceIndexByRefInTheEditableInvoiceList(reference: string): number {
+        for (var i = 0; i < this.invoiceVMList.length; ++i) {
+            if (this.invoiceVMList[i].invoiceDO.invoiceReference === reference) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
     public get newInvoiceSeq(): number {
         return this._newInvoiceSeq++;
+    }
+
+    public moveInvoiceItemLeft(sourceInvoiceRef: string, invoiceItemVMIndex: number) {
+        var sourceIndex = this.getInvoiceIndexByRefInTheEntireInvoiceList(sourceInvoiceRef);
+        var destinationIndex = this.getLeftEditableNeighborIndex(sourceInvoiceRef);
+        
+        this.moveInvoiceItem(sourceIndex, destinationIndex, invoiceItemVMIndex);
+    }
+    public getLeftEditableNeighborIndex(sourceInvoiceRef: string): number {
+        var indexInTheEditableInvoiceList = this.getInvoiceIndexByRefInTheEditableInvoiceList(sourceInvoiceRef);
+        if(indexInTheEditableInvoiceList === 0) {
+            return -1;
+        }
+        return this.getInvoiceIndexByRefInTheEntireInvoiceList(this.invoiceVMList[indexInTheEditableInvoiceList - 1].invoiceDO.invoiceReference);
+    }
+    public moveInvoiceItemRight(sourceInvoiceRef: string, invoiceItemVMIndex: number) {
+        var sourceIndex = this.getInvoiceIndexByRefInTheEntireInvoiceList(sourceInvoiceRef);
+        var destinationIndex = this.getRightEditableNeighborIndex(sourceInvoiceRef);
+        
+        this.moveInvoiceItem(sourceIndex, destinationIndex, invoiceItemVMIndex);
+    }
+    public getRightEditableNeighborIndex(sourceInvoiceRef: string): number {
+        var indexInTheEditableInvoiceList = this.getInvoiceIndexByRefInTheEditableInvoiceList(sourceInvoiceRef);
+        if(indexInTheEditableInvoiceList === this.invoiceVMList.length - 1) {
+            return -1;
+        }
+        return this.getInvoiceIndexByRefInTheEntireInvoiceList(this.invoiceVMList[indexInTheEditableInvoiceList + 1].invoiceDO.invoiceReference);
+    }
+    private moveInvoiceItem(sourceInvoiceIndex: number, destinationInvoiceIndex: number, invoiceItemIndex: number) {
+        this._invoiceVMList[destinationInvoiceIndex].invoceItemVMList.push(this._invoiceVMList[sourceInvoiceIndex].invoceItemVMList[invoiceItemIndex]);
+        this._invoiceVMList[destinationInvoiceIndex].invoiceDO.itemList.push(this._invoiceVMList[sourceInvoiceIndex].invoceItemVMList[invoiceItemIndex].invoiceItemDO);
+
+        this._invoiceVMList[sourceInvoiceIndex].invoceItemVMList.splice(invoiceItemIndex, 1);
+        this._invoiceVMList[sourceInvoiceIndex].invoiceDO.itemList.splice(invoiceItemIndex, 1);
     }
 }

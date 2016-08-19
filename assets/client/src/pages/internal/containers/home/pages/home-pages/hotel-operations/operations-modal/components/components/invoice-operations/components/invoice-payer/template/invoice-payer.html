@@ -41,17 +41,16 @@
 
             <div *ngIf="editMode" class="form-group m-0">
                 <div class="input-group">
-                    <select class="form-control">
-                        <option value="0: Object">Cash</option>
-                        <option value="1: Object">Visa</option>
+                    <select class="form-control" [ngModel]="selectedPaymentMethodVM" (ngModelChange)="selectedPaymentMethodVM=$event">
+                        <option *ngFor="let paymentMethodVM of paymentMethodVMList" [ngValue]="paymentMethodVM">{{paymentMethodVM.displayName | translate}}</option>
                     </select>
                 </div>
             </div>
 
             <div *ngIf="!editMode" class="form-group m-0">
                 <div class="input-group">
-                    <i class="fa fa-lg fa-cc-discover"></i>
-                    <span> Discover</span>
+                    <i class="fa" [ngClass]="selectedPaymentMethodVM.iconUrl"></i>
+                    <span> {{selectedPaymentMethodVM.displayName | translate}}</span>
                 </div>
             </div>
             

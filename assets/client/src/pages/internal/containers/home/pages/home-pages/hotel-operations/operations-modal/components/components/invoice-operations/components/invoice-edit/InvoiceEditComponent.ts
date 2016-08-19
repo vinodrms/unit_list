@@ -143,4 +143,26 @@ export class InvoiceEditComponent implements OnInit {
     public get isNewlyAdded(): boolean {
         return this.invoiceVM.isNewlyAdded;
     }
+
+    public moveLeft(invoiceItemVMIndex: number) {
+        if(!this.hasLeftEditableNeighbor()) {
+            return;
+        }
+        this.invoiceGroupVM.moveInvoiceItemLeft(this.invoiceReference, invoiceItemVMIndex);
+    }
+
+    public moveRight(invoiceItemVMIndex: number) {
+        if(!this.hasRightEditableNeighbor()) {
+            return;
+        }
+        this.invoiceGroupVM.moveInvoiceItemRight(this.invoiceReference, invoiceItemVMIndex);
+    }
+
+    public hasRightEditableNeighbor(): boolean {
+        return this.invoiceGroupVM.getRightEditableNeighborIndex(this.invoiceReference) != -1;
+    }
+
+    public hasLeftEditableNeighbor(): boolean {
+        return this.invoiceGroupVM.getLeftEditableNeighborIndex(this.invoiceReference) != -1;
+    }
 }

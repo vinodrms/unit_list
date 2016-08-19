@@ -13,6 +13,7 @@ import {InvoiceOperationsPageData} from './utils/InvoiceOperationsPageData';
 import {HotelAggregatedInfo} from '../../../../../../../../../../services/hotel/utils/HotelAggregatedInfo';
 import {CustomersDO} from '../../../../../../../../../../services/customers/data-objects/CustomersDO';
 import {InvoiceDO, InvoicePaymentStatus} from '../../../../../../../../../../services/invoices/data-objects/InvoiceDO';
+import {EagerBookingsService} from '../../../../../../../../../../services/bookings/EagerBookingsService';
 
 @Injectable()
 export class InvoiceOperationsPageService {

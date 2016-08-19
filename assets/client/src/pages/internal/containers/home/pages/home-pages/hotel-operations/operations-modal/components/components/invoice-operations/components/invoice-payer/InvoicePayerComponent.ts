@@ -13,6 +13,8 @@ import {InvoiceGroupVM} from '../../../../../../../../../../../services/invoices
 import {InvoiceVM} from '../../../../../../../../../../../services/invoices/view-models/InvoiceVM';
 import {InvoiceOperationsPageData} from '../../services/utils/InvoiceOperationsPageData';
 import {HotelOperationsPageControllerService} from '../../../../services/HotelOperationsPageControllerService';
+import {InvoicePaymentMethodVMGenerator} from '../../../../../../../../../../../services/invoices/view-models/utils/InvoicePaymentMethodVMGenerator';
+import {InvoicePaymentMethodVM} from '../../../../../../../../../../../services/invoices/view-models/InvoicePaymentMethodVM';
 
 @Component({
     selector: 'invoice-payer',
@@ -25,7 +27,11 @@ export class InvoicePayerComponent implements OnInit {
     @Input() invoiceVMIndex: number;
     @Input() invoicePayerVMIndex: number;
 
+    paymentMethodVMList: InvoicePaymentMethodVM[] = [];
+    selectedPaymentMethodVM: InvoicePaymentMethodVM;
+
     private _thUtils: ThUtils;
+    private _pmGenerator: InvoicePaymentMethodVMGenerator;
 
     constructor(private _appContext: AppContext,
         private _customerRegisterModalService: CustomerRegisterModalService,
@@ -36,6 +42,28 @@ export class InvoicePayerComponent implements OnInit {
     }
 
     ngOnInit() {
+        this._pmGenerator = new InvoicePaymentMethodVMGenerator(this._invoiceGroupControllerService.invoiceOperationsPageData.allowedPaymentMethods);
+        if (this.customerWasSelected()) {
+            this.paymentMethodVMList = this._pmGenerator.generatePaymentMethodsFor(this.invoicePayerVM.customerDO);
+
+            if (this.paymentMethodWasSelected()) {
+                this.selectedPaymentMethodVM =
+                    _.find(this.paymentMethodVMList, (paymentMethodVM: InvoicePaymentMethodVM) => {
+                        return paymentMethodVM.paymentMethod.isSame(this.invoicePayerVM.invoicePayerDO.paymentMethod);
+                    });
+            }
+            else {
+                this.selectedPaymentMethodVM = this.paymentMethodVMList[0];
+            }
+        }
+    }
+
+    private customerWasSelected(): boolean {
+        return !this._thUtils.isUndefinedOrNull(this.invoicePayerVM.customerDO);
+    }
+
+    private paymentMethodWasSelected(): boolean {
+        return !this._thUtils.isUndefinedOrNull(this.invoicePayerVM.invoicePayerDO.paymentMethod);
     }
 
     public openCustomerSelectModal() {
@@ -43,8 +71,8 @@ export class InvoicePayerComponent implements OnInit {
             modalDialogInstance.resultObservable.subscribe((selectedCustomerList: CustomerDO[]) => {
                 var newInvoicePayer = new InvoicePayerDO();
                 newInvoicePayer.customerId = selectedCustomerList[0].id;
-                
-                if(newInvoicePayer.priceToPay === 0 && this.invoiceVM.invoicePayerVMList.length === 1) {
+
+                if (newInvoicePayer.priceToPay === 0 && this.invoiceVM.invoicePayerVMList.length === 1) {
                     newInvoicePayer.priceToPay = this.invoiceVM.invoiceDO.getRemainingAmountToBePaid();
                 }
                 else {
@@ -52,6 +80,9 @@ export class InvoicePayerComponent implements OnInit {
                 }
                 this.invoicePayerVM.invoicePayerDO = newInvoicePayer;
                 this.invoicePayerVM.customerDO = selectedCustomerList[0];
+
+                this.paymentMethodVMList = this._pmGenerator.generatePaymentMethodsFor(this.invoicePayerVM.customerDO);
+                this.selectedPaymentMethodVM = this.paymentMethodVMList[0];
 
                 this.invoiceVM.isValid();
             });
@@ -69,7 +100,7 @@ export class InvoicePayerComponent implements OnInit {
         var negativeLabel = this._appContext.thTranslation.translate("No");
         this._appContext.modalService.confirm(title, content, { positive: positiveLabel, negative: negativeLabel }, () => {
             this.invoiceVM.invoicePayerVMList.splice(this.invoicePayerVMIndex, 1);
-            this.invoiceVM.isValid();            
+            this.invoiceVM.isValid();
         });
     }
 
