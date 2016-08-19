@@ -82,6 +82,7 @@ export class PriceProductStateComponent implements OnInit {
 			forever: false,
 			interval : interval
 		};
+		
 		this._priceProduct.yieldPriceProducts(yieldParams).subscribe(()=>{
 			this.stateChanged.emit({});
 		})

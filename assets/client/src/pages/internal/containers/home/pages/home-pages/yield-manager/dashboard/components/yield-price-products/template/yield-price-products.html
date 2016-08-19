@@ -1,20 +1,24 @@
-<div class="key-metrics-table p-12" *ngIf="priceProductResults">
-	<div class="key-metrics-row flex-row">
-		<div class="key-metrics-col wide" >
+<yield-actions-panel (onApplyAction)="applyAction($event)"></yield-actions-panel>
+<div class="price-products-table p-12" *ngIf="priceProductResults">
+	<div class="price-products-row flex-row">
+		<div class="price-products-col wide" >
 			<span class="dark-gray-color oneline-text f-14">Price Products</span>
 		</div>
-		<div class="key-metrics-col" *ngFor="let date of priceProductResults.dateList">
+		<div class="price-products-col" *ngFor="let date of priceProductResults.dateList">
 			<span class="dark-gray-color oneline-text f-14" title="{{getDateLabel(date)}}">{{getDateLabel(date)}}</span>
 		</div>
 	</div>
-	<div class="key-metrics-row flex-row" *ngFor="let priceProduct of priceProductResults.priceProductYieldItemVM">
-		<div class="key-metrics-col flex-jc-start wide">
-			<span>
-				<input type="checkbox" class="ng-pristine ng-valid ng-touched">
-				<span class="dark-gray-color f-14">{{priceProduct.priceProductYieldItemDO.priceProductName}}</span>
+	<div class="price-products-row flex-row" [ngClass]="getPriceProductRowClasses(priceProduct)" *ngFor="let priceProduct of priceProductResults.priceProductYieldItemVM">
+		<div class="price-products-col flex-jc-start wide">
+			<div class="selected-indicator" [ngClass]="getSelectedIndicatorClasses(priceProduct)"></div>
+			<span class=" p-l-6">
+				<input type="checkbox"
+					[(ngModel)]="itemsSelectionState[priceProduct.id]" 
+					(change)="toogleCheckPriceProduct(priceProduct)">
+				<span class="dark-gray-color f-14">{{priceProduct.name}}</span>
 			</span>
 		</div>
-		<div class="key-metrics-col" *ngFor="let value of priceProduct.priceProductYieldItemDO.stateList; let currentIndex = index">
+		<div class="price-products-col" *ngFor="let value of priceProduct.priceProductYieldItemDO.stateList; let currentIndex = index">
 			<span class="w-100">
 				<price-product-state [model]="getYieldStateModel(priceProductResults, priceProduct, currentIndex)" (stateChanged)="handleStateChange($event)"></price-product-state>
 			</span>
