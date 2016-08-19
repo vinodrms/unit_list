@@ -10,6 +10,7 @@ import {HotelOperationsPageFilterMeta} from '../../../services/utils/IHotelOpera
 import {IHotelOperationsOnFilterRemovedHandler} from '../../../services/utils/IHotelOperationsOnFilterRemovedHandler';
 import {InvoiceEditComponent} from './components/invoice-edit/InvoiceEditComponent';
 import {ItemListNavigatorComponent} from '../../../../../../../../../../../common/utils/components/item-list-navigator/ItemListNavigatorComponent';
+import {ItemListNavigatorConfig} from '../../../../../../../../../../../common/utils/components/item-list-navigator/ItemListNavigatorConfig';
 import {InvoiceOperationsPageService} from './services/InvoiceOperationsPageService';
 import {InvoiceOperationsPageData} from './services/utils/InvoiceOperationsPageData';
 import {InvoiceGroupControllerService} from './services/InvoiceGroupControllerService';
@@ -20,6 +21,7 @@ import {InvoicePayerVM} from '../../../../../../../../../services/invoices/view-
 import {CustomerDO} from '../../../../../../../../../services/customers/data-objects/CustomerDO';
 import {Subject} from 'rxjs/Subject';
 import {Observable} from 'rxjs/Observable';
+import {InvoiceMeta} from './components/invoice-edit/InvoiceMeta';
 
 @Component({
     selector: 'invoice-operations-page',
@@ -33,30 +35,42 @@ export class InvoiceOperationsPageComponent implements OnInit {
 
     private _thUtils: ThUtils;
     private _invoiceGroupVMCopy: InvoiceGroupVM;
+    private _title: string;
 
     isLoading: boolean;
     didInitOnce: boolean = false;
+
+    itemListNavigatorConfig: ItemListNavigatorConfig;
 
     invoiceNavigatorWindowSize = 6;
     numberOfSimultaneouslyDisplayedInvoices = 2;
 
     firstDisplayedInvoiceIndex = 0;
 
+    resetItemNavigator: Subject<ItemListNavigatorConfig>;
+    resetItemNavigatorObservable: Observable<ItemListNavigatorConfig>;
     itemsAdded: Subject<number>;
     itemsAddedObservable: Observable<number>;
     itemRemoved: Subject<number>;
     itemRemovedObservable: Observable<number>;
+    selectItem: Subject<number>;
+    selectItemObservable: Observable<number>;
 
     constructor(private _appContext: AppContext,
         private _invoiceOperationsPageService: InvoiceOperationsPageService,
         private _invoiceGroupControllerService: InvoiceGroupControllerService) {
 
         this._thUtils = new ThUtils();
+        this._title = "Invoice Group";
 
+        this.resetItemNavigator = new Subject<ItemListNavigatorConfig>();
+        this.resetItemNavigatorObservable = this.resetItemNavigator.asObservable();
         this.itemsAdded = new Subject<number>();
         this.itemsAddedObservable = this.itemsAdded.asObservable();
         this.itemRemoved = new Subject<number>();
         this.itemRemovedObservable = this.itemRemoved.asObservable();
+        this.selectItem = new Subject<number>();
+        this.selectItemObservable = this.selectItem.asObservable();
     }
 
     ngOnInit() {
@@ -79,20 +93,26 @@ export class InvoiceOperationsPageComponent implements OnInit {
         });
     }
     private updateContainerData() {
-        var title = "Invoice Group";
+
         var subtitle = "";
 
         this.invoiceOperationsPageParam.onFilterRemovedHandler = (() => {
-            this.invoiceOperationsPageParam.updateTitle(title, subtitle, this.filterMetaForDisabledFilter);
+
             this.editMode = true;
         });
 
         if (!this._thUtils.isUndefinedOrNull(this.invoiceOperationsPageParam.invoiceFilter.customerId)) {
-            this.invoiceOperationsPageParam.updateTitle(title, subtitle, this.filterMetaForEnabledFilter);
+            this.invoiceOperationsPageParam.updateTitle(this._title, subtitle, this.filterMetaForEnabledFilter);
         }
         else {
-            this.invoiceOperationsPageParam.updateTitle(title, subtitle, this.filterMetaForDisabledFilter);
+            this.invoiceOperationsPageParam.updateTitle(this._title, subtitle);
         }
+
+        this.itemListNavigatorConfig = {
+            initialNumberOfItems: this.totalNumberOfInvoices,
+            maxNumberOfDisplayedItems: this.invoiceNavigatorWindowSize,
+            numberOfSimultaneouslySelectedItems: this.numberOfSimultaneouslyDisplayedInvoices
+        };
     }
 
     public onEdit() {
@@ -103,35 +123,61 @@ export class InvoiceOperationsPageComponent implements OnInit {
         if (firstInvalidInvoice === -1) {
             this.editMode = false;
         }
+        else {
+            this.selectItem.next(firstInvalidInvoice);
+        }
     }
     public onCancel() {
-        this.invoiceGroupVM = this._invoiceGroupVMCopy;
-        this.editMode = false;
+        var title = 'Info';
+        var content = 'You might have unsaved changes. Are you sure you want to cancel?';
+        var positiveLabel = 'Yes';
+        var negativeLabel = 'No';
+
+        this._appContext.modalService.confirm(title, content, { positive: positiveLabel, negative: negativeLabel }, () => {
+            this.resetItemNavigator.next({
+                initialNumberOfItems: this._invoiceGroupVMCopy.invoiceVMList.length,
+                maxNumberOfDisplayedItems: this.invoiceNavigatorWindowSize,
+                numberOfSimultaneouslySelectedItems: this.numberOfSimultaneouslyDisplayedInvoices
+            });
+            this.invoiceGroupVM = this._invoiceGroupVMCopy;
+            this.editMode = false;
+        });
     }
     public onAddInvoice() {
         var invoiceVM = new InvoiceVM(this._appContext.thTranslation);
-        invoiceVM.buildCleanInvoiceVM();
-        this.invoiceGroupVM.invoiceVMList.push(invoiceVM);
-
+        invoiceVM.buildCleanInvoiceVM(this.newInvoiceRef);
+        this.invoiceGroupVM.addInvoiceVM(invoiceVM);
         this.itemsAdded.next(1);
     }
 
+    private get newInvoiceRef(): string {
+        return 'iv' + this.invoiceGroupVM.newInvoiceSeq;
+    }
 
     public displayedItemsUpdated(firstDisplayedInvoiceIndex) {
+        var displayedInvoiceIndexList = this.displayedInvoiceIndexList;
         this.firstDisplayedInvoiceIndex = firstDisplayedInvoiceIndex;
     }
 
-    public newlyAddedInvoiceRemoved(newlyAddedinvoiceIndex) {
-        this.itemRemoved.next(newlyAddedinvoiceIndex);
-        this.invoiceVMList.splice(newlyAddedinvoiceIndex, 1);
+    public newlyAddedInvoiceRemoved(newlyAddedInvoiceMeta: InvoiceMeta) {
+        console.log(this.displayedInvoiceIndexList);
+        this.itemRemoved.next(newlyAddedInvoiceMeta.indexInDisplayedInvoiceList);
+        this.invoiceGroupVM.removeInvoiceVMByReference(newlyAddedInvoiceMeta.reference);
+        console.log(this.displayedInvoiceIndexList);
     }
 
     public get displayedInvoiceIndexList(): number[] {
         var indexList = [];
-        for (var index = this.firstDisplayedInvoiceIndex; index < this.firstDisplayedInvoiceIndex + this.numberOfSimultaneouslyDisplayedInvoices; ++index) {
-            indexList.push(index);
+        if (!_.isEmpty(this.invoiceGroupVM.invoiceVMList)) {
+            for (var index = this.firstDisplayedInvoiceIndex; index < Math.min(this.firstDisplayedInvoiceIndex + this.numberOfSimultaneouslyDisplayedInvoices, this.invoiceGroupVM.invoiceVMList.length); ++index) {
+                indexList.push(index);
+            }
         }
         return indexList;
+    }
+
+    public getInvoiceReference(invoiceIndex: number): string {
+        return this.invoiceVMList[invoiceIndex].invoiceDO.invoiceReference;
     }
 
     public get filterMetaForEnabledFilter(): HotelOperationsPageFilterMeta {
@@ -140,12 +186,6 @@ export class InvoiceOperationsPageComponent implements OnInit {
             filterValue: this.invoiceFilterValue,
             filterRemoveInfo: 'Remove filter in order to edit.',
         }
-    }
-
-    public get filterMetaForDisabledFilter(): HotelOperationsPageFilterMeta {
-        return {
-            filterInfo: 'no active filter',
-        };
     }
 
     public get invoiceFilterValue(): string {
@@ -177,7 +217,9 @@ export class InvoiceOperationsPageComponent implements OnInit {
     }
 
     public get filterEnabled(): boolean {
-        return !this._thUtils.isUndefinedOrNull(this.invoiceOperationsPageParam.titleMeta.filterMeta.filterValue);
+        var filterMeta = this.invoiceOperationsPageParam.titleMeta.filterMeta;
+        return !this._thUtils.isUndefinedOrNull(filterMeta) &&
+            !this._thUtils.isUndefinedOrNull(filterMeta.filterValue)
     }
 
     public get payOnlyMode(): boolean {
@@ -191,8 +233,17 @@ export class InvoiceOperationsPageComponent implements OnInit {
         return !this.filterEnabled && this.invoiceGroupVM.editMode;
     }
     public set editMode(editMode: boolean) {
-        if(editMode) {
+        if (editMode) {
+            this.resetItemNavigator.next({
+                initialNumberOfItems: this.invoiceGroupVM.getUnpaidInvoiceVMList().length,
+                maxNumberOfDisplayedItems: this.invoiceNavigatorWindowSize,
+                numberOfSimultaneouslySelectedItems: this.numberOfSimultaneouslyDisplayedInvoices
+            });
             this._invoiceGroupVMCopy = this.invoiceGroupVM.buildPrototype();
+            this.invoiceOperationsPageParam.updateTitle(this._title, 'Edit');
+        }
+        else {
+            this.invoiceOperationsPageParam.updateTitle(this._title, '');
         }
         this.invoiceGroupVM.editMode = editMode;
     }

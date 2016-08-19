@@ -2,6 +2,7 @@ import {Component, Input, Output, EventEmitter, OnInit, SimpleChange} from '@ang
 import {AppContext, ThError} from '../../AppContext';
 import {Interval} from './Interval';
 import {Observable} from 'rxjs/Observable';
+import {ItemListNavigatorConfig} from './ItemListNavigatorConfig';
 
 @Component({
     selector: 'item-list-navigator',
@@ -12,12 +13,12 @@ import {Observable} from 'rxjs/Observable';
 export class ItemListNavigatorComponent implements OnInit {
     public interval: Interval;
 
-    @Input() maxNumberOfDisplayedItems: number;
-    @Input() numberOfSimultaneouslySelectedItems: number;
-    @Input() initialNumberOfItems: number;
-    
+    @Input() config: ItemListNavigatorConfig;
+
     @Input() itemsAdded: Observable<number>;
     @Input() itemRemoved: Observable<number>;
+    @Input() selectItemTriggered: Observable<number>;
+    @Input() reset: Observable<ItemListNavigatorConfig>;
 
     @Output() displayedItemsUpdated = new EventEmitter();
 
@@ -27,29 +28,41 @@ export class ItemListNavigatorComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.firstSelectedItemIndex = 0;
-        this.interval = new Interval(Math.min(this.maxNumberOfDisplayedItems, this.initialNumberOfItems),
-            this.maxNumberOfDisplayedItems, 0, this.initialNumberOfItems - 1);
+        this.init(this.config);
         
+        this.reset.subscribe((newConfig: ItemListNavigatorConfig) => {            
+            this.init(newConfig);
+        });
+
         this.itemsAdded.subscribe((noOfItems: number) => {
-            
             for(var i = 0; i < noOfItems; ++i) {
                 this.interval.addValue();
             }
-            
             this.selectItem(this.interval.maxValue);
         });
 
         this.itemRemoved.subscribe((itemToBeRemovedIndex: number) => {
             this.interval.removeValue(itemToBeRemovedIndex);
-            if(this.firstSelectedItemIndex + this.numberOfSimultaneouslySelectedItems > this.interval.lastWindowElement) {
-                this.selectItem(this.interval.lastWindowElement - this.numberOfSimultaneouslySelectedItems + 1);
+            if(this.firstSelectedItemIndex + this.config.numberOfSimultaneouslySelectedItems > this.interval.lastWindowElement) {
+                this.selectItem(Math.max(0, this.interval.lastWindowElement - this.config.numberOfSimultaneouslySelectedItems + 1));
             }            
+        });
+
+        this.selectItemTriggered.subscribe((itemToBeSelected: number) => {
+            this.selectItem(itemToBeSelected);           
         });
     }
 
+    private init(config: ItemListNavigatorConfig) {
+        this.config = config;
+
+        this.firstSelectedItemIndex = 0;
+        this.interval = new Interval(Math.min(this.config.maxNumberOfDisplayedItems, this.config.initialNumberOfItems),
+            this.config.maxNumberOfDisplayedItems, 0, this.config.initialNumberOfItems - 1);
+    }
+
     public itemSelected(index: number): boolean {
-        for (var i = 0; i < this.numberOfSimultaneouslySelectedItems; ++i) {
+        for (var i = 0; i < this.config.numberOfSimultaneouslySelectedItems; ++i) {
             if (index === this.firstSelectedItemIndex + i) {
                 return true;
             }
@@ -66,17 +79,17 @@ export class ItemListNavigatorComponent implements OnInit {
         if (this.totalNumberOfItemsLowerOrEqThanMaxNumberOfSimulatenouslyDisplayedItems())
             return true;
 
-        return this.firstSelectedItemIndex === this.numberOfItems - this.numberOfSimultaneouslySelectedItems;
+        return this.firstSelectedItemIndex === this.numberOfItems - this.config.numberOfSimultaneouslySelectedItems;
     }
     private totalNumberOfItemsLowerOrEqThanMaxNumberOfSimulatenouslyDisplayedItems(): boolean {
-        return this.numberOfItems <= this.numberOfSimultaneouslySelectedItems;
+        return this.numberOfItems <= this.config.numberOfSimultaneouslySelectedItems;
     }
     private get numberOfItems(): number {
         return this.interval.size;
     }
     public next() {
         this.firstSelectedItemIndex++;
-        if (this.interval.lastWindowElement == this.firstSelectedItemIndex + this.numberOfSimultaneouslySelectedItems - 1) {
+        if (this.interval.lastWindowElement == this.firstSelectedItemIndex + this.config.numberOfSimultaneouslySelectedItems - 1) {
             this.interval.shiftWindowRight();
         }
     }
@@ -87,10 +100,10 @@ export class ItemListNavigatorComponent implements OnInit {
             this.interval.shiftWindowLeft();
         }
     }
-    public selectItem(selectedItemIndex: number) {
-        if (selectedItemIndex + this.numberOfSimultaneouslySelectedItems > this.numberOfItems) {
+    private selectItem(selectedItemIndex: number) {
+        if (selectedItemIndex + this.config.numberOfSimultaneouslySelectedItems > this.numberOfItems) {
             if (!this.itemSelected(selectedItemIndex)) {
-                this.firstSelectedItemIndex = this.numberOfItems - this.numberOfSimultaneouslySelectedItems;
+                this.firstSelectedItemIndex = this.numberOfItems - this.config.numberOfSimultaneouslySelectedItems;
                 this.shiftRightIfNecessary();
             }
             return;
@@ -98,7 +111,7 @@ export class ItemListNavigatorComponent implements OnInit {
 
         this.firstSelectedItemIndex = selectedItemIndex;
 
-        if (this.interval.lastWindowElement < this.firstSelectedItemIndex + this.numberOfSimultaneouslySelectedItems) {
+        if (this.interval.lastWindowElement < this.firstSelectedItemIndex + this.config.numberOfSimultaneouslySelectedItems) {
             this.shiftRightIfNecessary();
         }
 
@@ -108,7 +121,7 @@ export class ItemListNavigatorComponent implements OnInit {
     }
 
     private shiftRightIfNecessary() {
-        var numberOfRightShifts = this.numberOfSimultaneouslySelectedItems - (this.interval.lastWindowElement - this.firstSelectedItemIndex);
+        var numberOfRightShifts = this.config.numberOfSimultaneouslySelectedItems - (this.interval.lastWindowElement - this.firstSelectedItemIndex);
         for (var i = 0; i < numberOfRightShifts; ++i) {
             this.interval.shiftWindowRight();
         }

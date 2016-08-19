@@ -31,7 +31,7 @@ import {InvoiceGroupsService} from '../../../../../../../../../../../services/in
     pipes: [TranslationPipe]
 })
 export class InvoiceEditComponent implements OnInit {
-    @Input() invoiceVMIndex: number;
+    @Input() invoiceReference: string;
     @Output() newlyAddedInvoiceRemoved = new EventEmitter();
 
     private _selectedInvoiceItemIndex: number;
@@ -70,12 +70,15 @@ export class InvoiceEditComponent implements OnInit {
     }
 
     public onDelete() {
-        var title = this._appContext.thTranslation.translate("Remove Invoice");
+        var title = this._appContext.thTranslation.translate("Info");
         var content = this._appContext.thTranslation.translate("Are you sure you want to remove this recently added invoice?");
         var positiveLabel = this._appContext.thTranslation.translate("Yes");
         var negativeLabel = this._appContext.thTranslation.translate("No");
         this._appContext.modalService.confirm(title, content, { positive: positiveLabel, negative: negativeLabel }, () => {
-            this.newlyAddedInvoiceRemoved.emit(this.invoiceVMIndex);
+            this.newlyAddedInvoiceRemoved.emit( {
+                indexInDisplayedInvoiceList: this.invoiceVMIndex,
+                reference: this.invoiceVM.invoiceDO.invoiceReference
+            });
         });
     }
 
@@ -102,7 +105,18 @@ export class InvoiceEditComponent implements OnInit {
         return this._invoiceGroupControllerService.invoiceGroupVM;
     }
     private get invoiceVM(): InvoiceVM {
-        return this.invoiceGroupVM.invoiceVMList[this.invoiceVMIndex];
+        for(var i = 0; i < this.invoiceGroupVM.invoiceVMList.length; ++i) {
+            if(this.invoiceGroupVM.invoiceVMList[i].invoiceDO.invoiceReference === this.invoiceReference) {
+                return this.invoiceGroupVM.invoiceVMList[i];
+            }
+        }
+    }
+    private get invoiceVMIndex(): number {
+        for(var i = 0; i < this.invoiceGroupVM.invoiceVMList.length; ++i) {
+            if(this.invoiceGroupVM.invoiceVMList[i].invoiceDO.invoiceReference === this.invoiceReference) {
+                return i;
+            }
+        }    
     }
     public get invoicePayerVMList(): InvoicePayerVM[] {
         return this.invoiceVM.invoicePayerVMList;

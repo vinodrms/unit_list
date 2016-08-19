@@ -3,13 +3,18 @@
 <div class="full-height" *ngIf="didInitOnce">
 	<div class="invoice-container">
 
-		<invoice-edit *ngFor="let displayedInvoiceIndex of displayedInvoiceIndexList" [invoiceVMIndex]="displayedInvoiceIndex" (newlyAddedInvoiceRemoved)="newlyAddedInvoiceRemoved($event)"></invoice-edit>
+		<invoice-edit *ngFor="let displayedInvoiceIndex of displayedInvoiceIndexList" [invoiceReference]="getInvoiceReference(displayedInvoiceIndex)" (newlyAddedInvoiceRemoved)="newlyAddedInvoiceRemoved($event)"></invoice-edit>
 
 	</div>
 	<div class="invoice-operations-footer">
 
-		<item-list-navigator (displayedItemsUpdated)="displayedItemsUpdated($event)" [initialNumberOfItems]="totalNumberOfInvoices" [maxNumberOfDisplayedItems]="invoiceNavigatorWindowSize"
-			[numberOfSimultaneouslySelectedItems]="numberOfSimultaneouslyDisplayedInvoices" [itemsAdded]="itemsAddedObservable" [itemRemoved]="itemRemovedObservable">
+		<item-list-navigator 
+			(displayedItemsUpdated)="displayedItemsUpdated($event)" 
+			[config]="itemListNavigatorConfig"
+			[reset]="resetItemNavigator" 
+			[itemsAdded]="itemsAddedObservable" 
+			[itemRemoved]="itemRemovedObservable"
+			[selectItemTriggered]="selectItemObservable">
 		</item-list-navigator>
 
 		<div *ngIf="editMode" class="invoice-operations-btn-group">

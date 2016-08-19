@@ -1,7 +1,7 @@
 export class Interval {
     values: number[];
 
-    constructor(currentWindowSize: number, private _maxWindowsSize: number, private _minValue: number, private _maxValue: number) {
+    constructor(currentWindowSize: number, private _maxWindowsSize: number, private _minValue: number, private _maxValue: number) {     
         this.values = [];
         for (var i = 0; i < currentWindowSize; ++i) {
             this.values.push(i);
@@ -15,6 +15,9 @@ export class Interval {
         return _.first(this.values);
     }
     public get lastWindowElement(): number {
+        if(_.isUndefined(_.last(this.values))) {
+            return -1;
+        }
         return _.last(this.values);
     }
     public get size(): number {

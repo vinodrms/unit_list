@@ -11,12 +11,13 @@ export enum InvoicePaymentStatus {
 export class InvoiceDO extends BaseDO implements IPriceableEntity {
 
     bookingId: string;
+    invoiceReference: string;
     payerList: InvoicePayerDO[];
     itemList: InvoiceItemDO[];
     paymentStatus: InvoicePaymentStatus;
 
     protected getPrimitivePropertyKeys(): string[] {
-        return ["bookingId", "paymentStatus"];
+        return ["bookingId", "invoiceReference", "paymentStatus"];
     }
 
     public buildFromObject(object: Object) {

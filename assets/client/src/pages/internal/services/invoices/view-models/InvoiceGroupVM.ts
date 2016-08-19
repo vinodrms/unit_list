@@ -8,13 +8,15 @@ import {ThTranslation} from '../../../../../common/utils/localization/ThTranslat
 
 export class InvoiceGroupVM {
     invoiceGroupDO: InvoiceGroupDO;
-    invoiceVMList: InvoiceVM[];
-    
+    private _invoiceVMList: InvoiceVM[];
+    private _newInvoiceSeq: number;
+
     ccySymbol: string;
     editMode: boolean;
-    
+
     constructor(private _thTranslation: ThTranslation) {
         this.editMode = false;
+        this._newInvoiceSeq = 1;
     }
 
     public buildFromInvoiceOperationsPageData(invoiceOperationsPageData: InvoiceOperationsPageData) {
@@ -32,16 +34,16 @@ export class InvoiceGroupVM {
     public buildInvoiceGroupDO(): InvoiceGroupDO {
         this.invoiceGroupDO.invoiceList = [];
         _.forEach(this.invoiceVMList, (invoiceVM: InvoiceVM) => {
-            this.invoiceGroupDO.invoiceList.push(invoiceVM.invoiceDO);        
+            this.invoiceGroupDO.invoiceList.push(invoiceVM.invoiceDO);
         });
         return this.invoiceGroupDO;
     }
 
     public checkValidations(): number {
         var firstInvalidInvoiceIndex = -1;
-        for(var i = 0; i < this.invoiceVMList.length; ++i) {
+        for (var i = 0; i < this.invoiceVMList.length; ++i) {
             var invoiceValid: boolean = this.invoiceVMList[i].isValid();
-            if(!invoiceValid && firstInvalidInvoiceIndex === -1) {
+            if (!invoiceValid && firstInvalidInvoiceIndex === -1) {
                 firstInvalidInvoiceIndex = i;
             }
         }
@@ -49,8 +51,8 @@ export class InvoiceGroupVM {
     }
 
     public buildPrototype(): InvoiceGroupVM {
-		var invoiceGroupVMCopy = new InvoiceGroupVM(this._thTranslation);
-        
+        var invoiceGroupVMCopy = new InvoiceGroupVM(this._thTranslation);
+
         var invoiceGroupDOCopy = new InvoiceGroupDO();
         invoiceGroupDOCopy.buildFromObject(this.invoiceGroupDO);
         invoiceGroupVMCopy.invoiceGroupDO = invoiceGroupDOCopy;
@@ -63,6 +65,37 @@ export class InvoiceGroupVM {
         invoiceGroupVMCopy.ccySymbol = this.ccySymbol;
         invoiceGroupVMCopy.editMode = this.editMode;
 
-		return invoiceGroupVMCopy;
-	} 
+        return invoiceGroupVMCopy;
+    }
+
+    public get invoiceVMList(): InvoiceVM[] {
+        if (this.editMode) {
+            return this.getUnpaidInvoiceVMList();
+        }
+        return this._invoiceVMList;
+    }
+    public set invoiceVMList(invoiceVMList: InvoiceVM[]) {
+        this._invoiceVMList = invoiceVMList;
+    }
+
+    public getUnpaidInvoiceVMList(): InvoiceVM[] {
+        return _.filter(this._invoiceVMList, (invoiceVM: InvoiceVM) => {
+            return !invoiceVM.invoiceDO.isPaid;
+        });
+    }
+
+    public addInvoiceVM(newInvoiceVM: InvoiceVM) {
+        this._invoiceVMList.push(newInvoiceVM);
+    }
+    public removeInvoiceVMByReference(reference: string) {
+        for(var i = 0; i < this._invoiceVMList.length; ++i) {
+            if(this._invoiceVMList[i].invoiceDO.invoiceReference === reference) {
+                this._invoiceVMList.splice(i, 1);
+                return;
+            }
+        }
+    }
+    public get newInvoiceSeq(): number {
+        return this._newInvoiceSeq++;
+    }
 }

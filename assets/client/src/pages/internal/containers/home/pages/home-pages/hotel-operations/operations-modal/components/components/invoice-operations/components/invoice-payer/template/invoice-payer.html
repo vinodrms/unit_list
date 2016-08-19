@@ -3,7 +3,12 @@
         <tbody>
             <tr class="row-actions">
                 <td width="70%" class="customer-container">
-                    <a *ngIf="invoicePayerVM.customerDO" class="clickable-item" (click)="goToCustomer(invoicePayerVM.customerDO)"><i class="fa fa-2x unitpal-font">(</i> <b>{{invoicePayerVM.customerDO.customerName}}</b></a>
+                    <a *ngIf="invoicePayerVM.customerDO" class="clickable-item" (click)="goToCustomer(invoicePayerVM.customerDO)">
+                        <i *ngIf="invoicePayerVM.customerDO.isIndividual()" class="fa fa-2x unitpal-font">(</i>
+                        <i *ngIf="invoicePayerVM.customerDO.isCompany()" class="fa fa-2x unitpal-font">)</i>
+                        <i *ngIf="invoicePayerVM.customerDO.isTravelAgency()" class="fa fa-2x unitpal-font">*</i>
+                        <b>{{invoicePayerVM.customerDO.customerName}}</b>
+                    </a>
                     <a *ngIf="invoicePayerVM.customerDO" class="clickable-item m-l-12" (click)="openCustomerSelectModal()"><i class="fa unitpal-font">]</i> {{ 'Change' | translate }}</a>
                     <a *ngIf="!invoicePayerVM.customerDO" class="clickable-item m-l-12" (click)="openCustomerSelectModal()"><i class="fa unitpal-font">]</i> {{ 'Select Customer' | translate }}</a>
                 </td>

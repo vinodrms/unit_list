@@ -27,9 +27,10 @@ export class InvoiceVM {
         this.errorMessageList = [];
     }
 
-    public buildCleanInvoiceVM() {
+    public buildCleanInvoiceVM(invoiceReference: string) {
         this.invoiceDO = new InvoiceDO();
         this.invoiceDO.buildCleanInvoice();
+        this.invoiceDO.invoiceReference = invoiceReference;
         this.invoicePayerVMList = [];
         var invoicePayerVM = new InvoicePayerVM(this._thTranslation);
         invoicePayerVM.invoicePayerDO = this.invoiceDO.payerList[0];
