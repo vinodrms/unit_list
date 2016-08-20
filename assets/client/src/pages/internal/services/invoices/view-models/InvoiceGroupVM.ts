@@ -89,7 +89,7 @@ export class InvoiceGroupVM {
     }
     public removeInvoiceVMByReference(reference: string) {
         var index = this.getInvoiceIndexByRefInTheEntireInvoiceList(reference);
-        if(index != -1) {
+        if (index != -1) {
             this._invoiceVMList.splice(index, 1);
         }
     }
@@ -117,12 +117,12 @@ export class InvoiceGroupVM {
     public moveInvoiceItemLeft(sourceInvoiceRef: string, invoiceItemVMIndex: number) {
         var sourceIndex = this.getInvoiceIndexByRefInTheEntireInvoiceList(sourceInvoiceRef);
         var destinationIndex = this.getLeftEditableNeighborIndex(sourceInvoiceRef);
-        
+
         this.moveInvoiceItem(sourceIndex, destinationIndex, invoiceItemVMIndex);
     }
     public getLeftEditableNeighborIndex(sourceInvoiceRef: string): number {
         var indexInTheEditableInvoiceList = this.getInvoiceIndexByRefInTheEditableInvoiceList(sourceInvoiceRef);
-        if(indexInTheEditableInvoiceList === 0) {
+        if (indexInTheEditableInvoiceList === 0) {
             return -1;
         }
         return this.getInvoiceIndexByRefInTheEntireInvoiceList(this.invoiceVMList[indexInTheEditableInvoiceList - 1].invoiceDO.invoiceReference);
@@ -130,12 +130,12 @@ export class InvoiceGroupVM {
     public moveInvoiceItemRight(sourceInvoiceRef: string, invoiceItemVMIndex: number) {
         var sourceIndex = this.getInvoiceIndexByRefInTheEntireInvoiceList(sourceInvoiceRef);
         var destinationIndex = this.getRightEditableNeighborIndex(sourceInvoiceRef);
-        
+
         this.moveInvoiceItem(sourceIndex, destinationIndex, invoiceItemVMIndex);
     }
     public getRightEditableNeighborIndex(sourceInvoiceRef: string): number {
         var indexInTheEditableInvoiceList = this.getInvoiceIndexByRefInTheEditableInvoiceList(sourceInvoiceRef);
-        if(indexInTheEditableInvoiceList === this.invoiceVMList.length - 1) {
+        if (indexInTheEditableInvoiceList === this.invoiceVMList.length - 1) {
             return -1;
         }
         return this.getInvoiceIndexByRefInTheEntireInvoiceList(this.invoiceVMList[indexInTheEditableInvoiceList + 1].invoiceDO.invoiceReference);
@@ -146,5 +146,20 @@ export class InvoiceGroupVM {
 
         this._invoiceVMList[sourceInvoiceIndex].invoceItemVMList.splice(invoiceItemIndex, 1);
         this._invoiceVMList[sourceInvoiceIndex].invoiceDO.itemList.splice(invoiceItemIndex, 1);
+
+        this.updatePriceToPayIfSinglePayerByIndex(sourceInvoiceIndex);
+        this.updatePriceToPayIfSinglePayerByIndex(destinationInvoiceIndex);
+    }
+
+    public updatePriceToPayIfSinglePayerByRef(invoiceRef: string) {
+        var index = this.getInvoiceIndexByRefInTheEntireInvoiceList(invoiceRef);
+
+        this.updatePriceToPayIfSinglePayerByIndex(index);
+    }
+
+    private updatePriceToPayIfSinglePayerByIndex(index: number) {
+        if (this._invoiceVMList[index].invoicePayerVMList.length === 1) {
+            this._invoiceVMList[index].invoicePayerVMList[0].invoicePayerDO.priceToPay = this._invoiceVMList[index].totalPrice;
+        }
     }
 }

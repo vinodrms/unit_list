@@ -40,7 +40,7 @@ export class InvoiceDO extends BaseDO implements IPriceableEntity {
     public buildCleanInvoice() {
         this.payerList = [];
         var cleanInvoicePayerDO = new InvoicePayerDO();
-        cleanInvoicePayerDO.priceToPay = this.getRemainingAmountToBePaid();
+        cleanInvoicePayerDO.priceToPay = this.getPrice();
         this.payerList.push(cleanInvoicePayerDO);
         this.itemList = [];
         this.paymentStatus = InvoicePaymentStatus.Unpaid;
@@ -71,9 +71,6 @@ export class InvoiceDO extends BaseDO implements IPriceableEntity {
 
     public getPrice(): number {
         return _.reduce(this.itemList, function(memo: number, item: InvoiceItemDO){ return memo + item.meta.getNumberOfItems() * item.meta.getPrice(); }, 0);
-    }
-    public getRemainingAmountToBePaid(): number {
-        return this.getPrice() - this.getAmountPaid();
     }
     public getAmountPaid(): number {
         return _.reduce(this.payerList, (amountPaid: number, payerDO: InvoicePayerDO) => { 

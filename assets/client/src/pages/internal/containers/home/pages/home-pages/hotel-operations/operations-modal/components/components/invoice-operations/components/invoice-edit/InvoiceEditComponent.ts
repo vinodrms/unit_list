@@ -54,6 +54,7 @@ export class InvoiceEditComponent implements OnInit {
                     this._numberOfAddOnProductsModalService.openModal(selectedAddOnProductList[0].id).then((modalDialogInstance: ModalDialogRef<NumberOfAddOnProductsModalOutput>) => {
                         modalDialogInstance.resultObservable.subscribe((numberOfAopSelection: NumberOfAddOnProductsModalOutput) => {
                             this.invoiceVM.addItemOnInvoice(selectedAddOnProductList[0], numberOfAopSelection.noOfItems);
+                            this.invoiceGroupVM.updatePriceToPayIfSinglePayerByRef(this.invoiceReference);
                         });
                     });
                 }
