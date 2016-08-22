@@ -95,6 +95,7 @@ export class YieldFilterPaneComponent implements OnInit {
 
 	public searchTextChangeHandler(value) {
 		this.searchText = value;
+		this.notifyFilterChange();
 	}
 
 	public colorItemToggleSelection(event : {filterItemComponent: YieldColorFitlerItemComponent, selected: boolean}){
@@ -128,7 +129,8 @@ export class YieldFilterPaneComponent implements OnInit {
 
 		return {
 			colorFilter : colorFilter,
-			textFilter: textFilter
+			textFilter: textFilter,
+			searchText: this.searchText
 		}
 	}
 

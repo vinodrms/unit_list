@@ -2,5 +2,6 @@ import {IFilterVM} from '../../../../../../../../services/yield-manager/dashboar
 
 export interface IFilterSelection{
 		colorFilter: IFilterVM,
-		textFilter :IFilterVM
+		textFilter: IFilterVM,
+		searchText: string;
 } 

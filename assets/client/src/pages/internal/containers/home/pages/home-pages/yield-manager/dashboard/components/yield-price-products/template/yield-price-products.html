@@ -17,9 +17,7 @@
 		<div class="price-products-col flex-jc-start wide">
 			<div class="selected-indicator" [ngClass]="getSelectedIndicatorClasses(priceProduct)"></div>
 			<span class=" p-l-6">
-				<input type="checkbox"
-					[(ngModel)]="itemsSelectionState[priceProduct.id]" 
-					(change)="toogleCheckPriceProduct(priceProduct)">
+				<input type="checkbox" [(ngModel)]="itemsSelectionState[priceProduct.id]">
 				<span class="dark-gray-color f-14">{{priceProduct.name}}</span>
 			</span>
 		</div>

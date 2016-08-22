@@ -82,11 +82,12 @@ export class YieldPriceProductsComponent implements OnInit {
 		var filteredByText: PriceProductYieldItemVM[] = [];
 		var filteredBySearch: PriceProductYieldItemVM[] = [];
 
-		debugger;
 		filteredByColor = this.selectByFilter(this.selectedFilters.colorFilter, this.priceProductResults.priceProductYieldItemVM);
 		filteredByText = this.selectByFilter(this.selectedFilters.textFilter, this.priceProductResults.priceProductYieldItemVM);
-		debugger;
+		filteredBySearch = this.selectBySearchText(this.selectedFilters.searchText, this.priceProductResults.priceProductYieldItemVM);
+
 		var partialFilter = this.intersectFilteredPriceProducts(filteredByColor, filteredByText);
+		var partialFilter = this.intersectFilteredPriceProducts(partialFilter, filteredBySearch);
 		this.filteredPriceProduct = partialFilter;
 	}
 
@@ -99,6 +100,22 @@ export class YieldPriceProductsComponent implements OnInit {
 			results = _.filter(priceProductYieldItemVM, (item: PriceProductYieldItemVM) => {
 				var ppFilter:IFilterVM = this.getFilterFromPriceProductByType(filter.filterType, item);
 				if (ppFilter && ppFilter.filterId == filter.filterId && ppFilter.valueId == filter.valueId){
+					return true;
+				}
+				return false;
+			 });
+		}
+		return results;
+	}
+
+	private selectBySearchText(searchText: string, priceProductYieldItemVM: PriceProductYieldItemVM[]):PriceProductYieldItemVM[]{
+		var results = [];
+		if (this._appContext.thUtils.isUndefinedOrNull(searchText) || searchText == ""){
+			results = priceProductYieldItemVM;
+		}
+		else{
+			results = _.filter(priceProductYieldItemVM, (item: PriceProductYieldItemVM) => {
+				if (item.name.toLocaleLowerCase().indexOf(searchText.toLocaleLowerCase()) != -1){
 					return true;
 				}
 				return false;
@@ -217,12 +234,11 @@ export class YieldPriceProductsComponent implements OnInit {
 		})
 	}
 
-	public toogleCheckPriceProduct(priceProduct: PriceProductYieldItemVM){
-		// alert(this.priceProductSelectionDictionary[priceProduct.priceProductYieldItemDO.priceProductId]);
-	}
+	// public toogleCheckPriceProduct(priceProduct: PriceProductYieldItemVM){
+	// 	// alert(this.priceProductSelectionDictionary[priceProduct.priceProductYieldItemDO.priceProductId]);
+	// }
 
 	public applyFilters(filters: IFilterSelection){
-		debugger;
 		this.setItemSelectionStateToAll(false);
 		this.selectedFilters = filters;
 		this.updateFilteredPriceProducts();

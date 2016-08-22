@@ -12,7 +12,6 @@ export abstract class AYieldFilterItemComponent implements OnInit {
 	}
 
 	public toggleSelection() {
-		debugger;
 		this.selected = !this.selected;
 		this.triggerOnToggleSelectionEvent(this.selected);
 	}
