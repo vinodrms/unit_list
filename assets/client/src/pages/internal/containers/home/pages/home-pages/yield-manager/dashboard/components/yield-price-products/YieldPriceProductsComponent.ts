@@ -48,7 +48,8 @@ export class YieldPriceProductsComponent implements OnInit {
 		this.selectAllItemsFlag = false;
 		this.selectedFilters = {
 			colorFilter : null,
-			textFilter : null
+			textFilter : null,
+			searchText : null
 		}
 	}
 
