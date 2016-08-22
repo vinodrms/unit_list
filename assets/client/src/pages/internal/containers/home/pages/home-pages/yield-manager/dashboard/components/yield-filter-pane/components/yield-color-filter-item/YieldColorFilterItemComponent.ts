@@ -10,10 +10,10 @@ import {AYieldFilterItemComponent} from '../common/AYieldFilterItemComponent';
 })
 export class YieldColorFitlerItemComponent extends AYieldFilterItemComponent implements OnInit {
 	@Input() yieldColorFilterItemVM: ColorFilterVM;
-	@Output() onSelect = new EventEmitter<YieldColorFitlerItemComponent>();
+	@Output() onToggleSelection = new EventEmitter<{filterItemComponent :YieldColorFitlerItemComponent, selected: boolean}>();
 
-	public triggerOnSelectEvent(){
-		this.onSelect.emit(this);
+	public triggerOnToggleSelectionEvent(selected: boolean){
+		this.onToggleSelection.emit({ filterItemComponent: this, selected : selected });
 	}
 
 	public getFilterNameClasses(){

@@ -8,10 +8,10 @@ import {AYieldFilterItemComponent} from '../common/AYieldFilterItemComponent';
 	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/yield-manager/dashboard/components/yield-filter-pane/components/yield-text-filter-item/template/yield-text-filter-item.html'
 })
 export class YieldTextFilterItemComponent extends AYieldFilterItemComponent implements OnInit {
-	@Output() onSelect = new EventEmitter<YieldTextFilterItemComponent>();
+	@Output() onToggleSelection = new EventEmitter<{filterItemComponent :YieldTextFilterItemComponent, selected: boolean}>();
 	@Input() yieldTextFilterItemVM: TextFilterVM
 
-	public triggerOnSelectEvent(){
-		this.onSelect.emit(this);
+	public triggerOnToggleSelectionEvent(selected: boolean){
+		this.onToggleSelection.emit({ filterItemComponent: this, selected : selected });
 	}
 }

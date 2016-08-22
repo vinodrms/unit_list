@@ -19,6 +19,12 @@ import {YieldActionsPanelComponent} from './components/yield-actions-panel/Yield
 import {IActionPaneYieldParams} from './components/yield-actions-panel/YieldActionsPanelComponent';
 
 import {ThDateIntervalDO} from '../../../../../../../../services/common/data-objects/th-dates/ThDateIntervalDO';
+import {YieldFilterType} from '../../../../../../../../services/common/data-objects/yield-filter/YieldFilterDO';
+
+import {IFilterSelection} from '../../common/interfaces/IFilterSelection';
+import {IFilterVM} from '../../../../../../../../services/yield-manager/dashboard/filter/view-models/IFilterVM';
+
+declare var _:any;
 
 @Component({
 	selector: 'yield-price-products',
@@ -29,21 +35,30 @@ import {ThDateIntervalDO} from '../../../../../../../../services/common/data-obj
 export class YieldPriceProductsComponent implements OnInit {
 	private _yieldManager: IYieldManagerDashboardPriceProducts;
 	public priceProductResults: PriceProductYieldResultVM;
+	public filteredPriceProduct: PriceProductYieldItemVM[];
 	private referenceDate: ThDateDO;
+	private selectedFilters:IFilterSelection;
+	private selectAllItemsFlag: boolean;
 	private itemsSelectionState = null;
 
 	constructor(
 		private _priceProductsService: YieldManagerDashboardPriceProductsService,
 		private _appContext: AppContext
-	) { }
+	) { 
+		this.selectAllItemsFlag = false;
+		this.selectedFilters = {
+			colorFilter : null,
+			textFilter : null
+		}
+	}
 
 	ngOnInit() { 
 		this.referenceDate = ThDateDO.buildThDateDO(2016, 7, 1);
 
 		this._priceProductsService.getPriceProducts({ referenceDate: this.referenceDate, noDays: 21 }).subscribe((results: PriceProductYieldResultVM) => {
 			this.priceProductResults = results;
-			debugger;
-			this.initializeItemSelectionStateDictionary()
+			this.initializeItemSelectionStateDictionary();
+			this.updateFilteredPriceProducts();
 		}, (e) => {
 			console.log(e);
 		});
@@ -52,39 +67,87 @@ export class YieldPriceProductsComponent implements OnInit {
 	private initializeItemSelectionStateDictionary(){
 		if (!this.itemsSelectionState){
 			this.itemsSelectionState = {};
-			this.priceProductResults.priceProductYieldItemVM.forEach(item => {
-				this.itemsSelectionState[item.id] = true;
-			});
+			this.setItemSelectionStateToAll(false);
 		}
+	}
+
+	private setItemSelectionStateToAll(selected: boolean){
+		this.priceProductResults.priceProductYieldItemVM.forEach(item => {
+			this.itemsSelectionState[item.id] = selected;
+		});
+	}
+
+	public updateFilteredPriceProducts(){
+		var filteredByColor: PriceProductYieldItemVM[] = [];
+		var filteredByText: PriceProductYieldItemVM[] = [];
+		var filteredBySearch: PriceProductYieldItemVM[] = [];
+
+		debugger;
+		filteredByColor = this.selectByFilter(this.selectedFilters.colorFilter, this.priceProductResults.priceProductYieldItemVM);
+		filteredByText = this.selectByFilter(this.selectedFilters.textFilter, this.priceProductResults.priceProductYieldItemVM);
+		debugger;
+		var partialFilter = this.intersectFilteredPriceProducts(filteredByColor, filteredByText);
+		this.filteredPriceProduct = partialFilter;
+	}
+
+	private selectByFilter(filter:IFilterVM, priceProductYieldItemVM: PriceProductYieldItemVM[]):PriceProductYieldItemVM[]{
+		var results = [];
+		if (filter == null){
+			results = priceProductYieldItemVM;
+		}
+		else{
+			results = _.filter(priceProductYieldItemVM, (item: PriceProductYieldItemVM) => {
+				var ppFilter:IFilterVM = this.getFilterFromPriceProductByType(filter.filterType, item);
+				if (ppFilter && ppFilter.filterId == filter.filterId && ppFilter.valueId == filter.valueId){
+					return true;
+				}
+				return false;
+			 });
+		}
+		return results;
+	}
+
+	private intersectFilteredPriceProducts(priceProductList1: PriceProductYieldItemVM[], priceProductList2: PriceProductYieldItemVM[]){
+		var overlapDictionary = {};
+		var intersectionList: PriceProductYieldItemVM[] = [];
+
+		priceProductList1.forEach(element => {
+			overlapDictionary[element.id] = 1;
+		});
+
+		priceProductList2.forEach(element => {
+			if (overlapDictionary[element.id]){
+				intersectionList.push(element);
+			}
+		});
+		
+		return intersectionList;
+	}
+
+	private getFilterFromPriceProductByType(filterType: YieldFilterType, priceProductYieldItemVM: PriceProductYieldItemVM):IFilterVM{
+		if (filterType == YieldFilterType.Color){
+			if ((priceProductYieldItemVM.colorFilterList.length > 0)){
+				return priceProductYieldItemVM.colorFilterList[0];
+			}
+		}
+		else if (filterType == YieldFilterType.Text){
+			if ((priceProductYieldItemVM.textFilterList.length > 0)){
+				return priceProductYieldItemVM.textFilterList[0];
+			}
+		}
+		return null;
 	}
 
 	public getPriceProductRowClasses(priceProduct:PriceProductYieldItemVM){
 		return this.getSelectedRowClasses(priceProduct, (className: string) => {
 			return className + '-alpha-1';
 		});
-
-		// var color_class = 'default-row-select-color';
-		// if (priceProduct.colorFilterList.length > 0){
-		// 	color_class = priceProduct.colorFilterList[0].cssClass + '-alpha-1';
-		// }
-		
-		// var results = {};
-		// results[color_class] = this.itemsSelectionState[priceProduct.priceProductYieldItemDO.priceProductId];
-		// return results;
 	}
 
 	public getSelectedIndicatorClasses(priceProduct:PriceProductYieldItemVM){
 		return this.getSelectedRowClasses(priceProduct, (className: string)=>{
 			return className;
 		});
-		// var color_class = 'default-row-select-color';
-		// if (priceProduct.colorFilterList.length > 0){
-		// 	color_class = priceProduct.colorFilterList[0].cssClass + '-alpha-1';
-		// }
-		
-		// var results = {};
-		// results[color_class] = this.itemsSelectionState[priceProduct.priceProductYieldItemDO.priceProductId];
-		// return results;
 	}
 
 	private getSelectedRowClasses(priceProduct:PriceProductYieldItemVM, classTransformer: (className:string) => string){
@@ -124,7 +187,6 @@ export class YieldPriceProductsComponent implements OnInit {
 	}
 
 	public applyAction(params:IActionPaneYieldParams){
-		debugger;
 		var yieldParams: PriceProductYieldParam;
 		var selectedPriceProducts = this.getSelectedPriceProductIds();
 		yieldParams = {
@@ -155,7 +217,14 @@ export class YieldPriceProductsComponent implements OnInit {
 		})
 	}
 
-	public toogleCheckPriceProduct(priceProduct:PriceProductYieldItemVM){
+	public toogleCheckPriceProduct(priceProduct: PriceProductYieldItemVM){
 		// alert(this.priceProductSelectionDictionary[priceProduct.priceProductYieldItemDO.priceProductId]);
+	}
+
+	public applyFilters(filters: IFilterSelection){
+		debugger;
+		this.setItemSelectionStateToAll(false);
+		this.selectedFilters = filters;
+		this.updateFilteredPriceProducts();
 	}
 }
