@@ -73,7 +73,8 @@ export class InvoicePayerComponent implements OnInit {
                 newInvoicePayer.customerId = selectedCustomerList[0].id;
 
                 if (newInvoicePayer.priceToPay === 0 && this.invoiceVM.invoicePayerVMList.length === 1) {
-                    newInvoicePayer.priceToPay = this.invoiceVM.invoiceDO.getRemainingAmountToBePaid();
+                    newInvoicePayer.priceToPay = 0.0;
+                    // TODO: check -> this.invoiceVM.invoiceDO.getRemainingAmountToBePaid();
                 }
                 else {
                     newInvoicePayer.priceToPay = this.invoicePayerVM.invoicePayerDO.priceToPay;
