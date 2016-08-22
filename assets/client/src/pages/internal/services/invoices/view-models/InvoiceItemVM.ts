@@ -20,6 +20,9 @@ export class InvoiceItemVM {
     public get price(): number {
         return this.invoiceItemDO.meta.getPrice();
     }
+    public get totalPrice(): number {
+        return this.invoiceItemDO.meta.getPrice() * this.qty;
+    }
     public isMovable():boolean {
         return this.invoiceItemDO.meta.isMovable();
     }

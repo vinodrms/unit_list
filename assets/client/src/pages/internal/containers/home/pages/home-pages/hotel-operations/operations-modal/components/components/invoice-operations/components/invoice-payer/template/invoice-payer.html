@@ -3,7 +3,12 @@
         <tbody>
             <tr class="row-actions">
                 <td width="70%" class="customer-container">
-                    <a *ngIf="invoicePayerVM.customerDO" class="clickable-item" (click)="goToCustomer(invoicePayerVM.customerDO)"><i class="fa fa-2x unitpal-font">(</i> <b>{{invoicePayerVM.customerDO.customerName}}</b></a>
+                    <a *ngIf="invoicePayerVM.customerDO" class="clickable-item" (click)="goToCustomer(invoicePayerVM.customerDO)">
+                        <i *ngIf="invoicePayerVM.customerDO.isIndividual()" class="fa fa-2x unitpal-font">(</i>
+                        <i *ngIf="invoicePayerVM.customerDO.isCompany()" class="fa fa-2x unitpal-font">)</i>
+                        <i *ngIf="invoicePayerVM.customerDO.isTravelAgency()" class="fa fa-2x unitpal-font">*</i>
+                        <b>{{invoicePayerVM.customerDO.customerName}}</b>
+                    </a>
                     <a *ngIf="invoicePayerVM.customerDO" class="clickable-item m-l-12" (click)="openCustomerSelectModal()"><i class="fa unitpal-font">]</i> {{ 'Change' | translate }}</a>
                     <a *ngIf="!invoicePayerVM.customerDO" class="clickable-item m-l-12" (click)="openCustomerSelectModal()"><i class="fa unitpal-font">]</i> {{ 'Select Customer' | translate }}</a>
                 </td>
@@ -36,17 +41,16 @@
 
             <div *ngIf="editMode" class="form-group m-0">
                 <div class="input-group">
-                    <select class="form-control">
-                        <option value="0: Object">Cash</option>
-                        <option value="1: Object">Visa</option>
+                    <select class="form-control" [ngModel]="selectedPaymentMethodVM" (ngModelChange)="selectedPaymentMethodVM=$event">
+                        <option *ngFor="let paymentMethodVM of paymentMethodVMList" [ngValue]="paymentMethodVM">{{paymentMethodVM.displayName | translate}}</option>
                     </select>
                 </div>
             </div>
 
             <div *ngIf="!editMode" class="form-group m-0">
                 <div class="input-group">
-                    <i class="fa fa-lg fa-cc-discover"></i>
-                    <span> Discover</span>
+                    <i class="fa" [ngClass]="selectedPaymentMethodVM.iconUrl"></i>
+                    <span> {{selectedPaymentMethodVM.displayName | translate}}</span>
                 </div>
             </div>
             
@@ -57,9 +61,6 @@
                     </span>
                 </div>
             </div>
-
-
-
         </form>
     </div>
 </div>

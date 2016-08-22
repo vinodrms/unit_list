@@ -3631,6 +3631,10 @@ invoice-edit {
     background-color: #fcf0e6;
     color: rgb(251, 103, 8);
 }
+.move-invoice-item-btn.disabled:hover {
+    background-color: rgb(251, 103, 8);
+    color: white;
+}
 .move-invoice-item-btn:active {
     background-color: #fcf0e6;
     color: rgb(251, 103, 8);
@@ -3647,6 +3651,9 @@ tr.selected-invoice-item {
     text-align: right;
     padding: 0 5px 0 0 !important;
     vertical-align: middle !important;
+}
+.not-allowed {
+    cursor: not-allowed;
 }
 .invoice-pagination-container .page-index {
     color: #c1c1c1;

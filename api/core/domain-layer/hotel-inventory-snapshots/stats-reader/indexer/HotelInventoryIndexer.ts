@@ -19,14 +19,16 @@ import {IBookingOccupancy} from '../../../bookings/search-bookings/utils/occupan
 import {BookingOccupancy} from '../../../bookings/search-bookings/utils/occupancy-calculator/results/BookingOccupancy';
 import {IRevenueForDate} from '../data-objects/revenue/IRevenueForDate';
 import {RevenueForDate} from '../data-objects/revenue/RevenueForDate';
+import {InvoiceIndexer} from './invoice/InvoiceIndexer';
+import {IInvoiceStats} from './invoice/IInvoiceStats';
 
 import _ = require('underscore');
 
-export interface BookingIndexerParams {
+export interface HotelInventoryIndexerParams {
     cancellationHour: ThHourDO;
     currentHotelTimestamp: ThTimestampDO;
 }
-export class BookingIndexer {
+export class HotelInventoryIndexer {
     private _bookingUtils: BookingUtils;
     private _dateUtils: ThDateUtils;
     private _indexedInterval: IndexedBookingInterval;
@@ -34,21 +36,22 @@ export class BookingIndexer {
     private _confirmedBookingsContainer: BookingsContainer;
     private _guaranteedBookingsContainer: BookingsContainer;
     private _penaltyBookingsContainer: BookingsContainer;
+    private _invoiceStats: IInvoiceStats;
 
     constructor(private _appContext: AppContext,
         private _sessionContext: SessionContext,
-        private _indexerParams: BookingIndexerParams) {
+        private _indexerParams: HotelInventoryIndexerParams) {
         this._bookingUtils = new BookingUtils();
         this._dateUtils = new ThDateUtils();
     }
 
-    public indexBookings(indexedInterval: IndexedBookingInterval): Promise<boolean> {
+    public indexInventory(indexedInterval: IndexedBookingInterval): Promise<boolean> {
         this._indexedInterval = indexedInterval;
         return new Promise<boolean>((resolve: { (result: boolean): void }, reject: { (err: ThError): void }) => {
-            this.indexBookingsCore(resolve, reject);
+            this.indexInventoryCore(resolve, reject);
         });
     }
-    private indexBookingsCore(resolve: { (result: boolean): void }, reject: { (err: ThError): void }) {
+    private indexInventoryCore(resolve: { (result: boolean): void }, reject: { (err: ThError): void }) {
         var bookingsRepo = this._appContext.getRepositoryFactory().getBookingRepository();
         bookingsRepo.getBookingList({ hotelId: this._sessionContext.sessionDO.hotel.id },
             {
@@ -60,8 +63,10 @@ export class BookingIndexer {
             }).then((bookingSearchResult: BookingSearchResultRepoDO) => {
                 this.indexBookingsByType(bookingSearchResult.bookingList);
 
-                // TODO: load invoice indexer (step 1)
-
+                var invoiceIndexer = new InvoiceIndexer(this._appContext, this._sessionContext);
+                return invoiceIndexer.getInvoiceStats(this._indexedInterval);
+            }).then((invoiceStats: IInvoiceStats) => {
+                this._invoiceStats = invoiceStats;
                 resolve(true);
             }).catch((error: any) => {
                 var thError = new ThError(ThStatusCode.BookingsIndexerError, error);
@@ -116,7 +121,8 @@ export class BookingIndexer {
         var guaranteedRev = this.getRevenue(this._guaranteedBookingsContainer, thDate);
         var penaltyRev = this.getRevenue(this._penaltyBookingsContainer, thDate);
         guaranteedRev.addRevenue(penaltyRev);
-        // TODO: get invoice price and append to guaranteedRev.otherRevenue (step 2)
+        var invoiceRevenue = this._invoiceStats.getRevenueForDate(thDate);
+        guaranteedRev.addRevenue(invoiceRevenue);
         return guaranteedRev;
     }
     private getRevenue(bookingsContainer: BookingsContainer, thDate: ThDateDO): RevenueForDate {
@@ -142,5 +148,6 @@ export class BookingIndexer {
         this._confirmedBookingsContainer.destroy();
         this._guaranteedBookingsContainer.destroy();
         this._penaltyBookingsContainer.destroy();
+        this._invoiceStats.destroy();
     }
 }

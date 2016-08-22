@@ -31,7 +31,7 @@ import {InvoiceGroupsService} from '../../../../../../../../../../../services/in
     pipes: [TranslationPipe]
 })
 export class InvoiceEditComponent implements OnInit {
-    @Input() invoiceVMIndex: number;
+    @Input() invoiceReference: string;
     @Output() newlyAddedInvoiceRemoved = new EventEmitter();
 
     private _selectedInvoiceItemIndex: number;
@@ -54,6 +54,7 @@ export class InvoiceEditComponent implements OnInit {
                     this._numberOfAddOnProductsModalService.openModal(selectedAddOnProductList[0].id).then((modalDialogInstance: ModalDialogRef<NumberOfAddOnProductsModalOutput>) => {
                         modalDialogInstance.resultObservable.subscribe((numberOfAopSelection: NumberOfAddOnProductsModalOutput) => {
                             this.invoiceVM.addItemOnInvoice(selectedAddOnProductList[0], numberOfAopSelection.noOfItems);
+                            this.invoiceGroupVM.updatePriceToPayIfSinglePayerByRef(this.invoiceReference);
                         });
                     });
                 }
@@ -70,12 +71,15 @@ export class InvoiceEditComponent implements OnInit {
     }
 
     public onDelete() {
-        var title = this._appContext.thTranslation.translate("Remove Invoice");
+        var title = this._appContext.thTranslation.translate("Info");
         var content = this._appContext.thTranslation.translate("Are you sure you want to remove this recently added invoice?");
         var positiveLabel = this._appContext.thTranslation.translate("Yes");
         var negativeLabel = this._appContext.thTranslation.translate("No");
         this._appContext.modalService.confirm(title, content, { positive: positiveLabel, negative: negativeLabel }, () => {
-            this.newlyAddedInvoiceRemoved.emit(this.invoiceVMIndex);
+            this.newlyAddedInvoiceRemoved.emit( {
+                indexInDisplayedInvoiceList: this.invoiceVMIndex,
+                reference: this.invoiceVM.invoiceDO.invoiceReference
+            });
         });
     }
 
@@ -102,7 +106,18 @@ export class InvoiceEditComponent implements OnInit {
         return this._invoiceGroupControllerService.invoiceGroupVM;
     }
     private get invoiceVM(): InvoiceVM {
-        return this.invoiceGroupVM.invoiceVMList[this.invoiceVMIndex];
+        for(var i = 0; i < this.invoiceGroupVM.invoiceVMList.length; ++i) {
+            if(this.invoiceGroupVM.invoiceVMList[i].invoiceDO.invoiceReference === this.invoiceReference) {
+                return this.invoiceGroupVM.invoiceVMList[i];
+            }
+        }
+    }
+    private get invoiceVMIndex(): number {
+        for(var i = 0; i < this.invoiceGroupVM.invoiceVMList.length; ++i) {
+            if(this.invoiceGroupVM.invoiceVMList[i].invoiceDO.invoiceReference === this.invoiceReference) {
+                return i;
+            }
+        }    
     }
     public get invoicePayerVMList(): InvoicePayerVM[] {
         return this.invoiceVM.invoicePayerVMList;
@@ -128,5 +143,27 @@ export class InvoiceEditComponent implements OnInit {
     }
     public get isNewlyAdded(): boolean {
         return this.invoiceVM.isNewlyAdded;
+    }
+
+    public moveLeft(invoiceItemVMIndex: number) {
+        if(!this.hasLeftEditableNeighbor()) {
+            return;
+        }
+        this.invoiceGroupVM.moveInvoiceItemLeft(this.invoiceReference, invoiceItemVMIndex);
+    }
+
+    public moveRight(invoiceItemVMIndex: number) {
+        if(!this.hasRightEditableNeighbor()) {
+            return;
+        }
+        this.invoiceGroupVM.moveInvoiceItemRight(this.invoiceReference, invoiceItemVMIndex);
+    }
+
+    public hasRightEditableNeighbor(): boolean {
+        return this.invoiceGroupVM.getRightEditableNeighborIndex(this.invoiceReference) != -1;
+    }
+
+    public hasLeftEditableNeighbor(): boolean {
+        return this.invoiceGroupVM.getLeftEditableNeighborIndex(this.invoiceReference) != -1;
     }
 }

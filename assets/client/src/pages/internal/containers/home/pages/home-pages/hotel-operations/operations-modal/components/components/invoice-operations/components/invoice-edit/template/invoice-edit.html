@@ -2,14 +2,17 @@
     <div class="invoice-edit-wrap">
         <p class="invoice-title-container">
             <span class="invoice-title m-l-16" [ngClass]="{'read-only': !editMode}">
-                <i *ngIf="isPaid" class="fa fa-check" aria-hidden="true"></i> {{ 'Invoice' | translate }} #{{ invoiceVMIndex + 1 }} <b *ngIf="isPaid"> {{ 'PAID' | translate }}</b>
+                <i *ngIf="isPaid" class="fa fa-check" aria-hidden="true"></i> {{ 'Invoice' | translate }} 
+                <small><i *ngIf="!isNewlyAdded">{{ invoiceReference }}</i></small>
+                <small *ngIf="isNewlyAdded"><i>{{ '(unsaved)' | translate }}</i></small>
+                <b *ngIf="isPaid"> {{ 'PAID' | translate }}</b>
             </span>
             <span class="invoice-remove" *ngIf="editMode && isNewlyAdded">
                 <a class="btn btn-xs" title="{{ 'Delete' | translate}}" (click)="onDelete()"><i class="fa unitpal-font">\</i></a>
             </span>            
             <br/>
             <span *ngFor="let errorMessage of errorMessageList" class="text-warning m-l-16">
-                <small><i class="fa fa-info-circle"></i>{{ errorMessage | translate }}</small><br/>
+                <small><i class="fa fa-info-circle"></i> {{ errorMessage | translate }}</small><br/>
             </span>
         </p>
 
@@ -31,7 +34,10 @@
                         {{ 'Qty' | translate }}
                     </th>
                     <th>
-                        {{ 'Cost' | translate }}
+                        {{ 'Unit Cost' | translate }}
+                    </th>
+                    <th>
+                        {{ 'Total' | translate }}
                     </th>
                     <th>
                     </th>
@@ -42,6 +48,7 @@
                     <td></td>
                     <td><b>{{ 'Total' | translate }}</b></td>
                     <td></td>
+                    <td></td>
                     <td>{{ ccySymbol }} <b>{{ totalPrice }}</b></td>
                     <td></td>
                 </tr>
@@ -49,18 +56,19 @@
             <tbody>
 
                 <tr *ngFor="let invoiceItemVM of invoiceItemVMList; let invoiceItemVMIndex = index" (click)="selectInvoiceItem(invoiceItemVMIndex)"
-                    [ngClass]="{'selectable' : invoiceItemVM.isMovable() && editMode, 'selected': invoiceItemSelected(invoiceItemVMIndex) && editMode}">
+                    [ngClass]="{'selectable' : invoiceItemVM.isMovable() && editMode, 'selected': invoiceItemSelected(invoiceItemVMIndex) && editMode, 'not-allowed': !invoiceItemVM.isMovable() && editMode}">
 
                     <td class="move-left-invoice-item-cell" width="10%">
-                        <label *ngIf="invoiceItemSelected(invoiceItemVMIndex) && editMode" class="btn btn-default move-invoice-item-btn">
+                        <label *ngIf="invoiceItemSelected(invoiceItemVMIndex) && editMode" class="btn btn-default move-invoice-item-btn" [ngClass]="{disabled: !hasLeftEditableNeighbor()}" (click)="moveLeft(invoiceItemVMIndex)">
                             <i class="fa fa-arrow-left" aria-hidden="true"></i>
                         </label>
                     </td>
-                    <td width="50%">{{ invoiceItemVM.itemDisplayText }}</td>
+                    <td width="40%">{{ invoiceItemVM.itemDisplayText }}</td>
                     <td width="10%">{{ invoiceItemVM.qty }}</td>
-                    <td width="20%">{{ ccySymbol }} <b>{{ invoiceItemVM.price }}</b></td>
+                    <td width="15%">{{ ccySymbol }} <b>{{ invoiceItemVM.price }}</b></td>
+                    <td width="15%">{{ ccySymbol }} <b>{{ invoiceItemVM.totalPrice }}</b></td>
                     <td width="10%" class="move-right-invoice-item-cell">
-                        <label *ngIf="invoiceItemSelected(invoiceItemVMIndex) && editMode" class="btn btn-default move-invoice-item-btn">
+                        <label *ngIf="invoiceItemSelected(invoiceItemVMIndex) && editMode" class="btn btn-default move-invoice-item-btn" [ngClass]="{disabled: !hasRightEditableNeighbor()}" (click)="moveRight(invoiceItemVMIndex)">
                             <i class="fa fa-arrow-right" aria-hidden="true"></i>
                         </label>
                     </td>

@@ -14,7 +14,7 @@ export class InvoiceVM {
     private static NO_ITEMS_ADDED_ERROR = 'Add at least an item.';
     private static NO_PAYERS_ADDED_ERROR = 'Add at least a payer.';
     private static EACH_PAYER_ENTRY_SHOULD_HAVE_A_CUSTOMER_SELECTED_ERROR = 'Select a customer for each payer entry.';
-    private static MORE_THAN_ONE_PAYER_COMPANY_ERROR = 'More than one payer company.';
+    private static MORE_THAN_ONE_COMPANY_OR_TA_PAYER_ERROR = 'You can share an invoice only between individuals.';
     private static TOTAL_PRICE_DIFFERENT_THAN_TOTAL_PAID = 'Total amount paid should equal total price.';
 
     errorMessageList: string[];
@@ -27,9 +27,10 @@ export class InvoiceVM {
         this.errorMessageList = [];
     }
 
-    public buildCleanInvoiceVM() {
+    public buildCleanInvoiceVM(invoiceReference: string) {
         this.invoiceDO = new InvoiceDO();
         this.invoiceDO.buildCleanInvoice();
+        this.invoiceDO.invoiceReference = invoiceReference;
         this.invoicePayerVMList = [];
         var invoicePayerVM = new InvoicePayerVM(this._thTranslation);
         invoicePayerVM.invoicePayerDO = this.invoiceDO.payerList[0];
@@ -67,7 +68,7 @@ export class InvoiceVM {
     public addInvoicePayer(customerDO: CustomerDO) {
         var newInvoicePayerVM = new InvoicePayerVM(this._thTranslation);
         newInvoicePayerVM.buildFromCustomerDO(customerDO);
-        newInvoicePayerVM.invoicePayerDO.priceToPay = this.invoiceDO.getRemainingAmountToBePaid();
+        newInvoicePayerVM.invoicePayerDO.priceToPay = this.totalPrice - this.amountPaid;
         newInvoicePayerVM.newlyAdded = true;
         this.invoicePayerVMList.push(newInvoicePayerVM);
 
@@ -92,10 +93,6 @@ export class InvoiceVM {
         this.invoiceDO.itemList.push(newInvoiceItem);
         this.invoceItemVMList.push(newInvoiceItemVM);
 
-        if (this.invoicePayerVMList.length === 1) {
-            this.invoicePayerVMList[0].invoicePayerDO.priceToPay = this.invoiceDO.getRemainingAmountToBePaid();
-        }
-
         this.isValid();
     }
 
@@ -104,6 +101,8 @@ export class InvoiceVM {
 
         this.validateNumberOfPayers();
         this.validateNumberOfItems();
+        this.validateAmountPaid();
+        this.validateNumberOfCompanyOrTaPayers();
 
         return _.isEmpty(this.errorMessageList);
     }
@@ -129,6 +128,35 @@ export class InvoiceVM {
         if (noOfEmptyPayers === this.invoicePayerVMList.length) {
             this.errorMessageList.push(InvoiceVM.EACH_PAYER_ENTRY_SHOULD_HAVE_A_CUSTOMER_SELECTED_ERROR);
         }
+    }
+    private validateAmountPaid() {
+        if(this.amountPaid != this.totalPrice) {
+            this.errorMessageList.push(InvoiceVM.TOTAL_PRICE_DIFFERENT_THAN_TOTAL_PAID);
+        }
+    }
+    private get amountPaid(): number {
+        var amountPaid = 0;
+        _.forEach(this.invoicePayerVMList, (invoicePayerVM: InvoicePayerVM) => {
+            amountPaid += invoicePayerVM.invoicePayerDO.priceToPay;
+        });
+        return amountPaid;
+    }
+    private validateNumberOfCompanyOrTaPayers() {
+        if(this.invoicePayerVMList.length < 2) return;
+
+        var thUtils = new ThUtils();
+        var companyOrTaCounter = 0;
+        for(var i = 0; i < this.invoicePayerVMList.length; ++i) {
+            if(!thUtils.isUndefinedOrNull(this.invoicePayerVMList[i].customerDO)) {
+                if(this.invoicePayerVMList[i].customerDO.isCompanyOrTravelAgency()) {
+                    companyOrTaCounter++;
+                    if(companyOrTaCounter > 1) {
+                        this.errorMessageList.push(InvoiceVM.MORE_THAN_ONE_COMPANY_OR_TA_PAYER_ERROR);
+                        return;
+                    }
+                }
+            }
+        }   
     }
 
     public buildPrototype(): InvoiceVM {
