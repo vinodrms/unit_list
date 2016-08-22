@@ -62,7 +62,10 @@ export class NewBookingEmailConfigComponent extends BaseComponent implements OnI
         _.forEach(bookingCartItemList, (bookingCartItem: BookingCartItemVM) => {
             customerList = customerList.concat(bookingCartItem.customerList);
         });
-        return customerList;
+        var filteredCustomerList = _.filter(customerList, (customer: CustomerDO) => {
+            return customer.customerDetails.canReceiveBookingConfirmations();
+        });
+        return filteredCustomerList;
     }
 
     public viewDidDisappear() {

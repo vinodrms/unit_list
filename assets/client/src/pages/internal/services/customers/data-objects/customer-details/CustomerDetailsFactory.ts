@@ -33,6 +33,7 @@ export class CustomerDetailsFactory {
 		corporateDetails.payInvoiceByAgreement = false;
 		corporateDetails.commission = new CommissionDO();
 		corporateDetails.commission.type = CommissionType.Fixed;
+		corporateDetails.receiveBookingConfirmations = true;
 		return corporateDetails;
 	}
 	public getCustomerDetailsMetaList(): CustomerDetailsMeta[] {

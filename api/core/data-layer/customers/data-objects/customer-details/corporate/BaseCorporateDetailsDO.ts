@@ -20,16 +20,17 @@ export class BaseCorporateDetailsDO extends BaseDO implements ICustomerDetailsDO
 	invoiceFee: number;
 	accountNo: string;
 	commission: CommissionDO;
+	receiveBookingConfirmations: boolean;
 
 	protected getPrimitivePropertyKeys(): string[] {
 		return ["vatCode", "governmentCode", "name", "phone", "fax", "email", "websiteUrl", "contactName", "payInvoiceByAgreement",
-			"invoiceFee", "accountNo"];
+			"invoiceFee", "accountNo", "receiveBookingConfirmations"];
 	}
 	public buildFromObject(object: Object) {
 		super.buildFromObject(object);
 		this.address = new AddressDO();
 		this.address.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "address"));
-		
+
 		this.commission = new CommissionDO();
 		this.commission.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "commission"));
 	}
@@ -41,5 +42,8 @@ export class BaseCorporateDetailsDO extends BaseDO implements ICustomerDetailsDO
 	}
 	public canPayInvoiceByAgreement(): boolean {
 		return this.payInvoiceByAgreement;
+	}
+	public canReceiveBookingConfirmations(): boolean {
+		return this.receiveBookingConfirmations;
 	}
 }
