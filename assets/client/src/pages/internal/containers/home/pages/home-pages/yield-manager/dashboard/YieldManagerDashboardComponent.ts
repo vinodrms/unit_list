@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChildren} from '@angular/core';
+import {Component, OnInit, ViewChild, ViewChildren} from '@angular/core';
 import {LazyLoadingTableComponent} from '../../../../../../../../common/utils/components/lazy-loading/LazyLoadingTableComponent';
 import {HeaderPageService} from '../../../utils/header/container/services/HeaderPageService';
 import {HeaderPageType} from '../../../utils/header/container/services/HeaderPageType';
@@ -16,6 +16,8 @@ import {YieldManagerDashboardPriceProductsService} from '../../../../../../servi
 import {YieldManagerDashboardKeyMetricsService} from '../../../../../../services/yield-manager/dashboard/key-metrics/YieldManagerDashboardKeyMetricsService';
 
 import {CustomScroll} from '../../../../../../../../common/utils/directives/CustomScroll';
+
+import {IFilterSelection} from './common/interfaces/IFilterSelection';
 
 export interface IYieldManagerDashboardFilter {
 
@@ -43,6 +45,7 @@ export class YieldManagerDashboardComponent extends AHomeContainerComponent impl
 	public priceProductsViewModeDecoratorClass =  ViewModeDecoratorClass.Default;
 
 	@ViewChildren(CustomScroll) scrollBars: CustomScroll[];
+	@ViewChild(YieldPriceProductsComponent) yieldPriceProductsComponent : YieldPriceProductsComponent;
 
 	constructor(headerPageService: HeaderPageService) {
 		super(headerPageService, HeaderPageType.YieldManager);
@@ -75,5 +78,9 @@ export class YieldManagerDashboardComponent extends AHomeContainerComponent impl
 				scrollBar.forceRecreate();
 			})
 		}
+	}
+
+	public filterChangeHandler(selectedFilters:IFilterSelection){
+		this.yieldPriceProductsComponent.applyFilters(selectedFilters);
 	}
 }

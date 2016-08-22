@@ -4,6 +4,7 @@ import {TextFilterVM}  from '../../../../../../../../../../services/yield-manage
 
 export abstract class AYieldFilterItemComponent implements OnInit {
 	public selected: boolean;
+	
 	constructor() { }
 
 	ngOnInit() {
@@ -11,13 +12,12 @@ export abstract class AYieldFilterItemComponent implements OnInit {
 	}
 
 	public toggleSelection() {
+		debugger;
 		this.selected = !this.selected;
-		if (this.selected){
-			this.triggerOnSelectEvent();
-		}
+		this.triggerOnToggleSelectionEvent(this.selected);
 	}
 
-	public triggerOnSelectEvent(){
+	public triggerOnToggleSelectionEvent(selected: boolean){
 		throw new Error("Trigger onSelect event not implemented")
 	}
 

@@ -20,7 +20,7 @@
 		<yield-color-filter-item
 			*ngFor="let yieldColorFilterItemVM of yieldColorFilterCollection.filterVMList" 
 			[yieldColorFilterItemVM] = "yieldColorFilterItemVM" 
-			(onSelect)="colorItemSelected($event)"
+			(onToggleSelection)="colorItemToggleSelection($event)"
 			>
 		</yield-color-filter-item>
 	</div>
@@ -28,7 +28,7 @@
 		<yield-text-filter-item
 			*ngFor="let yieldTextFilterItemVM of yieldTextFilterCollection.filterVMList" 
 			[yieldTextFilterItemVM] = "yieldTextFilterItemVM" 
-			(onSelect)="textItemSelected($event)"
+			(onToggleSelection)="textItemToggleSelection($event)"
 			>
 		</yield-text-filter-item>
 	</div>	

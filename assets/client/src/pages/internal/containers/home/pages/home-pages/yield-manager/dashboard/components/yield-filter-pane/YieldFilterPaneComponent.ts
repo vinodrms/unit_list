@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ViewChildren, Input } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChildren, Input, Output, EventEmitter } from '@angular/core';
 
 import {ThDateDO} from '../../../../../../../../services/common/data-objects/th-dates/ThDateDO';
 import {AppContext} from '../../../../../../../../../../common/utils/AppContext';
@@ -14,9 +14,12 @@ import {YieldColorFitlerItemComponent} from './components/yield-color-filter-ite
 import {YieldTextFilterItemComponent} from './components/yield-text-filter-item/YieldTextFilterItemComponent';
 
 import {IYieldManagerDashboardFilter} from '../../YieldManagerDashboardComponent'
+import {IFilterVM} from '../../../../../../../../services/yield-manager/dashboard/filter/view-models/IFilterVM';
 
 import {FilterVMCollection} from '../../../../../../../../services/yield-manager/dashboard/filter/utils/FilterVMCollection';
 import {CustomScroll} from '../../../../../../../../../../../src/common/utils/directives/CustomScroll';
+
+import {IFilterSelection} from '../../common/interfaces/IFilterSelection';
 
 @Component({
 	selector: 'yield-filter-pane',
@@ -27,6 +30,8 @@ import {CustomScroll} from '../../../../../../../../../../../src/common/utils/di
 export class YieldFilterPaneComponent implements OnInit {
 	@ViewChildren(YieldColorFitlerItemComponent) colorFilterComponents: YieldColorFitlerItemComponent[];
 	@ViewChildren(YieldTextFilterItemComponent) textFilterComponents: YieldTextFilterItemComponent[];
+	@Output() filterChanged = new EventEmitter();
+
 	public selectedDate: ThDateDO;
 	public searchText: string;
 
@@ -35,10 +40,16 @@ export class YieldFilterPaneComponent implements OnInit {
 
 	private _yieldManager: IYieldManagerDashboardFilter;
 
+	private selectedFilters: {
+		colorFilter: IFilterVM,
+		textFilter :IFilterVM
+	}
+
 	constructor(
 		private _appContext: AppContext,
 		private _filterService: YieldManagerDashboardFilterService) {
 		this.selectedDate = ThDateDO.buildThDateDO(2016, 11, 30);
+		this.selectedFilters = {colorFilter : null, textFilter : null};
 	}
 
 	ngOnInit() {
@@ -86,12 +97,39 @@ export class YieldFilterPaneComponent implements OnInit {
 		this.searchText = value;
 	}
 
-	public colorItemSelected(selectedItemComponent: YieldColorFitlerItemComponent){
-		this.filtersDeselect<YieldColorFitlerItemComponent>(this.colorFilterComponents, selectedItemComponent);
+	public colorItemToggleSelection(event : {filterItemComponent: YieldColorFitlerItemComponent, selected: boolean}){
+		this.filtersDeselect<YieldColorFitlerItemComponent>(this.colorFilterComponents, event.filterItemComponent);
+		this.notifyFilterChange();
 	}
 
-	public textItemSelected(selectedItemComponent: YieldTextFilterItemComponent){
-		this.filtersDeselect<YieldTextFilterItemComponent>(this.textFilterComponents, selectedItemComponent);
+	public textItemToggleSelection(event : {filterItemComponent: YieldTextFilterItemComponent, selected: boolean}){
+		this.filtersDeselect<YieldTextFilterItemComponent>(this.textFilterComponents, event.filterItemComponent);
+		this.notifyFilterChange();
+	}
+
+	private notifyFilterChange(){
+		var selectedFilters = this.getSelectedFilters();
+		this.filterChanged.emit(selectedFilters);
+	}
+
+	public getSelectedFilters(): IFilterSelection{
+		var colorFilter = null;
+		var textFilter = null;
+		this.colorFilterComponents.forEach(filterComponent => {
+			if (filterComponent.selected){
+				colorFilter = filterComponent.yieldColorFilterItemVM;
+			}
+		});
+		this.textFilterComponents.forEach(filterComponent => {
+			if (filterComponent.selected){
+				textFilter = filterComponent.yieldTextFilterItemVM;
+			}
+		});
+
+		return {
+			colorFilter : colorFilter,
+			textFilter: textFilter
+		}
 	}
 
 	private filtersDeselect<T extends AYieldFilterItemComponent>(filterComponents: T[], selectedItem: T){

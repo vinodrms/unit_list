@@ -1,14 +1,19 @@
 <yield-actions-panel (onApplyAction)="applyAction($event)"></yield-actions-panel>
 <div class="price-products-table p-12" *ngIf="priceProductResults">
 	<div class="price-products-row flex-row">
-		<div class="price-products-col wide" >
-			<span class="dark-gray-color oneline-text f-14">Price Products</span>
+		<div class="price-products-col flex-jc-start wide p-l-12">
+			<span class="p-l-6"></span>
+			<input type="checkbox"
+			[(ngModel)]="selectAllItemsFlag"
+			(change)="setItemSelectionStateToAll(!selectAllItemsFlag)"
+			>
+			<span class="dark-gray-color oneline-text f-14 p-l-6">Price Products</span>
 		</div>
 		<div class="price-products-col" *ngFor="let date of priceProductResults.dateList">
 			<span class="dark-gray-color oneline-text f-14" title="{{getDateLabel(date)}}">{{getDateLabel(date)}}</span>
 		</div>
 	</div>
-	<div class="price-products-row flex-row" [ngClass]="getPriceProductRowClasses(priceProduct)" *ngFor="let priceProduct of priceProductResults.priceProductYieldItemVM">
+	<div class="price-products-row flex-row" [ngClass]="getPriceProductRowClasses(priceProduct)" *ngFor="let priceProduct of filteredPriceProduct">
 		<div class="price-products-col flex-jc-start wide">
 			<div class="selected-indicator" [ngClass]="getSelectedIndicatorClasses(priceProduct)"></div>
 			<span class=" p-l-6">
