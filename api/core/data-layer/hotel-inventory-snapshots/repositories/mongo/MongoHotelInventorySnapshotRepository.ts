@@ -90,8 +90,8 @@ export class MongoHotelInventorySnapshotRepository extends MongoRepository imple
                         { "thDateUtcTimestamp": { $lte: searchCriteria.interval.end.getUtcTimestamp() } }
                     ]
                 );
-                mongoQueryBuilder.addExactMatch("thDateUtcTimestamp", searchCriteria.thDateUtcTimestamp);
             }
+            mongoQueryBuilder.addExactMatch("thDateUtcTimestamp", searchCriteria.thDateUtcTimestamp);
         }
         return mongoQueryBuilder.processedQuery;
     }

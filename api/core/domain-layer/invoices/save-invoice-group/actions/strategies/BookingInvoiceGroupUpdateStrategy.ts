@@ -25,7 +25,7 @@ export class BookingInvoiceGroupUpdateStrategy implements ISaveInvoiceGroupActio
     public saveInvoiceGroup(resolve: { (result: InvoiceGroupDO): void }, reject: { (err: ThError): void }) {
         var invoiceGroupMeta = this.buildInvoiceGroupMetaRepoDO();
         var invoiceGroupRepo = this._appContext.getRepositoryFactory().getInvoiceGroupsRepository();
-        
+
         invoiceGroupRepo.getInvoiceGroupById(invoiceGroupMeta, this._invoiceGroupDO.id)
             .then((loadedInvoiceGroup: InvoiceGroupDO) => {
                 this._loadedInvoiceGroup = loadedInvoiceGroup;
@@ -33,7 +33,7 @@ export class BookingInvoiceGroupUpdateStrategy implements ISaveInvoiceGroupActio
                 return this.savePaymentTimestampForMarkedAsPaidInvoices();
             }).then((result: InvoiceGroupDO) => {
                 var invoiceGroupItemMeta = this.buildInvoiceGroupItemMetaRepoDO();
-                
+
                 var invoiceGroupRepo = this._appContext.getRepositoryFactory().getInvoiceGroupsRepository();
                 return invoiceGroupRepo.updateInvoiceGroup(invoiceGroupMeta, invoiceGroupItemMeta, this._invoiceGroupDO);
             }).then((result: InvoiceGroupDO) => {
@@ -59,7 +59,7 @@ export class BookingInvoiceGroupUpdateStrategy implements ISaveInvoiceGroupActio
                 _.forEach(this._invoiceGroupDO.invoiceList, (invoice: InvoiceDO) => {
                     if (invoice.paymentStatus === InvoicePaymentStatus.Paid && this._thUtils.isUndefinedOrNull(invoice.paidDate) && this._thUtils.isUndefinedOrNull(invoice.paidUtcTimestamp)) {
                         invoice.paidDate = ThTimestampDO.buildThTimestampForTimezone(loadedHotel.timezone).thDateDO;
-                        invoice.paidUtcTimestamp = ThTimestampDO.buildThTimestampForTimezone(loadedHotel.timezone).getUtcTimestamp();
+                        invoice.paidUtcTimestamp = invoice.paidDate.getUtcTimestamp();
                     }
                 });
                 resolve(this._invoiceGroupDO);

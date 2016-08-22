@@ -18,7 +18,7 @@ import {HotelInventoryStats} from './data-objects/HotelInventoryStats';
 import {IHotelInventoryStats, HotelInventoryStatsForDate} from './data-objects/IHotelInventoryStats';
 import {TotalInventoryForDate} from './data-objects/total-inventory/TotalInventoryForDate';
 import {SnapshotUtils} from '../utils/SnapshotUtils';
-import {BookingIndexer} from './indexer/BookingIndexer';
+import {HotelInventoryIndexer} from './indexer/HotelInventoryIndexer';
 
 export interface HotelInventoryStatsParams {
     currentRoomList: RoomDO[];
@@ -36,7 +36,7 @@ export class HotelInventoryStatsReader {
 
     private _loadedSnapshotList: HotelInventorySnapshotDO[];
     private _currentRoomSnapshots: RoomSnapshotDO[];
-    private _bookingIndexer: BookingIndexer;
+    private _inventoryIndexer: HotelInventoryIndexer;
     private _minInventoryDate: ThDateDO;
 
     constructor(private _appContext: AppContext,
@@ -70,14 +70,14 @@ export class HotelInventoryStatsReader {
             .then((searchResult: HotelInventorySnapshotSearchResultRepoDO) => {
                 this._loadedSnapshotList = searchResult.snapshotList;
 
-                this._bookingIndexer = new BookingIndexer(this._appContext, this._sessionContext, {
+                this._inventoryIndexer = new HotelInventoryIndexer(this._appContext, this._sessionContext, {
                     cancellationHour: this._readerParams.cancellationHour,
                     currentHotelTimestamp: this._readerParams.currentHotelTimestamp
                 });
-                return this._bookingIndexer.indexBookings(this._indexedInterval);
+                return this._inventoryIndexer.indexInventory(this._indexedInterval);
             }).then((result: boolean) => {
                 var hotelInventory = this.getHotelInventory();
-                this._bookingIndexer.destroy();
+                this._inventoryIndexer.destroy();
                 resolve(hotelInventory);
             }).catch((error: any) => {
                 var thError = new ThError(ThStatusCode.HotelInventoryStatsReaderError, error);
@@ -93,10 +93,10 @@ export class HotelInventoryStatsReader {
         _.forEach(this._indexedInterval.bookingDateList, (date: ThDateDO) => {
             var inventoryForDate: HotelInventoryStatsForDate = {
                 totalInventory: this.getTotalInventoryForDate(date),
-                confirmedOccupancy: this._bookingIndexer.getConfirmedOccupancy(date),
-                guaranteedOccupancy: this._bookingIndexer.getGuaranteedOccupancy(date),
-                confirmedRevenue: this._bookingIndexer.getConfirmedRevenue(date),
-                guaranteedRevenue: this._bookingIndexer.getGuaranteedRevenue(date)
+                confirmedOccupancy: this._inventoryIndexer.getConfirmedOccupancy(date),
+                guaranteedOccupancy: this._inventoryIndexer.getGuaranteedOccupancy(date),
+                confirmedRevenue: this._inventoryIndexer.getConfirmedRevenue(date),
+                guaranteedRevenue: this._inventoryIndexer.getGuaranteedRevenue(date)
             }
             hotelInventory.indexHotelInventoryForDate(inventoryForDate, date);
         });

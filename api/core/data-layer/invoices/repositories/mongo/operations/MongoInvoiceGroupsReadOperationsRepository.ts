@@ -102,6 +102,15 @@ export class MongoInvoiceGroupsReadOperationsRepository extends MongoRepository 
             mongoQueryBuilder.addExactMatch("invoiceList.bookingId", searchCriteria.bookingId);
             mongoQueryBuilder.addMultipleSelectOptionList("indexedCustomerIdList", searchCriteria.customerIdList);
             mongoQueryBuilder.addExactMatch("invoiceList.paymentStatus", searchCriteria.invoicePaymentStatus);
+
+            if (!this._thUtils.isUndefinedOrNull(searchCriteria.paidInterval)) {
+                mongoQueryBuilder.addCustomQuery("$and",
+                    [
+                        { "invoiceList.paidUtcTimestamp": { $gte: searchCriteria.paidInterval.start.getUtcTimestamp() } },
+                        { "invoiceList.paidUtcTimestamp": { $lte: searchCriteria.paidInterval.end.getUtcTimestamp() } }
+                    ]
+                );
+            }
         }
 
         return mongoQueryBuilder.processedQuery;
