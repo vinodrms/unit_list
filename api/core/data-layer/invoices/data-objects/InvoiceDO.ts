@@ -20,10 +20,10 @@ export class InvoiceDO extends BaseDO implements IPriceableEntity {
     paymentStatus: InvoicePaymentStatus;
 
     paidDate: ThDateDO;
-    paidUtcTimestamp: number;
+    paidDateUtcTimestamp: number;
 
     protected getPrimitivePropertyKeys(): string[] {
-        return ["bookingId", "invoiceReference", "paymentStatus", "paidUtcTimestamp"];
+        return ["bookingId", "invoiceReference", "paymentStatus", "paidDateUtcTimestamp"];
     }
 
     public buildFromObject(object: Object) {

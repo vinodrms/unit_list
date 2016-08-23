@@ -106,8 +106,8 @@ export class MongoInvoiceGroupsReadOperationsRepository extends MongoRepository 
             if (!this._thUtils.isUndefinedOrNull(searchCriteria.paidInterval)) {
                 mongoQueryBuilder.addCustomQuery("$and",
                     [
-                        { "invoiceList.paidUtcTimestamp": { $gte: searchCriteria.paidInterval.start.getUtcTimestamp() } },
-                        { "invoiceList.paidUtcTimestamp": { $lte: searchCriteria.paidInterval.end.getUtcTimestamp() } }
+                        { "invoiceList.paidDateUtcTimestamp": { $gte: searchCriteria.paidInterval.start.getUtcTimestamp() } },
+                        { "invoiceList.paidDateUtcTimestamp": { $lte: searchCriteria.paidInterval.end.getUtcTimestamp() } }
                     ]
                 );
             }

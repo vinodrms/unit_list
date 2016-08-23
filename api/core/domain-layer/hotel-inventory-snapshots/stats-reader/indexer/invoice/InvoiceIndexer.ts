@@ -11,7 +11,10 @@ import {ThDateDO} from '../../../../../utils/th-dates/data-objects/ThDateDO';
 import {InvoiceGroupSearchResultRepoDO} from '../../../../../data-layer/invoices/repositories/IInvoiceGroupsRepository';
 import {InvoiceGroupDO} from '../../../../../data-layer/invoices/data-objects/InvoiceGroupDO';
 import {InvoiceDO} from '../../../../../data-layer/invoices/data-objects/InvoiceDO';
+import {InvoiceItemDO, InvoiceItemType} from '../../../../../data-layer/invoices/data-objects/items/InvoiceItemDO';
 import {RevenueForDate} from '../../data-objects/revenue/RevenueForDate';
+
+import _ = require('underscore');
 
 export class InvoiceIndexer {
     constructor(private _appContext: AppContext, private _sessionContext: SessionContext) {
@@ -57,13 +60,20 @@ export class InvoiceIndexer {
         var thDateUtcTimestamp = thDate.getUtcTimestamp();
         _.forEach(invoiceGroupList, (invoiceGroup: InvoiceGroupDO) => {
             _.forEach(invoiceGroup.invoiceList, (invoice: InvoiceDO) => {
-                if (thDateUtcTimestamp === invoice.paidUtcTimestamp && invoice.isPaid()) {
-                    // TODO: needs ammend from Dragos
-                    // here we only need the price for AddOnProducts within the invoices
-                    revenue.otherRevenue += invoice.getPrice();
+                if (thDateUtcTimestamp === invoice.paidDateUtcTimestamp && invoice.isPaid()) {
+                    revenue.otherRevenue += this.getOtherRevenueFrom(invoice);
                 }
             });
         });
         return revenue;
+    }
+    private getOtherRevenueFrom(invoice: InvoiceDO): number {
+        var otherRevenue = 0.0;
+        _.forEach(invoice.itemList, (item: InvoiceItemDO) => {
+            if (item.type === InvoiceItemType.AddOnProduct) {
+                otherRevenue += item.meta.getNumberOfItems() * item.meta.getPrice();
+            }
+        });
+        return otherRevenue;
     }
 }

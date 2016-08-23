@@ -57,9 +57,9 @@ export class BookingInvoiceGroupUpdateStrategy implements ISaveInvoiceGroupActio
         this._appContext.getRepositoryFactory().getHotelRepository().getHotelById(this._sessionContext.sessionDO.hotel.id)
             .then((loadedHotel: HotelDO) => {
                 _.forEach(this._invoiceGroupDO.invoiceList, (invoice: InvoiceDO) => {
-                    if (invoice.paymentStatus === InvoicePaymentStatus.Paid && this._thUtils.isUndefinedOrNull(invoice.paidDate) && this._thUtils.isUndefinedOrNull(invoice.paidUtcTimestamp)) {
+                    if (invoice.paymentStatus === InvoicePaymentStatus.Paid && this._thUtils.isUndefinedOrNull(invoice.paidDate) && this._thUtils.isUndefinedOrNull(invoice.paidDateUtcTimestamp)) {
                         invoice.paidDate = ThTimestampDO.buildThTimestampForTimezone(loadedHotel.timezone).thDateDO;
-                        invoice.paidUtcTimestamp = invoice.paidDate.getUtcTimestamp();
+                        invoice.paidDateUtcTimestamp = invoice.paidDate.getUtcTimestamp();
                     }
                 });
                 resolve(this._invoiceGroupDO);
