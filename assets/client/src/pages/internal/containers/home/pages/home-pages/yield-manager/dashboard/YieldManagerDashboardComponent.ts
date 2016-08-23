@@ -31,7 +31,7 @@ export interface IYieldManagerDashboardFilter {
 }
 
 export interface IYieldManagerDashboardPriceProducts {
-
+	refresh();
 }
 
 class ViewModeDecoratorClass{
@@ -71,6 +71,12 @@ export class YieldManagerDashboardComponent extends AHomeContainerComponent impl
 		this.yieldFilterPaneComponent.yieldManager = this;
 		this.yieldPriceProductsComponent.yieldManager = this;
 		this.yieldKeyMetricsComponent.yieldManager = this;
+	}
+
+	public refresh(){
+		var date = this.yieldFilterPaneComponent.selectedDate;
+		// TODO: 21 from filterPane
+		this.updateYieldTimeFrameParams(date, 21);
 	}
 
 	public updateYieldTimeFrameParams(date: ThDateDO, noDays: number){
