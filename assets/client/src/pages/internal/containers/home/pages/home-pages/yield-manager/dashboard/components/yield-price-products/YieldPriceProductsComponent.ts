@@ -54,15 +54,21 @@ export class YieldPriceProductsComponent implements OnInit {
 	}
 
 	ngOnInit() { 
-		this.referenceDate = ThDateDO.buildThDateDO(2016, 7, 1);
+	}
 
-		this._priceProductsService.getPriceProducts({ referenceDate: this.referenceDate, noDays: 21 }).subscribe((results: PriceProductYieldResultVM) => {
-			this.priceProductResults = results;
-			this.initializeItemSelectionStateDictionary();
-			this.updateFilteredPriceProducts();
-		}, (e) => {
-			console.log(e);
-		});
+	public refreshTable(date:ThDateDO, noDays:number){
+		if (this.priceProductResults){
+			this._priceProductsService.refresh({ referenceDate: date, noDays: noDays });
+		}
+		else {
+			this._priceProductsService.getPriceProducts({ referenceDate: date, noDays: noDays }).subscribe((results: PriceProductYieldResultVM) => {
+				this.priceProductResults = results;
+				this.initializeItemSelectionStateDictionary();
+				this.updateFilteredPriceProducts();
+			}, (e) => {
+				console.log(e);
+			});
+		}
 	}
 
 	private initializeItemSelectionStateDictionary(){
@@ -187,7 +193,6 @@ export class YieldPriceProductsComponent implements OnInit {
 		return this._yieldManager;
 	}
 
-	@Input()
 	public set yieldManager(yieldManager: IYieldManagerDashboardPriceProducts) {
 		this._yieldManager = yieldManager;
 	}
@@ -201,7 +206,8 @@ export class YieldPriceProductsComponent implements OnInit {
 	}
 
 	public handleStateChange(){
-		this._priceProductsService.refresh({referenceDate: this.referenceDate, noDays: 21});
+		// this._priceProductsService.refresh({referenceDate: this.referenceDate, noDays: 21});
+		this._yieldManager.refresh();
 	}
 
 	public applyAction(params:IActionPaneYieldParams){

@@ -4,6 +4,8 @@ import {HeaderPageService} from '../../../utils/header/container/services/Header
 import {HeaderPageType} from '../../../utils/header/container/services/HeaderPageType';
 import {AHomeContainerComponent} from '../../../utils/AHomeContainerComponent';
 
+import {ThDateDO} from '../../../../../../services/common/data-objects/th-dates/ThDateDO';
+
 import {YieldFilterPaneComponent} from './components/yield-filter-pane/YieldFilterPaneComponent';
 import {YieldKeyMetricsComponent} from './components/yield-key-metrics/YieldKeyMetricsComponent';
 import {YieldPriceProductsComponent} from './components/yield-price-products/YieldPriceProductsComponent';
@@ -11,6 +13,9 @@ import {YieldViewModeComponent} from './components/yield-view-mode/YieldViewMode
 import {YieldViewModeState} from './components/yield-view-mode/YieldViewModeComponent';
 
 import {YieldFiltersService} from '../../../../../../services/hotel-configurations/YieldFiltersService';
+import {HotelService} from '../../../../../../services/hotel/HotelService';
+import {HotelDetailsDO} from '../../../../../../services/hotel/data-objects/HotelDetailsDO';
+
 import {YieldManagerDashboardFilterService} from '../../../../../../services/yield-manager/dashboard/filter/YieldManagerDashboardFilterService';
 import {YieldManagerDashboardPriceProductsService} from '../../../../../../services/yield-manager/dashboard/price-products/YieldManagerDashboardPriceProductsService';
 import {YieldManagerDashboardKeyMetricsService} from '../../../../../../services/yield-manager/dashboard/key-metrics/YieldManagerDashboardKeyMetricsService';
@@ -19,12 +24,14 @@ import {CustomScroll} from '../../../../../../../../common/utils/directives/Cust
 
 import {IFilterSelection} from './common/interfaces/IFilterSelection';
 
-export interface IYieldManagerDashboardFilter {
+import {AppContext} from '../../../../../../../../common/utils/AppContext';
 
+export interface IYieldManagerDashboardFilter {
+	updateYieldTimeFrameParams(currentDate: ThDateDO, noDays: number);
 }
 
 export interface IYieldManagerDashboardPriceProducts {
-
+	refresh();
 }
 
 class ViewModeDecoratorClass{
@@ -37,21 +44,44 @@ class ViewModeDecoratorClass{
 	selector: 'yield-manager-dashboard',
 	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/yield-manager/dashboard/template/yield-manager-dashboard.html',
 	directives: [CustomScroll, LazyLoadingTableComponent, YieldFilterPaneComponent, YieldKeyMetricsComponent, YieldViewModeComponent, YieldPriceProductsComponent],
-	providers: [YieldFiltersService,
+	providers: [YieldFiltersService, HotelService,
 		YieldManagerDashboardFilterService, YieldManagerDashboardPriceProductsService, YieldManagerDashboardKeyMetricsService]
 })
 export class YieldManagerDashboardComponent extends AHomeContainerComponent implements OnInit, IYieldManagerDashboardFilter, IYieldManagerDashboardPriceProducts {
 	public keyMetricsViewModeDecoratorClass =  ViewModeDecoratorClass.Default;
 	public priceProductsViewModeDecoratorClass =  ViewModeDecoratorClass.Default;
+	public currentDate: ThDateDO;
 
 	@ViewChildren(CustomScroll) scrollBars: CustomScroll[];
 	@ViewChild(YieldPriceProductsComponent) yieldPriceProductsComponent : YieldPriceProductsComponent;
+	@ViewChild(YieldKeyMetricsComponent) yieldKeyMetricsComponent : YieldPriceProductsComponent;
+	@ViewChild(YieldFilterPaneComponent) yieldFilterPaneComponent : YieldFilterPaneComponent;
 
-	constructor(headerPageService: HeaderPageService) {
+	constructor(
+		headerPageService: HeaderPageService,
+		private _hotelService: HotelService,
+		private _appContext: AppContext
+	) {
 		super(headerPageService, HeaderPageType.YieldManager);
+		console.log("ctr YieldManagerDashboardComponent");
 	}
 
 	ngOnInit() {
+		console.log("ngInit YieldManagerDashboardComponent");
+		this.yieldFilterPaneComponent.yieldManager = this;
+		this.yieldPriceProductsComponent.yieldManager = this;
+		this.yieldKeyMetricsComponent.yieldManager = this;
+	}
+
+	public refresh(){
+		var date = this.yieldFilterPaneComponent.selectedDate;
+		// TODO: 21 from filterPane
+		this.updateYieldTimeFrameParams(date, 21);
+	}
+
+	public updateYieldTimeFrameParams(date: ThDateDO, noDays: number){
+		this.yieldPriceProductsComponent.refreshTable(date, noDays);
+		this.yieldKeyMetricsComponent.refreshTable(date, noDays);
 	}
 
 	public viewModeStateChanged(state:YieldViewModeState){
