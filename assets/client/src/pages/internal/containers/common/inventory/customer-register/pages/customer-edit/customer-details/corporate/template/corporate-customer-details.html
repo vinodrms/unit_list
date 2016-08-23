@@ -166,5 +166,21 @@
 				<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter a valid commission' | translate }}</small></label>
 			</div>
 		</div>
+		<div class="col-md-4 col-xs-6 form-group">
+			<label>{{ 'Booking Confirmations' | translate }}</label>
+			<div class="input-group">
+				<div class="btn-group" data-toggle="buttons">
+					<button class="btn btn-default" (click)="receiveBookingConfirmations=true" [ngClass]="{'active': receiveBookingConfirmations}"
+							[disabled]="readonly">
+						{{ 'Allow' | translate }}
+					</button>
+					<button class="btn btn-default" (click)="receiveBookingConfirmations=false" [ngClass]="{'active': !receiveBookingConfirmations}"
+							[disabled]="readonly">
+						{{ 'Disable' | translate }}
+					</button>
+				</div>
+			</div>
+			<small class="text-muted"><i class="fa fa-info-circle"></i>  {{ 'You can disable this customer to receive booking confirmations by email.' | translate }}</small>
+		</div>
 	</div>
 </div>

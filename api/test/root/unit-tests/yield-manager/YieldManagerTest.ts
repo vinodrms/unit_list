@@ -2,6 +2,7 @@ require("sails-test-helper");
 import should = require('should');
 import supertest = require('supertest');
 import _ = require("underscore");
+import async = require("async");
 
 import {TestContext} from '../../../helpers/TestContext';
 import {DefaultDataBuilder} from '../../../db-initializers/DefaultDataBuilder';
@@ -36,7 +37,8 @@ describe("Price Products Interval Tests", function () {
 	var thDateUtils: ThDateUtils;
 	var testDataBuilder: DefaultDataBuilder;
 
-	var createdSnapshot: HotelInventorySnapshotDO
+	var createdSnapshot: HotelInventorySnapshotDO;
+	var StressTestIterations = 50;
 
 	before(function (done: any) {
 		testContext = new TestContext();
@@ -380,6 +382,41 @@ describe("Price Products Interval Tests", function () {
 			}).catch((error: any) => {
 				done(error);
 			});
+        });
+	});
+
+	describe("Yield Management Stress Test", function () {
+		it("Should close a price product for one day " + StressTestIterations + " times", function (done) {
+			var index = 0;
+			var currentDate = ThDateDO.buildThDateDO(2016, ThMonth.January, 1);
+			var priceProductIdList: string[] = [testDataBuilder.priceProductList[0].id];
+			async.whilst(
+				(() => {
+					return index < StressTestIterations;
+				}),
+				((finishYieldingCallback: any) => {
+					var yieldData: PriceProductYieldingDO = {
+						priceProductIdList: priceProductIdList,
+						action: PriceProductYieldAction.Close,
+						forever: false,
+						interval: ThDateIntervalDO.buildThDateIntervalDO(
+							currentDate.buildPrototype(),
+							currentDate.buildPrototype()
+						)
+					};
+					var ppYm = new PriceProductYielding(testContext.appContext, testContext.sessionContext);
+					ppYm.yield(yieldData).then((yieldedPriceProducts: PriceProductDO[]) => {
+						currentDate = thDateUtils.addDaysToThDateDO(currentDate, 2);
+						index++;
+						finishYieldingCallback(null, true);
+					}).catch((error: any) => {
+						finishYieldingCallback(error);
+					});
+				}),
+				((err: Error) => {
+					done(err);
+				})
+			);
         });
 	});
 

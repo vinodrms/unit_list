@@ -5,6 +5,7 @@ import {ModalDialogRef} from '../../../../../../../../../../../../../common/util
 import {BookingOperationsPageData} from '../../services/utils/BookingOperationsPageData';
 import {BookingSendConfirmationRight} from '../../../../../../../../../../../services/bookings/data-objects/BookingEditRights';
 import {EmailSenderModalService} from '../../../../../../email-sender/services/EmailSenderModalService';
+import {CustomerDO} from '../../../../../../../../../../../services/customers/data-objects/CustomerDO';
 
 @Component({
     selector: 'booking-send-confirmation',
@@ -44,10 +45,12 @@ export class BookingSendConfirmationComponent implements OnInit {
     public send() {
         if (!this.hasSendRight) { return; }
         var customerList = this._bookingOperationsPageData.customersContainer.customerList;
+        var filteredCustomerList = _.filter(customerList, (customer: CustomerDO) => {
+            return customer.customerDetails.canReceiveBookingConfirmations();
+        });
         var groupBookingId = this._bookingOperationsPageData.bookingDO.groupBookingId;
         var bookingId = this._bookingOperationsPageData.bookingDO.bookingId;
-
-        this._emailSenderModalService.sendBookingConfirmation(customerList, groupBookingId, bookingId).then((modalDialogRef: ModalDialogRef<boolean>) => {
+        this._emailSenderModalService.sendBookingConfirmation(filteredCustomerList, groupBookingId, bookingId).then((modalDialogRef: ModalDialogRef<boolean>) => {
             modalDialogRef.resultObservable.subscribe((sendResult: boolean) => {
                 this._appContext.analytics.logEvent("booking", "send-confirmation", "Sent a booking confirmation by email");
             }, (err: any) => { });

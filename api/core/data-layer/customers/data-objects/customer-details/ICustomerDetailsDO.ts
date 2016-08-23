@@ -5,4 +5,5 @@ export interface ICustomerDetailsDO extends BaseDO {
 	getAddress(): AddressDO;
 	getName(): string;
 	canPayInvoiceByAgreement(): boolean;
+	canReceiveBookingConfirmations(): boolean;
 }

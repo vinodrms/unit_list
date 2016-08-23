@@ -31,11 +31,11 @@ export class CorporateCustomerDetailsComponent extends BaseFormComponent {
 		this._corporateDetails = corporateDetails;
 		this.initPage();
 	}
-	
+
 	countriesDO: CountriesDO;
 	currency: CurrencyDO;
 	vatDetails: VatDetails;
-	
+
 	constructor(private _formBuilder: CorporateDetailsFormBuilderService) {
 		super();
 	}
@@ -54,14 +54,14 @@ export class CorporateCustomerDetailsComponent extends BaseFormComponent {
 	public didGetVatResponse(vatResponse: VatResponse) {
 		this._formBuilder.updateCompanyNameAndAddress(vatResponse.companyName, vatResponse.companyAddress);
 	}
-	
+
 	protected get didSubmitForm(): boolean {
 		return this.didSubmit;
 	}
 	protected getDefaultControlGroup(): ControlGroup {
 		return this._formBuilder.individualFormGroup;
 	}
-	
+
 	public get payInvoiceByAgreement(): boolean {
 		return this._formBuilder.payInvoiceByAgreement;
 	}
@@ -74,7 +74,13 @@ export class CorporateCustomerDetailsComponent extends BaseFormComponent {
 	public set isFixedCommission(isFixedCommission: boolean) {
 		this._formBuilder.isFixedCommission = isFixedCommission;
 	}
-	
+	public get receiveBookingConfirmations(): boolean {
+		return this._formBuilder.receiveBookingConfirmations;
+	}
+	public set receiveBookingConfirmations(receiveBookingConfirmations: boolean) {
+		this._formBuilder.receiveBookingConfirmations = receiveBookingConfirmations;
+	}
+
 	public isValid(): boolean {
 		return this._formBuilder.individualFormGroup.valid && this._corporateDetails.address.country != null && this._corporateDetails.vatCode != null;
 	}
@@ -83,7 +89,7 @@ export class CorporateCustomerDetailsComponent extends BaseFormComponent {
 		return this._corporateDetails;
 	}
 	public get currencyNativeSymbol(): string {
-		if(!this.currency) {
+		if (!this.currency) {
 			return "";
 		}
 		return this.currency.nativeSymbol;

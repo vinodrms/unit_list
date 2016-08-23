@@ -24,6 +24,7 @@ export class CorporateDetailsFormBuilderService {
 
 	private _payInvoiceByAgreement: boolean;
 	private _isFixedCommission: boolean;
+	private _receiveBookingConfirmations: boolean;
 
 	constructor(private _formBuilder: FormBuilder) {
 		this.initFormControls();
@@ -78,7 +79,7 @@ export class CorporateDetailsFormBuilderService {
 
 		this.payInvoiceByAgreement = corporateDetails.payInvoiceByAgreement;
 		this._invoiceFeeControl.updateValue(corporateDetails.invoiceFee);
-		
+
 		var isFixedCommission = corporateDetails.commission.type === CommissionType.Fixed;
 		if (!corporateDetails.commission || isFixedCommission) {
 			this._commissionControl.updateValue(corporateDetails.commission.amount);
@@ -87,6 +88,7 @@ export class CorporateDetailsFormBuilderService {
 			this._commissionControl.updateValue(Math.round(corporateDetails.commission.amount * 100));
 		}
 		this.isFixedCommission = isFixedCommission;
+		this.receiveBookingConfirmations = corporateDetails.receiveBookingConfirmations;
 	}
 	public updateControlValuesOn(corporateDetails: CorporateDetailsDO) {
 		corporateDetails.governmentCode = this._governmentCodeControl.value;
@@ -102,10 +104,11 @@ export class CorporateDetailsFormBuilderService {
 		corporateDetails.invoiceFee = this._invoiceFeeControl.value;
 		corporateDetails.accountNo = this._accountNoControl.value;
 		corporateDetails.payInvoiceByAgreement = this._payInvoiceByAgreement;
-		corporateDetails.commission.type = this._isFixedCommission ? CommissionType.Fixed: CommissionType.Percentage;
-		
+		corporateDetails.receiveBookingConfirmations = this._receiveBookingConfirmations;
+		corporateDetails.commission.type = this._isFixedCommission ? CommissionType.Fixed : CommissionType.Percentage;
+
 		var commissionValue = this._commissionControl.value;
-		if(!this._isFixedCommission && commissionValue != null) {
+		if (!this._isFixedCommission && commissionValue != null) {
 			commissionValue = commissionValue / 100;
 		}
 		corporateDetails.commission.amount = commissionValue;
@@ -123,7 +126,7 @@ export class CorporateDetailsFormBuilderService {
 	}
 	public set payInvoiceByAgreement(payInvoiceByAgreement: boolean) {
 		this._payInvoiceByAgreement = payInvoiceByAgreement;
-		if(payInvoiceByAgreement) {
+		if (payInvoiceByAgreement) {
 			this._invoiceFeeControl.validator = ThValidators.priceValidator;
 		}
 		else {
@@ -136,13 +139,19 @@ export class CorporateDetailsFormBuilderService {
 	}
 	public set isFixedCommission(isFixedCommission: boolean) {
 		this._isFixedCommission = isFixedCommission;
-		if(isFixedCommission) {
+		if (isFixedCommission) {
 			this._commissionControl.validator = ThValidators.nullablePriceValidator;
 		}
 		else {
 			this._commissionControl.validator = ThValidators.nullablePercentageValidator;
 		}
 		this._commissionControl.updateValueAndValidity();
+	}
+	public get receiveBookingConfirmations(): boolean {
+		return this._receiveBookingConfirmations;
+	}
+	public set receiveBookingConfirmations(receiveBookingConfirmations: boolean) {
+		this._receiveBookingConfirmations = receiveBookingConfirmations;
 	}
 	public updateCompanyNameAndAddress(companyName: string, streetAddress: string) {
 		this._nameControl.updateValue(companyName);

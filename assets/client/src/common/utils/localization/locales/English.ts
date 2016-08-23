@@ -391,6 +391,8 @@ export var EnglishTranslations: Object = {
 	"Enter a valid account number": "Enter a valid account number",
 	"Type of Commission": "Type of Commission",
 	"Commission": "Commission",
+	"Booking Confirmations": "Booking Confirmations",
+	"You can disable this customer to receive booking confirmations by email.": "You can disable this customer to receive booking confirmations by email.",
 	"Enter a valid commission": "Enter a valid commission",
 	"Contact Person": "Contact Person",
 	"Hotel Logo": "Hotel Logo",
