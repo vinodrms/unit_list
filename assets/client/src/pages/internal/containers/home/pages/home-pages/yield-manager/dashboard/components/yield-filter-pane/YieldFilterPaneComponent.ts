@@ -20,6 +20,8 @@ import {FilterVMCollection} from '../../../../../../../../services/yield-manager
 import {CustomScroll} from '../../../../../../../../../../../src/common/utils/directives/CustomScroll';
 
 import {IFilterSelection} from '../../common/interfaces/IFilterSelection';
+import {HotelService} from '../../../../../../../../services/hotel/HotelService';
+import {HotelDetailsDO} from '../../../../../../../../services/hotel/data-objects/HotelDetailsDO';
 
 @Component({
 	selector: 'yield-filter-pane',
@@ -46,13 +48,17 @@ export class YieldFilterPaneComponent implements OnInit {
 	}
 
 	constructor(
+		private _hotelService: HotelService,
 		private _appContext: AppContext,
 		private _filterService: YieldManagerDashboardFilterService) {
 		this.selectedDate = ThDateDO.buildThDateDO(2016, 11, 30);
 		this.selectedFilters = {colorFilter : null, textFilter : null};
+
+		console.log("ctr YieldFilterPaneComponent");
 	}
 
 	ngOnInit() {
+		console.log("ngInit YieldFilterPaneComponent");
 		this._filterService.getColorFilterCollections().subscribe((colorFilters) => {
 			this.yieldColorFilterCollection = colorFilters[0];
 		}, (e) => {
@@ -64,13 +70,19 @@ export class YieldFilterPaneComponent implements OnInit {
 		}, (e) => {
 			console.log(e);
 		})
+
+		this._hotelService.getHotelDetailsDO().subscribe((details: HotelDetailsDO) => {
+			this.selectedDate = details.currentThTimestamp.thDateDO.buildPrototype();
+			this._yieldManager.updateYieldTimeFrameParams(this.selectedDate, 21);
+			}, (error:any) => {
+				this._appContext.toaster.error(error.message);
+			});
 	}
 
 	public get yieldManager(): IYieldManagerDashboardFilter {
 		return this._yieldManager;
 	}
 
-	@Input()
 	public set yieldManager(v: IYieldManagerDashboardFilter) {
 		this._yieldManager = v;
 	}
@@ -89,8 +101,12 @@ export class YieldFilterPaneComponent implements OnInit {
 		return this.selectedDate.getShortDisplayString(this._appContext.thTranslation);
 	}
 
+	// public setDate(date: ThDateDO){
+	// 	this.selectedDate = date;
+	// }
+
 	public refresh() {
-		//TODO: 
+		this._yieldManager.updateYieldTimeFrameParams(this.selectedDate, 21);
 	}
 
 	public searchTextChangeHandler(value) {

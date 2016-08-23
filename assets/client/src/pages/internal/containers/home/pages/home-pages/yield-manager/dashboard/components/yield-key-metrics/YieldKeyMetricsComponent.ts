@@ -39,13 +39,20 @@ export class YieldKeyMetricsComponent implements OnInit {
 	}
 
 	ngOnInit() {
-		var referenceDate = ThDateDO.buildThDateDO(2016, 7, 1);
-		this._keyMetricsService.getKeyMetrics({ referenceDate: referenceDate, noDays: 21 }).subscribe((results: KeyMetricsResultVM) => {
-			this.metricsResults = results;
-		}, (e) => {
-			console.log(e);
-		});
 	}
+
+	public refreshTable(date:ThDateDO, noDays:number){
+		if (this.metricsResults){
+			this._keyMetricsService.refresh({ referenceDate: date, noDays: noDays });
+		}
+		else {
+			this._keyMetricsService.getKeyMetrics({ referenceDate: date, noDays: noDays }).subscribe((results: KeyMetricsResultVM) => {
+				this.metricsResults = results;
+			}, (e) => {
+				console.log(e);
+			});
+		}
+	}	
 
 	public getPercentageStyles(percentage):Object {
 		const PERCENTAGE_MID = 0.5;
@@ -100,7 +107,7 @@ export class YieldKeyMetricsComponent implements OnInit {
 	public get yieldManager(): IYieldManagerDashboardFilter {
 		return this._yieldManager;
 	}
-	@Input()
+	
 	public set yieldManager(yieldManager: IYieldManagerDashboardFilter) {
 		this._yieldManager = yieldManager;
 	}

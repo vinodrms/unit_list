@@ -1,10 +1,11 @@
 <div class="row full-height">
 	<div class="yield-manager-dashboard operations-dashboard">
-		<yield-filter-pane [yieldManager]="self" class="pane full-height" (filterChanged)="filterChangeHandler($event)"></yield-filter-pane>
+		<!--<yield-filter-pane [yieldManager]="self" class="pane full-height" (filterChanged)="filterChangeHandler($event)"></yield-filter-pane>-->
+		<yield-filter-pane class="pane full-height" (filterChanged)="filterChangeHandler($event)"></yield-filter-pane>
 		<div class="main flex-column">
-			<yield-key-metrics customScroll class="{{keyMetricsViewModeDecoratorClass}}" [yieldManager]="self"></yield-key-metrics>
+			<yield-key-metrics customScroll class="{{keyMetricsViewModeDecoratorClass}}"></yield-key-metrics>
 			<yield-view-mode (onStateChange)="viewModeStateChanged($event)"></yield-view-mode>
-			<yield-price-products customScroll class="{{priceProductsViewModeDecoratorClass}}" [yieldManager]="self"></yield-price-products>
+			<yield-price-products customScroll class="{{priceProductsViewModeDecoratorClass}}"></yield-price-products>
 		</div>
 	</div>
 </div>
