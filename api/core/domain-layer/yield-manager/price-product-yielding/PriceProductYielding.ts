@@ -66,6 +66,10 @@ export class PriceProductYielding {
 		});
 	}
 	private yieldPriceProductCore(resolve: { (result: PriceProductDO): void }, reject: { (err: ThError): void }, priceProduct: PriceProductDO) {
+		if (priceProduct.lastRoomAvailability) {
+			resolve(priceProduct);
+			return;
+		}
 		var yieldFactory = new PriceProductYieldStrategyFactory();
 		var yieldStrategy = yieldFactory.getYieldStrategy(this._yieldData);
 		var yieldedPriceProduct = yieldStrategy.yield(priceProduct, this._yieldInterval);

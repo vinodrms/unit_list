@@ -45,7 +45,7 @@
                     </th-hour-select>
                 </div>
                 <div class="col-xs-6 col-md-6 form-group">
-                    <label>{{ 'Booking Cancellation Hour' | translate }}</label>
+                    <label>{{ 'Booking Cancellation Hour' | translate }}*</label>
                     <th-hour-select [initialHour]="hotel.operationHours.cancellationHour" (onHourSelected)="diChangeCancellationHour($event)"
                         [isRequired]="true" errorMessage="{{ 'Required' | translate }}" [didSubmitForm]="didSubmitForm">
                     </th-hour-select>
