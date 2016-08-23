@@ -21,7 +21,6 @@ export class InvoiceGroupVM {
 
     public buildFromInvoiceOperationsPageData(invoiceOperationsPageData: InvoiceOperationsPageData) {
         this.invoiceGroupDO = invoiceOperationsPageData.invoiceGroupDO;
-
         this.invoiceVMList = [];
         _.forEach(this.invoiceGroupDO.invoiceList, (invoice: InvoiceDO) => {
             var invoiceVM = new InvoiceVM(this._thTranslation);
@@ -34,6 +33,13 @@ export class InvoiceGroupVM {
     public buildInvoiceGroupDO(): InvoiceGroupDO {
         this.invoiceGroupDO.invoiceList = [];
         _.forEach(this.invoiceVMList, (invoiceVM: InvoiceVM) => {
+            if(invoiceVM.isNewlyAdded) {
+                delete invoiceVM.invoiceDO.invoiceReference;
+            }
+            invoiceVM.invoiceDO.payerList = [];
+            _.forEach(invoiceVM.invoicePayerVMList, (invoicePayerVM: InvoicePayerVM) => {
+                invoiceVM.invoiceDO.payerList.push(invoicePayerVM.invoicePayerDO);
+            });
             this.invoiceGroupDO.invoiceList.push(invoiceVM.invoiceDO);
         });
         return this.invoiceGroupDO;

@@ -15,6 +15,7 @@ import {InvoiceOperationsPageService} from './services/InvoiceOperationsPageServ
 import {InvoiceOperationsPageData} from './services/utils/InvoiceOperationsPageData';
 import {InvoiceGroupControllerService} from './services/InvoiceGroupControllerService';
 import {InvoiceDO} from '../../../../../../../../../services/invoices/data-objects/InvoiceDO';
+import {InvoiceGroupDO} from '../../../../../../../../../services/invoices/data-objects/InvoiceGroupDO';
 import {InvoiceGroupVM} from '../../../../../../../../../services/invoices/view-models/InvoiceGroupVM';
 import {InvoiceVM} from '../../../../../../../../../services/invoices/view-models/InvoiceVM';
 import {InvoicePayerVM} from '../../../../../../../../../services/invoices/view-models/InvoicePayerVM';
@@ -22,6 +23,7 @@ import {CustomerDO} from '../../../../../../../../../services/customers/data-obj
 import {Subject} from 'rxjs/Subject';
 import {Observable} from 'rxjs/Observable';
 import {InvoiceMeta} from './components/invoice-edit/InvoiceMeta';
+import {InvoiceGroupsService} from '../../../../../../../../../services/invoices/InvoiceGroupsService';
 
 @Component({
     selector: 'invoice-operations-page',
@@ -58,7 +60,8 @@ export class InvoiceOperationsPageComponent implements OnInit {
 
     constructor(private _appContext: AppContext,
         private _invoiceOperationsPageService: InvoiceOperationsPageService,
-        private _invoiceGroupControllerService: InvoiceGroupControllerService) {
+        private _invoiceGroupControllerService: InvoiceGroupControllerService,
+        private _invoiceGroupsService: InvoiceGroupsService) {
 
         this._thUtils = new ThUtils();
         this._title = "Invoice Group";
@@ -93,26 +96,30 @@ export class InvoiceOperationsPageComponent implements OnInit {
         });
     }
     private updateContainerData() {
-
         var subtitle = "";
-
+        
         this.invoiceOperationsPageParam.onFilterRemovedHandler = (() => {
-
             this.editMode = true;
         });
 
-        if (!this._thUtils.isUndefinedOrNull(this.invoiceOperationsPageParam.invoiceFilter.customerId)) {
+        if (!this._thUtils.isUndefinedOrNull(this.invoiceOperationsPageParam.invoiceGroupId) && 
+            !this._thUtils.isUndefinedOrNull(this.invoiceOperationsPageParam.invoiceFilter.customerId)) {
             this.invoiceOperationsPageParam.updateTitle(this._title, subtitle, this.filterMetaForEnabledFilter);
+            this.itemListNavigatorConfig = {
+                initialNumberOfItems: this.invoiceVMList.length,
+                maxNumberOfDisplayedItems: this.invoiceNavigatorWindowSize,
+                numberOfSimultaneouslySelectedItems: this.numberOfSimultaneouslyDisplayedInvoices
+            }
         }
         else {
             this.invoiceOperationsPageParam.updateTitle(this._title, subtitle);
+            this.itemListNavigatorConfig = {
+                initialNumberOfItems: this.totalNumberOfInvoices,
+                maxNumberOfDisplayedItems: this.invoiceNavigatorWindowSize,
+                numberOfSimultaneouslySelectedItems: this.numberOfSimultaneouslyDisplayedInvoices
+            };
+            this.editMode = true;
         }
-
-        this.itemListNavigatorConfig = {
-            initialNumberOfItems: this.totalNumberOfInvoices,
-            maxNumberOfDisplayedItems: this.invoiceNavigatorWindowSize,
-            numberOfSimultaneouslySelectedItems: this.numberOfSimultaneouslyDisplayedInvoices
-        };
     }
 
     public onEdit() {
@@ -121,7 +128,17 @@ export class InvoiceOperationsPageComponent implements OnInit {
     public onSave() {
         var firstInvalidInvoice = this.invoiceGroupVM.checkValidations();
         if (firstInvalidInvoice === -1) {
-            this.editMode = false;
+            var invoiceGroupVMClone = this.invoiceGroupVM.buildPrototype();
+            var invoiceGroupDOToSave = invoiceGroupVMClone.buildInvoiceGroupDO();
+
+            this._invoiceGroupsService.saveInvoiceGroupDO(invoiceGroupDOToSave).subscribe((updatedInvoiceGroupDO: InvoiceGroupDO) => {
+                this._invoiceGroupControllerService.updateInvoiceGroupVM(updatedInvoiceGroupDO);
+                this._appContext.toaster.success(this._appContext.thTranslation.translate("The invoice group was saved successfully."));
+                this.editMode = false;
+            }, (error: ThError) => {
+                this._appContext.toaster.error(error.message);
+            });
+
         }
         else {
             this.selectItem.next(firstInvalidInvoice);
@@ -155,7 +172,6 @@ export class InvoiceOperationsPageComponent implements OnInit {
     }
 
     public displayedItemsUpdated(firstDisplayedInvoiceIndex) {
-        var displayedInvoiceIndexList = this.displayedInvoiceIndexList;
         this.firstDisplayedInvoiceIndex = firstDisplayedInvoiceIndex;
     }
 
@@ -168,8 +184,9 @@ export class InvoiceOperationsPageComponent implements OnInit {
 
     public get displayedInvoiceIndexList(): number[] {
         var indexList = [];
-        if (!_.isEmpty(this.invoiceGroupVM.invoiceVMList)) {
-            for (var index = this.firstDisplayedInvoiceIndex; index < Math.min(this.firstDisplayedInvoiceIndex + this.numberOfSimultaneouslyDisplayedInvoices, this.invoiceGroupVM.invoiceVMList.length); ++index) {
+        
+        if (!_.isEmpty(this.invoiceVMList)) {
+            for (var index = this.firstDisplayedInvoiceIndex; index < Math.min(this.firstDisplayedInvoiceIndex + this.numberOfSimultaneouslyDisplayedInvoices, this.invoiceVMList.length); ++index) {
                 indexList.push(index);
             }
         }
@@ -210,6 +227,14 @@ export class InvoiceOperationsPageComponent implements OnInit {
         this._invoiceGroupControllerService.invoiceGroupVM = invoiceGroupVM;
     }
     public get invoiceVMList(): InvoiceVM[] {
+        if (this.filterEnabled) {
+            return _.filter(this.invoiceGroupVM.invoiceVMList, (invoiceVM: InvoiceVM) => {
+                var customerIdList = _.map(invoiceVM.invoicePayerVMList, (invoicePayerVM: InvoicePayerVM) => {
+                    return invoicePayerVM.invoicePayerDO.customerId;
+                })
+                return _.contains(customerIdList, this.invoiceOperationsPageParam.invoiceFilter.customerId);
+            });
+        }
         return this.invoiceGroupVM.invoiceVMList;
     }
     public get totalNumberOfInvoices(): number {
