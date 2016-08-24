@@ -72,6 +72,6 @@ export class CustomerOperationsPageComponent implements OnInit {
     public createInvoice() {
         this._operationsPageControllerService.goToInvoice(null, {
             customerId: this.customerVM.customer.id
-        });
+        }, true);
     }
 }

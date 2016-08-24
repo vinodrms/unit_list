@@ -1,19 +1,13 @@
-import {BaseDO} from '../../../../../../common/base/BaseDO';
 import {InvoiceGroupDO} from '../InvoiceGroupDO';
 import {InvoiceDO, InvoicePaymentStatus} from '../InvoiceDO';
 import {InvoicePayerDO} from '../payers/InvoicePayerDO';
 
-export class InvoiceGroupPayerStatsDO extends BaseDO {
+export class InvoiceGroupPayerStatsDO {
     invoiceGroupId: string;
-    invoiceGroupPaymentStatus: InvoicePaymentStatus;
     groupBookingId: string;
     customerId: string;
     amountPaid: number;
-    amountUnpaid: number;
-
-    protected getPrimitivePropertyKeys(): string[] {
-        return ["invoiceGroupId", "invoiceGroupPaymentStatus", "customerId", "totalAmount", "totalAmountPaid", "totalAmountUnpaid"];
-    }
+    totalAmountToPay: number;
 
     public static buildInvoiceGroupPayerStatsListFromInvoiceGroupList(invoiceGroupList: InvoiceGroupDO[], customerId: string): InvoiceGroupPayerStatsDO[] {
         var invoicegroupPayerStatsList = [];
@@ -29,12 +23,12 @@ export class InvoiceGroupPayerStatsDO extends BaseDO {
         var invoiceGroupPayerStats = new InvoiceGroupPayerStatsDO();
         invoiceGroupPayerStats.invoiceGroupId = invoiceGroupDO.id;
         invoiceGroupPayerStats.groupBookingId = invoiceGroupDO.groupBookingId;
-        invoiceGroupPayerStats.amountUnpaid = invoiceGroupDO.getAmountUnpaid(customerId);
         invoiceGroupPayerStats.amountPaid = invoiceGroupDO.getAmountPaid(customerId);
+        invoiceGroupPayerStats.totalAmountToPay = invoiceGroupDO.getAmountPaid(customerId)  + invoiceGroupDO.getAmountUnpaid(customerId);
         return invoiceGroupPayerStats;
     }
 
     public get invoiceGroupPaid(): boolean {
-        return this.invoiceGroupPaymentStatus === InvoicePaymentStatus.Paid;
+        return this.amountPaid === this.totalAmountToPay;
     }
 }

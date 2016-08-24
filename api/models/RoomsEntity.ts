@@ -2,12 +2,12 @@ import {BasePersistentEntity} from '../core/utils/entities/BasePersistentEntity'
 
 class RoomsEntity extends BasePersistentEntity {
     static TableName = "Rooms";
-    
+
     constructor(tableName: string) {
         super(tableName);
-        this.buildCustomAttributes();    
+        this.buildCustomAttributes();
     }
-    
+
     private buildCustomAttributes() {
         this.attributes = {
             versionId: {
@@ -43,7 +43,7 @@ class RoomsEntity extends BasePersistentEntity {
                 type: "string"
             },
             maintenanceStatus: {
-                type: "integer"  
+                type: "integer"
             },
             maintenanceMessage: {
                 type: "string",
@@ -54,7 +54,11 @@ class RoomsEntity extends BasePersistentEntity {
             },
             status: {
                 type: 'integer',
-                required: true    
+                required: true
+            },
+            rollawayBedStatus: {
+                type: 'integer',
+                required: true
             }
         };
     }

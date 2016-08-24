@@ -37,8 +37,8 @@ export class HotelOperationsPageControllerService {
         var custOperationsPageParam = new HotelCustomerOperationsPageParam(customerId);
         this.goToPage(custOperationsPageParam);
     }
-    public goToInvoice(invoiceGroupId: string, invoiceFilter: HotelInvoiceOperationsPageFilterParam) {
-        var invoiceOperationsPageParam = new HotelInvoiceOperationsPageParam(invoiceGroupId, invoiceFilter);
+    public goToInvoice(invoiceGroupId: string, invoiceFilter: HotelInvoiceOperationsPageFilterParam, openInEditMode: boolean) {
+        var invoiceOperationsPageParam = new HotelInvoiceOperationsPageParam(invoiceGroupId, invoiceFilter, openInEditMode);
         this.goToPage(invoiceOperationsPageParam);
     }
     private goToPage(operationsPageParam: IHotelOperationsPageParam) {

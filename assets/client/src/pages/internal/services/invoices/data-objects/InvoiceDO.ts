@@ -80,4 +80,7 @@ export class InvoiceDO extends BaseDO implements IPriceableEntity {
     public get isPaid(): boolean {
         return this.paymentStatus === InvoicePaymentStatus.Paid;
     }
+    public allAmountWasPaid(): boolean {
+        return this.getPrice() === this.getAmountPaid();   
+    }
 }

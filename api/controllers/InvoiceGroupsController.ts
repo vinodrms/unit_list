@@ -58,6 +58,7 @@ export class InvoiceGroupsController extends BaseController {
 
     public saveInvoiceGroupItem(req: Express.Request, res: Express.Response) {
 		var saveInvoiceGroup = new SaveInvoiceGroup(req.appContext, req.sessionContext);
+        
 		saveInvoiceGroup.save(req.body.invoiceGroup).then((updatedInvoiceGroup: InvoiceGroupDO) => {
 			this.returnSuccesfulResponse(req, res, { invoiceGroup: updatedInvoiceGroup });
 		}).catch((err: any) => {

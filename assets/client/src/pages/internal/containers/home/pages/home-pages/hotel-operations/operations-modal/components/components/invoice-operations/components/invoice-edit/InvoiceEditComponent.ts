@@ -22,6 +22,7 @@ import {CustomerDO} from '../../../../../../../../../../../services/customers/da
 import {InvoiceGroupControllerService} from '../../services/InvoiceGroupControllerService';
 import {CustomScroll} from '../../../../../../../../../../../../../common/utils/directives/CustomScroll';
 import {InvoiceGroupsService} from '../../../../../../../../../../../services/invoices/InvoiceGroupsService';
+import {HotelOperationsResultService} from '../../../../../../operations-modal/services/HotelOperationsResultService';
 
 @Component({
     selector: 'invoice-edit',
@@ -37,20 +38,21 @@ export class InvoiceEditComponent implements OnInit {
     private _selectedInvoiceItemIndex: number;
 
     constructor(private _appContext: AppContext,
+        private _hotelOperationsResultService: HotelOperationsResultService, 
         private _addOnProductsModalService: AddOnProductsModalService,
         private _numberOfAddOnProductsModalService: NumberOfAddOnProductsModalService,
         private _customerRegisterModalService: CustomerRegisterModalService,
         private _invoiceGroupsService: InvoiceGroupsService,
         private _invoiceGroupControllerService: InvoiceGroupControllerService) {
-	}
+    }
 
     ngOnInit() {
     }
 
     public openAddOnProductSelectModal() {
-		this._addOnProductsModalService.openAddOnProductsModal(false).then((modalDialogInstance: ModalDialogRef<AddOnProductDO[]>) => {
-			modalDialogInstance.resultObservable.subscribe((selectedAddOnProductList: AddOnProductDO[]) => {
-                if(!_.isEmpty(selectedAddOnProductList)) {
+        this._addOnProductsModalService.openAddOnProductsModal(false).then((modalDialogInstance: ModalDialogRef<AddOnProductDO[]>) => {
+            modalDialogInstance.resultObservable.subscribe((selectedAddOnProductList: AddOnProductDO[]) => {
+                if (!_.isEmpty(selectedAddOnProductList)) {
                     this._numberOfAddOnProductsModalService.openModal(selectedAddOnProductList[0].id).then((modalDialogInstance: ModalDialogRef<NumberOfAddOnProductsModalOutput>) => {
                         modalDialogInstance.resultObservable.subscribe((numberOfAopSelection: NumberOfAddOnProductsModalOutput) => {
                             this.invoiceVM.addItemOnInvoice(selectedAddOnProductList[0], numberOfAopSelection.noOfItems);
@@ -58,14 +60,15 @@ export class InvoiceEditComponent implements OnInit {
                         });
                     });
                 }
-			});
-		}).catch((e: any) => { });
-	}
+            });
+        }).catch((e: any) => { });
+    }
 
     public openCustomerSelectModal() {
         this._customerRegisterModalService.openCustomerRegisterModal(false).then((modalDialogInstance: ModalDialogRef<CustomerDO[]>) => {
             modalDialogInstance.resultObservable.subscribe((selectedCustomerList: CustomerDO[]) => {
                 this.invoiceVM.addInvoicePayer(selectedCustomerList[0]);
+                this._invoiceGroupControllerService.invoiceOperationsPageData.customersContainer.appendCustomer(selectedCustomerList[0]);
             });
         }).catch((e: any) => { });
     }
@@ -76,7 +79,7 @@ export class InvoiceEditComponent implements OnInit {
         var positiveLabel = this._appContext.thTranslation.translate("Yes");
         var negativeLabel = this._appContext.thTranslation.translate("No");
         this._appContext.modalService.confirm(title, content, { positive: positiveLabel, negative: negativeLabel }, () => {
-            this.newlyAddedInvoiceRemoved.emit( {
+            this.newlyAddedInvoiceRemoved.emit({
                 indexInDisplayedInvoiceList: this.invoiceVMIndex,
                 reference: this.invoiceVM.invoiceDO.invoiceReference
             });
@@ -84,13 +87,39 @@ export class InvoiceEditComponent implements OnInit {
     }
 
     public onPayInvoice() {
-        this.invoiceVM.invoiceDO.paymentStatus = InvoicePaymentStatus.Paid;
-        var invoiceGroupDOToSave = this.invoiceGroupVM.buildInvoiceGroupDO();
-        this._invoiceGroupsService.saveInvoiceGroupDO(invoiceGroupDOToSave).subscribe((updatedInvoiceGroupDO: InvoiceGroupDO) => {
-			console.log('updatedInvoiceGroupDO: ' + updatedInvoiceGroupDO);
-		}, (error: ThError) => {
-			this._appContext.toaster.error(error.message);
-		});
+
+        if (!this.invoiceVM.invoiceDO.allAmountWasPaid()) {
+            var title = this._appContext.thTranslation.translate("Info");
+            var content = this._appContext.thTranslation.translate("You cannot mark this invoice as paid. The total amount paid is lower than the total price.");
+            var positiveLabel = this._appContext.thTranslation.translate("OK");
+
+            this._appContext.modalService. confirm(title, content, { positive: positiveLabel }, () => {
+                
+            });
+        }
+        else {
+            var title = this._appContext.thTranslation.translate("Info");
+            var content = this._appContext.thTranslation.translate("By marking this invoice as paid you acknowledge that all payments were made. Continue?");
+            var positiveLabel = this._appContext.thTranslation.translate("Yes");
+            var negativeLabel = this._appContext.thTranslation.translate("No");
+            this._appContext.modalService.confirm(title, content, { positive: positiveLabel, negative: negativeLabel }, () => {
+                var invoiceGroupVMClone = this.invoiceGroupVM.buildPrototype();
+                for (var i = 0; i < invoiceGroupVMClone.invoiceVMList.length; ++i) {
+                    if (invoiceGroupVMClone.invoiceVMList[i].invoiceDO.invoiceReference === this.invoiceReference) {
+                        invoiceGroupVMClone.invoiceVMList[i].invoiceDO.paymentStatus = InvoicePaymentStatus.Paid;
+                    }
+                }
+                var invoiceGroupDOToSave = invoiceGroupVMClone.buildInvoiceGroupDO();
+                this._invoiceGroupsService.saveInvoiceGroupDO(invoiceGroupDOToSave).subscribe((updatedInvoiceGroupDO: InvoiceGroupDO) => {
+                    this._appContext.analytics.logEvent("invoice", "paid", "Marked an invoice as paid");
+                    this._invoiceGroupControllerService.updateInvoiceGroupVM(updatedInvoiceGroupDO);
+                    this._appContext.toaster.success(this._appContext.thTranslation.translate("The invoice was marked as paid."));
+                    this._hotelOperationsResultService.markInvoiceChanged(updatedInvoiceGroupDO);
+                }, (error: ThError) => {
+                    this._appContext.toaster.error(error.message);
+                });
+            });
+        }
     }
 
     public get ccySymbol(): string {
@@ -106,18 +135,18 @@ export class InvoiceEditComponent implements OnInit {
         return this._invoiceGroupControllerService.invoiceGroupVM;
     }
     private get invoiceVM(): InvoiceVM {
-        for(var i = 0; i < this.invoiceGroupVM.invoiceVMList.length; ++i) {
-            if(this.invoiceGroupVM.invoiceVMList[i].invoiceDO.invoiceReference === this.invoiceReference) {
+        for (var i = 0; i < this.invoiceGroupVM.invoiceVMList.length; ++i) {
+            if (this.invoiceGroupVM.invoiceVMList[i].invoiceDO.invoiceReference === this.invoiceReference) {
                 return this.invoiceGroupVM.invoiceVMList[i];
             }
         }
     }
     private get invoiceVMIndex(): number {
-        for(var i = 0; i < this.invoiceGroupVM.invoiceVMList.length; ++i) {
-            if(this.invoiceGroupVM.invoiceVMList[i].invoiceDO.invoiceReference === this.invoiceReference) {
+        for (var i = 0; i < this.invoiceGroupVM.invoiceVMList.length; ++i) {
+            if (this.invoiceGroupVM.invoiceVMList[i].invoiceDO.invoiceReference === this.invoiceReference) {
                 return i;
             }
-        }    
+        }
     }
     public get invoicePayerVMList(): InvoicePayerVM[] {
         return this.invoiceVM.invoicePayerVMList;
@@ -127,7 +156,7 @@ export class InvoiceEditComponent implements OnInit {
     }
 
     public selectInvoiceItem(invoiceItemIndex: number) {
-        if(!this.editMode || !this.invoiceItemVMList[invoiceItemIndex].isMovable()) {
+        if (!this.editMode || !this.invoiceItemVMList[invoiceItemIndex].isMovable()) {
             return;
         }
         this._selectedInvoiceItemIndex = invoiceItemIndex;
@@ -146,14 +175,14 @@ export class InvoiceEditComponent implements OnInit {
     }
 
     public moveLeft(invoiceItemVMIndex: number) {
-        if(!this.hasLeftEditableNeighbor()) {
+        if (!this.hasLeftEditableNeighbor()) {
             return;
         }
         this.invoiceGroupVM.moveInvoiceItemLeft(this.invoiceReference, invoiceItemVMIndex);
     }
 
     public moveRight(invoiceItemVMIndex: number) {
-        if(!this.hasRightEditableNeighbor()) {
+        if (!this.hasRightEditableNeighbor()) {
             return;
         }
         this.invoiceGroupVM.moveInvoiceItemRight(this.invoiceReference, invoiceItemVMIndex);

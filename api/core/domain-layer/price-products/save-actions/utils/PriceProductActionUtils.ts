@@ -12,6 +12,7 @@ export class PriceProductActionUtils {
 		priceProduct.openIntervalList = this.getDefaultIntervals();
 		priceProduct.openForArrivalIntervalList = this.getDefaultIntervals();
 		priceProduct.openForDepartureIntervalList = this.getDefaultIntervals();
+		priceProduct.price.roundPricesToTwoDecimals();
 	}
 
 	private getDefaultIntervals(): ThDateIntervalDO[] {

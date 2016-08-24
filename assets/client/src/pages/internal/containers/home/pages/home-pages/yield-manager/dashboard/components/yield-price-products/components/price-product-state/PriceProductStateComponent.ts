@@ -1,7 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
-import {PriceProductYieldParam} from '../../../../../../../../../../services/yield-manager/dashboard/common/PriceProductYieldParam';
-import {PriceProductYieldAction} from '../../../../../../../../../../services/yield-manager/dashboard/common/PriceProductYieldParam';
+import {AppContext} from '../../../../../../../../../../../../common/utils/AppContext';
+
+import {PriceProductYieldParam, PriceProductYieldAction} from '../../../../../../../../../../services/yield-manager/dashboard/common/PriceProductYieldParam';
 
 import {ThDateDO} from '../../../../../../../../../../services/common/data-objects/th-dates/ThDateDO';
 import {ThDateIntervalDO} from '../../../../../../../../../../services/common/data-objects/th-dates/ThDateIntervalDO';
@@ -21,7 +22,8 @@ export class PriceProductStateComponent implements OnInit {
 	@Input() model: IYieldStateModel; // State
 	@Output() stateChanged = new EventEmitter();
 
-	constructor(private _priceProduct: YieldManagerDashboardPriceProductsService) {
+	constructor(private _appContext: AppContext,
+		private _priceProduct: YieldManagerDashboardPriceProductsService) {
 	}
 
 	ngOnInit() {
@@ -52,7 +54,7 @@ export class PriceProductStateComponent implements OnInit {
 		else {
 			this.changeState(PriceProductYieldAction.OpenForDeparture)
 		}
-		
+
 	}
 
 	public isOpenForArrival(){
@@ -75,21 +77,26 @@ export class PriceProductStateComponent implements OnInit {
 		var interval = new ThDateIntervalDO();
 		interval.start = this.model.date;
 		interval.end = this.model.date;
-		
+
 		var yieldParams: PriceProductYieldParam = {
 			priceProductIdList : [this.model.priceProduct.priceProductYieldItemDO.priceProductId],
 			action: actionType,
 			forever: false,
 			interval : interval
 		};
-		
+
 		this._priceProduct.yieldPriceProducts(yieldParams).subscribe(()=>{
+			this.logAnalyticsEvent(yieldParams);
 			this.stateChanged.emit({});
 		})
+	}
+	private logAnalyticsEvent(yieldParams: PriceProductYieldParam) {
+		var eventDescription = "Yielded a Price Product for day " + yieldParams.interval.start.toString() + " with: " + PriceProductYieldAction[yieldParams.action];
+		this._appContext.analytics.logEvent("yield-manager", "yield-single-price-product", eventDescription);
 	}
 
 	private get state():YieldItemStateDO{
 		return this.model.priceProduct.priceProductYieldItemDO.stateList[this.model.stateIndex];
 	}
-	
+
 }

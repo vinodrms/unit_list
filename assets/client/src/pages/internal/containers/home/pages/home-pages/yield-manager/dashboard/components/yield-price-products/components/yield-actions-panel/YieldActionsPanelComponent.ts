@@ -22,6 +22,7 @@ export interface IActionPaneYieldParams {
 	templateUrl: 'client/src/pages/internal/containers/home/pages/home-pages/yield-manager/dashboard/components/yield-price-products/components/yield-actions-panel/template/yield-actions-panel.html'
 })
 export class YieldActionsPanelComponent implements OnInit {
+	@Input() isYielding: boolean = false;
 	@Output() onApplyAction = new EventEmitter<IActionPaneYieldParams>();
 	private referenceDate: ThDateDO;
 	private forever: boolean;

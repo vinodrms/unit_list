@@ -103,6 +103,7 @@ export class SaveCustomerItem {
 		customer.buildFromObject(this._saveCustomerDO);
 		customer.hotelId = this._sessionContext.sessionDO.hotel.id;
 		customer.indexedName = customer.customerDetails.getName();
+		customer.customerDetails.roundPricesToTwoDecimals();
 		return customer;
 	}
 

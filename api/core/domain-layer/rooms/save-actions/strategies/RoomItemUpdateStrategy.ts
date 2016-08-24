@@ -50,5 +50,6 @@ export class RoomItemUpdateStrategy implements IRoomItemActionStrategy {
 		delete this._roomDO.maintenanceStatus;
 		delete this._roomDO.maintenanceMessage;
 		delete this._roomDO.maintenanceHistory;
+		delete this._roomDO.rollawayBedStatus;
 	}
 }

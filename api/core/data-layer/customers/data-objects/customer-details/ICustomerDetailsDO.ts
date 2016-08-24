@@ -6,4 +6,5 @@ export interface ICustomerDetailsDO extends BaseDO {
 	getName(): string;
 	canPayInvoiceByAgreement(): boolean;
 	canReceiveBookingConfirmations(): boolean;
+	roundPricesToTwoDecimals();
 }

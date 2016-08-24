@@ -11,10 +11,14 @@ export class HotelInvoiceOperationsPageParam extends AHotelOperationsPageParam {
     private static InvoiceFontName = "L";
     invoiceGroupId: string;
     invoiceFilter: HotelInvoiceOperationsPageFilterParam;
+    openInEditMode: boolean;
 
-    constructor(invoiceGroupId: string, invoiceFilter: HotelInvoiceOperationsPageFilterParam) {
+    constructor(invoiceGroupId: string, invoiceFilter: HotelInvoiceOperationsPageFilterParam, openInEditMode: boolean) {
         super(HotelOperationsPageType.InvoiceOperations, HotelInvoiceOperationsPageParam.InvoiceFontName);
         this.invoiceGroupId = invoiceGroupId;
         this.invoiceFilter = invoiceFilter;
+        this.openInEditMode = openInEditMode;
     }
+
+    
 }

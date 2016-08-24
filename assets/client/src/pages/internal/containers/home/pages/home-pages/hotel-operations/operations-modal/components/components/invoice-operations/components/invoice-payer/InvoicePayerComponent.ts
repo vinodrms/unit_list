@@ -24,7 +24,7 @@ import {InvoicePaymentMethodVM} from '../../../../../../../../../../../services/
     pipes: [TranslationPipe]
 })
 export class InvoicePayerComponent implements OnInit {
-    @Input() invoiceVMIndex: number;
+    @Input() invoiceReference: string;
     @Input() invoicePayerVMIndex: number;
 
     paymentMethodVMList: InvoicePaymentMethodVM[] = [];
@@ -55,6 +55,7 @@ export class InvoicePayerComponent implements OnInit {
             else {
                 this.selectedPaymentMethodVM = this.paymentMethodVMList[0];
             }
+            this.invoicePayerVM.invoicePayerDO.paymentMethod = this.selectedPaymentMethodVM.paymentMethod;
         }
     }
 
@@ -67,8 +68,11 @@ export class InvoicePayerComponent implements OnInit {
     }
 
     public openCustomerSelectModal() {
+        
         this._customerRegisterModalService.openCustomerRegisterModal(false).then((modalDialogInstance: ModalDialogRef<CustomerDO[]>) => {
             modalDialogInstance.resultObservable.subscribe((selectedCustomerList: CustomerDO[]) => {
+                this._invoiceGroupControllerService.invoiceOperationsPageData.customersContainer.appendCustomer(selectedCustomerList[0]);
+                
                 var newInvoicePayer = new InvoicePayerDO();
                 newInvoicePayer.customerId = selectedCustomerList[0].id;
 
@@ -79,15 +83,16 @@ export class InvoicePayerComponent implements OnInit {
                 else {
                     newInvoicePayer.priceToPay = this.invoicePayerVM.invoicePayerDO.priceToPay;
                 }
+                
+                this.paymentMethodVMList = this._pmGenerator.generatePaymentMethodsFor(selectedCustomerList[0]);
+                this.selectedPaymentMethodVM = this.paymentMethodVMList[0];
+                newInvoicePayer.paymentMethod = this.paymentMethodVMList[0].paymentMethod;
                 this.invoicePayerVM.invoicePayerDO = newInvoicePayer;
                 this.invoicePayerVM.customerDO = selectedCustomerList[0];
-
-                this.paymentMethodVMList = this._pmGenerator.generatePaymentMethodsFor(this.invoicePayerVM.customerDO);
-                this.selectedPaymentMethodVM = this.paymentMethodVMList[0];
-
                 this.invoiceVM.isValid();
             });
-        }).catch((e: any) => { });
+        }).catch((e: any) => { 
+        });
     }
 
     public goToCustomer(customer: CustomerDO) {
@@ -115,7 +120,11 @@ export class InvoicePayerComponent implements OnInit {
         return this._invoiceGroupControllerService.invoiceGroupVM;
     }
     private get invoiceVM(): InvoiceVM {
-        return this.invoiceGroupVM.invoiceVMList[this.invoiceVMIndex];
+        for (var i = 0; i < this.invoiceGroupVM.invoiceVMList.length; ++i) {
+            if (this.invoiceGroupVM.invoiceVMList[i].invoiceDO.invoiceReference === this.invoiceReference) {
+                return this.invoiceGroupVM.invoiceVMList[i];
+            }
+        }
     }
     public get invoicePayerVM(): InvoicePayerVM {
         return this.invoiceVM.invoicePayerVMList[this.invoicePayerVMIndex];

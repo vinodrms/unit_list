@@ -132,6 +132,7 @@ module.exports.routes = {
 	'POST /api/hotelOperations/room/change': 'HotelRoomOperationsController.changeRoom',
 	'POST /api/hotelOperations/room/checkOut': 'HotelRoomOperationsController.checkOut',
 	'POST /api/hotelOperations/room/maintenanceStatus': 'HotelRoomOperationsController.changeMaintenanceStatus',
+	'POST /api/hotelOperations/room/rollawayBedStatus': 'HotelRoomOperationsController.changeRollawayBedStatus',
 	'GET /api/hotelOperations/room/attachedBooking': 'HotelRoomOperationsController.getAttachedBooking',
 
 	'POST /api/hotelOperations/booking/possiblePrices': 'HotelBookingOperationsController.getPossiblePrices',
@@ -143,7 +144,6 @@ module.exports.routes = {
 	'POST /api/hotelOperations/booking/changeCustomers': 'HotelBookingOperationsController.changeCustomers',
 	'POST /api/hotelOperations/booking/cancel': 'HotelBookingOperationsController.cancel',
 	'POST /api/hotelOperations/booking/reactivate': 'HotelBookingOperationsController.reactivate',
-	'POST /api/hotelOperations/booking/removeRollawayCapacityWarning': 'HotelBookingOperationsController.removeRollawayCapacityWarning',
 	'POST /api/hotelOperations/booking/reserveAddOnProducts': 'HotelBookingOperationsController.reserveAddOnProducts',
 
 	'POST /api/hotelOperations/common/sendEmail': 'HotelCommonOperationsController.sendEmail',

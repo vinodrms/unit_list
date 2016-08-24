@@ -19,7 +19,6 @@ export interface RoomItemInfo {
     groupBookingId: string;
     bookingInterval: ThDateIntervalDO;
     bookingCapacity: ConfigCapacityDO;
-    needsRollawayBeds: boolean;
 }
 
 export class HotelOperationsRoomInfo {

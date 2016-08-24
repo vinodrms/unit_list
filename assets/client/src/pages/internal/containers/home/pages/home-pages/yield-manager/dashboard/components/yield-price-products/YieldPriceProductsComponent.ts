@@ -1,6 +1,6 @@
 import {Component, OnInit, Input } from '@angular/core';
 import {ThDateDO} from '../../../../../../../../services/common/data-objects/th-dates/ThDateDO';
-import {AppContext} from '../../../../../../../../../../common/utils/AppContext';
+import {AppContext, ThError} from '../../../../../../../../../../common/utils/AppContext';
 import {CustomScroll} from '../../../../../../../../../../common/utils/directives/CustomScroll';
 
 import {PriceProductYieldResultVM} from '../../../../../../../../services/yield-manager/dashboard/price-products//view-models/PriceProductYieldResultVM';
@@ -10,7 +10,7 @@ import {TranslationPipe} from '../../../../../../../../../../common/utils/locali
 
 import {IYieldManagerDashboardPriceProducts} from '../../YieldManagerDashboardComponent'
 import {YieldManagerDashboardPriceProductsService} from '../../../../../../../../services/yield-manager/dashboard/price-products/YieldManagerDashboardPriceProductsService';
-import {PriceProductYieldParam} from '../../../../../../../../services/yield-manager/dashboard/common/PriceProductYieldParam';
+import {PriceProductYieldParam, PriceProductYieldAction} from '../../../../../../../../services/yield-manager/dashboard/common/PriceProductYieldParam';
 
 import {PriceProductStateComponent} from './components/price-product-state/PriceProductStateComponent';
 import {IYieldStateModel} from './components/price-product-state/IYieldStateModel';
@@ -40,11 +40,12 @@ export class YieldPriceProductsComponent implements OnInit {
 	private selectedFilters:IFilterSelection;
 	private selectAllItemsFlag: boolean;
 	private itemsSelectionState = null;
+	private isYielding: boolean = false;
 
 	constructor(
 		private _priceProductsService: YieldManagerDashboardPriceProductsService,
 		private _appContext: AppContext
-	) { 
+	) {
 		this.selectAllItemsFlag = false;
 		this.selectedFilters = {
 			colorFilter : null,
@@ -53,7 +54,7 @@ export class YieldPriceProductsComponent implements OnInit {
 		}
 	}
 
-	ngOnInit() { 
+	ngOnInit() {
 	}
 
 	public refreshTable(date:ThDateDO, noDays:number){
@@ -110,7 +111,7 @@ export class YieldPriceProductsComponent implements OnInit {
 					return true;
 				}
 				return false;
-			 });
+			});
 		}
 		return results;
 	}
@@ -126,7 +127,7 @@ export class YieldPriceProductsComponent implements OnInit {
 					return true;
 				}
 				return false;
-			 });
+			});
 		}
 		return results;
 	}
@@ -144,7 +145,7 @@ export class YieldPriceProductsComponent implements OnInit {
 				intersectionList.push(element);
 			}
 		});
-		
+
 		return intersectionList;
 	}
 
@@ -179,7 +180,7 @@ export class YieldPriceProductsComponent implements OnInit {
 		if (priceProduct.colorFilterList.length > 0){
 			color_class = classTransformer(priceProduct.colorFilterList[0].cssClass);
 		}
-		
+
 		var results = {};
 		results[color_class] = this.itemsSelectionState[priceProduct.priceProductYieldItemDO.priceProductId];
 		return results;
@@ -187,7 +188,7 @@ export class YieldPriceProductsComponent implements OnInit {
 
 	public getDateLabel(date: ThDateDO) {
 		return date.getShortDisplayString(this._appContext.thTranslation);
-	}	
+	}
 
 	public get yieldManager(): IYieldManagerDashboardPriceProducts {
 		return this._yieldManager;
@@ -234,11 +235,21 @@ export class YieldPriceProductsComponent implements OnInit {
 	}
 
 	public yieldPriceProducts(yieldParams: PriceProductYieldParam){
+		if(this.isYielding) { return; }
+		this.isYielding = true;
 		this._priceProductsService.yieldPriceProducts(yieldParams).subscribe(() => {
+			this.isYielding = false;
+			this.logAnalyticsEvent(yieldParams);
 			this.handleStateChange();
-		}, (e) => {
-			console.log(e);
+		}, (e: ThError) => {
+			this.isYielding = false;
+			this._appContext.toaster.error(e.message);
 		})
+	}
+	private logAnalyticsEvent(yieldParams: PriceProductYieldParam) {
+		var eventDescription = "Yielded " + yieldParams.priceProductIdList.length +
+			" Price Products for " + yieldParams.interval.toString() + " with: " + PriceProductYieldAction[yieldParams.action];
+		this._appContext.analytics.logEvent("yield-manager", "yield-price-products", eventDescription);
 	}
 
 	// public toogleCheckPriceProduct(priceProduct: PriceProductYieldItemVM){

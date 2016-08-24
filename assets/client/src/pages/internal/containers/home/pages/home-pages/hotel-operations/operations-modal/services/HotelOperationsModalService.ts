@@ -29,7 +29,7 @@ export class HotelOperationsModalService {
     }
 
     public openInvoiceGroupOperationsModal(invoiceGroupId: string, customerId: string): Promise<ModalDialogRef<HotelOperationsResult>> {
-        var invoiceOperationsPageParam = new HotelInvoiceOperationsPageParam(invoiceGroupId, {customerId: customerId});
+        var invoiceOperationsPageParam = new HotelInvoiceOperationsPageParam(invoiceGroupId, {customerId: customerId}, false);
         return this.openOperationsModal(invoiceOperationsPageParam);
     }
 

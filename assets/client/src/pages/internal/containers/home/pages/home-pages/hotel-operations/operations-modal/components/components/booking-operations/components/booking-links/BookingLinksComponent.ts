@@ -25,7 +25,7 @@ export class BookingLinksComponent {
         if (!this.hasInvoice) { return; }
         this._operationsPageControllerService.goToInvoice(this.bookingOperationsPageData.invoiceGroupDO.id, {
             bookingId: this.bookingOperationsPageData.bookingDO.bookingId
-        });
+        }, false);
     }
 
     public get hasRoom(): boolean {

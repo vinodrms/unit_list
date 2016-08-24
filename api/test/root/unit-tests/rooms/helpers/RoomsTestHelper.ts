@@ -29,7 +29,7 @@ export class RoomsTestHelper {
             notes: "Demo notes"
         };
     }
-    
+
     public getSaveRoomItemDOWithInvalidCategory(): SaveRoomItemDO {
         return {
             name: "Invalid Category",
@@ -97,6 +97,7 @@ export class RoomsTestHelper {
         should.equal(readRoom.description, createdRoom.description);
         should.equal(readRoom.notes, createdRoom.notes);
         should.equal(readRoom.maintenanceStatus, createdRoom.maintenanceStatus);
+        should.equal(readRoom.rollawayBedStatus, createdRoom.rollawayBedStatus);
     }
 
 }

@@ -42,8 +42,6 @@ import {BookingCancelDO} from '../../../../../core/domain-layer/hotel-operations
 import {EmailConfirmation} from '../../../../../core/domain-layer/hotel-operations/common/email-confirmations/EmailConfirmation';
 import {EmailConfirmationDO, EmailConfirmationType} from '../../../../../core/domain-layer/hotel-operations/common/email-confirmations/EmailConfirmationDO';
 import {BookingConfirmationEmailParameters} from '../../../../../core/domain-layer/hotel-operations/common/email-confirmations/utils/strategies/BookingEmailConfirmationStrategy';
-import {BookingRemoveRollawayCapacityWarning} from '../../../../../core/domain-layer/hotel-operations/booking/rollaway-capacity/BookingRemoveRollawayCapacityWarning';
-import {BookingRemoveRollawayCapacityWarningDO} from '../../../../../core/domain-layer/hotel-operations/booking/rollaway-capacity/BookingRemoveRollawayCapacityWarningDO';
 import {BookingReserveAddOnProducts} from '../../../../../core/domain-layer/hotel-operations/booking/reserve-add-on-products/BookingReserveAddOnProducts';
 import {BookingReserveAddOnProductsDO} from '../../../../../core/domain-layer/hotel-operations/booking/reserve-add-on-products/BookingReserveAddOnProductsDO';
 
@@ -266,20 +264,6 @@ describe("Hotel Booking Operations Tests", function () {
             reserveAddOnProducts.reserve(reserveAddOnProductsDO).then((updatedBooking: BookingDO) => {
                 var equality = testUtils.stringArraysAreEqual(updatedBooking.reservedAddOnProductIdList, reserveAddOnProductsDO.reservedAddOnProductIdList);
                 should.equal(equality, true);
-                bookingToChange = updatedBooking;
-                done();
-            }).catch((error: any) => {
-                done(error);
-            });
-        });
-        it("Should remove the rollaway capacity warning on the booking", function (done) {
-            var rollawayCapacityWarningDO = new BookingRemoveRollawayCapacityWarningDO();
-            rollawayCapacityWarningDO.groupBookingId = bookingToChange.groupBookingId;
-            rollawayCapacityWarningDO.bookingId = bookingToChange.bookingId;
-
-            var rollawayCapacity = new BookingRemoveRollawayCapacityWarning(testContext.appContext, testContext.sessionContext);
-            rollawayCapacity.removeRollawayCapacityWarning(rollawayCapacityWarningDO).then((updatedBooking: BookingDO) => {
-                should.equal(updatedBooking.needsRollawayBeds, false);
                 bookingToChange = updatedBooking;
                 done();
             }).catch((error: any) => {

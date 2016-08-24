@@ -12,12 +12,12 @@
                                 </span>
                             </td>
                             <td width="70%">
-                                {{ 'Amount unpaid' | translate }}: <b>{{ invoicePayerStats.amountUnpaid }}{{ ccySymbol }}</b> / {{ 'Amount paid' | translate }}: <b>{{invoicePayerStats.amountUnpaid}}{{ ccySymbol }}</b> / {{ 'Invoice group payment status' | translate }}:  
+                                {{ 'Amount paid' | translate }}: <b>{{ invoicePayerStats.amountPaid }}{{ ccySymbol }}</b> {{ 'from' | translate }}: <b>{{invoicePayerStats.totalAmountToPay}}{{ ccySymbol }}</b> / {{ 'Invoice group payment status' | translate }}:  
                                 <span *ngIf="invoicePayerStats.invoiceGroupPaid">
-                                    <b>{{ 'Paid' | translate }}</b>
+                                    <b>{{ 'PAID' | translate }}</b>
                                 </span>
                                 <span *ngIf="!invoicePayerStats.invoiceGroupPaid">  
-                                    <b>{{ 'Unpaid' | translate }}</b>
+                                    <b>{{ 'UNPAID' | translate }}</b>
                                 </span> 
                             </td>
                         </tr>
