@@ -90,7 +90,7 @@ export class RoomBookingPreviewComponent implements OnInit {
         if (!this.hasUnpaidInvoice()) { return; }
         this._operationsPageControllerService.goToInvoice(this._roomOperationsPageData.invoiceGroupDO.id, {
             bookingId: this.roomAttachedBookingResultVM.roomAttachedBookingResultDO.booking.bookingId
-        });
+        }, false);
     }
 
     public get bookingDO(): BookingDO {

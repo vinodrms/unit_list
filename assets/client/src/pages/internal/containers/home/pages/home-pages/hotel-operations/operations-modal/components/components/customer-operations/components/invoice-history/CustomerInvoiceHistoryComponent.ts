@@ -61,7 +61,7 @@ export class CustomerInvoiceHistoryComponent implements OnInit {
         this._invoiceGroupsService.updatePageNumber(this._pageNumber);
     }
     public goToInvoice(invoiceGroupPayerStatsDO: InvoiceGroupPayerStatsDO) {
-        this._operationsPageControllerService.goToInvoice(invoiceGroupPayerStatsDO.invoiceGroupId, {});
+        this._operationsPageControllerService.goToInvoice(invoiceGroupPayerStatsDO.invoiceGroupId, {}, false);
     }
     public get totalCount(): number {
         return this._totalCount;

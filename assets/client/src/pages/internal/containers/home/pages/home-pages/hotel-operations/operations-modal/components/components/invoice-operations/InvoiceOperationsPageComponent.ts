@@ -99,6 +99,8 @@ export class InvoiceOperationsPageComponent implements OnInit {
     private updateContainerData() {
         var subtitle = "";
         
+        this.editMode = this.invoiceOperationsPageParam.openInEditMode;
+
         this.invoiceOperationsPageParam.onFilterRemovedHandler = (() => {
             this.editMode = true;
         });
@@ -130,7 +132,6 @@ export class InvoiceOperationsPageComponent implements OnInit {
         if (firstInvalidInvoice === -1) {
             var invoiceGroupVMClone = this.invoiceGroupVM.buildPrototype();
             var invoiceGroupDOToSave = invoiceGroupVMClone.buildInvoiceGroupDO();
-
             this._invoiceGroupsService.saveInvoiceGroupDO(invoiceGroupDOToSave).subscribe((updatedInvoiceGroupDO: InvoiceGroupDO) => {
                 this._invoiceGroupControllerService.updateInvoiceGroupVM(updatedInvoiceGroupDO);
                 this._appContext.toaster.success(this._appContext.thTranslation.translate("The invoice group was saved successfully."));
