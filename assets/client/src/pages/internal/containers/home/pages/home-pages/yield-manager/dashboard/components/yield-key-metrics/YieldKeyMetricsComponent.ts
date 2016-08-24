@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import {ThDateDO} from '../../../../../../../../services/common/data-objects/th-dates/ThDateDO';
 import {AppContext} from '../../../../../../../../../../common/utils/AppContext';
 
-import {IYieldManagerDashboardFilter} from '../../YieldManagerDashboardComponent'
+import {IYieldManagerDashboardFilter} from '../../YieldManagerDashboardComponent';
 
 import {YieldManagerDashboardKeyMetricsService} from '../../../../../../../../services/yield-manager/dashboard/key-metrics/YieldManagerDashboardKeyMetricsService';
 import {KeyMetricsResultVM} from '../../../../../../../../services/yield-manager/dashboard/key-metrics/view-models/KeyMetricsResultVM';
