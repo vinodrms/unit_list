@@ -24,6 +24,7 @@ export class ISOWeekDayUtils {
 			ISOWeekDay.Sunday
 		];
 	}
+
 	public getISOWeekDayVMList(): ISOWeekDayVM[] {
 		return [
 			{

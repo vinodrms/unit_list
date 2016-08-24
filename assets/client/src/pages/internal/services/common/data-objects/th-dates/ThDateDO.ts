@@ -1,6 +1,6 @@
 import {BaseDO} from '../../../../../../common/base/BaseDO';
 import {ThDateUtils} from './ThDateUtils';
-import {ISOWeekDay} from './ISOWeekDay';
+import {ISOWeekDay, ISOWeekDayUtils} from './ISOWeekDay';
 import {ThTranslation} from '../../../../../../common/utils/localization/ThTranslation';
 
 export enum ThMonth {
@@ -35,10 +35,13 @@ ThMonthDisplayString[ThMonth.December] = "December";
 export class ThDateDO extends BaseDO {
 	public static MaxMonthLength: number = 3;
 	public static MaxYearLength: number = 2;
+	private _isoWeekDayUtils: ISOWeekDayUtils;
 
     constructor() {
         super();
+		this._isoWeekDayUtils = new ISOWeekDayUtils();
     }
+
     year: number;
 	month: number;
 	day: number;
@@ -130,6 +133,12 @@ export class ThDateDO extends BaseDO {
 			return "";
 		}
 		return this.day + " " + thTranslation.translate(ThMonthDisplayString[this.month]) + " " + this.year;
+	}
+
+	public getLongDayDisplayString(thTranslation: ThTranslation){
+		var isoDay = this.getISOWeekDay();
+		var dayName = this._isoWeekDayUtils.getISOWeekDayVMList()[isoDay - 1].name;
+		return thTranslation.translate(dayName);
 	}
 
 	private getShortMonthDisplayString(thTranslation: ThTranslation) {

@@ -2687,6 +2687,21 @@ a.btn.btn-square:focus {
         flex-shrink: 0;
     }
 
+    .yield-manager-dashboard yield-timeframe-header .header{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    yield-timeframe-header .left-side{
+        align-items: center;
+    }
+
+    yield-timeframe-header .right-side{
+        align-items: center;
+    }
+
     .yield-manager-dashboard yield-key-metrics,
     .yield-manager-dashboard yield-price-products
     {
@@ -2877,6 +2892,19 @@ a.btn.btn-square:focus {
 
         .yield-actions-control th-date-picker div.input-group{
             width: 180px !important;
+        }
+
+        yield-timeframe-header .time-frame-group-options{
+        }
+
+        yield-timeframe-header .time-frame-group-options .time-frame-option{
+            background-color: #a7a7a7;
+            padding: 6px 12px 6px 12px;
+            color: white;
+        }
+
+        yield-timeframe-header .time-frame-group-options .time-frame-option.active{
+            background-color: #808080;
         }
 
         price-product-state{
