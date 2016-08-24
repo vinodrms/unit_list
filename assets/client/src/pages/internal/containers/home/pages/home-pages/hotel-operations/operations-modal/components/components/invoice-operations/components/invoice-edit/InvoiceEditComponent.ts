@@ -22,6 +22,7 @@ import {CustomerDO} from '../../../../../../../../../../../services/customers/da
 import {InvoiceGroupControllerService} from '../../services/InvoiceGroupControllerService';
 import {CustomScroll} from '../../../../../../../../../../../../../common/utils/directives/CustomScroll';
 import {InvoiceGroupsService} from '../../../../../../../../../../../services/invoices/InvoiceGroupsService';
+import {HotelOperationsResultService} from '../../../../../../operations-modal/services/HotelOperationsResultService';
 
 @Component({
     selector: 'invoice-edit',
@@ -37,6 +38,7 @@ export class InvoiceEditComponent implements OnInit {
     private _selectedInvoiceItemIndex: number;
 
     constructor(private _appContext: AppContext,
+        private _hotelOperationsResultService: HotelOperationsResultService, 
         private _addOnProductsModalService: AddOnProductsModalService,
         private _numberOfAddOnProductsModalService: NumberOfAddOnProductsModalService,
         private _customerRegisterModalService: CustomerRegisterModalService,
@@ -86,25 +88,37 @@ export class InvoiceEditComponent implements OnInit {
 
     public onPayInvoice() {
 
-        var title = this._appContext.thTranslation.translate("Info");
-        var content = this._appContext.thTranslation.translate("By marking this invoice as paid you acknowledge that all payments were made. Continue?");
-        var positiveLabel = this._appContext.thTranslation.translate("Yes");
-        var negativeLabel = this._appContext.thTranslation.translate("No");
-        this._appContext.modalService.confirm(title, content, { positive: positiveLabel, negative: negativeLabel }, () => {
-            var invoiceGroupVMClone = this.invoiceGroupVM.buildPrototype();
-            for (var i = 0; i < invoiceGroupVMClone.invoiceVMList.length; ++i) {
-                if (invoiceGroupVMClone.invoiceVMList[i].invoiceDO.invoiceReference === this.invoiceReference) {
-                    invoiceGroupVMClone.invoiceVMList[i].invoiceDO.paymentStatus = InvoicePaymentStatus.Paid;
-                }
-            }
-            var invoiceGroupDOToSave = invoiceGroupVMClone.buildInvoiceGroupDO();
-            this._invoiceGroupsService.saveInvoiceGroupDO(invoiceGroupDOToSave).subscribe((updatedInvoiceGroupDO: InvoiceGroupDO) => {
-                this._invoiceGroupControllerService.updateInvoiceGroupVM(updatedInvoiceGroupDO);
-                this._appContext.toaster.success(this._appContext.thTranslation.translate("The invoice was marked as paid."));
-            }, (error: ThError) => {
-                this._appContext.toaster.error(error.message);
+        if (!this.invoiceVM.invoiceDO.allAmountWasPaid()) {
+            var title = this._appContext.thTranslation.translate("Info");
+            var content = this._appContext.thTranslation.translate("You cannot mark this invoice as paid. The total amount paid is lower than the total price.");
+            var positiveLabel = this._appContext.thTranslation.translate("OK");
+
+            this._appContext.modalService. confirm(title, content, { positive: positiveLabel }, () => {
+                
             });
-        });
+        }
+        else {
+            var title = this._appContext.thTranslation.translate("Info");
+            var content = this._appContext.thTranslation.translate("By marking this invoice as paid you acknowledge that all payments were made. Continue?");
+            var positiveLabel = this._appContext.thTranslation.translate("Yes");
+            var negativeLabel = this._appContext.thTranslation.translate("No");
+            this._appContext.modalService.confirm(title, content, { positive: positiveLabel, negative: negativeLabel }, () => {
+                var invoiceGroupVMClone = this.invoiceGroupVM.buildPrototype();
+                for (var i = 0; i < invoiceGroupVMClone.invoiceVMList.length; ++i) {
+                    if (invoiceGroupVMClone.invoiceVMList[i].invoiceDO.invoiceReference === this.invoiceReference) {
+                        invoiceGroupVMClone.invoiceVMList[i].invoiceDO.paymentStatus = InvoicePaymentStatus.Paid;
+                    }
+                }
+                var invoiceGroupDOToSave = invoiceGroupVMClone.buildInvoiceGroupDO();
+                this._invoiceGroupsService.saveInvoiceGroupDO(invoiceGroupDOToSave).subscribe((updatedInvoiceGroupDO: InvoiceGroupDO) => {
+                    this._invoiceGroupControllerService.updateInvoiceGroupVM(updatedInvoiceGroupDO);
+                    this._appContext.toaster.success(this._appContext.thTranslation.translate("The invoice was marked as paid."));
+                    this._hotelOperationsResultService.markInvoiceChanged(updatedInvoiceGroupDO);
+                }, (error: ThError) => {
+                    this._appContext.toaster.error(error.message);
+                });
+            });
+        }
     }
 
     public get ccySymbol(): string {

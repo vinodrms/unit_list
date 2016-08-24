@@ -24,6 +24,7 @@ import {Subject} from 'rxjs/Subject';
 import {Observable} from 'rxjs/Observable';
 import {InvoiceMeta} from './components/invoice-edit/InvoiceMeta';
 import {InvoiceGroupsService} from '../../../../../../../../../services/invoices/InvoiceGroupsService';
+import {HotelOperationsResultService} from '../../../../operations-modal/services/HotelOperationsResultService';
 
 @Component({
     selector: 'invoice-operations-page',
@@ -59,6 +60,7 @@ export class InvoiceOperationsPageComponent implements OnInit {
     selectItemObservable: Observable<number>;
 
     constructor(private _appContext: AppContext,
+        private _hotelOperationsResultService: HotelOperationsResultService,
         private _invoiceOperationsPageService: InvoiceOperationsPageService,
         private _invoiceGroupControllerService: InvoiceGroupControllerService,
         private _invoiceGroupsService: InvoiceGroupsService) {
@@ -134,6 +136,7 @@ export class InvoiceOperationsPageComponent implements OnInit {
             this._invoiceGroupsService.saveInvoiceGroupDO(invoiceGroupDOToSave).subscribe((updatedInvoiceGroupDO: InvoiceGroupDO) => {
                 this._invoiceGroupControllerService.updateInvoiceGroupVM(updatedInvoiceGroupDO);
                 this._appContext.toaster.success(this._appContext.thTranslation.translate("The invoice group was saved successfully."));
+                this._hotelOperationsResultService.markInvoiceChanged(updatedInvoiceGroupDO);
                 this.editMode = false;
             }, (error: ThError) => {
                 this._appContext.toaster.error(error.message);

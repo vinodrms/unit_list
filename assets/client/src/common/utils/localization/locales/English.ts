@@ -682,5 +682,6 @@ export var EnglishTranslations: Object = {
 	"Are you sure you want to remove the rollaway beds from the room?": "Are you sure you want to remove the rollaway beds from the room?",
 	"Rollaway beds required to fit": "Rollaway beds required to fit",
 	"Rollaway beds required": "Rollaway beds required",
+	"You cannot mark this invoice as paid. The total amount paid is lower than the total price.": "You cannot mark this invoice as paid. The total amount paid is lower than the total price.",
 	
 };
