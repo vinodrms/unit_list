@@ -140,6 +140,7 @@ export class InvoiceVM {
         });
         return amountPaid;
     }
+
     private validateNumberOfCompanyPayersWithPayByAgreementAsPM() {
         if (this.invoicePayerVMList.length < 2) return;
 

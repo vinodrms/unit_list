@@ -37,8 +37,8 @@ export class BookingPriceDO extends BaseDO implements IInvoiceItemMeta {
         });
     }
 
-    public getPrice(): number {
-        return this.getRoomPrice();
+    public getUnitPrice(): number {
+        return this.pricePerItem;
     }
     public getNumberOfItems(): number {
         return this.numberOfItems;
@@ -76,7 +76,7 @@ export class BookingPriceDO extends BaseDO implements IInvoiceItemMeta {
             return roomPrice;
         }
         _.forEach(this.includedInvoiceItemList, (invoiceItem: InvoiceItemDO) => {
-            roomPrice = roomPrice - invoiceItem.meta.getPrice();
+            roomPrice = roomPrice - invoiceItem.meta.getUnitPrice() * invoiceItem.meta.getNumberOfItems();
         });
         if (roomPrice < 0) { roomPrice = 0; }
         return roomPrice;

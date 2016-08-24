@@ -2173,6 +2173,7 @@ a.btn.btn-square:focus {
             border-bottom: 1px solid #DBDBDB;
             padding-left: 15px;
             flex-basis: 48px;
+            height: 48px;
             color: #5b5b62;
         }
 
@@ -2677,6 +2678,13 @@ a.btn.btn-square:focus {
         border-left: 1px solid #DBDBDB;
         border-right: 1px solid #DBDBDB;
         height: 100%;
+    }
+
+    .yield-manager-dashboard yield-timeframe-header{
+        height: 48px;
+        background: white;
+        flex-grow: 0;
+        flex-shrink: 0;
     }
 
     .yield-manager-dashboard yield-key-metrics,

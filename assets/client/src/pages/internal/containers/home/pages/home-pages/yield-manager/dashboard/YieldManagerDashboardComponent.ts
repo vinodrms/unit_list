@@ -7,6 +7,7 @@ import {AHomeContainerComponent} from '../../../utils/AHomeContainerComponent';
 import {ThDateDO} from '../../../../../../services/common/data-objects/th-dates/ThDateDO';
 
 import {YieldFilterPaneComponent} from './components/yield-filter-pane/YieldFilterPaneComponent';
+import {YieldTimeFrameHeaderComponent} from './components/yield-timeframe-header/YieldTimeFrameHeaderComponent';
 import {YieldKeyMetricsComponent} from './components/yield-key-metrics/YieldKeyMetricsComponent';
 import {YieldPriceProductsComponent} from './components/yield-price-products/YieldPriceProductsComponent';
 import {YieldViewModeComponent} from './components/yield-view-mode/YieldViewModeComponent';
@@ -43,7 +44,7 @@ class ViewModeDecoratorClass{
 @Component({
 	selector: 'yield-manager-dashboard',
 	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/yield-manager/dashboard/template/yield-manager-dashboard.html',
-	directives: [CustomScroll, LazyLoadingTableComponent, YieldFilterPaneComponent, YieldKeyMetricsComponent, YieldViewModeComponent, YieldPriceProductsComponent],
+	directives: [CustomScroll, LazyLoadingTableComponent, YieldFilterPaneComponent, YieldTimeFrameHeaderComponent, YieldKeyMetricsComponent, YieldViewModeComponent, YieldPriceProductsComponent],
 	providers: [YieldFiltersService, HotelService,
 		YieldManagerDashboardFilterService, YieldManagerDashboardPriceProductsService, YieldManagerDashboardKeyMetricsService]
 })
@@ -56,6 +57,7 @@ export class YieldManagerDashboardComponent extends AHomeContainerComponent impl
 	@ViewChild(YieldPriceProductsComponent) yieldPriceProductsComponent : YieldPriceProductsComponent;
 	@ViewChild(YieldKeyMetricsComponent) yieldKeyMetricsComponent : YieldPriceProductsComponent;
 	@ViewChild(YieldFilterPaneComponent) yieldFilterPaneComponent : YieldFilterPaneComponent;
+	@ViewChild(YieldTimeFrameHeaderComponent) yieldTimeFrameHeaderComponent : YieldTimeFrameHeaderComponent;
 
 	constructor(
 		headerPageService: HeaderPageService,
@@ -71,10 +73,11 @@ export class YieldManagerDashboardComponent extends AHomeContainerComponent impl
 		this.yieldFilterPaneComponent.yieldManager = this;
 		this.yieldPriceProductsComponent.yieldManager = this;
 		this.yieldKeyMetricsComponent.yieldManager = this;
+		this.yieldTimeFrameHeaderComponent.yieldManager = this;
 	}
 
 	public refresh(){
-		var date = this.yieldFilterPaneComponent.selectedDate;
+		var date = this.yieldTimeFrameHeaderComponent.selectedDate;
 		// TODO: 21 from filterPane
 		this.updateYieldTimeFrameParams(date, 21);
 	}

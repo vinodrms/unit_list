@@ -1,0 +1,16 @@
+<div class="header">
+	<div class="pane-title p-t-6">
+		<div class="unitpal-font f-12 f-32 clickable" (click)="previousDay()">&lt;</div>
+		<div class="flex-row">
+			<i class="fa fa-calendar orange-color p-r-12 f-32" aria-hidden="true"></i>
+			<div class="time-frame">
+				<div *ngIf="selectedDate" class="current-date f-16"><b>{{getDateShortString()}}</b></div>
+				<div class="flex-row-switch flex-center-v">
+					<span class="f-12">{{ 'Showing' | translate}}</span>
+					<span class="f-12">14</span>
+				</div>
+			</div>
+		</div>
+		<div class="unitpal-font f-12 p-r-12 f-32 clickable" (click)="nextDay()">&gt;</div>
+	</div>
+</div>

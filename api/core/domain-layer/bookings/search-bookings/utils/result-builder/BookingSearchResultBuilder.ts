@@ -3,6 +3,7 @@ import {ThError} from '../../../../../utils/th-responses/ThError';
 import {ThStatusCode} from '../../../../../utils/th-responses/ThResponse';
 import {AppContext} from '../../../../../utils/AppContext';
 import {SessionContext} from '../../../../../utils/SessionContext';
+import {ThUtils} from '../../../../../utils/ThUtils';
 import {BookingSearchResult, RoomCategoryItem, SearchParameters, AllotmentItem, PriceProductItem, PriceProductItemPrice} from './BookingSearchResult';
 import {IBookingOccupancy} from '../../utils/occupancy-calculator/results/IBookingOccupancy';
 import {BookingSearchDependencies} from '../data-loader/results/BookingSearchDependencies';
@@ -23,11 +24,13 @@ export interface SearchResultBuilderParams {
 }
 
 export class BookingSearchResultBuilder {
+    private _thUtils: ThUtils;
     private _builderParams: SearchResultBuilderParams;
     private _indexedBookingInterval: IndexedBookingInterval;
     private _priceProductList: PriceProductDO[];
 
     constructor(private _appContext: AppContext, private _sessionContext: SessionContext) {
+        this._thUtils = new ThUtils();
     }
 
     public build(builderParams: SearchResultBuilderParams): Promise<BookingSearchResult> {
@@ -115,6 +118,7 @@ export class BookingSearchResultBuilder {
                     roomCategoryId: roomCategoryId,
                     configCapacity: this._builderParams.searchParams.configCapacity
                 });
+                itemPrice.price = this._thUtils.roundNumberToTwoDecimals(itemPrice.price);
                 priceProductItem.priceList.push(itemPrice);
             });
             priceProductItemList.push(priceProductItem);

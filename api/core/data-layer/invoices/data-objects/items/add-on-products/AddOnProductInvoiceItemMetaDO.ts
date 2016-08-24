@@ -14,7 +14,7 @@ export class AddOnProductInvoiceItemMetaDO extends BaseDO implements IInvoiceIte
         return ["movable", "pricePerItem", "numberOfItems", "aopDisplayName"];
     }
 
-    public getPrice(): number {
+    public getUnitPrice(): number {
         return this.pricePerItem;
     }
     public getNumberOfItems(): number {
