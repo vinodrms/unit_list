@@ -31,7 +31,7 @@ export class InvoiceOperationsPageService {
 
     public getPageData(pageParam: HotelInvoiceOperationsPageParam): Observable<InvoiceOperationsPageData> {
         return Observable.combineLatest(
-            this.getInvoiceGroupDO(pageParam.invoiceGroupId, pageParam.invoiceFilter.customerId),
+            this.getInvoiceGroupDO(pageParam.invoiceGroupId),
             this._hotelAggregatorService.getHotelAggregatedInfo()
         ).flatMap((result: [InvoiceGroupDO, HotelAggregatedInfo]) => {
             this._pageData.ccy = result[1].ccy;
@@ -41,7 +41,12 @@ export class InvoiceOperationsPageService {
 
             if (this._appContext.thUtils.isUndefinedOrNull(this._pageData.invoiceGroupDO.invoiceList) || _.isEmpty(this._pageData.invoiceGroupDO.invoiceList)) {
                 this._pageData.invoiceGroupDO.invoiceList = [];
-                this._pageData.invoiceGroupDO.invoiceList.push(this.getInvoiceDOWithDefaultPayer(pageParam.invoiceFilter.customerId));
+
+                var customerId = pageParam.invoiceFilter.customerId;
+                var invoiceDOWithDefaultPayer = this.getInvoiceDOWithDefaultPayer(customerId);
+                this._pageData.invoiceGroupDO.invoiceList.push(invoiceDOWithDefaultPayer);
+                this._pageData.invoiceGroupDO.indexedCustomerIdList = [];
+                this._pageData.invoiceGroupDO.indexedCustomerIdList.push(customerId);
             }
 
             return Observable.combineLatest(
@@ -57,7 +62,7 @@ export class InvoiceOperationsPageService {
 
     }
 
-    private getInvoiceGroupDO(invoiceGroupId: string, customerId: string): Observable<InvoiceGroupDO> {
+    private getInvoiceGroupDO(invoiceGroupId: string): Observable<InvoiceGroupDO> {
         if (!this._appContext.thUtils.isUndefinedOrNull(invoiceGroupId)) {
             return this._eagerInvoiceGroupsService.getInvoiceGroup(invoiceGroupId)
         }
