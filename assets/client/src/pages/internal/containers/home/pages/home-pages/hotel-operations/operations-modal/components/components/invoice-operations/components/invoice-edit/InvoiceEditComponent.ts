@@ -111,6 +111,7 @@ export class InvoiceEditComponent implements OnInit {
                 }
                 var invoiceGroupDOToSave = invoiceGroupVMClone.buildInvoiceGroupDO();
                 this._invoiceGroupsService.saveInvoiceGroupDO(invoiceGroupDOToSave).subscribe((updatedInvoiceGroupDO: InvoiceGroupDO) => {
+                    this._appContext.analytics.logEvent("invoice", "paid", "Marked an invoice as paid");
                     this._invoiceGroupControllerService.updateInvoiceGroupVM(updatedInvoiceGroupDO);
                     this._appContext.toaster.success(this._appContext.thTranslation.translate("The invoice was marked as paid."));
                     this._hotelOperationsResultService.markInvoiceChanged(updatedInvoiceGroupDO);
