@@ -159,13 +159,13 @@ export class InvoiceGroupVM {
 
     public updatePriceToPayIfSinglePayerByRef(invoiceRef: string) {
         var index = this.getInvoiceIndexByRefInTheEntireInvoiceList(invoiceRef);
-
         this.updatePriceToPayIfSinglePayerByIndex(index);
     }
 
     private updatePriceToPayIfSinglePayerByIndex(index: number) {
         if (this._invoiceVMList[index].invoicePayerVMList.length === 1) {
             this._invoiceVMList[index].invoicePayerVMList[0].invoicePayerDO.priceToPay = this._invoiceVMList[index].totalPrice;
+            this._invoiceVMList[index].isValid();
         }
     }
 }
