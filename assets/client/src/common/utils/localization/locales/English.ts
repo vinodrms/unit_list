@@ -671,5 +671,7 @@ export var EnglishTranslations: Object = {
 	"The invoice was marked as paid.": "The invoice was marked as paid.",
 	"By marking this invoice as paid you acknowledge that all payments were made. Continue?": "By marking this invoice as paid you acknowledge that all payments were made. Continue?",
 	"The invoice group was saved successfully.": "The invoice group was saved successfully.",
+	"You cannot mark this invoice as paid. The total amount paid is lower than the total price.": "You cannot mark this invoice as paid. The total amount paid is lower than the total price.",
+	"Ok": "Ok",
 	
 };
