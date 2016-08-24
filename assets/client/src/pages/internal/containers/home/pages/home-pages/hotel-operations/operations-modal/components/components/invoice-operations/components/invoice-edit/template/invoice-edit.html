@@ -56,10 +56,10 @@
             <tbody>
 
                 <tr *ngFor="let invoiceItemVM of invoiceItemVMList; let invoiceItemVMIndex = index" (click)="selectInvoiceItem(invoiceItemVMIndex)"
-                    [ngClass]="{'selectable' : invoiceItemVM.isMovable() && editMode, 'selected': invoiceItemSelected(invoiceItemVMIndex) && editMode, 'not-allowed': !invoiceItemVM.isMovable() && editMode}">
+                    [ngClass]="{'selectable' : invoiceItemVM.isMovable() && editMode, 'selected': invoiceItemVM.isMovable() && invoiceItemSelected(invoiceItemVMIndex) && editMode, 'not-allowed': !invoiceItemVM.isMovable() && editMode}">
 
                     <td class="move-left-invoice-item-cell" width="10%">
-                        <label *ngIf="invoiceItemSelected(invoiceItemVMIndex) && editMode" class="btn btn-default move-invoice-item-btn" [ngClass]="{disabled: !hasLeftEditableNeighbor()}" (click)="moveLeft(invoiceItemVMIndex)">
+                        <label *ngIf="invoiceItemVM.isMovable() && invoiceItemSelected(invoiceItemVMIndex) && editMode" class="btn btn-default move-invoice-item-btn" [ngClass]="{disabled: !hasLeftEditableNeighbor()}" (click)="moveLeft(invoiceItemVMIndex)">
                             <i class="fa fa-arrow-left" aria-hidden="true"></i>
                         </label>
                     </td>
@@ -68,7 +68,7 @@
                     <td width="15%">{{ ccySymbol }} <b>{{ invoiceItemVM.price }}</b></td>
                     <td width="15%">{{ ccySymbol }} <b>{{ invoiceItemVM.totalPrice }}</b></td>
                     <td width="10%" class="move-right-invoice-item-cell">
-                        <label *ngIf="invoiceItemSelected(invoiceItemVMIndex) && editMode" class="btn btn-default move-invoice-item-btn" [ngClass]="{disabled: !hasRightEditableNeighbor()}" (click)="moveRight(invoiceItemVMIndex)">
+                        <label *ngIf="invoiceItemVM.isMovable() && invoiceItemSelected(invoiceItemVMIndex) && editMode" class="btn btn-default move-invoice-item-btn" [ngClass]="{disabled: !hasRightEditableNeighbor()}" (click)="moveRight(invoiceItemVMIndex)">
                             <i class="fa fa-arrow-right" aria-hidden="true"></i>
                         </label>
                     </td>
