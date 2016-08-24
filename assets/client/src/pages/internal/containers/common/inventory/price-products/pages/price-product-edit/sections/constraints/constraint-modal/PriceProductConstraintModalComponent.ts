@@ -28,8 +28,6 @@ export class PriceProductConstraintModalComponent extends BaseComponent implemen
 		this.constraintMetaList = this._constraintFactory.getPriceProductConstraintMetaList();
 		this.constraintDO = this._constraintFactory.getDefaultConstraintDO();
 		this.isoWeekDayVMList = (new ISOWeekDayUtils()).getISOWeekDayVMList();
-		
-		this.constraintDO.constraint
 	}
 
 	public closeDialog() {
