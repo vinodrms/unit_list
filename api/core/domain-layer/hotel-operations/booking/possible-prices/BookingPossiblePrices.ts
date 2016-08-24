@@ -3,6 +3,7 @@ import {ThError} from '../../../../utils/th-responses/ThError';
 import {ThStatusCode} from '../../../../utils/th-responses/ThResponse';
 import {AppContext} from '../../../../utils/AppContext';
 import {SessionContext} from '../../../../utils/SessionContext';
+import {ThUtils} from '../../../../utils/ThUtils';
 import {BookingPossiblePricesDO} from './BookingPossiblePricesDO';
 import {BookingDO} from '../../../../data-layer/bookings/data-objects/BookingDO';
 import {PriceProductPriceQueryDO} from '../../../../data-layer/price-products/data-objects/price/IPriceProductPrice';
@@ -13,11 +14,13 @@ import {IndexedBookingInterval} from '../../../../data-layer/price-products/util
 import _ = require('underscore');
 
 export class BookingPossiblePrices {
+    private _thUtils: ThUtils;
     private _possiblePricesDO: BookingPossiblePricesDO;
 
     private _loadedBooking: BookingDO;
 
     constructor(private _appContext: AppContext, private _sessionContext: SessionContext) {
+        this._thUtils = new ThUtils();
     }
 
     public getPossiblePrices(possiblePricesDO: BookingPossiblePricesDO): Promise<BookingPossiblePriceItems> {
@@ -63,6 +66,7 @@ export class BookingPossiblePrices {
                 var priceItem = new BookingPriceItem();
                 priceItem.roomCategoryId = roomCategoryId;
                 priceItem.price = noOfNights * this._loadedBooking.priceProductSnapshot.price.getPricePerNightFor(priceQuery);
+                priceItem.price = this._thUtils.roundNumberToTwoDecimals(priceItem.price);
                 possibleItems.priceItemList.push(priceItem);
             }
         });

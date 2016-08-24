@@ -67,7 +67,7 @@ export class BookingUtils {
     public updateBookingPriceUsingRoomCategory(bookingDO: BookingDO) {
         var breakfastCopy = bookingDO.price.breakfast;
         var includedInvoiceItemListCopy = bookingDO.price.includedInvoiceItemList;
-        
+
         var indexedBookingInterval = new IndexedBookingInterval(bookingDO.interval);
         bookingDO.price = new BookingPriceDO();
         bookingDO.price.priceType = BookingPriceType.BookingStay;
@@ -77,6 +77,7 @@ export class BookingUtils {
             roomCategoryId: bookingDO.roomCategoryId
         });
         bookingDO.price.totalPrice = bookingDO.price.numberOfItems * bookingDO.price.pricePerItem;
+        bookingDO.price.totalPrice = this._thUtils.roundNumberToTwoDecimals(bookingDO.price.totalPrice);
 
         bookingDO.price.breakfast = breakfastCopy;
         bookingDO.price.includedInvoiceItemList = includedInvoiceItemListCopy;

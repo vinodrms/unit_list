@@ -70,7 +70,7 @@ export class InvoiceTestUtils {
         var totalPrice = 0;
         var getPricePromiseList = [];
         _.forEach(invoiceItemMetaList, (invoiceItemMeta: IInvoiceItemMeta) => {
-            getPricePromiseList.push(invoiceItemMeta.getPrice());
+            getPricePromiseList.push(invoiceItemMeta.getUnitPrice());
         });
         Promise.all(getPricePromiseList).then((pricePerItemList: number[]) => {
             for (var i = 0; i < pricePerItemList.length; ++i) {

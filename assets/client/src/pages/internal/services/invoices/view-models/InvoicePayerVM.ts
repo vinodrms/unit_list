@@ -8,7 +8,6 @@ import {ThTranslation} from '../../../../../common/utils/localization/ThTranslat
 export class InvoicePayerVM {
     invoicePayerDO: InvoicePayerDO;
     customerDO: CustomerDO;
-    newlyAdded: boolean;
 
     constructor(private _thTranslation: ThTranslation) {
     }
@@ -23,13 +22,9 @@ export class InvoicePayerVM {
         this.invoicePayerDO.customerId = customerDO.id;
         this.invoicePayerDO.priceToPay = 0;
     }
-    public get isNewlyAdded(): boolean {
-        return this.newlyAdded;
-    }
 
     public buildPrototype(): InvoicePayerVM {
         var invoicePayerVMCopy = new InvoicePayerVM(this._thTranslation);
-        invoicePayerVMCopy.newlyAdded = this.newlyAdded;
 
         var customerDOCopy = new CustomerDO();
         customerDOCopy.buildFromObject(this.customerDO);

@@ -1,6 +1,5 @@
 import {BaseDO} from '../../../../../common/base/BaseDO';
 import {ThUtils} from '../../../../../common/utils/ThUtils';
-import {IPriceableEntity} from './price/IPriceableEntity';
 import {InvoiceItemDO, InvoiceItemType} from './items/InvoiceItemDO';
 import {InvoicePayerDO} from './payers/InvoicePayerDO';
 
@@ -8,7 +7,7 @@ export enum InvoicePaymentStatus {
     Unpaid, Paid
 }
 
-export class InvoiceDO extends BaseDO implements IPriceableEntity {
+export class InvoiceDO extends BaseDO {
 
     bookingId: string;
     invoiceReference: string;
@@ -70,7 +69,8 @@ export class InvoiceDO extends BaseDO implements IPriceableEntity {
     }
 
     public getPrice(): number {
-        return _.reduce(this.itemList, function(memo: number, item: InvoiceItemDO){ return memo + item.meta.getNumberOfItems() * item.meta.getPrice(); }, 0);
+        var thUtils = new ThUtils();
+        return _.reduce(this.itemList, function(memo: number, item: InvoiceItemDO){ return memo + thUtils.roundNumberToTwoDecimals(item.meta.getNumberOfItems() * item.meta.getUnitPrice()); }, 0);
     }
     public getAmountPaid(): number {
         return _.reduce(this.payerList, (amountPaid: number, payerDO: InvoicePayerDO) => { 

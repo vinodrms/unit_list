@@ -94,4 +94,11 @@ export class TestUtils {
             done(error);
         });
     }
+
+    public get thUtils(): ThUtils {
+        return this._thUtils;
+    }
+    public set thUtils(thUtils: ThUtils) {
+        this._thUtils = thUtils;
+    }
 }

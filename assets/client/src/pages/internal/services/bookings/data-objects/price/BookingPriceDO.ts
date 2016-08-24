@@ -15,7 +15,7 @@ export class BookingPriceDO extends BaseDO implements IInvoiceItemMeta {
     pricePerItem: number;
     numberOfItems: number;
     totalPrice: number;
-    
+
     breakfast: InvoiceItemDO;
     includedInvoiceItemList: InvoiceItemDO[];
 
@@ -36,8 +36,8 @@ export class BookingPriceDO extends BaseDO implements IInvoiceItemMeta {
         });
     }
 
-    public getPrice(): number {
-        return this.getRoomPrice();
+    public getUnitPrice(): number {
+        return this.pricePerItem;
     }
     public getNumberOfItems(): number {
         return this.numberOfItems;
@@ -69,20 +69,9 @@ export class BookingPriceDO extends BaseDO implements IInvoiceItemMeta {
         return !thUtils.isUndefinedOrNull(this.breakfast) && !thUtils.isUndefinedOrNull(this.breakfast.id);
     }
 
-    public getRoomPrice(): number {
-        var roomPrice = this.totalPrice;
-        if (this.isPenalty()) {
-            return roomPrice;
-        }
-        _.forEach(this.includedInvoiceItemList, (invoiceItem: InvoiceItemDO) => {
-            roomPrice = roomPrice - invoiceItem.meta.getPrice();
-        });
-        return roomPrice;
-    }
-
     public isMovable(): boolean {
         var thUtils = new ThUtils();
-        if(thUtils.isUndefinedOrNull(this.movable)) {
+        if (thUtils.isUndefinedOrNull(this.movable)) {
             return true;
         }
         return this.movable;
