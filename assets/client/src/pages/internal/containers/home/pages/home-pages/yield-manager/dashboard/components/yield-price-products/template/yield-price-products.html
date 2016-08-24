@@ -1,4 +1,4 @@
-<yield-actions-panel (onApplyAction)="applyAction($event)"></yield-actions-panel>
+<yield-actions-panel [isYielding]="isYielding" (onApplyAction)="applyAction($event)"></yield-actions-panel>
 <div class="price-products-table p-12" *ngIf="priceProductResults">
 	<div class="price-products-row flex-row">
 		<div class="price-products-col flex-jc-start wide p-l-12">

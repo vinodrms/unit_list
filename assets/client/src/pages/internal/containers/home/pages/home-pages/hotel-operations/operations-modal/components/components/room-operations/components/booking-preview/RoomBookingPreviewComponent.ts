@@ -151,6 +151,7 @@ export class RoomBookingPreviewComponent implements OnInit {
             groupBookingId: this.bookingDO.groupBookingId
         }
         this._hotelOperationsRoomService.checkOut(chechOutParams).subscribe((updatedBooking: BookingDO) => {
+            this._appContext.analytics.logEvent("room", "check-out", "Checked out a room");
             this.isCheckingOut = false;
             this.triggerOnBookingChanged(updatedBooking);
         }, (error: ThError) => {
@@ -160,26 +161,31 @@ export class RoomBookingPreviewComponent implements OnInit {
     }
 
     public addRollawayBeds() {
-        this.updateRollawayBedStatus(RollawayBedStatus.RollawayBedsInside, "Are you sure you want to add the rollaway beds in the room?");
+        this.updateRollawayBedStatus(RollawayBedStatus.RollawayBedsInside,
+            "Are you sure you want to add the rollaway beds in the room?",
+            "add-rollaway-beds", "Added rollaway beds in a room");
     }
     public removeRollawayBeds() {
-        this.updateRollawayBedStatus(RollawayBedStatus.NoRollawayBeds, "Are you sure you want to remove the rollaway beds from the room?");
+        this.updateRollawayBedStatus(RollawayBedStatus.NoRollawayBeds,
+            "Are you sure you want to remove the rollaway beds from the room?",
+            "remove-rollaway-beds", "Removed rollaway beds from a room");
     }
-    public updateRollawayBedStatus(rollawayBedStatus: RollawayBedStatus, alertMsg: string) {
+    public updateRollawayBedStatus(rollawayBedStatus: RollawayBedStatus, alertMsg: string, analyticsAction: string, analyticsDescription: string) {
         if (this.isUpdatingRollawayBeds) { return; }
         var title = this._appContext.thTranslation.translate("Rollaway Beds");
         var content = this._appContext.thTranslation.translate(alertMsg);
         this._appContext.modalService.confirm(title, content, { positive: this._appContext.thTranslation.translate("Yes"), negative: this._appContext.thTranslation.translate("No") },
             () => {
-                this.updateRollawayBedStatusCore(rollawayBedStatus);
+                this.updateRollawayBedStatusCore(rollawayBedStatus, analyticsAction, analyticsDescription);
             }, () => { });
     }
-    private updateRollawayBedStatusCore(rollawayBedStatus: RollawayBedStatus) {
+    private updateRollawayBedStatusCore(rollawayBedStatus: RollawayBedStatus, analyticsAction: string, analyticsDescription: string) {
         this.isUpdatingRollawayBeds = true;
         this._hotelOperationsRoomService.updateRollawayBedStatus({
             id: this.roomVM.room.id,
             rollawayBedStatus: rollawayBedStatus
         }).subscribe((updatedRoom: RoomDO) => {
+            this._appContext.analytics.logEvent("room", analyticsAction, analyticsDescription);
             this.isUpdatingRollawayBeds = false;
             this.triggerOnRoomChanged(updatedRoom);
         }, (error: ThError) => {
