@@ -25,7 +25,7 @@ export class AddOnProductDataSource implements IAddOnProductDataSource {
 		var aopList = [];
 
 		var breakfastCategory = this.getBreakfastCategory(addOnProductCategoryList);
-		aopList.push(DefaultAddOnProductBuilder.buildAddOnProductDO(this._testContext, breakfastCategory.id, "Continental Breakfast", 15.0, defaultTaxId));
+		aopList.push(DefaultAddOnProductBuilder.buildAddOnProductDO(this._testContext, breakfastCategory.id, "Best Breakfast", 15.0, defaultTaxId));
 
 		for (var addOnProductIndex = 0; addOnProductIndex < (AddOnProductDataSource.NumAddOnProducts - 1); addOnProductIndex++) {
 			var categId = this.getRandomCategoryIdFrom(addOnProductCategoryList);

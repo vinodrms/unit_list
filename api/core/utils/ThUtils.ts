@@ -4,7 +4,7 @@ import shortid = require('shortid');
 
 export class ThUtils {
 	private static ShortIdCharacters = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$@";
-	
+
 	constructor() {
 		shortid.characters(ThUtils.ShortIdCharacters);
 	}
@@ -35,4 +35,10 @@ export class ThUtils {
         var diffArray: T[] = _.difference(firstArray, secondArray);
         return diffArray.length == 0;
     }
+	public roundNumberToTwoDecimals(inputNumber: number): number {
+		if (this.isUndefinedOrNull(inputNumber) || !_.isNumber(inputNumber)) {
+			return inputNumber;
+		}
+		return Math.round(inputNumber * 100) / 100;
+	}
 }

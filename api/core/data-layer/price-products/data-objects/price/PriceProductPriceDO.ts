@@ -5,6 +5,8 @@ import {SinglePriceDO} from './single-price/SinglePriceDO';
 import {PricePerPersonDO} from './price-per-person/PricePerPersonDO';
 import {RoomCategoryStatsDO} from '../../../room-categories/data-objects/RoomCategoryStatsDO';
 
+import _ = require('underscore');
+
 export class PriceProductPriceDO extends BaseDO implements IPriceProductPrice {
 	type: PriceProductPriceType;
 	priceConfigurationState: PriceProductPriceConfigurationState;
@@ -69,5 +71,11 @@ export class PriceProductPriceDO extends BaseDO implements IPriceProductPrice {
 		var thUtils = new ThUtils();
 		var priceItem: IPriceProductPrice = this.getPriceForSingleRoomCategory(roomCategoryId);
 		return !thUtils.isUndefinedOrNull(priceItem);
+	}
+
+	public roundPricesToTwoDecimals() {
+		_.forEach(this.priceList, (price: IPriceProductPrice) => {
+			price.roundPricesToTwoDecimals();
+		});
 	}
 }

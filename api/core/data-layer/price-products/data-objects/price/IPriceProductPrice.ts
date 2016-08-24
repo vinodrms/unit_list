@@ -23,4 +23,5 @@ export interface IPriceProductPrice extends BaseDO {
 	getPricePerNightFor(query: PriceProductPriceQueryDO): number;
 	priceConfigurationIsValidFor(roomCategoryStatList: RoomCategoryStatsDO[]): boolean;
 	isConfiguredForRoomCategory(roomCategoryId: string): boolean;
+	roundPricesToTwoDecimals();
 }

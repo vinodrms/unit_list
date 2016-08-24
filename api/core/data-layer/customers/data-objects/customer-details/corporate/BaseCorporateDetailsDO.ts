@@ -2,6 +2,7 @@ import {BaseDO} from '../../../../common/base/BaseDO';
 import {AddressDO} from '../../../../common/data-objects/address/AddressDO';
 import {ICustomerDetailsDO} from '../ICustomerDetailsDO';
 import {CommissionDO} from '../../../../common/data-objects/commission/CommissionDO';
+import {ThUtils} from '../../../../../utils/ThUtils';
 
 export class BaseCorporateDetailsDO extends BaseDO implements ICustomerDetailsDO {
 	constructor() {
@@ -45,5 +46,10 @@ export class BaseCorporateDetailsDO extends BaseDO implements ICustomerDetailsDO
 	}
 	public canReceiveBookingConfirmations(): boolean {
 		return this.receiveBookingConfirmations;
+	}
+	public roundPricesToTwoDecimals() {
+		var thUtils = new ThUtils();
+		this.invoiceFee = thUtils.roundNumberToTwoDecimals(this.invoiceFee);
+		this.commission.amount = thUtils.roundNumberToTwoDecimals(this.commission.amount);
 	}
 }

@@ -2,12 +2,16 @@ import {IMetricBuilderStrategy} from './IMetricBuilderStrategy';
 import {IKeyMetricValue, KeyMetric, KeyMetricValueType} from '../KeyMetricsResult';
 import {KeyMetricType} from '../KeyMetricType';
 import {ThDateDO} from '../../../../../utils/th-dates/data-objects/ThDateDO';
+import {ThUtils} from '../../../../../utils/ThUtils';
 import {IHotelInventoryStats, HotelInventoryStatsForDate} from '../../../../hotel-inventory-snapshots/stats-reader/data-objects/IHotelInventoryStats';
 
 import _ = require('underscore');
 
 export abstract class AMetricBuilderStrategy implements IMetricBuilderStrategy {
+    private _thUtils: ThUtils;
+
     constructor(private _hotelInventoryStats: IHotelInventoryStats) {
+        this._thUtils = new ThUtils();
     }
 
     public buildKeyMetric(thDateList: ThDateDO[]): KeyMetric {
@@ -24,7 +28,7 @@ export abstract class AMetricBuilderStrategy implements IMetricBuilderStrategy {
     }
 
     protected roundValue(value: number): number {
-        return Math.round(value * 100) / 100;
+        return this._thUtils.roundNumberToTwoDecimals(value);
     }
 
     protected abstract getType(): KeyMetricType;

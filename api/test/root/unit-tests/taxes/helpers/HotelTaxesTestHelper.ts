@@ -41,7 +41,7 @@ export class HotelTaxesTestHelper {
 			type: TaxType.OtherTax,
 			name: "Church Tax",
 			valueType: TaxValueType.Fixed,
-			value: 100.827
+			value: 100.82
 		};
 	}
 

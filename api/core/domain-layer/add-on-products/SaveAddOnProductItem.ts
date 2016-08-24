@@ -85,6 +85,8 @@ export class SaveAddOnProductItem {
 		var aop = new AddOnProductDO();
 		aop.buildFromObject(this._addOnProductDO);
 		aop.hotelId = this._sessionContext.sessionDO.hotel.id;
+		aop.price = this._thUtils.roundNumberToTwoDecimals(aop.price);
+		aop.internalCost = this._thUtils.roundNumberToTwoDecimals(aop.internalCost);
 		return aop;
 	}
 }
