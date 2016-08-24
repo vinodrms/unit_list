@@ -84,7 +84,7 @@ export class InvoiceOperationsPageComponent implements OnInit {
     }
     private loadPageData() {
         this.isLoading = true;
-
+        debugger
         this._invoiceOperationsPageService.getPageData(this.invoiceOperationsPageParam).subscribe((pageData: InvoiceOperationsPageData) => {
             this._invoiceGroupControllerService.invoiceOperationsPageData = pageData;
 
@@ -120,7 +120,6 @@ export class InvoiceOperationsPageComponent implements OnInit {
                 maxNumberOfDisplayedItems: this.invoiceNavigatorWindowSize,
                 numberOfSimultaneouslySelectedItems: this.numberOfSimultaneouslyDisplayedInvoices
             };
-            this.editMode = true;
         }
     }
 
