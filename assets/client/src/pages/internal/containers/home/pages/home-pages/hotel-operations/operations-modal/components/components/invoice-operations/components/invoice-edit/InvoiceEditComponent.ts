@@ -22,6 +22,7 @@ import {CustomerDO} from '../../../../../../../../../../../services/customers/da
 import {InvoiceGroupControllerService} from '../../services/InvoiceGroupControllerService';
 import {CustomScroll} from '../../../../../../../../../../../../../common/utils/directives/CustomScroll';
 import {InvoiceGroupsService} from '../../../../../../../../../../../services/invoices/InvoiceGroupsService';
+import {HotelOperationsResultService} from '../../../../../../operations-modal/services/HotelOperationsResultService';
 
 @Component({
     selector: 'invoice-edit',
@@ -37,6 +38,7 @@ export class InvoiceEditComponent implements OnInit {
     private _selectedInvoiceItemIndex: number;
 
     constructor(private _appContext: AppContext,
+        private _hotelOperationsResultService: HotelOperationsResultService, 
         private _addOnProductsModalService: AddOnProductsModalService,
         private _numberOfAddOnProductsModalService: NumberOfAddOnProductsModalService,
         private _customerRegisterModalService: CustomerRegisterModalService,
@@ -111,6 +113,7 @@ export class InvoiceEditComponent implements OnInit {
                 this._invoiceGroupsService.saveInvoiceGroupDO(invoiceGroupDOToSave).subscribe((updatedInvoiceGroupDO: InvoiceGroupDO) => {
                     this._invoiceGroupControllerService.updateInvoiceGroupVM(updatedInvoiceGroupDO);
                     this._appContext.toaster.success(this._appContext.thTranslation.translate("The invoice was marked as paid."));
+                    this._hotelOperationsResultService.markInvoiceChanged(updatedInvoiceGroupDO);
                 }, (error: ThError) => {
                     this._appContext.toaster.error(error.message);
                 });
