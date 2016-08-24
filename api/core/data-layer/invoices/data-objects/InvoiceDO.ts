@@ -4,7 +4,6 @@ import {BaseDO} from '../../common/base/BaseDO';
 import {ThDateDO} from '../../../utils/th-dates/data-objects/ThDateDO';
 import {InvoicePayerDO} from './payers/InvoicePayerDO';
 import {InvoiceItemDO, InvoiceItemType} from './items/InvoiceItemDO';
-import {IPriceableEntity} from './price/IPriceableEntity';
 import {IInvoiceItemMeta} from './items/IInvoiceItemMeta';
 import {BookingDO} from '../../bookings/data-objects/BookingDO';
 
@@ -12,7 +11,7 @@ export enum InvoicePaymentStatus {
     Unpaid, Paid
 }
 
-export class InvoiceDO extends BaseDO implements IPriceableEntity {
+export class InvoiceDO extends BaseDO {
     bookingId: string;
     invoiceReference: string;
     payerList: InvoicePayerDO[];
@@ -44,12 +43,12 @@ export class InvoiceDO extends BaseDO implements IPriceableEntity {
 
         this.paidDate = new ThDateDO();
         this.paidDate.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "paidDate"));
-        
+
         var thUtils = new ThUtils();
-        if(thUtils.isUndefinedOrNull(this.paidDate.day) && thUtils.isUndefinedOrNull(this.paidDate.month) && 
+        if (thUtils.isUndefinedOrNull(this.paidDate.day) && thUtils.isUndefinedOrNull(this.paidDate.month) &&
             thUtils.isUndefinedOrNull(this.paidDate.year)) {
-                delete this.paidDate;
-            }
+            delete this.paidDate;
+        }
     }
 
     public getPayerCustomerIdList(): string[] {
@@ -78,26 +77,26 @@ export class InvoiceDO extends BaseDO implements IPriceableEntity {
     public linkBookingPrices(bookingList: BookingDO[]) {
         var thUtils = new ThUtils();
         _.forEach(this.itemList, (item: InvoiceItemDO) => {
-            if(item.type === InvoiceItemType.Booking) {
+            if (item.type === InvoiceItemType.Booking) {
                 var booking = _.find(bookingList, (booking: BookingDO) => {
                     return booking.bookingId === item.id;
                 });
-                if(!thUtils.isUndefinedOrNull(booking)) {
+                if (!thUtils.isUndefinedOrNull(booking)) {
                     item.meta = booking.price;
                     item.meta.setMovable(false);
                 }
                 _.forEach(booking.price.includedInvoiceItemList, (invoiceItem: InvoiceItemDO) => {
                     invoiceItem.meta.setMovable(false);
-                    this.itemList.push(invoiceItem);            
+                    this.itemList.push(invoiceItem);
                 });
             }
-        });             
+        });
     }
 
     public getPrice(): number {
-        return _.reduce(this.itemList, function(memo: number, item: InvoiceItemDO){ return memo + item.meta.getNumberOfItems() * item.meta.getPrice(); }, 0);
+        return _.reduce(this.itemList, function (memo: number, item: InvoiceItemDO) { return memo + item.meta.getNumberOfItems() * item.meta.getUnitPrice(); }, 0);
     }
-    
+
     public isPaid(): boolean {
         return this.paymentStatus === InvoicePaymentStatus.Paid;
     }

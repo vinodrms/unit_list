@@ -97,6 +97,7 @@ export class DefaultBookingBuilder implements IBookingDataSource {
             roomCategoryId: booking.roomCategoryId
         });
         booking.price.totalPrice = booking.price.numberOfItems * booking.price.pricePerItem;
+        booking.price.totalPrice = this._testUtils.thUtils.roundNumberToTwoDecimals(booking.price.totalPrice);
         booking.price.includedInvoiceItemList = [];
 
         return booking;

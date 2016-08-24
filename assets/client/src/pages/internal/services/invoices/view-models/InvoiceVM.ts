@@ -130,7 +130,7 @@ export class InvoiceVM {
         }
     }
     private validateAmountPaid() {
-        if(this.amountPaid != this.totalPrice) {
+        if (this.amountPaid != this.totalPrice) {
             this.errorMessageList.push(InvoiceVM.TOTAL_PRICE_DIFFERENT_THAN_TOTAL_PAID);
         }
     }
@@ -142,21 +142,21 @@ export class InvoiceVM {
         return amountPaid;
     }
     private validateNumberOfCompanyOrTaPayers() {
-        if(this.invoicePayerVMList.length < 2) return;
+        if (this.invoicePayerVMList.length < 2) return;
 
         var thUtils = new ThUtils();
         var companyOrTaCounter = 0;
-        for(var i = 0; i < this.invoicePayerVMList.length; ++i) {
-            if(!thUtils.isUndefinedOrNull(this.invoicePayerVMList[i].customerDO)) {
-                if(this.invoicePayerVMList[i].customerDO.isCompanyOrTravelAgency()) {
+        for (var i = 0; i < this.invoicePayerVMList.length; ++i) {
+            if (!thUtils.isUndefinedOrNull(this.invoicePayerVMList[i].customerDO)) {
+                if (this.invoicePayerVMList[i].customerDO.isCompanyOrTravelAgency()) {
                     companyOrTaCounter++;
-                    if(companyOrTaCounter > 1) {
+                    if (companyOrTaCounter > 1) {
                         this.errorMessageList.push(InvoiceVM.MORE_THAN_ONE_COMPANY_OR_TA_PAYER_ERROR);
                         return;
                     }
                 }
             }
-        }   
+        }
     }
 
     public buildPrototype(): InvoiceVM {

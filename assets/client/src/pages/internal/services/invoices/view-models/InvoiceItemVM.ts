@@ -18,10 +18,10 @@ export class InvoiceItemVM {
         return this.invoiceItemDO.meta.getNumberOfItems();
     }
     public get price(): number {
-        return this.invoiceItemDO.meta.getPrice();
+        return this.invoiceItemDO.meta.getUnitPrice();
     }
     public get totalPrice(): number {
-        return this.invoiceItemDO.meta.getPrice() * this.qty;
+        return this.invoiceItemDO.meta.getUnitPrice() * this.qty;
     }
     public isMovable():boolean {
         return this.invoiceItemDO.meta.isMovable();

@@ -1,3 +1,3 @@
 export interface IPriceableEntity {
-    getPrice(): number;
+    getUnitPrice(): number;
 }
