@@ -27,7 +27,6 @@ export class ChangeRoomStrategy extends AAssignRoomStrategy {
             return;
         }
         this.logRoomChangedOnBooking(bookingDO, "The customers were moved to room %roomName%", validationDO.roomList);
-        this.updateRollawayBedStatusOnBooking(validationDO);
         resolve(bookingDO);
     }
     public validateAlreadyCheckedInBooking(): boolean {

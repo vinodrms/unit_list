@@ -9,6 +9,7 @@ import {RoomDO} from '../../rooms/data-objects/RoomDO';
 import {RoomAttachedBookingResultDO} from './data-objects/RoomAttachedBookingResultDO';
 import {RoomAttachedBookingResultVM} from './view-models/RoomAttachedBookingResultVM';
 import {ChangeRoomMaintenanceStatusParam} from './utils/ChangeRoomMaintenanceStatusParam';
+import {ChangeRoomRollawayStatusParam} from './utils/ChangeRoomRollawayStatusParam';
 import {RoomsService} from '../../rooms/RoomsService';
 import {EagerCustomersService} from '../../customers/EagerCustomersService';
 import {CustomersDO} from '../../customers/data-objects/CustomersDO';
@@ -43,6 +44,15 @@ export class HotelOperationsRoomService {
 
     public updateMaintenanceStatus(roomMaintenanceStatusParam: ChangeRoomMaintenanceStatusParam): Observable<RoomDO> {
         return this._appContext.thHttp.post(ThServerApi.HotelOperationsRoomChangeMaintenanceStatus, { room: roomMaintenanceStatusParam }).map((roomObject: Object) => {
+            this._roomsService.refresh();
+            var roomDO = new RoomDO();
+            roomDO.buildFromObject(roomObject["room"]);
+            return roomDO;
+        });
+    }
+
+    public updateRollawayBedStatus(rollawayStatusParam: ChangeRoomRollawayStatusParam): Observable<RoomDO> {
+        return this._appContext.thHttp.post(ThServerApi.HotelOperationsRoomChangeRollawayBedStatus, { room: rollawayStatusParam }).map((roomObject: Object) => {
             this._roomsService.refresh();
             var roomDO = new RoomDO();
             roomDO.buildFromObject(roomObject["room"]);

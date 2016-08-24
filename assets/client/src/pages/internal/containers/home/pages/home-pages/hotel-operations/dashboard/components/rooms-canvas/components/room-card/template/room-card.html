@@ -15,6 +15,9 @@
 				<div *ngIf="needsRollawayBeds" class="clickable f-18 orange-color info-icon" (click)="openRoomModal()" title="{{'You need some rollaway beds to fit all the people from this booking' | translate}}">
 					<span class="unitpal-font">A</span>
 				</div>
+				<div *ngIf="hasRollawayBedsInside" class="clickable f-18 green-color info-icon" (click)="openRoomModal()" title="{{'This room has rollaway beds inside' | translate}}">
+					<span class="unitpal-font">A</span>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -47,6 +50,9 @@
 				<div *ngIf="maintenance" class="clickable f-18" [ngClass]="maintenance.cssClass" (click)="maintenance.clickHandler()" title="{{maintenance.title}}">
 					<span class="unitpal-font">{{maintenance.icon}}</span>
 				</div>
+				<div *ngIf="hasRollawayBedsInside" class="clickable f-18 green-color info-icon" (click)="openRoomModal()" title="{{'This room has rollaway beds inside' | translate}}">
+					<span class="unitpal-font">A</span>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -74,6 +80,12 @@
 				<div *ngIf="maintenance" class="clickable f-18" [ngClass]="maintenance.cssClass" (click)="maintenance.clickHandler()" title="{{maintenance.title}}">
 					<span class="unitpal-font">{{maintenance.icon}}</span>
 				</div>
+				<div *ngIf="needsRollawayBeds" class="clickable f-18 orange-color info-icon" (click)="openRoomModal()" title="{{'You need some rollaway beds to fit all the people from this booking' | translate}}">
+					<span class="unitpal-font">A</span>
+				</div>
+				<div *ngIf="hasRollawayBedsInside" class="clickable f-18 green-color info-icon" (click)="openRoomModal()" title="{{'This room has rollaway beds inside' | translate}}">
+					<span class="unitpal-font">A</span>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -100,6 +112,9 @@
 				<div *ngIf="maintenance" class="clickable f-18" [ngClass]="maintenance.cssClass" (click)="maintenance.clickHandler()" title="{{maintenance.title}}">
 					<span class="unitpal-font">{{maintenance.icon}}</span>
 				</div>
+				<div *ngIf="hasRollawayBedsInside" class="clickable f-18 green-color info-icon" (click)="openRoomModal()" title="{{'This room has rollaway beds inside' | translate}}">
+					<span class="unitpal-font">A</span>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -124,6 +139,9 @@
 			<div class="room-stats flex-row flex-center-v">
 				<div *ngIf="maintenance" class="clickable f-18" [ngClass]="maintenance.cssClass" (click)="maintenance.clickHandler()" title="{{maintenance.title}}">
 					<span class="unitpal-font">{{maintenance.icon}}</span>
+				</div>
+				<div *ngIf="hasRollawayBedsInside" class="clickable f-18 green-color info-icon" (click)="openRoomModal()" title="{{'This room has rollaway beds inside' | translate}}">
+					<span class="unitpal-font">A</span>
 				</div>
 			</div>
 		</div>

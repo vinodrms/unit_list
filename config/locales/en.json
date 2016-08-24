@@ -39,6 +39,10 @@
 	"The room was marked as Dirty (Checked Out)": "The room was marked as Dirty (Checked Out)",
 	"The room was marked as Dirty (Occupied)": "The room was marked as Dirty (Occupied)",
 
+	// room rollaway history
+	"Some rollaway beds were removed from the room": "Some rollaway beds were removed from the room",
+	"Some rollaway beds were added in the room": "Some rollaway beds were added in the room",
+
 	// ThResponse
 
 	"Ok" : "Ok",

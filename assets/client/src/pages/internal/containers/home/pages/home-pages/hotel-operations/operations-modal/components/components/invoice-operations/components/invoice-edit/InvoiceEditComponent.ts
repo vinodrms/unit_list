@@ -91,7 +91,7 @@ export class InvoiceEditComponent implements OnInit {
         if (!this.invoiceVM.invoiceDO.allAmountWasPaid()) {
             var title = this._appContext.thTranslation.translate("Info");
             var content = this._appContext.thTranslation.translate("You cannot mark this invoice as paid. The total amount paid is lower than the total price.");
-            var positiveLabel = this._appContext.thTranslation.translate("Ok");
+            var positiveLabel = this._appContext.thTranslation.translate("OK");
 
             this._appContext.modalService. confirm(title, content, { positive: positiveLabel }, () => {
                 

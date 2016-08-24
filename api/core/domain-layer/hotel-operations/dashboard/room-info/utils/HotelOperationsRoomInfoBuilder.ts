@@ -50,8 +50,7 @@ export class HotelOperationsRoomInfoBuilder {
             bookingId: booking.bookingId,
             groupBookingId: booking.groupBookingId,
             bookingInterval: booking.interval,
-            bookingCapacity: booking.configCapacity,
-            needsRollawayBeds: booking.needsRollawayBeds
+            bookingCapacity: booking.configCapacity
         }
     }
 

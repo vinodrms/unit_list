@@ -1,7 +1,7 @@
 import {ThError} from '../../../../utils/th-responses/ThError';
 import {AppContext} from '../../../../utils/AppContext';
 import {SessionContext} from '../../../../utils/SessionContext';
-import {RoomDO, RoomMaintenanceStatus} from '../../../../data-layer/rooms/data-objects/RoomDO';
+import {RoomDO, RoomMaintenanceStatus, RollawayBedStatus} from '../../../../data-layer/rooms/data-objects/RoomDO';
 import {IRoomItemActionStrategy} from '../IRoomItemActionStrategy';
 import {RoomMetaRepoDO} from '../../../../data-layer/rooms/repositories/IRoomRepository';
 import {DocumentHistoryDO} from '../../../../data-layer/common/data-objects/document-history/DocumentHistoryDO';
@@ -29,5 +29,6 @@ export class RoomItemAddStrategy implements IRoomItemActionStrategy {
 		this._roomDO.maintenanceStatus = RoomMaintenanceStatus.Clean;
 		this._roomDO.maintenanceMessage = "";
 		this._roomDO.maintenanceHistory = new DocumentHistoryDO();
+		this._roomDO.rollawayBedStatus = RollawayBedStatus.NoRollawayBeds;
 	}
 }

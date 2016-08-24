@@ -7,6 +7,7 @@ import {AssignRoomDO} from '../core/domain-layer/hotel-operations/room/assign/As
 import {BookingDO} from '../core/data-layer/bookings/data-objects/BookingDO';
 import {CheckOutRoom} from '../core/domain-layer/hotel-operations/room/check-out/CheckOutRoom';
 import {ChangeRoomMaintenanceStatus} from '../core/domain-layer/hotel-operations/room/change-maintenance-status/ChangeRoomMaintenanceStatus';
+import {ChangeRollawayBedStatus} from '../core/domain-layer/hotel-operations/room/change-rollaway-bed-status/ChangeRollawayBedStatus';
 import {RoomDO} from '../core/data-layer/rooms/data-objects/RoomDO';
 import {RoomAttachedBooking} from '../core/domain-layer/hotel-operations/room/attached-booking/RoomAttachedBooking';
 import {RoomAttachedBookingDO} from '../core/domain-layer/hotel-operations/room/attached-booking/RoomAttachedBookingDO';
@@ -79,6 +80,19 @@ class HotelRoomOperationsController extends BaseController {
         });
     }
 
+    public changeRollawayBedStatus(req: Express.Request, res: Express.Response) {
+        var appContext: AppContext = req.appContext;
+        var sessionContext: SessionContext = req.sessionContext;
+
+        var changeRollawayBedStatus = new ChangeRollawayBedStatus(appContext, sessionContext);
+        changeRollawayBedStatus.changeStatus(req.body.room).then((updatedRoom: RoomDO) => {
+            updatedRoom.maintenanceHistory.translateActions(this.getThTranslation(sessionContext));
+            this.returnSuccesfulResponse(req, res, { room: updatedRoom });
+        }).catch((error: any) => {
+            this.returnErrorResponse(req, res, error, ThStatusCode.HotelRoomOperationsControllerErrorChangingRollawayStatus);
+        });
+    }
+
     public getAttachedBooking(req: Express.Request, res: Express.Response) {
         if (!this.precheckGETParameters(req, res, ['roomId'])) { return };
 
@@ -105,5 +119,6 @@ module.exports = {
     changeRoom: hotelRoomOperationsController.changeRoom.bind(hotelRoomOperationsController),
     checkOut: hotelRoomOperationsController.checkOut.bind(hotelRoomOperationsController),
     changeMaintenanceStatus: hotelRoomOperationsController.changeMaintenanceStatus.bind(hotelRoomOperationsController),
+    changeRollawayBedStatus: hotelRoomOperationsController.changeRollawayBedStatus.bind(hotelRoomOperationsController),
     getAttachedBooking: hotelRoomOperationsController.getAttachedBooking.bind(hotelRoomOperationsController),
 }

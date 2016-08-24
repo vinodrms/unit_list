@@ -5,8 +5,11 @@ import {AppContext, ThError} from '../../../../../../../../../../../../../common
 import {ConfigCapacityComponent} from '../../../../../../../../../../../../../common/utils/components/ConfigCapacityComponent';
 import {BookingDO} from '../../../../../../../../../../../services/bookings/data-objects/BookingDO';
 import {CustomerDO} from '../../../../../../../../../../../services/customers/data-objects/CustomerDO';
+import {BedStorageType} from '../../../../../../../../../../../services/beds/data-objects/BedDO';
+import {BedVM} from '../../../../../../../../../../../services/beds/view-models/BedVM';
+import {RoomDO, RollawayBedStatus} from '../../../../../../../../../../../services/rooms/data-objects/RoomDO';
+import {RoomVM} from '../../../../../../../../../../../services/rooms/view-models/RoomVM';
 import {HotelOperationsRoomService} from '../../../../../../../../../../../services/hotel-operations/room/HotelOperationsRoomService';
-import {HotelOperationsBookingService} from '../../../../../../../../../../../services/hotel-operations/booking/HotelOperationsBookingService';
 import {CheckOutRoomParam} from '../../../../../../../../../../../services/hotel-operations/room/utils/CheckOutRoomParam';
 import {HotelOperationsPageControllerService} from '../../../../services/HotelOperationsPageControllerService';
 import {RoomOperationsPageData} from '../../services/utils/RoomOperationsPageData';
@@ -23,10 +26,18 @@ export class RoomBookingPreviewComponent implements OnInit {
         this.onBookingChanged.next(updatedBooking);
     }
 
+    @Output() onRoomChanged = new EventEmitter<RoomDO>();
+    public triggerOnRoomChanged(updatedRoom: RoomDO) {
+        this.onRoomChanged.next(updatedRoom);
+    }
+
     private _didInit = false;
     isLoading: boolean = false;
     isCheckingOut: boolean = false;
     isRemovingRollawayCapacityWarning: boolean = false;
+
+    private _roomHasRollawayBeds: boolean = false;
+    isUpdatingRollawayBeds: boolean = false;
 
     private _roomOperationsPageData: RoomOperationsPageData;
     public get roomOperationsPageData(): RoomOperationsPageData {
@@ -40,8 +51,7 @@ export class RoomBookingPreviewComponent implements OnInit {
 
     constructor(private _appContext: AppContext,
         private _operationsPageControllerService: HotelOperationsPageControllerService,
-        private _hotelOperationsRoomService: HotelOperationsRoomService,
-        private _hotelOperationsBookingService: HotelOperationsBookingService) { }
+        private _hotelOperationsRoomService: HotelOperationsRoomService) { }
 
     ngOnInit() {
         this._didInit = true;
@@ -51,10 +61,15 @@ export class RoomBookingPreviewComponent implements OnInit {
     private loadDependentData() {
         if (!this._didInit || this._appContext.thUtils.isUndefinedOrNull(this._roomOperationsPageData)
             || this._appContext.thUtils.isUndefinedOrNull(this._roomOperationsPageData.attachedBookingResultVM)) { return; }
+        var rollawayBedVMList: BedVM[] = _.filter(this._roomOperationsPageData.bedVMList, (bedVM: BedVM) => { return bedVM.bed.storageType === BedStorageType.Rollaway });
+        this._roomHasRollawayBeds = rollawayBedVMList.length > 0;
     }
 
     public get roomAttachedBookingResultVM(): RoomAttachedBookingResultVM {
         return this._roomOperationsPageData.attachedBookingResultVM;
+    }
+    public get roomVM(): RoomVM {
+        return this._roomOperationsPageData.roomVM;
     }
     public hasNoAttachedBooking(): boolean {
         return this.roomAttachedBookingResultVM.roomAttachedBookingResultDO.hasNoAttachedBooking();
@@ -84,8 +99,28 @@ export class RoomBookingPreviewComponent implements OnInit {
     public get hasNotes(): boolean {
         return _.isString(this.bookingDO.notes) && this.bookingDO.notes.length > 0;
     }
-    public get needsRollawayBeds(): boolean {
-        return _.isBoolean(this.bookingDO.needsRollawayBeds) && this.bookingDO.needsRollawayBeds;
+
+    public get canAddRollawayBeds(): boolean {
+        return this.roomVM.room.rollawayBedStatus === RollawayBedStatus.NoRollawayBeds
+            && this._roomHasRollawayBeds;
+    }
+    public get canRemoveRollawayBeds(): boolean {
+        return this.roomVM.room.rollawayBedStatus === RollawayBedStatus.RollawayBedsInside;
+    }
+    public get requiresAddingRollawayBeds(): boolean {
+        return !this.hasNoAttachedBooking() &&
+            !this._appContext.thUtils.isUndefinedOrNull(this.bookingDO) &&
+            !this.roomVM.categoryStats.capacity.canFitInStationaryCapacity(this.bookingDO.configCapacity) &&
+            this.roomVM.room.rollawayBedStatus === RollawayBedStatus.NoRollawayBeds;
+    }
+    public get rollawayBedStatusString(): string {
+        if (this.canRemoveRollawayBeds) {
+            return "The rollaway beds are inside the room";
+        }
+        if (this.canAddRollawayBeds) {
+            return "The rollaway beds are not in the room";
+        }
+        return "The room has no rollaway beds";
     }
 
     public get startDateLongString(): string {
@@ -124,22 +159,31 @@ export class RoomBookingPreviewComponent implements OnInit {
         });
     }
 
-    public markRollawayBeds() {
-        if (this.isRemovingRollawayCapacityWarning) { return; }
+    public addRollawayBeds() {
+        this.updateRollawayBedStatus(RollawayBedStatus.RollawayBedsInside, "Are you sure you want to add the rollaway beds in the room?");
+    }
+    public removeRollawayBeds() {
+        this.updateRollawayBedStatus(RollawayBedStatus.NoRollawayBeds, "Are you sure you want to remove the rollaway beds from the room?");
+    }
+    public updateRollawayBedStatus(rollawayBedStatus: RollawayBedStatus, alertMsg: string) {
+        if (this.isUpdatingRollawayBeds) { return; }
         var title = this._appContext.thTranslation.translate("Rollaway Beds");
-        var content = this._appContext.thTranslation.translate("Are you sure you've added the necessary rollaway beds to fit the booking's capacity?");
+        var content = this._appContext.thTranslation.translate(alertMsg);
         this._appContext.modalService.confirm(title, content, { positive: this._appContext.thTranslation.translate("Yes"), negative: this._appContext.thTranslation.translate("No") },
             () => {
-                this.markRollawayBedsCore();
+                this.updateRollawayBedStatusCore(rollawayBedStatus);
             }, () => { });
     }
-    private markRollawayBedsCore() {
-        this.isRemovingRollawayCapacityWarning = true;
-        this._hotelOperationsBookingService.removeRollawayCapacityWarning(this.bookingDO).subscribe((updatedBooking: BookingDO) => {
-            this.isRemovingRollawayCapacityWarning = false;
-            this.triggerOnBookingChanged(updatedBooking);
+    private updateRollawayBedStatusCore(rollawayBedStatus: RollawayBedStatus) {
+        this.isUpdatingRollawayBeds = true;
+        this._hotelOperationsRoomService.updateRollawayBedStatus({
+            id: this.roomVM.room.id,
+            rollawayBedStatus: rollawayBedStatus
+        }).subscribe((updatedRoom: RoomDO) => {
+            this.isUpdatingRollawayBeds = false;
+            this.triggerOnRoomChanged(updatedRoom);
         }, (error: ThError) => {
-            this.isRemovingRollawayCapacityWarning = false;
+            this.isUpdatingRollawayBeds = false;
             this._appContext.toaster.error(error.message);
         });
     }

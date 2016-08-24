@@ -19,10 +19,9 @@ export class RoomItemInfoDO extends BaseDO {
     groupBookingId: string;
     bookingInterval: ThDateIntervalDO;
     bookingCapacity: ConfigCapacityDO;
-    needsRollawayBeds: boolean;
 
     protected getPrimitivePropertyKeys(): string[] {
-        return ["roomId", "roomStatus", "customerId", "customerName", "bookingId", "groupBookingId", "needsRollawayBeds"];
+        return ["roomId", "roomStatus", "customerId", "customerName", "bookingId", "groupBookingId"];
     }
     public buildFromObject(object: Object) {
         super.buildFromObject(object);

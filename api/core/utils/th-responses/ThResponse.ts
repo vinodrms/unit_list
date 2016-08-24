@@ -419,7 +419,9 @@ export enum ThStatusCode {
     HotelBookingOperationsControllerErrorGettingPossiblePrices,
     MarkOccupiedRoomsAsDirtyCronJobExecutorError,
     ChangeRoomMaintenanceStatusError,
+    ChangeRollawayBedStatusError,
     HotelRoomOperationsControllerErrorChangingMaintenanceStatus,
+    HotelRoomOperationsControllerErrorChangingRollawayStatus,
     RoomAttachedBookingError,
     HotelRoomOperationsControllerErrorGettingAttachedBooking,
     BookingWithDependenciesLoaderError,
@@ -455,8 +457,6 @@ export enum ThStatusCode {
     HotelBookingOperationsControllerErrorReactivating,
     EmailConfirmationError,
     HotelCommonOperationsControllerEmailError,
-    BookingRemoveRollawayCapacityWarningError,
-    HotelBookingOperationsControllerErrorRemovingRollawayCapacity,
     PriceProductReaderInvalidInterval,
     PriceProductReaderError,
     YieldManagerControllerErrorGettingYieldItems,
@@ -883,7 +883,9 @@ ThMessage[ThStatusCode.BookingPossiblePricesError] = "Error getting all the poss
 ThMessage[ThStatusCode.HotelBookingOperationsControllerErrorGettingPossiblePrices] = "Error getting all the possible prices for the booking.";
 ThMessage[ThStatusCode.MarkOccupiedRoomsAsDirtyCronJobExecutorError] = "Error marking rooms as dirty.";
 ThMessage[ThStatusCode.ChangeRoomMaintenanceStatusError] = "Error changing the maintenance status of the room.";
+ThMessage[ThStatusCode.ChangeRollawayBedStatusError] = "Error changing the rollaway bed status of the room.";
 ThMessage[ThStatusCode.HotelRoomOperationsControllerErrorChangingMaintenanceStatus] = "Error changing the maintenance status of the room.";
+ThMessage[ThStatusCode.HotelRoomOperationsControllerErrorChangingRollawayStatus] = "Error changing the rollaway bed status of the room.";
 ThMessage[ThStatusCode.RoomAttachedBookingError] = "Error getting attached booking for the room.";
 ThMessage[ThStatusCode.HotelRoomOperationsControllerErrorGettingAttachedBooking] = "Error getting attached booking for the room.";
 ThMessage[ThStatusCode.BookingWithDependenciesLoaderError] = "Error loading booking dependencies.";
@@ -919,8 +921,6 @@ ThMessage[ThStatusCode.HotelBookingOperationsControllerErrorCancelling] = "Error
 ThMessage[ThStatusCode.HotelBookingOperationsControllerErrorReactivating] = "Error reactivating booking.";
 ThMessage[ThStatusCode.EmailConfirmationError] = "Error sending email.";
 ThMessage[ThStatusCode.HotelCommonOperationsControllerEmailError] = "Error sending email.";
-ThMessage[ThStatusCode.BookingRemoveRollawayCapacityWarningError] = "Error updating the rollaway capacity flag on the booking.";
-ThMessage[ThStatusCode.HotelBookingOperationsControllerErrorRemovingRollawayCapacity] = "Error updating the rollaway capacity flag on the booking.";
 ThMessage[ThStatusCode.PriceProductReaderInvalidInterval] = "Invalid interval.";
 ThMessage[ThStatusCode.PriceProductReaderError] = "Error getting price products.";
 ThMessage[ThStatusCode.YieldManagerControllerErrorGettingYieldItems] = "Error getting price products.";

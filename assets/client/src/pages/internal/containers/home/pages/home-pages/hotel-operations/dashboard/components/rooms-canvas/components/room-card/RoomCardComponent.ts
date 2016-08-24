@@ -4,7 +4,7 @@ import {RoomDropHandlerFactory} from './drop-handlers/RoomDropHandlerFactory';
 import {ModalDialogRef} from '../../../../../../../../../../../../common/utils/modals/utils/ModalDialogRef';
 import {RoomItemInfoVM} from '../../../../../../../../../../services/hotel-operations/dashboard/rooms/view-models/RoomItemInfoVM';
 
-import {RoomMaintenanceStatus} from '../../../../../../../../../../services/rooms/data-objects/RoomDO';
+import {RoomMaintenanceStatus, RollawayBedStatus} from '../../../../../../../../../../services/rooms/data-objects/RoomDO';
 import {ArrivalItemInfoVM} from '../../../../../../../../../../services/hotel-operations/dashboard/arrivals/view-models/ArrivalItemInfoVM';
 
 import {HotelOperationsResult} from '../../../../../operations-modal/services/utils/HotelOperationsResult';
@@ -110,8 +110,15 @@ export class RoomCardComponent {
 	ngOnInit() {
 		this.buildMaintenanceObject(this.roomVM.maintenanceStatus);
 	}
+
 	public get needsRollawayBeds(): boolean {
-		return this.roomVM.roomItemDO.needsRollawayBeds;
+		return (this.roomVM.isOccupied() || this.roomVM.isReserved()) &&
+			!this._appContext.thUtils.isUndefinedOrNull(this.roomVM.roomItemDO.bookingCapacity) &&
+			this.roomVM.roomVM.room.rollawayBedStatus === RollawayBedStatus.NoRollawayBeds &&
+			!this.roomVM.canFitInStationaryCapacity(this.roomVM.roomItemDO.bookingCapacity);
+	}
+	public get hasRollawayBedsInside(): boolean {
+		return this.roomVM.roomVM.room.rollawayBedStatus === RollawayBedStatus.RollawayBedsInside;
 	}
 
 	ngAfterViewInit() {
