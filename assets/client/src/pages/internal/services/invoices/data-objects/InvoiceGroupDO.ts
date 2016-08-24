@@ -69,6 +69,8 @@ export class InvoiceGroupDO extends BaseDO {
         return this.getAmount(customerId, InvoicePaymentStatus.Paid);
     }
     private getAmount(customerId: string, type: InvoicePaymentStatus): number {
+        var thUtils = new ThUtils();
+
         return _.chain(this.invoiceList)
             .filter((invoice: InvoiceDO) => {
                 return invoice.paymentStatus === type;
@@ -79,7 +81,7 @@ export class InvoiceGroupDO extends BaseDO {
             }).map((invoicePayer: InvoicePayerDO) => {
                 return invoicePayer.priceToPay;
             }).reduce((totalPriceToPay, individualPrice) => {
-                return totalPriceToPay + individualPrice;
+                return thUtils.roundNumberToTwoDecimals(totalPriceToPay + individualPrice);
             }, 0).value();
     }
 }

@@ -23,6 +23,7 @@ export class InvoiceGroupPayerStatsDO {
         var invoiceGroupPayerStats = new InvoiceGroupPayerStatsDO();
         invoiceGroupPayerStats.invoiceGroupId = invoiceGroupDO.id;
         invoiceGroupPayerStats.groupBookingId = invoiceGroupDO.groupBookingId;
+        debugger
         invoiceGroupPayerStats.amountPaid = invoiceGroupDO.getAmountPaid(customerId);
         invoiceGroupPayerStats.totalAmountToPay = invoiceGroupDO.getAmountPaid(customerId)  + invoiceGroupDO.getAmountUnpaid(customerId);
         return invoiceGroupPayerStats;

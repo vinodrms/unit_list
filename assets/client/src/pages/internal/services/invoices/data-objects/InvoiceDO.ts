@@ -69,7 +69,8 @@ export class InvoiceDO extends BaseDO {
     }
 
     public getPrice(): number {
-        return _.reduce(this.itemList, function(memo: number, item: InvoiceItemDO){ return memo + item.meta.getNumberOfItems() * item.meta.getUnitPrice(); }, 0);
+        var thUtils = new ThUtils();
+        return _.reduce(this.itemList, function(memo: number, item: InvoiceItemDO){ return memo + thUtils.roundNumberToTwoDecimals(item.meta.getNumberOfItems() * item.meta.getUnitPrice()); }, 0);
     }
     public getAmountPaid(): number {
         return _.reduce(this.payerList, (amountPaid: number, payerDO: InvoicePayerDO) => { 
