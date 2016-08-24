@@ -45,7 +45,6 @@ export class InvoicePayerComponent implements OnInit {
         this._pmGenerator = new InvoicePaymentMethodVMGenerator(this._invoiceGroupControllerService.invoiceOperationsPageData.allowedPaymentMethods);
         if (this.customerWasSelected()) {
             this.paymentMethodVMList = this._pmGenerator.generatePaymentMethodsFor(this.invoicePayerVM.customerDO);
-
             if (this.paymentMethodWasSelected()) {
                 this.selectedPaymentMethodVM =
                     _.find(this.paymentMethodVMList, (paymentMethodVM: InvoicePaymentMethodVM) => {
@@ -109,10 +108,6 @@ export class InvoicePayerComponent implements OnInit {
             this.invoiceVM.isValid();
         });
     }
-
-    public get isTheSinglePayer(): boolean {
-        return this.invoiceVM.invoicePayerVMList.length === 1;
-    }
     public get ccySymbol(): string {
         return this.invoiceGroupVM.ccySymbol;
     }
@@ -138,7 +133,14 @@ export class InvoicePayerComponent implements OnInit {
     public get editMode(): boolean {
         return this.invoiceGroupVM.editMode;
     }
-    public get isNewlyAdded(): boolean {
-        return this.invoicePayerVM.isNewlyAdded;
+
+    private generatePaymentMethodsFor(customer: CustomerDO): InvoicePaymentMethodVM[] {
+        var paymentMethodVMList = this._pmGenerator.generatePaymentMethodsFor(customer);
+
+        if(customer.isCompanyOrTravelAgency()) {
+            
+        }
+
+        return paymentMethodVMList;
     }
 }

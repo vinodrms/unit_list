@@ -9,12 +9,13 @@ import {ThTranslation} from '../../../../../common/utils/localization/ThTranslat
 import {AddOnProductDO} from '../../add-on-products/data-objects/AddOnProductDO';
 import {AddOnProductInvoiceItemMetaDO} from '../data-objects/items/add-on-products/AddOnProductInvoiceItemMetaDO';
 import {ThUtils} from '../../../../../common/utils/ThUtils';
+import {InvoicePaymentMethodType} from '../data-objects/payers/InvoicePaymentMethodDO';
 
 export class InvoiceVM {
     private static NO_ITEMS_ADDED_ERROR = 'Add at least an item.';
     private static NO_PAYERS_ADDED_ERROR = 'Add at least a payer.';
     private static EACH_PAYER_ENTRY_SHOULD_HAVE_A_CUSTOMER_SELECTED_ERROR = 'Select a customer for each payer entry.';
-    private static MORE_THAN_ONE_COMPANY_OR_TA_PAYER_ERROR = 'You can share an invoice only between individuals.';
+    private static SHARED_AND_PAY_BY_AGREEMENT_SELECTED_ERROR = 'You cannot share an invoice if one of the payers has \'pay invoice by agreement\' as payment method.';
     private static TOTAL_PRICE_DIFFERENT_THAN_TOTAL_PAID = 'Total amount paid should equal total price.';
 
     errorMessageList: string[];
@@ -34,7 +35,6 @@ export class InvoiceVM {
         this.invoicePayerVMList = [];
         var invoicePayerVM = new InvoicePayerVM(this._thTranslation);
         invoicePayerVM.invoicePayerDO = this.invoiceDO.payerList[0];
-        invoicePayerVM.newlyAdded = true;
         this.invoicePayerVMList.push(invoicePayerVM);
         this.invoceItemVMList = [];
         this.newlyAdded = true;
@@ -69,7 +69,6 @@ export class InvoiceVM {
         var newInvoicePayerVM = new InvoicePayerVM(this._thTranslation);
         newInvoicePayerVM.buildFromCustomerDO(customerDO);
         newInvoicePayerVM.invoicePayerDO.priceToPay = this.totalPrice - this.amountPaid;
-        newInvoicePayerVM.newlyAdded = true;
         this.invoicePayerVMList.push(newInvoicePayerVM);
 
         this.isValid();
@@ -102,7 +101,7 @@ export class InvoiceVM {
         this.validateNumberOfPayers();
         this.validateNumberOfItems();
         this.validateAmountPaid();
-        this.validateNumberOfCompanyOrTaPayers();
+        this.validateNumberOfCompanyPayersWithPayByAgreementAsPM();
 
         return _.isEmpty(this.errorMessageList);
     }
@@ -130,7 +129,7 @@ export class InvoiceVM {
         }
     }
     private validateAmountPaid() {
-        if(this.amountPaid != this.totalPrice) {
+        if (this.amountPaid != this.totalPrice) {
             this.errorMessageList.push(InvoiceVM.TOTAL_PRICE_DIFFERENT_THAN_TOTAL_PAID);
         }
     }
@@ -141,22 +140,25 @@ export class InvoiceVM {
         });
         return amountPaid;
     }
-    private validateNumberOfCompanyOrTaPayers() {
-        if(this.invoicePayerVMList.length < 2) return;
+    private validateNumberOfCompanyPayersWithPayByAgreementAsPM() {
+        if (this.invoicePayerVMList.length < 2) return;
 
         var thUtils = new ThUtils();
-        var companyOrTaCounter = 0;
-        for(var i = 0; i < this.invoicePayerVMList.length; ++i) {
-            if(!thUtils.isUndefinedOrNull(this.invoicePayerVMList[i].customerDO)) {
-                if(this.invoicePayerVMList[i].customerDO.isCompanyOrTravelAgency()) {
-                    companyOrTaCounter++;
-                    if(companyOrTaCounter > 1) {
-                        this.errorMessageList.push(InvoiceVM.MORE_THAN_ONE_COMPANY_OR_TA_PAYER_ERROR);
+        var hasAtLeastOnePayerWithPayByAgreement = false;
+        for (var i = 0; i < this.invoicePayerVMList.length; ++i) {
+            var invoicePayerVM = this.invoicePayerVMList[i];
+            if (!thUtils.isUndefinedOrNull(invoicePayerVM.customerDO)) {
+                if (invoicePayerVM.customerDO.isCompanyOrTravelAgency()) {
+                    if(thUtils.isUndefinedOrNull(invoicePayerVM.invoicePayerDO.paymentMethod)) {
+                        continue;
+                    }
+                    if (invoicePayerVM.invoicePayerDO.paymentMethod.type === InvoicePaymentMethodType.PayInvoiceByAgreement) {
+                        this.errorMessageList.push(InvoiceVM.SHARED_AND_PAY_BY_AGREEMENT_SELECTED_ERROR);
                         return;
                     }
                 }
             }
-        }   
+        }
     }
 
     public buildPrototype(): InvoiceVM {

@@ -663,7 +663,7 @@ export var EnglishTranslations: Object = {
 	"Add at least an item.": "Add at least an item.",
 	"Add at least a payer.": "Add at least a payer.",
 	"Select a customer for each payer entry.": "Select a customer for each payer entry.",
-	"You can share an invoice only between individuals.": "You can share an invoice only between individuals.",
+	"You cannot share an invoice if one of the payers has \'pay invoice by agreement\' as payment method.": "You cannot share an invoice if one of the payers has \'pay invoice by agreement\' as payment method.",
 	"Total amount paid should equal total price.": "Total amount paid should equal total price.",
 	"(unsaved)": "(unsaved)",
 	"You might have unsaved changes. Are you sure you want to cancel?": "You might have unsaved changes. Are you sure you want to cancel?",

@@ -1,6 +1,7 @@
 import {InvoiceDO} from '../data-objects/InvoiceDO';
 import {InvoiceGroupDO} from '../data-objects/InvoiceGroupDO';
 import {InvoiceVM} from './InvoiceVM';
+import {InvoiceItemDO, InvoiceItemType} from '../data-objects/items/InvoiceItemDO';
 import {InvoiceItemVM} from './InvoiceItemVM';
 import {InvoicePayerVM} from './InvoicePayerVM';
 import {InvoiceOperationsPageData} from '../../../containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/invoice-operations/services/utils/InvoiceOperationsPageData';
@@ -33,13 +34,30 @@ export class InvoiceGroupVM {
     public buildInvoiceGroupDO(): InvoiceGroupDO {
         this.invoiceGroupDO.invoiceList = [];
         _.forEach(this.invoiceVMList, (invoiceVM: InvoiceVM) => {
-            if(invoiceVM.isNewlyAdded) {
+            if (invoiceVM.isNewlyAdded) {
                 delete invoiceVM.invoiceDO.invoiceReference;
             }
             invoiceVM.invoiceDO.payerList = [];
             _.forEach(invoiceVM.invoicePayerVMList, (invoicePayerVM: InvoicePayerVM) => {
                 invoiceVM.invoiceDO.payerList.push(invoicePayerVM.invoicePayerDO);
             });
+
+            var itemsToRemoveIdList = [];
+            _.forEach(invoiceVM.invoiceDO.itemList, (invoiceItemDO: InvoiceItemDO) => {
+                if (invoiceItemDO.type === InvoiceItemType.AddOnProduct && !invoiceItemDO.meta.isMovable()) {
+                    itemsToRemoveIdList.push(invoiceItemDO.id);
+                }
+            });
+            _.forEach(itemsToRemoveIdList, (id: string) => {
+                var index = _.findIndex(invoiceVM.invoiceDO.itemList, (invoiceItemDO: InvoiceItemDO) => {
+                    return invoiceItemDO.id === id;
+                });
+                if(index != -1) {
+                    invoiceVM.invoiceDO.itemList.splice(index, 1);
+                }
+            })
+
+
             this.invoiceGroupDO.invoiceList.push(invoiceVM.invoiceDO);
         });
         return this.invoiceGroupDO;
