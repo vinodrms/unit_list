@@ -31,20 +31,28 @@ export class RoomCategoryCapacityDO extends BaseDO {
         totalRoomCapacity.noChildren = this.stationaryCapacity.noChildren + this.rollawayCapacity.noChildren;
         return totalRoomCapacity;
     }
-	
-	public isEmpty(): boolean {
+
+    public isEmpty(): boolean {
         return this.totalCapacity.noAdults === 0 && this.totalCapacity.noChildren === 0 && this.totalCapacity.noBabies === 0;
     }
-	
-    public canFit(capacityToCheck: ConfigCapacityDO): boolean {
-        if (this.totalCapacity.noAdults < capacityToCheck.noAdults) return false;
 
-        var maxChildrenCapacity = this.totalCapacity.noChildren;
+    public canFit(capacityToCheck: ConfigCapacityDO): boolean {
+        return this.canFitCore(this.totalCapacity, capacityToCheck);
+    }
+
+    public canFitInStationaryCapacity(capacityToCheck: ConfigCapacityDO): boolean {
+        return this.canFitCore(this.stationaryCapacity, capacityToCheck);
+    }
+
+    private canFitCore(referenceCapacity: ConfigCapacityDO, capacityToCheck: ConfigCapacityDO): boolean {
+        if (referenceCapacity.noAdults < capacityToCheck.noAdults) return false;
+
+        var maxChildrenCapacity = referenceCapacity.noChildren;
         // the adults are replaceable with a child
-        maxChildrenCapacity += (this.totalCapacity.noAdults - capacityToCheck.noAdults);
+        maxChildrenCapacity += (referenceCapacity.noAdults - capacityToCheck.noAdults);
         if (maxChildrenCapacity < capacityToCheck.noChildren) return false;
 
-        if (this.totalCapacity.noBabies < capacityToCheck.noBabies) return false;
+        if (referenceCapacity.noBabies < capacityToCheck.noBabies) return false;
         return true;
     }
 }

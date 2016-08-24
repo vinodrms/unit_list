@@ -75,6 +75,7 @@ export enum ThServerApi {
 	HotelOperationsRoomChange,
 	HotelOperationsRoomCheckOut,
 	HotelOperationsRoomChangeMaintenanceStatus,
+	HotelOperationsRoomChangeRollawayBedStatus,
 	HotelOperationsRoomGetAttachedBooking,
 
 	HotelOperationsBookingPossiblePrices,
@@ -86,7 +87,6 @@ export enum ThServerApi {
 	HotelOperationsBookingChangeCustomers,
 	HotelOperationsBookingCancel,
 	HotelOperationsBookingReactivate,
-	HotelOperationsBookingReactivateRollawayCapacity,
 	HotelOperationsCommonSendEmail,
 	HotelOperationsBookingReserveAddOnProducts,
 
@@ -180,6 +180,7 @@ ThServerApiUrl[ThServerApi.HotelOperationsRoomReserve] = "/hotelOperations/room/
 ThServerApiUrl[ThServerApi.HotelOperationsRoomChange] = "/hotelOperations/room/change";
 ThServerApiUrl[ThServerApi.HotelOperationsRoomCheckOut] = "/hotelOperations/room/checkOut";
 ThServerApiUrl[ThServerApi.HotelOperationsRoomChangeMaintenanceStatus] = "/hotelOperations/room/maintenanceStatus";
+ThServerApiUrl[ThServerApi.HotelOperationsRoomChangeRollawayBedStatus] = "/hotelOperations/room/rollawayBedStatus";
 ThServerApiUrl[ThServerApi.HotelOperationsRoomGetAttachedBooking] = "/hotelOperations/room/attachedBooking";
 
 ThServerApiUrl[ThServerApi.HotelOperationsBookingPossiblePrices] = "/hotelOperations/booking/possiblePrices";
@@ -191,7 +192,6 @@ ThServerApiUrl[ThServerApi.HotelOperationsBookingChangeDetails] = "/hotelOperati
 ThServerApiUrl[ThServerApi.HotelOperationsBookingChangeCustomers] = "/hotelOperations/booking/changeCustomers";
 ThServerApiUrl[ThServerApi.HotelOperationsBookingCancel] = "/hotelOperations/booking/cancel";
 ThServerApiUrl[ThServerApi.HotelOperationsBookingReactivate] = "/hotelOperations/booking/reactivate";
-ThServerApiUrl[ThServerApi.HotelOperationsBookingReactivateRollawayCapacity] = "/hotelOperations/booking/removeRollawayCapacityWarning";
 ThServerApiUrl[ThServerApi.HotelOperationsBookingReserveAddOnProducts] = "/hotelOperations/booking/reserveAddOnProducts";
 
 ThServerApiUrl[ThServerApi.HotelOperationsCommonSendEmail] = "/hotelOperations/common/sendEmail";

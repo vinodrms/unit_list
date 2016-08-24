@@ -83,6 +83,10 @@ export class RoomItemInfoVM {
         return this.roomVM.categoryStats.capacity.canFit(capacityToCheck);
     }
 
+    public canFitInStationaryCapacity(capacityToCheck: ConfigCapacityDO){
+        return this.roomVM.categoryStats.capacity.canFitInStationaryCapacity(capacityToCheck);
+    }
+
     public get UI() : RoomItemInfoVM_UI_Properties {
         return this._UI;
     }

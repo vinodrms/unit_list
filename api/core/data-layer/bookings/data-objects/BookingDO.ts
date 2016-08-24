@@ -57,7 +57,6 @@ export class BookingDO extends BaseDO {
     configCapacity: ConfigCapacityDO;
     roomCategoryId: string;
     roomId: string;
-    needsRollawayBeds: boolean;
     priceProductId: string;
     priceProductSnapshot: PriceProductDO;
     reservedAddOnProductIdList: string[];
@@ -72,7 +71,7 @@ export class BookingDO extends BaseDO {
 
     protected getPrimitivePropertyKeys(): string[] {
         return ["groupBookingId", "groupBookingReference", "hotelId", "versionId", "status", "inputChannel", "noOfRooms", "bookingId", "bookingReference", "confirmationStatus",
-            "customerIdList", "displayCustomerId", "startUtcTimestamp", "endUtcTimestamp", "roomCategoryId", "roomId", "needsRollawayBeds", "priceProductId", 
+            "customerIdList", "displayCustomerId", "startUtcTimestamp", "endUtcTimestamp", "roomCategoryId", "roomId", "priceProductId", 
             "reservedAddOnProductIdList", "allotmentId", "notes", "indexedSearchTerms"];
     }
 

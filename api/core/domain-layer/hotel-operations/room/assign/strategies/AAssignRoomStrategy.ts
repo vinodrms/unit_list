@@ -41,23 +41,4 @@ export abstract class AAssignRoomStrategy implements IAssignRoomStrategy {
         });
     }
     protected abstract generateInvoiceIfNecessaryCore(resolve: { (result: BookingDO): void }, reject: { (err: ThError): void }, booking: BookingDO);
-
-    protected updateRollawayBedStatusOnBooking(validationDO: AssignRoomValidationDO): RoomCategoryStatsDO {
-        validationDO.booking.needsRollawayBeds = false;
-
-        var room = _.find(validationDO.roomList, (room: RoomDO) => { return room.id === validationDO.booking.roomId });
-        if (this._thUtils.isUndefinedOrNull(room)) {
-            return;
-        }
-
-        var roomCategoryStats = _.find(validationDO.roomCategoryStatsList, (roomCategoryStats: RoomCategoryStatsDO) => {
-            return roomCategoryStats.roomCategory.id === room.categoryId;
-        });
-        if (this._thUtils.isUndefinedOrNull(roomCategoryStats)) {
-            return;
-        }
-        if (!roomCategoryStats.capacity.canFitInStationaryBeds(validationDO.booking.configCapacity)) {
-            validationDO.booking.needsRollawayBeds = true;
-        }
-    }
 }

@@ -14,6 +14,11 @@ export enum RoomMaintenanceStatus {
     OutOfOrder
 }
 
+export enum RollawayBedStatus {
+    NoRollawayBeds,
+    RollawayBedsInside
+}
+
 export class RoomDO extends BaseDO {
     constructor() {
         super();
@@ -34,10 +39,12 @@ export class RoomDO extends BaseDO {
     maintenanceMessage: string;
     maintenanceHistory: DocumentHistoryDO;
     status: RoomStatus;
+    rollawayBedStatus: RollawayBedStatus;
 
     protected getPrimitivePropertyKeys(): string[] {
         return ["id", "versionId", "hotelId", "name", "floor", "categoryId", "amenityIdList",
-            "attributeIdList", "fileUrlList", "description", "notes", "maintenanceStatus", "maintenanceMessage", "status"];
+            "attributeIdList", "fileUrlList", "description", "notes", "maintenanceStatus",
+            "maintenanceMessage", "status", "rollawayBedStatus"];
     }
 
     public buildFromObject(object: Object) {
