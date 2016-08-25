@@ -82,4 +82,7 @@ export class YieldActionsPanelComponent implements OnInit {
 		}
 	}
 
+	public getFilterStatInfoLabel(){
+		return "Showing 4/20";
+	}
 }

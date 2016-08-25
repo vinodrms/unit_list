@@ -2827,6 +2827,10 @@ a.btn.btn-square:focus {
             width: 100%;
         }
 
+        .yield-manager-dashboard .price-products-table{
+            padding: 0px 12px 12px 12px;
+        }
+
         .yield-manager-dashboard .key-metrics-row,
         .yield-manager-dashboard .price-products-row {
             justify-content: space-between;
@@ -2894,15 +2898,19 @@ a.btn.btn-square:focus {
         }
         
         .yield-actions-control {
-            padding: 24px 12px 12px 12px;
+            padding: 12px 12px 0px 12px;
         }
 
-        .yield-actions-control .yield-action{
-            width: 180px;
+        .yield-actions-control .th-date-picker{
+            padding: 12px 12px 0px 12px;
         }
 
         .yield-actions-control th-date-picker div.input-group{
-            width: 180px !important;
+            width: 100px !important;
+        }
+
+        .yield-actions-control .yield-action{
+            width: 150px;
         }
 
         yield-timeframe-header .time-frame-group-options{
