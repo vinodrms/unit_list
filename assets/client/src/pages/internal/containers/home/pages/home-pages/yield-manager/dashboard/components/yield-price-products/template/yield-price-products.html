@@ -1,6 +1,6 @@
 <yield-actions-panel [isYielding]="isYielding" (onApplyAction)="applyAction($event)"></yield-actions-panel>
-<div class="price-products-table" *ngIf="priceProductResults">
-	<div class="price-products-row flex-row">
+<div class="price-products-table flex-table" *ngIf="priceProductResults">
+	<div class="price-products-row table-header flex-row">
 		<div class="price-products-col flex-jc-start wide p-l-14">
 			<span class="p-l-6"></span>
 			<input type="checkbox"
@@ -13,20 +13,22 @@
 			<span class="dark-gray-color oneline-text f-14" title="{{getDateLabel(date)}}">{{getDateLabel(date)}}</span>
 		</div>
 	</div>
-	<div class="price-products-row flex-row" [ngClass]="getPriceProductRowClasses(priceProduct)" *ngFor="let priceProduct of filteredPriceProduct">
-		<div class="price-products-col flex-jc-start wide">
-			<div class="filter-indicator" [ngClass]="getPriceProductFilterClasses(priceProduct)">
-				<span class="f-10" title="{{getPriceProductTextFilter(priceProduct)}}">{{getPriceProductTextFilterInitial(priceProduct)}}</span>
+	<div customScroll class="table-body">
+		<div class="price-products-row flex-row" [ngClass]="getPriceProductRowClasses(priceProduct)" *ngFor="let priceProduct of filteredPriceProduct">
+			<div class="price-products-col flex-jc-start wide">
+				<div class="filter-indicator" [ngClass]="getPriceProductFilterClasses(priceProduct)">
+					<span class="f-10" title="{{getPriceProductTextFilter(priceProduct)}}">{{getPriceProductTextFilterInitial(priceProduct)}}</span>
+				</div>
+				<span class=" p-l-6">
+					<input type="checkbox" [(ngModel)]="itemsSelectionState[priceProduct.id]">
+					<span class="dark-gray-color f-14">{{priceProduct.name}}</span>
+				</span>
 			</div>
-			<span class=" p-l-6">
-				<input type="checkbox" [(ngModel)]="itemsSelectionState[priceProduct.id]">
-				<span class="dark-gray-color f-14">{{priceProduct.name}}</span>
-			</span>
-		</div>
-		<div class="price-products-col" *ngFor="let value of priceProduct.priceProductYieldItemDO.stateList; let currentIndex = index">
-			<span class="w-100">
-				<price-product-state [model]="getYieldStateModel(priceProductResults, priceProduct, currentIndex)" (stateChanged)="handleStateChange($event)"></price-product-state>
-			</span>
+			<div class="price-products-col" *ngFor="let value of priceProduct.priceProductYieldItemDO.stateList; let currentIndex = index">
+				<span class="w-100">
+					<price-product-state [model]="getYieldStateModel(priceProductResults, priceProduct, currentIndex)" (stateChanged)="handleStateChange($event)"></price-product-state>
+				</span>
+			</div>
 		</div>
 	</div>
 </div>

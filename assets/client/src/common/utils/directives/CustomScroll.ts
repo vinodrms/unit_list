@@ -53,13 +53,4 @@ export class CustomScroll implements AfterViewInit, OnDestroy {
         });
     }
 
-    /* Note: This is needed on yield-manager,
-    *  scroll update does not seem to work, only forcing a destroy and recreating makes it work properly.
-    */
-    public forceRecreate(){
-        this.destroy();
-        setTimeout(()=>{
-            this.create();
-        });
-    }
 }

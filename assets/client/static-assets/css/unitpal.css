@@ -2713,7 +2713,8 @@ a.btn.btn-square:focus {
     .yield-manager-dashboard yield-key-metrics,
     .yield-manager-dashboard yield-price-products
     {
-        /*display: flex;*/
+        display: flex;
+        flex-direction: column;
         background-color: white;
         border: 1px solid #DBDBDB;
         height: 50%;
@@ -2822,9 +2823,19 @@ a.btn.btn-square:focus {
             background-color: #fafafa;
         }
 
-        .yield-manager-dashboard .key-metrics-table,
-        .yield-manager-dashboard .price-products-table{
+        .yield-manager-dashboard .flex-table{
+            display: flex;
+            flex-direction: column;
             width: 100%;
+        }
+
+        .yield-manager-dashboard .flex-table .table-header{
+            flex-shrink: 0;
+            flex-grow: 0;
+        }
+
+        .yield-manager-dashboard .flex-table .table-body{
+            flex-grow: 0;
         }
 
         .yield-manager-dashboard .price-products-table{

@@ -53,7 +53,6 @@ export class YieldManagerDashboardComponent extends AHomeContainerComponent impl
 	public priceProductsViewModeDecoratorClass =  ViewModeDecoratorClass.Default;
 	public currentDate: ThDateDO;
 
-	@ViewChildren(CustomScroll) scrollBars: CustomScroll[];
 	@ViewChild(YieldPriceProductsComponent) yieldPriceProductsComponent : YieldPriceProductsComponent;
 	@ViewChild(YieldKeyMetricsComponent) yieldKeyMetricsComponent : YieldPriceProductsComponent;
 	@ViewChild(YieldFilterPaneComponent) yieldFilterPaneComponent : YieldFilterPaneComponent;
@@ -104,12 +103,6 @@ export class YieldManagerDashboardComponent extends AHomeContainerComponent impl
 				this.priceProductsViewModeDecoratorClass = ViewModeDecoratorClass.Expanded;
 				break;
 			}
-		}
-		
-		if (this.scrollBars){
-			this.scrollBars.forEach((scrollBar) =>{
-				scrollBar.forceRecreate();
-			})
 		}
 	}
 

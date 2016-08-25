@@ -1,5 +1,5 @@
-<div class="key-metrics-table p-12" *ngIf="metricsResults">
-	<div class="key-metrics-row flex-row">
+<div class="key-metrics-table flex-table p-12 full-height" *ngIf="metricsResults">
+	<div class="key-metrics-row table-header flex-row">
 		<div class="key-metrics-col wide" >
 			<span class="dark-gray-color oneline-text f-14">Key Metrics</span>
 		</div>
@@ -7,25 +7,27 @@
 			<span class="dark-gray-color oneline-text f-14" title="{{getDateLabel(date)}}">{{getDateLabel(date)}}</span>
 		</div>
 	</div>
-	<div class="key-metrics-row flex-row" *ngFor="let metric of metricsResults.currentItemVM.metricVMList">
-		<div class="key-metrics-col flex-jc-start wide">
-			<span class="clickable" (click)="openKeyMetricModal(metric)">
-				<span class="unitpal-font dark-gray-color f-14">{{metric.meta.fontName}}</span> 
-				<span class="dark-gray-color f-14" title="{{ metric.meta.displayName }}">{{ metric.meta.displayName }}</span>
-			</span>
-		</div>
-		<div class="key-metrics-col" *ngFor="let value of metric.keyMetricDO.valueList">
-			<span class="w-100" *ngIf="metric.keyMetricDO.valueType == 0">
-				<span class="key-metric-value oneline-text f-14 w-100" title="{{ value.price }}">{{ value.price }}</span> 
-			</span>
-			<span class="w-100" *ngIf="metric.keyMetricDO.valueType == 1">
-				<span class="percentage-metric key-metric-value oneline-text f-14" [ngStyle]="getPercentageStyles(normalizeAndReversPercentage(value.percentage))" title="{{ value.percentage }}%">{{ value.percentage * 100}}%</span> 
-			</span>
-			<span class="w-100" *ngIf="metric.keyMetricDO.valueType == 2">
-				<span class="key-metric-value oneline-text f-14 w-100" [ngStyle]="getInventoryStyles(value)" title="{{ value.available }}/{{ value.total }}">
-					<span [ngStyle]="getInventoryAvailableStyles(value)">{{ value.available }}</span>/{{ value.total }}
+	<div customScroll class="table-body">
+		<div class="key-metrics-row flex-row" *ngFor="let metric of metricsResults.currentItemVM.metricVMList">
+			<div class="key-metrics-col flex-jc-start wide">
+				<span class="clickable" (click)="openKeyMetricModal(metric)">
+					<span class="unitpal-font dark-gray-color f-14">{{metric.meta.fontName}}</span> 
+					<span class="dark-gray-color f-14" title="{{ metric.meta.displayName }}">{{ metric.meta.displayName }}</span>
 				</span>
-			</span>
+			</div>
+			<div class="key-metrics-col" *ngFor="let value of metric.keyMetricDO.valueList">
+				<span class="w-100" *ngIf="metric.keyMetricDO.valueType == 0">
+					<span class="key-metric-value oneline-text f-14 w-100" title="{{ value.price }}">{{ value.price }}</span> 
+				</span>
+				<span class="w-100" *ngIf="metric.keyMetricDO.valueType == 1">
+					<span class="percentage-metric key-metric-value oneline-text f-14" [ngStyle]="getPercentageStyles(normalizeAndReversPercentage(value.percentage))" title="{{ value.percentage }}%">{{ value.percentage * 100}}%</span> 
+				</span>
+				<span class="w-100" *ngIf="metric.keyMetricDO.valueType == 2">
+					<span class="key-metric-value oneline-text f-14 w-100" [ngStyle]="getInventoryStyles(value)" title="{{ value.available }}/{{ value.total }}">
+						<span [ngStyle]="getInventoryAvailableStyles(value)">{{ value.available }}</span>/{{ value.total }}
+					</span>
+				</span>
+			</div>
 		</div>
 	</div>
 </div>
