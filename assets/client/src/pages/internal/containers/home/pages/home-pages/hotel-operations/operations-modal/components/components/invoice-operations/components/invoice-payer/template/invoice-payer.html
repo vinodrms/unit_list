@@ -12,7 +12,10 @@
                     <a *ngIf="invoicePayerVM.customerDO && editMode" class="clickable-item m-l-12" (click)="openCustomerSelectModal()"><i class="fa unitpal-font">]</i> {{ 'Change' | translate }}</a>
                     <a *ngIf="!invoicePayerVM.customerDO && editMode" class="clickable-item m-l-12" (click)="openCustomerSelectModal()"><i class="fa unitpal-font">]</i> {{ 'Select Customer' | translate }}</a>
                 </td>
-                <td width="30%" class="print-container"><a class="clickable-item">{{ 'Print & Send' | translate }} <i class="fa fa-print" aria-hidden="true"></i></a></td>
+                <td width="30%" class="print-container">
+                    <a class="clickable-item m-r-6" (click)="onPrint()"> <i class="fa fa-print" aria-hidden="true"></i> {{ 'Print' | translate }} </a>
+                    <a class="clickable-item" (click)="onSend()"> <i class="fa fa-envelope" aria-hidden="true"></i> {{ 'Send' | translate }}</a>
+                </td>
             </tr>
         </tbody>
     </table>
