@@ -12,7 +12,7 @@ import {CustomerInvoicesTestHelper} from './helpers/CustomerInvoicesTestHelper';
 import {InvoiceGroupDO} from '../../../../core/data-layer/invoices/data-objects/InvoiceGroupDO';
 import {GenerateBookingInvoice} from '../../../../core/domain-layer/invoices/generate-booking-invoice/GenerateBookingInvoice';
 import {InvoiceGroupSearchResultRepoDO} from '../../../../core/data-layer/invoices/repositories/IInvoiceGroupsRepository';
-import {InvoiceEmailSender} from '../../../../core/domain-layer/invoices/email/InvoiceEmailSender';
+import {InvoiceConfirmationEmailSender} from '../../../../core/domain-layer/invoices/invoice-confirmations/InvoiceConfirmationEmailSender';
 import {SaveInvoiceGroup} from '../../../../core/domain-layer/invoices/save-invoice-group/SaveInvoiceGroup';
 import {SaveInvoiceGroupDO} from '../../../../core/domain-layer/invoices/save-invoice-group/SaveInvoiceGroupDO';
 import {InvoiceTestUtils} from './utils/InvoiceTestUtils';
@@ -184,8 +184,8 @@ describe("Invoices Tests", function () {
 
     describe("Invoice Email Sender Flow", function () {
         it("Should send the invoice by email", function (done) {
-            var invoiceEmailSender = new InvoiceEmailSender(testContext.appContext, testContext.sessionContext);
-            invoiceEmailSender.sendInvoice({}, ['dragos.pricope@gmail.com']).then((result: boolean) => {
+            var invoiceEmailSender = new InvoiceConfirmationEmailSender(testContext.appContext, testContext.sessionContext);
+            invoiceEmailSender.sendInvoiceConfirmation({}, ['dragos.pricope@gmail.com']).then((result: boolean) => {
 
                 done();
             }).catch((err: any) => {

@@ -8,6 +8,8 @@ import {StringValidationRule} from '../../../../../../utils/th-validation/rules/
 
 import {IEmailConfirmationStrategy} from '../IEmailConfirmationStrategy';
 import {EmailConfirmationDO} from '../../EmailConfirmationDO';
+import {InvoiceConfirmationEmailSender} from '../../../../../invoices/invoice-confirmations/InvoiceConfirmationEmailSender';
+import {InvoiceDataAggregatorQuery} from '../../../../../invoices/aggregators/InvoiceDataAggregator';
 
 export interface InvoiceEmailConfirmationParams {
     invoiceGroupId: string;
@@ -36,10 +38,12 @@ export class InvoiceEmailConfirmationStrategy implements IEmailConfirmationStrat
     }
     public send(confirmationDO: EmailConfirmationDO): Promise<boolean> {
         var invoiceConfirmationParams: InvoiceEmailConfirmationParams = confirmationDO.parameters;
+    
+        var emailSender: InvoiceConfirmationEmailSender = new InvoiceConfirmationEmailSender(this._appContext, this._sessionContext);
+        var invoiceQuery: InvoiceDataAggregatorQuery = {
 
-        // TODO: send email and remove mock promise
-        return new Promise<boolean>((resolve: { (result: boolean): void }, reject: { (err: any): void }) => {
-            resolve(true);
-        });
+        };
+
+        return emailSender.sendInvoiceConfirmation(invoiceQuery, confirmationDO.emailList);
     }
 }
