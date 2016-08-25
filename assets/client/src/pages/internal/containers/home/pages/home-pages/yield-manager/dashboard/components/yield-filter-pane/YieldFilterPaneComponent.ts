@@ -69,13 +69,6 @@ export class YieldFilterPaneComponent implements OnInit {
 		}, (e) => {
 			console.log(e);
 		})
-
-		// this._hotelService.getHotelDetailsDO().subscribe((details: HotelDetailsDO) => {
-		// 	this.selectedDate = details.currentThTimestamp.thDateDO.buildPrototype();
-		// 	this._yieldManager.updateYieldTimeFrameParams(this.selectedDate, 21);
-		// 	}, (error:any) => {
-		// 		this._appContext.toaster.error(error.message);
-		// 	});
 	}
 
 	public get yieldManager(): IYieldManagerDashboardFilter {
@@ -85,28 +78,6 @@ export class YieldFilterPaneComponent implements OnInit {
 	public set yieldManager(v: IYieldManagerDashboardFilter) {
 		this._yieldManager = v;
 	}
-
-	// public nextDay() {
-	// 	this.selectedDate.addDays(1);
-	// 	this.refresh();
-	// }
-
-	// public previousDay() {
-	// 	this.selectedDate.addDays(-1);
-	// 	this.refresh();
-	// }
-
-	// public getDateShortString() {
-	// 	return this.selectedDate.getShortDisplayString(this._appContext.thTranslation);
-	// }
-
-	// public setDate(date: ThDateDO){
-	// 	this.selectedDate = date;
-	// }
-
-	// public refresh() {
-	// 	this._yieldManager.updateYieldTimeFrameParams(this.selectedDate, 21);
-	// }
 
 	public searchTextChangeHandler(value) {
 		this.searchText = value;

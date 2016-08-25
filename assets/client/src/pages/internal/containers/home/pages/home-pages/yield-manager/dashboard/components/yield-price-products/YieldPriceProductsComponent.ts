@@ -232,7 +232,6 @@ export class YieldPriceProductsComponent implements OnInit {
 	}
 
 	public handleStateChange(){
-		// this._priceProductsService.refresh({referenceDate: this.referenceDate, noDays: 21});
 		this._yieldManager.refresh();
 	}
 

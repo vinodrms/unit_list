@@ -78,8 +78,8 @@ export class YieldManagerDashboardComponent extends AHomeContainerComponent impl
 
 	public refresh(){
 		var date = this.yieldTimeFrameHeaderComponent.selectedDate;
-		// TODO: 21 from filterPane
-		this.updateYieldTimeFrameParams(date, 21);
+		var noDays = this.yieldTimeFrameHeaderComponent.selectedTimeFrame.noDays;
+		this.updateYieldTimeFrameParams(date, noDays);
 	}
 
 	public updateYieldTimeFrameParams(date: ThDateDO, noDays: number){

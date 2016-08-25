@@ -56,7 +56,7 @@ export class YieldTimeFrameHeaderComponent implements OnInit,AfterViewInit {
 	ngOnInit() {
 		this._hotelService.getHotelDetailsDO().subscribe((details: HotelDetailsDO) => {
 			this.selectedDate = details.currentThTimestamp.thDateDO.buildPrototype();
-			this._yieldManager.updateYieldTimeFrameParams(this.selectedDate, 21);
+			this._yieldManager.updateYieldTimeFrameParams(this.selectedDate, this.selectedTimeFrame.noDays);
 			}, (error:any) => {
 				this._appContext.toaster.error(error.message);
 			});
