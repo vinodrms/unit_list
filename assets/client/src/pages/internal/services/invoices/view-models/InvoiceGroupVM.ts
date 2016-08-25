@@ -42,21 +42,7 @@ export class InvoiceGroupVM {
                 invoiceVM.invoiceDO.payerList.push(invoicePayerVM.invoicePayerDO);
             });
 
-            var itemsToRemoveIdList = [];
-            _.forEach(invoiceVM.invoiceDO.itemList, (invoiceItemDO: InvoiceItemDO) => {
-                if (invoiceItemDO.type === InvoiceItemType.AddOnProduct && !invoiceItemDO.meta.isMovable()) {
-                    itemsToRemoveIdList.push(invoiceItemDO.id);
-                }
-            });
-            _.forEach(itemsToRemoveIdList, (id: string) => {
-                var index = _.findIndex(invoiceVM.invoiceDO.itemList, (invoiceItemDO: InvoiceItemDO) => {
-                    return invoiceItemDO.id === id;
-                });
-                if(index != -1) {
-                    invoiceVM.invoiceDO.itemList.splice(index, 1);
-                }
-            })
-
+            invoiceVM.invoiceDO.removeItemsPopulatedFromBooking();
 
             this.invoiceGroupDO.invoiceList.push(invoiceVM.invoiceDO);
         });

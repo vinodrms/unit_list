@@ -22,6 +22,7 @@ export class GenerateBookingInvoiceByUpdatingGroupStrategy implements IGenerateB
 
         invoiceGroupRepo.getInvoiceGroupById(this._invoiceGroupMeta, this._invoiceGroupDO.id)
             .then((loadedInvoiceGroup: InvoiceGroupDO) => {
+                loadedInvoiceGroup.removeItemsPopulatedFromBooking();
                 this._loadedInvoiceGroup = loadedInvoiceGroup;
                 var itemMeta = this.buildInvoiceGroupItemMetaRepoDO();
                 return invoiceGroupRepo.updateInvoiceGroup(this._invoiceGroupMeta, itemMeta, this._invoiceGroupDO);

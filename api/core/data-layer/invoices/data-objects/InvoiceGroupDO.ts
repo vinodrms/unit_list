@@ -70,4 +70,10 @@ export class InvoiceGroupDO extends BaseDO {
             invoice.linkBookingPrices(bookingList);   
         });
     }
+
+     public removeItemsPopulatedFromBooking() {
+        _.forEach(this.invoiceList, (invoiceDO: InvoiceDO) => {
+            invoiceDO.removeItemsPopulatedFromBooking();
+        });
+    }
 }

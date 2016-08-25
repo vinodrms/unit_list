@@ -70,17 +70,37 @@ export class InvoiceDO extends BaseDO {
 
     public getPrice(): number {
         var thUtils = new ThUtils();
-        return _.reduce(this.itemList, function(memo: number, item: InvoiceItemDO){ return memo + thUtils.roundNumberToTwoDecimals(item.meta.getNumberOfItems() * item.meta.getUnitPrice()); }, 0);
+        return _.reduce(this.itemList, (memo: number, item: InvoiceItemDO) => { 
+            return thUtils.roundNumberToTwoDecimals(memo + thUtils.roundNumberToTwoDecimals(item.meta.getNumberOfItems() * item.meta.getUnitPrice())); 
+        }, 0);
     }
     public getAmountPaid(): number {
-        return _.reduce(this.payerList, (amountPaid: number, payerDO: InvoicePayerDO) => { 
-            return amountPaid + payerDO.priceToPay; 
+        var thUtils = new ThUtils();
+        return _.reduce(this.payerList, (amountPaid: number, payerDO: InvoicePayerDO) => {
+            return thUtils.roundNumberToTwoDecimals(amountPaid + payerDO.priceToPay);
         }, 0);
     }
     public get isPaid(): boolean {
         return this.paymentStatus === InvoicePaymentStatus.Paid;
     }
     public allAmountWasPaid(): boolean {
-        return this.getPrice() === this.getAmountPaid();   
+        return this.getPrice() === this.getAmountPaid();
+    }
+
+    public removeItemsPopulatedFromBooking() {
+        var itemsToRemoveIdList = [];
+        _.forEach(this.itemList, (invoiceItemDO: InvoiceItemDO) => {
+            if (invoiceItemDO.type === InvoiceItemType.AddOnProduct && !invoiceItemDO.meta.isMovable()) {
+                itemsToRemoveIdList.push(invoiceItemDO.id);
+            }
+        });
+        _.forEach(itemsToRemoveIdList, (id: string) => {
+            var index = _.findIndex(this.itemList, (invoiceItemDO: InvoiceItemDO) => {
+                return invoiceItemDO.id === id;
+            });
+            if (index != -1) {
+                this.itemList.splice(index, 1);
+            }
+        });
     }
 }

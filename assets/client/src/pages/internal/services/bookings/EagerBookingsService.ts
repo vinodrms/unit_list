@@ -34,4 +34,16 @@ export class EagerBookingsService {
             return bookings;
         });
     }
+
+    public getBookingsByGroupBookingId(groupBookingId: string): Observable<BookingsDO> {
+        return this._appContext.thHttp.post(ThServerApi.Bookings, {
+            searchCriteria: {
+                groupBookingId: groupBookingId
+            }
+        }).map((bookingsObject: Object) => {
+            var bookings = new BookingsDO();
+            bookings.buildFromObject(bookingsObject);
+            return bookings;
+        });
+    }
 }

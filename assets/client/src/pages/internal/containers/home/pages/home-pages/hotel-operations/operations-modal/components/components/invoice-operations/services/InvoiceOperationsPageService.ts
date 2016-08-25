@@ -16,6 +16,7 @@ import {InvoiceDO, InvoicePaymentStatus} from '../../../../../../../../../../ser
 import {InvoicePayerDO} from '../../../../../../../../../../services/invoices/data-objects/payers/InvoicePayerDO';
 import {InvoicePaymentMethodDO} from '../../../../../../../../../../services/invoices/data-objects/payers/InvoicePaymentMethodDO';
 import {EagerBookingsService} from '../../../../../../../../../../services/bookings/EagerBookingsService';
+import {BookingsDO} from '../../../../../../../../../../services/bookings/data-objects/BookingsDO';
 
 @Injectable()
 export class InvoiceOperationsPageService {
@@ -25,7 +26,8 @@ export class InvoiceOperationsPageService {
         private _eagerInvoiceGroupsService: EagerInvoiceGroupsService,
         private _invoiceGroupsService: InvoiceGroupsService,
         private _hotelAggregatorService: HotelAggregatorService,
-        private _eagerCustomersService: EagerCustomersService) {
+        private _eagerCustomersService: EagerCustomersService,
+        private _eagerBookingService: EagerBookingsService) {
         this._pageData = new InvoiceOperationsPageData();
     }
 
@@ -49,22 +51,36 @@ export class InvoiceOperationsPageService {
                 this._pageData.invoiceGroupDO.indexedCustomerIdList.push(customerId);
             }
 
+            this._pageData.invoiceGroupDO.groupBookingId
+
             return Observable.combineLatest(
                 Observable.from([this._pageData]),
-                this._eagerCustomersService.getCustomersById(this._pageData.invoiceGroupDO.indexedCustomerIdList)
+                this._eagerCustomersService.getCustomersById(this._pageData.invoiceGroupDO.indexedCustomerIdList),
+                this.getBookingsDO(this._pageData.invoiceGroupDO.groupBookingId)
             );
 
-        }).map((result: [InvoiceOperationsPageData, CustomersDO]) => {
+        }).map((result: [InvoiceOperationsPageData, CustomersDO, BookingsDO]) => {
             var pageData = result[0];
             pageData.customersContainer = result[1];
+            pageData.bookingsContainer = result[2];
             return pageData;
         });
 
     }
+    
+    private getBookingsDO(groupBookingId?: string): Observable<BookingsDO> {
+        if(!this._appContext.thUtils.isUndefinedOrNull(groupBookingId)) {
+            return this._eagerBookingService.getBookingsByGroupBookingId(groupBookingId);
+        }
+        else {
+            var bookingsDO = new BookingsDO();
+            return Observable.from([bookingsDO]);
+        }
+    }
 
     private getInvoiceGroupDO(invoiceGroupId: string): Observable<InvoiceGroupDO> {
         if (!this._appContext.thUtils.isUndefinedOrNull(invoiceGroupId)) {
-            return this._eagerInvoiceGroupsService.getInvoiceGroup(invoiceGroupId)
+            return this._eagerInvoiceGroupsService.getInvoiceGroup(invoiceGroupId);
         }
         var invoiceGroupDO = new InvoiceGroupDO();
         return Observable.from([invoiceGroupDO]);

@@ -2,13 +2,14 @@ import {CustomersDO} from '../../../../../../../../../../../services/customers/d
 import {CurrencyDO} from '../../../../../../../../../../../services/common/data-objects/currency/CurrencyDO';
 import {HotelPaymentMethodsDO} from '../../../../../../../../../../../services/settings/data-objects/HotelPaymentMethodsDO';
 import {InvoiceGroupDO} from '../../../../../../../../../../../services/invoices/data-objects/InvoiceGroupDO';
-
+import {BookingsDO} from '../../../../../../../../../../../services/bookings/data-objects/BookingsDO';
 
 export class InvoiceOperationsPageData {
     private _invoiceGroupDO: InvoiceGroupDO;
     private _allPaymentMethods: HotelPaymentMethodsDO;
     private _allowedPaymentMethods: HotelPaymentMethodsDO;
-    private _customersContainer: CustomersDO; 
+    private _customersContainer: CustomersDO;
+    private _bookingsContainer: BookingsDO; 
     private _ccy: CurrencyDO;
 
     public get invoiceGroupDO(): InvoiceGroupDO {
@@ -34,7 +35,13 @@ export class InvoiceOperationsPageData {
     }
     public set customersContainer(customersContainer: CustomersDO) {
         this._customersContainer = customersContainer;
-    }  
+    }
+    public get bookingsContainer(): BookingsDO {
+        return this._bookingsContainer;
+    }
+    public set bookingsContainer(bookingsContainer: BookingsDO) {
+        this._bookingsContainer = bookingsContainer;
+    }   
     public get ccy(): CurrencyDO {
         return this._ccy;
     }

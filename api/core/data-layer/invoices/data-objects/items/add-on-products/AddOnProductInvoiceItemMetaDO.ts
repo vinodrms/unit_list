@@ -26,4 +26,11 @@ export class AddOnProductInvoiceItemMetaDO extends BaseDO implements IInvoiceIte
     public setMovable(movable: boolean) {
         this.movable = movable;
     }
+    public isMovable(): boolean {
+        var thUtils = new ThUtils();
+        if(thUtils.isUndefinedOrNull(this.movable)) {
+            return true;
+        }
+        return this.movable;
+    }
 }
