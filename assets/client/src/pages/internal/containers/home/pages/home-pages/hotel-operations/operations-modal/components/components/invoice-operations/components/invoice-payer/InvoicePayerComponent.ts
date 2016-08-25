@@ -7,6 +7,7 @@ import {CustomerDO} from '../../../../../../../../../../../services/customers/da
 import {ModalDialogRef} from '../../../../../../../../../../../../../common/utils/modals/utils/ModalDialogRef';
 import {InvoiceGroupControllerService} from '../../services/InvoiceGroupControllerService';
 import {InvoiceDO} from '../../../../../../../../../../../services/invoices/data-objects/InvoiceDO';
+import {BookingDO} from '../../../../../../../../../../../services/bookings/data-objects/BookingDO';
 import {InvoicePayerDO} from '../../../../../../../../../../../services/invoices/data-objects/payers/InvoicePayerDO';
 import {InvoicePayerVM} from '../../../../../../../../../../../services/invoices/view-models/InvoicePayerVM';
 import {InvoiceGroupVM} from '../../../../../../../../../../../services/invoices/view-models/InvoiceGroupVM';
@@ -15,6 +16,7 @@ import {InvoiceOperationsPageData} from '../../services/utils/InvoiceOperationsP
 import {HotelOperationsPageControllerService} from '../../../../services/HotelOperationsPageControllerService';
 import {InvoicePaymentMethodVMGenerator} from '../../../../../../../../../../../services/invoices/view-models/utils/InvoicePaymentMethodVMGenerator';
 import {InvoicePaymentMethodVM} from '../../../../../../../../../../../services/invoices/view-models/InvoicePaymentMethodVM';
+import {InvoicePaymentMethodDO, InvoicePaymentMethodType} from '../../../../../../../../../../../services/invoices/data-objects/payers/InvoicePaymentMethodDO';
 
 @Component({
     selector: 'invoice-payer',
@@ -28,7 +30,7 @@ export class InvoicePayerComponent implements OnInit {
     @Input() invoicePayerVMIndex: number;
 
     paymentMethodVMList: InvoicePaymentMethodVM[] = [];
-    selectedPaymentMethodVM: InvoicePaymentMethodVM;
+    private _selectedPaymentMethodVM: InvoicePaymentMethodVM;
 
     private _thUtils: ThUtils;
     private _pmGenerator: InvoicePaymentMethodVMGenerator;
@@ -41,10 +43,19 @@ export class InvoicePayerComponent implements OnInit {
         this._thUtils = new ThUtils();
     }
 
+    public get selectedPaymentMethodVM(): InvoicePaymentMethodVM {
+        return this._selectedPaymentMethodVM;
+    }
+
+    public set selectedPaymentMethodVM(selectedPaymentMethodVM: InvoicePaymentMethodVM) {
+        this._selectedPaymentMethodVM = selectedPaymentMethodVM;
+        this.invoiceVM.isValid();
+    }
+
     ngOnInit() {
         this._pmGenerator = new InvoicePaymentMethodVMGenerator(this._invoiceGroupControllerService.invoiceOperationsPageData.allowedPaymentMethods);
         if (this.customerWasSelected()) {
-            this.paymentMethodVMList = this._pmGenerator.generatePaymentMethodsFor(this.invoicePayerVM.customerDO);
+            this.paymentMethodVMList = this.generatePaymentMethodsFor(this.invoicePayerVM.customerDO);
             if (this.paymentMethodWasSelected()) {
                 this.selectedPaymentMethodVM =
                     _.find(this.paymentMethodVMList, (paymentMethodVM: InvoicePaymentMethodVM) => {
@@ -67,13 +78,15 @@ export class InvoicePayerComponent implements OnInit {
     }
 
     public openCustomerSelectModal() {
-        
+
         this._customerRegisterModalService.openCustomerRegisterModal(false).then((modalDialogInstance: ModalDialogRef<CustomerDO[]>) => {
             modalDialogInstance.resultObservable.subscribe((selectedCustomerList: CustomerDO[]) => {
-                this._invoiceGroupControllerService.invoiceOperationsPageData.customersContainer.appendCustomer(selectedCustomerList[0]);
-                
+                var selectedCustomer = selectedCustomerList[0];
+
+                this._invoiceGroupControllerService.invoiceOperationsPageData.customersContainer.appendCustomer(selectedCustomer);
+
                 var newInvoicePayer = new InvoicePayerDO();
-                newInvoicePayer.customerId = selectedCustomerList[0].id;
+                newInvoicePayer.customerId = selectedCustomer.id;
 
                 if (newInvoicePayer.priceToPay === 0 && this.invoiceVM.invoicePayerVMList.length === 1) {
                     newInvoicePayer.priceToPay = 0.0;
@@ -82,15 +95,15 @@ export class InvoicePayerComponent implements OnInit {
                 else {
                     newInvoicePayer.priceToPay = this.invoicePayerVM.invoicePayerDO.priceToPay;
                 }
-                
-                this.paymentMethodVMList = this._pmGenerator.generatePaymentMethodsFor(selectedCustomerList[0]);
+
+                this.paymentMethodVMList = this.generatePaymentMethodsFor(selectedCustomer);
                 this.selectedPaymentMethodVM = this.paymentMethodVMList[0];
                 newInvoicePayer.paymentMethod = this.paymentMethodVMList[0].paymentMethod;
                 this.invoicePayerVM.invoicePayerDO = newInvoicePayer;
-                this.invoicePayerVM.customerDO = selectedCustomerList[0];
+                this.invoicePayerVM.customerDO = selectedCustomer;
                 this.invoiceVM.isValid();
             });
-        }).catch((e: any) => { 
+        }).catch((e: any) => {
         });
     }
 
@@ -135,12 +148,24 @@ export class InvoicePayerComponent implements OnInit {
     }
 
     private generatePaymentMethodsFor(customer: CustomerDO): InvoicePaymentMethodVM[] {
-        var paymentMethodVMList = this._pmGenerator.generatePaymentMethodsFor(customer);
+        var invoicePaymentMethodVMList = this._pmGenerator.generateInvoicePaymentMethodsFor(customer);
 
-        if(customer.isCompanyOrTravelAgency()) {
-            
+        if (customer.isCompanyOrTravelAgency()) {
+            var bookingDO = _.find(this._invoiceGroupControllerService.invoiceOperationsPageData.bookingsContainer.bookingList, (booking: BookingDO) => {
+                return booking.bookingId === this.invoiceVM.invoiceDO.bookingId;
+            });
+
+            if (customer.hasAccessOnPriceProduct(bookingDO.priceProductSnapshot)) {
+                return invoicePaymentMethodVMList;
+            }
         }
 
-        return paymentMethodVMList;
+        var index = _.findIndex(invoicePaymentMethodVMList, (invoicePaymentMethodVM: InvoicePaymentMethodVM) => {
+            return invoicePaymentMethodVM.paymentMethod.type === InvoicePaymentMethodType.PayInvoiceByAgreement;
+        });
+        if (index != -1) {
+            invoicePaymentMethodVMList.splice(index, 1);
+        }
+        return invoicePaymentMethodVMList;
     }
 }

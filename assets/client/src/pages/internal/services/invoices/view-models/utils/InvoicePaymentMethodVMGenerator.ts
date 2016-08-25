@@ -19,6 +19,16 @@ export class InvoicePaymentMethodVMGenerator {
         });
         return paymentMethodList;
     }
+    public generateInvoicePaymentMethodsFor(customer: CustomerDO): InvoicePaymentMethodVM[] {
+        var paymentMethodList: InvoicePaymentMethodVM[] = [];
+        if (customer.customerDetails.canPayInvoiceByAgreement()) {
+            paymentMethodList.push(this.generatePayInvoiceByAgreementPaymentMethodVM());
+        }
+        _.forEach(this._allowedPaymentMethods.paymentMethodList, (paymentMethod: PaymentMethodDO) => {
+            paymentMethodList.push(this.generatePaymentMethodVMFor(paymentMethod));
+        });
+        return paymentMethodList;
+    }
     private generatePayInvoiceByAgreementPaymentMethodVM(): InvoicePaymentMethodVM {
         var pmVM = new InvoicePaymentMethodVM();
         pmVM.displayName = "Pay Invoice By Agreement";

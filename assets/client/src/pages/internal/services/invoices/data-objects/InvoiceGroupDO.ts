@@ -75,7 +75,7 @@ export class InvoiceGroupDO extends BaseDO {
             .filter((invoice: InvoiceDO) => {
                 return invoice.paymentStatus === type;
             }).map((invoice: InvoiceDO) => {
-                return invoice.payerList;
+            return invoice.payerList;
             }).flatten().filter((invoicePayer: InvoicePayerDO) => {
                 return invoicePayer.customerId === customerId;
             }).map((invoicePayer: InvoicePayerDO) => {

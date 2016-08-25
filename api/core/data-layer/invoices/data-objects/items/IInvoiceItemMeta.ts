@@ -6,4 +6,5 @@ export interface IInvoiceItemMeta extends BaseDO, IPriceableEntity {
     getNumberOfItems(): number;
     getDisplayName(thTranslation: ThTranslation): string;
     setMovable(movable: boolean);
+    isMovable(): boolean;
 }

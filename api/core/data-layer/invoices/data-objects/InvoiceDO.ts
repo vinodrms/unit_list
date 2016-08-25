@@ -94,10 +94,30 @@ export class InvoiceDO extends BaseDO {
     }
 
     public getPrice(): number {
-        return _.reduce(this.itemList, function (memo: number, item: InvoiceItemDO) { return memo + item.meta.getNumberOfItems() * item.meta.getUnitPrice(); }, 0);
+        var thUtils = new ThUtils();
+        return _.reduce(this.itemList, (memo: number, item: InvoiceItemDO) => { 
+            return thUtils.roundNumberToTwoDecimals(memo + thUtils.roundNumberToTwoDecimals(item.meta.getNumberOfItems() * item.meta.getUnitPrice()));
+        }, 0);
     }
 
     public isPaid(): boolean {
         return this.paymentStatus === InvoicePaymentStatus.Paid;
+    }
+
+    public removeItemsPopulatedFromBooking() {
+        var itemsToRemoveIdList = [];
+        _.forEach(this.itemList, (invoiceItemDO: InvoiceItemDO) => {
+            if (invoiceItemDO.type === InvoiceItemType.AddOnProduct && !invoiceItemDO.meta.isMovable()) {
+                itemsToRemoveIdList.push(invoiceItemDO.id);
+            }
+        });
+        _.forEach(itemsToRemoveIdList, (id: string) => {
+            var index = _.findIndex(this.itemList, (invoiceItemDO: InvoiceItemDO) => {
+                return invoiceItemDO.id === id;
+            });
+            if (index != -1) {
+                this.itemList.splice(index, 1);
+            }
+        });
     }
 }
