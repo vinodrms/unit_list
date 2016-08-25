@@ -17,6 +17,11 @@ export interface IActionPaneYieldParams {
 	interval: ThDateIntervalDO
 }
 
+export interface IFilterStatsInfo {
+	found: number;
+	total: number;
+}
+
 @Component({
 	selector: 'yield-actions-panel',
 	templateUrl: 'client/src/pages/internal/containers/home/pages/home-pages/yield-manager/dashboard/components/yield-price-products/components/yield-actions-panel/template/yield-actions-panel.html'
@@ -31,6 +36,8 @@ export class YieldActionsPanelComponent implements OnInit {
 	private noAction = "-1"
 	private enums;
 
+	private _filterStatsInfo : IFilterStatsInfo;
+
 	constructor(
 		private _appContext: AppContext
 	) {
@@ -44,6 +51,7 @@ export class YieldActionsPanelComponent implements OnInit {
 			PriceProductYieldAction: PriceProductYieldAction
 		}
 		this.selectedAction = this.noAction;
+		this.filterStatsInfo = null;
 	}
 
 	ngOnInit() { }
@@ -83,6 +91,17 @@ export class YieldActionsPanelComponent implements OnInit {
 	}
 
 	public getFilterStatInfoLabel(){
-		return "Showing 4/20";
+		if(this.filterStatsInfo){
+			return "Showing "+ this.filterStatsInfo.found + "/" + this.filterStatsInfo.total; 
+		}
+		else return "";
 	}
+
+	public get filterStatsInfo() : IFilterStatsInfo {
+		return this._filterStatsInfo;
+	}
+	public set filterStatsInfo(v : IFilterStatsInfo) {
+		this._filterStatsInfo = v;
+	}
+	
 }

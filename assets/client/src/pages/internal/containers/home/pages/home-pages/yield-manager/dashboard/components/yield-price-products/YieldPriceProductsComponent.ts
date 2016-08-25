@@ -1,4 +1,4 @@
-import {Component, OnInit, Input } from '@angular/core';
+import {Component, OnInit, Input, ViewChild } from '@angular/core';
 import {ThDateDO} from '../../../../../../../../services/common/data-objects/th-dates/ThDateDO';
 import {AppContext, ThError} from '../../../../../../../../../../common/utils/AppContext';
 import {CustomScroll} from '../../../../../../../../../../common/utils/directives/CustomScroll';
@@ -33,6 +33,8 @@ declare var _:any;
 	pipes: [TranslationPipe]
 })
 export class YieldPriceProductsComponent implements OnInit {
+	@ViewChild(YieldActionsPanelComponent) actionsPanelComponent: YieldActionsPanelComponent;
+
 	private _yieldManager: IYieldManagerDashboardPriceProducts;
 	public priceProductResults: PriceProductYieldResultVM;
 	public filteredPriceProduct: PriceProductYieldItemVM[];
@@ -97,6 +99,11 @@ export class YieldPriceProductsComponent implements OnInit {
 		var partialFilter = this.intersectFilteredPriceProducts(filteredByColor, filteredByText);
 		var partialFilter = this.intersectFilteredPriceProducts(partialFilter, filteredBySearch);
 		this.filteredPriceProduct = partialFilter;
+
+		this.actionsPanelComponent.filterStatsInfo = {
+			found : this.filteredPriceProduct.length,
+			total : this.priceProductResults.priceProductYieldItemVM.length
+		}
 	}
 
 	private selectByFilter(filter:IFilterVM, priceProductYieldItemVM: PriceProductYieldItemVM[]):PriceProductYieldItemVM[]{
