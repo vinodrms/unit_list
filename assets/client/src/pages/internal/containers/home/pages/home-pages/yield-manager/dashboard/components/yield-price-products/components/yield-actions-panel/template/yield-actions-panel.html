@@ -28,7 +28,7 @@
 		<div class="form-group flex-row flex-center-v">
 			<input type="checkbox" class="dark-gray-color m-r-12" [(ngModel)]="forever">
 			<span class="ellipsis-text m-r-12">Forever</span>
-			<div class="btn btn-danger f-10" (click)="applyChanges()">
+			<div class="btn btn-danger f-10 clickable" (click)="applyChanges()">
 				<i class="fa fa-refresh fa-spin" *ngIf="isYielding"></i> 
 				APPLY CHANGES
 			</div>
