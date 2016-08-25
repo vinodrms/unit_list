@@ -628,7 +628,7 @@ export var EnglishTranslations: Object = {
 	"Out of Order Rooms": "Out of Order Rooms",
 	"Showing": "Showing",
 	"Showing Only": "Showing Only",
-	"Print & Send": "Print & Send",
+	"Print": "Print",
 	"of": "of",
 	"Pay": "Pay",
 	"Create Invoice": "Create Invoice",

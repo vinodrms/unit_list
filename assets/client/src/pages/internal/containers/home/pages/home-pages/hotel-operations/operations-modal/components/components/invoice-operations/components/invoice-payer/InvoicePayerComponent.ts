@@ -17,12 +17,13 @@ import {HotelOperationsPageControllerService} from '../../../../services/HotelOp
 import {InvoicePaymentMethodVMGenerator} from '../../../../../../../../../../../services/invoices/view-models/utils/InvoicePaymentMethodVMGenerator';
 import {InvoicePaymentMethodVM} from '../../../../../../../../../../../services/invoices/view-models/InvoicePaymentMethodVM';
 import {InvoicePaymentMethodDO, InvoicePaymentMethodType} from '../../../../../../../../../../../services/invoices/data-objects/payers/InvoicePaymentMethodDO';
+import {EmailSenderModalService} from '../../../../../../email-sender/services/EmailSenderModalService';
 
 @Component({
     selector: 'invoice-payer',
     templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/invoice-operations/components/invoice-payer/template/invoice-payer.html',
     directives: [],
-    providers: [CustomerRegisterModalService],
+    providers: [CustomerRegisterModalService, EmailSenderModalService],
     pipes: [TranslationPipe]
 })
 export class InvoicePayerComponent implements OnInit {
@@ -36,6 +37,7 @@ export class InvoicePayerComponent implements OnInit {
     private _pmGenerator: InvoicePaymentMethodVMGenerator;
 
     constructor(private _appContext: AppContext,
+        private _emailSenderModalService: EmailSenderModalService,
         private _customerRegisterModalService: CustomerRegisterModalService,
         private _invoiceGroupControllerService: InvoiceGroupControllerService,
         private _operationsPageControllerService: HotelOperationsPageControllerService) {
@@ -48,8 +50,10 @@ export class InvoicePayerComponent implements OnInit {
     }
 
     public set selectedPaymentMethodVM(selectedPaymentMethodVM: InvoicePaymentMethodVM) {
+        if(!this._appContext.thUtils.isUndefinedOrNull(this._selectedPaymentMethodVM)) {
+            this.invoiceVM.isValid();
+        }
         this._selectedPaymentMethodVM = selectedPaymentMethodVM;
-        this.invoiceVM.isValid();
     }
 
     ngOnInit() {
@@ -111,6 +115,20 @@ export class InvoicePayerComponent implements OnInit {
         this._operationsPageControllerService.goToCustomer(customer.id);
     }
 
+    public onPrint() {
+
+    }
+    public onSend() {
+        this._emailSenderModalService.sendInvoiceConfirmation([this.invoicePayerVM.customerDO], 
+            this.invoiceGroupVM.invoiceGroupDO.id, 
+            this.invoiceVM.invoiceDO.invoiceReference, 
+            this.invoicePayerVM.customerDO.id).then((modalDialogRef: ModalDialogRef<boolean>) => {
+            modalDialogRef.resultObservable.subscribe((sendResult: boolean) => {
+                this._appContext.analytics.logEvent("invoice", "send-confirmation", "Sent an invoice confirmation by email");
+            }, (err: any) => { });
+        }).catch((err: any) => { });
+    }
+
     public onDelete() {
         var title = this._appContext.thTranslation.translate("Remove Payer");
         var content = this._appContext.thTranslation.translate("Are you sure you want to remove this recently added payer?");
@@ -154,8 +172,8 @@ export class InvoicePayerComponent implements OnInit {
             var bookingDO = _.find(this._invoiceGroupControllerService.invoiceOperationsPageData.bookingsContainer.bookingList, (booking: BookingDO) => {
                 return booking.bookingId === this.invoiceVM.invoiceDO.bookingId;
             });
-
-            if (customer.hasAccessOnPriceProduct(bookingDO.priceProductSnapshot)) {
+            
+            if (!this._appContext.thUtils.isUndefinedOrNull(bookingDO) && customer.hasAccessOnPriceProduct(bookingDO.priceProductSnapshot)) {
                 return invoicePaymentMethodVMList;
             }
         }
