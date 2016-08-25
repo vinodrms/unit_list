@@ -51,8 +51,6 @@ export class InvoiceOperationsPageService {
                 this._pageData.invoiceGroupDO.indexedCustomerIdList.push(customerId);
             }
 
-            this._pageData.invoiceGroupDO.groupBookingId
-
             return Observable.combineLatest(
                 Observable.from([this._pageData]),
                 this._eagerCustomersService.getCustomersById(this._pageData.invoiceGroupDO.indexedCustomerIdList),

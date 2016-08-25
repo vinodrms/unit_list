@@ -89,13 +89,16 @@ export class GenerateBookingInvoice {
                 invoice.itemList.push(invoiceItem);
             });
         }
-
         this._appContext.getRepositoryFactory().getBookingRepository().getBookingById({ hotelId: this.hotelId }, this._generateBookingInvoiceDO.groupBookingId,
             this._generateBookingInvoiceDO.bookingId).then((booking: BookingDO) => {
                 invoice.payerList = [];
                 var defaultInvoicePayer =
                     InvoicePayerDO.buildFromCustomerDOAndPaymentMethod(this._loadedDefaultBillingCustomer, this._loadedBooking.defaultBillingDetails.paymentMethod);
-                defaultInvoicePayer.priceToPay = booking.price.getUnitPrice() * booking.price.getNumberOfItems();
+                defaultInvoicePayer.priceToPay = this._thUtils.roundNumberToTwoDecimals(booking.price.getUnitPrice() * booking.price.getNumberOfItems());
+                _.forEach(booking.price.includedInvoiceItemList, (invoiceItem: InvoiceItemDO) => {
+                    defaultInvoicePayer.priceToPay = 
+                        this._thUtils.roundNumberToTwoDecimals(defaultInvoicePayer.priceToPay + invoiceItem.meta.getUnitPrice() * invoiceItem.meta.getNumberOfItems());
+                });
                 invoice.payerList.push(defaultInvoicePayer);
 
                 resolve(invoice);

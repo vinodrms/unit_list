@@ -1,10 +1,10 @@
 import {ThTranslation} from '../../../utils/localization/ThTranslation';
 import {ThUtils} from '../../../../core/utils/ThUtils';
 
-import {InvoiceVM} from './InvoiceVM';
+import {InvoiceConfirmationVM} from './InvoiceConfirmationVM';
 import {InvoiceAggregatedDataContainer} from '../aggregators/InvoiceAggregatedDataContainer';
 
-export class InvoiceVMContainer {
+export class InvoiceConfirmationVMContainer {
     private _thUtils: ThUtils;
 
     constructor(private _thTranslation: ThTranslation) {

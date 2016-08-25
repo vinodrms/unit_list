@@ -50,11 +50,15 @@ export class GenerateBookingInvoiceActionFactory {
 
     private buildInvoiceGroupDO(bookingInvoice: InvoiceDO, loadedBookingInvoiceGroup?: InvoiceGroupDO): InvoiceGroupDO {
         var newInvoiceGroup = loadedBookingInvoiceGroup;
+        
         if (this._thUtils.isUndefinedOrNull(newInvoiceGroup)) {
             newInvoiceGroup = new InvoiceGroupDO();
             newInvoiceGroup.hotelId = this._sessionContext.sessionDO.hotel.id;
             newInvoiceGroup.groupBookingId = this._groupBookingId;
             newInvoiceGroup.invoiceList = [];
+        }
+        else {
+            newInvoiceGroup.removeItemsPopulatedFromBooking();
         }
         newInvoiceGroup.invoiceList.push(bookingInvoice);
         return newInvoiceGroup;

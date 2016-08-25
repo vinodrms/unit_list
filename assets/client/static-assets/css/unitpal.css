@@ -47,6 +47,10 @@ body,html {
     height: 100%;
     overflow-y: hidden;
 }
+.full-width {
+    width: 100%;
+    overflow-x: hidden;
+}
 .full-height-no-overflow {
     height: 100%;
 }

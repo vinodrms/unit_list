@@ -7,14 +7,14 @@ import {ThTranslation} from '../../../utils/localization/ThTranslation';
 
 import {InvoiceDataAggregator, InvoiceDataAggregatorQuery} from '../aggregators/InvoiceDataAggregator';
 import {InvoiceAggregatedDataContainer} from '../aggregators/InvoiceAggregatedDataContainer';
-import {InvoiceVMContainer} from './InvoiceVMContainer';
+import {InvoiceConfirmationVMContainer} from './InvoiceConfirmationVMContainer';
 import {ReportType, PdfReportsServiceResponse} from '../../../services/pdf-reports/IPdfReportsService';
 import {BaseEmailTemplateDO, EmailTemplateTypes} from '../../../services/email/data-objects/BaseEmailTemplateDO'
 
 import fs = require('fs');
 import path = require('path');
 
-export class InvoiceEmailSender {
+export class InvoiceConfirmationEmailSender {
     private static INVOICE_EMAIL_SUBJECT = 'Invoice';
     private _thTranslation: ThTranslation;
 
@@ -22,19 +22,19 @@ export class InvoiceEmailSender {
         this._thTranslation = new ThTranslation(this._sessionContext.language);
     }
 
-    public sendInvoice(query: InvoiceDataAggregatorQuery, emailDistributionList: string[]): Promise<boolean> {
+    public sendInvoiceConfirmation(query: InvoiceDataAggregatorQuery, emailDistributionList: string[]): Promise<boolean> {
         return new Promise<boolean>((resolve: { (emailSent: boolean): void }, reject: { (err: ThError): void }) => {
-            this.sendInvoiceCore(resolve, reject, query, emailDistributionList);
+            this.sendInvoiceConfirmationCore(resolve, reject, query, emailDistributionList);
         });
     }
 
-    private sendInvoiceCore(resolve: { (emailSent: boolean): void }, reject: { (err: ThError): void }, query: InvoiceDataAggregatorQuery, emailDistributionList: string[]) {
+    private sendInvoiceConfirmationCore(resolve: { (emailSent: boolean): void }, reject: { (err: ThError): void }, query: InvoiceDataAggregatorQuery, emailDistributionList: string[]) {
         var pdfReportsService = this._appContext.getServiceFactory().getPdfReportsService();
         var invoiceDataAggregator = new InvoiceDataAggregator(this._appContext, this._sessionContext);
         var generatedPdfAbsolutePath: string;
 
         invoiceDataAggregator.getInvoiceAggregatedDataContainer(query).then((invoiceAggregatedDataContainer: InvoiceAggregatedDataContainer) => {
-            var invoiceConfirmationVMContainer = new InvoiceVMContainer(this._thTranslation);
+            var invoiceConfirmationVMContainer = new InvoiceConfirmationVMContainer(this._thTranslation);
             invoiceConfirmationVMContainer.buildFromInvoiceAggregatedDataContainer(invoiceAggregatedDataContainer);
             return pdfReportsService.generatePdfReport({
                 reportType: ReportType.Invoice,
@@ -46,7 +46,7 @@ export class InvoiceEmailSender {
         }).then((result: PdfReportsServiceResponse) => {
             generatedPdfAbsolutePath = result.pdfPath;
             var emailService = this._appContext.getServiceFactory().getEmailService();
-            var emailSubject = this._thTranslation.translate(InvoiceEmailSender.INVOICE_EMAIL_SUBJECT);
+            var emailSubject = this._thTranslation.translate(InvoiceConfirmationEmailSender.INVOICE_EMAIL_SUBJECT);
             var sendEmailPromiseList: Promise<boolean>[] = [];
             _.forEach(emailDistributionList, (emailAddress: string) => {
                 sendEmailPromiseList.push(emailService.sendEmail({

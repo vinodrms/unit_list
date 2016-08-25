@@ -6,9 +6,11 @@ import {InvoiceItemVM} from './InvoiceItemVM';
 import {InvoicePayerVM} from './InvoicePayerVM';
 import {InvoiceOperationsPageData} from '../../../containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/invoice-operations/services/utils/InvoiceOperationsPageData';
 import {ThTranslation} from '../../../../../common/utils/localization/ThTranslation';
+import {ThUtils} from '../../../../../common/utils/ThUtils';
 
 export class InvoiceGroupVM {
     invoiceGroupDO: InvoiceGroupDO;
+    private _thUtils: ThUtils;
     private _invoiceVMList: InvoiceVM[];
     private _newInvoiceSeq: number;
 
@@ -16,6 +18,7 @@ export class InvoiceGroupVM {
     editMode: boolean;
 
     constructor(private _thTranslation: ThTranslation) {
+        this._thUtils = new ThUtils();
         this.editMode = false;
         this._newInvoiceSeq = 1;
     }
@@ -26,11 +29,14 @@ export class InvoiceGroupVM {
         _.forEach(this.invoiceGroupDO.invoiceList, (invoice: InvoiceDO) => {
             var invoiceVM = new InvoiceVM(this._thTranslation);
             invoiceVM.buildFromInvoiceDOAndCustomersDO(invoice, invoiceOperationsPageData.customersContainer);
+            if(this._thUtils.isUndefinedOrNull(this.invoiceGroupDO.id)) {
+                invoiceVM.newlyAdded = true;
+            }
             this.invoiceVMList.push(invoiceVM);
         });
         this.ccySymbol = invoiceOperationsPageData.ccy.symbol;
     }
-
+    
     public buildInvoiceGroupDO(): InvoiceGroupDO {
         this.invoiceGroupDO.invoiceList = [];
         _.forEach(this.invoiceVMList, (invoiceVM: InvoiceVM) => {
@@ -171,5 +177,14 @@ export class InvoiceGroupVM {
             this._invoiceVMList[index].invoicePayerVMList[0].invoicePayerDO.priceToPay = this._invoiceVMList[index].totalPrice;
             this._invoiceVMList[index].isValid();
         }
+    }
+
+    public allInvoicesAreNewlyAdded(): boolean {
+        for(var i = 0; i < this._invoiceVMList.length; ++i) {
+            if(!this._invoiceVMList[i].isNewlyAdded) {
+                return false;
+            }
+        }
+        return true;
     }
 }
