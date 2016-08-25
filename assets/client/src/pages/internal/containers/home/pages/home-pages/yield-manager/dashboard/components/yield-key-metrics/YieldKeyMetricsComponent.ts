@@ -54,6 +54,15 @@ export class YieldKeyMetricsComponent implements OnInit {
 		}
 	}	
 
+	private normalizeAndReversPercentage(percentage){
+		const PERCENTAGE_MIN = 0;
+		const PERCENTAGE_MAX = 1;
+		
+		var nrPercentage = PERCENTAGE_MAX - Math.min(Math.max(percentage, PERCENTAGE_MIN), PERCENTAGE_MAX);
+
+		return nrPercentage;
+	}
+
 	public getPercentageStyles(percentage):Object {
 		const PERCENTAGE_MID = 0.5;
 		const PERCENTAGE_MIN = 0;
