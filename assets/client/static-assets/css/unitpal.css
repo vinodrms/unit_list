@@ -914,6 +914,10 @@ td .room-categ-capacity {
     background: white !important;
 }
 
+.white-color {
+    color: white !important;
+}
+
 .red {
     background: rgb(255, 0, 0);
 }
@@ -2785,7 +2789,7 @@ a.btn.btn-square:focus {
         }
 
         .yield-manager-dashboard .yield-filter-item .left{
-            width: 12px;
+            width: 14px;
             height: 100%;
             display: flex;
             align-items: center;
@@ -2829,8 +2833,11 @@ a.btn.btn-square:focus {
             background-color: #FFFAD8; 
         }
 
-        .yield-manager-dashboard .price-products-table .selected-indicator{
-            width: 12px;
+        .yield-manager-dashboard .price-products-table .filter-indicator{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 14px;
             border-left: 1px solid #DBDBDB;
             border-right: 1px solid #DBDBDB;
             height: 100%;
@@ -3249,6 +3256,26 @@ a.btn.btn-square:focus {
 
 .p-r-12 {
   padding-right: 12px !important;
+}
+
+.p-14 {
+  padding: 14px !important;
+}
+
+.p-t-14 {
+  padding-top: 14px !important;
+}
+
+.p-b-14 {
+  padding-bottom: 14px !important;
+}
+
+.p-l-14 {
+  padding-left: 14px !important;
+}
+
+.p-r-14 {
+  padding-right: 14px !important;
 }
 
 .p-16 {

@@ -1,7 +1,7 @@
 <yield-actions-panel [isYielding]="isYielding" (onApplyAction)="applyAction($event)"></yield-actions-panel>
 <div class="price-products-table p-12" *ngIf="priceProductResults">
 	<div class="price-products-row flex-row">
-		<div class="price-products-col flex-jc-start wide p-l-12">
+		<div class="price-products-col flex-jc-start wide p-l-14">
 			<span class="p-l-6"></span>
 			<input type="checkbox"
 			[(ngModel)]="selectAllItemsFlag"
@@ -15,7 +15,9 @@
 	</div>
 	<div class="price-products-row flex-row" [ngClass]="getPriceProductRowClasses(priceProduct)" *ngFor="let priceProduct of filteredPriceProduct">
 		<div class="price-products-col flex-jc-start wide">
-			<div class="selected-indicator" [ngClass]="getSelectedIndicatorClasses(priceProduct)"></div>
+			<div class="filter-indicator" [ngClass]="getPriceProductFilterClasses(priceProduct)">
+				<span class="f-10" title="{{getPriceProductTextFilter(priceProduct)}}">{{getPriceProductTextFilterInitial(priceProduct)}}</span>
+			</div>
 			<span class=" p-l-6">
 				<input type="checkbox" [(ngModel)]="itemsSelectionState[priceProduct.id]">
 				<span class="dark-gray-color f-14">{{priceProduct.name}}</span>

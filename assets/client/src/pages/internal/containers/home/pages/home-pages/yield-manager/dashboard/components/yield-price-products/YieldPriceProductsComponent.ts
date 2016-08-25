@@ -169,22 +169,47 @@ export class YieldPriceProductsComponent implements OnInit {
 		});
 	}
 
-	public getSelectedIndicatorClasses(priceProduct:PriceProductYieldItemVM){
-		return this.getSelectedRowClasses(priceProduct, (className: string)=>{
+	public getPriceProductFilterClasses(priceProduct:PriceProductYieldItemVM){
+		var color_class = this.getPriceProductColorFilterClass(priceProduct, (className: string) => {
 			return className;
 		});
+		
+		var results = {};
+		results[color_class] = true;
+		results['white-color'] = true;
+
+		return results;
 	}
 
 	private getSelectedRowClasses(priceProduct:PriceProductYieldItemVM, classTransformer: (className:string) => string){
+		var color_class = this.getPriceProductColorFilterClass(priceProduct, classTransformer);
+		
+		var results = {};
+		results[color_class] = this.itemsSelectionState[priceProduct.priceProductYieldItemDO.priceProductId];
+		return results;
+	}
+
+	private getPriceProductColorFilterClass(priceProduct:PriceProductYieldItemVM, classTransformer: (className:string) => string){
 		var color_class = 'default-row-select-color';
 		if (priceProduct.colorFilterList.length > 0){
 			color_class = classTransformer(priceProduct.colorFilterList[0].cssClass);
 		}
 
-		var results = {};
-		results[color_class] = this.itemsSelectionState[priceProduct.priceProductYieldItemDO.priceProductId];
-		return results;
+		return color_class;
 	}
+
+	public getPriceProductTextFilterInitial(priceProduct:PriceProductYieldItemVM):string{
+		var filterInitial = this.getPriceProductTextFilter(priceProduct).substr(0,2);
+		return filterInitial;
+	}
+
+	public getPriceProductTextFilter(priceProduct:PriceProductYieldItemVM):string{
+		var filterInitial = "";
+		if (priceProduct.textFilterList.length > 0){
+			filterInitial = priceProduct.textFilterList[0].displayName;
+		}
+		return filterInitial;
+	}	
 
 	public getDateLabel(date: ThDateDO) {
 		return date.getShortDisplayString(this._appContext.thTranslation);
