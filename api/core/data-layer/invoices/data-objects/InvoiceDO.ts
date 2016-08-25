@@ -110,6 +110,9 @@ export class InvoiceDO extends BaseDO {
             if (invoiceItemDO.type === InvoiceItemType.AddOnProduct && !invoiceItemDO.meta.isMovable()) {
                 itemsToRemoveIdList.push(invoiceItemDO.id);
             }
+            else if (invoiceItemDO.type === InvoiceItemType.Booking) {
+                delete invoiceItemDO.meta;
+            }
         });
         _.forEach(itemsToRemoveIdList, (id: string) => {
             var index = _.findIndex(this.itemList, (invoiceItemDO: InvoiceItemDO) => {
