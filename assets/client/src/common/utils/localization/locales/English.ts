@@ -324,6 +324,8 @@ export var EnglishTranslations: Object = {
 	"Friday": "Friday",
 	"Saturday": "Saturday",
 	"Sunday": "Sunday",
+	"Week" : "Week",
+	"Weeks" : "Weeks",
 	"Number of Days": "Number of Days",
 	"Enter a valid number of days": "Enter a valid number of days",
 	"Minimum Length of Stay": "Minimum Length of Stay",
@@ -682,5 +684,4 @@ export var EnglishTranslations: Object = {
 	"Rollaway beds required to fit": "Rollaway beds required to fit",
 	"Rollaway beds required": "Rollaway beds required",
 	"You cannot mark this invoice as paid. The total amount paid is lower than the total price.": "You cannot mark this invoice as paid. The total amount paid is lower than the total price.",
-	
 };

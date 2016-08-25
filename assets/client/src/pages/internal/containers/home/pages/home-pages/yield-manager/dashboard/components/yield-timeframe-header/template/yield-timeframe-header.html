@@ -1,16 +1,20 @@
 <div class="header">
-	<div class="pane-title p-t-6">
-		<div class="unitpal-font f-12 f-32 clickable" (click)="previousDay()">&lt;</div>
-		<div class="flex-row">
-			<i class="fa fa-calendar orange-color p-r-12 f-32" aria-hidden="true"></i>
-			<div class="time-frame">
-				<div *ngIf="selectedDate" class="current-date f-16"><b>{{getDateShortString()}}</b></div>
-				<div class="flex-row-switch flex-center-v">
-					<span class="f-12">{{ 'Showing' | translate}}</span>
-					<span class="f-12">14</span>
-				</div>
+	<div class="left-side flex-row p-l-12">
+		<div class="unitpal-font dark-gray-color p-r-12 f-32 clickable" (click)="previousDay()">&lt;</div>
+		<div *ngIf="selectedDate" class="current-date dark-gray-color p-r-12 f-24"><b>{{getDateShortString()}}</b></div>
+		<div class="btn btn-danger btn-change-date f-10 clickable">
+			<i class="fa fa-calendar p-r-6" aria-hidden="true"></i>
+			<span>CHANGE DATE</span>
+		</div>
+	</div>
+	<div class="right-side flex-row">
+		<div class="time-frame-group-options flex-row m-r-12 f-12">
+			<div class="time-frame-option clickable"
+				*ngFor="let timeFrameOption of timeFrameOptionsList"
+				[ngClass]="{'active' : timeFrameOption.active }"
+				(click)="activateTimeFrame(timeFrameOption)">{{timeFrameOption.label}}
 			</div>
 		</div>
-		<div class="unitpal-font f-12 p-r-12 f-32 clickable" (click)="nextDay()">&gt;</div>
+		<div class="unitpal-font dark-gray-color p-r-12 f-32 clickable" (click)="nextDay()">&gt;</div>
 	</div>
 </div>
