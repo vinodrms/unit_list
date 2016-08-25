@@ -36,6 +36,8 @@ export class InvoicePayerComponent implements OnInit {
     private _thUtils: ThUtils;
     private _pmGenerator: InvoicePaymentMethodVMGenerator;
 
+    private _pmWasSetForTheFirstTime = false;
+
     constructor(private _appContext: AppContext,
         private _emailSenderModalService: EmailSenderModalService,
         private _customerRegisterModalService: CustomerRegisterModalService,
@@ -50,10 +52,10 @@ export class InvoicePayerComponent implements OnInit {
     }
 
     public set selectedPaymentMethodVM(selectedPaymentMethodVM: InvoicePaymentMethodVM) {
-        if(!this._appContext.thUtils.isUndefinedOrNull(this._selectedPaymentMethodVM)) {
-            this.invoiceVM.isValid();
-        }
         this._selectedPaymentMethodVM = selectedPaymentMethodVM;
+        this.invoicePayerVM.invoicePayerDO.paymentMethod = selectedPaymentMethodVM.paymentMethod;
+        if (this._pmWasSetForTheFirstTime) this.invoiceVM.isValid();
+        if (!this._pmWasSetForTheFirstTime) this._pmWasSetForTheFirstTime = true;
     }
 
     ngOnInit() {
@@ -119,14 +121,14 @@ export class InvoicePayerComponent implements OnInit {
 
     }
     public onSend() {
-        this._emailSenderModalService.sendInvoiceConfirmation([this.invoicePayerVM.customerDO], 
-            this.invoiceGroupVM.invoiceGroupDO.id, 
-            this.invoiceVM.invoiceDO.invoiceReference, 
+        this._emailSenderModalService.sendInvoiceConfirmation([this.invoicePayerVM.customerDO],
+            this.invoiceGroupVM.invoiceGroupDO.id,
+            this.invoiceVM.invoiceDO.invoiceReference,
             this.invoicePayerVM.customerDO.id).then((modalDialogRef: ModalDialogRef<boolean>) => {
-            modalDialogRef.resultObservable.subscribe((sendResult: boolean) => {
-                this._appContext.analytics.logEvent("invoice", "send-confirmation", "Sent an invoice confirmation by email");
-            }, (err: any) => { });
-        }).catch((err: any) => { });
+                modalDialogRef.resultObservable.subscribe((sendResult: boolean) => {
+                    this._appContext.analytics.logEvent("invoice", "send-confirmation", "Sent an invoice confirmation by email");
+                }, (err: any) => { });
+            }).catch((err: any) => { });
     }
 
     public onDelete() {
@@ -172,7 +174,7 @@ export class InvoicePayerComponent implements OnInit {
             var bookingDO = _.find(this._invoiceGroupControllerService.invoiceOperationsPageData.bookingsContainer.bookingList, (booking: BookingDO) => {
                 return booking.bookingId === this.invoiceVM.invoiceDO.bookingId;
             });
-            
+
             if (!this._appContext.thUtils.isUndefinedOrNull(bookingDO) && customer.hasAccessOnPriceProduct(bookingDO.priceProductSnapshot)) {
                 return invoicePaymentMethodVMList;
             }
