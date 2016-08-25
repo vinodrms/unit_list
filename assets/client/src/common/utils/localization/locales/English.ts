@@ -684,4 +684,7 @@ export var EnglishTranslations: Object = {
 	"Rollaway beds required to fit": "Rollaway beds required to fit",
 	"Rollaway beds required": "Rollaway beds required",
 	"You cannot mark this invoice as paid. The total amount paid is lower than the total price.": "You cannot mark this invoice as paid. The total amount paid is lower than the total price.",
+	"Only unpaid invoices are editable. No unpaid invoices exist in this invoice group.": "Only unpaid invoices are editable. No unpaid invoice exists in this invoice group.",
+	"You cannot save an invoice group if it does not contain at least an invoice.": "You cannot save an invoice group if it does not contain at least an invoice.",
+	
 };

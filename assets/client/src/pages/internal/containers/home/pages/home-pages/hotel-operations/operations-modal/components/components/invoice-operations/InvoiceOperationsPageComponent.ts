@@ -25,6 +25,8 @@ import {Observable} from 'rxjs/Observable';
 import {InvoiceMeta} from './components/invoice-edit/InvoiceMeta';
 import {InvoiceGroupsService} from '../../../../../../../../../services/invoices/InvoiceGroupsService';
 import {HotelOperationsResultService} from '../../../../operations-modal/services/HotelOperationsResultService';
+import {ModalDialogRef} from '../../../../../../../../../../../common/utils/modals/utils/ModalDialogRef';
+import {HotelOperationsResult} from '../../../services/utils/HotelOperationsResult';
 
 @Component({
     selector: 'invoice-operations-page',
@@ -60,6 +62,7 @@ export class InvoiceOperationsPageComponent implements OnInit {
     selectItemObservable: Observable<number>;
 
     constructor(private _appContext: AppContext,
+        private _modalDialogRef: ModalDialogRef<HotelOperationsResult>,
         private _hotelOperationsResultService: HotelOperationsResultService,
         private _invoiceOperationsPageService: InvoiceOperationsPageService,
         private _invoiceGroupControllerService: InvoiceGroupControllerService,
@@ -98,14 +101,14 @@ export class InvoiceOperationsPageComponent implements OnInit {
     }
     private updateContainerData() {
         var subtitle = "";
-        
+
         this.editMode = this.invoiceOperationsPageParam.openInEditMode;
 
         this.invoiceOperationsPageParam.onFilterRemovedHandler = (() => {
             this.editMode = true;
         });
 
-        if (!this._thUtils.isUndefinedOrNull(this.invoiceOperationsPageParam.invoiceGroupId) && 
+        if (!this._thUtils.isUndefinedOrNull(this.invoiceOperationsPageParam.invoiceGroupId) &&
             !this._thUtils.isUndefinedOrNull(this.invoiceOperationsPageParam.invoiceFilter.customerId)) {
             this.invoiceOperationsPageParam.updateTitle(this._title, subtitle, this.filterMetaForEnabledFilter);
             this.itemListNavigatorConfig = {
@@ -128,22 +131,33 @@ export class InvoiceOperationsPageComponent implements OnInit {
         this.editMode = true;
     }
     public onSave() {
-        var firstInvalidInvoice = this.invoiceGroupVM.checkValidations();
-        if (firstInvalidInvoice === -1) {
-            var invoiceGroupVMClone = this.invoiceGroupVM.buildPrototype();
-            var invoiceGroupDOToSave = invoiceGroupVMClone.buildInvoiceGroupDO();
-            this._invoiceGroupsService.saveInvoiceGroupDO(invoiceGroupDOToSave).subscribe((updatedInvoiceGroupDO: InvoiceGroupDO) => {
-                this._invoiceGroupControllerService.updateInvoiceGroupVM(updatedInvoiceGroupDO);
-                this._appContext.toaster.success(this._appContext.thTranslation.translate("The invoice group was saved successfully."));
-                this._hotelOperationsResultService.markInvoiceChanged(updatedInvoiceGroupDO);
-                this.editMode = false;
-            }, (error: ThError) => {
-                this._appContext.toaster.error(error.message);
-            });
+        if (this.totalNumberOfInvoices === 0) {
+            var title = this._appContext.thTranslation.translate("Info");
+            var content = this._appContext.thTranslation.translate("You cannot save an invoice group if it does not contain at least an invoice.");
+            var positiveLabel = this._appContext.thTranslation.translate("OK");
 
+            this._appContext.modalService.confirm(title, content, { positive: positiveLabel }, () => {
+
+            });
         }
         else {
-            this.selectItem.next(firstInvalidInvoice);
+            var firstInvalidInvoice = this.invoiceGroupVM.checkValidations();
+            if (firstInvalidInvoice === -1) {
+                var invoiceGroupVMClone = this.invoiceGroupVM.buildPrototype();
+                var invoiceGroupDOToSave = invoiceGroupVMClone.buildInvoiceGroupDO();
+                this._invoiceGroupsService.saveInvoiceGroupDO(invoiceGroupDOToSave).subscribe((updatedInvoiceGroupDO: InvoiceGroupDO) => {
+                    this._invoiceGroupControllerService.updateInvoiceGroupVM(updatedInvoiceGroupDO);
+                    this._appContext.toaster.success(this._appContext.thTranslation.translate("The invoice group was saved successfully."));
+                    this._hotelOperationsResultService.markInvoiceChanged(updatedInvoiceGroupDO);
+                    this.editMode = false;
+                }, (error: ThError) => {
+                    this._appContext.toaster.error(error.message);
+                });
+
+            }
+            else {
+                this.selectItem.next(firstInvalidInvoice);
+            }
         }
     }
     public onCancel() {
@@ -153,13 +167,18 @@ export class InvoiceOperationsPageComponent implements OnInit {
         var negativeLabel = 'No';
 
         this._appContext.modalService.confirm(title, content, { positive: positiveLabel, negative: negativeLabel }, () => {
-            this.resetItemNavigator.next({
-                initialNumberOfItems: this._invoiceGroupVMCopy.invoiceVMList.length,
-                maxNumberOfDisplayedItems: this.invoiceNavigatorWindowSize,
-                numberOfSimultaneouslySelectedItems: this.numberOfSimultaneouslyDisplayedInvoices
-            });
-            this.invoiceGroupVM = this._invoiceGroupVMCopy;
-            this.editMode = false;
+            if (this.invoiceGroupVM.allInvoicesAreNewlyAdded()) {
+                this._modalDialogRef.closeForced();
+            }
+            else {
+                this.resetItemNavigator.next({
+                    initialNumberOfItems: this._invoiceGroupVMCopy.invoiceVMList.length,
+                    maxNumberOfDisplayedItems: this.invoiceNavigatorWindowSize,
+                    numberOfSimultaneouslySelectedItems: this.numberOfSimultaneouslyDisplayedInvoices
+                });
+                this.invoiceGroupVM = this._invoiceGroupVMCopy;
+                this._modalDialogRef.closeForced();
+            }
         });
     }
     public onAddInvoice() {
@@ -178,15 +197,17 @@ export class InvoiceOperationsPageComponent implements OnInit {
     }
 
     public newlyAddedInvoiceRemoved(newlyAddedInvoiceMeta: InvoiceMeta) {
-        console.log(this.displayedInvoiceIndexList);
         this.itemRemoved.next(newlyAddedInvoiceMeta.indexInDisplayedInvoiceList);
         this.invoiceGroupVM.removeInvoiceVMByReference(newlyAddedInvoiceMeta.reference);
-        console.log(this.displayedInvoiceIndexList);
+    }
+
+    public get noEditableInvoicesExist(): boolean {
+        return _.isEmpty(this.displayedInvoiceIndexList);
     }
 
     public get displayedInvoiceIndexList(): number[] {
         var indexList = [];
-        
+
         if (!_.isEmpty(this.invoiceVMList)) {
             for (var index = this.firstDisplayedInvoiceIndex; index < Math.min(this.firstDisplayedInvoiceIndex + this.numberOfSimultaneouslyDisplayedInvoices, this.invoiceVMList.length); ++index) {
                 indexList.push(index);
