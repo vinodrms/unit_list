@@ -120,7 +120,6 @@ export class BookingItemsConverter {
                 hotel: this._converterParams.hotelDO,
                 currentHotelTimestamp: this._converterParams.currentHotelTimestamp
             });
-            bookingDO.price = this.generateDefaultBookingPriceDO(priceProduct);
             this._bookingUtils.updateBookingPriceUsingRoomCategory(bookingDO);
             this._bookingUtils.updateIndexedSearchTerms(bookingDO, this._converterParams.customersContainer);
             this._bookingUtils.updateDisplayCustomerId(bookingDO, this._converterParams.customersContainer);
@@ -128,38 +127,6 @@ export class BookingItemsConverter {
             bookingList.push(bookingDO);
         });
         resolve(bookingList);
-    }
-
-    private generateDefaultBookingPriceDO(priceProduct: PriceProductDO): BookingPriceDO {
-        var bookingPrice = new BookingPriceDO();
-        bookingPrice.includedInvoiceItemList = [];
-
-        // TODO: temporary fix
-        // replace includedItems.getUniqueAddOnProductIdList() with the actual generation
-        _.forEach(priceProduct.includedItems.getUniqueAddOnProductIdList(), (addOnProductId: string) => {
-            var addOnProductItem: AddOnProductItem = this._converterParams.addOnProductItemContainer.getAddOnProductItemById(addOnProductId);
-            if (!this._thUtils.isUndefinedOrNull(addOnProductItem)) {
-                var invoiceItem = this.convertAddOnProductToInvoiceItem(addOnProductItem.addOnProduct);
-                if (addOnProductItem.category.isBreakfast()) {
-                    bookingPrice.breakfast = invoiceItem;
-                }
-                else {
-                    bookingPrice.includedInvoiceItemList.push(invoiceItem);
-                }
-            }
-        });
-        return bookingPrice;
-    }
-    private convertAddOnProductToInvoiceItem(addOnProductDO: AddOnProductDO): InvoiceItemDO {
-        var invoiceItem = new InvoiceItemDO();
-        invoiceItem.id = addOnProductDO.id;
-        invoiceItem.type = InvoiceItemType.AddOnProduct;
-        var itemMeta = new AddOnProductInvoiceItemMetaDO();
-        itemMeta.aopDisplayName = addOnProductDO.name;
-        itemMeta.numberOfItems = 1;
-        itemMeta.pricePerItem = addOnProductDO.price;
-        invoiceItem.meta = itemMeta;
-        return invoiceItem;
     }
 
     private generateGroupBookingReference(): string {

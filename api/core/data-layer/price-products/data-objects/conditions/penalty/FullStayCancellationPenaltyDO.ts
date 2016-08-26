@@ -2,6 +2,7 @@ import {BaseDO} from '../../../../common/base/BaseDO';
 import {ThTranslation} from '../../../../../utils/localization/ThTranslation';
 import {IPriceProductCancellationPenalty} from './IPriceProductCancellationPenalty';
 import {BookingPriceDO, BookingPriceType} from '../../../../bookings/data-objects/price/BookingPriceDO';
+import {PenaltyUtils} from './utils/PenaltyUtils';
 
 export class FullStayCancellationPenaltyDO extends BaseDO implements IPriceProductCancellationPenalty {
 	protected getPrimitivePropertyKeys(): string[] {
@@ -18,13 +19,7 @@ export class FullStayCancellationPenaltyDO extends BaseDO implements IPriceProdu
 		return thTranslation.translate("Pay full stay");
 	}
 	public computePenaltyPrice(bookingPrice: BookingPriceDO): BookingPriceDO {
-		var penaltyPrice = new BookingPriceDO();
-		penaltyPrice.priceType = BookingPriceType.Penalty;
-		penaltyPrice.pricePerItem = bookingPrice.totalPrice;
-		penaltyPrice.numberOfItems = 1;
-		penaltyPrice.totalPrice = bookingPrice.totalPrice;
-		penaltyPrice.breakfast = bookingPrice.breakfast;
-		penaltyPrice.includedInvoiceItemList = bookingPrice.includedInvoiceItemList;
-		return penaltyPrice;
+		var penaltyUtils = new PenaltyUtils();
+		return penaltyUtils.getPenaltyPrice(bookingPrice, bookingPrice.totalBookingPrice);
 	}
 }

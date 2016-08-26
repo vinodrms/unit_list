@@ -112,7 +112,6 @@ export class DeleteBedItem {
 					ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Bed delete error: used in room categories", this._bedItemDO, thError);
 					reject(thError);
 				}
-				// TODO: add validations for deleting Bed
 				resolve(true);
 			}).catch((error: any) => {
 				reject(error);

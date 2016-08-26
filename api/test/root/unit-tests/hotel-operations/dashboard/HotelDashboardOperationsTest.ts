@@ -155,7 +155,7 @@ describe("Hotel Dashboard Operations Tests", function () {
                 should.equal(priceItems.priceItemList.length > 0, true);
                 var priceItem: BookingPriceItem = _.find(priceItems.priceItemList, (item: BookingPriceItem) => { return item.roomCategoryId === booking.roomCategoryId });
                 should.exist(priceItem);
-                should.equal(priceItem.price, booking.price.totalPrice);
+                should.equal(priceItem.price, booking.price.totalBookingPrice);
                 done();
             }).catch((error: any) => {
                 done(error);

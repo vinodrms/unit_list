@@ -9,6 +9,12 @@ import {ThTimestampDO} from '../../../utils/th-dates/data-objects/ThTimestampDO'
 import {CustomersContainer} from '../../customers/validators/results/CustomersContainer';
 import {BookingPriceDO, BookingPriceType} from '../../../data-layer/bookings/data-objects/price/BookingPriceDO';
 import {IndexedBookingInterval} from '../../../data-layer/price-products/utils/IndexedBookingInterval';
+import {InvoiceItemDO, InvoiceItemType} from '../../../data-layer/invoices/data-objects/items/InvoiceItemDO';
+import {AddOnProductInvoiceItemMetaDO} from '../../../data-layer/invoices/data-objects/items/add-on-products/AddOnProductInvoiceItemMetaDO';
+import {AddOnProductSnapshotDO} from '../../../data-layer/add-on-products/data-objects/AddOnProductSnapshotDO';
+import {AttachedAddOnProductItemDO} from '../../../data-layer/price-products/data-objects/included-items/AttachedAddOnProductItemDO';
+import {IncludedBookingItems} from './IncludedBookingItems';
+import {ConfigCapacityDO} from '../../../data-layer/common/data-objects/bed-config/ConfigCapacityDO';
 
 import _ = require('underscore');
 
@@ -65,22 +71,61 @@ export class BookingUtils {
         bookingDO.noShowTime = params.priceProduct.conditions.policy.generateNoShowTriggerTime({ arrivalDate: indexedBookingInterval.getArrivalDate() });
     }
     public updateBookingPriceUsingRoomCategory(bookingDO: BookingDO) {
-        var breakfastCopy = bookingDO.price.breakfast;
-        var includedInvoiceItemListCopy = bookingDO.price.includedInvoiceItemList;
-
         var indexedBookingInterval = new IndexedBookingInterval(bookingDO.interval);
-        bookingDO.price = new BookingPriceDO();
-        bookingDO.price.priceType = BookingPriceType.BookingStay;
-        bookingDO.price.numberOfItems = indexedBookingInterval.getLengthOfStay();
-        bookingDO.price.pricePerItem = bookingDO.priceProductSnapshot.price.getPricePerNightFor({
-            configCapacity: bookingDO.configCapacity,
-            roomCategoryId: bookingDO.roomCategoryId
-        });
-        bookingDO.price.totalPrice = bookingDO.price.numberOfItems * bookingDO.price.pricePerItem;
-        bookingDO.price.totalPrice = this._thUtils.roundNumberToTwoDecimals(bookingDO.price.totalPrice);
 
-        bookingDO.price.breakfast = breakfastCopy;
-        bookingDO.price.includedInvoiceItemList = includedInvoiceItemListCopy;
+        bookingDO.price = new BookingPriceDO();
+
+        bookingDO.price.movable = false;
+
+        bookingDO.price.priceType = BookingPriceType.BookingStay;
+
+        bookingDO.price.roomPricePerNight = this._thUtils.roundNumberToTwoDecimals(
+            bookingDO.priceProductSnapshot.price.getPricePerNightFor({
+                configCapacity: bookingDO.configCapacity,
+                roomCategoryId: bookingDO.roomCategoryId
+            })
+        );
+        bookingDO.price.numberOfNights = indexedBookingInterval.getLengthOfStay();
+        bookingDO.price.totalRoomPrice = this._thUtils.roundNumberToTwoDecimals(
+            bookingDO.price.roomPricePerNight * bookingDO.price.numberOfNights
+        );
+        var includedBookingItems = this.getIncludedInvoiceItems(bookingDO.priceProductSnapshot, bookingDO.configCapacity, indexedBookingInterval);
+        bookingDO.price.totalOtherPrice = includedBookingItems.getTotalPrice();
+
+        bookingDO.price.totalBookingPrice = bookingDO.price.totalRoomPrice + bookingDO.price.totalOtherPrice;
+        bookingDO.price.totalBookingPrice = this._thUtils.roundNumberToTwoDecimals(bookingDO.price.totalBookingPrice);
+
+        bookingDO.price.breakfast = includedBookingItems.breakfast;
+        bookingDO.price.includedInvoiceItemList = includedBookingItems.includedInvoiceItemList;
+    }
+    public getIncludedInvoiceItems(priceProduct: PriceProductDO, configCapacity: ConfigCapacityDO, indexedBookingInterval: IndexedBookingInterval): IncludedBookingItems {
+        var includedBookingItems = new IncludedBookingItems();
+        if (priceProduct.includedItems.hasBreakfast()) {
+            includedBookingItems.breakfast = this.convertAddOnProductSnapshotToInvoiceItem(
+                priceProduct.includedItems.includedBreakfastAddOnProductSnapshot, indexedBookingInterval.getLengthOfStay()
+            );
+        }
+        includedBookingItems.includedInvoiceItemList = [];
+        _.forEach(priceProduct.includedItems.attachedAddOnProductItemList, (attachedAddOnProductItem: AttachedAddOnProductItemDO) => {
+            var numberOfItems = attachedAddOnProductItem.getNumberOfItems({
+                configCapacity: configCapacity,
+                indexedBookingInterval: indexedBookingInterval
+            });
+            var invoiceItem = this.convertAddOnProductSnapshotToInvoiceItem(attachedAddOnProductItem.addOnProductSnapshot, numberOfItems);
+            includedBookingItems.includedInvoiceItemList.push(invoiceItem);
+        });
+        return includedBookingItems;
+    }
+    private convertAddOnProductSnapshotToInvoiceItem(addOnProductSnapshot: AddOnProductSnapshotDO, numberOfItems: number): InvoiceItemDO {
+        var invoiceItem = new InvoiceItemDO();
+        invoiceItem.id = addOnProductSnapshot.id;
+        invoiceItem.type = InvoiceItemType.AddOnProduct;
+        var itemMeta = new AddOnProductInvoiceItemMetaDO();
+        itemMeta.aopDisplayName = addOnProductSnapshot.name;
+        itemMeta.numberOfItems = numberOfItems;
+        itemMeta.pricePerItem = addOnProductSnapshot.price;
+        invoiceItem.meta = itemMeta;
+        return invoiceItem;
     }
 
     public hasPenalty(booking: BookingDO, triggerParams: TriggerTimeParams): boolean {

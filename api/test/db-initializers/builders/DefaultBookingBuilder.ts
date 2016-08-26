@@ -89,16 +89,7 @@ export class DefaultBookingBuilder implements IBookingDataSource {
         booking.fileAttachmentList = [];
         booking.notes = "This is an automatic booking";
 
-        booking.price = new BookingPriceDO();
-        booking.price.priceType = BookingPriceType.BookingStay;
-        booking.price.numberOfItems = indexedBookingInterval.getLengthOfStay();
-        booking.price.pricePerItem = priceProduct.price.getPricePerNightFor({
-            configCapacity: booking.configCapacity,
-            roomCategoryId: booking.roomCategoryId
-        });
-        booking.price.totalPrice = booking.price.numberOfItems * booking.price.pricePerItem;
-        booking.price.totalPrice = this._testUtils.thUtils.roundNumberToTwoDecimals(booking.price.totalPrice);
-        booking.price.includedInvoiceItemList = [];
+        this._bookingUtils.updateBookingPriceUsingRoomCategory(booking);
 
         return booking;
     }

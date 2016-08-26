@@ -10,17 +10,21 @@ import {PriceProductPriceQueryDO} from '../../../../data-layer/price-products/da
 import {ValidationResultParser} from '../../../common/ValidationResultParser';
 import {BookingPossiblePriceItems, BookingPriceItem} from './utils/BookingPossiblePriceItems';
 import {IndexedBookingInterval} from '../../../../data-layer/price-products/utils/IndexedBookingInterval';
+import {BookingUtils} from '../../../bookings/utils/BookingUtils';
 
 import _ = require('underscore');
 
 export class BookingPossiblePrices {
     private _thUtils: ThUtils;
+    private _bookingUtils: BookingUtils;
+
     private _possiblePricesDO: BookingPossiblePricesDO;
 
     private _loadedBooking: BookingDO;
 
     constructor(private _appContext: AppContext, private _sessionContext: SessionContext) {
         this._thUtils = new ThUtils();
+        this._bookingUtils = new BookingUtils();
     }
 
     public getPossiblePrices(possiblePricesDO: BookingPossiblePricesDO): Promise<BookingPossiblePriceItems> {
@@ -66,6 +70,9 @@ export class BookingPossiblePrices {
                 var priceItem = new BookingPriceItem();
                 priceItem.roomCategoryId = roomCategoryId;
                 priceItem.price = noOfNights * this._loadedBooking.priceProductSnapshot.price.getPricePerNightFor(priceQuery);
+                var includedInvoiceItems = this._bookingUtils.getIncludedInvoiceItems(this._loadedBooking.priceProductSnapshot,
+                    this._loadedBooking.configCapacity, indexedBookingInterval);
+                priceItem.price += includedInvoiceItems.getTotalPrice();
                 priceItem.price = this._thUtils.roundNumberToTwoDecimals(priceItem.price);
                 possibleItems.priceItemList.push(priceItem);
             }

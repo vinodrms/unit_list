@@ -8,6 +8,7 @@ import {InvoiceGroupDO} from '../../../../../core/data-layer/invoices/data-objec
 import {InvoicePaymentStatus} from '../../../../../core/data-layer/invoices/data-objects/InvoiceDO';
 import {InvoiceItemDO} from '../../../../../core/data-layer/invoices/data-objects/items/InvoiceItemDO';
 import {IInvoiceItemMeta} from '../../../../../core/data-layer/invoices/data-objects/items/IInvoiceItemMeta';
+import {BookingDO} from '../../../../../core/data-layer/bookings/data-objects/BookingDO';
 import {GenerateBookingInvoiceDO} from '../../../../../../api/core/domain-layer/invoices/generate-booking-invoice/GenerateBookingInvoiceDO';
 
 export class BookingInvoicesTestHelper {
@@ -18,9 +19,12 @@ export class BookingInvoicesTestHelper {
         this._invoiceTestUtils = new InvoiceTestUtils();
     }
 
+    public getFirstBooking(): BookingDO {
+        return this._defaultDataBuilder.bookingList[0];
+    }
+
     public buildGenerateBookingInvoiceDOForNewInvoiceGroup(): GenerateBookingInvoiceDO {
-        var bookingList = this._defaultDataBuilder.bookingList;
-        var booking = bookingList[0];
+        var booking = this.getFirstBooking();
 
         return {
             groupBookingId: booking.groupBookingId,
@@ -28,14 +32,21 @@ export class BookingInvoicesTestHelper {
         };
     }
 
+    public getSecondBooking(): BookingDO {
+        return this._defaultDataBuilder.bookingList[0];
+    }
+
     public buildGenerateBookingInvoiceDOForExistingInvoiceGroup(): GenerateBookingInvoiceDO {
-        var bookingList = this._defaultDataBuilder.bookingList;
-        var booking = bookingList[1];
+        var booking = this.getSecondBooking();
 
         return {
             groupBookingId: booking.groupBookingId,
             bookingId: booking.bookingId
         };
+    }
+
+    public getExpectedNoInvoiceItems(booking: BookingDO): number {
+        return 1 + booking.priceProductSnapshot.includedItems.attachedAddOnProductItemList.length;
     }
 
     public buildSaveInvoiceGroupDOForUpdatingBookingInvoiceGroup(invoiceGroupToUpdate: InvoiceGroupDO): Promise<SaveInvoiceGroupDO> {

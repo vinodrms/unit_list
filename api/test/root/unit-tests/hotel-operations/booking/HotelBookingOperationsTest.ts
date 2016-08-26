@@ -107,7 +107,7 @@ describe("Hotel Booking Operations Tests", function () {
             bookingChangeDatesDO.interval = dashboardHelper.getFromTomorrowTwoDaysInterval(testDataBuilder);
             var bookingChangeDates = new BookingChangeDates(testContext.appContext, testContext.sessionContext);
             bookingChangeDates.changeDates(bookingChangeDatesDO).then((updatedBooking: BookingDO) => {
-                should.equal(updatedBooking.price.totalPrice, bookingToChange.price.totalPrice * 2);
+                should.equal(updatedBooking.price.totalBookingPrice, bookingToChange.price.totalBookingPrice * 2);
                 should.equal(updatedBooking.bookingHistory.actionList.length > 1, true);
                 bookingToChange = updatedBooking;
                 done();

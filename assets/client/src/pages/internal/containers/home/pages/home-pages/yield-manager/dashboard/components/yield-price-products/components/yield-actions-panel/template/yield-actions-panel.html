@@ -2,23 +2,23 @@
 		<div class="form-group flex-row flex-center-v">
 			<div class="dark-gray-color ellipsis-text m-r-12" title="{{getFilterStatInfoLabel()}}">{{getFilterStatInfoLabel()}}</div>
 			<select class="yield-action form-control dark-gray-color m-r-12" [(ngModel)]="selectedAction">
-				<option [value]="noAction" disabled>Select an action</option>
-				<option [value]="enums.PriceProductYieldAction.Open">Open</option>
-				<option [value]="enums.PriceProductYieldAction.Close">Close</option>
-				<option [value]="enums.PriceProductYieldAction.OpenForArrival">Open For Arrival</option>
-				<option [value]="enums.PriceProductYieldAction.CloseForArrival">Close For Arrival</option>
-				<option [value]="enums.PriceProductYieldAction.OpenForDeparture">Open For Departure</option>
-				<option [value]="enums.PriceProductYieldAction.CloseForDeparture">Close For Departure</option>
+				<option [value]="noAction" disabled>{{'Select an action' | translate}}</option>
+				<option [value]="enums.PriceProductYieldAction.Open">{{'Open' | translate}}</option>
+				<option [value]="enums.PriceProductYieldAction.Close">{{'Close' | translate}}</option>
+				<option [value]="enums.PriceProductYieldAction.OpenForArrival">{{'Open For Arrival' | translate}}</option>
+				<option [value]="enums.PriceProductYieldAction.CloseForArrival">{{'Close For Arrival' | translate}}</option>
+				<option [value]="enums.PriceProductYieldAction.OpenForDeparture">{{'Open For Departure' | translate}}</option>
+				<option [value]="enums.PriceProductYieldAction.CloseForDeparture">{{'Close For Departure' | translate}}</option>
 			</select>
 		</div>
 		<div class="interval flex-row flex-center-v dark-gray-color m-r-12" *ngIf="!forever">
-			<div class="form-group dark-gray-color ellipsis-text m-r-12">apply to selected from</div>
+			<div class="form-group dark-gray-color ellipsis-text m-r-12">{{'apply to selected from' | translate}}</div>
 			<th-date-picker
 				[initialThDate]="actionDateInterval.start" [showLabel]="false"
 				(didSelectThDate)="didSelectActionStartDate($event)"
 				>
 			</th-date-picker>
-			<div class="form-group dark-gray-color m-l-12 m-r-12"> to </div>
+			<div class="form-group dark-gray-color m-l-12 m-r-12"> {{'to' | translate}} </div>
 			<th-date-picker
 				[initialThDate]="actionDateInterval.end" [minThDate]="actionDateInterval.start" [showLabel]="false"
 				(didSelectThDate)="didSelectActionEndDate($event)"
@@ -27,10 +27,10 @@
 		</div>
 		<div class="form-group flex-row flex-center-v">
 			<input type="checkbox" class="dark-gray-color m-r-12" [(ngModel)]="forever">
-			<span class="ellipsis-text m-r-12">Forever</span>
-			<div class="btn btn-danger f-10 clickable" (click)="applyChanges()">
+			<span class="ellipsis-text m-r-12">{{'Forever' | translate}}</span>
+			<div class="btn btn-danger uppercase f-10 clickable" (click)="applyChanges()">
 				<i class="fa fa-refresh fa-spin" *ngIf="isYielding"></i> 
-				APPLY CHANGES
+				{{'Apply changes' | translate}}
 			</div>
 		</div>
 </div>

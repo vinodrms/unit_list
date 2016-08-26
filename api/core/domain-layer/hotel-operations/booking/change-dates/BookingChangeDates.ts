@@ -113,7 +113,7 @@ export class BookingChangeDates {
     }
     private updateBooking() {
         var oldInterval: ThDateIntervalDO = this._bookingWithDependencies.bookingDO.interval.buildPrototype();
-        var oldPrice: number = this._bookingWithDependencies.bookingDO.price.totalPrice;
+        var oldPrice: number = this._bookingWithDependencies.bookingDO.price.totalBookingPrice;
 
         this._bookingWithDependencies.bookingDO.interval.end = this._newBookingInterval.end;
         if (this._bookingWithDependencies.bookingDO.confirmationStatus !== BookingConfirmationStatus.CheckedIn) {
@@ -122,7 +122,7 @@ export class BookingChangeDates {
         this._bookingUtils.updateBookingPriceUsingRoomCategory(this._bookingWithDependencies.bookingDO);
 
         var newInterval: ThDateIntervalDO = this._bookingWithDependencies.bookingDO.interval;
-        var newPrice: number = this._bookingWithDependencies.bookingDO.price.totalPrice;
+        var newPrice: number = this._bookingWithDependencies.bookingDO.price.totalBookingPrice;
 
         if (!newInterval.start.isSame(oldInterval.start)) {
             this._bookingUtils.updateBookingGuaranteedAndNoShowTimes(this._bookingWithDependencies.bookingDO, {

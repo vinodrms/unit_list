@@ -91,7 +91,7 @@ export class BookingConfirmationVM {
         var indexedBookingInterval = new IndexedBookingInterval(this._bookingAggregatedData.booking.interval);
 
         this.lengthOfStay = indexedBookingInterval.getLengthOfStay();
-        this.totalPrice = this._bookingAggregatedData.booking.price.totalPrice;
+        this.totalPrice = this._bookingAggregatedData.booking.price.totalBookingPrice;
         this.totalPrice = Math.round(this.totalPrice);
         this.initIncludedTaxesString(this._bookingAggregatedData.vatList, this._bookingAggregatedData.otherTaxes);
     }

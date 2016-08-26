@@ -13,6 +13,7 @@ import {PriceProductDO} from '../../../../../data-layer/price-products/data-obje
 import {PriceProductsContainer} from '../../../../price-products/validators/results/PriceProductsContainer';
 import {AllotmentDO} from '../../../../../data-layer/allotments/data-objects/AllotmentDO';
 import {IndexedBookingInterval} from '../../../../../data-layer/price-products/utils/IndexedBookingInterval';
+import {BookingUtils} from '../../../utils/BookingUtils';
 
 import _ = require('underscore');
 
@@ -25,12 +26,15 @@ export interface SearchResultBuilderParams {
 
 export class BookingSearchResultBuilder {
     private _thUtils: ThUtils;
+    private _bookingUtils: BookingUtils;
+
     private _builderParams: SearchResultBuilderParams;
     private _indexedBookingInterval: IndexedBookingInterval;
     private _priceProductList: PriceProductDO[];
 
     constructor(private _appContext: AppContext, private _sessionContext: SessionContext) {
         this._thUtils = new ThUtils();
+        this._bookingUtils = new BookingUtils();
     }
 
     public build(builderParams: SearchResultBuilderParams): Promise<BookingSearchResult> {
@@ -118,6 +122,8 @@ export class BookingSearchResultBuilder {
                     roomCategoryId: roomCategoryId,
                     configCapacity: this._builderParams.searchParams.configCapacity
                 });
+                var includedInvoiceItems = this._bookingUtils.getIncludedInvoiceItems(priceProduct, this._builderParams.searchParams.configCapacity, this._indexedBookingInterval);
+                itemPrice.price += includedInvoiceItems.getTotalPrice();
                 itemPrice.price = this._thUtils.roundNumberToTwoDecimals(itemPrice.price);
                 priceProductItem.priceList.push(itemPrice);
             });

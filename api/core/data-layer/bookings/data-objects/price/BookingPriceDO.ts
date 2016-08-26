@@ -13,15 +13,19 @@ export class BookingPriceDO extends BaseDO implements IInvoiceItemMeta {
     movable: boolean;
 
     priceType: BookingPriceType;
-    pricePerItem: number;
-    numberOfItems: number;
-    totalPrice: number;
+
+    roomPricePerNight: number;
+    numberOfNights: number;
+    totalRoomPrice: number;
+    totalOtherPrice: number;
+
+    totalBookingPrice: number;
 
     breakfast: InvoiceItemDO;
     includedInvoiceItemList: InvoiceItemDO[];
 
     protected getPrimitivePropertyKeys(): string[] {
-        return ["movable", "priceType", "pricePerItem", "numberOfItems", "totalPrice"];
+        return ["movable", "priceType", "roomPricePerNight", "numberOfNights", "totalRoomPrice", "totalOtherPrice", "totalBookingPrice"];
     }
     public buildFromObject(object: Object) {
         super.buildFromObject(object);
@@ -38,10 +42,10 @@ export class BookingPriceDO extends BaseDO implements IInvoiceItemMeta {
     }
 
     public getUnitPrice(): number {
-        return this.pricePerItem;
+        return this.roomPricePerNight;
     }
     public getNumberOfItems(): number {
-        return this.numberOfItems;
+        return this.numberOfNights;
     }
     public getDisplayName(thTranslation: ThTranslation): string {
         return thTranslation.translate(this.getDisplayNameCore(thTranslation));
@@ -71,18 +75,25 @@ export class BookingPriceDO extends BaseDO implements IInvoiceItemMeta {
     }
 
     public getRoomPrice(): number {
-        var roomPrice = this.totalPrice;
         if (this.isPenalty()) {
-            return roomPrice;
+            return this.totalBookingPrice;
         }
-        _.forEach(this.includedInvoiceItemList, (invoiceItem: InvoiceItemDO) => {
-            roomPrice = roomPrice - invoiceItem.meta.getUnitPrice() * invoiceItem.meta.getNumberOfItems();
-        });
+        var roomPrice = this.totalRoomPrice;
+        if (this.hasBreakfast()) {
+            roomPrice = roomPrice - (this.numberOfNights * this.breakfast.meta.getUnitPrice());
+        }
         if (roomPrice < 0) { roomPrice = 0; }
         return roomPrice;
     }
     public getOtherPrice(): number {
-        return this.totalPrice - this.getRoomPrice();
+        if (this.isPenalty()) {
+            return 0.0;
+        }
+        var otherPrice = this.totalOtherPrice;
+        if (this.hasBreakfast()) {
+            otherPrice = otherPrice + (this.numberOfNights * this.breakfast.meta.getUnitPrice());
+        }
+        return otherPrice;
     }
     public setMovable(movable: boolean) {
         this.movable = movable;

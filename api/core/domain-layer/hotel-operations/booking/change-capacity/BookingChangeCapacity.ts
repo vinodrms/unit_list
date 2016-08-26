@@ -95,14 +95,14 @@ export class BookingChangeCapacity {
         return _.contains(BookingDOConstraints.ConfirmationStatuses_CanChangeCapacity, this._bookingWithDependencies.bookingDO.confirmationStatus);
     }
     private updateBooking() {
-        var oldPrice: number = this._bookingWithDependencies.bookingDO.price.totalPrice;
+        var oldPrice: number = this._bookingWithDependencies.bookingDO.price.totalBookingPrice;
         var oldCapacity: ConfigCapacityDO = this._bookingWithDependencies.bookingDO.configCapacity.buildPrototype();
 
         var newCapacity = new ConfigCapacityDO();
         newCapacity.buildFromObject(this._bookingChangeCapacityDO.configCapacity);
         this._bookingWithDependencies.bookingDO.configCapacity = newCapacity;
         this._bookingUtils.updateBookingPriceUsingRoomCategory(this._bookingWithDependencies.bookingDO);
-        var newPrice: number = this._bookingWithDependencies.bookingDO.price.totalPrice;
+        var newPrice: number = this._bookingWithDependencies.bookingDO.price.totalBookingPrice;
 
         this._bookingWithDependencies.bookingDO.bookingHistory.logDocumentAction(DocumentActionDO.buildDocumentActionDO({
             actionParameterMap: {
