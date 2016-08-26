@@ -10,9 +10,9 @@
 	<div class="right-side flex-row">
 		<div class="time-frame-group-options flex-row m-r-12 f-12">
 			<div class="time-frame-option clickable"
-				*ngFor="let timeFrameOption of timeFrameOptionsList"
+				*ngFor="let timeFrameOption of timeFrameOptionsList; let timeFrameIndex = index"
 				[ngClass]="{'active' : timeFrameOption.active }"
-				(click)="activateTimeFrame(timeFrameOption)">{{timeFrameOption.label}}
+				(click)="activateTimeFrame(timeFrameOption, timeFrameIndex)">{{timeFrameOption.label}}
 			</div>
 		</div>
 		<div class="unitpal-font dark-gray-color p-r-12 f-32 clickable" (click)="nextDay()">&gt;</div>
