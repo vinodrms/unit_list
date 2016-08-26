@@ -155,7 +155,7 @@ export class BookingConfirmationVM {
             var itemDisplayString = invoiceItem.meta.getNumberOfItems() + "x" + invoiceItem.meta.getDisplayName(this._thTranslation);
             var aopPrice = invoiceItem.meta.getNumberOfItems() * invoiceItem.meta.getUnitPrice();
             aopPrice = this._thUtils.roundNumberToTwoDecimals(aopPrice);
-            itemDisplayString += " (" + aopPrice + this.ccyCode + "); ";
+            itemDisplayString += " (" + this.ccyCode + aopPrice + "); ";
             this.otherAops += itemDisplayString;
         });
 
