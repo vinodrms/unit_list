@@ -36,4 +36,8 @@ export class PriceProductYieldItemVM {
     public get name(){
         return this._priceProductYieldItemDO.priceProductName;
     }
+
+    public get lastRoomAvailability():boolean {
+        return this._priceProductYieldItemDO.lastRoomAvailability;
+    }
 }

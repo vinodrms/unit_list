@@ -20,7 +20,8 @@
 					<span class="f-10" title="{{getPriceProductTextFilter(priceProduct)}}">{{getPriceProductTextFilterInitial(priceProduct)}}</span>
 				</div>
 				<span class=" p-l-6">
-					<input type="checkbox" [(ngModel)]="itemsSelectionState[priceProduct.id]">
+					<input type="checkbox" [(ngModel)]="itemsSelectionState[priceProduct.id]" *ngIf="!priceProduct.lastRoomAvailability">
+					<span class="orange-color f-10" *ngIf="priceProduct.lastRoomAvailability" title="Last Room Availability"><b>LRA</b></span>
 					<span class="dark-gray-color f-14">{{priceProduct.name}}</span>
 				</span>
 			</div>
