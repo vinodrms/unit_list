@@ -6,6 +6,9 @@ import {InvoicePayerDO} from './payers/InvoicePayerDO';
 import {InvoiceItemDO, InvoiceItemType} from './items/InvoiceItemDO';
 import {IInvoiceItemMeta} from './items/IInvoiceItemMeta';
 import {BookingDO} from '../../bookings/data-objects/BookingDO';
+import {CustomerDO} from '../../customers/data-objects/CustomerDO';
+import {InvoicePaymentMethodType} from './payers/InvoicePaymentMethodDO';
+import {FeeInvoiceItemMetaDO} from './items/invoice-fee/FeeInvoiceItemMetaDO';
 
 export enum InvoicePaymentStatus {
     Unpaid, Paid
@@ -93,9 +96,26 @@ export class InvoiceDO extends BaseDO {
         });
     }
 
+    public addInvoiceFeeIfNecessary(customerDOList: CustomerDO[]) {
+        if (!this.hasPayInvoiceByAgreementAsPM()) return;
+
+        for (var i = 0; i < this.payerList.length; ++i) {
+            if (this.payerList[i].paymentMethod.type === InvoicePaymentMethodType.PayInvoiceByAgreement) {
+                var customerDO = _.find(customerDOList, (customerDO: CustomerDO) => {
+                    return customerDO.id === this.payerList[i].customerId;
+                });
+
+                var invoiceFeeItem = new InvoiceItemDO();
+                invoiceFeeItem.buildFeeItemFromCustomerDO(customerDO);
+
+                this.itemList.push(invoiceFeeItem);
+            }
+        }
+    }
+
     public getPrice(): number {
         var thUtils = new ThUtils();
-        return _.reduce(this.itemList, (memo: number, item: InvoiceItemDO) => { 
+        return _.reduce(this.itemList, (memo: number, item: InvoiceItemDO) => {
             return thUtils.roundNumberToTwoDecimals(memo + thUtils.roundNumberToTwoDecimals(item.meta.getNumberOfItems() * item.meta.getUnitPrice()));
         }, 0);
     }
@@ -104,10 +124,19 @@ export class InvoiceDO extends BaseDO {
         return this.paymentStatus === InvoicePaymentStatus.Paid;
     }
 
+    public hasPayInvoiceByAgreementAsPM(): boolean {
+        for (var i = 0; i < this.payerList.length; ++i) {
+            if (this.payerList[i].paymentMethod.type === InvoicePaymentMethodType.PayInvoiceByAgreement) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public removeItemsPopulatedFromBooking() {
         var itemsToRemoveIdList = [];
         _.forEach(this.itemList, (invoiceItemDO: InvoiceItemDO) => {
-            if (invoiceItemDO.type === InvoiceItemType.AddOnProduct && !invoiceItemDO.meta.isMovable()) {
+            if (invoiceItemDO.isDerivedFromBooking()) {
                 itemsToRemoveIdList.push(invoiceItemDO.id);
             }
             else if (invoiceItemDO.type === InvoiceItemType.Booking) {

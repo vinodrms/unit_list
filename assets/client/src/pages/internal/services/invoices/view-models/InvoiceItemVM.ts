@@ -38,4 +38,8 @@ export class InvoiceItemVM {
         invoiceItemVMCopy.invoiceItemDO = invoiceItemDOCopy;
         return invoiceItemVMCopy;
     }
+
+    public buildFromInvoiceItemDO(invoiceItemDO: InvoiceItemDO) {
+        this.invoiceItemDO = invoiceItemDO;
+    }
 }

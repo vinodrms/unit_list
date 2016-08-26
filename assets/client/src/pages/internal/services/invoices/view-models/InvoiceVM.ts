@@ -150,7 +150,7 @@ export class InvoiceVM {
             var invoicePayerVM = this.invoicePayerVMList[i];
             if (!thUtils.isUndefinedOrNull(invoicePayerVM.customerDO)) {
                 if (invoicePayerVM.customerDO.isCompanyOrTravelAgency()) {
-                    if(thUtils.isUndefinedOrNull(invoicePayerVM.invoicePayerDO.paymentMethod)) {
+                    if (thUtils.isUndefinedOrNull(invoicePayerVM.invoicePayerDO.paymentMethod)) {
                         continue;
                     }
                     if (invoicePayerVM.invoicePayerDO.paymentMethod.type === InvoicePaymentMethodType.PayInvoiceByAgreement) {
@@ -182,5 +182,50 @@ export class InvoiceVM {
         })
 
         return invoiceVMCopy;
+    }
+
+    public addOrRemoveInvoiceFeeIfNecessary(customerDOList: CustomerDO[]) {
+        if (!this.hasPayInvoiceByAgreementAsPM()) {
+            var index = _.findIndex(this.invoceItemVMList, (invoiceItemVM: InvoiceItemVM) => {
+                return invoiceItemVM.invoiceItemDO.type === InvoiceItemType.InvoiceFee;
+            });
+            if (index != -1) {
+                this.invoceItemVMList.splice(index, 1);
+                this.invoiceDO.itemList.splice(index, 1);
+            }
+            return;
+        }
+
+        for (var i = 0; i < this.invoicePayerVMList.length; ++i) {
+            if (this.invoicePayerVMList[i].invoicePayerDO.paymentMethod.type === InvoicePaymentMethodType.PayInvoiceByAgreement) {
+                var customerDO = _.find(customerDOList, (customerDO: CustomerDO) => {
+                    return customerDO.id === this.invoicePayerVMList[i].invoicePayerDO.customerId;
+                });
+
+                var index = _.findIndex(this.invoceItemVMList, (invoiceItemVM: InvoiceItemVM) => {
+                    return invoiceItemVM.invoiceItemDO.type === InvoiceItemType.InvoiceFee;
+                });
+                if (index === -1) {
+                    var invoiceFeeItem = new InvoiceItemDO();
+                    invoiceFeeItem.buildFeeItemFromCustomerDO(customerDO);
+
+                    var invoiceItemVM = new InvoiceItemVM(this._thTranslation);
+                    invoiceItemVM.buildFromInvoiceItem(invoiceFeeItem);
+
+                    this.invoceItemVMList.push(invoiceItemVM);
+                    this.invoiceDO.itemList.push(invoiceFeeItem);
+                }
+                return;
+            }
+        }
+    }
+
+    public hasPayInvoiceByAgreementAsPM(): boolean {
+        for (var i = 0; i < this.invoicePayerVMList.length; ++i) {
+            if (this.invoicePayerVMList[i].invoicePayerDO.paymentMethod.type === InvoicePaymentMethodType.PayInvoiceByAgreement) {
+                return true;
+            }
+        }
+        return false;
     }
 }

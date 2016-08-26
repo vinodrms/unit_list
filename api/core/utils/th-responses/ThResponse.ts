@@ -338,6 +338,7 @@ export enum ThStatusCode {
     BookingInvoiceGroupUpdateStrategyErrorUpdating,
     BookingInvoiceGroupUpdateStrategyErrorSavingPaymentDate,
     InvoiceGroupsRepositoryBookingPriceLinkError,
+    InvoiceGroupsRepositoryAddInvoiceFeeError,
     InvoiceEmailSenderErrorSendingEmail,
 
     SlackSendMessageError,
@@ -807,6 +808,7 @@ ThMessage[ThStatusCode.CustomerInvoiceGroupAddStrategyErrorAdding] = "Error addi
 ThMessage[ThStatusCode.BookingInvoiceGroupUpdateStrategyErrorUpdating] = "Error updating the invoice group.";
 ThMessage[ThStatusCode.BookingInvoiceGroupUpdateStrategyErrorSavingPaymentDate] = "Error saving the payment date an timestamp.";
 ThMessage[ThStatusCode.InvoiceGroupsRepositoryBookingPriceLinkError] = "Error linking booking prices with the invoice groups.";
+ThMessage[ThStatusCode.InvoiceGroupsRepositoryAddInvoiceFeeError] = "Error adding invoice fee to the invoices if necessary.";
 ThMessage[ThStatusCode.InvoiceEmailSenderErrorSendingEmail] = "Error sending invoice by email.";
 ThMessage[ThStatusCode.SlackSendMessageError] = "Error sending the message using Slack.";
 ThMessage[ThStatusCode.AddBookingsRepositoryEmptyBookingList] = "Empty booking list.";

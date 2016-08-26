@@ -134,7 +134,7 @@ export class RepositoryFactory {
     getInvoiceGroupsRepository(): IInvoiceGroupsRepository {
         switch (this._databaseType) {
             default:
-                return new MongoInvoiceGroupsRepositoryWithBookingPriceLink(new MongoInvoiceGroupsRepository(), new MongoBookingRepository());
+                return new MongoInvoiceGroupsRepositoryWithBookingPriceLink(new MongoInvoiceGroupsRepository(), new MongoBookingRepository(), new MongoCustomerRepository());
         }
     }
 

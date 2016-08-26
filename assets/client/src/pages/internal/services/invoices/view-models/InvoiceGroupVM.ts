@@ -47,7 +47,6 @@ export class InvoiceGroupVM {
             _.forEach(invoiceVM.invoicePayerVMList, (invoicePayerVM: InvoicePayerVM) => {
                 invoiceVM.invoiceDO.payerList.push(invoicePayerVM.invoicePayerDO);
             });
-
             invoiceVM.invoiceDO.removeItemsPopulatedFromBooking();
 
             this.invoiceGroupDO.invoiceList.push(invoiceVM.invoiceDO);

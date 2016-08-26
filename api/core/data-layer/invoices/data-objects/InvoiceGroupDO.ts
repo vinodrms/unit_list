@@ -4,6 +4,7 @@ import {InvoiceItemDO} from './items/InvoiceItemDO';
 import {InvoicePayerDO} from './payers/InvoicePayerDO';
 import {IBookingRepository} from '../../bookings/repositories/IBookingRepository';
 import {BookingDO} from '../../bookings/data-objects/BookingDO';
+import {CustomerDO} from '../../customers/data-objects/CustomerDO';
 
 export enum InvoiceGroupStatus {
     Active,
@@ -67,11 +68,16 @@ export class InvoiceGroupDO extends BaseDO {
 
     public linkBookingPrices(bookingList: BookingDO[]) {
         _.forEach(this.invoiceList, (invoice: InvoiceDO) => {
-            invoice.linkBookingPrices(bookingList);   
+            invoice.linkBookingPrices(bookingList);
         });
     }
 
-     public removeItemsPopulatedFromBooking() {
+    public addInvoiceFeeIfNecessary(customerDOList: CustomerDO[]) {
+        _.forEach(this.invoiceList, (invoiceDO: InvoiceDO) => {
+            invoiceDO.addInvoiceFeeIfNecessary(customerDOList);
+        });
+    }
+    public removeItemsPopulatedFromBooking() {
         _.forEach(this.invoiceList, (invoiceDO: InvoiceDO) => {
             invoiceDO.removeItemsPopulatedFromBooking();
         });
