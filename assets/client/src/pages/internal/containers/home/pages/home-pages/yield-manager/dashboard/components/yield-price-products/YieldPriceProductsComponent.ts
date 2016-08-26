@@ -82,8 +82,14 @@ export class YieldPriceProductsComponent implements OnInit {
 	}
 
 	private setItemSelectionStateToAll(selected: boolean){
+		this.selectAllItemsFlag = selected;
 		this.priceProductResults.priceProductYieldItemVM.forEach(item => {
-			this.itemsSelectionState[item.id] = selected;
+			if (!item.lastRoomAvailability){
+				this.itemsSelectionState[item.id] = selected;
+			}
+			else {
+				this.itemsSelectionState[item.id] = false;
+			}
 		});
 	}
 
@@ -123,13 +129,13 @@ export class YieldPriceProductsComponent implements OnInit {
 		return results;
 	}
 
-	private selectBySearchText(searchText: string, priceProductYieldItemVM: PriceProductYieldItemVM[]):PriceProductYieldItemVM[]{
+	private selectBySearchText(searchText: string, priceProductYieldItemVMList: PriceProductYieldItemVM[]):PriceProductYieldItemVM[]{
 		var results = [];
 		if (this._appContext.thUtils.isUndefinedOrNull(searchText) || searchText == ""){
-			results = priceProductYieldItemVM;
+			results = priceProductYieldItemVMList;
 		}
 		else{
-			results = _.filter(priceProductYieldItemVM, (item: PriceProductYieldItemVM) => {
+			results = _.filter(priceProductYieldItemVMList, (item: PriceProductYieldItemVM) => {
 				if (item.name.toLocaleLowerCase().indexOf(searchText.toLocaleLowerCase()) != -1){
 					return true;
 				}
