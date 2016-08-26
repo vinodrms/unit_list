@@ -2,7 +2,7 @@ import {PdfReportConfigDO} from '../IPdfReportConfig';
 import {APdfReportConfig} from '../APdfReportConfig';
 import {UnitPalConfig} from '../../../../../utils/environment/UnitPalConfig';
 
-export class InvoicePdfReportConfig extends APdfReportConfig {
+export class InvoiceConfirmationPdfReportConfig extends APdfReportConfig {
     constructor(unitPalConfig: UnitPalConfig) {
         super(unitPalConfig);
         
@@ -13,6 +13,6 @@ export class InvoicePdfReportConfig extends APdfReportConfig {
     }
     
     protected getReportFileName(reportParans: Object): string {
-        return 'invoice';
+        return 'invoice' + '_' + reportParans['invoiceReference'] + '_' + reportParans['payerIndex'];
     }
 }
