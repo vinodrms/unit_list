@@ -35,7 +35,7 @@ export interface IYieldManagerDashboardPriceProducts {
 	refresh();
 }
 
-class ViewModeDecoratorClass{
+class ViewModeDecoratorClass {
 	public static Default = '';
 	public static Shrinked = 'shrinked';
 	public static Expanded = 'expanded';
@@ -49,14 +49,14 @@ class ViewModeDecoratorClass{
 		YieldManagerDashboardFilterService, YieldManagerDashboardPriceProductsService, YieldManagerDashboardKeyMetricsService]
 })
 export class YieldManagerDashboardComponent extends AHomeContainerComponent implements OnInit, IYieldManagerDashboardFilter, IYieldManagerDashboardPriceProducts {
-	public keyMetricsViewModeDecoratorClass =  ViewModeDecoratorClass.Default;
-	public priceProductsViewModeDecoratorClass =  ViewModeDecoratorClass.Default;
+	public keyMetricsViewModeDecoratorClass = ViewModeDecoratorClass.Default;
+	public priceProductsViewModeDecoratorClass = ViewModeDecoratorClass.Default;
 	public currentDate: ThDateDO;
 
-	@ViewChild(YieldPriceProductsComponent) yieldPriceProductsComponent : YieldPriceProductsComponent;
-	@ViewChild(YieldKeyMetricsComponent) yieldKeyMetricsComponent : YieldPriceProductsComponent;
-	@ViewChild(YieldFilterPaneComponent) yieldFilterPaneComponent : YieldFilterPaneComponent;
-	@ViewChild(YieldTimeFrameHeaderComponent) yieldTimeFrameHeaderComponent : YieldTimeFrameHeaderComponent;
+	@ViewChild(YieldPriceProductsComponent) yieldPriceProductsComponent: YieldPriceProductsComponent;
+	@ViewChild(YieldKeyMetricsComponent) yieldKeyMetricsComponent: YieldPriceProductsComponent;
+	@ViewChild(YieldFilterPaneComponent) yieldFilterPaneComponent: YieldFilterPaneComponent;
+	@ViewChild(YieldTimeFrameHeaderComponent) yieldTimeFrameHeaderComponent: YieldTimeFrameHeaderComponent;
 
 	constructor(
 		headerPageService: HeaderPageService,
@@ -64,41 +64,39 @@ export class YieldManagerDashboardComponent extends AHomeContainerComponent impl
 		private _appContext: AppContext
 	) {
 		super(headerPageService, HeaderPageType.YieldManager);
-		console.log("ctr YieldManagerDashboardComponent");
 	}
 
 	ngOnInit() {
-		console.log("ngInit YieldManagerDashboardComponent");
 		this.yieldFilterPaneComponent.yieldManager = this;
 		this.yieldPriceProductsComponent.yieldManager = this;
 		this.yieldKeyMetricsComponent.yieldManager = this;
 		this.yieldTimeFrameHeaderComponent.yieldManager = this;
 	}
 
-	public refresh(){
+	public refresh() {
 		var date = this.yieldTimeFrameHeaderComponent.selectedDate;
 		var noDays = this.yieldTimeFrameHeaderComponent.selectedTimeFrame.noDays;
 		this.updateYieldTimeFrameParams(date, noDays);
 	}
 
-	public updateYieldTimeFrameParams(date: ThDateDO, noDays: number){
+	public updateYieldTimeFrameParams(date: ThDateDO, noDays: number) {
 		this.yieldPriceProductsComponent.refreshTable(date, noDays);
 		this.yieldKeyMetricsComponent.refreshTable(date, noDays);
 	}
 
-	public viewModeStateChanged(state:YieldViewModeState){
-		switch(state){
-			case YieldViewModeState.Default:{
+	public viewModeStateChanged(state: YieldViewModeState) {
+		switch (state) {
+			case YieldViewModeState.Default: {
 				this.keyMetricsViewModeDecoratorClass = ViewModeDecoratorClass.Default;
 				this.priceProductsViewModeDecoratorClass = ViewModeDecoratorClass.Default;
 				break;
 			}
-			case YieldViewModeState.ExpandedYieldKeyMetrics:{
+			case YieldViewModeState.ExpandedYieldKeyMetrics: {
 				this.keyMetricsViewModeDecoratorClass = ViewModeDecoratorClass.Expanded;
 				this.priceProductsViewModeDecoratorClass = ViewModeDecoratorClass.Shrinked;
 				break;
 			}
-			case YieldViewModeState.ExpandedYieldPriceProducts:{
+			case YieldViewModeState.ExpandedYieldPriceProducts: {
 				this.keyMetricsViewModeDecoratorClass = ViewModeDecoratorClass.Shrinked;
 				this.priceProductsViewModeDecoratorClass = ViewModeDecoratorClass.Expanded;
 				break;
@@ -106,7 +104,7 @@ export class YieldManagerDashboardComponent extends AHomeContainerComponent impl
 		}
 	}
 
-	public filterChangeHandler(selectedFilters:IFilterSelection){
+	public filterChangeHandler(selectedFilters: IFilterSelection) {
 		this.yieldPriceProductsComponent.applyFilters(selectedFilters);
 	}
 }
