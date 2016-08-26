@@ -89,8 +89,9 @@ export class SavePriceProductItemDO {
 							},
 							{
 								key: "strategyType",
-								validationStruct: new PrimitiveValidationStructure(new NumberInListValidationRule([AttachedAddOnProductItemStrategyType.FixedNumber,
-									AttachedAddOnProductItemStrategyType.OneItemPerDay, AttachedAddOnProductItemStrategyType.OneItemPerDayForEachAdultOrChild]))
+								validationStruct: new PrimitiveValidationStructure(new NumberInListValidationRule([AttachedAddOnProductItemStrategyType.OneItemPerDay,
+									AttachedAddOnProductItemStrategyType.OneItemForEachAdultOrChild, AttachedAddOnProductItemStrategyType.OneItemPerDayForEachAdultOrChild,
+									AttachedAddOnProductItemStrategyType.FixedNumber]))
 							},
 							{
 								key: "strategy",

@@ -13,6 +13,7 @@ import {YieldFiltersService} from '../../../../../services/hotel-configurations/
 import {PriceProductsService} from '../../../../../services/price-products/PriceProductsService';
 import {PriceProductVM} from '../../../../../services/price-products/view-models/PriceProductVM';
 import {PriceProductDO, PriceProductStatus} from '../../../../../services/price-products/data-objects/PriceProductDO';
+import {PriceProductIncludedItemsDO} from '../../../../../services/price-products/data-objects/included-items/PriceProductIncludedItemsDO';
 import {PriceProductTableMetaBuilderService} from './services/PriceProductTableMetaBuilderService';
 import {PriceProductOverviewComponent} from '../pages/price-product-overview/PriceProductOverviewComponent';
 import {PriceProductEditContainerComponent} from '../pages/price-product-edit/container/PriceProductEditContainerComponent';
@@ -27,8 +28,8 @@ import {PriceProductEditContainerComponent} from '../pages/price-product-edit/co
 export class PriceProductsComponent extends BaseComponent implements AfterViewInit {
 	@Output() protected onScreenStateTypeChanged = new EventEmitter();
 	@Output() protected onItemDeleted = new EventEmitter();
-	@ViewChild('overviewBottom', {read: ViewContainerRef}) private _overviewBottomVCRef: ViewContainerRef;
-	
+	@ViewChild('overviewBottom', { read: ViewContainerRef }) private _overviewBottomVCRef: ViewContainerRef;
+
 	@ViewChild(LazyLoadingTableComponent)
 	private _aopTableComponent: LazyLoadingTableComponent<PriceProductVM>;
 
@@ -187,6 +188,8 @@ export class PriceProductsComponent extends BaseComponent implements AfterViewIn
         var vm = new PriceProductVM(this._appContext.thTranslation);
         vm.priceProduct = new PriceProductDO();
 		vm.priceProduct.status = PriceProductStatus.Draft;
+		vm.priceProduct.includedItems = new PriceProductIncludedItemsDO();
+		vm.priceProduct.includedItems.attachedAddOnProductItemList = [];
         return vm;
     }
 

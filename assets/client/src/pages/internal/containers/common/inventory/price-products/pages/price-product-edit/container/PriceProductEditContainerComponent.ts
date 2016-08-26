@@ -116,18 +116,16 @@ export class PriceProductEditContainerComponent extends BaseComponent implements
 			this._dependentDataSubscription.unsubscribe();
 		}
 		this._dependentDataSubscription = Observable.combineLatest(
-			this._eagerAddOnProductsService.getAddOnProductsById(this._priceProductVM.priceProduct.addOnProductIdList),
 			this._hotelAggregatorService.getHotelAggregatedInfo(),
 			this._addOnProductCategoriesService.getAddOnProductCategoriesDO()
-		).subscribe((result: [AddOnProductsDO, HotelAggregatedInfo, AddOnProductCategoriesDO]) => {
-			this._priceProductVM.addOnProductList = result[0].addOnProductList;
-			this._priceProductVM.ccy = result[1].ccy;
+		).subscribe((result: [HotelAggregatedInfo, AddOnProductCategoriesDO]) => {
+			this._priceProductVM.ccy = result[0].ccy;
 
-			this._editSectionContainer.initializeFrom(this._priceProductVM, result[2]);
+			this._editSectionContainer.initializeFrom(this._priceProductVM, result[1]);
 			this._editSectionContainer.readonly = this.isReadOnly();
 			this._editFiltersSection.readonly = this.yieldFiltersAreReadOnly();
 			this._editNotesSection.readonly = this.yieldFiltersAreReadOnly();
-			this._editCancellationSection.cancellationHour = result[1].hotelDetails.hotel.operationHours.cancellationHour;
+			this._editCancellationSection.cancellationHour = result[0].hotelDetails.hotel.operationHours.cancellationHour;
 
 			this.isLoading = false;
 			this.didSubmit = false;

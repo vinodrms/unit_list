@@ -1,9 +1,7 @@
-import {BaseDO} from '../../../common/base/BaseDO';
+import {BaseDO} from '../../../../../../common/base/BaseDO';
 import {AddOnProductSnapshotDO} from './../../../add-on-products/data-objects/AddOnProductSnapshotDO';
 import {AttachedAddOnProductItemDO} from './AttachedAddOnProductItemDO';
-import {ThUtils} from '../../../../utils/ThUtils';
-
-import _ = require('underscore');
+import {ThUtils} from '../../../../../../common/utils/ThUtils';
 
 export class PriceProductIncludedItemsDO extends BaseDO {
     includedBreakfastAddOnProductSnapshot: AddOnProductSnapshotDO;
@@ -28,14 +26,6 @@ export class PriceProductIncludedItemsDO extends BaseDO {
         });
     }
 
-    public areValid(): boolean {
-        var valid = true;
-        _.forEach(this.attachedAddOnProductItemList, (attachedAddOnProductItem: AttachedAddOnProductItemDO) => {
-            valid = attachedAddOnProductItem.isValid() ? valid : false;
-        });
-        return valid;
-    }
-
     public hasBreakfast(): boolean {
         var thUtils = new ThUtils();
         return !thUtils.isUndefinedOrNull(this.includedBreakfastAddOnProductSnapshot)
@@ -43,14 +33,9 @@ export class PriceProductIncludedItemsDO extends BaseDO {
             && _.isString(this.includedBreakfastAddOnProductSnapshot.id);
     }
 
-    public getUniqueAddOnProductIdList(): string[] {
-        var addOnProductIdList: string[] = [];
-        if (this.hasBreakfast()) {
-            addOnProductIdList.push(this.includedBreakfastAddOnProductSnapshot.id);
-        }
-        addOnProductIdList = addOnProductIdList.concat(_.map(this.attachedAddOnProductItemList, (attachedAddOnProductItem: AttachedAddOnProductItemDO) => {
-            return attachedAddOnProductItem.addOnProductSnapshot.id;
-        }));
-        return _.uniq(addOnProductIdList);
+    public buildPrototype(): PriceProductIncludedItemsDO {
+        var copy = new PriceProductIncludedItemsDO();
+        copy.buildFromObject(this);
+        return copy;
     }
 }

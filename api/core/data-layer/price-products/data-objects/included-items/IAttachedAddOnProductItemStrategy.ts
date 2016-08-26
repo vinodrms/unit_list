@@ -4,6 +4,7 @@ import {ConfigCapacityDO} from '../../../common/data-objects/bed-config/ConfigCa
 
 export enum AttachedAddOnProductItemStrategyType {
     OneItemPerDay,
+    OneItemForEachAdultOrChild,
     OneItemPerDayForEachAdultOrChild,
     FixedNumber
 }
