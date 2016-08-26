@@ -12,12 +12,14 @@ import {BookingDO} from '../../../data-layer/bookings/data-objects/BookingDO';
 import {InvoiceDO, InvoicePaymentStatus} from '../../../data-layer/invoices/data-objects/InvoiceDO';
 import {InvoiceItemDO, InvoiceItemType} from '../../../data-layer/invoices/data-objects/items/InvoiceItemDO';
 import {InvoicePayerDO} from '../../../data-layer/invoices/data-objects/payers/InvoicePayerDO';
+import {InvoicePaymentMethodType} from '../../../data-layer/invoices/data-objects/payers/InvoicePaymentMethodDO';
 import {CustomerIdValidator} from '../../customers/validators/CustomerIdValidator';
 import {CustomerDO, CustomerType} from '../../../data-layer/customers/data-objects/CustomerDO';
 import {CustomersContainer} from '../../customers/validators/results/CustomersContainer';
 import {GenerateBookingInvoiceActionFactory} from './actions/GenerateBookingInvoiceActionFactory';
 import {IGenerateBookingInvoiceActionStrategy} from './actions/IGenerateBookingInvoiceActionStrategy';
 import {AddOnProductDO} from '../../../data-layer/add-on-products/data-objects/AddOnProductDO';
+import {BaseCorporateDetailsDO} from '../../../data-layer/customers/data-objects/customer-details/corporate/BaseCorporateDetailsDO';
 
 import _ = require('underscore');
 
@@ -99,6 +101,15 @@ export class GenerateBookingInvoice {
                     defaultInvoicePayer.priceToPay = 
                         this._thUtils.roundNumberToTwoDecimals(defaultInvoicePayer.priceToPay + invoiceItem.meta.getUnitPrice() * invoiceItem.meta.getNumberOfItems());
                 });
+
+                if(defaultInvoicePayer.paymentMethod.type === InvoicePaymentMethodType.PayInvoiceByAgreement) {
+                    var corporateDetails = new BaseCorporateDetailsDO();
+                    corporateDetails.buildFromObject(this._loadedDefaultBillingCustomer.customerDetails);
+
+                    defaultInvoicePayer.priceToPay = 
+                        this._thUtils.roundNumberToTwoDecimals(defaultInvoicePayer.priceToPay + corporateDetails.invoiceFee);
+                }
+
                 invoice.payerList.push(defaultInvoicePayer);
 
                 resolve(invoice);

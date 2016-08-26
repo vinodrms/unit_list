@@ -54,7 +54,11 @@ export class InvoicePayerComponent implements OnInit {
     public set selectedPaymentMethodVM(selectedPaymentMethodVM: InvoicePaymentMethodVM) {
         this._selectedPaymentMethodVM = selectedPaymentMethodVM;
         this.invoicePayerVM.invoicePayerDO.paymentMethod = selectedPaymentMethodVM.paymentMethod;
-        if (this._pmWasSetForTheFirstTime) this.invoiceVM.isValid();
+        if (this._pmWasSetForTheFirstTime) {
+            this.invoiceVM.addOrRemoveInvoiceFeeIfNecessary(this._invoiceGroupControllerService.invoiceOperationsPageData.customersContainer.customerList);
+            this.invoiceGroupVM.updatePriceToPayIfSinglePayerByRef(this.invoiceReference);
+            this.invoiceVM.isValid();
+        }
         if (!this._pmWasSetForTheFirstTime) this._pmWasSetForTheFirstTime = true;
     }
 

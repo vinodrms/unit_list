@@ -2,6 +2,8 @@ import {BaseDO} from '../../../../../common/base/BaseDO';
 import {ThUtils} from '../../../../../common/utils/ThUtils';
 import {InvoiceItemDO, InvoiceItemType} from './items/InvoiceItemDO';
 import {InvoicePayerDO} from './payers/InvoicePayerDO';
+import {InvoicePaymentMethodType} from './payers/InvoicePaymentMethodDO';
+import {CustomerDO} from '../../customers/data-objects/CustomerDO';
 
 export enum InvoicePaymentStatus {
     Unpaid, Paid
@@ -83,6 +85,7 @@ export class InvoiceDO extends BaseDO {
     public get isPaid(): boolean {
         return this.paymentStatus === InvoicePaymentStatus.Paid;
     }
+    
     public allAmountWasPaid(): boolean {
         return this.getPrice() === this.getAmountPaid();
     }
@@ -90,7 +93,7 @@ export class InvoiceDO extends BaseDO {
     public removeItemsPopulatedFromBooking() {
         var itemsToRemoveIdList = [];
         _.forEach(this.itemList, (invoiceItemDO: InvoiceItemDO) => {
-            if (invoiceItemDO.type === InvoiceItemType.AddOnProduct && !invoiceItemDO.meta.isMovable()) {
+            if (invoiceItemDO.isDerivedFromBooking()) {
                 itemsToRemoveIdList.push(invoiceItemDO.id);
             }
             else if (invoiceItemDO.type === InvoiceItemType.Booking) {

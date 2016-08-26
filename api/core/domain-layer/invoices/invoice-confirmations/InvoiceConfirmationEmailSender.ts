@@ -32,7 +32,7 @@ export class InvoiceConfirmationEmailSender {
         var pdfReportsService = this._appContext.getServiceFactory().getPdfReportsService();
         var invoiceDataAggregator = new InvoiceDataAggregator(this._appContext, this._sessionContext);
         var generatedPdfAbsolutePath: string;
-
+        
         invoiceDataAggregator.getInvoiceAggregatedDataContainer(query).then((invoiceAggregatedDataContainer: InvoiceAggregatedDataContainer) => {
             var invoiceConfirmationVMContainer = new InvoiceConfirmationVMContainer(this._thTranslation);
             invoiceConfirmationVMContainer.buildFromInvoiceAggregatedDataContainer(invoiceAggregatedDataContainer);
