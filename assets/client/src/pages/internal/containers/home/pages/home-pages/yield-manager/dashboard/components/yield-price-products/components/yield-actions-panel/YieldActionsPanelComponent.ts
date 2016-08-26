@@ -11,6 +11,9 @@ import {ThDatePickerComponent} from '../../../../../../../../../../../../common/
 
 import {PriceProductYieldParam} from '../../../../../../../../../../services/yield-manager/dashboard/common/PriceProductYieldParam';
 
+import {HotelService} from '../../../../../../../../../../services/hotel/HotelService';
+import {HotelDetailsDO} from '../../../../../../../../../../services/hotel/data-objects/HotelDetailsDO';
+
 export interface IActionPaneYieldParams {
 	action: PriceProductYieldAction,
 	forever: boolean,
@@ -39,14 +42,13 @@ export class YieldActionsPanelComponent implements OnInit {
 	private _filterStatsInfo : IFilterStatsInfo;
 
 	constructor(
-		private _appContext: AppContext
+		private _appContext: AppContext,
+		private _hotelService: HotelService
 	) {
-		// TODO: get correct reference date
-		var referenceDate = ThDateDO.buildThDateDO(2016, 7, 1);
+		// // TODO: get correct reference date
+		// var referenceDate = ThDateDO.buildThDateDO(2016, 7, 1);
+		this.actionDateInterval = null;
 		this.forever = false;
-		this.actionDateInterval = new ThDateIntervalDO();
-		this.actionDateInterval.start = referenceDate;
-		this.actionDateInterval.end = this.actionDateInterval.start.buildPrototype();
 		this.enums = {
 			PriceProductYieldAction: PriceProductYieldAction
 		}
@@ -54,7 +56,16 @@ export class YieldActionsPanelComponent implements OnInit {
 		this.filterStatsInfo = null;
 	}
 
-	ngOnInit() { }
+	ngOnInit() { 
+		this._hotelService.getHotelDetailsDO().subscribe((details: HotelDetailsDO) => {
+			var referenceDate = details.currentThTimestamp.thDateDO.buildPrototype();
+			this.actionDateInterval = new ThDateIntervalDO();
+			this.actionDateInterval.start = referenceDate;
+			this.actionDateInterval.end = this.actionDateInterval.start.buildPrototype();
+		}, (error:any) => {
+			this._appContext.toaster.error(error.message);
+		});
+	}
 
 	public didSelectOpenInterval(event) {
 		alert("did select open interval");

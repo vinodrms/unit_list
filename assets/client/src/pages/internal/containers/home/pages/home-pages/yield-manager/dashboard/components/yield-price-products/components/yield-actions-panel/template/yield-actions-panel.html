@@ -11,7 +11,7 @@
 				<option [value]="enums.PriceProductYieldAction.CloseForDeparture">{{'Close For Departure' | translate}}</option>
 			</select>
 		</div>
-		<div class="interval flex-row flex-center-v dark-gray-color m-r-12" *ngIf="!forever">
+		<div class="interval flex-row flex-center-v dark-gray-color m-r-12" *ngIf="!forever && actionDateInterval">
 			<div class="form-group dark-gray-color ellipsis-text m-r-12">{{'apply to selected from' | translate}}</div>
 			<th-date-picker
 				[initialThDate]="actionDateInterval.start" [showLabel]="false"
