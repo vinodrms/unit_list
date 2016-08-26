@@ -92,15 +92,6 @@ export class GenerateBookingInvoice {
         invoice.itemList.push(bookingInvoiceItem);
         invoice.paymentStatus = InvoicePaymentStatus.Unpaid;
 
-        if (!this._thUtils.isUndefinedOrNull(this._generateBookingInvoiceDO.initialAddOnProducts)
-            && _.isArray(this._generateBookingInvoiceDO.initialAddOnProducts)) {
-            _.forEach(this._generateBookingInvoiceDO.initialAddOnProducts, (aop: GenerateBookingInvoiceAopMeta) => {
-                var invoiceItem = new InvoiceItemDO();
-                invoiceItem.buildFromAddOnProductDO(aop.addOnProductDO, aop.noOfItems);
-                invoiceItem.id = aop.addOnProductDO.id;
-                invoice.itemList.push(invoiceItem);
-            });
-        }
         this._appContext.getRepositoryFactory().getBookingRepository().getBookingById({ hotelId: this.hotelId }, this._generateBookingInvoiceDO.groupBookingId,
             this._generateBookingInvoiceDO.bookingId).then((booking: BookingDO) => {
                 invoice.payerList = [];
