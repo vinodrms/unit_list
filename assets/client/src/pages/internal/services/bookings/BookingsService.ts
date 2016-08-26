@@ -69,7 +69,7 @@ export class BookingsService extends ALazyLoadRequestService<BookingVM> {
                     return roomCategory.id === booking.roomCategoryId;
                 });
                 bookingVM.bookingMeta = this._bookingMetaFactory.getBookingMetaByStatus(booking.confirmationStatus);
-                bookingVM.totalPriceString = booking.price.totalPrice + bookingVM.ccy.nativeSymbol;
+                bookingVM.totalPriceString = booking.price.totalBookingPrice + bookingVM.ccy.nativeSymbol;
                 bookingVM.conditionsString = booking.priceProductSnapshot.conditions.getCancellationConditionsString(this._appContext.thTranslation);
                 bookingVM.constraintsString = booking.priceProductSnapshot.constraints.getBriefValueDisplayString(this._appContext.thTranslation);
                 bookingVM.customerNameString = customers.getCustomerById(booking.displayCustomerId).customerName;

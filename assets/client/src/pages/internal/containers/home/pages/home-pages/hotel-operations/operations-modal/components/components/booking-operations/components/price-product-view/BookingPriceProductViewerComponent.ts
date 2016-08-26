@@ -38,11 +38,15 @@ export class BookingPriceProductViewerComponent implements OnInit {
     private loadDependentData() {
         if (!this._didInit || this._appContext.thUtils.isUndefinedOrNull(this._bookingOperationsPageData)) { return; }
         if (this.bookingDO.price.hasBreakfast()) {
-            this.includedString = this.bookingDO.price.breakfast.meta.getDisplayName(this._appContext.thTranslation);
+            this.includedString = this.bookingDO.price.breakfast.meta.getDisplayName(this._appContext.thTranslation)
+                + " (" + this._appContext.thTranslation.translate("Included") + ")";
         }
         _.forEach(this.bookingDO.price.includedInvoiceItemList, (invoiceItem: InvoiceItemDO) => {
             if (this.includedString.length > 0) { this.includedString += ", "; }
-            this.includedString += invoiceItem.meta.getDisplayName(this._appContext.thTranslation);
+            var totalPrice: number = invoiceItem.meta.getNumberOfItems() * invoiceItem.meta.getUnitPrice();
+            totalPrice = this._appContext.thUtils.roundNumberToTwoDecimals(totalPrice);
+            this.includedString += invoiceItem.meta.getNumberOfItems() + "x" + invoiceItem.meta.getDisplayName(this._appContext.thTranslation) +
+                " (" + totalPrice + this.currencySymbolString + ")";
         });
         this.conditionsString = this.priceProductDO.conditions.getCancellationConditionsString(this._appContext.thTranslation);
         this.constraintsString = this.priceProductDO.constraints.getBriefValueDisplayString(this._appContext.thTranslation);
@@ -58,7 +62,13 @@ export class BookingPriceProductViewerComponent implements OnInit {
         return this._bookingOperationsPageData.ccy.nativeSymbol;
     }
     public get totalPrice(): number {
-        return this.bookingDO.price.totalPrice;
+        return this.bookingDO.price.totalBookingPrice;
+    }
+    public get totalRoomPrice(): number {
+        return this.bookingDO.price.totalRoomPrice;
+    }
+    public get totalOtherPrice(): number {
+        return this.bookingDO.price.totalOtherPrice;
     }
     public get isPenaltyPrice(): boolean {
         return this.bookingDO.price.isPenalty();

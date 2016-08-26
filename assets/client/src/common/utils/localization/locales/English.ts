@@ -707,5 +707,6 @@ export var EnglishTranslations: Object = {
 	"Forever": "Forever",
 	"Apply changes": "Apply changes",
 	"Change date": "Change date",
+	"Others": "Others",
 
 };

@@ -11,16 +11,21 @@ export enum BookingPriceType {
 
 export class BookingPriceDO extends BaseDO implements IInvoiceItemMeta {
     movable: boolean;
+
     priceType: BookingPriceType;
-    pricePerItem: number;
-    numberOfItems: number;
-    totalPrice: number;
+
+    roomPricePerNight: number;
+    numberOfNights: number;
+    totalRoomPrice: number;
+    totalOtherPrice: number;
+
+    totalBookingPrice: number;
 
     breakfast: InvoiceItemDO;
     includedInvoiceItemList: InvoiceItemDO[];
 
     protected getPrimitivePropertyKeys(): string[] {
-        return ["movable", "priceType", "pricePerItem", "numberOfItems", "totalPrice"];
+        return ["movable", "priceType", "roomPricePerNight", "numberOfNights", "totalRoomPrice", "totalOtherPrice", "totalBookingPrice"];
     }
     public buildFromObject(object: Object) {
         super.buildFromObject(object);
@@ -37,10 +42,10 @@ export class BookingPriceDO extends BaseDO implements IInvoiceItemMeta {
     }
 
     public getUnitPrice(): number {
-        return this.pricePerItem;
+        return this.roomPricePerNight;
     }
     public getNumberOfItems(): number {
-        return this.numberOfItems;
+        return this.numberOfNights;
     }
     public getDisplayName(thTranslation: ThTranslation): string {
         return thTranslation.translate(this.getDisplayNameCore(thTranslation));
