@@ -68,8 +68,15 @@ export class InvoiceVM {
     public addInvoicePayer(customerDO: CustomerDO) {
         var newInvoicePayerVM = new InvoicePayerVM(this._thTranslation);
         newInvoicePayerVM.buildFromCustomerDO(customerDO);
-        newInvoicePayerVM.invoicePayerDO.priceToPay = this.totalPrice - this.amountPaid;
         this.invoicePayerVMList.push(newInvoicePayerVM);
+        var thUtils = new ThUtils();
+        var equalSharePrice = thUtils.roundNumberToTwoDecimals(this.totalPrice / this.invoicePayerVMList.length);
+        _.forEach(this.invoicePayerVMList, (invoicePayerVM: InvoicePayerVM) => {
+            invoicePayerVM.invoicePayerDO.priceToPay = equalSharePrice;
+        });
+
+        this.invoicePayerVMList[0].invoicePayerDO.priceToPay = 
+            thUtils.roundNumberToTwoDecimals(this.invoicePayerVMList[0].invoicePayerDO.priceToPay + this.totalPrice - this.amountPaid);
 
         this.isValid();
     }
