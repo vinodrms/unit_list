@@ -11,6 +11,7 @@ import {YieldManagerPeriodParam} from '../../../../../../../../services/yield-ma
 
 import {CustomScroll} from '../../../../../../../../../../common/utils/directives/CustomScroll';
 import {TranslationPipe} from '../../../../../../../../../../common/utils/localization/TranslationPipe';
+import {PercentagePipe} from '../../../../../../../../../../common/utils/pipes/PercentagePipe';
 
 import {KeyMetricModalService} from '../../../key-metric-modal/services/KeyMetricModalService';
 import {ModalDialogRef} from '../../../../../../../../../../common/utils/modals/utils/ModalDialogRef';
@@ -19,7 +20,8 @@ import {ModalDialogRef} from '../../../../../../../../../../common/utils/modals/
 	selector: 'yield-key-metrics',
 	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/yield-manager/dashboard/components/yield-key-metrics/template/yield-key-metrics.html',
 	providers: [YieldManagerDashboardKeyMetricsService, KeyMetricModalService],
-	directives: [CustomScroll]
+	directives: [CustomScroll],
+	pipes: [PercentagePipe, TranslationPipe]
 })
 export class YieldKeyMetricsComponent implements OnInit {
 	public matrix: string[][];
@@ -35,14 +37,14 @@ export class YieldKeyMetricsComponent implements OnInit {
 	}
 
 	public getDateLabel(date: ThDateDO) {
-		return date.getShortDisplayString(this._appContext.thTranslation);
+		return date.getShortDisplayString(this._appContext.thTranslation, true);
 	}
 
 	ngOnInit() {
 	}
 
-	public refreshTable(date:ThDateDO, noDays:number){
-		if (this.metricsResults){
+	public refreshTable(date: ThDateDO, noDays: number) {
+		if (this.metricsResults) {
 			this._keyMetricsService.refresh({ referenceDate: date, noDays: noDays });
 		}
 		else {
@@ -52,18 +54,18 @@ export class YieldKeyMetricsComponent implements OnInit {
 				console.log(e);
 			});
 		}
-	}	
+	}
 
-	private normalizeAndReversPercentage(percentage){
+	private normalizeAndReversPercentage(percentage) {
 		const PERCENTAGE_MIN = 0;
 		const PERCENTAGE_MAX = 1;
-		
+
 		var nrPercentage = PERCENTAGE_MAX - Math.min(Math.max(percentage, PERCENTAGE_MIN), PERCENTAGE_MAX);
 
 		return nrPercentage;
 	}
 
-	public getPercentageStyles(percentage):Object {
+	public getPercentageStyles(percentage): Object {
 		const PERCENTAGE_MID = 0.5;
 		const PERCENTAGE_MIN = 0;
 		const PERCENTAGE_MAX = 1;
@@ -83,23 +85,23 @@ export class YieldKeyMetricsComponent implements OnInit {
 		}
 
 		return {
-			"border-left-color" : rgbStr
+			"border-left-color": rgbStr
 		};
 	}
 
-	public getInventoryStyles(value):Object{
-		if (value.available < 0){
+	public getInventoryStyles(value): Object {
+		if (value.available < 0) {
 			return {
-				'font-weight' : 'bold',
+				'font-weight': 'bold',
 			}
 		}
 		return {}
 	}
 
-	public getInventoryAvailableStyles(value):Object{
-		if (value.available < 0){
+	public getInventoryAvailableStyles(value): Object {
+		if (value.available < 0) {
 			return {
-				'color' : 'red'
+				'color': 'red'
 			}
 		}
 		return {}
@@ -116,7 +118,7 @@ export class YieldKeyMetricsComponent implements OnInit {
 	public get yieldManager(): IYieldManagerDashboardFilter {
 		return this._yieldManager;
 	}
-	
+
 	public set yieldManager(yieldManager: IYieldManagerDashboardFilter) {
 		this._yieldManager = yieldManager;
 	}
