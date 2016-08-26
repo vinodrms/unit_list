@@ -19,7 +19,7 @@
 				<div class="filter-indicator" [ngClass]="getPriceProductFilterClasses(priceProduct)">
 					<span class="f-10" title="{{getPriceProductTextFilter(priceProduct)}}">{{getPriceProductTextFilterInitial(priceProduct)}}</span>
 				</div>
-				<span class=" p-l-6">
+				<span class="p-l-6 ellipsis-text">
 					<input type="checkbox" [(ngModel)]="itemsSelectionState[priceProduct.id]" *ngIf="!priceProduct.lastRoomAvailability">
 					<span class="orange-color f-10" *ngIf="priceProduct.lastRoomAvailability" title="{{'Last Room Availability' | translate}}"><b>LRA</b></span>
 					<span class="dark-gray-color f-14">{{priceProduct.name}}</span>
