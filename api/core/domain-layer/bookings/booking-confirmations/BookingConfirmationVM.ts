@@ -166,7 +166,7 @@ export class BookingConfirmationVM {
     private initReservedAopsDisplayText() {
         var reservedAddOnProductIdList: string[] = this._bookingAggregatedData.booking.reservedAddOnProductIdList;
         if (this._thUtils.isUndefinedOrNull(reservedAddOnProductIdList) || !_.isArray(reservedAddOnProductIdList)) {
-            this.reservedAops = 'n/a';
+            this.reservedAops = this._notAvailableTranslatedLabel;
             this.reservedAopsDescription = '';
         }
         this.reservedAops = '';
@@ -184,7 +184,7 @@ export class BookingConfirmationVM {
             }
         });
         if (this.reservedAops.length == 0) {
-            this.reservedAops = 'n/a';
+            this.reservedAops = this._notAvailableTranslatedLabel;
             this.reservedAopsDescription = '';
         }
         else {
