@@ -153,9 +153,9 @@ export class BookingConfirmationVM {
         var bookingPrice = this._bookingAggregatedData.booking.price;
         _.forEach(bookingPrice.includedInvoiceItemList, (invoiceItem: InvoiceItemDO) => {
             var itemDisplayString = invoiceItem.meta.getNumberOfItems() + "x" + invoiceItem.meta.getDisplayName(this._thTranslation);
-            var price = invoiceItem.meta.getNumberOfItems() + invoiceItem.meta.getUnitPrice();
-            price = this._thUtils.roundNumberToTwoDecimals(price);
-            itemDisplayString += " (" + price + this.ccyCode + "); ";
+            var aopPrice = invoiceItem.meta.getNumberOfItems() * invoiceItem.meta.getUnitPrice();
+            aopPrice = this._thUtils.roundNumberToTwoDecimals(aopPrice);
+            itemDisplayString += " (" + aopPrice + this.ccyCode + "); ";
             this.otherAops += itemDisplayString;
         });
 
