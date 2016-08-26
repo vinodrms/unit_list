@@ -19,6 +19,7 @@ import _ = require('underscore');
 
 export interface BookingCancelUpdateResult {
     hasPenalty: boolean;
+    penaltyPrice?: number;
 }
 
 export class BookingCancel {
@@ -96,6 +97,7 @@ export class BookingCancel {
             }
             logMessage = "The booking has been cancelled. The booking has a penalty.";
             updateResult.hasPenalty = true;
+            updateResult.penaltyPrice = this._loadedBooking.price.totalBookingPrice;
         }
 
         this._loadedBooking.bookingHistory.logDocumentAction(DocumentActionDO.buildDocumentActionDO({
@@ -123,10 +125,10 @@ export class BookingCancel {
             return;
         }
         var generateBookingInvoice = new GenerateBookingInvoice(this._appContext, this._sessionContext);
-        generateBookingInvoice.generate({
+        generateBookingInvoice.generateWithPenalty({
             groupBookingId: this._cancelDO.groupBookingId,
             bookingId: this._cancelDO.bookingId
-        }).then((invoiceGroup: InvoiceGroupDO) => {
+        }, bookingUpdateResult.penaltyPrice).then((invoiceGroup: InvoiceGroupDO) => {
             resolve(true);
         }).catch((error: ThError) => {
             reject(error);
