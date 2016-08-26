@@ -686,5 +686,18 @@ export var EnglishTranslations: Object = {
 	"You cannot mark this invoice as paid. The total amount paid is lower than the total price.": "You cannot mark this invoice as paid. The total amount paid is lower than the total price.",
 	"Only unpaid invoices are editable. No unpaid invoices exist in this invoice group.": "Only unpaid invoices are editable. No unpaid invoice exists in this invoice group.",
 	"You cannot save an invoice group if it does not contain at least an invoice.": "You cannot save an invoice group if it does not contain at least an invoice.",
-	
+	"Yield Filters" : "Yield Filters",
+	"Search here" : "Search here",
+	"Key Metrics" : "Key Metrics",
+	"Select an action" : "Select an action",
+	"Open" : "Open",
+	"Open For Arrival" : "Open For Arrival",
+	"Close For Arrival" : "Close For Arrival",
+	"Open For Departure" : "Open For Departure",
+	"Close For Departure" : "Close For Departure",
+	"apply to selected from" : "apply to selected from",
+	"to" : "to",
+	"Forever" : "Forever",
+	"Apply changes" : "Apply changes",
+	"Change date" : "Change date"
 };

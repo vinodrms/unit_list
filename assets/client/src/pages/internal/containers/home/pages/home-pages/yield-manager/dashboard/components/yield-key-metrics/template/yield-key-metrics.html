@@ -1,7 +1,7 @@
 <div class="key-metrics-table flex-table p-12 full-height" *ngIf="metricsResults">
 	<div class="key-metrics-row table-header flex-row">
 		<div class="key-metrics-col wide" >
-			<span class="dark-gray-color oneline-text f-14">Key Metrics</span>
+			<span class="dark-gray-color oneline-text f-14">{{'Key Metrics' | translate}}</span>
 		</div>
 		<div class="key-metrics-col" *ngFor="let date of metricsResults.currentItemVM.dateList">
 			<span class="dark-gray-color oneline-text f-14" title="{{getDateLabel(date)}}">{{getDateLabel(date)}}</span>

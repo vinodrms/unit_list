@@ -7,7 +7,7 @@
 			[(ngModel)]="selectAllItemsFlag"
 			(change)="setItemSelectionStateToAll(!selectAllItemsFlag)"
 			>
-			<span class="dark-gray-color oneline-text f-14 p-l-6">Price Products</span>
+			<span class="dark-gray-color oneline-text f-14 p-l-6">{{'Price Products' | translate}}</span>
 		</div>
 		<div class="price-products-col" *ngFor="let date of priceProductResults.dateList">
 			<span class="dark-gray-color oneline-text f-14" title="{{getDateLabel(date)}}">{{getDateLabel(date)}}</span>
@@ -21,7 +21,7 @@
 				</div>
 				<span class=" p-l-6">
 					<input type="checkbox" [(ngModel)]="itemsSelectionState[priceProduct.id]" *ngIf="!priceProduct.lastRoomAvailability">
-					<span class="orange-color f-10" *ngIf="priceProduct.lastRoomAvailability" title="Last Room Availability"><b>LRA</b></span>
+					<span class="orange-color f-10" *ngIf="priceProduct.lastRoomAvailability" title="{{'Last Room Availability' | translate}}"><b>LRA</b></span>
 					<span class="dark-gray-color f-14">{{priceProduct.name}}</span>
 				</span>
 			</div>
