@@ -10,6 +10,9 @@ import {BedDO} from '../../../data-layer/common/data-objects/bed/BedDO';
 import {AddOnProductDO} from '../../../data-layer/add-on-products/data-objects/AddOnProductDO';
 import {AddOnProductCategoryDO, AddOnProductCategoryType} from '../../../data-layer/common/data-objects/add-on-product/AddOnProductCategoryDO';
 import {BookingAggregatedData} from '../aggregators/BookingAggregatedData';
+import {InvoiceItemDO} from '../../../data-layer/invoices/data-objects/items/InvoiceItemDO';
+
+import _ = require('underscore');
 
 export class BookingConfirmationVM {
     private _isoWeekDayUtils: ISOWeekDayUtils;
@@ -137,33 +140,27 @@ export class BookingConfirmationVM {
     }
     private initBreakfastDisplayText() {
         this.breakfastAop = '';
-        var breakfastAopCategId = this.getBreakfastAOPCategoryId();
-        var breakfastAopObject = _.find(this._bookingAggregatedData.addOnProductList, (aop: AddOnProductDO) => {
-            return aop.categoryId === breakfastAopCategId;
-        });
-
-        if (this._thUtils.isUndefinedOrNull(breakfastAopObject)) {
-            this.breakfastAop = this._notAvailableTranslatedLabel;
+        var bookingPrice = this._bookingAggregatedData.booking.price;
+        if (bookingPrice.hasBreakfast()) {
+            this.breakfastAop += bookingPrice.breakfast.meta.getDisplayName(this._thTranslation) + " (" + this._thTranslation.translate("Included in Room Price") + ")";
+            return;
         }
-        else {
-            this.breakfastAop += breakfastAopObject.name;
-        }
+        this.breakfastAop += this._notAvailableTranslatedLabel;
     }
     private initOthersAopsDisplayText() {
         this.otherAops = '';
 
-        var otherAopCategId = this.getOthersAOPCategoryId();
-        var otherAopObjectList = _.filter(this._bookingAggregatedData.addOnProductList, (aop: AddOnProductDO) => {
-            return aop.categoryId === otherAopCategId;
+        var bookingPrice = this._bookingAggregatedData.booking.price;
+        _.forEach(bookingPrice.includedInvoiceItemList, (invoiceItem: InvoiceItemDO) => {
+            var itemDisplayString = invoiceItem.meta.getNumberOfItems() + "x" + invoiceItem.meta.getDisplayName(this._thTranslation);
+            var price = invoiceItem.meta.getNumberOfItems() + invoiceItem.meta.getUnitPrice();
+            price = this._thUtils.roundNumberToTwoDecimals(price);
+            itemDisplayString += " (" + price + this.ccyCode + "); ";
+            this.otherAops += itemDisplayString;
         });
 
-        if (this._thUtils.isUndefinedOrNull(otherAopObjectList) || _.isEmpty(otherAopObjectList)) {
+        if (this.otherAops.length == 0) {
             this.otherAops = this._notAvailableTranslatedLabel;
-        }
-        else {
-            _.forEach(otherAopObjectList, (aop: AddOnProductDO) => {
-                this.otherAops += aop.name + '; ';
-            });
         }
     }
     private initReservedAopsDisplayText() {

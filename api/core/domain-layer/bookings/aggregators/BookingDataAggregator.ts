@@ -116,8 +116,7 @@ export class BookingDataAggregator {
     }
     private getDistinctAddOnProductIdListFromBookingList(): string[] {
         return _.chain(this._bookingList).map((booking: BookingDO) => {
-            // TODO: temporary fix
-            var addOnProductIdList = _.map(booking.priceProductSnapshot.includedItems.getUniqueAddOnProductIdList(), (aopId: string) => { return aopId });
+            var addOnProductIdList = [];
             if (booking.reservedAddOnProductIdList) {
                 addOnProductIdList = addOnProductIdList.concat(booking.reservedAddOnProductIdList);
             }
@@ -153,8 +152,7 @@ export class BookingDataAggregator {
                 return _.contains(bookingBedIdList, bed.id);
             });
             bookingAggregatedData.addOnProductList = _.filter(this._addOnProductList, (aop: AddOnProductDO) => {
-                // TODO: remove the temporary fix
-                var addOnProductIdList = booking.priceProductSnapshot.includedItems.getUniqueAddOnProductIdList();
+                var addOnProductIdList = [];
                 if (booking.reservedAddOnProductIdList) {
                     addOnProductIdList = addOnProductIdList.concat(booking.reservedAddOnProductIdList);
                 }
