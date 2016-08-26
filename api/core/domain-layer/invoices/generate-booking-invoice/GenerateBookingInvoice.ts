@@ -30,6 +30,8 @@ export class GenerateBookingInvoice {
     private _loadedBooking: BookingDO;
     private _loadedDefaultBillingCustomer: CustomerDO;
 
+    private _penaltyPrice: number;
+
     constructor(private _appContext: AppContext, private _sessionContext: SessionContext) {
         this._thUtils = new ThUtils();
     }
@@ -42,8 +44,16 @@ export class GenerateBookingInvoice {
         });
     }
 
-    private generateCore(resolve: { (result: InvoiceGroupDO): void }, reject: { (err: ThError): void }) {
+    public generateWithPenalty(generateBookingInvoiceItemDO: GenerateBookingInvoiceDO, penaltyPrice: number): Promise<InvoiceGroupDO> {
+        this._generateBookingInvoiceDO = generateBookingInvoiceItemDO;
+        this._penaltyPrice = penaltyPrice;
 
+        return new Promise<InvoiceGroupDO>((resolve: { (result: InvoiceGroupDO): void }, reject: { (err: ThError): void }) => {
+            this.generateCore(resolve, reject);
+        });
+    }
+
+    private generateCore(resolve: { (result: InvoiceGroupDO): void }, reject: { (err: ThError): void }) {
         var bookingIdValidator = new BookingIdValidator(this._appContext, this._sessionContext);
         bookingIdValidator.validateBookingId(this._generateBookingInvoiceDO.groupBookingId, this._generateBookingInvoiceDO.bookingId).then((booking: BookingDO) => {
             this._loadedBooking = booking;
@@ -96,13 +106,16 @@ export class GenerateBookingInvoice {
                 invoice.payerList = [];
                 var defaultInvoicePayer =
                     InvoicePayerDO.buildFromCustomerDOAndPaymentMethod(this._loadedDefaultBillingCustomer, this._loadedBooking.defaultBillingDetails.paymentMethod);
-                defaultInvoicePayer.priceToPay = this._thUtils.roundNumberToTwoDecimals(booking.price.getUnitPrice() * booking.price.getNumberOfItems());
-
-                if (!booking.price.isPenalty()) {
+                
+                if (this._thUtils.isUndefinedOrNull(this._penaltyPrice)) {
+                    defaultInvoicePayer.priceToPay = this._thUtils.roundNumberToTwoDecimals(booking.price.getUnitPrice() * booking.price.getNumberOfItems());
                     _.forEach(booking.price.includedInvoiceItemList, (invoiceItem: InvoiceItemDO) => {
                         defaultInvoicePayer.priceToPay =
                             this._thUtils.roundNumberToTwoDecimals(defaultInvoicePayer.priceToPay + invoiceItem.meta.getUnitPrice() * invoiceItem.meta.getNumberOfItems());
                     });
+                }
+                else {
+                    defaultInvoicePayer.priceToPay = this._penaltyPrice;
                 }
                 if (defaultInvoicePayer.paymentMethod.type === InvoicePaymentMethodType.PayInvoiceByAgreement) {
                     var corporateDetails = new BaseCorporateDetailsDO();
