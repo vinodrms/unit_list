@@ -192,4 +192,8 @@ export class InvoicePayerComponent implements OnInit {
         }
         return invoicePaymentMethodVMList;
     }
+
+    public get invoiceisPaid(): boolean {
+        return this.invoiceVM.invoiceDO.isPaid;
+    }
 }
