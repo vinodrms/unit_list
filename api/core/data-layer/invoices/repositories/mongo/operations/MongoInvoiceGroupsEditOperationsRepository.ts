@@ -12,8 +12,8 @@ import {MongoBookingRepository} from '../../../../bookings/repositories/mongo/Mo
 export class MongoInvoiceGroupsEditOperationsRepository extends MongoRepository {
     private _helper: InvoiceGroupsRepositoryHelper;
 
-    private static InvoiceGroupReferencePrefix = 'ig';
-    private static InvoiceReferencePrefix = 'i';
+    private static InvoiceGroupReferencePrefix = 'IG';
+    private static InvoiceReferencePrefix = 'IR';
 
     constructor(invoiceGroupsEntity: Sails.Model) {
         super(invoiceGroupsEntity);
