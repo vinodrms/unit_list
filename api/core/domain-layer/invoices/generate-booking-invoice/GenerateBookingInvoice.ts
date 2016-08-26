@@ -97,16 +97,18 @@ export class GenerateBookingInvoice {
                 var defaultInvoicePayer =
                     InvoicePayerDO.buildFromCustomerDOAndPaymentMethod(this._loadedDefaultBillingCustomer, this._loadedBooking.defaultBillingDetails.paymentMethod);
                 defaultInvoicePayer.priceToPay = this._thUtils.roundNumberToTwoDecimals(booking.price.getUnitPrice() * booking.price.getNumberOfItems());
-                _.forEach(booking.price.includedInvoiceItemList, (invoiceItem: InvoiceItemDO) => {
-                    defaultInvoicePayer.priceToPay = 
-                        this._thUtils.roundNumberToTwoDecimals(defaultInvoicePayer.priceToPay + invoiceItem.meta.getUnitPrice() * invoiceItem.meta.getNumberOfItems());
-                });
 
-                if(defaultInvoicePayer.paymentMethod.type === InvoicePaymentMethodType.PayInvoiceByAgreement) {
+                if (!booking.price.isPenalty()) {
+                    _.forEach(booking.price.includedInvoiceItemList, (invoiceItem: InvoiceItemDO) => {
+                        defaultInvoicePayer.priceToPay =
+                            this._thUtils.roundNumberToTwoDecimals(defaultInvoicePayer.priceToPay + invoiceItem.meta.getUnitPrice() * invoiceItem.meta.getNumberOfItems());
+                    });
+                }
+                if (defaultInvoicePayer.paymentMethod.type === InvoicePaymentMethodType.PayInvoiceByAgreement) {
                     var corporateDetails = new BaseCorporateDetailsDO();
                     corporateDetails.buildFromObject(this._loadedDefaultBillingCustomer.customerDetails);
 
-                    defaultInvoicePayer.priceToPay = 
+                    defaultInvoicePayer.priceToPay =
                         this._thUtils.roundNumberToTwoDecimals(defaultInvoicePayer.priceToPay + corporateDetails.invoiceFee);
                 }
 

@@ -88,10 +88,12 @@ export class InvoiceDO extends BaseDO {
                     item.meta = booking.price;
                     item.meta.setMovable(false);
                 }
-                _.forEach(booking.price.includedInvoiceItemList, (invoiceItem: InvoiceItemDO) => {
-                    invoiceItem.meta.setMovable(false);
-                    this.itemList.push(invoiceItem);
-                });
+                if(!booking.price.isPenalty()) {
+                    _.forEach(booking.price.includedInvoiceItemList, (invoiceItem: InvoiceItemDO) => {
+                        invoiceItem.meta.setMovable(false);
+                        this.itemList.push(invoiceItem);
+                    });
+                }
             }
         });
     }
