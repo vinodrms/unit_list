@@ -7,7 +7,7 @@ import {DefaultRoomCategoryBuilder} from './builders/DefaultRoomCategoryBuilder'
 import {HotelDO} from '../../core/data-layer/hotel/data-objects/HotelDO';
 import {UserDO} from '../../core/data-layer/hotel/data-objects/user/UserDO';
 import {PaymentMethodDO} from '../../core/data-layer/common/data-objects/payment-method/PaymentMethodDO';
-import {AddOnProductCategoryDO} from '../../core/data-layer/common/data-objects/add-on-product/AddOnProductCategoryDO';
+import {AddOnProductCategoryDO, AddOnProductCategoryType} from '../../core/data-layer/common/data-objects/add-on-product/AddOnProductCategoryDO';
 import {AmenityDO} from '../../core/data-layer/common/data-objects/amenity/AmenityDO';
 import {BedTemplateDO} from '../../core/data-layer/common/data-objects/bed-template/BedTemplateDO';
 import {BedDO} from '../../core/data-layer/common/data-objects/bed/BedDO';
@@ -171,7 +171,8 @@ export class DefaultDataBuilder {
                 this._roomCategoryStatsList = roomCategoryStatsList;
 
                 var priceProductBuilder = new DefaultPriceProductBuilder(this._testContext);
-                return priceProductBuilder.loadPriceProducts(priceProductBuilder, this._roomCategoryStatsList, this._taxes, this._addOnProductList);
+                return priceProductBuilder.loadPriceProducts(priceProductBuilder, this._roomCategoryStatsList, 
+                    this._taxes, this._addOnProductList, this.breakfastAddOnProductCategory.id);
             }).then((priceProductList: PriceProductDO[]) => {
                 this._priceProductList = priceProductList;
 
@@ -248,6 +249,11 @@ export class DefaultDataBuilder {
     }
     public get addOnProductCategoryList(): AddOnProductCategoryDO[] {
         return this._addOnProductCategoryList;
+    }
+    public get breakfastAddOnProductCategory(): AddOnProductCategoryDO {
+        return _.find(this._addOnProductCategoryList, (aopCateg: AddOnProductCategoryDO) => {
+            return aopCateg.type === AddOnProductCategoryType.Breakfast;
+        });
     }
     public get addOnProductList(): AddOnProductDO[] {
         return this._addOnProductList;

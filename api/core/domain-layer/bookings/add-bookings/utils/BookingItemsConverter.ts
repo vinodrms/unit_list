@@ -134,7 +134,9 @@ export class BookingItemsConverter {
         var bookingPrice = new BookingPriceDO();
         bookingPrice.includedInvoiceItemList = [];
 
-        _.forEach(priceProduct.addOnProductIdList, (addOnProductId: string) => {
+        // TODO: temporary fix
+        // replace includedItems.getUniqueAddOnProductIdList() with the actual generation
+        _.forEach(priceProduct.includedItems.getUniqueAddOnProductIdList(), (addOnProductId: string) => {
             var addOnProductItem: AddOnProductItem = this._converterParams.addOnProductItemContainer.getAddOnProductItemById(addOnProductId);
             if (!this._thUtils.isUndefinedOrNull(addOnProductItem)) {
                 var invoiceItem = this.convertAddOnProductToInvoiceItem(addOnProductItem.addOnProduct);

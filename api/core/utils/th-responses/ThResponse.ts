@@ -223,8 +223,11 @@ export enum ThStatusCode {
     SavePriceProductItemInvalidConditions,
     PriceProductItemUpdateStrategyOnlyActiveAndDraftCanBeUpdated,
     PriceProductItemStrategyInvalidStatus,
+    PriceProductValidatorInvalidBreakfast,
+    PriceProductValidatorAopAsBreakfast,
     PriceProductValidatorUnusedRoomCategoryId,
     PriceProductValidatorEmptyRoomCategoryList,
+    PriceProductValidatorInvalidIncludedItems,
     PriceProductValidatorInvalidPrices,
     ArchivePriceProductItemError,
     ArchivePriceProductItemNonActiveStatus,
@@ -697,8 +700,11 @@ ThMessage[ThStatusCode.SavePriceProductItemInvalidConstraints] = "Invalid constr
 ThMessage[ThStatusCode.SavePriceProductItemInvalidConditions] = "Invalid conditions submitted.";
 ThMessage[ThStatusCode.PriceProductItemUpdateStrategyOnlyActiveAndDraftCanBeUpdated] = "Only draft or active price products can be updated.";
 ThMessage[ThStatusCode.PriceProductItemStrategyInvalidStatus] = "A price product can only be saved as draft or active.";
+ThMessage[ThStatusCode.PriceProductValidatorInvalidBreakfast] = "Invalid breakfast submitted on Price Product.";
+ThMessage[ThStatusCode.PriceProductValidatorAopAsBreakfast] = "You submitted a breakfast as an Add On Product.";
 ThMessage[ThStatusCode.PriceProductValidatorUnusedRoomCategoryId] = "You can assign on the price product only room categories which have rooms assigned.";
 ThMessage[ThStatusCode.PriceProductValidatorEmptyRoomCategoryList] = "Please assign at least one room category to the price product.";
+ThMessage[ThStatusCode.PriceProductValidatorInvalidIncludedItems] = "Error validating the breakfast and attached Add On Products.";
 ThMessage[ThStatusCode.PriceProductValidatorInvalidPrices] = "Please complete all the required price values.";
 ThMessage[ThStatusCode.ArchivePriceProductItemError] = "Please while archiving the price product.";
 ThMessage[ThStatusCode.ArchivePriceProductItemNonActiveStatus] = "Please while archiving the price product.";

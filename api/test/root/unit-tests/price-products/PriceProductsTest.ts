@@ -77,7 +77,7 @@ describe("Hotel Price Products Tests", function () {
         });
 		it("Should not save price product with invalid add on product id", function (done) {
 			var priceProductItem = pphelper.getDraftSavePriceProductItemDO();
-			priceProductItem.addOnProductIdList.push(InvalidAddOnProductId);
+			priceProductItem.includedItems.includedBreakfastAddOnProductSnapshot.id = InvalidAddOnProductId;
 
 			var savePPItem = new SavePriceProductItem(testContext.appContext, testContext.sessionContext);
 			savePPItem.save(priceProductItem).then((result: PriceProductDO) => {

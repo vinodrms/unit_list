@@ -3,8 +3,10 @@ import {ThError} from '../../utils/th-responses/ThError';
 import {ThStatusCode} from '../../utils/th-responses/ThResponse';
 import {AppContext} from '../../utils/AppContext';
 import {SessionContext} from '../../utils/SessionContext';
+import {ThUtils} from '../../utils/ThUtils';
 import {PriceProductInputIdDO} from './validation-structures/PriceProductInputIdDO';
 import {PriceProductDO, PriceProductStatus} from '../../data-layer/price-products/data-objects/PriceProductDO';
+import {AttachedAddOnProductItemDO} from '../../data-layer/price-products/data-objects/included-items/AttachedAddOnProductItemDO';
 import {UpdatePriceProductItemStatus} from './utils/UpdatePriceProductItemStatus';
 import {ValidationResultParser} from '../common/ValidationResultParser';
 import {TaxResponseRepoDO} from '../../data-layer/taxes/repositories/ITaxRepository';
@@ -17,6 +19,7 @@ import {AddOnProductSearchResultRepoDO} from '../../data-layer/add-on-products/r
 import _ = require("underscore");
 
 export class DraftPriceProductItem {
+	private _thUtils: ThUtils;
 	private _inputDO: PriceProductInputIdDO;
 
 	private _priceProduct: PriceProductDO;
@@ -25,6 +28,7 @@ export class DraftPriceProductItem {
 	private _validAddOnProductList: AddOnProductDO[];
 
 	constructor(private _appContext: AppContext, private _sessionContext: SessionContext) {
+		this._thUtils = new ThUtils();
 	}
 
 	public draft(inputDO: PriceProductInputIdDO): Promise<PriceProductDO> {
@@ -72,7 +76,7 @@ export class DraftPriceProductItem {
 				var aopRepo = this._appContext.getRepositoryFactory().getAddOnProductRepository();
 				return aopRepo.getAddOnProductList({ hotelId: this._sessionContext.sessionDO.hotel.id },
 					{
-						addOnProductIdList: this._priceProduct.addOnProductIdList
+						addOnProductIdList: this._priceProduct.includedItems.getUniqueAddOnProductIdList()
 					});
 			})
 			.then((aopSearch: AddOnProductSearchResultRepoDO) => {
@@ -80,7 +84,14 @@ export class DraftPriceProductItem {
 
 				this._priceProduct.taxIdList = _.map(this._validTaxes, (tax: TaxDO) => { return tax.id });
 				this._priceProduct.roomCategoryIdList = _.map(this._validRoomCategoryList, (roomCateg: RoomCategoryDO) => { return roomCateg.id });
-				this._priceProduct.addOnProductIdList = _.map(this._validAddOnProductList, (aop: AddOnProductDO) => { return aop.id });
+
+				this.deleteBreakfastIfInvalid();
+				this._priceProduct.includedItems.attachedAddOnProductItemList =
+					_.filter(this._priceProduct.includedItems.attachedAddOnProductItemList, (item: AttachedAddOnProductItemDO) => {
+						return this.addOnProductIdIsValid(item.addOnProductSnapshot.id);
+					});
+				this._priceProduct.includedItems.indexedAddOnProductIdList = this._priceProduct.includedItems.getUniqueAddOnProductIdList()
+
 				this._priceProduct.status = PriceProductStatus.Draft;
 
 				var ppRepo = this._appContext.getRepositoryFactory().getPriceProductRepository();
@@ -96,5 +107,24 @@ export class DraftPriceProductItem {
 				}
 				reject(thError);
 			});
+	}
+	private deleteBreakfastIfInvalid() {
+		var breakfastAopId = this._priceProduct.includedItems.includedBreakfastAddOnProductSnapshot.id;
+		if (this.addOnProductIdIsValid(breakfastAopId)) {
+			return;
+		}
+		delete this._priceProduct.includedItems.includedBreakfastAddOnProductSnapshot.id;
+		delete this._priceProduct.includedItems.includedBreakfastAddOnProductSnapshot.internalCost;
+		delete this._priceProduct.includedItems.includedBreakfastAddOnProductSnapshot.name;
+		delete this._priceProduct.includedItems.includedBreakfastAddOnProductSnapshot.price;
+	}
+	private addOnProductIdIsValid(addOnProductId: string) {
+		var foundAddOnProduct = this.getAddOnProductById(addOnProductId);
+		return !this._thUtils.isUndefinedOrNull(foundAddOnProduct);
+	}
+	private getAddOnProductById(addOnProductId: string): AddOnProductDO {
+		return _.find(this._validAddOnProductList, (addOnProduct: AddOnProductDO) => {
+			return addOnProduct.id === addOnProductId;
+		})
 	}
 }

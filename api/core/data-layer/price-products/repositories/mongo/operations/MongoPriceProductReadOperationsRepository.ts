@@ -80,7 +80,7 @@ export class MongoPriceProductReadOperationsRepository extends MongoRepository {
 		}
 		mongoQueryBuilder.addExactMatch("availability", searchCriteria.availability);
 		mongoQueryBuilder.addMultipleSelectOptionList("id", searchCriteria.priceProductIdList);
-		mongoQueryBuilder.addMultipleSelectOptionList("addOnProductIdList", searchCriteria.addOnProductIdList);
+		mongoQueryBuilder.addMultipleSelectOptionList("includedItems.indexedAddOnProductIdList", searchCriteria.addOnProductIdList);
 		mongoQueryBuilder.addMultipleSelectOptionList("taxIdList", searchCriteria.taxIdList);
 		this.appendCustomerPriceProductDetailsSearch(mongoQueryBuilder, searchCriteria);
 		return mongoQueryBuilder.processedQuery;

@@ -16,7 +16,7 @@ export class AddOnProductsContainer {
         this._aopList = aopList;
     }
 
-    public getCustomerById(aopId: string): AddOnProductDO {
+    public getAddOnProductById(aopId: string): AddOnProductDO {
         return _.find(this._aopList, (aop: AddOnProductDO) => {
             return aop.id === aopId;
         });

@@ -24,7 +24,7 @@ export class PriceProductsContainer {
     public getAddOnProductIdList(): string[] {
         var addOnProductIdList: string[] = [];
         _.forEach(this._priceProductList, (priceProduct: PriceProductDO) => {
-            addOnProductIdList = addOnProductIdList.concat(priceProduct.addOnProductIdList);
+            addOnProductIdList = addOnProductIdList.concat(priceProduct.includedItems.getUniqueAddOnProductIdList());
         });
         return _.uniq(addOnProductIdList);
     }

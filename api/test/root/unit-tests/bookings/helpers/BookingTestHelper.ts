@@ -1,6 +1,7 @@
 import {DefaultDataBuilder} from '../../../../db-initializers/DefaultDataBuilder';
 import {TestContext} from '../../../../helpers/TestContext';
 import {PriceProductDO, PriceProductStatus} from '../../../../../core/data-layer/price-products/data-objects/PriceProductDO';
+import {PriceProductIncludedItemsDO} from '../../../../../core/data-layer/price-products/data-objects/included-items/PriceProductIncludedItemsDO';
 import {AllotmentDO} from '../../../../../core/data-layer/allotments/data-objects/AllotmentDO';
 import {RoomCategoryStatsDO} from '../../../../../core/data-layer/room-categories/data-objects/RoomCategoryStatsDO';
 import {PriceProductsHelper} from '../../price-products/helpers/PriceProductsHelper';
@@ -44,7 +45,15 @@ export class BookingTestHelper {
         priceProductItem.status = PriceProductStatus.Active;
         priceProductItem.roomCategoryIdList = roomCategoryIdList;
         priceProductItem.price = DefaultPriceProductBuilder.getPricePerPerson(testDataBuilder.roomCategoryStatsList);
-        priceProductItem.addOnProductIdList = _.map(testDataBuilder.addOnProductList, (addOnProduct: AddOnProductDO) => { return addOnProduct.id });
+        
+        priceProductItem.includedItems = new PriceProductIncludedItemsDO();
+        var breakfastAop = _.find(testDataBuilder.addOnProductList, (aop: AddOnProductDO) => {
+            return aop.categoryId === testDataBuilder.breakfastAddOnProductCategory.id;
+        });
+        priceProductItem.includedItems.attachedAddOnProductItemList = [];
+        priceProductItem.includedItems.includedBreakfastAddOnProductSnapshot = breakfastAop.getAddOnProductSnapshotDO();
+        priceProductItem.includedItems.indexedAddOnProductIdList = [breakfastAop.id];
+
         var savePPItem = new SavePriceProductItem(testContext.appContext, testContext.sessionContext);
         return savePPItem.save(priceProductItem);
     }

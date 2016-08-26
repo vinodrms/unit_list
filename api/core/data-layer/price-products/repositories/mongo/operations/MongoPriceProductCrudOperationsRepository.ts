@@ -73,7 +73,7 @@ export class MongoPriceProductCrudOperationsRepository extends MongoRepository {
 				"name": priceProduct.name,
 				"availability": priceProduct.availability,
 				"lastRoomAvailability": priceProduct.lastRoomAvailability,
-				"addOnProductIdList": priceProduct.addOnProductIdList,
+				"includedItems": priceProduct.includedItems,
 				"roomCategoryIdList": priceProduct.roomCategoryIdList,
 				"price": priceProduct.price,
 				"taxIdList": priceProduct.taxIdList,

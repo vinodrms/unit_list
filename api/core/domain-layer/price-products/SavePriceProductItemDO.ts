@@ -4,12 +4,15 @@ import {PriceProductYieldFilterMetaDO} from '../../data-layer/price-products/dat
 import {PriceProductConstraintType} from '../../data-layer/price-products/data-objects/constraint/IPriceProductConstraint';
 import {PriceProductCancellationPolicyType} from '../../data-layer/price-products/data-objects/conditions/cancellation/IPriceProductCancellationPolicy';
 import {PriceProductCancellationPenaltyType} from '../../data-layer/price-products/data-objects/conditions/penalty/IPriceProductCancellationPenalty';
+import {PriceProductIncludedItemsDO} from '../../data-layer/price-products/data-objects/included-items/PriceProductIncludedItemsDO';
+import {AttachedAddOnProductItemStrategyType} from '../../data-layer/price-products/data-objects/included-items/IAttachedAddOnProductItemStrategy';
 import {IValidationStructure} from '../../utils/th-validation/structure/core/IValidationStructure';
 import {ObjectValidationStructure} from '../../utils/th-validation/structure/ObjectValidationStructure';
 import {PrimitiveValidationStructure} from '../../utils/th-validation/structure/PrimitiveValidationStructure';
 import {ArrayValidationStructure} from '../../utils/th-validation/structure/ArrayValidationStructure';
 import {StringValidationRule} from '../../utils/th-validation/rules/StringValidationRule';
 import {NumberInListValidationRule} from '../../utils/th-validation/rules/NumberInListValidationRule';
+import {NumberValidationRule} from '../../utils/th-validation/rules/NumberValidationRule';
 import {BooleanValidationRule} from '../../utils/th-validation/rules/BooleanValidationRule';
 import {SavePriceProductItemPriceDO} from './validation-structures/SavePriceProductItemPriceDO';
 import {SavePriceProductItemConstraintDO} from './validation-structures/SavePriceProductItemConstraintDO';
@@ -29,7 +32,7 @@ export class SavePriceProductItemDO {
 	name: string;
 	availability: PriceProductAvailability;
 	lastRoomAvailability: boolean;
-	addOnProductIdList: string[];
+	includedItems: PriceProductIncludedItemsDO;
 	roomCategoryIdList: string[];
 	price: SavePriceProductItemPriceDO;
 	taxIdList: string[];
@@ -61,8 +64,46 @@ export class SavePriceProductItemDO {
 				validationStruct: new PrimitiveValidationStructure(new BooleanValidationRule())
 			},
 			{
-				key: "addOnProductIdList",
-				validationStruct: new ArrayValidationStructure(new PrimitiveValidationStructure(new StringValidationRule()))
+				key: "includedItems",
+				validationStruct: new ObjectValidationStructure([
+					{
+						key: "includedBreakfastAddOnProductSnapshot",
+						validationStruct: new ObjectValidationStructure([
+							{
+								key: "id",
+								validationStruct: new PrimitiveValidationStructure(StringValidationRule.buildNullable())
+							}
+						])
+					},
+					{
+						key: "attachedAddOnProductItemList",
+						validationStruct: new ArrayValidationStructure(new ObjectValidationStructure([
+							{
+								key: "addOnProductSnapshot",
+								validationStruct: new ObjectValidationStructure([
+									{
+										key: "id",
+										validationStruct: new PrimitiveValidationStructure(new StringValidationRule())
+									}
+								])
+							},
+							{
+								key: "strategyType",
+								validationStruct: new PrimitiveValidationStructure(new NumberInListValidationRule([AttachedAddOnProductItemStrategyType.FixedNumber,
+									AttachedAddOnProductItemStrategyType.OneItemPerDay, AttachedAddOnProductItemStrategyType.OneItemPerDayForEachAdultOrChild]))
+							},
+							{
+								key: "strategy",
+								validationStruct: new ObjectValidationStructure([
+									{
+										key: "noOfItems",
+										validationStruct: new PrimitiveValidationStructure(NumberValidationRule.buildNullableIntegerNumberRule())
+									}
+								])
+							}
+						]))
+					}
+				])
 			},
 			{
 				key: "roomCategoryIdList",
