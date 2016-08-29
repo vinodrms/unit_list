@@ -709,5 +709,6 @@ export var EnglishTranslations: Object = {
 	"Change date": "Change date",
 	"Others": "Others",
 	"Pay Invoice By Agreement Fee": "Pay Invoice By Agreement Fee",
+	"Charge": "Charge",
 
 };

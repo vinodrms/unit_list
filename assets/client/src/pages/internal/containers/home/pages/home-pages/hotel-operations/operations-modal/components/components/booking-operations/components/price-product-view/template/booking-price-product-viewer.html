@@ -7,7 +7,7 @@
             <p>{{priceProductDO.name}}</p>
         </div>
         <div class="col-xs-12 col-sm-2">
-            <p>{{'Cost' | translate}}</p>
+            <p>{{'Charge' | translate}}</p>
         </div>
         <div class="col-xs-12 field-value text-field" [ngClass]="{'col-sm-5': !isPenaltyPrice, 'col-sm-2': isPenaltyPrice}">
             <p><b>{{currencySymbolString}} {{totalPrice}}:</b> {{'Room' | translate}} {{currencySymbolString}}{{totalRoomPrice}} / {{ 'Others' | translate }} {{currencySymbolString}}{{totalOtherPrice}}</p>
