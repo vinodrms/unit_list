@@ -52,4 +52,10 @@ export class BaseCorporateDetailsDO extends BaseDO implements ICustomerDetailsDO
 		this.invoiceFee = thUtils.roundNumberToTwoDecimals(this.invoiceFee);
 		this.commission.amount = thUtils.roundNumberToTwoDecimals(this.commission.amount);
 	}
+	public getEmail(): string {
+		return this.email;
+	}
+	public getPhone(): string {
+		return this.phone;
+	}
 }

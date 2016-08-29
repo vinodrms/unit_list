@@ -21,12 +21,9 @@ export class SaveInvoiceGroupActionFactory {
     }
 
     public getActionStrategy(invoiceGroup: InvoiceGroupDO): ISaveInvoiceGroupActionStrategy {
-        if (!this._thUtils.isUndefinedOrNull(invoiceGroup.id) && !this._thUtils.isUndefinedOrNull(invoiceGroup.groupBookingId)) {
+        if (!this._thUtils.isUndefinedOrNull(invoiceGroup.id)) {
 			return new BookingInvoiceGroupUpdateStrategy(this._appContext, this._sessionContext, invoiceGroup);
 		}
-        else if (!this._thUtils.isUndefinedOrNull(invoiceGroup.id) && this._thUtils.isUndefinedOrNull(invoiceGroup.groupBookingId)) {
-            return new CustomerInvoiceGroupUpdateStrategy(this._appContext, this._sessionContext, invoiceGroup);
-        }
 		return new CustomerInvoiceGroupAddStrategy(this._appContext, this._sessionContext, invoiceGroup);
     }
 }
