@@ -1,7 +1,5 @@
 import {ThTranslation} from '../../../utils/localization/ThTranslation';
 import {ThUtils} from '../../../../core/utils/ThUtils';
-
-import {InvoiceAggregatedDataContainer} from '../aggregators/InvoiceAggregatedDataContainer';
 import {HotelDO} from '../../../data-layer/hotel/data-objects/HotelDO';
 import {CustomerDO} from '../../../data-layer/customers/data-objects/CustomerDO';
 import {AddressDO} from '../../../data-layer/common/data-objects/address/AddressDO';
@@ -10,6 +8,7 @@ import {InvoiceDO} from '../../../data-layer/invoices/data-objects/InvoiceDO';
 import {InvoiceItemDO} from '../../../data-layer/invoices/data-objects/items/InvoiceItemDO';
 import {InvoiceItemVM} from './InvoiceItemVM';
 import {InvoicePaymentMethodType} from '../../../data-layer/invoices/data-objects/payers/InvoicePaymentMethodDO';
+import {InvoiceAggregatedData} from '../aggregators/InvoiceAggregatedData';
 
 export class InvoiceConfirmationVMContainer {
     private static UNITPAL_LOGO_SRC = 'assets/client/static-assets/images/unit_pal_logo_blue.png';
@@ -17,7 +16,7 @@ export class InvoiceConfirmationVMContainer {
     private static PAY_INVOICE_BY_AGREEMENT_STR: string = 'PAY INVOICE BY AGREEMENT';
     private _thUtils: ThUtils;
 
-    private _invoiceAggregatedDataContainer: InvoiceAggregatedDataContainer;
+    private _invoiceAggregatedData: InvoiceAggregatedData;
 
     invoiceReference: string;
     payerIndex: number;
@@ -65,12 +64,12 @@ export class InvoiceConfirmationVMContainer {
         this._thUtils = new ThUtils();
     }
 
-    public buildFromInvoiceAggregatedDataContainer(invoiceAggregatedDataContainer: InvoiceAggregatedDataContainer) {
-        this._invoiceAggregatedDataContainer = invoiceAggregatedDataContainer;
+    public buildFromInvoiceAggregatedDataContainer(invoiceAggregatedData: InvoiceAggregatedData) {
+        this._invoiceAggregatedData = invoiceAggregatedData;
 
-        this.invoiceReference = this._invoiceAggregatedDataContainer.invoiceAggregatedData.invoice.invoiceReference;
-        this.payerIndex = this._invoiceAggregatedDataContainer.invoiceAggregatedData.payerIndexOnInvoice;
-        this.ccySymbol = this._invoiceAggregatedDataContainer.ccySymbol;
+        this.invoiceReference = this._invoiceAggregatedData.invoice.invoiceReference;
+        this.payerIndex = this._invoiceAggregatedData.payerIndexOnInvoice;
+        this.ccySymbol = this._invoiceAggregatedData.ccySymbol;
         this.unitpalLogoSrcValue = InvoiceConfirmationVMContainer.UNITPAL_LOGO_SRC;
 
         this.initHeaderLabelsAndValues();
@@ -99,7 +98,6 @@ export class InvoiceConfirmationVMContainer {
     }
 
     private initPayerInfoLabelsAndValues() {
-        debugger
         this.toLabel = this._thTranslation.translate('To');
         this.payerNameValue = this.formatValue(this._payerCustomer.customerDetails.getName());
         this.payerAddressFirstLineValue = this.getFormattedAddressFirstLine(this._payerCustomer.customerDetails.getAddress());
@@ -138,23 +136,23 @@ export class InvoiceConfirmationVMContainer {
     }
 
     private initTotalValues() {
-        this.subtotalValue = this._invoice.getPrice();
+        this.subtotalValue = this._invoice.payerList[this.payerIndex].priceToPay;
         this.vatValue = 0;
         this.totalLabel = this._thTranslation.translate('Total');
         this.totalValue = this.subtotalValue;
     }
 
     private get _invoice(): InvoiceDO {
-        return this._invoiceAggregatedDataContainer.invoiceAggregatedData.invoice;
+        return this._invoiceAggregatedData.invoice;
     }
     private get _payerCustomer(): CustomerDO {
-        return this._invoiceAggregatedDataContainer.invoiceAggregatedData.payerCustomer;
+        return this._invoiceAggregatedData.payerCustomer;
     }
     private get _paymentMethodList(): PaymentMethodDO[] {
-        return this._invoiceAggregatedDataContainer.invoiceAggregatedData.paymentMethodList;
+        return this._invoiceAggregatedData.paymentMethodList;
     }
     private get _hotel(): HotelDO {
-        return this._invoiceAggregatedDataContainer.hotel;
+        return this._invoiceAggregatedData.hotel;
     }
     private getFormattedAddressFirstLine(addressDO: AddressDO): string {
         return this.formatValue(addressDO.streetAddress);

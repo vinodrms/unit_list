@@ -4,8 +4,6 @@ import {ThUtils} from '../../../utils/ThUtils';
 import {ThStatusCode} from '../../../utils/th-responses/ThResponse';
 import {AppContext} from '../../../utils/AppContext';
 import {SessionContext} from '../../../utils/SessionContext';
-
-import {InvoiceAggregatedDataContainer} from './InvoiceAggregatedDataContainer';
 import {InvoiceAggregatedData} from './InvoiceAggregatedData';
 import {InvoiceGroupMetaRepoDO} from '../../../data-layer/invoices/repositories/IInvoiceGroupsRepository';
 import {InvoiceGroupDO} from '../../../data-layer/invoices/data-objects/InvoiceGroupDO';
@@ -41,13 +39,13 @@ export class InvoiceDataAggregator {
     constructor(private _appContext: AppContext, private _sessionContext: SessionContext) {
     }
 
-    public getInvoiceAggregatedDataContainer(query: InvoiceDataAggregatorQuery): Promise<InvoiceAggregatedDataContainer> {
-        return new Promise<InvoiceAggregatedDataContainer>((resolve: { (result: InvoiceAggregatedDataContainer): void }, reject: { (err: ThError): void }) => {
-            this.getInvoiceAggregatedDataContainerCore(resolve, reject, query);
+    public getInvoiceAggregatedData(query: InvoiceDataAggregatorQuery): Promise<InvoiceAggregatedData> {
+        return new Promise<InvoiceAggregatedData>((resolve: { (result: InvoiceAggregatedData): void }, reject: { (err: ThError): void }) => {
+            this.getInvoiceAggregatedDataCore(resolve, reject, query);
         });
     }
 
-    private getInvoiceAggregatedDataContainerCore(resolve: { (result: InvoiceAggregatedDataContainer): void }, reject: { (err: ThError): void }, query: InvoiceDataAggregatorQuery) {
+    private getInvoiceAggregatedDataCore(resolve: { (result: InvoiceAggregatedData): void }, reject: { (err: ThError): void }, query: InvoiceDataAggregatorQuery) {
         var hotelRepo = this._appContext.getRepositoryFactory().getHotelRepository();
         hotelRepo.getHotelById(this.hotelId).then((hotel: HotelDO) => {
             this._hotel = hotel;
@@ -95,15 +93,13 @@ export class InvoiceDataAggregator {
             reject(thError);
         });
     }
-
-    private buildInvoiceAggregatedDataContainerFromLoadedData(): InvoiceAggregatedDataContainer {
-        var invoiceAggregatedDataContainer = new InvoiceAggregatedDataContainer();
-        invoiceAggregatedDataContainer.hotel = this._hotel;
-        invoiceAggregatedDataContainer.ccySymbol = _.find(this._currencyList, (ccy: CurrencyDO) => {
+    
+    private buildInvoiceAggregatedDataContainerFromLoadedData(): InvoiceAggregatedData {
+        var invoiceAggregatedData = new InvoiceAggregatedData(this._sessionContext);
+        invoiceAggregatedData.hotel = this._hotel;
+        invoiceAggregatedData.ccySymbol = _.find(this._currencyList, (ccy: CurrencyDO) => {
             return ccy.code === this._hotel.ccyCode;
         }).symbol;
-        
-        var invoiceAggregatedData = new InvoiceAggregatedData();
         invoiceAggregatedData.invoice = this._invoice;
         invoiceAggregatedData.payerCustomer = this._payerCustomer;
         invoiceAggregatedData.addOnProductList = this._addOnProductList;
@@ -111,10 +107,11 @@ export class InvoiceDataAggregator {
         invoiceAggregatedData.otherTaxes = this._otherTaxesList;
         invoiceAggregatedData.payerIndexOnInvoice = this._payerIndexOnInvoice;
         invoiceAggregatedData.paymentMethodList = this._paymentMethodList;
-        invoiceAggregatedDataContainer.invoiceAggregatedData = invoiceAggregatedData;
-
-        return invoiceAggregatedDataContainer;
+        invoiceAggregatedData.addSharedInvoiceItemIfNecessary();
+        return invoiceAggregatedData;
     }
+
+    
 
     private get hotelId(): string {
         return this._sessionContext.sessionDO.hotel.id;

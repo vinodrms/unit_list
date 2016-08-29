@@ -123,5 +123,6 @@
 	"Net Unit Price": "Net Unit Price",
 	"Subtotal": "Subtotal",
 	"Payment Method": "Payment Method",
-	"PAY INVOICE BY AGREEMENT": "PAY INVOICE BY AGREEMENT"
+	"PAY INVOICE BY AGREEMENT": "PAY INVOICE BY AGREEMENT",
+	"Shared Payment": "Shared Payment" 
 }

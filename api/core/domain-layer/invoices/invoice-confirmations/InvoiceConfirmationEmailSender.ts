@@ -4,9 +4,8 @@ import {ThStatusCode} from '../../../utils/th-responses/ThResponse';
 import {AppContext} from '../../../utils/AppContext';
 import {SessionContext} from '../../../utils/SessionContext';
 import {ThTranslation} from '../../../utils/localization/ThTranslation';
-
+import {InvoiceAggregatedData} from '../aggregators/InvoiceAggregatedData';
 import {InvoiceDataAggregator, InvoiceDataAggregatorQuery} from '../aggregators/InvoiceDataAggregator';
-import {InvoiceAggregatedDataContainer} from '../aggregators/InvoiceAggregatedDataContainer';
 import {InvoiceConfirmationVMContainer} from './InvoiceConfirmationVMContainer';
 import {ReportType, PdfReportsServiceResponse} from '../../../services/pdf-reports/IPdfReportsService';
 import {BaseEmailTemplateDO, EmailTemplateTypes} from '../../../services/email/data-objects/BaseEmailTemplateDO'
@@ -33,9 +32,9 @@ export class InvoiceConfirmationEmailSender {
         var invoiceDataAggregator = new InvoiceDataAggregator(this._appContext, this._sessionContext);
         var generatedPdfAbsolutePath: string;
         
-        invoiceDataAggregator.getInvoiceAggregatedDataContainer(query).then((invoiceAggregatedDataContainer: InvoiceAggregatedDataContainer) => {
+        invoiceDataAggregator.getInvoiceAggregatedData(query).then((invoiceAggregatedData: InvoiceAggregatedData) => {
             var invoiceConfirmationVMContainer = new InvoiceConfirmationVMContainer(this._thTranslation);
-            invoiceConfirmationVMContainer.buildFromInvoiceAggregatedDataContainer(invoiceAggregatedDataContainer);
+            invoiceConfirmationVMContainer.buildFromInvoiceAggregatedDataContainer(invoiceAggregatedData);
 
             return pdfReportsService.generatePdfReport({
                 reportType: ReportType.Invoice,
@@ -79,8 +78,8 @@ export class InvoiceConfirmationEmailSender {
         });
     }
     private removeFileCore(resolve: { (fileWasDeleted: boolean): void }, reject: { (err: ThError): void }, path: string) {
-        // fs.unlink(path, (err) => {
+        fs.unlink(path, (err) => {
             resolve(true);
-        // });
+        });
     }
 }
