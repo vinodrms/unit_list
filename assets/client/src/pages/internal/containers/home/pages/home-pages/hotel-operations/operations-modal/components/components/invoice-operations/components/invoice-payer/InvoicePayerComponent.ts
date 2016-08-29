@@ -128,7 +128,8 @@ export class InvoicePayerComponent implements OnInit {
         this._emailSenderModalService.sendInvoiceConfirmation([this.invoicePayerVM.customerDO],
             this.invoiceGroupVM.invoiceGroupDO.id,
             this.invoiceVM.invoiceDO.invoiceReference,
-            this.invoicePayerVM.customerDO.id).then((modalDialogRef: ModalDialogRef<boolean>) => {
+            this.invoicePayerVM.customerDO.id,
+            this.invoicePayerVMIndex).then((modalDialogRef: ModalDialogRef<boolean>) => {
                 modalDialogRef.resultObservable.subscribe((sendResult: boolean) => {
                     this._appContext.analytics.logEvent("invoice", "send-confirmation", "Sent an invoice confirmation by email");
                 }, (err: any) => { });

@@ -15,6 +15,7 @@ export interface InvoiceEmailConfirmationParams {
     invoiceGroupId: string;
     invoiceReference: string;
     customerId: string;
+    payerIndex: number;
 }
 export class InvoiceEmailConfirmationStrategy implements IEmailConfirmationStrategy {
     constructor(private _appContext: AppContext, private _sessionContext: SessionContext) {
@@ -38,10 +39,12 @@ export class InvoiceEmailConfirmationStrategy implements IEmailConfirmationStrat
     }
     public send(confirmationDO: EmailConfirmationDO): Promise<boolean> {
         var invoiceConfirmationParams: InvoiceEmailConfirmationParams = confirmationDO.parameters;
-    
         var emailSender: InvoiceConfirmationEmailSender = new InvoiceConfirmationEmailSender(this._appContext, this._sessionContext);
         var invoiceQuery: InvoiceDataAggregatorQuery = {
-
+            customerId: invoiceConfirmationParams.customerId,
+            invoiceGroupId: invoiceConfirmationParams.invoiceGroupId,
+            invoiceReference: invoiceConfirmationParams.invoiceReference,
+            payerIndex: invoiceConfirmationParams.payerIndex
         };
 
         return emailSender.sendInvoiceConfirmation(invoiceQuery, confirmationDO.emailList);

@@ -4,6 +4,8 @@ import {BaseDO} from '../../../common/base/BaseDO';
 export interface ICustomerDetailsDO extends BaseDO {
 	getAddress(): AddressDO;
 	getName(): string;
+	getEmail(): string;
+	getPhone(): string;
 	canPayInvoiceByAgreement(): boolean;
 	canReceiveBookingConfirmations(): boolean;
 	roundPricesToTwoDecimals();

@@ -36,6 +36,7 @@ export class InvoiceConfirmationEmailSender {
         invoiceDataAggregator.getInvoiceAggregatedDataContainer(query).then((invoiceAggregatedDataContainer: InvoiceAggregatedDataContainer) => {
             var invoiceConfirmationVMContainer = new InvoiceConfirmationVMContainer(this._thTranslation);
             invoiceConfirmationVMContainer.buildFromInvoiceAggregatedDataContainer(invoiceAggregatedDataContainer);
+
             return pdfReportsService.generatePdfReport({
                 reportType: ReportType.Invoice,
                 reportData: invoiceConfirmationVMContainer,
@@ -78,8 +79,8 @@ export class InvoiceConfirmationEmailSender {
         });
     }
     private removeFileCore(resolve: { (fileWasDeleted: boolean): void }, reject: { (err: ThError): void }, path: string) {
-        fs.unlink(path, (err) => {
+        // fs.unlink(path, (err) => {
             resolve(true);
-        });
+        // });
     }
 }

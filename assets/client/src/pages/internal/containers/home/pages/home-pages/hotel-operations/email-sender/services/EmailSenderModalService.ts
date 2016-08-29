@@ -18,11 +18,12 @@ export class EmailSenderModalService {
         return this.sendConfirmation(customerList, EmailConfirmationType.Booking, parameters);
     }
 
-    public sendInvoiceConfirmation(customerList: CustomerDO[], invoiceGroupId: string, invoiceReference: string, customerId: string) {
+    public sendInvoiceConfirmation(customerList: CustomerDO[], invoiceGroupId: string, invoiceReference: string, customerId: string, payerIndex: number) {
         var parameters = {
             invoiceGroupId: invoiceGroupId,
             invoiceReference: invoiceReference,
-            customerId: customerId
+            customerId: customerId,
+            payerIndex: payerIndex
         };
         return this.sendConfirmation(customerList, EmailConfirmationType.Invoice, parameters);
     }
