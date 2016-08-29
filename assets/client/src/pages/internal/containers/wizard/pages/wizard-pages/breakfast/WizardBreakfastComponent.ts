@@ -38,10 +38,7 @@ export class WizardBreakfastComponent extends BaseComponent implements OnInit, A
 	}
 
 	public ngOnInit() {
-		this._addOnProductCategoriesService.getAddOnProductCategoriesDO().flatMap((addOnProductCategoriesDO: AddOnProductCategoriesDO) => {
-			var breakfastCategory: AddOnProductCategoryDO = addOnProductCategoriesDO.getBreakfastCategory();
-			return this._addOnProductsTotalCountService.getTotalCountDO(breakfastCategory);
-		}).subscribe((totalCount: TotalCountDO) => {
+		this._addOnProductsTotalCountService.getTotalCountDO({ filterBreakfastCategory: true }).subscribe((totalCount: TotalCountDO) => {
 			this._breakfastStateService.totalNoOfBreakfasts = totalCount.numOfItems;
 		});
 	}

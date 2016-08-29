@@ -1,0 +1,29 @@
+<div class="header">
+	<div class="pane-title p-t-6">
+		<span>{{'Yield Filters' | translate}}</span>
+	</div>
+	<div class="pane-search-bar">
+		<input class="remove-auto-border" type="text" placeholder="{{'Search here' | translate}}" [ngModel]="searchText" (ngModelChange)="searchTextChangeHandler($event)">
+		<i class="fa fa-search gray-color p-l-6"></i>
+	</div>
+</div>
+<div customScroll class="body full-height">
+	<div *ngIf="yieldColorFilterCollection">
+		<yield-color-filter-item
+			*ngFor="let yieldColorFilterItemVM of yieldColorFilterCollection.filterVMList" 
+			[yieldColorFilterItemVM] = "yieldColorFilterItemVM" 
+			(onToggleSelection)="colorItemToggleSelection($event)"
+			>
+		</yield-color-filter-item>
+	</div>
+	<div class="yield-filter-collection m-t-24 m-b-24" *ngIf="yieldTextFilterCollection">
+		<yield-text-filter-item
+			*ngFor="let yieldTextFilterItemVM of yieldTextFilterCollection.filterVMList" 
+			[yieldTextFilterItemVM] = "yieldTextFilterItemVM" 
+			(onToggleSelection)="textItemToggleSelection($event)"
+			>
+		</yield-text-filter-item>
+	</div>	
+</div>
+
+

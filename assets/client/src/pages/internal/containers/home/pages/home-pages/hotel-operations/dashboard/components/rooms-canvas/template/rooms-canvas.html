@@ -1,0 +1,29 @@
+<div class="header">
+	<div class="rooms-controller p-12">
+		<div class="group-1 flex-row flex-center-v">
+			<i class="fa fa-calendar orange-color f-24 p-r-6" aria-hidden="true"></i>
+			<div *ngIf="currentDate" class="current-date p-r-12 f-24"><b>{{getDateShortString()}}</b></div>
+		</div>
+		<div class="group-2 flex-row flex-center-v">
+			<select class="form-control rooms-filter p-r-12 f-12" [ngModel]="filterValue.currentValue" (ngModelChange)="filterValueChanged($event)">
+				<option value="{{ enums.FilterValueType.All }}">{{'All Rooms' | translate }}</option>
+				<option value="{{ enums.FilterValueType.Free }}">{{'Free Rooms' | translate }}</option>
+				<option value="{{ enums.FilterValueType.Occupied }}">{{'Occupied Rooms' | translate }}</option>
+				<option value="{{ enums.FilterValueType.Reserved }}">{{'Reserved Rooms' | translate }}</option>
+				<option value="{{ enums.FilterValueType.OutOfService }}">{{'Out of Service Rooms' | translate }}</option>
+				<option value="{{ enums.FilterValueType.OutOfOrder }}">{{'Out of Order Rooms' | translate }}</option>
+			</select>
+		</div>
+	</div>
+	<div class="notification {{filterNotification.Properties.cssColor}}" *ngIf="isNotificationBarVisible()">
+		<div class="notification-message">{{filterNotification.Properties.textFirstPart}} &nbsp;<b> {{filterNotification.Properties.textSecondPart}}</b></div>
+		<div class="notification-close clickable f-20" (click)="closeNotificationBar()">
+			<span class="unitpal-font f-20">\</span>
+		</div>
+	</div>
+</div>
+<div customScroll class="body rooms-canvas">
+	<div *ngFor="let roomVM of filteredRoomVMList">
+		<room-card [roomVM]="roomVM" [roomCanvas]="self" (dropped)="dropHandled($event)"></room-card>
+	</div>
+</div>

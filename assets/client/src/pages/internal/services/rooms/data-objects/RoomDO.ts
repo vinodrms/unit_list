@@ -1,4 +1,5 @@
 import {BaseDO} from '../../../../../common/base/BaseDO';
+import {DocumentHistoryDO} from '../../common/data-objects/document-history/DocumentHistoryDO';
 
 export enum RoomStatus {
     Active,
@@ -6,9 +7,16 @@ export enum RoomStatus {
 }
 
 export enum RoomMaintenanceStatus {
-    Cleaning,
+    Clean,
     Dirty,
-    CheckInReady
+    PickUp,
+    OutOfService,
+    OutOfOrder
+}
+
+export enum RollawayBedStatus {
+    NoRollawayBeds,
+    RollawayBedsInside
 }
 
 export class RoomDO extends BaseDO {
@@ -28,14 +36,30 @@ export class RoomDO extends BaseDO {
     description: string;
     notes: string;
     maintenanceStatus: RoomMaintenanceStatus;
+    maintenanceMessage: string;
+    maintenanceHistory: DocumentHistoryDO;
     status: RoomStatus;
+    rollawayBedStatus: RollawayBedStatus;
 
     protected getPrimitivePropertyKeys(): string[] {
         return ["id", "versionId", "hotelId", "name", "floor", "categoryId", "amenityIdList",
-            "attributeIdList", "fileUrlList", "description", "notes", "maintenanceStatus", "status"];
+            "attributeIdList", "fileUrlList", "description", "notes", "maintenanceStatus",
+            "maintenanceMessage", "status", "rollawayBedStatus"];
     }
 
     public buildFromObject(object: Object) {
         super.buildFromObject(object);
+
+        this.maintenanceHistory = new DocumentHistoryDO();
+        this.maintenanceHistory.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "maintenanceHistory"));
+    }
+
+    public static get inInventoryMaintenanceStatusList(): RoomMaintenanceStatus[] {
+        return [
+            RoomMaintenanceStatus.Clean,
+            RoomMaintenanceStatus.Dirty,
+            RoomMaintenanceStatus.PickUp,
+            RoomMaintenanceStatus.OutOfService
+        ];
     }
 }

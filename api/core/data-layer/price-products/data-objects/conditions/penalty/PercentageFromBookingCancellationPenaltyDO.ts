@@ -3,6 +3,7 @@ import {IPriceProductCancellationPenalty} from './IPriceProductCancellationPenal
 import {NumberValidationRule} from '../../../../../utils/th-validation/rules/NumberValidationRule';
 import {ThTranslation} from '../../../../../utils/localization/ThTranslation';
 import {BookingPriceDO, BookingPriceType} from '../../../../bookings/data-objects/price/BookingPriceDO';
+import {PenaltyUtils} from './utils/PenaltyUtils';
 
 export class PercentageFromBookingCancellationPenaltyDO extends BaseDO implements IPriceProductCancellationPenalty {
 	percentage: number;
@@ -22,11 +23,8 @@ export class PercentageFromBookingCancellationPenaltyDO extends BaseDO implement
 		return thTranslation.translate("Pay %percentage% % from booking", { percentage: this.percentage * 100 });
 	}
 	public computePenaltyPrice(bookingPrice: BookingPriceDO): BookingPriceDO {
-		var penaltyPrice = new BookingPriceDO();
-		penaltyPrice.priceType = BookingPriceType.Penalty;
-		penaltyPrice.pricePerItem = bookingPrice.totalPrice * this.percentage;
-		penaltyPrice.numberOfItems = 1;
-		penaltyPrice.totalPrice = penaltyPrice.pricePerItem;
-		return penaltyPrice;
+		var penaltyPriceToPay = bookingPrice.totalBookingPrice * this.percentage;
+		var penaltyUtils = new PenaltyUtils();
+		return penaltyUtils.getPenaltyPrice(bookingPrice, penaltyPriceToPay);
 	}
 }

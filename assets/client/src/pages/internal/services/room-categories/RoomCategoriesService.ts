@@ -3,11 +3,7 @@ import {Observable} from 'rxjs/Observable';
 import {AppContext, ThServerApi} from '../../../../common/utils/AppContext';
 import {ARequestService} from '../common/ARequestService';
 import {RoomCategoryDO} from './data-objects/RoomCategoryDO';
-
-export enum RoomCategoriesType {
-	AllCategories,
-	UsedInRooms
-}
+import {RoomCategoriesType} from './RoomCategoriesType';
 
 @Injectable()
 export class RoomCategoriesService extends ARequestService<RoomCategoryDO[]> {

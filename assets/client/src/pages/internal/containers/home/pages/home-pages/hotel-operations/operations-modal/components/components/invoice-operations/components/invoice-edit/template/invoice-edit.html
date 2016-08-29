@@ -1,0 +1,92 @@
+<div class="invoice-edit-container full-height" [ngClass]="{'read-only-invoice': !editMode}" customScroll>
+    <div class="invoice-edit-wrap">
+        <p class="invoice-title-container">
+            <span class="invoice-title m-l-16" [ngClass]="{'read-only': !editMode}">
+                <i *ngIf="isPaid" class="fa fa-check" aria-hidden="true"></i> {{ 'Invoice' | translate }} 
+                <small><i *ngIf="!isNewlyAdded">{{ invoiceReference }}</i></small>
+                <small *ngIf="isNewlyAdded"><i>{{ '(unsaved)' | translate }}</i></small>
+                <b *ngIf="isPaid"> {{ 'PAID' | translate }}</b>
+            </span>
+            <span class="invoice-remove" *ngIf="editMode && isNewlyAdded">
+                <a class="btn btn-xs" title="{{ 'Delete' | translate}}" (click)="onDelete()"><i class="fa unitpal-font">\</i></a>
+            </span>            
+            <br/>
+            <span *ngFor="let errorMessage of errorMessageList" class="text-warning m-l-16">
+                <small><i class="fa fa-info-circle"></i> {{ errorMessage | translate }}</small><br/>
+            </span>
+        </p>
+
+        <invoice-payer *ngFor="let invoicePayerVM of invoicePayerVMList; let invoicePayerVMIndex = index" [invoiceReference]="invoiceReference"
+            [invoicePayerVMIndex]="invoicePayerVMIndex"></invoice-payer>
+
+        <p *ngIf="editMode" class="btn-add-invoice-payer">
+            <th-button [upFont]="'\''" [text]="'Add Payer'" (onButtonClick)="openCustomerSelectModal()"></th-button>
+        </p>
+        <table class="table table-invoice-items" style="width: 100%">
+            <thead>
+                <tr>
+                    <th>
+                    </th>
+                    <th>
+                        {{ 'Item Name'| translate }}
+                    </th>
+                    <th>
+                        {{ 'Qty' | translate }}
+                    </th>
+                    <th>
+                        {{ 'Unit Cost' | translate }}
+                    </th>
+                    <th>
+                        {{ 'Total' | translate }}
+                    </th>
+                    <th>
+                    </th>
+                </tr>
+            </thead>
+            <tfoot>
+                <tr>
+                    <td></td>
+                    <td><b>{{ 'Total' | translate }}</b></td>
+                    <td></td>
+                    <td></td>
+                    <td>{{ ccySymbol }} <b>{{ totalPrice }}</b></td>
+                    <td></td>
+                </tr>
+            </tfoot>
+            <tbody>
+
+                <tr *ngFor="let invoiceItemVM of invoiceItemVMList; let invoiceItemVMIndex = index" (click)="selectInvoiceItem(invoiceItemVMIndex)"
+                    [ngClass]="{'selectable' : invoiceItemVM.isMovable() && editMode, 'selected': invoiceItemVM.isMovable() && invoiceItemSelected(invoiceItemVMIndex) && editMode, 'not-allowed': !invoiceItemVM.isMovable() && editMode}">
+
+                    <td class="move-left-invoice-item-cell" width="10%">
+                        <label *ngIf="invoiceItemVM.isMovable() && invoiceItemSelected(invoiceItemVMIndex) && editMode" class="btn btn-default move-invoice-item-btn" [ngClass]="{disabled: !hasLeftEditableNeighbor()}" (click)="moveLeft(invoiceItemVMIndex)">
+                            <i class="fa fa-arrow-left" aria-hidden="true"></i>
+                        </label>
+                    </td>
+                    <td width="40%">{{ invoiceItemVM.itemDisplayText | translate }}</td>
+                    <td width="10%">{{ invoiceItemVM.qty }}</td>
+                    <td width="15%">{{ ccySymbol }} <b>{{ invoiceItemVM.price }}</b></td>
+                    <td width="15%">{{ ccySymbol }} <b>{{ invoiceItemVM.totalPrice }}</b></td>
+                    <td width="10%" class="move-right-invoice-item-cell">
+                        <label *ngIf="invoiceItemVM.isMovable() && invoiceItemSelected(invoiceItemVMIndex) && editMode" class="btn btn-default move-invoice-item-btn" [ngClass]="{disabled: !hasRightEditableNeighbor()}" (click)="moveRight(invoiceItemVMIndex)">
+                            <i class="fa fa-arrow-right" aria-hidden="true"></i>
+                        </label>
+                    </td>
+                </tr>
+
+                <tr *ngIf="editMode">
+                    <td colspan="2" class='add-item-cell'>
+                        <th-button [upFont]="'\''" [text]="'Add Item'" (onButtonClick)="openAddOnProductSelectModal()"></th-button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div *ngIf="!editMode && !isPaid" class="invoice-edit-footer">
+        <button type="button" class="btn btn-primary" (click)="onPayInvoice()">
+            <i class="fa fa-2x unitpal-font rotate-45">L</i> {{ 'Pay Invoice' | translate }}
+        </button>
+    </div>
+
+</div>

@@ -11,7 +11,6 @@ import {YieldFilterDO} from '../../common/data-objects/yield-filter/YieldFilterD
 import {YieldFilterValueDO} from '../../common/data-objects/yield-filter/YieldFilterValueDO';
 import {PriceProductYieldFilterMetaDO} from '../data-objects/yield-filter/PriceProductYieldFilterDO';
 import {CurrencyDO} from '../../common/data-objects/currency/CurrencyDO';
-import {AddOnProductDO} from '../../add-on-products/data-objects/AddOnProductDO';
 
 export class PriceProductVM {
 	private _thUtils: ThUtils;
@@ -21,7 +20,6 @@ export class PriceProductVM {
 	private _roomCategoryList: RoomCategoryDO[];
 	private _yieldFilterVMValues: YieldFilterValueVM[];
 	private _ccy: CurrencyDO;
-	private _addOnProductList: AddOnProductDO[];
 	private _priceBrief: string;
 
 	constructor(private _thTranslation: ThTranslation) {
@@ -49,7 +47,7 @@ export class PriceProductVM {
 		var priceBrief: string = "";
 		this._roomCategoryList.forEach((roomCategory: RoomCategoryDO) => {
 			var priceValue = this._priceProduct.price.getPriceBriefValueForRoomCategoryId(roomCategory.id);
-			if(priceBrief.length > 0) {
+			if (priceBrief.length > 0) {
 				priceBrief += " ";
 			}
 			priceBrief += priceValue + this._ccy.nativeSymbol;
@@ -97,12 +95,6 @@ export class PriceProductVM {
 	}
 	public set ccy(ccy: CurrencyDO) {
 		this._ccy = ccy;
-	}
-	public get addOnProductList(): AddOnProductDO[] {
-		return this._addOnProductList;
-	}
-	public set addOnProductList(addOnProductList: AddOnProductDO[]) {
-		this._addOnProductList = addOnProductList;
 	}
 
 	public get availabilityString(): string {

@@ -17,6 +17,7 @@
 <div [ngClass]="{'col-xs-3 overview-right': !isEditing, 'col-xs-9 edit-container': isEditing}">
 	<customer-register-overview 
 		*ngIf="selectedCustomerVM && !isEditing" 
+		[showLinkToOperationalModal]="showLinkToOperationalModal"
 		[customerVM]="selectedCustomerVM"
 		(onEdit)="editCustomer($event)">
 		>

@@ -9,6 +9,8 @@ import {ThTimestampDO} from '../../utils/th-dates/data-objects/ThTimestampDO';
 import {ThAuditLogger} from '../../utils/logging/ThAuditLogger';
 import {AllotmentArchiverCronJobExecutor} from './allotment/AllotmentArchiverCronJobExecutor';
 import {BookingStatusChangerCronJobExecutor} from './booking/BookingStatusChangerCronJobExecutor';
+import {MarkOccupiedCleanRoomsAsDirtyCronJobExecutor} from './room/MarkOccupiedCleanRoomsAsDirtyCronJobExecutor';
+import {HotelInventorySnapshotCronJobExecutor} from './inventory-snapshot/HotelInventorySnapshotCronJobExecutor';
 
 import util = require('util');
 
@@ -52,12 +54,14 @@ export class HotelHalfHourlyCronJob extends AHalfHourlyCronJob {
 
 	private getDaylyCronJobExecutor(executorDO: JobExecutorDO): BulkCronJobExecutor {
 		return new BulkCronJobExecutor([
-			new AllotmentArchiverCronJobExecutor(executorDO)
+			new AllotmentArchiverCronJobExecutor(executorDO),
+			new MarkOccupiedCleanRoomsAsDirtyCronJobExecutor(executorDO)
 		]);
 	}
 	private getHalfHourlyCronJobExecutor(executorDO: JobExecutorDO): BulkCronJobExecutor {
 		return new BulkCronJobExecutor([
-			new BookingStatusChangerCronJobExecutor(executorDO)
+			new BookingStatusChangerCronJobExecutor(executorDO),
+			new HotelInventorySnapshotCronJobExecutor(executorDO)
 		]);
 	}
 }

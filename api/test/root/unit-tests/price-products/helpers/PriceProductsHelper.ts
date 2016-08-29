@@ -9,6 +9,12 @@ import {PriceProductYieldFilterMetaDO} from '../../../../../core/data-layer/pric
 import {PriceProductPriceType} from '../../../../../core/data-layer/price-products/data-objects/price/IPriceProductPrice';
 import {PriceProductCancellationPolicyType} from '../../../../../core/data-layer/price-products/data-objects/conditions/cancellation/IPriceProductCancellationPolicy';
 import {PriceProductCancellationPenaltyType} from '../../../../../core/data-layer/price-products/data-objects/conditions/penalty/IPriceProductCancellationPenalty';
+import {PriceProductIncludedItemsDO} from '../../../../../core/data-layer/price-products/data-objects/included-items/PriceProductIncludedItemsDO';
+import {AttachedAddOnProductItemDO} from '../../../../../core/data-layer/price-products/data-objects/included-items/AttachedAddOnProductItemDO';
+import {AttachedAddOnProductItemStrategyType} from '../../../../../core/data-layer/price-products/data-objects/included-items/IAttachedAddOnProductItemStrategy';
+import {OneItemPerDayAttachedAddOnProductItemStrategyDO} from '../../../../../core/data-layer/price-products/data-objects/included-items/strategies/OneItemPerDayAttachedAddOnProductItemStrategyDO';
+import {AddOnProductDO} from '../../../../../core/data-layer/add-on-products/data-objects/AddOnProductDO';
+import {AddOnProductSnapshotDO} from '../../../../../core/data-layer/add-on-products/data-objects/AddOnProductSnapshotDO';
 import {YieldFilterDO} from '../../../../../core/data-layer/common/data-objects/yield-filter/YieldFilterDO';
 import {RoomCategoryStatsAggregator} from '../../../../../core/domain-layer/room-categories/aggregators/RoomCategoryStatsAggregator';
 import {RoomCategoryStatsDO} from '../../../../../core/data-layer/room-categories/data-objects/RoomCategoryStatsDO';
@@ -44,12 +50,37 @@ export class PriceProductsHelper {
 	public getDraftSavePriceProductItemDO(): SavePriceProductItemDO {
 		this.ensureRoomCategoryStatWasSet();
 
+		var includedItems = new PriceProductIncludedItemsDO();
+
+		var breakfastAopCategoryId = this._dataBuilder.breakfastAddOnProductCategory.id;
+		var breakfastAddOnProduct = _.find(this._dataBuilder.addOnProductList, (aop: AddOnProductDO) => {
+			return aop.categoryId === breakfastAopCategoryId;
+		});
+		var addOnProduct = _.find(this._dataBuilder.addOnProductList, (aop: AddOnProductDO) => {
+			return aop.categoryId !== breakfastAopCategoryId;
+		});
+		var attachedAopItem = new AttachedAddOnProductItemDO();
+		attachedAopItem.addOnProductSnapshot = new AddOnProductSnapshotDO();
+		attachedAopItem.addOnProductSnapshot.id = addOnProduct.id;
+		attachedAopItem.strategyType = AttachedAddOnProductItemStrategyType.OneItemPerDayForEachAdultOrChild;
+		attachedAopItem.strategy = new OneItemPerDayAttachedAddOnProductItemStrategyDO();
+		includedItems.attachedAddOnProductItemList = [
+			attachedAopItem
+		];
+
+		includedItems.includedBreakfastAddOnProductSnapshot = new AddOnProductSnapshotDO();
+		includedItems.includedBreakfastAddOnProductSnapshot.id = breakfastAddOnProduct.id;
+		includedItems.indexedAddOnProductIdList = [
+			breakfastAddOnProduct.id,
+			addOnProduct.id
+		];
+
 		return {
 			status: PriceProductStatus.Draft,
 			name: "Test Price Product",
 			availability: PriceProductAvailability.Public,
 			lastRoomAvailability: false,
-			addOnProductIdList: [this._testUtils.getRandomListElement(this._dataBuilder.addOnProductList).id],
+			includedItems: includedItems,
 			roomCategoryIdList: [this.getRoomCategoryId()],
 			price: DefaultPriceProductBuilder.getPricePerPerson([this._roomCategoryStat]),
 			taxIdList: [this._testUtils.getRandomListElement(this._dataBuilder.taxes.vatList).id],

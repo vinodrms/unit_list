@@ -4,7 +4,44 @@
 	"Booking was marked as Guaranteed by the System": "Booking was marked as Guaranteed by the System",
 	"Booking was marked as No Show by the System": "Booking was marked as No Show by the System",
 	"Booking was marked as No Show by the System. The booking has a penalty on the attached invoice.": "Booking was marked as No Show by the System. The booking has a penalty on the attached invoice.",
+	"The customers were moved to room %roomName%": "The customers were moved to room %roomName%",
+	"The customers were checked in room %roomName%": "The customers were checked in room %roomName%",
+	"Room %roomName% was reserved for this booking.": "Room %roomName% was reserved for this booking.",
+	"The room was checked out.": "The room was checked out.",
+	"The booking interval was changed from %oldInterval% to %newInterval%. The old price %oldPrice% has become %newPrice%.": "The booking interval was changed from %oldInterval% to %newInterval%. The old price %oldPrice% has become %newPrice%.",
+	"The booking was marked as a late arrival and will be marked as no show at %noShowTime%.": "The booking was marked as a late arrival and will be marked as no show at %noShowTime%.",
+	"The booking capacity was changed from %oldAdults% ad %oldChildren% ch %oldBabies% b to %newAdults% ad %newChildren% ch %newBabies% b. The old price %oldPrice% has become %newPrice%.": "The booking capacity was changed from %oldAdults% ad %oldChildren% ch %oldBabies% b to %newAdults% ad %newChildren% ch %newBabies% b. The old price %oldPrice% has become %newPrice%.",
+	"A payment guarantee has been added.": "A payment guarantee has been added.",
+	"The details of the booking have been changed": "The details of the booking have been changed",
+	"The customers from the booking have been changed": "The customers from the booking have been changed",
+	"The booking has been cancelled": "The booking has been cancelled",
+	"The booking has been cancelled. The booking has a penalty.": "The booking has been cancelled. The booking has a penalty.",
+	"The booking has been reactivated.": "The booking has been reactivated.",
+	"Some rollaway beds were added in the room to fit the booking capacity": "Some rollaway beds were added in the room to fit the booking capacity",
+	"%noReservedAddOnProducts% add on product(s) have been reserved for the booking": "%noReservedAddOnProducts% add on product(s) have been reserved for the booking",
 	
+	
+	
+
+	// room maintenance history
+	"The room was marked as Clean": "The room was marked as Clean",
+	"The room was marked as Dirty": "The room was marked as Dirty",
+	"The room was marked as Pick Up": "The room was marked as Pick Up",
+	"The room was marked as Out Of Order": "The room was marked as Out Of Order",
+	"The room was marked as Out Of Service": "The room was marked as Out Of Service",
+	
+	"The room was marked as Clean (%maintenanceMessage%)": "The room was marked as Clean (%maintenanceMessage%)",
+	"The room was marked as Dirty (%maintenanceMessage%)": "The room was marked as Dirty (%maintenanceMessage%)",
+	"The room was marked as Pick Up (%maintenanceMessage%)": "The room was marked as Pick Up (%maintenanceMessage%)",
+	"The room was marked as Out Of Order (%maintenanceMessage%)": "The room was marked as Out Of Order (%maintenanceMessage%)",
+	"The room was marked as Out Of Service (%maintenanceMessage%)": "The room was marked as Out Of Service (%maintenanceMessage%)",
+	
+	"The room was marked as Dirty (Checked Out)": "The room was marked as Dirty (Checked Out)",
+	"The room was marked as Dirty (Occupied)": "The room was marked as Dirty (Occupied)",
+
+	// room rollaway history
+	"Some rollaway beds were removed from the room": "Some rollaway beds were removed from the room",
+	"Some rollaway beds were added in the room": "Some rollaway beds were added in the room",
 
 	// ThResponse
 
@@ -43,10 +80,14 @@
 	"Booking Ref": "Booking Ref",
 	"Group Booking Ref": "Group Booking Ref",
 	"Booking Confirmation": "Booking Confirmation",
+	"Invoice": "Invoice",
 	"Contact": "Contact",
 	"Address": "Address",
 	"Check-In": "Check-In",
 	"Check-Out": "Check-Out",
+	"Included in Price": "Included in Price",
+	"Reserved Add-On-Products": "Reserved Add-On-Products",
+	"* Not included in the reservation's price": "* Not included in the reservation's price",
 	"Price": "Price",
 	"Room": "Room",
 	"room": "room",
@@ -64,8 +105,11 @@
 	"%noAdults% adults, %noChildren% children, %noBabies% babies": "%noAdults% adults, %noChildren% children, %noBabies% babies",
 	"cm (wide)": "cm (wide)",
 	"n/a": "n/a",
+	"Included in Room Price": "Included in Room Price",
 
 	// BookingPriceDO
 	"Booking": "Booking",
-	"Cancellation Penalty": "Cancellation Penalty"
+	"Cancellation Penalty": "Cancellation Penalty",
+	"Booking (includes %breakfastName%)": "Booking (includes %breakfastName%)"
+
 }

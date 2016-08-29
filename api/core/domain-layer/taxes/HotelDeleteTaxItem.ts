@@ -69,7 +69,7 @@ export class HotelDeleteTaxItem {
 				var taxRepo = this._appContext.getRepositoryFactory().getTaxRepository();
 				var itemMeta = this.buildTaxItemMetaRepoDO();
 
-				return taxRepo.deleteTax(this._taxMeta, itemMeta);
+				return taxRepo.deleteTax(this._taxMeta, itemMeta, this._loadedTax);
 			})
 			.then((deletedTax: TaxDO) => {
 				resolve(deletedTax);

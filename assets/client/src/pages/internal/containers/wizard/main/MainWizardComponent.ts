@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {RouteConfig, RouterOutlet} from '@angular/router-deprecated';
+import {ROUTER_DIRECTIVES} from '@angular/router';
 import {BaseComponent} from '../../../../../common/base/BaseComponent';
 import {WizardHeaderComponent} from '../pages/utils/header/WizardHeaderComponent';
 import {WizardNavbarComponent} from '../pages/utils/navbar/WizardNavbarComponent';
@@ -25,27 +25,23 @@ import {WizardService} from '../pages/wizard-pages/services/WizardService';
 import {SETTINGS_PROVIDERS} from '../../../services/settings/SettingsProviders';
 import {TaxService} from '../../../services/taxes/TaxService';
 import {HOTEL_AGGREGATOR_PROVIDERS} from '../../../services/hotel/HotelProviders';
-
-@RouteConfig([
-	{ path: '/basic-info/...', name: 'WizardBasicInformationComponent', component: WizardBasicInformationComponent, useAsDefault: true },
-	{ path: '/beds', name: 'WizardBedsComponent', component: WizardBedsComponent },
-    { path: '/rooms', name: 'WizardRoomsComponent', component: WizardRoomsComponent },
-	{ path: '/breakfast', name: 'WizardBreakfastComponent', component: WizardBreakfastComponent },
-	{ path: '/add-on-products', name: 'WizardAddOnProductsComponent', component: WizardAddOnProductsComponent },
-	{ path: '/price-products', name: 'WizardPriceProductsComponent', component: WizardPriceProductsComponent },
-	{ path: '/customer-register', name: 'WizardCustomerRegisterComponent', component: WizardCustomerRegisterComponent },
-	{ path: '/allotments', name: 'WizardAllotmentsComponent', component: WizardAllotmentsComponent }
-])
+import {RoomCategoriesService} from '../../../services/room-categories/RoomCategoriesService';
+import {RoomCategoriesStatsService} from '../../../services/room-categories/RoomCategoriesStatsService';
 
 @Component({
 	selector: 'main-wizard-component',
 	templateUrl: '/client/src/pages/internal/containers/wizard/main/template/main-wizard-component.html',
-	directives: [RouterOutlet, WizardHeaderComponent, WizardNavbarComponent, WizardStepsComponent, WizardPriceProductsComponent],
-	providers: [SETTINGS_PROVIDERS, HOTEL_AGGREGATOR_PROVIDERS, TaxService, WIZARD_BASIC_INFO_PAGES_PROVIDERS,
+	directives: [ROUTER_DIRECTIVES, WizardHeaderComponent, WizardNavbarComponent, WizardStepsComponent, WizardPriceProductsComponent],
+	providers: [SETTINGS_PROVIDERS, HOTEL_AGGREGATOR_PROVIDERS, TaxService,
+		RoomCategoriesService, RoomCategoriesStatsService, WIZARD_BASIC_INFO_PAGES_PROVIDERS,
 		WizardBedsStateService, WizardRoomsStateService, WizardBreakfastStateService,
-		WizardAddOnProductsStateService, WizardPriceProductsStateService, 
+		WizardAddOnProductsStateService, WizardPriceProductsStateService,
 		WizardCustomerRegisterStateService, WizardAllotmentsStateService,
-		WizardService]
+		WizardService],
+	entryComponents: [
+		WizardBasicInformationComponent, WizardBedsComponent, WizardRoomsComponent, WizardBreakfastComponent,
+		WizardAddOnProductsComponent, WizardPriceProductsComponent, WizardCustomerRegisterComponent, WizardAllotmentsComponent
+	]
 })
 
 export class MainWizardComponent extends BaseComponent {

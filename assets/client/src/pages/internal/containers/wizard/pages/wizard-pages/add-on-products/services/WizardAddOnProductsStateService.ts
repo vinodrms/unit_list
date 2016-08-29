@@ -59,8 +59,8 @@ export class WizardAddOnProductsStateService extends AWizardState {
     }
     public getMeta(): WizardStateMeta {
         return {
-            startRelativeComponentPath: "WizardAddOnProductsComponent",
-            endRelativeComponentPath: "WizardAddOnProductsComponent",
+            startRelativeComponentPath: "add-on-products",
+            endRelativeComponentPath: "add-on-products",
             iconFontName: "$",
             name: "Add-On Products"
         };

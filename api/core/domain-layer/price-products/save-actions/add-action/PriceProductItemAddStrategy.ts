@@ -9,10 +9,15 @@ import {PriceProductMetaRepoDO} from '../../../../data-layer/price-products/repo
 import {IPriceProductItemActionStrategy} from '../IPriceProductItemActionStrategy';
 import {PriceProductValidator} from '../../validators/PriceProductValidator';
 import {PriceProductActionUtils} from '../utils/PriceProductActionUtils';
+import {AddOnProductIdValidator} from '../../../add-on-products/validators/AddOnProductIdValidator';
+import {AddOnProductsContainer} from '../../../add-on-products/validators/results/AddOnProductsContainer';
 
 export class PriceProductItemAddStrategy implements IPriceProductItemActionStrategy {
+	private _priceProductUtils: PriceProductActionUtils;
+
 	constructor(private _appContext: AppContext, private _sessionContext: SessionContext,
 		private _ppRepoMeta: PriceProductMetaRepoDO, private _priceProductDO: PriceProductDO) {
+		this._priceProductUtils = new PriceProductActionUtils();
 	}
 
 	public save(resolve: { (result: PriceProductDO): void }, reject: { (err: ThError): void }) {
@@ -23,9 +28,14 @@ export class PriceProductItemAddStrategy implements IPriceProductItemActionStrat
 			return;
 		}
 
-		var ppValidator = new PriceProductValidator(this._appContext, this._sessionContext);
-		ppValidator.validatePriceProduct(this._priceProductDO)
-			.then((result: boolean) => {
+		var addOnProductIdValidator = new AddOnProductIdValidator(this._appContext, this._sessionContext);
+		addOnProductIdValidator.validateAddOnProductIdList(this._priceProductDO.includedItems.getUniqueAddOnProductIdList())
+			.then((aopContainer: AddOnProductsContainer) => {
+				this._priceProductUtils.updateIncludedItems(this._priceProductDO, aopContainer);
+
+				var ppValidator = new PriceProductValidator(this._appContext, this._sessionContext);
+				return ppValidator.validatePriceProduct(this._priceProductDO)
+			}).then((result: boolean) => {
 				var ppUtils = new PriceProductActionUtils();
 				ppUtils.populateDefaultIntervalsOn(this._priceProductDO);
 				var ppRepo = this._appContext.getRepositoryFactory().getPriceProductRepository();

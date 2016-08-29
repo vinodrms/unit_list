@@ -3,6 +3,7 @@ import {PriceProductPriceDO} from './price/PriceProductPriceDO';
 import {PriceProductConstraintWrapperDO} from './constraint/PriceProductConstraintWrapperDO';
 import {PriceProductConditionsDO} from './conditions/PriceProductConditionsDO';
 import {PriceProductYieldFilterMetaDO} from './yield-filter/PriceProductYieldFilterDO';
+import {PriceProductIncludedItemsDO} from './included-items/PriceProductIncludedItemsDO';
 
 export enum PriceProductStatus {
 	Draft,
@@ -23,7 +24,7 @@ export class PriceProductDO extends BaseDO {
 	name: string;
 	availability: PriceProductAvailability;
 	lastRoomAvailability: boolean;
-	addOnProductIdList: string[];
+	includedItems: PriceProductIncludedItemsDO;
 	roomCategoryIdList: string[];
 	price: PriceProductPriceDO;
 	taxIdList: string[];
@@ -43,10 +44,13 @@ export class PriceProductDO extends BaseDO {
 	}
 
 	protected getPrimitivePropertyKeys(): string[] {
-		return ["id", "versionId", "status", "name", "availability", "lastRoomAvailability", "addOnProductIdList", "roomCategoryIdList", "taxIdList", "notes"];
+		return ["id", "versionId", "status", "name", "availability", "lastRoomAvailability", "roomCategoryIdList", "taxIdList", "notes"];
 	}
 	public buildFromObject(object: Object) {
 		super.buildFromObject(object);
+
+		this.includedItems = new PriceProductIncludedItemsDO();
+		this.includedItems.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "includedItems"));
 
 		this.price = new PriceProductPriceDO();
 		this.price.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "price"));

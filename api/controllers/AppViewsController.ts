@@ -1,34 +1,36 @@
 import {BaseController} from './base/BaseController';
 import {AppEnvironmentType} from '../core/utils/environment/UnitPalConfig';
-import {AppContext} from '../core/utils/AppContext';
 import {SessionManager} from '../core/utils/SessionContext';
 import {LoginStatusCode} from '../core/utils/th-responses/LoginStatusCode';
+import {UnitPalConfig, GoogleAnalyticsSettings} from '../core/utils/environment/UnitPalConfig';
 
 class AppViewsController extends BaseController {
 	public getExternalView(req: Express.Request, res: Express.Response) {
-		var isDevelopmentEnvironment = this.isDevelopmentEnvironment(req);
-        res.view("external", {
-			isDevelopmentEnvironment: isDevelopmentEnvironment
-        });
+		var unitPalConfig: UnitPalConfig = req.appContext.getUnitPalConfig();
+        res.view("external", this.getViewParameters(unitPalConfig));
 	}
+
 	public getInternalView(req: Express.Request, res: Express.Response) {
-		var isDevelopmentEnvironment = this.isDevelopmentEnvironment(req);
+		var unitPalConfig: UnitPalConfig = req.appContext.getUnitPalConfig();
 		var sessionManager = new SessionManager(req);
-		if (!isDevelopmentEnvironment && !sessionManager.sessionExists()) {
-			var appContext: AppContext = req.appContext;
-			return res.redirect(appContext.getUnitPalConfig().getAppContextRoot() + "/?loginStatusCode=" + LoginStatusCode.SessionTimeout);
+
+		if (!this.isDevelopmentEnvironment(unitPalConfig) && !sessionManager.sessionExists()) {
+			return res.redirect(unitPalConfig.getAppContextRoot() + "/login/" + LoginStatusCode.SessionTimeout);
 		}
-        return res.view("internal", {
-			isDevelopmentEnvironment: isDevelopmentEnvironment
-        });
+        return res.view("internal", this.getViewParameters(unitPalConfig));
 	}
-	private isDevelopmentEnvironment(req: Express.Request): boolean {
-		var appContext: AppContext = req.appContext;
-		if (appContext.getUnitPalConfig().getAppEnvironment() == AppEnvironmentType.Development) {
-			return true;
-		}
-		return false;
-    }
+
+	private getViewParameters(unitPalConfig: UnitPalConfig): Object {
+		var googleAnalyticsSettings: GoogleAnalyticsSettings = unitPalConfig.getGoogleAnalyticsSettings();
+		return {
+			isDevelopmentEnvironment: this.isDevelopmentEnvironment(unitPalConfig),
+			googleAnalyticsEnabled: googleAnalyticsSettings.enabled,
+			googleAnalyticsTrackingId: googleAnalyticsSettings.trackingId
+        };
+	}
+	private isDevelopmentEnvironment(unitPalConfig: UnitPalConfig) {
+		return unitPalConfig.getAppEnvironment() == AppEnvironmentType.Development;
+	}
 }
 
 var appViewsController = new AppViewsController();

@@ -1,33 +1,33 @@
 import {BaseDO} from '../../common/base/BaseDO';
 import {InvoiceDO, InvoicePaymentStatus} from './InvoiceDO';
+import {InvoiceItemDO} from './items/InvoiceItemDO';
 import {InvoicePayerDO} from './payers/InvoicePayerDO';
+import {IBookingRepository} from '../../bookings/repositories/IBookingRepository';
+import {BookingDO} from '../../bookings/data-objects/BookingDO';
+import {CustomerDO} from '../../customers/data-objects/CustomerDO';
 
 export enum InvoiceGroupStatus {
-	Active,
-	Deleted
+    Active,
+    Deleted
 }
 
 export class InvoiceGroupDO extends BaseDO {
-    constructor() {
-        super();
-    }
-
     id: string;
+    invoiceGroupReference: string;
     versionId: number;
     hotelId: string;
     groupBookingId: string;
     indexedCustomerIdList: string[];
     invoiceList: InvoiceDO[];
-    paymentStatus: InvoicePaymentStatus;
     status: InvoiceGroupStatus;
 
     protected getPrimitivePropertyKeys(): string[] {
-        return ["id", "versionId", "groupBookingId", "indexedCustomerIdList", "paymentStatus", "status"];
+        return ["id", "invoiceGroupReference", "versionId", "hotelId", "groupBookingId", "indexedCustomerIdList", "status"];
     }
-    
+
     public buildFromObject(object: Object) {
-		super.buildFromObject(object);
-        
+        super.buildFromObject(object);
+
         this.invoiceList = [];
         this.forEachElementOf(this.getObjectPropertyEnsureUndefined(object, "invoiceList"), (invoiceObject: Object) => {
             var invoiceDO = new InvoiceDO();
@@ -52,5 +52,34 @@ export class InvoiceGroupDO extends BaseDO {
         return _.reduce(this.invoiceList, (result, invoice: InvoiceDO) => {
             return _.union(result, invoice.payerList);
         }, []);
+    }
+
+    public reindexByCustomerId() {
+        this.indexedCustomerIdList = _.chain(this.invoiceList).map((invoice: InvoiceDO) => {
+            return invoice.payerList;
+        })
+            .flatten()
+            .map((invoicePayer: InvoicePayerDO) => {
+                return invoicePayer.customerId;
+            })
+            .uniq()
+            .value();
+    }
+
+    public linkBookingPrices(bookingList: BookingDO[]) {
+        _.forEach(this.invoiceList, (invoice: InvoiceDO) => {
+            invoice.linkBookingPrices(bookingList);
+        });
+    }
+
+    public addInvoiceFeeIfNecessary(customerDOList: CustomerDO[]) {
+        _.forEach(this.invoiceList, (invoiceDO: InvoiceDO) => {
+            invoiceDO.addInvoiceFeeIfNecessary(customerDOList);
+        });
+    }
+    public removeItemsPopulatedFromBooking() {
+        _.forEach(this.invoiceList, (invoiceDO: InvoiceDO) => {
+            invoiceDO.removeItemsPopulatedFromBooking();
+        });
     }
 }

@@ -55,7 +55,7 @@ export class BookingDependenciesFilter {
         var allotmentFilter = new BusinessValidationRuleFilterComposer([
             new AllotmentConstraintsValidationRule({
                 bookingInterval: this._filterParams.interval,
-                currentHotelThDate: this._currentThHotelDate
+                bookingCreationDate: this._currentThHotelDate
             }),
             new AllotmentOpenIntervalValidationRule({
                 bookingInterval: this._filterParams.interval
@@ -67,7 +67,7 @@ export class BookingDependenciesFilter {
         var priceProductWithAllotmentFilter = new BusinessValidationRuleFilterComposer([
             new PriceProductConstraintsValidationRule({
                 bookingInterval: this._filterParams.interval,
-                currentHotelThDate: this._currentThHotelDate,
+                bookingCreationDate: this._currentThHotelDate,
                 configCapacity: this._filterParams.configCapacity
             })
         ]);
@@ -77,7 +77,7 @@ export class BookingDependenciesFilter {
         var priceProductFilter = new BusinessValidationRuleFilterComposer([
             new PriceProductConstraintsValidationRule({
                 bookingInterval: this._filterParams.interval,
-                currentHotelThDate: this._currentThHotelDate,
+                bookingCreationDate: this._currentThHotelDate,
                 configCapacity: this._filterParams.configCapacity
             }),
             new PriceProductYieldIntervalsValidationRule(this._filterParams.interval)

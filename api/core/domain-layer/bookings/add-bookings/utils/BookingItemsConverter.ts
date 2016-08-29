@@ -17,6 +17,10 @@ import {BookingUtils} from '../../utils/BookingUtils';
 import {ThDateIntervalDO} from '../../../../utils/th-dates/data-objects/ThDateIntervalDO';
 import {BookingPriceDO, BookingPriceType} from '../../../../data-layer/bookings/data-objects/price/BookingPriceDO';
 import {CustomersContainer} from '../../../customers/validators/results/CustomersContainer';
+import {AddOnProductItemContainer, AddOnProductItem} from '../../../add-on-products/validators/AddOnProductLoader';
+import {AddOnProductDO} from '../../../../data-layer/add-on-products/data-objects/AddOnProductDO';
+import {InvoiceItemDO, InvoiceItemType} from '../../../../data-layer/invoices/data-objects/items/InvoiceItemDO';
+import {AddOnProductInvoiceItemMetaDO} from '../../../../data-layer/invoices/data-objects/items/add-on-products/AddOnProductInvoiceItemMetaDO';
 
 import _ = require('underscore');
 
@@ -25,6 +29,7 @@ export class BookingItemsConverterParams {
     hotelDO: HotelDO;
     currentHotelTimestamp: ThTimestampDO;
     customersContainer: CustomersContainer;
+    addOnProductItemContainer: AddOnProductItemContainer;
 }
 
 export class BookingItemsConverter {
@@ -63,7 +68,6 @@ export class BookingItemsConverter {
         var hotelId = this._sessionContext.sessionDO.hotel.id;
         var groupBookingStatus = GroupBookingStatus.Active;
         var noOfRooms = this._bookingItems.bookingList.length;
-        var currentHotelDate = this._bookingUtils.getCurrentThDateForHotel(this._converterParams.hotelDO);
 
         _.forEach(this._bookingItems.bookingList, (bookingItem: BookingItemDO) => {
             var bookingDO = new BookingDO();
@@ -84,9 +88,11 @@ export class BookingItemsConverter {
             bookingDO.defaultBillingDetails = bookingItem.defaultBillingDetails;
             bookingDO.roomCategoryId = bookingItem.roomCategoryId;
             bookingDO.priceProductId = bookingItem.priceProductId;
+            bookingDO.reservedAddOnProductIdList = [];
             bookingDO.allotmentId = bookingItem.allotmentId;
             bookingDO.notes = bookingItem.notes;
             bookingDO.interval = bookingInterval;
+            bookingDO.creationDate = this._converterParams.currentHotelTimestamp.thDateDO;
 
             var priceProduct = this._converterParams.priceProductsContainer.getPriceProductById(bookingDO.priceProductId);
             bookingDO.priceProductSnapshot = new PriceProductDO();
@@ -108,25 +114,15 @@ export class BookingItemsConverter {
                 actionString: "Booking was created",
                 userId: this._sessionContext.sessionDO.user.id
             }));
-            bookingDO.guaranteedTime = priceProduct.conditions.policy.generateGuaranteedTriggerTime({ arrivalDate: indexedBookingInterval.getArrivalDate() });
-            if (bookingDO.guaranteedTime.isInThePast({
-                cancellationHour: this._converterParams.hotelDO.operationHours.cancellationHour,
+
+            this._bookingUtils.updateBookingGuaranteedAndNoShowTimes(bookingDO, {
+                priceProduct: priceProduct,
+                hotel: this._converterParams.hotelDO,
                 currentHotelTimestamp: this._converterParams.currentHotelTimestamp
-            })) {
-                bookingDO.confirmationStatus = BookingConfirmationStatus.Guaranteed;
-            }
-
-            bookingDO.noShowTime = priceProduct.conditions.policy.generateNoShowTriggerTime({ arrivalDate: indexedBookingInterval.getArrivalDate() });
-
-            bookingDO.price = new BookingPriceDO();
-            bookingDO.price.priceType = BookingPriceType.BookingStay;
-            bookingDO.price.numberOfItems = indexedBookingInterval.getLengthOfStay();
-            bookingDO.price.pricePerItem = priceProduct.price.getPricePerNightFor({
-                configCapacity: bookingDO.configCapacity,
-                roomCategoryId: bookingDO.roomCategoryId
             });
-            bookingDO.price.totalPrice = bookingDO.price.numberOfItems * bookingDO.price.pricePerItem;
+            this._bookingUtils.updateBookingPriceUsingRoomCategory(bookingDO);
             this._bookingUtils.updateIndexedSearchTerms(bookingDO, this._converterParams.customersContainer);
+            this._bookingUtils.updateDisplayCustomerId(bookingDO, this._converterParams.customersContainer);
 
             bookingList.push(bookingDO);
         });

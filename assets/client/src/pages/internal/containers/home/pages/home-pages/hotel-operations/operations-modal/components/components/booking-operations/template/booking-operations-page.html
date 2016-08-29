@@ -1,0 +1,87 @@
+<loading-component [isLoading]="isLoading && !didInitOnce"></loading-component>
+
+<div class="row full-height" *ngIf="didInitOnce">
+	<div class="col-xs-9 full-height right-margin padding-top-10px" customScroll>
+		<div class="row">
+			<booking-price-product-viewer [bookingOperationsPageData]="bookingOperationsPageData"></booking-price-product-viewer>
+		</div>
+		<div class="row">
+			<booking-allotment-viewer [bookingOperationsPageData]="bookingOperationsPageData"></booking-allotment-viewer>
+		</div>
+		<hr/>
+		<div class="row">
+			<booking-period-editor [bookingOperationsPageData]="bookingOperationsPageData" (onBookingPeriodChanged)="didChangeBooking($event)"></booking-period-editor>
+		</div>
+		<div class="row">
+			<booking-no-show-editor [bookingOperationsPageData]="bookingOperationsPageData" (onBookingNoShowTimestampChanged)="didChangeBooking($event)"></booking-no-show-editor>
+		</div>
+
+		<hr/>
+		<div class="row">
+			<div class="col-xs-12 col-sm-1 padding-top-10px">
+				{{'Status' | translate}}
+			</div>
+			<div class="col-xs-12 col-sm-4">
+            	<div class="form-group">
+					<div class="form-control operational-input-group non-editable" [ngClass]="bookingMeta.displayClassName">
+						<span class="unitpal-font unitpal-large">{{ bookingMeta.fontName }}</span>
+						<span class="name">{{ bookingMeta.displayName | translate }}</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<booking-payment-guarantee-editor [bookingOperationsPageData]="bookingOperationsPageData" (onBookingPaymentGuaranteeChanged)="didChangeBooking($event)"></booking-payment-guarantee-editor>
+		</div>
+		<hr/>
+		<div class="row">
+			<div class="col-xs-12 col-sm-1 padding-top-10px">
+				{{'Room' | translate}}
+			</div>
+			<div class="col-xs-12 col-sm-4">
+				<div class="row padding-bottom-5px">
+					<booking-room-editor [bookingOperationsPageData]="bookingOperationsPageData" (onBookingRoomChanged)="didChangeBooking($event) && loadPageData()"></booking-room-editor>
+				</div>
+			</div>
+			<div class="col-xs-12 col-sm-7">
+				<booking-capacity-editor [bookingOperationsPageData]="bookingOperationsPageData" (onBookingCapacityChanged)="didChangeBooking($event)"></booking-capacity-editor>
+			</div>
+		</div>
+		<hr/>
+		<div class="row padding-top-5px">
+			<booking-details-editor [bookingOperationsPageData]="bookingOperationsPageData" (onBookingDetailsChanged)="didChangeBooking($event)"></booking-details-editor>
+		</div>
+		<hr/>
+
+		<div class="row padding-bottom-10px">
+			<div class="col-xs-12 col-sm-1 padding-top-10px">
+				{{'History' | translate}}
+			</div>
+			<div class="col-xs-12 col-sm-11">
+				<document-history-viewer [documentHistory]="bookingDO.bookingHistory"></document-history-viewer>
+			</div>
+		</div>
+	</div>
+	<div class="col-xs-3 full-height right-sidebar padding-top-10px" customScroll>
+		<div class="row">
+			<booking-customer-editor [bookingOperationsPageData]="bookingOperationsPageData" (onCustomersChanged)="didChangeBooking($event)"></booking-customer-editor>
+		</div>
+		<hr/>
+		<div class="row">
+			<booking-reserve-add-on-product [bookingOperationsPageData]="bookingOperationsPageData" (onAddOnProductsChanged)="didChangeBooking($event)"></booking-reserve-add-on-product>
+		</div>
+		<hr/>
+		<div class="row">
+			<booking-reactivate [bookingOperationsPageData]="bookingOperationsPageData" (onBookingReactivate)="didChangeBooking($event)"></booking-reactivate>
+		</div>
+		<div class="row">
+			<booking-cancel [bookingOperationsPageData]="bookingOperationsPageData" (onBookingCancel)="didChangeBooking($event) && loadPageData()"></booking-cancel>
+		</div>
+		<div class="row">
+			<booking-send-confirmation [bookingOperationsPageData]="bookingOperationsPageData"></booking-send-confirmation>
+		</div>
+		<div class="row padding-bottom-10px">
+			<booking-links [bookingOperationsPageData]="bookingOperationsPageData"></booking-links>
+		</div>
+	</div>
+</div>

@@ -5,7 +5,7 @@ import {SessionContext} from '../../../../../utils/SessionContext';
 import {ABusinessValidationRule} from '../../../../common/validation-rules/ABusinessValidationRule';
 import {RoomDO} from '../../../../../data-layer/rooms/data-objects/RoomDO';
 import {BookingDO} from '../../../../../data-layer/bookings/data-objects/BookingDO';
-import {AllotmentDO} from '../../../../../data-layer/allotments/data-objects/AllotmentDO';
+import {AllotmentDO, AllotmentStatus} from '../../../../../data-layer/allotments/data-objects/AllotmentDO';
 import {AllotmentsContainer} from '../../../../allotments/validators/results/AllotmentsContainer';
 import {AllotmentConstraintsParams, AllotmentConstraintsValidationRule} from '../allotment/AllotmentConstraintsValidationRule';
 import {AllotmentOpenIntervalValidationRule} from '../allotment/AllotmentOpenIntervalValidationRule';
@@ -36,6 +36,11 @@ export class BookingAllotmentValidationRule extends ABusinessValidationRule<Book
             return;
         }
         var allotment = this._validationParams.allotmentsContainer.getAllotmentById(booking.allotmentId);
+        if (allotment.status === AllotmentStatus.Archived) {
+            resolve(booking);
+            return;
+        }
+
         if (allotment.customerId !== booking.defaultBillingDetails.customerId) {
             this.logBusinessAndReject(reject, booking, {
                 statusCode: ThStatusCode.BookingsValidatorAllotmentCustomer,
@@ -43,7 +48,8 @@ export class BookingAllotmentValidationRule extends ABusinessValidationRule<Book
             });
             return;
         }
-        if (allotment.roomCategoryId !== booking.roomCategoryId) {
+
+        if (allotment.roomCategoryId !== booking.roomCategoryId && this.isNewBooking(booking)) {
             this.logBusinessAndReject(reject, booking, {
                 statusCode: ThStatusCode.BookingsValidatorAllotmentInvalidRoomCategory,
                 errorMessage: "room category id mismatch between allotment and selected"
@@ -57,7 +63,7 @@ export class BookingAllotmentValidationRule extends ABusinessValidationRule<Book
         ]);
         allotmentValidationRule.isValidOn(allotment).then((validatedAllotment: AllotmentDO) => {
             var occupancyCalculator = new BookingOccupancyCalculator(this._appContext, this._sessionContext, this._validationParams.roomList);
-            return occupancyCalculator.compute(booking.interval, this._validationParams.transientBookingList);
+            return occupancyCalculator.compute(booking.interval, this._validationParams.transientBookingList, booking.bookingId);
         }).then((bookingOccupancy: IBookingOccupancy) => {
             var allotmentOccupancyNo = bookingOccupancy.getOccupancyForAllotmentId(booking.allotmentId);
             var allotmentAvailabilityNo = allotment.availability.getAllotmentAvailabilityForInterval(new IndexedBookingInterval(booking.interval));
@@ -72,5 +78,8 @@ export class BookingAllotmentValidationRule extends ABusinessValidationRule<Book
         }).catch((error: ThError) => {
             reject(error);
         });
+    }
+    private isNewBooking(booking: BookingDO): boolean {
+        return this._thUtils.isUndefinedOrNull(booking.groupBookingId);
     }
 }

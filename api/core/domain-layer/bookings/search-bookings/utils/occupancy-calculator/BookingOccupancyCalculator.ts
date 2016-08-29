@@ -7,7 +7,7 @@ import {ThUtils} from '../../../../../utils/ThUtils';
 import {ThDateIntervalDO} from '../../../../../utils/th-dates/data-objects/ThDateIntervalDO';
 import {ThDateDO} from '../../../../../utils/th-dates/data-objects/ThDateDO';
 import {ThDateUtils} from '../../../../../utils/th-dates/ThDateUtils';
-import {RoomDO} from '../../../../../data-layer/rooms/data-objects/RoomDO';
+import {IRoom} from '../../../../../data-layer/rooms/data-objects/IRoom';
 import {BookingDO} from '../../../../../data-layer/bookings/data-objects/BookingDO';
 import {BookingDOConstraints} from '../../../../../data-layer/bookings/data-objects/BookingDOConstraints';
 import {BookingSearchResultRepoDO} from '../../../../../data-layer/bookings/repositories/IBookingRepository';
@@ -23,25 +23,28 @@ export class BookingOccupancyCalculator {
     private _dateUtils: ThDateUtils;
     private _bookingUtils: BookingUtils;
     private _thUtils: ThUtils;
-    private _indexedRoomsById: { [id: string]: RoomDO; };
+    private _indexedRoomsById: { [id: string]: IRoom; };
 
     private _interval: ThDateIntervalDO;
     private _transientBookingList: BookingDO[];
+    private _bookingIdToOmit: string;
 
     private _bookingsContainer: BookingsContainer;
 
-    constructor(private _appContext: AppContext, private _sessionContext: SessionContext, roomList: RoomDO[]) {
+    constructor(private _appContext: AppContext, private _sessionContext: SessionContext, roomList: IRoom[]) {
         this._dateUtils = new ThDateUtils();
         this._bookingUtils = new BookingUtils();
         this._thUtils = new ThUtils();
-        this._indexedRoomsById = _.indexBy(roomList, (room: RoomDO) => { return room.id });
+        this._indexedRoomsById = _.indexBy(roomList, (room: IRoom) => { return room.id });
     }
 
     // it computes the availability for the given period
     // the transient booking list represents an array that is not persistet in the DB but should be considered when computing the occupancy
-    public compute(interval: ThDateIntervalDO, transientBookingList?: BookingDO[]): Promise<IBookingOccupancy> {
+    // the bookingIdToOmit represents an optional bookingId that is ommited from the occupancy calculator
+    public compute(interval: ThDateIntervalDO, transientBookingList?: BookingDO[], bookingIdToOmit?: string): Promise<IBookingOccupancy> {
         this._interval = interval;
         this._transientBookingList = transientBookingList;
+        this._bookingIdToOmit = bookingIdToOmit;
         return new Promise<IBookingOccupancy>((resolve: { (result: IBookingOccupancy): void }, reject: { (err: ThError): void }) => {
             try {
                 this.computeCore(resolve, reject);
@@ -60,6 +63,9 @@ export class BookingOccupancyCalculator {
                 interval: this._interval
             }).then((bookingSearchResult: BookingSearchResultRepoDO) => {
                 var bookingList = bookingSearchResult.bookingList;
+                if (!this._thUtils.isUndefinedOrNull(this._bookingIdToOmit) && _.isString(this._bookingIdToOmit)) {
+                    bookingList = _.filter(bookingList, (booking: BookingDO) => { return booking.bookingId !== this._bookingIdToOmit });
+                }
                 if (!this._thUtils.isUndefinedOrNull(this._transientBookingList) && _.isArray(this._transientBookingList)) {
                     bookingList = bookingList.concat(this._transientBookingList);
                 }

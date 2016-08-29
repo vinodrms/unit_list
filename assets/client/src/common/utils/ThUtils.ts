@@ -55,4 +55,10 @@ export class ThUtils {
 		window.print();
 		document.title = previousTitle;
 	}
+	public roundNumberToTwoDecimals(inputNumber: number): number {
+		if (this.isUndefinedOrNull(inputNumber) || !_.isNumber(inputNumber)) {
+			return inputNumber;
+		}
+		return Math.round(inputNumber * 100) / 100;
+	}
 }

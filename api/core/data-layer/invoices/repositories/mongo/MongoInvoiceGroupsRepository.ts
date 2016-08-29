@@ -1,20 +1,21 @@
 import {MongoRepository, MongoErrorCodes, MongoSearchCriteria} from '../../../common/base/MongoRepository';
-import {IInvoiceGroupsRepository, InvoiceGroupMetaRepoDO, InvoiceGroupItemMetaRepoDO, InvoiceGroupSearchCriteriaRepoDO, InvoiceGroupSearchResultRepoDO} from'../IInvoiceGroupsRepository';
+import {IInvoiceGroupsRepository, InvoiceGroupMetaRepoDO, InvoiceGroupItemMetaRepoDO, InvoiceGroupSearchCriteriaRepoDO, InvoiceGroupSearchResultRepoDO, InvoiceSearchCriteriaRepoDO} from'../IInvoiceGroupsRepository';
 import {InvoiceGroupDO} from '../../data-objects/InvoiceGroupDO';
+import {InvoiceDO} from '../../data-objects/InvoiceDO';
 import {MongoInvoiceGroupsReadOperationsRepository} from './operations/MongoInvoiceGroupsReadOperationsRepository';
 import {MongoInvoiceGroupsEditOperationsRepository} from './operations/MongoInvoiceGroupsEditOperationsRepository';
 import {LazyLoadRepoDO, LazyLoadMetaResponseRepoDO} from '../../../common/repo-data-objects/LazyLoadRepoDO';
+import {MongoBookingRepository} from '../../../bookings/repositories/mongo/MongoBookingRepository';
 
 export class MongoInvoiceGroupsRepository extends MongoRepository implements IInvoiceGroupsRepository {
     private _readRepository: MongoInvoiceGroupsReadOperationsRepository;
     private _editRepository: MongoInvoiceGroupsEditOperationsRepository;
 
     constructor() {
-        var invoiceGroupsEntity = sails.models.invoicegroupsentity;
-        super(invoiceGroupsEntity);
+        super(sails.models.invoicegroupsentity);
 
-        this._readRepository = new MongoInvoiceGroupsReadOperationsRepository(invoiceGroupsEntity);
-        this._editRepository = new MongoInvoiceGroupsEditOperationsRepository(invoiceGroupsEntity);
+        this._readRepository = new MongoInvoiceGroupsReadOperationsRepository(sails.models.invoicegroupsentity);
+        this._editRepository = new MongoInvoiceGroupsEditOperationsRepository(sails.models.invoicegroupsentity);
     }
 
     public getInvoiceGroupById(invoidGroupMeta: InvoiceGroupMetaRepoDO, invoiceGroupId: string): Promise<InvoiceGroupDO> {

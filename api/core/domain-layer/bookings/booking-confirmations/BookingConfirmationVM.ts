@@ -10,6 +10,9 @@ import {BedDO} from '../../../data-layer/common/data-objects/bed/BedDO';
 import {AddOnProductDO} from '../../../data-layer/add-on-products/data-objects/AddOnProductDO';
 import {AddOnProductCategoryDO, AddOnProductCategoryType} from '../../../data-layer/common/data-objects/add-on-product/AddOnProductCategoryDO';
 import {BookingAggregatedData} from '../aggregators/BookingAggregatedData';
+import {InvoiceItemDO} from '../../../data-layer/invoices/data-objects/items/InvoiceItemDO';
+
+import _ = require('underscore');
 
 export class BookingConfirmationVM {
     private _isoWeekDayUtils: ISOWeekDayUtils;
@@ -40,6 +43,8 @@ export class BookingConfirmationVM {
 
     breakfastAop: string;
     otherAops: string;
+    reservedAops: string;
+    reservedAopsDescription: string;
 
     guests: string;
 
@@ -85,10 +90,11 @@ export class BookingConfirmationVM {
         this.checkOutMonth = ThMonth[checkOutThDate.month];
     }
     private initPricingDetails() {
+        this.ccyCode = this._bookingAggregatedData.ccyCode;
         var indexedBookingInterval = new IndexedBookingInterval(this._bookingAggregatedData.booking.interval);
 
         this.lengthOfStay = indexedBookingInterval.getLengthOfStay();
-        this.totalPrice = this._bookingAggregatedData.booking.price.totalPrice;
+        this.totalPrice = this._bookingAggregatedData.booking.price.totalBookingPrice;
         this.totalPrice = Math.round(this.totalPrice);
         this.initIncludedTaxesString(this._bookingAggregatedData.vatList, this._bookingAggregatedData.otherTaxes);
     }
@@ -130,39 +136,62 @@ export class BookingConfirmationVM {
     private initAddOnProducts() {
         this.initBreakfastDisplayText();
         this.initOthersAopsDisplayText();
+        this.initReservedAopsDisplayText();
     }
     private initBreakfastDisplayText() {
         this.breakfastAop = '';
-        var breakfastAopCategId = this.getBreakfastAOPCategoryId();
-        var breakfastAopObject = _.find(this._bookingAggregatedData.addOnProductList, (aop: AddOnProductDO) => {
-            return aop.categoryId === breakfastAopCategId;
-        });
-
-        if (this._thUtils.isUndefinedOrNull(breakfastAopObject)) {
-            this.breakfastAop = this._notAvailableTranslatedLabel;
+        var bookingPrice = this._bookingAggregatedData.booking.price;
+        if (bookingPrice.hasBreakfast()) {
+            this.breakfastAop += bookingPrice.breakfast.meta.getDisplayName(this._thTranslation) + " (" + this._thTranslation.translate("Included in Room Price") + ")";
+            return;
         }
-        else {
-            this.breakfastAop += breakfastAopObject.name;
-        }
+        this.breakfastAop += this._notAvailableTranslatedLabel;
     }
     private initOthersAopsDisplayText() {
         this.otherAops = '';
 
-        var otherAopCategId = this.getOthersAOPCategoryId();
-        var otherAopObjectList = _.filter(this._bookingAggregatedData.addOnProductList, (aop: AddOnProductDO) => {
-            return aop.categoryId === otherAopCategId;
+        var bookingPrice = this._bookingAggregatedData.booking.price;
+        _.forEach(bookingPrice.includedInvoiceItemList, (invoiceItem: InvoiceItemDO) => {
+            var itemDisplayString = invoiceItem.meta.getNumberOfItems() + "x" + invoiceItem.meta.getDisplayName(this._thTranslation);
+            var aopPrice = invoiceItem.meta.getNumberOfItems() * invoiceItem.meta.getUnitPrice();
+            aopPrice = this._thUtils.roundNumberToTwoDecimals(aopPrice);
+            itemDisplayString += " (" + this.ccyCode + aopPrice + "); ";
+            this.otherAops += itemDisplayString;
         });
 
-        if (this._thUtils.isUndefinedOrNull(otherAopObjectList) || _.isEmpty(otherAopObjectList)) {
+        if (this.otherAops.length == 0) {
             this.otherAops = this._notAvailableTranslatedLabel;
         }
-        else {
-            _.forEach(otherAopObjectList, (aop: AddOnProductDO) => {
-                this.otherAops += aop.name + '; ';
-            });
-        }
-
     }
+    private initReservedAopsDisplayText() {
+        var reservedAddOnProductIdList: string[] = this._bookingAggregatedData.booking.reservedAddOnProductIdList;
+        if (this._thUtils.isUndefinedOrNull(reservedAddOnProductIdList) || !_.isArray(reservedAddOnProductIdList)) {
+            this.reservedAops = this._notAvailableTranslatedLabel;
+            this.reservedAopsDescription = '';
+        }
+        this.reservedAops = '';
+        var reservedAopMap: { [id: string]: number; } = _.countBy(reservedAddOnProductIdList, (aopId: string) => { return aopId });
+        var aopIdList: string[] = Object.keys(reservedAopMap);
+        _.forEach(aopIdList, (aopId: string) => {
+            var addOnProduct: AddOnProductDO = _.find(this._bookingAggregatedData.addOnProductList, (aop: AddOnProductDO) => {
+                return aop.id === aopId;
+            });
+            if (!this._thUtils.isUndefinedOrNull(addOnProduct)) {
+                var noReserved = reservedAopMap[aopId];
+                var totalPrice = Math.round(noReserved * addOnProduct.price);
+                if (this.reservedAops.length > 0) { this.reservedAops += '; '; }
+                this.reservedAops += noReserved + " x " + addOnProduct.name + ' (' + this.ccyCode + ' ' + totalPrice + ')';
+            }
+        });
+        if (this.reservedAops.length == 0) {
+            this.reservedAops = this._notAvailableTranslatedLabel;
+            this.reservedAopsDescription = '';
+        }
+        else {
+            this.reservedAopsDescription = this._thTranslation.translate("* Not included in the reservation's price");
+        }
+    }
+
     private getBreakfastAOPCategoryId(): string {
         return _.find(this._bookingAggregatedData.addOnProductCategoyList, (aopCategory: AddOnProductCategoryDO) => {
             return aopCategory.type === AddOnProductCategoryType.Breakfast;

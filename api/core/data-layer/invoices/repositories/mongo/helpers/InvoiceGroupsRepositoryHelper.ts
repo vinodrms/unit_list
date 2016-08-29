@@ -1,4 +1,5 @@
 import {InvoiceGroupDO} from '../../../data-objects/InvoiceGroupDO';
+import {IBookingRepository} from '../../../../bookings/repositories/IBookingRepository';
 
 export class InvoiceGroupsRepositoryHelper {
     constructor() {
@@ -8,11 +9,4 @@ export class InvoiceGroupsRepositoryHelper {
 		invoiceGroup.buildFromObject(dbInvoiceGroup);
 		return invoiceGroup;
 	}
-	public buildInvoiceGroupListFrom(dbInvoiceGroupList: Array<Object>): InvoiceGroupDO[] {
-		var list: InvoiceGroupDO[] = [];
-		dbInvoiceGroupList.forEach((dbInvoiceGroup: Object) => {
-			list.push(this.buildInvoiceGroupDOFrom(dbInvoiceGroup));
-		});
-		return list;
-	}   
 }

@@ -55,7 +55,10 @@ export class BookingSearch {
                 this._loadedHotel = loadedHotel;
 
                 var intervalValidator = new BookingIntervalValidator(loadedHotel);
-                return intervalValidator.validateBookingInterval(this._searchParams.interval);
+                return intervalValidator.validateBookingInterval({
+                    bookingInterval: this._searchParams.interval,
+                    isNewBooking: true
+                });
             }).then((validatedBookingInterval: ThDateIntervalDO) => {
                 this._searchParams.interval = validatedBookingInterval;
 

@@ -39,7 +39,7 @@ export class PhantomLocalHtmlToPdfConverterService extends AHtmlToPdfConverterSe
         var pdfPath = this._htmlToPdfReq.pdfReportOutputPath;
         var htmlUrl = this._htmlToPdfReq.htmlUrl;
 
-        var resourceWait = 300,
+        var resourceWait = 3000,
             maxRenderWait = 10000,
             count = 0,
             renderTimeout = null,

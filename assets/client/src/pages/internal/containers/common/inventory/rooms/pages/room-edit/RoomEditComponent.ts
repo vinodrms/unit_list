@@ -11,7 +11,7 @@ import {RoomDO, RoomMaintenanceStatus} from '../../../../../../services/rooms/da
 import {RoomAmenitiesDO} from '../../../../../../services/settings/data-objects/RoomAmenitiesDO';
 import {RoomAttributesDO} from '../../../../../../services/settings/data-objects/RoomAttributesDO';
 import {RoomCategoryDO} from '../../../../../../services/room-categories/data-objects/RoomCategoryDO';
-import {RoomsService} from '../../../../../../services/rooms/RoomsService';
+import {LazyLoadRoomsService} from '../../../../../../services/rooms/LazyLoadRoomsService';
 import {BedsEagerService} from '../../../../../../services/beds/BedsEagerService';
 import {RoomEditService} from './services/RoomEditService';
 import {RoomAmenitiesService} from '../../../../../../services/settings/RoomAmenitiesService';
@@ -70,7 +70,7 @@ export class RoomEditComponent extends BaseFormComponent implements OnInit {
 
     constructor(private _appContext: AppContext,
         private _roomEditService: RoomEditService,
-        private _roomsService: RoomsService,
+        private _lazyLoadRoomsService: LazyLoadRoomsService,
         private _roomAmenitiesService: RoomAmenitiesService,
         private _roomAttributesService: RoomAttributesService,
         private _roomCategoriesService: RoomCategoriesService,
@@ -109,16 +109,26 @@ export class RoomEditComponent extends BaseFormComponent implements OnInit {
             this.selectedStationaryBeds = [];
         }
         if (this._appContext.thUtils.isUndefinedOrNull(this.roomVM.room.maintenanceStatus)) {
-            this.roomVM.room.maintenanceStatus = RoomMaintenanceStatus.CheckInReady;
+            this.roomVM.room.maintenanceStatus = RoomMaintenanceStatus.Clean;
         }
-        if (this._appContext.thUtils.isUndefinedOrNull(this._roomVM.room.amenityIdList) &&
-            !this._appContext.thUtils.isUndefinedOrNull(this.roomAmenities)) {
+        this.initAmenities();
+        this.initAttributes();
+    }
+    private initAmenities() {
+        if (this._appContext.thUtils.isUndefinedOrNull(this.roomAmenities)) { return; }
+        if (this._appContext.thUtils.isUndefinedOrNull(this._roomVM.room.amenityIdList)) {
             this.roomAmenities.resetRoomAmenitySelection();
+            return;
         }
-        if (this._appContext.thUtils.isUndefinedOrNull(this._roomVM.room.attributeIdList) &&
-            !this._appContext.thUtils.isUndefinedOrNull(this.roomAttributes)) {
+        this.roomAmenities.updateRoomAmenitySelection(this._roomVM.room.amenityIdList);
+    }
+    private initAttributes() {
+        if (this._appContext.thUtils.isUndefinedOrNull(this.roomAttributes)) { return; }
+        if (this._appContext.thUtils.isUndefinedOrNull(this._roomVM.room.attributeIdList)) {
             this.roomAttributes.resetRoomAttributeSelection();
-        };
+            return;
+        }
+        this.roomAttributes.updateRoomAttributeSelection(this._roomVM.room.attributeIdList);
     }
     private initForm() {
         this.didSubmitForm = false;
@@ -186,7 +196,7 @@ export class RoomEditComponent extends BaseFormComponent implements OnInit {
         if (this.newRoomCategoryToSave) {
             this.prepareRoomCategoryForSave();
             this._roomCategoriesService.saveRoomCategory(this.roomVM.category).subscribe((roomCategory: RoomCategoryDO) => {
-                this._roomsService.saveRoomDO(room).subscribe((updatedRoom: RoomDO) => {
+                this._lazyLoadRoomsService.saveRoomDO(room).subscribe((updatedRoom: RoomDO) => {
                     this.isSavingRoom = false;
                     this.showViewScreen();
                 }, (error: ThError) => {
@@ -199,7 +209,7 @@ export class RoomEditComponent extends BaseFormComponent implements OnInit {
             });
         }
         else {
-            this._roomsService.saveRoomDO(room).subscribe((updatedRoom: RoomDO) => {
+            this._lazyLoadRoomsService.saveRoomDO(room).subscribe((updatedRoom: RoomDO) => {
                 this.isSavingRoom = false;
                 this.showViewScreen();
             }, (error: ThError) => {
@@ -301,6 +311,6 @@ export class RoomEditComponent extends BaseFormComponent implements OnInit {
         this.newRoomCategoryToSave = true;
     }
     public get roomCategoryConfigured(): boolean {
-        return _.isEmpty(this.selectedStationaryBeds) && _.isEmpty(this.selectedRollawayBeds) && !this._appContext.thUtils.isUndefinedOrNull(this._roomVM.category); 
+        return _.isEmpty(this.selectedStationaryBeds) && _.isEmpty(this.selectedRollawayBeds) && !this._appContext.thUtils.isUndefinedOrNull(this._roomVM.category);
     }
 }

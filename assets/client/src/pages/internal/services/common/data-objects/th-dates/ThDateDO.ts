@@ -1,6 +1,6 @@
 import {BaseDO} from '../../../../../../common/base/BaseDO';
 import {ThDateUtils} from './ThDateUtils';
-import {ISOWeekDay} from './ISOWeekDay';
+import {ISOWeekDay, ISOWeekDayUtils} from './ISOWeekDay';
 import {ThTranslation} from '../../../../../../common/utils/localization/ThTranslation';
 
 export enum ThMonth {
@@ -35,10 +35,13 @@ ThMonthDisplayString[ThMonth.December] = "December";
 export class ThDateDO extends BaseDO {
 	public static MaxMonthLength: number = 3;
 	public static MaxYearLength: number = 2;
+	private _isoWeekDayUtils: ISOWeekDayUtils;
 
     constructor() {
         super();
+		this._isoWeekDayUtils = new ISOWeekDayUtils();
     }
+
     year: number;
 	month: number;
 	day: number;
@@ -76,8 +79,17 @@ export class ThDateDO extends BaseDO {
 		var thisMoment = thDateUtils.convertThDateDOToMoment(this);
 		return thisMoment.isoWeekday();
 	}
+	
 	public buildPrototype(): ThDateDO {
 		return ThDateDO.buildThDateDO(this.year, this.month, this.day);
+	}
+
+	public addDays(days: number): void {
+		var thDateUtils = new ThDateUtils();
+		var thisMoment = thDateUtils.addDaysToThDateDO(this, days);
+		this.year = thisMoment.year;
+		this.month = thisMoment.month;
+		this.day = thisMoment.day;
 	}
 
 	public static buildThDateDO(year: number, month: number, day: number): ThDateDO {
@@ -105,18 +117,30 @@ export class ThDateDO extends BaseDO {
 		return actualMonth < 10 ? ("0" + actualMonth) : ("" + actualMonth);
 	}
 
-	public getShortDisplayString(thTranslation: ThTranslation): string {
+	public getShortDisplayString(thTranslation: ThTranslation, omitYear?: boolean): string {
 		if (!this.isPrintable()) {
 			return "";
 		}
-		return this.day + " " + this.getShortMonthDisplayString(thTranslation) + " " + this.getShortYearDisplayString();
+		var displayString = this.day + " " + this.getShortMonthDisplayString(thTranslation);
+		if(!omitYear) {
+			displayString += " " + this.getShortYearDisplayString();
+		}
+		return displayString;
 	}
+	
 	public getLongDisplayString(thTranslation: ThTranslation): string {
 		if (!this.isPrintable()) {
 			return "";
 		}
 		return this.day + " " + thTranslation.translate(ThMonthDisplayString[this.month]) + " " + this.year;
 	}
+
+	public getLongDayDisplayString(thTranslation: ThTranslation){
+		var isoDay = this.getISOWeekDay();
+		var dayName = this._isoWeekDayUtils.getISOWeekDayVMList()[isoDay - 1].name;
+		return thTranslation.translate(dayName);
+	}
+
 	private getShortMonthDisplayString(thTranslation: ThTranslation) {
 		var monthName: string = thTranslation.translate(ThMonthDisplayString[this.month]);
 		if (monthName.length > ThDateDO.MaxMonthLength) {
@@ -124,6 +148,7 @@ export class ThDateDO extends BaseDO {
 		}
 		return monthName;
 	}
+
 	private getShortYearDisplayString(): string {
 		var year = this.year + "";
 		if (year.length < ThDateDO.MaxYearLength) {

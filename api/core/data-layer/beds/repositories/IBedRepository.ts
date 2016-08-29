@@ -26,6 +26,6 @@ export interface IBedRepository {
 	getBedById(bedMeta: BedMetaRepoDO, bedId: string): Promise<BedDO>;
     
 	addBed(bedMeta: BedMetaRepoDO, bed: BedDO): Promise<BedDO>;
-	updateBed(bedMeta: BedMetaRepoDO, bedItemMeta: BedItemMetaRepoDO, tax: BedDO): Promise<BedDO>;
-	deleteBed(bedMeta: BedMetaRepoDO, bedItemMeta: BedItemMetaRepoDO): Promise<BedDO>;
+	updateBed(bedMeta: BedMetaRepoDO, bedItemMeta: BedItemMetaRepoDO, bed: BedDO): Promise<BedDO>;
+	deleteBed(bedMeta: BedMetaRepoDO, bedItemMeta: BedItemMetaRepoDO, bed: BedDO): Promise<BedDO>;
 }

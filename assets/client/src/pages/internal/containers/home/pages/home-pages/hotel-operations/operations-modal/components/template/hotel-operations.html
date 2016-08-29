@@ -1,0 +1,59 @@
+<div class="modal-lg-header container">
+	<div class="row full-height">
+		<div class="col-xs-7 col-md-7 full-height">
+            <a class="btn btn-square btn-square-next-prev back" *ngIf="canGoBack()" (click)="goBack()">
+                <i class="fa unitpal-font"><</i>
+            </a>
+            <span class="operational-page-font-container"><i class="fa fa-2x unitpal-font">{{ titleMeta.fontName }}</i></span>
+			<h1 class="oneline-text full-height">
+				{{ titleMeta.title }}
+				<small>{{ titleMeta.subtitle }}</small>
+				<small *ngIf="titleMeta.filterMeta && titleMeta.filterMeta.filterValue" class="filter">{{ titleMeta.filterMeta.filterInfo | translate}}</small>
+				<span *ngIf="titleMeta.filterMeta && titleMeta.filterMeta.filterValue" class="filter filter-label">
+					<i class="fa fa-2x unitpal-font">(</i> {{ titleMeta.filterMeta.filterValue }} 
+					<a class="clickable-item" (click)="removeHeaderFilter()">
+						<i class="fa unitpal-font">C</i>
+					</a>
+				</span>	
+				<small *ngIf="titleMeta.filterMeta && titleMeta.filterMeta.filterRemoveInfo" class="filter-remove-info m-l-6"> {{ titleMeta.filterMeta.filterRemoveInfo | translate }} </small>
+			</h1>
+		</div>
+		<div class="col-xs-5 col-md-5 full-height">
+			<div class="row full-height">
+				<div class="col-xs-8"></div>
+				<div class="col-xs-4 full-height">
+					<a class="btn btn-square float-right" (click)="triggerOnExit()">
+						<i class="fa unitpal-font">C</i>
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal-lg-body container operational-page-container">
+
+	<room-operations-page class="full-height" 
+        *ngIf="isRoomOperationsPage()"
+        [roomOperationsPageParam]="currentHotelOperationsPageParam"
+		>
+    </room-operations-page>
+
+	<booking-operations-page class="full-height" 
+		*ngIf="isBookingOperationsPage()"
+		[bookingOperationsPageParam]="currentHotelOperationsPageParam"
+		>
+	</booking-operations-page>
+
+	<customer-operations-page class="full-height" 
+		*ngIf="isCustomerOperationsPage()"
+		[customerOperationsPageParam]="currentHotelOperationsPageParam"
+		>
+	</customer-operations-page>
+
+	<invoice-operations-page class="full-height" 
+		*ngIf="isInvoiceOperationsPage()"
+		[invoiceOperationsPageParam]="currentHotelOperationsPageParam"
+		>
+	</invoice-operations-page>
+
+</div>

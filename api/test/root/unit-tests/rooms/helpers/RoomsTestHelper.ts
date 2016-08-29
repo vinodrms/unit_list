@@ -26,11 +26,10 @@ export class RoomsTestHelper {
             attributeIdList: this._testUtils.getIdSampleFrom(this._defaultDataBuilder.roomAttributeList, 3),
             fileUrlList: [],
             description: "Demo description",
-            notes: "Demo notes",
-            maintenanceStatus: RoomMaintenanceStatus.Clean
+            notes: "Demo notes"
         };
     }
-    
+
     public getSaveRoomItemDOWithInvalidCategory(): SaveRoomItemDO {
         return {
             name: "Invalid Category",
@@ -40,8 +39,7 @@ export class RoomsTestHelper {
             attributeIdList: this._testUtils.getIdSampleFrom(this._defaultDataBuilder.roomAttributeList, 3),
             fileUrlList: [],
             description: "Demo description",
-            notes: "Demo notes",
-            maintenanceStatus: RoomMaintenanceStatus.Clean
+            notes: "Demo notes"
         };
     }
 
@@ -54,8 +52,7 @@ export class RoomsTestHelper {
             attributeIdList: this._testUtils.getIdSampleFrom(this._defaultDataBuilder.roomAttributeList, 3),
             fileUrlList: [],
             description: "Demo description",
-            notes: "Demo notes",
-            maintenanceStatus: RoomMaintenanceStatus.Clean
+            notes: "Demo notes"
         };
     }
 
@@ -68,8 +65,7 @@ export class RoomsTestHelper {
             attributeIdList: ["X"],
             fileUrlList: [],
             description: "Demo description",
-            notes: "Demo notes",
-            maintenanceStatus: RoomMaintenanceStatus.Clean
+            notes: "Demo notes"
         };
     }
 
@@ -101,6 +97,7 @@ export class RoomsTestHelper {
         should.equal(readRoom.description, createdRoom.description);
         should.equal(readRoom.notes, createdRoom.notes);
         should.equal(readRoom.maintenanceStatus, createdRoom.maintenanceStatus);
+        should.equal(readRoom.rollawayBedStatus, createdRoom.rollawayBedStatus);
     }
 
 }

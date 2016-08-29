@@ -11,7 +11,7 @@ export enum AllotmentConstraintType {
 
 export interface AllotmentConstraintDataDO {
 	indexedBookingInterval: IndexedBookingInterval;
-	currentHotelThDate: ThDateDO;
+	bookingCreationDate: ThDateDO;
 }
 
 export interface IAllotmentConstraint extends BaseDO {

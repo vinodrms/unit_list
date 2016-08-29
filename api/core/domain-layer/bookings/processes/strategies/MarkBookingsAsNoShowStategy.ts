@@ -3,9 +3,13 @@ import {BookingSearchCriteriaRepoDO} from '../../../../data-layer/bookings/repos
 import {BookingDO, BookingConfirmationStatus} from '../../../../data-layer/bookings/data-objects/BookingDO';
 import {DocumentActionDO} from '../../../../data-layer/common/data-objects/document-history/DocumentActionDO';
 import {BookingPriceType} from '../../../../data-layer/bookings/data-objects/price/BookingPriceDO';
+import {BookingUtils} from '../../utils/BookingUtils';
 
 export class MarkBookingsAsNoShowStategy implements IBookingProcessStrategy {
+    private _bookingUtils: BookingUtils;
+
     constructor() {
+        this._bookingUtils = new BookingUtils();
     }
 
     public getMatchingSearchCriteria(params: BookingStrategyMatchParams): BookingSearchCriteriaRepoDO {
@@ -19,17 +23,19 @@ export class MarkBookingsAsNoShowStategy implements IBookingProcessStrategy {
         };
     }
 
-    public updateMatchedBooking(bookingDO: BookingDO) {
-        switch (bookingDO.confirmationStatus) {
-            case BookingConfirmationStatus.Confirmed:
-                this.updateBookingAsNoShow(bookingDO);
-                break;
-            case BookingConfirmationStatus.Guaranteed:
-                this.updateBookingAsNoShowWithPenalty(bookingDO);
-                break;
-            default:
-                break;
+    public updateMatchedBooking(bookingDO: BookingDO, params: BookingStrategyMatchParams) {
+        if (this.hasPenalty(bookingDO, params)) {
+            this.updateBookingAsNoShowWithPenalty(bookingDO);
+            return;
         }
+        this.updateBookingAsNoShow(bookingDO);
+    }
+
+    private hasPenalty(bookingDO: BookingDO, params: BookingStrategyMatchParams): boolean {
+        return this._bookingUtils.hasPenalty(bookingDO, {
+            cancellationHour: params.cancellationHour,
+            currentHotelTimestamp: params.referenceTimestamp
+        });
     }
 
     private updateBookingAsNoShow(bookingDO: BookingDO) {

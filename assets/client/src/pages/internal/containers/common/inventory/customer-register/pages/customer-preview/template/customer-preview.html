@@ -1,0 +1,59 @@
+<div class="col-xs-12">
+    <div class="row">
+        <div class="col-xs-12 col-sm-1">
+            <p>{{'Name' | translate}}</p>
+        </div>
+        <div class="col-xs-12 col-sm-7 field-value text-field">
+            <p>{{customerVM.customerNameString}}</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 col-sm-1 padding-top-5px">
+            <p>{{'Type' | translate}}</p>
+        </div>
+        <div class="col-xs-12 col-sm-3 field-value text-field">
+            <div class="form-group">
+                <div class="form-control operational-input-group non-editable">
+                    <span class="unitpal-font unitpal-large">{{customerVM.customerTypeFont}}</span>
+                    <span class="name field-value">{{customerVM.customerTypeString | translate}}</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-1 text-field padding-top-5px">
+            <p>{{'Prices' | translate}}</p>
+        </div>
+        <div class="col-xs-12 col-sm-3 field-value text-field padding-top-5px">
+            <p>{{ availabilityString | translate }}</p>
+        </div>
+        <div class="col-xs-12 col-sm-1 text-field padding-top-5px">
+            <p>{{'Confidential' | translate}}</p>
+        </div>
+        <div class="col-xs-12 col-sm-3 field-value text-field padding-top-5px">
+            <p>{{ confidPPNames }}</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 col-sm-1 text-field padding-top-5px">
+            <p>{{'Address' | translate}}</p>
+        </div>
+        <div class="col-xs-12 col-sm-7 field-value text-field padding-top-5px">
+            <p>{{ customerVM.customerAddressString }}</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 col-sm-1 text-field padding-top-5px">
+            <p>{{'Phone' | translate}}</p>
+        </div>
+        <div class="col-xs-12 col-sm-3 field-value text-field padding-top-5px">
+            <a *ngIf="hasPhone" href="tel:{{customerVM.phoneString}}">{{customerVM.phoneString}}</a>
+            <p *ngIf="!hasPhone">n/a</p>
+        </div>
+        <div class="col-xs-12 col-sm-1 text-field padding-top-5px">
+            <p>{{'Email' | translate}}</p>
+        </div>
+        <div class="col-xs-12 col-sm-3 field-value text-field padding-top-5px">
+            <a *ngIf="hasEmail" href="mailto:{{customerVM.emailString}}">{{customerVM.emailString}}</a>
+            <p *ngIf="!hasEmail">n/a</p>
+        </div>
+    </div>
+</div>

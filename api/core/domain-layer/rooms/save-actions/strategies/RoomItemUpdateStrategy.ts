@@ -19,6 +19,7 @@ export class RoomItemUpdateStrategy implements IRoomItemActionStrategy {
 		roomRepo.getRoomById(this._roomMeta, this._roomDO.id)
 			.then((loadedRoom: RoomDO) => {
 				this._loadedRoom = loadedRoom;
+				this.removeMaintenanceStatuses();
 
 				var roomRepo = this._appContext.getRepositoryFactory().getRoomRepository();
 				var itemMeta = this.buildRoomItemMetaRepoDO();
@@ -44,5 +45,11 @@ export class RoomItemUpdateStrategy implements IRoomItemActionStrategy {
 			id: this._loadedRoom.id,
 			versionId: this._loadedRoom.versionId
 		};
+	}
+	private removeMaintenanceStatuses() {
+		delete this._roomDO.maintenanceStatus;
+		delete this._roomDO.maintenanceMessage;
+		delete this._roomDO.maintenanceHistory;
+		delete this._roomDO.rollawayBedStatus;
 	}
 }

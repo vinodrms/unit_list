@@ -1,0 +1,18 @@
+<loading-component [isLoading]="!didInit"></loading-component>
+
+<div class="row lazy-loading-table-filter" *ngIf="didInit">
+    <ul class="nav nav-tabs">
+        <li [ngClass]="{active : filterByBookingRoomCategory}">
+            <a (click)="filterByBookingRoomCategory=true"> {{ bookingRoomCategoryName }} </a>
+        </li>
+        <li [ngClass]="{active : !filterByBookingRoomCategory}">
+            <a (click)="filterByBookingRoomCategory=false"> {{ 'Upgrade / Downgrade' | translate }} </a>
+        </li>
+    </ul>
+    <br/>
+</div>
+
+<lazy-loading-table
+    [hidden]="!didInit" 
+    (onSelect)="didSelectRoom($event)" >
+</lazy-loading-table>

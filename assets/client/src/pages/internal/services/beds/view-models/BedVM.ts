@@ -1,5 +1,5 @@
 import {BaseDO} from '../../../../../common/base/BaseDO';
-import {BedDO, BedAccommodationType} from '../data-objects/BedDO';
+import {BedDO, BedAccommodationType, BedStorageType} from '../data-objects/BedDO';
 import {BedTemplateDO} from '../../common/data-objects/bed-template/BedTemplateDO';
 import {RoomCategoryStatsDO} from '../../room-categories/data-objects/RoomCategoryStatsDO';
 import {ConfigCapacityDO} from '../../common/data-objects/bed-config/ConfigCapacityDO';
@@ -77,5 +77,12 @@ export class BedVM extends BaseDO {
     
     public get accommodatesBabies(): boolean {
         return this._bed.accommodationType === BedAccommodationType.Babies;
+    }
+
+    public get bedStorageTypeString(): string {
+        if(this._bed.storageType === BedStorageType.Rollaway) {
+            return "Rollaway";
+        }
+        return "Stationary";
     }
 }                                                                                                                                                                                                                                 

@@ -9,7 +9,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>UnitPal</title>
-
+    
+    <!-- Fonts -->
+    <link href='assets/client/static-assets/css/roboto-font.css' rel='stylesheet' type='text/css'>
+    
     <!-- CSS -->
     <link href="assets/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="assets/node_modules/font-awesome/css/font-awesome.min.css" rel="stylesheet">
@@ -115,14 +118,20 @@
 
             <hr/>
 
-            <div class="row" style="min-height: 50px;">
-                <div class="col-md-3">
-                    <b><%= bodyAddOnProductsLabel %></b><br>
-                    <span style="font-size: 10px;">(included)</span>
+            <div class="row" style="min-height: 60px;">
+                <div class="col-md-6">
+                    <div style="border-right: black solid; border-right-width: 1px; padding-right: 10px; min-height: 60px;"> 
+                        <span style="font-size: 15px;"><b><%= bodyAddOnProductsLabel %></b></span><br>
+                        <span style="font-size: 10px;"><%= bodyBreakfastAopLabel %>: <%= bookingConfirmationVM.breakfastAop %></span><br>
+                        <span style="font-size: 10px;"><%= bodyOthersAopLabel %>: <%= bookingConfirmationVM.otherAops %></span>
+                    </div>
                 </div>
-                <div class="col-md-9">
-                    <span><%= bodyBreakfastAopLabel %>: <%= bookingConfirmationVM.breakfastAop %></span><br>
-                    <span><%= bodyOthersAopLabel %>: <%= bookingConfirmationVM.otherAops %></span>
+                <div class="col-md-6">
+                    <div style="min-height: 60px;">
+                        <span style="font-size: 15px;"><b><%= bodyReservedAddOnProductsLabel %></b></span><br>
+                        <span style="font-size: 10px;"> <%= bookingConfirmationVM.reservedAops %> </span><br>
+                        <span style="font-size: 7px;"> <%= bookingConfirmationVM.reservedAopsDescription %> </span><br>
+                    </div>
                 </div>
             </div>
 

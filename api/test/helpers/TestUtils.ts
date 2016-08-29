@@ -1,11 +1,19 @@
 import _ = require("underscore")
 
+import {ThUtils} from '../../core/utils/ThUtils';
+
 export class TestUtils {
+    private _thUtils: ThUtils;
+
+    constructor() {
+        this._thUtils = new ThUtils();
+    }
+
     public getRandomIntBetween(min: number, max: number): number {
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }
     public getRandomFloatBetween(min: number, max: number): number {
-        return Math.random() * (max - min) + min;
+        return this._thUtils.roundNumberToTwoDecimals(Math.random() * (max - min) + min);
     }
     public stringArraysAreEqual(firstArray: string[], secondArray: string[]): boolean {
         var diffArray: string[] = _.difference(firstArray, secondArray);
@@ -16,15 +24,15 @@ export class TestUtils {
     }
     public getIdSampleFrom(list: Object[], sampleLength: number) {
         var idListSample: string[] = [];
-        
+
         var sample = _.sample(list, Math.min(sampleLength, list.length));
         sample.forEach(sampleElement => {
             idListSample.push(sampleElement["id"]);
         });
-        
+
         return idListSample;
     }
-    
+
     /**
      * Delays running the function given as parameter.
      * 
@@ -53,8 +61,8 @@ export class TestUtils {
      * parameters whenever you want to trigger the download. 
      */
     public static lazyFunction(func) {
-        return function(...args) {
-            return function() {
+        return function (...args) {
+            return function () {
                 return func.apply(null, args);
             }
         };
@@ -75,9 +83,9 @@ export class TestUtils {
         var done = asyncMethods[asyncMethods.length - 1];
         var executor = done;
         for (var i: number = asyncMethods.length - 2; i >= 0; i--) {
-            var chained = function(testMethod, callback) {
+            var chained = function (testMethod, callback) {
                 return testMethod().then(() => {
-                    return callback();    
+                    return callback();
                 });
             };
             executor = chained.bind(null, asyncMethods[i], executor);
@@ -85,5 +93,12 @@ export class TestUtils {
         executor().catch((error: any) => {
             done(error);
         });
+    }
+
+    public get thUtils(): ThUtils {
+        return this._thUtils;
+    }
+    public set thUtils(thUtils: ThUtils) {
+        this._thUtils = thUtils;
     }
 }

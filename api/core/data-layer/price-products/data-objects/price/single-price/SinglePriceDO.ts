@@ -14,6 +14,13 @@ export class SinglePriceDO extends BaseDO implements IPriceProductPrice {
 		return ["roomCategoryId", "price"];
 	}
 
+	public hasPriceConfiguredFor(query: PriceProductPriceQueryDO): boolean {
+		if (query.roomCategoryId === this.roomCategoryId) {
+			return true;
+		}
+		return false;
+	}
+
 	public getPricePerNightFor(query: PriceProductPriceQueryDO): number {
 		if (query.roomCategoryId === this.roomCategoryId) {
 			return this.price;
@@ -32,5 +39,9 @@ export class SinglePriceDO extends BaseDO implements IPriceProductPrice {
 	}
 	public isConfiguredForRoomCategory(roomCategoryId: string): boolean {
 		return this.roomCategoryId === roomCategoryId;
+	}
+	public roundPricesToTwoDecimals() {
+		var thUtils = new ThUtils();
+		this.price = thUtils.roundNumberToTwoDecimals(this.price);
 	}
 }

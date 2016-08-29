@@ -36,11 +36,18 @@ export class ThDateIntervalDO extends BaseDO {
 		return this.end;
 	}
 
+	public isSame(otherDateInterval: ThDateIntervalDO): boolean {
+		return this.start.isSame(otherDateInterval.start) && this.end.isSame(otherDateInterval.end);
+	}
+
 	public static buildThDateIntervalDO(start: ThDateDO, end: ThDateDO): ThDateIntervalDO {
 		var outInterval = new ThDateIntervalDO();
 		outInterval.start = start;
 		outInterval.end = end;
 		return outInterval;
+	}
+	public buildPrototype(): ThDateIntervalDO {
+		return ThDateIntervalDO.buildThDateIntervalDO(this.start.buildPrototype(), this.end.buildPrototype());
 	}
 
 	public toString(): string {
@@ -50,6 +57,6 @@ export class ThDateIntervalDO extends BaseDO {
 		return this.start.getShortDisplayString(thTranslation) + " - " + this.end.getShortDisplayString(thTranslation);
 	}
 	public getLongDisplayString(thTranslation: ThTranslation): string {
-		return thTranslation.translate("%firstDate% to %secondDate%", {firstDate: this.start.getLongDisplayString(thTranslation), secondDate: this.end.getLongDisplayString(thTranslation)})
+		return thTranslation.translate("%firstDate% to %secondDate%", { firstDate: this.start.getLongDisplayString(thTranslation), secondDate: this.end.getLongDisplayString(thTranslation) })
 	}
 }

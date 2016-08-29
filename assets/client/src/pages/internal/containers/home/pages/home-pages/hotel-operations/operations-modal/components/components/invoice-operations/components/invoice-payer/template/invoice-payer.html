@@ -1,0 +1,69 @@
+<div class="invoice-payer-container m-t-6 m-b-6">
+    <table class="table table-invoice-payer">
+        <tbody>
+            <tr class="row-actions">
+                <td width="70%" class="customer-container">
+                    <a *ngIf="invoicePayerVM.customerDO" class="clickable-item" (click)="goToCustomer(invoicePayerVM.customerDO)">
+                        <i *ngIf="invoicePayerVM.customerDO.isIndividual()" class="fa fa-2x unitpal-font">(</i>
+                        <i *ngIf="invoicePayerVM.customerDO.isCompany()" class="fa fa-2x unitpal-font">)</i>
+                        <i *ngIf="invoicePayerVM.customerDO.isTravelAgency()" class="fa fa-2x unitpal-font">*</i>
+                        <b>{{invoicePayerVM.customerDO.customerName}}</b>
+                    </a>
+                    <a *ngIf="invoicePayerVM.customerDO && editMode" class="clickable-item m-l-12" (click)="openCustomerSelectModal()"><i class="fa unitpal-font">]</i> {{ 'Change' | translate }}</a>
+                    <a *ngIf="!invoicePayerVM.customerDO && editMode" class="clickable-item m-l-12" (click)="openCustomerSelectModal()"><i class="fa unitpal-font">]</i> {{ 'Select Customer' | translate }}</a>
+                </td>
+                <td width="30%" class="print-container">
+                    <a *ngIf="!editMode && invoiceisPaid" class="clickable-item m-r-6" (click)="onPrint()"> <i class="fa fa-print" aria-hidden="true"></i> {{ 'Print' | translate }} </a>
+                    <a *ngIf="!editMode && invoiceisPaid" class="clickable-item" (click)="onSend()"> <i class="fa fa-envelope" aria-hidden="true"></i> {{ 'Send' | translate }}</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="payment-container" [ngClass]="{'read-only p-12' : !editMode, 'p-6': editMode}">
+        <form class="form-inline">
+
+            <div *ngIf="editMode" class="form-group m-0">
+                <div class="input-group">
+                    <span class="input-group-addon"><span>{{ccySymbol}}</span></span>
+                    <input class="form-control" type="number" [(ngModel)]="invoicePayerVM.invoicePayerDO.priceToPay">
+                </div>
+            </div>
+
+            <div *ngIf="!editMode" class="form-group m-0">
+                <div class="input-group">
+                    <span><b>{{ccySymbol}} {{invoicePayerVM.invoicePayerDO.priceToPay}}</b></span>
+                </div>
+            </div>
+
+            <div class="form-group m-t-0 m-r-12 m-b-0 m-l-0">
+                <div class="input-group">
+                    <span>{{ 'of' | translate }} <b>{{ccySymbol}} {{totalAmount}}</b></span>
+                </div>
+            </div>
+
+            <div *ngIf="editMode" class="form-group m-0">
+                <div class="input-group">
+                    <select class="form-control" [ngModel]="selectedPaymentMethodVM" (ngModelChange)="selectedPaymentMethodVM=$event">
+                        <option *ngFor="let paymentMethodVM of paymentMethodVMList" [ngValue]="paymentMethodVM">{{paymentMethodVM.displayName | translate}}</option>
+                    </select>
+                </div>
+            </div>
+
+            <div *ngIf="!editMode" class="form-group m-0">
+                <div class="input-group">
+                    <i class="fa" [ngClass]="selectedPaymentMethodVM.iconUrl"></i>
+                    <span> {{selectedPaymentMethodVM.displayName | translate}}</span>
+                </div>
+            </div>
+            
+            <div *ngIf="editMode" class="form-group m-0">
+                <div class="input-group">
+                    <span>
+                        <a class="btn btn-xs" title="{{ 'Delete' | translate}}" (click)="onDelete()"><i class="fa unitpal-font">\</i></a>
+                    </span>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

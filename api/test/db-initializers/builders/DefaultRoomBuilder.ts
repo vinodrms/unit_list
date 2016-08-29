@@ -1,5 +1,5 @@
 import {BedTemplateDO} from '../../../core/data-layer/common/data-objects/bed-template/BedTemplateDO';
-import {RoomDO, RoomStatus, RoomMaintenanceStatus} from '../../../core/data-layer/rooms/data-objects/RoomDO';
+import {RoomDO, RoomStatus, RoomMaintenanceStatus, RollawayBedStatus} from '../../../core/data-layer/rooms/data-objects/RoomDO';
 import {BedDO} from '../../../core/data-layer/common/data-objects/bed/BedDO';
 import {RoomCategoryDO} from '../../../core/data-layer/room-categories/data-objects/RoomCategoryDO';
 import {AuthUtils} from '../../../core/domain-layer/hotel-account/utils/AuthUtils';
@@ -56,6 +56,7 @@ export class DefaultRoomBuilder implements IRoomDataSource {
         roomDO.notes = "First floor single room notes.";
         roomDO.maintenanceStatus = RoomMaintenanceStatus.Clean;
         roomDO.status = RoomStatus.Active;
+        roomDO.rollawayBedStatus = RollawayBedStatus.NoRollawayBeds;
         return roomDO;
     }
     
@@ -71,6 +72,7 @@ export class DefaultRoomBuilder implements IRoomDataSource {
         roomDO.notes = "First floor second single room notes.";
         roomDO.maintenanceStatus = RoomMaintenanceStatus.Clean;
         roomDO.status = RoomStatus.Active;
+        roomDO.rollawayBedStatus = RollawayBedStatus.NoRollawayBeds;
         return roomDO;
     }
     
@@ -86,6 +88,7 @@ export class DefaultRoomBuilder implements IRoomDataSource {
         roomDO.notes = "First floor double double room notes.";
         roomDO.maintenanceStatus = RoomMaintenanceStatus.Clean;
         roomDO.status = RoomStatus.Active;
+        roomDO.rollawayBedStatus = RollawayBedStatus.NoRollawayBeds;
         return roomDO;
     }
     
@@ -101,6 +104,7 @@ export class DefaultRoomBuilder implements IRoomDataSource {
         roomDO.notes = "First floor double room notes.";
         roomDO.maintenanceStatus = RoomMaintenanceStatus.Clean;
         roomDO.status = RoomStatus.Active;
+        roomDO.rollawayBedStatus = RollawayBedStatus.NoRollawayBeds;
         return roomDO;
     }
     
@@ -116,6 +120,7 @@ export class DefaultRoomBuilder implements IRoomDataSource {
         roomDO.notes = "First floor twin room notes.";
         roomDO.maintenanceStatus = RoomMaintenanceStatus.Clean;
         roomDO.status = RoomStatus.Active;
+        roomDO.rollawayBedStatus = RollawayBedStatus.NoRollawayBeds;
         return roomDO;
     }
     
@@ -131,6 +136,7 @@ export class DefaultRoomBuilder implements IRoomDataSource {
         roomDO.notes = "Second floor studio room notes.";
         roomDO.maintenanceStatus = RoomMaintenanceStatus.Clean;
         roomDO.status = RoomStatus.Active;
+        roomDO.rollawayBedStatus = RollawayBedStatus.NoRollawayBeds;
         return roomDO;
     }
     
@@ -146,6 +152,7 @@ export class DefaultRoomBuilder implements IRoomDataSource {
         roomDO.notes = "Second floor double king room notes.";
         roomDO.maintenanceStatus = RoomMaintenanceStatus.Clean;
         roomDO.status = RoomStatus.Active;
+        roomDO.rollawayBedStatus = RollawayBedStatus.NoRollawayBeds;
         return roomDO;
     }
     

@@ -19,7 +19,8 @@ export class CustomerTableFilterService {
 		this._filterList= [
 			{
 				customerTypeName: "All Customers",
-				customerType: CustomerTableFilterService.AllCustomersType
+				customerType: CustomerTableFilterService.AllCustomersType,
+				fontName: ""
 			}
 		];
 		this._filterList = this._filterList.concat(custFactory.getCustomerDetailsMetaList());

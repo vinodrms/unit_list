@@ -1,0 +1,16 @@
+<div class="modal-header text-center">
+	<button type="button" class="close" (click)="closeDialog()">&times;</button>
+	<h4 class="modal-title">{{ 'Send Email' | translate }}</h4>
+</div>
+<div class="modal-body">
+    <div class="row full-height" customScroll>
+        <email-selector [customerList]="customerList" (onEmailListChanged)="didSelectEmailList($event)"></email-selector>
+    </div>
+</div>
+<div class="modal-footer">
+	<button  type="button" class="btn btn-primary" [disabled]="!canSendEmails()" (click)="sendEmails()">
+        <i *ngIf="isSending" class="fa fa-spinner fa-pulse"></i> 
+        <i *ngIf="!isSending" class="fa fa-envelope"></i>
+		{{ 'Send' | translate }}
+	</button>
+</div>

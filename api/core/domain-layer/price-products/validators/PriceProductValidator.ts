@@ -7,6 +7,7 @@ import {ThUtils} from '../../../utils/ThUtils';
 import {RoomCategoryDO} from '../../../data-layer/room-categories/data-objects/RoomCategoryDO';
 import {RoomCategoryStatsDO} from '../../../data-layer/room-categories/data-objects/RoomCategoryStatsDO';
 import {PriceProductDO} from '../../../data-layer/price-products/data-objects/PriceProductDO';
+import {AddOnProductCategoryDO} from '../../../data-layer/common/data-objects/add-on-product/AddOnProductCategoryDO';
 import {TaxIdValidator} from '../../taxes/validators/TaxIdValidator';
 import {AddOnProductIdValidator} from '../../add-on-products/validators/AddOnProductIdValidator';
 import {RoomCategoryStatsAggregator} from '../../room-categories/aggregators/RoomCategoryStatsAggregator';
@@ -36,14 +37,42 @@ export class PriceProductValidator {
 			reject(thError);
 			return;
 		}
+		if (!this._priceProduct.includedItems.areValid()) {
+			var thError = new ThError(ThStatusCode.PriceProductValidatorInvalidIncludedItems, null);
+			ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Error validating included brkfst & aops on price product", this._priceProduct, thError);
+			reject(thError);
+			return;
+		}
 
 		var taxIdValidator = new TaxIdValidator(this._appContext, this._sessionContext);
 		taxIdValidator.validateTaxIdList(this._priceProduct.taxIdList)
 			.then((taxValidationResult: boolean) => {
 				var addOnProductIdValidator = new AddOnProductIdValidator(this._appContext, this._sessionContext);
-				return addOnProductIdValidator.validateAddOnProductIdList(this._priceProduct.addOnProductIdList);
+				return addOnProductIdValidator.validateAddOnProductIdList(this._priceProduct.includedItems.getUniqueAddOnProductIdList());
 			})
-			.then((addOnProductValidationResult: AddOnProductsContainer) => {
+			.then((aopContainer: AddOnProductsContainer) => {
+				var settingsRepo = this._appContext.getRepositoryFactory().getSettingsRepository();
+				return settingsRepo.getAddOnProductCategories();
+			}).then((aopCategoryList: AddOnProductCategoryDO[]) => {
+				var breakfastCateg = _.find(aopCategoryList, (aopCategory: AddOnProductCategoryDO) => {
+					return aopCategory.isBreakfast;
+				});
+				if (this._priceProduct.includedItems.hasBreakfast()) {
+					if (this._priceProduct.includedItems.includedBreakfastAddOnProductSnapshot.categoryId !== breakfastCateg.id) {
+						var thError = new ThError(ThStatusCode.PriceProductValidatorInvalidBreakfast, null);
+						ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Added Non breakfast AOP on PP", this._priceProduct, thError);
+						throw thError;
+					}
+				}
+				for (var aopIndex = 0; aopIndex < this._priceProduct.includedItems.attachedAddOnProductItemList.length; aopIndex++) {
+					var attachedAddOnProductItem = this._priceProduct.includedItems.attachedAddOnProductItemList[aopIndex];
+					if (attachedAddOnProductItem.addOnProductSnapshot.categoryId === breakfastCateg.id) {
+						var thError = new ThError(ThStatusCode.PriceProductValidatorAopAsBreakfast, null);
+						ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Added breakfast as Add On Product", this._priceProduct, thError);
+						throw thError;
+					}
+				}
+
 				var roomAggregator = new RoomCategoryStatsAggregator(this._appContext, this._sessionContext);
 				return roomAggregator.getUsedRoomCategoryList();
 			})

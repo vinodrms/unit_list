@@ -1,11 +1,12 @@
 import {Component, OnInit} from '@angular/core';
-import {RouteConfig, RouterOutlet, ROUTER_DIRECTIVES} from '@angular/router-deprecated';
+import {ROUTER_DIRECTIVES} from '@angular/router';
 import {TranslationPipe} from '../../../../../../../../common/utils/localization/TranslationPipe';
 import {SettingsNavbarComponent} from '../subcomponents/navbar/SettingsNavbarComponent';
 import {SettingsNavbarService} from '../subcomponents/navbar/services/SettingsNavbarService';
 import {SettingsBasicInformationComponent} from '../subcomponents/basic-information/main/SettingsBasicInformationComponent';
 import {SettingsBedsComponent} from '../subcomponents/beds/SettingsBedsComponent';
 import {SettingsRoomsComponent} from '../subcomponents/rooms/SettingsRoomsComponent';
+import {SettingsBreakfastComponent} from '../subcomponents/breakfast/SettingsBreakfastComponent';
 import {SettingsAddOnProductsComponent} from '../subcomponents/add-on-products/SettingsAddOnProductsComponent';
 import {SettingsPriceProductsComponent} from '../subcomponents/price-products/SettingsPriceProductsComponent';
 import {SettingsCustomerRegisterComponent} from '../subcomponents/customer-register/SettingsCustomerRegisterComponent';
@@ -14,21 +15,15 @@ import {HeaderPageService} from '../../../utils/header/container/services/Header
 import {HeaderPageType} from '../../../utils/header/container/services/HeaderPageType';
 import {AHomeContainerComponent} from '../../../utils/AHomeContainerComponent';
 
-@RouteConfig([
-	{ path: '/basic-info/...', name: 'SettingsBasicInformationComponent', component: SettingsBasicInformationComponent, useAsDefault: true },
-	{ path: '/beds', name: 'SettingsBedsComponent', component: SettingsBedsComponent },
-    { path: '/rooms', name: 'SettingsRoomsComponent', component: SettingsRoomsComponent },
-	{ path: '/add-on-products', name: 'SettingsAddOnProductsComponent', component: SettingsAddOnProductsComponent },
-	{ path: '/price-products', name: 'SettingsPriceProductsComponent', component: SettingsPriceProductsComponent },
-	{ path: '/customer-register', name: 'SettingsCustomerRegisterComponent', component: SettingsCustomerRegisterComponent },
-	{ path: '/allotments', name: 'SettingsAllotmentsComponent', component: SettingsAllotmentsComponent }
-])
 @Component({
 	selector: 'settings-container',
 	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/settings/container/template/settings-container.html',
 	directives: [ROUTER_DIRECTIVES, SettingsNavbarComponent],
 	providers: [SettingsNavbarService],
-	pipes: [TranslationPipe]
+	pipes: [TranslationPipe],
+	entryComponents: [SettingsBasicInformationComponent, SettingsBedsComponent, SettingsRoomsComponent,
+		SettingsBreakfastComponent, SettingsAddOnProductsComponent, SettingsPriceProductsComponent, 
+		SettingsCustomerRegisterComponent, SettingsAllotmentsComponent]
 })
 export class SettingsContainerComponent extends AHomeContainerComponent implements OnInit {
 

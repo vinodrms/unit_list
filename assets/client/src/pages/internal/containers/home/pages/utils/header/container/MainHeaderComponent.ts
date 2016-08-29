@@ -1,5 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {RouterLink} from '@angular/router-deprecated';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/combineLatest';
 import {BaseComponent} from '../../../../../../../../common/base/BaseComponent';
@@ -16,8 +15,7 @@ import {HeaderNotificationsComponent} from '../subcomponents/notifications/Heade
 @Component({
 	selector: 'main-header',
 	templateUrl: '/client/src/pages/internal/containers/home/pages/utils/header/container/template/main-header.html',
-	directives: [RouterLink,
-		HeaderSettingsComponent, HeaderNotificationsComponent],
+	directives: [HeaderSettingsComponent, HeaderNotificationsComponent],
 	pipes: [TranslationPipe]
 })
 

@@ -7,14 +7,18 @@ import {InvoicePaymentMethodValidator} from '../../../../invoices/validators/Inv
 import {HotelDO} from '../../../../../data-layer/hotel/data-objects/HotelDO';
 import {CustomersContainer} from '../../../../customers/validators/results/CustomersContainer';
 import {RoomCategoryStatsDO} from '../../../../../data-layer/room-categories/data-objects/RoomCategoryStatsDO';
+import {RoomDO} from '../../../../../data-layer/rooms/data-objects/RoomDO';
 
-export interface BookingAllotmentValidationParams {
+import _ = require('underscore');
+
+export interface BookingRoomCategoryValidationParams {
     priceProductsContainer: PriceProductsContainer;
     roomCategoryStatsList: RoomCategoryStatsDO[];
+    roomList: RoomDO[];
 }
 
 export class BookingRoomCategoryValidationRule extends ABusinessValidationRule<BookingDO> {
-    constructor(private _validationParams: BookingAllotmentValidationParams) {
+    constructor(private _validationParams: BookingRoomCategoryValidationParams) {
         super({
             statusCode: ThStatusCode.BookingValidationError,
             errorMessage: "error validating booking"
@@ -32,8 +36,39 @@ export class BookingRoomCategoryValidationRule extends ABusinessValidationRule<B
             });
             return;
         }
+        if (booking.configCapacity.noAdults === 0 && booking.configCapacity.noChildren === 0) {
+            this.logBusinessAndReject(reject, booking, {
+                statusCode: ThStatusCode.BookingsValidatorInvalidBookingCapacity,
+                errorMessage: "invalid booking capacity (noAd == noBab == 0)"
+            });
+            return;
+        }
+        if (!priceProduct.price.hasPriceConfiguredFor({
+            configCapacity: booking.configCapacity,
+            roomCategoryId: booking.roomCategoryId
+        })) {
+            this.logBusinessAndReject(reject, booking, {
+                statusCode: ThStatusCode.BookingsValidatorInvalidPriceForRoomCategoryId,
+                errorMessage: "invalid room category id - no price"
+            });
+            return;
+        }
+
+        var actualRoomCategoryId: string = booking.roomCategoryId;
+        if (!this._thUtils.isUndefinedOrNull(booking.roomId) && _.isString(booking.roomId)) {
+            var foundRoom = _.find(this._validationParams.roomList, (room: RoomDO) => { return room.id === booking.roomId });
+            if (this._thUtils.isUndefinedOrNull(foundRoom)) {
+                this.logBusinessAndReject(reject, booking, {
+                    statusCode: ThStatusCode.BookingsValidatorInvalidRoomId,
+                    errorMessage: "room id not found"
+                });
+                return;
+            }
+            actualRoomCategoryId = foundRoom.categoryId;
+        }
+
         var roomCategoryStatsDO: RoomCategoryStatsDO = _.find(this._validationParams.roomCategoryStatsList, (roomCategStats: RoomCategoryStatsDO) => {
-            return roomCategStats.roomCategory.id === booking.roomCategoryId;
+            return roomCategStats.roomCategory.id === actualRoomCategoryId;
         });
         if (this._thUtils.isUndefinedOrNull(roomCategoryStatsDO)) {
             this.logBusinessAndReject(reject, booking, {

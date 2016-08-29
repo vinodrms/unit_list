@@ -22,4 +22,8 @@ export class BookingStateChangeTriggerTimeDO extends BaseDO {
         this.thTimestamp = new ThTimestampDO();
         this.thTimestamp.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "thTimestamp"));
     }
+
+    public isDependentOnCancellationHour(): boolean {
+        return this.type === BookingStateChangeTriggerType.DependentOnCancellationHour;
+    }
 }

@@ -1,7 +1,9 @@
-import {Component, AfterViewInit} from '@angular/core';
+import {Component, OnInit, OnDestroy} from '@angular/core';
 import {ControlGroup} from '@angular/common';
-import {RouteParams, RouterLink} from '@angular/router-deprecated';
+import {ROUTER_DIRECTIVES, ActivatedRoute} from '@angular/router';
 import {Location} from '@angular/common';
+import {Subscription} from 'rxjs/Subscription';
+
 import {BaseFormComponent} from '../../../../common/base/BaseFormComponent';
 import {TranslationPipe} from '../../../../common/utils/localization/TranslationPipe';
 import {LogInService} from './services/LogInService';
@@ -15,32 +17,34 @@ import {LoadingButtonComponent} from '../../../../common/utils/components/Loadin
 	selector: 'log-in-component',
 	templateUrl: '/client/src/pages/external/pages/log-in/template/log-in-component.html',
 	providers: [LogInService],
-	directives: [RouterLink, ExternalFooterComponent, LoadingButtonComponent],
+	directives: [ROUTER_DIRECTIVES, ExternalFooterComponent, LoadingButtonComponent],
 	pipes: [TranslationPipe]
 })
-
-export class LogInComponent extends BaseFormComponent implements AfterViewInit {
+export class LogInComponent extends BaseFormComponent implements OnInit, OnDestroy {
 	public isLoading: boolean = false;
 	private _statusCodeParser: LogInStatusCodeParser;
+	private _statusCodeSubscription: Subscription;
 
 	constructor(
 		private _appContext: AppContext,
 		private _logInService: LogInService,
 		private _location: Location,
-		routeParams: RouteParams) {
-
+		private _activatedRoute: ActivatedRoute) {
 		super();
-		this._statusCodeParser = new LogInStatusCodeParser();
-		this._statusCodeParser.updateStatusCode(routeParams.get("loginStatusCode"));
 	}
 
-	ngAfterViewInit() {
-		this.removeAllQueryParams();
-		this.displayStatusAlertIfNecessary();
+	ngOnInit() {
+		this._statusCodeSubscription = this._activatedRoute.params.subscribe(params => {
+			this._statusCodeParser = new LogInStatusCodeParser();
+			this._statusCodeParser.updateStatusCode(params['loginStatusCode']);
+			this.displayStatusAlertIfNecessary();
+			this._location.replaceState("");
+		});
 	}
-	private removeAllQueryParams() {
-		this._location.replaceState("/");
+	ngOnDestroy() {
+		this._statusCodeSubscription.unsubscribe();
 	}
+
 	private displayStatusAlertIfNecessary() {
 		var loginStatus = this._statusCodeParser.getLoginStatusResponse();
 		switch (loginStatus.action) {

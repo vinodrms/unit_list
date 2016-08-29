@@ -46,6 +46,7 @@ interface CorporateCustomerItemDetailsDO extends CustomerItemDetailsDO {
 	invoiceFee?: number;
 	accountNo?: string;
 	commission: ICommissionDO;
+	receiveBookingConfirmations: boolean;
 }
 export interface CompanyCustomerItemDetailsDO extends CorporateCustomerItemDetailsDO {
 }
@@ -235,6 +236,10 @@ export class SaveCustomerItemDO {
 						validationStruct: new PrimitiveValidationStructure(NumberValidationRule.buildNullable())
 					}
 				])
+			},
+			{
+				key: "receiveBookingConfirmations",
+				validationStruct: new PrimitiveValidationStructure(new BooleanValidationRule())
 			}
 		]);
 	}

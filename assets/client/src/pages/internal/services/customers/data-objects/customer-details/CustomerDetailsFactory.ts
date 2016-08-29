@@ -33,21 +33,25 @@ export class CustomerDetailsFactory {
 		corporateDetails.payInvoiceByAgreement = false;
 		corporateDetails.commission = new CommissionDO();
 		corporateDetails.commission.type = CommissionType.Fixed;
+		corporateDetails.receiveBookingConfirmations = true;
 		return corporateDetails;
 	}
 	public getCustomerDetailsMetaList(): CustomerDetailsMeta[] {
 		return [
 			{
 				customerType: CustomerType.Individual,
-				customerTypeName: "Individual"
+				customerTypeName: "Individual",
+				fontName: "("
 			},
 			{
 				customerType: CustomerType.Company,
-				customerTypeName: "Company"
+				customerTypeName: "Company",
+				fontName: ")"
 			},
 			{
 				customerType: CustomerType.TravelAgency,
-				customerTypeName: "Travel Agency"
+				customerTypeName: "Travel Agency",
+				fontName: "*"
 			}
 		];
 	}

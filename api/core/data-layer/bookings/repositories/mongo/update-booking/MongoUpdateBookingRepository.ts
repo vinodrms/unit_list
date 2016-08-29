@@ -19,6 +19,7 @@ export class MongoUpdateBookingRepository extends MongoRepository implements IUp
             {
                 "bookingList.$.confirmationStatus": booking.confirmationStatus,
                 "bookingList.$.customerIdList": booking.customerIdList,
+                "bookingList.$.displayCustomerId": booking.displayCustomerId,
                 "bookingList.$.defaultBillingDetails": booking.defaultBillingDetails,
                 "bookingList.$.interval": booking.interval,
                 "bookingList.$.startUtcTimestamp": booking.startUtcTimestamp,
@@ -27,6 +28,7 @@ export class MongoUpdateBookingRepository extends MongoRepository implements IUp
                 "bookingList.$.roomCategoryId": booking.roomCategoryId,
                 "bookingList.$.roomId": booking.roomId,
                 "bookingList.$.priceProductId": booking.priceProductId,
+                "bookingList.$.reservedAddOnProductIdList": booking.reservedAddOnProductIdList,
                 "bookingList.$.price": booking.price,
                 "bookingList.$.allotmentId": booking.allotmentId,
                 "bookingList.$.guaranteedTime": booking.guaranteedTime,

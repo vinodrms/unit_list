@@ -59,8 +59,8 @@ export class WizardCustomerRegisterStateService extends AWizardState {
     }
     public getMeta(): WizardStateMeta {
         return {
-            startRelativeComponentPath: "WizardCustomerRegisterComponent",
-            endRelativeComponentPath: "WizardCustomerRegisterComponent",
+            startRelativeComponentPath: "customer-register",
+            endRelativeComponentPath: "customer-register",
             iconFontName: "&",
             name: "Customer Register"
         };

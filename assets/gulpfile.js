@@ -37,7 +37,7 @@ function packCompiledFiles(configFileName, outFileName, appConfigName, endCallba
 			var outputFile = 'client/build/' + outFileName;
 			return builder.buildStatic(appConfigName, outputFile, {
 				minify: true,
-				mangle: true
+				mangle: false
 			});
 		})
 		.then(function () {
@@ -82,8 +82,10 @@ gulp.task('copy-dist', ['pack-internal', 'pack-external', 'clean-dist'], functio
 		'node_modules/pace-progress/**/*',
 		'node_modules/underscore/**/*',
 		'node_modules/perfect-scrollbar/**/*',
+		'node_modules/echarts/**/*',
 
 		'node_modules/es6-shim/**/*',
+		'node_modules/core-js/**/*',
 		'node_modules/systemjs/dist/**/*',
 		'node_modules/zone.js/dist/**/*',
 		'node_modules/reflect-metadata/**/*',

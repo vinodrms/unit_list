@@ -11,23 +11,33 @@ export class CustomScroll implements AfterViewInit, OnDestroy {
     }
 
     ngAfterViewInit() {
+        this.create();
+    }
+
+    ngOnDestroy() {
+        this.destroy();
+    }
+
+    onResize(event) {
+        this.updateScrollableRegion();
+    }
+
+    private create(){
         var jqElement = this.getjQueryElement();
         jqElement.addClass('position-relative');
         jqElement.perfectScrollbar({
-            wheelSpeed: 2,
+            wheelSpeed: 1,
             wheelPropagation: true,
             minScrollbarLength: 20
         });
         jqElement.perfectScrollbar('update');
     }
 
-    ngOnDestroy() {
+    private destroy(){
         var jqElement = this.getjQueryElement();
         jqElement.perfectScrollbar('destroy');
     }
-    onResize(event) {
-        this.updateScrollableRegion();
-    }
+
     private updateScrollableRegion() {
         var jqElement = this.getjQueryElement();
         jqElement.perfectScrollbar('update');
@@ -42,4 +52,5 @@ export class CustomScroll implements AfterViewInit, OnDestroy {
             this.updateScrollableRegion();
         });
     }
+
 }

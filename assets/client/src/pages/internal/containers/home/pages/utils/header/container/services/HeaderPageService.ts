@@ -5,7 +5,7 @@ import {HeaderPageType} from './HeaderPageType';
 
 @Injectable()
 export class HeaderPageService {
-	private static NavigationBasePath = "/MainHomeComponent/";
+	private static NavigationBasePath = "/";
 	private _headerPageList: HeaderPage[];
 
 	constructor(private _appContext: AppContext) {
@@ -13,9 +13,9 @@ export class HeaderPageService {
 	}
 	private initializeHeaderPageList() {
 		this._headerPageList = [
-			new HeaderPage(HeaderPageType.HotelOperations, "HotelOperationsDashboardComponent", "Hotel Operations", "E"),
-			new HeaderPage(HeaderPageType.YieldManager, "YieldManagerContainerComponent", "Yield Manager", "F"),
-			new HeaderPage(HeaderPageType.BookingHistory, "BookingHistoryDashboardComponent", "Booking History", "D")
+			new HeaderPage(HeaderPageType.HotelOperations, "operations", "Hotel Operations", "E"),
+			new HeaderPage(HeaderPageType.YieldManager, "yield-manager", "Yield Manager", "F"),
+			new HeaderPage(HeaderPageType.BookingHistory, "bookings", "Booking History", "D")
 		]
 	}
 
@@ -32,7 +32,7 @@ export class HeaderPageService {
 		if (headerPageType !== HeaderPageType.None) {
 			var headerPage = this.getHeaderPageWithType(headerPageType);
 			this.markCurrentPage(headerPageType);
-			this._appContext.routerNavigator.navigateTo(HeaderPageService.NavigationBasePath + headerPage.componentName);
+			this._appContext.routerNavigator.navigateTo(HeaderPageService.NavigationBasePath + headerPage.componentPath);
 		}
 	}
 

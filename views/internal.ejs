@@ -12,6 +12,9 @@
 
 	<title>UnitPal</title>
 
+	<!-- Fonts -->
+	<link href='/client/static-assets/css/roboto-font.css' rel='stylesheet' type='text/css'>
+
 	<!-- CSS -->
 	<link href="/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
 	<link href="/node_modules/font-awesome/css/font-awesome.min.css" rel="stylesheet">
@@ -29,9 +32,10 @@
 	<script src="/node_modules/jquery.1/node_modules/jquery/dist/jquery.min.js"></script>
 	<script src="/node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
 	<script src="/client/static-assets/third-party/jquery-ui/jquery-ui.min.js"></script>
+	<script src="/node_modules/echarts/dist/echarts.min.js"></script>
 
 	<!-- Angular JS Deps -->
-	<script src="/node_modules/es6-shim/es6-shim.min.js"></script>
+	<script src="/node_modules/core-js/client/shim.min.js"></script>
 	<script src="/node_modules/zone.js/dist/zone.js"></script>
 	<script src="/node_modules/reflect-metadata/Reflect.js"></script>
 	<script src="/node_modules/systemjs/dist/system.js"></script>
@@ -49,6 +53,18 @@
 		<script src="/client/systemjs.internal.config.js"></script>
 		<script>
 			System.import('internal').catch(function(err){ console.error(err); });
+		</script>
+	<%}%>
+
+	<%if (googleAnalyticsEnabled) {%>
+		<script>
+			(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+			(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+			m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+			})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+			
+			var googleAnalyticsTrackingId = '<%=googleAnalyticsTrackingId%>';
+			ga('create', googleAnalyticsTrackingId, 'auto');
 		</script>
 	<%}%>
 

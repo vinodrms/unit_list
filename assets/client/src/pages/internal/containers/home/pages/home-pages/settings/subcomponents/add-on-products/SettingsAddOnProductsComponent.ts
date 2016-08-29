@@ -11,21 +11,21 @@ import {InventoryScreenStateType} from '../../../../../../common/inventory/utils
 import {AddOnProductsTotalCountService} from '../../../../../../../services/add-on-products/AddOnProductsTotalCountService';
 
 @Component({
-	selector: 'settings-add-on-products',
-	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/settings/subcomponents/add-on-products/template/settings-add-on-products.html',
-	providers: [AddOnProductsTotalCountService],
-	directives: [AddOnProductsComponent],
-	pipes: [TranslationPipe]
+    selector: 'settings-add-on-products',
+    templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/settings/subcomponents/add-on-products/template/settings-add-on-products.html',
+    providers: [AddOnProductsTotalCountService],
+    directives: [AddOnProductsComponent],
+    pipes: [TranslationPipe]
 })
 export class SettingsAddOnProductsComponent extends BaseComponent implements OnInit, OnDestroy {
-	private _totalNoSubscription: Subscription;
-	constructor(private _navbarService: SettingsNavbarService,
-		private _addOnProductsTotalCountService: AddOnProductsTotalCountService) {
-		super();
-		this._navbarService.bootstrap(SettingsPageType.AddOnProducts);
-	}
+    private _totalNoSubscription: Subscription;
+    constructor(private _navbarService: SettingsNavbarService,
+        private _addOnProductsTotalCountService: AddOnProductsTotalCountService) {
+        super();
+        this._navbarService.bootstrap(SettingsPageType.AddOnProducts);
+    }
     public ngOnInit() {
-        this._totalNoSubscription = this._addOnProductsTotalCountService.getTotalCountDO().subscribe((totalCount: TotalCountDO) => {
+        this._totalNoSubscription = this._addOnProductsTotalCountService.getTotalCountDO({ filterBreakfastCategory: false }).subscribe((totalCount: TotalCountDO) => {
             this._navbarService.numberOfItems = totalCount.numOfItems;
         });
     }

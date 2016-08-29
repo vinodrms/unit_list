@@ -24,5 +24,9 @@ module.exports.unitPalConfig = {
         "username": "UnitPal",
         "enabled": false
     },
+    googleAnalytics: {
+        enabled: false,
+        trackingId: ""
+    },
     appContextRoot: "http://127.0.0.1:8001"
 };

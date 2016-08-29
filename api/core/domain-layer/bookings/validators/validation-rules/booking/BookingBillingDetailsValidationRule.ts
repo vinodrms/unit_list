@@ -21,22 +21,6 @@ export class BookingBillingDetailsValidationRule extends ABusinessValidationRule
     protected isValidOnCore(resolve: { (result: BookingDO): void }, reject: { (err: ThError): void }, businessObject: BookingDO) {
         var booking = businessObject;
 
-        if (!this.billingCustomerIsInCustomerIdList(booking)) {
-            this.logBusinessAndReject(reject, booking, {
-                statusCode: ThStatusCode.BookingsValidatorBillingCustomerMissing,
-                errorMessage: "missing billing customer from customer list"
-            });
-            return;
-        }
-        var noOfTaOrComp = this.getNumberOfTravelAgenciesOrCompanies(booking);
-        if (noOfTaOrComp > BookingDOConstraints.MaxNoOfCompaniesOrTravelAgenciesOnBooking) {
-            this.logBusinessAndReject(reject, booking, {
-                statusCode: ThStatusCode.BookingsValidatorNoCompaniesOrTALimit,
-                errorMessage: "too many companies or travel agencies"
-            });
-            return;
-        }
-
         var priceProduct = this._priceProductsContainer.getPriceProductById(booking.priceProductId);
         var billedCustomer = this._customersContainer.getCustomerById(booking.defaultBillingDetails.customerId);
         if (!billedCustomer.hasAccessOnPriceProduct(priceProduct)) {
@@ -47,15 +31,15 @@ export class BookingBillingDetailsValidationRule extends ABusinessValidationRule
             return;
         }
 
-        if (!priceProduct.conditions.policy.hasCancellationPolicy()) {
-            resolve(booking);
-            return;
-        }
-        if (!booking.defaultBillingDetails.paymentGuarantee) {
+        if (priceProduct.conditions.policy.hasCancellationPolicy() && !booking.defaultBillingDetails.paymentGuarantee) {
             this.logBusinessAndReject(reject, booking, {
                 statusCode: ThStatusCode.BookingsValidatorMissingPaymentGuarantee,
                 errorMessage: "payment guarantee missing"
             });
+            return;
+        }
+        if (!booking.defaultBillingDetails.paymentGuarantee) {
+            resolve(booking);
             return;
         }
         var invoicePMValidator = new InvoicePaymentMethodValidator(this._hotelDO, billedCustomer);
@@ -64,18 +48,5 @@ export class BookingBillingDetailsValidationRule extends ABusinessValidationRule
         }).catch((error: any) => {
             reject(error);
         });
-    }
-    private billingCustomerIsInCustomerIdList(booking: BookingDO): boolean {
-        return _.contains(booking.customerIdList, booking.defaultBillingDetails.customerId);
-    }
-    private getNumberOfTravelAgenciesOrCompanies(booking: BookingDO): number {
-        var noTaOrComp = 0;
-        _.forEach(booking.customerIdList, (customerId: string) => {
-            var customer = this._customersContainer.getCustomerById(customerId);
-            if (customer.isCompanyOrTravelAgency()) {
-                noTaOrComp++;
-            }
-        });
-        return noTaOrComp;
     }
 }

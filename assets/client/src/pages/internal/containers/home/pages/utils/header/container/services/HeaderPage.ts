@@ -2,15 +2,15 @@ import {HeaderPageType} from './HeaderPageType';
 
 export class HeaderPage {
 	private _headerPageType: HeaderPageType;
-	private _componentName: string;
+	private _componentPath: string;
 	private _pageName: string;
 	private _pageFontName: string;
 
 	private _selected: boolean;
 
-	constructor(headerPageType: HeaderPageType, componentName: string, pageName: string, pageFontName: string) {
+	constructor(headerPageType: HeaderPageType, componentPath: string, pageName: string, pageFontName: string) {
 		this._headerPageType = headerPageType;
-		this._componentName = componentName;
+		this._componentPath = componentPath;
 		this._pageName = pageName;
 		this._pageFontName = pageFontName;
 		this._selected = false;
@@ -22,11 +22,11 @@ export class HeaderPage {
 	public set headerPageType(headerPageType: HeaderPageType) {
 		this._headerPageType = headerPageType;
 	}
-	public get componentName(): string {
-		return this._componentName;
+	public get componentPath(): string {
+		return this._componentPath;
 	}
-	public set componentName(componentName: string) {
-		this._componentName = componentName;
+	public set componentPath(componentPath: string) {
+		this._componentPath = componentPath;
 	}
 	public get pageName(): string {
 		return this._pageName;

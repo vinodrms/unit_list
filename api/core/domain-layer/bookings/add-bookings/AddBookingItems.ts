@@ -28,6 +28,7 @@ import {RoomCategoryStatsAggregator} from '../../room-categories/aggregators/Roo
 import {RoomCategoryStatsDO} from '../../../data-layer/room-categories/data-objects/RoomCategoryStatsDO';
 import {BookingConfirmationEmailSender} from '../booking-confirmations/BookingConfirmationEmailSender';
 import {BookingDataAggregatorQuery} from '../aggregators/BookingDataAggregator';
+import {AddOnProductLoader, AddOnProductItemContainer} from '../../add-on-products/validators/AddOnProductLoader';
 
 import _ = require('underscore');
 
@@ -81,7 +82,10 @@ export class AddBookingItems {
 
                 var intervalValidator = new BookingIntervalValidator(loadedHotel);
                 var thDateIntervalDOList = this.getThDateIntervalDOListForBookings();
-                return intervalValidator.validateBookingIntervalList(thDateIntervalDOList);
+                return intervalValidator.validateBookingIntervalList({
+                    bookingIntervalList: thDateIntervalDOList,
+                    isNewBooking: true
+                });
             }).then((validatedBookingIntervalList: ThDateIntervalDO[]) => {
                 var priceProductValidator = new PriceProductIdValidator(this._appContext, this._sessionContext);
                 var priceProductIdListToValidate = this.getPriceProductIdListForBookings();
@@ -97,7 +101,10 @@ export class AddBookingItems {
 
                 var allotmentValidator = new AllotmentIdValidator(this._appContext, this._sessionContext);
                 var allotmentIdListToValidate = this.getAllotmentIdListForBookings();
-                return allotmentValidator.validateAllotmentIdList(allotmentIdListToValidate);
+                return allotmentValidator.validateAllotmentIdList({
+                    allotmentIdList: allotmentIdListToValidate,
+                    onlyActive: true
+                });
             }).then((loadedAllotmentsContainer: AllotmentsContainer) => {
                 this._loadedAllotmentsContainer = loadedAllotmentsContainer;
 
@@ -111,11 +118,15 @@ export class AddBookingItems {
             }).then((roomCategoryStatsList: RoomCategoryStatsDO[]) => {
                 this._loadedRoomCategoryStatsList = roomCategoryStatsList;
 
+                var addOnProductLoader = new AddOnProductLoader(this._appContext, this._sessionContext);
+                return addOnProductLoader.load(this._loadedPriceProductsContainer.getAddOnProductIdList());
+            }).then((addOnProductItemContainer: AddOnProductItemContainer) => {
                 var bookingItemsConverter = new BookingItemsConverter(this._appContext, this._sessionContext, {
                     hotelDO: this._loadedHotel,
                     currentHotelTimestamp: ThTimestampDO.buildThTimestampForTimezone(this._loadedHotel.timezone),
                     priceProductsContainer: this._loadedPriceProductsContainer,
-                    customersContainer: this._loadedCustomersContainer
+                    customersContainer: this._loadedCustomersContainer,
+                    addOnProductItemContainer: addOnProductItemContainer
                 });
                 return bookingItemsConverter.convert(this._bookingItems, this._inputChannel);
             }).then((convertedBookingList: BookingDO[]) => {

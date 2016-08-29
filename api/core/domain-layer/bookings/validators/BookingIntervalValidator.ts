@@ -24,27 +24,27 @@ export class BookingIntervalValidator {
         return yesterdayDate;
     }
 
-    public validateBookingIntervalList(bookingIntervalList: ThDateIntervalDO[]): Promise<ThDateIntervalDO[]> {
+    public validateBookingIntervalList(param: { bookingIntervalList: ThDateIntervalDO[], isNewBooking: boolean }): Promise<ThDateIntervalDO[]> {
         var promiseList: Promise<ThDateIntervalDO>[] = [];
-        _.forEach(bookingIntervalList, (bookingInterval: ThDateIntervalDO) => {
-            promiseList.push(this.validateBookingInterval(bookingInterval));
+        _.forEach(param.bookingIntervalList, (bookingInterval: ThDateIntervalDO) => {
+            promiseList.push(this.validateBookingInterval({ bookingInterval: bookingInterval, isNewBooking: param.isNewBooking }));
         });
         return Promise.all(promiseList);
     }
 
-    public validateBookingInterval(bookingInterval: ThDateIntervalDO): Promise<ThDateIntervalDO> {
+    public validateBookingInterval(param: { bookingInterval: ThDateIntervalDO, isNewBooking: boolean }): Promise<ThDateIntervalDO> {
         return new Promise<ThDateIntervalDO>((resolve: { (result: ThDateIntervalDO): void }, reject: { (err: ThError): void }) => {
             try {
-                this.validateBookingIntervalCore(resolve, reject, bookingInterval);
+                this.validateBookingIntervalCore(resolve, reject, param.bookingInterval, param.isNewBooking);
             } catch (error) {
                 var thError = new ThError(ThStatusCode.BookingIntervalValidatorError, error);
-                ThLogger.getInstance().logError(ThLogLevel.Error, "error validating booking interval", bookingInterval, thError);
+                ThLogger.getInstance().logError(ThLogLevel.Error, "error validating booking interval", param, thError);
                 reject(thError);
             }
         });
     }
 
-    private validateBookingIntervalCore(resolve: { (result: ThDateIntervalDO): void }, reject: { (err: ThError): void }, bookingInterval: ThDateIntervalDO) {
+    private validateBookingIntervalCore(resolve: { (result: ThDateIntervalDO): void }, reject: { (err: ThError): void }, bookingInterval: ThDateIntervalDO, isNewBooking: boolean) {
         var preprocessedInterval = this.preprocessThDateInterval(bookingInterval);
 
         if (!preprocessedInterval.isValid()) {
@@ -55,7 +55,7 @@ export class BookingIntervalValidator {
         }
 
         var bookingStartDate: ThDateDO = preprocessedInterval.start;
-        if (bookingStartDate.isBefore(this._minimumBookableDate)) {
+        if (bookingStartDate.isBefore(this._minimumBookableDate) && isNewBooking) {
             var thError = new ThError(ThStatusCode.BookingIntervalValidatorInvalidStartDate, null);
             ThLogger.getInstance().logError(ThLogLevel.Warning, "invalid start date for bookings", preprocessedInterval, thError);
             reject(thError);

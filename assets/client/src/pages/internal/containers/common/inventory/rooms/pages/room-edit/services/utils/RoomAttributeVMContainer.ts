@@ -22,10 +22,13 @@ export class RoomAttributeVMContainer {
             this._roomAttributeList.push(roomAttributeVM);
         });
     }
-    
+
     public resetRoomAttributeSelection() {
-        this._roomAttributeList.forEach((roomAttribute: RoomAttributeVM) => {
-            roomAttribute.isSelected = false;        
+        this.updateRoomAttributeSelection([]);
+    }
+    public updateRoomAttributeSelection(attributeIdList: string[]) {
+        this._roomAttributeList.forEach((roomAttributeVM: RoomAttributeVM) => {
+            roomAttributeVM.isSelected = _.contains(attributeIdList, roomAttributeVM.roomAttribute.id);
         });
     }
     

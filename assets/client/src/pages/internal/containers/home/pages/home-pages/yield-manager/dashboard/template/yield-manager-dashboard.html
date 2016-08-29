@@ -1,0 +1,11 @@
+<div class="row full-height">
+	<div class="yield-manager-dashboard operations-dashboard">
+		<yield-filter-pane class="pane full-height" (filterChanged)="filterChangeHandler($event)"></yield-filter-pane>
+		<div class="main flex-column">
+			<yield-timeframe-header></yield-timeframe-header>
+			<yield-key-metrics class="{{keyMetricsViewModeDecoratorClass}}"></yield-key-metrics>
+			<yield-view-mode (onStateChange)="viewModeStateChanged($event)"></yield-view-mode>
+			<yield-price-products class="{{priceProductsViewModeDecoratorClass}}"></yield-price-products>
+		</div>
+	</div>
+</div>

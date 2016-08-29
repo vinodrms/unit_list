@@ -35,7 +35,7 @@ export class NotificationsModalComponent extends BaseComponent implements ICusto
 
 	private _selectedNotification: ThNotificationDO;
 
-	constructor(
+	constructor(private _appContext: AppContext,
 		private _modalDialogRef: ModalDialogRef<boolean>,
 		private _modalInput: NotificationsModalInput,
 		private _notificationService: NotificationService,
@@ -45,7 +45,9 @@ export class NotificationsModalComponent extends BaseComponent implements ICusto
 		this.selectedNotification = this._modalInput.preselectedNotification;
 	}
 
-	ngOnInit() { }
+	ngOnInit() {
+		this._appContext.analytics.logPageView("/notifications");
+	}
 
 	public get selectedNotification(): ThNotificationDO {
 		return this._selectedNotification;

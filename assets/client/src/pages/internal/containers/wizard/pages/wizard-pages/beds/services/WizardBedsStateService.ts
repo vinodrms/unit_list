@@ -48,8 +48,8 @@ export class WizardBedsStateService extends AWizardState {
     }
     public getMeta(): WizardStateMeta {
         return {
-            startRelativeComponentPath: "WizardBedsComponent",
-            endRelativeComponentPath: "WizardBedsComponent",
+            startRelativeComponentPath: "beds",
+            endRelativeComponentPath: "beds",
             iconFontName: "!",
             name: "Beds"
         };

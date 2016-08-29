@@ -65,7 +65,7 @@ export class DeleteRoomItem {
 			.then((validationResult: boolean) => {
 				var roomRepo = this._appContext.getRepositoryFactory().getRoomRepository();
 				var itemMeta = this.buildRoomItemMetaRepoDO();
-				return roomRepo.deleteRoom(this._roomMeta, itemMeta);
+				return roomRepo.deleteRoom(this._roomMeta, itemMeta, this._loadedRoom);
 			})
 			.then((deletedRoom: RoomDO) => {
 				resolve(deletedRoom);

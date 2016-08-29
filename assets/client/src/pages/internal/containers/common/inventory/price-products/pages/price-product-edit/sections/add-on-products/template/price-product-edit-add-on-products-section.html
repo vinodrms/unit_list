@@ -1,23 +1,66 @@
-<div class="form-group">
-	<label>{{ 'Add On Products' | translate }}</label>
-	<table class="table table-striped form-group" *ngIf="didInitialize()">
-		<tbody class="input-group">
-			<tr *ngFor="let addOnProduct of addOnProductList">
-				<td>{{addOnProduct.name}}</td>
-				<td>{{ccy.nativeSymbol}} {{addOnProduct.price | price}}</td>
-				<td *ngIf="!readonly">
-					<a class="btn btn-xs" (click)="removeAddOnProduct(addOnProduct)">
-						<i class="fa unitpal-font">\</i> {{ 'Remove' | translate }}
-					</a>
-				</td>
-			</tr>
-			<tr>
-				<td  *ngIf="!readonly">
-					<a class="btn btn-xs" (click)="openAddOnProductSelectModal()"><i class="fa unitpal-font">'</i> {{ 'Add' | translate }} </a>
-				</td>
-				<td></td>
-			</tr>
-		</tbody>
-		<small class="text-muted"><i class="fa fa-info-circle"></i> {{ 'You can include Add On Products in the Price Product. The prices will include the Add On Product Prices.' | translate }}</small>
-	</table>
+<div class="row">
+	<div class="col-xs-12">
+		<div class="form-group">
+			<label>{{ 'Included Breakfast' | translate }}</label>
+			<table class="table table-striped form-group" *ngIf="didInitialize()">
+				<tbody class="input-group">
+					<tr *ngIf="didSelectBreakfast()">
+						<td>{{breakfastAopSnapshot.name}}</td>
+						<td>{{ccy.nativeSymbol}} {{breakfastAopSnapshot.price | price}}</td>
+						<td *ngIf="!readonly">
+							<a class="btn btn-xs" (click)="removeBreakfast()">
+								<i class="fa unitpal-font">\</i> {{ 'Remove' | translate }}
+							</a>
+						</td>
+					</tr>
+					<tr *ngIf="readonly && !didSelectBreakfast()">
+						<td><small class="text-muted">{{ 'No Breakfast added' | translate }}</small></td><td></td><td></td>
+					</tr>
+					<tr *ngIf="!readonly && !didSelectBreakfast()">
+						<td>
+							<a class="btn btn-xs" (click)="openBreakfastSelectModal()"><i class="fa unitpal-font">'</i> {{ 'Add' | translate }} </a>
+						</td>
+					</tr>
+				</tbody>
+				<small class="text-muted"><i class="fa fa-info-circle"></i> {{ 'The price of the breakfast will be included in the Room Rate.' | translate }}</small>
+			</table>
+		</div>
+	</div>
+	<div class="col-xs-12">
+		<div class="form-group">
+			<label>{{ 'Attached Add On Products' | translate }}</label>
+			<table class="table table-striped form-group" *ngIf="didInitialize()">
+				<tbody class="input-group">
+					<tr *ngFor="let addOnProductItem of addOnProductItemList; let currentIndex = index">
+						<td>
+							<span> {{addOnProductItem.addOnProductSnapshot.name}}</span>
+							<br/>
+							<div class="input-group">
+								<select class="form-control" [ngModel]="addOnProductItem.strategy" (ngModelChange)="didChangeStrategyOn(addOnProductItem, $event)" [disabled]="readonly">
+									<option *ngFor="let itemStrategy of itemStrategyList" [ngValue]="itemStrategy">{{ getStrategyValueDisplayString(itemStrategy) | translate }}</option>
+								</select>
+							</div> 
+						</td>
+						<td>
+							{{ccy.nativeSymbol}} {{addOnProductItem.addOnProductSnapshot.price | price}}
+						</td>
+						<td *ngIf="!readonly">
+							<a class="btn btn-xs" (click)="removeAddOnProductItemAtIndex(currentIndex)">
+								<i class="fa unitpal-font">\</i> {{ 'Remove' | translate }}
+							</a>
+						</td>
+					</tr>
+					<tr *ngIf="readonly && addOnProductItemList.length == 0">
+						<td><small class="text-muted">{{ 'No Add-On Products added' | translate }}</small></td><td></td><td></td>
+					</tr>
+					<tr *ngIf="!readonly">
+						<td>
+							<a class="btn btn-xs" (click)="openAddOnProductSelectModal()"><i class="fa unitpal-font">'</i> {{ 'Add' | translate }} </a>
+						</td>
+					</tr>
+				</tbody>
+				<small class="text-muted"><i class="fa fa-info-circle"></i> {{ 'You can attach Add On Products on the Price Product that will appear as separate items on the invoice. Their price is not included in the Room Price.' | translate }}</small>
+			</table>
+		</div>
+	</div>
 </div>

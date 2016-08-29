@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 import {Observer} from 'rxjs/Observer';
 import {AppContext, ThServerApi} from '../../../../common/utils/AppContext';
+import {CustomerDO} from './data-objects/CustomerDO';
 import {CustomersDO} from './data-objects/CustomersDO';
 
 @Injectable()
@@ -15,6 +16,12 @@ export class EagerCustomersService {
 		}
 		return this.getCustomersBySearchCriteria({ customerIdList: customerIdList });
 	}
+	public getCustomerById(customerId: string): Observable<CustomerDO> {
+		return this.getCustomersById([customerId]).map((customersContainer: CustomersDO) => {
+			return customersContainer.customerList[0];
+		});
+	}
+
 	public getCustomersByBookingCode(bookingCode: string): Observable<CustomersDO> {
 		if (!bookingCode || !_.isString(bookingCode)) {
 			return this.getEmptyResult();

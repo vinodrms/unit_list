@@ -1,5 +1,6 @@
 import {Component, Inject, ViewContainerRef} from '@angular/core';
-import {ROUTER_DIRECTIVES, RouteConfig} from '@angular/router-deprecated';
+import {ROUTER_DIRECTIVES} from '@angular/router';
+
 import {BaseComponent} from '../../../common/base/BaseComponent';
 import {IToaster} from '../../../common/utils/toaster/IToaster';
 import {IModalService} from '../../../common/utils/modals/IModalService';
@@ -11,14 +12,9 @@ import {MainWizardComponent} from '../containers/wizard/main/MainWizardComponent
     template: `
 		<router-outlet></router-outlet>
 	`,
-	directives: [ROUTER_DIRECTIVES]
+	directives: [ROUTER_DIRECTIVES],
+	entryComponents: [MainHomeComponent, MainWizardComponent]
 })
-
-@RouteConfig([
-	{ path: '/...', name: 'MainHomeComponent', component: MainHomeComponent, useAsDefault: true },
-	{ path: '/wizard/...', name: 'MainWizardComponent', component: MainWizardComponent }
-])
-
 export class MainLayoutInternalComponent extends BaseComponent {
 	constructor(viewContainerRef: ViewContainerRef, @Inject(IToaster) toaster: IToaster, @Inject(IModalService) modalService: IModalService) {
 		super();

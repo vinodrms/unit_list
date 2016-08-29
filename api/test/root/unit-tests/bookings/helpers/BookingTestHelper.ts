@@ -1,6 +1,7 @@
 import {DefaultDataBuilder} from '../../../../db-initializers/DefaultDataBuilder';
 import {TestContext} from '../../../../helpers/TestContext';
 import {PriceProductDO, PriceProductStatus} from '../../../../../core/data-layer/price-products/data-objects/PriceProductDO';
+import {PriceProductIncludedItemsDO} from '../../../../../core/data-layer/price-products/data-objects/included-items/PriceProductIncludedItemsDO';
 import {AllotmentDO} from '../../../../../core/data-layer/allotments/data-objects/AllotmentDO';
 import {RoomCategoryStatsDO} from '../../../../../core/data-layer/room-categories/data-objects/RoomCategoryStatsDO';
 import {PriceProductsHelper} from '../../price-products/helpers/PriceProductsHelper';
@@ -17,6 +18,7 @@ import {InvoicePaymentMethodType} from '../../../../../core/data-layer/invoices/
 import {DefaultPriceProductBuilder} from '../../../../db-initializers/builders/DefaultPriceProductBuilder';
 import {BookingSearchDO} from '../../../../../core/domain-layer/bookings/search-bookings/BookingSearchDO';
 import {CustomerDO} from '../../../../../core/data-layer/customers/data-objects/CustomerDO';
+import {AddOnProductDO} from '../../../../../core/data-layer/add-on-products/data-objects/AddOnProductDO';
 import {TransientBookingItemDO} from '../../../../../core/domain-layer/bookings/search-bookings/TransientBookingItemDO';
 
 import _ = require('underscore');
@@ -43,6 +45,15 @@ export class BookingTestHelper {
         priceProductItem.status = PriceProductStatus.Active;
         priceProductItem.roomCategoryIdList = roomCategoryIdList;
         priceProductItem.price = DefaultPriceProductBuilder.getPricePerPerson(testDataBuilder.roomCategoryStatsList);
+        
+        priceProductItem.includedItems = new PriceProductIncludedItemsDO();
+        var breakfastAop = _.find(testDataBuilder.addOnProductList, (aop: AddOnProductDO) => {
+            return aop.categoryId === testDataBuilder.breakfastAddOnProductCategory.id;
+        });
+        priceProductItem.includedItems.attachedAddOnProductItemList = [];
+        priceProductItem.includedItems.includedBreakfastAddOnProductSnapshot = breakfastAop.getAddOnProductSnapshotDO();
+        priceProductItem.includedItems.indexedAddOnProductIdList = [breakfastAop.id];
+
         var savePPItem = new SavePriceProductItem(testContext.appContext, testContext.sessionContext);
         return savePPItem.save(priceProductItem);
     }
@@ -102,7 +113,7 @@ export class BookingTestHelper {
         return capacity;
     }
 
-    private generateRandomFutureInterval(testDataBuilder: DefaultDataBuilder): ThDateIntervalDO {
+    public generateRandomFutureInterval(testDataBuilder: DefaultDataBuilder): ThDateIntervalDO {
         var thTimestamp = ThTimestampDO.buildThTimestampForTimezone(testDataBuilder.hotelDO.timezone);
         var startDate = this._thDateUtils.addDaysToThDateDO(thTimestamp.thDateDO, this._testUtils.getRandomIntBetween(10, 200));
         var endDate = this._thDateUtils.addDaysToThDateDO(startDate.buildPrototype(), this._testUtils.getRandomIntBetween(1, 7));

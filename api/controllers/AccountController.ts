@@ -25,9 +25,9 @@ class AccountController extends BaseController {
 		var appContext: AppContext = req.appContext;
 		var hotelActivateAccount = new UserAccountActivation(req.appContext, req.sessionContext, req.query);
 		hotelActivateAccount.activate().then((result: any) => {
-			res.redirect(appContext.getUnitPalConfig().getAppContextRoot() + "/?loginStatusCode=" + LoginStatusCode.AccountActivationOk);
+			res.redirect(appContext.getUnitPalConfig().getAppContextRoot() + "/login/" + LoginStatusCode.AccountActivationOk);
 		}).catch((err: any) => {
-			res.redirect(appContext.getUnitPalConfig().getAppContextRoot() + "/?loginStatusCode=" + LoginStatusCode.AccountActivationError);
+			res.redirect(appContext.getUnitPalConfig().getAppContextRoot() + "/login/" + LoginStatusCode.AccountActivationError);
 		});
 	}
 	public logIn(req: Express.Request, res: Express.Response) {

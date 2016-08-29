@@ -1,0 +1,13 @@
+<div class="modal-header text-center">
+	<button type="button" class="close" (click)="closeDialog()">&times;</button>
+	<h4 class="modal-title">{{ pageTitle | translate }}</h4>
+</div>
+
+<div class="modal-body">
+    <chart-component *ngIf="didInitChartData" [chartDetails]="chartComponentDO"></chart-component>
+</div>
+<div class="modal-footer">
+	<button (click)="closeDialog()" type="button" class="btn btn-primary">
+		{{ 'Close' | translate }}
+	</button>
+</div>

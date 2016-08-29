@@ -60,6 +60,9 @@ export class ThDateIntervalDO extends BaseDO implements IThInterval<ThDateDO> {
 		outInterval.end = end;
 		return outInterval;
 	}
+	public buildPrototype(): ThDateIntervalDO {
+		return ThDateIntervalDO.buildThDateIntervalDO(this.start.buildPrototype(), this.end.buildPrototype());
+	}
 
 	public toString(): string {
 		return this.start.toString() + " - " + this.end.toString();

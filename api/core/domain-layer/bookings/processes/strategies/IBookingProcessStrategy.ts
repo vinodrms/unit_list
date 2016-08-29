@@ -10,5 +10,5 @@ export interface BookingStrategyMatchParams {
 
 export interface IBookingProcessStrategy {
     getMatchingSearchCriteria(params: BookingStrategyMatchParams): BookingSearchCriteriaRepoDO;
-    updateMatchedBooking(bookingDO: BookingDO);
+    updateMatchedBooking(bookingDO: BookingDO, params: BookingStrategyMatchParams);
 }

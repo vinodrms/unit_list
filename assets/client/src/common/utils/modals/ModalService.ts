@@ -54,7 +54,7 @@ export class ModalService implements IModalService {
 	}
 	private updateModalBodyMaxHeight() {
 		$('.modal .modal-body').css('overflow-y', 'auto');
-		$('.modal .modal-body').css('max-height', $(window).height() * 0.8);
+		$('.modal .modal-body').css('max-height', $(window).height() * 0.7);
 	}
 
 	public confirm(title: string, content: string, confirmationButtons: ConfirmationModalButtons, onConfirmCallback: { (): void }, onRejectCallback?: { (): void }) {

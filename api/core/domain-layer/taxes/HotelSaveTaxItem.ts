@@ -3,6 +3,7 @@ import {ThError} from '../../utils/th-responses/ThError';
 import {ThStatusCode} from '../../utils/th-responses/ThResponse';
 import {AppContext} from '../../utils/AppContext';
 import {SessionContext} from '../../utils/SessionContext';
+import {ThUtils} from '../../utils/ThUtils';
 import {HotelSaveTaxItemDO} from './HotelSaveTaxItemDO';
 import {TaxResponseRepoDO} from '../../data-layer/taxes/repositories/ITaxRepository';
 import {ValidationResultParser} from '../common/ValidationResultParser';
@@ -10,10 +11,13 @@ import {TaxDO} from '../../data-layer/taxes/data-objects/TaxDO';
 import {TaxItemActionFactory} from './actions/TaxItemActionFactory';
 
 export class HotelSaveTaxItem {
+	private _thUtils: ThUtils;
 	private _taxItemDO: HotelSaveTaxItemDO;
 
 	constructor(private _appContext: AppContext, private _sessionContext: SessionContext) {
+		this._thUtils = new ThUtils();
 	}
+
 	public save(taxItemDO: HotelSaveTaxItemDO): Promise<TaxDO> {
 		this._taxItemDO = taxItemDO;
 		return new Promise<TaxDO>((resolve: { (result: TaxDO): void }, reject: { (err: ThError): void }) => {
@@ -49,6 +53,7 @@ export class HotelSaveTaxItem {
 		var tax = new TaxDO();
 		tax.buildFromObject(this._taxItemDO);
 		tax.hotelId = this._sessionContext.sessionDO.hotel.id;
+		tax.value = this._thUtils.roundNumberToTwoDecimals(tax.value);
 		return tax;
 	}
 }

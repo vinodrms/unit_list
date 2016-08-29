@@ -111,10 +111,11 @@ export class MongoTaxRepository extends MongoRepository implements ITaxRepositor
 				"value": tax.value
 			});
 	}
-	public deleteTax(taxMeta: TaxMetaRepoDO, taxItemMeta: TaxItemMetaRepoDO): Promise<TaxDO> {
+	public deleteTax(taxMeta: TaxMetaRepoDO, taxItemMeta: TaxItemMetaRepoDO, tax: TaxDO): Promise<TaxDO> {
 		return this.findAndModifyTax(taxMeta, taxItemMeta,
 			{
-				"status": TaxStatus.Deleted
+				"status": TaxStatus.Deleted,
+				"name": this.appendUniqueSuffix(tax.name)
 			});
 	}
 	private findAndModifyTax(taxMeta: TaxMetaRepoDO, taxItemMeta: TaxItemMetaRepoDO, updateQuery: Object): Promise<TaxDO> {

@@ -33,14 +33,21 @@ export class RoomCategoryCapacityDO extends BaseDO {
     }
 
     public canFit(capacityToCheck: ConfigCapacityDO): boolean {
-        if (this.totalCapacity.noAdults < capacityToCheck.noAdults) return false;
+        return this.canFitCore(this.totalCapacity, capacityToCheck);
+    }
+    public canFitInStationaryBeds(capacityToCheck: ConfigCapacityDO): boolean {
+        return this.canFitCore(this.stationaryCapacity, capacityToCheck);
+    }
 
-        var maxChildrenCapacity = this.totalCapacity.noChildren;
+    private canFitCore(referenceCapacity: ConfigCapacityDO, capacityToCheck: ConfigCapacityDO): boolean {
+        if (referenceCapacity.noAdults < capacityToCheck.noAdults) return false;
+
+        var maxChildrenCapacity = referenceCapacity.noChildren;
         // the adults are replaceable with a child
-        maxChildrenCapacity += (this.totalCapacity.noAdults - capacityToCheck.noAdults);
+        maxChildrenCapacity += (referenceCapacity.noAdults - capacityToCheck.noAdults);
         if (maxChildrenCapacity < capacityToCheck.noChildren) return false;
 
-        if (this.totalCapacity.noBabies < capacityToCheck.noBabies) return false;
+        if (referenceCapacity.noBabies < capacityToCheck.noBabies) return false;
         return true;
     }
 }

@@ -7,7 +7,7 @@ import {DefaultRoomCategoryBuilder} from './builders/DefaultRoomCategoryBuilder'
 import {HotelDO} from '../../core/data-layer/hotel/data-objects/HotelDO';
 import {UserDO} from '../../core/data-layer/hotel/data-objects/user/UserDO';
 import {PaymentMethodDO} from '../../core/data-layer/common/data-objects/payment-method/PaymentMethodDO';
-import {AddOnProductCategoryDO} from '../../core/data-layer/common/data-objects/add-on-product/AddOnProductCategoryDO';
+import {AddOnProductCategoryDO, AddOnProductCategoryType} from '../../core/data-layer/common/data-objects/add-on-product/AddOnProductCategoryDO';
 import {AmenityDO} from '../../core/data-layer/common/data-objects/amenity/AmenityDO';
 import {BedTemplateDO} from '../../core/data-layer/common/data-objects/bed-template/BedTemplateDO';
 import {BedDO} from '../../core/data-layer/common/data-objects/bed/BedDO';
@@ -31,6 +31,9 @@ import {DefaultAllotmentBuilder} from './builders/DefaultAllotmentBuilder';
 import {AllotmentDO} from '../../core/data-layer/allotments/data-objects/AllotmentDO';
 import {DefaultBookingBuilder} from './builders/DefaultBookingBuilder';
 import {BookingDO} from '../../core/data-layer/bookings/data-objects/BookingDO';
+import {DefaultInvoiceGroupBuilder} from './builders/DefaultInvoiceGroupBuilder';
+import {InvoiceGroupDO} from '../../core/data-layer/invoices/data-objects/InvoiceGroupDO';
+import {InvoiceDO} from '../../core/data-layer/invoices/data-objects/InvoiceDO';
 
 import _ = require("underscore");
 
@@ -59,6 +62,7 @@ export class DefaultDataBuilder {
     private _priceProductList: PriceProductDO[];
     private _allotmentList: AllotmentDO[];
     private _bookingList: BookingDO[];
+    private _invoiceGroupList: InvoiceGroupDO[];
 
     constructor(private _testContext: TestContext) {
         this._repositoryCleaner = new RepositoryCleanerWrapper(this._testContext.appContext.getUnitPalConfig());
@@ -167,7 +171,8 @@ export class DefaultDataBuilder {
                 this._roomCategoryStatsList = roomCategoryStatsList;
 
                 var priceProductBuilder = new DefaultPriceProductBuilder(this._testContext);
-                return priceProductBuilder.loadPriceProducts(priceProductBuilder, this._roomCategoryStatsList, this._taxes, this._addOnProductList);
+                return priceProductBuilder.loadPriceProducts(priceProductBuilder, this._roomCategoryStatsList, 
+                    this._taxes, this._addOnProductList, this.breakfastAddOnProductCategory.id);
             }).then((priceProductList: PriceProductDO[]) => {
                 this._priceProductList = priceProductList;
 
@@ -180,11 +185,16 @@ export class DefaultDataBuilder {
                 return allotmentBuilder.loadAllotments(allotmentBuilder, this._priceProductList, this._customerList);
             }).then((allotmentList: AllotmentDO[]) => {
                 this._allotmentList = allotmentList;
-                
+
                 var bookingBuilder = new DefaultBookingBuilder(this._testContext);
                 return bookingBuilder.loadBookings(bookingBuilder, this._hotelDO, this._customerList, this.roomCategoryList, this.priceProductList);
             }).then((bookingList: BookingDO[]) => {
                 this._bookingList = bookingList;
+
+                var invoiceGroupBuilder = new DefaultInvoiceGroupBuilder(this._testContext);
+                return invoiceGroupBuilder.loadInvoiceGroups(invoiceGroupBuilder, this._customerList, this._addOnProductList, this._bookingList);
+            }).then((invoiceGroupList: InvoiceGroupDO[]) => {
+                this._invoiceGroupList = invoiceGroupList;
 
                 resolve(true);
             }).catch((err: any) => {
@@ -240,6 +250,11 @@ export class DefaultDataBuilder {
     public get addOnProductCategoryList(): AddOnProductCategoryDO[] {
         return this._addOnProductCategoryList;
     }
+    public get breakfastAddOnProductCategory(): AddOnProductCategoryDO {
+        return _.find(this._addOnProductCategoryList, (aopCateg: AddOnProductCategoryDO) => {
+            return aopCateg.type === AddOnProductCategoryType.Breakfast;
+        });
+    }
     public get addOnProductList(): AddOnProductDO[] {
         return this._addOnProductList;
     }
@@ -254,6 +269,18 @@ export class DefaultDataBuilder {
     }
     public get bookingList(): BookingDO[] {
         return this._bookingList;
+    }
+    public get invoiceGroupList(): InvoiceGroupDO[] {
+        return this._invoiceGroupList;
+    }
+    public getNoUnpaidInvoices(): number {
+        var noUnpaidInvoices = 0;
+        _.forEach(this._invoiceGroupList, (invoiceGroup: InvoiceGroupDO) => {
+            _.forEach(invoiceGroup.invoiceList, (invoice: InvoiceDO) => {
+                if (!invoice.isPaid()) { noUnpaidInvoices++; };
+            });
+        });
+        return noUnpaidInvoices;
     }
     public get defaultTimezone(): string {
         return this._hotelDO.timezone;

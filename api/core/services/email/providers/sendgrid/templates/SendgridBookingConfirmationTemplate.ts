@@ -1,8 +1,8 @@
 import {ISendgridTemplate} from '../ISendgridTemplate';
-import {BookingConfirmationTemplateDO} from '../../../data-objects/BookingConfirmationTemplateDO';
+import {BookingConfirmationEmailTemplateDO} from '../../../data-objects/BookingConfirmationEmailTemplateDO';
 
 export class SendgridBookingConfirmationTemplate implements ISendgridTemplate {
-    constructor(private _emailTemplateDO: BookingConfirmationTemplateDO) {
+    constructor(private _emailTemplateDO: BookingConfirmationEmailTemplateDO) {
     }
 
     public getTemplateMetadata(): any {

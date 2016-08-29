@@ -25,6 +25,7 @@ import {CustomerRegisterEditContainerComponent} from '../pages/customer-edit/con
 	pipes: [TranslationPipe]
 })
 export class CustomerRegisterComponent extends BaseComponent implements AfterViewInit {
+	@Input() showLinkToOperationalModal: boolean = false;
 	@Input() allowCustomerSelection: boolean = false;
     @Output() protected onScreenStateTypeChanged = new EventEmitter();
 	@ViewChild('overviewBottom', { read: ViewContainerRef }) private _overviewBottomVCRef: ViewContainerRef;

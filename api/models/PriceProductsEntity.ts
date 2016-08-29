@@ -34,8 +34,8 @@ class PriceProductsEntity extends BasePersistentEntity {
                 type: 'boolean',
                 required: true
             },
-			addOnProductIdList: {
-				type: 'array',
+			includedItems: {
+				type: 'json',
 				defaultsTo: []
 			},
 			roomCategoryIdList: {

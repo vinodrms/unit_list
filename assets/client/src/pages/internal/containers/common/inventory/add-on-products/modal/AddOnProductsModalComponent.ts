@@ -14,6 +14,10 @@ import {HotelAggregatorService} from '../../../../../services/hotel/HotelAggrega
 import {HotelService} from '../../../../../services/hotel/HotelService';
 import {AddOnProductTableMetaBuilderService} from '../main/services/AddOnProductTableMetaBuilderService';
 import {LazyLoadTableMeta, TableRowCommand} from '../../../../../../../common/utils/components/lazy-loading/utils/LazyLoadTableMeta';
+import {AddOnProductCategoriesService} from '../../../../../services/settings/AddOnProductCategoriesService';
+import {AddOnProductCategoriesDO} from '../../../../../services/settings/data-objects/AddOnProductCategoriesDO';
+import {AddOnProductCategoryDO} from '../../../../../services/common/data-objects/add-on-product/AddOnProductCategoryDO';
+import {AddOnProductsModalInput} from './services/utils/AddOnProductsModalInput';
 
 @Component({
 	selector: 'add-on-products-modal',
@@ -31,18 +35,39 @@ export class AddOnProductsModalComponent extends BaseComponent implements ICusto
 	constructor(private _appContext: AppContext,
 		private _modalDialogRef: ModalDialogRef<AddOnProductDO[]>,
 		private _tableBuilder: AddOnProductTableMetaBuilderService,
-		private _addOnProductsService: AddOnProductsService) {
+		private _addOnProductsService: AddOnProductsService,
+		private _addOnProductCategoriesService: AddOnProductCategoriesService,
+		private _modalInput: AddOnProductsModalInput) {
 		super();
 	}
 
 	public ngAfterViewInit() {
-		this.bootstrapAddOnProductsTable();
+		this._addOnProductCategoriesService.getAddOnProductCategoriesDO().subscribe((addOnProductCategoriesDO: AddOnProductCategoriesDO) => {
+            var breakfastCategory: AddOnProductCategoryDO = addOnProductCategoriesDO.getBreakfastCategory();
+            if (this._modalInput.filterBreakfast) {
+                this._addOnProductsService.setDefaultCategory(breakfastCategory);
+            }
+            else {
+                this._addOnProductsService.setDefaultNotEqualWithCategory(breakfastCategory);
+            }
+            this.bootstrapAddOnProductsTable();
+        });
 	}
 	private bootstrapAddOnProductsTable() {
 		var lazyLoadTableMeta: LazyLoadTableMeta = this._tableBuilder.buildLazyLoadTableMeta(false);
-		lazyLoadTableMeta.supportedRowCommandList = [TableRowCommand.Search, TableRowCommand.MultipleSelect];
+		var selectionRowCommand = TableRowCommand.Select;
+		if (this._modalInput.multiSelection) {
+			selectionRowCommand = TableRowCommand.MultipleSelect;
+		}
+		lazyLoadTableMeta.supportedRowCommandList = [TableRowCommand.Search, selectionRowCommand];
 		lazyLoadTableMeta.autoSelectRows = true;
 		this._aopTableComponent.bootstrap(this._addOnProductsService, lazyLoadTableMeta);
+	}
+	public get pageTitle(): string {
+		if (this._modalInput.filterBreakfast) {
+			return "Select Breakfast";
+		}
+		return "Select Add-On Product";
 	}
 
 	public closeDialog() {
@@ -58,14 +83,18 @@ export class AddOnProductsModalComponent extends BaseComponent implements ICusto
 
 	public didSelectAddOnProductList(addOnProductVMList: AddOnProductVM[]) {
 		this._selectedAddOnProductList = _.map(addOnProductVMList, (aopVm: AddOnProductVM) => {
-			return aopVm.addOnProduct;	
+			return aopVm.addOnProduct;
 		});
 	}
-	public didSelectAddOnProduct(): boolean {
+	public didSelectAddOnProduct(addOnProductVM: AddOnProductVM) {
+		this._selectedAddOnProductList = [addOnProductVM.addOnProduct];
+	}
+
+	public didSelectAtLeastOneAddOnProduct(): boolean {
 		return this._selectedAddOnProductList.length > 0;
 	}
 	public triggerSelectedAddOnProduct() {
-		if (!this.didSelectAddOnProduct()) {
+		if (!this.didSelectAtLeastOneAddOnProduct()) {
 			return;
 		}
 		this._modalDialogRef.addResult(this._selectedAddOnProductList);

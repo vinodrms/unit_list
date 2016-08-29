@@ -61,7 +61,8 @@ export class CustomersTestHelper {
 			contactName: "Ionut Paraschiv",
 			email: "ionut.paraschiv@3angle.tech",
 			payInvoiceByAgreement: false,
-			vatCode: "RO34121562"
+			vatCode: "RO34121562",
+			receiveBookingConfirmations: true
 		}
 	}
 

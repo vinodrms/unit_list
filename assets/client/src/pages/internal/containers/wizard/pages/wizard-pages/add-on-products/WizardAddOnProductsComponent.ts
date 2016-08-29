@@ -22,10 +22,10 @@ import {WizardStepsComponent} from '../../utils/wizard-steps/WizardStepsComponen
 export class WizardAddOnProductsComponent extends BaseComponent implements OnInit, AfterViewInit {
 	@ViewChild(AddOnProductsComponent) private _addOnProductsComponent: AddOnProductsComponent;
 	private _isEditScreen: boolean;
-	
+
 	private _wizardController: IWizardController;
 
-	constructor(private _wizardService: WizardService, 
+	constructor(private _wizardService: WizardService,
 		private _addOnProductsStateService: WizardAddOnProductsStateService,
 		private _addOnProductsTotalCountService: AddOnProductsTotalCountService) {
 		super();
@@ -33,9 +33,9 @@ export class WizardAddOnProductsComponent extends BaseComponent implements OnIni
 		this._wizardController = _wizardService;
 		this.isEditScreen = false;
 	}
-	
+
 	public ngOnInit() {
-		this._addOnProductsTotalCountService.getTotalCountDO().subscribe((totalCount: TotalCountDO) => {
+		this._addOnProductsTotalCountService.getTotalCountDO({ filterBreakfastCategory: false }).subscribe((totalCount: TotalCountDO) => {
 			this._addOnProductsStateService.totalNoOfAddOnProducts = totalCount.numOfItems;
 		});
 	}
@@ -61,14 +61,14 @@ export class WizardAddOnProductsComponent extends BaseComponent implements OnIni
 				break;
 		}
 	}
-	
+
 	public get isEditScreen(): boolean {
 		return this._isEditScreen;
 	}
 	public set isEditScreen(isEditScreen: boolean) {
 		this._isEditScreen = isEditScreen;
 	}
-	
+
 	public didDeleteItem(deletedAddOnProduct: AddOnProductDO) {
 		this._addOnProductsTotalCountService.updateTotalCount();
 	}

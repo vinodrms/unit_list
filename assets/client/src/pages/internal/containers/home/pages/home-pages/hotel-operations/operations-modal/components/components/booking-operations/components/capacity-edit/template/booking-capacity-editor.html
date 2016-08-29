@@ -1,0 +1,55 @@
+<div class="col-xs-12 col-sm-1 padding-top-10px">
+    {{'Guests' | translate}}
+</div>
+<div class="col-xs-12 col-sm-6 padding-top-5px">
+    <div class="row">
+        <div class="col-xs-12" *ngIf="readonly">
+            <div class="row">
+                <div class="col-xs-12">
+                    <span class="padding-left-10px">
+                        <config-capacity [configCapacity]="bookingCapacity"></config-capacity>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12" *ngIf="!readonly">
+            <div class="col-sm-4 col-xs-12 form-group-small">
+                <div class="form-group">
+                    <div class="input-group input-group-small" [ngClass]="{'form-warning': !bookingCapacity.validNoAdults()}">
+                        <span class="input-group-addon"><small></small> <i class="fa unitpal-font">:</i></span>
+                        <input type="number" class="form-control" [(ngModel)]="bookingCapacity.noAdults">
+                    </div>
+                    <label class="form-warning"><small><i class="fa fa-info-circle"></i> {{'Enter a valid number' | translate}}</small></label>
+                </div>
+            </div>
+            <div class="col-sm-4 col-xs-12 form-group-small">
+                <div class="form-group">
+                    <div class="input-group input-group-small" [ngClass]="{'form-warning': !bookingCapacity.validNoChildren()}">
+                        <span class="input-group-addon"><small></small> <i class="fa unitpal-font">;</i></span>
+                        <input type="number" class="form-control" [(ngModel)]="bookingCapacity.noChildren">
+                    </div>
+                    <label class="form-warning"><small><i class="fa fa-info-circle"></i> {{'Enter a valid number' | translate}}</small></label>
+                </div>
+            </div>
+            <div class="col-sm-4 col-xs-12 form-group-small">
+                <div class="form-group">
+                    <div class="input-group input-group-small" [ngClass]="{'form-warning': !bookingCapacity.validNoBabies()}">
+                        <span class="input-group-addon"><small></small> <i class="fa unitpal-font">B</i></span>
+                        <input type="number" class="form-control" [(ngModel)]="bookingCapacity.noBabies">
+                    </div>
+                    <label class="form-warning"><small><i class="fa fa-info-circle"></i> {{'Enter a valid number' | translate}}</small></label>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-xs-12 col-sm-5 padding-top-5px padding-left-11px" *ngIf="canEditCapacity">
+    <edit-save-button-group
+        (onEditStart)="startEdit()"
+        (onEditEnd)="endEdit()"
+        (onSavePressed)="saveBookingCapacity()"
+        [isSaving]="isSaving"
+        [isEditing]="!readonly"
+        >
+    </edit-save-button-group>
+</div>

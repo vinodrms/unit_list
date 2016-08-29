@@ -82,8 +82,9 @@ module.exports.routes = {
     'POST /api/roomCategories': 'RoomCategoriesController.getRoomCategoryList',
     'POST /api/roomCategories/saveRoomCategoryItem': 'RoomCategoriesController.saveRoomCategoryItem',
 	'POST /api/roomCategories/deleteRoomCategoryItem': 'RoomCategoriesController.deleteRoomCategoryItem',
-    'GET /api/roomsCategories/roomCategoryItem': 'RoomCategoriesController.getRoomCategoryById',
-    'POST /api/roomsCategories/stats': 'RoomCategoriesController.getRoomCategoryStatsList',
+    'GET /api/roomCategories/roomCategoryItem': 'RoomCategoriesController.getRoomCategoryById',
+    'POST /api/roomCategories/stats': 'RoomCategoriesController.getRoomCategoryStatsList',
+	'POST /api/usedRoomCategories/stats': 'RoomCategoriesController.geUsedRoomCategoryStatsList',
 
 	'POST /api/priceProducts': 'PriceProductsController.getPriceProductList',
 	'POST /api/priceProducts/count': 'PriceProductsController.getPriceProductListCount',
@@ -93,8 +94,9 @@ module.exports.routes = {
 	'POST /api/priceProducts/draftPriceProductItem': 'PriceProductsController.draftPriceProductItem',
 	'GET /api/priceProducts/priceProductItem': 'PriceProductsController.getPriceProductById',
 
-	'POST /api/yieldManager/closePriceProducts': 'YieldManagerController.closePriceProducts',
-	'POST /api/yieldManager/openPriceProducts': 'YieldManagerController.openPriceProducts',
+	'POST /api/yieldManager/yieldPriceProducts': 'YieldManagerController.yieldPriceProducts',
+	'POST /api/yieldManager/getPriceProductYieldItems': 'YieldManagerController.getPriceProductYieldItems',
+	'POST /api/yieldManager/getKeyMetrics': 'YieldManagerController.getKeyMetrics',
 
     'GET /api/hotelConfigurations/yieldFilters': 'HotelConfigurationsController.getYieldFilterConfiguration',
     'POST /api/hotelConfigurations/saveYieldFilterValue': 'HotelConfigurationsController.saveYieldFilterValue',
@@ -114,10 +116,37 @@ module.exports.routes = {
 	'GET /api/bookings/bookingItem': 'BookingsController.getBookingById',
 	'POST /api/bookings/search': 'BookingsController.searchBookings',
 	'POST /api/bookings/add': 'BookingsController.addBookings',
+	'POST /api/bookings/occupancy': 'BookingsController.getOccupancy',
 
 	'POST /api/invoiceGroups': 'InvoiceGroupsController.getInvoiceGroupList',
     'POST /api/invoiceGroups/count': 'InvoiceGroupsController.getInvoiceGroupListCount',
-    'GET /api/invoiceGroups/invoiceGroupItem': 'InvoiceGroupsController.getInvoiceGroupById',
+	'GET /api/invoiceGroups/invoiceGroupItem': 'InvoiceGroupsController.getInvoiceGroupById',
+	'POST /api/invoiceGroups/saveInvoicegroupItem': 'InvoiceGroupsController.saveInvoiceGroupItem',
+
+	'POST /api/hotelOperations/dashboard/arrivals': 'HotelDashboardOperationsController.getArrivals',
+	'POST /api/hotelOperations/dashboard/departures': 'HotelDashboardOperationsController.getDepartures',
+	'POST /api/hotelOperations/dashboard/rooms': 'HotelDashboardOperationsController.getRooms',
+
+	'POST /api/hotelOperations/room/checkIn': 'HotelRoomOperationsController.checkIn',
+	'POST /api/hotelOperations/room/reserve': 'HotelRoomOperationsController.reserveRoom',
+	'POST /api/hotelOperations/room/change': 'HotelRoomOperationsController.changeRoom',
+	'POST /api/hotelOperations/room/checkOut': 'HotelRoomOperationsController.checkOut',
+	'POST /api/hotelOperations/room/maintenanceStatus': 'HotelRoomOperationsController.changeMaintenanceStatus',
+	'POST /api/hotelOperations/room/rollawayBedStatus': 'HotelRoomOperationsController.changeRollawayBedStatus',
+	'GET /api/hotelOperations/room/attachedBooking': 'HotelRoomOperationsController.getAttachedBooking',
+
+	'POST /api/hotelOperations/booking/possiblePrices': 'HotelBookingOperationsController.getPossiblePrices',
+	'POST /api/hotelOperations/booking/changeDates': 'HotelBookingOperationsController.changeDates',
+	'POST /api/hotelOperations/booking/changeNoShowTime': 'HotelBookingOperationsController.changeNoShowTime',
+	'POST /api/hotelOperations/booking/changeCapacity': 'HotelBookingOperationsController.changeCapacity',
+	'POST /api/hotelOperations/booking/addPaymentGuarantee': 'HotelBookingOperationsController.addPaymentGuarantee',
+	'POST /api/hotelOperations/booking/changeDetails': 'HotelBookingOperationsController.changeDetails',
+	'POST /api/hotelOperations/booking/changeCustomers': 'HotelBookingOperationsController.changeCustomers',
+	'POST /api/hotelOperations/booking/cancel': 'HotelBookingOperationsController.cancel',
+	'POST /api/hotelOperations/booking/reactivate': 'HotelBookingOperationsController.reactivate',
+	'POST /api/hotelOperations/booking/reserveAddOnProducts': 'HotelBookingOperationsController.reserveAddOnProducts',
+
+	'POST /api/hotelOperations/common/sendEmail': 'HotelCommonOperationsController.sendEmail',
 
 	/*Front End Views	*/
 	'GET /home*': {

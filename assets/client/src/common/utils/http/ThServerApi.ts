@@ -37,6 +37,7 @@ export enum ThServerApi {
 	RoomCategories,
 	RoomCategoriesSaveItem,
 	RoomCategoriesStats,
+	UsedRoomCategoriesStats,
 	RoomsUsedRoomCategories,
 	HotelConfigurationsYieldFilters,
 	HotelConfigurationsSaveYieldFilterValue,
@@ -50,9 +51,11 @@ export enum ThServerApi {
 	CustomersCount,
 	CustomersSaveItem,
 	Allotments,
+	AllotmentItem,
 	AllotmentsCount,
 	AllotmentsSaveItem,
 	AllotmentsArchiveItem,
+
 	Notifications,
 	NotificationsCount,
 	NotificationsMarkAsRead,
@@ -60,6 +63,41 @@ export enum ThServerApi {
 	BookingsAdd,
 	Bookings,
 	BookingsCount,
+	BookingsOccupancy,
+	BookingsItem,
+
+	HotelOperationsDashboardArrivals,
+	HotelOperationsDashboardDepartures,
+	HotelOperationsDashboardRooms,
+
+	HotelOperationsRoomCheckIn,
+	HotelOperationsRoomReserve,
+	HotelOperationsRoomChange,
+	HotelOperationsRoomCheckOut,
+	HotelOperationsRoomChangeMaintenanceStatus,
+	HotelOperationsRoomChangeRollawayBedStatus,
+	HotelOperationsRoomGetAttachedBooking,
+
+	HotelOperationsBookingPossiblePrices,
+	HotelOperationsBookingChangeDates,
+	HotelOperationsBookingChangeNoShowTime,
+	HotelOperationsBookingChangeCapacity,
+	HotelOperationsBookingAddPaymentGuarantee,
+	HotelOperationsBookingChangeDetails,
+	HotelOperationsBookingChangeCustomers,
+	HotelOperationsBookingCancel,
+	HotelOperationsBookingReactivate,
+	HotelOperationsCommonSendEmail,
+	HotelOperationsBookingReserveAddOnProducts,
+
+	InvoiceGroups,
+	InvoiceGroupsCount,
+	InvoiceGroupItem,
+	InvoiceGroupsSaveItem,
+
+	YieldManagerYieldPriceProducts,
+	YieldManagerYieldGetPriceProductItems,
+	YieldManagerGetKeyMetrics,
 
 }
 
@@ -103,7 +141,8 @@ ThServerApiUrl[ThServerApi.RoomsSaveItem] = "/rooms/saveRoomItem";
 ThServerApiUrl[ThServerApi.RoomsDeleteItem] = "/rooms/deleteRoomItem";
 ThServerApiUrl[ThServerApi.RoomCategories] = "/roomCategories";
 ThServerApiUrl[ThServerApi.RoomCategoriesSaveItem] = "/roomCategories/saveRoomCategoryItem";
-ThServerApiUrl[ThServerApi.RoomCategoriesStats] = "/roomsCategories/stats";
+ThServerApiUrl[ThServerApi.RoomCategoriesStats] = "/roomCategories/stats";
+ThServerApiUrl[ThServerApi.UsedRoomCategoriesStats] = "/usedRoomCategories/stats";
 ThServerApiUrl[ThServerApi.RoomsUsedRoomCategories] = "/rooms/usedRoomCategories";
 ThServerApiUrl[ThServerApi.HotelConfigurationsYieldFilters] = "/hotelConfigurations/yieldFilters";
 ThServerApiUrl[ThServerApi.HotelConfigurationsSaveYieldFilterValue] = "/hotelConfigurations/saveYieldFilterValue";
@@ -117,9 +156,11 @@ ThServerApiUrl[ThServerApi.Customers] = "/customers";
 ThServerApiUrl[ThServerApi.CustomersCount] = "/customers/count";
 ThServerApiUrl[ThServerApi.CustomersSaveItem] = "/customers/saveCustomerItem";
 ThServerApiUrl[ThServerApi.Allotments] = "/allotments";
+ThServerApiUrl[ThServerApi.AllotmentItem] = "/allotments/allotmentItem";
 ThServerApiUrl[ThServerApi.AllotmentsCount] = "/allotments/count";
 ThServerApiUrl[ThServerApi.AllotmentsSaveItem] = "/allotments/saveAllotmentItem";
 ThServerApiUrl[ThServerApi.AllotmentsArchiveItem] = "/allotments/archiveAllotmentItem";
+
 ThServerApiUrl[ThServerApi.Notifications] = "/notifications";
 ThServerApiUrl[ThServerApi.NotificationsCount] = "/notifications/count";
 ThServerApiUrl[ThServerApi.NotificationsMarkAsRead] = "/notifications/markNotificationsAsRead";
@@ -127,6 +168,42 @@ ThServerApiUrl[ThServerApi.BookingsSearch] = "/bookings/search";
 ThServerApiUrl[ThServerApi.BookingsAdd] = "/bookings/add";
 ThServerApiUrl[ThServerApi.Bookings] = "/bookings";
 ThServerApiUrl[ThServerApi.BookingsCount] = "/bookings/count";
+ThServerApiUrl[ThServerApi.BookingsOccupancy] = "/bookings/occupancy";
+ThServerApiUrl[ThServerApi.BookingsItem] = "/bookings/bookingItem";
+
+ThServerApiUrl[ThServerApi.HotelOperationsDashboardArrivals] = "/hotelOperations/dashboard/arrivals";
+ThServerApiUrl[ThServerApi.HotelOperationsDashboardDepartures] = "/hotelOperations/dashboard/departures";
+ThServerApiUrl[ThServerApi.HotelOperationsDashboardRooms] = "/hotelOperations/dashboard/rooms";
+
+ThServerApiUrl[ThServerApi.HotelOperationsRoomCheckIn] = "/hotelOperations/room/checkIn";
+ThServerApiUrl[ThServerApi.HotelOperationsRoomReserve] = "/hotelOperations/room/reserve";
+ThServerApiUrl[ThServerApi.HotelOperationsRoomChange] = "/hotelOperations/room/change";
+ThServerApiUrl[ThServerApi.HotelOperationsRoomCheckOut] = "/hotelOperations/room/checkOut";
+ThServerApiUrl[ThServerApi.HotelOperationsRoomChangeMaintenanceStatus] = "/hotelOperations/room/maintenanceStatus";
+ThServerApiUrl[ThServerApi.HotelOperationsRoomChangeRollawayBedStatus] = "/hotelOperations/room/rollawayBedStatus";
+ThServerApiUrl[ThServerApi.HotelOperationsRoomGetAttachedBooking] = "/hotelOperations/room/attachedBooking";
+
+ThServerApiUrl[ThServerApi.HotelOperationsBookingPossiblePrices] = "/hotelOperations/booking/possiblePrices";
+ThServerApiUrl[ThServerApi.HotelOperationsBookingChangeDates] = "/hotelOperations/booking/changeDates";
+ThServerApiUrl[ThServerApi.HotelOperationsBookingChangeNoShowTime] = "/hotelOperations/booking/changeNoShowTime";
+ThServerApiUrl[ThServerApi.HotelOperationsBookingChangeCapacity] = "/hotelOperations/booking/changeCapacity";
+ThServerApiUrl[ThServerApi.HotelOperationsBookingAddPaymentGuarantee] = "/hotelOperations/booking/addPaymentGuarantee";
+ThServerApiUrl[ThServerApi.HotelOperationsBookingChangeDetails] = "/hotelOperations/booking/changeDetails";
+ThServerApiUrl[ThServerApi.HotelOperationsBookingChangeCustomers] = "/hotelOperations/booking/changeCustomers";
+ThServerApiUrl[ThServerApi.HotelOperationsBookingCancel] = "/hotelOperations/booking/cancel";
+ThServerApiUrl[ThServerApi.HotelOperationsBookingReactivate] = "/hotelOperations/booking/reactivate";
+ThServerApiUrl[ThServerApi.HotelOperationsBookingReserveAddOnProducts] = "/hotelOperations/booking/reserveAddOnProducts";
+
+ThServerApiUrl[ThServerApi.HotelOperationsCommonSendEmail] = "/hotelOperations/common/sendEmail";
+
+ThServerApiUrl[ThServerApi.InvoiceGroups] = "/invoiceGroups";
+ThServerApiUrl[ThServerApi.InvoiceGroupsCount] = "/invoiceGroups/count";
+ThServerApiUrl[ThServerApi.InvoiceGroupItem] = "/invoiceGroups/invoiceGroupItem";
+ThServerApiUrl[ThServerApi.InvoiceGroupsSaveItem] = "/invoiceGroups/saveInvoicegroupItem";
+
+ThServerApiUrl[ThServerApi.YieldManagerYieldPriceProducts] = "/yieldManager/yieldPriceProducts";
+ThServerApiUrl[ThServerApi.YieldManagerYieldGetPriceProductItems] = "/yieldManager/getPriceProductYieldItems";
+ThServerApiUrl[ThServerApi.YieldManagerGetKeyMetrics] = "/yieldManager/getKeyMetrics";
 
 export class ServerApiBuilder {
 	public static ApiRoot = "/api";

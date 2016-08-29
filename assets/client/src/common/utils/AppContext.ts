@@ -14,6 +14,8 @@ import {ThError} from './responses/ThError';
 export {ThError} from './responses/ThError';
 import {CountryCodeVatConvertor} from './convertors/CountryCodeVatConvertor';
 import {LoginStatusCode} from './responses/LoginStatusCode';
+import {GoogleAnalytics} from './analytics/GoogleAnalytics';
+import {IAnalytics} from './analytics/IAnalytics';
 
 @Injectable()
 export class AppContext {
@@ -27,7 +29,8 @@ export class AppContext {
 		public thTranslation: ThTranslation,
 		@Inject(IThHttp) public thHttp: IThHttp,
 		@Inject(IToaster) public toaster: IToaster,
-		@Inject(IModalService) public modalService: IModalService
+		@Inject(IModalService) public modalService: IModalService,
+		@Inject(IAnalytics) public analytics: IAnalytics
 	) {
 		this.thUtils = new ThUtils();
 		this.countryCodeVatConvertor = new CountryCodeVatConvertor();

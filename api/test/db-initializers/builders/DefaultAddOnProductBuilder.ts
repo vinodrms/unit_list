@@ -1,4 +1,4 @@
-import {AddOnProductCategoryDO} from '../../../core/data-layer/common/data-objects/add-on-product/AddOnProductCategoryDO';
+import {AddOnProductCategoryDO, AddOnProductCategoryType} from '../../../core/data-layer/common/data-objects/add-on-product/AddOnProductCategoryDO';
 import {TestContext} from '../../helpers/TestContext';
 import {AddOnProductDO, AddOnProductStatus} from '../../../core/data-layer/add-on-products/data-objects/AddOnProductDO';
 import {TaxResponseRepoDO} from '../../../core/data-layer/taxes/repositories/ITaxRepository';
@@ -13,11 +13,18 @@ export class DefaultAddOnProductBuilder implements IAddOnProductDataSource {
 	}
 
 	public getAddOnProductList(addOnProductCategoryList: AddOnProductCategoryDO[], taxes: TaxResponseRepoDO): AddOnProductDO[] {
-		var defaultCategId = addOnProductCategoryList[0].id;
+		var breakfastCategId = _.find(addOnProductCategoryList, (addOnProductCategory: AddOnProductCategoryDO) => {
+			return addOnProductCategory.type == AddOnProductCategoryType.Breakfast;
+		}).id;
+		var otherCategId = _.find(addOnProductCategoryList, (addOnProductCategory: AddOnProductCategoryDO) => {
+			return addOnProductCategory.type != AddOnProductCategoryType.Breakfast;
+		}).id;
 		var defaultTaxId = taxes.vatList[0].id;
-		var aopList = [];
-		aopList.push(DefaultAddOnProductBuilder.buildAddOnProductDO(this._testContext, defaultCategId, "First AddOn Product", 100.0, defaultTaxId));
-		aopList.push(DefaultAddOnProductBuilder.buildAddOnProductDO(this._testContext, defaultCategId, "Second AddOn Product", 200.0, defaultTaxId));
+		var aopList = [
+			DefaultAddOnProductBuilder.buildAddOnProductDO(this._testContext, breakfastCategId, "Continental Breakfast", 25.0, defaultTaxId),
+			DefaultAddOnProductBuilder.buildAddOnProductDO(this._testContext, breakfastCategId, "English Breakfast", 20.0, defaultTaxId),
+			DefaultAddOnProductBuilder.buildAddOnProductDO(this._testContext, otherCategId, "Bus Ticket", 29.53, defaultTaxId)
+		];
 		return aopList;
 	}
 

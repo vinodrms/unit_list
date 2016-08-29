@@ -1,6 +1,7 @@
-import {Component} from '@angular/core';
+import {Component, OnInit, OnDestroy} from '@angular/core';
 import {ControlGroup} from '@angular/common';
-import {RouterLink, Router, RouteParams} from '@angular/router-deprecated';
+import {ROUTER_DIRECTIVES, ActivatedRoute} from '@angular/router';
+import {Subscription} from 'rxjs/Subscription';
 import {AppContext} from '../../../../common/utils/AppContext';
 import {ThError} from '../../../../common/utils/responses/ThError';
 import {BaseFormComponent} from '../../../../common/base/BaseFormComponent';
@@ -13,22 +14,30 @@ import {LoadingButtonComponent} from '../../../../common/utils/components/Loadin
 @Component({
 	selector: 'update-password-component',
 	templateUrl: '/client/src/pages/external/pages/update-password/template/update-password-component.html',
-	directives: [RouterLink, ExternalFooterComponent, LoadingButtonComponent],
+	directives: [ROUTER_DIRECTIVES, ExternalFooterComponent, LoadingButtonComponent],
 	providers: [UpdatePasswordService],
 	pipes: [TranslationPipe]
 })
 
-export class UpdatePasswordComponent extends BaseFormComponent {
+export class UpdatePasswordComponent extends BaseFormComponent implements OnInit, OnDestroy {
 	public isLoading: boolean = false;
-	
+	private _statusCodeSubscription: Subscription;
+
 	constructor(
-		routeParams: RouteParams,
+		private _activatedRoute: ActivatedRoute,
 		private _appContext: AppContext,
 		private _updatePasswdService: UpdatePasswordService
 	) {
 		super();
-		this._updatePasswdService.activationCode = routeParams.get("activationCode");
-		this._updatePasswdService.email = routeParams.get("email");
+	}
+	ngOnInit() {
+		this._statusCodeSubscription = this._activatedRoute.params.subscribe(params => {
+			this._updatePasswdService.activationCode = params["activationCode"];
+			this._updatePasswdService.email = params["email"];
+		});
+	}
+	ngOnDestroy() {
+		this._statusCodeSubscription.unsubscribe();
 	}
 
 	protected getDefaultControlGroup(): ControlGroup {
@@ -46,7 +55,7 @@ export class UpdatePasswordComponent extends BaseFormComponent {
 		this.isLoading = true;
 		this._updatePasswdService.updatePassword().subscribe((result: Object) => {
 			this.isLoading = false;
-			this._appContext.routerNavigator.navigateTo("LogInComponent", { loginStatusCode: LoginStatusCode.UpdatePasswordOk });
+			this._appContext.routerNavigator.navigateTo("/login", LoginStatusCode.UpdatePasswordOk);
 		}, (error: ThError) => {
 			this.isLoading = false;
 			this._appContext.toaster.error(error.message);

@@ -6,6 +6,7 @@ export interface DocumentActionBuilderDO {
     actionString: string;
     actionParameterMap: Object;
     userId?: string;
+    tag?: number;
 }
 
 export class DocumentActionDO extends BaseDO {
@@ -15,9 +16,10 @@ export class DocumentActionDO extends BaseDO {
     actionParameterMap: Object = {};
     userId: string;
     timestamp: number;
+    tag: number;
 
     protected getPrimitivePropertyKeys(): string[] {
-        return ["actionString", "actionParameterMap", "timestamp", "userId"];
+        return ["actionString", "actionParameterMap", "userId", "timestamp", "tag"];
     }
 
     /* Omit the userId parameter if action is made from batch process */
@@ -26,10 +28,11 @@ export class DocumentActionDO extends BaseDO {
         documentAction.actionString = builderDO.actionString;
         documentAction.actionParameterMap = builderDO.actionParameterMap;
         documentAction.userId = builderDO.userId;
-        if(!_.isString(documentAction.userId)) {
+        if (!_.isString(documentAction.userId)) {
             documentAction.userId = DocumentActionDO.SystemUserId;
         }
         documentAction.timestamp = (new Date()).getTime();
+        documentAction.tag = builderDO.tag;
         return documentAction;
     }
 }

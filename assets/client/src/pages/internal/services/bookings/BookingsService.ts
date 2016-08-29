@@ -38,6 +38,9 @@ export class BookingsService extends ALazyLoadRequestService<BookingVM> {
         this._interval = dateUtils.getTodayToTomorrowInterval();
         this._interval.end = dateUtils.addDaysToThDateDO(this._interval.end, BookingsService.DefaultDayOffset);
     }
+    public setCustomerIdFilter(customerId: string) {
+        this.defaultSearchCriteria = { customerId: customerId, descendentSortOrder: true };
+    }
 
     protected parsePageDataCore(pageDataObject: Object): Observable<BookingVM[]> {
         var bookings = new BookingsDO();
@@ -66,10 +69,10 @@ export class BookingsService extends ALazyLoadRequestService<BookingVM> {
                     return roomCategory.id === booking.roomCategoryId;
                 });
                 bookingVM.bookingMeta = this._bookingMetaFactory.getBookingMetaByStatus(booking.confirmationStatus);
-                bookingVM.totalPriceString = booking.price.totalPrice + bookingVM.ccy.nativeSymbol;
+                bookingVM.totalPriceString = booking.price.totalBookingPrice + bookingVM.ccy.nativeSymbol;
                 bookingVM.conditionsString = booking.priceProductSnapshot.conditions.getCancellationConditionsString(this._appContext.thTranslation);
                 bookingVM.constraintsString = booking.priceProductSnapshot.constraints.getBriefValueDisplayString(this._appContext.thTranslation);
-                bookingVM.customerNameString = customers.getCustomerById(booking.defaultBillingDetails.customerId).customerName;
+                bookingVM.customerNameString = customers.getCustomerById(booking.displayCustomerId).customerName;
 
                 bookingVMList.push(bookingVM);
             });

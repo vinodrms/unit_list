@@ -9,11 +9,16 @@ import {PriceProductMetaRepoDO, PriceProductItemMetaRepoDO} from '../../../../..
 import {IPriceProductItemActionStrategy} from '../../IPriceProductItemActionStrategy';
 import {PriceProductValidator} from '../../../validators/PriceProductValidator';
 import {PriceProductActionUtils} from '../../utils/PriceProductActionUtils';
+import {AddOnProductIdValidator} from '../../../../add-on-products/validators/AddOnProductIdValidator';
+import {AddOnProductsContainer} from '../../../../add-on-products/validators/results/AddOnProductsContainer';
 
 export class DraftStateUpdateStrategy implements IPriceProductItemActionStrategy {
+	private _priceProductUtils: PriceProductActionUtils;
+
 	constructor(private _appContext: AppContext, private _sessionContext: SessionContext,
 		private _ppRepoMeta: PriceProductMetaRepoDO, private _ppItemRepoMeta: PriceProductItemMetaRepoDO,
 		private _priceProductDO: PriceProductDO) {
+		this._priceProductUtils = new PriceProductActionUtils();
 	}
 
 	public save(resolve: { (result: PriceProductDO): void }, reject: { (err: ThError): void }) {
@@ -23,13 +28,16 @@ export class DraftStateUpdateStrategy implements IPriceProductItemActionStrategy
 			reject(thError);
 			return;
 		}
+		var addOnProductIdValidator = new AddOnProductIdValidator(this._appContext, this._sessionContext);
+		addOnProductIdValidator.validateAddOnProductIdList(this._priceProductDO.includedItems.getUniqueAddOnProductIdList())
+			.then((aopContainer: AddOnProductsContainer) => {
+				this._priceProductUtils.updateIncludedItems(this._priceProductDO, aopContainer);
 
-		var ppValidator = new PriceProductValidator(this._appContext, this._sessionContext);
-		ppValidator.validatePriceProduct(this._priceProductDO)
-			.then((result: boolean) => {
-				var ppUtils = new PriceProductActionUtils();
-				ppUtils.populateDefaultIntervalsOn(this._priceProductDO);
-				
+				var ppValidator = new PriceProductValidator(this._appContext, this._sessionContext);
+				return ppValidator.validatePriceProduct(this._priceProductDO)
+			}).then((result: boolean) => {
+				this._priceProductUtils.populateDefaultIntervalsOn(this._priceProductDO);
+
 				var ppRepo = this._appContext.getRepositoryFactory().getPriceProductRepository();
 				this._priceProductDO.price.priceConfigurationState = PriceProductPriceConfigurationState.Valid;
 				return ppRepo.updatePriceProduct(this._ppRepoMeta, this._ppItemRepoMeta, this._priceProductDO);

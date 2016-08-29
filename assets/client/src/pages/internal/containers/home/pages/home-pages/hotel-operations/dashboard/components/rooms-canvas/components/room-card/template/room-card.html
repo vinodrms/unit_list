@@ -1,0 +1,156 @@
+<div class="room-card occupied" *ngIf='roomVM.isOccupied()'
+	[ngClass]="{'ghost': roomVM.UI.ghost , 'highlight-for-drop': roomVM.UI.highlightForDrop}"
+>
+	<div class="card-header">
+		<div class="section1">
+			<div class="room-number ellipsis-text clickable" (click)="openRoomModal()" title="{{ roomVM.name }}">{{ roomVM.name }}</div>
+			<div class="room-type ellipsis-text" title="{{ roomVM.categoryLabel }}">{{ roomVM.categoryLabel }}</div>
+		</div>
+		<div class="section2 flex-row flex-jc-sb">
+			<div class="customer-name ellipsis-text clickable" (click)="openCustomerModal()" title="{{ roomVM.customerName }}">{{ roomVM.customerName }}</div>
+			<div class="room-stats flex-row flex-center-v">
+				<div *ngIf="maintenance" class="clickable f-18 info-icon" [ngClass]="maintenance.cssClass" (click)="maintenance.clickHandler()" title="{{maintenance.title}}">
+					<span class="unitpal-font">{{maintenance.icon}}</span>
+				</div>
+				<div *ngIf="needsRollawayBeds" class="clickable f-18 orange-color info-icon" (click)="openRoomModal()" title="{{'You need some rollaway beds to fit all the people from this booking' | translate}}">
+					<span class="unitpal-font">A</span>
+				</div>
+				<div *ngIf="hasRollawayBedsInside" class="clickable f-18 green-color info-icon" (click)="openRoomModal()" title="{{'This room has rollaway beds inside' | translate}}">
+					<span class="unitpal-font">A</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="card-footer">
+		<div class="period flex-row flex-center-v clickable" (click)="openBookingModal()">
+			<div class="start-date">{{ roomVM.arrivalLabel }}</div>
+			<i class="fa fa-arrow-right"></i>
+			<div class="end-date">{{ roomVM.departureLabel }}</div>
+		</div>
+		<div class="other-details gray-color flex-row flex-center-v f-12">
+			<div>
+				<span class="unitpal-font f-12">(</span> {{roomVM.numberOfPeople}}
+				<span class="unitpal-font f-12">Y</span> {{roomVM.numberOfNights}}
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="room-card free" *ngIf='roomVM.isFree()'
+	[ngClass]="{'ghost': roomVM.UI.ghost , 'highlight-for-drop': roomVM.UI.highlightForDrop}"
+>
+	<div class="card-header">
+		<div class="section1">
+			<div class="room-number ellipsis-text clickable" (click)="openRoomModal()" title="{{ roomVM.name }}">{{ roomVM.name }}</div>
+			<div class="room-type ellipsis-text" title="{{ roomVM.categoryLabel }}">{{ roomVM.categoryLabel }}</div>
+		</div>
+		<div class="section2 flex-row flex-jc-sb">
+			<div class="customer-name ellipsis-text clickable"></div>
+			<div class="room-stats flex-row flex-center-v">
+				<div *ngIf="maintenance" class="clickable f-18" [ngClass]="maintenance.cssClass" (click)="maintenance.clickHandler()" title="{{maintenance.title}}">
+					<span class="unitpal-font">{{maintenance.icon}}</span>
+				</div>
+				<div *ngIf="hasRollawayBedsInside" class="clickable f-18 green-color info-icon" (click)="openRoomModal()" title="{{'This room has rollaway beds inside' | translate}}">
+					<span class="unitpal-font">A</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="card-footer">
+		<div class="period flex-row flex-center-v">
+			{{ 'No booking' | translate }}
+		</div>
+		<div class="other-details">
+		</div>
+	</div>
+</div>
+
+
+<div class="room-card reserved" *ngIf='roomVM.isReserved()'
+	[ngClass]="{'ghost': roomVM.UI.ghost , 'highlight-for-drop': roomVM.UI.highlightForDrop}"
+>
+	<div class="card-header">
+		<div class="section1">
+			<div class="room-number ellipsis-text clickable" (click)="openRoomModal()" title="{{ roomVM.name }}">{{ roomVM.name }}</div>
+			<div class="room-type ellipsis-text" title="{{ roomVM.categoryLabel }}">{{ roomVM.categoryLabel }}</div>
+		</div>
+		<div class="section2 flex-row flex-jc-sb">
+			<div class="customer-name ellipsis-text clickable"></div>
+			<div class="room-stats flex-row flex-center-v">
+				<div *ngIf="maintenance" class="clickable f-18" [ngClass]="maintenance.cssClass" (click)="maintenance.clickHandler()" title="{{maintenance.title}}">
+					<span class="unitpal-font">{{maintenance.icon}}</span>
+				</div>
+				<div *ngIf="needsRollawayBeds" class="clickable f-18 orange-color info-icon" (click)="openRoomModal()" title="{{'You need some rollaway beds to fit all the people from this booking' | translate}}">
+					<span class="unitpal-font">A</span>
+				</div>
+				<div *ngIf="hasRollawayBedsInside" class="clickable f-18 green-color info-icon" (click)="openRoomModal()" title="{{'This room has rollaway beds inside' | translate}}">
+					<span class="unitpal-font">A</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="card-footer">
+		<div class="period flex-row flex-center-v clickable yellow-color" (click)="openBookingModal()">
+			{{ 'Arriving Today' | translate }}
+		</div>
+		<div class="other-details">
+		</div>
+	</div>
+</div>
+
+<div class="room-card out-of-service" *ngIf='roomVM.isOutOfService()'
+	[ngClass]="{'ghost': roomVM.UI.ghost , 'highlight-for-drop': roomVM.UI.highlightForDrop}"
+>
+	<div class="card-header">
+		<div class="section1">
+			<div class="room-number ellipsis-text clickable" (click)="openRoomModal()" title="{{ roomVM.name }}">{{ roomVM.name }}</div>
+			<div class="room-type ellipsis-text" title="{{ roomVM.categoryLabel }}">{{ roomVM.categoryLabel }}</div>
+		</div>
+		<div class="section2 flex-row flex-jc-sb">
+			<div class="customer-name ellipsis-text clickable"></div>
+			<div class="room-stats flex-row flex-center-v">
+				<div *ngIf="maintenance" class="clickable f-18" [ngClass]="maintenance.cssClass" (click)="maintenance.clickHandler()" title="{{maintenance.title}}">
+					<span class="unitpal-font">{{maintenance.icon}}</span>
+				</div>
+				<div *ngIf="hasRollawayBedsInside" class="clickable f-18 green-color info-icon" (click)="openRoomModal()" title="{{'This room has rollaway beds inside' | translate}}">
+					<span class="unitpal-font">A</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="card-footer">
+		<div class="period flex-row flex-center-v">
+			{{ 'Out Of Service' | translate }}
+		</div>
+		<div class="other-details">
+		</div>
+	</div>
+</div>
+
+<div class="room-card out-of-order" *ngIf='roomVM.isOutOfOrder()'
+	[ngClass]="{'ghost': roomVM.UI.ghost , 'highlight-for-drop': roomVM.UI.highlightForDrop}">
+	<div class="card-header">
+		<div class="section1">
+			<div class="room-number ellipsis-text clickable" (click)="openRoomModal()" title="{{ roomVM.name }}">{{ roomVM.name }}</div>
+			<div class="room-type ellipsis-text" title="{{ roomVM.categoryLabel }}">{{ roomVM.categoryLabel }}</div>
+		</div>
+		<div class="section2 flex-row flex-jc-sb">
+			<div class="customer-name ellipsis-text clickable"></div>
+			<div class="room-stats flex-row flex-center-v">
+				<div *ngIf="maintenance" class="clickable f-18" [ngClass]="maintenance.cssClass" (click)="maintenance.clickHandler()" title="{{maintenance.title}}">
+					<span class="unitpal-font">{{maintenance.icon}}</span>
+				</div>
+				<div *ngIf="hasRollawayBedsInside" class="clickable f-18 green-color info-icon" (click)="openRoomModal()" title="{{'This room has rollaway beds inside' | translate}}">
+					<span class="unitpal-font">A</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="card-footer">
+		<div class="period flex-row flex-center-v">
+			{{ 'Out Of Order' | translate }}
+		</div>
+		<div class="other-details">
+		</div>
+	</div>
+</div>

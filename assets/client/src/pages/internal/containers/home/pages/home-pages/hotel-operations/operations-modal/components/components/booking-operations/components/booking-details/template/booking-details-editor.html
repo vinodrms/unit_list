@@ -1,0 +1,40 @@
+<div class="col-xs-12">
+    <div class="row">
+        <div class="col-xs-12 col-sm-1">
+            <p>{{'Notes' | translate}}</p>
+        </div>
+        <div class="col-xs-12 col-sm-8 field-value text-field" *ngIf="readonly">
+            <p class="notes" *ngIf="!notesAreEmpty">{{bookingDO.notes}}</p>
+            <p class="placeholder" *ngIf="notesAreEmpty">{{'None' | translate}}</p>
+        </div>
+        <div class="col-xs-12 col-sm-8 form-group" *ngIf="!readonly">
+            <textarea class="form-control notes" [(ngModel)]="bookingDO.notes"></textarea>
+        </div>
+
+        <div class="col-xs-12 col-sm-3" *ngIf="hasDetailsEditRight">
+            <edit-save-button-group
+                (onEditStart)="startEdit()"
+                (onEditEnd)="endEdit()"
+                (onSavePressed)="saveBookingDetails()"
+                [isSaving]="isSaving"
+                [isEditing]="!readonly"
+                >
+            </edit-save-button-group>
+        </div>
+    </div>
+    <div class="row padding-top-5px">
+        <div class="col-xs-12 col-sm-1">
+            <p>{{'Files' | translate}}</p>
+        </div>
+        <div class="col-xs-12 col-sm-8">
+            <p class="placeholder" *ngIf="readonly && fileAttachmentsListIsEmpty">{{'None' | translate}}</p>
+            <file-attachments 
+                [readonly]="readonly"
+                [hideLabel]="true"
+                [attachButtonClasses]="'btn-xs container-button'"
+                [fileAttachmentList]="bookingDO.fileAttachmentList" 
+                (onFileAttachmentsChange)="didChangeFileAttachmentList($event)">
+			</file-attachments>
+        </div>
+    </div>
+</div>

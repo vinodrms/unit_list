@@ -90,6 +90,10 @@
 							{{ getItemValue(item, columnMeta.valueMeta).noBabies }} <span class="unitpal-font">{{columnMeta.valueMeta.fonts.baby}}</span>
 						</span>
 					</span>
+					<span *ngIf="isFontIconWithText(columnMeta.valueMeta)">
+							<span class="unitpal-font">{{getItemValue(item, columnMeta.valueMeta)}}</span>
+							{{ getDependentItemValue(item, columnMeta.valueMeta) }}
+					</span>
 				</td>
 				<td *ngIf="tableOptions.showRowActionsCell()" class="table-item-action-group" [ngClass]="tableOptions.getRowActionsCellClass(isCollapsed)">
 					<a class="btn btn-xs" *ngIf="canPerformCopyCommandOnItem(item)" (click)="copyItem(item)" title="{{ 'Clone' | translate }}">

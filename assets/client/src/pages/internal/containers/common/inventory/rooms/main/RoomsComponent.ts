@@ -1,12 +1,10 @@
-import {Component, ViewChild, AfterViewInit, Output, EventEmitter, DynamicComponentLoader, Type, ResolvedReflectiveProvider, ViewContainerRef} from '@angular/core';
+import {Component, ViewChild, AfterViewInit, Input, Output, EventEmitter, DynamicComponentLoader, Type, ResolvedReflectiveProvider, ViewContainerRef} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/combineLatest';
 import {BaseComponent} from '../../../../../../../common/base/BaseComponent';
 import {AppContext, ThError} from '../../../../../../../common/utils/AppContext';
 import {LazyLoadingTableComponent} from '../../../../../../../common/utils/components/lazy-loading/LazyLoadingTableComponent';
-import {RoomsService} from '../../../../../services/rooms/RoomsService';
-import {RoomCategoriesService} from '../../../../../services/room-categories/RoomCategoriesService';
-import {RoomCategoriesStatsService} from '../../../../../services/room-categories/RoomCategoriesStatsService';
+import {LazyLoadRoomsService} from '../../../../../services/rooms/LazyLoadRoomsService';
 import {RoomTableMetaBuilderService} from './services/RoomTableMetaBuilderService';
 import {InventoryStateManager} from '../../utils/state-manager/InventoryStateManager';
 import {InventoryScreenStateType} from '../../utils/state-manager/InventoryScreenStateType';
@@ -20,10 +18,11 @@ import {BedsEagerService} from '../../../../../services/beds/BedsEagerService';
 @Component({
     selector: 'rooms',
     templateUrl: '/client/src/pages/internal/containers/common/inventory/rooms/main/template/rooms.html',
-    providers: [BedsEagerService, RoomsService, RoomCategoriesService, RoomCategoriesStatsService, RoomTableMetaBuilderService],
+    providers: [BedsEagerService, LazyLoadRoomsService, RoomTableMetaBuilderService],
     directives: [LazyLoadingTableComponent, RoomOverviewComponent, RoomEditComponent]
 })
 export class RoomsComponent extends BaseComponent implements AfterViewInit {
+    @Input() showLinkToOperationalModal: boolean = false;
     @Output() protected onScreenStateTypeChanged = new EventEmitter();
     @Output() protected onItemDeleted = new EventEmitter();
     @ViewChild('overviewBottom', {read: ViewContainerRef}) private _overviewBottomVCRef: ViewContainerRef;
@@ -36,7 +35,7 @@ export class RoomsComponent extends BaseComponent implements AfterViewInit {
     constructor(private _dynamicComponentLoader: DynamicComponentLoader,
         private _appContext: AppContext,
         private _tableBuilder: RoomTableMetaBuilderService,
-        private _roomService: RoomsService) {
+        private _lazyLoadRoomService: LazyLoadRoomsService) {
         super();
         this._inventoryStateManager = new InventoryStateManager<RoomVM>(this._appContext, "room.id");
         this.registerStateChange();
@@ -55,7 +54,7 @@ export class RoomsComponent extends BaseComponent implements AfterViewInit {
     }
     
     public ngAfterViewInit() {
-        this._roomTableComponent.bootstrap(this._roomService, this._tableBuilder.buildLazyLoadTableMeta());
+        this._roomTableComponent.bootstrap(this._lazyLoadRoomService, this._tableBuilder.buildLazyLoadTableMeta());
     }
 
     protected get isEditing(): boolean {
@@ -115,7 +114,7 @@ export class RoomsComponent extends BaseComponent implements AfterViewInit {
     }
 
     private deleteRoomOnServer(roomDO: RoomDO) {
-        this._roomService.deleteRoomDO(roomDO).subscribe((deletedRoom: RoomDO) => {
+        this._lazyLoadRoomService.deleteRoomDO(roomDO).subscribe((deletedRoom: RoomDO) => {
             this.registerItemDeletion(deletedRoom);
         }, (error: ThError) => {
             this._appContext.toaster.error(error.message);

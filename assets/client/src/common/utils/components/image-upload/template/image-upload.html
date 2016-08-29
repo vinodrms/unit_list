@@ -4,7 +4,7 @@
 		<div *ngIf="!imageUrl && !isLoading" class="th-img-upload-placeholder"><i class="fa fa-picture-o fa-5x"></i></div>
 		<img *ngIf="imageUrl && !isLoading" [src]="imageUrl" />
 	</div>
-	<div class="row">
+	<div class="row" *ngIf="!readonly">
 		<div class="col-md-6 col-xs-6">
 			<label class="btn btn-danger btn-block fileinput-exists" data-dismiss="fileinput" (click)="removeImageUrl()">{{ 'Remove' | translate }}</label>
 		</div>

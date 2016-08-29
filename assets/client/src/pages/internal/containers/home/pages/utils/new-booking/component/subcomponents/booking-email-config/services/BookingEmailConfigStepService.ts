@@ -9,11 +9,10 @@ import {BookingCartService} from '../../../../services/search/BookingCartService
 import {TransientBookingItem} from '../../../../services/data-objects/TransientBookingItem';
 import {BookingCartItemVM} from '../../../../services/search/view-models/BookingCartItemVM';
 import {AddBookingItemsDO} from '../../../../services/data-objects/AddBookingItemsDO';
-import {EmailRecipientVM} from '../utils/EmailRecipientVM';
 
 @Injectable()
 export class BookingEmailConfigStepService implements IBookingStepService, ILastBookingStepService {
-    emailRecipientList: EmailRecipientVM[] = [];
+    emailRecipientList: string[] = [];
     private _stepPath: string[];
 
     didAppearObservable: Observable<boolean>;
@@ -74,6 +73,7 @@ export class BookingEmailConfigStepService implements IBookingStepService, ILast
     private postBookingsToServer(addBookingsObserver: Observer<boolean>, bookingItems: AddBookingItemsDO) {
         this._appContext.thHttp.post(ThServerApi.BookingsAdd, { bookingItems: bookingItems })
             .subscribe((result: any) => {
+                this._appContext.analytics.logEvent("booking", "add", "Added " + bookingItems.bookingList.length + " bookings");
                 addBookingsObserver.next(true);
                 addBookingsObserver.complete();
             }, (err: ThError) => {
@@ -88,13 +88,7 @@ export class BookingEmailConfigStepService implements IBookingStepService, ILast
         });
         var bookingItems = new AddBookingItemsDO();
         bookingItems.bookingList = transientBookingItemList;
-        bookingItems.confirmationEmailList = this.getRecipientEmailList();
+        bookingItems.confirmationEmailList = this.emailRecipientList;
         return bookingItems;
-    }
-    private getRecipientEmailList(): string[] {
-        var recipientList: EmailRecipientVM[] = _.filter(this.emailRecipientList, (emailRecipient: EmailRecipientVM) => {
-            return emailRecipient.isValid && emailRecipient.selected;
-        });
-        return _.uniq(_.map(recipientList, (recipient: EmailRecipientVM) => { return recipient.email }));
     }
 }

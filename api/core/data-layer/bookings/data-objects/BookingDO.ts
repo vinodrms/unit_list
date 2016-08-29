@@ -1,6 +1,7 @@
 import {BaseDO} from '../../common/base/BaseDO';
 import {ThUtils} from '../../../utils/ThUtils';
 import {ThDateIntervalDO} from '../../../utils/th-dates/data-objects/ThDateIntervalDO';
+import {ThDateDO} from '../../../utils/th-dates/data-objects/ThDateDO';
 import {ConfigCapacityDO} from '../../common/data-objects/bed-config/ConfigCapacityDO';
 import {PriceProductDO} from '../../price-products/data-objects/PriceProductDO';
 import {FileAttachmentDO} from '../../common/data-objects/file/FileAttachmentDO';
@@ -30,6 +31,8 @@ export enum GroupBookingInputChannel {
 export class BookingDO extends BaseDO {
     public static GuaranteedTriggerName: string = "guaranteedTime";
     public static NoShowTriggerName: string = "noShowTime";
+    public static StartUtcTimestampName: string = "startUtcTimestamp";
+    public static EndUtcTimestampName: string = "endUtcTimestamp";
 
     // booking group
     groupBookingId: string;
@@ -45,8 +48,10 @@ export class BookingDO extends BaseDO {
     bookingReference: string;
     confirmationStatus: BookingConfirmationStatus;
     customerIdList: string[];
+    displayCustomerId: string;
     defaultBillingDetails: DefaultBillingDetailsDO;
     interval: ThDateIntervalDO;
+    creationDate: ThDateDO;
     startUtcTimestamp: number;
     endUtcTimestamp: number;
     configCapacity: ConfigCapacityDO;
@@ -54,6 +59,7 @@ export class BookingDO extends BaseDO {
     roomId: string;
     priceProductId: string;
     priceProductSnapshot: PriceProductDO;
+    reservedAddOnProductIdList: string[];
     price: BookingPriceDO;
     allotmentId: string;
     guaranteedTime: BookingStateChangeTriggerTimeDO;
@@ -65,7 +71,8 @@ export class BookingDO extends BaseDO {
 
     protected getPrimitivePropertyKeys(): string[] {
         return ["groupBookingId", "groupBookingReference", "hotelId", "versionId", "status", "inputChannel", "noOfRooms", "bookingId", "bookingReference", "confirmationStatus",
-            "customerIdList", "startUtcTimestamp", "endUtcTimestamp", "roomCategoryId", "roomId", "priceProductId", "allotmentId", "notes", "indexedSearchTerms"];
+            "customerIdList", "displayCustomerId", "startUtcTimestamp", "endUtcTimestamp", "roomCategoryId", "roomId", "priceProductId", 
+            "reservedAddOnProductIdList", "allotmentId", "notes", "indexedSearchTerms"];
     }
 
     public buildFromObject(object: Object) {
@@ -76,6 +83,9 @@ export class BookingDO extends BaseDO {
 
         this.interval = new ThDateIntervalDO();
         this.interval.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "interval"));
+
+        this.creationDate = new ThDateDO();
+        this.creationDate.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "creationDate"));
 
         this.configCapacity = new ConfigCapacityDO();
         this.configCapacity.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "configCapacity"));

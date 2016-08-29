@@ -9,15 +9,15 @@ class InvoiceGroupsEntity extends BasePersistentEntity {
     }
     private buildCustomAttributes() {
         this.attributes = {
+            invoiceGroupReference: {
+                type: 'string',
+                required: true
+            },
             versionId: {
 				type: 'integer',
 				required: true,
 				defaultsTo: 0
 			},
-            paymentStatus: {
-                type: 'integer',
-                required: true
-            },
             hotelId: {
                 type: 'string'
             },
@@ -25,6 +25,10 @@ class InvoiceGroupsEntity extends BasePersistentEntity {
                 type: 'string'
             },
             invoiceList: {
+                type: 'array',
+                defaultsTo: []
+            },
+            indexedCustomerIdList: {
                 type: 'array',
                 defaultsTo: []
             },

@@ -34,4 +34,9 @@ export class IndividualDetailsDO extends BaseDO implements ICustomerDetailsDO {
 	public canPayInvoiceByAgreement(): boolean {
 		return false;
 	}
+	public canReceiveBookingConfirmations(): boolean {
+		return true;
+	}
+	public roundPricesToTwoDecimals() {
+	}
 }

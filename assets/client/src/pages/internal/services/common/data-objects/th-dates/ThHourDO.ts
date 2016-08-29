@@ -4,8 +4,8 @@ export class ThHourDO extends BaseDO {
 	public static MinHourOfDay = 0;
 	public static MaxHourOfDay = 23;
 
-	private static MinMinuteOfHour = 0;
-	private static MaxMinuteOfHour = 59;
+	public static MinMinuteOfHour = 0;
+	public static MaxMinuteOfHour = 59;
 
 	constructor() {
 		super();
@@ -26,6 +26,9 @@ export class ThHourDO extends BaseDO {
 	private isValidMinute(): boolean {
 		return _.isNumber(this.minute) && ThHourDO.MinMinuteOfHour <= this.minute && this.minute <= ThHourDO.MaxMinuteOfHour;
 	}
+	public isSame(otherHour: ThHourDO): boolean {
+		return this.hour === otherHour.hour && this.minute === otherHour.minute;
+	}
 	public toString(): string {
 		return this.addLeftPaddingIfNeccessary(this.hour) + ":" + this.addLeftPaddingIfNeccessary(this.minute);
     }
@@ -35,11 +38,14 @@ export class ThHourDO extends BaseDO {
         }
 		return hourOrMinute + '';
 	}
-	
+
 	public static buildThHourDO(hour: number, minute): ThHourDO {
 		var outHour = new ThHourDO();
 		outHour.hour = hour;
 		outHour.minute = minute;
 		return outHour;
+	}
+	public buildPrototype(): ThHourDO {
+		return ThHourDO.buildThHourDO(this.hour, this.minute);
 	}
 }

@@ -10,6 +10,8 @@ import {DeletePriceProductItem} from '../core/domain-layer/price-products/Delete
 import {DraftPriceProductItem} from '../core/domain-layer/price-products/DraftPriceProductItem';
 import {ArchivePriceProductItem} from '../core/domain-layer/price-products/ArchivePriceProductItem';
 
+import _ = require('underscore');
+
 export class PriceProductsController extends BaseController {
 	public getPriceProductById(req: Express.Request, res: Express.Response) {
 		if (!this.precheckGETParameters(req, res, ['id'])) { return };
@@ -22,6 +24,7 @@ export class PriceProductsController extends BaseController {
 
 		var priceProductRepo = appContext.getRepositoryFactory().getPriceProductRepository();
 		priceProductRepo.getPriceProductById(ppMeta, priceProductId).then((priceProduct: PriceProductDO) => {
+			priceProduct.prepareForClient();
 			this.returnSuccesfulResponse(req, res, { priceProduct: priceProduct });
 		}).catch((err: any) => {
 			this.returnErrorResponse(req, res, err, ThStatusCode.PriceProductsControllerErrorGettingPriceProduct);
@@ -30,6 +33,7 @@ export class PriceProductsController extends BaseController {
 	public savePriceProductItem(req: Express.Request, res: Express.Response) {
 		var savePpItem = new SavePriceProductItem(req.appContext, req.sessionContext);
 		savePpItem.save(req.body.priceProduct).then((updatedPriceProduct: PriceProductDO) => {
+			updatedPriceProduct.prepareForClient();
 			this.returnSuccesfulResponse(req, res, { priceProduct: updatedPriceProduct });
 		}).catch((err: any) => {
 			this.returnErrorResponse(req, res, err, ThStatusCode.PriceProductsControllerErrorSavingPriceProduct);
@@ -38,6 +42,7 @@ export class PriceProductsController extends BaseController {
 	public archivePriceProductItem(req: Express.Request, res: Express.Response) {
 		var archivePpItem = new ArchivePriceProductItem(req.appContext, req.sessionContext);
 		archivePpItem.archive(req.body.priceProduct).then((archivedPriceProduct: PriceProductDO) => {
+			archivedPriceProduct.prepareForClient();
 			this.returnSuccesfulResponse(req, res, { priceProduct: archivedPriceProduct });
 		}).catch((err: any) => {
 			this.returnErrorResponse(req, res, err, ThStatusCode.PriceProductsControllerErrorArchivingProduct);
@@ -46,6 +51,7 @@ export class PriceProductsController extends BaseController {
 	public deletePriceProductItem(req: Express.Request, res: Express.Response) {
 		var deletePpItem = new DeletePriceProductItem(req.appContext, req.sessionContext);
 		deletePpItem.delete(req.body.priceProduct).then((deletedPriceProduct: PriceProductDO) => {
+			deletedPriceProduct.prepareForClient();
 			this.returnSuccesfulResponse(req, res, { priceProduct: deletedPriceProduct });
 		}).catch((err: any) => {
 			this.returnErrorResponse(req, res, err, ThStatusCode.PriceProductsControllerErrorDeletingPriceProduct);
@@ -54,6 +60,7 @@ export class PriceProductsController extends BaseController {
 	public draftPriceProductItem(req: Express.Request, res: Express.Response) {
 		var draftPpItem = new DraftPriceProductItem(req.appContext, req.sessionContext);
 		draftPpItem.draft(req.body.priceProduct).then((draftPriceProduct: PriceProductDO) => {
+			draftPriceProduct.prepareForClient();
 			this.returnSuccesfulResponse(req, res, { priceProduct: draftPriceProduct });
 		}).catch((err: any) => {
 			this.returnErrorResponse(req, res, err, ThStatusCode.PriceProductsControllerErrorMarkingPriceProductAsDraft);
@@ -79,6 +86,7 @@ export class PriceProductsController extends BaseController {
 		var ppMeta = this.getPriceProductMetaRepoDOFrom(sessionContext);
 		var priceProductRepo = appContext.getRepositoryFactory().getPriceProductRepository();
 		priceProductRepo.getPriceProductList(ppMeta, req.body.searchCriteria, req.body.lazyLoad).then((ppSearchResult: PriceProductSearchResultRepoDO) => {
+			this.prepareListForClient(ppSearchResult.priceProductList);
 			this.returnSuccesfulResponse(req, res, ppSearchResult);
 		}).catch((err: any) => {
 			this.returnErrorResponse(req, res, err, ThStatusCode.PriceProductsControllerErrorGettingList);
@@ -87,6 +95,11 @@ export class PriceProductsController extends BaseController {
 
 	private getPriceProductMetaRepoDOFrom(sessionContext: SessionContext): PriceProductMetaRepoDO {
 		return { hotelId: sessionContext.sessionDO.hotel.id };
+	}
+	private prepareListForClient(priceProductList: PriceProductDO[]) {
+		_.forEach(priceProductList, (priceProduct: PriceProductDO) => {
+			priceProduct.prepareForClient();
+		});
 	}
 }
 

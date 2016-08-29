@@ -9,6 +9,8 @@ import {BookingSearch} from '../core/domain-layer/bookings/search-bookings/Booki
 import {BookingSearchResult} from '../core/domain-layer/bookings/search-bookings/utils/result-builder/BookingSearchResult';
 import {AddBookingItems} from '../core/domain-layer/bookings/add-bookings/AddBookingItems';
 import {ThTranslation} from '../core/utils/localization/ThTranslation';
+import {BookingOccupancyCalculatorWrapper} from '../core/domain-layer/bookings/search-bookings/utils/occupancy-calculator/wrapper/BookingOccupancyCalculatorWrapper';
+import {BookingOccupancyDO} from '../core/domain-layer/bookings/search-bookings/utils/occupancy-calculator/results/BookingOccupancyDO';
 
 import _ = require('underscore');
 
@@ -39,7 +41,7 @@ class BookingsController extends BaseController {
         var bookingMeta = this.getBookingMetaRepoDOFrom(sessionContext);
         var bookingRepo = appContext.getRepositoryFactory().getBookingRepository();
         bookingRepo.getBookingList(bookingMeta, req.body.searchCriteria, req.body.lazyLoad).then((bookingSearchResult: BookingSearchResultRepoDO) => {
-            this.translateSearchResult(bookingSearchResult, sessionContext);
+            this.translateBookingListHistory(bookingSearchResult.bookingList, sessionContext);
             this.returnSuccesfulResponse(req, res, bookingSearchResult);
         }).catch((err: any) => {
             this.returnErrorResponse(req, res, err, ThStatusCode.BookingsControllerErrorGettingBookings);
@@ -77,7 +79,20 @@ class BookingsController extends BaseController {
 
         var addBookingItems = new AddBookingItems(appContext, sessionContext);
         addBookingItems.add(req.body.bookingItems, GroupBookingInputChannel.PropertyManagementSystem).then((addedBookingList: BookingDO[]) => {
+            this.translateBookingListHistory(addedBookingList, sessionContext);
             this.returnSuccesfulResponse(req, res, { bookingList: addedBookingList });
+        }).catch((err: any) => {
+            this.returnErrorResponse(req, res, err, ThStatusCode.BookingsControllerErrorAddingBookings);
+        });
+    }
+
+    public getOccupancy(req: Express.Request, res: Express.Response) {
+        var appContext: AppContext = req.appContext;
+        var sessionContext: SessionContext = req.sessionContext;
+
+        var occupancyCalculator = new BookingOccupancyCalculatorWrapper(appContext, sessionContext);
+        occupancyCalculator.compute(req.body.filters).then((bookingOccupancy: BookingOccupancyDO) => {
+            this.returnSuccesfulResponse(req, res, { bookingOccupancy: bookingOccupancy });
         }).catch((err: any) => {
             this.returnErrorResponse(req, res, err, ThStatusCode.BookingsControllerErrorAddingBookings);
         });
@@ -86,9 +101,9 @@ class BookingsController extends BaseController {
     private getBookingMetaRepoDOFrom(sessionContext: SessionContext): BookingMetaRepoDO {
         return { hotelId: sessionContext.sessionDO.hotel.id };
     }
-    private translateSearchResult(bookingSearchResult: BookingSearchResultRepoDO, sessionContext: SessionContext) {
+    private translateBookingListHistory(bookingList: BookingDO[], sessionContext: SessionContext) {
         var thTranslation = this.getThTranslation(sessionContext);
-        _.forEach(bookingSearchResult.bookingList, (booking: BookingDO) => {
+        _.forEach(bookingList, (booking: BookingDO) => {
             this.translateBookingHistory(booking, thTranslation);
         });
     }
@@ -103,5 +118,6 @@ module.exports = {
     getBookingList: bookingsController.getBookingList.bind(bookingsController),
     getBookingListCount: bookingsController.getBookingListCount.bind(bookingsController),
     searchBookings: bookingsController.searchBookings.bind(bookingsController),
-    addBookings: bookingsController.addBookings.bind(bookingsController)
+    addBookings: bookingsController.addBookings.bind(bookingsController),
+    getOccupancy: bookingsController.getOccupancy.bind(bookingsController)
 }

@@ -1,0 +1,45 @@
+<loading-component [isLoading]="isLoading && !didInitOnce"></loading-component>
+
+<div class="row full-height" *ngIf="didInitOnce">
+	<div class="col-xs-9 full-height right-margin padding-top-10px" customScroll>
+		<div class="row">
+			<customer-preview [customerVM]="customerVM"></customer-preview>
+		</div>
+		<hr/>
+		<div class="row padding-top-5px">
+			<customer-details-editor [customerOperationsPageData]="customerOperationsPageData" (onCustomerDetailsChanged)="didChangeCustomer($event)"></customer-details-editor>
+		</div>
+		<div class="row">
+			<div class="col-xs-12">
+				<ul class="nav nav-tabs">
+					<li [ngClass]="{active : showBookingHistory}">
+						<a (click)="showBookingHistory=true"><i class="fa unitpal-font">E</i> {{'Booking History' | translate}} <span *ngIf="totalBookingsCount">({{ totalBookingsCount }})</span></a>
+					</li>
+					<li [ngClass]="{active : !showBookingHistory}">
+						<a (click)="showBookingHistory=false"><i class="fa unitpal-font">L</i> {{'Invoice History' | translate}} <span *ngIf="totalInvoiceGroupsCount">({{ totalInvoiceGroupsCount }})</span></a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="row" [hidden]="!showBookingHistory">
+			<customer-booking-history [customerOperationsPageData]="customerOperationsPageData" (totalBookingsCountEmitter)="totalBookingsCount=$event"></customer-booking-history>
+		</div>
+		<div class="row" [hidden]="showBookingHistory">
+			<customer-invoice-history [customerOperationsPageData]="customerOperationsPageData" (totalInvoiceGroupsCountEmitter)="totalInvoiceGroupsCount=$event"></customer-invoice-history>
+		</div>
+	</div>
+	<div class="col-xs-3 full-height right-sidebar">
+		<div class="row padding-top-10px">
+			<div class="col-xs-12 col-sm-12">
+				<div class="row">
+					<div class="col-xs-12 padding-top-5px">
+						<button type="button" class="btn btn-primary btn-block oneline-text" (click)="createInvoice()"> 
+							<i class="fa unitpal-font">L</i> 
+							{{ 'Create Invoice' | translate }}
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

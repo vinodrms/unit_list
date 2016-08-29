@@ -24,7 +24,7 @@ export class WizardBasicInfoPropertyDetailsService implements IBasicInfoStep {
 			});
 		});
 	}
-	public getComponentName(): string {
-		return "WizardBasicInfoPropertyDetailsComponent";
+	public getComponentPath(): string {
+		return "property-details";
 	}
 }

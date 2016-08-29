@@ -8,9 +8,11 @@ export interface ICustomerDetailsDO extends BaseDO {
 	getEmail(): string;
 	getPhone(): string;
 	canPayInvoiceByAgreement(): boolean;
+	canReceiveBookingConfirmations(): boolean;
 }
 
 export interface CustomerDetailsMeta {
 	customerTypeName: string;
 	customerType: CustomerType;
+	fontName: string;
 }

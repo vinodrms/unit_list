@@ -1,0 +1,35 @@
+<yield-actions-panel [isYielding]="isYielding" (onApplyAction)="applyAction($event)"></yield-actions-panel>
+<div class="price-products-table flex-table" *ngIf="priceProductResults">
+	<div class="price-products-row table-header flex-row">
+		<div class="price-products-col flex-jc-start wide p-l-14">
+			<span class="p-l-6"></span>
+			<input type="checkbox"
+			[(ngModel)]="selectAllItemsFlag"
+			(change)="setItemSelectionStateToAll(!selectAllItemsFlag)"
+			>
+			<span class="dark-gray-color oneline-text f-14 p-l-6">{{'Price Products' | translate}}</span>
+		</div>
+		<div class="price-products-col" *ngFor="let date of priceProductResults.dateList">
+			<span class="dark-gray-color oneline-text f-14" title="{{getDateLabel(date)}}">{{getDateLabel(date)}}</span>
+		</div>
+	</div>
+	<div customScroll class="table-body">
+		<div class="price-products-row flex-row" [ngClass]="getPriceProductRowClasses(priceProduct)" *ngFor="let priceProduct of filteredPriceProduct">
+			<div class="price-products-col flex-jc-start wide">
+				<div class="filter-indicator" [ngClass]="getPriceProductFilterClasses(priceProduct)">
+					<span class="f-10" title="{{getPriceProductTextFilter(priceProduct)}}">{{getPriceProductTextFilterInitial(priceProduct)}}</span>
+				</div>
+				<span class="p-l-6 ellipsis-text">
+					<input type="checkbox" [(ngModel)]="itemsSelectionState[priceProduct.id]" *ngIf="!priceProduct.lastRoomAvailability">
+					<span class="orange-color f-10" *ngIf="priceProduct.lastRoomAvailability" title="{{'Last Room Availability' | translate}}"><b>LRA</b></span>
+					<span class="dark-gray-color f-14">{{priceProduct.name}}</span>
+				</span>
+			</div>
+			<div class="price-products-col" *ngFor="let value of priceProduct.priceProductYieldItemDO.stateList; let currentIndex = index">
+				<span class="w-100">
+					<price-product-state [model]="getYieldStateModel(priceProductResults, priceProduct, currentIndex)" (stateChanged)="handleStateChange($event)"></price-product-state>
+				</span>
+			</div>
+		</div>
+	</div>
+</div>
