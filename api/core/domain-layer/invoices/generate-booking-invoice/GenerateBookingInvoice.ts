@@ -127,7 +127,7 @@ export class GenerateBookingInvoice {
 
             _.forEach(this._generateBookingInvoiceDO.initialAddOnProducts, (generateAopMeta: GenerateBookingInvoiceAopMeta) => {
                 var aopInvoiceItem = new InvoiceItemDO();
-                aopInvoiceItem.buildFromAddOnProductDO(generateAopMeta.addOnProductDO, generateAopMeta.noOfItems, true, generateAopMeta.addOnProductDO.getVatValue(vatList));
+                aopInvoiceItem.buildFromAddOnProductDO(generateAopMeta.addOnProductDO, generateAopMeta.noOfItems, true, generateAopMeta.addOnProductDO.getVatId());
                 invoice.itemList.push(aopInvoiceItem);
             });
 

@@ -7,5 +7,5 @@ export interface IInvoiceItemMeta extends BaseDO {
     setMovable(movable: boolean);
     isMovable(): boolean;
     getUnitPrice(): number;
-    getVatValue(): number;
+    getVatId(): string;
 }

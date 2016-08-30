@@ -73,7 +73,13 @@ export class BookingUtils {
     public updateBookingPriceUsingRoomCategory(bookingDO: BookingDO) {
         var indexedBookingInterval = new IndexedBookingInterval(bookingDO.interval);
 
+        var previousBookingVatId: string = null;
+        if (!this._thUtils.isUndefinedOrNull(bookingDO.price) && !this._thUtils.isUndefinedOrNull(bookingDO.price.vatId) && _.isString(bookingDO.price.vatId)) {
+            previousBookingVatId = bookingDO.price.vatId;
+        }
+
         bookingDO.price = new BookingPriceDO();
+        bookingDO.price.vatId = previousBookingVatId;
 
         bookingDO.price.movable = false;
 
@@ -124,6 +130,9 @@ export class BookingUtils {
         itemMeta.aopDisplayName = addOnProductSnapshot.name;
         itemMeta.numberOfItems = numberOfItems;
         itemMeta.pricePerItem = addOnProductSnapshot.price;
+        if (_.isArray(addOnProductSnapshot.taxIdList) && addOnProductSnapshot.taxIdList.length > 0) {
+            itemMeta.vatId = addOnProductSnapshot.taxIdList[0];
+        }
         invoiceItem.meta = itemMeta;
         return invoiceItem;
     }

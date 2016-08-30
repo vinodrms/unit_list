@@ -21,6 +21,7 @@ import {AddOnProductItemContainer, AddOnProductItem} from '../../../add-on-produ
 import {AddOnProductDO} from '../../../../data-layer/add-on-products/data-objects/AddOnProductDO';
 import {InvoiceItemDO, InvoiceItemType} from '../../../../data-layer/invoices/data-objects/items/InvoiceItemDO';
 import {AddOnProductInvoiceItemMetaDO} from '../../../../data-layer/invoices/data-objects/items/add-on-products/AddOnProductInvoiceItemMetaDO';
+import {TaxDO, TaxType} from '../../../../data-layer/taxes/data-objects/TaxDO';
 
 import _ = require('underscore');
 
@@ -30,6 +31,7 @@ export class BookingItemsConverterParams {
     currentHotelTimestamp: ThTimestampDO;
     customersContainer: CustomersContainer;
     addOnProductItemContainer: AddOnProductItemContainer;
+    vatTaxList: TaxDO[];
 }
 
 export class BookingItemsConverter {
@@ -123,10 +125,20 @@ export class BookingItemsConverter {
             this._bookingUtils.updateBookingPriceUsingRoomCategory(bookingDO);
             this._bookingUtils.updateIndexedSearchTerms(bookingDO, this._converterParams.customersContainer);
             this._bookingUtils.updateDisplayCustomerId(bookingDO, this._converterParams.customersContainer);
+            bookingDO.price.vatId = this.getBookingTaxId(priceProduct);
 
             bookingList.push(bookingDO);
         });
         resolve(bookingList);
+    }
+    private getBookingTaxId(priceProduct: PriceProductDO): string {
+        var filteredTaxList: TaxDO[] = _.filter(this._converterParams.vatTaxList, (tax: TaxDO) => {
+            return tax.type === TaxType.Vat && _.contains(priceProduct.taxIdList, tax.id);
+        });
+        if (filteredTaxList.length > 0) {
+            return filteredTaxList[0].id;
+        }
+        return null;
     }
 
     private generateGroupBookingReference(): string {

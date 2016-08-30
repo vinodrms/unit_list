@@ -6,12 +6,12 @@ import {IInvoiceItemMeta} from '../IInvoiceItemMeta';
 export class AddOnProductInvoiceItemMetaDO extends BaseDO implements IInvoiceItemMeta {
     movable: boolean;
     pricePerItem: number;
-    vatValue: number;
+    vatId: string;
     numberOfItems: number;
     aopDisplayName: string;
 
     protected getPrimitivePropertyKeys(): string[] {
-        return ["movable", "pricePerItem", "vatValue", "numberOfItems", "aopDisplayName"];
+        return ["movable", "pricePerItem", "vatId", "numberOfItems", "aopDisplayName"];
     }
 
     public getUnitPrice(): number {
@@ -25,12 +25,12 @@ export class AddOnProductInvoiceItemMetaDO extends BaseDO implements IInvoiceIte
     }
     public isMovable(): boolean {
         var thUtils = new ThUtils();
-        if(thUtils.isUndefinedOrNull(this.movable)) {
+        if (thUtils.isUndefinedOrNull(this.movable)) {
             return true;
         }
         return this.movable;
     }
-    public getVatValue(): number {
-        return this.vatValue;
+    public getVatId(): string {
+        return this.vatId;
     }
 }

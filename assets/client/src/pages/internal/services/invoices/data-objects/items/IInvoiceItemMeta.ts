@@ -6,5 +6,5 @@ export interface IInvoiceItemMeta extends BaseDO {
     getDisplayName(thTranslation: ThTranslation): string;
     isMovable(): boolean;
     getUnitPrice(): number;
-    getVatValue(): number;
+    getVatId(): string;
 }

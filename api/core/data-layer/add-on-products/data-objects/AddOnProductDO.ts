@@ -37,19 +37,14 @@ export class AddOnProductDO extends BaseDO {
 		snapshot.name = this.name;
 		snapshot.price = this.price;
 		snapshot.internalCost = this.internalCost;
+		snapshot.taxIdList = this.taxIdList;
 		return snapshot;
 	}
 
-	public getVatValue(vatList: TaxDO[]): number {
+	public getVatId(): string {
 		if (!_.isEmpty(this.taxIdList)) {
-			var thUtils = new ThUtils();
-			var vat = _.find(vatList, (vat: TaxDO) => {
-				return vat.id === this.taxIdList[0];
-			});
-			if(!thUtils.isUndefinedOrNull(vat)) {
-				return vat.value;
-			}
+			return this.taxIdList[0];
 		}
-		return 0;
+		return null;
 	}
 }
