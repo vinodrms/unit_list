@@ -38,13 +38,17 @@ export class InvoiceItemDO extends BaseDO {
         }
     }
 
-    public buildFromAddOnProductDO(aop: AddOnProductDO, numberOfItems: number) {
+    public buildFromAddOnProductDO(aop: AddOnProductDO, numberOfItems: number, isMovable: boolean, vatId: string) {
         var aopInvoiceItemMeta = new AddOnProductInvoiceItemMetaDO();
         aopInvoiceItemMeta.aopDisplayName = aop.name;
         aopInvoiceItemMeta.numberOfItems = numberOfItems;
         aopInvoiceItemMeta.pricePerItem = aop.price;
+        aopInvoiceItemMeta.movable = isMovable;
+        aopInvoiceItemMeta.vatId = vatId;
+        
         this.meta = aopInvoiceItemMeta;
         this.type = InvoiceItemType.AddOnProduct;
+        this.id = aop.id;
     }
     public buildFeeItemFromCustomerDO(customerDO: CustomerDO) {
         var meta = new FeeInvoiceItemMetaDO();

@@ -121,7 +121,7 @@
 	"Item": "Item",
 	"Qty": "Qty",
 	"Net Unit Price": "Net Unit Price",
-	"Subtotal": "Subtotal",
+	"Net Subtotal": "Net Subtotal",
 	"Payment Method": "Payment Method",
 	"PAY INVOICE BY AGREEMENT": "PAY INVOICE BY AGREEMENT",
 	"Shared Payment": "Shared Payment" 

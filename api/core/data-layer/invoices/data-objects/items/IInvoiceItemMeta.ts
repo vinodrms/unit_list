@@ -1,10 +1,11 @@
 import {BaseDO} from '../../../common/base/BaseDO';
 import {ThTranslation} from '../../../../utils/localization/ThTranslation';
-import {IPriceableEntity} from '../price/IPriceableEntity';
 
-export interface IInvoiceItemMeta extends BaseDO, IPriceableEntity {
+export interface IInvoiceItemMeta extends BaseDO {
     getNumberOfItems(): number;
     getDisplayName(thTranslation: ThTranslation): string;
     setMovable(movable: boolean);
     isMovable(): boolean;
+    getUnitPrice(): number;
+    getVatId(): string;
 }

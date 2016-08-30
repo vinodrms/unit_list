@@ -38,6 +38,8 @@ import {HotelOperationsResult} from '../../../services/utils/HotelOperationsResu
 export class InvoiceOperationsPageComponent implements OnInit {
     @Input() invoiceOperationsPageParam: HotelInvoiceOperationsPageParam;
 
+    private static MAX_NO_OF_INVOICES = 100;
+
     private _thUtils: ThUtils;
     private _invoiceGroupVMCopy: InvoiceGroupVM;
     private _title: string;
@@ -182,10 +184,27 @@ export class InvoiceOperationsPageComponent implements OnInit {
         });
     }
     public onAddInvoice() {
-        var invoiceVM = new InvoiceVM(this._appContext.thTranslation);
-        invoiceVM.buildCleanInvoiceVM(this.newInvoiceRef);
-        this.invoiceGroupVM.addInvoiceVM(invoiceVM);
-        this.itemsAdded.next(1);
+        if (this.maxNoOfInvoicesLimitExceeeded()) {
+            var title = this._appContext.thTranslation.translate("Info");
+            var content = this._appContext.thTranslation.translate("The maximum number of %maxNoOfInvoices% invoices was exceeded.", {
+                maxNoOfInvoices: InvoiceOperationsPageComponent.MAX_NO_OF_INVOICES
+            });
+            var positiveLabel = this._appContext.thTranslation.translate("OK");
+
+            this._appContext.modalService.confirm(title, content, { positive: positiveLabel }, () => {
+
+            });
+        }
+        else {
+            var invoiceVM = new InvoiceVM(this._appContext.thTranslation);
+            invoiceVM.buildCleanInvoiceVM(this.newInvoiceRef);
+            this.invoiceGroupVM.addInvoiceVM(invoiceVM);
+            this.itemsAdded.next(1);
+        }
+    }
+
+    private maxNoOfInvoicesLimitExceeeded(): boolean {
+        return this.invoiceGroupVM.invoiceVMList.length >= InvoiceOperationsPageComponent.MAX_NO_OF_INVOICES;
     }
 
     private get newInvoiceRef(): string {

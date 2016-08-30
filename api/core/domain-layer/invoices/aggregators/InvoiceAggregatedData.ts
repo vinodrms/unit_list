@@ -22,7 +22,6 @@ export class InvoiceAggregatedData {
     payerCustomer: CustomerDO;
     addOnProductList: AddOnProductDO[];
     vatList: TaxDO[];
-    otherTaxes: TaxDO[];
     paymentMethodList: PaymentMethodDO[];
 
     constructor(private _sessionContext: SessionContext) {

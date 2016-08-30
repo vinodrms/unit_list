@@ -102,10 +102,10 @@
                                     <%= netUnitPriceLabel %>
                                 </th>
                                 <th>
-                                    <%= vatLabel %>
+                                    <%= subtotalLabel %>
                                 </th>
                                 <th>
-                                    <%= subtotalLabel %>
+                                    <%= vatLabel %>
                                 </th>
                             </tr>
                         </thead>
@@ -119,16 +119,13 @@
                                         <%= itemVM.qty %>
                                     </td>
                                     <td>
-                                        <%= ccySymbol %>
-                                            <%= itemVM.netUnitPrice %>
+                                        <%= ccySymbol %><%= itemVM.netUnitPrice %>
                                     </td>
                                     <td>
-                                        <%= ccySymbol %>
-                                            <%= itemVM.vat %>
+                                        <%= ccySymbol %><%= itemVM.subtotal %>
                                     </td>
                                     <td>
-                                        <%= ccySymbol %>
-                                            <%= itemVM.subtotal %>
+                                        <%= ccySymbol %><%= itemVM.vat %>
                                     </td>
                                 </tr>
                                 <% }); %>
@@ -157,24 +154,21 @@
                                     <th style="width:50%">
                                         <%= subtotalLabel %>:</th>
                                     <td>
-                                        <%= ccySymbol %>
-                                            <%= subtotalValue %>
+                                        <%= ccySymbol %><%= subtotalValue %>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th>
                                         <%= vatLabel %>:</th>
                                     <td>
-                                        <%= ccySymbol %>
-                                            <%= vatValue %>
+                                        <%= ccySymbol %><%= totalVat %>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th>
                                         <%= totalLabel %>:</th>
                                     <td>
-                                        <%= ccySymbol %>
-                                            <%= totalValue %>
+                                        <%= ccySymbol %><%= totalValue %>
                                     </td>
                                 </tr>
                             </tbody>

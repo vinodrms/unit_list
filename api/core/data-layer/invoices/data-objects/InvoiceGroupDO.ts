@@ -5,6 +5,7 @@ import {InvoicePayerDO} from './payers/InvoicePayerDO';
 import {IBookingRepository} from '../../bookings/repositories/IBookingRepository';
 import {BookingDO} from '../../bookings/data-objects/BookingDO';
 import {CustomerDO} from '../../customers/data-objects/CustomerDO';
+import {TaxDO} from '../../taxes/data-objects/TaxDO';
 
 export enum InvoiceGroupStatus {
     Active,
@@ -20,6 +21,7 @@ export class InvoiceGroupDO extends BaseDO {
     indexedCustomerIdList: string[];
     invoiceList: InvoiceDO[];
     status: InvoiceGroupStatus;
+    vatTaxListSnapshot: TaxDO[];
 
     protected getPrimitivePropertyKeys(): string[] {
         return ["id", "invoiceGroupReference", "versionId", "hotelId", "groupBookingId", "indexedCustomerIdList", "status"];
@@ -33,6 +35,13 @@ export class InvoiceGroupDO extends BaseDO {
             var invoiceDO = new InvoiceDO();
             invoiceDO.buildFromObject(invoiceObject);
             this.invoiceList.push(invoiceDO);
+        });
+
+        this.vatTaxListSnapshot = [];
+        this.forEachElementOf(this.getObjectPropertyEnsureUndefined(object, "vatTaxListSnapshot"), (vatTaxSnapshotObject: Object) => {
+            var taxDO = new TaxDO();
+            taxDO.buildFromObject(vatTaxSnapshotObject);
+            this.vatTaxListSnapshot.push(taxDO);
         });
     }
 

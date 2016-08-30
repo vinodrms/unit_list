@@ -27,6 +27,7 @@ export interface InvoiceDataAggregatorQuery {
 
 export class InvoiceDataAggregator {
     private _hotel: HotelDO;
+    private _invoiceGroup: InvoiceGroupDO;
     private _invoice: InvoiceDO;
     private _payerCustomer: CustomerDO;
     private _payerIndexOnInvoice: number;
@@ -53,15 +54,10 @@ export class InvoiceDataAggregator {
             var invoiceGroupsRepo = this._appContext.getRepositoryFactory().getInvoiceGroupsRepository();
             return invoiceGroupsRepo.getInvoiceGroupById({ hotelId: this._hotel.id }, query.invoiceGroupId);
         }).then((invoiceGroupDO: InvoiceGroupDO) => {
+            this._vatList = invoiceGroupDO.vatTaxListSnapshot;
             this._invoice = _.find(invoiceGroupDO.invoiceList, (invoice: InvoiceDO) => {
                 return query.invoiceReference === invoice.invoiceReference;
             });
-
-            var taxRepo = this._appContext.getRepositoryFactory().getTaxRepository();
-            return taxRepo.getTaxList({ hotelId: this._hotel.id });
-        }).then((result: TaxResponseRepoDO) => {
-            this._vatList = result.vatList;
-            this._otherTaxesList = result.otherTaxList;
 
             var invoicePayerDO = this._invoice.payerList[query.payerIndex];
 
@@ -104,14 +100,11 @@ export class InvoiceDataAggregator {
         invoiceAggregatedData.payerCustomer = this._payerCustomer;
         invoiceAggregatedData.addOnProductList = this._addOnProductList;
         invoiceAggregatedData.vatList = this._vatList;
-        invoiceAggregatedData.otherTaxes = this._otherTaxesList;
         invoiceAggregatedData.payerIndexOnInvoice = this._payerIndexOnInvoice;
         invoiceAggregatedData.paymentMethodList = this._paymentMethodList;
         invoiceAggregatedData.addSharedInvoiceItemIfNecessary();
         return invoiceAggregatedData;
     }
-
-    
 
     private get hotelId(): string {
         return this._sessionContext.sessionDO.hotel.id;

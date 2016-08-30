@@ -6,8 +6,9 @@ export class AddOnProductSnapshotDO extends BaseDO {
     name: string;
     price: number;
     internalCost: number;
+    taxIdList: string[];
 
     protected getPrimitivePropertyKeys(): string[] {
-        return ["id", "categoryId", "name", "price", "internalCost"];
+        return ["id", "categoryId", "name", "price", "internalCost", "taxIdList"];
     }
 }

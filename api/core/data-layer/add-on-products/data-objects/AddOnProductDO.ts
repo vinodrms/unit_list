@@ -1,5 +1,7 @@
 import {BaseDO} from '../../common/base/BaseDO';
 import {AddOnProductSnapshotDO} from './AddOnProductSnapshotDO';
+import {TaxDO} from '../../taxes/data-objects/TaxDO';
+import {ThUtils} from '../../../utils/ThUtils';
 
 import _ = require("underscore");
 
@@ -35,6 +37,14 @@ export class AddOnProductDO extends BaseDO {
 		snapshot.name = this.name;
 		snapshot.price = this.price;
 		snapshot.internalCost = this.internalCost;
+		snapshot.taxIdList = this.taxIdList;
 		return snapshot;
+	}
+
+	public getVatId(): string {
+		if (!_.isEmpty(this.taxIdList)) {
+			return this.taxIdList[0];
+		}
+		return null;
 	}
 }

@@ -81,17 +81,18 @@ export class InvoiceDO extends BaseDO {
         var thUtils = new ThUtils();
         _.forEach(this.itemList, (item: InvoiceItemDO) => {
             if (item.type === InvoiceItemType.Booking) {
-                var booking = _.find(bookingList, (booking: BookingDO) => {
+                var bookingIndex = _.findIndex(bookingList, (booking: BookingDO) => {
                     return booking.bookingId === item.id;
-                });
-                if (!thUtils.isUndefinedOrNull(booking)) {
-                    item.meta = booking.price;
+                })
+                if(bookingIndex != -1) {
+                    item.meta = bookingList[bookingIndex].price;
                     item.meta.setMovable(false);
                 }
-                if(!booking.price.isPenalty()) {
-                    _.forEach(booking.price.includedInvoiceItemList, (invoiceItem: InvoiceItemDO) => {
+                if(!bookingList[bookingIndex].price.isPenalty()) {
+                    bookingList[bookingIndex].price.includedInvoiceItemList.reverse();
+                    _.forEach(bookingList[bookingIndex].price.includedInvoiceItemList, (invoiceItem: InvoiceItemDO) => {
                         invoiceItem.meta.setMovable(false);
-                        this.itemList.push(invoiceItem);
+                        this.itemList.splice(bookingIndex + 1, 0, invoiceItem);
                     });
                 }
             }

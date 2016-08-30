@@ -56,7 +56,7 @@ export class InvoiceConfirmationVMContainer {
     paymentMethodValue: string;
 
     subtotalValue: number;
-    vatValue: number;
+    totalVat: number;
     totalLabel: string;
     totalValue: number;
 
@@ -113,13 +113,18 @@ export class InvoiceConfirmationVMContainer {
         this.qtyLabel = this._thTranslation.translate('Qty');
         this.netUnitPriceLabel = this._thTranslation.translate('Net Unit Price');
         this.vatLabel = this._thTranslation.translate('VAT');
-        this.subtotalLabel = this._thTranslation.translate('Subtotal');
+        this.subtotalLabel = this._thTranslation.translate('Net Subtotal');
 
         this.itemVMList = [];
+        this.totalVat = 0;
+        this.subtotalValue = 0;
         _.forEach(this._invoice.itemList, (itemDO: InvoiceItemDO) => {
             var invoiceItemVM = new InvoiceItemVM(this._thTranslation);
-            invoiceItemVM.buildFromInvoiceItemDO(itemDO);
+            invoiceItemVM.buildFromInvoiceItemDO(itemDO, this._invoiceAggregatedData.vatList);
             this.itemVMList.push(invoiceItemVM);
+
+            this.totalVat = this._thUtils.roundNumberToTwoDecimals(this.totalVat + invoiceItemVM.vat);
+            this.subtotalValue = this._thUtils.roundNumberToTwoDecimals(this.subtotalValue + invoiceItemVM.subtotal);
         })
     }
 
@@ -136,10 +141,8 @@ export class InvoiceConfirmationVMContainer {
     }
 
     private initTotalValues() {
-        this.subtotalValue = this._invoice.payerList[this.payerIndex].priceToPay;
-        this.vatValue = 0;
         this.totalLabel = this._thTranslation.translate('Total');
-        this.totalValue = this.subtotalValue;
+        this.totalValue = this._invoice.payerList[this.payerIndex].priceToPay;
     }
 
     private get _invoice(): InvoiceDO {

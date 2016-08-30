@@ -9,11 +9,12 @@ export class FeeInvoiceItemMetaDO extends BaseDO implements IInvoiceItemMeta {
     movable: boolean;
 
     pricePerItem: number;
+    vatId: string;
     numberOfItems: number;
     displayName: string;
 
     protected getPrimitivePropertyKeys(): string[] {
-        return ["movable", "pricePerItem", "numberOfItems", "displayName"];
+        return ["movable", "pricePerItem", "vatId", "numberOfItems", "displayName"];
     }
 
     public getUnitPrice(): number {
@@ -35,7 +36,9 @@ export class FeeInvoiceItemMetaDO extends BaseDO implements IInvoiceItemMeta {
         }
         return this.movable;
     }
-
+    public getVatId(): string {
+        return this.vatId;
+    }
     public buildFromCustomerDO(customerDO: CustomerDO) {
         this.movable = false;
         this.numberOfItems = 1;

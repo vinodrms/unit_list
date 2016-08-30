@@ -29,6 +29,8 @@ import {RoomCategoryStatsDO} from '../../../data-layer/room-categories/data-obje
 import {BookingConfirmationEmailSender} from '../booking-confirmations/BookingConfirmationEmailSender';
 import {BookingDataAggregatorQuery} from '../aggregators/BookingDataAggregator';
 import {AddOnProductLoader, AddOnProductItemContainer} from '../../add-on-products/validators/AddOnProductLoader';
+import {TaxResponseRepoDO} from '../../../data-layer/taxes/repositories/ITaxRepository';
+import {TaxDO} from '../../../data-layer/taxes/data-objects/TaxDO';
 
 import _ = require('underscore');
 
@@ -42,6 +44,7 @@ export class AddBookingItems {
     private _loadedAllotmentsContainer: AllotmentsContainer;
     private _loadedRoomList: RoomDO[];
     private _loadedRoomCategoryStatsList: RoomCategoryStatsDO[];
+    private _loadedVatTaxList: TaxDO[];
 
     private _bookingList: BookingDO[];
 
@@ -118,6 +121,11 @@ export class AddBookingItems {
             }).then((roomCategoryStatsList: RoomCategoryStatsDO[]) => {
                 this._loadedRoomCategoryStatsList = roomCategoryStatsList;
 
+                var taxRepo = this._appContext.getRepositoryFactory().getTaxRepository();
+                return taxRepo.getTaxList({ hotelId: this._sessionContext.sessionDO.hotel.id });
+            }).then((taxResponse: TaxResponseRepoDO) => {
+                this._loadedVatTaxList = taxResponse.vatList;
+
                 var addOnProductLoader = new AddOnProductLoader(this._appContext, this._sessionContext);
                 return addOnProductLoader.load(this._loadedPriceProductsContainer.getAddOnProductIdList());
             }).then((addOnProductItemContainer: AddOnProductItemContainer) => {
@@ -126,7 +134,8 @@ export class AddBookingItems {
                     currentHotelTimestamp: ThTimestampDO.buildThTimestampForTimezone(this._loadedHotel.timezone),
                     priceProductsContainer: this._loadedPriceProductsContainer,
                     customersContainer: this._loadedCustomersContainer,
-                    addOnProductItemContainer: addOnProductItemContainer
+                    addOnProductItemContainer: addOnProductItemContainer,
+                    vatTaxList: this._loadedVatTaxList
                 });
                 return bookingItemsConverter.convert(this._bookingItems, this._inputChannel);
             }).then((convertedBookingList: BookingDO[]) => {
