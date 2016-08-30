@@ -92,7 +92,7 @@ export class InvoiceDO extends BaseDO {
                     bookingList[bookingIndex].price.includedInvoiceItemList.reverse();
                     _.forEach(bookingList[bookingIndex].price.includedInvoiceItemList, (invoiceItem: InvoiceItemDO) => {
                         invoiceItem.meta.setMovable(false);
-                        this.itemList.splice(bookingIndex, 0, invoiceItem);
+                        this.itemList.splice(bookingIndex + 1, 0, invoiceItem);
                     });
                 }
             }

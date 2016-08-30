@@ -35,10 +35,12 @@ export class InvoiceEditComponent implements OnInit {
     @Input() invoiceReference: string;
     @Output() newlyAddedInvoiceRemoved = new EventEmitter();
 
+    private static MAX_NO_OF_INVOICE_ITEMS = 50;
+
     private _selectedInvoiceItemIndex: number;
 
     constructor(private _appContext: AppContext,
-        private _hotelOperationsResultService: HotelOperationsResultService, 
+        private _hotelOperationsResultService: HotelOperationsResultService,
         private _addOnProductsModalService: AddOnProductsModalService,
         private _numberOfAddOnProductsModalService: NumberOfAddOnProductsModalService,
         private _customerRegisterModalService: CustomerRegisterModalService,
@@ -55,13 +57,34 @@ export class InvoiceEditComponent implements OnInit {
                 if (!_.isEmpty(selectedAddOnProductList)) {
                     this._numberOfAddOnProductsModalService.openModal(selectedAddOnProductList[0].id).then((modalDialogInstance: ModalDialogRef<NumberOfAddOnProductsModalOutput>) => {
                         modalDialogInstance.resultObservable.subscribe((numberOfAopSelection: NumberOfAddOnProductsModalOutput) => {
-                            this.invoiceVM.addItemOnInvoice(selectedAddOnProductList[0], numberOfAopSelection.noOfItems);
-                            this.invoiceGroupVM.updatePriceToPayIfSinglePayerByRef(this.invoiceReference);
+                            this.addItemOnInvoice(selectedAddOnProductList[0], numberOfAopSelection.noOfItems);
                         });
                     });
                 }
             });
         }).catch((e: any) => { });
+    }
+
+    private addItemOnInvoice(aopToBeAdded: AddOnProductDO, qty: number) {
+        if (this.maxNoOfInvoicsItemsLimitExceeeded()) {
+            var title = this._appContext.thTranslation.translate("Info");
+            var content = this._appContext.thTranslation.translate("The maximum number of %maxNoOfInvoiceItems% invoice items was exceeded.", {
+                maxNoOfInvoiceItems: InvoiceEditComponent.MAX_NO_OF_INVOICE_ITEMS
+            });
+            var positiveLabel = this._appContext.thTranslation.translate("OK");
+
+            this._appContext.modalService.confirm(title, content, { positive: positiveLabel }, () => {
+
+            });
+        }
+        else {
+            this.invoiceVM.addItemOnInvoice(aopToBeAdded, qty);
+            this.invoiceGroupVM.updatePriceToPayIfSinglePayerByRef(this.invoiceReference);
+        }
+    }
+
+    private maxNoOfInvoicsItemsLimitExceeeded(): boolean {
+        return this.invoiceVM.invoceItemVMList.length >= InvoiceEditComponent.MAX_NO_OF_INVOICE_ITEMS;
     }
 
     public openCustomerSelectModal() {
@@ -93,8 +116,8 @@ export class InvoiceEditComponent implements OnInit {
             var content = this._appContext.thTranslation.translate("You cannot mark this invoice as paid. The total amount paid is lower than the total price.");
             var positiveLabel = this._appContext.thTranslation.translate("OK");
 
-            this._appContext.modalService. confirm(title, content, { positive: positiveLabel }, () => {
-                
+            this._appContext.modalService.confirm(title, content, { positive: positiveLabel }, () => {
+
             });
         }
         else {

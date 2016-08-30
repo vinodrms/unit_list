@@ -91,6 +91,12 @@ export class InvoiceVM {
         invoiceItemMeta.movable = true;
         invoiceItemMeta.numberOfItems = qty;
         invoiceItemMeta.pricePerItem = aop.price;
+        if(_.isArray(aop.taxIdList) && !_.isEmpty(aop.taxIdList)) {
+            invoiceItemMeta.vatId = aop.taxIdList[0];
+        }
+        else {
+            invoiceItemMeta.vatId = null;
+        }
         newInvoiceItem.meta = invoiceItemMeta;
 
         var newInvoiceItemVM = new InvoiceItemVM(this._thTranslation);

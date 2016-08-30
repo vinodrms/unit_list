@@ -21,8 +21,6 @@ import {IGenerateBookingInvoiceActionStrategy} from './actions/IGenerateBookingI
 import {AddOnProductDO} from '../../../data-layer/add-on-products/data-objects/AddOnProductDO';
 import {BaseCorporateDetailsDO} from '../../../data-layer/customers/data-objects/customer-details/corporate/BaseCorporateDetailsDO';
 import {AddOnProductInvoiceItemMetaDO} from '../../../data-layer/invoices/data-objects/items/add-on-products/AddOnProductInvoiceItemMetaDO';
-import {TaxResponseRepoDO} from '../../../data-layer/taxes/repositories/ITaxRepository';
-import {TaxDO} from '../../../data-layer/taxes/data-objects/TaxDO';
 
 import _ = require('underscore');
 
@@ -95,44 +93,40 @@ export class GenerateBookingInvoice {
         invoice.itemList.push(bookingInvoiceItem);
         invoice.paymentStatus = InvoicePaymentStatus.Unpaid;
 
-        var vatList: TaxDO[];
-        this._appContext.getRepositoryFactory().getTaxRepository().getTaxList({ hotelId: this.hotelId }).then((result: TaxResponseRepoDO) => {
-            vatList = result.vatList;
-            return this._appContext.getRepositoryFactory().getBookingRepository().getBookingById({ hotelId: this.hotelId }, this._generateBookingInvoiceDO.groupBookingId,
-                this._generateBookingInvoiceDO.bookingId)
-        }).then((booking: BookingDO) => {
-            invoice.payerList = [];
-            var defaultInvoicePayer =
-                InvoicePayerDO.buildFromCustomerDOAndPaymentMethod(this._loadedDefaultBillingCustomer, this._loadedBooking.defaultBillingDetails.paymentMethod);
+        this._appContext.getRepositoryFactory().getBookingRepository().getBookingById({ hotelId: this.hotelId }, this._generateBookingInvoiceDO.groupBookingId,
+            this._generateBookingInvoiceDO.bookingId).then((booking: BookingDO) => {
+                invoice.payerList = [];
+                var defaultInvoicePayer =
+                    InvoicePayerDO.buildFromCustomerDOAndPaymentMethod(this._loadedDefaultBillingCustomer, this._loadedBooking.defaultBillingDetails.paymentMethod);
 
-            if (this._thUtils.isUndefinedOrNull(this._penaltyPrice)) {
-                defaultInvoicePayer.priceToPay = this._thUtils.roundNumberToTwoDecimals(booking.price.getUnitPrice() * booking.price.getNumberOfItems());
-                _.forEach(booking.price.includedInvoiceItemList, (invoiceItem: InvoiceItemDO) => {
+                if (this._thUtils.isUndefinedOrNull(this._penaltyPrice)) {
+                    defaultInvoicePayer.priceToPay = this._thUtils.roundNumberToTwoDecimals(booking.price.getUnitPrice() * booking.price.getNumberOfItems());
+                    _.forEach(booking.price.includedInvoiceItemList, (invoiceItem: InvoiceItemDO) => {
+                        defaultInvoicePayer.priceToPay =
+                            this._thUtils.roundNumberToTwoDecimals(defaultInvoicePayer.priceToPay + invoiceItem.meta.getUnitPrice() * invoiceItem.meta.getNumberOfItems());
+                    });
+                }
+                else {
+                    defaultInvoicePayer.priceToPay = this._penaltyPrice;
+                }
+                if (defaultInvoicePayer.paymentMethod.type === InvoicePaymentMethodType.PayInvoiceByAgreement) {
+                    var corporateDetails = new BaseCorporateDetailsDO();
+                    corporateDetails.buildFromObject(this._loadedDefaultBillingCustomer.customerDetails);
+
                     defaultInvoicePayer.priceToPay =
-                        this._thUtils.roundNumberToTwoDecimals(defaultInvoicePayer.priceToPay + invoiceItem.meta.getUnitPrice() * invoiceItem.meta.getNumberOfItems());
+                        this._thUtils.roundNumberToTwoDecimals(defaultInvoicePayer.priceToPay + corporateDetails.invoiceFee);
+                }
+
+                invoice.payerList.push(defaultInvoicePayer);
+
+                _.forEach(this._generateBookingInvoiceDO.initialAddOnProducts, (generateAopMeta: GenerateBookingInvoiceAopMeta) => {
+                    var aopInvoiceItem = new InvoiceItemDO();
+                    aopInvoiceItem.buildFromAddOnProductDO(generateAopMeta.addOnProductDO, generateAopMeta.noOfItems, true, generateAopMeta.addOnProductDO.getVatId());
+                    invoice.itemList.push(aopInvoiceItem);
                 });
-            }
-            else {
-                defaultInvoicePayer.priceToPay = this._penaltyPrice;
-            }
-            if (defaultInvoicePayer.paymentMethod.type === InvoicePaymentMethodType.PayInvoiceByAgreement) {
-                var corporateDetails = new BaseCorporateDetailsDO();
-                corporateDetails.buildFromObject(this._loadedDefaultBillingCustomer.customerDetails);
 
-                defaultInvoicePayer.priceToPay =
-                    this._thUtils.roundNumberToTwoDecimals(defaultInvoicePayer.priceToPay + corporateDetails.invoiceFee);
-            }
-
-            invoice.payerList.push(defaultInvoicePayer);
-
-            _.forEach(this._generateBookingInvoiceDO.initialAddOnProducts, (generateAopMeta: GenerateBookingInvoiceAopMeta) => {
-                var aopInvoiceItem = new InvoiceItemDO();
-                aopInvoiceItem.buildFromAddOnProductDO(generateAopMeta.addOnProductDO, generateAopMeta.noOfItems, true, generateAopMeta.addOnProductDO.getVatId());
-                invoice.itemList.push(aopInvoiceItem);
+                resolve(invoice);
             });
-
-            resolve(invoice);
-        });
     }
 
     private get hotelId(): string {

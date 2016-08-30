@@ -119,16 +119,13 @@
                                         <%= itemVM.qty %>
                                     </td>
                                     <td>
-                                        <%= ccySymbol %>
-                                            <%= itemVM.netUnitPrice %>
+                                        <%= ccySymbol %><%= itemVM.netUnitPrice %>
                                     </td>
                                     <td>
-                                        <%= ccySymbol %>
-                                            <%= itemVM.vat %>
+                                        <%= ccySymbol %><%= itemVM.vat %>
                                     </td>
                                     <td>
-                                        <%= ccySymbol %>
-                                            <%= itemVM.subtotal %>
+                                        <%= ccySymbol %><%= itemVM.subtotal %>
                                     </td>
                                 </tr>
                                 <% }); %>
@@ -165,16 +162,14 @@
                                     <th>
                                         <%= vatLabel %>:</th>
                                     <td>
-                                        <%= ccySymbol %>
-                                            <%= vatValue %>
+                                        <%= ccySymbol %><%= totalVat %>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th>
                                         <%= totalLabel %>:</th>
                                     <td>
-                                        <%= ccySymbol %>
-                                            <%= totalValue %>
+                                        <%= ccySymbol %><%= totalValue %>
                                     </td>
                                 </tr>
                             </tbody>

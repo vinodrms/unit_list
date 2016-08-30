@@ -186,4 +186,12 @@ export class InvoiceGroupVM {
         }
         return true;
     }
+    public get atLeastOneInvoiceUnpaid(): boolean {
+        for(var i = 0; i < this.invoiceVMList.length; ++i) {
+            if(!this.invoiceVMList[i].invoiceDO.isPaid) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

@@ -9,6 +9,9 @@ import {InvoiceGroupDO} from '../../../../../data-layer/invoices/data-objects/In
 import {ISaveInvoiceGroupActionStrategy} from '../ISaveInvoiceGroupActionStrategy';
 import {InvoiceGroupMetaRepoDO} from '../../../../../data-layer/invoices/repositories/IInvoiceGroupsRepository';
 
+import {TaxResponseRepoDO} from '../../../../../data-layer/taxes/repositories/ITaxRepository';
+import {TaxDO} from '../../../../../data-layer/taxes/data-objects/TaxDO';
+
 export class CustomerInvoiceGroupAddStrategy implements ISaveInvoiceGroupActionStrategy {
     private _thUtils: ThUtils;
 
@@ -19,8 +22,11 @@ export class CustomerInvoiceGroupAddStrategy implements ISaveInvoiceGroupActionS
 
     public saveInvoiceGroup(resolve: { (result: InvoiceGroupDO): void }, reject: { (err: ThError): void }) {
         var invoiceGroupRepo = this._appContext.getRepositoryFactory().getInvoiceGroupsRepository();
-        var invoiceGroupMeta = this.buildInvoiceGroupMetaRepoDO();
-        invoiceGroupRepo.addInvoiceGroup(invoiceGroupMeta, this._invoiceGroupDO).then((result: InvoiceGroupDO) => {
+        this._appContext.getRepositoryFactory().getTaxRepository().getTaxList({ hotelId: this.hotelId }).then((result: TaxResponseRepoDO) => {
+            this._invoiceGroupDO.vatTaxListSnapshot = result.vatList;
+
+            return invoiceGroupRepo.addInvoiceGroup({ hotelId: this.hotelId }, this._invoiceGroupDO);
+        }).then((result: InvoiceGroupDO) => {
             resolve(result);
         }).catch((error: any) => {
             var thError = new ThError(ThStatusCode.CustomerInvoiceGroupAddStrategyErrorAdding, error);
@@ -31,9 +37,7 @@ export class CustomerInvoiceGroupAddStrategy implements ISaveInvoiceGroupActionS
         });
     }
 
-    private buildInvoiceGroupMetaRepoDO(): InvoiceGroupMetaRepoDO {
-        return {
-            hotelId: this._sessionContext.sessionDO.hotel.id
-        };
+    private get hotelId(): string {
+        return this._sessionContext.sessionDO.hotel.id;
     }
 }
