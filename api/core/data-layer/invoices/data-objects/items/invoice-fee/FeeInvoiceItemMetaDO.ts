@@ -14,7 +14,7 @@ export class FeeInvoiceItemMetaDO extends BaseDO implements IInvoiceItemMeta {
     displayName: string;
     
     protected getPrimitivePropertyKeys(): string[] {
-        return ["movable", "pricePerItem", "numberOfItems", "displayName"];
+        return ["movable", "pricePerItem", "vatValue", "numberOfItems", "displayName"];
     }
 
     public getUnitPrice(): number {

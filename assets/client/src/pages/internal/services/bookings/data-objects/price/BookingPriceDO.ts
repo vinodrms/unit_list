@@ -21,11 +21,13 @@ export class BookingPriceDO extends BaseDO implements IInvoiceItemMeta {
 
     totalBookingPrice: number;
 
+    vatValue: number;
+
     breakfast: InvoiceItemDO;
     includedInvoiceItemList: InvoiceItemDO[];
 
     protected getPrimitivePropertyKeys(): string[] {
-        return ["movable", "priceType", "roomPricePerNight", "numberOfNights", "totalRoomPrice", "totalOtherPrice", "totalBookingPrice"];
+        return ["movable", "priceType", "roomPricePerNight", "numberOfNights", "totalRoomPrice", "totalOtherPrice", "totalBookingPrice", "vatValue"];
     }
     public buildFromObject(object: Object) {
         super.buildFromObject(object);
@@ -80,5 +82,8 @@ export class BookingPriceDO extends BaseDO implements IInvoiceItemMeta {
             return true;
         }
         return this.movable;
+    }
+    public getVatValue(): number {
+        return this.vatValue;
     }
 }
