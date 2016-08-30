@@ -7,6 +7,7 @@ export class AddOnProductInvoiceItemMetaDO extends BaseDO implements IInvoiceIte
     movable: boolean;
 
     pricePerItem: number;
+    vatValue: number;
     numberOfItems: number;
     aopDisplayName: string;
 
@@ -32,5 +33,8 @@ export class AddOnProductInvoiceItemMetaDO extends BaseDO implements IInvoiceIte
             return true;
         }
         return this.movable;
+    }
+    public getVatValue(): number {
+        return this.vatValue;
     }
 }

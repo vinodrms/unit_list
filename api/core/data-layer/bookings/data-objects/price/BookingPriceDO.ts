@@ -21,6 +21,8 @@ export class BookingPriceDO extends BaseDO implements IInvoiceItemMeta {
 
     totalBookingPrice: number;
 
+    vatValue: number;
+
     breakfast: InvoiceItemDO;
     includedInvoiceItemList: InvoiceItemDO[];
 
@@ -104,5 +106,8 @@ export class BookingPriceDO extends BaseDO implements IInvoiceItemMeta {
             return true;
         }
         return this.movable;
+    }
+    public getVatValue(): number {
+        return this.vatValue;
     }
 }
