@@ -102,10 +102,10 @@
                                     <%= netUnitPriceLabel %>
                                 </th>
                                 <th>
-                                    <%= vatLabel %>
+                                    <%= subtotalLabel %>
                                 </th>
                                 <th>
-                                    <%= subtotalLabel %>
+                                    <%= vatLabel %>
                                 </th>
                             </tr>
                         </thead>
@@ -122,10 +122,10 @@
                                         <%= ccySymbol %><%= itemVM.netUnitPrice %>
                                     </td>
                                     <td>
-                                        <%= ccySymbol %><%= itemVM.vat %>
+                                        <%= ccySymbol %><%= itemVM.subtotal %>
                                     </td>
                                     <td>
-                                        <%= ccySymbol %><%= itemVM.subtotal %>
+                                        <%= ccySymbol %><%= itemVM.vat %>
                                     </td>
                                 </tr>
                                 <% }); %>

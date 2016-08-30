@@ -113,7 +113,7 @@ export class InvoiceConfirmationVMContainer {
         this.qtyLabel = this._thTranslation.translate('Qty');
         this.netUnitPriceLabel = this._thTranslation.translate('Net Unit Price');
         this.vatLabel = this._thTranslation.translate('VAT');
-        this.subtotalLabel = this._thTranslation.translate('Subtotal');
+        this.subtotalLabel = this._thTranslation.translate('Net Subtotal');
 
         this.itemVMList = [];
         this.totalVat = 0;
