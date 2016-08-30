@@ -121,9 +121,13 @@ export class InvoicePayerComponent implements OnInit {
         this._operationsPageControllerService.goToCustomer(customer.id);
     }
 
-    public onPrint() {
-
+    public get invoicePdfUrl(): string {
+        return 'api/invoiceGroups/pdf?invoiceGroupId=' 
+            + this.invoiceGroupVM.invoiceGroupDO.id + '&invoiceReference=' 
+            + this.invoiceReference + '&customerId=' + this.invoicePayerVM.customerDO.id 
+            + '&payerIndex=' + this.invoicePayerVMIndex;
     }
+
     public onSend() {
         this._emailSenderModalService.sendInvoiceConfirmation([this.invoicePayerVM.customerDO],
             this.invoiceGroupVM.invoiceGroupDO.id,
