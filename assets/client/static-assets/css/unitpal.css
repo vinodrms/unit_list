@@ -2162,6 +2162,8 @@ a.btn.btn-square:focus {
         flex-basis: 236px;
         flex-direction: column;
         flex-grow: 0;
+        min-width: 236px;
+        max-width: 236px;
     }
 
     .operations-dashboard .pane > .header{
@@ -2680,6 +2682,7 @@ a.btn.btn-square:focus {
 
     .yield-manager-dashboard .main{
         width: 100px; /* Need to force a width as flex behaves odd on small resolutions, the width is acutally not taken into account.*/
+        max-width: calc(100% - 236px);
         background-color: #eeeeee;
         flex-basis: 100px;
         flex-grow: 1;
@@ -2840,6 +2843,7 @@ a.btn.btn-square:focus {
 
         .yield-manager-dashboard .price-products-table{
             padding: 0px 12px 12px 12px;
+            height: calc(100% - 56px);
         }
 
         .yield-manager-dashboard .key-metrics-row,
@@ -2910,6 +2914,7 @@ a.btn.btn-square:focus {
         
         .yield-actions-control {
             padding: 12px 12px 0px 12px;
+            height: 56px;
         }
 
         .yield-actions-control .th-date-picker{
