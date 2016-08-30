@@ -20,6 +20,7 @@ import {GenerateBookingInvoiceActionFactory} from './actions/GenerateBookingInvo
 import {IGenerateBookingInvoiceActionStrategy} from './actions/IGenerateBookingInvoiceActionStrategy';
 import {AddOnProductDO} from '../../../data-layer/add-on-products/data-objects/AddOnProductDO';
 import {BaseCorporateDetailsDO} from '../../../data-layer/customers/data-objects/customer-details/corporate/BaseCorporateDetailsDO';
+import {AddOnProductInvoiceItemMetaDO} from '../../../data-layer/invoices/data-objects/items/add-on-products/AddOnProductInvoiceItemMetaDO';
 
 import _ = require('underscore');
 
@@ -117,6 +118,12 @@ export class GenerateBookingInvoice {
                 }
 
                 invoice.payerList.push(defaultInvoicePayer);
+
+                _.forEach(this._generateBookingInvoiceDO.initialAddOnProducts, (generateAopMeta: GenerateBookingInvoiceAopMeta) => {
+                    var aopInvoiceItem = new InvoiceItemDO();
+                    aopInvoiceItem.buildFromAddOnProductDO(generateAopMeta.addOnProductDO, generateAopMeta.noOfItems, true);
+                    invoice.itemList.push(aopInvoiceItem);
+                });
 
                 resolve(invoice);
             });
