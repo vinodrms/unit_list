@@ -124,22 +124,21 @@ describe("Invoices Tests", function () {
             });
         });
 
-        // TODO: to be reviewed by Dragos
-        // it("Should update the previously created booking invoice group by adding a new invoice to it", function (done) {
-
-        //     var saveInvoiceGroup = new SaveInvoiceGroup(testContext.appContext, testContext.sessionContext);
-        //     bookingInvoiceGroupsHelper.buildSaveInvoiceGroupDOForUpdatingBookingInvoiceGroup(createdBookingInvoiceGroup).then((saveInvoiceGroupDO: SaveInvoiceGroupDO) => {
-        //         saveInvoiceGroup.save(saveInvoiceGroupDO).then((savedInvoiceGroup: InvoiceGroupDO) => {
-        //             createdBookingInvoiceGroup = savedInvoiceGroup;
-        //             invoiceTestUtils.testInvoiceGroupEquality(savedInvoiceGroup, saveInvoiceGroupDO);
-        //             done();
-        //         }).catch((err: any) => {
-        //             done(err);
-        //         });
-        //     }).catch((err: any) => {
-        //         done(err);
-        //     });
-        // });
+        it("Should update the previously created booking invoice group by adding a new invoice to it", function (done) {
+            var saveInvoiceGroup = new SaveInvoiceGroup(testContext.appContext, testContext.sessionContext);
+            bookingInvoiceGroupsHelper.buildSaveInvoiceGroupDOForUpdatingBookingInvoiceGroup(createdBookingInvoiceGroup).then((saveInvoiceGroupDO: SaveInvoiceGroupDO) => {
+                saveInvoiceGroup.save(saveInvoiceGroupDO).then((savedInvoiceGroup: InvoiceGroupDO) => {
+                    createdBookingInvoiceGroup = savedInvoiceGroup;
+                    should.equal(createdBookingInvoiceGroup.invoiceList.length, saveInvoiceGroupDO.invoiceList.length);
+                    invoiceTestUtils.testInvoiceEquality(_.last(createdBookingInvoiceGroup.invoiceList), _.last(saveInvoiceGroupDO.invoiceList));
+                    done();
+                }).catch((err: any) => {
+                    done(err);
+                });
+            }).catch((err: any) => {
+                done(err);
+            });
+        });
     });
 
     describe("Customer Invoice Groups Flow", function () {
@@ -172,35 +171,36 @@ describe("Invoices Tests", function () {
     });
 
     describe("Invoice Aggregators", function () {
-        it("Should get an invoice by booking id", function (done) {
-            // var invoiceGroupsRepo = testContext.appContext.getRepositoryFactory().getInvoiceGroupsRepository();
-            // var invoiceToSearchFor = createdBookingInvoiceGroup.invoiceList[0];
-            // invoiceGroupsRepo.getInvoiceList({ hotelId: testContext.sessionContext.sessionDO.hotel.id }, { groupBookingId: createdBookingInvoiceGroup.groupBookingId, bookingId: invoiceToSearchFor.bookingId }).then((invoice: InvoiceDO) => {
-            //     should.equal(invoiceToSearchFor.bookingId, invoice.bookingId);
-            //     done();
-            // }).catch((error: any) => {
-            //     done(error);
-            // });
-            done();
+        it("Should get an invoice group by group booking id", function (done) {
+            var invoiceGroupsRepo = testContext.appContext.getRepositoryFactory().getInvoiceGroupsRepository();
+            invoiceGroupsRepo.getInvoiceGroupList({ hotelId: testContext.sessionContext.sessionDO.hotel.id }, { groupBookingId: createdBookingInvoiceGroup.groupBookingId }).then((result: InvoiceGroupSearchResultRepoDO) => {
+                invoiceTestUtils.testInvoiceGroupEquality(createdBookingInvoiceGroup, result.invoiceGroupList[0]);
+                done();
+            }).catch((error: any) => {
+                done(error);
+            });
         });
 
     });
 
     describe("Invoice Email Sender Flow", function () {
         it("Should send the invoice by email", function (done) {
-            // var invoiceEmailSender = new InvoiceConfirmationEmailSender(testContext.appContext, testContext.sessionContext);
-            // invoiceEmailSender.sendInvoiceConfirmation({
-            //     customerId: '', 
-            //     invoiceGroupId: '', 
-            //     invoiceReference: '',
-            //     payerIndex: 0
-            // }, ['dragos.pricope@gmail.com']).then((result: boolean) => {
-
-            //     done();
-            // }).catch((err: any) => {
-            //     done(err);
-            // });
-            done();
+            var invoiceEmailSender = new InvoiceConfirmationEmailSender(testContext.appContext, testContext.sessionContext);
+            var invoice = createdBookingInvoiceGroup.invoiceList[0];
+            var invoiceGroupId = createdBookingInvoiceGroup.id;
+            var payerIndex = 0;
+            var customerId = invoice.payerList[payerIndex].customerId;
+            var invoiceReference = invoice.invoiceReference;
+            invoiceEmailSender.sendInvoiceConfirmation({
+                invoiceGroupId: invoiceGroupId, 
+                invoiceReference: invoiceReference,
+                payerIndex: payerIndex,
+                customerId: customerId 
+            }, ['dragos.pricope@gmail.com']).then((result: boolean) => {
+                done();
+            }).catch((err: any) => {
+                done(err);
+            });
         });
     });
 });
