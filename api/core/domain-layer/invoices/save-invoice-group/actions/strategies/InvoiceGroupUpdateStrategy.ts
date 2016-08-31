@@ -12,7 +12,7 @@ import {InvoiceDO, InvoicePaymentStatus} from '../../../../../data-layer/invoice
 import {ISaveInvoiceGroupActionStrategy} from '../ISaveInvoiceGroupActionStrategy';
 import {InvoiceGroupMetaRepoDO, InvoiceGroupItemMetaRepoDO} from '../../../../../data-layer/invoices/repositories/IInvoiceGroupsRepository';
 
-export class BookingInvoiceGroupUpdateStrategy implements ISaveInvoiceGroupActionStrategy {
+export class InvoiceGroupUpdateStrategy implements ISaveInvoiceGroupActionStrategy {
     private _loadedInvoiceGroup: InvoiceGroupDO;
 
     private _thUtils: ThUtils;
