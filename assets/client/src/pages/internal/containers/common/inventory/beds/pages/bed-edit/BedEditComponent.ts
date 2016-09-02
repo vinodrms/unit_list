@@ -1,5 +1,5 @@
 import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import {ControlGroup} from '@angular/common';
+import {FormGroup} from '@angular/forms';
 import {Observable} from 'rxjs/Observable';
 import {TranslationPipe} from '../../../../../../../../common/utils/localization/TranslationPipe';
 import {BedEditService} from './services/BedEditService';
@@ -78,7 +78,7 @@ export class BedEditComponent extends BaseFormComponent implements OnInit {
         this._bedEditService.updateFormValues(this._bedVM);	
 	}
     
-    protected getDefaultControlGroup(): ControlGroup {
+    protected getDefaultFormGroup(): FormGroup {
         return this._bedEditService.bedForm;
     }
     

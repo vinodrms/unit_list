@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {FormBuilder, ControlGroup, Validators} from '@angular/common';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Observable} from 'rxjs/Observable';
 import {AppContext, ThServerApi} from '../../../../../common/utils/AppContext';
 import {ThValidators} from '../../../../../common/utils/form-utils/ThFormUtils';
@@ -9,7 +9,7 @@ import {UpdatePasswordDO} from '../data-objects/UpdatePasswordDO';
 export class UpdatePasswordService {
 	private _activationCode;
 	private _email;
-	private _updatePasswdForm;
+	private _updatePasswdForm: FormGroup;
 
 	constructor(private _appContext: AppContext, private _formBuilder: FormBuilder) {
 		this.initResetPasswordForm();
@@ -52,10 +52,10 @@ export class UpdatePasswordService {
 	public set email(email: string) {
 		this._email = decodeURIComponent(email);
 	}
-	public get updatePasswdForm(): ControlGroup {
+	public get updatePasswdForm(): FormGroup {
 		return this._updatePasswdForm;
 	}
-	public set updatePasswdForm(updatePasswdForm: ControlGroup) {
+	public set updatePasswdForm(updatePasswdForm: FormGroup) {
 		this._updatePasswdForm = updatePasswdForm;
 	}
 }

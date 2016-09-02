@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {ControlGroup} from '@angular/common';
+import {FormGroup} from '@angular/forms';
 import {ROUTER_DIRECTIVES} from '@angular/router';
 import {AppContext} from '../../../../common/utils/AppContext';
 import {ThError} from '../../../../common/utils/responses/ThError';
@@ -25,7 +25,7 @@ export class SignUpComponent extends BaseFormComponent {
 		super();
 	}
 
-	protected getDefaultControlGroup(): ControlGroup {
+	protected getDefaultFormGroup(): FormGroup {
 		return this._signUpService.signUpForm;
 	}
 

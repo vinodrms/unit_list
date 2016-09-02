@@ -5,6 +5,7 @@
 			<span class="p-l-6"></span>
 			<input type="checkbox"
 			[(ngModel)]="selectAllItemsFlag"
+			name="selectAllItemsFlag"
 			(change)="setItemSelectionStateToAll(!selectAllItemsFlag)"
 			>
 			<span class="dark-gray-color oneline-text f-14 p-l-6">{{'Price Products' | translate}}</span>
@@ -20,7 +21,7 @@
 					<span class="f-10" title="{{getPriceProductTextFilter(priceProduct)}}">{{getPriceProductTextFilterInitial(priceProduct)}}</span>
 				</div>
 				<span class="p-l-6 ellipsis-text">
-					<input type="checkbox" [(ngModel)]="itemsSelectionState[priceProduct.id]" *ngIf="!priceProduct.lastRoomAvailability">
+					<input type="checkbox" [(ngModel)]="itemsSelectionState[priceProduct.id]" name="itemsSelectionStatePPId" *ngIf="!priceProduct.lastRoomAvailability">
 					<span class="orange-color f-10" *ngIf="priceProduct.lastRoomAvailability" title="{{'Last Room Availability' | translate}}"><b>LRA</b></span>
 					<span class="dark-gray-color f-14">{{priceProduct.name}}</span>
 				</span>

@@ -9,7 +9,7 @@
 		</div>
 		<div class="col-md-8 col-sm-8 col-xs-8">
 			<div class="form-group">
-				<select class="form-control" [ngModel]="constraintDO.type" (ngModelChange)="didChangeConstraintType($event)">
+				<select class="form-control" [ngModel]="constraintDO.type" (ngModelChange)="didChangeConstraintType($event)" name="constraintType">
 					<option *ngFor="let constraintMeta of constraintMetaList" [value]="constraintMeta.constraintType">
 						{{constraintMeta.title | translate}}
 					</option>
@@ -45,7 +45,7 @@
 		</div>
 		<div class="col-md-8 col-sm-8 col-xs-8 form-group">
 			<div class="input-group">
-				<input type="number" placeholder="{{ 'Enter a valid number of days' | translate }}" class="form-control input-group-lg" [(ngModel)]="constraintDO.constraint.leadDays"
+				<input type="number" placeholder="{{ 'Enter a valid number of days' | translate }}" class="form-control input-group-lg" [(ngModel)]="constraintDO.constraint.leadDays" name="leadDays"
 				/>
 			</div>
 		</div>
@@ -57,7 +57,7 @@
 		<div class="col-md-8 col-sm-8 col-xs-8 form-group">
 			<div class="input-group">
 				<input type="number" placeholder="{{ 'Enter a valid length of stay in days' | translate }}" class="form-control input-group-lg"
-				[(ngModel)]="constraintDO.constraint.lengthOfStay" />
+				[(ngModel)]="constraintDO.constraint.lengthOfStay" name="lengthOfStay" />
 			</div>
 		</div>
 	</div>
@@ -68,7 +68,7 @@
 		<div class="col-md-8 col-sm-8 col-xs-8 form-group">
 			<div class="input-group">
 				<input type="number" placeholder="{{ 'Enter a valid number of rooms' | translate }}" class="form-control input-group-lg"
-				[(ngModel)]="constraintDO.constraint.noOfRooms" />
+				[(ngModel)]="constraintDO.constraint.noOfRooms" name="noOfRooms" />
 			</div>
 		</div>
 	</div>
@@ -79,7 +79,7 @@
 		<div class="col-md-8 col-sm-8 col-xs-8 form-group">
 			<div class="input-group">
 				<input type="number" placeholder="{{ 'Enter a valid number of adults' | translate }}" class="form-control input-group-lg"
-				[(ngModel)]="constraintDO.constraint.noOfAdults" />
+				[(ngModel)]="constraintDO.constraint.noOfAdults" name="noOfAdults" />
 			</div>
 		</div>
 	</div>

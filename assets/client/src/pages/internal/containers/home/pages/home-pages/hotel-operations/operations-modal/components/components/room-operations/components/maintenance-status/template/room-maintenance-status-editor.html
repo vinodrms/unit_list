@@ -4,7 +4,7 @@
 
 <div class="col-xs-12 col-sm-4 padding-top-5px">
     <div class="form-group" *ngIf="!readonly">
-        <select class="form-control" [ngModel]="currentMaintenanceMeta" (ngModelChange)="currentMaintenanceMeta=$event" [disabled]="readonly">
+        <select class="form-control" [ngModel]="currentMaintenanceMeta" (ngModelChange)="currentMaintenanceMeta=$event" name="currentMaintenanceMeta" [disabled]="readonly">
 			<option *ngFor="let roomMaintenanceMeta of roomMaintenanceMetaList" [ngValue]="roomMaintenanceMeta">{{roomMaintenanceMeta.maintenanceMessage}}</option>
 		</select>
     </div>
@@ -19,7 +19,7 @@
 
 <div class="col-xs-12 col-sm-4 padding-top-5px">
     <div class="input-group">
-		<input type="text" class="form-control input-group-lg" [(ngModel)]="currentMaintenanceText" [readonly]="readonly" placeholder="{{'No Details' | translate}}">
+		<input type="text" class="form-control input-group-lg" [(ngModel)]="currentMaintenanceText" name="currentMaintenanceText" [readonly]="readonly" placeholder="{{'No Details' | translate}}">
 	</div>
 </div>
 <div class="col-xs-12 col-sm-3 padding-top-10px">

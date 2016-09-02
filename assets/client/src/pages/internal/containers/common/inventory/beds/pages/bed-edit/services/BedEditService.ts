@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {FormBuilder, ControlGroup, Validators, AbstractControl, Control} from '@angular/common';
+import {FormBuilder, FormGroup, Validators, AbstractControl, FormControl} from '@angular/forms';
 import {BedVM} from '../../../../../../../services/beds/view-models/BedVM';
 import {BedDO, BedSizeDO, BedCapacityDO, BedStorageType, BedAccommodationType} from '../../../../../../../services/beds/data-objects/BedDO';
 import {ThValidators, ThFieldLengths} from '../../../../../../../../../common/utils/form-utils/ThFormUtils';
@@ -9,14 +9,14 @@ import {ThUtils} from '../../../../../../../../../common/utils/ThUtils';
 export class BedEditService {
     private _thUtils: ThUtils;
 
-    private _nameControl: Control;
-    private _maxAdultsControl: Control;
-    private _maxChildrenControl: Control;
-    private _widthControl: Control;
-    private _lengthControl: Control;
-    private _notesControl: Control;
+    private _nameControl: FormControl;
+    private _maxAdultsControl: FormControl;
+    private _maxChildrenControl: FormControl;
+    private _widthControl: FormControl;
+    private _lengthControl: FormControl;
+    private _notesControl: FormControl;
 
-    private _bedForm: ControlGroup;
+    private _bedForm: FormGroup;
 
     constructor(private _formBuilder: FormBuilder) {
         this.initFormControls();
@@ -25,12 +25,12 @@ export class BedEditService {
         this._thUtils = new ThUtils();
     }
     private initFormControls() {
-        this._nameControl = new Control(null, Validators.compose([Validators.required, Validators.maxLength(200)]));
-        this._maxAdultsControl = new Control(null, Validators.compose([Validators.required, ThValidators.positiveIntegerValidator]));
-        this._maxChildrenControl = new Control(null, Validators.compose([Validators.required, ThValidators.positiveIntegerValidator]));
-        this._widthControl = new Control(null, Validators.compose([Validators.required, ThValidators.numberValidator]));
-        this._lengthControl = new Control(null, Validators.compose([Validators.required, ThValidators.numberValidator]));
-        this._notesControl = new Control(null, Validators.compose([Validators.maxLength(2000)]));
+        this._nameControl = new FormControl(null, Validators.compose([Validators.required, Validators.maxLength(200)]));
+        this._maxAdultsControl = new FormControl(null, Validators.compose([Validators.required, ThValidators.positiveIntegerValidator]));
+        this._maxChildrenControl = new FormControl(null, Validators.compose([Validators.required, ThValidators.positiveIntegerValidator]));
+        this._widthControl = new FormControl(null, Validators.compose([Validators.required, ThValidators.numberValidator]));
+        this._lengthControl = new FormControl(null, Validators.compose([Validators.required, ThValidators.numberValidator]));
+        this._notesControl = new FormControl(null, Validators.compose([Validators.maxLength(2000)]));
     }
     private initFormGroup() {
         this._bedForm = this._formBuilder.group({
@@ -89,10 +89,10 @@ export class BedEditService {
         return this._bedForm.valid;
     }
 
-    public get bedForm(): ControlGroup {
+    public get bedForm(): FormGroup {
         return this._bedForm;
     }
-    public set bedForm(bedForm: ControlGroup) {
+    public set bedForm(bedForm: FormGroup) {
         this._bedForm = bedForm;
     }
 
@@ -126,11 +126,11 @@ export class BedEditService {
         }
     }
 
-    private removeValidatorsFor(control: Control) {
+    private removeValidatorsFor(control: FormControl) {
         control.validator = Validators.compose([]);
     }
 
-    private resetControl(control: Control, value: any) {
+    private resetControl(control: FormControl, value: any) {
         control.setErrors(null);
         control.updateValue(value);
     }

@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 import {Observer} from 'rxjs/Observer';
-import {FormBuilder, ControlGroup, Validators, AbstractControl, Control} from '@angular/common';
+import {FormBuilder, FormGroup, Validators, AbstractControl, FormControl} from '@angular/forms';
 import {AppContext, ThServerApi, ThError} from '../../../../../../../../common/utils/AppContext';
 import {ThValidators, ThFieldLengths} from '../../../../../../../../common/utils/form-utils/ThFormUtils';
 import {CountriesDO} from '../../../../../../services/settings/data-objects/CountriesDO';
@@ -14,21 +14,21 @@ import {HotelService} from '../../../../../../services/hotel/HotelService';
 @Injectable()
 export class BasicInfoOverviewEditService {
 	public didSubmitForm: boolean = false;
-	private _overviewForm: ControlGroup;
+	private _overviewForm: FormGroup;
 
-	private _nameControl: Control;
-	private _companyNameControl: Control;
-	private _streetAddressControl: Control;
-	private _cityControl: Control;
-	private _postalCodeControl: Control;
-	private _phoneControl: Control;
-	private _faxControl: Control;
-	private _contactNameControl: Control;
-	private _websiteUrlControl: Control;
-	private _emailControl: Control;
-	private _facebookUrlControl: Control;
-	private _linkedinUrlControl: Control;
-	private _twitterUrlControl: Control;
+	private _nameControl: FormControl;
+	private _companyNameControl: FormControl;
+	private _streetAddressControl: FormControl;
+	private _cityControl: FormControl;
+	private _postalCodeControl: FormControl;
+	private _phoneControl: FormControl;
+	private _faxControl: FormControl;
+	private _contactNameControl: FormControl;
+	private _websiteUrlControl: FormControl;
+	private _emailControl: FormControl;
+	private _facebookUrlControl: FormControl;
+	private _linkedinUrlControl: FormControl;
+	private _twitterUrlControl: FormControl;
 
 	private _countries: CountriesDO;
 	private _hotel: HotelDO;
@@ -39,19 +39,19 @@ export class BasicInfoOverviewEditService {
 		this.initForm();
 	}
 	private initForm() {
-		this._nameControl = new Control("", Validators.compose([Validators.required, Validators.maxLength(ThFieldLengths.MaxHotelNameLength)]));
-		this._companyNameControl = new Control("", Validators.compose([Validators.required, Validators.maxLength(ThFieldLengths.MaxHotelNameLength)]));
-		this._streetAddressControl = new Control("", Validators.compose([Validators.required, Validators.maxLength(ThFieldLengths.MaxStreetAddressLength)]));
-		this._cityControl = new Control("", Validators.compose([Validators.required, Validators.maxLength(ThFieldLengths.MaxCityLength)]));
-		this._postalCodeControl = new Control("", Validators.compose([Validators.required]));
-		this._phoneControl = new Control("", Validators.compose([Validators.required, ThValidators.phoneValidator]));
-		this._faxControl = new Control("", Validators.compose([Validators.maxLength(ThFieldLengths.MaxPhoneLength), ThValidators.nullablePhoneValidator]));
-		this._contactNameControl = new Control("", Validators.compose([Validators.required, Validators.maxLength(ThFieldLengths.MaxNameLength)]));
-		this._websiteUrlControl = new Control("", Validators.compose([Validators.maxLength(ThFieldLengths.MaxUrlLength), ThValidators.nullableUrlValidator]));
-		this._emailControl = new Control("", Validators.compose([ThValidators.emailValidator, Validators.maxLength(ThFieldLengths.MaxUrlLength)]));
-		this._facebookUrlControl = new Control("", Validators.compose([Validators.maxLength(ThFieldLengths.MaxUrlLength), ThValidators.nullableUrlValidator]));
-		this._linkedinUrlControl = new Control("", Validators.compose([Validators.maxLength(ThFieldLengths.MaxUrlLength), ThValidators.nullableUrlValidator]));
-		this._twitterUrlControl = new Control("", Validators.compose([Validators.maxLength(ThFieldLengths.MaxUrlLength), ThValidators.nullableUrlValidator]));
+		this._nameControl = new FormControl("", Validators.compose([Validators.required, Validators.maxLength(ThFieldLengths.MaxHotelNameLength)]));
+		this._companyNameControl = new FormControl("", Validators.compose([Validators.required, Validators.maxLength(ThFieldLengths.MaxHotelNameLength)]));
+		this._streetAddressControl = new FormControl("", Validators.compose([Validators.required, Validators.maxLength(ThFieldLengths.MaxStreetAddressLength)]));
+		this._cityControl = new FormControl("", Validators.compose([Validators.required, Validators.maxLength(ThFieldLengths.MaxCityLength)]));
+		this._postalCodeControl = new FormControl("", Validators.compose([Validators.required]));
+		this._phoneControl = new FormControl("", Validators.compose([Validators.required, ThValidators.phoneValidator]));
+		this._faxControl = new FormControl("", Validators.compose([Validators.maxLength(ThFieldLengths.MaxPhoneLength), ThValidators.nullablePhoneValidator]));
+		this._contactNameControl = new FormControl("", Validators.compose([Validators.required, Validators.maxLength(ThFieldLengths.MaxNameLength)]));
+		this._websiteUrlControl = new FormControl("", Validators.compose([Validators.maxLength(ThFieldLengths.MaxUrlLength), ThValidators.nullableUrlValidator]));
+		this._emailControl = new FormControl("", Validators.compose([ThValidators.emailValidator, Validators.maxLength(ThFieldLengths.MaxUrlLength)]));
+		this._facebookUrlControl = new FormControl("", Validators.compose([Validators.maxLength(ThFieldLengths.MaxUrlLength), ThValidators.nullableUrlValidator]));
+		this._linkedinUrlControl = new FormControl("", Validators.compose([Validators.maxLength(ThFieldLengths.MaxUrlLength), ThValidators.nullableUrlValidator]));
+		this._twitterUrlControl = new FormControl("", Validators.compose([Validators.maxLength(ThFieldLengths.MaxUrlLength), ThValidators.nullableUrlValidator]));
 
 		this._overviewForm = this._formBuilder.group({
 			"name": this._nameControl,
@@ -149,10 +149,10 @@ export class BasicInfoOverviewEditService {
 		});
 	}
 
-	public get overviewForm(): ControlGroup {
+	public get overviewForm(): FormGroup {
 		return this._overviewForm;
 	}
-	public set overviewForm(overviewForm: ControlGroup) {
+	public set overviewForm(overviewForm: FormGroup) {
 		this._overviewForm = overviewForm;
 	}
 }

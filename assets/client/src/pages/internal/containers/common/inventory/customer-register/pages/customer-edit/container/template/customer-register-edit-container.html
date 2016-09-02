@@ -5,7 +5,7 @@
 			<div class="col-md-4 col-xs-6 form-group">
 				<label>{{ 'Type of customer' | translate }}</label>
 				<div class="input-group">
-					<select class="form-control" [ngModel]="customerVM.customer.type" (ngModelChange)="didChangeCustomerType($event)" [disabled]="!customerVM.isNewCustomer()">
+					<select class="form-control" [ngModel]="customerVM.customer.type" (ngModelChange)="didChangeCustomerType($event)" name="customerType" [disabled]="!customerVM.isNewCustomer()">
 						<option *ngFor="let custDetailsMeta of custDetailsMetaList" [value]="custDetailsMeta.customerType">{{custDetailsMeta.customerTypeName | translate}}</option>
 					</select>
 				</div>
@@ -76,7 +76,7 @@
 
 			<div class="col-md-4 col-xs-12 form-group">
 				<label>{{ 'Notes' | translate }}</label>
-				<textarea class="form-control" [(ngModel)]="customerVM.customer.notes"></textarea>
+				<textarea class="form-control" [(ngModel)]="customerVM.customer.notes" name="customerNotes"></textarea>
 			</div>
 		</div>
 

@@ -26,7 +26,7 @@
 			<div class="table-select-items pull-right" *ngIf="showPagination()">
 				<label>{{ 'Show' | translate }}</label>
 				<div class="no-padding">
-					<select class="form-control" [ngModel]="paginationIndex.numOfItemsPerPage" (ngModelChange)="didChangeNumOfItemsPerPage($event)">
+					<select class="form-control" [ngModel]="paginationIndex.numOfItemsPerPage" (ngModelChange)="didChangeNumOfItemsPerPage($event)" name="paginationIndexNumOfItemsPerPage">
 						<option *ngFor="let nomPerPage of paginationIndex.nunOfItemsPerPageList" [value]="nomPerPage">
 							{{nomPerPage}} {{ 'items' | translate }}
 						</option>

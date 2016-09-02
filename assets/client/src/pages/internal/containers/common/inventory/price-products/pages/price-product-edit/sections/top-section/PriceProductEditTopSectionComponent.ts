@@ -1,5 +1,5 @@
 import {Component, Input} from '@angular/core';
-import {Control, Validators, ControlGroup, FormBuilder} from '@angular/common';
+import {FormControl, Validators, FormGroup, FormBuilder} from '@angular/forms';
 import {BaseFormComponent} from '../../../../../../../../../../common/base/BaseFormComponent';
 import {TranslationPipe} from '../../../../../../../../../../common/utils/localization/TranslationPipe';
 import {IPriceProductEditSection} from '../utils/IPriceProductEditSection';
@@ -15,14 +15,14 @@ export class PriceProductEditTopSectionComponent extends BaseFormComponent imple
 	readonly: boolean;
 	@Input() didSubmit: boolean;
 
-	private _nameControl: Control;
-	private _formGroup: ControlGroup;
+	private _nameControl: FormControl;
+	private _formGroup: FormGroup;
 	private _isPublicAvailability: boolean;
 	private _isLastRoomAvailabilityEnabled: boolean;
 
 	constructor(private _formBuilder: FormBuilder) {
 		super();
-		this._nameControl = new Control("", Validators.compose([Validators.required, Validators.maxLength(200)]));
+		this._nameControl = new FormControl("", Validators.compose([Validators.required, Validators.maxLength(200)]));
 		this._formGroup = this._formBuilder.group({
 			"name": this._nameControl
 		})
@@ -47,7 +47,7 @@ export class PriceProductEditTopSectionComponent extends BaseFormComponent imple
 		priceProductVM.priceProduct.lastRoomAvailability = this._isLastRoomAvailabilityEnabled;
 	}
 
-	public getDefaultControlGroup(): ControlGroup {
+	public getDefaultFormGroup(): FormGroup {
 		return this._formGroup;
 	}
 	protected get didSubmitForm(): boolean {

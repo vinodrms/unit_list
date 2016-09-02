@@ -1,5 +1,4 @@
 import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import {ControlGroup} from '@angular/common';
 import {Observable} from 'rxjs/Observable';
 import {TranslationPipe} from '../../../../../../../../../../common/utils/localization/TranslationPipe';
 import {CustomScroll} from '../../../../../../../../../../common/utils/directives/CustomScroll';

@@ -26,7 +26,7 @@
             <div *ngIf="editMode" class="form-group m-0">
                 <div class="input-group">
                     <span class="input-group-addon"><span>{{ccySymbol}}</span></span>
-                    <input class="form-control" type="number" [(ngModel)]="invoicePayerVM.invoicePayerDO.priceToPay">
+                    <input class="form-control" type="number" [(ngModel)]="invoicePayerVM.invoicePayerDO.priceToPay" name="priceToPay">
                 </div>
             </div>
 
@@ -44,7 +44,7 @@
 
             <div *ngIf="editMode" class="form-group m-0">
                 <div class="input-group">
-                    <select class="form-control" [ngModel]="selectedPaymentMethodVM" (ngModelChange)="selectedPaymentMethodVM=$event">
+                    <select class="form-control" [ngModel]="selectedPaymentMethodVM" (ngModelChange)="selectedPaymentMethodVM=$event" name="selectedPaymentMethodVM">
                         <option *ngFor="let paymentMethodVM of paymentMethodVMList" [ngValue]="paymentMethodVM">{{paymentMethodVM.displayName | translate}}</option>
                     </select>
                 </div>

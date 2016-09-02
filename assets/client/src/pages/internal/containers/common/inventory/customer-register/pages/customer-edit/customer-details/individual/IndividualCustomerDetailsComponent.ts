@@ -1,5 +1,5 @@
 import {Component, Input} from '@angular/core';
-import {ControlGroup} from '@angular/common';
+import {FormGroup} from '@angular/forms';
 import {BaseFormComponent} from '../../../../../../../../../../common/base/BaseFormComponent';
 import {TranslationPipe} from '../../../../../../../../../../common/utils/localization/TranslationPipe';
 import {ThDatePickerComponent} from '../../../../../../../../../../common/utils/components/ThDatePickerComponent';
@@ -77,7 +77,7 @@ export class IndividualCustomerDetailsComponent extends BaseFormComponent {
 		return this.didSubmit;
 	}
 
-	protected getDefaultControlGroup(): ControlGroup {
+	protected getDefaultFormGroup(): FormGroup {
 		return this._formBuilder.individualFormGroup;
 	}
 

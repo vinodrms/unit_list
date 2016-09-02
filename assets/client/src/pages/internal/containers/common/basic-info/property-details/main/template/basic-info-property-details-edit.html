@@ -8,7 +8,7 @@
 
             <div class="form-group">
                 <div class="input-group" [ngClass]="{'form-warning': displayTimezoneError()}">
-                    <select class="select2_single form-control" [ngModel]="hotel.timezone" (ngModelChange)="updateTimezone($event)">
+                    <select class="select2_single form-control" [ngModel]="hotel.timezone" (ngModelChange)="updateTimezone($event)" name="hotelTimezone">
                     <option value="" disabled></option>
                 	<option *ngFor="let timezone of timezoneList" [value]="timezone.name">{{timezone.name}}</option>
             	</select>

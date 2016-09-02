@@ -1,34 +1,34 @@
 import {Injectable} from '@angular/core';
-import {FormBuilder, ControlGroup, Validators, AbstractControl, Control} from '@angular/common';
+import {FormBuilder, FormGroup, Validators, AbstractControl, FormControl} from '@angular/forms';
 import {ThValidators, ThFieldLengths} from '../../../../../../../../../../../common/utils/form-utils/ThFormUtils';
 import {IndividualDetailsDO} from '../../../../../../../../../services/customers/data-objects/customer-details/IndividualDetailsDO';
 
 @Injectable()
 export class IndividualDetailsFormBuilderService {
-	private _individualFormGroup: ControlGroup;
+	private _individualFormGroup: FormGroup;
 
-	private _firstNameControl: Control;
-	private _lastNameControl: Control;
-	private _passportNoControl: Control;
-	private _cityControl: Control;
-	private _streetAddressControl: Control;
-	private _postalCodeControl: Control;
-	private _emailControl: Control;
-	private _phoneControl: Control;
+	private _firstNameControl: FormControl;
+	private _lastNameControl: FormControl;
+	private _passportNoControl: FormControl;
+	private _cityControl: FormControl;
+	private _streetAddressControl: FormControl;
+	private _postalCodeControl: FormControl;
+	private _emailControl: FormControl;
+	private _phoneControl: FormControl;
 
 	constructor(private _formBuilder: FormBuilder) {
 		this.initFormControls();
 		this.initFormGroup();
 	}
 	private initFormControls() {
-		this._firstNameControl = new Control(null, Validators.compose([Validators.required, Validators.maxLength(ThFieldLengths.MaxNameLength)]));
-		this._lastNameControl = new Control(null, Validators.compose([Validators.required, Validators.maxLength(ThFieldLengths.MaxNameLength)]));
-		this._passportNoControl = new Control(null, Validators.compose([Validators.maxLength(100)]));
-		this._cityControl = new Control(null, Validators.compose([Validators.maxLength(ThFieldLengths.MaxCityLength)]));
-		this._streetAddressControl = new Control(null, Validators.compose([Validators.maxLength(ThFieldLengths.MaxStreetAddressLength)]));
-		this._postalCodeControl = new Control(null, Validators.compose([Validators.maxLength(50)]));
-		this._emailControl = new Control(null, Validators.compose([ThValidators.nullableEmailValidator]));
-		this._phoneControl = new Control(null, Validators.compose([ThValidators.nullablePhoneValidator]));
+		this._firstNameControl = new FormControl(null, Validators.compose([Validators.required, Validators.maxLength(ThFieldLengths.MaxNameLength)]));
+		this._lastNameControl = new FormControl(null, Validators.compose([Validators.required, Validators.maxLength(ThFieldLengths.MaxNameLength)]));
+		this._passportNoControl = new FormControl(null, Validators.compose([Validators.maxLength(100)]));
+		this._cityControl = new FormControl(null, Validators.compose([Validators.maxLength(ThFieldLengths.MaxCityLength)]));
+		this._streetAddressControl = new FormControl(null, Validators.compose([Validators.maxLength(ThFieldLengths.MaxStreetAddressLength)]));
+		this._postalCodeControl = new FormControl(null, Validators.compose([Validators.maxLength(50)]));
+		this._emailControl = new FormControl(null, Validators.compose([ThValidators.nullableEmailValidator]));
+		this._phoneControl = new FormControl(null, Validators.compose([ThValidators.nullablePhoneValidator]));
 	}
 
 	private initFormGroup() {
@@ -65,10 +65,10 @@ export class IndividualDetailsFormBuilderService {
 		individualDetails.phone = this._phoneControl.value;
 	}
 
-	public get individualFormGroup(): ControlGroup {
+	public get individualFormGroup(): FormGroup {
 		return this._individualFormGroup;
 	}
-	public set individualFormGroup(individualFormGroup: ControlGroup) {
+	public set individualFormGroup(individualFormGroup: FormGroup) {
 		this._individualFormGroup = individualFormGroup;
 	}
 }

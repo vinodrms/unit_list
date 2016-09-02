@@ -1,5 +1,5 @@
 import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import {ControlGroup} from '@angular/common';
+import {FormGroup} from '@angular/forms';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/combineLatest';
 import {BaseFormComponent} from '../../../../../../../../common/base/BaseFormComponent';
@@ -120,7 +120,7 @@ export class AddOnProductEditComponent extends BaseFormComponent implements OnIn
 		this.addOnProductVatId = taxId;
 	}
 
-	protected getDefaultControlGroup(): ControlGroup {
+	protected getDefaultFormGroup(): FormGroup {
 		return this._addOnProductEditService.addOnProductForm;
 	}
 	public didSelectCategory(): boolean {

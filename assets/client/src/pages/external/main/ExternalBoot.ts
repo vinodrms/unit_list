@@ -3,7 +3,7 @@
 import {NgModule, provide}      from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
-import {DeprecatedFormsModule} from "@angular/common";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 
 import {MainLayoutExternalComponent} from './MainLayoutExternalComponent';
 import {ExternalRouting, ExternalRouterModules} from './ExternalRouterConfig';
@@ -26,7 +26,7 @@ import {IAnalytics} from '../../../common/utils/analytics/IAnalytics';
 import {AppContext} from '../../../common/utils/AppContext';
 
 @NgModule({
-    imports: [BrowserModule, ExternalRouting, DeprecatedFormsModule],
+    imports: [BrowserModule, ExternalRouting, FormsModule, ReactiveFormsModule],
     declarations: [MainLayoutExternalComponent, ExternalRouterModules],
     bootstrap: [MainLayoutExternalComponent],
 	providers: [

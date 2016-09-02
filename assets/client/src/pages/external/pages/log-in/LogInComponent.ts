@@ -1,5 +1,5 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
-import {ControlGroup} from '@angular/common';
+import {FormGroup} from '@angular/forms';
 import {ROUTER_DIRECTIVES, ActivatedRoute} from '@angular/router';
 import {Location} from '@angular/common';
 import {Subscription} from 'rxjs/Subscription';
@@ -61,7 +61,7 @@ export class LogInComponent extends BaseFormComponent implements OnInit, OnDestr
 		}
 	}
 
-	protected getDefaultControlGroup(): ControlGroup {
+	protected getDefaultFormGroup(): FormGroup {
 		return this._logInService.loginForm;
 	}
 

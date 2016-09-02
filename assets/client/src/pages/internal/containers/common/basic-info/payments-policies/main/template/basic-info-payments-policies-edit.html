@@ -8,7 +8,7 @@
 		</label>
 			<div class="form-group">
 				<div class="input-group" [ngClass]="{'form-warning': (!hotel.ccyCode && didSubmitForm)}">
-					<select class="form-control" [ngModel]="hotel.ccyCode" (ngModelChange)="didChangeCurrencyCode($event)">
+					<select class="form-control" [ngModel]="hotel.ccyCode" (ngModelChange)="didChangeCurrencyCode($event)" name="hotelCcyCode">
 					<option value="" disabled>{{ 'Select a currency' | translate }}</option>
 					<option *ngFor="let currency of currencies.currencyList" [value]="currency.code">{{currency.code}} - {{currency.name}}</option>
 				</select>
@@ -24,7 +24,7 @@
 					<ul class="list-group checked-list-box">
 						<div class="checkbox" *ngFor="let paymentMethodVM of paymentMethods.paymentMethodList">
 							<label>
-							<input type="checkbox" [(ngModel)]="paymentMethodVM.isSelected"><i class="fa" [ngClass]="paymentMethodVM.paymentMethod.iconUrl"></i> {{paymentMethodVM.paymentMethod.name | translate}}
+							<input type="checkbox" [(ngModel)]="paymentMethodVM.isSelected" name="paymentMethodVMIsSelected"><i class="fa" [ngClass]="paymentMethodVM.paymentMethod.iconUrl"></i> {{paymentMethodVM.paymentMethod.name | translate}}
 						</label>
 						</div>
 					</ul>

@@ -1,5 +1,5 @@
 import {Component, OnInit, Input} from '@angular/core';
-import {ControlGroup} from '@angular/common';
+import {FormGroup} from '@angular/forms';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/combineLatest';
 import {BaseFormComponent} from '../../../../../../../common/base/BaseFormComponent';
@@ -64,7 +64,7 @@ export class BasicInfoOverviewEditComponent extends BaseFormComponent implements
 		}
 		this._overviewEditService.updateFormValues(this.countries, this.hotelInfo);
 	}
-	protected getDefaultControlGroup(): ControlGroup {
+	protected getDefaultFormGroup(): FormGroup {
 		return this._overviewEditService.overviewForm;
 	}
 	protected get didSubmitForm(): boolean {

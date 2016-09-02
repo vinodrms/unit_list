@@ -29,7 +29,7 @@
 			<div class="col-md-6 col-sm-6 col-xs-12 form-group" *ngFor="let singlePriceVM of singlePriceContainer.singlePriceVMList">
 				<label>{{singlePriceVM.roomCategoryStats.roomCategory.displayName}}</label>
 				<div class="input-group" [ngClass]="{'form-warning': displayError()&&!singlePriceVM.singlePrice.isValid()}">
-					<input type="number" placeholder="{{'Price' | translate}}" class="form-control" [(ngModel)]="singlePriceVM.singlePrice.price"
+					<input type="number" placeholder="{{'Price' | translate}}" class="form-control" [(ngModel)]="singlePriceVM.singlePrice.price" name="singlePrice"
 					[readonly]="readonly" />
 				</div>
 				<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Invalid Price' | translate }}</small></label>
@@ -50,7 +50,7 @@
 							<div class="col-md-12 col-sm-12 col-xs-12 form-group" *ngFor="let pricePerAdult of pricePerPersonVM.pricePerPerson.adultsPriceList">
 								<div class="input-group" [ngClass]="{'form-warning': displayError()&&!pricePerAdult.isValid()}">
 									<span class="input-group-addon"><small>{{pricePerAdult.noOfPersons}}{{getNumberSuffix(pricePerAdult.noOfPersons)}}</small> <span class="unitpal-font">:</span></span>
-									<input type="number" class="form-control" [(ngModel)]="pricePerAdult.price"
+									<input type="number" class="form-control" [(ngModel)]="pricePerAdult.price" name="adultPrice"
 									[readonly]="readonly" />
 								</div>
 								<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Invalid Price' | translate }}</small></label>
@@ -65,7 +65,7 @@
 									<div class="col-xs-12 form-group" *ngIf="pricePerChild.noOfPersons === 1">	
 										<div class="input-group" [ngClass]="{'form-warning': displayError()&&!pricePerPersonVM.pricePerPerson.firstChildWithoutAdultPriceIsValid()}">
 											<span class="input-group-addon"><small>1{{getNumberSuffix(1)}}</small> <span class="unitpal-font">;</span></span>
-											<input type="number" class="form-control" [(ngModel)]="pricePerPersonVM.pricePerPerson.firstChildWithoutAdultPrice"
+											<input type="number" class="form-control" [(ngModel)]="pricePerPersonVM.pricePerPerson.firstChildWithoutAdultPrice" name="firstChildPrice"
 											[readonly]="readonly" />
 										</div>
 										<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Invalid Price' | translate }}</small></label>
@@ -76,7 +76,7 @@
 									<div class="col-xs-12 form-group">	
 										<div class="input-group" [ngClass]="{'form-warning': displayError()&&!pricePerChild.isValid()}">
 											<span class="input-group-addon"><small>{{pricePerChild.noOfPersons}}{{getNumberSuffix(pricePerChild.noOfPersons)}}</small> <span class="unitpal-font">;</span></span>
-											<input type="number" class="form-control" [(ngModel)]="pricePerChild.price"
+											<input type="number" class="form-control" [(ngModel)]="pricePerChild.price" name="childPrice"
 											[readonly]="readonly" />
 										</div>
 										<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Invalid Price' | translate }}</small></label>

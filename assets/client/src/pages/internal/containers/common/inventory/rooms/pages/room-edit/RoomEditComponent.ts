@@ -1,5 +1,5 @@
 import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import {ControlGroup} from '@angular/common';
+import {FormGroup} from '@angular/forms';
 import {Observable} from 'rxjs/Observable';
 import {TranslationPipe} from '../../../../../../../../common/utils/localization/TranslationPipe';
 import {LoadingComponent} from '../../../../../../../../common/utils/components/LoadingComponent';
@@ -168,7 +168,7 @@ export class RoomEditComponent extends BaseFormComponent implements OnInit {
         }
     }
 
-    protected getDefaultControlGroup(): ControlGroup {
+    protected getDefaultFormGroup(): FormGroup {
         return this._roomEditService.roomForm;
     }
 

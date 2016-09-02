@@ -1,5 +1,5 @@
 import {Component, Input} from '@angular/core';
-import {ControlGroup} from '@angular/common';
+import {FormGroup} from '@angular/forms';
 import {BaseFormComponent} from '../../../../../../../../../../common/base/BaseFormComponent';
 import {TranslationPipe} from '../../../../../../../../../../common/utils/localization/TranslationPipe';
 import {CorporateDetailsDO} from '../../../../../../../../services/customers/data-objects/customer-details/CorporateDetailsDO';
@@ -58,7 +58,7 @@ export class CorporateCustomerDetailsComponent extends BaseFormComponent {
 	protected get didSubmitForm(): boolean {
 		return this.didSubmit;
 	}
-	protected getDefaultControlGroup(): ControlGroup {
+	protected getDefaultFormGroup(): FormGroup {
 		return this._formBuilder.individualFormGroup;
 	}
 

@@ -5,7 +5,7 @@
 			<div *ngIf="currentDate" class="current-date p-r-12 f-24"><b>{{getDateShortString()}}</b></div>
 		</div>
 		<div class="group-2 flex-row flex-center-v">
-			<select class="form-control rooms-filter p-r-12 f-12" [ngModel]="filterValue.currentValue" (ngModelChange)="filterValueChanged($event)">
+			<select class="form-control rooms-filter p-r-12 f-12" [ngModel]="filterValue.currentValue" (ngModelChange)="filterValueChanged($event)" name="filterValueCurrentValue">
 				<option value="{{ enums.FilterValueType.All }}">{{'All Rooms' | translate }}</option>
 				<option value="{{ enums.FilterValueType.Free }}">{{'Free Rooms' | translate }}</option>
 				<option value="{{ enums.FilterValueType.Occupied }}">{{'Occupied Rooms' | translate }}</option>

@@ -1,5 +1,4 @@
 import {Component, OnInit, Input} from '@angular/core';
-import {ControlGroup} from '@angular/common';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/combineLatest';
 import {BaseComponent} from '../../../../../../../common/base/BaseComponent';

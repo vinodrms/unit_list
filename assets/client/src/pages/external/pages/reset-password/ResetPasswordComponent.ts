@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {ControlGroup} from '@angular/common';
+import {FormGroup} from '@angular/forms';
 import {ROUTER_DIRECTIVES} from '@angular/router';
 import {BaseFormComponent} from '../../../../common/base/BaseFormComponent';
 import {ExternalFooterComponent} from '../common/footer/ExternalFooterComponent';
@@ -27,7 +27,7 @@ export class ResetPasswordComponent extends BaseFormComponent {
 
 		super();
 	}
-	protected getDefaultControlGroup(): ControlGroup {
+	protected getDefaultFormGroup(): FormGroup {
 		return this._resetPasswdService.resetPasswdForm;
 	}
 

@@ -50,7 +50,7 @@
                             <div class="form-group">
                                 <div class="input-group input-group-small" [ngClass]="{'form-warning': !searchParameters.validNoAdults()}">
                                     <span class="input-group-addon"><small></small> <i class="fa unitpal-font">:</i></span>
-                                    <input type="number" class="form-control" [(ngModel)]="searchParameters.configCapacity.noAdults">
+                                    <input type="number" class="form-control" [(ngModel)]="searchParameters.configCapacity.noAdults" name="noAdults">
                                 </div>
                                 <label class="form-warning"><small><i class="fa fa-info-circle"></i> {{'Enter a valid number' | translate}}</small></label>
                             </div>
@@ -59,7 +59,7 @@
                             <div class="form-group">
                                 <div class="input-group input-group-small" [ngClass]="{'form-warning': !searchParameters.validNoChildren()}">
                                     <span class="input-group-addon"><small></small> <i class="fa unitpal-font">;</i></span>
-                                    <input type="number" class="form-control" [(ngModel)]="searchParameters.configCapacity.noChildren">
+                                    <input type="number" class="form-control" [(ngModel)]="searchParameters.configCapacity.noChildren" name="noChildren">
                                 </div>
                                 <label class="form-warning"><small><i class="fa fa-info-circle"></i> {{'Enter a valid number' | translate}}</small></label>
                             </div>
@@ -68,7 +68,7 @@
                             <div class="form-group">
                                 <div class="input-group input-group-small" [ngClass]="{'form-warning': !searchParameters.validNoBabies()}">
                                     <span class="input-group-addon"><small></small> <i class="fa unitpal-font">B</i></span>
-                                    <input type="number" class="form-control" [(ngModel)]="searchParameters.configCapacity.noBabies">
+                                    <input type="number" class="form-control" [(ngModel)]="searchParameters.configCapacity.noBabies" name="noBabies">
                                 </div>
                                 <label class="form-warning"><small><i class="fa fa-info-circle"></i> {{'Enter a valid number' | translate}}</small></label>
                             </div>

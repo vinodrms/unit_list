@@ -1,4 +1,4 @@
-import {Validator, Validators, AbstractControl} from '@angular/common';
+import {Validator, Validators, AbstractControl} from '@angular/forms';
 import {ValidationResult, AThValidator} from './validators/AThValidator';
 import {EmailValidator} from './validators/EmailValidator';
 import {PasswordValidator} from './validators/PasswordValidator';

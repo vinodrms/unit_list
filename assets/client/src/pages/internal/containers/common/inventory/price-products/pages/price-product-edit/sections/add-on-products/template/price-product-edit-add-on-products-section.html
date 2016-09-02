@@ -36,7 +36,7 @@
 							<span> {{addOnProductItem.addOnProductSnapshot.name}}</span>
 							<br/>
 							<div class="input-group">
-								<select class="form-control" [ngModel]="addOnProductItem.strategy" (ngModelChange)="didChangeStrategyOn(addOnProductItem, $event)" [disabled]="readonly">
+								<select class="form-control" [ngModel]="addOnProductItem.strategy" (ngModelChange)="didChangeStrategyOn(addOnProductItem, $event)" name="aopStrategy" [disabled]="readonly">
 									<option *ngFor="let itemStrategy of itemStrategyList" [ngValue]="itemStrategy">{{ getStrategyValueDisplayString(itemStrategy) | translate }}</option>
 								</select>
 							</div> 

@@ -3,7 +3,7 @@
 import {NgModule, provide}      from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
-import {DeprecatedFormsModule} from "@angular/common";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 
 import {APP_BASE_HREF} from '@angular/common';
 import {MainLayoutInternalComponent} from './MainLayoutInternalComponent';
@@ -27,7 +27,7 @@ import {IAnalytics} from '../../../common/utils/analytics/IAnalytics';
 import {AppContext} from '../../../common/utils/AppContext';
 
 @NgModule({
-    imports: [BrowserModule, InternalRouting, DeprecatedFormsModule],
+    imports: [BrowserModule, InternalRouting, FormsModule, ReactiveFormsModule],
     declarations: [MainLayoutInternalComponent, InternalRouterModules],
     bootstrap: [MainLayoutInternalComponent],
 	providers: [
