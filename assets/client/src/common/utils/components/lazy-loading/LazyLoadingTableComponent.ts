@@ -1,5 +1,5 @@
 import {Component, OnInit, Output, EventEmitter, Input, Inject, ElementRef,
-	ViewChild, ViewContainerRef, Type, ResolvedReflectiveProvider, DynamicComponentLoader, OnChanges} from '@angular/core';
+	ViewChild, ViewContainerRef, Type, ResolvedReflectiveProvider, ComponentResolver, OnChanges} from '@angular/core';
 import {LoadingComponent} from '../LoadingComponent';
 import {ThButtonComponent} from '../ThButtonComponent';
 import {DebouncingInputTextComponent} from '../DebouncingInputTextComponent';
@@ -16,6 +16,7 @@ import {PaginationIndex} from './utils/PaginationIndex';
 import {TableOptions} from './utils/TableOptions';
 import {CustomScroll} from '../../directives/CustomScroll';
 import {ThUtils} from '../../ThUtils';
+import {ComponentUtils} from '../utils/ComponentUtils';
 
 @Component({
 	selector: 'lazy-loading-table',
@@ -29,6 +30,7 @@ export class LazyLoadingTableComponent<T> {
 	private _topTableCenterData: { componentToInject: Type, providers: ResolvedReflectiveProvider[] };
 
 	private _thUtils: ThUtils;
+	private _componentUtils: ComponentUtils;
 	protected _isCollapsed: boolean;
 	private _rowClassGenerator: { (item: T): string };
 	private _cellClassGenerator: { (item: T, columnValueMeta: TableColumnValueMeta): string };
@@ -96,10 +98,11 @@ export class LazyLoadingTableComponent<T> {
 
 	@ViewChild(CustomScroll) private _scrollableBodyRegion: CustomScroll;
 
-	constructor(private _dynamicComponentLoader: DynamicComponentLoader,
+	constructor(componentResolver: ComponentResolver,
 		private _appContext: AppContext,
 		@Inject(ElementRef) private _elementRef: ElementRef) {
 		this._thUtils = new ThUtils();
+		this._componentUtils = new ComponentUtils(componentResolver);
 		this.paginationIndex = new PaginationIndex(_appContext);
 		this.tableOptions = new TableOptions();
 	}
@@ -153,7 +156,7 @@ export class LazyLoadingTableComponent<T> {
 	}
 	private registerTopCenterComponentIfNecessary() {
 		if (!this.didInit || !this._topTableCenterData || this._didInitTopTableCenterRegion || !this._topTableCenterVCRef) { return; }
-		this._dynamicComponentLoader.loadNextToLocation(this._topTableCenterData.componentToInject, this._topTableCenterVCRef, this._topTableCenterData.providers);
+		this._componentUtils.loadNextToLocation(this._topTableCenterData.componentToInject, this._topTableCenterVCRef, this._topTableCenterData.providers);
 		this._didInitTopTableCenterRegion = true;
 	}
 	public attachTopTableCenterBootstrapData(topTableCenterData: { componentToInject: Type, providers: ResolvedReflectiveProvider[] }) {
@@ -240,7 +243,7 @@ export class LazyLoadingTableComponent<T> {
 	protected isDateInterval(valueMeta: TableColumnValueMeta): boolean {
 		return valueMeta.propertyType === TablePropertyType.DateIntervalType;
 	}
-	protected isFontIconWithText(valueMeta: TableColumnValueMeta) : boolean {
+	protected isFontIconWithText(valueMeta: TableColumnValueMeta): boolean {
 		return valueMeta.propertyType === TablePropertyType.FontIconWithTextType;
 	}
 	protected noResultsExist(): boolean {
