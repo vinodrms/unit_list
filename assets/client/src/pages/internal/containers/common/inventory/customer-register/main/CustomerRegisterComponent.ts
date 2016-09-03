@@ -1,8 +1,8 @@
-import {Component, Input, Output, EventEmitter, ViewChild, AfterViewInit, ComponentResolver, Type, ResolvedReflectiveProvider, ViewContainerRef} from '@angular/core';
+import {Component, Input, Output, EventEmitter, ViewChild, AfterViewInit, Type, ResolvedReflectiveProvider, ViewContainerRef} from '@angular/core';
 import {BaseComponent} from '../../../../../../../common/base/BaseComponent';
 import {TranslationPipe} from '../../../../../../../common/utils/localization/TranslationPipe';
 import {AppContext, ThError} from '../../../../../../../common/utils/AppContext';
-import {ComponentUtils} from '../../../../../../../common/utils/components/utils/ComponentUtils';
+import {ComponentLoaderService} from '../../../../../../../common/utils/components/services/ComponentLoaderService';
 import {LazyLoadingTableComponent} from '../../../../../../../common/utils/components/lazy-loading/LazyLoadingTableComponent';
 import {CustomerRegisterTableMetaBuilderService} from './services/CustomerRegisterTableMetaBuilderService';
 import {InventoryStateManager} from '../../utils/state-manager/InventoryStateManager';
@@ -48,20 +48,18 @@ export class CustomerRegisterComponent extends BaseComponent implements AfterVie
 
 	private _inventoryStateManager: InventoryStateManager<CustomerVM>;
 	private _customerType: CustomerType;
-	private _componentUtils: ComponentUtils;
 
-    constructor(componentResolver: ComponentResolver,
-        private _appContext: AppContext,
+    constructor(private _appContext: AppContext,
+		private _componentLoaderService: ComponentLoaderService,
 		private _customersService: CustomersService,
         private _tableBuilder: CustomerRegisterTableMetaBuilderService,
 		private _custTableFilterService: CustomerTableFilterService) {
         super();
-		this._componentUtils = new ComponentUtils(componentResolver);
 		this._inventoryStateManager = new InventoryStateManager<CustomerVM>(this._appContext, "customer.id");
 		this.registerStateChange();
     }
     public bootstrapOverviewBottom(componentToInject: Type, providers: ResolvedReflectiveProvider[]) {
-        this._componentUtils.loadNextToLocation(componentToInject, this._overviewBottomVCRef, providers);
+        this._componentLoaderService.loadNextToLocation(componentToInject, this._overviewBottomVCRef, providers);
     }
 	private registerStateChange() {
 		this._inventoryStateManager.stateChangedObservable.subscribe((currentState: InventoryScreenStateType) => {

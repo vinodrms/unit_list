@@ -1,4 +1,5 @@
-import {Component} from '@angular/core';
+import {Component, NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
 import {BaseComponent} from '../../../../base/BaseComponent';
 import {ICustomModalComponent, ModalSize} from '../../utils/ICustomModalComponent';
 import {ModalDialogRef} from '../../utils/ModalDialogRef';
@@ -14,24 +15,23 @@ import {TranslationPipe} from '../../../localization/TranslationPipe';
 		<div class="modal-body">
 			<p>{{content}}</p>
 			<hr/>
-			<center>
+			<span style="text-align:center">
 				<button *ngIf="buttons.positive" class="btn btn-primary btn-lg" (click)="didConfirm()">
 					{{ buttons.positive }}
 				</button>
 				<button *ngIf="buttons.negative" class="btn btn-danger btn-lg" (click)="didNotConfirm()">
 					{{ buttons.negative }}
 				</button>
-			</center>
+			</span>
 		</div>
-	`,
-	pipes: [TranslationPipe]
+	`
 })
 
 export class ConfirmationModalComponent extends BaseComponent implements ICustomModalComponent {
 	title = "";
 	content = "";
     buttons: ConfirmationModalButtons;
-    
+
 	constructor(private _modalDialogInstance: ModalDialogRef<any>,
 		confirmationModalInput: ConfirmationModalInput) {
 		super();
@@ -56,3 +56,10 @@ export class ConfirmationModalComponent extends BaseComponent implements ICustom
 		this._modalDialogInstance.closeForced();
 	}
 }
+
+@NgModule({
+    imports: [CommonModule],
+    declarations: [ConfirmationModalComponent],
+    exports: [ConfirmationModalComponent]
+})
+export class ConfirmationModalModule { }

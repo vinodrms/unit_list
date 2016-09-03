@@ -1,10 +1,10 @@
-import {Component, ViewChild, AfterViewInit, Input, Output, EventEmitter, ComponentResolver, Type, ResolvedReflectiveProvider, ViewContainerRef} from '@angular/core';
+import {Component, ViewChild, AfterViewInit, Input, Output, EventEmitter, Type, ResolvedReflectiveProvider, ViewContainerRef} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/combineLatest';
 import {BaseComponent} from '../../../../../../../common/base/BaseComponent';
 import {TranslationPipe} from '../../../../../../../common/utils/localization/TranslationPipe';
 import {AppContext, ThError} from '../../../../../../../common/utils/AppContext';
-import {ComponentUtils} from '../../../../../../../common/utils/components/utils/ComponentUtils';
+import {ComponentLoaderService} from '../../../../../../../common/utils/components/services/ComponentLoaderService';
 import {LazyLoadingTableComponent} from '../../../../../../../common/utils/components/lazy-loading/LazyLoadingTableComponent';
 import {InventoryStateManager} from '../../utils/state-manager/InventoryStateManager';
 import {InventoryScreenStateType} from '../../utils/state-manager/InventoryScreenStateType';
@@ -36,20 +36,18 @@ export class PriceProductsComponent extends BaseComponent implements AfterViewIn
 
 	private _inventoryStateManager: InventoryStateManager<PriceProductVM>;
 	private _priceProductStatus: PriceProductStatus;
-	private _componentUtils: ComponentUtils;
 
-	constructor(componentResolver: ComponentResolver,
-        private _appContext: AppContext,
+	constructor(private _appContext: AppContext,
+		private _componentLoaderService: ComponentLoaderService,
 		private _priceProductsService: PriceProductsService,
 		private _tableBuilder: PriceProductTableMetaBuilderService) {
 		super();
-		this._componentUtils = new ComponentUtils(componentResolver);
 		this._inventoryStateManager = new InventoryStateManager<PriceProductVM>(this._appContext, "priceProduct.id");
 		this.registerStateChange();
 		this.setDefaultPriceProductStatus();
 	}
     public bootstrapOverviewBottom(componentToInject: Type, providers: ResolvedReflectiveProvider[]) {
-        this._componentUtils.loadNextToLocation(componentToInject, this._overviewBottomVCRef, providers);
+        this._componentLoaderService.loadNextToLocation(componentToInject, this._overviewBottomVCRef, providers);
     }
 	private registerStateChange() {
 		this._inventoryStateManager.stateChangedObservable.subscribe((currentState: InventoryScreenStateType) => {

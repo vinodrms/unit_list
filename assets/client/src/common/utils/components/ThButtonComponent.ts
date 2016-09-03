@@ -1,5 +1,4 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import {TranslationPipe} from '../localization/TranslationPipe';
 
 @Component({
 	selector: 'th-button',
@@ -8,8 +7,7 @@ import {TranslationPipe} from '../localization/TranslationPipe';
 			<i class="fa fa-2x unitpal-font">{{ upFont }}</i>
 			<span>{{ text | translate }}</span>
 		</a>
-	`,
-	pipes: [TranslationPipe]
+	`
 })
 export class ThButtonComponent {
 	private _upFont: string;

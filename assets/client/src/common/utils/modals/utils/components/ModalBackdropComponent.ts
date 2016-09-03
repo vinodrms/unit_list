@@ -1,4 +1,5 @@
-import { Component, ViewChild, ViewContainerRef } from '@angular/core';
+import {Component, ViewChild, ViewContainerRef, NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
 
 /**
  * Represents the modal backdrop.
@@ -37,3 +38,10 @@ export class ModalBackdropComponent {
 		this.top = this.left = this.right = this.bottom = '0';
 	}
 }
+
+@NgModule({
+    imports: [CommonModule],
+    declarations: [ModalBackdropComponent],
+    exports: [ModalBackdropComponent]
+})
+export class ModalBackdropModule { }

@@ -1,4 +1,5 @@
-import {Component} from '@angular/core';
+import {Component, NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
 import {ICustomModalComponent, ModalSize} from '../../utils/ICustomModalComponent';
 import {ModalDialogRef} from '../../utils/ModalDialogRef';
 
@@ -23,3 +24,10 @@ export class LoadingModalComponent implements ICustomModalComponent {
 		return ModalSize.Small;
 	}
 }
+
+@NgModule({
+    imports: [CommonModule],
+    declarations: [LoadingModalComponent],
+    exports: [LoadingModalComponent]
+})
+export class LoadingModalModule { }

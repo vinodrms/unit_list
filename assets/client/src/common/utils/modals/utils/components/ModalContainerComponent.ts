@@ -1,4 +1,5 @@
-import {Component, ViewChild, ViewContainerRef} from '@angular/core';
+import {Component, ViewChild, ViewContainerRef, NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
 import {ModalDialogRef} from '../ModalDialogRef';
 import {ModalSize} from '../ICustomModalComponent';
 
@@ -48,3 +49,10 @@ export class ModalContainerComponent<T> {
         return this._dialogInstance.close();
     }
 }
+
+@NgModule({
+    imports: [CommonModule],
+    declarations: [ModalContainerComponent],
+    exports: [ModalContainerComponent]
+})
+export class ModalContainerModule { }

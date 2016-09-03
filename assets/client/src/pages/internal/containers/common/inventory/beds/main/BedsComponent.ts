@@ -1,9 +1,9 @@
-import {Component, ViewChild, AfterViewInit, Output, EventEmitter, ComponentResolver, Type, ResolvedReflectiveProvider, ViewContainerRef} from '@angular/core';
+import {Component, ViewChild, AfterViewInit, Output, EventEmitter, Type, ResolvedReflectiveProvider, ViewContainerRef} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/combineLatest';
 import {BaseComponent} from '../../../../../../../common/base/BaseComponent';
 import {AppContext, ThError} from '../../../../../../../common/utils/AppContext';
-import {ComponentUtils} from '../../../../../../../common/utils/components/utils/ComponentUtils';
+import {ComponentLoaderService} from '../../../../../../../common/utils/components/services/ComponentLoaderService';
 import {LazyLoadingTableComponent} from '../../../../../../../common/utils/components/lazy-loading/LazyLoadingTableComponent';
 import {BedVM} from '../../../../../services/beds/view-models/BedVM';
 import {BedTableMetaBuilderService} from './services/BedTableMetaBuilderService';
@@ -30,19 +30,17 @@ export class BedsComponent extends BaseComponent {
     private _bedTableComponent: LazyLoadingTableComponent<BedVM>;
 
     private _inventoryStateManager: InventoryStateManager<BedVM>;
-    private _componentUtils: ComponentUtils;
 
-    constructor(componentResolver: ComponentResolver,
-        private _appContext: AppContext,
+    constructor(private _appContext: AppContext,
+        private _componentLoaderService: ComponentLoaderService,
         private _tableBuilder: BedTableMetaBuilderService,
         private _bedsService: BedsService) {
         super();
-        this._componentUtils = new ComponentUtils(componentResolver);
         this._inventoryStateManager = new InventoryStateManager<BedVM>(this._appContext, "bed.id");
         this.registerStateChange();
     }
     public bootstrapOverviewBottom(componentToInject: Type, providers: ResolvedReflectiveProvider[]) {
-        this._componentUtils.loadNextToLocation(componentToInject, this._overviewBottomVCRef, providers);
+        this._componentLoaderService.loadNextToLocation(componentToInject, this._overviewBottomVCRef, providers);
     }
 
     private registerStateChange() {

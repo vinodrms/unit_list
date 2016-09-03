@@ -1,9 +1,9 @@
-import {Component, ViewChild, AfterViewInit, Input, Output, EventEmitter, ComponentResolver, Type, ResolvedReflectiveProvider, ViewContainerRef} from '@angular/core';
+import {Component, ViewChild, AfterViewInit, Input, Output, EventEmitter, Type, ResolvedReflectiveProvider, ViewContainerRef} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/combineLatest';
 import {BaseComponent} from '../../../../../../../common/base/BaseComponent';
 import {AppContext, ThError} from '../../../../../../../common/utils/AppContext';
-import {ComponentUtils} from '../../../../../../../common/utils/components/utils/ComponentUtils';
+import {ComponentLoaderService} from '../../../../../../../common/utils/components/services/ComponentLoaderService';
 import {AddOnProductsService} from '../../../../../services/add-on-products/AddOnProductsService';
 import {AddOnProductVM} from '../../../../../services/add-on-products/view-models/AddOnProductVM';
 import {AddOnProductDO} from '../../../../../services/add-on-products/data-objects/AddOnProductDO';
@@ -36,20 +36,18 @@ export class AddOnProductsComponent extends BaseComponent implements AfterViewIn
     private _aopTableComponent: LazyLoadingTableComponent<AddOnProductVM>;
 
     private _inventoryStateManager: InventoryStateManager<AddOnProductVM>;
-    private _componentUtils: ComponentUtils;
 
-    constructor(componentResolver: ComponentResolver,
-        private _appContext: AppContext,
+    constructor(private _appContext: AppContext,
+        private _componentLoaderService: ComponentLoaderService,
         private _tableBuilder: AddOnProductTableMetaBuilderService,
         private _addOnProductCategoriesService: AddOnProductCategoriesService,
         private _addOnProductsService: AddOnProductsService) {
         super();
-        this._componentUtils = new ComponentUtils(componentResolver);
         this._inventoryStateManager = new InventoryStateManager<AddOnProductVM>(this._appContext, "addOnProduct.id");
         this.registerStateChange();
     }
     public bootstrapOverviewBottom(componentToInject: Type, providers: ResolvedReflectiveProvider[]) {
-        this._componentUtils.loadNextToLocation(componentToInject, this._overviewBottomVCRef, providers);
+        this._componentLoaderService.loadNextToLocation(componentToInject, this._overviewBottomVCRef, providers);
     }
     private registerStateChange() {
         this._inventoryStateManager.stateChangedObservable.subscribe((currentState: InventoryScreenStateType) => {

@@ -2,13 +2,11 @@ import {Component, Input, Output, EventEmitter} from '@angular/core';
 import {BaseComponent} from '../../../base/BaseComponent';
 import {AppContext, ThError} from '../../AppContext';
 import {FileAttachmentDO} from '../../../../pages/internal/services/common/data-objects/file/FileAttachmentDO';
-import {TranslationPipe} from '../../localization/TranslationPipe';
 import {UploadedFileResponse} from '../../http/IThHttp';
 
 @Component({
 	selector: 'file-attachments',
-	templateUrl: '/client/src/common/utils/components/file-attachments/template/file-attachments.html',
-	pipes: [TranslationPipe]
+	templateUrl: '/client/src/common/utils/components/file-attachments/template/file-attachments.html'
 })
 export class FileAttachmentsComponent extends BaseComponent {
 	@Input() readonly: boolean = false;

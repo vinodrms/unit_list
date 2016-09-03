@@ -6,9 +6,7 @@ import {ItemListNavigatorConfig} from './ItemListNavigatorConfig';
 
 @Component({
     selector: 'item-list-navigator',
-    templateUrl: '/client/src/common/utils/components/item-list-navigator/template/item-list-navigator.html',
-    directives: [],
-    pipes: []
+    templateUrl: '/client/src/common/utils/components/item-list-navigator/template/item-list-navigator.html'
 })
 export class ItemListNavigatorComponent implements OnInit {
     public interval: Interval;

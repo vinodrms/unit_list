@@ -1,10 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import {BaseComponent} from '../../../../common/base/BaseComponent';
-import {ThHourPipe} from '../../../../common/utils/pipes/ThHourPipe';
 import {ThHourDO} from '../../../../pages/internal/services/common/data-objects/th-dates/ThHourDO';
 import {ThHourVM} from './utils/ThHourVM';
 import {HotelDO} from '../../../../pages/internal/services/hotel/data-objects/hotel/HotelDO.ts';
-import {TranslationPipe} from '../../../../common/utils/localization/TranslationPipe';
 import {OperationHoursBuilder} from './utils/OperationHoursBuilder';
 
 @Component({
@@ -19,8 +17,7 @@ import {OperationHoursBuilder} from './utils/OperationHoursBuilder';
 			</div>
             <label class="form-warning"><small><i class="fa fa-info-circle"></i> {{errorMessage | translate}}</small></label>
 		</div>
-        `,
-    pipes: [TranslationPipe, ThHourPipe]
+        `
 })
 export class ThHourSelectComponent extends BaseComponent implements OnInit {
 	private _hoursBuilder: OperationHoursBuilder = new OperationHoursBuilder();

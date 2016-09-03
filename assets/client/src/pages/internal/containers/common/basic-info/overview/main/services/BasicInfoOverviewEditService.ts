@@ -74,27 +74,27 @@ export class BasicInfoOverviewEditService {
 		this._countries = countries;
 		this._hotel = hotelInfo.hotelDetails.hotel;
 
-		this._nameControl.updateValue(this._hotel.contactDetails.name);
-		this._companyNameControl.updateValue(this._hotel.contactDetails.companyName);
-		this._streetAddressControl.updateValue(this._hotel.contactDetails.address.streetAddress);
-		this._cityControl.updateValue(this._hotel.contactDetails.address.city);
-		this._postalCodeControl.updateValue(this._hotel.contactDetails.address.postalCode);
-		this._phoneControl.updateValue(this._hotel.contactDetails.phone);
-		this._faxControl.updateValue(this._hotel.contactDetails.fax);
-		this._contactNameControl.updateValue(this._hotel.contactDetails.contactName);
-		this._websiteUrlControl.updateValue(this._hotel.contactDetails.websiteUrl);
-		this._emailControl.updateValue(this._hotel.contactDetails.email);
-		this._facebookUrlControl.updateValue(this._hotel.contactDetails.socialLinks.facebookUrl);
-		this._linkedinUrlControl.updateValue(this._hotel.contactDetails.socialLinks.linkedinUrl);
-		this._twitterUrlControl.updateValue(this._hotel.contactDetails.socialLinks.twitterUrl);
+		this._nameControl.setValue(this._hotel.contactDetails.name);
+		this._companyNameControl.setValue(this._hotel.contactDetails.companyName);
+		this._streetAddressControl.setValue(this._hotel.contactDetails.address.streetAddress);
+		this._cityControl.setValue(this._hotel.contactDetails.address.city);
+		this._postalCodeControl.setValue(this._hotel.contactDetails.address.postalCode);
+		this._phoneControl.setValue(this._hotel.contactDetails.phone);
+		this._faxControl.setValue(this._hotel.contactDetails.fax);
+		this._contactNameControl.setValue(this._hotel.contactDetails.contactName);
+		this._websiteUrlControl.setValue(this._hotel.contactDetails.websiteUrl);
+		this._emailControl.setValue(this._hotel.contactDetails.email);
+		this._facebookUrlControl.setValue(this._hotel.contactDetails.socialLinks.facebookUrl);
+		this._linkedinUrlControl.setValue(this._hotel.contactDetails.socialLinks.linkedinUrl);
+		this._twitterUrlControl.setValue(this._hotel.contactDetails.socialLinks.twitterUrl);
 	}
 	public didChangeVatDetails(vatDetails: VatDetails) {
 		this._hotel.contactDetails.address.country = this._countries.getCountryByCode(vatDetails.countryCode);
 		this._hotel.contactDetails.vatCode = vatDetails.fullVat;
 	}
 	public didGetVatResponse(vatResponse: VatResponse) {
-		this._companyNameControl.updateValue(vatResponse.companyName);
-		this._streetAddressControl.updateValue(vatResponse.companyAddress);
+		this._companyNameControl.setValue(vatResponse.companyName);
+		this._streetAddressControl.setValue(vatResponse.companyAddress);
 		this._hotel.contactDetails.vatCode = vatResponse.fullVatNumber;
 	}
 	public didUpdateLogoUrl(logoUrl: string) {

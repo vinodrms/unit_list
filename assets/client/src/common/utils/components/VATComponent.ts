@@ -6,7 +6,6 @@ import 'rxjs/add/operator/switchMap';
 import {BaseComponent} from '../../../common/base/BaseComponent';
 import {AppContext, ThError, ThServerApi} from '../AppContext';
 import {UploadedFileResponse} from '../http/IThHttp';
-import {TranslationPipe} from '../localization/TranslationPipe';
 import {CountriesService} from '../../../pages/internal/services/settings/CountriesService';
 import {CountriesDO} from '../../../pages/internal/services/settings/data-objects/CountriesDO';
 import {CountryDO} from '../../../pages/internal/services/common/data-objects/country/CountryDO';
@@ -46,8 +45,7 @@ export interface VatResponse {
 				<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Insert a VAT Number' | translate }}</small></label>
 			</div>
 		</div>
-	`,
-	pipes: [TranslationPipe]
+	`
 })
 
 export class VATComponent extends BaseComponent implements OnInit {

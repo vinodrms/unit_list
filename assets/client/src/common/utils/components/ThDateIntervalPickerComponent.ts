@@ -1,7 +1,5 @@
 import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import {ThDataValidators} from '../form-utils/utils/ThDataValidators';
-import {TranslationPipe} from '../localization/TranslationPipe';
-import {ThDatePickerComponent} from './ThDatePickerComponent';
 import {ThDateDO} from '../../../pages/internal/services/common/data-objects/th-dates/ThDateDO';
 import {ThDateIntervalDO} from '../../../pages/internal/services/common/data-objects/th-dates/ThDateIntervalDO';
 import {ThDateUtils} from '../../../pages/internal/services/common/data-objects/th-dates/ThDateUtils';
@@ -45,9 +43,7 @@ import {ThDateUtils} from '../../../pages/internal/services/common/data-objects/
 				</div>
 			</div>
 		</div>
-	`,
-	pipes: [TranslationPipe],
-	directives: [ThDatePickerComponent]
+	`
 })
 export class ThDateIntervalPickerComponent implements OnInit {
 	public static MaxNoOfDaysFromInterval = 186;

@@ -1,5 +1,4 @@
 import {Component, Input, Output, EventEmitter} from '@angular/core';
-import {TranslationPipe} from '../localization/TranslationPipe';
 
 @Component({
 	selector: 'loading-button',
@@ -8,8 +7,7 @@ import {TranslationPipe} from '../localization/TranslationPipe';
 			<i *ngIf="isLoading" class="fa fa-spinner fa-pulse"></i>
 			{{ title | translate }}
 		</button>
-	`,
-	pipes: [TranslationPipe]
+	`
 })
 
 export class LoadingButtonComponent {

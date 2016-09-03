@@ -38,7 +38,8 @@ export class BookingHistoryDashboardComponent extends AHomeContainerComponent im
 
 	public ngAfterViewInit() {
 		this._bookingsTableComponent.attachTopTableCenterBootstrapData({
-			componentToInject: BookingsDateFilterComponent,
+			// TODO: create module
+			moduleToInject: BookingsDateFilterComponent,
 			providers: ReflectiveInjector.resolve([provide(BookingsService, { useValue: this._bookingsService })])
 		});
 		this._bookingsTableComponent.bootstrap(this._bookingsService, this._tableBuilder.buildLazyLoadTableMeta());

@@ -1,6 +1,6 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
 import {FormGroup} from '@angular/forms';
-import {ROUTER_DIRECTIVES, ActivatedRoute} from '@angular/router';
+import {ActivatedRoute} from '@angular/router';
 import {Subscription} from 'rxjs/Subscription';
 import {AppContext} from '../../../../common/utils/AppContext';
 import {ThError} from '../../../../common/utils/responses/ThError';
@@ -14,9 +14,7 @@ import {LoadingButtonComponent} from '../../../../common/utils/components/Loadin
 @Component({
 	selector: 'update-password-component',
 	templateUrl: '/client/src/pages/external/pages/update-password/template/update-password-component.html',
-	directives: [ROUTER_DIRECTIVES, ExternalFooterComponent, LoadingButtonComponent],
-	providers: [UpdatePasswordService],
-	pipes: [TranslationPipe]
+	providers: [UpdatePasswordService]
 })
 
 export class UpdatePasswordComponent extends BaseFormComponent implements OnInit, OnDestroy {

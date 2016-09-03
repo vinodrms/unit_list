@@ -1,22 +1,20 @@
-import {Injectable, ComponentResolver, ComponentRef, ViewContainerRef} from '@angular/core';
+import {Injectable, ComponentRef, ViewContainerRef} from '@angular/core';
 import {IToaster} from './IToaster';
 import {Toast, ToastType} from './utils/Toast';
-import {ToastContainerComponent} from './utils/ToastContainerComponent';
-import {ComponentUtils} from '../components/utils/ComponentUtils';
+import {ToastContainerModule} from './utils/ToastContainerModule';
+import {ModuleLoaderService} from '../module-loader/ModuleLoaderService';
 
 @Injectable()
 export class Toaster implements IToaster {
 	private static ToasterTimeout = 4000;
 	private _container: ComponentRef<any>;
 	private _toastIndex = 0;
-	private _componentUtils: ComponentUtils;
 
-	constructor(componentResolver: ComponentResolver) {
-		this._componentUtils = new ComponentUtils(componentResolver);
+	constructor() {
 	}
 
-	public bootstrap(viewContainerRef: ViewContainerRef) {
-		this._componentUtils.loadNextToLocation(ToastContainerComponent, viewContainerRef, [])
+	public bootstrap(viewContainerRef: ViewContainerRef, moduleLoaderService: ModuleLoaderService) {
+		moduleLoaderService.loadNextToLocation(ToastContainerModule, viewContainerRef, [])
 			.then((ref) => {
 				this._container = ref;
 			});

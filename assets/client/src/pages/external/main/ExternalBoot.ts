@@ -1,13 +1,14 @@
 /// <reference path="../../../../typings/tsd.d.ts" />
 
-import {NgModule, provide}      from '@angular/core';
+import {NgModule}      from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {RouterModule} from "@angular/router";
+import {HttpModule} from "@angular/http";
 
 import {MainLayoutExternalComponent} from './MainLayoutExternalComponent';
-import {ExternalRouting, ExternalRouterModules} from './ExternalRouterConfig';
-import {HTTP_PROVIDERS} from '@angular/http';
+import {ExternalRouting} from './ExternalRouterConfig';
 import {IThCookie} from '../../../common/utils/cookies/IThCookie';
 import {ThCookie} from '../../../common/utils/cookies/ThCookie';
 import {IThHttp} from '../../../common/utils/http/IThHttp';
@@ -25,20 +26,24 @@ import {GoogleAnalytics} from '../../../common/utils/analytics/GoogleAnalytics';
 import {IAnalytics} from '../../../common/utils/analytics/IAnalytics';
 import {AppContext} from '../../../common/utils/AppContext';
 
+import {SharedDirectivesModule} from '../../../common/utils/directives/modules/SharedDirectivesModule';
+import {SharedPipesModule} from '../../../common/utils/pipes/modules/SharedPipesModule';
+import {ExternalPagesModule} from '../pages/ExternalPagesModule';
+
 @NgModule({
-    imports: [BrowserModule, ExternalRouting, FormsModule, ReactiveFormsModule],
-    declarations: [MainLayoutExternalComponent, ExternalRouterModules],
+    imports: [BrowserModule, HttpModule, RouterModule, ExternalRouting,
+		SharedDirectivesModule, SharedPipesModule, ExternalPagesModule],
+    declarations: [MainLayoutExternalComponent],
     bootstrap: [MainLayoutExternalComponent],
 	providers: [
-		provide(IThCookie, { useClass: ThCookie }),
-		provide(IBrowserLocation, { useClass: BrowserLocation }),
-		provide(IRouterNavigator, { useClass: RouterNavigator }),
+		{ provide: IThCookie, useClass: ThCookie },
+		{ provide: IBrowserLocation, useClass: BrowserLocation },
+		{ provide: IRouterNavigator, useClass: RouterNavigator },
 		ThTranslation,
-		HTTP_PROVIDERS,
-		provide(IThHttp, { useClass: ThHttp }),
-		provide(IToaster, { useClass: Toaster }),
-		provide(IModalService, { useClass: ModalService }),
-		provide(IAnalytics, { useClass: GoogleAnalytics }),
+		{ provide: IThHttp, useClass: ThHttp },
+		{ provide: IToaster, useClass: Toaster },
+		{ provide: IModalService, useClass: ModalService },
+		{ provide: IAnalytics, useClass: GoogleAnalytics },
 		AppContext
 	]
 })

@@ -1,8 +1,8 @@
-import {Component, AfterViewInit, ViewChild, ViewContainerRef, EventEmitter, Output, ComponentResolver, Type, ResolvedReflectiveProvider} from '@angular/core';
+import {Component, AfterViewInit, ViewChild, ViewContainerRef, EventEmitter, Output, Type, ResolvedReflectiveProvider} from '@angular/core';
 import {BaseComponent} from '../../../../../../../common/base/BaseComponent';
 import {TranslationPipe} from '../../../../../../../common/utils/localization/TranslationPipe';
 import {AppContext, ThError} from '../../../../../../../common/utils/AppContext';
-import {ComponentUtils} from '../../../../../../../common/utils/components/utils/ComponentUtils';
+import {ComponentLoaderService} from '../../../../../../../common/utils/components/services/ComponentLoaderService';
 import {InventoryStateManager} from '../../utils/state-manager/InventoryStateManager';
 import {InventoryScreenStateType} from '../../utils/state-manager/InventoryScreenStateType';
 import {InventoryScreenAction} from '../../utils/state-manager/InventoryScreenAction';
@@ -37,20 +37,18 @@ export class AllotmentsComponent extends BaseComponent implements AfterViewInit 
 
 	private _inventoryStateManager: InventoryStateManager<AllotmentVM>;
 	private _allotmentStatus: AllotmentStatus;
-	private _componentUtils: ComponentUtils;
 
-	constructor(componentResolver: ComponentResolver,
-		private _appContext: AppContext,
+	constructor(private _appContext: AppContext,
+		private _componentLoaderService: ComponentLoaderService,
 		private _allotmentsService: AllotmentsService,
 		private _tableBuilder: AllotmentsTableMetaBuilderService) {
 		super();
-		this._componentUtils = new ComponentUtils(componentResolver);
 		this._inventoryStateManager = new InventoryStateManager<AllotmentVM>(this._appContext, "allotment.id");
 		this.registerStateChange();
 		this.setDefaultAllotmentStatus();
 	}
 	public bootstrapOverviewBottom(componentToInject: Type, providers: ResolvedReflectiveProvider[]) {
-        this._componentUtils.loadNextToLocation(componentToInject, this._overviewBottomVCRef, providers);
+        this._componentLoaderService.loadNextToLocation(componentToInject, this._overviewBottomVCRef, providers);
     }
 	private registerStateChange() {
 		this._inventoryStateManager.stateChangedObservable.subscribe((currentState: InventoryScreenStateType) => {

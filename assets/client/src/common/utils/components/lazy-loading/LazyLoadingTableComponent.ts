@@ -1,12 +1,5 @@
 import {Component, OnInit, Output, EventEmitter, Input, Inject, ElementRef,
-	ViewChild, ViewContainerRef, Type, ResolvedReflectiveProvider, ComponentResolver, OnChanges} from '@angular/core';
-import {LoadingComponent} from '../LoadingComponent';
-import {ThButtonComponent} from '../ThButtonComponent';
-import {DebouncingInputTextComponent} from '../DebouncingInputTextComponent';
-import {TranslationPipe} from '../../localization/TranslationPipe';
-import {PricePipe} from '../../pipes/PricePipe';
-import {PercentagePipe} from '../../pipes/PercentagePipe';
-import {ThDateIntervalPipe} from '../../pipes/ThDateIntervalPipe';
+	ViewChild, ViewContainerRef, Type, ResolvedReflectiveProvider, ComponentFactoryResolver, OnChanges} from '@angular/core';
 import {AppContext} from '../../AppContext';
 import {LazyLoadTableMeta, TableRowCommand, TableColumnValueMeta, TablePropertyType, TableViewOption, TableColumnMeta} from './utils/LazyLoadTableMeta';
 import {ILazyLoadRequestService, LazyLoadData, PageContent, SortOrder, SortOptions} from '../../../../pages/internal/services/common/ILazyLoadRequestService';
@@ -16,21 +9,18 @@ import {PaginationIndex} from './utils/PaginationIndex';
 import {TableOptions} from './utils/TableOptions';
 import {CustomScroll} from '../../directives/CustomScroll';
 import {ThUtils} from '../../ThUtils';
-import {ComponentUtils} from '../utils/ComponentUtils';
+import {ModuleLoaderService} from '../../module-loader/ModuleLoaderService';
 
 @Component({
 	selector: 'lazy-loading-table',
-	templateUrl: '/client/src/common/utils/components/lazy-loading/template/lazy-loading-table.html',
-	directives: [LoadingComponent, CustomScroll, ThButtonComponent, DebouncingInputTextComponent],
-	pipes: [TranslationPipe, PricePipe, PercentagePipe, ThDateIntervalPipe]
+	templateUrl: '/client/src/common/utils/components/lazy-loading/template/lazy-loading-table.html'
 })
 export class LazyLoadingTableComponent<T> {
 	@ViewChild('topTableCenter', { read: ViewContainerRef }) private _topTableCenterVCRef: ViewContainerRef;
 	private _didInitTopTableCenterRegion: boolean = false;
-	private _topTableCenterData: { componentToInject: Type, providers: ResolvedReflectiveProvider[] };
+	private _topTableCenterData: { moduleToInject: Type<any>, providers: ResolvedReflectiveProvider[] };
 
 	private _thUtils: ThUtils;
-	private _componentUtils: ComponentUtils;
 	protected _isCollapsed: boolean;
 	private _rowClassGenerator: { (item: T): string };
 	private _cellClassGenerator: { (item: T, columnValueMeta: TableColumnValueMeta): string };
@@ -98,11 +88,11 @@ export class LazyLoadingTableComponent<T> {
 
 	@ViewChild(CustomScroll) private _scrollableBodyRegion: CustomScroll;
 
-	constructor(componentResolver: ComponentResolver,
+	constructor(componentFactoryResolver: ComponentFactoryResolver,
 		private _appContext: AppContext,
+		private _moduleLoaderService: ModuleLoaderService,
 		@Inject(ElementRef) private _elementRef: ElementRef) {
 		this._thUtils = new ThUtils();
-		this._componentUtils = new ComponentUtils(componentResolver);
 		this.paginationIndex = new PaginationIndex(_appContext);
 		this.tableOptions = new TableOptions();
 	}
@@ -156,10 +146,10 @@ export class LazyLoadingTableComponent<T> {
 	}
 	private registerTopCenterComponentIfNecessary() {
 		if (!this.didInit || !this._topTableCenterData || this._didInitTopTableCenterRegion || !this._topTableCenterVCRef) { return; }
-		this._componentUtils.loadNextToLocation(this._topTableCenterData.componentToInject, this._topTableCenterVCRef, this._topTableCenterData.providers);
+		this._moduleLoaderService.loadNextToLocation(this._topTableCenterData.moduleToInject, this._topTableCenterVCRef, this._topTableCenterData.providers);
 		this._didInitTopTableCenterRegion = true;
 	}
-	public attachTopTableCenterBootstrapData(topTableCenterData: { componentToInject: Type, providers: ResolvedReflectiveProvider[] }) {
+	public attachTopTableCenterBootstrapData(topTableCenterData: { moduleToInject: Type<any>, providers: ResolvedReflectiveProvider[] }) {
 		this._topTableCenterData = topTableCenterData;
 	}
 

@@ -2,7 +2,7 @@
 
 <div class="full-height" *ngIf="didInitOnce">
 	<div class="invoice-container">
-		<center *ngIf="noEditableInvoicesExist" class="full-width"> {{ 'Only unpaid invoices are editable. No unpaid invoices exist in this invoice group.' | translate }} </center>
+		<span style="text-align:center" *ngIf="noEditableInvoicesExist" class="full-width"> {{ 'Only unpaid invoices are editable. No unpaid invoices exist in this invoice group.' | translate }} </span>
 		<invoice-edit *ngFor="let displayedInvoiceIndex of displayedInvoiceIndexList" [invoiceReference]="getInvoiceReference(displayedInvoiceIndex)" (newlyAddedInvoiceRemoved)="newlyAddedInvoiceRemoved($event)"></invoice-edit>
 
 	</div>

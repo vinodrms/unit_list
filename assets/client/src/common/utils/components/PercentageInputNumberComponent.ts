@@ -1,5 +1,4 @@
 import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import {TranslationPipe} from '../localization/TranslationPipe';
 import {ThDataValidators} from '../form-utils/utils/ThDataValidators';
 
 @Component({
@@ -15,10 +14,8 @@ import {ThDataValidators} from '../form-utils/utils/ThDataValidators';
 			</div>
             <label class="form-warning"><small><i class="fa fa-info-circle"></i> {{errorMessage | translate}}</small></label>
 		</div>
-	`,
-	pipes: [TranslationPipe]
+	`
 })
-
 export class PercentageInputNumberComponent implements OnInit {
 	@Input() placeholder: string = "1 - 100";
 	@Input() didSubmitForm: boolean = false;

@@ -1,8 +1,18 @@
 var config = {
+	paths: {
+		'npm:': 'node_modules/'
+    },
 	map: {
-		'rxjs': 'node_modules/rxjs',
-		'@angular': 'node_modules/@angular',
 		'external': 'client/src',
+		'rxjs': 'node_modules/rxjs',
+		'@angular/core': 'npm:@angular/core/bundles/core.umd.js',
+		'@angular/common': 'npm:@angular/common/bundles/common.umd.js',
+		'@angular/compiler': 'npm:@angular/compiler/bundles/compiler.umd.js',
+		'@angular/platform-browser': 'npm:@angular/platform-browser/bundles/platform-browser.umd.js',
+		'@angular/platform-browser-dynamic': 'npm:@angular/platform-browser-dynamic/bundles/platform-browser-dynamic.umd.js',
+		'@angular/http': 'npm:@angular/http/bundles/http.umd.js',
+		'@angular/router': 'npm:@angular/router/bundles/router.umd.js',
+		'@angular/forms': 'npm:@angular/forms/bundles/forms.umd.js'
 	},
 	packages: {
 		'external': {
@@ -14,19 +24,4 @@ var config = {
 		}
 	}
 };
-var packageNames = [
-    '@angular/common',
-    '@angular/compiler',
-    '@angular/core',
-	'@angular/forms',
-    '@angular/http',
-    '@angular/platform-browser',
-    '@angular/platform-browser-dynamic',
-    '@angular/router',
-    '@angular/testing',
-    '@angular/upgrade',
-];
-packageNames.forEach(function (pkgName) {
-	config.packages[pkgName] = { main: 'index.js', defaultExtension: 'js' };
-});
 System.config(config);
