@@ -1,8 +1,6 @@
 import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import {TranslationPipe} from '../../../../../../../../../../../../../common/utils/localization/TranslationPipe';
 import {RoomAttachedBookingResultVM} from '../../../../../../../../../../../services/hotel-operations/room/view-models/RoomAttachedBookingResultVM';
 import {AppContext, ThError} from '../../../../../../../../../../../../../common/utils/AppContext';
-import {ConfigCapacityComponent} from '../../../../../../../../../../../../../common/utils/components/ConfigCapacityComponent';
 import {BookingDO} from '../../../../../../../../../../../services/bookings/data-objects/BookingDO';
 import {CustomerDO} from '../../../../../../../../../../../services/customers/data-objects/CustomerDO';
 import {BedStorageType} from '../../../../../../../../../../../services/beds/data-objects/BedDO';
@@ -16,9 +14,7 @@ import {RoomOperationsPageData} from '../../services/utils/RoomOperationsPageDat
 
 @Component({
     selector: 'room-booking-preview',
-    templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/room-operations/components/booking-preview/template/room-booking-preview.html',
-    directives: [ConfigCapacityComponent],
-    pipes: [TranslationPipe]
+    templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/room-operations/components/booking-preview/template/room-booking-preview.html'
 })
 export class RoomBookingPreviewComponent implements OnInit {
     @Output() onBookingChanged = new EventEmitter<BookingDO>();

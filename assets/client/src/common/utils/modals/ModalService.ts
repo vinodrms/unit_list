@@ -49,6 +49,7 @@ export class ModalService implements IModalService {
 				resolve(dialog);
 			})
 			.catch((err: any) => {
+				debugger
 				console.error(err);
 				reject(new ThError("Error opening popup"));
 			});

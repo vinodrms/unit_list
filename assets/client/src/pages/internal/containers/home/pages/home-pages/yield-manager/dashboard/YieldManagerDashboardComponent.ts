@@ -5,27 +5,16 @@ import {HeaderPageType} from '../../../utils/header/container/services/HeaderPag
 import {AHomeContainerComponent} from '../../../utils/AHomeContainerComponent';
 
 import {ThDateDO} from '../../../../../../services/common/data-objects/th-dates/ThDateDO';
+import {YieldViewModeState} from './components/yield-view-mode/YieldViewModeComponent';
+import {HotelDetailsDO} from '../../../../../../services/hotel/data-objects/HotelDetailsDO';
+import {IFilterSelection} from './common/interfaces/IFilterSelection';
+import {AppContext} from '../../../../../../../../common/utils/AppContext';
+import {HotelService} from '../../../../../../services/hotel/HotelService';
 
 import {YieldFilterPaneComponent} from './components/yield-filter-pane/YieldFilterPaneComponent';
 import {YieldTimeFrameHeaderComponent} from './components/yield-timeframe-header/YieldTimeFrameHeaderComponent';
 import {YieldKeyMetricsComponent} from './components/yield-key-metrics/YieldKeyMetricsComponent';
 import {YieldPriceProductsComponent} from './components/yield-price-products/YieldPriceProductsComponent';
-import {YieldViewModeComponent} from './components/yield-view-mode/YieldViewModeComponent';
-import {YieldViewModeState} from './components/yield-view-mode/YieldViewModeComponent';
-
-import {YieldFiltersService} from '../../../../../../services/hotel-configurations/YieldFiltersService';
-import {HotelService} from '../../../../../../services/hotel/HotelService';
-import {HotelDetailsDO} from '../../../../../../services/hotel/data-objects/HotelDetailsDO';
-
-import {YieldManagerDashboardFilterService} from '../../../../../../services/yield-manager/dashboard/filter/YieldManagerDashboardFilterService';
-import {YieldManagerDashboardPriceProductsService} from '../../../../../../services/yield-manager/dashboard/price-products/YieldManagerDashboardPriceProductsService';
-import {YieldManagerDashboardKeyMetricsService} from '../../../../../../services/yield-manager/dashboard/key-metrics/YieldManagerDashboardKeyMetricsService';
-
-import {CustomScroll} from '../../../../../../../../common/utils/directives/CustomScroll';
-
-import {IFilterSelection} from './common/interfaces/IFilterSelection';
-
-import {AppContext} from '../../../../../../../../common/utils/AppContext';
 
 export interface IYieldManagerDashboardFilter {
 	updateYieldTimeFrameParams(currentDate: ThDateDO, noDays: number);
@@ -43,10 +32,7 @@ class ViewModeDecoratorClass {
 
 @Component({
 	selector: 'yield-manager-dashboard',
-	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/yield-manager/dashboard/template/yield-manager-dashboard.html',
-	directives: [CustomScroll, LazyLoadingTableComponent, YieldFilterPaneComponent, YieldTimeFrameHeaderComponent, YieldKeyMetricsComponent, YieldViewModeComponent, YieldPriceProductsComponent],
-	providers: [YieldFiltersService, HotelService,
-		YieldManagerDashboardFilterService, YieldManagerDashboardPriceProductsService, YieldManagerDashboardKeyMetricsService]
+	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/yield-manager/dashboard/template/yield-manager-dashboard.html'
 })
 export class YieldManagerDashboardComponent extends AHomeContainerComponent implements OnInit, IYieldManagerDashboardFilter, IYieldManagerDashboardPriceProducts {
 	public keyMetricsViewModeDecoratorClass = ViewModeDecoratorClass.Default;

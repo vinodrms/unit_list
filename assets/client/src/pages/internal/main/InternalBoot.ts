@@ -26,12 +26,10 @@ import {GoogleAnalytics} from '../../../common/utils/analytics/GoogleAnalytics';
 import {IAnalytics} from '../../../common/utils/analytics/IAnalytics';
 import {AppContext} from '../../../common/utils/AppContext';
 import {ModuleLoaderService} from '../../../common/utils/module-loader/ModuleLoaderService';
-import {ThResourceLoader} from '../../../common/utils/module-loader/ThResourceLoader';
-
-import {WizardModule} from '../containers/wizard/WizardModule';
+import {HomeModule} from '../containers/home/HomeModule';
 
 @NgModule({
-    imports: [BrowserModule, HttpModule, InternalRouting, WizardModule],
+    imports: [BrowserModule, HttpModule, InternalRouting, HomeModule],
     declarations: [MainLayoutInternalComponent],
     bootstrap: [MainLayoutInternalComponent],
 	providers: [

@@ -13,7 +13,7 @@ import {WizardAllotmentsModule} from './pages/wizard-pages/allotments/WizardAllo
 
 const wizardRoutes: Routes = [
     {
-        path: 'wizard', component: MainWizardComponent,
+        path: '', component: MainWizardComponent,
         children: [
             { path: '', redirectTo: 'basic-info', pathMatch: 'prefix' },
             { path: 'basic-info', loadChildren: () => WizardBasicInformationModule },

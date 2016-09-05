@@ -1,21 +1,17 @@
 import {Component, OnInit} from '@angular/core';
 import {AppContext, ThError} from '../../../../../../../../common/utils/AppContext';
 import {BaseComponent} from '../../../../../../../../common/base/BaseComponent';
-import {TranslationPipe} from '../../../../../../../../common/utils/localization/TranslationPipe';
 import {ICustomModalComponent, ModalSize} from '../../../../../../../../common/utils/modals/utils/ICustomModalComponent';
 import {ModalDialogRef} from '../../../../../../../../common/utils/modals/utils/ModalDialogRef';
 import {ChartComponentSubsetDO} from '../../../../../../../../common/utils/components/chart/data-objects/ChartComponentSubsetDO';
 import {ChartComponentDO} from '../../../../../../../../common/utils/components/chart/data-objects/ChartComponentDO';
-import {ChartComponent} from '../../../../../../../../common/utils/components/chart/ChartComponent';
 import {KeyMetricModalInput, KeyMetricItem} from './services/utils/KeyMetricModalInput';
 import {IKeyMetricValue} from '../../../../../../services/yield-manager/dashboard/key-metrics/data-objects/metric-value/IKeyMetricValue';
 import {ThDateDO} from '../../../../../../services/common/data-objects/th-dates/ThDateDO';
 
 @Component({
     selector: 'key-metric-modal',
-    templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/yield-manager/key-metric-modal/template/key-metric-modal.html',
-    directives: [ChartComponent],
-    pipes: [TranslationPipe]
+    templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/yield-manager/key-metric-modal/template/key-metric-modal.html'
 })
 export class KeyMetricModalComponent implements ICustomModalComponent, OnInit {
     private static AvgLabel = "Average value for this period";

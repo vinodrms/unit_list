@@ -4,21 +4,15 @@ import 'rxjs/add/observable/combineLatest';
 import {BaseComponent} from '../../../../../../../../common/base/BaseComponent';
 import {AppContext, ThError} from '../../../../../../../../common/utils/AppContext';
 import {LoginStatusCode} from '../../../../../../../../common/utils/responses/LoginStatusCode';
-import {TranslationPipe} from '../../../../../../../../common/utils/localization/TranslationPipe';
 import {HotelDetailsDO} from '../../../../../../services/hotel/data-objects/HotelDetailsDO';
 import {HotelService} from '../../../../../../services/hotel/HotelService';
 import {HeaderPageService} from './services/HeaderPageService';
 import {HeaderPage} from './services/HeaderPage';
-import {HeaderSettingsComponent} from '../subcomponents/settings/HeaderSettingsComponent';
-import {HeaderNotificationsComponent} from '../subcomponents/notifications/HeaderNotificationsComponent';
 
 @Component({
 	selector: 'main-header',
-	templateUrl: '/client/src/pages/internal/containers/home/pages/utils/header/container/template/main-header.html',
-	directives: [HeaderSettingsComponent, HeaderNotificationsComponent],
-	pipes: [TranslationPipe]
+	templateUrl: '/client/src/pages/internal/containers/home/pages/utils/header/container/template/main-header.html'
 })
-
 export class MainHeaderComponent extends BaseComponent implements OnInit {
 	hotelName: string = "";
 

@@ -2,14 +2,9 @@ import { Component, OnInit, AfterViewInit, ViewChildren, Input, Output, ElementR
 
 import {ThDateDO} from '../../../../../../../../services/common/data-objects/th-dates/ThDateDO';
 import {AppContext} from '../../../../../../../../../../common/utils/AppContext';
-import {TranslationPipe} from '../../../../../../../../../../common/utils/localization/TranslationPipe';
-
 import {IYieldManagerDashboardFilter} from '../../YieldManagerDashboardComponent'
-
 import {HotelService} from '../../../../../../../../services/hotel/HotelService';
 import {HotelDetailsDO} from '../../../../../../../../services/hotel/data-objects/HotelDetailsDO';
-
-import {ThDatePickerComponent} from '../../../../../../../../../../common/utils/components/ThDatePickerComponent';
 
 interface ITimeFrameOption {
 	noDays: number,
@@ -19,8 +14,7 @@ interface ITimeFrameOption {
 
 @Component({
 	selector: 'yield-timeframe-header',
-	templateUrl: 'client/src/pages/internal/containers/home/pages/home-pages/yield-manager/dashboard/components/yield-timeframe-header/template/yield-timeframe-header.html',
-	directives: [ThDatePickerComponent]
+	templateUrl: 'client/src/pages/internal/containers/home/pages/home-pages/yield-manager/dashboard/components/yield-timeframe-header/template/yield-timeframe-header.html'
 })
 export class YieldTimeFrameHeaderComponent implements OnInit, AfterViewInit {
 	private static YMDefaultIndexCookieKey: string = "YMTimeframeIndexKey";

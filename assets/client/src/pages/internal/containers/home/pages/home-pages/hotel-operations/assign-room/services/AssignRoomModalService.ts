@@ -1,10 +1,11 @@
-import {Injectable, ReflectiveInjector, provide} from '@angular/core';
+import {Injectable, ReflectiveInjector} from '@angular/core';
 import {AppContext} from '../../../../../../../../../common/utils/AppContext';
 import {ModalDialogRef} from '../../../../../../../../../common/utils/modals/utils/ModalDialogRef';
 import {BookingDO} from '../../../../../../../services/bookings/data-objects/BookingDO';
 import {AssignRoomParam} from './utils/AssignRoomParam';
 import {AssignRoomModalInput} from './utils/AssignRoomModalInput';
 import {AssignRoomModalComponent} from '../AssignRoomModalComponent';
+import {AssignRoomModalModule} from '../AssignRoomModalModule';
 import {IAssignRoomStrategy} from './strategies/IAssignRoomStrategy';
 import {CheckInStrategy} from './strategies/CheckInStrategy';
 import {ReserveRoomStrategy} from './strategies/ReserveRoomStrategy';
@@ -26,8 +27,8 @@ export class AssignRoomModalService {
 
     private assignRoom(assignRoomStrategy: IAssignRoomStrategy, assignRoomParam: AssignRoomParam): Promise<ModalDialogRef<BookingDO>> {
         var assignRoomModalInput = new AssignRoomModalInput(assignRoomStrategy, assignRoomParam);
-        return this._appContext.modalService.open<any>(<any>AssignRoomModalComponent, ReflectiveInjector.resolve([
-            provide(AssignRoomModalInput, { useValue: assignRoomModalInput })
+        return this._appContext.modalService.open<any>(AssignRoomModalModule, AssignRoomModalComponent, ReflectiveInjector.resolve([
+            { provide: AssignRoomModalInput, useValue: assignRoomModalInput }
         ]));
     }
 }

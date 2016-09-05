@@ -1,13 +1,11 @@
 import {Component, Input} from '@angular/core';
-import {TranslationPipe} from '../../../../../../../../../../../../../common/utils/localization/TranslationPipe';
 import {AppContext} from '../../../../../../../../../../../../../common/utils/AppContext';
 import {HotelOperationsPageControllerService} from '../../../../services/HotelOperationsPageControllerService';
 import {BookingOperationsPageData} from '../../services/utils/BookingOperationsPageData';
 
 @Component({
     selector: 'booking-links',
-    templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/booking-operations/components/booking-links/template/booking-links.html',
-    pipes: [TranslationPipe]
+    templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/booking-operations/components/booking-links/template/booking-links.html'
 })
 export class BookingLinksComponent {
     @Input() bookingOperationsPageData: BookingOperationsPageData;

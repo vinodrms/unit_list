@@ -1,15 +1,13 @@
 import {Component, Input, Output, NgZone, ElementRef, EventEmitter} from '@angular/core';
 
-import {TranslationPipe} from '../../../../../../../../../../../../common/utils/localization/TranslationPipe';
-
 import {HotelDashboardModalService} from '../../../../services/HotelDashboardModalService';
 import {DepartureItemInfoVM} from '../../../../../../../../../../services/hotel-operations/dashboard/departures/view-models/DepartureItemInfoVM'
 
 declare var $: any;
+
 @Component({
 	selector: 'departure-item',
-	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/dashboard/components/departures-pane/components/departure-item/template/departure-item.html',
-	pipes: [TranslationPipe]
+	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/dashboard/components/departures-pane/components/departure-item/template/departure-item.html'
 })
 
 export class DepartureItemComponent {

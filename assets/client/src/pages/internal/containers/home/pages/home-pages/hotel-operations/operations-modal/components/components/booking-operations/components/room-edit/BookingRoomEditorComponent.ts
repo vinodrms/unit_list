@@ -1,5 +1,4 @@
 import {Component, Input, Output, EventEmitter} from '@angular/core';
-import {TranslationPipe} from '../../../../../../../../../../../../../common/utils/localization/TranslationPipe';
 import {AppContext, ThError} from '../../../../../../../../../../../../../common/utils/AppContext';
 import {BookingOperationsPageData} from '../../services/utils/BookingOperationsPageData';
 import {BookingAssignRoomRight} from '../../../../../../../../../../../services/bookings/data-objects/BookingEditRights';
@@ -13,8 +12,7 @@ import {ModalDialogRef} from '../../../../../../../../../../../../../common/util
 @Component({
     selector: 'booking-room-editor',
     templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/booking-operations/components/room-edit/template/booking-room-editor.html',
-    providers: [AssignRoomModalService],
-    pipes: [TranslationPipe]
+    providers: [AssignRoomModalService]
 })
 export class BookingRoomEditorComponent {
     @Output() onBookingRoomChanged = new EventEmitter<BookingDO>();

@@ -1,7 +1,5 @@
 import {Component, AfterViewInit, ViewChild, Output, EventEmitter, OnInit} from '@angular/core';
-import {TranslationPipe} from '../../../../../../../../../../common/utils/localization/TranslationPipe';
 import {AppContext} from '../../../../../../../../../../common/utils/AppContext';
-import {LoadingComponent} from '../../../../../../../../../../common/utils/components/LoadingComponent';
 import {LazyLoadingTableComponent} from '../../../../../../../../../../common/utils/components/lazy-loading/LazyLoadingTableComponent';
 import {RoomSelectionService} from './services/RoomSelectionService';
 import {RoomSelectionTableMetaBuilderService} from './services/RoomSelectionTableMetaBuilderService';
@@ -11,9 +9,7 @@ import {RoomVM} from '../../../../../../../../services/rooms/view-models/RoomVM'
 @Component({
     selector: 'room-selection',
     templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/assign-room/components/room-selection/template/room-selection.html',
-    providers: [RoomSelectionService, RoomSelectionTableMetaBuilderService],
-    directives: [LoadingComponent, LazyLoadingTableComponent],
-    pipes: [TranslationPipe]
+    providers: [RoomSelectionService, RoomSelectionTableMetaBuilderService]
 })
 export class RoomSelectionComponent implements AfterViewInit, OnInit {
     @Output() onRoomSelected = new EventEmitter<RoomVM>();

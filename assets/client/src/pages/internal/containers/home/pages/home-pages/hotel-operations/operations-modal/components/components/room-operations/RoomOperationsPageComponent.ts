@@ -1,7 +1,4 @@
 import {Component, Input, OnInit, Output, EventEmitter} from '@angular/core';
-import {TranslationPipe} from '../../../../../../../../../../../common/utils/localization/TranslationPipe';
-import {LoadingComponent} from '../../../../../../../../../../../common/utils/components/LoadingComponent';
-import {CustomScroll} from '../../../../../../../../../../../common/utils/directives/CustomScroll';
 import {ThError, AppContext} from '../../../../../../../../../../../common/utils/AppContext';
 import {RoomVM} from '../../../../../../../../../services/rooms/view-models/RoomVM';
 import {RoomDO} from '../../../../../../../../../services/rooms/data-objects/RoomDO';
@@ -11,20 +8,13 @@ import {RoomAttachedBookingResultVM} from '../../../../../../../../../services/h
 import {HotelRoomOperationsPageParam} from './utils/HotelRoomOperationsPageParam';
 import {RoomOperationsPageService} from './services/RoomOperationsPageService';
 import {RoomOperationsPageData} from './services/utils/RoomOperationsPageData';
-import {RoomPreviewComponent} from '../../../../../../../../common/inventory/rooms/pages/room-preview/RoomPreviewComponent';
 import {RoomPreviewInput} from '../../../../../../../../common/inventory/rooms/pages/room-preview/utils/RoomPreviewInput';
-import {RoomMaintenanceStatusEditorComponent} from './components/maintenance-status/RoomMaintenanceStatusEditorComponent';
-import {DocumentHistoryViewerComponent} from '../../../../../../../../../../../common/utils/components/document-history/DocumentHistoryViewerComponent';
-import {RoomBookingPreviewComponent} from './components/booking-preview/RoomBookingPreviewComponent';
 import {HotelOperationsResultService} from '../../../services/HotelOperationsResultService';
 
 @Component({
     selector: 'room-operations-page',
     templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/room-operations/template/room-operations-page.html',
-    directives: [LoadingComponent, CustomScroll, DocumentHistoryViewerComponent,
-        RoomPreviewComponent, RoomMaintenanceStatusEditorComponent, RoomBookingPreviewComponent],
-    providers: [RoomOperationsPageService],
-    pipes: [TranslationPipe]
+    providers: [RoomOperationsPageService]
 })
 export class RoomOperationsPageComponent implements OnInit {
     @Input() roomOperationsPageParam: HotelRoomOperationsPageParam;

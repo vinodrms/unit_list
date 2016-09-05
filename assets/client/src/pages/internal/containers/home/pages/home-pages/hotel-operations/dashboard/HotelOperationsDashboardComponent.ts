@@ -1,6 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {TranslationPipe} from '../../../../../../../../common/utils/localization/TranslationPipe';
-import {ThButtonComponent} from '../../../../../../../../common/utils/components/ThButtonComponent';
 import {HeaderPageService} from '../../../utils/header/container/services/HeaderPageService';
 import {HeaderPageType} from '../../../utils/header/container/services/HeaderPageType';
 import {AHomeContainerComponent} from '../../../utils/AHomeContainerComponent';
@@ -11,15 +9,6 @@ import {DeparturesPaneComponent} from './components/departures-pane/DeparturesPa
 import {RoomsCanvasComponent} from './components/rooms-canvas/RoomsCanvasComponent';
 
 import {ArrivalItemInfoVM} from '../../../../../../services/hotel-operations/dashboard/arrivals/view-models/ArrivalItemInfoVM';
-
-import {HOTEL_OPERATIONS_DASHBOARD_PROVIDERS} from '../../../../../../services/hotel-operations/dashboard/HotelOperationsDashboardProviders';
-import {EagerCustomersService} from '../../../../../../services/customers/EagerCustomersService';
-import {HotelOperationsRoomService} from '../../../../../../services/hotel-operations/room/HotelOperationsRoomService';
-
-import {AssignRoomModalService} from '../assign-room/services/AssignRoomModalService';
-import {HotelOperationsModalService} from '../operations-modal/services/HotelOperationsModalService';
-
-import {HotelDashboardModalService} from './services/HotelDashboardModalService';
 
 declare var $:any;
 
@@ -51,13 +40,8 @@ export interface IHotelOperationsDashboardDeparturesMediator{
 
 @Component({
 	selector: 'hotel-operations-dashboard',
-	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/dashboard/template/hotel-operations-dashboard.html',
-	directives: [ThButtonComponent, ArrivalsPaneComponent, DeparturesPaneComponent, RoomsCanvasComponent],
-	providers: [HOTEL_OPERATIONS_DASHBOARD_PROVIDERS, EagerCustomersService, HotelOperationsRoomService,
-	AssignRoomModalService, HotelOperationsModalService, HotelDashboardModalService],
-	pipes: [TranslationPipe]
+	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/dashboard/template/hotel-operations-dashboard.html'
 })
-
 export class HotelOperationsDashboardComponent extends AHomeContainerComponent implements OnInit, IHotelOperationsDashboardArrivalsPaneMediator, IHotelOperationsDashboardRoomsCanvasMediator, IHotelOperationsDashboardDeparturesMediator {
 	public self: IHotelOperationsDashboardRoomsCanvasMediator;
 	private roomVMList: any;

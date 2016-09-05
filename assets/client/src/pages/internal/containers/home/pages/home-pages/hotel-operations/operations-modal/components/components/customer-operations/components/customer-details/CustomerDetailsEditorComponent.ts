@@ -1,8 +1,5 @@
 import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import {TranslationPipe} from '../../../../../../../../../../../../../common/utils/localization/TranslationPipe';
 import {AppContext, ThError} from '../../../../../../../../../../../../../common/utils/AppContext';
-import {EditSaveButtonGroupComponent} from '../../../../../../../../../../../../../common/utils/components/button-groups/EditSaveButtonGroupComponent';
-import {FileAttachmentsComponent} from '../../../../../../../../../../../../../common/utils/components/file-attachments/FileAttachmentsComponent';
 import {CustomerOperationsPageData} from '../../services/utils/CustomerOperationsPageData';
 import {CustomerDO} from '../../../../../../../../../../../services/customers/data-objects/CustomerDO';
 import {FileAttachmentDO} from '../../../../../../../../../../../services/common/data-objects/file/FileAttachmentDO';
@@ -10,9 +7,7 @@ import {HotelOperationsCustomerService} from '../../../../../../../../../../../s
 
 @Component({
     selector: 'customer-details-editor',
-    templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/customer-operations/components/customer-details/template/customer-details-editor.html',
-    directives: [EditSaveButtonGroupComponent, FileAttachmentsComponent],
-    pipes: [TranslationPipe]
+    templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/customer-operations/components/customer-details/template/customer-details-editor.html'
 })
 export class CustomerDetailsEditorComponent implements OnInit {
     @Output() onCustomerDetailsChanged = new EventEmitter<CustomerDO>();

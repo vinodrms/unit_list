@@ -9,7 +9,6 @@ import {HotelOperationsResult} from './services/utils/HotelOperationsResult';
 @Component({
     selector: 'hotel-operations-modal',
     templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/template/hotel-operations-modal.html',
-    directives: [HotelOperationsComponent],
     providers: [HotelOperationsResultService]
 })
 export class HotelOperationsModalComponent extends BaseComponent implements ICustomModalComponent {

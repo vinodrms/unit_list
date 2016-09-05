@@ -1,36 +1,24 @@
 import {Component, Input, Output, NgZone, ElementRef, EventEmitter} from '@angular/core';
-import {RoomDropHandlerFactory} from './drop-handlers/RoomDropHandlerFactory';
-
+import {AppContext} from '../../../../../../../../../../../../common/utils/AppContext';
 import {ModalDialogRef} from '../../../../../../../../../../../../common/utils/modals/utils/ModalDialogRef';
 import {RoomItemInfoVM} from '../../../../../../../../../../services/hotel-operations/dashboard/rooms/view-models/RoomItemInfoVM';
-
+import {RoomDropHandlerFactory} from './drop-handlers/RoomDropHandlerFactory';
 import {RoomMaintenanceStatus, RollawayBedStatus} from '../../../../../../../../../../services/rooms/data-objects/RoomDO';
 import {ArrivalItemInfoVM} from '../../../../../../../../../../services/hotel-operations/dashboard/arrivals/view-models/ArrivalItemInfoVM';
-
 import {HotelOperationsResult} from '../../../../../operations-modal/services/utils/HotelOperationsResult';
-
 import {HotelOperationsModalService} from '../../../../../operations-modal/services/HotelOperationsModalService';
-
 import {AssignRoomParam} from '../../../../../../../../../../services/hotel-operations/room/utils/AssignRoomParam';
-
 import {HotelOperationsDashboardService} from '../../../../../../../../../../services/hotel-operations/dashboard/HotelOperationsDashboardService';
 import {HotelOperationsRoomService} from '../../../../../../../../../../services/hotel-operations/room/HotelOperationsRoomService';
-
 import {RoomsCanvasComponent} from '../../../rooms-canvas/RoomsCanvasComponent';
-
 import {HotelDashboardModalService} from '../../../../services/HotelDashboardModalService';
-
-import {TranslationPipe} from '../../../../../../../../../../../../common/utils/localization/TranslationPipe';
-import {AppContext} from '../../../../../../../../../../../../common/utils/AppContext';
 
 declare var $: any;
 
 @Component({
 	selector: 'room-card',
-	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/dashboard/components/rooms-canvas/components/room-card/template/room-card.html',
-	pipes: [TranslationPipe]
+	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/dashboard/components/rooms-canvas/components/room-card/template/room-card.html'
 })
-
 export class RoomCardComponent {
 	public maintenance;
 	public enums;

@@ -1,8 +1,5 @@
 import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import {TranslationPipe} from '../../../../../../../../../../../../../common/utils/localization/TranslationPipe';
-import {ThTimestampPipe} from '../../../../../../../../../../../../../common/utils/pipes/ThTimestampPipe';
 import {AppContext, ThError} from '../../../../../../../../../../../../../common/utils/AppContext';
-import {EditSaveButtonGroupComponent} from '../../../../../../../../../../../../../common/utils/components/button-groups/EditSaveButtonGroupComponent';
 import {BookingOperationsPageData} from '../../services/utils/BookingOperationsPageData';
 import {BookingNoShowEditRight} from '../../../../../../../../../../../services/bookings/data-objects/BookingEditRights';
 import {BookingDO} from '../../../../../../../../../../../services/bookings/data-objects/BookingDO';
@@ -12,9 +9,7 @@ import {ThDateUtils} from '../../../../../../../../../../../services/common/data
 
 @Component({
     selector: 'booking-no-show-editor',
-    templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/booking-operations/components/no-show-edit/template/booking-no-show-editor.html',
-    directives: [EditSaveButtonGroupComponent],
-    pipes: [TranslationPipe, ThTimestampPipe]
+    templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/booking-operations/components/no-show-edit/template/booking-no-show-editor.html'
 })
 export class BookingNoShowEditorComponent implements OnInit {
     @Output() onBookingNoShowTimestampChanged = new EventEmitter<BookingDO>();

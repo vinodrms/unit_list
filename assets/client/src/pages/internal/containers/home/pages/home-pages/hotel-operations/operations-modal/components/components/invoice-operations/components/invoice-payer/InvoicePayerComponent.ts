@@ -1,5 +1,4 @@
 import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import {TranslationPipe} from '../../../../../../../../../../../../../common/utils/localization/TranslationPipe';
 import {ThUtils} from '../../../../../../../../../../../../../common/utils/ThUtils';
 import {AppContext, ThError} from '../../../../../../../../../../../../../common/utils/AppContext';
 import {CustomerRegisterModalService} from '../../../../../../../../../../common/inventory/customer-register/modal/services/CustomerRegisterModalService';
@@ -22,9 +21,7 @@ import {EmailSenderModalService} from '../../../../../../email-sender/services/E
 @Component({
     selector: 'invoice-payer',
     templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/invoice-operations/components/invoice-payer/template/invoice-payer.html',
-    directives: [],
-    providers: [CustomerRegisterModalService, EmailSenderModalService],
-    pipes: [TranslationPipe]
+    providers: [CustomerRegisterModalService, EmailSenderModalService]
 })
 export class InvoicePayerComponent implements OnInit {
     @Input() invoiceReference: string;
@@ -117,9 +114,9 @@ export class InvoicePayerComponent implements OnInit {
     }
 
     public get invoicePdfUrl(): string {
-        return 'api/invoiceGroups/pdf?invoiceGroupId=' 
-            + this.invoiceGroupVM.invoiceGroupDO.id + '&invoiceReference=' 
-            + this.invoiceReference + '&customerId=' + this.invoicePayerVM.customerDO.id 
+        return 'api/invoiceGroups/pdf?invoiceGroupId='
+            + this.invoiceGroupVM.invoiceGroupDO.id + '&invoiceReference='
+            + this.invoiceReference + '&customerId=' + this.invoicePayerVM.customerDO.id
             + '&payerIndex=' + this.invoicePayerVMIndex;
     }
 

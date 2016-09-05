@@ -1,8 +1,6 @@
 import {Component, ViewChild, AfterViewInit, Input, Output, EventEmitter} from '@angular/core';
 import {BaseComponent} from '../../../../../../../../../../../../common/base/BaseComponent';
-import {TranslationPipe} from '../../../../../../../../../../../../common/utils/localization/TranslationPipe';
 import {SearchInputTextComponent} from '../../../../../../../../../../../../common/utils/components/SearchInputTextComponent';
-import {DebouncingInputTextComponent} from '../../../../../../../../../../../../common/utils/components/DebouncingInputTextComponent';
 import {ThDateIntervalPickerComponent} from '../../../../../../../../../../../../common/utils/components/ThDateIntervalPickerComponent';
 import {ThDateIntervalDO} from '../../../../../../../../../../services/common/data-objects/th-dates/ThDateIntervalDO';
 import {ThDateDO} from '../../../../../../../../../../services/common/data-objects/th-dates/ThDateDO';
@@ -18,9 +16,7 @@ import {BookingSearchParams} from '../../../../../services/data-objects/BookingS
 @Component({
     selector: 'booking-search-parameters',
     templateUrl: '/client/src/pages/internal/containers/home/pages/utils/new-booking/component/subcomponents/booking-search/components/search-parameters/template/booking-search-parameters.html',
-    directives: [ThDateIntervalPickerComponent, SearchInputTextComponent, DebouncingInputTextComponent],
-    providers: [CustomerSearchService, EagerCustomersService],
-    pipes: [TranslationPipe]
+    providers: [CustomerSearchService, EagerCustomersService]
 })
 export class BookingSearchParametersComponent extends BaseComponent implements AfterViewInit {
     @Input() isSearching: boolean;

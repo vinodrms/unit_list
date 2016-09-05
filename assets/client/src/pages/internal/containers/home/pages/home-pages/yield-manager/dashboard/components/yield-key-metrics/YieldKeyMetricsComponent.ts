@@ -1,27 +1,18 @@
 import { Component, OnInit, Input } from '@angular/core';
 import {ThDateDO} from '../../../../../../../../services/common/data-objects/th-dates/ThDateDO';
 import {AppContext} from '../../../../../../../../../../common/utils/AppContext';
-
 import {IYieldManagerDashboardFilter} from '../../YieldManagerDashboardComponent';
-
 import {YieldManagerDashboardKeyMetricsService} from '../../../../../../../../services/yield-manager/dashboard/key-metrics/YieldManagerDashboardKeyMetricsService';
 import {KeyMetricsResultVM} from '../../../../../../../../services/yield-manager/dashboard/key-metrics/view-models/KeyMetricsResultVM';
 import {KeyMetricVM} from '../../../../../../../../services/yield-manager/dashboard/key-metrics/view-models/key-metric/KeyMetricVM';
 import {YieldManagerPeriodParam} from '../../../../../../../../services/yield-manager/dashboard/common/YieldManagerPeriodParam';
-
-import {CustomScroll} from '../../../../../../../../../../common/utils/directives/CustomScroll';
-import {TranslationPipe} from '../../../../../../../../../../common/utils/localization/TranslationPipe';
-import {PercentagePipe} from '../../../../../../../../../../common/utils/pipes/PercentagePipe';
-
 import {KeyMetricModalService} from '../../../key-metric-modal/services/KeyMetricModalService';
 import {ModalDialogRef} from '../../../../../../../../../../common/utils/modals/utils/ModalDialogRef';
 
 @Component({
 	selector: 'yield-key-metrics',
 	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/yield-manager/dashboard/components/yield-key-metrics/template/yield-key-metrics.html',
-	providers: [YieldManagerDashboardKeyMetricsService, KeyMetricModalService],
-	directives: [CustomScroll],
-	pipes: [PercentagePipe, TranslationPipe]
+	providers: [YieldManagerDashboardKeyMetricsService, KeyMetricModalService]
 })
 export class YieldKeyMetricsComponent implements OnInit {
 	public matrix: string[][];

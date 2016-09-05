@@ -1,6 +1,4 @@
 import {Component, OnInit, Input} from '@angular/core';
-import {TranslationPipe} from '../../../../../../../../../../../common/utils/localization/TranslationPipe';
-import {LoadingComponent} from '../../../../../../../../../../../common/utils/components/LoadingComponent';
 import {CustomScroll} from '../../../../../../../../../../../common/utils/directives/CustomScroll';
 import {ThError, AppContext} from '../../../../../../../../../../../common/utils/AppContext';
 import {HotelCustomerOperationsPageParam} from './utils/HotelCustomerOperationsPageParam';
@@ -8,19 +6,12 @@ import {CustomerOperationsPageService} from './services/CustomerOperationsPageSe
 import {CustomerOperationsPageData} from './services/utils/CustomerOperationsPageData';
 import {CustomerVM} from '../../../../../../../../../services/customers/view-models/CustomerVM';
 import {CustomerDO} from '../../../../../../../../../services/customers/data-objects/CustomerDO';
-import {CustomerPreviewComponent} from '../../../../../../../../common/inventory/customer-register/pages/customer-preview/CustomerPreviewComponent';
-import {CustomerDetailsEditorComponent} from './components/customer-details/CustomerDetailsEditorComponent';
-import {CustomerBookingHistoryComponent} from './components/booking-history/CustomerBookingHistoryComponent';
-import {CustomerInvoiceHistoryComponent} from './components/invoice-history/CustomerInvoiceHistoryComponent';
 import {HotelOperationsPageControllerService} from '../../services/HotelOperationsPageControllerService';
 
 @Component({
     selector: 'customer-operations-page',
     templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/customer-operations/template/customer-operations-page.html',
-    directives: [LoadingComponent, CustomScroll, CustomerPreviewComponent, CustomerDetailsEditorComponent,
-        CustomerBookingHistoryComponent, CustomerInvoiceHistoryComponent],
-    providers: [CustomerOperationsPageService],
-    pipes: [TranslationPipe]
+    providers: [CustomerOperationsPageService]
 })
 export class CustomerOperationsPageComponent implements OnInit {
     @Input() customerOperationsPageParam: HotelCustomerOperationsPageParam;

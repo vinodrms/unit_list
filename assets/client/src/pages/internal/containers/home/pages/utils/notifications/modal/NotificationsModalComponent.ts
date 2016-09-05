@@ -1,9 +1,5 @@
 import {Component, OnInit, AfterViewInit, ViewChild} from '@angular/core';
 import {BaseComponent} from '../../../../../../../../common/base/BaseComponent';
-import {TranslationPipe} from '../../../../../../../../common/utils/localization/TranslationPipe';
-import {ThTimestampPipe} from '../../../../../../../../common/utils/pipes/ThTimestampPipe';
-import {CustomScroll} from '../../../../../../../../common/utils/directives/CustomScroll';
-import {LoadingComponent} from '../../../../../../../../common/utils/components/LoadingComponent';
 import {ThError, AppContext} from '../../../../../../../../common/utils/AppContext';
 import {ICustomModalComponent, ModalSize} from '../../../../../../../../common/utils/modals/utils/ICustomModalComponent';
 import {LazyLoadingTableComponent} from '../../../../../../../../common/utils/components/lazy-loading/LazyLoadingTableComponent';
@@ -24,9 +20,7 @@ SelectedTabSearchCriteria[SelectedTab.UNREAD] = { read: false };
 @Component({
 	selector: 'notifications-modal',
 	templateUrl: '/client/src/pages/internal/containers/home/pages/utils/notifications/modal/template/notifications-modal.html',
-	providers: [NotificationService, NotificationsTableMetaBuilderService],
-	directives: [CustomScroll, LazyLoadingTableComponent],
-	pipes: [TranslationPipe, ThTimestampPipe]
+	providers: [NotificationService, NotificationsTableMetaBuilderService]
 })
 export class NotificationsModalComponent extends BaseComponent implements ICustomModalComponent, AfterViewInit {
 	@ViewChild(LazyLoadingTableComponent)

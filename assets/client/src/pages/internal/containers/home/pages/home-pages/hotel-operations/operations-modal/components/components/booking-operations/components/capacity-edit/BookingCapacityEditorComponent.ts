@@ -1,8 +1,5 @@
 import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import {TranslationPipe} from '../../../../../../../../../../../../../common/utils/localization/TranslationPipe';
 import {AppContext, ThError} from '../../../../../../../../../../../../../common/utils/AppContext';
-import {EditSaveButtonGroupComponent} from '../../../../../../../../../../../../../common/utils/components/button-groups/EditSaveButtonGroupComponent';
-import {ConfigCapacityComponent} from '../../../../../../../../../../../../../common/utils/components/ConfigCapacityComponent';
 import {BookingOperationsPageData} from '../../services/utils/BookingOperationsPageData';
 import {HotelOperationsBookingService} from '../../../../../../../../../../../services/hotel-operations/booking/HotelOperationsBookingService';
 import {BookingCapacityEditRight} from '../../../../../../../../../../../services/bookings/data-objects/BookingEditRights';
@@ -11,9 +8,7 @@ import {ConfigCapacityDO} from '../../../../../../../../../../../services/common
 
 @Component({
     selector: 'booking-capacity-editor',
-    templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/booking-operations/components/capacity-edit/template/booking-capacity-editor.html',
-    directives: [EditSaveButtonGroupComponent, ConfigCapacityComponent],
-    pipes: [TranslationPipe]
+    templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/booking-operations/components/capacity-edit/template/booking-capacity-editor.html'
 })
 export class BookingCapacityEditorComponent implements OnInit {
     @Output() onBookingCapacityChanged = new EventEmitter<BookingDO>();

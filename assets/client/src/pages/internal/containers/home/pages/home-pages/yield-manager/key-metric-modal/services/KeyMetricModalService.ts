@@ -1,7 +1,8 @@
-import {Injectable, ReflectiveInjector, provide} from '@angular/core';
+import {Injectable, ReflectiveInjector} from '@angular/core';
 import {AppContext} from '../../../../../../../../../common/utils/AppContext';
 import {ModalDialogRef} from '../../../../../../../../../common/utils/modals/utils/ModalDialogRef';
 import {KeyMetricModalComponent} from '../KeyMetricModalComponent';
+import {KeyMetricModalModule} from '../KeyMetricModalModule';
 import {KeyMetricModalInput, KeyMetricItem} from './utils/KeyMetricModalInput';
 import {KeyMetricsResultVM} from '../../../../../../../services/yield-manager/dashboard/key-metrics/view-models/KeyMetricsResultVM';
 import {KeyMetricsResultItemVM} from '../../../../../../../services/yield-manager/dashboard/key-metrics/view-models/KeyMetricsResultItemVM';
@@ -17,8 +18,8 @@ export class KeyMetricModalService {
         modalInput.currentItem = this.getKeyMetricItem(keyMetricsResultVM.currentItemVM, keyMetricType);
         modalInput.previousItem = this.getKeyMetricItem(keyMetricsResultVM.previousItemVM, keyMetricType);
 
-        return this._appContext.modalService.open<any>(<any>KeyMetricModalComponent, ReflectiveInjector.resolve([
-            provide(KeyMetricModalInput, { useValue: modalInput })
+        return this._appContext.modalService.open<any>(KeyMetricModalModule, KeyMetricModalComponent, ReflectiveInjector.resolve([
+            { provide: KeyMetricModalInput, useValue: modalInput }
         ]));
     }
 

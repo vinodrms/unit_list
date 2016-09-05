@@ -1,8 +1,5 @@
 import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import {TranslationPipe} from '../../../../../../../../../../../../../common/utils/localization/TranslationPipe';
 import {AppContext, ThError} from '../../../../../../../../../../../../../common/utils/AppContext';
-import {EditSaveButtonGroupComponent} from '../../../../../../../../../../../../../common/utils/components/button-groups/EditSaveButtonGroupComponent';
-import {FileAttachmentsComponent} from '../../../../../../../../../../../../../common/utils/components/file-attachments/FileAttachmentsComponent';
 import {BookingOperationsPageData} from '../../services/utils/BookingOperationsPageData';
 import {BookingDetailsEditRight} from '../../../../../../../../../../../services/bookings/data-objects/BookingEditRights';
 import {BookingDO} from '../../../../../../../../../../../services/bookings/data-objects/BookingDO';
@@ -11,9 +8,7 @@ import {HotelOperationsBookingService} from '../../../../../../../../../../../se
 
 @Component({
     selector: 'booking-details-editor',
-    templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/booking-operations/components/booking-details/template/booking-details-editor.html',
-    directives: [EditSaveButtonGroupComponent, FileAttachmentsComponent],
-    pipes: [TranslationPipe]
+    templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/booking-operations/components/booking-details/template/booking-details-editor.html'
 })
 export class BookingDetailsEditorComponent implements OnInit {
     @Output() onBookingDetailsChanged = new EventEmitter<BookingDO>();

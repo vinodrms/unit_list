@@ -1,9 +1,7 @@
 import {Component, ViewChild, OnInit, AfterViewInit, OnDestroy} from '@angular/core';
 import {Subscription} from 'rxjs/Subscription';
 import {BaseComponent} from '../../../../../../../../../../common/base/BaseComponent';
-import {CustomScroll} from '../../../../../../../../../../common/utils/directives/CustomScroll';
 import {LazyLoadingTableComponent} from '../../../../../../../../../../common/utils/components/lazy-loading/LazyLoadingTableComponent';
-import {TranslationPipe} from '../../../../../../../../../../common/utils/localization/TranslationPipe';
 import {AppContext} from '../../../../../../../../../../common/utils/AppContext';
 import {BookingCartService} from '../../../services/search/BookingCartService';
 import {BookingCartItemVM} from '../../../services/search/view-models/BookingCartItemVM';
@@ -11,14 +9,11 @@ import {BookingCartTableMetaBuilderService} from '../utils/table-builder/Booking
 import {BookingTableUtilsService} from '../utils/table-builder/BookingTableUtilsService';
 import {BookingEmailConfigStepService} from './services/BookingEmailConfigStepService';
 import {CustomerDO} from '../../../../../../../../services/customers/data-objects/CustomerDO';
-import {EmailSelectorComponent} from '../../../../../home-pages/hotel-operations/email-sender/components/email-selector/EmailSelectorComponent';
 
 @Component({
     selector: 'new-booking-email-config',
     templateUrl: '/client/src/pages/internal/containers/home/pages/utils/new-booking/component/subcomponents/booking-email-config/template/new-booking-email-config.html',
-    directives: [LazyLoadingTableComponent, CustomScroll, EmailSelectorComponent],
-    providers: [BookingCartTableMetaBuilderService, BookingTableUtilsService],
-    pipes: [TranslationPipe]
+    providers: [BookingCartTableMetaBuilderService, BookingTableUtilsService]
 })
 export class NewBookingEmailConfigComponent extends BaseComponent implements OnInit, AfterViewInit, OnDestroy {
     @ViewChild('bookingCartReadOnly') private _bookingCartTableComponent: LazyLoadingTableComponent<BookingCartItemVM>;

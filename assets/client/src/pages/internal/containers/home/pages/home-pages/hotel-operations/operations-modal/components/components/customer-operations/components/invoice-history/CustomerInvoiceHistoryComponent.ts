@@ -1,5 +1,6 @@
 import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import {TranslationPipe} from '../../../../../../../../../../../../../common/utils/localization/TranslationPipe';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/observable/combineLatest';
 import {AppContext, ThError} from '../../../../../../../../../../../../../common/utils/AppContext';
 import {InvoiceGroupsService} from '../../../../../../../../../../../services/invoices/InvoiceGroupsService';
 import {HotelOperationsPageControllerService} from '../../../../services/HotelOperationsPageControllerService';
@@ -10,14 +11,10 @@ import {InvoiceGroupDO} from '../../../../../../../../../../../services/invoices
 import {HotelAggregatorService} from '../../../../../../../../../../../services/hotel/HotelAggregatorService';
 import {HotelAggregatedInfo} from '../../../../../../../../../../../services/hotel/utils/HotelAggregatedInfo';
 import {Observable} from 'rxjs/Observable';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/observable/combineLatest';
 
 @Component({
     selector: 'customer-invoice-history',
-    templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/customer-operations/components/invoice-history/template/customer-invoice-history.html',
-    providers: [],
-    pipes: [TranslationPipe]
+    templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/customer-operations/components/invoice-history/template/customer-invoice-history.html'
 })
 export class CustomerInvoiceHistoryComponent implements OnInit {
     @Output() totalInvoiceGroupsCountEmitter = new EventEmitter<number>();

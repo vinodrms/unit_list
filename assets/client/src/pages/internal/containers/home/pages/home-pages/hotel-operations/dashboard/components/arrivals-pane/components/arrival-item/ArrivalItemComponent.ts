@@ -4,14 +4,12 @@ import {ArrivalItemInfoVM} from '../../../../../../../../../../services/hotel-op
 import {ArrivalItemStatus} from '../../../../../../../../../../services/hotel-operations/dashboard/arrivals/data-objects/ArrivalItemInfoDO';
 
 import {HotelDashboardModalService} from '../../../../services/HotelDashboardModalService';
-import {TranslationPipe} from '../../../../../../../../../../../../common/utils/localization/TranslationPipe';
 
 declare var $: any;
 
 @Component({
 	selector: 'arrival-item',
-	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/dashboard/components/arrivals-pane/components/arrival-item/template/arrival-item.html',
-	pipes: [TranslationPipe]
+	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/dashboard/components/arrivals-pane/components/arrival-item/template/arrival-item.html'
 })
 
 export class ArrivalItemComponent {
@@ -25,20 +23,20 @@ export class ArrivalItemComponent {
 		private _zone: NgZone,
 		private _root: ElementRef,
 		private _modalService: HotelDashboardModalService
-		) {
-		
+	) {
+
 		this.enums = {
 			ArrivalItemStatus: ArrivalItemStatus
 		};
 	}
 
 	ngAfterViewInit() {
-		if (this.arrivalItemVM.arrivalItemDO.itemStatus == ArrivalItemStatus.CanCheckIn){
+		if (this.arrivalItemVM.arrivalItemDO.itemStatus == ArrivalItemStatus.CanCheckIn) {
 			$(this._root.nativeElement).find('.left').draggable(
 				{
 					revert: 'invalid',
 					appendTo: 'arrivals-pane',
-					cursorAt: { left: 12 , bottom: 6 },
+					cursorAt: { left: 12, bottom: 6 },
 					helper: () => {
 						var helperHtml = `
 						<arrival-helper class="flex-row">
@@ -47,13 +45,13 @@ export class ArrivalItemComponent {
 							</div>
 							<div class="right flex-row flex-jc-sb p-6">
 								<div class="client-name">`
-									+ this.arrivalItemVM.customerName +
-								`</div>
+							+ this.arrivalItemVM.customerName +
+							`</div>
 								<div class="other-details gray-color f-12">
 									<div>
-										<span class="unitpal-font f-12">(</span> ` + this.arrivalItemVM.numberOfPeople + 
-										` <span class="unitpal-font f-12">Y</span> `+ this.arrivalItemVM.numberOfNights +
-								`	</div>
+										<span class="unitpal-font f-12">(</span> ` + this.arrivalItemVM.numberOfPeople +
+							` <span class="unitpal-font f-12">Y</span> ` + this.arrivalItemVM.numberOfNights +
+							`	</div>
 								</div>
 							</div>
 						</arrival-helper>
@@ -61,8 +59,8 @@ export class ArrivalItemComponent {
 
 						return $(helperHtml);
 					},
-					zIndex:     100,
-					start: (event, ui) =>{
+					zIndex: 100,
+					start: (event, ui) => {
 						this._zone.run(() => {
 							$(this._root.nativeElement).addClass('ghost');
 							this.startedDragging.emit(this.arrivalItemVM);
@@ -79,18 +77,18 @@ export class ArrivalItemComponent {
 		}
 	}
 
-	public openCustomerModal(){
+	public openCustomerModal() {
 		var customerId = this.arrivalItemVM.arrivalItemDO.customerId;
 		this._modalService.openCustomerModal(customerId);
 	}
 
-	public openBookingModal(){
+	public openBookingModal() {
 		var bookingId = this.arrivalItemVM.arrivalItemDO.bookingId;
 		var groupBookingId = this.arrivalItemVM.arrivalItemDO.groupBookingId;
 		this._modalService.openBookingModal(bookingId, groupBookingId);
 	}
 
-	public openCheckInModal(){
+	public openCheckInModal() {
 		var bookingId = this.arrivalItemVM.arrivalItemDO.bookingId;
 		var groupBookingId = this.arrivalItemVM.arrivalItemDO.groupBookingId;
 		this._modalService.openCheckInModal(bookingId, groupBookingId);

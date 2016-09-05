@@ -5,8 +5,7 @@ import {ThDateIntervalDO} from '../../../../../../../services/common/data-object
 
 @Component({
     selector: 'bookings-date-filter',
-    templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/booking-history/components/bookings-date-filter/template/bookings-date-filter.html',
-    directives: [ThDateIntervalPickerComponent]
+    templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/booking-history/components/bookings-date-filter/template/bookings-date-filter.html'
 })
 export class BookingsDateFilterComponent {
     searchInterval: ThDateIntervalDO;
@@ -18,5 +17,4 @@ export class BookingsDateFilterComponent {
     public didSelectSearchInterval(interval: ThDateIntervalDO) {
         this._bookingsService.interval = interval;
     }
-
 }

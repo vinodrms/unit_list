@@ -1,10 +1,11 @@
-import {Injectable, ReflectiveInjector, provide} from '@angular/core';
+import {Injectable, ReflectiveInjector} from '@angular/core';
 import {AppContext} from '../../../../../../../../../common/utils/AppContext';
 import {ModalDialogRef} from '../../../../../../../../../common/utils/modals/utils/ModalDialogRef';
 import {CustomerDO} from '../../../../../../../services/customers/data-objects/CustomerDO';
 import {EmailConfirmationParams, EmailConfirmationType} from '../../../../../../../services/hotel-operations/common/utils/EmailConfirmationParams';
 import {EmailSenderModalInput} from './utils/EmailSenderModalInput';
 import {EmailSenderModalComponent} from '../EmailSenderModalComponent';
+import {EmailSenderModalModule} from '../EmailSenderModalModule';
 
 @Injectable()
 export class EmailSenderModalService {
@@ -33,8 +34,8 @@ export class EmailSenderModalService {
         emailConfirmationParams.type = type;
         emailConfirmationParams.parameters = parameters;
         var emailSenderModalInput = new EmailSenderModalInput(customerList, emailConfirmationParams);
-        return this._appContext.modalService.open<any>(<any>EmailSenderModalComponent, ReflectiveInjector.resolve([
-            provide(EmailSenderModalInput, { useValue: emailSenderModalInput })
+        return this._appContext.modalService.open<any>(EmailSenderModalModule, EmailSenderModalComponent, ReflectiveInjector.resolve([
+            { provide: EmailSenderModalInput, useValue: emailSenderModalInput }
         ]));
     }
 }

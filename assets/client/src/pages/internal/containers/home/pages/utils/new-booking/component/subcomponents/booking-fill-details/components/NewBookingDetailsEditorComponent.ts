@@ -1,9 +1,6 @@
 import {Component, Input, Output, EventEmitter} from '@angular/core';
 import {BaseComponent} from '../../../../../../../../../../../common/base/BaseComponent';
 import {AppContext} from '../../../../../../../../../../../common/utils/AppContext';
-import {CustomScroll} from '../../../../../../../../../../../common/utils/directives/CustomScroll';
-import {ConfigCapacityComponent} from '../../../../../../../../../../../common/utils/components/ConfigCapacityComponent';
-import {TranslationPipe} from '../../../../../../../../../../../common/utils/localization/TranslationPipe';
 import {BookingCartItemVM} from '../../../../services/search/view-models/BookingCartItemVM';
 import {BookingControllerService} from '../../utils/BookingControllerService';
 import {CustomerDO} from '../../../../../../../../../services/customers/data-objects/CustomerDO';
@@ -15,9 +12,7 @@ import {InvoicePaymentMethodDO, InvoicePaymentMethodType} from '../../../../../.
 
 @Component({
     selector: 'new-booking-details-editor',
-    templateUrl: '/client/src/pages/internal/containers/home/pages/utils/new-booking/component/subcomponents/booking-fill-details/components/template/new-booking-details-editor.html',
-    directives: [CustomScroll, ConfigCapacityComponent],
-    pipes: [TranslationPipe]
+    templateUrl: '/client/src/pages/internal/containers/home/pages/utils/new-booking/component/subcomponents/booking-fill-details/components/template/new-booking-details-editor.html'
 })
 export class NewBookingDetailsEditorComponent extends BaseComponent {
     @Output() protected onBookingItemChanged = new EventEmitter<BookingCartItemVM>();

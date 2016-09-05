@@ -1,5 +1,4 @@
 import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import {TranslationPipe} from '../../../../../../../../../../../../../common/utils/localization/TranslationPipe';
 import {AppContext, ThError} from '../../../../../../../../../../../../../common/utils/AppContext';
 import {ModalDialogRef} from '../../../../../../../../../../../../../common/utils/modals/utils/ModalDialogRef';
 import {BookingOperationsPageData} from '../../services/utils/BookingOperationsPageData';
@@ -10,8 +9,7 @@ import {CustomerDO} from '../../../../../../../../../../../services/customers/da
 @Component({
     selector: 'booking-send-confirmation',
     templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/booking-operations/components/send-confirmation/template/booking-send-confirmation.html',
-    providers: [EmailSenderModalService],
-    pipes: [TranslationPipe]
+    providers: [EmailSenderModalService]
 })
 export class BookingSendConfirmationComponent implements OnInit {
     private _bookingOperationsPageData: BookingOperationsPageData;
