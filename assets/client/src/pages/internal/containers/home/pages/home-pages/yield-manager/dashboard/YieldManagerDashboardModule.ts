@@ -18,12 +18,6 @@ import {YieldActionsPanelComponent} from './components/yield-price-products/comp
 import {PriceProductStateComponent} from './components/yield-price-products/components/price-product-state/PriceProductStateComponent';
 import {YieldViewModeComponent} from './components/yield-view-mode/YieldViewModeComponent';
 
-import {YieldFiltersService} from '../../../../../../services/hotel-configurations/YieldFiltersService';
-import {HotelService} from '../../../../../../services/hotel/HotelService';
-import {YieldManagerDashboardFilterService} from '../../../../../../services/yield-manager/dashboard/filter/YieldManagerDashboardFilterService';
-import {YieldManagerDashboardPriceProductsService} from '../../../../../../services/yield-manager/dashboard/price-products/YieldManagerDashboardPriceProductsService';
-import {YieldManagerDashboardKeyMetricsService} from '../../../../../../services/yield-manager/dashboard/key-metrics/YieldManagerDashboardKeyMetricsService';
-
 @NgModule({
     imports: [CommonModule, FormsModule,
         SharedPipesModule, SharedDirectivesModule, SharedComponentsModule],
@@ -32,8 +26,6 @@ import {YieldManagerDashboardKeyMetricsService} from '../../../../../../services
         YieldTimeFrameHeaderComponent, YieldKeyMetricsComponent,
         YieldPriceProductsComponent, YieldActionsPanelComponent, PriceProductStateComponent,
         YieldViewModeComponent,],
-    exports: [YieldManagerDashboardComponent],
-    providers: [YieldFiltersService, HotelService,
-        YieldManagerDashboardFilterService, YieldManagerDashboardPriceProductsService, YieldManagerDashboardKeyMetricsService]
+    exports: [YieldManagerDashboardComponent]
 })
 export class YieldManagerDashboardModule { }

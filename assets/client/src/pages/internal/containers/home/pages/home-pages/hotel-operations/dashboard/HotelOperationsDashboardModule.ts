@@ -14,13 +14,6 @@ import {DepartureItemComponent} from './components/departures-pane/components/de
 import {RoomsCanvasComponent} from './components/rooms-canvas/RoomsCanvasComponent';
 import {RoomCardComponent} from './components/rooms-canvas/components/room-card/RoomCardComponent';
 
-import {HOTEL_OPERATIONS_DASHBOARD_PROVIDERS} from '../../../../../../services/hotel-operations/dashboard/HotelOperationsDashboardProviders';
-import {EagerCustomersService} from '../../../../../../services/customers/EagerCustomersService';
-import {HotelOperationsRoomService} from '../../../../../../services/hotel-operations/room/HotelOperationsRoomService';
-import {AssignRoomModalService} from '../assign-room/services/AssignRoomModalService';
-import {HotelOperationsModalService} from '../operations-modal/services/HotelOperationsModalService';
-import {HotelDashboardModalService} from './services/HotelDashboardModalService';
-
 @NgModule({
     imports: [CommonModule, FormsModule,
         SharedPipesModule, SharedDirectivesModule, SharedComponentsModule],
@@ -28,8 +21,6 @@ import {HotelDashboardModalService} from './services/HotelDashboardModalService'
         ArrivalsPaneComponent, ArrivalItemComponent,
         DeparturesPaneComponent, DepartureItemComponent,
         RoomsCanvasComponent, RoomCardComponent],
-    exports: [HotelOperationsDashboardComponent],
-    providers: [HOTEL_OPERATIONS_DASHBOARD_PROVIDERS, EagerCustomersService, HotelOperationsRoomService,
-        AssignRoomModalService, HotelOperationsModalService, HotelDashboardModalService]
+    exports: [HotelOperationsDashboardComponent]
 })
 export class HotelOperationsDashboardModule { }

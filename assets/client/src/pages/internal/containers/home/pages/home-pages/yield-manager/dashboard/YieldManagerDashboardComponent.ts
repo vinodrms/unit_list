@@ -9,12 +9,17 @@ import {YieldViewModeState} from './components/yield-view-mode/YieldViewModeComp
 import {HotelDetailsDO} from '../../../../../../services/hotel/data-objects/HotelDetailsDO';
 import {IFilterSelection} from './common/interfaces/IFilterSelection';
 import {AppContext} from '../../../../../../../../common/utils/AppContext';
-import {HotelService} from '../../../../../../services/hotel/HotelService';
 
 import {YieldFilterPaneComponent} from './components/yield-filter-pane/YieldFilterPaneComponent';
 import {YieldTimeFrameHeaderComponent} from './components/yield-timeframe-header/YieldTimeFrameHeaderComponent';
 import {YieldKeyMetricsComponent} from './components/yield-key-metrics/YieldKeyMetricsComponent';
 import {YieldPriceProductsComponent} from './components/yield-price-products/YieldPriceProductsComponent';
+
+import {YieldFiltersService} from '../../../../../../services/hotel-configurations/YieldFiltersService';
+import {HotelService} from '../../../../../../services/hotel/HotelService';
+import {YieldManagerDashboardFilterService} from '../../../../../../services/yield-manager/dashboard/filter/YieldManagerDashboardFilterService';
+import {YieldManagerDashboardPriceProductsService} from '../../../../../../services/yield-manager/dashboard/price-products/YieldManagerDashboardPriceProductsService';
+import {YieldManagerDashboardKeyMetricsService} from '../../../../../../services/yield-manager/dashboard/key-metrics/YieldManagerDashboardKeyMetricsService';
 
 export interface IYieldManagerDashboardFilter {
 	updateYieldTimeFrameParams(currentDate: ThDateDO, noDays: number);
@@ -32,7 +37,9 @@ class ViewModeDecoratorClass {
 
 @Component({
 	selector: 'yield-manager-dashboard',
-	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/yield-manager/dashboard/template/yield-manager-dashboard.html'
+	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/yield-manager/dashboard/template/yield-manager-dashboard.html',
+	providers: [YieldFiltersService, HotelService,
+        YieldManagerDashboardFilterService, YieldManagerDashboardPriceProductsService, YieldManagerDashboardKeyMetricsService]
 })
 export class YieldManagerDashboardComponent extends AHomeContainerComponent implements OnInit, IYieldManagerDashboardFilter, IYieldManagerDashboardPriceProducts {
 	public keyMetricsViewModeDecoratorClass = ViewModeDecoratorClass.Default;
