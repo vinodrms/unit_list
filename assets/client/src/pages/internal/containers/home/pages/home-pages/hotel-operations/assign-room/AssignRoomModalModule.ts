@@ -10,24 +10,10 @@ import {AssignRoomModalComponent} from './AssignRoomModalComponent';
 import {PriceSelectionComponent} from './components/price-selection/PriceSelectionComponent';
 import {RoomSelectionComponent} from './components/room-selection/RoomSelectionComponent';
 
-import {SETTINGS_PROVIDERS} from '../../../../../../services/settings/SettingsProviders';
-import {BookingOccupancyService} from '../../../../../../services/bookings/occupancy/BookingOccupancyService';
-import {HotelService} from '../../../../../../services/hotel/HotelService';
-import {HotelAggregatorService} from '../../../../../../services/hotel/HotelAggregatorService';
-import {HotelOperationsRoomService} from '../../../../../../services/hotel-operations/room/HotelOperationsRoomService';
-import {EagerCustomersService} from '../../../../../../services/customers/EagerCustomersService';
-import {RoomCategoriesStatsService} from '../../../../../../services/room-categories/RoomCategoriesStatsService';
-import {RoomsService} from '../../../../../../services/rooms/RoomsService';
-import {EagerBookingsService} from '../../../../../../services/bookings/EagerBookingsService';
-
 @NgModule({
     imports: [CommonModule, FormsModule,
         SharedPipesModule, SharedDirectivesModule, SharedComponentsModule],
     declarations: [AssignRoomModalComponent, PriceSelectionComponent, RoomSelectionComponent],
-    exports: [AssignRoomModalComponent],
-    providers: [SETTINGS_PROVIDERS, HotelService, HotelAggregatorService,
-        RoomCategoriesStatsService, RoomsService, EagerCustomersService,
-        EagerBookingsService, BookingOccupancyService,
-        HotelOperationsRoomService]
+    exports: [AssignRoomModalComponent]
 })
 export class AssignRoomModalModule { }

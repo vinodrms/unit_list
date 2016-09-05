@@ -10,11 +10,24 @@ import {AssignRoomParam} from '../../../../../../services/hotel-operations/room/
 import {RoomSelectionComponent} from './components/room-selection/RoomSelectionComponent';
 import {PriceSelectionComponent} from './components/price-selection/PriceSelectionComponent';
 import {AssignRoomModalInput} from './services/utils/AssignRoomModalInput';
+
+import {SETTINGS_PROVIDERS} from '../../../../../../services/settings/SettingsProviders';
+import {BookingOccupancyService} from '../../../../../../services/bookings/occupancy/BookingOccupancyService';
+import {HotelService} from '../../../../../../services/hotel/HotelService';
+import {HotelAggregatorService} from '../../../../../../services/hotel/HotelAggregatorService';
 import {HotelOperationsRoomService} from '../../../../../../services/hotel-operations/room/HotelOperationsRoomService';
+import {EagerCustomersService} from '../../../../../../services/customers/EagerCustomersService';
+import {RoomCategoriesStatsService} from '../../../../../../services/room-categories/RoomCategoriesStatsService';
+import {RoomsService} from '../../../../../../services/rooms/RoomsService';
+import {EagerBookingsService} from '../../../../../../services/bookings/EagerBookingsService';
 
 @Component({
     selector: 'assign-room-modal',
-    templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/assign-room/template/assign-room-modal.html'
+    templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/assign-room/template/assign-room-modal.html',
+    providers: [SETTINGS_PROVIDERS, HotelService, HotelAggregatorService,
+        RoomCategoriesStatsService, RoomsService, EagerCustomersService,
+        EagerBookingsService, BookingOccupancyService,
+        HotelOperationsRoomService]
 })
 export class AssignRoomModalComponent extends BaseComponent implements ICustomModalComponent {
     selectedRoomVM: RoomVM;

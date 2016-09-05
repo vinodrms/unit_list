@@ -2,13 +2,14 @@ import {Component, AfterViewInit, ViewChild, Output, EventEmitter, OnInit} from 
 import {LazyLoadingTableComponent} from '../../../../../../../../../../common/utils/components/lazy-loading/LazyLoadingTableComponent';
 import {AppContext} from '../../../../../../../../../../common/utils/AppContext';
 import {PriceSelectionTableMetaBuilderService} from './services/PriceSelectionTableMetaBuilderService';
+import {HotelOperationsBookingService} from '../../../../../../../../services/hotel-operations/booking/HotelOperationsBookingService';
 import {PriceSelectionService, PriceSelectionType} from './services/PriceSelectionService';
 import {PriceSelectionVM} from './services/view-models/PriceSelectionVM';
 
 @Component({
     selector: 'price-selection',
     templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/assign-room/components/price-selection/template/price-selection.html',
-    providers: [PriceSelectionService, PriceSelectionTableMetaBuilderService]
+    providers: [HotelOperationsBookingService, PriceSelectionService, PriceSelectionTableMetaBuilderService],
 })
 export class PriceSelectionComponent implements AfterViewInit, OnInit {
     @Output() onPriceSelection = new EventEmitter<PriceSelectionVM>();
