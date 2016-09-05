@@ -4,6 +4,12 @@ import {SettingsContainerComponent} from './container/SettingsContainerComponent
 
 import {SettingsBasicInformationModule} from './subcomponents/basic-information/SettingsBasicInformationModule';
 import {SettingsBedsModule} from './subcomponents/beds/SettingsBedsModule';
+import {SettingsRoomsModule} from './subcomponents/rooms/SettingsRoomsModule';
+import {SettingsBreakfastModule} from './subcomponents/breakfast/SettingsBreakfastModule';
+import {SettingsAddOnProductsModule} from './subcomponents/add-on-products/SettingsAddOnProductsModule';
+import {SettingsPriceProductsModule} from './subcomponents/price-products/SettingsPriceProductsModule';
+import {SettingsCustomerRegisterModule} from './subcomponents/customer-register/SettingsCustomerRegisterModule';
+import {SettingsAllotmentsModule} from './subcomponents/allotments/SettingsAllotmentsModule';
 
 const settingsRoutes: Routes = [
     {
@@ -12,12 +18,12 @@ const settingsRoutes: Routes = [
             { path: '', redirectTo: 'basic-info', pathMatch: 'prefix' },
             { path: 'basic-info', loadChildren: () => SettingsBasicInformationModule },
             { path: 'beds', loadChildren: () => SettingsBedsModule },
-            // { path: 'rooms', loadChildren: () => WizardRoomsModule },
-            // { path: 'breakfast', loadChildren: () => WizardBreakfastModule },
-            // { path: 'add-on-products', loadChildren: () => WizardAddOnProductsModule },
-            // { path: 'price-products', loadChildren: () => WizardPriceProductsModule },
-            // { path: 'customer-register', loadChildren: () => WizardCustomerRegisterModule },
-            // { path: 'allotments', loadChildren: () => WizardAllotmentsModule }
+            { path: 'rooms', loadChildren: () => SettingsRoomsModule },
+            { path: 'breakfast', loadChildren: () => SettingsBreakfastModule },
+            { path: 'add-on-products', loadChildren: () => SettingsAddOnProductsModule },
+            { path: 'price-products', loadChildren: () => SettingsPriceProductsModule },
+            { path: 'customer-register', loadChildren: () => SettingsCustomerRegisterModule },
+            { path: 'allotments', loadChildren: () => SettingsAllotmentsModule }
         ]
     }
 ];

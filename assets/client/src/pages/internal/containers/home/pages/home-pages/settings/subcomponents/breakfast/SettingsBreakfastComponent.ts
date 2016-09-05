@@ -1,8 +1,6 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
 import {Subscription} from 'rxjs/Subscription';
 import {BaseComponent} from '../../../../../../../../../common/base/BaseComponent';
-import {TranslationPipe} from '../../../../../../../../../common/utils/localization/TranslationPipe';
-import {AddOnProductsComponent} from '../../../../../../common/inventory/add-on-products/main/AddOnProductsComponent';
 import {SettingsNavbarService} from '../navbar/services/SettingsNavbarService';
 import {SettingsPageType} from '../navbar/services/utils/SettingsPageType';
 import {AddOnProductDO} from '../../../../../../../services/add-on-products/data-objects/AddOnProductDO';
@@ -13,9 +11,7 @@ import {AddOnProductsTotalCountService} from '../../../../../../../services/add-
 @Component({
     selector: 'settings-breakfast',
     templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/settings/subcomponents/breakfast/template/settings-breakfast.html',
-    providers: [AddOnProductsTotalCountService],
-    directives: [AddOnProductsComponent],
-    pipes: [TranslationPipe]
+    providers: [AddOnProductsTotalCountService]
 })
 export class SettingsBreakfastComponent extends BaseComponent implements OnInit, OnDestroy {
     private _totalNoSubscription: Subscription;

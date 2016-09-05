@@ -1,8 +1,6 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
 import {Subscription} from 'rxjs/Subscription';
 import {BaseComponent} from '../../../../../../../../../common/base/BaseComponent';
-import {TranslationPipe} from '../../../../../../../../../common/utils/localization/TranslationPipe';
-import {PriceProductsComponent} from '../../../../../../common/inventory/price-products/main/PriceProductsComponent';
 import {SettingsNavbarService} from '../navbar/services/SettingsNavbarService';
 import {SettingsPageType} from '../navbar/services/utils/SettingsPageType';
 import {PriceProductDO, PriceProductStatus} from '../../../../../../../services/price-products/data-objects/PriceProductDO';
@@ -13,9 +11,7 @@ import {PriceProductsTotalCountService} from '../../../../../../../services/pric
 @Component({
 	selector: 'settings-price-products',
 	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/settings/subcomponents/price-products/template/settings-price-products.html',
-	providers: [PriceProductsTotalCountService],
-	directives: [PriceProductsComponent],
-	pipes: [TranslationPipe]
+	providers: [PriceProductsTotalCountService]
 })
 export class SettingsPriceProductsComponent extends BaseComponent implements OnInit, OnDestroy {
 	private _totalNoSubscription: Subscription;
