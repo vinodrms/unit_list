@@ -1,8 +1,6 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
 import {Subscription} from 'rxjs/Subscription';
 import {BaseComponent} from '../../../../../../../../../common/base/BaseComponent';
-import {TranslationPipe} from '../../../../../../../../../common/utils/localization/TranslationPipe';
-import {BedsComponent} from '../../../../../../common/inventory/beds/main/BedsComponent';
 import {SettingsNavbarService} from '../navbar/services/SettingsNavbarService';
 import {SettingsPageType} from '../navbar/services/utils/SettingsPageType';
 import {BedDO} from '../../../../../../../services/beds/data-objects/BedDO';
@@ -13,9 +11,7 @@ import {TotalCountDO} from '../../../../../../../services/common/data-objects/la
 @Component({
 	selector: 'settings-beds',
 	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/settings/subcomponents/beds/template/settings-beds.html',
-	providers: [BedsTotalCountService],
-    directives: [BedsComponent],
-	pipes: [TranslationPipe]
+	providers: [BedsTotalCountService]
 })
 export class SettingsBedsComponent extends BaseComponent implements OnInit, OnDestroy {
 	private _totalNoSubscription: Subscription;

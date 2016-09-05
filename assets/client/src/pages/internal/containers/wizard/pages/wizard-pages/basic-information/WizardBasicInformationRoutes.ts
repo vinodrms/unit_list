@@ -8,10 +8,15 @@ import {WizardBasicInfoPaymentsAndPoliciesComponent} from './pages/payments-poli
 import {WizardBasicInfoPropertyDetailsComponent} from './pages/property-details/WizardBasicInfoPropertyDetailsComponent';
 
 const wizardBasicInfoRoutes: Routes = [
-    { path: '', redirectTo: 'intro', pathMatch: 'prefix' },
-    { path: 'intro', component: WizardBasicInfoIntroComponent },
-    { path: 'overview', component: WizardBasicInfoOverviewComponent },
-    { path: 'payments-policies', component: WizardBasicInfoPaymentsAndPoliciesComponent },
-    { path: 'property-details', component: WizardBasicInfoPropertyDetailsComponent }
+    {
+        path: '', component: WizardBasicInformationComponent,
+        children: [
+            { path: '', redirectTo: 'intro', pathMatch: 'prefix' },
+            { path: 'intro', component: WizardBasicInfoIntroComponent },
+            { path: 'overview', component: WizardBasicInfoOverviewComponent },
+            { path: 'payments-policies', component: WizardBasicInfoPaymentsAndPoliciesComponent },
+            { path: 'property-details', component: WizardBasicInfoPropertyDetailsComponent }
+        ]
+    }
 ];
 export const wizardBasicInfoRouting: ModuleWithProviders = RouterModule.forChild(wizardBasicInfoRoutes);
