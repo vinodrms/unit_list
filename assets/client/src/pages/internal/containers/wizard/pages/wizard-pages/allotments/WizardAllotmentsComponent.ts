@@ -1,8 +1,8 @@
-import { Component, OnInit, AfterViewInit, ViewChild, ReflectiveInjector, provide } from '@angular/core';
+import {Component, OnInit, AfterViewInit, ViewChild, ReflectiveInjector} from '@angular/core';
 import {BaseComponent} from '../../../../../../../common/base/BaseComponent';
-import {TranslationPipe} from '../../../../../../../common/utils/localization/TranslationPipe';
 import {AllotmentsComponent} from '../../../../common/inventory/allotments/main/AllotmentsComponent';
 import {WizardStepsComponent} from '../../utils/wizard-steps/WizardStepsComponent';
+import {WizardStepsModule} from '../../utils/wizard-steps/WizardStepsModule';
 import {WizardAllotmentsStateService} from './services/WizardAllotmentsStateService';
 import {WizardService} from '../services/WizardService';
 import {IWizardController} from '../../wizard-pages/services/IWizardController';
@@ -14,9 +14,7 @@ import {TotalCountDO} from '../../../../../services/common/data-objects/lazy-loa
 @Component({
 	selector: 'wizard-allotments',
 	templateUrl: '/client/src/pages/internal/containers/wizard/pages/wizard-pages/allotments/template/wizard-allotments.html',
-	providers: [AllotmentsTotalCountService],
-	directives: [AllotmentsComponent],
-	pipes: [TranslationPipe]
+	providers: [AllotmentsTotalCountService]
 })
 export class WizardAllotmentsComponent extends BaseComponent implements AfterViewInit {
 	@ViewChild(AllotmentsComponent) private _allotmentsComponent: AllotmentsComponent;
@@ -45,7 +43,7 @@ export class WizardAllotmentsComponent extends BaseComponent implements AfterVie
 		});
 	}
 	private initializeWizardStepsComponent() {
-		this._allotmentsComponent.bootstrapOverviewBottom(WizardStepsComponent, ReflectiveInjector.resolve([provide(WizardService, { useValue: this._wizardService })]))
+		this._allotmentsComponent.bootstrapOverviewBottom(WizardStepsModule, WizardStepsComponent, ReflectiveInjector.resolve([{ provide: WizardService, useValue: this._wizardService }]));
 	}
 	public didChangeScreenStateType(screenStateType: InventoryScreenStateType) {
 		switch (screenStateType) {

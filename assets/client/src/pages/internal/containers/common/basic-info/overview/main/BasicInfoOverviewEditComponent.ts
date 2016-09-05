@@ -4,24 +4,17 @@ import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/combineLatest';
 import {BaseFormComponent} from '../../../../../../../common/base/BaseFormComponent';
 import {ThError, AppContext} from '../../../../../../../common/utils/AppContext';
-import {TranslationPipe} from '../../../../../../../common/utils/localization/TranslationPipe';
-import {LoadingComponent} from '../../../../../../../common/utils/components/LoadingComponent';
-import {ImageUploadComponent} from '../../../../../../../common/utils/components/image-upload/ImageUploadComponent';
-import {VATComponent, VatDetails, VatResponse} from '../../../../../../../common/utils/components/VATComponent';
+import {VatDetails, VatResponse} from '../../../../../../../common/utils/components/VATComponent';
 import {CountriesService} from '../../../../../services/settings/CountriesService';
 import {CountriesDO} from '../../../../../services/settings/data-objects/CountriesDO';
 import {HotelAggregatorService} from '../../../../../services/hotel/HotelAggregatorService';
 import {HotelAggregatedInfo} from '../../../../../services/hotel/utils/HotelAggregatedInfo';
 import {BasicInfoOverviewEditService} from './services/BasicInfoOverviewEditService';
-import {CustomScroll} from '../../../../../../../common/utils/directives/CustomScroll';
 
 @Component({
 	selector: 'basic-info-overview-edit',
-	templateUrl: '/client/src/pages/internal/containers/common/basic-info/overview/main/template/basic-info-overview-edit.html',
-	directives: [LoadingComponent, CustomScroll, ImageUploadComponent, VATComponent],
-	pipes: [TranslationPipe]
+	templateUrl: '/client/src/pages/internal/containers/common/basic-info/overview/main/template/basic-info-overview-edit.html'
 })
-
 export class BasicInfoOverviewEditComponent extends BaseFormComponent implements OnInit {
 	@Input() canAutoSave: boolean = false;
 	isSaving: boolean = false;

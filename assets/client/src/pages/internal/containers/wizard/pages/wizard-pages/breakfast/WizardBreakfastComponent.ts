@@ -1,6 +1,5 @@
-import {Component, ViewChild, OnInit, AfterViewInit, ReflectiveInjector, provide} from '@angular/core';
+import {Component, ViewChild, OnInit, AfterViewInit, ReflectiveInjector} from '@angular/core';
 import {BaseComponent} from '../../../../../../../common/base/BaseComponent';
-import {TranslationPipe} from '../../../../../../../common/utils/localization/TranslationPipe';
 import {WizardBreakfastStateService} from './services/WizardBreakfastStateService';
 import {WizardService} from '../services/WizardService';
 import {IWizardController} from '../../wizard-pages/services/IWizardController';
@@ -12,15 +11,13 @@ import {AddOnProductCategoriesService} from '../../../../../services/settings/Ad
 import {AddOnProductCategoriesDO} from '../../../../../services/settings/data-objects/AddOnProductCategoriesDO';
 import {AddOnProductCategoryDO} from '../../../../../services/common/data-objects/add-on-product/AddOnProductCategoryDO';
 import {WizardStepsComponent} from '../../utils/wizard-steps/WizardStepsComponent';
+import {WizardStepsModule} from '../../utils/wizard-steps/WizardStepsModule';
 
 @Component({
 	selector: 'wizard-breakfast',
 	templateUrl: '/client/src/pages/internal/containers/wizard/pages/wizard-pages/breakfast/template/wizard-breakfast.html',
-	providers: [AddOnProductsTotalCountService],
-	directives: [AddOnProductsComponent],
-	pipes: [TranslationPipe]
+	providers: [AddOnProductsTotalCountService]
 })
-
 export class WizardBreakfastComponent extends BaseComponent implements OnInit, AfterViewInit {
 	@ViewChild(AddOnProductsComponent) private _addOnProductsComponent: AddOnProductsComponent;
 	private _isEditScreen: boolean;
@@ -48,7 +45,7 @@ export class WizardBreakfastComponent extends BaseComponent implements OnInit, A
 		});
 	}
 	private initializeWizardStepsComponent() {
-		this._addOnProductsComponent.bootstrapOverviewBottom(WizardStepsComponent, ReflectiveInjector.resolve([provide(WizardService, { useValue: this._wizardService })]))
+		this._addOnProductsComponent.bootstrapOverviewBottom(WizardStepsModule, WizardStepsComponent, ReflectiveInjector.resolve([{ provide: WizardService, useValue: this._wizardService }]));
 	}
 
 	public didChangeScreenStateType(screenStateType: InventoryScreenStateType) {

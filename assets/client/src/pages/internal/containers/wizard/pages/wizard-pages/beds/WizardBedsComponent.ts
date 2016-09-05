@@ -1,24 +1,21 @@
-import {Component, ViewChild, OnInit, AfterViewInit, ReflectiveInjector, provide} from '@angular/core';
+import {Component, ViewChild, OnInit, AfterViewInit, ReflectiveInjector} from '@angular/core';
 import {BaseComponent} from '../../../../../../../common/base/BaseComponent';
 import {WizardBedsStateService} from './services/WizardBedsStateService';
 import {WizardService} from '../services/WizardService';
 import {BedsTotalCountService} from '../../../../../services/beds/BedsTotalCountService';
 import {BedDO} from '../../../../../services/beds/data-objects/BedDO';
-import {TranslationPipe} from '../../../../../../../common/utils/localization/TranslationPipe';
 import {BedsComponent} from '../../../../common/inventory/beds/main/BedsComponent';
 import {IWizardController} from '../../wizard-pages/services/IWizardController';
 import {TotalCountDO} from '../../../../../services/common/data-objects/lazy-load/TotalCountDO';
 import {InventoryScreenStateType} from '../../../../common/inventory/utils/state-manager/InventoryScreenStateType';
+import {WizardStepsModule} from '../../utils/wizard-steps/WizardStepsModule';
 import {WizardStepsComponent} from '../../utils/wizard-steps/WizardStepsComponent';
 
 @Component({
 	selector: 'wizard-beds',
 	templateUrl: '/client/src/pages/internal/containers/wizard/pages/wizard-pages/beds/template/wizard-beds.html',
-    providers: [BedsTotalCountService],
-    directives: [BedsComponent],
-	pipes: [TranslationPipe]
+    providers: [BedsTotalCountService]
 })
-
 export class WizardBedsComponent extends BaseComponent implements OnInit, AfterViewInit {
 	@ViewChild(BedsComponent) private _bedsComponent: BedsComponent;
     private _wizardController: IWizardController;
@@ -41,7 +38,7 @@ export class WizardBedsComponent extends BaseComponent implements OnInit, AfterV
 		});
 	}
 	private initializeWizardStepsComponent() {
-		this._bedsComponent.bootstrapOverviewBottom(WizardStepsComponent, ReflectiveInjector.resolve([provide(WizardService, { useValue: this._wizardService })]))
+		this._bedsComponent.bootstrapOverviewBottom(WizardStepsModule, WizardStepsComponent, ReflectiveInjector.resolve([{ provide: WizardService, useValue: this._wizardService }]));
 	}
 
     public didChangeScreenStateType(screenStateType: InventoryScreenStateType) {

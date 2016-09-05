@@ -47,8 +47,10 @@
 			</div>
 			<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter a valid value' | translate }}</small></label>
 		</div>
-		<span style="text-align:center">
-			<loading-button [isLoading]="isLoading" title="Save"></loading-button>
+		<span class="horizontal-align-center">
+			<div>
+				<loading-button [isLoading]="isLoading" title="Save"></loading-button>
+			</div>
 		</span>
 	</form>
 </div>

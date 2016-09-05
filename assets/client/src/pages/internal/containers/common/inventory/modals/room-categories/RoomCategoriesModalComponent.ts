@@ -1,11 +1,9 @@
 import {Observable} from 'rxjs/Observable';
 import {Component, OnInit, AfterViewChecked, ViewChild, ElementRef} from '@angular/core';
 import {BaseComponent} from '../../../../../../../common/base/BaseComponent';
-import {LoadingComponent} from '../../../../../../../common/utils/components/LoadingComponent';
 import {ThError, AppContext} from '../../../../../../../common/utils/AppContext';
 import {ICustomModalComponent, ModalSize} from '../../../../../../../common/utils/modals/utils/ICustomModalComponent';
 import {ModalDialogRef} from '../../../../../../../common/utils/modals/utils/ModalDialogRef';
-import {TranslationPipe} from '../../../../../../../common/utils/localization/TranslationPipe';
 import {RoomCategoriesModalService} from './services/RoomCategoriesModalService';
 import {RoomCategoriesModalInput} from './services/utils/RoomCategoriesModalInput';
 import {RoomCategoriesService} from '../../../../../services/room-categories/RoomCategoriesService';
@@ -13,14 +11,11 @@ import {RoomCategoriesStatsService} from '../../../../../services/room-categorie
 import {RoomCategoryDO} from '../../../../../services/room-categories/data-objects/RoomCategoryDO';
 import {RoomCategoryVM} from './services/view-models/RoomCategoryVM';
 import {RoomCategoryStatsDO} from '../../../../../services/room-categories/data-objects/RoomCategoryStatsDO';
-import {ThButtonComponent} from '../../../../../../../common/utils/components/ThButtonComponent';
 
 @Component({
 	selector: 'room-categories-modal',
 	templateUrl: "/client/src/pages/internal/containers/common/inventory/modals/room-categories/template/room-categories-modal.html",
-	providers: [RoomCategoriesService, RoomCategoriesStatsService],
-	directives: [LoadingComponent, ThButtonComponent],
-	pipes: [TranslationPipe]
+	providers: [RoomCategoriesService, RoomCategoriesStatsService]
 })
 export class RoomCategoriesModalComponent extends BaseComponent implements ICustomModalComponent, OnInit, AfterViewChecked {
 	isLoading: boolean = true;

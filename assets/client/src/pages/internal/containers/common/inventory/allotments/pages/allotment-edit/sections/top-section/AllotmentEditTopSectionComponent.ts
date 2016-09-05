@@ -2,7 +2,6 @@ import {Component, Input} from '@angular/core';
 import {Subscription} from 'rxjs/Subscription';
 import {AppContext} from '../../../../../../../../../../common/utils/AppContext';
 import {BaseComponent} from '../../../../../../../../../../common/base/BaseComponent';
-import {TranslationPipe} from '../../../../../../../../../../common/utils/localization/TranslationPipe';
 import {ModalDialogRef} from '../../../../../../../../../../common/utils/modals/utils/ModalDialogRef';
 import {IAllotmentEditSection} from '../utils/IAllotmentEditSection';
 import {AllotmentVM} from '../../../../../../../../services/allotments/view-models/AllotmentVM';
@@ -16,8 +15,7 @@ import {CustomerIndexedDetails} from './services/utils/CustomerIndexedDetails';
 @Component({
 	selector: 'allotment-edit-top-section',
 	templateUrl: '/client/src/pages/internal/containers/common/inventory/allotments/pages/allotment-edit/sections/top-section/template/allotment-edit-top-section.html',
-	providers: [CustomerRegisterModalService, CustomerDetailsService],
-	pipes: [TranslationPipe]
+	providers: [CustomerRegisterModalService, CustomerDetailsService]
 })
 export class AllotmentEditTopSectionComponent extends BaseComponent implements IAllotmentEditSection {
 	@Input() didSubmit: boolean;

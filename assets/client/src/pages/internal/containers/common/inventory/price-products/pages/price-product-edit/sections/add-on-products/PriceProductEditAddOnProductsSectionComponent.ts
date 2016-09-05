@@ -1,7 +1,5 @@
 import {Component, Input} from '@angular/core';
 import {BaseComponent} from '../../../../../../../../../../common/base/BaseComponent';
-import {TranslationPipe} from '../../../../../../../../../../common/utils/localization/TranslationPipe';
-import {PricePipe} from '../../../../../../../../../../common/utils/pipes/PricePipe';
 import {AppContext} from '../../../../../../../../../../common/utils/AppContext';
 import {IPriceProductEditSection} from '../utils/IPriceProductEditSection';
 import {PriceProductVM} from '../../../../../../../../services/price-products/view-models/PriceProductVM';
@@ -19,8 +17,7 @@ import {AddOnProductCategoriesDO} from '../../../../../../../../services/setting
 @Component({
 	selector: 'price-product-edit-add-on-products-section',
 	templateUrl: '/client/src/pages/internal/containers/common/inventory/price-products/pages/price-product-edit/sections/add-on-products/template/price-product-edit-add-on-products-section.html',
-	providers: [AddOnProductsModalService],
-	pipes: [TranslationPipe, PricePipe]
+	providers: [AddOnProductsModalService]
 })
 export class PriceProductEditAddOnProductsSectionComponent extends BaseComponent implements IPriceProductEditSection {
 	readonly: boolean;

@@ -1,7 +1,6 @@
 import {Component, AfterViewInit, ViewChild} from '@angular/core';
 import {BaseComponent} from '../../../../../../../common/base/BaseComponent';
 import {LazyLoadingTableComponent} from '../../../../../../../common/utils/components/lazy-loading/LazyLoadingTableComponent';
-import {TranslationPipe} from '../../../../../../../common/utils/localization/TranslationPipe';
 import {ThError, AppContext} from '../../../../../../../common/utils/AppContext';
 import {ICustomModalComponent, ModalSize} from '../../../../../../../common/utils/modals/utils/ICustomModalComponent';
 import {ModalDialogRef} from '../../../../../../../common/utils/modals/utils/ModalDialogRef';
@@ -22,9 +21,7 @@ import {AddOnProductsModalInput} from './services/utils/AddOnProductsModalInput'
 @Component({
 	selector: 'add-on-products-modal',
 	templateUrl: '/client/src/pages/internal/containers/common/inventory/add-on-products/modal/template/add-on-products-modal.html',
-	providers: [SETTINGS_PROVIDERS, TaxService, HotelService, HotelAggregatorService, AddOnProductsService, AddOnProductTableMetaBuilderService],
-	directives: [LazyLoadingTableComponent],
-	pipes: [TranslationPipe]
+	providers: [SETTINGS_PROVIDERS, TaxService, HotelService, HotelAggregatorService, AddOnProductsService, AddOnProductTableMetaBuilderService]
 })
 export class AddOnProductsModalComponent extends BaseComponent implements ICustomModalComponent, AfterViewInit {
 	@ViewChild(LazyLoadingTableComponent)

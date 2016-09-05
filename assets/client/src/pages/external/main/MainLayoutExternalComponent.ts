@@ -16,8 +16,7 @@ import {ModuleLoaderService} from '../../../common/utils/module-loader/ModuleLoa
 @Component({
     selector: 'main-layout-external',
     templateUrl: '/client/src/pages/external/main/template/main-layout-external.html',
-	entryComponents: [LogInComponent, ResetPasswordComponent, UpdatePasswordComponent, SignUpComponent],
-	providers: [COMPILER_PROVIDERS, ModuleLoaderService]
+	entryComponents: [LogInComponent, ResetPasswordComponent, UpdatePasswordComponent, SignUpComponent]
 })
 export class MainLayoutExternalComponent extends BaseComponent {
 	constructor(viewContainerRef: ViewContainerRef,

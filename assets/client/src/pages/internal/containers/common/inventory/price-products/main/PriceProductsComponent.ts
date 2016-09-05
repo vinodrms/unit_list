@@ -4,7 +4,7 @@ import 'rxjs/add/observable/combineLatest';
 import {BaseComponent} from '../../../../../../../common/base/BaseComponent';
 import {TranslationPipe} from '../../../../../../../common/utils/localization/TranslationPipe';
 import {AppContext, ThError} from '../../../../../../../common/utils/AppContext';
-import {ComponentLoaderService} from '../../../../../../../common/utils/components/services/ComponentLoaderService';
+import {ModuleLoaderService} from '../../../../../../../common/utils/module-loader/ModuleLoaderService';
 import {LazyLoadingTableComponent} from '../../../../../../../common/utils/components/lazy-loading/LazyLoadingTableComponent';
 import {InventoryStateManager} from '../../utils/state-manager/InventoryStateManager';
 import {InventoryScreenStateType} from '../../utils/state-manager/InventoryScreenStateType';
@@ -16,15 +16,11 @@ import {PriceProductVM} from '../../../../../services/price-products/view-models
 import {PriceProductDO, PriceProductStatus} from '../../../../../services/price-products/data-objects/PriceProductDO';
 import {PriceProductIncludedItemsDO} from '../../../../../services/price-products/data-objects/included-items/PriceProductIncludedItemsDO';
 import {PriceProductTableMetaBuilderService} from './services/PriceProductTableMetaBuilderService';
-import {PriceProductOverviewComponent} from '../pages/price-product-overview/PriceProductOverviewComponent';
-import {PriceProductEditContainerComponent} from '../pages/price-product-edit/container/PriceProductEditContainerComponent';
 
 @Component({
 	selector: 'price-products',
 	templateUrl: '/client/src/pages/internal/containers/common/inventory/price-products/main/template/price-products.html',
-	providers: [RoomCategoriesService, YieldFiltersService, PriceProductsService, PriceProductTableMetaBuilderService],
-	directives: [LazyLoadingTableComponent, PriceProductOverviewComponent, PriceProductEditContainerComponent],
-	pipes: [TranslationPipe]
+	providers: [RoomCategoriesService, YieldFiltersService, PriceProductsService, PriceProductTableMetaBuilderService]
 })
 export class PriceProductsComponent extends BaseComponent implements AfterViewInit {
 	@Output() protected onScreenStateTypeChanged = new EventEmitter();
@@ -38,7 +34,7 @@ export class PriceProductsComponent extends BaseComponent implements AfterViewIn
 	private _priceProductStatus: PriceProductStatus;
 
 	constructor(private _appContext: AppContext,
-		private _componentLoaderService: ComponentLoaderService,
+		private _moduleLoaderService: ModuleLoaderService,
 		private _priceProductsService: PriceProductsService,
 		private _tableBuilder: PriceProductTableMetaBuilderService) {
 		super();
@@ -46,8 +42,8 @@ export class PriceProductsComponent extends BaseComponent implements AfterViewIn
 		this.registerStateChange();
 		this.setDefaultPriceProductStatus();
 	}
-    public bootstrapOverviewBottom(componentToInject: Type, providers: ResolvedReflectiveProvider[]) {
-        this._componentLoaderService.loadNextToLocation(componentToInject, this._overviewBottomVCRef, providers);
+    public bootstrapOverviewBottom(moduleToInject: Type<any>, componentToInject: Type<any>, providers: ResolvedReflectiveProvider[]) {
+        this._moduleLoaderService.loadNextToLocation(moduleToInject, componentToInject, this._overviewBottomVCRef, providers);
     }
 	private registerStateChange() {
 		this._inventoryStateManager.stateChangedObservable.subscribe((currentState: InventoryScreenStateType) => {

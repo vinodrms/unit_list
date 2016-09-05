@@ -1,9 +1,7 @@
 import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import {FormGroup} from '@angular/forms';
 import {Observable} from 'rxjs/Observable';
-import {TranslationPipe} from '../../../../../../../../common/utils/localization/TranslationPipe';
 import {BedEditService} from './services/BedEditService';
-import {LoadingComponent} from '../../../../../../../../common/utils/components/LoadingComponent';
 import {BaseFormComponent} from '../../../../../../../../common/base/BaseFormComponent';
 import {AppContext, ThError} from '../../../../../../../../common/utils/AppContext';
 import {BedTemplateDO} from '../../../../../../services/common/data-objects/bed-template/BedTemplateDO';
@@ -12,14 +10,11 @@ import {BedDO, BedStorageType, BedAccommodationType, BedCapacityDO} from '../../
 import {BedsService} from '../../../../../../services/beds/BedsService';
 import {BedTemplatesService} from '../../../../../../services/settings/BedTemplatesService';
 import {BedTemplatesDO} from '../../../../../../services/settings/data-objects/BedTemplatesDO';
-import {CustomScroll} from '../../../../../../../../common/utils/directives/CustomScroll';
 
 @Component({
     selector: 'bed-edit',
     templateUrl: '/client/src/pages/internal/containers/common/inventory/beds/pages/bed-edit/template/bed-edit.html',
-    providers: [BedEditService],
-    directives: [LoadingComponent, CustomScroll],
-    pipes: [TranslationPipe]
+    providers: [BedEditService]
 })
 export class BedEditComponent extends BaseFormComponent implements OnInit {
     isLoading: boolean;

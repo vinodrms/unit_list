@@ -3,7 +3,7 @@ import {Component, Input, Output, EventEmitter} from '@angular/core';
 @Component({
 	selector: 'loading-component',
 	template: `
-		<span style="text-align:center" *ngIf="isLoading">
+		<span class="horizontal-align-center" *ngIf="isLoading">
 			<div>
 				<i class="fa fa-spinner fa-pulse fa-3x"></i>
 			</div>

@@ -1,7 +1,8 @@
-import {Injectable, ReflectiveInjector, provide} from '@angular/core';
+import {Injectable, ReflectiveInjector} from '@angular/core';
 import {AppContext} from '../../../../../../../../common/utils/AppContext';
 import {ModalDialogRef} from '../../../../../../../../common/utils/modals/utils/ModalDialogRef';
 import {YieldFilterModalComponent} from '../YieldFilterModalComponent';
+import {YieldFilterModalModule} from '../YieldFilterModalModule';
 import {YieldFilterModalInput} from './utils/YieldFilterModalInput';
 import {YieldFilterDO} from '../../../../../../services/common/data-objects/yield-filter/YieldFilterDO';
 import {YieldFilterValueDO} from '../../../../../../services/common/data-objects/yield-filter/YieldFilterValueDO';
@@ -16,8 +17,8 @@ export class YieldFilterModalService {
 		yieldFilterModalInput.yieldFilterService = yieldFilterService;
 		yieldFilterModalInput.yieldFilter = yieldFilter;
 
-		return this._appContext.modalService.open<any>(<any>YieldFilterModalComponent, ReflectiveInjector.resolve([
-			provide(YieldFilterModalInput, { useValue: yieldFilterModalInput })
+		return this._appContext.modalService.open<any>(YieldFilterModalModule, YieldFilterModalComponent, ReflectiveInjector.resolve([
+			{ provide: YieldFilterModalInput, useValue: yieldFilterModalInput }
 		]));
 	}
 }

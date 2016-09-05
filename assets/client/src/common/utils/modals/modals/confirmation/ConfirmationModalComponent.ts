@@ -4,7 +4,7 @@ import {BaseComponent} from '../../../../base/BaseComponent';
 import {ICustomModalComponent, ModalSize} from '../../utils/ICustomModalComponent';
 import {ModalDialogRef} from '../../utils/ModalDialogRef';
 import {ConfirmationModalInput, ConfirmationModalButtons} from './utils/ConfirmationModalInput';
-import {TranslationPipe} from '../../../localization/TranslationPipe';
+import {SharedPipesModule} from '../../../pipes/modules/SharedPipesModule';
 
 @Component({
 	selector: 'loading-modal-component',
@@ -15,13 +15,15 @@ import {TranslationPipe} from '../../../localization/TranslationPipe';
 		<div class="modal-body">
 			<p>{{content}}</p>
 			<hr/>
-			<span style="text-align:center">
-				<button *ngIf="buttons.positive" class="btn btn-primary btn-lg" (click)="didConfirm()">
-					{{ buttons.positive }}
-				</button>
-				<button *ngIf="buttons.negative" class="btn btn-danger btn-lg" (click)="didNotConfirm()">
-					{{ buttons.negative }}
-				</button>
+			<span class="horizontal-align-center">
+				<div>
+					<button *ngIf="buttons.positive" class="btn btn-primary btn-lg" (click)="didConfirm()">
+						{{ buttons.positive }}
+					</button>
+					<button *ngIf="buttons.negative" class="btn btn-danger btn-lg" (click)="didNotConfirm()">
+						{{ buttons.negative }}
+					</button>
+				</div>
 			</span>
 		</div>
 	`
@@ -58,7 +60,7 @@ export class ConfirmationModalComponent extends BaseComponent implements ICustom
 }
 
 @NgModule({
-    imports: [CommonModule],
+    imports: [CommonModule, SharedPipesModule],
     declarations: [ConfirmationModalComponent],
     exports: [ConfirmationModalComponent]
 })

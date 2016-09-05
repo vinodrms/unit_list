@@ -1,9 +1,8 @@
 import {Component, Input} from '@angular/core';
 import {FormGroup} from '@angular/forms';
 import {BaseFormComponent} from '../../../../../../../../../../common/base/BaseFormComponent';
-import {TranslationPipe} from '../../../../../../../../../../common/utils/localization/TranslationPipe';
 import {CorporateDetailsDO} from '../../../../../../../../services/customers/data-objects/customer-details/CorporateDetailsDO';
-import {VATComponent, VatDetails, VatResponse} from '../../../../../../../../../../common/utils/components/VATComponent';
+import {VatDetails, VatResponse} from '../../../../../../../../../../common/utils/components/VATComponent';
 import {CountriesDO} from '../../../../../../../../services/settings/data-objects/CountriesDO';
 import {CorporateDetailsFormBuilderService} from './services/CorporateDetailsFormBuilderService';
 import {CurrencyDO} from '../../../../../../../../services/common/data-objects/currency/CurrencyDO';
@@ -11,11 +10,8 @@ import {CurrencyDO} from '../../../../../../../../services/common/data-objects/c
 @Component({
 	selector: 'corporate-customer-details',
 	templateUrl: '/client/src/pages/internal/containers/common/inventory/customer-register/pages/customer-edit/customer-details/corporate/template/corporate-customer-details.html',
-	directives: [VATComponent],
-	providers: [CorporateDetailsFormBuilderService],
-	pipes: [TranslationPipe]
+	providers: [CorporateDetailsFormBuilderService]
 })
-
 export class CorporateCustomerDetailsComponent extends BaseFormComponent {
 	@Input() didSubmit: boolean;
 

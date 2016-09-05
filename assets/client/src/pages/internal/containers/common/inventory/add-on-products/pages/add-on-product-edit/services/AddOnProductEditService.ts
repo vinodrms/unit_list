@@ -34,10 +34,10 @@ export class AddOnProductEditService {
 
 	public updateFormValues(addOnProductVM: AddOnProductVM) {
 		var addOnProductDO = addOnProductVM.addOnProduct;
-		this._nameControl.updateValue(addOnProductDO.name);
-		this._priceControl.updateValue(addOnProductDO.price);
-		this._internalCostControl.updateValue(addOnProductDO.internalCost);
-		this._notesControl.updateValue(addOnProductDO.notes);
+		this._nameControl.setValue(addOnProductDO.name);
+		this._priceControl.setValue(addOnProductDO.price);
+		this._internalCostControl.setValue(addOnProductDO.internalCost);
+		this._notesControl.setValue(addOnProductDO.notes);
 	}
 
 	public updateAddOnProduct(addOnProduct: AddOnProductDO) {

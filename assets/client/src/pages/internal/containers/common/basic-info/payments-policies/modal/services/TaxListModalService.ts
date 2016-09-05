@@ -1,7 +1,8 @@
-import {Injectable, ReflectiveInjector, provide} from '@angular/core';
+import {Injectable, ReflectiveInjector} from '@angular/core';
 import {AppContext} from '../../../../../../../../common/utils/AppContext';
 import {ModalDialogRef} from '../../../../../../../../common/utils/modals/utils/ModalDialogRef';
 import {TaxListModalComponent} from '../TaxListModalComponent';
+import {TaxListModalModule} from '../TaxListModalModule';
 import {TaxListModalInput} from './utils/TaxListModalInput';
 import {TaxDO, TaxType} from '../../../../../../services/taxes/data-objects/TaxDO';
 
@@ -14,8 +15,8 @@ export class TaxListModalService {
 		var taxListModalInput = new TaxListModalInput();
 		taxListModalInput.taxType = taxType;
 
-		return this._appContext.modalService.open<any>(<any>TaxListModalComponent, ReflectiveInjector.resolve([
-			provide(TaxListModalInput, { useValue: taxListModalInput })
+		return this._appContext.modalService.open<any>(TaxListModalModule, TaxListModalComponent, ReflectiveInjector.resolve([
+			{ provide: TaxListModalInput, useValue: taxListModalInput }
 		]));
 	}
 }

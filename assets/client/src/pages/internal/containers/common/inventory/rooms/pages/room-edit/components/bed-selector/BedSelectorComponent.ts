@@ -13,9 +13,7 @@ import {RoomCategoryDO} from '../../../../../../../../services/room-categories/d
 @Component({
     selector: 'bed-selector',
     templateUrl: '/client/src/pages/internal/containers/common/inventory/rooms/pages/room-edit/components/bed-selector/template/bed-selector.html',
-    directives: [CustomScroll],
-    providers: [BedsModalService],
-    pipes: [TranslationPipe]
+    providers: [BedsModalService]
 })
 export class BedSelectorComponent extends BaseComponent {
     private MIN_BED_NO = 0;

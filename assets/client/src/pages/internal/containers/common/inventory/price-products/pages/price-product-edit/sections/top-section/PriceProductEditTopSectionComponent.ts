@@ -1,15 +1,13 @@
 import {Component, Input} from '@angular/core';
 import {FormControl, Validators, FormGroup, FormBuilder} from '@angular/forms';
 import {BaseFormComponent} from '../../../../../../../../../../common/base/BaseFormComponent';
-import {TranslationPipe} from '../../../../../../../../../../common/utils/localization/TranslationPipe';
 import {IPriceProductEditSection} from '../utils/IPriceProductEditSection';
 import {PriceProductVM} from '../../../../../../../../services/price-products/view-models/PriceProductVM';
 import {PriceProductAvailability} from '../../../../../../../../services/price-products/data-objects/PriceProductDO';
 
 @Component({
 	selector: 'price-product-edit-top-section',
-	templateUrl: '/client/src/pages/internal/containers/common/inventory/price-products/pages/price-product-edit/sections/top-section/template/price-product-edit-top-section.html',
-	pipes: [TranslationPipe]
+	templateUrl: '/client/src/pages/internal/containers/common/inventory/price-products/pages/price-product-edit/sections/top-section/template/price-product-edit-top-section.html'
 })
 export class PriceProductEditTopSectionComponent extends BaseFormComponent implements IPriceProductEditSection {
 	readonly: boolean;
@@ -32,7 +30,7 @@ export class PriceProductEditTopSectionComponent extends BaseFormComponent imple
 		return this._nameControl.valid;
 	}
 	public initializeFrom(priceProductVM: PriceProductVM) {
-		this._nameControl.updateValue(priceProductVM.priceProduct.name);
+		this._nameControl.setValue(priceProductVM.priceProduct.name);
 		this._isPublicAvailability = priceProductVM.priceProduct.availability === PriceProductAvailability.Public;
 		this.isLastRoomAvailabilityEnabled = priceProductVM.priceProduct.lastRoomAvailability;
 	}

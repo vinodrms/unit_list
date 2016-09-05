@@ -32,9 +32,9 @@ export class RoomEditService {
 
     public updateFormValues(roomVM: RoomVM) {
         var roomDO = roomVM.room;
-        this._nameControl.updateValue(roomDO.name);
-        this._floorControl.updateValue(roomDO.floor);
-        this._notesControl.updateValue(roomDO.notes);
+        this._nameControl.setValue(roomDO.name);
+        this._floorControl.setValue(roomDO.floor);
+        this._notesControl.setValue(roomDO.notes);
     }
 
     public updateRoom(room: RoomDO) {

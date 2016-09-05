@@ -4,14 +4,11 @@ import {ThError, AppContext, ThServerApi} from '../../../../../../../common/util
 import {LoginStatusCode} from '../../../../../../../common/utils/responses/LoginStatusCode';
 import {WizardService} from '../../wizard-pages/services/WizardService';
 import {IWizardState} from '../../wizard-pages/services/IWizardState';
-import {TranslationPipe} from '../../../../../../../common/utils/localization/TranslationPipe';
 
 @Component({
 	selector: 'wizard-header-component',
-	templateUrl: '/client/src/pages/internal/containers/wizard/pages/utils/header/template/wizard-header-component.html',
-	pipes: [TranslationPipe]
+	templateUrl: '/client/src/pages/internal/containers/wizard/pages/utils/header/template/wizard-header-component.html'
 })
-
 export class WizardHeaderComponent extends BaseComponent {
 	private _wizardState: IWizardState;
 

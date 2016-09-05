@@ -46,19 +46,19 @@ export class BedEditService {
     public updateFormValues(bedVM: BedVM) {
         var bedDO = bedVM.bed;
 
-        this._nameControl.updateValue(bedDO.name);
+        this._nameControl.setValue(bedDO.name);
         if (this._thUtils.isUndefinedOrNull(bedDO.capacity)) {
             bedDO.capacity = new BedCapacityDO();
         }
-        this._maxAdultsControl.updateValue(bedDO.capacity.maxNoAdults);
-        this._maxChildrenControl.updateValue(bedDO.capacity.maxNoChildren);
+        this._maxAdultsControl.setValue(bedDO.capacity.maxNoAdults);
+        this._maxChildrenControl.setValue(bedDO.capacity.maxNoChildren);
         if (!bedDO.size) {
-            this._widthControl.updateValue(null);
-            this._lengthControl.updateValue(null);
+            this._widthControl.setValue(null);
+            this._lengthControl.setValue(null);
         }
         else {
-            this._widthControl.updateValue(bedDO.size.widthCm);
-            this._lengthControl.updateValue(bedDO.size.lengthCm);
+            this._widthControl.setValue(bedDO.size.widthCm);
+            this._lengthControl.setValue(bedDO.size.lengthCm);
         }
         if (this._thUtils.isUndefinedOrNull(bedDO.storageType)) {
             bedDO.storageType = BedStorageType.Stationary;
@@ -67,7 +67,7 @@ export class BedEditService {
             bedDO.accommodationType = BedAccommodationType.AdultsAndChildren;
         }
 
-        this._notesControl.updateValue(bedDO.notes);
+        this._notesControl.setValue(bedDO.notes);
     }
 
     public updateBed(bed: BedDO) {
@@ -132,6 +132,6 @@ export class BedEditService {
 
     private resetControl(control: FormControl, value: any) {
         control.setErrors(null);
-        control.updateValue(value);
+        control.setValue(value);
     }
 }

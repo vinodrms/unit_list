@@ -1,6 +1,6 @@
 /// <reference path="../../../../typings/tsd.d.ts" />
 
-import {NgModule}      from '@angular/core';
+import {NgModule, Compiler}      from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
@@ -25,6 +25,7 @@ import {ThTranslation} from '../../../common/utils/localization/ThTranslation';
 import {GoogleAnalytics} from '../../../common/utils/analytics/GoogleAnalytics';
 import {IAnalytics} from '../../../common/utils/analytics/IAnalytics';
 import {AppContext} from '../../../common/utils/AppContext';
+import {ModuleLoaderService} from '../../../common/utils/module-loader/ModuleLoaderService';
 
 import {SharedDirectivesModule} from '../../../common/utils/directives/modules/SharedDirectivesModule';
 import {SharedPipesModule} from '../../../common/utils/pipes/modules/SharedPipesModule';
@@ -44,7 +45,8 @@ import {ExternalPagesModule} from '../pages/ExternalPagesModule';
 		{ provide: IToaster, useClass: Toaster },
 		{ provide: IModalService, useClass: ModalService },
 		{ provide: IAnalytics, useClass: GoogleAnalytics },
-		AppContext
+		AppContext,
+		Compiler, ModuleLoaderService
 	]
 })
 export class ExternalModule { }

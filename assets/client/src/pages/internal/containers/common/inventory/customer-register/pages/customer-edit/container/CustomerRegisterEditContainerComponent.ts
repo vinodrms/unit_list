@@ -6,7 +6,6 @@ import {AppContext, ThError} from '../../../../../../../../../common/utils/AppCo
 import {LoadingComponent} from '../../../../../../../../../common/utils/components/LoadingComponent';
 import {ModalDialogRef} from '../../../../../../../../../common/utils/modals/utils/ModalDialogRef';
 import {PriceProductsModalService} from '../../../../price-products/modal/services/PriceProductsModalService';
-import {TranslationPipe} from '../../../../../../../../../common/utils/localization/TranslationPipe';
 import {CustomerVM} from '../../../../../../../services/customers/view-models/CustomerVM';
 import {CustomerDO, CustomerType} from '../../../../../../../services/customers/data-objects/CustomerDO';
 import {PriceProductStatus} from '../../../../../../../services/price-products/data-objects/PriceProductDO';
@@ -15,7 +14,6 @@ import {PriceProductsDO} from '../../../../../../../services/price-products/data
 import {PriceProductDO} from '../../../../../../../services/price-products/data-objects/PriceProductDO';
 import {CustomerDetailsMeta} from '../../../../../../../services/customers/data-objects/customer-details/ICustomerDetailsDO';
 import {CustomerDetailsFactory} from '../../../../../../../services/customers/data-objects/customer-details/CustomerDetailsFactory';
-import {FileAttachmentsComponent} from '../../../../../../../../../common/utils/components/file-attachments/FileAttachmentsComponent';
 import {FileAttachmentDO} from '../../../../../../../services/common/data-objects/file/FileAttachmentDO';
 import {CorporateCustomerDetailsComponent} from '../customer-details/corporate/CorporateCustomerDetailsComponent';
 import {IndividualCustomerDetailsComponent} from '../customer-details/individual/IndividualCustomerDetailsComponent';
@@ -35,11 +33,8 @@ import {AllotmentsDO} from '../../../../../../../services/allotments/data-object
 @Component({
 	selector: 'customer-register-edit-container',
 	templateUrl: '/client/src/pages/internal/containers/common/inventory/customer-register/pages/customer-edit/container/template/customer-register-edit-container.html',
-	providers: [EagerPriceProductsService, PriceProductsModalService, EagerAllotmentsService],
-	directives: [CustomScroll, FileAttachmentsComponent, CorporateCustomerDetailsComponent, IndividualCustomerDetailsComponent],
-	pipes: [TranslationPipe]
+	providers: [EagerPriceProductsService, PriceProductsModalService, EagerAllotmentsService]
 })
-
 export class CustomerRegisterEditContainerComponent extends BaseComponent implements AfterViewInit {
 	@ViewChild(CorporateCustomerDetailsComponent) private _corporateCustomerDetailsComponent: CorporateCustomerDetailsComponent;
 	@ViewChild(IndividualCustomerDetailsComponent) private _individualCustDetailsComponent: IndividualCustomerDetailsComponent;

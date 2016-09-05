@@ -1,8 +1,6 @@
 import {Component, OnInit, Inject} from '@angular/core';
 import {BaseComponent} from '../../../../../../../../common/base/BaseComponent';
 import {AppContext, ThError} from '../../../../../../../../common/utils/AppContext';
-import {TranslationPipe} from '../../../../../../../../common/utils/localization/TranslationPipe';
-import {LoadingButtonComponent} from '../../../../../../../../common/utils/components/LoadingButtonComponent';
 import {ICustomModalComponent, ModalSize} from '../../../../../../../../common/utils/modals/utils/ICustomModalComponent';
 import {ModalDialogRef} from '../../../../../../../../common/utils/modals/utils/ModalDialogRef';
 import {TaxEditModalInput} from './services/utils/TaxEditModalInput';
@@ -11,9 +9,7 @@ import {TaxService} from '../../../../../../services/taxes/TaxService';
 
 @Component({
 	selector: 'tax-edit-modal',
-	templateUrl: '/client/src/pages/internal/containers/common/basic-info/payments-policies/pages/tax-modal/template/tax-edit-modal.html',
-	directives: [LoadingButtonComponent],
-	pipes: [TranslationPipe]
+	templateUrl: '/client/src/pages/internal/containers/common/basic-info/payments-policies/pages/tax-modal/template/tax-edit-modal.html'
 })
 export class TaxEditModalComponent extends BaseComponent implements ICustomModalComponent {
 	didSubmitForm = false;

@@ -45,14 +45,14 @@ export class IndividualDetailsFormBuilderService {
 	}
 
 	public updateControlValuesFrom(individualDetails: IndividualDetailsDO) {
-		this._firstNameControl.updateValue(individualDetails.firstName);
-		this._lastNameControl.updateValue(individualDetails.lastName);
-		this._passportNoControl.updateValue(individualDetails.passportNo);
-		this._cityControl.updateValue(individualDetails.address.city);
-		this._streetAddressControl.updateValue(individualDetails.address.streetAddress);
-		this._postalCodeControl.updateValue(individualDetails.address.postalCode);
-		this._emailControl.updateValue(individualDetails.email);
-		this._phoneControl.updateValue(individualDetails.phone);
+		this._firstNameControl.setValue(individualDetails.firstName);
+		this._lastNameControl.setValue(individualDetails.lastName);
+		this._passportNoControl.setValue(individualDetails.passportNo);
+		this._cityControl.setValue(individualDetails.address.city);
+		this._streetAddressControl.setValue(individualDetails.address.streetAddress);
+		this._postalCodeControl.setValue(individualDetails.address.postalCode);
+		this._emailControl.setValue(individualDetails.email);
+		this._phoneControl.setValue(individualDetails.phone);
 	}
 	public updateControlValuesOn(individualDetails: IndividualDetailsDO) {
 		individualDetails.firstName = this._firstNameControl.value;

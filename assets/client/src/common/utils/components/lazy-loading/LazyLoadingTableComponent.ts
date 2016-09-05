@@ -18,7 +18,7 @@ import {ModuleLoaderService} from '../../module-loader/ModuleLoaderService';
 export class LazyLoadingTableComponent<T> {
 	@ViewChild('topTableCenter', { read: ViewContainerRef }) private _topTableCenterVCRef: ViewContainerRef;
 	private _didInitTopTableCenterRegion: boolean = false;
-	private _topTableCenterData: { moduleToInject: Type<any>, providers: ResolvedReflectiveProvider[] };
+	private _topTableCenterData: { moduleToInject: Type<any>, componentType: Type<any>, providers: ResolvedReflectiveProvider[] };
 
 	private _thUtils: ThUtils;
 	protected _isCollapsed: boolean;
@@ -146,10 +146,10 @@ export class LazyLoadingTableComponent<T> {
 	}
 	private registerTopCenterComponentIfNecessary() {
 		if (!this.didInit || !this._topTableCenterData || this._didInitTopTableCenterRegion || !this._topTableCenterVCRef) { return; }
-		this._moduleLoaderService.loadNextToLocation(this._topTableCenterData.moduleToInject, this._topTableCenterVCRef, this._topTableCenterData.providers);
+		this._moduleLoaderService.loadNextToLocation(this._topTableCenterData.moduleToInject, this._topTableCenterData.componentType, this._topTableCenterVCRef, this._topTableCenterData.providers);
 		this._didInitTopTableCenterRegion = true;
 	}
-	public attachTopTableCenterBootstrapData(topTableCenterData: { moduleToInject: Type<any>, providers: ResolvedReflectiveProvider[] }) {
+	public attachTopTableCenterBootstrapData(topTableCenterData: { moduleToInject: Type<any>, componentType: Type<any>, providers: ResolvedReflectiveProvider[] }) {
 		this._topTableCenterData = topTableCenterData;
 	}
 

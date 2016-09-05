@@ -1,6 +1,5 @@
 import {Component} from '@angular/core';
 import {BaseComponent} from '../../../../../../../../../../../common/base/BaseComponent';
-import {TranslationPipe} from '../../../../../../../../../../../common/utils/localization/TranslationPipe';
 import {ThError, AppContext} from '../../../../../../../../../../../common/utils/AppContext';
 import {ICustomModalComponent, ModalSize} from '../../../../../../../../../../../common/utils/modals/utils/ICustomModalComponent';
 import {ModalDialogRef} from '../../../../../../../../../../../common/utils/modals/utils/ModalDialogRef';
@@ -11,8 +10,7 @@ import {PriceProductConstraintFactory} from '../../../../../../../../../services
 
 @Component({
 	selector: 'price-product-constraint-modal',
-	templateUrl: "/client/src/pages/internal/containers/common/inventory/price-products/pages/price-product-edit/sections/constraints/constraint-modal/template/price-product-constraint-modal.html",
-	pipes: [TranslationPipe]
+	templateUrl: "/client/src/pages/internal/containers/common/inventory/price-products/pages/price-product-edit/sections/constraints/constraint-modal/template/price-product-constraint-modal.html"
 })
 export class PriceProductConstraintModalComponent extends BaseComponent implements ICustomModalComponent {
 	private _constraintFactory: PriceProductConstraintFactory;

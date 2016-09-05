@@ -1,8 +1,6 @@
 import {Component, Input} from '@angular/core';
 import {FormGroup} from '@angular/forms';
 import {BaseFormComponent} from '../../../../../../../../../../common/base/BaseFormComponent';
-import {TranslationPipe} from '../../../../../../../../../../common/utils/localization/TranslationPipe';
-import {ThDatePickerComponent} from '../../../../../../../../../../common/utils/components/ThDatePickerComponent';
 import {IndividualDetailsDO} from '../../../../../../../../services/customers/data-objects/customer-details/IndividualDetailsDO';
 import {ThDateDO} from '../../../../../../../../services/common/data-objects/th-dates/ThDateDO';
 import {CountriesDO} from '../../../../../../../../services/settings/data-objects/CountriesDO';
@@ -12,11 +10,8 @@ import {IndividualDetailsFormBuilderService} from './services/IndividualDetailsF
 @Component({
 	selector: 'individual-customer-details',
 	templateUrl: '/client/src/pages/internal/containers/common/inventory/customer-register/pages/customer-edit/customer-details/individual/template/individual-customer-details.html',
-	providers: [IndividualDetailsFormBuilderService],
-	directives: [ThDatePickerComponent],
-	pipes: [TranslationPipe]
+	providers: [IndividualDetailsFormBuilderService]
 })
-
 export class IndividualCustomerDetailsComponent extends BaseFormComponent {
 	didInit: boolean = false;
 	private _countriesDO: CountriesDO;
@@ -41,7 +36,7 @@ export class IndividualCustomerDetailsComponent extends BaseFormComponent {
 	constructor(private _formBuilder: IndividualDetailsFormBuilderService) {
 		super();
 	}
-	
+
 	private initPage() {
 		this.countryCode = this._individualDetails.address.country.code;
 		if (!this.countryCode) {

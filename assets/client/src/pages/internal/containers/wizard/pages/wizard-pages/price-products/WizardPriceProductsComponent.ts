@@ -1,6 +1,5 @@
-import {Component, ViewChild, OnInit, AfterViewInit, ReflectiveInjector, provide} from '@angular/core';
+import {Component, ViewChild, OnInit, AfterViewInit, ReflectiveInjector} from '@angular/core';
 import {BaseComponent} from '../../../../../../../common/base/BaseComponent';
-import {TranslationPipe} from '../../../../../../../common/utils/localization/TranslationPipe';
 import {WizardPriceProductsStateService} from './services/WizardPriceProductsStateService';
 import {WizardService} from '../services/WizardService';
 import {IWizardController} from '../../wizard-pages/services/IWizardController';
@@ -10,15 +9,13 @@ import {PriceProductsTotalCountService} from '../../../../../services/price-prod
 import {PriceProductStatus, PriceProductDO} from '../../../../../services/price-products/data-objects/PriceProductDO';
 import {TotalCountDO} from '../../../../../services/common/data-objects/lazy-load/TotalCountDO';
 import {WizardStepsComponent} from '../../utils/wizard-steps/WizardStepsComponent';
+import {WizardStepsModule} from '../../utils/wizard-steps/WizardStepsModule';
 
 @Component({
 	selector: 'wizard-price-products',
 	templateUrl: '/client/src/pages/internal/containers/wizard/pages/wizard-pages/price-products/template/wizard-price-products.html',
-	providers: [PriceProductsTotalCountService],
-	directives: [PriceProductsComponent],
-	pipes: [TranslationPipe]
+	providers: [PriceProductsTotalCountService]
 })
-
 export class WizardPriceProductsComponent extends BaseComponent implements OnInit, AfterViewInit {
 	@ViewChild(PriceProductsComponent) private _priceProductsComponent: PriceProductsComponent;
 	private _isEditScreen: boolean;
@@ -44,7 +41,7 @@ export class WizardPriceProductsComponent extends BaseComponent implements OnIni
 		});
 	}
 	private initializeWizardStepsComponent() {
-		this._priceProductsComponent.bootstrapOverviewBottom(WizardStepsComponent, ReflectiveInjector.resolve([provide(WizardService, { useValue: this._wizardService })]))
+		this._priceProductsComponent.bootstrapOverviewBottom(WizardStepsModule, WizardStepsComponent, ReflectiveInjector.resolve([{ provide: WizardService, useValue: this._wizardService }]));
 	}
 
 	public didChangeScreenStateType(screenStateType: InventoryScreenStateType) {
@@ -67,7 +64,7 @@ export class WizardPriceProductsComponent extends BaseComponent implements OnIni
 	public set isEditScreen(isEditScreen: boolean) {
 		this._isEditScreen = isEditScreen;
 	}
-	
+
 	public didDeleteItem(deletedPriceProduct: PriceProductDO) {
 		this._priceProductsTotalCountService.updateTotalCount();
 	}

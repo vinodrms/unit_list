@@ -1,7 +1,6 @@
 import {Component, Input, Output, EventEmitter} from '@angular/core';
 import {BaseComponent} from '../../../../../../../../../../../common/base/BaseComponent';
 import {AppContext} from '../../../../../../../../../../../common/utils/AppContext';
-import {TranslationPipe} from '../../../../../../../../../../../common/utils/localization/TranslationPipe';
 import {IPriceProductEditSection} from '../../utils/IPriceProductEditSection';
 import {PriceProductVM} from '../../../../../../../../../services/price-products/view-models/PriceProductVM';
 import {ModalDialogRef} from '../../../../../../../../../../../common/utils/modals/utils/ModalDialogRef';
@@ -14,8 +13,7 @@ import {PriceProductConstraintVM} from './utils/PriceProductConstraintVM';
 @Component({
 	selector: 'price-product-edit-constraints-section',
 	templateUrl: '/client/src/pages/internal/containers/common/inventory/price-products/pages/price-product-edit/sections/constraints/constraints-list/template/price-product-edit-constraints-section.html',
-	providers: [PriceProductConstraintModalService],
-	pipes: [TranslationPipe]
+	providers: [PriceProductConstraintModalService]
 })
 export class PriceProductEditConstraintsSectionComponent extends BaseComponent implements IPriceProductEditSection {
 	readonly: boolean;

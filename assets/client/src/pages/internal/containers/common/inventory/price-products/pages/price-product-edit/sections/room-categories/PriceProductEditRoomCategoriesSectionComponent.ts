@@ -1,6 +1,5 @@
 import {Component, Input, Output, EventEmitter} from '@angular/core';
 import {BaseComponent} from '../../../../../../../../../../common/base/BaseComponent';
-import {TranslationPipe} from '../../../../../../../../../../common/utils/localization/TranslationPipe';
 import {IPriceProductEditSection} from '../utils/IPriceProductEditSection';
 import {PriceProductVM} from '../../../../../../../../services/price-products/view-models/PriceProductVM';
 import {ModalDialogRef} from '../../../../../../../../../../common/utils/modals/utils/ModalDialogRef';
@@ -11,8 +10,7 @@ import {CurrencyDO} from '../../../../../../../../services/common/data-objects/c
 @Component({
 	selector: 'price-product-edit-room-categories-section',
 	templateUrl: '/client/src/pages/internal/containers/common/inventory/price-products/pages/price-product-edit/sections/room-categories/template/price-product-edit-room-categories-section.html',
-	providers: [RoomCategoriesModalService],
-	pipes: [TranslationPipe]
+	providers: [RoomCategoriesModalService]
 })
 export class PriceProductEditRoomCategoriesSectionComponent extends BaseComponent implements IPriceProductEditSection {
 	readonly: boolean;

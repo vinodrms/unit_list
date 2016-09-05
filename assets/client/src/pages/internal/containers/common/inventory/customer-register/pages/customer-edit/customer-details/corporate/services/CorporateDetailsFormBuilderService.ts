@@ -65,27 +65,27 @@ export class CorporateDetailsFormBuilderService {
 	}
 
 	public updateControlValuesFrom(corporateDetails: CorporateDetailsDO) {
-		this._governmentCodeControl.updateValue(corporateDetails.governmentCode);
-		this._nameControl.updateValue(corporateDetails.name);
-		this._streetAddressControl.updateValue(corporateDetails.address.streetAddress);
-		this._cityControl.updateValue(corporateDetails.address.city);
-		this._postalCodeControl.updateValue(corporateDetails.address.postalCode);
-		this._websiteUrlControl.updateValue(corporateDetails.websiteUrl);
-		this._contactNameControl.updateValue(corporateDetails.contactName);
-		this._phoneControl.updateValue(corporateDetails.phone);
-		this._faxControl.updateValue(corporateDetails.fax);
-		this._emailControl.updateValue(corporateDetails.email);
-		this._accountNoControl.updateValue(corporateDetails.accountNo);
+		this._governmentCodeControl.setValue(corporateDetails.governmentCode);
+		this._nameControl.setValue(corporateDetails.name);
+		this._streetAddressControl.setValue(corporateDetails.address.streetAddress);
+		this._cityControl.setValue(corporateDetails.address.city);
+		this._postalCodeControl.setValue(corporateDetails.address.postalCode);
+		this._websiteUrlControl.setValue(corporateDetails.websiteUrl);
+		this._contactNameControl.setValue(corporateDetails.contactName);
+		this._phoneControl.setValue(corporateDetails.phone);
+		this._faxControl.setValue(corporateDetails.fax);
+		this._emailControl.setValue(corporateDetails.email);
+		this._accountNoControl.setValue(corporateDetails.accountNo);
 
 		this.payInvoiceByAgreement = corporateDetails.payInvoiceByAgreement;
-		this._invoiceFeeControl.updateValue(corporateDetails.invoiceFee);
+		this._invoiceFeeControl.setValue(corporateDetails.invoiceFee);
 
 		var isFixedCommission = corporateDetails.commission.type === CommissionType.Fixed;
 		if (!corporateDetails.commission || isFixedCommission) {
-			this._commissionControl.updateValue(corporateDetails.commission.amount);
+			this._commissionControl.setValue(corporateDetails.commission.amount);
 		}
 		else {
-			this._commissionControl.updateValue(Math.round(corporateDetails.commission.amount * 100));
+			this._commissionControl.setValue(Math.round(corporateDetails.commission.amount * 100));
 		}
 		this.isFixedCommission = isFixedCommission;
 		this.receiveBookingConfirmations = corporateDetails.receiveBookingConfirmations;
@@ -154,7 +154,7 @@ export class CorporateDetailsFormBuilderService {
 		this._receiveBookingConfirmations = receiveBookingConfirmations;
 	}
 	public updateCompanyNameAndAddress(companyName: string, streetAddress: string) {
-		this._nameControl.updateValue(companyName);
-		this._streetAddressControl.updateValue(streetAddress);
+		this._nameControl.setValue(companyName);
+		this._streetAddressControl.setValue(streetAddress);
 	}
 }

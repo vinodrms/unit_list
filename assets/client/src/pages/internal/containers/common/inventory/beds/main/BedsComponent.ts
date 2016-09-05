@@ -3,7 +3,7 @@ import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/combineLatest';
 import {BaseComponent} from '../../../../../../../common/base/BaseComponent';
 import {AppContext, ThError} from '../../../../../../../common/utils/AppContext';
-import {ComponentLoaderService} from '../../../../../../../common/utils/components/services/ComponentLoaderService';
+import {ModuleLoaderService} from '../../../../../../../common/utils/module-loader/ModuleLoaderService';
 import {LazyLoadingTableComponent} from '../../../../../../../common/utils/components/lazy-loading/LazyLoadingTableComponent';
 import {BedVM} from '../../../../../services/beds/view-models/BedVM';
 import {BedTableMetaBuilderService} from './services/BedTableMetaBuilderService';
@@ -12,14 +12,11 @@ import {BedDO} from '../../../../../services/beds/data-objects/BedDO';
 import {InventoryStateManager} from '../../utils/state-manager/InventoryStateManager';
 import {InventoryScreenStateType} from '../../utils/state-manager/InventoryScreenStateType';
 import {InventoryScreenAction} from '../../utils/state-manager/InventoryScreenAction';
-import {BedOverviewComponent} from '../pages/bed-overview/BedOverviewComponent';
-import {BedEditComponent} from '../pages/bed-edit/BedEditComponent';
 
 @Component({
     selector: 'beds',
     templateUrl: '/client/src/pages/internal/containers/common/inventory/beds/main/template/beds.html',
-    providers: [BedsService, BedTableMetaBuilderService],
-    directives: [LazyLoadingTableComponent, BedOverviewComponent, BedEditComponent]
+    providers: [BedsService, BedTableMetaBuilderService]
 })
 export class BedsComponent extends BaseComponent {
     @Output() protected onScreenStateTypeChanged = new EventEmitter();
@@ -32,15 +29,15 @@ export class BedsComponent extends BaseComponent {
     private _inventoryStateManager: InventoryStateManager<BedVM>;
 
     constructor(private _appContext: AppContext,
-        private _componentLoaderService: ComponentLoaderService,
+        private _moduleLoaderService: ModuleLoaderService,
         private _tableBuilder: BedTableMetaBuilderService,
         private _bedsService: BedsService) {
         super();
         this._inventoryStateManager = new InventoryStateManager<BedVM>(this._appContext, "bed.id");
         this.registerStateChange();
     }
-    public bootstrapOverviewBottom(componentToInject: Type, providers: ResolvedReflectiveProvider[]) {
-        this._componentLoaderService.loadNextToLocation(componentToInject, this._overviewBottomVCRef, providers);
+    public bootstrapOverviewBottom(moduleToInject: Type<any>, componentToInject: Type<any>, providers: ResolvedReflectiveProvider[]) {
+        this._moduleLoaderService.loadNextToLocation(moduleToInject, componentToInject, this._overviewBottomVCRef, providers);
     }
 
     private registerStateChange() {

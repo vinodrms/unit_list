@@ -1,9 +1,5 @@
 import {Component, Input, Output, EventEmitter} from '@angular/core';
 import {BaseComponent} from '../../../../../../../../../../common/base/BaseComponent';
-import {TranslationPipe} from '../../../../../../../../../../common/utils/localization/TranslationPipe';
-import {ThHourPipe} from '../../../../../../../../../../common/utils/pipes/ThHourPipe';
-import {ThHourSelectComponent} from '../../../../../../../../../../common/utils/components/th-hour-select/ThHourSelectComponent';
-import {PercentageInputNumberComponent} from '../../../../../../../../../../common/utils/components/PercentageInputNumberComponent';
 import {ThHourDO} from '../../../../../../../../services/common/data-objects/th-dates/ThHourDO';
 import {IPriceProductEditSection} from '../utils/IPriceProductEditSection';
 import {PriceProductVM} from '../../../../../../../../services/price-products/view-models/PriceProductVM';
@@ -18,13 +14,11 @@ import {PriceProductCancellationPenaltyFactory} from '../../../../../../../../se
 
 @Component({
 	selector: 'price-product-edit-cancellation-section',
-	templateUrl: '/client/src/pages/internal/containers/common/inventory/price-products/pages/price-product-edit/sections/cancellation/template/price-product-edit-cancellation-section.html',
-	pipes: [TranslationPipe, ThHourPipe],
-	directives: [ThHourSelectComponent, PercentageInputNumberComponent]
+	templateUrl: '/client/src/pages/internal/containers/common/inventory/price-products/pages/price-product-edit/sections/cancellation/template/price-product-edit-cancellation-section.html'
 })
 export class PriceProductEditCancellationSectionComponent extends BaseComponent implements IPriceProductEditSection {
 	cancellationHour: ThHourDO;
-	
+
 	readonly: boolean;
 	@Input() didSubmit: boolean;
 

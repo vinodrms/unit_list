@@ -2,12 +2,9 @@ import {Component, OnInit} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/combineLatest';
 import {BaseComponent} from '../../../../../../../common/base/BaseComponent';
-import {LoadingComponent} from '../../../../../../../common/utils/components/LoadingComponent';
 import {ThError, AppContext} from '../../../../../../../common/utils/AppContext';
 import {ICustomModalComponent, ModalSize} from '../../../../../../../common/utils/modals/utils/ICustomModalComponent';
 import {ModalDialogRef} from '../../../../../../../common/utils/modals/utils/ModalDialogRef';
-import {TranslationPipe} from '../../../../../../../common/utils/localization/TranslationPipe';
-import {PercentagePipe} from '../../../../../../../common/utils/pipes/PercentagePipe';
 import {TaxService} from '../../../../../services/taxes/TaxService';
 import {TaxDO, TaxType} from '../../../../../services/taxes/data-objects/TaxDO';
 import {TaxContainerDO} from '../../../../../services/taxes/data-objects/TaxContainerDO';
@@ -18,9 +15,7 @@ import {HotelDetailsDO} from '../../../../../services/hotel/data-objects/HotelDe
 @Component({
 	selector: 'tax-list-modal',
 	templateUrl: '/client/src/pages/internal/containers/common/basic-info/payments-policies/modal/template/tax-list-modal.html',
-	providers: [TaxService, HotelService],
-	directives: [LoadingComponent],
-	pipes: [TranslationPipe, PercentagePipe]
+	providers: [TaxService, HotelService]
 })
 export class TaxListModalComponent extends BaseComponent implements ICustomModalComponent, OnInit {
 	isLoading: boolean = true;

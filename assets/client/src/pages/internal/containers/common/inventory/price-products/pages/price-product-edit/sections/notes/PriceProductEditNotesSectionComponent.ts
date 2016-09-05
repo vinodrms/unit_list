@@ -7,8 +7,7 @@ import {PriceProductVM} from '../../../../../../../../services/price-products/vi
 
 @Component({
 	selector: 'price-product-edit-notes-section',
-	templateUrl: '/client/src/pages/internal/containers/common/inventory/price-products/pages/price-product-edit/sections/notes/template/price-product-edit-notes-section.html',
-	pipes: [TranslationPipe]
+	templateUrl: '/client/src/pages/internal/containers/common/inventory/price-products/pages/price-product-edit/sections/notes/template/price-product-edit-notes-section.html'
 })
 export class PriceProductEditNotesSectionComponent extends BaseFormComponent implements IPriceProductEditSection {
 	readonly: boolean;
@@ -28,7 +27,7 @@ export class PriceProductEditNotesSectionComponent extends BaseFormComponent imp
 		return this._notesControl.valid;
 	}
 	public initializeFrom(priceProductVM: PriceProductVM) {
-		this._notesControl.updateValue(priceProductVM.priceProduct.notes);
+		this._notesControl.setValue(priceProductVM.priceProduct.notes);
 	}
 	public updateDataOn(priceProductVM: PriceProductVM) {
 		priceProductVM.priceProduct.notes = this._notesControl.value;
