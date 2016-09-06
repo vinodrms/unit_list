@@ -10,7 +10,6 @@ import {SettingsBasicInfoPaymentsAndPoliciesComponent} from './pages/payments-po
 import {SettingsBasicInfoPropertyDetailsComponent} from './pages/property-details/SettingsBasicInfoPropertyDetailsComponent';
 
 import {TimezoneService} from '../../../../../../../services/timezones/TimezoneService';
-import {SettingsBasicInformationService} from './main/services/SettingsBasicInformationService';
 
 var settingsBasicInfoComponents = [
     SettingsBasicInformationComponent,
@@ -21,6 +20,6 @@ var settingsBasicInfoComponents = [
 @NgModule({
     imports: [CommonModule, SharedPipesModule, CommonBasicInfoModule, settingsBasicInfoRouting],
     declarations: [settingsBasicInfoComponents],
-    providers: [TimezoneService, SettingsBasicInformationService]
+    providers: [TimezoneService]
 })
 export class SettingsBasicInformationModule { }

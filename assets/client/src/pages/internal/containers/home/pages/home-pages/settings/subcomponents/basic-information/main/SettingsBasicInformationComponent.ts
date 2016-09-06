@@ -7,7 +7,8 @@ import {SettingsBasicInformationService} from './services/SettingsBasicInformati
 
 @Component({
 	selector: 'settings-basic-information',
-	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/settings/subcomponents/basic-information/main/template/settings-basic-information.html'
+	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/settings/subcomponents/basic-information/main/template/settings-basic-information.html',
+	providers: [SettingsBasicInformationService]
 })
 export class SettingsBasicInformationComponent extends BaseComponent {
 
