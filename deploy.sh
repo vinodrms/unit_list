@@ -121,15 +121,18 @@ selectNodeVersion
 # mkdir node_modules
 # cp -R ../native_modules/* ./node_modules/
 
+# 3.0 install rimraf
+eval $NPM_CMD install -g rimraf
+
 # 3. Install server npm packages
 cd "$DEPLOYMENT_TARGET"
-eval $NPM_CMD prune
+eval rimraf node_modules
 eval $NPM_CMD install
 exitWithMessageOnError "npm failed"
 
 # 4. Install client npm packages
 cd "assets"
-eval $NPM_CMD prune
+eval rimraf node_modules
 eval $NPM_CMD install
 exitWithMessageOnError "npm failed"
 cd ".."
