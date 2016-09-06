@@ -5,14 +5,13 @@ import {TranslationPipe} from '../localization/TranslationPipe';
 @Component({
     selector: 'debouncing-input-text',
     template: `
-        <input type="text" class="form-control" [formControl]="textControl" placeholder="{{ inputPlaceholder | translate }}" [disabled]="inputDisabled">
+        <input type="text" class="form-control" [formControl]="textControl" placeholder="{{ inputPlaceholder | translate }}">
     `
 })
 export class DebouncingInputTextComponent implements OnInit {
     public static DebounceTimeMillis = 400;
 
     @Input() inputPlaceholder: string = "";
-    @Input() inputDisabled: boolean = false;
     @Input() set textValue(value: string) {
         if (this._didInitTextControl) {
             this.textControl.setValue(value, { emitEvent: false });

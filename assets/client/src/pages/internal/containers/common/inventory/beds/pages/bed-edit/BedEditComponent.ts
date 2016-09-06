@@ -83,6 +83,9 @@ export class BedEditComponent extends BaseFormComponent implements OnInit {
     public isNewBed(): boolean {
         return this._bedVM.bed.id == null || this._bedVM.bed.id.length == 0;
     }
+    public get bedCapacity(): BedCapacityDO {
+        return this._bedVM.bed.capacity;
+    }
 
     public saveBed() {
         this.didSubmitForm = true;

@@ -38,9 +38,12 @@ export interface VatResponse {
 			</div>
 			<div class="col-xs-12 col-md-6 form-group">
 				<label>{{ 'VAT Code' | translate }}*</label>
-				<div class="input-group" [ngClass]="{'form-warning': displayVatError()}">
+				<div class="input-group" *ngIf="vatDetails.countryCode" [ngClass]="{'form-warning': displayVatError()}">
 					<span class="input-group-addon">{{convertedCountryCode}}</span>
-					<input type="text" class="form-control" [formControl]="vatCodeControl" [disabled]="!vatDetails.countryCode">
+					<input type="text" class="form-control" [formControl]="vatCodeControl">
+				</div>
+				<div class="form-control operational-input-group input-group" *ngIf="!vatDetails.countryCode" [ngClass]="{'form-warning': displayVatError()}">
+					<span class="name field-value"></span>
 				</div>
 				<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Insert a VAT Number' | translate }}</small></label>
 			</div>

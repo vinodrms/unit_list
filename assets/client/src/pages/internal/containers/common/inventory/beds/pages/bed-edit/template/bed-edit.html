@@ -60,19 +60,31 @@
             <div class="col-xs-12 col-md-6 form-group">
                 <label>{{ 'Capacity' | translate }}*</label>
                 <div class="row">
-                    <div class="col-xs-6 col-md-6">
+                    <div class="col-xs-6 col-md-6" *ngIf="isNewBed()">
                         <div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('maxAdults')}">
                             <span class="input-group-addon"><span class="unitpal-font">:</span></span>
-                            <input type="number" class="form-control" placeholder="{{ 'Adults' | translate }}" formControlName="maxAdults" [disabled]="!isNewBed()">
+                            <input type="number" class="form-control" placeholder="{{ 'Adults' | translate }}" formControlName="maxAdults">
                         </div>
                         <label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Insert a valid max number of adults' | translate }}</small></label>
                     </div>
-                    <div class="col-xs-6 col-md-6">
+                    <div class="col-xs-6 col-md-6" *ngIf="!isNewBed()">
+                        <div class="form-control operational-input-group">
+                            <span class="unitpal-font unitpal-large">:</span>
+                            <span class="name field-value">{{bedCapacity.maxNoAdults}}</span>
+                        </div>
+                    </div>
+                    <div class="col-xs-6 col-md-6" *ngIf="isNewBed()">
                         <div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('maxChildren')}">
                             <span class="input-group-addon"><span class="unitpal-font">;</span></span>
-                            <input type="number" class="form-control" placeholder="{{ 'Children' | translate }}" formControlName="maxChildren" [disabled]="!isNewBed()">
+                            <input type="number" class="form-control" placeholder="{{ 'Children' | translate }}" formControlName="maxChildren">
                         </div>
                         <label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Insert a valid max number of children' | translate }}</small></label>
+                    </div>
+                    <div class="col-xs-6 col-md-6" *ngIf="!isNewBed()">
+                        <div class="form-control operational-input-group">
+                            <span class="unitpal-font unitpal-large">;</span>
+                            <span class="name field-value">{{bedCapacity.maxNoChildren}}</span>
+                        </div>
                     </div>
                 </div>
                 <label class="text-muted">
