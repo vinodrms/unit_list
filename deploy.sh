@@ -123,11 +123,13 @@ selectNodeVersion
 
 # 3. Install server npm packages
 cd "$DEPLOYMENT_TARGET"
+eval $NPM_CMD uninstall
 eval $NPM_CMD install
 exitWithMessageOnError "npm failed"
 
 # 4. Install client npm packages
 cd "assets"
+eval $NPM_CMD uninstall
 eval $NPM_CMD install
 exitWithMessageOnError "npm failed"
 cd ".."
