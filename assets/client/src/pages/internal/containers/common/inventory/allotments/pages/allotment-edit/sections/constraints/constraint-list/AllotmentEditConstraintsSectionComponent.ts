@@ -1,6 +1,5 @@
 import {Component, Input} from '@angular/core';
 import {BaseComponent} from '../../../../../../../../../../../common/base/BaseComponent';
-import {TranslationPipe} from '../../../../../../../../../../../common/utils/localization/TranslationPipe';
 import {AppContext} from '../../../../../../../../../../../common/utils/AppContext';
 import {ModalDialogRef} from '../../../../../../../../../../../common/utils/modals/utils/ModalDialogRef';
 import {IAllotmentEditSection} from '../../utils/IAllotmentEditSection';
@@ -14,8 +13,7 @@ import {AllotmentConstraintModalService} from '../constraint-modal/services/Allo
 @Component({
 	selector: 'allotment-edit-constraints-section',
 	templateUrl: '/client/src/pages/internal/containers/common/inventory/allotments/pages/allotment-edit/sections/constraints/constraint-list/template/allotment-edit-constraints-section.html',
-	providers: [AllotmentConstraintModalService],
-	pipes: [TranslationPipe]
+	providers: [AllotmentConstraintModalService]
 })
 export class AllotmentEditConstraintsSectionComponent extends BaseComponent implements IAllotmentEditSection {
 	@Input() didSubmit: boolean;

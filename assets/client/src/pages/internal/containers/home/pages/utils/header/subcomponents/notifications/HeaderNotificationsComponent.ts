@@ -2,8 +2,6 @@ import {Component, OnInit, OnDestroy, Inject} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 import {Subscription} from 'rxjs/Subscription';
 import {BaseComponent} from '../../../../../../../../../common/base/BaseComponent';
-import {TranslationPipe} from '../../../../../../../../../common/utils/localization/TranslationPipe';
-import {ThTimestampDistanceFromNowPipe} from '../../../../../../../../../common/utils/pipes/ThTimestampDistanceFromNowPipe';
 import {ThError, AppContext} from '../../../../../../../../../common/utils/AppContext';
 import {ModalDialogRef} from '../../../../../../../../../common/utils/modals/utils/ModalDialogRef';
 import {NotificationsModalService} from '../../../notifications/modal/services/NotificationsModalService';
@@ -16,13 +14,12 @@ import {SocketMessage} from '../../../../../../../../../common/utils/sockets/uti
 @Component({
 	selector: 'header-notifications',
 	templateUrl: '/client/src/pages/internal/containers/home/pages/utils/header/subcomponents/notifications/template/header-notifications.html',
-	providers: [NotificationsModalService, NotificationStatsService],
-	pipes: [TranslationPipe, ThTimestampDistanceFromNowPipe]
+	providers: [NotificationsModalService, NotificationStatsService]
 })
 export class HeaderNotificationsComponent extends BaseComponent implements OnInit, OnDestroy {
 	numUnread: number = 0;
 	lastNotificationsList: ThNotificationDO[] = [];
-	
+
 	newNotificationsSubscription: Subscription;
 
 	constructor(private _appContext: AppContext,

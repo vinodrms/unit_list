@@ -1,7 +1,5 @@
 import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import {TranslationPipe} from '../../../../../../../../../../../../../common/utils/localization/TranslationPipe';
 import {AppContext, ThError} from '../../../../../../../../../../../../../common/utils/AppContext';
-import {EditSaveButtonGroupComponent} from '../../../../../../../../../../../../../common/utils/components/button-groups/EditSaveButtonGroupComponent';
 import {BookingOperationsPageData} from '../../services/utils/BookingOperationsPageData';
 import {BookingPaymentGuaranteeEditRight} from '../../../../../../../../../../../services/bookings/data-objects/BookingEditRights';
 import {BookingDO} from '../../../../../../../../../../../services/bookings/data-objects/BookingDO';
@@ -13,9 +11,7 @@ import {InvoicePaymentMethodDO} from '../../../../../../../../../../../services/
 
 @Component({
     selector: 'booking-payment-guarantee-editor',
-    templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/booking-operations/components/payment-guarantee-edit/template/booking-payment-guarantee-editor.html',
-    directives: [EditSaveButtonGroupComponent],
-    pipes: [TranslationPipe]
+    templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/booking-operations/components/payment-guarantee-edit/template/booking-payment-guarantee-editor.html'
 })
 export class BookingPaymentGuaranteeEditorComponent implements OnInit {
     @Output() onBookingPaymentGuaranteeChanged = new EventEmitter<BookingDO>();

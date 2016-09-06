@@ -1,12 +1,11 @@
 import {Component, OnChanges, Input, SimpleChange, Output, EventEmitter, OnInit} from '@angular/core';
-import {Control} from '@angular/common';
+import {FormControl} from '@angular/forms';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/switchMap';
 import {BaseComponent} from '../../../common/base/BaseComponent';
 import {AppContext, ThError, ThServerApi} from '../AppContext';
 import {UploadedFileResponse} from '../http/IThHttp';
-import {TranslationPipe} from '../localization/TranslationPipe';
 import {CountriesService} from '../../../pages/internal/services/settings/CountriesService';
 import {CountriesDO} from '../../../pages/internal/services/settings/data-objects/CountriesDO';
 import {CountryDO} from '../../../pages/internal/services/common/data-objects/country/CountryDO';
@@ -30,7 +29,7 @@ export interface VatResponse {
 			<div class="col-xs-12 col-md-6 form-group">
 				<label>{{ 'Country' | translate }}</label>
 				<div class="input-group" [ngClass]="{'form-warning': displayCountryError()}">
-					<select class="form-control" [ngModel]="vatDetails.countryCode" (ngModelChange)="didSelectCountryCode($event)">
+					<select class="form-control" [ngModel]="vatDetails.countryCode" (ngModelChange)="didSelectCountryCode($event)" name="vatDetailsCountryCode">
 						<option value="" disabled>{{ 'Select a country' | translate }}</option>
 						<option *ngFor="let country of countryList" [value]="country.code">{{country.name}}</option>
 					</select>
@@ -39,19 +38,21 @@ export interface VatResponse {
 			</div>
 			<div class="col-xs-12 col-md-6 form-group">
 				<label>{{ 'VAT Code' | translate }}*</label>
-				<div class="input-group" [ngClass]="{'form-warning': displayVatError()}">
+				<div class="input-group" *ngIf="vatDetails.countryCode" [ngClass]="{'form-warning': displayVatError()}">
 					<span class="input-group-addon">{{convertedCountryCode}}</span>
-					<input type="text" class="form-control" [ngFormControl]="vatCodeControl" [disabled]="!vatDetails.countryCode">
+					<input type="text" class="form-control" [formControl]="vatCodeControl">
+				</div>
+				<div class="form-control operational-input-group input-group" *ngIf="!vatDetails.countryCode" [ngClass]="{'form-warning': displayVatError()}">
+					<span class="name field-value"></span>
 				</div>
 				<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Insert a VAT Number' | translate }}</small></label>
 			</div>
 		</div>
-	`,
-	pipes: [TranslationPipe]
+	`
 })
 
 export class VATComponent extends BaseComponent implements OnInit {
-	vatCodeControl: Control;
+	vatCodeControl: FormControl;
 	countryList: CountryDO[];
 	@Input() isRequired: boolean = false;
 	@Input() didSubmitForm: boolean = false;
@@ -70,7 +71,7 @@ export class VATComponent extends BaseComponent implements OnInit {
 			this._vatDetails = vatDetails;	
 		}
 		this.preprocessVatDetails();
-		this.vatCodeControl = new Control(this.vatDetails.fullVat);
+		this.vatCodeControl = new FormControl(this.vatDetails.fullVat);
 		this.initVatSearchInput();
 	}
 	private preprocessVatDetails() {

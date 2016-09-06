@@ -1,4 +1,4 @@
-import {ControlGroup, AbstractControl} from '@angular/common';
+import {FormGroup, AbstractControl} from '@angular/forms';
 import {BaseComponent} from './BaseComponent';
 
 export abstract class BaseFormComponent extends BaseComponent {
@@ -11,15 +11,10 @@ export abstract class BaseFormComponent extends BaseComponent {
 		return this._didSubmitForm;
 	}
 
-	protected abstract getDefaultControlGroup(): ControlGroup;
+	protected abstract getDefaultFormGroup(): FormGroup;
 
-	private getAbstractControl(controlName: string, controlGroup?: ControlGroup): AbstractControl {
-		var fieldCG: ControlGroup = (!controlGroup) ? this.getDefaultControlGroup() : controlGroup;
-		return fieldCG.find(controlName);
-	}
-
-	public controlIsInvalid(controlName: string, controlGroup?: ControlGroup): boolean {
-		let control: AbstractControl = this.getAbstractControl(controlName, controlGroup);
+	public controlIsInvalid(controlName: string, formGroup?: FormGroup): boolean {
+		let control: AbstractControl = this.getAbstractControl(controlName, formGroup);
 		if (!control) {
 			return false;
 		}
@@ -28,13 +23,18 @@ export abstract class BaseFormComponent extends BaseComponent {
 		}
 		return false;
 	}
-	public confirmationControlIsInvalid(confirmationControlName: string, controlName: string, controlGroup?: ControlGroup): boolean {
-		var isInvalid = this.controlIsInvalid(confirmationControlName, controlGroup);
+	public confirmationControlIsInvalid(confirmationControlName: string, controlName: string, formGroup?: FormGroup): boolean {
+		var isInvalid = this.controlIsInvalid(confirmationControlName, formGroup);
 		if (isInvalid) {
 			return true;
 		}
-		let confirmationControl: AbstractControl = this.getAbstractControl(confirmationControlName, controlGroup);
-		let control: AbstractControl = this.getAbstractControl(controlName, controlGroup);
+		let confirmationControl: AbstractControl = this.getAbstractControl(confirmationControlName, formGroup);
+		let control: AbstractControl = this.getAbstractControl(controlName, formGroup);
 		return control.value !== confirmationControl.value && (confirmationControl.dirty || this._didSubmitForm);
+	}
+
+	private getAbstractControl(controlName: string, formGroup?: FormGroup): AbstractControl {
+		var actualFormGroup: FormGroup = (!formGroup) ? this.getDefaultFormGroup() : formGroup;
+		return actualFormGroup.controls[controlName];
 	}
 }

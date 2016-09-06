@@ -1,12 +1,21 @@
+import {ThError} from '../core/utils/th-responses/ThError';
 import {BaseController} from './base/BaseController';
 import {ThStatusCode} from '../core/utils/th-responses/ThResponse';
 import {AppContext} from '../core/utils/AppContext';
 import {SessionContext} from '../core/utils/SessionContext';
+import {ThTranslation} from '../core/utils/localization/ThTranslation';
 import {InvoiceGroupMetaRepoDO, InvoiceGroupSearchCriteriaRepoDO} from '../core/data-layer/invoices/repositories/IInvoiceGroupsRepository';
 import {InvoiceGroupDO} from '../core/data-layer/invoices/data-objects/InvoiceGroupDO';
 import {InvoiceDO} from '../core/data-layer/invoices/data-objects/InvoiceDO';
 import {LazyLoadRepoDO, LazyLoadMetaResponseRepoDO} from '../core/data-layer/common/repo-data-objects/LazyLoadRepoDO';
 import {SaveInvoiceGroup} from '../core/domain-layer/invoices/save-invoice-group/SaveInvoiceGroup';
+import {InvoiceDataAggregator, InvoiceDataAggregatorQuery} from '../core/domain-layer/invoices/aggregators/InvoiceDataAggregator';
+import {InvoiceAggregatedData} from '../core/domain-layer/invoices/aggregators/InvoiceAggregatedData';
+import {InvoiceConfirmationVMContainer} from '../core/domain-layer/invoices/invoice-confirmations/InvoiceConfirmationVMContainer';
+import {ReportType, PdfReportsServiceResponse} from '../core/services/pdf-reports/IPdfReportsService';
+
+import path = require("path");
+import fs = require("fs");
 
 export class InvoiceGroupsController extends BaseController {
 
@@ -57,14 +66,57 @@ export class InvoiceGroupsController extends BaseController {
     }
 
     public saveInvoiceGroupItem(req: Express.Request, res: Express.Response) {
-		var saveInvoiceGroup = new SaveInvoiceGroup(req.appContext, req.sessionContext);
-        
-		saveInvoiceGroup.save(req.body.invoiceGroup).then((updatedInvoiceGroup: InvoiceGroupDO) => {
-			this.returnSuccesfulResponse(req, res, { invoiceGroup: updatedInvoiceGroup });
-		}).catch((err: any) => {
-			this.returnErrorResponse(req, res, err, ThStatusCode.InvoiceGroupsControllerErrorsavingInvoiceGroup);
-		});
-	}
+        var saveInvoiceGroup = new SaveInvoiceGroup(req.appContext, req.sessionContext);
+
+        saveInvoiceGroup.save(req.body.invoiceGroup).then((updatedInvoiceGroup: InvoiceGroupDO) => {
+            this.returnSuccesfulResponse(req, res, { invoiceGroup: updatedInvoiceGroup });
+        }).catch((err: any) => {
+            this.returnErrorResponse(req, res, err, ThStatusCode.InvoiceGroupsControllerErrorsavingInvoiceGroup);
+        });
+    }
+
+    public downloadInvoicePdf(req: Express.Request, res: any) {
+
+        var pdfReportsService = req.appContext.getServiceFactory().getPdfReportsService();
+        var invoiceDataAggregator = new InvoiceDataAggregator(req.appContext, req.sessionContext);
+        var generatedPdfAbsolutePath: string;
+        var query: InvoiceDataAggregatorQuery = {
+            customerId: req.query['customerId'],
+            invoiceGroupId: req.query['invoiceGroupId'],
+            invoiceReference: req.query['invoiceReference'],
+            payerIndex: req.query['payerIndex']
+        };
+        var thTranslation = new ThTranslation(req.sessionContext.language);
+
+        invoiceDataAggregator.getInvoiceAggregatedData(query).then((invoiceAggregatedData: InvoiceAggregatedData) => {
+            var invoiceConfirmationVMContainer = new InvoiceConfirmationVMContainer(thTranslation);
+            invoiceConfirmationVMContainer.buildFromInvoiceAggregatedDataContainer(invoiceAggregatedData);
+
+            return pdfReportsService.generatePdfReport({
+                reportType: ReportType.Invoice,
+                reportData: invoiceConfirmationVMContainer,
+                settings: {
+
+                }
+            })
+        }).then((result: PdfReportsServiceResponse) => {
+            generatedPdfAbsolutePath = result.pdfPath;
+
+            res.download(generatedPdfAbsolutePath, (err) => {
+                if (err) {
+                    
+                } else {
+                    var pathObject = path.parse(generatedPdfAbsolutePath);
+                    var htmlAbsolutePath = pathObject.dir + path.sep + pathObject.name + '.html';
+
+                    fs.unlink(generatedPdfAbsolutePath, (err) => {});
+                    fs.unlink(htmlAbsolutePath, (err) => {});              
+                }
+            });
+        }).catch((err: any) => {
+
+        });
+    }
 }
 
 var invoiceGroupsController = new InvoiceGroupsController();
@@ -73,4 +125,6 @@ module.exports = {
     getInvoiceGroupList: invoiceGroupsController.getInvoiceGroupList.bind(invoiceGroupsController),
     getInvoiceGroupListCount: invoiceGroupsController.getInvoiceGroupListCount.bind(invoiceGroupsController),
     saveInvoiceGroupItem: invoiceGroupsController.saveInvoiceGroupItem.bind(invoiceGroupsController),
+    downloadInvoicePdf: invoiceGroupsController.downloadInvoicePdf.bind(invoiceGroupsController),
+
 }

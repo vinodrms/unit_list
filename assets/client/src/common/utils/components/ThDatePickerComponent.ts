@@ -1,7 +1,5 @@
 import {Component, Input, Output, EventEmitter, ElementRef, AfterViewInit, Inject} from '@angular/core';
-import {TranslationPipe} from '../localization/TranslationPipe';
 import {ThDateDO, ThMonth} from '../../../pages/internal/services/common/data-objects/th-dates/ThDateDO';
-import {ThDatePipe} from '../pipes/ThDatePipe';
 import {ThDateUtils} from '../../../pages/internal/services/common/data-objects/th-dates/ThDateUtils';
 
 @Component({
@@ -16,10 +14,8 @@ import {ThDateUtils} from '../../../pages/internal/services/common/data-objects/
 				<span class="form-control" [ngClass]="{'disabled-text': readonly}">{{ selectedThDate | thdate }}</span>
 			</div>
 		</div>
-	`,
-	pipes: [TranslationPipe, ThDatePipe]
+	`
 })
-
 export class ThDatePickerComponent implements AfterViewInit {
 	@Input() showLabel: boolean = true;
 	@Input() label: string = "Select a date";

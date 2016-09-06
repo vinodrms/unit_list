@@ -1,7 +1,6 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
 import {Subscription} from 'rxjs/Subscription';
 import {BaseComponent} from '../../../../../../../../../common/base/BaseComponent';
-import {AllotmentsComponent} from '../../../../../../common/inventory/allotments/main/AllotmentsComponent';
 import {SettingsNavbarService} from '../navbar/services/SettingsNavbarService';
 import {SettingsPageType} from '../navbar/services/utils/SettingsPageType';
 import {AllotmentDO, AllotmentStatus} from '../../../../../../../services/allotments/data-objects/AllotmentDO';
@@ -12,8 +11,7 @@ import {AllotmentsTotalCountService} from '../../../../../../../services/allotme
 @Component({
 	selector: 'settings-allotments',
 	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/settings/subcomponents/allotments/template/settings-allotments.html',
-	providers: [AllotmentsTotalCountService],
-	directives: [AllotmentsComponent]
+	providers: [AllotmentsTotalCountService]
 })
 export class SettingsAllotmentsComponent extends BaseComponent implements OnInit, OnDestroy {
 	private _totalNoSubscription: Subscription;

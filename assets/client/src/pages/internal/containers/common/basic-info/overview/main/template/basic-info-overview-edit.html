@@ -1,13 +1,13 @@
 <loading-component [isLoading]="isLoading"></loading-component>
 <div class="basic-info-form-container" customScroll>
-	<form *ngIf="!isLoading" [ngFormModel]="getDefaultControlGroup()" class="basic-info-form">
+	<form *ngIf="!isLoading" [formGroup]="getDefaultFormGroup()" class="basic-info-form">
 		<div class="row">
 			<div class="col-xs-12 col-md-6">
 				<div class="row">
 					<div class="col-xs-12 col-md-12 form-group">
 						<label>{{ 'Hotel Name' | translate }}*</label>
 						<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('name')}">
-							<input type="text" class="form-control" ngControl="name" />
+							<input type="text" class="form-control" formControlName="name" />
 						</div>
 						<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter a name for your hotel' | translate }}</small></label>
 					</div>
@@ -21,7 +21,7 @@
 					<div class="col-xs-12 col-md-12 form-group">
 						<label>{{ 'Company Name' | translate }}*</label>
 						<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('companyName')}">
-							<input type="text" class="form-control" ngControl="companyName" />
+							<input type="text" class="form-control" formControlName="companyName" />
 						</div>
 						<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter a name for your company' | translate }}</small></label>
 					</div>
@@ -36,56 +36,56 @@
 			<div class="col-xs-12 col-md-6 form-group">
 				<label>{{ 'Address' | translate }}*</label>
 				<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('streetAddress')}">
-					<input type="text" class="form-control" ngControl="streetAddress">
+					<input type="text" class="form-control" formControlName="streetAddress">
 				</div>
 				<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter the address' | translate }}</small></label>
 			</div>
 			<div class="col-xs-6 col-md-3 form-group">
 				<label>{{ 'City' | translate }}*</label>
 				<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('city')}">
-					<input type="text" class="form-control" ngControl="city">
+					<input type="text" class="form-control" formControlName="city">
 				</div>
 				<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter the city' | translate }}</small></label>
 			</div>
 			<div class="col-xs-6 col-md-3 form-group">
 				<label>{{ 'Postal Code' | translate }}*</label>
 				<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('postalCode')}">
-					<input type="text" class="form-control" ngControl="postalCode">
+					<input type="text" class="form-control" formControlName="postalCode">
 				</div>
 				<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter the postal code' | translate }}</small></label>
 			</div>
 			<div class="col-xs-6 col-md-3 form-group">
 				<label>{{ 'Phone' | translate }}*</label>
 				<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('phone')}">
-					<input type="text" class="form-control" placeholder="e.g.: +45 XX XX XX XX" ngControl="phone">
+					<input type="text" class="form-control" placeholder="e.g.: +45 XX XX XX XX" formControlName="phone">
 				</div>
 				<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter a valid phone' | translate }}</small></label>
 			</div>
 			<div class="col-xs-6 col-md-3 form-group">
 				<label>{{ 'Fax' | translate }}</label>
 				<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('fax')}">
-					<input type="text" class="form-control" ngControl="fax">
+					<input type="text" class="form-control" formControlName="fax">
 				</div>
 				<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter a valid fax' | translate }}</small></label>
 			</div>
 			<div class="col-xs-12 col-md-6 form-group">
 				<label>{{ 'Contact Person' | translate }}*</label>
 				<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('contactName')}">
-					<input type="text" class="form-control" ngControl="contactName" />
+					<input type="text" class="form-control" formControlName="contactName" />
 				</div>
 				<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter a contact name' | translate }}</small></label>
 			</div>
 			<div class="col-xs-12 col-md-6 form-group">
 				<label>{{ 'Website' | translate }}</label>
 				<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('websiteUrl')}">
-					<input type="text" class="form-control" ngControl="websiteUrl">
+					<input type="text" class="form-control" formControlName="websiteUrl">
 				</div>
 				<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter a valid url' | translate }}</small></label>
 			</div>
 			<div class="col-xs-12 col-md-6 form-group">
 				<label>{{ 'Email' | translate }}*</label>
 				<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('email')}">
-					<input type="email" class="form-control" ngControl="email">
+					<input type="email" class="form-control" formControlName="email">
 				</div>
 				<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter a valid contact email' | translate }}</small></label>
 			</div>
@@ -93,7 +93,7 @@
 				<label>Facebook</label>
 				<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('facebookUrl')}">
 					<span class="input-group-addon"><i class="fa fa-facebook"></i></span>
-					<input type="text" class="form-control" ngControl="facebookUrl">
+					<input type="text" class="form-control" formControlName="facebookUrl">
 				</div>
 				<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter a valid url' | translate }}</small></label>
 			</div>
@@ -101,7 +101,7 @@
 				<label>Twitter</label>
 				<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('twitterUrl')}">
 					<span class="input-group-addon"><i class="fa fa-twitter"></i></span>
-					<input type="text" class="form-control" ngControl="twitterUrl">
+					<input type="text" class="form-control" formControlName="twitterUrl">
 				</div>
 				<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter a valid url' | translate }}</small></label>
 			</div>
@@ -109,7 +109,7 @@
 				<label>LinkedIn</label>
 				<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('linkedinUrl')}">
 					<span class="input-group-addon"><i class="fa fa-linkedin"></i></span>
-					<input type="text" class="form-control" ngControl="linkedinUrl">
+					<input type="text" class="form-control" formControlName="linkedinUrl">
 				</div>
 				<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter a valid url' | translate }}</small></label>
 			</div>

@@ -1,14 +1,14 @@
 /// <reference path="../../../../typings/tsd.d.ts" />
 
-import {NgModule, provide}      from '@angular/core';
+import {NgModule, Compiler}      from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
+import {HttpModule} from "@angular/http";
 import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
-import {DeprecatedFormsModule} from "@angular/common";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 
 import {APP_BASE_HREF} from '@angular/common';
 import {MainLayoutInternalComponent} from './MainLayoutInternalComponent';
-import {InternalRouting, InternalRouterModules} from './InternalRouterConfig';
-import {HTTP_PROVIDERS} from '@angular/http';
+import {InternalRouting} from './InternalRouterConfig';
 import {IThCookie} from '../../../common/utils/cookies/IThCookie';
 import {ThCookie} from '../../../common/utils/cookies/ThCookie';
 import {IThHttp} from '../../../common/utils/http/IThHttp';
@@ -25,23 +25,25 @@ import {ThTranslation} from '../../../common/utils/localization/ThTranslation';
 import {GoogleAnalytics} from '../../../common/utils/analytics/GoogleAnalytics';
 import {IAnalytics} from '../../../common/utils/analytics/IAnalytics';
 import {AppContext} from '../../../common/utils/AppContext';
+import {ModuleLoaderService} from '../../../common/utils/module-loader/ModuleLoaderService';
+import {HomeModule} from '../containers/home/HomeModule';
 
 @NgModule({
-    imports: [BrowserModule, InternalRouting, DeprecatedFormsModule],
-    declarations: [MainLayoutInternalComponent, InternalRouterModules],
+    imports: [BrowserModule, HttpModule, InternalRouting, HomeModule],
+    declarations: [MainLayoutInternalComponent],
     bootstrap: [MainLayoutInternalComponent],
 	providers: [
-		provide(APP_BASE_HREF, { useValue: '/home' }),
-		provide(IThCookie, { useClass: ThCookie }),
-		provide(IBrowserLocation, { useClass: BrowserLocation }),
-		provide(IRouterNavigator, { useClass: RouterNavigator }),
+		{ provide: APP_BASE_HREF, useValue: '/home' },
+		{ provide: IThCookie, useClass: ThCookie },
+		{ provide: IBrowserLocation, useClass: BrowserLocation },
+		{ provide: IRouterNavigator, useClass: RouterNavigator },
 		ThTranslation,
-		HTTP_PROVIDERS,
-		provide(IThHttp, { useClass: ThHttp }),
-		provide(IToaster, { useClass: Toaster }),
-		provide(IModalService, { useClass: ModalService }),
-		provide(IAnalytics, { useClass: GoogleAnalytics }),
-		AppContext
+		{ provide: IThHttp, useClass: ThHttp },
+		{ provide: IToaster, useClass: Toaster },
+		{ provide: IModalService, useClass: ModalService },
+		{ provide: IAnalytics, useClass: GoogleAnalytics },
+		AppContext,
+		Compiler, ModuleLoaderService
 	]
 })
 export class InternalModule { }

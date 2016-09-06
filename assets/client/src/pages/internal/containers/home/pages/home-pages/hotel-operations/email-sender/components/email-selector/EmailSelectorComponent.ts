@@ -1,6 +1,5 @@
 import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import {AppContext} from '../../../../../../../../../../common/utils/AppContext';
-import {TranslationPipe} from '../../../../../../../../../../common/utils/localization/TranslationPipe';
 import {ThDataValidators} from '../../../../../../../../../../common/utils/form-utils/utils/ThDataValidators';
 import {CustomerDO} from '../../../../../../../../services/customers/data-objects/CustomerDO';
 import {EmailRecipientBuilder} from './utils/EmailRecipientBuilder';
@@ -8,11 +7,10 @@ import {EmailRecipientVM} from './utils/EmailRecipientVM';
 
 @Component({
     selector: 'email-selector',
-    templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/email-sender/components/email-selector/template/email-selector.html',
-    pipes: [TranslationPipe]
+    templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/email-sender/components/email-selector/template/email-selector.html'
 })
 export class EmailSelectorComponent implements OnInit {
-    @Output() onEmailListChanged = new EventEmitter<string>();
+    @Output() onEmailListChanged = new EventEmitter<string[]>();
     public triggerOnEmailListChanged() {
         this.onEmailListChanged.next(this.getSelectedEmailList());
     }

@@ -1,5 +1,4 @@
 import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import {TranslationPipe} from '../../../../../../../../../../../../../common/utils/localization/TranslationPipe';
 import {AppContext, ThError} from '../../../../../../../../../../../../../common/utils/AppContext';
 import {BookingOperationsPageData} from '../../services/utils/BookingOperationsPageData';
 import {BookingReactivateRight} from '../../../../../../../../../../../services/bookings/data-objects/BookingEditRights';
@@ -8,8 +7,7 @@ import {HotelOperationsBookingService} from '../../../../../../../../../../../se
 
 @Component({
     selector: 'booking-reactivate',
-    templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/booking-operations/components/reactivate/template/booking-reactivate.html',
-    pipes: [TranslationPipe]
+    templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/booking-operations/components/reactivate/template/booking-reactivate.html'
 })
 export class BookingReactivateComponent implements OnInit {
     @Output() onBookingReactivate = new EventEmitter<BookingDO>();

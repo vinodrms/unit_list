@@ -2,8 +2,6 @@ import {Component, OnInit, Input} from '@angular/core';
 import {TranslationPipe} from '../../../../../../../common/utils/localization/TranslationPipe';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/zip';
-import {LoadingComponent} from '../../../../../../../common/utils/components/LoadingComponent';
-import {ThHourSelectComponent} from '../../../../../../../common/utils/components/th-hour-select/ThHourSelectComponent';
 import {HotelAggregatorService} from '../../../../../services/hotel/HotelAggregatorService';
 import {HotelAggregatedInfo} from '../../../../../services/hotel/utils/HotelAggregatedInfo';
 import {HotelDO} from '../../../../../services/hotel/data-objects/hotel/HotelDO';
@@ -16,25 +14,21 @@ import {TimezoneDO} from '../../../../../services/timezones//data-objects/Timezo
 import {ThHourDO} from '../../../../../services/common/data-objects/th-dates/ThHourDO';
 import {ThHourVM} from '../../../../../../../common/utils/components/th-hour-select/utils/ThHourVM';
 import {BasicInfoPropertyDetailsEditService} from './services/BasicInfoPropertyDetailsEditService';
-import {CustomScroll} from '../../../../../../../common/utils/directives/CustomScroll';
 
 @Component({
     selector: 'basic-info-property-details-edit',
-    templateUrl: '/client/src/pages/internal/containers/common/basic-info/property-details/main/template/basic-info-property-details-edit.html',
-    directives: [LoadingComponent, CustomScroll, ThHourSelectComponent],
-    providers: [],
-    pipes: [TranslationPipe]
+    templateUrl: '/client/src/pages/internal/containers/common/basic-info/property-details/main/template/basic-info-property-details-edit.html'
 })
 export class BasicInfoPropertyDetailsEditComponent extends BaseComponent implements OnInit {
     @Input() canAutoSave: boolean = false;
-	isSaving: boolean = false;
-    
+    isSaving: boolean = false;
+
     isLoading: boolean = true;
 
     timezoneList: TimezoneDO[];
     hotelAmenities: HotelAmenityVMContainer;
     hotel: HotelDO;
-    
+
     constructor(private _appContext: AppContext,
         private _hotelAggregator: HotelAggregatorService,
         private _propertyDetailsEditService: BasicInfoPropertyDetailsEditService,
@@ -60,15 +54,15 @@ export class BasicInfoPropertyDetailsEditComponent extends BaseComponent impleme
             this._appContext.toaster.error(this._appContext.thTranslation.translate(error.message));
         });
     }
-    
+
     protected get didSubmitForm(): boolean {
-		return this._propertyDetailsEditService.didSubmitForm;
-	}
-    
+        return this._propertyDetailsEditService.didSubmitForm;
+    }
+
     protected displayTimezoneError(): boolean {
         return this.didSubmitForm && !this.hotel.timezone;
     }
-    
+
     private equalHours(hour1: ThHourDO, hour2: ThHourDO): boolean {
         return hour1.hour === hour2.hour && hour1.minute === hour2.minute;
     }
@@ -98,10 +92,10 @@ export class BasicInfoPropertyDetailsEditComponent extends BaseComponent impleme
     }
     savePropertyDetails() {
         this._propertyDetailsEditService.savePropertyDetails().subscribe((result: any) => {
-			this.isSaving = false;
-			this._appContext.toaster.success(this._appContext.thTranslation.translate("Information Saved Succesfully"));
-		}, (error: any) => {
-			this.isSaving = false;
-		});
+            this.isSaving = false;
+            this._appContext.toaster.success(this._appContext.thTranslation.translate("Information Saved Succesfully"));
+        }, (error: any) => {
+            this.isSaving = false;
+        });
     }
 }

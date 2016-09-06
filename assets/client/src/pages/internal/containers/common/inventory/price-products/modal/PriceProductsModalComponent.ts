@@ -2,7 +2,6 @@ import {Component, AfterViewInit, ViewChild} from '@angular/core';
 import {BaseComponent} from '../../../../../../../common/base/BaseComponent';
 import {LazyLoadingTableComponent} from '../../../../../../../common/utils/components/lazy-loading/LazyLoadingTableComponent';
 import {LazyLoadTableMeta, TableRowCommand} from '../../../../../../../common/utils/components/lazy-loading/utils/LazyLoadTableMeta';
-import {TranslationPipe} from '../../../../../../../common/utils/localization/TranslationPipe';
 import {AppContext} from '../../../../../../../common/utils/AppContext';
 import {ICustomModalComponent, ModalSize} from '../../../../../../../common/utils/modals/utils/ICustomModalComponent';
 import {ModalDialogRef} from '../../../../../../../common/utils/modals/utils/ModalDialogRef';
@@ -22,9 +21,7 @@ import {HotelService} from '../../../../../services/hotel/HotelService';
 	selector: 'price-products-modal',
 	templateUrl: '/client/src/pages/internal/containers/common/inventory/price-products/modal/template/price-products-modal.html',
 	providers: [SETTINGS_PROVIDERS, PriceProductTableMetaBuilderService, RoomCategoriesService,
-		TaxService, HotelService, HotelAggregatorService, YieldFiltersService, PriceProductsService],
-	directives: [LazyLoadingTableComponent],
-	pipes: [TranslationPipe]
+		TaxService, HotelService, HotelAggregatorService, YieldFiltersService, PriceProductsService]
 })
 export class PriceProductsModalComponent extends BaseComponent implements ICustomModalComponent, AfterViewInit {
 	@ViewChild(LazyLoadingTableComponent)

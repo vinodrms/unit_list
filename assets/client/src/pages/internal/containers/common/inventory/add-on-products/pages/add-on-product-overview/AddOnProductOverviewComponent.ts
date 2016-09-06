@@ -1,15 +1,10 @@
 import {Component, Input, Output, EventEmitter} from '@angular/core';
 import {BaseComponent} from '../../../../../../../../common/base/BaseComponent';
-import {TranslationPipe} from '../../../../../../../../common/utils/localization/TranslationPipe';
-import {PricePipe} from '../../../../../../../../common/utils/pipes/PricePipe';
 import {AddOnProductVM} from '../../../../../../services/add-on-products/view-models/AddOnProductVM';
-import {CustomScroll} from '../../../../../../../../common/utils/directives/CustomScroll';
 
 @Component({
 	selector: 'add-on-product-overview',
-	templateUrl: '/client/src/pages/internal/containers/common/inventory/add-on-products/pages/add-on-product-overview/template/add-on-product-overview.html',
-	pipes: [TranslationPipe, PricePipe],
-	directives: [CustomScroll]
+	templateUrl: '/client/src/pages/internal/containers/common/inventory/add-on-products/pages/add-on-product-overview/template/add-on-product-overview.html'
 })
 
 export class AddOnProductOverviewComponent extends BaseComponent {

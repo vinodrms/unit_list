@@ -1,20 +1,14 @@
 import {Component, Input, Output, EventEmitter} from '@angular/core';
 import {BaseComponent} from '../../../../../../../../common/base/BaseComponent';
-import {TranslationPipe} from '../../../../../../../../common/utils/localization/TranslationPipe';
 import {AppContext} from '../../../../../../../../common/utils/AppContext';
-import {ThDateIntervalPipe} from '../../../../../../../../common/utils/pipes/ThDateIntervalPipe';
-import {ThTrimPipe} from '../../../../../../../../common/utils/pipes/ThTrimPipe';
 import {AllotmentVM} from '../../../../../../services/allotments/view-models/AllotmentVM';
 import {AllotmentConstraintMeta} from '../../../../../../services/allotments/data-objects/constraint/IAllotmentConstraint';
 import {AllotmentConstraintDO} from '../../../../../../services/allotments/data-objects/constraint/AllotmentConstraintDO';
-import {CustomScroll} from '../../../../../../../../common/utils/directives/CustomScroll';
 import {ISOWeekDayUtils, ISOWeekDayVM}  from '../../../../../../services/common/data-objects/th-dates/ISOWeekDay';
 
 @Component({
 	selector: 'allotment-overview',
-	templateUrl: '/client/src/pages/internal/containers/common/inventory/allotments/pages/allotment-overview/template/allotment-overview.html',
-	pipes: [TranslationPipe, ThDateIntervalPipe, ThTrimPipe],
-	directives: [CustomScroll]
+	templateUrl: '/client/src/pages/internal/containers/common/inventory/allotments/pages/allotment-overview/template/allotment-overview.html'
 })
 export class AllotmentOverviewComponent extends BaseComponent {
 	private _allotmentVM: AllotmentVM;

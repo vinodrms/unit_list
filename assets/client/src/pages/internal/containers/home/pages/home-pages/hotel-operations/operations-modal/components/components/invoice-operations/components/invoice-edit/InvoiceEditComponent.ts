@@ -1,8 +1,5 @@
 import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import {TranslationPipe} from '../../../../../../../../../../../../../common/utils/localization/TranslationPipe';
 import {AppContext, ThError} from '../../../../../../../../../../../../../common/utils/AppContext';
-import {InvoicePayerComponent} from '../invoice-payer/InvoicePayerComponent';
-import {ThButtonComponent} from '../../../../../../../../../../../../../common/utils/components/ThButtonComponent';
 import {AddOnProductsModalService} from '../../../../../../../../../../common/inventory/add-on-products/modal/services/AddOnProductsModalService';
 import {NumberOfAddOnProductsModalService} from './modals/services/NumberOfAddOnProductsModalService';
 import {NumberOfAddOnProductsModalOutput} from './modals/services/utils/NumberOfAddOnProductsModalOutput';
@@ -20,16 +17,13 @@ import {InvoicePayerVM} from '../../../../../../../../../../../services/invoices
 import {InvoiceItemVM} from '../../../../../../../../../../../services/invoices/view-models/InvoiceItemVM';
 import {CustomerDO} from '../../../../../../../../../../../services/customers/data-objects/CustomerDO';
 import {InvoiceGroupControllerService} from '../../services/InvoiceGroupControllerService';
-import {CustomScroll} from '../../../../../../../../../../../../../common/utils/directives/CustomScroll';
 import {InvoiceGroupsService} from '../../../../../../../../../../../services/invoices/InvoiceGroupsService';
 import {HotelOperationsResultService} from '../../../../../../operations-modal/services/HotelOperationsResultService';
 
 @Component({
     selector: 'invoice-edit',
     templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/invoice-operations/components/invoice-edit/template/invoice-edit.html',
-    directives: [InvoicePayerComponent, ThButtonComponent, CustomScroll],
-    providers: [AddOnProductsModalService, NumberOfAddOnProductsModalService, CustomerRegisterModalService],
-    pipes: [TranslationPipe]
+    providers: [AddOnProductsModalService, NumberOfAddOnProductsModalService, CustomerRegisterModalService]
 })
 export class InvoiceEditComponent implements OnInit {
     @Input() invoiceReference: string;

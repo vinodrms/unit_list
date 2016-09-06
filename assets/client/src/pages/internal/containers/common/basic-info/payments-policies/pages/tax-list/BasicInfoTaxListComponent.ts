@@ -1,8 +1,6 @@
 import {Component, OnInit, Input} from '@angular/core';
 import {BaseComponent} from '../../../../../../../../common/base/BaseComponent';
 import {AppContext} from '../../../../../../../../common/utils/AppContext';
-import {TranslationPipe} from '../../../../../../../../common/utils/localization/TranslationPipe';
-import {PercentagePipe} from '../../../../../../../../common/utils/pipes/PercentagePipe';
 import {TaxService} from '../../../../../../services/taxes/TaxService';
 import {TaxContainerDO} from '../../../../../../services/taxes/data-objects/TaxContainerDO';
 import {TaxDO, TaxType} from '../../../../../../services/taxes/data-objects/TaxDO';
@@ -13,10 +11,8 @@ import {TaxEditModalService} from '../tax-modal/services/TaxEditModalService';
 @Component({
 	selector: 'basic-info-tax-list',
 	templateUrl: '/client/src/pages/internal/containers/common/basic-info/payments-policies/pages/tax-list/template/basic-info-tax-list.html',
-	providers: [TaxEditModalService],
-	pipes: [TranslationPipe, PercentagePipe]
+	providers: [TaxEditModalService]
 })
-
 export class BasicInfoTaxListComponent extends BaseComponent implements OnInit {
 	private _taxType: TaxType;
 	public get taxType(): TaxType {

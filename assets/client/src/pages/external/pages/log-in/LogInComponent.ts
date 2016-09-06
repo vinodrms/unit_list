@@ -1,24 +1,19 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
-import {ControlGroup} from '@angular/common';
-import {ROUTER_DIRECTIVES, ActivatedRoute} from '@angular/router';
+import {FormGroup} from '@angular/forms';
+import {ActivatedRoute} from '@angular/router';
 import {Location} from '@angular/common';
 import {Subscription} from 'rxjs/Subscription';
 
 import {BaseFormComponent} from '../../../../common/base/BaseFormComponent';
-import {TranslationPipe} from '../../../../common/utils/localization/TranslationPipe';
 import {LogInService} from './services/LogInService';
 import {LogInStatusCodeParser, LoginStatusAction} from './utils/LogInStatusCodeParser';
 import {ThError} from '../../../../common/utils/responses/ThError';
 import {AppContext} from '../../../../common/utils/AppContext';
-import {ExternalFooterComponent} from '../common/footer/ExternalFooterComponent';
-import {LoadingButtonComponent} from '../../../../common/utils/components/LoadingButtonComponent';
 
 @Component({
 	selector: 'log-in-component',
 	templateUrl: '/client/src/pages/external/pages/log-in/template/log-in-component.html',
-	providers: [LogInService],
-	directives: [ROUTER_DIRECTIVES, ExternalFooterComponent, LoadingButtonComponent],
-	pipes: [TranslationPipe]
+	providers: [LogInService]
 })
 export class LogInComponent extends BaseFormComponent implements OnInit, OnDestroy {
 	public isLoading: boolean = false;
@@ -61,7 +56,7 @@ export class LogInComponent extends BaseFormComponent implements OnInit, OnDestr
 		}
 	}
 
-	protected getDefaultControlGroup(): ControlGroup {
+	protected getDefaultFormGroup(): FormGroup {
 		return this._logInService.loginForm;
 	}
 

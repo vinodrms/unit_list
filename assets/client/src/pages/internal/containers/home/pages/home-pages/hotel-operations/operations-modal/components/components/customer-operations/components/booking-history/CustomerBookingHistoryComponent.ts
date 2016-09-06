@@ -1,6 +1,4 @@
 import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import {TranslationPipe} from '../../../../../../../../../../../../../common/utils/localization/TranslationPipe';
-import {ThLongDateIntervalPipe} from '../../../../../../../../../../../../../common/utils/pipes/ThLongDateIntervalPipe';
 import {AppContext, ThError} from '../../../../../../../../../../../../../common/utils/AppContext';
 import {CustomerOperationsPageData} from '../../services/utils/CustomerOperationsPageData';
 import {LazyLoadData} from '../../../../../../../../../../../services/common/ILazyLoadRequestService';
@@ -11,8 +9,7 @@ import {HotelOperationsPageControllerService} from '../../../../services/HotelOp
 @Component({
     selector: 'customer-booking-history',
     templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/customer-operations/components/booking-history/template/customer-booking-history.html',
-    providers: [BookingsService],
-    pipes: [TranslationPipe, ThLongDateIntervalPipe]
+    providers: [BookingsService]
 })
 export class CustomerBookingHistoryComponent implements OnInit {
     @Output() totalBookingsCountEmitter = new EventEmitter<number>();

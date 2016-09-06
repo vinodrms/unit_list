@@ -2,7 +2,6 @@ import {Component, AfterViewInit, ViewChild} from '@angular/core';
 import {BaseComponent} from '../../../../../../../common/base/BaseComponent';
 import {LazyLoadingTableComponent} from '../../../../../../../common/utils/components/lazy-loading/LazyLoadingTableComponent';
 import {LazyLoadTableMeta, TableRowCommand} from '../../../../../../../common/utils/components/lazy-loading/utils/LazyLoadTableMeta';
-import {TranslationPipe} from '../../../../../../../common/utils/localization/TranslationPipe';
 import {AppContext} from '../../../../../../../common/utils/AppContext';
 import {ICustomModalComponent, ModalSize} from '../../../../../../../common/utils/modals/utils/ICustomModalComponent';
 import {ModalDialogRef} from '../../../../../../../common/utils/modals/utils/ModalDialogRef';
@@ -17,9 +16,7 @@ import {CustomerDetailsMeta} from '../../../../../services/customers/data-object
 @Component({
 	selector: 'customer-register-modal',
 	templateUrl: '/client/src/pages/internal/containers/common/inventory/customer-register/modal/template/customer-register-modal.html',
-	providers: [CustomerRegisterTableMetaBuilderService, CustomerTableFilterService, CustomersService],
-	directives: [LazyLoadingTableComponent],
-	pipes: [TranslationPipe]
+	providers: [CustomerRegisterTableMetaBuilderService, CustomerTableFilterService, CustomersService]
 })
 export class CustomerRegisterModalComponent extends BaseComponent implements ICustomModalComponent, AfterViewInit {
 	@ViewChild(LazyLoadingTableComponent)

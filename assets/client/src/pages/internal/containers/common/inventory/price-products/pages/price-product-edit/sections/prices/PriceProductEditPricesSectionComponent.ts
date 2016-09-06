@@ -1,8 +1,6 @@
 import {Component, Input} from '@angular/core';
 import {BaseComponent} from '../../../../../../../../../../common/base/BaseComponent';
 import {AppContext, ThError} from '../../../../../../../../../../common/utils/AppContext';
-import {LoadingComponent} from '../../../../../../../../../../common/utils/components/LoadingComponent';
-import {TranslationPipe} from '../../../../../../../../../../common/utils/localization/TranslationPipe';
 import {NumberSuffixFormatter} from '../../../../../../../../../../common/utils/form-utils/NumberSuffixFormatter';
 import {IPriceProductEditSection} from '../utils/IPriceProductEditSection';
 import {PriceProductVM} from '../../../../../../../../services/price-products/view-models/PriceProductVM';
@@ -21,9 +19,7 @@ import {CurrencyDO} from '../../../../../../../../services/common/data-objects/c
 @Component({
 	selector: 'price-product-edit-prices-section',
 	templateUrl: '/client/src/pages/internal/containers/common/inventory/price-products/pages/price-product-edit/sections/prices/template/price-product-edit-prices-section.html',
-	providers: [RoomCategoriesStatsService],
-	pipes: [TranslationPipe],
-	directives: [LoadingComponent]
+	providers: [RoomCategoriesStatsService]
 })
 export class PriceProductEditPricesSectionComponent extends BaseComponent implements IPriceProductEditSection {
 	readonly: boolean;

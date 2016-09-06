@@ -1,5 +1,5 @@
 <loading-component [isLoading]="isLoading"></loading-component>
-<div *ngIf="!isLoading" [ngFormModel]="getDefaultControlGroup()" class="edit-form-container" customScroll>
+<div *ngIf="!isLoading" [formGroup]="getDefaultFormGroup()" class="edit-form-container" customScroll>
 	<div class="edit-form">
 		<div class="row">
 			<div class="col-xs-12 col-md-8">
@@ -7,7 +7,7 @@
 					<div class="col-xs-12 col-md-12 form-group">
 						<label>{{ 'Product Name' | translate }}*</label>
 						<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('name')}">
-							<input type="text" class="form-control" ngControl="name">
+							<input type="text" class="form-control" formControlName="name">
 						</div>
 						<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter a name for the product' | translate }}</small></label>
 					</div>
@@ -17,7 +17,7 @@
 						<label>{{ 'Price Charged' | translate }}*</label>
 						<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('price')}">
 							<span class="input-group-addon">{{ccy.nativeSymbol}}</span>
-							<input type="number" class="form-control" ngControl="price">
+							<input type="number" class="form-control" formControlName="price">
 						</div>
 						<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter a valid price that will be charged' | translate }}</small></label>
 					</div>
@@ -25,7 +25,7 @@
 						<label>{{ 'Internal Cost' | translate }}*</label>
 						<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('internalCost')}">
 							<span class="input-group-addon">{{ccy.nativeSymbol}}</span>
-							<input type="number" class="form-control" ngControl="internalCost">
+							<input type="number" class="form-control" formControlName="internalCost">
 						</div>
 						<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter a valid price' | translate }}</small></label>
 					</div>
@@ -36,7 +36,7 @@
 						<label>{{ 'VAT' | translate }}</label>
 						<br/>
 						<label class="text-muted"><small><i class="fa fa-info-circle"></i> {{ 'The VAT is included in the price.' | translate }}</small></label>
-						<select class="form-control" [ngModel]="addOnProductVatId" (ngModelChange)="didSelectTaxId($event)">
+						<select class="form-control" [ngModel]="addOnProductVatId" (ngModelChange)="didSelectTaxId($event)" [ngModelOptions]="{standalone: true}" name="addOnProductVatId">
 					<option [value]="noVatId">{{ 'No VAT' | translate }}</option>
 					<option *ngFor="let vat of vatList" [value]="vat.id">{{vat.name}} - {{vat.value | percentage}}</option>
 				</select>
@@ -46,7 +46,7 @@
 						<br/>
 						<div class="input-group" [ngClass]="{'form-warning': (!didSelectCategory() && didSubmitForm)}">
 							<label class="text-muted"><small><i class="fa fa-info-circle"></i> {{ 'The category of your add on product.' | translate }}</small></label>
-							<select class="form-control" [ngModel]="addOnProductVM.addOnProduct.categoryId" (ngModelChange)="didChangeCategoryId($event)">
+							<select class="form-control" [ngModel]="addOnProductVM.addOnProduct.categoryId" (ngModelChange)="didChangeCategoryId($event)" [ngModelOptions]="{standalone: true}" name="aopCategoryId">
 						<option value="" disabled>{{ 'Select a category' | translate }}</option>
 						<option *ngFor="let addOnProductCategory of addOnProductCategoryList" [value]="addOnProductCategory.id">{{addOnProductCategory.name}}</option>
 					</select>
@@ -57,7 +57,7 @@
 				<div class="row">
 					<div class="col-xs-12 col-md-12 form-group">
 						<label>{{ 'Notes' | translate }}</label>
-						<textarea class="form-control" ngControl="notes"></textarea>
+						<textarea class="form-control" formControlName="notes"></textarea>
 					</div>
 				</div>
 			</div>

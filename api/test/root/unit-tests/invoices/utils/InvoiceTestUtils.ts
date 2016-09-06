@@ -95,7 +95,7 @@ export class InvoiceTestUtils {
         }
     }
 
-    private testInvoiceEquality(invoice1: InvoiceDO, invoice2: InvoiceDO) {
+    public testInvoiceEquality(invoice1: InvoiceDO, invoice2: InvoiceDO) {
         if (!this._thUtils.isUndefinedOrNull(invoice2.bookingId)) {
             should.equal(invoice1.bookingId, invoice2.bookingId);
         }

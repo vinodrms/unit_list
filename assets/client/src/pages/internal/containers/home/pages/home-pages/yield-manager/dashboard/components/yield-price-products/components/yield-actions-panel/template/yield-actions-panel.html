@@ -1,7 +1,7 @@
 <div class="yield-actions-control flex-row">
 		<div class="form-group flex-row flex-center-v">
 			<div class="dark-gray-color ellipsis-text m-r-12" title="{{getFilterStatInfoLabel()}}">{{getFilterStatInfoLabel()}}</div>
-			<select class="yield-action form-control dark-gray-color m-r-12" [(ngModel)]="selectedAction">
+			<select class="yield-action form-control dark-gray-color m-r-12" [(ngModel)]="selectedAction" name="selectedAction">
 				<option [value]="noAction" disabled>{{'Select an action' | translate}}</option>
 				<option [value]="enums.PriceProductYieldAction.Open">{{'Open' | translate}}</option>
 				<option [value]="enums.PriceProductYieldAction.Close">{{'Close' | translate}}</option>
@@ -26,7 +26,7 @@
 			</th-date-picker>
 		</div>
 		<div class="form-group flex-row flex-center-v">
-			<input type="checkbox" class="dark-gray-color m-r-12" [(ngModel)]="forever">
+			<input type="checkbox" class="dark-gray-color m-r-12" [(ngModel)]="forever" name="forever">
 			<span class="ellipsis-text m-r-12">{{'Forever' | translate}}</span>
 			<div class="btn btn-danger uppercase f-10 clickable" (click)="applyChanges()">
 				<i class="fa fa-refresh fa-spin" *ngIf="isYielding"></i> 

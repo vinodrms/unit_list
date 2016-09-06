@@ -1,14 +1,11 @@
 import {Component, OnInit, Input} from '@angular/core';
 import {AppContext} from '../../../utils/AppContext';
-import {TranslationPipe} from '../../localization/TranslationPipe';
-import {ThTimestampPipe} from '../../pipes/ThTimestampPipe';
 import {DocumentHistoryDO} from '../../../../pages/internal/services/common/data-objects/document-history/DocumentHistoryDO';
 import {DocumentActionDO} from '../../../../pages/internal/services/common/data-objects/document-history/DocumentActionDO';
 
 @Component({
     selector: 'document-history-viewer',
-    templateUrl: '/client/src/common/utils/components/document-history/template/document-history-viewer.html',
-    pipes: [TranslationPipe, ThTimestampPipe]
+    templateUrl: '/client/src/common/utils/components/document-history/template/document-history-viewer.html'
 })
 export class DocumentHistoryViewerComponent {
     private static DefaultNoOfActions = 3;

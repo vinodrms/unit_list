@@ -16,12 +16,7 @@ import {AllotmentsService} from '../../../../../../../services/allotments/Allotm
 
 @Component({
 	selector: 'allotment-edit-container',
-	templateUrl: '/client/src/pages/internal/containers/common/inventory/allotments/pages/allotment-edit/container/template/allotment-edit-container.html',
-	directives: [CustomScroll,
-		AllotmentEditTopSectionComponent, AllotmentOpenIntervalSectionComponent,
-		AllotmentAvailabilitySectionComponent, AllotmentEditConstraintsSectionComponent,
-		AllotmentNotesSectionComponent],
-	pipes: [TranslationPipe]
+	templateUrl: '/client/src/pages/internal/containers/common/inventory/allotments/pages/allotment-edit/container/template/allotment-edit-container.html'
 })
 export class AllotmentEditContainerComponent extends BaseComponent implements AfterViewInit {
 	@ViewChild(AllotmentEditTopSectionComponent) private _topSectionComponent: AllotmentEditTopSectionComponent;

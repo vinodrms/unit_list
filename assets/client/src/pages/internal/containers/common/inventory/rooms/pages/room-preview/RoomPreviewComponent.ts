@@ -1,7 +1,4 @@
 import {Component, OnInit, Input} from '@angular/core';
-import {TranslationPipe} from '../../../../../../../../common/utils/localization/TranslationPipe';
-import {ConfigCapacityComponent} from '../../../../../../../../common/utils/components/ConfigCapacityComponent';
-import {ImageUploadComponent} from '../../../../../../../../common/utils/components/image-upload/ImageUploadComponent';
 import {RoomVM} from '../../../../../../services/rooms/view-models/RoomVM';
 import {BedVM} from '../../../../../../services/beds/view-models/BedVM';
 import {AppContext} from '../../../../../../../../common/utils/AppContext';
@@ -12,9 +9,7 @@ import {RoomPreviewInput} from './utils/RoomPreviewInput';
 
 @Component({
     selector: 'room-preview',
-    templateUrl: '/client/src/pages/internal/containers/common/inventory/rooms/pages/room-preview/template/room-preview.html',
-    directives: [ConfigCapacityComponent, ImageUploadComponent, BedSelectorComponent],
-    pipes: [TranslationPipe]
+    templateUrl: '/client/src/pages/internal/containers/common/inventory/rooms/pages/room-preview/template/room-preview.html'
 })
 export class RoomPreviewComponent implements OnInit {
     private _didInit: boolean = false;

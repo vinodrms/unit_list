@@ -1,13 +1,11 @@
 import {Component, OnInit, Input} from '@angular/core';
 import {AppContext} from '../../../../../../../../common/utils/AppContext';
-import {TranslationPipe} from '../../../../../../../../common/utils/localization/TranslationPipe';
 import {CustomerVM} from '../../../../../../services/customers/view-models/CustomerVM';
 import {PriceProductDO} from '../../../../../../services/price-products/data-objects/PriceProductDO';
 
 @Component({
     selector: 'customer-preview',
-    templateUrl: '/client/src/pages/internal/containers/common/inventory/customer-register/pages/customer-preview/template/customer-preview.html',
-    pipes: [TranslationPipe]
+    templateUrl: '/client/src/pages/internal/containers/common/inventory/customer-register/pages/customer-preview/template/customer-preview.html'
 })
 export class CustomerPreviewComponent implements OnInit {
     private _didInit: boolean = false;

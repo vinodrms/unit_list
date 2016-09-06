@@ -1,33 +1,26 @@
 import {Component} from '@angular/core';
-import {ControlGroup} from '@angular/common';
-import {ROUTER_DIRECTIVES} from '@angular/router';
+import {FormGroup} from '@angular/forms';
 import {BaseFormComponent} from '../../../../common/base/BaseFormComponent';
-import {ExternalFooterComponent} from '../common/footer/ExternalFooterComponent';
-import {TranslationPipe} from '../../../../common/utils/localization/TranslationPipe';
 import {AppContext} from '../../../../common/utils/AppContext';
 import {ThError} from '../../../../common/utils/responses/ThError';
 import {ResetPasswordService} from './services/ResetPasswordService';
 import {LoginStatusCode} from '../../../../common/utils/responses/LoginStatusCode';
-import {LoadingButtonComponent} from '../../../../common/utils/components/LoadingButtonComponent';
 
 @Component({
 	selector: 'reset-password-component',
 	templateUrl: '/client/src/pages/external/pages/reset-password/template/reset-password-component.html',
-	directives: [ROUTER_DIRECTIVES, ExternalFooterComponent, LoadingButtonComponent],
-	pipes: [TranslationPipe],
 	providers: [ResetPasswordService]
 })
-
 export class ResetPasswordComponent extends BaseFormComponent {
 	public isLoading: boolean = false;
-	
+
 	constructor(
 		private _appContext: AppContext,
 		private _resetPasswdService: ResetPasswordService) {
 
 		super();
 	}
-	protected getDefaultControlGroup(): ControlGroup {
+	protected getDefaultFormGroup(): FormGroup {
 		return this._resetPasswdService.resetPasswdForm;
 	}
 

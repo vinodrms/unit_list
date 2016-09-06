@@ -1,14 +1,10 @@
 import {Component, Input, Output, EventEmitter} from '@angular/core';
 import {AppContext, ThError} from '../../AppContext';
 import {UploadedFileResponse} from '../../http/IThHttp';
-import {TranslationPipe} from '../../localization/TranslationPipe';
-import {LoadingComponent} from '../LoadingComponent';
 
 @Component({
 	selector: 'image-upload',
-	templateUrl: '/client/src/common/utils/components/image-upload/template/image-upload.html',
-	directives: [LoadingComponent],
-	pipes: [TranslationPipe]
+	templateUrl: '/client/src/common/utils/components/image-upload/template/image-upload.html'
 })
 
 export class ImageUploadComponent {

@@ -2,15 +2,13 @@ import {Component, Input} from '@angular/core';
 import {BaseComponent} from '../../../../../../../../../../common/base/BaseComponent';
 import {IAllotmentEditSection} from '../utils/IAllotmentEditSection';
 import {AllotmentVM} from '../../../../../../../../services/allotments/view-models/AllotmentVM';
-import {ThDateIntervalPickerComponent} from '../../../../../../../../../../common/utils/components/ThDateIntervalPickerComponent';
 import {ThDateUtils} from '../../../../../../../../services/common/data-objects/th-dates/ThDateUtils';
 import {ThDateDO} from '../../../../../../../../services/common/data-objects/th-dates/ThDateDO';
 import {ThDateIntervalDO} from '../../../../../../../../services/common/data-objects/th-dates/ThDateIntervalDO';
 
 @Component({
 	selector: 'allotment-open-interval-section',
-	templateUrl: '/client/src/pages/internal/containers/common/inventory/allotments/pages/allotment-edit/sections/open-interval/template/allotment-open-interval-section.html',
-	directives: [ThDateIntervalPickerComponent]
+	templateUrl: '/client/src/pages/internal/containers/common/inventory/allotments/pages/allotment-edit/sections/open-interval/template/allotment-open-interval-section.html'
 })
 export class AllotmentOpenIntervalSectionComponent extends BaseComponent implements IAllotmentEditSection {
 	@Input() didSubmit: boolean;

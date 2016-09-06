@@ -1,8 +1,6 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
 import {Subscription} from 'rxjs/Subscription';
 import {BaseComponent} from '../../../../../../../../../common/base/BaseComponent';
-import {TranslationPipe} from '../../../../../../../../../common/utils/localization/TranslationPipe';
-import {CustomerRegisterComponent} from '../../../../../../common/inventory/customer-register/main/CustomerRegisterComponent';
 import {SettingsNavbarService} from '../navbar/services/SettingsNavbarService';
 import {SettingsPageType} from '../navbar/services/utils/SettingsPageType';
 import {InventoryScreenStateType} from '../../../../../../common/inventory/utils/state-manager/InventoryScreenStateType';
@@ -12,9 +10,7 @@ import {TotalCountDO} from '../../../../../../../services/common/data-objects/la
 @Component({
 	selector: 'settings-customer-register',
 	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/settings/subcomponents/customer-register/template/settings-customer-register.html',
-	providers: [CustomersTotalCountService],
-	directives: [CustomerRegisterComponent],
-	pipes: [TranslationPipe]
+	providers: [CustomersTotalCountService]
 })
 export class SettingsCustomerRegisterComponent extends BaseComponent implements OnInit, OnDestroy {
 	private _totalNoSubscription: Subscription;

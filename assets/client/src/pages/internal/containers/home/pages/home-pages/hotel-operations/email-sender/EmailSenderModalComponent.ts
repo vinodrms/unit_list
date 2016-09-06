@@ -1,21 +1,16 @@
 import {Component} from '@angular/core';
 import {AppContext, ThError} from '../../../../../../../../common/utils/AppContext';
 import {BaseComponent} from '../../../../../../../../common/base/BaseComponent';
-import {TranslationPipe} from '../../../../../../../../common/utils/localization/TranslationPipe';
-import {CustomScroll} from '../../../../../../../../common/utils/directives/CustomScroll';
 import {ICustomModalComponent, ModalSize} from '../../../../../../../../common/utils/modals/utils/ICustomModalComponent';
 import {ModalDialogRef} from '../../../../../../../../common/utils/modals/utils/ModalDialogRef';
 import {CustomerDO} from '../../../../../../services/customers/data-objects/CustomerDO';
 import {EmailSenderModalInput} from './services/utils/EmailSenderModalInput';
 import {HotelOperationsCommonService} from '../../../../../../services/hotel-operations/common/HotelOperationsCommonService';
-import {EmailSelectorComponent} from './components/email-selector/EmailSelectorComponent';
 
 @Component({
     selector: 'email-sender-modal',
     templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/email-sender/template/email-sender-modal.html',
-    directives: [CustomScroll, EmailSelectorComponent],
-    providers: [HotelOperationsCommonService],
-    pipes: [TranslationPipe]
+    providers: [HotelOperationsCommonService]
 })
 export class EmailSenderModalComponent extends BaseComponent implements ICustomModalComponent {
     isSending: boolean = false;

@@ -3,10 +3,7 @@ import {BaseComponent} from '../../../../../../../../../../common/base/BaseCompo
 import {LazyLoadingTableComponent} from '../../../../../../../../../../common/utils/components/lazy-loading/LazyLoadingTableComponent';
 import {TableColumnValueMeta} from '../../../../../../../../../../common/utils/components/lazy-loading/utils/LazyLoadTableMeta';
 import {AppContext, ThError} from '../../../../../../../../../../common/utils/AppContext';
-import {CustomScroll} from '../../../../../../../../../../common/utils/directives/CustomScroll';
-import {TranslationPipe} from '../../../../../../../../../../common/utils/localization/TranslationPipe';
 import {RoomCategoryDO} from '../../../../../../../../services/room-categories/data-objects/RoomCategoryDO';
-import {BookingSearchParametersComponent} from './components/search-parameters/BookingSearchParametersComponent';
 import {BookingSearchParams} from '../../../services/data-objects/BookingSearchParams';
 import {BookingSearchService} from '../../../services/search/BookingSearchService';
 import {BookingCartItemVM, BookingCartItemVMType} from '../../../services/search/view-models/BookingCartItemVM';
@@ -19,11 +16,8 @@ import {BookingCartService} from '../../../services/search/BookingCartService';
 @Component({
 	selector: 'new-booking-search',
 	templateUrl: '/client/src/pages/internal/containers/home/pages/utils/new-booking/component/subcomponents/booking-search/template/new-booking-search.html',
-	directives: [CustomScroll, LazyLoadingTableComponent,
-		BookingSearchParametersComponent],
 	providers: [BookingSearchService, BookingSearchResultsTableMetaBuilderService,
-		BookingCartTableMetaBuilderService, BookingTableUtilsService],
-	pipes: [TranslationPipe]
+		BookingCartTableMetaBuilderService, BookingTableUtilsService]
 })
 export class NewBookingSearchComponent extends BaseComponent implements AfterViewInit, OnInit {
 	@ViewChild('searchResults') private _searchResultsTableComponent: LazyLoadingTableComponent<BookingCartItemVM>;

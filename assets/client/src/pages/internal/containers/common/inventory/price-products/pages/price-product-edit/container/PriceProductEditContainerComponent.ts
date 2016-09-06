@@ -5,8 +5,6 @@ import 'rxjs/add/observable/combineLatest';
 import {BaseComponent} from '../../../../../../../../../common/base/BaseComponent';
 import {AppContext, ThError} from '../../../../../../../../../common/utils/AppContext';
 import {CustomScroll} from '../../../../../../../../../common/utils/directives/CustomScroll';
-import {LoadingComponent} from '../../../../../../../../../common/utils/components/LoadingComponent';
-import {TranslationPipe} from '../../../../../../../../../common/utils/localization/TranslationPipe';
 import {PriceProductVM} from '../../../../../../../services/price-products/view-models/PriceProductVM';
 import {PriceProductDO, PriceProductStatus} from '../../../../../../../services/price-products/data-objects/PriceProductDO';
 import {PriceProductsService} from '../../../../../../../services/price-products/PriceProductsService';
@@ -33,16 +31,8 @@ import {AddOnProductCategoryDO} from '../../../../../../../services/common/data-
 @Component({
 	selector: 'price-product-edit-container',
 	templateUrl: '/client/src/pages/internal/containers/common/inventory/price-products/pages/price-product-edit/container/template/price-product-edit-container.html',
-	providers: [EagerAddOnProductsService],
-	directives: [LoadingComponent, CustomScroll,
-		PriceProductEditTopSectionComponent, PriceProductEditRoomCategoriesSectionComponent,
-		PriceProductEditAddOnProductsSectionComponent, PriceProductEditTaxesSectionComponent,
-		PriceProductEditPricesSectionComponent, PriceProductEditFiltersSectionComponent,
-		PriceProductEditCancellationSectionComponent, PriceProductEditConstraintsSectionComponent,
-		PriceProductEditNotesSectionComponent],
-	pipes: [TranslationPipe]
+	providers: [EagerAddOnProductsService]
 })
-
 export class PriceProductEditContainerComponent extends BaseComponent implements AfterViewInit {
 	@ViewChild(PriceProductEditTopSectionComponent) private _topSectionComponent: PriceProductEditTopSectionComponent;
 	@ViewChild(PriceProductEditRoomCategoriesSectionComponent) private _roomCategoriesSectionComponent: PriceProductEditRoomCategoriesSectionComponent;

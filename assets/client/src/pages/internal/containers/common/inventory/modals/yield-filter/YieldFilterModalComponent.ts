@@ -3,7 +3,6 @@ import {BaseComponent} from '../../../../../../../common/base/BaseComponent';
 import {ThError, AppContext} from '../../../../../../../common/utils/AppContext';
 import {ICustomModalComponent, ModalSize} from '../../../../../../../common/utils/modals/utils/ICustomModalComponent';
 import {ModalDialogRef} from '../../../../../../../common/utils/modals/utils/ModalDialogRef';
-import {TranslationPipe} from '../../../../../../../common/utils/localization/TranslationPipe';
 import {YieldFilterModalInput} from './services/utils/YieldFilterModalInput';
 import {YieldFilterDO, YieldFilterType} from '../../../../../services/common/data-objects/yield-filter/YieldFilterDO';
 import {YieldFilterValueDO} from '../../../../../services/common/data-objects/yield-filter/YieldFilterValueDO';
@@ -12,8 +11,7 @@ import {YieldFilterValueVM} from './services/view-models/YieldFilterValueVM';
 
 @Component({
 	selector: 'yield-filter-modal',
-	templateUrl: "/client/src/pages/internal/containers/common/inventory/modals/yield-filter/template/yield-filter-modal.html",
-	pipes: [TranslationPipe]
+	templateUrl: "/client/src/pages/internal/containers/common/inventory/modals/yield-filter/template/yield-filter-modal.html"
 })
 export class YieldFilterModalComponent extends BaseComponent implements ICustomModalComponent, AfterViewChecked {
 	private _scrollToBottom: boolean = false;

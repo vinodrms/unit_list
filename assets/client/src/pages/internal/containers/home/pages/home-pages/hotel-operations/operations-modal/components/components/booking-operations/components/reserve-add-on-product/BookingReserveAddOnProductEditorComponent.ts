@@ -1,8 +1,6 @@
 import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import {TranslationPipe} from '../../../../../../../../../../../../../common/utils/localization/TranslationPipe';
 import {AppContext, ThError} from '../../../../../../../../../../../../../common/utils/AppContext';
 import {ModalDialogRef} from '../../../../../../../../../../../../../common/utils/modals/utils/ModalDialogRef';
-import {EditSaveButtonGroupComponent} from '../../../../../../../../../../../../../common/utils/components/button-groups/EditSaveButtonGroupComponent';
 import {BookingOperationsPageData} from '../../services/utils/BookingOperationsPageData';
 import {BookingReserveAddOnProductRight} from '../../../../../../../../../../../services/bookings/data-objects/BookingEditRights';
 import {BookingDO} from '../../../../../../../../../../../services/bookings/data-objects/BookingDO';
@@ -16,9 +14,7 @@ import {AddOnProductsModalService} from '../../../../../../../../../../common/in
 @Component({
     selector: 'booking-reserve-add-on-product',
     templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/booking-operations/components/reserve-add-on-product/template/booking-reserve-add-on-product.html',
-    directives: [EditSaveButtonGroupComponent],
-    providers: [AddOnProductsModalService],
-    pipes: [TranslationPipe]
+    providers: [AddOnProductsModalService]
 })
 export class BookingReserveAddOnProductEditorComponent implements OnInit {
     @Output() onAddOnProductsChanged = new EventEmitter<BookingDO>();

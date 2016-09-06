@@ -1,7 +1,8 @@
-import {Injectable, ReflectiveInjector, provide} from '@angular/core';
+import {Injectable, ReflectiveInjector} from '@angular/core';
 import {AppContext} from '../../../../../../../../../common/utils/AppContext';
 import {ModalDialogRef} from '../../../../../../../../../common/utils/modals/utils/ModalDialogRef';
 import {HotelOperationsModalComponent} from '../HotelOperationsModalComponent';
+import {HotelOperationsModalModule} from '../HotelOperationsModalModule';
 import {HotelOperationsResult} from './utils/HotelOperationsResult';
 import {IHotelOperationsPageParam} from './utils/IHotelOperationsPageParam';
 import {HotelRoomOperationsPageParam} from '../components/components/room-operations/utils/HotelRoomOperationsPageParam';
@@ -29,13 +30,13 @@ export class HotelOperationsModalService {
     }
 
     public openInvoiceGroupOperationsModal(invoiceGroupId: string, customerId: string): Promise<ModalDialogRef<HotelOperationsResult>> {
-        var invoiceOperationsPageParam = new HotelInvoiceOperationsPageParam(invoiceGroupId, {customerId: customerId}, false);
+        var invoiceOperationsPageParam = new HotelInvoiceOperationsPageParam(invoiceGroupId, { customerId: customerId }, false);
         return this.openOperationsModal(invoiceOperationsPageParam);
     }
 
     private openOperationsModal(pageParam: IHotelOperationsPageParam): Promise<ModalDialogRef<HotelOperationsResult>> {
-        return this._appContext.modalService.open<HotelOperationsResult>(<any>HotelOperationsModalComponent, ReflectiveInjector.resolve([
-            provide(IHotelOperationsPageParam, { useValue: pageParam })
+        return this._appContext.modalService.open<HotelOperationsResult>(HotelOperationsModalModule, HotelOperationsModalComponent, ReflectiveInjector.resolve([
+            { provide: IHotelOperationsPageParam, useValue: pageParam }
         ]));
     }
 }

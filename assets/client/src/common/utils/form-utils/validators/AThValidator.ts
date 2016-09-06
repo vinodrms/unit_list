@@ -1,4 +1,4 @@
-import {AbstractControl, Validator} from '@angular/common';
+import {AbstractControl, Validator} from '@angular/forms';
 
 export interface ValidationResult {
 	[key: string]: boolean;

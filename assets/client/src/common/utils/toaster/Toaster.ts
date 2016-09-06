@@ -1,7 +1,9 @@
-import {Injectable, DynamicComponentLoader, ComponentRef, ViewContainerRef} from '@angular/core';
+import {Injectable, ComponentRef, ViewContainerRef} from '@angular/core';
 import {IToaster} from './IToaster';
 import {Toast, ToastType} from './utils/Toast';
+import {ToastContainerModule} from './utils/ToastContainerModule';
 import {ToastContainerComponent} from './utils/ToastContainerComponent';
+import {ModuleLoaderService} from '../module-loader/ModuleLoaderService';
 
 @Injectable()
 export class Toaster implements IToaster {
@@ -9,11 +11,11 @@ export class Toaster implements IToaster {
 	private _container: ComponentRef<any>;
 	private _toastIndex = 0;
 
-	constructor(private _loader: DynamicComponentLoader) {
+	constructor() {
 	}
 
-	public bootstrap(viewContainerRef: ViewContainerRef) {
-		this._loader.loadNextToLocation(ToastContainerComponent, viewContainerRef)
+	public bootstrap(viewContainerRef: ViewContainerRef, moduleLoaderService: ModuleLoaderService) {
+		moduleLoaderService.loadNextToLocation(ToastContainerModule, ToastContainerComponent, viewContainerRef, [])
 			.then((ref) => {
 				this._container = ref;
 			});

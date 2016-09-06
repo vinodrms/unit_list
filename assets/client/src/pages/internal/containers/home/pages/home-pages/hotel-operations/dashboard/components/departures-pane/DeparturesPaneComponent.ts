@@ -1,8 +1,6 @@
 import {Component, OnInit, Input} from '@angular/core';
 
 import {IHotelOperationsDashboardDeparturesMediator} from '../../HotelOperationsDashboardComponent';
-import {DepartureItemComponent} from './components/departure-item/DepartureItemComponent';
-
 import {DepartureItemInfoVM} from '../../../../../../../../services/hotel-operations/dashboard/departures/view-models/DepartureItemInfoVM';
 
 import {HotelOperationsDashboardService} from '../../../../../../../../services/hotel-operations/dashboard/HotelOperationsDashboardService';
@@ -15,17 +13,11 @@ import {ThError} from '../../../../../../../../../../common/utils/responses/ThEr
 
 import {ThDateDO} from '../../../../../../../../services/common/data-objects/th-dates/ThDateDO';
 
-import {CustomScroll} from '../../../../../../../../../../../src/common/utils/directives/CustomScroll';
-import {TranslationPipe} from '../../../../../../../../../../common/utils/localization/TranslationPipe';
-
 declare var $: any;
 @Component({
 	selector: 'departures-pane',
-	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/dashboard/components/departures-pane/template/departures-pane.html',
-	directives: [CustomScroll, DepartureItemComponent],
-	pipes: [TranslationPipe]
+	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/dashboard/components/departures-pane/template/departures-pane.html'
 })
-
 export class DeparturesPaneComponent implements OnInit {
 	public departureItemsVMList: DepartureItemInfoVM[];
 	public filteredDeparturesVMList: DepartureItemInfoVM[];

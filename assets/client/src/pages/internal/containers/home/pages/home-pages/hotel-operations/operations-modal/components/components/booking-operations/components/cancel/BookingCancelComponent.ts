@@ -1,5 +1,4 @@
 import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import {TranslationPipe} from '../../../../../../../../../../../../../common/utils/localization/TranslationPipe';
 import {AppContext, ThError} from '../../../../../../../../../../../../../common/utils/AppContext';
 import {BookingOperationsPageData} from '../../services/utils/BookingOperationsPageData';
 import {BookingCancelRight} from '../../../../../../../../../../../services/bookings/data-objects/BookingEditRights';
@@ -8,8 +7,7 @@ import {HotelOperationsBookingService} from '../../../../../../../../../../../se
 
 @Component({
     selector: 'booking-cancel',
-    templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/booking-operations/components/cancel/template/booking-cancel.html',
-    pipes: [TranslationPipe]
+    templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/booking-operations/components/cancel/template/booking-cancel.html'
 })
 export class BookingCancelComponent implements OnInit {
     @Output() onBookingCancel = new EventEmitter<BookingDO>();

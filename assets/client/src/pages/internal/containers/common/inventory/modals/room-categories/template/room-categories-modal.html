@@ -15,7 +15,7 @@
 					{{roomCategoryVM.roomCategory.displayName}}
 				</td>
 				<td *ngIf="roomCategoryVM.isEditing">
-					<input type="text" class="form-control" [(ngModel)]="roomCategoryVM.roomCategory.displayName" (keyup.enter)="saveRoomCategory(roomCategoryVM)"
+					<input type="text" class="form-control" [(ngModel)]="roomCategoryVM.roomCategory.displayName" name="roomCategDisplayName" (keyup.enter)="saveRoomCategory(roomCategoryVM)"
 					/>
 				</td>
 

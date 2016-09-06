@@ -1,14 +1,10 @@
 import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import {ControlGroup} from '@angular/common';
+import {FormGroup} from '@angular/forms';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/combineLatest';
 import {BaseFormComponent} from '../../../../../../../../common/base/BaseFormComponent';
-import {LoadingComponent} from '../../../../../../../../common/utils/components/LoadingComponent';
-import {ImageUploadComponent} from '../../../../../../../../common/utils/components/image-upload/ImageUploadComponent';
 import {AppContext, ThError} from '../../../../../../../../common/utils/AppContext';
 import {TranslationPipe} from '../../../../../../../../common/utils/localization/TranslationPipe';
-import {PricePipe} from '../../../../../../../../common/utils/pipes/PricePipe';
-import {PercentagePipe} from '../../../../../../../../common/utils/pipes/PercentagePipe';
 import {AddOnProductVM} from '../../../../../../services/add-on-products/view-models/AddOnProductVM';
 import {AddOnProductEditService} from './services/AddOnProductEditService';
 import {AddOnProductCategoriesService} from '../../../../../../services/settings/AddOnProductCategoriesService';
@@ -22,16 +18,12 @@ import {HotelAggregatedInfo} from '../../../../../../services/hotel/utils/HotelA
 import {CurrencyDO} from '../../../../../../services/common/data-objects/currency/CurrencyDO';
 import {AddOnProductsService} from '../../../../../../services/add-on-products/AddOnProductsService';
 import {AddOnProductDO} from '../../../../../../services/add-on-products/data-objects/AddOnProductDO';
-import {CustomScroll} from '../../../../../../../../common/utils/directives/CustomScroll';
 
 @Component({
 	selector: 'add-on-product-edit',
 	templateUrl: '/client/src/pages/internal/containers/common/inventory/add-on-products/pages/add-on-product-edit/template/add-on-product-edit.html',
-	providers: [AddOnProductEditService],
-	directives: [LoadingComponent, CustomScroll, ImageUploadComponent],
-	pipes: [TranslationPipe, PricePipe, PercentagePipe]
+	providers: [AddOnProductEditService]
 })
-
 export class AddOnProductEditComponent extends BaseFormComponent implements OnInit {
 	isLoading: boolean;
 	isSavingAddOnProduct: boolean = false;
@@ -120,7 +112,7 @@ export class AddOnProductEditComponent extends BaseFormComponent implements OnIn
 		this.addOnProductVatId = taxId;
 	}
 
-	protected getDefaultControlGroup(): ControlGroup {
+	protected getDefaultFormGroup(): FormGroup {
 		return this._addOnProductEditService.addOnProductForm;
 	}
 	public didSelectCategory(): boolean {

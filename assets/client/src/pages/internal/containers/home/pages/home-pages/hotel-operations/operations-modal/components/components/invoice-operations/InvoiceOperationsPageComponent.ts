@@ -1,6 +1,5 @@
 import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import {Subscription}   from 'rxjs/Subscription';
-import {TranslationPipe} from '../../../../../../../../../../../common/utils/localization/TranslationPipe';
 import {LoadingComponent} from '../../../../../../../../../../../common/utils/components/LoadingComponent';
 import {CustomScroll} from '../../../../../../../../../../../common/utils/directives/CustomScroll';
 import {ThError, AppContext} from '../../../../../../../../../../../common/utils/AppContext';
@@ -8,8 +7,6 @@ import {ThUtils} from '../../../../../../../../../../../common/utils/ThUtils';
 import {HotelInvoiceOperationsPageParam} from './utils/HotelInvoiceOperationsPageParam';
 import {HotelOperationsPageFilterMeta} from '../../../services/utils/IHotelOperationsPageParam';
 import {IHotelOperationsOnFilterRemovedHandler} from '../../../services/utils/IHotelOperationsOnFilterRemovedHandler';
-import {InvoiceEditComponent} from './components/invoice-edit/InvoiceEditComponent';
-import {ItemListNavigatorComponent} from '../../../../../../../../../../../common/utils/components/item-list-navigator/ItemListNavigatorComponent';
 import {ItemListNavigatorConfig} from '../../../../../../../../../../../common/utils/components/item-list-navigator/ItemListNavigatorConfig';
 import {InvoiceOperationsPageService} from './services/InvoiceOperationsPageService';
 import {InvoiceOperationsPageData} from './services/utils/InvoiceOperationsPageData';
@@ -31,9 +28,7 @@ import {HotelOperationsResult} from '../../../services/utils/HotelOperationsResu
 @Component({
     selector: 'invoice-operations-page',
     templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/invoice-operations/template/invoice-operations-page.html',
-    directives: [LoadingComponent, CustomScroll, ItemListNavigatorComponent, InvoiceEditComponent],
-    providers: [InvoiceOperationsPageService, InvoiceGroupControllerService],
-    pipes: [TranslationPipe]
+    providers: [InvoiceOperationsPageService, InvoiceGroupControllerService]
 })
 export class InvoiceOperationsPageComponent implements OnInit {
     @Input() invoiceOperationsPageParam: HotelInvoiceOperationsPageParam;

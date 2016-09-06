@@ -29,7 +29,11 @@ export class MongoInvoiceGroupsRepositoryWithBookingPriceLink extends MongoInvoi
             this._invoiceGroupsRepo.getInvoiceGroupById(invoiceGroupMeta, invoiceGroupId).then((invoiceGroup: InvoiceGroupDO) => {
                 this.linkBookingPricesToInvoiceGroupItem(invoiceGroupMeta, invoiceGroup).then((invoiceGroup: InvoiceGroupDO) => {
                     resolve(invoiceGroup);
+                }).catch((err: ThError) => {
+                    reject(err);
                 });
+            }).catch((err: ThError) => {
+                reject(err);
             });
         });
     }
@@ -38,28 +42,38 @@ export class MongoInvoiceGroupsRepositoryWithBookingPriceLink extends MongoInvoi
             this._invoiceGroupsRepo.getInvoiceGroupList(invoiceGroupMeta, searchCriteria, lazyLoad).then((result: InvoiceGroupSearchResultRepoDO) => {
                 this.linkBookingPricesToInvoiceGroupSearchResultRepoDO(invoiceGroupMeta, result).then((result: InvoiceGroupSearchResultRepoDO) => {
                     resolve(result);
+                }).catch((err: ThError) => {
+                    reject(err);
                 });
+            }).catch((err: ThError) => {
+                reject(err);
             });
         });
     }
 
     public addInvoiceGroup(invoiceGroupMeta: InvoiceGroupMetaRepoDO, invoiceGroup: InvoiceGroupDO): Promise<InvoiceGroupDO> {
         return new Promise<InvoiceGroupDO>((resolve: { (result: InvoiceGroupDO): void }, reject: { (err: ThError): void }) => {
-
             this._invoiceGroupsRepo.addInvoiceGroup(invoiceGroupMeta, invoiceGroup).then((invoiceGroup: InvoiceGroupDO) => {
                 this.linkBookingPricesToInvoiceGroupItem(invoiceGroupMeta, invoiceGroup).then((invoiceGroup: InvoiceGroupDO) => {
                     resolve(invoiceGroup);
+                }).catch((err: ThError) => {
+                    reject(err);
                 });
+            }).catch((err: ThError) => {
+                reject(err);
             });
         });
     }
     public updateInvoiceGroup(invoiceGroupMeta: InvoiceGroupMetaRepoDO, invoiceGroupItemMeta: InvoiceGroupItemMetaRepoDO, invoiceGroup: InvoiceGroupDO): Promise<InvoiceGroupDO> {
         return new Promise<InvoiceGroupDO>((resolve: { (result: InvoiceGroupDO): void }, reject: { (err: ThError): void }) => {
-
             this._invoiceGroupsRepo.updateInvoiceGroup(invoiceGroupMeta, invoiceGroupItemMeta, invoiceGroup).then((invoiceGroup: InvoiceGroupDO) => {
                 this.linkBookingPricesToInvoiceGroupItem(invoiceGroupMeta, invoiceGroup).then((invoiceGroup: InvoiceGroupDO) => {
                     resolve(invoiceGroup);
+                }).catch((err: ThError) => {
+                    reject(err);
                 });
+            }).catch((err: ThError) => {
+                reject(err);
             });
         });
     }
@@ -68,7 +82,11 @@ export class MongoInvoiceGroupsRepositoryWithBookingPriceLink extends MongoInvoi
             this._invoiceGroupsRepo.deleteInvoiceGroup(invoiceGroupMeta, invoiceGroupItemMeta).then((invoiceGroup: InvoiceGroupDO) => {
                 this.linkBookingPricesToInvoiceGroupItem(invoiceGroupMeta, invoiceGroup).then((invoiceGroup: InvoiceGroupDO) => {
                     resolve(invoiceGroup);
+                }).catch((err: ThError) => {
+                    reject(err);
                 });
+            }).catch((err: ThError) => {
+                reject(err);
             });
         });
     }
@@ -77,6 +95,8 @@ export class MongoInvoiceGroupsRepositoryWithBookingPriceLink extends MongoInvoi
         return new Promise<InvoiceGroupDO>((resolve: { (result: InvoiceGroupDO): void }, reject: { (err: ThError): void }) => {
             this.linkBookingPricesToInvoiceGroupList(invoiceGroupMeta, [invoiceGroup]).then((invoiceGroupList: InvoiceGroupDO[]) => {
                 resolve(invoiceGroupList[0]);
+            }).catch((err: ThError) => {
+                reject(err);
             });
         });
     }
@@ -86,6 +106,8 @@ export class MongoInvoiceGroupsRepositoryWithBookingPriceLink extends MongoInvoi
             this.linkBookingPricesToInvoiceGroupList(invoiceGroupMeta, invoiceGroupSearchResult.invoiceGroupList).then((invoiceGroupList: InvoiceGroupDO[]) => {
                 invoiceGroupSearchResult.invoiceGroupList = invoiceGroupList;
                 resolve(invoiceGroupSearchResult);
+            }).catch((err: ThError) => {
+                reject(err);
             });
         });
     }
@@ -108,7 +130,7 @@ export class MongoInvoiceGroupsRepositoryWithBookingPriceLink extends MongoInvoi
                 }
             });
             return this.addInvoiceFeeIfNecessary(invoiceGroupMeta, invoiceGroupList);
-        }).then((invoiceGroupList: InvoiceGroupDO[])=>{
+        }).then((invoiceGroupList: InvoiceGroupDO[]) => {
             resolve(invoiceGroupList);
         }).catch((error: any) => {
             var thError = new ThError(ThStatusCode.InvoiceGroupsRepositoryBookingPriceLinkError, error);
@@ -124,7 +146,7 @@ export class MongoInvoiceGroupsRepositoryWithBookingPriceLink extends MongoInvoi
     }
 
     private addInvoiceFeeIfNecessaryCore(resolve: { (result: InvoiceGroupDO[]): void }, reject: { (err: ThError): void }, invoiceGroupMeta: InvoiceGroupMetaRepoDO, invoiceGroupList: InvoiceGroupDO[]) {
-        
+
         this._customersRepo.getCustomerList(this.buildCustomerMetaFromInvoiceGroupMeta(invoiceGroupMeta), this.buildPayInvoiceByAgreementCustomerListSearchCriteria(invoiceGroupList)).then((result: CustomerSearchResultRepoDO) => {
             _.forEach(invoiceGroupList, (invoiceGroup: InvoiceGroupDO) => {
                 invoiceGroup.addInvoiceFeeIfNecessary(result.customerList);
@@ -175,5 +197,4 @@ export class MongoInvoiceGroupsRepositoryWithBookingPriceLink extends MongoInvoi
             }).value()
         };
     }
-
 }

@@ -1,9 +1,8 @@
 import {Component, Input} from '@angular/core';
-import {ControlGroup} from '@angular/common';
+import {FormGroup} from '@angular/forms';
 import {BaseFormComponent} from '../../../../../../../../../../common/base/BaseFormComponent';
-import {TranslationPipe} from '../../../../../../../../../../common/utils/localization/TranslationPipe';
 import {CorporateDetailsDO} from '../../../../../../../../services/customers/data-objects/customer-details/CorporateDetailsDO';
-import {VATComponent, VatDetails, VatResponse} from '../../../../../../../../../../common/utils/components/VATComponent';
+import {VatDetails, VatResponse} from '../../../../../../../../../../common/utils/components/VATComponent';
 import {CountriesDO} from '../../../../../../../../services/settings/data-objects/CountriesDO';
 import {CorporateDetailsFormBuilderService} from './services/CorporateDetailsFormBuilderService';
 import {CurrencyDO} from '../../../../../../../../services/common/data-objects/currency/CurrencyDO';
@@ -11,11 +10,8 @@ import {CurrencyDO} from '../../../../../../../../services/common/data-objects/c
 @Component({
 	selector: 'corporate-customer-details',
 	templateUrl: '/client/src/pages/internal/containers/common/inventory/customer-register/pages/customer-edit/customer-details/corporate/template/corporate-customer-details.html',
-	directives: [VATComponent],
-	providers: [CorporateDetailsFormBuilderService],
-	pipes: [TranslationPipe]
+	providers: [CorporateDetailsFormBuilderService]
 })
-
 export class CorporateCustomerDetailsComponent extends BaseFormComponent {
 	@Input() didSubmit: boolean;
 
@@ -58,7 +54,7 @@ export class CorporateCustomerDetailsComponent extends BaseFormComponent {
 	protected get didSubmitForm(): boolean {
 		return this.didSubmit;
 	}
-	protected getDefaultControlGroup(): ControlGroup {
+	protected getDefaultFormGroup(): FormGroup {
 		return this._formBuilder.individualFormGroup;
 	}
 
@@ -82,7 +78,8 @@ export class CorporateCustomerDetailsComponent extends BaseFormComponent {
 	}
 
 	public isValid(): boolean {
-		return this._formBuilder.individualFormGroup.valid && this._corporateDetails.address.country != null && this._corporateDetails.vatCode != null;
+		return this._formBuilder.individualFormGroup.valid && this._corporateDetails.address.country != null &&
+			_.isString(this._corporateDetails.vatCode) && this._corporateDetails.vatCode.length > 0;
 	}
 	public getCustomerDetails(): CorporateDetailsDO {
 		this._formBuilder.updateControlValuesOn(this._corporateDetails);

@@ -3,7 +3,6 @@ import {BaseComponent} from '../../../../../../../../../../../../../../common/ba
 import {EagerAddOnProductsService} from '../../../../../../../../../../../../services/add-on-products/EagerAddOnProductsService';
 import {AddOnProductsDO} from '../../../../../../../../../../../../services/add-on-products/data-objects/AddOnProductsDO';
 import {AddOnProductDO} from '../../../../../../../../../../../../services/add-on-products/data-objects/AddOnProductDO';
-import {TranslationPipe} from '../../../../../../../../../../../../../../common/utils/localization/TranslationPipe';
 import {ThError, AppContext} from '../../../../../../../../../../../../../../common/utils/AppContext';
 import {ICustomModalComponent, ModalSize} from '../../../../../../../../../../../../../../common/utils/modals/utils/ICustomModalComponent';
 import {ModalDialogRef} from '../../../../../../../../../../../../../../common/utils/modals/utils/ModalDialogRef';
@@ -13,9 +12,7 @@ import {NumberOfAddOnProductsModalOutput} from './services/utils/NumberOfAddOnPr
 @Component({
 	selector: 'number-of-aop-modal',
 	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/invoice-operations/components/invoice-edit/modals/template/number-of-aop-modal.html',
-	providers: [EagerAddOnProductsService],
-	directives: [],
-	pipes: [TranslationPipe]
+	providers: [EagerAddOnProductsService]
 })
 export class NumberOfAddOnProductsModalComponent extends BaseComponent implements ICustomModalComponent, OnInit {
 	private static DEFAULT_NO_OF_AOPS = 1;
@@ -23,7 +20,7 @@ export class NumberOfAddOnProductsModalComponent extends BaseComponent implement
 
 	constructor(private _appContext: AppContext,
 		private _eagerAddOnProductsService: EagerAddOnProductsService,
-    	private _modalDialogRef: ModalDialogRef<NumberOfAddOnProductsModalOutput>,
+		private _modalDialogRef: ModalDialogRef<NumberOfAddOnProductsModalOutput>,
 		private _modalInput: NumberOfAddOnProductsModalInput) {
 		super();
 
@@ -33,7 +30,7 @@ export class NumberOfAddOnProductsModalComponent extends BaseComponent implement
 	public ngOnInit() {
 		this._eagerAddOnProductsService.getAddOnProductsById([this._modalInput.addOnProductId]).subscribe((addOnProducts: AddOnProductsDO) => {
 			var aopList = addOnProducts.addOnProductList;
-			if(!_.isEmpty(aopList)) {
+			if (!_.isEmpty(aopList)) {
 				this._numberOfAddOnProductsModalOutput.aop = aopList[0];
 				this._numberOfAddOnProductsModalOutput.noOfItems = NumberOfAddOnProductsModalComponent.DEFAULT_NO_OF_AOPS;
 			}

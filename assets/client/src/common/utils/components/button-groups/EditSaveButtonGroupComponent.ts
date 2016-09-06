@@ -1,5 +1,4 @@
 import {Component, Input, Output, EventEmitter} from '@angular/core';
-import {TranslationPipe} from '../../localization/TranslationPipe';
 
 @Component({
     selector: 'edit-save-button-group',
@@ -25,8 +24,7 @@ import {TranslationPipe} from '../../localization/TranslationPipe';
                 </span>
             </div>
         </div>
-    `,
-    pipes: [TranslationPipe]
+    `
 })
 export class EditSaveButtonGroupComponent {
     @Input() pullRight: boolean = false;

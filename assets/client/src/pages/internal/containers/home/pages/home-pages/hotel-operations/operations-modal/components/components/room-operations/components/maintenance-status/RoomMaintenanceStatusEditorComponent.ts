@@ -1,7 +1,4 @@
 import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import {TranslationPipe} from '../../../../../../../../../../../../../common/utils/localization/TranslationPipe';
-import {ThTimestampDistanceFromNowPipe} from '../../../../../../../../../../../../../common/utils/pipes/ThTimestampDistanceFromNowPipe';
-import {EditSaveButtonGroupComponent} from '../../../../../../../../../../../../../common/utils/components/button-groups/EditSaveButtonGroupComponent';
 import {AppContext, ThError} from '../../../../../../../../../../../../../common/utils/AppContext';
 import {ThTimestampDO} from '../../../../../../../../../../../services/common/data-objects/th-dates/ThTimestampDO';
 import {RoomDO, RoomMaintenanceStatus} from '../../../../../../../../../../../services/rooms/data-objects/RoomDO';
@@ -12,9 +9,7 @@ import {HotelOperationsRoomService} from '../../../../../../../../../../../servi
 
 @Component({
     selector: 'room-maintenance-status-editor',
-    templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/room-operations/components/maintenance-status/template/room-maintenance-status-editor.html',
-    directives: [EditSaveButtonGroupComponent],
-    pipes: [TranslationPipe, ThTimestampDistanceFromNowPipe]
+    templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/room-operations/components/maintenance-status/template/room-maintenance-status-editor.html'
 })
 export class RoomMaintenanceStatusEditorComponent implements OnInit {
     @Input() hasCheckedInBooking: boolean = false;

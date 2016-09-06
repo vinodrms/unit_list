@@ -5,7 +5,7 @@
 			<div class="col-md-4 col-xs-6 form-group">
 				<label>{{ 'Type of customer' | translate }}</label>
 				<div class="input-group">
-					<select class="form-control" [ngModel]="customerVM.customer.type" (ngModelChange)="didChangeCustomerType($event)" [disabled]="!customerVM.isNewCustomer()">
+					<select class="form-control" [ngModel]="customerVM.customer.type" (ngModelChange)="didChangeCustomerType($event)" name="customerType" [disabled]="!customerVM.isNewCustomer()">
 						<option *ngFor="let custDetailsMeta of custDetailsMetaList" [value]="custDetailsMeta.customerType">{{custDetailsMeta.customerTypeName | translate}}</option>
 					</select>
 				</div>
@@ -34,9 +34,11 @@
 							<tr *ngFor="let priceProduct of customerVM.priceProductList">
 								<td>{{priceProduct.name}}</td>
 								<td *ngIf="customerVM.getNumberOfAllotmentsForPriceProduct(priceProduct)>0">
-									<center [title]="'You have %noAllotments% allotments on this Price Product. If you want to remove it, archive the allotment first.' | translate:{noAllotments: customerVM.getNumberOfAllotmentsForPriceProduct(priceProduct)}">
-										<p>{{customerVM.getNumberOfAllotmentsForPriceProduct(priceProduct)}} <span class="unitpal-font">â</span></p>
-									</center>
+									<span class="horizontal-align-center" [title]="'You have %noAllotments% allotments on this Price Product. If you want to remove it, archive the allotment first.' | translate:{noAllotments: customerVM.getNumberOfAllotmentsForPriceProduct(priceProduct)}">
+										<div>
+											<p>{{customerVM.getNumberOfAllotmentsForPriceProduct(priceProduct)}} <span class="unitpal-font">â</span></p>
+										</div>
+									</span>
 								</td>
 								<td *ngIf="customerVM.getNumberOfAllotmentsForPriceProduct(priceProduct)==0">
 									<a class="btn btn-xs" (click)="removePriceProduct(priceProduct)">
@@ -76,7 +78,7 @@
 
 			<div class="col-md-4 col-xs-12 form-group">
 				<label>{{ 'Notes' | translate }}</label>
-				<textarea class="form-control" [(ngModel)]="customerVM.customer.notes"></textarea>
+				<textarea class="form-control" [(ngModel)]="customerVM.customer.notes" name="customerNotes"></textarea>
 			</div>
 		</div>
 

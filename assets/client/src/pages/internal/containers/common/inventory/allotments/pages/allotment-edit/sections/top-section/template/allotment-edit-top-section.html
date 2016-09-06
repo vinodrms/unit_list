@@ -27,7 +27,7 @@
 <div class="col-xs-12 col-sm-4 form-group">
 	<label>{{ 'Price Product' | translate }}* </label> <i class="fa fa-spinner fa-pulse" *ngIf="isLoadingDependentData"></i>
 	<div class="input-group" [ngClass]="{'form-warning': didSubmit&&!selectedPriceProductId}">
-		<select class="form-control" [ngModel]="selectedPriceProductId" (ngModelChange)="didSelectPriceProductId($event)" [disabled]="readonly">
+		<select class="form-control" [ngModel]="selectedPriceProductId" (ngModelChange)="didSelectPriceProductId($event)" name="selectedPriceProductId" [disabled]="readonly">
 			<option value="" disabled>{{ 'Select a price product' | translate }}</option>
 			<option *ngFor="let priceProduct of priceProductList" [value]="priceProduct.id">{{priceProduct.name}}</option>
 		</select>
@@ -38,7 +38,7 @@
 <div class="col-xs-12 col-sm-4 form-group">
 	<label>{{ 'Room' | translate }}*</label>
 	<div class="input-group" [ngClass]="{'form-warning': didSubmit&&!selectedRoomCategoryId}">
-		<select class="form-control" [ngModel]="selectedRoomCategoryId" (ngModelChange)="didSelectRoomCategoryId($event)" [disabled]="readonly">
+		<select class="form-control" [ngModel]="selectedRoomCategoryId" (ngModelChange)="didSelectRoomCategoryId($event)" name="selectedRoomCategoryId" [disabled]="readonly">
 			<option value="" disabled>{{ 'Select a room category' | translate }}</option>
 			<option *ngFor="let roomCategory of roomCategoryList" [value]="roomCategory.id">{{roomCategory.displayName}}</option>
 		</select>

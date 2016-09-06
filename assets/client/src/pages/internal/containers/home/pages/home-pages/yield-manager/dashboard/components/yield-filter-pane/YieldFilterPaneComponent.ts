@@ -1,33 +1,20 @@
 import { Component, OnInit, AfterViewInit, ViewChildren, Input, Output, EventEmitter } from '@angular/core';
-
-// import {ThDateDO} from '../../../../../../../../services/common/data-objects/th-dates/ThDateDO';
 import {AppContext} from '../../../../../../../../../../common/utils/AppContext';
-import {TranslationPipe} from '../../../../../../../../../../common/utils/localization/TranslationPipe'
-
 import {ColorFilterVM} from '../../../../../../../../services/yield-manager/dashboard/filter/view-models/ColorFilterVM';
 import {TextFilterVM} from '../../../../../../../../services/yield-manager/dashboard/filter/view-models/TextFilterVM';
 import {YieldManagerDashboardFilterService} from '../../../../../../../../services/yield-manager/dashboard/filter/YieldManagerDashboardFilterService';
-
 import {AYieldFilterItemComponent} from './components/common/AYieldFilterItemComponent';
-
 import {YieldColorFitlerItemComponent} from './components/yield-color-filter-item/YieldColorFilterItemComponent';
 import {YieldTextFilterItemComponent} from './components/yield-text-filter-item/YieldTextFilterItemComponent';
-
 import {IYieldManagerDashboardFilter} from '../../YieldManagerDashboardComponent'
 import {IFilterVM} from '../../../../../../../../services/yield-manager/dashboard/filter/view-models/IFilterVM';
-
 import {FilterVMCollection} from '../../../../../../../../services/yield-manager/dashboard/filter/utils/FilterVMCollection';
 import {CustomScroll} from '../../../../../../../../../../../src/common/utils/directives/CustomScroll';
-
 import {IFilterSelection} from '../../common/interfaces/IFilterSelection';
-// import {HotelService} from '../../../../../../../../services/hotel/HotelService';
-// import {HotelDetailsDO} from '../../../../../../../../services/hotel/data-objects/HotelDetailsDO';
 
 @Component({
 	selector: 'yield-filter-pane',
-	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/yield-manager/dashboard/components/yield-filter-pane/template/yield-filter-pane.html',
-	directives: [CustomScroll, YieldColorFitlerItemComponent, YieldTextFilterItemComponent],
-	pipes: [TranslationPipe]
+	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/yield-manager/dashboard/components/yield-filter-pane/template/yield-filter-pane.html'
 })
 export class YieldFilterPaneComponent implements OnInit {
 	@ViewChildren(YieldColorFitlerItemComponent) colorFilterComponents: YieldColorFitlerItemComponent[];
@@ -44,17 +31,13 @@ export class YieldFilterPaneComponent implements OnInit {
 
 	private selectedFilters: {
 		colorFilter: IFilterVM,
-		textFilter :IFilterVM
+		textFilter: IFilterVM
 	}
 
 	constructor(
-		// private _hotelService: HotelService,
 		private _appContext: AppContext,
 		private _filterService: YieldManagerDashboardFilterService) {
-		// this.selectedDate = ThDateDO.buildThDateDO(2016, 11, 30);
-		this.selectedFilters = {colorFilter : null, textFilter : null};
-
-		// console.log("ctr YieldFilterPaneComponent");
+		this.selectedFilters = { colorFilter: null, textFilter: null };
 	}
 
 	ngOnInit() {
@@ -84,48 +67,48 @@ export class YieldFilterPaneComponent implements OnInit {
 		this.notifyFilterChange();
 	}
 
-	public colorItemToggleSelection(event : {filterItemComponent: YieldColorFitlerItemComponent, selected: boolean}){
+	public colorItemToggleSelection(event: { filterItemComponent: YieldColorFitlerItemComponent, selected: boolean }) {
 		this.filtersDeselect<YieldColorFitlerItemComponent>(this.colorFilterComponents, event.filterItemComponent);
 		this.notifyFilterChange();
 	}
 
-	public textItemToggleSelection(event : {filterItemComponent: YieldTextFilterItemComponent, selected: boolean}){
+	public textItemToggleSelection(event: { filterItemComponent: YieldTextFilterItemComponent, selected: boolean }) {
 		this.filtersDeselect<YieldTextFilterItemComponent>(this.textFilterComponents, event.filterItemComponent);
 		this.notifyFilterChange();
 	}
 
-	private notifyFilterChange(){
+	private notifyFilterChange() {
 		var selectedFilters = this.getSelectedFilters();
 		this.filterChanged.emit(selectedFilters);
 	}
 
-	public getSelectedFilters(): IFilterSelection{
+	public getSelectedFilters(): IFilterSelection {
 		var colorFilter = null;
 		var textFilter = null;
 		this.colorFilterComponents.forEach(filterComponent => {
-			if (filterComponent.selected){
+			if (filterComponent.selected) {
 				colorFilter = filterComponent.yieldColorFilterItemVM;
 			}
 		});
 		this.textFilterComponents.forEach(filterComponent => {
-			if (filterComponent.selected){
+			if (filterComponent.selected) {
 				textFilter = filterComponent.yieldTextFilterItemVM;
 			}
 		});
 
 		return {
-			colorFilter : colorFilter,
+			colorFilter: colorFilter,
 			textFilter: textFilter,
 			searchText: this.searchText
 		}
 	}
 
-	private filtersDeselect<T extends AYieldFilterItemComponent>(filterComponents: T[], selectedItem: T){
+	private filtersDeselect<T extends AYieldFilterItemComponent>(filterComponents: T[], selectedItem: T) {
 		var itemsToDeselect = filterComponents.filter((item: T) => {
 			return item != selectedItem;
 		});
 
-		itemsToDeselect.forEach( (item:T) => {
+		itemsToDeselect.forEach((item: T) => {
 			item.deselect();
 		});
 	}

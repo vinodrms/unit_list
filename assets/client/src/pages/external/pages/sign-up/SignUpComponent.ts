@@ -1,21 +1,16 @@
 import {Component} from '@angular/core';
-import {ControlGroup} from '@angular/common';
-import {ROUTER_DIRECTIVES} from '@angular/router';
+import {FormGroup} from '@angular/forms';
 import {AppContext} from '../../../../common/utils/AppContext';
 import {ThError} from '../../../../common/utils/responses/ThError';
 import {BaseFormComponent} from '../../../../common/base/BaseFormComponent';
-import {ExternalFooterComponent} from '../common/footer/ExternalFooterComponent';
 import {SignUpService} from './services/SignUpService';
-import {TranslationPipe} from '../../../../common/utils/localization/TranslationPipe';
 import {LoginStatusCode} from '../../../../common/utils/responses/LoginStatusCode';
 import {LoadingButtonComponent} from '../../../../common/utils/components/LoadingButtonComponent';
 
 @Component({
 	selector: 'sign-up-component',
 	templateUrl: '/client/src/pages/external/pages/sign-up/template/sign-up-component.html',
-	directives: [ROUTER_DIRECTIVES, ExternalFooterComponent, LoadingButtonComponent],
-	providers: [SignUpService],
-	pipes: [TranslationPipe]
+	providers: [SignUpService]
 })
 
 export class SignUpComponent extends BaseFormComponent {
@@ -25,7 +20,7 @@ export class SignUpComponent extends BaseFormComponent {
 		super();
 	}
 
-	protected getDefaultControlGroup(): ControlGroup {
+	protected getDefaultFormGroup(): FormGroup {
 		return this._signUpService.signUpForm;
 	}
 

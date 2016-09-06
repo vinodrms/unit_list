@@ -1,7 +1,7 @@
-<div class="col-md-12 col-xs-12 form-group" [ngFormModel]="getDefaultControlGroup()">
+<div class="col-md-12 col-xs-12 form-group" [formGroup]="getDefaultFormGroup()">
 	<label>{{ 'Notes' | translate }}</label>
 	<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('notes')}">
-		<textarea class="form-control" ngControl="notes" [readonly]="readonly"></textarea>
+		<textarea class="form-control" formControlName="notes" [readonly]="readonly"></textarea>
 	</div>
 	<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Notes are too long' | translate }}</small></label>
 </div>

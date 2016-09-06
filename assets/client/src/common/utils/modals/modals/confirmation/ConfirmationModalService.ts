@@ -1,7 +1,7 @@
-import {Injectable, ReflectiveInjector, provide} from '@angular/core';
+import {Injectable, ReflectiveInjector} from '@angular/core';
 import {AppContext} from '../../../AppContext';
 import {ModalDialogRef} from '../../utils/ModalDialogRef';
-import {ConfirmationModalComponent} from './ConfirmationModalComponent';
+import {ConfirmationModalComponent, ConfirmationModalModule} from './ConfirmationModalComponent';
 import {ConfirmationModalInput} from './utils/ConfirmationModalInput';
 
 @Injectable()
@@ -14,8 +14,8 @@ export class ConfirmationModalService {
 		confirmationModalInput.title = title;
 		confirmationModalInput.content = content;
 
-		return this._appContext.modalService.open<any>(<any>ConfirmationModalComponent, ReflectiveInjector.resolve([
-			provide(ConfirmationModalInput, { useValue: confirmationModalInput })
+		return this._appContext.modalService.open<any>(ConfirmationModalModule, ConfirmationModalComponent, ReflectiveInjector.resolve([
+			{ provide: ConfirmationModalInput, useValue: confirmationModalInput }
 		]));
 	}
 }

@@ -1,7 +1,5 @@
 import {Component, Input} from '@angular/core';
 import {BaseComponent} from '../../../../../../../../../../common/base/BaseComponent';
-import {TranslationPipe} from '../../../../../../../../../../common/utils/localization/TranslationPipe';
-import {ThTrimPipe} from '../../../../../../../../../../common/utils/pipes/ThTrimPipe';
 import {IAllotmentEditSection} from '../utils/IAllotmentEditSection';
 import {AllotmentVM} from '../../../../../../../../services/allotments/view-models/AllotmentVM';
 import {AllotmentAvailabilityDO} from '../../../../../../../../services/allotments/data-objects/availability/AllotmentAvailabilityDO';
@@ -9,8 +7,7 @@ import {ISOWeekDayUtils, ISOWeekDayVM, ISOWeekDay}  from '../../../../../../../.
 
 @Component({
 	selector: 'allotment-availability-section',
-	templateUrl: '/client/src/pages/internal/containers/common/inventory/allotments/pages/allotment-edit/sections/availability/template/allotment-availability-section.html',
-	pipes: [TranslationPipe, ThTrimPipe]
+	templateUrl: '/client/src/pages/internal/containers/common/inventory/allotments/pages/allotment-edit/sections/availability/template/allotment-availability-section.html'
 })
 export class AllotmentAvailabilitySectionComponent extends BaseComponent implements IAllotmentEditSection {
 	@Input() didSubmit: boolean;

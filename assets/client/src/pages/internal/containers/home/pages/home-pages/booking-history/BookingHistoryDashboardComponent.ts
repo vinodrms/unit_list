@@ -1,4 +1,4 @@
-import {Component, AfterViewInit, ViewChild, ReflectiveInjector, provide, Type, ResolvedReflectiveProvider} from '@angular/core';
+import {Component, AfterViewInit, ViewChild, ReflectiveInjector, Type, ResolvedReflectiveProvider} from '@angular/core';
 import {LazyLoadingTableComponent} from '../../../../../../../common/utils/components/lazy-loading/LazyLoadingTableComponent';
 import {HeaderPageService} from '../../utils/header/container/services/HeaderPageService';
 import {HeaderPageType} from '../../utils/header/container/services/HeaderPageType';
@@ -12,16 +12,15 @@ import {NewBookingResult} from '../../utils/new-booking/modal/services/utils/New
 import {ModalDialogRef} from '../../../../../../../common/utils/modals/utils/ModalDialogRef';
 import {BookingOverviewComponent} from './components/booking-overview/BookingOverviewComponent';
 import {BookingsDateFilterComponent} from './components/bookings-date-filter/BookingsDateFilterComponent';
+import {BookingsDateFilterModule} from './components/bookings-date-filter/BookingsDateFilterModule';
 import {HotelOperationsModalService} from '../hotel-operations/operations-modal/services/HotelOperationsModalService';
 import {HotelOperationsResult} from '../hotel-operations/operations-modal/services/utils/HotelOperationsResult';
 
 @Component({
 	selector: 'booking-history-dashboard',
 	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/booking-history/template/booking-history-dashboard.html',
-	providers: [EagerCustomersService, BookingsService, BookingsTableMetaBuilderService, NewBookingModalService, HotelOperationsModalService],
-	directives: [LazyLoadingTableComponent, BookingOverviewComponent]
+	providers: [EagerCustomersService, BookingsService, BookingsTableMetaBuilderService, NewBookingModalService, HotelOperationsModalService]
 })
-
 export class BookingHistoryDashboardComponent extends AHomeContainerComponent implements AfterViewInit {
 	@ViewChild(LazyLoadingTableComponent)
 	private _bookingsTableComponent: LazyLoadingTableComponent<BookingVM>;
@@ -38,8 +37,9 @@ export class BookingHistoryDashboardComponent extends AHomeContainerComponent im
 
 	public ngAfterViewInit() {
 		this._bookingsTableComponent.attachTopTableCenterBootstrapData({
-			componentToInject: BookingsDateFilterComponent,
-			providers: ReflectiveInjector.resolve([provide(BookingsService, { useValue: this._bookingsService })])
+			moduleToInject: BookingsDateFilterModule,
+			componentType: BookingsDateFilterComponent,
+			providers: ReflectiveInjector.resolve([{ provide: BookingsService, useValue: this._bookingsService }])
 		});
 		this._bookingsTableComponent.bootstrap(this._bookingsService, this._tableBuilder.buildLazyLoadTableMeta());
 	}

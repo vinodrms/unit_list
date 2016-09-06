@@ -1,6 +1,5 @@
-import {Component, ViewChild, OnInit, AfterViewInit, ReflectiveInjector, provide} from '@angular/core';
+import {Component, ViewChild, OnInit, AfterViewInit, ReflectiveInjector} from '@angular/core';
 import {BaseComponent} from '../../../../../../../common/base/BaseComponent';
-import {TranslationPipe} from '../../../../../../../common/utils/localization/TranslationPipe';
 import {WizardCustomerRegisterStateService} from './services/WizardCustomerRegisterStateService';
 import {WizardService} from '../services/WizardService';
 import {IWizardController} from '../../wizard-pages/services/IWizardController';
@@ -9,15 +8,13 @@ import {InventoryScreenStateType} from '../../../../common/inventory/utils/state
 import {CustomersTotalCountService} from '../../../../../services/customers/CustomersTotalCountService';
 import {TotalCountDO} from '../../../../../services/common/data-objects/lazy-load/TotalCountDO';
 import {WizardStepsComponent} from '../../utils/wizard-steps/WizardStepsComponent';
+import {WizardStepsModule} from '../../utils/wizard-steps/WizardStepsModule';
 
 @Component({
 	selector: 'wizard-customer-register',
 	templateUrl: '/client/src/pages/internal/containers/wizard/pages/wizard-pages/customer-register/template/wizard-customer-register.html',
-	providers: [CustomersTotalCountService],
-	directives: [CustomerRegisterComponent],
-	pipes: [TranslationPipe]
+	providers: [CustomersTotalCountService]
 })
-
 export class WizardCustomerRegisterComponent extends BaseComponent implements OnInit, AfterViewInit {
 	@ViewChild(CustomerRegisterComponent) private _customerRegisterComponent: CustomerRegisterComponent;
 	private _isEditScreen: boolean;
@@ -44,7 +41,7 @@ export class WizardCustomerRegisterComponent extends BaseComponent implements On
 		});
 	}
 	private initializeWizardStepsComponent() {
-		this._customerRegisterComponent.bootstrapOverviewBottom(WizardStepsComponent, ReflectiveInjector.resolve([provide(WizardService, { useValue: this._wizardService })]))
+		this._customerRegisterComponent.bootstrapOverviewBottom(WizardStepsModule, WizardStepsComponent, ReflectiveInjector.resolve([{ provide: WizardService, useValue: this._wizardService }]));
 	}
 
 	public didChangeScreenStateType(screenStateType: InventoryScreenStateType) {

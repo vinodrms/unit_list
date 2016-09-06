@@ -8,7 +8,7 @@
 		<div class="form-group">
 			<label>{{ 'Name of tax' | translate }}:</label>
 			<div class="input-group" [ngClass]="{'form-warning': (!isValidName() && didSubmitForm)}">
-				<input type="text" class="form-control" [(ngModel)]="taxDO.name" />
+				<input type="text" class="form-control" [(ngModel)]="taxDO.name" name="taxName" />
 			</div>
 			<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter a name' | translate }}</small></label>
 		</div>
@@ -17,7 +17,7 @@
 			<div class="col-xs-6">
 				<label for="usr">{{ 'Type of Value' | translate }}:</label>
 				<div class="form-group">
-					<select class="select2_single form-control" [ngModel]="taxDO.valueType" (ngModelChange)="didChangeTaxValueType($event)">
+					<select class="select2_single form-control" [ngModel]="taxDO.valueType" (ngModelChange)="didChangeTaxValueType($event)" name="taxValueType">
 						<option [value]="getPercentageTaxValueType()">{{ 'Percentage' | translate }}</option>
 						<option [value]="getFixedTaxValueType()">{{ 'Fixed Price' | translate }}</option>
 					</select>
@@ -30,10 +30,10 @@
 					<div class="input-group" [ngClass]="{'form-warning': (!isValidValue() && didSubmitForm)}">
 						<input 
 							*ngIf="taxDO.valueType === getFixedTaxValueType()"
-							type="number" step="0.01" class="form-control" id="perval" placeholder="{{ 'Enter the value' | translate }}" [(ngModel)]="taxDO.value">
+							type="number" step="0.01" class="form-control" id="perval" placeholder="{{ 'Enter the value' | translate }}" [(ngModel)]="taxDO.value" name="taxValue">
 						<input 
 							*ngIf="taxDO.valueType === getPercentageTaxValueType()"
-							type="number" class="form-control" id="perval" placeholder="{{ 'Enter the value' | translate }}" [(ngModel)]="taxDO.value">
+							type="number" class="form-control" id="perval" placeholder="{{ 'Enter the value' | translate }}" [(ngModel)]="taxDO.value" name="taxValue">
 					</div>
 					<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter a valid value' | translate }}</small></label>
 				</div>
@@ -43,12 +43,14 @@
 		<div class="form-group" *ngIf="isVatTax()">
 			<label>1 - 100 %</label>
 			<div class="input-group" [ngClass]="{'form-warning': (!isValidValue() && didSubmitForm)}">
-				<input type="number" class="form-control" placeholder="{{ 'VAT Value 0 - 100' | translate }}" [(ngModel)]="taxDO.value">
+				<input type="number" class="form-control" placeholder="{{ 'VAT Value 0 - 100' | translate }}" [(ngModel)]="taxDO.value" name="taxValue">
 			</div>
 			<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter a valid value' | translate }}</small></label>
 		</div>
-		<center>
-			<loading-button [isLoading]="isLoading" title="Save"></loading-button>
-		</center>
+		<span class="horizontal-align-center">
+			<div>
+				<loading-button [isLoading]="isLoading" title="Save"></loading-button>
+			</div>
+		</span>
 	</form>
 </div>

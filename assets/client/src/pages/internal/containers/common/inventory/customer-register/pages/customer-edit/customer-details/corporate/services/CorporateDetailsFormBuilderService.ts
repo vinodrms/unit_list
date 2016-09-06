@@ -1,26 +1,26 @@
 import {Injectable} from '@angular/core';
-import {FormBuilder, ControlGroup, Validators, AbstractControl, Control} from '@angular/common';
+import {FormBuilder, FormGroup, Validators, AbstractControl, FormControl} from '@angular/forms';
 import {ThValidators, ThFieldLengths} from '../../../../../../../../../../../common/utils/form-utils/ThFormUtils';
 import {CorporateDetailsDO} from '../../../../../../../../../services/customers/data-objects/customer-details/CorporateDetailsDO';
 import {CommissionType} from '../../../../../../../../../services/common/data-objects/commission/CommissionDO';
 
 @Injectable()
 export class CorporateDetailsFormBuilderService {
-	private _corporateFormGroup: ControlGroup;
+	private _corporateFormGroup: FormGroup;
 
-	private _governmentCodeControl: Control;
-	private _nameControl: Control;
-	private _streetAddressControl: Control;
-	private _cityControl: Control;
-	private _postalCodeControl: Control;
-	private _websiteUrlControl: Control;
-	private _contactNameControl: Control;
-	private _phoneControl: Control;
-	private _faxControl: Control;
-	private _emailControl: Control;
-	private _invoiceFeeControl: Control;
-	private _accountNoControl: Control;
-	private _commissionControl: Control;
+	private _governmentCodeControl: FormControl;
+	private _nameControl: FormControl;
+	private _streetAddressControl: FormControl;
+	private _cityControl: FormControl;
+	private _postalCodeControl: FormControl;
+	private _websiteUrlControl: FormControl;
+	private _contactNameControl: FormControl;
+	private _phoneControl: FormControl;
+	private _faxControl: FormControl;
+	private _emailControl: FormControl;
+	private _invoiceFeeControl: FormControl;
+	private _accountNoControl: FormControl;
+	private _commissionControl: FormControl;
 
 	private _payInvoiceByAgreement: boolean;
 	private _isFixedCommission: boolean;
@@ -31,19 +31,19 @@ export class CorporateDetailsFormBuilderService {
 		this.initFormGroup();
 	}
 	private initFormControls() {
-		this._governmentCodeControl = new Control(null, Validators.compose([Validators.maxLength(200)]));
-		this._nameControl = new Control(null, Validators.compose([Validators.required, Validators.maxLength(ThFieldLengths.MaxNameLength)]));
-		this._streetAddressControl = new Control(null, Validators.compose([Validators.maxLength(ThFieldLengths.MaxStreetAddressLength)]));
-		this._cityControl = new Control(null, Validators.compose([Validators.maxLength(ThFieldLengths.MaxCityLength)]));
-		this._postalCodeControl = new Control(null, Validators.compose([Validators.maxLength(50)]));
-		this._websiteUrlControl = new Control(null, Validators.compose([Validators.maxLength(ThFieldLengths.MaxUrlLength), ThValidators.nullableUrlValidator]));
-		this._contactNameControl = new Control(null, Validators.compose([Validators.maxLength(ThFieldLengths.MaxNameLength)]));
-		this._phoneControl = new Control(null, Validators.compose([ThValidators.nullablePhoneValidator]));
-		this._faxControl = new Control(null, Validators.compose([ThValidators.nullablePhoneValidator]));
-		this._emailControl = new Control(null, Validators.compose([ThValidators.nullableEmailValidator]));
-		this._invoiceFeeControl = new Control(null);
-		this._accountNoControl = new Control(null, Validators.compose([Validators.maxLength(200)]));
-		this._commissionControl = new Control();
+		this._governmentCodeControl = new FormControl(null, Validators.compose([Validators.maxLength(200)]));
+		this._nameControl = new FormControl(null, Validators.compose([Validators.required, Validators.maxLength(ThFieldLengths.MaxNameLength)]));
+		this._streetAddressControl = new FormControl(null, Validators.compose([Validators.maxLength(ThFieldLengths.MaxStreetAddressLength)]));
+		this._cityControl = new FormControl(null, Validators.compose([Validators.maxLength(ThFieldLengths.MaxCityLength)]));
+		this._postalCodeControl = new FormControl(null, Validators.compose([Validators.maxLength(50)]));
+		this._websiteUrlControl = new FormControl(null, Validators.compose([Validators.maxLength(ThFieldLengths.MaxUrlLength), ThValidators.nullableUrlValidator]));
+		this._contactNameControl = new FormControl(null, Validators.compose([Validators.maxLength(ThFieldLengths.MaxNameLength)]));
+		this._phoneControl = new FormControl(null, Validators.compose([ThValidators.nullablePhoneValidator]));
+		this._faxControl = new FormControl(null, Validators.compose([ThValidators.nullablePhoneValidator]));
+		this._emailControl = new FormControl(null, Validators.compose([ThValidators.nullableEmailValidator]));
+		this._invoiceFeeControl = new FormControl(null);
+		this._accountNoControl = new FormControl(null, Validators.compose([Validators.maxLength(200)]));
+		this._commissionControl = new FormControl();
 	}
 
 	private initFormGroup() {
@@ -65,27 +65,27 @@ export class CorporateDetailsFormBuilderService {
 	}
 
 	public updateControlValuesFrom(corporateDetails: CorporateDetailsDO) {
-		this._governmentCodeControl.updateValue(corporateDetails.governmentCode);
-		this._nameControl.updateValue(corporateDetails.name);
-		this._streetAddressControl.updateValue(corporateDetails.address.streetAddress);
-		this._cityControl.updateValue(corporateDetails.address.city);
-		this._postalCodeControl.updateValue(corporateDetails.address.postalCode);
-		this._websiteUrlControl.updateValue(corporateDetails.websiteUrl);
-		this._contactNameControl.updateValue(corporateDetails.contactName);
-		this._phoneControl.updateValue(corporateDetails.phone);
-		this._faxControl.updateValue(corporateDetails.fax);
-		this._emailControl.updateValue(corporateDetails.email);
-		this._accountNoControl.updateValue(corporateDetails.accountNo);
+		this._governmentCodeControl.setValue(corporateDetails.governmentCode);
+		this._nameControl.setValue(corporateDetails.name);
+		this._streetAddressControl.setValue(corporateDetails.address.streetAddress);
+		this._cityControl.setValue(corporateDetails.address.city);
+		this._postalCodeControl.setValue(corporateDetails.address.postalCode);
+		this._websiteUrlControl.setValue(corporateDetails.websiteUrl);
+		this._contactNameControl.setValue(corporateDetails.contactName);
+		this._phoneControl.setValue(corporateDetails.phone);
+		this._faxControl.setValue(corporateDetails.fax);
+		this._emailControl.setValue(corporateDetails.email);
+		this._accountNoControl.setValue(corporateDetails.accountNo);
 
 		this.payInvoiceByAgreement = corporateDetails.payInvoiceByAgreement;
-		this._invoiceFeeControl.updateValue(corporateDetails.invoiceFee);
+		this._invoiceFeeControl.setValue(corporateDetails.invoiceFee);
 
 		var isFixedCommission = corporateDetails.commission.type === CommissionType.Fixed;
 		if (!corporateDetails.commission || isFixedCommission) {
-			this._commissionControl.updateValue(corporateDetails.commission.amount);
+			this._commissionControl.setValue(corporateDetails.commission.amount);
 		}
 		else {
-			this._commissionControl.updateValue(Math.round(corporateDetails.commission.amount * 100));
+			this._commissionControl.setValue(Math.round(corporateDetails.commission.amount * 100));
 		}
 		this.isFixedCommission = isFixedCommission;
 		this.receiveBookingConfirmations = corporateDetails.receiveBookingConfirmations;
@@ -114,10 +114,10 @@ export class CorporateDetailsFormBuilderService {
 		corporateDetails.commission.amount = commissionValue;
 	}
 
-	public get individualFormGroup(): ControlGroup {
+	public get individualFormGroup(): FormGroup {
 		return this._corporateFormGroup;
 	}
-	public set individualFormGroup(individualFormGroup: ControlGroup) {
+	public set individualFormGroup(individualFormGroup: FormGroup) {
 		this._corporateFormGroup = individualFormGroup;
 	}
 
@@ -154,7 +154,7 @@ export class CorporateDetailsFormBuilderService {
 		this._receiveBookingConfirmations = receiveBookingConfirmations;
 	}
 	public updateCompanyNameAndAddress(companyName: string, streetAddress: string) {
-		this._nameControl.updateValue(companyName);
-		this._streetAddressControl.updateValue(streetAddress);
+		this._nameControl.setValue(companyName);
+		this._streetAddressControl.setValue(streetAddress);
 	}
 }

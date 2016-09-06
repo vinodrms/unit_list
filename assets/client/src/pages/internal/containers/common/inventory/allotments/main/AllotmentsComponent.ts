@@ -1,7 +1,7 @@
-import {Component, AfterViewInit, ViewChild, ViewContainerRef, EventEmitter, Output, DynamicComponentLoader, Type, ResolvedReflectiveProvider} from '@angular/core';
+import {Component, AfterViewInit, ViewChild, ViewContainerRef, EventEmitter, Output, Type, ResolvedReflectiveProvider} from '@angular/core';
 import {BaseComponent} from '../../../../../../../common/base/BaseComponent';
-import {TranslationPipe} from '../../../../../../../common/utils/localization/TranslationPipe';
 import {AppContext, ThError} from '../../../../../../../common/utils/AppContext';
+import {ModuleLoaderService} from '../../../../../../../common/utils/module-loader/ModuleLoaderService';
 import {InventoryStateManager} from '../../utils/state-manager/InventoryStateManager';
 import {InventoryScreenStateType} from '../../utils/state-manager/InventoryScreenStateType';
 import {InventoryScreenAction} from '../../utils/state-manager/InventoryScreenAction';
@@ -15,16 +15,12 @@ import {AllotmentAvailabilityDO} from '../../../../../services/allotments/data-o
 import {AllotmentAvailabilityForDayDO} from '../../../../../services/allotments/data-objects/availability/AllotmentAvailabilityForDayDO';
 import {AllotmentsService} from '../../../../../services/allotments/AllotmentsService';
 import {AllotmentsTableMetaBuilderService} from './services/AllotmentsTableMetaBuilderService';
-import {AllotmentOverviewComponent} from '../pages/allotment-overview/AllotmentOverviewComponent';
-import {AllotmentEditContainerComponent} from '../pages/allotment-edit/container/AllotmentEditContainerComponent';
 import {ISOWeekDayUtils, ISOWeekDay}  from '../../../../../services/common/data-objects/th-dates/ISOWeekDay';
 
 @Component({
 	selector: 'allotments',
 	templateUrl: '/client/src/pages/internal/containers/common/inventory/allotments/main/template/allotments.html',
-	providers: [AllotmentsService, AllotmentsTableMetaBuilderService, EagerCustomersService, EagerPriceProductsService, RoomCategoriesService],
-	directives: [LazyLoadingTableComponent, AllotmentOverviewComponent, AllotmentEditContainerComponent],
-	pipes: [TranslationPipe]
+	providers: [AllotmentsService, AllotmentsTableMetaBuilderService, EagerCustomersService, EagerPriceProductsService, RoomCategoriesService]
 })
 export class AllotmentsComponent extends BaseComponent implements AfterViewInit {
 	@Output() protected onScreenStateTypeChanged = new EventEmitter();
@@ -37,8 +33,8 @@ export class AllotmentsComponent extends BaseComponent implements AfterViewInit 
 	private _inventoryStateManager: InventoryStateManager<AllotmentVM>;
 	private _allotmentStatus: AllotmentStatus;
 
-	constructor(private _dynamicComponentLoader: DynamicComponentLoader,
-		private _appContext: AppContext,
+	constructor(private _appContext: AppContext,
+		private _moduleLoaderService: ModuleLoaderService,
 		private _allotmentsService: AllotmentsService,
 		private _tableBuilder: AllotmentsTableMetaBuilderService) {
 		super();
@@ -46,8 +42,8 @@ export class AllotmentsComponent extends BaseComponent implements AfterViewInit 
 		this.registerStateChange();
 		this.setDefaultAllotmentStatus();
 	}
-	public bootstrapOverviewBottom(componentToInject: Type, providers: ResolvedReflectiveProvider[]) {
-        this._dynamicComponentLoader.loadNextToLocation(componentToInject, this._overviewBottomVCRef, providers);
+	public bootstrapOverviewBottom(moduleToInject: Type<any>, componentToInject: Type<any>, providers: ResolvedReflectiveProvider[]) {
+        this._moduleLoaderService.loadNextToLocation(moduleToInject, componentToInject, this._overviewBottomVCRef, providers);
     }
 	private registerStateChange() {
 		this._inventoryStateManager.stateChangedObservable.subscribe((currentState: InventoryScreenStateType) => {

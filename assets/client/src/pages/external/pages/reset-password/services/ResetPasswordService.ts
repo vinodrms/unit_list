@@ -1,7 +1,7 @@
 import {Injectable, Inject} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 import {AppContext, ThServerApi} from '../../../../../common/utils/AppContext';
-import {FormBuilder, ControlGroup, Validators} from '@angular/common';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ThValidators} from '../../../../../common/utils/form-utils/ThFormUtils';
 import {ResetPasswordDO} from '../data-objects/ResetPasswordDO';
 
@@ -27,10 +27,10 @@ export class ResetPasswordService {
 		return this._appContext.thHttp.post(ThServerApi.AccountRequestResetPassword, { requestData: resetPasswd });
 	}
 
-	public get resetPasswdForm(): ControlGroup {
+	public get resetPasswdForm(): FormGroup {
 		return this._resetPasswdForm
 	}
-	public set resetPasswdForm(resetPasswdForm: ControlGroup) {
+	public set resetPasswdForm(resetPasswdForm: FormGroup) {
 		this._resetPasswdForm = resetPasswdForm;
 	}
 }

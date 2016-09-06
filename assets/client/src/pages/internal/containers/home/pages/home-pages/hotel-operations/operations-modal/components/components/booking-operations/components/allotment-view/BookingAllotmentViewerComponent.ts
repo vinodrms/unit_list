@@ -1,6 +1,4 @@
 import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import {TranslationPipe} from '../../../../../../../../../../../../../common/utils/localization/TranslationPipe';
-import {ThDateIntervalPipe} from '../../../../../../../../../../../../../common/utils/pipes/ThDateIntervalPipe';
 import {AppContext, ThError} from '../../../../../../../../../../../../../common/utils/AppContext';
 import {BookingOperationsPageData} from '../../services/utils/BookingOperationsPageData';
 import {BookingDO} from '../../../../../../../../../../../services/bookings/data-objects/BookingDO';
@@ -8,8 +6,7 @@ import {AllotmentDO, AllotmentStatus} from '../../../../../../../../../../../ser
 
 @Component({
     selector: 'booking-allotment-viewer',
-    templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/booking-operations/components/allotment-view/template/booking-allotment-viewer.html',
-    pipes: [TranslationPipe, ThDateIntervalPipe]
+    templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/booking-operations/components/allotment-view/template/booking-allotment-viewer.html'
 })
 export class BookingAllotmentViewerComponent implements OnInit {
     private _bookingOperationsPageData: BookingOperationsPageData;

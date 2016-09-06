@@ -8,7 +8,7 @@
             <p class="placeholder" *ngIf="notesAreEmpty">{{'None' | translate}}</p>
         </div>
         <div class="col-xs-12 col-sm-8 form-group" *ngIf="!readonly">
-            <textarea class="form-control notes" [(ngModel)]="bookingDO.notes"></textarea>
+            <textarea class="form-control notes" [(ngModel)]="bookingDO.notes" name="bookingNotes"></textarea>
         </div>
 
         <div class="col-xs-12 col-sm-3" *ngIf="hasDetailsEditRight">

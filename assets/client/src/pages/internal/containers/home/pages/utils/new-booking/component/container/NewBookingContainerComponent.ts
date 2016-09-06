@@ -1,14 +1,11 @@
 import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import {BaseComponent} from '../../../../../../../../../common/base/BaseComponent';
-import {TranslationPipe} from '../../../../../../../../../common/utils/localization/TranslationPipe';
 import {AppContext, ThError} from '../../../../../../../../../common/utils/AppContext';
-
 import {SETTINGS_PROVIDERS} from '../../../../../../../services/settings/SettingsProviders';
 import {HotelService} from '../../../../../../../services/hotel/HotelService';
 import {HotelAggregatorService} from '../../../../../../../services/hotel/HotelAggregatorService';
 import {RoomCategoriesService} from '../../../../../../../services/room-categories/RoomCategoriesService';
 import {BookingCartService} from '../../services/search/BookingCartService';
-
 import {BookingStepType} from '../subcomponents/utils/BookingStepType';
 import {ILastBookingStepService} from '../subcomponents/utils/ILastBookingStepService';
 import {BookingSearchStepService} from '../subcomponents/booking-search/services/BookingSearchStepService';
@@ -17,19 +14,12 @@ import {BookingCustomerRegisterStepService} from '../subcomponents/booking-custo
 import {BookingEmailConfigStepService} from '../subcomponents/booking-email-config/services/BookingEmailConfigStepService';
 import {BookingControllerService} from '../subcomponents/utils/BookingControllerService';
 
-import {NewBookingSearchComponent} from '../subcomponents/booking-search/NewBookingSearchComponent';
-import {NewBookingFillDetailsComponent} from '../subcomponents/booking-fill-details/NewBookingFillDetailsComponent';
-import {NewBookingCustomerRegisterComponent} from '../subcomponents/booking-customer-register/NewBookingCustomerRegisterComponent';
-import {NewBookingEmailConfigComponent} from '../subcomponents/booking-email-config/NewBookingEmailConfigComponent';
-
 @Component({
 	selector: 'new-booking-container',
 	templateUrl: '/client/src/pages/internal/containers/home/pages/utils/new-booking/component/container/template/new-booking-container.html',
 	providers: [SETTINGS_PROVIDERS, HotelService, HotelAggregatorService, RoomCategoriesService, BookingCartService,
 		BookingSearchStepService, BookingFillDetailsStepService, BookingCustomerRegisterStepService, BookingEmailConfigStepService,
-		BookingControllerService],
-	directives: [NewBookingSearchComponent, NewBookingFillDetailsComponent, NewBookingCustomerRegisterComponent, NewBookingEmailConfigComponent],
-	pipes: [TranslationPipe]
+		BookingControllerService]
 })
 export class NewBookingContainerComponent extends BaseComponent {
 	@Input() showCloseButton: boolean = false;

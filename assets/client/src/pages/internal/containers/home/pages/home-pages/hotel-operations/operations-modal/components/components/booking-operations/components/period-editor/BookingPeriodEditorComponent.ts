@@ -1,9 +1,5 @@
 import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import {TranslationPipe} from '../../../../../../../../../../../../../common/utils/localization/TranslationPipe';
 import {AppContext, ThError} from '../../../../../../../../../../../../../common/utils/AppContext';
-import {EditSaveButtonGroupComponent} from '../../../../../../../../../../../../../common/utils/components/button-groups/EditSaveButtonGroupComponent';
-import {ThDateIntervalPickerComponent} from '../../../../../../../../../../../../../common/utils/components/ThDateIntervalPickerComponent';
-import {ThDatePickerComponent} from '../../../../../../../../../../../../../common/utils/components/ThDatePickerComponent';
 import {ThDateIntervalDO} from '../../../../../../../../../../../services/common/data-objects/th-dates/ThDateIntervalDO';
 import {ThDateDO} from '../../../../../../../../../../../services/common/data-objects/th-dates/ThDateDO';
 import {ThDateUtils} from '../../../../../../../../../../../services/common/data-objects/th-dates/ThDateUtils';
@@ -14,9 +10,7 @@ import {HotelOperationsBookingService} from '../../../../../../../../../../../se
 
 @Component({
     selector: 'booking-period-editor',
-    templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/booking-operations/components/period-editor/template/booking-period-editor.html',
-    directives: [EditSaveButtonGroupComponent, ThDateIntervalPickerComponent, ThDatePickerComponent],
-    pipes: [TranslationPipe]
+    templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/booking-operations/components/period-editor/template/booking-period-editor.html'
 })
 export class BookingPeriodEditorComponent implements OnInit {
     @Output() onBookingPeriodChanged = new EventEmitter<BookingDO>();

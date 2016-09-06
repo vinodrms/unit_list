@@ -1,22 +1,20 @@
 import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import {Control} from '@angular/common';
+import {FormControl} from '@angular/forms';
 import {TranslationPipe} from '../localization/TranslationPipe';
 
 @Component({
     selector: 'debouncing-input-text',
     template: `
-        <input type="text" class="form-control" [ngFormControl]="textControl" placeholder="{{ inputPlaceholder | translate }}" [disabled]="inputDisabled">
-    `,
-    pipes: [TranslationPipe]
+        <input type="text" class="form-control" [formControl]="textControl" placeholder="{{ inputPlaceholder | translate }}">
+    `
 })
 export class DebouncingInputTextComponent implements OnInit {
     public static DebounceTimeMillis = 400;
 
     @Input() inputPlaceholder: string = "";
-    @Input() inputDisabled: boolean = false;
     @Input() set textValue(value: string) {
         if (this._didInitTextControl) {
-            this.textControl.updateValue(value, { emitEvent: false });
+            this.textControl.setValue(value, { emitEvent: false });
             return;
         }
         this._initialTextValue = value;
@@ -24,7 +22,7 @@ export class DebouncingInputTextComponent implements OnInit {
     @Output() onTextChanged = new EventEmitter<string>();
 
     private _initialTextValue: string = "";
-    textControl: Control;
+    textControl: FormControl;
     private _didInitTextControl: boolean = false;
 
     constructor() { }
@@ -34,7 +32,7 @@ export class DebouncingInputTextComponent implements OnInit {
     }
 
     private initializeTextControl() {
-        this.textControl = new Control(this._initialTextValue);
+        this.textControl = new FormControl(this._initialTextValue);
         this.textControl.valueChanges
             .debounceTime(DebouncingInputTextComponent.DebounceTimeMillis)
             .distinctUntilChanged()

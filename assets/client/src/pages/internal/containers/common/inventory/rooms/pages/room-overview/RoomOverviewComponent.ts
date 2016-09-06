@@ -1,8 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import {BaseComponent} from '../../../../../../../../common/base/BaseComponent';
-import {TranslationPipe} from '../../../../../../../../common/utils/localization/TranslationPipe';
 import {RoomVM} from '../../../../../../services/rooms/view-models/RoomVM';
-import {CustomScroll} from '../../../../../../../../common/utils/directives/CustomScroll';
 import {ModalDialogRef} from '../../../../../../../../common/utils/modals/utils/ModalDialogRef';
 import {HotelOperationsModalService} from '../../../../../home/pages/home-pages/hotel-operations/operations-modal/services/HotelOperationsModalService';
 import {HotelOperationsResult} from '../../../../../home/pages/home-pages/hotel-operations/operations-modal/services/utils/HotelOperationsResult';
@@ -10,9 +8,7 @@ import {HotelOperationsResult} from '../../../../../home/pages/home-pages/hotel-
 @Component({
     selector: 'room-overview',
     templateUrl: '/client/src/pages/internal/containers/common/inventory/rooms/pages/room-overview/template/room-overview.html',
-    providers: [HotelOperationsModalService],
-	pipes: [TranslationPipe],
-	directives: [CustomScroll]
+    providers: [HotelOperationsModalService]
 })
 export class RoomOverviewComponent extends BaseComponent {
 	@Input() showLinkToOperationalModal: boolean = false;

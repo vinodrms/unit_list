@@ -13,7 +13,7 @@
 	</div>
 
 	<div class="form-group">
-		<select class="form-control" [ngModel]="conditions.policyType" (ngModelChange)="didChangePolicyType($event)" [disabled]="readonly">
+		<select class="form-control" [ngModel]="conditions.policyType" (ngModelChange)="didChangePolicyType($event)" name="policyType" [disabled]="readonly">
 			<option *ngFor="let cancellationPolicyMeta of cancellationPolicyMetaList" [value]="cancellationPolicyMeta.policyType">
 				{{cancellationPolicyMeta.policyName | translate}}
 			</option>
@@ -35,7 +35,7 @@
 		<div class="col-xs-12 form-group" *ngIf="isCanCancelDaysBeforePolicy()">
 			<div class="input-group" [ngClass]="{'form-warning': (didSubmit&&!conditions.policy.isValid())}">
 				<label>{{ 'Days until day of arrival at' | translate }} {{ cancellationHour | thhour }}</label>
-				<input type="number" placeholder="{{ 'Number of days' | translate }}" class="form-control input-group-lg" [(ngModel)]="conditions.policy.daysBefore" [readonly]="readonly">
+				<input type="number" placeholder="{{ 'Number of days' | translate }}" class="form-control input-group-lg" [(ngModel)]="conditions.policy.daysBefore" name="daysBefore" [readonly]="readonly">
 			</div>
 			<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter the number of days' | translate }}</small></label>
 		</div>
@@ -55,7 +55,7 @@
 			</small>
 		</div>
 		<div class="col-xs-12 form-group">
-			<select class="form-control" [ngModel]="conditions.penaltyType" (ngModelChange)="didChangePenaltyType($event)" [disabled]="readonly">
+			<select class="form-control" [ngModel]="conditions.penaltyType" (ngModelChange)="didChangePenaltyType($event)" name="penaltyType" [disabled]="readonly">
 				<option *ngFor="let cancellationPenaltyMeta of filteredCancellationPenaltyMetaList" [value]="cancellationPenaltyMeta.penaltyType">
 					{{cancellationPenaltyMeta.penaltyName | translate}}
 				</option>

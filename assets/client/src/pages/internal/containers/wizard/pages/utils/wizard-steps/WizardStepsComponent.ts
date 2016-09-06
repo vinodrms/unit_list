@@ -1,16 +1,13 @@
 import {Component} from '@angular/core';
 import {BaseComponent} from '../../../../../../../common/base/BaseComponent';
-import {TranslationPipe} from '../../../../../../../common/utils/localization/TranslationPipe';
 import {WizardService} from '../../wizard-pages/services/WizardService';
 import {IWizardState} from '../../wizard-pages/services/IWizardState';
 import {IWizardController} from '../../wizard-pages/services/IWizardController';
 
 @Component({
 	selector: 'wizard-steps-component',
-	templateUrl: '/client/src/pages/internal/containers/wizard/pages/utils/wizard-steps/template/wizard-steps-component.html',
-	pipes: [TranslationPipe]
+	templateUrl: '/client/src/pages/internal/containers/wizard/pages/utils/wizard-steps/template/wizard-steps-component.html'
 })
-
 export class WizardStepsComponent extends BaseComponent {
 	private _currentState: IWizardState;
 	private _wizardController: IWizardController;
@@ -48,5 +45,5 @@ export class WizardStepsComponent extends BaseComponent {
 	}
 	public get wizardButtonsVisible(): boolean {
 		return this._wizardController.wizardButtonsVisible;
-	}	
+	}
 }

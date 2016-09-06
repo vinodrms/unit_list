@@ -1,11 +1,8 @@
 import {Component, OnInit, Input} from '@angular/core';
-import {ControlGroup} from '@angular/common';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/combineLatest';
 import {BaseComponent} from '../../../../../../../common/base/BaseComponent';
 import {ThError, AppContext} from '../../../../../../../common/utils/AppContext';
-import {TranslationPipe} from '../../../../../../../common/utils/localization/TranslationPipe';
-import {LoadingComponent} from '../../../../../../../common/utils/components/LoadingComponent';
 import {CurrenciesService} from '../../../../../services/settings/CurrenciesService';
 import {CurrenciesDO} from '../../../../../services/settings/data-objects/CurrenciesDO';
 import {HotelAggregatorService} from '../../../../../services/hotel/HotelAggregatorService';
@@ -16,15 +13,10 @@ import {PaymentMethodVMContainer, PaymentMethodVM} from './services/utils/Paymen
 import {TaxService} from '../../../../../services/taxes/TaxService';
 import {TaxType} from '../../../../../services/taxes/data-objects/TaxDO';
 import {TaxContainerDO} from '../../../../../services/taxes/data-objects/TaxContainerDO';
-import {BasicInfoTaxListComponent} from '../pages/tax-list/BasicInfoTaxListComponent';
-import {CustomScroll} from '../../../../../../../common/utils/directives/CustomScroll';
 
 @Component({
 	selector: 'basic-info-payments-policies-edit',
-	templateUrl: '/client/src/pages/internal/containers/common/basic-info/payments-policies/main/template/basic-info-payments-policies-edit.html',
-	directives: [LoadingComponent, CustomScroll, BasicInfoTaxListComponent],
-	providers: [],
-	pipes: [TranslationPipe]
+	templateUrl: '/client/src/pages/internal/containers/common/basic-info/payments-policies/main/template/basic-info-payments-policies-edit.html'
 })
 
 export class BasicInfoPaymentsAndPoliciesEditComponent extends BaseComponent implements OnInit {

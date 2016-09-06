@@ -1,7 +1,5 @@
 import {Component, Input, Output, EventEmitter} from '@angular/core';
 import {BaseComponent} from '../../../../../../../../common/base/BaseComponent';
-import {TranslationPipe} from '../../../../../../../../common/utils/localization/TranslationPipe';
-import {PercentagePipe} from '../../../../../../../../common/utils/pipes/PercentagePipe';
 import {CustomerVM} from '../../../../../../services/customers/view-models/CustomerVM';
 import {CustomScroll} from '../../../../../../../../common/utils/directives/CustomScroll';
 import {ModalDialogRef} from '../../../../../../../../common/utils/modals/utils/ModalDialogRef';
@@ -11,9 +9,7 @@ import {HotelOperationsResult} from '../../../../../home/pages/home-pages/hotel-
 @Component({
 	selector: 'customer-register-overview',
 	templateUrl: '/client/src/pages/internal/containers/common/inventory/customer-register/pages/customer-overview/template/customer-register-overview.html',
-	providers: [HotelOperationsModalService],
-	pipes: [TranslationPipe, PercentagePipe],
-	directives: [CustomScroll]
+	providers: [HotelOperationsModalService]
 })
 
 export class CustomerRegisterOverviewComponent extends BaseComponent {

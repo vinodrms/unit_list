@@ -15,7 +15,7 @@
         </div>
         <div class="col-xs-12 col-sm-4" *ngIf="!readonly">
             <div class="form-group">
-                <select class="form-control" [ngModel]="noShowTimestamp" (ngModelChange)="noShowTimestamp=$event">
+                <select class="form-control" [ngModel]="noShowTimestamp" (ngModelChange)="noShowTimestamp=$event" name="noShowTimestamp">
 			        <option *ngFor="let thTimestamp of noShowTimestampList" [ngValue]="thTimestamp">{{ thTimestamp | thtimestamp }}</option>
 		        </select>
                 <small class="text-muted"><i class="fa fa-info-circle"></i> {{ 'Time when booking will be marked as No Show' | translate }} </small>

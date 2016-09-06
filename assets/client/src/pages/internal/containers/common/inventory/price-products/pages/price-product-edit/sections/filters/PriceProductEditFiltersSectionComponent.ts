@@ -1,7 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import 'rxjs/add/operator/map';
 import {BaseComponent} from '../../../../../../../../../../common/base/BaseComponent';
-import {TranslationPipe} from '../../../../../../../../../../common/utils/localization/TranslationPipe';
 import {IPriceProductEditSection} from '../utils/IPriceProductEditSection';
 import {ModalDialogRef} from '../../../../../../../../../../common/utils/modals/utils/ModalDialogRef';
 import {PriceProductVM} from '../../../../../../../../services/price-products/view-models/PriceProductVM';
@@ -16,8 +15,7 @@ import {YieldFiltersDO} from '../../../../../../../../services/hotel-configurati
 @Component({
 	selector: 'price-product-edit-filters-section',
 	templateUrl: '/client/src/pages/internal/containers/common/inventory/price-products/pages/price-product-edit/sections/filters/template/price-product-edit-filters-section.html',
-	providers: [YieldFilterModalService],
-	pipes: [TranslationPipe]
+	providers: [YieldFilterModalService]
 })
 export class PriceProductEditFiltersSectionComponent extends BaseComponent implements OnInit, IPriceProductEditSection {
 	readonly: boolean;

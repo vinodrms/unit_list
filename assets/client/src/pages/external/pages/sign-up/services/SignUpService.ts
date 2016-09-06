@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {FormBuilder, ControlGroup, Validators} from '@angular/common';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Observable} from 'rxjs/Observable';
 import {AppContext, ThServerApi} from '../../../../../common/utils/AppContext';
 import {ThValidators, ThFieldLengths} from '../../../../../common/utils/form-utils/ThFormUtils';
@@ -7,7 +7,7 @@ import {SignUpDO} from '../data-objects/SignUpDO';
 
 @Injectable()
 export class SignUpService {
-	private _signUpForm;
+	private _signUpForm: FormGroup;
 
 	constructor(private _appContext: AppContext, private _formBuilder: FormBuilder) {
 		this.initSignUpForm();
@@ -39,10 +39,10 @@ export class SignUpService {
 		return this._appContext.thHttp.post(ThServerApi.AccountSignUp, { accountData: signUpDO });
 	}
 
-	public get signUpForm(): ControlGroup {
+	public get signUpForm(): FormGroup {
 		return this._signUpForm;
 	}
-	public set signUpForm(signUpForm: ControlGroup) {
+	public set signUpForm(signUpForm: FormGroup) {
 		this._signUpForm = signUpForm;
 	}
 }

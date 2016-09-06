@@ -550,6 +550,13 @@ label small {
 /* To center vertically */
     vertical-align: middle;
 }
+.horizontal-align-center {
+    text-align:center;
+    width:100%;
+}
+.horizontal-align-center>div {
+    margin: auto;
+}
 
 .modal-content {
 /* Bootstrap sets the size of the modal in the modal-dialog class, we need to inherit it */

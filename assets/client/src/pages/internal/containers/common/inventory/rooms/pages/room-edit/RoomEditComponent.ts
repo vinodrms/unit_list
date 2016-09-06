@@ -1,9 +1,7 @@
 import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import {ControlGroup} from '@angular/common';
+import {FormGroup} from '@angular/forms';
 import {Observable} from 'rxjs/Observable';
-import {TranslationPipe} from '../../../../../../../../common/utils/localization/TranslationPipe';
 import {LoadingComponent} from '../../../../../../../../common/utils/components/LoadingComponent';
-import {ImageUploadComponent} from '../../../../../../../../common/utils/components/image-upload/ImageUploadComponent';
 import {BaseFormComponent} from '../../../../../../../../common/base/BaseFormComponent';
 import {AppContext, ThError} from '../../../../../../../../common/utils/AppContext';
 import {RoomVM} from '../../../../../../services/rooms/view-models/RoomVM';
@@ -22,8 +20,6 @@ import {ModalDialogRef} from '../../../../../../../../common/utils/modals/utils/
 import {RoomCategoriesModalService} from '../../../modals/room-categories/services/RoomCategoriesModalService';
 import {BedVM} from '../../../../../../services/beds/view-models/BedVM';
 import {BedDO, BedStorageType} from '../../../../../../services/beds/data-objects/BedDO';
-import {BedSelectorComponent} from './components/bed-selector/BedSelectorComponent';
-import {CustomScroll} from '../../../../../../../../common/utils/directives/CustomScroll';
 import {BedMetaDO} from '../../../../../../services/room-categories/data-objects/bed-config/BedMetaDO';
 import {BedConfigDO} from '../../../../../../services/room-categories/data-objects/bed-config/BedConfigDO';
 import {RoomCategoriesService} from '../../../../../../services/room-categories/RoomCategoriesService';
@@ -31,9 +27,7 @@ import {RoomCategoriesService} from '../../../../../../services/room-categories/
 @Component({
     selector: 'room-edit',
     templateUrl: '/client/src/pages/internal/containers/common/inventory/rooms/pages/room-edit/template/room-edit.html',
-    providers: [RoomEditService, RoomCategoriesModalService],
-    directives: [LoadingComponent, CustomScroll, ImageUploadComponent, BedSelectorComponent],
-    pipes: [TranslationPipe]
+    providers: [RoomEditService, RoomCategoriesModalService]
 })
 export class RoomEditComponent extends BaseFormComponent implements OnInit {
     private MAX_BED_NO = 6;
@@ -168,7 +162,7 @@ export class RoomEditComponent extends BaseFormComponent implements OnInit {
         }
     }
 
-    protected getDefaultControlGroup(): ControlGroup {
+    protected getDefaultFormGroup(): FormGroup {
         return this._roomEditService.roomForm;
     }
 

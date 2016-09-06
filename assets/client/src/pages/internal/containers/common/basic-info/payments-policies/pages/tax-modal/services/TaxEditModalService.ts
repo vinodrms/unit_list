@@ -1,8 +1,9 @@
-import {Injectable, ReflectiveInjector, provide} from '@angular/core';
+import {Injectable, ReflectiveInjector} from '@angular/core';
 import {Observable} from 'rxjs/Rx';
 import {AppContext} from '../../../../../../../../../common/utils/AppContext';
 import {ModalDialogRef} from '../../../../../../../../../common/utils/modals/utils/ModalDialogRef';
 import {TaxEditModalComponent} from '../TaxEditModalComponent';
+import {TaxEditModalModule} from '../TaxEditModalModule';
 import {TaxDO, TaxType, TaxValueType} from '../../../../../../../services/taxes/data-objects/TaxDO';
 import {TaxEditModalInput} from './utils/TaxEditModalInput';
 import {TaxService} from '../../../../../../../services/taxes/TaxService';
@@ -27,9 +28,9 @@ export class TaxEditModalService {
 	}
 	private showModal(taxDO: TaxDO, ccyCode: string): Promise<ModalDialogRef<TaxDO>> {
 		var taxModalInput = this.buildTaxModalInput(taxDO, ccyCode);
-		return this._appContext.modalService.open<TaxDO>(<any>TaxEditModalComponent, ReflectiveInjector.resolve([
-			provide(TaxEditModalInput, { useValue: taxModalInput }),
-			provide(TaxService, { useValue: this._taxService })
+		return this._appContext.modalService.open<TaxDO>(TaxEditModalModule, TaxEditModalComponent, ReflectiveInjector.resolve([
+			{ provide: TaxEditModalInput, useValue: taxModalInput },
+			{ provide: TaxService, useValue: this._taxService }
 		]));
 	}
 	private buildTaxModalInput(taxDO: TaxDO, ccyCode: string): TaxEditModalInput {

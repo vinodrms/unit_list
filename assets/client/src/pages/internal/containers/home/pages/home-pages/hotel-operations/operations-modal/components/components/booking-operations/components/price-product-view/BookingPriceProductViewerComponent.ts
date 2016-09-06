@@ -1,5 +1,4 @@
 import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import {TranslationPipe} from '../../../../../../../../../../../../../common/utils/localization/TranslationPipe';
 import {AppContext, ThError} from '../../../../../../../../../../../../../common/utils/AppContext';
 import {BookingOperationsPageData} from '../../services/utils/BookingOperationsPageData';
 import {PriceProductDO} from '../../../../../../../../../../../services/price-products/data-objects/PriceProductDO';
@@ -8,8 +7,7 @@ import {InvoiceItemDO} from '../../../../../../../../../../../services/invoices/
 
 @Component({
     selector: 'booking-price-product-viewer',
-    templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/booking-operations/components/price-product-view/template/booking-price-product-viewer.html',
-    pipes: [TranslationPipe]
+    templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/booking-operations/components/price-product-view/template/booking-price-product-viewer.html'
 })
 export class BookingPriceProductViewerComponent implements OnInit {
     private _bookingOperationsPageData: BookingOperationsPageData;

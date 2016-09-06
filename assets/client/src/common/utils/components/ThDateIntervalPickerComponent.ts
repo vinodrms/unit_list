@@ -1,7 +1,5 @@
 import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import {ThDataValidators} from '../form-utils/utils/ThDataValidators';
-import {TranslationPipe} from '../localization/TranslationPipe';
-import {ThDatePickerComponent} from './ThDatePickerComponent';
 import {ThDateDO} from '../../../pages/internal/services/common/data-objects/th-dates/ThDateDO';
 import {ThDateIntervalDO} from '../../../pages/internal/services/common/data-objects/th-dates/ThDateIntervalDO';
 import {ThDateUtils} from '../../../pages/internal/services/common/data-objects/th-dates/ThDateUtils';
@@ -39,15 +37,13 @@ import {ThDateUtils} from '../../../pages/internal/services/common/data-objects/
 				<div class="form-group" style="padding-top: 5px;">
 					<label>{{ 'Nights' | translate }}</label>
 					<div class="input-group" [ngClass]="{'form-warning': !noOfNightsIsValid()}">
-						<input type="number" class="form-control" [ngModel]="noOfNights" (ngModelChange)="didChangeNoOfNights($event)">
+						<input type="number" class="form-control" [ngModel]="noOfNights" (ngModelChange)="didChangeNoOfNights($event)" name="noOfNights">
 					</div>
 					<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{'Enter a valid number of nights' | translate}}</small></label>
 				</div>
 			</div>
 		</div>
-	`,
-	pipes: [TranslationPipe],
-	directives: [ThDatePickerComponent]
+	`
 })
 export class ThDateIntervalPickerComponent implements OnInit {
 	public static MaxNoOfDaysFromInterval = 186;

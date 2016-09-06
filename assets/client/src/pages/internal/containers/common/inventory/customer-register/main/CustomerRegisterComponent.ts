@@ -1,7 +1,7 @@
-import {Component, Input, Output, EventEmitter, ViewChild, AfterViewInit, DynamicComponentLoader, Type, ResolvedReflectiveProvider, ViewContainerRef} from '@angular/core';
+import {Component, Input, Output, EventEmitter, ViewChild, AfterViewInit, Type, ResolvedReflectiveProvider, ViewContainerRef} from '@angular/core';
 import {BaseComponent} from '../../../../../../../common/base/BaseComponent';
-import {TranslationPipe} from '../../../../../../../common/utils/localization/TranslationPipe';
 import {AppContext, ThError} from '../../../../../../../common/utils/AppContext';
+import {ModuleLoaderService} from '../../../../../../../common/utils/module-loader/ModuleLoaderService';
 import {LazyLoadingTableComponent} from '../../../../../../../common/utils/components/lazy-loading/LazyLoadingTableComponent';
 import {CustomerRegisterTableMetaBuilderService} from './services/CustomerRegisterTableMetaBuilderService';
 import {InventoryStateManager} from '../../utils/state-manager/InventoryStateManager';
@@ -14,15 +14,11 @@ import {CustomerDO, CustomerType} from '../../../../../services/customers/data-o
 import {CustomerPriceProductDetailsDO} from '../../../../../services/customers/data-objects/price-product-details/CustomerPriceProductDetailsDO';
 import {CustomerDetailsFactory} from '../../../../../services/customers/data-objects/customer-details/CustomerDetailsFactory';
 import {CustomerDetailsMeta} from '../../../../../services/customers/data-objects/customer-details/ICustomerDetailsDO';
-import {CustomerRegisterOverviewComponent} from '../pages/customer-overview/CustomerRegisterOverviewComponent';
-import {CustomerRegisterEditContainerComponent} from '../pages/customer-edit/container/CustomerRegisterEditContainerComponent';
 
 @Component({
     selector: 'customer-register',
     templateUrl: '/client/src/pages/internal/containers/common/inventory/customer-register/main/template/customer-register.html',
-    providers: [CustomersService, CustomerRegisterTableMetaBuilderService, CustomerTableFilterService],
-    directives: [LazyLoadingTableComponent, CustomerRegisterOverviewComponent, CustomerRegisterEditContainerComponent],
-	pipes: [TranslationPipe]
+    providers: [CustomersService, CustomerRegisterTableMetaBuilderService, CustomerTableFilterService]
 })
 export class CustomerRegisterComponent extends BaseComponent implements AfterViewInit {
 	@Input() showLinkToOperationalModal: boolean = false;
@@ -48,8 +44,8 @@ export class CustomerRegisterComponent extends BaseComponent implements AfterVie
 	private _inventoryStateManager: InventoryStateManager<CustomerVM>;
 	private _customerType: CustomerType;
 
-    constructor(private _dynamicComponentLoader: DynamicComponentLoader,
-        private _appContext: AppContext,
+    constructor(private _appContext: AppContext,
+		private _moduleLoaderService: ModuleLoaderService,
 		private _customersService: CustomersService,
         private _tableBuilder: CustomerRegisterTableMetaBuilderService,
 		private _custTableFilterService: CustomerTableFilterService) {
@@ -57,8 +53,8 @@ export class CustomerRegisterComponent extends BaseComponent implements AfterVie
 		this._inventoryStateManager = new InventoryStateManager<CustomerVM>(this._appContext, "customer.id");
 		this.registerStateChange();
     }
-    public bootstrapOverviewBottom(componentToInject: Type, providers: ResolvedReflectiveProvider[]) {
-        this._dynamicComponentLoader.loadNextToLocation(componentToInject, this._overviewBottomVCRef, providers);
+    public bootstrapOverviewBottom(moduleToInject: Type<any>, componentToInject: Type<any>, providers: ResolvedReflectiveProvider[]) {
+        this._moduleLoaderService.loadNextToLocation(moduleToInject, componentToInject, this._overviewBottomVCRef, providers);
     }
 	private registerStateChange() {
 		this._inventoryStateManager.stateChangedObservable.subscribe((currentState: InventoryScreenStateType) => {

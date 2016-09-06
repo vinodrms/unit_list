@@ -1,36 +1,22 @@
 import {Component, OnInit, Input, ViewChild } from '@angular/core';
 import {ThDateDO} from '../../../../../../../../services/common/data-objects/th-dates/ThDateDO';
 import {AppContext, ThError} from '../../../../../../../../../../common/utils/AppContext';
-import {CustomScroll} from '../../../../../../../../../../common/utils/directives/CustomScroll';
-
 import {PriceProductYieldResultVM} from '../../../../../../../../services/yield-manager/dashboard/price-products//view-models/PriceProductYieldResultVM';
 import {PriceProductYieldItemVM} from '../../../../../../../../services/yield-manager/dashboard/price-products/view-models/PriceProductYieldItemVM';
-
-import {TranslationPipe} from '../../../../../../../../../../common/utils/localization/TranslationPipe'
-
 import {IYieldManagerDashboardPriceProducts} from '../../YieldManagerDashboardComponent'
 import {YieldManagerDashboardPriceProductsService} from '../../../../../../../../services/yield-manager/dashboard/price-products/YieldManagerDashboardPriceProductsService';
 import {PriceProductYieldParam, PriceProductYieldAction} from '../../../../../../../../services/yield-manager/dashboard/common/PriceProductYieldParam';
-
-import {PriceProductStateComponent} from './components/price-product-state/PriceProductStateComponent';
 import {IYieldStateModel} from './components/price-product-state/IYieldStateModel';
-
 import {YieldActionsPanelComponent} from './components/yield-actions-panel/YieldActionsPanelComponent';
 import {IActionPaneYieldParams} from './components/yield-actions-panel/YieldActionsPanelComponent';
-
 import {ThDateIntervalDO} from '../../../../../../../../services/common/data-objects/th-dates/ThDateIntervalDO';
 import {YieldFilterType} from '../../../../../../../../services/common/data-objects/yield-filter/YieldFilterDO';
-
 import {IFilterSelection} from '../../common/interfaces/IFilterSelection';
 import {IFilterVM} from '../../../../../../../../services/yield-manager/dashboard/filter/view-models/IFilterVM';
 
-declare var _: any;
-
 @Component({
 	selector: 'yield-price-products',
-	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/yield-manager/dashboard/components/yield-price-products/template/yield-price-products.html',
-	directives: [YieldActionsPanelComponent, PriceProductStateComponent, CustomScroll],
-	pipes: [TranslationPipe]
+	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/yield-manager/dashboard/components/yield-price-products/template/yield-price-products.html'
 })
 export class YieldPriceProductsComponent implements OnInit {
 	@ViewChild(YieldActionsPanelComponent) actionsPanelComponent: YieldActionsPanelComponent;

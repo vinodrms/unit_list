@@ -1,15 +1,14 @@
-import {Component, ViewChild, AfterViewInit, Input, Output, EventEmitter, DynamicComponentLoader, Type, ResolvedReflectiveProvider, ViewContainerRef} from '@angular/core';
+import {Component, ViewChild, AfterViewInit, Input, Output, EventEmitter, Type, ResolvedReflectiveProvider, ViewContainerRef} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/combineLatest';
 import {BaseComponent} from '../../../../../../../common/base/BaseComponent';
 import {AppContext, ThError} from '../../../../../../../common/utils/AppContext';
+import {ModuleLoaderService} from '../../../../../../../common/utils/module-loader/ModuleLoaderService';
 import {AddOnProductsService} from '../../../../../services/add-on-products/AddOnProductsService';
 import {AddOnProductVM} from '../../../../../services/add-on-products/view-models/AddOnProductVM';
 import {AddOnProductDO} from '../../../../../services/add-on-products/data-objects/AddOnProductDO';
 import {LazyLoadingTableComponent} from '../../../../../../../common/utils/components/lazy-loading/LazyLoadingTableComponent';
 import {AddOnProductTableMetaBuilderService} from './services/AddOnProductTableMetaBuilderService';
-import {AddOnProductOverviewComponent} from '../pages/add-on-product-overview/AddOnProductOverviewComponent';
-import {AddOnProductEditComponent} from '../pages/add-on-product-edit/AddOnProductEditComponent';
 import {InventoryStateManager} from '../../utils/state-manager/InventoryStateManager';
 import {InventoryScreenStateType} from '../../utils/state-manager/InventoryScreenStateType';
 import {InventoryScreenAction} from '../../utils/state-manager/InventoryScreenAction';
@@ -20,8 +19,7 @@ import {AddOnProductCategoryDO} from '../../../../../services/common/data-object
 @Component({
     selector: 'add-on-products',
     templateUrl: '/client/src/pages/internal/containers/common/inventory/add-on-products/main/template/add-on-products.html',
-    providers: [AddOnProductsService, AddOnProductTableMetaBuilderService],
-    directives: [LazyLoadingTableComponent, AddOnProductOverviewComponent, AddOnProductEditComponent]
+    providers: [AddOnProductsService, AddOnProductTableMetaBuilderService]
 })
 export class AddOnProductsComponent extends BaseComponent implements AfterViewInit {
     @Input() protected filterBreakfastCategory: boolean = false;
@@ -36,8 +34,8 @@ export class AddOnProductsComponent extends BaseComponent implements AfterViewIn
 
     private _inventoryStateManager: InventoryStateManager<AddOnProductVM>;
 
-    constructor(private _dynamicComponentLoader: DynamicComponentLoader,
-        private _appContext: AppContext,
+    constructor(private _appContext: AppContext,
+        private _moduleLoaderService: ModuleLoaderService,
         private _tableBuilder: AddOnProductTableMetaBuilderService,
         private _addOnProductCategoriesService: AddOnProductCategoriesService,
         private _addOnProductsService: AddOnProductsService) {
@@ -45,8 +43,8 @@ export class AddOnProductsComponent extends BaseComponent implements AfterViewIn
         this._inventoryStateManager = new InventoryStateManager<AddOnProductVM>(this._appContext, "addOnProduct.id");
         this.registerStateChange();
     }
-    public bootstrapOverviewBottom(componentToInject: Type, providers: ResolvedReflectiveProvider[]) {
-        this._dynamicComponentLoader.loadNextToLocation(componentToInject, this._overviewBottomVCRef, providers);
+    public bootstrapOverviewBottom(moduleToInject: Type<any>, componentToInject: Type<any>, providers: ResolvedReflectiveProvider[]) {
+        this._moduleLoaderService.loadNextToLocation(moduleToInject, componentToInject, this._overviewBottomVCRef, providers);
     }
     private registerStateChange() {
         this._inventoryStateManager.stateChangedObservable.subscribe((currentState: InventoryScreenStateType) => {

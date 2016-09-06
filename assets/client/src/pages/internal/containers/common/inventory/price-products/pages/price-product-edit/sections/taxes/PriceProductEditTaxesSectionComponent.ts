@@ -1,7 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {BaseComponent} from '../../../../../../../../../../common/base/BaseComponent';
-import {TranslationPipe} from '../../../../../../../../../../common/utils/localization/TranslationPipe';
-import {PercentagePipe} from '../../../../../../../../../../common/utils/pipes/PercentagePipe';
 import {IPriceProductEditSection} from '../utils/IPriceProductEditSection';
 import {PriceProductVM} from '../../../../../../../../services/price-products/view-models/PriceProductVM';
 import {ModalDialogRef} from '../../../../../../../../../../common/utils/modals/utils/ModalDialogRef';
@@ -14,8 +12,7 @@ import {CurrencyDO} from '../../../../../../../../services/common/data-objects/c
 @Component({
 	selector: 'price-product-edit-taxes-section',
 	templateUrl: '/client/src/pages/internal/containers/common/inventory/price-products/pages/price-product-edit/sections/taxes/template/price-product-edit-taxes-section.html',
-	providers: [TaxListModalService],
-	pipes: [TranslationPipe, PercentagePipe]
+	providers: [TaxListModalService]
 })
 export class PriceProductEditTaxesSectionComponent extends BaseComponent implements OnInit, IPriceProductEditSection {
 	readonly: boolean;

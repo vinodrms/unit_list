@@ -1,9 +1,7 @@
 import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import {TranslationPipe} from '../../../../../../../../../../../../../common/utils/localization/TranslationPipe';
 import {AppContext, ThError} from '../../../../../../../../../../../../../common/utils/AppContext';
 import {ModalDialogRef} from '../../../../../../../../../../../../../common/utils/modals/utils/ModalDialogRef';
 import {HotelOperationsPageControllerService} from '../../../../services/HotelOperationsPageControllerService';
-import {EditSaveButtonGroupComponent} from '../../../../../../../../../../../../../common/utils/components/button-groups/EditSaveButtonGroupComponent';
 import {BookingOperationsPageData} from '../../services/utils/BookingOperationsPageData';
 import {BookingCustomerEditRight} from '../../../../../../../../../../../services/bookings/data-objects/BookingEditRights';
 import {BookingDO} from '../../../../../../../../../../../services/bookings/data-objects/BookingDO';
@@ -15,9 +13,7 @@ import {CustomerRegisterModalService} from '../../../../../../../../../../common
 @Component({
     selector: 'booking-customer-editor',
     templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/booking-operations/components/customers-edit/template/booking-customer-editor.html',
-    directives: [EditSaveButtonGroupComponent],
-    providers: [CustomerRegisterModalService],
-    pipes: [TranslationPipe]
+    providers: [CustomerRegisterModalService]
 })
 export class BookingCustomerEditorComponent implements OnInit {
     @Output() onCustomersChanged = new EventEmitter<BookingDO>();

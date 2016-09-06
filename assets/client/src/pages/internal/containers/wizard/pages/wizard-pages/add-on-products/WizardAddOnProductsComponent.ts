@@ -1,4 +1,4 @@
-import {Component, ViewChild, OnInit, AfterViewInit, ReflectiveInjector, provide} from '@angular/core';
+import {Component, ViewChild, OnInit, AfterViewInit, ReflectiveInjector} from '@angular/core';
 import {BaseComponent} from '../../../../../../../common/base/BaseComponent';
 import {TranslationPipe} from '../../../../../../../common/utils/localization/TranslationPipe';
 import {WizardAddOnProductsStateService} from './services/WizardAddOnProductsStateService';
@@ -10,15 +10,13 @@ import {AddOnProductsTotalCountService} from '../../../../../services/add-on-pro
 import {AddOnProductDO} from '../../../../../services/add-on-products/data-objects/AddOnProductDO';
 import {TotalCountDO} from '../../../../../services/common/data-objects/lazy-load/TotalCountDO';
 import {WizardStepsComponent} from '../../utils/wizard-steps/WizardStepsComponent';
+import {WizardStepsModule} from '../../utils/wizard-steps/WizardStepsModule';
 
 @Component({
 	selector: 'wizard-add-on-products',
 	templateUrl: '/client/src/pages/internal/containers/wizard/pages/wizard-pages/add-on-products/template/wizard-add-on-products.html',
-	providers: [AddOnProductsTotalCountService],
-	directives: [AddOnProductsComponent],
-	pipes: [TranslationPipe]
+	providers: [AddOnProductsTotalCountService]
 })
-
 export class WizardAddOnProductsComponent extends BaseComponent implements OnInit, AfterViewInit {
 	@ViewChild(AddOnProductsComponent) private _addOnProductsComponent: AddOnProductsComponent;
 	private _isEditScreen: boolean;
@@ -45,7 +43,7 @@ export class WizardAddOnProductsComponent extends BaseComponent implements OnIni
 		});
 	}
 	private initializeWizardStepsComponent() {
-		this._addOnProductsComponent.bootstrapOverviewBottom(WizardStepsComponent, ReflectiveInjector.resolve([provide(WizardService, { useValue: this._wizardService })]))
+		this._addOnProductsComponent.bootstrapOverviewBottom(WizardStepsModule, WizardStepsComponent, ReflectiveInjector.resolve([{ provide: WizardService, useValue: this._wizardService }]));
 	}
 
 	public didChangeScreenStateType(screenStateType: InventoryScreenStateType) {
