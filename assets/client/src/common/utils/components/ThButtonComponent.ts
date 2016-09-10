@@ -3,13 +3,15 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 @Component({
 	selector: 'th-button',
 	template: `
-		<a class="btn th-button-box" (click)="triggerOnButtonClick()">
+		<a class="btn th-button-box" [ngClass]="{'pull-right': pullRight}" (click)="triggerOnButtonClick()">
 			<i class="fa fa-2x unitpal-font">{{ upFont }}</i>
 			<span>{{ text | translate }}</span>
 		</a>
 	`
 })
 export class ThButtonComponent {
+	@Input() pullRight: boolean = false;
+
 	private _upFont: string;
 	public get upFont(): string {
 		return this._upFont;

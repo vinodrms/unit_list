@@ -23,16 +23,7 @@
 			</div>
 		</div>
 		<div class="col-xs-4 col-md-4" *ngIf="!isCollapsed">
-			<div class="table-select-items pull-right" *ngIf="showPagination()">
-				<label>{{ 'Show' | translate }}</label>
-				<div class="no-padding">
-					<select class="form-control" [ngModel]="paginationIndex.numOfItemsPerPage" (ngModelChange)="didChangeNumOfItemsPerPage($event)" name="paginationIndexNumOfItemsPerPage">
-						<option *ngFor="let nomPerPage of paginationIndex.nunOfItemsPerPageList" [value]="nomPerPage">
-							{{nomPerPage}} {{ 'items' | translate }}
-						</option>
-					</select> 
-				</div>
-			</div>
+			<th-button *ngIf="tableOptions.canAdd" [upFont]="'\''" [text]="tableMeta.addButtonText" [pullRight]="true" (onButtonClick)="addItem()"></th-button>
 		</div>
 	</div>
 
@@ -129,7 +120,18 @@
 		<tfoot *ngIf="showTableFooter()">
 			<tr>
 				<td [ngClass]="{'left up-col-30p': !isCollapsed, 'left up-col-40p': isCollapsed}">
-					<th-button *ngIf="tableOptions.canAdd" [upFont]="'\''" [text]="'Add'" (onButtonClick)="addItem()"></th-button>
+					<div class="form-inline table-select-items">
+						<div class="form-group" *ngIf="showPagination() && !isCollapsed">
+							<label>{{ 'Show' | translate }}</label>
+							<div class="input-group">
+								<select class="form-control" [ngModel]="paginationIndex.numOfItemsPerPage" (ngModelChange)="didChangeNumOfItemsPerPage($event)" name="paginationIndexNumOfItemsPerPage">
+									<option *ngFor="let nomPerPage of paginationIndex.nunOfItemsPerPageList" [value]="nomPerPage">
+										{{nomPerPage}} {{ 'items' | translate }}
+									</option>
+								</select> 
+							</div>
+						</div>
+					</div>
 				</td>
 				<td [ngClass]="{'up-col-30p': !isCollapsed, 'up-col-0p': isCollapsed}">
 					<span *ngIf="showPagination()">
