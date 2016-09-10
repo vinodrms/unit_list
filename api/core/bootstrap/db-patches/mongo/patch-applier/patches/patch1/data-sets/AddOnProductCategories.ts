@@ -39,12 +39,12 @@ export class AddOnProductCategories extends ABaseSetting {
         },
         {
             type: AddOnProductCategoryType.AddOnProduct,
-            name: "Outdoor Activities",
+            name: "Food and Beverages",
             iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
         },
         {
             type: AddOnProductCategoryType.AddOnProduct,
-            name: "Food and Beverages",
+            name: "Outdoor Activities",
             iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
         },
         {

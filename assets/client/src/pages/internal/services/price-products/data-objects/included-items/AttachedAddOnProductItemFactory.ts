@@ -20,13 +20,13 @@ export class AttachedAddOnProductItemFactory {
         }
     }
     public getDefaultStrategy(): IAttachedAddOnProductItemStrategy {
-        return this.getStrategyByType(AttachedAddOnProductItemStrategyType.OneItemPerDay);
+        return this.getStrategyByType(AttachedAddOnProductItemStrategyType.OneItemPerDayForEachAdultOrChild);
     }
     public getStrategyList(): IAttachedAddOnProductItemStrategy[] {
         var strategyList: IAttachedAddOnProductItemStrategy[] = [
+            new OneItemPerDayForEachAdultOrChildAttachedAddOnProductItemStrategyDO(),
             new OneItemPerDayAttachedAddOnProductItemStrategyDO(),
-            new OneItemForEachAdultOrChildAttachedAddOnProductItemStrategyDO(),
-            new OneItemPerDayForEachAdultOrChildAttachedAddOnProductItemStrategyDO()
+            new OneItemForEachAdultOrChildAttachedAddOnProductItemStrategyDO()
         ];
         var fixedNoStrategyList = this.getFixedNumberStrategyList();
         strategyList = strategyList.concat(fixedNoStrategyList);
