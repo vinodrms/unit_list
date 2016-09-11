@@ -14,6 +14,9 @@
                             <span class="bed-icon unitpal-font">{{bedSelectionVM.bedVM.template.iconUrl}}</span>
                             <small class="bed-slot-property">{{bedSelectionVM.bedVM.bed.name}}</small>
                             <small class="bed-slot-property type">
+                                <span>
+                                    <i class="fa fa-arrows-h"></i>{{ bedSelectionVM.bedVM.bed.size.lengthCm }} <i class="fa fa-arrows-v">{{ bedSelectionVM.bedVM.bed.size.widthCm }}</i>
+                                </span>
                                 {{ bedSelectionVM.bedVM.bedStorageTypeString | translate }}
                             </small>
                             <small class="bed-slot-property info">
