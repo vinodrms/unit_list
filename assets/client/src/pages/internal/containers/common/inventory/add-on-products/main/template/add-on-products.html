@@ -13,6 +13,8 @@
 	<add-on-product-overview 
 		*ngIf="selectedAddOnProductVM && !isEditing" 
 		[addOnProductVM]="selectedAddOnProductVM"
+		(onCopy)="copyAddOnProduct($event)"
+		(onDelete)="deleteAddOnProduct($event)"
 		(onEdit)="editAddOnProduct($event)">
 	</add-on-product-overview>
 	<add-on-product-edit

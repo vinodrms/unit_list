@@ -13,6 +13,8 @@
 	<bed-overview
 		*ngIf="selectedBedVM && !isEditing" 
 		[bedVM]="selectedBedVM"
+		(onCopy)="copyBed($event)"
+		(onDelete)="deleteBed($event)"
 		(onEdit)="editBed($event)">
 	</bed-overview>
 	<bed-edit

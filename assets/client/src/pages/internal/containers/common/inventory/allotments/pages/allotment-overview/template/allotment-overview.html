@@ -36,10 +36,10 @@
 		</small>
 	</div>
 	<div>
-		<a class="btn btn-lg" (click)="editAllotment()">
-			<i class="fa fa-pencil"></i> {{ 'Edit' | translate }}
+		<a class="btn btn-lg p-l-0" (click)="editAllotment()">
+			<i class="fa unitpal-font">]</i> {{ 'Edit' | translate }}
 		</a>
-		<a class="btn btn-lg" (click)="archiveAllotment()" *ngIf="allotmentVM.allotment.isActive()">
+		<a class="btn btn-lg p-l-0" (click)="archiveAllotment()" *ngIf="allotmentVM.allotment.isActive()">
 			<i class="fa fa-archive"></i> {{ 'Archive' | translate }}
 		</a>
 	</div>

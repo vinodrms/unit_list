@@ -37,6 +37,11 @@ export class PriceProductOverviewComponent extends BaseComponent {
 		this.onDraft.next(this._priceProductVM);
 	}
 
+	@Output() onCopy = new EventEmitter();
+	public copyPriceProduct() {
+		this.onCopy.next(this._priceProductVM);
+	}
+
 	constructor() {
 		super();
 	}

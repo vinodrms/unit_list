@@ -28,6 +28,16 @@ export class AddOnProductOverviewComponent extends BaseComponent {
 		this.onEdit.next(this._addOnProductVM);
 	}
 
+	@Output() onCopy = new EventEmitter();
+	public copyAddOnProduct() {
+		this.onCopy.next(this._addOnProductVM);
+	}
+
+	@Output() onDelete = new EventEmitter();
+	public deleteAddOnProduct() {
+		this.onDelete.next(this._addOnProductVM);
+	}
+
 	constructor() {
 		super();
 	}

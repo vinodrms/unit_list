@@ -32,6 +32,16 @@ export class RoomOverviewComponent extends BaseComponent {
 		this.onEdit.next(this._roomVM);
 	}
 
+	@Output() onCopy = new EventEmitter();
+	public copyRoom() {
+		this.onCopy.next(this._roomVM);
+	}
+
+	@Output() onDelete = new EventEmitter();
+	public deleteRoom() {
+		this.onDelete.next(this._roomVM);
+	}
+
 	public openRoomOperationsModal() {
 		this._hotelOperationsModalService.openRoomOperationsModal(this._roomVM.room.id).then((modalDialogRef: ModalDialogRef<HotelOperationsResult>) => {
 			modalDialogRef.resultObservable
