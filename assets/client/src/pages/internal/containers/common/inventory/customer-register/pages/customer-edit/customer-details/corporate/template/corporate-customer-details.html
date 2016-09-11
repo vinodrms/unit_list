@@ -5,6 +5,7 @@
 				[vatDetails]="vatDetails"
 				[isRequired]="true"
 				[didSubmitForm]="didSubmit" 
+				[countryLabel]="'Company Country'"
 				(onVatDetailsChanged)="didChangeVatDetails($event)" 
 				(onVatResponseReceived)="didGetVatResponse($event)">
 			</vat-input>
@@ -119,7 +120,7 @@
 				</button>
 				</div>
 			</div>
-			<small class="text-muted"><i class="fa fa-info-circle"></i>  {{ 'If selected, it means that you have an agreement with the company to pay invoices.' | translate }}</small>
+			<small class="text-muted"><i class="fa fa-info-circle"></i>  {{ 'If selected, you can guarantee Bookings by the company, and check out guests by invoicing the company/Agent.' | translate }}</small>
 		</div>
 		<div class="col-md-4 col-xs-12">
 			<div class="form-group">

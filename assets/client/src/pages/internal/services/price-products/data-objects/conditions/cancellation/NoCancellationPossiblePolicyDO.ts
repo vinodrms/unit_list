@@ -7,7 +7,7 @@ export class NoCancellationPossiblePolicyDO extends BaseDO implements IPriceProd
 	}
 	public getDescription(): CancellationPolicyDescription {
 		return {
-			phrase: "No cancellation possible"
+			phrase: "No cancellation"
 		}
 	}
 	public hasCancellationPolicy(): boolean {

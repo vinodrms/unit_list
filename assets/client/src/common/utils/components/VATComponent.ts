@@ -27,7 +27,7 @@ export interface VatResponse {
 	template: `
 		<div class="row">
 			<div class="col-xs-12 col-md-6 form-group">
-				<label>{{ 'Country' | translate }}</label>
+				<label>{{ countryLabel | translate }}</label>
 				<div class="input-group" [ngClass]="{'form-warning': displayCountryError()}">
 					<select class="form-control" [ngModel]="vatDetails.countryCode" (ngModelChange)="didSelectCountryCode($event)" name="vatDetailsCountryCode">
 						<option value="" disabled>{{ 'Select a country' | translate }}</option>
@@ -56,6 +56,7 @@ export class VATComponent extends BaseComponent implements OnInit {
 	countryList: CountryDO[];
 	@Input() isRequired: boolean = false;
 	@Input() didSubmitForm: boolean = false;
+	@Input() countryLabel: string = "Country";
 
 	convertedCountryCode: string = "";
 	private _vatDetails: VatDetails = {

@@ -42,32 +42,32 @@ export class PriceProductConstraintFactory {
 		return [
 			{
 				constraintType: PriceProductConstraintType.BookableOnlyOnDaysFromWeek,
-				title: "Bookable only on days from week",
+				title: "Available only on selected days of the week",
 				description: "Bookings can only be made on specific days from week (e.g. It you select Monday, the price product will apply only to bookings made from Monday to Tuesday.)",
 				brief: "Bookable on"
 			},
 			{
 				constraintType: PriceProductConstraintType.IncludeDaysFromWeek,
-				title: "Include days from week",
+				title: "Must include selected days of the week",
 				description: "Bookings must include the days selected. (e.g. If you select Saturday, the booking must include a Saturday)",
 				brief: "Must include"
 			},
 			{
 				constraintType: PriceProductConstraintType.MustArriveOnDaysFromWeek,
-				title: "Must arrive on days from week",
+				title: "Must arrive on selected day of the week",
 				description: "Bookings must always start with a day from the ones selected. (e.g. If you select Monday, the booking must start on a Monday)",
 				brief: "Arrive on"
 			},
 			{
 				constraintType: PriceProductConstraintType.MaximumLeadDays,
-				title: "Maximum lead days",
-				description: "The maximum number of days between the time of the booking and arrival date. (e.g. If selected 1 day and want to book today, the booking must start either today or tomorrow.)",
+				title: "Can be booked no more than selected days before arrival",
+				description: "The Price Product can be booked after the selected number of days before arrival. (E.g. if 2 days is selected, the booking can only be made 2 days or less before arrival)",
 				brief: "Max Lead"
 			},
 			{
 				constraintType: PriceProductConstraintType.MinimumLeadDays,
-				title: "Minimum lead days",
-				description: "The minimum number of days between the time of the booking and arrival date. (e.g. If selected 40 days, the price product will be available only for minimum 40 days between the booking and arrival)",
+				title: "Can only be booked at least selected days before arrival",
+				description: "The Price Product can be booked until the selected number of days before arrival. (E.g. if 28 days is selected, the booking can only be made 28 days or more before arrival)",
 				brief: "Min lead"
 			},
 			{

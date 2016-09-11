@@ -7,7 +7,7 @@ export class VatTaxViewer implements ITaxViewer {
 		return "VAT";
 	}
 	getDescription(): string {
-		return "Add VATs that will be later on used";
+		return "All VAT’s used by property";
 	}
 	filterTaxes(taxContainer: TaxContainerDO): TaxDO[] {
 		return taxContainer.vatList;

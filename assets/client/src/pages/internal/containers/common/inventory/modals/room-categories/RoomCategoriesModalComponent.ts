@@ -121,7 +121,9 @@ export class RoomCategoriesModalComponent extends BaseComponent implements ICust
 		this._scrollToBottom = true;
 	}
 	public didSelectCategory(): boolean {
-		return this.selectedCategoryVMList.length > 0;
+		return this.selectedCategoryVMList.length > 0 &&
+			!this._appContext.thUtils.isUndefinedOrNull(this.selectedCategoryVMList[0].roomCategory) &&
+			_.isString(this.selectedCategoryVMList[0].roomCategory.id);
 	}
 	public selectRoomCategory(roomCategVM: RoomCategoryVM) {
 		if (this._roomCategModalInput.allowMultiSelection) {

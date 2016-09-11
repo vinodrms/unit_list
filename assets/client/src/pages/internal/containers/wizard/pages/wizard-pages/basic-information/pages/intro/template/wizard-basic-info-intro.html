@@ -1,13 +1,28 @@
 <div class="row card-header">
 	<div class="col-xs-6 col-md-6">
-		<h1>{{ 'Welcome to UnitPal' | translate }} <small>{{ 'let\'s set up your hotel.' | translate }}</small></h1>
+		<h1>{{ 'Welcome to UnitPal' | translate }} <small>{{ 'Property & Revenue Management System' | translate }}</small></h1>
 	</div>
 
 </div>
 <div class="row card-body">
-	<div class="col-xs-9 col-md-9 th-padding-top">
-		<div class="col-xs-9 col-md-9">
-			<p>{{ '[Wizard Step 0] Welcome Message' | translate }}</p>
+	<div class="col-xs-9 col-md-9 th-padding-top full-height">
+		<loading-component [isLoading]="isLoading"></loading-component>
+		<div class="row full-height" *ngIf="!isLoading" customScroll>
+			<div class="col-xs-12">
+				<p>{{ 'Dear' | translate }} {{fullName}},</p>
+			</div>
+			<div class="col-xs-12">
+				<p>{{ '[Wizard Step 0] Welcome Message - Part 1' | translate }}</p>
+			</div>
+			<div class="col-xs-12">
+				<p>{{ '[Wizard Step 0] Welcome Message - Part 2' | translate }}</p>
+			</div>
+			<div class="col-xs-12">
+				<p>{{ '[Wizard Step 0] Welcome Message - Part 3' | translate }}</p>
+			</div>
+			<div class="col-xs-12">
+				<p>{{ '[Wizard Step 0] Welcome Message - Part 4' | translate }}</p>
+			</div>
 		</div>
 	</div>
 	<div class="col-xs-3 col-md-3 overview-right">

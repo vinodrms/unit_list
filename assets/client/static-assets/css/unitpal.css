@@ -296,10 +296,17 @@ booking-operations-page>div {
     background-color: rgba(255,132,50,1.0);
     font-size: 12px;
 }
+.btn.btn-app.btn-long {
+    width: 100px;
+    font-size: 16px;
+}
 
 .btn.btn-app > i {
     top: -17px;
     position: relative;
+}
+.btn.btn-app.btn-finish > i {
+    left: -4px;
 }
 .wizard-pagination .btn-spaceing{
     display: inline-block;

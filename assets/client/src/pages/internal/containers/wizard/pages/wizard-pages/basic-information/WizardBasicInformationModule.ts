@@ -1,6 +1,8 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {SharedPipesModule} from '../../../../../../../common/utils/pipes/modules/SharedPipesModule';
+import {SharedDirectivesModule} from '../../../../../../../common/utils/directives/modules/SharedDirectivesModule';
+import {SharedComponentsModule} from '../../../../../../../common/utils/components/modules/SharedComponentsModule';
 import {CommonBasicInfoModule} from '../../../../common/basic-info/CommonBasicInfoModule';
 import {WizardStepsModule} from '../../utils/wizard-steps/WizardStepsModule';
 import {wizardBasicInfoRouting} from './WizardBasicInformationRoutes';
@@ -20,7 +22,8 @@ var wizardBasicInfoComponents = [
     WizardBasicInfoPropertyDetailsComponent
 ];
 @NgModule({
-    imports: [CommonModule, SharedPipesModule, CommonBasicInfoModule, WizardStepsModule, wizardBasicInfoRouting],
+    imports: [CommonModule, SharedPipesModule, SharedDirectivesModule, SharedComponentsModule,
+        CommonBasicInfoModule, WizardStepsModule, wizardBasicInfoRouting],
     declarations: [wizardBasicInfoComponents],
     exports: [wizardBasicInfoComponents],
     providers: [TimezoneService]
