@@ -6,7 +6,10 @@
         <div *ngIf="!bedVM.accommodatesBabies" class="bed-slot-info" [title]="bedVM.bed.name">
             <span class="bed-icon unitpal-font">{{bedVM.template.iconUrl}}</span>
             <small class="bed-slot-property">{{bedVM.bed.name}}</small>
-            <small class="bed-slot-property type">
+            <small class="bed-slot-property type" title='{{bedVM.bedStorageTypeString | translate}}'>
+                <span>
+                    <i class="fa fa-arrows-h"></i>{{ bedVM.bed.size.lengthCm }} <i class="fa fa-arrows-v">{{ bedVM.bed.size.widthCm }}</i>
+                </span>
                 {{ bedVM.bedStorageTypeString | translate }}
             </small>
             <small class="bed-slot-property info">

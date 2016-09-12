@@ -8,7 +8,7 @@ import {BedAccommodationType} from '../../../../../../services/beds/data-objects
     templateUrl: '/client/src/pages/internal/containers/common/inventory/beds/pages/bed-overview/template/bed-overview.html'
 })
 export class BedOverviewComponent extends BaseComponent {
-    constructor() { 
+    constructor() {
         super();
     }
 
@@ -16,17 +16,27 @@ export class BedOverviewComponent extends BaseComponent {
 	public get bedVM(): BedVM {
 		return this._bedVM;
 	}
-    
+
 	@Input()
 	public set bedVM(bedVM: BedVM) {
 		this._bedVM = bedVM;
 	}
-    
+
     @Output() onEdit = new EventEmitter();
 	public editBed() {
 		this.onEdit.next(this._bedVM);
 	}
-	
+
+	@Output() onCopy = new EventEmitter();
+	public copyBed() {
+		this.onCopy.next(this._bedVM);
+	}
+
+	@Output() onDelete = new EventEmitter();
+	public deleteBed() {
+		this.onDelete.next(this._bedVM);
+	}
+
 	public get accommodatesBabies(): boolean {
 		return this._bedVM.bed.accommodationType === BedAccommodationType.Babies;
 	}

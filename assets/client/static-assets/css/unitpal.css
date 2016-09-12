@@ -296,10 +296,17 @@ booking-operations-page>div {
     background-color: rgba(255,132,50,1.0);
     font-size: 12px;
 }
+.btn.btn-app.btn-long {
+    width: 100px;
+    font-size: 16px;
+}
 
 .btn.btn-app > i {
     top: -17px;
     position: relative;
+}
+.btn.btn-app.btn-finish > i {
+    left: -4px;
 }
 .wizard-pagination .btn-spaceing{
     display: inline-block;
@@ -1186,7 +1193,7 @@ lazy-loading-table {
     font-size: 30px;
 }
 .th-button-box>span {
-    font-size: 12px;
+    font-size: 13px;
     height: 30px;
     text-align: right;
     white-space: nowrap;
@@ -1226,20 +1233,11 @@ table.lazy-loading tfoot {
   flex-shrink: 0;
 }
 div.table-select-items {
-    display: inline;
-}
-div.table-select-items>label {
     float: left;
-    font-weight: normal;
-    font-size: 14px;
-    padding-top: 6px;
-}
-div.table-select-items>div {
-    float: left;
-    padding-left: 3px;
+    padding-left: 10px;
 }
 @media screen and (max-width: 850px) {
-    div.table-select-items>label {
+    div.table-select-items {
         display: none;
     }
 }

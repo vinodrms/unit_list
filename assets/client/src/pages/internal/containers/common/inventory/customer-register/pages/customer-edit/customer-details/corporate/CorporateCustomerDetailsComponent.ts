@@ -78,8 +78,7 @@ export class CorporateCustomerDetailsComponent extends BaseFormComponent {
 	}
 
 	public isValid(): boolean {
-		return this._formBuilder.individualFormGroup.valid && this._corporateDetails.address.country != null &&
-			_.isString(this._corporateDetails.vatCode) && this._corporateDetails.vatCode.length > 0;
+		return this._formBuilder.individualFormGroup.valid && this._corporateDetails.address.country != null && _.isString(this._corporateDetails.address.country.code);
 	}
 	public getCustomerDetails(): CorporateDetailsDO {
 		this._formBuilder.updateControlValuesOn(this._corporateDetails);

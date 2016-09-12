@@ -45,9 +45,9 @@
 
         <div class="row">
             <div class="col-xs-12 col-md-12 form-group">
-                <label class="control-label">{{ 'Icon' | translate }}</label>
+                <label class="control-label">{{ 'Select icon' | translate }}</label>
                 <div class="row" data-toggle="buttons">
-                    <div class="col-md-2 button-items" *ngFor="let bedTemplate of displayedBedTemplates" title="{{ bedTemplate.name }}">
+                    <div class="col-md-2 button-items" *ngFor="let bedTemplate of displayedBedTemplates">
                         <label class="btn btn-default btn-group bed-btn" [ngClass]="{ active: bedTemplate.id == bedVM.bed.bedTemplateId }" (click)="bedVM.bed.bedTemplateId=bedTemplate.id">
                         <span class="unitpal-font">{{bedTemplate.iconUrl}}</span>
                     </label>
@@ -88,10 +88,7 @@
                     </div>
                 </div>
                 <label class="text-muted">
-                    <small><i class="fa fa-info-circle"></i> {{ 'Each adult is replaceable with a child. Possible configurations:' | translate }} 
-                        <span *ngFor="let configuration of possibleConfigurations; let i = index">{{'Max Adults:' | translate}} {{configuration.maxNoAdults}} {{'Max Children:' | translate}} {{configuration.maxNoChildren}}
-                            <span *ngIf="i < possibleConfigurations.length - 1"> {{'OR' | translate}} </span>
-                        </span>
+                    <small><i class="fa fa-info-circle"></i> {{ 'If the bed can accommodate 1 adult and 0 children, it can also accommodate 1 child and 0 adults, but not vice versa.' | translate }} 
                     </small>
                 </label>
             </div>

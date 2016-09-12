@@ -1,5 +1,5 @@
 <div class="col-md-4 col-sm-4 col-xs-12 form-group">
-	<label>{{ 'Price per number of persons' | translate }} </label>
+	<label>{{ 'Price per person' | translate }} </label>
 	<div class="input-group">
 		<div class="btn-group" data-toggle="buttons">
 			<button class="btn btn-default" (click)="isPricePerNumberOfPersons=true" [ngClass]="{'active': isPricePerNumberOfPersons}"
@@ -13,10 +13,10 @@
 		</div>
 	</div>
 	<small class="text-muted" *ngIf="isPricePerNumberOfPersons">
-		<i class="fa fa-info-circle"></i> {{ 'All the prices are cummulative. For example, the price for a booking made for 2 adults and 2 children will have the total price as the sum between the 1st Adult, 2nd Adult, 1st Child and 2nd Child' | translate }} 
+		<i class="fa fa-info-circle"></i> {{ 'Total price will be the sum of each person occupying the room, added together.' | translate }} 
 	</small>
 	<small class="text-muted" *ngIf="!isPricePerNumberOfPersons">
-		<i class="fa fa-info-circle"></i> {{ 'Single price for a room category, not dependent on the number of persons' | translate }} 
+		<i class="fa fa-info-circle"></i> {{ 'One price per Room Category, regardless of the amount of occupants' | translate }} 
 	</small>
 </div>
 

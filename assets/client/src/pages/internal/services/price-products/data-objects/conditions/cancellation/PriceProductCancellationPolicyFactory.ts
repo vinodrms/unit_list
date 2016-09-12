@@ -20,19 +20,19 @@ export class PriceProductCancellationPolicyFactory {
 	public getCancellationPolicyMetaList(): CancellationPolicyMeta[] {
 		return [
 			{
-				policyName: "Can cancel whenever",
+				policyName: "Can cancel any time",
 				policyType: PriceProductCancellationPolicyType.NoPolicy
 			},
 			{
-				policyName: "No cancellation possible",
+				policyName: "No cancellation",
 				policyType: PriceProductCancellationPolicyType.NoCancellationPossible
 			},
 			{
-				policyName: "Can cancel before number of days until arrival",
+				policyName: "Can cancel until X days before arrival",
 				policyType: PriceProductCancellationPolicyType.CanCancelDaysBefore
 			},
 			{
-				policyName: "Can cancel before time on day of arrival",
+				policyName: "Can cancel until X time on day upon arrival",
 				policyType: PriceProductCancellationPolicyType.CanCancelBeforeTimeOnDayOfArrival
 			}
 		];

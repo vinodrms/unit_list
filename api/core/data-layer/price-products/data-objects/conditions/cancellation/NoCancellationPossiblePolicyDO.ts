@@ -19,7 +19,7 @@ export class NoCancellationPossiblePolicyDO extends BaseDO implements IPriceProd
 		return true;
 	}
 	public getValueDisplayString(thTranslation: ThTranslation): string {
-		return thTranslation.translate("No cancellation possible");
+		return thTranslation.translate("No cancellation");
 	}
 
 	public generateGuaranteedTriggerTime(triggerParams: PolicyTriggerTimeParams): BookingStateChangeTriggerTimeDO {

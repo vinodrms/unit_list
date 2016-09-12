@@ -25,8 +25,14 @@
         <small>{{ bedVM.bed.notes }}</small>
     </div>
     <div>
-		<a class="btn btn-lg" (click)="editBed()">
-			<i class="fa fa-pencil"></i> {{ 'Edit' | translate }}
+		<a class="btn btn-lg p-l-0" (click)="copyBed()">
+			<i class="fa unitpal-font">[</i> {{ 'Copy' | translate }}
+		</a>
+        <a class="btn btn-lg p-l-0" (click)="editBed()">
+			<i class="fa unitpal-font">]</i> {{ 'Edit' | translate }}
+		</a>
+        <a class="btn btn-lg p-l-0" (click)="deleteBed()">
+			<i class="fa unitpal-font">\</i> {{ 'Delete' | translate }}
 		</a>
 	</div>
 </div>

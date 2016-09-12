@@ -18,7 +18,7 @@ export class NoCancellationPolicyDO extends BaseDO implements IPriceProductCance
 		return true;
 	}
 	public getValueDisplayString(thTranslation: ThTranslation): string {
-		return thTranslation.translate("Can cancel whenever");
+		return thTranslation.translate("Can cancel any time");
 	}
 
 	public generateGuaranteedTriggerTime(triggerParams: PolicyTriggerTimeParams): BookingStateChangeTriggerTimeDO {

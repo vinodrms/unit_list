@@ -11,6 +11,7 @@ import {AddOnProductDO} from '../../../data-layer/add-on-products/data-objects/A
 import {AddOnProductCategoryDO, AddOnProductCategoryType} from '../../../data-layer/common/data-objects/add-on-product/AddOnProductCategoryDO';
 import {BookingAggregatedData} from '../aggregators/BookingAggregatedData';
 import {InvoiceItemDO} from '../../../data-layer/invoices/data-objects/items/InvoiceItemDO';
+import {HotelDO} from '../../../data-layer/hotel/data-objects/HotelDO';
 
 import _ = require('underscore');
 
@@ -18,6 +19,7 @@ export class BookingConfirmationVM {
     private _isoWeekDayUtils: ISOWeekDayUtils;
     private _thUtils: ThUtils;
     private _bookingAggregatedData: BookingAggregatedData;
+    private _hotel: HotelDO;
 
     private _notAvailableTranslatedLabel: string;
 
@@ -27,10 +29,12 @@ export class BookingConfirmationVM {
     checkInDay: number;
     checkInSOWeekDay: string;
     checkInMonth: string;
+    checkInHourDetails: string;
 
     checkOutDay: number;
     checkOutISOWeekDay: string;
     checkOutMonth: string;
+    checkOutHourDetails: string;
 
     totalPrice: number;
     ccyCode: string;
@@ -58,8 +62,9 @@ export class BookingConfirmationVM {
         this._notAvailableTranslatedLabel = this._thTranslation.translate('n/a');
     }
 
-    public buildFromBookingAggregatedData(bookingAggregatedData: BookingAggregatedData) {
+    public buildFromBookingAggregatedData(bookingAggregatedData: BookingAggregatedData, hotel: HotelDO) {
         this._bookingAggregatedData = bookingAggregatedData;
+        this._hotel = hotel;
         this.initBookingReferences();
         this.initCheckInAndCheckOutDates();
         this.initPricingDetails();
@@ -81,6 +86,7 @@ export class BookingConfirmationVM {
             return isoWeekDayVM.iSOWeekDay === checkInThDate.getISOWeekDay();
         }).name;
         this.checkInMonth = ThMonth[checkInThDate.month];
+        this.checkInHourDetails = this._thTranslation.translate("Check In from %checkInHour%", { checkInHour: this._hotel.operationHours.checkInFrom.toString() });
 
         var checkOutThDate = this._bookingAggregatedData.booking.interval.end;
         this.checkOutDay = checkOutThDate.day;
@@ -88,6 +94,7 @@ export class BookingConfirmationVM {
             return isoWeekDayVM.iSOWeekDay === checkOutThDate.getISOWeekDay();
         }).name;
         this.checkOutMonth = ThMonth[checkOutThDate.month];
+        this.checkOutHourDetails = this._thTranslation.translate("Check Out until %checkOutHour%", { checkOutHour: this._hotel.operationHours.checkOutTo.toString() });
     }
     private initPricingDetails() {
         this.ccyCode = this._bookingAggregatedData.ccyCode;
@@ -184,7 +191,7 @@ export class BookingConfirmationVM {
             }
         });
         if (this.reservedAops.length == 0) {
-            this.reservedAops = this._notAvailableTranslatedLabel;
+            this.reservedAops = "None reserved. Please contact the property for details.";
             this.reservedAopsDescription = '';
         }
         else {

@@ -30,13 +30,13 @@ export class AllotmentConstraintFactory {
 			},
 			{
 				constraintType: AllotmentConstraintType.BookableOnlyOnDaysFromWeek,
-				title: "Bookable only on days from week",
+				title: "Available only on selected days of the week",
 				description: "Bookings can only be made on specific days from week (e.g. It you select Monday, the allotment will apply only to bookings made from Monday to Tuesday.)",
 				brief: "Bookable on",
 			},
 			{
 				constraintType: AllotmentConstraintType.IncludeDaysFromWeek,
-				title: "Include days from week",
+				title: "Must include selected days of the week",
 				description: "Bookings must include the days selected. (e.g. If you select Saturday, the booking must include a Saturday)",
 				brief: "Must include"
 			}

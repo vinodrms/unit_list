@@ -1,17 +1,22 @@
 <div class="wizard-pagination" align="center" *ngIf="wizardButtonsVisible">
-		<a class="signup-skip" *ngIf="canSkip()" (click)="handleSkipPressed()">
-		{{ 'Skip this step' | translate }}
-		</a>
-		<a class="btn btn-app" role="button" *ngIf="hasPrevious()" (click)="handlePreviousPressed()">
-			<i class="fa fa-angle-left"></i>
-		</a>
-		<span class="btn-spaceing"></span>
-		<a class="btn btn-app" role="button" *ngIf="hasNext()" (click)="handleNextPressed()">
-			<i *ngIf="isMovingNext" class="fa fa-spinner fa-pulse next-btn-loading"></i>
-			<i *ngIf="!isMovingNext" class="fa fa-angle-right"></i>
-		</a>
-		<a class="btn btn-app" role="button" *ngIf="!hasNext()" (click)="handleNextPressed()">
-			<i *ngIf="isMovingNext" class="fa fa-spinner fa-pulse next-btn-loading"></i>
-			<i *ngIf="!isMovingNext" class="fa fa-angle-double-right"></i>
-		</a>
+	<a class="signup-skip" *ngIf="canSkip()" (click)="handleSkipPressed()">
+	{{ 'Skip this step' | translate }}
+	</a>
+	<a class="btn btn-app" role="button" *ngIf="hasPrevious()" (click)="handlePreviousPressed()">
+		<i class="fa fa-angle-left"></i>
+	</a>
+	<span class="btn-spaceing"></span>
+	
+	<a class="btn btn-app btn-long" role="button" *ngIf="isFirstPage" (click)="handleNextPressed()">
+		<i *ngIf="isMovingNext" class="fa fa-spinner fa-pulse next-btn-loading"></i>
+		{{ 'Start' | translate }}
+	</a>
+	<a class="btn btn-app" role="button" *ngIf="!isFirstPage && !isLastPage" (click)="handleNextPressed()">
+		<i *ngIf="isMovingNext" class="fa fa-spinner fa-pulse next-btn-loading"></i>
+		<i *ngIf="!isMovingNext" class="fa fa-angle-right"></i>
+	</a>
+	<a class="btn btn-app btn-finish" role="button" *ngIf="isLastPage" (click)="handleNextPressed()">
+		<i *ngIf="isMovingNext" class="fa fa-spinner fa-pulse next-btn-loading"></i>
+		<i *ngIf="!isMovingNext" class="fa fa-angle-double-right"></i>
+	</a>
 </div>

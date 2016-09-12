@@ -3,8 +3,8 @@
 	<div class="row basic-info-form" *ngIf="!isLoading">
 		<div class="col-xs-12 col-md-4">
 			<label class="control-label">
-			<h3>{{ 'Select the default currency' | translate }}  </h3>
-			<small>{{ 'This will be used across all your Price Products, Add On Products and Invoices' | translate }}</small>
+			<h3>{{ 'Default currency' | translate }}  </h3>
+			<small>{{ 'All rates and prices will be in the selected currency' | translate }}</small>
 		</label>
 			<div class="form-group">
 				<div class="input-group" [ngClass]="{'form-warning': (!hotel.ccyCode && didSubmitForm)}">

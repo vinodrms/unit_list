@@ -15,8 +15,14 @@
 		<small>{{addOnProductVM.addOnProduct.notes}}</small>
 	</div>
 	<div>
-		<a class="btn btn-lg" (click)="editAddOnProduct()">
-			<i class="fa fa-pencil"></i> {{ 'Edit' | translate }}
+		<a class="btn btn-lg p-l-0" (click)="copyAddOnProduct()">
+			<i class="fa unitpal-font">[</i> {{ 'Copy' | translate }}
+		</a>
+		<a class="btn btn-lg p-l-0" (click)="editAddOnProduct()">
+			<i class="fa unitpal-font">]</i> {{ 'Edit' | translate }}
+		</a>
+		<a class="btn btn-lg p-l-0" (click)="deleteAddOnProduct()">
+			<i class="fa unitpal-font">\</i> {{ 'Delete' | translate }}
 		</a>
 	</div>
 </div>

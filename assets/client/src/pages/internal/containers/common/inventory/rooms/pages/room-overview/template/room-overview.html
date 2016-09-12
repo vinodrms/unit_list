@@ -22,8 +22,14 @@
         <small>{{ roomVM.room.notes }}</small>
     </div>
     <div>
-        <a class="btn btn-lg" (click)="editRoom()">
-            <i class="fa fa-pencil"></i> {{ 'Edit' | translate }}
+        <a class="btn btn-lg p-l-0" (click)="copyRoom()">
+			<i class="fa unitpal-font">[</i> {{ 'Copy' | translate }}
+		</a>
+        <a class="btn btn-lg p-l-0" (click)="editRoom()">
+            <i class="fa unitpal-font">]</i> {{ 'Edit' | translate }}
         </a>
+        <a class="btn btn-lg p-l-0" (click)="deleteRoom()">
+			<i class="fa unitpal-font">\</i> {{ 'Delete' | translate }}
+		</a>
     </div>
 </div>

@@ -3,7 +3,7 @@
 	<div class="row">
 		<div class="col-md-4 col-xs-6">
 			<div class="form-group">
-				<label>{{ 'First Name' | translate }}</label>
+				<label>{{ 'First Name' | translate }}*</label>
 				<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('firstName')}">
 					<input type="text" class="form-control" formControlName="firstName">
 				</div>
@@ -12,7 +12,7 @@
 		</div>
 		<div class="col-md-4 col-xs-6">
 			<div class="form-group">
-				<label>{{ 'Last Name' | translate }}</label>
+				<label>{{ 'Last Name' | translate }}*</label>
 				<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('lastName')}">
 					<input type="text" class="form-control" formControlName="lastName">
 				</div>

@@ -61,7 +61,9 @@ export class PricePerPersonDO extends BaseDO implements IPriceProductPrice {
 				newPricePerPerson.childrenPriceList.push(prevChildrenPrice);
 			}
 			else {
-				newPricePerPerson.childrenPriceList.push(new PriceForFixedNumberOfPersonsDO(noOfChildren));
+				var newPrice = new PriceForFixedNumberOfPersonsDO(noOfChildren);
+				newPrice.price = 0.0;
+				newPricePerPerson.childrenPriceList.push(newPrice);
 			}
 		}
 		return newPricePerPerson;
@@ -84,7 +86,7 @@ export class PricePerPersonDO extends BaseDO implements IPriceProductPrice {
 
 	getPriceBriefValue(): number {
 		var priceForOneAdult = this.getPriceForNumberOfAdults(1);
-		if(!priceForOneAdult) {
+		if (!priceForOneAdult) {
 			return 0.0;
 		}
 		return priceForOneAdult.price;

@@ -46,4 +46,11 @@ export class WizardStepsComponent extends BaseComponent {
 	public get wizardButtonsVisible(): boolean {
 		return this._wizardController.wizardButtonsVisible;
 	}
+
+	public get isFirstPage(): boolean {
+		return !this.hasPrevious();
+	}
+	public get isLastPage(): boolean {
+		return !this.hasNext();
+	}
 }
