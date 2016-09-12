@@ -27,7 +27,7 @@ export interface VatResponse {
 	template: `
 		<div class="row">
 			<div class="col-xs-12 col-md-6 form-group">
-				<label>{{ countryLabel | translate }}</label>
+				<label>{{ countryLabel | translate }}<span *ngIf="isRequired">*</span></label>
 				<div class="input-group" [ngClass]="{'form-warning': displayCountryError()}">
 					<select class="form-control" [ngModel]="vatDetails.countryCode" (ngModelChange)="didSelectCountryCode($event)" name="vatDetailsCountryCode">
 						<option value="" disabled>{{ 'Select a country' | translate }}</option>
@@ -37,7 +37,8 @@ export interface VatResponse {
 				<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Select a country' | translate }}</small></label>
 			</div>
 			<div class="col-xs-12 col-md-6 form-group">
-				<label>{{ 'VAT Code' | translate }}*</label>
+				<label>{{ 'VAT Code' | translate }}<span *ngIf="isVatRequired">*</span>
+				</label>
 				<div class="input-group" *ngIf="vatDetails.countryCode" [ngClass]="{'form-warning': displayVatError()}">
 					<span class="input-group-addon">{{convertedCountryCode}}</span>
 					<input type="text" class="form-control" [formControl]="vatCodeControl">
@@ -54,7 +55,8 @@ export interface VatResponse {
 export class VATComponent extends BaseComponent implements OnInit {
 	vatCodeControl: FormControl;
 	countryList: CountryDO[];
-	@Input() isRequired: boolean = false;
+	@Input() isRequired: boolean = true;
+	@Input() isVatRequired: boolean = true;
 	@Input() didSubmitForm: boolean = false;
 	@Input() countryLabel: string = "Country";
 
@@ -68,16 +70,20 @@ export class VATComponent extends BaseComponent implements OnInit {
 	}
 	@Input()
 	public set vatDetails(vatDetails: VatDetails) {
-		if(vatDetails) {
-			this._vatDetails = vatDetails;	
+		if (vatDetails) {
+			this._vatDetails = vatDetails;
 		}
 		this.preprocessVatDetails();
 		this.vatCodeControl = new FormControl(this.vatDetails.fullVat);
 		this.initVatSearchInput();
 	}
 	private preprocessVatDetails() {
-		if (!this.vatDetails.fullVat || this.vatDetails.fullVat.length <= 2)
+		if (!this.vatDetails.fullVat || this.vatDetails.fullVat.length <= 2) {
+			if (this.vatDetails.countryCode && _.isString(this.vatDetails.countryCode)) {
+				this.convertedCountryCode = this._appContext.countryCodeVatConvertor.convertCountryCode(this.vatDetails.countryCode);
+			}
 			return;
+		}
 		var vatPrefix = this.vatDetails.fullVat.substr(0, 2);
 		if (/^.*[A-Z].*/i.test(vatPrefix)) {
 			this.convertedCountryCode = vatPrefix;
@@ -137,6 +143,6 @@ export class VATComponent extends BaseComponent implements OnInit {
 		return this.didSubmitForm && !this.vatDetails.countryCode && this.isRequired;
 	}
 	public displayVatError(): boolean {
-		return this.didSubmitForm && !this.vatDetails.fullVat && this.isRequired;
+		return this.didSubmitForm && !this.vatDetails.fullVat && this.isRequired && this.isVatRequired;
 	}
 }

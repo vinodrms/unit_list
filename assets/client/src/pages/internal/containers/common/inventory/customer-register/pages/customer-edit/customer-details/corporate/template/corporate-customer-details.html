@@ -4,6 +4,7 @@
 			<vat-input 
 				[vatDetails]="vatDetails"
 				[isRequired]="true"
+				[isVatRequired]="false"
 				[didSubmitForm]="didSubmit" 
 				[countryLabel]="'Company Country'"
 				(onVatDetailsChanged)="didChangeVatDetails($event)" 
@@ -23,7 +24,7 @@
 	<div class="row">
 		<div class="col-md-4 col-xs-12">
 			<div class="form-group">
-				<label>{{ 'Company Name' | translate }}</label>
+				<label>{{ 'Company Name' | translate }}*</label>
 				<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('name')}">
 					<input type="text" class="form-control" formControlName="name">
 				</div>
