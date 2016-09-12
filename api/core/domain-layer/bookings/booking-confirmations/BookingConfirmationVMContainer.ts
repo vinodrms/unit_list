@@ -67,7 +67,7 @@ export class BookingConfirmationVMContainer {
         this.bookingConfirmationVMList = [];
         _.forEach(bookingAggregatedDataContainer.bookingAggregatedDataList, (bookingAggregatedData: BookingAggregatedData) => {
             var bookingConfirmationVM = new BookingConfirmationVM(this._thTranslation);
-            bookingConfirmationVM.buildFromBookingAggregatedData(bookingAggregatedData);
+            bookingConfirmationVM.buildFromBookingAggregatedData(bookingAggregatedData, this.hotel);
             bookingConfirmationVM.ccyCode = this.hotel.ccyCode;
             this.bookingConfirmationVMList.push(bookingConfirmationVM);
         });
