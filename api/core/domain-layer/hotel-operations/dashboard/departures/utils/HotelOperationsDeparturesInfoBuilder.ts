@@ -39,12 +39,12 @@ export class HotelOperationsDeparturesInfoBuilder {
         this._departuresInfo.departureInfoList.push(departureItemInfo);
     }
 
-    public appendInvoiceInformation(invoiceGroupList: InvoiceGroupDO[]) {
+    public appendInvoiceInformation(invoiceGroupList: InvoiceGroupDO[], attachedBookingList: BookingDO[]) {
         var filteredInvoiceGroupList = this.filterUnpaidInvoices(invoiceGroupList);
         filteredInvoiceGroupList = this.filterInvoiceGroupsWithAtLeastOneInvoice(filteredInvoiceGroupList);
         this.linkInvoicesWithBookings(filteredInvoiceGroupList);
         filteredInvoiceGroupList = this.filterInvoiceGroupsWithAtLeastOneInvoice(filteredInvoiceGroupList);
-        this.createInvoiceDepartureItemForGroupList(filteredInvoiceGroupList);
+        this.createInvoiceDepartureItemForGroupList(filteredInvoiceGroupList, attachedBookingList);
     }
     private filterUnpaidInvoices(invoiceGroupList: InvoiceGroupDO[]): InvoiceGroupDO[] {
         _.forEach(invoiceGroupList, (invoiceGroup: InvoiceGroupDO) => {
@@ -82,17 +82,20 @@ export class HotelOperationsDeparturesInfoBuilder {
         }
         return null;
     }
-    private createInvoiceDepartureItemForGroupList(invoiceGroupList: InvoiceGroupDO[]) {
+    private createInvoiceDepartureItemForGroupList(invoiceGroupList: InvoiceGroupDO[], attachedBookingList: BookingDO[]) {
         _.forEach(invoiceGroupList, (invoiceGroup: InvoiceGroupDO) => {
-            this.createInvoiceDepartureItemForGroup(invoiceGroup);
+            this.createInvoiceDepartureItemForGroup(invoiceGroup, attachedBookingList);
         });
     }
-    private createInvoiceDepartureItemForGroup(invoiceGroup: InvoiceGroupDO) {
+    private createInvoiceDepartureItemForGroup(invoiceGroup: InvoiceGroupDO, attachedBookingList: BookingDO[]) {
         _.forEach(invoiceGroup.invoiceList, (invoice: InvoiceDO) => {
-            this.createInvoiceDepartureItemForInvoice(invoiceGroup.id, invoice);
+            this.createInvoiceDepartureItemForInvoice(invoiceGroup.id, invoice, attachedBookingList);
         });
     }
-    private createInvoiceDepartureItemForInvoice(invoiceGroupId: string, invoice: InvoiceDO) {
+    private createInvoiceDepartureItemForInvoice(invoiceGroupId: string, invoice: InvoiceDO, attachedBookingList: BookingDO[]) {
+        if (this.invoiceHasAttachedCheckedInBooking(invoice, attachedBookingList)) {
+            return;
+        }
         var departureItemInfo: DeparturelItemInfo = {
             customerId: invoice.payerList[0].customerId,
             bookingItemStatus: DeparturelItemBookingStatus.CanNotCheckOut,
@@ -100,6 +103,16 @@ export class HotelOperationsDeparturesInfoBuilder {
             invoicePrice: invoice.getPrice()
         }
         this._departuresInfo.departureInfoList.push(departureItemInfo);
+    }
+    private invoiceHasAttachedCheckedInBooking(invoice: InvoiceDO, attachedBookingList: BookingDO[]): boolean {
+        if (this._thUtils.isUndefinedOrNull(invoice.bookingId)) {
+            return false;
+        }
+        var attachedBooking = _.find(attachedBookingList, (booking: BookingDO) => { return booking.bookingId === invoice.bookingId });
+        if (this._thUtils.isUndefinedOrNull(attachedBooking)) {
+            return false;
+        }
+        return attachedBooking.confirmationStatus === BookingConfirmationStatus.CheckedIn;
     }
 
     public getCustomerIdList(): string[] {

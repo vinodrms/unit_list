@@ -57,6 +57,20 @@ export class DeparturesPaneComponent implements OnInit {
 			if (!a.hasAttachedRoom && b.hasAttachedRoom) {
 				return 1;
 			}
+			if (a.hasBooking && !b.hasBooking) {
+				return -1;
+			}
+			if (!a.hasBooking && b.hasBooking) {
+				return 1;
+			}
+			if (a.hasBooking && b.hasBooking) {
+				if (!this._appContext.thUtils.isUndefinedOrNull(a.departureItemDO.roomId) && this._appContext.thUtils.isUndefinedOrNull(b.departureItemDO.roomId)) {
+					return -1;
+				}
+				if (this._appContext.thUtils.isUndefinedOrNull(a.departureItemDO.roomId) && !this._appContext.thUtils.isUndefinedOrNull(b.departureItemDO.roomId)) {
+					return 1;
+				}
+			}
 			return a.customerName.localeCompare(b.customerName);
 		})
 		return sortedItems;
