@@ -91,6 +91,7 @@ export var EnglishTranslations: Object = {
 	"Name of tax": "Name of tax",
 	"Enter a name": "Enter a name",
 	"Save": "Save",
+	"Saving": "Saving",
 	"VAT Value 0 - 100": "VAT Value 0 - 100",
 	"Type of Value": "Type of Value",
 	"Tax Value 0 - 100": "Tax Value 0 - 100",

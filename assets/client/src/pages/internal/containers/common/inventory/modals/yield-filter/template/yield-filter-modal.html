@@ -59,13 +59,13 @@
 
 				<td>
 					<a class="btn btn-xs" *ngIf="!yieldFilterValueVM.isEditing && !yieldFilterValueVM.isSaving" (click)="editYieldFilter(yieldFilterValueVM)">
-						<i class="fa unitpal-font">]</i>
+						<i class="fa unitpal-font">]</i> {{'Edit' | translate}}
 					</a>
 					<a class="btn btn-xs" *ngIf="yieldFilterValueVM.isEditing && !yieldFilterValueVM.isSaving" (click)="saveYieldFilter(yieldFilterValueVM)">
-						<i class="fa fa-save"></i>
+						<i class="fa fa-save"></i> {{'Save' | translate}}
 					</a>
 					<a class="btn btn-xs" *ngIf="yieldFilterValueVM.isSaving">
-						<i class="fa fa-spinner fa-pulse"></i>
+						<i class="fa fa-spinner fa-pulse"></i> {{'Saving' | translate}}
 					</a>
 				</td>
 			</tr>
@@ -73,11 +73,7 @@
 	</table>
 </div>
 <div class="modal-footer">
-	<div class="pull-left">
-		<a (click)="addYieldFilterValue()">
-			<span class="glyphicon glyphicon-plus-sign fa-2x"></span>
-		</a>
-	</div>
+	<th-button class="pull-left" [upFont]="'\''" [text]="'Add'" (onButtonClick)="addYieldFilterValue()"></th-button>
 	<button type="button" class="btn btn-primary" 
 		[disabled]="!didSelectFilterValue()"
 		(click)="triggerSelectFilterValue()">
