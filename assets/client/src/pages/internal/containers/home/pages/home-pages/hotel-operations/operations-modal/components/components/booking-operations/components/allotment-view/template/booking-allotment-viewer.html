@@ -11,8 +11,16 @@
                 <div class="col-xs-12 col-sm-2">
                     <p>{{'Status' | translate}}</p>
                 </div>
-                <div class="col-xs-12 col-sm-2 field-value text-field">
-                    <p *ngIf="!isArchived">{{'Active' | translate}}
+                <div class="col-xs-12 col-sm-5 field-value text-field">
+                    <p *ngIf="!isArchived"
+                        title="{{'This booking is made through an allotment. Therefore, whenever you change periods, only the Allotment\'s availability is checked (the yielding is ignored).' | translate}}"
+                        >
+                        {{'Active' | translate}}
+                        <small>
+                            &nbsp; &nbsp; 
+                            <i class="fa fa-info-circle"></i>
+                            {{ 'The Yielding of the Price Product is ignored' | translate }}
+                        </small>
                     </p>
                     <p *ngIf="isArchived" class="operational-important-field"> 
                         <i class="fa unitpal-font">+</i> {{'Archived' | translate}}

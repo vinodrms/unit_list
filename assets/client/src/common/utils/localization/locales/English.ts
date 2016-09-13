@@ -613,6 +613,8 @@ export var EnglishTranslations: Object = {
 	"Penalty": "Penalty",
 	"Archived": "Archived",
 	"Release": "Release",
+	"The Yielding of the Price Product is ignored": "The Yielding of the Price Product is ignored",
+	"This booking is made through an allotment. Therefore, whenever you change periods, only the Allotment's availability is checked (the yielding is ignored).": "This booking is made through an allotment. Therefore, whenever you change periods, only the Allotment's availability is checked (the yielding is ignored).",
 	"Some customers (%omittedCustomers%) have not been added because they do not have access on the price product": "Some customers (%omittedCustomers%) have not been added because they do not have access on the price product",
 	"Reactivate": "Reactivate",
 	"Are you sure you want to reactivate this booking?": "Are you sure you want to reactivate this booking?",
