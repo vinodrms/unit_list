@@ -289,6 +289,8 @@ export var EnglishTranslations: Object = {
 	"Total price will be the sum of each person occupying the room, added together.": "Total price will be the sum of each person occupying the room, added together.",
 	"One price per Room Category, regardless of the amount of occupants": "One price per Room Category, regardless of the amount of occupants",
 	"Price configuration in %ccySymbol%": "Price configuration in %ccySymbol%",
+	"%noOfRooms% Room": "%noOfRooms% Room",
+	"%noOfRooms% Rooms": "%noOfRooms% Rooms",
 	"Price Product Required": "Price Product Required",
 	"Filters": "Filters",
 	"Attach filters to your Price Products in order to group them. They can then be yielded together in the Yield Manager": "Attach filters to your Price Products in order to group them. They can then be yielded together in the Yield Manager",
