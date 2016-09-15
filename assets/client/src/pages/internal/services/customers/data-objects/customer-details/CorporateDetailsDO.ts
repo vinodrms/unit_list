@@ -49,6 +49,9 @@ export class CorporateDetailsDO extends BaseDO implements ICustomerDetailsDO {
 	public canPayInvoiceByAgreement(): boolean {
 		return this.payInvoiceByAgreement;
 	}
+	public canGuaranteePayment(): boolean {
+		return this.payInvoiceByAgreement;
+	}
 	public canReceiveBookingConfirmations(): boolean {
 		return this.receiveBookingConfirmations;
 	}

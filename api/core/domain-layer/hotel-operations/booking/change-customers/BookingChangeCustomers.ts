@@ -11,8 +11,11 @@ import {CustomerIdValidator} from '../../../customers/validators/CustomerIdValid
 import {CustomersContainer} from '../../../customers/validators/results/CustomersContainer';
 import {BookingChangeCustomersDO} from './BookingChangeCustomersDO';
 import {BookingUtils} from '../../../bookings/utils/BookingUtils';
+import {BookingWithDependenciesLoader} from '../utils/BookingWithDependenciesLoader';
+import {BookingWithDependencies} from '../utils/BookingWithDependencies';
 import {BusinessValidationRuleContainer} from '../../../common/validation-rules/BusinessValidationRuleContainer';
 import {BookingCustomersValidationRule} from '../../../bookings/validators/validation-rules/booking/BookingCustomersValidationRule';
+import {BookingAllotmentValidationRule, BookingAllotmentValidationParams} from '../../../bookings/validators/validation-rules/booking/BookingAllotmentValidationRule';
 
 import _ = require('underscore');
 
@@ -23,6 +26,7 @@ export class BookingChangeCustomers {
 
     private _loadedCustomersContainer: CustomersContainer;
     private _loadedBooking: BookingDO;
+    private _bookingWithDependencies: BookingWithDependencies;
 
     constructor(private _appContext: AppContext, private _sessionContext: SessionContext) {
         this._bookingUtils = new BookingUtils();
@@ -48,10 +52,11 @@ export class BookingChangeCustomers {
         customerValidator.validateCustomerIdList(customerIdListToValidate).then((customersContainer: CustomersContainer) => {
             this._loadedCustomersContainer = customersContainer;
 
-            var bookingsRepo = this._appContext.getRepositoryFactory().getBookingRepository();
-            return bookingsRepo.getBookingById({ hotelId: this._sessionContext.sessionDO.hotel.id }, this._bookingChangeCustomersDO.groupBookingId, this._bookingChangeCustomersDO.bookingId)
-        }).then((booking: BookingDO) => {
-            this._loadedBooking = booking;
+            var bookingLoader = new BookingWithDependenciesLoader(this._appContext, this._sessionContext);
+            return bookingLoader.load(this._bookingChangeCustomersDO.groupBookingId, this._bookingChangeCustomersDO.bookingId);
+        }).then((bookingWithDependencies: BookingWithDependencies) => {
+            this._bookingWithDependencies = bookingWithDependencies;
+            this._loadedBooking = bookingWithDependencies.bookingDO;
 
             if (!this.bookingHasValidStatus()) {
                 var thError = new ThError(ThStatusCode.BookingChangeCustomersInvalidState, null);
@@ -62,7 +67,8 @@ export class BookingChangeCustomers {
             this.updateBooking();
 
             var bookingValidationRule = new BusinessValidationRuleContainer([
-                new BookingCustomersValidationRule(this._loadedCustomersContainer)
+                new BookingCustomersValidationRule(this._loadedCustomersContainer),
+                new BookingAllotmentValidationRule(this._appContext, this._sessionContext, this.getBookingAllotmentValidationParams())
             ]);
             return bookingValidationRule.isValidOn(this._loadedBooking);
         }).then((validatedBooking: BookingDO) => {
@@ -94,5 +100,16 @@ export class BookingChangeCustomers {
             actionString: "The customers from the booking have been changed",
             userId: this._sessionContext.sessionDO.user.id
         }));
+    }
+    private getBookingAllotmentValidationParams(): BookingAllotmentValidationParams {
+        return {
+            allotmentsContainer: this._bookingWithDependencies.allotmentsContainer,
+            allotmentConstraintsParam: {
+                bookingInterval: this._bookingWithDependencies.bookingDO.interval,
+                bookingCreationDate: this._bookingWithDependencies.bookingDO.creationDate
+            },
+            transientBookingList: [],
+            roomList: this._bookingWithDependencies.roomList
+        };
     }
 }

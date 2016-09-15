@@ -77,6 +77,9 @@ export class CustomerDO extends BaseDO {
 	}
 
 	public hasAccessOnPriceProduct(priceProduct: PriceProductDO): boolean {
+		if (this.isIndividual()) {
+			return true;
+		}
 		if (this.priceProductDetails.allowPublicPriceProducts && priceProduct.availability === PriceProductAvailability.Public) {
 			return true;
 		}

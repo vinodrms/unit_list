@@ -55,7 +55,8 @@ export class NewBookingDetailsEditorComponent extends BaseComponent {
         return this._bookingCartItem.transientBookingItem.defaultBillingDetails.customerId === customer.id;
     }
     protected canBeBilledCustomer(customer: CustomerDO): boolean {
-        return customer.hasAccessOnPriceProduct(this._bookingCartItem.priceProduct);
+        return customer.hasAccessOnPriceProduct(this._bookingCartItem.priceProduct) &&
+            customer.customerDetails.canGuaranteePayment();
     }
 
     public addCustomer() {

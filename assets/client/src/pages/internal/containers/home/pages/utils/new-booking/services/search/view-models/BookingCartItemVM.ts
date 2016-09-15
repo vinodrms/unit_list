@@ -44,7 +44,7 @@ export class BookingCartItemVM {
     validationColumnClassName: string;
 
     transientBookingItem: TransientBookingItem;
-    canChangeDefaultBilledCustomer: boolean;
+    initialCustomerId: string;
 
     priceProduct: PriceProductDO;
     ccy: CurrencyDO;
@@ -145,5 +145,9 @@ export class BookingCartItemVM {
             }
         });
         return count;
+    }
+
+    public isInitialCustomer(customer: CustomerDO): boolean {
+        return this.initialCustomerId === customer.id;
     }
 }
