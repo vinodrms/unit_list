@@ -14,6 +14,8 @@ import {BookingOccupancyCalculator} from '../../../search-bookings/utils/occupan
 import {IBookingOccupancy} from '../../../search-bookings/utils/occupancy-calculator/results/IBookingOccupancy';
 import {IndexedBookingInterval} from '../../../../../data-layer/price-products/utils/IndexedBookingInterval';
 
+import _ = require('underscore');
+
 export interface BookingAllotmentValidationParams {
     allotmentsContainer: AllotmentsContainer;
     allotmentConstraintsParam: AllotmentConstraintsParams;
@@ -41,7 +43,7 @@ export class BookingAllotmentValidationRule extends ABusinessValidationRule<Book
             return;
         }
 
-        if (allotment.customerId !== booking.defaultBillingDetails.customerId) {
+        if (!_.contains(booking.customerIdList, allotment.customerId)) {
             this.logBusinessAndReject(reject, booking, {
                 statusCode: ThStatusCode.BookingsValidatorAllotmentCustomer,
                 errorMessage: "billable customer not from allotment"

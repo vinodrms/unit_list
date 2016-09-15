@@ -108,10 +108,20 @@ export class PriceProductEditPricesSectionComponent extends BaseComponent implem
 	public getNumberSuffix(inputNumber: number) {
 		return this._numberSuffixFormatter.getNumberSuffix(inputNumber);
 	}
+	public getNoRoomsLabel(noOfRooms: number): string {
+		if (noOfRooms === 1) {
+			return this._appContext.thTranslation.translate("%noOfRooms% Room", { noOfRooms: noOfRooms });
+		}
+		return this._appContext.thTranslation.translate("%noOfRooms% Rooms", { noOfRooms: noOfRooms });
+	}
 	public get priceContainer(): IPriceContainer {
 		if (this._isPricePerNumberOfPersons) {
 			return this.pricePerPersonContainer;
 		}
 		return this.singlePriceContainer;
+	}
+	public roomCategoryHasOnlyOneAdultAndZeroChildren(roomCategStats: RoomCategoryStatsDO): boolean {
+		var totalCapacity = roomCategStats.capacity.totalCapacity;
+		return totalCapacity.noAdults === 1 && totalCapacity.noChildren === 0;
 	}
 }

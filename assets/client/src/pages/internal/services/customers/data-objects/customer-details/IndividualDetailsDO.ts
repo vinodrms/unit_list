@@ -40,6 +40,9 @@ export class IndividualDetailsDO extends BaseDO implements ICustomerDetailsDO {
 	public canPayInvoiceByAgreement(): boolean {
 		return false;
 	}
+	public canGuaranteePayment(): boolean {
+		return true;
+	}
 	public canReceiveBookingConfirmations(): boolean {
 		return true;
 	}

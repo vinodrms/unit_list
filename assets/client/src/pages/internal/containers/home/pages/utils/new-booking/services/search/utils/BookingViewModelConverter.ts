@@ -103,7 +103,7 @@ export class BookingViewModelConverter {
         bookingItemVM.allowedPaymentMethods = hotelAggregatedInfo.allowedPaymentMethods;
 
         bookingItemVM.customerNameString = "";
-        bookingItemVM.canChangeDefaultBilledCustomer = true;
+        bookingItemVM.initialCustomerId = "";
         bookingItemVM.customerList = [];
         bookingItemVM.transientBookingItem.customerIdList = [];
         bookingItemVM.transientBookingItem.defaultBillingDetails = this.getDefaultBillingDetails(hotelAggregatedInfo, priceProductItem);
@@ -112,8 +112,10 @@ export class BookingViewModelConverter {
             bookingItemVM.customerNameString = bookingSearchResultDO.customer.customerName;
             bookingItemVM.customerList = [bookingSearchResultDO.customer];
             bookingItemVM.transientBookingItem.customerIdList = [bookingSearchResultDO.customer.id];
-            bookingItemVM.canChangeDefaultBilledCustomer = false;
-            bookingItemVM.transientBookingItem.defaultBillingDetails.customerId = bookingSearchResultDO.customer.id;
+            bookingItemVM.initialCustomerId = bookingSearchResultDO.customer.id;
+            if (bookingSearchResultDO.customer.customerDetails.canGuaranteePayment()) {
+                bookingItemVM.transientBookingItem.defaultBillingDetails.customerId = bookingSearchResultDO.customer.id;
+            }
         }
         bookingItemVM.updateValidationColumn();
 

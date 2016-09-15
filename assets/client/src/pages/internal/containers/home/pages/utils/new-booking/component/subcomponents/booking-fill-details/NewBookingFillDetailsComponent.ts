@@ -86,9 +86,6 @@ export class NewBookingFillDetailsComponent extends BaseComponent implements Aft
 		this._wizardBookingFillDetailsStepService.checkBookingCartValidity(this._bookingCartService);
 	}
 	private updateDefaultBilledCustomerIfNecessary(bookingCartItem: BookingCartItemVM, customerToAdd: CustomerDO) {
-		if (!bookingCartItem.canChangeDefaultBilledCustomer) {
-			return;
-		}
 		bookingCartItem.updateCustomerIfExists(customerToAdd);
 		if (!customerToAdd.hasAccessOnPriceProduct(bookingCartItem.priceProduct)) {
 			if (bookingCartItem.transientBookingItem.defaultBillingDetails.customerId === customerToAdd.id) {
