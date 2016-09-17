@@ -64,16 +64,24 @@ export class InvoicePayerComponent implements OnInit {
         if (this.customerWasSelected()) {
             this.paymentMethodVMList = this.generatePaymentMethodsFor(this.invoicePayerVM.customerDO);
             if (this.paymentMethodWasSelected()) {
-                this.selectedPaymentMethodVM =
-                    _.find(this.paymentMethodVMList, (paymentMethodVM: InvoicePaymentMethodVM) => {
-                        return paymentMethodVM.paymentMethod.isSame(this.invoicePayerVM.invoicePayerDO.paymentMethod);
-                    });
+                this.updateSelectedPaymentMethodVM();
             }
             else {
                 this.selectedPaymentMethodVM = this.paymentMethodVMList[0];
             }
             this.invoicePayerVM.invoicePayerDO.paymentMethod = this.selectedPaymentMethodVM.paymentMethod;
         }
+    }
+    private updateSelectedPaymentMethodVM() {
+        var selectedPaymentMethodVM = _.find(this.paymentMethodVMList, (paymentMethodVM: InvoicePaymentMethodVM) => {
+            return paymentMethodVM.paymentMethod.isSame(this.invoicePayerVM.invoicePayerDO.paymentMethod);
+        });
+        if (this._thUtils.isUndefinedOrNull(selectedPaymentMethodVM)) {
+            let allPaymentMethods = this._invoiceGroupControllerService.invoiceOperationsPageData.allPaymentMethods;
+            let selectedPaymentMethod = this.invoicePayerVM.invoicePayerDO.paymentMethod;
+            selectedPaymentMethodVM = this._pmGenerator.generatePaymentMethodVMForPaymentMethod(selectedPaymentMethod, allPaymentMethods);
+        }
+        this.selectedPaymentMethodVM = selectedPaymentMethodVM;
     }
 
     private customerWasSelected(): boolean {

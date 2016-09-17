@@ -5,29 +5,29 @@ import {CustomerDO} from '../../../customers/data-objects/CustomerDO';
 import {InvoicePaymentMethodDO, InvoicePaymentMethodType} from '../../data-objects/payers/InvoicePaymentMethodDO';
 
 export class InvoicePaymentMethodVMGenerator {
+    private _allowedPaymentMethodVMList: InvoicePaymentMethodVM[];
+
     constructor(private _allowedPaymentMethods: HotelPaymentMethodsDO) {
+        this.initAllowedInvoicePaymentMethodVMList();
+    }
+    private initAllowedInvoicePaymentMethodVMList() {
+        this._allowedPaymentMethodVMList = _.map(this._allowedPaymentMethods.paymentMethodList, (paymentMethod: PaymentMethodDO) => {
+            return this.generatePaymentMethodVMFor(paymentMethod);
+        });
     }
 
     public generatePaymentMethodsFor(customer: CustomerDO): InvoicePaymentMethodVM[] {
-        var paymentMethodList: InvoicePaymentMethodVM[] = [];
         if (customer.customerDetails.canPayInvoiceByAgreement()) {
-            paymentMethodList.push(this.generatePayInvoiceByAgreementPaymentMethodVM());
-            return paymentMethodList;
+            return [this.generatePayInvoiceByAgreementPaymentMethodVM()];
         }
-        _.forEach(this._allowedPaymentMethods.paymentMethodList, (paymentMethod: PaymentMethodDO) => {
-            paymentMethodList.push(this.generatePaymentMethodVMFor(paymentMethod));
-        });
-        return paymentMethodList;
+        return this._allowedPaymentMethodVMList;
     }
     public generateInvoicePaymentMethodsFor(customer: CustomerDO): InvoicePaymentMethodVM[] {
         var paymentMethodList: InvoicePaymentMethodVM[] = [];
         if (customer.customerDetails.canPayInvoiceByAgreement()) {
             paymentMethodList.push(this.generatePayInvoiceByAgreementPaymentMethodVM());
         }
-        _.forEach(this._allowedPaymentMethods.paymentMethodList, (paymentMethod: PaymentMethodDO) => {
-            paymentMethodList.push(this.generatePaymentMethodVMFor(paymentMethod));
-        });
-        return paymentMethodList;
+        return paymentMethodList.concat(this._allowedPaymentMethodVMList);
     }
     private generatePayInvoiceByAgreementPaymentMethodVM(): InvoicePaymentMethodVM {
         var pmVM = new InvoicePaymentMethodVM();
