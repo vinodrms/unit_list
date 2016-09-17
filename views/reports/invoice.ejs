@@ -39,10 +39,17 @@
                             <small class="pull-right"><%= dateLabel %>: <%= dateValue %></small>
                     </h1>
                 </div>
+                <div class="col-xs-12">
+                    <%= invoiceLabel %> #<%= invoiceReference %>
+                </div>
                 <!-- /.col -->
             </div>
             <!-- info row -->
             <div class="row invoice-info">
+                <div class="col-md-2">
+                    <br>
+                    <img src="<%= hotelLogoSrcValue %>"/>
+                </div>
                 <div class="col-sm-4 invoice-col">
                     <br>
                     <%= fromLabel %>
@@ -79,8 +86,7 @@
                         </address>
                 </div>
                 <!-- /.col -->
-                <div class="col-sm-4 invoice-col">
-                    <b><%= invoiceLabel %> #<%= invoiceReference %></b>
+                <div class="col-sm-2">
                 </div>
                 <!-- /.col -->
             </div>
@@ -174,6 +180,15 @@
                             </tbody>
                         </table>
                     </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12" style="text-align:center; width:100%; padding-top: 25px;">
+                    <p style="margin: auto;">
+                        <span style="font-size: 7px;">Generated from </span>
+                        <img src="<%= unitpalLogoSrcValue %>" style="height:13px">
+                        <small><strong>Unit</strong>Pal</small>
+                    </p>
                 </div>
             </div>
         </section>

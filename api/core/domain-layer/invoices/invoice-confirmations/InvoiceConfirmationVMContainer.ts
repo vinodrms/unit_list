@@ -9,6 +9,7 @@ import {InvoiceItemDO} from '../../../data-layer/invoices/data-objects/items/Inv
 import {InvoiceItemVM} from './InvoiceItemVM';
 import {InvoicePaymentMethodType} from '../../../data-layer/invoices/data-objects/payers/InvoicePaymentMethodDO';
 import {InvoiceAggregatedData} from '../aggregators/InvoiceAggregatedData';
+import {BookingConfirmationVMContainer} from '../../bookings/booking-confirmations/BookingConfirmationVMContainer';
 
 export class InvoiceConfirmationVMContainer {
     private static UNITPAL_LOGO_SRC = 'assets/client/static-assets/images/unit_pal_logo_blue.png';
@@ -18,6 +19,7 @@ export class InvoiceConfirmationVMContainer {
 
     private _invoiceAggregatedData: InvoiceAggregatedData;
 
+    hotelLogoSrcValue: string;
     invoiceReference: string;
     payerIndex: number;
     ccySymbol: string;
@@ -72,12 +74,22 @@ export class InvoiceConfirmationVMContainer {
         this.ccySymbol = this._invoiceAggregatedData.ccySymbol;
         this.unitpalLogoSrcValue = InvoiceConfirmationVMContainer.UNITPAL_LOGO_SRC;
 
+        this.initLogoSrcs();
         this.initHeaderLabelsAndValues();
         this.initHotelInfoLabelsAndValues();
         this.initPayerInfoLabelsAndValues();
         this.initItemsTableLabelsAndValues();
         this.initPaymentMethodLabelsAndValues();
         this.initTotalValues();
+    }
+    private initLogoSrcs() {
+        if (!this._thUtils.isUndefinedOrNull(this._invoiceAggregatedData.hotel.logoUrl)) {
+            this.hotelLogoSrcValue = this._invoiceAggregatedData.hotel.logoUrl;
+        }
+        else {
+            this.hotelLogoSrcValue = BookingConfirmationVMContainer.HOTEL_LOGO_PLACEHOLDER_SRC;
+        }
+        this.unitpalLogoSrcValue = BookingConfirmationVMContainer.UNITPAL_LOGO_SRC;
     }
 
     private initHeaderLabelsAndValues() {

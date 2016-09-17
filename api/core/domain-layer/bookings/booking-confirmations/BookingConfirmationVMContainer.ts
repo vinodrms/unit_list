@@ -7,11 +7,11 @@ import {BookingAggregatedDataContainer} from '../aggregators/BookingAggregatedDa
 import {BookingAggregatedData} from '../aggregators/BookingAggregatedData';
 
 export class BookingConfirmationVMContainer {
-    private static HOTEL_LOGO_PLACEHOLDER_SRC = 'assets/client/static-assets/images/hotel-logo-placeholder.png';
-    private static UNITPAL_LOGO_SRC = 'assets/client/static-assets/images/unit_pal_logo_blue.png';
+    public static HOTEL_LOGO_PLACEHOLDER_SRC = 'assets/client/static-assets/images/hotel-logo-placeholder.png';
+    public static UNITPAL_LOGO_SRC = 'assets/client/static-assets/images/unit_pal_logo_blue.png';
 
     private _thUtils: ThUtils;
-    
+
     hotel: HotelDO;
     bookingConfirmationVMList: BookingConfirmationVM[];
 
