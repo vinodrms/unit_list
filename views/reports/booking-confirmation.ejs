@@ -32,11 +32,11 @@
     <% bookingConfirmationVMList.forEach(function(bookingConfirmationVM){ %>
         <div style="page-break-after:always; margin: 15px;">
             <div class="row" style="margin-bottom:10px">
-                <div class="col-md-2">
-                    <img src="<%= hotelLogoSrcValue %>"/>
-                </div>
-                <div class="col-md-6">
-                    <p><b style="font-size: 18px;"><%= hotelNameValue %></b></p>
+                <div class="col-md-7">
+                    <p>
+                        <b style="font-size: 18px;"><%= hotelNameValue %></b>
+                        <img src="<%= hotelLogoSrcValue %>" style="height:35px"/>
+                    </p>
                     <p><b><%= hotelAddressLabel %>:</b>
                         <%= hotelAddressValue %>
                     </p>
@@ -44,7 +44,7 @@
                         <%= hotelContactValue %>
                     </p>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-5">
                     <div class="row" style="height:25px">
                         <div class="col-md-12" style="height:100%">
                             <i style="position: absolute; right: 15px; bottom: 0;"><%= headerTitle %></i><br><br>
