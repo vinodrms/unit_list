@@ -29,6 +29,11 @@ export class InvoiceConfirmationVMContainer {
     dateLabel: string;
     dateValue: string;
 
+    addFieldName1: string;
+    addFieldValue1: string;
+    addFieldName2: string;
+    addFieldValue2: string;
+
     fromLabel: string;
     hotelNameValue: string;
     hotelAddressFirstLineValue: string;
@@ -81,6 +86,7 @@ export class InvoiceConfirmationVMContainer {
         this.initItemsTableLabelsAndValues();
         this.initPaymentMethodLabelsAndValues();
         this.initTotalValues();
+        this.initAdditionalFields();
     }
     private initLogoSrcs() {
         if (!this._thUtils.isUndefinedOrNull(this._invoiceAggregatedData.hotel.logoUrl)) {
@@ -155,6 +161,20 @@ export class InvoiceConfirmationVMContainer {
     private initTotalValues() {
         this.totalLabel = this._thTranslation.translate('Total');
         this.totalValue = this._invoice.payerList[this.payerIndex].priceToPay;
+    }
+
+    private initAdditionalFields() {
+        this.addFieldName1 = "";
+        this.addFieldValue1 = "";
+        this.addFieldName2 = "";
+        this.addFieldValue2 = "";
+        if(this._invoiceAggregatedData.bookingAttachment.exists) {
+            this.addFieldName1 = this._thTranslation.translate("Guest");
+            this.addFieldValue1 = this._invoiceAggregatedData.bookingAttachment.guest.customerDetails.getName();
+
+            this.addFieldName2 = this._thTranslation.translate("Room");
+            this.addFieldValue2 = this._invoiceAggregatedData.bookingAttachment.roomCategory.displayName;
+        }
     }
 
     private get _invoice(): InvoiceDO {

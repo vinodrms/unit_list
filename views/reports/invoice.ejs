@@ -32,7 +32,7 @@
         <section class="content invoice">
             <!-- info row -->
             <div class="row invoice-info" style="padding-top: 15px;">
-                <div class="col-sm-5 invoice-col">
+                <div class="col-sm-4 invoice-col">
                     <%= fromLabel %>
                         <address>
                             <strong><%= hotelNameValue %></strong>
@@ -66,7 +66,7 @@
                         <%= payerEmailValue %>
                     </address>
                 </div>
-                <div class="col-sm-3">
+                <div class="col-sm-4">
                     <div class="row" style="height:25px">
                         <div class="col-md-12" style="height:100%">
                             <i style="position: absolute; right: 15px; bottom: 0;"><%= invoiceLabel %></i><br><br>
@@ -74,7 +74,12 @@
                     </div>
                     <div class="row" style="height:40px">
                         <div class="col-md-12" style="height:100%">
-                            <p style="position: absolute; top:10px; right:12px; bottom: 0; margin: 0; text-align: right;"><%= invoiceLabel %> <b><%= invoiceReference %></b><br><%= dateLabel %>: <b><%= dateValue %></b></p>
+                            <p style="position: absolute; top:10px; right:12px; bottom: 0; margin: 0; text-align: right;">
+                                <%= invoiceLabel %> <b><%= invoiceReference %></b>
+                                <br><%= dateLabel %> <b><%= dateValue %></b>
+                                <br><%= addFieldName1 %> <b><%= addFieldValue1 %></b>
+                                <br><%= addFieldName2 %> <b><%= addFieldValue2 %></b>
+                            </p>
                         </div>
                     </div>
                 </div>
