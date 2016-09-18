@@ -59,7 +59,7 @@ export class BookingConfirmationVM {
         this._thUtils = new ThUtils();
         this._isoWeekDayUtils = new ISOWeekDayUtils();
 
-        this._notAvailableTranslatedLabel = this._thTranslation.translate('n/a');
+        this._notAvailableTranslatedLabel = this._thTranslation.translate('none');
     }
 
     public buildFromBookingAggregatedData(bookingAggregatedData: BookingAggregatedData, hotel: HotelDO) {

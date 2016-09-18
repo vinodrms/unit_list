@@ -4,10 +4,13 @@ import {ThUtils} from '../../../utils/ThUtils';
 import {ThStatusCode} from '../../../utils/th-responses/ThResponse';
 import {AppContext} from '../../../utils/AppContext';
 import {SessionContext} from '../../../utils/SessionContext';
-import {InvoiceAggregatedData} from './InvoiceAggregatedData';
+import {InvoiceAggregatedData, BookingAttachment} from './InvoiceAggregatedData';
 import {InvoiceGroupMetaRepoDO} from '../../../data-layer/invoices/repositories/IInvoiceGroupsRepository';
 import {InvoiceGroupDO} from '../../../data-layer/invoices/data-objects/InvoiceGroupDO';
 import {InvoiceDO} from '../../../data-layer/invoices/data-objects/InvoiceDO';
+import {BookingDO} from '../../../data-layer/bookings/data-objects/BookingDO';
+import {BookingSearchResultRepoDO} from '../../../data-layer/bookings/repositories/IBookingRepository';
+import {RoomCategoryDO} from '../../../data-layer/room-categories/data-objects/RoomCategoryDO';
 import {CustomerMetaRepoDO} from '../../../data-layer/customers/repositories/ICustomerRepository';
 import {CustomerDO} from '../../../data-layer/customers/data-objects/CustomerDO';
 import {HotelDO} from '../../../data-layer/hotel/data-objects/HotelDO';
@@ -26,9 +29,16 @@ export interface InvoiceDataAggregatorQuery {
 }
 
 export class InvoiceDataAggregator {
+    private _thUtils: ThUtils;
+
     private _hotel: HotelDO;
     private _invoiceGroup: InvoiceGroupDO;
     private _invoice: InvoiceDO;
+
+    private _loadedBooking: BookingDO;
+    private _loadedRoomCateg: RoomCategoryDO;
+    private _loadedGuest: CustomerDO;
+
     private _payerCustomer: CustomerDO;
     private _payerIndexOnInvoice: number;
     private _addOnProductList: AddOnProductDO[];
@@ -38,6 +48,7 @@ export class InvoiceDataAggregator {
     private _otherTaxesList: TaxDO[];
 
     constructor(private _appContext: AppContext, private _sessionContext: SessionContext) {
+        this._thUtils = new ThUtils();
     }
 
     public getInvoiceAggregatedData(query: InvoiceDataAggregatorQuery): Promise<InvoiceAggregatedData> {
@@ -59,8 +70,9 @@ export class InvoiceDataAggregator {
                 return query.invoiceReference === invoice.invoiceReference;
             });
 
+            return this.loadBookingDependencies();
+        }).then((loadResult: boolean) => {
             var invoicePayerDO = this._invoice.payerList[query.payerIndex];
-
             var customerRepo = this._appContext.getRepositoryFactory().getCustomerRepository()
             return customerRepo.getCustomerById({ hotelId: this._hotel.id }, invoicePayerDO.customerId);
         }).then((customer: CustomerDO) => {
@@ -72,14 +84,14 @@ export class InvoiceDataAggregator {
         }).then((result: AddOnProductSearchResultRepoDO) => {
             this._addOnProductList = result.addOnProductList;
 
-            return this._appContext.getRepositoryFactory().getSettingsRepository().getCurrencies(); 
+            return this._appContext.getRepositoryFactory().getSettingsRepository().getCurrencies();
         }).then((result: CurrencyDO[]) => {
             this._currencyList = result;
 
             return this._appContext.getRepositoryFactory().getSettingsRepository().getPaymentMethods();
         }).then((result: PaymentMethodDO[]) => {
             this._paymentMethodList = result;
-            
+
             resolve(this.buildInvoiceAggregatedDataContainerFromLoadedData());
         }).catch((error: any) => {
             var thError = new ThError(ThStatusCode.InvoiceConfirmationErrorGettingData, error);
@@ -89,7 +101,48 @@ export class InvoiceDataAggregator {
             reject(thError);
         });
     }
-    
+
+    private loadBookingDependencies(): Promise<boolean> {
+        return new Promise<boolean>((resolve: { (result: boolean): void }, reject: { (err: ThError): void }) => {
+            this.loadBookingDependenciesCore(resolve, reject);
+        });
+    }
+    private loadBookingDependenciesCore(resolve: { (result: boolean): void }, reject: { (err: ThError): void }) {
+        if (this._thUtils.isUndefinedOrNull(this._invoice.bookingId)) {
+            resolve(false);
+            return;
+        }
+        var bookingsRepo = this._appContext.getRepositoryFactory().getBookingRepository();
+        bookingsRepo.getBookingList({ hotelId: this._sessionContext.sessionDO.hotel.id }, {
+            bookingIdList: [this._invoice.bookingId]
+        }).then((searchResult: BookingSearchResultRepoDO) => {
+            this.loadAdditionalBookingDependencies(resolve, reject, searchResult.bookingList);
+        }).catch((err: any) => {
+            reject(err);
+        });
+    }
+    private loadAdditionalBookingDependencies(resolve: { (result: boolean): void }, reject: { (err: ThError): void }, bookingList: BookingDO[]) {
+        if (bookingList.length === 0) {
+            resolve(false);
+            return;
+        }
+        this._loadedBooking = bookingList[0];
+        var roomCategRepo = this._appContext.getRepositoryFactory().getRoomCategoryRepository();
+        roomCategRepo.getRoomCategoryById({ hotelId: this._sessionContext.sessionDO.hotel.id }, this._loadedBooking.roomCategoryId)
+            .then((roomCategory: RoomCategoryDO) => {
+                this._loadedRoomCateg = roomCategory;
+
+                var custRepo = this._appContext.getRepositoryFactory().getCustomerRepository();
+                return custRepo.getCustomerById({ hotelId: this._hotel.id }, this._loadedBooking.displayCustomerId);
+            }).then((customer: CustomerDO) => {
+                this._loadedGuest = customer;
+
+                resolve(true);
+            }).catch((err: any) => {
+                reject(err);
+            });
+    }
+
     private buildInvoiceAggregatedDataContainerFromLoadedData(): InvoiceAggregatedData {
         var invoiceAggregatedData = new InvoiceAggregatedData(this._sessionContext);
         invoiceAggregatedData.hotel = this._hotel;
@@ -103,6 +156,16 @@ export class InvoiceDataAggregator {
         invoiceAggregatedData.payerIndexOnInvoice = this._payerIndexOnInvoice;
         invoiceAggregatedData.paymentMethodList = this._paymentMethodList;
         invoiceAggregatedData.addSharedInvoiceItemIfNecessary();
+        if (this._thUtils.isUndefinedOrNull(this._loadedBooking) || this._thUtils.isUndefinedOrNull(this._loadedRoomCateg)) {
+            invoiceAggregatedData.bookingAttachment = { exists: false };
+        }
+        else {
+            invoiceAggregatedData.bookingAttachment = {
+                exists: true,
+                guest: this._loadedGuest,
+                roomCategory: this._loadedRoomCateg
+            }
+        }
         return invoiceAggregatedData;
     }
 

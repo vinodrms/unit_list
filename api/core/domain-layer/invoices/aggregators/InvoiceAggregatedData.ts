@@ -9,6 +9,13 @@ import {AddOnProductDO} from '../../../data-layer/add-on-products/data-objects/A
 import {TaxDO} from '../../../data-layer/taxes/data-objects/TaxDO';
 import {PaymentMethodDO} from '../../../data-layer/common/data-objects/payment-method/PaymentMethodDO';
 import {HotelDO} from '../../../data-layer/hotel/data-objects/HotelDO';
+import {RoomCategoryDO} from '../../../data-layer/room-categories/data-objects/RoomCategoryDO';
+
+export interface BookingAttachment {
+    exists: boolean;
+    roomCategory?: RoomCategoryDO;
+    guest?: CustomerDO;
+}
 
 export class InvoiceAggregatedData {
     private static SHARED_INVOICE_ITEM_DISPLAY_NAME = "Shared Payment";
@@ -23,6 +30,7 @@ export class InvoiceAggregatedData {
     addOnProductList: AddOnProductDO[];
     vatList: TaxDO[];
     paymentMethodList: PaymentMethodDO[];
+    bookingAttachment: BookingAttachment;
 
     constructor(private _sessionContext: SessionContext) {
         this._thTranslation = new ThTranslation(this._sessionContext.language);
