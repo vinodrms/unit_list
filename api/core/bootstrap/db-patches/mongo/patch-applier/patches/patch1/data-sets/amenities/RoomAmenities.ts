@@ -48,6 +48,14 @@ export class RoomAmenities extends Amenities {
             {
                 name: "Kitchen",
                 iconUrl: "Ô"
+            },
+            {
+                name: "Shower",
+                iconUrl: "ã",
+            },
+            {
+                name: "Toilet",
+                iconUrl: "ä"
             }
         ];
 
