@@ -67,6 +67,9 @@ export class InvoiceConfirmationVMContainer {
     totalLabel: string;
     totalValue: number;
 
+    hotelVatLabel: string;
+    hotelVatValue: string;
+
     constructor(private _thTranslation: ThTranslation) {
         this._thUtils = new ThUtils();
     }
@@ -87,6 +90,7 @@ export class InvoiceConfirmationVMContainer {
         this.initPaymentMethodLabelsAndValues();
         this.initTotalValues();
         this.initAdditionalFields();
+        this.initHotelVatLabelAndValue();
     }
     private initLogoSrcs() {
         if (!this._thUtils.isUndefinedOrNull(this._invoiceAggregatedData.hotel.logoUrl)) {
@@ -175,6 +179,11 @@ export class InvoiceConfirmationVMContainer {
             this.addFieldName2 = this._thTranslation.translate("Room");
             this.addFieldValue2 = this._invoiceAggregatedData.bookingAttachment.roomCategory.displayName;
         }
+    }
+
+    private initHotelVatLabelAndValue() {
+        this.hotelVatLabel = this._thTranslation.translate('VAT');
+        this.hotelVatValue = this._invoiceAggregatedData.hotel.contactDetails.vatCode;
     }
 
     private get _invoice(): InvoiceDO {
