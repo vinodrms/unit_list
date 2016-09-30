@@ -16,6 +16,7 @@ exitWithMessageOnError () {
   fi
 }
 
+
 # Prerequisites
 # -------------
 
