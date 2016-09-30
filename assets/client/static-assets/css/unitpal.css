@@ -1985,10 +1985,21 @@ a.btn.btn-square:focus {
         min-height: 235px;
     }
 }
+.existing-booking-search-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+.existing-booking-search-container>div {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
 .existing-booking-search-inputs {
     flex: 0;
     overflow: hidden;
     height: 50px;
+    min-height: 50px;
 }
 
 .booking-search-results {

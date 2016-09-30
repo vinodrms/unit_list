@@ -40,6 +40,7 @@ export class ChangePriceProductModalComponent implements ICustomModalComponent, 
 
     public selectBookingCartItem(bookingCartItemVM: BookingCartItemVM) {
         this.selectedBookingCartItemVM = bookingCartItemVM;
+        console.log(bookingCartItemVM);
     }
 
     public useSelectedBookingCartItem() {

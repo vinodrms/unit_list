@@ -2,8 +2,8 @@
 	<button type="button" class="close" (click)="closeDialog()">&times;</button>
 	<h4 class="modal-title">{{ 'Select New Price Product' | translate }}</h4>
 </div>
-<div class="modal-body table-selection">
-	<existing-booking-search [searchInput]="bookingSearchInput" (onBookingCartItemVMSelected)="selectBookingCartItem($event)"></existing-booking-search>
+<div>
+	<existing-booking-search [searchInput]="bookingSearchInput" (onBookingCartItemVMSelected)="selectBookingCartItem($event)" class="modal-body table-selection"></existing-booking-search>
 </div>
 <div class="modal-footer">
 	<button [disabled]="!didSelectBookingCartItem" (click)="useSelectedBookingCartItem()" type="button" class="btn btn-primary">
