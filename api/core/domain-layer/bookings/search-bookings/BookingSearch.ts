@@ -1,27 +1,27 @@
-import {ThLogger, ThLogLevel} from '../../../utils/logging/ThLogger';
-import {ThError} from '../../../utils/th-responses/ThError';
-import {ThStatusCode} from '../../../utils/th-responses/ThResponse';
-import {AppContext} from '../../../utils/AppContext';
-import {SessionContext} from '../../../utils/SessionContext';
-import {BookingSearchDO} from './BookingSearchDO';
-import {TransientBookingItemDO} from './TransientBookingItemDO';
-import {ValidationResultParser} from '../../common/ValidationResultParser';
-import {BookingIntervalValidator} from '../validators/BookingIntervalValidator';
-import {RoomDO} from '../../../data-layer/rooms/data-objects/RoomDO';
-import {RoomSearchResultRepoDO} from '../../../data-layer/rooms/repositories/IRoomRepository';
-import {HotelDO} from '../../../data-layer/hotel/data-objects/HotelDO';
-import {ThDateIntervalDO} from '../../../utils/th-dates/data-objects/ThDateIntervalDO';
-import {BookingDataLoaderFactory} from './utils/data-loader/BookingDataLoaderFactory';
-import {IBookingDataLoader} from './utils/data-loader/IBookingDataLoader';
-import {BookingSearchDependencies} from './utils/data-loader/results/BookingSearchDependencies';
-import {BookingDependenciesFilter} from './utils/data-filter/BookingDependenciesFilter';
-import {BookingOccupancyCalculator} from './utils/occupancy-calculator/BookingOccupancyCalculator';
-import {IBookingOccupancy} from './utils/occupancy-calculator/results/IBookingOccupancy';
-import {RoomCategoryStatsAggregator} from '../../room-categories/aggregators/RoomCategoryStatsAggregator';
-import {RoomCategoryStatsDO, RoomCategoryCapacityDO} from '../../../data-layer/room-categories/data-objects/RoomCategoryStatsDO';
-import {RoomCategoryStatsFilter} from '../validators/filters/room-category-stats/RoomCategoryStatsFilter';
-import {BookingSearchResultBuilder} from './utils/result-builder/BookingSearchResultBuilder';
-import {BookingSearchResult} from './utils/result-builder/BookingSearchResult';
+import { ThLogger, ThLogLevel } from '../../../utils/logging/ThLogger';
+import { ThError } from '../../../utils/th-responses/ThError';
+import { ThStatusCode } from '../../../utils/th-responses/ThResponse';
+import { AppContext } from '../../../utils/AppContext';
+import { SessionContext } from '../../../utils/SessionContext';
+import { BookingSearchDO } from './BookingSearchDO';
+import { TransientBookingItemDO } from './TransientBookingItemDO';
+import { ValidationResultParser } from '../../common/ValidationResultParser';
+import { BookingIntervalValidator } from '../validators/BookingIntervalValidator';
+import { RoomDO } from '../../../data-layer/rooms/data-objects/RoomDO';
+import { RoomSearchResultRepoDO } from '../../../data-layer/rooms/repositories/IRoomRepository';
+import { HotelDO } from '../../../data-layer/hotel/data-objects/HotelDO';
+import { ThDateIntervalDO } from '../../../utils/th-dates/data-objects/ThDateIntervalDO';
+import { BookingDataLoaderFactory } from './utils/data-loader/BookingDataLoaderFactory';
+import { IBookingDataLoader } from './utils/data-loader/IBookingDataLoader';
+import { BookingSearchDependencies } from './utils/data-loader/results/BookingSearchDependencies';
+import { BookingDependenciesFilter } from './utils/data-filter/BookingDependenciesFilter';
+import { BookingOccupancyCalculator } from './utils/occupancy-calculator/BookingOccupancyCalculator';
+import { IBookingOccupancy } from './utils/occupancy-calculator/results/IBookingOccupancy';
+import { RoomCategoryStatsAggregator } from '../../room-categories/aggregators/RoomCategoryStatsAggregator';
+import { RoomCategoryStatsDO, RoomCategoryCapacityDO } from '../../../data-layer/room-categories/data-objects/RoomCategoryStatsDO';
+import { RoomCategoryStatsFilter } from '../validators/filters/room-category-stats/RoomCategoryStatsFilter';
+import { BookingSearchResultBuilder } from './utils/result-builder/BookingSearchResultBuilder';
+import { BookingSearchResult } from './utils/result-builder/BookingSearchResult';
 
 export class BookingSearch {
     private _searchParams: BookingSearchDO;
@@ -84,7 +84,7 @@ export class BookingSearch {
 
                 var transientBookingList = TransientBookingItemDO.convertToBookingList(this._searchParams.transientBookingList);
                 var occupancyCalculator = new BookingOccupancyCalculator(this._appContext, this._sessionContext, this._loadedRoomList);
-                return occupancyCalculator.compute(this._searchParams.interval, transientBookingList);
+                return occupancyCalculator.compute(this._searchParams.interval, transientBookingList, this._searchParams.bookingIdToOmit);
             }).then((bookingOccupancy: IBookingOccupancy) => {
                 this._loadedBookingOccupancy = bookingOccupancy;
 

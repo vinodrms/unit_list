@@ -39,6 +39,7 @@ export class ExistingBookingSearchComponent implements OnInit {
         this.bookingSearchParams.interval = this.searchInput.booking.interval;
         this.bookingSearchParams.transientBookingList = [];
         this.bookingSearchParams.configCapacity = this.searchInput.booking.configCapacity;
+        this.bookingSearchParams.bookingIdToOmit = this.searchInput.booking.bookingId;
         this.selectedCustomer = this.searchInput.customersContainer.getCustomerById(this.searchInput.booking.defaultBillingDetails.customerId);
     }
     public ngAfterViewInit() {

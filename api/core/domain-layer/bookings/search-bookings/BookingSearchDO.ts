@@ -13,6 +13,7 @@ export class BookingSearchDO {
     interval: ThDateIntervalDO;
     configCapacity: ConfigCapacityDO;
     transientBookingList: TransientBookingItemDO[];
+    bookingIdToOmit?: string;
 
     public static getValidationStructure(): IValidationStructure {
         return new ObjectValidationStructure([
@@ -31,6 +32,10 @@ export class BookingSearchDO {
             {
                 key: "transientBookingList",
                 validationStruct: new ArrayValidationStructure(TransientBookingItemDO.getValidationStructure())
+            },
+            {
+                key: "bookingIdToOmit",
+                validationStruct: new PrimitiveValidationStructure(StringValidationRule.buildNullable())
             }
         ]);
     }
