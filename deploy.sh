@@ -118,6 +118,7 @@ eval rimraf node_modules
 eval $NPM_CMD install
 exitWithMessageOnError "npm failed"
 
+
 # 4. Install client npm packages
 cd "assets"
 eval rimraf node_modules
