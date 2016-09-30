@@ -3,47 +3,49 @@ import should = require('should');
 import supertest = require('supertest');
 import _ = require("underscore");
 
-import {ThError} from '../../../../../core/utils/th-responses/ThError';
-import {ThStatusCode} from '../../../../../core/utils/th-responses/ThResponse';
-import {DefaultDataBuilder} from '../../../../db-initializers/DefaultDataBuilder';
-import {TestContext} from '../../../../helpers/TestContext';
-import {TestUtils} from '../../../../helpers/TestUtils';
-import {BookingTestHelper} from '../../bookings/helpers/BookingTestHelper';
-import {HotelDashboardOperationsTestHelper} from '../dashboard/helpers/HotelDashboardOperationsTestHelper';
-import {AddOnProductDO} from '../../../../../core/data-layer/add-on-products/data-objects/AddOnProductDO';
-import {PriceProductDO} from '../../../../../core/data-layer/price-products/data-objects/PriceProductDO';
-import {AddBookingItems} from '../../../../../core/domain-layer/bookings/add-bookings/AddBookingItems';
-import {BookingItemDO} from '../../../../../core/domain-layer/bookings/add-bookings/AddBookingItemsDO';
-import {CustomerDO, CustomerType} from '../../../../../core/data-layer/customers/data-objects/CustomerDO';
-import {BookingDO, GroupBookingInputChannel, BookingConfirmationStatus} from '../../../../../core/data-layer/bookings/data-objects/BookingDO';
-import {BookingChangeDates} from '../../../../../core/domain-layer/hotel-operations/booking/change-dates/BookingChangeDates';
-import {BookingChangeDatesDO} from '../../../../../core/domain-layer/hotel-operations/booking/change-dates/BookingChangeDatesDO';
-import {BookingChangeNoShowTime} from '../../../../../core/domain-layer/hotel-operations/booking/change-no-show-time/BookingChangeNoShowTime';
-import {BookingChangeNoShowTimeDO} from '../../../../../core/domain-layer/hotel-operations/booking/change-no-show-time/BookingChangeNoShowTimeDO';
-import {ThTimestampDO} from '../../../../../core/utils/th-dates/data-objects/ThTimestampDO';
-import {ThHourDO} from '../../../../../core/utils/th-dates/data-objects/ThHourDO';
-import {InvoicePaymentMethodDO, InvoicePaymentMethodType} from '../../../../../core/data-layer/invoices/data-objects/payers/InvoicePaymentMethodDO';
-import {FileAttachmentDO} from '../../../../../core/data-layer/common/data-objects/file/FileAttachmentDO';
-import {BookingStateChangeTriggerType} from '../../../../../core/data-layer/bookings/data-objects/state-change-time/BookingStateChangeTriggerTimeDO';
-import {BookingChangeCapacity} from '../../../../../core/domain-layer/hotel-operations/booking/change-capacity/BookingChangeCapacity';
-import {BookingChangeCapacityDO} from '../../../../../core/domain-layer/hotel-operations/booking/change-capacity/BookingChangeCapacityDO';
-import {BookingPaymentGuarantee} from '../../../../../core/domain-layer/hotel-operations/booking/payment-guarantee/BookingPaymentGuarantee';
-import {BookingPaymentGuaranteeDO} from '../../../../../core/domain-layer/hotel-operations/booking/payment-guarantee/BookingPaymentGuaranteeDO';
-import {BookingChangeDetails} from '../../../../../core/domain-layer/hotel-operations/booking/change-details/BookingChangeDetails';
-import {BookingChangeDetailsDO} from '../../../../../core/domain-layer/hotel-operations/booking/change-details/BookingChangeDetailsDO';
-import {BookingChangeCustomers} from '../../../../../core/domain-layer/hotel-operations/booking/change-customers/BookingChangeCustomers';
-import {BookingChangeCustomersDO} from '../../../../../core/domain-layer/hotel-operations/booking/change-customers/BookingChangeCustomersDO';
-import {BookingProcessFactory, BookingStatusChangerProcessType} from '../../../../../core/domain-layer/bookings/processes/BookingProcessFactory';
-import {IBookingStatusChangerProcess} from '../../../../../core/domain-layer/bookings/processes/IBookingStatusChangerProcess';
-import {BookingReactivate} from '../../../../../core/domain-layer/hotel-operations/booking/reactivate-booking/BookingReactivate';
-import {BookingReactivateDO} from '../../../../../core/domain-layer/hotel-operations/booking/reactivate-booking/BookingReactivateDO';
-import {BookingCancel} from '../../../../../core/domain-layer/hotel-operations/booking/cancel-booking/BookingCancel';
-import {BookingCancelDO} from '../../../../../core/domain-layer/hotel-operations/booking/cancel-booking/BookingCancelDO';
-import {EmailConfirmation} from '../../../../../core/domain-layer/hotel-operations/common/email-confirmations/EmailConfirmation';
-import {EmailConfirmationDO, EmailConfirmationType} from '../../../../../core/domain-layer/hotel-operations/common/email-confirmations/EmailConfirmationDO';
-import {BookingConfirmationEmailParameters} from '../../../../../core/domain-layer/hotel-operations/common/email-confirmations/utils/strategies/BookingEmailConfirmationStrategy';
-import {BookingReserveAddOnProducts} from '../../../../../core/domain-layer/hotel-operations/booking/reserve-add-on-products/BookingReserveAddOnProducts';
-import {BookingReserveAddOnProductsDO} from '../../../../../core/domain-layer/hotel-operations/booking/reserve-add-on-products/BookingReserveAddOnProductsDO';
+import { ThError } from '../../../../../core/utils/th-responses/ThError';
+import { ThStatusCode } from '../../../../../core/utils/th-responses/ThResponse';
+import { DefaultDataBuilder } from '../../../../db-initializers/DefaultDataBuilder';
+import { TestContext } from '../../../../helpers/TestContext';
+import { TestUtils } from '../../../../helpers/TestUtils';
+import { BookingTestHelper } from '../../bookings/helpers/BookingTestHelper';
+import { HotelDashboardOperationsTestHelper } from '../dashboard/helpers/HotelDashboardOperationsTestHelper';
+import { AddOnProductDO } from '../../../../../core/data-layer/add-on-products/data-objects/AddOnProductDO';
+import { PriceProductDO } from '../../../../../core/data-layer/price-products/data-objects/PriceProductDO';
+import { AddBookingItems } from '../../../../../core/domain-layer/bookings/add-bookings/AddBookingItems';
+import { BookingItemDO } from '../../../../../core/domain-layer/bookings/add-bookings/AddBookingItemsDO';
+import { CustomerDO, CustomerType } from '../../../../../core/data-layer/customers/data-objects/CustomerDO';
+import { BookingDO, GroupBookingInputChannel, BookingConfirmationStatus } from '../../../../../core/data-layer/bookings/data-objects/BookingDO';
+import { BookingChangeDates } from '../../../../../core/domain-layer/hotel-operations/booking/change-dates/BookingChangeDates';
+import { BookingChangeDatesDO } from '../../../../../core/domain-layer/hotel-operations/booking/change-dates/BookingChangeDatesDO';
+import { BookingChangeNoShowTime } from '../../../../../core/domain-layer/hotel-operations/booking/change-no-show-time/BookingChangeNoShowTime';
+import { BookingChangeNoShowTimeDO } from '../../../../../core/domain-layer/hotel-operations/booking/change-no-show-time/BookingChangeNoShowTimeDO';
+import { ThTimestampDO } from '../../../../../core/utils/th-dates/data-objects/ThTimestampDO';
+import { ThHourDO } from '../../../../../core/utils/th-dates/data-objects/ThHourDO';
+import { InvoicePaymentMethodDO, InvoicePaymentMethodType } from '../../../../../core/data-layer/invoices/data-objects/payers/InvoicePaymentMethodDO';
+import { FileAttachmentDO } from '../../../../../core/data-layer/common/data-objects/file/FileAttachmentDO';
+import { BookingStateChangeTriggerType } from '../../../../../core/data-layer/bookings/data-objects/state-change-time/BookingStateChangeTriggerTimeDO';
+import { BookingChangeCapacity } from '../../../../../core/domain-layer/hotel-operations/booking/change-capacity/BookingChangeCapacity';
+import { BookingChangeCapacityDO } from '../../../../../core/domain-layer/hotel-operations/booking/change-capacity/BookingChangeCapacityDO';
+import { BookingPaymentGuarantee } from '../../../../../core/domain-layer/hotel-operations/booking/payment-guarantee/BookingPaymentGuarantee';
+import { BookingPaymentGuaranteeDO } from '../../../../../core/domain-layer/hotel-operations/booking/payment-guarantee/BookingPaymentGuaranteeDO';
+import { BookingChangeDetails } from '../../../../../core/domain-layer/hotel-operations/booking/change-details/BookingChangeDetails';
+import { BookingChangeDetailsDO } from '../../../../../core/domain-layer/hotel-operations/booking/change-details/BookingChangeDetailsDO';
+import { BookingChangeCustomers } from '../../../../../core/domain-layer/hotel-operations/booking/change-customers/BookingChangeCustomers';
+import { BookingChangeCustomersDO } from '../../../../../core/domain-layer/hotel-operations/booking/change-customers/BookingChangeCustomersDO';
+import { BookingProcessFactory, BookingStatusChangerProcessType } from '../../../../../core/domain-layer/bookings/processes/BookingProcessFactory';
+import { IBookingStatusChangerProcess } from '../../../../../core/domain-layer/bookings/processes/IBookingStatusChangerProcess';
+import { BookingReactivate } from '../../../../../core/domain-layer/hotel-operations/booking/reactivate-booking/BookingReactivate';
+import { BookingReactivateDO } from '../../../../../core/domain-layer/hotel-operations/booking/reactivate-booking/BookingReactivateDO';
+import { BookingCancel } from '../../../../../core/domain-layer/hotel-operations/booking/cancel-booking/BookingCancel';
+import { BookingCancelDO } from '../../../../../core/domain-layer/hotel-operations/booking/cancel-booking/BookingCancelDO';
+import { EmailConfirmation } from '../../../../../core/domain-layer/hotel-operations/common/email-confirmations/EmailConfirmation';
+import { EmailConfirmationDO, EmailConfirmationType } from '../../../../../core/domain-layer/hotel-operations/common/email-confirmations/EmailConfirmationDO';
+import { BookingConfirmationEmailParameters } from '../../../../../core/domain-layer/hotel-operations/common/email-confirmations/utils/strategies/BookingEmailConfirmationStrategy';
+import { BookingReserveAddOnProducts } from '../../../../../core/domain-layer/hotel-operations/booking/reserve-add-on-products/BookingReserveAddOnProducts';
+import { BookingReserveAddOnProductsDO } from '../../../../../core/domain-layer/hotel-operations/booking/reserve-add-on-products/BookingReserveAddOnProductsDO';
+import { BookingChangePriceProduct } from '../../../../../core/domain-layer/hotel-operations/booking/change-price-product/BookingChangePriceProduct';
+import { BookingChangePriceProductDO } from '../../../../../core/domain-layer/hotel-operations/booking/change-price-product/BookingChangePriceProductDO';
 
 describe("Hotel Booking Operations Tests", function () {
     var testContext: TestContext;
@@ -270,6 +272,24 @@ describe("Hotel Booking Operations Tests", function () {
                 done(error);
             });
         });
+        it("Should change the price product for the booking", function (done) {
+            var bookingChangePriceProductDO = new BookingChangePriceProductDO();
+            bookingChangePriceProductDO.groupBookingId = bookingToChange.groupBookingId;
+            bookingChangePriceProductDO.bookingId = bookingToChange.bookingId;
+            bookingChangePriceProductDO.priceProductId = bookingToChange.priceProductId;
+            bookingChangePriceProductDO.roomCategoryId = bookingToChange.roomCategoryId;
+            bookingChangePriceProductDO.allotmentId = bookingToChange.allotmentId;
+            debugger
+
+            var changePriceProduct = new BookingChangePriceProduct(testContext.appContext, testContext.sessionContext);
+            changePriceProduct.changePriceProduct(bookingChangePriceProductDO).then((updatedBooking: BookingDO) => {
+                bookingToChange = updatedBooking;
+                done();
+            }).catch((error: any) => {
+                done(error);
+            });
+        });
+
         it("Should cancel the booking", function (done) {
             var bookingCancelDO = new BookingCancelDO();
             bookingCancelDO.groupBookingId = bookingToChange.groupBookingId;

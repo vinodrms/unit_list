@@ -478,6 +478,7 @@ export enum ThStatusCode {
     KeyMetricReaderInvalidInterval,
     KeyMetricReaderError,
     YieldManagerControllerErrorGettingKeyMetrics,
+    BookingChangePriceProductError,
 
 }
 
@@ -947,6 +948,7 @@ ThMessage[ThStatusCode.HotelInventoryStatsReaderError] = "Error reading the stat
 ThMessage[ThStatusCode.KeyMetricReaderInvalidInterval] = "Invalid interval.";
 ThMessage[ThStatusCode.KeyMetricReaderError] = "Error reading key metrics.";
 ThMessage[ThStatusCode.YieldManagerControllerErrorGettingKeyMetrics] = "Error getting key metrics.";
+ThMessage[ThStatusCode.BookingChangePriceProductError] = "Error changing the Price Product for the booking.";
 
 export class ThResponse {
     statusCode: ThStatusCode;
