@@ -1,5 +1,5 @@
-import { BookingDO } from '../../../../../../../../../../../../../../../services/bookings/data-objects/BookingDO';
-import { CustomersDO } from '../../../../../../../../../../../../../../../services/customers/data-objects/CustomersDO';
+import { BookingDO } from '../../../../../../../../../../../../../../services/bookings/data-objects/BookingDO';
+import { CustomersDO } from '../../../../../../../../../../../../../../services/customers/data-objects/CustomersDO';
 
 export class ChangePriceProductModalInput {
     private _booking: BookingDO;

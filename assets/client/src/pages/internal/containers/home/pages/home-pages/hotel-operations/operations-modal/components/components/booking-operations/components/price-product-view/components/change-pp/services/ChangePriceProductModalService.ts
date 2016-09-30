@@ -3,9 +3,9 @@ import { AppContext } from '../../../../../../../../../../../../../../../../comm
 import { ModalDialogRef } from '../../../../../../../../../../../../../../../../common/utils/modals/utils/ModalDialogRef';
 import { BookingDO } from '../../../../../../../../../../../../../../services/bookings/data-objects/BookingDO';
 import { CustomersDO } from '../../../../../../../../../../../../../../services/customers/data-objects/CustomersDO';
-import { ChangePriceProductModalInput } from './utils/ChangePriceProductModalInput';
 import { ChangePriceProductModalComponent } from '../ChangePriceProductModalComponent';
 import { ChangePriceProductModalModule } from '../ChangePriceProductModalModule';
+import { ChangePriceProductModalInput } from './ChangePriceProductModalInput';
 
 @Injectable()
 export class ChangePriceProductModalService {

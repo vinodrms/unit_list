@@ -6,7 +6,7 @@ import { PriceProductDO } from '../../../../../../../../../../../services/price-
 import { BookingDO } from '../../../../../../../../../../../services/bookings/data-objects/BookingDO';
 import { InvoiceItemDO } from '../../../../../../../../../../../services/invoices/data-objects/items/InvoiceItemDO';
 import { BookingChangePriceProductRight } from '../../../../../../../../../../../services/bookings/data-objects/BookingEditRights';
-import { ChangePriceProductModalService } from './components/change-price-product/services/ChangePriceProductModalService';
+import { ChangePriceProductModalService } from './components/change-pp/services/ChangePriceProductModalService';
 import { BookingCartItemVM } from '../../../../../../../../utils/new-booking/services/search/view-models/BookingCartItemVM';
 
 @Component({
