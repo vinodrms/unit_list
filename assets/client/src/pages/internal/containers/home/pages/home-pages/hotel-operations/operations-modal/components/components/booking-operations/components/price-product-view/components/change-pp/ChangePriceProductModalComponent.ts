@@ -4,13 +4,13 @@ import { ICustomModalComponent, ModalSize } from '../../../../../../../../../../
 import { ModalDialogRef } from '../../../../../../../../../../../../../../../common/utils/modals/utils/ModalDialogRef';
 import { BookingCartItemVM } from '../../../../../../../../../../utils/new-booking/services/search/view-models/BookingCartItemVM';
 import { BookingDO } from '../../../../../../../../../../../../../services/bookings/data-objects/BookingDO';
-import { ChangePriceProductModalInput } from './services/utils/ChangePriceProductModalInput';
+import { ChangePriceProductModalInput } from './services/ChangePriceProductModalInput';
 import { ExistingBookingSearchInput } from '../../../../../../../../../../utils/new-booking/component/subcomponents/booking-search/modules/components/utils/ExistingBookingSearchInput';
 import { HotelOperationsBookingService } from '../../../../../../../../../../../../../services/hotel-operations/booking/HotelOperationsBookingService';
 
 @Component({
     selector: 'selector',
-    templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/booking-operations/components/price-product-view/components/change-price-product/template/change-price-product-modal.html',
+    templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/booking-operations/components/price-product-view/components/change-pp/template/change-price-product-modal.html',
     providers: [HotelOperationsBookingService]
 })
 export class ChangePriceProductModalComponent implements ICustomModalComponent, OnInit {
