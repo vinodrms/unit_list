@@ -97,7 +97,6 @@ export class BookingPriceProductEditorComponent implements OnInit {
                 modalDialogRef.resultObservable
                     .subscribe((updatedBooking: BookingDO) => {
                         this.triggerOnBookingPriceProductChanged(updatedBooking);
-                        this._appContext.analytics.logEvent("booking", "change-price-product", "changed the price product for a booking");
                     }, (err: any) => {
                     });
             }).catch((err: any) => { });

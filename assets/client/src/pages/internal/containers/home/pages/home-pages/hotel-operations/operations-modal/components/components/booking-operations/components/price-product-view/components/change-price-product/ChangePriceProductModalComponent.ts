@@ -6,10 +6,12 @@ import { BookingCartItemVM } from '../../../../../../../../../../utils/new-booki
 import { BookingDO } from '../../../../../../../../../../../../../services/bookings/data-objects/BookingDO';
 import { ChangePriceProductModalInput } from './services/utils/ChangePriceProductModalInput';
 import { ExistingBookingSearchInput } from '../../../../../../../../../../utils/new-booking/component/subcomponents/booking-search/modules/components/utils/ExistingBookingSearchInput';
+import { HotelOperationsBookingService } from '../../../../../../../../../../../../../services/hotel-operations/booking/HotelOperationsBookingService';
 
 @Component({
     selector: 'selector',
-    templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/booking-operations/components/price-product-view/components/change-price-product/template/change-price-product-modal.html'
+    templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/booking-operations/components/price-product-view/components/change-price-product/template/change-price-product-modal.html',
+    providers: [HotelOperationsBookingService]
 })
 export class ChangePriceProductModalComponent implements ICustomModalComponent, OnInit {
     selectedBookingCartItemVM: BookingCartItemVM;
@@ -18,7 +20,8 @@ export class ChangePriceProductModalComponent implements ICustomModalComponent, 
 
     constructor(private _appContext: AppContext,
         private _modalDialogRef: ModalDialogRef<BookingDO>,
-        private _modalInput: ChangePriceProductModalInput) {
+        private _modalInput: ChangePriceProductModalInput,
+        private _hotelOperationsBookingService: HotelOperationsBookingService) {
         this.bookingSearchInput = new ExistingBookingSearchInput(_modalInput.booking, _modalInput.customersContainer);
     }
 
@@ -89,7 +92,23 @@ export class ChangePriceProductModalComponent implements ICustomModalComponent, 
 
 
     private changeBookingPriceProduct() {
-        console.log(this.selectedBookingCartItemVM);
-        // TODO: run change price product REST Api
+        var booking = new BookingDO();
+        booking.buildFromObject(this.bookingSearchInput.booking);
+
+        var bookingItem = this.selectedBookingCartItemVM.transientBookingItem;
+        booking.roomCategoryId = bookingItem.roomCategoryId;
+        booking.priceProductId = bookingItem.priceProductId;
+        booking.allotmentId = bookingItem.allotmentId;
+
+        this.isUpdatingPriceProduct = true;
+        this._hotelOperationsBookingService.changePriceProduct(booking).subscribe((updatedBooking: BookingDO) => {
+            this._appContext.analytics.logEvent("booking", "change-price-product", "changed the price product for a booking");
+            this.isUpdatingPriceProduct = false;
+            this._modalDialogRef.addResult(updatedBooking);
+            this.closeDialog();
+        }, (error: ThError) => {
+            this.isUpdatingPriceProduct = false;
+            this._appContext.toaster.error(error.message);
+        });
     }
 }
