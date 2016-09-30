@@ -1,19 +1,20 @@
-import {BaseController} from './base/BaseController';
-import {ThStatusCode} from '../core/utils/th-responses/ThResponse';
-import {AppContext} from '../core/utils/AppContext';
-import {SessionContext} from '../core/utils/SessionContext';
-import {BookingDO} from '../core/data-layer/bookings/data-objects/BookingDO';
-import {BookingPossiblePrices} from '../core/domain-layer/hotel-operations/booking/possible-prices/BookingPossiblePrices';
-import {BookingPossiblePriceItems} from '../core/domain-layer/hotel-operations/booking/possible-prices/utils/BookingPossiblePriceItems';
-import {BookingChangeDates} from '../core/domain-layer/hotel-operations/booking/change-dates/BookingChangeDates';
-import {BookingChangeNoShowTime} from '../core/domain-layer/hotel-operations/booking/change-no-show-time/BookingChangeNoShowTime';
-import {BookingChangeCapacity} from '../core/domain-layer/hotel-operations/booking/change-capacity/BookingChangeCapacity';
-import {BookingPaymentGuarantee} from '../core/domain-layer/hotel-operations/booking/payment-guarantee/BookingPaymentGuarantee';
-import {BookingChangeDetails} from '../core/domain-layer/hotel-operations/booking/change-details/BookingChangeDetails';
-import {BookingChangeCustomers} from '../core/domain-layer/hotel-operations/booking/change-customers/BookingChangeCustomers';
-import {BookingCancel} from '../core/domain-layer/hotel-operations/booking/cancel-booking/BookingCancel';
-import {BookingReactivate} from '../core/domain-layer/hotel-operations/booking/reactivate-booking/BookingReactivate';
-import {BookingReserveAddOnProducts} from '../core/domain-layer/hotel-operations/booking/reserve-add-on-products/BookingReserveAddOnProducts';
+import { BaseController } from './base/BaseController';
+import { ThStatusCode } from '../core/utils/th-responses/ThResponse';
+import { AppContext } from '../core/utils/AppContext';
+import { SessionContext } from '../core/utils/SessionContext';
+import { BookingDO } from '../core/data-layer/bookings/data-objects/BookingDO';
+import { BookingPossiblePrices } from '../core/domain-layer/hotel-operations/booking/possible-prices/BookingPossiblePrices';
+import { BookingPossiblePriceItems } from '../core/domain-layer/hotel-operations/booking/possible-prices/utils/BookingPossiblePriceItems';
+import { BookingChangeDates } from '../core/domain-layer/hotel-operations/booking/change-dates/BookingChangeDates';
+import { BookingChangeNoShowTime } from '../core/domain-layer/hotel-operations/booking/change-no-show-time/BookingChangeNoShowTime';
+import { BookingChangeCapacity } from '../core/domain-layer/hotel-operations/booking/change-capacity/BookingChangeCapacity';
+import { BookingPaymentGuarantee } from '../core/domain-layer/hotel-operations/booking/payment-guarantee/BookingPaymentGuarantee';
+import { BookingChangeDetails } from '../core/domain-layer/hotel-operations/booking/change-details/BookingChangeDetails';
+import { BookingChangeCustomers } from '../core/domain-layer/hotel-operations/booking/change-customers/BookingChangeCustomers';
+import { BookingCancel } from '../core/domain-layer/hotel-operations/booking/cancel-booking/BookingCancel';
+import { BookingReactivate } from '../core/domain-layer/hotel-operations/booking/reactivate-booking/BookingReactivate';
+import { BookingReserveAddOnProducts } from '../core/domain-layer/hotel-operations/booking/reserve-add-on-products/BookingReserveAddOnProducts';
+import { BookingChangePriceProduct } from '../core/domain-layer/hotel-operations/booking/change-price-product/BookingChangePriceProduct';
 
 class HotelBookingOperationsController extends BaseController {
     public getPossiblePrices(req: Express.Request, res: Express.Response) {
@@ -143,6 +144,19 @@ class HotelBookingOperationsController extends BaseController {
             this.returnErrorResponse(req, res, error, ThStatusCode.HotelBookingOperationsControllerErrorReservingAddOnProducts);
         });
     }
+
+    public changePriceProduct(req: Express.Request, res: Express.Response) {
+        var appContext: AppContext = req.appContext;
+        var sessionContext: SessionContext = req.sessionContext;
+
+        var changePriceProduct = new BookingChangePriceProduct(appContext, sessionContext);
+        changePriceProduct.changePriceProduct(req.body.booking).then((booking: BookingDO) => {
+            booking.bookingHistory.translateActions(this.getThTranslation(sessionContext));
+            this.returnSuccesfulResponse(req, res, { booking: booking });
+        }).catch((error: any) => {
+            this.returnErrorResponse(req, res, error, ThStatusCode.HotelBookingOperationsControllerErrorReservingAddOnProducts);
+        });
+    }
 }
 
 var hotelBookingOperationsController = new HotelBookingOperationsController();
@@ -157,4 +171,5 @@ module.exports = {
     cancel: hotelBookingOperationsController.cancel.bind(hotelBookingOperationsController),
     reactivate: hotelBookingOperationsController.reactivate.bind(hotelBookingOperationsController),
     reserveAddOnProducts: hotelBookingOperationsController.reserveAddOnProducts.bind(hotelBookingOperationsController),
+    changePriceProduct: hotelBookingOperationsController.changePriceProduct.bind(hotelBookingOperationsController),
 }

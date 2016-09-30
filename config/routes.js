@@ -146,6 +146,7 @@ module.exports.routes = {
 	'POST /api/hotelOperations/booking/cancel': 'HotelBookingOperationsController.cancel',
 	'POST /api/hotelOperations/booking/reactivate': 'HotelBookingOperationsController.reactivate',
 	'POST /api/hotelOperations/booking/reserveAddOnProducts': 'HotelBookingOperationsController.reserveAddOnProducts',
+	'POST /api/hotelOperations/booking/changePriceProduct': 'HotelBookingOperationsController.changePriceProduct',
 
 	'POST /api/hotelOperations/common/sendEmail': 'HotelCommonOperationsController.sendEmail',
 
