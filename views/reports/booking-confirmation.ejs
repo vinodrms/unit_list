@@ -37,6 +37,9 @@
                         <b style="font-size: 18px;"><%= hotelNameValue %></b>
                         <img src="<%= hotelLogoSrcValue %>" style="height:35px"/>
                     </p>
+                    <p><b><%= hotelVatLabel %>:</b>
+                        <%= hotelVatValue %>
+                    </p>
                     <p><b><%= hotelAddressLabel %>:</b>
                         <%= hotelAddressValue %>
                     </p>
@@ -93,14 +96,14 @@
 
             <hr/>
 
-            <div class="row" style="min-height: 50px;">
+            <div class="row" style="min-height: 40px;">
                 <div class="col-md-3">
                     <b><%= bodyRoomLabel %></b>
                 </div>
                 <div class="col-md-9">
                     <b><%= bookingConfirmationVM.roomCategoryName %></b><br>
                     <span><%= bodyBookingCapacityLabel %>: <%= bookingConfirmationVM.bookedCapacity %></span><br>
-                    <span><%= bodyBedSizesLabel %>: <%= bookingConfirmationVM.bedSizes %></span>
+                    <!--<span><%= bodyBedSizesLabel %>: <%= bookingConfirmationVM.bedSizes %></span>-->
                 </div>
             </div>
 

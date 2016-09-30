@@ -27,7 +27,6 @@ export class LogInComponent extends BaseFormComponent implements OnInit, OnDestr
 		private _activatedRoute: ActivatedRoute) {
 		super();
 	}
-
 	ngOnInit() {
 		this._statusCodeSubscription = this._activatedRoute.params.subscribe(params => {
 			this._statusCodeParser = new LogInStatusCodeParser();
