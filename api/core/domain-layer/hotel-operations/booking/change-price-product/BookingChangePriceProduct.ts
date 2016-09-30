@@ -6,6 +6,7 @@ import { SessionContext } from '../../../../utils/SessionContext';
 import { ThUtils } from '../../../../utils/ThUtils';
 import { BookingUtils } from '../../../bookings/utils/BookingUtils';
 import { BookingDO } from '../../../../data-layer/bookings/data-objects/BookingDO';
+import { BookingDOConstraints } from '../../../../data-layer/bookings/data-objects/BookingDOConstraints';
 import { HotelDO } from '../../../../data-layer/hotel/data-objects/HotelDO';
 import { PriceProductsContainer } from '../../../price-products/validators/results/PriceProductsContainer';
 import { PriceProductIdValidator } from '../../../price-products/validators/PriceProductIdValidator';
@@ -19,6 +20,9 @@ import { RoomCategoryStatsDO } from '../../../../data-layer/room-categories/data
 import { RoomDO } from '../../../../data-layer/rooms/data-objects/RoomDO';
 import { PriceProductDO } from '../../../../data-layer/price-products/data-objects/PriceProductDO';
 import { DocumentActionDO } from '../../../../data-layer/common/data-objects/document-history/DocumentActionDO';
+import { InvoiceGroupSearchResultRepoDO } from '../../../../data-layer/invoices/repositories/IInvoiceGroupsRepository';
+import { InvoiceGroupDO } from '../../../../data-layer/invoices/data-objects/InvoiceGroupDO';
+import { BookingWithDependencies } from '../utils/BookingWithDependencies';
 import { NewBookingsValidationRules } from '../../../bookings/add-bookings/utils/NewBookingsValidationRules';
 import { ValidationResultParser } from '../../../common/ValidationResultParser';
 import { BookingChangePriceProductDO } from './BookingChangePriceProductDO';
@@ -37,6 +41,7 @@ export class BookingChangePriceProduct {
     private _loadedAllotmentsContainer: AllotmentsContainer;
     private _loadedRoomList: RoomDO[];
     private _loadedRoomCategoryStatsList: RoomCategoryStatsDO[];
+    private _loadedInvoiceGroupList: InvoiceGroupDO[];
 
     private _booking: BookingDO;
 
@@ -74,6 +79,12 @@ export class BookingChangePriceProduct {
                 return bookingRepository.getBookingById({ hotelId: this._sessionContext.sessionDO.hotel.id }, this._inputDO.groupBookingId, this._inputDO.bookingId);
             }).then((loadedBooking: BookingDO) => {
                 this._booking = loadedBooking;
+
+                if (!this.bookingHasValidStatus()) {
+                    var thError = new ThError(ThStatusCode.BookingChangePriceProductInvalidState, null);
+                    ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "change price product: invalid booking state", this._inputDO, thError);
+                    throw thError;
+                }
 
                 var priceProductValidator = new PriceProductIdValidator(this._appContext, this._sessionContext);
                 return priceProductValidator.validatePriceProductId(this._inputDO.priceProductId);
@@ -123,6 +134,20 @@ export class BookingChangePriceProduct {
             }).then((validatedBookingList: BookingDO[]) => {
                 this._booking = validatedBookingList[0];
 
+                var invoiceGroupsRepo = this._appContext.getRepositoryFactory().getInvoiceGroupsRepository();
+                return invoiceGroupsRepo.getInvoiceGroupList({ hotelId: this._sessionContext.sessionDO.hotel.id }, {
+                    groupBookingId: this._booking.groupBookingId,
+                    bookingId: this._booking.bookingId
+                });
+            }).then((invoiceGroupSearchResult: InvoiceGroupSearchResultRepoDO) => {
+                this._loadedInvoiceGroupList = invoiceGroupSearchResult.invoiceGroupList;
+
+                if (this.bookingHasPaidInvoice()) {
+                    var thError = new ThError(ThStatusCode.BookingChangePriceProductPaidInvoice, null);
+                    ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "change price product: paid invoice", this._inputDO, thError);
+                    throw thError;
+                }
+
                 var bookingsRepo = this._appContext.getRepositoryFactory().getBookingRepository();
                 return bookingsRepo.updateBooking({ hotelId: this._sessionContext.sessionDO.hotel.id }, {
                     groupBookingId: this._booking.groupBookingId,
@@ -138,6 +163,21 @@ export class BookingChangePriceProduct {
                 }
                 reject(thError);
             });
+    }
+
+    private bookingHasValidStatus() {
+        return _.contains(BookingDOConstraints.ConfirmationStatuses_CanChangePriceProduct, this._booking.confirmationStatus);
+    }
+
+    private bookingHasPaidInvoice() {
+        var bookingWithDependencies = new BookingWithDependencies();
+        bookingWithDependencies.bookingDO = this._booking;
+        bookingWithDependencies.priceProductsContainer = this._loadedPriceProductsContainer;
+        bookingWithDependencies.allotmentsContainer = this._loadedAllotmentsContainer;
+        bookingWithDependencies.roomList = this._loadedRoomList;
+        bookingWithDependencies.roomCategoryStatsList = this._loadedRoomCategoryStatsList;
+        bookingWithDependencies.invoiceGroupList = this._loadedInvoiceGroupList;
+        return bookingWithDependencies.hasPaidInvoice();
     }
 
     private updateBookingUsingInputParams() {

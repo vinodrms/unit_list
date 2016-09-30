@@ -479,6 +479,8 @@ export enum ThStatusCode {
     KeyMetricReaderError,
     YieldManagerControllerErrorGettingKeyMetrics,
     BookingChangePriceProductError,
+    BookingChangePriceProductInvalidState,
+    BookingChangePriceProductPaidInvoice,
 
 }
 
@@ -949,6 +951,8 @@ ThMessage[ThStatusCode.KeyMetricReaderInvalidInterval] = "Invalid interval.";
 ThMessage[ThStatusCode.KeyMetricReaderError] = "Error reading key metrics.";
 ThMessage[ThStatusCode.YieldManagerControllerErrorGettingKeyMetrics] = "Error getting key metrics.";
 ThMessage[ThStatusCode.BookingChangePriceProductError] = "Error changing the Price Product for the booking.";
+ThMessage[ThStatusCode.BookingChangePriceProductInvalidState] = "You can change the Price Product only on a Confirmed, Guaranteed or Checked In booking.";
+ThMessage[ThStatusCode.BookingChangePriceProductPaidInvoice] = "You cannot change the Price Product because the invoice has been paid.";
 
 export class ThResponse {
     statusCode: ThStatusCode;

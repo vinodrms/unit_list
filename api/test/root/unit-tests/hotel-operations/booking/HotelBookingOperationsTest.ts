@@ -279,7 +279,6 @@ describe("Hotel Booking Operations Tests", function () {
             bookingChangePriceProductDO.priceProductId = bookingToChange.priceProductId;
             bookingChangePriceProductDO.roomCategoryId = bookingToChange.roomCategoryId;
             bookingChangePriceProductDO.allotmentId = bookingToChange.allotmentId;
-            debugger
 
             var changePriceProduct = new BookingChangePriceProduct(testContext.appContext, testContext.sessionContext);
             changePriceProduct.changePriceProduct(bookingChangePriceProductDO).then((updatedBooking: BookingDO) => {
