@@ -111,28 +111,16 @@ selectNodeVersion
 
 # 2.1 Install rimraf and remove node_module for client and server
 eval $NPM_CMD install -g rimraf
-# cd "$DEPLOYMENT_TARGET"
-# rimraf node_modules
-cd "assets"
-rimraf node_modules
-
-# 2.2. Copy native Node modules
-# cd "$DEPLOYMENT_TARGET"
-# mkdir node_modules
-# cp -R ../native_modules/* ./node_modules/
-
-# 3.0 install rimraf
-# eval $NPM_CMD install -g rimraf
 
 # 3. Install server npm packages
 cd "$DEPLOYMENT_TARGET"
-# eval rimraf node_modules
+eval rimraf node_modules
 eval $NPM_CMD install
 exitWithMessageOnError "npm failed"
 
 # 4. Install client npm packages
 cd "assets"
-# eval rimraf node_modules
+eval rimraf node_modules
 eval $NPM_CMD install
 exitWithMessageOnError "npm failed"
 cd ".."
