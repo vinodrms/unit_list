@@ -115,14 +115,14 @@ eval $NPM_CMD install -g rimraf
 
 # 3. Install server npm packages
 cd "$DEPLOYMENT_TARGET"
-eval rimraf node_modules
+# eval rimraf node_modules
 eval $NPM_CMD install
 exitWithMessageOnError "npm failed"
 
 
 # 4. Install client npm packages
 cd "assets"
-eval rimraf node_modules
+# eval rimraf node_modules
 eval $NPM_CMD install
 exitWithMessageOnError "npm failed"
 cd ".."
