@@ -62,7 +62,8 @@ export class BookingPriceProductEditorComponent implements OnInit {
     }
 
     public get canChangePriceProduct(): boolean {
-        return this._bookingOperationsPageData.bookingMeta.changePriceProductRight === BookingChangePriceProductRight.Edit;
+        return this._bookingOperationsPageData.bookingMeta.changePriceProductRight === BookingChangePriceProductRight.Edit
+            && !this._bookingOperationsPageData.hasPaidInvoice;;
     }
 
     public get bookingDO(): BookingDO {
