@@ -1,0 +1,13 @@
+<div class="modal-header text-center">
+	<button type="button" class="close" (click)="closeDialog()">&times;</button>
+	<h4 class="modal-title">{{ 'Select New Price Product' | translate }}</h4>
+</div>
+<div>
+	<!--<price-selection *ngIf="didSelectRoom()" (onPriceSelection)="didChangePriceSelection($event)" class="modal-body table-selection"></price-selection>-->
+</div>
+<div class="modal-footer">
+	<button [disabled]="!didSelectBookingCartItem" (click)="useSelectedBookingCartItem()" type="button" class="btn btn-primary">
+		<i *ngIf="isUpdatingPriceProduct" class="fa fa-spinner fa-pulse"></i>
+		{{ 'Select' | translate }}
+	</button>
+</div>

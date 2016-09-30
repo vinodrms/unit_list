@@ -736,5 +736,6 @@ export var EnglishTranslations: Object = {
 	"The maximum number of %maxNoOfInvoices% invoices was exceeded.": "The maximum number of %maxNoOfInvoices% invoices was exceeded.",
 	"The maximum number of %maxNoOfInvoiceItems% invoice items was exceeded.": "The maximum number of %maxNoOfInvoiceItems% invoice items was exceeded.",
 	"Download": "Download",
+	"Select New Price Product": "Select New Price Product",
 	
 };

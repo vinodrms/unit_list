@@ -44,3 +44,7 @@ export enum BookingReserveAddOnProductRight {
     Edit,
     None
 }
+export enum BookingChangePriceProductRight {
+    Edit,
+    None
+}
