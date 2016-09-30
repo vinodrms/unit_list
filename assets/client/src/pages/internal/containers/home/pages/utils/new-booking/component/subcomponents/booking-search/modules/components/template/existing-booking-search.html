@@ -1,0 +1,36 @@
+<div class="container">
+    <div class="row full-height">
+        <div class="col-xs-12 full-height booking-search-container">
+            <div class="row existing-booking-search-inputs" customScroll>
+                <div class="col-xs-12 booking-configuration-container">
+                    <div class="row booking-configuration">
+                        <div class="col-xs-12">
+                            <div class="row">
+                                <div class="col-xs-3 padding-top-5px">
+                                    <span class="unitpal-font">-</span>
+                                    <small>{{ 'Configuration' | translate }}</small>
+                                </div>
+                                <div class="col-xs-6 padding-top-2px">
+                                    <select class="form-control" [ngModel]="selectedCustomer" (ngModelChange)="selectedCustomer=$event">
+                                        <option *ngFor="let customer of customerList" [ngValue]="customer">{{customer.customerNameAndEmailString}}</option>
+                                    </select>
+                                </div>
+                                <div class="col-xs-3 padding-right-0px">
+                                    <a class="btn search-button" (click)="searchBookings()">
+                                        <i class="fa unitpal-font" *ngIf="!isSearching">=</i>
+                                        <i *ngIf="isSearching" class="fa fa-spinner fa-pulse"></i>
+                                        <span>{{'Search' | translate}}</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row booking-search-results">
+                <lazy-loading-table #searchResults (onAddExistingItem)="selectBookingCartItem($event)">
+                </lazy-loading-table>
+            </div>
+        </div>
+    </div>
+</div>

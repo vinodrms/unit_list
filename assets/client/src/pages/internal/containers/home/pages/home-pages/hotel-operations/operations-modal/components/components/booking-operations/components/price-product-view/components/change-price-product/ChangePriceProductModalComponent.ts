@@ -5,6 +5,7 @@ import { ModalDialogRef } from '../../../../../../../../../../../../../../../com
 import { BookingCartItemVM } from '../../../../../../../../../../utils/new-booking/services/search/view-models/BookingCartItemVM';
 import { BookingDO } from '../../../../../../../../../../../../../services/bookings/data-objects/BookingDO';
 import { ChangePriceProductModalInput } from './services/utils/ChangePriceProductModalInput';
+import { ExistingBookingSearchInput } from '../../../../../../../../../../utils/new-booking/component/subcomponents/booking-search/modules/components/utils/ExistingBookingSearchInput';
 
 @Component({
     selector: 'selector',
@@ -13,10 +14,13 @@ import { ChangePriceProductModalInput } from './services/utils/ChangePriceProduc
 export class ChangePriceProductModalComponent implements ICustomModalComponent, OnInit {
     selectedBookingCartItemVM: BookingCartItemVM;
     isUpdatingPriceProduct: boolean = false;
+    bookingSearchInput: ExistingBookingSearchInput;
 
     constructor(private _appContext: AppContext,
         private _modalDialogRef: ModalDialogRef<BookingDO>,
-        private _modalInput: ChangePriceProductModalInput) { }
+        private _modalInput: ChangePriceProductModalInput) {
+        this.bookingSearchInput = new ExistingBookingSearchInput(_modalInput.booking, _modalInput.customersContainer);
+    }
 
     ngOnInit() { }
 
@@ -32,6 +36,10 @@ export class ChangePriceProductModalComponent implements ICustomModalComponent, 
 
     public get didSelectBookingCartItem(): boolean {
         return !this._appContext.thUtils.isUndefinedOrNull(this.selectedBookingCartItemVM);
+    }
+
+    public selectBookingCartItem(bookingCartItemVM: BookingCartItemVM) {
+        this.selectedBookingCartItemVM = bookingCartItemVM;
     }
 
     public useSelectedBookingCartItem() {

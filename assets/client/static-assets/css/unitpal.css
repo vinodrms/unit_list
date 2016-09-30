@@ -1985,6 +1985,12 @@ a.btn.btn-square:focus {
         min-height: 235px;
     }
 }
+.existing-booking-search-inputs {
+    flex: 0;
+    overflow: hidden;
+    height: 50px;
+}
+
 .booking-search-results {
     flex: 1;
     display: flex;
@@ -2082,6 +2088,9 @@ a.btn.btn-square:focus {
 
 .padding-right-0px {
     padding-right: 0px;
+}
+.padding-top-2px {
+    padding-top: 2px;
 }
 .padding-top-5px {
     padding-top: 5px;
