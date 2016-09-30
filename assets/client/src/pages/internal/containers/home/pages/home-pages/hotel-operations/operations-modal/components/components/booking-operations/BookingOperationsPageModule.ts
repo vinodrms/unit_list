@@ -13,7 +13,7 @@ import {BookingRoomEditorComponent} from './components/room-edit/BookingRoomEdit
 import {BookingCapacityEditorComponent} from './components/capacity-edit/BookingCapacityEditorComponent';
 import {BookingPaymentGuaranteeEditorComponent} from './components/payment-guarantee-edit/BookingPaymentGuaranteeEditorComponent';
 import {BookingDetailsEditorComponent} from './components/booking-details/BookingDetailsEditorComponent';
-import {BookingPriceProductViewerComponent} from './components/price-product-view/BookingPriceProductViewerComponent';
+import {BookingPriceProductEditorComponent} from './components/price-product-view/BookingPriceProductEditorComponent';
 import {BookingAllotmentViewerComponent} from './components/allotment-view/BookingAllotmentViewerComponent';
 import {BookingCustomerEditorComponent} from './components/customers-edit/BookingCustomerEditorComponent';
 import {BookingReactivateComponent} from './components/reactivate/BookingReactivateComponent';
@@ -28,7 +28,7 @@ import {BookingReserveAddOnProductEditorComponent} from './components/reserve-ad
     declarations: [BookingOperationsPageComponent,
         BookingPeriodEditorComponent, BookingNoShowEditorComponent, BookingRoomEditorComponent,
         BookingCapacityEditorComponent, BookingPaymentGuaranteeEditorComponent, BookingDetailsEditorComponent,
-        BookingPriceProductViewerComponent, BookingAllotmentViewerComponent,
+        BookingPriceProductEditorComponent, BookingAllotmentViewerComponent,
         BookingCustomerEditorComponent, BookingReactivateComponent, BookingCancelComponent,
         BookingSendConfirmationComponent, BookingLinksComponent, BookingReserveAddOnProductEditorComponent],
     exports: [BookingOperationsPageComponent]

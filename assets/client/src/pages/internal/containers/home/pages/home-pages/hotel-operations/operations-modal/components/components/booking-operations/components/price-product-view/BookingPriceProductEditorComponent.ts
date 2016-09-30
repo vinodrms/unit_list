@@ -1,15 +1,25 @@
-import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import {AppContext, ThError} from '../../../../../../../../../../../../../common/utils/AppContext';
-import {BookingOperationsPageData} from '../../services/utils/BookingOperationsPageData';
-import {PriceProductDO} from '../../../../../../../../../../../services/price-products/data-objects/PriceProductDO';
-import {BookingDO} from '../../../../../../../../../../../services/bookings/data-objects/BookingDO';
-import {InvoiceItemDO} from '../../../../../../../../../../../services/invoices/data-objects/items/InvoiceItemDO';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { AppContext, ThError } from '../../../../../../../../../../../../../common/utils/AppContext';
+import { ModalDialogRef } from '../../../../../../../../../../../../../common/utils/modals/utils/ModalDialogRef';
+import { BookingOperationsPageData } from '../../services/utils/BookingOperationsPageData';
+import { PriceProductDO } from '../../../../../../../../../../../services/price-products/data-objects/PriceProductDO';
+import { BookingDO } from '../../../../../../../../../../../services/bookings/data-objects/BookingDO';
+import { InvoiceItemDO } from '../../../../../../../../../../../services/invoices/data-objects/items/InvoiceItemDO';
+import { BookingChangePriceProductRight } from '../../../../../../../../../../../services/bookings/data-objects/BookingEditRights';
+import { ChangePriceProductModalService } from './components/change-price-product/services/ChangePriceProductModalService';
+import { BookingCartItemVM } from '../../../../../../../../utils/new-booking/services/search/view-models/BookingCartItemVM';
 
 @Component({
-    selector: 'booking-price-product-viewer',
-    templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/booking-operations/components/price-product-view/template/booking-price-product-viewer.html'
+    selector: 'booking-price-product-editor',
+    templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/booking-operations/components/price-product-view/template/booking-price-product-editor.html',
+    providers: [ChangePriceProductModalService]
 })
-export class BookingPriceProductViewerComponent implements OnInit {
+export class BookingPriceProductEditorComponent implements OnInit {
+    @Output() onBookingPriceProductChanged = new EventEmitter<BookingDO>();
+    public triggerOnBookingPriceProductChanged(updatedBooking: BookingDO) {
+        this.onBookingPriceProductChanged.next(updatedBooking);
+    }
+
     private _bookingOperationsPageData: BookingOperationsPageData;
     public get bookingOperationsPageData(): BookingOperationsPageData {
         return this._bookingOperationsPageData;
@@ -26,7 +36,8 @@ export class BookingPriceProductViewerComponent implements OnInit {
     conditionsString: string = "";
     constraintsString: string = "";
 
-    constructor(private _appContext: AppContext) { }
+    constructor(private _appContext: AppContext,
+        private _changePriceProductModalService: ChangePriceProductModalService) { }
 
     ngOnInit() {
         this._didInit = true;
@@ -48,6 +59,11 @@ export class BookingPriceProductViewerComponent implements OnInit {
         });
         this.conditionsString = this.priceProductDO.conditions.getCancellationConditionsString(this._appContext.thTranslation);
         this.constraintsString = this.priceProductDO.constraints.getBriefValueDisplayString(this._appContext.thTranslation);
+    }
+
+    public get canChangePriceProduct(): boolean {
+        return this._bookingOperationsPageData.bookingMeta.changePriceProductRight === BookingChangePriceProductRight.Edit
+            && !this._bookingOperationsPageData.hasPaidInvoice;;
     }
 
     public get bookingDO(): BookingDO {
@@ -73,5 +89,17 @@ export class BookingPriceProductViewerComponent implements OnInit {
     }
     public get roomCategoryName(): string {
         return this._bookingOperationsPageData.roomCategoryStats.roomCategory.displayName;
+    }
+
+    public changePriceProduct() {
+        if (!this.canChangePriceProduct) { return; }
+        this._changePriceProductModalService.changeBookingPriceProduct(this.bookingDO, this._bookingOperationsPageData.customersContainer)
+            .then((modalDialogRef: ModalDialogRef<BookingDO>) => {
+                modalDialogRef.resultObservable
+                    .subscribe((updatedBooking: BookingDO) => {
+                        this.triggerOnBookingPriceProductChanged(updatedBooking);
+                    }, (err: any) => {
+                    });
+            }).catch((err: any) => { });
     }
 }

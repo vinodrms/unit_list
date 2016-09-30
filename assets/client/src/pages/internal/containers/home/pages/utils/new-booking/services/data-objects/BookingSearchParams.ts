@@ -12,6 +12,7 @@ export class BookingSearchParams {
     interval: ThDateIntervalDO;
     configCapacity: ConfigCapacityDO;
     transientBookingList: TransientBookingItem[];
+    bookingIdToOmit: string;
 
     public validNoAdults(): boolean {
         return this.validNoOfItems(this.configCapacity.noAdults);
@@ -37,6 +38,7 @@ export class BookingSearchParams {
         bookingSearchParams.interval.buildFromObject(this.interval);
         bookingSearchParams.configCapacity = new ConfigCapacityDO();
         bookingSearchParams.configCapacity.buildFromObject(this.configCapacity);
+        bookingSearchParams.bookingIdToOmit = this.bookingIdToOmit;
         return bookingSearchParams;
     }
 }
