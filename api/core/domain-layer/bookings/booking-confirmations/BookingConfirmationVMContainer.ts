@@ -28,9 +28,6 @@ export class BookingConfirmationVMContainer {
     hotelContactValue: string;
     hotelContactLabel: string;
 
-    hotelVatLabel: string;
-    hotelVatValue: string;
-
     hotelLogoSrcValue: string;
     unitpalLogoSrcValue: string;
 
@@ -64,7 +61,6 @@ export class BookingConfirmationVMContainer {
         this.initLogoSrcs();
         this.initHotelAddressLabelAndValue();
         this.initHotelContactLabelAndValue();
-        this.initHotelVatLabelAndValue();
     }
 
     private initBookingConfirmationVMList(bookingAggregatedDataContainer: BookingAggregatedDataContainer) {
@@ -131,9 +127,5 @@ export class BookingConfirmationVMContainer {
     private initHotelContactLabelAndValue() {
         this.hotelContactLabel = this._thTranslation.translate('Contact');
         this.hotelContactValue = this.hotel.contactDetails.phone;
-    }
-    private initHotelVatLabelAndValue() {
-        this.hotelVatLabel = this._thTranslation.translate('VAT');
-        this.hotelVatValue = this.hotel.contactDetails.vatCode;
     }
 }
