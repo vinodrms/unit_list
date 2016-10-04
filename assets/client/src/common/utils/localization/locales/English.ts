@@ -747,6 +747,8 @@ export var EnglishTranslations: Object = {
 	"By marking this invoice as lost by management you acknowledge that you did not receive any money from the customer. Continue?": "By marking this invoice as lost by management you acknowledge that you did not receive any money from the customer. Continue?",
 	"The invoice was changed succesfully.": "The invoice was changed succesfully.",
 	"LOSS ACCEPTED BY MANAGEMENT": "LOSS ACCEPTED BY MANAGEMENT",
+	"Even though you marked this booking as lost by management, you can always mark it as Paid whenever you get the money from the customer.": "Even though you marked this booking as lost by management, you can always mark it as Paid whenever you get the money from the customer.",
+	
 
 	
 
