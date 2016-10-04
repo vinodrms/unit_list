@@ -119,8 +119,8 @@ export class BookingOperationsPageData {
         return !this._thUtils.isUndefinedOrNull(this.invoiceDO) &&
             !this._thUtils.isUndefinedOrNull(this.invoiceGroupDO);
     }
-    public get hasPaidInvoice(): boolean {
-        return this.hasInvoice && this.invoiceDO.isPaid;
+    public get hasClosedInvoice(): boolean {
+        return this.hasInvoice && this.invoiceDO.isClosed;
     }
     public get hasRoom(): boolean {
         return !this._thUtils.isUndefinedOrNull(this.roomVM) &&

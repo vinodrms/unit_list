@@ -1,18 +1,18 @@
-import {ThLogger, ThLogLevel} from '../../../../../utils/logging/ThLogger';
-import {ThError} from '../../../../../utils/th-responses/ThError';
-import {ThStatusCode} from '../../../../../utils/th-responses/ThResponse';
-import {AppContext} from '../../../../../utils/AppContext';
-import {SessionContext} from '../../../../../utils/SessionContext';
-import {IInvoiceStats} from './IInvoiceStats';
-import {InvoiceStats} from './InvoiceStats';
-import {IndexedBookingInterval} from '../../../../../data-layer/price-products/utils/IndexedBookingInterval';
-import {ThDateIntervalDO} from '../../../../../utils/th-dates/data-objects/ThDateIntervalDO';
-import {ThDateDO} from '../../../../../utils/th-dates/data-objects/ThDateDO';
-import {InvoiceGroupSearchResultRepoDO} from '../../../../../data-layer/invoices/repositories/IInvoiceGroupsRepository';
-import {InvoiceGroupDO} from '../../../../../data-layer/invoices/data-objects/InvoiceGroupDO';
-import {InvoiceDO} from '../../../../../data-layer/invoices/data-objects/InvoiceDO';
-import {InvoiceItemDO, InvoiceItemType} from '../../../../../data-layer/invoices/data-objects/items/InvoiceItemDO';
-import {RevenueForDate} from '../../data-objects/revenue/RevenueForDate';
+import { ThLogger, ThLogLevel } from '../../../../../utils/logging/ThLogger';
+import { ThError } from '../../../../../utils/th-responses/ThError';
+import { ThStatusCode } from '../../../../../utils/th-responses/ThResponse';
+import { AppContext } from '../../../../../utils/AppContext';
+import { SessionContext } from '../../../../../utils/SessionContext';
+import { IInvoiceStats } from './IInvoiceStats';
+import { InvoiceStats } from './InvoiceStats';
+import { IndexedBookingInterval } from '../../../../../data-layer/price-products/utils/IndexedBookingInterval';
+import { ThDateIntervalDO } from '../../../../../utils/th-dates/data-objects/ThDateIntervalDO';
+import { ThDateDO } from '../../../../../utils/th-dates/data-objects/ThDateDO';
+import { InvoiceGroupSearchResultRepoDO } from '../../../../../data-layer/invoices/repositories/IInvoiceGroupsRepository';
+import { InvoiceGroupDO } from '../../../../../data-layer/invoices/data-objects/InvoiceGroupDO';
+import { InvoiceDO } from '../../../../../data-layer/invoices/data-objects/InvoiceDO';
+import { InvoiceItemDO, InvoiceItemType } from '../../../../../data-layer/invoices/data-objects/items/InvoiceItemDO';
+import { RevenueForDate } from '../../data-objects/revenue/RevenueForDate';
 
 import _ = require('underscore');
 
@@ -52,7 +52,17 @@ export class InvoiceIndexer {
             var revenueForDate = this.getRevenueForDate(thDate, invoiceGroupList);
             invoiceStats.indexRevenueForDate(revenueForDate, thDate);
         });
+        this.indexBookingsLossAcceptedByManagement(invoiceStats, invoiceGroupList);
         return invoiceStats;
+    }
+    private indexBookingsLossAcceptedByManagement(invoiceStats: InvoiceStats, invoiceGroupList: InvoiceGroupDO[]) {
+        _.forEach(invoiceGroupList, (invoiceGroup: InvoiceGroupDO) => {
+            _.forEach(invoiceGroup.invoiceList, (invoice: InvoiceDO) => {
+                if (invoice.isLossAcceptedByManagement() && _.isString(invoice.bookingId) && invoice.bookingId.length > 0) {
+                    invoiceStats.indexBookingLossAcceptedByManagement(invoice.bookingId);
+                }
+            });
+        });
     }
 
     private getRevenueForDate(thDate: ThDateDO, invoiceGroupList: InvoiceGroupDO[]): RevenueForDate {

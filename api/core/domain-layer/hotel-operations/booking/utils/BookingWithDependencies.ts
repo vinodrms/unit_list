@@ -1,13 +1,13 @@
-import {BookingDO} from '../../../../data-layer/bookings/data-objects/BookingDO';
-import {PriceProductDO} from '../../../../data-layer/price-products/data-objects/PriceProductDO';
-import {PriceProductsContainer} from '../../../price-products/validators/results/PriceProductsContainer';
-import {AllotmentDO, AllotmentStatus} from '../../../../data-layer/allotments/data-objects/AllotmentDO';
-import {AllotmentsContainer} from '../../../allotments/validators/results/AllotmentsContainer';
-import {RoomDO} from '../../../../data-layer/rooms/data-objects/RoomDO';
-import {RoomCategoryStatsDO} from '../../../../data-layer/room-categories/data-objects/RoomCategoryStatsDO';
-import {InvoiceGroupDO} from '../../../../data-layer/invoices/data-objects/InvoiceGroupDO';
-import {InvoiceDO, InvoicePaymentStatus} from '../../../../data-layer/invoices/data-objects/InvoiceDO';
-import {ThUtils} from '../../../../utils/ThUtils';
+import { BookingDO } from '../../../../data-layer/bookings/data-objects/BookingDO';
+import { PriceProductDO } from '../../../../data-layer/price-products/data-objects/PriceProductDO';
+import { PriceProductsContainer } from '../../../price-products/validators/results/PriceProductsContainer';
+import { AllotmentDO, AllotmentStatus } from '../../../../data-layer/allotments/data-objects/AllotmentDO';
+import { AllotmentsContainer } from '../../../allotments/validators/results/AllotmentsContainer';
+import { RoomDO } from '../../../../data-layer/rooms/data-objects/RoomDO';
+import { RoomCategoryStatsDO } from '../../../../data-layer/room-categories/data-objects/RoomCategoryStatsDO';
+import { InvoiceGroupDO } from '../../../../data-layer/invoices/data-objects/InvoiceGroupDO';
+import { InvoiceDO, InvoicePaymentStatus } from '../../../../data-layer/invoices/data-objects/InvoiceDO';
+import { ThUtils } from '../../../../utils/ThUtils';
 
 import _ = require('underscore');
 
@@ -93,7 +93,7 @@ export class BookingWithDependencies {
             && this.allotmentDO.status === AllotmentStatus.Active;
     }
 
-    public hasPaidInvoice(): boolean {
+    public hasClosedInvoice(): boolean {
         if (this._invoiceGroupList.length == 0) { return false; }
         var foundInvoiceGroup: InvoiceGroupDO = _.find(this._invoiceGroupList, (groupInvoice: InvoiceGroupDO) => {
             return groupInvoice.groupBookingId === this._bookingDO.groupBookingId;
@@ -105,6 +105,6 @@ export class BookingWithDependencies {
         });
         if (this._thUtils.isUndefinedOrNull(foundInvoice)) { return false; }
 
-        return foundInvoice.isPaid();
+        return foundInvoice.isClosed();
     }
 }

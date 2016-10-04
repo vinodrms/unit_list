@@ -70,7 +70,7 @@ export class BookingChangeDates {
                     ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "change dates: invalid booking state", this._bookingChangeDatesDO, thError);
                     throw thError;
                 }
-                if (this._bookingWithDependencies.hasPaidInvoice()) {
+                if (this._bookingWithDependencies.hasClosedInvoice()) {
                     var thError = new ThError(ThStatusCode.BookingChangeDatesPaidInvoice, null);
                     ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "change dates: paid invoice", this._bookingChangeDatesDO, thError);
                     throw thError;

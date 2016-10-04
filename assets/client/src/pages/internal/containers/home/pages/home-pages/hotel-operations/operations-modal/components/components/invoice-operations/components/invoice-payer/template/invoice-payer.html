@@ -1,5 +1,5 @@
 <div class="invoice-payer-container m-t-6 m-b-6">
-    <table class="table table-invoice-payer">
+    <table class="table table-invoice-payer" [ngClass]="{'paid': invoiceIsClosed}">
         <tbody>
             <tr class="row-actions">
                 <td width="70%" class="customer-container">
@@ -13,8 +13,8 @@
                     <a *ngIf="!invoicePayerVM.customerDO && editMode" class="clickable-item m-l-12" (click)="openCustomerSelectModal()"><i class="fa unitpal-font">]</i> {{ 'Select Customer' | translate }}</a>
                 </td>
                 <td width="30%" class="print-container">
-                    <a *ngIf="!editMode && invoiceisPaid" class="clickable-item m-r-6" [href]="invoicePdfUrl" target="_blank"> <i class="fa fa-download" aria-hidden="true"></i> {{ 'Download' | translate }} </a>
-                    <a *ngIf="!editMode && invoiceisPaid" class="clickable-item" (click)="onSend()"> <i class="fa fa-envelope" aria-hidden="true"></i> {{ 'Send' | translate }}</a>
+                    <a *ngIf="!editMode && invoiceIsClosed" class="clickable-item m-r-6" [href]="invoicePdfUrl" target="_blank"> <i class="fa fa-download" aria-hidden="true"></i> {{ 'Download' | translate }} </a>
+                    <a *ngIf="!editMode && invoiceIsClosed" class="clickable-item" (click)="onSend()"> <i class="fa fa-envelope" aria-hidden="true"></i> {{ 'Send' | translate }}</a>
                 </td>
             </tr>
         </tbody>

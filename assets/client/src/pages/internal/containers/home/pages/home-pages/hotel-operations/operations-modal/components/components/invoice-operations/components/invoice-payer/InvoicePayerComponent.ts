@@ -201,4 +201,7 @@ export class InvoicePayerComponent implements OnInit {
     public get invoiceisPaid(): boolean {
         return this.invoiceVM.invoiceDO.isPaid;
     }
+    public get invoiceIsClosed(): boolean {
+        return this.invoiceVM.invoiceDO.isClosed;
+    }
 }

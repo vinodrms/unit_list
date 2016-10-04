@@ -1,39 +1,39 @@
-import {RepositoryCleanerWrapper} from './RepositoryCleanerWrapper';
-import {TestContext} from '../helpers/TestContext';
-import {DefaultHotelBuilder} from './builders/DefaultHotelBuilder';
-import {DefaultBedBuilder} from './builders/DefaultBedBuilder';
-import {DefaultRoomBuilder} from './builders/DefaultRoomBuilder';
-import {DefaultRoomCategoryBuilder} from './builders/DefaultRoomCategoryBuilder';
-import {HotelDO} from '../../core/data-layer/hotel/data-objects/HotelDO';
-import {UserDO} from '../../core/data-layer/hotel/data-objects/user/UserDO';
-import {PaymentMethodDO} from '../../core/data-layer/common/data-objects/payment-method/PaymentMethodDO';
-import {AddOnProductCategoryDO, AddOnProductCategoryType} from '../../core/data-layer/common/data-objects/add-on-product/AddOnProductCategoryDO';
-import {AmenityDO} from '../../core/data-layer/common/data-objects/amenity/AmenityDO';
-import {BedTemplateDO} from '../../core/data-layer/common/data-objects/bed-template/BedTemplateDO';
-import {BedDO} from '../../core/data-layer/common/data-objects/bed/BedDO';
-import {RoomDO} from '../../core/data-layer/rooms/data-objects/RoomDO';
-import {RoomAttributeDO} from '../../core/data-layer/common/data-objects/room-attribute/RoomAttributeDO';
-import {RoomCategoryDO} from '../../core/data-layer/room-categories/data-objects/RoomCategoryDO';
-import {DefaultTaxBuilder} from './builders/DefaultTaxBuilder';
-import {TaxResponseRepoDO} from '../../core/data-layer/taxes/repositories/ITaxRepository';
-import {DefaultAddOnProductBuilder} from './builders/DefaultAddOnProductBuilder';
-import {AddOnProductDO} from '../../core/data-layer/add-on-products/data-objects/AddOnProductDO';
-import {DefaultCustomerBuilder} from './builders/DefaultCustomerBuilder';
-import {CustomerDO} from '../../core/data-layer/customers/data-objects/CustomerDO';
-import {YieldFilterDO} from '../../core/data-layer/common/data-objects/yield-filter/YieldFilterDO';
-import {RoomCategoryStatsAggregator} from '../../core/domain-layer/room-categories/aggregators/RoomCategoryStatsAggregator';
-import {RoomCategoryStatsDO} from '../../core/data-layer/room-categories/data-objects/RoomCategoryStatsDO';
-import {DefaultPriceProductBuilder} from './builders/DefaultPriceProductBuilder';
-import {PriceProductDO} from '../../core/data-layer/price-products/data-objects/PriceProductDO';
-import {HotelConfigurationsBootstrap} from '../../core/domain-layer/hotel-configurations/HotelConfigurationsBootstrap';
-import {YieldFilterConfigurationDO} from '../../core/data-layer/hotel-configurations/data-objects/yield-filter/YieldFilterConfigurationDO';
-import {DefaultAllotmentBuilder} from './builders/DefaultAllotmentBuilder';
-import {AllotmentDO} from '../../core/data-layer/allotments/data-objects/AllotmentDO';
-import {DefaultBookingBuilder} from './builders/DefaultBookingBuilder';
-import {BookingDO} from '../../core/data-layer/bookings/data-objects/BookingDO';
-import {DefaultInvoiceGroupBuilder} from './builders/DefaultInvoiceGroupBuilder';
-import {InvoiceGroupDO} from '../../core/data-layer/invoices/data-objects/InvoiceGroupDO';
-import {InvoiceDO} from '../../core/data-layer/invoices/data-objects/InvoiceDO';
+import { RepositoryCleanerWrapper } from './RepositoryCleanerWrapper';
+import { TestContext } from '../helpers/TestContext';
+import { DefaultHotelBuilder } from './builders/DefaultHotelBuilder';
+import { DefaultBedBuilder } from './builders/DefaultBedBuilder';
+import { DefaultRoomBuilder } from './builders/DefaultRoomBuilder';
+import { DefaultRoomCategoryBuilder } from './builders/DefaultRoomCategoryBuilder';
+import { HotelDO } from '../../core/data-layer/hotel/data-objects/HotelDO';
+import { UserDO } from '../../core/data-layer/hotel/data-objects/user/UserDO';
+import { PaymentMethodDO } from '../../core/data-layer/common/data-objects/payment-method/PaymentMethodDO';
+import { AddOnProductCategoryDO, AddOnProductCategoryType } from '../../core/data-layer/common/data-objects/add-on-product/AddOnProductCategoryDO';
+import { AmenityDO } from '../../core/data-layer/common/data-objects/amenity/AmenityDO';
+import { BedTemplateDO } from '../../core/data-layer/common/data-objects/bed-template/BedTemplateDO';
+import { BedDO } from '../../core/data-layer/common/data-objects/bed/BedDO';
+import { RoomDO } from '../../core/data-layer/rooms/data-objects/RoomDO';
+import { RoomAttributeDO } from '../../core/data-layer/common/data-objects/room-attribute/RoomAttributeDO';
+import { RoomCategoryDO } from '../../core/data-layer/room-categories/data-objects/RoomCategoryDO';
+import { DefaultTaxBuilder } from './builders/DefaultTaxBuilder';
+import { TaxResponseRepoDO } from '../../core/data-layer/taxes/repositories/ITaxRepository';
+import { DefaultAddOnProductBuilder } from './builders/DefaultAddOnProductBuilder';
+import { AddOnProductDO } from '../../core/data-layer/add-on-products/data-objects/AddOnProductDO';
+import { DefaultCustomerBuilder } from './builders/DefaultCustomerBuilder';
+import { CustomerDO } from '../../core/data-layer/customers/data-objects/CustomerDO';
+import { YieldFilterDO } from '../../core/data-layer/common/data-objects/yield-filter/YieldFilterDO';
+import { RoomCategoryStatsAggregator } from '../../core/domain-layer/room-categories/aggregators/RoomCategoryStatsAggregator';
+import { RoomCategoryStatsDO } from '../../core/data-layer/room-categories/data-objects/RoomCategoryStatsDO';
+import { DefaultPriceProductBuilder } from './builders/DefaultPriceProductBuilder';
+import { PriceProductDO } from '../../core/data-layer/price-products/data-objects/PriceProductDO';
+import { HotelConfigurationsBootstrap } from '../../core/domain-layer/hotel-configurations/HotelConfigurationsBootstrap';
+import { YieldFilterConfigurationDO } from '../../core/data-layer/hotel-configurations/data-objects/yield-filter/YieldFilterConfigurationDO';
+import { DefaultAllotmentBuilder } from './builders/DefaultAllotmentBuilder';
+import { AllotmentDO } from '../../core/data-layer/allotments/data-objects/AllotmentDO';
+import { DefaultBookingBuilder } from './builders/DefaultBookingBuilder';
+import { BookingDO } from '../../core/data-layer/bookings/data-objects/BookingDO';
+import { DefaultInvoiceGroupBuilder } from './builders/DefaultInvoiceGroupBuilder';
+import { InvoiceGroupDO } from '../../core/data-layer/invoices/data-objects/InvoiceGroupDO';
+import { InvoiceDO } from '../../core/data-layer/invoices/data-objects/InvoiceDO';
 
 import _ = require("underscore");
 
@@ -171,7 +171,7 @@ export class DefaultDataBuilder {
                 this._roomCategoryStatsList = roomCategoryStatsList;
 
                 var priceProductBuilder = new DefaultPriceProductBuilder(this._testContext);
-                return priceProductBuilder.loadPriceProducts(priceProductBuilder, this._roomCategoryStatsList, 
+                return priceProductBuilder.loadPriceProducts(priceProductBuilder, this._roomCategoryStatsList,
                     this._taxes, this._addOnProductList, this.breakfastAddOnProductCategory.id);
             }).then((priceProductList: PriceProductDO[]) => {
                 this._priceProductList = priceProductList;
@@ -277,7 +277,7 @@ export class DefaultDataBuilder {
         var noUnpaidInvoices = 0;
         _.forEach(this._invoiceGroupList, (invoiceGroup: InvoiceGroupDO) => {
             _.forEach(invoiceGroup.invoiceList, (invoice: InvoiceDO) => {
-                if (!invoice.isPaid()) { noUnpaidInvoices++; };
+                if (!invoice.isClosed()) { noUnpaidInvoices++; };
             });
         });
         return noUnpaidInvoices;

@@ -1,12 +1,12 @@
-import {BaseDO} from '../../../../../common/base/BaseDO';
-import {ThUtils} from '../../../../../common/utils/ThUtils';
-import {InvoiceItemDO, InvoiceItemType} from './items/InvoiceItemDO';
-import {InvoicePayerDO} from './payers/InvoicePayerDO';
-import {InvoicePaymentMethodType} from './payers/InvoicePaymentMethodDO';
-import {CustomerDO} from '../../customers/data-objects/CustomerDO';
+import { BaseDO } from '../../../../../common/base/BaseDO';
+import { ThUtils } from '../../../../../common/utils/ThUtils';
+import { InvoiceItemDO, InvoiceItemType } from './items/InvoiceItemDO';
+import { InvoicePayerDO } from './payers/InvoicePayerDO';
+import { InvoicePaymentMethodType } from './payers/InvoicePaymentMethodDO';
+import { CustomerDO } from '../../customers/data-objects/CustomerDO';
 
 export enum InvoicePaymentStatus {
-    Unpaid, Paid
+    Unpaid, Paid, LossAcceptedByManagement
 }
 
 export class InvoiceDO extends BaseDO {
@@ -72,8 +72,8 @@ export class InvoiceDO extends BaseDO {
 
     public getPrice(): number {
         var thUtils = new ThUtils();
-        return _.reduce(this.itemList, (memo: number, item: InvoiceItemDO) => { 
-            return thUtils.roundNumberToTwoDecimals(memo + thUtils.roundNumberToTwoDecimals(item.meta.getNumberOfItems() * item.meta.getUnitPrice())); 
+        return _.reduce(this.itemList, (memo: number, item: InvoiceItemDO) => {
+            return thUtils.roundNumberToTwoDecimals(memo + thUtils.roundNumberToTwoDecimals(item.meta.getNumberOfItems() * item.meta.getUnitPrice()));
         }, 0);
     }
     public getAmountPaid(): number {
@@ -85,7 +85,13 @@ export class InvoiceDO extends BaseDO {
     public get isPaid(): boolean {
         return this.paymentStatus === InvoicePaymentStatus.Paid;
     }
-    
+    public get isLossAcceptedByManagement(): boolean {
+        return this.paymentStatus === InvoicePaymentStatus.LossAcceptedByManagement;
+    }
+    public get isClosed(): boolean {
+        return this.isPaid || this.isLossAcceptedByManagement;
+    }
+
     public allAmountWasPaid(): boolean {
         return this.getPrice() === this.getAmountPaid();
     }

@@ -142,7 +142,7 @@ export class BookingChangePriceProduct {
             }).then((invoiceGroupSearchResult: InvoiceGroupSearchResultRepoDO) => {
                 this._loadedInvoiceGroupList = invoiceGroupSearchResult.invoiceGroupList;
 
-                if (this.bookingHasPaidInvoice()) {
+                if (this.bookingHasClosedInvoice()) {
                     var thError = new ThError(ThStatusCode.BookingChangePriceProductPaidInvoice, null);
                     ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "change price product: paid invoice", this._inputDO, thError);
                     throw thError;
@@ -169,7 +169,7 @@ export class BookingChangePriceProduct {
         return _.contains(BookingDOConstraints.ConfirmationStatuses_CanChangePriceProduct, this._booking.confirmationStatus);
     }
 
-    private bookingHasPaidInvoice() {
+    private bookingHasClosedInvoice() {
         var bookingWithDependencies = new BookingWithDependencies();
         bookingWithDependencies.bookingDO = this._booking;
         bookingWithDependencies.priceProductsContainer = this._loadedPriceProductsContainer;
@@ -177,7 +177,7 @@ export class BookingChangePriceProduct {
         bookingWithDependencies.roomList = this._loadedRoomList;
         bookingWithDependencies.roomCategoryStatsList = this._loadedRoomCategoryStatsList;
         bookingWithDependencies.invoiceGroupList = this._loadedInvoiceGroupList;
-        return bookingWithDependencies.hasPaidInvoice();
+        return bookingWithDependencies.hasClosedInvoice();
     }
 
     private updateBookingUsingInputParams() {

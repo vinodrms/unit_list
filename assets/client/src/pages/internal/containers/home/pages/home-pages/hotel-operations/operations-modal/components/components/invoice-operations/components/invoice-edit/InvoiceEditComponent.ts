@@ -1,24 +1,24 @@
-import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import {AppContext, ThError} from '../../../../../../../../../../../../../common/utils/AppContext';
-import {AddOnProductsModalService} from '../../../../../../../../../../common/inventory/add-on-products/modal/services/AddOnProductsModalService';
-import {NumberOfAddOnProductsModalService} from './modals/services/NumberOfAddOnProductsModalService';
-import {NumberOfAddOnProductsModalOutput} from './modals/services/utils/NumberOfAddOnProductsModalOutput';
-import {AddOnProductDO} from '../../../../../../../../../../../services/add-on-products/data-objects/AddOnProductDO';
-import {ModalDialogRef} from '../../../../../../../../../../../../../common/utils/modals/utils/ModalDialogRef';
-import {CustomerRegisterModalService} from '../../../../../../../../../../common/inventory/customer-register/modal/services/CustomerRegisterModalService';
-import {InvoiceGroupDO} from '../../../../../../../../../../../services/invoices/data-objects/InvoiceGroupDO';
-import {InvoiceGroupVM} from '../../../../../../../../../../../services/invoices/view-models/InvoiceGroupVM';
-import {InvoiceDO, InvoicePaymentStatus} from '../../../../../../../../../../../services/invoices/data-objects/InvoiceDO';
-import {InvoiceItemDO, InvoiceItemType} from '../../../../../../../../../../../services/invoices/data-objects/items/InvoiceItemDO';
-import {AddOnProductInvoiceItemMetaDO} from '../../../../../../../../../../../services/invoices/data-objects/items/add-on-products/AddOnProductInvoiceItemMetaDO';
-import {InvoiceVM} from '../../../../../../../../../../../services/invoices/view-models/InvoiceVM';
-import {InvoicePayerDO} from '../../../../../../../../../../../services/invoices/data-objects/payers/InvoicePayerDO';
-import {InvoicePayerVM} from '../../../../../../../../../../../services/invoices/view-models/InvoicePayerVM';
-import {InvoiceItemVM} from '../../../../../../../../../../../services/invoices/view-models/InvoiceItemVM';
-import {CustomerDO} from '../../../../../../../../../../../services/customers/data-objects/CustomerDO';
-import {InvoiceGroupControllerService} from '../../services/InvoiceGroupControllerService';
-import {InvoiceGroupsService} from '../../../../../../../../../../../services/invoices/InvoiceGroupsService';
-import {HotelOperationsResultService} from '../../../../../../operations-modal/services/HotelOperationsResultService';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { AppContext, ThError } from '../../../../../../../../../../../../../common/utils/AppContext';
+import { AddOnProductsModalService } from '../../../../../../../../../../common/inventory/add-on-products/modal/services/AddOnProductsModalService';
+import { NumberOfAddOnProductsModalService } from './modals/services/NumberOfAddOnProductsModalService';
+import { NumberOfAddOnProductsModalOutput } from './modals/services/utils/NumberOfAddOnProductsModalOutput';
+import { AddOnProductDO } from '../../../../../../../../../../../services/add-on-products/data-objects/AddOnProductDO';
+import { ModalDialogRef } from '../../../../../../../../../../../../../common/utils/modals/utils/ModalDialogRef';
+import { CustomerRegisterModalService } from '../../../../../../../../../../common/inventory/customer-register/modal/services/CustomerRegisterModalService';
+import { InvoiceGroupDO } from '../../../../../../../../../../../services/invoices/data-objects/InvoiceGroupDO';
+import { InvoiceGroupVM } from '../../../../../../../../../../../services/invoices/view-models/InvoiceGroupVM';
+import { InvoiceDO, InvoicePaymentStatus } from '../../../../../../../../../../../services/invoices/data-objects/InvoiceDO';
+import { InvoiceItemDO, InvoiceItemType } from '../../../../../../../../../../../services/invoices/data-objects/items/InvoiceItemDO';
+import { AddOnProductInvoiceItemMetaDO } from '../../../../../../../../../../../services/invoices/data-objects/items/add-on-products/AddOnProductInvoiceItemMetaDO';
+import { InvoiceVM } from '../../../../../../../../../../../services/invoices/view-models/InvoiceVM';
+import { InvoicePayerDO } from '../../../../../../../../../../../services/invoices/data-objects/payers/InvoicePayerDO';
+import { InvoicePayerVM } from '../../../../../../../../../../../services/invoices/view-models/InvoicePayerVM';
+import { InvoiceItemVM } from '../../../../../../../../../../../services/invoices/view-models/InvoiceItemVM';
+import { CustomerDO } from '../../../../../../../../../../../services/customers/data-objects/CustomerDO';
+import { InvoiceGroupControllerService } from '../../services/InvoiceGroupControllerService';
+import { InvoiceGroupsService } from '../../../../../../../../../../../services/invoices/InvoiceGroupsService';
+import { HotelOperationsResultService } from '../../../../../../operations-modal/services/HotelOperationsResultService';
 
 @Component({
     selector: 'invoice-edit',
@@ -104,39 +104,53 @@ export class InvoiceEditComponent implements OnInit {
     }
 
     public onPayInvoice() {
-
+        if (!this.totalAmountIsValid()) { return; }
+        var title = this._appContext.thTranslation.translate("Info");
+        var content = this._appContext.thTranslation.translate("By marking this invoice as paid you acknowledge that all payments were made. Continue?");
+        var positiveLabel = this._appContext.thTranslation.translate("Yes");
+        var negativeLabel = this._appContext.thTranslation.translate("No");
+        this._appContext.modalService.confirm(title, content, { positive: positiveLabel, negative: negativeLabel }, () => {
+            this.updatePaymentStatusForCurrentInvoice(InvoicePaymentStatus.Paid, "paid", "Marked an invoice as paid");
+        });
+    }
+    public onLossByManagementInvoice() {
+        if (!this.totalAmountIsValid()) { return; }
+        var title = this._appContext.thTranslation.translate("Info");
+        var content = this._appContext.thTranslation.translate("By marking this invoice as lost by management you acknowledge that you did not receive any money from the customer. Continue?");
+        var positiveLabel = this._appContext.thTranslation.translate("Yes");
+        var negativeLabel = this._appContext.thTranslation.translate("No");
+        this._appContext.modalService.confirm(title, content, { positive: positiveLabel, negative: negativeLabel }, () => {
+            this.updatePaymentStatusForCurrentInvoice(InvoicePaymentStatus.LossAcceptedByManagement, "loss-accepted-by-management", "The invoice was marked as loss accepted by management.");
+        });
+    }
+    private totalAmountIsValid(): boolean {
         if (!this.invoiceVM.invoiceDO.allAmountWasPaid()) {
             var title = this._appContext.thTranslation.translate("Info");
             var content = this._appContext.thTranslation.translate("You cannot mark this invoice as paid. The total amount paid is lower than the total price.");
             var positiveLabel = this._appContext.thTranslation.translate("OK");
 
             this._appContext.modalService.confirm(title, content, { positive: positiveLabel }, () => {
-
             });
+            return false;
         }
-        else {
-            var title = this._appContext.thTranslation.translate("Info");
-            var content = this._appContext.thTranslation.translate("By marking this invoice as paid you acknowledge that all payments were made. Continue?");
-            var positiveLabel = this._appContext.thTranslation.translate("Yes");
-            var negativeLabel = this._appContext.thTranslation.translate("No");
-            this._appContext.modalService.confirm(title, content, { positive: positiveLabel, negative: negativeLabel }, () => {
-                var invoiceGroupVMClone = this.invoiceGroupVM.buildPrototype();
-                for (var i = 0; i < invoiceGroupVMClone.invoiceVMList.length; ++i) {
-                    if (invoiceGroupVMClone.invoiceVMList[i].invoiceDO.invoiceReference === this.invoiceReference) {
-                        invoiceGroupVMClone.invoiceVMList[i].invoiceDO.paymentStatus = InvoicePaymentStatus.Paid;
-                    }
-                }
-                var invoiceGroupDOToSave = invoiceGroupVMClone.buildInvoiceGroupDO();
-                this._invoiceGroupsService.saveInvoiceGroupDO(invoiceGroupDOToSave).subscribe((updatedInvoiceGroupDO: InvoiceGroupDO) => {
-                    this._appContext.analytics.logEvent("invoice", "paid", "Marked an invoice as paid");
-                    this._invoiceGroupControllerService.updateInvoiceGroupVM(updatedInvoiceGroupDO);
-                    this._appContext.toaster.success(this._appContext.thTranslation.translate("The invoice was marked as paid."));
-                    this._hotelOperationsResultService.markInvoiceChanged(updatedInvoiceGroupDO);
-                }, (error: ThError) => {
-                    this._appContext.toaster.error(error.message);
-                });
-            });
+        return true;
+    }
+    private updatePaymentStatusForCurrentInvoice(paymentStatus: InvoicePaymentStatus, logEventName: string, logMessage: string) {
+        var invoiceGroupVMClone = this.invoiceGroupVM.buildPrototype();
+        for (var i = 0; i < invoiceGroupVMClone.invoiceVMList.length; ++i) {
+            if (invoiceGroupVMClone.invoiceVMList[i].invoiceDO.invoiceReference === this.invoiceReference) {
+                invoiceGroupVMClone.invoiceVMList[i].invoiceDO.paymentStatus = paymentStatus;
+            }
         }
+        var invoiceGroupDOToSave = invoiceGroupVMClone.buildInvoiceGroupDO();
+        this._invoiceGroupsService.saveInvoiceGroupDO(invoiceGroupDOToSave).subscribe((updatedInvoiceGroupDO: InvoiceGroupDO) => {
+            this._appContext.analytics.logEvent("invoice", logEventName, logMessage);
+            this._invoiceGroupControllerService.updateInvoiceGroupVM(updatedInvoiceGroupDO);
+            this._appContext.toaster.success(this._appContext.thTranslation.translate("The invoice was changed succesfully."));
+            this._hotelOperationsResultService.markInvoiceChanged(updatedInvoiceGroupDO);
+        }, (error: ThError) => {
+            this._appContext.toaster.error(error.message);
+        });
     }
 
     public get ccySymbol(): string {
@@ -182,10 +196,16 @@ export class InvoiceEditComponent implements OnInit {
         return this._selectedInvoiceItemIndex === invoiceItemIndex;
     }
     public get editMode(): boolean {
-        return this.invoiceGroupVM.editMode && !this.invoiceVM.invoiceDO.isPaid;
+        return this.invoiceGroupVM.editMode && !this.invoiceVM.invoiceDO.isClosed;
+    }
+    public get isClosed(): boolean {
+        return this.invoiceVM.invoiceDO.isClosed;
     }
     public get isPaid(): boolean {
         return this.invoiceVM.invoiceDO.isPaid;
+    }
+    public get isLossAcceptedByManagement(): boolean {
+        return this.invoiceVM.invoiceDO.isLossAcceptedByManagement;
     }
     public get isNewlyAdded(): boolean {
         return this.invoiceVM.isNewlyAdded;

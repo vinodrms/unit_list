@@ -51,7 +51,7 @@ export class BookingCapacityEditorComponent implements OnInit {
     }
     public get canEditCapacity(): boolean {
         return this._bookingOperationsPageData.bookingMeta.capacityEditRight === BookingCapacityEditRight.Edit
-            && !this._bookingOperationsPageData.hasPaidInvoice;
+            && !this._bookingOperationsPageData.hasClosedInvoice;
     }
 
     public startEdit() {

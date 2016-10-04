@@ -1,29 +1,29 @@
-import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import {Subscription}   from 'rxjs/Subscription';
-import {LoadingComponent} from '../../../../../../../../../../../common/utils/components/LoadingComponent';
-import {CustomScroll} from '../../../../../../../../../../../common/utils/directives/CustomScroll';
-import {ThError, AppContext} from '../../../../../../../../../../../common/utils/AppContext';
-import {ThUtils} from '../../../../../../../../../../../common/utils/ThUtils';
-import {HotelInvoiceOperationsPageParam} from './utils/HotelInvoiceOperationsPageParam';
-import {HotelOperationsPageFilterMeta} from '../../../services/utils/IHotelOperationsPageParam';
-import {IHotelOperationsOnFilterRemovedHandler} from '../../../services/utils/IHotelOperationsOnFilterRemovedHandler';
-import {ItemListNavigatorConfig} from '../../../../../../../../../../../common/utils/components/item-list-navigator/ItemListNavigatorConfig';
-import {InvoiceOperationsPageService} from './services/InvoiceOperationsPageService';
-import {InvoiceOperationsPageData} from './services/utils/InvoiceOperationsPageData';
-import {InvoiceGroupControllerService} from './services/InvoiceGroupControllerService';
-import {InvoiceDO} from '../../../../../../../../../services/invoices/data-objects/InvoiceDO';
-import {InvoiceGroupDO} from '../../../../../../../../../services/invoices/data-objects/InvoiceGroupDO';
-import {InvoiceGroupVM} from '../../../../../../../../../services/invoices/view-models/InvoiceGroupVM';
-import {InvoiceVM} from '../../../../../../../../../services/invoices/view-models/InvoiceVM';
-import {InvoicePayerVM} from '../../../../../../../../../services/invoices/view-models/InvoicePayerVM';
-import {CustomerDO} from '../../../../../../../../../services/customers/data-objects/CustomerDO';
-import {Subject} from 'rxjs/Subject';
-import {Observable} from 'rxjs/Observable';
-import {InvoiceMeta} from './components/invoice-edit/InvoiceMeta';
-import {InvoiceGroupsService} from '../../../../../../../../../services/invoices/InvoiceGroupsService';
-import {HotelOperationsResultService} from '../../../../operations-modal/services/HotelOperationsResultService';
-import {ModalDialogRef} from '../../../../../../../../../../../common/utils/modals/utils/ModalDialogRef';
-import {HotelOperationsResult} from '../../../services/utils/HotelOperationsResult';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Subscription } from 'rxjs/Subscription';
+import { LoadingComponent } from '../../../../../../../../../../../common/utils/components/LoadingComponent';
+import { CustomScroll } from '../../../../../../../../../../../common/utils/directives/CustomScroll';
+import { ThError, AppContext } from '../../../../../../../../../../../common/utils/AppContext';
+import { ThUtils } from '../../../../../../../../../../../common/utils/ThUtils';
+import { HotelInvoiceOperationsPageParam } from './utils/HotelInvoiceOperationsPageParam';
+import { HotelOperationsPageFilterMeta } from '../../../services/utils/IHotelOperationsPageParam';
+import { IHotelOperationsOnFilterRemovedHandler } from '../../../services/utils/IHotelOperationsOnFilterRemovedHandler';
+import { ItemListNavigatorConfig } from '../../../../../../../../../../../common/utils/components/item-list-navigator/ItemListNavigatorConfig';
+import { InvoiceOperationsPageService } from './services/InvoiceOperationsPageService';
+import { InvoiceOperationsPageData } from './services/utils/InvoiceOperationsPageData';
+import { InvoiceGroupControllerService } from './services/InvoiceGroupControllerService';
+import { InvoiceDO } from '../../../../../../../../../services/invoices/data-objects/InvoiceDO';
+import { InvoiceGroupDO } from '../../../../../../../../../services/invoices/data-objects/InvoiceGroupDO';
+import { InvoiceGroupVM } from '../../../../../../../../../services/invoices/view-models/InvoiceGroupVM';
+import { InvoiceVM } from '../../../../../../../../../services/invoices/view-models/InvoiceVM';
+import { InvoicePayerVM } from '../../../../../../../../../services/invoices/view-models/InvoicePayerVM';
+import { CustomerDO } from '../../../../../../../../../services/customers/data-objects/CustomerDO';
+import { Subject } from 'rxjs/Subject';
+import { Observable } from 'rxjs/Observable';
+import { InvoiceMeta } from './components/invoice-edit/InvoiceMeta';
+import { InvoiceGroupsService } from '../../../../../../../../../services/invoices/InvoiceGroupsService';
+import { HotelOperationsResultService } from '../../../../operations-modal/services/HotelOperationsResultService';
+import { ModalDialogRef } from '../../../../../../../../../../../common/utils/modals/utils/ModalDialogRef';
+import { HotelOperationsResult } from '../../../services/utils/HotelOperationsResult';
 
 @Component({
     selector: 'invoice-operations-page',
@@ -174,7 +174,6 @@ export class InvoiceOperationsPageComponent implements OnInit {
                     numberOfSimultaneouslySelectedItems: this.numberOfSimultaneouslyDisplayedInvoices
                 });
                 this.invoiceGroupVM = this._invoiceGroupVMCopy;
-                this._modalDialogRef.closeForced();
             }
         });
     }
@@ -296,17 +295,21 @@ export class InvoiceOperationsPageComponent implements OnInit {
     }
     public set editMode(editMode: boolean) {
         if (editMode) {
-            this.resetItemNavigator.next({
-                initialNumberOfItems: this.invoiceGroupVM.getUnpaidInvoiceVMList().length,
-                maxNumberOfDisplayedItems: this.invoiceNavigatorWindowSize,
-                numberOfSimultaneouslySelectedItems: this.numberOfSimultaneouslyDisplayedInvoices
-            });
             this._invoiceGroupVMCopy = this.invoiceGroupVM.buildPrototype();
             this.invoiceOperationsPageParam.updateTitle(this._title, 'Edit');
+            this.resetPaginationCount(this.invoiceGroupVM.getOpenInvoiceVMList().length);
         }
         else {
             this.invoiceOperationsPageParam.updateTitle(this._title, '');
+            this.resetPaginationCount(this.invoiceGroupVM.invoiceVMList.length);
         }
         this.invoiceGroupVM.editMode = editMode;
+    }
+    private resetPaginationCount(noOfItems: number) {
+        this.resetItemNavigator.next({
+            initialNumberOfItems: noOfItems,
+            maxNumberOfDisplayedItems: this.invoiceNavigatorWindowSize,
+            numberOfSimultaneouslySelectedItems: this.numberOfSimultaneouslyDisplayedInvoices
+        });
     }
 }

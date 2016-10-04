@@ -88,7 +88,7 @@ export class HotelOperationsDeparturesReader {
         var bookingIdList: string[] = [];
         _.forEach(this._invoiceGroupList, (invoiceGroup: InvoiceGroupDO) => {
             _.forEach(invoiceGroup.invoiceList, (invoice: InvoiceDO) => {
-                if (!invoice.isPaid() && !this._thUtils.isUndefinedOrNull(invoice.bookingId)) {
+                if (!invoice.isClosed() && !this._thUtils.isUndefinedOrNull(invoice.bookingId)) {
                     bookingIdList.push(invoice.bookingId);
                 }
             });
