@@ -1,5 +1,5 @@
 <div class="invoice-payer-container m-t-6 m-b-6">
-    <table class="table table-invoice-payer">
+    <table class="table table-invoice-payer" [ngClass]="{'paid': invoiceIsClosed}">
         <tbody>
             <tr class="row-actions">
                 <td width="70%" class="customer-container">

@@ -52,7 +52,7 @@ export class BookingChangeCapacity {
                     ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "change capacity: invalid booking state", this._bookingChangeCapacityDO, thError);
                     throw thError;
                 }
-                if (this._bookingWithDependencies.hasPaidInvoice()) {
+                if (this._bookingWithDependencies.hasClosedInvoice()) {
                     var thError = new ThError(ThStatusCode.BookingChangeCapacityPaidInvoice, null);
                     ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "change capacity: paid invoice", this._bookingChangeCapacityDO, thError);
                     throw thError;

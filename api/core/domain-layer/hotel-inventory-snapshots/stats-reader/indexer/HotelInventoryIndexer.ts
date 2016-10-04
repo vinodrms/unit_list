@@ -1,26 +1,26 @@
-import {ThLogger, ThLogLevel} from '../../../../utils/logging/ThLogger';
-import {ThError} from '../../../../utils/th-responses/ThError';
-import {ThStatusCode} from '../../../../utils/th-responses/ThResponse';
-import {AppContext} from '../../../../utils/AppContext';
-import {SessionContext} from '../../../../utils/SessionContext';
-import {IndexedBookingInterval} from '../../../../data-layer/price-products/utils/IndexedBookingInterval';
-import {BookingDOConstraints} from '../../../../data-layer/bookings/data-objects/BookingDOConstraints';
-import {BookingDO, BookingConfirmationStatus} from '../../../../data-layer/bookings/data-objects/BookingDO';
-import {BookingSearchResultRepoDO} from '../../../../data-layer/bookings/repositories/IBookingRepository';
-import {ThDateIntervalDO} from '../../../../utils/th-dates/data-objects/ThDateIntervalDO';
-import {ThHourDO} from '../../../../utils/th-dates/data-objects/ThHourDO';
-import {ThDateDO} from '../../../../utils/th-dates/data-objects/ThDateDO';
-import {ThDateUtils} from '../../../../utils/th-dates/ThDateUtils';
-import {ThTimestampDO} from '../../../../utils/th-dates/data-objects/ThTimestampDO';
-import {BookingUtils} from '../../../bookings/utils/BookingUtils';
-import {BookingsContainer} from '../../../bookings/search-bookings/utils/occupancy-calculator/utils/BookingsContainer';
-import {BookingItemContainer} from '../../../bookings/search-bookings/utils/occupancy-calculator/utils/BookingItemContainer';
-import {IBookingOccupancy} from '../../../bookings/search-bookings/utils/occupancy-calculator/results/IBookingOccupancy';
-import {BookingOccupancy} from '../../../bookings/search-bookings/utils/occupancy-calculator/results/BookingOccupancy';
-import {IRevenueForDate} from '../data-objects/revenue/IRevenueForDate';
-import {RevenueForDate} from '../data-objects/revenue/RevenueForDate';
-import {InvoiceIndexer} from './invoice/InvoiceIndexer';
-import {IInvoiceStats} from './invoice/IInvoiceStats';
+import { ThLogger, ThLogLevel } from '../../../../utils/logging/ThLogger';
+import { ThError } from '../../../../utils/th-responses/ThError';
+import { ThStatusCode } from '../../../../utils/th-responses/ThResponse';
+import { AppContext } from '../../../../utils/AppContext';
+import { SessionContext } from '../../../../utils/SessionContext';
+import { IndexedBookingInterval } from '../../../../data-layer/price-products/utils/IndexedBookingInterval';
+import { BookingDOConstraints } from '../../../../data-layer/bookings/data-objects/BookingDOConstraints';
+import { BookingDO, BookingConfirmationStatus } from '../../../../data-layer/bookings/data-objects/BookingDO';
+import { BookingSearchResultRepoDO } from '../../../../data-layer/bookings/repositories/IBookingRepository';
+import { ThDateIntervalDO } from '../../../../utils/th-dates/data-objects/ThDateIntervalDO';
+import { ThHourDO } from '../../../../utils/th-dates/data-objects/ThHourDO';
+import { ThDateDO } from '../../../../utils/th-dates/data-objects/ThDateDO';
+import { ThDateUtils } from '../../../../utils/th-dates/ThDateUtils';
+import { ThTimestampDO } from '../../../../utils/th-dates/data-objects/ThTimestampDO';
+import { BookingUtils } from '../../../bookings/utils/BookingUtils';
+import { BookingsContainer } from '../../../bookings/search-bookings/utils/occupancy-calculator/utils/BookingsContainer';
+import { BookingItemContainer } from '../../../bookings/search-bookings/utils/occupancy-calculator/utils/BookingItemContainer';
+import { IBookingOccupancy } from '../../../bookings/search-bookings/utils/occupancy-calculator/results/IBookingOccupancy';
+import { BookingOccupancy } from '../../../bookings/search-bookings/utils/occupancy-calculator/results/BookingOccupancy';
+import { IRevenueForDate } from '../data-objects/revenue/IRevenueForDate';
+import { RevenueForDate } from '../data-objects/revenue/RevenueForDate';
+import { InvoiceIndexer } from './invoice/InvoiceIndexer';
+import { IInvoiceStats } from './invoice/IInvoiceStats';
 
 import _ = require('underscore');
 
@@ -52,21 +52,22 @@ export class HotelInventoryIndexer {
         });
     }
     private indexInventoryCore(resolve: { (result: boolean): void }, reject: { (err: ThError): void }) {
-        var bookingsRepo = this._appContext.getRepositoryFactory().getBookingRepository();
-        bookingsRepo.getBookingList({ hotelId: this._sessionContext.sessionDO.hotel.id },
-            {
-                confirmationStatusList: BookingDOConstraints.ConfirmationStatuses_BookingsConsideredInYieldManager,
-                interval: ThDateIntervalDO.buildThDateIntervalDO(
-                    this._indexedInterval.getArrivalDate().buildPrototype(),
-                    this._indexedInterval.getDepartureDate().buildPrototype()
-                )
+        var invoiceIndexer = new InvoiceIndexer(this._appContext, this._sessionContext);
+        invoiceIndexer.getInvoiceStats(this._indexedInterval)
+            .then((invoiceStats: IInvoiceStats) => {
+                this._invoiceStats = invoiceStats;
+
+                var bookingsRepo = this._appContext.getRepositoryFactory().getBookingRepository();
+                return bookingsRepo.getBookingList({ hotelId: this._sessionContext.sessionDO.hotel.id },
+                    {
+                        confirmationStatusList: BookingDOConstraints.ConfirmationStatuses_BookingsConsideredInYieldManager,
+                        interval: ThDateIntervalDO.buildThDateIntervalDO(
+                            this._indexedInterval.getArrivalDate().buildPrototype(),
+                            this._indexedInterval.getDepartureDate().buildPrototype()
+                        )
+                    });
             }).then((bookingSearchResult: BookingSearchResultRepoDO) => {
                 this.indexBookingsByType(bookingSearchResult.bookingList);
-
-                var invoiceIndexer = new InvoiceIndexer(this._appContext, this._sessionContext);
-                return invoiceIndexer.getInvoiceStats(this._indexedInterval);
-            }).then((invoiceStats: IInvoiceStats) => {
-                this._invoiceStats = invoiceStats;
                 resolve(true);
             }).catch((error: any) => {
                 var thError = new ThError(ThStatusCode.BookingsIndexerError, error);
@@ -131,7 +132,7 @@ export class HotelInventoryIndexer {
         var revenue = new RevenueForDate(0.0, 0.0);
         _.forEach(filteredBookingItemList, (bookingItem: BookingItemContainer) => {
             var noNights = bookingItem.indexedBookingInterval.getLengthOfStay();
-            if (noNights > 0) {
+            if (noNights > 0 && !this._invoiceStats.bookingHasInvoiceWithLossAcceptedByManagement(bookingItem.booking.bookingId)) {
                 revenue.roomRevenue += bookingItem.booking.price.getRoomPrice() / noNights;
                 revenue.otherRevenue += bookingItem.booking.price.getOtherPrice() / noNights;
             }

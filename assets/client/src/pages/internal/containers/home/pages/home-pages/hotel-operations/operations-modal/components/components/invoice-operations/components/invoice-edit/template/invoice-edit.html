@@ -2,10 +2,13 @@
     <div class="invoice-edit-wrap">
         <p class="invoice-title-container">
             <span class="invoice-title m-l-16" [ngClass]="{'read-only': !editMode}">
-                <i *ngIf="isPaid" class="fa fa-check" aria-hidden="true"></i> {{ 'Invoice' | translate }} 
+                <i *ngIf="isPaid" class="fa fa-check" aria-hidden="true"></i> 
+                <i *ngIf="isLossAcceptedByManagement" class="fa fa-2x unitpal-font" aria-hidden="true">+</i>
+                {{ 'Invoice' | translate }} 
                 <small><i *ngIf="!isNewlyAdded">{{ invoiceReference }}</i></small>
                 <small *ngIf="isNewlyAdded"><i>{{ '(unsaved)' | translate }}</i></small>
                 <b *ngIf="isPaid"> {{ 'PAID' | translate }}</b>
+                <b *ngIf="isLossAcceptedByManagement"> {{ 'LOSS ACCEPTED BY MANAGEMENT' | translate }}</b>
             </span>
             <span class="invoice-remove" *ngIf="editMode && isNewlyAdded">
                 <a class="btn btn-xs" title="{{ 'Delete' | translate}}" (click)="onDelete()"><i class="fa unitpal-font">\</i></a>
@@ -83,9 +86,12 @@
         </table>
     </div>
 
-    <div *ngIf="!editMode && !isPaid" class="invoice-edit-footer">
-        <button type="button" class="btn btn-primary" (click)="onPayInvoice()">
+    <div *ngIf="!editMode" class="invoice-edit-footer">
+        <button type="button" class="btn btn-primary" *ngIf="!isPaid" (click)="onPayInvoice()">
             <i class="fa fa-2x unitpal-font rotate-45">L</i> {{ 'Pay Invoice' | translate }}
+        </button>
+        <button type="button" class="btn btn-danger" *ngIf="!isPaid && !isLossAcceptedByManagement" (click)="onLossByManagementInvoice()">
+            <i class="fa fa-2x unitpal-font">+</i> {{ 'Loss Accepted By Management' | translate }}
         </button>
     </div>
 

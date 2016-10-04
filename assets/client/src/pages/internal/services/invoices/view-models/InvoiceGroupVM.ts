@@ -1,12 +1,12 @@
-import {InvoiceDO} from '../data-objects/InvoiceDO';
-import {InvoiceGroupDO} from '../data-objects/InvoiceGroupDO';
-import {InvoiceVM} from './InvoiceVM';
-import {InvoiceItemDO, InvoiceItemType} from '../data-objects/items/InvoiceItemDO';
-import {InvoiceItemVM} from './InvoiceItemVM';
-import {InvoicePayerVM} from './InvoicePayerVM';
-import {InvoiceOperationsPageData} from '../../../containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/invoice-operations/services/utils/InvoiceOperationsPageData';
-import {ThTranslation} from '../../../../../common/utils/localization/ThTranslation';
-import {ThUtils} from '../../../../../common/utils/ThUtils';
+import { InvoiceDO } from '../data-objects/InvoiceDO';
+import { InvoiceGroupDO } from '../data-objects/InvoiceGroupDO';
+import { InvoiceVM } from './InvoiceVM';
+import { InvoiceItemDO, InvoiceItemType } from '../data-objects/items/InvoiceItemDO';
+import { InvoiceItemVM } from './InvoiceItemVM';
+import { InvoicePayerVM } from './InvoicePayerVM';
+import { InvoiceOperationsPageData } from '../../../containers/home/pages/home-pages/hotel-operations/operations-modal/components/components/invoice-operations/services/utils/InvoiceOperationsPageData';
+import { ThTranslation } from '../../../../../common/utils/localization/ThTranslation';
+import { ThUtils } from '../../../../../common/utils/ThUtils';
 
 export class InvoiceGroupVM {
     invoiceGroupDO: InvoiceGroupDO;
@@ -29,17 +29,17 @@ export class InvoiceGroupVM {
         _.forEach(this.invoiceGroupDO.invoiceList, (invoice: InvoiceDO) => {
             var invoiceVM = new InvoiceVM(this._thTranslation);
             invoiceVM.buildFromInvoiceDOAndCustomersDO(invoice, invoiceOperationsPageData.customersContainer);
-            if(this._thUtils.isUndefinedOrNull(this.invoiceGroupDO.id)) {
+            if (this._thUtils.isUndefinedOrNull(this.invoiceGroupDO.id)) {
                 invoiceVM.newlyAdded = true;
             }
             this.invoiceVMList.push(invoiceVM);
         });
         this.ccySymbol = invoiceOperationsPageData.ccy.symbol;
     }
-    
+
     public buildInvoiceGroupDO(): InvoiceGroupDO {
         this.invoiceGroupDO.invoiceList = [];
-        _.forEach(this.invoiceVMList, (invoiceVM: InvoiceVM) => {
+        _.forEach(this._invoiceVMList, (invoiceVM: InvoiceVM) => {
             if (invoiceVM.isNewlyAdded) {
                 delete invoiceVM.invoiceDO.invoiceReference;
             }
@@ -73,8 +73,11 @@ export class InvoiceGroupVM {
         invoiceGroupVMCopy.invoiceGroupDO = invoiceGroupDOCopy;
 
         invoiceGroupVMCopy.invoiceVMList = [];
-        _.forEach(this.invoiceVMList, (invoiceVM: InvoiceVM) => {
-            invoiceGroupVMCopy.invoiceVMList.push(invoiceVM.buildPrototype());
+        invoiceGroupVMCopy.invoiceGroupDO.invoiceList = [];
+        _.forEach(this._invoiceVMList, (invoiceVM: InvoiceVM) => {
+            var invoiceVMCopy = invoiceVM.buildPrototype();
+            invoiceGroupVMCopy.invoiceVMList.push(invoiceVMCopy);
+            invoiceGroupVMCopy.invoiceGroupDO.invoiceList.push(invoiceVMCopy.invoiceDO);
         });
 
         invoiceGroupVMCopy.ccySymbol = this.ccySymbol;
@@ -85,7 +88,7 @@ export class InvoiceGroupVM {
 
     public get invoiceVMList(): InvoiceVM[] {
         if (this.editMode) {
-            return this.getUnpaidInvoiceVMList();
+            return this.getOpenInvoiceVMList();
         }
         return this._invoiceVMList;
     }
@@ -93,9 +96,9 @@ export class InvoiceGroupVM {
         this._invoiceVMList = invoiceVMList;
     }
 
-    public getUnpaidInvoiceVMList(): InvoiceVM[] {
+    public getOpenInvoiceVMList(): InvoiceVM[] {
         return _.filter(this._invoiceVMList, (invoiceVM: InvoiceVM) => {
-            return !invoiceVM.invoiceDO.isPaid;
+            return !invoiceVM.invoiceDO.isClosed;
         });
     }
 
@@ -179,16 +182,16 @@ export class InvoiceGroupVM {
     }
 
     public allInvoicesAreNewlyAdded(): boolean {
-        for(var i = 0; i < this._invoiceVMList.length; ++i) {
-            if(!this._invoiceVMList[i].isNewlyAdded) {
+        for (var i = 0; i < this._invoiceVMList.length; ++i) {
+            if (!this._invoiceVMList[i].isNewlyAdded) {
                 return false;
             }
         }
         return true;
     }
     public get atLeastOneInvoiceUnpaid(): boolean {
-        for(var i = 0; i < this.invoiceVMList.length; ++i) {
-            if(!this.invoiceVMList[i].invoiceDO.isPaid) {
+        for (var i = 0; i < this.invoiceVMList.length; ++i) {
+            if (!this.invoiceVMList[i].invoiceDO.isPaid) {
                 return true;
             }
         }
