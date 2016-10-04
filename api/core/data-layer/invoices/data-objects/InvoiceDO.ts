@@ -1,17 +1,17 @@
-import {ThUtils} from '../../../utils/ThUtils';
-import {ThError} from '../../../utils/th-responses/ThError';
-import {BaseDO} from '../../common/base/BaseDO';
-import {ThDateDO} from '../../../utils/th-dates/data-objects/ThDateDO';
-import {InvoicePayerDO} from './payers/InvoicePayerDO';
-import {InvoiceItemDO, InvoiceItemType} from './items/InvoiceItemDO';
-import {IInvoiceItemMeta} from './items/IInvoiceItemMeta';
-import {BookingDO} from '../../bookings/data-objects/BookingDO';
-import {CustomerDO} from '../../customers/data-objects/CustomerDO';
-import {InvoicePaymentMethodType} from './payers/InvoicePaymentMethodDO';
-import {FeeInvoiceItemMetaDO} from './items/invoice-fee/FeeInvoiceItemMetaDO';
+import { ThUtils } from '../../../utils/ThUtils';
+import { ThError } from '../../../utils/th-responses/ThError';
+import { BaseDO } from '../../common/base/BaseDO';
+import { ThDateDO } from '../../../utils/th-dates/data-objects/ThDateDO';
+import { InvoicePayerDO } from './payers/InvoicePayerDO';
+import { InvoiceItemDO, InvoiceItemType } from './items/InvoiceItemDO';
+import { IInvoiceItemMeta } from './items/IInvoiceItemMeta';
+import { BookingDO } from '../../bookings/data-objects/BookingDO';
+import { CustomerDO } from '../../customers/data-objects/CustomerDO';
+import { InvoicePaymentMethodType } from './payers/InvoicePaymentMethodDO';
+import { FeeInvoiceItemMetaDO } from './items/invoice-fee/FeeInvoiceItemMetaDO';
 
 export enum InvoicePaymentStatus {
-    Unpaid, Paid
+    Unpaid, Paid, LossAcceptedByManagement
 }
 
 export class InvoiceDO extends BaseDO {
@@ -22,7 +22,7 @@ export class InvoiceDO extends BaseDO {
     paymentStatus: InvoicePaymentStatus;
 
     paidDate: ThDateDO;
-    paidDateUtcTimestamp: number;
+    paidDateUtcTimestamp: number;
 
     protected getPrimitivePropertyKeys(): string[] {
         return ["bookingId", "invoiceReference", "paymentStatus", "paidDateUtcTimestamp"];
@@ -84,11 +84,11 @@ export class InvoiceDO extends BaseDO {
                 var bookingIndex = _.findIndex(bookingList, (booking: BookingDO) => {
                     return booking.bookingId === item.id;
                 })
-                if(bookingIndex != -1) {
+                if (bookingIndex != -1) {
                     item.meta = bookingList[bookingIndex].price;
                     item.meta.setMovable(false);
                 }
-                if(!bookingList[bookingIndex].price.isPenalty()) {
+                if (!bookingList[bookingIndex].price.isPenalty()) {
                     bookingList[bookingIndex].price.includedInvoiceItemList.reverse();
                     _.forEach(bookingList[bookingIndex].price.includedInvoiceItemList, (invoiceItem: InvoiceItemDO) => {
                         invoiceItem.meta.setMovable(false);
@@ -125,6 +125,12 @@ export class InvoiceDO extends BaseDO {
 
     public isPaid(): boolean {
         return this.paymentStatus === InvoicePaymentStatus.Paid;
+    }
+    public isLossAcceptedByManagement(): boolean {
+        return this.paymentStatus === InvoicePaymentStatus.LossAcceptedByManagement;
+    }
+    public isClosed(): boolean {
+        return this.isPaid() || this.isLossAcceptedByManagement();
     }
 
     public hasPayInvoiceByAgreementAsPM(): boolean {

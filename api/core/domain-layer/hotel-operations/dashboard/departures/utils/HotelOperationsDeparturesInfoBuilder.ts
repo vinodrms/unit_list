@@ -1,9 +1,9 @@
-import {HotelOperationsDeparturesInfo, DeparturelItemInfo, DeparturelItemBookingStatus} from './HotelOperationsDeparturesInfo';
-import {BookingDO, BookingConfirmationStatus} from '../../../../../data-layer/bookings/data-objects/BookingDO';
-import {CustomersContainer} from '../../../../customers/validators/results/CustomersContainer';
-import {InvoiceGroupDO} from '../../../../../data-layer/invoices/data-objects/InvoiceGroupDO';
-import {InvoiceDO} from '../../../../../data-layer/invoices/data-objects/InvoiceDO';
-import {ThUtils} from '../../../../../utils/ThUtils';
+import { HotelOperationsDeparturesInfo, DeparturelItemInfo, DeparturelItemBookingStatus } from './HotelOperationsDeparturesInfo';
+import { BookingDO, BookingConfirmationStatus } from '../../../../../data-layer/bookings/data-objects/BookingDO';
+import { CustomersContainer } from '../../../../customers/validators/results/CustomersContainer';
+import { InvoiceGroupDO } from '../../../../../data-layer/invoices/data-objects/InvoiceGroupDO';
+import { InvoiceDO } from '../../../../../data-layer/invoices/data-objects/InvoiceDO';
+import { ThUtils } from '../../../../../utils/ThUtils';
 
 import _ = require('underscore');
 
@@ -40,15 +40,15 @@ export class HotelOperationsDeparturesInfoBuilder {
     }
 
     public appendInvoiceInformation(invoiceGroupList: InvoiceGroupDO[], attachedBookingList: BookingDO[]) {
-        var filteredInvoiceGroupList = this.filterUnpaidInvoices(invoiceGroupList);
+        var filteredInvoiceGroupList = this.filterOpenInvoices(invoiceGroupList);
         filteredInvoiceGroupList = this.filterInvoiceGroupsWithAtLeastOneInvoice(filteredInvoiceGroupList);
         this.linkInvoicesWithBookings(filteredInvoiceGroupList);
         filteredInvoiceGroupList = this.filterInvoiceGroupsWithAtLeastOneInvoice(filteredInvoiceGroupList);
         this.createInvoiceDepartureItemForGroupList(filteredInvoiceGroupList, attachedBookingList);
     }
-    private filterUnpaidInvoices(invoiceGroupList: InvoiceGroupDO[]): InvoiceGroupDO[] {
+    private filterOpenInvoices(invoiceGroupList: InvoiceGroupDO[]): InvoiceGroupDO[] {
         _.forEach(invoiceGroupList, (invoiceGroup: InvoiceGroupDO) => {
-            invoiceGroup.invoiceList = _.filter(invoiceGroup.invoiceList, (invoice: InvoiceDO) => { return !invoice.isPaid() });
+            invoiceGroup.invoiceList = _.filter(invoiceGroup.invoiceList, (invoice: InvoiceDO) => { return !invoice.isClosed() });
         });
         return invoiceGroupList;
     }

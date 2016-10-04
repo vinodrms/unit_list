@@ -743,6 +743,13 @@ export var EnglishTranslations: Object = {
 	"Are you sure you want to change the Price Product from this booking? This will affect the total price.": "Are you sure you want to change the Price Product from this booking? This will affect the total price.",
 	"Change Room Category": "Change Room Category",
 	"Are you sure you want to change the Room Category from this booking? This will affect the total price.": "Are you sure you want to change the Room Category from this booking? This will affect the total price.",
+	"Loss Accepted By Management": "Loss Accepted By Management",
+	"By marking this invoice as lost by management you acknowledge that you did not receive any money from the customer. Continue?": "By marking this invoice as lost by management you acknowledge that you did not receive any money from the customer. Continue?",
+	"The invoice was changed succesfully.": "The invoice was changed succesfully.",
+	"LOSS ACCEPTED BY MANAGEMENT": "LOSS ACCEPTED BY MANAGEMENT",
+	"Even though you marked this booking as lost by management, you can always mark it as Paid whenever you get the money from the customer.": "Even though you marked this booking as lost by management, you can always mark it as Paid whenever you get the money from the customer.",
+	
+
 	
 
 

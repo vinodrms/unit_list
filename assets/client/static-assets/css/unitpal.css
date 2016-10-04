@@ -3646,6 +3646,8 @@ a.btn.btn-square:focus {
     padding: 10px 0 15px 0;
 }
 .invoice-edit-container {
+    flex: 1;
+    height: 100%;
     position: relative;
     text-align: center;
     margin: 0 5px;
@@ -3682,6 +3684,8 @@ invoice-edit {
     flex-basis: 0;
     flex-grow: 1;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
 }
 .invoice-title-container {
     position: relative;
@@ -3704,6 +3708,10 @@ invoice-edit {
 }
 .table-invoice-payer > tbody > tr.row-actions {
    background-color: rgb(251, 103, 8);
+   color: white;
+}
+.table-invoice-payer.paid > tbody > tr.row-actions {
+   background-color: #9d9ca1;
    color: white;
 }
 .table-invoice-payer > tbody > tr.row-actions > .customer-container {
@@ -3795,15 +3803,14 @@ tr.selected-invoice-item {
     font-size: 14px;
 }
 .invoice-edit-wrap {
-    min-height: 100%;
-	margin-bottom: -40px; 
+    height: calc(100% - 80px); 
 }
 .invoice-edit-wrap:after {
     content: "";
     display: block;
 }
 .invoice-edit-footer, .invoice-edit-wrap:after {
-	height: 40px; 
+	height: 80px; 
 }
 
 .rotate-45 {

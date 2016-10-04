@@ -1,16 +1,16 @@
-import {AppContext} from '../../../../../utils/AppContext';
-import {SessionContext} from '../../../../../utils/SessionContext';
-import {ThUtils} from '../../../../../utils/ThUtils';
-import {ThLogger, ThLogLevel} from '../../../../../utils/logging/ThLogger';
-import {ThError} from '../../../../../utils/th-responses/ThError';
-import {ThStatusCode} from '../../../../../utils/th-responses/ThResponse';
-import {ThTimestampDO} from '../../../../../utils/th-dates/data-objects/ThTimestampDO';
-import {HotelDO} from '../../../../../data-layer/hotel/data-objects/HotelDO';
+import { AppContext } from '../../../../../utils/AppContext';
+import { SessionContext } from '../../../../../utils/SessionContext';
+import { ThUtils } from '../../../../../utils/ThUtils';
+import { ThLogger, ThLogLevel } from '../../../../../utils/logging/ThLogger';
+import { ThError } from '../../../../../utils/th-responses/ThError';
+import { ThStatusCode } from '../../../../../utils/th-responses/ThResponse';
+import { ThTimestampDO } from '../../../../../utils/th-dates/data-objects/ThTimestampDO';
+import { HotelDO } from '../../../../../data-layer/hotel/data-objects/HotelDO';
 
-import {InvoiceGroupDO} from '../../../../../data-layer/invoices/data-objects/InvoiceGroupDO';
-import {InvoiceDO, InvoicePaymentStatus} from '../../../../../data-layer/invoices/data-objects/InvoiceDO';
-import {ISaveInvoiceGroupActionStrategy} from '../ISaveInvoiceGroupActionStrategy';
-import {InvoiceGroupMetaRepoDO, InvoiceGroupItemMetaRepoDO} from '../../../../../data-layer/invoices/repositories/IInvoiceGroupsRepository';
+import { InvoiceGroupDO } from '../../../../../data-layer/invoices/data-objects/InvoiceGroupDO';
+import { InvoiceDO, InvoicePaymentStatus } from '../../../../../data-layer/invoices/data-objects/InvoiceDO';
+import { ISaveInvoiceGroupActionStrategy } from '../ISaveInvoiceGroupActionStrategy';
+import { InvoiceGroupMetaRepoDO, InvoiceGroupItemMetaRepoDO } from '../../../../../data-layer/invoices/repositories/IInvoiceGroupsRepository';
 
 export class InvoiceGroupUpdateStrategy implements ISaveInvoiceGroupActionStrategy {
     private _loadedInvoiceGroup: InvoiceGroupDO;
@@ -57,7 +57,7 @@ export class InvoiceGroupUpdateStrategy implements ISaveInvoiceGroupActionStrate
         this._appContext.getRepositoryFactory().getHotelRepository().getHotelById(this._sessionContext.sessionDO.hotel.id)
             .then((loadedHotel: HotelDO) => {
                 _.forEach(this._invoiceGroupDO.invoiceList, (invoice: InvoiceDO) => {
-                    if (invoice.paymentStatus === InvoicePaymentStatus.Paid && this._thUtils.isUndefinedOrNull(invoice.paidDate) && this._thUtils.isUndefinedOrNull(invoice.paidDateUtcTimestamp)) {
+                    if (invoice.isClosed() && this._thUtils.isUndefinedOrNull(invoice.paidDate) && this._thUtils.isUndefinedOrNull(invoice.paidDateUtcTimestamp)) {
                         invoice.paidDate = ThTimestampDO.buildThTimestampForTimezone(loadedHotel.timezone).thDateDO;
                         invoice.paidDateUtcTimestamp = invoice.paidDate.getUtcTimestamp();
                     }

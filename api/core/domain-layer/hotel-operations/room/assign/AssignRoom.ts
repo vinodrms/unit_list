@@ -104,7 +104,7 @@ export class AssignRoom {
                 return bookingValidationRule.isValidOn(this._bookingWithDependencies.bookingDO);
             }).then((validatedBooking: BookingDO) => {
                 this._bookingWithDependencies.bookingDO = validatedBooking;
-                if (this._needsPriceRecomputing && this._bookingWithDependencies.hasPaidInvoice()) {
+                if (this._needsPriceRecomputing && this._bookingWithDependencies.hasClosedInvoice()) {
                     var thError = new ThError(ThStatusCode.AssignRoomPaidInvoice, null);
                     ThLogger.getInstance().logBusiness(ThLogLevel.Info, "assign room: paid invoice", this._assignRoomDO, thError);
                     throw thError;
