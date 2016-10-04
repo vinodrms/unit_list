@@ -52,6 +52,7 @@ export class InvoiceIndexer {
             var revenueForDate = this.getRevenueForDate(thDate, invoiceGroupList);
             invoiceStats.indexRevenueForDate(revenueForDate, thDate);
         });
+        this.indexBookingsLossAcceptedByManagement(invoiceStats, invoiceGroupList);
         return invoiceStats;
     }
     private indexBookingsLossAcceptedByManagement(invoiceStats: InvoiceStats, invoiceGroupList: InvoiceGroupDO[]) {
