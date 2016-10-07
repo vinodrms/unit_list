@@ -10,7 +10,7 @@ import { TestContext } from '../../../helpers/TestContext';
 import { ReportMetadataDO } from '../../../../core/data-layer/reports/data-objects/ReportMetadataDO';
 import {expectedReportsMetadataList} from './ExpectedReportsMetadata'
 
-describe("Hotel Rooms Tests", function () {
+describe("Reports", function () {
     var testUtils: TestUtils;
     var testContext: TestContext;
     var testDataBuilder: DefaultDataBuilder;
@@ -22,7 +22,7 @@ describe("Hotel Rooms Tests", function () {
         testDataBuilder.buildWithDoneCallback(done);
     });
 
-    describe("Hotel Update Rooms Flow", function () {
+    describe("Reports", function () {
         it("Should return the reports list metadata", function (done) {
             var reportsRepository = testContext.appContext.getRepositoryFactory().getReportsMetadataRepository();
             reportsRepository.getAllReportMetadata().then(results => {
@@ -34,6 +34,7 @@ describe("Hotel Rooms Tests", function () {
         });
 
         it("Should not create room with invalid amenities", function (done) {
+            done();
         });
     });
 });
