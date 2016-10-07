@@ -13,7 +13,13 @@ The project has 3 Visual Studio Tasks
  - build server (Shift+Ctrl+B / Shift+Cmd+B)
  - build client (Shift+Ctrl+T / Shift+Cmd+T)
  - build e2e tests
- 
+
+=========================================
+
+Change the sessionAuth, with values found in database on collection hotels
+	sessionDo.hotel.id = hotels[0].id
+	sessionDo.user.id = hotels[0].userList[0].id
+
 =========================================
 
 To run locally on dev environment
