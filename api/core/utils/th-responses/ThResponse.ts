@@ -481,7 +481,7 @@ export enum ThStatusCode {
     BookingChangePriceProductError,
     BookingChangePriceProductInvalidState,
     BookingChangePriceProductPaidInvoice,
-
+    ReportsMetadataListFetchError
 }
 
 var ThMessage: { [index: number]: string; } = {};
@@ -953,6 +953,7 @@ ThMessage[ThStatusCode.YieldManagerControllerErrorGettingKeyMetrics] = "Error ge
 ThMessage[ThStatusCode.BookingChangePriceProductError] = "Error changing the Price Product for the booking.";
 ThMessage[ThStatusCode.BookingChangePriceProductInvalidState] = "You can change the Price Product only on a Confirmed, Guaranteed or Checked In booking.";
 ThMessage[ThStatusCode.BookingChangePriceProductPaidInvoice] = "You cannot change the Price Product because the invoice has been paid.";
+ThMessage[ThStatusCode.ReportsMetadataListFetchError] = "Error fetching list of reports Metadata.";
 
 export class ThResponse {
     statusCode: ThStatusCode;

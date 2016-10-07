@@ -13,7 +13,7 @@ export class BookingSearchDO {
     interval: ThDateIntervalDO;
     configCapacity: ConfigCapacityDO;
     transientBookingList: TransientBookingItemDO[];
-    bookingIdToOmit?: string;
+    bookingIdToOmit: string;
 
     public static getValidationStructure(): IValidationStructure {
         return new ObjectValidationStructure([
