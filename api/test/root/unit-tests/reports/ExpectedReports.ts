@@ -1,8 +1,9 @@
 import { ReportMetadataDO, ReportType, FieldType } from '../../../../core/data-layer/reports/data-objects/ReportMetadataDO';
+import { ReportDO } from '../../../../core/data-layer/reports/data-objects/ReportDO';
 
-var reportGuestsArriving = new ReportMetadataDO();
+var reportGuestsArrivingMetadata = new ReportMetadataDO();
 
-reportGuestsArriving.buildFromObject({
+reportGuestsArrivingMetadata.buildFromObject({
 	type: ReportType.GuestsArriving,
 	name: "Guests Arriving",
 	inputParams: [
@@ -56,8 +57,8 @@ reportGuestsArriving.buildFromObject({
 	]
 });
 
-var reportGuestsInHouse = new ReportMetadataDO();
-reportGuestsArriving.buildFromObject({
+var reportGuestsInHouseMetadata = new ReportMetadataDO();
+reportGuestsArrivingMetadata.buildFromObject({
 	type: ReportType.GuestsArriving,
 	name: "Guests Arriving",
 	inputParams: [
@@ -99,7 +100,17 @@ reportGuestsArriving.buildFromObject({
 	]
 });
 
-var reportsMetadataList = [reportGuestsArriving, reportGuestsInHouse];
+let row1 = ['Daniel 1', 'a2', 'a3', 'a4', 'a5', 'a6', 'a7', 'a8', 'a9', 'a10'];
+let row2 = ['Nikola 1', 'b2', 'b3', 'b4', 'b5', 'b6', 'b7', 'b8', 'b9', 'b10'];
+let expectedGuestArrivalsReport = new ReportDO();
+expectedGuestArrivalsReport.metadata = reportGuestsArrivingMetadata;
+expectedGuestArrivalsReport.data = [row1, row2];
 
-export { reportsMetadataList as expectedReportsMetadataList};
+let reportsMetadataList = [reportGuestsArrivingMetadata, reportGuestsInHouseMetadata];
+
+export var ExpectedReports = { 
+	reportsMetadataList : reportsMetadataList,
+	reports: {
+		GuestArrivalsReport : expectedGuestArrivalsReport
+	}
 

@@ -1,9 +1,10 @@
-import { ThLogger, ThLogLevel } from '../../../../utils/logging/ThLogger';
 import { ThError } from '../../../../utils/th-responses/ThError';
 import { ThStatusCode } from '../../../../utils/th-responses/ThResponse';
 
 import { ReportMetadataDO, ReportType, FieldType } from '../../data-objects/ReportMetadataDO';
 import { IReportMetadataRepository } from '../IReportMetadataRepository';
+
+import _ = require('underscore');
 
 export class MongoReportMetadataRepository implements IReportMetadataRepository {
 	private _reportsMetadataList: ReportMetadataDO[];
@@ -118,7 +119,8 @@ export class MongoReportMetadataRepository implements IReportMetadataRepository 
 
 	getReportMetadata(type: ReportType): Promise<ReportMetadataDO> {
 		return new Promise<ReportMetadataDO>((resolve: { (result: ReportMetadataDO): void }, reject: { (err: ThError): void }) => {
-
+			var retrievedReportMetadata = _.findWhere(this._reportsMetadataList, {type: type});
+			resolve(<ReportMetadataDO>retrievedReportMetadata);
 		});
 	}
 }

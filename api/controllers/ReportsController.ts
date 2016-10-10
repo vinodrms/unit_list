@@ -1,16 +1,9 @@
 import { BaseController } from './base/BaseController';
 import { ThStatusCode } from '../core/utils/th-responses/ThResponse';
-import { PriceProductYielding } from '../core/domain-layer/yield-manager/price-product-yielding/PriceProductYielding';
-import { PriceProductDO } from '../core/data-layer/price-products/data-objects/PriceProductDO';
-import { PriceProductReader } from '../core/domain-layer/yield-manager/price-product-reader/PriceProductReader';
-import { PriceProductYieldResult } from '../core/domain-layer/yield-manager/price-product-reader/utils/PriceProductYieldItem';
-import { KeyMetricReader } from '../core/domain-layer/yield-manager/key-metrics/KeyMetricReader';
-import { KeyMetricsResult } from '../core/domain-layer/yield-manager/key-metrics/utils/KeyMetricsResult';
-import { ReportMetadataDO, ReportType, FieldType } from '../core/data-layer/reports/data-objects/ReportMetadataDO';
+import { ReportDO } from '../core/data-layer/reports/data-objects/ReportDO';
+import { ReportGeneratorFactory } from '../core/domain-layer/reports/ReportGeneratorFactory';
 import { AppContext } from '../core/utils/AppContext';
 
-
-//TODO: use THtranslate
 export class ReportsController extends BaseController {
 	public getReportsList(req: Express.Request, res: Express.Response) {
 		let appContext: AppContext = req.appContext;
@@ -26,6 +19,18 @@ export class ReportsController extends BaseController {
 	}
 
 	public getReport(req: Express.Request, res: Express.Response) {
+		let reportType = req.body.type;
+		let reportParams = req.body.params;
+
+		let reportGeneratorFactory = new ReportGeneratorFactory(req.appContext);
+		let reportGenerator = reportGeneratorFactory.getGeneratorStrategy(reportType);
+		reportGenerator.generate(reportParams).then((results : ReportDO) => {
+			this.returnSuccesfulResponse(req, res, {
+				report : results
+			});
+		}).catch((err: any) =>{
+			this.returnErrorResponse(req, res, err, ThStatusCode.ReportFetchError);
+		})
 	}
 }
 
