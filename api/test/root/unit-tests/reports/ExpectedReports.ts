@@ -113,4 +113,5 @@ export var ExpectedReports = {
 	reports: {
 		GuestArrivalsReport : expectedGuestArrivalsReport
 	}
+}
 
