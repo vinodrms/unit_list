@@ -33,16 +33,26 @@
         <div style="page-break-after:always; margin: 15px;">
             <div class="row" style="margin-bottom:10px">
                 <div class="col-md-7">
-                    <p>
-                        <b style="font-size: 18px;"><%= hotelNameValue %></b>
-                        <img src="<%= hotelLogoSrcValue %>" style="height:35px"/>
-                    </p>
-                    <p><b><%= hotelAddressLabel %>:</b>
-                        <%= hotelAddressValue %>
-                    </p>
-                    <p><b><%= hotelContactLabel %>:</b>
-                        <%= hotelContactValue %>
-                    </p>
+                    <div class="row">
+                        <div class="col-xs-8">
+                            <b style="font-size: 18px;"><%= hotelNameValue %></b>
+                            <br>
+                            <small><%= hotelWebsite %></small>
+                        </div>
+                        <div class="col-xs-4">
+                            <img src="<%= hotelLogoSrcValue %>" style="height:35px"/>
+                        </div>
+                        <div class="col-xs-12">
+                            <p><b><%= hotelAddressLabel %>:</b>
+                                <%= hotelAddressValue %>
+                            </p>
+                        </div>
+                        <div class="col-xs-12">
+                            <p><b><%= hotelContactLabel %>:</b>
+                                <%= hotelContactValue %>
+                            </p>
+                        </div>
+                    </div>
                 </div>
                 <div class="col-md-5">
                     <div class="row" style="height:25px">

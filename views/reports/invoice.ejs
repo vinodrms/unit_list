@@ -32,45 +32,56 @@
         <section class="content invoice">
             <!-- info row -->
             <div class="row invoice-info" style="padding-top: 15px;">
-                <div class="col-sm-4 invoice-col">
-                    <%= fromLabel %>
-                        <address>
+                <div class="col-sm-5 invoice-col">
+                    <div class="row">
+                        <div class="col-xs-8">
+                            <%= fromLabel %>
                             <strong><%= hotelNameValue %></strong>
-                            <img src="<%= hotelLogoSrcValue %>" style="height:35px"/>
                             <br>
+                            <small><%= hotelWebsite %></small>
+                        </div>
+                        <div class="col-xs-4">
+                            <img src="<%= hotelLogoSrcValue %>" style="max-height:35px; width: auto;"/>
+                        </div>
+                        <div class="col-xs-12">
                             <p><b><%= hotelVatLabel %>:</b>
-                            <%= hotelVatValue %>
+                                <%= hotelVatValue %>
                             </p>
-                            <br>
+                        </div>
+                        <div class="col-xs-12">
                             <%= hotelAddressFirstLineValue %>
-                            <br>
+                        </div>
+                        <div class="col-xs-12">
                             <%= hotelAddressSecondLineValue %>
-                            <br>
-                            <%= hotelPhoneLabel %>:
-                            <%= hotelPhoneValue %>
-                            <br>
-                            <%= hotelEmailLabel %>:
-                            <%= hotelEmailValue %>
-                        </address>
+                        </div>
+                        <div class="col-xs-12">
+                            <p><b><%= hotelContactLabel %>:</b>
+                                <%= hotelContactValue %>
+                            </p>
+                        </div>
+                    </div>
                 </div>
                 <!-- /.col -->
                 <div class="col-sm-4 invoice-col">
-                    <%= toLabel %>
-                    <address>
-                        <strong><%= payerNameValue %></strong>
-                        <br>
-                        <%= payerAddressFirstLineValue %>
-                        <br>
-                        <%= payerAddressSecondLineValue %>
-                        <br>
-                        <%= payerPhoneLabel %>:
-                        <%= payerPhoneValue %>
-                        <br>
-                        <%= payerEmailLabel %>:
-                        <%= payerEmailValue %>
-                    </address>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <%= toLabel %>
+                            <strong><%= payerNameValue %></strong>
+                        </div>
+                        <div class="col-xs-12">
+                            <%= payerAddressFirstLineValue %>
+                        </div>
+                        <div class="col-xs-12">
+                            <%= payerAddressSecondLineValue %>
+                        </div>
+                        <div class="col-xs-12">
+                            <p><b><%= payerContactLabel %>:</b>
+                                <%= payerContactValue %>
+                            </p>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-sm-4">
+                <div class="col-sm-3">
                     <div class="row" style="height:25px">
                         <div class="col-md-12" style="height:100%">
                             <i style="position: absolute; right: 15px; bottom: 0;"><%= invoiceLabel %></i><br><br>
