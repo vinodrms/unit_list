@@ -1,10 +1,12 @@
-import {ThTranslation} from '../../../utils/localization/ThTranslation';
-import {ThUtils} from '../../../../core/utils/ThUtils';
-import {BookingDO} from '../../../data-layer/bookings/data-objects/BookingDO';
-import {HotelDO} from '../../../data-layer/hotel/data-objects/HotelDO';
-import {BookingConfirmationVM} from './BookingConfirmationVM';
-import {BookingAggregatedDataContainer} from '../aggregators/BookingAggregatedDataContainer';
-import {BookingAggregatedData} from '../aggregators/BookingAggregatedData';
+import { ThTranslation } from '../../../utils/localization/ThTranslation';
+import { ThUtils } from '../../../../core/utils/ThUtils';
+import { BookingDO } from '../../../data-layer/bookings/data-objects/BookingDO';
+import { HotelDO } from '../../../data-layer/hotel/data-objects/HotelDO';
+import { BookingConfirmationVM } from './BookingConfirmationVM';
+import { BookingAggregatedDataContainer } from '../aggregators/BookingAggregatedDataContainer';
+import { BookingAggregatedData } from '../aggregators/BookingAggregatedData';
+
+import _ = require('underscore');
 
 export class BookingConfirmationVMContainer {
     public static HOTEL_LOGO_PLACEHOLDER_SRC = 'assets/client/static-assets/images/hotel-logo-placeholder.png';
@@ -27,6 +29,7 @@ export class BookingConfirmationVMContainer {
 
     hotelContactValue: string;
     hotelContactLabel: string;
+    hotelWebsite: string;
 
     hotelLogoSrcValue: string;
     unitpalLogoSrcValue: string;
@@ -126,6 +129,10 @@ export class BookingConfirmationVMContainer {
 
     private initHotelContactLabelAndValue() {
         this.hotelContactLabel = this._thTranslation.translate('Contact');
-        this.hotelContactValue = this.hotel.contactDetails.phone;
+        this.hotelContactValue = this.hotel.contactDetails.phone + " / " + this.hotel.contactDetails.email;
+        this.hotelWebsite = "";
+        if (_.isString(this.hotel.contactDetails.websiteUrl) && this.hotel.contactDetails.websiteUrl.length > 0) {
+            this.hotelWebsite = this.hotel.contactDetails.websiteUrl;
+        }
     }
 }

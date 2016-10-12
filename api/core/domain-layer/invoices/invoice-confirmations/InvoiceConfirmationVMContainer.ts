@@ -1,15 +1,17 @@
-import {ThTranslation} from '../../../utils/localization/ThTranslation';
-import {ThUtils} from '../../../../core/utils/ThUtils';
-import {HotelDO} from '../../../data-layer/hotel/data-objects/HotelDO';
-import {CustomerDO} from '../../../data-layer/customers/data-objects/CustomerDO';
-import {AddressDO} from '../../../data-layer/common/data-objects/address/AddressDO';
-import {PaymentMethodDO} from '../../../data-layer/common/data-objects/payment-method/PaymentMethodDO';
-import {InvoiceDO} from '../../../data-layer/invoices/data-objects/InvoiceDO';
-import {InvoiceItemDO} from '../../../data-layer/invoices/data-objects/items/InvoiceItemDO';
-import {InvoiceItemVM} from './InvoiceItemVM';
-import {InvoicePaymentMethodType} from '../../../data-layer/invoices/data-objects/payers/InvoicePaymentMethodDO';
-import {InvoiceAggregatedData} from '../aggregators/InvoiceAggregatedData';
-import {BookingConfirmationVMContainer} from '../../bookings/booking-confirmations/BookingConfirmationVMContainer';
+import { ThTranslation } from '../../../utils/localization/ThTranslation';
+import { ThUtils } from '../../../../core/utils/ThUtils';
+import { HotelDO } from '../../../data-layer/hotel/data-objects/HotelDO';
+import { CustomerDO } from '../../../data-layer/customers/data-objects/CustomerDO';
+import { AddressDO } from '../../../data-layer/common/data-objects/address/AddressDO';
+import { PaymentMethodDO } from '../../../data-layer/common/data-objects/payment-method/PaymentMethodDO';
+import { InvoiceDO } from '../../../data-layer/invoices/data-objects/InvoiceDO';
+import { InvoiceItemDO } from '../../../data-layer/invoices/data-objects/items/InvoiceItemDO';
+import { InvoiceItemVM } from './InvoiceItemVM';
+import { InvoicePaymentMethodType } from '../../../data-layer/invoices/data-objects/payers/InvoicePaymentMethodDO';
+import { InvoiceAggregatedData } from '../aggregators/InvoiceAggregatedData';
+import { BookingConfirmationVMContainer } from '../../bookings/booking-confirmations/BookingConfirmationVMContainer';
+
+import _ = require('underscore');
 
 export class InvoiceConfirmationVMContainer {
     private static UNITPAL_LOGO_SRC = 'assets/client/static-assets/images/unit_pal_logo_blue.png';
@@ -38,19 +40,16 @@ export class InvoiceConfirmationVMContainer {
     hotelNameValue: string;
     hotelAddressFirstLineValue: string;
     hotelAddressSecondLineValue: string;
-    hotelPhoneLabel: string;
-    hotelPhoneValue: string;
-    hotelEmailLabel: string;
-    hotelEmailValue: string;
+    hotelContactValue: string;
+    hotelContactLabel: string;
+    hotelWebsite: string;
 
     toLabel: string;
     payerNameValue: string;
     payerAddressFirstLineValue: string;
     payerAddressSecondLineValue: string;
-    payerPhoneLabel: string;
-    payerPhoneValue: string;
-    payerEmailLabel: string;
-    payerEmailValue: string;
+    payerContactLabel: string;
+    payerContactValue: string;
 
     itemLabel: string;
     qtyLabel: string;
@@ -113,10 +112,12 @@ export class InvoiceConfirmationVMContainer {
         this.hotelNameValue = this.formatValue(this._hotel.contactDetails.name);
         this.hotelAddressFirstLineValue = this.getFormattedAddressFirstLine(this._hotel.contactDetails.address);
         this.hotelAddressSecondLineValue = this.getFormattedAddressSecondLine(this._hotel.contactDetails.address);
-        this.hotelPhoneLabel = this._thTranslation.translate('Phone');
-        this.hotelPhoneValue = this.formatValue(this._hotel.contactDetails.phone);
-        this.hotelEmailLabel = this._thTranslation.translate('Email');
-        this.hotelEmailValue = this.formatValue(this._hotel.contactDetails.email);
+        this.hotelContactLabel = this._thTranslation.translate('Contact');
+        this.hotelContactValue = this._hotel.contactDetails.phone + " / " + this._hotel.contactDetails.email;
+        this.hotelWebsite = "";
+        if (_.isString(this._hotel.contactDetails.websiteUrl) && this._hotel.contactDetails.websiteUrl.length > 0) {
+            this.hotelWebsite = this._hotel.contactDetails.websiteUrl;
+        }
     }
 
     private initPayerInfoLabelsAndValues() {
@@ -124,10 +125,21 @@ export class InvoiceConfirmationVMContainer {
         this.payerNameValue = this.formatValue(this._payerCustomer.customerDetails.getName());
         this.payerAddressFirstLineValue = this.getFormattedAddressFirstLine(this._payerCustomer.customerDetails.getAddress());
         this.payerAddressSecondLineValue = this.getFormattedAddressSecondLine(this._payerCustomer.customerDetails.getAddress());
-        this.payerPhoneLabel = this._thTranslation.translate('Phone');
-        this.payerPhoneValue = this.formatValue(this._payerCustomer.customerDetails.getPhone());
-        this.payerEmailLabel = this._thTranslation.translate('Email');
-        this.payerEmailValue = this.formatValue(this._payerCustomer.customerDetails.getEmail());
+        this.payerContactLabel = this._thTranslation.translate('Contact');
+        this.payerContactValue = "";
+        var phone = this._payerCustomer.customerDetails.getPhone();
+        if(_.isString(phone) && phone.length > 0) {
+            this.payerContactValue += phone;
+        }
+
+        var email = this._payerCustomer.customerDetails.getEmail();
+        if(_.isString(email) && email.length > 0) {
+            this.payerContactValue += (this.payerContactValue.length > 0) ? " / " : "";
+            this.payerContactValue += email;
+        }
+        if(this.payerContactValue.length == 0) {
+            this.payerContactValue = "-";
+        }
     }
 
     private initItemsTableLabelsAndValues() {
@@ -172,7 +184,7 @@ export class InvoiceConfirmationVMContainer {
         this.addFieldValue1 = "";
         this.addFieldName2 = "";
         this.addFieldValue2 = "";
-        if(this._invoiceAggregatedData.bookingAttachment.exists) {
+        if (this._invoiceAggregatedData.bookingAttachment.exists) {
             this.addFieldName1 = this._thTranslation.translate("Guest");
             this.addFieldValue1 = this._invoiceAggregatedData.bookingAttachment.guest.customerDetails.getName();
 
