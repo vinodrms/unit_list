@@ -1,8 +1,8 @@
 import { AppContext } from '../../utils/AppContext';
+import { SessionContext } from '../../utils/SessionContext';
 import { ReportDO } from '../../data-layer/reports/data-objects/ReportDO';
 import { ReportType } from '../../data-layer/reports/data-objects/ReportMetadataDO';
-import { IReportGeneratorStrategy } from './IReportGeneratorStrategy';
-
+import { IReportGeneratorStrategy } from './CommonInterfaces';
 import { ThError } from '../../utils/th-responses/ThError';
 import { ThStatusCode } from '../../utils/th-responses/ThResponse';
 import { ThLogger, ThLogLevel } from '../../utils/logging/ThLogger';
@@ -12,7 +12,7 @@ export class AReportGeneratorStrategy implements IReportGeneratorStrategy {
 	protected _reportType: ReportType;
 	protected _thUtils: ThUtils;
 
-	constructor(protected _appContext: AppContext) {
+	constructor(protected _appContext: AppContext, protected _sessionContext: SessionContext) {
 		this._thUtils = new ThUtils();
 	}
 

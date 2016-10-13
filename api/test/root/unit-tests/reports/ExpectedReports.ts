@@ -58,9 +58,9 @@ reportGuestsArrivingMetadata.buildFromObject({
 });
 
 var reportGuestsInHouseMetadata = new ReportMetadataDO();
-reportGuestsArrivingMetadata.buildFromObject({
-	type: ReportType.GuestsArriving,
-	name: "Guests Arriving",
+reportGuestsInHouseMetadata.buildFromObject({
+	type: ReportType.GuestsInHouse,
+	name: "Guests In House",
 	inputParams: [
 		{
 			type: FieldType.DateTime,

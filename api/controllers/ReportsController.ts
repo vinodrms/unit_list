@@ -1,7 +1,7 @@
 import { BaseController } from './base/BaseController';
 import { ThStatusCode } from '../core/utils/th-responses/ThResponse';
 import { ReportDO } from '../core/data-layer/reports/data-objects/ReportDO';
-import { ReportGeneratorFactory } from '../core/domain-layer/reports/ReportGeneratorFactory';
+import { ReportGroupGeneratorFactory } from '../core/domain-layer/reports/ReportGroupGeneratorFactory';
 import { AppContext } from '../core/utils/AppContext';
 
 export class ReportsController extends BaseController {
@@ -19,12 +19,12 @@ export class ReportsController extends BaseController {
 	}
 
 	public getReport(req: Express.Request, res: Express.Response) {
-		let reportType = req.body.type;
-		let reportParams = req.body.params;
+		let rgType = req.body.type;
+		let rgParams = req.body.params;
 
-		let reportGeneratorFactory = new ReportGeneratorFactory(req.appContext);
-		let reportGenerator = reportGeneratorFactory.getGeneratorStrategy(reportType);
-		reportGenerator.generate(reportParams).then((results : ReportDO) => {
+		let rgGeneratorFactory = new ReportGroupGeneratorFactory(req.appContext, req.sessionContext);
+		let rgGenerator = rgGeneratorFactory.getGeneratorStrategy(rgType);
+		rgGenerator.generate(rgParams).then((results : ReportDO) => {
 			this.returnSuccesfulResponse(req, res, {
 				report : results
 			});

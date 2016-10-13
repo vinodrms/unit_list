@@ -66,9 +66,9 @@ export class MongoReportMetadataRepository implements IReportMetadataRepository 
 		});
 
 		var reportGuestsInHouse = new ReportMetadataDO();
-		reportGuestsArriving.buildFromObject({
-			type: ReportType.GuestsArriving,
-			name: "Guests Arriving",
+		reportGuestsInHouse.buildFromObject({
+			type: ReportType.GuestsInHouse,
+			name: "Guests In House",
 			inputParams: [
 				{
 					type: FieldType.DateTime,
