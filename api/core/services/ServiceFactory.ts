@@ -22,6 +22,8 @@ import {PhantomLocalHtmlToPdfConverterService} from './html-to-pdf/providers/pha
 import {IPdfReportsService} from './pdf-reports/IPdfReportsService';
 import {PdfReportsService} from './pdf-reports/providers/PdfReportsService';
 import {MockPdfReportsService} from './pdf-reports/providers/MockPdfReportsService';
+import {IFileService} from './file-service/IFileService'
+import {FileService} from './file-service/FileService'
 
 export class ServiceFactory {
     constructor(private _unitPalConfig: UnitPalConfig) {
@@ -73,5 +75,9 @@ export class ServiceFactory {
     }
     public getHtmltoPdfConverterService(): IHtmlToPdfConverterService {
         return new PhantomLocalHtmlToPdfConverterService();   
+    }
+    
+    public getFileService():IFileService{
+        return new FileService();
     }
 }
