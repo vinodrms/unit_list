@@ -14,7 +14,6 @@ import { BookingConfirmationVMContainer } from '../../bookings/booking-confirmat
 import _ = require('underscore');
 
 export class InvoiceConfirmationVMContainer {
-    private static UNITPAL_LOGO_SRC = 'assets/client/static-assets/images/unit_pal_logo_blue.png';
     private static DEFAULT_VALUE_IF_EMPTY: string = '-';
     private static PAY_INVOICE_BY_AGREEMENT_STR: string = 'PAY INVOICE BY AGREEMENT';
     private _thUtils: ThUtils;
@@ -79,7 +78,7 @@ export class InvoiceConfirmationVMContainer {
         this.invoiceReference = this._invoiceAggregatedData.invoice.invoiceReference;
         this.payerIndex = this._invoiceAggregatedData.payerIndexOnInvoice;
         this.ccySymbol = this._invoiceAggregatedData.ccySymbol;
-        this.unitpalLogoSrcValue = InvoiceConfirmationVMContainer.UNITPAL_LOGO_SRC;
+        this.unitpalLogoSrcValue = BookingConfirmationVMContainer.UNITPAL_LOGO_SRC;
 
         this.initLogoSrcs();
         this.initHeaderLabelsAndValues();
@@ -128,16 +127,16 @@ export class InvoiceConfirmationVMContainer {
         this.payerContactLabel = this._thTranslation.translate('Contact');
         this.payerContactValue = "";
         var phone = this._payerCustomer.customerDetails.getPhone();
-        if(_.isString(phone) && phone.length > 0) {
+        if (_.isString(phone) && phone.length > 0) {
             this.payerContactValue += phone;
         }
 
         var email = this._payerCustomer.customerDetails.getEmail();
-        if(_.isString(email) && email.length > 0) {
+        if (_.isString(email) && email.length > 0) {
             this.payerContactValue += (this.payerContactValue.length > 0) ? " / " : "";
             this.payerContactValue += email;
         }
-        if(this.payerContactValue.length == 0) {
+        if (this.payerContactValue.length == 0) {
             this.payerContactValue = "-";
         }
     }
@@ -160,6 +159,9 @@ export class InvoiceConfirmationVMContainer {
             this.totalVat = this._thUtils.roundNumberToTwoDecimals(this.totalVat + invoiceItemVM.vat);
             this.subtotalValue = this._thUtils.roundNumberToTwoDecimals(this.subtotalValue + invoiceItemVM.subtotal);
         })
+        if (this.itemVMList.length > 0) {
+            this.itemVMList[this.itemVMList.length - 1].isLastOne = true;
+        }
     }
 
     private initPaymentMethodLabelsAndValues() {

@@ -1,8 +1,8 @@
-import {ThTranslation} from '../../../utils/localization/ThTranslation';
-import {ThUtils} from '../../../../core/utils/ThUtils';
+import { ThTranslation } from '../../../utils/localization/ThTranslation';
+import { ThUtils } from '../../../../core/utils/ThUtils';
 
-import {InvoiceItemDO} from '../../../data-layer/invoices/data-objects/items/InvoiceItemDO';
-import {TaxDO} from '../../../data-layer/taxes/data-objects/TaxDO';
+import { InvoiceItemDO } from '../../../data-layer/invoices/data-objects/items/InvoiceItemDO';
+import { TaxDO } from '../../../data-layer/taxes/data-objects/TaxDO';
 
 export class InvoiceItemVM {
     private _thUtils: ThUtils;
@@ -12,15 +12,17 @@ export class InvoiceItemVM {
     netUnitPrice: number;
     vat: number;
     subtotal: number;
+    isLastOne: boolean;
 
     constructor(private _thTranslation: ThTranslation) {
         this._thUtils = new ThUtils();
+        this.isLastOne = false;
     }
 
     public buildFromInvoiceItemDO(invoiceItemDO: InvoiceItemDO, vatTaxList: TaxDO[]) {
         this.name = invoiceItemDO.meta.getDisplayName(this._thTranslation);
         this.qty = invoiceItemDO.meta.getNumberOfItems();
-        
+
         var vatValue = this.getVatValue(invoiceItemDO.meta.getVatId(), vatTaxList);
         var unitVat = this._thUtils.roundNumberToTwoDecimals(vatValue * invoiceItemDO.meta.getUnitPrice());
         this.vat = this._thUtils.roundNumberToTwoDecimals(unitVat * invoiceItemDO.meta.getNumberOfItems());
@@ -29,13 +31,13 @@ export class InvoiceItemVM {
     }
 
     private getVatValue(vatId: string, vatTaxList: TaxDO[]): number {
-        if(this._thUtils.isUndefinedOrNull(vatId)) {
+        if (this._thUtils.isUndefinedOrNull(vatId)) {
             return 0;
         }
         var vat = _.find(vatTaxList, (vat: TaxDO) => {
             return vat.id === vatId;
         });
-        if(this._thUtils.isUndefinedOrNull(vat)) {
+        if (this._thUtils.isUndefinedOrNull(vat)) {
             return 0;
         }
         return vat.value;
