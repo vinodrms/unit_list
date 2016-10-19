@@ -90,7 +90,7 @@ reportGuestsInHouseMetadata.buildFromObject({
 			name: "Babies"
 		},
 		{
-			type: FieldType.String,
+			type: FieldType.Date,
 			name: "Departing Date"
 		},
 		{
