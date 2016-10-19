@@ -486,6 +486,9 @@ export enum ThStatusCode {
 	ReportsMetadataListFetchError,
 	ReportFetchError,
 	ReportsGenerateInvalidParameters,
+
+	//File service
+	FileServiceErrorWritingFile
 }
 
 var ThMessage: { [index: number]: string; } = {};
@@ -962,6 +965,9 @@ ThMessage[ThStatusCode.BookingChangePriceProductPaidInvoice] = "You cannot chang
 ThMessage[ThStatusCode.ReportsMetadataListFetchError] = "Error fetching list of reports Metadata.";
 ThMessage[ThStatusCode.ReportFetchError] = "Error fetching report.";
 ThMessage[ThStatusCode.ReportsGenerateInvalidParameters] = "Invalid parameters for generate report";
+
+// File service
+ThMessage[ThStatusCode.FileServiceErrorWritingFile] = "Error writing file";
 
 export class ThResponse {
 	statusCode: ThStatusCode;

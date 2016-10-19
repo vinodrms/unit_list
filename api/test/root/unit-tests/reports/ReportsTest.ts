@@ -82,9 +82,10 @@ describe("Reports", function () {
 			let rgGeneratorFactory = new ReportGroupGeneratorFactory(testContext.appContext, testContext.sessionContext);
 			let rgGenerator = rgGeneratorFactory.getGeneratorStrategy(ReportGroupType.Backup);
 			rgGenerator.generate({}).then(result => {
-				(result.data.length).should.be.above(0);
-				(result.data[0].length).should.be.equal(result.metadata.columns.length);
-				// console.log(JSON.stringify(result, null, '\t'));
+				var arrivalsReport = result.reportsList[0];
+				(arrivalsReport.data.length).should.be.above(0);
+				(arrivalsReport.data[0].length).should.be.equal(arrivalsReport.metadata.columns.length);
+				// console.log(result.buildCSVString());
 				done();
 			}).catch(err =>{
 				done(err);

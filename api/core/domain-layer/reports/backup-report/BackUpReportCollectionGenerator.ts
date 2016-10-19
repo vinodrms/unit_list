@@ -1,10 +1,10 @@
 import { AppContext } from '../../../utils/AppContext';
 import { SessionContext } from '../../../utils/SessionContext';
 import { ReportDO } from '../../../data-layer/reports/data-objects/ReportDO';
+import { ReportGroupDO } from '../ReportGroupDO';
 import { ReportMetadataDO } from '../../../data-layer/reports/data-objects/ReportMetadataDO';
 import { ReportType } from '../../../data-layer/reports/data-objects/ReportMetadataDO';
 import { IReportGeneratorStrategy, IReportGroupGeneratorStrategy } from './../CommonInterfaces';
-import {  } from '../IReportGroupGeneratorStrategy';
 import { ThError } from '../../../utils/th-responses/ThError';
 import { ThStatusCode } from '../../../utils/th-responses/ThResponse';
 import { ThLogger, ThLogLevel } from '../../../utils/logging/ThLogger';
@@ -12,6 +12,7 @@ import { ThUtils } from '../../../utils/ThUtils';
 import { ReportArrivalsReader } from '../backup-report/arrivals/ReportArrivalsReader';
 import { ReportArrivalItemInfo } from '../backup-report/arrivals/utils/ReportArrivalsInfo'
 import { ReportGeneratorFactory } from '../ReportGeneratorFactory';
+
 export class BackUpReportCollectionGenerator implements IReportGroupGeneratorStrategy {
 	constructor(protected _appContext: AppContext, protected _sessionContext: SessionContext) {
 	}
@@ -20,13 +21,18 @@ export class BackUpReportCollectionGenerator implements IReportGroupGeneratorStr
 		return true;
 	}
 
-	public generate(params: Object): Promise<ReportDO> {
-		return new Promise<ReportDO>((resolve: { (result: ReportDO): void }, reject: { (err: ThError): void }) => {
+	public generate(params: Object): Promise<ReportGroupDO> {
+		return new Promise<ReportGroupDO>((resolve: { (result: ReportGroupDO): void }, reject: { (err: ThError): void }) => {
 			let reportGeneratorFactory = new ReportGeneratorFactory(this._appContext, this._sessionContext);
 			if (this.validParameters(params)) {
 				let arrivalsReportGenerator = reportGeneratorFactory.getGeneratorStrategy(ReportType.GuestsArriving);
 				arrivalsReportGenerator.generate({})
-				.then(resolve);
+				.then((arrivalsReport: ReportDO)=>{
+					var rg = new ReportGroupDO();
+					rg.name = "Backup";
+					rg.reportsList = [arrivalsReport, arrivalsReport, arrivalsReport];
+					resolve(rg);
+				});
 			}
 			else {
 				let thError = new ThError(ThStatusCode.PriceProductValidatorEmptyRoomCategoryList, null);
