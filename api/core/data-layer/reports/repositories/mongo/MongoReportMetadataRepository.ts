@@ -98,7 +98,7 @@ export class MongoReportMetadataRepository implements IReportMetadataRepository 
 					name: "Babies"
 				},
 				{
-					type: FieldType.String,
+					type: FieldType.Date,
 					name: "Departing Date"
 				},
 				{

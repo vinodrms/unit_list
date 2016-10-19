@@ -26,13 +26,27 @@ export class BackUpReportCollectionGenerator implements IReportGroupGeneratorStr
 			let reportGeneratorFactory = new ReportGeneratorFactory(this._appContext, this._sessionContext);
 			if (this.validParameters(params)) {
 				let arrivalsReportGenerator = reportGeneratorFactory.getGeneratorStrategy(ReportType.GuestsArriving);
-				arrivalsReportGenerator.generate({})
-				.then((arrivalsReport: ReportDO)=>{
+				let inHouseReportGenerator = reportGeneratorFactory.getGeneratorStrategy(ReportType.GuestsInHouse);
+
+				let arrivalsReport = null;
+				let inHouseReport = null;
+				let depatureReport = null;
+
+				let p1 = arrivalsReportGenerator.generate({})
+				.then((report: ReportDO) => {
+					arrivalsReport = report;
+				})
+				let p2 = inHouseReportGenerator.generate({})
+				.then((report: ReportDO) => {
+					inHouseReport = report;
+				})
+
+				Promise.all([p1, p2]).then(() => {
 					var rg = new ReportGroupDO();
 					rg.name = "Backup";
-					rg.reportsList = [arrivalsReport, arrivalsReport, arrivalsReport];
+					rg.reportsList = [arrivalsReport, inHouseReport, arrivalsReport];
 					resolve(rg);
-				});
+				})
 			}
 			else {
 				let thError = new ThError(ThStatusCode.PriceProductValidatorEmptyRoomCategoryList, null);

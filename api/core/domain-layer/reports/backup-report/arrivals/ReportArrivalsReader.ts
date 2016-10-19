@@ -18,7 +18,6 @@ import { HotelOperationsArrivalsInfo, ArrivalItemInfo } from '../../../../../cor
 import { RoomCategoryDO } from '../../../../../core/data-layer/room-categories/data-objects/RoomCategoryDO';
 import { RoomDO } from '../../../../../core/data-layer/rooms/data-objects/RoomDO';
 
-
 export class ReportArrivalsReader {
 	constructor(private _appContext: AppContext, private _sessionContext: SessionContext) {
 	}
