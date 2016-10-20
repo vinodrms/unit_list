@@ -27,24 +27,29 @@ export class BackUpReportCollectionGenerator implements IReportGroupGeneratorStr
 			if (this.validParameters(params)) {
 				let arrivalsReportGenerator = reportGeneratorFactory.getGeneratorStrategy(ReportType.GuestsArriving);
 				let inHouseReportGenerator = reportGeneratorFactory.getGeneratorStrategy(ReportType.GuestsInHouse);
+				let departureReportGenerator = reportGeneratorFactory.getGeneratorStrategy(ReportType.GuestsDeparting);
 
 				let arrivalsReport = null;
 				let inHouseReport = null;
-				let depatureReport = null;
+				let depaturesReport = null;
 
-				let p1 = arrivalsReportGenerator.generate({})
+				let pArrivals = arrivalsReportGenerator.generate({})
 				.then((report: ReportDO) => {
 					arrivalsReport = report;
 				})
-				let p2 = inHouseReportGenerator.generate({})
+				let pInHouse = inHouseReportGenerator.generate({})
 				.then((report: ReportDO) => {
 					inHouseReport = report;
 				})
+				let pDepartures = departureReportGenerator.generate({})
+				.then((report: ReportDO) => {
+					depaturesReport = report;
+				})
 
-				Promise.all([p1, p2]).then(() => {
+				Promise.all([pArrivals, pInHouse, pDepartures]).then(() => {
 					var rg = new ReportGroupDO();
 					rg.name = "Backup";
-					rg.reportsList = [arrivalsReport, inHouseReport, arrivalsReport];
+					rg.reportsList = [arrivalsReport, inHouseReport, depaturesReport];
 					resolve(rg);
 				})
 			}

@@ -100,13 +100,56 @@ reportGuestsInHouseMetadata.buildFromObject({
 	]
 });
 
+var reportGuestsDeparting = new ReportMetadataDO();
+reportGuestsDeparting.buildFromObject({
+	type: ReportType.GuestsDeparting,
+	name: "Guests Departing",
+	inputParams: [
+		{
+			type: FieldType.DateTime,
+			name: "time",
+			required: true
+		}
+	],
+	columns: [
+		{
+			type: FieldType.String,
+			name: "Customer name"
+		},
+		{
+			type: FieldType.String,
+			name: "Room number"
+		},
+		{
+			type: FieldType.Number,
+			name: "Adults"
+		},
+		{
+			type: FieldType.Number,
+			name: "Children"
+		},
+		{
+			type: FieldType.Number,
+			name: "Babies"
+		},
+		{
+			type: FieldType.Number,
+			name: "Total Price"
+		},
+		{
+			type: FieldType.String,
+			name: "Notes"
+		}
+	]
+});
+
 let row1 = ['Daniel 1', 'a2', 'a3', 'a4', 'a5', 'a6', 'a7', 'a8', 'a9', 'a10'];
 let row2 = ['Nikola 1', 'b2', 'b3', 'b4', 'b5', 'b6', 'b7', 'b8', 'b9', 'b10'];
 let expectedGuestArrivalsReport = new ReportDO();
 expectedGuestArrivalsReport.metadata = reportGuestsArrivingMetadata;
 expectedGuestArrivalsReport.data = [row1, row2];
 
-let reportsMetadataList = [reportGuestsArrivingMetadata, reportGuestsInHouseMetadata];
+let reportsMetadataList = [reportGuestsArrivingMetadata, reportGuestsInHouseMetadata, reportGuestsDeparting];
 
 export var ExpectedReports = { 
 	reportsMetadataList : reportsMetadataList,

@@ -32,7 +32,7 @@ export class ReportGroupDO {
 		for (let i = 0; i < data.length - 1; i++) {
 			rowCSV += this.transformValue(data[i]) + ',';
 		}
-		rowCSV += data[data.length - 1] + endOfLine;
+		rowCSV += this.transformValue(data[data.length - 1]) + endOfLine;
 		return rowCSV;
 	}
 
