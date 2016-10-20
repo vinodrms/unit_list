@@ -9,86 +9,87 @@ import { BookingDOConstraints } from '../../../../data-layer/bookings/data-objec
 import { BookingSearchResultRepoDO } from '../../../../data-layer/bookings/repositories/IBookingRepository';
 import { CustomerIdValidator } from '../../../customers/validators/CustomerIdValidator';
 import { CustomersContainer } from '../../../customers/validators/results/CustomersContainer';
-import { ReportInHouseItemInfo } from './utils/ReportInHouseInfo';
-import { ReportInHouseItemInfoBuilder } from './utils/ReportInHouseInfoBuilder';
+import { ReportDepartureInfo } from './utils/ReportDepartureInfo';
+import { ReportDepartureInfoBuilder } from './utils/ReportDepartureInfoBuilder';
 import { BookingDO, GroupBookingInputChannel, BookingConfirmationStatus } from '../../../../../core/data-layer/bookings/data-objects/BookingDO';
 import { BookingItemDO } from '../../../../../core/domain-layer/bookings/add-bookings/AddBookingItemsDO';
 //TODO:
-import { HotelOperationsRoomInfoReader } from '../../../../../core/domain-layer/hotel-operations/dashboard/room-info/HotelOperationsRoomInfoReader';
-import { HotelOperationsRoomInfo, RoomItemInfo } from '../../../../../core/domain-layer/hotel-operations/dashboard/room-info/utils/HotelOperationsRoomInfo';
+import { HotelOperationsDeparturesReader } from '../../../../../core/domain-layer/hotel-operations/dashboard/departures/HotelOperationsDeparturesReader';
+import { HotelOperationsDeparturesInfo, DeparturelItemInfo } from '../../../../../core/domain-layer/hotel-operations/dashboard/departures/utils/HotelOperationsDeparturesInfo';
 import { RoomCategoryDO } from '../../../../../core/data-layer/room-categories/data-objects/RoomCategoryDO';
 import { RoomDO } from '../../../../../core/data-layer/rooms/data-objects/RoomDO';
 
 
-export class ReportInHouseReader {
+export class ReportDepartureReader {
 	constructor(private _appContext: AppContext, private _sessionContext: SessionContext) {
 	}
 
-	public read(): Promise<ReportInHouseItemInfo[]> {
-		return new Promise<ReportInHouseItemInfo[]>((resolve: { (result: any): void }, reject: { (err: ThError): void }) => {
+	public read(): Promise<ReportDepartureInfo[]> {
+		return new Promise<ReportDepartureInfo[]>((resolve: { (result: any): void }, reject: { (err: ThError): void }) => {
 			this.readCore(resolve, reject);
 		});
 	}
 
 	private readCore(resolve: { (result: any): void }, reject: { (err: ThError): void }) {
-		var inHouseInfoBuilder = new ReportInHouseItemInfoBuilder();
-		var inHouseReader = new HotelOperationsRoomInfoReader(this._appContext, this._sessionContext);
+		var departureInfoBuilder = new ReportDepartureInfoBuilder();
+		var departureReader = new HotelOperationsDeparturesReader(this._appContext, this._sessionContext);
+		var emptyDateRefParam: any = {};
 		var meta = { hotelId: this._sessionContext.sessionDO.hotel.id };
 
-		var inHouseInfo: RoomItemInfo = null;
+		var departureInfo: DeparturelItemInfo = null;
 
-		inHouseReader.read()
-			.then((result: HotelOperationsRoomInfo) => {
+		departureReader.read(emptyDateRefParam)
+			.then((result: HotelOperationsDeparturesInfo) => {
 				let promiseList = [];
-				result.roomInfoList.forEach(roomInfo => {
-					let p = this.buildReportInHouseItem(roomInfo)
+				result.departureInfoList.forEach((departureInfo: DeparturelItemInfo) => {
+					let p = this.buildReportDepartureItem(departureInfo)
 					promiseList.push(p);
 				});
-				Promise.all(promiseList).then((reportInHouseItems:ReportInHouseItemInfo[]) => {
-					let sortedRoomItems = reportInHouseItems.sort(this.sortComparator);
+				Promise.all(promiseList).then((reportDepartureItems: ReportDepartureInfo[]) => {
+					let sortedRoomItems = reportDepartureItems.sort(this.sortComparator);
 					resolve(sortedRoomItems);
 				});
 			})
 			.catch((error: any) => {
-				var thError = new ThError(ThStatusCode.HotelOperationsRoomInfoReaderError, error);
+				var thError = new ThError(ThStatusCode.HotelOperationsDeparturesReaderError, error);
 				if (thError.isNativeError()) {
-					ThLogger.getInstance().logError(ThLogLevel.Error, "error getting hotel room information", this._sessionContext, thError);
+					ThLogger.getInstance().logError(ThLogLevel.Error, "error getting hotel departure information", this._sessionContext, thError);
 				}
 				reject(thError);
 			});
 	}
 
-	private sortComparator(a:ReportInHouseItemInfo, b:ReportInHouseItemInfo){
+	private sortComparator(a: ReportDepartureInfo, b: ReportDepartureInfo) {
 		return a.customerName.localeCompare(b.customerName);
 	}
 
-	private buildReportInHouseItem(roomInfo: RoomItemInfo): Promise<ReportInHouseItemInfo> {
+	private buildReportDepartureItem(departureInfo: DeparturelItemInfo): Promise<ReportDepartureInfo> {
 		return new Promise<any>((resolve: { (result: any): void }, reject: { (err: ThError): void }) => {
-			let inHouseInfoBuilder = new ReportInHouseItemInfoBuilder();
+			let departureInfoBuilder = new ReportDepartureInfoBuilder();
 			let meta = { hotelId: this._sessionContext.sessionDO.hotel.id };
 
 			let roomCategoryRepo = this._appContext.getRepositoryFactory().getRoomCategoryRepository();
 			let roomRepo = this._appContext.getRepositoryFactory().getRoomRepository();
 			let bookingRepo = this._appContext.getRepositoryFactory().getBookingRepository();
 
-			inHouseInfoBuilder.setRoomItemInfo(roomInfo);
+			departureInfoBuilder.setDepartureItemInfo(departureInfo);
 
-			let promiseList = [];
-			if (roomInfo.roomId){
-				let pRoom = roomRepo.getRoomById(meta, roomInfo.roomId).then((room: RoomDO) => {
-					inHouseInfoBuilder.setRoom(room);
+			var pList = [];
+			if (departureInfo.roomId){
+				let pRoom = roomRepo.getRoomById(meta, departureInfo.roomId).then((room: RoomDO) =>{
+					departureInfoBuilder.setRoom(room);
 				})
-				promiseList.push(pRoom);
+				pList.push(pRoom);
 			}
-			if (roomInfo.groupBookingId && roomInfo.bookingId){
-				let pBooking = bookingRepo.getBookingById(meta, roomInfo.groupBookingId, roomInfo.bookingId).then((booking: BookingDO) => {
-					inHouseInfoBuilder.setBooking(booking);
-				});
-				promiseList.push(pBooking);
+			if (departureInfo.groupBookingId && departureInfo.bookingId){
+				let pBooking = bookingRepo.getBookingById(meta, departureInfo.groupBookingId, departureInfo.bookingId).then((booking: BookingDO) => {
+					departureInfoBuilder.setBooking(booking);
+				})
+				pList.push(pBooking);
 			}
-			
-			Promise.all(promiseList).then(()=>{
-				let report = inHouseInfoBuilder.build();
+
+			Promise.all(pList).then(()=>{
+				let report = departureInfoBuilder.build();
 				resolve(report);
 			})
 			.catch((error: any) => {
@@ -98,7 +99,6 @@ export class ReportInHouseReader {
 				}
 				reject(thError);
 			});
-		});
-
+		})
 	}
 }

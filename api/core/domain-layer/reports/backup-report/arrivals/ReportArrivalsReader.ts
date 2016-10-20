@@ -71,28 +71,39 @@ export class ReportArrivalsReader {
 			let bookingRepo = this._appContext.getRepositoryFactory().getBookingRepository();
 
 			arrivalsInfoBuilder.setArrivalsItemInfo(arrivalInfo);
-
-			roomCategoryRepo.getRoomCategoryById(meta, arrivalInfo.roomCategoryId)
-				.then((roomCategory: RoomCategoryDO) => {
+			var promiseList = [];
+			if (arrivalInfo.roomCategoryId){
+				var pRoomCategory = roomCategoryRepo.getRoomCategoryById(meta, arrivalInfo.roomCategoryId).then((roomCategory : RoomCategoryDO)=>{
 					arrivalsInfoBuilder.setRoomCategory(roomCategory);
-					return (arrivalInfo.reservedRoomId) ? roomRepo.getRoomById(meta, arrivalInfo.reservedRoomId) : null;
-				})
-				.then((room: RoomDO) => {
-					arrivalsInfoBuilder.setRoom(room);
-					return bookingRepo.getBookingById(meta, arrivalInfo.groupBookingId, arrivalInfo.bookingId);
-				})
-				.then((booking: BookingDO) => {
-					arrivalsInfoBuilder.setBooking(booking);
-					let report = arrivalsInfoBuilder.build();
-					resolve(report);
-				})
-				.catch((error: any) => {
-					let thError = new ThError(ThStatusCode.HotelOperationsArrivalsReaderError, error);
-					if (thError.isNativeError()) {
-						ThLogger.getInstance().logError(ThLogLevel.Error, "error getting hotel arrival item information", this._sessionContext, thError);
-					}
-					reject(thError);
 				});
+				promiseList.push(pRoomCategory);
+			}
+
+			if (arrivalInfo.reservedRoomId){
+				var pRoom = roomRepo.getRoomById(meta, arrivalInfo.reservedRoomId).then((room:RoomDO) => {
+					arrivalsInfoBuilder.setRoom(room);
+				})
+				promiseList.push(pRoom);
+			}
+			
+			if (arrivalInfo.bookingId){
+				var pBooking = bookingRepo.getBookingById(meta, arrivalInfo.groupBookingId, arrivalInfo.bookingId).then((booking: BookingDO) => {
+					arrivalsInfoBuilder.setBooking(booking);
+				})
+				promiseList.push(pBooking);
+			}
+
+			Promise.all(promiseList).then(() => {
+				let report = arrivalsInfoBuilder.build();
+				resolve(report);
+			})
+			.catch((error: any) => {
+				let thError = new ThError(ThStatusCode.HotelOperationsArrivalsReaderError, error);
+				if (thError.isNativeError()) {
+					ThLogger.getInstance().logError(ThLogLevel.Error, "error getting hotel arrival item information", this._sessionContext, thError);
+				}
+				reject(thError);
+			});
 		});
 
 	}

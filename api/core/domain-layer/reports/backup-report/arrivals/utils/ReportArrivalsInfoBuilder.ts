@@ -40,9 +40,9 @@ export class ReportArrivalsItemInfoBuilder {
 			customerName: this._arrivalInfo.customerName,
 			roomCategory: this._roomCategory ? this._roomCategory.displayName : null,
 			roomNumber: this._room ? this._room.name : null,		// room[roomId].displayName -> make test to create bookings with reserver Room number
-			noAdults: this._arrivalInfo.bookingCapacity.noAdults,
-			noChildren: this._arrivalInfo.bookingCapacity.noChildren,
-			noBabies: this._arrivalInfo.bookingCapacity.noBabies,
+			noAdults: this._arrivalInfo.bookingCapacity ? this._arrivalInfo.bookingCapacity.noAdults: null,
+			noChildren: this._arrivalInfo.bookingCapacity ? this._arrivalInfo.bookingCapacity.noChildren: null,
+			noBabies: this._arrivalInfo.bookingCapacity ? this._arrivalInfo.bookingCapacity.noBabies: null,
 			bookingStatus: null,
 			totalPrice: null,
 			cancelationHours: "",

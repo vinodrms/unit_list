@@ -33,10 +33,10 @@ export class ReportInHouseItemInfoBuilder {
 		var report: ReportInHouseItemInfo = {
 			customerName: this._roomInfo.customerName,
 			roomNumber: this._room ? this._room.name : null,		// room[roomId].displayName -> make test to create bookings with reserver Room number
-			noAdults: this._roomInfo.bookingCapacity.noAdults,
-			noChildren: this._roomInfo.bookingCapacity.noChildren,
-			noBabies: this._roomInfo.bookingCapacity.noBabies,
-			departingDate: this._roomInfo.bookingInterval.getEnd(),
+			noAdults: this._roomInfo.bookingCapacity ? this._roomInfo.bookingCapacity.noAdults: null,
+			noChildren: this._roomInfo.bookingCapacity ? this._roomInfo.bookingCapacity.noChildren: null,
+			noBabies: this._roomInfo.bookingCapacity ? this._roomInfo.bookingCapacity.noBabies: null,
+			departingDate: this._roomInfo.bookingInterval ? this._roomInfo.bookingInterval.getEnd(): null,
 			notes: this._booking ? this._booking.notes : null
 		}
 		return report;
