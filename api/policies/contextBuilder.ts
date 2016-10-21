@@ -7,7 +7,8 @@ import _ = require("underscore");
 
 module.exports = function(req: Express.Request, res: Express.Response, next: any) {
 	var unitPalConfig = new UnitPalConfig();
-	req.appContext = new AppContext(unitPalConfig);
+	let appContext = new AppContext(unitPalConfig);
+	req.appContext = appContext;
 
 	var requestLocale = ThTranslation.DefaultLocale;
 	var thUtils = new ThUtils();
@@ -21,5 +22,8 @@ module.exports = function(req: Express.Request, res: Express.Response, next: any
 	else {
 		req.sessionContext.language = requestLocale;
 	}
+	
+	appContext.thTranslate = new ThTranslation(requestLocale);
+	
 	return next();
 };

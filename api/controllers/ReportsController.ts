@@ -2,7 +2,7 @@ import { BaseController } from './base/BaseController';
 import { ThStatusCode } from '../core/utils/th-responses/ThResponse';
 import { ReportDO } from '../core/data-layer/reports/data-objects/ReportDO';
 import { ReportGroupDO } from '../core/domain-layer/reports/ReportGroupDO';
-import { ReportGroupGeneratorFactory } from '../core/domain-layer/reports/ReportGroupGeneratorFactory';
+import { ReportGroupGeneratorFactory, ReportGroupType } from '../core/domain-layer/reports/ReportGroupGeneratorFactory';
 import { AppContext } from '../core/utils/AppContext';
 
 import { ThError } from '../core/utils/th-responses/ThError';
@@ -29,7 +29,7 @@ export class ReportsController extends BaseController {
 	public getReport(req: Express.Request, res: Express.Response) {
 		// let rgType = req.body.type;
 		// let rgParams = req.body.params;
-		let rgType = 0;
+		let rgType = ReportGroupType.KeyMetrics;
 		let rgParams = {};
 
 		let rgGeneratorFactory = new ReportGroupGeneratorFactory(req.appContext, req.sessionContext);
