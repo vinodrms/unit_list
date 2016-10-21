@@ -4,7 +4,10 @@ import {ThUtils} from '../../../utils/ThUtils';
 export enum ReportType {
 	GuestsArriving,
 	GuestsInHouse,
-	GuestsDeparting
+	GuestsDeparting,
+	KeyMetricsDaily,
+	KeyMetricsMonthly,
+	KeyMetricsYearly,
 }
 
 export enum FieldType{

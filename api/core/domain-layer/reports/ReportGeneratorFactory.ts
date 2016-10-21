@@ -7,6 +7,7 @@ import { IReportGeneratorStrategy } from './CommonInterfaces';
 import { GuestsArrivingReportGeneratorStrategy } from './backup-report/strategies/GuestsArrivingReportGeneratorStrategy';
 import { GuestsDepartingReportGeneratorStrategy } from './backup-report/strategies/GuestsDepartingReportGeneratorStrategy';
 import { GuestsInHouseReportGeneratorStrategy } from './backup-report/strategies/GuestsInHouseReportGeneratorStrategy';
+import { KeyMetricsReportDailyStrategy } from './key-metrics/strategies/KeyMetricsReportDailyStrategy';
 
 export class ReportGeneratorFactory {
 	private _thUtils: ThUtils;
@@ -23,6 +24,8 @@ export class ReportGeneratorFactory {
 				return new GuestsDepartingReportGeneratorStrategy(this._appContext, this._sessionContext);
 			case ReportType.GuestsInHouse:
 				return new GuestsInHouseReportGeneratorStrategy(this._appContext, this._sessionContext);
+			case ReportType.KeyMetricsDaily:
+				return new KeyMetricsReportDailyStrategy(this._appContext, this._sessionContext);
 			default:
 				throw Error("Report not supported");
 		}

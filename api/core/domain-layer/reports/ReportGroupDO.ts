@@ -1,11 +1,16 @@
 import { ReportDO } from '../../data-layer/reports/data-objects/ReportDO';
+import { ThUtils } from '../../utils/ThUtils';
 import _ = require("underscore");
 
 let endOfLine = require('os').EOL;
-
 export class ReportGroupDO {
+	private _utils:ThUtils;
 	public name: string;
 	reportsList: ReportDO[];
+
+	constructor(){
+		this._utils = new ThUtils();
+	}
 
 	public buildCSVString() {
 		let csvString = "";
@@ -37,6 +42,6 @@ export class ReportGroupDO {
 	}
 
 	private transformValue(data){
-		return (data)? data : "";
+		return !this._utils.isUndefinedOrNull(data) ? data : "";
 	}
 }

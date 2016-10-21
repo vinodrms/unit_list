@@ -4,9 +4,11 @@ import { ReportDO } from '../../data-layer/reports/data-objects/ReportDO';
 
 import { IReportGroupGeneratorStrategy } from './CommonInterfaces';
 import { BackUpReportCollectionGenerator } from './backup-report/BackUpReportCollectionGenerator';
+import { KeyMetricsReportGroupGenerator } from './key-metrics/KeyMetricsReportGroupGenerator';
 
 export enum ReportGroupType{
-	Backup
+	Backup,
+	KeyMetrics
 }
 
 export class ReportGroupGeneratorFactory {
@@ -20,6 +22,8 @@ export class ReportGroupGeneratorFactory {
 		switch (type) {
 			case ReportGroupType.Backup:
 				return new BackUpReportCollectionGenerator(this._appContext, this._sessionContext);
+			case ReportGroupType.KeyMetrics:
+				return new KeyMetricsReportGroupGenerator(this._appContext, this._sessionContext);
 			default:
 				throw Error("Report not supported");
 		}
