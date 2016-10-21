@@ -106,7 +106,9 @@
                             <td>
                                 <%= invoiceLabel %> : <%= invoiceReference %><br>
                                 <%= dateLabel %>: <%= dateValue %><br>
-                                <%= addFieldName1 %>: <%= addFieldValue1 %><br>
+                                <%if (addFieldValue1.length > 0) {%>
+                                    <%= addFieldName1 %>: <%= addFieldValue1 %><br>
+                                <%}%>
                             </td>
                         </tr>
                     </table>
@@ -126,9 +128,15 @@
                             
                             <td width="45%">
                                 <%= payerNameValue %><br>
-                                <%= payerAddressFirstLineValue %><br>
-                                <%= payerAddressSecondLineValue %><br>
-                                <%= payerContactLabel %>: <%= payerContactValue %><br>
+                                <%if (payerAddressFirstLineValue.length > 0) {%>
+                                    <%= payerAddressFirstLineValue %><br>
+                                <%}%>
+                                <%if (payerAddressSecondLineValue.length > 0) {%>
+                                    <%= payerAddressSecondLineValue %><br>
+                                <%}%>
+                                <%if (payerContactValue.length > 0) {%>
+                                    <%= payerContactLabel %>: <%= payerContactValue %><br>
+                                <%}%>
                             </td>
                         </tr>
                     </table>
