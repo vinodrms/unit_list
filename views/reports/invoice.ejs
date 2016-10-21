@@ -72,6 +72,22 @@
             text-align:center;
         }
     }
+
+    * {
+        margin: 0;
+    }
+    html, body {
+        height: 100%;
+    }
+    .wrapper {
+        min-height: 100%;
+        height: auto !important; /* This line and the next line are not necessary unless you need IE6 support */
+        height: 100%;
+        margin: 0 auto -90px; /* the bottom margin is the negative value of the footer's height */
+    }
+    .footer, .push {
+        height: 90px; /* .push must be the same height as .footer */
+    }
     </style>
 </head>
 
@@ -195,7 +211,7 @@
             <p style="margin: auto;">
                 <span style="font-size: 7px;">Generated from </span>
                 <img src="<%= unitpalLogoSrcValue %>" style="height:13px;">
-                <small><strong>Unit</strong>Pal</small>
+                <span style="font-size: 9px;"><strong>Unit</strong>Pal</span>
             </p>
         </div>
     </div>

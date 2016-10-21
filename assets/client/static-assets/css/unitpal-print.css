@@ -4,19 +4,6 @@
     src: url(../fonts/UnitpalIcons.TTF);
 }
 
-* {
-    margin: 0;
-}
-html, body {
-    font-family: 'Roboto', sans-serif;
-    height: 100%;
-}
-.wrapper {
-    min-height: 100% !important;
-    height: auto !important; /* This line and the next line are not necessary unless you need IE6 support */
-    height: 100% !important;
-    margin: 0 auto -90px  !important; /* the bottom margin is the negative value of the footer's height */
-}
-.footer, .push {
-    height: 90px !important; /* .push must be the same height as .footer */
+body {
+  font-family: 'Roboto', sans-serif;
 }
