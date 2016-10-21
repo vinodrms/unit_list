@@ -16,8 +16,8 @@
         padding:30px;
         border:1px solid #eee;
         box-shadow:0 0 10px rgba(0, 0, 0, .15);
-        font-size:10px;
-        line-height:20px;
+        font-size:9px;
+        line-height:18px;
         font-family: 'Roboto', sans-serif;
         color:#555;
     }
@@ -107,7 +107,6 @@
                                 <%= invoiceLabel %> : <%= invoiceReference %><br>
                                 <%= dateLabel %>: <%= dateValue %><br>
                                 <%= addFieldName1 %>: <%= addFieldValue1 %><br>
-                                <%= addFieldName2 %>: <%= addFieldValue2 %><br>
                             </td>
                         </tr>
                     </table>
@@ -125,7 +124,7 @@
                                 <%= hotelContactLabel %>: <%= hotelContactValue %><br>
                             </td>
                             
-                            <td>
+                            <td width="45%">
                                 <%= payerNameValue %><br>
                                 <%= payerAddressFirstLineValue %><br>
                                 <%= payerAddressSecondLineValue %><br>
@@ -134,20 +133,6 @@
                         </tr>
                     </table>
                 </td>
-            </tr>
-            
-            <tr class="heading">
-                <td colspan="2">
-                    <%= paymentMethodLabel %>
-                </td>
-                
-                <td colspan="5">
-                    <%= paymentMethodValue %>
-                </td>
-            </tr>
-            
-            <tr class="details">
-                <td colspan="2"></td><td colspan="5"></td>
             </tr>
             
             <tr class="heading">
@@ -196,6 +181,7 @@
             <tr class="total">
                 <td></td>
                 <td colspan="4">
+                   <%= paymentMethodLabel %>: <%= paymentMethodValue %> <br>
                    <%= subtotalLabel %>: <%= ccySymbol %><%= subtotalValue %> <br>
                    <%= vatLabel %>: <%= ccySymbol %><%= totalVat %> <br>
                    <%= totalLabel %>: <%= ccySymbol %><%= totalValue %>

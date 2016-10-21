@@ -14,7 +14,7 @@ import { BookingConfirmationVMContainer } from '../../bookings/booking-confirmat
 import _ = require('underscore');
 
 export class InvoiceConfirmationVMContainer {
-    private static DEFAULT_VALUE_IF_EMPTY: string = '-';
+    private static DEFAULT_VALUE_IF_EMPTY: string = '';
     private static PAY_INVOICE_BY_AGREEMENT_STR: string = 'PAY INVOICE BY AGREEMENT';
     private _thUtils: ThUtils;
 
@@ -32,8 +32,6 @@ export class InvoiceConfirmationVMContainer {
 
     addFieldName1: string;
     addFieldValue1: string;
-    addFieldName2: string;
-    addFieldValue2: string;
 
     fromLabel: string;
     hotelNameValue: string;
@@ -184,14 +182,9 @@ export class InvoiceConfirmationVMContainer {
     private initAdditionalFields() {
         this.addFieldName1 = "";
         this.addFieldValue1 = "";
-        this.addFieldName2 = "";
-        this.addFieldValue2 = "";
         if (this._invoiceAggregatedData.bookingAttachment.exists) {
             this.addFieldName1 = this._thTranslation.translate("Guest");
             this.addFieldValue1 = this._invoiceAggregatedData.bookingAttachment.guest.customerDetails.getName();
-
-            this.addFieldName2 = this._thTranslation.translate("Room");
-            this.addFieldValue2 = this._invoiceAggregatedData.bookingAttachment.roomCategory.displayName;
         }
     }
 
