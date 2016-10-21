@@ -134,9 +134,6 @@ export class InvoiceConfirmationVMContainer {
             this.payerContactValue += (this.payerContactValue.length > 0) ? " / " : "";
             this.payerContactValue += email;
         }
-        if (this.payerContactValue.length == 0) {
-            this.payerContactValue = "-";
-        }
     }
 
     private initItemsTableLabelsAndValues() {
@@ -214,13 +211,13 @@ export class InvoiceConfirmationVMContainer {
             formattedSecondLine += addressDO.city;
         }
         if (!this._thUtils.isUndefinedOrNull(addressDO.postalCode)) {
-            if (!this._thUtils.isUndefinedOrNull(addressDO.city)) {
+            if (formattedSecondLine.length > 0) {
                 formattedSecondLine += ', ';
             }
             formattedSecondLine += addressDO.postalCode;
         }
         if (!this._thUtils.isUndefinedOrNull(addressDO.country) && !this._thUtils.isUndefinedOrNull(addressDO.country.name)) {
-            if (!this._thUtils.isUndefinedOrNull(addressDO.postalCode)) {
+            if (formattedSecondLine.length > 0) {
                 formattedSecondLine += ', ';
             }
             formattedSecondLine += addressDO.country.name;
