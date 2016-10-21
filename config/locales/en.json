@@ -116,7 +116,7 @@
 	// BookingPriceDO
 	"Booking": "Booking",
 	"Cancellation Penalty": "Cancellation Penalty",
-	"Booking (includes %breakfastName%)": "Booking (includes %breakfastName%)",
+	"%description% (includes %breakfastName%)": "%description% (includes %breakfastName%)",
 
 	// Invoice Confirmation
 	"Phone": "Phone",

@@ -104,6 +104,13 @@ export class BookingUtils {
 
         bookingDO.price.breakfast = includedBookingItems.breakfast;
         bookingDO.price.includedInvoiceItemList = includedBookingItems.includedInvoiceItemList;
+
+        if (_.isArray(roomCategoryStatsList)) {
+            var foundRoomCategoryStats: RoomCategoryStatsDO = _.find(roomCategoryStatsList, (stats: RoomCategoryStatsDO) => { return stats.roomCategory.id === bookingDO.roomCategoryId });
+            if (!this._thUtils.isUndefinedOrNull(foundRoomCategoryStats)) {
+                bookingDO.price.description = foundRoomCategoryStats.roomCategory.displayName;
+            }
+        }
     }
     public getIncludedInvoiceItems(priceProduct: PriceProductDO, configCapacity: ConfigCapacityDO, indexedBookingInterval: IndexedBookingInterval): IncludedBookingItems {
         var includedBookingItems = new IncludedBookingItems();
