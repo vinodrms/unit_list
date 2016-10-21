@@ -1,25 +1,25 @@
-import {ThError} from '../../../core/utils/th-responses/ThError';
-import {TestContext} from '../../helpers/TestContext';
-import {BookingDO, GroupBookingInputChannel, BookingConfirmationStatus} from '../../../core/data-layer/bookings/data-objects/BookingDO';
-import {BookingPriceDO, BookingPriceType} from '../../../core/data-layer/bookings/data-objects/price/BookingPriceDO';
-import {HotelDO} from '../../../core/data-layer/hotel/data-objects/HotelDO';
-import {CustomerDO} from '../../../core/data-layer/customers/data-objects/CustomerDO';
-import {RoomCategoryDO} from '../../../core/data-layer/room-categories/data-objects/RoomCategoryDO';
-import {PriceProductDO} from '../../../core/data-layer/price-products/data-objects/PriceProductDO';
-import {ConfigCapacityDO} from '../../../core/data-layer/common/data-objects/bed-config/ConfigCapacityDO';
-import {TestUtils} from '../../helpers/TestUtils';
-import {ThDateUtils} from '../../../core/utils/th-dates/ThDateUtils';
-import {DefaultBillingDetailsDO} from '../../../core/data-layer/bookings/data-objects/default-billing/DefaultBillingDetailsDO';
-import {InvoicePaymentMethodType} from '../../../core/data-layer/invoices/data-objects/payers/InvoicePaymentMethodDO';
-import {ThDateIntervalDO} from '../../../core/utils/th-dates/data-objects/ThDateIntervalDO';
-import {ThTimestampDO} from '../../../core/utils/th-dates/data-objects/ThTimestampDO';
-import {AddBookingItemsDO, BookingItemDO} from '../../../core/domain-layer/bookings/add-bookings/AddBookingItemsDO';
-import {AddBookingItems} from '../../../core/domain-layer/bookings/add-bookings/AddBookingItems';
-import {IndexedBookingInterval} from '../../../core/data-layer/price-products/utils/IndexedBookingInterval';
-import {BookingUtils} from '../../../core/domain-layer/bookings/utils/BookingUtils';
+import { ThError } from '../../../core/utils/th-responses/ThError';
+import { TestContext } from '../../helpers/TestContext';
+import { BookingDO, GroupBookingInputChannel, BookingConfirmationStatus } from '../../../core/data-layer/bookings/data-objects/BookingDO';
+import { BookingPriceDO, BookingPriceType } from '../../../core/data-layer/bookings/data-objects/price/BookingPriceDO';
+import { HotelDO } from '../../../core/data-layer/hotel/data-objects/HotelDO';
+import { CustomerDO } from '../../../core/data-layer/customers/data-objects/CustomerDO';
+import { RoomCategoryStatsDO } from '../../../core/data-layer/room-categories/data-objects/RoomCategoryStatsDO';
+import { PriceProductDO } from '../../../core/data-layer/price-products/data-objects/PriceProductDO';
+import { ConfigCapacityDO } from '../../../core/data-layer/common/data-objects/bed-config/ConfigCapacityDO';
+import { TestUtils } from '../../helpers/TestUtils';
+import { ThDateUtils } from '../../../core/utils/th-dates/ThDateUtils';
+import { DefaultBillingDetailsDO } from '../../../core/data-layer/bookings/data-objects/default-billing/DefaultBillingDetailsDO';
+import { InvoicePaymentMethodType } from '../../../core/data-layer/invoices/data-objects/payers/InvoicePaymentMethodDO';
+import { ThDateIntervalDO } from '../../../core/utils/th-dates/data-objects/ThDateIntervalDO';
+import { ThTimestampDO } from '../../../core/utils/th-dates/data-objects/ThTimestampDO';
+import { AddBookingItemsDO, BookingItemDO } from '../../../core/domain-layer/bookings/add-bookings/AddBookingItemsDO';
+import { AddBookingItems } from '../../../core/domain-layer/bookings/add-bookings/AddBookingItems';
+import { IndexedBookingInterval } from '../../../core/data-layer/price-products/utils/IndexedBookingInterval';
+import { BookingUtils } from '../../../core/domain-layer/bookings/utils/BookingUtils';
 
 export interface IBookingDataSource {
-    getBookingList(hotelDO: HotelDO, customerList: CustomerDO[], roomCategoryList: RoomCategoryDO[], priceProductList: PriceProductDO[]): BookingDO[];
+    getBookingList(hotelDO: HotelDO, customerList: CustomerDO[], roomCategoryStatsList: RoomCategoryStatsDO[], priceProductList: PriceProductDO[]): BookingDO[];
 }
 
 export class DefaultBookingBuilder implements IBookingDataSource {
@@ -33,16 +33,16 @@ export class DefaultBookingBuilder implements IBookingDataSource {
         this._bookingUtils = new BookingUtils();
     }
 
-    public getBookingList(hotelDO: HotelDO, customerList: CustomerDO[], roomCategoryList: RoomCategoryDO[], priceProductList: PriceProductDO[]): BookingDO[] {
+    public getBookingList(hotelDO: HotelDO, customerList: CustomerDO[], roomCategoryStatsList: RoomCategoryStatsDO[], priceProductList: PriceProductDO[]): BookingDO[] {
         var bookingsList = [];
-        bookingsList.push(this.buildBooking("1", "2", "groupRef1", "ref1", hotelDO, customerList, roomCategoryList, priceProductList));
-        bookingsList.push(this.buildBooking("1", "3", "groupRef1", "ref2", hotelDO, customerList, roomCategoryList, priceProductList));
-        bookingsList.push(this.buildBooking("2", "4", "groupRef2", "ref3", hotelDO, customerList, roomCategoryList, priceProductList));
+        bookingsList.push(this.buildBooking("1", "2", "groupRef1", "ref1", hotelDO, customerList, roomCategoryStatsList, priceProductList));
+        bookingsList.push(this.buildBooking("1", "3", "groupRef1", "ref2", hotelDO, customerList, roomCategoryStatsList, priceProductList));
+        bookingsList.push(this.buildBooking("2", "4", "groupRef2", "ref3", hotelDO, customerList, roomCategoryStatsList, priceProductList));
 
         return bookingsList;
     }
 
-    private buildBooking(groupBookingId: string, bookingId: string, groupBookingRef: string, bookingRef: string, hotelDO: HotelDO, customerList: CustomerDO[], roomCategoryList: RoomCategoryDO[], priceProductList: PriceProductDO[]): BookingDO {
+    private buildBooking(groupBookingId: string, bookingId: string, groupBookingRef: string, bookingRef: string, hotelDO: HotelDO, customerList: CustomerDO[], roomCategoryStatsList: RoomCategoryStatsDO[], priceProductList: PriceProductDO[]): BookingDO {
         var priceProduct = priceProductList[0];
         var customerId = this._testUtils.getRandomListElement(customerList).id;
         var roomCategoryId = this._testUtils.getRandomListElement(priceProduct.roomCategoryIdList);
@@ -89,7 +89,7 @@ export class DefaultBookingBuilder implements IBookingDataSource {
         booking.fileAttachmentList = [];
         booking.notes = "This is an automatic booking";
 
-        this._bookingUtils.updateBookingPriceUsingRoomCategory(booking);
+        this._bookingUtils.updateBookingPriceUsingRoomCategory(booking, roomCategoryStatsList);
 
         return booking;
     }
@@ -109,16 +109,16 @@ export class DefaultBookingBuilder implements IBookingDataSource {
         return ThDateIntervalDO.buildThDateIntervalDO(startDate, endDate);
     }
 
-    public loadBookings(dataSource: IBookingDataSource, hotelDO: HotelDO, customerList: CustomerDO[], roomCategoryList: RoomCategoryDO[], priceProductList: PriceProductDO[]): Promise<BookingDO[]> {
+    public loadBookings(dataSource: IBookingDataSource, hotelDO: HotelDO, customerList: CustomerDO[], roomCategoryStatsList: RoomCategoryStatsDO[], priceProductList: PriceProductDO[]): Promise<BookingDO[]> {
         return new Promise<BookingDO[]>((resolve: { (result: BookingDO[]): void }, reject: { (err: ThError): void }) => {
-            this.loadBookingsCore(resolve, reject, dataSource, hotelDO, customerList, roomCategoryList, priceProductList);
+            this.loadBookingsCore(resolve, reject, dataSource, hotelDO, customerList, roomCategoryStatsList, priceProductList);
         });
     }
     private loadBookingsCore(resolve: { (result: BookingDO[]): void }, reject: { (err: ThError): void },
-        dataSource: IBookingDataSource, hotelDO: HotelDO, customerList: CustomerDO[], roomCategoryList: RoomCategoryDO[], priceProductList: PriceProductDO[]) {
+        dataSource: IBookingDataSource, hotelDO: HotelDO, customerList: CustomerDO[], roomCategoryStatsList: RoomCategoryStatsDO[], priceProductList: PriceProductDO[]) {
         var bookingsRepo = this._testContext.appContext.getRepositoryFactory().getBookingRepository();
 
-        var bookingList = dataSource.getBookingList(hotelDO, customerList, roomCategoryList, priceProductList);
+        var bookingList = dataSource.getBookingList(hotelDO, customerList, roomCategoryStatsList, priceProductList);
         var groupedBookingsByGroupBookingRef = _.groupBy(bookingList, (booking: BookingDO) => {
             return booking.groupBookingReference;
         });
@@ -133,8 +133,7 @@ export class DefaultBookingBuilder implements IBookingDataSource {
             reject(error);
         });
 
-
-        bookingsRepo.addBookings({ hotelId: hotelDO.id }, dataSource.getBookingList(hotelDO, customerList, roomCategoryList, priceProductList)).then((bookingList: BookingDO[]) => {
+        bookingsRepo.addBookings({ hotelId: hotelDO.id }, dataSource.getBookingList(hotelDO, customerList, roomCategoryStatsList, priceProductList)).then((bookingList: BookingDO[]) => {
             resolve(bookingList);
         })
     }

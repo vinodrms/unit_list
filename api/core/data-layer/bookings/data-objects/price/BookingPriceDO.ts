@@ -1,8 +1,10 @@
-import {BaseDO} from '../../../common/base/BaseDO';
-import {ThTranslation} from '../../../../utils/localization/ThTranslation';
-import {IInvoiceItemMeta} from '../../../invoices/data-objects/items/IInvoiceItemMeta';
-import {InvoiceItemDO} from '../../../invoices/data-objects/items/InvoiceItemDO';
-import {ThUtils} from '../../../../utils/ThUtils';
+import { BaseDO } from '../../../common/base/BaseDO';
+import { ThTranslation } from '../../../../utils/localization/ThTranslation';
+import { IInvoiceItemMeta } from '../../../invoices/data-objects/items/IInvoiceItemMeta';
+import { InvoiceItemDO } from '../../../invoices/data-objects/items/InvoiceItemDO';
+import { ThUtils } from '../../../../utils/ThUtils';
+
+import _ = require('underscore');
 
 export enum BookingPriceType {
     BookingStay,
@@ -23,11 +25,12 @@ export class BookingPriceDO extends BaseDO implements IInvoiceItemMeta {
 
     vatId: string;
 
+    description: string;
     breakfast: InvoiceItemDO;
     includedInvoiceItemList: InvoiceItemDO[];
 
     protected getPrimitivePropertyKeys(): string[] {
-        return ["movable", "priceType", "roomPricePerNight", "numberOfNights", "totalRoomPrice", "totalOtherPrice", "totalBookingPrice", "vatId"];
+        return ["movable", "priceType", "roomPricePerNight", "numberOfNights", "totalRoomPrice", "totalOtherPrice", "totalBookingPrice", "vatId", "description"];
     }
     public buildFromObject(object: Object) {
         super.buildFromObject(object);
@@ -62,10 +65,20 @@ export class BookingPriceDO extends BaseDO implements IInvoiceItemMeta {
     }
     private getDisplayNameWithBreakfast(thTranslation: ThTranslation): string {
         if (!this.hasBreakfast()) {
-            return thTranslation.translate("Booking");
+            return this.getDisplayNameDescription(thTranslation);
         }
-        return thTranslation.translate("Booking (includes %breakfastName%)", { breakfastName: this.breakfast.meta.getDisplayName(thTranslation) });
+        return thTranslation.translate("%description% (includes %breakfastName%)", {
+            description: this.getDisplayNameDescription(thTranslation),
+            breakfastName: this.breakfast.meta.getDisplayName(thTranslation)
+        });
     }
+    private getDisplayNameDescription(thTranslation: ThTranslation): string {
+        if (_.isString(this.description) && this.description.length > 0) {
+            return this.description;
+        }
+        return thTranslation.translate("Booking");
+    }
+
     public getVatId(): string {
         return this.vatId;
     }

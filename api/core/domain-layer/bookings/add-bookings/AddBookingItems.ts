@@ -1,36 +1,36 @@
-import {ThLogger, ThLogLevel} from '../../../utils/logging/ThLogger';
-import {ThError} from '../../../utils/th-responses/ThError';
-import {ThStatusCode} from '../../../utils/th-responses/ThResponse';
-import {AppContext} from '../../../utils/AppContext';
-import {SessionContext} from '../../../utils/SessionContext';
-import {ThTimestampDO} from '../../../utils/th-dates/data-objects/ThTimestampDO';
-import {GroupBookingInputChannel, BookingDO} from '../../../data-layer/bookings/data-objects/BookingDO';
-import {AddBookingItemsDO, BookingItemDO} from './AddBookingItemsDO';
-import {ValidationResultParser} from '../../common/ValidationResultParser';
-import {HotelDO} from '../../../data-layer/hotel/data-objects/HotelDO';
-import {BookingIntervalValidator} from '../validators/BookingIntervalValidator';
-import {RoomDO} from '../../../data-layer/rooms/data-objects/RoomDO';
-import {RoomSearchResultRepoDO} from '../../../data-layer/rooms/repositories/IRoomRepository';
-import {PriceProductDO} from '../../../data-layer/price-products/data-objects/PriceProductDO';
-import {PriceProductIdValidator} from '../../price-products/validators/PriceProductIdValidator';
-import {PriceProductsContainer} from '../../price-products/validators/results/PriceProductsContainer';
-import {BookingDOConstraints} from '../../../data-layer/bookings/data-objects/BookingDOConstraints';
-import {ThDateIntervalDO} from '../../../utils/th-dates/data-objects/ThDateIntervalDO';
-import {CustomerIdValidator} from '../../customers/validators/CustomerIdValidator';
-import {CustomerDO} from '../../../data-layer/customers/data-objects/CustomerDO';
-import {CustomersContainer} from '../../customers/validators/results/CustomersContainer';
-import {AllotmentIdValidator} from '../../allotments/validators/AllotmentIdValidator';
-import {AllotmentsContainer} from '../../allotments/validators/results/AllotmentsContainer';
-import {AllotmentDO} from '../../../data-layer/allotments/data-objects/AllotmentDO';
-import {BookingItemsConverter, BookingItemsConverterParams} from './utils/BookingItemsConverter';
-import {NewBookingsValidationRules} from './utils/NewBookingsValidationRules';
-import {RoomCategoryStatsAggregator} from '../../room-categories/aggregators/RoomCategoryStatsAggregator';
-import {RoomCategoryStatsDO} from '../../../data-layer/room-categories/data-objects/RoomCategoryStatsDO';
-import {BookingConfirmationEmailSender} from '../booking-confirmations/BookingConfirmationEmailSender';
-import {BookingDataAggregatorQuery} from '../aggregators/BookingDataAggregator';
-import {AddOnProductLoader, AddOnProductItemContainer} from '../../add-on-products/validators/AddOnProductLoader';
-import {TaxResponseRepoDO} from '../../../data-layer/taxes/repositories/ITaxRepository';
-import {TaxDO} from '../../../data-layer/taxes/data-objects/TaxDO';
+import { ThLogger, ThLogLevel } from '../../../utils/logging/ThLogger';
+import { ThError } from '../../../utils/th-responses/ThError';
+import { ThStatusCode } from '../../../utils/th-responses/ThResponse';
+import { AppContext } from '../../../utils/AppContext';
+import { SessionContext } from '../../../utils/SessionContext';
+import { ThTimestampDO } from '../../../utils/th-dates/data-objects/ThTimestampDO';
+import { GroupBookingInputChannel, BookingDO } from '../../../data-layer/bookings/data-objects/BookingDO';
+import { AddBookingItemsDO, BookingItemDO } from './AddBookingItemsDO';
+import { ValidationResultParser } from '../../common/ValidationResultParser';
+import { HotelDO } from '../../../data-layer/hotel/data-objects/HotelDO';
+import { BookingIntervalValidator } from '../validators/BookingIntervalValidator';
+import { RoomDO } from '../../../data-layer/rooms/data-objects/RoomDO';
+import { RoomSearchResultRepoDO } from '../../../data-layer/rooms/repositories/IRoomRepository';
+import { PriceProductDO } from '../../../data-layer/price-products/data-objects/PriceProductDO';
+import { PriceProductIdValidator } from '../../price-products/validators/PriceProductIdValidator';
+import { PriceProductsContainer } from '../../price-products/validators/results/PriceProductsContainer';
+import { BookingDOConstraints } from '../../../data-layer/bookings/data-objects/BookingDOConstraints';
+import { ThDateIntervalDO } from '../../../utils/th-dates/data-objects/ThDateIntervalDO';
+import { CustomerIdValidator } from '../../customers/validators/CustomerIdValidator';
+import { CustomerDO } from '../../../data-layer/customers/data-objects/CustomerDO';
+import { CustomersContainer } from '../../customers/validators/results/CustomersContainer';
+import { AllotmentIdValidator } from '../../allotments/validators/AllotmentIdValidator';
+import { AllotmentsContainer } from '../../allotments/validators/results/AllotmentsContainer';
+import { AllotmentDO } from '../../../data-layer/allotments/data-objects/AllotmentDO';
+import { BookingItemsConverter, BookingItemsConverterParams } from './utils/BookingItemsConverter';
+import { NewBookingsValidationRules } from './utils/NewBookingsValidationRules';
+import { RoomCategoryStatsAggregator } from '../../room-categories/aggregators/RoomCategoryStatsAggregator';
+import { RoomCategoryStatsDO } from '../../../data-layer/room-categories/data-objects/RoomCategoryStatsDO';
+import { BookingConfirmationEmailSender } from '../booking-confirmations/BookingConfirmationEmailSender';
+import { BookingDataAggregatorQuery } from '../aggregators/BookingDataAggregator';
+import { AddOnProductLoader, AddOnProductItemContainer } from '../../add-on-products/validators/AddOnProductLoader';
+import { TaxResponseRepoDO } from '../../../data-layer/taxes/repositories/ITaxRepository';
+import { TaxDO } from '../../../data-layer/taxes/data-objects/TaxDO';
 
 import _ = require('underscore');
 
@@ -135,7 +135,8 @@ export class AddBookingItems {
                     priceProductsContainer: this._loadedPriceProductsContainer,
                     customersContainer: this._loadedCustomersContainer,
                     addOnProductItemContainer: addOnProductItemContainer,
-                    vatTaxList: this._loadedVatTaxList
+                    vatTaxList: this._loadedVatTaxList,
+                    roomCategoryStatsList: this._loadedRoomCategoryStatsList
                 });
                 return bookingItemsConverter.convert(this._bookingItems, this._inputChannel);
             }).then((convertedBookingList: BookingDO[]) => {

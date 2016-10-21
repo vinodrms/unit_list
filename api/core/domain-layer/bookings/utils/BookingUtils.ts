@@ -1,20 +1,21 @@
-import {ThUtils} from '../../../utils/ThUtils';
-import {HotelDO} from '../../../data-layer/hotel/data-objects/HotelDO';
-import {BookingDO, BookingConfirmationStatus} from '../../../data-layer/bookings/data-objects/BookingDO';
-import {TriggerTimeParams} from '../../../data-layer/bookings/data-objects/state-change-time/BookingStateChangeTriggerTimeDO';
-import {PriceProductDO} from '../../../data-layer/price-products/data-objects/PriceProductDO';
-import {ThDateDO} from '../../../utils/th-dates/data-objects/ThDateDO';
-import {ThHourDO} from '../../../utils/th-dates/data-objects/ThHourDO';
-import {ThTimestampDO} from '../../../utils/th-dates/data-objects/ThTimestampDO';
-import {CustomersContainer} from '../../customers/validators/results/CustomersContainer';
-import {BookingPriceDO, BookingPriceType} from '../../../data-layer/bookings/data-objects/price/BookingPriceDO';
-import {IndexedBookingInterval} from '../../../data-layer/price-products/utils/IndexedBookingInterval';
-import {InvoiceItemDO, InvoiceItemType} from '../../../data-layer/invoices/data-objects/items/InvoiceItemDO';
-import {AddOnProductInvoiceItemMetaDO} from '../../../data-layer/invoices/data-objects/items/add-on-products/AddOnProductInvoiceItemMetaDO';
-import {AddOnProductSnapshotDO} from '../../../data-layer/add-on-products/data-objects/AddOnProductSnapshotDO';
-import {AttachedAddOnProductItemDO} from '../../../data-layer/price-products/data-objects/included-items/AttachedAddOnProductItemDO';
-import {IncludedBookingItems} from './IncludedBookingItems';
-import {ConfigCapacityDO} from '../../../data-layer/common/data-objects/bed-config/ConfigCapacityDO';
+import { ThUtils } from '../../../utils/ThUtils';
+import { HotelDO } from '../../../data-layer/hotel/data-objects/HotelDO';
+import { BookingDO, BookingConfirmationStatus } from '../../../data-layer/bookings/data-objects/BookingDO';
+import { TriggerTimeParams } from '../../../data-layer/bookings/data-objects/state-change-time/BookingStateChangeTriggerTimeDO';
+import { PriceProductDO } from '../../../data-layer/price-products/data-objects/PriceProductDO';
+import { ThDateDO } from '../../../utils/th-dates/data-objects/ThDateDO';
+import { ThHourDO } from '../../../utils/th-dates/data-objects/ThHourDO';
+import { ThTimestampDO } from '../../../utils/th-dates/data-objects/ThTimestampDO';
+import { CustomersContainer } from '../../customers/validators/results/CustomersContainer';
+import { BookingPriceDO, BookingPriceType } from '../../../data-layer/bookings/data-objects/price/BookingPriceDO';
+import { IndexedBookingInterval } from '../../../data-layer/price-products/utils/IndexedBookingInterval';
+import { InvoiceItemDO, InvoiceItemType } from '../../../data-layer/invoices/data-objects/items/InvoiceItemDO';
+import { AddOnProductInvoiceItemMetaDO } from '../../../data-layer/invoices/data-objects/items/add-on-products/AddOnProductInvoiceItemMetaDO';
+import { AddOnProductSnapshotDO } from '../../../data-layer/add-on-products/data-objects/AddOnProductSnapshotDO';
+import { AttachedAddOnProductItemDO } from '../../../data-layer/price-products/data-objects/included-items/AttachedAddOnProductItemDO';
+import { IncludedBookingItems } from './IncludedBookingItems';
+import { ConfigCapacityDO } from '../../../data-layer/common/data-objects/bed-config/ConfigCapacityDO';
+import { RoomCategoryStatsDO } from '../../../data-layer/room-categories/data-objects/RoomCategoryStatsDO';
 
 import _ = require('underscore');
 
@@ -70,7 +71,7 @@ export class BookingUtils {
         }
         bookingDO.noShowTime = params.priceProduct.conditions.policy.generateNoShowTriggerTime({ arrivalDate: indexedBookingInterval.getArrivalDate() });
     }
-    public updateBookingPriceUsingRoomCategory(bookingDO: BookingDO) {
+    public updateBookingPriceUsingRoomCategory(bookingDO: BookingDO, roomCategoryStatsList: RoomCategoryStatsDO[]) {
         var indexedBookingInterval = new IndexedBookingInterval(bookingDO.interval);
 
         var previousBookingVatId: string = null;
@@ -103,6 +104,13 @@ export class BookingUtils {
 
         bookingDO.price.breakfast = includedBookingItems.breakfast;
         bookingDO.price.includedInvoiceItemList = includedBookingItems.includedInvoiceItemList;
+
+        if (_.isArray(roomCategoryStatsList)) {
+            var foundRoomCategoryStats: RoomCategoryStatsDO = _.find(roomCategoryStatsList, (stats: RoomCategoryStatsDO) => { return stats.roomCategory.id === bookingDO.roomCategoryId });
+            if (!this._thUtils.isUndefinedOrNull(foundRoomCategoryStats)) {
+                bookingDO.price.description = foundRoomCategoryStats.roomCategory.displayName;
+            }
+        }
     }
     public getIncludedInvoiceItems(priceProduct: PriceProductDO, configCapacity: ConfigCapacityDO, indexedBookingInterval: IndexedBookingInterval): IncludedBookingItems {
         var includedBookingItems = new IncludedBookingItems();
