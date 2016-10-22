@@ -116,7 +116,7 @@
 	// BookingPriceDO
 	"Booking": "Booking",
 	"Cancellation Penalty": "Cancellation Penalty",
-	"Booking (includes %breakfastName%)": "Booking (includes %breakfastName%)",
+	"%description% (includes %breakfastName%)": "%description% (includes %breakfastName%)",
 
 	// Invoice Confirmation
 	"Phone": "Phone",
@@ -131,5 +131,17 @@
 	"Payment Method": "Payment Method",
 	"PAY INVOICE BY AGREEMENT": "PAY INVOICE BY AGREEMENT",
 	"Shared Payment": "Shared Payment",
-	"Guest": "Guest"
+	"Guest": "Guest",
+
+	// Reports
+	"TotalOccupancy" : "sTotalOccupancy",
+	"ConfirmedOccupancy" : "ConfirmedOccupancy",
+	"TotalRevPar" : "TotalRevPar",
+	"ConfirmedRevPar" : "ConfirmedRevPar",
+	"TotalAvgRate" : "TotalAvgRate",
+	"ConfirmedAvgRate" : "ConfirmedAvgRate",
+	"Rooms" : "Rooms",
+	"Allotments" : "Allotments",
+	"RoomRevenue" : "RoomRevenue",
+	"OtherRevenue" : "OtherRevenue"
 }

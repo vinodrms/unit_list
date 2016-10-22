@@ -101,7 +101,7 @@ export class BookingChangeCapacity {
         var newCapacity = new ConfigCapacityDO();
         newCapacity.buildFromObject(this._bookingChangeCapacityDO.configCapacity);
         this._bookingWithDependencies.bookingDO.configCapacity = newCapacity;
-        this._bookingUtils.updateBookingPriceUsingRoomCategory(this._bookingWithDependencies.bookingDO);
+        this._bookingUtils.updateBookingPriceUsingRoomCategory(this._bookingWithDependencies.bookingDO, this._bookingWithDependencies.roomCategoryStatsList);
         var newPrice: number = this._bookingWithDependencies.bookingDO.price.totalBookingPrice;
 
         this._bookingWithDependencies.bookingDO.bookingHistory.logDocumentAction(DocumentActionDO.buildDocumentActionDO({

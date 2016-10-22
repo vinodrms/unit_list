@@ -194,7 +194,7 @@ export class BookingChangePriceProduct {
         this._booking.priceProductSnapshot.openForArrivalIntervalList = [];
         this._booking.priceProductSnapshot.openForDepartureIntervalList = [];
         this._booking.priceProductSnapshot.openIntervalList = [];
-        this._bookingUtils.updateBookingPriceUsingRoomCategory(this._booking);
+        this._bookingUtils.updateBookingPriceUsingRoomCategory(this._booking, this._loadedRoomCategoryStatsList);
 
         var newPrice: number = this._booking.price.totalBookingPrice;
 

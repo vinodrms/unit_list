@@ -1,205 +1,219 @@
+<!doctype html>
 <html>
-
 <head>
     <base href="../../../">
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <!-- Meta, title, CSS, favicons, etc. -->
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <title>Invoice</title>
-
+    <title><%= invoiceLabel %> <%= invoiceReference %></title>
     <!-- Fonts -->
     <link href='assets/client/static-assets/css/roboto-font.css' rel='stylesheet' type='text/css'>
-
-    <!-- CSS -->
-    <link href="assets/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="assets/node_modules/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-
     <!-- Custom CSS -->
-    <link href="assets/client/static-assets/css/custom.css" rel="stylesheet">
     <link href="assets/client/static-assets/css/unitpal-print.css" rel="stylesheet">
 
-    <!-- JS Libraries -->
-    <script src="assets/node_modules/jquery.1/node_modules/jquery/dist/jquery.min.js"></script>
-    <script src="assets/node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <style>
+    .invoice-box{
+        max-width:800px;
+        margin:auto;
+        padding-right: 30px;
+        padding-left: 30px;
+        font-size:9px;
+        line-height:18px;
+        font-family: 'Roboto', sans-serif;
+        color:#555;
+    }
+    
+    .invoice-box table{
+        width:100%;
+        line-height:inherit;
+        text-align:left;
+    }
+    
+    .invoice-box table td{
+        padding:5px;
+        vertical-align:top;
+    }
+    
+    .invoice-box table tr td:nth-child(2){
+        text-align:right;
+    }
+    
+    .invoice-box table tr.heading td{
+        background:#eee;
+        border-bottom:1px solid #ddd;
+        font-weight:bold;
+    }
+    
+    .invoice-box table tr.details td{
+        padding-bottom:20px;
+    }
+    
+    .invoice-box table tr.item td{
+        border-bottom:1px solid #eee;
+    }
+    
+    .invoice-box table tr.item.last td{
+        border-bottom:none;
+    }
+    
+    .invoice-box table tr.total td:nth-child(2){
+        border-top:2px solid #eee;
+        font-weight:bold;
+    }
+    
+    @media only screen and (max-width: 600px) {
+        .invoice-box table tr.top table td{
+            width:100%;
+            display:block;
+            text-align:center;
+        }
+        
+        .invoice-box table tr.information table td{
+            width:100%;
+            display:block;
+            text-align:center;
+        }
+    }
 
+    * {
+        margin: 0;
+    }
+    html, body {
+        height: 100%;
+    }
+    .wrapper {
+        min-height: 100%;
+        height: auto !important; /* This line and the next line are not necessary unless you need IE6 support */
+        height: 100%;
+        margin: 0 auto -90px; /* the bottom margin is the negative value of the footer's height */
+    }
+    .footer, .push {
+        height: 90px; /* .push must be the same height as .footer */
+    }
+    </style>
 </head>
 
 <body>
-    <div style="margin: 10px;">
-        <section class="content invoice">
-            <!-- info row -->
-            <div class="row invoice-info" style="padding-top: 15px;">
-                <div class="col-sm-5 invoice-col">
-                    <div class="row">
-                        <div class="col-xs-8">
-                            <%= fromLabel %>
-                            <strong><%= hotelNameValue %></strong>
-                            <br>
-                            <small><%= hotelWebsite %></small>
-                        </div>
-                        <div class="col-xs-4">
-                            <img src="<%= hotelLogoSrcValue %>" style="max-height:35px; width: auto;"/>
-                        </div>
-                        <div class="col-xs-12">
-                            <p><b><%= hotelVatLabel %>:</b>
-                                <%= hotelVatValue %>
-                            </p>
-                        </div>
-                        <div class="col-xs-12">
-                            <%= hotelAddressFirstLineValue %>
-                        </div>
-                        <div class="col-xs-12">
-                            <%= hotelAddressSecondLineValue %>
-                        </div>
-                        <div class="col-xs-12">
-                            <p><b><%= hotelContactLabel %>:</b>
-                                <%= hotelContactValue %>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                <!-- /.col -->
-                <div class="col-sm-4 invoice-col">
-                    <div class="row">
-                        <div class="col-xs-12">
-                            <%= toLabel %>
-                            <strong><%= payerNameValue %></strong>
-                        </div>
-                        <div class="col-xs-12">
-                            <%= payerAddressFirstLineValue %>
-                        </div>
-                        <div class="col-xs-12">
-                            <%= payerAddressSecondLineValue %>
-                        </div>
-                        <div class="col-xs-12">
-                            <p><b><%= payerContactLabel %>:</b>
-                                <%= payerContactValue %>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-3">
-                    <div class="row" style="height:25px">
-                        <div class="col-md-12" style="height:100%">
-                            <i style="position: absolute; right: 15px; bottom: 0;"><%= invoiceLabel %></i><br><br>
-                        </div>
-                    </div>
-                    <div class="row" style="height:40px">
-                        <div class="col-md-12" style="height:100%">
-                            <p style="position: absolute; top:10px; right:12px; bottom: 0; margin: 0; text-align: right;">
-                                <%= invoiceLabel %> <b><%= invoiceReference %></b>
-                                <br><%= dateLabel %> <b><%= dateValue %></b>
-                                <br><%= addFieldName1 %> <b><%= addFieldValue1 %></b>
-                                <br><%= addFieldName2 %> <b><%= addFieldValue2 %></b>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-xs-12 table">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>
-                                    <%= itemLabel %>
-                                </th>
-                                <th>
-                                    <%= qtyLabel %>
-                                </th>
-                                <th>
-                                    <%= netUnitPriceLabel %>
-                                </th>
-                                <th>
-                                    <%= subtotalLabel %>
-                                </th>
-                                <th>
-                                    <%= vatLabel %>
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <% itemVMList.forEach(function(itemVM){ %>
-                                <tr>
-                                    <td>
-                                        <%= itemVM.name %>
-                                    </td>
-                                    <td>
-                                        <%= itemVM.qty %>
-                                    </td>
-                                    <td>
-                                        <%= ccySymbol %><%= itemVM.netUnitPrice %>
-                                    </td>
-                                    <td>
-                                        <%= ccySymbol %><%= itemVM.subtotal %>
-                                    </td>
-                                    <td>
-                                        <%= ccySymbol %><%= itemVM.vat %>
-                                    </td>
-                                </tr>
-                                <% }); %>
-                        </tbody>
+    <div class="invoice-box wrapper">
+        <br><br>
+        <table cellpadding="0" cellspacing="0">
+            <tr class="top">
+                <td colspan="5">
+                    <table>
+                        <tr>
+                            <td class="title">
+                                <br>
+                                <%= payerNameValue %><br>
+                                <%if (payerAddressFirstLineValue.length > 0) {%>
+                                    <%= payerAddressFirstLineValue %><br>
+                                <%}%>
+                                <%if (payerAddressSecondLineValue.length > 0) {%>
+                                    <%= payerAddressSecondLineValue %><br>
+                                <%}%>
+                                <%if (payerContactValue.length > 0) {%>
+                                    <%= payerContactLabel %>: <%= payerContactValue %><br>
+                                <%}%>
+                            </td>
+                            
+                            <td>
+                                <img src="<%= hotelLogoSrcValue %>" style="width:100%; max-width:130px;"><br>
+                                <%= invoiceLabel %> : <%= invoiceReference %><br>
+                                <%= dateLabel %>: <%= dateValue %><br>
+                                <%if (addFieldValue1.length > 0) {%>
+                                    <%= addFieldName1 %>: <%= addFieldValue1 %><br>
+                                <%}%>
+                            </td>
+                        </tr>
                     </table>
-                </div>
-                <!-- /.col -->
-            </div>
-            <!-- /.row -->
+                </td>
+            </tr>
+            
+            <tr class="heading">
+                <td>
+                    <%= itemLabel %>
+                </td>
+                <td>
+                    <%= qtyLabel %>
+                </td>
+                <td>
+                    <%= netUnitPriceLabel %>
+                </td>
+                <td>
+                    <%= subtotalLabel %>
+                </td>
+                <td>
+                    <%= vatLabel %>
+                </td>
+            </tr>
+            
+            <% itemVMList.forEach(function(itemVM){ %>
+                <%if (itemVM.isLastOne) {%>
+                    <tr class="item last">
+                <% } else{ %>
+                     <tr class="item">
+                <%}%>
+                
+                    <td>
+                        <%= itemVM.name %>
+                    </td>
+                    <td>
+                        <%= itemVM.qty %>
+                    </td>
+                    <td>
+                        <%= ccySymbol %><%= itemVM.netUnitPrice %>
+                    </td>
+                    <td>
+                        <%= ccySymbol %><%= itemVM.subtotal %>
+                    </td>
+                    <td>
+                        <%= ccySymbol %><%= itemVM.vat %>
+                    </td>
+                </tr>
+            <% }); %>
+            
+            <tr class="total">
+                <td></td>
+                <td colspan="4">
+                   <%= paymentMethodLabel %>: <%= paymentMethodValue %> <br>
+                   <%= subtotalLabel %>: <%= ccySymbol %><%= subtotalValue %> <br>
+                   <%= vatLabel %>: <%= ccySymbol %><%= totalVat %> <br>
+                   <%= totalLabel %>: <%= ccySymbol %><%= totalValue %>
+                </td>
+            </tr>
+            <tr class="information">
+                <td colspan="5">
+                    <table>
+                        <tr>
+                            <td>
+                                <%= hotelNameValue %> <br>
+                                <%= hotelWebsite %> <br>
+                                <%= hotelVatLabel %>: <%= hotelVatValue %><br>
+                                <%= hotelAddressFirstLineValue %><br>
+                                <%= hotelAddressSecondLineValue %><br>
+                                <%if (hotelContactValue.length > 0) {%>
+                                    <%= hotelContactLabel %>: <%= hotelContactValue %><br>
+                                <%}%>
+                            </td>
+                            <td width="45%">
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
 
-            <div class="row">
-                <!-- accepted payments column -->
-                <div class="col-xs-6">
-                    <p class="lead">
-                        <%= paymentMethodLabel %>:</p>
-                    <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;text-transform: uppercase;">
-                        <%= paymentMethodValue %>
-                    </p>
-                </div>
-                <!-- /.col -->
-                <div class="col-xs-6">
-                    <div class="table-responsive">
-                        <table class="table">
-                            <tbody>
-                                <tr>
-                                    <th style="width:50%">
-                                        <%= subtotalLabel %>:</th>
-                                    <td>
-                                        <%= ccySymbol %><%= subtotalValue %>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        <%= vatLabel %>:</th>
-                                    <td>
-                                        <%= ccySymbol %><%= totalVat %>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        <%= totalLabel %>:</th>
-                                    <td>
-                                        <%= ccySymbol %><%= totalValue %>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12" style="text-align:center; width:100%; padding-top: 25px;">
-                    <p style="margin: auto;">
-                        <span style="font-size: 7px;">Generated from </span>
-                        <img src="<%= unitpalLogoSrcValue %>" style="height:13px">
-                        <small><strong>Unit</strong>Pal</small>
-                    </p>
-                </div>
-            </div>
-        </section>
+            <tr class="top footer">
+                <td colspan="5">
+                    
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="footer">
+        <div style="text-align:center; width:100%; padding-top: 25px;">
+            <p style="margin: auto;">
+                <span style="font-size: 7px;">Generated from </span>
+                <img src="<%= unitpalLogoSrcValue %>" style="height:13px;">
+                <span style="font-size: 9px;"><strong>Unit</strong>Pal</span>
+            </p>
+        </div>
     </div>
 </body>
-
 </html>

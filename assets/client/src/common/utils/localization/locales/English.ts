@@ -553,6 +553,7 @@ export var EnglishTranslations: Object = {
 	"No access to bill": "No access to bill",
 	"You cannot have more than %noCompOrTa% Company or Travel Agent on a booking": "You cannot have more than %noCompOrTa% Company or Travel Agent on a booking",
 	"Booking": "Booking",
+	"%description% (includes %breakfastName%)": "%description% (includes %breakfastName%)",
 	"Customer Name or References": "Customer Name or References",
 	"Status": "Status",
 	"Confirmed": "Confirmed",

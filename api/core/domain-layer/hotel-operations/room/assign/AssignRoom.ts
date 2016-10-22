@@ -1,32 +1,32 @@
-import {ThLogger, ThLogLevel} from '../../../../utils/logging/ThLogger';
-import {ThError} from '../../../../utils/th-responses/ThError';
-import {ThStatusCode} from '../../../../utils/th-responses/ThResponse';
-import {AppContext} from '../../../../utils/AppContext';
-import {SessionContext} from '../../../../utils/SessionContext';
-import {ThUtils} from '../../../../utils/ThUtils';
-import {ThTimestampDO} from '../../../../utils/th-dates/data-objects/ThTimestampDO';
-import {ValidationResultParser} from '../../../common/ValidationResultParser';
-import {AssignRoomDO} from './AssignRoomDO';
-import {BookingDO} from '../../../../data-layer/bookings/data-objects/BookingDO';
-import {BookingDOConstraints} from '../../../../data-layer/bookings/data-objects/BookingDOConstraints';
-import {BookingSearchResultRepoDO} from '../../../../data-layer/bookings/repositories/IBookingRepository';
-import {RoomCategoryStatsAggregator} from '../../../room-categories/aggregators/RoomCategoryStatsAggregator';
-import {RoomCategoryStatsDO} from '../../../../data-layer/room-categories/data-objects/RoomCategoryStatsDO';
-import {RoomDO} from '../../../../data-layer/rooms/data-objects/RoomDO';
-import {RoomSearchResultRepoDO} from '../../../../data-layer/rooms/repositories/IRoomRepository';
-import {PriceProductsContainer} from '../../../price-products/validators/results/PriceProductsContainer';
-import {IAssignRoomStrategy} from './strategies/IAssignRoomStrategy';
-import {CheckInStrategy} from './strategies/CheckInStrategy';
-import {ReserveRoomStrategy} from './strategies/ReserveRoomStrategy';
-import {ChangeRoomStrategy} from './strategies/ChangeRoomStrategy';
-import {HotelTime} from '../../common/hotel-time/HotelTime';
-import {BusinessValidationRuleContainer} from '../../../common/validation-rules/BusinessValidationRuleContainer';
-import {BookingRoomCategoryValidationRule} from '../../../bookings/validators/validation-rules/booking/BookingRoomCategoryValidationRule';
-import {BookingOccupancyCalculator} from '../../../bookings/search-bookings/utils/occupancy-calculator/BookingOccupancyCalculator';
-import {IBookingOccupancy} from '../../../bookings/search-bookings/utils/occupancy-calculator/results/IBookingOccupancy';
-import {BookingUtils} from '../../../bookings/utils/BookingUtils';
-import {BookingWithDependencies} from '../../booking/utils/BookingWithDependencies';
-import {BookingWithDependenciesLoader} from '../../booking/utils/BookingWithDependenciesLoader';
+import { ThLogger, ThLogLevel } from '../../../../utils/logging/ThLogger';
+import { ThError } from '../../../../utils/th-responses/ThError';
+import { ThStatusCode } from '../../../../utils/th-responses/ThResponse';
+import { AppContext } from '../../../../utils/AppContext';
+import { SessionContext } from '../../../../utils/SessionContext';
+import { ThUtils } from '../../../../utils/ThUtils';
+import { ThTimestampDO } from '../../../../utils/th-dates/data-objects/ThTimestampDO';
+import { ValidationResultParser } from '../../../common/ValidationResultParser';
+import { AssignRoomDO } from './AssignRoomDO';
+import { BookingDO } from '../../../../data-layer/bookings/data-objects/BookingDO';
+import { BookingDOConstraints } from '../../../../data-layer/bookings/data-objects/BookingDOConstraints';
+import { BookingSearchResultRepoDO } from '../../../../data-layer/bookings/repositories/IBookingRepository';
+import { RoomCategoryStatsAggregator } from '../../../room-categories/aggregators/RoomCategoryStatsAggregator';
+import { RoomCategoryStatsDO } from '../../../../data-layer/room-categories/data-objects/RoomCategoryStatsDO';
+import { RoomDO } from '../../../../data-layer/rooms/data-objects/RoomDO';
+import { RoomSearchResultRepoDO } from '../../../../data-layer/rooms/repositories/IRoomRepository';
+import { PriceProductsContainer } from '../../../price-products/validators/results/PriceProductsContainer';
+import { IAssignRoomStrategy } from './strategies/IAssignRoomStrategy';
+import { CheckInStrategy } from './strategies/CheckInStrategy';
+import { ReserveRoomStrategy } from './strategies/ReserveRoomStrategy';
+import { ChangeRoomStrategy } from './strategies/ChangeRoomStrategy';
+import { HotelTime } from '../../common/hotel-time/HotelTime';
+import { BusinessValidationRuleContainer } from '../../../common/validation-rules/BusinessValidationRuleContainer';
+import { BookingRoomCategoryValidationRule } from '../../../bookings/validators/validation-rules/booking/BookingRoomCategoryValidationRule';
+import { BookingOccupancyCalculator } from '../../../bookings/search-bookings/utils/occupancy-calculator/BookingOccupancyCalculator';
+import { IBookingOccupancy } from '../../../bookings/search-bookings/utils/occupancy-calculator/results/IBookingOccupancy';
+import { BookingUtils } from '../../../bookings/utils/BookingUtils';
+import { BookingWithDependencies } from '../../booking/utils/BookingWithDependencies';
+import { BookingWithDependenciesLoader } from '../../booking/utils/BookingWithDependenciesLoader';
 
 import _ = require('underscore');
 
@@ -165,6 +165,6 @@ export class AssignRoom {
         if (!this._needsPriceRecomputing) {
             return;
         }
-        this._bookingUtils.updateBookingPriceUsingRoomCategory(this._bookingWithDependencies.bookingDO);
+        this._bookingUtils.updateBookingPriceUsingRoomCategory(this._bookingWithDependencies.bookingDO, this._bookingWithDependencies.roomCategoryStatsList);
     }
 }

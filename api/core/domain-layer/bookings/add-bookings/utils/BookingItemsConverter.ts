@@ -1,27 +1,28 @@
-import {AddBookingItemsDO, BookingItemDO} from '../AddBookingItemsDO';
-import {AppContext} from '../../../../utils/AppContext';
-import {SessionContext} from '../../../../utils/SessionContext';
-import {ThLogger, ThLogLevel} from '../../../../utils/logging/ThLogger';
-import {ThError} from '../../../../utils/th-responses/ThError';
-import {ThStatusCode} from '../../../../utils/th-responses/ThResponse';
-import {ThTimestampDO} from '../../../../utils/th-dates/data-objects/ThTimestampDO';
-import {GroupBookingInputChannel, BookingDO, GroupBookingStatus, BookingConfirmationStatus} from '../../../../data-layer/bookings/data-objects/BookingDO';
-import {ThUtils} from '../../../../utils/ThUtils';
-import {IndexedBookingInterval} from '../../../../data-layer/price-products/utils/IndexedBookingInterval';
-import {DocumentHistoryDO} from '../../../../data-layer/common/data-objects/document-history/DocumentHistoryDO';
-import {DocumentActionDO} from '../../../../data-layer/common/data-objects/document-history/DocumentActionDO';
-import {PriceProductDO} from '../../../../data-layer/price-products/data-objects/PriceProductDO';
-import {PriceProductsContainer} from '../../../price-products/validators/results/PriceProductsContainer';
-import {HotelDO} from '../../../../data-layer/hotel/data-objects/HotelDO';
-import {BookingUtils} from '../../utils/BookingUtils';
-import {ThDateIntervalDO} from '../../../../utils/th-dates/data-objects/ThDateIntervalDO';
-import {BookingPriceDO, BookingPriceType} from '../../../../data-layer/bookings/data-objects/price/BookingPriceDO';
-import {CustomersContainer} from '../../../customers/validators/results/CustomersContainer';
-import {AddOnProductItemContainer, AddOnProductItem} from '../../../add-on-products/validators/AddOnProductLoader';
-import {AddOnProductDO} from '../../../../data-layer/add-on-products/data-objects/AddOnProductDO';
-import {InvoiceItemDO, InvoiceItemType} from '../../../../data-layer/invoices/data-objects/items/InvoiceItemDO';
-import {AddOnProductInvoiceItemMetaDO} from '../../../../data-layer/invoices/data-objects/items/add-on-products/AddOnProductInvoiceItemMetaDO';
-import {TaxDO, TaxType} from '../../../../data-layer/taxes/data-objects/TaxDO';
+import { AddBookingItemsDO, BookingItemDO } from '../AddBookingItemsDO';
+import { AppContext } from '../../../../utils/AppContext';
+import { SessionContext } from '../../../../utils/SessionContext';
+import { ThLogger, ThLogLevel } from '../../../../utils/logging/ThLogger';
+import { ThError } from '../../../../utils/th-responses/ThError';
+import { ThStatusCode } from '../../../../utils/th-responses/ThResponse';
+import { ThTimestampDO } from '../../../../utils/th-dates/data-objects/ThTimestampDO';
+import { GroupBookingInputChannel, BookingDO, GroupBookingStatus, BookingConfirmationStatus } from '../../../../data-layer/bookings/data-objects/BookingDO';
+import { ThUtils } from '../../../../utils/ThUtils';
+import { IndexedBookingInterval } from '../../../../data-layer/price-products/utils/IndexedBookingInterval';
+import { DocumentHistoryDO } from '../../../../data-layer/common/data-objects/document-history/DocumentHistoryDO';
+import { DocumentActionDO } from '../../../../data-layer/common/data-objects/document-history/DocumentActionDO';
+import { PriceProductDO } from '../../../../data-layer/price-products/data-objects/PriceProductDO';
+import { PriceProductsContainer } from '../../../price-products/validators/results/PriceProductsContainer';
+import { HotelDO } from '../../../../data-layer/hotel/data-objects/HotelDO';
+import { BookingUtils } from '../../utils/BookingUtils';
+import { ThDateIntervalDO } from '../../../../utils/th-dates/data-objects/ThDateIntervalDO';
+import { BookingPriceDO, BookingPriceType } from '../../../../data-layer/bookings/data-objects/price/BookingPriceDO';
+import { CustomersContainer } from '../../../customers/validators/results/CustomersContainer';
+import { AddOnProductItemContainer, AddOnProductItem } from '../../../add-on-products/validators/AddOnProductLoader';
+import { AddOnProductDO } from '../../../../data-layer/add-on-products/data-objects/AddOnProductDO';
+import { InvoiceItemDO, InvoiceItemType } from '../../../../data-layer/invoices/data-objects/items/InvoiceItemDO';
+import { AddOnProductInvoiceItemMetaDO } from '../../../../data-layer/invoices/data-objects/items/add-on-products/AddOnProductInvoiceItemMetaDO';
+import { TaxDO, TaxType } from '../../../../data-layer/taxes/data-objects/TaxDO';
+import { RoomCategoryStatsDO } from '../../../../data-layer/room-categories/data-objects/RoomCategoryStatsDO';
 
 import _ = require('underscore');
 
@@ -32,6 +33,7 @@ export class BookingItemsConverterParams {
     customersContainer: CustomersContainer;
     addOnProductItemContainer: AddOnProductItemContainer;
     vatTaxList: TaxDO[];
+    roomCategoryStatsList: RoomCategoryStatsDO[];
 }
 
 export class BookingItemsConverter {
@@ -122,7 +124,7 @@ export class BookingItemsConverter {
                 hotel: this._converterParams.hotelDO,
                 currentHotelTimestamp: this._converterParams.currentHotelTimestamp
             });
-            this._bookingUtils.updateBookingPriceUsingRoomCategory(bookingDO);
+            this._bookingUtils.updateBookingPriceUsingRoomCategory(bookingDO, this._converterParams.roomCategoryStatsList);
             this._bookingUtils.updateIndexedSearchTerms(bookingDO, this._converterParams.customersContainer);
             this._bookingUtils.updateDisplayCustomerId(bookingDO, this._converterParams.customersContainer);
             bookingDO.price.vatId = this.getBookingTaxId(priceProduct);
