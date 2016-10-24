@@ -1,14 +1,14 @@
-import {ThLogger, ThLogLevel} from '../../../../../utils/logging/ThLogger';
-import {ThError} from '../../../../../utils/th-responses/ThError';
-import {ThStatusCode} from '../../../../../utils/th-responses/ThResponse';
-import {ThUtils} from '../../../../../utils/ThUtils';
-import {MongoRepository, MongoErrorCodes, MongoSearchCriteria} from '../../../../common/base/MongoRepository';
-import {HotelDO} from '../../../data-objects/HotelDO';
-import {HotelContactDetailsDO} from '../../../data-objects/hotel-contact-details/HotelContactDetailsDO';
-import {GeoLocationDO} from '../../../../common/data-objects/geo-location/GeoLocationDO';
-import {HotelMetaRepoDO, BasicHotelInfoRepoDO, PaymentsPoliciesRepoDO, PropertyDetailsRepoDO} from '../../IHotelRepository';
-import {LazyLoadRepoDO} from '../../../../common/repo-data-objects/LazyLoadRepoDO';
-import {ThTimestampDO} from '../../../../../utils/th-dates/data-objects/ThTimestampDO';
+import { ThLogger, ThLogLevel } from '../../../../../utils/logging/ThLogger';
+import { ThError } from '../../../../../utils/th-responses/ThError';
+import { ThStatusCode } from '../../../../../utils/th-responses/ThResponse';
+import { ThUtils } from '../../../../../utils/ThUtils';
+import { MongoRepository, MongoErrorCodes, MongoSearchCriteria } from '../../../../common/base/MongoRepository';
+import { HotelDO } from '../../../data-objects/HotelDO';
+import { HotelContactDetailsDO } from '../../../data-objects/hotel-contact-details/HotelContactDetailsDO';
+import { GeoLocationDO } from '../../../../common/data-objects/geo-location/GeoLocationDO';
+import { HotelMetaRepoDO, BasicHotelInfoRepoDO, PaymentsPoliciesRepoDO, PropertyDetailsRepoDO } from '../../IHotelRepository';
+import { LazyLoadRepoDO } from '../../../../common/repo-data-objects/LazyLoadRepoDO';
+import { ThTimestampDO } from '../../../../../utils/th-dates/data-objects/ThTimestampDO';
 
 import _ = require("underscore");
 
@@ -50,7 +50,8 @@ export class MongoHotelDetailsRepository extends MongoRepository {
 	public updatePaymentsPolicies(hotelMeta: HotelMetaRepoDO, paymPoliciesParams: PaymentsPoliciesRepoDO): Promise<HotelDO> {
 		return this.findAndModifyHotel(hotelMeta, {
 			"paymentMethodIdList": paymPoliciesParams.paymentMethodIdList,
-			"ccyCode": paymPoliciesParams.ccyCode
+			"ccyCode": paymPoliciesParams.ccyCode,
+			"additionalInvoiceDetails": paymPoliciesParams.additionalInvoiceDetails
 		});
 	}
 

@@ -40,6 +40,7 @@ export class InvoiceConfirmationVMContainer {
     hotelContactValue: string;
     hotelContactLabel: string;
     hotelWebsite: string;
+    additionalInvoiceDetails: string;
 
     toLabel: string;
     payerNameValue: string;
@@ -114,6 +115,10 @@ export class InvoiceConfirmationVMContainer {
         this.hotelWebsite = "";
         if (_.isString(this._hotel.contactDetails.websiteUrl) && this._hotel.contactDetails.websiteUrl.length > 0) {
             this.hotelWebsite = this._hotel.contactDetails.websiteUrl;
+        }
+        this.additionalInvoiceDetails = "";
+        if (_.isString(this._hotel.additionalInvoiceDetails) && this._hotel.additionalInvoiceDetails.length > 0) {
+            this.additionalInvoiceDetails = this._hotel.additionalInvoiceDetails;
         }
     }
 

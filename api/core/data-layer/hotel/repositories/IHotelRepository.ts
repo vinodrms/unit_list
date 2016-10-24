@@ -32,6 +32,7 @@ export interface BasicHotelInfoRepoDO {
 export interface PaymentsPoliciesRepoDO {
 	ccyCode: string;
 	paymentMethodIdList: string[];
+	additionalInvoiceDetails: string;
 }
 export interface PropertyDetailsRepoDO {
 	operationHours: OperationHoursDO;
