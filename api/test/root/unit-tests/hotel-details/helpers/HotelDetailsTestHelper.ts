@@ -1,10 +1,10 @@
-import {HotelUpdateBasicInfoDO} from '../../../../../core/domain-layer/hotel-details/basic-info/HotelUpdateBasicInfoDO';
-import {HotelDO} from '../../../../../core/data-layer/hotel/data-objects/HotelDO';
-import {HotelUpdatePaymentsPoliciesDO} from '../../../../../core/domain-layer/hotel-details/payment-policies/HotelUpdatePaymentsPoliciesDO';
-import {DefaultDataBuilder} from '../../../../db-initializers/DefaultDataBuilder';
-import {PaymentMethodDO} from '../../../../../core/data-layer/common/data-objects/payment-method/PaymentMethodDO';
-import {AmenityDO} from '../../../../../core/data-layer/common/data-objects/amenity/AmenityDO';
-import {HotelUpdatePropertyDetailsDO, HotelUpdatePropertyDetailsHourDO} from '../../../../../core/domain-layer/hotel-details/property-details/HotelUpdatePropertyDetailsDO';
+import { HotelUpdateBasicInfoDO } from '../../../../../core/domain-layer/hotel-details/basic-info/HotelUpdateBasicInfoDO';
+import { HotelDO } from '../../../../../core/data-layer/hotel/data-objects/HotelDO';
+import { HotelUpdatePaymentsPoliciesDO } from '../../../../../core/domain-layer/hotel-details/payment-policies/HotelUpdatePaymentsPoliciesDO';
+import { DefaultDataBuilder } from '../../../../db-initializers/DefaultDataBuilder';
+import { PaymentMethodDO } from '../../../../../core/data-layer/common/data-objects/payment-method/PaymentMethodDO';
+import { AmenityDO } from '../../../../../core/data-layer/common/data-objects/amenity/AmenityDO';
+import { HotelUpdatePropertyDetailsDO, HotelUpdatePropertyDetailsHourDO } from '../../../../../core/domain-layer/hotel-details/property-details/HotelUpdatePropertyDetailsDO';
 
 import _ = require('underscore');
 
@@ -51,6 +51,7 @@ export class HotelDetailsTestHelper {
 		return {
 			ccyCode: "EUR",
 			paymentMethodIdList: paymentMethodIdList,
+			additionalInvoiceDetails: "IBAN RO34INGB736137812638"
 		}
 	}
 	public getPaymentMethodIdListFromPaymentMethodList(paymentMethodList: PaymentMethodDO[]): string[] {

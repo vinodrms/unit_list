@@ -39,6 +39,9 @@ export class BasicInfoPaymentsAndPoliciesEditService {
 	private didAddTax(): boolean {
 		return this._taxContainer && this._taxContainer.vatList.length > 0;
 	}
+	public updateAdditionalInvoiceDetails(additionalInvoiceDetails: string) {
+		this._hotel.additionalInvoiceDetails = additionalInvoiceDetails;
+	}
 	public savePaymentsAndPolicies(): Observable<any> {
 		this.didSubmitForm = true;
 		if (!this.isValid()) {

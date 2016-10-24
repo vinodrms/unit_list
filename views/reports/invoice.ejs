@@ -88,6 +88,9 @@
     .footer, .push {
         height: 90px; /* .push must be the same height as .footer */
     }
+    .text-details {
+        white-space:pre-wrap;
+    }
     </style>
 </head>
 
@@ -190,6 +193,9 @@
                                 <%= hotelAddressSecondLineValue %><br>
                                 <%if (hotelContactValue.length > 0) {%>
                                     <%= hotelContactLabel %>: <%= hotelContactValue %><br>
+                                <%}%>
+                                <%if (additionalInvoiceDetails.length > 0) {%>
+                                    <span class="text-details"><%=additionalInvoiceDetails%></span>
                                 <%}%>
                             </td>
                             <td width="45%">
