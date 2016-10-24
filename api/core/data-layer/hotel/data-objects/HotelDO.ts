@@ -1,10 +1,10 @@
-import {BaseDO} from '../../common/base/BaseDO';
-import {HotelContactDetailsDO} from './hotel-contact-details/HotelContactDetailsDO';
-import {GeoLocationDO} from '../../common/data-objects/geo-location/GeoLocationDO';
-import {UserDO} from './user/UserDO';
-import {AmenityDO} from '../../common/data-objects/amenity/AmenityDO';
-import {OperationHoursDO} from './operation-hours/OperationHoursDO';
-import {ThTimestampDO} from '../../../utils/th-dates/data-objects/ThTimestampDO';
+import { BaseDO } from '../../common/base/BaseDO';
+import { HotelContactDetailsDO } from './hotel-contact-details/HotelContactDetailsDO';
+import { GeoLocationDO } from '../../common/data-objects/geo-location/GeoLocationDO';
+import { UserDO } from './user/UserDO';
+import { AmenityDO } from '../../common/data-objects/amenity/AmenityDO';
+import { OperationHoursDO } from './operation-hours/OperationHoursDO';
+import { ThTimestampDO } from '../../../utils/th-dates/data-objects/ThTimestampDO';
 
 export class HotelDO extends BaseDO {
 	constructor() {
@@ -20,13 +20,14 @@ export class HotelDO extends BaseDO {
 	amenityIdList: string[];
 	customAmenityList: AmenityDO[];
 	paymentMethodIdList: string[];
+	additionalInvoiceDetails: string;
 	configurationCompleted: boolean;
 	configurationCompletedTimestamp: ThTimestampDO;
 	timezone: string;
 	operationHours: OperationHoursDO;
 
 	protected getPrimitivePropertyKeys(): string[] {
-		return ["id", "versionId", "logoUrl", "ccyCode", "amenityIdList", "paymentMethodIdList", "configurationCompleted", "timezone"];
+		return ["id", "versionId", "logoUrl", "ccyCode", "amenityIdList", "paymentMethodIdList", "additionalInvoiceDetails", "configurationCompleted", "timezone"];
 	}
 	public buildFromObject(object: Object) {
 		super.buildFromObject(object);

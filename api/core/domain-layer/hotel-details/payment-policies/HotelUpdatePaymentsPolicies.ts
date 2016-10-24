@@ -1,17 +1,17 @@
-import {ThLogger, ThLogLevel} from '../../../utils/logging/ThLogger';
-import {ThError} from '../../../utils/th-responses/ThError';
-import {ThStatusCode} from '../../../utils/th-responses/ThResponse';
-import {AppContext} from '../../../utils/AppContext';
-import {SessionContext} from '../../../utils/SessionContext';
-import {HotelUpdatePaymentsPoliciesDO} from './HotelUpdatePaymentsPoliciesDO';
-import {HotelDetailsBuilder, HotelDetailsDO} from '../utils/HotelDetailsBuilder';
-import {ValidationResultParser} from '../../common/ValidationResultParser';
-import {HotelDO} from '../../../data-layer/hotel/data-objects/HotelDO';
-import {PaymentMethodDO} from '../../../data-layer/common/data-objects/payment-method/PaymentMethodDO';
-import {ThUtils} from '../../../utils/ThUtils';
-import {HotelMetaRepoDO, PaymentsPoliciesRepoDO} from '../../../data-layer/hotel/repositories/IHotelRepository';
-import {CurrencyDO} from '../../../data-layer/common/data-objects/currency/CurrencyDO';
-import {PaymentMethodIdListValidator} from './common/PaymentMethodIdListValidator';
+import { ThLogger, ThLogLevel } from '../../../utils/logging/ThLogger';
+import { ThError } from '../../../utils/th-responses/ThError';
+import { ThStatusCode } from '../../../utils/th-responses/ThResponse';
+import { AppContext } from '../../../utils/AppContext';
+import { SessionContext } from '../../../utils/SessionContext';
+import { HotelUpdatePaymentsPoliciesDO } from './HotelUpdatePaymentsPoliciesDO';
+import { HotelDetailsBuilder, HotelDetailsDO } from '../utils/HotelDetailsBuilder';
+import { ValidationResultParser } from '../../common/ValidationResultParser';
+import { HotelDO } from '../../../data-layer/hotel/data-objects/HotelDO';
+import { PaymentMethodDO } from '../../../data-layer/common/data-objects/payment-method/PaymentMethodDO';
+import { ThUtils } from '../../../utils/ThUtils';
+import { HotelMetaRepoDO, PaymentsPoliciesRepoDO } from '../../../data-layer/hotel/repositories/IHotelRepository';
+import { CurrencyDO } from '../../../data-layer/common/data-objects/currency/CurrencyDO';
+import { PaymentMethodIdListValidator } from './common/PaymentMethodIdListValidator';
 
 import _ = require("underscore");
 
@@ -84,7 +84,7 @@ export class HotelUpdatePaymentsPolicies {
 				ThLogger.getInstance().logError(ThLogLevel.Error, "Error prechecking constraints for payments and policies", this._paymentPoliciesDO, thError);
 				reject(thError);
 			}
-        });
+		});
 	}
 	private precheckConstraintsCore(resolve: { (result: boolean): void }, reject: { (err: ThError): void }) {
 		if (!this.currencyCodeIsValid()) {
@@ -111,7 +111,8 @@ export class HotelUpdatePaymentsPolicies {
 	private getPaymentsPoliciesRepoDO(): PaymentsPoliciesRepoDO {
 		return {
 			ccyCode: this._paymentPoliciesDO.ccyCode,
-			paymentMethodIdList: this._paymentPoliciesDO.paymentMethodIdList
+			paymentMethodIdList: this._paymentPoliciesDO.paymentMethodIdList,
+			additionalInvoiceDetails: this._paymentPoliciesDO.additionalInvoiceDetails
 		};
 	}
 }
