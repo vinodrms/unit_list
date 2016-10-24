@@ -58,8 +58,10 @@ export class InvoiceGroupUpdateStrategy implements ISaveInvoiceGroupActionStrate
             .then((loadedHotel: HotelDO) => {
                 _.forEach(this._invoiceGroupDO.invoiceList, (invoice: InvoiceDO) => {
                     if (invoice.isClosed() && this._thUtils.isUndefinedOrNull(invoice.paidDate) && this._thUtils.isUndefinedOrNull(invoice.paidDateUtcTimestamp)) {
-                        invoice.paidDate = ThTimestampDO.buildThTimestampForTimezone(loadedHotel.timezone).thDateDO;
+                        var thTimestamp = ThTimestampDO.buildThTimestampForTimezone(loadedHotel.timezone);
+                        invoice.paidDate = thTimestamp.thDateDO;
                         invoice.paidDateUtcTimestamp = invoice.paidDate.getUtcTimestamp();
+                        invoice.paidDateTimeUtcTimestamp = thTimestamp.getUtcTimestamp();
                     }
                 });
                 resolve(this._invoiceGroupDO);
