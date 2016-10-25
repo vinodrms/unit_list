@@ -150,7 +150,34 @@ export class MongoReportMetadataRepository implements IReportMetadataRepository 
 				}
 			]
 		});
-		this._reportsMetadataList = [reportGuestsArriving, reportGuestsInHouse, reportGuestsDeparting];
+
+		var shiftReportByPaymentMethod = new ReportMetadataDO();
+		shiftReportByPaymentMethod.buildFromObject({
+			type: ReportType.ShiftReportPaymentMethod,
+			name: "Shift Report - Payment report",
+			inputParams: [
+				{
+					type: FieldType.DateTime,
+					name: "time",
+					required: true
+				}
+			],
+			columns: [
+				{
+					type: FieldType.String,
+					name: "Payment method"
+				},
+				{
+					type: FieldType.Number,
+					name: "Transactions"
+				},
+				{
+					type: FieldType.Number,
+					name: "Amount"
+				}
+			]
+		});		
+		this._reportsMetadataList = [reportGuestsArriving, reportGuestsInHouse, reportGuestsDeparting, shiftReportByPaymentMethod];
 	}
 
 	getAllReportMetadata(): Promise<ReportMetadataDO[]> {

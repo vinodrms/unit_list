@@ -29,7 +29,7 @@ export class ReportsController extends BaseController {
 	public getReport(req: Express.Request, res: Express.Response) {
 		// let rgType = req.body.type;
 		// let rgParams = req.body.params;
-		let rgType = ReportGroupType.KeyMetrics;
+		let rgType = ReportGroupType.ShiftReport;
 		let rgParams = {};
 
 		let rgGeneratorFactory = new ReportGroupGeneratorFactory(req.appContext, req.sessionContext);
