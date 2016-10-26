@@ -146,7 +146,7 @@ reportGuestsDeparting.buildFromObject({
 var shiftReportByPaymentMethod = new ReportMetadataDO();
 shiftReportByPaymentMethod.buildFromObject({
 	type: ReportType.ShiftReportPaymentMethod,
-	name: "Shift Report - Payment report",
+	name: "Shift Report - by payment method",
 	inputParams: [
 		{
 			type: FieldType.DateTime,
@@ -170,13 +170,40 @@ shiftReportByPaymentMethod.buildFromObject({
 	]
 });
 
+var shiftReportByPriceProductAndAddonProduct = new ReportMetadataDO();
+shiftReportByPriceProductAndAddonProduct.buildFromObject({
+	type: ReportType.ShiftReportProduct,
+	name: "Shift Report - by price product and addon product",
+	inputParams: [
+		{
+			type: FieldType.DateTime,
+			name: "time",
+			required: true
+		}
+	],
+	columns: [
+		{
+			type: FieldType.String,
+			name: "Product"
+		},
+		{
+			type: FieldType.Number,
+			name: "Transactions"
+		},
+		{
+			type: FieldType.Number,
+			name: "Amount"
+		}
+	]
+});
+
 let row1 = ['Daniel 1', 'a2', 'a3', 'a4', 'a5', 'a6', 'a7', 'a8', 'a9', 'a10'];
 let row2 = ['Nikola 1', 'b2', 'b3', 'b4', 'b5', 'b6', 'b7', 'b8', 'b9', 'b10'];
 let expectedGuestArrivalsReport = new ReportDO();
 expectedGuestArrivalsReport.metadata = reportGuestsArrivingMetadata;
 expectedGuestArrivalsReport.data = [row1, row2];
 
-let reportsMetadataList = [reportGuestsArrivingMetadata, reportGuestsInHouseMetadata, reportGuestsDeparting, shiftReportByPaymentMethod];
+let reportsMetadataList = [reportGuestsArrivingMetadata, reportGuestsInHouseMetadata, reportGuestsDeparting, shiftReportByPaymentMethod, shiftReportByPriceProductAndAddonProduct];
 
 export var ExpectedReports = { 
 	reportsMetadataList : reportsMetadataList,

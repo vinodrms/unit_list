@@ -25,19 +25,25 @@ export class ShiftReportGroupGenerator implements IReportGroupGeneratorStrategy 
 		return new Promise<ReportGroupDO>((resolve: { (result: ReportGroupDO): void }, reject: { (err: ThError): void }) => {
 			let reportGeneratorFactory = new ReportGeneratorFactory(this._appContext, this._sessionContext);
 			if (this.validParameters(params)) {
-				let keyMetricsReportGenerator = reportGeneratorFactory.getGeneratorStrategy(ReportType.ShiftReportPaymentMethod);
+				let srPaymentMethodGenerator = reportGeneratorFactory.getGeneratorStrategy(ReportType.ShiftReportPaymentMethod);
+				let srProductGenerator = reportGeneratorFactory.getGeneratorStrategy(ReportType.ShiftReportProduct);
 
-				let keyMetricsReport = null;
+				let paymentMethodReport = null;
+				let productReport = null;
 
-				let pMetrics = keyMetricsReportGenerator.generate({})
+				let ppmGenerator = srPaymentMethodGenerator.generate(params)
 				.then((report: ReportDO) => {
-					keyMetricsReport = report;
+					paymentMethodReport = report;
+				})
+				let ppGenerator = srProductGenerator.generate(params)
+				.then((report: ReportDO) => {
+					productReport = report;
 				})
 
-				Promise.all([pMetrics]).then(() => {
+				Promise.all([ppmGenerator, ppGenerator]).then(() => {
 					var rg = new ReportGroupDO();
 					rg.name = "Shift Report";
-					rg.reportsList = [keyMetricsReport];
+					rg.reportsList = [paymentMethodReport, productReport];
 					resolve(rg);
 				})
 			}
