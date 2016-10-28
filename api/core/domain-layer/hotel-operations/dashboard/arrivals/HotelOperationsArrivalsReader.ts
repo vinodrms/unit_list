@@ -1,16 +1,17 @@
-import {ThLogger, ThLogLevel} from '../../../../utils/logging/ThLogger';
-import {ThError} from '../../../../utils/th-responses/ThError';
-import {ThStatusCode} from '../../../../utils/th-responses/ThResponse';
-import {AppContext} from '../../../../utils/AppContext';
-import {SessionContext} from '../../../../utils/SessionContext';
-import {BookingDOConstraints} from '../../../../data-layer/bookings/data-objects/BookingDOConstraints';
-import {BookingSearchResultRepoDO} from '../../../../data-layer/bookings/repositories/IBookingRepository';
-import {CustomerIdValidator} from '../../../customers/validators/CustomerIdValidator';
-import {CustomersContainer} from '../../../customers/validators/results/CustomersContainer';
-import {HotelOperationsQueryDO} from '../utils/HotelOperationsQueryDO';
-import {HotelOperationsQueryDOParser} from '../utils/HotelOperationsQueryDOParser';
-import {HotelOperationsArrivalsInfo} from './utils/HotelOperationsArrivalsInfo';
-import {HotelOperationsArrivalsInfoBuilder} from './utils/HotelOperationsArrivalsInfoBuilder';
+import { ThLogger, ThLogLevel } from '../../../../utils/logging/ThLogger';
+import { ThError } from '../../../../utils/th-responses/ThError';
+import { ThStatusCode } from '../../../../utils/th-responses/ThResponse';
+import { AppContext } from '../../../../utils/AppContext';
+import { SessionContext } from '../../../../utils/SessionContext';
+import { BookingDOConstraints } from '../../../../data-layer/bookings/data-objects/BookingDOConstraints';
+import { BookingSearchResultRepoDO } from '../../../../data-layer/bookings/repositories/IBookingRepository';
+import { CustomerIdValidator } from '../../../customers/validators/CustomerIdValidator';
+import { CustomersContainer } from '../../../customers/validators/results/CustomersContainer';
+import { HotelOperationsQueryDO } from '../utils/HotelOperationsQueryDO';
+import { HotelOperationsQueryDOParser } from '../utils/HotelOperationsQueryDOParser';
+import { HotelOperationsArrivalsInfo } from './utils/HotelOperationsArrivalsInfo';
+import { HotelOperationsArrivalsInfoBuilder } from './utils/HotelOperationsArrivalsInfoBuilder';
+import { HotelDO } from '../../../../data-layer/hotel/data-objects/HotelDO';
 
 export class HotelOperationsArrivalsReader {
     private _parsedQuery: HotelOperationsQueryDO;
@@ -30,6 +31,11 @@ export class HotelOperationsArrivalsReader {
         var queryParser = new HotelOperationsQueryDOParser(this._appContext, this._sessionContext);
         return queryParser.parse(query).then((parsedQuery: HotelOperationsQueryDO) => {
             this._parsedQuery = parsedQuery;
+
+            var hotelRepository = this._appContext.getRepositoryFactory().getHotelRepository();
+            return hotelRepository.getHotelById(this._sessionContext.sessionDO.hotel.id);
+        }).then((loadedHotel: HotelDO) => {
+            arrivalsInfoBuilder.hotel = loadedHotel;
 
             var bookingRepository = this._appContext.getRepositoryFactory().getBookingRepository();
             return bookingRepository.getBookingList({ hotelId: this._sessionContext.sessionDO.hotel.id }, {
