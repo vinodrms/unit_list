@@ -1,15 +1,15 @@
-import {BaseDO} from '../../common/base/BaseDO';
-import {ThUtils} from '../../../utils/ThUtils';
-import {ThDateIntervalDO} from '../../../utils/th-dates/data-objects/ThDateIntervalDO';
-import {ThDateDO} from '../../../utils/th-dates/data-objects/ThDateDO';
-import {ConfigCapacityDO} from '../../common/data-objects/bed-config/ConfigCapacityDO';
-import {PriceProductDO} from '../../price-products/data-objects/PriceProductDO';
-import {FileAttachmentDO} from '../../common/data-objects/file/FileAttachmentDO';
-import {BookingStateChangeTriggerTimeDO} from './state-change-time/BookingStateChangeTriggerTimeDO';
-import {DefaultBillingDetailsDO} from './default-billing/DefaultBillingDetailsDO';
-import {DocumentHistoryDO} from '../../common/data-objects/document-history/DocumentHistoryDO';
-import {BookingPriceDO} from './price/BookingPriceDO';
-import {IInvoiceItemMeta} from '../../invoices/data-objects/items/IInvoiceItemMeta';
+import { BaseDO } from '../../common/base/BaseDO';
+import { ThUtils } from '../../../utils/ThUtils';
+import { ThDateIntervalDO } from '../../../utils/th-dates/data-objects/ThDateIntervalDO';
+import { ThDateDO } from '../../../utils/th-dates/data-objects/ThDateDO';
+import { ConfigCapacityDO } from '../../common/data-objects/bed-config/ConfigCapacityDO';
+import { PriceProductDO } from '../../price-products/data-objects/PriceProductDO';
+import { FileAttachmentDO } from '../../common/data-objects/file/FileAttachmentDO';
+import { BookingStateChangeTriggerTimeDO } from './state-change-time/BookingStateChangeTriggerTimeDO';
+import { DefaultBillingDetailsDO } from './default-billing/DefaultBillingDetailsDO';
+import { DocumentHistoryDO } from '../../common/data-objects/document-history/DocumentHistoryDO';
+import { BookingPriceDO } from './price/BookingPriceDO';
+import { IInvoiceItemMeta } from '../../invoices/data-objects/items/IInvoiceItemMeta';
 
 export enum GroupBookingStatus {
     Active,
@@ -27,6 +27,15 @@ export enum BookingConfirmationStatus {
 export enum GroupBookingInputChannel {
     PropertyManagementSystem
 }
+
+var BookingConfirmationStatusDisplayString: { [index: number]: string; } = {};
+BookingConfirmationStatusDisplayString[BookingConfirmationStatus.Confirmed] = "Confirmed";
+BookingConfirmationStatusDisplayString[BookingConfirmationStatus.Guaranteed] = "Guaranteed";
+BookingConfirmationStatusDisplayString[BookingConfirmationStatus.NoShow] = "No Show";
+BookingConfirmationStatusDisplayString[BookingConfirmationStatus.NoShowWithPenalty] = "No Show With Penalty";
+BookingConfirmationStatusDisplayString[BookingConfirmationStatus.Cancelled] = "Cancelled";
+BookingConfirmationStatusDisplayString[BookingConfirmationStatus.CheckedIn] = "CheckedIn";
+BookingConfirmationStatusDisplayString[BookingConfirmationStatus.CheckedOut] = "CheckedOut";
 
 export class BookingDO extends BaseDO {
     public static GuaranteedTriggerName: string = "guaranteedTime";
@@ -71,7 +80,7 @@ export class BookingDO extends BaseDO {
 
     protected getPrimitivePropertyKeys(): string[] {
         return ["groupBookingId", "groupBookingReference", "hotelId", "versionId", "status", "inputChannel", "noOfRooms", "bookingId", "bookingReference", "confirmationStatus",
-            "customerIdList", "displayCustomerId", "startUtcTimestamp", "endUtcTimestamp", "roomCategoryId", "roomId", "priceProductId", 
+            "customerIdList", "displayCustomerId", "startUtcTimestamp", "endUtcTimestamp", "roomCategoryId", "roomId", "priceProductId",
             "reservedAddOnProductIdList", "allotmentId", "notes", "indexedSearchTerms"];
     }
 
@@ -120,5 +129,9 @@ export class BookingDO extends BaseDO {
 
     public getInvoiceItemMeta(): IInvoiceItemMeta {
         return this.price;
+    }
+
+    public getBookingConfirmationStatusDisplayString(): string {
+        return BookingConfirmationStatusDisplayString[this.confirmationStatus];
     }
 }
