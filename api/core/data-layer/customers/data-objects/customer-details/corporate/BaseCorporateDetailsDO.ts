@@ -1,8 +1,8 @@
-import {BaseDO} from '../../../../common/base/BaseDO';
-import {AddressDO} from '../../../../common/data-objects/address/AddressDO';
-import {ICustomerDetailsDO} from '../ICustomerDetailsDO';
-import {CommissionDO} from '../../../../common/data-objects/commission/CommissionDO';
-import {ThUtils} from '../../../../../utils/ThUtils';
+import { BaseDO } from '../../../../common/base/BaseDO';
+import { AddressDO } from '../../../../common/data-objects/address/AddressDO';
+import { ICustomerDetailsDO } from '../ICustomerDetailsDO';
+import { CommissionDO } from '../../../../common/data-objects/commission/CommissionDO';
+import { ThUtils } from '../../../../../utils/ThUtils';
 
 export class BaseCorporateDetailsDO extends BaseDO implements ICustomerDetailsDO {
 	constructor() {
@@ -57,5 +57,11 @@ export class BaseCorporateDetailsDO extends BaseDO implements ICustomerDetailsDO
 	}
 	public getPhone(): string {
 		return this.phone;
+	}
+	public getVatCode(): string {
+		return this.vatCode;
+	}
+	public getGovernmentCode(): string {
+		return this.governmentCode;
 	}
 }
