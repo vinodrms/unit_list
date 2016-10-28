@@ -54,6 +54,11 @@ export class KeyMetricMetaFactory {
             fontName: "T"
         },
         {
+            type: KeyMetricType.ConfirmedRevenue,
+            measureUnit: "",
+            fontName: "U"
+        },
+        {
             type: KeyMetricType.RoomCategory,
             measureUnit: "",
             fontName: "@"

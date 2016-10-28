@@ -11,6 +11,7 @@ import { AllotmentsBuilderStrategy } from './strategies/AllotmentsBuilderStrateg
 import { RoomRevenueBuilderStrategy } from './strategies/RoomRevenueBuilderStrategy';
 import { OtherRevenueBuilderStrategy } from './strategies/OtherRevenueBuilderStrategy';
 import { RoomCategoryBuilderStrategy } from './strategies/RoomCategoryBuilderStrategy';
+import { ConfirmedRevenueBuilderStrategy } from './strategies/ConfirmedRevenueBuilderStrategy';
 import { IMetricBuilderStrategy } from './IMetricBuilderStrategy';
 
 import _ = require('underscore');
@@ -31,7 +32,8 @@ export class MetricBuilderStrategyFactory {
             new RoomsBuilderStrategy(this._hotelInventoryStats),
             new AllotmentsBuilderStrategy(this._hotelInventoryStats),
             new RoomRevenueBuilderStrategy(this._hotelInventoryStats),
-            new OtherRevenueBuilderStrategy(this._hotelInventoryStats)
+            new OtherRevenueBuilderStrategy(this._hotelInventoryStats),
+            new ConfirmedRevenueBuilderStrategy(this._hotelInventoryStats)
         ];
         _.forEach(this._roomCategoryStatsList, (roomCategoryStats: RoomCategoryStatsDO) => {
             metricList.push(new RoomCategoryBuilderStrategy(this._hotelInventoryStats, roomCategoryStats));

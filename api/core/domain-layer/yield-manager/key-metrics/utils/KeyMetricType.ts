@@ -9,5 +9,6 @@ export enum KeyMetricType {
     Allotments,
     RoomRevenue,
     OtherRevenue,
+    ConfirmedRevenue,
     RoomCategory
 }
