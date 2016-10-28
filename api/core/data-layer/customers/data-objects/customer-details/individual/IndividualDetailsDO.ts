@@ -1,7 +1,7 @@
-import {BaseDO} from '../../../../common/base/BaseDO';
-import {AddressDO} from '../../../../common/data-objects/address/AddressDO';
-import {ThDateDO} from '../../../../../utils/th-dates/data-objects/ThDateDO';
-import {ICustomerDetailsDO} from '../ICustomerDetailsDO';
+import { BaseDO } from '../../../../common/base/BaseDO';
+import { AddressDO } from '../../../../common/data-objects/address/AddressDO';
+import { ThDateDO } from '../../../../../utils/th-dates/data-objects/ThDateDO';
+import { ICustomerDetailsDO } from '../ICustomerDetailsDO';
 
 export class IndividualDetailsDO extends BaseDO implements ICustomerDetailsDO {
 	constructor() {
@@ -44,5 +44,11 @@ export class IndividualDetailsDO extends BaseDO implements ICustomerDetailsDO {
 		return true;
 	}
 	public roundPricesToTwoDecimals() {
+	}
+	public getVatCode(): string {
+		return "";
+	}
+	public getGovernmentCode(): string {
+		return "";
 	}
 }

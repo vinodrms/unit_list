@@ -8,11 +8,13 @@ import { GuestsArrivingReportGeneratorStrategy } from './backup-report/strategie
 import { GuestsDepartingReportGeneratorStrategy } from './backup-report/strategies/GuestsDepartingReportGeneratorStrategy';
 import { GuestsInHouseReportGeneratorStrategy } from './backup-report/strategies/GuestsInHouseReportGeneratorStrategy';
 import { KeyMetricsReportDailyStrategy } from './key-metrics/strategies/KeyMetricsReportDailyStrategy';
+import { ShiftReportPaymentMethodStrategy } from './shift-report/strategies/ShiftReportPaymentMethodStrategy';
+import { ShiftReportProductStrategy } from './shift-report/strategies/ShiftReportProductStrategy';
 
 export class ReportGeneratorFactory {
 	private _thUtils: ThUtils;
 
-	constructor(private _appContext: AppContext,private _sessionContext) {
+	constructor(private _appContext: AppContext, private _sessionContext) {
 		this._thUtils = new ThUtils();
 	}
 
@@ -26,6 +28,10 @@ export class ReportGeneratorFactory {
 				return new GuestsInHouseReportGeneratorStrategy(this._appContext, this._sessionContext);
 			case ReportType.KeyMetricsDaily:
 				return new KeyMetricsReportDailyStrategy(this._appContext, this._sessionContext);
+			case ReportType.ShiftReportPaymentMethod:
+				return new ShiftReportPaymentMethodStrategy(this._appContext, this._sessionContext);
+			case ReportType.ShiftReportProduct:
+				return new ShiftReportProductStrategy(this._appContext, this._sessionContext);
 			default:
 				throw Error("Report not supported");
 		}

@@ -6,8 +6,8 @@ export enum ReportType {
 	GuestsInHouse,
 	GuestsDeparting,
 	KeyMetricsDaily,
-	KeyMetricsMonthly,
-	KeyMetricsYearly,
+	ShiftReportPaymentMethod,
+	ShiftReportProduct
 }
 
 export enum FieldType{

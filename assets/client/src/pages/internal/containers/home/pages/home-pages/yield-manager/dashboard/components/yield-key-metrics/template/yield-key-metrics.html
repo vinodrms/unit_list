@@ -12,7 +12,7 @@
 			<div class="key-metrics-col flex-jc-start wide">
 				<span class="clickable" (click)="openKeyMetricModal(metric)">
 					<span class="unitpal-font dark-gray-color f-14">{{metric.meta.fontName}}</span> 
-					<span class="dark-gray-color f-14" title="{{ metric.meta.displayName }}">{{ metric.meta.displayName }}</span>
+					<span class="dark-gray-color f-14" title="{{ metric.keyMetricDO.displayName }}">{{ metric.keyMetricDO.displayName }}</span>
 				</span>
 			</div>
 			<div class="key-metrics-col" *ngFor="let value of metric.keyMetricDO.valueList">
@@ -23,7 +23,7 @@
 					<span class="percentage-metric key-metric-value oneline-text f-14" [ngStyle]="getPercentageStyles(normalizeAndReversPercentage(value.percentage))" title="{{ value.percentage }}%">{{ value.percentage | percentage }}</span> 
 				</span>
 				<span class="w-100" *ngIf="metric.keyMetricDO.valueType == 2">
-					<span class="key-metric-value oneline-text f-14 w-100" [ngStyle]="getInventoryStyles(value)" title="{{ value.available }}/{{ value.total }}">
+					<span class="key-metric-value oneline-text f-14 w-100" [ngStyle]="getInventoryStyles(value)" title="{{ 'Available / Total' | translate }}">
 						<span [ngStyle]="getInventoryAvailableStyles(value)">{{ value.available }}</span>/{{ value.total }}
 					</span>
 				</span>

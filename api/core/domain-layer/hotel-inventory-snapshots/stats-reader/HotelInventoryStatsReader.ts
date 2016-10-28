@@ -1,24 +1,24 @@
-import {ThLogger, ThLogLevel} from '../../../utils/logging/ThLogger';
-import {ThError} from '../../../utils/th-responses/ThError';
-import {ThStatusCode} from '../../../utils/th-responses/ThResponse';
-import {AppContext} from '../../../utils/AppContext';
-import {SessionContext} from '../../../utils/SessionContext';
-import {ThUtils} from '../../../utils/ThUtils';
-import {ThDateDO} from '../../../utils/th-dates/data-objects/ThDateDO';
-import {ThHourDO} from '../../../utils/th-dates/data-objects/ThHourDO';
-import {ThTimestampDO} from '../../../utils/th-dates/data-objects/ThTimestampDO';
-import {ThDateUtils} from '../../../utils/th-dates/ThDateUtils';
-import {IndexedBookingInterval} from '../../../data-layer/price-products/utils/IndexedBookingInterval';
-import {RoomDO} from '../../../data-layer/rooms/data-objects/RoomDO';
-import {HotelInventorySnapshotDO} from '../../../data-layer/hotel-inventory-snapshots/data-objects/HotelInventorySnapshotDO';
-import {RoomSnapshotDO} from '../../../data-layer/hotel-inventory-snapshots/data-objects/room/RoomSnapshotDO';
-import {AllotmentDO} from '../../../data-layer/allotments/data-objects/AllotmentDO';
-import {HotelInventorySnapshotSearchResultRepoDO} from '../../../data-layer/hotel-inventory-snapshots/repositories/IHotelInventorySnapshotRepository';
-import {HotelInventoryStats} from './data-objects/HotelInventoryStats';
-import {IHotelInventoryStats, HotelInventoryStatsForDate} from './data-objects/IHotelInventoryStats';
-import {TotalInventoryForDate} from './data-objects/total-inventory/TotalInventoryForDate';
-import {SnapshotUtils} from '../utils/SnapshotUtils';
-import {HotelInventoryIndexer} from './indexer/HotelInventoryIndexer';
+import { ThLogger, ThLogLevel } from '../../../utils/logging/ThLogger';
+import { ThError } from '../../../utils/th-responses/ThError';
+import { ThStatusCode } from '../../../utils/th-responses/ThResponse';
+import { AppContext } from '../../../utils/AppContext';
+import { SessionContext } from '../../../utils/SessionContext';
+import { ThUtils } from '../../../utils/ThUtils';
+import { ThDateDO } from '../../../utils/th-dates/data-objects/ThDateDO';
+import { ThHourDO } from '../../../utils/th-dates/data-objects/ThHourDO';
+import { ThTimestampDO } from '../../../utils/th-dates/data-objects/ThTimestampDO';
+import { ThDateUtils } from '../../../utils/th-dates/ThDateUtils';
+import { IndexedBookingInterval } from '../../../data-layer/price-products/utils/IndexedBookingInterval';
+import { RoomDO } from '../../../data-layer/rooms/data-objects/RoomDO';
+import { HotelInventorySnapshotDO } from '../../../data-layer/hotel-inventory-snapshots/data-objects/HotelInventorySnapshotDO';
+import { RoomSnapshotDO } from '../../../data-layer/hotel-inventory-snapshots/data-objects/room/RoomSnapshotDO';
+import { AllotmentDO } from '../../../data-layer/allotments/data-objects/AllotmentDO';
+import { HotelInventorySnapshotSearchResultRepoDO } from '../../../data-layer/hotel-inventory-snapshots/repositories/IHotelInventorySnapshotRepository';
+import { HotelInventoryStats } from './data-objects/HotelInventoryStats';
+import { IHotelInventoryStats, HotelInventoryStatsForDate } from './data-objects/IHotelInventoryStats';
+import { TotalInventoryForDate } from './data-objects/total-inventory/TotalInventoryForDate';
+import { SnapshotUtils } from '../utils/SnapshotUtils';
+import { HotelInventoryIndexer } from './indexer/HotelInventoryIndexer';
 
 export interface HotelInventoryStatsParams {
     currentRoomList: RoomDO[];
@@ -109,16 +109,19 @@ export class HotelInventoryStatsReader {
         if (!this._thUtils.isUndefinedOrNull(snapshot)) {
             totalInventoryForDate.noOfRooms = snapshot.roomList.length;
             totalInventoryForDate.noOfRoomsWithAllotment = snapshot.allotments.totalNoOfRooms;
+            totalInventoryForDate.indexFrom(snapshot.roomList);
             return totalInventoryForDate;
         }
         if (date.isBefore(this._minInventoryDate)) {
             totalInventoryForDate.noOfRooms = 0;
             totalInventoryForDate.noOfRoomsWithAllotment = 0;
+            totalInventoryForDate.indexFrom([]);
             return totalInventoryForDate;
         }
         totalInventoryForDate.noOfRooms = this._currentRoomSnapshots.length;
         var allotmentsSnapshot = this._snapshotUtils.buildAllotmentsSnapshot(this._readerParams.currentAllotmentList, date);
         totalInventoryForDate.noOfRoomsWithAllotment = allotmentsSnapshot.totalNoOfRooms;
+        totalInventoryForDate.indexFrom(this._currentRoomSnapshots);
         return totalInventoryForDate;
     }
     private getSnapshotByDate(thDateDO: ThDateDO): HotelInventorySnapshotDO {

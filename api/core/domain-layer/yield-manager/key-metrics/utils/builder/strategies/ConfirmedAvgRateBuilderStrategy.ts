@@ -1,7 +1,7 @@
-import {IHotelInventoryStats, HotelInventoryStatsForDate} from '../../../../../hotel-inventory-snapshots/stats-reader/data-objects/IHotelInventoryStats';
-import {AMetricBuilderStrategy} from '../AMetricBuilderStrategy';
-import {KeyMetricType} from '../../KeyMetricType';
-import {IKeyMetricValue, KeyMetricValueType, PriceKeyMetric} from '../../KeyMetricsResult';
+import { IHotelInventoryStats, HotelInventoryStatsForDate } from '../../../../../hotel-inventory-snapshots/stats-reader/data-objects/IHotelInventoryStats';
+import { AMetricBuilderStrategy } from '../AMetricBuilderStrategy';
+import { KeyMetricType } from '../../KeyMetricType';
+import { IKeyMetricValue, KeyMetricValueType, PriceKeyMetric } from '../../KeyMetricsResult';
 
 export class ConfirmedAvgRateBuilderStrategy extends AMetricBuilderStrategy {
     constructor(hotelInventoryStats: IHotelInventoryStats) {
@@ -24,5 +24,8 @@ export class ConfirmedAvgRateBuilderStrategy extends AMetricBuilderStrategy {
         var roomRevenue = statsForDate.confirmedRevenue.roomRevenue;
         metric.price = this.roundValue(roomRevenue / noOccupiedRooms);
         return metric;
+    }
+    protected getKeyMetricDisplayName(): string {
+        return "Confirmed AvgRate";
     }
 }

@@ -1,9 +1,9 @@
-import {IMetricBuilderStrategy} from './IMetricBuilderStrategy';
-import {IKeyMetricValue, KeyMetric, KeyMetricValueType} from '../KeyMetricsResult';
-import {KeyMetricType} from '../KeyMetricType';
-import {ThDateDO} from '../../../../../utils/th-dates/data-objects/ThDateDO';
-import {ThUtils} from '../../../../../utils/ThUtils';
-import {IHotelInventoryStats, HotelInventoryStatsForDate} from '../../../../hotel-inventory-snapshots/stats-reader/data-objects/IHotelInventoryStats';
+import { IMetricBuilderStrategy } from './IMetricBuilderStrategy';
+import { IKeyMetricValue, KeyMetric, KeyMetricValueType } from '../KeyMetricsResult';
+import { KeyMetricType } from '../KeyMetricType';
+import { ThDateDO } from '../../../../../utils/th-dates/data-objects/ThDateDO';
+import { ThUtils } from '../../../../../utils/ThUtils';
+import { IHotelInventoryStats, HotelInventoryStatsForDate } from '../../../../hotel-inventory-snapshots/stats-reader/data-objects/IHotelInventoryStats';
 
 import _ = require('underscore');
 
@@ -18,6 +18,7 @@ export abstract class AMetricBuilderStrategy implements IMetricBuilderStrategy {
         var keyMetric = new KeyMetric();
         keyMetric.type = this.getType();
         keyMetric.valueType = this.getValueType();
+        keyMetric.displayName = this.getKeyMetricDisplayName();
         keyMetric.valueList = [];
         _.forEach(thDateList, (thDate: ThDateDO) => {
             var statsForDate = this._hotelInventoryStats.getInventoryStatsForDate(thDate);
@@ -34,4 +35,5 @@ export abstract class AMetricBuilderStrategy implements IMetricBuilderStrategy {
     protected abstract getType(): KeyMetricType;
     protected abstract getValueType(): KeyMetricValueType;
     protected abstract getKeyMetricValueCore(statsForDate: HotelInventoryStatsForDate): IKeyMetricValue;
+    protected abstract getKeyMetricDisplayName(): string;
 }
