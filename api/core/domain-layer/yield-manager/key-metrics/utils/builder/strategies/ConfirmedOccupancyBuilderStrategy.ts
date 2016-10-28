@@ -1,7 +1,7 @@
-import {IHotelInventoryStats, HotelInventoryStatsForDate} from '../../../../../hotel-inventory-snapshots/stats-reader/data-objects/IHotelInventoryStats';
-import {AMetricBuilderStrategy} from '../AMetricBuilderStrategy';
-import {KeyMetricType} from '../../KeyMetricType';
-import {IKeyMetricValue, KeyMetricValueType, PercentageKeyMetric} from '../../KeyMetricsResult';
+import { IHotelInventoryStats, HotelInventoryStatsForDate } from '../../../../../hotel-inventory-snapshots/stats-reader/data-objects/IHotelInventoryStats';
+import { AMetricBuilderStrategy } from '../AMetricBuilderStrategy';
+import { KeyMetricType } from '../../KeyMetricType';
+import { IKeyMetricValue, KeyMetricValueType, PercentageKeyMetric } from '../../KeyMetricsResult';
 
 export class ConfirmedOccupancyBuilderStrategy extends AMetricBuilderStrategy {
     constructor(hotelInventoryStats: IHotelInventoryStats) {
@@ -24,5 +24,8 @@ export class ConfirmedOccupancyBuilderStrategy extends AMetricBuilderStrategy {
         var noOccupiedRooms = statsForDate.confirmedOccupancy.getTotalRoomOccupancy();
         metric.percentage = this.roundValue(noOccupiedRooms / totalNoOfRooms);
         return metric;
+    }
+    protected getKeyMetricDisplayName(): string {
+        return "Confirmed Occupancy";
     }
 }
