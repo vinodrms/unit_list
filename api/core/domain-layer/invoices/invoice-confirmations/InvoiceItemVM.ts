@@ -11,6 +11,7 @@ export class InvoiceItemVM {
     qty: number;
     netUnitPrice: number;
     vat: number;
+    varPercentage: number;
     subtotal: number;
     isLastOne: boolean;
 
@@ -24,6 +25,7 @@ export class InvoiceItemVM {
         this.qty = invoiceItemDO.meta.getNumberOfItems();
 
         var vatValue = this.getVatValue(invoiceItemDO.meta.getVatId(), vatTaxList);
+        this.varPercentage = this._thUtils.roundNumberToTwoDecimals(vatValue * 100);
         var unitVat = this._thUtils.roundNumberToTwoDecimals(vatValue * invoiceItemDO.meta.getUnitPrice());
         this.vat = this._thUtils.roundNumberToTwoDecimals(unitVat * invoiceItemDO.meta.getNumberOfItems());
         this.netUnitPrice = this._thUtils.roundNumberToTwoDecimals(invoiceItemDO.meta.getUnitPrice() - unitVat);
