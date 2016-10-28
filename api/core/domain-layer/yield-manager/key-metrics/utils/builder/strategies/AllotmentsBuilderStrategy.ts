@@ -1,7 +1,7 @@
-import {IHotelInventoryStats, HotelInventoryStatsForDate} from '../../../../../hotel-inventory-snapshots/stats-reader/data-objects/IHotelInventoryStats';
-import {AMetricBuilderStrategy} from '../AMetricBuilderStrategy';
-import {KeyMetricType} from '../../KeyMetricType';
-import {IKeyMetricValue, KeyMetricValueType, InventoryKeyMetric} from '../../KeyMetricsResult';
+import { IHotelInventoryStats, HotelInventoryStatsForDate } from '../../../../../hotel-inventory-snapshots/stats-reader/data-objects/IHotelInventoryStats';
+import { AMetricBuilderStrategy } from '../AMetricBuilderStrategy';
+import { KeyMetricType } from '../../KeyMetricType';
+import { IKeyMetricValue, KeyMetricValueType, InventoryKeyMetric } from '../../KeyMetricsResult';
 
 export class AllotmentsBuilderStrategy extends AMetricBuilderStrategy {
     constructor(hotelInventoryStats: IHotelInventoryStats) {
@@ -20,5 +20,8 @@ export class AllotmentsBuilderStrategy extends AMetricBuilderStrategy {
         var occupied = statsForDate.confirmedOccupancy.getTotalAllotmentOccupancy() + statsForDate.guaranteedOccupancy.getTotalAllotmentOccupancy();
         metric.available = metric.total - occupied;
         return metric;
+    }
+    protected getKeyMetricDisplayName(): string {
+        return "Allotments";
     }
 }

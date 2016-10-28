@@ -12,7 +12,7 @@
 			<div class="key-metrics-col flex-jc-start wide">
 				<span class="clickable" (click)="openKeyMetricModal(metric)">
 					<span class="unitpal-font dark-gray-color f-14">{{metric.meta.fontName}}</span> 
-					<span class="dark-gray-color f-14" title="{{ metric.meta.displayName }}">{{ metric.meta.displayName }}</span>
+					<span class="dark-gray-color f-14" title="{{ metric.keyMetricDO.displayName }}">{{ metric.keyMetricDO.displayName }}</span>
 				</span>
 			</div>
 			<div class="key-metrics-col" *ngFor="let value of metric.keyMetricDO.valueList">

@@ -25,6 +25,7 @@ export class KeyMetric {
     type: KeyMetricType;
     valueType: KeyMetricValueType;
     valueList: IKeyMetricValue[];
+    displayName: string;
 }
 
 export class KeyMetricsResultItem {
