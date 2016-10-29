@@ -11,9 +11,9 @@ import { ServiceFactory } from '../core/services/ServiceFactory';
 
 import { ThDateDO } from '../core/utils/th-dates/data-objects/ThDateDO';
 import { ThHourDO } from '../core/utils/th-dates/data-objects/ThHourDO';
+import { ThTimestampDO } from '../core/utils/th-dates/data-objects/ThTimestampDO';
 import { ThDateIntervalDO } from '../core/utils/th-dates/data-objects/ThDateIntervalDO';
 
-import { ThTimestampDO } from '../core/utils/th-dates/data-objects/ThTimestampDO';
 
 import path = require("path");
 import fs = require("fs");
@@ -33,21 +33,24 @@ export class ReportsController extends BaseController {
 	}
 
 	public getReport(req: Express.Request, res: Express.Response) {
-		// let rgType = req.body.type;
-		// let rgParams = req.body.params;
-		let rgType = ReportGroupType.ShiftReport;
-		//TODO: remove this when frontend is built
-		let startDate = ThDateDO.buildThDateDO(2016, 9, 23);
-		let endDate = ThDateDO.buildThDateDO(2016, 9, 26);
+        var params = JSON.parse(req.query.params);
 
-
-		let startDateTime = 1477324800000;
-		let endDateTime = 1477425600000;
+		let rgType = params.reportType;
+		let startDate = new ThDateDO();
+		startDate.buildFromObject(params.properties.startDate);
+		let endDate = new ThDateDO();
+		endDate.buildFromObject(params.properties.endDate);
+		let startHour = new ThHourDO();
+		startHour.buildFromObject(params.properties.startDateTime)
+		let endHour = new ThHourDO();
+		endHour.buildFromObject(params.properties.endDateTime)
+		let startTimestamp = ThTimestampDO.buildThTimestampDO(startDate, startHour);
+		let endTimestamp = ThTimestampDO.buildThTimestampDO(endDate, endHour);
 
 		let rgParams = {
 			dateInterval: ThDateIntervalDO.buildThDateIntervalDO(startDate, endDate),
-			startTime: startDateTime,
-			endTime: endDateTime
+			startTime: startTimestamp,
+			endTime: endTimestamp
 		};
 
 		let rgGeneratorFactory = new ReportGroupGeneratorFactory(req.appContext, req.sessionContext);

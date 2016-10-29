@@ -1,0 +1,51 @@
+<!--<loading-component [isLoading]="isLoading"></loading-component>-->
+<div class="container-fluid" customScroll>
+	<!--<div class="row basic-info-form" *ngIf="!isLoading">-->
+	<div class="row basic-info-form">
+		<div class="col-xs-12 col-md-6">
+			<label class="control-label">
+				<h3>{{ 'Select your time zone' | translate }}</h3><small>{{ 'This will be used for automatic processes that need to know your local hour' | translate }}</small>
+			</label>
+			<hr>
+			<div class="row">
+				<div class="col-xs-6 col-md-6 form-group">
+					<th-date-picker
+						[initialThDate]="startDate"
+						[label]="'Start date'"
+						(didSelectThDate)="didSelectStartDate($event)"
+						>
+					</th-date-picker>
+				</div>
+
+				<div class="col-xs-6 col-md-6 form-group">
+					<label>{{ 'Start time' | translate }}</label>
+					<th-hour-select [initialHour]="startTime" (onHourSelected)="didChangeStartTime($event)" [isRequired]="true"
+						[didSubmitForm]="didSubmitForm">
+					</th-hour-select>
+				</div>
+				<div class="col-xs-6 col-md-6 form-group">
+					<th-date-picker
+						[initialThDate]="endDate"
+						[label]="'End date'"
+						(didSelectThDate)="didSelectEndDate($event)"
+						>
+					</th-date-picker>
+				</div>
+
+				<div class="col-xs-6 col-md-6 form-group">
+					<label>{{ 'End time' | translate }}</label>
+					<th-hour-select [initialHour]="endTime" (onHourSelected)="didChangeEndTime($event)" [isRequired]="true"
+						[didSubmitForm]="didSubmitForm">
+					</th-hour-select>
+				</div>
+
+				<div *ngIf="!isLoading" class="col-xs-12 col-md-offset-9 col-md-3">
+					<a class="btn btn-primary btn-block" [href]="reportCSVUrl()" target="_blank">{{ 'Generate' | translate }}</a>
+					<!--<button type="button" class="btn btn-primary btn-block" (click)="generateReport()">
+						<a *ngIf="isSaving" class="fa fa-spinner fa-pulse"></a> {{ 'Generate' | translate }}
+					</button>-->
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

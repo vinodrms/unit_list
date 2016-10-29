@@ -20,7 +20,8 @@ export class SettingsNavbarService {
 			new SettingsPageVM(SettingsPageType.AddOnProducts, "add-on-products", "Add-On Products", "$"),
 			new SettingsPageVM(SettingsPageType.PriceProducts, "price-products", "Price Products", "%"),
 			new SettingsPageVM(SettingsPageType.CustomerRegister, "customer-register", "Customer Register", "&"),
-			new SettingsPageVM(SettingsPageType.Allotments, "allotments", "Allotments", "â")
+			new SettingsPageVM(SettingsPageType.Allotments, "allotments", "Allotments", "â"),
+			new SettingsPageVM(SettingsPageType.Reports, "reports", "Reports", "-")
 		]
 	}
 

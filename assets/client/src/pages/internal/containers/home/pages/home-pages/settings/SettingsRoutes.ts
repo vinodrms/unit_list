@@ -10,6 +10,7 @@ import {SettingsAddOnProductsModule} from './subcomponents/add-on-products/Setti
 import {SettingsPriceProductsModule} from './subcomponents/price-products/SettingsPriceProductsModule';
 import {SettingsCustomerRegisterModule} from './subcomponents/customer-register/SettingsCustomerRegisterModule';
 import {SettingsAllotmentsModule} from './subcomponents/allotments/SettingsAllotmentsModule';
+import {SettingsReportsModule} from './subcomponents/reports/SettingsReportsModule';
 
 const settingsRoutes: Routes = [
     {
@@ -23,7 +24,8 @@ const settingsRoutes: Routes = [
             { path: 'add-on-products', loadChildren: () => SettingsAddOnProductsModule },
             { path: 'price-products', loadChildren: () => SettingsPriceProductsModule },
             { path: 'customer-register', loadChildren: () => SettingsCustomerRegisterModule },
-            { path: 'allotments', loadChildren: () => SettingsAllotmentsModule }
+            { path: 'allotments', loadChildren: () => SettingsAllotmentsModule },
+            { path: 'reports', loadChildren: () => SettingsReportsModule }
         ]
     }
 ];
