@@ -1,16 +1,16 @@
-import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/combineLatest';
-import {AppContext, ThError} from '../../../../../../../../../../../../../common/utils/AppContext';
-import {InvoiceGroupsService} from '../../../../../../../../../../../services/invoices/InvoiceGroupsService';
-import {HotelOperationsPageControllerService} from '../../../../services/HotelOperationsPageControllerService';
-import {CustomerOperationsPageData} from '../../services/utils/CustomerOperationsPageData';
-import {LazyLoadData} from '../../../../../../../../../../../services/common/ILazyLoadRequestService';
-import {InvoiceGroupPayerStatsDO} from '../../../../../../../../../../../services/invoices/data-objects/stats/InvoiceGroupPayerStatsDO';
-import {InvoiceGroupDO} from '../../../../../../../../../../../services/invoices/data-objects/InvoiceGroupDO';
-import {HotelAggregatorService} from '../../../../../../../../../../../services/hotel/HotelAggregatorService';
-import {HotelAggregatedInfo} from '../../../../../../../../../../../services/hotel/utils/HotelAggregatedInfo';
-import {Observable} from 'rxjs/Observable';
+import { AppContext, ThError } from '../../../../../../../../../../../../../common/utils/AppContext';
+import { InvoiceGroupsService } from '../../../../../../../../../../../services/invoices/InvoiceGroupsService';
+import { HotelOperationsPageControllerService } from '../../../../services/HotelOperationsPageControllerService';
+import { CustomerOperationsPageData } from '../../services/utils/CustomerOperationsPageData';
+import { LazyLoadData } from '../../../../../../../../../../../services/common/ILazyLoadRequestService';
+import { InvoiceGroupPayerStatsDO } from '../../../../../../../../../../../services/invoices/data-objects/stats/InvoiceGroupPayerStatsDO';
+import { InvoiceGroupDO } from '../../../../../../../../../../../services/invoices/data-objects/InvoiceGroupDO';
+import { HotelAggregatorService } from '../../../../../../../../../../../services/hotel/HotelAggregatorService';
+import { HotelAggregatedInfo } from '../../../../../../../../../../../services/hotel/utils/HotelAggregatedInfo';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
     selector: 'customer-invoice-history',
@@ -25,7 +25,7 @@ export class CustomerInvoiceHistoryComponent implements OnInit {
     private _totalCount: number;
 
     invoiceGroupPayerStatsList: InvoiceGroupPayerStatsDO[] = [];
-    ccySymbol: string;
+    ccySymbol: string = "";
 
     constructor(private _appContext: AppContext,
         private _invoiceGroupsService: InvoiceGroupsService,
@@ -36,14 +36,14 @@ export class CustomerInvoiceHistoryComponent implements OnInit {
         this.isLoading = true;
         this._invoiceGroupsService.setCustomerIdFilter(this.customerOperationsPageData.customerVM.customer.id);
 
-        Observable.combineLatest(
-            this._invoiceGroupsService.getDataObservable(),
-            this._hotelAggregatorService.getHotelAggregatedInfo()
-        ).subscribe((result: [LazyLoadData<InvoiceGroupDO>, HotelAggregatedInfo]) => {
-            this.invoiceGroupPayerStatsList = InvoiceGroupPayerStatsDO.buildInvoiceGroupPayerStatsListFromInvoiceGroupList(result[0].pageContent.pageItemList,
+        this._hotelAggregatorService.getHotelAggregatedInfo().subscribe((aggInfo: HotelAggregatedInfo) => {
+            this.ccySymbol = aggInfo.ccy.symbol;
+        });
+        this._invoiceGroupsService.getDataObservable().subscribe((lazyLoadData: LazyLoadData<InvoiceGroupDO>) => {
+            var invoiceGroupPayerStatsList = InvoiceGroupPayerStatsDO.buildInvoiceGroupPayerStatsListFromInvoiceGroupList(lazyLoadData.pageContent.pageItemList,
                 this.customerOperationsPageData.customerVM.customer.id);
-            this.totalCount = result[0].totalCount.numOfItems;
-            this.ccySymbol = result[1].ccy.symbol;
+            this.invoiceGroupPayerStatsList = this.invoiceGroupPayerStatsList.concat(invoiceGroupPayerStatsList);
+            this.totalCount = lazyLoadData.totalCount.numOfItems;
             this.isLoading = false;
         });
         this._invoiceGroupsService.refreshData();
