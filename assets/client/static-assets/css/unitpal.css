@@ -660,6 +660,7 @@ lazy-loading-table {
 .btn-primary:focus {
     background-color: #36ce8d !important;
     border-color: #36ce8d !important;
+    color: white !important;
 }
 
 .btn-danger,
@@ -669,6 +670,7 @@ lazy-loading-table {
 .btn-danger:focus {
     background-color: rgb(251, 103, 8) !important;
     border-color: rgb(251, 103, 8) !important;
+    color: white !important;
 }
 
 .btn-green,
@@ -678,7 +680,7 @@ lazy-loading-table {
 .btn-green:focus {
     background-color: rgb(29, 205, 140) !important;
     border-color: rgb(29, 205, 140) !important;
-    color: white;
+    color: white !important;
 }
 
 /* End Bootstrap overrides */

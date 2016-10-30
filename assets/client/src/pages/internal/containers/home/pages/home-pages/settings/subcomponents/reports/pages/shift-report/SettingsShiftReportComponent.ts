@@ -68,6 +68,7 @@ export class SettingsShiftReportComponent extends BaseComponent {
     
 	public reportCSVUrl(): string {
 		let params = {
+			//TODO: Report Type
 			reportType: 2,
 			properties: {
 				startDate: this.startDate,

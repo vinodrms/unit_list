@@ -11,9 +11,9 @@ const settingsReportsRoutes: Routes = [
         path: '', component: SettingsReportsComponent,
         children: [
             { path: '', redirectTo: 'shift', pathMatch: 'prefix' },
-            { path: 'shift', component: SettingsShiftReportComponent }
-            // { path: 'backup', component: SettingsBackUpReportComponent },
-            // { path: 'key-metrics', component: SettingsKeyMetricsReportComponent }
+            { path: 'shift', component: SettingsShiftReportComponent },
+            { path: 'backup', component: SettingsBackUpReportComponent },
+            { path: 'key-metrics', component: SettingsKeyMetricsReportComponent }
         ]
     }
 ];
