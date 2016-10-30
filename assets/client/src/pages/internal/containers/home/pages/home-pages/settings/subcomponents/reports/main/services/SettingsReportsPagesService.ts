@@ -16,7 +16,7 @@ export class SettingsReportsPagesService {
 			new SettingsReportsPageVM("key-metrics", SettingsReportsType.KeyMetrics, "Key Metrics")
 		];
 	}
-	
+	//TODO: This does not seem to bootstrap a page, just sets the selected tab, consifer renaming
 	public bootstrap(pageType: SettingsReportsType) {
 		_.forEach(this._reportsPageList, (page: SettingsReportsPageVM) => {
 			page.selected = page.pageType === pageType;

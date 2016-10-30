@@ -31,7 +31,7 @@
             "type": "node",
             "program": "${workspaceRoot}/node_modules/sails-test-helper/node_modules/mocha/bin/_mocha",
             "stopOnEntry": false,
-            "args": ["api/test/root/**/*.js", "--timeout", "1000000"],
+            "args": ["api/test/root/**/ReportsTest.js", "--timeout", "1000000"],
             "cwd": "${workspaceRoot}",
             "runtimeExecutable": null,
             "env": { "NODE_ENV": "test"}
