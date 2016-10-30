@@ -3911,3 +3911,6 @@ table.small-margin {
 .payment-container.read-only {
     background: white;
 }
+textarea.payer-details {
+    height: 34px;
+}

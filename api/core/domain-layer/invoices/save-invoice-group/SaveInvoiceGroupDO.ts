@@ -64,6 +64,10 @@ export class SaveInvoiceGroupDO {
                             {
                                 key: "priceToPay",
                                 validationStruct: new PrimitiveValidationStructure(NumberValidationRule.buildPriceNumberRule())
+                            },
+                            {
+                                key: "additionalInvoiceDetails",
+                                validationStruct: new PrimitiveValidationStructure(StringValidationRule.buildNullable(2000))
                             }
                         ]))
                     },
