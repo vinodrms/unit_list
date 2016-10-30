@@ -15,8 +15,8 @@
         margin:auto;
         padding-right: 30px;
         padding-left: 30px;
-        font-size:11px;
-        line-height:18px;
+        font-size:12px;
+        line-height:17px;
         font-family: 'Roboto', sans-serif;
         color:#555;
     }
@@ -130,6 +130,9 @@
                                 <%}%>
                                 <%if (payerGovernmentCodeValue.length > 0) {%>
                                     <%= payerGovernmentCodeLabel %>: <%= payerGovernmentCodeValue %><br>
+                                <%}%>
+                                <%if (additionalPayerDetails.length > 0) {%>
+                                    <span class="text-details"><%= additionalPayerDetails %></span>
                                 <%}%>
 
                             </td>

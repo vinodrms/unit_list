@@ -54,6 +54,7 @@ export class InvoiceConfirmationVMContainer {
     payerVatCodeValue: string;
     payerGovernmentCodeLabel: string;
     payerGovernmentCodeValue: string;
+    additionalPayerDetails: string;
 
     itemLabel: string;
     qtyLabel: string;
@@ -157,6 +158,11 @@ export class InvoiceConfirmationVMContainer {
         this.payerGovernmentCodeValue = this._payerCustomer.customerDetails.getGovernmentCode();
         if (!_.isString(this.payerGovernmentCodeValue)) {
             this.payerGovernmentCodeValue = "";
+        }
+        this.additionalPayerDetails = "";
+        var payer = this._invoice.payerList[this.payerIndex];
+        if (_.isString(payer.additionalInvoiceDetails)) {
+            this.additionalPayerDetails = payer.additionalInvoiceDetails;
         }
     }
 

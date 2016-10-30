@@ -1,18 +1,18 @@
-import {BaseDO} from '../../../common/base/BaseDO';
-import {InvoicePaymentMethodDO} from './InvoicePaymentMethodDO';
-import {CommissionDO} from '../../../common/data-objects/commission/CommissionDO';
-import {CustomerDO, CustomerType} from '../../../customers/data-objects/CustomerDO';
-import {BaseCorporateDetailsDO} from '../../../customers/data-objects/customer-details/corporate/BaseCorporateDetailsDO';
+import { BaseDO } from '../../../common/base/BaseDO';
+import { InvoicePaymentMethodDO } from './InvoicePaymentMethodDO';
+import { CommissionDO } from '../../../common/data-objects/commission/CommissionDO';
+import { CustomerDO, CustomerType } from '../../../customers/data-objects/CustomerDO';
+import { BaseCorporateDetailsDO } from '../../../customers/data-objects/customer-details/corporate/BaseCorporateDetailsDO';
 
 export class InvoicePayerDO extends BaseDO {
-
     customerId: string;
     paymentMethod: InvoicePaymentMethodDO;
     commissionSnapshot: CommissionDO;
     priceToPay: number;
+    additionalInvoiceDetails: string;
 
     protected getPrimitivePropertyKeys(): string[] {
-        return ["customerId", "priceToPay"];
+        return ["customerId", "priceToPay", "additionalInvoiceDetails"];
     }
 
     public buildFromObject(object: Object) {
