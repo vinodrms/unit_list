@@ -35,6 +35,8 @@ export class ReportsController extends BaseController {
 	public getReport(req: Express.Request, res: Express.Response) {
         var params = JSON.parse(req.query.params);
 
+		// TODO: Add validation for getReport parameters #79
+		// TODO: Move parameters handling in ReportGroupStrategy classes #80
 		let rgType = params.reportType;
 		let startDate = new ThDateDO();
 		startDate.buildFromObject(params.properties.startDate);

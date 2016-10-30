@@ -34,7 +34,6 @@ export class SettingsBackUpReportComponent extends BaseComponent {
 
 	public reportCSVUrl(): string {
 		let params = {
-			//TODO: Report Type
 			reportType: 0,
 			properties: {
 			}
