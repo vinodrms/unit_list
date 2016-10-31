@@ -1,18 +1,18 @@
-import {Component, OnInit, Input, ViewChild } from '@angular/core';
-import {ThDateDO} from '../../../../../../../../services/common/data-objects/th-dates/ThDateDO';
-import {AppContext, ThError} from '../../../../../../../../../../common/utils/AppContext';
-import {PriceProductYieldResultVM} from '../../../../../../../../services/yield-manager/dashboard/price-products//view-models/PriceProductYieldResultVM';
-import {PriceProductYieldItemVM} from '../../../../../../../../services/yield-manager/dashboard/price-products/view-models/PriceProductYieldItemVM';
-import {IYieldManagerDashboardPriceProducts} from '../../YieldManagerDashboardComponent'
-import {YieldManagerDashboardPriceProductsService} from '../../../../../../../../services/yield-manager/dashboard/price-products/YieldManagerDashboardPriceProductsService';
-import {PriceProductYieldParam, PriceProductYieldAction} from '../../../../../../../../services/yield-manager/dashboard/common/PriceProductYieldParam';
-import {IYieldStateModel} from './components/price-product-state/IYieldStateModel';
-import {YieldActionsPanelComponent} from './components/yield-actions-panel/YieldActionsPanelComponent';
-import {IActionPaneYieldParams} from './components/yield-actions-panel/YieldActionsPanelComponent';
-import {ThDateIntervalDO} from '../../../../../../../../services/common/data-objects/th-dates/ThDateIntervalDO';
-import {YieldFilterType} from '../../../../../../../../services/common/data-objects/yield-filter/YieldFilterDO';
-import {IFilterSelection} from '../../common/interfaces/IFilterSelection';
-import {IFilterVM} from '../../../../../../../../services/yield-manager/dashboard/filter/view-models/IFilterVM';
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { ThDateDO } from '../../../../../../../../services/common/data-objects/th-dates/ThDateDO';
+import { AppContext, ThError } from '../../../../../../../../../../common/utils/AppContext';
+import { PriceProductYieldResultVM } from '../../../../../../../../services/yield-manager/dashboard/price-products//view-models/PriceProductYieldResultVM';
+import { PriceProductYieldItemVM } from '../../../../../../../../services/yield-manager/dashboard/price-products/view-models/PriceProductYieldItemVM';
+import { IYieldManagerDashboardPriceProducts } from '../../YieldManagerDashboardComponent'
+import { YieldManagerDashboardPriceProductsService } from '../../../../../../../../services/yield-manager/dashboard/price-products/YieldManagerDashboardPriceProductsService';
+import { PriceProductYieldParam, PriceProductYieldAction } from '../../../../../../../../services/yield-manager/dashboard/common/PriceProductYieldParam';
+import { IYieldStateModel } from './components/price-product-state/IYieldStateModel';
+import { YieldActionsPanelComponent } from './components/yield-actions-panel/YieldActionsPanelComponent';
+import { IActionPaneYieldParams } from './components/yield-actions-panel/YieldActionsPanelComponent';
+import { ThDateIntervalDO } from '../../../../../../../../services/common/data-objects/th-dates/ThDateIntervalDO';
+import { YieldFilterType } from '../../../../../../../../services/common/data-objects/yield-filter/YieldFilterDO';
+import { IFilterSelection } from '../../common/interfaces/IFilterSelection';
+import { IFilterVM } from '../../../../../../../../services/yield-manager/dashboard/filter/view-models/IFilterVM';
 
 @Component({
 	selector: 'yield-price-products',
@@ -23,7 +23,7 @@ export class YieldPriceProductsComponent implements OnInit {
 
 	private _yieldManager: IYieldManagerDashboardPriceProducts;
 	public priceProductResults: PriceProductYieldResultVM;
-	public filteredPriceProduct: PriceProductYieldItemVM[];
+	public filteredPriceProduct: PriceProductYieldItemVM[] = [];
 	private referenceDate: ThDateDO;
 	private selectedFilters: IFilterSelection;
 	private selectAllItemsFlag: boolean;
@@ -70,6 +70,9 @@ export class YieldPriceProductsComponent implements OnInit {
 	private setItemSelectionStateToAll(selected: boolean) {
 		this.selectAllItemsFlag = selected;
 		this.priceProductResults.priceProductYieldItemVM.forEach(item => {
+			this.itemsSelectionState[item.id] = false;
+		});
+		this.filteredPriceProduct.forEach(item => {
 			if (!item.lastRoomAvailability) {
 				this.itemsSelectionState[item.id] = selected;
 			}

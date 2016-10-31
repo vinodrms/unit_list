@@ -35,7 +35,7 @@ export class KeyMetricsReportDailyStrategy extends AReportGeneratorStrategy {
 				this.buildMetadata(report, kmrItem);
 				kmrItem.metricList.forEach((metric: KeyMetric) => {
 					// TODO: Bug with thTranslate #72
-					var typeStr = this._appContext.thTranslate.translate(this.getMetricTypeString(metric.type));
+					var typeStr = this._appContext.thTranslate.translate(metric.displayName);
 					let row: any = [typeStr];
 					_.forEach(metric.valueList, (value: IKeyMetricValue) => {
 						var m = this.metricToString(metric.valueType, value);
@@ -48,39 +48,13 @@ export class KeyMetricsReportDailyStrategy extends AReportGeneratorStrategy {
 			})
 		});
 	}
+	
+	private getPeriodFromParams(): YieldManagerPeriodDO {
 
-	private getPeriodFromParams():YieldManagerPeriodDO{
 		var period = new YieldManagerPeriodDO();
 		period.referenceDate = this._params.dateInterval.start;
 		period.noDays = this._params.dateInterval.getNumberOfDays();
 		return period;
-	}
-
-	private getMetricTypeString(type: KeyMetricType) {
-		switch(type){
-			case KeyMetricType.TotalOccupancy:
-				return "TotalOccupancy";
-			case KeyMetricType.ConfirmedOccupancy:
-				return "ConfirmedOccupancy";
-			case KeyMetricType.TotalRevPar:
-				return "TotalRevPar";
-			case KeyMetricType.ConfirmedRevPar:
-				return "ConfirmedRevPar";
-			case KeyMetricType.TotalAvgRate:
-				return "TotalAvgRate";
-			case KeyMetricType.ConfirmedAvgRate:
-				return "ConfirmedAvgRate";
-			case KeyMetricType.Rooms:
-				return "Rooms";
-			case KeyMetricType.Allotments:
-				return "Allotments";
-			case KeyMetricType.RoomRevenue:
-				return "RoomRevenue";
-			case KeyMetricType.OtherRevenue:
-				return "OtherRevenue";
-			default:
-				return type;
-		}
 	}
 
 	private metricToString(valueType: KeyMetricValueType, value: IKeyMetricValue): string {

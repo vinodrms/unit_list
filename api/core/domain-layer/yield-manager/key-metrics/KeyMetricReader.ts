@@ -1,24 +1,26 @@
-import {ThLogger, ThLogLevel} from '../../../utils/logging/ThLogger';
-import {ThError} from '../../../utils/th-responses/ThError';
-import {ThStatusCode} from '../../../utils/th-responses/ThResponse';
-import {AppContext} from '../../../utils/AppContext';
-import {SessionContext} from '../../../utils/SessionContext';
-import {KeyMetricsResult, KeyMetricsResultItem} from './utils/KeyMetricsResult';
-import {YieldManagerPeriodDO} from '../utils/YieldManagerPeriodDO';
-import {YieldManagerPeriodParser} from '../utils/YieldManagerPeriodParser';
-import {IndexedBookingInterval} from '../../../data-layer/price-products/utils/IndexedBookingInterval';
-import {RoomDO} from '../../../data-layer/rooms/data-objects/RoomDO';
-import {RoomSearchResultRepoDO} from '../../../data-layer/rooms/repositories/IRoomRepository';
-import {AllotmentDO, AllotmentStatus} from '../../../data-layer/allotments/data-objects/AllotmentDO';
-import {AllotmentSearchResultRepoDO} from '../../../data-layer/allotments/repositories/IAllotmentRepository';
-import {ThHourDO} from '../../../utils/th-dates/data-objects/ThHourDO';
-import {ThTimestampDO} from '../../../utils/th-dates/data-objects/ThTimestampDO';
-import {ThDateIntervalDO} from '../../../utils/th-dates/data-objects/ThDateIntervalDO';
-import {HotelDO} from '../../../data-layer/hotel/data-objects/HotelDO';
-import {HotelInventoryStatsReader} from '../../hotel-inventory-snapshots/stats-reader/HotelInventoryStatsReader';
-import {IHotelInventoryStats} from '../../hotel-inventory-snapshots/stats-reader/data-objects/IHotelInventoryStats';
-import {IMetricBuilderStrategy} from './utils/builder/IMetricBuilderStrategy';
-import {MetricBuilderStrategyFactory} from './utils/builder/MetricBuilderStrategyFactory';
+import { ThLogger, ThLogLevel } from '../../../utils/logging/ThLogger';
+import { ThError } from '../../../utils/th-responses/ThError';
+import { ThStatusCode } from '../../../utils/th-responses/ThResponse';
+import { AppContext } from '../../../utils/AppContext';
+import { SessionContext } from '../../../utils/SessionContext';
+import { KeyMetricsResult, KeyMetricsResultItem } from './utils/KeyMetricsResult';
+import { YieldManagerPeriodDO } from '../utils/YieldManagerPeriodDO';
+import { YieldManagerPeriodParser } from '../utils/YieldManagerPeriodParser';
+import { IndexedBookingInterval } from '../../../data-layer/price-products/utils/IndexedBookingInterval';
+import { RoomDO } from '../../../data-layer/rooms/data-objects/RoomDO';
+import { RoomSearchResultRepoDO } from '../../../data-layer/rooms/repositories/IRoomRepository';
+import { AllotmentDO, AllotmentStatus } from '../../../data-layer/allotments/data-objects/AllotmentDO';
+import { AllotmentSearchResultRepoDO } from '../../../data-layer/allotments/repositories/IAllotmentRepository';
+import { RoomCategoryStatsAggregator } from '../../room-categories/aggregators/RoomCategoryStatsAggregator';
+import { RoomCategoryStatsDO } from '../../../data-layer/room-categories/data-objects/RoomCategoryStatsDO';
+import { ThHourDO } from '../../../utils/th-dates/data-objects/ThHourDO';
+import { ThTimestampDO } from '../../../utils/th-dates/data-objects/ThTimestampDO';
+import { ThDateIntervalDO } from '../../../utils/th-dates/data-objects/ThDateIntervalDO';
+import { HotelDO } from '../../../data-layer/hotel/data-objects/HotelDO';
+import { HotelInventoryStatsReader } from '../../hotel-inventory-snapshots/stats-reader/HotelInventoryStatsReader';
+import { IHotelInventoryStats } from '../../hotel-inventory-snapshots/stats-reader/data-objects/IHotelInventoryStats';
+import { IMetricBuilderStrategy } from './utils/builder/IMetricBuilderStrategy';
+import { MetricBuilderStrategyFactory } from './utils/builder/MetricBuilderStrategyFactory';
 
 export class KeyMetricReader {
     private _currentIndexedInterval: IndexedBookingInterval;
@@ -26,6 +28,7 @@ export class KeyMetricReader {
 
     private _loadedRoomList: RoomDO[];
     private _loadedAllotmentList: AllotmentDO[];
+    private _loadedRoomCategoryStatsList: RoomCategoryStatsDO[];
     private _cancellationHour: ThHourDO;
     private _currentHotelTimestamp: ThTimestampDO;
     private _configurationCompletedTimestamp: ThTimestampDO;
@@ -71,6 +74,11 @@ export class KeyMetricReader {
             }).then((allotmentsSearchResult: AllotmentSearchResultRepoDO) => {
                 this._loadedAllotmentList = allotmentsSearchResult.allotmentList;
 
+                var roomCategStatsAggregator = new RoomCategoryStatsAggregator(this._appContext, this._sessionContext);
+                return roomCategStatsAggregator.getUsedRoomCategoryStatsList()
+            }).then((roomCategoryStatsList: RoomCategoryStatsDO[]) => {
+                this._loadedRoomCategoryStatsList = roomCategoryStatsList;
+
                 this._keyMetricsResult = new KeyMetricsResult();
                 return this.getKeyMetricsResultItem(this._currentIndexedInterval);
             }).then((currentItem: KeyMetricsResultItem) => {
@@ -109,7 +117,7 @@ export class KeyMetricReader {
                 indexedInterval.getDepartureDate().buildPrototype()
             );
             resultItem.metricList = [];
-            var metricFactory = new MetricBuilderStrategyFactory(inventoryStats);
+            var metricFactory = new MetricBuilderStrategyFactory(inventoryStats, this._loadedRoomCategoryStatsList);
             var metricBuilderStrategyList: IMetricBuilderStrategy[] = metricFactory.getMetricStrategies();
             _.forEach(metricBuilderStrategyList, (metricBuilderStrategy: IMetricBuilderStrategy) => {
                 var keyMetric = metricBuilderStrategy.buildKeyMetric(indexedInterval.bookingDateList);

@@ -9,6 +9,7 @@ import { HotelService } from '../../../../../../../../../services/hotel/HotelSer
 import { HotelDetailsDO } from '../../../../../../../../../services/hotel/data-objects/HotelDetailsDO';
 
 import { SettingsReportsService } from '../../main/services/SettingsReportsService';
+import {ReportGroupType} from '../../ReportGroupType';
 
 @Component({
 	selector: 'settings-key-metrics-report',
@@ -50,7 +51,7 @@ export class SettingsKeyMetricsReportComponent extends BaseComponent {
 	public reportCSVUrl(): string {
 		let params = {
 			//TODO: Report Type
-			reportType: 1,
+			reportType: ReportGroupType.KeyMetrics,
 			properties: {
 				startDate: this.startDate,
 				endDate: this.endDate

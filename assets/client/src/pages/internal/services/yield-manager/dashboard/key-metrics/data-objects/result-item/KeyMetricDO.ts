@@ -10,9 +10,10 @@ export class KeyMetricDO extends BaseDO {
     type: KeyMetricType;
     valueType: KeyMetricValueType;
     valueList: IKeyMetricValue[];
+    displayName: string;
 
     protected getPrimitivePropertyKeys(): string[] {
-        return ["type", "valueType"];
+        return ["type", "valueType", "displayName"];
     }
 
     public buildFromObject(object: Object) {

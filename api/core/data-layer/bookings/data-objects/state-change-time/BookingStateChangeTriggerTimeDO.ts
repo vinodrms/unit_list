@@ -1,6 +1,6 @@
-import {BaseDO} from '../../../common/base/BaseDO';
-import {ThTimestampDO} from '../../../../utils/th-dates/data-objects/ThTimestampDO';
-import {ThHourDO} from '../../../../utils/th-dates/data-objects/ThHourDO';
+import { BaseDO } from '../../../common/base/BaseDO';
+import { ThTimestampDO } from '../../../../utils/th-dates/data-objects/ThTimestampDO';
+import { ThHourDO } from '../../../../utils/th-dates/data-objects/ThHourDO';
 
 export enum BookingStateChangeTriggerType {
     ExactTimestamp,
@@ -38,5 +38,12 @@ export class BookingStateChangeTriggerTimeDO extends BaseDO {
             triggerUtcTimestamp += triggerParams.cancellationHour.getMillis();
         }
         return triggerUtcTimestamp <= triggerParams.currentHotelTimestamp.getUtcTimestamp();
+    }
+    public getThTimestamp(triggerParams: TriggerTimeParams): ThTimestampDO {
+        var thTimestamp = this.thTimestamp.buildPrototype();
+        if (this.type === BookingStateChangeTriggerType.DependentOnCancellationHour) {
+            thTimestamp.thHourDO = triggerParams.cancellationHour;
+        }
+        return thTimestamp;
     }
 }

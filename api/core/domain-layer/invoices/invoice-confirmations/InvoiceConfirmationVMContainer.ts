@@ -37,8 +37,10 @@ export class InvoiceConfirmationVMContainer {
     hotelNameValue: string;
     hotelAddressFirstLineValue: string;
     hotelAddressSecondLineValue: string;
-    hotelContactValue: string;
-    hotelContactLabel: string;
+    hotelPhoneValue: string;
+    hotelPhoneLabel: string;
+    hotelEmailValue: string;
+    hotelEmailLabel: string;
     hotelWebsite: string;
     additionalInvoiceDetails: string;
 
@@ -48,6 +50,11 @@ export class InvoiceConfirmationVMContainer {
     payerAddressSecondLineValue: string;
     payerContactLabel: string;
     payerContactValue: string;
+    payerVatCodeLabel: string;
+    payerVatCodeValue: string;
+    payerGovernmentCodeLabel: string;
+    payerGovernmentCodeValue: string;
+    additionalPayerDetails: string;
 
     itemLabel: string;
     qtyLabel: string;
@@ -102,7 +109,7 @@ export class InvoiceConfirmationVMContainer {
     private initHeaderLabelsAndValues() {
         this.invoiceLabel = this._thTranslation.translate('Invoice');
         this.dateLabel = this._thTranslation.translate('Date');
-        this.dateValue = this._invoice.paidDate.day + '/' + this._invoice.paidDate.month + '/' + this._invoice.paidDate.year;
+        this.dateValue = this._invoice.paidDate.toString();
     }
 
     private initHotelInfoLabelsAndValues() {
@@ -110,8 +117,11 @@ export class InvoiceConfirmationVMContainer {
         this.hotelNameValue = this.formatValue(this._hotel.contactDetails.name);
         this.hotelAddressFirstLineValue = this.getFormattedAddressFirstLine(this._hotel.contactDetails.address);
         this.hotelAddressSecondLineValue = this.getFormattedAddressSecondLine(this._hotel.contactDetails.address);
-        this.hotelContactLabel = this._thTranslation.translate('Contact');
-        this.hotelContactValue = this._hotel.contactDetails.phone + " / " + this._hotel.contactDetails.email;
+        this.hotelPhoneLabel = this._thTranslation.translate("Phone");
+        this.hotelPhoneValue = this._hotel.contactDetails.phone;
+        this.hotelEmailLabel = this._thTranslation.translate("Email");
+        this.hotelEmailValue = this._hotel.contactDetails.email;
+
         this.hotelWebsite = "";
         if (_.isString(this._hotel.contactDetails.websiteUrl) && this._hotel.contactDetails.websiteUrl.length > 0) {
             this.hotelWebsite = this._hotel.contactDetails.websiteUrl;
@@ -138,6 +148,21 @@ export class InvoiceConfirmationVMContainer {
         if (_.isString(email) && email.length > 0) {
             this.payerContactValue += (this.payerContactValue.length > 0) ? " / " : "";
             this.payerContactValue += email;
+        }
+        this.payerVatCodeLabel = this._thTranslation.translate('VAT');
+        this.payerVatCodeValue = this._payerCustomer.customerDetails.getVatCode();
+        if (!_.isString(this.payerVatCodeValue)) {
+            this.payerVatCodeValue = "";
+        }
+        this.payerGovernmentCodeLabel = this._thTranslation.translate('Government Code');
+        this.payerGovernmentCodeValue = this._payerCustomer.customerDetails.getGovernmentCode();
+        if (!_.isString(this.payerGovernmentCodeValue)) {
+            this.payerGovernmentCodeValue = "";
+        }
+        this.additionalPayerDetails = "";
+        var payer = this._invoice.payerList[this.payerIndex];
+        if (_.isString(payer.additionalInvoiceDetails)) {
+            this.additionalPayerDetails = payer.additionalInvoiceDetails;
         }
     }
 

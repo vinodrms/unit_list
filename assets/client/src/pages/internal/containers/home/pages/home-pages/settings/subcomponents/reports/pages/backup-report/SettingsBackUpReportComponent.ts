@@ -11,6 +11,8 @@ import { HotelService } from '../../../../../../../../../services/hotel/HotelSer
 import { HotelDetailsDO } from '../../../../../../../../../services/hotel/data-objects/HotelDetailsDO';
 import { SettingsReportsService } from '../../main/services/SettingsReportsService';
 
+import {ReportGroupType} from '../../ReportGroupType';
+
 @Component({
 	selector: 'settings-backup-report',
 	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/settings/subcomponents/reports/pages/backup-report/template/settings-backup-report.html',
@@ -34,7 +36,7 @@ export class SettingsBackUpReportComponent extends BaseComponent {
 
 	public reportCSVUrl(): string {
 		let params = {
-			reportType: 0,
+			reportType: ReportGroupType.Backup,
 			properties: {
 			}
 		}

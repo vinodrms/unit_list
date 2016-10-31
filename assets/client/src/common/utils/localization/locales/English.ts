@@ -685,6 +685,7 @@ export var EnglishTranslations: Object = {
 	"Average value for this period": "Average value for this period",
 	"Minimum value for this period": "Minimum value for this period",
 	"Maximum value for this period": "Maximum value for this period",
+	"Available / Total": "Available / Total",
 	"Select Qty": "Select Qty",
 	"Add On Product": "Add On Product",
 	"filtered by:": "filtered by:",
@@ -752,6 +753,7 @@ export var EnglishTranslations: Object = {
 	"The invoice was changed succesfully.": "The invoice was changed succesfully.",
 	"LOSS ACCEPTED BY MANAGEMENT": "LOSS ACCEPTED BY MANAGEMENT",
 	"Even though you marked this booking as lost by management, you can always mark it as Paid whenever you get the money from the customer.": "Even though you marked this booking as lost by management, you can always mark it as Paid whenever you get the money from the customer.",
+	"Additional payer details": "Additional payer details",
 	
 
 	

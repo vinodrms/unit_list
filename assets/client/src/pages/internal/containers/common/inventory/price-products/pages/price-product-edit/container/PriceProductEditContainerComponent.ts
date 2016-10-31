@@ -119,7 +119,6 @@ export class PriceProductEditContainerComponent extends BaseComponent implements
 
 			this.isLoading = false;
 			this.didSubmit = false;
-			this.saveAsDraft = false;
 		}, (error: ThError) => {
 			this.isLoading = false;
 			this._appContext.toaster.error(this._appContext.thTranslation.translate(error.message));

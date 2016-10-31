@@ -3,29 +3,23 @@ import { AMetricBuilderStrategy } from '../AMetricBuilderStrategy';
 import { KeyMetricType } from '../../KeyMetricType';
 import { IKeyMetricValue, KeyMetricValueType, PriceKeyMetric } from '../../KeyMetricsResult';
 
-export class TotalAvgRateBuilderStrategy extends AMetricBuilderStrategy {
+export class ConfirmedRevenueBuilderStrategy extends AMetricBuilderStrategy {
     constructor(hotelInventoryStats: IHotelInventoryStats) {
         super(hotelInventoryStats);
     }
 
     protected getType(): KeyMetricType {
-        return KeyMetricType.TotalAvgRate;
+        return KeyMetricType.ConfirmedRevenue;
     }
     protected getValueType(): KeyMetricValueType {
         return KeyMetricValueType.Price;
     }
     protected getKeyMetricValueCore(statsForDate: HotelInventoryStatsForDate): IKeyMetricValue {
         var metric = new PriceKeyMetric();
-        var noOccupiedRooms = statsForDate.confirmedOccupancy.getTotalRoomOccupancy() + statsForDate.guaranteedOccupancy.getTotalRoomOccupancy();
-        if (noOccupiedRooms == 0) {
-            metric.price = 0.0;
-            return metric;
-        }
-        var roomRevenue = statsForDate.confirmedRevenue.roomRevenue + statsForDate.guaranteedRevenue.roomRevenue;
-        metric.price = this.roundValue(roomRevenue / noOccupiedRooms);
+        metric.price = this.roundValue(statsForDate.confirmedRevenue.roomRevenue + statsForDate.confirmedRevenue.otherRevenue);
         return metric;
     }
     protected getKeyMetricDisplayName(): string {
-        return "Total AvgRate";
+        return "Confirmed Revenue";
     }
 }

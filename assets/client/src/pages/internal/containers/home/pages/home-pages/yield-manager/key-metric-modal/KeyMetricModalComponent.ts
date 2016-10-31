@@ -42,9 +42,10 @@ export class KeyMetricModalComponent implements ICustomModalComponent, OnInit {
 
     private bootstrapChart() {
         var metricMeta = this._modalInput.currentItem.metricVM.meta;
-        this.pageTitle = metricMeta.displayName;
+        var keyMetric = this._modalInput.currentItem.metricVM.keyMetricDO;
+        this.pageTitle = keyMetric.displayName;
         var chartComponentDO = new ChartComponentDO();
-        chartComponentDO.title = this._appContext.thTranslation.translate(metricMeta.displayName);
+        chartComponentDO.title = this._appContext.thTranslation.translate(keyMetric.displayName);
         chartComponentDO.subtitle = this._appContext.thTranslation.translate(metricMeta.measureUnit);
         chartComponentDO.xAxisLabels = this.getXAxisLabels();
         chartComponentDO.subset1 = this.getChartComponentSubset(this._modalInput.previousItem);

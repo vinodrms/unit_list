@@ -14,6 +14,14 @@ import { SettingsReportsType } from '../../main/services/utils/SettingsReportsTy
 import { ThDateDO } from '../../../../../../../../../services/common/data-objects/th-dates/ThDateDO';
 import { ThHourDO } from '../../../../../../../../../services/common/data-objects/th-dates/ThHourDO';
 
+import {ReportGroupType} from '../../ReportGroupType';
+
+export enum ReportGroupType{
+	Backup,
+	KeyMetrics,
+	ShiftReport
+}
+
 @Component({
 	selector: 'settings-shift-report',
 	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/settings/subcomponents/reports/pages/shift-report/template/settings-shift-report.html',
@@ -69,7 +77,7 @@ export class SettingsShiftReportComponent extends BaseComponent {
 	public reportCSVUrl(): string {
 		let params = {
 			//TODO: Report Type
-			reportType: 2,
+			reportType: ReportGroupType.ShiftReport,
 			properties: {
 				startDate: this.startDate,
 				endDate: this.endDate,

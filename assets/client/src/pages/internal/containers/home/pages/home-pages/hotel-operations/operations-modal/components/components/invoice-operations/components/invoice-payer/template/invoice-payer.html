@@ -56,6 +56,15 @@
                     <span> {{selectedPaymentMethodVM.displayName | translate}}</span>
                 </div>
             </div>
+
+            <div *ngIf="editMode" class="form-group m-0">
+                <div class="input-group">
+                    <textarea class="form-control payer-details" 
+                        [(ngModel)]="invoicePayerVM.invoicePayerDO.additionalInvoiceDetails" name="additionalInvoiceDetails" 
+                        placeholder="{{'Additional payer details' | translate}}">                        
+                    </textarea>
+                </div>
+            </div>
             
             <div *ngIf="editMode" class="form-group m-0">
                 <div class="input-group">
