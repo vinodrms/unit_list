@@ -16,12 +16,6 @@ import { ThHourDO } from '../../../../../../../../../services/common/data-object
 
 import {ReportGroupType} from '../../ReportGroupType';
 
-export enum ReportGroupType{
-	Backup,
-	KeyMetrics,
-	ShiftReport
-}
-
 @Component({
 	selector: 'settings-shift-report',
 	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/settings/subcomponents/reports/pages/shift-report/template/settings-shift-report.html',
