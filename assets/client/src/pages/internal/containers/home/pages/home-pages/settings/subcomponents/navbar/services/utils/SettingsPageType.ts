@@ -6,5 +6,6 @@ export enum SettingsPageType {
 	AddOnProducts,
 	PriceProducts,
 	CustomerRegister,
-	Allotments
+	Allotments,
+	Reports
 }
