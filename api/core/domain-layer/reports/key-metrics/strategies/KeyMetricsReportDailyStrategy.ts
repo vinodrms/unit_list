@@ -48,12 +48,12 @@ export class KeyMetricsReportDailyStrategy extends AReportGeneratorStrategy {
 			})
 		});
 	}
-
+	
 	private getPeriodFromParams(): YieldManagerPeriodDO {
-		//TODO: period should be returned from this._params
+
 		var period = new YieldManagerPeriodDO();
-		period.referenceDate = ThDateDO.buildThDateDO(2016, 9, 20);
-		period.noDays = 100;
+		period.referenceDate = this._params.dateInterval.start;
+		period.noDays = this._params.dateInterval.getNumberOfDays();
 		return period;
 	}
 

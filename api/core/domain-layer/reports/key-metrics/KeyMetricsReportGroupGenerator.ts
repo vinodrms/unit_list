@@ -29,7 +29,7 @@ export class KeyMetricsReportGroupGenerator implements IReportGroupGeneratorStra
 
 				let keyMetricsReport = null;
 
-				let pMetrics = keyMetricsReportGenerator.generate({})
+				let pMetrics = keyMetricsReportGenerator.generate(params)
 				.then((report: ReportDO) => {
 					keyMetricsReport = report;
 				})

@@ -1,0 +1,14 @@
+<div class="basic-info-settings-container">
+	<div class="basic-info-settings-tabbar">
+		<ul class="nav nav-tabs">
+			<li *ngFor="let reportPage of reportsPageList" [ngClass]="{'active': reportPage.selected}">
+				<a (click)="changePage(reportPage)">
+					{{reportPage.pageName | translate}}
+				</a>
+			</li>
+		</ul>
+	</div>
+	<div class="basic-info-settings-edit-container">
+		<router-outlet></router-outlet>
+	</div>
+</div>
