@@ -13,15 +13,15 @@
     .invoice-box{
         max-width:800px;
         margin:auto;
-        padding-right: 30px;
-        padding-left: 30px;
-        font-size:12px;
-        line-height:17px;
+        padding-right: 20px;
+        padding-left: 20px;
+        font-size:17px;
+        line-height:22px;
         font-family: 'Roboto', sans-serif;
         color:#555;
     }
     .small-line-height {
-        line-height:12px;
+        line-height:17px;
     }
     
     .invoice-box table{
@@ -86,45 +86,58 @@
         min-height: 100%;
         height: auto !important; /* This line and the next line are not necessary unless you need IE6 support */
         height: 100%;
-        margin: 0 auto -90px; /* the bottom margin is the negative value of the footer's height */
+        margin: 0 auto -150px; /* the bottom margin is the negative value of the footer's height */
     }
     .footer, .push {
-        height: 90px; /* .push must be the same height as .footer */
+        height: 150px; /* .push must be the same height as .footer */
+        font-size:17px;
+        line-height:22px;
+        font-family: 'Roboto', sans-serif;
+        color:#555;
     }
     .text-details {
         white-space:pre-wrap;
     }
     .small-font {
-        font-size: 9px;
-        line-height: 9px;
+        font-size: 16px;
+        line-height: 17px;
     }
     .border-right {
         border-right: 1px dotted gray;
     }
+    .envelope-address {
+        border: 1px dotted gray;
+        padding-left: 10px;
+    }
+
     </style>
 </head>
 
 <body>
     <div class="invoice-box wrapper">
-        <br><br>
+        <br><br><br>
         <table cellpadding="0" cellspacing="0">
             <tr class="top">
                 <td colspan="5">
                     <table>
                         <tr>
-                            <td class="title small-line-height">
+                            <td class="title small-line-height" width="45%">
+                                <div class="envelope-address">
+                                    <br>
+                                    <%= payerNameValue %><br>
+                                    <%if (payerAddressFirstLineValue.length > 0) {%>
+                                        <%= payerAddressFirstLineValue %><br>
+                                    <%}%>
+                                    <%if (payerAddressSecondLineValue.length > 0) {%>
+                                        <%= payerAddressSecondLineValue %><br>
+                                    <%}%>
+                                    <%if (payerContactValue.length > 0) {%>
+                                        <%= payerContactLabel %>: <%= payerContactValue %><br>
+                                    <%}%>
+                                    <br>
+                                </div>
+                                
                                 <br>
-                                <%= payerNameValue %><br>
-                                <%if (payerAddressFirstLineValue.length > 0) {%>
-                                    <%= payerAddressFirstLineValue %><br>
-                                <%}%>
-                                <%if (payerAddressSecondLineValue.length > 0) {%>
-                                    <%= payerAddressSecondLineValue %><br>
-                                <%}%>
-                                <%if (payerContactValue.length > 0) {%>
-                                    <%= payerContactLabel %>: <%= payerContactValue %><br>
-                                <%}%>
-                                <br><br>
                                 <%if (payerVatCodeValue.length > 0) {%>
                                     <%= payerVatCodeLabel %>: <%= payerVatCodeValue %><br>
                                 <%}%>
@@ -136,9 +149,9 @@
                                 <%}%>
 
                             </td>
-                            
-                            <td>
-                                <img src="<%= hotelLogoSrcValue %>" style="width:100%; max-height:200px; max-width:200px;"><br>
+                            <td width="10%"></td>
+                            <td width="45%" style="text-align:right;">
+                                <img src="<%= hotelLogoSrcValue %>" style="max-width:100%; max-height:240px; height:auto;"><br>
                                 <%= hotelVatLabel %>: <%= hotelVatValue %><br>
                                 <%= invoiceLabel %> : <%= invoiceReference %><br>
                                 <%= dateLabel %>: <%= dateValue %><br>
@@ -151,6 +164,7 @@
             <tr class="information">
                 <td colspan="5">
                     <table>
+                        <br><br><br><br>
                         <tr>
                             <td>
                                 <%if (addFieldValue1.length > 0) {%>
@@ -220,50 +234,17 @@
                 <td colspan="5">
                     <table>
                         <tr>
-                            <td>
+                            <td width="100%">
                                 <br>
                                 <%if (additionalInvoiceDetails.length > 0) {%>
                                     <span class="text-details small-font"><%=additionalInvoiceDetails%></span>
                                 <%}%>
                             </td>
-                            <td width="45%">
-                            </td>
                         </tr>
                     </table>
                 </td>
             </tr>
-            <tr class="information small-font">
-                <td colspan="5">
-                    <table>
-                        <tr>
-                            <td witdh="0%"></td>
-                            <td witdh="33%" class="border-right">
-                                <%= hotelNameValue %>
-                            </td>
-                            <td witdh="33%" class="border-right">
-                                <%= hotelAddressFirstLineValue %><br>
-                            </td>
-                            <td witdh="33%">
-                                <%= hotelAddressSecondLineValue %><br>
-                            </td>
-                            <td witdh="0%"></td>
-                        </tr>
-                        <tr>
-                            <td witdh="0%"></td>
-                            <td witdh="33%" class="border-right">
-                                <%= hotelPhoneLabel %>: <%= hotelPhoneValue %>
-                            </td>
-                            <td witdh="33%" class="border-right">
-                                <%= hotelEmailLabel %>: <%= hotelEmailValue %>
-                            </td>
-                            <td witdh="33%">
-                                <%= hotelWebsite %><br>
-                            </td>
-                            <td witdh="0%"></td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
+            
 
             <tr class="top footer">
                 <td colspan="5">
@@ -273,12 +254,35 @@
         </table>
     </div>
     <div class="footer">
-        <div style="text-align:center; width:100%; padding-top: 25px;">
-            <p style="margin: auto;">
-                <span style="font-size: 7px;">Generated from </span>
-                <img src="<%= unitpalLogoSrcValue %>" style="height:13px;">
-                <span style="font-size: 9px;"><strong>Unit</strong>Pal</span>
-            </p>
+        <div style="text-align:center; width:100%; padding-top: 25px; padding-left: 35px; padding-right: 35px;">
+            <table style="width:93%;">
+                <tr>
+                    <td witdh="0%"></td>
+                    <td witdh="33%" class="border-right">
+                        <%= hotelNameValue %>
+                    </td>
+                    <td witdh="33%" class="border-right">
+                        <%= hotelAddressFirstLineValue %><br>
+                    </td>
+                    <td witdh="33%">
+                        <%= hotelAddressSecondLineValue %><br>
+                    </td>
+                    <td witdh="0%"></td>
+                </tr>
+                <tr>
+                    <td witdh="0%"></td>
+                    <td witdh="33%" class="border-right">
+                        <%= hotelPhoneLabel %>: <%= hotelPhoneValue %>
+                    </td>
+                    <td witdh="33%" class="border-right">
+                        <%= hotelEmailLabel %>: <%= hotelEmailValue %>
+                    </td>
+                    <td witdh="33%">
+                        <%= hotelWebsite %><br>
+                    </td>
+                    <td witdh="0%"></td>
+                </tr>
+            </table>
         </div>
     </div>
 </body>
