@@ -19,17 +19,7 @@ export class KeyMetricMetaFactory {
             fontName: "O"
         },
         {
-            type: KeyMetricType.ConfirmedRevPar,
-            measureUnit: "",
-            fontName: "O"
-        },
-        {
             type: KeyMetricType.TotalAvgRate,
-            measureUnit: "",
-            fontName: "R"
-        },
-        {
-            type: KeyMetricType.ConfirmedAvgRate,
             measureUnit: "",
             fontName: "R"
         },
