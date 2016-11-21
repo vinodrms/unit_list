@@ -11,7 +11,7 @@ export class InvoiceItemVM {
     qty: number;
     netUnitPrice: number;
     vat: number;
-    varPercentage: number;
+    vatPercentage: number;
     subtotal: number;
     isLastOne: boolean;
 
@@ -25,22 +25,22 @@ export class InvoiceItemVM {
         this.qty = invoiceItemDO.meta.getNumberOfItems();
 
         var vatValue = this.getVatValue(invoiceItemDO.meta.getVatId(), vatTaxList);
-        this.varPercentage = this._thUtils.roundNumberToTwoDecimals(vatValue * 100);
-        var unitVat = this._thUtils.roundNumberToTwoDecimals(vatValue * invoiceItemDO.meta.getUnitPrice());
+        this.vatPercentage = this._thUtils.roundNumberToTwoDecimals(vatValue * 100);
+        this.netUnitPrice = this._thUtils.roundNumberToTwoDecimals(invoiceItemDO.meta.getUnitPrice() / (1 + vatValue));
+        var unitVat = this._thUtils.roundNumberToTwoDecimals(invoiceItemDO.meta.getUnitPrice() - this.netUnitPrice);
         this.vat = this._thUtils.roundNumberToTwoDecimals(unitVat * invoiceItemDO.meta.getNumberOfItems());
-        this.netUnitPrice = this._thUtils.roundNumberToTwoDecimals(invoiceItemDO.meta.getUnitPrice() - unitVat);
         this.subtotal = this._thUtils.roundNumberToTwoDecimals(this.qty * this.netUnitPrice);
     }
 
     private getVatValue(vatId: string, vatTaxList: TaxDO[]): number {
         if (this._thUtils.isUndefinedOrNull(vatId)) {
-            return 0;
+            return 0.0;
         }
         var vat = _.find(vatTaxList, (vat: TaxDO) => {
             return vat.id === vatId;
         });
         if (this._thUtils.isUndefinedOrNull(vat)) {
-            return 0;
+            return 0.0;
         }
         return vat.value;
     }
