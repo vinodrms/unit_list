@@ -1,38 +1,38 @@
-import {UnitPalConfig, DatabaseType} from '../utils/environment/UnitPalConfig';
-import {IHotelRepository} from './hotel/repositories/IHotelRepository';
-import {MongoHotelRepository} from './hotel/repositories/mongo/MongoHotelRepository';
-import {ISettingsRepository} from './settings/repositories/ISettingsRepository';
-import {MongoSettingsRepository} from './settings/repositories/mongo/MongoSettingsRepository';
-import {IBedRepository} from './beds/repositories/IBedRepository';
-import {MongoBedRepository} from './beds/repositories/mongo/MongoBedRepository';
-import {MongoRoomRepository} from './rooms/repositories/mongo/MongoRoomRepository';
-import {IRoomRepository} from './rooms/repositories/IRoomRepository';
-import {MongoRoomCategoryRepository} from './room-categories/repositories/mongo/MongoRoomCategoryRepository';
-import {IRoomCategoryRepository} from './room-categories/repositories/IRoomCategoryRepository';
-import {ITaxRepository} from './taxes/repositories/ITaxRepository';
-import {MongoTaxRepository} from './taxes/repositories/mongo/MongoTaxRepository';
-import {IAddOnProductRepository} from './add-on-products/repositories/IAddOnProductRepository';
-import {MongoAddOnProductRepository} from './add-on-products/repositories/mongo/MongoAddOnProductRepository';
-import {IRepositoryCleaner} from './common/base/IRepositoryCleaner';
-import {MongoCustomerRepository} from './customers/repositories/mongo/MongoCustomerRepository';
-import {ICustomerRepository} from './customers/repositories/ICustomerRepository';
-import {IPriceProductRepository} from './price-products/repositories/IPriceProductRepository';
-import {MongoPriceProductRepository} from './price-products/repositories/mongo/MongoPriceProductRepository';
-import {IYieldFilterConfigurationRepository} from './hotel-configurations/repositories/IYieldFilterConfigurationRepository';
-import {MongoYieldFilterConfigurationRepository} from './hotel-configurations/repositories/mongo/MongoYieldFilterConfigurationRepository';
-import {IAllotmentRepository} from './allotments/repositories/IAllotmentRepository';
-import {MongoAllotmentRepository} from './allotments/repositories/mongo/MongoAllotmentRepository';
-import {INotificationsRepository} from './notifications/repositories/INotificationsRepository';
-import {MongoNotificationsRepository} from './notifications/repositories/mongo/MongoNotificationsRepository';
-import {IInvoiceGroupsRepository} from './invoices/repositories/IInvoiceGroupsRepository';
-import {MongoInvoiceGroupsRepository} from './invoices/repositories/mongo/MongoInvoiceGroupsRepository';
-import {MongoInvoiceGroupsRepositoryWithBookingPriceLink} from './invoices/repositories/mongo/decorators/MongoInvoiceGroupsRepositoryWithBookingPriceLink';
-import {IBookingRepository} from './bookings/repositories/IBookingRepository';
-import {MongoBookingRepository} from './bookings/repositories/mongo/MongoBookingRepository';
-import {IHotelInventorySnapshotRepository} from './hotel-inventory-snapshots/repositories/IHotelInventorySnapshotRepository';
-import {MongoHotelInventorySnapshotRepository} from './hotel-inventory-snapshots/repositories/mongo/MongoHotelInventorySnapshotRepository';
-import {IReportMetadataRepository} from './reports/repositories/IReportMetadataRepository';
-import {MongoReportMetadataRepository} from './reports/repositories/mongo/MongoReportMetadataRepository';
+import { UnitPalConfig, DatabaseType } from '../utils/environment/UnitPalConfig';
+import { IHotelRepository } from './hotel/repositories/IHotelRepository';
+import { MongoHotelRepository } from './hotel/repositories/mongo/MongoHotelRepository';
+import { ISettingsRepository } from './settings/repositories/ISettingsRepository';
+import { MongoSettingsRepository } from './settings/repositories/mongo/MongoSettingsRepository';
+import { IBedRepository } from './beds/repositories/IBedRepository';
+import { MongoBedRepository } from './beds/repositories/mongo/MongoBedRepository';
+import { MongoRoomRepository } from './rooms/repositories/mongo/MongoRoomRepository';
+import { IRoomRepository } from './rooms/repositories/IRoomRepository';
+import { MongoRoomCategoryRepository } from './room-categories/repositories/mongo/MongoRoomCategoryRepository';
+import { IRoomCategoryRepository } from './room-categories/repositories/IRoomCategoryRepository';
+import { ITaxRepository } from './taxes/repositories/ITaxRepository';
+import { MongoTaxRepository } from './taxes/repositories/mongo/MongoTaxRepository';
+import { IAddOnProductRepository } from './add-on-products/repositories/IAddOnProductRepository';
+import { MongoAddOnProductRepository } from './add-on-products/repositories/mongo/MongoAddOnProductRepository';
+import { IRepositoryCleaner } from './common/base/IRepositoryCleaner';
+import { MongoCustomerRepository } from './customers/repositories/mongo/MongoCustomerRepository';
+import { ICustomerRepository } from './customers/repositories/ICustomerRepository';
+import { IPriceProductRepository } from './price-products/repositories/IPriceProductRepository';
+import { MongoPriceProductRepository } from './price-products/repositories/mongo/MongoPriceProductRepository';
+import { IYieldFilterConfigurationRepository } from './hotel-configurations/repositories/IYieldFilterConfigurationRepository';
+import { MongoYieldFilterConfigurationRepository } from './hotel-configurations/repositories/mongo/MongoYieldFilterConfigurationRepository';
+import { IAllotmentRepository } from './allotments/repositories/IAllotmentRepository';
+import { MongoAllotmentRepository } from './allotments/repositories/mongo/MongoAllotmentRepository';
+import { INotificationsRepository } from './notifications/repositories/INotificationsRepository';
+import { MongoNotificationsRepository } from './notifications/repositories/mongo/MongoNotificationsRepository';
+import { IInvoiceGroupsRepository } from './invoices/repositories/IInvoiceGroupsRepository';
+import { MongoInvoiceGroupsRepository } from './invoices/repositories/mongo/MongoInvoiceGroupsRepository';
+import { MongoInvoiceGroupsRepositoryWithBookingPriceLink } from './invoices/repositories/mongo/decorators/MongoInvoiceGroupsRepositoryWithBookingPriceLink';
+import { IBookingRepository } from './bookings/repositories/IBookingRepository';
+import { MongoBookingRepository } from './bookings/repositories/mongo/MongoBookingRepository';
+import { IHotelInventorySnapshotRepository } from './hotel-inventory-snapshots/repositories/IHotelInventorySnapshotRepository';
+import { MongoHotelInventorySnapshotRepository } from './hotel-inventory-snapshots/repositories/mongo/MongoHotelInventorySnapshotRepository';
+import { IReportMetadataRepository } from './reports/repositories/IReportMetadataRepository';
+import { MongoReportMetadataRepository } from './reports/repositories/mongo/MongoReportMetadataRepository';
 
 export class RepositoryFactory {
     private _databaseType: DatabaseType;
@@ -44,9 +44,9 @@ export class RepositoryFactory {
         switch (this._databaseType) {
             default:
                 return [new MongoHotelRepository(), new MongoBedRepository(), new MongoTaxRepository(), new MongoAddOnProductRepository(),
-                    new MongoRoomRepository(), new MongoRoomCategoryRepository(), new MongoCustomerRepository(), new MongoPriceProductRepository(),
-                    new MongoYieldFilterConfigurationRepository(), new MongoAllotmentRepository(), new MongoNotificationsRepository(),
-                    new MongoBookingRepository(), new MongoInvoiceGroupsRepository(), new MongoHotelInventorySnapshotRepository()];
+                new MongoRoomRepository(), new MongoRoomCategoryRepository(), new MongoCustomerRepository(), new MongoPriceProductRepository(),
+                new MongoYieldFilterConfigurationRepository(), new MongoAllotmentRepository(), new MongoNotificationsRepository(),
+                new MongoBookingRepository(), new MongoInvoiceGroupsRepository(new MongoHotelRepository()), new MongoHotelInventorySnapshotRepository()];
         }
     }
 
@@ -136,7 +136,7 @@ export class RepositoryFactory {
     getInvoiceGroupsRepository(): IInvoiceGroupsRepository {
         switch (this._databaseType) {
             default:
-                return new MongoInvoiceGroupsRepositoryWithBookingPriceLink(new MongoInvoiceGroupsRepository(), new MongoBookingRepository(), new MongoCustomerRepository());
+                return new MongoInvoiceGroupsRepositoryWithBookingPriceLink(new MongoInvoiceGroupsRepository(new MongoHotelRepository()), new MongoBookingRepository(), new MongoCustomerRepository());
         }
     }
 

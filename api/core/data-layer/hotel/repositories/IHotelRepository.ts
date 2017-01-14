@@ -1,10 +1,11 @@
-import {HotelDO} from '../data-objects/HotelDO';
-import {UserDO} from '../data-objects/user/UserDO';
-import {ActionTokenDO} from '../data-objects/user/ActionTokenDO';
-import {HotelContactDetailsDO} from '../data-objects/hotel-contact-details/HotelContactDetailsDO';
-import {GeoLocationDO} from '../../common/data-objects/geo-location/GeoLocationDO';
-import {OperationHoursDO} from '../data-objects/operation-hours/OperationHoursDO';
-import {LazyLoadRepoDO} from '../../common/repo-data-objects/LazyLoadRepoDO';
+import { HotelDO } from '../data-objects/HotelDO';
+import { UserDO } from '../data-objects/user/UserDO';
+import { ActionTokenDO } from '../data-objects/user/ActionTokenDO';
+import { HotelContactDetailsDO } from '../data-objects/hotel-contact-details/HotelContactDetailsDO';
+import { GeoLocationDO } from '../../common/data-objects/geo-location/GeoLocationDO';
+import { OperationHoursDO } from '../data-objects/operation-hours/OperationHoursDO';
+import { LazyLoadRepoDO } from '../../common/repo-data-objects/LazyLoadRepoDO';
+import { HotelSequenceType } from '../data-objects/sequences/HotelSequencesDO';
 
 export interface UserAccountActivationRepoDO {
 	email: string;
@@ -39,6 +40,10 @@ export interface PropertyDetailsRepoDO {
 	timezone: string;
 	amenityIdList: string[];
 }
+export interface SequenceValue {
+	hotelPrefix: string;
+	sequence: number;
+}
 
 export interface IHotelRepository {
 	addHotel(hotel: HotelDO): Promise<HotelDO>;
@@ -54,4 +59,6 @@ export interface IHotelRepository {
 	updatePaymentsPolicies(hotelMeta: HotelMetaRepoDO, paymPoliciesParams: PaymentsPoliciesRepoDO): Promise<HotelDO>;
 	updatePropertyDetails(hotelMeta: HotelMetaRepoDO, propertyDetails: PropertyDetailsRepoDO): Promise<HotelDO>;
 	markConfigurationCompleted(hotelMeta: HotelMetaRepoDO, hotel: HotelDO): Promise<HotelDO>;
+
+	getNextSequenceValue(hotelId: string, sequenceType: HotelSequenceType): Promise<SequenceValue>;
 }

@@ -6,13 +6,16 @@ import { MongoRepository, MongoErrorCodes, MongoSearchCriteria } from '../../../
 import { HotelDO } from '../../../data-objects/HotelDO';
 import { HotelContactDetailsDO } from '../../../data-objects/hotel-contact-details/HotelContactDetailsDO';
 import { GeoLocationDO } from '../../../../common/data-objects/geo-location/GeoLocationDO';
-import { HotelMetaRepoDO, BasicHotelInfoRepoDO, PaymentsPoliciesRepoDO, PropertyDetailsRepoDO } from '../../IHotelRepository';
+import { HotelMetaRepoDO, BasicHotelInfoRepoDO, PaymentsPoliciesRepoDO, PropertyDetailsRepoDO, SequenceValue } from '../../IHotelRepository';
 import { LazyLoadRepoDO } from '../../../../common/repo-data-objects/LazyLoadRepoDO';
 import { ThTimestampDO } from '../../../../../utils/th-dates/data-objects/ThTimestampDO';
+import { HotelSequenceType, HotelSequencesDO } from '../../../data-objects/sequences/HotelSequencesDO';
 
 import _ = require("underscore");
 
 export class MongoHotelDetailsRepository extends MongoRepository {
+	private static PrefixLength = 3;
+
 	constructor(hotelsEntity: Sails.Model) {
 		super(hotelsEntity);
 	}
@@ -126,5 +129,46 @@ export class MongoHotelDetailsRepository extends MongoRepository {
 				resolve(hotelList);
 			}
 		);
+	}
+
+	public getNextSequenceValue(hotelId: string, sequenceType: HotelSequenceType): Promise<SequenceValue> {
+		return new Promise<SequenceValue>((resolve: { (result: SequenceValue): void }, reject: { (err: ThError): void }) => {
+			this.getNextSequenceValueCore(resolve, reject, hotelId, sequenceType);
+		});
+	}
+
+	private getNextSequenceValueCore(resolve: { (result: SequenceValue): void }, reject: { (err: ThError): void },
+		hotelId: string, sequenceType: HotelSequenceType) {
+
+		var sequenceKey = HotelSequencesDO.getSequenceKey(sequenceType);
+		var incQuery = {};
+		incQuery["sequences." + sequenceKey] = 1;
+
+		this.findAndModifyDocument(
+			{ "id": hotelId }, { $inc: incQuery },
+			() => {
+				var thError = new ThError(ThStatusCode.HotelDetailsRepositoryProblemGettingSequence, null);
+				ThLogger.getInstance().logBusiness(ThLogLevel.Info, "Problem getting sequence", { hotelId: hotelId, sequenceType: sequenceType }, thError);
+				reject(thError);
+			},
+			(err: Error) => {
+				var thError = new ThError(ThStatusCode.HotelDetailsRepositoryErrorGettingSequence, err);
+				ThLogger.getInstance().logError(ThLogLevel.Error, "Error getting sequence", { hotelId: hotelId, sequenceType: sequenceType }, thError);
+				reject(thError);
+			},
+			(updatedDBHotel: Object) => {
+				var updatedHotel: HotelDO = new HotelDO();
+				updatedHotel.buildFromObject(updatedDBHotel);
+
+				resolve({
+					hotelPrefix: this.getHotelPrefix(updatedHotel),
+					sequence: updatedHotel.sequences[sequenceKey] - 1
+				});
+			}
+		);
+	}
+	private getHotelPrefix(hotel: HotelDO): string {
+		var name = hotel.contactDetails.name;
+		return name.trim().substring(0, Math.min(MongoHotelDetailsRepository.PrefixLength, name.length)).toUpperCase();
 	}
 }

@@ -1,21 +1,22 @@
-import {ThLogger, ThLogLevel} from '../../../utils/logging/ThLogger';
-import {ThError} from '../../../utils/th-responses/ThError';
-import {ThStatusCode} from '../../../utils/th-responses/ThResponse';
-import {AppContext} from '../../../utils/AppContext';
-import {ThUtils} from '../../../utils/ThUtils';
-import {SessionContext} from '../../../utils/SessionContext';
-import {HotelDO} from '../../../data-layer/hotel/data-objects/HotelDO';
-import {HotelContactDetailsDO} from '../../../data-layer/hotel/data-objects/hotel-contact-details/HotelContactDetailsDO';
-import {ActionTokenDO} from '../../../data-layer/hotel/data-objects/user/ActionTokenDO';
-import {UserDO, AccountStatus, UserRoles} from '../../../data-layer/hotel/data-objects/user/UserDO';
-import {UserContactDetailsDO} from '../../../data-layer/hotel/data-objects/user/UserContactDetailsDO';
-import {IHotelRepository} from '../../../data-layer/hotel/repositories/IHotelRepository';
-import {IEmailService, EmailHeaderDO} from '../../../services/email/IEmailService';
-import {AccountActivationEmailTemplateDO} from '../../../services/email/data-objects/AccountActivationEmailTemplateDO';
-import {AuthUtils} from '../utils/AuthUtils';
-import {HotelSignUpDO} from './HotelSignUpDO';
-import {ValidationResultParser} from '../../common/ValidationResultParser';
-import {HotelConfigurationsBootstrap} from '../../hotel-configurations/HotelConfigurationsBootstrap';
+import { ThLogger, ThLogLevel } from '../../../utils/logging/ThLogger';
+import { ThError } from '../../../utils/th-responses/ThError';
+import { ThStatusCode } from '../../../utils/th-responses/ThResponse';
+import { AppContext } from '../../../utils/AppContext';
+import { ThUtils } from '../../../utils/ThUtils';
+import { SessionContext } from '../../../utils/SessionContext';
+import { HotelDO } from '../../../data-layer/hotel/data-objects/HotelDO';
+import { HotelContactDetailsDO } from '../../../data-layer/hotel/data-objects/hotel-contact-details/HotelContactDetailsDO';
+import { HotelSequencesDO } from '../../../data-layer/hotel/data-objects/sequences/HotelSequencesDO';
+import { ActionTokenDO } from '../../../data-layer/hotel/data-objects/user/ActionTokenDO';
+import { UserDO, AccountStatus, UserRoles } from '../../../data-layer/hotel/data-objects/user/UserDO';
+import { UserContactDetailsDO } from '../../../data-layer/hotel/data-objects/user/UserContactDetailsDO';
+import { IHotelRepository } from '../../../data-layer/hotel/repositories/IHotelRepository';
+import { IEmailService, EmailHeaderDO } from '../../../services/email/IEmailService';
+import { AccountActivationEmailTemplateDO } from '../../../services/email/data-objects/AccountActivationEmailTemplateDO';
+import { AuthUtils } from '../utils/AuthUtils';
+import { HotelSignUpDO } from './HotelSignUpDO';
+import { ValidationResultParser } from '../../common/ValidationResultParser';
+import { HotelConfigurationsBootstrap } from '../../hotel-configurations/HotelConfigurationsBootstrap';
 
 export class HotelSignUp {
 	private static FirstUserIndex = 0;
@@ -96,23 +97,26 @@ export class HotelSignUp {
 		hotel.customAmenityList = [];
 		hotel.paymentMethodIdList = [];
 		hotel.configurationCompleted = false;
+		hotel.sequences = new HotelSequencesDO();
+		hotel.sequences.setInitialValues();
+
 		return hotel;
 	}
 
-    private getAccountActivationEmailTemplateDO(): AccountActivationEmailTemplateDO {
-        var emailTemplateDO: AccountActivationEmailTemplateDO = new AccountActivationEmailTemplateDO();
-        emailTemplateDO.activationLink = this._authUtils.getActivationLink(this._signUpDO.email, this._activationCode);
-        emailTemplateDO.firstName = this._signUpDO.firstName;
-        emailTemplateDO.lastName = this._signUpDO.lastName;
-        emailTemplateDO.email = this._signUpDO.email;
-        return emailTemplateDO;
+	private getAccountActivationEmailTemplateDO(): AccountActivationEmailTemplateDO {
+		var emailTemplateDO: AccountActivationEmailTemplateDO = new AccountActivationEmailTemplateDO();
+		emailTemplateDO.activationLink = this._authUtils.getActivationLink(this._signUpDO.email, this._activationCode);
+		emailTemplateDO.firstName = this._signUpDO.firstName;
+		emailTemplateDO.lastName = this._signUpDO.lastName;
+		emailTemplateDO.email = this._signUpDO.email;
+		return emailTemplateDO;
 	}
 
 	private getEmailHeaderDO(): EmailHeaderDO {
 		return {
 			to: [this._signUpDO.email],
 			subject: "[UnitPal] Account Activation",
-            attachments: []
+			attachments: []
 		};
 	}
 }

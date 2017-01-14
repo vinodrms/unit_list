@@ -1,14 +1,17 @@
-import {MongoRepository} from '../../../common/base/MongoRepository';
-import {HotelDO} from '../../data-objects/HotelDO';
-import {UserDO} from '../../data-objects/user/UserDO';
-import {MongoHotelAccountRepository} from './actions/MongoHotelAccountRepository';
-import {MongoHotelDetailsRepository} from './actions/MongoHotelDetailsRepository';
-import {ActionTokenDO} from '../../data-objects/user/ActionTokenDO';
-import {HotelContactDetailsDO} from '../../data-objects/hotel-contact-details/HotelContactDetailsDO';
-import {GeoLocationDO} from '../../../common/data-objects/geo-location/GeoLocationDO';
-import {IHotelRepository, HotelMetaRepoDO, BasicHotelInfoRepoDO, UserAccountActivationRepoDO, RequestResetPasswordRepoDO,
-	ResetPasswordRepoDO, PaymentsPoliciesRepoDO, PropertyDetailsRepoDO} from '../IHotelRepository';
-import {LazyLoadRepoDO} from '../../../common/repo-data-objects/LazyLoadRepoDO';
+import { MongoRepository } from '../../../common/base/MongoRepository';
+import { HotelDO } from '../../data-objects/HotelDO';
+import { UserDO } from '../../data-objects/user/UserDO';
+import { MongoHotelAccountRepository } from './actions/MongoHotelAccountRepository';
+import { MongoHotelDetailsRepository } from './actions/MongoHotelDetailsRepository';
+import { ActionTokenDO } from '../../data-objects/user/ActionTokenDO';
+import { HotelContactDetailsDO } from '../../data-objects/hotel-contact-details/HotelContactDetailsDO';
+import { GeoLocationDO } from '../../../common/data-objects/geo-location/GeoLocationDO';
+import {
+	IHotelRepository, HotelMetaRepoDO, BasicHotelInfoRepoDO, UserAccountActivationRepoDO, RequestResetPasswordRepoDO,
+	ResetPasswordRepoDO, PaymentsPoliciesRepoDO, PropertyDetailsRepoDO, SequenceValue
+} from '../IHotelRepository';
+import { LazyLoadRepoDO } from '../../../common/repo-data-objects/LazyLoadRepoDO';
+import { HotelSequenceType } from '../../data-objects/sequences/HotelSequencesDO';
 
 export class MongoHotelRepository extends MongoRepository implements IHotelRepository {
 	private _accountActionsRepository: MongoHotelAccountRepository;
@@ -52,5 +55,8 @@ export class MongoHotelRepository extends MongoRepository implements IHotelRepos
 	}
 	public markConfigurationCompleted(hotelMeta: HotelMetaRepoDO, hotel: HotelDO): Promise<HotelDO> {
 		return this._hotelDetailsRepository.markConfigurationCompleted(hotelMeta, hotel);
+	}
+	public getNextSequenceValue(hotelId: string, sequenceType: HotelSequenceType): Promise<SequenceValue> {
+		return this._hotelDetailsRepository.getNextSequenceValue(hotelId, sequenceType);
 	}
 }

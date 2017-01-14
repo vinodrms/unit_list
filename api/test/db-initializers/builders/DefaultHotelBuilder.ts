@@ -1,17 +1,18 @@
-import {HotelDO} from '../../../core/data-layer/hotel/data-objects/HotelDO';
-import {HotelContactDetailsDO} from '../../../core/data-layer/hotel/data-objects/hotel-contact-details/HotelContactDetailsDO';
-import {ActionTokenDO} from '../../../core/data-layer/hotel/data-objects/user/ActionTokenDO';
-import {UserDO, AccountStatus, UserRoles} from '../../../core/data-layer/hotel/data-objects/user/UserDO';
-import {UserContactDetailsDO} from '../../../core/data-layer/hotel/data-objects/user/UserContactDetailsDO';
-import {AddressDO} from '../../../core/data-layer/common/data-objects/address/AddressDO';
-import {CountryDO} from '../../../core/data-layer/common/data-objects/country/CountryDO';
-import {PaymentMethodDO} from '../../../core/data-layer/common/data-objects/payment-method/PaymentMethodDO';
-import {OperationHoursDO} from '../../../core/data-layer/hotel/data-objects/operation-hours/OperationHoursDO';
-import {ThHourDO} from '../../../core/utils/th-dates/data-objects/ThHourDO';
-import {ThTimestampDO} from '../../../core/utils/th-dates/data-objects/ThTimestampDO';
-import {ThUtils} from '../../../core/utils/ThUtils';
-import {Locales} from '../../../core/utils/localization/ThTranslation';
-import {AppContext} from '../../../core/utils/AppContext';
+import { HotelDO } from '../../../core/data-layer/hotel/data-objects/HotelDO';
+import { HotelSequencesDO } from '../../../core/data-layer/hotel/data-objects/sequences/HotelSequencesDO';
+import { HotelContactDetailsDO } from '../../../core/data-layer/hotel/data-objects/hotel-contact-details/HotelContactDetailsDO';
+import { ActionTokenDO } from '../../../core/data-layer/hotel/data-objects/user/ActionTokenDO';
+import { UserDO, AccountStatus, UserRoles } from '../../../core/data-layer/hotel/data-objects/user/UserDO';
+import { UserContactDetailsDO } from '../../../core/data-layer/hotel/data-objects/user/UserContactDetailsDO';
+import { AddressDO } from '../../../core/data-layer/common/data-objects/address/AddressDO';
+import { CountryDO } from '../../../core/data-layer/common/data-objects/country/CountryDO';
+import { PaymentMethodDO } from '../../../core/data-layer/common/data-objects/payment-method/PaymentMethodDO';
+import { OperationHoursDO } from '../../../core/data-layer/hotel/data-objects/operation-hours/OperationHoursDO';
+import { ThHourDO } from '../../../core/utils/th-dates/data-objects/ThHourDO';
+import { ThTimestampDO } from '../../../core/utils/th-dates/data-objects/ThTimestampDO';
+import { ThUtils } from '../../../core/utils/ThUtils';
+import { Locales } from '../../../core/utils/localization/ThTranslation';
+import { AppContext } from '../../../core/utils/AppContext';
 
 export class DefaultHotelBuilder {
 	private _thUtils;
@@ -69,6 +70,9 @@ export class DefaultHotelBuilder {
 		hotel.paymentMethodIdList = this.getPaymentIdList();
 		hotel.configurationCompleted = false;
 		hotel.configurationCompletedTimestamp = ThTimestampDO.buildThTimestampForTimezone(hotel.timezone);
+		hotel.sequences = new HotelSequencesDO();
+		hotel.sequences.setInitialValues();
+
 		return hotel;
 	}
 

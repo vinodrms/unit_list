@@ -1,18 +1,18 @@
-import {AppContext} from '../../../../../utils/AppContext';
-import {SessionContext} from '../../../../../utils/SessionContext';
-import {ThUtils} from '../../../../../utils/ThUtils';
-import {ThLogger, ThLogLevel} from '../../../../../utils/logging/ThLogger';
-import {ThError} from '../../../../../utils/th-responses/ThError';
-import {ThStatusCode} from '../../../../../utils/th-responses/ThResponse';
+import { AppContext } from '../../../../../utils/AppContext';
+import { SessionContext } from '../../../../../utils/SessionContext';
+import { ThUtils } from '../../../../../utils/ThUtils';
+import { ThLogger, ThLogLevel } from '../../../../../utils/logging/ThLogger';
+import { ThError } from '../../../../../utils/th-responses/ThError';
+import { ThStatusCode } from '../../../../../utils/th-responses/ThResponse';
 
-import {InvoiceGroupDO} from '../../../../../data-layer/invoices/data-objects/InvoiceGroupDO';
-import {ISaveInvoiceGroupActionStrategy} from '../ISaveInvoiceGroupActionStrategy';
-import {InvoiceGroupMetaRepoDO} from '../../../../../data-layer/invoices/repositories/IInvoiceGroupsRepository';
+import { InvoiceGroupDO } from '../../../../../data-layer/invoices/data-objects/InvoiceGroupDO';
+import { ISaveInvoiceGroupActionStrategy } from '../ISaveInvoiceGroupActionStrategy';
+import { InvoiceGroupMetaRepoDO } from '../../../../../data-layer/invoices/repositories/IInvoiceGroupsRepository';
 
-import {TaxResponseRepoDO} from '../../../../../data-layer/taxes/repositories/ITaxRepository';
-import {TaxDO} from '../../../../../data-layer/taxes/data-objects/TaxDO';
+import { TaxResponseRepoDO } from '../../../../../data-layer/taxes/repositories/ITaxRepository';
+import { TaxDO } from '../../../../../data-layer/taxes/data-objects/TaxDO';
 
-export class CustomerInvoiceGroupAddStrategy implements ISaveInvoiceGroupActionStrategy {
+export class InvoiceGroupAddStrategy implements ISaveInvoiceGroupActionStrategy {
     private _thUtils: ThUtils;
 
     constructor(private _appContext: AppContext, private _sessionContext: SessionContext,

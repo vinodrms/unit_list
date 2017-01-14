@@ -289,6 +289,8 @@ export enum ThStatusCode {
 	AllotmentsControllerErrorGettingCount,
 	AllotmentsControllerErrorGettingList,
 	HotelDetailsRepositoryErrorGettingList,
+	HotelDetailsRepositoryProblemGettingSequence,
+	HotelDetailsRepositoryErrorGettingSequence,
 	HotelIteratorError,
 	AllotmentArchiverCronJobExecutorError,
 
@@ -777,6 +779,8 @@ ThMessage[ThStatusCode.AllotmentsControllerErrorArchivingAllotment] = "Error arc
 ThMessage[ThStatusCode.AllotmentsControllerErrorGettingCount] = "Error getting the number of allotments.";
 ThMessage[ThStatusCode.AllotmentsControllerErrorGettingList] = "Error getting the list of allotments.";
 ThMessage[ThStatusCode.HotelDetailsRepositoryErrorGettingList] = "Error getting the list of hotels.";
+ThMessage[ThStatusCode.HotelDetailsRepositoryProblemGettingSequence] = "Problem getting a sequence number.";
+ThMessage[ThStatusCode.HotelDetailsRepositoryErrorGettingSequence] = "Error getting a sequence number.";
 ThMessage[ThStatusCode.HotelIteratorError] = "Error iterating through the hotels.";
 ThMessage[ThStatusCode.AllotmentArchiverCronJobExecutorError] = "Error archiving allotments from the process.";
 ThMessage[ThStatusCode.NotificationsRepositoryErrorAddingNotification] = "Error adding a notification.";
