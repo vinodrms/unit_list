@@ -1,6 +1,12 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/combineLatest';
 import { ThDateDO } from '../../../../../../../../services/common/data-objects/th-dates/ThDateDO';
 import { AppContext, ThError } from '../../../../../../../../../../common/utils/AppContext';
+import { ColorFilterVM } from '../../../../../../../../services/yield-manager/dashboard/filter/view-models/ColorFilterVM';
+import { TextFilterVM } from '../../../../../../../../services/yield-manager/dashboard/filter/view-models/TextFilterVM';
+import { FilterVMCollection } from '../../../../../../../../services/yield-manager/dashboard/filter/utils/FilterVMCollection';
+import { YieldManagerDashboardFilterService } from '../../../../../../../../services/yield-manager/dashboard/filter/YieldManagerDashboardFilterService';
 import { PriceProductYieldResultVM } from '../../../../../../../../services/yield-manager/dashboard/price-products//view-models/PriceProductYieldResultVM';
 import { PriceProductYieldItemVM } from '../../../../../../../../services/yield-manager/dashboard/price-products/view-models/PriceProductYieldItemVM';
 import { IYieldManagerDashboardPriceProducts } from '../../YieldManagerDashboardComponent'
@@ -23,6 +29,8 @@ export class YieldPriceProductsComponent implements OnInit {
 
 	private _yieldManager: IYieldManagerDashboardPriceProducts;
 	public priceProductResults: PriceProductYieldResultVM;
+	public yieldColorFilterCollection: FilterVMCollection<ColorFilterVM>;
+	public yieldTextFilterCollection: FilterVMCollection<TextFilterVM>;
 	public filteredPriceProduct: PriceProductYieldItemVM[] = [];
 	private referenceDate: ThDateDO;
 	private selectedFilters: IFilterSelection;
@@ -32,6 +40,7 @@ export class YieldPriceProductsComponent implements OnInit {
 
 	constructor(
 		private _priceProductsService: YieldManagerDashboardPriceProductsService,
+		private _filterService: YieldManagerDashboardFilterService,
 		private _appContext: AppContext
 	) {
 		this.selectAllItemsFlag = false;
@@ -50,6 +59,18 @@ export class YieldPriceProductsComponent implements OnInit {
 			this._priceProductsService.refresh({ referenceDate: date, noDays: noDays });
 		}
 		else {
+		Observable.combineLatest(
+			this._priceProductsService.getPriceProducts({ referenceDate: date, noDays: noDays }),
+			this._filterService.getColorFilterCollections(),
+			this._filterService.getTextFilterCollections()
+		).subscribe((results: [PriceProductYieldResultVM, FilterVMCollection<ColorFilterVM>[], FilterVMCollection<TextFilterVM>[]]) => {
+			this.priceProductResults = results[0];
+			this.yieldColorFilterCollection = results[1][0];
+			this.yieldTextFilterCollection = results[2][0];
+			
+			this.initializeItemSelectionStateDictionary();
+			this.updateFilteredPriceProducts();
+		});
 			this._priceProductsService.getPriceProducts({ referenceDate: date, noDays: noDays }).subscribe((results: PriceProductYieldResultVM) => {
 				this.priceProductResults = results;
 				this.initializeItemSelectionStateDictionary();
@@ -87,6 +108,7 @@ export class YieldPriceProductsComponent implements OnInit {
 		var filteredByText: PriceProductYieldItemVM[] = [];
 		var filteredBySearch: PriceProductYieldItemVM[] = [];
 
+		var sortedPriceProducts = this.sortPriceProducts(this.priceProductResults.priceProductYieldItemVM);
 		filteredByColor = this.selectByFilter(this.selectedFilters.colorFilter, this.priceProductResults.priceProductYieldItemVM);
 		filteredByText = this.selectByFilter(this.selectedFilters.textFilter, this.priceProductResults.priceProductYieldItemVM);
 		filteredBySearch = this.selectBySearchText(this.selectedFilters.searchText, this.priceProductResults.priceProductYieldItemVM);
@@ -99,6 +121,43 @@ export class YieldPriceProductsComponent implements OnInit {
 			found: this.filteredPriceProduct.length,
 			total: this.priceProductResults.priceProductYieldItemVM.length
 		}
+	}
+
+	// First group by color filter, then by text label filter
+	private sortPriceProducts(ppList: PriceProductYieldItemVM[]): PriceProductYieldItemVM[] {
+		var colorFilterId = this.yieldColorFilterCollection.filterVMList[0].filterId;
+		var textFilterId = this.yieldTextFilterCollection.filterVMList[0].filterId;
+		var textFilterCount = this.yieldTextFilterCollection.filterVMList.length;
+
+		var filterOrderMap = {};
+		filterOrderMap[colorFilterId] = {};
+		filterOrderMap[textFilterId] = {};
+
+		var count = 1;
+		this.yieldColorFilterCollection.filterVMList.forEach(cf => {
+			filterOrderMap[colorFilterId][cf.valueId] = textFilterCount * count;
+			count++;
+		});
+		filterOrderMap[colorFilterId][null] = textFilterCount * (count + 1);
+
+		count = 0;
+		this.yieldTextFilterCollection.filterVMList.forEach(tf => {
+			filterOrderMap[textFilterId][tf.valueId] = count;
+			count++;
+		});
+		filterOrderMap[textFilterId][null] = ++count;
+		debugger;
+		ppList.sort((a : PriceProductYieldItemVM, b: PriceProductYieldItemVM) => {
+			var aColorValueId = a.colorFilterList.length > 0 ? a.colorFilterList[0].valueId : null;
+			var aTextValueId = a.textFilterList.length > 0 ? a.textFilterList[0].valueId : null;
+			var bColorValueId = b.colorFilterList.length > 0 ? b.colorFilterList[0].valueId : null;
+			var bTextValueId = b.textFilterList.length > 0 ? b.textFilterList[0].valueId : null;
+			
+			var aPriority = filterOrderMap[colorFilterId][aColorValueId] + filterOrderMap[textFilterId][aTextValueId];
+			var bPriority = filterOrderMap[colorFilterId][bColorValueId] + filterOrderMap[textFilterId][bTextValueId];
+			return aPriority - bPriority;
+		});
+		return ppList;
 	}
 
 	private selectByFilter(filter: IFilterVM, priceProductYieldItemVM: PriceProductYieldItemVM[]): PriceProductYieldItemVM[] {
