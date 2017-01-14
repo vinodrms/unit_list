@@ -41,7 +41,7 @@ export class InvoicePayersValidator {
         }).map((customerId: string) => {
             return this._customersContainer.getCustomerById(customerId);
         }).reduce((count, customer: CustomerDO) => {
-            return count + customer.customerDetails.canPayInvoiceByAgreement();
+            return count + (customer.customerDetails.canPayInvoiceByAgreement() ? 1 : 0);
         }, 0).value();
     }
 }

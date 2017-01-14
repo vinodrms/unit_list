@@ -16,9 +16,7 @@ export class SettingsReportsService {
 	}
 
 	public generate(params: any){
-		debugger;	
 		return this._appContext.thHttp.post(ThServerApi.Report, params).subscribe(() => {
-			debugger;
 		});
 	}
 }

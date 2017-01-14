@@ -48,6 +48,8 @@ describe("Invoices Tests", function () {
                 createdBookingInvoiceGroup = invoiceGroup;
                 should.equal(invoiceGroup.groupBookingId, generateBookingInvoiceDO.groupBookingId);
                 should.equal(createdBookingInvoiceGroup.invoiceList.length, 1);
+                should.equal(invoiceGroup.invoiceGroupReference, "IG0000002");
+                should.equal(createdBookingInvoiceGroup.invoiceList[0].invoiceReference, "3AN0000003");
                 should.equal(createdBookingInvoiceGroup.invoiceList[0].bookingId, generateBookingInvoiceDO.bookingId);
                 var expectedNoInvoiceItems = bookingInvoiceGroupsHelper.getExpectedNoInvoiceItems(bookingInvoiceGroupsHelper.getFirstBooking());
                 should.equal(createdBookingInvoiceGroup.invoiceList[0].itemList.length, expectedNoInvoiceItems);
@@ -63,6 +65,9 @@ describe("Invoices Tests", function () {
             generateBookingInvoice.generate(generateBookingInvoiceDO).then((invoiceGroup: InvoiceGroupDO) => {
                 createdBookingInvoiceGroup = invoiceGroup;
                 should.equal(createdBookingInvoiceGroup.invoiceList.length, 2);
+                should.equal(invoiceGroup.invoiceGroupReference, "IG0000002");
+                should.equal(createdBookingInvoiceGroup.invoiceList[0].invoiceReference, "3AN0000003");
+                should.equal(createdBookingInvoiceGroup.invoiceList[1].invoiceReference, "3AN0000004");
                 should.equal(createdBookingInvoiceGroup.invoiceList[1].bookingId, generateBookingInvoiceDO.bookingId);
 
                 var expectedNoInvoiceItems = bookingInvoiceGroupsHelper.getExpectedNoInvoiceItems(bookingInvoiceGroupsHelper.getSecondBooking());
@@ -78,9 +83,11 @@ describe("Invoices Tests", function () {
             invoiceGroupsRepo.getInvoiceGroupById({ hotelId: testContext.sessionContext.sessionDO.hotel.id }, createdBookingInvoiceGroup.id)
                 .then((loadedInvoiceGroup: InvoiceGroupDO) => {
                     should.equal(loadedInvoiceGroup.groupBookingId, createdBookingInvoiceGroup.groupBookingId);
+                    should.equal(loadedInvoiceGroup.invoiceGroupReference, createdBookingInvoiceGroup.invoiceGroupReference);
                     should.equal(loadedInvoiceGroup.invoiceList.length, createdBookingInvoiceGroup.invoiceList.length);
                     for (var i = 0; i < loadedInvoiceGroup.invoiceList.length; ++i) {
                         should.equal(loadedInvoiceGroup.invoiceList[i].bookingId, createdBookingInvoiceGroup.invoiceList[i].bookingId);
+                        should.equal(loadedInvoiceGroup.invoiceList[i].invoiceReference, createdBookingInvoiceGroup.invoiceList[i].invoiceReference);
                         should.equal(loadedInvoiceGroup.invoiceList[i].itemList.length, createdBookingInvoiceGroup.invoiceList[i].itemList.length);
                     }
                     done();
@@ -96,9 +103,11 @@ describe("Invoices Tests", function () {
                     should.equal(result.invoiceGroupList.length, 1);
                     var loadedInvoiceGroup = result.invoiceGroupList[0];
                     should.equal(loadedInvoiceGroup.groupBookingId, createdBookingInvoiceGroup.groupBookingId);
+                    should.equal(loadedInvoiceGroup.invoiceGroupReference, createdBookingInvoiceGroup.invoiceGroupReference);
                     should.equal(loadedInvoiceGroup.invoiceList.length, createdBookingInvoiceGroup.invoiceList.length);
                     for (var i = 0; i < loadedInvoiceGroup.invoiceList.length; ++i) {
                         should.equal(loadedInvoiceGroup.invoiceList[i].bookingId, createdBookingInvoiceGroup.invoiceList[i].bookingId);
+                        should.equal(loadedInvoiceGroup.invoiceList[i].invoiceReference, createdBookingInvoiceGroup.invoiceList[i].invoiceReference);
                         should.equal(loadedInvoiceGroup.invoiceList[i].itemList.length, createdBookingInvoiceGroup.invoiceList[i].itemList.length);
                     }
                     done();
