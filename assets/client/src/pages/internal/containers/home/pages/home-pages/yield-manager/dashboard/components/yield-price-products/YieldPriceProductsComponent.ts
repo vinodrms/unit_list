@@ -138,15 +138,17 @@ export class YieldPriceProductsComponent implements OnInit {
 			filterOrderMap[colorFilterId][cf.valueId] = textFilterCount * count;
 			count++;
 		});
-		filterOrderMap[colorFilterId][null] = textFilterCount * (count + 1);
+
+		var nullKey = null;
+		filterOrderMap[colorFilterId][nullKey] = textFilterCount * (count + 1);
 
 		count = 0;
 		this.yieldTextFilterCollection.filterVMList.forEach(tf => {
 			filterOrderMap[textFilterId][tf.valueId] = count;
 			count++;
 		});
-		filterOrderMap[textFilterId][null] = ++count;
-		debugger;
+		filterOrderMap[textFilterId][nullKey] = ++count;
+
 		ppList.sort((a : PriceProductYieldItemVM, b: PriceProductYieldItemVM) => {
 			var aColorValueId = a.colorFilterList.length > 0 ? a.colorFilterList[0].valueId : null;
 			var aTextValueId = a.textFilterList.length > 0 ? a.textFilterList[0].valueId : null;

@@ -19,15 +19,15 @@
   "author": "3angleTECH",
   "license": "ISC",
   "dependencies": {
-    "@angular/common": "~2.2.0",
-    "@angular/compiler": "~2.2.0",
-    "@angular/core": "~2.2.0",
-    "@angular/forms": "~2.2.0",
-    "@angular/http": "~2.2.0",
-    "@angular/platform-browser": "~2.2.0",
-    "@angular/platform-browser-dynamic": "~2.2.0",
-    "@angular/router": "~3.2.0",
-    "@angular/upgrade": "~2.2.0",
+    "@angular/common": "~2.4.0",
+    "@angular/compiler": "~2.4.0",
+    "@angular/core": "~2.4.0",
+    "@angular/forms": "~2.4.0",
+    "@angular/http": "~2.4.0",
+    "@angular/platform-browser": "~2.4.0",
+    "@angular/platform-browser-dynamic": "~2.4.0",
+    "@angular/router": "~3.4.0",
+    "@angular/upgrade": "~2.4.0",
     "animate.css": "^3.5.2",
     "bootstrap": "^3.3.7",
     "bootstrap-daterangepicker": "^2.1.24",
@@ -39,17 +39,17 @@
     "pace-progress": "^1.0.2",
     "perfect-scrollbar": "^0.6.12",
     "reflect-metadata": "^0.1.8",
-    "rxjs": "5.0.0-beta.12",
+    "rxjs": "5.0.1",
     "select2": "^4.0.2",
     "socket.io": "1.4.6",
     "core-js": "^2.4.1",
-    "systemjs": "0.19.39",
+    "systemjs": "0.19.40",
     "toastr": "^2.1.2",
     "underscore": "^1.8.3",
-    "zone.js": "^0.6.25"
+    "zone.js": "^0.7.4"
   },
   "devDependencies": {
-    "concurrently": "^3.0.0",
+    "concurrently": "^3.1.0",
     "gulp": "^3.9.0",
     "gulp-angular-embed-templates": "^2.2.0",
     "gulp-clean": "^0.3.2",
@@ -60,8 +60,6 @@
     "phantomjs": "^2.1.7",
     "systemjs-builder": "^0.15.15",
     "protractor": "^3.3.0",
-    "typescript": "2.0.3"
+    "typescript": "2.1.5"
   }
 }
-
-
