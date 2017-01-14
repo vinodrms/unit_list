@@ -1,11 +1,11 @@
-import {ThUtils} from '../../../../utils/ThUtils';
-import {AppContext} from '../../../../utils/AppContext';
-import {SessionContext} from '../../../../utils/SessionContext';
-import {ISaveInvoiceGroupActionStrategy} from './ISaveInvoiceGroupActionStrategy';
+import { ThUtils } from '../../../../utils/ThUtils';
+import { AppContext } from '../../../../utils/AppContext';
+import { SessionContext } from '../../../../utils/SessionContext';
+import { ISaveInvoiceGroupActionStrategy } from './ISaveInvoiceGroupActionStrategy';
 
-import {InvoiceGroupDO} from '../../../../data-layer/invoices/data-objects/InvoiceGroupDO';
-import {InvoiceGroupUpdateStrategy} from './strategies/InvoiceGroupUpdateStrategy';
-import {CustomerInvoiceGroupAddStrategy} from './strategies/CustomerInvoiceGroupAddStrategy';
+import { InvoiceGroupDO } from '../../../../data-layer/invoices/data-objects/InvoiceGroupDO';
+import { InvoiceGroupUpdateStrategy } from './strategies/InvoiceGroupUpdateStrategy';
+import { InvoiceGroupAddStrategy } from './strategies/InvoiceGroupAddStrategy';
 
 export class SaveInvoiceGroupActionFactory {
     private _thUtils: ThUtils;
@@ -17,8 +17,8 @@ export class SaveInvoiceGroupActionFactory {
 
     public getActionStrategy(invoiceGroup: InvoiceGroupDO): ISaveInvoiceGroupActionStrategy {
         if (!this._thUtils.isUndefinedOrNull(invoiceGroup.id)) {
-			return new InvoiceGroupUpdateStrategy(this._appContext, this._sessionContext, invoiceGroup);
-		}
-		return new CustomerInvoiceGroupAddStrategy(this._appContext, this._sessionContext, invoiceGroup);
+            return new InvoiceGroupUpdateStrategy(this._appContext, this._sessionContext, invoiceGroup);
+        }
+        return new InvoiceGroupAddStrategy(this._appContext, this._sessionContext, invoiceGroup);
     }
 }

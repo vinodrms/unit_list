@@ -5,6 +5,7 @@ import { UserDO } from './user/UserDO';
 import { AmenityDO } from '../../common/data-objects/amenity/AmenityDO';
 import { OperationHoursDO } from './operation-hours/OperationHoursDO';
 import { ThTimestampDO } from '../../../utils/th-dates/data-objects/ThTimestampDO';
+import { HotelSequencesDO } from './sequences/HotelSequencesDO';
 
 export class HotelDO extends BaseDO {
 	constructor() {
@@ -25,6 +26,7 @@ export class HotelDO extends BaseDO {
 	configurationCompletedTimestamp: ThTimestampDO;
 	timezone: string;
 	operationHours: OperationHoursDO;
+	sequences: HotelSequencesDO;
 
 	protected getPrimitivePropertyKeys(): string[] {
 		return ["id", "versionId", "logoUrl", "ccyCode", "amenityIdList", "paymentMethodIdList", "additionalInvoiceDetails", "configurationCompleted", "timezone"];
@@ -57,5 +59,8 @@ export class HotelDO extends BaseDO {
 
 		this.operationHours = new OperationHoursDO();
 		this.operationHours.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "operationHours"));
+
+		this.sequences = new HotelSequencesDO();
+		this.sequences.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "sequences"));
 	}
 }

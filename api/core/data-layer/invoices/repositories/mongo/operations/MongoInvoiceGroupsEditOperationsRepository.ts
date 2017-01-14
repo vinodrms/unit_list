@@ -1,21 +1,25 @@
-import {ThLogger, ThLogLevel} from '../../../../../utils/logging/ThLogger';
-import {ThError} from '../../../../../utils/th-responses/ThError';
-import {ThStatusCode} from '../../../../../utils/th-responses/ThResponse';
-import {MongoRepository, MongoErrorCodes, MongoSearchCriteria} from '../../../../common/base/MongoRepository';
-import {MongoQueryBuilder} from '../../../../common/base/MongoQueryBuilder';
-import {InvoiceGroupDO, InvoiceGroupStatus} from '../../../data-objects/InvoiceGroupDO';
-import {InvoiceDO} from '../../../data-objects/InvoiceDO';
-import {InvoiceGroupMetaRepoDO, InvoiceGroupItemMetaRepoDO} from'../../IInvoiceGroupsRepository';
-import {InvoiceGroupsRepositoryHelper} from '../helpers/InvoiceGroupsRepositoryHelper';
-import {MongoBookingRepository} from '../../../../bookings/repositories/mongo/MongoBookingRepository';
+import { ThLogger, ThLogLevel } from '../../../../../utils/logging/ThLogger';
+import { ThError } from '../../../../../utils/th-responses/ThError';
+import { ThStatusCode } from '../../../../../utils/th-responses/ThResponse';
+import { MongoRepository, MongoErrorCodes, MongoSearchCriteria } from '../../../../common/base/MongoRepository';
+import { MongoQueryBuilder } from '../../../../common/base/MongoQueryBuilder';
+import { InvoiceGroupDO, InvoiceGroupStatus } from '../../../data-objects/InvoiceGroupDO';
+import { InvoiceDO } from '../../../data-objects/InvoiceDO';
+import { InvoiceGroupMetaRepoDO, InvoiceGroupItemMetaRepoDO } from '../../IInvoiceGroupsRepository';
+import { InvoiceGroupsRepositoryHelper } from '../helpers/InvoiceGroupsRepositoryHelper';
+import { MongoBookingRepository } from '../../../../bookings/repositories/mongo/MongoBookingRepository';
+import { IHotelRepository, SequenceValue } from '../../../../hotel/repositories/IHotelRepository';
+import { HotelSequenceType } from '../../../../hotel/data-objects/sequences/HotelSequencesDO';
+
+import _ = require('underscore');
 
 export class MongoInvoiceGroupsEditOperationsRepository extends MongoRepository {
     private _helper: InvoiceGroupsRepositoryHelper;
 
     private static InvoiceGroupReferencePrefix = 'IG';
-    private static InvoiceReferencePrefix = 'IR';
+    private static RefMaxLength = 7;
 
-    constructor(invoiceGroupsEntity: Sails.Model) {
+    constructor(invoiceGroupsEntity: Sails.Model, private _hotelRepo: IHotelRepository) {
         super(invoiceGroupsEntity);
         this._helper = new InvoiceGroupsRepositoryHelper();
     }
@@ -30,24 +34,31 @@ export class MongoInvoiceGroupsEditOperationsRepository extends MongoRepository 
         invoiceGroup.versionId = 0;
         invoiceGroup.status = InvoiceGroupStatus.Active;
         invoiceGroup.reindexByCustomerId();
-        
-        invoiceGroup = this.attachInvoiceGroupAndInvoiceReferencesIfNecessary(invoiceGroup);
 
-        this.createDocument(invoiceGroup,
-            (err: Error) => {
-                this.logAndReject(err, reject, { meta: invoiceGroupMeta, invoiceGroup: invoiceGroup }, ThStatusCode.InvoiceGroupsRepositoryErrorAddingInvoiceGroup);
-            },
-            (createdInvoiceGroup: Object) => {
-                resolve(this._helper.buildInvoiceGroupDOFrom(createdInvoiceGroup));
-            }
-        );
+        this.attachInvoiceGroupAndInvoiceReferencesIfNecessary(invoiceGroup).then((updatedGroup: InvoiceGroupDO) => {
+            this.createDocument(updatedGroup,
+                (err: Error) => {
+                    this.logAndReject(err, reject, { meta: invoiceGroupMeta, invoiceGroup: invoiceGroup }, ThStatusCode.InvoiceGroupsRepositoryErrorAddingInvoiceGroup);
+                },
+                (createdInvoiceGroup: Object) => {
+                    resolve(this._helper.buildInvoiceGroupDOFrom(createdInvoiceGroup));
+                }
+            );
+        }).catch((e) => {
+            reject(e);
+        });
     }
 
     public updateInvoiceGroup(invoiceGroupMeta: InvoiceGroupMetaRepoDO, invoiceGroupItemMeta: InvoiceGroupItemMetaRepoDO, invoiceGroup: InvoiceGroupDO): Promise<InvoiceGroupDO> {
         invoiceGroup.reindexByCustomerId();
-        invoiceGroup = this.attachInvoiceGroupAndInvoiceReferencesIfNecessary(invoiceGroup);
-        
-        return this.findAndModifyInvoiceGroup(invoiceGroupMeta, invoiceGroupItemMeta, invoiceGroup);
+
+        return new Promise<InvoiceGroupDO>((resolve: { (result: InvoiceGroupDO): void }, reject: { (err: ThError): void }) => {
+            this.attachInvoiceGroupAndInvoiceReferencesIfNecessary(invoiceGroup).then((updatedGroup: InvoiceGroupDO) => {
+                this.findAndModifyInvoiceGroupCore(invoiceGroupMeta, invoiceGroupItemMeta, invoiceGroup, resolve, reject);
+            }).catch((e) => {
+                reject(e);
+            });
+        });
     }
     public deleteInvoiceGroup(invoiceGroupMeta: InvoiceGroupMetaRepoDO, invoiceGroupItemMeta: InvoiceGroupItemMetaRepoDO): Promise<InvoiceGroupDO> {
         return this.findAndModifyInvoiceGroup(invoiceGroupMeta, invoiceGroupItemMeta,
@@ -85,25 +96,68 @@ export class MongoInvoiceGroupsEditOperationsRepository extends MongoRepository 
             }
         );
     }
-    
-    private attachInvoiceGroupAndInvoiceReferencesIfNecessary(invoiceGroup: InvoiceGroupDO): InvoiceGroupDO {
-        if(this._thUtils.isUndefinedOrNull(invoiceGroup.invoiceGroupReference)) {
-            invoiceGroup.invoiceGroupReference = this.generateInvoiceGroupReference();
-        }
-        _.forEach(invoiceGroup.invoiceList, (invoice: InvoiceDO) => {
-            if(this._thUtils.isUndefinedOrNull(invoice.invoiceReference)) {
-                invoice.invoiceReference = this.generateInvoiceReference();
-            }
+
+    private attachInvoiceGroupAndInvoiceReferencesIfNecessary(invoiceGroup: InvoiceGroupDO): Promise<InvoiceGroupDO> {
+        return new Promise<InvoiceGroupDO>((resolve: { (result: InvoiceGroupDO): void }, reject: { (err: ThError): void }) => {
+            return this.attachInvoiceGroupAndInvoiceReferencesIfNecessaryCore(resolve, reject, invoiceGroup);
         });
-        return invoiceGroup;
+    }
+    private attachInvoiceGroupAndInvoiceReferencesIfNecessaryCore(resolve: { (result: InvoiceGroupDO): void }, reject: { (err: ThError): void }, invoiceGroup: InvoiceGroupDO) {
+        var group = invoiceGroup;
+        this.attachInvoiceGroupReferenceIfNecessary(group)
+            .then((updatedGroup: InvoiceGroupDO) => {
+                group = updatedGroup;
+                var promises = [];
+                _.forEach(group.invoiceList, (invoice) => {
+                    promises.push(this.attachInvoiceItemReferenceIfNecessary(group.hotelId, invoice));
+                });
+                return Promise.all(promises);
+            }).then((updatedInvoiceList: InvoiceDO[]) => {
+                group.invoiceList = updatedInvoiceList;
+                resolve(group);
+            }).catch((e) => {
+                reject(e);
+            });
     }
 
-    private generateInvoiceGroupReference(): string {
-        return MongoInvoiceGroupsEditOperationsRepository.InvoiceGroupReferencePrefix + this._thUtils.generateShortId();
+    private attachInvoiceGroupReferenceIfNecessary(invoiceGroup: InvoiceGroupDO): Promise<InvoiceGroupDO> {
+        return new Promise<InvoiceGroupDO>((resolve: { (result: InvoiceGroupDO): void }, reject: { (err: ThError): void }) => {
+            if (!this._thUtils.isUndefinedOrNull(invoiceGroup.invoiceGroupReference)) {
+                resolve(invoiceGroup);
+                return;
+            }
+            this._hotelRepo.getNextSequenceValue(invoiceGroup.hotelId, HotelSequenceType.InvoiceGroup)
+                .then((seq: SequenceValue) => {
+                    invoiceGroup.invoiceGroupReference = MongoInvoiceGroupsEditOperationsRepository.InvoiceGroupReferencePrefix + this.getSequenceString(seq.sequence);
+                    resolve(invoiceGroup);
+                }).catch((e) => {
+                    reject(e);
+                });
+        });
     }
 
-    private generateInvoiceReference(): string {
-        return MongoInvoiceGroupsEditOperationsRepository.InvoiceReferencePrefix + this._thUtils.generateShortId();
+    private attachInvoiceItemReferenceIfNecessary(hotelId: string, invoice: InvoiceDO): Promise<InvoiceDO> {
+        return new Promise<InvoiceDO>((resolve: { (result: InvoiceDO): void }, reject: { (err: ThError): void }) => {
+            if (!this._thUtils.isUndefinedOrNull(invoice.invoiceReference)) {
+                resolve(invoice);
+                return;
+            }
+            this._hotelRepo.getNextSequenceValue(hotelId, HotelSequenceType.InvoiceItem)
+                .then((seq: SequenceValue) => {
+                    invoice.invoiceReference = seq.hotelPrefix + this.getSequenceString(seq.sequence);
+                    resolve(invoice);
+                }).catch((e) => {
+                    reject(e);
+                });
+        });
+    }
+
+    private getSequenceString(seq: number): string {
+        var seqStr: string = seq + "";
+        while (seqStr.length < MongoInvoiceGroupsEditOperationsRepository.RefMaxLength) {
+            seqStr = "0" + seqStr;
+        }
+        return seqStr;
     }
 
     private logAndReject(err: Error, reject: { (err: ThError): void }, context: Object, defaultStatusCode: ThStatusCode) {
