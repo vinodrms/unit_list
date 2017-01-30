@@ -29,7 +29,7 @@ export class BookingValidationStructures {
             }
         ]);
     }
-    private static getThHourDOValidationStructure(): IValidationStructure {
+    public static getThHourDOValidationStructure(): IValidationStructure {
         return new ObjectValidationStructure([
             {
                 key: "hour",

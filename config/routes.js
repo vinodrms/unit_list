@@ -150,9 +150,6 @@ module.exports.routes = {
 
 	'POST /api/hotelOperations/common/sendEmail': 'HotelCommonOperationsController.sendEmail',
 
-	/* Reports */
-	'GET /api/reports/list': 'ReportsController.getReportsList',
-	//TODO: GET is only for testing, should change to POST
 	'GET /api/reports/report': 'ReportsController.getReport',
 
 
