@@ -4,5 +4,6 @@
 		"assets/client/src/**/*.js": { "when": "$(basename).ts"},
 		"api/**/*.js": { "when": "$(basename).ts"}
 	},
-	"workbench.editor.showTabs": false
+    "workbench.editor.showTabs": false,
+    "typescript.tsdk": "./node_modules/typescript/lib"
 }

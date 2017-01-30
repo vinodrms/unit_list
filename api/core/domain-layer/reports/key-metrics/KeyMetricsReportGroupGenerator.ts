@@ -1,51 +1,52 @@
 import { AppContext } from '../../../utils/AppContext';
 import { SessionContext } from '../../../utils/SessionContext';
-import { ReportDO } from '../../../data-layer/reports/data-objects/ReportDO';
-import { ReportGroupDO } from '../ReportGroupDO';
-import { ReportMetadataDO } from '../../../data-layer/reports/data-objects/ReportMetadataDO';
-import { ReportType } from '../../../data-layer/reports/data-objects/ReportMetadataDO';
-import { IReportGeneratorStrategy, IReportGroupGeneratorStrategy } from './../CommonInterfaces';
 import { ThError } from '../../../utils/th-responses/ThError';
-import { ThStatusCode } from '../../../utils/th-responses/ThResponse';
-import { ThLogger, ThLogLevel } from '../../../utils/logging/ThLogger';
-import { ThUtils } from '../../../utils/ThUtils';
-import { ReportArrivalsReader } from '../backup-report/arrivals/ReportArrivalsReader';
-import { ReportArrivalItemInfo } from '../backup-report/arrivals/utils/ReportArrivalsInfo'
-import { ReportGeneratorFactory } from '../ReportGeneratorFactory';
+import { AReportGeneratorStrategy } from '../common/report-generator/AReportGeneratorStrategy';
+import { IReportItemGenerator } from '../common/report-item-generator/IReportItemGenerator';
+import { IValidationStructure } from '../../../utils/th-validation/structure/core/IValidationStructure';
+import { ObjectValidationStructure } from '../../../utils/th-validation/structure/ObjectValidationStructure';
+import { BookingValidationStructures } from '../../bookings/validators/BookingValidationStructures';
+import { ThDateDO } from '../../../utils/th-dates/data-objects/ThDateDO';
+import { ThDateIntervalDO } from '../../../utils/th-dates/data-objects/ThDateIntervalDO';
+import { ReportGroupMeta } from '../common/result/ReportGroup';
+import { DailyKeyMetricsReportItemGenerator } from './strategies/DailyKeyMetricsReportItemGenerator';
 
-export class KeyMetricsReportGroupGenerator implements IReportGroupGeneratorStrategy {
-	constructor(protected _appContext: AppContext, protected _sessionContext: SessionContext) {
+export class KeyMetricsReportGroupGenerator extends AReportGeneratorStrategy {
+	private _dateInterval: ThDateIntervalDO;
+
+	constructor(appContext: AppContext, private _sessionContext: SessionContext) {
+		super(appContext);
 	}
 
-	private validParameters(params: Object) {
-		return true;
+	protected getParamsValidationStructure(): IValidationStructure {
+		return new ObjectValidationStructure([
+			{
+				key: "startDate",
+				validationStruct: BookingValidationStructures.getThDateDOValidationStructure()
+			},
+			{
+				key: "endDate",
+				validationStruct: BookingValidationStructures.getThDateDOValidationStructure()
+			}
+		]);
 	}
 
-	public generate(params: Object): Promise<ReportGroupDO> {
-		return new Promise<ReportGroupDO>((resolve: { (result: ReportGroupDO): void }, reject: { (err: ThError): void }) => {
-			let reportGeneratorFactory = new ReportGeneratorFactory(this._appContext, this._sessionContext);
-			if (this.validParameters(params)) {
-				let keyMetricsReportGenerator = reportGeneratorFactory.getGeneratorStrategy(ReportType.KeyMetricsDaily);
+	protected loadParameters(params: any) {
+		var startDate = new ThDateDO();
+		startDate.buildFromObject(params.startDate);
+		var endDate = new ThDateDO();
+		endDate.buildFromObject(params.endDate);
+		this._dateInterval = ThDateIntervalDO.buildThDateIntervalDO(startDate, endDate);
+	}
 
-				let keyMetricsReport = null;
-
-				let pMetrics = keyMetricsReportGenerator.generate(params)
-				.then((report: ReportDO) => {
-					keyMetricsReport = report;
-				})
-
-				Promise.all([pMetrics]).then(() => {
-					var rg = new ReportGroupDO();
-					rg.name = "Key Metrics";
-					rg.reportsList = [keyMetricsReport];
-					resolve(rg);
-				})
-			}
-			else {
-				let thError = new ThError(ThStatusCode.PriceProductValidatorEmptyRoomCategoryList, null);
-				ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Invalid Report Parameters: ", JSON.stringify(params), thError);
-				reject(thError);
-			}
-		});
+	protected getMeta(): ReportGroupMeta {
+		return {
+			name: "Key Metrics"
+		}
+	}
+	protected getGenerators(): IReportItemGenerator[] {
+		return [
+			new DailyKeyMetricsReportItemGenerator(this._appContext, this._sessionContext, this._dateInterval)
+		];
 	}
 }

@@ -20,9 +20,6 @@
 	"Some rollaway beds were added in the room to fit the booking capacity": "Some rollaway beds were added in the room to fit the booking capacity",
 	"%noReservedAddOnProducts% add on product(s) have been reserved for the booking": "%noReservedAddOnProducts% add on product(s) have been reserved for the booking",
 	"The Price Product from this booking has been changed. The old price %oldPrice% has become %newPrice%.": "The Price Product from this booking has been changed. The old price %oldPrice% has become %newPrice%.",
-	
-	
-	
 
 	// room maintenance history
 	"The room was marked as Clean": "The room was marked as Clean",
@@ -135,7 +132,7 @@
 	"Guest": "Guest",
 
 	// Reports
-	"TotalOccupancy" : "sTotalOccupancy",
+	"TotalOccupancy" : "TotalOccupancy",
 	"ConfirmedOccupancy" : "ConfirmedOccupancy",
 	"TotalRevPar" : "TotalRevPar",
 	"ConfirmedRevPar" : "ConfirmedRevPar",
@@ -144,5 +141,32 @@
 	"Rooms" : "Rooms",
 	"Allotments" : "Allotments",
 	"RoomRevenue" : "RoomRevenue",
-	"OtherRevenue" : "OtherRevenue"
+	"OtherRevenue" : "OtherRevenue",
+	"BackUp Report": "BackUp Report",
+	"Customer name": "Customer name",
+	"Room category":"Room category",
+	"Room number":"Room number",
+	"Adults": "Adults",
+	"Children": "Children",
+	"Babies": "Babies",
+	"Booking status": "Booking status",
+	"Total price": "Total price",
+	"No show time":"No show time",
+	"Notes": "Notes",
+	"Departing Date": "Departing Date",
+	"Key Metrics": "Key Metrics",
+	"Total RevPar": "Total RevPar",
+	"Total Occupancy": "Total Occupancy",
+	"Confirmed Occupancy": "Confirmed Occupancy",
+	"Total AvgRate": "Total AvgRate",
+	"Room Revenue": "Room Revenue",
+	"Other Revenue": "Other Revenue",
+	"Confirmed Revenue": "Confirmed Revenue",
+	"Total": "Total",
+	"Payment method": "Payment method",
+	"Transactions": "Transactions",
+	"Amount": "Amount",
+	"Product": "Product",
+	"Shift Report": "Shift Report"
+
 }

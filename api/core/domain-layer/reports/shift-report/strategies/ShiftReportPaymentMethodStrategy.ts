@@ -1,71 +1,56 @@
 import { AppContext } from '../../../../utils/AppContext';
 import { SessionContext } from '../../../../utils/SessionContext';
-import { ReportDO } from '../../../../data-layer/reports/data-objects/ReportDO';
-import { ReportMetadataDO, FieldType } from '../../../../data-layer/reports/data-objects/ReportMetadataDO';
-import { HotelOperationsArrivalsInfo } from '../../../../domain-layer/hotel-operations/dashboard/arrivals/utils/HotelOperationsArrivalsInfo';
-import { ReportType } from '../../../../data-layer/reports/data-objects/ReportMetadataDO';
-import { AReportGeneratorStrategy } from '../../AReportGeneratorStrategy';
 import { ThError } from '../../../../utils/th-responses/ThError';
-import { HotelOperationsArrivalsReader } from '../../../../domain-layer/hotel-operations/dashboard/arrivals/HotelOperationsArrivalsReader';
-
-import { KeyMetricReader } from '../../../../domain-layer/yield-manager/key-metrics/KeyMetricReader';
-import { YieldManagerPeriodDO } from '../../../../domain-layer/yield-manager/utils/YieldManagerPeriodDO';
-import { KeyMetricsResult, KeyMetricsResultItem, KeyMetric, KeyMetricValueType, IKeyMetricValue, PriceKeyMetric, PercentageKeyMetric, InventoryKeyMetric } from '../../../../domain-layer/yield-manager/key-metrics/utils/KeyMetricsResult';
-import { KeyMetricType } from '../../../../domain-layer/yield-manager/key-metrics/utils/KeyMetricType';
-
-import { ThDateDO } from '../../../../utils/th-dates/data-objects/ThDateDO';
 import { ThDateIntervalDO } from '../../../../utils/th-dates/data-objects/ThDateIntervalDO';
 import { InvoiceDO, InvoicePaymentStatus } from '../../../../data-layer/invoices/data-objects/InvoiceDO';
 import { InvoiceGroupDO } from '../../../../data-layer/invoices/data-objects/InvoiceGroupDO';
-
 import { InvoiceGroupSearchResultRepoDO } from '../../../../data-layer/invoices/repositories/IInvoiceGroupsRepository';
-
 import { ShiftReportUtils } from './ShiftReportUtils';
+import { AReportItemGenerator } from '../../common/report-item-generator/AReportItemGenerator';
+import { ShiftReportParams } from './ShiftReportParams';
+import { ReportItemHeader } from '../../common/result/ReportItem';
 
-export class ShiftReportPaymentMethodStrategy extends AReportGeneratorStrategy {
-	protected _reportType: ReportType = ReportType.ShiftReportPaymentMethod;
+export class ShiftReportPaymentMethodStrategy extends AReportItemGenerator {
 	private _utils: ShiftReportUtils;
 
-	constructor(protected _appContext: AppContext, protected _sessionContext: SessionContext) {
-		super(_appContext, _sessionContext);
-		this._utils = new ShiftReportUtils(_appContext, _sessionContext);
+	constructor(appContext: AppContext, private _sessionContext: SessionContext, private _params: ShiftReportParams) {
+		super(appContext);
+		this._utils = new ShiftReportUtils(this._appContext, this._sessionContext);
 	}
 
-	protected validParameters(params: Object) {
-		return true;
+	protected getHeader(): ReportItemHeader {
+		return {
+			displayHeader: true,
+			values: [
+				"Payment method",
+				"Transactions",
+				"Amount"
+			]
+		};
 	}
 
-	protected buildReportData(reportMetadata): Promise<ReportDO> {
-		return new Promise<ReportDO>((resolve: { (result: ReportDO): void }, reject: { (err: ThError): void }) => {
-			var report = new ReportDO();
-			report.metadata = reportMetadata;
-			report.data = [];
-			//TODO: Use date from parameters
+	protected getDataCore(resolve: { (result: any[][]): void }, reject: { (err: ThError): void }) {
+		this.createPaymentMethodIdToNameMap().then((pmIdToNameMap) => {
+			this.mergedPaymentMethodsDetailsDict(this._params.dateInterval).then((mpmDetailsDict) => {
+				var totalTransaction = 0;
+				var totalAmount = 0;
+				var data: any[] = [];
+				Object.keys(mpmDetailsDict).forEach((pMethod) => {
+					let pmName = pmIdToNameMap[pMethod];
+					let transactions = mpmDetailsDict[pMethod].transactions;
 
-			let dateInterval = ThDateIntervalDO.buildThDateIntervalDO(ThDateDO.buildThDateDO(2016, 9, 23), ThDateDO.buildThDateDO(2016, 9, 26));
+					let amount = mpmDetailsDict[pMethod].amount;
+					let row = [pmName, transactions, amount];
 
-			this.createPaymentMethodIdToNameMap().then((pmIdToNameMap) => {
-				this.mergedPaymentMethodsDetailsDict(dateInterval).then((mpmDetailsDict) => {
-					var totalTransaction = 0;
-					var totalAmount = 0;
-					Object.keys(mpmDetailsDict).forEach((pMethod) => {
-						let pmName = pmIdToNameMap[pMethod];
-						let transactions = mpmDetailsDict[pMethod].transactions;
+					totalTransaction += transactions;
+					totalAmount += amount;
 
-						let amount = mpmDetailsDict[pMethod].amount;
-						let row = [pmName, transactions, amount];
-
-						totalTransaction+= transactions;
-						totalAmount += amount;
-
-						report.data.push(row);
-					})
-					report.data.push(['Total', totalTransaction, totalAmount]);
-					resolve(report);
-				})
-
-			})
-		});
+					data.push(row);
+				});
+				data.push(['Total', totalTransaction, totalAmount]);
+				resolve(data);
+			}).catch((e) => { reject(e) });
+		}).catch((e) => { reject(e) });
 	}
 
 	private createPaymentMethodIdToNameMap(): Promise<any> {
@@ -113,10 +98,10 @@ export class ShiftReportPaymentMethodStrategy extends AReportGeneratorStrategy {
 		});
 	}
 
-	private getAggregatedPaidPayerList(ig: InvoiceGroupDO){
+	private getAggregatedPaidPayerList(ig: InvoiceGroupDO) {
 		let paidInvoicesL = [];
 		ig.invoiceList.forEach((invoice) => {
-			if(invoice.isPaid() && this._utils.invoicePaidInTimeFrame(invoice, this._params.startTime, this._params.endTime)){
+			if (invoice.isPaid() && this._utils.invoicePaidInTimeFrame(invoice, this._params.startTime, this._params.endTime)) {
 				paidInvoicesL.push(invoice);
 				invoice.payerList
 			}

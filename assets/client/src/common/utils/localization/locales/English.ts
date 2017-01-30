@@ -754,8 +754,12 @@ export var EnglishTranslations: Object = {
 	"LOSS ACCEPTED BY MANAGEMENT": "LOSS ACCEPTED BY MANAGEMENT",
 	"Even though you marked this booking as lost by management, you can always mark it as Paid whenever you get the money from the customer.": "Even though you marked this booking as lost by management, you can always mark it as Paid whenever you get the money from the customer.",
 	"Additional payer details": "Additional payer details",
-	
-
+	"Generate BackUp Report": "Generate BackUp Report",
+	"Contains the arrivals, in house guests and departures for today": "Contains the arrivals, in house guests and departures for today",
+	"Generate Key Metrics Report": "Generate Key Metrics Report",
+	"Get your hotel's key metrics": "Get your hotel's key metrics",
+	"Generate Shift Report": "Generate Shift Report",
+	"The shift report between two intervals": "The shift report between two intervals",
 	
 
 

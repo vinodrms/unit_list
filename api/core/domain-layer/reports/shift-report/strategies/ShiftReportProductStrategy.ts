@@ -1,70 +1,54 @@
 import { AppContext } from '../../../../utils/AppContext';
 import { SessionContext } from '../../../../utils/SessionContext';
-import { ReportDO } from '../../../../data-layer/reports/data-objects/ReportDO';
-import { ReportMetadataDO, FieldType } from '../../../../data-layer/reports/data-objects/ReportMetadataDO';
-import { HotelOperationsArrivalsInfo } from '../../../../domain-layer/hotel-operations/dashboard/arrivals/utils/HotelOperationsArrivalsInfo';
-import { ReportType } from '../../../../data-layer/reports/data-objects/ReportMetadataDO';
-import { AReportGeneratorStrategy } from '../../AReportGeneratorStrategy';
 import { ThError } from '../../../../utils/th-responses/ThError';
-import { HotelOperationsArrivalsReader } from '../../../../domain-layer/hotel-operations/dashboard/arrivals/HotelOperationsArrivalsReader';
-
-import { KeyMetricReader } from '../../../../domain-layer/yield-manager/key-metrics/KeyMetricReader';
-import { YieldManagerPeriodDO } from '../../../../domain-layer/yield-manager/utils/YieldManagerPeriodDO';
-import { KeyMetricsResult, KeyMetricsResultItem, KeyMetric, KeyMetricValueType, IKeyMetricValue, PriceKeyMetric, PercentageKeyMetric, InventoryKeyMetric } from '../../../../domain-layer/yield-manager/key-metrics/utils/KeyMetricsResult';
-import { KeyMetricType } from '../../../../domain-layer/yield-manager/key-metrics/utils/KeyMetricType';
-
-import { ThDateDO } from '../../../../utils/th-dates/data-objects/ThDateDO';
 import { ThDateIntervalDO } from '../../../../utils/th-dates/data-objects/ThDateIntervalDO';
-import { InvoiceDO, InvoicePaymentStatus } from '../../../../data-layer/invoices/data-objects/InvoiceDO';
-import { InvoiceItemDO, InvoiceItemType } from '../../../../data-layer/invoices/data-objects/items/InvoiceItemDO';
-import { InvoiceGroupDO } from '../../../../data-layer/invoices/data-objects/InvoiceGroupDO';
-
+import { InvoicePaymentStatus } from '../../../../data-layer/invoices/data-objects/InvoiceDO';
+import { InvoiceItemDO } from '../../../../data-layer/invoices/data-objects/items/InvoiceItemDO';
 import { InvoiceGroupSearchResultRepoDO } from '../../../../data-layer/invoices/repositories/IInvoiceGroupsRepository';
-
 import { ShiftReportUtils } from './ShiftReportUtils';
+import { AReportItemGenerator } from '../../common/report-item-generator/AReportItemGenerator';
+import { ShiftReportParams } from './ShiftReportParams';
+import { ReportItemHeader } from '../../common/result/ReportItem';
 
-export class ShiftReportProductStrategy extends AReportGeneratorStrategy {
-	protected _reportType: ReportType = ReportType.ShiftReportProduct;
+export class ShiftReportProductStrategy extends AReportItemGenerator {
 	private _utils: ShiftReportUtils;
 
-	constructor(protected _appContext: AppContext, protected _sessionContext: SessionContext) {
-		super(_appContext, _sessionContext);
-		this._utils = new ShiftReportUtils(_appContext, _sessionContext);
-	}
-	
-	protected validParameters(params: Object) {
-		return true;
+	constructor(appContext: AppContext, private _sessionContext: SessionContext, private _params: ShiftReportParams) {
+		super(appContext);
+		this._utils = new ShiftReportUtils(this._appContext, this._sessionContext);
 	}
 
-	protected buildReportData(reportMetadata): Promise<ReportDO> {
-		return new Promise<ReportDO>((resolve: { (result: ReportDO): void }, reject: { (err: ThError): void }) => {
-			var report = new ReportDO();
-			report.metadata = reportMetadata;
-			report.data = [];
-			//TODO: Use date from parameters
-
-			let dateInterval = this._params.dateInterval;
-
-			this.mergeProductDetailsDict(dateInterval).then((mpmDetailsDict) => {
-				var totalTransaction = 0;
-				var totalAmount = 0;
-				Object.keys(mpmDetailsDict).forEach((productName) => {
-					let transactions = mpmDetailsDict[productName].transactions;
-					let amount = mpmDetailsDict[productName].amount;
-
-					let row = [productName, transactions, amount];
-
-					totalTransaction += transactions;
-					totalAmount += amount;
-
-					report.data.push(row);
-				})
-				report.data.push(['Total', totalTransaction, totalAmount]);
-				resolve(report);
-			})
-		});
+	protected getHeader(): ReportItemHeader {
+		return {
+			displayHeader: true,
+			values: [
+				"Product",
+				"Transactions",
+				"Amount"
+			]
+		};
 	}
 
+	protected getDataCore(resolve: { (result: any[][]): void }, reject: { (err: ThError): void }) {
+		this.mergeProductDetailsDict(this._params.dateInterval).then((mpmDetailsDict) => {
+			var totalTransaction = 0;
+			var totalAmount = 0;
+			var data = [];
+			Object.keys(mpmDetailsDict).forEach((productName) => {
+				let transactions = mpmDetailsDict[productName].transactions;
+				let amount = mpmDetailsDict[productName].amount;
+
+				let row = [productName, transactions, amount];
+
+				totalTransaction += transactions;
+				totalAmount += amount;
+
+				data.push(row);
+			});
+			data.push(['Total', totalTransaction, totalAmount]);
+			resolve(data);
+		}).catch((e) => { reject(e) });
+	}
 
 	private mergeProductDetailsDict(dateInterval: ThDateIntervalDO): Promise<any> {
 		let igRepository = this._appContext.getRepositoryFactory().getInvoiceGroupsRepository();
@@ -105,14 +89,7 @@ export class ShiftReportProductStrategy extends AReportGeneratorStrategy {
 		});
 	}
 
-
-
 	private getDisplayNameForItem(item: InvoiceItemDO): string {
-		if (item.type == InvoiceItemType.Booking) {
-			return "Bookings"
-		}
-		else {
-			return item.meta.getDisplayName(this._appContext.thTranslate);
-		}
+		return item.meta.getDisplayName(this._appContext.thTranslate);
 	}
 }
