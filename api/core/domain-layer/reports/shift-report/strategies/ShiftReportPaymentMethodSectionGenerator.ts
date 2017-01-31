@@ -1,6 +1,7 @@
 import { AppContext } from '../../../../utils/AppContext';
 import { SessionContext } from '../../../../utils/SessionContext';
 import { ThError } from '../../../../utils/th-responses/ThError';
+import { ThUtils } from '../../../../utils/ThUtils';
 import { InvoiceDO } from '../../../../data-layer/invoices/data-objects/InvoiceDO';
 import { InvoiceGroupDO } from '../../../../data-layer/invoices/data-objects/InvoiceGroupDO';
 import { AReportSectionGeneratorStrategy } from '../../common/report-section-generator/AReportSectionGeneratorStrategy';
@@ -8,10 +9,12 @@ import { ShiftReportParams } from './ShiftReportParams';
 import { ReportSectionHeader } from '../../common/result/ReportSection';
 
 export class ShiftReportPaymentMethodSectionGenerator extends AReportSectionGeneratorStrategy {
+	private _thUtils: ThUtils;
 
 	constructor(appContext: AppContext, private _sessionContext: SessionContext,
 		private _paidInvoiceGroupList: InvoiceGroupDO[], private _params: ShiftReportParams) {
 		super(appContext);
+		this._thUtils = new ThUtils();
 	}
 
 	protected getHeader(): ReportSectionHeader {
@@ -35,7 +38,7 @@ export class ShiftReportPaymentMethodSectionGenerator extends AReportSectionGene
 				let pmName = pmIdToNameMap[pMethod];
 				let transactions = mpmDetailsDict[pMethod].transactions;
 
-				let amount = mpmDetailsDict[pMethod].amount;
+				let amount = this._thUtils.roundNumberToTwoDecimals(mpmDetailsDict[pMethod].amount);
 				let row = [pmName, transactions, amount];
 
 				totalTransaction += transactions;
@@ -43,6 +46,7 @@ export class ShiftReportPaymentMethodSectionGenerator extends AReportSectionGene
 
 				data.push(row);
 			});
+			totalAmount = this._thUtils.roundNumberToTwoDecimals(totalAmount);
 			data.push(['Total', totalTransaction, totalAmount]);
 			resolve(data);
 		}).catch((e) => { reject(e) });

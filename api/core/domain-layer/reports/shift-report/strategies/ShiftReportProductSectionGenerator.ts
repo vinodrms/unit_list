@@ -1,6 +1,7 @@
 import { AppContext } from '../../../../utils/AppContext';
 import { SessionContext } from '../../../../utils/SessionContext';
 import { ThError } from '../../../../utils/th-responses/ThError';
+import { ThUtils } from '../../../../utils/ThUtils';
 import { InvoicePaymentStatus } from '../../../../data-layer/invoices/data-objects/InvoiceDO';
 import { InvoiceGroupDO } from '../../../../data-layer/invoices/data-objects/InvoiceGroupDO';
 import { InvoiceItemDO, InvoiceItemType } from '../../../../data-layer/invoices/data-objects/items/InvoiceItemDO';
@@ -9,10 +10,12 @@ import { ShiftReportParams } from './ShiftReportParams';
 import { ReportSectionHeader } from '../../common/result/ReportSection';
 
 export class ShiftReportProductSectionGenerator extends AReportSectionGeneratorStrategy {
+	private _thUtils: ThUtils;
 
 	constructor(appContext: AppContext, private _sessionContext: SessionContext,
 		private _paidInvoiceGroupList: InvoiceGroupDO[], private _params: ShiftReportParams) {
 		super(appContext);
+		this._thUtils = new ThUtils();
 	}
 
 	protected getHeader(): ReportSectionHeader {
@@ -33,7 +36,7 @@ export class ShiftReportProductSectionGenerator extends AReportSectionGeneratorS
 		var data = [];
 		Object.keys(mpmDetailsDict).forEach((productName) => {
 			let transactions = mpmDetailsDict[productName].transactions;
-			let amount = mpmDetailsDict[productName].amount;
+			let amount = this._thUtils.roundNumberToTwoDecimals(mpmDetailsDict[productName].amount);
 
 			let row = [productName, transactions, amount];
 
@@ -42,6 +45,7 @@ export class ShiftReportProductSectionGenerator extends AReportSectionGeneratorS
 
 			data.push(row);
 		});
+		totalAmount = this._thUtils.roundNumberToTwoDecimals(totalAmount);
 		data.push(['Total', totalTransaction, totalAmount]);
 		resolve(data);
 	}
@@ -78,7 +82,7 @@ export class ShiftReportProductSectionGenerator extends AReportSectionGeneratorS
 		return item.meta.getDisplayName(this._appContext.thTranslate);
 	}
 	private getQuantityForItem(item: InvoiceItemDO): number {
-		// we do not want to count the number of nights as separate items
+		// we do not want to count the number of nights as separate rooms
 		if (item.type == InvoiceItemType.Booking) {
 			return 1;
 		}
