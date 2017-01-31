@@ -3,7 +3,7 @@ import { SessionContext } from '../../../../utils/SessionContext';
 import { ThError } from '../../../../utils/th-responses/ThError';
 import { ThDateIntervalDO } from '../../../../utils/th-dates/data-objects/ThDateIntervalDO';
 import { InvoicePaymentStatus } from '../../../../data-layer/invoices/data-objects/InvoiceDO';
-import { InvoiceItemDO } from '../../../../data-layer/invoices/data-objects/items/InvoiceItemDO';
+import { InvoiceItemDO, InvoiceItemType } from '../../../../data-layer/invoices/data-objects/items/InvoiceItemDO';
 import { InvoiceGroupSearchResultRepoDO } from '../../../../data-layer/invoices/repositories/IInvoiceGroupsRepository';
 import { ShiftReportUtils } from './ShiftReportUtils';
 import { AReportItemGenerator } from '../../common/report-item-generator/AReportItemGenerator';
@@ -70,14 +70,15 @@ export class ShiftReportProductStrategy extends AReportItemGenerator {
 							invoice.itemList.forEach((item) => {
 								let name = this.getDisplayNameForItem(item);
 								let price = item.meta.getUnitPrice() * item.meta.getNumberOfItems();
+								let transactions = this.getQuantityForItem(item);
 								if (!dic[name]) {
 									dic[name] = {
-										transactions: 1,
+										transactions: transactions,
 										amount: price
 									}
 								}
 								else {
-									dic[name].transactions++;
+									dic[name].transactions += transactions;
 									dic[name].amount += price
 								}
 							})
@@ -90,6 +91,17 @@ export class ShiftReportProductStrategy extends AReportItemGenerator {
 	}
 
 	private getDisplayNameForItem(item: InvoiceItemDO): string {
+		// Price Products are aggregated with the `Rooms` key
+		if (item.type == InvoiceItemType.Booking) {
+			return this._appContext.thTranslate.translate("Rooms");
+		}
 		return item.meta.getDisplayName(this._appContext.thTranslate);
+	}
+	private getQuantityForItem(item: InvoiceItemDO): number {
+		// we do not want to count the number of nights as separate items
+		if (item.type == InvoiceItemType.Booking) {
+			return 1;
+		}
+		return item.meta.getNumberOfItems();
 	}
 }
