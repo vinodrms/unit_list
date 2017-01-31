@@ -2,7 +2,7 @@ import { AppContext } from '../../../../../utils/AppContext';
 import { ThError } from '../../../../../utils/th-responses/ThError';
 import { AReportOutputWriter } from '../AReportOutputWriter';
 import { ReportGroup } from '../../result/ReportGroup';
-import { ReportItem } from '../../result/ReportItem';
+import { ReportSection } from '../../result/ReportSection';
 import { ReportFileResult } from '../../result/ReportFileResult';
 import { ThUtils } from '../../../../../utils/ThUtils';
 
@@ -31,15 +31,15 @@ export class CsvReportOutputWriter extends AReportOutputWriter {
 
     private getReportCSVString(group: ReportGroup): string {
         let csvString = "";
-        group.itemList.forEach((item: ReportItem) => {
+        group.sectionList.forEach((item: ReportSection) => {
             let rcsv = this.buildCSVStringForReportItem(item);
             csvString += rcsv + endOfLine + endOfLine;
         });
         return csvString;
     }
-    private buildCSVStringForReportItem(item: ReportItem) {
+    private buildCSVStringForReportItem(item: ReportSection) {
         let rCSV = "";
-        if (item.header.displayHeader) {
+        if (item.header.display) {
             rCSV += this.buildCSVRowForArray(item.header.values); + endOfLine;
         }
         item.data.forEach(row => {

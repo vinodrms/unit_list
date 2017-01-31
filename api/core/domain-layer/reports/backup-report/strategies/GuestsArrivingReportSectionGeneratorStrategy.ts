@@ -3,18 +3,18 @@ import { SessionContext } from '../../../../utils/SessionContext';
 import { ThError } from '../../../../utils/th-responses/ThError';
 import { ReportArrivalsReader } from '../arrivals/ReportArrivalsReader';
 import { ReportArrivalItemInfo } from '../arrivals/utils/ReportArrivalsInfo';
-import { AReportItemGenerator } from '../../common/report-item-generator/AReportItemGenerator';
-import { ReportItemHeader } from '../../common/result/ReportItem';
+import { AReportSectionGeneratorStrategy } from '../../common/report-section-generator/AReportSectionGeneratorStrategy';
+import { ReportSectionHeader } from '../../common/result/ReportSection';
 
-export class GuestsArrivingReportItemGeneratorStrategy extends AReportItemGenerator {
+export class GuestsArrivingReportSectionGeneratorStrategy extends AReportSectionGeneratorStrategy {
 
 	constructor(appContext: AppContext, private _sessionContext: SessionContext) {
 		super(appContext);
 	}
 
-	protected getHeader(): ReportItemHeader {
+	protected getHeader(): ReportSectionHeader {
 		return {
-			displayHeader: true,
+			display: true,
 			values: [
 				"Customer name",
 				"Room category",

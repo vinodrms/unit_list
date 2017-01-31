@@ -5,8 +5,8 @@ import { ValidationResultParser } from '../../../common/ValidationResultParser';
 import { IReportGeneratorStrategy } from './IReportGeneratorStrategy';
 import { ReportGroup } from '../result/ReportGroup';
 import { ReportGroupMeta } from '../result/ReportGroup';
-import { ReportItem } from '../result/ReportItem';
-import { IReportItemGenerator } from '../report-item-generator/IReportItemGenerator';
+import { ReportSection } from '../result/ReportSection';
+import { IReportSectionGeneratorStrategy } from '../report-section-generator/IReportSectionGeneratorStrategy';
 
 import _ = require('underscore');
 
@@ -32,23 +32,35 @@ export abstract class AReportGeneratorStrategy implements IReportGeneratorStrate
 
 		var meta = this.getMeta();
 		meta.name = this._appContext.thTranslate.translate(meta.name);
-
 		var reportGroup = new ReportGroup(meta);
-		var generators = this.getGenerators();
-		var itemPromiseList: Promise<ReportItem>[] = [];
-		_.forEach(generators, (g: IReportItemGenerator) => {
-			itemPromiseList.push(g.generate());
-		});
-		Promise.all(itemPromiseList).then((itemList: ReportItem[]) => {
-			reportGroup.itemList = itemList;
+
+		this.loadDependentData().then((result: any) => {
+			var generators = this.getSectionGenerators();
+			var itemPromiseList: Promise<ReportSection>[] = [];
+			_.forEach(generators, (g: IReportSectionGeneratorStrategy) => {
+				itemPromiseList.push(g.generate());
+			});
+			return Promise.all(itemPromiseList);
+		}).then((itemList: ReportSection[]) => {
+			reportGroup.sectionList = itemList;
 			resolve(reportGroup);
-		}).catch((e: ThError) => {
+		}).catch((e) => {
 			reject(e);
 		});
+	}
+
+	private loadDependentData(): Promise<boolean> {
+		return new Promise<boolean>((resolve: { (result: boolean): void }, reject: { (err: ThError): void }) => {
+			this.loadDependentDataCore(resolve, reject);
+		});
+	}
+	// this function should be overriden when the sections depend on some common data
+	protected loadDependentDataCore(resolve: { (result: boolean): void }, reject: { (err: ThError): void }) {
+		resolve(true);
 	}
 
 	protected abstract getParamsValidationStructure(): IValidationStructure;
 	protected abstract loadParameters(params: any);
 	protected abstract getMeta(): ReportGroupMeta;
-	protected abstract getGenerators(): IReportItemGenerator[];
+	protected abstract getSectionGenerators(): IReportSectionGeneratorStrategy[];
 }
