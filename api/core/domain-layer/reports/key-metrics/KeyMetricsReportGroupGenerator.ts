@@ -2,14 +2,14 @@ import { AppContext } from '../../../utils/AppContext';
 import { SessionContext } from '../../../utils/SessionContext';
 import { ThError } from '../../../utils/th-responses/ThError';
 import { AReportGeneratorStrategy } from '../common/report-generator/AReportGeneratorStrategy';
-import { IReportItemGenerator } from '../common/report-item-generator/IReportItemGenerator';
+import { IReportSectionGeneratorStrategy } from '../common/report-section-generator/IReportSectionGeneratorStrategy';
 import { IValidationStructure } from '../../../utils/th-validation/structure/core/IValidationStructure';
 import { ObjectValidationStructure } from '../../../utils/th-validation/structure/ObjectValidationStructure';
 import { BookingValidationStructures } from '../../bookings/validators/BookingValidationStructures';
 import { ThDateDO } from '../../../utils/th-dates/data-objects/ThDateDO';
 import { ThDateIntervalDO } from '../../../utils/th-dates/data-objects/ThDateIntervalDO';
 import { ReportGroupMeta } from '../common/result/ReportGroup';
-import { DailyKeyMetricsReportItemGenerator } from './strategies/DailyKeyMetricsReportItemGenerator';
+import { DailyKeyMetricsReportSectionGenerator } from './strategies/DailyKeyMetricsReportSectionGenerator';
 
 export class KeyMetricsReportGroupGenerator extends AReportGeneratorStrategy {
 	private _dateInterval: ThDateIntervalDO;
@@ -44,9 +44,9 @@ export class KeyMetricsReportGroupGenerator extends AReportGeneratorStrategy {
 			name: "Key Metrics"
 		}
 	}
-	protected getGenerators(): IReportItemGenerator[] {
+	protected getSectionGenerators(): IReportSectionGeneratorStrategy[] {
 		return [
-			new DailyKeyMetricsReportItemGenerator(this._appContext, this._sessionContext, this._dateInterval)
+			new DailyKeyMetricsReportSectionGenerator(this._appContext, this._sessionContext, this._dateInterval)
 		];
 	}
 }

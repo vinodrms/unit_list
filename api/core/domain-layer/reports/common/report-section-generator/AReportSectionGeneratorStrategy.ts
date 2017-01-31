@@ -1,22 +1,22 @@
 import { AppContext } from '../../../../utils/AppContext';
-import { IReportItemGenerator } from './IReportItemGenerator';
-import { ReportItem, ReportItemHeader } from '../result/ReportItem';
+import { IReportSectionGeneratorStrategy } from './IReportSectionGeneratorStrategy';
+import { ReportSection, ReportSectionHeader } from '../result/ReportSection';
 import { ThError } from '../../../../utils/th-responses/ThError';
 
 import _ = require('underscore');
 
-export abstract class AReportItemGenerator implements IReportItemGenerator {
+export abstract class AReportSectionGeneratorStrategy implements IReportSectionGeneratorStrategy {
 
     constructor(protected _appContext: AppContext) {
     }
 
-    public generate(): Promise<ReportItem> {
-        return new Promise<ReportItem>((resolve: { (result: ReportItem): void }, reject: { (err: ThError): void }) => {
+    public generate(): Promise<ReportSection> {
+        return new Promise<ReportSection>((resolve: { (result: ReportSection): void }, reject: { (err: ThError): void }) => {
             this.generateCore(resolve, reject);
         });
     }
-    private generateCore(resolve: { (result: ReportItem): void }, reject: { (err: ThError): void }) {
-        var item = new ReportItem();
+    private generateCore(resolve: { (result: ReportSection): void }, reject: { (err: ThError): void }) {
+        var item = new ReportSection();
         item.header = this.getHeader();
         this.translateHeaderValues(item.header);
         this.getData().then((data: any[][]) => {
@@ -26,13 +26,13 @@ export abstract class AReportItemGenerator implements IReportItemGenerator {
             reject(e);
         });
     }
-    private translateHeaderValues(header: ReportItemHeader) {
+    private translateHeaderValues(header: ReportSectionHeader) {
         if (!_.isArray(header.values)) { return; }
         for (var i = 0; i < header.values.length; i++) {
             header.values[i] = this._appContext.thTranslate.translate(header.values[i]);
         }
     }
-    protected abstract getHeader(): ReportItemHeader;
+    protected abstract getHeader(): ReportSectionHeader;
 
     private getData(): Promise<any[][]> {
         return new Promise<any[][]>((resolve: { (result: any[][]): void }, reject: { (err: ThError): void }) => {

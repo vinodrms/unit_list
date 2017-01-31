@@ -6,11 +6,11 @@ import { InvoiceDO, InvoicePaymentStatus } from '../../../../data-layer/invoices
 import { InvoiceGroupDO } from '../../../../data-layer/invoices/data-objects/InvoiceGroupDO';
 import { InvoiceGroupSearchResultRepoDO } from '../../../../data-layer/invoices/repositories/IInvoiceGroupsRepository';
 import { ShiftReportUtils } from './ShiftReportUtils';
-import { AReportItemGenerator } from '../../common/report-item-generator/AReportItemGenerator';
+import { AReportSectionGeneratorStrategy } from '../../common/report-section-generator/AReportSectionGeneratorStrategy';
 import { ShiftReportParams } from './ShiftReportParams';
-import { ReportItemHeader } from '../../common/result/ReportItem';
+import { ReportSectionHeader } from '../../common/result/ReportSection';
 
-export class ShiftReportPaymentMethodStrategy extends AReportItemGenerator {
+export class ShiftReportPaymentMethodStrategy extends AReportSectionGeneratorStrategy {
 	private _utils: ShiftReportUtils;
 
 	constructor(appContext: AppContext, private _sessionContext: SessionContext, private _params: ShiftReportParams) {
@@ -18,9 +18,9 @@ export class ShiftReportPaymentMethodStrategy extends AReportItemGenerator {
 		this._utils = new ShiftReportUtils(this._appContext, this._sessionContext);
 	}
 
-	protected getHeader(): ReportItemHeader {
+	protected getHeader(): ReportSectionHeader {
 		return {
-			displayHeader: true,
+			display: true,
 			values: [
 				"Payment method",
 				"Transactions",

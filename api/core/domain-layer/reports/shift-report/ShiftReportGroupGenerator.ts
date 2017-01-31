@@ -4,7 +4,7 @@ import { IValidationStructure } from '../../../utils/th-validation/structure/cor
 import { ObjectValidationStructure } from '../../../utils/th-validation/structure/ObjectValidationStructure';
 import { BookingValidationStructures } from '../../bookings/validators/BookingValidationStructures';
 import { AReportGeneratorStrategy } from '../common/report-generator/AReportGeneratorStrategy';
-import { IReportItemGenerator } from '../common/report-item-generator/IReportItemGenerator';
+import { IReportSectionGeneratorStrategy } from '../common/report-section-generator/IReportSectionGeneratorStrategy';
 import { ShiftReportParams } from './strategies/ShiftReportParams';
 import { ThDateDO } from '../../../utils/th-dates/data-objects/ThDateDO';
 import { ThHourDO } from '../../../utils/th-dates/data-objects/ThHourDO';
@@ -65,7 +65,7 @@ export class ShiftReportGroupGenerator extends AReportGeneratorStrategy {
 			name: "Shift Report"
 		}
 	}
-	protected getGenerators(): IReportItemGenerator[] {
+	protected getSectionGenerators(): IReportSectionGeneratorStrategy[] {
 		return [
 			new ShiftReportPaymentMethodStrategy(this._appContext, this._sessionContext, this._params),
 			new ShiftReportProductStrategy(this._appContext, this._sessionContext, this._params)

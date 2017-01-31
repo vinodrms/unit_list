@@ -1,44 +1,44 @@
 import { AppContext } from '../../../../utils/AppContext';
 import { SessionContext } from '../../../../utils/SessionContext';
 import { ThError } from '../../../../utils/th-responses/ThError';
-import { ReportInHouseReader } from '../in-house/ReportInHouseReader';
-import { ReportInHouseItemInfo } from '../in-house/utils/ReportInHouseInfo';
-import { AReportItemGenerator } from '../../common/report-item-generator/AReportItemGenerator';
-import { ReportItemHeader } from '../../common/result/ReportItem';
+import { ReportDepartureReader } from '../departures/ReportDepartureReader';
+import { ReportDepartureInfo } from '../departures/utils/ReportDepartureInfo';
+import { AReportSectionGeneratorStrategy } from '../../common/report-section-generator/AReportSectionGeneratorStrategy';
+import { ReportSectionHeader } from '../../common/result/ReportSection';
 
-export class GuestsInHouseReportItemGeneratorStrategy extends AReportItemGenerator {
+export class GuestsDepartingReportSectionGeneratorStrategy extends AReportSectionGeneratorStrategy {
 
 	constructor(appContext: AppContext, private _sessionContext: SessionContext) {
 		super(appContext);
 	}
 
-	protected getHeader(): ReportItemHeader {
+	protected getHeader(): ReportSectionHeader {
 		return {
-			displayHeader: true,
+			display: true,
 			values: [
 				"Customer name",
 				"Room number",
 				"Adults",
 				"Children",
 				"Babies",
-				"Departing Date",
+				"Total Price",
 				"Notes"
 			]
 		};
 	}
 
 	protected getDataCore(resolve: { (result: any[][]): void }, reject: { (err: ThError): void }) {
-		let inhouseReader = new ReportInHouseReader(this._appContext, this._sessionContext);
-		inhouseReader.read().then((reportItems: ReportInHouseItemInfo[]) => {
+		let departureReader = new ReportDepartureReader(this._appContext, this._sessionContext);
+		departureReader.read().then((reportItems: ReportDepartureInfo[]) => {
 			var data = [];
-			reportItems.forEach((item: ReportInHouseItemInfo) => {
+			reportItems.forEach((item: ReportDepartureInfo) => {
 				let row = [
 					item.customerName,
 					item.roomNumber,
 					item.noAdults,
 					item.noChildren,
 					item.noBabies,
-					item.departingDate,
+					item.totalPrice,
 					item.notes
 				];
 				data.push(row);

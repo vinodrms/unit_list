@@ -1,22 +1,22 @@
 import { AppContext } from '../../../../utils/AppContext';
 import { SessionContext } from '../../../../utils/SessionContext';
 import { ThError } from '../../../../utils/th-responses/ThError';
-import { AReportItemGenerator } from '../../common/report-item-generator/AReportItemGenerator';
-import { ReportItemHeader } from '../../common/result/ReportItem';
+import { AReportSectionGeneratorStrategy } from '../../common/report-section-generator/AReportSectionGeneratorStrategy';
+import { ReportSectionHeader } from '../../common/result/ReportSection';
 import { ThDateIntervalDO } from '../../../../utils/th-dates/data-objects/ThDateIntervalDO';
 import { YieldManagerPeriodDO } from '../../../../domain-layer/yield-manager/utils/YieldManagerPeriodDO';
 import { KeyMetricReader } from '../../../../domain-layer/yield-manager/key-metrics/KeyMetricReader';
 import { KeyMetricsResult, KeyMetric, KeyMetricValueType, IKeyMetricValue, PriceKeyMetric, PercentageKeyMetric, InventoryKeyMetric } from '../../../../domain-layer/yield-manager/key-metrics/utils/KeyMetricsResult';
 
-export class DailyKeyMetricsReportItemGenerator extends AReportItemGenerator {
+export class DailyKeyMetricsReportSectionGenerator extends AReportSectionGeneratorStrategy {
 
 	constructor(appContext: AppContext, private _sessionContext: SessionContext, private _dateInterval: ThDateIntervalDO) {
 		super(appContext);
 	}
 
-	protected getHeader(): ReportItemHeader {
+	protected getHeader(): ReportSectionHeader {
 		return {
-			displayHeader: false
+			display: false
 		};
 	}
 

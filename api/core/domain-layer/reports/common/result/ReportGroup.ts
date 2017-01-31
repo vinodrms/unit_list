@@ -1,4 +1,4 @@
-import { ReportItem } from './ReportItem';
+import { ReportSection } from './ReportSection';
 
 export interface ReportGroupMeta {
     name: string;
@@ -6,10 +6,10 @@ export interface ReportGroupMeta {
 
 export class ReportGroup {
     meta: ReportGroupMeta;
-    itemList: ReportItem[];
+    sectionList: ReportSection[];
 
     constructor(meta: ReportGroupMeta) {
         this.meta = meta;
-        this.itemList = [];
+        this.sectionList = [];
     }
 }
