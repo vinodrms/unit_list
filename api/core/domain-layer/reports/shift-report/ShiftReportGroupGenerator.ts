@@ -15,9 +15,10 @@ import { ThHourDO } from '../../../utils/th-dates/data-objects/ThHourDO';
 import { ThDateIntervalDO } from '../../../utils/th-dates/data-objects/ThDateIntervalDO';
 import { ThTimestampDO } from '../../../utils/th-dates/data-objects/ThTimestampDO';
 import { ReportGroupMeta } from '../common/result/ReportGroup';
+import { AddOnProductLoader, AddOnProductItemContainer } from '../../add-on-products/validators/AddOnProductLoader';
 import { ShiftReportByPaymentMethodSectionGenerator } from './strategies/ShiftReportByPaymentMethodSectionGenerator';
 import { ShiftReportByCategorySectionGenerator } from './strategies/ShiftReportByCategorySectionGenerator';
-import { AddOnProductLoader, AddOnProductItemContainer } from '../../add-on-products/validators/AddOnProductLoader';
+import { ShiftReportByAopNameSectionGenerator } from './strategies/ShiftReportByAopNameSectionGenerator';
 
 export class ShiftReportGroupGenerator extends AReportGeneratorStrategy {
 	private _params: ShiftReportParams;
@@ -108,7 +109,8 @@ export class ShiftReportGroupGenerator extends AReportGeneratorStrategy {
 	protected getSectionGenerators(): IReportSectionGeneratorStrategy[] {
 		return [
 			new ShiftReportByPaymentMethodSectionGenerator(this._appContext, this._sessionContext, this._paidInvoiceGroupList, this._params),
-			new ShiftReportByCategorySectionGenerator(this._appContext, this._sessionContext, this._paidInvoiceGroupList, this._aopContainer, this._params)
+			new ShiftReportByCategorySectionGenerator(this._appContext, this._sessionContext, this._paidInvoiceGroupList, this._aopContainer, this._params),
+			new ShiftReportByAopNameSectionGenerator(this._appContext, this._sessionContext, this._paidInvoiceGroupList, this._params)
 		];
 	}
 }

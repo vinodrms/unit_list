@@ -81,10 +81,13 @@ export class ShiftReportByCategorySectionGenerator extends AReportSectionGenerat
 		if (item.type == InvoiceItemType.Booking) {
 			return this._appContext.thTranslate.translate("Rooms");
 		}
+		if (item.type == InvoiceItemType.InvoiceFee) {
+			return this._appContext.thTranslate.translate("Invoice Fee");
+		}
 		// fallback to add on products
 		let aopItem = this._aopContainer.getAddOnProductItemById(item.id);
 		if (this._thUtils.isUndefinedOrNull(aopItem)) {
-			return "No Category";
+			return this._appContext.thTranslate.translate("No Category");
 		}
 		return aopItem.category.name;
 	}
