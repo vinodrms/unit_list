@@ -31,14 +31,13 @@ export class DailyKeyMetricsReportSectionGenerator extends AReportSectionGenerat
 				var typeStr = this._appContext.thTranslate.translate(metric.displayName);
 				let row: any = [typeStr];
 				_.forEach(metric.valueList, (value: IKeyMetricValue) => {
-					var m = this.metricToString(metric.valueType, value);
-					row.push(m);
+					row.push(value.getDisplayValue());
 				})
 				row.concat(metric.valueList);
 				data.push(row);
 			});
 			resolve(data);
-		})
+		}).catch((e) => { reject(e); })
 	}
 
 	private getPeriodFromParams(): YieldManagerPeriodDO {
@@ -46,18 +45,5 @@ export class DailyKeyMetricsReportSectionGenerator extends AReportSectionGenerat
 		period.referenceDate = this._dateInterval.start;
 		period.noDays = this._dateInterval.getNumberOfDays();
 		return period;
-	}
-
-	private metricToString(valueType: KeyMetricValueType, value: IKeyMetricValue): string {
-		switch (valueType) {
-			case KeyMetricValueType.Inventory:
-				let available = (<InventoryKeyMetric>value).available.toString();
-				let total = (<InventoryKeyMetric>value).total.toString();
-				return '"' + available + " of " + total + '"';
-			case KeyMetricValueType.Percentage:
-				return '"' + (<PercentageKeyMetric>value).percentage.toString() + '"';
-			case KeyMetricValueType.Price:
-				return '"' + (<PriceKeyMetric>value).price.toString() + '"';
-		}
 	}
 }
