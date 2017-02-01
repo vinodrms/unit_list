@@ -6,14 +6,16 @@ import { InvoicePaymentStatus } from '../../../../data-layer/invoices/data-objec
 import { InvoiceGroupDO } from '../../../../data-layer/invoices/data-objects/InvoiceGroupDO';
 import { InvoiceItemDO, InvoiceItemType } from '../../../../data-layer/invoices/data-objects/items/InvoiceItemDO';
 import { AReportSectionGeneratorStrategy } from '../../common/report-section-generator/AReportSectionGeneratorStrategy';
-import { ShiftReportParams } from './ShiftReportParams';
+import { ShiftReportParams } from '../ShiftReportParams';
 import { ReportSectionHeader } from '../../common/result/ReportSection';
+import { AddOnProductItemContainer } from '../../../add-on-products/validators/AddOnProductLoader';
 
-export class ShiftReportProductSectionGenerator extends AReportSectionGeneratorStrategy {
+export class ShiftReportByCategorySectionGenerator extends AReportSectionGeneratorStrategy {
 	private _thUtils: ThUtils;
 
 	constructor(appContext: AppContext, private _sessionContext: SessionContext,
-		private _paidInvoiceGroupList: InvoiceGroupDO[], private _params: ShiftReportParams) {
+		private _paidInvoiceGroupList: InvoiceGroupDO[], private _aopContainer: AddOnProductItemContainer,
+		private _params: ShiftReportParams) {
 		super(appContext);
 		this._thUtils = new ThUtils();
 	}
@@ -22,7 +24,7 @@ export class ShiftReportProductSectionGenerator extends AReportSectionGeneratorS
 		return {
 			display: true,
 			values: [
-				"Product",
+				"Product Category",
 				"Transactions",
 				"Amount"
 			]
@@ -79,7 +81,12 @@ export class ShiftReportProductSectionGenerator extends AReportSectionGeneratorS
 		if (item.type == InvoiceItemType.Booking) {
 			return this._appContext.thTranslate.translate("Rooms");
 		}
-		return item.meta.getDisplayName(this._appContext.thTranslate);
+		// fallback to add on products
+		let aopItem = this._aopContainer.getAddOnProductItemById(item.id);
+		if (this._thUtils.isUndefinedOrNull(aopItem)) {
+			return "No Category";
+		}
+		return aopItem.category.name;
 	}
 	private getQuantityForItem(item: InvoiceItemDO): number {
 		// we do not want to count the number of nights as separate rooms

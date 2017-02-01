@@ -5,10 +5,10 @@ import { ThUtils } from '../../../../utils/ThUtils';
 import { InvoiceDO } from '../../../../data-layer/invoices/data-objects/InvoiceDO';
 import { InvoiceGroupDO } from '../../../../data-layer/invoices/data-objects/InvoiceGroupDO';
 import { AReportSectionGeneratorStrategy } from '../../common/report-section-generator/AReportSectionGeneratorStrategy';
-import { ShiftReportParams } from './ShiftReportParams';
+import { ShiftReportParams } from '../ShiftReportParams';
 import { ReportSectionHeader } from '../../common/result/ReportSection';
 
-export class ShiftReportPaymentMethodSectionGenerator extends AReportSectionGeneratorStrategy {
+export class ShiftReportByPaymentMethodSectionGenerator extends AReportSectionGeneratorStrategy {
 	private _thUtils: ThUtils;
 
 	constructor(appContext: AppContext, private _sessionContext: SessionContext,

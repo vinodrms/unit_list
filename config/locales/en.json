@@ -167,6 +167,8 @@
 	"Transactions": "Transactions",
 	"Amount": "Amount",
 	"Product": "Product",
-	"Shift Report": "Shift Report"
+	"Shift Report": "Shift Report",
+	"Product Category": "Product Category",
+	"No Category": "No Category"
 
 }
