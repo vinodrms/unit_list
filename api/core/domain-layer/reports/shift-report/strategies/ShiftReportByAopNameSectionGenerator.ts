@@ -5,6 +5,8 @@ import { ThUtils } from '../../../../utils/ThUtils';
 import { InvoicePaymentStatus } from '../../../../data-layer/invoices/data-objects/InvoiceDO';
 import { InvoiceGroupDO } from '../../../../data-layer/invoices/data-objects/InvoiceGroupDO';
 import { InvoiceItemDO, InvoiceItemType } from '../../../../data-layer/invoices/data-objects/items/InvoiceItemDO';
+import { TaxDO } from '../../../../data-layer/taxes/data-objects/TaxDO';
+import { InvoiceItemVM } from '../../../invoices/invoice-confirmations/InvoiceItemVM';
 import { AReportSectionGeneratorStrategy } from '../../common/report-section-generator/AReportSectionGeneratorStrategy';
 import { ShiftReportParams } from '../ShiftReportParams';
 import { ReportSectionHeader } from '../../common/result/ReportSection';
@@ -25,7 +27,9 @@ export class ShiftReportByAopNameSectionGenerator extends AReportSectionGenerato
             values: [
                 "Add On Product",
                 "Transactions",
-                "Amount"
+                "Net Price",
+                "VAT",
+                "Subtotal"
             ]
         };
     }
@@ -33,22 +37,28 @@ export class ShiftReportByAopNameSectionGenerator extends AReportSectionGenerato
     protected getDataCore(resolve: { (result: any[][]): void }, reject: { (err: ThError): void }) {
         let mpmDetailsDict = this.getProductDetailsDict();
         var totalTransaction = 0;
-        var totalAmount = 0;
+        var totalNet = 0, totalVat = 0, total = 0;
         var data = [];
         Object.keys(mpmDetailsDict).forEach((aopId) => {
             let transactions = mpmDetailsDict[aopId].transactions;
-            let amount = this._thUtils.roundNumberToTwoDecimals(mpmDetailsDict[aopId].amount);
+            let itemNet = this._thUtils.roundNumberToTwoDecimals(mpmDetailsDict[aopId].itemNet);
+            let itemVat = this._thUtils.roundNumberToTwoDecimals(mpmDetailsDict[aopId].itemVat);
+            let itemTotal = this._thUtils.roundNumberToTwoDecimals(mpmDetailsDict[aopId].itemTotal);
             let displayName = mpmDetailsDict[aopId].displayName;
 
-            let row = [displayName, transactions, amount];
+            let row = [displayName, transactions, itemNet, itemVat, itemTotal];
 
             totalTransaction += transactions;
-            totalAmount += amount;
+            totalNet += itemNet;
+            totalVat += itemVat;
+            total += itemTotal;
 
             data.push(row);
         });
-        totalAmount = this._thUtils.roundNumberToTwoDecimals(totalAmount);
-        data.push([this._appContext.thTranslate.translate('Total'), totalTransaction, totalAmount]);
+        totalNet = this._thUtils.roundNumberToTwoDecimals(totalNet);
+        totalVat = this._thUtils.roundNumberToTwoDecimals(totalVat);
+        total = this._thUtils.roundNumberToTwoDecimals(total);
+        data.push([this._appContext.thTranslate.translate('Total'), totalTransaction, totalNet, totalVat, total]);
         resolve(data);
     }
 
@@ -62,16 +72,28 @@ export class ShiftReportByAopNameSectionGenerator extends AReportSectionGenerato
                         let price = item.meta.getUnitPrice() * item.meta.getNumberOfItems();
                         let transactions = this.getQuantityForItem(item);
                         let aopId = item.id;
+
+                        let itemVM = new InvoiceItemVM(this._appContext.thTranslate);
+                        itemVM.buildFromInvoiceItemDO(item, ig.vatTaxListSnapshot);
+
+                        let itemNet = itemVM.subtotal;
+                        let itemVat = itemVM.vat;
+                        let itemTotal = itemNet + itemVat;
+
                         if (!dic[aopId]) {
                             dic[aopId] = {
                                 transactions: transactions,
-                                amount: price,
+                                itemNet: itemNet,
+                                itemVat: itemVat,
+                                itemTotal: itemTotal,
                                 displayName: displayName
                             }
                         }
                         else {
                             dic[aopId].transactions += transactions;
-                            dic[aopId].amount += price
+                            dic[aopId].itemNet += itemNet;
+                            dic[aopId].itemVat += itemVat;
+                            dic[aopId].itemTotal += itemTotal;
                         }
                     }
                 });
