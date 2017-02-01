@@ -35,11 +35,12 @@ export class ShiftReportByAopNameSectionGenerator extends AReportSectionGenerato
         var totalTransaction = 0;
         var totalAmount = 0;
         var data = [];
-        Object.keys(mpmDetailsDict).forEach((productName) => {
-            let transactions = mpmDetailsDict[productName].transactions;
-            let amount = this._thUtils.roundNumberToTwoDecimals(mpmDetailsDict[productName].amount);
+        Object.keys(mpmDetailsDict).forEach((aopId) => {
+            let transactions = mpmDetailsDict[aopId].transactions;
+            let amount = this._thUtils.roundNumberToTwoDecimals(mpmDetailsDict[aopId].amount);
+            let displayName = mpmDetailsDict[aopId].displayName;
 
-            let row = [productName, transactions, amount];
+            let row = [displayName, transactions, amount];
 
             totalTransaction += transactions;
             totalAmount += amount;
@@ -47,7 +48,7 @@ export class ShiftReportByAopNameSectionGenerator extends AReportSectionGenerato
             data.push(row);
         });
         totalAmount = this._thUtils.roundNumberToTwoDecimals(totalAmount);
-        data.push(['Total', totalTransaction, totalAmount]);
+        data.push([this._appContext.thTranslate.translate('Total'), totalTransaction, totalAmount]);
         resolve(data);
     }
 
@@ -57,18 +58,20 @@ export class ShiftReportByAopNameSectionGenerator extends AReportSectionGenerato
             ig.invoiceList.forEach((invoice) => {
                 invoice.itemList.forEach((item) => {
                     if (item.type == InvoiceItemType.AddOnProduct) {
-                        let name = this.getDisplayNameForItem(item);
+                        let displayName = this.getDisplayNameForItem(item);
                         let price = item.meta.getUnitPrice() * item.meta.getNumberOfItems();
                         let transactions = this.getQuantityForItem(item);
-                        if (!dic[name]) {
-                            dic[name] = {
+                        let aopId = item.id;
+                        if (!dic[aopId]) {
+                            dic[aopId] = {
                                 transactions: transactions,
-                                amount: price
+                                amount: price,
+                                displayName: displayName
                             }
                         }
                         else {
-                            dic[name].transactions += transactions;
-                            dic[name].amount += price
+                            dic[aopId].transactions += transactions;
+                            dic[aopId].amount += price
                         }
                     }
                 });

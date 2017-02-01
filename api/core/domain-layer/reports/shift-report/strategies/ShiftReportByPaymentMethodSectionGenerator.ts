@@ -3,6 +3,8 @@ import { SessionContext } from '../../../../utils/SessionContext';
 import { ThError } from '../../../../utils/th-responses/ThError';
 import { ThUtils } from '../../../../utils/ThUtils';
 import { InvoiceDO } from '../../../../data-layer/invoices/data-objects/InvoiceDO';
+import { InvoicePayerDO } from '../../../../data-layer/invoices/data-objects/payers/InvoicePayerDO';
+import { InvoicePaymentMethodType } from '../../../../data-layer/invoices/data-objects/payers/InvoicePaymentMethodDO';
 import { InvoiceGroupDO } from '../../../../data-layer/invoices/data-objects/InvoiceGroupDO';
 import { AReportSectionGeneratorStrategy } from '../../common/report-section-generator/AReportSectionGeneratorStrategy';
 import { ShiftReportParams } from '../ShiftReportParams';
@@ -47,7 +49,7 @@ export class ShiftReportByPaymentMethodSectionGenerator extends AReportSectionGe
 				data.push(row);
 			});
 			totalAmount = this._thUtils.roundNumberToTwoDecimals(totalAmount);
-			data.push(['Total', totalTransaction, totalAmount]);
+			data.push([this._appContext.thTranslate.translate('Total'), totalTransaction, totalAmount]);
 			resolve(data);
 		}).catch((e) => { reject(e) });
 	}
@@ -57,7 +59,8 @@ export class ShiftReportByPaymentMethodSectionGenerator extends AReportSectionGe
 			let settingsRepository = this._appContext.getRepositoryFactory().getSettingsRepository();
 			settingsRepository.getPaymentMethods().then((paymentMethodL) => {
 				let pmIdToNameMap = {}
-				paymentMethodL.forEach((pm) => { pmIdToNameMap[pm.id] = pm.name });
+				paymentMethodL.forEach((pm) => { pmIdToNameMap[pm.id] = this._appContext.thTranslate.translate(pm.name) });
+				pmIdToNameMap[InvoicePaymentMethodType.PayInvoiceByAgreement + ""] = this._appContext.thTranslate.translate("Paid By Agreement");
 				resolve(pmIdToNameMap);
 			});
 		});
@@ -67,8 +70,11 @@ export class ShiftReportByPaymentMethodSectionGenerator extends AReportSectionGe
 		let dic = {};
 		this._paidInvoiceGroupList.forEach((ig) => {
 			let ipayerL = this.getAggregatedPaidPayerList(ig);
-			ipayerL.forEach((ipayer) => {
+			ipayerL.forEach((ipayer: InvoicePayerDO) => {
 				let pMethod = ipayer.paymentMethod.value;
+				if (ipayer.paymentMethod.type == InvoicePaymentMethodType.PayInvoiceByAgreement) {
+					pMethod = InvoicePaymentMethodType.PayInvoiceByAgreement + "";
+				}
 				let pPrice = ipayer.priceToPay;
 				if (!dic[pMethod]) {
 					dic[pMethod] = {

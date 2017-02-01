@@ -36,11 +36,12 @@ export class ShiftReportByCategorySectionGenerator extends AReportSectionGenerat
 		var totalTransaction = 0;
 		var totalAmount = 0;
 		var data = [];
-		Object.keys(mpmDetailsDict).forEach((productName) => {
-			let transactions = mpmDetailsDict[productName].transactions;
-			let amount = this._thUtils.roundNumberToTwoDecimals(mpmDetailsDict[productName].amount);
+		Object.keys(mpmDetailsDict).forEach((productId) => {
+			let transactions = mpmDetailsDict[productId].transactions;
+			let amount = this._thUtils.roundNumberToTwoDecimals(mpmDetailsDict[productId].amount);
+			let displayName = mpmDetailsDict[productId].displayName;
 
-			let row = [productName, transactions, amount];
+			let row = [displayName, transactions, amount];
 
 			totalTransaction += transactions;
 			totalAmount += amount;
@@ -48,7 +49,7 @@ export class ShiftReportByCategorySectionGenerator extends AReportSectionGenerat
 			data.push(row);
 		});
 		totalAmount = this._thUtils.roundNumberToTwoDecimals(totalAmount);
-		data.push(['Total', totalTransaction, totalAmount]);
+		data.push([this._appContext.thTranslate.translate('Total'), totalTransaction, totalAmount]);
 		resolve(data);
 	}
 
@@ -57,18 +58,19 @@ export class ShiftReportByCategorySectionGenerator extends AReportSectionGenerat
 		this._paidInvoiceGroupList.forEach((ig) => {
 			ig.invoiceList.forEach((invoice) => {
 				invoice.itemList.forEach((item) => {
-					let name = this.getDisplayNameForItem(item);
+					let details = this.getDisplayNameAndIdForItem(item);
 					let price = item.meta.getUnitPrice() * item.meta.getNumberOfItems();
 					let transactions = this.getQuantityForItem(item);
-					if (!dic[name]) {
-						dic[name] = {
+					if (!dic[details.id]) {
+						dic[details.id] = {
 							transactions: transactions,
-							amount: price
+							amount: price,
+							displayName: details.displayName
 						}
 					}
 					else {
-						dic[name].transactions += transactions;
-						dic[name].amount += price
+						dic[details.id].transactions += transactions;
+						dic[details.id].amount += price
 					}
 				});
 			});
@@ -76,20 +78,32 @@ export class ShiftReportByCategorySectionGenerator extends AReportSectionGenerat
 		return dic;
 	}
 
-	private getDisplayNameForItem(item: InvoiceItemDO): string {
+	private getDisplayNameAndIdForItem(item: InvoiceItemDO): { displayName: string, id: string } {
 		// Price Products are aggregated with the `Rooms` key
 		if (item.type == InvoiceItemType.Booking) {
-			return this._appContext.thTranslate.translate("Rooms");
+			return {
+				displayName: this._appContext.thTranslate.translate("Rooms"),
+				id: (InvoiceItemType.Booking + "")
+			};
 		}
 		if (item.type == InvoiceItemType.InvoiceFee) {
-			return this._appContext.thTranslate.translate("Invoice Fee");
+			return {
+				displayName: this._appContext.thTranslate.translate("Invoice Fee"),
+				id: (InvoiceItemType.InvoiceFee + "")
+			};
 		}
 		// fallback to add on products
 		let aopItem = this._aopContainer.getAddOnProductItemById(item.id);
-		if (this._thUtils.isUndefinedOrNull(aopItem)) {
-			return this._appContext.thTranslate.translate("No Category");
+		if (this._thUtils.isUndefinedOrNull(aopItem, "category")) {
+			return {
+				displayName: this._appContext.thTranslate.translate("No Category"),
+				id: ""
+			}
 		}
-		return aopItem.category.name;
+		return {
+			displayName: this._appContext.thTranslate.translate(aopItem.category.name),
+			id: aopItem.category.id
+		};
 	}
 	private getQuantityForItem(item: InvoiceItemDO): number {
 		// we do not want to count the number of nights as separate rooms
