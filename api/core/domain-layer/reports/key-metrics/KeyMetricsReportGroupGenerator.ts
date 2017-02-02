@@ -5,14 +5,23 @@ import { AReportGeneratorStrategy } from '../common/report-generator/AReportGene
 import { IReportSectionGeneratorStrategy } from '../common/report-section-generator/IReportSectionGeneratorStrategy';
 import { IValidationStructure } from '../../../utils/th-validation/structure/core/IValidationStructure';
 import { ObjectValidationStructure } from '../../../utils/th-validation/structure/ObjectValidationStructure';
+import { PrimitiveValidationStructure } from '../../../utils/th-validation/structure/PrimitiveValidationStructure';
 import { BookingValidationStructures } from '../../bookings/validators/BookingValidationStructures';
+import { NumberInListValidationRule } from '../../../utils/th-validation/rules/NumberInListValidationRule';
 import { ThDateDO } from '../../../utils/th-dates/data-objects/ThDateDO';
 import { ThDateIntervalDO } from '../../../utils/th-dates/data-objects/ThDateIntervalDO';
 import { ReportGroupMeta } from '../common/result/ReportGroup';
-import { DailyKeyMetricsReportSectionGenerator } from './strategies/DailyKeyMetricsReportSectionGenerator';
+import { KeyMetricsReportSectionGenerator } from './strategies/KeyMetricsReportSectionGenerator';
+import { YieldManagerPeriodDO } from '../../../domain-layer/yield-manager/utils/YieldManagerPeriodDO';
+import { KeyMetricReader } from '../../../domain-layer/yield-manager/key-metrics/KeyMetricReader';
+import { KeyMetricsResult, KeyMetricsResultItem } from '../../../domain-layer/yield-manager/key-metrics/utils/KeyMetricsResult';
+import { ThPeriodType } from './period-converter/ThPeriodDO';
+import { ThDateToThPeriodConverterFactory } from './period-converter/ThDateToThPeriodConverterFactory';
 
 export class KeyMetricsReportGroupGenerator extends AReportGeneratorStrategy {
-	private _dateInterval: ThDateIntervalDO;
+	private _period: YieldManagerPeriodDO;
+	private _periodType: ThPeriodType;
+	private _keyMetricItem: KeyMetricsResultItem;
 
 	constructor(appContext: AppContext, private _sessionContext: SessionContext) {
 		super(appContext);
@@ -27,6 +36,10 @@ export class KeyMetricsReportGroupGenerator extends AReportGeneratorStrategy {
 			{
 				key: "endDate",
 				validationStruct: BookingValidationStructures.getThDateDOValidationStructure()
+			},
+			{
+				key: "periodType",
+				validationStruct: new PrimitiveValidationStructure(new NumberInListValidationRule([ThPeriodType.Day, ThPeriodType.Month, ThPeriodType.Week]))
 			}
 		]);
 	}
@@ -36,7 +49,19 @@ export class KeyMetricsReportGroupGenerator extends AReportGeneratorStrategy {
 		startDate.buildFromObject(params.startDate);
 		var endDate = new ThDateDO();
 		endDate.buildFromObject(params.endDate);
-		this._dateInterval = ThDateIntervalDO.buildThDateIntervalDO(startDate, endDate);
+		let dateInterval = ThDateIntervalDO.buildThDateIntervalDO(startDate, endDate);
+		this._period = new YieldManagerPeriodDO();
+		this._period.referenceDate = dateInterval.start;
+		this._period.noDays = dateInterval.getNumberOfDays();
+		this._periodType = params.periodType;
+	}
+
+	protected loadDependentDataCore(resolve: { (result: boolean): void }, reject: { (err: ThError): void }) {
+		let reader = new KeyMetricReader(this._appContext, this._sessionContext);
+		reader.getKeyMetrics(this._period, false).then((reportItems: KeyMetricsResult) => {
+			this._keyMetricItem = reportItems.currentItem;
+			resolve(true);
+		}).catch((e) => { reject(e); })
 	}
 
 	protected getMeta(): ReportGroupMeta {
@@ -45,8 +70,10 @@ export class KeyMetricsReportGroupGenerator extends AReportGeneratorStrategy {
 		}
 	}
 	protected getSectionGenerators(): IReportSectionGeneratorStrategy[] {
+		let converterFactory = new ThDateToThPeriodConverterFactory();
+		let periodConverter = converterFactory.getConverter(this._periodType);
 		return [
-			new DailyKeyMetricsReportSectionGenerator(this._appContext, this._sessionContext, this._dateInterval)
+			new KeyMetricsReportSectionGenerator(this._appContext, this._sessionContext, this._keyMetricItem, periodConverter)
 		];
 	}
 }

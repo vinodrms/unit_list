@@ -38,12 +38,12 @@ export class KeyMetricReader {
     constructor(private _appContext: AppContext, private _sessionContext: SessionContext) {
     }
 
-    public getKeyMetrics(yieldManagerPeriodDO: YieldManagerPeriodDO): Promise<KeyMetricsResult> {
+    public getKeyMetrics(yieldManagerPeriodDO: YieldManagerPeriodDO, includePreviousPeriod: boolean = true): Promise<KeyMetricsResult> {
         return new Promise<KeyMetricsResult>((resolve: { (result: KeyMetricsResult): void }, reject: { (err: ThError): void }) => {
-            this.getKeyMetricsCore(resolve, reject, yieldManagerPeriodDO);
+            this.getKeyMetricsCore(resolve, reject, yieldManagerPeriodDO, includePreviousPeriod);
         });
     }
-    private getKeyMetricsCore(resolve: { (result: KeyMetricsResult): void }, reject: { (err: ThError): void }, yieldManagerPeriodDO: YieldManagerPeriodDO) {
+    private getKeyMetricsCore(resolve: { (result: KeyMetricsResult): void }, reject: { (err: ThError): void }, yieldManagerPeriodDO: YieldManagerPeriodDO, includePreviousPeriod: boolean) {
         var ymPeriodParser = new YieldManagerPeriodParser(yieldManagerPeriodDO);
         if (!ymPeriodParser.isValid()) {
             var thError = new ThError(ThStatusCode.KeyMetricReaderInvalidInterval, null);
@@ -83,6 +83,11 @@ export class KeyMetricReader {
                 return this.getKeyMetricsResultItem(this._currentIndexedInterval);
             }).then((currentItem: KeyMetricsResultItem) => {
                 this._keyMetricsResult.currentItem = currentItem;
+                if (!includePreviousPeriod) {
+                    return new Promise<KeyMetricsResultItem>((resolve: { (result: KeyMetricsResultItem): void }, reject: { (err: ThError): void }) => {
+                        resolve(null);
+                    });
+                }
                 return this.getKeyMetricsResultItem(this._previousIndexedInterval);
             }).then((previousItem: KeyMetricsResultItem) => {
                 this._keyMetricsResult.previousItem = previousItem;

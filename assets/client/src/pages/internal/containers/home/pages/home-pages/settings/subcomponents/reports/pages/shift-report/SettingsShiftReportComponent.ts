@@ -6,7 +6,7 @@ import { ThError, AppContext } from '../../../../../../../../../../../common/uti
 import { HotelDO } from '../../../../../../../../../services/hotel/data-objects/hotel/HotelDO';
 import { BaseComponent } from '../../../../../../../../../../../common/base/BaseComponent';
 import { HotelService } from '../../../../../../../../../services/hotel/HotelService';
-import {HotelDetailsDO} from '../../../../../../../../../services/hotel/data-objects/HotelDetailsDO';
+import { HotelDetailsDO } from '../../../../../../../../../services/hotel/data-objects/HotelDetailsDO';
 
 import { SettingsReportsPagesService } from '../../main/services/SettingsReportsPagesService';
 import { SettingsReportsService } from '../../main/services/SettingsReportsService';
@@ -14,7 +14,7 @@ import { SettingsReportsType } from '../../main/services/utils/SettingsReportsTy
 import { ThDateDO } from '../../../../../../../../../services/common/data-objects/th-dates/ThDateDO';
 import { ThHourDO } from '../../../../../../../../../services/common/data-objects/th-dates/ThHourDO';
 
-import {ReportGroupType} from '../../ReportGroupType';
+import { ReportGroupType } from '../../utils/ReportGroupType';
 
 @Component({
 	selector: 'settings-shift-report',
@@ -37,8 +37,8 @@ export class SettingsShiftReportComponent extends BaseComponent {
 		private _pagesService: SettingsReportsPagesService) {
 		super();
 		this._pagesService.bootstrap(SettingsReportsType.Shift);
-		this.startTime = ThHourDO.buildThHourDO(0,0);
-		this.endTime = ThHourDO.buildThHourDO(0,0);
+		this.startTime = ThHourDO.buildThHourDO(0, 0);
+		this.endTime = ThHourDO.buildThHourDO(0, 0);
 	}
 
 	ngOnInit() {
@@ -67,7 +67,7 @@ export class SettingsShiftReportComponent extends BaseComponent {
 	public didChangeEndTime(endTime) {
 		this.endTime = endTime;
 	}
-    
+
 	public reportCSVUrl(): string {
 		let params = {
 			//TODO: Report Type
@@ -83,5 +83,5 @@ export class SettingsShiftReportComponent extends BaseComponent {
 		var encodedParams = encodeURI(JSON.stringify(params));
 		return 'api/reports/report?params=' + encodedParams;
 	}
-	
+
 }

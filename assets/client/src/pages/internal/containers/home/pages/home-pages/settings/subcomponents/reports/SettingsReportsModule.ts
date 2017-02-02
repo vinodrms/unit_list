@@ -1,7 +1,7 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
+import {FormsModule} from "@angular/forms";
 import {SharedPipesModule} from '../../../../../../../../../common/utils/pipes/modules/SharedPipesModule';
-// import {CommonBasicInfoModule} from '../../../../../../common/basic-info/CommonBasicInfoModule';
 import {settingsReportsRouting} from './SettingsReportsRoutes';
 
 import {SharedComponentsModule} from '../../../../../../../../../common/utils/components/modules/SharedComponentsModule';
@@ -20,7 +20,7 @@ var settingsReportsComponents = [
     SettingsKeyMetricsReportComponent
 ];
 @NgModule({
-    imports: [CommonModule, SharedPipesModule, SharedComponentsModule, settingsReportsRouting],
+    imports: [CommonModule, FormsModule, SharedPipesModule, SharedComponentsModule, settingsReportsRouting],
     declarations: [settingsReportsComponents],
     providers: [TimezoneService]
 })

@@ -1,8 +1,12 @@
-import {ThDateDO} from './data-objects/ThDateDO';
-import {ThHourDO} from './data-objects/ThHourDO';
-import {ThTimestampDO} from './data-objects/ThTimestampDO';
+import { ThDateDO } from './data-objects/ThDateDO';
+import { ThHourDO } from './data-objects/ThHourDO';
+import { ThTimestampDO } from './data-objects/ThTimestampDO';
 
 import moment = require('moment-timezone');
+
+export type ThUnitOfTime =
+	"isoWeek"
+	| "month";
 
 export class ThDateUtils {
 	private static MinDateMillis = 0;
@@ -60,5 +64,13 @@ export class ThDateUtils {
 		newTimestamp.thHourDO.hour = 24 - newTimestamp.thHourDO.hour;
 		newTimestamp.thDateDO = this.addDaysToThDateDO(newTimestamp.thDateDO, 1);
 		return newTimestamp;
+	}
+	public startOf(inDate: ThDateDO, unitOfTime: ThUnitOfTime): ThDateDO {
+		let moment = this.convertThDateDOToMoment(inDate).startOf(unitOfTime);
+		return this.convertMomentToThDateDO(moment);
+	}
+	public endOf(inDate: ThDateDO, unitOfTime: ThUnitOfTime): ThDateDO {
+		let moment = this.convertThDateDOToMoment(inDate).endOf(unitOfTime);
+		return this.convertMomentToThDateDO(moment);
 	}
 }
