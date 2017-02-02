@@ -45,6 +45,6 @@ To run the e2e tests
 	> npm run e2e-tests
 
 
-Environment
+## Environment
 
-Node.js - 4.6.0
+ - Node.js - 4.6.0
