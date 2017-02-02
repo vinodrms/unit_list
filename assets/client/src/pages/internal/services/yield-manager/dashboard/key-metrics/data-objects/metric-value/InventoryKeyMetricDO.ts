@@ -9,6 +9,6 @@ export class InventoryKeyMetricDO extends BaseDO implements IKeyMetricValue {
         return ["total", "available"];
     }
     public getValue(): number {
-        return this.available;
+        return this.total - this.available;
     }
 }

@@ -1,10 +1,10 @@
-import {ThError} from '../../../utils/th-responses/ThError';
-import {AppContext} from '../../../utils/AppContext';
-import {SessionContext} from '../../../utils/SessionContext';
-import {ThUtils} from '../../../utils/ThUtils';
-import {AddOnProductSearchResultRepoDO} from '../../../data-layer/add-on-products/repositories/IAddOnProductRepository';
-import {AddOnProductDO} from '../../../data-layer/add-on-products/data-objects/AddOnProductDO';
-import {AddOnProductCategoryDO} from '../../../data-layer/common/data-objects/add-on-product/AddOnProductCategoryDO';
+import { ThError } from '../../../utils/th-responses/ThError';
+import { AppContext } from '../../../utils/AppContext';
+import { SessionContext } from '../../../utils/SessionContext';
+import { ThUtils } from '../../../utils/ThUtils';
+import { AddOnProductSearchResultRepoDO, AddOnProductSearchCriteriaRepoDO } from '../../../data-layer/add-on-products/repositories/IAddOnProductRepository';
+import { AddOnProductDO } from '../../../data-layer/add-on-products/data-objects/AddOnProductDO';
+import { AddOnProductCategoryDO } from '../../../data-layer/common/data-objects/add-on-product/AddOnProductCategoryDO';
 
 import _ = require('underscore');
 
@@ -14,23 +14,29 @@ export class AddOnProductItem {
 }
 
 export class AddOnProductItemContainer {
-    itemList: AddOnProductItem[];
-    constructor() {
-        this.itemList = [];
+    private _itemList: AddOnProductItem[];
+    private _indexedAopItemsByAopId: { [index: string]: AddOnProductItem; };
+
+    constructor(itemList: AddOnProductItem[]) {
+        this._itemList = itemList;
     }
     public getAddOnProductItemById(addOnProductId: string): AddOnProductItem {
-        return _.find(this.itemList, (item: AddOnProductItem) => {
-            return item.addOnProduct.id === addOnProductId;
-        });
+        if (!this._indexedAopItemsByAopId) {
+            this.indexAopItemsByAopId();
+        }
+        return this._indexedAopItemsByAopId[addOnProductId];
     }
+    private indexAopItemsByAopId() {
+        this._indexedAopItemsByAopId = _.indexBy(this._itemList, (item: AddOnProductItem) => { return item.addOnProduct.id });
+    }
+
     public getAddOnProductList(): AddOnProductDO[] {
-        return _.map(this.itemList, (item: AddOnProductItem) => { return item.addOnProduct });
+        return _.map(this._itemList, (item: AddOnProductItem) => { return item.addOnProduct });
     }
 }
 
 export class AddOnProductLoader {
     private _thUtils: ThUtils;
-    private _addOnProductIdList: string[];
 
     private _addOnProductList: AddOnProductDO[];
     private _addOnProductCategoryList: AddOnProductCategoryDO[];
@@ -40,18 +46,23 @@ export class AddOnProductLoader {
     }
 
     public load(addOnProductIdList: string[]): Promise<AddOnProductItemContainer> {
-        this._addOnProductIdList = addOnProductIdList;
         return new Promise<AddOnProductItemContainer>((resolve: { (result: AddOnProductItemContainer): void }, reject: { (err: ThError): void }) => {
-            this.loadCore(resolve, reject);
+            if (addOnProductIdList.length == 0) {
+                resolve(new AddOnProductItemContainer([]));
+                return;
+            }
+            this.loadCore(resolve, reject, { addOnProductIdList: addOnProductIdList });
         });
     }
-    private loadCore(resolve: { (result: AddOnProductItemContainer): void }, reject: { (err: ThError): void }) {
-        if (this._addOnProductIdList.length == 0) {
-            resolve(new AddOnProductItemContainer());
-            return;
-        }
+    public loadAll(): Promise<AddOnProductItemContainer> {
+        return new Promise<AddOnProductItemContainer>((resolve: { (result: AddOnProductItemContainer): void }, reject: { (err: ThError): void }) => {
+            this.loadCore(resolve, reject, {});
+        });
+    }
+
+    private loadCore(resolve: { (result: AddOnProductItemContainer): void }, reject: { (err: ThError): void }, searchCriteria: AddOnProductSearchCriteriaRepoDO) {
         var addOnProductRepo = this._appContext.getRepositoryFactory().getAddOnProductRepository();
-        addOnProductRepo.getAddOnProductList({ hotelId: this._sessionContext.sessionDO.hotel.id }, { addOnProductIdList: this._addOnProductIdList })
+        addOnProductRepo.getAddOnProductList({ hotelId: this._sessionContext.sessionDO.hotel.id }, searchCriteria)
             .then((searchResult: AddOnProductSearchResultRepoDO) => {
                 this._addOnProductList = searchResult.addOnProductList;
 
@@ -65,14 +76,14 @@ export class AddOnProductLoader {
             });
     }
     private buildAddOnProductItemContainer(): AddOnProductItemContainer {
-        var container = new AddOnProductItemContainer();
+        var itemList: AddOnProductItem[] = [];
         _.forEach(this._addOnProductList, (addOnProduct: AddOnProductDO) => {
             var addOnProductItem: AddOnProductItem = new AddOnProductItem();
             addOnProductItem.addOnProduct = addOnProduct;
             addOnProductItem.category = this.getAddOnProductCategoryById(addOnProduct.categoryId);
-            container.itemList.push(addOnProductItem);
+            itemList.push(addOnProductItem);
         });
-        return container;
+        return new AddOnProductItemContainer(itemList);
     }
     private getAddOnProductCategoryById(categoryId: string): AddOnProductCategoryDO {
         return _.find(this._addOnProductCategoryList, (addOnProductCateg: AddOnProductCategoryDO) => {
