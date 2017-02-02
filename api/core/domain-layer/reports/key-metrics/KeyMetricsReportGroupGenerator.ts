@@ -9,10 +9,16 @@ import { BookingValidationStructures } from '../../bookings/validators/BookingVa
 import { ThDateDO } from '../../../utils/th-dates/data-objects/ThDateDO';
 import { ThDateIntervalDO } from '../../../utils/th-dates/data-objects/ThDateIntervalDO';
 import { ReportGroupMeta } from '../common/result/ReportGroup';
-import { DailyKeyMetricsReportSectionGenerator } from './strategies/DailyKeyMetricsReportSectionGenerator';
+import { KeyMetricsReportSectionGenerator } from './strategies/KeyMetricsReportSectionGenerator';
+import { YieldManagerPeriodDO } from '../../../domain-layer/yield-manager/utils/YieldManagerPeriodDO';
+import { KeyMetricReader } from '../../../domain-layer/yield-manager/key-metrics/KeyMetricReader';
+import { KeyMetricsResult, KeyMetricsResultItem } from '../../../domain-layer/yield-manager/key-metrics/utils/KeyMetricsResult';
+import { ThPeriodType } from './period-converter/ThPeriodDO';
+import { ThDateToThPeriodConverterFactory } from './period-converter/ThDateToThPeriodConverterFactory';
 
 export class KeyMetricsReportGroupGenerator extends AReportGeneratorStrategy {
-	private _dateInterval: ThDateIntervalDO;
+	private _period: YieldManagerPeriodDO;
+	private _keyMetricItem: KeyMetricsResultItem;
 
 	constructor(appContext: AppContext, private _sessionContext: SessionContext) {
 		super(appContext);
@@ -36,7 +42,18 @@ export class KeyMetricsReportGroupGenerator extends AReportGeneratorStrategy {
 		startDate.buildFromObject(params.startDate);
 		var endDate = new ThDateDO();
 		endDate.buildFromObject(params.endDate);
-		this._dateInterval = ThDateIntervalDO.buildThDateIntervalDO(startDate, endDate);
+		let dateInterval = ThDateIntervalDO.buildThDateIntervalDO(startDate, endDate);
+		this._period = new YieldManagerPeriodDO();
+		this._period.referenceDate = dateInterval.start;
+		this._period.noDays = dateInterval.getNumberOfDays();
+	}
+
+	protected loadDependentDataCore(resolve: { (result: boolean): void }, reject: { (err: ThError): void }) {
+		let reader = new KeyMetricReader(this._appContext, this._sessionContext);
+		reader.getKeyMetrics(this._period, false).then((reportItems: KeyMetricsResult) => {
+			this._keyMetricItem = reportItems.currentItem;
+			resolve(true);
+		}).catch((e) => { reject(e); })
 	}
 
 	protected getMeta(): ReportGroupMeta {
@@ -45,8 +62,11 @@ export class KeyMetricsReportGroupGenerator extends AReportGeneratorStrategy {
 		}
 	}
 	protected getSectionGenerators(): IReportSectionGeneratorStrategy[] {
+		let converterFactory = new ThDateToThPeriodConverterFactory();
+		// TODO: add parameter from front end
+		let periodConverter = converterFactory.getConverter(ThPeriodType.Week);
 		return [
-			new DailyKeyMetricsReportSectionGenerator(this._appContext, this._sessionContext, this._dateInterval)
+			new KeyMetricsReportSectionGenerator(this._appContext, this._sessionContext, this._keyMetricItem, periodConverter)
 		];
 	}
 }
