@@ -5,7 +5,9 @@ import { AReportGeneratorStrategy } from '../common/report-generator/AReportGene
 import { IReportSectionGeneratorStrategy } from '../common/report-section-generator/IReportSectionGeneratorStrategy';
 import { IValidationStructure } from '../../../utils/th-validation/structure/core/IValidationStructure';
 import { ObjectValidationStructure } from '../../../utils/th-validation/structure/ObjectValidationStructure';
+import { PrimitiveValidationStructure } from '../../../utils/th-validation/structure/PrimitiveValidationStructure';
 import { BookingValidationStructures } from '../../bookings/validators/BookingValidationStructures';
+import { NumberInListValidationRule } from '../../../utils/th-validation/rules/NumberInListValidationRule';
 import { ThDateDO } from '../../../utils/th-dates/data-objects/ThDateDO';
 import { ThDateIntervalDO } from '../../../utils/th-dates/data-objects/ThDateIntervalDO';
 import { ReportGroupMeta } from '../common/result/ReportGroup';
@@ -18,6 +20,7 @@ import { ThDateToThPeriodConverterFactory } from './period-converter/ThDateToThP
 
 export class KeyMetricsReportGroupGenerator extends AReportGeneratorStrategy {
 	private _period: YieldManagerPeriodDO;
+	private _periodType: ThPeriodType;
 	private _keyMetricItem: KeyMetricsResultItem;
 
 	constructor(appContext: AppContext, private _sessionContext: SessionContext) {
@@ -33,6 +36,10 @@ export class KeyMetricsReportGroupGenerator extends AReportGeneratorStrategy {
 			{
 				key: "endDate",
 				validationStruct: BookingValidationStructures.getThDateDOValidationStructure()
+			},
+			{
+				key: "periodType",
+				validationStruct: new PrimitiveValidationStructure(new NumberInListValidationRule([ThPeriodType.Day, ThPeriodType.Month, ThPeriodType.Week]))
 			}
 		]);
 	}
@@ -46,6 +53,7 @@ export class KeyMetricsReportGroupGenerator extends AReportGeneratorStrategy {
 		this._period = new YieldManagerPeriodDO();
 		this._period.referenceDate = dateInterval.start;
 		this._period.noDays = dateInterval.getNumberOfDays();
+		this._periodType = params.periodType;
 	}
 
 	protected loadDependentDataCore(resolve: { (result: boolean): void }, reject: { (err: ThError): void }) {
@@ -63,8 +71,7 @@ export class KeyMetricsReportGroupGenerator extends AReportGeneratorStrategy {
 	}
 	protected getSectionGenerators(): IReportSectionGeneratorStrategy[] {
 		let converterFactory = new ThDateToThPeriodConverterFactory();
-		// TODO: add parameter from front end
-		let periodConverter = converterFactory.getConverter(ThPeriodType.Week);
+		let periodConverter = converterFactory.getConverter(this._periodType);
 		return [
 			new KeyMetricsReportSectionGenerator(this._appContext, this._sessionContext, this._keyMetricItem, periodConverter)
 		];

@@ -11,7 +11,7 @@ import { HotelService } from '../../../../../../../../../services/hotel/HotelSer
 import { HotelDetailsDO } from '../../../../../../../../../services/hotel/data-objects/HotelDetailsDO';
 import { SettingsReportsService } from '../../main/services/SettingsReportsService';
 
-import {ReportGroupType} from '../../ReportGroupType';
+import { ReportGroupType } from '../../utils/ReportGroupType';
 
 @Component({
 	selector: 'settings-backup-report',

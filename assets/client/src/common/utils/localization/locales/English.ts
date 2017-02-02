@@ -760,7 +760,8 @@ export var EnglishTranslations: Object = {
 	"Get your hotel's key metrics": "Get your hotel's key metrics",
 	"Generate Shift Report": "Generate Shift Report",
 	"The shift report between two intervals": "The shift report between two intervals",
-	
-
+	"Group Values By": "Group Values By",
+	"Day": "Day",
+	"Month": "Month"
 
 };
