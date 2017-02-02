@@ -38,7 +38,7 @@ export class KeyMetricsReportSectionGenerator extends AReportSectionGeneratorStr
 
 	protected getHeader(): ReportSectionHeader {
 		var headerValues = [this._appContext.thTranslate.translate("Dates")];
-		this._kmResultItem.dateList.forEach((thDate: ThDateDO) => {
+		this._kmResultItem.dateList.forEach((thDate: ThDateDO, index: number) => {
 			let period = this._periodConverter.convert(thDate);
 			if (this._thUtils.isUndefinedOrNull(this._periodIdToValueGroupMap[period.id])) {
 				this._periodIdList.push(period.id);
@@ -46,7 +46,15 @@ export class KeyMetricsReportSectionGenerator extends AReportSectionGeneratorStr
 					period: period,
 					count: 0
 				};
+				this.tryUpdatePeriodMarginDisplayString(period, thDate, index);
 				headerValues.push(period.displayString);
+			}
+			else {
+				let didUpdate = this.tryUpdatePeriodMarginDisplayString(period, thDate, index);
+				if (didUpdate) {
+					headerValues.pop();
+					headerValues.push(period.displayString);
+				}
 			}
 			this._thDateToThPeriodMap[thDate.toString()] = period;
 		});
@@ -54,6 +62,22 @@ export class KeyMetricsReportSectionGenerator extends AReportSectionGeneratorStr
 			display: true,
 			values: headerValues
 		};
+	}
+	private tryUpdatePeriodMarginDisplayString(period: ThPeriodDO, thDate: ThDateDO, index: number): boolean {
+		if (index == 0 && period.dateStart.isBefore(thDate)) {
+			period.dateStart = thDate;
+			this.updatePeriodDisplayString(period);
+			return true;
+		}
+		if (index == this._kmResultItem.dateList.length - 1 && thDate.isBefore(period.dateEnd)) {
+			period.dateEnd = thDate;
+			this.updatePeriodDisplayString(period);
+			return true;
+		}
+		return false;
+	}
+	private updatePeriodDisplayString(period: ThPeriodDO) {
+		period.displayString = period.dateStart.toString() + " - " + period.dateEnd.toString();
 	}
 
 	protected getDataCore(resolve: { (result: any[][]): void }, reject: { (err: ThError): void }) {

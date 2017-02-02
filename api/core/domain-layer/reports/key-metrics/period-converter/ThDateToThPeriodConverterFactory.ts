@@ -30,7 +30,7 @@ class ThDateToDayThPeriodConverter implements IThDateToThPeriodConverter {
 
 class ThDateToWeekThPeriodConverter implements IThDateToThPeriodConverter {
     private _dateUtils: ThDateUtils;
-    constructor () {
+    constructor() {
         this._dateUtils = new ThDateUtils();
     }
     public convert(date: ThDateDO): ThPeriodDO {
@@ -46,7 +46,7 @@ class ThDateToWeekThPeriodConverter implements IThDateToThPeriodConverter {
 
 class ThDateToMonthThPeriodConverter implements IThDateToThPeriodConverter {
     private _dateUtils: ThDateUtils;
-    constructor () {
+    constructor() {
         this._dateUtils = new ThDateUtils();
     }
     public convert(date: ThDateDO): ThPeriodDO {
