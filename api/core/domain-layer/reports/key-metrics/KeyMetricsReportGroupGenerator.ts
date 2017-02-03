@@ -52,7 +52,7 @@ export class KeyMetricsReportGroupGenerator extends AReportGeneratorStrategy {
 		let dateInterval = ThDateIntervalDO.buildThDateIntervalDO(startDate, endDate);
 		this._period = new YieldManagerPeriodDO();
 		this._period.referenceDate = dateInterval.start;
-		this._period.noDays = dateInterval.getNumberOfDays();
+		this._period.noDays = dateInterval.getNumberOfDays() + 1;
 		this._periodType = params.periodType;
 	}
 
