@@ -12,6 +12,7 @@ import { HotelDetailsDO } from '../../../../../../../../../services/hotel/data-o
 import { SettingsReportsService } from '../../main/services/SettingsReportsService';
 
 import { ReportGroupType } from '../../utils/ReportGroupType';
+import { ReportOutputFormatType } from '../../utils/ReportOutputFormatType';
 
 @Component({
 	selector: 'settings-backup-report',
@@ -21,7 +22,7 @@ import { ReportGroupType } from '../../utils/ReportGroupType';
 export class SettingsBackUpReportComponent extends BaseComponent {
 	private startDate: ThDateDO;
 	private endDate: ThDateDO;
-	private isLoading: boolean = true;
+	private format: ReportOutputFormatType;
 
 	constructor(
 		private _appContext: AppContext,
@@ -34,9 +35,14 @@ export class SettingsBackUpReportComponent extends BaseComponent {
 	ngOnInit() {
 	}
 
+	public didSelectFormat(format: ReportOutputFormatType) {
+		this.format = format;
+	}
+
 	public reportCSVUrl(): string {
 		let params = {
 			reportType: ReportGroupType.Backup,
+			format: this.format,
 			properties: {
 			}
 		}

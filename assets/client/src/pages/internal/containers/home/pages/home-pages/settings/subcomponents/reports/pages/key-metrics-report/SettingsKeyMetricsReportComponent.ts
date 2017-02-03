@@ -11,6 +11,7 @@ import { HotelDetailsDO } from '../../../../../../../../../services/hotel/data-o
 import { SettingsReportsService } from '../../main/services/SettingsReportsService';
 import { ReportGroupType } from '../../utils/ReportGroupType';
 import { ThPeriodType, ThPeriodOption } from '../../utils/ThPeriodType';
+import { ReportOutputFormatType } from '../../utils/ReportOutputFormatType';
 
 @Component({
 	selector: 'settings-key-metrics-report',
@@ -23,6 +24,7 @@ export class SettingsKeyMetricsReportComponent extends BaseComponent {
 	private isLoading: boolean = true;
 	private periodOptionList: ThPeriodOption[];
 	private selectedPeriodType: ThPeriodType;
+	private format: ReportOutputFormatType;
 
 	constructor(
 		private _appContext: AppContext,
@@ -55,10 +57,14 @@ export class SettingsKeyMetricsReportComponent extends BaseComponent {
 	public didSelectPeriodOption(periodType: string) {
 		this.selectedPeriodType = parseInt(periodType);
 	}
+	public didSelectFormat(format: ReportOutputFormatType) {
+		this.format = format;
+	}
 
 	public reportCSVUrl(): string {
 		let params = {
 			reportType: ReportGroupType.KeyMetrics,
+			format: this.format,
 			properties: {
 				startDate: this.startDate,
 				endDate: this.endDate,

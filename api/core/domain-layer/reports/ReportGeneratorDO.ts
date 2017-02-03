@@ -15,11 +15,14 @@ var SupportedReportGroupTypes: ReportGroupType[] = [
     ReportGroupType.ShiftReport,
 ]
 
-// TODO: add Pdf & add validation in getValidationStructure()
 export enum ReportOutputFormat {
-    Csv
+    Csv,
+    Pdf
 }
-
+var SupportedOutputFormats: ReportOutputFormat[] = [
+    ReportOutputFormat.Csv,
+    ReportOutputFormat.Pdf
+]
 export class ReportGeneratorDO {
     reportType: ReportGroupType;
     properties: Object;
@@ -34,6 +37,10 @@ export class ReportGeneratorDO {
             {
                 key: "properties",
                 validationStruct: new ObjectValidationStructure([])
+            },
+            {
+                key: "format",
+                validationStruct: new PrimitiveValidationStructure(new NumberInListValidationRule(SupportedOutputFormats))
             }
         ])
     }

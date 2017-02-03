@@ -8,7 +8,7 @@
 			</label>
 			<hr>
 			<div class="row">
-				<div class="col-xs-6 col-md-6 form-group">
+				<div class="col-xs-12 col-md-6 form-group">
 					<th-date-picker
 						[initialThDate]="startDate"
 						[label]="'Start date'"
@@ -17,13 +17,13 @@
 					</th-date-picker>
 				</div>
 
-				<div class="col-xs-6 col-md-6 form-group">
+				<div class="col-xs-12 col-md-6 form-group">
 					<label>{{ 'Start time' | translate }}</label>
 					<th-hour-select [initialHour]="startTime" (onHourSelected)="didChangeStartTime($event)" [isRequired]="true"
 						[didSubmitForm]="didSubmitForm">
 					</th-hour-select>
 				</div>
-				<div class="col-xs-6 col-md-6 form-group">
+				<div class="col-xs-12 col-md-6 form-group">
 					<th-date-picker
 						[initialThDate]="endDate"
 						[label]="'End date'"
@@ -32,11 +32,16 @@
 					</th-date-picker>
 				</div>
 
-				<div class="col-xs-6 col-md-6 form-group">
+				<div class="col-xs-12 col-md-6 form-group">
 					<label>{{ 'End time' | translate }}</label>
 					<th-hour-select [initialHour]="endTime" (onHourSelected)="didChangeEndTime($event)" [isRequired]="true"
 						[didSubmitForm]="didSubmitForm">
 					</th-hour-select>
+				</div>
+
+				<div class="col-xs-12 col-md-6 form-group">
+					<label>{{ 'File Format' | translate }}</label>
+					<report-output-format (onFormatSelected)="didSelectFormat($event)"></report-output-format>
 				</div>
 
 				<div *ngIf="!isLoading" class="col-xs-12 col-md-offset-9 col-md-3">

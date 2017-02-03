@@ -10,6 +10,8 @@ export class ReportOutputWriterFactory {
 
     public getOutputWriter(format: ReportOutputFormat): IReportOutputWriter {
         switch (format) {
+            case ReportOutputFormat.Csv:
+                return new CsvReportOutputWriter(this._appContext);
             default:
                 return new PdfReportOutputWriter(this._appContext);
         }
