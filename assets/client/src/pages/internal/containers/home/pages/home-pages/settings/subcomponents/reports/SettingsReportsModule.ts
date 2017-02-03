@@ -5,6 +5,7 @@ import { SharedPipesModule } from '../../../../../../../../../common/utils/pipes
 import { settingsReportsRouting } from './SettingsReportsRoutes';
 
 import { SharedComponentsModule } from '../../../../../../../../../common/utils/components/modules/SharedComponentsModule';
+import { SharedDirectivesModule } from '../../../../../../../../../common/utils/directives/modules/SharedDirectivesModule';
 
 import { SettingsReportsComponent } from './main/SettingsReportsComponent';
 import { ReportOutputFormatComponent } from './pages/common/report-output-format/ReportOutputFormatComponent';
@@ -22,7 +23,7 @@ var settingsReportsComponents = [
     SettingsKeyMetricsReportComponent
 ];
 @NgModule({
-    imports: [CommonModule, FormsModule, SharedPipesModule, SharedComponentsModule, settingsReportsRouting],
+    imports: [CommonModule, FormsModule, SharedPipesModule, SharedComponentsModule, SharedDirectivesModule, settingsReportsRouting],
     declarations: [settingsReportsComponents],
     providers: [TimezoneService]
 })
