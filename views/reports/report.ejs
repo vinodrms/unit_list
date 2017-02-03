@@ -24,16 +24,11 @@
     .table-box table {
         width:100%;
         line-height:inherit;
-        text-align:left;
     }
     
     .table-box table td{
         padding:5px;
         vertical-align:top;
-    }
-    
-    .table-box table tr td:nth-child(2){
-        text-align:right;
     }
     
     .table-box table tr.heading td{
@@ -85,7 +80,7 @@
                     <%if (section.header.display == true) { %>
                         <tr class="heading">
                             <% section.header.values.forEach(function(value){ %>
-                                <td>
+                                <td align="center">
                                     <%= value %>
                                 </td>
                             <% }); %>
@@ -95,7 +90,7 @@
                     <% section.data.forEach(function(rowValueList){ %>
                         <tr class="item">
                             <% rowValueList.forEach(function(rowValue){ %>
-                            <td>
+                            <td align="center">
                                 <%= rowValue %>
                             </td>
                             <% }); %>

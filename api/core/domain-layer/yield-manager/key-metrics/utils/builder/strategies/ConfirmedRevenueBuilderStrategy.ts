@@ -16,7 +16,7 @@ export class ConfirmedRevenueBuilderStrategy extends AMetricBuilderStrategy {
     }
     protected getKeyMetricValueCore(statsForDate: HotelInventoryStatsForDate): IKeyMetricValue {
         var metric = new PriceKeyMetric();
-        metric.price = this.roundValue(statsForDate.confirmedRevenue.roomRevenue + statsForDate.confirmedRevenue.otherRevenue);
+        metric.price = this.roundValueToNearestInteger(statsForDate.confirmedRevenue.roomRevenue + statsForDate.confirmedRevenue.otherRevenue);
         return metric;
     }
     protected getKeyMetricDisplayName(): string {

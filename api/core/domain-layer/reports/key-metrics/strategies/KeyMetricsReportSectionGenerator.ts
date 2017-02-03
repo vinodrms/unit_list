@@ -34,7 +34,7 @@ export class KeyMetricsReportSectionGenerator extends AReportSectionGeneratorStr
 	}
 
 	protected getHeader(): ReportSectionHeader {
-		var headerValues = [this._appContext.thTranslate.translate("Dates")];
+		var headerValues = [this._appContext.thTranslate.translate("Metric")];
 		this._kmResultItem.dateList.forEach((thDate: ThDateDO, index: number) => {
 			let period = this._periodConverter.convert(thDate);
 			if (this._thUtils.isUndefinedOrNull(this._periodIdToValueGroupMap[period.id])) {

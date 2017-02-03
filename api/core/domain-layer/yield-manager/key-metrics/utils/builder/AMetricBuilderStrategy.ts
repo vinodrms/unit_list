@@ -31,6 +31,9 @@ export abstract class AMetricBuilderStrategy implements IMetricBuilderStrategy {
     protected roundValue(value: number): number {
         return this._thUtils.roundNumberToTwoDecimals(value);
     }
+    protected roundValueToNearestInteger(value: number): number {
+        return this._thUtils.roundNumberToNearestInteger(value);
+    }
 
     protected abstract getType(): KeyMetricType;
     protected abstract getValueType(): KeyMetricValueType;
