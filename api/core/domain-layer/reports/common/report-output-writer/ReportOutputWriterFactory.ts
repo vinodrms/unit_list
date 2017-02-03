@@ -2,6 +2,7 @@ import { AppContext } from '../../../../utils/AppContext';
 import { IReportOutputWriter } from './IReportOutputWriter';
 import { ReportOutputFormat } from '../../ReportGeneratorDO';
 import { CsvReportOutputWriter } from './strategies/CsvReportOutputWriter';
+import { PdfReportOutputWriter } from './strategies/PdfReportOutputWriter';
 
 export class ReportOutputWriterFactory {
     constructor(private _appContext: AppContext) {
@@ -10,7 +11,7 @@ export class ReportOutputWriterFactory {
     public getOutputWriter(format: ReportOutputFormat): IReportOutputWriter {
         switch (format) {
             default:
-                return new CsvReportOutputWriter(this._appContext)
+                return new PdfReportOutputWriter(this._appContext);
         }
     }
 }

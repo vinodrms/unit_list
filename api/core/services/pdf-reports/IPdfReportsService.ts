@@ -1,6 +1,7 @@
 export enum ReportType {
 	Invoice,
-	BookingConfirmation
+	BookingConfirmation,
+    Report
 }
 
 export interface PdfReportsServiceRequest {

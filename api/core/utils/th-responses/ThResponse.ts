@@ -324,6 +324,7 @@ export enum ThStatusCode {
 	InvoiceGroupsRepositoryErrorGettingInvoice,
 	InvoiceGroupsControllerErrorGettingInvoiceGroupsCount,
 	InvoiceGroupsControllerErrorGettingInvoiceGroupsBrief,
+	InvoiceGroupsControllerErrorDownloading,
 	InvoiceGroupsBriefDataAggregatorErrorGettingInvoiceGroupsBrief,
 	InvoiceGroupsControllerErrorsavingInvoiceGroup,
 	SaveInvoiceGroupItem,
@@ -491,7 +492,8 @@ export enum ThStatusCode {
 	ReportsControllerErrorParsingJson,
 
 	//File service
-	FileServiceErrorWritingFile
+	FileServiceErrorWritingFile,
+	FileServiceErrorDeletingFile
 }
 
 var ThMessage: { [index: number]: string; } = {};
@@ -808,6 +810,7 @@ ThMessage[ThStatusCode.InvoiceGroupsRepositoryErrorReadingDocumentCount] = "Erro
 ThMessage[ThStatusCode.InvoiceGroupsControllerErrorGettingInvoiceGroups] = "Error getting the invoice group list.";
 ThMessage[ThStatusCode.InvoiceGroupsControllerErrorGettingInvoiceGroupsCount] = "Error getting the total number of invoice groups matching the search criteria.";
 ThMessage[ThStatusCode.InvoiceGroupsControllerErrorGettingInvoiceGroupsBrief] = "Error getting brief info about the required invoices.";
+ThMessage[ThStatusCode.InvoiceGroupsControllerErrorDownloading] = "Error downloading invoice.";
 ThMessage[ThStatusCode.InvoiceGroupsControllerErrorsavingInvoiceGroup] = "Error saving invoice group.";
 ThMessage[ThStatusCode.InvoiceGroupsBriefDataAggregatorErrorGettingInvoiceGroupsBrief] = "Error getting brief info about the required invoices.";
 ThMessage[ThStatusCode.SaveInvoiceGroupItem] = "Error saving the invoice group item.";
@@ -974,6 +977,7 @@ ThMessage[ThStatusCode.ReportsControllerErrorParsingJson] = "Error parsing the i
 
 // File service
 ThMessage[ThStatusCode.FileServiceErrorWritingFile] = "Error writing file";
+ThMessage[ThStatusCode.FileServiceErrorDeletingFile] = "Error deleting file";
 
 export class ThResponse {
 	statusCode: ThStatusCode;
