@@ -1,5 +1,4 @@
-<!--<loading-component [isLoading]="isLoading"></loading-component>-->
-<div class="container-fluid" customScroll>
+<div class="container full-height" customScroll>
 	<div class="row basic-info-form">
 		<div class="col-xs-12 col-md-6">
 			<label class="control-label">
@@ -7,7 +6,11 @@
 			</label>
 			<hr>
 			<div class="row">
-				<div class="col-xs-12 col-md-3">
+				<div class="col-xs-12 col-md-6 form-group">
+					<label>{{ 'File Format' | translate }}</label>
+					<report-output-format (onFormatSelected)="didSelectFormat($event)"></report-output-format>
+				</div>
+				<div class="col-xs-12 col-md-offset-9 col-md-3">
 					<a class="btn btn-primary btn-block" [href]="reportCSVUrl()" target="_blank">{{ 'Generate' | translate }}</a>
 				</div>
 			</div>

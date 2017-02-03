@@ -2,6 +2,7 @@ import { ReportSection } from './ReportSection';
 
 export interface ReportGroupMeta {
     name: string;
+    reference?: string;
 }
 
 export class ReportGroup {

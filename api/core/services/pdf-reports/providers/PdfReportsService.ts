@@ -1,11 +1,12 @@
-import {ReportType, PdfReportsServiceRequest, PdfReportsServiceResponse} from '../IPdfReportsService';
-import {ThError} from '../../../utils/th-responses/ThError';
-import {ThLogger, ThLogLevel} from '../../../utils/logging/ThLogger';
-import {ThStatusCode} from '../../../utils/th-responses/ThResponse';
-import {APdfReportsService} from '../APdfReportsService';
-import {IPdfReportConfig} from './config/IPdfReportConfig';
-import {PdfReportConfigFactory} from './config/PdfReportConfigFactory';
-import {HtmlToPdfResponseDO} from '../../html-to-pdf/IHtmlToPdfConverterService';
+import { ReportType, PdfReportsServiceRequest, PdfReportsServiceResponse } from '../IPdfReportsService';
+import { ThError } from '../../../utils/th-responses/ThError';
+import { ThLogger, ThLogLevel } from '../../../utils/logging/ThLogger';
+import { ThStatusCode } from '../../../utils/th-responses/ThResponse';
+import { APdfReportsService } from '../APdfReportsService';
+import { IPdfReportConfig } from './config/IPdfReportConfig';
+import { PdfReportConfigFactory } from './config/PdfReportConfigFactory';
+import { HtmlToPdfResponseDO } from '../../html-to-pdf/IHtmlToPdfConverterService';
+import { IFileService } from '../../file-service/IFileService';
 
 var ejs = require('ejs');
 var mkdirp = require('mkdirp');
@@ -17,6 +18,7 @@ export class PdfReportsService extends APdfReportsService {
 
     private _reportsServiceRequest: PdfReportsServiceRequest;
     private _reportConfig: IPdfReportConfig;
+    private _htmlPath: string;
 
     public generatePdfReport(reportsServiceRequest: PdfReportsServiceRequest): Promise<PdfReportsServiceResponse> {
         this._reportsServiceRequest = reportsServiceRequest;
@@ -32,12 +34,14 @@ export class PdfReportsService extends APdfReportsService {
         this._reportConfig = PdfReportConfigFactory.getPdfReportConfig(this._reportsServiceRequest.reportType, this._unitPalConfig);
 
         this.generateHtml().then((generatedHtmlPath: string) => {
+            this._htmlPath = generatedHtmlPath;
             return this._htmlToPdfConverterService.generatePdf({
                 htmlUrl: this.getFileUrlFromFileRelativePath(generatedHtmlPath),
                 pdfReportOutputPath: this._reportConfig.getOutputPdfAbsolutePath(this._reportsServiceRequest.reportData),
                 settings: this._reportsServiceRequest.settings
             });
         }).then((converterRespone: HtmlToPdfResponseDO) => {
+            this._fileService.deleteFile(this._htmlPath);
             resolve({ pdfPath: converterRespone.filePath });
         }).catch((err: any) => {
             var thError = new ThError(ThStatusCode.PdfReportServiceHtmlToPdfError, err);

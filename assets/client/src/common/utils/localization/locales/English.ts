@@ -762,6 +762,7 @@ export var EnglishTranslations: Object = {
 	"The shift report between two intervals": "The shift report between two intervals",
 	"Group Values By": "Group Values By",
 	"Day": "Day",
-	"Month": "Month"
+	"Month": "Month",
+	"File Format": "File Format"
 
 };

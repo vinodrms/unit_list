@@ -3,7 +3,7 @@ import { SessionContext } from '../../../../utils/SessionContext';
 import { ThError } from '../../../../utils/th-responses/ThError';
 import { ThUtils } from '../../../../utils/ThUtils';
 import { AReportSectionGeneratorStrategy } from '../../common/report-section-generator/AReportSectionGeneratorStrategy';
-import { ReportSectionHeader } from '../../common/result/ReportSection';
+import { ReportSectionHeader, ReportSectionMeta } from '../../common/result/ReportSection';
 import { ThDateIntervalDO } from '../../../../utils/th-dates/data-objects/ThDateIntervalDO';
 import { ThDateDO } from '../../../../utils/th-dates/data-objects/ThDateDO';
 import { KeyMetricsResultItem, KeyMetric, KeyMetricValueType, IKeyMetricValue, PriceKeyMetric, PercentageKeyMetric, InventoryKeyMetric } from '../../../../domain-layer/yield-manager/key-metrics/utils/KeyMetricsResult';
@@ -17,8 +17,6 @@ interface IKeyMetricValueGroup {
 }
 
 export class KeyMetricsReportSectionGenerator extends AReportSectionGeneratorStrategy {
-	private _thUtils: ThUtils;
-
 	// use to keep the chronological order of the results 
 	private _periodIdList: string[];
 	// used to aggregate the values of a single metric by periods
@@ -30,14 +28,13 @@ export class KeyMetricsReportSectionGenerator extends AReportSectionGeneratorStr
 		private _kmResultItem: KeyMetricsResultItem, private _periodConverter: IThDateToThPeriodConverter) {
 		super(appContext);
 
-		this._thUtils = new ThUtils();
 		this._periodIdList = [];
 		this._periodIdToValueGroupMap = {};
 		this._thDateToThPeriodMap = {};
 	}
 
 	protected getHeader(): ReportSectionHeader {
-		var headerValues = [this._appContext.thTranslate.translate("Dates")];
+		var headerValues = [this._appContext.thTranslate.translate("Metric")];
 		this._kmResultItem.dateList.forEach((thDate: ThDateDO, index: number) => {
 			let period = this._periodConverter.convert(thDate);
 			if (this._thUtils.isUndefinedOrNull(this._periodIdToValueGroupMap[period.id])) {
@@ -78,6 +75,10 @@ export class KeyMetricsReportSectionGenerator extends AReportSectionGeneratorStr
 	}
 	private updatePeriodDisplayString(period: ThPeriodDO) {
 		period.displayString = period.dateStart.toString() + " - " + period.dateEnd.toString();
+	}
+
+	protected getMeta(): ReportSectionMeta {
+		return {}
 	}
 
 	protected getDataCore(resolve: { (result: any[][]): void }, reject: { (err: ThError): void }) {

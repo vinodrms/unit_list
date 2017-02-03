@@ -1,0 +1,5 @@
+<div class="input-group">
+    <select class="form-control" [ngModel]="selectedFormatType" (ngModelChange)="didSelectFormat($event)">
+        <option *ngFor="let format of formatList" [value]="format.type">{{ format.displayName | translate }}</option>
+    </select>
+</div>

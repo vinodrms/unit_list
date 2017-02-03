@@ -4,7 +4,7 @@ import { ThError } from '../../../../utils/th-responses/ThError';
 import { ReportArrivalsReader } from '../arrivals/ReportArrivalsReader';
 import { ReportArrivalItemInfo } from '../arrivals/utils/ReportArrivalsInfo';
 import { AReportSectionGeneratorStrategy } from '../../common/report-section-generator/AReportSectionGeneratorStrategy';
-import { ReportSectionHeader } from '../../common/result/ReportSection';
+import { ReportSectionHeader, ReportSectionMeta } from '../../common/result/ReportSection';
 
 export class GuestsArrivingReportSectionGeneratorStrategy extends AReportSectionGeneratorStrategy {
 
@@ -28,6 +28,12 @@ export class GuestsArrivingReportSectionGeneratorStrategy extends AReportSection
 				"Notes"
 			]
 		};
+	}
+
+	protected getMeta(): ReportSectionMeta {
+		return {
+			title: "Guests Arriving"
+		}
 	}
 
 	protected getDataCore(resolve: { (result: any[][]): void }, reject: { (err: ThError): void }) {

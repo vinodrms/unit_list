@@ -15,6 +15,7 @@ import { ThDateDO } from '../../../../../../../../../services/common/data-object
 import { ThHourDO } from '../../../../../../../../../services/common/data-objects/th-dates/ThHourDO';
 
 import { ReportGroupType } from '../../utils/ReportGroupType';
+import { ReportOutputFormatType } from '../../utils/ReportOutputFormatType';
 
 @Component({
 	selector: 'settings-shift-report',
@@ -26,6 +27,7 @@ export class SettingsShiftReportComponent extends BaseComponent {
 	private endDate: ThDateDO;
 	private startTime: ThHourDO;
 	private endTime: ThHourDO;
+	private format: ReportOutputFormatType;
 
 	isSaving: boolean = false;
 	isLoading: boolean = true;
@@ -68,10 +70,14 @@ export class SettingsShiftReportComponent extends BaseComponent {
 		this.endTime = endTime;
 	}
 
+	public didSelectFormat(format: ReportOutputFormatType) {
+		this.format = format;
+	}
+
 	public reportCSVUrl(): string {
 		let params = {
-			//TODO: Report Type
 			reportType: ReportGroupType.ShiftReport,
+			format: this.format,
 			properties: {
 				startDate: this.startDate,
 				endDate: this.endDate,

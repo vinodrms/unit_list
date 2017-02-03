@@ -1,14 +1,14 @@
-import {ThLogger, ThLogLevel} from '../../../utils/logging/ThLogger';
-import {ThError} from '../../../utils/th-responses/ThError';
-import {ThStatusCode} from '../../../utils/th-responses/ThResponse';
-import {AppContext} from '../../../utils/AppContext';
-import {SessionContext} from '../../../utils/SessionContext';
-import {ThTranslation} from '../../../utils/localization/ThTranslation';
-import {InvoiceAggregatedData} from '../aggregators/InvoiceAggregatedData';
-import {InvoiceDataAggregator, InvoiceDataAggregatorQuery} from '../aggregators/InvoiceDataAggregator';
-import {InvoiceConfirmationVMContainer} from './InvoiceConfirmationVMContainer';
-import {ReportType, PdfReportsServiceResponse} from '../../../services/pdf-reports/IPdfReportsService';
-import {BaseEmailTemplateDO, EmailTemplateTypes} from '../../../services/email/data-objects/BaseEmailTemplateDO'
+import { ThLogger, ThLogLevel } from '../../../utils/logging/ThLogger';
+import { ThError } from '../../../utils/th-responses/ThError';
+import { ThStatusCode } from '../../../utils/th-responses/ThResponse';
+import { AppContext } from '../../../utils/AppContext';
+import { SessionContext } from '../../../utils/SessionContext';
+import { ThTranslation } from '../../../utils/localization/ThTranslation';
+import { InvoiceAggregatedData } from '../aggregators/InvoiceAggregatedData';
+import { InvoiceDataAggregator, InvoiceDataAggregatorQuery } from '../aggregators/InvoiceDataAggregator';
+import { InvoiceConfirmationVMContainer } from './InvoiceConfirmationVMContainer';
+import { ReportType, PdfReportsServiceResponse } from '../../../services/pdf-reports/IPdfReportsService';
+import { BaseEmailTemplateDO, EmailTemplateTypes } from '../../../services/email/data-objects/BaseEmailTemplateDO'
 
 import fs = require('fs');
 import path = require('path');
@@ -31,7 +31,7 @@ export class InvoiceConfirmationEmailSender {
         var pdfReportsService = this._appContext.getServiceFactory().getPdfReportsService();
         var invoiceDataAggregator = new InvoiceDataAggregator(this._appContext, this._sessionContext);
         var generatedPdfAbsolutePath: string;
-        
+
         invoiceDataAggregator.getInvoiceAggregatedData(query).then((invoiceAggregatedData: InvoiceAggregatedData) => {
             var invoiceConfirmationVMContainer = new InvoiceConfirmationVMContainer(this._thTranslation);
             invoiceConfirmationVMContainer.buildFromInvoiceAggregatedDataContainer(invoiceAggregatedData);
@@ -57,29 +57,13 @@ export class InvoiceConfirmationEmailSender {
             });
             return Promise.all(sendEmailPromiseList);
         }).then((result: any) => {
-            var deletePdfPromise = this.removeFile(generatedPdfAbsolutePath);
-            var deleteHtmlPromise = this.removeFile(this.getGeneratedHtmlPathFromPdfPath(generatedPdfAbsolutePath));
-            return Promise.all([deletePdfPromise, deleteHtmlPromise]);
-        }).then((result: any) => {
+            let fileService = this._appContext.getServiceFactory().getFileService();
+            fileService.deleteFile(generatedPdfAbsolutePath);
             resolve(true);
         }).catch((err: any) => {
             var thError = new ThError(ThStatusCode.InvoiceEmailSenderErrorSendingEmail, err);
             ThLogger.getInstance().logError(ThLogLevel.Error, "error sending invoice by email", { invoicesQuery: query, distributionList: emailDistributionList }, thError);
             resolve(false);
-        });    
-    }
-    private getGeneratedHtmlPathFromPdfPath(generatedPdfAbsolutePath: string): string {
-        var pathObject = path.parse(generatedPdfAbsolutePath);
-        return pathObject.dir + path.sep + pathObject.name + '.html';
-    }
-    private removeFile(path: string): Promise<boolean> {
-        return new Promise<boolean>((resolve: { (fileWasDeleted: boolean): void }, reject: { (err: ThError): void }) => {
-            this.removeFileCore(resolve, reject, path);
-        });
-    }
-    private removeFileCore(resolve: { (fileWasDeleted: boolean): void }, reject: { (err: ThError): void }, path: string) {
-        fs.unlink(path, (err) => {
-            resolve(true);
         });
     }
 }

@@ -9,7 +9,7 @@ import { ThUtils } from '../../../../../utils/ThUtils';
 let endOfLine = require('os').EOL;
 
 export class CsvReportOutputWriter extends AReportOutputWriter {
-    private static OutputFolder = "output/reports/csv"
+    private static OutputFolder = "output/reports/report/"
     private _utils: ThUtils;
 
     constructor(private _appContext: AppContext) {

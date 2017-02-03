@@ -1,29 +1,29 @@
-import {UnitPalConfig, EmailProviderType, ImageStorageProviderType, PdfReportsProviderType} from '../utils/environment/UnitPalConfig';
-import {IVatProvider} from './vat/IVatProvider';
-import {VatProviderProxyService} from './vat/VatProviderProxyService';
-import {VIESVatProviderAdapter} from './vat/providers/VIESVatProviderAdapter';
-import {IEmailService} from './email/IEmailService';
-import {MockEmailService} from './email/providers/mock/MockEmailService';
-import {SendgridEmailService} from './email/providers/sendgrid/SendgridEmailService';
-import {ILoginService} from './login/ILoginService';
-import {IImageStorageService} from './image-storage/IImageStorageService';
-import {CloudinaryImageStorageService} from './image-storage/cloudinary/CloudinaryImageStorageService';
-import {MockImageStorageService} from './image-storage/mock/MockImageStorageService';
-import {PassportLoginService} from './login/custom/PassportLoginService';
-import {MomentTimeZonesService} from './time-zones/providers/moment/MomentTimeZonesService';
-import {ITimeZonesService} from './time-zones/ITimeZonesService';
-import {INotificationService} from './notifications/INotificationService';
-import {NotificationServicePushDecorator} from './notifications/providers/NotificationServicePushDecorator';
-import {NotificationService} from './notifications/providers/NotificationService';
-import {ISocketsService} from './sockets/ISocketsService';
-import {SocketIoService} from './sockets/providers/SocketIoService';
-import {IHtmlToPdfConverterService} from './html-to-pdf/IHtmlToPdfConverterService';
-import {PhantomLocalHtmlToPdfConverterService} from './html-to-pdf/providers/phantom/PhantomLocalHtmlToPdfConverterService';
-import {IPdfReportsService} from './pdf-reports/IPdfReportsService';
-import {PdfReportsService} from './pdf-reports/providers/PdfReportsService';
-import {MockPdfReportsService} from './pdf-reports/providers/MockPdfReportsService';
-import {IFileService} from './file-service/IFileService'
-import {FileService} from './file-service/FileService'
+import { UnitPalConfig, EmailProviderType, ImageStorageProviderType, PdfReportsProviderType } from '../utils/environment/UnitPalConfig';
+import { IVatProvider } from './vat/IVatProvider';
+import { VatProviderProxyService } from './vat/VatProviderProxyService';
+import { VIESVatProviderAdapter } from './vat/providers/VIESVatProviderAdapter';
+import { IEmailService } from './email/IEmailService';
+import { MockEmailService } from './email/providers/mock/MockEmailService';
+import { SendgridEmailService } from './email/providers/sendgrid/SendgridEmailService';
+import { ILoginService } from './login/ILoginService';
+import { IImageStorageService } from './image-storage/IImageStorageService';
+import { CloudinaryImageStorageService } from './image-storage/cloudinary/CloudinaryImageStorageService';
+import { MockImageStorageService } from './image-storage/mock/MockImageStorageService';
+import { PassportLoginService } from './login/custom/PassportLoginService';
+import { MomentTimeZonesService } from './time-zones/providers/moment/MomentTimeZonesService';
+import { ITimeZonesService } from './time-zones/ITimeZonesService';
+import { INotificationService } from './notifications/INotificationService';
+import { NotificationServicePushDecorator } from './notifications/providers/NotificationServicePushDecorator';
+import { NotificationService } from './notifications/providers/NotificationService';
+import { ISocketsService } from './sockets/ISocketsService';
+import { SocketIoService } from './sockets/providers/SocketIoService';
+import { IHtmlToPdfConverterService } from './html-to-pdf/IHtmlToPdfConverterService';
+import { PhantomLocalHtmlToPdfConverterService } from './html-to-pdf/providers/phantom/PhantomLocalHtmlToPdfConverterService';
+import { IPdfReportsService } from './pdf-reports/IPdfReportsService';
+import { PdfReportsService } from './pdf-reports/providers/PdfReportsService';
+import { MockPdfReportsService } from './pdf-reports/providers/MockPdfReportsService';
+import { IFileService } from './file-service/IFileService'
+import { FileService } from './file-service/FileService'
 
 export class ServiceFactory {
     constructor(private _unitPalConfig: UnitPalConfig) {
@@ -57,7 +57,7 @@ export class ServiceFactory {
         return new MomentTimeZonesService();
     }
     public getSocketsService(): ISocketsService {
-        return new SocketIoService(sails.config.ws);    
+        return new SocketIoService(sails.config.ws);
     }
     public getNotificationService(): INotificationService {
         return new NotificationServicePushDecorator(new NotificationService(this._unitPalConfig), this.getSocketsService());
@@ -65,19 +65,18 @@ export class ServiceFactory {
     public getPdfReportsService(): IPdfReportsService {
         switch (this._unitPalConfig.getPdfReportsProviderType()) {
             case PdfReportsProviderType.Real:
-                return new PdfReportsService(this._unitPalConfig, this.getHtmltoPdfConverterService());
+                return new PdfReportsService(this._unitPalConfig, this.getHtmltoPdfConverterService(), this.getFileService());
             case PdfReportsProviderType.Mock:
-                return new MockPdfReportsService(this._unitPalConfig, this.getHtmltoPdfConverterService());
+                return new MockPdfReportsService(this._unitPalConfig, this.getHtmltoPdfConverterService(), this.getFileService());
             default:
-                return new PdfReportsService(this._unitPalConfig, this.getHtmltoPdfConverterService());
+                return new PdfReportsService(this._unitPalConfig, this.getHtmltoPdfConverterService(), this.getFileService());
         }
-           
     }
     public getHtmltoPdfConverterService(): IHtmlToPdfConverterService {
-        return new PhantomLocalHtmlToPdfConverterService();   
+        return new PhantomLocalHtmlToPdfConverterService();
     }
-    
-    public getFileService():IFileService{
+
+    public getFileService(): IFileService {
         return new FileService();
     }
 }

@@ -1,5 +1,6 @@
 import { AppContext } from '../../../../utils/AppContext';
 import { ThError } from '../../../../utils/th-responses/ThError';
+import { ThUtils } from '../../../../utils/ThUtils';
 import { IValidationStructure } from '../../../../utils/th-validation/structure/core/IValidationStructure';
 import { ValidationResultParser } from '../../../common/ValidationResultParser';
 import { IReportGeneratorStrategy } from './IReportGeneratorStrategy';
@@ -11,8 +12,10 @@ import { IReportSectionGeneratorStrategy } from '../report-section-generator/IRe
 import _ = require('underscore');
 
 export abstract class AReportGeneratorStrategy implements IReportGeneratorStrategy {
+	protected _thUtils: ThUtils;
 
 	constructor(protected _appContext: AppContext) {
+		this._thUtils = new ThUtils();
 	}
 
 	public generate(params: Object): Promise<ReportGroup> {
@@ -32,6 +35,7 @@ export abstract class AReportGeneratorStrategy implements IReportGeneratorStrate
 
 		var meta = this.getMeta();
 		meta.name = this._appContext.thTranslate.translate(meta.name);
+		meta.reference = this._thUtils.generateShortId();
 		var reportGroup = new ReportGroup(meta);
 
 		this.loadDependentData().then((result: any) => {

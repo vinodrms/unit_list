@@ -22,7 +22,7 @@ export class TotalAvgRateBuilderStrategy extends AMetricBuilderStrategy {
             return metric;
         }
         var roomRevenue = statsForDate.confirmedRevenue.roomRevenue + statsForDate.guaranteedRevenue.roomRevenue;
-        metric.price = this.roundValue(roomRevenue / noOccupiedRooms);
+        metric.price = this.roundValueToNearestInteger(roomRevenue / noOccupiedRooms);
         return metric;
     }
     protected getKeyMetricDisplayName(): string {

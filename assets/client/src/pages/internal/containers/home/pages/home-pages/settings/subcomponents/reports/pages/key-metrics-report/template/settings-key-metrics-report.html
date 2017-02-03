@@ -1,6 +1,4 @@
-<!--<loading-component [isLoading]="isLoading"></loading-component>-->
-<div class="container-fluid" customScroll>
-	<!--<div class="row basic-info-form" *ngIf="!isLoading">-->
+<div class="container full-height" customScroll>
 	<div class="row basic-info-form">
 		<div class="col-xs-12 col-md-6">
 			<label class="control-label">
@@ -8,7 +6,7 @@
 			</label>
 			<hr>
 			<div class="row">
-				<div class="col-xs-6 col-md-6 form-group">
+				<div class="col-xs-12 col-md-6 form-group">
 					<th-date-picker
 						[initialThDate]="startDate"
 						[label]="'Start date'"
@@ -17,7 +15,7 @@
 					</th-date-picker>
 				</div>
 
-				<div class="col-xs-6 col-md-6 form-group">
+				<div class="col-xs-12 col-md-6 form-group">
 					<th-date-picker
 						[initialThDate]="endDate"
 						[label]="'End date'"
@@ -26,13 +24,18 @@
 					</th-date-picker>
 				</div>
 
-				<div class="col-xs-6 col-md-6 form-group">
+				<div class="col-xs-12 col-md-6 form-group">
 					<label>{{ 'Group Values By' | translate }}</label>
 					<div class="input-group">
 						<select class="form-control" [ngModel]="selectedPeriodType" (ngModelChange)="didSelectPeriodOption($event)">
 							<option *ngFor="let periodOption of periodOptionList" [value]="periodOption.type">{{ periodOption.displayName | translate }}</option>
 						</select>
 					</div>
+				</div>
+
+				<div class="col-xs-12 col-md-6 form-group">
+					<label>{{ 'File Format' | translate }}</label>
+					<report-output-format (onFormatSelected)="didSelectFormat($event)"></report-output-format>
 				</div>
 
 				<div *ngIf="!isLoading" class="col-xs-12 col-md-offset-9 col-md-3">

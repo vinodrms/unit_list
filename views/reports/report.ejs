@@ -1,0 +1,104 @@
+<!doctype html>
+<html>
+<head>
+    <base href="../../../">
+    <meta charset="utf-8">
+    <title><%= meta.name %></title>
+    <!-- Fonts -->
+    <link href='assets/client/static-assets/css/roboto-font.css' rel='stylesheet' type='text/css'>
+    <!-- Custom CSS -->
+    <link href="assets/client/static-assets/css/unitpal-print.css" rel="stylesheet">
+
+    <style>
+    .table-box {
+        max-width:800px;
+        margin:auto;
+        padding-right: 20px;
+        padding-left: 20px;
+        font-size:12px;
+        line-height:22px;
+        font-family: 'Roboto', sans-serif;
+        color:#555;
+    }
+    
+    .table-box table {
+        width:100%;
+        line-height:inherit;
+    }
+    
+    .table-box table td{
+        padding:5px;
+        vertical-align:top;
+    }
+    
+    .table-box table tr.heading td{
+        background:#eee;
+        border-bottom:1px solid #ddd;
+        font-weight:bold;
+    }
+    
+    .table-box table tr.item td{
+        border-bottom:1px solid #eee;
+    }
+    
+    .table-box table tr.item.last td{
+        border-bottom:none;
+    }
+    
+    .table-box table tr.total td:nth-child(2){
+        border-top:2px solid #eee;
+        font-weight:bold;
+    }
+    
+    * {
+        margin: 0;
+    }
+    html, body {
+        height: 100%;
+    }
+    .wrapper {
+        min-height: 100%;
+        height: auto !important; /* This line and the next line are not necessary unless you need IE6 support */
+        height: 100%;
+        margin: 0 auto -150px; /* the bottom margin is the negative value of the footer's height */
+    }
+
+    </style>
+</head>
+
+    <body>
+        <div class="table-box wrapper">
+            
+            <% sectionList.forEach(function(section){ %>
+                <br><br>
+
+                <% if (section.meta.title) { %>
+                    <h3> <%= section.meta.title %> </h3>
+                <% } %>
+
+                <table cellpadding="0" cellspacing="0">
+                    <%if (section.header.display == true) { %>
+                        <tr class="heading">
+                            <% section.header.values.forEach(function(value){ %>
+                                <td align="center">
+                                    <%= value %>
+                                </td>
+                            <% }); %>
+                        </tr>
+                    <% } %>
+
+                    <% section.data.forEach(function(rowValueList){ %>
+                        <tr class="item">
+                            <% rowValueList.forEach(function(rowValue){ %>
+                            <td align="center">
+                                <%= rowValue %>
+                            </td>
+                            <% }); %>
+                        </tr>
+                    <% }); %>
+
+                </table>
+            <% }); %>
+        </div>
+    </body>
+</html>

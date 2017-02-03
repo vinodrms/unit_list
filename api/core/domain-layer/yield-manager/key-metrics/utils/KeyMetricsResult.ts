@@ -13,13 +13,14 @@ export class PriceKeyMetric implements IKeyMetricValue {
     }
     public divideBy(divisor: number) {
         let thUtils = new ThUtils();
-        this.price = thUtils.roundNumberToTwoDecimals(this.price / divisor);
+        this.price = thUtils.roundNumberToNearestInteger(this.price / divisor);
     }
 }
 export class PercentageKeyMetric implements IKeyMetricValue {
     percentage: number;
     public getDisplayValue(): string {
-        return (this.percentage * 100.0).toString() + "%";
+        let thUtils = new ThUtils();
+        return thUtils.roundNumberToNearestInteger(this.percentage * 100.0).toString() + "%";
     }
     public add(value: any) {
         this.percentage += value.percentage;
@@ -34,7 +35,7 @@ export class InventoryKeyMetric implements IKeyMetricValue {
     available: number;
     public getDisplayValue(): string {
         let thUtils = new ThUtils();
-        return thUtils.roundNumberToTwoDecimals(this.total - this.available).toString() + " of " + this.total;
+        return thUtils.roundNumberToNearestInteger(this.total - this.available).toString() + " of " + this.total;
     }
     public add(value: any) {
         this.total += value.total;
@@ -42,8 +43,8 @@ export class InventoryKeyMetric implements IKeyMetricValue {
     }
     public divideBy(divisor: number) {
         let thUtils = new ThUtils();
-        this.total = thUtils.roundNumberToTwoDecimals(this.total / divisor);
-        this.available = thUtils.roundNumberToTwoDecimals(this.available / divisor);
+        this.total = thUtils.roundNumberToNearestInteger(this.total / divisor);
+        this.available = thUtils.roundNumberToNearestInteger(this.available / divisor);
     }
 }
 export interface IKeyMetricValue {
