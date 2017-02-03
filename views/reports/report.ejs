@@ -76,7 +76,11 @@
             
             <% sectionList.forEach(function(section){ %>
                 <br><br>
-                <h3> Report Heading </h3>
+
+                <% if (section.meta.title) { %>
+                    <h3> <%= section.meta.title %> </h3>
+                <% } %>
+
                 <table cellpadding="0" cellspacing="0">
                     <%if (section.header.display == true) { %>
                         <tr class="heading">

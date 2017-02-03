@@ -3,7 +3,12 @@ export interface ReportSectionHeader {
     values?: string[];
 }
 
+export interface ReportSectionMeta {
+    title?: string;
+}
+
 export class ReportSection {
     header: ReportSectionHeader;
+    meta: ReportSectionMeta;
     data: any[][];
 }

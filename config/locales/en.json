@@ -175,6 +175,12 @@
 	"Paid By Agreement": "Paid By Agreement",
 	"Net Price": "Net Price",
 	"Subtotal": "Subtotal",
-	"Dates": "Dates"
+	"Dates": "Dates",
+	"Guests Arriving": "Guests Arriving",
+	"Guests Departing": "Guests Departing",
+	"Guests In House": "Guests In House",
+	"Add On Product Transactions": "Add On Product Transactions",
+	"Transactions Grouped by Category": "Transactions Grouped by Category",
+	"Transactions Grouped by Payment Method": "Transactions Grouped by Payment Method"
 
 }

@@ -1,22 +1,19 @@
 import { AppContext } from '../../../../utils/AppContext';
 import { SessionContext } from '../../../../utils/SessionContext';
 import { ThError } from '../../../../utils/th-responses/ThError';
-import { ThUtils } from '../../../../utils/ThUtils';
 import { InvoiceDO } from '../../../../data-layer/invoices/data-objects/InvoiceDO';
 import { InvoicePayerDO } from '../../../../data-layer/invoices/data-objects/payers/InvoicePayerDO';
 import { InvoicePaymentMethodType } from '../../../../data-layer/invoices/data-objects/payers/InvoicePaymentMethodDO';
 import { InvoiceGroupDO } from '../../../../data-layer/invoices/data-objects/InvoiceGroupDO';
 import { AReportSectionGeneratorStrategy } from '../../common/report-section-generator/AReportSectionGeneratorStrategy';
 import { ShiftReportParams } from '../ShiftReportParams';
-import { ReportSectionHeader } from '../../common/result/ReportSection';
+import { ReportSectionHeader, ReportSectionMeta } from '../../common/result/ReportSection';
 
 export class ShiftReportByPaymentMethodSectionGenerator extends AReportSectionGeneratorStrategy {
-	private _thUtils: ThUtils;
 
 	constructor(appContext: AppContext, private _sessionContext: SessionContext,
 		private _paidInvoiceGroupList: InvoiceGroupDO[], private _params: ShiftReportParams) {
 		super(appContext);
-		this._thUtils = new ThUtils();
 	}
 
 	protected getHeader(): ReportSectionHeader {
@@ -28,6 +25,12 @@ export class ShiftReportByPaymentMethodSectionGenerator extends AReportSectionGe
 				"Amount"
 			]
 		};
+	}
+
+	protected getMeta(): ReportSectionMeta {
+		return {
+			title: "Transactions Grouped by Payment Method"
+		}
 	}
 
 	protected getDataCore(resolve: { (result: any[][]): void }, reject: { (err: ThError): void }) {

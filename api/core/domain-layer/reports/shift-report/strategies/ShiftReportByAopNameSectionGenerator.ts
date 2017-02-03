@@ -1,7 +1,6 @@
 import { AppContext } from '../../../../utils/AppContext';
 import { SessionContext } from '../../../../utils/SessionContext';
 import { ThError } from '../../../../utils/th-responses/ThError';
-import { ThUtils } from '../../../../utils/ThUtils';
 import { InvoicePaymentStatus } from '../../../../data-layer/invoices/data-objects/InvoiceDO';
 import { InvoiceGroupDO } from '../../../../data-layer/invoices/data-objects/InvoiceGroupDO';
 import { InvoiceItemDO, InvoiceItemType } from '../../../../data-layer/invoices/data-objects/items/InvoiceItemDO';
@@ -9,16 +8,14 @@ import { TaxDO } from '../../../../data-layer/taxes/data-objects/TaxDO';
 import { InvoiceItemVM } from '../../../invoices/invoice-confirmations/InvoiceItemVM';
 import { AReportSectionGeneratorStrategy } from '../../common/report-section-generator/AReportSectionGeneratorStrategy';
 import { ShiftReportParams } from '../ShiftReportParams';
-import { ReportSectionHeader } from '../../common/result/ReportSection';
+import { ReportSectionHeader, ReportSectionMeta } from '../../common/result/ReportSection';
 import { AddOnProductItemContainer } from '../../../add-on-products/validators/AddOnProductLoader';
 
 export class ShiftReportByAopNameSectionGenerator extends AReportSectionGeneratorStrategy {
-    private _thUtils: ThUtils;
 
     constructor(appContext: AppContext, private _sessionContext: SessionContext,
         private _paidInvoiceGroupList: InvoiceGroupDO[], private _params: ShiftReportParams) {
         super(appContext);
-        this._thUtils = new ThUtils();
     }
 
     protected getHeader(): ReportSectionHeader {
@@ -33,6 +30,12 @@ export class ShiftReportByAopNameSectionGenerator extends AReportSectionGenerato
             ]
         };
     }
+
+    protected getMeta(): ReportSectionMeta {
+		return {
+			title: "Add On Product Transactions"
+		}
+	}
 
     protected getDataCore(resolve: { (result: any[][]): void }, reject: { (err: ThError): void }) {
         let mpmDetailsDict = this.getProductDetailsDict();

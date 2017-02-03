@@ -4,7 +4,7 @@ import { ThError } from '../../../../utils/th-responses/ThError';
 import { ReportInHouseReader } from '../in-house/ReportInHouseReader';
 import { ReportInHouseItemInfo } from '../in-house/utils/ReportInHouseInfo';
 import { AReportSectionGeneratorStrategy } from '../../common/report-section-generator/AReportSectionGeneratorStrategy';
-import { ReportSectionHeader } from '../../common/result/ReportSection';
+import { ReportSectionHeader, ReportSectionMeta } from '../../common/result/ReportSection';
 
 export class GuestsInHouseReportSectionGeneratorStrategy extends AReportSectionGeneratorStrategy {
 
@@ -25,6 +25,12 @@ export class GuestsInHouseReportSectionGeneratorStrategy extends AReportSectionG
 				"Notes"
 			]
 		};
+	}
+
+	protected getMeta(): ReportSectionMeta {
+		return {
+			title: "Guests In House"
+		}
 	}
 
 	protected getDataCore(resolve: { (result: any[][]): void }, reject: { (err: ThError): void }) {
