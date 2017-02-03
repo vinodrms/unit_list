@@ -35,7 +35,7 @@ export class InventoryKeyMetric implements IKeyMetricValue {
     available: number;
     public getDisplayValue(): string {
         let thUtils = new ThUtils();
-        return thUtils.roundNumberToNearestInteger(this.total - this.available).toString() + " of " + this.total;
+        return thUtils.roundNumberToNearestInteger(this.available).toString() + " of " + this.total;
     }
     public add(value: any) {
         this.total += value.total;
