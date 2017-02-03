@@ -22,7 +22,7 @@ export class TotalRevParBuilderStrategy extends AMetricBuilderStrategy {
             return metric;
         }
         var roomRevenue = statsForDate.confirmedRevenue.roomRevenue + statsForDate.guaranteedRevenue.roomRevenue;
-        metric.price = this.roundValue(roomRevenue / totalNoOfRooms);
+        metric.price = this.roundValueToNearestInteger(roomRevenue / totalNoOfRooms);
         return metric;
     }
     protected getKeyMetricDisplayName(): string {

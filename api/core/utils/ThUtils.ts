@@ -32,13 +32,16 @@ export class ThUtils {
 		return shortid.generate();
 	}
 	public firstArrayIncludedInSecond<T>(firstArray: T[], secondArray: T[]): boolean {
-        var diffArray: T[] = _.difference(firstArray, secondArray);
-        return diffArray.length == 0;
-    }
+		var diffArray: T[] = _.difference(firstArray, secondArray);
+		return diffArray.length == 0;
+	}
 	public roundNumberToTwoDecimals(inputNumber: number): number {
 		if (this.isUndefinedOrNull(inputNumber) || !_.isNumber(inputNumber)) {
 			return inputNumber;
 		}
 		return Math.round(inputNumber * 100) / 100;
+	}
+	public roundNumberToNearestInteger(inputNumber: number): number {
+		return Math.round(inputNumber);
 	}
 }

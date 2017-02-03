@@ -43,7 +43,7 @@ export class FileService implements IFileService {
 	 * Create all necesary directories if path to location does not exits
 	 * @fullPath: Path to file
 	 */
-	public createPathIfNecessary(fullPath):Promise<any> {
+	public createPathIfNecessary(fullPath): Promise<any> {
 		return new Promise<void>((resolve: { (): void }, reject: { (err: ThError): void }) => {
 			var filePath = path.parse(fullPath).dir;
 
@@ -70,6 +70,11 @@ export class FileService implements IFileService {
 	 * @fullPath: Full path to file
 	 */
 	deleteFile(fullPath) {
-		fs.unlink(fullPath, (err) => { });
+		fs.unlink(fullPath, (err) => {
+			if (err) {
+				var thError = new ThError(ThStatusCode.FileServiceErrorDeletingFile, err);
+				ThLogger.getInstance().logError(ThLogLevel.Error, "error deleting file", { path: fullPath }, thError);
+			}
+		});
 	}
 }

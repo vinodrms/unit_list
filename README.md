@@ -43,3 +43,8 @@ To run the e2e tests
 	> npm run test
  - Terminal 2
 	> npm run e2e-tests
+
+
+## Environment
+
+ - Node.js - 4.6.0

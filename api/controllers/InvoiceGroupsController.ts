@@ -1,21 +1,20 @@
-import {ThError} from '../core/utils/th-responses/ThError';
-import {BaseController} from './base/BaseController';
-import {ThStatusCode} from '../core/utils/th-responses/ThResponse';
-import {AppContext} from '../core/utils/AppContext';
-import {SessionContext} from '../core/utils/SessionContext';
-import {ThTranslation} from '../core/utils/localization/ThTranslation';
-import {InvoiceGroupMetaRepoDO, InvoiceGroupSearchCriteriaRepoDO} from '../core/data-layer/invoices/repositories/IInvoiceGroupsRepository';
-import {InvoiceGroupDO} from '../core/data-layer/invoices/data-objects/InvoiceGroupDO';
-import {InvoiceDO} from '../core/data-layer/invoices/data-objects/InvoiceDO';
-import {LazyLoadRepoDO, LazyLoadMetaResponseRepoDO} from '../core/data-layer/common/repo-data-objects/LazyLoadRepoDO';
-import {SaveInvoiceGroup} from '../core/domain-layer/invoices/save-invoice-group/SaveInvoiceGroup';
-import {InvoiceDataAggregator, InvoiceDataAggregatorQuery} from '../core/domain-layer/invoices/aggregators/InvoiceDataAggregator';
-import {InvoiceAggregatedData} from '../core/domain-layer/invoices/aggregators/InvoiceAggregatedData';
-import {InvoiceConfirmationVMContainer} from '../core/domain-layer/invoices/invoice-confirmations/InvoiceConfirmationVMContainer';
-import {ReportType, PdfReportsServiceResponse} from '../core/services/pdf-reports/IPdfReportsService';
+import { ThError } from '../core/utils/th-responses/ThError';
+import { BaseController } from './base/BaseController';
+import { ThStatusCode } from '../core/utils/th-responses/ThResponse';
+import { AppContext } from '../core/utils/AppContext';
+import { SessionContext } from '../core/utils/SessionContext';
+import { ThTranslation } from '../core/utils/localization/ThTranslation';
+import { InvoiceGroupMetaRepoDO, InvoiceGroupSearchCriteriaRepoDO } from '../core/data-layer/invoices/repositories/IInvoiceGroupsRepository';
+import { InvoiceGroupDO } from '../core/data-layer/invoices/data-objects/InvoiceGroupDO';
+import { InvoiceDO } from '../core/data-layer/invoices/data-objects/InvoiceDO';
+import { LazyLoadRepoDO, LazyLoadMetaResponseRepoDO } from '../core/data-layer/common/repo-data-objects/LazyLoadRepoDO';
+import { SaveInvoiceGroup } from '../core/domain-layer/invoices/save-invoice-group/SaveInvoiceGroup';
+import { InvoiceDataAggregator, InvoiceDataAggregatorQuery } from '../core/domain-layer/invoices/aggregators/InvoiceDataAggregator';
+import { InvoiceAggregatedData } from '../core/domain-layer/invoices/aggregators/InvoiceAggregatedData';
+import { InvoiceConfirmationVMContainer } from '../core/domain-layer/invoices/invoice-confirmations/InvoiceConfirmationVMContainer';
+import { ReportType, PdfReportsServiceResponse } from '../core/services/pdf-reports/IPdfReportsService';
 
 import path = require("path");
-import fs = require("fs");
 
 export class InvoiceGroupsController extends BaseController {
 
@@ -103,18 +102,11 @@ export class InvoiceGroupsController extends BaseController {
             generatedPdfAbsolutePath = result.pdfPath;
 
             res.download(generatedPdfAbsolutePath, (err) => {
-                if (err) {
-                    
-                } else {
-                    var pathObject = path.parse(generatedPdfAbsolutePath);
-                    var htmlAbsolutePath = pathObject.dir + path.sep + pathObject.name + '.html';
-
-                    fs.unlink(generatedPdfAbsolutePath, (err) => {});
-                    fs.unlink(htmlAbsolutePath, (err) => {});              
-                }
+                let fileService = (<AppContext>req.appContext).getServiceFactory().getFileService();
+                fileService.deleteFile(generatedPdfAbsolutePath);
             });
         }).catch((err: any) => {
-
+            this.returnErrorResponse(req, res, err, ThStatusCode.InvoiceGroupsControllerErrorDownloading);
         });
     }
 }
