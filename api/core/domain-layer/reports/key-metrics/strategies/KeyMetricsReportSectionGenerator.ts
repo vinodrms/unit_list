@@ -47,6 +47,7 @@ export class KeyMetricsReportSectionGenerator extends AReportSectionGeneratorStr
 				headerValues.push(period.displayString);
 			}
 			else {
+				period = this._periodIdToValueGroupMap[period.id].period;
 				let didUpdate = this.tryUpdatePeriodMarginDisplayString(period, thDate, index);
 				if (didUpdate) {
 					headerValues.pop();
