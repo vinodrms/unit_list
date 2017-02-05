@@ -6,14 +6,14 @@ import { AReportSectionGeneratorStrategy } from '../../common/report-section-gen
 import { ReportSectionHeader, ReportSectionMeta } from '../../common/result/ReportSection';
 import { ThDateIntervalDO } from '../../../../utils/th-dates/data-objects/ThDateIntervalDO';
 import { ThDateDO } from '../../../../utils/th-dates/data-objects/ThDateDO';
-import { KeyMetricsResultItem, KeyMetric, KeyMetricValueType, IKeyMetricValue, PriceKeyMetric, PercentageKeyMetric, InventoryKeyMetric } from '../../../../domain-layer/yield-manager/key-metrics/utils/KeyMetricsResult';
+import { KeyMetricsResultItem, KeyMetric } from '../../../yield-manager/key-metrics/utils/KeyMetricsResult';
+import { IKeyMetricValue, KeyMetricValueType } from '../../../yield-manager/key-metrics/utils/values/IKeyMetricValue';
 import { ThPeriodDO, ThPeriodType } from '../period-converter/ThPeriodDO';
 import { IThDateToThPeriodConverter } from '../period-converter/IThDateToThPeriodConverter';
 
 interface IKeyMetricValueGroup {
 	period: ThPeriodDO;
 	metricValue?: IKeyMetricValue;
-	count: number;
 }
 
 export class KeyMetricsReportSectionGenerator extends AReportSectionGeneratorStrategy {
@@ -25,7 +25,8 @@ export class KeyMetricsReportSectionGenerator extends AReportSectionGeneratorStr
 	private _thDateToThPeriodMap: { [index: string]: ThPeriodDO; };
 
 	constructor(appContext: AppContext, private _sessionContext: SessionContext,
-		private _kmResultItem: KeyMetricsResultItem, private _periodConverter: IThDateToThPeriodConverter) {
+		private _kmResultItem: KeyMetricsResultItem, private _periodConverter: IThDateToThPeriodConverter,
+		private _periodType: ThPeriodType) {
 		super(appContext);
 
 		this._periodIdList = [];
@@ -40,8 +41,7 @@ export class KeyMetricsReportSectionGenerator extends AReportSectionGeneratorStr
 			if (this._thUtils.isUndefinedOrNull(this._periodIdToValueGroupMap[period.id])) {
 				this._periodIdList.push(period.id);
 				this._periodIdToValueGroupMap[period.id] = {
-					period: period,
-					count: 0
+					period: period
 				};
 				this.tryUpdatePeriodMarginDisplayString(period, thDate, index);
 				headerValues.push(period.displayString);
@@ -91,26 +91,19 @@ export class KeyMetricsReportSectionGenerator extends AReportSectionGeneratorStr
 				let thPeriod = this._thDateToThPeriodMap[thDate.toString()];
 
 				let group = this._periodIdToValueGroupMap[thPeriod.id];
-				if (group.count == 0) {
-					group.count = 1;
+				if (this._thUtils.isUndefinedOrNull(group.metricValue)) {
 					group.metricValue = metricValue;
 				} else {
 					group.metricValue.add(metricValue);
-					group.count++;
 				}
 			}
-			Object.keys(this._periodIdToValueGroupMap).forEach((id: string) => {
-				let group = this._periodIdToValueGroupMap[id];
-				group.metricValue.divideBy(group.count);
-			});
 
 			var typeStr = this._appContext.thTranslate.translate(metric.displayName);
 			let row: any = [typeStr];
 			this._periodIdList.forEach((periodId: string) => {
 				let group = this._periodIdToValueGroupMap[periodId];
-				row.push(group.metricValue.getDisplayValue());
+				row.push(group.metricValue.getDisplayValue(this._periodType));
 				group.metricValue = null;
-				group.count = 0;
 			});
 			data.push(row);
 		});
