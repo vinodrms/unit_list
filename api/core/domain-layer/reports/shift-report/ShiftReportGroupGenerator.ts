@@ -23,6 +23,7 @@ import { ShiftReportByAopNameSectionGenerator } from './strategies/ShiftReportBy
 export class ShiftReportGroupGenerator extends AReportGeneratorStrategy {
 	private _params: ShiftReportParams;
 	private _paidInvoiceGroupList: InvoiceGroupDO[];
+	private _lossAcceptedByManagementInvoiceGroupList: InvoiceGroupDO[];
 	private _aopContainer: AddOnProductItemContainer;
 
 	constructor(appContext: AppContext, private _sessionContext: SessionContext) {
@@ -72,13 +73,13 @@ export class ShiftReportGroupGenerator extends AReportGeneratorStrategy {
 		let igRepository = this._appContext.getRepositoryFactory().getInvoiceGroupsRepository();
 		let igMeta = { hotelId: this._sessionContext.sessionDO.hotel.id };
 		let searchCriteria = {
-			invoicePaymentStatus: InvoicePaymentStatus.Paid,
 			paidInterval: this._params.dateInterval
 		};
 		igRepository.getInvoiceGroupList(igMeta, searchCriteria)
 			.then((result: InvoiceGroupSearchResultRepoDO) => {
-				this._paidInvoiceGroupList = result.invoiceGroupList;
-				this.filterPaidInvoicesWithinInterval();
+				let invoiceGroupList = result.invoiceGroupList;
+				this._paidInvoiceGroupList = this.getFilteredInvoiceGroupList(invoiceGroupList, (invoice: InvoiceDO) => { return invoice.isPaid(); });
+				this._lossAcceptedByManagementInvoiceGroupList = this.getFilteredInvoiceGroupList(invoiceGroupList, (invoice: InvoiceDO) => { return invoice.isLossAcceptedByManagement(); });
 
 				let aopLoader = new AddOnProductLoader(this._appContext, this._sessionContext);
 				return aopLoader.loadAll();
@@ -89,14 +90,24 @@ export class ShiftReportGroupGenerator extends AReportGeneratorStrategy {
 				reject(e);
 			});
 	}
-	private filterPaidInvoicesWithinInterval() {
-		this._paidInvoiceGroupList.forEach((ig) => {
-			ig.invoiceList = _.filter(ig.invoiceList, (invoice: InvoiceDO) => {
-				return invoice.isPaid() &&
+
+	private getFilteredInvoiceGroupList(invoiceGroupList: InvoiceGroupDO[], checkInvoice: { (invoice: InvoiceDO): boolean }): InvoiceGroupDO[] {
+		var filteredInvoiceGroupList: InvoiceGroupDO[] = [];
+		invoiceGroupList.forEach((ig) => {
+			let filteredInvoiceList = _.filter(ig.invoiceList, (invoice: InvoiceDO) => {
+				return checkInvoice(invoice) &&
 					this.invoicePaidInTimeFrame(invoice, this._params.startTime, this._params.endTime);
 			});
+			if (filteredInvoiceList.length > 0) {
+				let igCopy = new InvoiceGroupDO();
+				igCopy.buildFromObject(ig);
+				igCopy.invoiceList = filteredInvoiceList;
+				filteredInvoiceGroupList.push(igCopy);
+			}
 		});
+		return filteredInvoiceGroupList;
 	}
+
 	private invoicePaidInTimeFrame(invoice: InvoiceDO, startTime: ThTimestampDO, endTime: ThTimestampDO) {
 		return (invoice.paidDateTimeUtcTimestamp >= startTime.getUtcTimestamp() && invoice.paidDateTimeUtcTimestamp < endTime.getUtcTimestamp());
 	}
@@ -109,8 +120,13 @@ export class ShiftReportGroupGenerator extends AReportGeneratorStrategy {
 	protected getSectionGenerators(): IReportSectionGeneratorStrategy[] {
 		return [
 			new ShiftReportByPaymentMethodSectionGenerator(this._appContext, this._sessionContext, this._paidInvoiceGroupList, this._params),
-			new ShiftReportByCategorySectionGenerator(this._appContext, this._sessionContext, this._paidInvoiceGroupList, this._aopContainer, this._params),
-			new ShiftReportByAopNameSectionGenerator(this._appContext, this._sessionContext, this._paidInvoiceGroupList, this._params)
+			new ShiftReportByCategorySectionGenerator(this._appContext, this._sessionContext, this._paidInvoiceGroupList, this._aopContainer, this._params, {
+				title: "Transactions Grouped by Category"
+			}),
+			new ShiftReportByAopNameSectionGenerator(this._appContext, this._sessionContext, this._paidInvoiceGroupList, this._params),
+			new ShiftReportByCategorySectionGenerator(this._appContext, this._sessionContext, this._lossAcceptedByManagementInvoiceGroupList, this._aopContainer, this._params, {
+				title: "Loss Accepted By Management Transactions Grouped by Category"
+			}),
 		];
 	}
 }

@@ -181,6 +181,8 @@
 	"Guests In House": "Guests In House",
 	"Add On Product Transactions": "Add On Product Transactions",
 	"Transactions Grouped by Category": "Transactions Grouped by Category",
-	"Transactions Grouped by Payment Method": "Transactions Grouped by Payment Method"
+	"Transactions Grouped by Payment Method": "Transactions Grouped by Payment Method",
+	"Loss Accepted By Management Transactions Grouped by Category": "Loss Accepted By Management Transactions Grouped by Category",
+	"Part %partNo%": "Part %partNo%"
 
 }

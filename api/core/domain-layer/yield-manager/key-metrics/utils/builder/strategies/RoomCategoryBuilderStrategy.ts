@@ -1,7 +1,8 @@
 import { IHotelInventoryStats, HotelInventoryStatsForDate } from '../../../../../hotel-inventory-snapshots/stats-reader/data-objects/IHotelInventoryStats';
 import { AMetricBuilderStrategy } from '../AMetricBuilderStrategy';
 import { KeyMetricType } from '../../KeyMetricType';
-import { IKeyMetricValue, KeyMetricValueType, InventoryKeyMetric } from '../../KeyMetricsResult';
+import { IKeyMetricValue, KeyMetricValueType } from '../../values/IKeyMetricValue';
+import { InventoryKeyMetric } from '../../values/InventoryKeyMetric';
 import { RoomCategoryStatsDO } from '../../../../../../data-layer/room-categories/data-objects/RoomCategoryStatsDO';
 
 export class RoomCategoryBuilderStrategy extends AMetricBuilderStrategy {

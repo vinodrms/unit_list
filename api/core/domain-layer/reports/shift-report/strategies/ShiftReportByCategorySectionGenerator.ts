@@ -15,7 +15,7 @@ export class ShiftReportByCategorySectionGenerator extends AReportSectionGenerat
 
 	constructor(appContext: AppContext, private _sessionContext: SessionContext,
 		private _paidInvoiceGroupList: InvoiceGroupDO[], private _aopContainer: AddOnProductItemContainer,
-		private _params: ShiftReportParams) {
+		private _params: ShiftReportParams, private _sectionMeta: ReportSectionMeta) {
 		super(appContext);
 	}
 
@@ -33,9 +33,7 @@ export class ShiftReportByCategorySectionGenerator extends AReportSectionGenerat
 	}
 
 	protected getMeta(): ReportSectionMeta {
-		return {
-			title: "Transactions Grouped by Category"
-		}
+		return this._sectionMeta;
 	}
 
 	protected getDataCore(resolve: { (result: any[][]): void }, reject: { (err: ThError): void }) {
