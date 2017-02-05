@@ -1,7 +1,8 @@
 import { IHotelInventoryStats, HotelInventoryStatsForDate } from '../../../../../hotel-inventory-snapshots/stats-reader/data-objects/IHotelInventoryStats';
 import { AMetricBuilderStrategy } from '../AMetricBuilderStrategy';
 import { KeyMetricType } from '../../KeyMetricType';
-import { IKeyMetricValue, KeyMetricValueType, PercentageKeyMetric } from '../../KeyMetricsResult';
+import { IKeyMetricValue, KeyMetricValueType } from '../../values/IKeyMetricValue';
+import { PercentageKeyMetric } from '../../values/PercentageKeyMetric';
 
 export class ConfirmedOccupancyBuilderStrategy extends AMetricBuilderStrategy {
     constructor(hotelInventoryStats: IHotelInventoryStats) {

@@ -1,5 +1,6 @@
 import { IMetricBuilderStrategy } from './IMetricBuilderStrategy';
-import { IKeyMetricValue, KeyMetric, KeyMetricValueType } from '../KeyMetricsResult';
+import { KeyMetric } from '../KeyMetricsResult';
+import { IKeyMetricValue, KeyMetricValueType } from '../values/IKeyMetricValue';
 import { KeyMetricType } from '../KeyMetricType';
 import { ThDateDO } from '../../../../../utils/th-dates/data-objects/ThDateDO';
 import { ThUtils } from '../../../../../utils/ThUtils';
