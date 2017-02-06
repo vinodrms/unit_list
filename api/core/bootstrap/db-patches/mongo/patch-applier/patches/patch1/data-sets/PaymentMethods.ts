@@ -58,6 +58,14 @@ export class PaymentMethods extends ABaseSetting {
         {
             name: "Discover",
             iconUrl: "fa-cc-discover"
+        },
+        {
+            name: "Dankort",
+            iconUrl: "fa-credit-card"
+        },
+        {
+            name: "Bank Transfer",
+            iconUrl: "fa-bank"
         }
     ];
 }
