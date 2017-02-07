@@ -1,30 +1,33 @@
-import {ThLogger, ThLogLevel} from '../../../../utils/logging/ThLogger';
-import {ThError} from '../../../../utils/th-responses/ThError';
-import {ThStatusCode} from '../../../../utils/th-responses/ThResponse';
-import {AppContext} from '../../../../utils/AppContext';
-import {SessionContext} from '../../../../utils/SessionContext';
-import {BookingChangeDatesDO} from './BookingChangeDatesDO';
-import {BookingDO, BookingConfirmationStatus} from '../../../../data-layer/bookings/data-objects/BookingDO';
-import {BookingDOConstraints} from '../../../../data-layer/bookings/data-objects/BookingDOConstraints';
-import {ValidationResultParser} from '../../../common/ValidationResultParser';
-import {HotelDO} from '../../../../data-layer/hotel/data-objects/HotelDO';
-import {BookingIntervalValidator} from '../../../bookings/validators/BookingIntervalValidator';
-import {ThDateIntervalDO} from '../../../../utils/th-dates/data-objects/ThDateIntervalDO';
-import {BookingWithDependenciesLoader} from '../utils/BookingWithDependenciesLoader';
-import {BookingWithDependencies} from '../utils/BookingWithDependencies';
-import {BookingUtils} from '../../../bookings/utils/BookingUtils';
-import {DocumentActionDO} from '../../../../data-layer/common/data-objects/document-history/DocumentActionDO';
-import {BusinessValidationRuleContainer} from '../../../common/validation-rules/BusinessValidationRuleContainer';
-import {BookingAllotmentValidationRule, BookingAllotmentValidationParams} from '../../../bookings/validators/validation-rules/booking/BookingAllotmentValidationRule';
-import {PriceProductConstraintsValidationRule, PriceProductConstraintsParams} from '../../../bookings/validators/validation-rules/price-product/PriceProductConstraintsValidationRule';
-import {PriceProductYieldIntervalsValidationRule} from '../../../bookings/validators/validation-rules/price-product/PriceProductYieldIntervalsValidationRule';
-import {PriceProductDO} from '../../../../data-layer/price-products/data-objects/PriceProductDO';
-import {IndexedBookingInterval} from '../../../../data-layer/price-products/utils/IndexedBookingInterval';
+import { ThLogger, ThLogLevel } from '../../../../utils/logging/ThLogger';
+import { ThError } from '../../../../utils/th-responses/ThError';
+import { ThStatusCode } from '../../../../utils/th-responses/ThResponse';
+import { AppContext } from '../../../../utils/AppContext';
+import { SessionContext } from '../../../../utils/SessionContext';
+import { BookingChangeDatesDO } from './BookingChangeDatesDO';
+import { BookingDO, BookingConfirmationStatus } from '../../../../data-layer/bookings/data-objects/BookingDO';
+import { InvoiceGroupDO } from '../../../../data-layer/invoices/data-objects/InvoiceGroupDO';
+import { BookingDOConstraints } from '../../../../data-layer/bookings/data-objects/BookingDOConstraints';
+import { ValidationResultParser } from '../../../common/ValidationResultParser';
+import { HotelDO } from '../../../../data-layer/hotel/data-objects/HotelDO';
+import { BookingIntervalValidator } from '../../../bookings/validators/BookingIntervalValidator';
+import { ThDateIntervalDO } from '../../../../utils/th-dates/data-objects/ThDateIntervalDO';
+import { BookingWithDependenciesLoader } from '../utils/BookingWithDependenciesLoader';
+import { BookingWithDependencies } from '../utils/BookingWithDependencies';
+import { BookingUtils } from '../../../bookings/utils/BookingUtils';
+import { BookingInvoiceUtils } from '../../../bookings/utils/BookingInvoiceUtils';
+import { DocumentActionDO } from '../../../../data-layer/common/data-objects/document-history/DocumentActionDO';
+import { BusinessValidationRuleContainer } from '../../../common/validation-rules/BusinessValidationRuleContainer';
+import { BookingAllotmentValidationRule, BookingAllotmentValidationParams } from '../../../bookings/validators/validation-rules/booking/BookingAllotmentValidationRule';
+import { PriceProductConstraintsValidationRule, PriceProductConstraintsParams } from '../../../bookings/validators/validation-rules/price-product/PriceProductConstraintsValidationRule';
+import { PriceProductYieldIntervalsValidationRule } from '../../../bookings/validators/validation-rules/price-product/PriceProductYieldIntervalsValidationRule';
+import { PriceProductDO } from '../../../../data-layer/price-products/data-objects/PriceProductDO';
+import { IndexedBookingInterval } from '../../../../data-layer/price-products/utils/IndexedBookingInterval';
 
 import _ = require('underscore');
 
 export class BookingChangeDates {
     private _bookingUtils: BookingUtils;
+    private _bookingInvoiceUtils: BookingInvoiceUtils;
     private _bookingChangeDatesDO: BookingChangeDatesDO;
 
     private _loadedHotel: HotelDO;
@@ -33,6 +36,7 @@ export class BookingChangeDates {
 
     constructor(private _appContext: AppContext, private _sessionContext: SessionContext) {
         this._bookingUtils = new BookingUtils();
+        this._bookingInvoiceUtils = new BookingInvoiceUtils(this._appContext, this._sessionContext);
     }
 
     public changeDates(bookingChangeDatesDO: BookingChangeDatesDO): Promise<BookingDO> {
@@ -98,7 +102,10 @@ export class BookingChangeDates {
                     versionId: this._bookingWithDependencies.bookingDO.versionId
                 }, this._bookingWithDependencies.bookingDO);
             }).then((updatedBooking: BookingDO) => {
-                resolve(updatedBooking);
+                this._bookingWithDependencies.bookingDO = updatedBooking;
+                return this._bookingInvoiceUtils.updateInvoicePriceToPay(updatedBooking);
+            }).then((updatedGroup: InvoiceGroupDO) => {
+                resolve(this._bookingWithDependencies.bookingDO);
             }).catch((error: any) => {
                 var thError = new ThError(ThStatusCode.BookingChangeDatesError, error);
                 if (thError.isNativeError()) {

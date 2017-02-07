@@ -1,29 +1,32 @@
-import {ThLogger, ThLogLevel} from '../../../../utils/logging/ThLogger';
-import {ThError} from '../../../../utils/th-responses/ThError';
-import {ThStatusCode} from '../../../../utils/th-responses/ThResponse';
-import {AppContext} from '../../../../utils/AppContext';
-import {SessionContext} from '../../../../utils/SessionContext';
-import {ThTimestampDO} from '../../../../utils/th-dates/data-objects/ThTimestampDO';
-import {ThHourDO} from '../../../../utils/th-dates/data-objects/ThHourDO';
-import {HotelDO} from '../../../../data-layer/hotel/data-objects/HotelDO';
-import {BookingDO, BookingConfirmationStatus} from '../../../../data-layer/bookings/data-objects/BookingDO';
-import {BookingDOConstraints} from '../../../../data-layer/bookings/data-objects/BookingDOConstraints';
-import {BookingStateChangeTriggerTimeDO, BookingStateChangeTriggerType} from '../../../../data-layer/bookings/data-objects/state-change-time/BookingStateChangeTriggerTimeDO';
-import {CustomerIdValidator} from '../../../customers/validators/CustomerIdValidator';
-import {CustomersContainer} from '../../../customers/validators/results/CustomersContainer';
-import {DocumentActionDO} from '../../../../data-layer/common/data-objects/document-history/DocumentActionDO';
-import {BookingWithDependenciesLoader} from '../utils/BookingWithDependenciesLoader';
-import {BookingWithDependencies} from '../utils/BookingWithDependencies';
-import {BookingReactivateDO} from './BookingReactivateDO';
-import {ValidationResultParser} from '../../../common/ValidationResultParser';
-import {BookingUtils} from '../../../bookings/utils/BookingUtils';
-import {ThDateUtils} from '../../../../utils/th-dates/ThDateUtils';
-import {NewBookingsValidationRules} from '../../../bookings/add-bookings/utils/NewBookingsValidationRules';
+import { ThLogger, ThLogLevel } from '../../../../utils/logging/ThLogger';
+import { ThError } from '../../../../utils/th-responses/ThError';
+import { ThStatusCode } from '../../../../utils/th-responses/ThResponse';
+import { AppContext } from '../../../../utils/AppContext';
+import { SessionContext } from '../../../../utils/SessionContext';
+import { ThTimestampDO } from '../../../../utils/th-dates/data-objects/ThTimestampDO';
+import { ThHourDO } from '../../../../utils/th-dates/data-objects/ThHourDO';
+import { HotelDO } from '../../../../data-layer/hotel/data-objects/HotelDO';
+import { BookingDO, BookingConfirmationStatus } from '../../../../data-layer/bookings/data-objects/BookingDO';
+import { BookingDOConstraints } from '../../../../data-layer/bookings/data-objects/BookingDOConstraints';
+import { InvoiceGroupDO } from '../../../../data-layer/invoices/data-objects/InvoiceGroupDO';
+import { BookingStateChangeTriggerTimeDO, BookingStateChangeTriggerType } from '../../../../data-layer/bookings/data-objects/state-change-time/BookingStateChangeTriggerTimeDO';
+import { CustomerIdValidator } from '../../../customers/validators/CustomerIdValidator';
+import { CustomersContainer } from '../../../customers/validators/results/CustomersContainer';
+import { DocumentActionDO } from '../../../../data-layer/common/data-objects/document-history/DocumentActionDO';
+import { BookingWithDependenciesLoader } from '../utils/BookingWithDependenciesLoader';
+import { BookingWithDependencies } from '../utils/BookingWithDependencies';
+import { BookingReactivateDO } from './BookingReactivateDO';
+import { ValidationResultParser } from '../../../common/ValidationResultParser';
+import { BookingUtils } from '../../../bookings/utils/BookingUtils';
+import { BookingInvoiceUtils } from '../../../bookings/utils/BookingInvoiceUtils';
+import { ThDateUtils } from '../../../../utils/th-dates/ThDateUtils';
+import { NewBookingsValidationRules } from '../../../bookings/add-bookings/utils/NewBookingsValidationRules';
 
 import _ = require('underscore');
 
 export class BookingReactivate {
     private _bookingUtils: BookingUtils;
+    private _bookingInvoiceUtils: BookingInvoiceUtils;
     private _thDateUtils: ThDateUtils;
 
     private _reactivateDO: BookingReactivateDO;
@@ -35,6 +38,7 @@ export class BookingReactivate {
 
     constructor(private _appContext: AppContext, private _sessionContext: SessionContext) {
         this._bookingUtils = new BookingUtils();
+        this._bookingInvoiceUtils = new BookingInvoiceUtils(this._appContext, this._sessionContext);
         this._thDateUtils = new ThDateUtils();
     }
 
@@ -104,7 +108,10 @@ export class BookingReactivate {
                     versionId: this._bookingWithDependencies.bookingDO.versionId
                 }, this._bookingWithDependencies.bookingDO);
             }).then((updatedBooking: BookingDO) => {
-                resolve(updatedBooking);
+                this._bookingWithDependencies.bookingDO = updatedBooking;
+                return this._bookingInvoiceUtils.updateInvoicePriceToPay(updatedBooking);
+            }).then((updatedGroup: InvoiceGroupDO) => {
+                resolve(this._bookingWithDependencies.bookingDO);
             }).catch((error: any) => {
                 var thError = new ThError(ThStatusCode.BookingReactivateError, error);
                 if (thError.isNativeError()) {
