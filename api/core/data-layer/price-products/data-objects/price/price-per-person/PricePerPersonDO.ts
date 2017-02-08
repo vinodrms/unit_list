@@ -8,6 +8,7 @@ import { PriceForFixedNumberOfPersonsDO } from './PriceForFixedNumberOfPersonsDO
 import { RoomCategoryStatsDO } from '../../../../room-categories/data-objects/RoomCategoryStatsDO';
 import { NumberValidationRule } from '../../../../../utils/th-validation/rules/NumberValidationRule';
 import { ConfigCapacityDO } from '../../../../common/data-objects/bed-config/ConfigCapacityDO';
+import { RoomCategoryStatsIndexer } from './utils/RoomCategoryStatsIndexer';
 
 import _ = require("underscore");
 
@@ -66,9 +67,17 @@ export class PricePerPersonDO extends BaseDO implements IPriceProductPrice {
 				if (noOfChildren === 1 && query.configCapacity.noAdults === 0) {
 					priceForCurrentChild = this.firstChildWithoutAdultPrice;
 				}
+				else if (noOfChildren === 1 && query.configCapacity.noAdults > 0) {
+					let roomCategoryStats = _.find(query.roomCategoryStatsList, (stats: RoomCategoryStatsDO) => { return stats.roomCategory.id === this.roomCategoryId });
+					if (roomCategoryStats) {
+						let statsIndexer = new RoomCategoryStatsIndexer(roomCategoryStats);
+						if (statsIndexer.canFitAChildInAdultsBed(query.configCapacity)) {
+							priceForCurrentChild = _.isNumber(this.firstChildWithAdultInSharedBedPrice) ? this.firstChildWithAdultInSharedBedPrice : 0;
+						}
+					}
+				}
 				childrenPrice += priceForCurrentChild;
 			}
-
 			return adultsPrice + childrenPrice;
 		} catch (e) {
 			var thError = new ThError(ThStatusCode.PricePerPersonForSingleRoomCategoryDOInvalidPriceConfiguration, e);
