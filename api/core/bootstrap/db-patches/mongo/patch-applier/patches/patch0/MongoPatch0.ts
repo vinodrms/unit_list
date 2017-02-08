@@ -91,13 +91,8 @@ export class MongoPatch0 extends ATransactionalMongoPatch {
     public getPatchType(): MongoPatcheType {
         return MongoPatcheType.CreateUniqueIndexOnHotel;
     }
-    public apply(): Promise<boolean> {
-        return new Promise<boolean>((resolve, reject) => {
-            this.applyCore(resolve, reject);
-        });
-    }
 
-    private applyCore(resolve: { (result: boolean): void }, reject: { (err: ThError): void }) {
+    protected applyCore(resolve: { (result: boolean): void }, reject: { (err: ThError): void }) {
         async.map(this._indexList, this.createIndexAsync, ((err: any, result?: boolean[]) => {
             if (err || !result) {
                 var thError = new ThError(ThStatusCode.ErrorBootstrappingApp, err);

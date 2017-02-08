@@ -1,13 +1,14 @@
-import {BaseDO} from '../../../../../../../common/base/BaseDO';
-import {IPriceProductPrice} from '../IPriceProductPrice';
-import {PriceForFixedNumberOfPersonsDO} from './PriceForFixedNumberOfPersonsDO';
-import {RoomCategoryStatsDO} from '../../../../room-categories/data-objects/RoomCategoryStatsDO';
-import {ThDataValidators} from '../../../../../../../common/utils/form-utils/utils/ThDataValidators';
+import { BaseDO } from '../../../../../../../common/base/BaseDO';
+import { IPriceProductPrice } from '../IPriceProductPrice';
+import { PriceForFixedNumberOfPersonsDO } from './PriceForFixedNumberOfPersonsDO';
+import { RoomCategoryStatsDO } from '../../../../room-categories/data-objects/RoomCategoryStatsDO';
+import { ThDataValidators } from '../../../../../../../common/utils/form-utils/utils/ThDataValidators';
 
 export class PricePerPersonDO extends BaseDO implements IPriceProductPrice {
 	adultsPriceList: PriceForFixedNumberOfPersonsDO[];
 	childrenPriceList: PriceForFixedNumberOfPersonsDO[];
 	firstChildWithoutAdultPrice: number;
+	firstChildWithAdultInSharedBedPrice: number;
 	roomCategoryId: string;
 
 	constructor() {
@@ -17,7 +18,7 @@ export class PricePerPersonDO extends BaseDO implements IPriceProductPrice {
 	}
 
 	protected getPrimitivePropertyKeys(): string[] {
-		return ["firstChildWithoutAdultPrice", "roomCategoryId"];
+		return ["firstChildWithoutAdultPrice", "firstChildWithAdultInSharedBedPrice", "roomCategoryId"];
 	}
 	public buildFromObject(object: Object) {
 		super.buildFromObject(object);
@@ -54,7 +55,8 @@ export class PricePerPersonDO extends BaseDO implements IPriceProductPrice {
 				newPricePerPerson.adultsPriceList.push(new PriceForFixedNumberOfPersonsDO(noOfAdults));
 			}
 		}
-		newPricePerPerson.firstChildWithoutAdultPrice = this.firstChildWithoutAdultPrice;
+		newPricePerPerson.firstChildWithoutAdultPrice = _.isNumber(this.firstChildWithoutAdultPrice) ? this.firstChildWithoutAdultPrice : 0;
+		newPricePerPerson.firstChildWithAdultInSharedBedPrice = _.isNumber(this.firstChildWithAdultInSharedBedPrice) ? this.firstChildWithAdultInSharedBedPrice : 0;
 		for (var noOfChildren = 1; noOfChildren <= (roomCategoryStats.capacity.totalCapacity.noAdults + roomCategoryStats.capacity.totalCapacity.noChildren); noOfChildren++) {
 			var prevChildrenPrice = this.getPriceForNumberOfChildren(noOfChildren);
 			if (prevChildrenPrice) {
@@ -69,10 +71,14 @@ export class PricePerPersonDO extends BaseDO implements IPriceProductPrice {
 		return newPricePerPerson;
 	}
 	public isValid(): boolean {
-		return this.priceListIsValid(this.adultsPriceList) && this.priceListIsValid(this.childrenPriceList) && this.firstChildWithoutAdultPriceIsValid();
+		return this.priceListIsValid(this.adultsPriceList) && this.priceListIsValid(this.childrenPriceList)
+			&& this.firstChildWithoutAdultPriceIsValid() && this.firstChildWithAdultInSharedBedPriceIsValid();
 	}
 	public firstChildWithoutAdultPriceIsValid(): boolean {
 		return ThDataValidators.isValidPrice(this.firstChildWithoutAdultPrice);
+	}
+	public firstChildWithAdultInSharedBedPriceIsValid(): boolean {
+		return ThDataValidators.isValidPrice(this.firstChildWithAdultInSharedBedPrice);
 	}
 	private priceListIsValid(priceForNoOfPersList: PriceForFixedNumberOfPersonsDO[]): boolean {
 		var valid = true;

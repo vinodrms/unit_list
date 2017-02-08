@@ -19,6 +19,8 @@ export enum ThStatusCode {
 	EmailTemplateBuilderProblemFindingTemplatesDirectory,
 	EmailTemplateBuilderProblemBuildingContent,
 	SendGridServiceErrorSendingEmail,
+	MongoUpdateMultipleDocumentsInvalidStatus,
+	MongoUpdateMultipleDocumentsErrorUpdatingAll,
 	HotelSignUpError,
 	HotelRepositoryAccountAlreadyExists,
 	HotelRepositoryErrorAddingHotel,
@@ -516,6 +518,8 @@ ThMessage[ThStatusCode.TimezoneServiceErrorGettingAvailableTZs] = "Error getting
 ThMessage[ThStatusCode.EmailTemplateBuilderProblemFindingTemplatesDirectory] = "Error sending email: the content was not found on the server. Please contact the Administrator.";
 ThMessage[ThStatusCode.EmailTemplateBuilderProblemBuildingContent] = "Error sending email: problem building content. Please contact the Administrator.";
 ThMessage[ThStatusCode.SendGridServiceErrorSendingEmail] = "Error sending email. Please contact the Administrator.";
+ThMessage[ThStatusCode.MongoUpdateMultipleDocumentsInvalidStatus] = "Error updating multiple documents.";
+ThMessage[ThStatusCode.MongoUpdateMultipleDocumentsErrorUpdatingAll] = "Error updating all matched documents.";
 ThMessage[ThStatusCode.HotelSignUpError] = "Error signing up. Please try again.";
 ThMessage[ThStatusCode.HotelRepositoryAccountAlreadyExists] = "An account with this email already exists.";
 ThMessage[ThStatusCode.HotelRepositoryErrorAddingHotel] = "Error adding the information. Please try again.";

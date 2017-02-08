@@ -1,16 +1,18 @@
-import {ThLogger, ThLogLevel} from '../../../../utils/logging/ThLogger';
-import {ThError} from '../../../../utils/th-responses/ThError';
-import {ThStatusCode} from '../../../../utils/th-responses/ThResponse';
-import {AppContext} from '../../../../utils/AppContext';
-import {SessionContext} from '../../../../utils/SessionContext';
-import {ThUtils} from '../../../../utils/ThUtils';
-import {BookingPossiblePricesDO} from './BookingPossiblePricesDO';
-import {BookingDO} from '../../../../data-layer/bookings/data-objects/BookingDO';
-import {PriceProductPriceQueryDO} from '../../../../data-layer/price-products/data-objects/price/IPriceProductPrice';
-import {ValidationResultParser} from '../../../common/ValidationResultParser';
-import {BookingPossiblePriceItems, BookingPriceItem} from './utils/BookingPossiblePriceItems';
-import {IndexedBookingInterval} from '../../../../data-layer/price-products/utils/IndexedBookingInterval';
-import {BookingUtils} from '../../../bookings/utils/BookingUtils';
+import { ThLogger, ThLogLevel } from '../../../../utils/logging/ThLogger';
+import { ThError } from '../../../../utils/th-responses/ThError';
+import { ThStatusCode } from '../../../../utils/th-responses/ThResponse';
+import { AppContext } from '../../../../utils/AppContext';
+import { SessionContext } from '../../../../utils/SessionContext';
+import { ThUtils } from '../../../../utils/ThUtils';
+import { BookingPossiblePricesDO } from './BookingPossiblePricesDO';
+import { BookingDO } from '../../../../data-layer/bookings/data-objects/BookingDO';
+import { PriceProductPriceQueryDO } from '../../../../data-layer/price-products/data-objects/price/IPriceProductPrice';
+import { ValidationResultParser } from '../../../common/ValidationResultParser';
+import { BookingPossiblePriceItems, BookingPriceItem } from './utils/BookingPossiblePriceItems';
+import { IndexedBookingInterval } from '../../../../data-layer/price-products/utils/IndexedBookingInterval';
+import { BookingUtils } from '../../../bookings/utils/BookingUtils';
+import { RoomCategoryStatsAggregator } from '../../../room-categories/aggregators/RoomCategoryStatsAggregator';
+import { RoomCategoryStatsDO } from '../../../../data-layer/room-categories/data-objects/RoomCategoryStatsDO';
 
 import _ = require('underscore');
 
@@ -20,6 +22,7 @@ export class BookingPossiblePrices {
 
     private _possiblePricesDO: BookingPossiblePricesDO;
 
+    private _loadedRoomCategoryStatsList: RoomCategoryStatsDO[];
     private _loadedBooking: BookingDO;
 
     constructor(private _appContext: AppContext, private _sessionContext: SessionContext) {
@@ -40,9 +43,15 @@ export class BookingPossiblePrices {
             parser.logAndReject("Error validating check out room fields", reject);
             return;
         }
-        var bookingsRepo = this._appContext.getRepositoryFactory().getBookingRepository();
-        bookingsRepo.getBookingById({ hotelId: this._sessionContext.sessionDO.hotel.id }, this._possiblePricesDO.groupBookingId, this._possiblePricesDO.bookingId)
-            .then((booking: BookingDO) => {
+
+        let roomCategStatsAggregator = new RoomCategoryStatsAggregator(this._appContext, this._sessionContext);
+        roomCategStatsAggregator.getRoomCategoryStatsList()
+            .then((roomCategoryStatsList: RoomCategoryStatsDO[]) => {
+                this._loadedRoomCategoryStatsList = roomCategoryStatsList;
+
+                let bookingsRepo = this._appContext.getRepositoryFactory().getBookingRepository();
+                return bookingsRepo.getBookingById({ hotelId: this._sessionContext.sessionDO.hotel.id }, this._possiblePricesDO.groupBookingId, this._possiblePricesDO.bookingId)
+            }).then((booking: BookingDO) => {
                 this._loadedBooking = booking;
 
                 resolve(this.getBookingPossiblePriceItems());
@@ -63,7 +72,8 @@ export class BookingPossiblePrices {
         _.forEach(this._loadedBooking.priceProductSnapshot.roomCategoryIdList, (roomCategoryId: string) => {
             var priceQuery: PriceProductPriceQueryDO = {
                 roomCategoryId: roomCategoryId,
-                configCapacity: this._loadedBooking.configCapacity
+                configCapacity: this._loadedBooking.configCapacity,
+                roomCategoryStatsList: this._loadedRoomCategoryStatsList
             };
 
             if (this._loadedBooking.priceProductSnapshot.price.hasPriceConfiguredFor(priceQuery)) {

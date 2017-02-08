@@ -1,10 +1,10 @@
-import {PriceProductPriceType} from '../../../data-layer/price-products/data-objects/price/IPriceProductPrice';
-import {IValidationStructure} from '../../../utils/th-validation/structure/core/IValidationStructure';
-import {ObjectValidationStructure} from '../../../utils/th-validation/structure/ObjectValidationStructure';
-import {PrimitiveValidationStructure} from '../../../utils/th-validation/structure/PrimitiveValidationStructure';
-import {ArrayValidationStructure} from '../../../utils/th-validation/structure/ArrayValidationStructure';
-import {StringValidationRule} from '../../../utils/th-validation/rules/StringValidationRule';
-import {NumberValidationRule} from '../../../utils/th-validation/rules/NumberValidationRule';
+import { PriceProductPriceType } from '../../../data-layer/price-products/data-objects/price/IPriceProductPrice';
+import { IValidationStructure } from '../../../utils/th-validation/structure/core/IValidationStructure';
+import { ObjectValidationStructure } from '../../../utils/th-validation/structure/ObjectValidationStructure';
+import { PrimitiveValidationStructure } from '../../../utils/th-validation/structure/PrimitiveValidationStructure';
+import { ArrayValidationStructure } from '../../../utils/th-validation/structure/ArrayValidationStructure';
+import { StringValidationRule } from '../../../utils/th-validation/rules/StringValidationRule';
+import { NumberValidationRule } from '../../../utils/th-validation/rules/NumberValidationRule';
 
 export class SavePriceProductItemPriceDO {
 	type: PriceProductPriceType;
@@ -28,6 +28,10 @@ export class SavePriceProductItemPriceDO {
 					},
 					{
 						key: "firstChildWithoutAdultPrice",
+						validationStruct: new PrimitiveValidationStructure(NumberValidationRule.buildPriceNumberRule())
+					},
+					{
+						key: "firstChildWithAdultInSharedBedPrice",
 						validationStruct: new PrimitiveValidationStructure(NumberValidationRule.buildPriceNumberRule())
 					}
 				]));

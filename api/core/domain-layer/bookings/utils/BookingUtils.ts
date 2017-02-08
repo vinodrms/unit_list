@@ -89,7 +89,8 @@ export class BookingUtils {
         bookingDO.price.roomPricePerNight = this._thUtils.roundNumberToTwoDecimals(
             bookingDO.priceProductSnapshot.price.getPricePerNightFor({
                 configCapacity: bookingDO.configCapacity,
-                roomCategoryId: bookingDO.roomCategoryId
+                roomCategoryId: bookingDO.roomCategoryId,
+                roomCategoryStatsList: roomCategoryStatsList
             })
         );
         bookingDO.price.numberOfNights = indexedBookingInterval.getLengthOfStay();

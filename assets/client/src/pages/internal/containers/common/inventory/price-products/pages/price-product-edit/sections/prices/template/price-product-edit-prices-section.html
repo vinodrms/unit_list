@@ -73,6 +73,31 @@
 							<div class="row">
 								<div class="col-md-12 col-sm-12 col-xs-12" *ngFor="let pricePerChild of pricePerPersonVM.pricePerPerson.childrenPriceList">
 									<div class="row">
+										
+										<div class="col-xs-12 form-group" *ngIf="pricePerChild.noOfPersons === 1">	
+											<div class="input-group" [ngClass]="{'form-warning': displayError()&&!pricePerPersonVM.pricePerPerson.firstChildWithAdultInSharedBedPriceIsValid()}">
+												<span class="input-group-addon"><small>1{{getNumberSuffix(1)}}</small> <span class="unitpal-font">;</span></span>
+												<input type="number" class="form-control" [(ngModel)]="pricePerPersonVM.pricePerPerson.firstChildWithAdultInSharedBedPrice" name="firstChildInSharedBedPrice"
+												[readonly]="readonly" />
+											</div>
+											<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Invalid Price' | translate }}</small></label>
+											<small class="text-muted">
+												<i class="fa fa-info-circle"></i> {{ "Reservation with at least one adult if space is available in parent's bed" | translate }}
+											</small>
+										</div>
+
+										<div class="col-xs-12 form-group" *ngIf="!roomCategoryHasOnlyOneAdultAndZeroChildren(pricePerPersonVM.roomCategoryStats)">	
+											<div class="input-group" [ngClass]="{'form-warning': displayError()&&!pricePerChild.isValid()}">
+												<span class="input-group-addon"><small>{{pricePerChild.noOfPersons}}{{getNumberSuffix(pricePerChild.noOfPersons)}}</small> <span class="unitpal-font">;</span></span>
+												<input type="number" class="form-control" [(ngModel)]="pricePerChild.price" name="childPrice"
+												[readonly]="readonly" />
+											</div>
+											<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Invalid Price' | translate }}</small></label>
+											<small class="text-muted" *ngIf="pricePerChild.noOfPersons === 1">
+												<i class="fa fa-info-circle"></i>  {{ "Reservation with at least one adult if space is NOT available in parent's bed" | translate }}
+											</small>
+										</div>
+										
 										<div class="col-xs-12 form-group" *ngIf="pricePerChild.noOfPersons === 1">	
 											<div class="input-group" [ngClass]="{'form-warning': displayError()&&!pricePerPersonVM.pricePerPerson.firstChildWithoutAdultPriceIsValid()}">
 												<span class="input-group-addon"><small>1{{getNumberSuffix(1)}}</small> <span class="unitpal-font">;</span></span>
@@ -83,18 +108,7 @@
 											<small class="text-muted">
 												<i class="fa fa-info-circle"></i> {{ 'Reservation without adults' | translate }}
 											</small>
-										</div>
-										<div class="col-xs-12 form-group" *ngIf="!roomCategoryHasOnlyOneAdultAndZeroChildren(pricePerPersonVM.roomCategoryStats)">	
-											<div class="input-group" [ngClass]="{'form-warning': displayError()&&!pricePerChild.isValid()}">
-												<span class="input-group-addon"><small>{{pricePerChild.noOfPersons}}{{getNumberSuffix(pricePerChild.noOfPersons)}}</small> <span class="unitpal-font">;</span></span>
-												<input type="number" class="form-control" [(ngModel)]="pricePerChild.price" name="childPrice"
-												[readonly]="readonly" />
-											</div>
-											<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Invalid Price' | translate }}</small></label>
-											<small class="text-muted" *ngIf="pricePerChild.noOfPersons === 1">
-												<i class="fa fa-info-circle"></i>  {{ 'Reservation with at least one adult' | translate }}
-											</small>
-										</div>
+										</div>										
 									</div>
 								</div>
 							</div>
