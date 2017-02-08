@@ -41,13 +41,8 @@ export class MongoPatch1 extends ATransactionalMongoPatch {
     public getPatchType(): MongoPatcheType {
         return MongoPatcheType.PopulateCountriesAndCurrencyCodes;
     }
-    public apply(): Promise<boolean> {
-        return new Promise<boolean>((resolve, reject) => {
-            this.applyCore(resolve, reject);
-        });
-    }
 
-    private applyCore(resolve: { (result: boolean): void }, reject: { (err: ThError): void }) {
+    protected applyCore(resolve: { (result: boolean): void }, reject: { (err: ThError): void }) {
         async.waterfall(
             [
                 ((finishedEnsuringIndex: { (error: ThError, result?: boolean): void }) => {
