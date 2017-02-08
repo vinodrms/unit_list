@@ -1,13 +1,13 @@
-import {BaseDO} from '../../../../common/base/BaseDO';
-import {ThLogger, ThLogLevel} from '../../../../../utils/logging/ThLogger';
-import {ThError} from '../../../../../utils/th-responses/ThError';
-import {ThStatusCode} from '../../../../../utils/th-responses/ThResponse';
-import {ThUtils} from '../../../../../utils/ThUtils';
-import {IPriceProductPrice, PriceProductPriceQueryDO} from '../IPriceProductPrice';
-import {PriceForFixedNumberOfPersonsDO} from './PriceForFixedNumberOfPersonsDO';
-import {RoomCategoryStatsDO} from '../../../../room-categories/data-objects/RoomCategoryStatsDO';
-import {NumberValidationRule} from '../../../../../utils/th-validation/rules/NumberValidationRule';
-import {ConfigCapacityDO} from '../../../../common/data-objects/bed-config/ConfigCapacityDO';
+import { BaseDO } from '../../../../common/base/BaseDO';
+import { ThLogger, ThLogLevel } from '../../../../../utils/logging/ThLogger';
+import { ThError } from '../../../../../utils/th-responses/ThError';
+import { ThStatusCode } from '../../../../../utils/th-responses/ThResponse';
+import { ThUtils } from '../../../../../utils/ThUtils';
+import { IPriceProductPrice, PriceProductPriceQueryDO } from '../IPriceProductPrice';
+import { PriceForFixedNumberOfPersonsDO } from './PriceForFixedNumberOfPersonsDO';
+import { RoomCategoryStatsDO } from '../../../../room-categories/data-objects/RoomCategoryStatsDO';
+import { NumberValidationRule } from '../../../../../utils/th-validation/rules/NumberValidationRule';
+import { ConfigCapacityDO } from '../../../../common/data-objects/bed-config/ConfigCapacityDO';
 
 import _ = require("underscore");
 
@@ -15,10 +15,11 @@ export class PricePerPersonDO extends BaseDO implements IPriceProductPrice {
 	adultsPriceList: PriceForFixedNumberOfPersonsDO[];
 	childrenPriceList: PriceForFixedNumberOfPersonsDO[];
 	firstChildWithoutAdultPrice: number;
+	firstChildWithAdultInSharedBedPrice: number;
 	roomCategoryId: string;
 
 	protected getPrimitivePropertyKeys(): string[] {
-		return ["firstChildWithoutAdultPrice", "roomCategoryId"];
+		return ["firstChildWithoutAdultPrice", "firstChildWithAdultInSharedBedPrice", "roomCategoryId"];
 	}
 	public buildFromObject(object: Object) {
 		super.buildFromObject(object);
@@ -90,11 +91,12 @@ export class PricePerPersonDO extends BaseDO implements IPriceProductPrice {
 		if (!this.priceListIsValidForMaxNoOfPersons(this.adultsPriceList, maxNoOfAdults)) {
 			return false;
 		}
-
 		if (!this.priceIsValid(this.firstChildWithoutAdultPrice)) {
 			return false;
 		}
-
+		if (!this.priceIsValid(this.firstChildWithAdultInSharedBedPrice)) {
+			return false;
+		}
 		var maxNoOfChildren = roomCategStat.capacity.totalCapacity.noChildren;
 		return this.priceListIsValidForMaxNoOfPersons(this.childrenPriceList, (maxNoOfChildren + maxNoOfAdults));
 	}
@@ -124,7 +126,7 @@ export class PricePerPersonDO extends BaseDO implements IPriceProductPrice {
 		this.roundPricesToTwoDecimalsFrom(this.adultsPriceList, thUtils);
 		this.roundPricesToTwoDecimalsFrom(this.childrenPriceList, thUtils);
 		this.firstChildWithoutAdultPrice = thUtils.roundNumberToTwoDecimals(this.firstChildWithoutAdultPrice);
-
+		this.firstChildWithAdultInSharedBedPrice = thUtils.roundNumberToTwoDecimals(this.firstChildWithAdultInSharedBedPrice);
 	}
 	private roundPricesToTwoDecimalsFrom(priceForPersonList: PriceForFixedNumberOfPersonsDO[], thUtils: ThUtils) {
 		_.forEach(priceForPersonList, (priceForPerson: PriceForFixedNumberOfPersonsDO) => {
