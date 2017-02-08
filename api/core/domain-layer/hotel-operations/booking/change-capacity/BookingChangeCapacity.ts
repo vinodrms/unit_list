@@ -1,32 +1,36 @@
-import {ThLogger, ThLogLevel} from '../../../../utils/logging/ThLogger';
-import {ThError} from '../../../../utils/th-responses/ThError';
-import {ThStatusCode} from '../../../../utils/th-responses/ThResponse';
-import {AppContext} from '../../../../utils/AppContext';
-import {SessionContext} from '../../../../utils/SessionContext';
-import {PriceProductDO} from '../../../../data-layer/price-products/data-objects/PriceProductDO';
-import {ConfigCapacityDO} from '../../../../data-layer/common/data-objects/bed-config/ConfigCapacityDO';
-import {BookingDO, BookingConfirmationStatus} from '../../../../data-layer/bookings/data-objects/BookingDO';
-import {BookingDOConstraints} from '../../../../data-layer/bookings/data-objects/BookingDOConstraints';
-import {DocumentActionDO} from '../../../../data-layer/common/data-objects/document-history/DocumentActionDO';
-import {BookingUtils} from '../../../bookings/utils/BookingUtils';
-import {ValidationResultParser} from '../../../common/ValidationResultParser';
-import {BookingWithDependenciesLoader} from '../utils/BookingWithDependenciesLoader';
-import {BookingWithDependencies} from '../utils/BookingWithDependencies';
-import {BookingChangeCapacityDO} from './BookingChangeCapacityDO';
-import {BusinessValidationRuleContainer} from '../../../common/validation-rules/BusinessValidationRuleContainer';
-import {BookingRoomCategoryValidationRule} from '../../../bookings/validators/validation-rules/booking/BookingRoomCategoryValidationRule';
-import {PriceProductConstraintsValidationRule, PriceProductConstraintsParams} from '../../../bookings/validators/validation-rules/price-product/PriceProductConstraintsValidationRule';
+import { ThLogger, ThLogLevel } from '../../../../utils/logging/ThLogger';
+import { ThError } from '../../../../utils/th-responses/ThError';
+import { ThStatusCode } from '../../../../utils/th-responses/ThResponse';
+import { AppContext } from '../../../../utils/AppContext';
+import { SessionContext } from '../../../../utils/SessionContext';
+import { PriceProductDO } from '../../../../data-layer/price-products/data-objects/PriceProductDO';
+import { ConfigCapacityDO } from '../../../../data-layer/common/data-objects/bed-config/ConfigCapacityDO';
+import { BookingDO, BookingConfirmationStatus } from '../../../../data-layer/bookings/data-objects/BookingDO';
+import { InvoiceGroupDO } from '../../../../data-layer/invoices/data-objects/InvoiceGroupDO';
+import { BookingDOConstraints } from '../../../../data-layer/bookings/data-objects/BookingDOConstraints';
+import { DocumentActionDO } from '../../../../data-layer/common/data-objects/document-history/DocumentActionDO';
+import { BookingUtils } from '../../../bookings/utils/BookingUtils';
+import { BookingInvoiceUtils } from '../../../bookings/utils/BookingInvoiceUtils';
+import { ValidationResultParser } from '../../../common/ValidationResultParser';
+import { BookingWithDependenciesLoader } from '../utils/BookingWithDependenciesLoader';
+import { BookingWithDependencies } from '../utils/BookingWithDependencies';
+import { BookingChangeCapacityDO } from './BookingChangeCapacityDO';
+import { BusinessValidationRuleContainer } from '../../../common/validation-rules/BusinessValidationRuleContainer';
+import { BookingRoomCategoryValidationRule } from '../../../bookings/validators/validation-rules/booking/BookingRoomCategoryValidationRule';
+import { PriceProductConstraintsValidationRule, PriceProductConstraintsParams } from '../../../bookings/validators/validation-rules/price-product/PriceProductConstraintsValidationRule';
 
 import _ = require('underscore');
 
 export class BookingChangeCapacity {
     private _bookingUtils: BookingUtils;
+    private _bookingInvoiceUtils: BookingInvoiceUtils;
     private _bookingChangeCapacityDO: BookingChangeCapacityDO;
 
     private _bookingWithDependencies: BookingWithDependencies;
 
     constructor(private _appContext: AppContext, private _sessionContext: SessionContext) {
         this._bookingUtils = new BookingUtils();
+        this._bookingInvoiceUtils = new BookingInvoiceUtils(this._appContext, this._sessionContext);
     }
 
     public changeCapacity(bookingChangeCapacityDO: BookingChangeCapacityDO): Promise<BookingDO> {
@@ -81,7 +85,10 @@ export class BookingChangeCapacity {
                     versionId: this._bookingWithDependencies.bookingDO.versionId
                 }, this._bookingWithDependencies.bookingDO);
             }).then((updatedBooking: BookingDO) => {
-                resolve(updatedBooking);
+                this._bookingWithDependencies.bookingDO = updatedBooking;
+                return this._bookingInvoiceUtils.updateInvoicePriceToPay(updatedBooking);
+            }).then((updatedGroup: InvoiceGroupDO) => {
+                resolve(this._bookingWithDependencies.bookingDO);
             }).catch((error: any) => {
                 var thError = new ThError(ThStatusCode.BookingChangeCapacityError, error);
                 if (thError.isNativeError()) {
@@ -89,7 +96,6 @@ export class BookingChangeCapacity {
                 }
                 reject(thError);
             });
-
     }
     private bookingHasValidStatus(): boolean {
         return _.contains(BookingDOConstraints.ConfirmationStatuses_CanChangeCapacity, this._bookingWithDependencies.bookingDO.confirmationStatus);

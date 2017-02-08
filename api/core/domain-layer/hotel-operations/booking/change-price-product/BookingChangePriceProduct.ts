@@ -5,6 +5,7 @@ import { AppContext } from '../../../../utils/AppContext';
 import { SessionContext } from '../../../../utils/SessionContext';
 import { ThUtils } from '../../../../utils/ThUtils';
 import { BookingUtils } from '../../../bookings/utils/BookingUtils';
+import { BookingInvoiceUtils } from '../../../bookings/utils/BookingInvoiceUtils';
 import { BookingDO } from '../../../../data-layer/bookings/data-objects/BookingDO';
 import { BookingDOConstraints } from '../../../../data-layer/bookings/data-objects/BookingDOConstraints';
 import { HotelDO } from '../../../../data-layer/hotel/data-objects/HotelDO';
@@ -32,6 +33,7 @@ import _ = require('underscore');
 export class BookingChangePriceProduct {
     private _thUtils: ThUtils;
     private _bookingUtils: BookingUtils;
+    private _bookingInvoiceUtils: BookingInvoiceUtils;
 
     private _inputDO: BookingChangePriceProductDO;
 
@@ -48,6 +50,7 @@ export class BookingChangePriceProduct {
     constructor(private _appContext: AppContext, private _sessionContext: SessionContext) {
         this._thUtils = new ThUtils();
         this._bookingUtils = new BookingUtils();
+        this._bookingInvoiceUtils = new BookingInvoiceUtils(this._appContext, this._sessionContext);
     }
 
     public changePriceProduct(inputDO: BookingChangePriceProductDO): Promise<BookingDO> {
@@ -155,7 +158,10 @@ export class BookingChangePriceProduct {
                     versionId: this._booking.versionId
                 }, this._booking);
             }).then((updatedBooking: BookingDO) => {
-                resolve(updatedBooking);
+                this._booking = updatedBooking;
+                return this._bookingInvoiceUtils.updateInvoicePriceToPay(updatedBooking);
+            }).then((updatedGroup: InvoiceGroupDO) => {
+                resolve(this._booking);
             }).catch((error: any) => {
                 var thError = new ThError(ThStatusCode.BookingChangePriceProductError, error);
                 if (thError.isNativeError()) {
