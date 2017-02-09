@@ -1,9 +1,10 @@
-import {ThError} from '../../../../utils/th-responses/ThError';
-import {ThStatusCode} from '../../../../utils/th-responses/ThResponse';
-import {IMongoPatchApplier} from './utils/IMongoPatchApplier';
-import {ATransactionalMongoPatch, MongoPatcheType} from './utils/ATransactionalMongoPatch';
-import {MongoPatch0} from './patches/patch0/MongoPatch0';
-import {MongoPatch1} from './patches/patch1/MongoPatch1';
+import { ThError } from '../../../../utils/th-responses/ThError';
+import { ThStatusCode } from '../../../../utils/th-responses/ThResponse';
+import { IMongoPatchApplier } from './utils/IMongoPatchApplier';
+import { ATransactionalMongoPatch, MongoPatcheType } from './utils/ATransactionalMongoPatch';
+import { MongoPatch0 } from './patches/patch0/MongoPatch0';
+import { MongoPatch1 } from './patches/patch1/MongoPatch1';
+import { MongoPatch2 } from './patches/patch2/MongoPatch2';
 import async = require("async");
 import _ = require("underscore");
 
@@ -15,7 +16,7 @@ export class MongoPatchApplier implements IMongoPatchApplier {
 	}
 
 	private initPatchAppliers() {
-		this._mongoPatchAppliers = [new MongoPatch0(), new MongoPatch1()];
+		this._mongoPatchAppliers = [new MongoPatch0(), new MongoPatch1(), new MongoPatch2()];
 	}
 	public applyAsync(finishApplyingPatchCallback: { (err: ThError, result?: MongoPatcheType[]): void; }) {
 		this.apply().then((result: MongoPatcheType[]) => {

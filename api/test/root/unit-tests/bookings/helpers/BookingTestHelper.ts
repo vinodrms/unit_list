@@ -108,7 +108,7 @@ export class BookingTestHelper {
     private getConfigCapacity(): ConfigCapacityDO {
         var capacity = new ConfigCapacityDO();
         capacity.noAdults = 1;
-        capacity.noChildren = 0;
+        capacity.noChildren = 1;
         capacity.noBabies = 0;
         return capacity;
     }

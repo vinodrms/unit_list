@@ -65,6 +65,7 @@ export class MongoInvoiceGroupsRepositoryWithBookingPriceLink extends MongoInvoi
         });
     }
     public updateInvoiceGroup(invoiceGroupMeta: InvoiceGroupMetaRepoDO, invoiceGroupItemMeta: InvoiceGroupItemMetaRepoDO, invoiceGroup: InvoiceGroupDO): Promise<InvoiceGroupDO> {
+        invoiceGroup.removeItemsPopulatedFromBooking();
         return new Promise<InvoiceGroupDO>((resolve: { (result: InvoiceGroupDO): void }, reject: { (err: ThError): void }) => {
             this._invoiceGroupsRepo.updateInvoiceGroup(invoiceGroupMeta, invoiceGroupItemMeta, invoiceGroup).then((invoiceGroup: InvoiceGroupDO) => {
                 this.linkBookingPricesToInvoiceGroupItem(invoiceGroupMeta, invoiceGroup).then((invoiceGroup: InvoiceGroupDO) => {

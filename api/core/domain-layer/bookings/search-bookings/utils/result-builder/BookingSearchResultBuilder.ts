@@ -1,19 +1,19 @@
-import {ThLogger, ThLogLevel} from '../../../../../utils/logging/ThLogger';
-import {ThError} from '../../../../../utils/th-responses/ThError';
-import {ThStatusCode} from '../../../../../utils/th-responses/ThResponse';
-import {AppContext} from '../../../../../utils/AppContext';
-import {SessionContext} from '../../../../../utils/SessionContext';
-import {ThUtils} from '../../../../../utils/ThUtils';
-import {BookingSearchResult, RoomCategoryItem, SearchParameters, AllotmentItem, PriceProductItem, PriceProductItemPrice} from './BookingSearchResult';
-import {IBookingOccupancy} from '../../utils/occupancy-calculator/results/IBookingOccupancy';
-import {BookingSearchDependencies} from '../data-loader/results/BookingSearchDependencies';
-import {BookingSearchDO} from '../../BookingSearchDO';
-import {RoomCategoryStatsDO} from '../../../../../data-layer/room-categories/data-objects/RoomCategoryStatsDO';
-import {PriceProductDO} from '../../../../../data-layer/price-products/data-objects/PriceProductDO';
-import {PriceProductsContainer} from '../../../../price-products/validators/results/PriceProductsContainer';
-import {AllotmentDO} from '../../../../../data-layer/allotments/data-objects/AllotmentDO';
-import {IndexedBookingInterval} from '../../../../../data-layer/price-products/utils/IndexedBookingInterval';
-import {BookingUtils} from '../../../utils/BookingUtils';
+import { ThLogger, ThLogLevel } from '../../../../../utils/logging/ThLogger';
+import { ThError } from '../../../../../utils/th-responses/ThError';
+import { ThStatusCode } from '../../../../../utils/th-responses/ThResponse';
+import { AppContext } from '../../../../../utils/AppContext';
+import { SessionContext } from '../../../../../utils/SessionContext';
+import { ThUtils } from '../../../../../utils/ThUtils';
+import { BookingSearchResult, RoomCategoryItem, SearchParameters, AllotmentItem, PriceProductItem, PriceProductItemPrice } from './BookingSearchResult';
+import { IBookingOccupancy } from '../../utils/occupancy-calculator/results/IBookingOccupancy';
+import { BookingSearchDependencies } from '../data-loader/results/BookingSearchDependencies';
+import { BookingSearchDO } from '../../BookingSearchDO';
+import { RoomCategoryStatsDO } from '../../../../../data-layer/room-categories/data-objects/RoomCategoryStatsDO';
+import { PriceProductDO } from '../../../../../data-layer/price-products/data-objects/PriceProductDO';
+import { PriceProductsContainer } from '../../../../price-products/validators/results/PriceProductsContainer';
+import { AllotmentDO } from '../../../../../data-layer/allotments/data-objects/AllotmentDO';
+import { IndexedBookingInterval } from '../../../../../data-layer/price-products/utils/IndexedBookingInterval';
+import { BookingUtils } from '../../../utils/BookingUtils';
 
 import _ = require('underscore');
 
@@ -120,7 +120,8 @@ export class BookingSearchResultBuilder {
                 var noOfNights = this._indexedBookingInterval.getLengthOfStay();
                 itemPrice.price = noOfNights * priceProduct.price.getPricePerNightFor({
                     roomCategoryId: roomCategoryId,
-                    configCapacity: this._builderParams.searchParams.configCapacity
+                    configCapacity: this._builderParams.searchParams.configCapacity,
+                    roomCategoryStatsList: this._builderParams.roomCategoryStatsList
                 });
                 var includedInvoiceItems = this._bookingUtils.getIncludedInvoiceItems(priceProduct, this._builderParams.searchParams.configCapacity, this._indexedBookingInterval);
                 itemPrice.price += includedInvoiceItems.getTotalPrice();

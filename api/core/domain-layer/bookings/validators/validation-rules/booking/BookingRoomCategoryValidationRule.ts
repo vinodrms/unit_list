@@ -1,13 +1,13 @@
-import {ThError} from '../../../../../utils/th-responses/ThError';
-import {ThStatusCode} from '../../../../../utils/th-responses/ThResponse';
-import {ABusinessValidationRule} from '../../../../common/validation-rules/ABusinessValidationRule';
-import {BookingDO} from '../../../../../data-layer/bookings/data-objects/BookingDO';
-import {PriceProductsContainer} from '../../../../price-products/validators/results/PriceProductsContainer';
-import {InvoicePaymentMethodValidator} from '../../../../invoices/validators/InvoicePaymentMethodValidator';
-import {HotelDO} from '../../../../../data-layer/hotel/data-objects/HotelDO';
-import {CustomersContainer} from '../../../../customers/validators/results/CustomersContainer';
-import {RoomCategoryStatsDO} from '../../../../../data-layer/room-categories/data-objects/RoomCategoryStatsDO';
-import {RoomDO} from '../../../../../data-layer/rooms/data-objects/RoomDO';
+import { ThError } from '../../../../../utils/th-responses/ThError';
+import { ThStatusCode } from '../../../../../utils/th-responses/ThResponse';
+import { ABusinessValidationRule } from '../../../../common/validation-rules/ABusinessValidationRule';
+import { BookingDO } from '../../../../../data-layer/bookings/data-objects/BookingDO';
+import { PriceProductsContainer } from '../../../../price-products/validators/results/PriceProductsContainer';
+import { InvoicePaymentMethodValidator } from '../../../../invoices/validators/InvoicePaymentMethodValidator';
+import { HotelDO } from '../../../../../data-layer/hotel/data-objects/HotelDO';
+import { CustomersContainer } from '../../../../customers/validators/results/CustomersContainer';
+import { RoomCategoryStatsDO } from '../../../../../data-layer/room-categories/data-objects/RoomCategoryStatsDO';
+import { RoomDO } from '../../../../../data-layer/rooms/data-objects/RoomDO';
 
 import _ = require('underscore');
 
@@ -45,7 +45,8 @@ export class BookingRoomCategoryValidationRule extends ABusinessValidationRule<B
         }
         if (!priceProduct.price.hasPriceConfiguredFor({
             configCapacity: booking.configCapacity,
-            roomCategoryId: booking.roomCategoryId
+            roomCategoryId: booking.roomCategoryId,
+            roomCategoryStatsList: this._validationParams.roomCategoryStatsList
         })) {
             this.logBusinessAndReject(reject, booking, {
                 statusCode: ThStatusCode.BookingsValidatorInvalidPriceForRoomCategoryId,

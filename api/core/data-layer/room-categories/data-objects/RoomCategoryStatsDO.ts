@@ -1,6 +1,7 @@
-import {BaseDO} from '../../common/base/BaseDO';
-import {RoomCategoryDO} from './RoomCategoryDO';
-import {ConfigCapacityDO} from '../../common/data-objects/bed-config/ConfigCapacityDO';
+import { BaseDO } from '../../common/base/BaseDO';
+import { RoomCategoryDO } from './RoomCategoryDO';
+import { ConfigCapacityDO } from '../../common/data-objects/bed-config/ConfigCapacityDO';
+import { BedStatsDO } from './bed-stats/BedStatsDO';
 
 export class RoomCategoryCapacityDO extends BaseDO {
     constructor() {
@@ -60,6 +61,7 @@ export class RoomCategoryStatsDO extends BaseDO {
     noOfRooms: number;
     roomCategory: RoomCategoryDO;
     capacity: RoomCategoryCapacityDO;
+    bedStatsList: BedStatsDO[];
 
     protected getPrimitivePropertyKeys(): string[] {
         return ["noOfRooms"];
@@ -73,5 +75,12 @@ export class RoomCategoryStatsDO extends BaseDO {
 
         this.roomCategory = new RoomCategoryDO();
         this.roomCategory.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "roomCategory"));
+
+        this.bedStatsList = [];
+        this.forEachElementOf(this.getObjectPropertyEnsureUndefined(object, "bedStatsList"), (statsObject: Object) => {
+            var stats = new BedStatsDO();
+            stats.buildFromObject(statsObject);
+            this.bedStatsList.push(stats);
+        });
     }
 }
