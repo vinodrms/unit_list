@@ -16,7 +16,7 @@ export class MongoInvoiceGroupsRepository extends MongoRepository implements IIn
         super(sails.models.invoicegroupsentity);
 
         this._readRepository = new MongoInvoiceGroupsReadOperationsRepository(sails.models.invoicegroupsentity);
-        this._editRepository = new MongoInvoiceGroupsEditOperationsRepository(sails.models.invoicegroupsentity, hotelRepo);
+        this._editRepository = new MongoInvoiceGroupsEditOperationsRepository(sails.models.invoicegroupsentity, hotelRepo, this._readRepository);
     }
 
     public getInvoiceGroupById(invoidGroupMeta: InvoiceGroupMetaRepoDO, invoiceGroupId: string): Promise<InvoiceGroupDO> {
