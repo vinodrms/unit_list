@@ -6,13 +6,12 @@ import { InvoicePayerDO } from '../../../../data-layer/invoices/data-objects/pay
 import { InvoicePaymentMethodType } from '../../../../data-layer/invoices/data-objects/payers/InvoicePaymentMethodDO';
 import { InvoiceGroupDO } from '../../../../data-layer/invoices/data-objects/InvoiceGroupDO';
 import { AReportSectionGeneratorStrategy } from '../../common/report-section-generator/AReportSectionGeneratorStrategy';
-import { ShiftReportParams } from '../ShiftReportParams';
 import { ReportSectionHeader, ReportSectionMeta } from '../../common/result/ReportSection';
 
 export class ShiftReportByPaymentMethodSectionGenerator extends AReportSectionGeneratorStrategy {
 
 	constructor(appContext: AppContext, private _sessionContext: SessionContext,
-		private _paidInvoiceGroupList: InvoiceGroupDO[], private _params: ShiftReportParams) {
+		private _paidInvoiceGroupList: InvoiceGroupDO[]) {
 		super(appContext);
 	}
 

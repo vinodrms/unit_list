@@ -2,22 +2,22 @@ require("sails-test-helper");
 import should = require('should');
 import supertest = require('supertest');
 
-import {ThError} from '../../../../core/utils/th-responses/ThError';
-import {ThStatusCode} from '../../../../core/utils/th-responses/ThResponse';
-import {TestUtils} from '../../../../test/helpers/TestUtils';
-import {DefaultDataBuilder} from '../../../db-initializers/DefaultDataBuilder';
-import {TestContext} from '../../../helpers/TestContext';
-import {BookingInvoicesTestHelper} from './helpers/BookingInvoicesTestHelper';
-import {CustomerInvoicesTestHelper} from './helpers/CustomerInvoicesTestHelper';
-import {InvoiceGroupDO} from '../../../../core/data-layer/invoices/data-objects/InvoiceGroupDO';
-import {GenerateBookingInvoice} from '../../../../core/domain-layer/invoices/generate-booking-invoice/GenerateBookingInvoice';
-import {InvoiceGroupSearchResultRepoDO} from '../../../../core/data-layer/invoices/repositories/IInvoiceGroupsRepository';
-import {InvoiceConfirmationEmailSender} from '../../../../core/domain-layer/invoices/invoice-confirmations/InvoiceConfirmationEmailSender';
-import {SaveInvoiceGroup} from '../../../../core/domain-layer/invoices/save-invoice-group/SaveInvoiceGroup';
-import {SaveInvoiceGroupDO} from '../../../../core/domain-layer/invoices/save-invoice-group/SaveInvoiceGroupDO';
-import {InvoiceTestUtils} from './utils/InvoiceTestUtils';
-import {InvoiceDO} from '../../../../core/data-layer/invoices/data-objects/InvoiceDO';
-import {InvoicePayerDO} from '../../../../core/data-layer/invoices/data-objects/payers/InvoicePayerDO';
+import { ThError } from '../../../../core/utils/th-responses/ThError';
+import { ThStatusCode } from '../../../../core/utils/th-responses/ThResponse';
+import { TestUtils } from '../../../../test/helpers/TestUtils';
+import { DefaultDataBuilder } from '../../../db-initializers/DefaultDataBuilder';
+import { TestContext } from '../../../helpers/TestContext';
+import { BookingInvoicesTestHelper } from './helpers/BookingInvoicesTestHelper';
+import { CustomerInvoicesTestHelper } from './helpers/CustomerInvoicesTestHelper';
+import { InvoiceGroupDO } from '../../../../core/data-layer/invoices/data-objects/InvoiceGroupDO';
+import { GenerateBookingInvoice } from '../../../../core/domain-layer/invoices/generate-booking-invoice/GenerateBookingInvoice';
+import { InvoiceGroupSearchResultRepoDO } from '../../../../core/data-layer/invoices/repositories/IInvoiceGroupsRepository';
+import { InvoiceConfirmationEmailSender } from '../../../../core/domain-layer/invoices/invoice-confirmations/InvoiceConfirmationEmailSender';
+import { SaveInvoiceGroup } from '../../../../core/domain-layer/invoices/save-invoice-group/SaveInvoiceGroup';
+import { SaveInvoiceGroupDO } from '../../../../core/domain-layer/invoices/save-invoice-group/SaveInvoiceGroupDO';
+import { InvoiceTestUtils } from './utils/InvoiceTestUtils';
+import { InvoiceDO } from '../../../../core/data-layer/invoices/data-objects/InvoiceDO';
+import { InvoicePayerDO } from '../../../../core/data-layer/invoices/data-objects/payers/InvoicePayerDO';
 
 describe("Invoices Tests", function () {
     var testUtils: TestUtils;
@@ -49,7 +49,6 @@ describe("Invoices Tests", function () {
                 should.equal(invoiceGroup.groupBookingId, generateBookingInvoiceDO.groupBookingId);
                 should.equal(createdBookingInvoiceGroup.invoiceList.length, 1);
                 should.equal(invoiceGroup.invoiceGroupReference, "IG0000002");
-                should.equal(createdBookingInvoiceGroup.invoiceList[0].invoiceReference, "3AN0000003");
                 should.equal(createdBookingInvoiceGroup.invoiceList[0].bookingId, generateBookingInvoiceDO.bookingId);
                 var expectedNoInvoiceItems = bookingInvoiceGroupsHelper.getExpectedNoInvoiceItems(bookingInvoiceGroupsHelper.getFirstBooking());
                 should.equal(createdBookingInvoiceGroup.invoiceList[0].itemList.length, expectedNoInvoiceItems);
@@ -66,8 +65,6 @@ describe("Invoices Tests", function () {
                 createdBookingInvoiceGroup = invoiceGroup;
                 should.equal(createdBookingInvoiceGroup.invoiceList.length, 2);
                 should.equal(invoiceGroup.invoiceGroupReference, "IG0000002");
-                should.equal(createdBookingInvoiceGroup.invoiceList[0].invoiceReference, "3AN0000003");
-                should.equal(createdBookingInvoiceGroup.invoiceList[1].invoiceReference, "3AN0000004");
                 should.equal(createdBookingInvoiceGroup.invoiceList[1].bookingId, generateBookingInvoiceDO.bookingId);
 
                 var expectedNoInvoiceItems = bookingInvoiceGroupsHelper.getExpectedNoInvoiceItems(bookingInvoiceGroupsHelper.getSecondBooking());
@@ -140,6 +137,8 @@ describe("Invoices Tests", function () {
                     createdBookingInvoiceGroup = savedInvoiceGroup;
                     should.equal(createdBookingInvoiceGroup.invoiceList.length, saveInvoiceGroupDO.invoiceList.length);
                     invoiceTestUtils.testInvoiceEquality(_.last(createdBookingInvoiceGroup.invoiceList), _.last(saveInvoiceGroupDO.invoiceList));
+                    should.equal(createdBookingInvoiceGroup.invoiceList[0].invoiceReference, "3AN0000001");
+                    should.notEqual(createdBookingInvoiceGroup.invoiceList[1].invoiceReference, "3AN0000002");
                     done();
                 }).catch((err: any) => {
                     done(err);
@@ -201,10 +200,10 @@ describe("Invoices Tests", function () {
             var customerId = invoice.payerList[payerIndex].customerId;
             var invoiceReference = invoice.invoiceReference;
             invoiceEmailSender.sendInvoiceConfirmation({
-                invoiceGroupId: invoiceGroupId, 
+                invoiceGroupId: invoiceGroupId,
                 invoiceReference: invoiceReference,
                 payerIndex: payerIndex,
-                customerId: customerId 
+                customerId: customerId
             }, ['dragos.pricope@gmail.com']).then((result: boolean) => {
                 done();
             }).catch((err: any) => {

@@ -26,8 +26,8 @@ export class MetricBuilderStrategyFactory {
             new ConfirmedOccupancyBuilderStrategy(this._hotelInventoryStats),
             new TotalAvgRateBuilderStrategy(this._hotelInventoryStats),
             new RoomRevenueBuilderStrategy(this._hotelInventoryStats),
-            new OtherRevenueBuilderStrategy(this._hotelInventoryStats),
             new ConfirmedRevenueBuilderStrategy(this._hotelInventoryStats),
+            new OtherRevenueBuilderStrategy(this._hotelInventoryStats),
             new AllotmentsBuilderStrategy(this._hotelInventoryStats),
             new RoomsBuilderStrategy(this._hotelInventoryStats)
         ];
