@@ -18,6 +18,7 @@ export class MongoInvoiceGroupsEditOperationsRepository extends MongoRepository 
     private _helper: InvoiceGroupsRepositoryHelper;
 
     private static InvoiceGroupReferencePrefix = 'IG';
+    private static TemporaryInvoiceReferencePrefix = 'TEMP';
     private static RefMaxLength = 7;
 
     constructor(invoiceGroupsEntity: Sails.Model, private _hotelRepo: IHotelRepository,
@@ -173,7 +174,9 @@ export class MongoInvoiceGroupsEditOperationsRepository extends MongoRepository 
                 oldPaymentStatus = paymentStatusByInvoiceReferenceMap[invoice.invoiceReference];
             }
             // only attach the invoice reference from the Invoice Sequence if it was marked as Paid and it was not Paid previously
-            if (oldPaymentStatus !== invoice.paymentStatus && invoice.paymentStatus === InvoicePaymentStatus.Paid) {
+            if (oldPaymentStatus !== invoice.paymentStatus
+                && invoice.paymentStatus === InvoicePaymentStatus.Paid
+                && this.isTemporaryInvoiceReference(invoice.invoiceReference)) {
                 this._hotelRepo.getNextSequenceValue(hotelId, HotelSequenceType.InvoiceItem)
                     .then((seq: SequenceValue) => {
                         invoice.invoiceReference = seq.hotelPrefix + this.getSequenceString(seq.sequence);
@@ -185,7 +188,7 @@ export class MongoInvoiceGroupsEditOperationsRepository extends MongoRepository 
             else {
                 // attach a different reference for open invoices
                 if (this._thUtils.isUndefinedOrNull(invoice.invoiceReference)) {
-                    invoice.invoiceReference = this._thUtils.generateShortId();
+                    invoice.invoiceReference = this.getTemporaryInvoiceReference();
                 }
                 resolve(invoice);
             }
@@ -198,6 +201,16 @@ export class MongoInvoiceGroupsEditOperationsRepository extends MongoRepository 
             seqStr = "0" + seqStr;
         }
         return seqStr;
+    }
+    private getTemporaryInvoiceReference(): string {
+        return MongoInvoiceGroupsEditOperationsRepository.TemporaryInvoiceReferencePrefix + this._thUtils.generateShortId();
+    }
+    private isTemporaryInvoiceReference(invoiceReference: string): boolean {
+        let tempPrefix = MongoInvoiceGroupsEditOperationsRepository.TemporaryInvoiceReferencePrefix;
+        if (_.isString(invoiceReference) && invoiceReference.length > tempPrefix.length) {
+            return invoiceReference.substr(0, tempPrefix.length) === tempPrefix;
+        }
+        return false;
     }
 
     private logAndReject(err: Error, reject: { (err: ThError): void }, context: Object, defaultStatusCode: ThStatusCode) {
