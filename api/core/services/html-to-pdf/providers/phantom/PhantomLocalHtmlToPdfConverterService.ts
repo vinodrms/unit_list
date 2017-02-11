@@ -14,7 +14,13 @@ var ejs = require('ejs');
 export class PhantomLocalHtmlToPdfConverterService extends AHtmlToPdfConverterService {
     private static PAPER_SIZE = {
         format: 'A4',
-        orientation: 'portrait'
+        orientation: 'portrait',
+        margin: {
+            top: '20px',
+            bottom: '20px',
+            left: '10px',
+            right: '10px'
+        }
     };
     private static VIEWPORT_SIZE = {
         width: 1920,

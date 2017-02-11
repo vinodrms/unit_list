@@ -19,6 +19,7 @@ import { AddOnProductLoader, AddOnProductItemContainer } from '../../add-on-prod
 import { ShiftReportByPaymentMethodSectionGenerator } from './strategies/ShiftReportByPaymentMethodSectionGenerator';
 import { ShiftReportByCategorySectionGenerator } from './strategies/ShiftReportByCategorySectionGenerator';
 import { ShiftReportByAopNameSectionGenerator } from './strategies/ShiftReportByAopNameSectionGenerator';
+import { ShiftReportPaidInvoicesSectionGenerator } from './strategies/ShiftReportPaidInvoicesSectionGenerator';
 
 export class ShiftReportGroupGenerator extends AReportGeneratorStrategy {
 	private _params: ShiftReportParams;
@@ -119,12 +120,13 @@ export class ShiftReportGroupGenerator extends AReportGeneratorStrategy {
 	}
 	protected getSectionGenerators(): IReportSectionGeneratorStrategy[] {
 		return [
-			new ShiftReportByPaymentMethodSectionGenerator(this._appContext, this._sessionContext, this._paidInvoiceGroupList, this._params),
-			new ShiftReportByCategorySectionGenerator(this._appContext, this._sessionContext, this._paidInvoiceGroupList, this._aopContainer, this._params, {
+			new ShiftReportByPaymentMethodSectionGenerator(this._appContext, this._sessionContext, this._paidInvoiceGroupList),
+			new ShiftReportPaidInvoicesSectionGenerator(this._appContext, this._sessionContext, this._paidInvoiceGroupList),
+			new ShiftReportByCategorySectionGenerator(this._appContext, this._sessionContext, this._paidInvoiceGroupList, this._aopContainer, {
 				title: "Transactions Grouped by Category"
 			}),
-			new ShiftReportByAopNameSectionGenerator(this._appContext, this._sessionContext, this._paidInvoiceGroupList, this._params),
-			new ShiftReportByCategorySectionGenerator(this._appContext, this._sessionContext, this._lossAcceptedByManagementInvoiceGroupList, this._aopContainer, this._params, {
+			new ShiftReportByAopNameSectionGenerator(this._appContext, this._sessionContext, this._paidInvoiceGroupList),
+			new ShiftReportByCategorySectionGenerator(this._appContext, this._sessionContext, this._lossAcceptedByManagementInvoiceGroupList, this._aopContainer, {
 				title: "Loss Accepted By Management Transactions Grouped by Category"
 			}),
 		];
