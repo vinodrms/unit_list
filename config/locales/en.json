@@ -183,6 +183,9 @@
 	"Transactions Grouped by Category": "Transactions Grouped by Category",
 	"Transactions Grouped by Payment Method": "Transactions Grouped by Payment Method",
 	"Loss Accepted By Management Transactions Grouped by Category": "Loss Accepted By Management Transactions Grouped by Category",
-	"Part %partNo%": "Part %partNo%"
+	"Part %partNo%": "Part %partNo%",
+	"Invoice Reference": "Invoice Reference",
+	"Customer": "Customer",
+	"Paid Invoices": "Paid Invoices"
 
 }
