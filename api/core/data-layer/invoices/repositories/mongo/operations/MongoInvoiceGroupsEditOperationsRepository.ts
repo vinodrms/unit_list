@@ -4,9 +4,10 @@ import { ThStatusCode } from '../../../../../utils/th-responses/ThResponse';
 import { MongoRepository, MongoErrorCodes, MongoSearchCriteria } from '../../../../common/base/MongoRepository';
 import { MongoQueryBuilder } from '../../../../common/base/MongoQueryBuilder';
 import { InvoiceGroupDO, InvoiceGroupStatus } from '../../../data-objects/InvoiceGroupDO';
-import { InvoiceDO } from '../../../data-objects/InvoiceDO';
+import { InvoiceDO, InvoicePaymentStatus } from '../../../data-objects/InvoiceDO';
 import { InvoiceGroupMetaRepoDO, InvoiceGroupItemMetaRepoDO } from '../../IInvoiceGroupsRepository';
 import { InvoiceGroupsRepositoryHelper } from '../helpers/InvoiceGroupsRepositoryHelper';
+import { MongoInvoiceGroupsReadOperationsRepository } from './MongoInvoiceGroupsReadOperationsRepository';
 import { MongoBookingRepository } from '../../../../bookings/repositories/mongo/MongoBookingRepository';
 import { IHotelRepository, SequenceValue } from '../../../../hotel/repositories/IHotelRepository';
 import { HotelSequenceType } from '../../../../hotel/data-objects/sequences/HotelSequencesDO';
@@ -19,7 +20,8 @@ export class MongoInvoiceGroupsEditOperationsRepository extends MongoRepository 
     private static InvoiceGroupReferencePrefix = 'IG';
     private static RefMaxLength = 7;
 
-    constructor(invoiceGroupsEntity: Sails.Model, private _hotelRepo: IHotelRepository) {
+    constructor(invoiceGroupsEntity: Sails.Model, private _hotelRepo: IHotelRepository,
+        private _invoiceReadRepository: MongoInvoiceGroupsReadOperationsRepository) {
         super(invoiceGroupsEntity);
         this._helper = new InvoiceGroupsRepositoryHelper();
     }
@@ -35,29 +37,31 @@ export class MongoInvoiceGroupsEditOperationsRepository extends MongoRepository 
         invoiceGroup.status = InvoiceGroupStatus.Active;
         invoiceGroup.reindexByCustomerId();
 
-        this.attachInvoiceGroupAndInvoiceReferencesIfNecessary(invoiceGroup).then((updatedGroup: InvoiceGroupDO) => {
-            this.createDocument(updatedGroup,
-                (err: Error) => {
-                    this.logAndReject(err, reject, { meta: invoiceGroupMeta, invoiceGroup: invoiceGroup }, ThStatusCode.InvoiceGroupsRepositoryErrorAddingInvoiceGroup);
-                },
-                (createdInvoiceGroup: Object) => {
-                    resolve(this._helper.buildInvoiceGroupDOFrom(createdInvoiceGroup));
-                }
-            );
-        }).catch((e) => {
-            reject(e);
-        });
+        this.attachInvoiceGroupAndInvoiceReferencesIfNecessary(invoiceGroupMeta, invoiceGroup)
+            .then((updatedGroup: InvoiceGroupDO) => {
+                this.createDocument(updatedGroup,
+                    (err: Error) => {
+                        this.logAndReject(err, reject, { meta: invoiceGroupMeta, invoiceGroup: invoiceGroup }, ThStatusCode.InvoiceGroupsRepositoryErrorAddingInvoiceGroup);
+                    },
+                    (createdInvoiceGroup: Object) => {
+                        resolve(this._helper.buildInvoiceGroupDOFrom(createdInvoiceGroup));
+                    }
+                );
+            }).catch((e) => {
+                reject(e);
+            });
     }
 
     public updateInvoiceGroup(invoiceGroupMeta: InvoiceGroupMetaRepoDO, invoiceGroupItemMeta: InvoiceGroupItemMetaRepoDO, invoiceGroup: InvoiceGroupDO): Promise<InvoiceGroupDO> {
         invoiceGroup.reindexByCustomerId();
 
         return new Promise<InvoiceGroupDO>((resolve: { (result: InvoiceGroupDO): void }, reject: { (err: ThError): void }) => {
-            this.attachInvoiceGroupAndInvoiceReferencesIfNecessary(invoiceGroup).then((updatedGroup: InvoiceGroupDO) => {
-                this.findAndModifyInvoiceGroupCore(invoiceGroupMeta, invoiceGroupItemMeta, invoiceGroup, resolve, reject);
-            }).catch((e) => {
-                reject(e);
-            });
+            this.attachInvoiceGroupAndInvoiceReferencesIfNecessary(invoiceGroupMeta, invoiceGroup)
+                .then((updatedGroup: InvoiceGroupDO) => {
+                    this.findAndModifyInvoiceGroupCore(invoiceGroupMeta, invoiceGroupItemMeta, invoiceGroup, resolve, reject);
+                }).catch((e) => {
+                    reject(e);
+                });
         });
     }
     public deleteInvoiceGroup(invoiceGroupMeta: InvoiceGroupMetaRepoDO, invoiceGroupItemMeta: InvoiceGroupItemMetaRepoDO): Promise<InvoiceGroupDO> {
@@ -97,27 +101,52 @@ export class MongoInvoiceGroupsEditOperationsRepository extends MongoRepository 
         );
     }
 
-    private attachInvoiceGroupAndInvoiceReferencesIfNecessary(invoiceGroup: InvoiceGroupDO): Promise<InvoiceGroupDO> {
+    private attachInvoiceGroupAndInvoiceReferencesIfNecessary(invoiceGroupMeta: InvoiceGroupMetaRepoDO, invoiceGroup: InvoiceGroupDO): Promise<InvoiceGroupDO> {
         return new Promise<InvoiceGroupDO>((resolve: { (result: InvoiceGroupDO): void }, reject: { (err: ThError): void }) => {
-            return this.attachInvoiceGroupAndInvoiceReferencesIfNecessaryCore(resolve, reject, invoiceGroup);
+            return this.attachInvoiceGroupAndInvoiceReferencesIfNecessaryCore(resolve, reject, invoiceGroupMeta, invoiceGroup);
         });
     }
-    private attachInvoiceGroupAndInvoiceReferencesIfNecessaryCore(resolve: { (result: InvoiceGroupDO): void }, reject: { (err: ThError): void }, invoiceGroup: InvoiceGroupDO) {
+    private attachInvoiceGroupAndInvoiceReferencesIfNecessaryCore(resolve: { (result: InvoiceGroupDO): void }, reject: { (err: ThError): void },
+        invoiceGroupMeta: InvoiceGroupMetaRepoDO, invoiceGroup: InvoiceGroupDO) {
+
         var group = invoiceGroup;
-        this.attachInvoiceGroupReferenceIfNecessary(group)
-            .then((updatedGroup: InvoiceGroupDO) => {
+        var paymentStatusByInvoiceReferenceMap: { [index: string]: InvoicePaymentStatus };
+        this.getCurrentPaymentStatusByInvoiceReferenceMap(invoiceGroupMeta, invoiceGroup)
+            .then((map: { [index: string]: InvoicePaymentStatus }) => {
+                paymentStatusByInvoiceReferenceMap = map;
+                return this.attachInvoiceGroupReferenceIfNecessary(group);
+            }).then((updatedGroup: InvoiceGroupDO) => {
                 group = updatedGroup;
-                var promises = [];
-                _.forEach(group.invoiceList, (invoice) => {
-                    promises.push(this.attachInvoiceItemReferenceIfNecessary(group.hotelId, invoice));
+                var promiseList = [];
+                group.invoiceList.forEach((invoice) => {
+                    let promise = this.attachInvoiceItemReferenceIfNecessary(group.hotelId, invoice, paymentStatusByInvoiceReferenceMap);
+                    promiseList.push(promise);
                 });
-                return Promise.all(promises);
+                return Promise.all(promiseList);
             }).then((updatedInvoiceList: InvoiceDO[]) => {
                 group.invoiceList = updatedInvoiceList;
                 resolve(group);
             }).catch((e) => {
                 reject(e);
             });
+    }
+
+    private getCurrentPaymentStatusByInvoiceReferenceMap(invoiceGroupMeta: InvoiceGroupMetaRepoDO, invoiceGroup: InvoiceGroupDO): Promise<{ [index: string]: InvoicePaymentStatus }> {
+        return new Promise<{ [index: string]: InvoicePaymentStatus }>((resolve: { (result: { [index: string]: InvoicePaymentStatus }): void }, reject: { (err: ThError): void }) => {
+            // if the invoice group is not created return an empty result
+            if (this._thUtils.isUndefinedOrNull(invoiceGroup.id)) {
+                resolve({});
+                return;
+            }
+            this._invoiceReadRepository.getInvoiceGroupById(invoiceGroupMeta, invoiceGroup.id)
+                .then((readInvoiceGroup: InvoiceGroupDO) => {
+                    let paymentStatusByInvoiceReferenceMap: { [index: string]: InvoicePaymentStatus } = {};
+                    _.forEach(readInvoiceGroup.invoiceList, (readInvoice: InvoiceDO) => {
+                        paymentStatusByInvoiceReferenceMap[readInvoice.invoiceReference] = readInvoice.paymentStatus;
+                    });
+                    resolve(paymentStatusByInvoiceReferenceMap);
+                }).catch(e => { reject(e); });
+        });
     }
 
     private attachInvoiceGroupReferenceIfNecessary(invoiceGroup: InvoiceGroupDO): Promise<InvoiceGroupDO> {
@@ -136,19 +165,30 @@ export class MongoInvoiceGroupsEditOperationsRepository extends MongoRepository 
         });
     }
 
-    private attachInvoiceItemReferenceIfNecessary(hotelId: string, invoice: InvoiceDO): Promise<InvoiceDO> {
+    private attachInvoiceItemReferenceIfNecessary(hotelId: string, invoice: InvoiceDO,
+        paymentStatusByInvoiceReferenceMap: { [index: string]: InvoicePaymentStatus }): Promise<InvoiceDO> {
         return new Promise<InvoiceDO>((resolve: { (result: InvoiceDO): void }, reject: { (err: ThError): void }) => {
+            let oldPaymentStatus: InvoicePaymentStatus;
             if (!this._thUtils.isUndefinedOrNull(invoice.invoiceReference)) {
-                resolve(invoice);
-                return;
+                oldPaymentStatus = paymentStatusByInvoiceReferenceMap[invoice.invoiceReference];
             }
-            this._hotelRepo.getNextSequenceValue(hotelId, HotelSequenceType.InvoiceItem)
-                .then((seq: SequenceValue) => {
-                    invoice.invoiceReference = seq.hotelPrefix + this.getSequenceString(seq.sequence);
-                    resolve(invoice);
-                }).catch((e) => {
-                    reject(e);
-                });
+            // only attach the invoice reference from the Invoice Sequence if it was marked as Paid and it was not Paid previously
+            if (oldPaymentStatus !== invoice.paymentStatus && invoice.paymentStatus === InvoicePaymentStatus.Paid) {
+                this._hotelRepo.getNextSequenceValue(hotelId, HotelSequenceType.InvoiceItem)
+                    .then((seq: SequenceValue) => {
+                        invoice.invoiceReference = seq.hotelPrefix + this.getSequenceString(seq.sequence);
+                        resolve(invoice);
+                    }).catch((e) => {
+                        reject(e);
+                    });
+            }
+            else {
+                // attach a different reference for open invoices
+                if (this._thUtils.isUndefinedOrNull(invoice.invoiceReference)) {
+                    invoice.invoiceReference = this._thUtils.generateShortId();
+                }
+                resolve(invoice);
+            }
         });
     }
 
