@@ -1,0 +1,41 @@
+---
+
+- block:
+    - name: Create UnitPal root folder if it does not exist 
+      file:
+        path: "{{ unitpal_root }}"
+        state: directory
+        owner: unitpal
+        group: unitpal
+        mode: 0755
+      become: yes
+      
+    - name: Check out UnitPal
+      git: >
+        dest={{ unitpal_root }}
+        repo={{ unitpal_repo }}
+        version={{ unitpal_version }}
+        update=yes
+        force=yes
+
+      become_user: unitpal
+    
+    - name: Install npm dependencies
+      command: npm run install-deps
+      args: 
+        chdir: "{{ unitpal_root }}"
+    
+    - name: Compiling client & server
+      command: npm run build-all
+      args: 
+        chdir: "{{ unitpal_root }}"
+        
+    - name: Create UnitPal environment files
+      template: src={{ item }}
+                dest={{ unitpal_root }}/config/env/{{ item | regex_replace('\.j2$', '') }}
+                backup=yes
+                owner=unitpal group=unitpal mode=0664
+      with_items:
+        - azure.js.j2
+
+  become: yes

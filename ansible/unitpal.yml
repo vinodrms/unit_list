@@ -1,0 +1,10 @@
+---
+- name: Install UnitPal
+  hosts: appservers
+
+  roles:
+    - git
+    - node
+    - unitpal
+    - pm2
+    - nginx

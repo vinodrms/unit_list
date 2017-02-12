@@ -1,0 +1,10 @@
+---
+
+- block:
+    - name: Install git
+      apt: pkg="{{ item }}"
+           state=latest
+      with_items:
+        - git
+        
+  become: yes
