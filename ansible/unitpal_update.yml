@@ -3,6 +3,6 @@
   hosts: appservers
 
   roles:
-    - unitpal-stop
+    - unitpal_stop
     - unitpal
-    - unitpal-start
+    - unitpal_start
