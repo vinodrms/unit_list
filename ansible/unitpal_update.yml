@@ -1,0 +1,8 @@
+---
+- name: Install UnitPal
+  hosts: appservers
+
+  roles:
+    - unitpal-stop
+    - unitpal
+    - unitpal-start
