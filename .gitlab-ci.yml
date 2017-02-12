@@ -1,10 +1,10 @@
 before_script:
- - npm run forever-stop
- - npm run install-deps
+#  - npm run forever-stop
+#  - npm run install-deps
 rspec:
   script:
-   - npm run build-all
-   - MONGO_USER=demothangle MONGO_PASSWD=Anisdy\$57m! npm run server-tests
+  #  - npm run build-all
+  #  - MONGO_USER=demothangle MONGO_PASSWD=Anisdy\$57m! npm run server-tests
    - ./azure_install.sh
-   - MONGO_USER=demothangle MONGO_PASSWD=Anisdy\$57m! npm run forever-start
+  #  - MONGO_USER=demothangle MONGO_PASSWD=Anisdy\$57m! npm run forever-start
    - echo "Finished the build for the Production Branch"
