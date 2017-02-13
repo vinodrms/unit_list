@@ -1,0 +1,28 @@
+---
+
+- block:
+    - name: Install nginx
+      apt: pkg="{{ item }}"
+      with_items:
+        - nginx=1.10.0-0ubuntu0.16.04.4
+    
+    - name: Create UnitPal nignx conf file
+      template: src={{ item }}
+                dest={{ nginx_root }}/sites-available/{{ item | regex_replace('\.j2$', '') }}
+      with_items:
+        - unitpal.j2
+    
+    - name: Disable nginx default site
+      file: path={{ nginx_root }}/sites-enabled/default
+            state=absent
+
+    - name: Enable unitpal web site
+      file: src={{ nginx_root }}/sites-available/unitpal
+            dest={{ nginx_root }}/sites-enabled/unitpal
+            state=link
+    
+    - name: Restart nginx
+      service: name=nginx
+               state=restarted
+        
+  become: yes

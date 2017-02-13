@@ -1,0 +1,5 @@
+---
+
+- block:
+    - name: Start UnitPal process with pm2
+      command: pm2 start {{ app_name }}

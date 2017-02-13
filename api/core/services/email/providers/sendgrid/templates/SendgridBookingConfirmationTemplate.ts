@@ -7,7 +7,7 @@ export class SendgridBookingConfirmationTemplate implements ISendgridTemplate {
 
     public getTemplateMetadata(): any {
         return {
-            id: '48e0b815-3311-4df9-bf74-93d80a63bce8',
+            id: '566a3b78-4095-4e8c-bb45-5d637ba6447d',
             subs: {
                 
             }
