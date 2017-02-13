@@ -5,7 +5,7 @@ app_name: unitpal
 env: azure
 host: 104.46.52.145
 port: 8001
-app_context_root: 'http://{{ host }}:{{ port }}/'
+app_context_root: 'http://{{ host }}/'
 
 mongo_host: ds062178.mongolab.com
 mongo_port: 62178
