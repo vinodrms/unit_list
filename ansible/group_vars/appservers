@@ -17,7 +17,7 @@ cloudinary_cloud_name: hbpr8ossz
 cloudinary_api_key: 849423217949946
 cloudinary_api_secret: V5Cr6imHfTPXitvr0bKtxcum3EA
 
-sendgrid_api_key: SG.GSlmdxA7Qk6SA8TEWkNSaA.7a5vmeljhV_T-BoMm_hhZOTdbt_AerUVoJoamAbZaRM
+sendgrid_api_key: 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
 sendgrid_from: contact@unitpal.com
 
 scm_command_idle_timeout: 180
