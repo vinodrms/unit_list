@@ -3,7 +3,7 @@ module.exports.unitPalConfig = {
     emailService: {
         type: "sendgrid",
         settings: {
-            apiKey: "SG.GSlmdxA7Qk6SA8TEWkNSaA.7a5vmeljhV_T-BoMm_hhZOTdbt_AerUVoJoamAbZaRM",
+            apiKey: "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",
             from: "contact@unitpal.com"
         }
     },
