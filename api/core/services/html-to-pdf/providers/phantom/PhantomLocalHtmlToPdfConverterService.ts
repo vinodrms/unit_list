@@ -1,9 +1,9 @@
-import {AHtmlToPdfConverterService} from '../../AHtmlToPdfConverterService';
-import {HtmlToPdfRequestDO, HtmlToPdfResponseDO} from '../../IHtmlToPdfConverterService';
-import {ThError} from '../../../../utils/th-responses/ThError';
-import {ThLogger, ThLogLevel} from '../../../../utils/logging/ThLogger';
-import {ThStatusCode} from '../../../../utils/th-responses/ThResponse';
-import {ThUtils} from '../../../../utils/ThUtils';
+import { AHtmlToPdfConverterService } from '../../AHtmlToPdfConverterService';
+import { HtmlToPdfRequestDO, HtmlToPdfResponseDO } from '../../IHtmlToPdfConverterService';
+import { ThError } from '../../../../utils/th-responses/ThError';
+import { ThLogger, ThLogLevel } from '../../../../utils/logging/ThLogger';
+import { ThStatusCode } from '../../../../utils/th-responses/ThResponse';
+import { ThUtils } from '../../../../utils/ThUtils';
 
 import phantom = require('phantom');
 import fs = require('fs');
@@ -16,8 +16,8 @@ export class PhantomLocalHtmlToPdfConverterService extends AHtmlToPdfConverterSe
         format: 'A4',
         orientation: 'portrait',
         margin: {
-            top: '20px',
-            bottom: '20px',
+            top: '30px',
+            bottom: '30px',
             left: '10px',
             right: '10px'
         }

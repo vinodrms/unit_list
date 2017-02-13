@@ -15,8 +15,8 @@
         margin:auto;
         padding-right: 20px;
         padding-left: 20px;
-        font-size:12px;
-        line-height:22px;
+        font-size:9px;
+        line-height:17px;
         font-family: 'Roboto', sans-serif;
         color:#555;
     }
@@ -27,7 +27,7 @@
     }
     
     .table-box table td{
-        padding:5px;
+        padding:4px;
         vertical-align:top;
     }
     
@@ -60,7 +60,6 @@
         min-height: 100%;
         height: auto !important; /* This line and the next line are not necessary unless you need IE6 support */
         height: 100%;
-        margin: 0 auto -150px; /* the bottom margin is the negative value of the footer's height */
     }
 
     </style>
@@ -70,7 +69,7 @@
         <div class="table-box wrapper">
             
             <% sectionList.forEach(function(section){ %>
-                <br><br>
+                <br>
 
                 <% if (section.meta.title) { %>
                     <h3> <%= section.meta.title %> </h3>
