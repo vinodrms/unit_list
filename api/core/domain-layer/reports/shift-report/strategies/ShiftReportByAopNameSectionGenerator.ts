@@ -7,14 +7,13 @@ import { InvoiceItemDO, InvoiceItemType } from '../../../../data-layer/invoices/
 import { TaxDO } from '../../../../data-layer/taxes/data-objects/TaxDO';
 import { InvoiceItemVM } from '../../../invoices/invoice-confirmations/InvoiceItemVM';
 import { AReportSectionGeneratorStrategy } from '../../common/report-section-generator/AReportSectionGeneratorStrategy';
-import { ShiftReportParams } from '../ShiftReportParams';
 import { ReportSectionHeader, ReportSectionMeta } from '../../common/result/ReportSection';
 import { AddOnProductItemContainer } from '../../../add-on-products/validators/AddOnProductLoader';
 
 export class ShiftReportByAopNameSectionGenerator extends AReportSectionGeneratorStrategy {
 
     constructor(appContext: AppContext, private _sessionContext: SessionContext,
-        private _paidInvoiceGroupList: InvoiceGroupDO[], private _params: ShiftReportParams) {
+        private _paidInvoiceGroupList: InvoiceGroupDO[]) {
         super(appContext);
     }
 
