@@ -1,0 +1,30 @@
+---
+
+- block:
+    - name: Install pm2
+      npm:
+        name: pm2
+        global: yes
+        state: present
+        version: 2.4.0
+      become: yes
+
+    - name: Register pm2 as a systemd service
+      command: env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -u {{ pm2_user }} --hp {{ pm2_user_home }}
+      become: yes
+
+    - name: Delete all pm2 registered apps
+      command: pm2 delete all
+      ignore_errors: yes
+
+    - name: Create UnitPal pm2 conf file
+      template: src={{ item }}
+                dest=/home/unitpal/{{ item | regex_replace('\.j2$', '') }}
+      with_items:
+        - unitpal-pm2.json.j2
+
+    - name: Start UnitPal with pm2
+      command: pm2 start /home/unitpal/unitpal-pm2.json
+
+    - name: Save pm2 configuration
+      command: pm2 save

@@ -1,0 +1,48 @@
+module.exports = {
+	port: {{ port }} || 1337,
+	connections: {
+		mongodbazure: {
+			adapter: 'sails-mongo',
+			host: "{{ mongo_host }}",
+			port: {{ mongo_port }},
+			user: "{{ mongo_user }}",
+			password: "{{ mongo_passwd }}",
+			database: "{{ mongo_db }}"
+		}
+	},
+	models: {
+		connection: 'mongodbazure'
+	},
+	hookTimeout: 40000,
+	log: {
+		level: "silent"
+	},
+	unitPalConfig: {
+		appContextRoot: "{{ app_context_root }}",
+		emailService: {
+			type: "sendgrid",
+			settings: {
+				apiKey: "{{ sendgrid_api_key }}",
+				from: "{{ sendgrid_from }}"
+			}
+		},
+		imageUploadService: {
+			type: "cloudinary",
+			settings: {
+				cloud_name: "{{ cloudinary_cloud_name }}",
+				api_key: "{{ cloudinary_api_key }}",
+				api_secret: "{{ cloudinary_api_secret }}"
+			}
+		},
+		slack: {
+			webhookUri: "{{ slack_webhook_uri }}",
+			channel: "{{ slack_channel }}",
+			username: "{{ slack_username }}",
+			enabled: "{{ slack_enabled }}"
+		},
+		googleAnalytics: {
+			enabled: "{{ google_analytics_enabled }}",
+			trackingId: "{{ google_analytics_tracking_id }}"
+		}
+	}
+};

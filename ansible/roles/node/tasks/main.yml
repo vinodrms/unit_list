@@ -1,0 +1,11 @@
+---
+
+- block:
+    - name: Add node.js repo sources
+      shell: curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
+    
+    - name: Install node
+      apt: 
+        pkg: "{{ item }}"
+      with_items:
+        - nodejs=6.9.5-1nodesource1~xenial1

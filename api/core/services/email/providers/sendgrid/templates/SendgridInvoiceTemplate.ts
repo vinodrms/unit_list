@@ -7,7 +7,7 @@ export class SendgridInvoiceTemplate implements ISendgridTemplate {
 
     public getTemplateMetadata(): any {
         return {
-            id: 'e0780e69-7acb-4abd-a7c4-67eb0ccf66a9',
+            id: '995db70f-5c6c-4ea6-98be-558cfbd26239',
             subs: {
                 
             }
