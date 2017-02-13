@@ -8,7 +8,7 @@ export class CronJobInitializer implements ICronJobScheduler {
 
 	private scheduleHourlyJobs() {
 		this.scheduleJobList([
-			// new HotelHalfHourlyCronJob()
+			new HotelHalfHourlyCronJob()
 		]);
 	}
 

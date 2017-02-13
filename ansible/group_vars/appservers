@@ -3,7 +3,7 @@ inventory: production
 
 app_name: unitpal
 env: azure
-host: www.app.unitpal.com
+host: app.unitpal.com
 port: 8001
 app_context_root: 'http://{{ host }}/'
 
