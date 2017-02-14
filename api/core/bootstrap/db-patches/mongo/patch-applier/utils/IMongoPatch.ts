@@ -1,5 +1,5 @@
-import {MongoPatcheType} from './ATransactionalMongoPatch';
+import { MongoPatchType } from '../patches/MongoPatchType';
 
 export interface IMongoPatch {
-	getPatchType(): MongoPatcheType;
+	getPatchType(): MongoPatchType;
 }

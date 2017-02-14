@@ -1,8 +1,9 @@
-import {MongoPatcheType, ATransactionalMongoPatch} from '../../utils/ATransactionalMongoPatch';
-import {ThLogger, ThLogLevel} from '../../../../../../utils/logging/ThLogger';
-import {ThError} from '../../../../../../utils/th-responses/ThError';
-import {ThStatusCode} from '../../../../../../utils/th-responses/ThResponse';
-import {MongoRepository} from '../../../../../../data-layer/common/base/MongoRepository';
+import { ATransactionalMongoPatch } from '../../utils/ATransactionalMongoPatch';
+import { MongoPatchType } from '../MongoPatchType';
+import { ThLogger, ThLogLevel } from '../../../../../../utils/logging/ThLogger';
+import { ThError } from '../../../../../../utils/th-responses/ThError';
+import { ThStatusCode } from '../../../../../../utils/th-responses/ThResponse';
+import { MongoRepository } from '../../../../../../data-layer/common/base/MongoRepository';
 
 import _ = require('underscore');
 
@@ -88,8 +89,8 @@ export class MongoPatch0 extends ATransactionalMongoPatch {
             type: IndexType.Unique
         });
     }
-    public getPatchType(): MongoPatcheType {
-        return MongoPatcheType.CreateUniqueIndexOnHotel;
+    public getPatchType(): MongoPatchType {
+        return MongoPatchType.CreateUniqueIndexOnHotel;
     }
 
     protected applyCore(resolve: { (result: boolean): void }, reject: { (err: ThError): void }) {

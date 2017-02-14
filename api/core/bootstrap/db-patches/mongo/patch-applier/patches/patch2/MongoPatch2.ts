@@ -1,5 +1,6 @@
 import { ThError } from '../../../../../../utils/th-responses/ThError';
-import { MongoPatcheType, ATransactionalMongoPatch } from '../../utils/ATransactionalMongoPatch';
+import { ATransactionalMongoPatch } from '../../utils/ATransactionalMongoPatch';
+import { MongoPatchType } from '../MongoPatchType';
 import { MongoUpdateMultipleDocuments } from '../../../../../../data-layer/common/base/mongo-utils/MongoUpdateMultipleDocuments';
 import { PriceProductPriceType } from '../../../../../../data-layer/price-products/data-objects/price/IPriceProductPrice';
 
@@ -7,8 +8,8 @@ import async = require("async");
 
 export class MongoPatch2 extends ATransactionalMongoPatch {
 
-    public getPatchType(): MongoPatcheType {
-        return MongoPatcheType.SetValueForFirstChildWithAdultInSharedBedPriceOnPriceProducts;
+    public getPatchType(): MongoPatchType {
+        return MongoPatchType.SetValueForFirstChildWithAdultInSharedBedPriceOnPriceProducts;
     }
     protected applyCore(resolve: { (result: boolean): void }, reject: { (err: ThError): void }) {
         var noUpdated = 0;
