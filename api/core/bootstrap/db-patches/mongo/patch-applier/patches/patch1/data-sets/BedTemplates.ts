@@ -30,22 +30,22 @@ export class BedTemplates extends ABaseSetting {
         {
             name: "Single Bed",
             iconUrl: "A",
-            accommodationType: BedAccommodationType.AdultsAndChildren
+            accommodationType: BedAccommodationType.Any
         },
         {
             name: "Double Bed",
             iconUrl: "1",
-            accommodationType: BedAccommodationType.AdultsAndChildren
+            accommodationType: BedAccommodationType.Any
         },
         {
             name: "Modular",
             iconUrl: "5",
-            accommodationType: BedAccommodationType.AdultsAndChildren
+            accommodationType: BedAccommodationType.Any
         },
         {
             name: "Queen/King",
             iconUrl: "2",
-            accommodationType: BedAccommodationType.AdultsAndChildren
+            accommodationType: BedAccommodationType.Any
         },
         {
             name: "Baby Crib/Cot",
@@ -55,17 +55,17 @@ export class BedTemplates extends ABaseSetting {
         {
             name: "Stacked",
             iconUrl: "4",
-            accommodationType: BedAccommodationType.AdultsAndChildren
+            accommodationType: BedAccommodationType.Any
         },
         {
             name: "Couch",
             iconUrl: "7",
-            accommodationType: BedAccommodationType.AdultsAndChildren
+            accommodationType: BedAccommodationType.Any
         },
         {
             name: "Custom",
             iconUrl: "3",
-            accommodationType: BedAccommodationType.AdultsAndChildren
+            accommodationType: BedAccommodationType.Any
         }
     ];        
 } 

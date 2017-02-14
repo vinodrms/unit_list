@@ -79,7 +79,7 @@ export class SaveBedItem {
             return false;
         }
 
-        if (this._bedItemDO.accommodationType === BedAccommodationType.AdultsAndChildren) {
+        if (this._bedItemDO.accommodationType === BedAccommodationType.Any) {
             validationResult = SaveBedItemDO.getSizeAndCapacityValidationStructure().validateStructure(this._bedItemDO);
             if (!validationResult.isValid()) {
                 var parser = new ValidationResultParser(validationResult, this._bedItemDO);
@@ -91,7 +91,7 @@ export class SaveBedItem {
     }
     
     private sizeAndCapacityAreValid(): boolean {
-        if (this._bedItemDO.accommodationType === BedAccommodationType.AdultsAndChildren) {
+        if (this._bedItemDO.accommodationType === BedAccommodationType.Any) {
             return this.sizeAndCapacityExist();
         }
         else if (this._bedItemDO.accommodationType === BedAccommodationType.Babies) {

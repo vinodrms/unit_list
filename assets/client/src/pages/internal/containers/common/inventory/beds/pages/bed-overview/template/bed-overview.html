@@ -10,7 +10,10 @@
     </div>
     
     <div *ngIf="!accommodatesBabies">
-        <small>Accomodates {{ bedVM.bed.capacity.maxNoAdults }} <span class="unitpal-font">:</span> {{ bedVM.bed.capacity.maxNoChildren }} <span class="unitpal-font">;</span> 0 <span class="unitpal-font">B</span></small>
+        <small>Accomodates {{ bedVM.bed.capacity.maxNoAdults }} <span class="unitpal-font">:</span> 
+            {{ bedVM.bed.capacity.maxNoChildren }} <span class="unitpal-font">;</span> 
+            {{ bedVM.bed.capacity.maxNoBabies }} <span class="unitpal-font">B</span>
+        </small>
         <br/>
         <small>Size <i class="fa fa-arrows-h"></i> {{ bedVM.bed.size.lengthCm }} <i class="fa fa-arrows-v"> {{ bedVM.bed.size.widthCm }}</i></small>
     </div>
