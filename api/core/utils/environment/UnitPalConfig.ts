@@ -112,6 +112,10 @@ export class UnitPalConfig {
     }
     private updateAppContextRoot() {
         this._appContextRoot = sails.config.unitPalConfig.appContextRoot;
+        // the app context root should not end with '/'
+        if (this._appContextRoot.lastIndexOf("/") === this._appContextRoot.length - 1) {
+            this._appContextRoot = this._appContextRoot.substring(0, this._appContextRoot.length - 1);
+        }
     }
     public getAppEnvironment(): AppEnvironmentType {
         return this._appEnvironment;
