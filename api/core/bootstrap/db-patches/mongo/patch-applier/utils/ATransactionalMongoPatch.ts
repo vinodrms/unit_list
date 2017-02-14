@@ -3,15 +3,18 @@ import { IMongoPatch } from './IMongoPatch';
 import { ThError } from '../../../../../utils/th-responses/ThError';
 import { MongoPriceProductRepository } from '../../../../../data-layer/price-products/repositories/mongo/MongoPriceProductRepository';
 import { MongoBedRepository } from '../../../../../data-layer/beds/repositories/mongo/MongoBedRepository';
+import { MongoBookingRepository } from '../../../../../data-layer/bookings/repositories/mongo/MongoBookingRepository';
 import { MongoPatchType } from '../patches/MongoPatchType';
 
 export abstract class ATransactionalMongoPatch implements IMongoPatchApplier, IMongoPatch {
 	protected _priceProductRepository: MongoPriceProductRepository;
 	protected _bedRepository: MongoBedRepository;
+	protected _bookingRepository: MongoBookingRepository;
 
 	constructor() {
 		this._priceProductRepository = new MongoPriceProductRepository();
 		this._bedRepository = new MongoBedRepository();
+		this._bookingRepository = new MongoBookingRepository();
 	}
 
 	public apply(): Promise<boolean> {

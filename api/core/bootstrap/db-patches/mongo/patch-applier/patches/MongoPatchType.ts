@@ -3,5 +3,6 @@ export enum MongoPatchType {
     PopulateCountriesAndCurrencyCodes,
     SetValueForFirstChildWithAdultInSharedBedPriceOnPriceProducts,
     AddMaxNoBabiesAttributeOnBeds,
+    SetTheNoBabyBedsOnBookingsCapacity,
 
 }
