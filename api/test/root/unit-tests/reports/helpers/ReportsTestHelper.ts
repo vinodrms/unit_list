@@ -1,25 +1,25 @@
-import {DefaultDataBuilder} from '../../../../db-initializers/DefaultDataBuilder';
-import {TestContext} from '../../../../helpers/TestContext';
-import {PriceProductDO, PriceProductStatus} from '../../../../../core/data-layer/price-products/data-objects/PriceProductDO';
-import {PriceProductIncludedItemsDO} from '../../../../../core/data-layer/price-products/data-objects/included-items/PriceProductIncludedItemsDO';
-import {AllotmentDO} from '../../../../../core/data-layer/allotments/data-objects/AllotmentDO';
-import {RoomCategoryStatsDO} from '../../../../../core/data-layer/room-categories/data-objects/RoomCategoryStatsDO';
-import {PriceProductsHelper} from '../../price-products/helpers/PriceProductsHelper';
-import {SavePriceProductItem} from '../../../../../core/domain-layer/price-products/SavePriceProductItem';
-import {AddBookingItemsDO, BookingItemDO} from '../../../../../core/domain-layer/bookings/add-bookings/AddBookingItemsDO';
-import {ThTimestampDO} from '../../../../../core/utils/th-dates/data-objects/ThTimestampDO';
-import {ThHourDO} from '../../../../../core/utils/th-dates/data-objects/ThHourDO';
-import {ThDateIntervalDO} from '../../../../../core/utils/th-dates/data-objects/ThDateIntervalDO';
-import {TestUtils} from '../../../../helpers/TestUtils';
-import {ThDateUtils} from '../../../../../core/utils/th-dates/ThDateUtils';
-import {ConfigCapacityDO} from '../../../../../core/data-layer/common/data-objects/bed-config/ConfigCapacityDO';
-import {DefaultBillingDetailsDO} from '../../../../../core/data-layer/bookings/data-objects/default-billing/DefaultBillingDetailsDO';
-import {InvoicePaymentMethodType} from '../../../../../core/data-layer/invoices/data-objects/payers/InvoicePaymentMethodDO';
-import {DefaultPriceProductBuilder} from '../../../../db-initializers/builders/DefaultPriceProductBuilder';
-import {BookingSearchDO} from '../../../../../core/domain-layer/bookings/search-bookings/BookingSearchDO';
-import {CustomerDO} from '../../../../../core/data-layer/customers/data-objects/CustomerDO';
-import {AddOnProductDO} from '../../../../../core/data-layer/add-on-products/data-objects/AddOnProductDO';
-import {TransientBookingItemDO} from '../../../../../core/domain-layer/bookings/search-bookings/TransientBookingItemDO';
+import { DefaultDataBuilder } from '../../../../db-initializers/DefaultDataBuilder';
+import { TestContext } from '../../../../helpers/TestContext';
+import { PriceProductDO, PriceProductStatus } from '../../../../../core/data-layer/price-products/data-objects/PriceProductDO';
+import { PriceProductIncludedItemsDO } from '../../../../../core/data-layer/price-products/data-objects/included-items/PriceProductIncludedItemsDO';
+import { AllotmentDO } from '../../../../../core/data-layer/allotments/data-objects/AllotmentDO';
+import { RoomCategoryStatsDO } from '../../../../../core/data-layer/room-categories/data-objects/RoomCategoryStatsDO';
+import { PriceProductsHelper } from '../../price-products/helpers/PriceProductsHelper';
+import { SavePriceProductItem } from '../../../../../core/domain-layer/price-products/SavePriceProductItem';
+import { AddBookingItemsDO, BookingItemDO } from '../../../../../core/domain-layer/bookings/add-bookings/AddBookingItemsDO';
+import { ThTimestampDO } from '../../../../../core/utils/th-dates/data-objects/ThTimestampDO';
+import { ThHourDO } from '../../../../../core/utils/th-dates/data-objects/ThHourDO';
+import { ThDateIntervalDO } from '../../../../../core/utils/th-dates/data-objects/ThDateIntervalDO';
+import { TestUtils } from '../../../../helpers/TestUtils';
+import { ThDateUtils } from '../../../../../core/utils/th-dates/ThDateUtils';
+import { ConfigCapacityDO } from '../../../../../core/data-layer/common/data-objects/bed-config/ConfigCapacityDO';
+import { DefaultBillingDetailsDO } from '../../../../../core/data-layer/bookings/data-objects/default-billing/DefaultBillingDetailsDO';
+import { InvoicePaymentMethodType } from '../../../../../core/data-layer/invoices/data-objects/payers/InvoicePaymentMethodDO';
+import { DefaultPriceProductBuilder } from '../../../../db-initializers/builders/DefaultPriceProductBuilder';
+import { BookingSearchDO } from '../../../../../core/domain-layer/bookings/search-bookings/BookingSearchDO';
+import { CustomerDO } from '../../../../../core/data-layer/customers/data-objects/CustomerDO';
+import { AddOnProductDO } from '../../../../../core/data-layer/add-on-products/data-objects/AddOnProductDO';
+import { TransientBookingItemDO } from '../../../../../core/domain-layer/bookings/search-bookings/TransientBookingItemDO';
 
 import _ = require('underscore');
 
@@ -45,7 +45,7 @@ export class ReportsTestHelper {
         priceProductItem.status = PriceProductStatus.Active;
         priceProductItem.roomCategoryIdList = roomCategoryIdList;
         priceProductItem.price = DefaultPriceProductBuilder.getPricePerPerson(testDataBuilder.roomCategoryStatsList);
-        
+
         priceProductItem.includedItems = new PriceProductIncludedItemsDO();
         var breakfastAop = _.find(testDataBuilder.addOnProductList, (aop: AddOnProductDO) => {
             return aop.categoryId === testDataBuilder.breakfastAddOnProductCategory.id;
@@ -110,6 +110,7 @@ export class ReportsTestHelper {
         capacity.noAdults = 1;
         capacity.noChildren = 0;
         capacity.noBabies = 0;
+        capacity.noBabyBeds = 0;
         return capacity;
     }
 

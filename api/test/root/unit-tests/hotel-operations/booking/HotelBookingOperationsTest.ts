@@ -152,6 +152,7 @@ describe("Hotel Booking Operations Tests", function () {
                 should.equal(updatedBooking.configCapacity.noAdults, bookingToChange.configCapacity.noAdults);
                 should.equal(updatedBooking.configCapacity.noChildren, bookingToChange.configCapacity.noChildren);
                 should.equal(updatedBooking.configCapacity.noBabies, bookingToChange.configCapacity.noBabies);
+                should.equal(updatedBooking.configCapacity.noBabyBeds, bookingToChange.configCapacity.noBabyBeds);
                 bookingToChange = updatedBooking;
                 done();
             }).catch((error: any) => {

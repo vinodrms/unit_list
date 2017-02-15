@@ -112,11 +112,11 @@ export class BookingChangeCapacity {
 
         this._bookingWithDependencies.bookingDO.bookingHistory.logDocumentAction(DocumentActionDO.buildDocumentActionDO({
             actionParameterMap: {
-                oldAdults: oldCapacity.noAdults, oldChildren: oldCapacity.noChildren, oldBabies: oldCapacity.noBabies,
-                newAdults: newCapacity.noAdults, newChildren: newCapacity.noChildren, newBabies: newCapacity.noBabies,
+                oldAdults: oldCapacity.noAdults, oldChildren: oldCapacity.noChildren, oldBabies: oldCapacity.noBabies, oldBabyBeds: oldCapacity.noBabyBeds,
+                newAdults: newCapacity.noAdults, newChildren: newCapacity.noChildren, newBabies: newCapacity.noBabies, newBabyBeds: newCapacity.noBabyBeds,
                 oldPrice: oldPrice, newPrice: newPrice
             },
-            actionString: "The booking capacity was changed from %oldAdults% ad %oldChildren% ch %oldBabies% b to %newAdults% ad %newChildren% ch %newBabies% b. The old price %oldPrice% has become %newPrice%.",
+            actionString: "The booking capacity was changed from %oldAdults%/%oldChildren%/%oldBabies%/%oldBabyBeds% to %newAdults%/%newChildren%/%newBabies%/%newBabyBeds%. The old price %oldPrice% has become %newPrice%.",
             userId: this._sessionContext.sessionDO.user.id
         }));
     }

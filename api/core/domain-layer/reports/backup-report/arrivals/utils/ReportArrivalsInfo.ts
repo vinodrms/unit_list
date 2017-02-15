@@ -1,5 +1,4 @@
 import { ThDateIntervalDO } from '../../../../../utils/th-dates/data-objects/ThDateIntervalDO';
-import { ConfigCapacityDO } from '../../../../../data-layer/common/data-objects/bed-config/ConfigCapacityDO';
 import { ThDateDO } from '../../../../../utils/th-dates/data-objects/ThDateDO';
 
 import { BookingDO, GroupBookingInputChannel, BookingConfirmationStatus } from '../../../../../../core/data-layer/bookings/data-objects/BookingDO';
@@ -17,6 +16,7 @@ export interface ReportArrivalItemInfo {
 	noAdults: number,
 	noChildren: number,
 	noBabies: number;
+	noBabyBeds: number;
 	bookingStatus: string;
 	totalPrice: number;
 	cancelationHours: string;
