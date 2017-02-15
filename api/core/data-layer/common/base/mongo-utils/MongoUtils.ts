@@ -47,7 +47,7 @@ export class MongoUtils {
 
 		var processedUpdates: any = {};
 		// these are placed individually on the update query
-		var reservedWordList = ["$inc", "$push", "$pop", "$addToSet", "$pull", "$pullAll"];
+		var reservedWordList = ["$inc", "$push", "$pop", "$addToSet", "$pull", "$pullAll", "$rename"];
 		reservedWordList.forEach((reservedWord: string) => {
 			var reservedWordValue = updates[reservedWord];
 			if (!this._thUtils.isUndefinedOrNull(reservedWordValue)) {

@@ -76,6 +76,7 @@ describe("Hotel Beds Tests", function() {
                 should.not.exist(result.size.widthCm);
                 should.not.exist(result.capacity.maxNoAdults);
                 should.not.exist(result.capacity.maxNoChildren);
+                should.not.exist(result.capacity.maxNoBabies);
                 numCreatedBeds++;
                 
                 createdBed = result;
@@ -100,6 +101,7 @@ describe("Hotel Beds Tests", function() {
                 should.equal(result.size.lengthCm, saveBedItemDO.size.lengthCm);
                 should.equal(result.capacity.maxNoAdults, saveBedItemDO.capacity.maxNoAdults);
                 should.equal(result.capacity.maxNoChildren, saveBedItemDO.capacity.maxNoChildren);
+                should.equal(result.capacity.maxNoBabies, saveBedItemDO.capacity.maxNoBabies);
                 
                 numCreatedBeds++;
                 
@@ -125,6 +127,7 @@ describe("Hotel Beds Tests", function() {
                 should.equal(result.size.lengthCm, bedToUpdate.size.lengthCm);
                 should.equal(result.capacity.maxNoAdults, bedToUpdate.capacity.maxNoAdults);
                 should.equal(result.capacity.maxNoChildren, bedToUpdate.capacity.maxNoChildren);
+                should.equal(result.capacity.maxNoBabies, bedToUpdate.capacity.maxNoBabies);
                 
                 createdBed = result;
                 

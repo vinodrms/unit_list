@@ -21,6 +21,7 @@ export class GuestsDepartingReportSectionGeneratorStrategy extends AReportSectio
 				"Adults",
 				"Children",
 				"Babies",
+				"Baby Beds",
 				"Total Price",
 				"Notes"
 			]
@@ -44,6 +45,7 @@ export class GuestsDepartingReportSectionGeneratorStrategy extends AReportSectio
 					item.noAdults,
 					item.noChildren,
 					item.noBabies,
+					item.noBabyBeds,
 					item.totalPrice,
 					item.notes
 				];

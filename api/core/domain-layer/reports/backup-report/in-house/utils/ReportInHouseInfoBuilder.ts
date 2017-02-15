@@ -36,6 +36,7 @@ export class ReportInHouseItemInfoBuilder {
 			noAdults: this._roomInfo.bookingCapacity ? this._roomInfo.bookingCapacity.noAdults: null,
 			noChildren: this._roomInfo.bookingCapacity ? this._roomInfo.bookingCapacity.noChildren: null,
 			noBabies: this._roomInfo.bookingCapacity ? this._roomInfo.bookingCapacity.noBabies: null,
+			noBabyBeds: this._roomInfo.bookingCapacity ? this._roomInfo.bookingCapacity.noBabyBeds: null,
 			departingDate: this._roomInfo.bookingInterval ? this._roomInfo.bookingInterval.getEnd(): null,
 			notes: this._booking ? this._booking.notes : null
 		}

@@ -20,8 +20,7 @@
                                 {{ bedSelectionVM.bedVM.bedStorageTypeString | translate }}
                             </small>
                             <small class="bed-slot-property info">
-                                <span *ngIf="bedSelectionVM.bedVM.capacity.noAdults>0">{{bedSelectionVM.bedVM.capacity.noAdults}}<span class="unitpal-font">:</span></span> 
-                                <span *ngIf="bedSelectionVM.bedVM.capacity.noChildren>0">{{bedSelectionVM.bedVM.capacity.noChildren}}<span class="unitpal-font">;</span></span>
+                                <config-capacity [configCapacity]="bedSelectionVM.bedVM.capacity"></config-capacity>
                             </small>
                         </div>
                         <div *ngIf="bedSelectionVM.bedVM.accommodatesBabies" class="bed-slot-info" [title]="bedSelectionVM.bedVM.bed.name">
@@ -30,7 +29,7 @@
                             <small class="bed-slot-property type">
                                  {{ bedSelectionVM.bedVM.bedStorageTypeString | translate }}
                             </small>
-                            <small class="bed-slot-property info">{{bedSelectionVM.bedVM.capacity.noBabies}}<span class="unitpal-font">B</span></small>
+                            <small class="bed-slot-property info">{{bedSelectionVM.bedVM.capacity.noBabyBeds}}<span class="unitpal-font">B</span></small>
                         </div>
                     </div>
 

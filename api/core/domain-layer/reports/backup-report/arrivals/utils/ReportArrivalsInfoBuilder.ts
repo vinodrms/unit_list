@@ -43,6 +43,7 @@ export class ReportArrivalsItemInfoBuilder {
 			noAdults: this._arrivalInfo.bookingCapacity ? this._arrivalInfo.bookingCapacity.noAdults : null,
 			noChildren: this._arrivalInfo.bookingCapacity ? this._arrivalInfo.bookingCapacity.noChildren : null,
 			noBabies: this._arrivalInfo.bookingCapacity ? this._arrivalInfo.bookingCapacity.noBabies : null,
+			noBabyBeds: this._arrivalInfo.bookingCapacity ? this._arrivalInfo.bookingCapacity.noBabyBeds : null,
 			bookingStatus: this._arrivalInfo.bookingStatusDisplayString,
 			totalPrice: this._arrivalInfo.totalBookingPrice,
 			cancelationHours: this._arrivalInfo.showCancellationTimestamp ? this._arrivalInfo.cancellationTimestampDisplayString : "",

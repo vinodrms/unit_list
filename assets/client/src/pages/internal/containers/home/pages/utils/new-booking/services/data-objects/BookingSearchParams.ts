@@ -1,7 +1,6 @@
-import {ThDateIntervalDO} from '../../../../../../../services/common/data-objects/th-dates/ThDateIntervalDO';
-import {ConfigCapacityDO} from '../../../../../../../services/common/data-objects/bed-config/ConfigCapacityDO';
-import {TransientBookingItem} from './TransientBookingItem';
-import {ThDataValidators} from '../../../../../../../../../common/utils/form-utils/utils/ThDataValidators';
+import { ThDateIntervalDO } from '../../../../../../../services/common/data-objects/th-dates/ThDateIntervalDO';
+import { ConfigCapacityDO } from '../../../../../../../services/common/data-objects/bed-config/ConfigCapacityDO';
+import { TransientBookingItem } from './TransientBookingItem';
 
 export class BookingSearchParams {
     constructor() {
@@ -15,20 +14,20 @@ export class BookingSearchParams {
     bookingIdToOmit: string;
 
     public validNoAdults(): boolean {
-        return this.validNoOfItems(this.configCapacity.noAdults);
+        return this.configCapacity.validNoAdults();
     }
     public validNoChildren(): boolean {
-        return this.validNoOfItems(this.configCapacity.noChildren);
+        return this.configCapacity.validNoChildren();
     }
     public validNoBabies(): boolean {
-        return this.validNoOfItems(this.configCapacity.noBabies);
+        return this.configCapacity.validNoBabies();
     }
-    private validNoOfItems(noOfItems: number) {
-        return ThDataValidators.isValidInteger(noOfItems) && noOfItems >= 0;
+    public validNoBabyBeds(): boolean {
+        return this.configCapacity.validNoBabyBeds();
     }
 
     public areValid(): boolean {
-        return this.validNoAdults() && this.validNoChildren() && this.validNoBabies();
+        return this.configCapacity.valid();
     }
 
     public buildPrototype(): BookingSearchParams {

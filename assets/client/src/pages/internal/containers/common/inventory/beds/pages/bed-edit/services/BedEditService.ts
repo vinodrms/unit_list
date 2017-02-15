@@ -12,6 +12,7 @@ export class BedEditService {
     private _nameControl: FormControl;
     private _maxAdultsControl: FormControl;
     private _maxChildrenControl: FormControl;
+    private _maxBabiesControl: FormControl;
     private _widthControl: FormControl;
     private _lengthControl: FormControl;
     private _notesControl: FormControl;
@@ -28,6 +29,7 @@ export class BedEditService {
         this._nameControl = new FormControl(null, Validators.compose([Validators.required, Validators.maxLength(200)]));
         this._maxAdultsControl = new FormControl(null, Validators.compose([Validators.required, ThValidators.positiveIntegerValidator]));
         this._maxChildrenControl = new FormControl(null, Validators.compose([Validators.required, ThValidators.positiveIntegerValidator]));
+        this._maxBabiesControl = new FormControl(null, Validators.compose([Validators.required, ThValidators.positiveIntegerValidator]));
         this._widthControl = new FormControl(null, Validators.compose([Validators.required, ThValidators.numberValidator]));
         this._lengthControl = new FormControl(null, Validators.compose([Validators.required, ThValidators.numberValidator]));
         this._notesControl = new FormControl(null, Validators.compose([Validators.maxLength(2000)]));
@@ -37,6 +39,7 @@ export class BedEditService {
             "name": this._nameControl,
             "maxAdults": this._maxAdultsControl,
             "maxChildren": this._maxChildrenControl,
+            "maxBabies": this._maxBabiesControl,
             "width": this._widthControl,
             "length": this._lengthControl,
             "notes": this._notesControl
@@ -52,6 +55,7 @@ export class BedEditService {
         }
         this._maxAdultsControl.setValue(bedDO.capacity.maxNoAdults);
         this._maxChildrenControl.setValue(bedDO.capacity.maxNoChildren);
+        this._maxBabiesControl.setValue(bedDO.capacity.maxNoBabies);
         if (!bedDO.size) {
             this._widthControl.setValue(null);
             this._lengthControl.setValue(null);
@@ -64,7 +68,7 @@ export class BedEditService {
             bedDO.storageType = BedStorageType.Stationary;
         }
         if (this._thUtils.isUndefinedOrNull(bedDO.accommodationType)) {
-            bedDO.accommodationType = BedAccommodationType.AdultsAndChildren;
+            bedDO.accommodationType = BedAccommodationType.Any;
         }
 
         this._notesControl.setValue(bedDO.notes);
@@ -76,6 +80,7 @@ export class BedEditService {
         var bedCapacity = new BedCapacityDO();
         bedCapacity.maxNoAdults = this._bedForm.value["maxAdults"];
         bedCapacity.maxNoChildren = this._bedForm.value["maxChildren"];
+        bedCapacity.maxNoBabies = this._bedForm.value["maxBabies"];
         bed.capacity = bedCapacity;
 
         var bedSizeDO = new BedSizeDO();
@@ -103,6 +108,9 @@ export class BedEditService {
         this.removeValidatorsFor(this._maxChildrenControl);
         this.resetControl(this._maxChildrenControl, '');
 
+        this.removeValidatorsFor(this._maxBabiesControl);
+        this.resetControl(this._maxBabiesControl, '');
+
         this.removeValidatorsFor(this._lengthControl);
         this.resetControl(this._lengthControl, '');
 
@@ -113,9 +121,11 @@ export class BedEditService {
     public addValidatorsForSizeAndCapacityAndInitValues(bedVM: BedVM) {
         this._maxAdultsControl.validator = Validators.compose([Validators.required, ThValidators.positiveIntegerValidator]);
         this._maxChildrenControl.validator = Validators.compose([Validators.required, ThValidators.positiveIntegerValidator]);
+        this._maxBabiesControl.validator = Validators.compose([Validators.required, ThValidators.positiveIntegerValidator]);
         if (!this._thUtils.isUndefinedOrNull(bedVM.bed.capacity)) {
             this.resetControl(this._maxAdultsControl, bedVM.bed.capacity.maxNoAdults);
             this.resetControl(this._maxChildrenControl, bedVM.bed.capacity.maxNoChildren);
+            this.resetControl(this._maxBabiesControl, bedVM.bed.capacity.maxNoBabies);
         }
 
         this._lengthControl.validator = Validators.compose([Validators.required, ThValidators.numberValidator]);

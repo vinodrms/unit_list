@@ -1,17 +1,17 @@
-import {ThTranslation} from '../../../utils/localization/ThTranslation';
-import {CustomerDO} from '../../../data-layer/customers/data-objects/CustomerDO';
-import {PriceProductDO} from '../../../data-layer/price-products/data-objects/PriceProductDO';
-import {IndexedBookingInterval} from '../../../data-layer/price-products/utils/IndexedBookingInterval';
-import {ISOWeekDay, ISOWeekDayVM, ISOWeekDayUtils} from '../../../utils/th-dates/data-objects/ISOWeekDay';
-import {ThMonth} from '../../../utils/th-dates/data-objects/ThDateDO';
-import {TaxDO, TaxValueType} from '../../../data-layer/taxes/data-objects/TaxDO';
-import {ThUtils} from '../../../utils/ThUtils';
-import {BedDO} from '../../../data-layer/common/data-objects/bed/BedDO';
-import {AddOnProductDO} from '../../../data-layer/add-on-products/data-objects/AddOnProductDO';
-import {AddOnProductCategoryDO, AddOnProductCategoryType} from '../../../data-layer/common/data-objects/add-on-product/AddOnProductCategoryDO';
-import {BookingAggregatedData} from '../aggregators/BookingAggregatedData';
-import {InvoiceItemDO} from '../../../data-layer/invoices/data-objects/items/InvoiceItemDO';
-import {HotelDO} from '../../../data-layer/hotel/data-objects/HotelDO';
+import { ThTranslation } from '../../../utils/localization/ThTranslation';
+import { CustomerDO } from '../../../data-layer/customers/data-objects/CustomerDO';
+import { PriceProductDO } from '../../../data-layer/price-products/data-objects/PriceProductDO';
+import { IndexedBookingInterval } from '../../../data-layer/price-products/utils/IndexedBookingInterval';
+import { ISOWeekDay, ISOWeekDayVM, ISOWeekDayUtils } from '../../../utils/th-dates/data-objects/ISOWeekDay';
+import { ThMonth } from '../../../utils/th-dates/data-objects/ThDateDO';
+import { TaxDO, TaxValueType } from '../../../data-layer/taxes/data-objects/TaxDO';
+import { ThUtils } from '../../../utils/ThUtils';
+import { BedDO } from '../../../data-layer/common/data-objects/bed/BedDO';
+import { AddOnProductDO } from '../../../data-layer/add-on-products/data-objects/AddOnProductDO';
+import { AddOnProductCategoryDO, AddOnProductCategoryType } from '../../../data-layer/common/data-objects/add-on-product/AddOnProductCategoryDO';
+import { BookingAggregatedData } from '../aggregators/BookingAggregatedData';
+import { InvoiceItemDO } from '../../../data-layer/invoices/data-objects/items/InvoiceItemDO';
+import { HotelDO } from '../../../data-layer/hotel/data-objects/HotelDO';
 
 import _ = require('underscore');
 
@@ -125,10 +125,11 @@ export class BookingConfirmationVM {
     }
     private initBookedRoomDetails() {
         this.roomCategoryName = this._bookingAggregatedData.roomCategoryStats.roomCategory.displayName;
-        this.bookedCapacity = this._thTranslation.translate("%noAdults% adults, %noChildren% children, %noBabies% babies", {
+        this.bookedCapacity = this._thTranslation.translate("%noAdults% adults, %noChildren% children, %noBabies% babies, %noBabyBeds% baby beds", {
             noAdults: this._bookingAggregatedData.booking.configCapacity.noAdults,
             noChildren: this._bookingAggregatedData.booking.configCapacity.noChildren,
-            noBabies: this._bookingAggregatedData.booking.configCapacity.noBabies
+            noBabies: this._bookingAggregatedData.booking.configCapacity.noBabies,
+            noBabyBeds: this._bookingAggregatedData.booking.configCapacity.noBabyBeds
         }) + '.';
         this.initBedSizesDisplayText();
     }

@@ -1,6 +1,7 @@
-import {BaseDO} from '../../../../../common/base/BaseDO';
-import {ConfigCapacityDO} from '../../common/data-objects/bed-config/ConfigCapacityDO';
-import {RoomCategoryDO} from './RoomCategoryDO';
+import { BaseDO } from '../../../../../common/base/BaseDO';
+import { RoomCategoryDO } from './RoomCategoryDO';
+import { ConfigCapacityDO } from '../../common/data-objects/bed-config/ConfigCapacityDO';
+import { BedStatsDO } from './bed-stats/BedStatsDO';
 
 export class RoomCategoryCapacityDO extends BaseDO {
     constructor() {
@@ -26,14 +27,16 @@ export class RoomCategoryCapacityDO extends BaseDO {
 
     public get totalCapacity(): ConfigCapacityDO {
         var totalRoomCapacity = new ConfigCapacityDO();
-        totalRoomCapacity.noBabies = this.stationaryCapacity.noBabies + this.rollawayCapacity.noBabies;
         totalRoomCapacity.noAdults = this.stationaryCapacity.noAdults + this.rollawayCapacity.noAdults;
         totalRoomCapacity.noChildren = this.stationaryCapacity.noChildren + this.rollawayCapacity.noChildren;
+        totalRoomCapacity.noBabies = this.stationaryCapacity.noBabies + this.rollawayCapacity.noBabies;
+        totalRoomCapacity.noBabyBeds = this.stationaryCapacity.noBabyBeds + this.rollawayCapacity.noBabyBeds;
         return totalRoomCapacity;
     }
 
     public isEmpty(): boolean {
-        return this.totalCapacity.noAdults === 0 && this.totalCapacity.noChildren === 0 && this.totalCapacity.noBabies === 0;
+        return this.totalCapacity.noAdults === 0 && this.totalCapacity.noChildren === 0
+            && this.totalCapacity.noBabies === 0 && this.totalCapacity.noBabyBeds === 0;
     }
 
     public canFit(capacityToCheck: ConfigCapacityDO): boolean {
@@ -46,13 +49,18 @@ export class RoomCategoryCapacityDO extends BaseDO {
 
     private canFitCore(referenceCapacity: ConfigCapacityDO, capacityToCheck: ConfigCapacityDO): boolean {
         if (referenceCapacity.noAdults < capacityToCheck.noAdults) return false;
+        let noAdultsRemaining = referenceCapacity.noAdults - capacityToCheck.noAdults;
 
-        var maxChildrenCapacity = referenceCapacity.noChildren;
-        // the adults are replaceable with a child
-        maxChildrenCapacity += (referenceCapacity.noAdults - capacityToCheck.noAdults);
+        // the remainig adults from the reference capacity can be used as children
+        let maxChildrenCapacity = referenceCapacity.noChildren + noAdultsRemaining;
         if (maxChildrenCapacity < capacityToCheck.noChildren) return false;
 
-        if (referenceCapacity.noBabies < capacityToCheck.noBabies) return false;
+        let noChildrenRemaining = referenceCapacity.noChildren - capacityToCheck.noChildren;
+        // the remainig adults and children from the reference capacity can be used as babies
+        let maxBabyCapacity = referenceCapacity.noBabies + noAdultsRemaining + noChildrenRemaining;
+        if (maxBabyCapacity < capacityToCheck.noBabies) return false;
+
+        if (referenceCapacity.noBabyBeds < capacityToCheck.noBabyBeds) return false;
         return true;
     }
 }
@@ -65,6 +73,7 @@ export class RoomCategoryStatsDO extends BaseDO {
     noOfRooms: number;
     roomCategory: RoomCategoryDO;
     capacity: RoomCategoryCapacityDO;
+    bedStatsList: BedStatsDO[];
 
     protected getPrimitivePropertyKeys(): string[] {
         return ["noOfRooms"];
@@ -78,5 +87,12 @@ export class RoomCategoryStatsDO extends BaseDO {
 
         this.roomCategory = new RoomCategoryDO();
         this.roomCategory.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "roomCategory"));
+
+        this.bedStatsList = [];
+        this.forEachElementOf(this.getObjectPropertyEnsureUndefined(object, "bedStatsList"), (statsObject: Object) => {
+            var stats = new BedStatsDO();
+            stats.buildFromObject(statsObject);
+            this.bedStatsList.push(stats);
+        });
     }
 }

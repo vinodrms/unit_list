@@ -1,7 +1,7 @@
-import {IValidationStructure} from '../../../utils/th-validation/structure/core/IValidationStructure';
-import {ObjectValidationStructure} from '../../../utils/th-validation/structure/ObjectValidationStructure';
-import {PrimitiveValidationStructure} from '../../../utils/th-validation/structure/PrimitiveValidationStructure';
-import {NumberValidationRule} from '../../../utils/th-validation/rules/NumberValidationRule';
+import { IValidationStructure } from '../../../utils/th-validation/structure/core/IValidationStructure';
+import { ObjectValidationStructure } from '../../../utils/th-validation/structure/ObjectValidationStructure';
+import { PrimitiveValidationStructure } from '../../../utils/th-validation/structure/PrimitiveValidationStructure';
+import { NumberValidationRule } from '../../../utils/th-validation/rules/NumberValidationRule';
 
 export class BookingValidationStructures {
     public static getThDateIntervalDOValidationStructure(): IValidationStructure {
@@ -61,15 +61,19 @@ export class BookingValidationStructures {
     public static getConfigCapacityDOValidationStructure(): IValidationStructure {
         return new ObjectValidationStructure([
             {
-                key: "noBabies",
-                validationStruct: new PrimitiveValidationStructure(NumberValidationRule.buildIntegerNumberRule(0))
-            },
-            {
                 key: "noAdults",
                 validationStruct: new PrimitiveValidationStructure(NumberValidationRule.buildIntegerNumberRule(0))
             },
             {
                 key: "noChildren",
+                validationStruct: new PrimitiveValidationStructure(NumberValidationRule.buildIntegerNumberRule(0))
+            },
+            {
+                key: "noBabies",
+                validationStruct: new PrimitiveValidationStructure(NumberValidationRule.buildIntegerNumberRule(0))
+            },
+            {
+                key: "noBabyBeds",
                 validationStruct: new PrimitiveValidationStructure(NumberValidationRule.buildIntegerNumberRule(0))
             }
         ])

@@ -1,17 +1,17 @@
-import {Component, ViewChild, AfterViewInit, Input, Output, EventEmitter} from '@angular/core';
-import {BaseComponent} from '../../../../../../../../../../../../common/base/BaseComponent';
-import {SearchInputTextComponent} from '../../../../../../../../../../../../common/utils/components/SearchInputTextComponent';
-import {ThDateIntervalPickerComponent} from '../../../../../../../../../../../../common/utils/components/ThDateIntervalPickerComponent';
-import {ThDateIntervalDO} from '../../../../../../../../../../services/common/data-objects/th-dates/ThDateIntervalDO';
-import {ThDateDO} from '../../../../../../../../../../services/common/data-objects/th-dates/ThDateDO';
-import {ThDateUtils} from '../../../../../../../../../../services/common/data-objects/th-dates/ThDateUtils';
-import {CustomerSearchService} from '../../../../../../../../../../services/customers/CustomerSearchService';
-import {CustomerDO} from '../../../../../../../../../../services/customers/data-objects/CustomerDO';
-import {CustomersDO} from '../../../../../../../../../../services/customers/data-objects/CustomersDO';
-import {EagerCustomersService} from '../../../../../../../../../../services/customers/EagerCustomersService';
-import {BookingControllerService} from '../../../utils/BookingControllerService';
-import {IBookingCustomerRegisterSelector} from '../../../utils/IBookingCustomerRegister';
-import {BookingSearchParams} from '../../../../../services/data-objects/BookingSearchParams';
+import { Component, ViewChild, AfterViewInit, Input, Output, EventEmitter } from '@angular/core';
+import { BaseComponent } from '../../../../../../../../../../../../common/base/BaseComponent';
+import { SearchInputTextComponent } from '../../../../../../../../../../../../common/utils/components/SearchInputTextComponent';
+import { ThDateIntervalPickerComponent } from '../../../../../../../../../../../../common/utils/components/ThDateIntervalPickerComponent';
+import { ThDateIntervalDO } from '../../../../../../../../../../services/common/data-objects/th-dates/ThDateIntervalDO';
+import { ThDateDO } from '../../../../../../../../../../services/common/data-objects/th-dates/ThDateDO';
+import { ThDateUtils } from '../../../../../../../../../../services/common/data-objects/th-dates/ThDateUtils';
+import { CustomerSearchService } from '../../../../../../../../../../services/customers/CustomerSearchService';
+import { CustomerDO } from '../../../../../../../../../../services/customers/data-objects/CustomerDO';
+import { CustomersDO } from '../../../../../../../../../../services/customers/data-objects/CustomersDO';
+import { EagerCustomersService } from '../../../../../../../../../../services/customers/EagerCustomersService';
+import { BookingControllerService } from '../../../utils/BookingControllerService';
+import { IBookingCustomerRegisterSelector } from '../../../utils/IBookingCustomerRegister';
+import { BookingSearchParams } from '../../../../../services/data-objects/BookingSearchParams';
 
 @Component({
     selector: 'booking-search-parameters',
@@ -54,6 +54,7 @@ export class BookingSearchParametersComponent extends BaseComponent implements A
         this.searchParameters.configCapacity.noAdults = 2;
         this.searchParameters.configCapacity.noChildren = 0;
         this.searchParameters.configCapacity.noBabies = 0;
+        this.searchParameters.configCapacity.noBabyBeds = 0;
     }
 
     ngAfterViewInit() {
