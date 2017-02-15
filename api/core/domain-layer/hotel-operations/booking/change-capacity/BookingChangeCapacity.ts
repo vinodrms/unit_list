@@ -109,14 +109,13 @@ export class BookingChangeCapacity {
         this._bookingWithDependencies.bookingDO.configCapacity = newCapacity;
         this._bookingUtils.updateBookingPriceUsingRoomCategory(this._bookingWithDependencies.bookingDO, this._bookingWithDependencies.roomCategoryStatsList);
         var newPrice: number = this._bookingWithDependencies.bookingDO.price.totalBookingPrice;
-
         this._bookingWithDependencies.bookingDO.bookingHistory.logDocumentAction(DocumentActionDO.buildDocumentActionDO({
             actionParameterMap: {
                 oldAdults: oldCapacity.noAdults, oldChildren: oldCapacity.noChildren, oldBabies: oldCapacity.noBabies, oldBabyBeds: oldCapacity.noBabyBeds,
                 newAdults: newCapacity.noAdults, newChildren: newCapacity.noChildren, newBabies: newCapacity.noBabies, newBabyBeds: newCapacity.noBabyBeds,
                 oldPrice: oldPrice, newPrice: newPrice
             },
-            actionString: "The booking capacity was changed from %oldAdults%/%oldChildren%/%oldBabies%/%oldBabyBeds% to %newAdults%/%newChildren%/%newBabies%/%newBabyBeds%. The old price %oldPrice% has become %newPrice%.",
+            actionString: "The booking capacity was changed from %oldAdults%, %oldChildren%, %oldBabies%, %oldBabyBeds% to %newAdults%, %newChildren%, %newBabies%, %newBabyBeds% (adult, children, babies, baby beds). The old price %oldPrice% has become %newPrice%.",
             userId: this._sessionContext.sessionDO.user.id
         }));
     }
