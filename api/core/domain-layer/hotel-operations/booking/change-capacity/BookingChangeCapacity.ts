@@ -115,7 +115,7 @@ export class BookingChangeCapacity {
                 newAdults: newCapacity.noAdults, newChildren: newCapacity.noChildren, newBabies: newCapacity.noBabies, newBabyBeds: newCapacity.noBabyBeds,
                 oldPrice: oldPrice, newPrice: newPrice
             },
-            actionString: "The booking capacity was changed from %oldAdults%, %oldChildren%, %oldBabies%, %oldBabyBeds% to %newAdults%, %newChildren%, %newBabies%, %newBabyBeds% (adult, children, babies, baby beds). The old price %oldPrice% has become %newPrice%.",
+            actionString: "The booking capacity was changed from %oldAdults%, %oldChildren%, %oldBabies%, %oldBabyBeds% to %newAdults%, %newChildren%, %newBabies%, %newBabyBeds% (adults, children, babies, baby beds). The old price %oldPrice% has become %newPrice%.",
             userId: this._sessionContext.sessionDO.user.id
         }));
     }
