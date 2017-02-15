@@ -71,15 +71,7 @@
 									<span class="unitpal-font">{{getItemValue(item, columnMeta.valueMeta)}}</span>
 					</span>
 					<span *ngIf="isCapacity(columnMeta.valueMeta)">
-						<span *ngIf="getItemValue(item, columnMeta.valueMeta).noAdults > 0">
-							{{ getItemValue(item, columnMeta.valueMeta).noAdults }} <span class="unitpal-font">{{columnMeta.valueMeta.fonts.adult}}</span>
-						</span>
-						<span *ngIf="getItemValue(item, columnMeta.valueMeta).noChildren > 0">
-							{{ getItemValue(item, columnMeta.valueMeta).noChildren }} <span class="unitpal-font">{{columnMeta.valueMeta.fonts.child}}</span>
-						</span>
-						<span *ngIf="getItemValue(item, columnMeta.valueMeta).noBabies > 0">
-							{{ getItemValue(item, columnMeta.valueMeta).noBabies }} <span class="unitpal-font">{{columnMeta.valueMeta.fonts.baby}}</span>
-						</span>
+						<config-capacity [configCapacity]="getItemValue(item, columnMeta.valueMeta)"></config-capacity>
 					</span>
 					<span *ngIf="isFontIconWithText(columnMeta.valueMeta)">
 							<span class="unitpal-font">{{getItemValue(item, columnMeta.valueMeta)}}</span>

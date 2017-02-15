@@ -21,9 +21,7 @@
 				</td>
 
 				<td *ngIf="roomCategoryVM.bedsConfigured" class="selectable-row room-categ-capacity" (click)="selectRoomCategory(roomCategoryVM)">
-					<span *ngIf="roomCategoryVM.capacity.totalCapacity.noAdults>0">{{roomCategoryVM.capacity.totalCapacity.noAdults}}<span class="unitpal-font">:</span></span> 
-					<span *ngIf="roomCategoryVM.capacity.totalCapacity.noChildren>0">{{roomCategoryVM.capacity.totalCapacity.noChildren}}<span class="unitpal-font">;</span> </span>
-					<span *ngIf="roomCategoryVM.capacity.totalCapacity.noBabies>0">{{roomCategoryVM.capacity.totalCapacity.noBabies}}<span class="unitpal-font">B</span></span>
+					<config-capacity [configCapacity]="roomCategoryVM.capacity.totalCapacity"></config-capacity>
 				</td>
 				
 				<td *ngIf="!roomCategoryVM.bedsConfigured" class="selectable-row room-categ-capacity not-configured" (click)="selectRoomCategory(roomCategoryVM)">

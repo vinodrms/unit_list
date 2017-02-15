@@ -1,17 +1,18 @@
-import {BaseDO} from '../../../../../../common/base/BaseDO';
-import {ThDataValidators} from '../../../../../../common/utils/form-utils/utils/ThDataValidators';
+import { BaseDO } from '../../../../../../common/base/BaseDO';
+import { ThDataValidators } from '../../../../../../common/utils/form-utils/utils/ThDataValidators';
 
 export class ConfigCapacityDO extends BaseDO {
     constructor() {
         super();
     }
 
-    noBabies: number;
     noAdults: number;
     noChildren: number;
+    noBabies: number;
+    noBabyBeds: number;
 
     protected getPrimitivePropertyKeys(): string[] {
-        return ["noBabies", "noAdults", "noChildren"];
+        return ["noAdults", "noChildren", "noBabies", "noBabyBeds"];
     }
 
     public buildPrototype(): ConfigCapacityDO {
@@ -19,16 +20,18 @@ export class ConfigCapacityDO extends BaseDO {
         configCapacity.noAdults = this.noAdults;
         configCapacity.noChildren = this.noChildren;
         configCapacity.noBabies = this.noBabies;
+        configCapacity.noBabyBeds = this.noBabyBeds;
         return configCapacity;
     }
 
     public isSame(otherCapacity: ConfigCapacityDO): boolean {
         return this.noAdults === otherCapacity.noAdults
             && this.noChildren === otherCapacity.noChildren
-            && this.noBabies === otherCapacity.noBabies;
+            && this.noBabies === otherCapacity.noBabies
+            && this.noBabyBeds === otherCapacity.noBabyBeds;
     }
     public valid(): boolean {
-        return this.validNoAdults() && this.validNoChildren() && this.validNoBabies() &&
+        return this.validNoAdults() && this.validNoChildren() && this.validNoBabies() && this.validNoBabyBeds() &&
             (this.noAdults > 0 || this.noChildren > 0);
     }
 
@@ -40,6 +43,9 @@ export class ConfigCapacityDO extends BaseDO {
     }
     public validNoBabies(): boolean {
         return this.validNoOfItems(this.noBabies);
+    }
+    public validNoBabyBeds(): boolean {
+        return this.validNoOfItems(this.noBabyBeds);
     }
     private validNoOfItems(noOfItems: number) {
         return ThDataValidators.isValidInteger(noOfItems) && noOfItems >= 0;

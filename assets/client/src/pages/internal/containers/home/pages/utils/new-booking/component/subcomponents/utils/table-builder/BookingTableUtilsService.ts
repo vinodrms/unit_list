@@ -1,9 +1,9 @@
-import {Injectable} from '@angular/core';
-import {AppContext} from '../../../../../../../../../../../common/utils/AppContext';
-import {TableRowCommand, TableColumnValueMeta} from '../../../../../../../../../../../common/utils/components/lazy-loading/utils/LazyLoadTableMeta';
-import {BookingCartItemVM, BookingCartItemVMType} from '../../../../services/search/view-models/BookingCartItemVM';
-import {BookingCartService} from '../../../../services/search/BookingCartService';
-import {ConfigCapacityDO} from '../../../../../../../../../services/common/data-objects/bed-config/ConfigCapacityDO';
+import { Injectable } from '@angular/core';
+import { AppContext } from '../../../../../../../../../../../common/utils/AppContext';
+import { TableRowCommand, TableColumnValueMeta } from '../../../../../../../../../../../common/utils/components/lazy-loading/utils/LazyLoadTableMeta';
+import { BookingCartItemVM, BookingCartItemVMType } from '../../../../services/search/view-models/BookingCartItemVM';
+import { BookingCartService } from '../../../../services/search/BookingCartService';
+import { ConfigCapacityDO } from '../../../../../../../../../services/common/data-objects/bed-config/ConfigCapacityDO';
 
 @Injectable()
 export class BookingTableUtilsService {
@@ -20,7 +20,7 @@ export class BookingTableUtilsService {
             }
             return className;
         }
-        if(columnValueMeta.objectPropertyId === 'validationColumnFontName') {
+        if (columnValueMeta.objectPropertyId === 'validationColumnFontName') {
             return bookingCartItem.validationColumnClassName;
         }
         return "";
@@ -48,12 +48,14 @@ export class BookingTableUtilsService {
         totalsBookingItem.bookingCapacity.noAdults = 0;
         totalsBookingItem.bookingCapacity.noChildren = 0;
         totalsBookingItem.bookingCapacity.noBabies = 0;
+        totalsBookingItem.bookingCapacity.noBabyBeds = 0;
         var totalPrice = 0;
         _.forEach(bookingCartService.bookingItemVMList, (bookingItem: BookingCartItemVM) => {
             totalPrice += bookingItem.totalPrice;
             totalsBookingItem.bookingCapacity.noAdults += bookingItem.bookingCapacity.noAdults;
             totalsBookingItem.bookingCapacity.noChildren += bookingItem.bookingCapacity.noChildren;
             totalsBookingItem.bookingCapacity.noBabies += bookingItem.bookingCapacity.noBabies;
+            totalsBookingItem.bookingCapacity.noBabyBeds += bookingItem.bookingCapacity.noBabyBeds;
         });
         totalsBookingItem.totalPrice = totalPrice;
         totalsBookingItem.totalPriceString = totalPrice + bookingCartService.bookingItemVMList[0].ccy.nativeSymbol;

@@ -3,28 +3,18 @@
         <a *ngIf="!readonly" class="btn btn-xs bed-remove-btn" (click)="removeBed(bedIndex)">
             <i class="fa unitpal-font">\</i>
         </a>
-        <div *ngIf="!bedVM.accommodatesBabies" class="bed-slot-info" [title]="bedVM.bed.name">
+        <div class="bed-slot-info" [title]="bedVM.bed.name">
             <span class="bed-icon unitpal-font">{{bedVM.template.iconUrl}}</span>
             <small class="bed-slot-property">{{bedVM.bed.name}}</small>
             <small class="bed-slot-property type" title='{{bedVM.bedStorageTypeString | translate}}'>
-                <span>
+                <span *ngIf="!bedVM.accommodatesBabies">
                     <i class="fa fa-arrows-h"></i>{{ bedVM.bed.size.lengthCm }} <i class="fa fa-arrows-v">{{ bedVM.bed.size.widthCm }}</i>
                 </span>
                 {{ bedVM.bedStorageTypeString | translate }}
             </small>
             <small class="bed-slot-property info">
-                <span *ngIf="bedVM.capacity.noAdults>0">{{bedVM.capacity.noAdults}}<span class="unitpal-font">:</span></span> 
-                <span *ngIf="bedVM.capacity.noChildren>0">{{bedVM.capacity.noChildren}}<span class="unitpal-font">;</span></span>
+                <config-capacity [configCapacity]="bedVM.capacity"></config-capacity>
             </small>
-        </div>
-
-        <div *ngIf="bedVM.accommodatesBabies" class="bed-slot-info" [title]="bedVM.bed.name">
-            <span class="bed-icon unitpal-font">{{bedVM.template.iconUrl}}</span>
-            <small class="bed-slot-property">{{bedVM.bed.name}}</small>
-            <small class="bed-slot-property type">
-                {{ bedVM.bedStorageTypeString | translate }}
-            </small>
-            <small class="bed-slot-property info">{{bedVM.capacity.noBabies}}<span class="unitpal-font">B</span></small>
         </div>
     </div>
 

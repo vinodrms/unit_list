@@ -1,16 +1,16 @@
-import {RoomDO} from '../data-objects/RoomDO';
-import {RoomCategoryDO} from '../../room-categories/data-objects/RoomCategoryDO';
-import {BedDO} from '../../beds/data-objects/BedDO';
-import {BedVM} from '../../beds/view-models/BedVM';
-import {AmenityDO} from '../../common/data-objects/amenity/AmenityDO';
-import {RoomAttributeDO} from '../../common/data-objects/room-attribute/RoomAttributeDO';
-import {RoomCategoryStatsDO} from '../../room-categories/data-objects/RoomCategoryStatsDO';
-import {ConfigCapacityDO} from '../../common/data-objects/bed-config/ConfigCapacityDO';
-import {ThUtils} from '../../../../../common/utils/ThUtils';
+import { RoomDO } from '../data-objects/RoomDO';
+import { RoomCategoryDO } from '../../room-categories/data-objects/RoomCategoryDO';
+import { BedDO } from '../../beds/data-objects/BedDO';
+import { BedVM } from '../../beds/view-models/BedVM';
+import { AmenityDO } from '../../common/data-objects/amenity/AmenityDO';
+import { RoomAttributeDO } from '../../common/data-objects/room-attribute/RoomAttributeDO';
+import { RoomCategoryStatsDO } from '../../room-categories/data-objects/RoomCategoryStatsDO';
+import { ConfigCapacityDO } from '../../common/data-objects/bed-config/ConfigCapacityDO';
+import { ThUtils } from '../../../../../common/utils/ThUtils';
 
 export class RoomVM {
     private _thUtils: ThUtils;
-    
+
     private _room: RoomDO;
     private _category: RoomCategoryDO;
 
@@ -84,10 +84,17 @@ export class RoomVM {
 
     public get capacity(): ConfigCapacityDO {
         var bedConfigCapacity = new ConfigCapacityDO();
-        
-        (this._thUtils.isUndefinedOrNull(this._categoryStats) || this._thUtils.isUndefinedOrNull(this._categoryStats.capacity.totalCapacity.noAdults))? bedConfigCapacity.noAdults = 0 : bedConfigCapacity.noAdults = this._categoryStats.capacity.totalCapacity.noAdults;
-        (this._thUtils.isUndefinedOrNull(this._categoryStats) || this._thUtils.isUndefinedOrNull(this._categoryStats.capacity.totalCapacity.noChildren))? bedConfigCapacity.noChildren = 0 : bedConfigCapacity.noChildren = this._categoryStats.capacity.totalCapacity.noChildren;
-        (this._thUtils.isUndefinedOrNull(this._categoryStats) || this._thUtils.isUndefinedOrNull(this._categoryStats.capacity.totalCapacity.noBabies))? bedConfigCapacity.noBabies = 0 : bedConfigCapacity.noBabies = this._categoryStats.capacity.totalCapacity.noBabies;
+        bedConfigCapacity.noAdults = 0;
+        bedConfigCapacity.noChildren = 0;
+        bedConfigCapacity.noBabies = 0;
+        bedConfigCapacity.noBabyBeds = 0;
+
+        if (!this._thUtils.isUndefinedOrNull(this._categoryStats)) {
+            bedConfigCapacity.noAdults = this._categoryStats.capacity.totalCapacity.noAdults || 0;
+            bedConfigCapacity.noChildren = this._categoryStats.capacity.totalCapacity.noChildren || 0;
+            bedConfigCapacity.noBabies = this._categoryStats.capacity.totalCapacity.noBabies || 0;
+            bedConfigCapacity.noBabyBeds = this._categoryStats.capacity.totalCapacity.noBabyBeds || 0;
+        }
 
         return bedConfigCapacity;
     }
