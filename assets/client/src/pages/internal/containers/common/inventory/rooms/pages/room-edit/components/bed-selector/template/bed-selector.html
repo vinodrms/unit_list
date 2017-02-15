@@ -13,7 +13,12 @@
                 {{ bedVM.bedStorageTypeString | translate }}
             </small>
             <small class="bed-slot-property info">
-                <config-capacity [configCapacity]="bedVM.capacity"></config-capacity>
+                <span *ngIf="!bedVM.accommodatesBabies">
+                    <config-capacity [configCapacity]="bedVM.capacity"></config-capacity>
+                </span>
+                <span *ngIf="bedVM.accommodatesBabies">
+                    <span>{{bedVM.capacity.noBabyBeds}} <span class="unitpal-font">B</span></span>
+                </span>
             </small>
         </div>
     </div>
