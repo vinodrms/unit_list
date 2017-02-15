@@ -21,6 +21,7 @@ export class GuestsInHouseReportSectionGeneratorStrategy extends AReportSectionG
 				"Adults",
 				"Children",
 				"Babies",
+				"Baby Beds",
 				"Departing Date",
 				"Notes"
 			]
@@ -44,6 +45,7 @@ export class GuestsInHouseReportSectionGeneratorStrategy extends AReportSectionG
 					item.noAdults,
 					item.noChildren,
 					item.noBabies,
+					item.noBabyBeds,
 					item.departingDate,
 					item.notes
 				];

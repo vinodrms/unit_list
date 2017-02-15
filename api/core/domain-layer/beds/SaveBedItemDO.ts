@@ -1,20 +1,20 @@
-import {IValidationStructure} from '../../utils/th-validation/structure/core/IValidationStructure';
-import {ObjectValidationStructure} from '../../utils/th-validation/structure/ObjectValidationStructure';
-import {PrimitiveValidationStructure} from '../../utils/th-validation/structure/PrimitiveValidationStructure';
-import {ArrayValidationStructure} from '../../utils/th-validation/structure/ArrayValidationStructure';
-import {StringValidationRule} from '../../utils/th-validation/rules/StringValidationRule';
-import {NumberValidationRule} from '../../utils/th-validation/rules/NumberValidationRule';
-import {NumberInListValidationRule} from '../../utils/th-validation/rules/NumberInListValidationRule';
-import {BedSizeDO, BedCapacityDO, BedAccommodationType, BedStorageType} from '../../data-layer/common/data-objects/bed/BedDO';
+import { IValidationStructure } from '../../utils/th-validation/structure/core/IValidationStructure';
+import { ObjectValidationStructure } from '../../utils/th-validation/structure/ObjectValidationStructure';
+import { PrimitiveValidationStructure } from '../../utils/th-validation/structure/PrimitiveValidationStructure';
+import { ArrayValidationStructure } from '../../utils/th-validation/structure/ArrayValidationStructure';
+import { StringValidationRule } from '../../utils/th-validation/rules/StringValidationRule';
+import { NumberValidationRule } from '../../utils/th-validation/rules/NumberValidationRule';
+import { NumberInListValidationRule } from '../../utils/th-validation/rules/NumberInListValidationRule';
+import { BedSizeDO, BedCapacityDO, BedAccommodationType, BedStorageType } from '../../data-layer/common/data-objects/bed/BedDO';
 
 export class SaveBedItemDO {
 	bedTemplateId: string;
-    name: string;
+	name: string;
 	capacity: BedCapacityDO;
 	status: number;
 	storageType: number;
 	accommodationType: number;
-    size: BedSizeDO;
+	size: BedSizeDO;
 	notes: string;
 
 	public static getValidationStructure(): IValidationStructure {
@@ -29,13 +29,13 @@ export class SaveBedItemDO {
 			},
 			{
 				key: "accommodationType",
-				validationStruct: new PrimitiveValidationStructure(new NumberInListValidationRule([BedAccommodationType.AdultsAndChildren, BedAccommodationType.Babies]))
+				validationStruct: new PrimitiveValidationStructure(new NumberInListValidationRule([BedAccommodationType.Any, BedAccommodationType.Babies]))
 			},
-            {
+			{
 				key: "name",
 				validationStruct: new PrimitiveValidationStructure(new StringValidationRule(100))
 			},
-            {
+			{
 				key: "notes",
 				validationStruct: new PrimitiveValidationStructure(StringValidationRule.buildNullable())
 			}
@@ -43,7 +43,7 @@ export class SaveBedItemDO {
 	}
 	public static getSizeAndCapacityValidationStructure(): IValidationStructure {
 		return new ObjectValidationStructure([
-            {
+			{
 				key: "size",
 				validationStruct: new ObjectValidationStructure([
 					{
@@ -61,11 +61,15 @@ export class SaveBedItemDO {
 				validationStruct: new ObjectValidationStructure([
 					{
 						key: "maxNoAdults",
-						validationStruct: new PrimitiveValidationStructure(new NumberValidationRule())
+						validationStruct: new PrimitiveValidationStructure(NumberValidationRule.buildIntegerNumberRule())
 					},
 					{
 						key: "maxNoChildren",
-						validationStruct: new PrimitiveValidationStructure(new NumberValidationRule())
+						validationStruct: new PrimitiveValidationStructure(NumberValidationRule.buildIntegerNumberRule())
+					},
+					{
+						key: "maxNoBabies",
+						validationStruct: new PrimitiveValidationStructure(NumberValidationRule.buildIntegerNumberRule())
 					}
 				])
 			}

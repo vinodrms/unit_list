@@ -7,7 +7,6 @@ import { IPriceProductPrice, PriceProductPriceQueryDO } from '../IPriceProductPr
 import { PriceForFixedNumberOfPersonsDO } from './PriceForFixedNumberOfPersonsDO';
 import { RoomCategoryStatsDO } from '../../../../room-categories/data-objects/RoomCategoryStatsDO';
 import { NumberValidationRule } from '../../../../../utils/th-validation/rules/NumberValidationRule';
-import { ConfigCapacityDO } from '../../../../common/data-objects/bed-config/ConfigCapacityDO';
 import { RoomCategoryStatsIndexer } from './utils/RoomCategoryStatsIndexer';
 
 import _ = require("underscore");

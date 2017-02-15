@@ -99,6 +99,7 @@ export class DefaultBookingBuilder implements IBookingDataSource {
         capacity.noAdults = 1;
         capacity.noChildren = 0;
         capacity.noBabies = 0;
+        capacity.noBabyBeds = 0;
         return capacity;
     }
 

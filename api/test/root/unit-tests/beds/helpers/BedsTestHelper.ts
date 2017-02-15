@@ -13,6 +13,7 @@ export class BedsTestHelper {
         var bedCapacity = new BedCapacityDO();
         bedCapacity.maxNoAdults = 2;
         bedCapacity.maxNoChildren = 2;
+        bedCapacity.maxNoBabies = 2;
         var bedSize = new BedSizeDO();
         bedSize.lengthCm = 120;
         bedSize.widthCm = 120;
@@ -21,7 +22,7 @@ export class BedsTestHelper {
         return {
             bedTemplateId: bedTemplateId,
             name: "King Size Type 1",
-            accommodationType: BedAccommodationType.AdultsAndChildren,
+            accommodationType: BedAccommodationType.Any,
             storageType: BedStorageType.Stationary,
             capacity: bedCapacity,
             status: BedStatus.Active,
@@ -34,6 +35,7 @@ export class BedsTestHelper {
         var bedCapacity = new BedCapacityDO();
         bedCapacity.maxNoAdults = 2;
         bedCapacity.maxNoChildren = 2;
+        bedCapacity.maxNoBabies = 1;
         var bedSize = new BedSizeDO();
         bedSize.lengthCm = 120;
         bedSize.widthCm = 120;
@@ -66,7 +68,7 @@ export class BedsTestHelper {
         return {
             bedTemplateId: bedTemplateId,
             name: "Invalid Size/Cap Adults Bed",
-            accommodationType: BedAccommodationType.AdultsAndChildren,
+            accommodationType: BedAccommodationType.Any,
             storageType: BedStorageType.Stationary,
             capacity: null,
             status: BedStatus.Active,
@@ -97,6 +99,7 @@ export class BedsTestHelper {
         var bedCapacity = new BedCapacityDO();
         bedCapacity.maxNoAdults = 2;
         bedCapacity.maxNoChildren = 2;
+        bedCapacity.maxNoBabies = 1;
         var bedSize = new BedSizeDO();
         bedSize.lengthCm = 120;
         bedSize.widthCm = 120;
@@ -108,7 +111,7 @@ export class BedsTestHelper {
         return {
             bedTemplateId: bedTemplateId,
             name: "King Size Type 1",
-            accommodationType: BedAccommodationType.AdultsAndChildren,
+            accommodationType: BedAccommodationType.Any,
             storageType: BedStorageType.Stationary,
             capacity:bedCapacity,
             status: BedStatus.Active,
@@ -121,10 +124,11 @@ export class BedsTestHelper {
         var bedCapacity = new BedCapacityDO();
         bedCapacity.maxNoAdults = 2;
         bedCapacity.maxNoChildren = 2;
+        bedCapacity.maxNoBabies = 2;
         var result = {
             bedTemplateId: bed.bedTemplateId,
             name: bed.name,
-            accommodationType: BedAccommodationType.AdultsAndChildren,
+            accommodationType: BedAccommodationType.Any,
             storageType: BedStorageType.Stationary,
             size: bed.size,
             capacity: bedCapacity,
@@ -142,5 +146,6 @@ export class BedsTestHelper {
         should.equal(readBed.size.lengthCm, createdBed.size.lengthCm);
         should.equal(readBed.capacity.maxNoAdults, createdBed.capacity.maxNoAdults);
         should.equal(readBed.capacity.maxNoChildren, createdBed.capacity.maxNoChildren);
+        should.equal(readBed.capacity.maxNoBabies, createdBed.capacity.maxNoBabies);
     }
 }

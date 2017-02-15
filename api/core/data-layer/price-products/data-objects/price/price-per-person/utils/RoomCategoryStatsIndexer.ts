@@ -66,6 +66,7 @@ export class RoomCategoryStatsIndexer {
         capacity.noAdults = queryCapacity.noAdults;
         capacity.noChildren = queryCapacity.noChildren;
         capacity.noBabies = queryCapacity.noBabies;
+        capacity.noBabyBeds = queryCapacity.noBabyBeds;
         return capacity;
     }
 }

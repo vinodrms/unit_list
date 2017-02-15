@@ -1,37 +1,35 @@
 import { ThError } from '../../../../utils/th-responses/ThError';
 import { ThStatusCode } from '../../../../utils/th-responses/ThResponse';
 import { IMongoPatchApplier } from './utils/IMongoPatchApplier';
-import { ATransactionalMongoPatch, MongoPatcheType } from './utils/ATransactionalMongoPatch';
-import { MongoPatch0 } from './patches/patch0/MongoPatch0';
-import { MongoPatch1 } from './patches/patch1/MongoPatch1';
-import { MongoPatch2 } from './patches/patch2/MongoPatch2';
+import { ATransactionalMongoPatch } from './utils/ATransactionalMongoPatch';
+import { MongoPatchUtils } from './patches/MongoPatchUtils';
+import { MongoPatchType } from './patches/MongoPatchType';
 import async = require("async");
 import _ = require("underscore");
 
 export class MongoPatchApplier implements IMongoPatchApplier {
 	private _mongoPatchAppliers: ATransactionalMongoPatch[];
 
-	constructor(private _appliedPatches: MongoPatcheType[]) {
+	constructor(private _appliedPatches: MongoPatchType[]) {
 		this.initPatchAppliers();
 	}
-
 	private initPatchAppliers() {
-		this._mongoPatchAppliers = [new MongoPatch0(), new MongoPatch1(), new MongoPatch2()];
+		this._mongoPatchAppliers = MongoPatchUtils.PatchList;
 	}
-	public applyAsync(finishApplyingPatchCallback: { (err: ThError, result?: MongoPatcheType[]): void; }) {
-		this.apply().then((result: MongoPatcheType[]) => {
+	public applyAsync(finishApplyingPatchCallback: { (err: ThError, result?: MongoPatchType[]): void; }) {
+		this.apply().then((result: MongoPatchType[]) => {
 			finishApplyingPatchCallback(null, result);
 		}).catch((error: any) => {
 			var thError = new ThError(ThStatusCode.ErrorBootstrappingApp, error);
 			finishApplyingPatchCallback(thError);
 		});
 	}
-	public apply(): Promise<MongoPatcheType[]> {
-		return new Promise<MongoPatcheType[]>((resolve, reject) => {
+	public apply(): Promise<MongoPatchType[]> {
+		return new Promise<MongoPatchType[]>((resolve, reject) => {
 			this.applyCore(resolve, reject);
 		});
 	}
-	private applyCore(resolve: { (result: MongoPatcheType[]): void }, reject: { (err: ThError): void }) {
+	private applyCore(resolve: { (result: MongoPatchType[]): void }, reject: { (err: ThError): void }) {
 		var applierIndex = 0;
 		async.whilst(
 			(() => {

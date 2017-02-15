@@ -179,6 +179,7 @@ export var EnglishTranslations: Object = {
 	"Adults": "Adults",
 	"Children": "Children",
 	"Insert a valid max number of children": "Insert a valid max number of children",
+	"Insert a valid max number of babies": "Insert a valid max number of babies",
 	"Insert a valid bed width": "Insert a valid bed width",
 	"Insert a valid bed length": "Insert a valid bed length",
 	"Width": "Width",

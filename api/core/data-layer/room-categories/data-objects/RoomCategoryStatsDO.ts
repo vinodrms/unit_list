@@ -27,9 +27,10 @@ export class RoomCategoryCapacityDO extends BaseDO {
 
     public get totalCapacity(): ConfigCapacityDO {
         var totalRoomCapacity = new ConfigCapacityDO();
-        totalRoomCapacity.noBabies = this.stationaryCapacity.noBabies + this.rollawayCapacity.noBabies;
         totalRoomCapacity.noAdults = this.stationaryCapacity.noAdults + this.rollawayCapacity.noAdults;
         totalRoomCapacity.noChildren = this.stationaryCapacity.noChildren + this.rollawayCapacity.noChildren;
+        totalRoomCapacity.noBabies = this.stationaryCapacity.noBabies + this.rollawayCapacity.noBabies;
+        totalRoomCapacity.noBabyBeds = this.stationaryCapacity.noBabyBeds + this.rollawayCapacity.noBabyBeds;
         return totalRoomCapacity;
     }
 
@@ -42,13 +43,18 @@ export class RoomCategoryCapacityDO extends BaseDO {
 
     private canFitCore(referenceCapacity: ConfigCapacityDO, capacityToCheck: ConfigCapacityDO): boolean {
         if (referenceCapacity.noAdults < capacityToCheck.noAdults) return false;
+        let noAdultsRemaining = referenceCapacity.noAdults - capacityToCheck.noAdults;
 
-        var maxChildrenCapacity = referenceCapacity.noChildren;
-        // the adults are replaceable with a child
-        maxChildrenCapacity += (referenceCapacity.noAdults - capacityToCheck.noAdults);
+        // the remainig adults from the reference capacity can be used as children
+        let maxChildrenCapacity = referenceCapacity.noChildren + noAdultsRemaining;
         if (maxChildrenCapacity < capacityToCheck.noChildren) return false;
 
-        if (referenceCapacity.noBabies < capacityToCheck.noBabies) return false;
+        let noChildrenRemaining = referenceCapacity.noChildren - capacityToCheck.noChildren;
+        // the remainig adults and children from the reference capacity can be used as babies
+        let maxBabyCapacity = referenceCapacity.noBabies + noAdultsRemaining + noChildrenRemaining;
+        if (maxBabyCapacity < capacityToCheck.noBabies) return false;
+
+        if (referenceCapacity.noBabyBeds < capacityToCheck.noBabyBeds) return false;
         return true;
     }
 }

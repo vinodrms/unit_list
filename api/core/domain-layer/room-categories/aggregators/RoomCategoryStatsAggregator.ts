@@ -186,9 +186,10 @@ export class RoomCategoryStatsAggregator {
 
     private getBedDetailsByStorageType(bedConfig: BedConfigDO, bedList: BedDO[], bedStorageType: BedStorageType): { capacity: ConfigCapacityDO, bedStatsList: BedStatsDO[] } {
         var configCapacity = new ConfigCapacityDO();
-        configCapacity.noBabies = 0;
         configCapacity.noAdults = 0;
         configCapacity.noChildren = 0;
+        configCapacity.noBabies = 0;
+        configCapacity.noBabyBeds = 0;
 
         var bedListToAggregate: BedDO[] = this.filterBedListByStorageType(bedList, bedStorageType);
         var bedStatsList: BedStatsDO[] = [];
@@ -198,14 +199,17 @@ export class RoomCategoryStatsAggregator {
 
             let bedCapacity = this.getZeroCapacity();
             if (bed.accommodationType === BedAccommodationType.Babies) {
-                configCapacity.noBabies += bedMeta.noOfInstances;
-                bedCapacity.noBabies = 1;
+                configCapacity.noBabyBeds += bedMeta.noOfInstances;
+                bedCapacity.noBabyBeds = 1;
             }
             else {
                 configCapacity.noAdults += bedMeta.noOfInstances * bed.capacity.maxNoAdults;
                 configCapacity.noChildren += bedMeta.noOfInstances * bed.capacity.maxNoChildren;
+                configCapacity.noBabies += bedMeta.noOfInstances * bed.capacity.maxNoBabies;
+
                 bedCapacity.noAdults = bed.capacity.maxNoAdults;
                 bedCapacity.noChildren = bed.capacity.maxNoChildren;
+                bedCapacity.noBabies = bed.capacity.maxNoBabies;
             }
             bedStatsList = bedStatsList.concat(this.buildBedStatsList(bedCapacity, bedMeta.noOfInstances, bed));
         });
@@ -251,8 +255,9 @@ export class RoomCategoryStatsAggregator {
     private getZeroCapacity(): ConfigCapacityDO {
         var emptyCapacity = new ConfigCapacityDO();
         emptyCapacity.noAdults = 0;
-        emptyCapacity.noBabies = 0;
         emptyCapacity.noChildren = 0;
+        emptyCapacity.noBabies = 0;
+        emptyCapacity.noBabyBeds = 0;
         return emptyCapacity;
     }
     private get hotelId(): string {

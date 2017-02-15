@@ -1,16 +1,17 @@
-import {BaseDO} from '../../../common/base/BaseDO';
+import { BaseDO } from '../../../common/base/BaseDO';
 
 export class ConfigCapacityDO extends BaseDO {
     constructor() {
         super();
     }
 
-    noBabies: number;
     noAdults: number;
     noChildren: number;
+    noBabies: number;
+    noBabyBeds: number;
 
     protected getPrimitivePropertyKeys(): string[] {
-        return ["noBabies", "noAdults", "noChildren"];
+        return ["noAdults", "noChildren", "noBabies", "noBabyBeds"];
     }
 
     public buildPrototype(): ConfigCapacityDO {
@@ -18,6 +19,7 @@ export class ConfigCapacityDO extends BaseDO {
         configCapacity.noAdults = this.noAdults;
         configCapacity.noChildren = this.noChildren;
         configCapacity.noBabies = this.noBabies;
+        configCapacity.noBabyBeds = this.noBabyBeds;
         return configCapacity;
     }
 }
