@@ -4,17 +4,15 @@ import { ThError } from '../../../../utils/th-responses/ThError';
 import { ThLogger, ThLogLevel } from '../../../../utils/logging/ThLogger';
 import { ThStatusCode } from '../../../../utils/th-responses/ThResponse';
 import { ThUtils } from '../../../../utils/ThUtils';
+import { PageOrientation } from '../../../pdf-reports/PageOrientation';
 
 import phantom = require('phantom');
-import fs = require('fs');
-import path = require('path');
-import url = require('url');
+import _ = require('underscore');
 var ejs = require('ejs');
 
 export class PhantomLocalHtmlToPdfConverterService extends AHtmlToPdfConverterService {
-    private static PAPER_SIZE = {
+    private static PAPER_OPTIONS = {
         format: 'A4',
-        orientation: 'portrait',
         margin: {
             top: '30px',
             bottom: '30px',
@@ -77,8 +75,7 @@ export class PhantomLocalHtmlToPdfConverterService extends AHtmlToPdfConverterSe
                     }
                 }
             }));
-
-            return sitepage.property('paperSize', PhantomLocalHtmlToPdfConverterService.PAPER_SIZE);
+            return sitepage.property('paperSize', this.getPaperOptions());
         }).then(() => {
             return sitepage.property('viewportSize', PhantomLocalHtmlToPdfConverterService.VIEWPORT_SIZE);
         }).then(() => {
@@ -103,5 +100,14 @@ export class PhantomLocalHtmlToPdfConverterService extends AHtmlToPdfConverterSe
             ThLogger.getInstance().logError(ThLogLevel.Error, "error converting html to pdf with phantom js", this._htmlToPdfReq, thError);
             phInstance.exit();
         });
+    }
+
+    private getPaperOptions(): Object {
+        let options: any = _.clone(PhantomLocalHtmlToPdfConverterService.PAPER_OPTIONS);
+        options.orientation = 'portrait';
+        if (this._htmlToPdfReq.pageOrientation === PageOrientation.Landscape) {
+            options.orientation = 'landscape';
+        }
+        return options;
     }
 }

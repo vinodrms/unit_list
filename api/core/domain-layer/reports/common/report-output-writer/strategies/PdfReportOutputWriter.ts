@@ -21,7 +21,8 @@ export class PdfReportOutputWriter extends AReportOutputWriter {
         pdfReportsService.generatePdfReport({
             reportType: ReportType.Report,
             reportData: splitReportGroup,
-            settings: {}
+            settings: {},
+            pageOrientation: group.meta.pageOrientation
         }).then((pdfResponse: PdfReportsServiceResponse) => {
             resolve({
                 reportPath: pdfResponse.pdfPath
