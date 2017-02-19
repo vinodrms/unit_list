@@ -38,7 +38,8 @@ export class PdfReportsService extends APdfReportsService {
             return this._htmlToPdfConverterService.generatePdf({
                 htmlUrl: this.getFileUrlFromFileRelativePath(generatedHtmlPath),
                 pdfReportOutputPath: this._reportConfig.getOutputPdfAbsolutePath(this._reportsServiceRequest.reportData),
-                settings: this._reportsServiceRequest.settings
+                settings: this._reportsServiceRequest.settings,
+                pageOrientation: this._reportsServiceRequest.pageOrientation
             });
         }).then((converterRespone: HtmlToPdfResponseDO) => {
             this._fileService.deleteFile(this._htmlPath);

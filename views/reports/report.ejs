@@ -16,7 +16,7 @@
         padding-right: 20px;
         padding-left: 20px;
         font-size:9px;
-        line-height:17px;
+        line-height:16px;
         font-family: 'Roboto', sans-serif;
         color:#555;
     }
@@ -69,6 +69,11 @@
         <div class="table-box wrapper">
             
             <% sectionList.forEach(function(section){ %>
+
+                <% if (section.newLineBefore) { %>
+                    <div style="page-break-before:always;">
+                <% } %>
+
                 <br>
 
                 <% if (section.meta.title) { %>
@@ -97,6 +102,11 @@
                     <% }); %>
 
                 </table>
+                
+                <% if (section.newLineBefore) { %>
+                    </div>
+                <% } %>
+
             <% }); %>
         </div>
     </body>

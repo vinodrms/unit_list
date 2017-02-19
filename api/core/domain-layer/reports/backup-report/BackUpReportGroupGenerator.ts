@@ -8,6 +8,7 @@ import { ReportGroupMeta } from '../common/result/ReportGroup';
 import { GuestsArrivingReportSectionGeneratorStrategy } from './strategies/GuestsArrivingReportSectionGeneratorStrategy';
 import { GuestsInHouseReportSectionGeneratorStrategy } from './strategies/GuestsInHouseReportSectionGeneratorStrategy';
 import { GuestsDepartingReportSectionGeneratorStrategy } from './strategies/GuestsDepartingReportSectionGeneratorStrategy';
+import { PageOrientation } from '../../../services/pdf-reports/PageOrientation';
 
 export class BackUpReportGroupGenerator extends AReportGeneratorStrategy {
 
@@ -22,7 +23,8 @@ export class BackUpReportGroupGenerator extends AReportGeneratorStrategy {
 
 	protected getMeta(): ReportGroupMeta {
 		return {
-			name: "BackUp Report"
+			name: "BackUp Report",
+			pageOrientation: PageOrientation.Landscape
 		}
 	}
 	protected getSectionGenerators(): IReportSectionGeneratorStrategy[] {

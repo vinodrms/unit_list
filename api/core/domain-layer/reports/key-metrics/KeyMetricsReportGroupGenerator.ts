@@ -17,6 +17,7 @@ import { KeyMetricReader } from '../../../domain-layer/yield-manager/key-metrics
 import { KeyMetricsResult, KeyMetricsResultItem } from '../../../domain-layer/yield-manager/key-metrics/utils/KeyMetricsResult';
 import { ThPeriodType } from './period-converter/ThPeriodDO';
 import { ThDateToThPeriodConverterFactory } from './period-converter/ThDateToThPeriodConverterFactory';
+import { PageOrientation } from '../../../services/pdf-reports/PageOrientation';
 
 export class KeyMetricsReportGroupGenerator extends AReportGeneratorStrategy {
 	private _period: YieldManagerPeriodDO;
@@ -66,7 +67,8 @@ export class KeyMetricsReportGroupGenerator extends AReportGeneratorStrategy {
 
 	protected getMeta(): ReportGroupMeta {
 		return {
-			name: "Key Metrics"
+			name: "Key Metrics",
+			pageOrientation: PageOrientation.Landscape
 		}
 	}
 	protected getSectionGenerators(): IReportSectionGeneratorStrategy[] {
