@@ -1,13 +1,16 @@
+import { PageOrientation } from '../pdf-reports/PageOrientation';
+
 export interface HtmlToPdfRequestDO {
     htmlUrl: string;
     pdfReportOutputPath: string;
-    settings?: Object;        
+    settings?: Object;
+    pageOrientation?: PageOrientation;
 }
 
 export interface HtmlToPdfResponseDO {
-    filePath: string;        
+    filePath: string;
 }
 
 export interface IHtmlToPdfConverterService {
-    generatePdf(htmlToPdfReq: HtmlToPdfRequestDO): Promise<HtmlToPdfResponseDO>;     
+    generatePdf(htmlToPdfReq: HtmlToPdfRequestDO): Promise<HtmlToPdfResponseDO>;
 }

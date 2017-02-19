@@ -1,8 +1,10 @@
 import { ReportSection } from './ReportSection';
+import { PageOrientation } from '../../../../services/pdf-reports/PageOrientation';
 
 export interface ReportGroupMeta {
     name: string;
     reference?: string;
+    pageOrientation?: PageOrientation;
 }
 
 export class ReportGroup {

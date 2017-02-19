@@ -13,6 +13,11 @@ export class ReportSection {
     header: ReportSectionHeader;
     meta: ReportSectionMeta;
     data: any[][];
+    newLineBefore: boolean;
+
+    constructor() {
+        this.newLineBefore = false;
+    }
 
     public getNoColumns(): number {
         if (this.header.display && _.isArray(this.header.values)) {
