@@ -11,8 +11,11 @@ import { BookingDO, BookingConfirmationStatus } from '../../../../data-layer/boo
 import { BookingDOConstraints } from '../../../../data-layer/bookings/data-objects/BookingDOConstraints';
 import { BookingStateChangeTriggerTimeDO, BookingStateChangeTriggerType } from '../../../../data-layer/bookings/data-objects/state-change-time/BookingStateChangeTriggerTimeDO';
 import { DocumentActionDO } from '../../../../data-layer/common/data-objects/document-history/DocumentActionDO';
+import { InvoiceGroupDO } from '../../../../data-layer/invoices/data-objects/InvoiceGroupDO';
+import { InvoiceDO } from '../../../../data-layer/invoices/data-objects/InvoiceDO';
 import { BookingUtils } from '../../../bookings/utils/BookingUtils';
 import { ThDateUtils } from '../../../../utils/th-dates/ThDateUtils';
+import { ThUtils } from '../../../../utils/ThUtils';
 import { BookingWithDependenciesLoader } from '../utils/BookingWithDependenciesLoader';
 import { BookingWithDependencies } from '../utils/BookingWithDependencies';
 import { BookingUndoCheckInDO } from './BookingUndoCheckInDO';
@@ -20,15 +23,19 @@ import { BookingUndoCheckInDO } from './BookingUndoCheckInDO';
 export class BookingUndoCheckIn {
     private _bookingUtils: BookingUtils;
     private _thDateUtils: ThDateUtils;
+    private _thUtils: ThUtils;
     private _bookingUndoCheckInDO: BookingUndoCheckInDO;
 
     private _loadedHotel: HotelDO;
     private _currentHotelTimestamp: ThTimestampDO;
     private _bookingWithDependencies: BookingWithDependencies;
+    private _invoiceGroup: InvoiceGroupDO;
+    private _invoice: InvoiceDO;
 
     constructor(private _appContext: AppContext, private _sessionContext: SessionContext) {
         this._bookingUtils = new BookingUtils();
         this._thDateUtils = new ThDateUtils();
+        this._thUtils = new ThUtils();
     }
 
     public undo(bookingUndoCheckInDO: BookingUndoCheckInDO): Promise<BookingDO> {
@@ -45,7 +52,6 @@ export class BookingUndoCheckIn {
             parser.logAndReject("Error validating undo checkin fields", reject);
             return;
         }
-
         let hotelRepository = this._appContext.getRepositoryFactory().getHotelRepository();
         hotelRepository.getHotelById(this._sessionContext.sessionDO.hotel.id)
             .then((loadedHotel: HotelDO) => {
@@ -72,8 +78,26 @@ export class BookingUndoCheckIn {
                     ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "undo checkin: start date must match property's current date", this._bookingUndoCheckInDO, thError);
                     throw thError;
                 }
+                this._invoiceGroup = this._bookingWithDependencies.getInvoiceGroupDO();
+                if (this._thUtils.isUndefinedOrNull(this._invoiceGroup)) {
+                    var thError = new ThError(ThStatusCode.BookingUndoCheckInInvoiceGroupNotFound, null);
+                    ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "undo checkin: invoice group not found", this._bookingUndoCheckInDO, thError);
+                    throw thError;
+                }
+                this._invoice = this._invoiceGroup.getInvoiceForBooking(this._bookingWithDependencies.bookingDO.bookingId);
+                if (this._thUtils.isUndefinedOrNull(this._invoice)) {
+                    var thError = new ThError(ThStatusCode.BookingUndoCheckInInvoiceNotFound, null);
+                    ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "undo checkin: invoice not found", this._bookingUndoCheckInDO, thError);
+                    throw thError;
+                }
+                if (this.invoiceContainsAddOns()) {
+                    var thError = new ThError(ThStatusCode.BookingUndoCheckInInvoiceContainsAddOns, null);
+                    ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "undo checkin: invoice contains addons", this._bookingUndoCheckInDO, thError);
+                    throw thError;
+                }
 
                 this.updateBooking();
+                this.updateInvoiceGroup();
 
                 var bookingsRepo = this._appContext.getRepositoryFactory().getBookingRepository();
                 return bookingsRepo.updateBooking({ hotelId: this._sessionContext.sessionDO.hotel.id }, {
@@ -82,7 +106,15 @@ export class BookingUndoCheckIn {
                     versionId: this._bookingWithDependencies.bookingDO.versionId
                 }, this._bookingWithDependencies.bookingDO);
             }).then((updatedBooking: BookingDO) => {
-                resolve(updatedBooking);
+                this._bookingWithDependencies.bookingDO = updatedBooking;
+
+                let invoiceRepo = this._appContext.getRepositoryFactory().getInvoiceGroupsRepository();
+                return invoiceRepo.updateInvoiceGroup({ hotelId: this._sessionContext.sessionDO.hotel.id }, {
+                    id: this._invoiceGroup.id,
+                    versionId: this._invoiceGroup.versionId
+                }, this._invoiceGroup);
+            }).then((updatedInvoiceGroup: InvoiceGroupDO) => {
+                resolve(this._bookingWithDependencies.bookingDO);
             }).catch((error: any) => {
                 var thError = new ThError(ThStatusCode.BookingUndoCheckInError, error);
                 if (thError.isNativeError()) {
@@ -93,6 +125,15 @@ export class BookingUndoCheckIn {
     }
     private bookingHasValidStatus(): boolean {
         return _.contains(BookingDOConstraints.ConfirmationStatuses_CanUndoCheckIn, this._bookingWithDependencies.bookingDO.confirmationStatus);
+    }
+    private invoiceContainsAddOns(): boolean {
+        let invoiceCopy = new InvoiceDO();
+        invoiceCopy.buildFromObject(this._invoice);
+        invoiceCopy.removeItemsPopulatedFromBooking();
+        if (invoiceCopy.itemList.length > 1) {
+            return true;
+        }
+        return false;
     }
 
     private updateBooking() {
@@ -128,5 +169,11 @@ export class BookingUndoCheckIn {
         noShowTimestamp = this._thDateUtils.addThirtyMinutesToThTimestampDO(noShowTimestamp);
         noShowTimestamp = this._thDateUtils.addThirtyMinutesToThTimestampDO(noShowTimestamp);
         return noShowTimestamp;
+    }
+
+    private updateInvoiceGroup() {
+        this._invoiceGroup.invoiceList = _.reject(this._invoiceGroup.invoiceList, invoice => {
+            return invoice.bookingId === this._bookingWithDependencies.bookingDO.bookingId;
+        });
     }
 }
