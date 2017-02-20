@@ -47,7 +47,8 @@ export class BookingUndoCheckInComponent implements OnInit {
 
     public get hasUndoCheckInRight(): boolean {
         return this._bookingOperationsPageData.bookingMeta.undoCheckInRight === BookingUndoCheckInRight.Allowed
-            && this.bookingStartDate.isSame(this._bookingOperationsPageData.bookingDO.interval.start);
+            && this.bookingStartDate.isSame(this._bookingOperationsPageData.bookingDO.interval.start)
+            && !this._bookingOperationsPageData.hasClosedInvoice;
     }
 
     public undoCheckIn() {
