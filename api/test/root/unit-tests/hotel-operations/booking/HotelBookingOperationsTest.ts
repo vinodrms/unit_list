@@ -46,6 +46,10 @@ import { BookingReserveAddOnProducts } from '../../../../../core/domain-layer/ho
 import { BookingReserveAddOnProductsDO } from '../../../../../core/domain-layer/hotel-operations/booking/reserve-add-on-products/BookingReserveAddOnProductsDO';
 import { BookingChangePriceProduct } from '../../../../../core/domain-layer/hotel-operations/booking/change-price-product/BookingChangePriceProduct';
 import { BookingChangePriceProductDO } from '../../../../../core/domain-layer/hotel-operations/booking/change-price-product/BookingChangePriceProductDO';
+import { AssignRoom } from '../../../../../core/domain-layer/hotel-operations/room/assign/AssignRoom';
+import { AssignRoomDO } from '../../../../../core/domain-layer/hotel-operations/room/assign/AssignRoomDO';
+import { BookingUndoCheckIn } from '../../../../../core/domain-layer/hotel-operations/booking/undo-check-in/BookingUndoCheckIn';
+import { BookingUndoCheckInDO } from '../../../../../core/domain-layer/hotel-operations/booking/undo-check-in/BookingUndoCheckInDO';
 
 describe("Hotel Booking Operations Tests", function () {
     var testContext: TestContext;
@@ -106,7 +110,7 @@ describe("Hotel Booking Operations Tests", function () {
             var bookingChangeDatesDO = new BookingChangeDatesDO();
             bookingChangeDatesDO.groupBookingId = bookingToChange.groupBookingId;
             bookingChangeDatesDO.bookingId = bookingToChange.bookingId;
-            bookingChangeDatesDO.interval = dashboardHelper.getFromTomorrowTwoDaysInterval(testDataBuilder);
+            bookingChangeDatesDO.interval = dashboardHelper.getFromTodayTwoDaysInterval(testDataBuilder);
             var bookingChangeDates = new BookingChangeDates(testContext.appContext, testContext.sessionContext);
             bookingChangeDates.changeDates(bookingChangeDatesDO).then((updatedBooking: BookingDO) => {
                 should.equal(updatedBooking.price.totalBookingPrice, bookingToChange.price.totalBookingPrice * 2);
@@ -283,6 +287,54 @@ describe("Hotel Booking Operations Tests", function () {
 
             var changePriceProduct = new BookingChangePriceProduct(testContext.appContext, testContext.sessionContext);
             changePriceProduct.changePriceProduct(bookingChangePriceProductDO).then((updatedBooking: BookingDO) => {
+                bookingToChange = updatedBooking;
+                done();
+            }).catch((error: any) => {
+                done(error);
+            });
+        });
+
+        it("Should remove the reserved add on products for the booking", function (done) {
+            var reserveAddOnProductsDO = new BookingReserveAddOnProductsDO();
+            reserveAddOnProductsDO.groupBookingId = bookingToChange.groupBookingId;
+            reserveAddOnProductsDO.bookingId = bookingToChange.bookingId;
+            reserveAddOnProductsDO.reservedAddOnProductIdList = [];
+            var reserveAddOnProducts = new BookingReserveAddOnProducts(testContext.appContext, testContext.sessionContext);
+            reserveAddOnProducts.reserve(reserveAddOnProductsDO).then((updatedBooking: BookingDO) => {
+                var equality = testUtils.stringArraysAreEqual(updatedBooking.reservedAddOnProductIdList, reserveAddOnProductsDO.reservedAddOnProductIdList);
+                should.equal(equality, true);
+                bookingToChange = updatedBooking;
+                done();
+            }).catch((error: any) => {
+                done(error);
+            });
+        });
+
+        it("Should check in the booking", function (done) {
+            var assignRoomDO = new AssignRoomDO();
+            assignRoomDO.bookingId = bookingToChange.bookingId;
+            assignRoomDO.groupBookingId = bookingToChange.groupBookingId;
+            let room = dashboardHelper.getRoomForSameRoomCategoryFromBooking(testDataBuilder, bookingToChange);
+            assignRoomDO.roomId = room.id;
+
+            var assignRoom = new AssignRoom(testContext.appContext, testContext.sessionContext);
+            assignRoom.checkIn(assignRoomDO).then((updatedBooking: BookingDO) => {
+                should.equal(updatedBooking.confirmationStatus, BookingConfirmationStatus.CheckedIn);
+                bookingToChange = updatedBooking;
+                done();
+            }).catch((error: any) => {
+                done(error);
+            });
+        });
+
+        it("Should undo the check in", function (done) {
+            let undoCheckInDO = new BookingUndoCheckInDO();
+            undoCheckInDO.bookingId = bookingToChange.bookingId;
+            undoCheckInDO.groupBookingId = bookingToChange.groupBookingId;
+            let undoCheckIn = new BookingUndoCheckIn(testContext.appContext, testContext.sessionContext);
+            undoCheckIn.undo(undoCheckInDO).then((updatedBooking: BookingDO) => {
+                should.equal(updatedBooking.confirmationStatus === BookingConfirmationStatus.Confirmed
+                    || updatedBooking.confirmationStatus === BookingConfirmationStatus.Guaranteed, true);
                 bookingToChange = updatedBooking;
                 done();
             }).catch((error: any) => {
