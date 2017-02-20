@@ -440,7 +440,12 @@ export enum ThStatusCode {
 	BookingChangeDatesError,
 	BookingChangeDatesInvalidState,
 	BookingChangeDatesPaidInvoice,
+	BookingUndoCheckInError,
+	BookingUndoCheckInInvalidState,
+	BookingUndoCheckInPaidInvoice,
+	BookingUndoCheckInStartDateMustMatchHotelDate,
 	HotelBookingOperationsControllerErrorChangingDates,
+	HotelBookingOperationsControllerErrorUndoCheckIn,
 	BookingChangeNoShowTimeError,
 	BookingChangeNoShowTimeInvalidTime,
 	BookingChangeNoShowTimeInvalidState,
@@ -928,7 +933,12 @@ ThMessage[ThStatusCode.BookingWithDependenciesLoaderError] = "Error loading book
 ThMessage[ThStatusCode.BookingChangeDatesError] = "Error changing booking dates.";
 ThMessage[ThStatusCode.BookingChangeDatesInvalidState] = "The date can be changed only for Confirmed, Guaranteed or Checked In bookings.";
 ThMessage[ThStatusCode.BookingChangeDatesPaidInvoice] = "The dates cannot be changed because the invoice for this booking was paid.";
+ThMessage[ThStatusCode.BookingUndoCheckInError] = "Error undoing the Check In.";
+ThMessage[ThStatusCode.BookingUndoCheckInInvalidState] = "Only Checked In Bookings can be undoed.";
+ThMessage[ThStatusCode.BookingUndoCheckInPaidInvoice] = "You cannot undo the checkin because the invoice was marked as paid.";
+ThMessage[ThStatusCode.BookingUndoCheckInStartDateMustMatchHotelDate] = "You can only undo check in for bookings that have their start date equal to the property's current date.";
 ThMessage[ThStatusCode.HotelBookingOperationsControllerErrorChangingDates] = "Error changing booking dates.";
+ThMessage[ThStatusCode.HotelBookingOperationsControllerErrorUndoCheckIn] = "There was an error while undoing the check in.";
 ThMessage[ThStatusCode.BookingChangeNoShowTimeError] = "Error changing the no show time.";
 ThMessage[ThStatusCode.BookingChangeNoShowTimeInvalidTime] = "Invalid submitted time.";
 ThMessage[ThStatusCode.BookingChangeNoShowTimeInvalidState] = "The no show time can be changed only for confirmed or guaranteed bookings.";

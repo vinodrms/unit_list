@@ -18,6 +18,7 @@
 	"The booking has been cancelled": "The booking has been cancelled",
 	"The booking has been cancelled. The booking has a penalty.": "The booking has been cancelled. The booking has a penalty.",
 	"The booking has been reactivated.": "The booking has been reactivated.",
+	"The check in has been undone.": "The check in has been undone.",
 	"Some rollaway beds were added in the room to fit the booking capacity": "Some rollaway beds were added in the room to fit the booking capacity",
 	"%noReservedAddOnProducts% add on product(s) have been reserved for the booking": "%noReservedAddOnProducts% add on product(s) have been reserved for the booking",
 	"The Price Product from this booking has been changed. The old price %oldPrice% has become %newPrice%.": "The Price Product from this booking has been changed. The old price %oldPrice% has become %newPrice%.",

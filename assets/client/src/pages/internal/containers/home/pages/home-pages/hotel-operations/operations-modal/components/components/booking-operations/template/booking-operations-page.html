@@ -80,6 +80,9 @@
 		<div class="row">
 			<booking-send-confirmation [bookingOperationsPageData]="bookingOperationsPageData"></booking-send-confirmation>
 		</div>
+		<div class="row">
+			<booking-undo-checkin [bookingOperationsPageData]="bookingOperationsPageData" (onBookingUndoCheckIn)="didChangeBooking($event) && loadPageData()"></booking-undo-checkin>
+		</div>
 		<div class="row padding-bottom-10px">
 			<booking-links [bookingOperationsPageData]="bookingOperationsPageData"></booking-links>
 		</div>

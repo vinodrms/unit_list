@@ -75,6 +75,9 @@ export class BookingDOConstraints {
         BookingConfirmationStatus.Guaranteed,
         BookingConfirmationStatus.CheckedIn
     ];
+    public static ConfirmationStatuses_CanUndoCheckIn: BookingConfirmationStatus[] = [
+        BookingConfirmationStatus.CheckedIn
+    ];
 
     public static ConfirmationStatuses_BookingsConsideredInYieldManager: BookingConfirmationStatus[] = [
         BookingConfirmationStatus.Confirmed,

@@ -21,6 +21,7 @@ import {BookingCancelComponent} from './components/cancel/BookingCancelComponent
 import {BookingSendConfirmationComponent} from './components/send-confirmation/BookingSendConfirmationComponent';
 import {BookingLinksComponent} from './components/booking-links/BookingLinksComponent';
 import {BookingReserveAddOnProductEditorComponent} from './components/reserve-add-on-product/BookingReserveAddOnProductEditorComponent';
+import {BookingUndoCheckInComponent} from './components/undo-check-in/BookingUndoCheckInComponent';
 
 @NgModule({
     imports: [CommonModule, FormsModule,
@@ -30,7 +31,8 @@ import {BookingReserveAddOnProductEditorComponent} from './components/reserve-ad
         BookingCapacityEditorComponent, BookingPaymentGuaranteeEditorComponent, BookingDetailsEditorComponent,
         BookingPriceProductEditorComponent, BookingAllotmentViewerComponent,
         BookingCustomerEditorComponent, BookingReactivateComponent, BookingCancelComponent,
-        BookingSendConfirmationComponent, BookingLinksComponent, BookingReserveAddOnProductEditorComponent],
+        BookingSendConfirmationComponent, BookingLinksComponent, BookingReserveAddOnProductEditorComponent,
+        BookingUndoCheckInComponent],
     exports: [BookingOperationsPageComponent]
 })
 export class BookingOperationsPageModule { }
