@@ -3,10 +3,10 @@ import {ThStatusCode} from '../core/utils/th-responses/ThResponse';
 
 class HealthCheckController extends BaseController {
 	
-    public getHealth(req: Express.Request, res: Express.Response) {
+    public getHealth(req, res) {
 		sails.models.hotelsentity.count().exec((error, found) => {
 			if(error) {
-				this.returnErrorResponse(req, res, error, ThStatusCode.InternalServerError);
+				res.serverError();
 			}
 			this.returnSuccesfulResponse(req, res, { result: found });
 		});
