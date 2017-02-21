@@ -153,6 +153,7 @@ module.exports.routes = {
 
 	'GET /api/reports/report': 'ReportsController.getReport',
 
+	'GET /api/health': 'HealthCheckController.getHealth',
 
 	/*Front End Views	*/
 	'GET /home*': {
