@@ -46,7 +46,7 @@ module.exports.policies = {
 		'resetPassword': ['contextBuilder']
 	},
 	HealthCheckController: {
-		'health': ['contextBuilder']
+		'getHealth': ['contextBuilder']
 	},
 
 };
