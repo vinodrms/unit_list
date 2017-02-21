@@ -1,8 +1,11 @@
-import {BookingConfirmationStatus} from './BookingDO';
-import {BookingIntervalEditRight, BookingNoShowEditRight, BookingAssignRoomRight, 
-        BookingCapacityEditRight, BookingPaymentGuaranteeEditRight, BookingDetailsEditRight,
-        BookingCustomerEditRight, BookingCancelRight, BookingReactivateRight,
-        BookingSendConfirmationRight, BookingReserveAddOnProductRight, BookingChangePriceProductRight} from './BookingEditRights';
+import { BookingConfirmationStatus } from './BookingDO';
+import {
+    BookingIntervalEditRight, BookingNoShowEditRight, BookingAssignRoomRight,
+    BookingCapacityEditRight, BookingPaymentGuaranteeEditRight, BookingDetailsEditRight,
+    BookingCustomerEditRight, BookingCancelRight, BookingReactivateRight,
+    BookingSendConfirmationRight, BookingReserveAddOnProductRight, BookingChangePriceProductRight,
+    BookingUndoCheckInRight
+} from './BookingEditRights';
 
 export interface BookingMetaOptions {
     confirmationStatus: BookingConfirmationStatus;
@@ -21,6 +24,7 @@ export interface BookingMetaOptions {
     sendConfirmationRight: BookingSendConfirmationRight;
     reserveAddOnProductRight: BookingReserveAddOnProductRight;
     changePriceProductRight: BookingChangePriceProductRight;
+    undoCheckInRight: BookingUndoCheckInRight;
 }
 
 export class BookingMeta {
@@ -40,6 +44,7 @@ export class BookingMeta {
     sendConfirmationRight: BookingSendConfirmationRight;
     reserveAddOnProductRight: BookingReserveAddOnProductRight;
     changePriceProductRight: BookingChangePriceProductRight;
+    undoCheckInRight: BookingUndoCheckInRight;
 
     constructor(metaOptions: BookingMetaOptions) {
         this.confirmationStatus = metaOptions.confirmationStatus;
@@ -58,5 +63,6 @@ export class BookingMeta {
         this.sendConfirmationRight = metaOptions.sendConfirmationRight;
         this.reserveAddOnProductRight = metaOptions.reserveAddOnProductRight;
         this.changePriceProductRight = metaOptions.changePriceProductRight;
+        this.undoCheckInRight = metaOptions.undoCheckInRight;
     }
 }

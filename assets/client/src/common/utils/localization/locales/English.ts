@@ -765,6 +765,9 @@ export var EnglishTranslations: Object = {
 	"Group Values By": "Group Values By",
 	"Day": "Day",
 	"Month": "Month",
-	"File Format": "File Format"
+	"File Format": "File Format",
+	"Undo Check In": "Undo Check In",
+	"Are you sure you want to undo the check in? This will move the booking back to the arrivals pane.": "Are you sure you want to undo the check in? This will move the booking back to the arrivals pane.",
+	
 
 };
