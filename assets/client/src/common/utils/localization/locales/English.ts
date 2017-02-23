@@ -544,7 +544,7 @@ export var EnglishTranslations: Object = {
 	"This confirms that you have acquired all the necessary information to bill the customer": "This confirms that you have acquired all the necessary information to bill the customer",
 	"Booking Notes": "Booking Notes",
 	"Recipients": "Recipients",
-	"Add Bookings": "Add Bookings",
+	"Save Bookings": "Save Bookings",
 	"Recipient": "Recipient",
 	"Select All": "Select All",
 	"Not configured": "Not configured",
