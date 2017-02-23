@@ -3,7 +3,7 @@
 	<h4 class="modal-title">{{ 'Select Customer' | translate }}</h4>
 </div>
 <div class="modal-body table-selection">
-		<div class="row">
+	<div class="row" *ngIf="!isEditing">
 		<ul class="nav nav-tabs">
 			<li *ngFor="let filter of filterList" [ngClass]="{active : isFilterSelected(filter)}">
 				<a (click)="selectFilter(filter)">{{filter.customerTypeName | translate}}</a>
@@ -11,10 +11,22 @@
 		</ul>
 		<br/>
 	</div>
-	<lazy-loading-table (onSelect)="didSelectCustomer($event)" (onMultiSelect)="didSelectCustomerList($event)"></lazy-loading-table>
+	<lazy-loading-table 
+		[hidden]="isEditing"
+		(onSelect)="didSelectCustomer($event)" 
+		(onMultiSelect)="didSelectCustomerList($event)"
+		(onAdd)="addCustomer()"
+		(onEdit)="editCustomer($event)">
+	</lazy-loading-table>
+	<customer-register-edit-container
+		*ngIf="isEditing"
+		[customerVM]="editingCustomer"
+		(onExit)="exitEditMode($event)">
+		>
+	</customer-register-edit-container>
 </div>
 <div class="modal-footer">
-	<button type="button" class="btn btn-primary" [disabled]="!hasSelectedCustomer()" (click)="triggerSelectedCustomerList()">
+	<button type="button" class="btn btn-primary" [disabled]="!hasSelectedCustomer() || isEditing" (click)="triggerSelectedCustomerList()">
 		{{ 'Select' | translate }}
 	</button>
 </div>
