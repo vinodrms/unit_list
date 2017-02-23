@@ -19,7 +19,7 @@
 						<a class="btn btn-square btn-square-finalize" *ngIf="isLastStep()" [ngClass]="{disabled: !canMoveNext()}" (click)="addBookings()" >
 							<i *ngIf="!isAddingBookings" class="fa fa-envelope"></i> 
 							<i *ngIf="isAddingBookings" class="fa fa-spinner fa-pulse"></i>
-							{{'Add Bookings' | translate}}
+							{{'Save Bookings' | translate}}
 						</a>
 					</p>
 					<p class="btn-err-container" *ngIf="errorString">
