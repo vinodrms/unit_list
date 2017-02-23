@@ -48,3 +48,7 @@ export enum BookingChangePriceProductRight {
     Edit,
     None
 }
+export enum BookingUndoCheckInRight {
+    Allowed,
+    None
+}

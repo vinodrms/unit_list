@@ -147,11 +147,13 @@ module.exports.routes = {
 	'POST /api/hotelOperations/booking/reactivate': 'HotelBookingOperationsController.reactivate',
 	'POST /api/hotelOperations/booking/reserveAddOnProducts': 'HotelBookingOperationsController.reserveAddOnProducts',
 	'POST /api/hotelOperations/booking/changePriceProduct': 'HotelBookingOperationsController.changePriceProduct',
+	'POST /api/hotelOperations/booking/undoCheckIn': 'HotelBookingOperationsController.undoCheckIn',
 
 	'POST /api/hotelOperations/common/sendEmail': 'HotelCommonOperationsController.sendEmail',
 
 	'GET /api/reports/report': 'ReportsController.getReport',
 
+	'GET /api/health': 'HealthCheckController.getHealth',
 
 	/*Front End Views	*/
 	'GET /home*': {

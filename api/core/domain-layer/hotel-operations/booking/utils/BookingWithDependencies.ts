@@ -94,17 +94,18 @@ export class BookingWithDependencies {
     }
 
     public hasClosedInvoice(): boolean {
-        if (this._invoiceGroupList.length == 0) { return false; }
-        var foundInvoiceGroup: InvoiceGroupDO = _.find(this._invoiceGroupList, (groupInvoice: InvoiceGroupDO) => {
+        let invoiceGroup = this.getInvoiceGroupDO();
+        if (this._thUtils.isUndefinedOrNull(invoiceGroup)) { return false; }
+
+        let invoice = invoiceGroup.getInvoiceForBooking(this._bookingDO.bookingId);
+        if (this._thUtils.isUndefinedOrNull(invoice)) { return false; }
+        return invoice.isClosed();
+    }
+
+    public getInvoiceGroupDO(): InvoiceGroupDO {
+        if (this._invoiceGroupList.length == 0) { return null; }
+        return _.find(this._invoiceGroupList, (groupInvoice: InvoiceGroupDO) => {
             return groupInvoice.groupBookingId === this._bookingDO.groupBookingId;
         });
-        if (this._thUtils.isUndefinedOrNull(foundInvoiceGroup)) { return false; }
-
-        var foundInvoice: InvoiceDO = _.find(foundInvoiceGroup.invoiceList, (innerInvoice: InvoiceDO) => {
-            return innerInvoice.bookingId === this._bookingDO.bookingId;
-        });
-        if (this._thUtils.isUndefinedOrNull(foundInvoice)) { return false; }
-
-        return foundInvoice.isClosed();
     }
 }

@@ -90,6 +90,7 @@ export enum ThServerApi {
 	HotelOperationsCommonSendEmail,
 	HotelOperationsBookingReserveAddOnProducts,
 	HotelOperationsBookingChangePriceProduct,
+	HotelOperationsBookingUndoCheckIn,
 
 	InvoiceGroups,
 	InvoiceGroupsCount,
@@ -196,6 +197,7 @@ ThServerApiUrl[ThServerApi.HotelOperationsBookingCancel] = "/hotelOperations/boo
 ThServerApiUrl[ThServerApi.HotelOperationsBookingReactivate] = "/hotelOperations/booking/reactivate";
 ThServerApiUrl[ThServerApi.HotelOperationsBookingReserveAddOnProducts] = "/hotelOperations/booking/reserveAddOnProducts";
 ThServerApiUrl[ThServerApi.HotelOperationsBookingChangePriceProduct] = "/hotelOperations/booking/changePriceProduct";
+ThServerApiUrl[ThServerApi.HotelOperationsBookingUndoCheckIn] = "/hotelOperations/booking/undoCheckIn";
 
 ThServerApiUrl[ThServerApi.HotelOperationsCommonSendEmail] = "/hotelOperations/common/sendEmail";
 

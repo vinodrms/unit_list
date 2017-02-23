@@ -1,11 +1,11 @@
-import {BaseDO} from '../../common/base/BaseDO';
-import {InvoiceDO, InvoicePaymentStatus} from './InvoiceDO';
-import {InvoiceItemDO} from './items/InvoiceItemDO';
-import {InvoicePayerDO} from './payers/InvoicePayerDO';
-import {IBookingRepository} from '../../bookings/repositories/IBookingRepository';
-import {BookingDO} from '../../bookings/data-objects/BookingDO';
-import {CustomerDO} from '../../customers/data-objects/CustomerDO';
-import {TaxDO} from '../../taxes/data-objects/TaxDO';
+import { BaseDO } from '../../common/base/BaseDO';
+import { InvoiceDO, InvoicePaymentStatus } from './InvoiceDO';
+import { InvoiceItemDO } from './items/InvoiceItemDO';
+import { InvoicePayerDO } from './payers/InvoicePayerDO';
+import { IBookingRepository } from '../../bookings/repositories/IBookingRepository';
+import { BookingDO } from '../../bookings/data-objects/BookingDO';
+import { CustomerDO } from '../../customers/data-objects/CustomerDO';
+import { TaxDO } from '../../taxes/data-objects/TaxDO';
 
 export enum InvoiceGroupStatus {
     Active,
@@ -89,6 +89,11 @@ export class InvoiceGroupDO extends BaseDO {
     public removeItemsPopulatedFromBooking() {
         _.forEach(this.invoiceList, (invoiceDO: InvoiceDO) => {
             invoiceDO.removeItemsPopulatedFromBooking();
+        });
+    }
+    public getInvoiceForBooking(bookingId: string): InvoiceDO {
+        return _.find(this.invoiceList, (innerInvoice: InvoiceDO) => {
+            return innerInvoice.bookingId === bookingId;
         });
     }
 }
