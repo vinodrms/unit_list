@@ -1,27 +1,35 @@
-import {Component, AfterViewInit, ViewChild} from '@angular/core';
-import {BaseComponent} from '../../../../../../../common/base/BaseComponent';
-import {LazyLoadingTableComponent} from '../../../../../../../common/utils/components/lazy-loading/LazyLoadingTableComponent';
-import {LazyLoadTableMeta, TableRowCommand} from '../../../../../../../common/utils/components/lazy-loading/utils/LazyLoadTableMeta';
-import {AppContext} from '../../../../../../../common/utils/AppContext';
-import {ICustomModalComponent, ModalSize} from '../../../../../../../common/utils/modals/utils/ICustomModalComponent';
-import {ModalDialogRef} from '../../../../../../../common/utils/modals/utils/ModalDialogRef';
-import {CustomerRegisterTableMetaBuilderService} from '../main/services/CustomerRegisterTableMetaBuilderService';
-import {CustomerTableFilterService} from '../main/services/CustomerTableFilterService';
-import {CustomerRegisterModalInput} from './services/utils/CustomerRegisterModalInput';
-import {CustomerDO} from '../../../../../services/customers/data-objects/CustomerDO';
-import {CustomerVM} from '../../../../../services/customers/view-models/CustomerVM';
-import {CustomersService} from '../../../../../services/customers/CustomersService';
-import {CustomerDetailsMeta} from '../../../../../services/customers/data-objects/customer-details/ICustomerDetailsDO';
+import { Component, AfterViewInit, ViewChild } from '@angular/core';
+import { BaseComponent } from '../../../../../../../common/base/BaseComponent';
+import { LazyLoadingTableComponent } from '../../../../../../../common/utils/components/lazy-loading/LazyLoadingTableComponent';
+import { LazyLoadTableMeta, TableRowCommand } from '../../../../../../../common/utils/components/lazy-loading/utils/LazyLoadTableMeta';
+import { AppContext } from '../../../../../../../common/utils/AppContext';
+import { ICustomModalComponent, ModalSize } from '../../../../../../../common/utils/modals/utils/ICustomModalComponent';
+import { ModalDialogRef } from '../../../../../../../common/utils/modals/utils/ModalDialogRef';
+import { CustomerRegisterTableMetaBuilderService } from '../main/services/CustomerRegisterTableMetaBuilderService';
+import { CustomerTableFilterService } from '../main/services/CustomerTableFilterService';
+import { CustomerRegisterModalInput } from './services/utils/CustomerRegisterModalInput';
+import { CustomerDO } from '../../../../../services/customers/data-objects/CustomerDO';
+import { CustomerVM } from '../../../../../services/customers/view-models/CustomerVM';
+import { CustomersService } from '../../../../../services/customers/CustomersService';
+import { CustomerDetailsMeta } from '../../../../../services/customers/data-objects/customer-details/ICustomerDetailsDO';
+import { SETTINGS_PROVIDERS } from '../../../../../services/settings/SettingsProviders';
+import { HotelService } from '../../../../../services/hotel/HotelService';
+import { HotelAggregatorService } from '../../../../../services/hotel/HotelAggregatorService';
+import { CustomerRegisterComponent } from '../main/CustomerRegisterComponent';
 
 @Component({
 	selector: 'customer-register-modal',
 	templateUrl: '/client/src/pages/internal/containers/common/inventory/customer-register/modal/template/customer-register-modal.html',
-	providers: [CustomerRegisterTableMetaBuilderService, CustomerTableFilterService, CustomersService]
+	providers: [CustomerRegisterTableMetaBuilderService, CustomerTableFilterService,
+		SETTINGS_PROVIDERS, HotelService, HotelAggregatorService, CustomersService]
 })
 export class CustomerRegisterModalComponent extends BaseComponent implements ICustomModalComponent, AfterViewInit {
 	@ViewChild(LazyLoadingTableComponent)
 	private _aopTableComponent: LazyLoadingTableComponent<CustomerVM>;
 	private _selectedCustomerList: CustomerDO[] = [];
+
+	private editingCustomer: CustomerVM;
+	private isEditing = false;
 
 	constructor(private _appContext: AppContext,
 		private _modalDialogRef: ModalDialogRef<CustomerDO[]>,
@@ -37,7 +45,6 @@ export class CustomerRegisterModalComponent extends BaseComponent implements ICu
 	}
 	private bootstrapCustomersTable() {
 		var lazyLoadTableMeta: LazyLoadTableMeta = this._tableBuilder.buildLazyLoadTableMeta();
-		lazyLoadTableMeta.supportedRowCommandList = [TableRowCommand.Search];
 		if (this._modalInput.multiSelection) {
 			lazyLoadTableMeta.supportedRowCommandList.push(TableRowCommand.MultipleSelect);
 		}
@@ -85,5 +92,34 @@ export class CustomerRegisterModalComponent extends BaseComponent implements ICu
 	}
 	protected selectFilter(filter: CustomerDetailsMeta) {
 		return this._custTableFilterService.selectFilter(filter);
+	}
+	protected addCustomer() {
+		this.editingCustomer = CustomerRegisterComponent.buildNewCustomerVM();
+		this.isEditing = true;
+	}
+	protected editCustomer(customerVM: CustomerVM) {
+		this.editingCustomer = customerVM.buildPrototype();
+		this.isEditing = true;
+	}
+	protected exitEditMode(selectedCustomer?: CustomerVM) {
+		this.isEditing = false;
+		if (!this._appContext.thUtils.isUndefinedOrNull(selectedCustomer, "customer")) {
+			this._aopTableComponent.selectItem(selectedCustomer);
+			this._aopTableComponent.updateTextSearchInput(selectedCustomer.customer.customerName);
+			this.addSelectedCustomer(selectedCustomer);
+		}
+	}
+	private addSelectedCustomer(customerVM: CustomerVM) {
+		if (this._modalInput.multiSelection) {
+			let foundCustomer = _.find(this._selectedCustomerList, (cust: CustomerDO) => {
+				return cust.id === customerVM.customer.id;
+			});
+			if (this._appContext.thUtils.isUndefinedOrNull(foundCustomer)) {
+				this._selectedCustomerList.push(customerVM.customer);
+			}
+		}
+		else {
+			this.didSelectCustomer(customerVM);
+		}
 	}
 }
