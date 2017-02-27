@@ -1,11 +1,11 @@
-import {Component} from '@angular/core';
-import {FormGroup} from '@angular/forms';
-import {AppContext} from '../../../../common/utils/AppContext';
-import {ThError} from '../../../../common/utils/responses/ThError';
-import {BaseFormComponent} from '../../../../common/base/BaseFormComponent';
-import {SignUpService} from './services/SignUpService';
-import {LoginStatusCode} from '../../../../common/utils/responses/LoginStatusCode';
-import {LoadingButtonComponent} from '../../../../common/utils/components/LoadingButtonComponent';
+import { Component } from '@angular/core';
+import { FormGroup } from '@angular/forms';
+import { AppContext } from '../../../../common/utils/AppContext';
+import { ThError } from '../../../../common/utils/responses/ThError';
+import { BaseFormComponent } from '../../../../common/base/BaseFormComponent';
+import { SignUpService } from './services/SignUpService';
+import { LoginStatusCode } from '../../../../common/utils/responses/LoginStatusCode';
+import { LoadingButtonComponent } from '../../../../common/utils/components/LoadingButtonComponent';
 
 @Component({
 	selector: 'sign-up-component',
@@ -34,7 +34,7 @@ export class SignUpComponent extends BaseFormComponent {
 		this.isLoading = true;
 		this._signUpService.signUp().subscribe((result: Object) => {
 			this.isLoading = false;
-			this._appContext.routerNavigator.navigateTo("/login", LoginStatusCode.SignUpOk);
+			this._appContext.routerNavigator.navigateTo("/signed-up");
 		}, (error: ThError) => {
 			this.isLoading = false;
 			this._appContext.toaster.error(error.message);
