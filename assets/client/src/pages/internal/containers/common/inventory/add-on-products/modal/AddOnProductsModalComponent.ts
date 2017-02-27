@@ -1,22 +1,22 @@
-import {Component, AfterViewInit, ViewChild} from '@angular/core';
-import {BaseComponent} from '../../../../../../../common/base/BaseComponent';
-import {LazyLoadingTableComponent} from '../../../../../../../common/utils/components/lazy-loading/LazyLoadingTableComponent';
-import {ThError, AppContext} from '../../../../../../../common/utils/AppContext';
-import {ICustomModalComponent, ModalSize} from '../../../../../../../common/utils/modals/utils/ICustomModalComponent';
-import {ModalDialogRef} from '../../../../../../../common/utils/modals/utils/ModalDialogRef';
-import {AddOnProductDO} from '../../../../../services/add-on-products/data-objects/AddOnProductDO';
-import {AddOnProductVM} from '../../../../../services/add-on-products/view-models/AddOnProductVM';
-import {AddOnProductsService} from '../../../../../services/add-on-products/AddOnProductsService';
-import {TaxService} from '../../../../../services/taxes/TaxService';
-import {SETTINGS_PROVIDERS} from '../../../../../services/settings/SettingsProviders';
-import {HotelAggregatorService} from '../../../../../services/hotel/HotelAggregatorService';
-import {HotelService} from '../../../../../services/hotel/HotelService';
-import {AddOnProductTableMetaBuilderService} from '../main/services/AddOnProductTableMetaBuilderService';
-import {LazyLoadTableMeta, TableRowCommand} from '../../../../../../../common/utils/components/lazy-loading/utils/LazyLoadTableMeta';
-import {AddOnProductCategoriesService} from '../../../../../services/settings/AddOnProductCategoriesService';
-import {AddOnProductCategoriesDO} from '../../../../../services/settings/data-objects/AddOnProductCategoriesDO';
-import {AddOnProductCategoryDO} from '../../../../../services/common/data-objects/add-on-product/AddOnProductCategoryDO';
-import {AddOnProductsModalInput} from './services/utils/AddOnProductsModalInput';
+import { Component, AfterViewInit, ViewChild } from '@angular/core';
+import { BaseComponent } from '../../../../../../../common/base/BaseComponent';
+import { LazyLoadingTableComponent } from '../../../../../../../common/utils/components/lazy-loading/LazyLoadingTableComponent';
+import { ThError, AppContext } from '../../../../../../../common/utils/AppContext';
+import { ICustomModalComponent, ModalSize } from '../../../../../../../common/utils/modals/utils/ICustomModalComponent';
+import { ModalDialogRef } from '../../../../../../../common/utils/modals/utils/ModalDialogRef';
+import { AddOnProductDO } from '../../../../../services/add-on-products/data-objects/AddOnProductDO';
+import { AddOnProductVM } from '../../../../../services/add-on-products/view-models/AddOnProductVM';
+import { AddOnProductsService } from '../../../../../services/add-on-products/AddOnProductsService';
+import { TaxService } from '../../../../../services/taxes/TaxService';
+import { SETTINGS_PROVIDERS } from '../../../../../services/settings/SettingsProviders';
+import { HotelAggregatorService } from '../../../../../services/hotel/HotelAggregatorService';
+import { HotelService } from '../../../../../services/hotel/HotelService';
+import { AddOnProductTableMetaBuilderService } from '../main/services/AddOnProductTableMetaBuilderService';
+import { LazyLoadTableMeta, TableRowCommand } from '../../../../../../../common/utils/components/lazy-loading/utils/LazyLoadTableMeta';
+import { AddOnProductCategoriesService } from '../../../../../services/settings/AddOnProductCategoriesService';
+import { AddOnProductCategoriesDO } from '../../../../../services/settings/data-objects/AddOnProductCategoriesDO';
+import { AddOnProductCategoryDO } from '../../../../../services/common/data-objects/add-on-product/AddOnProductCategoryDO';
+import { AddOnProductsModalInput } from './services/utils/AddOnProductsModalInput';
 
 @Component({
 	selector: 'add-on-products-modal',
@@ -29,6 +29,9 @@ export class AddOnProductsModalComponent extends BaseComponent implements ICusto
 
 	private _selectedAddOnProductList: AddOnProductDO[] = [];
 
+	private editingAddOnVM: AddOnProductVM;
+	private isEditing = false;
+
 	constructor(private _appContext: AppContext,
 		private _modalDialogRef: ModalDialogRef<AddOnProductDO[]>,
 		private _tableBuilder: AddOnProductTableMetaBuilderService,
@@ -40,15 +43,15 @@ export class AddOnProductsModalComponent extends BaseComponent implements ICusto
 
 	public ngAfterViewInit() {
 		this._addOnProductCategoriesService.getAddOnProductCategoriesDO().subscribe((addOnProductCategoriesDO: AddOnProductCategoriesDO) => {
-            var breakfastCategory: AddOnProductCategoryDO = addOnProductCategoriesDO.getBreakfastCategory();
-            if (this._modalInput.filterBreakfast) {
-                this._addOnProductsService.setDefaultCategory(breakfastCategory);
-            }
-            else {
-                this._addOnProductsService.setDefaultNotEqualWithCategory(breakfastCategory);
-            }
-            this.bootstrapAddOnProductsTable();
-        });
+			var breakfastCategory: AddOnProductCategoryDO = addOnProductCategoriesDO.getBreakfastCategory();
+			if (this._modalInput.filterBreakfast) {
+				this._addOnProductsService.setDefaultCategory(breakfastCategory);
+			}
+			else {
+				this._addOnProductsService.setDefaultNotEqualWithCategory(breakfastCategory);
+			}
+			this.bootstrapAddOnProductsTable();
+		});
 	}
 	private bootstrapAddOnProductsTable() {
 		var lazyLoadTableMeta: LazyLoadTableMeta = this._tableBuilder.buildLazyLoadTableMeta(false);
@@ -56,7 +59,7 @@ export class AddOnProductsModalComponent extends BaseComponent implements ICusto
 		if (this._modalInput.multiSelection) {
 			selectionRowCommand = TableRowCommand.MultipleSelect;
 		}
-		lazyLoadTableMeta.supportedRowCommandList = [TableRowCommand.Search, selectionRowCommand];
+		lazyLoadTableMeta.supportedRowCommandList = [TableRowCommand.Search, selectionRowCommand, TableRowCommand.Add, TableRowCommand.Edit, TableRowCommand.Delete];
 		lazyLoadTableMeta.autoSelectRows = true;
 		this._aopTableComponent.bootstrap(this._addOnProductsService, lazyLoadTableMeta);
 	}
@@ -96,5 +99,18 @@ export class AddOnProductsModalComponent extends BaseComponent implements ICusto
 		}
 		this._modalDialogRef.addResult(this._selectedAddOnProductList);
 		this.closeDialog();
+	}
+
+	protected addAddOnProduct() {
+		this.editingAddOnVM = new AddOnProductVM();
+		this.editingAddOnVM.addOnProduct = new AddOnProductDO();
+		this.isEditing = true;
+	}
+	protected editAddOnProduct(addOnVM: AddOnProductVM) {
+		this.editingAddOnVM = addOnVM.buildPrototype();
+		this.isEditing = true;
+	}
+	protected exitEditMode() {
+		this.isEditing = false;
 	}
 }
