@@ -104,6 +104,11 @@ export class AddOnProductCategories extends ABaseSetting {
         },
         {
             type: AddOnProductCategoryType.AddOnProduct,
+            name: "Rooms",
+            iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
+        },
+        {
+            type: AddOnProductCategoryType.AddOnProduct,
             name: "Other",
             iconUrl: "http://res.cloudinary.com/hbpr8ossz/image/upload/v1455114119/iznokfvetygeaiqgyobe.png"
         }
