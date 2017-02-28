@@ -84,8 +84,16 @@ export class InvoiceEditComponent implements OnInit {
     public openCustomerSelectModal() {
         this._customerRegisterModalService.openCustomerRegisterModal(false).then((modalDialogInstance: ModalDialogRef<CustomerDO[]>) => {
             modalDialogInstance.resultObservable.subscribe((selectedCustomerList: CustomerDO[]) => {
-                this.invoiceVM.addInvoicePayer(selectedCustomerList[0]);
-                this._invoiceGroupControllerService.invoiceOperationsPageData.customersContainer.appendCustomer(selectedCustomerList[0]);
+                let selectedCustomer = selectedCustomerList[0];
+
+                if (this.invoiceVM.invoiceDO.isWalkInInvoice() && !selectedCustomer.canCreateWalkInInvoices()) {
+                    let errorMessage = this._appContext.thTranslation.translate("You cannot create walk in invoices for customers with Pay Invoice By Agreement enabled.");
+                    this._appContext.toaster.error(errorMessage);
+                    return;
+                }
+
+                this.invoiceVM.addInvoicePayer(selectedCustomer);
+                this._invoiceGroupControllerService.invoiceOperationsPageData.customersContainer.appendCustomer(selectedCustomer);
             });
         }).catch((e: any) => { });
     }
