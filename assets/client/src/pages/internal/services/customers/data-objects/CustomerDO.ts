@@ -1,9 +1,9 @@
-import {BaseDO} from '../../../../../common/base/BaseDO';
-import {FileAttachmentDO} from '../../common/data-objects/file/FileAttachmentDO';
-import {CustomerPriceProductDetailsDO} from './price-product-details/CustomerPriceProductDetailsDO';
-import {ICustomerDetailsDO} from './customer-details/ICustomerDetailsDO';
-import {CustomerDetailsFactory} from './customer-details/CustomerDetailsFactory';
-import {PriceProductDO, PriceProductAvailability} from '../../price-products/data-objects/PriceProductDO';
+import { BaseDO } from '../../../../../common/base/BaseDO';
+import { FileAttachmentDO } from '../../common/data-objects/file/FileAttachmentDO';
+import { CustomerPriceProductDetailsDO } from './price-product-details/CustomerPriceProductDetailsDO';
+import { ICustomerDetailsDO } from './customer-details/ICustomerDetailsDO';
+import { CustomerDetailsFactory } from './customer-details/CustomerDetailsFactory';
+import { PriceProductDO, PriceProductAvailability } from '../../price-products/data-objects/PriceProductDO';
 
 export enum CustomerType {
 	Individual,
@@ -84,5 +84,8 @@ export class CustomerDO extends BaseDO {
 			return true;
 		}
 		return _.contains(this.priceProductDetails.priceProductIdList, priceProduct.id);
+	}
+	public canCreateWalkInInvoices(): boolean {
+		return !this.customerDetails.canPayInvoiceByAgreement();
 	}
 }

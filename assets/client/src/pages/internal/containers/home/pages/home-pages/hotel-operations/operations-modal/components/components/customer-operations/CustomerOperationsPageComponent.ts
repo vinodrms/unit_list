@@ -1,12 +1,12 @@
-import {Component, OnInit, Input} from '@angular/core';
-import {CustomScroll} from '../../../../../../../../../../../common/utils/directives/CustomScroll';
-import {ThError, AppContext} from '../../../../../../../../../../../common/utils/AppContext';
-import {HotelCustomerOperationsPageParam} from './utils/HotelCustomerOperationsPageParam';
-import {CustomerOperationsPageService} from './services/CustomerOperationsPageService';
-import {CustomerOperationsPageData} from './services/utils/CustomerOperationsPageData';
-import {CustomerVM} from '../../../../../../../../../services/customers/view-models/CustomerVM';
-import {CustomerDO} from '../../../../../../../../../services/customers/data-objects/CustomerDO';
-import {HotelOperationsPageControllerService} from '../../services/HotelOperationsPageControllerService';
+import { Component, OnInit, Input } from '@angular/core';
+import { CustomScroll } from '../../../../../../../../../../../common/utils/directives/CustomScroll';
+import { ThError, AppContext } from '../../../../../../../../../../../common/utils/AppContext';
+import { HotelCustomerOperationsPageParam } from './utils/HotelCustomerOperationsPageParam';
+import { CustomerOperationsPageService } from './services/CustomerOperationsPageService';
+import { CustomerOperationsPageData } from './services/utils/CustomerOperationsPageData';
+import { CustomerVM } from '../../../../../../../../../services/customers/view-models/CustomerVM';
+import { CustomerDO } from '../../../../../../../../../services/customers/data-objects/CustomerDO';
+import { HotelOperationsPageControllerService } from '../../services/HotelOperationsPageControllerService';
 
 @Component({
     selector: 'customer-operations-page',
@@ -58,6 +58,10 @@ export class CustomerOperationsPageComponent implements OnInit {
         this.customerOperationsPageData.customerVM.customer = customer;
         this.customerOperationsPageData = this.customerOperationsPageData.buildPrototype();
         this.updateContainerData();
+    }
+
+    public canCreateWalkInInvoices(): boolean {
+        return this.customerOperationsPageData.customerVM.customer.canCreateWalkInInvoices();
     }
 
     public createInvoice() {
