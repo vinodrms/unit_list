@@ -77,4 +77,7 @@ export class CustomerDO extends BaseDO {
 		}
 		return _.contains(this.priceProductDetails.priceProductIdList, priceProduct.id);
 	}
+	public canCreateWalkInInvoices(): boolean {
+		return !this.customerDetails.canPayInvoiceByAgreement();
+	}
 }
