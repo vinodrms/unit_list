@@ -10,6 +10,8 @@ import { CustomerDO } from '../../customers/data-objects/CustomerDO';
 import { InvoicePaymentMethodType } from './payers/InvoicePaymentMethodDO';
 import { FeeInvoiceItemMetaDO } from './items/invoice-fee/FeeInvoiceItemMetaDO';
 
+import _ = require('underscore');
+
 export enum InvoicePaymentStatus {
     Unpaid, Paid, LossAcceptedByManagement
 }
@@ -161,5 +163,9 @@ export class InvoiceDO extends BaseDO {
                 this.itemList.splice(index, 1);
             }
         });
+    }
+
+    public isWalkInInvoice(): boolean {
+        return !_.isString(this.bookingId) || this.bookingId.length == 0;
     }
 }
