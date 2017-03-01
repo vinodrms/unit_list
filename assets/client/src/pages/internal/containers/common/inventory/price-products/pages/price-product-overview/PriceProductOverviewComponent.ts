@@ -1,7 +1,6 @@
-import {Component, Input, Output, EventEmitter} from '@angular/core';
-import {BaseComponent} from '../../../../../../../../common/base/BaseComponent';
-import {PriceProductVM} from '../../../../../../services/price-products/view-models/PriceProductVM';
-import {PriceProductPriceConfigurationState} from '../../../../../../services/price-products/data-objects/price/IPriceProductPrice';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { BaseComponent } from '../../../../../../../../common/base/BaseComponent';
+import { PriceProductVM } from '../../../../../../services/price-products/view-models/PriceProductVM';
 
 @Component({
 	selector: 'price-product-overview',
@@ -40,13 +39,5 @@ export class PriceProductOverviewComponent extends BaseComponent {
 	@Output() onCopy = new EventEmitter();
 	public copyPriceProduct() {
 		this.onCopy.next(this._priceProductVM);
-	}
-
-	constructor() {
-		super();
-	}
-
-	public priceConfigurationIsValid(): boolean {
-		return this.priceProductVM.priceProduct.price.priceConfigurationState === PriceProductPriceConfigurationState.Valid;
 	}
 }

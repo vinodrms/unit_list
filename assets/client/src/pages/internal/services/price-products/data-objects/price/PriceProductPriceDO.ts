@@ -1,15 +1,14 @@
-import {BaseDO} from '../../../../../../common/base/BaseDO';
-import {PriceProductPriceType, IPriceProductPrice, PriceProductPriceConfigurationState} from './IPriceProductPrice';
-import {SinglePriceDO} from './single-price/SinglePriceDO';
-import {PricePerPersonDO} from './price-per-person/PricePerPersonDO';
+import { BaseDO } from '../../../../../../common/base/BaseDO';
+import { PriceProductPriceType, IPriceProductPrice } from './IPriceProductPrice';
+import { SinglePriceDO } from './single-price/SinglePriceDO';
+import { PricePerPersonDO } from './price-per-person/PricePerPersonDO';
 
 export class PriceProductPriceDO extends BaseDO {
 	type: PriceProductPriceType;
-	priceConfigurationState: PriceProductPriceConfigurationState;
 	priceList: IPriceProductPrice[];
 
 	protected getPrimitivePropertyKeys(): string[] {
-		return ["type", "priceConfigurationState"];
+		return ["type"];
 	}
 
 	public buildFromObject(object: Object) {
@@ -33,7 +32,7 @@ export class PriceProductPriceDO extends BaseDO {
 
 	public getPriceBriefValueForRoomCategoryId(roomCategoryId: string): number {
 		var price: IPriceProductPrice = _.find(this.priceList, (price: IPriceProductPrice) => { return price.getRoomCategoryId() === roomCategoryId });
-		if(!price) {
+		if (!price) {
 			return 0.0;
 		}
 		return price.getPriceBriefValue();

@@ -1,19 +1,18 @@
-import {BaseDO} from '../../../common/base/BaseDO';
-import {ThUtils} from '../../../../utils/ThUtils';
-import {PriceProductPriceType, PriceProductPriceQueryDO, IPriceProductPrice, PriceProductPriceConfigurationState} from './IPriceProductPrice';
-import {SinglePriceDO} from './single-price/SinglePriceDO';
-import {PricePerPersonDO} from './price-per-person/PricePerPersonDO';
-import {RoomCategoryStatsDO} from '../../../room-categories/data-objects/RoomCategoryStatsDO';
+import { BaseDO } from '../../../common/base/BaseDO';
+import { ThUtils } from '../../../../utils/ThUtils';
+import { PriceProductPriceType, PriceProductPriceQueryDO, IPriceProductPrice } from './IPriceProductPrice';
+import { SinglePriceDO } from './single-price/SinglePriceDO';
+import { PricePerPersonDO } from './price-per-person/PricePerPersonDO';
+import { RoomCategoryStatsDO } from '../../../room-categories/data-objects/RoomCategoryStatsDO';
 
 import _ = require('underscore');
 
 export class PriceProductPriceDO extends BaseDO implements IPriceProductPrice {
 	type: PriceProductPriceType;
-	priceConfigurationState: PriceProductPriceConfigurationState;
 	priceList: IPriceProductPrice[];
 
 	protected getPrimitivePropertyKeys(): string[] {
-		return ["type", "priceConfigurationState"];
+		return ["type"];
 	}
 
 	public buildFromObject(object: Object) {

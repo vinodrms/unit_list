@@ -8,11 +8,6 @@ export enum PriceProductPriceType {
 	PricePerPerson
 }
 
-export enum PriceProductPriceConfigurationState {
-	Valid,
-	MissingPrices
-}
-
 export interface PriceProductPriceQueryDO {
 	roomCategoryId: string;
 	configCapacity: ConfigCapacityDO;

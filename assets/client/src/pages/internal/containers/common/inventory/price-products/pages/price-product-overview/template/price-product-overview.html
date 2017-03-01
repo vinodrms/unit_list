@@ -10,11 +10,6 @@
 	</div>
 	<div>
 		<i class="fa fa-credit-card"></i> <small>{{priceProductVM.priceTypeString}}</small>
-		<i class="fa fa-check green-color" *ngIf="priceConfigurationIsValid()"></i>
-		<i class="fa fa-exclamation-circle red-color" *ngIf="!priceConfigurationIsValid()"></i>
-	</div>
-	<div *ngIf="!priceConfigurationIsValid()">
-		<label class="text-muted"><small><i class="fa fa-info-circle"></i> {{ 'Some prices are missing from the price product\'s configuration' | translate }}</small></label>
 	</div>
 	<div>
 		<i class="fa fa-globe"></i> <small>{{priceProductVM.availabilityString}}</small>

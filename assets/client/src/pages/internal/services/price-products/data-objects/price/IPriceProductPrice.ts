@@ -6,11 +6,6 @@ export enum PriceProductPriceType {
 	PricePerPerson
 }
 
-export enum PriceProductPriceConfigurationState {
-	Valid,
-	MissingPrices
-}
-
 export interface IPriceProductPrice extends BaseDO {
 	getPriceBriefValue(): number;
 	getRoomCategoryId(): string;

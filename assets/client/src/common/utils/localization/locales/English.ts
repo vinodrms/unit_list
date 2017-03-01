@@ -245,7 +245,6 @@ export var EnglishTranslations: Object = {
 	"Delete": "Delete",
 	"Archive": "Archive",
 	"Mark as Draft": "Mark as Draft",
-	"Some prices are missing from the price product\'s configuration": "Some prices are missing from the price product\'s configuration",
 	"Rooms": "Rooms",
 	"[Wizard Step 3] Rooms text": "Now it is time to build the rooms. Please add all bed types which can fit in the rooms at the same time, both stationary and moveable, to calculate the max capacity of your property.",
 	"Delete Price Product": "Delete Price Product",

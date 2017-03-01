@@ -5,7 +5,7 @@ import {NumberSuffixFormatter} from '../../../../../../../../../../common/utils/
 import {IPriceProductEditSection} from '../utils/IPriceProductEditSection';
 import {PriceProductVM} from '../../../../../../../../services/price-products/view-models/PriceProductVM';
 import {PricePerPersonDO} from '../../../../../../../../services/price-products/data-objects/price/price-per-person/PricePerPersonDO';
-import {PriceProductPriceType, PriceProductPriceConfigurationState} from '../../../../../../../../services/price-products/data-objects/price/IPriceProductPrice';
+import {PriceProductPriceType} from '../../../../../../../../services/price-products/data-objects/price/IPriceProductPrice';
 import {PriceProductPriceDO} from '../../../../../../../../services/price-products/data-objects/price/PriceProductPriceDO';
 import {SinglePriceDO} from '../../../../../../../../services/price-products/data-objects/price/single-price/SinglePriceDO';
 import {RoomCategoriesStatsService} from '../../../../../../../../services/room-categories/RoomCategoriesStatsService';
@@ -78,7 +78,6 @@ export class PriceProductEditPricesSectionComponent extends BaseComponent implem
 	public updateDataOn(priceProductVM: PriceProductVM) {
 		if (!priceProductVM.priceProduct.price) {
 			priceProductVM.priceProduct.price = new PriceProductPriceDO();
-			priceProductVM.priceProduct.price.priceConfigurationState = PriceProductPriceConfigurationState.Valid;
 		}
 		this.priceContainer.updatePricesOn(priceProductVM);
 	}
