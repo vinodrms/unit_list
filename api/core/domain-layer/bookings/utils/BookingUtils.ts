@@ -86,18 +86,21 @@ export class BookingUtils {
 
         bookingDO.price.priceType = BookingPriceType.BookingStay;
 
-        bookingDO.price.roomPricePerNight = this._thUtils.roundNumberToTwoDecimals(
-            bookingDO.priceProductSnapshot.price.getPricePerNightFor({
-                configCapacity: bookingDO.configCapacity,
-                roomCategoryId: bookingDO.roomCategoryId,
-                roomCategoryStatsList: roomCategoryStatsList,
-                bookingInterval: indexedBookingInterval
-            })
-        );
+        let pricePerNightList: number[] = bookingDO.priceProductSnapshot.price.getPricePerNightBreakdownFor({
+            configCapacity: bookingDO.configCapacity,
+            roomCategoryId: bookingDO.roomCategoryId,
+            roomCategoryStatsList: roomCategoryStatsList,
+            bookingInterval: indexedBookingInterval
+        });
+
+        // TODO: https://gitlab.3angletech.com/UnitPalDK/UnitPal/issues/139
+        // For now we keep the mean average for every night, whereas we need to keep the exact prices for each night
+        bookingDO.price.roomPricePerNight = this._thUtils.getArrayAverage(pricePerNightList);
+        bookingDO.price.roomPricePerNight = this._thUtils.roundNumberToTwoDecimals(bookingDO.price.roomPricePerNight);
+
         bookingDO.price.numberOfNights = indexedBookingInterval.getLengthOfStay();
-        bookingDO.price.totalRoomPrice = this._thUtils.roundNumberToTwoDecimals(
-            bookingDO.price.roomPricePerNight * bookingDO.price.numberOfNights
-        );
+        bookingDO.price.totalRoomPrice = this._thUtils.getArraySum(pricePerNightList);
+        bookingDO.price.totalRoomPrice = this._thUtils.roundNumberToTwoDecimals(bookingDO.price.totalRoomPrice);
         var includedBookingItems = this.getIncludedInvoiceItems(bookingDO.priceProductSnapshot, bookingDO.configCapacity, indexedBookingInterval);
         bookingDO.price.totalOtherPrice = includedBookingItems.getTotalPrice();
 

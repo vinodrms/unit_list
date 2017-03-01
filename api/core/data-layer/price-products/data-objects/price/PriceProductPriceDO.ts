@@ -5,10 +5,12 @@ import { SinglePriceDO } from './single-price/SinglePriceDO';
 import { PricePerPersonDO } from './price-per-person/PricePerPersonDO';
 import { RoomCategoryStatsDO } from '../../../room-categories/data-objects/RoomCategoryStatsDO';
 import { PriceExceptionDO } from './price-exceptions/PriceExceptionDO';
+import { ThDateDO } from '../../../../utils/th-dates/data-objects/ThDateDO';
+import { ISOWeekDay } from '../../../../utils/th-dates/data-objects/ISOWeekDay';
 
 import _ = require('underscore');
 
-export class PriceProductPriceDO extends BaseDO implements IPriceProductPrice {
+export class PriceProductPriceDO extends BaseDO {
 	type: PriceProductPriceType;
 	priceList: IPriceProductPrice[];
 	priceExceptionList: PriceExceptionDO[];
@@ -44,18 +46,39 @@ export class PriceProductPriceDO extends BaseDO implements IPriceProductPrice {
 	}
 
 	public hasPriceConfiguredFor(query: PriceProductPriceQueryDO): boolean {
-		var priceItem: IPriceProductPrice = this.getPriceForSingleRoomCategory(query.roomCategoryId);
+		var priceItem: IPriceProductPrice = this.getPriceForRoomCategory(query.roomCategoryId);
 		if (!priceItem) {
 			return false;
 		}
 		return priceItem.hasPriceConfiguredFor(query);
 	}
-	public getPricePerNightFor(query: PriceProductPriceQueryDO): number {
-		var priceItem: IPriceProductPrice = this.getPriceForSingleRoomCategory(query.roomCategoryId);
-		return priceItem.getPricePerNightFor(query);
+	public getPricePerNightBreakdownFor(query: PriceProductPriceQueryDO): number[] {
+		var priceBreakdown: number[] = [];
+
+		let priceItem: IPriceProductPrice = this.getPriceForRoomCategory(query.roomCategoryId);
+		let defaultPrice = priceItem.getPricePerNightFor(query);
+
+		var thUtils = new ThUtils();
+		_.forEach(query.bookingInterval.bookingDateList, (bookingDate: ThDateDO) => {
+			let exception = this.getPriceException(query.roomCategoryId, bookingDate.getISOWeekDay());
+			if (!thUtils.isUndefinedOrNull(exception)) {
+				let exceptionPrice = exception.price.getPricePerNightFor(query);
+				priceBreakdown.push(exceptionPrice);
+			}
+			else {
+				priceBreakdown.push(defaultPrice);
+			}
+		});
+		return priceBreakdown;
 	}
-	private getPriceForSingleRoomCategory(roomCategoryId: string): IPriceProductPrice {
+	private getPriceForRoomCategory(roomCategoryId: string): IPriceProductPrice {
 		return _.find(this.priceList, (price: IPriceProductPrice) => { return price.isConfiguredForRoomCategory(roomCategoryId) });
+	}
+	private getPriceException(roomCategoryId: string, dayOfWeek: ISOWeekDay): PriceExceptionDO {
+		return _.find(this.priceExceptionList, priceException => {
+			return priceException.roomCategoryId === roomCategoryId &&
+				priceException.dayFromWeek === dayOfWeek;
+		});
 	}
 
 	public priceConfigurationIsValidFor(roomCategoryStatList: RoomCategoryStatsDO[]): boolean {
@@ -69,7 +92,7 @@ export class PriceProductPriceDO extends BaseDO implements IPriceProductPrice {
 	}
 	private priceConfigurationIsValidForSingleRoomCategoryId(roomCategoryStatList: RoomCategoryStatsDO[], roomCategoryId: string): boolean {
 		var thUtils = new ThUtils();
-		var priceItem: IPriceProductPrice = this.getPriceForSingleRoomCategory(roomCategoryId);
+		var priceItem: IPriceProductPrice = this.getPriceForRoomCategory(roomCategoryId);
 		if (thUtils.isUndefinedOrNull(priceItem)) {
 			return false;
 		}
@@ -78,7 +101,7 @@ export class PriceProductPriceDO extends BaseDO implements IPriceProductPrice {
 
 	public isConfiguredForRoomCategory(roomCategoryId: string): boolean {
 		var thUtils = new ThUtils();
-		var priceItem: IPriceProductPrice = this.getPriceForSingleRoomCategory(roomCategoryId);
+		var priceItem: IPriceProductPrice = this.getPriceForRoomCategory(roomCategoryId);
 		return !thUtils.isUndefinedOrNull(priceItem);
 	}
 

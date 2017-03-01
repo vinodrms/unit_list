@@ -66,8 +66,6 @@ export class BookingPossiblePrices {
 
     private getBookingPossiblePriceItems(): BookingPossiblePriceItems {
         var indexedBookingInterval = new IndexedBookingInterval(this._loadedBooking.interval);
-        var noOfNights = indexedBookingInterval.getLengthOfStay();
-
         var possibleItems = new BookingPossiblePriceItems();
         _.forEach(this._loadedBooking.priceProductSnapshot.roomCategoryIdList, (roomCategoryId: string) => {
             var priceQuery: PriceProductPriceQueryDO = {
@@ -80,7 +78,8 @@ export class BookingPossiblePrices {
             if (this._loadedBooking.priceProductSnapshot.price.hasPriceConfiguredFor(priceQuery)) {
                 var priceItem = new BookingPriceItem();
                 priceItem.roomCategoryId = roomCategoryId;
-                priceItem.price = noOfNights * this._loadedBooking.priceProductSnapshot.price.getPricePerNightFor(priceQuery);
+                let pricePerNightList: number[] = this._loadedBooking.priceProductSnapshot.price.getPricePerNightBreakdownFor(priceQuery);
+                priceItem.price = this._thUtils.getArraySum(pricePerNightList);
                 var includedInvoiceItems = this._bookingUtils.getIncludedInvoiceItems(this._loadedBooking.priceProductSnapshot,
                     this._loadedBooking.configCapacity, indexedBookingInterval);
                 priceItem.price += includedInvoiceItems.getTotalPrice();
