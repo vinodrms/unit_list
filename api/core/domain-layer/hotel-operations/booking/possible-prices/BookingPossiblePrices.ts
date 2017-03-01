@@ -73,7 +73,8 @@ export class BookingPossiblePrices {
             var priceQuery: PriceProductPriceQueryDO = {
                 roomCategoryId: roomCategoryId,
                 configCapacity: this._loadedBooking.configCapacity,
-                roomCategoryStatsList: this._loadedRoomCategoryStatsList
+                roomCategoryStatsList: this._loadedRoomCategoryStatsList,
+                bookingInterval: indexedBookingInterval
             };
 
             if (this._loadedBooking.priceProductSnapshot.price.hasPriceConfiguredFor(priceQuery)) {

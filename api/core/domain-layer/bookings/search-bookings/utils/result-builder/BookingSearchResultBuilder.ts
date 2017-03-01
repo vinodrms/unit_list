@@ -121,7 +121,8 @@ export class BookingSearchResultBuilder {
                 itemPrice.price = noOfNights * priceProduct.price.getPricePerNightFor({
                     roomCategoryId: roomCategoryId,
                     configCapacity: this._builderParams.searchParams.configCapacity,
-                    roomCategoryStatsList: this._builderParams.roomCategoryStatsList
+                    roomCategoryStatsList: this._builderParams.roomCategoryStatsList,
+                    bookingInterval: this._indexedBookingInterval
                 });
                 var includedInvoiceItems = this._bookingUtils.getIncludedInvoiceItems(priceProduct, this._builderParams.searchParams.configCapacity, this._indexedBookingInterval);
                 itemPrice.price += includedInvoiceItems.getTotalPrice();

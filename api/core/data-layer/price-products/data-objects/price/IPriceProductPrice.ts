@@ -12,6 +12,7 @@ export interface PriceProductPriceQueryDO {
 	roomCategoryId: string;
 	configCapacity: ConfigCapacityDO;
 	roomCategoryStatsList: RoomCategoryStatsDO[];
+	bookingInterval: IndexedBookingInterval;
 }
 
 export interface IPriceProductPrice extends BaseDO {

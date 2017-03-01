@@ -90,7 +90,8 @@ export class BookingUtils {
             bookingDO.priceProductSnapshot.price.getPricePerNightFor({
                 configCapacity: bookingDO.configCapacity,
                 roomCategoryId: bookingDO.roomCategoryId,
-                roomCategoryStatsList: roomCategoryStatsList
+                roomCategoryStatsList: roomCategoryStatsList,
+                bookingInterval: indexedBookingInterval
             })
         );
         bookingDO.price.numberOfNights = indexedBookingInterval.getLengthOfStay();
