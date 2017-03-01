@@ -15,6 +15,7 @@ import { Locales } from '../../../core/utils/localization/ThTranslation';
 import { AppContext } from '../../../core/utils/AppContext';
 
 export class DefaultHotelBuilder {
+	public static Timezone = "Europe/Bucharest";
 	private _thUtils;
 
 	constructor(private _appContext: AppContext, private _email: string, private _paymentMethodList: PaymentMethodDO[]) {
@@ -41,7 +42,7 @@ export class DefaultHotelBuilder {
 		hotel.contactDetails.fax = "0722375399";
 		hotel.contactDetails.phone = "0722375399";
 		hotel.contactDetails.websiteUrl = "www.3angle.tech";
-		hotel.timezone = "Europe/Bucharest";
+		hotel.timezone = DefaultHotelBuilder.Timezone;
 		hotel.operationHours = new OperationHoursDO();
 		hotel.operationHours.checkOutFromOptional = ThHourDO.buildThHourDO(8, 0);
 		hotel.operationHours.checkOutTo = ThHourDO.buildThHourDO(12, 0);

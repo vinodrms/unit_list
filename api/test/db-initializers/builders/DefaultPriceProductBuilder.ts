@@ -2,6 +2,7 @@ import { TestUtils } from '../../helpers/TestUtils';
 import { ThError } from '../../../core/utils/th-responses/ThError';
 import { TestContext } from '../../helpers/TestContext';
 import { PriceProductActionUtils } from '../../../core/domain-layer/price-products/save-actions/utils/PriceProductActionUtils';
+import { DefaultHotelBuilder } from './DefaultHotelBuilder';
 import { TaxResponseRepoDO } from '../../../core/data-layer/taxes/repositories/ITaxRepository';
 import { AddOnProductDO } from '../../../core/data-layer/add-on-products/data-objects/AddOnProductDO';
 import { PriceProductDO, PriceProductStatus, PriceProductAvailability } from '../../../core/data-layer/price-products/data-objects/PriceProductDO';
@@ -15,12 +16,14 @@ import { PricePerPersonDO } from '../../../core/data-layer/price-products/data-o
 import { PriceForFixedNumberOfPersonsDO } from '../../../core/data-layer/price-products/data-objects/price/price-per-person/PriceForFixedNumberOfPersonsDO';
 import { PriceProductPriceDO } from '../../../core/data-layer/price-products/data-objects/price/PriceProductPriceDO';
 import { PriceProductPriceType } from '../../../core/data-layer/price-products/data-objects/price/IPriceProductPrice';
+import { PriceExceptionDO } from '../../../core/data-layer/price-products/data-objects/price/price-exceptions/PriceExceptionDO';
 import { PriceProductIncludedItemsDO } from '../../../core/data-layer/price-products/data-objects/included-items/PriceProductIncludedItemsDO';
 import { AttachedAddOnProductItemDO } from '../../../core/data-layer/price-products/data-objects/included-items/AttachedAddOnProductItemDO';
 import { AttachedAddOnProductItemStrategyType } from '../../../core/data-layer/price-products/data-objects/included-items/IAttachedAddOnProductItemStrategy';
 import { FixedNumberAttachedAddOnProductItemStrategyDO } from '../../../core/data-layer/price-products/data-objects/included-items/strategies/FixedNumberAttachedAddOnProductItemStrategyDO';
 import { SinglePriceDO } from '../../../core/data-layer/price-products/data-objects/price/single-price/SinglePriceDO';
 import { RoomCategoryStatsDO } from '../../../core/data-layer/room-categories/data-objects/RoomCategoryStatsDO';
+import { ThTimestampDO } from '../../../core/utils/th-dates/data-objects/ThTimestampDO';
 
 import _ = require('underscore');
 
@@ -78,6 +81,11 @@ export class DefaultPriceProductBuilder implements IPriceProductDataSource {
 		priceProduct.hotelId = testContext.sessionContext.sessionDO.hotel.id;
 		priceProduct.lastRoomAvailability = false;
 		priceProduct.name = name;
+		let priceException = new PriceExceptionDO();
+		priceException.roomCategoryId = roomCategoryStat.roomCategory.id;
+		let timestamp = ThTimestampDO.buildThTimestampForTimezone(DefaultHotelBuilder.Timezone);
+		priceException.dayFromWeek = timestamp.thDateDO.getISOWeekDay();
+
 		switch (priceType) {
 			case PriceProductPriceType.PricePerPerson:
 				priceProduct.price = DefaultPriceProductBuilder.getPricePerPerson([roomCategoryStat]);
@@ -86,6 +94,9 @@ export class DefaultPriceProductBuilder implements IPriceProductDataSource {
 				priceProduct.price = DefaultPriceProductBuilder.getPricePerRoomCategory(roomCategoryStat);
 				break;
 		}
+		priceException.price = priceProduct.price.priceList[0];
+		priceProduct.price.priceExceptionList = [priceException];
+
 		priceProduct.roomCategoryIdList = [roomCategoryStat.roomCategory.id];
 		priceProduct.status = PriceProductStatus.Active;
 		priceProduct.taxIdList = [taxId];
