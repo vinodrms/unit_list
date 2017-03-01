@@ -4,12 +4,14 @@ import { PriceProductPriceType, PriceProductPriceQueryDO, IPriceProductPrice } f
 import { SinglePriceDO } from './single-price/SinglePriceDO';
 import { PricePerPersonDO } from './price-per-person/PricePerPersonDO';
 import { RoomCategoryStatsDO } from '../../../room-categories/data-objects/RoomCategoryStatsDO';
+import { PriceExceptionDO } from './price-exceptions/PriceExceptionDO';
 
 import _ = require('underscore');
 
 export class PriceProductPriceDO extends BaseDO implements IPriceProductPrice {
 	type: PriceProductPriceType;
 	priceList: IPriceProductPrice[];
+	priceExceptionList: PriceExceptionDO[];
 
 	protected getPrimitivePropertyKeys(): string[] {
 		return ["type"];
@@ -20,19 +22,27 @@ export class PriceProductPriceDO extends BaseDO implements IPriceProductPrice {
 
 		this.priceList = [];
 		this.forEachElementOf(this.getObjectPropertyEnsureUndefined(object, "priceList"), (priceObject: Object) => {
-			var price: IPriceProductPrice;
-			switch (this.type) {
-				case PriceProductPriceType.SinglePrice:
-					price = new SinglePriceDO();
-					break;
-				case PriceProductPriceType.PricePerPerson:
-					price = new PricePerPersonDO();
-					break;
-			}
+			var price: IPriceProductPrice = this.buildPriceInstance(this.type);
 			price.buildFromObject(priceObject);
 			this.priceList.push(price);
 		});
+
+		this.priceExceptionList = [];
+		this.forEachElementOf(this.getObjectPropertyEnsureUndefined(object, "priceExceptionList"), (priceExceptionObject: Object) => {
+			let priceException = new PriceExceptionDO();
+			priceException.buildFromObject(priceExceptionObject);
+			priceException.price = this.buildPriceInstance(this.type);
+			priceException.price.buildFromObject(this.getObjectPropertyEnsureUndefined(priceExceptionObject, "price"));
+			this.priceExceptionList.push(priceException);
+		});
 	}
+	private buildPriceInstance(type: PriceProductPriceType): IPriceProductPrice {
+		if (type === PriceProductPriceType.SinglePrice) {
+			return new SinglePriceDO();
+		}
+		return new PricePerPersonDO();
+	}
+
 	public hasPriceConfiguredFor(query: PriceProductPriceQueryDO): boolean {
 		var priceItem: IPriceProductPrice = this.getPriceForSingleRoomCategory(query.roomCategoryId);
 		if (!priceItem) {
