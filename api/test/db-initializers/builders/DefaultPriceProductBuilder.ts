@@ -81,10 +81,6 @@ export class DefaultPriceProductBuilder implements IPriceProductDataSource {
 		priceProduct.hotelId = testContext.sessionContext.sessionDO.hotel.id;
 		priceProduct.lastRoomAvailability = false;
 		priceProduct.name = name;
-		let priceException = new PriceExceptionDO();
-		priceException.roomCategoryId = roomCategoryStat.roomCategory.id;
-		let timestamp = ThTimestampDO.buildThTimestampForTimezone(DefaultHotelBuilder.Timezone);
-		priceException.dayFromWeek = timestamp.thDateDO.getISOWeekDay();
 
 		switch (priceType) {
 			case PriceProductPriceType.PricePerPerson:
@@ -94,8 +90,6 @@ export class DefaultPriceProductBuilder implements IPriceProductDataSource {
 				priceProduct.price = DefaultPriceProductBuilder.getPricePerRoomCategory(roomCategoryStat);
 				break;
 		}
-		priceException.price = priceProduct.price.priceList[0];
-		priceProduct.price.priceExceptionList = [priceException];
 
 		priceProduct.roomCategoryIdList = [roomCategoryStat.roomCategory.id];
 		priceProduct.status = PriceProductStatus.Active;
@@ -121,7 +115,12 @@ export class DefaultPriceProductBuilder implements IPriceProductDataSource {
 
 			outPrice.priceList.push(pricePerPerson);
 		});
-
+		let timestamp = ThTimestampDO.buildThTimestampForTimezone(DefaultHotelBuilder.Timezone);
+		let priceException = new PriceExceptionDO();
+		priceException.roomCategoryId = roomCategoryStatList[0].roomCategory.id;
+		priceException.dayFromWeek = timestamp.thDateDO.getISOWeekDay();
+		priceException.price = outPrice.priceList[0];
+		outPrice.priceExceptionList = [priceException];
 		return outPrice;
 	}
 	private static getPriceForFixedNumberOfPersonsDOList(maxNoOfPersons: number): PriceForFixedNumberOfPersonsDO[] {
@@ -145,6 +144,14 @@ export class DefaultPriceProductBuilder implements IPriceProductDataSource {
 		singlePrice.price = 98.21;
 		singlePrice.roomCategoryId = roomCategoryStat.roomCategory.id;
 		outPrice.priceList = [singlePrice];
+
+		let timestamp = ThTimestampDO.buildThTimestampForTimezone(DefaultHotelBuilder.Timezone);
+		let priceException = new PriceExceptionDO();
+		priceException.roomCategoryId = roomCategoryStat.roomCategory.id;
+		priceException.dayFromWeek = timestamp.thDateDO.getISOWeekDay();
+		priceException.price = outPrice.priceList[0];
+		outPrice.priceExceptionList = [priceException];
+		
 		return outPrice;
 	}
 
