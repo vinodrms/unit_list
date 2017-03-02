@@ -39,78 +39,14 @@
 						(click)="priceContainer.copyPrices(priceVM.previousRoomCategoryId, priceVM.roomCategoryStats.roomCategory.id)">
 						<i class="fa unitpal-font">[</i> <small>{{ 'Copy Prices from Previous Room Category' | translate }}</small>
 					</a>
-					
-					<!-- TODO: move to separate component + module -->
-					<div class="row" *ngIf="!isPricePerNumberOfPersons">
-						<div class="col-md-6 col-sm-6 col-xs-12 form-group">
-							<div class="input-group" [ngClass]="{'form-warning': displayError()&&!priceVM.price.isValid()}">
-								<input type="number" placeholder="{{'Price' | translate}}" class="form-control" [(ngModel)]="priceVM.price.price" name="price"
-								[readonly]="readonly" />
-							</div>
-							<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Invalid Price' | translate }}</small></label>
-						</div>
-					</div>
 
-					<!-- TODO: move to separate component + module -->
-					<div class="row" *ngIf="isPricePerNumberOfPersons">
-						<div class="col-md-6 col-sm-6 col-xs-6">
-							<label><small>{{ 'Price For Adults' | translate }}*</small></label>
-							<div class="row">
-								<div class="col-md-12 col-sm-12 col-xs-12 form-group" *ngFor="let pricePerAdult of priceVM.price.adultsPriceList">
-									<div class="input-group" [ngClass]="{'form-warning': displayError()&&!pricePerAdult.isValid()}">
-										<span class="input-group-addon"><small>{{pricePerAdult.noOfPersons}}{{getNumberSuffix(pricePerAdult.noOfPersons)}}</small> <span class="unitpal-font">:</span></span>
-										<input type="number" class="form-control" [(ngModel)]="pricePerAdult.price" name="adultPrice"
-										[readonly]="readonly" />
-									</div>
-									<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Invalid Price' | translate }}</small></label>
-								</div>
-							</div>
-						</div>
-						<div class="col-md-6 col-sm-6 col-xs-6">
-							<label><small>{{ 'Price For Children' | translate }}*</small></label>
-							<div class="row">
-								<div class="col-md-12 col-sm-12 col-xs-12" *ngFor="let pricePerChild of priceVM.price.childrenPriceList">
-									<div class="row">	
-										<div class="col-xs-12 form-group" *ngIf="pricePerChild.noOfPersons === 1">	
-											<div class="input-group" [ngClass]="{'form-warning': displayError()&&!priceVM.price.firstChildWithAdultInSharedBedPriceIsValid()}">
-												<span class="input-group-addon"><small>1{{getNumberSuffix(1)}}</small> <span class="unitpal-font">;</span></span>
-												<input type="number" class="form-control" [(ngModel)]="priceVM.price.firstChildWithAdultInSharedBedPrice" name="firstChildInSharedBedPrice"
-												[readonly]="readonly" />
-											</div>
-											<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Invalid Price' | translate }}</small></label>
-											<small class="text-muted">
-												<i class="fa fa-info-circle"></i> {{ "Reservation with at least one adult if space is available in parent's bed" | translate }}
-											</small>
-										</div>
-
-										<div class="col-xs-12 form-group" *ngIf="!roomCategoryHasOnlyOneAdultAndZeroChildren(priceVM.roomCategoryStats)">	
-											<div class="input-group" [ngClass]="{'form-warning': displayError()&&!pricePerChild.isValid()}">
-												<span class="input-group-addon"><small>{{pricePerChild.noOfPersons}}{{getNumberSuffix(pricePerChild.noOfPersons)}}</small> <span class="unitpal-font">;</span></span>
-												<input type="number" class="form-control" [(ngModel)]="pricePerChild.price" name="childPrice"
-												[readonly]="readonly" />
-											</div>
-											<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Invalid Price' | translate }}</small></label>
-											<small class="text-muted" *ngIf="pricePerChild.noOfPersons === 1">
-												<i class="fa fa-info-circle"></i>  {{ "Reservation with at least one adult if space is NOT available in parent's bed" | translate }}
-											</small>
-										</div>
-										
-										<div class="col-xs-12 form-group" *ngIf="pricePerChild.noOfPersons === 1">	
-											<div class="input-group" [ngClass]="{'form-warning': displayError()&&!priceVM.price.firstChildWithoutAdultPriceIsValid()}">
-												<span class="input-group-addon"><small>1{{getNumberSuffix(1)}}</small> <span class="unitpal-font">;</span></span>
-												<input type="number" class="form-control" [(ngModel)]="priceVM.price.firstChildWithoutAdultPrice" name="firstChildPrice"
-												[readonly]="readonly" />
-											</div>
-											<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Invalid Price' | translate }}</small></label>
-											<small class="text-muted">
-												<i class="fa fa-info-circle"></i> {{ 'Reservation without adults' | translate }}
-											</small>
-										</div>										
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
+					<price-edit 
+						[displayError]="displayError()"
+						[readonly]="readonly"
+						[priceType]="priceType"
+						[roomCategoryStats]="priceVM.roomCategoryStats"
+						[(price)]="priceVM.price">
+					</price-edit>
 
 					<!-- TODO: display price exceptions -->
 				</div>

@@ -1,7 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { BaseComponent } from '../../../../../../../../../../common/base/BaseComponent';
 import { AppContext, ThError } from '../../../../../../../../../../common/utils/AppContext';
-import { NumberSuffixFormatter } from '../../../../../../../../../../common/utils/form-utils/NumberSuffixFormatter';
 import { IPriceProductEditSection } from '../utils/IPriceProductEditSection';
 import { PriceProductVM } from '../../../../../../../../services/price-products/view-models/PriceProductVM';
 import { PricePerPersonDO } from '../../../../../../../../services/price-products/data-objects/price/price-per-person/PricePerPersonDO';
@@ -30,14 +29,12 @@ export class PriceProductEditPricesSectionComponent extends BaseComponent implem
 
 	private _isPricePerNumberOfPersons: boolean;
 	isLoading: boolean = false;
-	private _numberSuffixFormatter: NumberSuffixFormatter;
 	ccy: CurrencyDO;
 
 	constructor(private _appContext: AppContext,
 		private _roomCategoriesStatsService: RoomCategoriesStatsService) {
 		super();
 		this.ccy = new CurrencyDO();
-		this._numberSuffixFormatter = new NumberSuffixFormatter(this._appContext.thTranslation);
 		this.pricePerPersonContainer = new PriceContainer(PriceProductPriceType.PricePerPerson);
 		this.singlePriceContainer = new PriceContainer(PriceProductPriceType.SinglePrice);
 	}
@@ -89,6 +86,12 @@ export class PriceProductEditPricesSectionComponent extends BaseComponent implem
 		}
 		this._isPricePerNumberOfPersons = isPricePerNumberOfPersons;
 	}
+	public get priceType(): PriceProductPriceType {
+		if (this._isPricePerNumberOfPersons) {
+			return PriceProductPriceType.PricePerPerson;
+		}
+		return PriceProductPriceType.SinglePrice;
+	}
 
 	public get currentRoomCategoryStatsList(): RoomCategoryStatsDO[] {
 		return this._currentRoomCategoryStatsList;
@@ -102,9 +105,7 @@ export class PriceProductEditPricesSectionComponent extends BaseComponent implem
 	public displayError() {
 		return this.didSubmit || this.readonly;
 	}
-	public getNumberSuffix(inputNumber: number) {
-		return this._numberSuffixFormatter.getNumberSuffix(inputNumber);
-	}
+	
 	public getNoRoomsLabel(noOfRooms: number): string {
 		if (noOfRooms === 1) {
 			return this._appContext.thTranslation.translate("%noOfRooms% Room", { noOfRooms: noOfRooms });
@@ -116,9 +117,5 @@ export class PriceProductEditPricesSectionComponent extends BaseComponent implem
 			return this.pricePerPersonContainer;
 		}
 		return this.singlePriceContainer;
-	}
-	public roomCategoryHasOnlyOneAdultAndZeroChildren(roomCategStats: RoomCategoryStatsDO): boolean {
-		var totalCapacity = roomCategStats.capacity.totalCapacity;
-		return totalCapacity.noAdults === 1 && totalCapacity.noChildren === 0;
 	}
 }
