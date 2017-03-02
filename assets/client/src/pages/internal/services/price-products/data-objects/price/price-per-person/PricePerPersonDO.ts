@@ -90,14 +90,30 @@ export class PricePerPersonDO extends BaseDO implements IPriceProductPrice {
 		return valid;
 	}
 
-	getPriceBriefValue(): number {
+	public getPriceBriefValue(): number {
 		var priceForOneAdult = this.getPriceForNumberOfAdults(1);
 		if (!priceForOneAdult) {
 			return 0.0;
 		}
 		return priceForOneAdult.price;
 	}
-	getRoomCategoryId(): string {
+	public getRoomCategoryId(): string {
 		return this.roomCategoryId;
+	}
+	public copyPricesFrom(otherPrice: PricePerPersonDO) {
+		this.adultsPriceList.forEach((destAdultPrice: PriceForFixedNumberOfPersonsDO) => {
+			var priceForFixedNoOfPersons = otherPrice.getPriceForNumberOfAdults(destAdultPrice.noOfPersons);
+			if (priceForFixedNoOfPersons) {
+				destAdultPrice.price = priceForFixedNoOfPersons.price;
+			}
+		});
+		this.firstChildWithoutAdultPrice = otherPrice.firstChildWithoutAdultPrice;
+		this.firstChildWithAdultInSharedBedPrice = otherPrice.firstChildWithAdultInSharedBedPrice;
+		this.childrenPriceList.forEach((destChildPrice: PriceForFixedNumberOfPersonsDO) => {
+			var priceForFixedNoOfPersons = otherPrice.getPriceForNumberOfChildren(destChildPrice.noOfPersons);
+			if (priceForFixedNoOfPersons) {
+				destChildPrice.price = priceForFixedNoOfPersons.price;
+			}
+		});
 	}
 }

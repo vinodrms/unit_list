@@ -18,7 +18,7 @@ export class PriceProductPriceDO extends BaseDO {
 
 		this.priceList = [];
 		this.forEachElementOf(this.getObjectPropertyEnsureUndefined(object, "priceList"), (priceObject: Object) => {
-			var price: IPriceProductPrice = this.buildPriceInstance(this.type);
+			var price: IPriceProductPrice = PriceProductPriceDO.buildPriceInstance(this.type);
 			price.buildFromObject(priceObject);
 			this.priceList.push(price);
 		});
@@ -27,12 +27,12 @@ export class PriceProductPriceDO extends BaseDO {
 		this.forEachElementOf(this.getObjectPropertyEnsureUndefined(object, "priceExceptionList"), (priceExceptionObject: Object) => {
 			let priceException = new PriceExceptionDO();
 			priceException.buildFromObject(priceExceptionObject);
-			priceException.price = this.buildPriceInstance(this.type);
+			priceException.price = PriceProductPriceDO.buildPriceInstance(this.type);
 			priceException.price.buildFromObject(this.getObjectPropertyEnsureUndefined(priceExceptionObject, "price"));
 			this.priceExceptionList.push(priceException);
 		});
 	}
-	private buildPriceInstance(type: PriceProductPriceType): IPriceProductPrice {
+	public static buildPriceInstance(type: PriceProductPriceType): IPriceProductPrice {
 		if (type === PriceProductPriceType.SinglePrice) {
 			return new SinglePriceDO();
 		}
@@ -45,5 +45,10 @@ export class PriceProductPriceDO extends BaseDO {
 			return 0.0;
 		}
 		return price.getPriceBriefValue();
+	}
+	public getFilteredExceptionsByRoomCategoryId(roomCategoryId: string): PriceExceptionDO[] {
+		return _.filter(this.priceExceptionList, exp => {
+			return exp.getRoomCategoryId() === roomCategoryId;
+		});
 	}
 }
