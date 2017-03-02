@@ -117,7 +117,6 @@ export class DefaultPriceProductBuilder implements IPriceProductDataSource {
 		});
 		let timestamp = ThTimestampDO.buildThTimestampForTimezone(DefaultHotelBuilder.Timezone);
 		let priceException = new PriceExceptionDO();
-		priceException.roomCategoryId = roomCategoryStatList[0].roomCategory.id;
 		priceException.dayFromWeek = timestamp.thDateDO.getISOWeekDay();
 		priceException.price = outPrice.priceList[0];
 		outPrice.priceExceptionList = [priceException];
@@ -147,11 +146,10 @@ export class DefaultPriceProductBuilder implements IPriceProductDataSource {
 
 		let timestamp = ThTimestampDO.buildThTimestampForTimezone(DefaultHotelBuilder.Timezone);
 		let priceException = new PriceExceptionDO();
-		priceException.roomCategoryId = roomCategoryStat.roomCategory.id;
 		priceException.dayFromWeek = timestamp.thDateDO.getISOWeekDay();
 		priceException.price = outPrice.priceList[0];
 		outPrice.priceExceptionList = [priceException];
-		
+
 		return outPrice;
 	}
 

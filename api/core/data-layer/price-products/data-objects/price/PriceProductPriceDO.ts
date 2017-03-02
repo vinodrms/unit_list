@@ -72,11 +72,11 @@ export class PriceProductPriceDO extends BaseDO {
 		return priceBreakdown;
 	}
 	private getPriceForRoomCategory(roomCategoryId: string): IPriceProductPrice {
-		return _.find(this.priceList, (price: IPriceProductPrice) => { return price.isConfiguredForRoomCategory(roomCategoryId) });
+		return _.find(this.priceList, (price: IPriceProductPrice) => { return price.getRoomCategoryId() === roomCategoryId; });
 	}
 	private getPriceException(roomCategoryId: string, dayOfWeek: ISOWeekDay): PriceExceptionDO {
 		return _.find(this.priceExceptionList, priceException => {
-			return priceException.roomCategoryId === roomCategoryId &&
+			return priceException.getRoomCategoryId() === roomCategoryId &&
 				priceException.dayFromWeek === dayOfWeek;
 		});
 	}

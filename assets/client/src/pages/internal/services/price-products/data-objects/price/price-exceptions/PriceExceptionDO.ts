@@ -1,5 +1,5 @@
-import { BaseDO } from '../../../../common/base/BaseDO';
-import { ISOWeekDay } from '../../../../../utils/th-dates/data-objects/ISOWeekDay';
+import { BaseDO } from '../../../../../../../common/base/BaseDO';
+import { ISOWeekDay } from '../../../../common/data-objects/th-dates/ISOWeekDay';
 import { IPriceProductPrice } from '../IPriceProductPrice';
 
 export class PriceExceptionDO extends BaseDO {

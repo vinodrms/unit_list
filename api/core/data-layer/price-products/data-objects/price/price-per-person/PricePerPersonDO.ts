@@ -125,8 +125,8 @@ export class PricePerPersonDO extends BaseDO implements IPriceProductPrice {
 		var priceRule = NumberValidationRule.buildPriceNumberRule();
 		return priceRule.validate(price).isValid();
 	}
-	public isConfiguredForRoomCategory(roomCategoryId: string): boolean {
-		return this.roomCategoryId === roomCategoryId;
+	public getRoomCategoryId(): string {
+		return this.roomCategoryId;
 	}
 
 	public roundPricesToTwoDecimals() {

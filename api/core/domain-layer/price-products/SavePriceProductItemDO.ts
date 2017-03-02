@@ -127,10 +127,6 @@ export class SavePriceProductItemDO {
 						key: "priceExceptionList",
 						validationStruct: new ArrayValidationStructure(new ObjectValidationStructure([
 							{
-								key: "roomCategoryId",
-								validationStruct: new PrimitiveValidationStructure(new StringValidationRule())
-							},
-							{
 								key: "dayFromWeek",
 								validationStruct: new PrimitiveValidationStructure(new NumberInListValidationRule(weekDayUtils.getISOWeekDayList()))
 							},
