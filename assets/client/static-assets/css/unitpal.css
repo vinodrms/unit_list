@@ -1078,6 +1078,12 @@ td .room-categ-capacity {
     opacity: 0.7;
 }
 
+.price-product-box {
+    outline: 1px solid #d3d3d3; 
+    outline-offset: 5px; 
+    margin-top: 5px; 
+}
+
 .yield-filter {
     height: 60px;
     overflow: hidden;
@@ -3915,4 +3921,14 @@ table.small-margin {
 }
 textarea.payer-details {
     height: 34px;
+}
+
+/* Use this class with the bootstrap row class to force all the columns to have the same height */
+.row-eq-height { 
+    display: flex; 
+    flex-wrap: wrap; 
+}
+.row-eq-height > [class*='col-'] { 
+    display: flex; 
+    flex-direction: column; 
 }

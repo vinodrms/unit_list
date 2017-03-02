@@ -16,12 +16,6 @@ import { CurrencyDO } from '../../../../../../../../services/common/data-objects
 @Component({
 	selector: 'price-product-edit-prices-section',
 	templateUrl: '/client/src/pages/internal/containers/common/inventory/price-products/pages/price-product-edit/sections/prices/template/price-product-edit-prices-section.html',
-	styles: [
-		`	.price-product-box { outline: 1px solid #d3d3d3; outline-offset: 5px; margin-top: 5px; } 
-			.row-eq-height { display: flex; flex-wrap: wrap; }
-			.row-eq-height > [class*='col-'] { display: flex; flex-direction: column; }
-		`
-	],
 	providers: [RoomCategoriesStatsService]
 })
 export class PriceProductEditPricesSectionComponent extends BaseComponent implements IPriceProductEditSection {
