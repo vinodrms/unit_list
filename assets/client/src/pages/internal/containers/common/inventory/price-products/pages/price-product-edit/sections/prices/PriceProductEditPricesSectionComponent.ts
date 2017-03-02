@@ -12,6 +12,8 @@ import { RoomCategoryDO } from '../../../../../../../../services/room-categories
 import { RoomCategoryStatsDO } from '../../../../../../../../services/room-categories/data-objects/RoomCategoryStatsDO';
 import { PriceContainer } from './utils/PriceContainer';
 import { CurrencyDO } from '../../../../../../../../services/common/data-objects/currency/CurrencyDO';
+import { ISOWeekDayUtils, ISOWeekDayVM, ISOWeekDay } from '../../../../../../../../services/common/data-objects/th-dates/ISOWeekDay';
+import { PriceExceptionDO } from '../../../../../../../../services/price-products/data-objects/price/price-exceptions/PriceExceptionDO';
 
 @Component({
 	selector: 'price-product-edit-prices-section',
@@ -27,6 +29,7 @@ export class PriceProductEditPricesSectionComponent extends BaseComponent implem
 
 	private _currentRoomCategoryStatsList: RoomCategoryStatsDO[];
 
+	private _isoWeekDayUtils: ISOWeekDayUtils;
 	private _isPricePerNumberOfPersons: boolean;
 	isLoading: boolean = false;
 	ccy: CurrencyDO;
@@ -34,6 +37,7 @@ export class PriceProductEditPricesSectionComponent extends BaseComponent implem
 	constructor(private _appContext: AppContext,
 		private _roomCategoriesStatsService: RoomCategoriesStatsService) {
 		super();
+		this._isoWeekDayUtils = new ISOWeekDayUtils();
 		this.ccy = new CurrencyDO();
 		this.pricePerPersonContainer = new PriceContainer(PriceProductPriceType.PricePerPerson);
 		this.singlePriceContainer = new PriceContainer(PriceProductPriceType.SinglePrice);
@@ -117,5 +121,15 @@ export class PriceProductEditPricesSectionComponent extends BaseComponent implem
 			return this.pricePerPersonContainer;
 		}
 		return this.singlePriceContainer;
+	}
+	public getWeekDayName(iSOWeekDay: ISOWeekDay): string {
+		return this._isoWeekDayUtils.getISOWeekDayVM(iSOWeekDay).name;
+	}
+
+	public removeException(exception: PriceExceptionDO) {
+		// TODO
+	}
+	public openExceptionSelectionModal() {
+		// TODO
 	}
 }

@@ -49,7 +49,34 @@
 							[(price)]="priceVM.price">
 						</price-edit>
 
-						<!-- TODO: display price exceptions -->
+						<label>{{ 'Exceptions' | translate }}</label>
+						<table class="table table-striped projects">
+							<tbody>
+								<tr *ngFor="let exception of priceVM.exceptionList">
+									<td title="{{ 'Exception will apply on %dayFromWeek%' | translate:{dayFromWeek: getWeekDayName(exception.dayFromWeek)} }}">
+										{{ getWeekDayName(exception.dayFromWeek) | translate }}
+									</td>
+									<td title="{{ 'Prices for adults' | translate }}">
+										{{ ccy.nativeSymbol }}  {{ exception.price.getPriceBriefLineString() }}
+									</td>
+									<td *ngIf="!readonly">
+										<a class="btn btn-xs" (click)="removeException(exception)">
+											<i class="fa unitpal-font">\</i> {{ 'Remove' | translate }}
+										</a>
+									</td>
+								</tr>
+								<tr>
+									<td *ngIf="!readonly">
+										<a class="btn btn-xs" (click)="openExceptionSelectionModal()">
+											<i class="fa unitpal-font">'</i> {{ 'Add' | translate }}
+										</a>
+									</td>
+									<td></td>
+									<td></td>
+								</tr>
+							</tbody>
+							<small class="text-muted"><i class="fa fa-info-circle"></i> {{ 'Exceptions for the default prices' | translate }} </small>
+						</table>
 					</div>
 				</div>
 			</div>

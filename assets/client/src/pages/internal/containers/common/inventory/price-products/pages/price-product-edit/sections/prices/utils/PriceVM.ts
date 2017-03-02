@@ -9,6 +9,7 @@ export class PriceVM {
     private _priceType: PriceProductPriceType;
     private _price: IPriceProductPrice;
     private _priceExceptionsByWeekday: { [index: number]: IPriceProductPrice };
+    private _exceptionList: PriceExceptionDO[];
 
     constructor(priceType: PriceProductPriceType) {
         this._priceType = priceType;
@@ -50,6 +51,13 @@ export class PriceVM {
         this._priceExceptionsByWeekday = priceExceptionsByWeekday;
     }
 
+    public get exceptionList(): PriceExceptionDO[] {
+        return this._exceptionList;
+    }
+    public set exceptionList(exceptionList: PriceExceptionDO[]) {
+        this._exceptionList = exceptionList;
+    }
+
     public isValid(): boolean {
         if (!this._price.isValid()) { return false; }
         var valid = true;
@@ -63,7 +71,7 @@ export class PriceVM {
         return valid;
     }
 
-    public getExceptionList(): PriceExceptionDO[] {
+    public indexExceptions() {
         let exceptionList: PriceExceptionDO[] = [];
         let weekDayList = Object.keys(this._priceExceptionsByWeekday);
         _.forEach(weekDayList, weekDay => {
@@ -72,6 +80,6 @@ export class PriceVM {
             exception.price = this._priceExceptionsByWeekday[weekDay];
             exceptionList.push(exception);
         });
-        return exceptionList;
+        this._exceptionList = exceptionList;
     }
 }

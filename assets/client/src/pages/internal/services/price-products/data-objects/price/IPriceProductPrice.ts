@@ -8,6 +8,7 @@ export enum PriceProductPriceType {
 
 export interface IPriceProductPrice extends BaseDO {
 	getPriceBriefValue(): number;
+	getPriceBriefLineString(): string;
 	getRoomCategoryId(): string;
 	prototypeForStats(roomCategoryStats: RoomCategoryStatsDO): IPriceProductPrice;
 	isValid(): boolean;

@@ -37,6 +37,7 @@ export class PriceContainer {
             _.forEach(filteredPriceExceptionList, (exp: PriceExceptionDO) => {
                 priceVM.priceExceptionsByWeekday[exp.dayFromWeek] = exp.price;
             });
+            priceVM.indexExceptions();
             newPriceVMList.push(priceVM);
         });
         this._priceVMList = newPriceVMList;
@@ -53,6 +54,7 @@ export class PriceContainer {
             if (currentPriceVM) {
                 currentPrice = currentPriceVM.price;
                 newPriceVM.priceExceptionsByWeekday = currentPriceVM.priceExceptionsByWeekday;
+                newPriceVM.indexExceptions();
             }
             else {
                 currentPrice = PriceProductPriceDO.buildPriceInstance(this._priceType);
@@ -88,7 +90,7 @@ export class PriceContainer {
         priceProductVM.priceProduct.price.priceExceptionList = [];
         _.forEach(this._priceVMList, priceVM => {
             priceProductVM.priceProduct.price.priceList.push(priceVM.price);
-            priceProductVM.priceProduct.price.priceExceptionList = priceProductVM.priceProduct.price.priceExceptionList.concat(priceVM.getExceptionList());
+            priceProductVM.priceProduct.price.priceExceptionList = priceProductVM.priceProduct.price.priceExceptionList.concat(priceVM.exceptionList);
         });
     }
 

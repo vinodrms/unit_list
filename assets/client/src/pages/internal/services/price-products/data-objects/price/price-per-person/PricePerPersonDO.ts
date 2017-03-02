@@ -97,6 +97,13 @@ export class PricePerPersonDO extends BaseDO implements IPriceProductPrice {
 		}
 		return priceForOneAdult.price;
 	}
+	public getPriceBriefLineString(): string {
+		var priceStr = "";
+		this.adultsPriceList.forEach(price => {
+			priceStr += (priceStr.length > 0 ? " / " : "") + price.price;
+		});
+		return priceStr;
+	}
 	public getRoomCategoryId(): string {
 		return this.roomCategoryId;
 	}

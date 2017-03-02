@@ -24,6 +24,9 @@ export class SinglePriceDO extends BaseDO implements IPriceProductPrice {
 	public getPriceBriefValue(): number {
 		return this.price;
 	}
+	public getPriceBriefLineString(): string {
+		return this.price + "";
+	}
 	public getRoomCategoryId(): string {
 		return this.roomCategoryId;
 	}
