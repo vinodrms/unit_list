@@ -1079,9 +1079,12 @@ td .room-categ-capacity {
 }
 
 .price-product-box {
-    outline: 1px solid #d3d3d3; 
-    outline-offset: 5px; 
-    margin-top: 5px; 
+    border: 1px solid;
+    border-color: #d3d3d3;
+    padding: 5px;
+    margin-top: 5px;
+    margin-left: 5px;
+    margin-right: 5px;
 }
 
 .yield-filter {
@@ -3933,4 +3936,8 @@ textarea.payer-details {
 .row-eq-height > [class*='col-'] { 
     display: flex; 
     flex-direction: column; 
+}
+/* Needed for Safari */
+.row.row-eq-height:before, .row.row-eq-height:after {
+    display: none;
 }
