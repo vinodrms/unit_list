@@ -1,7 +1,16 @@
 server {
     listen 80;
+    listen [::]:80;
+    return 301 https://$host$request_uri;
+}
 
-    server_name {{ host }};
+server {
+    listen 443;
+    listen [::]:443;
+
+    ssl on;
+    ssl_certificate {{ ssl_cert_chain_path }};
+    ssl_certificate_key {{ ssl_private_key_path }};
 
     location / {
         proxy_pass http://localhost:{{ port }};
