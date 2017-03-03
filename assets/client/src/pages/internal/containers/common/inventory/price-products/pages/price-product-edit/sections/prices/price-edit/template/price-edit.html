@@ -1,5 +1,6 @@
 <div class="row" *ngIf="isSinglePrice">
-    <div class="col-md-6 col-sm-6 col-xs-12 form-group">
+    <div class="col-md-5 col-sm-8 col-xs-12 form-group">
+        <label><small>{{ 'Room price' | translate }} *</small></label>
         <div class="input-group" [ngClass]="{'form-warning': displayError&&!price.isValid()}">
             <input type="number" placeholder="{{'Price' | translate}}" class="form-control" 
                 [(ngModel)]="price.price" 
@@ -14,7 +15,7 @@
 
 <div class="row" *ngIf="isPricePerPerson">
     <div class="col-md-6 col-sm-6 col-xs-6">
-        <label><small>{{ 'Price For Adults' | translate }}*</small></label>
+        <label><small>{{ 'Price For Adults' | translate }} *</small></label>
         <div class="row">
             <div class="col-md-12 col-sm-12 col-xs-12 form-group" *ngFor="let pricePerAdult of price.adultsPriceList">
                 <div class="input-group" [ngClass]="{'form-warning': displayError&&!pricePerAdult.isValid()}">
@@ -30,7 +31,7 @@
         </div>
     </div>
     <div class="col-md-6 col-sm-6 col-xs-6">
-        <label><small>{{ 'Price For Children' | translate }}*</small></label>
+        <label><small>{{ 'Price For Children' | translate }} *</small></label>
         <div class="row">
             <div class="col-md-12 col-sm-12 col-xs-12" *ngFor="let pricePerChild of price.childrenPriceList">
                 <div class="row">	

@@ -293,6 +293,7 @@ export var EnglishTranslations: Object = {
 	"Reservation with at least one adult if space is available in parent's bed": "Reservation with at least one adult if space is available in parent's bed",
 	"Reservation with at least one adult if space is NOT available in parent's bed": "Reservation with at least one adult if space is NOT available in parent's bed",
 	"Price For Adults": "Price For Adults",
+	"Room price": "Room price",
 	"st": "st",
 	"nd": "nd",
 	"rd": "rd",
