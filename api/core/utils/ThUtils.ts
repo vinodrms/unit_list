@@ -44,4 +44,15 @@ export class ThUtils {
 	public roundNumberToNearestInteger(inputNumber: number): number {
 		return Math.round(inputNumber);
 	}
+	public getArrayAverage(array: number[]): number {
+		if (!_.isArray(array) || array.length == 0) {
+			return 0.0;
+		}
+		return this.getArraySum(array) / array.length;
+	}
+	public getArraySum(array: number[]): number {
+		var sum = 0.0;
+		_.forEach(array, (value: number) => { sum += value; })
+		return sum;
+	}
 }

@@ -9,11 +9,27 @@ import { NumberValidationRule } from '../../../utils/th-validation/rules/NumberV
 export class SavePriceProductItemPriceDO {
 	type: PriceProductPriceType;
 	priceList: Object[];
+	priceExceptionList: Object[];
 
-	public static getPriceConfigurationValidationStructure(priceDO: SavePriceProductItemPriceDO): IValidationStructure {
+	public static getPriceListValidationStructure(priceDO: SavePriceProductItemPriceDO): IValidationStructure {
+		return new ArrayValidationStructure(
+			SavePriceProductItemPriceDO.getPriceConfigurationValidationStructure(priceDO)
+		);
+	}
+	public static getPriceExceptionListValidationStructure(priceDO: SavePriceProductItemPriceDO): IValidationStructure {
+		return new ArrayValidationStructure(
+			new ObjectValidationStructure([
+				{
+					key: "price",
+					validationStruct: SavePriceProductItemPriceDO.getPriceConfigurationValidationStructure(priceDO)
+				}
+			])
+		);
+	}
+	private static getPriceConfigurationValidationStructure(priceDO: SavePriceProductItemPriceDO): IValidationStructure {
 		switch (priceDO.type) {
 			case PriceProductPriceType.PricePerPerson:
-				return new ArrayValidationStructure(new ObjectValidationStructure([
+				return new ObjectValidationStructure([
 					{
 						key: "roomCategoryId",
 						validationStruct: new PrimitiveValidationStructure(new StringValidationRule())
@@ -34,9 +50,9 @@ export class SavePriceProductItemPriceDO {
 						key: "firstChildWithAdultInSharedBedPrice",
 						validationStruct: new PrimitiveValidationStructure(NumberValidationRule.buildPriceNumberRule())
 					}
-				]));
+				]);
 			case PriceProductPriceType.SinglePrice:
-				return new ArrayValidationStructure(new ObjectValidationStructure([
+				return new ObjectValidationStructure([
 					{
 						key: "roomCategoryId",
 						validationStruct: new PrimitiveValidationStructure(new StringValidationRule())
@@ -45,7 +61,7 @@ export class SavePriceProductItemPriceDO {
 						key: "price",
 						validationStruct: new PrimitiveValidationStructure(NumberValidationRule.buildPriceNumberRule())
 					}
-				]));
+				]);
 		}
 	}
 	private static getPriceForFixedNumberOfPersonsDOValidationStructure(): IValidationStructure {

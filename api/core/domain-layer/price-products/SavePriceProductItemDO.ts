@@ -1,21 +1,22 @@
-import {PriceProductStatus, PriceProductAvailability} from '../../data-layer/price-products/data-objects/PriceProductDO';
-import {PriceProductPriceType} from '../../data-layer/price-products/data-objects/price/IPriceProductPrice';
-import {PriceProductYieldFilterMetaDO} from '../../data-layer/price-products/data-objects/yield-filter/PriceProductYieldFilterDO';
-import {PriceProductConstraintType} from '../../data-layer/price-products/data-objects/constraint/IPriceProductConstraint';
-import {PriceProductCancellationPolicyType} from '../../data-layer/price-products/data-objects/conditions/cancellation/IPriceProductCancellationPolicy';
-import {PriceProductCancellationPenaltyType} from '../../data-layer/price-products/data-objects/conditions/penalty/IPriceProductCancellationPenalty';
-import {PriceProductIncludedItemsDO} from '../../data-layer/price-products/data-objects/included-items/PriceProductIncludedItemsDO';
-import {AttachedAddOnProductItemStrategyType} from '../../data-layer/price-products/data-objects/included-items/IAttachedAddOnProductItemStrategy';
-import {IValidationStructure} from '../../utils/th-validation/structure/core/IValidationStructure';
-import {ObjectValidationStructure} from '../../utils/th-validation/structure/ObjectValidationStructure';
-import {PrimitiveValidationStructure} from '../../utils/th-validation/structure/PrimitiveValidationStructure';
-import {ArrayValidationStructure} from '../../utils/th-validation/structure/ArrayValidationStructure';
-import {StringValidationRule} from '../../utils/th-validation/rules/StringValidationRule';
-import {NumberInListValidationRule} from '../../utils/th-validation/rules/NumberInListValidationRule';
-import {NumberValidationRule} from '../../utils/th-validation/rules/NumberValidationRule';
-import {BooleanValidationRule} from '../../utils/th-validation/rules/BooleanValidationRule';
-import {SavePriceProductItemPriceDO} from './validation-structures/SavePriceProductItemPriceDO';
-import {SavePriceProductItemConstraintDO} from './validation-structures/SavePriceProductItemConstraintDO';
+import { PriceProductStatus, PriceProductAvailability } from '../../data-layer/price-products/data-objects/PriceProductDO';
+import { PriceProductPriceType } from '../../data-layer/price-products/data-objects/price/IPriceProductPrice';
+import { PriceProductYieldFilterMetaDO } from '../../data-layer/price-products/data-objects/yield-filter/PriceProductYieldFilterDO';
+import { PriceProductConstraintType } from '../../data-layer/price-products/data-objects/constraint/IPriceProductConstraint';
+import { PriceProductCancellationPolicyType } from '../../data-layer/price-products/data-objects/conditions/cancellation/IPriceProductCancellationPolicy';
+import { PriceProductCancellationPenaltyType } from '../../data-layer/price-products/data-objects/conditions/penalty/IPriceProductCancellationPenalty';
+import { PriceProductIncludedItemsDO } from '../../data-layer/price-products/data-objects/included-items/PriceProductIncludedItemsDO';
+import { AttachedAddOnProductItemStrategyType } from '../../data-layer/price-products/data-objects/included-items/IAttachedAddOnProductItemStrategy';
+import { IValidationStructure } from '../../utils/th-validation/structure/core/IValidationStructure';
+import { ObjectValidationStructure } from '../../utils/th-validation/structure/ObjectValidationStructure';
+import { PrimitiveValidationStructure } from '../../utils/th-validation/structure/PrimitiveValidationStructure';
+import { ArrayValidationStructure } from '../../utils/th-validation/structure/ArrayValidationStructure';
+import { StringValidationRule } from '../../utils/th-validation/rules/StringValidationRule';
+import { NumberInListValidationRule } from '../../utils/th-validation/rules/NumberInListValidationRule';
+import { NumberValidationRule } from '../../utils/th-validation/rules/NumberValidationRule';
+import { BooleanValidationRule } from '../../utils/th-validation/rules/BooleanValidationRule';
+import { SavePriceProductItemPriceDO } from './validation-structures/SavePriceProductItemPriceDO';
+import { SavePriceProductItemConstraintDO } from './validation-structures/SavePriceProductItemConstraintDO';
+import { ISOWeekDayUtils } from '../../utils/th-dates/data-objects/ISOWeekDay';
 
 export interface SavePriceProductItemConstraintListDO {
 	constraintList: SavePriceProductItemConstraintDO[];
@@ -42,6 +43,7 @@ export class SavePriceProductItemDO {
 	notes: string;
 
 	public static getValidationStructure(): IValidationStructure {
+		var weekDayUtils = new ISOWeekDayUtils();
 		return new ObjectValidationStructure([
 			{
 				key: "id",
@@ -90,8 +92,8 @@ export class SavePriceProductItemDO {
 							{
 								key: "strategyType",
 								validationStruct: new PrimitiveValidationStructure(new NumberInListValidationRule([AttachedAddOnProductItemStrategyType.OneItemPerDay,
-									AttachedAddOnProductItemStrategyType.OneItemForEachAdultOrChild, AttachedAddOnProductItemStrategyType.OneItemPerDayForEachAdultOrChild,
-									AttachedAddOnProductItemStrategyType.FixedNumber]))
+								AttachedAddOnProductItemStrategyType.OneItemForEachAdultOrChild, AttachedAddOnProductItemStrategyType.OneItemPerDayForEachAdultOrChild,
+								AttachedAddOnProductItemStrategyType.FixedNumber]))
 							},
 							{
 								key: "strategy",
@@ -120,6 +122,19 @@ export class SavePriceProductItemDO {
 					{
 						key: "priceList",
 						validationStruct: new ArrayValidationStructure(new ObjectValidationStructure([]))
+					},
+					{
+						key: "priceExceptionList",
+						validationStruct: new ArrayValidationStructure(new ObjectValidationStructure([
+							{
+								key: "dayFromWeek",
+								validationStruct: new PrimitiveValidationStructure(new NumberInListValidationRule(weekDayUtils.getISOWeekDayList()))
+							},
+							{
+								key: "price",
+								validationStruct: new ObjectValidationStructure([])
+							}
+						]))
 					}
 				])
 			},

@@ -13,6 +13,12 @@ export interface ISOWeekDayVM {
 }
 
 export class ISOWeekDayUtils {
+	private _isoWeekDayVMByWeekDay: { [index: number]: ISOWeekDayVM };
+
+	constructor() {
+		this._isoWeekDayVMByWeekDay = _.indexBy(this.getISOWeekDayVMList(), wdVM => { return wdVM.iSOWeekDay; });
+	}
+
 	public getISOWeekDayList(): ISOWeekDay[] {
 		return [
 			ISOWeekDay.Monday,
@@ -55,5 +61,8 @@ export class ISOWeekDayUtils {
 				name: "Sunday"
 			}
 		]
+	}
+	public getISOWeekDayVM(iSOWeekDay: ISOWeekDay): ISOWeekDayVM {
+		return this._isoWeekDayVMByWeekDay[iSOWeekDay];
 	}
 }

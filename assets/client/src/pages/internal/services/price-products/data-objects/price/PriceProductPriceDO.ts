@@ -1,15 +1,16 @@
-import {BaseDO} from '../../../../../../common/base/BaseDO';
-import {PriceProductPriceType, IPriceProductPrice, PriceProductPriceConfigurationState} from './IPriceProductPrice';
-import {SinglePriceDO} from './single-price/SinglePriceDO';
-import {PricePerPersonDO} from './price-per-person/PricePerPersonDO';
+import { BaseDO } from '../../../../../../common/base/BaseDO';
+import { PriceProductPriceType, IPriceProductPrice } from './IPriceProductPrice';
+import { SinglePriceDO } from './single-price/SinglePriceDO';
+import { PricePerPersonDO } from './price-per-person/PricePerPersonDO';
+import { PriceExceptionDO } from './price-exceptions/PriceExceptionDO';
 
 export class PriceProductPriceDO extends BaseDO {
 	type: PriceProductPriceType;
-	priceConfigurationState: PriceProductPriceConfigurationState;
 	priceList: IPriceProductPrice[];
+	priceExceptionList: PriceExceptionDO[];
 
 	protected getPrimitivePropertyKeys(): string[] {
-		return ["type", "priceConfigurationState"];
+		return ["type"];
 	}
 
 	public buildFromObject(object: Object) {
@@ -17,25 +18,37 @@ export class PriceProductPriceDO extends BaseDO {
 
 		this.priceList = [];
 		this.forEachElementOf(this.getObjectPropertyEnsureUndefined(object, "priceList"), (priceObject: Object) => {
-			var price: IPriceProductPrice;
-			switch (this.type) {
-				case PriceProductPriceType.SinglePrice:
-					price = new SinglePriceDO();
-					break;
-				case PriceProductPriceType.PricePerPerson:
-					price = new PricePerPersonDO();
-					break;
-			}
+			var price: IPriceProductPrice = PriceProductPriceDO.buildPriceInstance(this.type);
 			price.buildFromObject(priceObject);
 			this.priceList.push(price);
 		});
+
+		this.priceExceptionList = [];
+		this.forEachElementOf(this.getObjectPropertyEnsureUndefined(object, "priceExceptionList"), (priceExceptionObject: Object) => {
+			let priceException = new PriceExceptionDO();
+			priceException.buildFromObject(priceExceptionObject);
+			priceException.price = PriceProductPriceDO.buildPriceInstance(this.type);
+			priceException.price.buildFromObject(this.getObjectPropertyEnsureUndefined(priceExceptionObject, "price"));
+			this.priceExceptionList.push(priceException);
+		});
+	}
+	public static buildPriceInstance(type: PriceProductPriceType): IPriceProductPrice {
+		if (type === PriceProductPriceType.SinglePrice) {
+			return new SinglePriceDO();
+		}
+		return new PricePerPersonDO();
 	}
 
 	public getPriceBriefValueForRoomCategoryId(roomCategoryId: string): number {
 		var price: IPriceProductPrice = _.find(this.priceList, (price: IPriceProductPrice) => { return price.getRoomCategoryId() === roomCategoryId });
-		if(!price) {
+		if (!price) {
 			return 0.0;
 		}
 		return price.getPriceBriefValue();
+	}
+	public getFilteredExceptionsByRoomCategoryId(roomCategoryId: string): PriceExceptionDO[] {
+		return _.filter(this.priceExceptionList, exp => {
+			return exp.getRoomCategoryId() === roomCategoryId;
+		});
 	}
 }

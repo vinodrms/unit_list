@@ -1,12 +1,12 @@
-import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
-import {Observer} from 'rxjs/Observer';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { Observer } from 'rxjs/Observer';
 
-import {AppContext, ThServerApi} from '../../../../common/utils/AppContext';
-import {ARequestService} from '../common/ARequestService';
-import {RoomCategoryDO} from './data-objects/RoomCategoryDO';
-import {RoomCategoryStatsDO} from './data-objects/RoomCategoryStatsDO';
-import {RoomCategoriesType} from './RoomCategoriesType';
+import { AppContext, ThServerApi } from '../../../../common/utils/AppContext';
+import { ARequestService } from '../common/ARequestService';
+import { RoomCategoryDO } from './data-objects/RoomCategoryDO';
+import { RoomCategoryStatsDO } from './data-objects/RoomCategoryStatsDO';
+import { RoomCategoriesType } from './RoomCategoriesType';
 
 @Injectable()
 export class RoomCategoriesStatsService extends ARequestService<RoomCategoryStatsDO[]> {
@@ -37,7 +37,7 @@ export class RoomCategoriesStatsService extends ARequestService<RoomCategoryStat
 			roomCategoryStatsList.push(roomCategoryStatDO);
 		});
 		return _.sortBy(roomCategoryStatsList, (roomCategoryStats: RoomCategoryStatsDO) => {
-			return - (roomCategoryStats.capacity.totalCapacity.noAdults + roomCategoryStats.capacity.totalCapacity.noChildren);
+			return - ((roomCategoryStats.capacity.totalCapacity.noAdults * 2) + roomCategoryStats.capacity.totalCapacity.noChildren);
 		});
 	}
 

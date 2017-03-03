@@ -1078,6 +1078,15 @@ td .room-categ-capacity {
     opacity: 0.7;
 }
 
+.price-product-box {
+    border: 1px solid;
+    border-color: #d3d3d3;
+    padding: 5px;
+    margin-top: 5px;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
 .yield-filter {
     height: 60px;
     overflow: hidden;
@@ -1086,7 +1095,9 @@ td .room-categ-capacity {
 
 /* Maybe get rid of the 'th' prefix */
 .th-btn-weekday {
-    width: 100px !important;
+    width: 77px !important;
+    font-size: 11px;
+    padding-top: 15px !important;
 }
 
 /* Upload components */
@@ -3915,4 +3926,18 @@ table.small-margin {
 }
 textarea.payer-details {
     height: 34px;
+}
+
+/* Use this class with the bootstrap row class to force all the columns to have the same height */
+.row-eq-height { 
+    display: flex; 
+    flex-wrap: wrap; 
+}
+.row-eq-height > [class*='col-'] { 
+    display: flex; 
+    flex-direction: column; 
+}
+/* Needed for Safari */
+.row.row-eq-height:before, .row.row-eq-height:after {
+    display: none;
 }
