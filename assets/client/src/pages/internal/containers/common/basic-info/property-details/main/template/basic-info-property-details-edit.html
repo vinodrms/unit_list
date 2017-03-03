@@ -3,7 +3,7 @@
     <div class="row basic-info-form" *ngIf="!isLoading">
         <div class="col-xs-12 col-md-6">
             <label class="control-label">
-            <h3>{{ 'Select your time zone' | translate }}</h3><small>{{ 'This will be used for automatic processes that need to know your local hour' | translate }}</small>
+            <h3>{{ 'Select your time zone' | translate }}</h3>
         </label>
 
             <div class="form-group">
@@ -15,6 +15,7 @@
                 </div>
                 <label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Select a timezone' | translate }}</small></label>
             </div>
+            <small class="text-muted"><i class="fa fa-info-circle"></i> {{ 'This will be used for automatic processes that need to know your local hour.' | translate }}</small>
 
             <hr>
             <div class="row">
@@ -49,7 +50,7 @@
                     <th-hour-select [initialHour]="hotel.operationHours.cancellationHour" (onHourSelected)="diChangeCancellationHour($event)"
                         [isRequired]="true" errorMessage="{{ 'Required' | translate }}" [didSubmitForm]="didSubmitForm">
                     </th-hour-select>
-                    <small class="text-muted"><i class="fa fa-info-circle"></i> {{ 'The hour chosen will be when reservations gets cancelled on day of arrival if payment is not guaranteed.' | translate }}</small>
+                    <small class="text-muted"><i class="fa fa-info-circle"></i> {{ 'The chosen hour will be used when reservations get cancelled on day of arrival if payment is not guaranteed.' | translate }}</small>
                 </div>
             </div>
         </div>
