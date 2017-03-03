@@ -254,6 +254,7 @@ export var EnglishTranslations: Object = {
 	"Archive Price Product": "Archive Price Product",
 	"Exceptions": "Exceptions",
 	"Custom prices for different days of the week": "Custom prices for different days of the week",
+	"The exception was added succesfully on %dayFromWeek%": "The exception was added succesfully on %dayFromWeek%",
 	"Exception will apply on %dayFromWeek%": "Exception will apply on %dayFromWeek%",
 	"Prices for adults": "Prices for adults",
 	"Delete Room": "Delete Room",

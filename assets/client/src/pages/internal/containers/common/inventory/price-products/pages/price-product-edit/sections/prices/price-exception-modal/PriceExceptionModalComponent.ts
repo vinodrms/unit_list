@@ -15,10 +15,10 @@ import { PriceVM } from '../utils/PriceVM';
 })
 export class PriceExceptionModalComponent extends BaseComponent implements ICustomModalComponent {
     readonly: boolean;
-    displayError: boolean;
     priceVM: PriceVM;
     isoWeekDayVMList: ISOWeekDayVM[];
 
+    private _isoWeekDayUtils: ISOWeekDayUtils;
     private _selectedWeekDay: ISOWeekDay;
     price: IPriceProductPrice;
     didEditCurrentException: boolean;
@@ -27,11 +27,11 @@ export class PriceExceptionModalComponent extends BaseComponent implements ICust
         private _modalDialogRef: ModalDialogRef<PriceVM>,
         modalInput: PriceExceptionModalInput) {
         super();
-        this.isoWeekDayVMList = (new ISOWeekDayUtils()).getISOWeekDayVMList();
+        this._isoWeekDayUtils = new ISOWeekDayUtils();
+        this.isoWeekDayVMList = this._isoWeekDayUtils.getISOWeekDayVMList();
         this.priceVM = modalInput.priceVM;
         this.readonly = modalInput.readonly;
         this.selectedWeekDay = ISOWeekDay.Monday;
-        this.displayError = false;
     }
     public closeDialog() {
         if (!this.readonly) {
@@ -78,5 +78,8 @@ export class PriceExceptionModalComponent extends BaseComponent implements ICust
         if (this.readonly || !this.price.isValid()) { return; }
         this.priceVM.priceExceptionsByWeekday[this._selectedWeekDay] = this.price;
         this.priceVM.indexExceptions();
+        let dayFromWeek = this._isoWeekDayUtils.getISOWeekDayVM(this._selectedWeekDay).name;
+        let message = this._appContext.thTranslation.translate("The exception was added succesfully on %dayFromWeek%", { dayFromWeek: dayFromWeek });
+        this._appContext.toaster.success(message);
     }
 }

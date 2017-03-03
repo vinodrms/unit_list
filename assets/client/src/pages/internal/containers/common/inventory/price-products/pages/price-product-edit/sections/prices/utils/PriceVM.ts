@@ -14,6 +14,7 @@ export class PriceVM {
 
     constructor(priceType: PriceProductPriceType) {
         this._priceType = priceType;
+        this._exceptionList = [];
         this._priceExceptionsByWeekday = {};
     }
 
