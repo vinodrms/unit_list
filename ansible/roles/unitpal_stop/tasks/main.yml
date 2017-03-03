@@ -1,0 +1,5 @@
+---
+
+- block:
+    - name: Stop UnitPal process with pm2
+      command: pm2 stop {{ app_name }}
