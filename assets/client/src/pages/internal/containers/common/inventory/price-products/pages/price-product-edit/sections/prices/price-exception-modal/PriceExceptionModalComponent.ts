@@ -31,6 +31,17 @@ export class PriceExceptionModalComponent extends BaseComponent implements ICust
         this.isoWeekDayVMList = this._isoWeekDayUtils.getISOWeekDayVMList();
         this.priceVM = modalInput.priceVM;
         this.readonly = modalInput.readonly;
+        this.setDefaultSelectedWeekDay();
+
+    }
+    private setDefaultSelectedWeekDay() {
+        for (var i = 0; i < this.isoWeekDayVMList.length; i++) {
+            let isoWeekDayVM = this.isoWeekDayVMList[i];
+            if (!this._appContext.thUtils.isUndefinedOrNull(this.priceVM.priceExceptionsByWeekday[isoWeekDayVM.iSOWeekDay])) {
+                this.selectedWeekDay = isoWeekDayVM.iSOWeekDay;
+                return;
+            }
+        }
         this.selectedWeekDay = ISOWeekDay.Monday;
     }
     public closeDialog() {
