@@ -1,0 +1,23 @@
+server {
+    listen 80;
+    listen [::]:80;
+    return 301 https://$host$request_uri;
+}
+
+server {
+    listen 443;
+    listen [::]:443;
+
+    ssl on;
+    ssl_certificate {{ ssl_cert_chain_path }};
+    ssl_certificate_key {{ ssl_private_key_path }};
+
+    location / {
+        proxy_pass http://localhost:{{ port }};
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+}

@@ -1,0 +1,3 @@
+unitpal_root: /var/www/unitpal
+unitpal_repo: https://gitlabrunner:Gts%2527_217AZC%23%24%252_982@gitlab.3angletech.com/UnitPalDK/UnitPal.git
+unitpal_version: master
