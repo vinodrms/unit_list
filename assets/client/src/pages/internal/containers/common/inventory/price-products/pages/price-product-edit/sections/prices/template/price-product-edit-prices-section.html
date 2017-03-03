@@ -59,17 +59,27 @@
 									<td title="{{ 'Prices for adults' | translate }}">
 										{{ ccy.nativeSymbol }}  {{ exception.price.getPriceBriefLineString() }}
 									</td>
-									<td *ngIf="!readonly">
-										<a class="btn btn-xs" (click)="removeException(exception)">
+									<td>
+										<a class="btn btn-xs" *ngIf="!readonly" (click)="removeException(priceVM, exception)">
 											<i class="fa unitpal-font">\</i> {{ 'Remove' | translate }}
 										</a>
 									</td>
 								</tr>
 								<tr>
-									<td *ngIf="!readonly">
-										<a class="btn btn-xs" (click)="openExceptionSelectionModal()">
-											<i class="fa unitpal-font">'</i> {{ 'Add' | translate }}
-										</a>
+									<td>
+										<span *ngIf="readonly && priceVM.hasExceptions()">
+											<a class="btn btn-xs" (click)="openPriceExceptionModal(priceVM)">
+												<span><i class="fa fa-eye"></i> {{ 'View' | translate }}</span>
+											</a>	
+										</span>
+										<p *ngIf="readonly && !priceVM.hasExceptions()">{{'No exceptions' | translate}}</p>
+
+										<span *ngIf="!readonly">
+											<a class="btn btn-xs" (click)="openPriceExceptionModal(priceVM)">
+												<span *ngIf="!priceVM.hasExceptions()"><i class="fa unitpal-font">'</i> {{ 'Add' | translate }}</span>
+												<span *ngIf="priceVM.hasExceptions()"><i class="fa unitpal-font">]</i> {{ 'Edit' | translate }}</span>
+											</a>
+										</span>
 									</td>
 									<td></td>
 									<td></td>

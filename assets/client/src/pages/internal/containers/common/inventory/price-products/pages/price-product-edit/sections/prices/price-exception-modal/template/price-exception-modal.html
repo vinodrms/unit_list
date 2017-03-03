@@ -1,0 +1,46 @@
+<div class="modal-header text-center">
+	<button type="button" class="close" (click)="closeDialog()">&times;</button>
+	<h4 class="modal-title">{{ 'Price Exceptions' | translate }}</h4>
+</div>
+<div class="modal-body">
+	<div class="row">
+        <div class="col-md-12">
+			<div class="btn-group btn-group-lg" role="group">
+				<div class="button-check th-grid-btn" *ngFor="let isoWeekDayVM of isoWeekDayVMList">
+					<div class="info-block block-info clearfix" title="{{ isoWeekDayVM.name | translate }}">
+						<div data-toggle="buttons">
+							<label class="btn btn-default th-btn-weekday"
+								[ngClass]="{active: (selectedWeekDay == isoWeekDayVM.iSOWeekDay)}"
+								(click)="selectedWeekDay=isoWeekDayVM.iSOWeekDay">
+								<i *ngIf="hasExceptionConfigured(isoWeekDayVM.iSOWeekDay)" class="fa fa-check green-color" aria-hidden="true"></i> 
+								{{ isoWeekDayVM.name | translate }}
+							</label>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-12">
+			<price-edit 
+				[displayError]="displayError"
+				[readonly]="readonly"
+				[priceType]="priceVM.priceType"
+				[roomCategoryStats]="priceVM.roomCategoryStats"
+				[(price)]="price"
+				(priceChange)="didEditCurrentException=true">
+			</price-edit>
+		</div>
+	</div>
+</div>
+<div class="modal-footer">
+	<button type="button" class="btn btn-primary" 
+		*ngIf="!readonly"
+		(click)="savePriceException()" 
+		[disabled]="!price.isValid() || !didEditCurrentException">
+		{{ buttonLabel | translate }}
+	</button>
+	<button type="button" class="btn btn-danger" 
+		(click)="closeDialog()">
+		{{ 'Close' | translate }}
+	</button>
+</div>

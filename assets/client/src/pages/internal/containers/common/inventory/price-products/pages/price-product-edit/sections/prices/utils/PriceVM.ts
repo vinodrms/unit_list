@@ -1,6 +1,7 @@
 import { RoomCategoryStatsDO } from '../../../../../../../../../services/room-categories/data-objects/RoomCategoryStatsDO';
 import { PriceProductPriceType, IPriceProductPrice } from '../../../../../../../../../services/price-products/data-objects/price/IPriceProductPrice';
 import { PriceExceptionDO } from '../../../../../../../../../services/price-products/data-objects/price/price-exceptions/PriceExceptionDO';
+import { PriceProductPriceDO } from '../../../../../../../../../services/price-products/data-objects/price/PriceProductPriceDO';
 import { ISOWeekDay } from '../../../../../../../../../services/common/data-objects/th-dates/ISOWeekDay';
 
 export class PriceVM {
@@ -81,5 +82,26 @@ export class PriceVM {
             exceptionList.push(exception);
         });
         this._exceptionList = exceptionList;
+    }
+
+    public deleteExceptionOn(dayFromWeek: ISOWeekDay) {
+        delete this.priceExceptionsByWeekday[dayFromWeek];
+        this.indexExceptions();
+    }
+    public hasExceptions(): boolean {
+        return this.exceptionList.length > 0;
+    }
+    public buildPrototype(): PriceVM {
+        let priceCopy: PriceVM = new PriceVM(this.priceType);
+        priceCopy.price = PriceProductPriceDO.buildPriceInstance(this.priceType);
+        priceCopy.price.buildFromObject(this.price);
+        this.exceptionList.forEach(e => {
+            let exceptionPrice = PriceProductPriceDO.buildPriceInstance(this.priceType);
+            exceptionPrice.buildFromObject(e.price);
+            priceCopy.priceExceptionsByWeekday[e.dayFromWeek] = exceptionPrice;
+        });
+        priceCopy.indexExceptions();
+        priceCopy.roomCategoryStats = this.roomCategoryStats;
+        return priceCopy;
     }
 }

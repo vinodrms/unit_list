@@ -1,24 +1,25 @@
 import { Component, Input } from '@angular/core';
 import { BaseComponent } from '../../../../../../../../../../common/base/BaseComponent';
 import { AppContext, ThError } from '../../../../../../../../../../common/utils/AppContext';
+import { ModalDialogRef } from '../../../../../../../../../../common/utils/modals/utils/ModalDialogRef';
 import { IPriceProductEditSection } from '../utils/IPriceProductEditSection';
 import { PriceProductVM } from '../../../../../../../../services/price-products/view-models/PriceProductVM';
-import { PricePerPersonDO } from '../../../../../../../../services/price-products/data-objects/price/price-per-person/PricePerPersonDO';
 import { PriceProductPriceType } from '../../../../../../../../services/price-products/data-objects/price/IPriceProductPrice';
 import { PriceProductPriceDO } from '../../../../../../../../services/price-products/data-objects/price/PriceProductPriceDO';
-import { SinglePriceDO } from '../../../../../../../../services/price-products/data-objects/price/single-price/SinglePriceDO';
 import { RoomCategoriesStatsService } from '../../../../../../../../services/room-categories/RoomCategoriesStatsService';
 import { RoomCategoryDO } from '../../../../../../../../services/room-categories/data-objects/RoomCategoryDO';
 import { RoomCategoryStatsDO } from '../../../../../../../../services/room-categories/data-objects/RoomCategoryStatsDO';
-import { PriceContainer } from './utils/PriceContainer';
 import { CurrencyDO } from '../../../../../../../../services/common/data-objects/currency/CurrencyDO';
 import { ISOWeekDayUtils, ISOWeekDayVM, ISOWeekDay } from '../../../../../../../../services/common/data-objects/th-dates/ISOWeekDay';
 import { PriceExceptionDO } from '../../../../../../../../services/price-products/data-objects/price/price-exceptions/PriceExceptionDO';
+import { PriceExceptionModalService } from './price-exception-modal/services/PriceExceptionModalService';
+import { PriceContainer } from './utils/PriceContainer';
+import { PriceVM } from './utils/PriceVM';
 
 @Component({
 	selector: 'price-product-edit-prices-section',
 	templateUrl: '/client/src/pages/internal/containers/common/inventory/price-products/pages/price-product-edit/sections/prices/template/price-product-edit-prices-section.html',
-	providers: [RoomCategoriesStatsService]
+	providers: [RoomCategoriesStatsService, PriceExceptionModalService]
 })
 export class PriceProductEditPricesSectionComponent extends BaseComponent implements IPriceProductEditSection {
 	readonly: boolean;
@@ -35,7 +36,8 @@ export class PriceProductEditPricesSectionComponent extends BaseComponent implem
 	ccy: CurrencyDO;
 
 	constructor(private _appContext: AppContext,
-		private _roomCategoriesStatsService: RoomCategoriesStatsService) {
+		private _roomCategoriesStatsService: RoomCategoriesStatsService,
+		private _priceExceptionModal: PriceExceptionModalService) {
 		super();
 		this._isoWeekDayUtils = new ISOWeekDayUtils();
 		this.ccy = new CurrencyDO();
@@ -126,10 +128,25 @@ export class PriceProductEditPricesSectionComponent extends BaseComponent implem
 		return this._isoWeekDayUtils.getISOWeekDayVM(iSOWeekDay).name;
 	}
 
-	public removeException(exception: PriceExceptionDO) {
-		// TODO
+	public removeException(priceVM: PriceVM, exception: PriceExceptionDO) {
+		priceVM.deleteExceptionOn(exception.dayFromWeek);
 	}
-	public openExceptionSelectionModal() {
-		// TODO
+	public openPriceExceptionModal(priceVM: PriceVM) {
+		let priceCopy = priceVM.buildPrototype();
+		this._priceExceptionModal.openPriceExceptionModal(priceCopy, this.readonly)
+			.then((modalDialogInstance: ModalDialogRef<PriceVM>) => {
+				modalDialogInstance.resultObservable.subscribe((updatedPrice: PriceVM) => {
+					this.didChangeExceptionsOn(updatedPrice);
+				})
+			}).catch((e: any) => { });
+	}
+	private didChangeExceptionsOn(priceVM: PriceVM) {
+		let foundPrice = this.priceContainer.getPriceVMForRoomCategoryId(priceVM.price.getRoomCategoryId());
+		if (this._appContext.thUtils.isUndefinedOrNull(foundPrice)) { return; }
+		foundPrice.priceExceptionsByWeekday = {};
+		_.forEach(priceVM.exceptionList, e => {
+			foundPrice.priceExceptionsByWeekday[e.dayFromWeek] = e.price;
+		});
+		foundPrice.indexExceptions();
 	}
 }

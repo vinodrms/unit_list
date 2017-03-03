@@ -1092,7 +1092,9 @@ td .room-categ-capacity {
 
 /* Maybe get rid of the 'th' prefix */
 .th-btn-weekday {
-    width: 100px !important;
+    width: 77px !important;
+    font-size: 11px;
+    padding-top: 15px !important;
 }
 
 /* Upload components */

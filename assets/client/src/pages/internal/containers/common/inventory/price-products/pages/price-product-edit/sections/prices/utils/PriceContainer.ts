@@ -70,7 +70,7 @@ export class PriceContainer {
         });
         this._priceVMList = newPriceVMList;
     }
-    private getPriceVMForRoomCategoryId(roomCategoryId: string): PriceVM {
+    public getPriceVMForRoomCategoryId(roomCategoryId: string): PriceVM {
         return _.find(this._priceVMList, (priceVM: PriceVM) => { return priceVM.price.getRoomCategoryId() === roomCategoryId });
     }
 
