@@ -253,7 +253,7 @@ export var EnglishTranslations: Object = {
 	"Are you sure you want to mark %name% as draft ?": "Are you sure you want to mark %name% as draft ?",
 	"Archive Price Product": "Archive Price Product",
 	"Exceptions": "Exceptions",
-	"Exceptions for the default prices": "Exceptions for the default prices",
+	"Custom prices for different days of the week": "Custom prices for different days of the week",
 	"Exception will apply on %dayFromWeek%": "Exception will apply on %dayFromWeek%",
 	"Prices for adults": "Prices for adults",
 	"Delete Room": "Delete Room",

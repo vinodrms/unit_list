@@ -5,7 +5,6 @@ import { ICustomModalComponent, ModalSize } from '../../../../../../../../../../
 import { ModalDialogRef } from '../../../../../../../../../../../common/utils/modals/utils/ModalDialogRef';
 import { ISOWeekDayUtils, ISOWeekDayVM, ISOWeekDay } from '../../../../../../../../../services/common/data-objects/th-dates/ISOWeekDay';
 import { PriceExceptionModalInput } from './services/utils/PriceExceptionModalInput';
-import { PriceExceptionDO } from '../../../../../../../../../services/price-products/data-objects/price/price-exceptions/PriceExceptionDO';
 import { IPriceProductPrice } from '../../../../../../../../../services/price-products/data-objects/price/IPriceProductPrice';
 import { PriceProductPriceDO } from '../../../../../../../../../services/price-products/data-objects/price/PriceProductPriceDO';
 import { PriceVM } from '../utils/PriceVM';
