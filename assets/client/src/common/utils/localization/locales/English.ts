@@ -116,6 +116,7 @@ export var EnglishTranslations: Object = {
 	"Check out to": "Check out to",
 	"Required": "Required",
 	"Cancellation hour of not guaranteed bookings": "Cancellation hour of not guaranteed bookings",
+	"The hour chosen will be when reservations gets cancelled on day of arrival if payment is not guaranteed.": "The hour chosen will be when reservations gets cancelled on day of arrival if payment is not guaranteed."
 	"Select a timezone": "Select a timezone",
 	"Hotel Amenities": "Hotel Amenities",
 	"Add-On Products": "Add-On Products",

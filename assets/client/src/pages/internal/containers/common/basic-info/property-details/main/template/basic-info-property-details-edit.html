@@ -49,6 +49,7 @@
                     <th-hour-select [initialHour]="hotel.operationHours.cancellationHour" (onHourSelected)="diChangeCancellationHour($event)"
                         [isRequired]="true" errorMessage="{{ 'Required' | translate }}" [didSubmitForm]="didSubmitForm">
                     </th-hour-select>
+                    <small class="text-muted"><i class="fa fa-info-circle"></i> {{ 'The hour chosen will be when reservations gets cancelled on day of arrival if payment is not guaranteed.' | translate }}</small>
                 </div>
             </div>
         </div>
