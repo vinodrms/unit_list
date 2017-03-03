@@ -37,8 +37,8 @@ export class SinglePriceDO extends BaseDO implements IPriceProductPrice {
 		}
 		return true;
 	}
-	public isConfiguredForRoomCategory(roomCategoryId: string): boolean {
-		return this.roomCategoryId === roomCategoryId;
+	public getRoomCategoryId(): string {
+		return this.roomCategoryId;
 	}
 	public roundPricesToTwoDecimals() {
 		var thUtils = new ThUtils();

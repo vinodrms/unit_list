@@ -1,32 +1,34 @@
-import {TestUtils} from '../../helpers/TestUtils';
-import {ThError} from '../../../core/utils/th-responses/ThError';
-import {TestContext} from '../../helpers/TestContext';
-import {PriceProductActionUtils} from '../../../core/domain-layer/price-products/save-actions/utils/PriceProductActionUtils';
-import {TaxResponseRepoDO} from '../../../core/data-layer/taxes/repositories/ITaxRepository';
-import {AddOnProductDO} from '../../../core/data-layer/add-on-products/data-objects/AddOnProductDO';
-import {PriceProductDO, PriceProductStatus, PriceProductAvailability} from '../../../core/data-layer/price-products/data-objects/PriceProductDO';
-import {PriceProductConditionsDO} from '../../../core/data-layer/price-products/data-objects/conditions/PriceProductConditionsDO';
-import {PriceProductCancellationPolicyType} from '../../../core/data-layer/price-products/data-objects/conditions/cancellation/IPriceProductCancellationPolicy';
-import {PriceProductCancellationPenaltyType} from '../../../core/data-layer/price-products/data-objects/conditions/penalty/IPriceProductCancellationPenalty';
-import {NoCancellationPolicyDO} from '../../../core/data-layer/price-products/data-objects/conditions/cancellation/NoCancellationPolicyDO';
-import {NoCancellationPenaltyDO} from '../../../core/data-layer/price-products/data-objects/conditions/penalty/NoCancellationPenaltyDO';
-import {PriceProductConstraintWrapperDO} from '../../../core/data-layer/price-products/data-objects/constraint/PriceProductConstraintWrapperDO';
-import {PricePerPersonDO} from '../../../core/data-layer/price-products/data-objects/price/price-per-person/PricePerPersonDO';
-import {PriceForFixedNumberOfPersonsDO} from '../../../core/data-layer/price-products/data-objects/price/price-per-person/PriceForFixedNumberOfPersonsDO';
-import {PriceProductPriceDO} from '../../../core/data-layer/price-products/data-objects/price/PriceProductPriceDO';
-import {PriceProductPriceConfigurationState} from '../../../core/data-layer/price-products/data-objects/price/IPriceProductPrice';
-import {PriceProductPriceType} from '../../../core/data-layer/price-products/data-objects/price/IPriceProductPrice';
-import {PriceProductIncludedItemsDO} from '../../../core/data-layer/price-products/data-objects/included-items/PriceProductIncludedItemsDO';
-import {AttachedAddOnProductItemDO} from '../../../core/data-layer/price-products/data-objects/included-items/AttachedAddOnProductItemDO';
-import {AttachedAddOnProductItemStrategyType} from '../../../core/data-layer/price-products/data-objects/included-items/IAttachedAddOnProductItemStrategy';
-import {FixedNumberAttachedAddOnProductItemStrategyDO} from '../../../core/data-layer/price-products/data-objects/included-items/strategies/FixedNumberAttachedAddOnProductItemStrategyDO';
-import {SinglePriceDO} from '../../../core/data-layer/price-products/data-objects/price/single-price/SinglePriceDO';
-import {RoomCategoryStatsDO} from '../../../core/data-layer/room-categories/data-objects/RoomCategoryStatsDO';
+import { TestUtils } from '../../helpers/TestUtils';
+import { ThError } from '../../../core/utils/th-responses/ThError';
+import { TestContext } from '../../helpers/TestContext';
+import { PriceProductActionUtils } from '../../../core/domain-layer/price-products/save-actions/utils/PriceProductActionUtils';
+import { DefaultHotelBuilder } from './DefaultHotelBuilder';
+import { TaxResponseRepoDO } from '../../../core/data-layer/taxes/repositories/ITaxRepository';
+import { AddOnProductDO } from '../../../core/data-layer/add-on-products/data-objects/AddOnProductDO';
+import { PriceProductDO, PriceProductStatus, PriceProductAvailability } from '../../../core/data-layer/price-products/data-objects/PriceProductDO';
+import { PriceProductConditionsDO } from '../../../core/data-layer/price-products/data-objects/conditions/PriceProductConditionsDO';
+import { PriceProductCancellationPolicyType } from '../../../core/data-layer/price-products/data-objects/conditions/cancellation/IPriceProductCancellationPolicy';
+import { PriceProductCancellationPenaltyType } from '../../../core/data-layer/price-products/data-objects/conditions/penalty/IPriceProductCancellationPenalty';
+import { NoCancellationPolicyDO } from '../../../core/data-layer/price-products/data-objects/conditions/cancellation/NoCancellationPolicyDO';
+import { NoCancellationPenaltyDO } from '../../../core/data-layer/price-products/data-objects/conditions/penalty/NoCancellationPenaltyDO';
+import { PriceProductConstraintWrapperDO } from '../../../core/data-layer/price-products/data-objects/constraint/PriceProductConstraintWrapperDO';
+import { PricePerPersonDO } from '../../../core/data-layer/price-products/data-objects/price/price-per-person/PricePerPersonDO';
+import { PriceForFixedNumberOfPersonsDO } from '../../../core/data-layer/price-products/data-objects/price/price-per-person/PriceForFixedNumberOfPersonsDO';
+import { PriceProductPriceDO } from '../../../core/data-layer/price-products/data-objects/price/PriceProductPriceDO';
+import { PriceProductPriceType } from '../../../core/data-layer/price-products/data-objects/price/IPriceProductPrice';
+import { PriceExceptionDO } from '../../../core/data-layer/price-products/data-objects/price/price-exceptions/PriceExceptionDO';
+import { PriceProductIncludedItemsDO } from '../../../core/data-layer/price-products/data-objects/included-items/PriceProductIncludedItemsDO';
+import { AttachedAddOnProductItemDO } from '../../../core/data-layer/price-products/data-objects/included-items/AttachedAddOnProductItemDO';
+import { AttachedAddOnProductItemStrategyType } from '../../../core/data-layer/price-products/data-objects/included-items/IAttachedAddOnProductItemStrategy';
+import { FixedNumberAttachedAddOnProductItemStrategyDO } from '../../../core/data-layer/price-products/data-objects/included-items/strategies/FixedNumberAttachedAddOnProductItemStrategyDO';
+import { SinglePriceDO } from '../../../core/data-layer/price-products/data-objects/price/single-price/SinglePriceDO';
+import { RoomCategoryStatsDO } from '../../../core/data-layer/room-categories/data-objects/RoomCategoryStatsDO';
+import { ThTimestampDO } from '../../../core/utils/th-dates/data-objects/ThTimestampDO';
 
 import _ = require('underscore');
 
 export interface IPriceProductDataSource {
-	getPriceProductList(roomCategoryStatsList: RoomCategoryStatsDO[], taxes: TaxResponseRepoDO, 
+	getPriceProductList(roomCategoryStatsList: RoomCategoryStatsDO[], taxes: TaxResponseRepoDO,
 		addOnProductList: AddOnProductDO[], breakfastAopCategoryId: string): PriceProductDO[];
 }
 
@@ -37,18 +39,18 @@ export class DefaultPriceProductBuilder implements IPriceProductDataSource {
 		this._testUtils = new TestUtils();
 	}
 
-	public getPriceProductList(roomCategoryStatsList: RoomCategoryStatsDO[], taxes: TaxResponseRepoDO, 
+	public getPriceProductList(roomCategoryStatsList: RoomCategoryStatsDO[], taxes: TaxResponseRepoDO,
 		addOnProductList: AddOnProductDO[], breakfastAopCategoryId: string): PriceProductDO[] {
 		var ppList: PriceProductDO[] = [];
 		var taxId = this._testUtils.getRandomListElement(taxes.vatList).id;
 
 		var breakfastAddOnProduct = _.find(addOnProductList, (aop: AddOnProductDO) => { return aop.categoryId === breakfastAopCategoryId });
 		var addOnProduct = _.find(addOnProductList, (aop: AddOnProductDO) => { return aop.categoryId !== breakfastAopCategoryId });
-		ppList.push(DefaultPriceProductBuilder.buildPriceProductDO(this._testContext, "Price Product 1", this._testUtils.getRandomListElement(roomCategoryStatsList), taxId, 
+		ppList.push(DefaultPriceProductBuilder.buildPriceProductDO(this._testContext, "Price Product 1", this._testUtils.getRandomListElement(roomCategoryStatsList), taxId,
 			breakfastAddOnProduct, addOnProduct, PriceProductPriceType.PricePerPerson));
-		ppList.push(DefaultPriceProductBuilder.buildPriceProductDO(this._testContext, "Price Product 2", this._testUtils.getRandomListElement(roomCategoryStatsList), taxId, 
+		ppList.push(DefaultPriceProductBuilder.buildPriceProductDO(this._testContext, "Price Product 2", this._testUtils.getRandomListElement(roomCategoryStatsList), taxId,
 			breakfastAddOnProduct, addOnProduct, PriceProductPriceType.SinglePrice));
-		var confidentialPriceProduct = DefaultPriceProductBuilder.buildPriceProductDO(this._testContext, "Price Product 3 (Private)", this._testUtils.getRandomListElement(roomCategoryStatsList), taxId, 
+		var confidentialPriceProduct = DefaultPriceProductBuilder.buildPriceProductDO(this._testContext, "Price Product 3 (Private)", this._testUtils.getRandomListElement(roomCategoryStatsList), taxId,
 			breakfastAddOnProduct, addOnProduct, PriceProductPriceType.SinglePrice);
 		confidentialPriceProduct.availability = PriceProductAvailability.Confidential;
 		ppList.push(confidentialPriceProduct);
@@ -65,7 +67,7 @@ export class DefaultPriceProductBuilder implements IPriceProductDataSource {
 		var strategy = new FixedNumberAttachedAddOnProductItemStrategyDO();
 		strategy.noOfItems = 1;
 		aopItem.strategy = strategy;
-		priceProduct.includedItems.attachedAddOnProductItemList = [ aopItem ];
+		priceProduct.includedItems.attachedAddOnProductItemList = [aopItem];
 		priceProduct.includedItems.indexedAddOnProductIdList = priceProduct.includedItems.getUniqueAddOnProductIdList();
 
 		priceProduct.availability = PriceProductAvailability.Public;
@@ -79,6 +81,7 @@ export class DefaultPriceProductBuilder implements IPriceProductDataSource {
 		priceProduct.hotelId = testContext.sessionContext.sessionDO.hotel.id;
 		priceProduct.lastRoomAvailability = false;
 		priceProduct.name = name;
+
 		switch (priceType) {
 			case PriceProductPriceType.PricePerPerson:
 				priceProduct.price = DefaultPriceProductBuilder.getPricePerPerson([roomCategoryStat]);
@@ -87,6 +90,7 @@ export class DefaultPriceProductBuilder implements IPriceProductDataSource {
 				priceProduct.price = DefaultPriceProductBuilder.getPricePerRoomCategory(roomCategoryStat);
 				break;
 		}
+
 		priceProduct.roomCategoryIdList = [roomCategoryStat.roomCategory.id];
 		priceProduct.status = PriceProductStatus.Active;
 		priceProduct.taxIdList = [taxId];
@@ -99,7 +103,6 @@ export class DefaultPriceProductBuilder implements IPriceProductDataSource {
 	public static getPricePerPerson(roomCategoryStatList: RoomCategoryStatsDO[]): PriceProductPriceDO {
 		var outPrice = new PriceProductPriceDO();
 		outPrice.type = PriceProductPriceType.PricePerPerson;
-		outPrice.priceConfigurationState = PriceProductPriceConfigurationState.Valid;
 
 		outPrice.priceList = [];
 		_.forEach(roomCategoryStatList, (roomCategoryStat: RoomCategoryStatsDO) => {
@@ -112,7 +115,11 @@ export class DefaultPriceProductBuilder implements IPriceProductDataSource {
 
 			outPrice.priceList.push(pricePerPerson);
 		});
-
+		let timestamp = ThTimestampDO.buildThTimestampForTimezone(DefaultHotelBuilder.Timezone);
+		let priceException = new PriceExceptionDO();
+		priceException.dayFromWeek = timestamp.thDateDO.getISOWeekDay();
+		priceException.price = outPrice.priceList[0];
+		outPrice.priceExceptionList = [priceException];
 		return outPrice;
 	}
 	private static getPriceForFixedNumberOfPersonsDOList(maxNoOfPersons: number): PriceForFixedNumberOfPersonsDO[] {
@@ -132,22 +139,28 @@ export class DefaultPriceProductBuilder implements IPriceProductDataSource {
 	public static getPricePerRoomCategory(roomCategoryStat: RoomCategoryStatsDO): PriceProductPriceDO {
 		var outPrice = new PriceProductPriceDO();
 		outPrice.type = PriceProductPriceType.SinglePrice;
-		outPrice.priceConfigurationState = PriceProductPriceConfigurationState.Valid;
 		var singlePrice = new SinglePriceDO();
 		singlePrice.price = 98.21;
 		singlePrice.roomCategoryId = roomCategoryStat.roomCategory.id;
 		outPrice.priceList = [singlePrice];
+
+		let timestamp = ThTimestampDO.buildThTimestampForTimezone(DefaultHotelBuilder.Timezone);
+		let priceException = new PriceExceptionDO();
+		priceException.dayFromWeek = timestamp.thDateDO.getISOWeekDay();
+		priceException.price = outPrice.priceList[0];
+		outPrice.priceExceptionList = [priceException];
+
 		return outPrice;
 	}
 
-	public loadPriceProducts(dataSource: IPriceProductDataSource, roomCategoryStatsList: RoomCategoryStatsDO[], 
+	public loadPriceProducts(dataSource: IPriceProductDataSource, roomCategoryStatsList: RoomCategoryStatsDO[],
 		taxes: TaxResponseRepoDO, addOnProductList: AddOnProductDO[], breakfastAopCategoryId: string): Promise<PriceProductDO[]> {
 		return new Promise<PriceProductDO[]>((resolve: { (result: PriceProductDO[]): void }, reject: { (err: ThError): void }) => {
 			this.loadPriceProductsCore(resolve, reject, dataSource, roomCategoryStatsList, taxes, addOnProductList, breakfastAopCategoryId);
 		});
 	}
 	private loadPriceProductsCore(resolve: { (result: PriceProductDO[]): void }, reject: { (err: ThError): void },
-		dataSource: IPriceProductDataSource, roomCategoryStatsList: RoomCategoryStatsDO[], 
+		dataSource: IPriceProductDataSource, roomCategoryStatsList: RoomCategoryStatsDO[],
 		taxes: TaxResponseRepoDO, addOnProductList: AddOnProductDO[], breakfastAopCategoryId: string) {
 
 		var priceProductList: PriceProductDO[] = dataSource.getPriceProductList(roomCategoryStatsList, taxes, addOnProductList, breakfastAopCategoryId);

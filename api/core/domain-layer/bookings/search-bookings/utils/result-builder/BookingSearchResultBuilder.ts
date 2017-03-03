@@ -117,12 +117,13 @@ export class BookingSearchResultBuilder {
             _.forEach(priceProduct.roomCategoryIdList, (roomCategoryId: string) => {
                 var itemPrice = new PriceProductItemPrice();
                 itemPrice.roomCategoryId = roomCategoryId;
-                var noOfNights = this._indexedBookingInterval.getLengthOfStay();
-                itemPrice.price = noOfNights * priceProduct.price.getPricePerNightFor({
+                let pricePerNightList: number[] = priceProduct.price.getPricePerNightBreakdownFor({
                     roomCategoryId: roomCategoryId,
                     configCapacity: this._builderParams.searchParams.configCapacity,
-                    roomCategoryStatsList: this._builderParams.roomCategoryStatsList
+                    roomCategoryStatsList: this._builderParams.roomCategoryStatsList,
+                    bookingInterval: this._indexedBookingInterval
                 });
+                itemPrice.price = this._thUtils.getArraySum(pricePerNightList);
                 var includedInvoiceItems = this._bookingUtils.getIncludedInvoiceItems(priceProduct, this._builderParams.searchParams.configCapacity, this._indexedBookingInterval);
                 itemPrice.price += includedInvoiceItems.getTotalPrice();
                 itemPrice.price = this._thUtils.roundNumberToTwoDecimals(itemPrice.price);

@@ -221,6 +221,7 @@ export enum ThStatusCode {
 	PriceProductRepositoryErrorGettingList,
 	SavePriceProductItemError,
 	SavePriceProductItemInvalidPrice,
+	SavePriceProductItemInvalidPriceException,
 	SavePriceProductItemInvalidConstraints,
 	SavePriceProductItemInvalidConditions,
 	PriceProductItemUpdateStrategyOnlyActiveAndDraftCanBeUpdated,
@@ -338,6 +339,7 @@ export enum ThStatusCode {
 	InvoicePaymentValidatorError,
 	InvoicePayersValidatorError,
 	InvoicePayersValidatorInvalidSplit,
+	InvoicePayersValidatorNoAccessToWalkIn,
 	GetInvoiceGroupBriefDataError,
 	CustomerInvoiceGroupUpdateStrategyErrorUpdating,
 	CustomerInvoiceGroupAddStrategyErrorAdding,
@@ -727,6 +729,7 @@ ThMessage[ThStatusCode.PriceProductRepositoryErrorReadingDocumentCount] = "Error
 ThMessage[ThStatusCode.PriceProductRepositoryErrorGettingList] = "Error getting the list of price products.";
 ThMessage[ThStatusCode.SavePriceProductItemError] = "Error saving price product.";
 ThMessage[ThStatusCode.SavePriceProductItemInvalidPrice] = "Invalid price submitted.";
+ThMessage[ThStatusCode.SavePriceProductItemInvalidPriceException] = "Invalid price exceptions submitted.";
 ThMessage[ThStatusCode.SavePriceProductItemInvalidConstraints] = "Invalid constraints submitted.";
 ThMessage[ThStatusCode.SavePriceProductItemInvalidConditions] = "Invalid conditions submitted.";
 ThMessage[ThStatusCode.PriceProductItemUpdateStrategyOnlyActiveAndDraftCanBeUpdated] = "Only draft or active price products can be updated.";
@@ -837,6 +840,7 @@ ThMessage[ThStatusCode.InvoicePaymentValidatorError] = "Error validating the inv
 ThMessage[ThStatusCode.GetInvoiceGroupBriefDataError] = "Error getting the invoice group brief data.";
 ThMessage[ThStatusCode.InvoicePayersValidatorError] = "Error validating the payers that split the invoice payment.";
 ThMessage[ThStatusCode.InvoicePayersValidatorInvalidSplit] = "Error validating the payers that split the invoice payment.";
+ThMessage[ThStatusCode.InvoicePayersValidatorNoAccessToWalkIn] = "Customers with pay invoice by agreement enabled cannot create walk in invoices.";
 ThMessage[ThStatusCode.CustomerInvoiceGroupUpdateStrategyErrorUpdating] = "Error updating the invoice group.";
 ThMessage[ThStatusCode.CustomerInvoiceGroupAddStrategyErrorAdding] = "Error adding the invoice group.";
 ThMessage[ThStatusCode.BookingInvoiceGroupUpdateStrategyErrorUpdating] = "Error updating the invoice group.";

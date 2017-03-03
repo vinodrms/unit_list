@@ -1,7 +1,7 @@
-import {BaseDO} from '../../../../../../../common/base/BaseDO';
-import {IPriceProductPrice} from '../IPriceProductPrice';
-import {RoomCategoryStatsDO} from '../../../../room-categories/data-objects/RoomCategoryStatsDO';
-import {ThDataValidators} from '../../../../../../../common/utils/form-utils/utils/ThDataValidators';
+import { BaseDO } from '../../../../../../../common/base/BaseDO';
+import { IPriceProductPrice } from '../IPriceProductPrice';
+import { RoomCategoryStatsDO } from '../../../../room-categories/data-objects/RoomCategoryStatsDO';
+import { ThDataValidators } from '../../../../../../../common/utils/form-utils/utils/ThDataValidators';
 
 export class SinglePriceDO extends BaseDO implements IPriceProductPrice {
 	roomCategoryId: string;
@@ -10,7 +10,7 @@ export class SinglePriceDO extends BaseDO implements IPriceProductPrice {
 	protected getPrimitivePropertyKeys(): string[] {
 		return ["roomCategoryId", "price"];
 	}
-	
+
 	public prototypeForStats(roomCategoryStats: RoomCategoryStatsDO): SinglePriceDO {
 		var singlePrice: SinglePriceDO = new SinglePriceDO();
 		singlePrice.roomCategoryId = roomCategoryStats.roomCategory.id;
@@ -21,10 +21,16 @@ export class SinglePriceDO extends BaseDO implements IPriceProductPrice {
 		return ThDataValidators.isValidPrice(this.price);
 	}
 
-	getPriceBriefValue(): number {
+	public getPriceBriefValue(): number {
 		return this.price;
 	}
-	getRoomCategoryId(): string {
+	public getPriceBriefLineString(): string {
+		return this.price + "";
+	}
+	public getRoomCategoryId(): string {
 		return this.roomCategoryId;
+	}
+	public copyPricesFrom(otherPrice: SinglePriceDO) {
+		this.price = otherPrice.price;
 	}
 }

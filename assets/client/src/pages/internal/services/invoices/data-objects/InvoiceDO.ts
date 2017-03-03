@@ -115,4 +115,8 @@ export class InvoiceDO extends BaseDO {
             }
         });
     }
+
+    public isWalkInInvoice(): boolean {
+        return !_.isString(this.bookingId) || this.bookingId.length == 0;
+    }
 }

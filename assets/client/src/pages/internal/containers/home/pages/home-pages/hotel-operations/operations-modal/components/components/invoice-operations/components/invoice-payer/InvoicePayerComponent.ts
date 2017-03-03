@@ -1,22 +1,22 @@
-import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import {ThUtils} from '../../../../../../../../../../../../../common/utils/ThUtils';
-import {AppContext, ThError} from '../../../../../../../../../../../../../common/utils/AppContext';
-import {CustomerRegisterModalService} from '../../../../../../../../../../common/inventory/customer-register/modal/services/CustomerRegisterModalService';
-import {CustomerDO} from '../../../../../../../../../../../services/customers/data-objects/CustomerDO';
-import {ModalDialogRef} from '../../../../../../../../../../../../../common/utils/modals/utils/ModalDialogRef';
-import {InvoiceGroupControllerService} from '../../services/InvoiceGroupControllerService';
-import {InvoiceDO} from '../../../../../../../../../../../services/invoices/data-objects/InvoiceDO';
-import {BookingDO} from '../../../../../../../../../../../services/bookings/data-objects/BookingDO';
-import {InvoicePayerDO} from '../../../../../../../../../../../services/invoices/data-objects/payers/InvoicePayerDO';
-import {InvoicePayerVM} from '../../../../../../../../../../../services/invoices/view-models/InvoicePayerVM';
-import {InvoiceGroupVM} from '../../../../../../../../../../../services/invoices/view-models/InvoiceGroupVM';
-import {InvoiceVM} from '../../../../../../../../../../../services/invoices/view-models/InvoiceVM';
-import {InvoiceOperationsPageData} from '../../services/utils/InvoiceOperationsPageData';
-import {HotelOperationsPageControllerService} from '../../../../services/HotelOperationsPageControllerService';
-import {InvoicePaymentMethodVMGenerator} from '../../../../../../../../../../../services/invoices/view-models/utils/InvoicePaymentMethodVMGenerator';
-import {InvoicePaymentMethodVM} from '../../../../../../../../../../../services/invoices/view-models/InvoicePaymentMethodVM';
-import {InvoicePaymentMethodDO, InvoicePaymentMethodType} from '../../../../../../../../../../../services/invoices/data-objects/payers/InvoicePaymentMethodDO';
-import {EmailSenderModalService} from '../../../../../../email-sender/services/EmailSenderModalService';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { ThUtils } from '../../../../../../../../../../../../../common/utils/ThUtils';
+import { AppContext, ThError } from '../../../../../../../../../../../../../common/utils/AppContext';
+import { CustomerRegisterModalService } from '../../../../../../../../../../common/inventory/customer-register/modal/services/CustomerRegisterModalService';
+import { CustomerDO } from '../../../../../../../../../../../services/customers/data-objects/CustomerDO';
+import { ModalDialogRef } from '../../../../../../../../../../../../../common/utils/modals/utils/ModalDialogRef';
+import { InvoiceGroupControllerService } from '../../services/InvoiceGroupControllerService';
+import { InvoiceDO } from '../../../../../../../../../../../services/invoices/data-objects/InvoiceDO';
+import { BookingDO } from '../../../../../../../../../../../services/bookings/data-objects/BookingDO';
+import { InvoicePayerDO } from '../../../../../../../../../../../services/invoices/data-objects/payers/InvoicePayerDO';
+import { InvoicePayerVM } from '../../../../../../../../../../../services/invoices/view-models/InvoicePayerVM';
+import { InvoiceGroupVM } from '../../../../../../../../../../../services/invoices/view-models/InvoiceGroupVM';
+import { InvoiceVM } from '../../../../../../../../../../../services/invoices/view-models/InvoiceVM';
+import { InvoiceOperationsPageData } from '../../services/utils/InvoiceOperationsPageData';
+import { HotelOperationsPageControllerService } from '../../../../services/HotelOperationsPageControllerService';
+import { InvoicePaymentMethodVMGenerator } from '../../../../../../../../../../../services/invoices/view-models/utils/InvoicePaymentMethodVMGenerator';
+import { InvoicePaymentMethodVM } from '../../../../../../../../../../../services/invoices/view-models/InvoicePaymentMethodVM';
+import { InvoicePaymentMethodDO, InvoicePaymentMethodType } from '../../../../../../../../../../../services/invoices/data-objects/payers/InvoicePaymentMethodDO';
+import { EmailSenderModalService } from '../../../../../../email-sender/services/EmailSenderModalService';
 
 @Component({
     selector: 'invoice-payer',
@@ -97,6 +97,12 @@ export class InvoicePayerComponent implements OnInit {
         this._customerRegisterModalService.openCustomerRegisterModal(false).then((modalDialogInstance: ModalDialogRef<CustomerDO[]>) => {
             modalDialogInstance.resultObservable.subscribe((selectedCustomerList: CustomerDO[]) => {
                 var selectedCustomer = selectedCustomerList[0];
+
+                if (this.invoiceVM.invoiceDO.isWalkInInvoice() && !selectedCustomer.canCreateWalkInInvoices()) {
+                    let errorMessage = this._appContext.thTranslation.translate("You cannot create walk in invoices for customers with Pay Invoice By Agreement enabled.");
+                    this._appContext.toaster.error(errorMessage);
+                    return;
+                }
 
                 this._invoiceGroupControllerService.invoiceOperationsPageData.customersContainer.appendCustomer(selectedCustomer);
 
