@@ -8,21 +8,17 @@ export enum PriceProductPriceType {
 	PricePerPerson
 }
 
-export enum PriceProductPriceConfigurationState {
-	Valid,
-	MissingPrices
-}
-
 export interface PriceProductPriceQueryDO {
 	roomCategoryId: string;
 	configCapacity: ConfigCapacityDO;
 	roomCategoryStatsList: RoomCategoryStatsDO[];
+	bookingInterval: IndexedBookingInterval;
 }
 
 export interface IPriceProductPrice extends BaseDO {
 	hasPriceConfiguredFor(query: PriceProductPriceQueryDO): boolean;
 	getPricePerNightFor(query: PriceProductPriceQueryDO): number;
 	priceConfigurationIsValidFor(roomCategoryStatList: RoomCategoryStatsDO[]): boolean;
-	isConfiguredForRoomCategory(roomCategoryId: string): boolean;
+	getRoomCategoryId(): string;
 	roundPricesToTwoDecimals();
 }

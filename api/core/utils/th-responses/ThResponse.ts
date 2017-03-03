@@ -221,6 +221,7 @@ export enum ThStatusCode {
 	PriceProductRepositoryErrorGettingList,
 	SavePriceProductItemError,
 	SavePriceProductItemInvalidPrice,
+	SavePriceProductItemInvalidPriceException,
 	SavePriceProductItemInvalidConstraints,
 	SavePriceProductItemInvalidConditions,
 	PriceProductItemUpdateStrategyOnlyActiveAndDraftCanBeUpdated,
@@ -728,6 +729,7 @@ ThMessage[ThStatusCode.PriceProductRepositoryErrorReadingDocumentCount] = "Error
 ThMessage[ThStatusCode.PriceProductRepositoryErrorGettingList] = "Error getting the list of price products.";
 ThMessage[ThStatusCode.SavePriceProductItemError] = "Error saving price product.";
 ThMessage[ThStatusCode.SavePriceProductItemInvalidPrice] = "Invalid price submitted.";
+ThMessage[ThStatusCode.SavePriceProductItemInvalidPriceException] = "Invalid price exceptions submitted.";
 ThMessage[ThStatusCode.SavePriceProductItemInvalidConstraints] = "Invalid constraints submitted.";
 ThMessage[ThStatusCode.SavePriceProductItemInvalidConditions] = "Invalid conditions submitted.";
 ThMessage[ThStatusCode.PriceProductItemUpdateStrategyOnlyActiveAndDraftCanBeUpdated] = "Only draft or active price products can be updated.";

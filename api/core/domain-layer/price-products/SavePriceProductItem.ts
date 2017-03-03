@@ -1,16 +1,18 @@
-import {ThLogger, ThLogLevel} from '../../utils/logging/ThLogger';
-import {ThError} from '../../utils/th-responses/ThError';
-import {ThStatusCode} from '../../utils/th-responses/ThResponse';
-import {AppContext} from '../../utils/AppContext';
-import {SessionContext} from '../../utils/SessionContext';
-import {SavePriceProductItemDO} from './SavePriceProductItemDO';
-import {SavePriceProductItemPriceDO} from './validation-structures/SavePriceProductItemPriceDO';
-import {SavePriceProductItemConstraintDO} from './validation-structures/SavePriceProductItemConstraintDO';
-import {PriceProductDO} from '../../data-layer/price-products/data-objects/PriceProductDO';
-import {ValidationResultParser} from '../common/ValidationResultParser';
-import {PriceProductItemActionFactory} from './save-actions/PriceProductItemActionFactory';
-import {IPriceProductItemActionStrategy} from './save-actions/IPriceProductItemActionStrategy';
-import {PriceProductMetaRepoDO} from '../../data-layer/price-products/repositories/IPriceProductRepository';
+import { ThLogger, ThLogLevel } from '../../utils/logging/ThLogger';
+import { ThError } from '../../utils/th-responses/ThError';
+import { ThStatusCode } from '../../utils/th-responses/ThResponse';
+import { AppContext } from '../../utils/AppContext';
+import { SessionContext } from '../../utils/SessionContext';
+import { ArrayValidationStructure } from '../../utils/th-validation/structure/ArrayValidationStructure';
+import { ObjectValidationStructure } from '../../utils/th-validation/structure/ObjectValidationStructure';
+import { SavePriceProductItemDO } from './SavePriceProductItemDO';
+import { SavePriceProductItemPriceDO } from './validation-structures/SavePriceProductItemPriceDO';
+import { SavePriceProductItemConstraintDO } from './validation-structures/SavePriceProductItemConstraintDO';
+import { PriceProductDO } from '../../data-layer/price-products/data-objects/PriceProductDO';
+import { ValidationResultParser } from '../common/ValidationResultParser';
+import { PriceProductItemActionFactory } from './save-actions/PriceProductItemActionFactory';
+import { IPriceProductItemActionStrategy } from './save-actions/IPriceProductItemActionStrategy';
+import { PriceProductMetaRepoDO } from '../../data-layer/price-products/repositories/IPriceProductRepository';
 
 export class SavePriceProductItem {
 	private _inputDO: SavePriceProductItemDO;
@@ -48,10 +50,17 @@ export class SavePriceProductItem {
 			return false;
 		}
 
-		var priceValidationResult = SavePriceProductItemPriceDO.getPriceConfigurationValidationStructure(this._inputDO.price);
-		if (!priceValidationResult.validateStructure(this._inputDO.price.priceList).isValid()) {
-			var thError = new ThError(ThStatusCode.SavePriceProductItemInvalidPrice, null);
+		let priceValidationStruct = SavePriceProductItemPriceDO.getPriceListValidationStructure(this._inputDO.price);
+		if (!priceValidationStruct.validateStructure(this._inputDO.price.priceList).isValid()) {
+			let thError = new ThError(ThStatusCode.SavePriceProductItemInvalidPrice, null);
 			ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Invalid submitted price for price product", this._inputDO, thError);
+			reject(thError);
+			return false;
+		}
+		let priceExceptionValidationStruct = SavePriceProductItemPriceDO.getPriceExceptionListValidationStructure(this._inputDO.price);
+		if (!priceExceptionValidationStruct.validateStructure(this._inputDO.price.priceExceptionList).isValid()) {
+			let thError = new ThError(ThStatusCode.SavePriceProductItemInvalidPriceException, null);
+			ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Invalid submitted price exceptions for price product", this._inputDO, thError);
 			reject(thError);
 			return false;
 		}

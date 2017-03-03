@@ -8,6 +8,7 @@ import { HotelDO } from '../../../../../data-layer/hotel/data-objects/HotelDO';
 import { CustomersContainer } from '../../../../customers/validators/results/CustomersContainer';
 import { RoomCategoryStatsDO } from '../../../../../data-layer/room-categories/data-objects/RoomCategoryStatsDO';
 import { RoomDO } from '../../../../../data-layer/rooms/data-objects/RoomDO';
+import { IndexedBookingInterval } from '../../../../../data-layer/price-products/utils/IndexedBookingInterval';
 
 import _ = require('underscore');
 
@@ -43,10 +44,12 @@ export class BookingRoomCategoryValidationRule extends ABusinessValidationRule<B
             });
             return;
         }
+        let indexedBookingInterval = new IndexedBookingInterval(booking.interval);
         if (!priceProduct.price.hasPriceConfiguredFor({
             configCapacity: booking.configCapacity,
             roomCategoryId: booking.roomCategoryId,
-            roomCategoryStatsList: this._validationParams.roomCategoryStatsList
+            roomCategoryStatsList: this._validationParams.roomCategoryStatsList,
+            bookingInterval: indexedBookingInterval
         })) {
             this.logBusinessAndReject(reject, booking, {
                 statusCode: ThStatusCode.BookingsValidatorInvalidPriceForRoomCategoryId,
