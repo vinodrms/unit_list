@@ -1,5 +1,5 @@
-import {BookingPriceDO, BookingPriceType} from '../../../../../bookings/data-objects/price/BookingPriceDO';
-import {ThUtils} from '../../../../../../utils/ThUtils';
+import { BookingPriceDO, BookingPriceType } from '../../../../../bookings/data-objects/price/BookingPriceDO';
+import { ThUtils } from '../../../../../../utils/ThUtils';
 
 export class PenaltyUtils {
     private _thUtils: ThUtils;
@@ -19,6 +19,7 @@ export class PenaltyUtils {
 
         penaltyPrice.priceType = BookingPriceType.Penalty;
 
+        penaltyPrice.roomPricePerNightList = bookingPrice.roomPricePerNightList;
         penaltyPrice.roomPricePerNightAvg = this._thUtils.roundNumberToTwoDecimals(penaltyPriceToPay);
         penaltyPrice.numberOfNights = 1;
         penaltyPrice.totalRoomPrice = penaltyPrice.roomPricePerNightAvg;

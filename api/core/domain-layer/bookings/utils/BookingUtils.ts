@@ -93,8 +93,7 @@ export class BookingUtils {
             bookingInterval: indexedBookingInterval
         });
 
-        // TODO: https://gitlab.3angletech.com/UnitPalDK/UnitPal/issues/139
-        // For now we keep the mean average for every night, whereas we need to keep the exact prices for each night
+        bookingDO.price.roomPricePerNightList = pricePerNightList;
         bookingDO.price.roomPricePerNightAvg = this._thUtils.getArrayAverage(pricePerNightList);
         bookingDO.price.roomPricePerNightAvg = this._thUtils.roundNumberToTwoDecimals(bookingDO.price.roomPricePerNightAvg);
 

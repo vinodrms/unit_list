@@ -17,6 +17,7 @@ export class BookingPriceDO extends BaseDO implements IInvoiceItemMeta {
     priceType: BookingPriceType;
 
     roomPricePerNightAvg: number;
+    roomPricePerNightList: number[];
     numberOfNights: number;
     totalRoomPrice: number;
     totalOtherPrice: number;
@@ -30,7 +31,7 @@ export class BookingPriceDO extends BaseDO implements IInvoiceItemMeta {
     includedInvoiceItemList: InvoiceItemDO[];
 
     protected getPrimitivePropertyKeys(): string[] {
-        return ["movable", "priceType", "roomPricePerNightAvg", "numberOfNights", "totalRoomPrice", "totalOtherPrice", "totalBookingPrice", "vatId", "description"];
+        return ["movable", "priceType", "roomPricePerNightAvg", "roomPricePerNightList", "numberOfNights", "totalRoomPrice", "totalOtherPrice", "totalBookingPrice", "vatId", "description"];
     }
     public buildFromObject(object: Object) {
         super.buildFromObject(object);
