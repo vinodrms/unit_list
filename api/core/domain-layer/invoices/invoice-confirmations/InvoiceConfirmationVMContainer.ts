@@ -5,11 +5,14 @@ import { CustomerDO } from '../../../data-layer/customers/data-objects/CustomerD
 import { AddressDO } from '../../../data-layer/common/data-objects/address/AddressDO';
 import { PaymentMethodDO } from '../../../data-layer/common/data-objects/payment-method/PaymentMethodDO';
 import { InvoiceDO } from '../../../data-layer/invoices/data-objects/InvoiceDO';
-import { InvoiceItemDO } from '../../../data-layer/invoices/data-objects/items/InvoiceItemDO';
+import { InvoiceItemDO, InvoiceItemType } from '../../../data-layer/invoices/data-objects/items/InvoiceItemDO';
 import { InvoiceItemVM } from './InvoiceItemVM';
 import { InvoicePaymentMethodType } from '../../../data-layer/invoices/data-objects/payers/InvoicePaymentMethodDO';
 import { InvoiceAggregatedData } from '../aggregators/InvoiceAggregatedData';
 import { BookingConfirmationVMContainer } from '../../bookings/booking-confirmations/BookingConfirmationVMContainer';
+import { BookingPriceDO } from "../../../data-layer/bookings/data-objects/price/BookingPriceDO";
+import { PricePerDayDO } from "../../../data-layer/bookings/data-objects/price/PricePerDayDO";
+import { AddOnProductInvoiceItemMetaDO } from "../../../data-layer/invoices/data-objects/items/add-on-products/AddOnProductInvoiceItemMetaDO";
 
 import _ = require('underscore');
 
@@ -179,14 +182,47 @@ export class InvoiceConfirmationVMContainer {
         _.forEach(this._invoice.itemList, (itemDO: InvoiceItemDO) => {
             var invoiceItemVM = new InvoiceItemVM(this._thTranslation);
             invoiceItemVM.buildFromInvoiceItemDO(itemDO, this._invoiceAggregatedData.vatList);
-            this.itemVMList.push(invoiceItemVM);
-
             this.totalVat = this._thUtils.roundNumberToTwoDecimals(this.totalVat + invoiceItemVM.vat);
             this.subtotalValue = this._thUtils.roundNumberToTwoDecimals(this.subtotalValue + invoiceItemVM.subtotal);
-        })
+
+            if (this.displayBookingDateBreakdown(itemDO)) {
+                let bookingInvoiceItems = this.getBookingDateBreakdownItems(<BookingPriceDO>itemDO.meta);
+                this.itemVMList = this.itemVMList.concat(bookingInvoiceItems);
+            }
+            else {
+                this.itemVMList.push(invoiceItemVM);
+            }
+        });
         if (this.itemVMList.length > 0) {
             this.itemVMList[this.itemVMList.length - 1].isLastOne = true;
         }
+    }
+    private displayBookingDateBreakdown(invoiceItemDO: InvoiceItemDO): boolean {
+        if (!invoiceItemDO.isBookingPrice()) {
+            return false;
+        }
+        let bookingPrice: BookingPriceDO = <BookingPriceDO>invoiceItemDO.meta;
+        return bookingPrice.roomPricePerNightList.length > 0;
+    }
+    private getBookingDateBreakdownItems(bookingPrice: BookingPriceDO): InvoiceItemVM[] {
+        let invoiceItemVMList: InvoiceItemVM[] = [];
+        bookingPrice.roomPricePerNightList.forEach((pricePerDay: PricePerDayDO​​) => {
+            let aopItem = new AddOnProductInvoiceItemMetaDO();
+            aopItem.aopDisplayName = this._thTranslation.translate("Accomodation for %date%", { date: pricePerDay.thDate.toString() });
+            aopItem.numberOfItems = 1;
+            aopItem.pricePerItem = pricePerDay.price;
+            aopItem.vatId = bookingPrice.vatId;
+
+            let item = new InvoiceItemDO();
+            item.type = InvoiceItemType.AddOnProduct;
+            item.meta = aopItem;
+
+            var invoiceItemVM = new InvoiceItemVM(this._thTranslation);
+            invoiceItemVM.buildFromInvoiceItemDO(item, this._invoiceAggregatedData.vatList);
+
+            invoiceItemVMList.push(invoiceItemVM);
+        });
+        return invoiceItemVMList;
     }
 
     private initPaymentMethodLabelsAndValues() {

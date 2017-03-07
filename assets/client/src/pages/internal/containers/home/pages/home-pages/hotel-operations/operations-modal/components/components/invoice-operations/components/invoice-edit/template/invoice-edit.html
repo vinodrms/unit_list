@@ -66,10 +66,60 @@
                             <i class="fa fa-arrow-left" aria-hidden="true"></i>
                         </label>
                     </td>
-                    <td width="40%"><i *ngIf="!invoiceItemVM.isMovable()" class="unitpal-font">%</i> {{ invoiceItemVM.itemDisplayText | translate }}</td>
-                    <td width="10%">{{ invoiceItemVM.qty }}</td>
-                    <td width="15%">{{ ccySymbol }} <b>{{ invoiceItemVM.price }}</b></td>
-                    <td width="15%">{{ ccySymbol }} <b>{{ invoiceItemVM.totalPrice }}</b></td>
+                    <td width="40%">
+                        <span *ngIf="!invoiceItemVM.displayBookingDateBreakdown()">
+                            <i *ngIf="!invoiceItemVM.isMovable()" class="unitpal-font">%</i> {{ invoiceItemVM.itemDisplayText | translate }}
+                        </span>
+                        
+                        <!-- Booking price -->
+                        <span *ngIf="invoiceItemVM.displayBookingDateBreakdown()">
+                            <span *ngFor="let roomPricePerNight of invoiceItemVM.invoiceItemDO.meta.roomPricePerNightList"
+                                title="{{ invoiceItemVM.itemDisplayText }}">
+                                <i class="unitpal-font">%</i>
+                                {{ 'Accomodation for' | translate }} {{ roomPricePerNight.thDate | thdate }}
+                                <br>
+                            </span>
+                        </span>
+                        <!-- END Booking price -->
+                    </td>
+                    <td width="10%">
+                        <span *ngIf="!invoiceItemVM.displayBookingDateBreakdown()">
+                            {{ invoiceItemVM.qty }}
+                        </span>
+                        <!-- Booking price -->
+                        <span *ngIf="invoiceItemVM.displayBookingDateBreakdown()">
+                            <p *ngFor="let roomPricePerNight of invoiceItemVM.invoiceItemDO.meta.roomPricePerNightList" class="invoice-item-small">
+                                1
+                            </p>
+                        </span>
+                        <!-- END Booking price -->
+                    </td>
+                    <td width="15%">
+                        <span *ngIf="!invoiceItemVM.displayBookingDateBreakdown()">
+                            {{ ccySymbol }} <b>{{ invoiceItemVM.price }}</b>
+                        </span>
+
+                        <!-- Booking price -->
+                        <span *ngIf="invoiceItemVM.displayBookingDateBreakdown()">
+                            <p *ngFor="let roomPricePerNight of invoiceItemVM.invoiceItemDO.meta.roomPricePerNightList" class="invoice-item-small">
+                                {{ ccySymbol }} <b>{{ roomPricePerNight.price }}</b>
+                            </p>
+                        </span>
+                        <!-- END Booking price -->    
+                    </td>
+                    <td width="15%">
+                        <span *ngIf="!invoiceItemVM.displayBookingDateBreakdown()">
+                            {{ ccySymbol }} <b>{{ invoiceItemVM.totalPrice }}</b>
+                        </span>
+                        
+                        <!-- Booking price -->
+                        <span *ngIf="invoiceItemVM.displayBookingDateBreakdown()">
+                            <p *ngFor="let roomPricePerNight of invoiceItemVM.invoiceItemDO.meta.roomPricePerNightList" class="invoice-item-small">
+                                {{ ccySymbol }} <b>{{ roomPricePerNight.price }}</b>
+                            </p>
+                        </span>
+                        <!-- END Booking price -->  
+                    </td>
                     <td width="10%" class="move-right-invoice-item-cell">
                         <label *ngIf="invoiceItemVM.isMovable() && invoiceItemSelected(invoiceItemVMIndex) && editMode" class="btn btn-default move-invoice-item-btn" [ngClass]="{disabled: !hasRightEditableNeighbor()}" (click)="moveRight(invoiceItemVMIndex)">
                             <i class="fa fa-arrow-right" aria-hidden="true"></i>

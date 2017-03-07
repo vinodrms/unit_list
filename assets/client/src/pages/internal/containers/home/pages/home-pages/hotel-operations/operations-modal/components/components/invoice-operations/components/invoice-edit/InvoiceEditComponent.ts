@@ -18,7 +18,7 @@ import { InvoiceItemVM } from '../../../../../../../../../../../services/invoice
 import { CustomerDO } from '../../../../../../../../../../../services/customers/data-objects/CustomerDO';
 import { InvoiceGroupControllerService } from '../../services/InvoiceGroupControllerService';
 import { InvoiceGroupsService } from '../../../../../../../../../../../services/invoices/InvoiceGroupsService';
-import { HotelOperationsResultService } from '../../../../../../operations-modal/services/HotelOperationsResultService';
+import { HotelOperationsResultService } from '../../../../../services/HotelOperationsResultService';
 
 @Component({
     selector: 'invoice-edit',
