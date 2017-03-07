@@ -1,8 +1,8 @@
-import {ThDateIntervalDO} from '../../../utils/th-dates/data-objects/ThDateIntervalDO';
-import {ThDateDO} from '../../../utils/th-dates/data-objects/ThDateDO';
-import {ThTimestampDO} from '../../../utils/th-dates/data-objects/ThTimestampDO';
-import {ThHourDO} from '../../../utils/th-dates/data-objects/ThHourDO';
-import {ISOWeekDay} from '../../../utils/th-dates/data-objects/ISOWeekDay';
+import { ThDateIntervalDO } from '../../../utils/th-dates/data-objects/ThDateIntervalDO';
+import { ThDateDO } from '../../../utils/th-dates/data-objects/ThDateDO';
+import { ThTimestampDO } from '../../../utils/th-dates/data-objects/ThTimestampDO';
+import { ThHourDO } from '../../../utils/th-dates/data-objects/ThHourDO';
+import { ISOWeekDay } from '../../../utils/th-dates/data-objects/ISOWeekDay';
 
 import _ = require('underscore');
 

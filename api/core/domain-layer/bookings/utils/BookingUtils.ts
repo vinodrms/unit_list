@@ -8,6 +8,7 @@ import { ThHourDO } from '../../../utils/th-dates/data-objects/ThHourDO';
 import { ThTimestampDO } from '../../../utils/th-dates/data-objects/ThTimestampDO';
 import { CustomersContainer } from '../../customers/validators/results/CustomersContainer';
 import { BookingPriceDO, BookingPriceType } from '../../../data-layer/bookings/data-objects/price/BookingPriceDO';
+import { PricePerDayDO } from '../../../data-layer/bookings/data-objects/price/PricePerDayDO';
 import { IndexedBookingInterval } from '../../../data-layer/price-products/utils/IndexedBookingInterval';
 import { InvoiceItemDO, InvoiceItemType } from '../../../data-layer/invoices/data-objects/items/InvoiceItemDO';
 import { AddOnProductInvoiceItemMetaDO } from '../../../data-layer/invoices/data-objects/items/add-on-products/AddOnProductInvoiceItemMetaDO';
@@ -93,10 +94,9 @@ export class BookingUtils {
             bookingInterval: indexedBookingInterval
         });
 
-        // TODO: https://gitlab.3angletech.com/UnitPalDK/UnitPal/issues/139
-        // For now we keep the mean average for every night, whereas we need to keep the exact prices for each night
-        bookingDO.price.roomPricePerNight = this._thUtils.getArrayAverage(pricePerNightList);
-        bookingDO.price.roomPricePerNight = this._thUtils.roundNumberToTwoDecimals(bookingDO.price.roomPricePerNight);
+        bookingDO.price.roomPricePerNightList = PricePerDayDO.buildPricePerDayList(indexedBookingInterval.bookingDateList, pricePerNightList);
+        bookingDO.price.roomPricePerNightAvg = this._thUtils.getArrayAverage(pricePerNightList);
+        bookingDO.price.roomPricePerNightAvg = this._thUtils.roundNumberToTwoDecimals(bookingDO.price.roomPricePerNightAvg);
 
         bookingDO.price.numberOfNights = indexedBookingInterval.getLengthOfStay();
         bookingDO.price.totalRoomPrice = this._thUtils.getArraySum(pricePerNightList);
