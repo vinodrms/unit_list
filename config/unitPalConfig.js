@@ -28,5 +28,40 @@ module.exports.unitPalConfig = {
         enabled: false,
         trackingId: ""
     },
+    loggerChannels: [
+        // {
+        //     type: "papertrail",
+        //     options: {
+        //         host: 'logs5.papertrailapp.com',
+		// 	    port: 13086,
+		// 	    level: "debug"
+        //     }
+        // },
+        {
+            type: "file",
+            options: {
+                filename: 'unitPal.log',
+			    colorize: true,
+			    maxsize: 1000 * 1000 * 100,
+			    level: "debug"
+            }
+        },
+        // {
+        //     type: "console",
+        //     options: {
+
+        //     }
+        // },
+        // {
+        //     type: "mongo",
+        //     options: {
+        //         collection: "SystemLogs",
+		// 		db: "mongodb://localhost:27017/UnitPalDev",
+		// 		username: process.env.MONGO_USER || "",
+		// 		password: process.env.MONGO_PASSWD || "",
+		// 		level: "info"
+        //     }
+        // }
+    ],
     appContextRoot: "http://127.0.0.1:8001"
 };

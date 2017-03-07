@@ -12,5 +12,5 @@ module.exports = {
 	},
     models: {
         connection: 'mongodbdev'
-    }
+    },
 };
