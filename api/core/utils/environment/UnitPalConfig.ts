@@ -1,3 +1,5 @@
+import _ = require('underscore');
+
 export enum DatabaseType {
     MongoDB
 }
@@ -22,6 +24,16 @@ export enum AppEnvironmentType {
 export interface GoogleAnalyticsSettings {
     enabled: boolean;
     trackingId: string;
+}
+export enum LoggerChannelType {
+    Console,
+    File,
+    Papertrail,
+    Mongo
+}
+export interface LoggerChannel {
+    type: LoggerChannelType;
+    options: Object;    
 }
 
 export class UnitPalConfig {
@@ -146,5 +158,41 @@ export class UnitPalConfig {
     }
     public getGoogleAnalyticsSettings(): GoogleAnalyticsSettings {
         return this._googleAnalyticsSettings;
+    }
+    public getLoggerChannels(): LoggerChannel[] {
+        let rawLoggerChannels = sails.config.unitPalConfig.loggerChannels;
+        let loggerChannels: LoggerChannel[] = [];
+        
+        _.forEach(rawLoggerChannels, (rawLoggerChannel: any) => {
+            
+            switch (rawLoggerChannel.type) {
+                case 'console':
+                    loggerChannels.push({
+                        type: LoggerChannelType.Console,
+                        options: rawLoggerChannel.options
+                    });
+                    break;
+                case 'file':
+                    loggerChannels.push({
+                        type: LoggerChannelType.File,
+                        options: rawLoggerChannel.options
+                    });
+                    break;
+                case 'papertrail':
+                    loggerChannels.push({
+                        type: LoggerChannelType.Papertrail,
+                        options: rawLoggerChannel.options
+                    });
+                    break;
+                case 'mongo':
+                    loggerChannels.push({
+                        type: LoggerChannelType.Mongo,
+                        options: rawLoggerChannel.options
+                    });
+                    break;
+            }
+		});
+
+        return loggerChannels;
     }
 }
