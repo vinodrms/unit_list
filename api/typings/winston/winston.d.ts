@@ -140,7 +140,11 @@ declare module "winston" {
   }
 
   export interface PapertrailTransportInstance extends TransportInstance {
-    new (options?: WebhookTransportOptions): PapertrailTransportInstance;
+    new (options?: any): PapertrailTransportInstance;
+  }
+
+  export interface MongoDBTransportInstance extends TransportInstance {
+    new (options?: any): MongoDBTransportInstance;
   }
 
   export interface WebhookTransportInstance extends TransportInstance {
@@ -174,6 +178,7 @@ declare module "winston" {
     Memory: MemoryTransportInstance;
     Webhook: WebhookTransportInstance;
     Papertrail: PapertrailTransportInstance;
+    MongoDB: MongoDBTransportInstance;
   }
 
   export interface TransportOptions {
