@@ -1,6 +1,7 @@
-import {InvoiceItemDO} from '../data-objects/items/InvoiceItemDO';
-import {ThTranslation} from '../../../../../common/utils/localization/ThTranslation';
-import {ThUtils} from '../../../../../common/utils/ThUtils';
+import { InvoiceItemDO } from '../data-objects/items/InvoiceItemDO';
+import { ThTranslation } from '../../../../../common/utils/localization/ThTranslation';
+import { ThUtils } from '../../../../../common/utils/ThUtils';
+import { BookingPriceDO } from "../../bookings/data-objects/price/BookingPriceDO";
 
 export class InvoiceItemVM {
     private _thUtils: ThUtils;
@@ -27,8 +28,15 @@ export class InvoiceItemVM {
     public get totalPrice(): number {
         return this._thUtils.roundNumberToTwoDecimals(this.invoiceItemDO.meta.getUnitPrice() * this.qty);
     }
-    public isMovable():boolean {
+    public isMovable(): boolean {
         return this.invoiceItemDO.meta.isMovable();
+    }
+    public displayBookingDateBreakdown(): boolean {
+        if (!this.invoiceItemDO.isBookingPrice()) {
+            return false;
+        }
+        let bookingPrice: BookingPriceDO = <BookingPriceDO>this.invoiceItemDO.meta;
+        return bookingPrice.roomPricePerNightList.length > 0;
     }
 
     public buildPrototype(): InvoiceItemVM {

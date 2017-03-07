@@ -6,9 +6,11 @@ import { InvoicePayerDO } from './payers/InvoicePayerDO';
 import { InvoiceItemDO, InvoiceItemType } from './items/InvoiceItemDO';
 import { IInvoiceItemMeta } from './items/IInvoiceItemMeta';
 import { BookingDO } from '../../bookings/data-objects/BookingDO';
+import { BookingPriceDO } from '../../bookings/data-objects/price/BookingPriceDO';
 import { CustomerDO } from '../../customers/data-objects/CustomerDO';
 import { InvoicePaymentMethodType } from './payers/InvoicePaymentMethodDO';
 import { FeeInvoiceItemMetaDO } from './items/invoice-fee/FeeInvoiceItemMetaDO';
+import { IndexedBookingInterval } from '../../price-products/utils/IndexedBookingInterval';
 
 import _ = require('underscore');
 
@@ -81,25 +83,41 @@ export class InvoiceDO extends BaseDO {
     }
 
     public linkBookingPrices(bookingList: BookingDO[]) {
-        var thUtils = new ThUtils();
+        let thUtils = new ThUtils();
+        let actualItemList: InvoiceItemDO[] = [];
         _.forEach(this.itemList, (item: InvoiceItemDO) => {
             if (item.type === InvoiceItemType.Booking) {
-                var bookingIndex = _.findIndex(bookingList, (booking: BookingDO) => {
+                let booking = _.find(bookingList, (booking: BookingDO) => {
                     return booking.bookingId === item.id;
-                })
-                if (bookingIndex != -1) {
-                    item.meta = bookingList[bookingIndex].price;
-                    item.meta.setMovable(false);
-                }
-                if (!bookingList[bookingIndex].price.isPenalty()) {
-                    bookingList[bookingIndex].price.includedInvoiceItemList.reverse();
-                    _.forEach(bookingList[bookingIndex].price.includedInvoiceItemList, (invoiceItem: InvoiceItemDO) => {
-                        invoiceItem.meta.setMovable(false);
-                        this.itemList.splice(bookingIndex + 1, 0, invoiceItem);
-                    });
+                });
+                if (thUtils.isUndefinedOrNull(booking)) {
+                    actualItemList.push(item);
+                } else {
+                    let bookingInvoiceItemList = this.getBookingInvoiceItems(item, booking);
+                    actualItemList = actualItemList.concat(bookingInvoiceItemList);
                 }
             }
+            else {
+                actualItemList.push(item);
+            }
         });
+        this.itemList = actualItemList;
+    }
+    private getBookingInvoiceItems(item: InvoiceItemDO, booking: BookingDO): InvoiceItemDO[] {
+        let bookingInvoiceItemList: InvoiceItemDO[] = [];
+
+        item.meta = booking.price;
+        item.meta.setMovable(false);
+        bookingInvoiceItemList.push(item);
+
+        if (!booking.price.isPenalty()) {
+            booking.price.includedInvoiceItemList.reverse();
+            _.forEach(booking.price.includedInvoiceItemList, (invoiceItem: InvoiceItemDO) => {
+                invoiceItem.meta.setMovable(false);
+                bookingInvoiceItemList = bookingInvoiceItemList.concat(invoiceItem);
+            });
+        }
+        return bookingInvoiceItemList;
     }
 
     public addInvoiceFeeIfNecessary(customerDOList: CustomerDO[]) {

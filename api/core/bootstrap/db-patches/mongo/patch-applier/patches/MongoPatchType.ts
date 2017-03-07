@@ -4,5 +4,6 @@ export enum MongoPatchType {
     SetValueForFirstChildWithAdultInSharedBedPriceOnPriceProducts,
     AddMaxNoBabiesAttributeOnBeds,
     SetTheNoBabyBedsOnBookingsCapacity,
+    AddTheRoomPricePerNightListOnBookingPrice,
 
 }

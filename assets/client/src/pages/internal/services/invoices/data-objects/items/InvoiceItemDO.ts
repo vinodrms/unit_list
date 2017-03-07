@@ -1,10 +1,10 @@
-import {BaseDO} from '../../../../../../common/base/BaseDO';
-import {ThUtils} from '../../../../../../common/utils/ThUtils';
-import {IInvoiceItemMeta} from './IInvoiceItemMeta';
-import {AddOnProductInvoiceItemMetaDO} from './add-on-products/AddOnProductInvoiceItemMetaDO';
-import {FeeInvoiceItemMetaDO} from './invoice-fee/FeeInvoiceItemMetaDO';
-import {BookingPriceDO} from '../../../bookings/data-objects/price/BookingPriceDO';
-import {CustomerDO} from '../../../customers/data-objects/CustomerDO';
+import { BaseDO } from '../../../../../../common/base/BaseDO';
+import { ThUtils } from '../../../../../../common/utils/ThUtils';
+import { IInvoiceItemMeta } from './IInvoiceItemMeta';
+import { AddOnProductInvoiceItemMetaDO } from './add-on-products/AddOnProductInvoiceItemMetaDO';
+import { FeeInvoiceItemMetaDO } from './invoice-fee/FeeInvoiceItemMetaDO';
+import { BookingPriceDO } from '../../../bookings/data-objects/price/BookingPriceDO';
+import { CustomerDO } from '../../../customers/data-objects/CustomerDO';
 
 export enum InvoiceItemType {
     AddOnProduct, Booking, InvoiceFee
@@ -24,25 +24,25 @@ export class InvoiceItemDO extends BaseDO {
 
         if (this.type === InvoiceItemType.AddOnProduct) {
             var metaObject = this.getObjectPropertyEnsureUndefined(object, "meta");
-            
+
             var addOnProductInvoiceItemMetaDO = new AddOnProductInvoiceItemMetaDO();
             addOnProductInvoiceItemMetaDO.buildFromObject(metaObject);
             this.meta = addOnProductInvoiceItemMetaDO;
-        } 
-        else if(this.type === InvoiceItemType.Booking) {
+        }
+        else if (this.type === InvoiceItemType.Booking) {
             var metaObject = this.getObjectPropertyEnsureUndefined(object, "meta");
 
             var bookingPrice = new BookingPriceDO();
             bookingPrice.buildFromObject(metaObject);
             this.meta = bookingPrice;
         }
-        else if(this.type === InvoiceItemType.InvoiceFee) {
+        else if (this.type === InvoiceItemType.InvoiceFee) {
             var metaObject = this.getObjectPropertyEnsureUndefined(object, "meta");
-            
+
             var feeInvoiceItemMetaDO = new FeeInvoiceItemMetaDO();
             feeInvoiceItemMetaDO.buildFromObject(metaObject);
             this.meta = feeInvoiceItemMetaDO;
-        }  
+        }
     }
     public buildFeeItemFromCustomerDO(customerDO: CustomerDO) {
         var meta = new FeeInvoiceItemMetaDO();
@@ -52,5 +52,8 @@ export class InvoiceItemDO extends BaseDO {
     }
     public isDerivedFromBooking(): boolean {
         return this.type === InvoiceItemType.InvoiceFee || (this.type === InvoiceItemType.AddOnProduct && !this.meta.isMovable());
+    }
+    public isBookingPrice(): boolean {
+        return this.type === InvoiceItemType.Booking;
     }
 }
