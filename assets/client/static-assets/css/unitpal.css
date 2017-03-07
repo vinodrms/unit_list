@@ -3755,6 +3755,11 @@ invoice-edit {
     padding: 0;
     margin: 0;
 }
+p.invoice-item-small {
+    margin-top: 5px;
+    margin-bottom: 0px;
+}
+
 .table-invoice-items .th-button-box, .btn-add-invoice-payer .th-button-box {
     padding-top:0; 
     padding-bottom:0;
