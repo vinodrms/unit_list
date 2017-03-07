@@ -139,6 +139,10 @@ declare module "winston" {
     new (options?: MemoryTransportOptions): MemoryTransportInstance;
   }
 
+  export interface PapertrailTransportInstance extends TransportInstance {
+    new (options?: WebhookTransportOptions): PapertrailTransportInstance;
+  }
+
   export interface WebhookTransportInstance extends TransportInstance {
     new (options?: WebhookTransportOptions): WebhookTransportInstance;
   }
@@ -169,6 +173,7 @@ declare module "winston" {
     Http: HttpTransportInstance;
     Memory: MemoryTransportInstance;
     Webhook: WebhookTransportInstance;
+    Papertrail: PapertrailTransportInstance;
   }
 
   export interface TransportOptions {
