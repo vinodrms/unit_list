@@ -43,6 +43,16 @@ module.exports = {
 		googleAnalytics: {
 			enabled: "{{ google_analytics_enabled }}",
 			trackingId: "{{ google_analytics_tracking_id }}"
-		}
+		},
+        loggerChannels: [
+            {
+                type: "papertrail",
+                options: {
+                    host: {{ papertrail_host }},
+                    port: {{ papertrail_port }},
+                    level: "debug"
+                }
+            },
+        ]
 	}
 };

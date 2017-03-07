@@ -33,3 +33,6 @@ slack_enabled: true
 
 google_analytics_enabled: true
 google_analytics_tracking_id: UA-67731917-5
+
+papertrail_host: logs5.papertrailapp.com
+papertrail_port: 13086
