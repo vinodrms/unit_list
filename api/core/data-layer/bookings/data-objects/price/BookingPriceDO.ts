@@ -3,6 +3,7 @@ import { ThTranslation } from '../../../../utils/localization/ThTranslation';
 import { IInvoiceItemMeta } from '../../../invoices/data-objects/items/IInvoiceItemMeta';
 import { InvoiceItemDO } from '../../../invoices/data-objects/items/InvoiceItemDO';
 import { ThUtils } from '../../../../utils/ThUtils';
+import { PricePerDayDO } from './PricePerDayDO';
 
 import _ = require('underscore');
 
@@ -17,7 +18,7 @@ export class BookingPriceDO extends BaseDO implements IInvoiceItemMeta {
     priceType: BookingPriceType;
 
     roomPricePerNightAvg: number;
-    roomPricePerNightList: number[];
+    roomPricePerNightList: PricePerDayDO[];
     numberOfNights: number;
     totalRoomPrice: number;
     totalOtherPrice: number;
@@ -31,7 +32,7 @@ export class BookingPriceDO extends BaseDO implements IInvoiceItemMeta {
     includedInvoiceItemList: InvoiceItemDO[];
 
     protected getPrimitivePropertyKeys(): string[] {
-        return ["movable", "priceType", "roomPricePerNightAvg", "roomPricePerNightList", "numberOfNights", "totalRoomPrice", "totalOtherPrice", "totalBookingPrice", "vatId", "description"];
+        return ["movable", "priceType", "roomPricePerNightAvg", "numberOfNights", "totalRoomPrice", "totalOtherPrice", "totalBookingPrice", "vatId", "description"];
     }
     public buildFromObject(object: Object) {
         super.buildFromObject(object);
@@ -44,6 +45,13 @@ export class BookingPriceDO extends BaseDO implements IInvoiceItemMeta {
             var invoiceItem = new InvoiceItemDO();
             invoiceItem.buildFromObject(includedInvoiceItemObject);
             this.includedInvoiceItemList.push(invoiceItem);
+        });
+
+        this.roomPricePerNightList = [];
+        this.forEachElementOf(this.getObjectPropertyEnsureUndefined(object, "roomPricePerNightList"), (roomPricePerNightObject: Object) => {
+            var pricePerDay = new PricePerDayDO();
+            pricePerDay.buildFromObject(roomPricePerNightObject);
+            this.roomPricePerNightList.push(pricePerDay);
         });
     }
 

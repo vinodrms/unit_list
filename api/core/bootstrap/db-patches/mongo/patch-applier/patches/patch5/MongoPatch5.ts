@@ -3,6 +3,9 @@ import { ATransactionalMongoPatch } from '../../utils/ATransactionalMongoPatch';
 import { MongoPatchType } from '../MongoPatchType';
 import { ABookingGroupTransactionalMongoPatch } from '../../utils/ABookingGroupTransactionalMongoPatch';
 import { BookingPriceType } from '../../../../../../data-layer/bookings/data-objects/price/BookingPriceDO';
+import { PricePerDayDO } from '../../../../../../data-layer/bookings/data-objects/price/PricePerDayDO';
+import { IndexedBookingInterval } from '../../../../../../data-layer/price-products/utils/IndexedBookingInterval';
+import { ThDateIntervalDO } from '../../../../../../utils/th-dates/data-objects/ThDateIntervalDO';
 
 import _ = require('underscore');
 
@@ -20,9 +23,14 @@ export class MongoPatch5 extends ABookingGroupTransactionalMongoPatch {
                 booking.price.roomPricePerNightList = [];
 
                 if (booking.price.priceType === BookingPriceType.BookingStay) {
+                    let priceList = [];
                     for (var i = 0; i < booking.price.numberOfNights; i++) {
-                        booking.price.roomPricePerNightList.push(booking.price.roomPricePerNightAvg);
+                        priceList.push(booking.price.roomPricePerNightAvg);
                     }
+                    let bookingInterval = new ThDateIntervalDO();
+                    bookingInterval.buildFromObject(booking.interval);
+                    let indexedBookingInterval = new IndexedBookingInterval(bookingInterval);
+                    booking.price.roomPricePerNightList = PricePerDayDO.buildPricePerDayList(indexedBookingInterval.bookingDateList, priceList);
                 }
             }
         });

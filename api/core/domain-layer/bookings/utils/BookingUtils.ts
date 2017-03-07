@@ -8,6 +8,7 @@ import { ThHourDO } from '../../../utils/th-dates/data-objects/ThHourDO';
 import { ThTimestampDO } from '../../../utils/th-dates/data-objects/ThTimestampDO';
 import { CustomersContainer } from '../../customers/validators/results/CustomersContainer';
 import { BookingPriceDO, BookingPriceType } from '../../../data-layer/bookings/data-objects/price/BookingPriceDO';
+import { PricePerDayDO } from '../../../data-layer/bookings/data-objects/price/PricePerDayDO';
 import { IndexedBookingInterval } from '../../../data-layer/price-products/utils/IndexedBookingInterval';
 import { InvoiceItemDO, InvoiceItemType } from '../../../data-layer/invoices/data-objects/items/InvoiceItemDO';
 import { AddOnProductInvoiceItemMetaDO } from '../../../data-layer/invoices/data-objects/items/add-on-products/AddOnProductInvoiceItemMetaDO';
@@ -93,7 +94,7 @@ export class BookingUtils {
             bookingInterval: indexedBookingInterval
         });
 
-        bookingDO.price.roomPricePerNightList = pricePerNightList;
+        bookingDO.price.roomPricePerNightList = PricePerDayDO.buildPricePerDayList(indexedBookingInterval.bookingDateList, pricePerNightList);
         bookingDO.price.roomPricePerNightAvg = this._thUtils.getArrayAverage(pricePerNightList);
         bookingDO.price.roomPricePerNightAvg = this._thUtils.roundNumberToTwoDecimals(bookingDO.price.roomPricePerNightAvg);
 
