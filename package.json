@@ -55,7 +55,8 @@
     "underscore": "1.8.3",
     "util": "0.10.3",
     "winston": "2.2.0",
-    "winston-mongodb": "1.6.0"
+    "winston-mongodb": "1.6.0",
+    "winston-papertrail": "1.0.4"
   },
   "scripts": {
     "debug": "node debug app.js",

@@ -22,6 +22,17 @@ module.exports = {
         googleAnalytics: {
             enabled: true,
             trackingId: "UA-67731917-6"
-        }
-    }
+        },
+        loggerChannels: [
+            {
+                type: "papertrail",
+                options: {
+                    host: 'logs5.papertrailapp.com',
+                    port: 13086,
+                    level: "debug"
+                }
+            },
+        ]
+    },
+    
 };
