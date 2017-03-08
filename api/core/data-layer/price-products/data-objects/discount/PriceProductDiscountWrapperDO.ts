@@ -22,6 +22,9 @@ export class PriceProductDiscountWrapperDO extends BaseDO {
         });
     }
 
+    /**
+     * Returns the discount's value that satisfies all the constraints in the [0, 1] interval
+     */
     public getDiscountValueFor(data: PriceProductConstraintDataDO): number {
         let discountValue = 0.0;
         this.discountList.forEach(discount => {

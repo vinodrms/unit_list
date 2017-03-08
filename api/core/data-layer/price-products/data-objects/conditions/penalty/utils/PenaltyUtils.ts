@@ -27,6 +27,7 @@ export class PenaltyUtils {
 
         penaltyPrice.totalBookingPrice = penaltyPrice.roomPricePerNightAvg;
 
+        penaltyPrice.appliedDiscountValue = bookingPrice.appliedDiscountValue;
         penaltyPrice.breakfast = bookingPrice.breakfast;
         penaltyPrice.includedInvoiceItemList = bookingPrice.includedInvoiceItemList;
 

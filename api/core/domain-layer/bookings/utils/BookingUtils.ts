@@ -17,6 +17,7 @@ import { AttachedAddOnProductItemDO } from '../../../data-layer/price-products/d
 import { IncludedBookingItems } from './IncludedBookingItems';
 import { ConfigCapacityDO } from '../../../data-layer/common/data-objects/bed-config/ConfigCapacityDO';
 import { RoomCategoryStatsDO } from '../../../data-layer/room-categories/data-objects/RoomCategoryStatsDO';
+import { StringOccurenciesIndexer } from "../../../utils/indexers/StringOccurenciesIndexer";
 
 import _ = require('underscore');
 
@@ -72,7 +73,15 @@ export class BookingUtils {
         }
         bookingDO.noShowTime = params.priceProduct.conditions.policy.generateNoShowTriggerTime({ arrivalDate: indexedBookingInterval.getArrivalDate() });
     }
-    public updateBookingPriceUsingRoomCategory(bookingDO: BookingDO, roomCategoryStatsList: RoomCategoryStatsDO[]) {
+
+    /** 
+     * Function used to update the price on a booking using its attached Price Product
+     * 
+     * `bookingDO`: the booking on which the price will be recomputed
+     * `roomCategoryStatsList`: the list of room category stats of the hotel; are needed because some prices depend on the room's configuration
+     * `groupBookingRoomCategoryIdList`: the list of room category ids that are inside the same group booking; it needs to be passed only when the bookings are initially added to apply the min no rooms discount constraints if they exist
+    */
+    public updateBookingPriceUsingRoomCategory(bookingDO: BookingDO, roomCategoryStatsList: RoomCategoryStatsDO[], groupBookingRoomCategoryIdList?: string[]) {
         var indexedBookingInterval = new IndexedBookingInterval(bookingDO.interval);
 
         var previousBookingVatId: string = null;
@@ -87,6 +96,7 @@ export class BookingUtils {
 
         bookingDO.price.priceType = BookingPriceType.BookingStay;
 
+        // get the breakdown of prices per night
         let pricePerNightList: number[] = bookingDO.priceProductSnapshot.price.getPricePerNightBreakdownFor({
             configCapacity: bookingDO.configCapacity,
             roomCategoryId: bookingDO.roomCategoryId,
@@ -94,6 +104,21 @@ export class BookingUtils {
             bookingInterval: indexedBookingInterval
         });
 
+        var groupBookingRoomCategoryIdIndexer: StringOccurenciesIndexer;
+        if (!this._thUtils.isUndefinedOrNull(groupBookingRoomCategoryIdList)) {
+            groupBookingRoomCategoryIdIndexer = new StringOccurenciesIndexer(groupBookingRoomCategoryIdList);
+        }
+        let discount = bookingDO.priceProductSnapshot.discounts.getDiscountValueFor({
+            indexedBookingInterval: indexedBookingInterval,
+            bookingCreationDate: bookingDO.creationDate,
+            configCapacity: bookingDO.configCapacity,
+
+            indexedNumberOfRoomCategories: groupBookingRoomCategoryIdIndexer,
+            roomCategoryIdListFromPriceProduct: bookingDO.priceProductSnapshot.roomCategoryIdList
+        });
+        pricePerNightList = this.getPricePerNightListWithDiscount(pricePerNightList, discount);
+
+        bookingDO.price.appliedDiscountValue = discount;
         bookingDO.price.roomPricePerNightList = PricePerDayDO.buildPricePerDayList(indexedBookingInterval.bookingDateList, pricePerNightList);
         bookingDO.price.roomPricePerNightAvg = this._thUtils.getArrayAverage(pricePerNightList);
         bookingDO.price.roomPricePerNightAvg = this._thUtils.roundNumberToTwoDecimals(bookingDO.price.roomPricePerNightAvg);
@@ -116,6 +141,14 @@ export class BookingUtils {
                 bookingDO.price.description = foundRoomCategoryStats.roomCategory.displayName;
             }
         }
+    }
+    public getPricePerNightListWithDiscount(pricePerNightList: number[], discount: number): number[] {
+        return _.map(pricePerNightList, (pricePerNight) => {
+            if (discount > 0.0) {
+                pricePerNight = (1 - discount) * pricePerNight;
+            }
+            return this._thUtils.roundNumberToTwoDecimals(pricePerNight);
+        });
     }
     public getIncludedInvoiceItems(priceProduct: PriceProductDO, configCapacity: ConfigCapacityDO, indexedBookingInterval: IndexedBookingInterval): IncludedBookingItems {
         var includedBookingItems = new IncludedBookingItems();

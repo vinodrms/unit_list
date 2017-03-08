@@ -1,8 +1,8 @@
-import {ABaseSetting} from '../ABaseSetting';
-import {SettingMetadataDO, SettingType} from '../../../../../../../../data-layer/settings/data-objects/common/SettingMetadataDO';
-import {AmenityDO} from '../../../../../../../../data-layer/common/data-objects/amenity/AmenityDO';
-import {AmenitySettingDO} from '../../../../../../../../data-layer/settings/data-objects/amenity/AmenitySettingDO';
-import {Amenities} from './Amenities';
+import { ABaseSetting } from '../ABaseSetting';
+import { SettingMetadataDO, SettingType } from '../../../../../../../../data-layer/settings/data-objects/common/SettingMetadataDO';
+import { AmenityDO } from '../../../../../../../../data-layer/common/data-objects/amenity/AmenityDO';
+import { AmenitySettingDO } from '../../../../../../../../data-layer/settings/data-objects/amenity/AmenitySettingDO';
+import { Amenities } from './Amenities';
 
 export class HotelAmenities extends Amenities {
     constructor() {
@@ -31,19 +31,19 @@ export class HotelAmenities extends Amenities {
             },
             {
                 name: "24/7 Reception",
-                iconUrl: "Å"    
+                iconUrl: "Å"
             },
             {
                 name: "Currency Exchange",
-                iconUrl: "Æ"    
+                iconUrl: "Æ"
             },
             {
                 name: "Luggage storage",
-                iconUrl: "Ç"    
+                iconUrl: "Ç"
             },
             {
                 name: "Transfer",
-                iconUrl: "È"    
+                iconUrl: "È"
             },
             {
                 name: "Gym",
@@ -51,7 +51,7 @@ export class HotelAmenities extends Amenities {
             },
             {
                 name: "Pool",
-                iconUrl: "Ý"    
+                iconUrl: "Ý"
             },
             {
                 name: "Wellness",

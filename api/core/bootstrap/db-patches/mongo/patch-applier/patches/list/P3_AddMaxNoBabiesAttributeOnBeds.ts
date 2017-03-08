@@ -7,7 +7,7 @@ import { BedAccommodationType } from '../../../../../../data-layer/common/data-o
 
 import async = require("async");
 
-export class MongoPatch3 extends ATransactionalMongoPatch {
+export class P3_AddMaxNoBabiesAttributeOnBeds extends ATransactionalMongoPatch {
 
     public getPatchType(): MongoPatchType {
         return MongoPatchType.AddMaxNoBabiesAttributeOnBeds;

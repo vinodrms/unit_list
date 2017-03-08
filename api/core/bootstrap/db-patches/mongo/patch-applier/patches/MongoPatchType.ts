@@ -1,9 +1,10 @@
 export enum MongoPatchType {
-    CreateUniqueIndexOnHotel,
+    CreateUniqueIndexes,
     PopulateCountriesAndCurrencyCodes,
     SetValueForFirstChildWithAdultInSharedBedPriceOnPriceProducts,
     AddMaxNoBabiesAttributeOnBeds,
     SetTheNoBabyBedsOnBookingsCapacity,
     AddTheRoomPricePerNightListOnBookingPrice,
+    AddAppliedDiscountValueOnBookingPrice,
 
 }

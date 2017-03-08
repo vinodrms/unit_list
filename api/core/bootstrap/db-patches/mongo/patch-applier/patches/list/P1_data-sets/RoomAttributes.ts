@@ -1,7 +1,7 @@
-import {ABaseSetting} from './ABaseSetting';
-import {SettingMetadataDO, SettingType} from '../../../../../../../data-layer/settings/data-objects/common/SettingMetadataDO';
-import {RoomAttributeDO} from '../../../../../../../data-layer/common/data-objects/room-attribute/RoomAttributeDO';
-import {RoomAttributeSettingDO} from '../../../../../../../data-layer/settings/data-objects/room-attribute/RoomAttributeSettingDO';
+import { ABaseSetting } from './ABaseSetting';
+import { SettingMetadataDO, SettingType } from '../../../../../../../data-layer/settings/data-objects/common/SettingMetadataDO';
+import { RoomAttributeDO } from '../../../../../../../data-layer/common/data-objects/room-attribute/RoomAttributeDO';
+import { RoomAttributeSettingDO } from '../../../../../../../data-layer/settings/data-objects/room-attribute/RoomAttributeSettingDO';
 
 export class RoomAttributes extends ABaseSetting {
 

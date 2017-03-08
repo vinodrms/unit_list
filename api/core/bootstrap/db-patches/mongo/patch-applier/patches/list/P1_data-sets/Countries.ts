@@ -1,7 +1,7 @@
-import {ABaseSetting} from './ABaseSetting';
-import {SettingMetadataDO, SettingType} from '../../../../../../../data-layer/settings/data-objects/common/SettingMetadataDO';
-import {CountryDO} from '../../../../../../../data-layer/common/data-objects/country/CountryDO';
-import {CountrySettingDO} from '../../../../../../../data-layer/settings/data-objects/country/CountrySettingDO';
+import { ABaseSetting } from './ABaseSetting';
+import { SettingMetadataDO, SettingType } from '../../../../../../../data-layer/settings/data-objects/common/SettingMetadataDO';
+import { CountryDO } from '../../../../../../../data-layer/common/data-objects/country/CountryDO';
+import { CountrySettingDO } from '../../../../../../../data-layer/settings/data-objects/country/CountrySettingDO';
 
 export class Countries extends ABaseSetting {
     constructor() {

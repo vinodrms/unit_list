@@ -13,6 +13,7 @@ import { IndexedBookingInterval } from '../../../../data-layer/price-products/ut
 import { BookingUtils } from '../../../bookings/utils/BookingUtils';
 import { RoomCategoryStatsAggregator } from '../../../room-categories/aggregators/RoomCategoryStatsAggregator';
 import { RoomCategoryStatsDO } from '../../../../data-layer/room-categories/data-objects/RoomCategoryStatsDO';
+import { PriceProductConstraintDataDO } from "../../../../data-layer/price-products/data-objects/constraint/IPriceProductConstraint";
 
 import _ = require('underscore');
 
@@ -74,11 +75,21 @@ export class BookingPossiblePrices {
                 roomCategoryStatsList: this._loadedRoomCategoryStatsList,
                 bookingInterval: indexedBookingInterval
             };
+            let discountQuery: PriceProductConstraintDataDO = {
+                indexedBookingInterval: indexedBookingInterval,
+                bookingCreationDate: this._loadedBooking.creationDate,
+                configCapacity: this._loadedBooking.configCapacity,
+                indexedNumberOfRoomCategories: null,
+                roomCategoryIdListFromPriceProduct: this._loadedBooking.priceProductSnapshot.roomCategoryIdList
+            };
 
             if (this._loadedBooking.priceProductSnapshot.price.hasPriceConfiguredFor(priceQuery)) {
                 var priceItem = new BookingPriceItem();
                 priceItem.roomCategoryId = roomCategoryId;
-                let pricePerNightList: number[] = this._loadedBooking.priceProductSnapshot.price.getPricePerNightBreakdownFor(priceQuery);
+                var pricePerNightList: number[] = this._loadedBooking.priceProductSnapshot.price.getPricePerNightBreakdownFor(priceQuery);
+                let discount = this._loadedBooking.priceProductSnapshot.discounts.getDiscountValueFor(discountQuery);
+                pricePerNightList = this._bookingUtils.getPricePerNightListWithDiscount(pricePerNightList, discount);
+
                 priceItem.price = this._thUtils.getArraySum(pricePerNightList);
                 var includedInvoiceItems = this._bookingUtils.getIncludedInvoiceItems(this._loadedBooking.priceProductSnapshot,
                     this._loadedBooking.configCapacity, indexedBookingInterval);

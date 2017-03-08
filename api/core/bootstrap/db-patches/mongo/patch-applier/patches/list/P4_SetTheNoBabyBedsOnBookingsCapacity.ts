@@ -5,7 +5,7 @@ import { ABookingGroupTransactionalMongoPatch } from '../../utils/ABookingGroupT
 
 import _ = require('underscore');
 
-export class MongoPatch4 extends ABookingGroupTransactionalMongoPatch {
+export class P4_SetTheNoBabyBedsOnBookingsCapacity extends ABookingGroupTransactionalMongoPatch {
 
     public getPatchType(): MongoPatchType {
         return MongoPatchType.SetTheNoBabyBedsOnBookingsCapacity;

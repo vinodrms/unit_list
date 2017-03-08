@@ -1,11 +1,11 @@
-import {ABaseSetting} from './ABaseSetting';
-import {SettingMetadataDO, SettingType} from '../../../../../../../data-layer/settings/data-objects/common/SettingMetadataDO';
-import {YieldFilterValueDO} from '../../../../../../../data-layer/common/data-objects/yield-filter/YieldFilterValueDO';
-import {YieldFilterDO, YieldFilterType} from '../../../../../../../data-layer/common/data-objects/yield-filter/YieldFilterDO';
-import {YieldFilterSettingDO} from '../../../../../../../data-layer/settings/data-objects/yield-manager-filter/YieldManagerFilterSettingDO';
+import { ABaseSetting } from './ABaseSetting';
+import { SettingMetadataDO, SettingType } from '../../../../../../../data-layer/settings/data-objects/common/SettingMetadataDO';
+import { YieldFilterValueDO } from '../../../../../../../data-layer/common/data-objects/yield-filter/YieldFilterValueDO';
+import { YieldFilterDO, YieldFilterType } from '../../../../../../../data-layer/common/data-objects/yield-filter/YieldFilterDO';
+import { YieldFilterSettingDO } from '../../../../../../../data-layer/settings/data-objects/yield-manager-filter/YieldManagerFilterSettingDO';
 
 export class YieldManagerFilters extends ABaseSetting {
-	private static NumYieldLevels = 10;
+    private static NumYieldLevels = 10;
     private dataSet: { label: string, type: YieldFilterType, values: YieldFilterValueDO[] }[];
 
     constructor() {
@@ -37,13 +37,13 @@ export class YieldManagerFilters extends ABaseSetting {
             values: []
         };
 
-		for (var level = 1; level <= YieldManagerFilters.NumYieldLevels; level++) {
-			var firstFilter = new YieldFilterValueDO();
-			firstFilter.id = this._thUtils.generateUniqueID();
-			firstFilter.description = "";
-			firstFilter.label = level + "";
-			yieldLevel.values.push(firstFilter);
-		}
+        for (var level = 1; level <= YieldManagerFilters.NumYieldLevels; level++) {
+            var firstFilter = new YieldFilterValueDO();
+            firstFilter.id = this._thUtils.generateUniqueID();
+            firstFilter.description = "";
+            firstFilter.label = level + "";
+            yieldLevel.values.push(firstFilter);
+        }
 
         var yieldGroup = {
             label: "Yield Group",

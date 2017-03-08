@@ -1,8 +1,8 @@
-import {ABaseSetting} from '../ABaseSetting';
-import {SettingMetadataDO, SettingType} from '../../../../../../../../data-layer/settings/data-objects/common/SettingMetadataDO';
-import {AmenityDO} from '../../../../../../../../data-layer/common/data-objects/amenity/AmenityDO';
-import {AmenitySettingDO} from '../../../../../../../../data-layer/settings/data-objects/amenity/AmenitySettingDO';
-import {Amenities} from './Amenities';
+import { ABaseSetting } from '../ABaseSetting';
+import { SettingMetadataDO, SettingType } from '../../../../../../../../data-layer/settings/data-objects/common/SettingMetadataDO';
+import { AmenityDO } from '../../../../../../../../data-layer/common/data-objects/amenity/AmenityDO';
+import { AmenitySettingDO } from '../../../../../../../../data-layer/settings/data-objects/amenity/AmenitySettingDO';
+import { Amenities } from './Amenities';
 
 export class RoomAmenities extends Amenities {
     constructor() {

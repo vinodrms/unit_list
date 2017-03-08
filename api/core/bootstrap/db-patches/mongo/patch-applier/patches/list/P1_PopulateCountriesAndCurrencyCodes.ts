@@ -6,19 +6,19 @@ import { MongoPatchType } from '../MongoPatchType';
 import { MongoRepository } from '../../../../../../data-layer/common/base/MongoRepository';
 import { MongoSettingsRepository } from '../../../../../../data-layer/settings/repositories/mongo/MongoSettingsRepository';
 
-import { RoomAmenities } from './data-sets/amenities/RoomAmenities';
-import { RoomAttributes } from './data-sets/RoomAttributes';
-import { HotelAmenities } from './data-sets/amenities/HotelAmenities';
-import { Countries } from './data-sets/Countries';
-import { CurrencyCodes } from './data-sets/CurrencyCodes';
-import { PaymentMethods } from './data-sets/PaymentMethods';
-import { BedTemplates } from './data-sets/BedTemplates';
-import { AddOnProductCategories } from './data-sets/AddOnProductCategories';
-import { YieldManagerFilters } from './data-sets/YieldManagerFilters';
+import { RoomAmenities } from './P1_data-sets/amenities/RoomAmenities';
+import { RoomAttributes } from './P1_data-sets/RoomAttributes';
+import { HotelAmenities } from './P1_data-sets/amenities/HotelAmenities';
+import { Countries } from './P1_data-sets/Countries';
+import { CurrencyCodes } from './P1_data-sets/CurrencyCodes';
+import { PaymentMethods } from './P1_data-sets/PaymentMethods';
+import { BedTemplates } from './P1_data-sets/BedTemplates';
+import { AddOnProductCategories } from './P1_data-sets/AddOnProductCategories';
+import { YieldManagerFilters } from './P1_data-sets/YieldManagerFilters';
 
 import async = require('async');
 
-export class MongoPatch1 extends ATransactionalMongoPatch {
+export class P1_PopulateCountriesAndCurrencyCodes extends ATransactionalMongoPatch {
     private _settingsToAdd: Object[] = [
         (new RoomAmenities()).getAmenitySettingDO(),
         (new HotelAmenities()).getAmenitySettingDO(),

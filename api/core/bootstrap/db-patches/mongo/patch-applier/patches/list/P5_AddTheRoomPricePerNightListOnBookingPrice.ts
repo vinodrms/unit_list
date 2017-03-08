@@ -9,7 +9,7 @@ import { ThDateIntervalDO } from '../../../../../../utils/th-dates/data-objects/
 
 import _ = require('underscore');
 
-export class MongoPatch5 extends ABookingGroupTransactionalMongoPatch {
+export class P5_AddTheRoomPricePerNightListOnBookingPrice extends ABookingGroupTransactionalMongoPatch {
 
     public getPatchType(): MongoPatchType {
         return MongoPatchType.AddTheRoomPricePerNightListOnBookingPrice;

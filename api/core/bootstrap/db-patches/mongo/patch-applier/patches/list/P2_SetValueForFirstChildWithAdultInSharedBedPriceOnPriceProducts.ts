@@ -6,7 +6,7 @@ import { PriceProductPriceType } from '../../../../../../data-layer/price-produc
 
 import async = require("async");
 
-export class MongoPatch2 extends ATransactionalMongoPatch {
+export class P2_SetValueForFirstChildWithAdultInSharedBedPriceOnPriceProducts extends ATransactionalMongoPatch {
 
     public getPatchType(): MongoPatchType {
         return MongoPatchType.SetValueForFirstChildWithAdultInSharedBedPriceOnPriceProducts;

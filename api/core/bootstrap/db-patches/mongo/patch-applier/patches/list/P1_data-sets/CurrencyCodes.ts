@@ -1,7 +1,7 @@
-import {ABaseSetting} from './ABaseSetting';
-import {SettingMetadataDO, SettingType} from '../../../../../../../data-layer/settings/data-objects/common/SettingMetadataDO';
-import {CurrencyDO} from '../../../../../../../data-layer/common/data-objects/currency/CurrencyDO';
-import {CurrencySettingDO} from '../../../../../../../data-layer/settings/data-objects/currency/CurrencySettingDO';
+import { ABaseSetting } from './ABaseSetting';
+import { SettingMetadataDO, SettingType } from '../../../../../../../data-layer/settings/data-objects/common/SettingMetadataDO';
+import { CurrencyDO } from '../../../../../../../data-layer/common/data-objects/currency/CurrencyDO';
+import { CurrencySettingDO } from '../../../../../../../data-layer/settings/data-objects/currency/CurrencySettingDO';
 
 export class CurrencyCodes extends ABaseSetting {
     constructor() {
@@ -847,5 +847,4 @@ export class CurrencyCodes extends ABaseSetting {
             namePlural: "Zambian kwachas"
         }
     ];
-}   
-    
+}

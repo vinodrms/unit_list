@@ -1,7 +1,7 @@
-import {ABaseSetting} from './ABaseSetting';
-import {SettingMetadataDO, SettingType} from '../../../../../../../data-layer/settings/data-objects/common/SettingMetadataDO';
-import {PaymentMethodDO} from '../../../../../../../data-layer/common/data-objects/payment-method/PaymentMethodDO';
-import {PaymentMethodSettingDO} from '../../../../../../../data-layer/settings/data-objects/payment-method/PaymentMethodSettingDO';
+import { ABaseSetting } from './ABaseSetting';
+import { SettingMetadataDO, SettingType } from '../../../../../../../data-layer/settings/data-objects/common/SettingMetadataDO';
+import { PaymentMethodDO } from '../../../../../../../data-layer/common/data-objects/payment-method/PaymentMethodDO';
+import { PaymentMethodSettingDO } from '../../../../../../../data-layer/settings/data-objects/payment-method/PaymentMethodSettingDO';
 
 export class PaymentMethods extends ABaseSetting {
     constructor() {

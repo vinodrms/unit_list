@@ -18,7 +18,7 @@ interface IndexMetadataDO {
     type: IndexType;
 }
 
-export class MongoPatch0 extends ATransactionalMongoPatch {
+export class P0_CreateUniqueIndexes extends ATransactionalMongoPatch {
 
     private _indexList: IndexMetadataDO[];
 
@@ -90,7 +90,7 @@ export class MongoPatch0 extends ATransactionalMongoPatch {
         });
     }
     public getPatchType(): MongoPatchType {
-        return MongoPatchType.CreateUniqueIndexOnHotel;
+        return MongoPatchType.CreateUniqueIndexes;
     }
 
     protected applyCore(resolve: { (result: boolean): void }, reject: { (err: ThError): void }) {

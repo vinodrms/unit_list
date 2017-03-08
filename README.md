@@ -1,54 +1,72 @@
 # UnitPal
+**Property Management System designed for Small & Medium Sized Hotels**
 
-Hotel Management Application for internal use
+## Prerequisites
 
-=========================================
+To run UnitPal, you need the following:
+- TypeScript 2.2.1
+- Npm 3.10
+- Node 6.10.0
+- MongoDB 3.2.6 running on the default port 27017
+- Visual Studio Code (last version)
+- RoboMongo (last version) - MongoDB IDE
+
+## Running the project
+
+### Install Dependencies
 
 When you first clone the app, run in a terminal
-> npm run install-deps
+```
+ npm run install-deps
+```
+This will install all the required node modules for the client + server.
 
-=========================================
+### VS Code Project's Structure
 
-The project has 3 Visual Studio Tasks
- - build server (Shift+Ctrl+B / Shift+Cmd+B)
- - build client (Shift+Ctrl+T / Shift+Cmd+T)
+The project has 3 Visual Studio Tasks:
+ - build server (Shift+Ctrl+B / Shift+Cmd+B) : this will open up a process that will continuously compile `.ts` files to `.js` whenever a change is made on the **server**
+ - build client (Shift+Ctrl+T / Shift+Cmd+T) : this will open up a process that will continuously compile `.ts` files to `.js` whenever a change is made on the **client**
  - build e2e tests
 
-=========================================
+The client's and the server's code is on TypeScript, and the transpiled `.js` filed are hidded in VS Code.
 
-Change the sessionAuth, with values found in database on collection hotels
+From the VS Code Launch commands, the next 2 are important:
+- `Launch`: will open up UnitPal on the local environment on port `8001`
+- `Server tests`: will run all the server tests
+
+To run the same 2 commands outside VS Code (from the terminal):
+```
+npm run dev
+npm run server-tests
+```
+
+### Accessing the local web app without authentication
+
+After running the `Server tests` command, these will create a default hotel. You need to connect to the `Hotels` collection with RoboMongo, open up the single hotel and copy its `hotelId` and `userId` to the `sessionAuth.ts` file:
+```
 	sessionDo.hotel.id = hotels[0].id
 	sessionDo.user.id = hotels[0].userList[0].id
+```
+run the `build server` task to compile the server's code and run the application using either the `Launch` command or via terminal.
 
-=========================================
+### Other Useful Commands
 
-To run locally on dev environment
-> npm run dev
+Compile both client + server
+```
+npm run build-all
+```
 
-On test environment
-> npm run test
-
-=========================================
-
-To run the server tests
-> npm run server-tests
-
-=========================================
-
-> npm run build-all
-
-=========================================
 To run the e2e tests
+``` 
  - Terminal 1
 	> npm run test
  - Terminal 2
 	> npm run e2e-tests
+```
 
+## Development
 
-## Environment
-
- - Node.js - 6.9.5
-
+A. If you need to create a **database migration script**, you can follow this [README](api/core/bootstrap/db-patches/mongo/patch-applier/patches/README.md)
 
 ## Deployment
 

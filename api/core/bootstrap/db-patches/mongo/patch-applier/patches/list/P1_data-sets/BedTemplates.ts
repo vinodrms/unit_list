@@ -1,14 +1,14 @@
-import {ABaseSetting} from './ABaseSetting';
-import {SettingMetadataDO, SettingType} from '../../../../../../../data-layer/settings/data-objects/common/SettingMetadataDO';
-import {BedTemplateDO} from '../../../../../../../data-layer/common/data-objects/bed-template/BedTemplateDO';
-import {BedTemplateSettingDO} from '../../../../../../../data-layer/settings/data-objects/bed-template/BedTemplateSettingDO';
-import {BedAccommodationType} from '../../../../../../../data-layer/common/data-objects/bed/BedDO';
+import { ABaseSetting } from './ABaseSetting';
+import { SettingMetadataDO, SettingType } from '../../../../../../../data-layer/settings/data-objects/common/SettingMetadataDO';
+import { BedTemplateDO } from '../../../../../../../data-layer/common/data-objects/bed-template/BedTemplateDO';
+import { BedTemplateSettingDO } from '../../../../../../../data-layer/settings/data-objects/bed-template/BedTemplateSettingDO';
+import { BedAccommodationType } from '../../../../../../../data-layer/common/data-objects/bed/BedDO';
 
 export class BedTemplates extends ABaseSetting {
     constructor() {
         super(SettingType.BedTemplates, "Bed Templates");
     }
-    
+
     public getBedTemplateSettingDO(): BedTemplateSettingDO {
         var readBedTemplates = this.dataSet;
         var toAddBedTemplates: BedTemplateDO[] = [];
@@ -25,7 +25,7 @@ export class BedTemplates extends ABaseSetting {
         bedTemplateSettingDO.value = toAddBedTemplates;
         return bedTemplateSettingDO;
     }
-    
+
     private dataSet: { name: string, iconUrl: string, accommodationType: BedAccommodationType }[] = [
         {
             name: "Single Bed",
@@ -67,5 +67,5 @@ export class BedTemplates extends ABaseSetting {
             iconUrl: "3",
             accommodationType: BedAccommodationType.Any
         }
-    ];        
+    ];
 } 
