@@ -10,11 +10,11 @@ app_context_root: 'https://{{ host }}/'
 ssl_cert_chain_path: /etc/letsencrypt/live/app.unitpal.com/fullchain.pem
 ssl_private_key_path: /etc/letsencrypt/live/app.unitpal.com/privkey.pem
 
-mongo_host: ds062178.mongolab.com
-mongo_port: 62178
+mongo_host: ds058629-a0.mlab.com
+mongo_port: 58629
 mongo_user: threeangle
 mongo_passwd: TH64__djaj()21UPal
-mongo_db: UnitPalMongo
+mongo_db: unitpal
 
 cloudinary_cloud_name: hbpr8ossz
 cloudinary_api_key: 849423217949946
