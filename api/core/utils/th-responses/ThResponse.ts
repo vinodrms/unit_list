@@ -1,5 +1,5 @@
-import {Locales, ThTranslation} from '../localization/ThTranslation';
-import {ThUtils} from '../ThUtils';
+import { Locales, ThTranslation } from '../localization/ThTranslation';
+import { ThUtils } from '../ThUtils';
 
 export enum ThStatusCode {
 	Ok,
@@ -223,6 +223,10 @@ export enum ThStatusCode {
 	SavePriceProductItemInvalidPrice,
 	SavePriceProductItemInvalidPriceException,
 	SavePriceProductItemInvalidConstraints,
+	SavePriceProductItemTooManyConstraints,
+	SavePriceProductItemInvalidDiscountConstraints,
+	SavePriceProductItemTooManyDiscounts,
+	SavePriceProductItemTooManyConstraintsForTheSameDiscount,
 	SavePriceProductItemInvalidConditions,
 	PriceProductItemUpdateStrategyOnlyActiveAndDraftCanBeUpdated,
 	PriceProductItemStrategyInvalidStatus,
@@ -731,6 +735,10 @@ ThMessage[ThStatusCode.SavePriceProductItemError] = "Error saving price product.
 ThMessage[ThStatusCode.SavePriceProductItemInvalidPrice] = "Invalid price submitted.";
 ThMessage[ThStatusCode.SavePriceProductItemInvalidPriceException] = "Invalid price exceptions submitted.";
 ThMessage[ThStatusCode.SavePriceProductItemInvalidConstraints] = "Invalid constraints submitted.";
+ThMessage[ThStatusCode.SavePriceProductItemTooManyConstraints] = "You cannot add more than 20 constraints on the same Price Product.";
+ThMessage[ThStatusCode.SavePriceProductItemInvalidDiscountConstraints] = "Invalid discount constraints submitted.";
+ThMessage[ThStatusCode.SavePriceProductItemTooManyDiscounts] = "You cannot add more than 20 discounts on the same Price Product.";
+ThMessage[ThStatusCode.SavePriceProductItemTooManyConstraintsForTheSameDiscount] = "You cannot add more than 20 constraints for one discount.";
 ThMessage[ThStatusCode.SavePriceProductItemInvalidConditions] = "Invalid conditions submitted.";
 ThMessage[ThStatusCode.PriceProductItemUpdateStrategyOnlyActiveAndDraftCanBeUpdated] = "Only draft or active price products can be updated.";
 ThMessage[ThStatusCode.PriceProductItemStrategyInvalidStatus] = "A price product can only be saved as draft or active.";
@@ -1028,7 +1036,7 @@ export class ThResponse {
 		}
 		return this;
 	}
- 
+
 	private translateMessage(locale: Locales) {
 		var translation = new ThTranslation(locale);
 		this.message = translation.translate(this.message);

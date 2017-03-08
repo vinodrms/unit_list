@@ -65,6 +65,13 @@ export class SavePriceProductItem {
 			return false;
 		}
 
+		if (this._inputDO.constraints.constraintList.length > SavePriceProductItemDO.MaxConstraints) {
+			var thError = new ThError(ThStatusCode.SavePriceProductItemTooManyConstraints, null);
+			ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Submitted more than 20 constraints for the same price product", this._inputDO, thError);
+			reject(thError);
+			return false;
+		}
+
 		var validConstraints = true;
 		this._inputDO.constraints.constraintList.forEach((constraintDO: SavePriceProductItemConstraintDO) => {
 			var structure = SavePriceProductItemConstraintDO.getConstraintValidationStructure(constraintDO);
@@ -75,6 +82,38 @@ export class SavePriceProductItem {
 		if (!validConstraints) {
 			var thError = new ThError(ThStatusCode.SavePriceProductItemInvalidConstraints, null);
 			ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Invalid submitted constraints for price product", this._inputDO, thError);
+			reject(thError);
+			return false;
+		}
+
+		if (this._inputDO.discounts.discountList.length > SavePriceProductItemDO.MaxDiscounts) {
+			var thError = new ThError(ThStatusCode.SavePriceProductItemTooManyDiscounts, null);
+			ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Submitted more than 20 discounts for the same price product", this._inputDO, thError);
+			reject(thError);
+			return false;
+		}
+
+		var maxNoConstraintsForSameDiscount = 0;
+		this._inputDO.discounts.discountList.forEach(discount => { maxNoConstraintsForSameDiscount = Math.max(maxNoConstraintsForSameDiscount, discount.constraints.constraintList.length) });
+		if (maxNoConstraintsForSameDiscount > SavePriceProductItemDO.MaxConstraintsForDiscount) {
+			var thError = new ThError(ThStatusCode.SavePriceProductItemTooManyConstraintsForTheSameDiscount, null);
+			ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Submitted more than 20 constraints for the same discount on a price product", this._inputDO, thError);
+			reject(thError);
+			return false;
+		}
+
+		var validDiscountConstraints = true;
+		this._inputDO.discounts.discountList.forEach(discount => {
+			discount.constraints.constraintList.forEach(constraintDO => {
+				var structure = SavePriceProductItemConstraintDO.getConstraintValidationStructure(constraintDO);
+				if (!structure.validateStructure(constraintDO.constraint).isValid()) {
+					validDiscountConstraints = false;
+				}
+			});
+		});
+		if (!validDiscountConstraints) {
+			var thError = new ThError(ThStatusCode.SavePriceProductItemInvalidDiscountConstraints, null);
+			ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Invalid submitted discount constraints for price product", this._inputDO, thError);
 			reject(thError);
 			return false;
 		}
