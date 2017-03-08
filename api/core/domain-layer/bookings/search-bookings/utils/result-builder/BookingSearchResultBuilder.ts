@@ -15,6 +15,7 @@ import { AllotmentDO } from '../../../../../data-layer/allotments/data-objects/A
 import { IndexedBookingInterval } from '../../../../../data-layer/price-products/utils/IndexedBookingInterval';
 import { BookingUtils } from '../../../utils/BookingUtils';
 import { HotelDO } from "../../../../../data-layer/hotel/data-objects/HotelDO";
+import { StringOccurenciesIndexer } from "../../../../../utils/indexers/StringOccurenciesIndexer";
 
 import _ = require('underscore');
 
@@ -131,7 +132,10 @@ export class BookingSearchResultBuilder {
                     indexedBookingInterval: this._indexedBookingInterval,
                     bookingCreationDate: bookingCreationDate,
                     configCapacity: this._builderParams.searchParams.configCapacity,
-                    indexedNumberOfRoomCategories: null,
+
+                    // pass no room categories because the bookings were not added yet
+                    // such as e.g. the min no rooms constraint will not apply
+                    indexedNumberOfRoomCategoriesFromGroupBooking: new StringOccurenciesIndexer​​([]),
                     roomCategoryIdListFromPriceProduct: priceProduct.roomCategoryIdList
                 });
                 pricePerNightList = this._bookingUtils.getPricePerNightListWithDiscount(pricePerNightList, discount);

@@ -113,7 +113,7 @@ export class BookingUtils {
             bookingCreationDate: bookingDO.creationDate,
             configCapacity: bookingDO.configCapacity,
 
-            indexedNumberOfRoomCategories: groupBookingRoomCategoryIdIndexer,
+            indexedNumberOfRoomCategoriesFromGroupBooking: groupBookingRoomCategoryIdIndexer,
             roomCategoryIdListFromPriceProduct: bookingDO.priceProductSnapshot.roomCategoryIdList
         });
         pricePerNightList = this.getPricePerNightListWithDiscount(pricePerNightList, discount);

@@ -79,7 +79,7 @@ export class BookingPossiblePrices {
                 indexedBookingInterval: indexedBookingInterval,
                 bookingCreationDate: this._loadedBooking.creationDate,
                 configCapacity: this._loadedBooking.configCapacity,
-                indexedNumberOfRoomCategories: null,
+                indexedNumberOfRoomCategoriesFromGroupBooking: null,
                 roomCategoryIdListFromPriceProduct: this._loadedBooking.priceProductSnapshot.roomCategoryIdList
             };
 

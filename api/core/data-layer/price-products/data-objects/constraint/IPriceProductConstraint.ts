@@ -21,7 +21,7 @@ export interface PriceProductConstraintDataDO {
 	bookingCreationDate: ThDateDO;
 	configCapacity: ConfigCapacityDO;
 
-	indexedNumberOfRoomCategories: StringOccurenciesIndexer;
+	indexedNumberOfRoomCategoriesFromGroupBooking: StringOccurenciesIndexer;
 	roomCategoryIdListFromPriceProduct: string[];
 }
 

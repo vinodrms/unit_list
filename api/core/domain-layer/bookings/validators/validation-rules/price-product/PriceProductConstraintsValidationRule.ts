@@ -1,15 +1,15 @@
-import {ThError} from '../../../../../utils/th-responses/ThError';
-import {ThStatusCode} from '../../../../../utils/th-responses/ThResponse';
-import {ABusinessValidationRule} from '../../../../common/validation-rules/ABusinessValidationRule';
-import {IBusinessValidationRuleFilter} from '../../../../common/validation-rule-filters/IBusinessValidationRuleFilter';
-import {ThUtils} from '../../../../../utils/ThUtils';
-import {ThDateDO} from '../../../../../utils/th-dates/data-objects/ThDateDO';
-import {ThDateIntervalDO} from '../../../../../utils/th-dates/data-objects/ThDateIntervalDO';
-import {ConfigCapacityDO} from '../../../../../data-layer/common/data-objects/bed-config/ConfigCapacityDO';
-import {PriceProductConstraintDataDO} from '../../../../../data-layer/price-products/data-objects/constraint/IPriceProductConstraint';
-import {PriceProductDO} from '../../../../../data-layer/price-products/data-objects/PriceProductDO';
-import {IndexedBookingInterval} from '../../../../../data-layer/price-products/utils/IndexedBookingInterval';
-import {StringOccurenciesIndexer} from '../../../../../utils/indexers/StringOccurenciesIndexer';
+import { ThError } from '../../../../../utils/th-responses/ThError';
+import { ThStatusCode } from '../../../../../utils/th-responses/ThResponse';
+import { ABusinessValidationRule } from '../../../../common/validation-rules/ABusinessValidationRule';
+import { IBusinessValidationRuleFilter } from '../../../../common/validation-rule-filters/IBusinessValidationRuleFilter';
+import { ThUtils } from '../../../../../utils/ThUtils';
+import { ThDateDO } from '../../../../../utils/th-dates/data-objects/ThDateDO';
+import { ThDateIntervalDO } from '../../../../../utils/th-dates/data-objects/ThDateIntervalDO';
+import { ConfigCapacityDO } from '../../../../../data-layer/common/data-objects/bed-config/ConfigCapacityDO';
+import { PriceProductConstraintDataDO } from '../../../../../data-layer/price-products/data-objects/constraint/IPriceProductConstraint';
+import { PriceProductDO } from '../../../../../data-layer/price-products/data-objects/PriceProductDO';
+import { IndexedBookingInterval } from '../../../../../data-layer/price-products/utils/IndexedBookingInterval';
+import { StringOccurenciesIndexer } from '../../../../../utils/indexers/StringOccurenciesIndexer';
 
 import _ = require('underscore');
 
@@ -64,7 +64,7 @@ export class PriceProductConstraintsValidationRule extends ABusinessValidationRu
             indexedBookingInterval: this._indexedBookingInterval,
             bookingCreationDate: this._constraintParams.bookingCreationDate,
             configCapacity: this._constraintParams.configCapacity,
-            indexedNumberOfRoomCategories: this._indexedNumberOfRoomCategories,
+            indexedNumberOfRoomCategoriesFromGroupBooking: this._indexedNumberOfRoomCategories,
             roomCategoryIdListFromPriceProduct: priceProduct.roomCategoryIdList
         };
         return priceProduct.constraints.appliesOn(priceProductConstraintDataDO);
