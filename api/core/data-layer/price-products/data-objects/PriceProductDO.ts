@@ -1,10 +1,11 @@
-import {BaseDO} from '../../common/base/BaseDO';
-import {PriceProductPriceDO} from './price/PriceProductPriceDO';
-import {ThDateIntervalDO} from '../../../utils/th-dates/data-objects/ThDateIntervalDO';
-import {PriceProductConstraintWrapperDO} from './constraint/PriceProductConstraintWrapperDO';
-import {PriceProductConditionsDO} from './conditions/PriceProductConditionsDO';
-import {PriceProductYieldFilterMetaDO} from './yield-filter/PriceProductYieldFilterDO';
-import {PriceProductIncludedItemsDO} from './included-items/PriceProductIncludedItemsDO';
+import { BaseDO } from '../../common/base/BaseDO';
+import { PriceProductPriceDO } from './price/PriceProductPriceDO';
+import { ThDateIntervalDO } from '../../../utils/th-dates/data-objects/ThDateIntervalDO';
+import { PriceProductConstraintWrapperDO } from './constraint/PriceProductConstraintWrapperDO';
+import { PriceProductConditionsDO } from './conditions/PriceProductConditionsDO';
+import { PriceProductYieldFilterMetaDO } from './yield-filter/PriceProductYieldFilterDO';
+import { PriceProductIncludedItemsDO } from './included-items/PriceProductIncludedItemsDO';
+import { PriceProductDiscountWrapperDO } from "./discount/PriceProductDiscountWrapperDO";
 
 import _ = require('underscore');
 
@@ -37,6 +38,7 @@ export class PriceProductDO extends BaseDO {
 	openForDepartureIntervalList: ThDateIntervalDO[];
 	yieldFilterList: PriceProductYieldFilterMetaDO[];
 	constraints: PriceProductConstraintWrapperDO;
+	discounts: PriceProductDiscountWrapperDO;
 	conditions: PriceProductConditionsDO;
 	notes: string;
 
@@ -66,6 +68,9 @@ export class PriceProductDO extends BaseDO {
 		this.constraints = new PriceProductConstraintWrapperDO();
 		this.constraints.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "constraints"));
 
+		this.discounts = new PriceProductDiscountWrapperDO();
+		this.discounts.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "discounts"));
+
 		this.conditions = new PriceProductConditionsDO();
 		this.conditions.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "conditions"));
 	}
@@ -82,8 +87,8 @@ export class PriceProductDO extends BaseDO {
 		return _.contains(this.roomCategoryIdList, roomCategoryId);
 	}
 	public prepareForClient() {
-        delete this.openForArrivalIntervalList;
-        delete this.openForDepartureIntervalList;
-        delete this.openIntervalList;
-    }
+		delete this.openForArrivalIntervalList;
+		delete this.openForDepartureIntervalList;
+		delete this.openIntervalList;
+	}
 }

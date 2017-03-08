@@ -1,7 +1,7 @@
-import {BaseDO} from '../../../common/base/BaseDO';
-import {ThTranslation} from '../../../../utils/localization/ThTranslation';
-import {PriceProductConstraintType, PriceProductConstraintDataDO, IPriceProductConstraint} from './IPriceProductConstraint';
-import {PriceProductConstraintFactory} from './PriceProductConstraintFactory';
+import { BaseDO } from '../../../common/base/BaseDO';
+import { ThTranslation } from '../../../../utils/localization/ThTranslation';
+import { PriceProductConstraintType, PriceProductConstraintDataDO, IPriceProductConstraint } from './IPriceProductConstraint';
+import { PriceProductConstraintFactory } from './PriceProductConstraintFactory';
 
 export class PriceProductConstraintDO extends BaseDO implements IPriceProductConstraint {
 	type: PriceProductConstraintType;
