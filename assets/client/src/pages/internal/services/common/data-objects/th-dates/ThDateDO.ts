@@ -43,7 +43,7 @@ export class ThDateDO extends BaseDO {
     }
 
     year: number;
-	month: number;
+	month: ThMonth;
 	day: number;
 
     protected getPrimitivePropertyKeys(): string[] {

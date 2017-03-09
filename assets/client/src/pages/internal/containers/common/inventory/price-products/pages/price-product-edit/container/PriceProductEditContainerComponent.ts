@@ -23,6 +23,7 @@ import { PriceProductEditPricesSectionComponent } from '../sections/prices/Price
 import { PriceProductEditFiltersSectionComponent } from '../sections/filters/PriceProductEditFiltersSectionComponent';
 import { PriceProductEditCancellationSectionComponent } from '../sections/cancellation/PriceProductEditCancellationSectionComponent';
 import { PriceProductEditConstraintsSectionComponent } from '../sections/constraints/constraints-list/PriceProductEditConstraintsSectionComponent';
+import { PriceProductEditDiscountsSectionComponent } from '../sections/discounts/PriceProductEditDiscountsSectionComponent';
 import { PriceProductEditNotesSectionComponent } from '../sections/notes/PriceProductEditNotesSectionComponent';
 import { AddOnProductCategoriesService } from '../../../../../../../services/settings/AddOnProductCategoriesService';
 import { AddOnProductCategoriesDO } from '../../../../../../../services/settings/data-objects/AddOnProductCategoriesDO';
@@ -42,6 +43,7 @@ export class PriceProductEditContainerComponent extends BaseComponent implements
 	@ViewChild(PriceProductEditFiltersSectionComponent) private _editFiltersSection: PriceProductEditFiltersSectionComponent;
 	@ViewChild(PriceProductEditCancellationSectionComponent) private _editCancellationSection: PriceProductEditCancellationSectionComponent;
 	@ViewChild(PriceProductEditConstraintsSectionComponent) private _editConstraintsSection: PriceProductEditConstraintsSectionComponent;
+	@ViewChild(PriceProductEditDiscountsSectionComponent) private _editDiscountsSection: PriceProductEditDiscountsSectionComponent;
 	@ViewChild(PriceProductEditNotesSectionComponent) private _editNotesSection: PriceProductEditNotesSectionComponent;
 
 	private _didInit = false;
@@ -89,6 +91,7 @@ export class PriceProductEditContainerComponent extends BaseComponent implements
 					this._editFiltersSection,
 					this._editCancellationSection,
 					this._editConstraintsSection,
+					this._editDiscountsSection,
 					this._editNotesSection
 				]
 			);

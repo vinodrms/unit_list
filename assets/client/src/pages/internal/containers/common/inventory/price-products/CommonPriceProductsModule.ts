@@ -19,6 +19,7 @@ import { PriceProductEditPricesSectionComponent } from './pages/price-product-ed
 import { PriceProductEditFiltersSectionComponent } from './pages/price-product-edit/sections/filters/PriceProductEditFiltersSectionComponent';
 import { PriceProductEditCancellationSectionComponent } from './pages/price-product-edit/sections/cancellation/PriceProductEditCancellationSectionComponent';
 import { PriceProductEditConstraintsSectionComponent } from './pages/price-product-edit/sections/constraints/constraints-list/PriceProductEditConstraintsSectionComponent';
+import { PriceProductEditDiscountsSectionComponent } from "./pages/price-product-edit/sections/discounts/PriceProductEditDiscountsSectionComponent";
 import { PriceProductEditNotesSectionComponent } from './pages/price-product-edit/sections/notes/PriceProductEditNotesSectionComponent';
 
 const CommonPriceProductsComponentsDeclarations = [
@@ -33,6 +34,7 @@ const CommonPriceProductsComponentsDeclarations = [
     PriceProductEditFiltersSectionComponent,
     PriceProductEditCancellationSectionComponent,
     PriceProductEditConstraintsSectionComponent,
+    PriceProductEditDiscountsSectionComponent,
     PriceProductEditNotesSectionComponent,
 ];
 

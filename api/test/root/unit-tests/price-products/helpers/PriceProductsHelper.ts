@@ -158,6 +158,20 @@ export class PriceProductsHelper {
 								}
 							]
 						}
+					},
+					{
+						name: "Discount 2",
+						value: 0.08,
+						constraints: {
+							constraintList: [
+								{
+									type: PriceProductConstraintType.MinimumLengthOfStay,
+									constraint: {
+										lengthOfStay: 7
+									}
+								}
+							]
+						}
 					}
 				]
 			},

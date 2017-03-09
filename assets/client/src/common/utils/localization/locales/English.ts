@@ -374,6 +374,15 @@ export var EnglishTranslations: Object = {
 	"Constraints": "Constraints",
 	"Booking constraints": "Booking constraints",
 	"Constraints which must be met when booking the Price Product": "Constraints which must be met when booking the Price Product",
+	"Remove Constraint": "Remove Constraint",
+	"Are you sure you want to remove the %constraintName% constraint?": "Are you sure you want to remove the %constraintName% constraint?",
+	"No constraints.": "No constraints.",
+	"Booking discounts": "Booking discounts",
+	"Discounts that apply if all their conditions are met": "Discounts that apply if all their conditions are met",
+	"No constraints. The discount will apply to all the bookings made on this Price Product.": "No constraints. The discount will apply to all the bookings made on this Price Product.",
+	"Remove Discount": "Remove Discount",
+	"Are you sure you want to remove %name%?": "Are you sure you want to remove %name%?",
+	"No discounts.": "No discounts.",
 	"Active Price Products are available for booking, but cannot be edited. Draft Price Products can be edited, but not booked.": "Active Price Products are available for booking, but cannot be edited. Draft Price Products can be edited, but not booked.",
 	"Save as Draft": "Save as Draft",
 	"Save as": "Save as",
@@ -785,6 +794,6 @@ export var EnglishTranslations: Object = {
 	"File Format": "File Format",
 	"Undo Check In": "Undo Check In",
 	"Are you sure you want to undo the check in? This will move the booking back to the arrivals pane.": "Are you sure you want to undo the check in? This will move the booking back to the arrivals pane.",
-	
+
 
 };

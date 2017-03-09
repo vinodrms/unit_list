@@ -1,14 +1,14 @@
-import {Component, Input, Output, EventEmitter} from '@angular/core';
-import {BaseComponent} from '../../../../../../../../../../../common/base/BaseComponent';
-import {AppContext} from '../../../../../../../../../../../common/utils/AppContext';
-import {IPriceProductEditSection} from '../../utils/IPriceProductEditSection';
-import {PriceProductVM} from '../../../../../../../../../services/price-products/view-models/PriceProductVM';
-import {ModalDialogRef} from '../../../../../../../../../../../common/utils/modals/utils/ModalDialogRef';
-import {PriceProductConstraintModalService} from '../constraint-modal/services/PriceProductConstraintModalService';
-import {PriceProductConstraintDO} from '../../../../../../../../../services/price-products/data-objects/constraint/PriceProductConstraintDO';
-import {PriceProductConstraintWrapperDO} from '../../../../../../../../../services/price-products/data-objects/constraint/PriceProductConstraintWrapperDO';
-import {PriceProductConstraintContainer} from './utils/PriceProductConstraintContainer';
-import {PriceProductConstraintVM} from './utils/PriceProductConstraintVM';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { BaseComponent } from '../../../../../../../../../../../common/base/BaseComponent';
+import { AppContext } from '../../../../../../../../../../../common/utils/AppContext';
+import { IPriceProductEditSection } from '../../utils/IPriceProductEditSection';
+import { PriceProductVM } from '../../../../../../../../../services/price-products/view-models/PriceProductVM';
+import { ModalDialogRef } from '../../../../../../../../../../../common/utils/modals/utils/ModalDialogRef';
+import { PriceProductConstraintModalService } from '../constraint-modal/services/PriceProductConstraintModalService';
+import { PriceProductConstraintDO } from '../../../../../../../../../services/price-products/data-objects/constraint/PriceProductConstraintDO';
+import { PriceProductConstraintWrapperDO } from '../../../../../../../../../services/price-products/data-objects/constraint/PriceProductConstraintWrapperDO';
+import { PriceProductConstraintContainer } from './utils/PriceProductConstraintContainer';
+import { PriceProductConstraintVM } from './utils/PriceProductConstraintVM';
 
 @Component({
 	selector: 'price-product-edit-constraints-section',
@@ -24,7 +24,7 @@ export class PriceProductEditConstraintsSectionComponent extends BaseComponent i
 	constructor(private _appContext: AppContext,
 		private _constraintsModal: PriceProductConstraintModalService) {
 		super();
-		this.constraintContainer = new PriceProductConstraintContainer(this._appContext.thTranslation);
+		this.constraintContainer = new PriceProductConstraintContainer(this._appContext);
 	}
 
 	public isValid(): boolean {
