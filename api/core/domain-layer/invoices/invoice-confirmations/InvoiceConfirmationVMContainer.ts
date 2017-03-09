@@ -4,7 +4,7 @@ import { HotelDO } from '../../../data-layer/hotel/data-objects/HotelDO';
 import { CustomerDO } from '../../../data-layer/customers/data-objects/CustomerDO';
 import { AddressDO } from '../../../data-layer/common/data-objects/address/AddressDO';
 import { PaymentMethodDO } from '../../../data-layer/common/data-objects/payment-method/PaymentMethodDO';
-import { InvoiceDO } from '../../../data-layer/invoices/data-objects/InvoiceDO';
+import { InvoiceDO, InvoicePaymentStatus } from '../../../data-layer/invoices/data-objects/InvoiceDO';
 import { InvoiceItemDO, InvoiceItemType } from '../../../data-layer/invoices/data-objects/items/InvoiceItemDO';
 import { InvoiceItemVM } from './InvoiceItemVM';
 import { InvoicePaymentMethodType } from '../../../data-layer/invoices/data-objects/payers/InvoicePaymentMethodDO';
@@ -19,6 +19,8 @@ import _ = require('underscore');
 export class InvoiceConfirmationVMContainer {
     private static DEFAULT_VALUE_IF_EMPTY: string = '';
     private static PAY_INVOICE_BY_AGREEMENT_STR: string = 'PAY INVOICE BY AGREEMENT';
+    private static LOSS_ACCEPTED_BY_MANAGEMENT_STR: string = 'LOSS ACCEPTED BY MANAGEMENT';
+
     private _thUtils: ThUtils;
 
     private _invoiceAggregatedData: InvoiceAggregatedData;
@@ -227,6 +229,12 @@ export class InvoiceConfirmationVMContainer {
 
     private initPaymentMethodLabelsAndValues() {
         this.paymentMethodLabel = this._thTranslation.translate('Payment Method');
+
+        if(this._invoice.paymentStatus === InvoicePaymentStatus.LossAcceptedByManagement) {
+            this.paymentMethodValue = this._thTranslation.translate(InvoiceConfirmationVMContainer.LOSS_ACCEPTED_BY_MANAGEMENT_STR);
+            return;
+        }
+        
         if (this._invoice.payerList[this.payerIndex].paymentMethod.type === InvoicePaymentMethodType.DefaultPaymentMethod) {
             this.paymentMethodValue = _.find(this._paymentMethodList, (pm: PaymentMethodDO) => {
                 return pm.id === this._invoice.payerList[this.payerIndex].paymentMethod.value;
