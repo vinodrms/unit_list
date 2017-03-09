@@ -332,6 +332,7 @@ export var EnglishTranslations: Object = {
 	"Price Exceptions": "Price Exceptions",
 	"Save Exception": "Save Exception",
 	"No exceptions": "No exceptions",
+	"Add / Edit": "Add / Edit",
 	"Add Exception": "Add Exception",
 	"Available only on selected days of the week": "Available only on selected days of the week",
 	"Bookings can only be made on specific days from week (e.g. It you select Monday, the price product will apply only to bookings made from Monday to Tuesday.)": "Bookings can only be made on specific days from week (e.g. It you select Monday, the price product will apply only to bookings made from Monday to Tuesday.)",
