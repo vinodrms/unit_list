@@ -8,7 +8,7 @@
             <div class="col-sm-12 col-xs-12 booking-details-header">
                 <span class="first-line"><i class="fa fa-envelope"></i> {{ 'Recipients' | translate }}</span>
             </div>
-			<email-selector [customerList]="customerList" (onEmailListChanged)="emailRecipientList=$event"></email-selector>
+			<email-selector [customerList]="customerList" [disabled]="bookingConfirmationsBlocked" (onEmailListChanged)="emailRecipientList=$event"></email-selector>
 		</div>
 	</div>
 </div>

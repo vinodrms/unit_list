@@ -22,11 +22,14 @@ export class NewBookingEmailConfigComponent extends BaseComponent implements OnI
     private _didDisappearSubscription: Subscription;
 
     customerList: CustomerDO[];
+    bookingConfirmationsBlocked: boolean;
 
     constructor(private _appContext: AppContext, private _bookingCartService: BookingCartService,
         private _cartTableMetaBuilder: BookingCartTableMetaBuilderService, private _bookingTableUtilsService: BookingTableUtilsService,
         private _wizardEmailConfigStepService: BookingEmailConfigStepService) {
         super();
+
+        this.bookingConfirmationsBlocked = false;
     }
 
     ngAfterViewInit() {
@@ -51,16 +54,22 @@ export class NewBookingEmailConfigComponent extends BaseComponent implements OnI
     private viewDidAppear() {
         this.customerList = this.buildCustomerList();
     }
+
     private buildCustomerList(): CustomerDO[] {
         var bookingCartItemList = this._bookingCartService.bookingItemVMList;
-        var customerList: CustomerDO[] = [];
+        var allCustomers: CustomerDO[] = [];
         _.forEach(bookingCartItemList, (bookingCartItem: BookingCartItemVM) => {
-            customerList = customerList.concat(bookingCartItem.customerList);
+            allCustomers = allCustomers.concat(bookingCartItem.customerList);
         });
-        var filteredCustomerList = _.filter(customerList, (customer: CustomerDO) => {
+        var customersAbleToReceiveConfirmations = _.filter(allCustomers, (customer: CustomerDO) => {
             return customer.customerDetails.canReceiveBookingConfirmations();
         });
-        return filteredCustomerList;
+
+        if(!_.isEmpty(allCustomers) && allCustomers.length > customersAbleToReceiveConfirmations.length) {
+            this.bookingConfirmationsBlocked = true;
+        }
+
+        return customersAbleToReceiveConfirmations;
     }
 
     public viewDidDisappear() {
