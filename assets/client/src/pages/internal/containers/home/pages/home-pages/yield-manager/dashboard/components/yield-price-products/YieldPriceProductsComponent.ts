@@ -275,7 +275,8 @@ export class YieldPriceProductsComponent implements OnInit {
 	}
 
 	public getDateLabel(date: ThDateDO) {
-		return date.getShortDisplayString(this._appContext.thTranslation, true);
+		return date.getLongDayDisplayString(this._appContext.thTranslation).charAt(0) + " "
+				+ date.getDayString() + "." + date.getMonthString();
 	}
 
 	public get yieldManager(): IYieldManagerDashboardPriceProducts {
