@@ -12,6 +12,8 @@ import {CustomerDO} from '../../../../../../../../../../../services/customers/da
     providers: [EmailSenderModalService]
 })
 export class BookingSendConfirmationComponent implements OnInit {
+    private _bookingConfirmationsBlocked: boolean;
+
     private _bookingOperationsPageData: BookingOperationsPageData;
     public get bookingOperationsPageData(): BookingOperationsPageData {
         return this._bookingOperationsPageData;
@@ -29,26 +31,48 @@ export class BookingSendConfirmationComponent implements OnInit {
 
     ngOnInit() {
         this._didInit = true;
+        this._bookingConfirmationsBlocked = false;
+
         this.loadDependentData();
     }
 
     private loadDependentData() {
         if (!this._didInit || this._appContext.thUtils.isUndefinedOrNull(this._bookingOperationsPageData)) { return; }
+
+        this.checkIfBookingConfirmationsShouldBeBlocked();
+    }
+
+    private checkIfBookingConfirmationsShouldBeBlocked() {
+        var allCustomers = this._bookingOperationsPageData.customersContainer.customerList;
+        var customersAbleToReceiveConfirmations = this.getCustomersAllowedToReceiveConfirmations();
+
+        if(!_.isEmpty(allCustomers) && allCustomers.length > customersAbleToReceiveConfirmations.length) {
+            this._bookingConfirmationsBlocked = true;
+        }
+    }
+
+    private getCustomersAllowedToReceiveConfirmations(): CustomerDO[] {
+        var allCustomers = this._bookingOperationsPageData.customersContainer.customerList;
+        return _.filter(allCustomers, (customer: CustomerDO) => {
+            return customer.customerDetails.canReceiveBookingConfirmations();
+        });
     }
 
     public get hasSendRight(): boolean {
         return this._bookingOperationsPageData.bookingMeta.sendConfirmationRight === BookingSendConfirmationRight.Send;
+    } 
+
+    public get bookingConfirmationsBlocked(): boolean {
+        return this._bookingConfirmationsBlocked;
     }
 
     public send() {
         if (!this.hasSendRight) { return; }
-        var customerList = this._bookingOperationsPageData.customersContainer.customerList;
-        var filteredCustomerList = _.filter(customerList, (customer: CustomerDO) => {
-            return customer.customerDetails.canReceiveBookingConfirmations();
-        });
+        
+        var customersAbleToReceiveConfirmations = this.getCustomersAllowedToReceiveConfirmations();
         var groupBookingId = this._bookingOperationsPageData.bookingDO.groupBookingId;
         var bookingId = this._bookingOperationsPageData.bookingDO.bookingId;
-        this._emailSenderModalService.sendBookingConfirmation(filteredCustomerList, groupBookingId, bookingId).then((modalDialogRef: ModalDialogRef<boolean>) => {
+        this._emailSenderModalService.sendBookingConfirmation(customersAbleToReceiveConfirmations, groupBookingId, bookingId).then((modalDialogRef: ModalDialogRef<boolean>) => {
             modalDialogRef.resultObservable.subscribe((sendResult: boolean) => {
                 this._appContext.analytics.logEvent("booking", "send-confirmation", "Sent a booking confirmation by email");
             }, (err: any) => { });
