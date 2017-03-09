@@ -16,6 +16,7 @@ import { PriceProductConstraintVM } from './utils/PriceProductConstraintVM';
 	providers: [PriceProductConstraintModalService]
 })
 export class PriceProductEditConstraintsSectionComponent extends BaseComponent implements IPriceProductEditSection {
+	public static MaxNoConstraints = 10;
 	readonly: boolean;
 	@Input() didSubmit: boolean;
 
@@ -55,6 +56,11 @@ export class PriceProductEditConstraintsSectionComponent extends BaseComponent i
 		this.constraintContainer.removeConstraint(constraintVM);
 	}
 	public openConstraintsModal() {
+		if (this.constraintContainer.constraintVMList.length > PriceProductEditConstraintsSectionComponent.MaxNoConstraints) {
+			let errorMessage = this._appContext.thTranslation.translate("You cannot add more than 10 constraints on the same price product");
+			this._appContext.toaster.error(errorMessage);
+			return;
+		}
 		this._constraintsModal.openPriceProductConstraintsModal()
 			.then((modalDialogInstance: ModalDialogRef<PriceProductConstraintDO>) => {
 				modalDialogInstance.resultObservable.subscribe((addedConstraint: PriceProductConstraintDO) => {

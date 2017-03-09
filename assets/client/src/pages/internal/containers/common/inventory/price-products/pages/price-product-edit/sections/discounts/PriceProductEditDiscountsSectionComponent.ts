@@ -7,18 +7,23 @@ import { PriceProductDiscountDO } from "../../../../../../../../services/price-p
 import { PriceProductDiscountWrapperDO } from "../../../../../../../../services/price-products/data-objects/discount/PriceProductDiscountWrapperDO";
 import { PriceProductDiscountContainer } from "./utils/PriceProductDiscountContainer";
 import { PriceProductDiscountVM } from "./utils/PriceProductDiscountVM";
+import { PriceProductDiscountModalService } from "./discount-modal/services/PriceProductDiscountModalService";
+import { ModalDialogRef } from "../../../../../../../../../../common/utils/modals/utils/ModalDialogRef";
 
 @Component({
     selector: 'price-product-edit-discounts-section',
-    templateUrl: '/client/src/pages/internal/containers/common/inventory/price-products/pages/price-product-edit/sections/discounts/template/price-product-edit-discounts-section.html'
+    templateUrl: '/client/src/pages/internal/containers/common/inventory/price-products/pages/price-product-edit/sections/discounts/template/price-product-edit-discounts-section.html',
+    providers: [PriceProductDiscountModalService]
 })
 export class PriceProductEditDiscountsSectionComponent extends BaseComponent implements IPriceProductEditSection {
+    public static MaxDiscountsNo = 10;
     readonly: boolean;
     @Input() didSubmit: boolean;
 
     discountContainer: PriceProductDiscountContainer;
 
-    constructor(private _appContext: AppContext) {
+    constructor(private _appContext: AppContext,
+        private _discountModalService: PriceProductDiscountModalService) {
         super();
         this.discountContainer = new PriceProductDiscountContainer(this._appContext);
     }
@@ -46,8 +51,17 @@ export class PriceProductEditDiscountsSectionComponent extends BaseComponent imp
         this.discountContainer.removeDiscount(discountVM);
     }
 
-    // TODO: implement discounts modal
     public openDiscountsModal() {
-
+        if (this.discountContainer.discountVMList.length > PriceProductEditDiscountsSectionComponent.MaxDiscountsNo) {
+            let errorMessage = this._appContext.thTranslation.translate("You cannot add more than 10 discounts on the same price product");
+            this._appContext.toaster.error(errorMessage);
+            return;
+        }
+        this._discountModalService.openPriceProductDiscountModal()
+            .then((modalDialogInstance: ModalDialogRef<PriceProductDiscountDO>) => {
+                modalDialogInstance.resultObservable.subscribe((addedDiscount: PriceProductDiscountDO) => {
+                    this.discountContainer.addDiscount(addedDiscount);
+                })
+            }).catch((e: any) => { });
     }
 }
