@@ -8,7 +8,12 @@
             <div class="col-sm-12 col-xs-12 booking-details-header">
                 <span class="first-line"><i class="fa fa-envelope"></i> {{ 'Recipients' | translate }}</span>
             </div>
-			<email-selector [customerList]="customerList" (onEmailListChanged)="emailRecipientList=$event"></email-selector>
+			<email-selector [customerList]="customerList" [disabled]="bookingConfirmationsBlocked" (onEmailListChanged)="emailRecipientList=$event"></email-selector>
+			<div class="col-xs-12" [hidden]="!bookingConfirmationsBlocked">
+    			<small class="text-muted">
+        			<i class="fa fa-info-circle"></i> {{ 'When a company/travel agent on a booking has booking confirmations disabled, booking confirmations are blocked for that booking.' | translate }}
+    			</small>
+			</div>
 		</div>
 	</div>
 </div>

@@ -4,7 +4,7 @@
             <tr>
                 <th> {{ 'Recipient' | translate }} </th>
                 <th> {{ 'Email' | translate }} </th>
-                <th> <input type="checkbox" [(ngModel)]="selectAll" name="selectAll">  {{ 'Select All' | translate }}</th>
+                <th> <input type="checkbox" [(ngModel)]="selectAll" name="selectAll" [disabled]="disabled">  {{ 'Select All' | translate }}</th>
             </tr>
         </thead>
         <tbody>
@@ -12,14 +12,14 @@
                 <td width="45%">{{ emailRecipient.recipientName }}</td>
                 <td width="50%" *ngIf="emailRecipient.isValid">{{ emailRecipient.email }}</td>
                 <td width="50%" *ngIf="!emailRecipient.isValid"><i>{{ 'Not configured' | translate }}</i></td>
-                <td width="5%"><input type="checkbox" [ngModel]="emailRecipient.selected" (ngModelChange)="didChangeRecipient(emailRecipient)" name="emailRecipient" [disabled]="!emailRecipient.isValid"></td>
+                <td width="5%"><input type="checkbox" [ngModel]="emailRecipient.selected" (ngModelChange)="didChangeRecipient(emailRecipient)" name="emailRecipient" [disabled]="disabled || !emailRecipient.isValid"></td>
             </tr>
         </tbody>
         <tfoot>
         </tfoot>
     </table>
 </div>
-<div class="col-xs-6">
+<div class="col-xs-6" [hidden]="disabled">
     <div class="form-group">
         <div class="input-group" [ngClass]="{'form-warning': dirtyNewEmail && !validNewEmail}">
             <input type="text" class="form-control" placeholder="{{'Insert a different email' | translate}}" [(ngModel)]="newEmail" name="newEmail">
@@ -27,7 +27,7 @@
         <label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Invalid email' | translate }}</small></label>
     </div>
 </div>
-<div class="col-xs-6">
+<div class="col-xs-6" [hidden]="disabled">
     <button  type="button" class="btn btn-primary" [disabled]="!validNewEmail" (click)="addNewEmail()">
         {{ 'Add' | translate }}
     </button>

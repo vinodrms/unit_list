@@ -25,6 +25,15 @@ export class EmailSelectorComponent implements OnInit {
         this.loadDependentData();
     }
 
+    private _disabled: boolean;
+    public get disabled(): boolean {
+        return this._disabled;
+    }
+    @Input()
+    public set disabled(disabled: boolean) {
+        this._disabled = disabled;
+    }
+
     private emailRecipientList: EmailRecipientVM[];
 
     private _didInit: boolean = false;
