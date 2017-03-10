@@ -807,6 +807,6 @@ export var EnglishTranslations: Object = {
 	"File Format": "File Format",
 	"Undo Check In": "Undo Check In",
 	"Are you sure you want to undo the check in? This will move the booking back to the arrivals pane.": "Are you sure you want to undo the check in? This will move the booking back to the arrivals pane.",
-
+	"When a company/travel agent on a booking has booking confirmations disabled, booking confirmations are blocked for that booking.": "When a company/travel agent on a booking has booking confirmations disabled, booking confirmations are blocked for that booking.",
 
 };

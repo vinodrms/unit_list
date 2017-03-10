@@ -192,6 +192,9 @@
 	"Part %partNo%": "Part %partNo%",
 	"Invoice Reference": "Invoice Reference",
 	"Customer": "Customer",
-	"Paid Invoices": "Paid Invoices"
+	"Paid Invoices": "Paid Invoices",
 
+	// Booking confirmations
+	"Booking confirmations are blocked for this booking.": "Booking confirmations are blocked for this booking."
+	
 }
