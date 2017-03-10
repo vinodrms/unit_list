@@ -1,7 +1,7 @@
-import {BaseDO} from '../../../common/base/BaseDO';
-import {IPriceProductConstraint, PriceProductConstraintDataDO} from './IPriceProductConstraint';
-import {PriceProductConstraintDO} from './PriceProductConstraintDO';
-import {ThTranslation} from '../../../../utils/localization/ThTranslation';
+import { BaseDO } from '../../../common/base/BaseDO';
+import { IPriceProductConstraint, PriceProductConstraintDataDO } from './IPriceProductConstraint';
+import { PriceProductConstraintDO } from './PriceProductConstraintDO';
+import { ThTranslation } from '../../../../utils/localization/ThTranslation';
 
 import _ = require('underscore');
 

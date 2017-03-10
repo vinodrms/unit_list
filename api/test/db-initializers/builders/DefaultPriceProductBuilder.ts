@@ -24,6 +24,7 @@ import { FixedNumberAttachedAddOnProductItemStrategyDO } from '../../../core/dat
 import { SinglePriceDO } from '../../../core/data-layer/price-products/data-objects/price/single-price/SinglePriceDO';
 import { RoomCategoryStatsDO } from '../../../core/data-layer/room-categories/data-objects/RoomCategoryStatsDO';
 import { ThTimestampDO } from '../../../core/utils/th-dates/data-objects/ThTimestampDO';
+import { PriceProductDiscountWrapperDO } from "../../../core/data-layer/price-products/data-objects/discount/PriceProductDiscountWrapperDO";
 
 import _ = require('underscore');
 
@@ -78,6 +79,8 @@ export class DefaultPriceProductBuilder implements IPriceProductDataSource {
 		priceProduct.conditions.penalty = new NoCancellationPenaltyDO();
 		priceProduct.constraints = new PriceProductConstraintWrapperDO();
 		priceProduct.constraints.constraintList = [];
+		priceProduct.discounts = new PriceProductDiscountWrapperDO();
+		priceProduct.discounts.discountList = [];
 		priceProduct.hotelId = testContext.sessionContext.sessionDO.hotel.id;
 		priceProduct.lastRoomAvailability = false;
 		priceProduct.name = name;

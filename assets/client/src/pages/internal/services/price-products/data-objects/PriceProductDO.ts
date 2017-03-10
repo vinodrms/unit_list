@@ -1,9 +1,10 @@
-import {BaseDO} from '../../../../../common/base/BaseDO';
-import {PriceProductPriceDO} from './price/PriceProductPriceDO';
-import {PriceProductConstraintWrapperDO} from './constraint/PriceProductConstraintWrapperDO';
-import {PriceProductConditionsDO} from './conditions/PriceProductConditionsDO';
-import {PriceProductYieldFilterMetaDO} from './yield-filter/PriceProductYieldFilterDO';
-import {PriceProductIncludedItemsDO} from './included-items/PriceProductIncludedItemsDO';
+import { BaseDO } from '../../../../../common/base/BaseDO';
+import { PriceProductPriceDO } from './price/PriceProductPriceDO';
+import { PriceProductConstraintWrapperDO } from './constraint/PriceProductConstraintWrapperDO';
+import { PriceProductConditionsDO } from './conditions/PriceProductConditionsDO';
+import { PriceProductYieldFilterMetaDO } from './yield-filter/PriceProductYieldFilterDO';
+import { PriceProductIncludedItemsDO } from './included-items/PriceProductIncludedItemsDO';
+import { PriceProductDiscountWrapperDO } from "./discount/PriceProductDiscountWrapperDO";
 
 export enum PriceProductStatus {
 	Draft,
@@ -30,6 +31,7 @@ export class PriceProductDO extends BaseDO {
 	taxIdList: string[];
 	yieldFilterList: PriceProductYieldFilterMetaDO[];
 	constraints: PriceProductConstraintWrapperDO;
+	discounts: PriceProductDiscountWrapperDO;
 	conditions: PriceProductConditionsDO;
 	notes: string;
 
@@ -64,6 +66,9 @@ export class PriceProductDO extends BaseDO {
 
 		this.constraints = new PriceProductConstraintWrapperDO();
 		this.constraints.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "constraints"));
+
+		this.discounts = new PriceProductDiscountWrapperDO();
+		this.discounts.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "discounts"));
 
 		this.conditions = new PriceProductConditionsDO();
 		this.conditions.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "conditions"));

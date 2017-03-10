@@ -1,14 +1,14 @@
-import {Component, Input, Output, EventEmitter} from '@angular/core';
-import {BaseComponent} from '../../../../../../../../../../../common/base/BaseComponent';
-import {AppContext} from '../../../../../../../../../../../common/utils/AppContext';
-import {IPriceProductEditSection} from '../../utils/IPriceProductEditSection';
-import {PriceProductVM} from '../../../../../../../../../services/price-products/view-models/PriceProductVM';
-import {ModalDialogRef} from '../../../../../../../../../../../common/utils/modals/utils/ModalDialogRef';
-import {PriceProductConstraintModalService} from '../constraint-modal/services/PriceProductConstraintModalService';
-import {PriceProductConstraintDO} from '../../../../../../../../../services/price-products/data-objects/constraint/PriceProductConstraintDO';
-import {PriceProductConstraintWrapperDO} from '../../../../../../../../../services/price-products/data-objects/constraint/PriceProductConstraintWrapperDO';
-import {PriceProductConstraintContainer} from './utils/PriceProductConstraintContainer';
-import {PriceProductConstraintVM} from './utils/PriceProductConstraintVM';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { BaseComponent } from '../../../../../../../../../../../common/base/BaseComponent';
+import { AppContext } from '../../../../../../../../../../../common/utils/AppContext';
+import { IPriceProductEditSection } from '../../utils/IPriceProductEditSection';
+import { PriceProductVM } from '../../../../../../../../../services/price-products/view-models/PriceProductVM';
+import { ModalDialogRef } from '../../../../../../../../../../../common/utils/modals/utils/ModalDialogRef';
+import { PriceProductConstraintModalService } from '../constraint-modal/services/PriceProductConstraintModalService';
+import { PriceProductConstraintDO } from '../../../../../../../../../services/price-products/data-objects/constraint/PriceProductConstraintDO';
+import { PriceProductConstraintWrapperDO } from '../../../../../../../../../services/price-products/data-objects/constraint/PriceProductConstraintWrapperDO';
+import { PriceProductConstraintContainer } from './utils/PriceProductConstraintContainer';
+import { PriceProductConstraintVM } from './utils/PriceProductConstraintVM';
 
 @Component({
 	selector: 'price-product-edit-constraints-section',
@@ -16,6 +16,7 @@ import {PriceProductConstraintVM} from './utils/PriceProductConstraintVM';
 	providers: [PriceProductConstraintModalService]
 })
 export class PriceProductEditConstraintsSectionComponent extends BaseComponent implements IPriceProductEditSection {
+	public static MaxNoConstraints = 10;
 	readonly: boolean;
 	@Input() didSubmit: boolean;
 
@@ -24,7 +25,7 @@ export class PriceProductEditConstraintsSectionComponent extends BaseComponent i
 	constructor(private _appContext: AppContext,
 		private _constraintsModal: PriceProductConstraintModalService) {
 		super();
-		this.constraintContainer = new PriceProductConstraintContainer(this._appContext.thTranslation);
+		this.constraintContainer = new PriceProductConstraintContainer(this._appContext);
 	}
 
 	public isValid(): boolean {
@@ -55,6 +56,11 @@ export class PriceProductEditConstraintsSectionComponent extends BaseComponent i
 		this.constraintContainer.removeConstraint(constraintVM);
 	}
 	public openConstraintsModal() {
+		if (this.constraintContainer.constraintVMList.length > PriceProductEditConstraintsSectionComponent.MaxNoConstraints) {
+			let errorMessage = this._appContext.thTranslation.translate("You cannot add more than 10 constraints on the same price product");
+			this._appContext.toaster.error(errorMessage);
+			return;
+		}
 		this._constraintsModal.openPriceProductConstraintsModal()
 			.then((modalDialogInstance: ModalDialogRef<PriceProductConstraintDO>) => {
 				modalDialogInstance.resultObservable.subscribe((addedConstraint: PriceProductConstraintDO) => {

@@ -1,19 +1,19 @@
-import {ThLogger, ThLogLevel} from '../../../../../utils/logging/ThLogger';
-import {ThError} from '../../../../../utils/th-responses/ThError';
-import {ThStatusCode} from '../../../../../utils/th-responses/ThResponse';
-import {MongoRepository, MongoErrorCodes} from '../../../../common/base/MongoRepository';
-import {PriceProductMetaRepoDO, PriceProductItemMetaRepoDO, PriceProductUpdateStatusParamsRepoDO, PriceProductUpdateYMIntervalsParamsRepoDO} from '../../IPriceProductRepository';
-import {PriceProductDO, PriceProductStatus} from '../../../data-objects/PriceProductDO';
-import {PriceProductYieldFilterMetaDO} from '../../../data-objects/yield-filter/PriceProductYieldFilterDO';
-import {PriceProductRepositoryHelper} from './helpers/PriceProductRepositoryHelper';
+import { ThLogger, ThLogLevel } from '../../../../../utils/logging/ThLogger';
+import { ThError } from '../../../../../utils/th-responses/ThError';
+import { ThStatusCode } from '../../../../../utils/th-responses/ThResponse';
+import { MongoRepository, MongoErrorCodes } from '../../../../common/base/MongoRepository';
+import { PriceProductMetaRepoDO, PriceProductItemMetaRepoDO, PriceProductUpdateStatusParamsRepoDO, PriceProductUpdateYMIntervalsParamsRepoDO } from '../../IPriceProductRepository';
+import { PriceProductDO, PriceProductStatus } from '../../../data-objects/PriceProductDO';
+import { PriceProductYieldFilterMetaDO } from '../../../data-objects/yield-filter/PriceProductYieldFilterDO';
+import { PriceProductRepositoryHelper } from './helpers/PriceProductRepositoryHelper';
 
 export class MongoPriceProductCrudOperationsRepository extends MongoRepository {
 	private _helper: PriceProductRepositoryHelper;
 
-    constructor(priceProdEntity: Sails.Model) {
-        super(priceProdEntity);
+	constructor(priceProdEntity: Sails.Model) {
+		super(priceProdEntity);
 		this._helper = new PriceProductRepositoryHelper();
-    }
+	}
 
 	public addPriceProduct(meta: PriceProductMetaRepoDO, priceProduct: PriceProductDO): Promise<PriceProductDO> {
 		return new Promise<PriceProductDO>((resolve: { (result: PriceProductDO): void }, reject: { (err: ThError): void }) => {
@@ -82,6 +82,7 @@ export class MongoPriceProductCrudOperationsRepository extends MongoRepository {
 				"openForDepartureIntervalList": priceProduct.openForDepartureIntervalList,
 				"yieldFilterList": priceProduct.yieldFilterList,
 				"constraints": priceProduct.constraints,
+				"discounts": priceProduct.discounts,
 				"conditions": priceProduct.conditions,
 				"notes": priceProduct.notes
 			});

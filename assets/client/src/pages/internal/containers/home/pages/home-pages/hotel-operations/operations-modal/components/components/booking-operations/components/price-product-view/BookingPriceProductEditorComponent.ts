@@ -90,6 +90,20 @@ export class BookingPriceProductEditorComponent implements OnInit {
     public get roomCategoryName(): string {
         return this._bookingOperationsPageData.roomCategoryStats.roomCategory.displayName;
     }
+    public hasDiscount(): boolean {
+        return this.bookingDO.price.hasDiscount();
+    }
+    public get discountValueString(): string {
+        return Math.round(this.bookingDO.price.appliedDiscountValue * 100) + "%";
+    }
+    public openDiscountInformAlert() {
+        let title = this._appContext.thTranslation.translate("Discount");
+        let message = this._appContext.thTranslation.translate("A discount of %discountValue% defined on %priceProduct% has been applied on this booking\'s room price", {
+            discountValue: this.discountValueString,
+            priceProduct: this.bookingDO.priceProductSnapshot.name
+        });
+        this._appContext.modalService.confirm(title, message, { positive: this._appContext.thTranslation.translate("OK") }, () => { }, () => { });
+    }
 
     public changePriceProduct() {
         if (!this.canChangePriceProduct) { return; }

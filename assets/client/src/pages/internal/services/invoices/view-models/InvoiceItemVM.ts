@@ -36,7 +36,7 @@ export class InvoiceItemVM {
             return false;
         }
         let bookingPrice: BookingPriceDO = <BookingPriceDO>this.invoiceItemDO.meta;
-        return bookingPrice.roomPricePerNightList.length > 0;
+        return !bookingPrice.isPenalty();
     }
 
     public buildPrototype(): InvoiceItemVM {

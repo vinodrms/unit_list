@@ -24,7 +24,7 @@ export class ThDateDO extends BaseDO {
         super();
     }
     year: number;
-	month: number;
+	month: ThMonth;
 	day: number;
 
     protected getPrimitivePropertyKeys(): string[] {

@@ -1,20 +1,23 @@
 import { ATransactionalMongoPatch } from '../utils/ATransactionalMongoPatch';
-import { MongoPatch0 } from './patch0/MongoPatch0';
-import { MongoPatch1 } from './patch1/MongoPatch1';
-import { MongoPatch2 } from './patch2/MongoPatch2';
-import { MongoPatch3 } from './patch3/MongoPatch3';
-import { MongoPatch4 } from './patch4/MongoPatch4';
-import { MongoPatch5 } from './patch5/MongoPatch5';
+import { P0_CreateUniqueIndexes } from './list/P0_CreateUniqueIndexes';
+import { P1_PopulateCountriesAndCurrencyCodes } from './list/P1_PopulateCountriesAndCurrencyCodes';
+import { P2_SetValueForFirstChildWithAdultInSharedBedPriceOnPriceProducts } from './list/P2_SetValueForFirstChildWithAdultInSharedBedPriceOnPriceProducts';
+import { P3_AddMaxNoBabiesAttributeOnBeds } from './list/P3_AddMaxNoBabiesAttributeOnBeds';
+import { P4_SetTheNoBabyBedsOnBookingsCapacity } from './list/P4_SetTheNoBabyBedsOnBookingsCapacity';
+import { P5_AddTheRoomPricePerNightListOnBookingPrice } from './list/P5_AddTheRoomPricePerNightListOnBookingPrice';
+import { P6_AddAppliedDiscountValueOnBookingPrice } from './list/P6_AddAppliedDiscountValueOnBookingPrice';
+
 
 export class MongoPatchUtils {
 	public static get PatchList(): ATransactionalMongoPatch[] {
 		return [
-			new MongoPatch0(),
-			new MongoPatch1(),
-			new MongoPatch2(),
-			new MongoPatch3(),
-			new MongoPatch4(),
-			new MongoPatch5(),
+			new P0_CreateUniqueIndexes(),
+			new P1_PopulateCountriesAndCurrencyCodes(),
+			new P2_SetValueForFirstChildWithAdultInSharedBedPriceOnPriceProducts(),
+			new P3_AddMaxNoBabiesAttributeOnBeds(),
+			new P4_SetTheNoBabyBedsOnBookingsCapacity(),
+			new P5_AddTheRoomPricePerNightListOnBookingPrice(),
+			new P6_AddAppliedDiscountValueOnBookingPrice(),
 
 		];
 	}

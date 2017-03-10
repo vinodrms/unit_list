@@ -99,7 +99,8 @@ export class BookingSearch {
                     bookingOccupancy: this._loadedBookingOccupancy,
                     bookingSearchDependencies: this._loadedBookingSearchDependencies,
                     roomCategoryStatsList: this._loadedRoomCategoryStatsList,
-                    searchParams: this._searchParams
+                    searchParams: this._searchParams,
+                    hotel: this._loadedHotel
                 });
             }).then((searchResult: BookingSearchResult) => {
                 resolve(searchResult);

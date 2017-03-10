@@ -24,6 +24,7 @@ export class BookingPriceDO extends BaseDO implements IInvoiceItemMeta {
     totalOtherPrice: number;
 
     totalBookingPrice: number;
+    appliedDiscountValue: number;
 
     vatId: string;
 
@@ -32,7 +33,7 @@ export class BookingPriceDO extends BaseDO implements IInvoiceItemMeta {
     includedInvoiceItemList: InvoiceItemDO[];
 
     protected getPrimitivePropertyKeys(): string[] {
-        return ["movable", "priceType", "roomPricePerNightAvg", "numberOfNights", "totalRoomPrice", "totalOtherPrice", "totalBookingPrice", "vatId", "description"];
+        return ["movable", "priceType", "roomPricePerNightAvg", "numberOfNights", "totalRoomPrice", "totalOtherPrice", "totalBookingPrice", "appliedDiscountValue", "vatId", "description"];
     }
     public buildFromObject(object: Object) {
         super.buildFromObject(object);
@@ -101,27 +102,6 @@ export class BookingPriceDO extends BaseDO implements IInvoiceItemMeta {
         return !thUtils.isUndefinedOrNull(this.breakfast) && !thUtils.isUndefinedOrNull(this.breakfast.id);
     }
 
-    public getRoomPrice(): number {
-        if (this.isPenalty()) {
-            return this.totalBookingPrice;
-        }
-        var roomPrice = this.totalRoomPrice;
-        if (this.hasBreakfast()) {
-            roomPrice = roomPrice - (this.numberOfNights * this.breakfast.meta.getUnitPrice());
-        }
-        if (roomPrice < 0) { roomPrice = 0; }
-        return roomPrice;
-    }
-    public getOtherPrice(): number {
-        if (this.isPenalty()) {
-            return 0.0;
-        }
-        var otherPrice = this.totalOtherPrice;
-        if (this.hasBreakfast()) {
-            otherPrice = otherPrice + (this.numberOfNights * this.breakfast.meta.getUnitPrice());
-        }
-        return otherPrice;
-    }
     public setMovable(movable: boolean) {
         this.movable = movable;
     }
