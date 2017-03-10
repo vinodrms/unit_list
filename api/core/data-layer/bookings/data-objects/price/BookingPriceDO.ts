@@ -102,27 +102,6 @@ export class BookingPriceDO extends BaseDO implements IInvoiceItemMeta {
         return !thUtils.isUndefinedOrNull(this.breakfast) && !thUtils.isUndefinedOrNull(this.breakfast.id);
     }
 
-    public getRoomPrice(): number {
-        if (this.isPenalty()) {
-            return this.totalBookingPrice;
-        }
-        var roomPrice = this.totalRoomPrice;
-        if (this.hasBreakfast()) {
-            roomPrice = roomPrice - (this.numberOfNights * this.breakfast.meta.getUnitPrice());
-        }
-        if (roomPrice < 0) { roomPrice = 0; }
-        return roomPrice;
-    }
-    public getOtherPrice(): number {
-        if (this.isPenalty()) {
-            return 0.0;
-        }
-        var otherPrice = this.totalOtherPrice;
-        if (this.hasBreakfast()) {
-            otherPrice = otherPrice + (this.numberOfNights * this.breakfast.meta.getUnitPrice());
-        }
-        return otherPrice;
-    }
     public setMovable(movable: boolean) {
         this.movable = movable;
     }
