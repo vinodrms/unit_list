@@ -43,7 +43,7 @@ export class ThDateDO extends BaseDO {
     }
 
     year: number;
-	month: number;
+	month: ThMonth;
 	day: number;
 
     protected getPrimitivePropertyKeys(): string[] {
@@ -109,10 +109,10 @@ export class ThDateDO extends BaseDO {
 	private isPrintable() {
 		return _.isNumber(this.year) && _.isNumber(this.month) && _.isNumber(this.day);
 	}
-	private getDayString(): string {
+	public getDayString(): string {
 		return this.day < 10 ? ("0" + this.day) : ("" + this.day);
 	}
-	private getMonthString(): string {
+	public getMonthString(): string {
 		var actualMonth = this.month + 1;
 		return actualMonth < 10 ? ("0" + actualMonth) : ("" + actualMonth);
 	}

@@ -1,0 +1,56 @@
+<div class="modal-header text-center">
+	<button type="button" class="close" (click)="closeDialog()">&times;</button>
+	<h4 class="modal-title">{{ 'Price Product Discount' | translate }}</h4>
+</div>
+<div class="modal-body">
+    <div class="row">
+        <div class="col-md-8 col-xs-12">
+            <label><small>{{ 'Discount Name' | translate }} *</small></label>
+            <div class="input-group">
+                <input type="text" class="form-control input-group-lg" [(ngModel)]="discount.name">
+            </div>
+        </div>
+        <div class="col-md-4 col-xs-12">
+            <label><small>{{ 'Discount Percentage' | translate }} *</small></label>
+            <percentage-input-number
+                [didSubmitForm]="false" [readonly]="false" [isRequired]="true" [errorMessage]="''" 
+                (onPercentageChanged)="discount.value = $event"
+                >
+            </percentage-input-number>
+        </div>
+    </div>
+
+    <div class="row" *ngFor="let discountId of discountIdList; let i = index">
+        <div class="col-xs-12"><hr></div>
+        <div class="col-xs-10">
+            <p class="bold-text">
+                {{ 'Constraint #' | translate }}{{i + 1}}
+            </p>
+        </div>
+        <div class="col-xs-2">
+            <a class="btn btn-xs bold-text" (click)="removeConstraintAtIndex(i)"  title="{{ 'Remove' | translate }}">
+                <i class="fa unitpal-font">\</i> {{ 'Remove' | translate }}
+            </a>
+        </div>
+        <div class="col-xs-12">
+            <price-product-constraint-selector
+                (onConstraintChange)="discount.constraints.constraintList[discountId] = $event">
+            </price-product-constraint-selector>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12">
+            <hr>
+			<a class="btn btn-xs" (click)="createNewConstraint()">
+				<i class="fa unitpal-font">'</i> {{ 'Add Constraint' | translate }}
+			</a>
+		</div>
+    </div>
+
+</div>
+<div class="modal-footer">
+	<button type="button" class="btn btn-primary" (click)="addDiscount()" [disabled]="!discount.isValid()">
+		{{ 'Add' | translate }}
+	</button>
+</div>

@@ -1,15 +1,15 @@
-import {ThTranslation} from '../../../../../../../../../../../../common/utils/localization/ThTranslation';
-import {PriceProductConstraintFactory} from '../../../../../../../../../../services/price-products/data-objects/constraint/PriceProductConstraintFactory';
-import {PriceProductConstraintMeta} from '../../../../../../../../../../services/price-products/data-objects/constraint/IPriceProductConstraint';
-import {PriceProductConstraintDO} from '../../../../../../../../../../services/price-products/data-objects/constraint/PriceProductConstraintDO';
-import {PriceProductConstraintVM} from './PriceProductConstraintVM';
+import { AppContext } from "../../../../../../../../../../../../common/utils/AppContext";
+import { PriceProductConstraintFactory } from '../../../../../../../../../../services/price-products/data-objects/constraint/PriceProductConstraintFactory';
+import { PriceProductConstraintMeta } from '../../../../../../../../../../services/price-products/data-objects/constraint/IPriceProductConstraint';
+import { PriceProductConstraintDO } from '../../../../../../../../../../services/price-products/data-objects/constraint/PriceProductConstraintDO';
+import { PriceProductConstraintVM } from './PriceProductConstraintVM';
 
 export class PriceProductConstraintContainer {
 	private _constraintMetaList: PriceProductConstraintMeta[];
 	private _currentIndex: number;
 	private _constraintVMList: PriceProductConstraintVM[];
 
-	constructor(private _thTranslation: ThTranslation) {
+	constructor(private _appContext: AppContext) {
 		var constraintFactory = new PriceProductConstraintFactory();
 		this._constraintMetaList = constraintFactory.getPriceProductConstraintMetaList();
 	}
@@ -25,7 +25,7 @@ export class PriceProductConstraintContainer {
 		var constraintVM = new PriceProductConstraintVM();
 		constraintVM.constraintDO = constraintDO;
 		constraintVM.displayTitle = this.getConstraintTitle(constraintDO);
-		constraintVM.displayValue = constraintDO.getValueDisplayString(this._thTranslation);
+		constraintVM.displayValue = constraintDO.getValueDisplayString(this._appContext.thTranslation);
 		constraintVM.index = this._currentIndex++;
 		this._constraintVMList.push(constraintVM);
 	}
@@ -34,6 +34,14 @@ export class PriceProductConstraintContainer {
 	}
 
 	public removeConstraint(constraintVM: PriceProductConstraintVM) {
+		let title = this._appContext.thTranslation.translate("Remove Constraint");
+		var content = this._appContext.thTranslation.translate("Are you sure you want to remove the %constraintName% constraint?", { constraintName: constraintVM.displayTitle });
+		this._appContext.modalService.confirm(title, content, { positive: this._appContext.thTranslation.translate("Yes"), negative: this._appContext.thTranslation.translate("No") },
+			() => {
+				this.removeConstraintCore(constraintVM);
+			}, () => { });
+	}
+	private removeConstraintCore(constraintVM: PriceProductConstraintVM) {
 		this._constraintVMList = _.filter(this._constraintVMList, (existingConstraintVM: PriceProductConstraintVM) => { return existingConstraintVM.index !== constraintVM.index });
 	}
 
@@ -48,5 +56,9 @@ export class PriceProductConstraintContainer {
 		return _.map(this._constraintVMList, (constraintVM: PriceProductConstraintVM) => {
 			return constraintVM.constraintDO;
 		});
+	}
+
+	public isEmpty(): boolean {
+		return !_.isArray(this._constraintVMList) || this._constraintVMList.length == 0;
 	}
 }

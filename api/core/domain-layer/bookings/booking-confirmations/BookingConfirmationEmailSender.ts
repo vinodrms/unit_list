@@ -12,6 +12,8 @@ import { BookingAggregatedDataContainer } from '../aggregators/BookingAggregated
 
 import fs = require('fs');
 import path = require('path');
+import { BookingAggregatedData } from "../aggregators/BookingAggregatedData";
+import { CustomerDO } from "../../../data-layer/customers/data-objects/CustomerDO";
 
 export class BookingConfirmationEmailSender {
     private static BOOKING_CONFIRMATION_EMAIL_SUBJECT = 'Booking Confirmation';
@@ -35,6 +37,11 @@ export class BookingConfirmationEmailSender {
         bookingDataAggregator.getBookingAggregatedDataContainer(bookingsQuery).then((bookingAggregatedDataContainer: BookingAggregatedDataContainer) => {
             var bookingConfirmationVMContainer = new BookingConfirmationVMContainer(this._thTranslation);
             bookingConfirmationVMContainer.buildFromBookingAggregatedDataContainer(bookingAggregatedDataContainer);
+            
+            if(this.bookingConfirmationBlocked(bookingAggregatedDataContainer)) {
+                throw new Error(this._thTranslation.translate('Booking confirmations are blocked for this booking.'));
+            }
+
             return pdfReportsService.generatePdfReport({
                 reportType: ReportType.BookingConfirmation,
                 reportData: bookingConfirmationVMContainer,
@@ -62,7 +69,22 @@ export class BookingConfirmationEmailSender {
         }).catch((err: any) => {
             var thError = new ThError(ThStatusCode.BookingConfirmationEmailSenderErrorSendingEmail, err);
             ThLogger.getInstance().logError(ThLogLevel.Error, "error sending booking confirmation by email", { bookingQuery: bookingsQuery, distributionList: emailDistributionList }, thError);
-            resolve(false);
+            reject(err);
         });
     }
+
+    private bookingConfirmationBlocked(bookingAggregatedDataContainer: BookingAggregatedDataContainer): boolean {
+        var allCustomers = _.chain(bookingAggregatedDataContainer.bookingAggregatedDataList).map((bookingAggregatedData: BookingAggregatedData) => {
+            return bookingAggregatedData.customerList;
+        }).flatten().value();
+        
+        var customersAbleToReceiveConfirmations = _.filter(allCustomers, (customer: CustomerDO) => {
+            return customer.customerDetails.canReceiveBookingConfirmations();
+        });
+        if(!_.isEmpty(allCustomers) && allCustomers.length > customersAbleToReceiveConfirmations.length) {
+            return true;
+        }
+        return false;
+    }
+
 }

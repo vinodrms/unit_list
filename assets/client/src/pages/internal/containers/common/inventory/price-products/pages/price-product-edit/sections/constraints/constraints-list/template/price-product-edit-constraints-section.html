@@ -1,4 +1,4 @@
-<div class="col-md-12">
+<div class="col-md-6 col-sm-12">
 	<div class="row">
 		<div class="col-xs-12 form-group">
 			<label>{{ 'Booking constraints' | translate }}</label>
@@ -12,26 +12,36 @@
 		</div>
 	</div>
 
-	<table class="table table-striped projects">
-		<tbody>
-			<tr *ngFor="let constraintVM of constraintContainer.constraintVMList">
-				<td>{{constraintVM.displayTitle | translate}}</td>
-				<td>{{constraintVM.displayValue}}</td>
-				<td *ngIf="!readonly">
-					<a class="btn btn-xs" (click)="removeConstraint(constraintVM)">
-						<i class="fa unitpal-font">\</i> {{ 'Remove' | translate }}
-					</a>
-				</td>
-			</tr>
-			<tr>
-				<td *ngIf="!readonly">
-					<a class="btn btn-xs" (click)="openConstraintsModal()">
-						<i class="fa unitpal-font">'</i> {{ 'Add' | translate }}
-					</a>
-				</td>
-				<td></td>
-				<td></td>
-			</tr>
-		</tbody>
-	</table>
+	<div class="row">
+		<div class="col-xs-12">
+			<div class="price-product-box">
+				<div class="row" *ngFor="let constraintVM of constraintContainer.constraintVMList">
+					<div class="col-xs-10">
+						<p>
+							{{ constraintVM.displayTitle | translate }} 
+							<br>
+							<small class="gray-color">{{ constraintVM.displayValue }}</small>
+						</p>
+					</div>
+					<div class="col-xs-2" *ngIf="!readonly">
+						<a class="btn btn-xs bold-text" (click)="removeConstraint(constraintVM)"  title="{{ 'Remove' | translate }}">
+							<i class="fa unitpal-font">\</i>
+						</a>
+					</div>
+				</div>
+				<div class="row" *ngIf="constraintContainer.isEmpty()">
+					<div class="col-xs-12">
+						<small class="gray-color">
+							{{ 'No constraints.' | translate }}
+						</small>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-xs-12" *ngIf="!readonly">
+			<a class="btn btn-xs" (click)="openConstraintsModal()">
+				<i class="fa unitpal-font">'</i> {{ 'Add' | translate }}
+			</a>
+		</div>
+	</div>
 </div>

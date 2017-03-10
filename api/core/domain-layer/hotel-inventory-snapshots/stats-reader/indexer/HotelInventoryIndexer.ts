@@ -3,9 +3,11 @@ import { ThError } from '../../../../utils/th-responses/ThError';
 import { ThStatusCode } from '../../../../utils/th-responses/ThResponse';
 import { AppContext } from '../../../../utils/AppContext';
 import { SessionContext } from '../../../../utils/SessionContext';
+import { ConfigCapacityDO } from "../../../../data-layer/common/data-objects/bed-config/ConfigCapacityDO";
 import { IndexedBookingInterval } from '../../../../data-layer/price-products/utils/IndexedBookingInterval';
 import { BookingDOConstraints } from '../../../../data-layer/bookings/data-objects/BookingDOConstraints';
 import { BookingDO, BookingConfirmationStatus } from '../../../../data-layer/bookings/data-objects/BookingDO';
+import { BookingPriceDO } from "../../../../data-layer/bookings/data-objects/price/BookingPriceDO";
 import { BookingSearchResultRepoDO } from '../../../../data-layer/bookings/repositories/IBookingRepository';
 import { ThDateIntervalDO } from '../../../../utils/th-dates/data-objects/ThDateIntervalDO';
 import { ThHourDO } from '../../../../utils/th-dates/data-objects/ThHourDO';
@@ -133,11 +135,44 @@ export class HotelInventoryIndexer {
         _.forEach(filteredBookingItemList, (bookingItem: BookingItemContainer) => {
             var noNights = bookingItem.indexedBookingInterval.getLengthOfStay();
             if (noNights > 0 && !this._invoiceStats.bookingHasInvoiceWithLossAcceptedByManagement(bookingItem.booking.bookingId)) {
-                revenue.roomRevenue += bookingItem.booking.price.getRoomPrice() / noNights;
-                revenue.otherRevenue += bookingItem.booking.price.getOtherPrice() / noNights;
+                revenue.roomRevenue += this.getBookingRoomPriceForDate(bookingItem.booking.price, bookingItem.booking.configCapacity, noNights, thDate);
+                revenue.otherRevenue += this.getBookingOtherPriceAvgPerNight(bookingItem.booking.price, bookingItem.booking.configCapacity, noNights);
             }
         });
         return revenue;
+    }
+
+    private getBookingRoomPriceForDate(bookingPrice: BookingPriceDO, bookingCapacity: ConfigCapacityDO​​, totalNoNights: number, thDate: ThDateDO): number {
+        if (bookingPrice.isPenalty()) {
+            return bookingPrice.totalBookingPrice / totalNoNights;
+        }
+        var roomPriceForNight = bookingPrice.roomPricePerNightAvg;
+        // now we try to find the actual price for the specific date
+        for (var i = 0; i < bookingPrice.roomPricePerNightList.length; i++) {
+            let priceForNight = bookingPrice.roomPricePerNightList[i];
+            if (priceForNight.thDate.isSame(thDate)) {
+                roomPriceForNight = priceForNight.price;
+                break;
+            }
+        }
+
+        // even though breakfast is included in the room's price we remove it from the stats
+        if (bookingPrice.hasBreakfast()) {
+            roomPriceForNight = roomPriceForNight - (bookingPrice.breakfast.meta.getUnitPrice() * bookingCapacity.getNoAdultsAndChildren());
+        }
+        if (roomPriceForNight < 0) { roomPriceForNight = 0; }
+        return roomPriceForNight;
+    }
+
+    private getBookingOtherPriceAvgPerNight(bookingPrice: BookingPriceDO, bookingCapacity: ConfigCapacityDO​​, totalNoNights: number): number {
+        if (bookingPrice.isPenalty()) {
+            return 0.0;
+        }
+        var otherPrice = bookingPrice.totalOtherPrice / totalNoNights;
+        if (bookingPrice.hasBreakfast()) {
+            otherPrice = otherPrice + (bookingPrice.breakfast.meta.getUnitPrice() * bookingCapacity.getNoAdultsAndChildren());
+        }
+        return otherPrice;
     }
 
     private getSingleDayIntervalStartingFrom(thDate: ThDateDO): IndexedBookingInterval {

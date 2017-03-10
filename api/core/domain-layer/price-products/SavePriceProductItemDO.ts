@@ -21,6 +21,17 @@ import { ISOWeekDayUtils } from '../../utils/th-dates/data-objects/ISOWeekDay';
 export interface SavePriceProductItemConstraintListDO {
 	constraintList: SavePriceProductItemConstraintDO[];
 }
+
+export interface SavePriceProductItemDiscountDO {
+	name: string;
+	value: number;
+	constraints: SavePriceProductItemConstraintListDO;
+}
+
+export interface SavePriceProductItemDiscountListDO {
+	discountList: SavePriceProductItemDiscountDO[];
+}
+
 export interface SavePriceProductItemConditionsDO {
 	policyType: PriceProductCancellationPolicyType;
 	policy: Object;
@@ -40,7 +51,35 @@ export class SavePriceProductItemDO {
 	yieldFilterList: PriceProductYieldFilterMetaDO[];
 	constraints: SavePriceProductItemConstraintListDO;
 	conditions: SavePriceProductItemConditionsDO;
+	discounts: SavePriceProductItemDiscountListDO;
 	notes: string;
+
+	public static MaxConstraints = 20;
+	public static MaxDiscounts = 20;
+	public static MaxConstraintsForDiscount = 20;
+
+	public static getPriceProductConstraintWrapperValidationRule(): IValidationStructure {
+		return new ObjectValidationStructure([
+			{
+				key: "constraintList",
+				validationStruct: new ArrayValidationStructure(new ObjectValidationStructure([
+					{
+						key: "type",
+						validationStruct: new PrimitiveValidationStructure(new NumberInListValidationRule([
+							PriceProductConstraintType.BookableOnlyOnDaysFromWeek, PriceProductConstraintType.IncludeDaysFromWeek,
+							PriceProductConstraintType.MaximumLeadDays, PriceProductConstraintType.MinimumLeadDays,
+							PriceProductConstraintType.MinimumLengthOfStay, PriceProductConstraintType.MinimumNumberOfRooms,
+							PriceProductConstraintType.MustArriveOnDaysFromWeek, PriceProductConstraintType.MinimumNumberOfAdults
+						]))
+					},
+					{
+						key: "constraint",
+						validationStruct: new ObjectValidationStructure([])
+					}
+				]))
+			}
+		]);
+	}
 
 	public static getValidationStructure(): IValidationStructure {
 		var weekDayUtils = new ISOWeekDayUtils();
@@ -157,21 +196,25 @@ export class SavePriceProductItemDO {
 			},
 			{
 				key: "constraints",
+				validationStruct: SavePriceProductItemDO.getPriceProductConstraintWrapperValidationRule()
+			},
+			{
+				key: "discounts",
 				validationStruct: new ObjectValidationStructure([
 					{
-						key: "constraintList",
+						key: "discountList",
 						validationStruct: new ArrayValidationStructure(new ObjectValidationStructure([
 							{
-								key: "type",
-								validationStruct: new PrimitiveValidationStructure(new NumberInListValidationRule([
-									PriceProductConstraintType.BookableOnlyOnDaysFromWeek, PriceProductConstraintType.IncludeDaysFromWeek,
-									PriceProductConstraintType.MaximumLeadDays, PriceProductConstraintType.MinimumLeadDays,
-									PriceProductConstraintType.MinimumLengthOfStay, PriceProductConstraintType.MinimumNumberOfRooms,
-									PriceProductConstraintType.MustArriveOnDaysFromWeek, PriceProductConstraintType.MinimumNumberOfAdults]))
+								key: "name",
+								validationStruct: new PrimitiveValidationStructure(new StringValidationRule(100))
 							},
 							{
-								key: "constraint",
-								validationStruct: new ObjectValidationStructure([])
+								key: "value",
+								validationStruct: new PrimitiveValidationStructure(NumberValidationRule.buildPercentageNumberRule())
+							},
+							{
+								key: "constraints",
+								validationStruct: SavePriceProductItemDO.getPriceProductConstraintWrapperValidationRule()
 							}
 						]))
 					}
