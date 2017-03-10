@@ -19,7 +19,7 @@ export class PenaltyUtils {
 
         penaltyPrice.priceType = BookingPriceType.Penalty;
 
-        penaltyPrice.roomPricePerNightList = [];
+        penaltyPrice.roomPricePerNightList = bookingPrice.roomPricePerNightList;
         penaltyPrice.roomPricePerNightAvg = this._thUtils.roundNumberToTwoDecimals(penaltyPriceToPay);
         penaltyPrice.numberOfNights = 1;
         penaltyPrice.totalRoomPrice = penaltyPrice.roomPricePerNightAvg;

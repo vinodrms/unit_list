@@ -22,16 +22,14 @@ export class P5_AddTheRoomPricePerNightListOnBookingPrice extends ABookingGroupT
                 delete booking.price["roomPricePerNight"];
                 booking.price.roomPricePerNightList = [];
 
-                if (booking.price.priceType === BookingPriceType.BookingStay) {
-                    let priceList = [];
-                    for (var i = 0; i < booking.price.numberOfNights; i++) {
-                        priceList.push(booking.price.roomPricePerNightAvg);
-                    }
-                    let bookingInterval = new ThDateIntervalDO();
-                    bookingInterval.buildFromObject(booking.interval);
-                    let indexedBookingInterval = new IndexedBookingInterval(bookingInterval);
-                    booking.price.roomPricePerNightList = PricePerDayDO.buildPricePerDayList(indexedBookingInterval.bookingDateList, priceList);
+                let priceList = [];
+                for (var i = 0; i < booking.price.numberOfNights; i++) {
+                    priceList.push(booking.price.roomPricePerNightAvg);
                 }
+                let bookingInterval = new ThDateIntervalDO();
+                bookingInterval.buildFromObject(booking.interval);
+                let indexedBookingInterval = new IndexedBookingInterval(bookingInterval);
+                booking.price.roomPricePerNightList = PricePerDayDO.buildPricePerDayList(indexedBookingInterval.bookingDateList, priceList);
             }
         });
         bookingGroup.versionId++;
