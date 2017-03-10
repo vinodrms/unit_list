@@ -1,20 +1,20 @@
-import {ThError} from '../../../core/utils/th-responses/ThError';
-import {CustomerDO, CustomerStatus, CustomerType} from '../../../core/data-layer/customers/data-objects/CustomerDO';
-import {CustomerPriceProductDetailsDO} from '../../../core/data-layer/customers/data-objects/price-product-details/CustomerPriceProductDetailsDO';
-import {PriceProductAvailability} from '../../../core/data-layer/price-products/data-objects/PriceProductDO';
-import {TestContext} from '../../helpers/TestContext';
-import {ThUtils} from '../../../core/utils/ThUtils';
-import {IndividualDetailsDO} from '../../../core/data-layer/customers/data-objects/customer-details/individual/IndividualDetailsDO';
-import {CompanyDetailsDO} from '../../../core/data-layer/customers/data-objects/customer-details/corporate/CompanyDetailsDO';
-import {TravelAgencyDetailsDO} from '../../../core/data-layer/customers/data-objects/customer-details/corporate/TravelAgencyDetailsDO';
-import {BaseCorporateDetailsDO} from '../../../core/data-layer/customers/data-objects/customer-details/corporate/BaseCorporateDetailsDO';
-import {ICustomerDetailsDO} from '../../../core/data-layer/customers/data-objects/customer-details/ICustomerDetailsDO';
-import {CustomerItemAddStrategy} from '../../../core/domain-layer/customers/save-actions/strategies/CustomerItemAddStrategy';
-import {AddressDO} from '../../../core/data-layer/common/data-objects/address/AddressDO';
-import {CommissionDO, CommissionType} from '../../../core/data-layer/common/data-objects/commission/CommissionDO';
-import {ThDateDO} from '../../../core/utils/th-dates/data-objects/ThDateDO';
-import {PriceProductDO} from '../../../core/data-layer/price-products/data-objects/PriceProductDO';
-import {TestUtils} from '../../helpers/TestUtils';
+import { ThError } from '../../../core/utils/th-responses/ThError';
+import { CustomerDO, CustomerStatus, CustomerType } from '../../../core/data-layer/customers/data-objects/CustomerDO';
+import { CustomerPriceProductDetailsDO } from '../../../core/data-layer/customers/data-objects/price-product-details/CustomerPriceProductDetailsDO';
+import { PriceProductAvailability } from '../../../core/data-layer/price-products/data-objects/PriceProductDO';
+import { TestContext } from '../../helpers/TestContext';
+import { ThUtils } from '../../../core/utils/ThUtils';
+import { IndividualDetailsDO } from '../../../core/data-layer/customers/data-objects/customer-details/individual/IndividualDetailsDO';
+import { CompanyDetailsDO } from '../../../core/data-layer/customers/data-objects/customer-details/corporate/CompanyDetailsDO';
+import { TravelAgencyDetailsDO } from '../../../core/data-layer/customers/data-objects/customer-details/corporate/TravelAgencyDetailsDO';
+import { BaseCorporateDetailsDO } from '../../../core/data-layer/customers/data-objects/customer-details/corporate/BaseCorporateDetailsDO';
+import { ICustomerDetailsDO } from '../../../core/data-layer/customers/data-objects/customer-details/ICustomerDetailsDO';
+import { CustomerItemAddStrategy } from '../../../core/domain-layer/customers/save-actions/strategies/CustomerItemAddStrategy';
+import { AddressDO } from '../../../core/data-layer/common/data-objects/address/AddressDO';
+import { CommissionDO, CommissionType } from '../../../core/data-layer/common/data-objects/commission/CommissionDO';
+import { ThDateDO } from '../../../core/utils/th-dates/data-objects/ThDateDO';
+import { PriceProductDO } from '../../../core/data-layer/price-products/data-objects/PriceProductDO';
+import { TestUtils } from '../../helpers/TestUtils';
 
 export interface ICustomerDataSource {
 	getCustomerList(): CustomerDO[];
@@ -108,6 +108,7 @@ export class DefaultCustomerBuilder implements ICustomerDataSource {
 		details.phone = "217893129371";
 		details.vatCode = "RO34121562";
 		details.websiteUrl = "www.3angle.tech";
+		details.receiveBookingConfirmations = true;
 		return details;
 	}
 
