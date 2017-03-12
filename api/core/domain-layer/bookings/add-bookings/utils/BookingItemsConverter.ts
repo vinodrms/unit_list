@@ -90,7 +90,13 @@ export class BookingItemsConverter {
             bookingDO.bookingReference = this.generateIndividualBookingReference();
             bookingDO.confirmationStatus = BookingConfirmationStatus.Confirmed;
             bookingDO.customerIdList = bookingItem.customerIdList;
+            
             bookingDO.defaultBillingDetails = bookingItem.defaultBillingDetails;
+            if(this._thUtils.isUndefinedOrNull(bookingDO.defaultBillingDetails.customerIdDisplayedAsGuest)) {
+                bookingDO.defaultBillingDetails.customerIdDisplayedAsGuest = 
+                    bookingDO.defaultBillingDetails.customerId;
+            }
+
             bookingDO.roomCategoryId = bookingItem.roomCategoryId;
             bookingDO.priceProductId = bookingItem.priceProductId;
             bookingDO.reservedAddOnProductIdList = [];
