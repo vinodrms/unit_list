@@ -35,7 +35,7 @@ body,html {
     color: #0b2139;
     font-family: 'Roboto', sans-serif;
     /*font-family: 'Open Sans', sans-serif;*/
-    font-size: 14px;
+    font-size: 13px;
     overflow: hidden;
 }
 
@@ -2175,6 +2175,10 @@ a.btn.btn-square:focus {
 }
 
 .unread-notification {
+    font-weight: bold;
+}
+
+.bold-text {
     font-weight: bold;
 }
 

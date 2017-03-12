@@ -1,25 +1,25 @@
-import {DefaultDataBuilder} from '../../../../db-initializers/DefaultDataBuilder';
-import {TestContext} from '../../../../helpers/TestContext';
-import {TestUtils} from '../../../../helpers/TestUtils';
-import {DefaultPriceProductBuilder} from '../../../../db-initializers/builders/DefaultPriceProductBuilder';
-import {SavePriceProductItemDO} from '../../../../../core/domain-layer/price-products/SavePriceProductItemDO';
-import {SavePriceProductItemPriceDO} from '../../../../../core/domain-layer/price-products/validation-structures/SavePriceProductItemPriceDO';
-import {PriceProductStatus, PriceProductAvailability} from '../../../../../core/data-layer/price-products/data-objects/PriceProductDO';
-import {PriceProductYieldFilterMetaDO} from '../../../../../core/data-layer/price-products/data-objects/yield-filter/PriceProductYieldFilterDO';
-import {PriceProductPriceType} from '../../../../../core/data-layer/price-products/data-objects/price/IPriceProductPrice';
-import {PriceProductCancellationPolicyType} from '../../../../../core/data-layer/price-products/data-objects/conditions/cancellation/IPriceProductCancellationPolicy';
-import {PriceProductCancellationPenaltyType} from '../../../../../core/data-layer/price-products/data-objects/conditions/penalty/IPriceProductCancellationPenalty';
-import {PriceProductIncludedItemsDO} from '../../../../../core/data-layer/price-products/data-objects/included-items/PriceProductIncludedItemsDO';
-import {AttachedAddOnProductItemDO} from '../../../../../core/data-layer/price-products/data-objects/included-items/AttachedAddOnProductItemDO';
-import {AttachedAddOnProductItemStrategyType} from '../../../../../core/data-layer/price-products/data-objects/included-items/IAttachedAddOnProductItemStrategy';
-import {OneItemPerDayAttachedAddOnProductItemStrategyDO} from '../../../../../core/data-layer/price-products/data-objects/included-items/strategies/OneItemPerDayAttachedAddOnProductItemStrategyDO';
-import {AddOnProductDO} from '../../../../../core/data-layer/add-on-products/data-objects/AddOnProductDO';
-import {AddOnProductSnapshotDO} from '../../../../../core/data-layer/add-on-products/data-objects/AddOnProductSnapshotDO';
-import {YieldFilterDO} from '../../../../../core/data-layer/common/data-objects/yield-filter/YieldFilterDO';
-import {RoomCategoryStatsAggregator} from '../../../../../core/domain-layer/room-categories/aggregators/RoomCategoryStatsAggregator';
-import {RoomCategoryStatsDO} from '../../../../../core/data-layer/room-categories/data-objects/RoomCategoryStatsDO';
-import {PriceProductConstraintType} from '../../../../../core/data-layer/price-products/data-objects/constraint/IPriceProductConstraint';
-import {ISOWeekDay} from '../../../../../core/utils/th-dates/data-objects/ISOWeekDay';
+import { DefaultDataBuilder } from '../../../../db-initializers/DefaultDataBuilder';
+import { TestContext } from '../../../../helpers/TestContext';
+import { TestUtils } from '../../../../helpers/TestUtils';
+import { DefaultPriceProductBuilder } from '../../../../db-initializers/builders/DefaultPriceProductBuilder';
+import { SavePriceProductItemDO } from '../../../../../core/domain-layer/price-products/SavePriceProductItemDO';
+import { SavePriceProductItemPriceDO } from '../../../../../core/domain-layer/price-products/validation-structures/SavePriceProductItemPriceDO';
+import { PriceProductStatus, PriceProductAvailability } from '../../../../../core/data-layer/price-products/data-objects/PriceProductDO';
+import { PriceProductYieldFilterMetaDO } from '../../../../../core/data-layer/price-products/data-objects/yield-filter/PriceProductYieldFilterDO';
+import { PriceProductPriceType } from '../../../../../core/data-layer/price-products/data-objects/price/IPriceProductPrice';
+import { PriceProductCancellationPolicyType } from '../../../../../core/data-layer/price-products/data-objects/conditions/cancellation/IPriceProductCancellationPolicy';
+import { PriceProductCancellationPenaltyType } from '../../../../../core/data-layer/price-products/data-objects/conditions/penalty/IPriceProductCancellationPenalty';
+import { PriceProductIncludedItemsDO } from '../../../../../core/data-layer/price-products/data-objects/included-items/PriceProductIncludedItemsDO';
+import { AttachedAddOnProductItemDO } from '../../../../../core/data-layer/price-products/data-objects/included-items/AttachedAddOnProductItemDO';
+import { AttachedAddOnProductItemStrategyType } from '../../../../../core/data-layer/price-products/data-objects/included-items/IAttachedAddOnProductItemStrategy';
+import { OneItemPerDayAttachedAddOnProductItemStrategyDO } from '../../../../../core/data-layer/price-products/data-objects/included-items/strategies/OneItemPerDayAttachedAddOnProductItemStrategyDO';
+import { AddOnProductDO } from '../../../../../core/data-layer/add-on-products/data-objects/AddOnProductDO';
+import { AddOnProductSnapshotDO } from '../../../../../core/data-layer/add-on-products/data-objects/AddOnProductSnapshotDO';
+import { YieldFilterDO } from '../../../../../core/data-layer/common/data-objects/yield-filter/YieldFilterDO';
+import { RoomCategoryStatsAggregator } from '../../../../../core/domain-layer/room-categories/aggregators/RoomCategoryStatsAggregator';
+import { RoomCategoryStatsDO } from '../../../../../core/data-layer/room-categories/data-objects/RoomCategoryStatsDO';
+import { PriceProductConstraintType } from '../../../../../core/data-layer/price-products/data-objects/constraint/IPriceProductConstraint';
+import { ISOWeekDay } from '../../../../../core/utils/th-dates/data-objects/ISOWeekDay';
 
 export class PriceProductsHelper {
 	private _testUtils: TestUtils;
@@ -133,6 +133,44 @@ export class PriceProductsHelper {
 						type: PriceProductConstraintType.MinimumNumberOfAdults,
 						constraint: {
 							noOfAdults: 1
+						}
+					}
+				]
+			},
+			discounts: {
+				discountList: [
+					{
+						name: "Discount 1",
+						value: 0.1,
+						constraints: {
+							constraintList: [
+								{
+									type: PriceProductConstraintType.MinimumLeadDays,
+									constraint: {
+										leadDays: 0
+									}
+								},
+								{
+									type: PriceProductConstraintType.MinimumNumberOfAdults,
+									constraint: {
+										noOfAdults: 1
+									}
+								}
+							]
+						}
+					},
+					{
+						name: "Discount 2",
+						value: 0.08,
+						constraints: {
+							constraintList: [
+								{
+									type: PriceProductConstraintType.MinimumLengthOfStay,
+									constraint: {
+										lengthOfStay: 7
+									}
+								}
+							]
 						}
 					}
 				]

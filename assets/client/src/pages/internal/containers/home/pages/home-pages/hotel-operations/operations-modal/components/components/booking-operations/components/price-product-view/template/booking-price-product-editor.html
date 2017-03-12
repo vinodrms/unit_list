@@ -23,7 +23,15 @@
             <p>{{'Charge' | translate}}</p>
         </div>
         <div class="col-xs-12 field-value text-field padding-top-5px" [ngClass]="{'col-sm-5': !isPenaltyPrice, 'col-sm-2': isPenaltyPrice}">
-            <p><b>{{currencySymbolString}} {{totalPrice}}:</b> {{'Room' | translate}} {{currencySymbolString}}{{totalRoomPrice}} / {{ 'Others' | translate }} {{currencySymbolString}}{{totalOtherPrice}}</p>
+            <p><b>{{currencySymbolString}} {{totalPrice}}:</b> 
+            {{'Room' | translate}} {{currencySymbolString}}{{totalRoomPrice}} 
+            <i class="fa fa-tags clickable-item" 
+                *ngIf="hasDiscount()" 
+                (click)="openDiscountInformAlert()"
+                title="{{ 'A discount of %discountValue% has been applied on the room\'s price' | translate:{discountValue: discountValueString} }}"
+                >
+            </i>
+            / {{ 'Others' | translate }} {{currencySymbolString}}{{totalOtherPrice}}</p>
         </div>
         <div class="col-xs-12 col-sm-3 field-value text-field padding-top-5px" *ngIf="isPenaltyPrice">
             <span class="operational-important-field"> <i class="fa unitpal-font">+</i> {{'Penalty' | translate}}</span>

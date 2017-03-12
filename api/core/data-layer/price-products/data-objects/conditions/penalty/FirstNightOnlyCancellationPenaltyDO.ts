@@ -1,8 +1,8 @@
-import {BaseDO} from '../../../../common/base/BaseDO';
-import {IPriceProductCancellationPenalty} from './IPriceProductCancellationPenalty';
-import {ThTranslation} from '../../../../../utils/localization/ThTranslation';
-import {BookingPriceDO, BookingPriceType} from '../../../../bookings/data-objects/price/BookingPriceDO';
-import {PenaltyUtils} from './utils/PenaltyUtils';
+import { BaseDO } from '../../../../common/base/BaseDO';
+import { IPriceProductCancellationPenalty } from './IPriceProductCancellationPenalty';
+import { ThTranslation } from '../../../../../utils/localization/ThTranslation';
+import { BookingPriceDO, BookingPriceType } from '../../../../bookings/data-objects/price/BookingPriceDO';
+import { PenaltyUtils } from './utils/PenaltyUtils';
 
 export class FirstNightOnlyCancellationPenaltyDO extends BaseDO implements IPriceProductCancellationPenalty {
 	protected getPrimitivePropertyKeys(): string[] {
@@ -19,10 +19,18 @@ export class FirstNightOnlyCancellationPenaltyDO extends BaseDO implements IPric
 		return thTranslation.translate("Pay first night");
 	}
 	public computePenaltyPrice(bookingPrice: BookingPriceDO): BookingPriceDO {
-		var penaltyPriceToPay = 0.0;
-		if (bookingPrice.numberOfNights > 0) {
-			penaltyPriceToPay = bookingPrice.totalBookingPrice / bookingPrice.numberOfNights;
+		var roomPriceForFirstNight = bookingPrice.roomPricePerNightAvg;
+		if (bookingPrice.roomPricePerNightList.length > 0) {
+			roomPriceForFirstNight = bookingPrice.roomPricePerNightList[0].price;
 		}
+
+		var totalOtherPriceForFirstNight = 0.0;
+		if (bookingPrice.numberOfNights > 0) {
+			totalOtherPriceForFirstNight = bookingPrice.totalOtherPrice / bookingPrice.numberOfNights;
+		}
+
+		let penaltyPriceToPay = roomPriceForFirstNight + totalOtherPriceForFirstNight;
+
 		var penaltyUtils = new PenaltyUtils();
 		return penaltyUtils.getPenaltyPrice(bookingPrice, penaltyPriceToPay);
 	}

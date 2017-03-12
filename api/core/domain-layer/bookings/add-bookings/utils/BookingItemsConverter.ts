@@ -72,6 +72,7 @@ export class BookingItemsConverter {
         var hotelId = this._sessionContext.sessionDO.hotel.id;
         var groupBookingStatus = GroupBookingStatus.Active;
         var noOfRooms = this._bookingItems.bookingList.length;
+        let groupBookingRoomCategoryIdList = this.getRoomCategoryIdListWithinGroupBooking();
 
         _.forEach(this._bookingItems.bookingList, (bookingItem: BookingItemDO) => {
             var bookingDO = new BookingDO();
@@ -124,7 +125,7 @@ export class BookingItemsConverter {
                 hotel: this._converterParams.hotelDO,
                 currentHotelTimestamp: this._converterParams.currentHotelTimestamp
             });
-            this._bookingUtils.updateBookingPriceUsingRoomCategory(bookingDO, this._converterParams.roomCategoryStatsList);
+            this._bookingUtils.updateBookingPriceUsingRoomCategory(bookingDO, this._converterParams.roomCategoryStatsList, groupBookingRoomCategoryIdList);
             this._bookingUtils.updateIndexedSearchTerms(bookingDO, this._converterParams.customersContainer);
             this._bookingUtils.updateDisplayCustomerId(bookingDO, this._converterParams.customersContainer);
             bookingDO.price.vatId = this.getBookingTaxId(priceProduct);
@@ -132,6 +133,9 @@ export class BookingItemsConverter {
             bookingList.push(bookingDO);
         });
         resolve(bookingList);
+    }
+    private getRoomCategoryIdListWithinGroupBooking(): string[] {
+        return _.map(this._bookingItems.bookingList, bookingItem => { return bookingItem.roomCategoryId; })
     }
     private getBookingTaxId(priceProduct: PriceProductDO): string {
         var filteredTaxList: TaxDO[] = _.filter(this._converterParams.vatTaxList, (tax: TaxDO) => {

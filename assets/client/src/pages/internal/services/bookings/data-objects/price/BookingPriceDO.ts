@@ -22,6 +22,7 @@ export class BookingPriceDO extends BaseDO implements IInvoiceItemMeta {
     totalOtherPrice: number;
 
     totalBookingPrice: number;
+    appliedDiscountValue: number;
 
     vatId: string;
 
@@ -30,7 +31,7 @@ export class BookingPriceDO extends BaseDO implements IInvoiceItemMeta {
     includedInvoiceItemList: InvoiceItemDO[];
 
     protected getPrimitivePropertyKeys(): string[] {
-        return ["movable", "priceType", "roomPricePerNightAvg", "numberOfNights", "totalRoomPrice", "totalOtherPrice", "totalBookingPrice", "vatId", "description"];
+        return ["movable", "priceType", "roomPricePerNightAvg", "numberOfNights", "totalRoomPrice", "totalOtherPrice", "totalBookingPrice", "appliedDiscountValue", "vatId", "description"];
     }
     public buildFromObject(object: Object) {
         super.buildFromObject(object);
@@ -94,9 +95,13 @@ export class BookingPriceDO extends BaseDO implements IInvoiceItemMeta {
         return this.priceType === BookingPriceType.Penalty;
     }
 
-    public hasBreakfast() {
+    public hasBreakfast(): boolean {
         var thUtils = new ThUtils();
         return !thUtils.isUndefinedOrNull(this.breakfast) && !thUtils.isUndefinedOrNull(this.breakfast.id);
+    }
+
+    public hasDiscount(): boolean {
+        return this.appliedDiscountValue > 0.0;
     }
 
     public isMovable(): boolean {

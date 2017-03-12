@@ -1,8 +1,8 @@
-import {BaseDO} from '../../../../../../../common/base/BaseDO';
-import {ISOWeekDay, ISOWeekDayVM, ISOWeekDayUtils} from '../../../../common/data-objects/th-dates/ISOWeekDay';
-import {IPriceProductConstraint} from '../IPriceProductConstraint';
-import {IAllotmentConstraint} from '../../../../allotments/data-objects/constraint/IAllotmentConstraint';
-import {ThTranslation} from '../../../../../../../common/utils/localization/ThTranslation';
+import { BaseDO } from '../../../../../../../common/base/BaseDO';
+import { ISOWeekDay, ISOWeekDayVM, ISOWeekDayUtils } from '../../../../common/data-objects/th-dates/ISOWeekDay';
+import { IPriceProductConstraint } from '../IPriceProductConstraint';
+import { IAllotmentConstraint } from '../../../../allotments/data-objects/constraint/IAllotmentConstraint';
+import { ThTranslation } from '../../../../../../../common/utils/localization/ThTranslation';
 
 export class DaysFromWeekConstraintDO extends BaseDO implements IPriceProductConstraint, IAllotmentConstraint {
 	private static MaxWeekDayStringLength: number = 3;

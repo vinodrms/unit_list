@@ -1,32 +1,33 @@
-import {Component, Input, Output, EventEmitter, AfterViewInit, ViewChild} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
-import {Subscription} from 'rxjs/Subscription';
+import { Component, Input, Output, EventEmitter, AfterViewInit, ViewChild } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/observable/combineLatest';
-import {BaseComponent} from '../../../../../../../../../common/base/BaseComponent';
-import {AppContext, ThError} from '../../../../../../../../../common/utils/AppContext';
-import {CustomScroll} from '../../../../../../../../../common/utils/directives/CustomScroll';
-import {PriceProductVM} from '../../../../../../../services/price-products/view-models/PriceProductVM';
-import {PriceProductDO, PriceProductStatus} from '../../../../../../../services/price-products/data-objects/PriceProductDO';
-import {PriceProductsService} from '../../../../../../../services/price-products/PriceProductsService';
-import {YieldFiltersService} from '../../../../../../../services/hotel-configurations/YieldFiltersService';
-import {EagerAddOnProductsService} from '../../../../../../../services/add-on-products/EagerAddOnProductsService';
-import {AddOnProductsDO} from '../../../../../../../services/add-on-products/data-objects/AddOnProductsDO';
-import {HotelAggregatorService} from '../../../../../../../services/hotel/HotelAggregatorService';
-import {HotelAggregatedInfo} from '../../../../../../../services/hotel/utils/HotelAggregatedInfo';
-import {RoomCategoryDO} from '../../../../../../../services/room-categories/data-objects/RoomCategoryDO';
-import {PriceProductEditSectionContainer} from './utils/PriceProductEditSectionContainer';
-import {PriceProductEditTopSectionComponent} from '../sections/top-section/PriceProductEditTopSectionComponent';
-import {PriceProductEditRoomCategoriesSectionComponent} from '../sections/room-categories/PriceProductEditRoomCategoriesSectionComponent';
-import {PriceProductEditAddOnProductsSectionComponent} from '../sections/add-on-products/PriceProductEditAddOnProductsSectionComponent';
-import {PriceProductEditTaxesSectionComponent} from '../sections/taxes/PriceProductEditTaxesSectionComponent';
-import {PriceProductEditPricesSectionComponent} from '../sections/prices/PriceProductEditPricesSectionComponent';
-import {PriceProductEditFiltersSectionComponent} from '../sections/filters/PriceProductEditFiltersSectionComponent';
-import {PriceProductEditCancellationSectionComponent} from '../sections/cancellation/PriceProductEditCancellationSectionComponent';
-import {PriceProductEditConstraintsSectionComponent} from '../sections/constraints/constraints-list/PriceProductEditConstraintsSectionComponent';
-import {PriceProductEditNotesSectionComponent} from '../sections/notes/PriceProductEditNotesSectionComponent';
-import {AddOnProductCategoriesService} from '../../../../../../../services/settings/AddOnProductCategoriesService';
-import {AddOnProductCategoriesDO} from '../../../../../../../services/settings/data-objects/AddOnProductCategoriesDO';
-import {AddOnProductCategoryDO} from '../../../../../../../services/common/data-objects/add-on-product/AddOnProductCategoryDO';
+import { BaseComponent } from '../../../../../../../../../common/base/BaseComponent';
+import { AppContext, ThError } from '../../../../../../../../../common/utils/AppContext';
+import { CustomScroll } from '../../../../../../../../../common/utils/directives/CustomScroll';
+import { PriceProductVM } from '../../../../../../../services/price-products/view-models/PriceProductVM';
+import { PriceProductDO, PriceProductStatus } from '../../../../../../../services/price-products/data-objects/PriceProductDO';
+import { PriceProductsService } from '../../../../../../../services/price-products/PriceProductsService';
+import { YieldFiltersService } from '../../../../../../../services/hotel-configurations/YieldFiltersService';
+import { EagerAddOnProductsService } from '../../../../../../../services/add-on-products/EagerAddOnProductsService';
+import { AddOnProductsDO } from '../../../../../../../services/add-on-products/data-objects/AddOnProductsDO';
+import { HotelAggregatorService } from '../../../../../../../services/hotel/HotelAggregatorService';
+import { HotelAggregatedInfo } from '../../../../../../../services/hotel/utils/HotelAggregatedInfo';
+import { RoomCategoryDO } from '../../../../../../../services/room-categories/data-objects/RoomCategoryDO';
+import { PriceProductEditSectionContainer } from './utils/PriceProductEditSectionContainer';
+import { PriceProductEditTopSectionComponent } from '../sections/top-section/PriceProductEditTopSectionComponent';
+import { PriceProductEditRoomCategoriesSectionComponent } from '../sections/room-categories/PriceProductEditRoomCategoriesSectionComponent';
+import { PriceProductEditAddOnProductsSectionComponent } from '../sections/add-on-products/PriceProductEditAddOnProductsSectionComponent';
+import { PriceProductEditTaxesSectionComponent } from '../sections/taxes/PriceProductEditTaxesSectionComponent';
+import { PriceProductEditPricesSectionComponent } from '../sections/prices/PriceProductEditPricesSectionComponent';
+import { PriceProductEditFiltersSectionComponent } from '../sections/filters/PriceProductEditFiltersSectionComponent';
+import { PriceProductEditCancellationSectionComponent } from '../sections/cancellation/PriceProductEditCancellationSectionComponent';
+import { PriceProductEditConstraintsSectionComponent } from '../sections/constraints/constraints-list/PriceProductEditConstraintsSectionComponent';
+import { PriceProductEditDiscountsSectionComponent } from '../sections/discounts/PriceProductEditDiscountsSectionComponent';
+import { PriceProductEditNotesSectionComponent } from '../sections/notes/PriceProductEditNotesSectionComponent';
+import { AddOnProductCategoriesService } from '../../../../../../../services/settings/AddOnProductCategoriesService';
+import { AddOnProductCategoriesDO } from '../../../../../../../services/settings/data-objects/AddOnProductCategoriesDO';
+import { AddOnProductCategoryDO } from '../../../../../../../services/common/data-objects/add-on-product/AddOnProductCategoryDO';
 
 @Component({
 	selector: 'price-product-edit-container',
@@ -42,6 +43,7 @@ export class PriceProductEditContainerComponent extends BaseComponent implements
 	@ViewChild(PriceProductEditFiltersSectionComponent) private _editFiltersSection: PriceProductEditFiltersSectionComponent;
 	@ViewChild(PriceProductEditCancellationSectionComponent) private _editCancellationSection: PriceProductEditCancellationSectionComponent;
 	@ViewChild(PriceProductEditConstraintsSectionComponent) private _editConstraintsSection: PriceProductEditConstraintsSectionComponent;
+	@ViewChild(PriceProductEditDiscountsSectionComponent) private _editDiscountsSection: PriceProductEditDiscountsSectionComponent;
 	@ViewChild(PriceProductEditNotesSectionComponent) private _editNotesSection: PriceProductEditNotesSectionComponent;
 
 	private _didInit = false;
@@ -89,6 +91,7 @@ export class PriceProductEditContainerComponent extends BaseComponent implements
 					this._editFiltersSection,
 					this._editCancellationSection,
 					this._editConstraintsSection,
+					this._editDiscountsSection,
 					this._editNotesSection
 				]
 			);

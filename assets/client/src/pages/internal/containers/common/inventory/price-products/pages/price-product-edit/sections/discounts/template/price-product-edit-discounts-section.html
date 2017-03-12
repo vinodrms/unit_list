@@ -1,0 +1,69 @@
+<div class="col-md-6 col-sm-12">
+	<div class="row">
+		<div class="col-xs-12 form-group">
+			<label>{{ 'Booking discounts' | translate }}</label>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12">
+			<small class="text-muted" *ngIf="!isPricePerNumberOfPersons">
+				<i class="fa fa-info-circle"></i> {{ 'Discounts that apply if all their conditions are met' | translate }} 
+			</small>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-xs-12" *ngFor="let discountVM of discountContainer.discountVMList">
+			<div class="price-product-box">
+				<div class="row">
+					<div class="col-xs-8">
+						<p class="bold-text">{{ discountVM.name | translate }}</p>
+					</div>
+					<div class="col-xs-2">
+						<p class="bold-text">{{ discountVM.value | percentage }}</p>
+					</div>
+					<div class="col-xs-2" *ngIf="!readonly">
+						<a class="btn btn-xs bold-text" (click)="removeDiscount(discountVM)"  title="{{ 'Remove' | translate }}">
+							<i class="fa unitpal-font">\</i>
+						</a>
+					</div>
+				</div>
+
+				<div class="row" *ngFor="let constraintVM of discountVM.constraintContainer.constraintVMList">
+					<div class="col-xs-10">
+						<p>
+							{{ constraintVM.displayTitle | translate }} 
+							<br>
+							<small class="gray-color">{{ constraintVM.displayValue }}</small>
+						</p>
+					</div>
+					<div class="col-xs-2" *ngIf="!readonly">
+						<a class="btn btn-xs bold-text" (click)="discountVM.constraintContainer.removeConstraint(constraintVM)"  title="{{ 'Remove' | translate }}">
+							<i class="fa unitpal-font">\</i>
+						</a>
+					</div>
+				</div>
+
+				<div class="row" *ngIf="discountVM.constraintContainer.isEmpty()">
+					<div class="col-xs-12">
+						<small class="gray-color">
+							{{ 'No constraints. The discount will apply to all the bookings made on this Price Product.' }}
+						</small>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-xs-12" *ngIf="discountContainer.isEmpty()">
+			<div class="price-product-box">
+				<small class="gray-color">
+					{{ 'No discounts.' }}
+				</small>
+			</div>
+		</div>
+		<div class="col-xs-12" *ngIf="!readonly">
+			<a class="btn btn-xs" (click)="openDiscountsModal()">
+				<i class="fa unitpal-font">'</i> {{ 'Add' | translate }}
+			</a>
+		</div>
+	</div>	
+</div>

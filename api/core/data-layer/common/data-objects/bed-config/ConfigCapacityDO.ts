@@ -22,4 +22,8 @@ export class ConfigCapacityDO extends BaseDO {
         configCapacity.noBabyBeds = this.noBabyBeds;
         return configCapacity;
     }
+
+    public getNoAdultsAndChildren(): number {
+        return this.noAdults + this.noChildren;
+    }
 }

@@ -204,11 +204,11 @@ export class InvoiceConfirmationVMContainer {
             return false;
         }
         let bookingPrice: BookingPriceDO = <BookingPriceDO>invoiceItemDO.meta;
-        return bookingPrice.roomPricePerNightList.length > 0;
+        return !bookingPrice.isPenalty();
     }
     private getBookingDateBreakdownItems(bookingPrice: BookingPriceDO): InvoiceItemVM[] {
         let invoiceItemVMList: InvoiceItemVM[] = [];
-        bookingPrice.roomPricePerNightList.forEach((pricePerDay: PricePerDayDO​​) => {
+        bookingPrice.roomPricePerNightList.forEach((pricePerDay: PricePerDayDO) => {
             let aopItem = new AddOnProductInvoiceItemMetaDO();
             aopItem.aopDisplayName = this._thTranslation.translate("Accomodation for %date%", { date: pricePerDay.thDate.toString() });
             aopItem.numberOfItems = 1;
@@ -230,11 +230,11 @@ export class InvoiceConfirmationVMContainer {
     private initPaymentMethodLabelsAndValues() {
         this.paymentMethodLabel = this._thTranslation.translate('Payment Method');
 
-        if(this._invoice.paymentStatus === InvoicePaymentStatus.LossAcceptedByManagement) {
+        if (this._invoice.paymentStatus === InvoicePaymentStatus.LossAcceptedByManagement) {
             this.paymentMethodValue = this._thTranslation.translate(InvoiceConfirmationVMContainer.LOSS_ACCEPTED_BY_MANAGEMENT_STR);
             return;
         }
-        
+
         if (this._invoice.payerList[this.payerIndex].paymentMethod.type === InvoicePaymentMethodType.DefaultPaymentMethod) {
             this.paymentMethodValue = _.find(this._paymentMethodList, (pm: PaymentMethodDO) => {
                 return pm.id === this._invoice.payerList[this.payerIndex].paymentMethod.value;
