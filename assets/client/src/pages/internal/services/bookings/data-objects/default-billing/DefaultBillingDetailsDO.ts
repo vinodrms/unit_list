@@ -3,11 +3,12 @@ import {InvoicePaymentMethodDO} from '../../../invoices/data-objects/payers/Invo
 
 export class DefaultBillingDetailsDO extends BaseDO {
     customerId: string;
+    customerIdDisplayedAsGuest: string;
     paymentGuarantee: boolean;
     paymentMethod: InvoicePaymentMethodDO;
 
     protected getPrimitivePropertyKeys(): string[] {
-        return ["customerId", "paymentGuarantee"];
+        return ["customerId", "customerIdDisplayedAsGuest", "paymentGuarantee"];
     }
 
     public buildFromObject(object: Object) {
