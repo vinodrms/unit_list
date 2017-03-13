@@ -809,5 +809,9 @@ export var EnglishTranslations: Object = {
 	"Are you sure you want to undo the check in? This will move the booking back to the arrivals pane.": "Are you sure you want to undo the check in? This will move the booking back to the arrivals pane.",
 	"When a company/travel agent on a booking has booking confirmations disabled, booking confirmations are blocked for that booking.": "When a company/travel agent on a booking has booking confirmations disabled, booking confirmations are blocked for that booking.",
 	"Billed customer": "Billed customer",
-	"Guest on invoice": "Guest on invoice"
+	"Guest on invoice": "Guest on invoice",
+	"Additional price for": "Additional price for",
+	"adult": "adult",
+	"child": "child",
+		
 };
