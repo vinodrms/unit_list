@@ -23,6 +23,6 @@ export class AllotmentsBuilderStrategy extends AMetricBuilderStrategy {
         return metric;
     }
     protected getKeyMetricDisplayName(): string {
-        return "Allotments";
+        return "Allotments Total";
     }
 }

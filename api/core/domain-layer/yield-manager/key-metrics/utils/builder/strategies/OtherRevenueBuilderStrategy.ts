@@ -23,6 +23,6 @@ export class OtherRevenueBuilderStrategy extends AMetricBuilderStrategy {
         return metric;
     }
     protected getKeyMetricDisplayName(): string {
-        return "Other Revenue";
+        return "Other Revenue Total";
     }
 }
