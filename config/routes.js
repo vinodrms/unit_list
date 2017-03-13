@@ -142,6 +142,7 @@ module.exports.routes = {
 	'POST /api/hotelOperations/booking/changeCapacity': 'HotelBookingOperationsController.changeCapacity',
 	'POST /api/hotelOperations/booking/addPaymentGuarantee': 'HotelBookingOperationsController.addPaymentGuarantee',
 	'POST /api/hotelOperations/booking/changeDetails': 'HotelBookingOperationsController.changeDetails',
+	'POST /api/hotelOperations/booking/changeGuestCustomerDisplayedOnInvoice': 'HotelBookingOperationsController.changeGuestCustomerDisplayedOnInvoice',
 	'POST /api/hotelOperations/booking/changeCustomers': 'HotelBookingOperationsController.changeCustomers',
 	'POST /api/hotelOperations/booking/cancel': 'HotelBookingOperationsController.cancel',
 	'POST /api/hotelOperations/booking/reactivate': 'HotelBookingOperationsController.reactivate',

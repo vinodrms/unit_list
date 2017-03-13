@@ -73,6 +73,14 @@ export class HotelOperationsBookingService {
         );
     }
 
+    public changeGuestOnInvoice(booking: any): Observable<BookingDO> {
+        return this.mapToBookingObservable(
+            this._appContext.thHttp.post(ThServerApi.HotelOperationsBookingChangeGuestOnInvoice, {
+                booking: booking
+            })
+        );
+    }
+
     public changeCustomers(booking: BookingDO): Observable<BookingDO> {
         return this.mapToBookingObservable(
             this._appContext.thHttp.post(ThServerApi.HotelOperationsBookingChangeCustomers, {
