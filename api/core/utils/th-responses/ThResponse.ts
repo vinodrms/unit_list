@@ -471,6 +471,10 @@ export enum ThStatusCode {
 	HotelBookingOperationsControllerErrorChangingDetails,
 	BookingChangeCustomersInvalidState,
 	BookingChangeCustomersError,
+	HotelBookingOperationsControllerErrorChangingGuestOnInvoice,
+	BookingChangeGuestOnInvoiceInvalidState,
+	BookingChangeGuestOnInvoiceGuestNotOnBooking,
+	BookingChangeGuestOnInvoiceError,
 	BookingChangeCustomersBilledCustomerMisssing,
 	HotelBookingOperationsControllerErrorChangingCustomers,
 	BookingCancelInvalidState,
@@ -972,7 +976,11 @@ ThMessage[ThStatusCode.BookingChangeDetailsInvalidState] = "You cannot change de
 ThMessage[ThStatusCode.BookingChangeDetailsError] = "Error changing booking details.";
 ThMessage[ThStatusCode.HotelBookingOperationsControllerErrorChangingDetails] = "Error changing booking details.";
 ThMessage[ThStatusCode.BookingChangeCustomersInvalidState] = "The customers can be changed only for checked in, confirmed or guaranteed bookings.";
+ThMessage[ThStatusCode.HotelBookingOperationsControllerErrorChangingGuestOnInvoice] = "Error changing guest displayed on invoice.";
+ThMessage[ThStatusCode.BookingChangeGuestOnInvoiceInvalidState] = "The guest displayed on invoice can be changed only for checked in, confirmed or guaranteed bookings.";
+ThMessage[ThStatusCode.BookingChangeGuestOnInvoiceGuestNotOnBooking] = "The guest displayed on invoice should already be on the booking.";
 ThMessage[ThStatusCode.BookingChangeCustomersError] = "Error changing customers from booking.";
+ThMessage[ThStatusCode.BookingChangeGuestOnInvoiceError] = "Error changing guest displayed on invoice.";
 ThMessage[ThStatusCode.BookingChangeCustomersBilledCustomerMisssing] = "The billed customer is missing from the list.";
 ThMessage[ThStatusCode.HotelBookingOperationsControllerErrorChangingCustomers] = "Error changing customers from booking.";
 ThMessage[ThStatusCode.BookingCancelInvalidState] = "Only confirmed, guaranteed or no show bookings can be cancelled.";

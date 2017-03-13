@@ -69,7 +69,14 @@ export class BookingCustomerEditorComponent implements OnInit {
     public isBilledCustomer(customer: CustomerDO): boolean {
         return this.bookingDO.defaultBillingDetails.customerId === customer.id;
     }
-
+    public isDisplayedOnInvoiceAsGuest(customer: CustomerDO): boolean {
+        return this.bookingDO.defaultBillingDetails.customerIdDisplayedAsGuest === customer.id;
+    }
+    public onSelectionChange(selectedCustomer: CustomerDO) {
+        this.bookingDO.defaultBillingDetails.customerIdDisplayedAsGuest = selectedCustomer.id;
+        this._didMakeChanges = true;
+    }
+    
     public goToCustomer(customer: CustomerDO) {
         this._operationsPageControllerService.goToCustomer(customer.id);
     }
@@ -108,7 +115,6 @@ export class BookingCustomerEditorComponent implements OnInit {
             this._appContext.toaster.error(errorMessage);
         }
     }
-
     public removeCustomer(customer: CustomerDO) {
         if (this.isBilledCustomer(customer)) { return; }
         this.customerContainer.removeCustomer(customer);
@@ -126,9 +132,22 @@ export class BookingCustomerEditorComponent implements OnInit {
             return;
         }
         this.isSaving = true;
+
         this._bookingOperationsPageData.bookingDO.customerIdList = _.map(this.customerList, (customer: CustomerDO) => { return customer.id });
-        this._hotelOperationsBookingService.changeCustomers(this._bookingOperationsPageData.bookingDO).subscribe((updatedBooking: BookingDO) => {
+        this._hotelOperationsBookingService.changeCustomers(this._bookingOperationsPageData.bookingDO).flatMap((updatedBooking: BookingDO) => {
             this._appContext.analytics.logEvent("booking", "edit-customers", "Changed the customers for a booking");
+            this.readonly = true;
+            this.isSaving = false;
+            
+            let bookingChangeGuestOnInvoiceDO = {
+                groupBookingId: this._bookingOperationsPageData.bookingDO.groupBookingId,
+                bookingId: this._bookingOperationsPageData.bookingDO.bookingId,
+                customerIdDisplayedOnInvoice: this.bookingDO.defaultBillingDetails.customerIdDisplayedAsGuest
+            };
+
+            return this._hotelOperationsBookingService.changeGuestOnInvoice(bookingChangeGuestOnInvoiceDO);
+        }).subscribe((updatedBooking: BookingDO) => {
+            this._appContext.analytics.logEvent("booking", "edit-customers", "Changed the guest displayed on invoice for a booking");
             this.readonly = true;
             this.isSaving = false;
             this.triggerOnCustomersChanged(updatedBooking);
