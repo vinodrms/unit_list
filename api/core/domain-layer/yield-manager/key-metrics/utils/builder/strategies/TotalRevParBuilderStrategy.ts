@@ -29,6 +29,6 @@ export class TotalRevParBuilderStrategy extends AMetricBuilderStrategy {
         return metric;
     }
     protected getKeyMetricDisplayName(): string {
-        return "Total RevPar";
+        return "RevPar Total";
     }
 }

@@ -18,6 +18,7 @@
         <label><small>{{ 'Price For Adults' | translate }} *</small></label>
         <div class="row">
             <div class="col-md-12 col-sm-12 col-xs-12 form-group" *ngFor="let pricePerAdult of price.adultsPriceList">
+                <label *ngIf="pricePerAdult.noOfPersons > 1"><small>{{ 'Additional price for' | translate }} {{pricePerAdult.noOfPersons}}{{getNumberSuffix(pricePerAdult.noOfPersons)}} {{ 'adult' | translate }}:</small></label>
                 <div class="input-group" [ngClass]="{'form-warning': displayError&&!pricePerAdult.isValid()}">
                     <span class="input-group-addon"><small>{{pricePerAdult.noOfPersons}}{{getNumberSuffix(pricePerAdult.noOfPersons)}}</small> <span class="unitpal-font">:</span></span>
                     <input type="number" class="form-control" 
@@ -34,6 +35,7 @@
         <label><small>{{ 'Price For Children' | translate }} *</small></label>
         <div class="row">
             <div class="col-md-12 col-sm-12 col-xs-12" *ngFor="let pricePerChild of price.childrenPriceList">
+                <label *ngIf="pricePerChild.noOfPersons > 1"><small>{{ 'Additional price for' | translate }} {{pricePerChild.noOfPersons}}{{getNumberSuffix(pricePerChild.noOfPersons)}} {{ 'child' | translate }}:</small></label>
                 <div class="row">	
                     <div class="col-xs-12 form-group" *ngIf="pricePerChild.noOfPersons === 1">	
                         <div class="input-group" [ngClass]="{'form-warning': displayError&&!price.firstChildWithAdultInSharedBedPriceIsValid()}">
