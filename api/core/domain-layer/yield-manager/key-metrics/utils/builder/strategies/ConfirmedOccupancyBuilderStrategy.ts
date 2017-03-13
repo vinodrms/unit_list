@@ -27,6 +27,6 @@ export class ConfirmedOccupancyBuilderStrategy extends AMetricBuilderStrategy {
         return metric;
     }
     protected getKeyMetricDisplayName(): string {
-        return "Confirmed Occupancy";
+        return "Occupancy Confirmed";
     }
 }

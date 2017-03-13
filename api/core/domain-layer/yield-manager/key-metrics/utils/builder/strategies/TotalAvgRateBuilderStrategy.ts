@@ -29,6 +29,6 @@ export class TotalAvgRateBuilderStrategy extends AMetricBuilderStrategy {
         return metric;
     }
     protected getKeyMetricDisplayName(): string {
-        return "Total AvgRate";
+        return "AvgRate Total";
     }
 }

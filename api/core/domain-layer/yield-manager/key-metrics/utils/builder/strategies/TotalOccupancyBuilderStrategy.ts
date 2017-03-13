@@ -27,6 +27,6 @@ export class TotalOccupancyBuilderStrategy extends AMetricBuilderStrategy {
         return metric;
     }
     protected getKeyMetricDisplayName(): string {
-        return "Total Occupancy";
+        return "Occupancy Total";
     }
 }

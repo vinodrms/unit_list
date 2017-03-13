@@ -23,6 +23,6 @@ export class RoomRevenueBuilderStrategy extends AMetricBuilderStrategy {
         return metric;
     }
     protected getKeyMetricDisplayName(): string {
-        return "Room Revenue";
+        return "Room Revenue Total";
     }
 }
