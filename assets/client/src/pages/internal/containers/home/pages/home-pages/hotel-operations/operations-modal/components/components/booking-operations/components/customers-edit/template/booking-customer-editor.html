@@ -16,8 +16,8 @@
             <tr>
                 <th width="10%"> </th>
                 <th width="60%"> </th>
-                <th width="10%"> <span class="unitpal-font">D</span> </th>
-                <th width="10%"> <span class="unitpal-font">-</span> </th>
+                <th width="10%"> <span class="unitpal-font clickable-item" title="{{ 'Billed customer' | translate }}">D</span> </th>
+                <th width="10%"> <span class="unitpal-font clickable-item" title="{{ 'Guest on invoice' | translate }}">-</span> </th>
                 <th width="10%"> </th>
             </tr>
         </thead>
@@ -43,8 +43,8 @@
                     {{ customer.customerName }}
                 </td>
                 <td width="20%">                     
-                    <span class="unitpal-font" *ngIf="isBilledCustomer(customer)">D</span>
-                    <span class="unitpal-font" *ngIf="isDisplayedOnInvoiceAsGuest(customer)">-</span>
+                    <span class="unitpal-font clickable-item" *ngIf="isBilledCustomer(customer)" title="{{ 'Billed customer' | translate }}">D</span>
+                    <span class="unitpal-font clickable-item" *ngIf="isDisplayedOnInvoiceAsGuest(customer)" title="{{ 'Guest on invoice' | translate }}">-</span>
                 </td>
             </tr>
         </tbody>
