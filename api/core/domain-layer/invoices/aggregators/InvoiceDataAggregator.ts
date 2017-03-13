@@ -131,9 +131,11 @@ export class InvoiceDataAggregator {
         roomCategRepo.getRoomCategoryById({ hotelId: this._sessionContext.sessionDO.hotel.id }, this._loadedBooking.roomCategoryId)
             .then((roomCategory: RoomCategoryDO) => {
                 this._loadedRoomCateg = roomCategory;
+                
+                let customerIdDisplayedAsGuest = this._loadedBooking.defaultBillingDetails.customerIdDisplayedAsGuest;
 
                 var custRepo = this._appContext.getRepositoryFactory().getCustomerRepository();
-                return custRepo.getCustomerById({ hotelId: this._hotel.id }, this._loadedBooking.displayCustomerId);
+                return custRepo.getCustomerById({ hotelId: this._hotel.id }, customerIdDisplayedAsGuest);
             }).then((customer: CustomerDO) => {
                 this._loadedGuest = customer;
 

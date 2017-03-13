@@ -6,6 +6,7 @@ import { P3_AddMaxNoBabiesAttributeOnBeds } from './list/P3_AddMaxNoBabiesAttrib
 import { P4_SetTheNoBabyBedsOnBookingsCapacity } from './list/P4_SetTheNoBabyBedsOnBookingsCapacity';
 import { P5_AddTheRoomPricePerNightListOnBookingPrice } from './list/P5_AddTheRoomPricePerNightListOnBookingPrice';
 import { P6_AddAppliedDiscountValueOnBookingPrice } from './list/P6_AddAppliedDiscountValueOnBookingPrice';
+import { P7_AddCustomerIdDisplayedAsGuestOnDefaultBillingDetails } from "./list/P7_AddCustomerIdDisplayedAsGuestOnDefaultBillingDetails";
 
 
 export class MongoPatchUtils {
@@ -18,6 +19,7 @@ export class MongoPatchUtils {
 			new P4_SetTheNoBabyBedsOnBookingsCapacity(),
 			new P5_AddTheRoomPricePerNightListOnBookingPrice(),
 			new P6_AddAppliedDiscountValueOnBookingPrice(),
+			new P7_AddCustomerIdDisplayedAsGuestOnDefaultBillingDetails(),
 
 		];
 	}

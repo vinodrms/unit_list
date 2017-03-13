@@ -11,6 +11,7 @@ import { BookingSearchDO } from '../../BookingSearchDO';
 import { RoomCategoryStatsDO } from '../../../../../data-layer/room-categories/data-objects/RoomCategoryStatsDO';
 import { PriceProductDO } from '../../../../../data-layer/price-products/data-objects/PriceProductDO';
 import { PriceProductsContainer } from '../../../../price-products/validators/results/PriceProductsContainer';
+import { PriceProductPriceQueryDO } from "../../../../../data-layer/price-products/data-objects/price/IPriceProductPrice";
 import { AllotmentDO } from '../../../../../data-layer/allotments/data-objects/AllotmentDO';
 import { IndexedBookingInterval } from '../../../../../data-layer/price-products/utils/IndexedBookingInterval';
 import { BookingUtils } from '../../../utils/BookingUtils';
@@ -120,30 +121,33 @@ export class BookingSearchResultBuilder {
             let bookingCreationDate = this._bookingUtils.getCurrentThDateForHotel(this._builderParams.hotel);
 
             _.forEach(priceProduct.roomCategoryIdList, (roomCategoryId: string) => {
-                var itemPrice = new PriceProductItemPrice();
-                itemPrice.roomCategoryId = roomCategoryId;
-                var pricePerNightList: number[] = priceProduct.price.getPricePerNightBreakdownFor({
+                let priceQuery: PriceProductPriceQueryDO = {
                     roomCategoryId: roomCategoryId,
                     configCapacity: this._builderParams.searchParams.configCapacity,
                     roomCategoryStatsList: this._builderParams.roomCategoryStatsList,
                     bookingInterval: this._indexedBookingInterval
-                });
-                let discount = priceProduct.discounts.getDiscountValueFor({
-                    indexedBookingInterval: this._indexedBookingInterval,
-                    bookingCreationDate: bookingCreationDate,
-                    configCapacity: this._builderParams.searchParams.configCapacity,
+                };
+                if (priceProduct.price.hasPriceConfiguredFor(priceQuery)) {
+                    var itemPrice = new PriceProductItemPrice();
+                    itemPrice.roomCategoryId = roomCategoryId;
+                    var pricePerNightList: number[] = priceProduct.price.getPricePerNightBreakdownFor(priceQuery);
+                    let discount = priceProduct.discounts.getDiscountValueFor({
+                        indexedBookingInterval: this._indexedBookingInterval,
+                        bookingCreationDate: bookingCreationDate,
+                        configCapacity: this._builderParams.searchParams.configCapacity,
 
-                    // pass no room categories because the bookings were not added yet
-                    // such as e.g. the min no rooms constraint will not apply
-                    indexedNumberOfRoomCategoriesFromGroupBooking: new StringOccurenciesIndexer​​([]),
-                    roomCategoryIdListFromPriceProduct: priceProduct.roomCategoryIdList
-                });
-                pricePerNightList = this._bookingUtils.getPricePerNightListWithDiscount(pricePerNightList, discount);
-                itemPrice.price = this._thUtils.getArraySum(pricePerNightList);
-                var includedInvoiceItems = this._bookingUtils.getIncludedInvoiceItems(priceProduct, this._builderParams.searchParams.configCapacity, this._indexedBookingInterval);
-                itemPrice.price += includedInvoiceItems.getTotalPrice();
-                itemPrice.price = this._thUtils.roundNumberToTwoDecimals(itemPrice.price);
-                priceProductItem.priceList.push(itemPrice);
+                        // pass no room categories because the bookings were not added yet
+                        // such as e.g. the min no rooms constraint will not apply
+                        indexedNumberOfRoomCategoriesFromGroupBooking: new StringOccurenciesIndexer([]),
+                        roomCategoryIdListFromPriceProduct: priceProduct.roomCategoryIdList
+                    });
+                    pricePerNightList = this._bookingUtils.getPricePerNightListWithDiscount(pricePerNightList, discount);
+                    itemPrice.price = this._thUtils.getArraySum(pricePerNightList);
+                    var includedInvoiceItems = this._bookingUtils.getIncludedInvoiceItems(priceProduct, this._builderParams.searchParams.configCapacity, this._indexedBookingInterval);
+                    itemPrice.price += includedInvoiceItems.getTotalPrice();
+                    itemPrice.price = this._thUtils.roundNumberToTwoDecimals(itemPrice.price);
+                    priceProductItem.priceList.push(itemPrice);
+                }
             });
             priceProductItemList.push(priceProductItem);
         });

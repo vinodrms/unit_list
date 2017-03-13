@@ -9,22 +9,48 @@
         >
     </edit-save-button-group>
 </div>
+
 <div class="col-xs-12 booking-details-table">
-    <table class="table form-group bottom-margin">
+    <table *ngIf="!readonly" class="table form-group bottom-margin">
+        <thead>
+            <tr>
+                <th width="10%"> </th>
+                <th width="60%"> </th>
+                <th width="10%"> <span class="unitpal-font clickable-item" title="{{ 'Billed customer' | translate }}">D</span> </th>
+                <th width="10%"> <span class="unitpal-font clickable-item" title="{{ 'Guest on invoice' | translate }}">-</span> </th>
+                <th width="10%"> </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let customer of customerList" class="operational-box">
+                <td> <i class="fa unitpal-font">(</i>  </td>
+                <td class="clickable-item name-field" (click)="goToCustomer(customer)">
+                    {{ customer.customerName }}
+                </td>
+                <td> <input type="radio" [checked]="isBilledCustomer(customer)" [disabled]="true"/> </td>
+                <td> <input type="radio" name="test" [checked]="isDisplayedOnInvoiceAsGuest(customer)" [value]="customer.id" (change)="onSelectionChange(customer)" /> </td>
+                <td> <span class="unitpal-font clickable-item" *ngIf="!isBilledCustomer(customer) && !isDisplayedOnInvoiceAsGuest(customer) && !readonly" (click)="removeCustomer(customer)">\</span>  </td>
+            </tr>
+        </tbody>
+        <tfoot></tfoot>
+    </table>
+
+    <table *ngIf="readonly" class="table form-group bottom-margin">
         <tbody>
             <tr *ngFor="let customer of customerList" class="operational-box" [ngClass]="{'important-header': isBilledCustomer(customer)}">
                 <td width="10%"> <i class="fa unitpal-font">(</i>  </td>
                 <td width="70%" class="clickable-item name-field" (click)="goToCustomer(customer)">
                     {{ customer.customerName }}
                 </td>
-                <td width="20%"> 
-                    <span class="unitpal-font clickable-item" *ngIf="!isBilledCustomer(customer) && !readonly" (click)="removeCustomer(customer)">\</span>
-                    <span class="unitpal-font" *ngIf="isBilledCustomer(customer)">D</span>
+                <td width="20%">                     
+                    <span class="unitpal-font clickable-item" *ngIf="isBilledCustomer(customer)" title="{{ 'Billed customer' | translate }}">D</span>
+                    <span class="unitpal-font clickable-item" *ngIf="isDisplayedOnInvoiceAsGuest(customer)" title="{{ 'Guest on invoice' | translate }}">-</span>
                 </td>
             </tr>
         </tbody>
         <tfoot></tfoot>
     </table>
+
 </div>
 <div class="col-xs-12" *ngIf="!readonly">
     <a class="link-with-unitpal-font-icon" (click)="addCustomers()">
