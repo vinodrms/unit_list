@@ -221,6 +221,7 @@ export enum ThStatusCode {
 	PriceProductRepositoryErrorGettingList,
 	SavePriceProductItemError,
 	SavePriceProductItemInvalidPrice,
+	SavePriceProductItemMaxNoDynamicRates,
 	SavePriceProductItemInvalidPriceException,
 	SavePriceProductItemInvalidConstraints,
 	SavePriceProductItemTooManyConstraints,
@@ -737,6 +738,7 @@ ThMessage[ThStatusCode.PriceProductRepositoryErrorReadingDocumentCount] = "Error
 ThMessage[ThStatusCode.PriceProductRepositoryErrorGettingList] = "Error getting the list of price products.";
 ThMessage[ThStatusCode.SavePriceProductItemError] = "Error saving price product.";
 ThMessage[ThStatusCode.SavePriceProductItemInvalidPrice] = "Invalid price submitted.";
+ThMessage[ThStatusCode.SavePriceProductItemMaxNoDynamicRates] = "You cannot add more than 15 dynamic daily rates on the same price product.";
 ThMessage[ThStatusCode.SavePriceProductItemInvalidPriceException] = "Invalid price exceptions submitted.";
 ThMessage[ThStatusCode.SavePriceProductItemInvalidConstraints] = "Invalid constraints submitted.";
 ThMessage[ThStatusCode.SavePriceProductItemTooManyConstraints] = "You cannot add more than 20 constraints on the same Price Product.";

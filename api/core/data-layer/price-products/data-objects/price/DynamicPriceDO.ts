@@ -68,7 +68,7 @@ export class DynamicPriceDO extends BaseDO {
         }
         else {
             let priceItem: IPriceProductPrice = this.getPriceForRoomCategory(query.roomCategoryId);
-            let defaultPrice = priceItem.getPricePerNightFor(query);
+            return priceItem.getPricePerNightFor(query);
         }
     }
     private getPriceException(roomCategoryId: string, dayOfWeek: ISOWeekDay): PriceExceptionDO {

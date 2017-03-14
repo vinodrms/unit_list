@@ -50,19 +50,30 @@ export class SavePriceProductItem {
 			return false;
 		}
 
-		let priceValidationStruct = SavePriceProductItemPriceDO.getPriceListValidationStructure(this._inputDO.price);
-		if (!priceValidationStruct.validateStructure(this._inputDO.price.priceList).isValid()) {
-			let thError = new ThError(ThStatusCode.SavePriceProductItemInvalidPrice, null);
-			ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Invalid submitted price for price product", this._inputDO, thError);
+		if (this._inputDO.price.dynamicPriceList.length > SavePriceProductItemDO.MaxConstraintsForDiscount) {
+			let thError = new ThError(ThStatusCode.SavePriceProductItemMaxNoDynamicRates, null);
+			ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Submitted more than 15 dynamic rates", this._inputDO, thError);
 			reject(thError);
 			return false;
 		}
-		let priceExceptionValidationStruct = SavePriceProductItemPriceDO.getPriceExceptionListValidationStructure(this._inputDO.price);
-		if (!priceExceptionValidationStruct.validateStructure(this._inputDO.price.priceExceptionList).isValid()) {
-			let thError = new ThError(ThStatusCode.SavePriceProductItemInvalidPriceException, null);
-			ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Invalid submitted price exceptions for price product", this._inputDO, thError);
-			reject(thError);
-			return false;
+
+		for (var priceIndex = 0; priceIndex < this._inputDO.price.dynamicPriceList.length; priceIndex++) {
+			let dynamicPrice = this._inputDO.price.dynamicPriceList[priceIndex];
+
+			let priceValidationStruct = SavePriceProductItemPriceDO.getPriceListValidationStructure(this._inputDO.price);
+			if (!priceValidationStruct.validateStructure(dynamicPrice.priceList).isValid()) {
+				let thError = new ThError(ThStatusCode.SavePriceProductItemInvalidPrice, null);
+				ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Invalid submitted price for price product", this._inputDO, thError);
+				reject(thError);
+				return false;
+			}
+			let priceExceptionValidationStruct = SavePriceProductItemPriceDO.getPriceExceptionListValidationStructure(this._inputDO.price);
+			if (!priceExceptionValidationStruct.validateStructure(dynamicPrice.priceExceptionList).isValid()) {
+				let thError = new ThError(ThStatusCode.SavePriceProductItemInvalidPriceException, null);
+				ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Invalid submitted price exceptions for price product", this._inputDO, thError);
+				reject(thError);
+				return false;
+			}
 		}
 
 		if (this._inputDO.constraints.constraintList.length > SavePriceProductItemDO.MaxConstraints) {
