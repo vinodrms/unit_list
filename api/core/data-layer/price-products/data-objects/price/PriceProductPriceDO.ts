@@ -1,113 +1,101 @@
 import { BaseDO } from '../../../common/base/BaseDO';
-import { ThUtils } from '../../../../utils/ThUtils';
-import { PriceProductPriceType, PriceProductPriceQueryDO, IPriceProductPrice } from './IPriceProductPrice';
-import { SinglePriceDO } from './single-price/SinglePriceDO';
-import { PricePerPersonDO } from './price-per-person/PricePerPersonDO';
+import { PriceProductPriceType, PriceProductPriceQueryDO } from './IPriceProductPrice';
 import { RoomCategoryStatsDO } from '../../../room-categories/data-objects/RoomCategoryStatsDO';
-import { PriceExceptionDO } from './price-exceptions/PriceExceptionDO';
+import { DynamicPriceDO } from './DynamicPriceDO';
 import { ThDateDO } from '../../../../utils/th-dates/data-objects/ThDateDO';
-import { ISOWeekDay } from '../../../../utils/th-dates/data-objects/ISOWeekDay';
+import { PricePerDayDO } from "../../../bookings/data-objects/price/PricePerDayDO";
 
 import _ = require('underscore');
 
 export class PriceProductPriceDO extends BaseDO {
 	type: PriceProductPriceType;
-	priceList: IPriceProductPrice[];
-	priceExceptionList: PriceExceptionDO[];
+	dynamicPriceList: DynamicPriceDO[];
+
+	/*
+		`index` : the UTC timestamp of the date
+		`value` : the id of the dynamic price
+		if a dynamic price id does not exist => the first one is used
+	*/
+	enabledDynamicPriceIdByDate: { [index: number]: string; };
 
 	protected getPrimitivePropertyKeys(): string[] {
-		return ["type"];
+		return ["type", "enabledDynamicPriceIdByDate"];
 	}
 
 	public buildFromObject(object: Object) {
 		super.buildFromObject(object);
 
-		this.priceList = [];
-		this.forEachElementOf(this.getObjectPropertyEnsureUndefined(object, "priceList"), (priceObject: Object) => {
-			var price: IPriceProductPrice = this.buildPriceInstance(this.type);
-			price.buildFromObject(priceObject);
-			this.priceList.push(price);
-		});
-
-		this.priceExceptionList = [];
-		this.forEachElementOf(this.getObjectPropertyEnsureUndefined(object, "priceExceptionList"), (priceExceptionObject: Object) => {
-			let priceException = new PriceExceptionDO();
-			priceException.buildFromObject(priceExceptionObject);
-			priceException.price = this.buildPriceInstance(this.type);
-			priceException.price.buildFromObject(this.getObjectPropertyEnsureUndefined(priceExceptionObject, "price"));
-			this.priceExceptionList.push(priceException);
+		this.dynamicPriceList = [];
+		this.forEachElementOf(this.getObjectPropertyEnsureUndefined(object, "dynamicPriceList"), (dynamicPriceObject: Object) => {
+			var dynamicPrice = new DynamicPriceDO(this.type);
+			dynamicPrice.buildFromObject(dynamicPriceObject);
+			this.dynamicPriceList.push(dynamicPrice);
 		});
 	}
-	private buildPriceInstance(type: PriceProductPriceType): IPriceProductPrice {
-		if (type === PriceProductPriceType.SinglePrice) {
-			return new SinglePriceDO();
-		}
-		return new PricePerPersonDO();
-	}
 
+	/**
+	 * Returns whether the price product has prices defined for the roomCategoryId from the query
+	 */
 	public hasPriceConfiguredFor(query: PriceProductPriceQueryDO): boolean {
-		var priceItem: IPriceProductPrice = this.getPriceForRoomCategory(query.roomCategoryId);
-		if (!priceItem) {
-			return false;
+		for (var i = 0; i < this.dynamicPriceList.length; i++) {
+			let dynamicPrice = this.dynamicPriceList[i];
+			if (!dynamicPrice.hasPriceConfiguredFor(query)) {
+				return false;
+			}
 		}
-		return priceItem.hasPriceConfiguredFor(query);
+		return true;
 	}
-	public getPricePerNightBreakdownFor(query: PriceProductPriceQueryDO): number[] {
-		var priceBreakdown: number[] = [];
 
-		let priceItem: IPriceProductPrice = this.getPriceForRoomCategory(query.roomCategoryId);
-		let defaultPrice = priceItem.getPricePerNightFor(query);
-
-		var thUtils = new ThUtils();
+	/**
+	 * Returns the breakdown of all the prices for each night with the according exceptions and dynamic rates
+	 */
+	public getPricePerDayBreakdownFor(query: PriceProductPriceQueryDO): PricePerDayDO[] {
+		let priceList: PricePerDayDO[] = [];
 		_.forEach(query.bookingInterval.bookingDateList, (bookingDate: ThDateDO) => {
-			let exception = this.getPriceException(query.roomCategoryId, bookingDate.getISOWeekDay());
-			if (!thUtils.isUndefinedOrNull(exception)) {
-				let exceptionPrice = exception.price.getPricePerNightFor(query);
-				priceBreakdown.push(exceptionPrice);
-			}
-			else {
-				priceBreakdown.push(defaultPrice);
-			}
-		});
-		return priceBreakdown;
-	}
-	private getPriceForRoomCategory(roomCategoryId: string): IPriceProductPrice {
-		return _.find(this.priceList, (price: IPriceProductPrice) => { return price.getRoomCategoryId() === roomCategoryId; });
-	}
-	private getPriceException(roomCategoryId: string, dayOfWeek: ISOWeekDay): PriceExceptionDO {
-		return _.find(this.priceExceptionList, priceException => {
-			return priceException.getRoomCategoryId() === roomCategoryId &&
-				priceException.dayFromWeek === dayOfWeek;
-		});
-	}
+			let dynamicPrice = this.getEnabledDynamicPriceForDate(bookingDate);
 
-	public priceConfigurationIsValidFor(roomCategoryStatList: RoomCategoryStatsDO[]): boolean {
-		var isValid = true;
-		roomCategoryStatList.forEach((roomCategoryStat: RoomCategoryStatsDO) => {
-			if (!this.priceConfigurationIsValidForSingleRoomCategoryId(roomCategoryStatList, roomCategoryStat.roomCategory.id)) {
-				isValid = false;
-			}
+			let price = new PricePerDayDO();
+			price.thDate = bookingDate;
+			price.dynamicPriceId = dynamicPrice.id;
+			price.price = dynamicPrice.getPriceForDate(query, bookingDate);
+
+			priceList.push(price);
 		});
-		return isValid;
+		return priceList;
 	}
-	private priceConfigurationIsValidForSingleRoomCategoryId(roomCategoryStatList: RoomCategoryStatsDO[], roomCategoryId: string): boolean {
-		var thUtils = new ThUtils();
-		var priceItem: IPriceProductPrice = this.getPriceForRoomCategory(roomCategoryId);
-		if (thUtils.isUndefinedOrNull(priceItem)) {
-			return false;
+	private getEnabledDynamicPriceForDate(thDate: ThDateDO): DynamicPriceDO {
+		let dynamicPriceId = this.enabledDynamicPriceIdByDate[thDate.getUtcTimestamp()];
+		// if the date is not indexed we return the default dynamic price
+		if (!dynamicPriceId) {
+			return this.getDefaultDynamicPrice();
 		}
-		return priceItem.priceConfigurationIsValidFor(roomCategoryStatList);
+		let dynamicPrice = _.find(this.dynamicPriceList, dynamicPrice => { return dynamicPrice.id === dynamicPriceId; });
+		// if the dynamic price was not found we return the default dynamic price
+		if (!dynamicPrice) {
+			return this.getDefaultDynamicPrice();
+		}
+		return dynamicPrice;
+	}
+	private getDefaultDynamicPrice(): DynamicPriceDO {
+		return this.dynamicPriceList[0];
 	}
 
-	public isConfiguredForRoomCategory(roomCategoryId: string): boolean {
-		var thUtils = new ThUtils();
-		var priceItem: IPriceProductPrice = this.getPriceForRoomCategory(roomCategoryId);
-		return !thUtils.isUndefinedOrNull(priceItem);
+	/**
+	 * Validates whether the prices contain all the values in relation with the people that can fit in a room category 
+	 */
+	public priceConfigurationIsValidFor(roomCategoryStatList: RoomCategoryStatsDO[]): boolean {
+		for (var i = 0; i < this.dynamicPriceList.length; i++) {
+			let dynamicPrice = this.dynamicPriceList[i];
+			if (!dynamicPrice.priceConfigurationIsValidFor(roomCategoryStatList)) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	public roundPricesToTwoDecimals() {
-		_.forEach(this.priceList, (price: IPriceProductPrice) => {
-			price.roundPricesToTwoDecimals();
+		_.forEach(this.dynamicPriceList, dynamicPrice => {
+			dynamicPrice.roundPricesToTwoDecimals();
 		});
 	}
 }

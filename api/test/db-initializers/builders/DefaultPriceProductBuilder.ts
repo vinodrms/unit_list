@@ -16,6 +16,7 @@ import { PricePerPersonDO } from '../../../core/data-layer/price-products/data-o
 import { PriceForFixedNumberOfPersonsDO } from '../../../core/data-layer/price-products/data-objects/price/price-per-person/PriceForFixedNumberOfPersonsDO';
 import { PriceProductPriceDO } from '../../../core/data-layer/price-products/data-objects/price/PriceProductPriceDO';
 import { PriceProductPriceType } from '../../../core/data-layer/price-products/data-objects/price/IPriceProductPrice';
+import { DynamicPriceDO } from "../../../core/data-layer/price-products/data-objects/price/DynamicPriceDO";
 import { PriceExceptionDO } from '../../../core/data-layer/price-products/data-objects/price/price-exceptions/PriceExceptionDO';
 import { PriceProductIncludedItemsDO } from '../../../core/data-layer/price-products/data-objects/included-items/PriceProductIncludedItemsDO';
 import { AttachedAddOnProductItemDO } from '../../../core/data-layer/price-products/data-objects/included-items/AttachedAddOnProductItemDO';
@@ -107,7 +108,12 @@ export class DefaultPriceProductBuilder implements IPriceProductDataSource {
 		var outPrice = new PriceProductPriceDO();
 		outPrice.type = PriceProductPriceType.PricePerPerson;
 
-		outPrice.priceList = [];
+		let dynamicPrice = new DynamicPriceDO(outPrice.type);
+		dynamicPrice.id = "test";
+		dynamicPrice.name = "Default Rate";
+		dynamicPrice.description = "";
+
+		dynamicPrice.priceList = [];
 		_.forEach(roomCategoryStatList, (roomCategoryStat: RoomCategoryStatsDO) => {
 			var pricePerPerson = new PricePerPersonDO();
 			pricePerPerson.roomCategoryId = roomCategoryStat.roomCategory.id;
@@ -116,13 +122,15 @@ export class DefaultPriceProductBuilder implements IPriceProductDataSource {
 			pricePerPerson.firstChildWithoutAdultPrice = 50.0;
 			pricePerPerson.firstChildWithAdultInSharedBedPrice = 10.0;
 
-			outPrice.priceList.push(pricePerPerson);
+			dynamicPrice.priceList.push(pricePerPerson);
 		});
 		let timestamp = ThTimestampDO.buildThTimestampForTimezone(DefaultHotelBuilder.Timezone);
 		let priceException = new PriceExceptionDO();
 		priceException.dayFromWeek = timestamp.thDateDO.getISOWeekDay();
-		priceException.price = outPrice.priceList[0];
-		outPrice.priceExceptionList = [priceException];
+		priceException.price = dynamicPrice.priceList[0];
+		dynamicPrice.priceExceptionList = [priceException];
+		outPrice.dynamicPriceList = [dynamicPrice];
+		outPrice.enabledDynamicPriceIdByDate = {};
 		return outPrice;
 	}
 	private static getPriceForFixedNumberOfPersonsDOList(maxNoOfPersons: number): PriceForFixedNumberOfPersonsDO[] {
@@ -142,17 +150,25 @@ export class DefaultPriceProductBuilder implements IPriceProductDataSource {
 	public static getPricePerRoomCategory(roomCategoryStat: RoomCategoryStatsDO): PriceProductPriceDO {
 		var outPrice = new PriceProductPriceDO();
 		outPrice.type = PriceProductPriceType.SinglePrice;
+
+		let dynamicPrice = new DynamicPriceDO(outPrice.type);
+		dynamicPrice.id = "test";
+		dynamicPrice.name = "Default Rate";
+		dynamicPrice.description = "";
+
 		var singlePrice = new SinglePriceDO();
 		singlePrice.price = 98.21;
 		singlePrice.roomCategoryId = roomCategoryStat.roomCategory.id;
-		outPrice.priceList = [singlePrice];
+		dynamicPrice.priceList = [singlePrice];
 
 		let timestamp = ThTimestampDO.buildThTimestampForTimezone(DefaultHotelBuilder.Timezone);
 		let priceException = new PriceExceptionDO();
 		priceException.dayFromWeek = timestamp.thDateDO.getISOWeekDay();
-		priceException.price = outPrice.priceList[0];
-		outPrice.priceExceptionList = [priceException];
+		priceException.price = dynamicPrice.priceList[0];
+		dynamicPrice.priceExceptionList = [priceException];
 
+		outPrice.dynamicPriceList = [dynamicPrice];
+		outPrice.enabledDynamicPriceIdByDate = {};
 		return outPrice;
 	}
 

@@ -7,6 +7,7 @@ import { ThUtils } from '../../../../utils/ThUtils';
 import { BookingPossiblePricesDO } from './BookingPossiblePricesDO';
 import { BookingDO } from '../../../../data-layer/bookings/data-objects/BookingDO';
 import { PriceProductPriceQueryDO } from '../../../../data-layer/price-products/data-objects/price/IPriceProductPrice';
+import { PricePerDayDO } from "../../../../data-layer/bookings/data-objects/price/PricePerDayDO";
 import { ValidationResultParser } from '../../../common/ValidationResultParser';
 import { BookingPossiblePriceItems, BookingPriceItem } from './utils/BookingPossiblePriceItems';
 import { IndexedBookingInterval } from '../../../../data-layer/price-products/utils/IndexedBookingInterval';
@@ -86,11 +87,11 @@ export class BookingPossiblePrices {
             if (this._loadedBooking.priceProductSnapshot.price.hasPriceConfiguredFor(priceQuery)) {
                 var priceItem = new BookingPriceItem();
                 priceItem.roomCategoryId = roomCategoryId;
-                var pricePerNightList: number[] = this._loadedBooking.priceProductSnapshot.price.getPricePerNightBreakdownFor(priceQuery);
+                var pricePerDayList: PricePerDayDO[] = this._loadedBooking.priceProductSnapshot.price.getPricePerDayBreakdownFor(priceQuery);
                 let discount = this._loadedBooking.priceProductSnapshot.discounts.getDiscountValueFor(discountQuery);
-                pricePerNightList = this._bookingUtils.getPricePerNightListWithDiscount(pricePerNightList, discount);
+                pricePerDayList = this._bookingUtils.getPricePerDayListWithDiscount(pricePerDayList, discount);
 
-                priceItem.price = this._thUtils.getArraySum(pricePerNightList);
+                priceItem.price = this._thUtils.getArraySum(pricePerDayList);
                 var includedInvoiceItems = this._bookingUtils.getIncludedInvoiceItems(this._loadedBooking.priceProductSnapshot,
                     this._loadedBooking.configCapacity, indexedBookingInterval);
                 priceItem.price += includedInvoiceItems.getTotalPrice();

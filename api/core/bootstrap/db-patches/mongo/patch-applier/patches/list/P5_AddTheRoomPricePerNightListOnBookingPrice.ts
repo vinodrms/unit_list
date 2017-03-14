@@ -6,6 +6,7 @@ import { BookingPriceType } from '../../../../../../data-layer/bookings/data-obj
 import { PricePerDayDO } from '../../../../../../data-layer/bookings/data-objects/price/PricePerDayDO';
 import { IndexedBookingInterval } from '../../../../../../data-layer/price-products/utils/IndexedBookingInterval';
 import { ThDateIntervalDO } from '../../../../../../utils/th-dates/data-objects/ThDateIntervalDO';
+import { ThDateDO } from "../../../../../../utils/th-dates/data-objects/ThDateDO";
 
 import _ = require('underscore');
 
@@ -29,9 +30,20 @@ export class P5_AddTheRoomPricePerNightListOnBookingPrice extends ABookingGroupT
                 let bookingInterval = new ThDateIntervalDO();
                 bookingInterval.buildFromObject(booking.interval);
                 let indexedBookingInterval = new IndexedBookingInterval(bookingInterval);
-                booking.price.roomPricePerNightList = PricePerDayDO.buildPricePerDayList(indexedBookingInterval.bookingDateList, priceList);
+                booking.price.roomPricePerNightList = this.buildPricePerDayList(indexedBookingInterval.bookingDateList, priceList);
             }
         });
         bookingGroup.versionId++;
+    }
+    private buildPricePerDayList(thDateList: ThDateDO[], priceList: number[]): PricePerDayDO[] {
+        let pricePerDayList: PricePerDayDO[] = [];
+        let length = Math.min(thDateList.length, priceList.length);
+        for (var i = 0; i < length; i++) {
+            let pricePerDay = new PricePerDayDO();
+            pricePerDay.thDate = thDateList[i];
+            pricePerDay.price = priceList[i];
+            pricePerDayList.push(pricePerDay);
+        }
+        return pricePerDayList;
     }
 }
