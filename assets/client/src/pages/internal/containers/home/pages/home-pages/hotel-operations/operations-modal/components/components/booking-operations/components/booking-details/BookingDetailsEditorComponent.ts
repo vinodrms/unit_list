@@ -52,6 +52,9 @@ export class BookingDetailsEditorComponent implements OnInit {
     public get notesAreEmpty(): boolean {
         return this._appContext.thUtils.isUndefinedOrNull(this.bookingDO.notes) || this.bookingDO.notes.length == 0;
     }
+    public get invoiceNotesAreEmpty(): boolean {
+        return this._appContext.thUtils.isUndefinedOrNull(this.bookingDO.invoiceNotes) || this.bookingDO.invoiceNotes.length == 0;
+    }
     public get fileAttachmentsListIsEmpty(): boolean {
         return this.bookingDO.fileAttachmentList.length == 0;
     }

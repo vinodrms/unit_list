@@ -24,6 +24,18 @@
     </div>
     <div class="row padding-top-5px">
         <div class="col-xs-12 col-sm-1">
+            <p>{{'Invoice Notes' | translate}}</p>
+        </div>
+        <div class="col-xs-12 col-sm-8 field-value text-field" *ngIf="readonly">
+            <p class="notes" *ngIf="!invoiceNotesAreEmpty">{{bookingDO.invoiceNotes}}</p>
+            <p class="placeholder" *ngIf="invoiceNotesAreEmpty">{{'None' | translate}}</p>
+        </div>
+        <div class="col-xs-12 col-sm-8 form-group" *ngIf="!readonly">
+            <textarea class="form-control notes" [(ngModel)]="bookingDO.invoiceNotes" name="invoiceNotes"></textarea>
+        </div>
+    </div>
+    <div class="row padding-top-5px">
+        <div class="col-xs-12 col-sm-1">
             <p>{{'Files' | translate}}</p>
         </div>
         <div class="col-xs-12 col-sm-8">

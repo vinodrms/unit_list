@@ -66,6 +66,7 @@ export class BookingChangeDetails {
     }
     private updateDetailsOnLoadedBooking() {
         this._loadedBooking.notes = this._changeDetailsDO.notes;
+        this._loadedBooking.invoiceNotes = this._changeDetailsDO.invoiceNotes;
         this._loadedBooking.fileAttachmentList = this._changeDetailsDO.fileAttachmentList;
         this._loadedBooking.bookingHistory.logDocumentAction(DocumentActionDO.buildDocumentActionDO({
             actionParameterMap: {},
