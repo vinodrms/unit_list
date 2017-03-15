@@ -1,22 +1,27 @@
-import {ThLogger, ThLogLevel} from '../../../../utils/logging/ThLogger';
-import {ThError} from '../../../../utils/th-responses/ThError';
-import {ThStatusCode} from '../../../../utils/th-responses/ThResponse';
-import {AppContext} from '../../../../utils/AppContext';
-import {SessionContext} from '../../../../utils/SessionContext';
-import {BookingChangeDetailsDO} from './BookingChangeDetailsDO';
-import {BookingDO} from '../../../../data-layer/bookings/data-objects/BookingDO';
-import {BookingDOConstraints} from '../../../../data-layer/bookings/data-objects/BookingDOConstraints';
-import {ValidationResultParser} from '../../../common/ValidationResultParser';
-import {DocumentActionDO} from '../../../../data-layer/common/data-objects/document-history/DocumentActionDO';
+import { ThLogger, ThLogLevel } from '../../../../utils/logging/ThLogger';
+import { ThError } from '../../../../utils/th-responses/ThError';
+import { ThStatusCode } from '../../../../utils/th-responses/ThResponse';
+import { AppContext } from '../../../../utils/AppContext';
+import { SessionContext } from '../../../../utils/SessionContext';
+import { BookingChangeDetailsDO } from './BookingChangeDetailsDO';
+import { BookingDO } from '../../../../data-layer/bookings/data-objects/BookingDO';
+import { BookingDOConstraints } from '../../../../data-layer/bookings/data-objects/BookingDOConstraints';
+import { ValidationResultParser } from '../../../common/ValidationResultParser';
+import { DocumentActionDO } from '../../../../data-layer/common/data-objects/document-history/DocumentActionDO';
+import { BookingInvoiceUtils } from "../../../bookings/utils/BookingInvoiceUtils";
+import { InvoiceGroupDO } from "../../../../data-layer/invoices/data-objects/InvoiceGroupDO";
 
 import _ = require('underscore');
 
 export class BookingChangeDetails {
+    private _bookingInvoiceUtils: BookingInvoiceUtils;
     private _changeDetailsDO: BookingChangeDetailsDO;
 
     private _loadedBooking: BookingDO;
+    private _updatedBooking: BookingDO;
 
     constructor(private _appContext: AppContext, private _sessionContext: SessionContext) {
+        this._bookingInvoiceUtils = new BookingInvoiceUtils(this._appContext, this._sessionContext);
     }
 
     public changeDetails(changeDetailsDO: BookingChangeDetailsDO): Promise<BookingDO> {
@@ -52,7 +57,10 @@ export class BookingChangeDetails {
                     versionId: this._loadedBooking.versionId
                 }, this._loadedBooking);
             }).then((updatedBooking: BookingDO) => {
-                resolve(updatedBooking);
+                this._updatedBooking = updatedBooking;
+                return this._bookingInvoiceUtils.syncInvoiceWithBooking(updatedBooking);
+            }).then((updatedGroup: InvoiceGroupDO) => {
+                resolve(this._updatedBooking);
             }).catch((error: any) => {
                 var thError = new ThError(ThStatusCode.BookingChangeDetailsError, error);
                 if (thError.isNativeError()) {
