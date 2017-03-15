@@ -196,7 +196,7 @@ export class BookingChangePriceProduct {
         var priceProduct = this._loadedPriceProductsContainer.getPriceProductById(this._inputDO.priceProductId);
         this._booking.priceProductSnapshot = new PriceProductDO();
         this._booking.priceProductSnapshot.buildFromObject(priceProduct);
-        this._booking.priceProductSnapshot.prepareForClient
+        this._booking.priceProductSnapshot.prepareForClient();
         this._booking.priceProductSnapshot.openForArrivalIntervalList = [];
         this._booking.priceProductSnapshot.openForDepartureIntervalList = [];
         this._booking.priceProductSnapshot.openIntervalList = [];

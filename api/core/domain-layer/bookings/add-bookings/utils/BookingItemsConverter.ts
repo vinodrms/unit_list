@@ -90,10 +90,10 @@ export class BookingItemsConverter {
             bookingDO.bookingReference = this.generateIndividualBookingReference();
             bookingDO.confirmationStatus = BookingConfirmationStatus.Confirmed;
             bookingDO.customerIdList = bookingItem.customerIdList;
-            
+
             bookingDO.defaultBillingDetails = bookingItem.defaultBillingDetails;
-            if(this._thUtils.isUndefinedOrNull(bookingDO.defaultBillingDetails.customerIdDisplayedAsGuest)) {
-                bookingDO.defaultBillingDetails.customerIdDisplayedAsGuest = 
+            if (this._thUtils.isUndefinedOrNull(bookingDO.defaultBillingDetails.customerIdDisplayedAsGuest)) {
+                bookingDO.defaultBillingDetails.customerIdDisplayedAsGuest =
                     bookingDO.defaultBillingDetails.customerId;
             }
 
@@ -110,6 +110,7 @@ export class BookingItemsConverter {
             bookingDO.priceProductSnapshot.buildFromObject(priceProduct);
 
             // remove the yield intervals on the snapshot to minimize the document size
+            bookingDO.priceProductSnapshot.prepareForClient();
             bookingDO.priceProductSnapshot.openForArrivalIntervalList = [];
             bookingDO.priceProductSnapshot.openForDepartureIntervalList = [];
             bookingDO.priceProductSnapshot.openIntervalList = [];

@@ -1,17 +1,22 @@
 import { ThError } from '../../../../../../utils/th-responses/ThError';
+import { MongoRepository } from "../../../../../../data-layer/common/base/MongoRepository";
 import { ATransactionalMongoPatch } from '../../utils/ATransactionalMongoPatch';
 import { MongoPatchType } from '../MongoPatchType';
-import { ABookingGroupTransactionalMongoPatch } from '../../utils/ABookingGroupTransactionalMongoPatch';
+import { APaginatedTransactionalMongoPatch } from '../../utils/APaginatedTransactionalMongoPatch';
 
 import _ = require('underscore');
 
-export class P4_SetTheNoBabyBedsOnBookingsCapacity extends ABookingGroupTransactionalMongoPatch {
+export class P4_SetTheNoBabyBedsOnBookingsCapacity extends APaginatedTransactionalMongoPatch {
 
     public getPatchType(): MongoPatchType {
         return MongoPatchType.SetTheNoBabyBedsOnBookingsCapacity;
     }
 
-    protected updateBookingGroupInMemory(bookingGroup) {
+    protected getMongoRepository(): MongoRepository {
+        return this._bookingRepository;
+    }
+
+    protected updateDocumentInMemory(bookingGroup) {
         bookingGroup.bookingList.forEach(booking => {
             if (!_.isNumber(booking.configCapacity.noBabyBeds)) {
                 booking.configCapacity.noBabyBeds = booking.configCapacity.noBabies;

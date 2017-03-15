@@ -2,16 +2,23 @@ import { ThError } from '../../../../../utils/th-responses/ThError';
 import { ATransactionalMongoPatch } from './ATransactionalMongoPatch';
 import { MongoPatchType } from '../patches/MongoPatchType';
 import { MongoUpdateMultipleDocuments } from '../../../../../data-layer/common/base/mongo-utils/MongoUpdateMultipleDocuments';
-import { PriceProductPriceType } from '../../../../../data-layer/price-products/data-objects/price/IPriceProductPrice';
-import { MongoSearchCriteria } from '../../../../../data-layer/common/base/MongoRepository';
+import { MongoSearchCriteria, MongoRepository } from '../../../../../data-layer/common/base/MongoRepository';
 
 import async = require("async");
 
-// extend this class only when the multi update cannot be made without in memory updates (find + update + findAndModify)
-export abstract class ABookingGroupTransactionalMongoPatch extends ATransactionalMongoPatch {
-    public static PageSize = 20;
+/**
+ * Extend this class only when the multi update cannot be made without in memory updates (find + update + findAndModify)
+ * The class reads in chunks of `PageSize` documents from the collection, updates them in memory, and saves them back to the database
+ */
+export abstract class APaginatedTransactionalMongoPatch extends ATransactionalMongoPatch {
+    public static PageSize = 50;
 
-    public abstract getPatchType(): MongoPatchType;
+    private _repository: MongoRepository;
+
+    constructor() {
+        super();
+        this._repository = this.getMongoRepository();
+    }
 
     protected applyCore(resolve: { (result: boolean): void }, reject: { (err: ThError): void }) {
         var noUpdated = 0, pageNumber = 0;
@@ -20,18 +27,18 @@ export abstract class ABookingGroupTransactionalMongoPatch extends ATransactiona
                 criteria: {},
                 lazyLoad: {
                     pageNumber: pageNumber,
-                    pageSize: ABookingGroupTransactionalMongoPatch.PageSize
+                    pageSize: APaginatedTransactionalMongoPatch.PageSize
                 }
             };
-            this._bookingRepository.findMultipleDocuments(searchCriteria, (err) => {
+            this._repository.findMultipleDocuments(searchCriteria, (err) => {
                 finishSingleUpdateCallback(err);
-            }, (bookingGroups: any[]) => {
-                bookingGroups.forEach(group => {
-                    this.updateBookingGroupInMemory(group);
+            }, (documentList: any[]) => {
+                documentList.forEach(document => {
+                    this.updateDocumentInMemory(document);
                 });
                 var promiseList = [];
-                bookingGroups.forEach(group => {
-                    promiseList.push(this.updateBookingGroupInDatabase(group));
+                documentList.forEach(document => {
+                    promiseList.push(this.updateDocumentInDatabase(document));
                 });
                 Promise.all(promiseList).then(result => {
                     noUpdated = result.length;
@@ -52,22 +59,33 @@ export abstract class ABookingGroupTransactionalMongoPatch extends ATransactiona
             }
         });
     }
-    private updateBookingGroupInDatabase(bookingGroup): Promise<boolean> {
+    private updateDocumentInDatabase(document): Promise<boolean> {
         return new Promise<boolean>((resolve: { (result: boolean): void }, reject: { (err: any): void }) => {
-            this._bookingRepository.findAndModifyDocument({
-                id: bookingGroup.id
-            }, bookingGroup,
+            this._repository.findAndModifyDocument({
+                id: document.id
+            }, document,
                 () => {
-                    reject(new Error("booking not found"));
+                    reject(new Error("document not found"));
                 },
                 (err: Error) => {
                     reject(err);
                 },
-                (updatedDBInvoiceGroup: Object) => {
+                (updatedDBDocument: Object) => {
                     resolve(true);
                 }
             );
         });
     }
-    protected abstract updateBookingGroupInMemory(bookingGroup);
+
+    /**
+     * Return the repository that will be paginated
+     */
+    protected abstract getMongoRepository(): MongoRepository;
+
+    /**
+     * 
+     * @param document A single document from the collection
+     * The function needs to make the according update on the document
+     */
+    protected abstract updateDocumentInMemory(document);
 }
