@@ -159,7 +159,7 @@ export class BookingChangePriceProduct {
                 }, this._booking);
             }).then((updatedBooking: BookingDO) => {
                 this._booking = updatedBooking;
-                return this._bookingInvoiceUtils.updateInvoicePriceToPay(updatedBooking);
+                return this._bookingInvoiceUtils.syncInvoiceWithBooking(updatedBooking);
             }).then((updatedGroup: InvoiceGroupDO) => {
                 resolve(this._booking);
             }).catch((error: any) => {

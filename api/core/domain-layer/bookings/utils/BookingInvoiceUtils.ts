@@ -19,13 +19,13 @@ export class BookingInvoiceUtils {
         this._thUtils = new ThUtils();
     }
 
-    public updateInvoicePriceToPay(booking: BookingDO): Promise<InvoiceGroupDO> {
+    public syncInvoiceWithBooking(booking: BookingDO): Promise<InvoiceGroupDO> {
         return new Promise<InvoiceGroupDO>((resolve: { (result: InvoiceGroupDO): void }, reject: { (err: ThError): void }) => {
-            this.updateInvoicePriceToPayCore(resolve, reject, booking);
+            this.syncInvoiceWithBookingCore(resolve, reject, booking);
         });
     }
 
-    private updateInvoicePriceToPayCore(resolve: { (result: InvoiceGroupDO): void }, reject: { (err: ThError): void }, booking: BookingDO) {
+    private syncInvoiceWithBookingCore(resolve: { (result: InvoiceGroupDO): void }, reject: { (err: ThError): void }, booking: BookingDO) {
         let invoiceRepository = this._appContext.getRepositoryFactory().getInvoiceGroupsRepository();
         invoiceRepository.getInvoiceGroupList({
             hotelId: this._sessionContext.sessionDO.hotel.id
@@ -40,7 +40,7 @@ export class BookingInvoiceUtils {
                 });
             }
             let invoiceGroup = searchResult.invoiceGroupList[0];
-            let needsUpdate = this.updateInvoicePriceToPayForGroup(invoiceGroup, booking);
+            let needsUpdate = this.syncInvoiceWithBookingForGroup(invoiceGroup, booking);
             if (!needsUpdate) {
                 return new Promise<InvoiceGroupDO>((resolve: { (result: InvoiceGroupDO): void }, reject: { (err: ThError): void }) => {
                     resolve(invoiceGroup);
@@ -56,7 +56,7 @@ export class BookingInvoiceUtils {
             reject(e);
         });
     }
-    private updateInvoicePriceToPayForGroup(invoiceGroup: InvoiceGroupDO, booking: BookingDO): boolean {
+    private syncInvoiceWithBookingForGroup(invoiceGroup: InvoiceGroupDO, booking: BookingDO): boolean {
         let invoice = _.find(invoiceGroup.invoiceList, (invoice: InvoiceDO) => { return invoice.bookingId == booking.bookingId });
         if (this._thUtils.isUndefinedOrNull(invoice)) {
             var thError = new ThError(ThStatusCode.BookingInvoiceUtilsInvoiceNotFound, null);

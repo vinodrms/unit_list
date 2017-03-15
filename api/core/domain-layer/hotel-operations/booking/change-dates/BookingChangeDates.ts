@@ -103,7 +103,7 @@ export class BookingChangeDates {
                 }, this._bookingWithDependencies.bookingDO);
             }).then((updatedBooking: BookingDO) => {
                 this._bookingWithDependencies.bookingDO = updatedBooking;
-                return this._bookingInvoiceUtils.updateInvoicePriceToPay(updatedBooking);
+                return this._bookingInvoiceUtils.syncInvoiceWithBooking(updatedBooking);
             }).then((updatedGroup: InvoiceGroupDO) => {
                 resolve(this._bookingWithDependencies.bookingDO);
             }).catch((error: any) => {
