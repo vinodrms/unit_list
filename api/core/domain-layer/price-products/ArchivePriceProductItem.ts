@@ -1,15 +1,15 @@
-import {ThLogger, ThLogLevel} from '../../utils/logging/ThLogger';
-import {ThError} from '../../utils/th-responses/ThError';
-import {ThStatusCode} from '../../utils/th-responses/ThResponse';
-import {AppContext} from '../../utils/AppContext';
-import {SessionContext} from '../../utils/SessionContext';
-import {PriceProductMetaRepoDO, PriceProductItemMetaRepoDO} from '../../data-layer/price-products/repositories/IPriceProductRepository';
-import {CustomerSearchResultRepoDO} from '../../data-layer/customers/repositories/ICustomerRepository';
-import {PriceProductInputIdDO} from './validation-structures/PriceProductInputIdDO';
-import {PriceProductDO, PriceProductStatus} from '../../data-layer/price-products/data-objects/PriceProductDO';
-import {ValidationResultParser} from '../common/ValidationResultParser';
-import {LazyLoadMetaResponseRepoDO} from '../../data-layer/common/repo-data-objects/LazyLoadRepoDO';
-import {BookingDOConstraints} from '../../data-layer/bookings/data-objects/BookingDOConstraints';
+import { ThLogger, ThLogLevel } from '../../utils/logging/ThLogger';
+import { ThError } from '../../utils/th-responses/ThError';
+import { ThStatusCode } from '../../utils/th-responses/ThResponse';
+import { AppContext } from '../../utils/AppContext';
+import { SessionContext } from '../../utils/SessionContext';
+import { PriceProductMetaRepoDO, PriceProductItemMetaRepoDO } from '../../data-layer/price-products/repositories/IPriceProductRepository';
+import { CustomerSearchResultRepoDO } from '../../data-layer/customers/repositories/ICustomerRepository';
+import { PriceProductInputIdDO } from './validation-structures/PriceProductInputIdDO';
+import { PriceProductDO, PriceProductStatus } from '../../data-layer/price-products/data-objects/PriceProductDO';
+import { ValidationResultParser } from '../common/ValidationResultParser';
+import { LazyLoadMetaResponseRepoDO } from '../../data-layer/common/repo-data-objects/LazyLoadRepoDO';
+import { BookingDOConstraints } from '../../data-layer/bookings/data-objects/BookingDOConstraints';
 
 export class ArchivePriceProductItem {
 	private _inputDO: PriceProductInputIdDO;
@@ -68,7 +68,7 @@ export class ArchivePriceProductItem {
 				var bookingsRepo = this._appContext.getRepositoryFactory().getBookingRepository();
 				return bookingsRepo.getBookingListCount({ hotelId: this._sessionContext.sessionDO.hotel.id },
 					{
-						confirmationStatusList: BookingDOConstraints.ConfirmationStatuses_AddOnProductForbidDeletion,
+						confirmationStatusList: BookingDOConstraints.ConfirmationStatuses_PriceProductForbidArchive,
 						priceProductId: this._inputDO.id
 					});
 			}).then((bookingMetaRsp: LazyLoadMetaResponseRepoDO) => {

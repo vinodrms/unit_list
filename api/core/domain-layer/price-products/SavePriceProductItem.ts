@@ -56,6 +56,12 @@ export class SavePriceProductItem {
 			reject(thError);
 			return false;
 		}
+		if (this._inputDO.price.dynamicPriceList.length == 0) {
+			let thError = new ThError(ThStatusCode.SavePriceProductItemNoDynamicRates, null);
+			ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Submitted 0 dynamic rates for a price product", this._inputDO, thError);
+			reject(thError);
+			return false;
+		}
 
 		for (var priceIndex = 0; priceIndex < this._inputDO.price.dynamicPriceList.length; priceIndex++) {
 			let dynamicPrice = this._inputDO.price.dynamicPriceList[priceIndex];

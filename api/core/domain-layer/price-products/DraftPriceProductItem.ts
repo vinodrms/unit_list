@@ -7,7 +7,6 @@ import { ThUtils } from '../../utils/ThUtils';
 import { PriceProductInputIdDO } from './validation-structures/PriceProductInputIdDO';
 import { PriceProductDO, PriceProductStatus } from '../../data-layer/price-products/data-objects/PriceProductDO';
 import { AttachedAddOnProductItemDO } from '../../data-layer/price-products/data-objects/included-items/AttachedAddOnProductItemDO';
-import { UpdatePriceProductItemStatus } from './utils/UpdatePriceProductItemStatus';
 import { ValidationResultParser } from '../common/ValidationResultParser';
 import { TaxResponseRepoDO } from '../../data-layer/taxes/repositories/ITaxRepository';
 import { RoomCategorySearchResultRepoDO } from '../../data-layer/room-categories/repositories/IRoomCategoryRepository';
