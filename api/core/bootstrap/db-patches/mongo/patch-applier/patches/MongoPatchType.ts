@@ -7,5 +7,7 @@ export enum MongoPatchType {
     AddTheRoomPricePerNightListOnBookingPrice,
     AddAppliedDiscountValueOnBookingPrice,
     AddCustomerIdDisplayedAsGuestOnDefaultBillingDetails,
-    
+    AddDynamicPricesOnPriceProducts,
+    AddDynamicPriceIdsOnBookingPrice,
+
 }
