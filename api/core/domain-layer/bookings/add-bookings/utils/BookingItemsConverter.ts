@@ -102,6 +102,7 @@ export class BookingItemsConverter {
             bookingDO.reservedAddOnProductIdList = [];
             bookingDO.allotmentId = bookingItem.allotmentId;
             bookingDO.notes = bookingItem.notes;
+            bookingDO.invoiceNotes = bookingItem.invoiceNotes;
             bookingDO.interval = bookingInterval;
             bookingDO.creationDate = this._converterParams.currentHotelTimestamp.thDateDO;
 
