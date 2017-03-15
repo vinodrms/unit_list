@@ -77,19 +77,25 @@ export class BookingInvoiceUtils {
             throw thError;
         }
 
+        let needsUpdate = false;
         let priceToPay = invoice.getPrice();
         let payersPriceToPay = this.getInvoicePayersPriceToPay(invoice);
 
-        if (priceToPay === payersPriceToPay) {
-            return false;
+        if (priceToPay != payersPriceToPay) {
+            let priceForEachPayer = (priceToPay - payersPriceToPay) / invoice.payerList.length;
+            invoice.payerList.forEach((payer: InvoicePayerDO) => {
+                payer.priceToPay += priceForEachPayer;
+                payer.priceToPay = this._thUtils.roundNumberToTwoDecimals(payer.priceToPay);
+            });
+            needsUpdate = true;
+        }
+        
+        if (invoice.notesFromBooking != booking.invoiceNotes) {
+            invoice.notesFromBooking = booking.invoiceNotes;
+            needsUpdate = true;
         }
 
-        let priceForEachPayer = (priceToPay - payersPriceToPay) / invoice.payerList.length;
-        invoice.payerList.forEach((payer: InvoicePayerDO) => {
-            payer.priceToPay += priceForEachPayer;
-            payer.priceToPay = this._thUtils.roundNumberToTwoDecimals(payer.priceToPay);
-        });
-        return true;
+        return needsUpdate;
     }
 
     private getInvoicePayersPriceToPay(invoice: InvoiceDO): number {
