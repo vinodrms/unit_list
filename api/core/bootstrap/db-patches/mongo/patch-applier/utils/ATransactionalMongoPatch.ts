@@ -27,7 +27,11 @@ export abstract class ATransactionalMongoPatch implements IMongoPatchApplier, IM
 
 	public apply(): Promise<boolean> {
 		return new Promise<boolean>((resolve, reject) => {
-			this.applyCore(resolve, reject);
+			try {
+				this.applyCore(resolve, reject);
+			} catch (e) {
+				reject(e);
+			}
 		});
 	}
 	public abstract getPatchType(): MongoPatchType;

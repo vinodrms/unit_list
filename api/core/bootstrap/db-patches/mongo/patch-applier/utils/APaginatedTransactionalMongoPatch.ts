@@ -36,7 +36,11 @@ export abstract class APaginatedTransactionalMongoPatch extends ATransactionalMo
             }, (documentList: any[]) => {
                 noToUpdate += documentList.length;
                 documentList.forEach(document => {
-                    this.updateDocumentInMemory(document);
+                    try {
+                        this.updateDocumentInMemory(document);
+                    } catch (e) {
+                        finishSingleUpdateCallback(e);
+                    }
                 });
                 var promiseList = [];
                 documentList.forEach(document => {
