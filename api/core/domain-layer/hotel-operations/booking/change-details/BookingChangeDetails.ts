@@ -10,6 +10,8 @@ import { ValidationResultParser } from '../../../common/ValidationResultParser';
 import { DocumentActionDO } from '../../../../data-layer/common/data-objects/document-history/DocumentActionDO';
 import { BookingInvoiceUtils } from "../../../bookings/utils/BookingInvoiceUtils";
 import { InvoiceGroupDO } from "../../../../data-layer/invoices/data-objects/InvoiceGroupDO";
+import { BookingWithDependencies } from "../utils/BookingWithDependencies";
+import { BookingWithDependenciesLoader } from "../utils/BookingWithDependenciesLoader";
 
 import _ = require('underscore');
 
@@ -17,9 +19,9 @@ export class BookingChangeDetails {
     private _bookingInvoiceUtils: BookingInvoiceUtils;
     private _changeDetailsDO: BookingChangeDetailsDO;
 
-    private _loadedBooking: BookingDO;
     private _updatedBooking: BookingDO;
-
+    private _bookingWithDependencies: BookingWithDependencies;
+    
     constructor(private _appContext: AppContext, private _sessionContext: SessionContext) {
         this._bookingInvoiceUtils = new BookingInvoiceUtils(this._appContext, this._sessionContext);
     }
@@ -37,25 +39,30 @@ export class BookingChangeDetails {
             parser.logAndReject("Error validating change details fields", reject);
             return;
         }
+        
+        var bookingLoader = new BookingWithDependenciesLoader(this._appContext, this._sessionContext);
+        bookingLoader.load(this._changeDetailsDO.groupBookingId, this._changeDetailsDO.bookingId)
+            .then((bookingWithDependencies: BookingWithDependencies) => {
+                this._bookingWithDependencies = bookingWithDependencies;
 
-        var bookingsRepo = this._appContext.getRepositoryFactory().getBookingRepository();
-        bookingsRepo.getBookingById({ hotelId: this._sessionContext.sessionDO.hotel.id }, this._changeDetailsDO.groupBookingId, this._changeDetailsDO.bookingId)
-            .then((booking: BookingDO) => {
-                this._loadedBooking = booking;
-
-                if (!this.bookingHasValidStatus()) {
+                if (!this.bookingHasValidStatusForBookingNotesAndAttachmentsUpdate()) {
                     var thError = new ThError(ThStatusCode.BookingChangeDetailsInvalidState, null);
                     ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "change details: invalid booking state", this._changeDetailsDO, thError);
+                    throw thError;
+                }
+                if (!this.bookingHasValidStatusForInvoiceNotesUpdate()) {
+                    var thError = new ThError(ThStatusCode.BookingChangeInvoiceNotesInvalidState, null);
+                    ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "change details: invoice already paid - cannot change invoice notes", this._changeDetailsDO, thError);
                     throw thError;
                 }
                 this.updateDetailsOnLoadedBooking();
 
                 var bookingsRepo = this._appContext.getRepositoryFactory().getBookingRepository();
                 return bookingsRepo.updateBooking({ hotelId: this._sessionContext.sessionDO.hotel.id }, {
-                    groupBookingId: this._loadedBooking.groupBookingId,
-                    bookingId: this._loadedBooking.bookingId,
-                    versionId: this._loadedBooking.versionId
-                }, this._loadedBooking);
+                    groupBookingId: this._bookingWithDependencies.bookingDO.groupBookingId,
+                    bookingId: this._bookingWithDependencies.bookingDO.bookingId,
+                    versionId: this._bookingWithDependencies.bookingDO.versionId
+                }, this._bookingWithDependencies.bookingDO);
             }).then((updatedBooking: BookingDO) => {
                 this._updatedBooking = updatedBooking;
                 return this._bookingInvoiceUtils.syncInvoiceWithBooking(updatedBooking);
@@ -69,14 +76,18 @@ export class BookingChangeDetails {
                 reject(thError);
             });
     }
-    private bookingHasValidStatus(): boolean {
-        return _.contains(BookingDOConstraints.ConfirmationStatuses_CanChangeDetails, this._loadedBooking.confirmationStatus);
+    private bookingHasValidStatusForBookingNotesAndAttachmentsUpdate(): boolean {
+        return _.contains(BookingDOConstraints.ConfirmationStatuses_CanChangeDetails, this._bookingWithDependencies.bookingDO.confirmationStatus);
     }
+    private bookingHasValidStatusForInvoiceNotesUpdate(): boolean {
+        return !this._bookingWithDependencies.hasClosedInvoice();
+    }
+
     private updateDetailsOnLoadedBooking() {
-        this._loadedBooking.notes = this._changeDetailsDO.notes;
-        this._loadedBooking.invoiceNotes = this._changeDetailsDO.invoiceNotes;
-        this._loadedBooking.fileAttachmentList = this._changeDetailsDO.fileAttachmentList;
-        this._loadedBooking.bookingHistory.logDocumentAction(DocumentActionDO.buildDocumentActionDO({
+        this._bookingWithDependencies.bookingDO.notes = this._changeDetailsDO.notes;
+        this._bookingWithDependencies.bookingDO.invoiceNotes = this._changeDetailsDO.invoiceNotes;
+        this._bookingWithDependencies.bookingDO.fileAttachmentList = this._changeDetailsDO.fileAttachmentList;
+        this._bookingWithDependencies.bookingDO.bookingHistory.logDocumentAction(DocumentActionDO.buildDocumentActionDO({
             actionParameterMap: {},
             actionString: "The details of the booking have been changed",
             userId: this._sessionContext.sessionDO.user.id
