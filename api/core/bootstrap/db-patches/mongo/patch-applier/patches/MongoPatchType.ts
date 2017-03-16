@@ -6,5 +6,7 @@ export enum MongoPatchType {
     SetTheNoBabyBedsOnBookingsCapacity,
     AddTheRoomPricePerNightListOnBookingPrice,
     AddAppliedDiscountValueOnBookingPrice,
-
+    AddCustomerIdDisplayedAsGuestOnDefaultBillingDetails,
+    SetValueForFirstChildWithAdultInSharedBedPriceOnBookingsPriceProductSnapshots,
+    
 }

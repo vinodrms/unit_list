@@ -23,6 +23,6 @@ export class ConfirmedRevenueBuilderStrategy extends AMetricBuilderStrategy {
         return metric;
     }
     protected getKeyMetricDisplayName(): string {
-        return "Confirmed Revenue";
+        return "Room Revenue Confirmed";
     }
 }

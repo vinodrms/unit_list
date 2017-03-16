@@ -16,6 +16,7 @@ import { BookingReactivate } from '../core/domain-layer/hotel-operations/booking
 import { BookingReserveAddOnProducts } from '../core/domain-layer/hotel-operations/booking/reserve-add-on-products/BookingReserveAddOnProducts';
 import { BookingChangePriceProduct } from '../core/domain-layer/hotel-operations/booking/change-price-product/BookingChangePriceProduct';
 import { BookingUndoCheckIn } from '../core/domain-layer/hotel-operations/booking/undo-check-in/BookingUndoCheckIn';
+import { BookingChangeGuestOnInvoice } from "../core/domain-layer/hotel-operations/booking/change-guest-invoice/BookingChangeGuestOnInvoice";
 
 class HotelBookingOperationsController extends BaseController {
     public getPossiblePrices(req: Express.Request, res: Express.Response) {
@@ -94,10 +95,23 @@ class HotelBookingOperationsController extends BaseController {
         });
     }
 
-    public changeCustomers(req: Express.Request, res: Express.Response) {
+    public changeGuestCustomerDisplayedOnInvoice(req: Express.Request, res: Express.Response) {
         var appContext: AppContext = req.appContext;
         var sessionContext: SessionContext = req.sessionContext;
 
+        var bookingChangeGuestOnInvoice = new BookingChangeGuestOnInvoice(appContext, sessionContext);
+        bookingChangeGuestOnInvoice.changeGuestDisplayedOnInvoice(req.body.booking).then((booking: BookingDO) => {
+            booking.bookingHistory.translateActions(this.getThTranslation(sessionContext));
+            this.returnSuccesfulResponse(req, res, { booking: booking });
+        }).catch((error: any) => {
+            this.returnErrorResponse(req, res, error, ThStatusCode.HotelBookingOperationsControllerErrorChangingGuestOnInvoice);
+        });
+    }
+
+    public changeCustomers(req: Express.Request, res: Express.Response) {
+        var appContext: AppContext = req.appContext;
+        var sessionContext: SessionContext = req.sessionContext;
+        
         var bookingChangeCustomers = new BookingChangeCustomers(appContext, sessionContext);
         bookingChangeCustomers.changeCustomers(req.body.booking).then((booking: BookingDO) => {
             booking.bookingHistory.translateActions(this.getThTranslation(sessionContext));
@@ -181,6 +195,7 @@ module.exports = {
     changeCapacity: hotelBookingOperationsController.changeCapacity.bind(hotelBookingOperationsController),
     addPaymentGuarantee: hotelBookingOperationsController.addPaymentGuarantee.bind(hotelBookingOperationsController),
     changeDetails: hotelBookingOperationsController.changeDetails.bind(hotelBookingOperationsController),
+    changeGuestCustomerDisplayedOnInvoice: hotelBookingOperationsController.changeGuestCustomerDisplayedOnInvoice.bind(hotelBookingOperationsController),
     changeCustomers: hotelBookingOperationsController.changeCustomers.bind(hotelBookingOperationsController),
     cancel: hotelBookingOperationsController.cancel.bind(hotelBookingOperationsController),
     reactivate: hotelBookingOperationsController.reactivate.bind(hotelBookingOperationsController),
