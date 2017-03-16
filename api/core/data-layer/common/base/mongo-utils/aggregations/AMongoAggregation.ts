@@ -1,6 +1,6 @@
-import {ThUtils} from '../../../../../utils/ThUtils';
-import {MongoUtils} from '../MongoUtils';
-import {MongoSearchCriteria, MongoAggregationOptions} from '../../MongoRepository';
+import { ThUtils } from '../../../../../utils/ThUtils';
+import { MongoUtils } from '../MongoUtils';
+import { MongoSearchCriteria, MongoAggregationOptions } from '../../MongoRepository';
 
 import _ = require('underscore');
 import mongodb = require('mongodb');
@@ -48,9 +48,12 @@ export abstract class AMongoAggregation<T> {
         }
         return pipeline;
     }
-    private applySortCriteria(pipeline: Object[], searchCriteria: MongoSearchCriteria) {
+    private applySortCriteria(pipeline: Object[], searchCriteria: MongoSearchCriteria): Object[] {
         if (!this._thUtils.isUndefinedOrNull(searchCriteria.sortCriteria) && _.isObject(searchCriteria.sortCriteria)) {
             pipeline.push({ $sort: searchCriteria.sortCriteria });
+        }
+        else {
+            pipeline.push({ $sort: { "_id": -1 } });
         }
         return pipeline;
     }

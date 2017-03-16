@@ -19,20 +19,22 @@ export abstract class APaginatedTransactionalMongoPatch extends ATransactionalMo
         super();
         this._repository = this.getMongoRepository();
     }
-
     protected applyCore(resolve: { (result: boolean): void }, reject: { (err: ThError): void }) {
-        var noUpdated = 0, pageNumber = 0;
+        var noUpdated = 0, noToUpdate = 0, pageNumber = 0;
+        var noUpdatedInCurrentStep = 0;
         async.doWhilst((finishSingleUpdateCallback) => {
             let searchCriteria: MongoSearchCriteria = {
                 criteria: {},
                 lazyLoad: {
                     pageNumber: pageNumber,
                     pageSize: APaginatedTransactionalMongoPatch.PageSize
-                }
+                },
+                sortCriteria: { "_id": 1 }
             };
             this._repository.findMultipleDocuments(searchCriteria, (err) => {
                 finishSingleUpdateCallback(err);
             }, (documentList: any[]) => {
+                noToUpdate += documentList.length;
                 documentList.forEach(document => {
                     this.updateDocumentInMemory(document);
                 });
@@ -41,7 +43,8 @@ export abstract class APaginatedTransactionalMongoPatch extends ATransactionalMo
                     promiseList.push(this.updateDocumentInDatabase(document));
                 });
                 Promise.all(promiseList).then(result => {
-                    noUpdated = result.length;
+                    noUpdated += result.length;
+                    noUpdatedInCurrentStep = result.length;
                     pageNumber++;
                     finishSingleUpdateCallback(null);
                 }).catch(err => {
@@ -49,9 +52,13 @@ export abstract class APaginatedTransactionalMongoPatch extends ATransactionalMo
                 });
             });
         }, () => {
-            return noUpdated > 0;
+            return noUpdatedInCurrentStep > 0;
         }, (err) => {
             if (err) {
+                reject(err);
+            }
+            else if (noUpdated != noToUpdate) {
+                let error = new Error("Patch " + this.getPatchType() + " did not update all the rows.")
                 reject(err);
             }
             else {
