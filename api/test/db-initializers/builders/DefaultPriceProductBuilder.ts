@@ -100,7 +100,7 @@ export class DefaultPriceProductBuilder implements IPriceProductDataSource {
 		priceProduct.taxIdList = [taxId];
 		priceProduct.versionId = 0;
 		priceProduct.yieldFilterList = [];
-		ppUtils.populateDefaultIntervalsOn(priceProduct);
+		ppUtils.populateDefaultValuesOn(priceProduct);
 		return priceProduct;
 	}
 
