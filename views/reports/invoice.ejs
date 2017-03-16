@@ -140,8 +140,11 @@
                                     <%}%>
                                     <br>
                                 </div>
+
+                                <%if (payerVatCodeValue.length > 0 || payerGovernmentCodeValue.length > 0 || additionalPayerDetails.length > 0) {%>
+                                    <br>
+                                <%}%>
                                 
-                                <br>
                                 <%if (payerVatCodeValue.length > 0) {%>
                                     <%= payerVatCodeLabel %>: <%= payerVatCodeValue %><br>
                                 <%}%>
@@ -151,7 +154,12 @@
                                 <%if (additionalPayerDetails.length > 0) {%>
                                     <span class="text-details"><%= additionalPayerDetails %></span>
                                 <%}%>
-
+                                
+                                <%if (notesFromBooking.length > 0) {%>
+                                    <br>
+                                    <%= notesFromBooking %>
+                                <%}%>
+                                
                             </td>
                             <td width="10%"></td>
                             <td width="45%" style="text-align:right;">
