@@ -468,6 +468,7 @@ export enum ThStatusCode {
 	HotelBookingOperationsControllerErrorAddingPaymentGuarantee,
 	BookingChangeDetailsInvalidState,
 	BookingChangeInvoiceNotesInvalidState,
+	BookingChangeDetailsInvoiceSyncError,
 	BookingChangeDetailsError,
 	HotelBookingOperationsControllerErrorChangingDetails,
 	BookingChangeCustomersInvalidState,
@@ -911,7 +912,7 @@ ThMessage[ThStatusCode.BookingsControllerErrorSearchingBookings] = "Error search
 ThMessage[ThStatusCode.BookingsControllerErrorAddingBookings] = "Error adding bookings.";
 ThMessage[ThStatusCode.BookingStatusChangerCronJobExecutorError] = "Error changing booking statuses from the process.";
 ThMessage[ThStatusCode.BookingInvoiceUtilsInvoiceNotFound] = "The invoice for the booking was not found.";
-ThMessage[ThStatusCode.BookingInvoiceUtilsInvoiceIsClosed] = "The price cannot be updated on the invoice because it is closed (Paid or Lost by Management).";
+ThMessage[ThStatusCode.BookingInvoiceUtilsInvoiceIsClosed] = "The price and the notes cannot be updated on the invoice because it is closed (Paid or Lost by Management).";
 ThMessage[ThStatusCode.HotelTimeNullTimezone] = "The timezone for the hotel is not set.";
 ThMessage[ThStatusCode.HotelTimeError] = "Error getting the current time for your hotel.";
 ThMessage[ThStatusCode.HotelOperationsRoomInfoReaderError] = "Error getting the hotel operations data.";
@@ -975,6 +976,7 @@ ThMessage[ThStatusCode.BookingPaymentGuaranteeInvalidState] = "A payment guarant
 ThMessage[ThStatusCode.HotelBookingOperationsControllerErrorAddingPaymentGuarantee] = "Error adding payment guarantee.";
 ThMessage[ThStatusCode.BookingChangeDetailsInvalidState] = "You cannot change details for checked out or cancelled bookings.";
 ThMessage[ThStatusCode.BookingChangeInvoiceNotesInvalidState] = "You cannot change invoice notes on bookings that have the invoice paid.";
+ThMessage[ThStatusCode.BookingChangeDetailsInvoiceSyncError] = "There was an error updating notes on the invoice.";
 ThMessage[ThStatusCode.BookingChangeDetailsError] = "Error changing booking details.";
 ThMessage[ThStatusCode.HotelBookingOperationsControllerErrorChangingDetails] = "Error changing booking details.";
 ThMessage[ThStatusCode.BookingChangeCustomersInvalidState] = "The customers can be changed only for checked in, confirmed or guaranteed bookings.";

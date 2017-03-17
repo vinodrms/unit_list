@@ -10,7 +10,7 @@ import { InvoiceGroupDO } from '../../../../data-layer/invoices/data-objects/Inv
 import { BookingDOConstraints } from '../../../../data-layer/bookings/data-objects/BookingDOConstraints';
 import { DocumentActionDO } from '../../../../data-layer/common/data-objects/document-history/DocumentActionDO';
 import { BookingUtils } from '../../../bookings/utils/BookingUtils';
-import { BookingInvoiceUtils } from '../../../bookings/utils/BookingInvoiceUtils';
+import { BookingInvoiceSync } from '../../../bookings/invoice-sync/BookingInvoiceSync';
 import { ValidationResultParser } from '../../../common/ValidationResultParser';
 import { BookingWithDependenciesLoader } from '../utils/BookingWithDependenciesLoader';
 import { BookingWithDependencies } from '../utils/BookingWithDependencies';
@@ -23,14 +23,14 @@ import _ = require('underscore');
 
 export class BookingChangeCapacity {
     private _bookingUtils: BookingUtils;
-    private _bookingInvoiceUtils: BookingInvoiceUtils;
+    private _bookingInvoiceSync: BookingInvoiceSync;
     private _bookingChangeCapacityDO: BookingChangeCapacityDO;
 
     private _bookingWithDependencies: BookingWithDependencies;
 
     constructor(private _appContext: AppContext, private _sessionContext: SessionContext) {
         this._bookingUtils = new BookingUtils();
-        this._bookingInvoiceUtils = new BookingInvoiceUtils(this._appContext, this._sessionContext);
+        this._bookingInvoiceSync = new BookingInvoiceSync(this._appContext, this._sessionContext);
     }
 
     public changeCapacity(bookingChangeCapacityDO: BookingChangeCapacityDO): Promise<BookingDO> {
@@ -86,7 +86,7 @@ export class BookingChangeCapacity {
                 }, this._bookingWithDependencies.bookingDO);
             }).then((updatedBooking: BookingDO) => {
                 this._bookingWithDependencies.bookingDO = updatedBooking;
-                return this._bookingInvoiceUtils.syncInvoiceWithBooking(updatedBooking);
+                return this._bookingInvoiceSync.syncInvoiceWithBookingPrice(updatedBooking);
             }).then((updatedGroup: InvoiceGroupDO) => {
                 resolve(this._bookingWithDependencies.bookingDO);
             }).catch((error: any) => {

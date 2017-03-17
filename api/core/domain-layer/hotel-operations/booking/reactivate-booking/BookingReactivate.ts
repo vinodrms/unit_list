@@ -18,7 +18,7 @@ import { BookingWithDependencies } from '../utils/BookingWithDependencies';
 import { BookingReactivateDO } from './BookingReactivateDO';
 import { ValidationResultParser } from '../../../common/ValidationResultParser';
 import { BookingUtils } from '../../../bookings/utils/BookingUtils';
-import { BookingInvoiceUtils } from '../../../bookings/utils/BookingInvoiceUtils';
+import { BookingInvoiceSync } from '../../../bookings/invoice-sync/BookingInvoiceSync';
 import { ThDateUtils } from '../../../../utils/th-dates/ThDateUtils';
 import { NewBookingsValidationRules } from '../../../bookings/add-bookings/utils/NewBookingsValidationRules';
 
@@ -26,7 +26,7 @@ import _ = require('underscore');
 
 export class BookingReactivate {
     private _bookingUtils: BookingUtils;
-    private _bookingInvoiceUtils: BookingInvoiceUtils;
+    private _bookingInvoiceSync: BookingInvoiceSync;
     private _thDateUtils: ThDateUtils;
 
     private _reactivateDO: BookingReactivateDO;
@@ -38,7 +38,7 @@ export class BookingReactivate {
 
     constructor(private _appContext: AppContext, private _sessionContext: SessionContext) {
         this._bookingUtils = new BookingUtils();
-        this._bookingInvoiceUtils = new BookingInvoiceUtils(this._appContext, this._sessionContext);
+        this._bookingInvoiceSync = new BookingInvoiceSync(this._appContext, this._sessionContext);
         this._thDateUtils = new ThDateUtils();
     }
 
@@ -109,7 +109,7 @@ export class BookingReactivate {
                 }, this._bookingWithDependencies.bookingDO);
             }).then((updatedBooking: BookingDO) => {
                 this._bookingWithDependencies.bookingDO = updatedBooking;
-                return this._bookingInvoiceUtils.syncInvoiceWithBooking(updatedBooking);
+                return this._bookingInvoiceSync.syncInvoiceWithBookingPrice(updatedBooking);
             }).then((updatedGroup: InvoiceGroupDO) => {
                 resolve(this._bookingWithDependencies.bookingDO);
             }).catch((error: any) => {
