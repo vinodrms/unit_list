@@ -815,5 +815,6 @@ export var EnglishTranslations: Object = {
 	"Additional price for": "Additional price for",
 	"adult": "adult",
 	"child": "child",
-		
+	"After the invoice has been closed, invoice notes cannot be edited anymore.": "After the invoice has been closed, invoice notes cannot be edited anymore.",
+			
 };
