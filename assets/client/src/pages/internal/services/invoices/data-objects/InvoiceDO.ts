@@ -16,9 +16,10 @@ export class InvoiceDO extends BaseDO {
     payerList: InvoicePayerDO[];
     itemList: InvoiceItemDO[];
     paymentStatus: InvoicePaymentStatus;
+    notesFromBooking: string;
 
     protected getPrimitivePropertyKeys(): string[] {
-        return ["bookingId", "invoiceReference", "paymentStatus"];
+        return ["bookingId", "invoiceReference", "paymentStatus", "notesFromBooking"];
     }
 
     public buildFromObject(object: Object) {

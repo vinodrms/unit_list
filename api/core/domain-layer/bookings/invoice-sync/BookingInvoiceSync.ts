@@ -12,20 +12,31 @@ import { InvoiceGroupSearchResultRepoDO } from '../../../data-layer/invoices/rep
 
 import _ = require('underscore');
 
-export class BookingInvoiceUtils {
+enum BookingInvoiceSyncType {
+    Pricing,
+    Notes,
+};
+
+export class BookingInvoiceSync {
     private _thUtils: ThUtils;
 
     constructor(private _appContext: AppContext, private _sessionContext: SessionContext) {
         this._thUtils = new ThUtils();
     }
 
-    public updateInvoicePriceToPay(booking: BookingDO): Promise<InvoiceGroupDO> {
+    public syncInvoiceWithBookingPrice(booking: BookingDO): Promise<InvoiceGroupDO> {
         return new Promise<InvoiceGroupDO>((resolve: { (result: InvoiceGroupDO): void }, reject: { (err: ThError): void }) => {
-            this.updateInvoicePriceToPayCore(resolve, reject, booking);
+            this.syncInvoiceWithBookingCore(resolve, reject, booking, BookingInvoiceSyncType.Pricing);
         });
     }
 
-    private updateInvoicePriceToPayCore(resolve: { (result: InvoiceGroupDO): void }, reject: { (err: ThError): void }, booking: BookingDO) {
+    public syncInvoiceWithBookingNotes(booking: BookingDO): Promise<InvoiceGroupDO> {
+        return new Promise<InvoiceGroupDO>((resolve: { (result: InvoiceGroupDO): void }, reject: { (err: ThError): void }) => {
+            this.syncInvoiceWithBookingCore(resolve, reject, booking, BookingInvoiceSyncType.Notes);
+        });
+    }
+
+    private syncInvoiceWithBookingCore(resolve: { (result: InvoiceGroupDO): void }, reject: { (err: ThError): void }, booking: BookingDO, syncType: BookingInvoiceSyncType) {
         let invoiceRepository = this._appContext.getRepositoryFactory().getInvoiceGroupsRepository();
         invoiceRepository.getInvoiceGroupList({
             hotelId: this._sessionContext.sessionDO.hotel.id
@@ -40,8 +51,14 @@ export class BookingInvoiceUtils {
                 });
             }
             let invoiceGroup = searchResult.invoiceGroupList[0];
-            let needsUpdate = this.updateInvoicePriceToPayForGroup(invoiceGroup, booking);
-            if (!needsUpdate) {
+            let syncIsRequired = false;
+            switch(syncType) {
+                case BookingInvoiceSyncType.Pricing: syncIsRequired = this.syncInvoiceWithBookingPriceForGroup(invoiceGroup, booking); break;
+                case BookingInvoiceSyncType.Notes: syncIsRequired = this.syncInvoiceWithBookingNotesForGroup(invoiceGroup, booking); break;
+                default: syncIsRequired = false;
+            }
+            
+            if (!syncIsRequired) {
                 return new Promise<InvoiceGroupDO>((resolve: { (result: InvoiceGroupDO): void }, reject: { (err: ThError): void }) => {
                     resolve(invoiceGroup);
                 });
@@ -56,7 +73,47 @@ export class BookingInvoiceUtils {
             reject(e);
         });
     }
-    private updateInvoicePriceToPayForGroup(invoiceGroup: InvoiceGroupDO, booking: BookingDO): boolean {
+
+    private syncInvoiceWithBookingPriceForGroup(invoiceGroup: InvoiceGroupDO, booking: BookingDO): boolean {
+        let invoice = this.getBookingInvoiceFromInvoiceGroup(invoiceGroup, booking);
+
+        let priceToPay = invoice.getPrice();
+        let payersPriceToPay = this.getInvoicePayersPriceToPay(invoice);
+        
+        if (priceToPay == payersPriceToPay) {
+            return false;
+        }
+        
+        let priceForEachPayer = (priceToPay - payersPriceToPay) / invoice.payerList.length;
+        invoice.payerList.forEach((payer: InvoicePayerDO) => {
+            payer.priceToPay += priceForEachPayer;
+            payer.priceToPay = this._thUtils.roundNumberToTwoDecimals(payer.priceToPay);
+        });
+
+        return true;
+    }
+
+    private getInvoicePayersPriceToPay(invoice: InvoiceDO): number {
+        var payerTotalPrice = 0.0;
+        invoice.payerList.forEach((payer: InvoicePayerDO) => {
+            payerTotalPrice += payer.priceToPay;
+        });
+        return payerTotalPrice;
+    }
+
+    private syncInvoiceWithBookingNotesForGroup(invoiceGroup: InvoiceGroupDO, booking: BookingDO): boolean {        
+        let invoice = this.getBookingInvoiceFromInvoiceGroup(invoiceGroup, booking);
+
+        if (invoice.notesFromBooking == booking.invoiceNotes) {
+            return false
+        }
+        
+        invoice.notesFromBooking = booking.invoiceNotes;
+        
+        return true;
+    }
+
+    private getBookingInvoiceFromInvoiceGroup(invoiceGroup: InvoiceGroupDO, booking: BookingDO): InvoiceDO {
         let invoice = _.find(invoiceGroup.invoiceList, (invoice: InvoiceDO) => { return invoice.bookingId == booking.bookingId });
         if (this._thUtils.isUndefinedOrNull(invoice)) {
             var thError = new ThError(ThStatusCode.BookingInvoiceUtilsInvoiceNotFound, null);
@@ -69,7 +126,7 @@ export class BookingInvoiceUtils {
         }
         if (invoice.isClosed()) {
             var thError = new ThError(ThStatusCode.BookingInvoiceUtilsInvoiceIsClosed, null);
-            ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Invoice price cannot be changed because the invoice is closed", {
+            ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Invoice cannot be changed because the invoice is closed", {
                 groupBookingId: booking.groupBookingId,
                 bookingId: booking.bookingId,
                 invoiceGroupId: invoiceGroup.id
@@ -77,26 +134,7 @@ export class BookingInvoiceUtils {
             throw thError;
         }
 
-        let priceToPay = invoice.getPrice();
-        let payersPriceToPay = this.getInvoicePayersPriceToPay(invoice);
-
-        if (priceToPay === payersPriceToPay) {
-            return false;
-        }
-
-        let priceForEachPayer = (priceToPay - payersPriceToPay) / invoice.payerList.length;
-        invoice.payerList.forEach((payer: InvoicePayerDO) => {
-            payer.priceToPay += priceForEachPayer;
-            payer.priceToPay = this._thUtils.roundNumberToTwoDecimals(payer.priceToPay);
-        });
-        return true;
+        return invoice;
     }
 
-    private getInvoicePayersPriceToPay(invoice: InvoiceDO): number {
-        var payerTotalPrice = 0.0;
-        invoice.payerList.forEach((payer: InvoicePayerDO) => {
-            payerTotalPrice += payer.priceToPay;
-        });
-        return payerTotalPrice;
-    }
 }
