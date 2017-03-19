@@ -46,8 +46,8 @@ enum BookingType {
 }
 
 export class BookingItemsConverter {
-    public static GroupBookingReferencePrefix = "GR";
-    public static IndividualBookingReferencePrefix = "BR";
+    private static GroupBookingReferencePrefix = "GR";
+    private static IndividualBookingReferencePrefix = "BR";
 
     private static MAX_BOOKINGS_PER_DAY = 99999;
 
