@@ -124,6 +124,8 @@ export class GenerateBookingInvoice {
                     aopInvoiceItem.buildFromAddOnProductDO(generateAopMeta.addOnProductDO, generateAopMeta.noOfItems, true, generateAopMeta.addOnProductDO.getVatId());
                     invoice.itemList.push(aopInvoiceItem);
                 });
+                
+                invoice.notesFromBooking = booking.invoiceNotes;
 
                 resolve(invoice);
             });

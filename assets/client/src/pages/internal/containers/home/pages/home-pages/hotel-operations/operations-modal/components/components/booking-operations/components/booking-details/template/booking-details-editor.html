@@ -24,6 +24,21 @@
     </div>
     <div class="row padding-top-5px">
         <div class="col-xs-12 col-sm-1">
+            <p>{{'Invoice Notes' | translate}}</p>
+        </div>
+        <div class="col-xs-12 col-sm-8 field-value text-field" *ngIf="readonly || invoiceIsClosed">
+            <p class="notes" *ngIf="!invoiceNotesAreEmpty">{{bookingDO.invoiceNotes}}</p>
+            <p class="placeholder" *ngIf="invoiceNotesAreEmpty">{{'None' | translate}}</p>
+        </div>
+        <div class="col-xs-12 col-sm-8 field-value text-field" *ngIf="invoiceIsClosed && !readonly">
+            <p class="text-muted small"> <i class="fa fa-info-circle"></i>{{ 'After the invoice has been closed, invoice notes cannot be edited anymore.' | translate }}</p>
+        </div>
+        <div class="col-xs-12 col-sm-8 form-group" *ngIf="!readonly && !invoiceIsClosed">
+            <textarea class="form-control notes" [(ngModel)]="bookingDO.invoiceNotes" name="invoiceNotes"></textarea>
+        </div>
+    </div>
+    <div class="row padding-top-5px">
+        <div class="col-xs-12 col-sm-1">
             <p>{{'Files' | translate}}</p>
         </div>
         <div class="col-xs-12 col-sm-8">

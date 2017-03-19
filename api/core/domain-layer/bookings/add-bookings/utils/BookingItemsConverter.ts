@@ -84,8 +84,9 @@ export class BookingItemsConverter {
         var noOfRooms = this._bookingItems.bookingList.length;
         let groupBookingRoomCategoryIdList = this.getRoomCategoryIdListWithinGroupBooking();
 
-        let promiseList = [];
         this.generateReference(BookingType.Group).then((groupBookingReference: string) => {
+            let promiseList = [];
+
             _.forEach(this._bookingItems.bookingList, (bookingItem: BookingItemDO) => {
                 var bookingDO = new BookingDO();
 
@@ -150,7 +151,7 @@ export class BookingItemsConverter {
                 promiseList.push(this.attachIndividualBookingReference(bookingDO));
             });
 
-            return Promise.all(promiseList)
+            return Promise.all(promiseList);
         }).then((bookingList: BookingDO[]) => {
             resolve(bookingList);
         }).catch((error) => {
