@@ -816,5 +816,6 @@ export var EnglishTranslations: Object = {
 	"adult": "adult",
 	"child": "child",
 	"After the invoice has been closed, invoice notes cannot be edited anymore.": "After the invoice has been closed, invoice notes cannot be edited anymore.",
+	"The booking group with reference %groupBookingReference% has been successfully added. The group includes the following bookings:": "The booking group with reference %groupBookingReference% has been successfully added. The group includes the following bookings:",
 			
 };
