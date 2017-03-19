@@ -7,6 +7,7 @@ import { P4_SetTheNoBabyBedsOnBookingsCapacity } from './list/P4_SetTheNoBabyBed
 import { P5_AddTheRoomPricePerNightListOnBookingPrice } from './list/P5_AddTheRoomPricePerNightListOnBookingPrice';
 import { P6_AddAppliedDiscountValueOnBookingPrice } from './list/P6_AddAppliedDiscountValueOnBookingPrice';
 import { P7_AddCustomerIdDisplayedAsGuestOnDefaultBillingDetails } from "./list/P7_AddCustomerIdDisplayedAsGuestOnDefaultBillingDetails";
+import { P9_SetInitialValuesForBookingReferenceSequencesOnHotel } from "./list/P9_SetInitialValuesForBookingReferenceSequencesOnHotel";
 
 
 export class MongoPatchUtils {
@@ -20,7 +21,7 @@ export class MongoPatchUtils {
 			new P5_AddTheRoomPricePerNightListOnBookingPrice(),
 			new P6_AddAppliedDiscountValueOnBookingPrice(),
 			new P7_AddCustomerIdDisplayedAsGuestOnDefaultBillingDetails(),
-
+			new P9_SetInitialValuesForBookingReferenceSequencesOnHotel(),
 		];
 	}
 }
