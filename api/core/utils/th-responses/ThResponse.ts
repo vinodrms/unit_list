@@ -365,6 +365,7 @@ export enum ThStatusCode {
 	BookingIntervalValidatorMaxSixMonths,
 	AddBookingItemsInvalidNoOfBookings,
 	BookingItemsConverterError,
+	BookingItemsConverterReferenceGenerationError,
 	BookingValidationError,
 	BookingsValidatorBillingCustomerMissing,
 	BookingsValidatorYieldingClosed,
@@ -873,6 +874,7 @@ ThMessage[ThStatusCode.BookingIntervalValidatorInvalidStartDate] = "Invalid star
 ThMessage[ThStatusCode.BookingIntervalValidatorMaxSixMonths] = "The maximum interval for a booking is 6 months.";
 ThMessage[ThStatusCode.AddBookingItemsInvalidNoOfBookings] = "The maximum number of bookings you can add is 50.";
 ThMessage[ThStatusCode.BookingItemsConverterError] = "There was a problem while reading the bookings.";
+ThMessage[ThStatusCode.BookingItemsConverterReferenceGenerationError] = "There was a problem while generating bookign references.";
 ThMessage[ThStatusCode.BookingValidationError] = "There was a problem while validating the bookings.";
 ThMessage[ThStatusCode.BookingsValidatorBillingCustomerMissing] = "The billable customer must be in the customer list.";
 ThMessage[ThStatusCode.BookingsValidatorYieldingClosed] = "You cannot book a price product that is not opened in the Yield Manager for the selected interval.";

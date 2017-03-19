@@ -2,28 +2,36 @@ import { BaseDO } from '../../../common/base/BaseDO';
 
 export enum HotelSequenceType {
     InvoiceGroup,
-    InvoiceItem
+    InvoiceItem,
+    BookingGroup,
+    BookingItem
 }
 
 var HotelSequences: { [index: number]: string; } = {};
 HotelSequences[HotelSequenceType.InvoiceGroup] = "invoiceGroupSequence";
 HotelSequences[HotelSequenceType.InvoiceItem] = "invoiceItemSequence";
-
+HotelSequences[HotelSequenceType.BookingGroup] = "bookingGroupSequence";
+HotelSequences[HotelSequenceType.BookingItem] = "bookingItemSequence";
 export class HotelSequencesDO extends BaseDO {
     invoiceGroupSequence: number;
     invoiceItemSequence: number;
-
+    bookingGroupSequence: number;
+    bookingItemSequence: number;
+    
     constructor() {
         super();
     }
 
     protected getPrimitivePropertyKeys(): string[] {
-        return [HotelSequences[HotelSequenceType.InvoiceGroup], HotelSequences[HotelSequenceType.InvoiceItem]];
+        return [HotelSequences[HotelSequenceType.InvoiceGroup], HotelSequences[HotelSequenceType.InvoiceItem],
+            HotelSequences[HotelSequenceType.BookingGroup], HotelSequences[HotelSequenceType.BookingItem]];
     }
 
     public setInitialValues() {
         this.invoiceGroupSequence = 1;
         this.invoiceItemSequence = 1;
+        this.bookingGroupSequence = 1;
+        this.bookingItemSequence = 1;
     }
 
     public static getSequenceKey(sequenceType: HotelSequenceType) {

@@ -23,8 +23,12 @@ import { InvoiceItemDO, InvoiceItemType } from '../../../../data-layer/invoices/
 import { AddOnProductInvoiceItemMetaDO } from '../../../../data-layer/invoices/data-objects/items/add-on-products/AddOnProductInvoiceItemMetaDO';
 import { TaxDO, TaxType } from '../../../../data-layer/taxes/data-objects/TaxDO';
 import { RoomCategoryStatsDO } from '../../../../data-layer/room-categories/data-objects/RoomCategoryStatsDO';
+import { IHotelRepository, SequenceValue } from "../../../../data-layer/hotel/repositories/IHotelRepository";
+import { HotelSequenceType } from "../../../../data-layer/hotel/data-objects/sequences/HotelSequencesDO";
 
 import _ = require('underscore');
+import moment = require('moment');
+import shortid = require('shortid');
 
 export class BookingItemsConverterParams {
     priceProductsContainer: PriceProductsContainer;
@@ -36,9 +40,16 @@ export class BookingItemsConverterParams {
     roomCategoryStatsList: RoomCategoryStatsDO[];
 }
 
+enum BookingType {
+    Group,
+    Individual
+}
+
 export class BookingItemsConverter {
-    public static GroupBookingReferencePrefix = "GR";
-    public static IndividualBookingReferencePrefix = "BR";
+    private static GroupBookingReferencePrefix = "GR";
+    private static IndividualBookingReferencePrefix = "BR";
+
+    private static MAX_BOOKINGS_PER_DAY = 99999;
 
     private _thUtils: ThUtils;
     private _bookingUtils: BookingUtils;
@@ -68,78 +79,84 @@ export class BookingItemsConverter {
     private convertCore(resolve: { (result: BookingDO[]): void }, reject: { (err: ThError): void }) {
         var bookingList: BookingDO[] = [];
 
-        var groupBookingReference = this.generateGroupBookingReference();
         var hotelId = this._sessionContext.sessionDO.hotel.id;
         var groupBookingStatus = GroupBookingStatus.Active;
         var noOfRooms = this._bookingItems.bookingList.length;
         let groupBookingRoomCategoryIdList = this.getRoomCategoryIdListWithinGroupBooking();
 
-        _.forEach(this._bookingItems.bookingList, (bookingItem: BookingItemDO) => {
-            var bookingDO = new BookingDO();
+        this.generateReference(BookingType.Group).then((groupBookingReference: string) => {
+            let promiseList = [];
 
-            var bookingInterval = new ThDateIntervalDO();
-            bookingInterval.buildFromObject(bookingItem.interval);
+            _.forEach(this._bookingItems.bookingList, (bookingItem: BookingItemDO) => {
+                var bookingDO = new BookingDO();
 
-            bookingDO.groupBookingReference = groupBookingReference;
-            bookingDO.hotelId = hotelId;
-            bookingDO.status = groupBookingStatus;
-            bookingDO.inputChannel = this._inputChannel;
-            bookingDO.noOfRooms = noOfRooms;
+                var bookingInterval = new ThDateIntervalDO();
+                bookingInterval.buildFromObject(bookingItem.interval);
 
-            bookingDO.bookingId = this._thUtils.generateUniqueID();
-            bookingDO.bookingReference = this.generateIndividualBookingReference();
-            bookingDO.confirmationStatus = BookingConfirmationStatus.Confirmed;
-            bookingDO.customerIdList = bookingItem.customerIdList;
-            
-            bookingDO.defaultBillingDetails = bookingItem.defaultBillingDetails;
-            if(this._thUtils.isUndefinedOrNull(bookingDO.defaultBillingDetails.customerIdDisplayedAsGuest)) {
-                bookingDO.defaultBillingDetails.customerIdDisplayedAsGuest = 
-                    bookingDO.defaultBillingDetails.customerId;
-            }
+                bookingDO.groupBookingReference = groupBookingReference;
+                bookingDO.hotelId = hotelId;
+                bookingDO.status = groupBookingStatus;
+                bookingDO.inputChannel = this._inputChannel;
+                bookingDO.noOfRooms = noOfRooms;
 
-            bookingDO.roomCategoryId = bookingItem.roomCategoryId;
-            bookingDO.priceProductId = bookingItem.priceProductId;
-            bookingDO.reservedAddOnProductIdList = [];
-            bookingDO.allotmentId = bookingItem.allotmentId;
-            bookingDO.notes = bookingItem.notes;
-            bookingDO.invoiceNotes = bookingItem.invoiceNotes;
-            bookingDO.interval = bookingInterval;
-            bookingDO.creationDate = this._converterParams.currentHotelTimestamp.thDateDO;
+                bookingDO.bookingId = this._thUtils.generateUniqueID();
+                bookingDO.confirmationStatus = BookingConfirmationStatus.Confirmed;
+                bookingDO.customerIdList = bookingItem.customerIdList;
+                
+                bookingDO.defaultBillingDetails = bookingItem.defaultBillingDetails;
+                if(this._thUtils.isUndefinedOrNull(bookingDO.defaultBillingDetails.customerIdDisplayedAsGuest)) {
+                    bookingDO.defaultBillingDetails.customerIdDisplayedAsGuest = 
+                        bookingDO.defaultBillingDetails.customerId;
+                }
 
-            var priceProduct = this._converterParams.priceProductsContainer.getPriceProductById(bookingDO.priceProductId);
-            bookingDO.priceProductSnapshot = new PriceProductDO();
-            bookingDO.priceProductSnapshot.buildFromObject(priceProduct);
+                bookingDO.roomCategoryId = bookingItem.roomCategoryId;
+                bookingDO.priceProductId = bookingItem.priceProductId;
+                bookingDO.reservedAddOnProductIdList = [];
+                bookingDO.allotmentId = bookingItem.allotmentId;
+                bookingDO.notes = bookingItem.notes;
+                bookingDO.interval = bookingInterval;
+                bookingDO.creationDate = this._converterParams.currentHotelTimestamp.thDateDO;
 
-            // remove the yield intervals on the snapshot to minimize the document size
-            bookingDO.priceProductSnapshot.openForArrivalIntervalList = [];
-            bookingDO.priceProductSnapshot.openForDepartureIntervalList = [];
-            bookingDO.priceProductSnapshot.openIntervalList = [];
+                var priceProduct = this._converterParams.priceProductsContainer.getPriceProductById(bookingDO.priceProductId);
+                bookingDO.priceProductSnapshot = new PriceProductDO();
+                bookingDO.priceProductSnapshot.buildFromObject(priceProduct);
 
-            var indexedBookingInterval = new IndexedBookingInterval(bookingDO.interval);
-            bookingDO.startUtcTimestamp = indexedBookingInterval.getStartUtcTimestamp();
-            bookingDO.endUtcTimestamp = indexedBookingInterval.getEndUtcTimestamp();
-            bookingDO.configCapacity = bookingItem.configCapacity;
-            bookingDO.fileAttachmentList = [];
-            bookingDO.bookingHistory = new DocumentHistoryDO();
-            bookingDO.bookingHistory.logDocumentAction(DocumentActionDO.buildDocumentActionDO({
-                actionParameterMap: {},
-                actionString: "Booking was created",
-                userId: this._sessionContext.sessionDO.user.id
-            }));
+                // remove the yield intervals on the snapshot to minimize the document size
+                bookingDO.priceProductSnapshot.openForArrivalIntervalList = [];
+                bookingDO.priceProductSnapshot.openForDepartureIntervalList = [];
+                bookingDO.priceProductSnapshot.openIntervalList = [];
 
-            this._bookingUtils.updateBookingGuaranteedAndNoShowTimes(bookingDO, {
-                priceProduct: priceProduct,
-                hotel: this._converterParams.hotelDO,
-                currentHotelTimestamp: this._converterParams.currentHotelTimestamp
+                var indexedBookingInterval = new IndexedBookingInterval(bookingDO.interval);
+                bookingDO.startUtcTimestamp = indexedBookingInterval.getStartUtcTimestamp();
+                bookingDO.endUtcTimestamp = indexedBookingInterval.getEndUtcTimestamp();
+                bookingDO.configCapacity = bookingItem.configCapacity;
+                bookingDO.fileAttachmentList = [];
+                bookingDO.bookingHistory = new DocumentHistoryDO();
+                bookingDO.bookingHistory.logDocumentAction(DocumentActionDO.buildDocumentActionDO({
+                    actionParameterMap: {},
+                    actionString: "Booking was created",
+                    userId: this._sessionContext.sessionDO.user.id
+                }));
+
+                this._bookingUtils.updateBookingGuaranteedAndNoShowTimes(bookingDO, {
+                    priceProduct: priceProduct,
+                    hotel: this._converterParams.hotelDO,
+                    currentHotelTimestamp: this._converterParams.currentHotelTimestamp
+                });
+                this._bookingUtils.updateBookingPriceUsingRoomCategory(bookingDO, this._converterParams.roomCategoryStatsList, groupBookingRoomCategoryIdList);
+                this._bookingUtils.updateIndexedSearchTerms(bookingDO, this._converterParams.customersContainer);
+                this._bookingUtils.updateDisplayCustomerId(bookingDO, this._converterParams.customersContainer);
+                bookingDO.price.vatId = this.getBookingTaxId(priceProduct);
+
+                promiseList.push(this.attachIndividualBookingReference(bookingDO));
             });
-            this._bookingUtils.updateBookingPriceUsingRoomCategory(bookingDO, this._converterParams.roomCategoryStatsList, groupBookingRoomCategoryIdList);
-            this._bookingUtils.updateIndexedSearchTerms(bookingDO, this._converterParams.customersContainer);
-            this._bookingUtils.updateDisplayCustomerId(bookingDO, this._converterParams.customersContainer);
-            bookingDO.price.vatId = this.getBookingTaxId(priceProduct);
 
-            bookingList.push(bookingDO);
+            return Promise.all(promiseList);
+        }).then((bookingList: BookingDO[]) => {
+            resolve(bookingList);
+        }).catch((error) => {
+            reject(error);
         });
-        resolve(bookingList);
     }
     private getRoomCategoryIdListWithinGroupBooking(): string[] {
         return _.map(this._bookingItems.bookingList, bookingItem => { return bookingItem.roomCategoryId; })
@@ -154,10 +171,52 @@ export class BookingItemsConverter {
         return null;
     }
 
-    private generateGroupBookingReference(): string {
-        return BookingItemsConverter.GroupBookingReferencePrefix + this._thUtils.generateShortId();
+    private attachIndividualBookingReference(booking: BookingDO): Promise<BookingDO> {
+        return new Promise<BookingDO>((resolve: { (result: BookingDO): void }, reject: { (err: ThError): void }) => {
+            this.attachIndividualBookingReferenceCore(resolve, reject, booking);
+        })
     }
-    private generateIndividualBookingReference(): string {
-        return BookingItemsConverter.IndividualBookingReferencePrefix + this._thUtils.generateShortId();
+
+    private attachIndividualBookingReferenceCore(resolve: { (result: BookingDO): void }, reject: { (err: ThError): void }, booking: BookingDO) {
+        this.generateReference(BookingType.Individual).then((bookingReference: string) => {
+            booking.bookingReference = bookingReference;
+            resolve(booking);
+        });
+    }
+
+    private generateReference(type: BookingType): Promise<string> {
+        return new Promise<string>((resolve: { (result: string): void }, reject: { (err: ThError): void }) => {
+            this.generateReferenceCore(resolve, reject, type);
+        });
+    }
+
+    private generateReferenceCore(resolve: { (result: string): void }, reject: { (err: ThError): void }, type: BookingType) {
+        let seq = (type == BookingType.Individual)? HotelSequenceType.InvoiceItem : HotelSequenceType.InvoiceGroup;
+
+        let hotelRepo: IHotelRepository = this._appContext.getRepositoryFactory().getHotelRepository();
+        hotelRepo.getNextSequenceValue(this._sessionContext.sessionDO.hotel.id, seq)
+            .then((seqValue: SequenceValue) => {
+                let referencePrefix = 
+                    (type == BookingType.Individual)? 
+                        BookingItemsConverter.IndividualBookingReferencePrefix : BookingItemsConverter.GroupBookingReferencePrefix;
+                resolve(referencePrefix + this.getReferenceFromSeqValue(seqValue.sequence.toString()));
+            }).catch((error) => {
+                var thError = new ThError(ThStatusCode.BookingItemsConverterReferenceGenerationError, error);
+                ThLogger.getInstance().logError(ThLogLevel.Error, "error generating booking reference", this._bookingItems, thError);
+                reject(thError);
+            });
+            
+    }
+
+    private getReferenceFromSeqValue(seqValue: string) {
+        let now = new Date();
+        return moment(now).format('MMDDYY') + this.leftPad('0', seqValue);
+    }
+
+    private leftPad(padString: string, input: string): string {
+        let idLength = BookingItemsConverter.MAX_BOOKINGS_PER_DAY.toString().length;
+        while (input.length < idLength)
+            input = padString + input;
+        return input;
     }
 }
