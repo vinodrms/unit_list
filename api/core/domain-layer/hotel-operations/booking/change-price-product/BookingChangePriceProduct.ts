@@ -194,13 +194,7 @@ export class BookingChangePriceProduct {
         this._booking.allotmentId = this._inputDO.allotmentId;
 
         var priceProduct = this._loadedPriceProductsContainer.getPriceProductById(this._inputDO.priceProductId);
-        this._booking.priceProductSnapshot = new PriceProductDO();
-        this._booking.priceProductSnapshot.buildFromObject(priceProduct);
-        this._booking.priceProductSnapshot.prepareForClient();
-        this._booking.priceProductSnapshot.openForArrivalIntervalList = [];
-        this._booking.priceProductSnapshot.openForDepartureIntervalList = [];
-        this._booking.priceProductSnapshot.openIntervalList = [];
-        this._bookingUtils.updateBookingPriceUsingRoomCategory(this._booking, this._loadedRoomCategoryStatsList);
+        this._bookingUtils.updateBookingPriceUsingRoomCategoryAndSavePPSnapshot(this._booking, this._loadedRoomCategoryStatsList, priceProduct);
 
         var newPrice: number = this._booking.price.totalBookingPrice;
 

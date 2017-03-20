@@ -81,8 +81,13 @@ export class BookingUtils {
      * `roomCategoryStatsList`: the list of room category stats of the hotel; are needed because some prices depend on the room's configuration
      * `groupBookingRoomCategoryIdList`: the list of room category ids that are inside the same group booking; it needs to be passed only when the bookings are initially added to apply the min no rooms discount constraints if they exist
     */
-    public updateBookingPriceUsingRoomCategory(bookingDO: BookingDO, roomCategoryStatsList: RoomCategoryStatsDO[], groupBookingRoomCategoryIdList?: string[]) {
+    public updateBookingPriceUsingRoomCategoryAndSavePPSnapshot(bookingDO: BookingDO, roomCategoryStatsList: RoomCategoryStatsDO[],
+        priceProduct: PriceProductDO, groupBookingRoomCategoryIdList?: string[]) {
         var indexedBookingInterval = new IndexedBookingInterval(bookingDO.interval);
+
+        // update the snapshot of the price product applied on the booking
+        bookingDO.priceProductSnapshot = new PriceProductDO();
+        bookingDO.priceProductSnapshot.buildFromObject(priceProduct);
 
         var previousBookingVatId: string = null;
         if (!this._thUtils.isUndefinedOrNull(bookingDO.price) && !this._thUtils.isUndefinedOrNull(bookingDO.price.vatId) && _.isString(bookingDO.price.vatId)) {
@@ -141,6 +146,12 @@ export class BookingUtils {
                 bookingDO.price.description = foundRoomCategoryStats.roomCategory.displayName;
             }
         }
+
+        // cleanup the unnecessary attributes on the PP snapshot saved on the booking - to keep the document's size relatively small
+        bookingDO.priceProductSnapshot.openForArrivalIntervalList = [];
+        bookingDO.priceProductSnapshot.openForDepartureIntervalList = [];
+        bookingDO.priceProductSnapshot.openIntervalList = [];
+        bookingDO.priceProductSnapshot.price.enabledDynamicPriceIdByDate = {};
     }
     public getPricePerDayListWithDiscount(pricePerDayList: PricePerDayDO[], discount: number): PricePerDayDO[] {
         return _.map(pricePerDayList, (pricePerDay) => {

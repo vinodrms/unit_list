@@ -15,6 +15,8 @@ import { BookingUtils } from '../../../bookings/utils/BookingUtils';
 import { RoomCategoryStatsAggregator } from '../../../room-categories/aggregators/RoomCategoryStatsAggregator';
 import { RoomCategoryStatsDO } from '../../../../data-layer/room-categories/data-objects/RoomCategoryStatsDO';
 import { PriceProductConstraintDataDO } from "../../../../data-layer/price-products/data-objects/constraint/IPriceProductConstraint";
+import { PriceProductIdValidator } from "../../../price-products/validators/PriceProductIdValidator";
+import { PriceProductsContainer } from "../../../price-products/validators/results/PriceProductsContainer";
 
 import _ = require('underscore');
 
@@ -55,6 +57,12 @@ export class BookingPossiblePrices {
                 return bookingsRepo.getBookingById({ hotelId: this._sessionContext.sessionDO.hotel.id }, this._possiblePricesDO.groupBookingId, this._possiblePricesDO.bookingId)
             }).then((booking: BookingDO) => {
                 this._loadedBooking = booking;
+
+                var priceProductValidator = new PriceProductIdValidator(this._appContext, this._sessionContext);
+                return priceProductValidator.validatePriceProductId(this._loadedBooking.priceProductId);
+            }).then((loadedPriceProductsContainer: PriceProductsContainer) => {
+                // update the PP snapshot so that the correct dynamic rate will be applied
+                this._loadedBooking.priceProductSnapshot = loadedPriceProductsContainer.getPriceProductById(this._loadedBooking.priceProductId);
 
                 resolve(this.getBookingPossiblePriceItems());
             }).catch((error: any) => {

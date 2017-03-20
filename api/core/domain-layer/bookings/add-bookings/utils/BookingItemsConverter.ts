@@ -117,16 +117,6 @@ export class BookingItemsConverter {
                 bookingDO.interval = bookingInterval;
                 bookingDO.creationDate = this._converterParams.currentHotelTimestamp.thDateDO;
 
-                var priceProduct = this._converterParams.priceProductsContainer.getPriceProductById(bookingDO.priceProductId);
-                bookingDO.priceProductSnapshot = new PriceProductDO();
-                bookingDO.priceProductSnapshot.buildFromObject(priceProduct);
-
-                // remove the yield intervals on the snapshot to minimize the document size
-                bookingDO.priceProductSnapshot.prepareForClient();
-                bookingDO.priceProductSnapshot.openForArrivalIntervalList = [];
-                bookingDO.priceProductSnapshot.openForDepartureIntervalList = [];
-                bookingDO.priceProductSnapshot.openIntervalList = [];
-
                 var indexedBookingInterval = new IndexedBookingInterval(bookingDO.interval);
                 bookingDO.startUtcTimestamp = indexedBookingInterval.getStartUtcTimestamp();
                 bookingDO.endUtcTimestamp = indexedBookingInterval.getEndUtcTimestamp();
@@ -139,12 +129,13 @@ export class BookingItemsConverter {
                     userId: this._sessionContext.sessionDO.user.id
                 }));
 
+                var priceProduct = this._converterParams.priceProductsContainer.getPriceProductById(bookingDO.priceProductId);
                 this._bookingUtils.updateBookingGuaranteedAndNoShowTimes(bookingDO, {
                     priceProduct: priceProduct,
                     hotel: this._converterParams.hotelDO,
                     currentHotelTimestamp: this._converterParams.currentHotelTimestamp
                 });
-                this._bookingUtils.updateBookingPriceUsingRoomCategory(bookingDO, this._converterParams.roomCategoryStatsList, groupBookingRoomCategoryIdList);
+                this._bookingUtils.updateBookingPriceUsingRoomCategoryAndSavePPSnapshot(bookingDO, this._converterParams.roomCategoryStatsList, priceProduct, groupBookingRoomCategoryIdList);
                 this._bookingUtils.updateIndexedSearchTerms(bookingDO, this._converterParams.customersContainer);
                 this._bookingUtils.updateDisplayCustomerId(bookingDO, this._converterParams.customersContainer);
                 bookingDO.price.vatId = this.getBookingTaxId(priceProduct);
