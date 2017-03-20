@@ -8,7 +8,8 @@ import {BookingStepType} from '../../utils/BookingStepType';
 import {BookingCartService} from '../../../../services/search/BookingCartService';
 import {TransientBookingItem} from '../../../../services/data-objects/TransientBookingItem';
 import {BookingCartItemVM} from '../../../../services/search/view-models/BookingCartItemVM';
-import {AddBookingItemsDO} from '../../../../services/data-objects/AddBookingItemsDO';
+import { AddBookingItemsDO } from '../../../../services/data-objects/AddBookingItemsDO';
+import { BookingDO } from "../../../../../../../../../services/bookings/data-objects/BookingDO";
 
 @Injectable()
 export class BookingEmailConfigStepService implements IBookingStepService, ILastBookingStepService {
@@ -50,12 +51,12 @@ export class BookingEmailConfigStepService implements IBookingStepService, ILast
         if (this._didDisappearObserver) { this._didDisappearObserver.next(true) };
     }
 
-    public addBookings(): Observable<boolean> {
-        return new Observable<boolean>((addBookingsObserver: Observer<boolean>) => {
+    public addBookings(): Observable<BookingDO[]> {
+        return new Observable<BookingDO[]>((addBookingsObserver: Observer<BookingDO[]>) => {
             this.addBookingsCore(addBookingsObserver);
         });
     }
-    private addBookingsCore(addBookingsObserver: Observer<boolean>) {
+    private addBookingsCore(addBookingsObserver: Observer<BookingDO[]>) {
         var bookingItems = this.getAddBookingItemsDO();
         if (bookingItems.confirmationEmailList.length > 0) {
             this.postBookingsToServer(addBookingsObserver, bookingItems);
@@ -70,11 +71,12 @@ export class BookingEmailConfigStepService implements IBookingStepService, ILast
                 addBookingsObserver.complete();
             });
     }
-    private postBookingsToServer(addBookingsObserver: Observer<boolean>, bookingItems: AddBookingItemsDO) {
+    private postBookingsToServer(addBookingsObserver: Observer<BookingDO[]>, bookingItems: AddBookingItemsDO) {
         this._appContext.thHttp.post(ThServerApi.BookingsAdd, { bookingItems: bookingItems })
             .subscribe((result: any) => {
                 this._appContext.analytics.logEvent("booking", "add", "Added " + bookingItems.bookingList.length + " bookings");
-                addBookingsObserver.next(true);
+                console.log(result.bookingList);
+                addBookingsObserver.next(result.bookingList);
                 addBookingsObserver.complete();
             }, (err: ThError) => {
                 addBookingsObserver.error(err);

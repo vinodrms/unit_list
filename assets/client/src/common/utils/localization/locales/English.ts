@@ -578,6 +578,7 @@ export var EnglishTranslations: Object = {
 	"Payment Method": "Payment Method",
 	"This confirms that you have acquired all the necessary information to bill the customer": "This confirms that you have acquired all the necessary information to bill the customer",
 	"Booking Notes": "Booking Notes",
+	"Invoice Notes": "Invoice Notes",
 	"Recipients": "Recipients",
 	"Save Bookings": "Save Bookings",
 	"Recipient": "Recipient",
@@ -814,5 +815,7 @@ export var EnglishTranslations: Object = {
 	"Additional price for": "Additional price for",
 	"adult": "adult",
 	"child": "child",
-		
+	"After the invoice has been closed, invoice notes cannot be edited anymore.": "After the invoice has been closed, invoice notes cannot be edited anymore.",
+	"The booking group with reference %groupBookingReference% has been successfully added. The group includes the following bookings:": "The booking group with reference %groupBookingReference% has been successfully added. The group includes the following bookings:",
+			
 };

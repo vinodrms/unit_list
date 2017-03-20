@@ -5,7 +5,7 @@ import { DynamicPriceDO } from "../../../../../../data-layer/price-products/data
 
 import _ = require('underscore');
 
-export class P9_AddDynamicPricesOnPriceProducts extends APaginatedTransactionalMongoPatch {
+export class P10_AddDynamicPricesOnPriceProducts extends APaginatedTransactionalMongoPatch {
     public static DefaultDynamicPriceId = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee";
 
     public getPatchType(): MongoPatchType {
@@ -17,7 +17,7 @@ export class P9_AddDynamicPricesOnPriceProducts extends APaginatedTransactionalM
     }
 
     protected updateDocumentInMemory(priceProduct) {
-        P9_AddDynamicPricesOnPriceProducts.addDynamicPricesOnPriceProduct(priceProduct);
+        P10_AddDynamicPricesOnPriceProducts.addDynamicPricesOnPriceProduct(priceProduct);
         priceProduct.versionId++;
     }
 
@@ -25,7 +25,7 @@ export class P9_AddDynamicPricesOnPriceProducts extends APaginatedTransactionalM
         if (!_.isArray(priceProduct.price.dynamicPriceList)) {
 
             let dynamicPrice = new DynamicPriceDO(priceProduct.price.type);
-            dynamicPrice.id = P9_AddDynamicPricesOnPriceProducts.DefaultDynamicPriceId;
+            dynamicPrice.id = P10_AddDynamicPricesOnPriceProducts.DefaultDynamicPriceId;
             dynamicPrice.name = "Default Pricing";
             dynamicPrice.description = "";
             dynamicPrice.priceList = priceProduct.price.priceList;

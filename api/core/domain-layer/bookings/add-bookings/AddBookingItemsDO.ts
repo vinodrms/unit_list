@@ -21,6 +21,7 @@ export class BookingItemDO {
     priceProductId: string;
     allotmentId: string;
     notes: string;
+    invoiceNotes: string;
 }
 
 export class AddBookingItemsDO {
@@ -84,6 +85,10 @@ export class AddBookingItemsDO {
                     },
                     {
                         key: "notes",
+                        validationStruct: new PrimitiveValidationStructure(StringValidationRule.buildNullable())
+                    },
+                    {
+                        key: "invoiceNotes",
                         validationStruct: new PrimitiveValidationStructure(StringValidationRule.buildNullable())
                     }
                 ]))

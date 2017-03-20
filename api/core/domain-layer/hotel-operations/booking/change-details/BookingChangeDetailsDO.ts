@@ -9,6 +9,7 @@ export class BookingChangeDetailsDO {
     groupBookingId: string;
     bookingId: string;
     notes: string;
+    invoiceNotes: string;
     fileAttachmentList: FileAttachmentDO[];
 
     public static getValidationStructure(): IValidationStructure {
@@ -23,6 +24,10 @@ export class BookingChangeDetailsDO {
             },
             {
                 key: "notes",
+                validationStruct: new PrimitiveValidationStructure(StringValidationRule.buildNullable())
+            },
+            {
+                key: "invoiceNotes",
                 validationStruct: new PrimitiveValidationStructure(StringValidationRule.buildNullable())
             },
             {

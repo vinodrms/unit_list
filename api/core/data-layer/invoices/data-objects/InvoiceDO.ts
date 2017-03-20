@@ -24,13 +24,14 @@ export class InvoiceDO extends BaseDO {
     payerList: InvoicePayerDO[];
     itemList: InvoiceItemDO[];
     paymentStatus: InvoicePaymentStatus;
+    notesFromBooking: string;
 
     paidDate: ThDateDO;
     paidDateUtcTimestamp: number;
     paidDateTimeUtcTimestamp: number;
 
     protected getPrimitivePropertyKeys(): string[] {
-        return ["bookingId", "invoiceReference", "paymentStatus", "paidDateUtcTimestamp", "paidDateTimeUtcTimestamp"];
+        return ["bookingId", "invoiceReference", "paymentStatus", "notesFromBooking", "paidDateUtcTimestamp", "paidDateTimeUtcTimestamp"];
     }
 
     public buildFromObject(object: Object) {

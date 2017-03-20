@@ -1,7 +1,8 @@
 import {Observable} from 'rxjs/Observable';
-import {BookingStepType} from './BookingStepType';
+import { BookingStepType } from './BookingStepType';
+import { BookingDO } from "../../../../../../../../services/bookings/data-objects/BookingDO";
 
 export interface ILastBookingStepService {
-    addBookings(): Observable<boolean>;
+    addBookings(): Observable<BookingDO[]>;
     getBookingStepType(): BookingStepType;
 }

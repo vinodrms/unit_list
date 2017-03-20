@@ -60,6 +60,7 @@ export class InvoiceConfirmationVMContainer {
     payerGovernmentCodeLabel: string;
     payerGovernmentCodeValue: string;
     additionalPayerDetails: string;
+    notesFromBooking: string;
 
     itemLabel: string;
     qtyLabel: string;
@@ -95,6 +96,7 @@ export class InvoiceConfirmationVMContainer {
         this.initHeaderLabelsAndValues();
         this.initHotelInfoLabelsAndValues();
         this.initPayerInfoLabelsAndValues();
+        this.initNotesFromBooking();
         this.initItemsTableLabelsAndValues();
         this.initPaymentMethodLabelsAndValues();
         this.initTotalValues();
@@ -168,6 +170,13 @@ export class InvoiceConfirmationVMContainer {
         var payer = this._invoice.payerList[this.payerIndex];
         if (_.isString(payer.additionalInvoiceDetails)) {
             this.additionalPayerDetails = payer.additionalInvoiceDetails;
+        }
+    }
+
+    private initNotesFromBooking() {
+        this.notesFromBooking = "";
+        if (_.isString(this._invoice.notesFromBooking) && this._invoice.notesFromBooking) {
+            this.notesFromBooking = this._invoice.notesFromBooking;
         }
     }
 

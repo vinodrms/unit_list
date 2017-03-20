@@ -181,6 +181,12 @@ export class NewBookingDetailsEditorComponent extends BaseComponent {
     public set bookingNotes(bookingNotes: string) {
         this._bookingCartItem.transientBookingItem.notes = bookingNotes;
     }
+    public get invoiceNotes(): string {
+        return this._bookingCartItem.transientBookingItem.invoiceNotes;
+    }
+    public set invoiceNotes(invoiceNotes: string) {
+        this._bookingCartItem.transientBookingItem.invoiceNotes = invoiceNotes;
+    }
 
     private triggerBookingCartItemChange() {
         this.onBookingItemChanged.next(this._bookingCartItem);
