@@ -1,22 +1,25 @@
-import {MongoRepository} from '../../../common/base/MongoRepository';
-import {PriceProductDO} from '../../data-objects/PriceProductDO';
-import {PriceProductYieldFilterMetaDO} from '../../data-objects/yield-filter/PriceProductYieldFilterDO';
-import {LazyLoadRepoDO, LazyLoadMetaResponseRepoDO} from '../../../common/repo-data-objects/LazyLoadRepoDO';
-import {IPriceProductRepository, PriceProductMetaRepoDO, PriceProductSearchCriteriaRepoDO,
-	PriceProductItemMetaRepoDO, PriceProductSearchResultRepoDO, PriceProductUpdateStatusParamsRepoDO, PriceProductUpdateYMIntervalsParamsRepoDO} from '../IPriceProductRepository';
-import {MongoPriceProductCrudOperationsRepository} from './operations/MongoPriceProductCrudOperationsRepository';
-import {MongoPriceProductReadOperationsRepository} from './operations/MongoPriceProductReadOperationsRepository';
+import { MongoRepository } from '../../../common/base/MongoRepository';
+import { PriceProductDO } from '../../data-objects/PriceProductDO';
+import { PriceProductYieldFilterMetaDO } from '../../data-objects/yield-filter/PriceProductYieldFilterDO';
+import { LazyLoadRepoDO, LazyLoadMetaResponseRepoDO } from '../../../common/repo-data-objects/LazyLoadRepoDO';
+import {
+	IPriceProductRepository, PriceProductMetaRepoDO, PriceProductSearchCriteriaRepoDO,
+	PriceProductItemMetaRepoDO, PriceProductSearchResultRepoDO, PriceProductUpdateStatusParamsRepoDO, PriceProductUpdateYMIntervalsParamsRepoDO
+} from '../IPriceProductRepository';
+import { MongoPriceProductCrudOperationsRepository } from './operations/MongoPriceProductCrudOperationsRepository';
+import { MongoPriceProductReadOperationsRepository } from './operations/MongoPriceProductReadOperationsRepository';
+import { PriceProductPriceDO } from "../../data-objects/price/PriceProductPriceDO";
 
 export class MongoPriceProductRepository extends MongoRepository implements IPriceProductRepository {
 	private _crudRepository: MongoPriceProductCrudOperationsRepository;
 	private _readRepository: MongoPriceProductReadOperationsRepository;
 
 	constructor() {
-        var priceProdEntity = sails.models.priceproductsentity;
-        super(priceProdEntity);
+		var priceProdEntity = sails.models.priceproductsentity;
+		super(priceProdEntity);
 		this._crudRepository = new MongoPriceProductCrudOperationsRepository(priceProdEntity);
 		this._readRepository = new MongoPriceProductReadOperationsRepository(priceProdEntity);
-    }
+	}
 
 	public getPriceProductListCount(meta: PriceProductMetaRepoDO, searchCriteria: PriceProductSearchCriteriaRepoDO): Promise<LazyLoadMetaResponseRepoDO> {
 		return this._readRepository.getPriceProductListCount(meta, searchCriteria);
@@ -37,8 +40,8 @@ export class MongoPriceProductRepository extends MongoRepository implements IPri
 	public updatePriceProductStatus(meta: PriceProductMetaRepoDO, itemMeta: PriceProductItemMetaRepoDO, params: PriceProductUpdateStatusParamsRepoDO): Promise<PriceProductDO> {
 		return this._crudRepository.updatePriceProductStatus(meta, itemMeta, params);
 	}
-	public updatePriceProductYieldFiltersAndNotes(meta: PriceProductMetaRepoDO, itemMeta: PriceProductItemMetaRepoDO, filterList: PriceProductYieldFilterMetaDO[], notes: string): Promise<PriceProductDO> {
-		return this._crudRepository.updatePriceProductYieldFiltersAndNotes(meta, itemMeta, filterList, notes);
+	public updatePriceProductYieldFiltersNotesAndPrice(meta: PriceProductMetaRepoDO, itemMeta: PriceProductItemMetaRepoDO, filterList: PriceProductYieldFilterMetaDO[], notes: string, price: PriceProductPriceDO): Promise<PriceProductDO> {
+		return this._crudRepository.updatePriceProductYieldFiltersNotesAndPrice(meta, itemMeta, filterList, notes, price);
 	}
 	public updatePriceProductYieldManagerIntervals(meta: PriceProductMetaRepoDO, itemMeta: PriceProductItemMetaRepoDO, intervals: PriceProductUpdateYMIntervalsParamsRepoDO): Promise<PriceProductDO> {
 		return this._crudRepository.updatePriceProductYieldManagerIntervals(meta, itemMeta, intervals);

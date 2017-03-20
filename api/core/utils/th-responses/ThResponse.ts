@@ -232,6 +232,7 @@ export enum ThStatusCode {
 	SavePriceProductItemInvalidConditions,
 	PriceProductItemUpdateStrategyOnlyActiveAndDraftCanBeUpdated,
 	PriceProductItemStrategyInvalidStatus,
+	PriceProductItemStrategyMissingDynamicRates,
 	PriceProductValidatorInvalidBreakfast,
 	PriceProductValidatorAopAsBreakfast,
 	PriceProductValidatorUnusedRoomCategoryId,
@@ -753,6 +754,7 @@ ThMessage[ThStatusCode.SavePriceProductItemTooManyConstraintsForTheSameDiscount]
 ThMessage[ThStatusCode.SavePriceProductItemInvalidConditions] = "Invalid conditions submitted.";
 ThMessage[ThStatusCode.PriceProductItemUpdateStrategyOnlyActiveAndDraftCanBeUpdated] = "Only draft or active price products can be updated.";
 ThMessage[ThStatusCode.PriceProductItemStrategyInvalidStatus] = "A price product can only be saved as draft or active.";
+ThMessage[ThStatusCode.PriceProductItemStrategyMissingDynamicRates] = "Some of the existing dynamic daily rates are missing from the price product.";
 ThMessage[ThStatusCode.PriceProductValidatorInvalidBreakfast] = "Invalid breakfast submitted on Price Product.";
 ThMessage[ThStatusCode.PriceProductValidatorAopAsBreakfast] = "You submitted a breakfast as an Add On Product.";
 ThMessage[ThStatusCode.PriceProductValidatorUnusedRoomCategoryId] = "You can assign on the price product only room categories which have rooms assigned.";

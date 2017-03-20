@@ -1,8 +1,9 @@
-import {PriceProductDO, PriceProductStatus, PriceProductAvailability} from '../data-objects/PriceProductDO';
-import {PriceProductYieldFilterMetaDO} from '../data-objects/yield-filter/PriceProductYieldFilterDO';
-import {ThDateIntervalDO} from '../../../utils/th-dates/data-objects/ThDateIntervalDO';
-import {LazyLoadRepoDO, LazyLoadMetaResponseRepoDO} from '../../common/repo-data-objects/LazyLoadRepoDO';
-import {CustomerPriceProductDetailsDO} from '../../customers/data-objects/price-product-details/CustomerPriceProductDetailsDO';
+import { PriceProductDO, PriceProductStatus, PriceProductAvailability } from '../data-objects/PriceProductDO';
+import { PriceProductYieldFilterMetaDO } from '../data-objects/yield-filter/PriceProductYieldFilterDO';
+import { ThDateIntervalDO } from '../../../utils/th-dates/data-objects/ThDateIntervalDO';
+import { LazyLoadRepoDO, LazyLoadMetaResponseRepoDO } from '../../common/repo-data-objects/LazyLoadRepoDO';
+import { CustomerPriceProductDetailsDO } from '../../customers/data-objects/price-product-details/CustomerPriceProductDetailsDO';
+import { PriceProductPriceDO } from "../data-objects/price/PriceProductPriceDO";
 
 export interface PriceProductMetaRepoDO {
 	hotelId: string;
@@ -47,6 +48,6 @@ export interface IPriceProductRepository {
 
 	updatePriceProduct(meta: PriceProductMetaRepoDO, itemMeta: PriceProductItemMetaRepoDO, priceProduct: PriceProductDO): Promise<PriceProductDO>;
 	updatePriceProductStatus(meta: PriceProductMetaRepoDO, itemMeta: PriceProductItemMetaRepoDO, params: PriceProductUpdateStatusParamsRepoDO): Promise<PriceProductDO>;
-	updatePriceProductYieldFiltersAndNotes(meta: PriceProductMetaRepoDO, itemMeta: PriceProductItemMetaRepoDO, filterList: PriceProductYieldFilterMetaDO[], notes: string): Promise<PriceProductDO>;
+	updatePriceProductYieldFiltersNotesAndPrice(meta: PriceProductMetaRepoDO, itemMeta: PriceProductItemMetaRepoDO, filterList: PriceProductYieldFilterMetaDO[], notes: string, price: PriceProductPriceDO): Promise<PriceProductDO>;
 	updatePriceProductYieldManagerIntervals(meta: PriceProductMetaRepoDO, itemMeta: PriceProductItemMetaRepoDO, intervals: PriceProductUpdateYMIntervalsParamsRepoDO): Promise<PriceProductDO>;
 }

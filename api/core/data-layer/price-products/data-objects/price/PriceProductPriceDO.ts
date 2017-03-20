@@ -98,4 +98,10 @@ export class PriceProductPriceDO extends BaseDO {
 			dynamicPrice.roundPricesToTwoDecimals();
 		});
 	}
+
+	public getDynamicPriceById(dynamicPriceId: string): DynamicPriceDO {
+		return _.find(this.dynamicPriceList, dynamicPrice => {
+			return dynamicPrice.id === dynamicPriceId;
+		});
+	}
 }

@@ -196,7 +196,7 @@ describe("Hotel Price Products Tests", function () {
 					done(e);
 				});
 		});
-		it("Should update only the Yield Filters and Notes for the Active Price Product", function (done) {
+		it("Should update only the Yield Filters, Notes and Dynamic Prices for the Active Price Product", function (done) {
 			var priceProductItem = pphelper.getDraftSavePriceProductItemDO();
 			priceProductItem["id"] = addedPriceProduct.id;
 			priceProductItem.status = PriceProductStatus.Draft;
@@ -204,6 +204,7 @@ describe("Hotel Price Products Tests", function () {
 			priceProductItem.taxIdList = [];
 			priceProductItem.name = NewPriceProductName;
 			priceProductItem.notes = "Updated notes for my price product!";
+			priceProductItem.price = addedPriceProduct.price;
 
 			var savePPItem = new SavePriceProductItem(testContext.appContext, testContext.sessionContext);
 			savePPItem.save(priceProductItem).then((updatedPriceProduct: PriceProductDO) => {
