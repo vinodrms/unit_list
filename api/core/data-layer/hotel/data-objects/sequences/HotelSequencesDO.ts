@@ -11,12 +11,10 @@ var HotelSequences: { [index: number]: string; } = {};
 HotelSequences[HotelSequenceType.InvoiceGroup] = "invoiceGroupSequence";
 HotelSequences[HotelSequenceType.InvoiceItem] = "invoiceItemSequence";
 HotelSequences[HotelSequenceType.BookingGroup] = "bookingGroupSequence";
-HotelSequences[HotelSequenceType.BookingItem] = "bookingItemSequence";
 export class HotelSequencesDO extends BaseDO {
     invoiceGroupSequence: number;
     invoiceItemSequence: number;
     bookingGroupSequence: number;
-    bookingItemSequence: number;
     
     constructor() {
         super();
@@ -31,7 +29,6 @@ export class HotelSequencesDO extends BaseDO {
         this.invoiceGroupSequence = 1;
         this.invoiceItemSequence = 1;
         this.bookingGroupSequence = 1;
-        this.bookingItemSequence = 1;
     }
 
     public static getSequenceKey(sequenceType: HotelSequenceType) {

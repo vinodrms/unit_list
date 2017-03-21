@@ -12,12 +12,10 @@ export class P9_SetInitialValuesForBookingReferenceSequencesOnHotel extends ATra
         var noUpdated = 0;
         async.doWhilst((finishSingleUpdateCallback) => {
             this._hotelRepository.updateMultipleDocuments({
-                    "sequences.bookingGroupSequence": null,
-                    "sequences.bookingItemSequence": null
+                    "sequences.bookingGroupSequence": null
                 },
                 {
-                    "sequences.bookingGroupSequence": 0,
-                    "sequences.bookingItemSequence": 0
+                    "sequences.bookingGroupSequence": 0
                 }, ((err: any) => {
                     finishSingleUpdateCallback(err);
                 }), ((noUpdatedAtCurrentStep: number) => {
