@@ -141,4 +141,13 @@ export class PricePerPersonDO extends BaseDO implements IPriceProductPrice {
 			priceForPerson.price = thUtils.roundNumberToTwoDecimals(priceForPerson.price);
 		});
 	}
+	public getPriceBriefString(): string {
+		if (this.adultsPriceList.length > 0) {
+			return this.adultsPriceList[0].price + "";
+		}
+		if (this.childrenPriceList.length > 0) {
+			return this.childrenPriceList[0].price + "";
+		}
+		return "";
+	}
 }

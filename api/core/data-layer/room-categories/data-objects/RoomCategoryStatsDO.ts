@@ -89,4 +89,10 @@ export class RoomCategoryStatsDO extends BaseDO {
             this.bedStatsList.push(stats);
         });
     }
+
+    public static sortByUnits(roomCategoryStatsList: RoomCategoryStatsDO[]): RoomCategoryStatsDO[] {
+        return _.sortBy(roomCategoryStatsList, (roomCategoryStats: RoomCategoryStatsDO) => {
+            return (roomCategoryStats.capacity.totalCapacity.noAdults * 2) + roomCategoryStats.capacity.totalCapacity.noChildren;
+        });
+    }
 }

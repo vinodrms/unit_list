@@ -56,7 +56,10 @@ export class DynamicPriceDO extends BaseDO {
         }
         return priceItem.hasPriceConfiguredFor(query);
     }
-    private getPriceForRoomCategory(roomCategoryId: string): IPriceProductPrice {
+    public getRoomCategoryIdList(): string[] {
+        return _.map(this.priceList, price => { return price.getRoomCategoryId(); });
+    }
+    public getPriceForRoomCategory(roomCategoryId: string): IPriceProductPrice {
         return _.find(this.priceList, (price: IPriceProductPrice) => { return price.getRoomCategoryId() === roomCategoryId; });
     }
 

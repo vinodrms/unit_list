@@ -212,9 +212,6 @@ ThServerApiUrl[ThServerApi.YieldManagerYieldPriceProducts] = "/yieldManager/yiel
 ThServerApiUrl[ThServerApi.YieldManagerYieldGetPriceProductItems] = "/yieldManager/getPriceProductYieldItems";
 ThServerApiUrl[ThServerApi.YieldManagerGetKeyMetrics] = "/yieldManager/getKeyMetrics";
 
-ThServerApiUrl[ThServerApi.YieldManagerYieldGetPriceProductItems] = "/yieldManager/getPriceProductYieldItems";
-ThServerApiUrl[ThServerApi.YieldManagerGetKeyMetrics] = "/yieldManager/getKeyMetrics";
-
 ThServerApiUrl[ThServerApi.Report] = '/reports/report';
 
 export class ServerApiBuilder {

@@ -63,7 +63,7 @@ export class PriceProductPriceDO extends BaseDO {
 		});
 		return priceList;
 	}
-	private getEnabledDynamicPriceForDate(thDate: ThDateDO): DynamicPriceDO {
+	public getEnabledDynamicPriceForDate(thDate: ThDateDO): DynamicPriceDO {
 		let dynamicPriceId = this.enabledDynamicPriceIdByDate[thDate.getUtcTimestamp()];
 		// if the date is not indexed we return the default dynamic price
 		if (!dynamicPriceId) {
@@ -103,5 +103,10 @@ export class PriceProductPriceDO extends BaseDO {
 		return _.find(this.dynamicPriceList, dynamicPrice => {
 			return dynamicPrice.id === dynamicPriceId;
 		});
+	}
+
+	public getRoomCategoryIdList(): string[] {
+		// all the dynamic rates have prices defined for the same room category ids
+		return this.dynamicPriceList[0].getRoomCategoryIdList();
 	}
 }

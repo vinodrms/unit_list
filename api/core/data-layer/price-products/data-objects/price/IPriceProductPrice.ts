@@ -21,4 +21,5 @@ export interface IPriceProductPrice extends BaseDO {
 	priceConfigurationIsValidFor(roomCategoryStatList: RoomCategoryStatsDO[]): boolean;
 	getRoomCategoryId(): string;
 	roundPricesToTwoDecimals();
+	getPriceBriefString(): string;
 }
