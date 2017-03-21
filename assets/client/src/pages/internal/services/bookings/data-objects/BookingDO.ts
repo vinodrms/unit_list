@@ -111,4 +111,8 @@ export class BookingDO extends BaseDO {
     public getInvoiceItemMeta(): IInvoiceItemMeta {
         return this.price;
     }
+
+    public get reservationNumber(): string {
+        return this.groupBookingReference + '/' + this.bookingReference;
+    }
 }

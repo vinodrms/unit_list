@@ -87,13 +87,10 @@ export class NewBookingContainerComponent extends BaseComponent {
 		if (this.isAddingBookings) { return; }
 		this.isAddingBookings = true;
 		var lastBookingStep: ILastBookingStepService = this._bookingCtrlService.getLastStepService();
-		lastBookingStep.addBookings().subscribe((bookingList: BookingDO[]) => {
-            var title = this._appContext.thTranslation.translate("Info");
-            var content = this._appContext.thTranslation.translate("The booking group with reference %groupBookingReference% has been successfully added. The group includes the following bookings:", {
-				"groupBookingReference": bookingList[0].groupBookingReference
-			});
-			content += " " + this.getBookingReferenceListFormattedString(bookingList) + ".";
-
+		lastBookingStep.addBookings().subscribe((bookingList: Object[]) => {
+			var title = this._appContext.thTranslation.translate("Info");
+            var content = this._appContext.thTranslation.translate("The following bookings have been successfully added:");
+			content += " " + this.getBookingResNoListFormattedString(bookingList)+ ".";
             var positiveLabel = this._appContext.thTranslation.translate("OK");
 
             this._appContext.modalService.confirm(title, content, { positive: positiveLabel }, () => {
@@ -110,17 +107,23 @@ export class NewBookingContainerComponent extends BaseComponent {
 		});
 	}
 
-	private getBookingReferenceListFormattedString(bookingList: BookingDO[]): string {
-		let bookingReferenceListStr = "";
+	private getBookingResNoListFormattedString(bookingList: Object[]): string {
+		let resNoListStr = "";
 		
-		_.forEach(bookingList, (booking: BookingDO) => {
-			bookingReferenceListStr += booking.bookingReference + ", ";
+		let resNoList = _.map(bookingList, (booking: BookingDO) => { 
+			let bookingDO = new BookingDO();
+			bookingDO.buildFromObject(booking)
+			return bookingDO.reservationNumber; 
 		});
 
-		if(bookingReferenceListStr.length > 0) {
-			bookingReferenceListStr = bookingReferenceListStr.slice(0, -2);
+		_.forEach(resNoList, (resNo: string) => {
+			resNoListStr += resNo + ", ";
+		});
+
+		if(resNoListStr.length > 0) {
+			resNoListStr = resNoListStr.slice(0, -2);
 		}
 
-		return bookingReferenceListStr;
+		return resNoListStr;
 	}
 }
