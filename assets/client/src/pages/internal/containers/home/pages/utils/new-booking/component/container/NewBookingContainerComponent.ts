@@ -1,18 +1,19 @@
-import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import {BaseComponent} from '../../../../../../../../../common/base/BaseComponent';
-import {AppContext, ThError} from '../../../../../../../../../common/utils/AppContext';
-import {SETTINGS_PROVIDERS} from '../../../../../../../services/settings/SettingsProviders';
-import {HotelService} from '../../../../../../../services/hotel/HotelService';
-import {HotelAggregatorService} from '../../../../../../../services/hotel/HotelAggregatorService';
-import {RoomCategoriesService} from '../../../../../../../services/room-categories/RoomCategoriesService';
-import {BookingCartService} from '../../services/search/BookingCartService';
-import {BookingStepType} from '../subcomponents/utils/BookingStepType';
-import {ILastBookingStepService} from '../subcomponents/utils/ILastBookingStepService';
-import {BookingSearchStepService} from '../subcomponents/booking-search/services/BookingSearchStepService';
-import {BookingFillDetailsStepService} from '../subcomponents/booking-fill-details/services/BookingFillDetailsStepService';
-import {BookingCustomerRegisterStepService} from '../subcomponents/booking-customer-register/services/BookingCustomerRegisterStepService';
-import {BookingEmailConfigStepService} from '../subcomponents/booking-email-config/services/BookingEmailConfigStepService';
-import {BookingControllerService} from '../subcomponents/utils/BookingControllerService';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { BaseComponent } from '../../../../../../../../../common/base/BaseComponent';
+import { AppContext, ThError } from '../../../../../../../../../common/utils/AppContext';
+import { SETTINGS_PROVIDERS } from '../../../../../../../services/settings/SettingsProviders';
+import { HotelService } from '../../../../../../../services/hotel/HotelService';
+import { HotelAggregatorService } from '../../../../../../../services/hotel/HotelAggregatorService';
+import { RoomCategoriesService } from '../../../../../../../services/room-categories/RoomCategoriesService';
+import { BookingCartService } from '../../services/search/BookingCartService';
+import { BookingStepType } from '../subcomponents/utils/BookingStepType';
+import { ILastBookingStepService } from '../subcomponents/utils/ILastBookingStepService';
+import { BookingSearchStepService } from '../subcomponents/booking-search/services/BookingSearchStepService';
+import { BookingFillDetailsStepService } from '../subcomponents/booking-fill-details/services/BookingFillDetailsStepService';
+import { BookingCustomerRegisterStepService } from '../subcomponents/booking-customer-register/services/BookingCustomerRegisterStepService';
+import { BookingEmailConfigStepService } from '../subcomponents/booking-email-config/services/BookingEmailConfigStepService';
+import { BookingControllerService } from '../subcomponents/utils/BookingControllerService';
+import { BookingDO } from "../../../../../../../services/bookings/data-objects/BookingDO";
 
 @Component({
 	selector: 'new-booking-container',
@@ -86,8 +87,18 @@ export class NewBookingContainerComponent extends BaseComponent {
 		if (this.isAddingBookings) { return; }
 		this.isAddingBookings = true;
 		var lastBookingStep: ILastBookingStepService = this._bookingCtrlService.getLastStepService();
-		lastBookingStep.addBookings().subscribe((result: boolean) => {
-			this._appContext.toaster.success(this._appContext.thTranslation.translate("The bookings have been added succesfully"));
+		lastBookingStep.addBookings().subscribe((bookingList: BookingDO[]) => {
+            var title = this._appContext.thTranslation.translate("Info");
+            var content = this._appContext.thTranslation.translate("The booking group with reference %groupBookingReference% has been successfully added. The group includes the following bookings:", {
+				"groupBookingReference": bookingList[0].groupBookingReference
+			});
+			content += " " + this.getBookingReferenceListFormattedString(bookingList) + ".";
+
+            var positiveLabel = this._appContext.thTranslation.translate("OK");
+
+            this._appContext.modalService.confirm(title, content, { positive: positiveLabel }, () => {
+            });
+
 			this.triggerOnBookingsAdded();
 			this.triggerOnCloseButtonPressed(true);
 			this.isAddingBookings = false;
@@ -97,5 +108,19 @@ export class NewBookingContainerComponent extends BaseComponent {
 		}, () => {
 			this.isAddingBookings = false;
 		});
+	}
+
+	private getBookingReferenceListFormattedString(bookingList: BookingDO[]): string {
+		let bookingReferenceListStr = "";
+		
+		_.forEach(bookingList, (booking: BookingDO) => {
+			bookingReferenceListStr += booking.bookingReference + ", ";
+		});
+
+		if(bookingReferenceListStr.length > 0) {
+			bookingReferenceListStr = bookingReferenceListStr.slice(0, -2);
+		}
+
+		return bookingReferenceListStr;
 	}
 }

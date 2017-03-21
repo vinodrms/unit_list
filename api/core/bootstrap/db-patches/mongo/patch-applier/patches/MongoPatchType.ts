@@ -8,5 +8,6 @@ export enum MongoPatchType {
     AddAppliedDiscountValueOnBookingPrice,
     AddCustomerIdDisplayedAsGuestOnDefaultBillingDetails,
     SetValueForFirstChildWithAdultInSharedBedPriceOnBookingsPriceProductSnapshots,
+    SetInitialValuesForBookingReferenceSequencesOnHotel,
     
 }
