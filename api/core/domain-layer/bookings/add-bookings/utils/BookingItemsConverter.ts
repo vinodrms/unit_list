@@ -144,7 +144,6 @@ export class BookingItemsConverter {
                     currentHotelTimestamp: this._converterParams.currentHotelTimestamp
                 });
                 this._bookingUtils.updateBookingPriceUsingRoomCategory(bookingDO, this._converterParams.roomCategoryStatsList, groupBookingRoomCategoryIdList);
-                this._bookingUtils.updateIndexedSearchTerms(bookingDO, this._converterParams.customersContainer);
                 this._bookingUtils.updateDisplayCustomerId(bookingDO, this._converterParams.customersContainer);
                 bookingDO.price.vatId = this.getBookingTaxId(priceProduct);
 
@@ -153,6 +152,10 @@ export class BookingItemsConverter {
 
             return Promise.all(promiseList);
         }).then((bookingList: BookingDO[]) => {
+            _.forEach(bookingList, (bookingDO: BookingDO) => {
+                this._bookingUtils.updateIndexedSearchTerms(bookingDO, this._converterParams.customersContainer);
+            });
+
             resolve(bookingList);
         }).catch((error) => {
             reject(error);
