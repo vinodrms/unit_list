@@ -13,7 +13,7 @@ import { CurrencyDO } from '../../../../../../../../services/common/data-objects
 import { ISOWeekDayUtils, ISOWeekDayVM, ISOWeekDay } from '../../../../../../../../services/common/data-objects/th-dates/ISOWeekDay';
 import { PriceExceptionDO } from '../../../../../../../../services/price-products/data-objects/price/price-exceptions/PriceExceptionDO';
 import { PriceExceptionModalService } from './price-exception-modal/services/PriceExceptionModalService';
-import { PriceContainer } from './utils/PriceContainer';
+import { DynamicPriceVM } from './utils/DynamicPriceVM';
 import { PriceVM } from './utils/PriceVM';
 
 @Component({
@@ -25,8 +25,8 @@ export class PriceProductEditPricesSectionComponent extends BaseComponent implem
 	readonly: boolean;
 	@Input() didSubmit: boolean;
 
-	pricePerPersonContainer: PriceContainer;
-	singlePriceContainer: PriceContainer;
+	pricePerPersonContainer: DynamicPriceVM;
+	singlePriceContainer: DynamicPriceVM;
 
 	private _currentRoomCategoryStatsList: RoomCategoryStatsDO[];
 
@@ -41,8 +41,8 @@ export class PriceProductEditPricesSectionComponent extends BaseComponent implem
 		super();
 		this._isoWeekDayUtils = new ISOWeekDayUtils();
 		this.ccy = new CurrencyDO();
-		this.pricePerPersonContainer = new PriceContainer(PriceProductPriceType.PricePerPerson);
-		this.singlePriceContainer = new PriceContainer(PriceProductPriceType.SinglePrice);
+		this.pricePerPersonContainer = new DynamicPriceVM(PriceProductPriceType.PricePerPerson);
+		this.singlePriceContainer = new DynamicPriceVM(PriceProductPriceType.SinglePrice);
 	}
 
 	public isValid(): boolean {
@@ -118,7 +118,7 @@ export class PriceProductEditPricesSectionComponent extends BaseComponent implem
 		}
 		return this._appContext.thTranslation.translate("%noOfRooms% Rooms", { noOfRooms: noOfRooms });
 	}
-	public get priceContainer(): PriceContainer {
+	public get priceContainer(): DynamicPriceVM {
 		if (this._isPricePerNumberOfPersons) {
 			return this.pricePerPersonContainer;
 		}

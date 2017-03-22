@@ -15,6 +15,8 @@ import { PriceProductEditTopSectionComponent } from './pages/price-product-edit/
 import { PriceProductEditRoomCategoriesSectionComponent } from './pages/price-product-edit/sections/room-categories/PriceProductEditRoomCategoriesSectionComponent';
 import { PriceProductEditAddOnProductsSectionComponent } from './pages/price-product-edit/sections/add-on-products/PriceProductEditAddOnProductsSectionComponent';
 import { PriceProductEditTaxesSectionComponent } from './pages/price-product-edit/sections/taxes/PriceProductEditTaxesSectionComponent';
+import { DynamicPriceContainerComponent } from './pages/price-product-edit/sections/prices/dynamic-price-container/DynamicPriceContainerComponent';
+import { DynamicPriceEditComponent } from './pages/price-product-edit/sections/prices/dynamic-price-edit/DynamicPriceEditComponent';
 import { PriceProductEditPricesSectionComponent } from './pages/price-product-edit/sections/prices/PriceProductEditPricesSectionComponent';
 import { PriceProductEditFiltersSectionComponent } from './pages/price-product-edit/sections/filters/PriceProductEditFiltersSectionComponent';
 import { PriceProductEditCancellationSectionComponent } from './pages/price-product-edit/sections/cancellation/PriceProductEditCancellationSectionComponent';
@@ -30,6 +32,8 @@ const CommonPriceProductsComponentsDeclarations = [
     PriceProductEditRoomCategoriesSectionComponent,
     PriceProductEditAddOnProductsSectionComponent,
     PriceProductEditTaxesSectionComponent,
+    DynamicPriceContainerComponent,
+    DynamicPriceEditComponent,
     PriceProductEditPricesSectionComponent,
     PriceProductEditFiltersSectionComponent,
     PriceProductEditCancellationSectionComponent,

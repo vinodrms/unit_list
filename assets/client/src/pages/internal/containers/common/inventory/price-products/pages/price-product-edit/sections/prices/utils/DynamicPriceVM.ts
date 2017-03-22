@@ -6,7 +6,7 @@ import { RoomCategoryStatsDO } from '../../../../../../../../../services/room-ca
 import { RoomCategoryDO } from '../../../../../../../../../services/room-categories/data-objects/RoomCategoryDO';
 import { PriceVM } from './PriceVM';
 
-export class PriceContainer {
+export class DynamicPriceVM {
     private _priceVMList: PriceVM[];
 
     constructor(private _priceType: PriceProductPriceType) {
@@ -26,18 +26,18 @@ export class PriceContainer {
             return;
         }
         let newPriceVMList: PriceVM[] = [];
-        _.forEach(price.priceList, (innerPrice: IPriceProductPrice) => {
+        _.forEach(price.dynamicPriceList[0].priceList, (innerPrice: IPriceProductPrice) => {
             let priceVM = new PriceVM(this._priceType);
             priceVM.roomCategoryStats = new RoomCategoryStatsDO();
             priceVM.roomCategoryStats.roomCategory = new RoomCategoryDO();
             priceVM.roomCategoryStats.roomCategory.id = innerPrice.getRoomCategoryId();
             priceVM.price = innerPrice;
 
-            let filteredPriceExceptionList: PriceExceptionDO[] = price.getFilteredExceptionsByRoomCategoryId(innerPrice.getRoomCategoryId());
-            _.forEach(filteredPriceExceptionList, (exp: PriceExceptionDO) => {
-                priceVM.priceExceptionsByWeekday[exp.dayFromWeek] = exp.price;
-            });
-            priceVM.indexExceptions();
+            // let filteredPriceExceptionList: PriceExceptionDO[] = price.getFilteredExceptionsByRoomCategoryId(innerPrice.getRoomCategoryId());
+            // _.forEach(filteredPriceExceptionList, (exp: PriceExceptionDO) => {
+            //     priceVM.priceExceptionsByWeekday[exp.dayFromWeek] = exp.price;
+            // });
+            // priceVM.indexExceptions();
             newPriceVMList.push(priceVM);
         });
         this._priceVMList = newPriceVMList;
@@ -86,11 +86,11 @@ export class PriceContainer {
 
     public updatePricesOn(priceProductVM: PriceProductVM) {
         priceProductVM.priceProduct.price.type = this._priceType;
-        priceProductVM.priceProduct.price.priceList = [];
-        priceProductVM.priceProduct.price.priceExceptionList = [];
+        priceProductVM.priceProduct.price.dynamicPriceList[0].priceList = [];
+        priceProductVM.priceProduct.price.dynamicPriceList[0].priceExceptionList = [];
         _.forEach(this._priceVMList, priceVM => {
-            priceProductVM.priceProduct.price.priceList.push(priceVM.price);
-            priceProductVM.priceProduct.price.priceExceptionList = priceProductVM.priceProduct.price.priceExceptionList.concat(priceVM.exceptionList);
+            priceProductVM.priceProduct.price.dynamicPriceList[0].priceList.push(priceVM.price);
+            priceProductVM.priceProduct.price.dynamicPriceList[0].priceExceptionList = priceProductVM.priceProduct.price.dynamicPriceList[0].priceExceptionList.concat(priceVM.exceptionList);
         });
     }
 
