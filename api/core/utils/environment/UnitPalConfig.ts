@@ -33,7 +33,7 @@ export enum LoggerChannelType {
 }
 export interface LoggerChannel {
     type: LoggerChannelType;
-    options: Object;    
+    options: Object;
 }
 
 export class UnitPalConfig {
@@ -47,9 +47,11 @@ export class UnitPalConfig {
     private _pdfReportsProviderSettings: Object;
     private _googleAnalyticsSettings: GoogleAnalyticsSettings;
     private _appContextRoot: string;
+    private _defaultClientSessionEnabled: boolean;
 
     constructor() {
         this.updateAppEnvironment();
+        this.updateDefaultClientSessionEnabled();
         this.updateDatabaseType();
         this.updateEmailProvider();
         this.updateImageStorageProvider();
@@ -68,6 +70,12 @@ export class UnitPalConfig {
             default:
                 this._appEnvironment = AppEnvironmentType.Production;
                 break;
+        }
+    }
+    private updateDefaultClientSessionEnabled() {
+        this._defaultClientSessionEnabled = false;
+        if (_.isBoolean(sails.config.unitPalConfig.defaultClientSessionEnabled) && sails.config.unitPalConfig.defaultClientSessionEnabled) {
+            this._defaultClientSessionEnabled = true;
         }
     }
     private updateDatabaseType() {
@@ -162,9 +170,9 @@ export class UnitPalConfig {
     public getLoggerChannels(): LoggerChannel[] {
         let rawLoggerChannels = sails.config.unitPalConfig.loggerChannels;
         let loggerChannels: LoggerChannel[] = [];
-        
+
         _.forEach(rawLoggerChannels, (rawLoggerChannel: any) => {
-            
+
             switch (rawLoggerChannel.type) {
                 case 'console':
                     loggerChannels.push({
@@ -191,8 +199,11 @@ export class UnitPalConfig {
                     });
                     break;
             }
-		});
+        });
 
         return loggerChannels;
+    }
+    public defaultClientSessionIsEnabled(): boolean {
+        return this._defaultClientSessionEnabled;
     }
 }

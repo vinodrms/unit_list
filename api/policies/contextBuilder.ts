@@ -1,11 +1,11 @@
-import {UnitPalConfig} from '../core/utils/environment/UnitPalConfig';
-import {AppContext} from '../core/utils/AppContext';
-import {ThUtils} from '../core/utils/ThUtils';
-import {Locales, ThTranslation} from '../core/utils/localization/ThTranslation';
+import { UnitPalConfig } from '../core/utils/environment/UnitPalConfig';
+import { AppContext } from '../core/utils/AppContext';
+import { ThUtils } from '../core/utils/ThUtils';
+import { Locales, ThTranslation } from '../core/utils/localization/ThTranslation';
 
 import _ = require("underscore");
 
-module.exports = function(req: Express.Request, res: Express.Response, next: any) {
+module.exports = function (req: Express.Request, res: Express.Response, next: any) {
 	var unitPalConfig = new UnitPalConfig();
 	let appContext = new AppContext(unitPalConfig);
 	req.appContext = appContext;
@@ -22,8 +22,8 @@ module.exports = function(req: Express.Request, res: Express.Response, next: any
 	else {
 		req.sessionContext.language = requestLocale;
 	}
-	
+
 	appContext.thTranslate = new ThTranslation(requestLocale);
-	
+
 	return next();
 };

@@ -108,7 +108,22 @@ export class DefaultPriceProductBuilder implements IPriceProductDataSource {
 		var outPrice = new PriceProductPriceDO();
 		outPrice.type = PriceProductPriceType.PricePerPerson;
 
-		let dynamicPrice = new DynamicPriceDO(outPrice.type);
+		let dynamicPrice = DefaultPriceProductBuilder.getPricePerPersonDynamicPriceDO(roomCategoryStatList, "Default Rate");
+		let timestamp = ThTimestampDO.buildThTimestampForTimezone(DefaultHotelBuilder.Timezone);
+		let priceException = new PriceExceptionDO();
+		priceException.dayFromWeek = timestamp.thDateDO.getISOWeekDay();
+		priceException.price = dynamicPrice.priceList[0];
+		dynamicPrice.priceExceptionList = [priceException];
+
+		let dynamicPrice2 = DefaultPriceProductBuilder.getPricePerPersonDynamicPriceDO(roomCategoryStatList, "High Season Rate");
+		let dynamicPrice3 = DefaultPriceProductBuilder.getPricePerPersonDynamicPriceDO(roomCategoryStatList, "Low Season Rate");
+
+		outPrice.dynamicPriceList = [dynamicPrice, dynamicPrice2, dynamicPrice3];
+		outPrice.enabledDynamicPriceIdByDate = {};
+		return outPrice;
+	}
+	private static getPricePerPersonDynamicPriceDO(roomCategoryStatList: RoomCategoryStatsDO[], name: string): DynamicPriceDO {
+		let dynamicPrice = new DynamicPriceDO(PriceProductPriceType.PricePerPerson);
 		dynamicPrice.id = "test";
 		dynamicPrice.name = "Default Rate";
 		dynamicPrice.description = "";
@@ -124,15 +139,10 @@ export class DefaultPriceProductBuilder implements IPriceProductDataSource {
 
 			dynamicPrice.priceList.push(pricePerPerson);
 		});
-		let timestamp = ThTimestampDO.buildThTimestampForTimezone(DefaultHotelBuilder.Timezone);
-		let priceException = new PriceExceptionDO();
-		priceException.dayFromWeek = timestamp.thDateDO.getISOWeekDay();
-		priceException.price = dynamicPrice.priceList[0];
-		dynamicPrice.priceExceptionList = [priceException];
-		outPrice.dynamicPriceList = [dynamicPrice];
-		outPrice.enabledDynamicPriceIdByDate = {};
-		return outPrice;
+		dynamicPrice.priceExceptionList = [];
+		return dynamicPrice;
 	}
+
 	private static getPriceForFixedNumberOfPersonsDOList(maxNoOfPersons: number): PriceForFixedNumberOfPersonsDO[] {
 		var testUtils = new TestUtils();
 		var priceList: PriceForFixedNumberOfPersonsDO[] = [];

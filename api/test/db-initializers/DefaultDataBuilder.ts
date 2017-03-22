@@ -38,10 +38,10 @@ import { InvoiceDO } from '../../core/data-layer/invoices/data-objects/InvoiceDO
 import _ = require("underscore");
 
 export class DefaultDataBuilder {
+    public static DefaultEmail = "paraschiv.ionut@gmail.com";
     private static FirstUserIndex = 0;
     private _repositoryCleaner: RepositoryCleanerWrapper;
 
-    private _email: string = "paraschiv.ionut@gmail.com";
     private _hotelDO: HotelDO;
     private _userDO: UserDO;
     private _paymentMethodList: PaymentMethodDO[];
@@ -88,7 +88,7 @@ export class DefaultDataBuilder {
             }).then((paymentMethodList: PaymentMethodDO[]) => {
                 this._paymentMethodList = paymentMethodList;
 
-                var hotelBuilder = new DefaultHotelBuilder(this._testContext.appContext, this._email, this._paymentMethodList);
+                var hotelBuilder = new DefaultHotelBuilder(this._testContext.appContext, DefaultDataBuilder.DefaultEmail, this._paymentMethodList);
                 var hotel = hotelBuilder.getHotel();
                 return this._testContext.appContext.getRepositoryFactory().getHotelRepository().addHotel(hotel);
             }).then((savedHotel: HotelDO) => {
@@ -202,9 +202,6 @@ export class DefaultDataBuilder {
             });
     }
 
-    public get email(): string {
-        return this._email;
-    }
     public get hotelDO(): HotelDO {
         return this._hotelDO;
     }

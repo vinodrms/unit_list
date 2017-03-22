@@ -18,6 +18,7 @@ module.exports = {
         level: "silent"
     },
     unitPalConfig: {
+        defaultClientSessionEnabled: true,
         emailService: {
             type: "mock"
         },

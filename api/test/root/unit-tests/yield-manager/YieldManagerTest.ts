@@ -326,14 +326,16 @@ describe("Price Products Interval Tests", function () {
 					should.equal(yieldItem.stateList[1].openForDeparture, YieldItemStateType.Open);
 					should.equal(yieldItem.stateList[2].openForDeparture, YieldItemStateType.Open);
 
-					should.equal(yieldItem.dynamicPriceList.length, 1);
-					should.equal(yieldItem.dynamicPriceList[0].openList.length, 3);
-					should.equal(yieldItem.dynamicPriceList[0].dynamicPriceId.length > 1, true);
-					should.equal(yieldItem.dynamicPriceList[0].name.length > 1, true);
-					should.equal(yieldItem.dynamicPriceList[0].priceBriefString.length > 1, true);
-					should.equal(yieldItem.dynamicPriceList[0].roomCategoryNameForPriceBrief.length > 1, true);
-					yieldItem.dynamicPriceList[0].openList.forEach(open => {
-						should.equal(open, YieldItemStateType.Open);
+					should.equal(yieldItem.dynamicPriceList.length >= 1, true);
+					yieldItem.dynamicPriceList.forEach(dynamicPrice => {
+						should.equal(dynamicPrice.openList.length, 3);
+						should.equal(dynamicPrice.dynamicPriceId.length > 1, true);
+						should.equal(dynamicPrice.name.length > 1, true);
+						should.equal(dynamicPrice.priceBriefString.length > 1, true);
+						should.equal(dynamicPrice.roomCategoryNameForPriceBrief.length > 1, true);
+						dynamicPrice.openList.forEach(open => {
+							should.equal(open, YieldItemStateType.Open);
+						});
 					});
 				});
 				done();
@@ -388,14 +390,16 @@ describe("Price Products Interval Tests", function () {
 					should.equal(yieldItem.stateList[1].openForDeparture, YieldItemStateType.Open);
 					should.equal(yieldItem.stateList[2].openForDeparture, YieldItemStateType.Open);
 
-					should.equal(yieldItem.dynamicPriceList.length, 1);
-					should.equal(yieldItem.dynamicPriceList[0].openList.length, 3);
-					should.equal(yieldItem.dynamicPriceList[0].dynamicPriceId.length > 1, true);
-					should.equal(yieldItem.dynamicPriceList[0].name.length > 1, true);
-					should.equal(yieldItem.dynamicPriceList[0].priceBriefString.length > 1, true);
-					should.equal(yieldItem.dynamicPriceList[0].roomCategoryNameForPriceBrief.length > 1, true);
-					yieldItem.dynamicPriceList[0].openList.forEach(open => {
-						should.equal(open, YieldItemStateType.Open);
+					should.equal(yieldItem.dynamicPriceList.length >= 1, true);
+					yieldItem.dynamicPriceList.forEach(dynamicPrice => {
+						should.equal(dynamicPrice.openList.length, 3);
+						should.equal(dynamicPrice.dynamicPriceId.length > 1, true);
+						should.equal(dynamicPrice.name.length > 1, true);
+						should.equal(dynamicPrice.priceBriefString.length > 1, true);
+						should.equal(dynamicPrice.roomCategoryNameForPriceBrief.length > 1, true);
+						dynamicPrice.openList.forEach(open => {
+							should.equal(open, YieldItemStateType.Open);
+						});
 					});
 				});
 				done();
