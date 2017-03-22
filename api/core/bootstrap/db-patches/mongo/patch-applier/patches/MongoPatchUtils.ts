@@ -8,6 +8,7 @@ import { P5_AddTheRoomPricePerNightListOnBookingPrice } from './list/P5_AddTheRo
 import { P6_AddAppliedDiscountValueOnBookingPrice } from './list/P6_AddAppliedDiscountValueOnBookingPrice';
 import { P7_AddCustomerIdDisplayedAsGuestOnDefaultBillingDetails } from "./list/P7_AddCustomerIdDisplayedAsGuestOnDefaultBillingDetails";
 import { P8_SetValueForFirstChildWithAdultInSharedBedPriceOnBookingsPriceProductSnapshots } from "./list/P8_SetValueForFirstChildWithAdultInSharedBedPriceOnBookingsPriceProductSnapshots";
+import { P9_SetInitialValuesForBookingReferenceSequencesOnHotel } from "./list/P9_SetInitialValuesForBookingReferenceSequencesOnHotel";
 
 export class MongoPatchUtils {
 	public static get PatchList(): ATransactionalMongoPatch[] {
@@ -21,6 +22,7 @@ export class MongoPatchUtils {
 			new P6_AddAppliedDiscountValueOnBookingPrice(),
 			new P7_AddCustomerIdDisplayedAsGuestOnDefaultBillingDetails(),
 			new P8_SetValueForFirstChildWithAdultInSharedBedPriceOnBookingsPriceProductSnapshots(),
+			new P9_SetInitialValuesForBookingReferenceSequencesOnHotel(),
 
 		];
 	}

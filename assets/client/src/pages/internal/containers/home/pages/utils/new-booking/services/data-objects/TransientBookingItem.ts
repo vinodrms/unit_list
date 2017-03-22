@@ -11,4 +11,5 @@ export class TransientBookingItem {
     priceProductId: string;
     allotmentId: string;
     notes: string;
+    invoiceNotes: string;
 }

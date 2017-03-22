@@ -57,6 +57,7 @@ export class BookingDO extends BaseDO {
     guaranteedTime: BookingStateChangeTriggerTimeDO;
     noShowTime: BookingStateChangeTriggerTimeDO;
     notes: string;
+    invoiceNotes: string;
     fileAttachmentList: FileAttachmentDO[];
     bookingHistory: DocumentHistoryDO;
     indexedSearchTerms: string[];
@@ -64,7 +65,7 @@ export class BookingDO extends BaseDO {
     protected getPrimitivePropertyKeys(): string[] {
         return ["groupBookingId", "groupBookingReference", "versionId", "status", "inputChannel", "noOfRooms", "bookingId", "bookingReference", "confirmationStatus",
             "customerIdList", "displayCustomerId", "startUtcTimestamp", "endUtcTimestamp", "roomCategoryId", "roomId", "priceProductId",
-            "reservedAddOnProductIdList", "allotmentId", "notes", "indexedSearchTerms"];
+            "reservedAddOnProductIdList", "allotmentId", "invoiceNotes", "notes", "indexedSearchTerms"];
     }
 
     public buildFromObject(object: Object) {
@@ -109,5 +110,9 @@ export class BookingDO extends BaseDO {
 
     public getInvoiceItemMeta(): IInvoiceItemMeta {
         return this.price;
+    }
+
+    public get reservationNumber(): string {
+        return this.groupBookingReference + '/' + this.bookingReference;
     }
 }

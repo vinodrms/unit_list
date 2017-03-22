@@ -5,16 +5,19 @@ import { MongoPriceProductRepository } from '../../../../../data-layer/price-pro
 import { MongoBedRepository } from '../../../../../data-layer/beds/repositories/mongo/MongoBedRepository';
 import { MongoBookingRepository } from '../../../../../data-layer/bookings/repositories/mongo/MongoBookingRepository';
 import { MongoPatchType } from '../patches/MongoPatchType';
+import { MongoHotelRepository } from "../../../../../data-layer/hotel/repositories/mongo/MongoHotelRepository";
 
 export abstract class ATransactionalMongoPatch implements IMongoPatchApplier, IMongoPatch {
 	protected _priceProductRepository: MongoPriceProductRepository;
 	protected _bedRepository: MongoBedRepository;
 	protected _bookingRepository: MongoBookingRepository;
+	protected _hotelRepository: MongoHotelRepository;
 
 	constructor() {
 		this._priceProductRepository = new MongoPriceProductRepository();
 		this._bedRepository = new MongoBedRepository();
 		this._bookingRepository = new MongoBookingRepository();
+		this._hotelRepository = new MongoHotelRepository();
 	}
 
 	public apply(): Promise<boolean> {

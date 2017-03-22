@@ -365,6 +365,7 @@ export enum ThStatusCode {
 	BookingIntervalValidatorMaxSixMonths,
 	AddBookingItemsInvalidNoOfBookings,
 	BookingItemsConverterError,
+	BookingItemsConverterReferenceGenerationError,
 	BookingValidationError,
 	BookingsValidatorBillingCustomerMissing,
 	BookingsValidatorYieldingClosed,
@@ -467,6 +468,8 @@ export enum ThStatusCode {
 	BookingPaymentGuaranteeInvalidState,
 	HotelBookingOperationsControllerErrorAddingPaymentGuarantee,
 	BookingChangeDetailsInvalidState,
+	BookingChangeInvoiceNotesInvalidState,
+	BookingChangeDetailsInvoiceSyncError,
 	BookingChangeDetailsError,
 	HotelBookingOperationsControllerErrorChangingDetails,
 	BookingChangeCustomersInvalidState,
@@ -871,6 +874,7 @@ ThMessage[ThStatusCode.BookingIntervalValidatorInvalidStartDate] = "Invalid star
 ThMessage[ThStatusCode.BookingIntervalValidatorMaxSixMonths] = "The maximum interval for a booking is 6 months.";
 ThMessage[ThStatusCode.AddBookingItemsInvalidNoOfBookings] = "The maximum number of bookings you can add is 50.";
 ThMessage[ThStatusCode.BookingItemsConverterError] = "There was a problem while reading the bookings.";
+ThMessage[ThStatusCode.BookingItemsConverterReferenceGenerationError] = "There was a problem while generating bookign references.";
 ThMessage[ThStatusCode.BookingValidationError] = "There was a problem while validating the bookings.";
 ThMessage[ThStatusCode.BookingsValidatorBillingCustomerMissing] = "The billable customer must be in the customer list.";
 ThMessage[ThStatusCode.BookingsValidatorYieldingClosed] = "You cannot book a price product that is not opened in the Yield Manager for the selected interval.";
@@ -910,7 +914,7 @@ ThMessage[ThStatusCode.BookingsControllerErrorSearchingBookings] = "Error search
 ThMessage[ThStatusCode.BookingsControllerErrorAddingBookings] = "Error adding bookings.";
 ThMessage[ThStatusCode.BookingStatusChangerCronJobExecutorError] = "Error changing booking statuses from the process.";
 ThMessage[ThStatusCode.BookingInvoiceUtilsInvoiceNotFound] = "The invoice for the booking was not found.";
-ThMessage[ThStatusCode.BookingInvoiceUtilsInvoiceIsClosed] = "The price cannot be updated on the invoice because it is closed (Paid or Lost by Management).";
+ThMessage[ThStatusCode.BookingInvoiceUtilsInvoiceIsClosed] = "The price and the notes cannot be updated on the invoice because it is closed (Paid or Lost by Management).";
 ThMessage[ThStatusCode.HotelTimeNullTimezone] = "The timezone for the hotel is not set.";
 ThMessage[ThStatusCode.HotelTimeError] = "Error getting the current time for your hotel.";
 ThMessage[ThStatusCode.HotelOperationsRoomInfoReaderError] = "Error getting the hotel operations data.";
@@ -973,6 +977,8 @@ ThMessage[ThStatusCode.BookingPaymentGuaranteeError] = "Error adding payment gua
 ThMessage[ThStatusCode.BookingPaymentGuaranteeInvalidState] = "A payment guarantee can be added only for confirmed or guaranteed bookings.";
 ThMessage[ThStatusCode.HotelBookingOperationsControllerErrorAddingPaymentGuarantee] = "Error adding payment guarantee.";
 ThMessage[ThStatusCode.BookingChangeDetailsInvalidState] = "You cannot change details for checked out or cancelled bookings.";
+ThMessage[ThStatusCode.BookingChangeInvoiceNotesInvalidState] = "You cannot change invoice notes on bookings that have the invoice paid.";
+ThMessage[ThStatusCode.BookingChangeDetailsInvoiceSyncError] = "There was an error updating notes on the invoice.";
 ThMessage[ThStatusCode.BookingChangeDetailsError] = "Error changing booking details.";
 ThMessage[ThStatusCode.HotelBookingOperationsControllerErrorChangingDetails] = "Error changing booking details.";
 ThMessage[ThStatusCode.BookingChangeCustomersInvalidState] = "The customers can be changed only for checked in, confirmed or guaranteed bookings.";
