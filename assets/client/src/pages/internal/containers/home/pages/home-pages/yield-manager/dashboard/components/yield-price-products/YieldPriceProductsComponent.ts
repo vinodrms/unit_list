@@ -20,6 +20,7 @@ import { YieldFilterType } from '../../../../../../../../services/common/data-ob
 import { IFilterSelection } from '../../common/interfaces/IFilterSelection';
 import { IFilterVM } from '../../../../../../../../services/yield-manager/dashboard/filter/view-models/IFilterVM';
 import { YieldItemStateType } from "../../../../../../../../services/yield-manager/dashboard/price-products/data-objects/YieldItemStateDO";
+import { DynamicPriceYieldItemDO } from "../../../../../../../../services/yield-manager/dashboard/price-products/data-objects/DynamicPriceYieldItemDO";
 
 @Component({
 	selector: 'yield-price-products',
@@ -361,5 +362,21 @@ export class YieldPriceProductsComponent {
 
 	private stateIsOpen(state: YieldItemStateType): boolean {
 		return state === YieldItemStateType.Open;
+	}
+	private openDynamicPrice(priceProductItem: PriceProductYieldItemVM, dynamicPrice: DynamicPriceYieldItemDO, dayIndex: number) {
+		if (dynamicPrice.openList[dayIndex] === YieldItemStateType.Open) {
+			return;
+		}
+		let date = this.priceProductResults.dateList[dayIndex];
+		var interval = ThDateIntervalDO.buildThDateIntervalDO(date, date);
+		this._yieldPriceProductsService.openDynamicPrice({
+			priceProductId: priceProductItem.priceProductYieldItemDO.priceProductId,
+			dynamicPriceId: dynamicPrice.dynamicPriceId,
+			interval: interval
+		}).subscribe(() => {
+			var eventDescription = "Opened a Dynamic Price for day " + date.toString();
+			this._appContext.analytics.logEvent("yield-manager", "yield-single-dynamic-price", eventDescription);
+			this.handleStateChange();
+		});
 	}
 }

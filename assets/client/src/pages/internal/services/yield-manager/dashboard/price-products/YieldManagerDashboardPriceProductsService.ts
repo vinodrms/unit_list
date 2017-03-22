@@ -19,6 +19,8 @@ import { PriceProductYieldResultVM } from './view-models/PriceProductYieldResult
 import { PriceProductYieldItemVM } from './view-models/PriceProductYieldItemVM';
 import { PriceProductYieldResultDO } from './data-objects/PriceProductYieldResultDO';
 import { PriceProductYieldItemDO } from './data-objects/PriceProductYieldItemDO';
+import { ThDateIntervalDO } from "../../../common/data-objects/th-dates/ThDateIntervalDO";
+import { DynamicPriceYieldParam } from "../common/DynamicPriceYieldParam";
 
 @Injectable()
 export class YieldManagerDashboardPriceProductsService extends ARequestService<PriceProductYieldResultVM> {
@@ -89,6 +91,14 @@ export class YieldManagerDashboardPriceProductsService extends ARequestService<P
                 var priceProducts = new PriceProductsDO();
                 priceProducts.buildFromObject(priceProductsObject);
                 return priceProducts;
+            });
+    }
+    public openDynamicPrice(yieldParam: DynamicPriceYieldParam): Observable<PriceProductDO> {
+        return this._appContext.thHttp.post(ThServerApi.YieldManagerOpenDynamicPrice, { yieldData: yieldParam })
+            .map((priceProductObject: Object) => {
+                var priceProduct = new PriceProductDO();
+                priceProduct.buildFromObject(priceProductObject);
+                return priceProduct;
             });
     }
 }

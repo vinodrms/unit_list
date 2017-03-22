@@ -60,9 +60,12 @@
 							</span>
 						</span>
 					</div>
-					<div class="price-products-col" *ngFor="let state of dynamicPrice.openList">
+					<div class="price-products-col" *ngFor="let state of dynamicPrice.openList; let currentIndex = index">
 						<span class="w-100 horizontal-align-center">
-							<input type="checkbox" name="itemsSelectionStatePPDRId" [checked]="stateIsOpen(state)">
+							<input type="radio" 
+								name="{{ priceProduct.priceProductYieldItemDO.priceProductId + currentIndex }}" 
+								[checked]="stateIsOpen(state)" 
+								(click)="openDynamicPrice(priceProduct, dynamicPrice, currentIndex)">
 						</span>
 					</div>
 				</div>
