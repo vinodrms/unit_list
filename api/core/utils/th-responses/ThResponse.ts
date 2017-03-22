@@ -248,6 +248,8 @@ export enum ThStatusCode {
 	DraftPriceProductItemOnlyArchived,
 	DraftPriceProductItemError,
 	PriceProductsYieldManagementInvalidInterval,
+	DynamicPriceYieldingInvalidInterval,
+	DynamicPriceYieldingDynamicPriceNotFound,
 	PriceProductIdValidatorInvalidId,
 	PriceProductsControllerErrorGettingPriceProduct,
 	PriceProductsControllerErrorSavingPriceProduct,
@@ -259,6 +261,7 @@ export enum ThStatusCode {
 	PricePerPersonForSingleRoomCategoryDOInvalidPriceConfiguration,
 	YieldManagerControllerErrorClosing,
 	YieldManagerControllerErrorOpening,
+	YieldManagerControllerErrorOpeningDynamicPrice,
 	HotelConfigurationRepositoryNotFound,
 	HotelConfigurationRepositoryReadError,
 	HotelConfigurationRepositoryErrorAddingConfiguration,
@@ -770,6 +773,8 @@ ThMessage[ThStatusCode.UpdatePriceProductItemStatusWrongStatus] = "Cannot run th
 ThMessage[ThStatusCode.DraftPriceProductItemOnlyArchived] = "Only archived price products can be marked as drafts.";
 ThMessage[ThStatusCode.DraftPriceProductItemError] = "Error marking the price product as draft.";
 ThMessage[ThStatusCode.PriceProductsYieldManagementInvalidInterval] = "Invalid interval submitted.";
+ThMessage[ThStatusCode.DynamicPriceYieldingInvalidInterval] = "Invalid interval submitted.";
+ThMessage[ThStatusCode.DynamicPriceYieldingDynamicPriceNotFound] = "The dynamic price was not found.";
 ThMessage[ThStatusCode.PriceProductIdValidatorInvalidId] = "Invalid price products.";
 ThMessage[ThStatusCode.PriceProductsControllerErrorGettingPriceProduct] = "Error getting price product.";
 ThMessage[ThStatusCode.PriceProductsControllerErrorSavingPriceProduct] = "Error saving price product.";
@@ -780,6 +785,7 @@ ThMessage[ThStatusCode.PriceProductsControllerErrorGettingCount] = "Error the nu
 ThMessage[ThStatusCode.PriceProductsControllerErrorGettingList] = "Error getting the list price product.";
 ThMessage[ThStatusCode.YieldManagerControllerErrorClosing] = "Error closing the period for the price products.";
 ThMessage[ThStatusCode.YieldManagerControllerErrorOpening] = "Error opening the period for the price products.";
+ThMessage[ThStatusCode.YieldManagerControllerErrorOpeningDynamicPrice] = "Error opening the period for the price products.";
 ThMessage[ThStatusCode.HotelConfigurationRepositoryNotFound] = "Hotel configuration not found.";
 ThMessage[ThStatusCode.HotelConfigurationRepositoryReadError] = "Cannot read hotel configuration.";
 ThMessage[ThStatusCode.HotelConfigurationRepositoryErrorAddingConfiguration] = "Cannot add hotel configuration.";

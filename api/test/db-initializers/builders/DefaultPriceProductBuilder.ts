@@ -108,25 +108,25 @@ export class DefaultPriceProductBuilder implements IPriceProductDataSource {
 		var outPrice = new PriceProductPriceDO();
 		outPrice.type = PriceProductPriceType.PricePerPerson;
 
-		let dynamicPrice = DefaultPriceProductBuilder.getPricePerPersonDynamicPriceDO(roomCategoryStatList, "Default Rate");
+		let dynamicPrice = DefaultPriceProductBuilder.getPricePerPersonDynamicPriceDO(roomCategoryStatList, "Default Rate", "test");
 		let timestamp = ThTimestampDO.buildThTimestampForTimezone(DefaultHotelBuilder.Timezone);
 		let priceException = new PriceExceptionDO();
 		priceException.dayFromWeek = timestamp.thDateDO.getISOWeekDay();
 		priceException.price = dynamicPrice.priceList[0];
 		dynamicPrice.priceExceptionList = [priceException];
 
-		let dynamicPrice2 = DefaultPriceProductBuilder.getPricePerPersonDynamicPriceDO(roomCategoryStatList, "High Season Rate");
-		let dynamicPrice3 = DefaultPriceProductBuilder.getPricePerPersonDynamicPriceDO(roomCategoryStatList, "Low Season Rate");
+		let dynamicPrice2 = DefaultPriceProductBuilder.getPricePerPersonDynamicPriceDO(roomCategoryStatList, "High Season Rate", "test2");
+		let dynamicPrice3 = DefaultPriceProductBuilder.getPricePerPersonDynamicPriceDO(roomCategoryStatList, "Low Season Rate", "test3");
 
 		outPrice.dynamicPriceList = [dynamicPrice, dynamicPrice2, dynamicPrice3];
 		outPrice.enabledDynamicPriceIdByDate = {};
 		return outPrice;
 	}
-	private static getPricePerPersonDynamicPriceDO(roomCategoryStatList: RoomCategoryStatsDO[], name: string): DynamicPriceDO {
+	private static getPricePerPersonDynamicPriceDO(roomCategoryStatList: RoomCategoryStatsDO[], name: string, dpId: string): DynamicPriceDO {
 		let dynamicPrice = new DynamicPriceDO(PriceProductPriceType.PricePerPerson);
-		dynamicPrice.id = "test";
-		dynamicPrice.name = "Default Rate";
-		dynamicPrice.description = "";
+		dynamicPrice.id = dpId;
+		dynamicPrice.name = name;
+		dynamicPrice.description = "Some description for " + name;
 
 		dynamicPrice.priceList = [];
 		_.forEach(roomCategoryStatList, (roomCategoryStat: RoomCategoryStatsDO) => {

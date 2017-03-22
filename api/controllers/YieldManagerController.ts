@@ -1,11 +1,12 @@
-import {BaseController} from './base/BaseController';
-import {ThStatusCode} from '../core/utils/th-responses/ThResponse';
-import {PriceProductYielding} from '../core/domain-layer/yield-manager/price-product-yielding/PriceProductYielding';
-import {PriceProductDO} from '../core/data-layer/price-products/data-objects/PriceProductDO';
-import {PriceProductReader} from '../core/domain-layer/yield-manager/price-product-reader/PriceProductReader';
-import {PriceProductYieldResult} from '../core/domain-layer/yield-manager/price-product-reader/utils/PriceProductYieldItem';
-import {KeyMetricReader} from '../core/domain-layer/yield-manager/key-metrics/KeyMetricReader';
-import {KeyMetricsResult} from '../core/domain-layer/yield-manager/key-metrics/utils/KeyMetricsResult';
+import { BaseController } from './base/BaseController';
+import { ThStatusCode } from '../core/utils/th-responses/ThResponse';
+import { PriceProductYielding } from '../core/domain-layer/yield-manager/price-product-yielding/PriceProductYielding';
+import { PriceProductDO } from '../core/data-layer/price-products/data-objects/PriceProductDO';
+import { PriceProductReader } from '../core/domain-layer/yield-manager/price-product-reader/PriceProductReader';
+import { PriceProductYieldResult } from '../core/domain-layer/yield-manager/price-product-reader/utils/PriceProductYieldItem';
+import { KeyMetricReader } from '../core/domain-layer/yield-manager/key-metrics/KeyMetricReader';
+import { KeyMetricsResult } from '../core/domain-layer/yield-manager/key-metrics/utils/KeyMetricsResult';
+import { DynamicPriceYielding } from "../core/domain-layer/yield-manager/dynamic-price-yielding/DynamicPriceYielding";
 
 export class YieldManagerController extends BaseController {
 	public yieldPriceProducts(req: Express.Request, res: Express.Response) {
@@ -17,6 +18,17 @@ export class YieldManagerController extends BaseController {
 			this.returnErrorResponse(req, res, err, ThStatusCode.YieldManagerControllerErrorClosing);
 		});
 	}
+
+	public openDynamicPrice(req: Express.Request, res: Express.Response) {
+		var dpYielding = new DynamicPriceYielding(req.appContext, req.sessionContext);
+		dpYielding.open(req.body.yieldData).then((priceProduct: PriceProductDO) => {
+			priceProduct.prepareForClient();
+			this.returnSuccesfulResponse(req, res, { priceProduct: priceProduct });
+		}).catch((err: any) => {
+			this.returnErrorResponse(req, res, err, ThStatusCode.YieldManagerControllerErrorOpeningDynamicPrice);
+		});
+	}
+
 	public getPriceProductYieldItems(req: Express.Request, res: Express.Response) {
 		var ppReader = new PriceProductReader(req.appContext, req.sessionContext);
 		ppReader.getYieldItems(req.body.yieldParams).then((yieldResult: PriceProductYieldResult) => {
@@ -39,6 +51,7 @@ export class YieldManagerController extends BaseController {
 var ymController = new YieldManagerController();
 module.exports = {
 	yieldPriceProducts: ymController.yieldPriceProducts.bind(ymController),
+	openDynamicPrice: ymController.openDynamicPrice.bind(ymController),
 	getPriceProductYieldItems: ymController.getPriceProductYieldItems.bind(ymController),
 	getKeyMetrics: ymController.getKeyMetrics.bind(ymController)
 }

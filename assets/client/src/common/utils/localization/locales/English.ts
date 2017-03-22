@@ -205,6 +205,7 @@ export var EnglishTranslations: Object = {
 	"Dimensions are expressed in cm": "Dimensions are expressed in cm",
 	"Capacity": "Capacity",
 	"Select Yield Filter": "Select Yield Filter",
+	"Base price for %roomCategory%": "Base price for %roomCategory%",
 	"Color Code": "Color Code",
 	"Filter Label": "Filter Label",
 	"Red": "Red",

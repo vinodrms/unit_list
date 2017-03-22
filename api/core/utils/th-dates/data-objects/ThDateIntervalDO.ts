@@ -1,16 +1,16 @@
-import {BaseDO} from '../../../data-layer/common/base/BaseDO';
-import {IThInterval} from '../../th-interval/IThInterval';
-import {ThDateDO} from './ThDateDO';
-import {ThDateUtils} from '../ThDateUtils';
-import {ThDateComparator} from '../ThDateComparator';
+import { BaseDO } from '../../../data-layer/common/base/BaseDO';
+import { IThInterval } from '../../th-interval/IThInterval';
+import { ThDateDO } from './ThDateDO';
+import { ThDateUtils } from '../ThDateUtils';
+import { ThDateComparator } from '../ThDateComparator';
 
 export class ThDateIntervalDO extends BaseDO implements IThInterval<ThDateDO> {
 	start: ThDateDO;
 	end: ThDateDO;
 
 	protected getPrimitivePropertyKeys(): string[] {
-        return [];
-    }
+		return [];
+	}
 	public buildFromObject(object: Object) {
 		this.start = new ThDateDO();
 		this.start.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "start"));
@@ -42,7 +42,7 @@ export class ThDateIntervalDO extends BaseDO implements IThInterval<ThDateDO> {
 	}
 	public getThDateDOList(): ThDateDO[] {
 		var dateList: ThDateDO[] = [];
-		if (!this.isValid()) {
+		if (!this.isValid() && !this.start.isSame(this.end)) {
 			return dateList;
 		}
 		var thDateUtils = new ThDateUtils();

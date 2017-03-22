@@ -79,6 +79,15 @@ export class PriceProductPriceDO extends BaseDO {
 	private getDefaultDynamicPrice(): DynamicPriceDO {
 		return this.dynamicPriceList[0];
 	}
+	public enableDynamicPriceForDate(dynamicPrice: DynamicPriceDO, thDate: ThDateDO) {
+		let defaultDynamicPrice = this.getDefaultDynamicPrice();
+		if (dynamicPrice.id === defaultDynamicPrice.id) {
+			delete this.enabledDynamicPriceIdByDate[thDate.getUtcTimestamp()];
+		}
+		else {
+			this.enabledDynamicPriceIdByDate[thDate.getUtcTimestamp()] = dynamicPrice.id;
+		}
+	}
 
 	/**
 	 * Validates whether the prices contain all the values in relation with the people that can fit in a room category 
