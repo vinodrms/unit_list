@@ -3950,3 +3950,9 @@ textarea.payer-details {
 .row.row-eq-height:before, .row.row-eq-height:after {
     display: none;
 }
+
+/* Scrollbar always visible */
+.ps-container > .ps-scrollbar-x-rail,
+.ps-container > .ps-scrollbar-y-rail {
+  opacity: 0.6;
+}
