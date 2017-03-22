@@ -7,27 +7,26 @@ import { DynamicPriceVM } from "./DynamicPriceVM";
 
 export class DynamicPriceVMContainer {
 
-    private _priceContainerList: DynamicPriceVM[];
+    private _dynamicPriceVMList: DynamicPriceVM[];
     
     constructor(private _priceType: PriceProductPriceType) {
     }
 
     public initializeFrom(price: PriceProductPriceDO) {
         debugger
-        let newPriceContainerList: DynamicPriceVM[] = [];
+        let newDynamicPriceVMList: DynamicPriceVM[] = [];
         _.forEach(price.dynamicPriceList, (dynamicPrice: DynamicPriceDO) => {
             
-            let priceContainer = new DynamicPriceVM(this._priceType);
-            // priceContainer.initializeFrom(dynamicPrice);
+            let dynamicPriceVM = new DynamicPriceVM(this._priceType);
+            dynamicPriceVM.initializeFrom(dynamicPrice);
             
-            
-            newPriceContainerList.push(priceContainer);
+            newDynamicPriceVMList.push(dynamicPriceVM);
         });
-        this._priceContainerList = newPriceContainerList;
+        this._dynamicPriceVMList = newDynamicPriceVMList;
     }
 
-    public get priceContainerList(): DynamicPriceVM[] {
-        return this._priceContainerList;
+    public get dynamicPriceVMList(): DynamicPriceVM[] {
+        return this._dynamicPriceVMList;
     }
 
     public isValid(): boolean {

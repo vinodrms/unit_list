@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { BaseComponent } from "../../../../../../../../../../../common/base/BaseComponent";
 import { AppContext } from "../../../../../../../../../../../common/utils/AppContext";
-import { DynamicPriceVMContainer } from "../utils/DynamicPriceContainer";
+import { DynamicPriceVMContainer } from "../utils/DynamicPriceVMContainer";
 import { PriceVM } from "../utils/PriceVM";
 import { DynamicPriceVM } from "../utils/DynamicPriceVM";
 
@@ -11,7 +11,7 @@ import { DynamicPriceVM } from "../utils/DynamicPriceVM";
 	providers: []
 })
 export class DynamicPriceContainerComponent extends BaseComponent {
-	@Input() priceContainer: DynamicPriceVM;
+	@Input() dynamicPriceVMContainer: DynamicPriceVMContainer;
 
 	constructor(private _appContext: AppContext) {
 		super();

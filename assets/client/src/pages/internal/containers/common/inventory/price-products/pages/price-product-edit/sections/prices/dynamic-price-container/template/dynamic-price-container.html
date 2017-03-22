@@ -3,16 +3,16 @@
 			<!--<label>{{ 'Price configuration in %ccySymbol%' | translate:{ccySymbol: ccy.nativeSymbol} }}</label>-->
 			<div class="basic-info-settings-tabbar">
 				<ul class="nav nav-tabs">
-					<li [ngClass]="{'active': true}">
+					<li [ngClass]="{'active': true}" *ngFor="let dynamicPriceVM of dynamicPriceVMContainer.dynamicPriceVMList">
 						<a>
-							Tab1
+							{{ dynamicPriceVM.name }}
 						</a>
 					</li>
 				</ul>
 			</div>
 			<div class="basic-info-settings-edit-container" customScroll>
 				<div class="row row-eq-height">
-					<div class="col-md-6 col-sm-12 col-xs-12 form-group" *ngFor="let priceVM of priceContainer.priceVMList">
+					<div class="col-md-6 col-sm-12 col-xs-12 form-group">
 						<div class="price-product-box">
 							<!--<label>{{ priceVM.roomCategoryStats.roomCategory.displayName }}
 								<small> 

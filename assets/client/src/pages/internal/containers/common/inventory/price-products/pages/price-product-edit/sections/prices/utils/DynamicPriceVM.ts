@@ -5,14 +5,23 @@ import { PriceProductVM } from '../../../../../../../../../services/price-produc
 import { RoomCategoryStatsDO } from '../../../../../../../../../services/room-categories/data-objects/RoomCategoryStatsDO';
 import { RoomCategoryDO } from '../../../../../../../../../services/room-categories/data-objects/RoomCategoryDO';
 import { PriceVM } from './PriceVM';
+import { DynamicPriceDO } from "../../../../../../../../../services/price-products/data-objects/price/DynamicPriceDO";
 
 export class DynamicPriceVM {
+    private _name: string;
+    private _description: string;
     private _priceVMList: PriceVM[];
 
     constructor(private _priceType: PriceProductPriceType) {
         this._priceVMList = [];
     }
 
+    public get name(): string {
+        return this._name;
+    }
+    public get description(): string {
+        return this._description;
+    }
     public get priceVMList(): PriceVM[] {
         return this._priceVMList;
     }
@@ -20,13 +29,13 @@ export class DynamicPriceVM {
         this._priceVMList = priceVMList;
     }
 
-    public initializeFrom(price: PriceProductPriceDO) {
-        if (price.type !== this._priceType) {
+    public initializeFrom(dynamicPrice: DynamicPriceDO) {
+        if (dynamicPrice.type !== this._priceType) {
             this._priceVMList = [];
             return;
         }
         let newPriceVMList: PriceVM[] = [];
-        _.forEach(price.dynamicPriceList[0].priceList, (innerPrice: IPriceProductPrice) => {
+        _.forEach(dynamicPrice.priceList, (innerPrice: IPriceProductPrice) => {
             let priceVM = new PriceVM(this._priceType);
             priceVM.roomCategoryStats = new RoomCategoryStatsDO();
             priceVM.roomCategoryStats.roomCategory = new RoomCategoryDO();
@@ -41,6 +50,9 @@ export class DynamicPriceVM {
             newPriceVMList.push(priceVM);
         });
         this._priceVMList = newPriceVMList;
+
+        this._name = dynamicPrice.name;
+        this._description = dynamicPrice.description;
     }
 
     public updateFromRoomCategoryStatsList(roomCategoryStatsList: RoomCategoryStatsDO[]) {

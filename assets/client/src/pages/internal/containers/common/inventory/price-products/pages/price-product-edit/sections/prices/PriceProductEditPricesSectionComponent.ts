@@ -15,6 +15,7 @@ import { PriceExceptionDO } from '../../../../../../../../services/price-product
 import { PriceExceptionModalService } from './price-exception-modal/services/PriceExceptionModalService';
 import { DynamicPriceVM } from './utils/DynamicPriceVM';
 import { PriceVM } from './utils/PriceVM';
+import { DynamicPriceVMContainer } from "./utils/DynamicPriceVMContainer";
 
 @Component({
 	selector: 'price-product-edit-prices-section',
@@ -25,8 +26,8 @@ export class PriceProductEditPricesSectionComponent extends BaseComponent implem
 	readonly: boolean;
 	@Input() didSubmit: boolean;
 
-	pricePerPersonContainer: DynamicPriceVM;
-	singlePriceContainer: DynamicPriceVM;
+	pricePerPersonContainer: DynamicPriceVMContainer;
+	singlePriceContainer: DynamicPriceVMContainer;
 
 	private _currentRoomCategoryStatsList: RoomCategoryStatsDO[];
 
@@ -41,12 +42,13 @@ export class PriceProductEditPricesSectionComponent extends BaseComponent implem
 		super();
 		this._isoWeekDayUtils = new ISOWeekDayUtils();
 		this.ccy = new CurrencyDO();
-		this.pricePerPersonContainer = new DynamicPriceVM(PriceProductPriceType.PricePerPerson);
-		this.singlePriceContainer = new DynamicPriceVM(PriceProductPriceType.SinglePrice);
+		this.pricePerPersonContainer = new DynamicPriceVMContainer(PriceProductPriceType.PricePerPerson);
+		this.singlePriceContainer = new DynamicPriceVMContainer(PriceProductPriceType.SinglePrice);
 	}
 
 	public isValid(): boolean {
-		return this.priceContainer.isValid();
+		return true;
+		// return this.priceContainer.isValid();
 	}
 	public initializeFrom(priceProductVM: PriceProductVM) {
 		this.ccy = priceProductVM.ccy;
@@ -80,7 +82,7 @@ export class PriceProductEditPricesSectionComponent extends BaseComponent implem
 		if (!priceProductVM.priceProduct.price) {
 			priceProductVM.priceProduct.price = new PriceProductPriceDO();
 		}
-		this.priceContainer.updatePricesOn(priceProductVM);
+		// this.priceContainer.updatePricesOn(priceProductVM);
 	}
 
 	public get isPricePerNumberOfPersons(): boolean {
@@ -104,8 +106,8 @@ export class PriceProductEditPricesSectionComponent extends BaseComponent implem
 	}
 	public set currentRoomCategoryStatsList(currentRoomCategoryStatsList: RoomCategoryStatsDO[]) {
 		this._currentRoomCategoryStatsList = currentRoomCategoryStatsList;
-		this.pricePerPersonContainer.updateFromRoomCategoryStatsList(currentRoomCategoryStatsList);
-		this.singlePriceContainer.updateFromRoomCategoryStatsList(currentRoomCategoryStatsList);
+		// this.pricePerPersonContainer.updateFromRoomCategoryStatsList(currentRoomCategoryStatsList);
+		// this.singlePriceContainer.updateFromRoomCategoryStatsList(currentRoomCategoryStatsList);
 	}
 
 	public displayError() {
@@ -118,7 +120,7 @@ export class PriceProductEditPricesSectionComponent extends BaseComponent implem
 		}
 		return this._appContext.thTranslation.translate("%noOfRooms% Rooms", { noOfRooms: noOfRooms });
 	}
-	public get priceContainer(): DynamicPriceVM {
+	public get dynamicPriceVMContainer(): DynamicPriceVMContainer {
 		if (this._isPricePerNumberOfPersons) {
 			return this.pricePerPersonContainer;
 		}
@@ -141,12 +143,12 @@ export class PriceProductEditPricesSectionComponent extends BaseComponent implem
 			}).catch((e: any) => { });
 	}
 	private didChangeExceptionsOn(priceVM: PriceVM) {
-		let foundPrice = this.priceContainer.getPriceVMForRoomCategoryId(priceVM.price.getRoomCategoryId());
-		if (this._appContext.thUtils.isUndefinedOrNull(foundPrice)) { return; }
-		foundPrice.priceExceptionsByWeekday = {};
-		_.forEach(priceVM.exceptionList, e => {
-			foundPrice.priceExceptionsByWeekday[e.dayFromWeek] = e.price;
-		});
-		foundPrice.indexExceptions();
+		// let foundPrice = this.priceContainer.getPriceVMForRoomCategoryId(priceVM.price.getRoomCategoryId());
+		// if (this._appContext.thUtils.isUndefinedOrNull(foundPrice)) { return; }
+		// foundPrice.priceExceptionsByWeekday = {};
+		// _.forEach(priceVM.exceptionList, e => {
+		// 	foundPrice.priceExceptionsByWeekday[e.dayFromWeek] = e.price;
+		// });
+		// foundPrice.indexExceptions();
 	}
 }
