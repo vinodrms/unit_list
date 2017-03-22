@@ -19,6 +19,7 @@ import { ThDateIntervalDO } from '../../../../../../../../services/common/data-o
 import { YieldFilterType } from '../../../../../../../../services/common/data-objects/yield-filter/YieldFilterDO';
 import { IFilterSelection } from '../../common/interfaces/IFilterSelection';
 import { IFilterVM } from '../../../../../../../../services/yield-manager/dashboard/filter/view-models/IFilterVM';
+import { YieldItemStateType } from "../../../../../../../../services/yield-manager/dashboard/price-products/data-objects/YieldItemStateDO";
 
 @Component({
 	selector: 'yield-price-products',
@@ -37,6 +38,7 @@ export class YieldPriceProductsComponent {
 	private selectAllItemsFlag: boolean;
 	private itemsSelectionState = null;
 	private isYielding: boolean = false;
+	private expandedPriceProductIds: { [id: string]: boolean };
 
 	constructor(
 		private _yieldPriceProductsService: YieldManagerDashboardPriceProductsService,
@@ -49,6 +51,7 @@ export class YieldPriceProductsComponent {
 			textFilter: null,
 			searchText: null
 		}
+		this.expandedPriceProductIds = {};
 	}
 
 	public refreshTable(date: ThDateDO, noDays: number) {
@@ -341,5 +344,22 @@ export class YieldPriceProductsComponent {
 		this.setItemSelectionStateToAll(false);
 		this.selectedFilters = filters;
 		this.updateFilteredPriceProducts();
+	}
+
+
+	private isExpanded(priceProduct: PriceProductYieldItemVM): boolean {
+		return this.expandedPriceProductIds[priceProduct.id] === true;
+	}
+	private toggleExpanded(priceProduct: PriceProductYieldItemVM) {
+		if (!priceProduct.hasMoreThanOneDynamicPrice()) { return; }
+		if (this.isExpanded(priceProduct)) {
+			delete this.expandedPriceProductIds[priceProduct.id];
+		} else {
+			this.expandedPriceProductIds[priceProduct.id] = true;
+		}
+	}
+
+	private stateIsOpen(state: YieldItemStateType): boolean {
+		return state === YieldItemStateType.Open;
 	}
 }

@@ -2907,6 +2907,10 @@ a.btn.btn-square:focus {
             border-right: 1px solid #DBDBDB;
             height: 100%;
         }
+        .yield-manager-dashboard .price-products-table .filter-indicator.dynamic-price{
+            border-left: 0px;
+            border-right: 0px;
+        }
 
         /* This is a quick way to accomodate the selected-indicator*/
         .yield-manager-dashboard .price-products-row .price-products-col.wide {

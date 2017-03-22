@@ -1,6 +1,7 @@
 import { PriceProductYieldItemDO } from '../data-objects/PriceProductYieldItemDO';
 import { ColorFilterVM } from '../../filter/view-models/ColorFilterVM';
 import { TextFilterVM } from '../../filter/view-models/TextFilterVM';
+import { DynamicPriceYieldItemDO } from "../data-objects/DynamicPriceYieldItemDO";
 
 export class PriceProductYieldItemVM {
     private _priceProductYieldItemDO: PriceProductYieldItemDO;
@@ -39,5 +40,20 @@ export class PriceProductYieldItemVM {
 
     public get lastRoomAvailability(): boolean {
         return this._priceProductYieldItemDO.lastRoomAvailability;
+    }
+
+    public hasMoreThanOneDynamicPrice(): boolean {
+        return this._priceProductYieldItemDO.dynamicPriceList.length > 1;
+    }
+
+    public get dynamicPriceList(): DynamicPriceYieldItemDO[] {
+        return this._priceProductYieldItemDO.dynamicPriceList;
+    }
+
+    public get priceBriefString(): string {
+        return this._priceProductYieldItemDO.dynamicPriceList[0].priceBriefString;
+    }
+    public get roomCategoryNameForPriceBrief(): string {
+        return this._priceProductYieldItemDO.dynamicPriceList[0].roomCategoryNameForPriceBrief;
     }
 }

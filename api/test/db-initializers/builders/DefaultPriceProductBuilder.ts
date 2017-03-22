@@ -125,8 +125,8 @@ export class DefaultPriceProductBuilder implements IPriceProductDataSource {
 	private static getPricePerPersonDynamicPriceDO(roomCategoryStatList: RoomCategoryStatsDO[], name: string, dpId: string): DynamicPriceDO {
 		let dynamicPrice = new DynamicPriceDO(PriceProductPriceType.PricePerPerson);
 		dynamicPrice.id = dpId;
-		dynamicPrice.name = "Default Rate";
-		dynamicPrice.description = "";
+		dynamicPrice.name = name;
+		dynamicPrice.description = "Some description for " + name;
 
 		dynamicPrice.priceList = [];
 		_.forEach(roomCategoryStatList, (roomCategoryStat: RoomCategoryStatsDO) => {
