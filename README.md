@@ -42,12 +42,9 @@ npm run server-tests
 
 ### Accessing the local web app without authentication
 
-After running the `Server tests` command, these will create a default hotel. You need to connect to the `Hotels` collection with RoboMongo, open up the single hotel and copy its `hotelId` and `userId` to the `sessionAuth.ts` file:
-```
-	sessionDo.hotel.id = hotels[0].id
-	sessionDo.user.id = hotels[0].userList[0].id
-```
-run the `build server` task to compile the server's code and run the application using either the `Launch` command or via terminal.
+After running the `Server tests` VS Code command, these will create a default hotel. On the development and tests environment, this user is set automatically on the session on the server. This allows you to easily go to pages that usually require having a session without inserting credentials or be redirected to the login page.
+
+Run the application using either the `Launch` VSCode command or via terminal.
 
 ### Other Useful Commands
 
