@@ -75,7 +75,6 @@ export class BookingEmailConfigStepService implements IBookingStepService, ILast
         this._appContext.thHttp.post(ThServerApi.BookingsAdd, { bookingItems: bookingItems })
             .subscribe((result: any) => {
                 this._appContext.analytics.logEvent("booking", "add", "Added " + bookingItems.bookingList.length + " bookings");
-                console.log(result.bookingList);
                 addBookingsObserver.next(result.bookingList);
                 addBookingsObserver.complete();
             }, (err: ThError) => {

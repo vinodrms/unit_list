@@ -40,14 +40,7 @@ export class BookingItemsConverterParams {
     roomCategoryStatsList: RoomCategoryStatsDO[];
 }
 
-enum BookingType {
-    Group,
-    Individual
-}
-
 export class BookingItemsConverter {
-    private static GroupBookingReferencePrefix = "GR";
-    private static IndividualBookingReferencePrefix = "BR";
 
     private static MAX_BOOKINGS_PER_DAY = 99999;
 
@@ -84,9 +77,9 @@ export class BookingItemsConverter {
         var noOfRooms = this._bookingItems.bookingList.length;
         let groupBookingRoomCategoryIdList = this.getRoomCategoryIdListWithinGroupBooking();
 
-        this.generateReference(BookingType.Group).then((groupBookingReference: string) => {
-            let promiseList = [];
+        let bookingIndex = 1;
 
+        this.generateReference().then((groupBookingReference: string) => {
             _.forEach(this._bookingItems.bookingList, (bookingItem: BookingItemDO) => {
                 var bookingDO = new BookingDO();
 
@@ -94,6 +87,8 @@ export class BookingItemsConverter {
                 bookingInterval.buildFromObject(bookingItem.interval);
 
                 bookingDO.groupBookingReference = groupBookingReference;
+                bookingDO.bookingReference = bookingIndex.toString();
+                bookingIndex++;
                 bookingDO.hotelId = hotelId;
                 bookingDO.status = groupBookingStatus;
                 bookingDO.inputChannel = this._inputChannel;
@@ -138,14 +133,10 @@ export class BookingItemsConverter {
 
                 this._bookingUtils.updateBookingPriceUsingRoomCategoryAndSavePPSnapshot(bookingDO, this._converterParams.roomCategoryStatsList, priceProduct, groupBookingRoomCategoryIdList);
                 this._bookingUtils.updateDisplayCustomerId(bookingDO, this._converterParams.customersContainer);
-                bookingDO.price.vatId = this.getBookingTaxId(priceProduct);
-
-                promiseList.push(this.attachIndividualBookingReference(bookingDO));
-            });
-            return Promise.all(promiseList);
-        }).then((bookingList: BookingDO[]) => {
-            _.forEach(bookingList, (bookingDO: BookingDO) => {
                 this._bookingUtils.updateIndexedSearchTerms(bookingDO, this._converterParams.customersContainer);
+
+                bookingDO.price.vatId = this.getBookingTaxId(priceProduct);
+                bookingList.push(bookingDO);
             });
 
             resolve(bookingList);
@@ -166,41 +157,22 @@ export class BookingItemsConverter {
         return null;
     }
 
-    private attachIndividualBookingReference(booking: BookingDO): Promise<BookingDO> {
-        return new Promise<BookingDO>((resolve: { (result: BookingDO): void }, reject: { (err: ThError): void }) => {
-            this.attachIndividualBookingReferenceCore(resolve, reject, booking);
-        })
-    }
-
-    private attachIndividualBookingReferenceCore(resolve: { (result: BookingDO): void }, reject: { (err: ThError): void }, booking: BookingDO) {
-        this.generateReference(BookingType.Individual).then((bookingReference: string) => {
-            booking.bookingReference = bookingReference;
-            resolve(booking);
-        });
-    }
-
-    private generateReference(type: BookingType): Promise<string> {
+    private generateReference(): Promise<string> {
         return new Promise<string>((resolve: { (result: string): void }, reject: { (err: ThError): void }) => {
-            this.generateReferenceCore(resolve, reject, type);
+            this.generateReferenceCore(resolve, reject);
         });
     }
 
-    private generateReferenceCore(resolve: { (result: string): void }, reject: { (err: ThError): void }, type: BookingType) {
-        let seq = (type == BookingType.Individual) ? HotelSequenceType.InvoiceItem : HotelSequenceType.InvoiceGroup;
-
+    private generateReferenceCore(resolve: { (result: string): void }, reject: { (err: ThError): void }) {
         let hotelRepo: IHotelRepository = this._appContext.getRepositoryFactory().getHotelRepository();
-        hotelRepo.getNextSequenceValue(this._sessionContext.sessionDO.hotel.id, seq)
+        hotelRepo.getNextSequenceValue(this._sessionContext.sessionDO.hotel.id, HotelSequenceType.BookingGroup)
             .then((seqValue: SequenceValue) => {
-                let referencePrefix =
-                    (type == BookingType.Individual) ?
-                        BookingItemsConverter.IndividualBookingReferencePrefix : BookingItemsConverter.GroupBookingReferencePrefix;
-                resolve(referencePrefix + this.getReferenceFromSeqValue(seqValue.sequence.toString()));
+                resolve(this.getReferenceFromSeqValue(seqValue.sequence.toString()));
             }).catch((error) => {
                 var thError = new ThError(ThStatusCode.BookingItemsConverterReferenceGenerationError, error);
                 ThLogger.getInstance().logError(ThLogLevel.Error, "error generating booking reference", this._bookingItems, thError);
                 reject(thError);
             });
-
     }
 
     private getReferenceFromSeqValue(seqValue: string) {
