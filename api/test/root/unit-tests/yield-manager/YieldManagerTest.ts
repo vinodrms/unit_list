@@ -21,6 +21,8 @@ import { HotelInventorySnapshotProcess, InventorySnapshotProcessResult, Inventor
 import { HotelInventorySnapshotDO } from '../../../../core/data-layer/hotel-inventory-snapshots/data-objects/HotelInventorySnapshotDO';
 import { KeyMetricReader } from '../../../../core/domain-layer/yield-manager/key-metrics/KeyMetricReader';
 import { KeyMetricsResult, KeyMetric } from '../../../../core/domain-layer/yield-manager/key-metrics/utils/KeyMetricsResult';
+import { DynamicPriceYielding } from "../../../../core/domain-layer/yield-manager/dynamic-price-yielding/DynamicPriceYielding";
+import { DynamicPriceYieldingDO } from "../../../../core/domain-layer/yield-manager/dynamic-price-yielding/DynamicPriceYieldingDO";
 
 function testPriceProductOpenInterval(priceProduct: PriceProductDO, firstIntervalEnd: ThDateDO, secondIntervalStart: ThDateDO) {
 	should.equal(priceProduct.openIntervalList.length >= 2, true);
@@ -415,6 +417,73 @@ describe("Price Products Interval Tests", function () {
 				done();
 			}).catch((error: any) => {
 				done(error);
+			});
+		});
+
+		it("Should not yield a dynamic price for price product with an invalid dynamic price id", function (done) {
+			let priceProduct = _.find(testDataBuilder.priceProductList, priceProduct => { return priceProduct.price.dynamicPriceList.length > 1 });
+
+			let yieldData = new DynamicPriceYieldingDO();
+			yieldData.dynamicPriceId = "1452643156416";
+			yieldData.priceProductId = priceProduct.id;
+			let date = ThDateDO.buildThDateDO(2017, ThMonth.March, 22);
+			yieldData.interval = ThDateIntervalDO.buildThDateIntervalDO(date, date);
+
+			let ddYield = new DynamicPriceYielding(testContext.appContext, testContext.sessionContext);
+			ddYield.open(yieldData).then(updatedPriceProduct => {
+				done("Managed to yield a price product with an invalid dynamic price id");
+			}).catch(e => {
+				done();
+			});
+		});
+
+		it("Should yield some dynamic rates and test whether they are enabled/disabled correspondingly", function (done) {
+			let priceProduct = _.find(testDataBuilder.priceProductList, priceProduct => { return priceProduct.price.dynamicPriceList.length > 1 });
+			let defaultPrice = priceProduct.price.dynamicPriceList[0];
+			let dynamicPrice = priceProduct.price.dynamicPriceList[1];
+
+			let beforeDate = ThDateDO.buildThDateDO(2017, ThMonth.March, 21);
+			let date1 = ThDateDO.buildThDateDO(2017, ThMonth.March, 22);
+			let date2 = ThDateDO.buildThDateDO(2017, ThMonth.March, 23);
+			let afterDate = ThDateDO.buildThDateDO(2017, ThMonth.March, 24);
+
+			should.equal(Object.keys(priceProduct.price.enabledDynamicPriceIdByDate).length, 0);
+
+			let yieldData = new DynamicPriceYieldingDO();
+			yieldData.dynamicPriceId = dynamicPrice.id;
+			yieldData.priceProductId = priceProduct.id;
+			yieldData.interval = ThDateIntervalDO.buildThDateIntervalDO(date1, date2);
+
+			let ddYield = new DynamicPriceYielding(testContext.appContext, testContext.sessionContext);
+			ddYield.open(yieldData).then(updatedPriceProduct => {
+				should.equal(updatedPriceProduct.id, priceProduct.id);
+				priceProduct = updatedPriceProduct;
+
+				should.equal(Object.keys(priceProduct.price.enabledDynamicPriceIdByDate).length, 2);
+
+				should.equal(priceProduct.price.getEnabledDynamicPriceForDate(beforeDate).id, defaultPrice.id);
+				should.equal(priceProduct.price.getEnabledDynamicPriceForDate(date1).id, dynamicPrice.id);
+				should.equal(priceProduct.price.getEnabledDynamicPriceForDate(date2).id, dynamicPrice.id);
+				should.equal(priceProduct.price.getEnabledDynamicPriceForDate(afterDate).id, defaultPrice.id);
+
+				yieldData.interval = ThDateIntervalDO.buildThDateIntervalDO(date2, date2);
+				yieldData.dynamicPriceId = defaultPrice.id;
+
+				return ddYield.open(yieldData);
+			}).then(updatedPriceProduct => {
+				should.equal(updatedPriceProduct.id, priceProduct.id);
+				priceProduct = updatedPriceProduct;
+
+				should.equal(Object.keys(priceProduct.price.enabledDynamicPriceIdByDate).length, 1);
+
+				should.equal(priceProduct.price.getEnabledDynamicPriceForDate(beforeDate).id, defaultPrice.id);
+				should.equal(priceProduct.price.getEnabledDynamicPriceForDate(date1).id, dynamicPrice.id);
+				should.equal(priceProduct.price.getEnabledDynamicPriceForDate(date2).id, defaultPrice.id);
+				should.equal(priceProduct.price.getEnabledDynamicPriceForDate(afterDate).id, defaultPrice.id);
+
+				done();
+			}).catch(e => {
+				done(e);
 			});
 		});
 	});

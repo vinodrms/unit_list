@@ -248,6 +248,8 @@ export enum ThStatusCode {
 	DraftPriceProductItemOnlyArchived,
 	DraftPriceProductItemError,
 	PriceProductsYieldManagementInvalidInterval,
+	DynamicPriceYieldingInvalidInterval,
+	DynamicPriceYieldingDynamicPriceNotFound,
 	PriceProductIdValidatorInvalidId,
 	PriceProductsControllerErrorGettingPriceProduct,
 	PriceProductsControllerErrorSavingPriceProduct,
@@ -770,6 +772,8 @@ ThMessage[ThStatusCode.UpdatePriceProductItemStatusWrongStatus] = "Cannot run th
 ThMessage[ThStatusCode.DraftPriceProductItemOnlyArchived] = "Only archived price products can be marked as drafts.";
 ThMessage[ThStatusCode.DraftPriceProductItemError] = "Error marking the price product as draft.";
 ThMessage[ThStatusCode.PriceProductsYieldManagementInvalidInterval] = "Invalid interval submitted.";
+ThMessage[ThStatusCode.DynamicPriceYieldingInvalidInterval] = "Invalid interval submitted.";
+ThMessage[ThStatusCode.DynamicPriceYieldingDynamicPriceNotFound] = "The dynamic price was not found.";
 ThMessage[ThStatusCode.PriceProductIdValidatorInvalidId] = "Invalid price products.";
 ThMessage[ThStatusCode.PriceProductsControllerErrorGettingPriceProduct] = "Error getting price product.";
 ThMessage[ThStatusCode.PriceProductsControllerErrorSavingPriceProduct] = "Error saving price product.";
