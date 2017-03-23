@@ -50,6 +50,9 @@
 	<script src="/node_modules/socket.io-client/socket.io.js"></script>
 	
 	<%if (isDevelopmentEnvironment) {%>
+		<script>
+			var enableAngularProdMode = false;
+		</script>
 		<script src="/client/systemjs.internal.config.js"></script>
 		<script>
 			System.import('internal').catch(function(err){ console.error(err); });
@@ -74,6 +77,9 @@
 	<main-layout-internal></main-layout-internal>
 
 	<%if (!isDevelopmentEnvironment) {%>
+		<script>
+			var enableAngularProdMode = true;
+		</script>
 		<script src="/client/build/unitpal-internal-1.0.28.min.js"></script>
 	<%}%>
 

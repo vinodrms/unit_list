@@ -44,6 +44,9 @@
 	<script src='/node_modules/perfect-scrollbar/dist/js/perfect-scrollbar.jquery.min.js'></script>
 
 	<%if (isDevelopmentEnvironment) {%>
+		<script>
+			var enableAngularProdMode = false;
+		</script>
 		<script src="/client/systemjs.external.config.js"></script>
 		<script>
 			System.import('external').catch(function(err){ console.error(err); });
@@ -67,6 +70,9 @@
 	<main-layout-external></main-layout-external>
 	
 	<%if (!isDevelopmentEnvironment) {%>
+		<script>
+			var enableAngularProdMode = true;
+		</script>
 		<script src="/client/build/unitpal-external-1.0.28.min.js"></script>
 	<%}%>
 	
