@@ -6,7 +6,7 @@
 			<input type="checkbox"
 			[(ngModel)]="selectAllItemsFlag"
 			name="selectAllItemsFlag"
-			(change)="setItemSelectionStateToAll(!selectAllItemsFlag)"
+			(change)="setItemSelectionStateToAll(selectAllItemsFlag)"
 			>
 			<span class="dark-gray-color oneline-text f-14 p-l-6">{{'Price Products' | translate}}</span>
 		</div>

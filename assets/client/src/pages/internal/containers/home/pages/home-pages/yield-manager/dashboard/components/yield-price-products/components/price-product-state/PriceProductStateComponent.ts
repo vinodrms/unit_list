@@ -71,6 +71,14 @@ export class PriceProductStateComponent {
 	}
 
 	private changeState(actionType: PriceProductYieldAction) {
+		if (this.model.priceProduct.lastRoomAvailability) {
+			let message = this._appContext.thTranslation.translate("%priceProduct% cannot be yielded because it has the last room availability flag enabled", {
+				priceProduct: this.model.priceProduct.name
+			});
+			this._appContext.toaster.info(message);
+			return;
+		}
+
 		var interval = new ThDateIntervalDO();
 		interval.start = this.model.date;
 		interval.end = this.model.date;

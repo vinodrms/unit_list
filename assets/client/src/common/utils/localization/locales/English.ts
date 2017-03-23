@@ -822,5 +822,7 @@ export var EnglishTranslations: Object = {
 	"Open %rateName%": "Open %rateName%",
 	"Open %rateName% for longer periods": "Open %rateName% for longer periods",
 	"%rateName% was opened succesfully for the period %period%": "%rateName% was opened succesfully for the period %period%",
+	"%priceProduct% cannot be yielded because it has the last room availability flag enabled": "%priceProduct% cannot be yielded because it has the last room availability flag enabled",
+	
 		
 };
