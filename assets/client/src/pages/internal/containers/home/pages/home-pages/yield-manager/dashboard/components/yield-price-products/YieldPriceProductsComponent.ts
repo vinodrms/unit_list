@@ -23,10 +23,14 @@ import { YieldItemStateType } from "../../../../../../../../services/yield-manag
 import { DynamicPriceYieldItemDO } from "../../../../../../../../services/yield-manager/dashboard/price-products/data-objects/DynamicPriceYieldItemDO";
 import { HotelAggregatedInfo } from "../../../../../../../../services/hotel/utils/HotelAggregatedInfo";
 import { HotelAggregatorService } from "../../../../../../../../services/hotel/HotelAggregatorService";
+import { YieldDynamicPriceModalService } from "./yield-dynamic-price-modal/services/YieldDynamicPriceModalService";
+import { ModalDialogRef } from "../../../../../../../../../../common/utils/modals/utils/ModalDialogRef";
+import { PriceProductDO } from "../../../../../../../../services/price-products/data-objects/PriceProductDO";
 
 @Component({
 	selector: 'yield-price-products',
-	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/yield-manager/dashboard/components/yield-price-products/template/yield-price-products.html'
+	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/yield-manager/dashboard/components/yield-price-products/template/yield-price-products.html',
+	providers: [YieldDynamicPriceModalService]
 })
 export class YieldPriceProductsComponent {
 	@ViewChild(YieldActionsPanelComponent) actionsPanelComponent: YieldActionsPanelComponent;
@@ -48,7 +52,8 @@ export class YieldPriceProductsComponent {
 		private _appContext: AppContext,
 		private _yieldPriceProductsService: YieldManagerDashboardPriceProductsService,
 		private _filterService: YieldManagerDashboardFilterService,
-		private _hotelAggregatorService: HotelAggregatorService
+		private _hotelAggregatorService: HotelAggregatorService,
+		private _yieldDynamicPriceModal: YieldDynamicPriceModalService
 	) {
 		this.selectAllItemsFlag = false;
 		this.selectedFilters = {
@@ -386,5 +391,14 @@ export class YieldPriceProductsComponent {
 		}, (error: ThError) => {
 			this._appContext.toaster.error(error.message);
 		});
+	}
+	private openDynamicPriceYieldModal(priceProductItem: PriceProductYieldItemVM, dynamicPrice: DynamicPriceYieldItemDO) {
+		let date = this.priceProductResults.dateList[0];
+		this._yieldDynamicPriceModal.openDynamicPriceYieldModal(priceProductItem, dynamicPrice, date)
+			.then((modalDialogInstance: ModalDialogRef<PriceProductDO>) => {
+				modalDialogInstance.resultObservable.subscribe((updatedPriceProduct: PriceProductDO) => {
+					this.handleStateChange();
+				});
+			}).catch((e: any) => { });
 	}
 }

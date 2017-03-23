@@ -1,0 +1,27 @@
+<div class="modal-header text-center">
+	<button type="button" class="close" (click)="closeDialog()">&times;</button>
+	<h4 class="modal-title">{{ 'Open %rateName%' | translate:{rateName: dynamicPriceYieldItem.name} }}</h4>
+</div>
+<div class="modal-body">
+	<div class="row">
+        <div class="col-xs-12 col-md-12 col-md-offset-2 form-group">
+            <th-date-interval-picker
+                [initialThDateInterval]="interval"
+                (didSelectThDateInterval)="interval=$event"
+                >
+            </th-date-interval-picker>
+            <small class="text-muted"><i class="fa fa-info-circle"></i>  {{ 'Open %rateName% for longer periods' | translate:{rateName: dynamicPriceYieldItem.name} }}</small>
+		</div>
+	</div>
+</div>
+<div class="modal-footer">
+	<button type="button" class="btn btn-primary" 
+		(click)="openDynamicPrice()" 
+		>
+        <i *ngIf="isLoading" class="fa fa-spinner fa-pulse"></i>
+		{{ 'Open' | translate }}
+	</button>
+	<button type="button" class="btn btn-danger" (click)="closeDialog()">
+		{{ 'Close' | translate }}
+	</button>
+</div>

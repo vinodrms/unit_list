@@ -819,5 +819,8 @@ export var EnglishTranslations: Object = {
 	"After the invoice has been closed, invoice notes cannot be edited anymore.": "After the invoice has been closed, invoice notes cannot be edited anymore.",
 	"The following bookings have been successfully added:": "The following bookings have been successfully added:",
 	"ResNO": "ResNO",
+	"Open %rateName%": "Open %rateName%",
+	"Open %rateName% for longer periods": "Open %rateName% for longer periods",
+	"%rateName% was opened succesfully for the period %period%": "%rateName% was opened succesfully for the period %period%",
 		
 };

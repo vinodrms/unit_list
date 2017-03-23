@@ -49,7 +49,7 @@
 				<div class="price-products-row flex-row white" [ngClass]="getPriceProductRowClasses(priceProduct)" *ngFor="let dynamicPrice of priceProduct.dynamicPriceList">
 					<div class="price-products-col flex-jc-start wide">
 						<div class="filter-indicator dynamic-price"> </div>
-						<span class="p-l-6 ellipsis-text">
+						<span class="p-l-6 ellipsis-text clickable" (click)="openDynamicPriceYieldModal(priceProduct, dynamicPrice)">
 							<span class="dark-gray-color f-14 p-l-16">
 								<small title="{{ 'Base price for %roomCategory%' | translate:{roomCategory: dynamicPrice.roomCategoryNameForPriceBrief} }}" class="bold-text"> 
 									{{ccyNativeSymbol}} {{ dynamicPrice.priceBriefString }} 
