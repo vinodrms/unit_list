@@ -64,6 +64,7 @@
 					<div class="price-products-col" *ngFor="let state of dynamicPrice.openList; let currentIndex = index">
 						<span class="w-100 horizontal-align-center">
 							<input type="radio" 
+								title="{{ getTitleForDynamicPriceInput(priceProduct, dynamicPrice, currentIndex) }}"
 								name="{{ priceProduct.priceProductYieldItemDO.priceProductId + currentIndex }}" 
 								[checked]="stateIsOpen(state)" 
 								(click)="openDynamicPrice(priceProduct, dynamicPrice, currentIndex)">

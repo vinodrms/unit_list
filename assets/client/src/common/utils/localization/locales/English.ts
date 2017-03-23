@@ -823,6 +823,14 @@ export var EnglishTranslations: Object = {
 	"Open %rateName% for longer periods": "Open %rateName% for longer periods",
 	"%rateName% was opened succesfully for the period %period%": "%rateName% was opened succesfully for the period %period%",
 	"%priceProduct% cannot be yielded because it has the last room availability flag enabled": "%priceProduct% cannot be yielded because it has the last room availability flag enabled",
+	"%priceProduct% is open for arrival on %date%. Click here to close for arrival.": "%priceProduct% is open for arrival on %date%. Click here to close for arrival.",
+	"%priceProduct% is closed for arrival on %date%. Click here to open for arrival.": "%priceProduct% is closed for arrival on %date%. Click here to open for arrival.",
+	"%priceProduct% is open on %date%. Click here to close.": "%priceProduct% is open on %date%. Click here to close.",
+	"%priceProduct% is closed on %date%. Click here to open.": "%priceProduct% is closed on %date%. Click here to open.",
+	"%priceProduct% is open for departure on %date%. Click here to close for departure.": "%priceProduct% is open for departure on %date%. Click here to close for departure.",
+	"%priceProduct% is closed for departure on %date%. Click here to open for departure.": "%priceProduct% is closed for departure on %date%. Click here to open for departure.",
+	"%dynamicPrice% is open on %date%. It will be the price used for incoming bookings with %priceProduct% on this day.": "%dynamicPrice% is open on %date%. It will be the price used for incoming bookings with %priceProduct% on this day.",
+	"Click here to open %dynamicPrice% on %date%.": "Click here to open %dynamicPrice% on %date%.",
 	
 		
 };

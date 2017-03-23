@@ -70,6 +70,31 @@ export class PriceProductStateComponent {
 		return (stateValue == YieldItemStateType.Open) ? true : false;
 	}
 
+	private get arrivalTitle(): string {
+		if (this.state.openForArrival === YieldItemStateType.Open) {
+			return this._appContext.thTranslation.translate("%priceProduct% is open for arrival on %date%. Click here to close for arrival.", this.getTitleParams());
+		}
+		return this._appContext.thTranslation.translate("%priceProduct% is closed for arrival on %date%. Click here to open for arrival.", this.getTitleParams());
+	}
+	private get stayTitle(): string {
+		if (this.state.open === YieldItemStateType.Open) {
+			return this._appContext.thTranslation.translate("%priceProduct% is open on %date%. Click here to close.", this.getTitleParams());
+		}
+		return this._appContext.thTranslation.translate("%priceProduct% is closed on %date%. Click here to open.", this.getTitleParams());
+	}
+	private get departureTitle(): string {
+		if (this.state.openForDeparture === YieldItemStateType.Open) {
+			return this._appContext.thTranslation.translate("%priceProduct% is open for departure on %date%. Click here to close for departure.", this.getTitleParams());
+		}
+		return this._appContext.thTranslation.translate("%priceProduct% is closed for departure on %date%. Click here to open for departure.", this.getTitleParams());
+	}
+	private getTitleParams(): Object {
+		return {
+			priceProduct: this.model.priceProduct.name,
+			date: this.model.date.toString()
+		};
+	}
+
 	private changeState(actionType: PriceProductYieldAction) {
 		if (this.model.priceProduct.lastRoomAvailability) {
 			let message = this._appContext.thTranslation.translate("%priceProduct% cannot be yielded because it has the last room availability flag enabled", {

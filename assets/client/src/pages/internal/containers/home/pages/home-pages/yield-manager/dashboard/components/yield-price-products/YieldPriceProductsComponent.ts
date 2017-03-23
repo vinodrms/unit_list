@@ -374,6 +374,20 @@ export class YieldPriceProductsComponent {
 	private stateIsOpen(state: YieldItemStateType): boolean {
 		return state === YieldItemStateType.Open;
 	}
+	private getTitleForDynamicPriceInput(priceProductItem: PriceProductYieldItemVM, dynamicPrice: DynamicPriceYieldItemDO, dayIndex: number): string {
+		let date = this.priceProductResults.dateList[dayIndex];
+		if (dynamicPrice.openList[dayIndex] === YieldItemStateType.Open) {
+			return this._appContext.thTranslation.translate("%dynamicPrice% is open on %date%. It will be the price used for incoming bookings with %priceProduct% on this day.", {
+				dynamicPrice: dynamicPrice.name,
+				date: date.toString(),
+				priceProduct: priceProductItem.name
+			});
+		}
+		return this._appContext.thTranslation.translate("Click here to open %dynamicPrice% on %date%.", {
+			dynamicPrice: dynamicPrice.name,
+			date: date.toString()
+		});
+	}
 	private openDynamicPrice(priceProductItem: PriceProductYieldItemVM, dynamicPrice: DynamicPriceYieldItemDO, dayIndex: number) {
 		if (dynamicPrice.openList[dayIndex] === YieldItemStateType.Open) {
 			return;
