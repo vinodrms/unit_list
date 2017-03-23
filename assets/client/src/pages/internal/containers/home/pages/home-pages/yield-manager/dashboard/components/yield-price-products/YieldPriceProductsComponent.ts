@@ -21,6 +21,8 @@ import { IFilterSelection } from '../../common/interfaces/IFilterSelection';
 import { IFilterVM } from '../../../../../../../../services/yield-manager/dashboard/filter/view-models/IFilterVM';
 import { YieldItemStateType } from "../../../../../../../../services/yield-manager/dashboard/price-products/data-objects/YieldItemStateDO";
 import { DynamicPriceYieldItemDO } from "../../../../../../../../services/yield-manager/dashboard/price-products/data-objects/DynamicPriceYieldItemDO";
+import { HotelAggregatedInfo } from "../../../../../../../../services/hotel/utils/HotelAggregatedInfo";
+import { HotelAggregatorService } from "../../../../../../../../services/hotel/HotelAggregatorService";
 
 @Component({
 	selector: 'yield-price-products',
@@ -39,12 +41,14 @@ export class YieldPriceProductsComponent {
 	private selectAllItemsFlag: boolean;
 	private itemsSelectionState = null;
 	private isYielding: boolean = false;
+	private ccyNativeSymbol = '';
 	private expandedPriceProductIds: { [id: string]: boolean };
 
 	constructor(
+		private _appContext: AppContext,
 		private _yieldPriceProductsService: YieldManagerDashboardPriceProductsService,
 		private _filterService: YieldManagerDashboardFilterService,
-		private _appContext: AppContext
+		private _hotelAggregatorService: HotelAggregatorService
 	) {
 		this.selectAllItemsFlag = false;
 		this.selectedFilters = {
@@ -63,11 +67,13 @@ export class YieldPriceProductsComponent {
 			Observable.combineLatest(
 				this._yieldPriceProductsService.getPriceProducts({ referenceDate: date, noDays: noDays }),
 				this._filterService.getColorFilterCollections(),
-				this._filterService.getTextFilterCollections()
-			).subscribe((results: [PriceProductYieldResultVM, FilterVMCollection<ColorFilterVM>[], FilterVMCollection<TextFilterVM>[]]) => {
+				this._filterService.getTextFilterCollections(),
+				this._hotelAggregatorService.getHotelAggregatedInfo()
+			).subscribe((results: [PriceProductYieldResultVM, FilterVMCollection<ColorFilterVM>[], FilterVMCollection<TextFilterVM>[], HotelAggregatedInfo]) => {
 				this.priceProductResults = results[0];
 				this.yieldColorFilterCollection = results[1][0];
 				this.yieldTextFilterCollection = results[2][0];
+				this.ccyNativeSymbol = results[3].ccy.nativeSymbol;
 
 				this.initializeItemSelectionStateDictionary();
 				this.updateFilteredPriceProducts();

@@ -26,7 +26,7 @@
 						<span class="orange-color f-10" *ngIf="priceProduct.lastRoomAvailability" title="{{'Last Room Availability' | translate}}"><b>LRA</b></span>
 						<span class="dark-gray-color f-14" [ngClass]="{'clickable': priceProduct.hasMoreThanOneDynamicPrice()}" (click)="toggleExpanded(priceProduct)"> 
 							<small title="{{ 'Base price for %roomCategory%' | translate:{roomCategory: priceProduct.roomCategoryNameForPriceBrief} }}" class="bold-text"> 
-								{{ priceProduct.priceBriefString }} 
+								{{ccyNativeSymbol}} {{ priceProduct.priceBriefString }} 
 							</small> 
 							<span title="{{ priceProduct.name }}">
 								{{ priceProduct.name }} 
@@ -52,7 +52,7 @@
 						<span class="p-l-6 ellipsis-text">
 							<span class="dark-gray-color f-14 p-l-16">
 								<small title="{{ 'Base price for %roomCategory%' | translate:{roomCategory: dynamicPrice.roomCategoryNameForPriceBrief} }}" class="bold-text"> 
-									{{ dynamicPrice.priceBriefString }} 
+									{{ccyNativeSymbol}} {{ dynamicPrice.priceBriefString }} 
 								</small> 
 								<span title="{{ dynamicPrice.description }}">
 									{{ dynamicPrice.name }}
