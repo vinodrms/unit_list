@@ -20,8 +20,14 @@ export class DynamicPriceVM {
     public get name(): string {
         return this._name;
     }
+    public set name(name: string) {
+        this._name = name;
+    }
     public get description(): string {
         return this._description;
+    }
+    public set description(description: string) {
+        this._description = description;
     }
     public get priceVMList(): PriceVM[] {
         return this._priceVMList;
@@ -123,5 +129,18 @@ export class DynamicPriceVM {
         var sourcePriceDO = sourcePriceVM.price;
         var destPriceDO = destPriceVM.price;
         destPriceDO.copyPricesFrom(sourcePriceDO);
+    }
+
+    public buildPrototype(): DynamicPriceVM {
+        let dynamicPriceCopy: DynamicPriceVM = new DynamicPriceVM(this._priceType);
+        dynamicPriceCopy.name = this.name;
+        dynamicPriceCopy.description = this.description;
+        dynamicPriceCopy.priceVMList = [];
+
+        _.forEach(this.priceVMList, (priceVM: PriceVM) => {
+            dynamicPriceCopy.priceVMList.push(priceVM.buildPrototype());
+        })
+        
+        return dynamicPriceCopy;
     }
 }

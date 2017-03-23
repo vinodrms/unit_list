@@ -5,7 +5,7 @@
 					<label>{{ 'Price configuration in %ccySymbol%' | translate:{ccySymbol: ccy.nativeSymbol} }}</label>
 				</div>
 				<div class="col-xs-6">
-					<a class="btn btn-xs"><i class="fa unitpal-font">'</i> Add Dynamic Daily Rate</a>
+					<a class="btn btn-xs" (click)="openNewDynamicPriceModal()"><i class="fa unitpal-font">'</i> {{ 'Add' | translate }} {{ 'Dynamic Daily Rate' | translate }}</a>
 				</div>
 			</div>
 			<div class="basic-info-settings-tabbar">

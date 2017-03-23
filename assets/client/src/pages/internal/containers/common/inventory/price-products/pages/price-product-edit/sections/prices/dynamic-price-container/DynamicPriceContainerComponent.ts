@@ -9,11 +9,12 @@ import { ModalDialogRef } from "../../../../../../../../../../../common/utils/mo
 import { PriceProductPriceType } from "../../../../../../../../../services/price-products/data-objects/price/IPriceProductPrice";
 import { ISOWeekDay, ISOWeekDayUtils } from "../../../../../../../../../services/common/data-objects/th-dates/ISOWeekDay";
 import { CurrencyDO } from "../../../../../../../../../services/common/data-objects/currency/CurrencyDO";
+import { DynamicPriceModalService } from "./dynamic-price-modal/services/DynamicPriceModalService";
 
 @Component({
 	selector: 'dynamic-price-container',
 	templateUrl: '/client/src/pages/internal/containers/common/inventory/price-products/pages/price-product-edit/sections/prices/dynamic-price-container/template/dynamic-price-container.html',
-	providers: [PriceExceptionModalService]
+	providers: [PriceExceptionModalService, DynamicPriceModalService]
 })
 export class DynamicPriceContainerComponent extends BaseComponent {
 	private _dynamicPriceVMContainer: DynamicPriceVMContainer;
@@ -27,7 +28,8 @@ export class DynamicPriceContainerComponent extends BaseComponent {
 	private _selectedDynamicPriceIndex: number;
 	
 	constructor(private _appContext: AppContext,
-				private _priceExceptionModal: PriceExceptionModalService) {
+				private _priceExceptionModal: PriceExceptionModalService,
+				private _dynamicPriceModal: DynamicPriceModalService) {
 		super();
 
 		this._isoWeekDayUtils = new ISOWeekDayUtils();
@@ -99,5 +101,32 @@ export class DynamicPriceContainerComponent extends BaseComponent {
 			foundPrice.priceExceptionsByWeekday[e.dayFromWeek] = e.price;
 		});
 		foundPrice.indexExceptions();
+	}
+
+	public openEditDynamicPriceModal(dynamicPriceVM: DynamicPriceVM) {
+		let dynamicPriceCopy = dynamicPriceVM.buildPrototype();
+		this._dynamicPriceModal.openEditDynamicPriceModal(dynamicPriceCopy, this.readonly)
+			.then((modalDialogInstance: ModalDialogRef<DynamicPriceVM>) => {
+				modalDialogInstance.resultObservable.subscribe((updatedDynamicPrice: DynamicPriceVM) => {
+					this.didChangeDynamicPriceNameAndDetails(updatedDynamicPrice);
+				})
+			}).catch((e: any) => { });
+	}
+
+	public didChangeDynamicPriceNameAndDetails(updatedDynamicPrice: DynamicPriceVM) {
+
+	}
+
+	public openNewDynamicPriceModal() {
+		this._dynamicPriceModal.openNewDynamicPriceModal()
+			.then((modalDialogInstance: ModalDialogRef<DynamicPriceVM>) => {
+				modalDialogInstance.resultObservable.subscribe((newDynamicPrice: DynamicPriceVM) => {
+					this.didChangeDynamicPriceNameAndDetails(newDynamicPrice);
+				})
+			}).catch((e: any) => { });
+	}
+
+	public didAddDynamicPrice(newDynamicPrice: DynamicPriceVM) {
+		
 	}
 }
