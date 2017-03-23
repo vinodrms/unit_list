@@ -21,21 +21,22 @@
 					<div class="filter-indicator" [ngClass]="getPriceProductFilterClasses(priceProduct)">
 						<span class="f-10" title="{{getPriceProductTextFilter(priceProduct)}}">{{getPriceProductTextFilterInitial(priceProduct)}}</span>
 					</div>
-					<span class="p-l-6 ellipsis-text">
+					<span class="p-l-6 ellipsis-text up-col-5p">
 						<input type="checkbox" [(ngModel)]="itemsSelectionState[priceProduct.id]" name="itemsSelectionStatePPId" *ngIf="!priceProduct.lastRoomAvailability">
 						<span class="orange-color f-10" *ngIf="priceProduct.lastRoomAvailability" title="{{'Last Room Availability' | translate}}"><b>LRA</b></span>
 						<span class="dark-gray-color f-14" [ngClass]="{'clickable': priceProduct.hasMoreThanOneDynamicPrice()}" (click)="toggleExpanded(priceProduct)"> 
-							<small title="{{ 'Base price for %roomCategory%' | translate:{roomCategory: priceProduct.roomCategoryNameForPriceBrief} }}" class="bold-text"> 
+							<small class="bold-text"
+								title="{{ 'Base price for %roomCategory%' | translate:{roomCategory: priceProduct.roomCategoryNameForPriceBrief} }}"> 
 								{{ccyNativeSymbol}} {{ priceProduct.priceBriefString }} 
 							</small> 
 							<span title="{{ priceProduct.name }}">
 								{{ priceProduct.name }} 
 							</span>
-							<i class="fa p-l-2 p-t-2" 
-								*ngIf="priceProduct.hasMoreThanOneDynamicPrice()"
-								[ngClass]="{'fa-angle-down': !isExpanded(priceProduct), 'fa-angle-up': isExpanded(priceProduct)}">
-							</i>
 						</span>
+					</span>
+					<span class="p-r-6 clickable" *ngIf="priceProduct.hasMoreThanOneDynamicPrice()" (click)="toggleExpanded(priceProduct)">
+						<i class="fa bold-text" [ngClass]="{'fa-angle-down': !isExpanded(priceProduct), 'fa-angle-up': isExpanded(priceProduct)}">
+						</i>
 					</span>
 				</div>
 				<div class="price-products-col" *ngFor="let value of priceProduct.priceProductYieldItemDO.stateList; let currentIndex = index">
