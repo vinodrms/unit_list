@@ -11,6 +11,7 @@ export class DynamicPriceVM {
     private _name: string;
     private _description: string;
     private _priceVMList: PriceVM[];
+    private _selected: boolean;
 
     constructor(private _priceType: PriceProductPriceType) {
         this._priceVMList = [];
@@ -27,6 +28,12 @@ export class DynamicPriceVM {
     }
     public set priceVMList(priceVMList: PriceVM[]) {
         this._priceVMList = priceVMList;
+    }
+    public get selected(): boolean {
+        return this._selected;
+    }
+    public set selected(selected: boolean) {
+        this._selected = selected;
     }
 
     public initializeFrom(dynamicPrice: DynamicPriceDO) {
@@ -53,6 +60,7 @@ export class DynamicPriceVM {
 
         this._name = dynamicPrice.name;
         this._description = dynamicPrice.description;
+        this._selected = false;
     }
 
     public updateFromRoomCategoryStatsList(roomCategoryStatsList: RoomCategoryStatsDO[]) {

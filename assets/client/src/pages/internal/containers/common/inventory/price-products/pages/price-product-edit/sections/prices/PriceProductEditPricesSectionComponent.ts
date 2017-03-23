@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core';
 import { BaseComponent } from '../../../../../../../../../../common/base/BaseComponent';
 import { AppContext, ThError } from '../../../../../../../../../../common/utils/AppContext';
 import { ModalDialogRef } from '../../../../../../../../../../common/utils/modals/utils/ModalDialogRef';
@@ -16,6 +16,7 @@ import { PriceExceptionModalService } from './price-exception-modal/services/Pri
 import { DynamicPriceVM } from './utils/DynamicPriceVM';
 import { PriceVM } from './utils/PriceVM';
 import { DynamicPriceVMContainer } from "./utils/DynamicPriceVMContainer";
+import { DynamicPriceContainerComponent } from "./dynamic-price-container/DynamicPriceContainerComponent";
 
 @Component({
 	selector: 'price-product-edit-prices-section',
@@ -23,6 +24,8 @@ import { DynamicPriceVMContainer } from "./utils/DynamicPriceVMContainer";
 	providers: [RoomCategoriesStatsService, PriceExceptionModalService]
 })
 export class PriceProductEditPricesSectionComponent extends BaseComponent implements IPriceProductEditSection {
+	@ViewChild(DynamicPriceContainerComponent) private _dynamicPriceContainerComponent: DynamicPriceContainerComponent;
+
 	readonly: boolean;
 	@Input() didSubmit: boolean;
 
@@ -39,6 +42,7 @@ export class PriceProductEditPricesSectionComponent extends BaseComponent implem
 	constructor(private _appContext: AppContext,
 		private _roomCategoriesStatsService: RoomCategoriesStatsService,
 		private _priceExceptionModal: PriceExceptionModalService) {
+		
 		super();
 		this._isoWeekDayUtils = new ISOWeekDayUtils();
 		this.ccy = new CurrencyDO();
@@ -73,6 +77,8 @@ export class PriceProductEditPricesSectionComponent extends BaseComponent implem
 		this._roomCategoriesStatsService.getRoomCategoryStatsForRoomCategoryList(roomCategoryList).subscribe((roomCategoryStatsList: RoomCategoryStatsDO[]) => {
 			this.currentRoomCategoryStatsList = roomCategoryStatsList;
 			this.isLoading = false;
+
+			this._dynamicPriceContainerComponent.initializeFrom(this.ccy, this.dynamicPriceVMContainer);
 		}, (err: ThError) => {
 			this._appContext.toaster.error(err.message);
 		});
@@ -106,20 +112,14 @@ export class PriceProductEditPricesSectionComponent extends BaseComponent implem
 	}
 	public set currentRoomCategoryStatsList(currentRoomCategoryStatsList: RoomCategoryStatsDO[]) {
 		this._currentRoomCategoryStatsList = currentRoomCategoryStatsList;
-		// this.pricePerPersonContainer.updateFromRoomCategoryStatsList(currentRoomCategoryStatsList);
-		// this.singlePriceContainer.updateFromRoomCategoryStatsList(currentRoomCategoryStatsList);
+		this.pricePerPersonContainer.updateFromRoomCategoryStatsList(currentRoomCategoryStatsList);
+		this.singlePriceContainer.updateFromRoomCategoryStatsList(currentRoomCategoryStatsList);
 	}
 
 	public displayError() {
 		return this.didSubmit || this.readonly;
 	}
 
-	public getNoRoomsLabel(noOfRooms: number): string {
-		if (noOfRooms === 1) {
-			return this._appContext.thTranslation.translate("%noOfRooms% Room", { noOfRooms: noOfRooms });
-		}
-		return this._appContext.thTranslation.translate("%noOfRooms% Rooms", { noOfRooms: noOfRooms });
-	}
 	public get dynamicPriceVMContainer(): DynamicPriceVMContainer {
 		if (this._isPricePerNumberOfPersons) {
 			return this.pricePerPersonContainer;

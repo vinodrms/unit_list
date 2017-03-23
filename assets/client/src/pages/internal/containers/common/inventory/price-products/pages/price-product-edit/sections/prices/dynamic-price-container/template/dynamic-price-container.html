@@ -1,10 +1,10 @@
 <div class="row" *ngIf="!isLoading">
 		<div class="col-xs-12 form-group">
-			<!--<label>{{ 'Price configuration in %ccySymbol%' | translate:{ccySymbol: ccy.nativeSymbol} }}</label>-->
+			<label>{{ 'Price configuration in %ccySymbol%' | translate:{ccySymbol: ccy.nativeSymbol} }}</label>
 			<div class="basic-info-settings-tabbar">
 				<ul class="nav nav-tabs">
-					<li [ngClass]="{'active': true}" *ngFor="let dynamicPriceVM of dynamicPriceVMContainer.dynamicPriceVMList">
-						<a>
+					<li *ngFor="let dynamicPriceVM of dynamicPriceVMList; let i = index" [ngClass]="{'active': dynamicPriceVM.selected}">
+						<a (click)="changeDynamicPrice(i)">
 							{{ dynamicPriceVM.name }}
 						</a>
 					</li>
@@ -12,9 +12,9 @@
 			</div>
 			<div class="basic-info-settings-edit-container" customScroll>
 				<div class="row row-eq-height">
-					<div class="col-md-6 col-sm-12 col-xs-12 form-group">
+					<div class="col-md-6 col-sm-12 coal-xs-12 form-group" *ngFor="let priceVM of selectedDynamicPriceVM.priceVMList">
 						<div class="price-product-box">
-							<!--<label>{{ priceVM.roomCategoryStats.roomCategory.displayName }}
+							<label>{{ priceVM.roomCategoryStats.roomCategory.displayName }}
 								<small> 
 									{{ getNoRoomsLabel(priceVM.roomCategoryStats.noOfRooms) }} x
 									<config-capacity [configCapacity]="priceVM.roomCategoryStats.capacity.totalCapacity"></config-capacity>
@@ -22,7 +22,7 @@
 							</label>
 							<a class="btn" 
 								*ngIf="priceVM.previousRoomCategoryId && !readonly" 
-								(click)="priceContainer.copyPrices(priceVM.previousRoomCategoryId, priceVM.roomCategoryStats.roomCategory.id)">
+								(click)="selectedDynamicPriceVM.copyPrices(priceVM.previousRoomCategoryId, priceVM.roomCategoryStats.roomCategory.id)">
 								<i class="fa unitpal-font">[</i> <small>{{ 'Copy Prices from Previous Room Category' | translate }}</small>
 							</a>
 							<price-edit 
@@ -68,7 +68,7 @@
 									</tr>
 								</tbody>
 								<small class="text-muted"><i class="fa fa-info-circle"></i> {{ 'Custom prices for different days of the week' | translate }} </small>
-							</table>-->
+							</table>
 						</div>
 					</div>
 				</div>
