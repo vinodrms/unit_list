@@ -1,6 +1,13 @@
 <div class="row" *ngIf="!isLoading">
 		<div class="col-xs-12 form-group">
-			<label>{{ 'Price configuration in %ccySymbol%' | translate:{ccySymbol: ccy.nativeSymbol} }}</label>
+			<div class="row">
+				<div class="col-xs-6">
+					<label>{{ 'Price configuration in %ccySymbol%' | translate:{ccySymbol: ccy.nativeSymbol} }}</label>
+				</div>
+				<div class="col-xs-6">
+					<a class="btn btn-xs"><i class="fa unitpal-font">'</i> Add Dynamic Daily Rate</a>
+				</div>
+			</div>
 			<div class="basic-info-settings-tabbar">
 				<ul class="nav nav-tabs">
 					<li *ngFor="let dynamicPriceVM of dynamicPriceVMList; let i = index" [ngClass]="{'active': dynamicPriceVM.selected}">
