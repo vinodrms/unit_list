@@ -20,7 +20,7 @@
         </div>
     </div>
 
-    <div class="row" *ngFor="let discountId of discountIdList; let i = index">
+    <div class="row" *ngFor="let constraintId of constraintIdList; let i = index">
         <div class="col-xs-12"><hr></div>
         <div class="col-xs-10">
             <p class="bold-text">
@@ -34,7 +34,7 @@
         </div>
         <div class="col-xs-12">
             <price-product-constraint-selector
-                (onConstraintChange)="discount.constraints.constraintList[discountId] = $event">
+                (onConstraintChange)="discount.constraints.constraintList[constraintId] = $event">
             </price-product-constraint-selector>
         </div>
     </div>
@@ -46,6 +46,35 @@
 				<i class="fa unitpal-font">'</i> {{ 'Add Constraint' | translate }}
 			</a>
 		</div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12"> <hr> </div>
+        <div class="col-xs-12" *ngIf="isPublic()">
+            <small class="text-muted">
+				<i class="fa fa-info-circle"></i> {{ 'Discounts are public by default, meaning that they will be used for all the bookings that satisfy the constraints. You can restrict this discount by selecting up to 10 customers.' | translate }} 
+			</small>
+        </div>
+
+        <div class="col-xs-12" *ngFor="let customerId of discount.customerIdList">
+            <div class="row">
+                <div class="col-xs-10">
+                    <p class="bold-text">{{ getNameForCustomer(customerId) }}</p>
+                </div>
+                <div class="col-xs-2">
+                    <a class="btn btn-xs bold-text" (click)="removeCustomer(customerId)" title="{{ 'Remove' | translate }}">
+                        <i class="fa unitpal-font">\</i> {{ 'Remove' | translate }}
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xs-12" *ngIf="canAddMoreCustomers()">
+			<a class="btn btn-xs p-t-6" (click)="openCustomerSelectModal()">
+				<i class="fa unitpal-font">'</i> {{ 'Add Customer' | translate }}
+			</a>
+		</div>
+
     </div>
 
 </div>

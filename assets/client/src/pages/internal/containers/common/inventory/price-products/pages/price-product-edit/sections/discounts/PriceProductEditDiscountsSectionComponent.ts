@@ -9,11 +9,15 @@ import { PriceProductDiscountContainer } from "./utils/PriceProductDiscountConta
 import { PriceProductDiscountVM } from "./utils/PriceProductDiscountVM";
 import { PriceProductDiscountModalService } from "./discount-modal/services/PriceProductDiscountModalService";
 import { ModalDialogRef } from "../../../../../../../../../../common/utils/modals/utils/ModalDialogRef";
+import { PriceProductDiscountModalResult } from "./discount-modal/services/utils/PriceProductDiscountModalResult";
+import { EagerCustomersService } from "../../../../../../../../services/customers/EagerCustomersService";
+import { CustomersDO } from "../../../../../../../../services/customers/data-objects/CustomersDO";
+import { CustomerDO } from "../../../../../../../../services/customers/data-objects/CustomerDO";
 
 @Component({
     selector: 'price-product-edit-discounts-section',
     templateUrl: '/client/src/pages/internal/containers/common/inventory/price-products/pages/price-product-edit/sections/discounts/template/price-product-edit-discounts-section.html',
-    providers: [PriceProductDiscountModalService]
+    providers: [PriceProductDiscountModalService, EagerCustomersService]
 })
 export class PriceProductEditDiscountsSectionComponent extends BaseComponent implements IPriceProductEditSection {
     public static MaxDiscountsNo = 10;
@@ -21,11 +25,14 @@ export class PriceProductEditDiscountsSectionComponent extends BaseComponent imp
     @Input() didSubmit: boolean;
 
     discountContainer: PriceProductDiscountContainer;
+    private customerMap: { [index: string]: CustomerDO };
 
     constructor(private _appContext: AppContext,
-        private _discountModalService: PriceProductDiscountModalService) {
+        private _discountModalService: PriceProductDiscountModalService,
+        private _eagerCustomersService: EagerCustomersService) {
         super();
         this.discountContainer = new PriceProductDiscountContainer(this._appContext);
+        this.customerMap = {};
     }
 
     public isValid(): boolean {
@@ -39,6 +46,7 @@ export class PriceProductEditDiscountsSectionComponent extends BaseComponent imp
                 discountList = discountList.concat(ppDiscountList);
             }
         }
+        this.initCustomersFromDiscounts(discountList);
         this.discountContainer.initFromDiscountList(discountList);
     }
     public updateDataOn(priceProductVM: PriceProductVM) {
@@ -47,21 +55,46 @@ export class PriceProductEditDiscountsSectionComponent extends BaseComponent imp
         }
         priceProductVM.priceProduct.discounts.discountList = this.discountContainer.getDiscountDOList();
     }
-    public removeDiscount(discountVM: PriceProductDiscountVM) {
+
+    private initCustomersFromDiscounts(discountList: PriceProductDiscountDO[]) {
+        var customerIdList = [];
+        _.forEach(discountList, discount => {
+            customerIdList = customerIdList.concat(discount.customerIdList);
+        });
+        customerIdList = _.uniq(customerIdList);
+
+        this._eagerCustomersService.getCustomersById(customerIdList).subscribe((customers: CustomersDO) => {
+            this.updateDiscountCustomers(customers.customerList);
+        });
+    }
+    private updateDiscountCustomers(customerList: CustomerDO[]) {
+        this.updateCustomerMap(customerList);
+        _.forEach(this.discountContainer.discountVMList, discountVM => {
+            discountVM.updateCustomersLabel(this.customerMap);
+        });
+    }
+    private updateCustomerMap(customerList: CustomerDO[]) {
+        _.forEach(customerList, customer => {
+            this.customerMap[customer.id] = customer;
+        });
+    }
+
+    private removeDiscount(discountVM: PriceProductDiscountVM) {
         this.discountContainer.removeDiscount(discountVM);
     }
 
-    public openDiscountsModal() {
+    private openDiscountsModal() {
         if (this.discountContainer.discountVMList.length > PriceProductEditDiscountsSectionComponent.MaxDiscountsNo) {
             let errorMessage = this._appContext.thTranslation.translate("You cannot add more than 10 discounts on the same price product");
             this._appContext.toaster.error(errorMessage);
             return;
         }
         this._discountModalService.openPriceProductDiscountModal()
-            .then((modalDialogInstance: ModalDialogRef<PriceProductDiscountDO>) => {
-                modalDialogInstance.resultObservable.subscribe((addedDiscount: PriceProductDiscountDO) => {
-                    this.discountContainer.addDiscount(addedDiscount);
-                })
+            .then((modalDialogInstance: ModalDialogRef<PriceProductDiscountModalResult>) => {
+                modalDialogInstance.resultObservable.subscribe((result: PriceProductDiscountModalResult) => {
+                    this.discountContainer.addDiscount(result.discount);
+                    this.updateDiscountCustomers(result.customerList);
+                });
             }).catch((e: any) => { });
     }
 }

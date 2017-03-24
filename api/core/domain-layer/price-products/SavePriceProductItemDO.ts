@@ -26,6 +26,7 @@ export interface SavePriceProductItemDiscountDO {
 	name: string;
 	value: number;
 	constraints: SavePriceProductItemConstraintListDO;
+	customerIdList: string[];
 }
 
 export interface SavePriceProductItemDiscountListDO {
@@ -215,6 +216,10 @@ export class SavePriceProductItemDO {
 							{
 								key: "constraints",
 								validationStruct: SavePriceProductItemDO.getPriceProductConstraintWrapperValidationRule()
+							},
+							{
+								key: "customerIdList",
+								validationStruct: new ArrayValidationStructure(new PrimitiveValidationStructure(new StringValidationRule()))
 							}
 						]))
 					}

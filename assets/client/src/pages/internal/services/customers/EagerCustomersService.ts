@@ -1,9 +1,9 @@
-import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
-import {Observer} from 'rxjs/Observer';
-import {AppContext, ThServerApi} from '../../../../common/utils/AppContext';
-import {CustomerDO} from './data-objects/CustomerDO';
-import {CustomersDO} from './data-objects/CustomersDO';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { Observer } from 'rxjs/Observer';
+import { AppContext, ThServerApi } from '../../../../common/utils/AppContext';
+import { CustomerDO } from './data-objects/CustomerDO';
+import { CustomersDO } from './data-objects/CustomersDO';
 
 @Injectable()
 export class EagerCustomersService {
