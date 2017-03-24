@@ -29,8 +29,7 @@ export class ActiveStateUpdateStrategy implements IPriceProductItemActionStrateg
 			.then((filterCheckResult: boolean) => {
 				this.updateAttributesOnLoadedPriceProduct();
 				var priceProductRepo = this._appContext.getRepositoryFactory().getPriceProductRepository();
-				return priceProductRepo.updatePriceProductYieldFiltersNotesAndPrice(this._ppRepoMeta, this._ppItemRepoMeta,
-					this._loadedPriceProductDO.yieldFilterList, this._loadedPriceProductDO.notes, this._loadedPriceProductDO.price);
+				return priceProductRepo.updatePriceProduct(this._ppRepoMeta, this._ppItemRepoMeta, this._loadedPriceProductDO);
 			}).then((updatedPriceProduct: PriceProductDO) => {
 				resolve(updatedPriceProduct);
 			}).catch((error: any) => {
