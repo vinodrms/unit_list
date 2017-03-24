@@ -13,7 +13,7 @@ import { IndexedBookingInterval } from '../../../../data-layer/price-products/ut
 import { BookingUtils } from '../../../bookings/utils/BookingUtils';
 import { RoomCategoryStatsAggregator } from '../../../room-categories/aggregators/RoomCategoryStatsAggregator';
 import { RoomCategoryStatsDO } from '../../../../data-layer/room-categories/data-objects/RoomCategoryStatsDO';
-import { PriceProductConstraintDataDO } from "../../../../data-layer/price-products/data-objects/constraint/IPriceProductConstraint";
+import { DiscountConstraintDataDO } from "../../../../data-layer/price-products/data-objects/discount/PriceProductDiscountDO";
 
 import _ = require('underscore');
 
@@ -75,12 +75,13 @@ export class BookingPossiblePrices {
                 roomCategoryStatsList: this._loadedRoomCategoryStatsList,
                 bookingInterval: indexedBookingInterval
             };
-            let discountQuery: PriceProductConstraintDataDO = {
+            let discountQuery: DiscountConstraintDataDO = {
                 indexedBookingInterval: indexedBookingInterval,
                 bookingCreationDate: this._loadedBooking.creationDate,
                 configCapacity: this._loadedBooking.configCapacity,
                 indexedNumberOfRoomCategoriesFromGroupBooking: null,
-                roomCategoryIdListFromPriceProduct: this._loadedBooking.priceProductSnapshot.roomCategoryIdList
+                roomCategoryIdListFromPriceProduct: this._loadedBooking.priceProductSnapshot.roomCategoryIdList,
+                bookingBilledCustomerId: this._loadedBooking.defaultBillingDetails.customerId
             };
 
             if (this._loadedBooking.priceProductSnapshot.price.hasPriceConfiguredFor(priceQuery)) {

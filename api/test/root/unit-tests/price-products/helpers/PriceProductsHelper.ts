@@ -157,7 +157,8 @@ export class PriceProductsHelper {
 									}
 								}
 							]
-						}
+						},
+						customerIdList: []
 					},
 					{
 						name: "Discount 2",
@@ -171,7 +172,8 @@ export class PriceProductsHelper {
 									}
 								}
 							]
-						}
+						},
+						customerIdList: []
 					}
 				]
 			},

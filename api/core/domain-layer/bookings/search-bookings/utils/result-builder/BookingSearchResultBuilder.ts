@@ -129,6 +129,12 @@ export class BookingSearchResultBuilder {
                 };
                 if (priceProduct.price.hasPriceConfiguredFor(priceQuery)) {
                     var itemPrice = new PriceProductItemPrice();
+
+                    var bookingBilledCustomerId: string;
+                    if (!this._thUtils.isUndefinedOrNull(this._builderParams.bookingSearchDependencies.customer)) {
+                        bookingBilledCustomerId = this._builderParams.bookingSearchDependencies.customer.id;
+                    }
+
                     itemPrice.roomCategoryId = roomCategoryId;
                     var pricePerNightList: number[] = priceProduct.price.getPricePerNightBreakdownFor(priceQuery);
                     let discount = priceProduct.discounts.getDiscountValueFor({
@@ -139,7 +145,8 @@ export class BookingSearchResultBuilder {
                         // pass no room categories because the bookings were not added yet
                         // such as e.g. the min no rooms constraint will not apply
                         indexedNumberOfRoomCategoriesFromGroupBooking: new StringOccurenciesIndexer([]),
-                        roomCategoryIdListFromPriceProduct: priceProduct.roomCategoryIdList
+                        roomCategoryIdListFromPriceProduct: priceProduct.roomCategoryIdList,
+                        bookingBilledCustomerId: bookingBilledCustomerId
                     });
                     pricePerNightList = this._bookingUtils.getPricePerNightListWithDiscount(pricePerNightList, discount);
                     itemPrice.price = this._thUtils.getArraySum(pricePerNightList);
