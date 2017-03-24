@@ -24,6 +24,7 @@ export class PriceProductDiscountContainer {
         discountVM.value = discountDO.value;
         discountVM.constraintContainer = new PriceProductConstraintContainer(this._appContext);
         discountVM.constraintContainer.initFromConstraintList(discountDO.constraints.constraintList);
+        discountVM.customerIdList = discountDO.customerIdList;
         this._discountVMList.push(discountVM);
     }
 
@@ -53,6 +54,7 @@ export class PriceProductDiscountContainer {
             discountDO.value = discountVM.value;
             discountDO.constraints = new PriceProductConstraintWrapperDO();
             discountDO.constraints.constraintList = discountVM.constraintContainer.getConstraintDOList();
+            discountDO.customerIdList = discountVM.customerIdList;
             return discountDO;
         });
     }

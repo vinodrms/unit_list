@@ -40,7 +40,7 @@ export class BookingTestHelper {
         });
         var ppHelper = new PriceProductsHelper(testDataBuilder, testContext);
         ppHelper.updateYMValidFilterList(testDataBuilder.defaultYieldFilters);
-        var priceProductItem = ppHelper.getDraftSavePriceProductItemDO();
+        var priceProductItem = ppHelper.getDraftSavePriceProductItemDO(testDataBuilder.customerList);
         priceProductItem.constraints.constraintList = [];
         priceProductItem.status = PriceProductStatus.Active;
         priceProductItem.roomCategoryIdList = roomCategoryIdList;

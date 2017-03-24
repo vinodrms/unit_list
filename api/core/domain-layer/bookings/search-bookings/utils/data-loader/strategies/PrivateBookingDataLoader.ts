@@ -1,13 +1,13 @@
-import {ThError} from '../../../../../../utils/th-responses/ThError';
-import {AppContext} from '../../../../../../utils/AppContext';
-import {SessionContext} from '../../../../../../utils/SessionContext';
-import {BookingSearchDependencies} from '../results/BookingSearchDependencies';
-import {ABookingDataLoader} from '../ABookingDataLoader';
-import {CustomerDO} from '../../../../../../data-layer/customers/data-objects/CustomerDO';
-import {PriceProductDO, PriceProductStatus} from '../../../../../../data-layer/price-products/data-objects/PriceProductDO';
-import {PriceProductSearchResultRepoDO} from '../../../../../../data-layer/price-products/repositories/IPriceProductRepository';
-import {AllotmentStatus} from '../../../../../../data-layer/allotments/data-objects/AllotmentDO';
-import {AllotmentSearchResultRepoDO} from '../../../../../../data-layer/allotments/repositories/IAllotmentRepository';
+import { ThError } from '../../../../../../utils/th-responses/ThError';
+import { AppContext } from '../../../../../../utils/AppContext';
+import { SessionContext } from '../../../../../../utils/SessionContext';
+import { BookingSearchDependencies } from '../results/BookingSearchDependencies';
+import { ABookingDataLoader } from '../ABookingDataLoader';
+import { CustomerDO } from '../../../../../../data-layer/customers/data-objects/CustomerDO';
+import { PriceProductDO, PriceProductStatus } from '../../../../../../data-layer/price-products/data-objects/PriceProductDO';
+import { PriceProductSearchResultRepoDO } from '../../../../../../data-layer/price-products/repositories/IPriceProductRepository';
+import { AllotmentStatus } from '../../../../../../data-layer/allotments/data-objects/AllotmentDO';
+import { AllotmentSearchResultRepoDO } from '../../../../../../data-layer/allotments/repositories/IAllotmentRepository';
 
 import _ = require('underscore');
 
