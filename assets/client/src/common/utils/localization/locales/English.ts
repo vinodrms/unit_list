@@ -831,6 +831,6 @@ export var EnglishTranslations: Object = {
 	"%priceProduct% is closed for departure on %date%. Click here to open for departure.": "%priceProduct% is closed for departure on %date%. Click here to open for departure.",
 	"%dynamicPrice% is open on %date%. It will be the price used for incoming bookings with %priceProduct% on this day.": "%dynamicPrice% is open on %date%. It will be the price used for incoming bookings with %priceProduct% on this day.",
 	"Click here to open %dynamicPrice% on %date%.": "Click here to open %dynamicPrice% on %date%.",
-	
+	"Show/hide dynamic rates": "Show/hide dynamic rates",
 		
 };
