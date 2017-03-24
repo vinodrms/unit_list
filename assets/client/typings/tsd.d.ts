@@ -4,7 +4,6 @@
 /// <reference path="underscore/underscore.d.ts" />
 /// <reference path="jquery/jquery.d.ts" />
 /// <reference path="toastr/toastr.d.ts" />
-/// <reference path="es6-shim/es6-shim.d.ts" />
 /// <reference path="jasmine/jasmine.d.ts" />
 /// <reference path="select2/select2.d.ts" />
 /// <reference path="socket.io-client/socket.io-client.d.ts" />
