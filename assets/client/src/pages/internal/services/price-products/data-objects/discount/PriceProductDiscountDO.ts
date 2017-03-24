@@ -5,9 +5,10 @@ export class PriceProductDiscountDO extends BaseDO {
     name: string;
     value: number;
     constraints: PriceProductConstraintWrapperDO;
+    customerIdList: string[];
 
     protected getPrimitivePropertyKeys(): string[] {
-        return ["name", "value"];
+        return ["name", "value", "customerIdList"];
     }
 
     public buildFromObject(object: Object) {
@@ -31,5 +32,9 @@ export class PriceProductDiscountDO extends BaseDO {
             }
         }
         return true;
+    }
+
+    public isPublic(): boolean {
+        return !_.isArray(this.customerIdList) || this.customerIdList.length == 0;
     }
 }

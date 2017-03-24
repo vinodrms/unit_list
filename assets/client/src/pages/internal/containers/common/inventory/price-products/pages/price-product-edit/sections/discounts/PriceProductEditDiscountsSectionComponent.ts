@@ -9,6 +9,7 @@ import { PriceProductDiscountContainer } from "./utils/PriceProductDiscountConta
 import { PriceProductDiscountVM } from "./utils/PriceProductDiscountVM";
 import { PriceProductDiscountModalService } from "./discount-modal/services/PriceProductDiscountModalService";
 import { ModalDialogRef } from "../../../../../../../../../../common/utils/modals/utils/ModalDialogRef";
+import { PriceProductDiscountModalResult } from "./discount-modal/services/utils/PriceProductDiscountModalResult";
 
 @Component({
     selector: 'price-product-edit-discounts-section',
@@ -58,10 +59,10 @@ export class PriceProductEditDiscountsSectionComponent extends BaseComponent imp
             return;
         }
         this._discountModalService.openPriceProductDiscountModal()
-            .then((modalDialogInstance: ModalDialogRef<PriceProductDiscountDO>) => {
-                modalDialogInstance.resultObservable.subscribe((addedDiscount: PriceProductDiscountDO) => {
-                    this.discountContainer.addDiscount(addedDiscount);
-                })
+            .then((modalDialogInstance: ModalDialogRef<PriceProductDiscountModalResult>) => {
+                modalDialogInstance.resultObservable.subscribe((result: PriceProductDiscountModalResult) => {
+                    this.discountContainer.addDiscount(result.discount);
+                });
             }).catch((e: any) => { });
     }
 }
