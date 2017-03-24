@@ -20,6 +20,9 @@ import { RoomCategoryStatsAggregator } from '../../../../../core/domain-layer/ro
 import { RoomCategoryStatsDO } from '../../../../../core/data-layer/room-categories/data-objects/RoomCategoryStatsDO';
 import { PriceProductConstraintType } from '../../../../../core/data-layer/price-products/data-objects/constraint/IPriceProductConstraint';
 import { ISOWeekDay } from '../../../../../core/utils/th-dates/data-objects/ISOWeekDay';
+import { CustomerDO } from "../../../../../core/data-layer/customers/data-objects/CustomerDO";
+
+import _ = require('underscore');
 
 export class PriceProductsHelper {
 	private _testUtils: TestUtils;
@@ -47,7 +50,7 @@ export class PriceProductsHelper {
 		return [filter];
 	}
 
-	public getDraftSavePriceProductItemDO(): SavePriceProductItemDO {
+	public getDraftSavePriceProductItemDO(customerList?: CustomerDO[]): SavePriceProductItemDO {
 		this.ensureRoomCategoryStatWasSet();
 
 		var includedItems = new PriceProductIncludedItemsDO();
@@ -74,6 +77,10 @@ export class PriceProductsHelper {
 			breakfastAddOnProduct.id,
 			addOnProduct.id
 		];
+		let discountCustomerIdList = [];
+		if (_.isArray(customerList)) {
+			discountCustomerIdList.push(this._testUtils.getRandomListElement(customerList).id);
+		}
 
 		return {
 			status: PriceProductStatus.Draft,
@@ -157,7 +164,8 @@ export class PriceProductsHelper {
 									}
 								}
 							]
-						}
+						},
+						customerIdList: discountCustomerIdList
 					},
 					{
 						name: "Discount 2",
@@ -171,7 +179,8 @@ export class PriceProductsHelper {
 									}
 								}
 							]
-						}
+						},
+						customerIdList: discountCustomerIdList
 					}
 				]
 			},

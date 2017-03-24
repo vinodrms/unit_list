@@ -17,6 +17,7 @@ import { RoomCategoryStatsDO } from '../../../../data-layer/room-categories/data
 import { PriceProductConstraintDataDO } from "../../../../data-layer/price-products/data-objects/constraint/IPriceProductConstraint";
 import { PriceProductIdValidator } from "../../../price-products/validators/PriceProductIdValidator";
 import { PriceProductsContainer } from "../../../price-products/validators/results/PriceProductsContainer";
+import { DiscountConstraintDataDO } from "../../../../data-layer/price-products/data-objects/discount/PriceProductDiscountDO";
 
 import _ = require('underscore');
 
@@ -84,12 +85,13 @@ export class BookingPossiblePrices {
                 roomCategoryStatsList: this._loadedRoomCategoryStatsList,
                 bookingInterval: indexedBookingInterval
             };
-            let discountQuery: PriceProductConstraintDataDO = {
+            let discountQuery: DiscountConstraintDataDO = {
                 indexedBookingInterval: indexedBookingInterval,
                 bookingCreationDate: this._loadedBooking.creationDate,
                 configCapacity: this._loadedBooking.configCapacity,
                 indexedNumberOfRoomCategoriesFromGroupBooking: null,
-                roomCategoryIdListFromPriceProduct: this._loadedBooking.priceProductSnapshot.roomCategoryIdList
+                roomCategoryIdListFromPriceProduct: this._loadedBooking.priceProductSnapshot.roomCategoryIdList,
+                bookingBilledCustomerId: this._loadedBooking.defaultBillingDetails.customerId
             };
 
             if (this._loadedBooking.priceProductSnapshot.price.hasPriceConfiguredFor(priceQuery)) {

@@ -51,6 +51,21 @@
 						</small>
 					</div>
 				</div>
+
+				<div class="row">
+					<div class="col-xs-12">
+						<p *ngIf="discountVM.isPublic()">
+							<span class="bold-text green-color">{{ 'Public' | translate }} </span>
+							<br>
+							<small class="gray-color">{{ 'Discount applied for all the customers' }}</small>
+						</p>
+						<p *ngIf="!discountVM.isPublic()">
+							<span class="bold-text red-color">{{ 'Private' | translate }} </span>
+							<br>
+							<small class="gray-color">{{ discountVM.customerListLabel }}</small>
+						</p>
+					</div>
+				</div>
 			</div>
 		</div>
 		<div class="col-xs-12" *ngIf="discountContainer.isEmpty()">
