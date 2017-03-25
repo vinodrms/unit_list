@@ -160,8 +160,6 @@ export class PriceProductEditContainerComponent extends BaseComponent implements
 		this._editSectionContainer.updateDataOn(this._priceProductVM);
 		this.updateStatusForNewPriceProductOn(this._priceProductVM);
 
-		debugger
-
 		this.isSavingPriceProduct = true;
 		this._priceProductsService.savePriceProductDO(this._priceProductVM.priceProduct)
 			.subscribe((updatedPriceProduct: PriceProductDO) => {
