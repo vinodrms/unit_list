@@ -33,7 +33,7 @@ export class DynamicPriceModalComponent extends BaseComponent implements ICustom
     }
 
     public get isValid(): boolean {
-        return this.textNotNullOrEmpty(this.dynamicPriceVM.name) && this.textNotNullOrEmpty(this.dynamicPriceVM.description);
+        return this.textNotNullOrEmpty(this.dynamicPriceVM.name);
     }
 
     private textNotNullOrEmpty(text: string): boolean {

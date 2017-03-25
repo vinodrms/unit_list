@@ -28,7 +28,7 @@
 				<div class="col-xs-6">
 					<label>{{ 'Price configuration in %ccySymbol%' | translate:{ccySymbol: ccy.nativeSymbol} }}</label>
 				</div>
-				<div *ngIf="!readonly" class="col-xs-6">
+				<div class="col-xs-6">
 					<a class="btn btn-xs" (click)="openNewDynamicPriceModal()"><i class="fa unitpal-font">'</i> {{ 'Add' | translate }} {{ 'Dynamic Daily Rate' | translate }}</a>
 				</div>
 			</div>
@@ -58,7 +58,7 @@
 							</a>
 							<price-edit 
 								[displayError]="displayError()"
-								[readonly]="readonly"
+								[readonly]="!selectedDynamicPriceVM.editOnPricesAndExceptionsIsAllowed(readonly)"
 								[priceType]="priceType"
 								[roomCategoryStats]="priceVM.roomCategoryStats"
 								[(price)]="priceVM.price">
@@ -74,20 +74,20 @@
 											{{ ccy.nativeSymbol }}  {{ exception.price.getPriceBriefLineString() }}
 										</td>
 										<td>
-											<a class="btn btn-xs" *ngIf="!readonly" (click)="removeException(priceVM, exception)">
+											<a class="btn btn-xs" *ngIf="selectedDynamicPriceVM.editOnPricesAndExceptionsIsAllowed(readonly)" (click)="removeException(priceVM, exception)">
 												<i class="fa unitpal-font">\</i> {{ 'Remove' | translate }}
 											</a>
 										</td>
 									</tr>
 									<tr>
 										<td>
-											<span *ngIf="readonly && priceVM.hasExceptions()">
+											<span *ngIf="!selectedDynamicPriceVM.editOnPricesAndExceptionsIsAllowed(readonly) && priceVM.hasExceptions()">
 												<a class="btn btn-xs" (click)="openPriceExceptionModal(priceVM)">
 													<span><i class="fa fa-eye"></i> {{ 'View' | translate }}</span>
 												</a>	
 											</span>
-											<p *ngIf="readonly && !priceVM.hasExceptions()">{{'No exceptions' | translate}}</p>
-											<span *ngIf="!readonly">
+											<p *ngIf="!selectedDynamicPriceVM.editOnPricesAndExceptionsIsAllowed(readonly) && !priceVM.hasExceptions()">{{'No exceptions' | translate}}</p>
+											<span *ngIf="selectedDynamicPriceVM.editOnPricesAndExceptionsIsAllowed(readonly)">
 												<a class="btn btn-xs" (click)="openPriceExceptionModal(priceVM)">
 													<span *ngIf="!priceVM.hasExceptions()"><i class="fa unitpal-font">'</i> {{ 'Add' | translate }}</span>
 													<span *ngIf="priceVM.hasExceptions()"><i class="fa unitpal-font">]</i> {{ 'Add / Edit' | translate }}</span>

@@ -6,13 +6,18 @@ import { PriceVM } from "./PriceVM";
 import { DynamicPriceVM } from "./DynamicPriceVM";
 import { RoomCategoryStatsDO } from "../../../../../../../../../services/room-categories/data-objects/RoomCategoryStatsDO";
 import { RoomCategoryDO } from "../../../../../../../../../services/room-categories/data-objects/RoomCategoryDO";
+import { ThUtils } from "../../../../../../../../../../../common/utils/ThUtils";
 
 export class DynamicPriceVMContainer {
+    private _thUtils: ThUtils;
+    
     private _selectedDynamicPriceIndex: number;
     private _dynamicPriceVMList: DynamicPriceVM[];
     
     constructor(private _priceType: PriceProductPriceType) {
         this._selectedDynamicPriceIndex = 0;
+
+        this._thUtils = new ThUtils();
     }
 
     public get priceType(): PriceProductPriceType {
@@ -62,9 +67,30 @@ export class DynamicPriceVMContainer {
     }
 
     public updatePricesOn(priceProductVM: PriceProductVM) {
+        this.removeDeletedDynamicPricesOnPriceProduct(priceProductVM);
+
+        priceProductVM.priceProduct.price.type = this._priceType;
+
         _.forEach(this._dynamicPriceVMList, (dynamicPriceVM: DynamicPriceVM) => {
             dynamicPriceVM.updatePricesOn(priceProductVM);    
         });
+    }
+
+    private removeDeletedDynamicPricesOnPriceProduct(priceProductVM: PriceProductVM) {
+        let dynamicPriceIdList = 
+            _.chain(this._dynamicPriceVMList)
+                .map((dynamicPriceVM: DynamicPriceVM) => {
+                    return dynamicPriceVM.dynamicPriceDO.id
+                })
+                .filter((dynamicPriceId: string) => {
+                    return !this._thUtils.isUndefinedOrNull(dynamicPriceId);
+                })
+                .value();
+        
+        priceProductVM.priceProduct.price.dynamicPriceList = 
+            _.filter(priceProductVM.priceProduct.price.dynamicPriceList, (dynamicPriceDO: DynamicPriceDO) => {
+                return _.contains(dynamicPriceIdList, dynamicPriceDO.id);
+            });
     }
 
     public getPriceVMForRoomCategoryId(roomCategoryId: string): PriceVM {

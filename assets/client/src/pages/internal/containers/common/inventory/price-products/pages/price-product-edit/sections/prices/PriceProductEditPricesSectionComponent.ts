@@ -17,6 +17,7 @@ import { DynamicPriceVM } from './utils/DynamicPriceVM';
 import { PriceVM } from './utils/PriceVM';
 import { DynamicPriceVMContainer } from "./utils/DynamicPriceVMContainer";
 import { DynamicPriceModalService } from "./dynamic-price-modal/services/DynamicPriceModalService";
+import { PricingContainer } from "./utils/PricingContainer";
 
 @Component({
 	selector: 'price-product-edit-prices-section',
@@ -25,7 +26,8 @@ import { DynamicPriceModalService } from "./dynamic-price-modal/services/Dynamic
 })
 export class PriceProductEditPricesSectionComponent extends BaseComponent implements IPriceProductEditSection {
 
-	readonly: boolean;
+	private _readonly: boolean;
+
 	@Input() didSubmit: boolean;
 
 	private _currentRoomCategoryStatsList: RoomCategoryStatsDO[];
@@ -36,8 +38,7 @@ export class PriceProductEditPricesSectionComponent extends BaseComponent implem
 	isLoading: boolean = true;
 	ccy: CurrencyDO;
 
-	pricePerPersonContainer: DynamicPriceVMContainer;
-	singlePriceContainer: DynamicPriceVMContainer;
+	pricingContainer: PricingContainer;
 
 	constructor(private _appContext: AppContext,
 		private _roomCategoriesStatsService: RoomCategoriesStatsService,
@@ -46,10 +47,24 @@ export class PriceProductEditPricesSectionComponent extends BaseComponent implem
 		
 		super();
 		this._isoWeekDayUtils = new ISOWeekDayUtils();
-		
 		this.ccy = new CurrencyDO();
-		this.pricePerPersonContainer = new DynamicPriceVMContainer(PriceProductPriceType.PricePerPerson);
-		this.singlePriceContainer = new DynamicPriceVMContainer(PriceProductPriceType.SinglePrice);
+
+		this.pricingContainer = new PricingContainer(this._appContext);
+	}
+
+	public get readonly(): boolean {
+		let isReadonly = this._readonly;
+
+		_.forEach(this.dynamicPriceVMList, (dynamicPriceVM: DynamicPriceVM) => {
+			if(dynamicPriceVM.editOnPricesAndExceptionsIsAllowed(this._readonly)) {
+				isReadonly = false;
+			}
+		});
+
+		return isReadonly;
+	}
+	public set readonly(readonly: boolean) {
+		this._readonly = readonly;
 	}
 
 	public isValid(): boolean {
@@ -63,15 +78,11 @@ export class PriceProductEditPricesSectionComponent extends BaseComponent implem
 		this._currentRoomCategoryStatsList = [];
 
 		if (priceProductVM.priceProduct.price && priceProductVM.priceProduct.price.type != null) {
-			this.updateCurrentPriceFrom(priceProductVM);
+			this.pricingContainer.updateCurrentPriceFrom(priceProductVM);
+
 			this._isPricePerNumberOfPersons = (priceProductVM.priceProduct.price.type === PriceProductPriceType.PricePerPerson);
 		}
 		this.updatePricesForRoomCategories(priceProductVM.roomCategoryList);
-	}
-
-	private updateCurrentPriceFrom(priceProductVM: PriceProductVM) {
-		this.singlePriceContainer.initializeFrom(priceProductVM.priceProduct.price);
-		this.pricePerPersonContainer.initializeFrom(priceProductVM.priceProduct.price);
 	}
 
 	public updatePricesForRoomCategories(roomCategoryList: RoomCategoryDO[]) {
@@ -113,15 +124,14 @@ export class PriceProductEditPricesSectionComponent extends BaseComponent implem
 	}
 	public set currentRoomCategoryStatsList(currentRoomCategoryStatsList: RoomCategoryStatsDO[]) {
 		this._currentRoomCategoryStatsList = currentRoomCategoryStatsList;
-		this.pricePerPersonContainer.updateFromRoomCategoryStatsList(currentRoomCategoryStatsList);
-		this.singlePriceContainer.updateFromRoomCategoryStatsList(currentRoomCategoryStatsList);
+		this.pricingContainer.updateFromRoomCategoryStatsList(currentRoomCategoryStatsList);
 	}
 
 	public updateDataOn(priceProductVM: PriceProductVM) {
-		// if (!priceProductVM.priceProduct.price) {
-		// 	priceProductVM.priceProduct.price = new PriceProductPriceDO();
-		// }
-		// this.dynamicPriceVMContainer.updatePricesOn(priceProductVM);
+		if (!priceProductVM.priceProduct.price) {
+			priceProductVM.priceProduct.price = new PriceProductPriceDO();
+		}
+		this.dynamicPriceVMContainer.updatePricesOn(priceProductVM);
 	}
 
 	public displayError() {
@@ -129,14 +139,7 @@ export class PriceProductEditPricesSectionComponent extends BaseComponent implem
 	}
 	
 	public get dynamicPriceVMContainer(): DynamicPriceVMContainer {
-		if (this._isPricePerNumberOfPersons) {
-			return this.pricePerPersonContainer;
-		}
-		return this.singlePriceContainer;
-	}
-
-	public getWeekDayName(iSOWeekDay: ISOWeekDay): string {
-		return this._isoWeekDayUtils.getISOWeekDayVM(iSOWeekDay).name;
+		return this.pricingContainer.getSelectedPricingContainer(this._isPricePerNumberOfPersons);
 	}
 
 	public get dynamicPriceVMList(): DynamicPriceVM[] {
@@ -155,6 +158,10 @@ export class PriceProductEditPricesSectionComponent extends BaseComponent implem
 		return this.dynamicPriceVMContainer.selectedDynamicPriceVM;
 	}
 	
+	public getWeekDayName(iSOWeekDay: ISOWeekDay): string {
+		return this._isoWeekDayUtils.getISOWeekDayVM(iSOWeekDay).name;
+	}
+
 	public getNoRoomsLabel(noOfRooms: number): string {
 		if (noOfRooms === 1) {
 			return this._appContext.thTranslation.translate("%noOfRooms% Room", { noOfRooms: noOfRooms });
@@ -195,22 +202,21 @@ export class PriceProductEditPricesSectionComponent extends BaseComponent implem
 						this.didRemoveDynamicPrice(dynamicPriceVMIndex);
 						return;
 					}
-					this.didChangeDynamicPriceNameAndDetails(updatedDynamicPrice);
+					this.didChangeDynamicPriceNameAndDetails(dynamicPriceVMIndex, updatedDynamicPrice);
 				})
 			}).catch((e: any) => { });
 	}
 
-	public didChangeDynamicPriceNameAndDetails(updatedDynamicPrice: DynamicPriceVM) {
-
+	public didChangeDynamicPriceNameAndDetails(dynamicPriceVMIndex: number, updatedDynamicPrice: DynamicPriceVM) {
+		this.pricingContainer.updateNameAndDescriptionOnDynamicPrice(dynamicPriceVMIndex, updatedDynamicPrice);
 	}
 
 	public didRemoveDynamicPrice(indexToRemove: number) {
-		if(this.pricePerPersonContainer.dynamicPriceVMList.length == 1 || this.singlePriceContainer.dynamicPriceVMList.length == 1) {
+		if(this.pricingContainer.hasAtLeastADynamicPriceConfigured()) {
 			this._appContext.toaster.error(this._appContext.thTranslation.translate("The price product must have at least a dynamic daily rate configured."));
 			return;
 		}
-		this.pricePerPersonContainer.dynamicPriceVMList.splice(indexToRemove, 1);
-		this.singlePriceContainer.dynamicPriceVMList.splice(indexToRemove, 1);
+		this.pricingContainer.removeDynamicPrice(indexToRemove);
 		
 		this.selectDynamicPrice(indexToRemove == 0? 0 : indexToRemove - 1);
 	}
@@ -225,12 +231,7 @@ export class PriceProductEditPricesSectionComponent extends BaseComponent implem
 	}
 
 	public didAddDynamicPrice(newDynamicPrice: DynamicPriceVM) {
-		let fisrtDynamicPriceClone: DynamicPriceVM = this.dynamicPriceVMList[0].buildPrototype();
-		fisrtDynamicPriceClone.name = newDynamicPrice.name;
-		fisrtDynamicPriceClone.description = newDynamicPrice.description;
-	
-		this.dynamicPriceVMList.push(fisrtDynamicPriceClone);
-
+		this.pricingContainer.addDynamicPrice(newDynamicPrice);
 		this.selectDynamicPrice(this.dynamicPriceVMList.length - 1);
 	}
 }

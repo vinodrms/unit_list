@@ -20,6 +20,7 @@ export class DynamicPriceVM {
 
     constructor(
         private _priceType: PriceProductPriceType) {
+        this._thUtils = new ThUtils();
         this._dynamicPriceDO = new DynamicPriceDO(this._priceType);
         this._priceVMList = [];
     }
@@ -47,6 +48,16 @@ export class DynamicPriceVM {
     }
     public set selected(selected: boolean) {
         this._selected = selected;
+    }
+    public get dynamicPriceDO(): DynamicPriceDO {
+        return this._dynamicPriceDO;
+    }
+    
+    public editOnPricesAndExceptionsIsAllowed(readonly: boolean): boolean {
+        if(readonly && !this._thUtils.isUndefinedOrNull(this.dynamicPriceDO.id)) {
+            return false;
+        }
+        return true;
     }
 
     public initializeFrom(dynamicPriceDO: DynamicPriceDO) {
@@ -119,8 +130,6 @@ export class DynamicPriceVM {
     }
 
     public updatePricesOn(priceProductVM: PriceProductVM) {
-        priceProductVM.priceProduct.price.type = this._priceType;
-        
         let dynamicPrice: DynamicPriceDO = priceProductVM.priceProduct.price.getDynamicPriceById(this._dynamicPriceDO.id);
         if(this._thUtils.isUndefinedOrNull(dynamicPrice)) {
             dynamicPrice = new DynamicPriceDO(this._dynamicPriceDO.type);
@@ -131,9 +140,12 @@ export class DynamicPriceVM {
         dynamicPrice.priceList = [];
         dynamicPrice.priceExceptionList = [];
         _.forEach(this._priceVMList, priceVM => {
-            priceProductVM.priceProduct.price.dynamicPriceList[0].priceList.push(priceVM.price);
-            priceProductVM.priceProduct.price.dynamicPriceList[0].priceExceptionList = priceProductVM.priceProduct.price.dynamicPriceList[0].priceExceptionList.concat(priceVM.exceptionList);
+            dynamicPrice.priceList.push(priceVM.price);
+            dynamicPrice.priceExceptionList = dynamicPrice.priceExceptionList.concat(priceVM.exceptionList);
         });
+        if(this._thUtils.isUndefinedOrNull(dynamicPrice.id)) {
+            priceProductVM.priceProduct.price.dynamicPriceList.push(dynamicPrice);
+        }
     }
 
     public copyPrices(sourceRoomCategoryId: string, destinationRoomCategoryId: string) {
