@@ -3,30 +3,30 @@ import should = require('should');
 import supertest = require('supertest');
 import _ = require("underscore");
 
-import {ThError} from '../../../../core/utils/th-responses/ThError';
-import {ThStatusCode} from '../../../../core/utils/th-responses/ThResponse';
-import {DefaultDataBuilder} from '../../../db-initializers/DefaultDataBuilder';
-import {TestContext} from '../../../helpers/TestContext';
-import {TestUtils} from '../../../helpers/TestUtils';
-import {DefaultPriceProductBuilder} from '../../../db-initializers/builders/DefaultPriceProductBuilder';
-import {PriceProductsHelper} from './helpers/PriceProductsHelper';
-import {CustomersTestHelper} from '../customers/helpers/CustomersTestHelper';
-import {RoomCategoryStatsDO} from '../../../../core/data-layer/room-categories/data-objects/RoomCategoryStatsDO';
-import {SavePriceProductItem} from '../../../../core/domain-layer/price-products/SavePriceProductItem';
-import {PriceProductDO, PriceProductAvailability} from '../../../../core/data-layer/price-products/data-objects/PriceProductDO';
-import {CustomerDO} from '../../../../core/data-layer/customers/data-objects/CustomerDO';
-import {PriceProductStatus} from '../../../../core/data-layer/price-products/data-objects/PriceProductDO';
-import {PriceProductCancellationPolicyType} from '../../../../core/data-layer/price-products/data-objects/conditions/cancellation/IPriceProductCancellationPolicy';
-import {PriceProductCancellationPenaltyType} from '../../../../core/data-layer/price-products/data-objects/conditions/penalty/IPriceProductCancellationPenalty';
-import {SaveCustomerItem} from '../../../../core/domain-layer/customers/SaveCustomerItem';
-import {ArchivePriceProductItem} from '../../../../core/domain-layer/price-products/ArchivePriceProductItem';
-import {DraftPriceProductItem} from '../../../../core/domain-layer/price-products/DraftPriceProductItem';
-import {DeletePriceProductItem} from '../../../../core/domain-layer/price-products/DeletePriceProductItem';
-import {PriceProductSearchResultRepoDO} from '../../../../core/data-layer/price-products/repositories/IPriceProductRepository';
-import {AllotmentsHelper} from '../allotments/helpers/AllotmentsHelper';
-import {SaveAllotmentItem} from '../../../../core/domain-layer/allotments/SaveAllotmentItem';
-import {AllotmentDO, AllotmentStatus} from '../../../../core/data-layer/allotments/data-objects/AllotmentDO';
-import {ArchiveAllotmentItem} from '../../../../core/domain-layer/allotments/ArchiveAllotmentItem';
+import { ThError } from '../../../../core/utils/th-responses/ThError';
+import { ThStatusCode } from '../../../../core/utils/th-responses/ThResponse';
+import { DefaultDataBuilder } from '../../../db-initializers/DefaultDataBuilder';
+import { TestContext } from '../../../helpers/TestContext';
+import { TestUtils } from '../../../helpers/TestUtils';
+import { DefaultPriceProductBuilder } from '../../../db-initializers/builders/DefaultPriceProductBuilder';
+import { PriceProductsHelper } from './helpers/PriceProductsHelper';
+import { CustomersTestHelper } from '../customers/helpers/CustomersTestHelper';
+import { RoomCategoryStatsDO } from '../../../../core/data-layer/room-categories/data-objects/RoomCategoryStatsDO';
+import { SavePriceProductItem } from '../../../../core/domain-layer/price-products/SavePriceProductItem';
+import { PriceProductDO, PriceProductAvailability } from '../../../../core/data-layer/price-products/data-objects/PriceProductDO';
+import { CustomerDO } from '../../../../core/data-layer/customers/data-objects/CustomerDO';
+import { PriceProductStatus } from '../../../../core/data-layer/price-products/data-objects/PriceProductDO';
+import { PriceProductCancellationPolicyType } from '../../../../core/data-layer/price-products/data-objects/conditions/cancellation/IPriceProductCancellationPolicy';
+import { PriceProductCancellationPenaltyType } from '../../../../core/data-layer/price-products/data-objects/conditions/penalty/IPriceProductCancellationPenalty';
+import { SaveCustomerItem } from '../../../../core/domain-layer/customers/SaveCustomerItem';
+import { ArchivePriceProductItem } from '../../../../core/domain-layer/price-products/ArchivePriceProductItem';
+import { DraftPriceProductItem } from '../../../../core/domain-layer/price-products/DraftPriceProductItem';
+import { DeletePriceProductItem } from '../../../../core/domain-layer/price-products/DeletePriceProductItem';
+import { PriceProductSearchResultRepoDO } from '../../../../core/data-layer/price-products/repositories/IPriceProductRepository';
+import { AllotmentsHelper } from '../allotments/helpers/AllotmentsHelper';
+import { SaveAllotmentItem } from '../../../../core/domain-layer/allotments/SaveAllotmentItem';
+import { AllotmentDO, AllotmentStatus } from '../../../../core/data-layer/allotments/data-objects/AllotmentDO';
+import { ArchiveAllotmentItem } from '../../../../core/domain-layer/allotments/ArchiveAllotmentItem';
 
 describe("Hotel Price Products Tests", function () {
 	var InvalidRoomCategoryId = "12121221211";
@@ -55,7 +55,7 @@ describe("Hotel Price Products Tests", function () {
 		allotmentsHelper = new AllotmentsHelper(testDataBuilder, testContext);
 
 		testDataBuilder.buildWithDoneCallback(done);
-    });
+	});
 
 	describe("Price Products Validation Tests", function () {
 		it("Should update the price product filter list", function (done) {
@@ -74,7 +74,7 @@ describe("Hotel Price Products Tests", function () {
 				should.notEqual(e.getThStatusCode(), ThStatusCode.Ok);
 				done();
 			});
-        });
+		});
 		it("Should not save price product with invalid add on product id", function (done) {
 			var priceProductItem = pphelper.getDraftSavePriceProductItemDO();
 			priceProductItem.includedItems.includedBreakfastAddOnProductSnapshot.id = InvalidAddOnProductId;
@@ -86,7 +86,7 @@ describe("Hotel Price Products Tests", function () {
 				should.notEqual(e.getThStatusCode(), ThStatusCode.Ok);
 				done();
 			});
-        });
+		});
 		it("Should not save price product with invalid tax id", function (done) {
 			var priceProductItem = pphelper.getDraftSavePriceProductItemDO();
 			priceProductItem.taxIdList.push(InvalidTaxId);
@@ -98,11 +98,11 @@ describe("Hotel Price Products Tests", function () {
 				should.notEqual(e.getThStatusCode(), ThStatusCode.Ok);
 				done();
 			});
-        });
+		});
 		it("Should not save price product with missing price per person", function (done) {
 			var priceProductItem = pphelper.getDraftSavePriceProductItemDO();
 			priceProductItem.price = DefaultPriceProductBuilder.getPricePerPerson([pphelper.roomCategoryStat]);
-			priceProductItem.price.priceList[0]["adultsPriceList"] = [];
+			priceProductItem.price.dynamicPriceList[0].priceList[0]["adultsPriceList"] = [];
 
 			var savePPItem = new SavePriceProductItem(testContext.appContext, testContext.sessionContext);
 			savePPItem.save(priceProductItem).then((result: PriceProductDO) => {
@@ -111,11 +111,11 @@ describe("Hotel Price Products Tests", function () {
 				should.notEqual(e.getThStatusCode(), ThStatusCode.Ok);
 				done();
 			});
-        });
+		});
 		it("Should not save price product with missing price per category", function (done) {
 			var priceProductItem = pphelper.getDraftSavePriceProductItemDO();
 			priceProductItem.price = DefaultPriceProductBuilder.getPricePerRoomCategory(pphelper.roomCategoryStat);
-			priceProductItem.price.priceList = [];
+			priceProductItem.price.dynamicPriceList[0].priceList = [];
 
 			var savePPItem = new SavePriceProductItem(testContext.appContext, testContext.sessionContext);
 			savePPItem.save(priceProductItem).then((result: PriceProductDO) => {
@@ -124,7 +124,7 @@ describe("Hotel Price Products Tests", function () {
 				should.notEqual(e.getThStatusCode(), ThStatusCode.Ok);
 				done();
 			});
-        });
+		});
 		it("Should not save price product with invalid conditions", function (done) {
 			var priceProductItem = pphelper.getDraftSavePriceProductItemDO();
 			priceProductItem.conditions.policyType = PriceProductCancellationPolicyType.CanCancelBeforeTimeOnDayOfArrival;
@@ -141,7 +141,7 @@ describe("Hotel Price Products Tests", function () {
 				should.notEqual(e.getThStatusCode(), ThStatusCode.Ok);
 				done();
 			});
-        });
+		});
 		it("Should not save price product with invalid filters", function (done) {
 			var priceProductItem = pphelper.getDraftSavePriceProductItemDO();
 			priceProductItem.yieldFilterList = pphelper.getInvalidFilterList();
@@ -153,7 +153,7 @@ describe("Hotel Price Products Tests", function () {
 				should.notEqual(e.getThStatusCode(), ThStatusCode.Ok);
 				done();
 			});
-        });
+		});
 	});
 	describe("Price Products CRUD Tests", function () {
 		it("Should save a draft price product", function (done) {
@@ -169,7 +169,7 @@ describe("Hotel Price Products Tests", function () {
 			}).catch((e: ThError) => {
 				done(e);
 			});
-        });
+		});
 		it("Should update the price product and mark it as Active", function (done) {
 			var priceProductItem = pphelper.getDraftSavePriceProductItemDO();
 			priceProductItem["id"] = addedPriceProduct.id;
@@ -185,7 +185,7 @@ describe("Hotel Price Products Tests", function () {
 			}).catch((e: ThError) => {
 				done(e);
 			});
-        });
+		});
 		it("Should get the list of Price Products", function (done) {
 			var ppRepo = testContext.appContext.getRepositoryFactory().getPriceProductRepository();
 			ppRepo.getPriceProductList({ hotelId: testContext.sessionContext.sessionDO.hotel.id }, { status: PriceProductStatus.Active })
@@ -195,8 +195,8 @@ describe("Hotel Price Products Tests", function () {
 				}).catch((e: any) => {
 					done(e);
 				});
-        });
-		it("Should update only the Yield Filters and Notes for the Active Price Product", function (done) {
+		});
+		it("Should update only the Yield Filters, Notes and Dynamic Prices for the Active Price Product", function (done) {
 			var priceProductItem = pphelper.getDraftSavePriceProductItemDO();
 			priceProductItem["id"] = addedPriceProduct.id;
 			priceProductItem.status = PriceProductStatus.Draft;
@@ -204,6 +204,7 @@ describe("Hotel Price Products Tests", function () {
 			priceProductItem.taxIdList = [];
 			priceProductItem.name = NewPriceProductName;
 			priceProductItem.notes = "Updated notes for my price product!";
+			priceProductItem.price = addedPriceProduct.price;
 
 			var savePPItem = new SavePriceProductItem(testContext.appContext, testContext.sessionContext);
 			savePPItem.save(priceProductItem).then((updatedPriceProduct: PriceProductDO) => {
@@ -219,7 +220,7 @@ describe("Hotel Price Products Tests", function () {
 			}).catch((e: ThError) => {
 				done(e);
 			});
-        });
+		});
 		it("Should attach the price product to a customer profile", function (done) {
 			var companyCustDO = custHelper.getCompanyCustomer(addedPriceProduct.id);
 
@@ -231,7 +232,7 @@ describe("Hotel Price Products Tests", function () {
 			}).catch((error: any) => {
 				done(error);
 			});
-        });
+		});
 		it("Should not archive the price product attached to a customer profile", function (done) {
 			var archivePPItem = new ArchivePriceProductItem(testContext.appContext, testContext.sessionContext);
 			archivePPItem.archive({ id: addedPriceProduct.id }).then((priceProduct: PriceProductDO) => {
@@ -240,7 +241,7 @@ describe("Hotel Price Products Tests", function () {
 				should.notEqual(e.getThStatusCode(), ThStatusCode.Ok);
 				done();
 			});
-        });
+		});
 		it("Should create an allotment with the price product", function (done) {
 			var allotmentItem = allotmentsHelper.getSaveAllotmentItemDO(addedCompanyCustomer, addedPriceProduct);
 			var saveAllotmentItem = new SaveAllotmentItem(testContext.appContext, testContext.sessionContext);
@@ -251,7 +252,7 @@ describe("Hotel Price Products Tests", function () {
 			}).catch((e: ThError) => {
 				done(e);
 			});
-        });
+		});
 		it("Should not be able to detach the price product from the customer profile if active allotment exists", function (done) {
 			var companyCustDO = addedCompanyCustomer;
 			companyCustDO.priceProductDetails.allowPublicPriceProducts = true;
@@ -263,7 +264,7 @@ describe("Hotel Price Products Tests", function () {
 				should.notEqual(e.getThStatusCode(), ThStatusCode.Ok);
 				done();
 			});
-        });
+		});
 		it("Should archive the allotment", function (done) {
 			var archiveAllotmentItem = new ArchiveAllotmentItem(testContext.appContext, testContext.sessionContext);
 			archiveAllotmentItem.archive({ id: addedAllotment.id }).then((archivedAllotment: AllotmentDO) => {
@@ -275,7 +276,7 @@ describe("Hotel Price Products Tests", function () {
 			}).catch((e: ThError) => {
 				done(e);
 			});
-        });
+		});
 		it("Should detach the price product from the customer profile", function (done) {
 			var companyCustDO = addedCompanyCustomer;
 			companyCustDO.priceProductDetails.allowPublicPriceProducts = true;
@@ -288,7 +289,7 @@ describe("Hotel Price Products Tests", function () {
 			}).catch((error: any) => {
 				done(error);
 			});
-        });
+		});
 		it("Should archive the price product", function (done) {
 			var archivePPItem = new ArchivePriceProductItem(testContext.appContext, testContext.sessionContext);
 			archivePPItem.archive({ id: addedPriceProduct.id }).then((priceProduct: PriceProductDO) => {
@@ -299,7 +300,7 @@ describe("Hotel Price Products Tests", function () {
 			}).catch((e: any) => {
 				done(e);
 			});
-        });
+		});
 		it("Should mark the archived price product as draft", function (done) {
 			var draftPPItem = new DraftPriceProductItem(testContext.appContext, testContext.sessionContext);
 			draftPPItem.draft({ id: addedPriceProduct.id }).then((priceProduct: PriceProductDO) => {
@@ -310,7 +311,7 @@ describe("Hotel Price Products Tests", function () {
 			}).catch((e: any) => {
 				done(e);
 			});
-        });
+		});
 		it("Should delete the draft price product", function (done) {
 			var deletePPItem = new DeletePriceProductItem(testContext.appContext, testContext.sessionContext);
 			deletePPItem.delete({ id: addedPriceProduct.id }).then((priceProduct: PriceProductDO) => {
@@ -321,6 +322,6 @@ describe("Hotel Price Products Tests", function () {
 			}).catch((e: any) => {
 				done(e);
 			});
-        });
+		});
 	});
 });

@@ -81,8 +81,13 @@ export class BookingUtils {
      * `roomCategoryStatsList`: the list of room category stats of the hotel; are needed because some prices depend on the room's configuration
      * `groupBookingRoomCategoryIdList`: the list of room category ids that are inside the same group booking; it needs to be passed only when the bookings are initially added to apply the min no rooms discount constraints if they exist
     */
-    public updateBookingPriceUsingRoomCategory(bookingDO: BookingDO, roomCategoryStatsList: RoomCategoryStatsDO[], groupBookingRoomCategoryIdList?: string[]) {
+    public updateBookingPriceUsingRoomCategoryAndSavePPSnapshot(bookingDO: BookingDO, roomCategoryStatsList: RoomCategoryStatsDO[],
+        priceProduct: PriceProductDO, groupBookingRoomCategoryIdList?: string[]) {
         var indexedBookingInterval = new IndexedBookingInterval(bookingDO.interval);
+
+        // update the snapshot of the price product applied on the booking
+        bookingDO.priceProductSnapshot = new PriceProductDO();
+        bookingDO.priceProductSnapshot.buildFromObject(priceProduct);
 
         var previousBookingVatId: string = null;
         if (!this._thUtils.isUndefinedOrNull(bookingDO.price) && !this._thUtils.isUndefinedOrNull(bookingDO.price.vatId) && _.isString(bookingDO.price.vatId)) {
@@ -97,7 +102,7 @@ export class BookingUtils {
         bookingDO.price.priceType = BookingPriceType.BookingStay;
 
         // get the breakdown of prices per night
-        let pricePerNightList: number[] = bookingDO.priceProductSnapshot.price.getPricePerNightBreakdownFor({
+        let pricePerDayList: PricePerDayDO[] = bookingDO.priceProductSnapshot.price.getPricePerDayBreakdownFor({
             configCapacity: bookingDO.configCapacity,
             roomCategoryId: bookingDO.roomCategoryId,
             roomCategoryStatsList: roomCategoryStatsList,
@@ -117,15 +122,15 @@ export class BookingUtils {
             roomCategoryIdListFromPriceProduct: bookingDO.priceProductSnapshot.roomCategoryIdList,
             bookingBilledCustomerId: bookingDO.defaultBillingDetails.customerId
         });
-        pricePerNightList = this.getPricePerNightListWithDiscount(pricePerNightList, discount);
+        pricePerDayList = this.getPricePerDayListWithDiscount(pricePerDayList, discount);
 
         bookingDO.price.appliedDiscountValue = discount;
-        bookingDO.price.roomPricePerNightList = PricePerDayDO.buildPricePerDayList(indexedBookingInterval.bookingDateList, pricePerNightList);
-        bookingDO.price.roomPricePerNightAvg = this._thUtils.getArrayAverage(pricePerNightList);
+        bookingDO.price.roomPricePerNightList = pricePerDayList;
+        bookingDO.price.roomPricePerNightAvg = this._thUtils.getArrayAverage(pricePerDayList);
         bookingDO.price.roomPricePerNightAvg = this._thUtils.roundNumberToTwoDecimals(bookingDO.price.roomPricePerNightAvg);
 
         bookingDO.price.numberOfNights = indexedBookingInterval.getLengthOfStay();
-        bookingDO.price.totalRoomPrice = this._thUtils.getArraySum(pricePerNightList);
+        bookingDO.price.totalRoomPrice = this._thUtils.getArraySum(pricePerDayList);
         bookingDO.price.totalRoomPrice = this._thUtils.roundNumberToTwoDecimals(bookingDO.price.totalRoomPrice);
         var includedBookingItems = this.getIncludedInvoiceItems(bookingDO.priceProductSnapshot, bookingDO.configCapacity, indexedBookingInterval);
         bookingDO.price.totalOtherPrice = includedBookingItems.getTotalPrice();
@@ -142,13 +147,20 @@ export class BookingUtils {
                 bookingDO.price.description = foundRoomCategoryStats.roomCategory.displayName;
             }
         }
+
+        // cleanup the unnecessary attributes on the PP snapshot saved on the booking - to keep the document's size relatively small
+        bookingDO.priceProductSnapshot.openForArrivalIntervalList = [];
+        bookingDO.priceProductSnapshot.openForDepartureIntervalList = [];
+        bookingDO.priceProductSnapshot.openIntervalList = [];
+        bookingDO.priceProductSnapshot.price.enabledDynamicPriceIdByDate = {};
     }
-    public getPricePerNightListWithDiscount(pricePerNightList: number[], discount: number): number[] {
-        return _.map(pricePerNightList, (pricePerNight) => {
+    public getPricePerDayListWithDiscount(pricePerDayList: PricePerDayDO[], discount: number): PricePerDayDO[] {
+        return _.map(pricePerDayList, (pricePerDay) => {
             if (discount > 0.0) {
-                pricePerNight = (1 - discount) * pricePerNight;
+                pricePerDay.price = (1 - discount) * pricePerDay.price;
             }
-            return this._thUtils.roundNumberToTwoDecimals(pricePerNight);
+            pricePerDay.price = this._thUtils.roundNumberToTwoDecimals(pricePerDay.price);
+            return pricePerDay;
         });
     }
     public getIncludedInvoiceItems(priceProduct: PriceProductDO, configCapacity: ConfigCapacityDO, indexedBookingInterval: IndexedBookingInterval): IncludedBookingItems {

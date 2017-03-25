@@ -1,5 +1,5 @@
-import {ThDateDO} from '../../../../common/data-objects/th-dates/ThDateDO';
-import {PriceProductYieldItemVM} from './PriceProductYieldItemVM';
+import { ThDateDO } from '../../../../common/data-objects/th-dates/ThDateDO';
+import { PriceProductYieldItemVM } from './PriceProductYieldItemVM';
 
 export class PriceProductYieldResultVM {
     private _dateList: ThDateDO[];

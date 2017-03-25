@@ -1,8 +1,8 @@
-import {ThUtils} from '../../../../utils/ThUtils';
-import {MongoUtils} from './MongoUtils';
-import {MongoSearchCriteria} from '../MongoRepository';
-import {IValidationStructure} from '../../../../utils/th-validation/structure/core/IValidationStructure';
-import {LazyLoadRepoDO} from '../../repo-data-objects/LazyLoadRepoDO';
+import { ThUtils } from '../../../../utils/ThUtils';
+import { MongoUtils } from './MongoUtils';
+import { MongoSearchCriteria } from '../MongoRepository';
+import { IValidationStructure } from '../../../../utils/th-validation/structure/core/IValidationStructure';
+import { LazyLoadRepoDO } from '../../repo-data-objects/LazyLoadRepoDO';
 
 import _ = require('underscore');
 import mongodb = require('mongodb');
@@ -50,7 +50,7 @@ export class MongoFindMultipleDocuments {
 	}
 	private updateCursorWithSortCriteria(mongoCursor: Cursor, sortCriteria: Object): Cursor {
 		if (this._thUtils.isUndefinedOrNull(sortCriteria) || !_.isObject(sortCriteria)) {
-			return mongoCursor;
+			return mongoCursor.sort({ "_id": -1 });
 		}
 		return mongoCursor.sort(sortCriteria);
 	}

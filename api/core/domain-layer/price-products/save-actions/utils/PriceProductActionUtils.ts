@@ -1,9 +1,10 @@
-import {PriceProductDO} from '../../../../data-layer/price-products/data-objects/PriceProductDO';
-import {ThDateIntervalDO} from '../../../../utils/th-dates/data-objects/ThDateIntervalDO';
-import {ThDateUtils} from '../../../../utils/th-dates/ThDateUtils';
-import {ThUtils} from '../../../../utils/ThUtils';
-import {AddOnProductsContainer} from '../../../add-on-products/validators/results/AddOnProductsContainer';
-import {AttachedAddOnProductItemDO} from '../../../../data-layer/price-products/data-objects/included-items/AttachedAddOnProductItemDO';
+import { PriceProductDO } from '../../../../data-layer/price-products/data-objects/PriceProductDO';
+import { ThDateIntervalDO } from '../../../../utils/th-dates/data-objects/ThDateIntervalDO';
+import { ThDateUtils } from '../../../../utils/th-dates/ThDateUtils';
+import { ThUtils } from '../../../../utils/ThUtils';
+import { AddOnProductsContainer } from '../../../add-on-products/validators/results/AddOnProductsContainer';
+import { AttachedAddOnProductItemDO } from '../../../../data-layer/price-products/data-objects/included-items/AttachedAddOnProductItemDO';
+import { DynamicPriceDO } from "../../../../data-layer/price-products/data-objects/price/DynamicPriceDO";
 
 export class PriceProductActionUtils {
 	private _thDateUtils: ThDateUtils;
@@ -14,11 +15,24 @@ export class PriceProductActionUtils {
 		this._thUtils = new ThUtils();
 	}
 
-	public populateDefaultIntervalsOn(priceProduct: PriceProductDO) {
+	/**
+	 * Sets the default yild intervals (opens for arrival/departure/stay forever)
+	 * Rounds the prices to 2 decimals 
+	 * Sets the default `enabledDynamicPriceIdByDate` for the price product's price
+	 */
+	public populateDefaultValuesOn(priceProduct: PriceProductDO) {
 		priceProduct.openIntervalList = this.getDefaultIntervals();
 		priceProduct.openForArrivalIntervalList = this.getDefaultIntervals();
 		priceProduct.openForDepartureIntervalList = this.getDefaultIntervals();
 		priceProduct.price.roundPricesToTwoDecimals();
+		priceProduct.price.enabledDynamicPriceIdByDate = {};
+	}
+
+	public populateDynamicPriceIdsOn(priceProduct: PriceProductDO) {
+		priceProduct.price.dynamicPriceList = _.map(priceProduct.price.dynamicPriceList, (dynamicPrice: DynamicPriceDO​​) => {
+			dynamicPrice.id = this.generateDynamicPriceId();
+			return dynamicPrice;
+		});
 	}
 
 	private getDefaultIntervals(): ThDateIntervalDO[] {
@@ -45,5 +59,9 @@ export class PriceProductActionUtils {
 			}
 		});
 		priceProduct.includedItems.indexedAddOnProductIdList = priceProduct.includedItems.getUniqueAddOnProductIdList();
+	}
+
+	public generateDynamicPriceId(): string {
+		return this._thUtils.generateUniqueID();
 	}
 }

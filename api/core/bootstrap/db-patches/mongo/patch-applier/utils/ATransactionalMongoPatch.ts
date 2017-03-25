@@ -1,19 +1,27 @@
 import { IMongoPatchApplier } from './IMongoPatchApplier';
 import { IMongoPatch } from './IMongoPatch';
 import { ThError } from '../../../../../utils/th-responses/ThError';
+import { ThUtils } from "../../../../../utils/ThUtils";
 import { MongoPriceProductRepository } from '../../../../../data-layer/price-products/repositories/mongo/MongoPriceProductRepository';
 import { MongoBedRepository } from '../../../../../data-layer/beds/repositories/mongo/MongoBedRepository';
 import { MongoBookingRepository } from '../../../../../data-layer/bookings/repositories/mongo/MongoBookingRepository';
 import { MongoPatchType } from '../patches/MongoPatchType';
 import { MongoHotelRepository } from "../../../../../data-layer/hotel/repositories/mongo/MongoHotelRepository";
 
+/**
+ * Extend this class when the multi update can be made with a simple MongoDB Query
+ */
 export abstract class ATransactionalMongoPatch implements IMongoPatchApplier, IMongoPatch {
+	protected _thUtils: ThUtils;
+
 	protected _priceProductRepository: MongoPriceProductRepository;
 	protected _bedRepository: MongoBedRepository;
 	protected _bookingRepository: MongoBookingRepository;
 	protected _hotelRepository: MongoHotelRepository;
 
 	constructor() {
+		this._thUtils = new ThUtils();
+
 		this._priceProductRepository = new MongoPriceProductRepository();
 		this._bedRepository = new MongoBedRepository();
 		this._bookingRepository = new MongoBookingRepository();
@@ -22,7 +30,11 @@ export abstract class ATransactionalMongoPatch implements IMongoPatchApplier, IM
 
 	public apply(): Promise<boolean> {
 		return new Promise<boolean>((resolve, reject) => {
-			this.applyCore(resolve, reject);
+			try {
+				this.applyCore(resolve, reject);
+			} catch (e) {
+				reject(e);
+			}
 		});
 	}
 	public abstract getPatchType(): MongoPatchType;

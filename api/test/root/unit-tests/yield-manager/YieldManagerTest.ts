@@ -4,23 +4,25 @@ import supertest = require('supertest');
 import _ = require("underscore");
 import async = require("async");
 
-import {TestContext} from '../../../helpers/TestContext';
-import {DefaultDataBuilder} from '../../../db-initializers/DefaultDataBuilder';
-import {ThDateDO, ThMonth} from '../../../../core/utils/th-dates/data-objects/ThDateDO';
-import {ThTimestampDO} from '../../../../core/utils/th-dates/data-objects/ThTimestampDO';
-import {ThDateIntervalDO} from '../../../../core/utils/th-dates/data-objects/ThDateIntervalDO';
-import {ThDateIntervalUtils} from '../../../../core/utils/th-dates/ThDateIntervalUtils';
-import {ThDateUtils} from '../../../../core/utils/th-dates/ThDateUtils';
-import {PriceProductDO} from '../../../../core/data-layer/price-products/data-objects/PriceProductDO';
-import {PriceProductYielding} from '../../../../core/domain-layer/yield-manager/price-product-yielding/PriceProductYielding';
-import {PriceProductYieldingDO, PriceProductYieldAction} from '../../../../core/domain-layer/yield-manager/price-product-yielding/PriceProductYieldingDO';
-import {PriceProductReader} from '../../../../core/domain-layer/yield-manager/price-product-reader/PriceProductReader';
-import {YieldManagerPeriodDO} from '../../../../core/domain-layer/yield-manager/utils/YieldManagerPeriodDO';
-import {PriceProductYieldResult, PriceProductYieldItem, YieldItemStateType, YieldItemState} from '../../../../core/domain-layer/yield-manager/price-product-reader/utils/PriceProductYieldItem';
-import {HotelInventorySnapshotProcess, InventorySnapshotProcessResult, InventorySnapshotType} from '../../../../core/domain-layer/hotel-inventory-snapshots/processes/HotelInventorySnapshotProcess';
-import {HotelInventorySnapshotDO} from '../../../../core/data-layer/hotel-inventory-snapshots/data-objects/HotelInventorySnapshotDO';
-import {KeyMetricReader} from '../../../../core/domain-layer/yield-manager/key-metrics/KeyMetricReader';
-import {KeyMetricsResult, KeyMetric} from '../../../../core/domain-layer/yield-manager/key-metrics/utils/KeyMetricsResult';
+import { TestContext } from '../../../helpers/TestContext';
+import { DefaultDataBuilder } from '../../../db-initializers/DefaultDataBuilder';
+import { ThDateDO, ThMonth } from '../../../../core/utils/th-dates/data-objects/ThDateDO';
+import { ThTimestampDO } from '../../../../core/utils/th-dates/data-objects/ThTimestampDO';
+import { ThDateIntervalDO } from '../../../../core/utils/th-dates/data-objects/ThDateIntervalDO';
+import { ThDateIntervalUtils } from '../../../../core/utils/th-dates/ThDateIntervalUtils';
+import { ThDateUtils } from '../../../../core/utils/th-dates/ThDateUtils';
+import { PriceProductDO } from '../../../../core/data-layer/price-products/data-objects/PriceProductDO';
+import { PriceProductYielding } from '../../../../core/domain-layer/yield-manager/price-product-yielding/PriceProductYielding';
+import { PriceProductYieldingDO, PriceProductYieldAction } from '../../../../core/domain-layer/yield-manager/price-product-yielding/PriceProductYieldingDO';
+import { PriceProductReader } from '../../../../core/domain-layer/yield-manager/price-product-reader/PriceProductReader';
+import { YieldManagerPeriodDO } from '../../../../core/domain-layer/yield-manager/utils/YieldManagerPeriodDO';
+import { PriceProductYieldResult, PriceProductYieldItem, YieldItemStateType, YieldItemState } from '../../../../core/domain-layer/yield-manager/price-product-reader/utils/PriceProductYieldItem';
+import { HotelInventorySnapshotProcess, InventorySnapshotProcessResult, InventorySnapshotType } from '../../../../core/domain-layer/hotel-inventory-snapshots/processes/HotelInventorySnapshotProcess';
+import { HotelInventorySnapshotDO } from '../../../../core/data-layer/hotel-inventory-snapshots/data-objects/HotelInventorySnapshotDO';
+import { KeyMetricReader } from '../../../../core/domain-layer/yield-manager/key-metrics/KeyMetricReader';
+import { KeyMetricsResult, KeyMetric } from '../../../../core/domain-layer/yield-manager/key-metrics/utils/KeyMetricsResult';
+import { DynamicPriceYielding } from "../../../../core/domain-layer/yield-manager/dynamic-price-yielding/DynamicPriceYielding";
+import { DynamicPriceYieldingDO } from "../../../../core/domain-layer/yield-manager/dynamic-price-yielding/DynamicPriceYieldingDO";
 
 function testPriceProductOpenInterval(priceProduct: PriceProductDO, firstIntervalEnd: ThDateDO, secondIntervalStart: ThDateDO) {
 	should.equal(priceProduct.openIntervalList.length >= 2, true);
@@ -33,7 +35,7 @@ function testPriceProductOpenInterval(priceProduct: PriceProductDO, firstInterva
 }
 
 describe("Price Products Interval Tests", function () {
-    var testContext: TestContext;
+	var testContext: TestContext;
 	var thDateUtils: ThDateUtils;
 	var testDataBuilder: DefaultDataBuilder;
 
@@ -45,10 +47,10 @@ describe("Price Products Interval Tests", function () {
 		testDataBuilder = new DefaultDataBuilder(testContext);
 		thDateUtils = new ThDateUtils();
 		testDataBuilder.buildWithDoneCallback(done);
-    });
+	});
 
 	describe("DayInYear Merge Tests", function () {
-        it("Should merge into one interval", function (done) {
+		it("Should merge into one interval", function (done) {
 
 			var intervalList: ThDateIntervalDO[] = [
 				ThDateIntervalDO.buildThDateIntervalDO(
@@ -82,7 +84,7 @@ describe("Price Products Interval Tests", function () {
 			should.equal(mergedList[0].getEnd().year, 2016);
 
 			done();
-        });
+		});
 
 		it("Should add one interval and merge", function (done) {
 			var intervalList: ThDateIntervalDO[] = [
@@ -110,7 +112,7 @@ describe("Price Products Interval Tests", function () {
 			should.equal(mergedList[0].getEnd().month, ThMonth.May);
 
 			done();
-        });
+		});
 
 
 		it("Should not substract interval", function (done) {
@@ -134,7 +136,7 @@ describe("Price Products Interval Tests", function () {
 			should.equal(mergedList[0].getEnd().month, ThMonth.March);
 
 			done();
-        });
+		});
 
 		it("Should not substract interval", function (done) {
 			var intervalList: ThDateIntervalDO[] = [
@@ -157,7 +159,7 @@ describe("Price Products Interval Tests", function () {
 			should.equal(mergedList[0].getEnd().month, ThMonth.March);
 
 			done();
-        });
+		});
 
 		it("Should substract all active intervals", function (done) {
 			var intervalList: ThDateIntervalDO[] = [
@@ -176,7 +178,7 @@ describe("Price Products Interval Tests", function () {
 			should.equal(mergedList.length, 0);
 
 			done();
-        });
+		});
 
 		it("Should split the interval into two subintervals", function (done) {
 			var minDate = thDateUtils.getMinThDateDO();
@@ -260,7 +262,7 @@ describe("Price Products Interval Tests", function () {
 			done();
 		});
 
-    });
+	});
 
 	describe("Yield Management Tests", function () {
 		it("Should close price products from 1 Jan to 1 Jan (only one day)", function (done) {
@@ -282,7 +284,7 @@ describe("Price Products Interval Tests", function () {
 			}).catch((error: any) => {
 				done(error);
 			});
-        });
+		});
 		it("Should close for arrival price products forever", function (done) {
 			var yieldData: PriceProductYieldingDO = <any>{
 				priceProductIdList: _.map(testDataBuilder.priceProductList, (priceProduct: PriceProductDO) => { return priceProduct.id }),
@@ -298,7 +300,7 @@ describe("Price Products Interval Tests", function () {
 			}).catch((error: any) => {
 				done(error);
 			});
-        });
+		});
 		it("Should read the Yielded values of the Price Products", function (done) {
 			var yieldPeriodDO = new YieldManagerPeriodDO();
 			yieldPeriodDO.referenceDate = ThDateDO.buildThDateDO(2015, ThMonth.December, 31);
@@ -325,12 +327,29 @@ describe("Price Products Interval Tests", function () {
 					should.equal(yieldItem.stateList[0].openForDeparture, YieldItemStateType.Open);
 					should.equal(yieldItem.stateList[1].openForDeparture, YieldItemStateType.Open);
 					should.equal(yieldItem.stateList[2].openForDeparture, YieldItemStateType.Open);
+
+					should.equal(yieldItem.dynamicPriceList.length >= 1, true);
+					yieldItem.dynamicPriceList.forEach((dynamicPrice, index) => {
+						should.equal(dynamicPrice.openList.length, 3);
+						should.equal(dynamicPrice.dynamicPriceId.length > 1, true);
+						should.equal(dynamicPrice.name.length > 1, true);
+						should.equal(dynamicPrice.priceBriefString.length > 1, true);
+						should.equal(dynamicPrice.roomCategoryNameForPriceBrief.length > 1, true);
+						dynamicPrice.openList.forEach(open => {
+							if (index == 0) {
+								should.equal(open, YieldItemStateType.Open);
+							}
+							else {
+								should.equal(open, YieldItemStateType.Closed);
+							}
+						});
+					});
 				});
 				done();
 			}).catch((error: any) => {
 				done(error);
 			});
-        });
+		});
 		it("Should open the price products on the previously closed day", function (done) {
 			var yieldData: PriceProductYieldingDO = {
 				priceProductIdList: _.map(testDataBuilder.priceProductList, (priceProduct: PriceProductDO) => { return priceProduct.id }),
@@ -350,7 +369,7 @@ describe("Price Products Interval Tests", function () {
 			}).catch((error: any) => {
 				done(error);
 			});
-        });
+		});
 		it("Should read the Yielded values of the Price Products", function (done) {
 			var yieldPeriodDO = new YieldManagerPeriodDO();
 			yieldPeriodDO.referenceDate = ThDateDO.buildThDateDO(2015, ThMonth.December, 31);
@@ -377,12 +396,96 @@ describe("Price Products Interval Tests", function () {
 					should.equal(yieldItem.stateList[0].openForDeparture, YieldItemStateType.Open);
 					should.equal(yieldItem.stateList[1].openForDeparture, YieldItemStateType.Open);
 					should.equal(yieldItem.stateList[2].openForDeparture, YieldItemStateType.Open);
+
+					should.equal(yieldItem.dynamicPriceList.length >= 1, true);
+					yieldItem.dynamicPriceList.forEach((dynamicPrice, index) => {
+						should.equal(dynamicPrice.openList.length, 3);
+						should.equal(dynamicPrice.dynamicPriceId.length > 1, true);
+						should.equal(dynamicPrice.name.length > 1, true);
+						should.equal(dynamicPrice.priceBriefString.length > 1, true);
+						should.equal(dynamicPrice.roomCategoryNameForPriceBrief.length > 1, true);
+						dynamicPrice.openList.forEach(open => {
+							if (index == 0) {
+								should.equal(open, YieldItemStateType.Open);
+							}
+							else {
+								should.equal(open, YieldItemStateType.Closed);
+							}
+						});
+					});
 				});
 				done();
 			}).catch((error: any) => {
 				done(error);
 			});
-        });
+		});
+
+		it("Should not yield a dynamic price for price product with an invalid dynamic price id", function (done) {
+			let priceProduct = _.find(testDataBuilder.priceProductList, priceProduct => { return priceProduct.price.dynamicPriceList.length > 1 });
+
+			let yieldData = new DynamicPriceYieldingDO();
+			yieldData.dynamicPriceId = "1452643156416";
+			yieldData.priceProductId = priceProduct.id;
+			let date = ThDateDO.buildThDateDO(2017, ThMonth.March, 22);
+			yieldData.interval = ThDateIntervalDO.buildThDateIntervalDO(date, date);
+
+			let ddYield = new DynamicPriceYielding(testContext.appContext, testContext.sessionContext);
+			ddYield.open(yieldData).then(updatedPriceProduct => {
+				done("Managed to yield a price product with an invalid dynamic price id");
+			}).catch(e => {
+				done();
+			});
+		});
+
+		it("Should yield some dynamic rates and test whether they are enabled/disabled correspondingly", function (done) {
+			let priceProduct = _.find(testDataBuilder.priceProductList, priceProduct => { return priceProduct.price.dynamicPriceList.length > 1 });
+			let defaultPrice = priceProduct.price.dynamicPriceList[0];
+			let dynamicPrice = priceProduct.price.dynamicPriceList[1];
+
+			let beforeDate = ThDateDO.buildThDateDO(2017, ThMonth.March, 21);
+			let date1 = ThDateDO.buildThDateDO(2017, ThMonth.March, 22);
+			let date2 = ThDateDO.buildThDateDO(2017, ThMonth.March, 23);
+			let afterDate = ThDateDO.buildThDateDO(2017, ThMonth.March, 24);
+
+			should.equal(Object.keys(priceProduct.price.enabledDynamicPriceIdByDate).length, 0);
+
+			let yieldData = new DynamicPriceYieldingDO();
+			yieldData.dynamicPriceId = dynamicPrice.id;
+			yieldData.priceProductId = priceProduct.id;
+			yieldData.interval = ThDateIntervalDO.buildThDateIntervalDO(date1, date2);
+
+			let ddYield = new DynamicPriceYielding(testContext.appContext, testContext.sessionContext);
+			ddYield.open(yieldData).then(updatedPriceProduct => {
+				should.equal(updatedPriceProduct.id, priceProduct.id);
+				priceProduct = updatedPriceProduct;
+
+				should.equal(Object.keys(priceProduct.price.enabledDynamicPriceIdByDate).length, 2);
+
+				should.equal(priceProduct.price.getEnabledDynamicPriceForDate(beforeDate).id, defaultPrice.id);
+				should.equal(priceProduct.price.getEnabledDynamicPriceForDate(date1).id, dynamicPrice.id);
+				should.equal(priceProduct.price.getEnabledDynamicPriceForDate(date2).id, dynamicPrice.id);
+				should.equal(priceProduct.price.getEnabledDynamicPriceForDate(afterDate).id, defaultPrice.id);
+
+				yieldData.interval = ThDateIntervalDO.buildThDateIntervalDO(date2, date2);
+				yieldData.dynamicPriceId = defaultPrice.id;
+
+				return ddYield.open(yieldData);
+			}).then(updatedPriceProduct => {
+				should.equal(updatedPriceProduct.id, priceProduct.id);
+				priceProduct = updatedPriceProduct;
+
+				should.equal(Object.keys(priceProduct.price.enabledDynamicPriceIdByDate).length, 1);
+
+				should.equal(priceProduct.price.getEnabledDynamicPriceForDate(beforeDate).id, defaultPrice.id);
+				should.equal(priceProduct.price.getEnabledDynamicPriceForDate(date1).id, dynamicPrice.id);
+				should.equal(priceProduct.price.getEnabledDynamicPriceForDate(date2).id, defaultPrice.id);
+				should.equal(priceProduct.price.getEnabledDynamicPriceForDate(afterDate).id, defaultPrice.id);
+
+				done();
+			}).catch(e => {
+				done(e);
+			});
+		});
 	});
 
 	describe("Yield Management Stress Test", function () {
@@ -417,7 +520,7 @@ describe("Price Products Interval Tests", function () {
 					done(err);
 				})
 			);
-        });
+		});
 	});
 
 	describe("Inventory Snapshot Process Tests", function () {

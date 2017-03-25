@@ -1,17 +1,22 @@
 import { MongoPatchType } from "../MongoPatchType";
-import { ABookingGroupTransactionalMongoPatch } from "../../utils/ABookingGroupTransactionalMongoPatch";
 import { ThUtils } from "../../../../../../utils/ThUtils";
+import { APaginatedTransactionalMongoPatch } from "../../utils/APaginatedTransactionalMongoPatch";
+import { MongoRepository } from "../../../../../../data-layer/common/base/MongoRepository";
 import { PriceProductPriceType } from "../../../../../../data-layer/price-products/data-objects/price/IPriceProductPrice";
 
 import _ = require('underscore');
 
-export class P8_SetValueForFirstChildWithAdultInSharedBedPriceOnBookingsPriceProductSnapshots extends ABookingGroupTransactionalMongoPatch {
+export class P8_SetValueForFirstChildWithAdultInSharedBedPriceOnBookingsPriceProductSnapshots extends APaginatedTransactionalMongoPatch {
 
     public getPatchType(): MongoPatchType {
         return MongoPatchType.SetValueForFirstChildWithAdultInSharedBedPriceOnBookingsPriceProductSnapshots;
     }
 
-    protected updateBookingGroupInMemory(bookingGroup) {
+    protected getMongoRepository(): MongoRepository {
+        return this._bookingRepository;
+    }
+
+    protected updateDocumentInMemory(bookingGroup) {
         var thUtils = new ThUtils();
 
         bookingGroup.bookingList.forEach(booking => {

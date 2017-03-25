@@ -33,4 +33,8 @@ export class SinglePriceDO extends BaseDO implements IPriceProductPrice {
 	public copyPricesFrom(otherPrice: SinglePriceDO) {
 		this.price = otherPrice.price;
 	}
+
+	public resetPrices() {
+		this.price = null;
+	}
 }

@@ -99,6 +99,7 @@ export enum ThServerApi {
 	InvoiceGroupsSaveItem,
 
 	YieldManagerYieldPriceProducts,
+	YieldManagerOpenDynamicPrice,
 	YieldManagerYieldGetPriceProductItems,
 	YieldManagerGetKeyMetrics,
 
@@ -209,9 +210,7 @@ ThServerApiUrl[ThServerApi.InvoiceGroupItem] = "/invoiceGroups/invoiceGroupItem"
 ThServerApiUrl[ThServerApi.InvoiceGroupsSaveItem] = "/invoiceGroups/saveInvoicegroupItem";
 
 ThServerApiUrl[ThServerApi.YieldManagerYieldPriceProducts] = "/yieldManager/yieldPriceProducts";
-ThServerApiUrl[ThServerApi.YieldManagerYieldGetPriceProductItems] = "/yieldManager/getPriceProductYieldItems";
-ThServerApiUrl[ThServerApi.YieldManagerGetKeyMetrics] = "/yieldManager/getKeyMetrics";
-
+ThServerApiUrl[ThServerApi.YieldManagerOpenDynamicPrice] = "/yieldManager/openDynamicPrice";
 ThServerApiUrl[ThServerApi.YieldManagerYieldGetPriceProductItems] = "/yieldManager/getPriceProductYieldItems";
 ThServerApiUrl[ThServerApi.YieldManagerGetKeyMetrics] = "/yieldManager/getKeyMetrics";
 

@@ -5,38 +5,83 @@ import { PriceProductVM } from '../../../../../../../../../services/price-produc
 import { RoomCategoryStatsDO } from '../../../../../../../../../services/room-categories/data-objects/RoomCategoryStatsDO';
 import { RoomCategoryDO } from '../../../../../../../../../services/room-categories/data-objects/RoomCategoryDO';
 import { PriceVM } from './PriceVM';
+import { DynamicPriceDO } from "../../../../../../../../../services/price-products/data-objects/price/DynamicPriceDO";
+import { PricePerPersonDO } from "../../../../../../../../../services/price-products/data-objects/price/price-per-person/PricePerPersonDO";
+import { SinglePriceDO } from "../../../../../../../../../services/price-products/data-objects/price/single-price/SinglePriceDO";
+import { AppContext } from "../../../../../../../../../../../common/utils/AppContext";
+import { ThUtils } from "../../../../../../../../../../../common/utils/ThUtils";
 
-export class PriceContainer {
+export class DynamicPriceVM {
+    private _thUtils: ThUtils;
+
+    private _dynamicPriceDO: DynamicPriceDO;
     private _priceVMList: PriceVM[];
+    private _selected: boolean;
 
-    constructor(private _priceType: PriceProductPriceType) {
+    constructor(
+        private _priceType: PriceProductPriceType) {
+        this._thUtils = new ThUtils();
+        this._dynamicPriceDO = new DynamicPriceDO(this._priceType);
         this._priceVMList = [];
     }
 
+    public get name(): string {
+        return this._dynamicPriceDO.name;
+    }
+    public set name(name: string) {
+        this._dynamicPriceDO.name = name;
+    }
+    public get description(): string {
+        return this._dynamicPriceDO.description;
+    }
+    public set description(description: string) {
+        this._dynamicPriceDO.description = description;
+    }
     public get priceVMList(): PriceVM[] {
         return this._priceVMList;
     }
     public set priceVMList(priceVMList: PriceVM[]) {
         this._priceVMList = priceVMList;
     }
+    public get selected(): boolean {
+        return this._selected;
+    }
+    public set selected(selected: boolean) {
+        this._selected = selected;
+    }
+    public get dynamicPriceDO(): DynamicPriceDO {
+        return this._dynamicPriceDO;
+    }
+    
+    public editOnPricesAndExceptionsIsAllowed(readonly: boolean): boolean {
+        if(readonly && !this._thUtils.isUndefinedOrNull(this.dynamicPriceDO.id)) {
+            return false;
+        }
+        return true;
+    }
 
-    public initializeFrom(price: PriceProductPriceDO) {
-        if (price.type !== this._priceType) {
+    public initializeFrom(dynamicPriceDO: DynamicPriceDO) {
+        this._dynamicPriceDO = dynamicPriceDO;
+        this._selected = false;
+
+        if (dynamicPriceDO.type !== this._priceType) {
             this._priceVMList = [];
             return;
         }
         let newPriceVMList: PriceVM[] = [];
-        _.forEach(price.priceList, (innerPrice: IPriceProductPrice) => {
+        
+        _.forEach(dynamicPriceDO.priceList, (innerPrice: IPriceProductPrice) => {
             let priceVM = new PriceVM(this._priceType);
             priceVM.roomCategoryStats = new RoomCategoryStatsDO();
             priceVM.roomCategoryStats.roomCategory = new RoomCategoryDO();
             priceVM.roomCategoryStats.roomCategory.id = innerPrice.getRoomCategoryId();
             priceVM.price = innerPrice;
 
-            let filteredPriceExceptionList: PriceExceptionDO[] = price.getFilteredExceptionsByRoomCategoryId(innerPrice.getRoomCategoryId());
+            let filteredPriceExceptionList: PriceExceptionDO[] = dynamicPriceDO.getFilteredExceptionsByRoomCategoryId(innerPrice.getRoomCategoryId());
             _.forEach(filteredPriceExceptionList, (exp: PriceExceptionDO) => {
                 priceVM.priceExceptionsByWeekday[exp.dayFromWeek] = exp.price;
             });
+            
             priceVM.indexExceptions();
             newPriceVMList.push(priceVM);
         });
@@ -85,13 +130,22 @@ export class PriceContainer {
     }
 
     public updatePricesOn(priceProductVM: PriceProductVM) {
-        priceProductVM.priceProduct.price.type = this._priceType;
-        priceProductVM.priceProduct.price.priceList = [];
-        priceProductVM.priceProduct.price.priceExceptionList = [];
+        let dynamicPrice: DynamicPriceDO = priceProductVM.priceProduct.price.getDynamicPriceById(this._dynamicPriceDO.id);
+        if(this._thUtils.isUndefinedOrNull(dynamicPrice)) {
+            dynamicPrice = new DynamicPriceDO(this._dynamicPriceDO.type);
+            dynamicPrice.name = this._dynamicPriceDO.name;
+            dynamicPrice.description = this._dynamicPriceDO.description;
+        }
+
+        dynamicPrice.priceList = [];
+        dynamicPrice.priceExceptionList = [];
         _.forEach(this._priceVMList, priceVM => {
-            priceProductVM.priceProduct.price.priceList.push(priceVM.price);
-            priceProductVM.priceProduct.price.priceExceptionList = priceProductVM.priceProduct.price.priceExceptionList.concat(priceVM.exceptionList);
+            dynamicPrice.priceList.push(priceVM.price);
+            dynamicPrice.priceExceptionList = dynamicPrice.priceExceptionList.concat(priceVM.exceptionList);
         });
+        if(this._thUtils.isUndefinedOrNull(dynamicPrice.id)) {
+            priceProductVM.priceProduct.price.dynamicPriceList.push(dynamicPrice);
+        }
     }
 
     public copyPrices(sourceRoomCategoryId: string, destinationRoomCategoryId: string) {
@@ -103,5 +157,24 @@ export class PriceContainer {
         var sourcePriceDO = sourcePriceVM.price;
         var destPriceDO = destPriceVM.price;
         destPriceDO.copyPricesFrom(sourcePriceDO);
+    }
+
+    public resetPrices() {
+        _.forEach(this._priceVMList, (priceVM: PriceVM) => {
+            priceVM.price.resetPrices();
+        });
+    }
+
+    public buildPrototype(): DynamicPriceVM {
+        let dynamicPriceCopy: DynamicPriceVM = new DynamicPriceVM(this._priceType);
+        dynamicPriceCopy.name = this.name;
+        dynamicPriceCopy.description = this.description;
+        dynamicPriceCopy.priceVMList = [];
+
+        _.forEach(this.priceVMList, (priceVM: PriceVM) => {
+            dynamicPriceCopy.priceVMList.push(priceVM.buildPrototype());
+        })
+        
+        return dynamicPriceCopy;
     }
 }

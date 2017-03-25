@@ -123,4 +123,15 @@ export class PricePerPersonDO extends BaseDO implements IPriceProductPrice {
 			}
 		});
 	}
+	public resetPrices() {
+		let resetValue = null;
+		this.adultsPriceList.forEach((destAdultPrice: PriceForFixedNumberOfPersonsDO) => {
+			destAdultPrice.price = resetValue;
+		});
+		this.firstChildWithoutAdultPrice = resetValue;
+		this.firstChildWithAdultInSharedBedPrice = resetValue;
+		this.childrenPriceList.forEach((destChildPrice: PriceForFixedNumberOfPersonsDO) => {
+			destChildPrice.price = resetValue;
+		});
+	}
 }

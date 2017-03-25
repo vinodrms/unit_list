@@ -1,14 +1,14 @@
-import {UnitPalConfig} from '../utils/environment/UnitPalConfig';
-import {ServiceBootstrapFactory} from '../services/ServiceBootstrapFactory';
-import {DBPatchesFactory} from './db-patches/DBPatchesFactory';
-import {IDBPatch} from './db-patches/IDBPatch';
-import {LogInitializerFactory} from './logs/LogInitializerFactory';
-import {ILogInitializer} from './logs/ILogInitializer';
-import {ThLogger, ThLogLevel} from '../utils/logging/ThLogger';
-import {ThError} from '../utils/th-responses/ThError';
-import {ThStatusCode} from '../utils/th-responses/ThResponse';
-import {CronJobInitializer} from '../cron-jobs/CronJobInitializer';
-import {SocketsInitializer} from './sockets/SocketsInitializer';
+import { UnitPalConfig } from '../utils/environment/UnitPalConfig';
+import { ServiceBootstrapFactory } from '../services/ServiceBootstrapFactory';
+import { DBPatchesFactory } from './db-patches/DBPatchesFactory';
+import { IDBPatch } from './db-patches/IDBPatch';
+import { LogInitializerFactory } from './logs/LogInitializerFactory';
+import { ILogInitializer } from './logs/ILogInitializer';
+import { ThLogger, ThLogLevel } from '../utils/logging/ThLogger';
+import { ThError } from '../utils/th-responses/ThError';
+import { ThStatusCode } from '../utils/th-responses/ThResponse';
+import { CronJobInitializer } from '../cron-jobs/CronJobInitializer';
+import { SocketsInitializer } from './sockets/SocketsInitializer';
 
 export class UnitPalBootstrap {
 	private _unitPalConfig: UnitPalConfig;
@@ -23,6 +23,7 @@ export class UnitPalBootstrap {
 		this.initializeSockets();
 		this.initializeDatabase(endCallback);
 		this.initializeCronJobs();
+		this.logDefaultClientSessionIfNecessary();
 	}
 	private initializeLogger() {
 		try {
@@ -66,5 +67,10 @@ export class UnitPalBootstrap {
 	private initializeSockets() {
 		var socketsInitializer = new SocketsInitializer();
 		socketsInitializer.register();
+	}
+	private logDefaultClientSessionIfNecessary() {
+		if (this._unitPalConfig.defaultClientSessionIsEnabled()) {
+			sails.log.warn("!!!! THE DEFAULT CLIENT SESSION IS ENABLED !!!! Each client request without a session will be attached to the default hotel & user from the database.");
+		}
 	}
 }

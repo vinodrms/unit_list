@@ -44,4 +44,7 @@ export class SinglePriceDO extends BaseDO implements IPriceProductPrice {
 		var thUtils = new ThUtils();
 		this.price = thUtils.roundNumberToTwoDecimals(this.price);
 	}
+	public getPriceBriefString(): string {
+		return this.price + "";
+	}
 }

@@ -1,19 +1,22 @@
 import { MongoPatchType } from "../MongoPatchType";
-import { ABookingGroupTransactionalMongoPatch } from "../../utils/ABookingGroupTransactionalMongoPatch";
+import { MongoRepository } from "../../../../../../data-layer/common/base/MongoRepository";
+import { APaginatedTransactionalMongoPatch } from "../../utils/APaginatedTransactionalMongoPatch";
 import { ThUtils } from "../../../../../../utils/ThUtils";
 
-export class P7_AddCustomerIdDisplayedAsGuestOnDefaultBillingDetails extends ABookingGroupTransactionalMongoPatch {
+export class P7_AddCustomerIdDisplayedAsGuestOnDefaultBillingDetails extends APaginatedTransactionalMongoPatch {
 
     public getPatchType(): MongoPatchType {
         return MongoPatchType.AddCustomerIdDisplayedAsGuestOnDefaultBillingDetails;
     }
 
-    protected updateBookingGroupInMemory(bookingGroup) {
-        var thUtils = new ThUtils();
+    protected getMongoRepository(): MongoRepository {
+        return this._bookingRepository;
+    }
 
+    protected updateDocumentInMemory(bookingGroup) {
         bookingGroup.bookingList.forEach(booking => {
-            if (!thUtils.isUndefinedOrNull(booking.defaultBillingDetails)
-                && thUtils.isUndefinedOrNull(booking.defaultBillingDetails.customerIdDisplayedAsGuest)) {
+            if (!this._thUtils.isUndefinedOrNull(booking.defaultBillingDetails)
+                && this._thUtils.isUndefinedOrNull(booking.defaultBillingDetails.customerIdDisplayedAsGuest)) {
                 booking.defaultBillingDetails.customerIdDisplayedAsGuest =
                     booking.defaultBillingDetails.customerId;
             }

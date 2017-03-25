@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/combineLatest';
 import { ThDateDO } from '../../../../../../../../services/common/data-objects/th-dates/ThDateDO';
@@ -19,12 +19,20 @@ import { ThDateIntervalDO } from '../../../../../../../../services/common/data-o
 import { YieldFilterType } from '../../../../../../../../services/common/data-objects/yield-filter/YieldFilterDO';
 import { IFilterSelection } from '../../common/interfaces/IFilterSelection';
 import { IFilterVM } from '../../../../../../../../services/yield-manager/dashboard/filter/view-models/IFilterVM';
+import { YieldItemStateType } from "../../../../../../../../services/yield-manager/dashboard/price-products/data-objects/YieldItemStateDO";
+import { DynamicPriceYieldItemDO } from "../../../../../../../../services/yield-manager/dashboard/price-products/data-objects/DynamicPriceYieldItemDO";
+import { HotelAggregatedInfo } from "../../../../../../../../services/hotel/utils/HotelAggregatedInfo";
+import { HotelAggregatorService } from "../../../../../../../../services/hotel/HotelAggregatorService";
+import { YieldDynamicPriceModalService } from "./yield-dynamic-price-modal/services/YieldDynamicPriceModalService";
+import { ModalDialogRef } from "../../../../../../../../../../common/utils/modals/utils/ModalDialogRef";
+import { PriceProductDO } from "../../../../../../../../services/price-products/data-objects/PriceProductDO";
 
 @Component({
 	selector: 'yield-price-products',
-	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/yield-manager/dashboard/components/yield-price-products/template/yield-price-products.html'
+	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/yield-manager/dashboard/components/yield-price-products/template/yield-price-products.html',
+	providers: [YieldDynamicPriceModalService]
 })
-export class YieldPriceProductsComponent implements OnInit {
+export class YieldPriceProductsComponent {
 	@ViewChild(YieldActionsPanelComponent) actionsPanelComponent: YieldActionsPanelComponent;
 
 	private _yieldManager: IYieldManagerDashboardPriceProducts;
@@ -37,11 +45,15 @@ export class YieldPriceProductsComponent implements OnInit {
 	private selectAllItemsFlag: boolean;
 	private itemsSelectionState = null;
 	private isYielding: boolean = false;
+	private ccyNativeSymbol = '';
+	private expandedPriceProductIds: { [id: string]: boolean };
 
 	constructor(
-		private _priceProductsService: YieldManagerDashboardPriceProductsService,
+		private _appContext: AppContext,
+		private _yieldPriceProductsService: YieldManagerDashboardPriceProductsService,
 		private _filterService: YieldManagerDashboardFilterService,
-		private _appContext: AppContext
+		private _hotelAggregatorService: HotelAggregatorService,
+		private _yieldDynamicPriceModal: YieldDynamicPriceModalService
 	) {
 		this.selectAllItemsFlag = false;
 		this.selectedFilters = {
@@ -49,29 +61,29 @@ export class YieldPriceProductsComponent implements OnInit {
 			textFilter: null,
 			searchText: null
 		}
-	}
-
-	ngOnInit() {
+		this.expandedPriceProductIds = {};
 	}
 
 	public refreshTable(date: ThDateDO, noDays: number) {
 		if (this.priceProductResults) {
-			this._priceProductsService.refresh({ referenceDate: date, noDays: noDays });
+			this._yieldPriceProductsService.refresh({ referenceDate: date, noDays: noDays });
 		}
 		else {
-		Observable.combineLatest(
-			this._priceProductsService.getPriceProducts({ referenceDate: date, noDays: noDays }),
-			this._filterService.getColorFilterCollections(),
-			this._filterService.getTextFilterCollections()
-		).subscribe((results: [PriceProductYieldResultVM, FilterVMCollection<ColorFilterVM>[], FilterVMCollection<TextFilterVM>[]]) => {
-			this.priceProductResults = results[0];
-			this.yieldColorFilterCollection = results[1][0];
-			this.yieldTextFilterCollection = results[2][0];
-			
-			this.initializeItemSelectionStateDictionary();
-			this.updateFilteredPriceProducts();
-		});
-			this._priceProductsService.getPriceProducts({ referenceDate: date, noDays: noDays }).subscribe((results: PriceProductYieldResultVM) => {
+			Observable.combineLatest(
+				this._yieldPriceProductsService.getPriceProducts({ referenceDate: date, noDays: noDays }),
+				this._filterService.getColorFilterCollections(),
+				this._filterService.getTextFilterCollections(),
+				this._hotelAggregatorService.getHotelAggregatedInfo()
+			).subscribe((results: [PriceProductYieldResultVM, FilterVMCollection<ColorFilterVM>[], FilterVMCollection<TextFilterVM>[], HotelAggregatedInfo]) => {
+				this.priceProductResults = results[0];
+				this.yieldColorFilterCollection = results[1][0];
+				this.yieldTextFilterCollection = results[2][0];
+				this.ccyNativeSymbol = results[3].ccy.nativeSymbol;
+
+				this.initializeItemSelectionStateDictionary();
+				this.updateFilteredPriceProducts();
+			});
+			this._yieldPriceProductsService.getPriceProducts({ referenceDate: date, noDays: noDays }).subscribe((results: PriceProductYieldResultVM) => {
 				this.priceProductResults = results;
 				this.initializeItemSelectionStateDictionary();
 				this.updateFilteredPriceProducts();
@@ -149,12 +161,12 @@ export class YieldPriceProductsComponent implements OnInit {
 		});
 		filterOrderMap[textFilterId][nullKey] = ++count;
 
-		ppList.sort((a : PriceProductYieldItemVM, b: PriceProductYieldItemVM) => {
+		ppList.sort((a: PriceProductYieldItemVM, b: PriceProductYieldItemVM) => {
 			var aColorValueId = a.colorFilterList.length > 0 ? a.colorFilterList[0].valueId : null;
 			var aTextValueId = a.textFilterList.length > 0 ? a.textFilterList[0].valueId : null;
 			var bColorValueId = b.colorFilterList.length > 0 ? b.colorFilterList[0].valueId : null;
 			var bTextValueId = b.textFilterList.length > 0 ? b.textFilterList[0].valueId : null;
-			
+
 			var aPriority = filterOrderMap[colorFilterId][aColorValueId] + filterOrderMap[textFilterId][aTextValueId];
 			var bPriority = filterOrderMap[colorFilterId][bColorValueId] + filterOrderMap[textFilterId][bTextValueId];
 			return aPriority - bPriority;
@@ -276,7 +288,7 @@ export class YieldPriceProductsComponent implements OnInit {
 
 	public getDateLabel(date: ThDateDO) {
 		return date.getLongDayDisplayString(this._appContext.thTranslation).charAt(0) + " "
-				+ date.getDayString() + "." + date.getMonthString();
+			+ date.getDayString() + "." + date.getMonthString();
 	}
 
 	public get yieldManager(): IYieldManagerDashboardPriceProducts {
@@ -325,7 +337,7 @@ export class YieldPriceProductsComponent implements OnInit {
 	public yieldPriceProducts(yieldParams: PriceProductYieldParam) {
 		if (this.isYielding) { return; }
 		this.isYielding = true;
-		this._priceProductsService.yieldPriceProducts(yieldParams).subscribe(() => {
+		this._yieldPriceProductsService.yieldPriceProducts(yieldParams).subscribe(() => {
 			this.isYielding = false;
 			this.logAnalyticsEvent(yieldParams);
 			this.handleStateChange();
@@ -340,13 +352,67 @@ export class YieldPriceProductsComponent implements OnInit {
 		this._appContext.analytics.logEvent("yield-manager", "yield-price-products", eventDescription);
 	}
 
-	// public toogleCheckPriceProduct(priceProduct: PriceProductYieldItemVM){
-	// 	// alert(this.priceProductSelectionDictionary[priceProduct.priceProductYieldItemDO.priceProductId]);
-	// }
-
 	public applyFilters(filters: IFilterSelection) {
 		this.setItemSelectionStateToAll(false);
 		this.selectedFilters = filters;
 		this.updateFilteredPriceProducts();
+	}
+
+
+	private isExpanded(priceProduct: PriceProductYieldItemVM): boolean {
+		return this.expandedPriceProductIds[priceProduct.id] === true;
+	}
+	private toggleExpanded(priceProduct: PriceProductYieldItemVM) {
+		if (!priceProduct.hasMoreThanOneDynamicPrice()) { return; }
+		if (this.isExpanded(priceProduct)) {
+			delete this.expandedPriceProductIds[priceProduct.id];
+		} else {
+			this.expandedPriceProductIds[priceProduct.id] = true;
+		}
+	}
+
+	private stateIsOpen(state: YieldItemStateType): boolean {
+		return state === YieldItemStateType.Open;
+	}
+	private getTitleForDynamicPriceInput(priceProductItem: PriceProductYieldItemVM, dynamicPrice: DynamicPriceYieldItemDO, dayIndex: number): string {
+		let date = this.priceProductResults.dateList[dayIndex];
+		if (dynamicPrice.openList[dayIndex] === YieldItemStateType.Open) {
+			return this._appContext.thTranslation.translate("%dynamicPrice% is open on %date%. It will be the price used for incoming bookings with %priceProduct% on this day.", {
+				dynamicPrice: dynamicPrice.name,
+				date: date.toString(),
+				priceProduct: priceProductItem.name
+			});
+		}
+		return this._appContext.thTranslation.translate("Click here to open %dynamicPrice% on %date%.", {
+			dynamicPrice: dynamicPrice.name,
+			date: date.toString()
+		});
+	}
+	private openDynamicPrice(priceProductItem: PriceProductYieldItemVM, dynamicPrice: DynamicPriceYieldItemDO, dayIndex: number) {
+		if (dynamicPrice.openList[dayIndex] === YieldItemStateType.Open) {
+			return;
+		}
+		let date = this.priceProductResults.dateList[dayIndex];
+		var interval = ThDateIntervalDO.buildThDateIntervalDO(date, date);
+		this._yieldPriceProductsService.openDynamicPrice({
+			priceProductId: priceProductItem.priceProductYieldItemDO.priceProductId,
+			dynamicPriceId: dynamicPrice.dynamicPriceId,
+			interval: interval
+		}).subscribe(() => {
+			var eventDescription = "Opened a Dynamic Price for day " + date.toString();
+			this._appContext.analytics.logEvent("yield-manager", "yield-single-dynamic-price", eventDescription);
+			this.handleStateChange();
+		}, (error: ThError) => {
+			this._appContext.toaster.error(error.message);
+		});
+	}
+	private openDynamicPriceYieldModal(priceProductItem: PriceProductYieldItemVM, dynamicPrice: DynamicPriceYieldItemDO) {
+		let date = this.priceProductResults.dateList[0];
+		this._yieldDynamicPriceModal.openDynamicPriceYieldModal(priceProductItem, dynamicPrice, date)
+			.then((modalDialogInstance: ModalDialogRef<PriceProductDO>) => {
+				modalDialogInstance.resultObservable.subscribe((updatedPriceProduct: PriceProductDO) => {
+					this.handleStateChange();
+				});
+			}).catch((e: any) => { });
 	}
 }

@@ -1,24 +1,34 @@
-import {ThLogger, ThLogLevel} from '../../../utils/logging/ThLogger';
-import {ThError} from '../../../utils/th-responses/ThError';
-import {ThStatusCode} from '../../../utils/th-responses/ThResponse';
-import {AppContext} from '../../../utils/AppContext';
-import {SessionContext} from '../../../utils/SessionContext';
-import {ThDateDO} from '../../../utils/th-dates/data-objects/ThDateDO';
-import {ThDateIntervalUtils} from '../../../utils/th-dates/ThDateIntervalUtils';
-import {IndexedBookingInterval} from '../../../data-layer/price-products/utils/IndexedBookingInterval';
-import {PriceProductDO, PriceProductStatus} from '../../../data-layer/price-products/data-objects/PriceProductDO';
-import {PriceProductSearchResultRepoDO} from '../../../data-layer/price-products/repositories/IPriceProductRepository';
-import {ValidationResultParser} from '../../common/ValidationResultParser';
-import {YieldManagerPeriodDO} from '../utils/YieldManagerPeriodDO';
-import {YieldManagerPeriodParser} from '../utils/YieldManagerPeriodParser';
-import {PriceProductYieldResult, PriceProductYieldItem, YieldItemState, YieldItemStateType} from './utils/PriceProductYieldItem';
+import { ThLogger, ThLogLevel } from '../../../utils/logging/ThLogger';
+import { ThError } from '../../../utils/th-responses/ThError';
+import { ThStatusCode } from '../../../utils/th-responses/ThResponse';
+import { AppContext } from '../../../utils/AppContext';
+import { SessionContext } from '../../../utils/SessionContext';
+import { ThUtils } from '../../../utils/ThUtils';
+import { ThDateDO } from '../../../utils/th-dates/data-objects/ThDateDO';
+import { ThDateIntervalUtils } from '../../../utils/th-dates/ThDateIntervalUtils';
+import { IndexedBookingInterval } from '../../../data-layer/price-products/utils/IndexedBookingInterval';
+import { PriceProductDO, PriceProductStatus } from '../../../data-layer/price-products/data-objects/PriceProductDO';
+import { IPriceProductPrice } from "../../../data-layer/price-products/data-objects/price/IPriceProductPrice";
+import { DynamicPriceDO } from "../../../data-layer/price-products/data-objects/price/DynamicPriceDO";
+import { PriceProductSearchResultRepoDO } from '../../../data-layer/price-products/repositories/IPriceProductRepository';
+import { RoomCategoryStatsAggregator } from "../../room-categories/aggregators/RoomCategoryStatsAggregator";
+import { RoomCategoryStatsDO } from "../../../data-layer/room-categories/data-objects/RoomCategoryStatsDO";
+import { ValidationResultParser } from '../../common/ValidationResultParser';
+import { YieldManagerPeriodDO } from '../utils/YieldManagerPeriodDO';
+import { YieldManagerPeriodParser } from '../utils/YieldManagerPeriodParser';
+import { PriceProductYieldResult, PriceProductYieldItem, YieldItemState, YieldItemStateType, DynamicPriceYieldItem } from './utils/PriceProductYieldItem';
 
 import _ = require('underscore');
 
 export class PriceProductReader {
     private _indexedInterval: IndexedBookingInterval;
+    private _thUtils: ThUtils;
+
+    private _loadedpriceProductList: PriceProductDO[];
+    private _loadedRoomCategoryStatsList: RoomCategoryStatsDO[];
 
     constructor(private _appContext: AppContext, private _sessionContext: SessionContext) {
+        this._thUtils = new ThUtils();
     }
 
     public getYieldItems(yieldManagerPeriodDO: YieldManagerPeriodDO): Promise<PriceProductYieldResult> {
@@ -40,8 +50,14 @@ export class PriceProductReader {
         priceProductRepo.getPriceProductList({ hotelId: this._sessionContext.sessionDO.hotel.id }, {
             status: PriceProductStatus.Active
         }).then((searchResult: PriceProductSearchResultRepoDO) => {
-            var priceProductList: PriceProductDO[] = searchResult.priceProductList;
-            return this.getYieldItemList(priceProductList);
+            this._loadedpriceProductList = searchResult.priceProductList;
+
+            var roomCategStatsAggregator = new RoomCategoryStatsAggregator(this._appContext, this._sessionContext);
+            return roomCategStatsAggregator.getRoomCategoryStatsList();
+        }).then((roomCategoryStatsList: RoomCategoryStatsDO[]) => {
+            this._loadedRoomCategoryStatsList = RoomCategoryStatsDO.sortByUnits(roomCategoryStatsList);
+
+            return this.getYieldItemList();
         }).then((yieldItemList: PriceProductYieldItem[]) => {
             var result = new PriceProductYieldResult();
             result.itemList = yieldItemList;
@@ -56,9 +72,9 @@ export class PriceProductReader {
         });
     }
 
-    private getYieldItemList(priceProductList: PriceProductDO[]): Promise<PriceProductYieldItem[]> {
+    private getYieldItemList(): Promise<PriceProductYieldItem[]> {
         var promiseArray: Promise<PriceProductYieldItem>[] = []
-        _.forEach(priceProductList, (priceProduct: PriceProductDO) => {
+        _.forEach(this._loadedpriceProductList, (priceProduct: PriceProductDO) => {
             promiseArray.push(this.getYieldItem(priceProduct));
         });
         return Promise.all(promiseArray);
@@ -72,9 +88,32 @@ export class PriceProductReader {
         var yieldItem = new PriceProductYieldItem();
         yieldItem.priceProductId = priceProduct.id;
         yieldItem.priceProductName = priceProduct.name;
-        yieldItem.yieldFilterList = priceProduct.yieldFilterList;
         yieldItem.lastRoomAvailability = priceProduct.lastRoomAvailability;
+        yieldItem.yieldFilterList = priceProduct.yieldFilterList;
         yieldItem.stateList = [];
+        yieldItem.dynamicPriceList = [];
+
+        let roomCategoryIdList = priceProduct.price.getRoomCategoryIdList();
+        priceProduct.price.dynamicPriceList.forEach(dynamicPrice => {
+            let dynamicPriceItem = new DynamicPriceYieldItem();
+            dynamicPriceItem.dynamicPriceId = dynamicPrice.id;
+            dynamicPriceItem.name = dynamicPrice.name;
+            dynamicPriceItem.description = dynamicPrice.description;
+            dynamicPriceItem.priceBriefString = "";
+            dynamicPriceItem.roomCategoryNameForPriceBrief = "";
+            dynamicPriceItem.openList = [];
+
+            let baseRoomCategStats = this.getBaseRoomCategoryStats(dynamicPrice, roomCategoryIdList);
+            if (!this._thUtils.isUndefinedOrNull(baseRoomCategStats)) {
+                dynamicPriceItem.roomCategoryNameForPriceBrief = baseRoomCategStats.roomCategory.displayName;
+                let price: IPriceProductPrice = dynamicPrice.getPriceForRoomCategory(baseRoomCategStats.roomCategory.id);
+                if (!this._thUtils.isUndefinedOrNull(price)) {
+                    dynamicPriceItem.priceBriefString = price.getPriceBriefString();
+                }
+            }
+
+            yieldItem.dynamicPriceList.push(dynamicPriceItem);
+        });
 
         var openIntervalUtils = new ThDateIntervalUtils(priceProduct.openIntervalList);
         var openForArrivalIntervalUtils = new ThDateIntervalUtils(priceProduct.openForArrivalIntervalList);
@@ -86,8 +125,27 @@ export class PriceProductReader {
             state.openForArrival = openForArrivalIntervalUtils.containsThDateDO(date) ? YieldItemStateType.Open : YieldItemStateType.Closed;
             state.openForDeparture = openForDepartureIntervalUtils.containsThDateDO(date) ? YieldItemStateType.Open : YieldItemStateType.Closed;
             yieldItem.stateList.push(state);
+
+            let enabledDynamicPrice: DynamicPriceDO = priceProduct.price.getEnabledDynamicPriceForDate(date);
+            yieldItem.dynamicPriceList.forEach(dynamicPriceItem => {
+                if (dynamicPriceItem.dynamicPriceId === enabledDynamicPrice.id) {
+                    dynamicPriceItem.openList.push(YieldItemStateType.Open);
+                }
+                else {
+                    dynamicPriceItem.openList.push(YieldItemStateType.Closed);
+                }
+            });
         });
 
         resolve(yieldItem);
+    }
+    private getBaseRoomCategoryStats(dynamicPrice: DynamicPriceDO, roomCategoryIdList: string[]​​): RoomCategoryStatsDO {
+        for (var i = 0; i < this._loadedRoomCategoryStatsList.length; i++) {
+            let roomCategStats = this._loadedRoomCategoryStatsList[i];
+            if (_.contains(roomCategoryIdList, roomCategStats.roomCategory.id)) {
+                return roomCategStats;
+            }
+        }
+        return null;
     }
 }

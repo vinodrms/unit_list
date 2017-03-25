@@ -126,7 +126,8 @@ export class BookingChangeDates {
         if (this._bookingWithDependencies.bookingDO.confirmationStatus !== BookingConfirmationStatus.CheckedIn) {
             this._bookingWithDependencies.bookingDO.interval.start = this._newBookingInterval.start;
         }
-        this._bookingUtils.updateBookingPriceUsingRoomCategory(this._bookingWithDependencies.bookingDO, this._bookingWithDependencies.roomCategoryStatsList);
+        this._bookingUtils.updateBookingPriceUsingRoomCategoryAndSavePPSnapshot(this._bookingWithDependencies.bookingDO,
+            this._bookingWithDependencies.roomCategoryStatsList, this._bookingWithDependencies.priceProductDO);
 
         var newInterval: ThDateIntervalDO = this._bookingWithDependencies.bookingDO.interval;
         var newPrice: number = this._bookingWithDependencies.bookingDO.price.totalBookingPrice;

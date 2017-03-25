@@ -19,74 +19,88 @@
 		<i class="fa fa-info-circle"></i> {{ 'One price per Room Category, regardless of the amount of occupants' | translate }} 
 	</small>
 </div>
-
 <div class="col-xs-12">
 	<loading-component [isLoading]="isLoading"></loading-component>
+	
 	<div class="row" *ngIf="!isLoading">
 		<div class="col-xs-12 form-group">
-			<label>{{ 'Price configuration in %ccySymbol%' | translate:{ccySymbol: ccy.nativeSymbol} }}</label>
-
-			<div class="row row-eq-height">
-				<div class="col-md-6 col-sm-12 col-xs-12 form-group" *ngFor="let priceVM of priceContainer.priceVMList">
-					<div class="price-product-box">
-						<label>{{ priceVM.roomCategoryStats.roomCategory.displayName }}
-							<small> 
-								{{ getNoRoomsLabel(priceVM.roomCategoryStats.noOfRooms) }} x
-								<config-capacity [configCapacity]="priceVM.roomCategoryStats.capacity.totalCapacity"></config-capacity>
-							</small>
-						</label>
-						<a class="btn" 
-							*ngIf="priceVM.previousRoomCategoryId && !readonly" 
-							(click)="priceContainer.copyPrices(priceVM.previousRoomCategoryId, priceVM.roomCategoryStats.roomCategory.id)">
-							<i class="fa unitpal-font">[</i> <small>{{ 'Copy Prices from Previous Room Category' | translate }}</small>
+			<div class="row">
+				<div class="col-xs-6">
+					<label>{{ 'Price configuration in %ccySymbol%' | translate:{ccySymbol: ccy.nativeSymbol} }}</label>
+				</div>
+				<div class="col-xs-6">
+					<a class="btn btn-xs" (click)="openNewDynamicPriceModal()"><i class="fa unitpal-font">'</i> {{ 'Add' | translate }} {{ 'Dynamic Daily Rate' | translate }}</a>
+				</div>
+			</div>
+			<div class="basic-info-settings-tabbar">
+				<ul class="nav nav-tabs">
+					<li *ngFor="let dynamicPriceVM of dynamicPriceVMList; let i = index" [ngClass]="{'active': dynamicPriceVM.selected}">
+						<a [ngClass]="{'active': dynamicPriceVM.selected}" (click)="selectDynamicPrice(i)">
+							{{ dynamicPriceVM.name }} <a *ngIf="dynamicPriceVM.selected" (click)="openEditDynamicPriceModal(dynamicPriceVM, i)"><i class="fa unitpal-font">]</i></a>
 						</a>
-
-						<price-edit 
-							[displayError]="displayError()"
-							[readonly]="readonly"
-							[priceType]="priceType"
-							[roomCategoryStats]="priceVM.roomCategoryStats"
-							[(price)]="priceVM.price">
-						</price-edit>
-
-						<label>{{ 'Exceptions' | translate }}</label>
-						<table class="table table-striped projects">
-							<tbody>
-								<tr *ngFor="let exception of priceVM.exceptionList">
-									<td title="{{ 'Exception will apply on %dayFromWeek%' | translate:{dayFromWeek: getWeekDayName(exception.dayFromWeek)} }}">
-										{{ getWeekDayName(exception.dayFromWeek) | translate }}
-									</td>
-									<td title="{{ 'Prices for adults' | translate }}">
-										{{ ccy.nativeSymbol }}  {{ exception.price.getPriceBriefLineString() }}
-									</td>
-									<td>
-										<a class="btn btn-xs" *ngIf="!readonly" (click)="removeException(priceVM, exception)">
-											<i class="fa unitpal-font">\</i> {{ 'Remove' | translate }}
-										</a>
-									</td>
-								</tr>
-								<tr>
-									<td>
-										<span *ngIf="readonly && priceVM.hasExceptions()">
-											<a class="btn btn-xs" (click)="openPriceExceptionModal(priceVM)">
-												<span><i class="fa fa-eye"></i> {{ 'View' | translate }}</span>
-											</a>	
-										</span>
-										<p *ngIf="readonly && !priceVM.hasExceptions()">{{'No exceptions' | translate}}</p>
-
-										<span *ngIf="!readonly">
-											<a class="btn btn-xs" (click)="openPriceExceptionModal(priceVM)">
-												<span *ngIf="!priceVM.hasExceptions()"><i class="fa unitpal-font">'</i> {{ 'Add' | translate }}</span>
-												<span *ngIf="priceVM.hasExceptions()"><i class="fa unitpal-font">]</i> {{ 'Add / Edit' | translate }}</span>
+					</li>
+				</ul>
+			</div>
+			<div class="basic-info-settings-edit-container" customScroll>
+				<div class="row row-eq-height">
+					<div class="col-md-6 col-sm-12 coal-xs-12 form-group" *ngFor="let priceVM of selectedDynamicPriceVM.priceVMList">
+						<div class="price-product-box">
+							<label>{{ priceVM.roomCategoryStats.roomCategory.displayName }}
+								<small> 
+									{{ getNoRoomsLabel(priceVM.roomCategoryStats.noOfRooms) }} x
+									<config-capacity [configCapacity]="priceVM.roomCategoryStats.capacity.totalCapacity"></config-capacity>
+								</small>
+							</label>
+							<a class="btn" 
+								*ngIf="priceVM.previousRoomCategoryId && !readonly" 
+								(click)="selectedDynamicPriceVM.copyPrices(priceVM.previousRoomCategoryId, priceVM.roomCategoryStats.roomCategory.id)">
+								<i class="fa unitpal-font">[</i> <small>{{ 'Copy Prices from Previous Room Category' | translate }}</small>
+							</a>
+							<price-edit 
+								[displayError]="displayError()"
+								[readonly]="!selectedDynamicPriceVM.editOnPricesAndExceptionsIsAllowed(readonly)"
+								[priceType]="priceType"
+								[roomCategoryStats]="priceVM.roomCategoryStats"
+								[(price)]="priceVM.price">
+							</price-edit>
+							<label>{{ 'Exceptions' | translate }}</label>
+							<table class="table table-striped projects">
+								<tbody>
+									<tr *ngFor="let exception of priceVM.exceptionList">
+										<td title="{{ 'Exception will apply on %dayFromWeek%' | translate:{dayFromWeek: getWeekDayName(exception.dayFromWeek)} }}">
+											{{ getWeekDayName(exception.dayFromWeek) | translate }}
+										</td>
+										<td title="{{ 'Prices for adults' | translate }}">
+											{{ ccy.nativeSymbol }}  {{ exception.price.getPriceBriefLineString() }}
+										</td>
+										<td>
+											<a class="btn btn-xs" *ngIf="selectedDynamicPriceVM.editOnPricesAndExceptionsIsAllowed(readonly)" (click)="removeException(priceVM, exception)">
+												<i class="fa unitpal-font">\</i> {{ 'Remove' | translate }}
 											</a>
-										</span>
-									</td>
-									<td></td>
-									<td></td>
-								</tr>
-							</tbody>
-							<small class="text-muted"><i class="fa fa-info-circle"></i> {{ 'Custom prices for different days of the week' | translate }} </small>
-						</table>
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<span *ngIf="!selectedDynamicPriceVM.editOnPricesAndExceptionsIsAllowed(readonly) && priceVM.hasExceptions()">
+												<a class="btn btn-xs" (click)="openPriceExceptionModal(priceVM)">
+													<span><i class="fa fa-eye"></i> {{ 'View' | translate }}</span>
+												</a>	
+											</span>
+											<p *ngIf="!selectedDynamicPriceVM.editOnPricesAndExceptionsIsAllowed(readonly) && !priceVM.hasExceptions()">{{'No exceptions' | translate}}</p>
+											<span *ngIf="selectedDynamicPriceVM.editOnPricesAndExceptionsIsAllowed(readonly)">
+												<a class="btn btn-xs" (click)="openPriceExceptionModal(priceVM)">
+													<span *ngIf="!priceVM.hasExceptions()"><i class="fa unitpal-font">'</i> {{ 'Add' | translate }}</span>
+													<span *ngIf="priceVM.hasExceptions()"><i class="fa unitpal-font">]</i> {{ 'Add / Edit' | translate }}</span>
+												</a>
+											</span>
+										</td>
+										<td></td>
+										<td></td>
+									</tr>
+								</tbody>
+								<small class="text-muted"><i class="fa fa-info-circle"></i> {{ 'Custom prices for different days of the week' | translate }} </small>
+							</table>
+						</div>
 					</div>
 				</div>
 			</div>

@@ -13,4 +13,5 @@ export interface IPriceProductPrice extends BaseDO {
 	prototypeForStats(roomCategoryStats: RoomCategoryStatsDO): IPriceProductPrice;
 	isValid(): boolean;
 	copyPricesFrom(otherPrice: IPriceProductPrice);
+	resetPrices();
 }
