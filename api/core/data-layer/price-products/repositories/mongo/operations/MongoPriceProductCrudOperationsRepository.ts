@@ -101,14 +101,6 @@ export class MongoPriceProductCrudOperationsRepository extends MongoRepository {
 			},
 			updateQuery);
 	}
-	public updatePriceProductYieldFiltersNotesAndPrice(meta: PriceProductMetaRepoDO, itemMeta: PriceProductItemMetaRepoDO, filterList: PriceProductYieldFilterMetaDO[], notes: string, price: PriceProductPriceDO): Promise<PriceProductDO> {
-		return this.findAndModifyPriceProduct(meta, itemMeta, {},
-			{
-				"price": price,
-				"yieldFilterList": filterList,
-				"notes": notes
-			});
-	}
 	public updatePriceProductYieldManagerIntervals(meta: PriceProductMetaRepoDO, itemMeta: PriceProductItemMetaRepoDO, intervals: PriceProductUpdateYMIntervalsParamsRepoDO): Promise<PriceProductDO> {
 		return this.findAndModifyPriceProduct(meta, itemMeta, {},
 			{

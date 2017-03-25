@@ -393,6 +393,11 @@ export var EnglishTranslations: Object = {
 	"You cannot add more than 10 constraints on the same discount": "You cannot add more than 10 constraints on the same discount",
 	"You cannot add more than 10 discounts on the same price product": "You cannot add more than 10 discounts on the same price product",
 	"You cannot add more than 10 constraints on the same price product": "You cannot add more than 10 constraints on the same price product",
+	"Add Customer": "Add Customer",
+	"Discounts are public by default, meaning that they will be used for all the bookings that satisfy the constraints. You can restrict this discount by selecting up to 10 customers.": "Discounts are public by default, meaning that they will be used for all the bookings that satisfy the constraints. You can restrict this discount by selecting up to 10 customers.",
+	"You cannot add more than %custNo% customers on a discount": "You cannot add more than %custNo% customers on a discount",
+	"Private": "Private",
+	"Discount applied for all the customers": "Discount applied for all the customers",
 	"Constraint #": "Constraint #",
 	"Active Price Products are available for booking, but cannot be edited. Draft Price Products can be edited, but not booked.": "Active Price Products are available for booking, but cannot be edited. Draft Price Products can be edited, but not booked.",
 	"Save as Draft": "Save as Draft",
@@ -827,6 +832,18 @@ export var EnglishTranslations: Object = {
 	"Update": "Update",
 	"Are you sure you want to remove this dynamic daily rate?": "Are you sure you want to remove this dynamic daily rate?",
 	"The price product must have at least a dynamic daily rate configured.": "The price product must have at least a dynamic daily rate configured.",
-	
-	
+	"Open %rateName%": "Open %rateName%",
+	"Open %rateName% for longer periods": "Open %rateName% for longer periods",
+	"%rateName% was opened succesfully for the period %period%": "%rateName% was opened succesfully for the period %period%",
+	"%priceProduct% cannot be yielded because it has the last room availability flag enabled": "%priceProduct% cannot be yielded because it has the last room availability flag enabled",
+	"%priceProduct% is open for arrival on %date%. Click here to close for arrival.": "%priceProduct% is open for arrival on %date%. Click here to close for arrival.",
+	"%priceProduct% is closed for arrival on %date%. Click here to open for arrival.": "%priceProduct% is closed for arrival on %date%. Click here to open for arrival.",
+	"%priceProduct% is open on %date%. Click here to close.": "%priceProduct% is open on %date%. Click here to close.",
+	"%priceProduct% is closed on %date%. Click here to open.": "%priceProduct% is closed on %date%. Click here to open.",
+	"%priceProduct% is open for departure on %date%. Click here to close for departure.": "%priceProduct% is open for departure on %date%. Click here to close for departure.",
+	"%priceProduct% is closed for departure on %date%. Click here to open for departure.": "%priceProduct% is closed for departure on %date%. Click here to open for departure.",
+	"%dynamicPrice% is open on %date%. It will be the price used for incoming bookings with %priceProduct% on this day.": "%dynamicPrice% is open on %date%. It will be the price used for incoming bookings with %priceProduct% on this day.",
+	"Click here to open %dynamicPrice% on %date%.": "Click here to open %dynamicPrice% on %date%.",
+	"Show/hide dynamic rates": "Show/hide dynamic rates",
+
 };

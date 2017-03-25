@@ -1,3 +1,3 @@
-<span class="open-for-arrival clickable unitpal-font" [ngClass]="{'active' : isOpenForArrival()}" (click)="toggleOpenForArrival()">d</span>
-<span class="open clickable unitpal-font" [ngClass]="{'active' : isOpen()}" (click)="toggleOpen()">e</span> 
-<span class="open-for-departure clickable unitpal-font" [ngClass]="{'active' : isOpenForDeparture()}" (click)="toggleOpenForDeparture()">f</span>
+<span class="open-for-arrival clickable unitpal-font" title="{{arrivalTitle}}" [ngClass]="{'active' : isOpenForArrival()}" (click)="toggleOpenForArrival()">d</span>
+<span class="open clickable unitpal-font" title="{{stayTitle}}" [ngClass]="{'active' : isOpen()}" (click)="toggleOpen()">e</span> 
+<span class="open-for-departure clickable unitpal-font" title="{{departureTitle}}" [ngClass]="{'active' : isOpenForDeparture()}" (click)="toggleOpenForDeparture()">f</span>

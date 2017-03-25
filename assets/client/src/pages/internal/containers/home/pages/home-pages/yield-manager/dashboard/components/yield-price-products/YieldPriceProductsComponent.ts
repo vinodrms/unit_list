@@ -21,10 +21,16 @@ import { IFilterSelection } from '../../common/interfaces/IFilterSelection';
 import { IFilterVM } from '../../../../../../../../services/yield-manager/dashboard/filter/view-models/IFilterVM';
 import { YieldItemStateType } from "../../../../../../../../services/yield-manager/dashboard/price-products/data-objects/YieldItemStateDO";
 import { DynamicPriceYieldItemDO } from "../../../../../../../../services/yield-manager/dashboard/price-products/data-objects/DynamicPriceYieldItemDO";
+import { HotelAggregatedInfo } from "../../../../../../../../services/hotel/utils/HotelAggregatedInfo";
+import { HotelAggregatorService } from "../../../../../../../../services/hotel/HotelAggregatorService";
+import { YieldDynamicPriceModalService } from "./yield-dynamic-price-modal/services/YieldDynamicPriceModalService";
+import { ModalDialogRef } from "../../../../../../../../../../common/utils/modals/utils/ModalDialogRef";
+import { PriceProductDO } from "../../../../../../../../services/price-products/data-objects/PriceProductDO";
 
 @Component({
 	selector: 'yield-price-products',
-	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/yield-manager/dashboard/components/yield-price-products/template/yield-price-products.html'
+	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/yield-manager/dashboard/components/yield-price-products/template/yield-price-products.html',
+	providers: [YieldDynamicPriceModalService]
 })
 export class YieldPriceProductsComponent {
 	@ViewChild(YieldActionsPanelComponent) actionsPanelComponent: YieldActionsPanelComponent;
@@ -39,12 +45,15 @@ export class YieldPriceProductsComponent {
 	private selectAllItemsFlag: boolean;
 	private itemsSelectionState = null;
 	private isYielding: boolean = false;
+	private ccyNativeSymbol = '';
 	private expandedPriceProductIds: { [id: string]: boolean };
 
 	constructor(
+		private _appContext: AppContext,
 		private _yieldPriceProductsService: YieldManagerDashboardPriceProductsService,
 		private _filterService: YieldManagerDashboardFilterService,
-		private _appContext: AppContext
+		private _hotelAggregatorService: HotelAggregatorService,
+		private _yieldDynamicPriceModal: YieldDynamicPriceModalService
 	) {
 		this.selectAllItemsFlag = false;
 		this.selectedFilters = {
@@ -63,11 +72,13 @@ export class YieldPriceProductsComponent {
 			Observable.combineLatest(
 				this._yieldPriceProductsService.getPriceProducts({ referenceDate: date, noDays: noDays }),
 				this._filterService.getColorFilterCollections(),
-				this._filterService.getTextFilterCollections()
-			).subscribe((results: [PriceProductYieldResultVM, FilterVMCollection<ColorFilterVM>[], FilterVMCollection<TextFilterVM>[]]) => {
+				this._filterService.getTextFilterCollections(),
+				this._hotelAggregatorService.getHotelAggregatedInfo()
+			).subscribe((results: [PriceProductYieldResultVM, FilterVMCollection<ColorFilterVM>[], FilterVMCollection<TextFilterVM>[], HotelAggregatedInfo]) => {
 				this.priceProductResults = results[0];
 				this.yieldColorFilterCollection = results[1][0];
 				this.yieldTextFilterCollection = results[2][0];
+				this.ccyNativeSymbol = results[3].ccy.nativeSymbol;
 
 				this.initializeItemSelectionStateDictionary();
 				this.updateFilteredPriceProducts();
@@ -363,6 +374,20 @@ export class YieldPriceProductsComponent {
 	private stateIsOpen(state: YieldItemStateType): boolean {
 		return state === YieldItemStateType.Open;
 	}
+	private getTitleForDynamicPriceInput(priceProductItem: PriceProductYieldItemVM, dynamicPrice: DynamicPriceYieldItemDO, dayIndex: number): string {
+		let date = this.priceProductResults.dateList[dayIndex];
+		if (dynamicPrice.openList[dayIndex] === YieldItemStateType.Open) {
+			return this._appContext.thTranslation.translate("%dynamicPrice% is open on %date%. It will be the price used for incoming bookings with %priceProduct% on this day.", {
+				dynamicPrice: dynamicPrice.name,
+				date: date.toString(),
+				priceProduct: priceProductItem.name
+			});
+		}
+		return this._appContext.thTranslation.translate("Click here to open %dynamicPrice% on %date%.", {
+			dynamicPrice: dynamicPrice.name,
+			date: date.toString()
+		});
+	}
 	private openDynamicPrice(priceProductItem: PriceProductYieldItemVM, dynamicPrice: DynamicPriceYieldItemDO, dayIndex: number) {
 		if (dynamicPrice.openList[dayIndex] === YieldItemStateType.Open) {
 			return;
@@ -380,5 +405,14 @@ export class YieldPriceProductsComponent {
 		}, (error: ThError) => {
 			this._appContext.toaster.error(error.message);
 		});
+	}
+	private openDynamicPriceYieldModal(priceProductItem: PriceProductYieldItemVM, dynamicPrice: DynamicPriceYieldItemDO) {
+		let date = this.priceProductResults.dateList[0];
+		this._yieldDynamicPriceModal.openDynamicPriceYieldModal(priceProductItem, dynamicPrice, date)
+			.then((modalDialogInstance: ModalDialogRef<PriceProductDO>) => {
+				modalDialogInstance.resultObservable.subscribe((updatedPriceProduct: PriceProductDO) => {
+					this.handleStateChange();
+				});
+			}).catch((e: any) => { });
 	}
 }

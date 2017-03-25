@@ -40,9 +40,6 @@ export class MongoPriceProductRepository extends MongoRepository implements IPri
 	public updatePriceProductStatus(meta: PriceProductMetaRepoDO, itemMeta: PriceProductItemMetaRepoDO, params: PriceProductUpdateStatusParamsRepoDO): Promise<PriceProductDO> {
 		return this._crudRepository.updatePriceProductStatus(meta, itemMeta, params);
 	}
-	public updatePriceProductYieldFiltersNotesAndPrice(meta: PriceProductMetaRepoDO, itemMeta: PriceProductItemMetaRepoDO, filterList: PriceProductYieldFilterMetaDO[], notes: string, price: PriceProductPriceDO): Promise<PriceProductDO> {
-		return this._crudRepository.updatePriceProductYieldFiltersNotesAndPrice(meta, itemMeta, filterList, notes, price);
-	}
 	public updatePriceProductYieldManagerIntervals(meta: PriceProductMetaRepoDO, itemMeta: PriceProductItemMetaRepoDO, intervals: PriceProductUpdateYMIntervalsParamsRepoDO): Promise<PriceProductDO> {
 		return this._crudRepository.updatePriceProductYieldManagerIntervals(meta, itemMeta, intervals);
 	}
