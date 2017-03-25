@@ -23,7 +23,7 @@ export class PriceEditComponent implements OnInit {
         this._numberSuffixFormatter = new NumberSuffixFormatter(this._appContext.thTranslation);
     }
 
-    ngOnInit() { }
+    ngOnInit() {}
 
     public get isSinglePrice() {
         return this.priceType === PriceProductPriceType.SinglePrice;

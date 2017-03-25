@@ -6,6 +6,7 @@ import { PriceProductMetaRepoDO, PriceProductItemMetaRepoDO, PriceProductUpdateS
 import { PriceProductDO, PriceProductStatus } from '../../../data-objects/PriceProductDO';
 import { PriceProductYieldFilterMetaDO } from '../../../data-objects/yield-filter/PriceProductYieldFilterDO';
 import { PriceProductRepositoryHelper } from './helpers/PriceProductRepositoryHelper';
+import { PriceProductPriceDO } from "../../../data-objects/price/PriceProductPriceDO";
 
 export class MongoPriceProductCrudOperationsRepository extends MongoRepository {
 	private _helper: PriceProductRepositoryHelper;
@@ -99,13 +100,6 @@ export class MongoPriceProductCrudOperationsRepository extends MongoRepository {
 				"status": params.oldStatus
 			},
 			updateQuery);
-	}
-	public updatePriceProductYieldFiltersAndNotes(meta: PriceProductMetaRepoDO, itemMeta: PriceProductItemMetaRepoDO, filterList: PriceProductYieldFilterMetaDO[], notes: string): Promise<PriceProductDO> {
-		return this.findAndModifyPriceProduct(meta, itemMeta, {},
-			{
-				"yieldFilterList": filterList,
-				"notes": notes
-			});
 	}
 	public updatePriceProductYieldManagerIntervals(meta: PriceProductMetaRepoDO, itemMeta: PriceProductItemMetaRepoDO, intervals: PriceProductUpdateYMIntervalsParamsRepoDO): Promise<PriceProductDO> {
 		return this.findAndModifyPriceProduct(meta, itemMeta, {},

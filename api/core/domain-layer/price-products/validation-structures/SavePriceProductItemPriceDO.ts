@@ -6,10 +6,17 @@ import { ArrayValidationStructure } from '../../../utils/th-validation/structure
 import { StringValidationRule } from '../../../utils/th-validation/rules/StringValidationRule';
 import { NumberValidationRule } from '../../../utils/th-validation/rules/NumberValidationRule';
 
-export class SavePriceProductItemPriceDO {
-	type: PriceProductPriceType;
+export interface SavePriceProductItemDynamicPriceDO {
+	id?: string;
+	name: string;
+	description: string;
 	priceList: Object[];
 	priceExceptionList: Object[];
+}
+
+export class SavePriceProductItemPriceDO {
+	type: PriceProductPriceType;
+	dynamicPriceList: SavePriceProductItemDynamicPriceDO[];
 
 	public static getPriceListValidationStructure(priceDO: SavePriceProductItemPriceDO): IValidationStructure {
 		return new ArrayValidationStructure(

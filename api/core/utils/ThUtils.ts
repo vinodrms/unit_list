@@ -2,6 +2,10 @@ import _ = require('underscore');
 import uuid = require('node-uuid');
 import shortid = require('shortid');
 
+export interface INumber {
+	getValue(): number;
+}
+
 export class ThUtils {
 	private static ShortIdCharacters = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$@";
 
@@ -44,15 +48,15 @@ export class ThUtils {
 	public roundNumberToNearestInteger(inputNumber: number): number {
 		return Math.round(inputNumber);
 	}
-	public getArrayAverage(array: number[]): number {
+	public getArrayAverage(array: INumber[]): number {
 		if (!_.isArray(array) || array.length == 0) {
 			return 0.0;
 		}
 		return this.getArraySum(array) / array.length;
 	}
-	public getArraySum(array: number[]): number {
+	public getArraySum(array: INumber[]): number {
 		var sum = 0.0;
-		_.forEach(array, (value: number) => { sum += value; })
+		_.forEach(array, (value: INumber) => { sum += value.getValue(); })
 		return sum;
 	}
 }

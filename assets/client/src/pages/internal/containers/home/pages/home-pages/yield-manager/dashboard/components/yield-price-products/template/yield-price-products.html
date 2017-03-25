@@ -6,7 +6,7 @@
 			<input type="checkbox"
 			[(ngModel)]="selectAllItemsFlag"
 			name="selectAllItemsFlag"
-			(change)="setItemSelectionStateToAll(!selectAllItemsFlag)"
+			(change)="setItemSelectionStateToAll(selectAllItemsFlag)"
 			>
 			<span class="dark-gray-color oneline-text f-14 p-l-6">{{'Price Products' | translate}}</span>
 		</div>
@@ -15,22 +15,72 @@
 		</div>
 	</div>
 	<div customScroll class="table-body">
-		<div class="price-products-row flex-row" [ngClass]="getPriceProductRowClasses(priceProduct)" *ngFor="let priceProduct of filteredPriceProduct">
-			<div class="price-products-col flex-jc-start wide">
-				<div class="filter-indicator" [ngClass]="getPriceProductFilterClasses(priceProduct)">
-					<span class="f-10" title="{{getPriceProductTextFilter(priceProduct)}}">{{getPriceProductTextFilterInitial(priceProduct)}}</span>
+		<span *ngFor="let priceProduct of filteredPriceProduct">
+			<div class="price-products-row flex-row" [ngClass]="getPriceProductRowClasses(priceProduct)">
+				<div class="price-products-col flex-jc-start wide">
+					<div class="filter-indicator" [ngClass]="getPriceProductFilterClasses(priceProduct)">
+						<span class="f-10" title="{{getPriceProductTextFilter(priceProduct)}}">{{getPriceProductTextFilterInitial(priceProduct)}}</span>
+					</div>
+					<span class="p-l-6 ellipsis-text up-col-5p">
+						<input type="checkbox" [(ngModel)]="itemsSelectionState[priceProduct.id]" name="itemsSelectionStatePPId" *ngIf="!priceProduct.lastRoomAvailability">
+						<span class="orange-color f-10" *ngIf="priceProduct.lastRoomAvailability" title="{{'Last Room Availability' | translate}}"><b>LRA</b></span>
+						<span class="dark-gray-color f-14" (click)="toggleExpanded(priceProduct)"> 
+							<small class="bold-text"
+								title="{{ 'Base price for %roomCategory%' | translate:{roomCategory: priceProduct.roomCategoryNameForPriceBrief} }}"> 
+								{{ccyNativeSymbol}} {{ priceProduct.priceBriefString }} 
+							</small> 
+							<span title="{{ priceProduct.name }}">
+								{{ priceProduct.name }} 
+							</span>
+						</span>
+					</span>
+					<span class="p-r-8 f-s-14 clickable" 
+						*ngIf="priceProduct.hasMoreThanOneDynamicPrice()" 
+						(click)="toggleExpanded(priceProduct)"
+						title="{{ 'Show/hide dynamic rates' | translate }}">
+						<i class="fa bold-text" [ngClass]="{'fa-angle-down': !isExpanded(priceProduct), 'fa-angle-up': isExpanded(priceProduct)}">
+						</i>
+					</span>
 				</div>
-				<span class="p-l-6 ellipsis-text">
-					<input type="checkbox" [(ngModel)]="itemsSelectionState[priceProduct.id]" name="itemsSelectionStatePPId" *ngIf="!priceProduct.lastRoomAvailability">
-					<span class="orange-color f-10" *ngIf="priceProduct.lastRoomAvailability" title="{{'Last Room Availability' | translate}}"><b>LRA</b></span>
-					<span class="dark-gray-color f-14">{{priceProduct.name}}</span>
-				</span>
+				<div class="price-products-col" *ngFor="let value of priceProduct.priceProductYieldItemDO.stateList; let currentIndex = index">
+					<span class="w-100">
+						<price-product-state [model]="getYieldStateModel(priceProductResults, priceProduct, currentIndex)" (stateChanged)="handleStateChange($event)"></price-product-state>
+					</span>
+				</div>
 			</div>
-			<div class="price-products-col" *ngFor="let value of priceProduct.priceProductYieldItemDO.stateList; let currentIndex = index">
-				<span class="w-100">
-					<price-product-state [model]="getYieldStateModel(priceProductResults, priceProduct, currentIndex)" (stateChanged)="handleStateChange($event)"></price-product-state>
-				</span>
-			</div>
-		</div>
+
+			<span *ngIf="priceProduct.hasMoreThanOneDynamicPrice() && isExpanded(priceProduct)" >
+				<div class="price-products-row flex-row white" [ngClass]="getPriceProductRowClasses(priceProduct)" *ngFor="let dynamicPrice of priceProduct.dynamicPriceList">
+					<div class="price-products-col flex-jc-start wide">
+						<div class="filter-indicator dynamic-price"> </div>
+						<span class="p-l-6 ellipsis-text up-col-5p">
+							<span class="dark-gray-color f-14 p-l-16">
+								<small title="{{ 'Base price for %roomCategory%' | translate:{roomCategory: dynamicPrice.roomCategoryNameForPriceBrief} }}" class="bold-text"> 
+									{{ccyNativeSymbol}} {{ dynamicPrice.priceBriefString }} 
+								</small> 
+								<span title="{{ dynamicPrice.description }}">
+									{{ dynamicPrice.name }}
+								</span>
+							</span>
+						</span>
+						<span class="p-r-6 clickable" 
+							title="{{ 'Open %rateName% for longer periods' | translate:{rateName: dynamicPrice.name} }}"
+							(click)="openDynamicPriceYieldModal(priceProduct, dynamicPrice)">
+							<i class="fa bold-text fa-calendar">
+							</i>
+						</span>
+					</div>
+					<div class="price-products-col" *ngFor="let state of dynamicPrice.openList; let currentIndex = index">
+						<span class="w-100 horizontal-align-center">
+							<input type="radio" 
+								title="{{ getTitleForDynamicPriceInput(priceProduct, dynamicPrice, currentIndex) }}"
+								name="{{ priceProduct.priceProductYieldItemDO.priceProductId + currentIndex }}" 
+								[checked]="stateIsOpen(state)" 
+								(click)="openDynamicPrice(priceProduct, dynamicPrice, currentIndex)">
+						</span>
+					</div>
+				</div>
+			</span>
+		</span>
 	</div>
 </div>

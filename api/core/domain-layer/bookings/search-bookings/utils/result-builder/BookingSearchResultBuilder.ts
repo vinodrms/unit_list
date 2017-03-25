@@ -12,6 +12,7 @@ import { RoomCategoryStatsDO } from '../../../../../data-layer/room-categories/d
 import { PriceProductDO } from '../../../../../data-layer/price-products/data-objects/PriceProductDO';
 import { PriceProductsContainer } from '../../../../price-products/validators/results/PriceProductsContainer';
 import { PriceProductPriceQueryDO } from "../../../../../data-layer/price-products/data-objects/price/IPriceProductPrice";
+import { PricePerDayDO } from "../../../../../data-layer/bookings/data-objects/price/PricePerDayDO";
 import { AllotmentDO } from '../../../../../data-layer/allotments/data-objects/AllotmentDO';
 import { IndexedBookingInterval } from '../../../../../data-layer/price-products/utils/IndexedBookingInterval';
 import { BookingUtils } from '../../../utils/BookingUtils';
@@ -136,7 +137,7 @@ export class BookingSearchResultBuilder {
                     }
 
                     itemPrice.roomCategoryId = roomCategoryId;
-                    var pricePerNightList: number[] = priceProduct.price.getPricePerNightBreakdownFor(priceQuery);
+                    var pricePerDayList: PricePerDayDO[] = priceProduct.price.getPricePerDayBreakdownFor(priceQuery);
                     let discount = priceProduct.discounts.getDiscountValueFor({
                         indexedBookingInterval: this._indexedBookingInterval,
                         bookingCreationDate: bookingCreationDate,
@@ -148,8 +149,8 @@ export class BookingSearchResultBuilder {
                         roomCategoryIdListFromPriceProduct: priceProduct.roomCategoryIdList,
                         bookingBilledCustomerId: bookingBilledCustomerId
                     });
-                    pricePerNightList = this._bookingUtils.getPricePerNightListWithDiscount(pricePerNightList, discount);
-                    itemPrice.price = this._thUtils.getArraySum(pricePerNightList);
+                    pricePerDayList = this._bookingUtils.getPricePerDayListWithDiscount(pricePerDayList, discount);
+                    itemPrice.price = this._thUtils.getArraySum(pricePerDayList);
                     var includedInvoiceItems = this._bookingUtils.getIncludedInvoiceItems(priceProduct, this._builderParams.searchParams.configCapacity, this._indexedBookingInterval);
                     itemPrice.price += includedInvoiceItems.getTotalPrice();
                     itemPrice.price = this._thUtils.roundNumberToTwoDecimals(itemPrice.price);

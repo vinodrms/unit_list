@@ -1,6 +1,6 @@
-import {BaseDO} from '../../../../../../../common/base/BaseDO';
-import {ThDateDO} from '../../../../common/data-objects/th-dates/ThDateDO';
-import {PriceProductYieldItemDO} from './PriceProductYieldItemDO';
+import { BaseDO } from '../../../../../../../common/base/BaseDO';
+import { ThDateDO } from '../../../../common/data-objects/th-dates/ThDateDO';
+import { PriceProductYieldItemDO } from './PriceProductYieldItemDO';
 
 export class PriceProductYieldResultDO extends BaseDO {
     dateList: ThDateDO[];

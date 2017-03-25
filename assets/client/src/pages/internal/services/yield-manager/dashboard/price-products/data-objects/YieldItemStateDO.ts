@@ -1,4 +1,4 @@
-import {BaseDO} from '../../../../../../../common/base/BaseDO';
+import { BaseDO } from '../../../../../../../common/base/BaseDO';
 
 export enum YieldItemStateType {
     Open,

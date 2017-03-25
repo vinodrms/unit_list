@@ -3,35 +3,35 @@ import should = require('should');
 import supertest = require('supertest');
 import _ = require("underscore");
 
-import {ThError} from '../../../../core/utils/th-responses/ThError';
-import {ThStatusCode} from '../../../../core/utils/th-responses/ThResponse';
-import {DefaultDataBuilder} from '../../../db-initializers/DefaultDataBuilder';
-import {TestContext} from '../../../helpers/TestContext';
-import {TestUtils} from '../../../helpers/TestUtils';
-import {BookingTestHelper} from './helpers/BookingTestHelper';
-import {LazyLoadMetaResponseRepoDO} from '../../../../core/data-layer/common/repo-data-objects/LazyLoadRepoDO';
-import {SaveAllotmentItem} from '../../../../core/domain-layer/allotments/SaveAllotmentItem';
-import {AllotmentDO} from '../../../../core/data-layer/allotments/data-objects/AllotmentDO';
-import {AllotmentsHelper} from '../allotments/helpers/AllotmentsHelper';
-import {CustomersTestHelper} from '../customers/helpers/CustomersTestHelper';
-import {CustomerDO} from '../../../../core/data-layer/customers/data-objects/CustomerDO';
-import {SaveCustomerItem} from '../../../../core/domain-layer/customers/SaveCustomerItem';
-import {PriceProductDO, PriceProductAvailability} from '../../../../core/data-layer/price-products/data-objects/PriceProductDO';
-import {AddBookingItems} from '../../../../core/domain-layer/bookings/add-bookings/AddBookingItems';
-import {AddBookingItemsDO} from '../../../../core/domain-layer/bookings/add-bookings/AddBookingItemsDO';
-import {BookingDO, GroupBookingInputChannel, BookingConfirmationStatus} from '../../../../core/data-layer/bookings/data-objects/BookingDO';
-import {BookingPriceType} from '../../../../core/data-layer/bookings/data-objects/price/BookingPriceDO';
-import {BookingSearchResultRepoDO} from '../../../../core/data-layer/bookings/repositories/IBookingRepository';
-import {BookingConfirmationEmailSender} from '../../../../core/domain-layer/bookings/booking-confirmations/BookingConfirmationEmailSender';
-import {BookingOccupancyCalculator} from '../../../../core/domain-layer/bookings/search-bookings/utils/occupancy-calculator/BookingOccupancyCalculator';
-import {IBookingOccupancy} from '../../../../core/domain-layer/bookings/search-bookings/utils/occupancy-calculator/results/IBookingOccupancy';
-import {BookingSearch} from '../../../../core/domain-layer/bookings/search-bookings/BookingSearch';
-import {TransientBookingItemDO} from '../../../../core/domain-layer/bookings/search-bookings/TransientBookingItemDO';
-import {BookingSearchResult, RoomCategoryItem} from '../../../../core/domain-layer/bookings/search-bookings/utils/result-builder/BookingSearchResult';
-import {BookingProcessFactory, BookingStatusChangerProcessType} from '../../../../core/domain-layer/bookings/processes/BookingProcessFactory';
-import {IBookingStatusChangerProcess} from '../../../../core/domain-layer/bookings/processes/IBookingStatusChangerProcess';
-import {BookingChangeDates} from '../../../../core/domain-layer/hotel-operations/booking/change-dates/BookingChangeDates';
-import {BookingChangeDatesDO} from '../../../../core/domain-layer/hotel-operations/booking/change-dates/BookingChangeDatesDO';
+import { ThError } from '../../../../core/utils/th-responses/ThError';
+import { ThStatusCode } from '../../../../core/utils/th-responses/ThResponse';
+import { DefaultDataBuilder } from '../../../db-initializers/DefaultDataBuilder';
+import { TestContext } from '../../../helpers/TestContext';
+import { TestUtils } from '../../../helpers/TestUtils';
+import { BookingTestHelper } from './helpers/BookingTestHelper';
+import { LazyLoadMetaResponseRepoDO } from '../../../../core/data-layer/common/repo-data-objects/LazyLoadRepoDO';
+import { SaveAllotmentItem } from '../../../../core/domain-layer/allotments/SaveAllotmentItem';
+import { AllotmentDO } from '../../../../core/data-layer/allotments/data-objects/AllotmentDO';
+import { AllotmentsHelper } from '../allotments/helpers/AllotmentsHelper';
+import { CustomersTestHelper } from '../customers/helpers/CustomersTestHelper';
+import { CustomerDO } from '../../../../core/data-layer/customers/data-objects/CustomerDO';
+import { SaveCustomerItem } from '../../../../core/domain-layer/customers/SaveCustomerItem';
+import { PriceProductDO, PriceProductAvailability } from '../../../../core/data-layer/price-products/data-objects/PriceProductDO';
+import { AddBookingItems } from '../../../../core/domain-layer/bookings/add-bookings/AddBookingItems';
+import { AddBookingItemsDO } from '../../../../core/domain-layer/bookings/add-bookings/AddBookingItemsDO';
+import { BookingDO, GroupBookingInputChannel, BookingConfirmationStatus } from '../../../../core/data-layer/bookings/data-objects/BookingDO';
+import { BookingPriceType } from '../../../../core/data-layer/bookings/data-objects/price/BookingPriceDO';
+import { BookingSearchResultRepoDO } from '../../../../core/data-layer/bookings/repositories/IBookingRepository';
+import { BookingConfirmationEmailSender } from '../../../../core/domain-layer/bookings/booking-confirmations/BookingConfirmationEmailSender';
+import { BookingOccupancyCalculator } from '../../../../core/domain-layer/bookings/search-bookings/utils/occupancy-calculator/BookingOccupancyCalculator';
+import { IBookingOccupancy } from '../../../../core/domain-layer/bookings/search-bookings/utils/occupancy-calculator/results/IBookingOccupancy';
+import { BookingSearch } from '../../../../core/domain-layer/bookings/search-bookings/BookingSearch';
+import { TransientBookingItemDO } from '../../../../core/domain-layer/bookings/search-bookings/TransientBookingItemDO';
+import { BookingSearchResult, RoomCategoryItem } from '../../../../core/domain-layer/bookings/search-bookings/utils/result-builder/BookingSearchResult';
+import { BookingProcessFactory, BookingStatusChangerProcessType } from '../../../../core/domain-layer/bookings/processes/BookingProcessFactory';
+import { IBookingStatusChangerProcess } from '../../../../core/domain-layer/bookings/processes/IBookingStatusChangerProcess';
+import { BookingChangeDates } from '../../../../core/domain-layer/hotel-operations/booking/change-dates/BookingChangeDates';
+import { BookingChangeDatesDO } from '../../../../core/domain-layer/hotel-operations/booking/change-dates/BookingChangeDatesDO';
 
 describe("New Bookings Tests", function () {
     var testContext: TestContext;
@@ -143,26 +143,6 @@ describe("New Bookings Tests", function () {
                 done(err);
             });
         });
-
-        // it("Should send booking confirmation email", function (done) {
-        //     var bookingRepo = testContext.appContext.getRepositoryFactory().getBookingRepository();
-        //     bookingRepo.getBookingList({ hotelId: testContext.sessionContext.sessionDO.hotel.id }, {
-        //         interval: bookingTestHelper.getBookingSearchInterval(testDataBuilder)
-        //     }).then((bookingSearchResult: BookingSearchResultRepoDO) => {
-        //         var groupBookingReferenceList = _.chain(bookingSearchResult.bookingList).map((booking: BookingDO) => {
-        //             return booking.groupBookingId;
-        //         }).uniq().value();
-        //         var groupBookingArr = _.where(bookingSearchResult.bookingList, { groupBookingReference: groupBookingReferenceList[0] });
-        //         var bookingConfirmationEmailSender = new BookingConfirmationEmailSender(testContext.appContext, testContext.sessionContext);
-        //         return bookingConfirmationEmailSender.sendBookingConfirmation({
-        //             groupBookingId: groupBookingReferenceList[0]
-        //         }, ['dragos.pricope@gmail.com']);
-        //     }).then((result: boolean) => {
-        //         done();
-        //     }).catch((err: any) => {
-        //         done(err);
-        //     });
-        // });
 
     });
     describe("Bookings Search Tests", function () {

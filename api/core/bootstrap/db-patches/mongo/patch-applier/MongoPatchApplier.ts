@@ -1,5 +1,6 @@
 import { ThError } from '../../../../utils/th-responses/ThError';
 import { ThStatusCode } from '../../../../utils/th-responses/ThResponse';
+import { ThLogger, ThLogLevel } from "../../../../utils/logging/ThLogger";
 import { IMongoPatchApplier } from './utils/IMongoPatchApplier';
 import { ATransactionalMongoPatch } from './utils/ATransactionalMongoPatch';
 import { MongoPatchUtils } from './patches/MongoPatchUtils';
@@ -44,6 +45,7 @@ export class MongoPatchApplier implements IMongoPatchApplier {
 						finishApplySinglePatchCallback(null, result);
 					}).catch((err: Error) => {
 						var thError = new ThError(ThStatusCode.ErrorBootstrappingApp, err);
+						ThLogger.getInstance().logError(ThLogLevel.Error, "error applying patch", { "patchType": patchApplier.getPatchType() }, thError);
 						finishApplySinglePatchCallback(thError);
 					});
 				}

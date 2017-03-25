@@ -9,6 +9,8 @@ import { P6_AddAppliedDiscountValueOnBookingPrice } from './list/P6_AddAppliedDi
 import { P7_AddCustomerIdDisplayedAsGuestOnDefaultBillingDetails } from "./list/P7_AddCustomerIdDisplayedAsGuestOnDefaultBillingDetails";
 import { P8_SetValueForFirstChildWithAdultInSharedBedPriceOnBookingsPriceProductSnapshots } from "./list/P8_SetValueForFirstChildWithAdultInSharedBedPriceOnBookingsPriceProductSnapshots";
 import { P9_SetInitialValuesForBookingReferenceSequencesOnHotel } from "./list/P9_SetInitialValuesForBookingReferenceSequencesOnHotel";
+import { P10_AddDynamicPricesOnPriceProducts } from "./list/P10_AddDynamicPricesOnPriceProducts";
+import { P11_AddDynamicPriceIdsOnBookingPrice } from "./list/P11_AddDynamicPriceIdsOnBookingPrice";
 
 export class MongoPatchUtils {
 	public static get PatchList(): ATransactionalMongoPatch[] {
@@ -23,6 +25,8 @@ export class MongoPatchUtils {
 			new P7_AddCustomerIdDisplayedAsGuestOnDefaultBillingDetails(),
 			new P8_SetValueForFirstChildWithAdultInSharedBedPriceOnBookingsPriceProductSnapshots(),
 			new P9_SetInitialValuesForBookingReferenceSequencesOnHotel(),
+			new P10_AddDynamicPricesOnPriceProducts(),
+			new P11_AddDynamicPriceIdsOnBookingPrice(),
 
 		];
 	}

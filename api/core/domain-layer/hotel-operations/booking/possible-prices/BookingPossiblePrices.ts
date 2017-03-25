@@ -7,12 +7,16 @@ import { ThUtils } from '../../../../utils/ThUtils';
 import { BookingPossiblePricesDO } from './BookingPossiblePricesDO';
 import { BookingDO } from '../../../../data-layer/bookings/data-objects/BookingDO';
 import { PriceProductPriceQueryDO } from '../../../../data-layer/price-products/data-objects/price/IPriceProductPrice';
+import { PricePerDayDO } from "../../../../data-layer/bookings/data-objects/price/PricePerDayDO";
 import { ValidationResultParser } from '../../../common/ValidationResultParser';
 import { BookingPossiblePriceItems, BookingPriceItem } from './utils/BookingPossiblePriceItems';
 import { IndexedBookingInterval } from '../../../../data-layer/price-products/utils/IndexedBookingInterval';
 import { BookingUtils } from '../../../bookings/utils/BookingUtils';
 import { RoomCategoryStatsAggregator } from '../../../room-categories/aggregators/RoomCategoryStatsAggregator';
 import { RoomCategoryStatsDO } from '../../../../data-layer/room-categories/data-objects/RoomCategoryStatsDO';
+import { PriceProductConstraintDataDO } from "../../../../data-layer/price-products/data-objects/constraint/IPriceProductConstraint";
+import { PriceProductIdValidator } from "../../../price-products/validators/PriceProductIdValidator";
+import { PriceProductsContainer } from "../../../price-products/validators/results/PriceProductsContainer";
 import { DiscountConstraintDataDO } from "../../../../data-layer/price-products/data-objects/discount/PriceProductDiscountDO";
 
 import _ = require('underscore');
@@ -55,6 +59,12 @@ export class BookingPossiblePrices {
             }).then((booking: BookingDO) => {
                 this._loadedBooking = booking;
 
+                var priceProductValidator = new PriceProductIdValidator(this._appContext, this._sessionContext);
+                return priceProductValidator.validatePriceProductId(this._loadedBooking.priceProductId);
+            }).then((loadedPriceProductsContainer: PriceProductsContainer) => {
+                // update the PP snapshot so that the correct dynamic rate will be applied
+                this._loadedBooking.priceProductSnapshot = loadedPriceProductsContainer.getPriceProductById(this._loadedBooking.priceProductId);
+
                 resolve(this.getBookingPossiblePriceItems());
             }).catch((error: any) => {
                 var thError = new ThError(ThStatusCode.BookingPossiblePricesError, error);
@@ -87,11 +97,11 @@ export class BookingPossiblePrices {
             if (this._loadedBooking.priceProductSnapshot.price.hasPriceConfiguredFor(priceQuery)) {
                 var priceItem = new BookingPriceItem();
                 priceItem.roomCategoryId = roomCategoryId;
-                var pricePerNightList: number[] = this._loadedBooking.priceProductSnapshot.price.getPricePerNightBreakdownFor(priceQuery);
+                var pricePerDayList: PricePerDayDO[] = this._loadedBooking.priceProductSnapshot.price.getPricePerDayBreakdownFor(priceQuery);
                 let discount = this._loadedBooking.priceProductSnapshot.discounts.getDiscountValueFor(discountQuery);
-                pricePerNightList = this._bookingUtils.getPricePerNightListWithDiscount(pricePerNightList, discount);
+                pricePerDayList = this._bookingUtils.getPricePerDayListWithDiscount(pricePerDayList, discount);
 
-                priceItem.price = this._thUtils.getArraySum(pricePerNightList);
+                priceItem.price = this._thUtils.getArraySum(pricePerDayList);
                 var includedInvoiceItems = this._bookingUtils.getIncludedInvoiceItems(this._loadedBooking.priceProductSnapshot,
                     this._loadedBooking.configCapacity, indexedBookingInterval);
                 priceItem.price += includedInvoiceItems.getTotalPrice();

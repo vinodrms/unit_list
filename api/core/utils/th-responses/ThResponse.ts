@@ -221,6 +221,8 @@ export enum ThStatusCode {
 	PriceProductRepositoryErrorGettingList,
 	SavePriceProductItemError,
 	SavePriceProductItemInvalidPrice,
+	SavePriceProductItemMaxNoDynamicRates,
+	SavePriceProductItemNoDynamicRates,
 	SavePriceProductItemInvalidPriceException,
 	SavePriceProductItemInvalidConstraints,
 	SavePriceProductItemTooManyConstraints,
@@ -230,6 +232,7 @@ export enum ThStatusCode {
 	SavePriceProductItemInvalidConditions,
 	PriceProductItemUpdateStrategyOnlyActiveAndDraftCanBeUpdated,
 	PriceProductItemStrategyInvalidStatus,
+	PriceProductItemStrategyMissingDynamicRates,
 	PriceProductValidatorInvalidBreakfast,
 	PriceProductValidatorAopAsBreakfast,
 	PriceProductValidatorUnusedRoomCategoryId,
@@ -245,6 +248,8 @@ export enum ThStatusCode {
 	DraftPriceProductItemOnlyArchived,
 	DraftPriceProductItemError,
 	PriceProductsYieldManagementInvalidInterval,
+	DynamicPriceYieldingInvalidInterval,
+	DynamicPriceYieldingDynamicPriceNotFound,
 	PriceProductIdValidatorInvalidId,
 	PriceProductsControllerErrorGettingPriceProduct,
 	PriceProductsControllerErrorSavingPriceProduct,
@@ -256,6 +261,7 @@ export enum ThStatusCode {
 	PricePerPersonForSingleRoomCategoryDOInvalidPriceConfiguration,
 	YieldManagerControllerErrorClosing,
 	YieldManagerControllerErrorOpening,
+	YieldManagerControllerErrorOpeningDynamicPrice,
 	HotelConfigurationRepositoryNotFound,
 	HotelConfigurationRepositoryReadError,
 	HotelConfigurationRepositoryErrorAddingConfiguration,
@@ -740,6 +746,8 @@ ThMessage[ThStatusCode.PriceProductRepositoryErrorReadingDocumentCount] = "Error
 ThMessage[ThStatusCode.PriceProductRepositoryErrorGettingList] = "Error getting the list of price products.";
 ThMessage[ThStatusCode.SavePriceProductItemError] = "Error saving price product.";
 ThMessage[ThStatusCode.SavePriceProductItemInvalidPrice] = "Invalid price submitted.";
+ThMessage[ThStatusCode.SavePriceProductItemMaxNoDynamicRates] = "You cannot add more than 15 dynamic daily rates on the same price product.";
+ThMessage[ThStatusCode.SavePriceProductItemNoDynamicRates] = "You need to attach at lease one dynamic daily rate on the price product.";
 ThMessage[ThStatusCode.SavePriceProductItemInvalidPriceException] = "Invalid price exceptions submitted.";
 ThMessage[ThStatusCode.SavePriceProductItemInvalidConstraints] = "Invalid constraints submitted.";
 ThMessage[ThStatusCode.SavePriceProductItemTooManyConstraints] = "You cannot add more than 20 constraints on the same Price Product.";
@@ -749,6 +757,7 @@ ThMessage[ThStatusCode.SavePriceProductItemTooManyConstraintsForTheSameDiscount]
 ThMessage[ThStatusCode.SavePriceProductItemInvalidConditions] = "Invalid conditions submitted.";
 ThMessage[ThStatusCode.PriceProductItemUpdateStrategyOnlyActiveAndDraftCanBeUpdated] = "Only draft or active price products can be updated.";
 ThMessage[ThStatusCode.PriceProductItemStrategyInvalidStatus] = "A price product can only be saved as draft or active.";
+ThMessage[ThStatusCode.PriceProductItemStrategyMissingDynamicRates] = "Some of the existing dynamic daily rates are missing from the price product.";
 ThMessage[ThStatusCode.PriceProductValidatorInvalidBreakfast] = "Invalid breakfast submitted on Price Product.";
 ThMessage[ThStatusCode.PriceProductValidatorAopAsBreakfast] = "You submitted a breakfast as an Add On Product.";
 ThMessage[ThStatusCode.PriceProductValidatorUnusedRoomCategoryId] = "You can assign on the price product only room categories which have rooms assigned.";
@@ -764,6 +773,8 @@ ThMessage[ThStatusCode.UpdatePriceProductItemStatusWrongStatus] = "Cannot run th
 ThMessage[ThStatusCode.DraftPriceProductItemOnlyArchived] = "Only archived price products can be marked as drafts.";
 ThMessage[ThStatusCode.DraftPriceProductItemError] = "Error marking the price product as draft.";
 ThMessage[ThStatusCode.PriceProductsYieldManagementInvalidInterval] = "Invalid interval submitted.";
+ThMessage[ThStatusCode.DynamicPriceYieldingInvalidInterval] = "Invalid interval submitted.";
+ThMessage[ThStatusCode.DynamicPriceYieldingDynamicPriceNotFound] = "The dynamic price was not found.";
 ThMessage[ThStatusCode.PriceProductIdValidatorInvalidId] = "Invalid price products.";
 ThMessage[ThStatusCode.PriceProductsControllerErrorGettingPriceProduct] = "Error getting price product.";
 ThMessage[ThStatusCode.PriceProductsControllerErrorSavingPriceProduct] = "Error saving price product.";
@@ -774,6 +785,7 @@ ThMessage[ThStatusCode.PriceProductsControllerErrorGettingCount] = "Error the nu
 ThMessage[ThStatusCode.PriceProductsControllerErrorGettingList] = "Error getting the list price product.";
 ThMessage[ThStatusCode.YieldManagerControllerErrorClosing] = "Error closing the period for the price products.";
 ThMessage[ThStatusCode.YieldManagerControllerErrorOpening] = "Error opening the period for the price products.";
+ThMessage[ThStatusCode.YieldManagerControllerErrorOpeningDynamicPrice] = "Error opening the period for the price products.";
 ThMessage[ThStatusCode.HotelConfigurationRepositoryNotFound] = "Hotel configuration not found.";
 ThMessage[ThStatusCode.HotelConfigurationRepositoryReadError] = "Cannot read hotel configuration.";
 ThMessage[ThStatusCode.HotelConfigurationRepositoryErrorAddingConfiguration] = "Cannot add hotel configuration.";

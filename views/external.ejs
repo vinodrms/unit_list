@@ -24,7 +24,7 @@
 	<link href='/node_modules/perfect-scrollbar/dist/css/perfect-scrollbar.min.css' rel='stylesheet'>
 	<!-- Custom CSS -->
 	<link href="/client/static-assets/css/custom.css" rel="stylesheet">
-	<link href="/client/static-assets/css/unitpal.css?version=1030" rel="stylesheet">
+	<link href="/client/static-assets/css/unitpal.css?version=1031" rel="stylesheet">
 
 	<!-- JS Libraries -->
 	<script src="/node_modules/jquery.1/node_modules/jquery/dist/jquery.min.js"></script>
@@ -44,6 +44,9 @@
 	<script src='/node_modules/perfect-scrollbar/dist/js/perfect-scrollbar.jquery.min.js'></script>
 
 	<%if (isDevelopmentEnvironment) {%>
+		<script>
+			var enableAngularProdMode = false;
+		</script>
 		<script src="/client/systemjs.external.config.js"></script>
 		<script>
 			System.import('external').catch(function(err){ console.error(err); });
@@ -67,7 +70,10 @@
 	<main-layout-external></main-layout-external>
 	
 	<%if (!isDevelopmentEnvironment) {%>
-		<script src="/client/build/unitpal-external-1.0.30.min.js"></script>
+		<script>
+			var enableAngularProdMode = true;
+		</script>
+		<script src="/client/build/unitpal-external-1.0.31.min.js"></script>
 	<%}%>
 	
 </body>

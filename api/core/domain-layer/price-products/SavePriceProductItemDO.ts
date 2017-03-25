@@ -58,6 +58,7 @@ export class SavePriceProductItemDO {
 	public static MaxConstraints = 20;
 	public static MaxDiscounts = 20;
 	public static MaxConstraintsForDiscount = 20;
+	public static MaxNoDynamicRates = 15;
 
 	public static getPriceProductConstraintWrapperValidationRule(): IValidationStructure {
 		return new ObjectValidationStructure([
@@ -160,19 +161,36 @@ export class SavePriceProductItemDO {
 						validationStruct: new PrimitiveValidationStructure(new NumberInListValidationRule([PriceProductPriceType.PricePerPerson, PriceProductPriceType.SinglePrice]))
 					},
 					{
-						key: "priceList",
-						validationStruct: new ArrayValidationStructure(new ObjectValidationStructure([]))
-					},
-					{
-						key: "priceExceptionList",
+						key: "dynamicPriceList",
 						validationStruct: new ArrayValidationStructure(new ObjectValidationStructure([
 							{
-								key: "dayFromWeek",
-								validationStruct: new PrimitiveValidationStructure(new NumberInListValidationRule(weekDayUtils.getISOWeekDayList()))
+								key: "id",
+								validationStruct: new PrimitiveValidationStructure(StringValidationRule.buildNullable())
 							},
 							{
-								key: "price",
-								validationStruct: new ObjectValidationStructure([])
+								key: "name",
+								validationStruct: new PrimitiveValidationStructure(new StringValidationRule(50))
+							},
+							{
+								key: "description",
+								validationStruct: new PrimitiveValidationStructure(StringValidationRule.buildNullable(200))
+							},
+							{
+								key: "priceList",
+								validationStruct: new ArrayValidationStructure(new ObjectValidationStructure([]))
+							},
+							{
+								key: "priceExceptionList",
+								validationStruct: new ArrayValidationStructure(new ObjectValidationStructure([
+									{
+										key: "dayFromWeek",
+										validationStruct: new PrimitiveValidationStructure(new NumberInListValidationRule(weekDayUtils.getISOWeekDayList()))
+									},
+									{
+										key: "price",
+										validationStruct: new ObjectValidationStructure([])
+									}
+								]))
 							}
 						]))
 					}

@@ -1,24 +1,26 @@
-import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/combineLatest';
 
-import {ARequestService} from '../../../common/ARequestService';
-import {AppContext, ThServerApi} from '../../../../../../common/utils/AppContext';
-import {PriceProductYieldFilterMetaDO} from '../../../price-products/data-objects/yield-filter/PriceProductYieldFilterDO';
-import {PriceProductDO} from '../../../price-products/data-objects/PriceProductDO';
-import {PriceProductsDO} from '../../../price-products/data-objects/PriceProductsDO';
-import {YieldManagerDashboardFilterService} from '../filter/YieldManagerDashboardFilterService';
-import {FilterVMCollection} from '../filter/utils/FilterVMCollection';
-import {ColorFilterVM} from '../filter/view-models/ColorFilterVM';
-import {TextFilterVM} from '../filter/view-models/TextFilterVM';
-import {IFilterVM} from '../filter/view-models/IFilterVM';
-import {YieldManagerPeriodParam} from '../common/YieldManagerPeriodParam';
-import {PriceProductYieldParam} from '../common/PriceProductYieldParam';
-import {PriceProductYieldResultVM} from './view-models/PriceProductYieldResultVM';
-import {PriceProductYieldItemVM} from './view-models/PriceProductYieldItemVM';
-import {PriceProductYieldResultDO} from './data-objects/PriceProductYieldResultDO';
-import {PriceProductYieldItemDO} from './data-objects/PriceProductYieldItemDO';
+import { ARequestService } from '../../../common/ARequestService';
+import { AppContext, ThServerApi } from '../../../../../../common/utils/AppContext';
+import { PriceProductYieldFilterMetaDO } from '../../../price-products/data-objects/yield-filter/PriceProductYieldFilterDO';
+import { PriceProductDO } from '../../../price-products/data-objects/PriceProductDO';
+import { PriceProductsDO } from '../../../price-products/data-objects/PriceProductsDO';
+import { YieldManagerDashboardFilterService } from '../filter/YieldManagerDashboardFilterService';
+import { FilterVMCollection } from '../filter/utils/FilterVMCollection';
+import { ColorFilterVM } from '../filter/view-models/ColorFilterVM';
+import { TextFilterVM } from '../filter/view-models/TextFilterVM';
+import { IFilterVM } from '../filter/view-models/IFilterVM';
+import { YieldManagerPeriodParam } from '../common/YieldManagerPeriodParam';
+import { PriceProductYieldParam } from '../common/PriceProductYieldParam';
+import { PriceProductYieldResultVM } from './view-models/PriceProductYieldResultVM';
+import { PriceProductYieldItemVM } from './view-models/PriceProductYieldItemVM';
+import { PriceProductYieldResultDO } from './data-objects/PriceProductYieldResultDO';
+import { PriceProductYieldItemDO } from './data-objects/PriceProductYieldItemDO';
+import { ThDateIntervalDO } from "../../../common/data-objects/th-dates/ThDateIntervalDO";
+import { DynamicPriceYieldParam } from "../common/DynamicPriceYieldParam";
 
 @Injectable()
 export class YieldManagerDashboardPriceProductsService extends ARequestService<PriceProductYieldResultVM> {
@@ -89,6 +91,14 @@ export class YieldManagerDashboardPriceProductsService extends ARequestService<P
                 var priceProducts = new PriceProductsDO();
                 priceProducts.buildFromObject(priceProductsObject);
                 return priceProducts;
+            });
+    }
+    public openDynamicPrice(yieldParam: DynamicPriceYieldParam): Observable<PriceProductDO> {
+        return this._appContext.thHttp.post(ThServerApi.YieldManagerOpenDynamicPrice, { yieldData: yieldParam })
+            .map((priceProductObject: Object) => {
+                var priceProduct = new PriceProductDO();
+                priceProduct.buildFromObject(priceProductObject);
+                return priceProduct;
             });
     }
 }
