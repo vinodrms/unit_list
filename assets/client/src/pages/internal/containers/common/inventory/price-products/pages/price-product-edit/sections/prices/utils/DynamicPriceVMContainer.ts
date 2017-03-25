@@ -63,7 +63,13 @@ export class DynamicPriceVMContainer {
     }
 
     public isValid(): boolean {
-        return true;
+        let isValid = true;
+        _.forEach(this._dynamicPriceVMList, (dynamicPriceVM: DynamicPriceVM) => {
+            if(!dynamicPriceVM.isValid()) {
+                isValid = false;
+            }
+        });
+        return isValid;
     }
 
     public updatePricesOn(priceProductVM: PriceProductVM) {
@@ -91,10 +97,6 @@ export class DynamicPriceVMContainer {
             _.filter(priceProductVM.priceProduct.price.dynamicPriceList, (dynamicPriceDO: DynamicPriceDO) => {
                 return _.contains(dynamicPriceIdList, dynamicPriceDO.id);
             });
-    }
-
-    public getPriceVMForRoomCategoryId(roomCategoryId: string): PriceVM {
-        return null;
     }
 
     public updateFromRoomCategoryStatsList(roomCategoryStatsList: RoomCategoryStatsDO[]) { 

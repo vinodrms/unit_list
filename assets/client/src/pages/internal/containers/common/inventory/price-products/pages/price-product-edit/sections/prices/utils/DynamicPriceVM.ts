@@ -159,6 +159,12 @@ export class DynamicPriceVM {
         destPriceDO.copyPricesFrom(sourcePriceDO);
     }
 
+    public resetPrices() {
+        _.forEach(this._priceVMList, (priceVM: PriceVM) => {
+            priceVM.price.resetPrices();
+        });
+    }
+
     public buildPrototype(): DynamicPriceVM {
         let dynamicPriceCopy: DynamicPriceVM = new DynamicPriceVM(this._priceType);
         dynamicPriceCopy.name = this.name;

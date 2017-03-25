@@ -25,19 +25,18 @@ import { PricingContainer } from "./utils/PricingContainer";
 	providers: [RoomCategoriesStatsService, PriceExceptionModalService, DynamicPriceModalService]
 })
 export class PriceProductEditPricesSectionComponent extends BaseComponent implements IPriceProductEditSection {
+	private static MAX_NO_OF_DYNAMIC_PRICES = 15;
 
 	private _readonly: boolean;
-
+  	
 	@Input() didSubmit: boolean;
-
+	
 	private _currentRoomCategoryStatsList: RoomCategoryStatsDO[];
-
 	private _isoWeekDayUtils: ISOWeekDayUtils;
 	private _isPricePerNumberOfPersons: boolean;
 
 	isLoading: boolean = true;
 	ccy: CurrencyDO;
-
 	pricingContainer: PricingContainer;
 
 	constructor(private _appContext: AppContext,
@@ -231,6 +230,11 @@ export class PriceProductEditPricesSectionComponent extends BaseComponent implem
 	}
 
 	public didAddDynamicPrice(newDynamicPrice: DynamicPriceVM) {
+		if(this.dynamicPriceVMContainer.dynamicPriceVMList.length == PriceProductEditPricesSectionComponent.MAX_NO_OF_DYNAMIC_PRICES) {
+			this._appContext.toaster.error(this._appContext.thTranslation.translate("The maximum number of dynamic prices on this price product has been reached."));
+			return;
+		}
+
 		this.pricingContainer.addDynamicPrice(newDynamicPrice);
 		this.selectDynamicPrice(this.dynamicPriceVMList.length - 1);
 	}

@@ -42,10 +42,12 @@ export class PricingContainer {
         let firstPricePerPersonDynamicPriceClone: DynamicPriceVM = this.pricePerPersonContainer.dynamicPriceVMList[0].buildPrototype();
 		firstPricePerPersonDynamicPriceClone.name = newDynamicPrice.name;
 		firstPricePerPersonDynamicPriceClone.description = newDynamicPrice.description;
+        firstPricePerPersonDynamicPriceClone.resetPrices();
 
         let firstSinglePriceDynamicPriceClone: DynamicPriceVM = this.singlePriceContainer.dynamicPriceVMList[0].buildPrototype();
 		firstSinglePriceDynamicPriceClone.name = newDynamicPrice.name;
 		firstSinglePriceDynamicPriceClone.description = newDynamicPrice.description;
+        firstSinglePriceDynamicPriceClone.resetPrices();
         
 		this.pricePerPersonContainer.dynamicPriceVMList.push(firstPricePerPersonDynamicPriceClone);
         this.singlePriceContainer.dynamicPriceVMList.push(firstSinglePriceDynamicPriceClone);
