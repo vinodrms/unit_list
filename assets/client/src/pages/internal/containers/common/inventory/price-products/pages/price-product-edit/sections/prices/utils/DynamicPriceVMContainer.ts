@@ -5,12 +5,14 @@ import { PriceProductVM } from "../../../../../../../../../services/price-produc
 import { PriceVM } from "./PriceVM";
 import { DynamicPriceVM } from "./DynamicPriceVM";
 import { RoomCategoryStatsDO } from "../../../../../../../../../services/room-categories/data-objects/RoomCategoryStatsDO";
+import { RoomCategoryDO } from "../../../../../../../../../services/room-categories/data-objects/RoomCategoryDO";
 
 export class DynamicPriceVMContainer {
-
+    private _selectedDynamicPriceIndex: number;
     private _dynamicPriceVMList: DynamicPriceVM[];
     
     constructor(private _priceType: PriceProductPriceType) {
+        this._selectedDynamicPriceIndex = 0;
     }
 
     public get priceType(): PriceProductPriceType {
@@ -19,8 +21,7 @@ export class DynamicPriceVMContainer {
     
     public initializeFrom(price: PriceProductPriceDO) {
         let newDynamicPriceVMList: DynamicPriceVM[] = [];
-    _.forEach(price.dynamicPriceList, (dynamicPrice: DynamicPriceDO) => {
-            
+        _.forEach(price.dynamicPriceList, (dynamicPrice: DynamicPriceDO) => {
             let dynamicPriceVM = new DynamicPriceVM(this._priceType);
             dynamicPriceVM.initializeFrom(dynamicPrice);
             
@@ -29,12 +30,31 @@ export class DynamicPriceVMContainer {
         this._dynamicPriceVMList = newDynamicPriceVMList;
 
         if(this._dynamicPriceVMList.length > 0) {
-            this._dynamicPriceVMList[0].selected = true;
+            this._selectedDynamicPriceIndex = 0;
+            this.selectDynamicPrice(this._selectedDynamicPriceIndex);
         }
     }
 
+    public get selectedDynamicPriceIndex(): number {
+		return this._selectedDynamicPriceIndex;
+	}
+
+    public selectDynamicPrice(index: number) {
+		this.dynamicPriceVMList[this._selectedDynamicPriceIndex].selected = false;
+		this.dynamicPriceVMList[index].selected = true;
+		this._selectedDynamicPriceIndex = index;
+    }
+
+    public get selectedDynamicPriceVM(): DynamicPriceVM {
+		return this._dynamicPriceVMList[this._selectedDynamicPriceIndex];
+	}
+
     public get dynamicPriceVMList(): DynamicPriceVM[] {
         return this._dynamicPriceVMList;
+    }
+
+    public set dynamicPriceVMList(dynamicPriceVMList: DynamicPriceVM[]) {
+        this._dynamicPriceVMList = dynamicPriceVMList;
     }
 
     public isValid(): boolean {
@@ -42,14 +62,16 @@ export class DynamicPriceVMContainer {
     }
 
     public updatePricesOn(priceProductVM: PriceProductVM) {
+        _.forEach(this._dynamicPriceVMList, (dynamicPriceVM: DynamicPriceVM) => {
+            dynamicPriceVM.updatePricesOn(priceProductVM);    
+        });
     }
 
     public getPriceVMForRoomCategoryId(roomCategoryId: string): PriceVM {
         return null;
     }
 
-    public updateFromRoomCategoryStatsList(roomCategoryStatsList: RoomCategoryStatsDO[]) {
-        
+    public updateFromRoomCategoryStatsList(roomCategoryStatsList: RoomCategoryStatsDO[]) { 
         _.forEach(this._dynamicPriceVMList, (dynamicPriceVM: DynamicPriceVM) => {
             dynamicPriceVM.updateFromRoomCategoryStatsList(roomCategoryStatsList);
         });

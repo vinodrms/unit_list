@@ -820,5 +820,13 @@ export var EnglishTranslations: Object = {
 	"The following bookings have been successfully added:": "The following bookings have been successfully added:",
 	"ResNO": "ResNO",
 	"Dynamic Daily Rate": "Dynamic Daily Rate",
-		
+	"Title": "Title",
+	"Description": "Description",
+	"Remove Dynamic Daily Rate": "Remove Dynamic Daily Rate",
+	"Add Dynamic Daily Rate": "Add Dynamic Daily Rate",
+	"Update": "Update",
+	"Are you sure you want to remove this dynamic daily rate?": "Are you sure you want to remove this dynamic daily rate?",
+	"The price product must have at least a dynamic daily rate configured.": "The price product must have at least a dynamic daily rate configured.",
+	
+	
 };

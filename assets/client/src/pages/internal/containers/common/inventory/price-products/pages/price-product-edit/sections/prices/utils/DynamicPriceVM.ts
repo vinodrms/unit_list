@@ -6,28 +6,35 @@ import { RoomCategoryStatsDO } from '../../../../../../../../../services/room-ca
 import { RoomCategoryDO } from '../../../../../../../../../services/room-categories/data-objects/RoomCategoryDO';
 import { PriceVM } from './PriceVM';
 import { DynamicPriceDO } from "../../../../../../../../../services/price-products/data-objects/price/DynamicPriceDO";
+import { PricePerPersonDO } from "../../../../../../../../../services/price-products/data-objects/price/price-per-person/PricePerPersonDO";
+import { SinglePriceDO } from "../../../../../../../../../services/price-products/data-objects/price/single-price/SinglePriceDO";
+import { AppContext } from "../../../../../../../../../../../common/utils/AppContext";
+import { ThUtils } from "../../../../../../../../../../../common/utils/ThUtils";
 
 export class DynamicPriceVM {
-    private _name: string;
-    private _description: string;
+    private _thUtils: ThUtils;
+
+    private _dynamicPriceDO: DynamicPriceDO;
     private _priceVMList: PriceVM[];
     private _selected: boolean;
 
-    constructor(private _priceType: PriceProductPriceType) {
+    constructor(
+        private _priceType: PriceProductPriceType) {
+        this._dynamicPriceDO = new DynamicPriceDO(this._priceType);
         this._priceVMList = [];
     }
 
     public get name(): string {
-        return this._name;
+        return this._dynamicPriceDO.name;
     }
     public set name(name: string) {
-        this._name = name;
+        this._dynamicPriceDO.name = name;
     }
     public get description(): string {
-        return this._description;
+        return this._dynamicPriceDO.description;
     }
     public set description(description: string) {
-        this._description = description;
+        this._dynamicPriceDO.description = description;
     }
     public get priceVMList(): PriceVM[] {
         return this._priceVMList;
@@ -42,31 +49,32 @@ export class DynamicPriceVM {
         this._selected = selected;
     }
 
-    public initializeFrom(dynamicPrice: DynamicPriceDO) {
-        if (dynamicPrice.type !== this._priceType) {
+    public initializeFrom(dynamicPriceDO: DynamicPriceDO) {
+        this._dynamicPriceDO = dynamicPriceDO;
+        this._selected = false;
+
+        if (dynamicPriceDO.type !== this._priceType) {
             this._priceVMList = [];
             return;
         }
         let newPriceVMList: PriceVM[] = [];
-        _.forEach(dynamicPrice.priceList, (innerPrice: IPriceProductPrice) => {
+        
+        _.forEach(dynamicPriceDO.priceList, (innerPrice: IPriceProductPrice) => {
             let priceVM = new PriceVM(this._priceType);
             priceVM.roomCategoryStats = new RoomCategoryStatsDO();
             priceVM.roomCategoryStats.roomCategory = new RoomCategoryDO();
             priceVM.roomCategoryStats.roomCategory.id = innerPrice.getRoomCategoryId();
             priceVM.price = innerPrice;
 
-            // let filteredPriceExceptionList: PriceExceptionDO[] = price.getFilteredExceptionsByRoomCategoryId(innerPrice.getRoomCategoryId());
-            // _.forEach(filteredPriceExceptionList, (exp: PriceExceptionDO) => {
-            //     priceVM.priceExceptionsByWeekday[exp.dayFromWeek] = exp.price;
-            // });
-            // priceVM.indexExceptions();
+            let filteredPriceExceptionList: PriceExceptionDO[] = dynamicPriceDO.getFilteredExceptionsByRoomCategoryId(innerPrice.getRoomCategoryId());
+            _.forEach(filteredPriceExceptionList, (exp: PriceExceptionDO) => {
+                priceVM.priceExceptionsByWeekday[exp.dayFromWeek] = exp.price;
+            });
+            
+            priceVM.indexExceptions();
             newPriceVMList.push(priceVM);
         });
         this._priceVMList = newPriceVMList;
-
-        this._name = dynamicPrice.name;
-        this._description = dynamicPrice.description;
-        this._selected = false;
     }
 
     public updateFromRoomCategoryStatsList(roomCategoryStatsList: RoomCategoryStatsDO[]) {
@@ -112,8 +120,16 @@ export class DynamicPriceVM {
 
     public updatePricesOn(priceProductVM: PriceProductVM) {
         priceProductVM.priceProduct.price.type = this._priceType;
-        priceProductVM.priceProduct.price.dynamicPriceList[0].priceList = [];
-        priceProductVM.priceProduct.price.dynamicPriceList[0].priceExceptionList = [];
+        
+        let dynamicPrice: DynamicPriceDO = priceProductVM.priceProduct.price.getDynamicPriceById(this._dynamicPriceDO.id);
+        if(this._thUtils.isUndefinedOrNull(dynamicPrice)) {
+            dynamicPrice = new DynamicPriceDO(this._dynamicPriceDO.type);
+            dynamicPrice.name = this._dynamicPriceDO.name;
+            dynamicPrice.description = this._dynamicPriceDO.description;
+        }
+
+        dynamicPrice.priceList = [];
+        dynamicPrice.priceExceptionList = [];
         _.forEach(this._priceVMList, priceVM => {
             priceProductVM.priceProduct.price.dynamicPriceList[0].priceList.push(priceVM.price);
             priceProductVM.priceProduct.price.dynamicPriceList[0].priceExceptionList = priceProductVM.priceProduct.price.dynamicPriceList[0].priceExceptionList.concat(priceVM.exceptionList);

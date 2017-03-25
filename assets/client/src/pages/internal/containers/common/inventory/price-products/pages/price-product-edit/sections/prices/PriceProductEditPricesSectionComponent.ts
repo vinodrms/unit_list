@@ -16,79 +16,77 @@ import { PriceExceptionModalService } from './price-exception-modal/services/Pri
 import { DynamicPriceVM } from './utils/DynamicPriceVM';
 import { PriceVM } from './utils/PriceVM';
 import { DynamicPriceVMContainer } from "./utils/DynamicPriceVMContainer";
-import { DynamicPriceContainerComponent } from "./dynamic-price-container/DynamicPriceContainerComponent";
+import { DynamicPriceModalService } from "./dynamic-price-modal/services/DynamicPriceModalService";
 
 @Component({
 	selector: 'price-product-edit-prices-section',
 	templateUrl: '/client/src/pages/internal/containers/common/inventory/price-products/pages/price-product-edit/sections/prices/template/price-product-edit-prices-section.html',
-	providers: [RoomCategoriesStatsService, PriceExceptionModalService]
+	providers: [RoomCategoriesStatsService, PriceExceptionModalService, DynamicPriceModalService]
 })
 export class PriceProductEditPricesSectionComponent extends BaseComponent implements IPriceProductEditSection {
-	@ViewChild(DynamicPriceContainerComponent) private _dynamicPriceContainerComponent: DynamicPriceContainerComponent;
 
 	readonly: boolean;
 	@Input() didSubmit: boolean;
-
-	pricePerPersonContainer: DynamicPriceVMContainer;
-	singlePriceContainer: DynamicPriceVMContainer;
 
 	private _currentRoomCategoryStatsList: RoomCategoryStatsDO[];
 
 	private _isoWeekDayUtils: ISOWeekDayUtils;
 	private _isPricePerNumberOfPersons: boolean;
-	isLoading: boolean = false;
+
+	isLoading: boolean = true;
 	ccy: CurrencyDO;
+
+	pricePerPersonContainer: DynamicPriceVMContainer;
+	singlePriceContainer: DynamicPriceVMContainer;
 
 	constructor(private _appContext: AppContext,
 		private _roomCategoriesStatsService: RoomCategoriesStatsService,
-		private _priceExceptionModal: PriceExceptionModalService) {
+		private _priceExceptionModal: PriceExceptionModalService,
+		private _dynamicPriceModal: DynamicPriceModalService) {
 		
 		super();
 		this._isoWeekDayUtils = new ISOWeekDayUtils();
+		
 		this.ccy = new CurrencyDO();
 		this.pricePerPersonContainer = new DynamicPriceVMContainer(PriceProductPriceType.PricePerPerson);
 		this.singlePriceContainer = new DynamicPriceVMContainer(PriceProductPriceType.SinglePrice);
 	}
 
 	public isValid(): boolean {
-		return true;
-		// return this.priceContainer.isValid();
+		return this.dynamicPriceVMContainer.isValid();
 	}
+	
 	public initializeFrom(priceProductVM: PriceProductVM) {
 		this.ccy = priceProductVM.ccy;
+		
 		this._isPricePerNumberOfPersons = true;
 		this._currentRoomCategoryStatsList = [];
+
 		if (priceProductVM.priceProduct.price && priceProductVM.priceProduct.price.type != null) {
 			this.updateCurrentPriceFrom(priceProductVM);
 			this._isPricePerNumberOfPersons = (priceProductVM.priceProduct.price.type === PriceProductPriceType.PricePerPerson);
 		}
 		this.updatePricesForRoomCategories(priceProductVM.roomCategoryList);
 	}
+
 	private updateCurrentPriceFrom(priceProductVM: PriceProductVM) {
 		this.singlePriceContainer.initializeFrom(priceProductVM.priceProduct.price);
 		this.pricePerPersonContainer.initializeFrom(priceProductVM.priceProduct.price);
 	}
+
 	public updatePricesForRoomCategories(roomCategoryList: RoomCategoryDO[]) {
 		if (this._appContext.thUtils.isUndefinedOrNull(roomCategoryList) || (_.isArray(roomCategoryList) && roomCategoryList.length == 0)) {
 			this.currentRoomCategoryStatsList = [];
 			return;
 		}
+		
 		this.isLoading = true;
 		this._roomCategoriesStatsService.getRoomCategoryStatsForRoomCategoryList(roomCategoryList).subscribe((roomCategoryStatsList: RoomCategoryStatsDO[]) => {
 			this.currentRoomCategoryStatsList = roomCategoryStatsList;
 			this.isLoading = false;
-
-			this._dynamicPriceContainerComponent.initializeFrom(this.ccy, this.dynamicPriceVMContainer);
 		}, (err: ThError) => {
 			this._appContext.toaster.error(err.message);
 		});
-	}
-
-	public updateDataOn(priceProductVM: PriceProductVM) {
-		if (!priceProductVM.priceProduct.price) {
-			priceProductVM.priceProduct.price = new PriceProductPriceDO();
-		}
-		// this.priceContainer.updatePricesOn(priceProductVM);
 	}
 
 	public get isPricePerNumberOfPersons(): boolean {
@@ -99,7 +97,10 @@ export class PriceProductEditPricesSectionComponent extends BaseComponent implem
 			return;
 		}
 		this._isPricePerNumberOfPersons = isPricePerNumberOfPersons;
+
+		this.selectDynamicPrice(0);
 	}
+
 	public get priceType(): PriceProductPriceType {
 		if (this._isPricePerNumberOfPersons) {
 			return PriceProductPriceType.PricePerPerson;
@@ -116,23 +117,55 @@ export class PriceProductEditPricesSectionComponent extends BaseComponent implem
 		this.singlePriceContainer.updateFromRoomCategoryStatsList(currentRoomCategoryStatsList);
 	}
 
+	public updateDataOn(priceProductVM: PriceProductVM) {
+		// if (!priceProductVM.priceProduct.price) {
+		// 	priceProductVM.priceProduct.price = new PriceProductPriceDO();
+		// }
+		// this.dynamicPriceVMContainer.updatePricesOn(priceProductVM);
+	}
+
 	public displayError() {
 		return this.didSubmit || this.readonly;
 	}
-
+	
 	public get dynamicPriceVMContainer(): DynamicPriceVMContainer {
 		if (this._isPricePerNumberOfPersons) {
 			return this.pricePerPersonContainer;
 		}
 		return this.singlePriceContainer;
 	}
+
 	public getWeekDayName(iSOWeekDay: ISOWeekDay): string {
 		return this._isoWeekDayUtils.getISOWeekDayVM(iSOWeekDay).name;
+	}
+
+	public get dynamicPriceVMList(): DynamicPriceVM[] {
+		return this.dynamicPriceVMContainer.dynamicPriceVMList;
+	}
+
+	public set dynamicPriceVMList(dynamicPriceVMList: DynamicPriceVM[]) {
+		this.dynamicPriceVMContainer.dynamicPriceVMList = dynamicPriceVMList;
+	}
+
+	public selectDynamicPrice(index: number) {
+		this.dynamicPriceVMContainer.selectDynamicPrice(index);
+    }
+
+	public get selectedDynamicPriceVM(): DynamicPriceVM {
+		return this.dynamicPriceVMContainer.selectedDynamicPriceVM;
+	}
+	
+	public getNoRoomsLabel(noOfRooms: number): string {
+		if (noOfRooms === 1) {
+			return this._appContext.thTranslation.translate("%noOfRooms% Room", { noOfRooms: noOfRooms });
+		}
+		return this._appContext.thTranslation.translate("%noOfRooms% Rooms", { noOfRooms: noOfRooms });
 	}
 
 	public removeException(priceVM: PriceVM, exception: PriceExceptionDO) {
 		priceVM.deleteExceptionOn(exception.dayFromWeek);
 	}
+
 	public openPriceExceptionModal(priceVM: PriceVM) {
 		let priceCopy = priceVM.buildPrototype();
 		this._priceExceptionModal.openPriceExceptionModal(priceCopy, this.readonly)
@@ -142,13 +175,62 @@ export class PriceProductEditPricesSectionComponent extends BaseComponent implem
 				})
 			}).catch((e: any) => { });
 	}
+
 	private didChangeExceptionsOn(priceVM: PriceVM) {
-		// let foundPrice = this.priceContainer.getPriceVMForRoomCategoryId(priceVM.price.getRoomCategoryId());
-		// if (this._appContext.thUtils.isUndefinedOrNull(foundPrice)) { return; }
-		// foundPrice.priceExceptionsByWeekday = {};
-		// _.forEach(priceVM.exceptionList, e => {
-		// 	foundPrice.priceExceptionsByWeekday[e.dayFromWeek] = e.price;
-		// });
-		// foundPrice.indexExceptions();
+		let foundPrice = this.selectedDynamicPriceVM.getPriceVMForRoomCategoryId(priceVM.price.getRoomCategoryId());
+		if (this._appContext.thUtils.isUndefinedOrNull(foundPrice)) { return; }
+		foundPrice.priceExceptionsByWeekday = {};
+		_.forEach(priceVM.exceptionList, e => {
+			foundPrice.priceExceptionsByWeekday[e.dayFromWeek] = e.price;
+		});
+		foundPrice.indexExceptions();
+	}
+
+	public openEditDynamicPriceModal(dynamicPriceVM: DynamicPriceVM, dynamicPriceVMIndex: number) {
+		let dynamicPriceCopy = dynamicPriceVM.buildPrototype();
+		this._dynamicPriceModal.openEditDynamicPriceModal(dynamicPriceCopy, this.readonly)
+			.then((modalDialogInstance: ModalDialogRef<DynamicPriceVM>) => {
+				modalDialogInstance.resultObservable.subscribe((updatedDynamicPrice: DynamicPriceVM) => {
+					if(this._appContext.thUtils.isUndefinedOrNull(updatedDynamicPrice)) {
+						this.didRemoveDynamicPrice(dynamicPriceVMIndex);
+						return;
+					}
+					this.didChangeDynamicPriceNameAndDetails(updatedDynamicPrice);
+				})
+			}).catch((e: any) => { });
+	}
+
+	public didChangeDynamicPriceNameAndDetails(updatedDynamicPrice: DynamicPriceVM) {
+
+	}
+
+	public didRemoveDynamicPrice(indexToRemove: number) {
+		if(this.pricePerPersonContainer.dynamicPriceVMList.length == 1 || this.singlePriceContainer.dynamicPriceVMList.length == 1) {
+			this._appContext.toaster.error(this._appContext.thTranslation.translate("The price product must have at least a dynamic daily rate configured."));
+			return;
+		}
+		this.pricePerPersonContainer.dynamicPriceVMList.splice(indexToRemove, 1);
+		this.singlePriceContainer.dynamicPriceVMList.splice(indexToRemove, 1);
+		
+		this.selectDynamicPrice(indexToRemove == 0? 0 : indexToRemove - 1);
+	}
+
+	public openNewDynamicPriceModal() {
+		this._dynamicPriceModal.openNewDynamicPriceModal(this.dynamicPriceVMContainer.priceType)
+			.then((modalDialogInstance: ModalDialogRef<DynamicPriceVM>) => {
+				modalDialogInstance.resultObservable.subscribe((newDynamicPrice: DynamicPriceVM) => {
+					this.didAddDynamicPrice(newDynamicPrice);
+				})
+			}).catch((e: any) => { });
+	}
+
+	public didAddDynamicPrice(newDynamicPrice: DynamicPriceVM) {
+		let fisrtDynamicPriceClone: DynamicPriceVM = this.dynamicPriceVMList[0].buildPrototype();
+		fisrtDynamicPriceClone.name = newDynamicPrice.name;
+		fisrtDynamicPriceClone.description = newDynamicPrice.description;
+	
+		this.dynamicPriceVMList.push(fisrtDynamicPriceClone);
+
+		this.selectDynamicPrice(this.dynamicPriceVMList.length - 1);
 	}
 }

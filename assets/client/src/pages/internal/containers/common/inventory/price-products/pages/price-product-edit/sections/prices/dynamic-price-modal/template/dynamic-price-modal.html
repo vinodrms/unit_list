@@ -1,0 +1,51 @@
+<div class="modal-header text-center">
+	<button type="button" class="close" (click)="closeDialog()">&times;</button>
+	<h4 class="modal-title">{{ 'Dynamic Daily Rate' | translate }}</h4>
+</div>
+<div class="modal-body">
+	
+    <div class="form-group">
+        <label>{{ 'Title' | translate }} *</label>
+        <div class="input-group">
+            <input type="text" class="form-control" [(ngModel)]="dynamicPriceVM.name" name="dynamicPriceName" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>{{ 'Description' | translate }} *</label>
+        <div class="input-group">
+            <input type="text" class="form-control" [(ngModel)]="dynamicPriceVM.description" name="dynamicPriceDescription" />
+        </div>
+    </div>
+	
+</div>
+
+<div *ngIf="newDynamicPrice" class="modal-footer">
+	<button type="button" class="btn btn-green" 
+		(click)="submitChanges()" [disabled]="!isValid">
+		{{ 'Add Dynamic Daily Rate' | translate }}
+	</button>
+
+	<button type="button" class="btn btn-danger" 
+		(click)="closeDialog()">
+		{{ 'Cancel' | translate }}
+	</button>
+</div>
+
+<div *ngIf="!newDynamicPrice" class="modal-footer">
+	<button type="button" class="btn btn-green" 
+		(click)="submitChanges()" [disabled]="!isValid">
+        {{ 'Update' | translate }}
+	</button>
+    
+    <button *ngIf="!readonly" type="button" class="btn"
+        (click)="removeDynamicPrice()">
+		<i class="fa unitpal-font">\</i> {{ 'Remove Dynamic Daily Rate' | translate }}
+	</button>
+	
+    <button type="button" class="btn btn-danger" 
+		(click)="closeDialog()">
+		{{ 'Cancel' | translate }}
+	</button>
+</div>
+  
