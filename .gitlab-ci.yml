@@ -12,8 +12,12 @@ install_to_prod:
    - ./ansible/azure_install.sh
   only:
    - master
+  dependencies:
+   - build_and_test
 
 run_demo_app:
   script:
    - MONGO_USER=demothangle MONGO_PASSWD=Anisdy\$57m! npm run forever-start
    - echo "Finished the build for the Production Branch"
+  dependencies:
+   - build_and_test
