@@ -2,22 +2,15 @@ before_script:
  - npm run forever-stop
  - npm run install-deps
 
-build_and_test:
+build_test_run:
   script:
    - npm run build-all
    - MONGO_USER=demothangle MONGO_PASSWD=Anisdy\$57m! npm run server-tests
+   - MONGO_USER=demothangle MONGO_PASSWD=Anisdy\$57m! npm run forever-start
+   - echo "Finished the build for the Production Branch"
   
-install_to_prod:
+deploy:
   script:
    - ./ansible/azure_install.sh
   only:
    - master
-  dependencies:
-   - build_and_test
-
-run_demo_app:
-  script:
-   - MONGO_USER=demothangle MONGO_PASSWD=Anisdy\$57m! npm run forever-start
-   - echo "Finished the build for the Production Branch"
-  dependencies:
-   - build_and_test
