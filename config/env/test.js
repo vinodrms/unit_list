@@ -1,5 +1,5 @@
 module.exports = {
-    port: 8001,
+    port: 8888,
     connections: {
         mongodbtest: {
             adapter: 'sails-mongo',
