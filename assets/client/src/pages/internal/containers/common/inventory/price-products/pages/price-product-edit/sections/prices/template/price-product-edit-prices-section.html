@@ -3,11 +3,11 @@
 	<div class="input-group">
 		<div class="btn-group" data-toggle="buttons">
 			<button class="btn btn-default" (click)="isPricePerNumberOfPersons=true" [ngClass]="{'active': isPricePerNumberOfPersons}"
-			[disabled]="readonly">
+			[disabled]="_readonly">
 				{{ 'Yes' | translate }}
 			</button>
 			<button class="btn btn-default" (click)="isPricePerNumberOfPersons=false" [ngClass]="{'active': !isPricePerNumberOfPersons}"
-			[disabled]="readonly">
+			[disabled]="_readonly">
 				{{ 'No' | translate }}
 			</button>
 		</div>
@@ -41,7 +41,7 @@
 					</li>
 				</ul>
 			</div>
-			<div class="basic-info-settings-edit-container" customScroll>
+			<div class="basic-info-settings-edit-container">
 				<div class="row row-eq-height">
 					<div class="col-md-6 col-sm-12 coal-xs-12 form-group" *ngFor="let priceVM of selectedDynamicPriceVM.priceVMList">
 						<div class="price-product-box">
@@ -52,13 +52,13 @@
 								</small>
 							</label>
 							<a class="btn" 
-								*ngIf="priceVM.previousRoomCategoryId && !readonly" 
+								*ngIf="priceVM.previousRoomCategoryId && selectedDynamicPriceVM.editOnPricesAndExceptionsIsAllowed(_readonly)" 
 								(click)="selectedDynamicPriceVM.copyPrices(priceVM.previousRoomCategoryId, priceVM.roomCategoryStats.roomCategory.id)">
 								<i class="fa unitpal-font">[</i> <small>{{ 'Copy Prices from Previous Room Category' | translate }}</small>
 							</a>
 							<price-edit 
 								[displayError]="displayError()"
-								[readonly]="!selectedDynamicPriceVM.editOnPricesAndExceptionsIsAllowed(readonly)"
+								[readonly]="!selectedDynamicPriceVM.editOnPricesAndExceptionsIsAllowed(_readonly)"
 								[priceType]="priceType"
 								[roomCategoryStats]="priceVM.roomCategoryStats"
 								[(price)]="priceVM.price">
@@ -74,21 +74,21 @@
 											{{ ccy.nativeSymbol }}  {{ exception.price.getPriceBriefLineString() }}
 										</td>
 										<td>
-											<a class="btn btn-xs" *ngIf="selectedDynamicPriceVM.editOnPricesAndExceptionsIsAllowed(readonly)" (click)="removeException(priceVM, exception)">
+											<a class="btn btn-xs" *ngIf="selectedDynamicPriceVM.editOnPricesAndExceptionsIsAllowed(_readonly)" (click)="removeException(priceVM, exception)">
 												<i class="fa unitpal-font">\</i> {{ 'Remove' | translate }}
 											</a>
 										</td>
 									</tr>
 									<tr>
 										<td>
-											<span *ngIf="!selectedDynamicPriceVM.editOnPricesAndExceptionsIsAllowed(readonly) && priceVM.hasExceptions()">
-												<a class="btn btn-xs" (click)="openPriceExceptionModal(priceVM)">
+											<span *ngIf="!selectedDynamicPriceVM.editOnPricesAndExceptionsIsAllowed(_readonly) && priceVM.hasExceptions()">
+												<a class="btn btn-xs" (click)="openPriceExceptionModal(selectedDynamicPriceVM, priceVM)">
 													<span><i class="fa fa-eye"></i> {{ 'View' | translate }}</span>
 												</a>	
 											</span>
-											<p *ngIf="!selectedDynamicPriceVM.editOnPricesAndExceptionsIsAllowed(readonly) && !priceVM.hasExceptions()">{{'No exceptions' | translate}}</p>
-											<span *ngIf="selectedDynamicPriceVM.editOnPricesAndExceptionsIsAllowed(readonly)">
-												<a class="btn btn-xs" (click)="openPriceExceptionModal(priceVM)">
+											<p *ngIf="!selectedDynamicPriceVM.editOnPricesAndExceptionsIsAllowed(_readonly) && !priceVM.hasExceptions()">{{'No exceptions' | translate}}</p>
+											<span *ngIf="selectedDynamicPriceVM.editOnPricesAndExceptionsIsAllowed(_readonly)">
+												<a class="btn btn-xs" (click)="openPriceExceptionModal(selectedDynamicPriceVM, priceVM)">
 													<span *ngIf="!priceVM.hasExceptions()"><i class="fa unitpal-font">'</i> {{ 'Add' | translate }}</span>
 													<span *ngIf="priceVM.hasExceptions()"><i class="fa unitpal-font">]</i> {{ 'Add / Edit' | translate }}</span>
 												</a>
