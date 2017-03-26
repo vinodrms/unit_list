@@ -14,6 +14,9 @@ import { HotelDashboardOperationsTestHelper } from '../hotel-operations/dashboar
 import { ReportGenerator } from '../../../../core/domain-layer/reports/ReportGenerator';
 import { ReportGeneratorDO, ReportGroupType, ReportOutputFormat } from '../../../../core/domain-layer/reports/ReportGeneratorDO';
 import { ReportFileResult } from '../../../../core/domain-layer/reports/common/result/ReportFileResult';
+import { ThDateDO, ThMonth } from "../../../../core/utils/th-dates/data-objects/ThDateDO";
+import { ThHourDO } from "../../../../core/utils/th-dates/data-objects/ThHourDO";
+import { ThPeriodType } from "../../../../core/domain-layer/reports/key-metrics/period-converter/ThPeriodDO";
 
 describe("Reports", function () {
 	var testUtils: TestUtils;
@@ -58,6 +61,71 @@ describe("Reports", function () {
 
 			generator.getReport(generatorDO).then((reportFile: ReportFileResult) => {
 				should.equal(reportFile.reportPath.length > 0, true);
+				done();
+			}).catch((e) => {
+				done(e);
+			});
+		});
+
+		it("Should generate the shift report", function (done) {
+			let generator = new ReportGenerator(testContext.appContext, testContext.sessionContext);
+
+			let generatorDO = new ReportGeneratorDO();
+			generatorDO.properties = {
+				startDate: ThDateDO​​.buildThDateDO(2018, ThMonth.January, 22),
+				endDate: ThDateDO​​.buildThDateDO(2018, ThMonth.May, 22),
+				startDateTime: ThHourDO.buildThHourDO(0, 0),
+				endDateTime: ThHourDO.buildThHourDO(0, 0)
+			};
+			generatorDO.reportType = ReportGroupType.ShiftReport;
+			generatorDO.format = ReportOutputFormat.Csv;
+			generator.getReport(generatorDO).then((reportFile: ReportFileResult) => {
+				should.equal(reportFile.reportPath.length > 0, true);
+				done();
+			}).catch((e) => {
+				done(e);
+			});
+		});
+
+		it("Should generate the key metrics report", function (done) {
+			let generator = new ReportGenerator(testContext.appContext, testContext.sessionContext);
+
+			let generatorDO = new ReportGeneratorDO();
+			generatorDO.properties = {
+				startDate: ThDateDO​​.buildThDateDO(2018, ThMonth.January, 22),
+				endDate: ThDateDO​​.buildThDateDO(2018, ThMonth.May, 22),
+				periodType: ThPeriodType.Month
+			};
+			generatorDO.reportType = ReportGroupType.KeyMetrics;
+			generatorDO.format = ReportOutputFormat.Csv;
+			generator.getReport(generatorDO).then((report: ReportFileResult) => {
+				should.equal(report.reportPath.length > 0, true);
+				should.equal(report.reportGroup.sectionList.length, 1);
+				// more than 1 metric
+				should.equal(report.reportGroup.sectionList[0].data.length > 0, true);
+				// first metric should have 5 months + the header `Metric`
+				should.equal(report.reportGroup.sectionList[0].data[0].length, 6);
+				done();
+			}).catch((e) => {
+				done(e);
+			});
+		});
+
+		it("Should generate the bookings for a price product report", function (done) {
+			let generator = new ReportGenerator(testContext.appContext, testContext.sessionContext);
+
+			let generatorDO = new ReportGeneratorDO();
+			generatorDO.properties = {
+				priceProductId: testDataBuilder.bookingList[0].priceProductId,
+				confirmationStatusList: [testDataBuilder.bookingList[0].confirmationStatus]
+			};
+			generatorDO.reportType = ReportGroupType.BookingsForPriceProduct;
+			generatorDO.format = ReportOutputFormat.Pdf;
+
+			generator.getReport(generatorDO).then((report: ReportFileResult) => {
+				should.equal(report.reportPath.length > 0, true);
+				should.equal(report.reportGroup.sectionList.length, 1);
+				should.equal(report.reportGroup.sectionList[0].data.length > 0, true);
 				done();
 			}).catch((e) => {
 				done(e);

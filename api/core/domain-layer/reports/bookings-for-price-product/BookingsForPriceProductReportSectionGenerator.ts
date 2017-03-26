@@ -66,6 +66,7 @@ export class BookingsForPriceProductReportSectionGenerator extends AReportSectio
                     ];
                     data.push(row);
                 });
+                resolve(data);
             }).catch(e => {
                 reject(e);
             })

@@ -138,8 +138,10 @@ export class BookingDO extends BaseDO {
 
     public getIndexedCustomerNames(): string[] {
         var custNames: string[] = [];
-        for (var i = 2; i < this.indexedSearchTerms.length; i++) {
-            custNames.push(this.indexedSearchTerms[i]);
+        if (_.isArray(this.indexedSearchTerms)) {
+            for (var i = 2; i < this.indexedSearchTerms.length; i++) {
+                custNames.push(this.indexedSearchTerms[i]);
+            }
         }
         return custNames;
     }
