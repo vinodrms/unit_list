@@ -8,10 +8,6 @@ import { ReportSectionHeader, ReportSectionMeta } from '../../common/result/Repo
 
 export class GuestsInHouseReportSectionGeneratorStrategy extends AReportSectionGeneratorStrategy {
 
-	constructor(appContext: AppContext, private _sessionContext: SessionContext) {
-		super(appContext);
-	}
-
 	protected getHeader(): ReportSectionHeader {
 		return {
 			display: true,

@@ -135,4 +135,12 @@ export class BookingDO extends BaseDO {
     public getBookingConfirmationStatusDisplayString(): string {
         return BookingConfirmationStatusDisplayString[this.confirmationStatus];
     }
+
+    public getIndexedCustomerNames(): string[] {
+        var custNames: string[] = [];
+        for (var i = 2; i < this.indexedSearchTerms.length; i++) {
+            custNames.push(this.indexedSearchTerms[i]);
+        }
+        return custNames;
+    }
 }

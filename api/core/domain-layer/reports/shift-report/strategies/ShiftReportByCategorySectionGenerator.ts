@@ -12,10 +12,10 @@ import { AddOnProductItemContainer } from '../../../add-on-products/validators/A
 
 export class ShiftReportByCategorySectionGenerator extends AReportSectionGeneratorStrategy {
 
-	constructor(appContext: AppContext, private _sessionContext: SessionContext,
+	constructor(appContext: AppContext, sessionContext: SessionContext,
 		private _paidInvoiceGroupList: InvoiceGroupDO[], private _aopContainer: AddOnProductItemContainer,
 		private _sectionMeta: ReportSectionMeta) {
-		super(appContext);
+		super(appContext, sessionContext);
 	}
 
 	protected getHeader(): ReportSectionHeader {
