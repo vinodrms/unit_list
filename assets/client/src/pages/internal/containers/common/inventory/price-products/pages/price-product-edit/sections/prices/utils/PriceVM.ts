@@ -103,6 +103,7 @@ export class PriceVM {
         });
         priceCopy.indexExceptions();
         priceCopy.roomCategoryStats = this.roomCategoryStats;
+        priceCopy.previousRoomCategoryId = this.previousRoomCategoryId;
         return priceCopy;
     }
 }
