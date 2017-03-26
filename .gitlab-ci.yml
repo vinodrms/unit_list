@@ -5,12 +5,12 @@ before_script:
 build_test_run:
   script:
    - npm run build-all
-   - MONGO_USER=demothangle MONGO_PASSWD=Anisdy\$57m! npm run server-tests
-   - MONGO_USER=demothangle MONGO_PASSWD=Anisdy\$57m! npm run forever-start
+   - MONGO_USER=demothangle MONGO_PASSWD=$MONGO_PASSWD npm run server-tests
+   - MONGO_USER=demothangle MONGO_PASSWD=$MONGO_PASSWD npm run forever-start
    - echo "Finished the build for the Production Branch"
   
 deploy:
   script:
-   - ./ansible/azure_install.sh
+   - ./ansible/azure_install.sh $UNITPAL_REPO_URL
   only:
    - master
