@@ -28,14 +28,14 @@ export class PriceProductEditPricesSectionComponent extends BaseComponent implem
 	private static MAX_NO_OF_DYNAMIC_PRICES = 15;
 
 	private _readonly: boolean;
-  	
+
 	@Input() didSubmit: boolean;
-	
+
 	private _currentRoomCategoryStatsList: RoomCategoryStatsDO[];
 	private _isoWeekDayUtils: ISOWeekDayUtils;
 	private _isPricePerNumberOfPersons: boolean;
 
-	isLoading: boolean = true;
+	isLoading: boolean = false;
 	ccy: CurrencyDO;
 	pricingContainer: PricingContainer;
 
@@ -43,7 +43,7 @@ export class PriceProductEditPricesSectionComponent extends BaseComponent implem
 		private _roomCategoriesStatsService: RoomCategoriesStatsService,
 		private _priceExceptionModal: PriceExceptionModalService,
 		private _dynamicPriceModal: DynamicPriceModalService) {
-		
+
 		super();
 		this._isoWeekDayUtils = new ISOWeekDayUtils();
 		this.ccy = new CurrencyDO();
@@ -51,11 +51,13 @@ export class PriceProductEditPricesSectionComponent extends BaseComponent implem
 		this.pricingContainer = new PricingContainer(this._appContext);
 	}
 
+	// this is used only from the parent container that does not update the values if the child component (this) is readonly
+	// this is why all the subcomponents / logic of this component uses the private `_readonly` flag
 	public get readonly(): boolean {
 		let isReadonly = this._readonly;
 
 		_.forEach(this.dynamicPriceVMList, (dynamicPriceVM: DynamicPriceVM) => {
-			if(dynamicPriceVM.editOnPricesAndExceptionsIsAllowed(this._readonly)) {
+			if (dynamicPriceVM.editOnPricesAndExceptionsIsAllowed(this._readonly)) {
 				isReadonly = false;
 			}
 		});
@@ -69,10 +71,10 @@ export class PriceProductEditPricesSectionComponent extends BaseComponent implem
 	public isValid(): boolean {
 		return this.dynamicPriceVMContainer.isValid();
 	}
-	
+
 	public initializeFrom(priceProductVM: PriceProductVM) {
 		this.ccy = priceProductVM.ccy;
-		
+
 		this._isPricePerNumberOfPersons = true;
 		this._currentRoomCategoryStatsList = [];
 
@@ -89,12 +91,13 @@ export class PriceProductEditPricesSectionComponent extends BaseComponent implem
 			this.currentRoomCategoryStatsList = [];
 			return;
 		}
-		
+
 		this.isLoading = true;
 		this._roomCategoriesStatsService.getRoomCategoryStatsForRoomCategoryList(roomCategoryList).subscribe((roomCategoryStatsList: RoomCategoryStatsDO[]) => {
 			this.currentRoomCategoryStatsList = roomCategoryStatsList;
 			this.isLoading = false;
 		}, (err: ThError) => {
+			this.isLoading = false;
 			this._appContext.toaster.error(err.message);
 		});
 	}
@@ -103,7 +106,7 @@ export class PriceProductEditPricesSectionComponent extends BaseComponent implem
 		return this._isPricePerNumberOfPersons;
 	}
 	public set isPricePerNumberOfPersons(isPricePerNumberOfPersons: boolean) {
-		if (this.readonly) {
+		if (this._readonly) {
 			return;
 		}
 		this._isPricePerNumberOfPersons = isPricePerNumberOfPersons;
@@ -134,9 +137,9 @@ export class PriceProductEditPricesSectionComponent extends BaseComponent implem
 	}
 
 	public displayError() {
-		return this.didSubmit || this.readonly;
+		return this.didSubmit;
 	}
-	
+
 	public get dynamicPriceVMContainer(): DynamicPriceVMContainer {
 		return this.pricingContainer.getSelectedPricingContainer(this._isPricePerNumberOfPersons);
 	}
@@ -151,12 +154,12 @@ export class PriceProductEditPricesSectionComponent extends BaseComponent implem
 
 	public selectDynamicPrice(index: number) {
 		this.dynamicPriceVMContainer.selectDynamicPrice(index);
-    }
+	}
 
 	public get selectedDynamicPriceVM(): DynamicPriceVM {
 		return this.dynamicPriceVMContainer.selectedDynamicPriceVM;
 	}
-	
+
 	public getWeekDayName(iSOWeekDay: ISOWeekDay): string {
 		return this._isoWeekDayUtils.getISOWeekDayVM(iSOWeekDay).name;
 	}
@@ -172,9 +175,9 @@ export class PriceProductEditPricesSectionComponent extends BaseComponent implem
 		priceVM.deleteExceptionOn(exception.dayFromWeek);
 	}
 
-	public openPriceExceptionModal(priceVM: PriceVM) {
+	public openPriceExceptionModal(dynamicPriceVM: DynamicPriceVM, priceVM: PriceVM) {
 		let priceCopy = priceVM.buildPrototype();
-		this._priceExceptionModal.openPriceExceptionModal(priceCopy, this.readonly)
+		this._priceExceptionModal.openPriceExceptionModal(priceCopy, !dynamicPriceVM.editOnPricesAndExceptionsIsAllowed(this._readonly))
 			.then((modalDialogInstance: ModalDialogRef<PriceVM>) => {
 				modalDialogInstance.resultObservable.subscribe((updatedPrice: PriceVM) => {
 					this.didChangeExceptionsOn(updatedPrice);
@@ -194,10 +197,10 @@ export class PriceProductEditPricesSectionComponent extends BaseComponent implem
 
 	public openEditDynamicPriceModal(dynamicPriceVM: DynamicPriceVM, dynamicPriceVMIndex: number) {
 		let dynamicPriceCopy = dynamicPriceVM.buildPrototype();
-		this._dynamicPriceModal.openEditDynamicPriceModal(dynamicPriceCopy, this.readonly)
+		this._dynamicPriceModal.openEditDynamicPriceModal(dynamicPriceCopy, !dynamicPriceVM.editOnPricesAndExceptionsIsAllowed(this._readonly))
 			.then((modalDialogInstance: ModalDialogRef<DynamicPriceVM>) => {
 				modalDialogInstance.resultObservable.subscribe((updatedDynamicPrice: DynamicPriceVM) => {
-					if(this._appContext.thUtils.isUndefinedOrNull(updatedDynamicPrice)) {
+					if (this._appContext.thUtils.isUndefinedOrNull(updatedDynamicPrice)) {
 						this.didRemoveDynamicPrice(dynamicPriceVMIndex);
 						return;
 					}
@@ -211,13 +214,13 @@ export class PriceProductEditPricesSectionComponent extends BaseComponent implem
 	}
 
 	public didRemoveDynamicPrice(indexToRemove: number) {
-		if(this.pricingContainer.hasAtLeastADynamicPriceConfigured()) {
+		if (this.pricingContainer.hasAtLeastADynamicPriceConfigured()) {
 			this._appContext.toaster.error(this._appContext.thTranslation.translate("The price product must have at least a dynamic daily rate configured."));
 			return;
 		}
 		this.pricingContainer.removeDynamicPrice(indexToRemove);
-		
-		this.selectDynamicPrice(indexToRemove == 0? 0 : indexToRemove - 1);
+
+		this.selectDynamicPrice(indexToRemove == 0 ? 0 : indexToRemove - 1);
 	}
 
 	public openNewDynamicPriceModal() {
@@ -230,7 +233,7 @@ export class PriceProductEditPricesSectionComponent extends BaseComponent implem
 	}
 
 	public didAddDynamicPrice(newDynamicPrice: DynamicPriceVM) {
-		if(this.dynamicPriceVMContainer.dynamicPriceVMList.length == PriceProductEditPricesSectionComponent.MAX_NO_OF_DYNAMIC_PRICES) {
+		if (this.dynamicPriceVMContainer.dynamicPriceVMList.length == PriceProductEditPricesSectionComponent.MAX_NO_OF_DYNAMIC_PRICES) {
 			this._appContext.toaster.error(this._appContext.thTranslation.translate("The maximum number of dynamic prices on this price product has been reached."));
 			return;
 		}
