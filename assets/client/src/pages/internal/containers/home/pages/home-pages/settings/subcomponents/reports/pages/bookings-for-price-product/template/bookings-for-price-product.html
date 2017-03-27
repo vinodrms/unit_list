@@ -16,11 +16,28 @@
                         </select>
                     </div>
                 </div>
-                
+
                 <div class="col-xs-12 col-sm-6 form-group">
 					<label>{{ 'File Format' | translate }}</label>
 					<report-output-format (onFormatSelected)="didSelectFormat($event)"></report-output-format>
 				</div>
+
+                <div class="col-xs-12 col-sm-6 form-group">
+                    <label class="control-label">{{"Booking Statuses" | translate}}</label>
+                    <div class="well form-group">
+                        <div class="input-group">
+                            <ul class="list-group checked-list-box">
+                                <div class="checkbox" *ngFor="let bookingMeta of bookingMetaList">
+                                    <label>
+                                        <input type="checkbox" 
+                                            [(ngModel)]="selectedConfirmationStatuses[bookingMeta.confirmationStatus]" 
+                                            name="bookingMetaSelected"> {{bookingMeta.displayName | translate}}
+                                    </label>
+                                </div>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
 
 				<div *ngIf="!isLoading" class="col-xs-12 col-md-offset-9 col-md-3">
 					<a class="btn btn-primary btn-block" [href]="reportCSVUrl()" target="_blank">{{ 'Generate' | translate }}</a>

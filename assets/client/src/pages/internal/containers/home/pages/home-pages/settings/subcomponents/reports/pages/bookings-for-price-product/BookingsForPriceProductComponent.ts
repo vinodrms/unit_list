@@ -8,24 +8,42 @@ import { EagerPriceProductsService } from "../../../../../../../../../services/p
 import { PriceProductsDO } from "../../../../../../../../../services/price-products/data-objects/PriceProductsDO";
 import { PriceProductDO } from "../../../../../../../../../services/price-products/data-objects/PriceProductDO";
 import { BookingConfirmationStatus } from "../../../../../../../../../services/bookings/data-objects/BookingDO";
+import { BookingMeta } from "../../../../../../../../../services/bookings/data-objects/BookingMeta";
+import { BookingMetaFactory } from "../../../../../../../../../services/bookings/data-objects/BookingMetaFactory";
 
 @Component({
     selector: 'bookings-for-price-product',
     templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/settings/subcomponents/reports/pages/bookings-for-price-product/template/bookings-for-price-product.html',
     providers: [EagerPriceProductsService]
 })
-export class BookingsForPriceProductComponent extends BaseComponent {
+export class BookingsForPriceProductComponent extends BaseComponent implements OnInit {
     private format: ReportOutputFormatType;
     private isLoading: boolean = false;
 
     private _priceProductList: PriceProductDO[];
     private priceProductId: string;
+    private bookingMetaList: BookingMeta[];
+    private selectedConfirmationStatuses: { [index: number]: boolean } = {};
 
     constructor(private _appContext: AppContext,
         private _pagesService: SettingsReportsPagesService,
         private _eagerPriceProductsService: EagerPriceProductsService) {
         super();
         this._pagesService.bootstrapSelectedTab(ReportGroupType.BookingsForPriceProduct);
+        let factory = new BookingMetaFactory();
+        this.bookingMetaList = factory.getBookingMetaList();
+        this.setDefaultStatuses();
+
+    }
+    private setDefaultStatuses() {
+        this.bookingMetaList.forEach(meta => {
+            this.selectedConfirmationStatuses[meta.confirmationStatus] = false;
+        });
+        this.selectedConfirmationStatuses[BookingConfirmationStatus.Confirmed] = true;
+        this.selectedConfirmationStatuses[BookingConfirmationStatus.Guaranteed] = true;
+        this.selectedConfirmationStatuses[BookingConfirmationStatus.NoShow] = true;
+        this.selectedConfirmationStatuses[BookingConfirmationStatus.NoShowWithPenalty] = true;
+        this.selectedConfirmationStatuses[BookingConfirmationStatus.CheckedIn] = true;
     }
 
     ngOnInit() {
@@ -55,12 +73,19 @@ export class BookingsForPriceProductComponent extends BaseComponent {
     }
 
     public reportCSVUrl(): string {
+        var confirmationStringList: string[] = Object.keys(this.selectedConfirmationStatuses);
+        var confirmationList: BookingConfirmationStatus[] = [];
+        confirmationStringList.forEach(confirmationString => {
+            if (this.selectedConfirmationStatuses[confirmationString] === true) {
+                confirmationList.push(parseInt(confirmationString));
+            }
+        });
         let params = {
             reportType: ReportGroupType.BookingsForPriceProduct,
             format: this.format,
             properties: {
                 priceProductId: this.priceProductId,
-                confirmationStatusList: [BookingConfirmationStatus.Guaranteed, BookingConfirmationStatus.Confirmed]
+                confirmationStatusList: confirmationList
             }
         }
         var encodedParams = encodeURI(JSON.stringify(params));
