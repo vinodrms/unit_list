@@ -13,6 +13,7 @@ import { ReportSection } from "../common/result/ReportSection";
 import { IReportSectionGeneratorStrategy } from "../common/report-section-generator/IReportSectionGeneratorStrategy";
 import { BookingsForPriceProductReportSectionGenerator } from "./BookingsForPriceProductReportSectionGenerator";
 import { PriceProductDO } from "../../../data-layer/price-products/data-objects/PriceProductDO";
+import { PageOrientation } from "../../../services/pdf-reports/PageOrientation";
 
 export class BookingsForPriceProductReportGroupGenerator extends AReportGeneratorStrategy {
     private _priceProductId: string;
@@ -39,7 +40,8 @@ export class BookingsForPriceProductReportGroupGenerator extends AReportGenerato
 
     protected getMeta(): ReportGroupMeta {
         return {
-            name: "Reservations Booked for Price Product"
+            name: "Reservations Booked for Price Product",
+            pageOrientation: PageOrientation.Landscape
         }
     }
 

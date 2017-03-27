@@ -33,6 +33,9 @@ export class BookingsForPriceProductReportSectionGenerator extends AReportSectio
                 "Start Date",
                 "End Date",
                 "Status",
+                "Adults",
+                "Children",
+                "Babies",
                 "Customers",
                 "Total Charge"
             ]
@@ -61,6 +64,9 @@ export class BookingsForPriceProductReportSectionGenerator extends AReportSectio
                         booking.interval.start.toString(),
                         booking.interval.end.toString(),
                         this._appContext.thTranslate.translate(this._bookingMetaByStatus[booking.confirmationStatus].name),
+                        booking.configCapacity.noAdults,
+                        booking.configCapacity.noChildren,
+                        booking.configCapacity.noBabies,
                         custString,
                         booking.price.totalBookingPrice.toString()
                     ];

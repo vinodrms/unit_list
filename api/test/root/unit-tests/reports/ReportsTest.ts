@@ -72,12 +72,12 @@ describe("Reports", function () {
 
 			let generatorDO = new ReportGeneratorDO();
 			generatorDO.properties = {
-				startDate: ThDateDO​​.buildThDateDO(2018, ThMonth.January, 22),
-				endDate: ThDateDO​​.buildThDateDO(2018, ThMonth.May, 22),
+				startDate: ThDateDO.buildThDateDO(2018, ThMonth.January, 22),
+				endDate: ThDateDO.buildThDateDO(2018, ThMonth.May, 22),
 				startDateTime: ThHourDO.buildThHourDO(0, 0),
 				endDateTime: ThHourDO.buildThHourDO(0, 0)
 			};
-			generatorDO.reportType = ReportGroupType.ShiftReport;
+			generatorDO.reportType = ReportGroupType.Shift;
 			generatorDO.format = ReportOutputFormat.Csv;
 			generator.getReport(generatorDO).then((reportFile: ReportFileResult) => {
 				should.equal(reportFile.reportPath.length > 0, true);
@@ -92,8 +92,8 @@ describe("Reports", function () {
 
 			let generatorDO = new ReportGeneratorDO();
 			generatorDO.properties = {
-				startDate: ThDateDO​​.buildThDateDO(2018, ThMonth.January, 22),
-				endDate: ThDateDO​​.buildThDateDO(2018, ThMonth.May, 22),
+				startDate: ThDateDO.buildThDateDO(2018, ThMonth.January, 22),
+				endDate: ThDateDO.buildThDateDO(2018, ThMonth.May, 22),
 				periodType: ThPeriodType.Month
 			};
 			generatorDO.reportType = ReportGroupType.KeyMetrics;

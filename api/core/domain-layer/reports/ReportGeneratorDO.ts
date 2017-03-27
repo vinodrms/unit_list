@@ -6,7 +6,7 @@ import { NumberInListValidationRule } from '../../utils/th-validation/rules/Numb
 export enum ReportGroupType {
     Backup,
     KeyMetrics,
-    ShiftReport,
+    Shift,
     BookingsForPriceProduct,
 
 }
@@ -14,7 +14,7 @@ export enum ReportGroupType {
 var SupportedReportGroupTypes: ReportGroupType[] = [
     ReportGroupType.Backup,
     ReportGroupType.KeyMetrics,
-    ReportGroupType.ShiftReport,
+    ReportGroupType.Shift,
     ReportGroupType.BookingsForPriceProduct,
 
 ]

@@ -1,18 +1,18 @@
-import {SettingsReportsType} from './SettingsReportsType';
+import { ReportGroupType } from "../../../utils/ReportGroupType";
 
 export class SettingsReportsPageVM {
 	private _componentPath: string;
 	private _selected: boolean;
-	private _pageType: SettingsReportsType;
+	private _pageType: ReportGroupType;
 	private _pageName: string;
-	
-	constructor(componentPath: string, pageType: SettingsReportsType, pageName: string) {
+
+	constructor(componentPath: string, pageType: ReportGroupType, pageName: string) {
 		this._componentPath = componentPath;
 		this._pageType = pageType;
 		this._pageName = pageName;
-		this._selected = false; 
+		this._selected = false;
 	}
-	
+
 	public get componentPath(): string {
 		return this._componentPath;
 	}
@@ -25,10 +25,10 @@ export class SettingsReportsPageVM {
 	public set selected(selected: boolean) {
 		this._selected = selected;
 	}
-	public get pageType(): SettingsReportsType {
+	public get pageType(): ReportGroupType {
 		return this._pageType;
 	}
-	public set pageType(pageType: SettingsReportsType) {
+	public set pageType(pageType: ReportGroupType) {
 		this._pageType = pageType;
 	}
 	public get pageName(): string {
