@@ -14,9 +14,9 @@ import _ = require('underscore');
 export class ShiftReportPaidInvoicesSectionGenerator extends AReportSectionGeneratorStrategy {
     private _indexedCustomersById: { [id: string]: CustomerDO };
 
-    constructor(appContext: AppContext, private _sessionContext: SessionContext,
+    constructor(appContext: AppContext, sessionContext: SessionContext,
         private _paidInvoiceGroupList: InvoiceGroupDO[]) {
-        super(appContext);
+        super(appContext, sessionContext);
     }
 
     protected getHeader(): ReportSectionHeader {

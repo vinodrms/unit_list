@@ -1,16 +1,16 @@
 import { AppContext } from '../../../../utils/AppContext';
+import { SessionContext } from "../../../../utils/SessionContext";
 import { ThError } from '../../../../utils/th-responses/ThError';
 import { ThUtils } from '../../../../utils/ThUtils';
 import { IReportSectionGeneratorStrategy } from './IReportSectionGeneratorStrategy';
 import { ReportSection, ReportSectionHeader, ReportSectionMeta } from '../result/ReportSection';
-
 
 import _ = require('underscore');
 
 export abstract class AReportSectionGeneratorStrategy implements IReportSectionGeneratorStrategy {
     protected _thUtils: ThUtils;
 
-    constructor(protected _appContext: AppContext) {
+    constructor(protected _appContext: AppContext, protected _sessionContext: SessionContext) {
         this._thUtils = new ThUtils();
     }
 

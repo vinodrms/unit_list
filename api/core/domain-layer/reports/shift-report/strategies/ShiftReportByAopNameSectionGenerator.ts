@@ -12,9 +12,9 @@ import { AddOnProductItemContainer } from '../../../add-on-products/validators/A
 
 export class ShiftReportByAopNameSectionGenerator extends AReportSectionGeneratorStrategy {
 
-    constructor(appContext: AppContext, private _sessionContext: SessionContext,
+    constructor(appContext: AppContext, sessionContext: SessionContext,
         private _paidInvoiceGroupList: InvoiceGroupDO[]) {
-        super(appContext);
+        super(appContext, sessionContext);
     }
 
     protected getHeader(): ReportSectionHeader {
@@ -31,10 +31,10 @@ export class ShiftReportByAopNameSectionGenerator extends AReportSectionGenerato
     }
 
     protected getMeta(): ReportSectionMeta {
-		return {
-			title: "Add On Product Transactions"
-		}
-	}
+        return {
+            title: "Add On Product Transactions"
+        }
+    }
 
     protected getDataCore(resolve: { (result: any[][]): void }, reject: { (err: ThError): void }) {
         let mpmDetailsDict = this.getProductDetailsDict();

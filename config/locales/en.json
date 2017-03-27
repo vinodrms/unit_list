@@ -194,6 +194,20 @@
 	"Invoice Reference": "Invoice Reference",
 	"Customer": "Customer",
 	"Paid Invoices": "Paid Invoices",
+	"Confirmed": "Confirmed",
+	"Guaranteed": "Guaranteed",
+	"No Show": "No Show",
+	"No Show With Penalty": "No Show With Penalty",
+	"Cancelled": "Cancelled",
+	"Checked In": "Checked In",
+	"Checked Out": "Checked Out",
+	"Reservations Booked for Price Product": "Reservations Booked for Price Product",
+	"Reference": "Reference",
+	"Start Date": "Start Date",
+	"End Date": "End Date",
+	"Status": "Status",
+	"Customers": "Customers",
+	"Total Charge": "Total Charge",
 
 	// Booking confirmations
 	"Booking confirmations are blocked for this booking.": "Booking confirmations are blocked for this booking."
