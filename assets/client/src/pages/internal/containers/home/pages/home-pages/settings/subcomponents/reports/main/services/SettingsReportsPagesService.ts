@@ -1,8 +1,8 @@
-import {Injectable} from '@angular/core';
-import {AppContext} from '../../../../../../../../../../../common/utils/AppContext';
-import {SettingsNavbarService} from '../../../navbar/services/SettingsNavbarService';
-import {SettingsReportsPageVM} from './utils/SettingsReportsPageVM';
-import {SettingsReportsType} from './utils/SettingsReportsType';
+import { Injectable } from '@angular/core';
+import { AppContext } from '../../../../../../../../../../../common/utils/AppContext';
+import { SettingsNavbarService } from '../../../navbar/services/SettingsNavbarService';
+import { SettingsReportsPageVM } from './utils/SettingsReportsPageVM';
+import { ReportGroupType } from "../../utils/ReportGroupType";
 
 @Injectable()
 export class SettingsReportsPagesService {
@@ -11,13 +11,15 @@ export class SettingsReportsPagesService {
 
 	constructor(private _appContext: AppContext) {
 		this._reportsPageList = [
-			new SettingsReportsPageVM("shift", SettingsReportsType.Shift, "Shift"),
-			new SettingsReportsPageVM("backup", SettingsReportsType.BackUp, "Backup"),
-			new SettingsReportsPageVM("key-metrics", SettingsReportsType.KeyMetrics, "Key Metrics")
+			new SettingsReportsPageVM("shift", ReportGroupType.Shift, "Shift"),
+			new SettingsReportsPageVM("backup", ReportGroupType.Backup, "Backup"),
+			new SettingsReportsPageVM("key-metrics", ReportGroupType.KeyMetrics, "Key Metrics"),
+			new SettingsReportsPageVM("bookings-for-price-product", ReportGroupType.BookingsForPriceProduct, "Bookings"),
+
 		];
 	}
-	//TODO: This does not seem to bootstrap a page, just sets the selected tab, consifer renaming
-	public bootstrap(pageType: SettingsReportsType) {
+
+	public bootstrapSelectedTab(pageType: ReportGroupType) {
 		_.forEach(this._reportsPageList, (page: SettingsReportsPageVM) => {
 			page.selected = page.pageType === pageType;
 		});

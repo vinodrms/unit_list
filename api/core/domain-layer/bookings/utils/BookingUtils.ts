@@ -36,6 +36,7 @@ export class BookingUtils {
         return ThTimestampDO.buildThTimestampForTimezone(hotelDO.timezone);
     }
     public updateIndexedSearchTerms(booking: BookingDO, customersContainer: CustomersContainer) {
+        // when changing the order in which the terms are saved, be sure to also check the logic from the `getIndexedCustomerNames` function on BookingDO
         booking.indexedSearchTerms = [booking.groupBookingReference, booking.groupBookingReference + '/' + booking.bookingReference];
         _.forEach(booking.customerIdList, (customerId: string) => {
             var customer = customersContainer.getCustomerById(customerId);

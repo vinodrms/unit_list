@@ -10,9 +10,9 @@ import { ReportSectionHeader, ReportSectionMeta } from '../../common/result/Repo
 
 export class ShiftReportByPaymentMethodSectionGenerator extends AReportSectionGeneratorStrategy {
 
-	constructor(appContext: AppContext, private _sessionContext: SessionContext,
+	constructor(appContext: AppContext, sessionContext: SessionContext,
 		private _paidInvoiceGroupList: InvoiceGroupDO[]) {
-		super(appContext);
+		super(appContext, sessionContext);
 	}
 
 	protected getHeader(): ReportSectionHeader {

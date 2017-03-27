@@ -27,10 +27,6 @@ export class ShiftReportGroupGenerator extends AReportGeneratorStrategy {
 	private _lossAcceptedByManagementInvoiceGroupList: InvoiceGroupDO[];
 	private _aopContainer: AddOnProductItemContainer;
 
-	constructor(appContext: AppContext, private _sessionContext: SessionContext) {
-		super(appContext);
-	}
-
 	protected getParamsValidationStructure(): IValidationStructure {
 		return new ObjectValidationStructure([
 			{

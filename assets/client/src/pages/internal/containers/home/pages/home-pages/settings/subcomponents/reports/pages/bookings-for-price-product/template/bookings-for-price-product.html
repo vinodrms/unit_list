@@ -1,0 +1,48 @@
+<div class="container full-height" customScroll>
+	<div class="row basic-info-form">
+		<div class="col-xs-12 col-md-6">
+			<label class="control-label">
+				<h3>{{ 'Bookings for Price Products Report' | translate }}</h3><small>{{ "Get the bookings attached to a Price Product" | translate }}</small>
+			</label>
+			<hr>
+            <loading-component [isLoading]="isLoading"></loading-component>
+			<div class="row" *ngIf="!isLoading">
+				<div class="col-xs-12 col-sm-6 form-group">
+                    <label>{{ 'Active Price Product' | translate }}* </label>
+                    <div class="input-group">
+                        <select class="form-control" [ngModel]="priceProductId" (ngModelChange)="priceProductId=$event" name="priceProductId">
+                            <option value="" disabled>{{ 'Select a price product' | translate }}</option>
+                            <option *ngFor="let priceProduct of priceProductList" [value]="priceProduct.id">{{priceProduct.name}}</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-sm-6 form-group">
+					<label>{{ 'File Format' | translate }}</label>
+					<report-output-format (onFormatSelected)="didSelectFormat($event)"></report-output-format>
+				</div>
+
+                <div class="col-xs-12 col-sm-6 form-group">
+                    <label class="control-label">{{"Booking Statuses" | translate}}</label>
+                    <div class="well form-group">
+                        <div class="input-group">
+                            <ul class="list-group checked-list-box">
+                                <div class="checkbox" *ngFor="let bookingMeta of bookingMetaList">
+                                    <label>
+                                        <input type="checkbox" 
+                                            [(ngModel)]="selectedConfirmationStatuses[bookingMeta.confirmationStatus]" 
+                                            name="bookingMetaSelected"> {{bookingMeta.displayName | translate}}
+                                    </label>
+                                </div>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+				<div *ngIf="!isLoading" class="col-xs-12 col-md-offset-9 col-md-3">
+					<a class="btn btn-primary btn-block" [href]="reportCSVUrl()" target="_blank">{{ 'Generate' | translate }}</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

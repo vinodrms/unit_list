@@ -1,10 +1,11 @@
-import { ModuleWithProviders }  from '@angular/core';
+import { ModuleWithProviders } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import {SettingsReportsComponent} from './main/SettingsReportsComponent';
-import {SettingsShiftReportComponent} from './pages/shift-report/SettingsShiftReportComponent';
-import {SettingsBackUpReportComponent} from './pages/backup-report/SettingsBackUpReportComponent';
-import {SettingsKeyMetricsReportComponent} from './pages/key-metrics-report/SettingsKeyMetricsReportComponent';
+import { SettingsReportsComponent } from './main/SettingsReportsComponent';
+import { SettingsShiftReportComponent } from './pages/shift-report/SettingsShiftReportComponent';
+import { SettingsBackUpReportComponent } from './pages/backup-report/SettingsBackUpReportComponent';
+import { SettingsKeyMetricsReportComponent } from './pages/key-metrics-report/SettingsKeyMetricsReportComponent';
+import { BookingsForPriceProductComponent } from "./pages/bookings-for-price-product/BookingsForPriceProductComponent";
 
 const settingsReportsRoutes: Routes = [
     {
@@ -13,7 +14,9 @@ const settingsReportsRoutes: Routes = [
             { path: '', redirectTo: 'shift', pathMatch: 'prefix' },
             { path: 'shift', component: SettingsShiftReportComponent },
             { path: 'backup', component: SettingsBackUpReportComponent },
-            { path: 'key-metrics', component: SettingsKeyMetricsReportComponent }
+            { path: 'key-metrics', component: SettingsKeyMetricsReportComponent },
+            { path: 'bookings-for-price-product', component: BookingsForPriceProductComponent },
+
         ]
     }
 ];

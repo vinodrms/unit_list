@@ -1,9 +1,56 @@
 import { BookingConfirmationStatus } from './BookingDO';
 
+export interface BookingMeta {
+    status: BookingConfirmationStatus;
+    name: string;
+}
+
 export class BookingDOConstraints {
     public static NoBookingsLimit: number = 50;
     public static MaxBookingNoOfDays = 186;
     public static MaxNoOfCompaniesOrTravelAgenciesOnBooking: number = 1;
+
+    public static ConfirmationStatuses_All: BookingConfirmationStatus[] = [
+        BookingConfirmationStatus.Confirmed,
+        BookingConfirmationStatus.Guaranteed,
+        BookingConfirmationStatus.NoShow,
+        BookingConfirmationStatus.NoShowWithPenalty,
+        BookingConfirmationStatus.Cancelled,
+        BookingConfirmationStatus.CheckedIn,
+        BookingConfirmationStatus.CheckedOut
+    ];
+
+    public static BookingMetaList: BookingMeta[] = [
+        {
+            status: BookingConfirmationStatus.Confirmed,
+            name: "Confirmed"
+        },
+
+        {
+            status: BookingConfirmationStatus.Guaranteed,
+            name: "Guaranteed"
+        },
+        {
+            status: BookingConfirmationStatus.NoShow,
+            name: "No Show"
+        },
+        {
+            status: BookingConfirmationStatus.NoShowWithPenalty,
+            name: "No Show With Penalty"
+        },
+        {
+            status: BookingConfirmationStatus.Cancelled,
+            name: "Cancelled"
+        },
+        {
+            status: BookingConfirmationStatus.CheckedIn,
+            name: "Checked In"
+        },
+        {
+            status: BookingConfirmationStatus.CheckedOut,
+            name: "Checked Out"
+        }
+    ];
 
     public static ConfirmationStatuses_OccupyingRoomsFromInventory: BookingConfirmationStatus[] = [
         BookingConfirmationStatus.Confirmed,

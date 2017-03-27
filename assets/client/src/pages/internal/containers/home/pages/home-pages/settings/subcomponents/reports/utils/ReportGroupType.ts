@@ -1,5 +1,7 @@
-export enum ReportGroupType{
+export enum ReportGroupType {
 	Backup,
 	KeyMetrics,
-	ShiftReport
+	Shift,
+	BookingsForPriceProduct,
+
 }
