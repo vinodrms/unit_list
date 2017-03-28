@@ -1,18 +1,21 @@
-import {HotelPaymentMethodsDO} from '../../../settings/data-objects/HotelPaymentMethodsDO';
-import {PaymentMethodDO} from '../../../common/data-objects/payment-method/PaymentMethodDO';
-import {InvoicePaymentMethodVM} from '../InvoicePaymentMethodVM';
-import {CustomerDO} from '../../../customers/data-objects/CustomerDO';
-import {InvoicePaymentMethodDO, InvoicePaymentMethodType} from '../../data-objects/payers/InvoicePaymentMethodDO';
+import { HotelPaymentMethodsDO } from '../../../settings/data-objects/HotelPaymentMethodsDO';
+import { PaymentMethodDO } from '../../../common/data-objects/payment-method/PaymentMethodDO';
+import { InvoicePaymentMethodVM } from '../InvoicePaymentMethodVM';
+import { CustomerDO } from '../../../customers/data-objects/CustomerDO';
+import { InvoicePaymentMethodDO, InvoicePaymentMethodType } from '../../data-objects/payers/InvoicePaymentMethodDO';
+import { HotelAggregatedPaymentMethodsDO } from "../../../settings/data-objects/HotelAggregatedPaymentMethodsDO";
+import { AggregatedPaymentMethodDO } from "../../../common/data-objects/payment-method/AggregatedPaymentMethodDO";
 
 export class InvoicePaymentMethodVMGenerator {
     private _allowedPaymentMethodVMList: InvoicePaymentMethodVM[];
 
-    constructor(private _allowedPaymentMethods: HotelPaymentMethodsDO) {
+    constructor(private _allowedPaymentMethods: HotelAggregatedPaymentMethodsDO) {
         this.initAllowedInvoicePaymentMethodVMList();
     }
     private initAllowedInvoicePaymentMethodVMList() {
-        this._allowedPaymentMethodVMList = _.map(this._allowedPaymentMethods.paymentMethodList, (paymentMethod: PaymentMethodDO) => {
-            return this.generatePaymentMethodVMFor(paymentMethod);
+
+        this._allowedPaymentMethodVMList = _.map(this._allowedPaymentMethods.paymentMethodList, (paymentMethod: AggregatedPaymentMethodDO) => {
+            return this.generatePaymentMethodVMFor(paymentMethod.paymentMethod);
         });
     }
 

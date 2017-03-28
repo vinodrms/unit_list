@@ -28,7 +28,7 @@ export class BasicInfoPaymentsAndPoliciesEditComponent extends BaseFormComponent
 
 	isLoading: boolean = true;
 	currencies: CurrenciesDO;
-	paymentMethods: PaymentMethodVMContainer;
+	allPaymentMethodsVMContainer: PaymentMethodVMContainer;
 	hotel: HotelDO;
 
 	private _additionalInvoiceDetailsControl: FormControl;
@@ -58,8 +58,8 @@ export class BasicInfoPaymentsAndPoliciesEditComponent extends BaseFormComponent
 			var hotelAggregatedInfo = result[1];
 
 			this.hotel = hotelAggregatedInfo.hotelDetails.hotel;
-			this.paymentMethods = new PaymentMethodVMContainer(hotelAggregatedInfo.paymentMethods, this.hotel.paymentMethodIdList);
-			this._paymPoliciesEditService.bootstrap(this.paymentMethods, this.hotel);
+			this.allPaymentMethodsVMContainer = new PaymentMethodVMContainer(hotelAggregatedInfo.allAvailablePaymentMethods, this.hotel.paymentMethodList);
+			this._paymPoliciesEditService.bootstrap(this.allPaymentMethodsVMContainer, this.hotel);
 			this._additionalInvoiceDetailsControl.setValue(this.hotel.additionalInvoiceDetails);
 			this.isLoading = false;
 		}, (error: ThError) => {

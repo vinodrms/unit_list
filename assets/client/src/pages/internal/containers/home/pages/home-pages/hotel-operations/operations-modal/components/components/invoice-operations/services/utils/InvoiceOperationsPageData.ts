@@ -1,13 +1,14 @@
-import {CustomersDO} from '../../../../../../../../../../../services/customers/data-objects/CustomersDO';
-import {CurrencyDO} from '../../../../../../../../../../../services/common/data-objects/currency/CurrencyDO';
-import {HotelPaymentMethodsDO} from '../../../../../../../../../../../services/settings/data-objects/HotelPaymentMethodsDO';
-import {InvoiceGroupDO} from '../../../../../../../../../../../services/invoices/data-objects/InvoiceGroupDO';
-import {BookingsDO} from '../../../../../../../../../../../services/bookings/data-objects/BookingsDO';
+import { CustomersDO } from '../../../../../../../../../../../services/customers/data-objects/CustomersDO';
+import { CurrencyDO } from '../../../../../../../../../../../services/common/data-objects/currency/CurrencyDO';
+import { HotelPaymentMethodsDO } from '../../../../../../../../../../../services/settings/data-objects/HotelPaymentMethodsDO';
+import { InvoiceGroupDO } from '../../../../../../../../../../../services/invoices/data-objects/InvoiceGroupDO';
+import { BookingsDO } from '../../../../../../../../../../../services/bookings/data-objects/BookingsDO';
+import { HotelAggregatedPaymentMethodsDO } from "../../../../../../../../../../../services/settings/data-objects/HotelAggregatedPaymentMethodsDO";
 
 export class InvoiceOperationsPageData {
     private _invoiceGroupDO: InvoiceGroupDO;
     private _allPaymentMethods: HotelPaymentMethodsDO;
-    private _allowedPaymentMethods: HotelPaymentMethodsDO;
+    private _allowedPaymentMethods: HotelAggregatedPaymentMethodsDO;
     private _customersContainer: CustomersDO;
     private _bookingsContainer: BookingsDO; 
     private _ccy: CurrencyDO;
@@ -24,10 +25,10 @@ export class InvoiceOperationsPageData {
     public set allPaymentMethods(allPaymentMethods: HotelPaymentMethodsDO) {
         this._allPaymentMethods = allPaymentMethods;
     }
-    public get allowedPaymentMethods(): HotelPaymentMethodsDO {
+    public get allowedPaymentMethods(): HotelAggregatedPaymentMethodsDO {
         return this._allowedPaymentMethods;
     }
-    public set allowedPaymentMethods(allowedPaymentMethods: HotelPaymentMethodsDO) {
+    public set allowedPaymentMethods(allowedPaymentMethods: HotelAggregatedPaymentMethodsDO) {
         this._allowedPaymentMethods = allowedPaymentMethods;
     }
     public get customersContainer(): CustomersDO {

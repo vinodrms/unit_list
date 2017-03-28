@@ -1,21 +1,43 @@
 import {HotelPaymentMethodsDO} from '../../../../../../../services/settings/data-objects/HotelPaymentMethodsDO';
-import {PaymentMethodDO} from '../../../../../../../services/common/data-objects/payment-method/PaymentMethodDO';
+import { PaymentMethodDO } from '../../../../../../../services/common/data-objects/payment-method/PaymentMethodDO';
+import { ThUtils } from "../../../../../../../../../common/utils/ThUtils";
+import { PaymentMethodInstanceDO } from "../../../../../../../services/common/data-objects/payment-method/PaymentMethodInstanceDO";
+import { AggregatedPaymentMethodDO } from "../../../../../../../services/common/data-objects/payment-method/AggregatedPaymentMethodDO";
 
 export class PaymentMethodVM {
-	paymentMethod: PaymentMethodDO;
+	aggregatedPaymentMethod: AggregatedPaymentMethodDO;
 	isSelected: boolean;
-	hasTransactionFee: boolean;
 }
 
 export class PaymentMethodVMContainer {
+	private _thUtils: ThUtils;
 	private _paymentMethodList: PaymentMethodVM[];
 
-	constructor(paymentMethods: HotelPaymentMethodsDO, availablePaymentMethodIdList: string[]) {
+	constructor(allAvailablePaymentMethods: HotelPaymentMethodsDO, supportedPaymentMethodInstanceList: PaymentMethodInstanceDO[]) {
+		this._thUtils = new ThUtils();
 		this._paymentMethodList = [];
-		paymentMethods.paymentMethodList.forEach((paymentMethod: PaymentMethodDO) => {
+		
+		let supportedPaymentMethodIdList = _.map(supportedPaymentMethodInstanceList, (paymentMethod: PaymentMethodInstanceDO) => {
+			return paymentMethod.paymentMethodId;
+		});
+		
+		allAvailablePaymentMethods.paymentMethodList.forEach((paymentMethod: PaymentMethodDO) => {
 			var paymMethodVM: PaymentMethodVM = new PaymentMethodVM();
-			paymMethodVM.paymentMethod = paymentMethod;
-			paymMethodVM.isSelected = _.contains(availablePaymentMethodIdList, paymentMethod.id);
+			paymMethodVM.aggregatedPaymentMethod = new AggregatedPaymentMethodDO();
+			paymMethodVM.aggregatedPaymentMethod.paymentMethod = paymentMethod;
+
+			let paymentSupportedByHotel = _.contains(supportedPaymentMethodIdList, paymentMethod.id);
+			if(paymentSupportedByHotel) {
+				let paymentMethodInstance = _.find(supportedPaymentMethodInstanceList, (pmInstance: PaymentMethodInstanceDO) => {
+					return pmInstance.paymentMethodId == paymentMethod.id;
+				});
+
+				paymMethodVM.aggregatedPaymentMethod = new AggregatedPaymentMethodDO();
+				paymMethodVM.aggregatedPaymentMethod.paymentMethod = paymentMethod;
+				paymMethodVM.aggregatedPaymentMethod.paymentMethod.transactionFee = paymentMethodInstance.transactionFee;
+			}
+			paymMethodVM.isSelected = paymentSupportedByHotel;
+			
 			this._paymentMethodList.push(paymMethodVM);
 		});
 	}
@@ -28,12 +50,16 @@ export class PaymentMethodVMContainer {
 		this._paymentMethodList = paymentMethodList;
 	}
 
-	public getSelectedPaymentMethodIdList(): string[] {
+	public getSelectedPaymentMethodIdList(): PaymentMethodInstanceDO[] {
 		var filteredPM: PaymentMethodVM[] = _.filter(this._paymentMethodList, (paymMethodVM: PaymentMethodVM) => {
 			return paymMethodVM.isSelected;
-		})
+		});
+
 		return _.map(filteredPM, (paymMethodVM: PaymentMethodVM) => {
-			return paymMethodVM.paymentMethod.id;
+			let paymentInstanceDO = new PaymentMethodInstanceDO();
+			paymentInstanceDO.paymentMethodId = paymMethodVM.aggregatedPaymentMethod.paymentMethod.id;
+			paymentInstanceDO.transactionFee = paymMethodVM.aggregatedPaymentMethod.transactionFee;
+			return paymentInstanceDO;
 		});
 	}
 }

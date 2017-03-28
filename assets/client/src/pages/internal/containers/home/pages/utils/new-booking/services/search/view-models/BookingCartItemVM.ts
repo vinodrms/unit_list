@@ -6,7 +6,8 @@ import {ThDateIntervalDO} from '../../../../../../../../services/common/data-obj
 import {CurrencyDO} from '../../../../../../../../services/common/data-objects/currency/CurrencyDO';
 import {CustomerDO} from '../../../../../../../../services/customers/data-objects/CustomerDO';
 import {HotelPaymentMethodsDO} from '../../../../../../../../services/settings/data-objects/HotelPaymentMethodsDO';
-import {InvoicePaymentMethodType} from '../../../../../../../../services/invoices/data-objects/payers/InvoicePaymentMethodDO';
+import { InvoicePaymentMethodType } from '../../../../../../../../services/invoices/data-objects/payers/InvoicePaymentMethodDO';
+import { HotelAggregatedPaymentMethodsDO } from "../../../../../../../../services/settings/data-objects/HotelAggregatedPaymentMethodsDO";
 
 export interface BillingValidationResult {
     valid: boolean;
@@ -49,7 +50,7 @@ export class BookingCartItemVM {
     priceProduct: PriceProductDO;
     ccy: CurrencyDO;
     customerList: CustomerDO[];
-    allowedPaymentMethods: HotelPaymentMethodsDO;
+    allowedPaymentMethods: HotelAggregatedPaymentMethodsDO;
 
     private _thUtils: ThUtils;
 

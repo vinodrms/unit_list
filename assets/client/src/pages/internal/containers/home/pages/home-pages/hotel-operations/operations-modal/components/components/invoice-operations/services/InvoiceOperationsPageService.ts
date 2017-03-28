@@ -38,7 +38,7 @@ export class InvoiceOperationsPageService {
         ).flatMap((result: [InvoiceGroupDO, HotelAggregatedInfo]) => {
             this._pageData.ccy = result[1].ccy;
             this._pageData.allowedPaymentMethods = result[1].allowedPaymentMethods;
-            this._pageData.allPaymentMethods = result[1].paymentMethods;
+            this._pageData.allPaymentMethods = result[1].allAvailablePaymentMethods;
             this._pageData.invoiceGroupDO = result[0];
 
             if (this._appContext.thUtils.isUndefinedOrNull(this._pageData.invoiceGroupDO.invoiceList) || _.isEmpty(this._pageData.invoiceGroupDO.invoiceList)) {

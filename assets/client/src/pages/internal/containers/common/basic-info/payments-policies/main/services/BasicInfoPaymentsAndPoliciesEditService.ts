@@ -1,12 +1,12 @@
-import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
-import {Observer} from 'rxjs/Observer';
-import {AppContext, ThServerApi, ThError} from '../../../../../../../../common/utils/AppContext';
-import {PaymentMethodVMContainer} from '../services/utils/PaymentMethodVMContainer';
-import {HotelDO} from '../../../../../../services/hotel/data-objects/hotel/HotelDO';
-import {HotelService} from '../../../../../../services/hotel/HotelService';
-import {HotelDetailsDO} from '../../../../../../services/hotel/data-objects/HotelDetailsDO';
-import {TaxContainerDO} from '../../../../../../services/taxes/data-objects/TaxContainerDO';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { Observer } from 'rxjs/Observer';
+import { AppContext, ThServerApi, ThError } from '../../../../../../../../common/utils/AppContext';
+import { PaymentMethodVMContainer } from '../services/utils/PaymentMethodVMContainer';
+import { HotelDO } from '../../../../../../services/hotel/data-objects/hotel/HotelDO';
+import { HotelService } from '../../../../../../services/hotel/HotelService';
+import { HotelDetailsDO } from '../../../../../../services/hotel/data-objects/HotelDetailsDO';
+import { TaxContainerDO } from '../../../../../../services/taxes/data-objects/TaxContainerDO';
 
 @Injectable()
 export class BasicInfoPaymentsAndPoliciesEditService {
@@ -55,7 +55,7 @@ export class BasicInfoPaymentsAndPoliciesEditService {
 			this._appContext.modalService.confirm(modalTitle, errorMessage, { positive: "Ok" }, () => { }, () => { });
 			return this.reject();
 		}
-		this._hotel.paymentMethodIdList = this._paymentMethods.getSelectedPaymentMethodIdList();
+		this._hotel.paymentMethodList = this._paymentMethods.getSelectedPaymentMethodIdList();
 		return new Observable<any>((observer: Observer<any>) => {
 			this._hotelService.updatePaymentsAndPolicies(this._hotel).subscribe((hotel: HotelDetailsDO) => {
 				observer.next(hotel);
