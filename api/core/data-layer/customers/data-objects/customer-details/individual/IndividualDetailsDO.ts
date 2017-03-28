@@ -2,6 +2,7 @@ import { BaseDO } from '../../../../common/base/BaseDO';
 import { AddressDO } from '../../../../common/data-objects/address/AddressDO';
 import { ThDateDO } from '../../../../../utils/th-dates/data-objects/ThDateDO';
 import { ICustomerDetailsDO } from '../ICustomerDetailsDO';
+import { CommissionDO, CommissionType } from "../../../../common/data-objects/commission/CommissionDO";
 
 export class IndividualDetailsDO extends BaseDO implements ICustomerDetailsDO {
 	constructor() {
@@ -50,5 +51,12 @@ export class IndividualDetailsDO extends BaseDO implements ICustomerDetailsDO {
 	}
 	public getGovernmentCode(): string {
 		return "";
+	}
+	public getCommission(): CommissionDO {
+		let commission = new CommissionDO();
+		commission.type = CommissionType.Fixed;
+		commission.amount = 0.0;
+		commission.deducted = false;
+		return commission;
 	}
 }

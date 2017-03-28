@@ -102,6 +102,7 @@ export class DefaultCustomerBuilder implements ICustomerDataSource {
 		details.commission = new CommissionDO();
 		details.commission.type = CommissionType.Percentage;
 		details.commission.amount = 0.1;
+		details.commission.deducted = true;
 		details.contactName = "Ionut Paraschiv";
 		details.name = name;
 		details.payInvoiceByAgreement = false;

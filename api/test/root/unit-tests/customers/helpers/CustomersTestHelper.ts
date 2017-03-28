@@ -56,7 +56,8 @@ export class CustomersTestHelper {
 			},
 			commission: {
 				type: CommissionType.Percentage,
-				amount: 0.2
+				amount: 0.2,
+				deducted: true
 			},
 			contactName: "Ionut Paraschiv",
 			email: "ionut.paraschiv@3angle.tech",

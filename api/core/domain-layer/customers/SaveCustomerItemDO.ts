@@ -1,15 +1,15 @@
-import {IValidationStructure} from '../../utils/th-validation/structure/core/IValidationStructure';
-import {ObjectValidationStructure} from '../../utils/th-validation/structure/ObjectValidationStructure';
-import {PrimitiveValidationStructure} from '../../utils/th-validation/structure/PrimitiveValidationStructure';
-import {ArrayValidationStructure} from '../../utils/th-validation/structure/ArrayValidationStructure';
-import {StringValidationRule} from '../../utils/th-validation/rules/StringValidationRule';
-import {NumberValidationRule} from '../../utils/th-validation/rules/NumberValidationRule';
-import {NumberInListValidationRule} from '../../utils/th-validation/rules/NumberInListValidationRule';
-import {EmailValidationRule} from '../../utils/th-validation/rules/EmailValidationRule';
-import {BooleanValidationRule} from '../../utils/th-validation/rules/BooleanValidationRule';
-import {CustomerType} from '../../data-layer/customers/data-objects/CustomerDO';
-import {ICommissionDO, CommissionDO, CommissionType} from '../../data-layer/common/data-objects/commission/CommissionDO';
-import {PriceProductAvailability} from '../../data-layer/price-products/data-objects/PriceProductDO';
+import { IValidationStructure } from '../../utils/th-validation/structure/core/IValidationStructure';
+import { ObjectValidationStructure } from '../../utils/th-validation/structure/ObjectValidationStructure';
+import { PrimitiveValidationStructure } from '../../utils/th-validation/structure/PrimitiveValidationStructure';
+import { ArrayValidationStructure } from '../../utils/th-validation/structure/ArrayValidationStructure';
+import { StringValidationRule } from '../../utils/th-validation/rules/StringValidationRule';
+import { NumberValidationRule } from '../../utils/th-validation/rules/NumberValidationRule';
+import { NumberInListValidationRule } from '../../utils/th-validation/rules/NumberInListValidationRule';
+import { EmailValidationRule } from '../../utils/th-validation/rules/EmailValidationRule';
+import { BooleanValidationRule } from '../../utils/th-validation/rules/BooleanValidationRule';
+import { CustomerType } from '../../data-layer/customers/data-objects/CustomerDO';
+import { CommissionDO, CommissionType } from '../../data-layer/common/data-objects/commission/CommissionDO';
+import { PriceProductAvailability } from '../../data-layer/price-products/data-objects/PriceProductDO';
 
 export interface CustomerItemAddressDO {
 	streetAddress?: string;
@@ -45,7 +45,11 @@ interface CorporateCustomerItemDetailsDO extends CustomerItemDetailsDO {
 	payInvoiceByAgreement: boolean;
 	invoiceFee?: number;
 	accountNo?: string;
-	commission: ICommissionDO;
+	commission: {
+		type: CommissionType;
+		amount?: number;
+		deducted?: boolean;
+	};
 	receiveBookingConfirmations: boolean;
 }
 export interface CompanyCustomerItemDetailsDO extends CorporateCustomerItemDetailsDO {
@@ -234,6 +238,10 @@ export class SaveCustomerItemDO {
 					{
 						key: "amount",
 						validationStruct: new PrimitiveValidationStructure(NumberValidationRule.buildNullable())
+					},
+					{
+						key: "deducted",
+						validationStruct: new PrimitiveValidationStructure(new BooleanValidationRule())
 					}
 				])
 			},
