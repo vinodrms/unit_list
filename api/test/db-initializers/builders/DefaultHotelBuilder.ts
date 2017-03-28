@@ -13,6 +13,7 @@ import { ThTimestampDO } from '../../../core/utils/th-dates/data-objects/ThTimes
 import { ThUtils } from '../../../core/utils/ThUtils';
 import { Locales } from '../../../core/utils/localization/ThTranslation';
 import { AppContext } from '../../../core/utils/AppContext';
+import { PaymentMethodInstanceDO } from "../../../core/data-layer/common/data-objects/payment-method/PaymentMethodInstanceDO";
 
 export class DefaultHotelBuilder {
 	public static Timezone = "Europe/Bucharest";
@@ -68,13 +69,25 @@ export class DefaultHotelBuilder {
 		hotel.userList.push(user);
 		hotel.amenityIdList = [];
 		hotel.customAmenityList = [];
-		hotel.paymentMethodIdList = this.getPaymentIdList();
+		hotel.paymentMethodList = this.getPaymentMethodList();
 		hotel.configurationCompleted = false;
 		hotel.configurationCompletedTimestamp = ThTimestampDO.buildThTimestampForTimezone(hotel.timezone);
 		hotel.sequences = new HotelSequencesDO();
 		hotel.sequences.setInitialValues();
 
 		return hotel;
+	}
+
+	private getPaymentMethodList(): PaymentMethodInstanceDO[] {
+		let paymentMethodList: PaymentMethodInstanceDO[] = [];
+		let paymentIdList = this.getPaymentIdList();
+		_.forEach(paymentIdList, (paymentMethodId: string) => {
+			let paymentMethod = new PaymentMethodInstanceDO();
+			paymentMethod.paymentMethodId = paymentMethodId;
+			paymentMethodList.push(paymentMethod);
+		});
+
+		return paymentMethodList;
 	}
 
 	private getPaymentIdList(): string[] {

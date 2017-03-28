@@ -17,6 +17,7 @@ import { AddBookingItemsDO, BookingItemDO } from '../../../core/domain-layer/boo
 import { AddBookingItems } from '../../../core/domain-layer/bookings/add-bookings/AddBookingItems';
 import { IndexedBookingInterval } from '../../../core/data-layer/price-products/utils/IndexedBookingInterval';
 import { BookingUtils } from '../../../core/domain-layer/bookings/utils/BookingUtils';
+import { PaymentMethodInstanceDO } from "../../../core/data-layer/common/data-objects/payment-method/PaymentMethodInstanceDO";
 
 export interface IBookingDataSource {
     getBookingList(hotelDO: HotelDO, customerList: CustomerDO[], roomCategoryStatsList: RoomCategoryStatsDO[], priceProductList: PriceProductDO[]): BookingDO[];
@@ -52,7 +53,7 @@ export class DefaultBookingBuilder implements IBookingDataSource {
             paymentGuarantee: true,
             paymentMethod: {
                 type: InvoicePaymentMethodType.DefaultPaymentMethod,
-                value: this._testUtils.getRandomListElement(hotelDO.paymentMethodIdList)
+                value: this._testUtils.getRandomListElement(hotelDO.paymentMethodList).paymentMethodId
             }
         });
         var booking = new BookingDO();

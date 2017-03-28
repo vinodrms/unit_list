@@ -6,6 +6,7 @@ import { AmenityDO } from '../../common/data-objects/amenity/AmenityDO';
 import { OperationHoursDO } from './operation-hours/OperationHoursDO';
 import { ThTimestampDO } from '../../../utils/th-dates/data-objects/ThTimestampDO';
 import { HotelSequencesDO } from './sequences/HotelSequencesDO';
+import { PaymentMethodInstanceDO } from "../../common/data-objects/payment-method/PaymentMethodInstanceDO";
 
 export class HotelDO extends BaseDO {
 	constructor() {
@@ -20,7 +21,7 @@ export class HotelDO extends BaseDO {
 	ccyCode: string;
 	amenityIdList: string[];
 	customAmenityList: AmenityDO[];
-	paymentMethodIdList: string[];
+	paymentMethodList: PaymentMethodInstanceDO[];
 	additionalInvoiceDetails: string;
 	configurationCompleted: boolean;
 	configurationCompletedTimestamp: ThTimestampDO;
@@ -29,7 +30,7 @@ export class HotelDO extends BaseDO {
 	sequences: HotelSequencesDO;
 
 	protected getPrimitivePropertyKeys(): string[] {
-		return ["id", "versionId", "logoUrl", "ccyCode", "amenityIdList", "paymentMethodIdList", "additionalInvoiceDetails", "configurationCompleted", "timezone"];
+		return ["id", "versionId", "logoUrl", "ccyCode", "amenityIdList", "additionalInvoiceDetails", "configurationCompleted", "timezone"];
 	}
 	public buildFromObject(object: Object) {
 		super.buildFromObject(object);
@@ -52,6 +53,13 @@ export class HotelDO extends BaseDO {
 			var amenityDO = new AmenityDO();
 			amenityDO.buildFromObject(amenityObject);
 			this.customAmenityList.push(amenityDO);
+		});
+
+		this.paymentMethodList = [];
+		this.forEachElementOf(this.getObjectPropertyEnsureUndefined(object, "paymentMethodList"), (paymentMethodInstanceObject: Object) => {
+			var paymentMethodInstanceDO = new PaymentMethodInstanceDO();
+			paymentMethodInstanceDO.buildFromObject(paymentMethodInstanceObject);
+			this.paymentMethodList.push(paymentMethodInstanceDO);
 		});
 
 		this.configurationCompletedTimestamp = new ThTimestampDO();

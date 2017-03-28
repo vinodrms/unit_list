@@ -104,7 +104,7 @@ describe("Hotel Details Tests", function () {
 			updatePaymPolicies.update(paymPoliciesDO).then((details: HotelDetailsDO) => {
 				testHotelDetailsDO = details;
 				should.equal(details.hotel.ccyCode, paymPoliciesDO.ccyCode);
-				should.equal(details.hotel.paymentMethodIdList.length, paymPoliciesDO.paymentMethodIdList.length);
+				should.equal(details.hotel.paymentMethodList.length, paymPoliciesDO.paymentMethodIdList.length);
 				done();
 			}).catch((e: any) => {
 				done(e);
