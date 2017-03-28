@@ -852,5 +852,8 @@ export var EnglishTranslations: Object = {
 	"Click here to open %dynamicPrice% on %date%.": "Click here to open %dynamicPrice% on %date%.",
 	"Show/hide dynamic rates": "Show/hide dynamic rates",
 	"The maximum number of dynamic prices on this price product has been reached.": "The maximum number of dynamic prices on this price product has been reached.",
-
+	"Supported payments": "Supported payments",
+	"Payment method": "Payment method",
+	"Transaction Fee": "Transaction Fee",
+	
 };

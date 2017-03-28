@@ -4,11 +4,12 @@ import {PaymentMethodDO} from '../../../../../../../services/common/data-objects
 export class PaymentMethodVM {
 	paymentMethod: PaymentMethodDO;
 	isSelected: boolean;
+	hasTransactionFee: boolean;
+	transactionFeeValue: number;
 }
 
 export class PaymentMethodVMContainer {
 	private _paymentMethodList: PaymentMethodVM[];
-
 
 	constructor(paymentMethods: HotelPaymentMethodsDO, availablePaymentMethodIdList: string[]) {
 		this._paymentMethodList = [];
@@ -23,6 +24,7 @@ export class PaymentMethodVMContainer {
 	public get paymentMethodList(): PaymentMethodVM[] {
 		return this._paymentMethodList;
 	}
+	
 	public set paymentMethodList(paymentMethodList: PaymentMethodVM[]) {
 		this._paymentMethodList = paymentMethodList;
 	}
