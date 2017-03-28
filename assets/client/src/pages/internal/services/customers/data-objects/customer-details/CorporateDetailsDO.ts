@@ -1,7 +1,7 @@
-import {BaseDO} from '../../../../../../common/base/BaseDO';
-import {AddressDO} from '../../../common/data-objects/address/AddressDO';
-import {CommissionDO} from '../../../common/data-objects/commission/CommissionDO';
-import {ICustomerDetailsDO} from './ICustomerDetailsDO';
+import { BaseDO } from '../../../../../../common/base/BaseDO';
+import { AddressDO } from '../../../common/data-objects/address/AddressDO';
+import { CommissionDO } from '../../../common/data-objects/commission/CommissionDO';
+import { ICustomerDetailsDO } from './ICustomerDetailsDO';
 
 export class CorporateDetailsDO extends BaseDO implements ICustomerDetailsDO {
 	constructor() {

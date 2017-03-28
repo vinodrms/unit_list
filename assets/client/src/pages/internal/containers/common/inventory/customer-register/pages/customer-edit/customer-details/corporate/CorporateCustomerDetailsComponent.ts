@@ -1,11 +1,12 @@
-import {Component, Input} from '@angular/core';
-import {FormGroup} from '@angular/forms';
-import {BaseFormComponent} from '../../../../../../../../../../common/base/BaseFormComponent';
-import {CorporateDetailsDO} from '../../../../../../../../services/customers/data-objects/customer-details/CorporateDetailsDO';
-import {VatDetails, VatResponse} from '../../../../../../../../../../common/utils/components/VATComponent';
-import {CountriesDO} from '../../../../../../../../services/settings/data-objects/CountriesDO';
-import {CorporateDetailsFormBuilderService} from './services/CorporateDetailsFormBuilderService';
-import {CurrencyDO} from '../../../../../../../../services/common/data-objects/currency/CurrencyDO';
+import { Component, Input } from '@angular/core';
+import { FormGroup } from '@angular/forms';
+import { BaseFormComponent } from '../../../../../../../../../../common/base/BaseFormComponent';
+import { CorporateDetailsDO } from '../../../../../../../../services/customers/data-objects/customer-details/CorporateDetailsDO';
+import { VatDetails, VatResponse } from '../../../../../../../../../../common/utils/components/VATComponent';
+import { CountriesDO } from '../../../../../../../../services/settings/data-objects/CountriesDO';
+import { CorporateDetailsFormBuilderService } from './services/CorporateDetailsFormBuilderService';
+import { CurrencyDO } from '../../../../../../../../services/common/data-objects/currency/CurrencyDO';
+import { CommissionDO } from "../../../../../../../../services/common/data-objects/commission/CommissionDO";
 
 @Component({
 	selector: 'corporate-customer-details',

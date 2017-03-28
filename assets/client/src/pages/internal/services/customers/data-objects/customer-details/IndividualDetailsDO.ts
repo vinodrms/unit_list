@@ -1,7 +1,7 @@
-import {BaseDO} from '../../../../../../common/base/BaseDO';
-import {AddressDO} from '../../../common/data-objects/address/AddressDO';
-import {ICustomerDetailsDO} from './ICustomerDetailsDO';
-import {ThDateDO} from '../../../common/data-objects/th-dates/ThDateDO';
+import { BaseDO } from '../../../../../../common/base/BaseDO';
+import { AddressDO } from '../../../common/data-objects/address/AddressDO';
+import { ICustomerDetailsDO } from './ICustomerDetailsDO';
+import { ThDateDO } from '../../../common/data-objects/th-dates/ThDateDO';
 
 export class IndividualDetailsDO extends BaseDO implements ICustomerDetailsDO {
 	constructor() {

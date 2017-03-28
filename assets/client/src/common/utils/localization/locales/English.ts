@@ -460,6 +460,7 @@ export var EnglishTranslations: Object = {
 	"Booking Confirmations": "Booking Confirmations",
 	"You can disable this customer to receive booking confirmations by email.": "You can disable this customer to receive booking confirmations by email.",
 	"Enter a valid commission": "Enter a valid commission",
+	"Deducted from Room Prices": "Deducted from Room Prices",
 	"Contact Person": "Contact Person",
 	"Hotel Logo": "Hotel Logo",
 	"Logo": "Logo",
