@@ -46,7 +46,7 @@ export class InvoicePaymentMethodValidator {
         var foundPaymentMethod: PaymentMethodInstanceDO = _.find(this._hotelDO.paymentMethodList, (paymentMethodInstance: PaymentMethodInstanceDO) => {
             return paymentMethodInstance.paymentMethodId === this._invoicePaymentMethod.value;
         });
-        if (this._thUtils.isUndefinedOrNull(foundPaymentMethod) || !_.isString(foundPaymentMethod)) {
+        if (this._thUtils.isUndefinedOrNull(foundPaymentMethod) || !_.isString(foundPaymentMethod.paymentMethodId)) {
             var thError = new ThError(ThStatusCode.InvoicePaymentMethodValidatorUnsupportedPaymentMethod, null);
             ThLogger.getInstance().logBusiness(ThLogLevel.Error, "unsupported payment method", this._invoicePaymentMethod, thError);
             reject(thError);
