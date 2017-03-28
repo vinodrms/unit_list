@@ -7,8 +7,9 @@ export class PaymentMethodDO extends BaseDO {
     id: string;
     name: string;
     iconUrl: string;
+	transactionFee: number;
 
     protected getPrimitivePropertyKeys(): string[] {
-        return ["id", "name", "iconUrl"];
+        return ["id", "name", "iconUrl", "transactionFee"];
     }
 }

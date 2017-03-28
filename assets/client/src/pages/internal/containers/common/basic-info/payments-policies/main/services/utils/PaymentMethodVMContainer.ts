@@ -5,7 +5,6 @@ export class PaymentMethodVM {
 	paymentMethod: PaymentMethodDO;
 	isSelected: boolean;
 	hasTransactionFee: boolean;
-	transactionFeeValue: number;
 }
 
 export class PaymentMethodVMContainer {
