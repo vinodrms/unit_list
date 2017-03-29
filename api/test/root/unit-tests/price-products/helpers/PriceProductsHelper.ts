@@ -165,6 +165,7 @@ export class PriceProductsHelper {
 								}
 							]
 						},
+						intervals: [],
 						customerIdList: discountCustomerIdList
 					},
 					{
@@ -180,6 +181,7 @@ export class PriceProductsHelper {
 								}
 							]
 						},
+						intervals: [],
 						customerIdList: discountCustomerIdList
 					}
 				]

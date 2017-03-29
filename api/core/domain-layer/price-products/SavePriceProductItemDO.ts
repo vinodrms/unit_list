@@ -17,6 +17,7 @@ import { BooleanValidationRule } from '../../utils/th-validation/rules/BooleanVa
 import { SavePriceProductItemPriceDO } from './validation-structures/SavePriceProductItemPriceDO';
 import { SavePriceProductItemConstraintDO } from './validation-structures/SavePriceProductItemConstraintDO';
 import { ISOWeekDayUtils } from '../../utils/th-dates/data-objects/ISOWeekDay';
+import { ThDateIntervalDO } from "../../utils/th-dates/data-objects/ThDateIntervalDO";
 
 export interface SavePriceProductItemConstraintListDO {
 	constraintList: SavePriceProductItemConstraintDO[];
@@ -26,6 +27,7 @@ export interface SavePriceProductItemDiscountDO {
 	name: string;
 	value: number;
 	constraints: SavePriceProductItemConstraintListDO;
+	intervals: ThDateIntervalDO[];
 	customerIdList: string[];
 }
 
@@ -82,6 +84,36 @@ export class SavePriceProductItemDO {
 			}
 		]);
 	}
+
+	public static getThDateIntervalDOValidationStructure(): IValidationStructure {
+        return new ObjectValidationStructure([
+            {
+                key: "start",
+                validationStruct: SavePriceProductItemDO.getThDateDOValidationStructure()
+            },
+            {
+                key: "end",
+                validationStruct: SavePriceProductItemDO.getThDateDOValidationStructure()
+            }
+        ]);
+    }
+
+	public static getThDateDOValidationStructure(): IValidationStructure {
+        return new ObjectValidationStructure([
+            {
+                key: "year",
+                validationStruct: new PrimitiveValidationStructure(NumberValidationRule.buildIntegerNumberRule(0))
+            },
+            {
+                key: "month",
+                validationStruct: new PrimitiveValidationStructure(NumberValidationRule.buildIntegerNumberRule(0))
+            },
+            {
+                key: "day",
+                validationStruct: new PrimitiveValidationStructure(NumberValidationRule.buildIntegerNumberRule(1))
+            }
+        ]);
+    }
 
 	public static getValidationStructure(): IValidationStructure {
 		var weekDayUtils = new ISOWeekDayUtils();
@@ -234,6 +266,10 @@ export class SavePriceProductItemDO {
 							{
 								key: "constraints",
 								validationStruct: SavePriceProductItemDO.getPriceProductConstraintWrapperValidationRule()
+							},
+							{
+								key: "intervals",
+								validationStruct: new ArrayValidationStructure(SavePriceProductItemDO.getThDateIntervalDOValidationStructure())
 							},
 							{
 								key: "customerIdList",
