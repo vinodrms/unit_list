@@ -1,0 +1,20 @@
+<div class="modal-header text-center">
+	<button type="button" class="close" (click)="closeDialog()">&times;</button>
+	<h4 class="modal-title">{{ 'Room Availability' | translate }}</h4>
+</div>
+<div class="modal-body">
+	<table class="table table-striped room-availability-modal-table">
+		<thead>
+            <th>{{ 'Room Category' | translate }}</th>
+            <th>{{ 'Available Rooms' | translate }}</th>
+            <th>{{ 'Total Rooms' | translate }}</th>
+		</thead>
+		<tbody>
+			<tr *ngFor="let roomCategoryItem of roomCategoryItemList">
+				<td>{{roomCategoryItem.stats.roomCategory.displayName}}</td>
+				<td>{{roomCategoryItem.stats.noOfRooms - roomCategoryItem.noOccupiedRooms}}</td>
+				<td>{{roomCategoryItem.stats.noOfRooms}}</td>
+			</tr>
+		</tbody>
+	</table>
+</div>

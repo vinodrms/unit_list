@@ -10,6 +10,11 @@
 			<lazy-loading-table #searchResults (onAddExistingItem)="addBookingVMInCart($event)">
 			</lazy-loading-table>
 		</div>
+		<div class="row booking-search-room-availability">
+           <button type="button" class="btn btn-secondary booking-search-room-availability-button" (click)="openRoomAvailabilityModal()" *ngIf='getNumberOfAvailableRooms()!==undefined'>
+			 {{getNumberOfAvailableRooms()}} {{ 'out of' | translate }} {{getTotalNumberOfRooms()}}
+		   </button>
+		</div>
 	</div>
 	<div class="col-xs-5 full-height booking-cart">
 		<lazy-loading-table #bookingCart (onDelete)="removeBookingVMFromCart($event)">
