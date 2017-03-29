@@ -52,7 +52,7 @@ export class MongoHotelDetailsRepository extends MongoRepository {
 	}
 	public updatePaymentsPolicies(hotelMeta: HotelMetaRepoDO, paymPoliciesParams: PaymentsPoliciesRepoDO): Promise<HotelDO> {
 		return this.findAndModifyHotel(hotelMeta, {
-			"paymentMethodIdList": paymPoliciesParams.paymentMethodIdList,
+			"paymentMethodList": paymPoliciesParams.paymentMethodList,
 			"ccyCode": paymPoliciesParams.ccyCode,
 			"additionalInvoiceDetails": paymPoliciesParams.additionalInvoiceDetails
 		});

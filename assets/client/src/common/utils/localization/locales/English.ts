@@ -84,7 +84,7 @@ export var EnglishTranslations: Object = {
 	"Default currency": "Default currency",
 	"All rates and prices will be in the selected currency": "All rates and prices will be in the selected currency",
 	"Select a currency": "Select a currency",
-	"Select at least a payment method": "Select at least a payment method",
+	"Select at least a payment method and input fees where enabled": "Select at least a payment method and input fees where enabled.",
 	"Other Taxes": "Other Taxes",
 	"e.g. City Tax": "e.g. City Tax",
 	"VAT": "VAT",
@@ -854,6 +854,6 @@ export var EnglishTranslations: Object = {
 	"The maximum number of dynamic prices on this price product has been reached.": "The maximum number of dynamic prices on this price product has been reached.",
 	"Supported payments": "Supported payments",
 	"Payment method": "Payment method",
-	"Transaction Fee": "Transaction Fee",
+	"Transaction Fee (in %)": "Transaction Fee (in %)",
 	
 };

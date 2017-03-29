@@ -1,4 +1,4 @@
-import {HotelPaymentMethodsDO} from '../../../../../../../services/settings/data-objects/HotelPaymentMethodsDO';
+import { HotelPaymentMethodsDO } from '../../../../../../../services/settings/data-objects/HotelPaymentMethodsDO';
 import { PaymentMethodDO } from '../../../../../../../services/common/data-objects/payment-method/PaymentMethodDO';
 import { ThUtils } from "../../../../../../../../../common/utils/ThUtils";
 import { PaymentMethodInstanceDO } from "../../../../../../../services/common/data-objects/payment-method/PaymentMethodInstanceDO";
@@ -6,7 +6,49 @@ import { AggregatedPaymentMethodDO } from "../../../../../../../services/common/
 
 export class PaymentMethodVM {
 	aggregatedPaymentMethod: AggregatedPaymentMethodDO;
-	isSelected: boolean;
+	_isSelected: boolean;
+	_hasTransactionFee: boolean;
+
+	public get iconUrl(): string {
+		return this.aggregatedPaymentMethod.paymentMethod.iconUrl;
+	}
+
+	public get name(): string {
+		return this.aggregatedPaymentMethod.paymentMethod.name;
+	}
+
+	public set hasTransactionFee(hasTransactionFee: boolean) {
+		this._hasTransactionFee = hasTransactionFee;
+
+		if(!hasTransactionFee) {
+			this.transactionFee = null;
+		}
+	}
+
+	public get hasTransactionFee(): boolean {
+		return this._hasTransactionFee; 
+	}
+
+	public get transactionFee(): number {
+		return this.aggregatedPaymentMethod.transactionFee;
+	}
+
+	public set transactionFee(fee: number) {
+		this.aggregatedPaymentMethod.transactionFee = fee;
+	}
+
+	public get isSelected(): boolean {
+		return this._isSelected;
+	}
+
+	public set isSelected(isSelected: boolean) {
+		this._isSelected = isSelected;
+
+		if(!isSelected) {
+			this.hasTransactionFee = false;
+			this.transactionFee = null;
+		}
+	}
 }
 
 export class PaymentMethodVMContainer {
@@ -34,7 +76,8 @@ export class PaymentMethodVMContainer {
 
 				paymMethodVM.aggregatedPaymentMethod = new AggregatedPaymentMethodDO();
 				paymMethodVM.aggregatedPaymentMethod.paymentMethod = paymentMethod;
-				paymMethodVM.aggregatedPaymentMethod.paymentMethod.transactionFee = paymentMethodInstance.transactionFee;
+				paymMethodVM.aggregatedPaymentMethod.transactionFee = paymentMethodInstance.transactionFee;
+				paymMethodVM.hasTransactionFee = _.isNumber(paymentMethodInstance.transactionFee);
 			}
 			paymMethodVM.isSelected = paymentSupportedByHotel;
 			
@@ -50,7 +93,7 @@ export class PaymentMethodVMContainer {
 		this._paymentMethodList = paymentMethodList;
 	}
 
-	public getSelectedPaymentMethodIdList(): PaymentMethodInstanceDO[] {
+	public getSelectedPaymentMethodList(): PaymentMethodInstanceDO[] {
 		var filteredPM: PaymentMethodVM[] = _.filter(this._paymentMethodList, (paymMethodVM: PaymentMethodVM) => {
 			return paymMethodVM.isSelected;
 		});

@@ -3,19 +3,20 @@ import should = require('should');
 import supertest = require('supertest');
 import _ = require("underscore");
 
-import {ThError} from '../../../../core/utils/th-responses/ThError';
-import {ThStatusCode} from '../../../../core/utils/th-responses/ThResponse';
-import {DefaultDataBuilder} from '../../../db-initializers/DefaultDataBuilder';
-import {TestContext} from '../../../helpers/TestContext';
-import {HotelGetDetails} from '../../../../core/domain-layer/hotel-details/get-details/HotelGetDetails';
-import {HotelDO} from '../../../../core/data-layer/hotel/data-objects/HotelDO';
-import {UserDO} from '../../../../core/data-layer/hotel/data-objects/user/UserDO';
-import {HotelUpdateBasicInfo} from '../../../../core/domain-layer/hotel-details/basic-info/HotelUpdateBasicInfo';
-import {HotelDetailsDO} from '../../../../core/domain-layer/hotel-details/utils/HotelDetailsBuilder';
-import {HotelDetailsTestHelper} from './helpers/HotelDetailsTestHelper';
-import {HotelUpdatePaymentsPolicies} from '../../../../core/domain-layer/hotel-details/payment-policies/HotelUpdatePaymentsPolicies';
-import {HotelUpdatePropertyDetails} from '../../../../core/domain-layer/hotel-details/property-details/HotelUpdatePropertyDetails';
-import {HotelConfigurations} from '../../../../core/domain-layer/hotel-details/config-completed/HotelConfigurations';
+import { ThError } from '../../../../core/utils/th-responses/ThError';
+import { ThStatusCode } from '../../../../core/utils/th-responses/ThResponse';
+import { DefaultDataBuilder } from '../../../db-initializers/DefaultDataBuilder';
+import { TestContext } from '../../../helpers/TestContext';
+import { HotelGetDetails } from '../../../../core/domain-layer/hotel-details/get-details/HotelGetDetails';
+import { HotelDO } from '../../../../core/data-layer/hotel/data-objects/HotelDO';
+import { UserDO } from '../../../../core/data-layer/hotel/data-objects/user/UserDO';
+import { HotelUpdateBasicInfo } from '../../../../core/domain-layer/hotel-details/basic-info/HotelUpdateBasicInfo';
+import { HotelDetailsDO } from '../../../../core/domain-layer/hotel-details/utils/HotelDetailsBuilder';
+import { HotelDetailsTestHelper } from './helpers/HotelDetailsTestHelper';
+import { HotelUpdatePaymentsPolicies } from '../../../../core/domain-layer/hotel-details/payment-policies/HotelUpdatePaymentsPolicies';
+import { HotelUpdatePropertyDetails } from '../../../../core/domain-layer/hotel-details/property-details/HotelUpdatePropertyDetails';
+import { HotelConfigurations } from '../../../../core/domain-layer/hotel-details/config-completed/HotelConfigurations';
+import { PaymentMethodInstanceDO } from "../../../../core/data-layer/common/data-objects/payment-method/PaymentMethodInstanceDO";
 
 describe("Hotel Details Tests", function () {
 	var InvalidDayHour = 30;
@@ -89,7 +90,11 @@ describe("Hotel Details Tests", function () {
         });
 		it("Should not update the hotel payments and policies using invalid payment id", function (done) {
 			var paymPoliciesDO = hotelDetailsTestHelper.getHotelUpdatePaymentsPoliciesDO(testDataBuilder);
-			paymPoliciesDO.paymentMethodIdList.push("1111111111111");
+			
+			let paymentMethodInstanceDO = new PaymentMethodInstanceDO();
+			paymentMethodInstanceDO.paymentMethodId = "1111111111111";
+			paymPoliciesDO.paymentMethodList.push(paymentMethodInstanceDO);
+			
 			var updatePaymPolicies = new HotelUpdatePaymentsPolicies(testContext.appContext, testContext.sessionContext);
 			updatePaymPolicies.update(paymPoliciesDO).then((details: HotelDetailsDO) => {
 				done(new Error("updated payments and policies using invalid payment id"));
@@ -104,7 +109,7 @@ describe("Hotel Details Tests", function () {
 			updatePaymPolicies.update(paymPoliciesDO).then((details: HotelDetailsDO) => {
 				testHotelDetailsDO = details;
 				should.equal(details.hotel.ccyCode, paymPoliciesDO.ccyCode);
-				should.equal(details.hotel.paymentMethodList.length, paymPoliciesDO.paymentMethodIdList.length);
+				should.equal(details.hotel.paymentMethodList.length, paymPoliciesDO.paymentMethodList.length);
 				done();
 			}).catch((e: any) => {
 				done(e);

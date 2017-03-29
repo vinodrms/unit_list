@@ -19,45 +19,54 @@
 			<hr>
 
 			<label class="control-label">{{'Supported payments' | translate}}</label>
-			<div class="well form-group">
-				<div class="row">
-					<div class="col-xs-6">
-						<label class="control-label">{{'Payment method' | translate}}</label>
+			<div class="form-group">
+				<div class="well margin-bottom-0px border-radius-0px input-group" [ngClass]="{'form-warning': ((!didSelectPaymentMethod() || !didInputFeeWherePaymentMethodsHaveTransactionFees())&&didSubmitPage)}">
+					<div class="row">
+						<div class="col-xs-6">
+							<label class="control-label">{{'Payment method' | translate}}</label>
+						</div>
+						<div class="col-xs-6">
+							<label class="control-label">{{'Transaction Fee (in %)' | translate}}</label>
+						</div>
 					</div>
-					<div class="col-xs-6">
-						<label class="control-label">{{'Transaction Fee' | translate}}</label>
-					</div>
-				</div>
-				<div class="row" *ngFor="let paymentMethodVM of paymentMethods.paymentMethodList">
-					<div class="col-xs-6">
-						<div class="input-group" [ngClass]="{'form-warning': (!didSelectPaymentMethod()&&didSubmitPage)}">
-							<div class="checkbox" >
-								<label>
-									<input type="checkbox" [(ngModel)]="paymentMethodVM.isSelected" name="paymentMethodVMIsSelected"/><i class="fa" [ngClass]="paymentMethodVM.paymentMethod.iconUrl"></i> {{paymentMethodVM.paymentMethod.name | translate}}
-								</label>
+					<div class="row" *ngFor="let paymentMethodVM of allPaymentMethodsVMContainer.paymentMethodList">
+						<div class="col-xs-6">
+							<div class="input-group">
+								<div class="checkbox" >
+									<label>
+										<input type="checkbox" [(ngModel)]="paymentMethodVM.isSelected" name="paymentMethodVMIsSelected"/><i class="fa" [ngClass]="paymentMethodVM.iconUrl"></i> {{paymentMethodVM.name | translate}}
+									</label>
+								</div>
 							</div>
 						</div>
-						<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Select at least a payment method' | translate }}</small></label>
-					</div>
 
-					<div class="col-xs-3">
-						<div class="input-group" [ngClass]="{'form-warning': (!didSelectPaymentMethod()&&didSubmitPage)}">
-							<div class="checkbox">
-								<label>
-									<input type="checkbox" [(ngModel)]="paymentMethodVM.isSelected" name="paymentMethodVMIsSelected"/>
-								</label>
+						<div class="col-xs-3">
+							<div class="input-group">
+								<div class="checkbox">
+									<label>
+										<input type="checkbox" [disabled]="!paymentMethodVM.isSelected" [(ngModel)]="paymentMethodVM.hasTransactionFee" name="paymentMethodVMHasTransactionFee"/>
+									</label>
+								</div>
+							</div>
+						</div>
+						
+						<div class="col-xs-3">	
+							<div *ngIf="paymentMethodVM.isSelected && paymentMethodVM.hasTransactionFee" class="input-group">
+								<percentage-input-number
+									[initialPercentage]="paymentMethodVM.transactionFee"
+									[didSubmitForm]="didSubmitPage"
+									[readonly]="false"
+									[isRequired]="true"
+									[errorMessage]="''" 
+									(onPercentageChanged)="paymentMethodVM.transactionFee = $event">
+								</percentage-input-number>
 							</div>
 						</div>
 					</div>
-					
-					<div class="col-xs-3">	
-						<div class="input-group" [ngClass]="{'form-warning': (!didSelectPaymentMethod()&&didSubmitPage)}">
-							<input type="number" class="form-control" placeholder="%" name="feeValue">
-						</div>
-					</div>
 				</div>
+				<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Select at least a payment method and input fees where enabled' | translate }}</small></label>
 			</div>
-
+			
 		</div>
 
 		<div class="col-xs-12 col-md-4">

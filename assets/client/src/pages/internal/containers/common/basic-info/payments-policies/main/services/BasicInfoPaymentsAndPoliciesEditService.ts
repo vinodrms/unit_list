@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Observer } from 'rxjs/Observer';
 import { AppContext, ThServerApi, ThError } from '../../../../../../../../common/utils/AppContext';
-import { PaymentMethodVMContainer } from '../services/utils/PaymentMethodVMContainer';
+import { PaymentMethodVMContainer, PaymentMethodVM } from '../services/utils/PaymentMethodVMContainer';
 import { HotelDO } from '../../../../../../services/hotel/data-objects/hotel/HotelDO';
 import { HotelService } from '../../../../../../services/hotel/HotelService';
 import { HotelDetailsDO } from '../../../../../../services/hotel/data-objects/HotelDetailsDO';
@@ -12,7 +12,7 @@ import { TaxContainerDO } from '../../../../../../services/taxes/data-objects/Ta
 export class BasicInfoPaymentsAndPoliciesEditService {
 	public didSubmitForm: boolean = false;
 
-	private _paymentMethods: PaymentMethodVMContainer;
+	private _paymentMethodVMContainer: PaymentMethodVMContainer;
 	private _hotel: HotelDO;
 	private _taxContainer: TaxContainerDO;
 
@@ -23,7 +23,7 @@ export class BasicInfoPaymentsAndPoliciesEditService {
 		this._taxContainer = taxContainer;
 	}
 	public bootstrap(paymentMethods: PaymentMethodVMContainer, hotel: HotelDO) {
-		this._paymentMethods = paymentMethods;
+		this._paymentMethodVMContainer = paymentMethods;
 		this._hotel = hotel;
 	}
 	public didUpdateCcyCode(ccyCode: string) {
@@ -31,10 +31,23 @@ export class BasicInfoPaymentsAndPoliciesEditService {
 	}
 
 	public didSelectPaymentMethod(): boolean {
-		return this._paymentMethods.getSelectedPaymentMethodIdList().length > 0;
+		return this._paymentMethodVMContainer.getSelectedPaymentMethodList().length > 0;
+	}
+	public didInputFeeWherePaymentMethodsHaveTransactionFees(): boolean {
+		var selectedPaymentMethodVMList: PaymentMethodVM[] = _.filter(this._paymentMethodVMContainer.paymentMethodList, (paymMethodVM: PaymentMethodVM) => {
+			return paymMethodVM.isSelected;
+		});
+
+		let isValid = true;
+		_.forEach(selectedPaymentMethodVMList, (paymentMethodVM: PaymentMethodVM) => {
+			if(paymentMethodVM.hasTransactionFee && !_.isNumber(paymentMethodVM.transactionFee)) {
+				isValid = false;
+			}
+		});
+		return isValid;
 	}
 	private isValid() {
-		return this._hotel.ccyCode && this._paymentMethods.getSelectedPaymentMethodIdList().length > 0;
+		return this._hotel.ccyCode && this.didSelectPaymentMethod() && this.didInputFeeWherePaymentMethodsHaveTransactionFees();
 	}
 	private didAddTax(): boolean {
 		return this._taxContainer && this._taxContainer.vatList.length > 0;
@@ -55,7 +68,7 @@ export class BasicInfoPaymentsAndPoliciesEditService {
 			this._appContext.modalService.confirm(modalTitle, errorMessage, { positive: "Ok" }, () => { }, () => { });
 			return this.reject();
 		}
-		this._hotel.paymentMethodList = this._paymentMethods.getSelectedPaymentMethodIdList();
+		this._hotel.paymentMethodList = this._paymentMethodVMContainer.getSelectedPaymentMethodList();
 		return new Observable<any>((observer: Observer<any>) => {
 			this._hotelService.updatePaymentsAndPolicies(this._hotel).subscribe((hotel: HotelDetailsDO) => {
 				observer.next(hotel);

@@ -3960,3 +3960,11 @@ textarea.payer-details {
 .ps-container > .ps-scrollbar-y-rail {
   opacity: 0.6;
 }
+
+.margin-bottom-0px {
+    margin-bottom: 0px;
+}
+
+.border-radius-0px {
+    border-radius: 0px;
+}

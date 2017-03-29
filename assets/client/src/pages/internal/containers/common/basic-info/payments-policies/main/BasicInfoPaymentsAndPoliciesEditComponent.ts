@@ -79,6 +79,9 @@ export class BasicInfoPaymentsAndPoliciesEditComponent extends BaseFormComponent
 	protected didSelectPaymentMethod() {
 		return this._paymPoliciesEditService.didSelectPaymentMethod();
 	}
+	protected didInputFeeWherePaymentMethodsHaveTransactionFees() {
+		return this._paymPoliciesEditService.didInputFeeWherePaymentMethodsHaveTransactionFees();
+	}
 	public getDefaultFormGroup(): FormGroup {
 		return this._formGroup;
 	}
