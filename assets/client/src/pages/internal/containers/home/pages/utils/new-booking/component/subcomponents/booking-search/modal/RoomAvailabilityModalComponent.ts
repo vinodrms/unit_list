@@ -3,10 +3,11 @@ import {BaseComponent} from "../../../../../../../../../../../common/base/BaseCo
 import {ICustomModalComponent, ModalSize} from "../../../../../../../../../../../common/utils/modals/utils/ICustomModalComponent";
 import {AppContext} from "../../../../../../../../../../../common/utils/AppContext";
 import {ModalDialogRef} from "../../../../../../../../../../../common/utils/modals/utils/ModalDialogRef";
-import {RoomCategoryItemDO} from '../../../../services/search/data-objects/room-category-item/RoomCategoryItemDO'
-import {RoomAvailabilityModalInput} from './util/RoomAvailabilityModalInput'
+import {RoomCategoryItemDO} from '../../../../services/search/data-objects/room-category-item/RoomCategoryItemDO';
+import {RoomAvailabilityModalInput} from './util/RoomAvailabilityModalInput';
 
 @Component({
+    selector: "room-availability-modal",
     templateUrl: "/client/src/pages/internal/containers/home/pages/utils/new-booking/component/subcomponents/booking-search/modal/template/room-availability-modal.html"
 })
 export class RoomAvailabilityModalComponent extends BaseComponent implements ICustomModalComponent {
@@ -18,7 +19,6 @@ export class RoomAvailabilityModalComponent extends BaseComponent implements ICu
         private _roomAvailabilityModalInput: RoomAvailabilityModalInput ) {
         super();
         this._roomCategoryItemList = _roomAvailabilityModalInput.roomCategoryItemList;
-        debugger
     }
 
     public isBlocking() : boolean {
@@ -30,7 +30,6 @@ export class RoomAvailabilityModalComponent extends BaseComponent implements ICu
     }
 
     public closeDialog() {
-        debugger
         this._modalDialogRef.closeForced();
     }
 

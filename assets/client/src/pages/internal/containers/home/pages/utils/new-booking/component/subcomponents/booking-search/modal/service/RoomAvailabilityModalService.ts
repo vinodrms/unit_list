@@ -1,9 +1,9 @@
 import {Injectable, ReflectiveInjector} from '@angular/core';
-import {AppContext} from "../../../../../../../../../../../../common/utils/AppContext"
-import {RoomCategoryItemDO} from "../../../../../../../../../../../../pages/internal/containers/home/pages/utils/new-booking/services/search/data-objects/room-category-item/RoomCategoryItemDO"
-import {RoomAvailabilityModalComponent} from '../RoomAvailabilityModalComponent'
-import {RoomAvailabilityModalModule} from '../RoomAvailabilityModalModule'
-import {RoomAvailabilityModalInput} from '../util/RoomAvailabilityModalInput'
+import {AppContext} from "../../../../../../../../../../../../common/utils/AppContext";
+import {RoomCategoryItemDO} from "../../../../../../../../../../../../pages/internal/containers/home/pages/utils/new-booking/services/search/data-objects/room-category-item/RoomCategoryItemDO";
+import {RoomAvailabilityModalComponent} from '../RoomAvailabilityModalComponent';
+import {RoomAvailabilityModalModule} from '../RoomAvailabilityModalModule';
+import {RoomAvailabilityModalInput} from '../util/RoomAvailabilityModalInput';
 
 @Injectable()
 export class RoomAvailabilityModalService {

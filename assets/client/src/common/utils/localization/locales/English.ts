@@ -846,7 +846,7 @@ export var EnglishTranslations: Object = {
 	"Click here to open %dynamicPrice% on %date%.": "Click here to open %dynamicPrice% on %date%.",
 	"Show/hide dynamic rates": "Show/hide dynamic rates",
 	"The maximum number of dynamic prices on this price product has been reached.": "The maximum number of dynamic prices on this price product has been reached.",
-	"out of": "out of",
+	"%noAvailable% out of %noTotal%": "%noAvailable% out of %noTotal%",
 	"Available Rooms": "Available Rooms",
 	"Total Rooms": "Total Rooms"
 

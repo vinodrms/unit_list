@@ -12,7 +12,7 @@
 		<tbody>
 			<tr *ngFor="let roomCategoryItem of roomCategoryItemList">
 				<td>{{roomCategoryItem.stats.roomCategory.displayName}}</td>
-				<td>{{roomCategoryItem.stats.noOfRooms - roomCategoryItem.noOccupiedRooms}}</td>
+				<td [ngClass]="{'red-color' : roomCategoryItem.availableRooms <= 0}">{{roomCategoryItem.availableRooms}}</td>
 				<td>{{roomCategoryItem.stats.noOfRooms}}</td>
 			</tr>
 		</tbody>

@@ -20,4 +20,8 @@ export class RoomCategoryItemDO extends BaseDO {
         this.stats = new RoomCategoryStatsDO();
         this.stats.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "stats"));
     }
+
+    public get availableRooms(): number {
+        return this.stats.noOfRooms - this.noOccupiedRooms;
+    }
 }

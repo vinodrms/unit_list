@@ -12,8 +12,8 @@ import {BookingCartTableMetaBuilderService} from '../utils/table-builder/Booking
 import {BookingTableUtilsService} from '../utils/table-builder/BookingTableUtilsService';
 import {BookingSearchStepService} from './services/BookingSearchStepService';
 import {BookingCartService} from '../../../services/search/BookingCartService';
-import {RoomCategoryItemDO} from '../../../services/search/data-objects/room-category-item/RoomCategoryItemDO'
-import {RoomAvailabilityModalService} from './modal/service/RoomAvailabilityModalService'
+import {RoomCategoryItemDO} from '../../../services/search/data-objects/room-category-item/RoomCategoryItemDO';
+import {RoomAvailabilityModalService} from './modal/service/RoomAvailabilityModalService';
 
 @Component({
 	selector: 'new-booking-search',
@@ -97,7 +97,7 @@ export class NewBookingSearchComponent extends BaseComponent implements AfterVie
 		if (!this._roomCategoryItemList || this._roomCategoryItemList.length == 0) { return; }
 		var available = 0;
 		this._roomCategoryItemList.forEach(roomCategoryItem => {
-			available += roomCategoryItem.stats.noOfRooms - roomCategoryItem.noOccupiedRooms;
+			available += roomCategoryItem.availableRooms;
 		});
 		return available;
 	}

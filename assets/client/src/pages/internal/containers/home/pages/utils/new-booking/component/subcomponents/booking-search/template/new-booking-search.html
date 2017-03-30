@@ -12,7 +12,7 @@
 		</div>
 		<div class="row booking-search-room-availability">
            <button type="button" class="btn btn-secondary booking-search-room-availability-button" (click)="openRoomAvailabilityModal()" *ngIf='getNumberOfAvailableRooms()!==undefined'>
-			 {{getNumberOfAvailableRooms()}} {{ 'out of' | translate }} {{getTotalNumberOfRooms()}}
+			 {{ '%noAvailable% out of %noTotal%' | translate:{noAvailable: getNumberOfAvailableRooms(), noTotal: getTotalNumberOfRooms()} }}
 		   </button>
 		</div>
 	</div>
