@@ -4,6 +4,7 @@ import { ThTranslation } from '../../../../../../common/utils/localization/ThTra
 import { IInvoiceItemMeta } from '../../../invoices/data-objects/items/IInvoiceItemMeta';
 import { InvoiceItemDO } from '../../../invoices/data-objects/items/InvoiceItemDO';
 import { PricePerDayDO } from './PricePerDayDO';
+import { CommissionDO } from "../../../common/data-objects/commission/CommissionDO";
 
 export enum BookingPriceType {
     BookingStay,
@@ -21,9 +22,14 @@ export class BookingPriceDO extends BaseDO implements IInvoiceItemMeta {
     totalRoomPrice: number;
     totalOtherPrice: number;
 
-    totalBookingPrice: number;
     appliedDiscountValue: number;
 
+    // the commission always appears as a separate item on the invoice
+    deductedCommissionPrice: number;
+    commissionSnapshot: CommissionDO;
+
+    // The total booking price represents: ` room price - commission + other price `
+    totalBookingPrice: number;
     vatId: string;
 
     description: string;
@@ -31,7 +37,7 @@ export class BookingPriceDO extends BaseDO implements IInvoiceItemMeta {
     includedInvoiceItemList: InvoiceItemDO[];
 
     protected getPrimitivePropertyKeys(): string[] {
-        return ["movable", "priceType", "roomPricePerNightAvg", "numberOfNights", "totalRoomPrice", "totalOtherPrice", "totalBookingPrice", "appliedDiscountValue", "vatId", "description"];
+        return ["movable", "priceType", "roomPricePerNightAvg", "numberOfNights", "totalRoomPrice", "totalOtherPrice", "appliedDiscountValue", "deductedCommissionPrice", "totalBookingPrice", "vatId", "description"];
     }
     public buildFromObject(object: Object) {
         super.buildFromObject(object);
@@ -52,6 +58,17 @@ export class BookingPriceDO extends BaseDO implements IInvoiceItemMeta {
             pricePerDay.buildFromObject(roomPricePerNightObject);
             this.roomPricePerNightList.push(pricePerDay);
         });
+
+        this.commissionSnapshot = new CommissionDO();
+        this.commissionSnapshot.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "commissionSnapshot"));
+    }
+
+    public get totalBookingPriceWithoutDeductedCommission(): number {
+        return this.totalRoomPrice + this.totalOtherPrice;
+    }
+
+    public hasDeductedCommission(): boolean {
+        return _.isNumber(this.deductedCommissionPrice) && this.deductedCommissionPrice > 0;
     }
 
     public getUnitPrice(): number {

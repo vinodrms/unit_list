@@ -787,6 +787,7 @@ export var EnglishTranslations: Object = {
 	"Change date": "Change date",
 	"Others": "Others",
 	"Pay Invoice By Agreement Fee": "Pay Invoice By Agreement Fee",
+	"Deducted Room Commission": "Deducted Room Commission",
 	"Charge": "Charge",
 	"The maximum number of %maxNoOfInvoices% invoices was exceeded.": "The maximum number of %maxNoOfInvoices% invoices was exceeded.",
 	"The maximum number of %maxNoOfInvoiceItems% invoice items was exceeded.": "The maximum number of %maxNoOfInvoiceItems% invoice items was exceeded.",
