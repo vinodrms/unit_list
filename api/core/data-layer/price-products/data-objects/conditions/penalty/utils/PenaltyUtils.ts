@@ -25,7 +25,10 @@ export class PenaltyUtils {
         penaltyPrice.totalRoomPrice = penaltyPrice.roomPricePerNightAvg;
         penaltyPrice.totalOtherPrice = 0.0;
 
-        penaltyPrice.totalBookingPrice = penaltyPrice.roomPricePerNightAvg;
+        penaltyPrice.deductedCommissionPrice = bookingPrice.commissionSnapshot.getCommissionFor(penaltyPrice.totalRoomPrice);
+        penaltyPrice.commissionSnapshot = bookingPrice.commissionSnapshot;
+
+        penaltyPrice.totalBookingPrice = penaltyPrice.roomPricePerNightAvg - penaltyPrice.deductedCommissionPrice;
 
         penaltyPrice.appliedDiscountValue = bookingPrice.appliedDiscountValue;
         penaltyPrice.breakfast = bookingPrice.breakfast;
