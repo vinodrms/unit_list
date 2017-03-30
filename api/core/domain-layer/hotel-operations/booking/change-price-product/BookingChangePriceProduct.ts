@@ -194,7 +194,8 @@ export class BookingChangePriceProduct {
         this._booking.allotmentId = this._inputDO.allotmentId;
 
         var priceProduct = this._loadedPriceProductsContainer.getPriceProductById(this._inputDO.priceProductId);
-        this._bookingUtils.updateBookingPriceUsingRoomCategoryAndSavePPSnapshot(this._booking, this._loadedRoomCategoryStatsList, priceProduct);
+        let billedCustomer = this._loadedCustomersContainer.getCustomerById(this._booking.defaultBillingDetails.customerId);
+        this._bookingUtils.updateBookingPriceUsingRoomCategoryAndSavePPSnapshot(this._booking, this._loadedRoomCategoryStatsList, priceProduct, billedCustomer);
 
         var newPrice: number = this._booking.price.totalBookingPrice;
 

@@ -1,18 +1,19 @@
-import {ThLogger, ThLogLevel} from '../../../../utils/logging/ThLogger';
-import {ThError} from '../../../../utils/th-responses/ThError';
-import {ThStatusCode} from '../../../../utils/th-responses/ThResponse';
-import {AppContext} from '../../../../utils/AppContext';
-import {SessionContext} from '../../../../utils/SessionContext';
-import {BookingWithDependencies} from './BookingWithDependencies';
-import {BookingDO} from '../../../../data-layer/bookings/data-objects/BookingDO';
-import {PriceProductIdValidator} from '../../../price-products/validators/PriceProductIdValidator';
-import {PriceProductsContainer} from '../../../price-products/validators/results/PriceProductsContainer';
-import {AllotmentIdValidator} from '../../../allotments/validators/AllotmentIdValidator';
-import {AllotmentsContainer} from '../../../allotments/validators/results/AllotmentsContainer';
-import {RoomSearchResultRepoDO} from '../../../../data-layer/rooms/repositories/IRoomRepository';
-import {RoomCategoryStatsAggregator} from '../../../room-categories/aggregators/RoomCategoryStatsAggregator';
-import {RoomCategoryStatsDO} from '../../../../data-layer/room-categories/data-objects/RoomCategoryStatsDO';
-import {InvoiceGroupSearchResultRepoDO} from '../../../../data-layer/invoices/repositories/IInvoiceGroupsRepository';
+import { ThLogger, ThLogLevel } from '../../../../utils/logging/ThLogger';
+import { ThError } from '../../../../utils/th-responses/ThError';
+import { ThStatusCode } from '../../../../utils/th-responses/ThResponse';
+import { AppContext } from '../../../../utils/AppContext';
+import { SessionContext } from '../../../../utils/SessionContext';
+import { BookingWithDependencies } from './BookingWithDependencies';
+import { BookingDO } from '../../../../data-layer/bookings/data-objects/BookingDO';
+import { PriceProductIdValidator } from '../../../price-products/validators/PriceProductIdValidator';
+import { PriceProductsContainer } from '../../../price-products/validators/results/PriceProductsContainer';
+import { AllotmentIdValidator } from '../../../allotments/validators/AllotmentIdValidator';
+import { AllotmentsContainer } from '../../../allotments/validators/results/AllotmentsContainer';
+import { RoomSearchResultRepoDO } from '../../../../data-layer/rooms/repositories/IRoomRepository';
+import { RoomCategoryStatsAggregator } from '../../../room-categories/aggregators/RoomCategoryStatsAggregator';
+import { RoomCategoryStatsDO } from '../../../../data-layer/room-categories/data-objects/RoomCategoryStatsDO';
+import { InvoiceGroupSearchResultRepoDO } from '../../../../data-layer/invoices/repositories/IInvoiceGroupsRepository';
+import { CustomerDO } from "../../../../data-layer/customers/data-objects/CustomerDO";
 
 export class BookingWithDependenciesLoader {
     private _groupBookingId: string;
@@ -70,6 +71,11 @@ export class BookingWithDependenciesLoader {
                 });
             }).then((invoiceGroupSearchResult: InvoiceGroupSearchResultRepoDO) => {
                 bookingWithDependencies.invoiceGroupList = invoiceGroupSearchResult.invoiceGroupList;
+
+                let customerRepo = this._appContext.getRepositoryFactory().getCustomerRepository();
+                return customerRepo.getCustomerById({ hotelId: this._sessionContext.sessionDO.hotel.id }, bookingWithDependencies.bookingDO.defaultBillingDetails.customerId);
+            }).then((customer: CustomerDO) => {
+                bookingWithDependencies.billingCustomer = customer;
 
                 resolve(bookingWithDependencies);
             }).catch((error: any) => {

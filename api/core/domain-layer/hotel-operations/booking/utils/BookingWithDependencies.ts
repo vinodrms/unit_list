@@ -8,6 +8,7 @@ import { RoomCategoryStatsDO } from '../../../../data-layer/room-categories/data
 import { InvoiceGroupDO } from '../../../../data-layer/invoices/data-objects/InvoiceGroupDO';
 import { InvoiceDO, InvoicePaymentStatus } from '../../../../data-layer/invoices/data-objects/InvoiceDO';
 import { ThUtils } from '../../../../utils/ThUtils';
+import { CustomerDO } from "../../../../data-layer/customers/data-objects/CustomerDO";
 
 import _ = require('underscore');
 
@@ -25,6 +26,8 @@ export class BookingWithDependencies {
     private _roomCategoryStatsList: RoomCategoryStatsDO[];
 
     private _invoiceGroupList: InvoiceGroupDO[];
+
+    private _billingCustomer: CustomerDO;
 
     constructor() {
         this._thUtils = new ThUtils();
@@ -85,6 +88,12 @@ export class BookingWithDependencies {
     }
     public set invoiceGroupList(invoiceGroupList: InvoiceGroupDO[]) {
         this._invoiceGroupList = invoiceGroupList;
+    }
+    public get billingCustomer(): CustomerDO {
+        return this._billingCustomer;
+    }
+    public set billingCustomer(billingCustomer: CustomerDO) {
+        this._billingCustomer = billingCustomer;
     }
 
     public isMadeThroughActiveAllotment(): boolean {
