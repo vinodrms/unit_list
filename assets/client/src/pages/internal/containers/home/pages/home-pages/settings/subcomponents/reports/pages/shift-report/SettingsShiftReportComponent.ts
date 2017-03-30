@@ -10,10 +10,8 @@ import { HotelDetailsDO } from '../../../../../../../../../services/hotel/data-o
 
 import { SettingsReportsPagesService } from '../../main/services/SettingsReportsPagesService';
 import { SettingsReportsService } from '../../main/services/SettingsReportsService';
-import { SettingsReportsType } from '../../main/services/utils/SettingsReportsType';
 import { ThDateDO } from '../../../../../../../../../services/common/data-objects/th-dates/ThDateDO';
 import { ThHourDO } from '../../../../../../../../../services/common/data-objects/th-dates/ThHourDO';
-
 import { ReportGroupType } from '../../utils/ReportGroupType';
 import { ReportOutputFormatType } from '../../utils/ReportOutputFormatType';
 
@@ -38,7 +36,7 @@ export class SettingsShiftReportComponent extends BaseComponent {
 		private _backendService: SettingsReportsService,
 		private _pagesService: SettingsReportsPagesService) {
 		super();
-		this._pagesService.bootstrap(SettingsReportsType.Shift);
+		this._pagesService.bootstrapSelectedTab(ReportGroupType.Shift);
 		this.startTime = ThHourDO.buildThHourDO(0, 0);
 		this.endTime = ThHourDO.buildThHourDO(0, 0);
 	}
@@ -76,7 +74,7 @@ export class SettingsShiftReportComponent extends BaseComponent {
 
 	public reportCSVUrl(): string {
 		let params = {
-			reportType: ReportGroupType.ShiftReport,
+			reportType: ReportGroupType.Shift,
 			format: this.format,
 			properties: {
 				startDate: this.startDate,

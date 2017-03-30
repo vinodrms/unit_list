@@ -3,11 +3,9 @@ import { BaseComponent } from '../../../../../../../../../../../common/base/Base
 import { ThError, AppContext } from '../../../../../../../../../../../common/utils/AppContext';
 import { BasicInfoPaymentsAndPoliciesEditService } from '../../../../../../../../common/basic-info/payments-policies/main/services/BasicInfoPaymentsAndPoliciesEditService';
 import { SettingsReportsPagesService } from '../../main/services/SettingsReportsPagesService';
-import { SettingsReportsType } from '../../main/services/utils/SettingsReportsType';
 import { ThDateDO } from '../../../../../../../../../services/common/data-objects/th-dates/ThDateDO';
 import { HotelService } from '../../../../../../../../../services/hotel/HotelService';
 import { HotelDetailsDO } from '../../../../../../../../../services/hotel/data-objects/HotelDetailsDO';
-
 import { SettingsReportsService } from '../../main/services/SettingsReportsService';
 import { ReportGroupType } from '../../utils/ReportGroupType';
 import { ThPeriodType, ThPeriodOption } from '../../utils/ThPeriodType';
@@ -32,7 +30,7 @@ export class SettingsKeyMetricsReportComponent extends BaseComponent {
 		private _backendService: SettingsReportsService,
 		private _pagesService: SettingsReportsPagesService) {
 		super();
-		this._pagesService.bootstrap(SettingsReportsType.KeyMetrics);
+		this._pagesService.bootstrapSelectedTab(ReportGroupType.KeyMetrics);
 		this.periodOptionList = ThPeriodOption.getValues();
 		this.selectedPeriodType = this.periodOptionList[0].type;
 	}

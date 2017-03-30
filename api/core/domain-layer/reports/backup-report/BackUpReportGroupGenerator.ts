@@ -12,10 +12,6 @@ import { PageOrientation } from '../../../services/pdf-reports/PageOrientation';
 
 export class BackUpReportGroupGenerator extends AReportGeneratorStrategy {
 
-	constructor(appContext: AppContext, private _sessionContext: SessionContext) {
-		super(appContext);
-	}
-
 	protected getParamsValidationStructure(): IValidationStructure {
 		return new ObjectValidationStructure([]);
 	}

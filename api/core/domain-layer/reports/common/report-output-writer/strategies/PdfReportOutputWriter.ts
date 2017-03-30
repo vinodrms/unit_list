@@ -31,7 +31,8 @@ export class PdfReportOutputWriter extends AReportOutputWriter {
             pageOrientation: group.meta.pageOrientation
         }).then((pdfResponse: PdfReportsServiceResponse) => {
             resolve({
-                reportPath: pdfResponse.pdfPath
+                reportPath: pdfResponse.pdfPath,
+                reportGroup: group
             })
         }).catch((e) => {
             reject(e);

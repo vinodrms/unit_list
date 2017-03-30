@@ -5,6 +5,7 @@ import { IReportGeneratorStrategy } from './IReportGeneratorStrategy';
 import { KeyMetricsReportGroupGenerator } from '../../key-metrics/KeyMetricsReportGroupGenerator';
 import { BackUpReportGroupGenerator } from '../../backup-report/BackUpReportGroupGenerator';
 import { ShiftReportGroupGenerator } from '../../shift-report/ShiftReportGroupGenerator';
+import { BookingsForPriceProductReportGroupGenerator } from "../../bookings-for-price-product/BookingsForPriceProductReportGroupGenerator";
 
 export class ReportGeneratorFactory {
 	private _thUtils: ThUtils;
@@ -19,8 +20,10 @@ export class ReportGeneratorFactory {
 				return new KeyMetricsReportGroupGenerator(this._appContext, this._sessionContext);
 			case ReportGroupType.Backup:
 				return new BackUpReportGroupGenerator(this._appContext, this._sessionContext);
-			case ReportGroupType.ShiftReport:
+			case ReportGroupType.Shift:
 				return new ShiftReportGroupGenerator(this._appContext, this._sessionContext);
+			case ReportGroupType.BookingsForPriceProduct:
+				return new BookingsForPriceProductReportGroupGenerator(this._appContext, this._sessionContext);
 		}
 	}
 }

@@ -22,7 +22,8 @@ export class CsvReportOutputWriter extends AReportOutputWriter {
         let fileName = group.meta.name + "_" + this._utils.generateShortId();
         fileService.createFile(CsvReportOutputWriter.OutputFolder, fileName, 'csv', csvString).then((fullFilePath: string) => {
             resolve({
-                reportPath: fullFilePath
+                reportPath: fullFilePath,
+                reportGroup: group
             });
         }).catch((e) => {
             reject(e);

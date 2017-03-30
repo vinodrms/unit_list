@@ -1,9 +1,9 @@
-import {Component} from '@angular/core';
-import {BaseComponent} from '../../../../../../../../../../common/base/BaseComponent';
-import {SettingsNavbarService} from '../../navbar/services/SettingsNavbarService';
-import {SettingsPageType} from '../../navbar/services/utils/SettingsPageType';
-import {SettingsReportsPageVM} from './services/utils/SettingsReportsPageVM';
-import {SettingsReportsPagesService} from './services/SettingsReportsPagesService';
+import { Component } from '@angular/core';
+import { BaseComponent } from '../../../../../../../../../../common/base/BaseComponent';
+import { SettingsNavbarService } from '../../navbar/services/SettingsNavbarService';
+import { SettingsPageType } from '../../navbar/services/utils/SettingsPageType';
+import { SettingsReportsPageVM } from './services/utils/SettingsReportsPageVM';
+import { SettingsReportsPagesService } from './services/SettingsReportsPagesService';
 
 @Component({
 	selector: 'settings-reports',

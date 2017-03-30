@@ -24,10 +24,6 @@ export class KeyMetricsReportGroupGenerator extends AReportGeneratorStrategy {
 	private _periodType: ThPeriodType;
 	private _keyMetricItem: KeyMetricsResultItem;
 
-	constructor(appContext: AppContext, private _sessionContext: SessionContext) {
-		super(appContext);
-	}
-
 	protected getParamsValidationStructure(): IValidationStructure {
 		return new ObjectValidationStructure([
 			{

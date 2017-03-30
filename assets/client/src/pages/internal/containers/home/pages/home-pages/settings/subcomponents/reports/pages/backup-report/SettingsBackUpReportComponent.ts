@@ -1,16 +1,12 @@
 import { Component } from '@angular/core';
 import { BaseComponent } from '../../../../../../../../../../../common/base/BaseComponent';
 import { SettingsReportsPagesService } from '../../main/services/SettingsReportsPagesService';
-import { SettingsReportsType } from '../../main/services/utils/SettingsReportsType';
-
-
 import { ThError, AppContext } from '../../../../../../../../../../../common/utils/AppContext';
 import { BasicInfoPaymentsAndPoliciesEditService } from '../../../../../../../../common/basic-info/payments-policies/main/services/BasicInfoPaymentsAndPoliciesEditService';
 import { ThDateDO } from '../../../../../../../../../services/common/data-objects/th-dates/ThDateDO';
 import { HotelService } from '../../../../../../../../../services/hotel/HotelService';
 import { HotelDetailsDO } from '../../../../../../../../../services/hotel/data-objects/HotelDetailsDO';
 import { SettingsReportsService } from '../../main/services/SettingsReportsService';
-
 import { ReportGroupType } from '../../utils/ReportGroupType';
 import { ReportOutputFormatType } from '../../utils/ReportOutputFormatType';
 
@@ -30,7 +26,7 @@ export class SettingsBackUpReportComponent extends BaseComponent {
 		private _backendService: SettingsReportsService,
 		private _pagesService: SettingsReportsPagesService) {
 		super();
-		this._pagesService.bootstrap(SettingsReportsType.BackUp);
+		this._pagesService.bootstrapSelectedTab(ReportGroupType.Backup);
 	}
 	ngOnInit() {
 	}
