@@ -12,6 +12,7 @@ import { P9_SetInitialValuesForBookingReferenceSequencesOnHotel } from "./list/P
 import { P10_AddDynamicPricesOnPriceProducts } from "./list/P10_AddDynamicPricesOnPriceProducts";
 import { P11_AddDynamicPriceIdsOnBookingPrice } from "./list/P11_AddDynamicPriceIdsOnBookingPrice";
 import { P12_AddDeductedOnCustomerCommissions } from "./list/P12_AddDeductedOnCustomerCommissions";
+import { P13_AddDeductedCommissionPriceAndEmptyCommissionOnBookingPrice } from "./list/P13_AddDeductedCommissionPriceAndEmptyCommissionOnBookingPrice";
 
 export class MongoPatchUtils {
 	public static get PatchList(): ATransactionalMongoPatch[] {
@@ -29,6 +30,7 @@ export class MongoPatchUtils {
 			new P10_AddDynamicPricesOnPriceProducts(),
 			new P11_AddDynamicPriceIdsOnBookingPrice(),
 			new P12_AddDeductedOnCustomerCommissions(),
+			new P13_AddDeductedCommissionPriceAndEmptyCommissionOnBookingPrice(),
 
 		];
 	}

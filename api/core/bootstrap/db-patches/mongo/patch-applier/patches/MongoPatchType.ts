@@ -12,5 +12,6 @@ export enum MongoPatchType {
     AddDynamicPricesOnPriceProducts,
     AddDynamicPriceIdsOnBookingPrice,
     AddDeductedOnCustomerCommissions,
+    AddDeductedCommissionPriceAndEmptyCommissionOnBookingPrice,
 
 }
