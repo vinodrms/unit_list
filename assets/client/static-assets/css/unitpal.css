@@ -2031,6 +2031,13 @@ a.btn.btn-square:focus {
 .booking-search-results .allotment {
     font-weight: bold;
 }
+.booking-search-room-availability {
+    padding: 0px 15px 15px 15px;
+}
+.booking-search-room-availability-button {
+    font-size: 13px;
+    float: right;
+}
 .booking-cart {
     font-size: 11px;
     padding-left: 0px;
@@ -3959,4 +3966,10 @@ textarea.payer-details {
 .ps-container > .ps-scrollbar-x-rail,
 .ps-container > .ps-scrollbar-y-rail {
   opacity: 0.6;
+}
+.room-availability-modal-table {
+    font-size: 12px;
+    width: 100%;
+    margin: auto;
+    float: none;
 }

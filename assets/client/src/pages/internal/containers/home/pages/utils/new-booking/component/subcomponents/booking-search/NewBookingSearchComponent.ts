@@ -12,12 +12,14 @@ import {BookingCartTableMetaBuilderService} from '../utils/table-builder/Booking
 import {BookingTableUtilsService} from '../utils/table-builder/BookingTableUtilsService';
 import {BookingSearchStepService} from './services/BookingSearchStepService';
 import {BookingCartService} from '../../../services/search/BookingCartService';
+import {RoomCategoryItemDO} from '../../../services/search/data-objects/room-category-item/RoomCategoryItemDO';
+import {RoomAvailabilityModalService} from './modal/service/RoomAvailabilityModalService';
 
 @Component({
 	selector: 'new-booking-search',
 	templateUrl: '/client/src/pages/internal/containers/home/pages/utils/new-booking/component/subcomponents/booking-search/template/new-booking-search.html',
 	providers: [BookingSearchService, BookingSearchResultsTableMetaBuilderService,
-		BookingCartTableMetaBuilderService, BookingTableUtilsService]
+		BookingCartTableMetaBuilderService, BookingTableUtilsService, RoomAvailabilityModalService]
 })
 export class NewBookingSearchComponent extends BaseComponent implements AfterViewInit, OnInit {
 	@ViewChild('searchResults') private _searchResultsTableComponent: LazyLoadingTableComponent<BookingCartItemVM>;
@@ -26,11 +28,13 @@ export class NewBookingSearchComponent extends BaseComponent implements AfterVie
 	private _roomCategoryList: RoomCategoryDO[];
 	isSearching: boolean = false;
 	private _bookingSearchParams: BookingSearchParams;
+	private _roomCategoryItemList: RoomCategoryItemDO[];
 
 	constructor(private _appContext: AppContext, private _wizardBookingSearchService: BookingSearchStepService,
 		private _bookingSearchService: BookingSearchService, private _searchTableMetaBuilder: BookingSearchResultsTableMetaBuilderService,
 		private _cartTableMetaBuilder: BookingCartTableMetaBuilderService, private _bookingTableUtilsService: BookingTableUtilsService,
-		private _bookingCartService: BookingCartService) {
+		private _bookingCartService: BookingCartService,
+		private _roomAvailabilityModalService: RoomAvailabilityModalService) {
 		super();
 	}
 	public ngOnInit() {
@@ -51,13 +55,14 @@ export class NewBookingSearchComponent extends BaseComponent implements AfterVie
 		this._bookingSearchParams.transientBookingList = this._bookingCartService.getTransientBookingItemList();
 		this.isSearching = true;
 		this._bookingSearchService.searchBookings(this._bookingSearchParams)
-			.subscribe((searchResult: { roomCategoryList: RoomCategoryDO[], bookingItemList: BookingCartItemVM[] }) => {
-                this._roomCategoryList = searchResult.roomCategoryList;
+			.subscribe((searchResult: { roomCategoryList: RoomCategoryDO[], bookingItemList: BookingCartItemVM[], roomCategoryItemList: RoomCategoryItemDO[] }) => {
+				this._roomCategoryList = searchResult.roomCategoryList;
+				this._roomCategoryItemList = searchResult.roomCategoryItemList;
 				this.isSearching = false;
-            }, (error: ThError) => {
+			}, (error: ThError) => {
 				this.isSearching = false;
-                this._appContext.toaster.error(error.message);
-            });
+				this._appContext.toaster.error(error.message);
+			});
 	}
 	public addBookingVMInCart(bookingCartItemVM: BookingCartItemVM) {
 		if (bookingCartItemVM.itemType === BookingCartItemVMType.Total) { return; }
@@ -79,6 +84,25 @@ export class NewBookingSearchComponent extends BaseComponent implements AfterVie
 			() => {
 				this.removeBookingVMFromCartCore(bookingCartItemVM);
 			}, () => { });
+	}
+	public getTotalNumberOfRooms() {
+		if (!this._roomCategoryItemList || this._roomCategoryItemList.length == 0) { return; }
+		var total = 0;
+		this._roomCategoryItemList.forEach(roomCategoryItem => {
+			total += roomCategoryItem.stats.noOfRooms;
+		});
+		return total;
+	}
+	public getNumberOfAvailableRooms() {
+		if (!this._roomCategoryItemList || this._roomCategoryItemList.length == 0) { return; }
+		var available = 0;
+		this._roomCategoryItemList.forEach(roomCategoryItem => {
+			available += roomCategoryItem.availableRooms;
+		});
+		return available;
+	}
+	public openRoomAvailabilityModal() {
+		this._roomAvailabilityModalService.openNewRoomAvailabilityModal(this._roomCategoryItemList);
 	}
 	private removeBookingVMFromCartCore(bookingCartItemVM: BookingCartItemVM) {
 		if (!this._bookingSearchParams) { return; }
