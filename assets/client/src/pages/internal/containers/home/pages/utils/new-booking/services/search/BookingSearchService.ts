@@ -16,6 +16,7 @@ import {BookingCartItemVM} from './view-models/BookingCartItemVM';
 import {BookingViewModelConverter} from './utils/BookingViewModelConverter';
 import {BookingViewModelSorter} from './utils/BookingViewModelSorter';
 import {TransientBookingItem} from '../data-objects/TransientBookingItem';
+import {RoomCategoryItemDO} from './data-objects/room-category-item/RoomCategoryItemDO';
 
 @Injectable()
 export class BookingSearchService extends ABookingService {
@@ -41,7 +42,8 @@ export class BookingSearchService extends ABookingService {
         return this.returnObservableWith(this._bookingCartItemVMList);
     }
 
-    public searchBookings(searchParams: BookingSearchParams): Observable<{ roomCategoryList: RoomCategoryDO[], bookingItemList: BookingCartItemVM[] }> {
+    public searchBookings(searchParams: BookingSearchParams)
+    : Observable<{ roomCategoryList: RoomCategoryDO[], bookingItemList: BookingCartItemVM[], roomCategoryItemList: RoomCategoryItemDO[]}> {
         this._searchParams = searchParams.buildPrototype();
         this._sortOptions = null;
 
@@ -58,7 +60,8 @@ export class BookingSearchService extends ABookingService {
 
             return {
                 roomCategoryList: roomCategoryList,
-                bookingItemList: this.bookingItemVMList
+                bookingItemList: this.bookingItemVMList,
+                roomCategoryItemList: this._bookingSearchResult.roomCategoryItemList
             }
         });
     }
