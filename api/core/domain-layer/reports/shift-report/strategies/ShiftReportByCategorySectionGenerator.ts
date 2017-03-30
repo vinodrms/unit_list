@@ -114,6 +114,12 @@ export class ShiftReportByCategorySectionGenerator extends AReportSectionGenerat
 				id: (InvoiceItemType.InvoiceFee + "")
 			};
 		}
+		if (item.type == InvoiceItemType.RoomCommission) {
+			return {
+				displayName: this._appContext.thTranslate.translate("Deducted Room Commission"),
+				id: (InvoiceItemType.RoomCommission + "")
+			};
+		}
 		// fallback to add on products
 		let aopItem = this._aopContainer.getAddOnProductItemById(item.id);
 		if (this._thUtils.isUndefinedOrNull(aopItem, "category")) {
