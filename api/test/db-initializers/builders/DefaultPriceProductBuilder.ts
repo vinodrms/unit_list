@@ -28,6 +28,13 @@ import { ThTimestampDO } from '../../../core/utils/th-dates/data-objects/ThTimes
 import { PriceProductDiscountWrapperDO } from "../../../core/data-layer/price-products/data-objects/discount/PriceProductDiscountWrapperDO";
 
 import _ = require('underscore');
+import { PriceProductDiscountDO } from "../../../core/data-layer/price-products/data-objects/discount/PriceProductDiscountDO";
+import { PriceProductConstraintDO } from "../../../core/data-layer/price-products/data-objects/constraint/PriceProductConstraintDO";
+import { PriceProductConstraintType } from "../../../core/data-layer/price-products/data-objects/constraint/IPriceProductConstraint";
+import { IncludeDaysFromWeekConstraintDO } from "../../../core/data-layer/price-products/data-objects/constraint/constraints/IncludeDaysFromWeekConstraintDO";
+import { ISOWeekDay } from "../../../core/utils/th-dates/data-objects/ISOWeekDay";
+import { ThDateIntervalDO } from "../../../core/utils/th-dates/data-objects/ThDateIntervalDO";
+import { ThDateDO } from "../../../core/utils/th-dates/data-objects/ThDateDO";
 
 export interface IPriceProductDataSource {
 	getPriceProductList(roomCategoryStatsList: RoomCategoryStatsDO[], taxes: TaxResponseRepoDO,
@@ -56,8 +63,54 @@ export class DefaultPriceProductBuilder implements IPriceProductDataSource {
 			breakfastAddOnProduct, addOnProduct, PriceProductPriceType.SinglePrice);
 		confidentialPriceProduct.availability = PriceProductAvailability.Confidential;
 		ppList.push(confidentialPriceProduct);
+
+		let discountPriceProduct = DefaultPriceProductBuilder.buildPriceProductDO(this._testContext, "Price Product 4 (Discount)", this._testUtils.getRandomListElement(roomCategoryStatsList), taxId,
+			breakfastAddOnProduct, addOnProduct, PriceProductPriceType.SinglePrice);
+		discountPriceProduct.discounts = DefaultPriceProductBuilder.buildPriceProductDiscount();
+		ppList.push(discountPriceProduct);
+
 		return ppList;
 	}
+
+	public static buildPriceProductDiscount(): PriceProductDiscountWrapperDO {
+		let ppDiscount = new PriceProductDiscountDO();
+		ppDiscount.name = "Summer discount";
+		
+		let includeDaysFromWeekConstraint = new IncludeDaysFromWeekConstraintDO();
+		includeDaysFromWeekConstraint.daysFromWeek = [ISOWeekDay.Monday, ISOWeekDay.Sunday];
+		
+		let ppConstraint = new PriceProductConstraintDO();
+		ppConstraint.type = PriceProductConstraintType.IncludeDaysFromWeek;
+		ppConstraint.constraint = includeDaysFromWeekConstraint;
+		
+		let ppDiscountConstraintsWrapper = new PriceProductConstraintWrapperDO();
+		ppDiscountConstraintsWrapper.constraintList = [];
+		ppDiscountConstraintsWrapper.constraintList.push(ppConstraint);
+		ppDiscount.constraints = ppDiscountConstraintsWrapper;
+		
+		let startDate = new ThDateDO();
+		startDate.day = 1;
+		startDate.month = 6;
+		startDate.year = 2017;
+		let endDate = new ThDateDO();
+		endDate.day = 30;
+		endDate.month = 6;
+		endDate.year = 2017;
+		
+		let ppDiscountInterval = new ThDateIntervalDO();
+		ppDiscountInterval.start = startDate;
+		ppDiscountInterval.end = endDate; 
+		
+		ppDiscount.intervals = [];
+		ppDiscount.intervals.push(ppDiscountInterval);
+
+		let ppDiscountWrapper = new PriceProductDiscountWrapperDO();
+		ppDiscountWrapper.discountList = [];
+		ppDiscountWrapper.discountList.push(ppDiscount);
+		
+		return ppDiscountWrapper;
+	}
+
 	public static buildPriceProductDO(testContext: TestContext, name: string, roomCategoryStat: RoomCategoryStatsDO, taxId: string, breakfastAddOnProduct: AddOnProductDO, addOnProduct: AddOnProductDO, priceType: PriceProductPriceType): PriceProductDO {
 		var ppUtils = new PriceProductActionUtils();
 		var priceProduct = new PriceProductDO();
