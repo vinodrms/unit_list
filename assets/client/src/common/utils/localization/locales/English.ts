@@ -647,6 +647,7 @@ export var EnglishTranslations: Object = {
 	"A discount of %discountValue% has been applied on the room\'s price": "A discount of %discountValue% has been applied on the room\'s price",
 	"Discount": "Discount",
 	"A discount of %discountValue% defined on %priceProduct% has been applied on this booking\'s room price": "A discount of %discountValue% defined on %priceProduct% has been applied on this booking\'s room price",
+	"Deducted Commission": "Deducted Commission",
 	"Reserved": "Reserved",
 	"Are you sure you want to check out this room?": "Are you sure you want to check out this room?",
 	"Change Dates": "Change Dates",
