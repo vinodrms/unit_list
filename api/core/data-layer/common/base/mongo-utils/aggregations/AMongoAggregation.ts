@@ -61,7 +61,7 @@ export abstract class AMongoAggregation<T> {
     private applySortCriteria(pipeline: Object[], aggregateOptions: MongoAggregationOptions, searchCriteria: MongoSearchCriteria): Object[] {
         let defaultSortCriteriaAttribute = MongoUtils.DefaultDocumentIdAttribute;
         if (aggregateOptions.unwind) {
-            defaultSortCriteriaAttribute = aggregateOptions.subdocumentUnwindedPropertyIdIelector;
+            defaultSortCriteriaAttribute = aggregateOptions.subdocumentUnwindedPropertyIdSelector;
         }
         var sortCriteria: Object = {};
         if (!this._thUtils.isUndefinedOrNull(searchCriteria.sortCriteria) && _.isObject(searchCriteria.sortCriteria)) {
