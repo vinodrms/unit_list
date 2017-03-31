@@ -14,6 +14,7 @@ import { BookingCancelDO } from './BookingCancelDO';
 import { ValidationResultParser } from '../../../common/ValidationResultParser';
 import { GenerateBookingInvoice } from '../../../invoices/generate-booking-invoice/GenerateBookingInvoice';
 import { InvoiceGroupDO } from '../../../../data-layer/invoices/data-objects/InvoiceGroupDO';
+import { BookingInvoiceSync } from "../../../bookings/invoice-sync/BookingInvoiceSync";
 
 import _ = require('underscore');
 
@@ -70,7 +71,12 @@ export class BookingCancel {
                     versionId: this._loadedBooking.versionId
                 }, this._loadedBooking);
             }).then((updatedBooking: BookingDO) => {
-                resolve(updatedBooking);
+                this._loadedBooking = updatedBooking;
+
+                let bookingInvoiceSync = new BookingInvoiceSync(this._appContext, this._sessionContext);
+                return bookingInvoiceSync.syncInvoiceWithBookingPrice(updatedBooking);
+            }).then((updatedGroup: InvoiceGroupDO) => {
+                resolve(this._loadedBooking);
             }).catch((error: any) => {
                 var thError = new ThError(ThStatusCode.BookingCancelError, error);
                 if (thError.isNativeError()) {
