@@ -27,9 +27,19 @@ export abstract class AMongoAggregation<T> {
     private aggregateDocumentsCore(nativeMongoCollection: Collection, searchCriteria: MongoSearchCriteria, aggregateOptions: MongoAggregationOptions) {
         var preprocessedSearchCriteria = this._mongoUtils.preprocessSearchCriteria(searchCriteria.criteria);
 
+        if (aggregateOptions.unwind === true) {
+            if (!_.isString(aggregateOptions.unwindParam) || !_.isString(aggregateOptions.subdocumentUnwindedPropertyIdSelector)) {
+                let error = new Error("The subdocument's unwindedPropertyIdIdSelector and unwindParam attributes should be set when unwind is enabled");
+                this.errorCallback(error);
+                return;
+            }
+        }
+
         var pipeline: Object[] = [{ $match: preprocessedSearchCriteria }];
         pipeline = this.applyUnwindParams(pipeline, aggregateOptions, preprocessedSearchCriteria);
-        pipeline = this.applySortCriteria(pipeline, searchCriteria);
+        if (this.requiresSorting()) {
+            pipeline = this.applySortCriteria(pipeline, aggregateOptions, searchCriteria);
+        }
         pipeline = this.customApplyPipelineParams(pipeline, searchCriteria, aggregateOptions);
 
         nativeMongoCollection.aggregate(pipeline, {}, (err: Error, aggregationResult: any) => {
@@ -48,16 +58,21 @@ export abstract class AMongoAggregation<T> {
         }
         return pipeline;
     }
-    private applySortCriteria(pipeline: Object[], searchCriteria: MongoSearchCriteria): Object[] {
+    private applySortCriteria(pipeline: Object[], aggregateOptions: MongoAggregationOptions, searchCriteria: MongoSearchCriteria): Object[] {
+        let defaultSortCriteriaAttribute = MongoUtils.DefaultDocumentIdAttribute;
+        if (aggregateOptions.unwind) {
+            defaultSortCriteriaAttribute = aggregateOptions.subdocumentUnwindedPropertyIdIelector;
+        }
+        var sortCriteria: Object = {};
         if (!this._thUtils.isUndefinedOrNull(searchCriteria.sortCriteria) && _.isObject(searchCriteria.sortCriteria)) {
-            pipeline.push({ $sort: searchCriteria.sortCriteria });
+            sortCriteria = _.clone(searchCriteria.sortCriteria);
         }
-        else {
-            pipeline.push({ $sort: { "_id": -1 } });
-        }
+        sortCriteria[defaultSortCriteriaAttribute] = -1;
+        pipeline.push({ $sort: sortCriteria });
         return pipeline;
     }
 
     protected abstract customApplyPipelineParams(pipeline: Object[], searchCriteria: MongoSearchCriteria, aggregateOptions: MongoAggregationOptions): Object[];
     protected abstract processAggregationResultAndRunCallback(aggregationResult: any);
+    protected abstract requiresSorting(): boolean;
 }
