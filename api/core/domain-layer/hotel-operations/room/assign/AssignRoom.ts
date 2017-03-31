@@ -173,6 +173,7 @@ export class AssignRoom {
             return;
         }
         this._bookingUtils.updateBookingPriceUsingRoomCategoryAndSavePPSnapshot(this._bookingWithDependencies.bookingDO,
-            this._bookingWithDependencies.roomCategoryStatsList, this._bookingWithDependencies.priceProductDO);
+            this._bookingWithDependencies.roomCategoryStatsList, this._bookingWithDependencies.priceProductDO,
+            this._bookingWithDependencies.billingCustomer);
     }
 }

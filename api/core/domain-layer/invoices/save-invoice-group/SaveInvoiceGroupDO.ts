@@ -80,7 +80,10 @@ export class SaveInvoiceGroupDO {
                             },
                             {
                                 key: "type",
-                                validationStruct: new PrimitiveValidationStructure(new NumberInListValidationRule([InvoiceItemType.AddOnProduct, InvoiceItemType.Booking]))
+                                validationStruct: new PrimitiveValidationStructure(new NumberInListValidationRule([
+                                    InvoiceItemType.AddOnProduct, InvoiceItemType.Booking,
+                                    InvoiceItemType.InvoiceFee, InvoiceItemType.RoomCommission
+                                ]))
                             }
                         ]))
                     },

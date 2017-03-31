@@ -108,7 +108,8 @@ export class BookingChangeCapacity {
         newCapacity.buildFromObject(this._bookingChangeCapacityDO.configCapacity);
         this._bookingWithDependencies.bookingDO.configCapacity = newCapacity;
         this._bookingUtils.updateBookingPriceUsingRoomCategoryAndSavePPSnapshot(this._bookingWithDependencies.bookingDO,
-            this._bookingWithDependencies.roomCategoryStatsList, this._bookingWithDependencies.priceProductDO);
+            this._bookingWithDependencies.roomCategoryStatsList, this._bookingWithDependencies.priceProductDO,
+            this._bookingWithDependencies.billingCustomer);
         var newPrice: number = this._bookingWithDependencies.bookingDO.price.totalBookingPrice;
         this._bookingWithDependencies.bookingDO.bookingHistory.logDocumentAction(DocumentActionDO.buildDocumentActionDO({
             actionParameterMap: {

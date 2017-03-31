@@ -1,15 +1,15 @@
-import {DefaultDataBuilder} from '../../../../db-initializers/DefaultDataBuilder';
-import {InvoiceTestUtils} from '../utils/InvoiceTestUtils';
-import {SaveInvoiceGroupBuilder} from '../builders/SaveInvoiceGroupBuilder';
-import {SaveInvoiceGroupDO} from '../../../../../core/domain-layer/invoices/save-invoice-group/SaveInvoiceGroupDO';
-import {InvoiceBuilder} from '../builders/InvoiceBuilder';
-import {InvoicePayerBuilder} from '../builders/InvoicePayerBuilder';
-import {InvoiceGroupDO} from '../../../../../core/data-layer/invoices/data-objects/InvoiceGroupDO';
-import {InvoicePaymentStatus} from '../../../../../core/data-layer/invoices/data-objects/InvoiceDO';
-import {InvoiceItemDO} from '../../../../../core/data-layer/invoices/data-objects/items/InvoiceItemDO';
-import {IInvoiceItemMeta} from '../../../../../core/data-layer/invoices/data-objects/items/IInvoiceItemMeta';
-import {BookingDO} from '../../../../../core/data-layer/bookings/data-objects/BookingDO';
-import {GenerateBookingInvoiceDO} from '../../../../../../api/core/domain-layer/invoices/generate-booking-invoice/GenerateBookingInvoiceDO';
+import { DefaultDataBuilder } from '../../../../db-initializers/DefaultDataBuilder';
+import { InvoiceTestUtils } from '../utils/InvoiceTestUtils';
+import { SaveInvoiceGroupBuilder } from '../builders/SaveInvoiceGroupBuilder';
+import { SaveInvoiceGroupDO } from '../../../../../core/domain-layer/invoices/save-invoice-group/SaveInvoiceGroupDO';
+import { InvoiceBuilder } from '../builders/InvoiceBuilder';
+import { InvoicePayerBuilder } from '../builders/InvoicePayerBuilder';
+import { InvoiceGroupDO } from '../../../../../core/data-layer/invoices/data-objects/InvoiceGroupDO';
+import { InvoicePaymentStatus } from '../../../../../core/data-layer/invoices/data-objects/InvoiceDO';
+import { InvoiceItemDO } from '../../../../../core/data-layer/invoices/data-objects/items/InvoiceItemDO';
+import { IInvoiceItemMeta } from '../../../../../core/data-layer/invoices/data-objects/items/IInvoiceItemMeta';
+import { BookingDO } from '../../../../../core/data-layer/bookings/data-objects/BookingDO';
+import { GenerateBookingInvoiceDO } from '../../../../../../api/core/domain-layer/invoices/generate-booking-invoice/GenerateBookingInvoiceDO';
 
 export class BookingInvoicesTestHelper {
 
@@ -46,7 +46,11 @@ export class BookingInvoicesTestHelper {
     }
 
     public getExpectedNoInvoiceItems(booking: BookingDO): number {
-        return 1 + booking.priceProductSnapshot.includedItems.attachedAddOnProductItemList.length;
+        var noItems = 1 + booking.priceProductSnapshot.includedItems.attachedAddOnProductItemList.length;
+        if (booking.price.hasDeductedCommission()) {
+            noItems++;
+        }
+        return noItems;
     }
 
     public buildSaveInvoiceGroupDOForUpdatingBookingInvoiceGroup(invoiceGroupToUpdate: InvoiceGroupDO): Promise<SaveInvoiceGroupDO> {
@@ -75,7 +79,7 @@ export class BookingInvoicesTestHelper {
                     .withCustomerId(invoicePayer.customerId)
                     .withPaymentMethod(invoicePayer.paymentMethod)
                     .withPriceToPay(totalPrice).build();
-                
+
                 invoiceGroupToUpdate.invoiceList.push(new InvoiceBuilder()
                     .withItemList(aopItemList)
                     .withPayerList([invoicePayerWithUpdatedPricetoPay])

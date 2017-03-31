@@ -202,6 +202,7 @@ export enum ThStatusCode {
 	CustomerRepositoryErrorGettingList,
 	SaveCustomerItemError,
 	SaveCustomerItemInvalidOrNullClientType,
+	SaveCustomerItemInvalidCommission,
 	SaveCustomerItemCompOrTACannotBeLinkedToOtherCustomers,
 	CustomerIdValidatorInvalidId,
 	CustomerItemUpdateStrategyError,
@@ -727,6 +728,7 @@ ThMessage[ThStatusCode.CustomerRepositoryErrorReadingCustomerCount] = "Error get
 ThMessage[ThStatusCode.CustomerRepositoryErrorGettingList] = "Error getting customers.";
 ThMessage[ThStatusCode.SaveCustomerItemError] = "Error saving customer.";
 ThMessage[ThStatusCode.SaveCustomerItemInvalidOrNullClientType] = "Invalid client type.";
+ThMessage[ThStatusCode.SaveCustomerItemInvalidCommission] = "Invalid commission submitted. If this is set to be deducted, please set a correct value for the commission.";
 ThMessage[ThStatusCode.SaveCustomerItemCompOrTACannotBeLinkedToOtherCustomers] = "Companies or travel agencies cannot be linked to other customers.";
 ThMessage[ThStatusCode.CustomerIdValidatorInvalidId] = "Invalid list of customers.";
 ThMessage[ThStatusCode.CustomerItemUpdateStrategyError] = "Error updating customer.";

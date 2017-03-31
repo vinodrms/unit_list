@@ -1,24 +1,25 @@
-import {ThLogger, ThLogLevel} from '../../utils/logging/ThLogger';
-import {ThError} from '../../utils/th-responses/ThError';
-import {ThStatusCode} from '../../utils/th-responses/ThResponse';
-import {AppContext} from '../../utils/AppContext';
-import {SessionContext} from '../../utils/SessionContext';
-import {ThUtils} from '../../utils/ThUtils';
-import {ValidationResultParser} from '../common/ValidationResultParser';
-import {CustomerDO, CustomerType} from '../../data-layer/customers/data-objects/CustomerDO';
-import {SaveCustomerItemDO} from './SaveCustomerItemDO';
-import {CustomerMetaRepoDO, CustomerSearchResultRepoDO} from '../../data-layer/customers/repositories/ICustomerRepository';
-import {PriceProductAvailability, PriceProductDO} from '../../data-layer/price-products/data-objects/PriceProductDO';
-import {CustomerItemActionFactory} from './save-actions/CustomerItemActionFactory';
-import {ICustomerItemActionStrategy} from './save-actions/ICustomerItemActionStrategy';
-import {PriceProductIdValidator} from '../price-products/validators/PriceProductIdValidator';
-import {PriceProductsContainer} from '../price-products/validators/results/PriceProductsContainer';
+import { ThLogger, ThLogLevel } from '../../utils/logging/ThLogger';
+import { ThError } from '../../utils/th-responses/ThError';
+import { ThStatusCode } from '../../utils/th-responses/ThResponse';
+import { AppContext } from '../../utils/AppContext';
+import { SessionContext } from '../../utils/SessionContext';
+import { ThUtils } from '../../utils/ThUtils';
+import { ValidationResultParser } from '../common/ValidationResultParser';
+import { CustomerDO, CustomerType } from '../../data-layer/customers/data-objects/CustomerDO';
+import { SaveCustomerItemDO } from './SaveCustomerItemDO';
+import { CustomerMetaRepoDO, CustomerSearchResultRepoDO } from '../../data-layer/customers/repositories/ICustomerRepository';
+import { PriceProductAvailability, PriceProductDO } from '../../data-layer/price-products/data-objects/PriceProductDO';
+import { CustomerItemActionFactory } from './save-actions/CustomerItemActionFactory';
+import { ICustomerItemActionStrategy } from './save-actions/ICustomerItemActionStrategy';
+import { PriceProductIdValidator } from '../price-products/validators/PriceProductIdValidator';
+import { PriceProductsContainer } from '../price-products/validators/results/PriceProductsContainer';
 
 import _ = require("underscore");
 
 export class SaveCustomerItem {
 	private _thUtils: ThUtils;
 	private _saveCustomerDO: SaveCustomerItemDO;
+	private _convertedCustomerDO: CustomerDO;
 
 	constructor(private _appContext: AppContext, private _sessionContext: SessionContext) {
 		this._thUtils = new ThUtils();
@@ -48,6 +49,14 @@ export class SaveCustomerItem {
 		if (!validationResult.isValid()) {
 			var parser = new ValidationResultParser(validationResult, this._saveCustomerDO);
 			parser.logAndReject("Error validating data for save customer", reject);
+			return;
+		}
+		this._convertedCustomerDO = this.buildCustomerDO();
+		let commission = this._convertedCustomerDO.customerDetails.getCommission();
+		if (!commission.isValid()) {
+			var thError = new ThError(ThStatusCode.SaveCustomerItemInvalidCommission, null);
+			ThLogger.getInstance().logBusiness(ThLogLevel.Error, "Invalid commission", this._saveCustomerDO, thError);
+			reject(thError);
 			return;
 		}
 
@@ -95,7 +104,7 @@ export class SaveCustomerItem {
 	}
 	private saveCustomerItemCore(resolve: { (result: CustomerDO): void }, reject: { (err: ThError): void }) {
 		var actionFactory = new CustomerItemActionFactory(this._appContext, this._sessionContext);
-		var actionStrategy = actionFactory.getActionStrategy(this.buildCustomerDO(), this.getCustomerMetaRepoDO());
+		var actionStrategy = actionFactory.getActionStrategy(this._convertedCustomerDO, this.getCustomerMetaRepoDO());
 		actionStrategy.save(resolve, reject);
 	}
 	private buildCustomerDO(): CustomerDO {

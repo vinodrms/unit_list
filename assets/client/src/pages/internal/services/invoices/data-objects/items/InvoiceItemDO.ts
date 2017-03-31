@@ -5,9 +5,10 @@ import { AddOnProductInvoiceItemMetaDO } from './add-on-products/AddOnProductInv
 import { FeeInvoiceItemMetaDO } from './invoice-fee/FeeInvoiceItemMetaDO';
 import { BookingPriceDO } from '../../../bookings/data-objects/price/BookingPriceDO';
 import { CustomerDO } from '../../../customers/data-objects/CustomerDO';
+import { RoomCommissionItemMetaDO } from "./room-commission/RoomCommissionItemMetaDO";
 
 export enum InvoiceItemType {
-    AddOnProduct, Booking, InvoiceFee
+    AddOnProduct, Booking, InvoiceFee, RoomCommission
 }
 
 export class InvoiceItemDO extends BaseDO {
@@ -22,26 +23,26 @@ export class InvoiceItemDO extends BaseDO {
     public buildFromObject(object: Object) {
         super.buildFromObject(object);
 
+        let metaObject = this.getObjectPropertyEnsureUndefined(object, "meta");
         if (this.type === InvoiceItemType.AddOnProduct) {
-            var metaObject = this.getObjectPropertyEnsureUndefined(object, "meta");
-
             var addOnProductInvoiceItemMetaDO = new AddOnProductInvoiceItemMetaDO();
             addOnProductInvoiceItemMetaDO.buildFromObject(metaObject);
             this.meta = addOnProductInvoiceItemMetaDO;
         }
         else if (this.type === InvoiceItemType.Booking) {
-            var metaObject = this.getObjectPropertyEnsureUndefined(object, "meta");
-
             var bookingPrice = new BookingPriceDO();
             bookingPrice.buildFromObject(metaObject);
             this.meta = bookingPrice;
         }
         else if (this.type === InvoiceItemType.InvoiceFee) {
-            var metaObject = this.getObjectPropertyEnsureUndefined(object, "meta");
-
             var feeInvoiceItemMetaDO = new FeeInvoiceItemMetaDO();
             feeInvoiceItemMetaDO.buildFromObject(metaObject);
             this.meta = feeInvoiceItemMetaDO;
+        }
+        else if (this.type === InvoiceItemType.RoomCommission) {
+            var roomCommissionItemMetaDO = new RoomCommissionItemMetaDO();
+            roomCommissionItemMetaDO.buildFromObject(metaObject);
+            this.meta = roomCommissionItemMetaDO;
         }
     }
     public buildFeeItemFromCustomerDO(customerDO: CustomerDO) {
@@ -51,7 +52,9 @@ export class InvoiceItemDO extends BaseDO {
         this.type = InvoiceItemType.InvoiceFee;
     }
     public isDerivedFromBooking(): boolean {
-        return this.type === InvoiceItemType.InvoiceFee || (this.type === InvoiceItemType.AddOnProduct && !this.meta.isMovable());
+        return this.type === InvoiceItemType.InvoiceFee
+            || this.type === InvoiceItemType.RoomCommission
+            || (this.type === InvoiceItemType.AddOnProduct && !this.meta.isMovable());
     }
     public isBookingPrice(): boolean {
         return this.type === InvoiceItemType.Booking;

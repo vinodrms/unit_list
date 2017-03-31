@@ -1,8 +1,8 @@
-import {Injectable} from '@angular/core';
-import {FormBuilder, FormGroup, Validators, AbstractControl, FormControl} from '@angular/forms';
-import {ThValidators, ThFieldLengths} from '../../../../../../../../../../../common/utils/form-utils/ThFormUtils';
-import {CorporateDetailsDO} from '../../../../../../../../../services/customers/data-objects/customer-details/CorporateDetailsDO';
-import {CommissionType} from '../../../../../../../../../services/common/data-objects/commission/CommissionDO';
+import { Injectable } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, AbstractControl, FormControl } from '@angular/forms';
+import { ThValidators, ThFieldLengths } from '../../../../../../../../../../../common/utils/form-utils/ThFormUtils';
+import { CorporateDetailsDO } from '../../../../../../../../../services/customers/data-objects/customer-details/CorporateDetailsDO';
+import { CommissionType } from '../../../../../../../../../services/common/data-objects/commission/CommissionDO';
 
 @Injectable()
 export class CorporateDetailsFormBuilderService {
@@ -21,6 +21,7 @@ export class CorporateDetailsFormBuilderService {
 	private _invoiceFeeControl: FormControl;
 	private _accountNoControl: FormControl;
 	private _commissionControl: FormControl;
+	private _commissionDeductedControl: FormControl;
 
 	private _payInvoiceByAgreement: boolean;
 	private _isFixedCommission: boolean;
@@ -44,6 +45,7 @@ export class CorporateDetailsFormBuilderService {
 		this._invoiceFeeControl = new FormControl(null);
 		this._accountNoControl = new FormControl(null, Validators.compose([Validators.maxLength(200)]));
 		this._commissionControl = new FormControl();
+		this._commissionDeductedControl = new FormControl(false);
 	}
 
 	private initFormGroup() {
@@ -60,7 +62,8 @@ export class CorporateDetailsFormBuilderService {
 			"email": this._emailControl,
 			"invoiceFee": this._invoiceFeeControl,
 			"accountNo": this._accountNoControl,
-			"commission": this._commissionControl
+			"commission": this._commissionControl,
+			"commissionDeducted": this._commissionDeductedControl
 		});
 	}
 
@@ -87,6 +90,7 @@ export class CorporateDetailsFormBuilderService {
 		else {
 			this._commissionControl.setValue(Math.round(corporateDetails.commission.amount * 100));
 		}
+		this._commissionDeductedControl.setValue(corporateDetails.commission.deducted);
 		this.isFixedCommission = isFixedCommission;
 		this.receiveBookingConfirmations = corporateDetails.receiveBookingConfirmations;
 	}
@@ -112,6 +116,7 @@ export class CorporateDetailsFormBuilderService {
 			commissionValue = commissionValue / 100;
 		}
 		corporateDetails.commission.amount = commissionValue;
+		corporateDetails.commission.deducted = this._commissionDeductedControl.value;
 	}
 
 	public get individualFormGroup(): FormGroup {

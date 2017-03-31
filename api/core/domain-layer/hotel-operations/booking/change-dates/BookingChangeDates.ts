@@ -127,7 +127,8 @@ export class BookingChangeDates {
             this._bookingWithDependencies.bookingDO.interval.start = this._newBookingInterval.start;
         }
         this._bookingUtils.updateBookingPriceUsingRoomCategoryAndSavePPSnapshot(this._bookingWithDependencies.bookingDO,
-            this._bookingWithDependencies.roomCategoryStatsList, this._bookingWithDependencies.priceProductDO);
+            this._bookingWithDependencies.roomCategoryStatsList, this._bookingWithDependencies.priceProductDO,
+            this._bookingWithDependencies.billingCustomer);
 
         var newInterval: ThDateIntervalDO = this._bookingWithDependencies.bookingDO.interval;
         var newPrice: number = this._bookingWithDependencies.bookingDO.price.totalBookingPrice;
