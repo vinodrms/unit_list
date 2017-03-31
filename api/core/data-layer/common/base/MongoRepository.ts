@@ -34,8 +34,23 @@ export interface MongoSearchCriteria {
 	lazyLoad?: LazyLoadRepoDO;
 }
 export interface MongoAggregationOptions {
+	/**
+	 * Whether the collection should be unwinded or not 
+	 * Can be used when e.g. the collection is formed of documents that have arrays and we want to treat them as separate "documents"
+	 */
 	unwind: boolean;
+
+	/**
+	 * Required if `unwind` is true
+	 * Represents the selector (e.g. $innerDocumentArrayProperty)
+	 */
 	unwindParam?: string;
+
+	/**
+	 * Required if `unwind` is true
+	 * Represents the selector that needs to uniquely identify the `innerDocumentArrayProperty` property
+	 */
+	subdocumentUnwindedPropertyIdSelector?: string;
 }
 
 export class MongoRepository implements IRepositoryCleaner {

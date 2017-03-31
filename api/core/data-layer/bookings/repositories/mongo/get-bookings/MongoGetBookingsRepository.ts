@@ -1,16 +1,16 @@
-import {MongoRepository, MongoSearchCriteria, MongoAggregationOptions} from '../../../../common/base/MongoRepository';
-import {ThLogger, ThLogLevel} from '../../../../../utils/logging/ThLogger';
-import {ThError} from '../../../../../utils/th-responses/ThError';
-import {ThStatusCode} from '../../../../../utils/th-responses/ThResponse';
-import {LazyLoadRepoDO, LazyLoadMetaResponseRepoDO} from '../../../../common/repo-data-objects/LazyLoadRepoDO';
-import {BookingDO, GroupBookingStatus} from '../../../data-objects/BookingDO';
-import {BookingMetaRepoDO, BookingSearchCriteriaRepoDO, BookingSearchResultRepoDO} from '../../IBookingRepository';
-import {MongoQueryBuilder, QueryComparisonOperator} from '../../../../common/base/MongoQueryBuilder';
-import {ThDateIntervalDO} from '../../../../../utils/th-dates/data-objects/ThDateIntervalDO';
-import {IndexedBookingInterval} from '../../../../price-products/utils/IndexedBookingInterval';
-import {BookingAggregationResultDO} from '../utils/data-objects/BookingAggregationResultDO';
-import {BookingStateChangeTriggerType} from '../../../data-objects/state-change-time/BookingStateChangeTriggerTimeDO';
-import {ThDateDO} from '../../../../../utils/th-dates/data-objects/ThDateDO';
+import { MongoRepository, MongoSearchCriteria, MongoAggregationOptions } from '../../../../common/base/MongoRepository';
+import { ThLogger, ThLogLevel } from '../../../../../utils/logging/ThLogger';
+import { ThError } from '../../../../../utils/th-responses/ThError';
+import { ThStatusCode } from '../../../../../utils/th-responses/ThResponse';
+import { LazyLoadRepoDO, LazyLoadMetaResponseRepoDO } from '../../../../common/repo-data-objects/LazyLoadRepoDO';
+import { BookingDO, GroupBookingStatus } from '../../../data-objects/BookingDO';
+import { BookingMetaRepoDO, BookingSearchCriteriaRepoDO, BookingSearchResultRepoDO } from '../../IBookingRepository';
+import { MongoQueryBuilder, QueryComparisonOperator } from '../../../../common/base/MongoQueryBuilder';
+import { ThDateIntervalDO } from '../../../../../utils/th-dates/data-objects/ThDateIntervalDO';
+import { IndexedBookingInterval } from '../../../../price-products/utils/IndexedBookingInterval';
+import { BookingAggregationResultDO } from '../utils/data-objects/BookingAggregationResultDO';
+import { BookingStateChangeTriggerType } from '../../../data-objects/state-change-time/BookingStateChangeTriggerTimeDO';
+import { ThDateDO } from '../../../../../utils/th-dates/data-objects/ThDateDO';
 
 import _ = require('underscore');
 
@@ -182,7 +182,8 @@ export class MongoGetBookingsRepository extends MongoRepository {
     private getAggregationOptions(): MongoAggregationOptions {
         return {
             unwind: true,
-            unwindParam: "$bookingList"
+            unwindParam: "$bookingList",
+            subdocumentUnwindedPropertyIdSelector: "bookingList.bookingId"
         }
     }
 }
