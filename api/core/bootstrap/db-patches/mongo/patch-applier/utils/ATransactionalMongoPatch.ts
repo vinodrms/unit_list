@@ -7,6 +7,7 @@ import { MongoBedRepository } from '../../../../../data-layer/beds/repositories/
 import { MongoBookingRepository } from '../../../../../data-layer/bookings/repositories/mongo/MongoBookingRepository';
 import { MongoPatchType } from '../patches/MongoPatchType';
 import { MongoHotelRepository } from "../../../../../data-layer/hotel/repositories/mongo/MongoHotelRepository";
+import { MongoCustomerRepository } from "../../../../../data-layer/customers/repositories/mongo/MongoCustomerRepository";
 
 /**
  * Extend this class when the multi update can be made with a simple MongoDB Query
@@ -14,18 +15,20 @@ import { MongoHotelRepository } from "../../../../../data-layer/hotel/repositori
 export abstract class ATransactionalMongoPatch implements IMongoPatchApplier, IMongoPatch {
 	protected _thUtils: ThUtils;
 
-	protected _priceProductRepository: MongoPriceProductRepository;
-	protected _bedRepository: MongoBedRepository;
-	protected _bookingRepository: MongoBookingRepository;
 	protected _hotelRepository: MongoHotelRepository;
+	protected _bedRepository: MongoBedRepository;
+	protected _priceProductRepository: MongoPriceProductRepository;
+	protected _customerRepository: MongoCustomerRepository​​;
+	protected _bookingRepository: MongoBookingRepository;
 
 	constructor() {
 		this._thUtils = new ThUtils();
 
-		this._priceProductRepository = new MongoPriceProductRepository();
-		this._bedRepository = new MongoBedRepository();
-		this._bookingRepository = new MongoBookingRepository();
 		this._hotelRepository = new MongoHotelRepository();
+		this._bedRepository = new MongoBedRepository();
+		this._priceProductRepository = new MongoPriceProductRepository();
+		this._customerRepository = new MongoCustomerRepository​​();
+		this._bookingRepository = new MongoBookingRepository();
 	}
 
 	public apply(): Promise<boolean> {

@@ -1,6 +1,6 @@
-import {MongoSearchCriteria, MongoAggregationOptions} from '../../MongoRepository';
-import {LazyLoadRepoDO} from '../../../repo-data-objects/LazyLoadRepoDO';
-import {AMongoAggregation} from './AMongoAggregation';
+import { MongoSearchCriteria, MongoAggregationOptions } from '../../MongoRepository';
+import { LazyLoadRepoDO } from '../../../repo-data-objects/LazyLoadRepoDO';
+import { AMongoAggregation } from './AMongoAggregation';
 
 import _ = require('underscore');
 
@@ -30,5 +30,9 @@ export class MongoDocumentListAggregation extends AMongoAggregation<Object[]> {
             return this._mongoUtils.processQueryResultItem(item);
         });
         this.successCallback(processedItemList);
+    }
+
+    protected requiresSorting(): boolean {
+        return true;
     }
 }

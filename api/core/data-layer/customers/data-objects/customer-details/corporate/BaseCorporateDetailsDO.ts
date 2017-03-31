@@ -64,4 +64,7 @@ export class BaseCorporateDetailsDO extends BaseDO implements ICustomerDetailsDO
 	public getGovernmentCode(): string {
 		return this.governmentCode;
 	}
+	public getCommission(): CommissionDO {
+		return this.commission;
+	}
 }

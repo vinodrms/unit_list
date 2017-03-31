@@ -9,7 +9,6 @@ import { BookingDO } from '../../bookings/data-objects/BookingDO';
 import { BookingPriceDO } from '../../bookings/data-objects/price/BookingPriceDO';
 import { CustomerDO } from '../../customers/data-objects/CustomerDO';
 import { InvoicePaymentMethodType } from './payers/InvoicePaymentMethodDO';
-import { FeeInvoiceItemMetaDO } from './items/invoice-fee/FeeInvoiceItemMetaDO';
 import { IndexedBookingInterval } from '../../price-products/utils/IndexedBookingInterval';
 
 import _ = require('underscore');
@@ -111,6 +110,12 @@ export class InvoiceDO extends BaseDO {
         item.meta.setMovable(false);
         bookingInvoiceItemList.push(item);
 
+        if (booking.price.hasDeductedCommission()) {
+            var invoiceRoomCommissionItem = new InvoiceItemDO();
+            invoiceRoomCommissionItem.buildItemFromRoomCommission(booking.price.deductedCommissionPrice);
+            bookingInvoiceItemList.push(invoiceRoomCommissionItem);
+        }
+
         if (!booking.price.isPenalty()) {
             booking.price.includedInvoiceItemList.reverse();
             _.forEach(booking.price.includedInvoiceItemList, (invoiceItem: InvoiceItemDO) => {
@@ -124,10 +129,10 @@ export class InvoiceDO extends BaseDO {
     public addInvoiceFeeIfNecessary(customerDOList: CustomerDO[]) {
         if (!this.hasPayInvoiceByAgreementAsPM()) return;
 
-        for (var i = 0; i < this.payerList.length; ++i) {
-            if (this.payerList[i].paymentMethod.type === InvoicePaymentMethodType.PayInvoiceByAgreement) {
+        this.payerList.forEach(payer => {
+            if (payer.paymentMethod.type === InvoicePaymentMethodType.PayInvoiceByAgreement) {
                 var customerDO = _.find(customerDOList, (customerDO: CustomerDO) => {
-                    return customerDO.id === this.payerList[i].customerId;
+                    return customerDO.id === payer.customerId;
                 });
 
                 var invoiceFeeItem = new InvoiceItemDO();
@@ -135,7 +140,7 @@ export class InvoiceDO extends BaseDO {
 
                 this.itemList.push(invoiceFeeItem);
             }
-        }
+        });
     }
 
     public getPrice(): number {

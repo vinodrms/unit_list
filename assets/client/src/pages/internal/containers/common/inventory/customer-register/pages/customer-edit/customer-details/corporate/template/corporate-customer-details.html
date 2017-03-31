@@ -157,15 +157,24 @@
 			</div>
 		</div>
 		<div class="col-md-4 col-xs-12">
-			<div class="form-group">
-				<label>{{ 'Commission' | translate }} 
-					<span *ngIf="isFixedCommission">{{currencyNativeSymbol}}</span>
-					<span *ngIf="!isFixedCommission">%</span>
-				</label>
-				<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('commission')}">
-					<input type="number" class="form-control" formControlName="commission">
+			<div class="row">
+				<div class="col-xs-12">
+					<div class="form-group">
+						<label>{{ 'Commission' | translate }} 
+							<span *ngIf="isFixedCommission">{{currencyNativeSymbol}}</span>
+							<span *ngIf="!isFixedCommission">%</span>
+						</label>
+						<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('commission')}">
+							<input type="number" class="form-control" formControlName="commission">
+						</div>
+						<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter a valid commission' | translate }}</small></label>
+					</div>
 				</div>
-				<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter a valid commission' | translate }}</small></label>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<input type="checkbox" formControlName="commissionDeducted"> {{ 'Deducted from Room Prices' | translate }}
+				</div>
 			</div>
 		</div>
 		<div class="col-md-4 col-xs-6 form-group">

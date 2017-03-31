@@ -2,10 +2,8 @@ import { ThUtils } from '../../../../../utils/ThUtils';
 import { BaseDO } from '../../../../common/base/BaseDO';
 import { IInvoiceItemMeta } from '../IInvoiceItemMeta';
 import { ThTranslation } from '../../../../../utils/localization/ThTranslation';
-import { CustomerDO } from '../../../../customers/data-objects/CustomerDO';
-import { BaseCorporateDetailsDO } from '../../../../customers/data-objects/customer-details/corporate/BaseCorporateDetailsDO';
 
-export class FeeInvoiceItemMetaDO extends BaseDO implements IInvoiceItemMeta {
+export class RoomCommissionItemMetaDO extends BaseDO implements IInvoiceItemMeta {
     movable: boolean;
 
     pricePerItem: number;
@@ -39,12 +37,10 @@ export class FeeInvoiceItemMetaDO extends BaseDO implements IInvoiceItemMeta {
     public getVatId(): string {
         return this.vatId;
     }
-    public buildFromCustomerDO(customerDO: CustomerDO) {
+    public buildFromRoomCommission(deductedCommissionPrice: number) {
         this.movable = false;
-        this.numberOfItems = 1;
-        this.displayName = 'Pay Invoice By Agreement Fee';
-        var corporateDetails = new BaseCorporateDetailsDO();
-        corporateDetails.buildFromObject(customerDO.customerDetails);
-        this.pricePerItem = corporateDetails.invoiceFee;
+        this.numberOfItems = -1;
+        this.displayName = 'Deducted Room Commission';
+        this.pricePerItem = deductedCommissionPrice;
     }
 }

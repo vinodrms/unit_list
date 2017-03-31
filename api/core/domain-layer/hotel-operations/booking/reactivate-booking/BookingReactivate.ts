@@ -131,7 +131,8 @@ export class BookingReactivate {
             this._bookingWithDependencies.bookingDO.confirmationStatus = BookingConfirmationStatus.Confirmed;
         }
         this._bookingUtils.updateBookingPriceUsingRoomCategoryAndSavePPSnapshot(this._bookingWithDependencies.bookingDO,
-            this._bookingWithDependencies.roomCategoryStatsList, this._bookingWithDependencies.priceProductDO);
+            this._bookingWithDependencies.roomCategoryStatsList, this._bookingWithDependencies.priceProductDO,
+            this._bookingWithDependencies.billingCustomer);
 
         this._bookingWithDependencies.bookingDO.noShowTime = new BookingStateChangeTriggerTimeDO();
         this._bookingWithDependencies.bookingDO.noShowTime.type = BookingStateChangeTriggerType.ExactTimestamp;

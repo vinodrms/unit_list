@@ -1,5 +1,5 @@
-import {AValidationRule} from './core/AValidationRule';
-import {InvalidConstraintType} from './core/ValidationResult';
+import { AValidationRule } from './core/AValidationRule';
+import { InvalidConstraintType } from './core/ValidationResult';
 
 import _ = require("underscore");
 

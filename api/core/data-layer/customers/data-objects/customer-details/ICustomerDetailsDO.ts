@@ -1,5 +1,6 @@
 import { AddressDO } from '../../../common/data-objects/address/AddressDO';
 import { BaseDO } from '../../../common/base/BaseDO';
+import { CommissionDO } from "../../../common/data-objects/commission/CommissionDO";
 
 export interface ICustomerDetailsDO extends BaseDO {
 	getAddress(): AddressDO;
@@ -11,4 +12,5 @@ export interface ICustomerDetailsDO extends BaseDO {
 	roundPricesToTwoDecimals();
 	getVatCode(): string;
 	getGovernmentCode(): string;
+	getCommission(): CommissionDO;
 }

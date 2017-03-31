@@ -5,9 +5,10 @@ import { AddOnProductInvoiceItemMetaDO } from './add-on-products/AddOnProductInv
 import { FeeInvoiceItemMetaDO } from './invoice-fee/FeeInvoiceItemMetaDO';
 import { AddOnProductDO } from '../../../add-on-products/data-objects/AddOnProductDO';
 import { CustomerDO } from '../../../customers/data-objects/CustomerDO';
+import { RoomCommissionItemMetaDO } from "./room-commission/RoomCommissionItemMetaDO";
 
 export enum InvoiceItemType {
-    AddOnProduct, Booking, InvoiceFee
+    AddOnProduct, Booking, InvoiceFee, RoomCommission
 }
 
 export class InvoiceItemDO extends BaseDO {
@@ -22,19 +23,21 @@ export class InvoiceItemDO extends BaseDO {
     public buildFromObject(object: Object) {
         super.buildFromObject(object);
 
+        let metaObject = this.getObjectPropertyEnsureUndefined(object, "meta");
         if (this.type === InvoiceItemType.AddOnProduct) {
-            var metaObject = this.getObjectPropertyEnsureUndefined(object, "meta");
-
             var addOnProductInvoiceItemMetaDO = new AddOnProductInvoiceItemMetaDO();
             addOnProductInvoiceItemMetaDO.buildFromObject(metaObject);
             this.meta = addOnProductInvoiceItemMetaDO;
         }
         else if (this.type === InvoiceItemType.InvoiceFee) {
-            var metaObject = this.getObjectPropertyEnsureUndefined(object, "meta");
-
             var feeInvoiceItemMetaDO = new FeeInvoiceItemMetaDO();
             feeInvoiceItemMetaDO.buildFromObject(metaObject);
             this.meta = feeInvoiceItemMetaDO;
+        }
+        else if (this.type === InvoiceItemType.RoomCommission) {
+            var roomCommissionItemMetaDO = new RoomCommissionItemMetaDO();
+            roomCommissionItemMetaDO.buildFromObject(metaObject);
+            this.meta = roomCommissionItemMetaDO;
         }
     }
 
@@ -56,8 +59,16 @@ export class InvoiceItemDO extends BaseDO {
         this.meta = meta;
         this.type = InvoiceItemType.InvoiceFee;
     }
+    public buildItemFromRoomCommission(deductedCommissionPrice: number) {
+        var meta = new RoomCommissionItemMetaDO();
+        meta.buildFromRoomCommission(deductedCommissionPrice);
+        this.meta = meta;
+        this.type = InvoiceItemType.RoomCommission;
+    }
     public isDerivedFromBooking(): boolean {
-        return this.type === InvoiceItemType.InvoiceFee || (this.type === InvoiceItemType.AddOnProduct && !this.meta.isMovable());
+        return this.type === InvoiceItemType.InvoiceFee
+            || this.type === InvoiceItemType.RoomCommission
+            || (this.type === InvoiceItemType.AddOnProduct && !this.meta.isMovable());
     }
     public isBookingPrice(): boolean {
         return this.type === InvoiceItemType.Booking;
