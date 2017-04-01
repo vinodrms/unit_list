@@ -27,6 +27,9 @@ import { AllotmentsHelper } from '../allotments/helpers/AllotmentsHelper';
 import { SaveAllotmentItem } from '../../../../core/domain-layer/allotments/SaveAllotmentItem';
 import { AllotmentDO, AllotmentStatus } from '../../../../core/data-layer/allotments/data-objects/AllotmentDO';
 import { ArchiveAllotmentItem } from '../../../../core/domain-layer/allotments/ArchiveAllotmentItem';
+import {SaveAddOnProductItem} from '../../../../core/domain-layer/add-on-products/SaveAddOnProductItem';
+import {AddOnProductDO} from '../../../../core/data-layer/add-on-products/data-objects/AddOnProductDO';
+import {AddOnProductsTestHelper} from '../add-on-products/helpers/AddOnProductsTestHelper'
 
 describe("Hotel Price Products Tests", function () {
 	var InvalidRoomCategoryId = "12121221211";
@@ -45,6 +48,8 @@ describe("Hotel Price Products Tests", function () {
 	var addedPriceProduct: PriceProductDO;
 	var addedCompanyCustomer: CustomerDO;
 	var addedAllotment: AllotmentDO;
+	
+	var addOnProdHelper: AddOnProductsTestHelper;
 
 	before(function (done: any) {
 		testContext = new TestContext();
@@ -53,7 +58,7 @@ describe("Hotel Price Products Tests", function () {
 		pphelper = new PriceProductsHelper(testDataBuilder, testContext);
 		custHelper = new CustomersTestHelper(testDataBuilder, testContext);
 		allotmentsHelper = new AllotmentsHelper(testDataBuilder, testContext);
-
+		addOnProdHelper = new AddOnProductsTestHelper(testDataBuilder, testContext);
 		testDataBuilder.buildWithDoneCallback(done);
 	});
 
@@ -319,6 +324,34 @@ describe("Hotel Price Products Tests", function () {
 				should.equal(priceProduct.status, PriceProductStatus.Deleted);
 				addedPriceProduct = priceProduct;
 				done();
+			}).catch((e: any) => {
+				done(e);
+			});
+		});
+		it("Should update the snapshot of associated addon product when addon product data changes (e.g. price)", function (done) {
+			var priceProductItem = pphelper.getDraftSavePriceProductItemDO();
+			var addOnProductSnapshot = priceProductItem.includedItems.attachedAddOnProductItemList[0].addOnProductSnapshot;
+			var addOnProduct = new AddOnProductDO();
+			addOnProduct.id = addOnProductSnapshot.id;
+			var addOnProdDO = addOnProdHelper.getSaveAddOnProductItemWithUpdatedPriceFrom(addOnProduct);
+			var saveAddOnProd = new SaveAddOnProductItem(testContext.appContext, testContext.sessionContext);
+			
+			saveAddOnProd.save(addOnProdDO).then((result: AddOnProductDO) => {
+			var ppRepo = testContext.appContext.getRepositoryFactory().getPriceProductRepository();
+			ppRepo.getPriceProductList({ hotelId: testContext.sessionContext.sessionDO.hotel.id },
+				{ 
+				status: PriceProductStatus.Active,
+				addOnProductIdList: [addOnProduct.id]
+				})
+				.then((searchResult: PriceProductSearchResultRepoDO) => {
+					for (let priceProduct of searchResult.priceProductList) {
+						should.equal(priceProduct.includedItems.attachedAddOnProductItemList[0].addOnProductSnapshot.price, addOnProdDO.price);
+					}
+					done();
+				})
+				.catch((e:any) => {
+					done(e);
+				})
 			}).catch((e: any) => {
 				done(e);
 			});
