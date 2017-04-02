@@ -4,6 +4,7 @@ import { PriceProductConstraintDataDO } from "../constraint/IPriceProductConstra
 import { ThDateIntervalDO } from "../../../../utils/th-dates/data-objects/ThDateIntervalDO";
 
 import _ = require('underscore');
+import { PriceProductDiscountIntervalWrapperDO } from "./PriceProductDiscountIntervalWrapperDO";
 
 export interface DiscountConstraintDataDO extends PriceProductConstraintDataDO {
     bookingBilledCustomerId: string;
@@ -13,7 +14,7 @@ export class PriceProductDiscountDO extends BaseDO {
     name: string;
     value: number;
     constraints: PriceProductConstraintWrapperDO;
-    intervals: ThDateIntervalDO[];
+    intervals: PriceProductDiscountIntervalWrapperDO;
     
     // the list of customers that can use the discount
     // if empty => the discount is public
@@ -29,12 +30,8 @@ export class PriceProductDiscountDO extends BaseDO {
         this.constraints = new PriceProductConstraintWrapperDO();
         this.constraints.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "constraints"));
 
-        this.intervals = [];
-		this.forEachElementOf(this.getObjectPropertyEnsureUndefined(object, "intervals"), (intervalObject: Object) => {
-			var dateIntervalDO = new ThDateIntervalDO();
-			dateIntervalDO.buildFromObject(intervalObject);
-			this.intervals.push(dateIntervalDO);
-		});
+        this.intervals = new PriceProductDiscountIntervalWrapperDO();
+        this.intervals.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "intervals"));
     }
 
     public appliesOn(data: DiscountConstraintDataDO): boolean {

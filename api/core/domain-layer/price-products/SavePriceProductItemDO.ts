@@ -18,16 +18,21 @@ import { SavePriceProductItemPriceDO } from './validation-structures/SavePricePr
 import { SavePriceProductItemConstraintDO } from './validation-structures/SavePriceProductItemConstraintDO';
 import { ISOWeekDayUtils } from '../../utils/th-dates/data-objects/ISOWeekDay';
 import { ThDateIntervalDO } from "../../utils/th-dates/data-objects/ThDateIntervalDO";
+import { PriceProductDiscountIntervalWrapperDO } from "../../data-layer/price-products/data-objects/discount/PriceProductDiscountIntervalWrapperDO";
 
 export interface SavePriceProductItemConstraintListDO {
 	constraintList: SavePriceProductItemConstraintDO[];
+}
+
+export interface SavePriceProductDiscountIntervalListDO {
+	intervalList: ThDateIntervalDO[];
 }
 
 export interface SavePriceProductItemDiscountDO {
 	name: string;
 	value: number;
 	constraints: SavePriceProductItemConstraintListDO;
-	intervals: ThDateIntervalDO[];
+	intervals: SavePriceProductDiscountIntervalListDO;
 	customerIdList: string[];
 }
 
@@ -81,6 +86,15 @@ export class SavePriceProductItemDO {
 						validationStruct: new ObjectValidationStructure([])
 					}
 				]))
+			}
+		]);
+	}
+
+	public static getPriceProductDiscountIntervalWrapperValidationRule(): IValidationStructure {
+		return new ObjectValidationStructure([
+			{
+				key: "intervalList",
+				validationStruct: new ArrayValidationStructure(SavePriceProductItemDO.getThDateIntervalDOValidationStructure())
 			}
 		]);
 	}
@@ -269,7 +283,7 @@ export class SavePriceProductItemDO {
 							},
 							{
 								key: "intervals",
-								validationStruct: new ArrayValidationStructure(SavePriceProductItemDO.getThDateIntervalDOValidationStructure())
+								validationStruct: SavePriceProductItemDO.getPriceProductDiscountIntervalWrapperValidationRule()
 							},
 							{
 								key: "customerIdList",

@@ -35,6 +35,7 @@ import { IncludeDaysFromWeekConstraintDO } from "../../../core/data-layer/price-
 import { ISOWeekDay } from "../../../core/utils/th-dates/data-objects/ISOWeekDay";
 import { ThDateIntervalDO } from "../../../core/utils/th-dates/data-objects/ThDateIntervalDO";
 import { ThDateDO } from "../../../core/utils/th-dates/data-objects/ThDateDO";
+import { PriceProductDiscountIntervalWrapperDO } from "../../../core/data-layer/price-products/data-objects/discount/PriceProductDiscountIntervalWrapperDO";
 
 export interface IPriceProductDataSource {
 	getPriceProductList(roomCategoryStatsList: RoomCategoryStatsDO[], taxes: TaxResponseRepoDO,
@@ -68,13 +69,13 @@ export class DefaultPriceProductBuilder implements IPriceProductDataSource {
 			breakfastAddOnProduct, addOnProduct, PriceProductPriceType.SinglePrice);
 		discountPriceProduct.discounts = DefaultPriceProductBuilder.buildPriceProductDiscount();
 		ppList.push(discountPriceProduct);
-
 		return ppList;
 	}
 
 	public static buildPriceProductDiscount(): PriceProductDiscountWrapperDO {
 		let ppDiscount = new PriceProductDiscountDO();
 		ppDiscount.name = "Summer discount";
+		ppDiscount.value = 0.1;
 		
 		let includeDaysFromWeekConstraint = new IncludeDaysFromWeekConstraintDO();
 		includeDaysFromWeekConstraint.daysFromWeek = [ISOWeekDay.Monday, ISOWeekDay.Sunday];
@@ -101,8 +102,9 @@ export class DefaultPriceProductBuilder implements IPriceProductDataSource {
 		ppDiscountInterval.start = startDate;
 		ppDiscountInterval.end = endDate; 
 		
-		ppDiscount.intervals = [];
-		ppDiscount.intervals.push(ppDiscountInterval);
+		ppDiscount.intervals = new PriceProductDiscountIntervalWrapperDO();
+		ppDiscount.intervals.intervalList = [];
+		ppDiscount.intervals.intervalList.push(ppDiscountInterval);
 
 		let ppDiscountWrapper = new PriceProductDiscountWrapperDO();
 		ppDiscountWrapper.discountList = [];

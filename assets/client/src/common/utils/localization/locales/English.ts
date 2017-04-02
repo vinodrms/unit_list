@@ -854,5 +854,10 @@ export var EnglishTranslations: Object = {
 	"The maximum number of dynamic prices on this price product has been reached.": "The maximum number of dynamic prices on this price product has been reached.",
 	"%noAvailable% out of %noTotal%": "%noAvailable% out of %noTotal%",
 	"Available Rooms": "Available Rooms",
-	"Total Rooms": "Total Rooms"
+	"Total Rooms": "Total Rooms",
+	"Add Interval": "Add Interval",
+	"You cannot add more than 10 intervals on the same discount": "You cannot add more than 10 intervals on the same discount",
+	"Intervals": "Intervals",
+	"No intervals. The discount will apply no matter the booking interval.": "No intervals. The discount will apply no matter the booking interval.",
+
 };

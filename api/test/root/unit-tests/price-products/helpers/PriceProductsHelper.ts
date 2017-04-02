@@ -165,7 +165,9 @@ export class PriceProductsHelper {
 								}
 							]
 						},
-						intervals: [],
+						intervals: {
+							intervalList: []
+						},
 						customerIdList: discountCustomerIdList
 					},
 					{
@@ -181,7 +183,9 @@ export class PriceProductsHelper {
 								}
 							]
 						},
-						intervals: [],
+						intervals: {
+							intervalList: []
+						},
 						customerIdList: discountCustomerIdList
 					}
 				]
