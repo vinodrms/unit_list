@@ -1,6 +1,7 @@
 import {ThUtils} from '../../../../utils/ThUtils';
 
 import _ = require('underscore');
+import { IntermediateValidationResult } from "./AValidationRule";
 
 export enum InvalidConstraintType {
 	Array,
@@ -18,9 +19,9 @@ export enum InvalidConstraintType {
 }
 
 export class ValidationResult {
-	private _invalidConstraintList: InvalidConstraintType[];
+	private _invalidConstraintList: IntermediateValidationResult[];
 
-	constructor(invalidConstraint?: InvalidConstraintType) {
+	constructor(invalidConstraint?: IntermediateValidationResult) {
 		this._invalidConstraintList = [];
 		var thUtils = new ThUtils();
 		if (!thUtils.isUndefinedOrNull(invalidConstraint)) {
@@ -33,10 +34,12 @@ export class ValidationResult {
 	public appendValidationResult(otherResult: ValidationResult) {
 		this._invalidConstraintList = this._invalidConstraintList.concat(otherResult.getInvalidConstraintList());
 	}
-	public getInvalidConstraintList(): InvalidConstraintType[] {
+	public getInvalidConstraintList(): IntermediateValidationResult[] {
 		return this._invalidConstraintList;
 	}
-	public containsInvalidConstraint(invalidConstraint: InvalidConstraintType) {
-		return _.contains(this._invalidConstraintList, invalidConstraint);
+	public containsInvalidConstraint(invalidConstraint: InvalidConstraintType):boolean {
+		return _.contains(_.map(this._invalidConstraintList, (result: IntermediateValidationResult) => {
+			return result.constraintType;
+		}), invalidConstraint);
 	}
 }

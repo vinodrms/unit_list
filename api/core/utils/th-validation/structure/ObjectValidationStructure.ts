@@ -10,7 +10,7 @@ export class ObjectValidationStructure extends AValidationStructure {
 	protected validateStructureCore(object: any): ValidationResult {
 		var validationResult = new ValidationResult();
 		this._structure.forEach(((childStructure: { key: string, validationStruct: IValidationStructure }) => {
-			var childStructureResult = childStructure.validationStruct.validateStructure(object[childStructure.key]);
+			var childStructureResult = childStructure.validationStruct.validateStructure(object[childStructure.key], childStructure.key);
 			validationResult.appendValidationResult(childStructureResult);
 		}));
 		return validationResult;

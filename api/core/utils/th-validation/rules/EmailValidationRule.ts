@@ -1,4 +1,4 @@
-import {AValidationRule} from './core/AValidationRule';
+import { AValidationRule, IntermediateValidationResult } from './core/AValidationRule';
 import {InvalidConstraintType} from './core/ValidationResult';
 import {StringValidationRule} from './StringValidationRule';
 
@@ -9,12 +9,12 @@ export class EmailValidationRule extends AValidationRule {
 		super(InvalidConstraintType.Email);
 		this._stringValidationRule = new StringValidationRule(EmailValidationRule.MaxEmailLength);
 	}
-	protected validateCore(object: any): boolean {
-		var stringValidationResult = this._stringValidationRule.validate(object);
+	protected validateCore(object: any, key: string): IntermediateValidationResult {
+		var stringValidationResult = this._stringValidationRule.validate(object, key);
 		if (!stringValidationResult.isValid()) {
-			return false;
+			return this.buildIntermediateValidationResult(key, object, false);
 		}
-		return this.validateByEmailRegex(object);
+		return this.buildIntermediateValidationResult(key, object, this.validateByEmailRegex(object));
 	}
 
 	private validateByEmailRegex(email: string): boolean {

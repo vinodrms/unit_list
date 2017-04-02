@@ -1,4 +1,4 @@
-import {AValidationRule} from './core/AValidationRule';
+import { AValidationRule, IntermediateValidationResult } from './core/AValidationRule';
 import {InvalidConstraintType} from './core/ValidationResult';
 
 import _ = require("underscore");
@@ -34,21 +34,21 @@ export class NumberValidationRule extends AValidationRule {
 		return this._isInteger;
 	}
 
-	protected validateCore(object: any): boolean {
+	protected validateCore(object: any, key: string): IntermediateValidationResult {
 		if (!_.isNumber(object)) {
-			return false;
+			return this.buildIntermediateValidationResult(key, object, false);
 		}
 		var num: number = object;
 		if (num >= this._minValue && num <= this._maxValue) {
 			if (this._isInteger) {
 				if (this.isValidInteger(num)) {
-					return true;
+					return this.buildIntermediateValidationResult(key, object, true);
 				}
-				return false;
+				return this.buildIntermediateValidationResult(key, object, false);		
 			}
-			return true;
+			return this.buildIntermediateValidationResult(key, object, true);
 		}
-		return false;
+		return this.buildIntermediateValidationResult(key, object, false);
 	}
 	private isValidInteger(n: number): boolean {
 		return Number(n) === n && n % 1 === 0;
