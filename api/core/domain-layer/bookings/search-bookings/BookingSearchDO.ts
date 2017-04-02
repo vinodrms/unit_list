@@ -1,12 +1,13 @@
-import {ThDateIntervalDO} from '../../../utils/th-dates/data-objects/ThDateIntervalDO';
-import {ConfigCapacityDO} from '../../../data-layer/common/data-objects/bed-config/ConfigCapacityDO';
-import {BookingValidationStructures} from '../validators/BookingValidationStructures';
-import {IValidationStructure} from '../../../utils/th-validation/structure/core/IValidationStructure';
-import {ObjectValidationStructure} from '../../../utils/th-validation/structure/ObjectValidationStructure';
-import {ArrayValidationStructure} from '../../../utils/th-validation/structure/ArrayValidationStructure';
-import {PrimitiveValidationStructure} from '../../../utils/th-validation/structure/PrimitiveValidationStructure';
-import {StringValidationRule} from '../../../utils/th-validation/rules/StringValidationRule';
-import {TransientBookingItemDO} from './TransientBookingItemDO';
+import { ThDateIntervalDO } from '../../../utils/th-dates/data-objects/ThDateIntervalDO';
+import { ConfigCapacityDO } from '../../../data-layer/common/data-objects/bed-config/ConfigCapacityDO';
+import { BookingValidationStructures } from '../validators/BookingValidationStructures';
+import { IValidationStructure } from '../../../utils/th-validation/structure/core/IValidationStructure';
+import { ObjectValidationStructure } from '../../../utils/th-validation/structure/ObjectValidationStructure';
+import { ArrayValidationStructure } from '../../../utils/th-validation/structure/ArrayValidationStructure';
+import { PrimitiveValidationStructure } from '../../../utils/th-validation/structure/PrimitiveValidationStructure';
+import { StringValidationRule } from '../../../utils/th-validation/rules/StringValidationRule';
+import { TransientBookingItemDO } from './TransientBookingItemDO';
+import { CommonValidationStructures } from "../../common/CommonValidations";
 
 export class BookingSearchDO {
     customerId: string;
@@ -23,7 +24,7 @@ export class BookingSearchDO {
             },
             {
                 key: "interval",
-                validationStruct: BookingValidationStructures.getThDateIntervalDOValidationStructure()
+                validationStruct: CommonValidationStructures.getThDateIntervalDOValidationStructure()
             },
             {
                 key: "configCapacity",

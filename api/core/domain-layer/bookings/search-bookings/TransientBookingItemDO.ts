@@ -1,11 +1,12 @@
-import {IValidationStructure} from '../../../utils/th-validation/structure/core/IValidationStructure';
-import {ObjectValidationStructure} from '../../../utils/th-validation/structure/ObjectValidationStructure';
-import {PrimitiveValidationStructure} from '../../../utils/th-validation/structure/PrimitiveValidationStructure';
-import {StringValidationRule} from '../../../utils/th-validation/rules/StringValidationRule';
-import {BookingValidationStructures} from '../validators/BookingValidationStructures';
-import {ThDateIntervalDO} from '../../../utils/th-dates/data-objects/ThDateIntervalDO';
-import {ConfigCapacityDO} from '../../../data-layer/common/data-objects/bed-config/ConfigCapacityDO';
-import {BookingDO} from '../../../data-layer/bookings/data-objects/BookingDO';
+import { IValidationStructure } from '../../../utils/th-validation/structure/core/IValidationStructure';
+import { ObjectValidationStructure } from '../../../utils/th-validation/structure/ObjectValidationStructure';
+import { PrimitiveValidationStructure } from '../../../utils/th-validation/structure/PrimitiveValidationStructure';
+import { StringValidationRule } from '../../../utils/th-validation/rules/StringValidationRule';
+import { BookingValidationStructures } from '../validators/BookingValidationStructures';
+import { ThDateIntervalDO } from '../../../utils/th-dates/data-objects/ThDateIntervalDO';
+import { ConfigCapacityDO } from '../../../data-layer/common/data-objects/bed-config/ConfigCapacityDO';
+import { BookingDO } from '../../../data-layer/bookings/data-objects/BookingDO';
+import { CommonValidationStructures } from "../../common/CommonValidations";
 
 import _ = require('underscore');
 
@@ -20,7 +21,7 @@ export class TransientBookingItemDO {
         return new ObjectValidationStructure([
             {
                 key: "interval",
-                validationStruct: BookingValidationStructures.getThDateIntervalDOValidationStructure()
+                validationStruct: CommonValidationStructures.getThDateIntervalDOValidationStructure()
             },
             {
                 key: "configCapacity",
