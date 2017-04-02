@@ -105,8 +105,8 @@ export class BookingPossiblePrices {
                 var priceItem = new BookingPriceItem();
                 priceItem.roomCategoryId = roomCategoryId;
                 var pricePerDayList: PricePerDayDO[] = this._loadedBooking.priceProductSnapshot.price.getPricePerDayBreakdownFor(priceQuery);
-                let discount = this._loadedBooking.priceProductSnapshot.discounts.getDiscountValueFor(discountQuery);
-                pricePerDayList = this._bookingUtils.getPricePerDayListWithDiscount(pricePerDayList, discount);
+                let discountPerDayBreakdown = this._loadedBooking.priceProductSnapshot.discounts.getDiscountValuesBreakdownFor(discountQuery);
+                pricePerDayList = this._bookingUtils.getPricePerDayListWithDiscount(pricePerDayList, discountPerDayBreakdown);
 
                 let roomPrice = this._thUtils.getArraySum(pricePerDayList);
                 priceItem.price = roomPrice;

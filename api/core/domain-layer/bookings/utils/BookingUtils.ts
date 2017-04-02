@@ -116,7 +116,7 @@ export class BookingUtils {
         if (!this._thUtils.isUndefinedOrNull(groupBookingRoomCategoryIdList)) {
             groupBookingRoomCategoryIdIndexer = new StringOccurenciesIndexer(groupBookingRoomCategoryIdList);
         }
-        let discount = bookingDO.priceProductSnapshot.discounts.getDiscountValueFor({
+        let discountPerDayBreakdown = bookingDO.priceProductSnapshot.discounts.getDiscountValuesBreakdownFor({
             indexedBookingInterval: indexedBookingInterval,
             bookingCreationDate: bookingDO.creationDate,
             configCapacity: bookingDO.configCapacity,
@@ -125,9 +125,9 @@ export class BookingUtils {
             roomCategoryIdListFromPriceProduct: bookingDO.priceProductSnapshot.roomCategoryIdList,
             bookingBilledCustomerId: bookingDO.defaultBillingDetails.customerId
         });
-        pricePerDayList = this.getPricePerDayListWithDiscount(pricePerDayList, discount);
+        pricePerDayList = this.getPricePerDayListWithDiscount(pricePerDayList, discountPerDayBreakdown);
 
-        bookingDO.price.appliedDiscountValue = discount;
+        bookingDO.price.appliedDiscountValue = discountPerDayBreakdown;
         bookingDO.price.roomPricePerNightList = pricePerDayList;
         bookingDO.price.roomPricePerNightAvg = this._thUtils.getArrayAverage(pricePerDayList);
         bookingDO.price.roomPricePerNightAvg = this._thUtils.roundNumberToTwoDecimals(bookingDO.price.roomPricePerNightAvg);
@@ -162,10 +162,10 @@ export class BookingUtils {
         bookingDO.priceProductSnapshot.openIntervalList = [];
         bookingDO.priceProductSnapshot.price.enabledDynamicPriceIdByDate = {};
     }
-    public getPricePerDayListWithDiscount(pricePerDayList: PricePerDayDO[], discount: number): PricePerDayDO[] {
-        return _.map(pricePerDayList, (pricePerDay) => {
-            if (discount > 0.0) {
-                pricePerDay.price = (1 - discount) * pricePerDay.price;
+    public getPricePerDayListWithDiscount(pricePerDayList: PricePerDayDO[], discountPerDayBreakdown: number[]): PricePerDayDO[] {
+        return _.map(pricePerDayList, (pricePerDay, index) => {
+            if (discountPerDayBreakdown[index] > 0.0) {
+                pricePerDay.price = (1 - discountPerDayBreakdown[index]) * pricePerDay.price;
             }
             pricePerDay.price = this._thUtils.roundNumberToTwoDecimals(pricePerDay.price);
             return pricePerDay;

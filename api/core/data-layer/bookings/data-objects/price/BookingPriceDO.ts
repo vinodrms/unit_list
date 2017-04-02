@@ -24,7 +24,7 @@ export class BookingPriceDO extends BaseDO implements IInvoiceItemMeta {
     totalRoomPrice: number;
     totalOtherPrice: number;
 
-    appliedDiscountValue: number;
+    appliedDiscountValue: number[];
 
     // the commission always appears as a separate item on the invoice
     deductedCommissionPrice: number;

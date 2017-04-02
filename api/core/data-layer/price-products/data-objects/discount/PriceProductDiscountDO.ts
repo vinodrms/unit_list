@@ -2,9 +2,11 @@ import { BaseDO } from '../../../common/base/BaseDO';
 import { PriceProductConstraintWrapperDO } from "../constraint/PriceProductConstraintWrapperDO";
 import { PriceProductConstraintDataDO } from "../constraint/IPriceProductConstraint";
 import { ThDateIntervalDO } from "../../../../utils/th-dates/data-objects/ThDateIntervalDO";
+import { PriceProductDiscountIntervalWrapperDO } from "./PriceProductDiscountIntervalWrapperDO";
+import { ThDateDO } from "../../../../utils/th-dates/data-objects/ThDateDO";
+import { ThDateIntervalUtils } from "../../../../utils/th-dates/ThDateIntervalUtils";
 
 import _ = require('underscore');
-import { PriceProductDiscountIntervalWrapperDO } from "./PriceProductDiscountIntervalWrapperDO";
 
 export interface DiscountConstraintDataDO extends PriceProductConstraintDataDO {
     bookingBilledCustomerId: string;
@@ -38,6 +40,15 @@ export class PriceProductDiscountDO extends BaseDO {
         return this.constraints.appliesOn(data)
             && this.appliesOnCustomer(data.bookingBilledCustomerId);
     }
+    public appliesOnDate(date: ThDateDO): boolean {
+        if (this.intervals.intervalList.length == 0) {
+            return true;
+        }
+        
+        let dateIntervalUtils = new ThDateIntervalUtils(this.intervals.intervalList);
+        return dateIntervalUtils.containsThDateDO(date);
+    }
+
     private appliesOnCustomer(bookingBilledCustomerId: string): boolean {
         if (this.isPublic()) {
             return true;

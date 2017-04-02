@@ -1,6 +1,7 @@
 import { BaseDO } from '../../../common/base/BaseDO';
 import { PriceProductDiscountDO, DiscountConstraintDataDO } from "./PriceProductDiscountDO";
 import { PriceProductConstraintDataDO } from "../constraint/IPriceProductConstraint";
+import { ThDateDO } from "../../../../utils/th-dates/data-objects/ThDateDO";
 
 import _ = require('underscore');
 
@@ -25,13 +26,25 @@ export class PriceProductDiscountWrapperDO extends BaseDO {
     /**
      * Returns the discount's value that satisfies all the constraints in the [0, 1] interval
      */
-    public getDiscountValueFor(data: DiscountConstraintDataDO): number {
-        let discountValue = 0.0;
-        this.discountList.forEach(discount => {
-            if (discount.appliesOn(data)) {
+    public getDiscountValuesBreakdownFor(constraints: DiscountConstraintDataDO): number[] {
+        let discountValuesBreakdown: number[] = [];
+        
+        let dateList = constraints.indexedBookingInterval.bookingDateList;
+        _.forEach(dateList, (date: ThDateDO) => {
+            let discountValue = 0.0;
+            
+            this.discountList.forEach(discount => {
+                if (!discount.appliesOn(constraints)) {
+                    return;
+                }
+                if (!discount.appliesOnDate(date)) {
+                    return;
+                }
                 discountValue = Math.max(discountValue, discount.value);
-            }
-        });
-        return discountValue;
+            });
+
+            discountValuesBreakdown.push(discountValue);    
+        })
+        return discountValuesBreakdown;
     }
 }
