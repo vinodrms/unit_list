@@ -401,9 +401,16 @@ export class YieldPriceProductsComponent {
 		}).subscribe(() => {
 			var eventDescription = "Opened a Dynamic Price for day " + date.toString();
 			this._appContext.analytics.logEvent("yield-manager", "yield-single-dynamic-price", eventDescription);
-			this.handleStateChange();
+			_.forEach(priceProductItem.dynamicPriceList, (item: DynamicPriceYieldItemDO) => {
+				if (item.dynamicPriceId === dynamicPrice.dynamicPriceId) {
+					item.openList[dayIndex] = 0;
+				} else {
+					item.openList[dayIndex] = 1;
+				}
+			});
 		}, (error: ThError) => {
 			this._appContext.toaster.error(error.message);
+			this.handleStateChange();
 		});
 	}
 	private openDynamicPriceYieldModal(priceProductItem: PriceProductYieldItemVM, dynamicPrice: DynamicPriceYieldItemDO) {
