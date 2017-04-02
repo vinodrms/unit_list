@@ -403,9 +403,9 @@ export class YieldPriceProductsComponent {
 			this._appContext.analytics.logEvent("yield-manager", "yield-single-dynamic-price", eventDescription);
 			_.forEach(priceProductItem.dynamicPriceList, (item: DynamicPriceYieldItemDO) => {
 				if (item.dynamicPriceId === dynamicPrice.dynamicPriceId) {
-					item.openList[dayIndex] = 0;
+					item.openList[dayIndex] = YieldItemStateType.Open;
 				} else {
-					item.openList[dayIndex] = 1;
+					item.openList[dayIndex] = YieldItemStateType.Closed;
 				}
 			});
 		}, (error: ThError) => {
