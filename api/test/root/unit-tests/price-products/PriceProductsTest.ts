@@ -338,20 +338,17 @@ describe("Hotel Price Products Tests", function () {
 			
 			saveAddOnProd.save(addOnProdDO).then((result: AddOnProductDO) => {
 			var ppRepo = testContext.appContext.getRepositoryFactory().getPriceProductRepository();
-			ppRepo.getPriceProductList({ hotelId: testContext.sessionContext.sessionDO.hotel.id },
+			return ppRepo.getPriceProductList({ hotelId: testContext.sessionContext.sessionDO.hotel.id },
 				{ 
 				status: PriceProductStatus.Active,
 				addOnProductIdList: [addOnProduct.id]
 				})
-				.then((searchResult: PriceProductSearchResultRepoDO) => {
-					for (let priceProduct of searchResult.priceProductList) {
-						should.equal(priceProduct.includedItems.attachedAddOnProductItemList[0].addOnProductSnapshot.price, addOnProdDO.price);
-					}
-					done();
-				})
-				.catch((e:any) => {
-					done(e);
-				})
+			})
+			.then((searchResult: PriceProductSearchResultRepoDO) => {
+				for (let priceProduct of searchResult.priceProductList) {
+					should.equal(priceProduct.includedItems.attachedAddOnProductItemList[0].addOnProductSnapshot.price, addOnProdDO.price);
+				}
+				done();
 			}).catch((e: any) => {
 				done(e);
 			});

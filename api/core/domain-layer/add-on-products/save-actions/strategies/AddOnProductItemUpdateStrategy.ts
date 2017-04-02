@@ -8,18 +8,24 @@ import {IAddOnProductItemActionStrategy} from '../IAddOnProductItemActionStrateg
 import {AddOnProductMetaRepoDO, AddOnProductItemMetaRepoDO} from '../../../../data-layer/add-on-products/repositories/IAddOnProductRepository';
 import {PriceProductDO} from '../../../../data-layer/price-products/data-objects/PriceProductDO';
 import {
-	IPriceProductRepository, PriceProductMetaRepoDO, PriceProductSearchCriteriaRepoDO,
-	PriceProductItemMetaRepoDO, PriceProductSearchResultRepoDO, PriceProductUpdateStatusParamsRepoDO, PriceProductUpdateYMIntervalsParamsRepoDO
+	PriceProductMetaRepoDO, PriceProductSearchCriteriaRepoDO,
+	PriceProductItemMetaRepoDO, PriceProductSearchResultRepoDO
 } from '../../../../data-layer/price-products/repositories/IPriceProductRepository';
 import {PriceProductStatus} from '../../../../data-layer/price-products/data-objects/PriceProductDO';
+import {AddOnProductSnapshotDO} from '../../../../data-layer/add-on-products/data-objects/AddOnProductSnapshotDO';
+import {ThUtils} from '../../../../utils/ThUtils'
+
+import _ = require('underscore')
 
 export class AddOnProductItemUpdateStrategy implements IAddOnProductItemActionStrategy {
 	private _aopMeta: AddOnProductMetaRepoDO;
 	private _loadedAddOnProduct: AddOnProductDO;
 	private _updatedAddOnProduct: AddOnProductDO;
+	private _thUtils: ThUtils;
 
 	constructor(private _appContext: AppContext, private _sessionContext: SessionContext, private _addOnProductDO: AddOnProductDO) {
 		this._aopMeta = this.buildAddOnProductMetaRepoDO();
+		this._thUtils = new ThUtils();
 	}
 	save(resolve: { (result: AddOnProductDO): void }, reject: { (err: ThError): void }) {
 		var aopRepo = this._appContext.getRepositoryFactory().getAddOnProductRepository();
@@ -47,55 +53,55 @@ export class AddOnProductItemUpdateStrategy implements IAddOnProductItemActionSt
 	}
 	private updateAssociatedPriceProducts(): Promise<any> {
 		return new Promise((resolve: { (result: any): void }, reject: { (err: ThError): void }) => {
-			var ppRepo = this._appContext.getRepositoryFactory().getPriceProductRepository();
-			ppRepo.getPriceProductList({ hotelId: this._sessionContext.sessionDO.hotel.id },
-				{
-					addOnProductIdList: [this._updatedAddOnProduct.id],
-					status: PriceProductStatus.Active
-				})
-			.then((priceProductSearchResult: PriceProductSearchResultRepoDO) => {
-				var priceProductList = priceProductSearchResult.priceProductList;
-				let updatePriceProductsPromisesArray = [];
-				for (let priceProduct of priceProductList) {
-					priceProduct.includedItems.attachedAddOnProductItemList.forEach((addOnProductItemDO) => {
-						var addOnProductSnapshot = addOnProductItemDO.addOnProductSnapshot;
-						if (addOnProductSnapshot.id == this._updatedAddOnProduct.id) {
-							addOnProductSnapshot.categoryId = this._updatedAddOnProduct.categoryId;
-							addOnProductSnapshot.name = this._updatedAddOnProduct.name;
-							addOnProductSnapshot.price = this._updatedAddOnProduct.price;
-							addOnProductSnapshot.internalCost = this._updatedAddOnProduct.internalCost;
-							addOnProductSnapshot.taxIdList = this._updatedAddOnProduct.taxIdList;
-						}
-					});
-					var breakfastSnapshot = priceProduct.includedItems.includedBreakfastAddOnProductSnapshot;
-					if (breakfastSnapshot.id == this._updatedAddOnProduct.id) {
-						breakfastSnapshot.categoryId = this._updatedAddOnProduct.categoryId;
-						breakfastSnapshot.name = this._updatedAddOnProduct.name;
-						breakfastSnapshot.price = this._updatedAddOnProduct.price;
-						breakfastSnapshot.internalCost = this._updatedAddOnProduct.internalCost;
-						breakfastSnapshot.taxIdList = this._updatedAddOnProduct.taxIdList;
-					}
-					updatePriceProductsPromisesArray.push(ppRepo.updatePriceProduct({ hotelId: this._sessionContext.sessionDO.hotel.id },
-					{
-						id: priceProduct.id,
-						versionId: priceProduct.versionId
-					}, priceProduct));
+			this.updateAssociatedPriceProductsCore(resolve, reject);
+		});
+	}
+	private updateAssociatedPriceProductsCore(resolve: { (result: any): void }, reject: { (err: ThError): void }) {
+		var ppRepo = this._appContext.getRepositoryFactory().getPriceProductRepository();
+		ppRepo.getPriceProductList({ hotelId: this._sessionContext.sessionDO.hotel.id },
+			{
+				addOnProductIdList: [this._updatedAddOnProduct.id],
+				status: PriceProductStatus.Active
+			})
+		.then((priceProductSearchResult: PriceProductSearchResultRepoDO) => {
+			var priceProductList = priceProductSearchResult.priceProductList;
+			let updatePriceProductsPromisesArray = [];
+			for (let priceProduct of priceProductList) {
+				let aop = _.find(priceProduct.includedItems.attachedAddOnProductItemList, aop => { return aop.addOnProductSnapshot.id === this._updatedAddOnProduct.id });
+				if( !this._thUtils.isUndefinedOrNull(aop)) {
+					this.updateAddOnProductSnapshotByAddOnProduct(aop.addOnProductSnapshot, this._updatedAddOnProduct);
+				};
+				var breakfastSnapshot = priceProduct.includedItems.includedBreakfastAddOnProductSnapshot;
+				if (breakfastSnapshot.id == this._updatedAddOnProduct.id) {
+					this.updateAddOnProductSnapshotByAddOnProduct(breakfastSnapshot,this._updatedAddOnProduct);
 				}
-				Promise.all(updatePriceProductsPromisesArray)
-				.then(() => {
-					resolve(true);
-				})
-				.catch((error: any) => {
-					var thError = new ThError(ThStatusCode.AddOnProductItemUpdateStrategyErrorUpdatingPriceProducts, null);
-					ThLogger.getInstance().logError(ThLogLevel.Debug, "error updating price products", {}, thError);
-					resolve(true);
-				});
-			}).catch((error: any) => {
+				updatePriceProductsPromisesArray.push(ppRepo.updatePriceProduct({ hotelId: this._sessionContext.sessionDO.hotel.id },
+				{
+					id: priceProduct.id,
+					versionId: priceProduct.versionId
+				}, priceProduct));
+			}
+			Promise.all(updatePriceProductsPromisesArray)
+			.then(() => {
+				resolve(true);
+			})
+			.catch((error: any) => {
 				var thError = new ThError(ThStatusCode.AddOnProductItemUpdateStrategyErrorUpdatingPriceProducts, null);
 				ThLogger.getInstance().logError(ThLogLevel.Debug, "error updating price products", {}, thError);
 				resolve(true);
 			});
+		}).catch((error: any) => {
+			var thError = new ThError(ThStatusCode.AddOnProductItemUpdateStrategyErrorUpdatingPriceProducts, null);
+			ThLogger.getInstance().logError(ThLogLevel.Debug, "error updating price products", {}, thError);
+			resolve(true);
 		});
+	}
+	private updateAddOnProductSnapshotByAddOnProduct(itemToUpdate: AddOnProductSnapshotDO , newValue: AddOnProductDO) {
+		itemToUpdate.categoryId = newValue.categoryId;
+		itemToUpdate.name = newValue.name;
+		itemToUpdate.price = newValue.price;
+		itemToUpdate.internalCost = newValue.internalCost;
+		itemToUpdate.taxIdList = newValue.taxIdList;
 	}
 	private buildAddOnProductMetaRepoDO(): AddOnProductMetaRepoDO {
 		return {
