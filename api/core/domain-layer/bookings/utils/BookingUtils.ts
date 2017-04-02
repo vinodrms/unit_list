@@ -127,7 +127,6 @@ export class BookingUtils {
         });
         pricePerDayList = this.getPricePerDayListWithDiscount(pricePerDayList, discountPerDayBreakdown);
 
-        bookingDO.price.appliedDiscountValue = discountPerDayBreakdown;
         bookingDO.price.roomPricePerNightList = pricePerDayList;
         bookingDO.price.roomPricePerNightAvg = this._thUtils.getArrayAverage(pricePerDayList);
         bookingDO.price.roomPricePerNightAvg = this._thUtils.roundNumberToTwoDecimals(bookingDO.price.roomPricePerNightAvg);
@@ -168,6 +167,7 @@ export class BookingUtils {
                 pricePerDay.price = (1 - discountPerDayBreakdown[index]) * pricePerDay.price;
             }
             pricePerDay.price = this._thUtils.roundNumberToTwoDecimals(pricePerDay.price);
+            pricePerDay.discount = discountPerDayBreakdown[index];
             return pricePerDay;
         });
     }

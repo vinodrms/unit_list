@@ -30,7 +30,6 @@ export class PenaltyUtils {
 
         penaltyPrice.totalBookingPrice = penaltyPrice.roomPricePerNightAvg - penaltyPrice.deductedCommissionPrice;
 
-        penaltyPrice.appliedDiscountValue = bookingPrice.appliedDiscountValue;
         penaltyPrice.breakfast = bookingPrice.breakfast;
         penaltyPrice.includedInvoiceItemList = bookingPrice.includedInvoiceItemList;
 

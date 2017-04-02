@@ -6,9 +6,10 @@ export class PricePerDayDO extends BaseDO implements INumber {
     dynamicPriceId: string;
     thDate: ThDateDO;
     price: number;
+    discount: number;
 
     protected getPrimitivePropertyKeys(): string[] {
-        return ["dynamicPriceId", "price"];
+        return ["dynamicPriceId", "price", "discount"];
     }
     public buildFromObject(object: Object) {
         super.buildFromObject(object);

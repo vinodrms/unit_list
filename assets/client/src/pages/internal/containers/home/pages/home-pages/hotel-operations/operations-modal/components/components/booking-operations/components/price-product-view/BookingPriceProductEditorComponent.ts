@@ -8,6 +8,7 @@ import { InvoiceItemDO } from '../../../../../../../../../../../services/invoice
 import { BookingChangePriceProductRight } from '../../../../../../../../../../../services/bookings/data-objects/BookingEditRights';
 import { ChangePriceProductModalService } from './components/change-pp/services/ChangePriceProductModalService';
 import { BookingCartItemVM } from '../../../../../../../../utils/new-booking/services/search/view-models/BookingCartItemVM';
+import { PricePerDayDO } from "../../../../../../../../../../../services/bookings/data-objects/price/PricePerDayDO";
 
 @Component({
     selector: 'booking-price-product-editor',
@@ -100,8 +101,9 @@ export class BookingPriceProductEditorComponent implements OnInit {
         let dayTranslation = this._appContext.thTranslation.translate('Day');
         
         let discountBreakdown = [];
-        _.forEach(this.bookingDO.price.appliedDiscountValue, (discount: number, index) => {
-            discountBreakdown.push(dayTranslation + ' ' + (index + 1) + ': ' + Math.round(discount * 100) + '%');
+        
+        _.forEach(this.bookingDO.price.roomPricePerNightList, (pricePerDay: PricePerDayDO, index) => {
+            discountBreakdown.push(dayTranslation + ' ' + (index + 1) + ': ' + Math.round(pricePerDay.discount * 100) + '%');
         });
 
         let discountBreakdownString = '';
