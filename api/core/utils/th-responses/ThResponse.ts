@@ -182,6 +182,7 @@ export enum ThStatusCode {
 	SaveAddOnProductItemInvalidCategoryId,
 	TaxIdValidatorInvalidTaxId,
 	AddOnProductItemUpdateStrategyErrorUpdating,
+	AddOnProductItemUpdateStrategyErrorUpdatingPriceProducts,
 	DeleteAddOnProductItemError,
 	DeleteAddOnProductItemErrorValidating,
 	DeleteAddOnProductItemUsedInDraftOrActivePriceProducts,
@@ -708,6 +709,7 @@ ThMessage[ThStatusCode.SaveAddOnProductItemError] = "Error saving add on product
 ThMessage[ThStatusCode.SaveAddOnProductItemInvalidCategoryId] = "Invalid category id.";
 ThMessage[ThStatusCode.TaxIdValidatorInvalidTaxId] = "Invalid tax id.";
 ThMessage[ThStatusCode.AddOnProductItemUpdateStrategyErrorUpdating] = "Error updating add on product id.";
+ThMessage[ThStatusCode.AddOnProductItemUpdateStrategyErrorUpdatingPriceProducts] = "Error updating price products add on snapshots after add on product update";
 ThMessage[ThStatusCode.DeleteAddOnProductItemError] = "Error deleting add on product.";
 ThMessage[ThStatusCode.DeleteAddOnProductItemErrorValidating] = "Error validating add on product.";
 ThMessage[ThStatusCode.DeleteAddOnProductItemUsedInDraftOrActivePriceProducts] = "Cannot delete the add on product because it was added in active or draft price products.";
