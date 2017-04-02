@@ -97,14 +97,26 @@ export class BookingPriceProductEditorComponent implements OnInit {
         return this.bookingDO.price.hasDeductedCommission();
     }
     public get discountValueString(): string {
-        return Math.round(this.bookingDO.price.appliedDiscountValue * 100) + "%";
+        let dayTranslation = this._appContext.thTranslation.translate('Day');
+        
+        let discountBreakdown = [];
+        _.forEach(this.bookingDO.price.appliedDiscountValue, (discount: number, index) => {
+            discountBreakdown.push(dayTranslation + ' ' + (index + 1) + ': ' + Math.round(discount * 100) + '%');
+        });
+
+        let discountBreakdownString = '';
+        _.forEach(discountBreakdown, (discount) => {
+            discountBreakdownString += ' ' + discount;
+        });
+
+        return discountBreakdownString;
     }
     public get commissionValueString(): string {
         return this.currencySymbolString + this.bookingDO.price.deductedCommissionPrice;
     }
     public openDiscountInformAlert() {
         let title = this._appContext.thTranslation.translate("Discount");
-        let message = this._appContext.thTranslation.translate("A discount of %discountValue% defined on %priceProduct% has been applied on this booking\'s room price", {
+        let message = this._appContext.thTranslation.translate("A discount defined on %priceProduct% has been applied on this booking\'s room price. Discount breakdown per day: %discountValue%", {
             discountValue: this.discountValueString,
             priceProduct: this.bookingDO.priceProductSnapshot.name
         });

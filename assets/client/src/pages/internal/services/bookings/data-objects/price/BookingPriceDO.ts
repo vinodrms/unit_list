@@ -22,7 +22,7 @@ export class BookingPriceDO extends BaseDO implements IInvoiceItemMeta {
     totalRoomPrice: number;
     totalOtherPrice: number;
 
-    appliedDiscountValue: number;
+    appliedDiscountValue: number[];
 
     // the commission always appears as a separate item on the invoice
     deductedCommissionPrice: number;
@@ -118,7 +118,7 @@ export class BookingPriceDO extends BaseDO implements IInvoiceItemMeta {
     }
 
     public hasDiscount(): boolean {
-        return this.appliedDiscountValue > 0.0;
+        return _.reduce(this.appliedDiscountValue, function(sum, discount: number){ return sum + discount; }, 0) > 0.0;
     }
 
     public isMovable(): boolean {
