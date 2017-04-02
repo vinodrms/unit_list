@@ -1,11 +1,11 @@
-import {ICustomerDetailsDO, CustomerDetailsMeta} from './ICustomerDetailsDO';
-import {CustomerType} from '../CustomerDO';
-import {IndividualDetailsDO} from './IndividualDetailsDO';
-import {CorporateDetailsDO} from './CorporateDetailsDO';
-import {CommissionDO, CommissionType} from '../../../common/data-objects/commission/CommissionDO';
-import {AddressDO} from '../../../common/data-objects/address/AddressDO';
-import {CountryDO} from '../../../common/data-objects/country/CountryDO';
-import {ThDateDO} from '../../../common/data-objects/th-dates/ThDateDO';
+import { ICustomerDetailsDO, CustomerDetailsMeta } from './ICustomerDetailsDO';
+import { CustomerType } from '../CustomerDO';
+import { IndividualDetailsDO } from './IndividualDetailsDO';
+import { CorporateDetailsDO } from './CorporateDetailsDO';
+import { CommissionDO, CommissionType } from '../../../common/data-objects/commission/CommissionDO';
+import { AddressDO } from '../../../common/data-objects/address/AddressDO';
+import { CountryDO } from '../../../common/data-objects/country/CountryDO';
+import { ThDateDO } from '../../../common/data-objects/th-dates/ThDateDO';
 
 export class CustomerDetailsFactory {
 	public getCustomerDetailsByType(customerType: CustomerType): ICustomerDetailsDO {
@@ -33,6 +33,7 @@ export class CustomerDetailsFactory {
 		corporateDetails.payInvoiceByAgreement = false;
 		corporateDetails.commission = new CommissionDO();
 		corporateDetails.commission.type = CommissionType.Fixed;
+		corporateDetails.commission.deducted = false;
 		corporateDetails.receiveBookingConfirmations = true;
 		return corporateDetails;
 	}

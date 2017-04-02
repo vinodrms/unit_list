@@ -93,14 +93,27 @@ export class BookingPriceProductEditorComponent implements OnInit {
     public hasDiscount(): boolean {
         return this.bookingDO.price.hasDiscount();
     }
+    public hasDeductedCommission(): boolean {
+        return this.bookingDO.price.hasDeductedCommission();
+    }
     public get discountValueString(): string {
         return Math.round(this.bookingDO.price.appliedDiscountValue * 100) + "%";
+    }
+    public get commissionValueString(): string {
+        return this.currencySymbolString + this.bookingDO.price.deductedCommissionPrice;
     }
     public openDiscountInformAlert() {
         let title = this._appContext.thTranslation.translate("Discount");
         let message = this._appContext.thTranslation.translate("A discount of %discountValue% defined on %priceProduct% has been applied on this booking\'s room price", {
             discountValue: this.discountValueString,
             priceProduct: this.bookingDO.priceProductSnapshot.name
+        });
+        this._appContext.modalService.confirm(title, message, { positive: this._appContext.thTranslation.translate("OK") }, () => { }, () => { });
+    }
+    public openDeductedCommissionAlert() {
+        let title = this._appContext.thTranslation.translate("Deducted Commission");
+        let message = this._appContext.thTranslation.translate("A commission of %commission% has been been deducted", {
+            commission: this.commissionValueString
         });
         this._appContext.modalService.confirm(title, message, { positive: this._appContext.thTranslation.translate("OK") }, () => { }, () => { });
     }

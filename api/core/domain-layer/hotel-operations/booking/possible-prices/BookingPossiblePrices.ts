@@ -18,6 +18,7 @@ import { PriceProductConstraintDataDO } from "../../../../data-layer/price-produ
 import { PriceProductIdValidator } from "../../../price-products/validators/PriceProductIdValidator";
 import { PriceProductsContainer } from "../../../price-products/validators/results/PriceProductsContainer";
 import { DiscountConstraintDataDO } from "../../../../data-layer/price-products/data-objects/discount/PriceProductDiscountDO";
+import { CustomerDO } from "../../../../data-layer/customers/data-objects/CustomerDO";
 
 import _ = require('underscore');
 
@@ -28,6 +29,7 @@ export class BookingPossiblePrices {
     private _possiblePricesDO: BookingPossiblePricesDO;
 
     private _loadedRoomCategoryStatsList: RoomCategoryStatsDO[];
+    private _loadedBillingCustomer: CustomerDO;
     private _loadedBooking: BookingDO;
 
     constructor(private _appContext: AppContext, private _sessionContext: SessionContext) {
@@ -65,6 +67,11 @@ export class BookingPossiblePrices {
                 // update the PP snapshot so that the correct dynamic rate will be applied
                 this._loadedBooking.priceProductSnapshot = loadedPriceProductsContainer.getPriceProductById(this._loadedBooking.priceProductId);
 
+                let customerRepo = this._appContext.getRepositoryFactory().getCustomerRepository();
+                return customerRepo.getCustomerById({ hotelId: this._sessionContext.sessionDO.hotel.id }, this._loadedBooking.defaultBillingDetails.customerId);
+            }).then((customer: CustomerDO) => {
+                this._loadedBillingCustomer = customer;
+
                 resolve(this.getBookingPossiblePriceItems());
             }).catch((error: any) => {
                 var thError = new ThError(ThStatusCode.BookingPossiblePricesError, error);
@@ -101,10 +108,16 @@ export class BookingPossiblePrices {
                 let discount = this._loadedBooking.priceProductSnapshot.discounts.getDiscountValueFor(discountQuery);
                 pricePerDayList = this._bookingUtils.getPricePerDayListWithDiscount(pricePerDayList, discount);
 
-                priceItem.price = this._thUtils.getArraySum(pricePerDayList);
+                let roomPrice = this._thUtils.getArraySum(pricePerDayList);
+                priceItem.price = roomPrice;
+
+                let commission = this._loadedBillingCustomer.customerDetails.getCommission();
+                priceItem.price -= commission.getCommissionFor(roomPrice);
+
                 var includedInvoiceItems = this._bookingUtils.getIncludedInvoiceItems(this._loadedBooking.priceProductSnapshot,
                     this._loadedBooking.configCapacity, indexedBookingInterval);
                 priceItem.price += includedInvoiceItems.getTotalPrice();
+
                 priceItem.price = this._thUtils.roundNumberToTwoDecimals(priceItem.price);
                 possibleItems.priceItemList.push(priceItem);
             }

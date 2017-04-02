@@ -74,7 +74,7 @@ export class BookingTestHelper {
     }
 
     public getBookingItemDO(testDataBuilder: DefaultDataBuilder, priceProduct: PriceProductDO, allotment?: AllotmentDO): BookingItemDO {
-        var customerId = this._testUtils.getRandomListElement(testDataBuilder.customerList).id;
+        var customerId = _.find(testDataBuilder.customerList, cust => { return cust.isCompanyOrTravelAgency(); }).id;
         var roomCategoryId = this._testUtils.getRandomListElement(priceProduct.roomCategoryIdList);
         var allotmentId = "";
         if (allotment) {

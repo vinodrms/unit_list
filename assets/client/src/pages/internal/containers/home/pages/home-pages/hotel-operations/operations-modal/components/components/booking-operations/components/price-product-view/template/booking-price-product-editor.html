@@ -31,6 +31,12 @@
                 title="{{ 'A discount of %discountValue% has been applied on the room\'s price' | translate:{discountValue: discountValueString} }}"
                 >
             </i>
+            <i class="fa fa-tags clickable-item" 
+                *ngIf="hasDeductedCommission()" 
+                (click)="openDeductedCommissionAlert()"
+                title="{{ 'A commission of %commission% has been been deducted' | translate:{commission: commissionValueString} }}"
+                >
+            </i>
             / {{ 'Others' | translate }} {{currencySymbolString}}{{totalOtherPrice}}</p>
         </div>
         <div class="col-xs-12 col-sm-3 field-value text-field padding-top-5px" *ngIf="isPenaltyPrice">

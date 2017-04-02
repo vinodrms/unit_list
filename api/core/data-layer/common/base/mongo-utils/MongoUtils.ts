@@ -1,4 +1,4 @@
-import {ThUtils} from '../../../../utils/ThUtils';
+import { ThUtils } from '../../../../utils/ThUtils';
 
 import _ = require('underscore');
 import mongodb = require('mongodb');
@@ -6,6 +6,7 @@ import ObjectID = mongodb.ObjectID;
 import Collection = mongodb.Collection;
 
 export class MongoUtils {
+	public static DefaultDocumentIdAttribute = "_id";
 	private _thUtils: ThUtils;
 
 	constructor() {
@@ -13,20 +14,20 @@ export class MongoUtils {
 	}
 
 	public getNativeMongoCollection(sailsEntity: Sails.Model): Promise<Collection> {
-        return new Promise<Collection>((resolve, reject) => {
-            sailsEntity.native((err, nativeEntity: any) => {
-                if (err || !nativeEntity) {
-                    reject(err);
-                    return;
-                }
-                resolve(nativeEntity);
-            });
-        });
-    }
+		return new Promise<Collection>((resolve, reject) => {
+			sailsEntity.native((err, nativeEntity: any) => {
+				if (err || !nativeEntity) {
+					reject(err);
+					return;
+				}
+				resolve(nativeEntity);
+			});
+		});
+	}
 
 	public preprocessSearchCriteria(searchCriteria: any): Object {
-		if (!this._thUtils.isUndefinedOrNull(searchCriteria.id) 
-				&& this._thUtils.isUndefinedOrNull(searchCriteria.id.$in)) {
+		if (!this._thUtils.isUndefinedOrNull(searchCriteria.id)
+			&& this._thUtils.isUndefinedOrNull(searchCriteria.id.$in)) {
 			searchCriteria._id = new ObjectID(searchCriteria.id);
 			delete searchCriteria["id"];
 		}

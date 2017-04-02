@@ -1,5 +1,5 @@
 import { AValidationRule, IntermediateValidationResult } from './core/AValidationRule';
-import {InvalidConstraintType} from './core/ValidationResult';
+import { InvalidConstraintType } from './core/ValidationResult';
 
 import _ = require("underscore");
 

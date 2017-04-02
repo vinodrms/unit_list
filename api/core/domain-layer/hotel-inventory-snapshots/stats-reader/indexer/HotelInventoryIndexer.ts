@@ -144,7 +144,7 @@ export class HotelInventoryIndexer {
 
     private getBookingRoomPriceForDate(bookingPrice: BookingPriceDO, bookingCapacity: ConfigCapacityDO​​, totalNoNights: number, thDate: ThDateDO): number {
         if (bookingPrice.isPenalty()) {
-            return bookingPrice.totalBookingPrice / totalNoNights;
+            return bookingPrice.totalRoomPrice / totalNoNights;
         }
         var roomPriceForNight = bookingPrice.roomPricePerNightAvg;
         // now we try to find the actual price for the specific date

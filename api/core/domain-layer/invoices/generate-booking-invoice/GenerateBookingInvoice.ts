@@ -1,26 +1,26 @@
-import {ThLogger, ThLogLevel} from '../../../utils/logging/ThLogger';
-import {ThError} from '../../../utils/th-responses/ThError';
-import {ThUtils} from '../../../utils/ThUtils';
-import {ThStatusCode} from '../../../utils/th-responses/ThResponse';
-import {AppContext} from '../../../utils/AppContext';
-import {SessionContext} from '../../../utils/SessionContext';
-import {ValidationResultParser} from '../../common/ValidationResultParser';
-import {GenerateBookingInvoiceDO, GenerateBookingInvoiceAopMeta} from './GenerateBookingInvoiceDO';
-import {InvoiceGroupDO} from '../../../data-layer/invoices/data-objects/InvoiceGroupDO';
-import {BookingIdValidator} from '../validators/BookingIdValidator';
-import {BookingDO} from '../../../data-layer/bookings/data-objects/BookingDO';
-import {InvoiceDO, InvoicePaymentStatus} from '../../../data-layer/invoices/data-objects/InvoiceDO';
-import {InvoiceItemDO, InvoiceItemType} from '../../../data-layer/invoices/data-objects/items/InvoiceItemDO';
-import {InvoicePayerDO} from '../../../data-layer/invoices/data-objects/payers/InvoicePayerDO';
-import {InvoicePaymentMethodType} from '../../../data-layer/invoices/data-objects/payers/InvoicePaymentMethodDO';
-import {CustomerIdValidator} from '../../customers/validators/CustomerIdValidator';
-import {CustomerDO, CustomerType} from '../../../data-layer/customers/data-objects/CustomerDO';
-import {CustomersContainer} from '../../customers/validators/results/CustomersContainer';
-import {GenerateBookingInvoiceActionFactory} from './actions/GenerateBookingInvoiceActionFactory';
-import {IGenerateBookingInvoiceActionStrategy} from './actions/IGenerateBookingInvoiceActionStrategy';
-import {AddOnProductDO} from '../../../data-layer/add-on-products/data-objects/AddOnProductDO';
-import {BaseCorporateDetailsDO} from '../../../data-layer/customers/data-objects/customer-details/corporate/BaseCorporateDetailsDO';
-import {AddOnProductInvoiceItemMetaDO} from '../../../data-layer/invoices/data-objects/items/add-on-products/AddOnProductInvoiceItemMetaDO';
+import { ThLogger, ThLogLevel } from '../../../utils/logging/ThLogger';
+import { ThError } from '../../../utils/th-responses/ThError';
+import { ThUtils } from '../../../utils/ThUtils';
+import { ThStatusCode } from '../../../utils/th-responses/ThResponse';
+import { AppContext } from '../../../utils/AppContext';
+import { SessionContext } from '../../../utils/SessionContext';
+import { ValidationResultParser } from '../../common/ValidationResultParser';
+import { GenerateBookingInvoiceDO, GenerateBookingInvoiceAopMeta } from './GenerateBookingInvoiceDO';
+import { InvoiceGroupDO } from '../../../data-layer/invoices/data-objects/InvoiceGroupDO';
+import { BookingIdValidator } from '../validators/BookingIdValidator';
+import { BookingDO } from '../../../data-layer/bookings/data-objects/BookingDO';
+import { InvoiceDO, InvoicePaymentStatus } from '../../../data-layer/invoices/data-objects/InvoiceDO';
+import { InvoiceItemDO, InvoiceItemType } from '../../../data-layer/invoices/data-objects/items/InvoiceItemDO';
+import { InvoicePayerDO } from '../../../data-layer/invoices/data-objects/payers/InvoicePayerDO';
+import { InvoicePaymentMethodType } from '../../../data-layer/invoices/data-objects/payers/InvoicePaymentMethodDO';
+import { CustomerIdValidator } from '../../customers/validators/CustomerIdValidator';
+import { CustomerDO, CustomerType } from '../../../data-layer/customers/data-objects/CustomerDO';
+import { CustomersContainer } from '../../customers/validators/results/CustomersContainer';
+import { GenerateBookingInvoiceActionFactory } from './actions/GenerateBookingInvoiceActionFactory';
+import { IGenerateBookingInvoiceActionStrategy } from './actions/IGenerateBookingInvoiceActionStrategy';
+import { AddOnProductDO } from '../../../data-layer/add-on-products/data-objects/AddOnProductDO';
+import { BaseCorporateDetailsDO } from '../../../data-layer/customers/data-objects/customer-details/corporate/BaseCorporateDetailsDO';
+import { AddOnProductInvoiceItemMetaDO } from '../../../data-layer/invoices/data-objects/items/add-on-products/AddOnProductInvoiceItemMetaDO';
 
 import _ = require('underscore');
 
@@ -31,23 +31,12 @@ export class GenerateBookingInvoice {
     private _loadedBooking: BookingDO;
     private _loadedDefaultBillingCustomer: CustomerDO;
 
-    private _penaltyPrice: number;
-
     constructor(private _appContext: AppContext, private _sessionContext: SessionContext) {
         this._thUtils = new ThUtils();
     }
 
     public generate(generateBookingInvoiceItemDO: GenerateBookingInvoiceDO): Promise<InvoiceGroupDO> {
         this._generateBookingInvoiceDO = generateBookingInvoiceItemDO;
-
-        return new Promise<InvoiceGroupDO>((resolve: { (result: InvoiceGroupDO): void }, reject: { (err: ThError): void }) => {
-            this.generateCore(resolve, reject);
-        });
-    }
-
-    public generateWithPenalty(generateBookingInvoiceItemDO: GenerateBookingInvoiceDO, penaltyPrice: number): Promise<InvoiceGroupDO> {
-        this._generateBookingInvoiceDO = generateBookingInvoiceItemDO;
-        this._penaltyPrice = penaltyPrice;
 
         return new Promise<InvoiceGroupDO>((resolve: { (result: InvoiceGroupDO): void }, reject: { (err: ThError): void }) => {
             this.generateCore(resolve, reject);
@@ -99,16 +88,8 @@ export class GenerateBookingInvoice {
                 var defaultInvoicePayer =
                     InvoicePayerDO.buildFromCustomerDOAndPaymentMethod(this._loadedDefaultBillingCustomer, this._loadedBooking.defaultBillingDetails.paymentMethod);
 
-                if (this._thUtils.isUndefinedOrNull(this._penaltyPrice)) {
-                    defaultInvoicePayer.priceToPay = this._thUtils.roundNumberToTwoDecimals(booking.price.getUnitPrice() * booking.price.getNumberOfItems());
-                    _.forEach(booking.price.includedInvoiceItemList, (invoiceItem: InvoiceItemDO) => {
-                        defaultInvoicePayer.priceToPay =
-                            this._thUtils.roundNumberToTwoDecimals(defaultInvoicePayer.priceToPay + invoiceItem.meta.getUnitPrice() * invoiceItem.meta.getNumberOfItems());
-                    });
-                }
-                else {
-                    defaultInvoicePayer.priceToPay = this._penaltyPrice;
-                }
+                defaultInvoicePayer.priceToPay = this._thUtils.roundNumberToTwoDecimals(booking.price.totalBookingPrice);
+
                 if (defaultInvoicePayer.paymentMethod.type === InvoicePaymentMethodType.PayInvoiceByAgreement) {
                     var corporateDetails = new BaseCorporateDetailsDO();
                     corporateDetails.buildFromObject(this._loadedDefaultBillingCustomer.customerDetails);
@@ -124,7 +105,7 @@ export class GenerateBookingInvoice {
                     aopInvoiceItem.buildFromAddOnProductDO(generateAopMeta.addOnProductDO, generateAopMeta.noOfItems, true, generateAopMeta.addOnProductDO.getVatId());
                     invoice.itemList.push(aopInvoiceItem);
                 });
-                
+
                 invoice.notesFromBooking = booking.invoiceNotes;
 
                 resolve(invoice);
