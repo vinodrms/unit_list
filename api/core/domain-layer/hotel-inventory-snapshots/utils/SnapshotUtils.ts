@@ -1,9 +1,9 @@
-import {RoomDO} from '../../../data-layer/rooms/data-objects/RoomDO';
-import {RoomSnapshotDO} from '../../../data-layer/hotel-inventory-snapshots/data-objects/room/RoomSnapshotDO';
-import {AllotmentsSnapshotDO} from '../../../data-layer/hotel-inventory-snapshots/data-objects/allotment/AllotmentsSnapshotDO';
-import {AllotmentDO, AllotmentStatus} from '../../../data-layer/allotments/data-objects/AllotmentDO';
-import {ThDateDO} from '../../../utils/th-dates/data-objects/ThDateDO';
-import {ThDateIntervalUtils} from '../../../utils/th-dates/ThDateIntervalUtils';
+import { RoomDO } from '../../../data-layer/rooms/data-objects/RoomDO';
+import { RoomSnapshotDO } from '../../../data-layer/hotel-inventory-snapshots/data-objects/room/RoomSnapshotDO';
+import { AllotmentsSnapshotDO } from '../../../data-layer/hotel-inventory-snapshots/data-objects/allotment/AllotmentsSnapshotDO';
+import { AllotmentDO, AllotmentStatus } from '../../../data-layer/allotments/data-objects/AllotmentDO';
+import { ThDateDO } from '../../../utils/th-dates/data-objects/ThDateDO';
+import { ThDateIntervalUtils } from '../../../utils/th-dates/ThDateIntervalUtils';
 
 import _ = require('underscore');
 
@@ -31,10 +31,10 @@ export class SnapshotUtils {
                 thDateIntervalUtils.containsThDateDO(referenceDate);
         });
         var allotmentsSnapshot = new AllotmentsSnapshotDO();
-        allotmentsSnapshot.activeAllotmentIdList = _.map(allotmentList, (allotment: AllotmentDO) => { return allotment.id });
+        allotmentsSnapshot.activeAllotmentIdList = _.map(filteredAllotments, (allotment: AllotmentDO) => { return allotment.id });
         allotmentsSnapshot.totalNoOfRooms = 0;
         var isoWeekDay = referenceDate.getISOWeekDay();
-        _.forEach(allotmentList, (allotment: AllotmentDO) => {
+        _.forEach(filteredAllotments, (allotment: AllotmentDO) => {
             var allotAvailability = allotment.availability.getAllotmentAvailabilityForDay(isoWeekDay);
             allotmentsSnapshot.totalNoOfRooms += allotment.availability.getAllotmentAvailabilityForDay(isoWeekDay).availableCount;
         });
