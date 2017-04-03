@@ -4,9 +4,10 @@ import { ThDateDO } from '../../../common/data-objects/th-dates/ThDateDO';
 export class PricePerDayDO extends BaseDO {
     thDate: ThDateDO;
     price: number;
+    discount: number;
 
     protected getPrimitivePropertyKeys(): string[] {
-        return ["price"];
+        return ["price", "discount"];
     }
     public buildFromObject(object: Object) {
         super.buildFromObject(object);

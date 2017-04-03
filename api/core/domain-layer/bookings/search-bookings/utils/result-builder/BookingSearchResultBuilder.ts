@@ -138,7 +138,7 @@ export class BookingSearchResultBuilder {
 
                     itemPrice.roomCategoryId = roomCategoryId;
                     var pricePerDayList: PricePerDayDO[] = priceProduct.price.getPricePerDayBreakdownFor(priceQuery);
-                    let discount = priceProduct.discounts.getDiscountValueFor({
+                    let discountPerDayBreakdown = priceProduct.discounts.getDiscountValuesBreakdownFor({
                         indexedBookingInterval: this._indexedBookingInterval,
                         bookingCreationDate: bookingCreationDate,
                         configCapacity: this._builderParams.searchParams.configCapacity,
@@ -149,10 +149,19 @@ export class BookingSearchResultBuilder {
                         roomCategoryIdListFromPriceProduct: priceProduct.roomCategoryIdList,
                         bookingBilledCustomerId: bookingBilledCustomerId
                     });
-                    pricePerDayList = this._bookingUtils.getPricePerDayListWithDiscount(pricePerDayList, discount);
-                    itemPrice.price = this._thUtils.getArraySum(pricePerDayList);
+                    pricePerDayList = this._bookingUtils.getPricePerDayListWithDiscount(pricePerDayList, discountPerDayBreakdown);
+                    
+                    let roomPrice = this._thUtils.getArraySum(pricePerDayList);
+                    itemPrice.price = roomPrice;
+
+                    if (!this._thUtils.isUndefinedOrNull(this._builderParams.bookingSearchDependencies.customer)) {
+                        let commission = this._builderParams.bookingSearchDependencies.customer.customerDetails.getCommission();
+                        itemPrice.price -= commission.getCommissionFor(roomPrice);
+                    }
+
                     var includedInvoiceItems = this._bookingUtils.getIncludedInvoiceItems(priceProduct, this._builderParams.searchParams.configCapacity, this._indexedBookingInterval);
                     itemPrice.price += includedInvoiceItems.getTotalPrice();
+
                     itemPrice.price = this._thUtils.roundNumberToTwoDecimals(itemPrice.price);
                     priceProductItem.priceList.push(itemPrice);
                 }

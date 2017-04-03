@@ -38,12 +38,40 @@
             </price-product-constraint-selector>
         </div>
     </div>
-
+    
     <div class="row">
         <div class="col-xs-12">
             <hr>
 			<a class="btn btn-xs" (click)="createNewConstraint()">
 				<i class="fa unitpal-font">'</i> {{ 'Add Constraint' | translate }}
+			</a>
+		</div>
+    </div>
+
+    <div class="row" *ngFor="let interval of discount.intervals.intervalList; let i = index">
+        <div class="col-xs-12"><hr></div>
+        <div class="col-xs-10">
+            <p class="bold-text">
+                {{ 'Interval #' | translate }}{{i + 1}}
+            </p>
+            <th-date-interval-picker
+		        [initialThDateInterval]="interval"
+		        (didSelectThDateInterval)="didSelectInterval($event, i)"
+		    >
+	</th-date-interval-picker>
+        </div>
+        <div class="col-xs-2">
+            <a class="btn btn-xs bold-text" (click)="removeIntervalAtIndex(i)"  title="{{ 'Remove' | translate }}">
+                <i class="fa unitpal-font">\</i> {{ 'Remove' | translate }}
+            </a>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-xs-12">
+            <hr>
+			<a class="btn btn-xs" (click)="createNewInterval()">
+				<i class="fa unitpal-font">'</i> {{ 'Add Interval' | translate }}
 			</a>
 		</div>
     </div>

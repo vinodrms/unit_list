@@ -1,9 +1,9 @@
-import {IValidationStructure} from '../../../utils/th-validation/structure/core/IValidationStructure';
-import {ObjectValidationStructure} from '../../../utils/th-validation/structure/ObjectValidationStructure';
-import {PrimitiveValidationStructure} from '../../../utils/th-validation/structure/PrimitiveValidationStructure';
-import {NumberValidationRule} from '../../../utils/th-validation/rules/NumberValidationRule';
-import {BookingValidationStructures} from '../../bookings/validators/BookingValidationStructures';
-import {ThDateDO} from '../../../utils/th-dates/data-objects/ThDateDO';
+import { IValidationStructure } from '../../../utils/th-validation/structure/core/IValidationStructure';
+import { ObjectValidationStructure } from '../../../utils/th-validation/structure/ObjectValidationStructure';
+import { PrimitiveValidationStructure } from '../../../utils/th-validation/structure/PrimitiveValidationStructure';
+import { NumberValidationRule } from '../../../utils/th-validation/rules/NumberValidationRule';
+import { ThDateDO } from '../../../utils/th-dates/data-objects/ThDateDO';
+import { CommonValidationStructures } from "../../common/CommonValidations";
 
 export class YieldManagerPeriodDO {
     referenceDate: ThDateDO;
@@ -13,7 +13,7 @@ export class YieldManagerPeriodDO {
         return new ObjectValidationStructure([
             {
                 key: "referenceDate",
-                validationStruct: BookingValidationStructures.getThDateDOValidationStructure()
+                validationStruct: CommonValidationStructures.getThDateDOValidationStructure()
             },
             {
                 key: "noDays",

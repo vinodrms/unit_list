@@ -48,10 +48,12 @@ export class MongoFindMultipleDocuments {
 			this.successCallback(processedItemList);
 		});
 	}
-	private updateCursorWithSortCriteria(mongoCursor: Cursor, sortCriteria: Object): Cursor {
-		if (this._thUtils.isUndefinedOrNull(sortCriteria) || !_.isObject(sortCriteria)) {
-			return mongoCursor.sort({ "_id": -1 });
+	private updateCursorWithSortCriteria(mongoCursor: Cursor, inputSortCriteria: Object): Cursor {
+		var sortCriteria: Object = {};
+		if (!this._thUtils.isUndefinedOrNull(inputSortCriteria) && _.isObject(inputSortCriteria)) {
+			sortCriteria = _.clone(inputSortCriteria);
 		}
+		sortCriteria[MongoUtils.DefaultDocumentIdAttribute] = -1;
 		return mongoCursor.sort(sortCriteria);
 	}
 	private updateCursorWithLazyLoadParam(mongoCursor: Cursor, lazyLoad: LazyLoadRepoDO): Cursor {

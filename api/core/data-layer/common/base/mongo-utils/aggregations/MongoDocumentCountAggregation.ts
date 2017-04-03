@@ -1,6 +1,6 @@
-import {MongoSearchCriteria, MongoAggregationOptions} from '../../MongoRepository';
-import {LazyLoadRepoDO, LazyLoadMetaResponseRepoDO} from '../../../repo-data-objects/LazyLoadRepoDO';
-import {AMongoAggregation} from './AMongoAggregation';
+import { MongoSearchCriteria, MongoAggregationOptions } from '../../MongoRepository';
+import { LazyLoadRepoDO, LazyLoadMetaResponseRepoDO } from '../../../repo-data-objects/LazyLoadRepoDO';
+import { AMongoAggregation } from './AMongoAggregation';
 
 import _ = require('underscore');
 
@@ -29,5 +29,9 @@ export class MongoDocumentCountAggregation extends AMongoAggregation<LazyLoadMet
             return;
         }
         this.successCallback({ numOfItems: aggregationObject["count"] });
+    }
+
+    protected requiresSorting(): boolean {
+        return false;
     }
 }

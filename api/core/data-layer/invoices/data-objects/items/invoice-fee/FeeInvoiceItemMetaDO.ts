@@ -1,9 +1,9 @@
-import {ThUtils} from '../../../../../utils/ThUtils';
-import {BaseDO} from '../../../../common/base/BaseDO';
-import {IInvoiceItemMeta} from '../IInvoiceItemMeta';
-import {ThTranslation} from '../../../../../utils/localization/ThTranslation';
-import {CustomerDO} from '../../../../customers/data-objects/CustomerDO';
-import {BaseCorporateDetailsDO} from '../../../../customers/data-objects/customer-details/corporate/BaseCorporateDetailsDO';
+import { ThUtils } from '../../../../../utils/ThUtils';
+import { BaseDO } from '../../../../common/base/BaseDO';
+import { IInvoiceItemMeta } from '../IInvoiceItemMeta';
+import { ThTranslation } from '../../../../../utils/localization/ThTranslation';
+import { CustomerDO } from '../../../../customers/data-objects/CustomerDO';
+import { BaseCorporateDetailsDO } from '../../../../customers/data-objects/customer-details/corporate/BaseCorporateDetailsDO';
 
 export class FeeInvoiceItemMetaDO extends BaseDO implements IInvoiceItemMeta {
     movable: boolean;
@@ -24,7 +24,7 @@ export class FeeInvoiceItemMetaDO extends BaseDO implements IInvoiceItemMeta {
         return this.numberOfItems;
     }
     public getDisplayName(thTranslation: ThTranslation): string {
-        return this.displayName;
+        return thTranslation.translate(this.displayName);
     }
     public setMovable(movable: boolean) {
         this.movable = movable;

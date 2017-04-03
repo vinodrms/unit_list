@@ -4,7 +4,6 @@ import { SinglePriceDO } from './single-price/SinglePriceDO';
 import { PricePerPersonDO } from './price-per-person/PricePerPersonDO';
 import { PriceExceptionDO } from './price-exceptions/PriceExceptionDO';
 import { DynamicPriceDO } from "./DynamicPriceDO";
-import { PricePerDayDO } from "../../../bookings/data-objects/price/PricePerDayDO";
 import { ThDateDO } from "../../../common/data-objects/th-dates/ThDateDO";
 
 export class PriceProductPriceDO extends BaseDO {
@@ -38,6 +37,7 @@ export class PriceProductPriceDO extends BaseDO {
 	}
 
 	public getDynamicPriceById(dynamicPriceId: string): DynamicPriceDO {
+		if (!dynamicPriceId) { return null; }
 		return _.find(this.dynamicPriceList, dynamicPrice => {
 			return dynamicPrice.id === dynamicPriceId;
 		});

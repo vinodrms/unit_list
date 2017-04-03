@@ -1,5 +1,5 @@
 import {ValidationResult} from './ValidationResult';
 
 export interface IValidationRule {
-	validate(object: any): ValidationResult;
+	validate(object: any, key: string): ValidationResult;
 }

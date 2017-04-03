@@ -1,12 +1,12 @@
-import {ThDateIntervalDO} from '../../../utils/th-dates/data-objects/ThDateIntervalDO';
-import {IValidationStructure} from '../../../utils/th-validation/structure/core/IValidationStructure';
-import {ObjectValidationStructure} from '../../../utils/th-validation/structure/ObjectValidationStructure';
-import {PrimitiveValidationStructure} from '../../../utils/th-validation/structure/PrimitiveValidationStructure';
-import {ArrayValidationStructure} from '../../../utils/th-validation/structure/ArrayValidationStructure';
-import {StringValidationRule} from '../../../utils/th-validation/rules/StringValidationRule';
-import {NumberInListValidationRule} from '../../../utils/th-validation/rules/NumberInListValidationRule';
-import {BooleanValidationRule} from '../../../utils/th-validation/rules/BooleanValidationRule';
-import {BookingValidationStructures} from '../../bookings/validators/BookingValidationStructures';
+import { ThDateIntervalDO } from '../../../utils/th-dates/data-objects/ThDateIntervalDO';
+import { IValidationStructure } from '../../../utils/th-validation/structure/core/IValidationStructure';
+import { ObjectValidationStructure } from '../../../utils/th-validation/structure/ObjectValidationStructure';
+import { PrimitiveValidationStructure } from '../../../utils/th-validation/structure/PrimitiveValidationStructure';
+import { ArrayValidationStructure } from '../../../utils/th-validation/structure/ArrayValidationStructure';
+import { StringValidationRule } from '../../../utils/th-validation/rules/StringValidationRule';
+import { NumberInListValidationRule } from '../../../utils/th-validation/rules/NumberInListValidationRule';
+import { BooleanValidationRule } from '../../../utils/th-validation/rules/BooleanValidationRule';
+import { CommonValidationStructures } from "../../common/CommonValidations";
 
 export enum PriceProductYieldAction {
 	Open,
@@ -44,6 +44,6 @@ export class PriceProductYieldingDO {
 	}
 
 	public static getIntervalValidationStructure(): IValidationStructure {
-		return BookingValidationStructures.getThDateIntervalDOValidationStructure();
+		return CommonValidationStructures.getThDateIntervalDOValidationStructure();
 	}
 }

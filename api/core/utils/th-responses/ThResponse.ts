@@ -182,6 +182,7 @@ export enum ThStatusCode {
 	SaveAddOnProductItemInvalidCategoryId,
 	TaxIdValidatorInvalidTaxId,
 	AddOnProductItemUpdateStrategyErrorUpdating,
+	AddOnProductItemUpdateStrategyErrorUpdatingPriceProducts,
 	DeleteAddOnProductItemError,
 	DeleteAddOnProductItemErrorValidating,
 	DeleteAddOnProductItemUsedInDraftOrActivePriceProducts,
@@ -202,6 +203,7 @@ export enum ThStatusCode {
 	CustomerRepositoryErrorGettingList,
 	SaveCustomerItemError,
 	SaveCustomerItemInvalidOrNullClientType,
+	SaveCustomerItemInvalidCommission,
 	SaveCustomerItemCompOrTACannotBeLinkedToOtherCustomers,
 	CustomerIdValidatorInvalidId,
 	CustomerItemUpdateStrategyError,
@@ -707,6 +709,7 @@ ThMessage[ThStatusCode.SaveAddOnProductItemError] = "Error saving add on product
 ThMessage[ThStatusCode.SaveAddOnProductItemInvalidCategoryId] = "Invalid category id.";
 ThMessage[ThStatusCode.TaxIdValidatorInvalidTaxId] = "Invalid tax id.";
 ThMessage[ThStatusCode.AddOnProductItemUpdateStrategyErrorUpdating] = "Error updating add on product id.";
+ThMessage[ThStatusCode.AddOnProductItemUpdateStrategyErrorUpdatingPriceProducts] = "Error updating price products add on snapshots after add on product update";
 ThMessage[ThStatusCode.DeleteAddOnProductItemError] = "Error deleting add on product.";
 ThMessage[ThStatusCode.DeleteAddOnProductItemErrorValidating] = "Error validating add on product.";
 ThMessage[ThStatusCode.DeleteAddOnProductItemUsedInDraftOrActivePriceProducts] = "Cannot delete the add on product because it was added in active or draft price products.";
@@ -727,6 +730,7 @@ ThMessage[ThStatusCode.CustomerRepositoryErrorReadingCustomerCount] = "Error get
 ThMessage[ThStatusCode.CustomerRepositoryErrorGettingList] = "Error getting customers.";
 ThMessage[ThStatusCode.SaveCustomerItemError] = "Error saving customer.";
 ThMessage[ThStatusCode.SaveCustomerItemInvalidOrNullClientType] = "Invalid client type.";
+ThMessage[ThStatusCode.SaveCustomerItemInvalidCommission] = "Invalid commission submitted. If this is set to be deducted, please set a correct value for the commission.";
 ThMessage[ThStatusCode.SaveCustomerItemCompOrTACannotBeLinkedToOtherCustomers] = "Companies or travel agencies cannot be linked to other customers.";
 ThMessage[ThStatusCode.CustomerIdValidatorInvalidId] = "Invalid list of customers.";
 ThMessage[ThStatusCode.CustomerItemUpdateStrategyError] = "Error updating customer.";

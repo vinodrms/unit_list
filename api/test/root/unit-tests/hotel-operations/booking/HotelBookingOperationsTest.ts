@@ -50,6 +50,9 @@ import { AssignRoom } from '../../../../../core/domain-layer/hotel-operations/ro
 import { AssignRoomDO } from '../../../../../core/domain-layer/hotel-operations/room/assign/AssignRoomDO';
 import { BookingUndoCheckIn } from '../../../../../core/domain-layer/hotel-operations/booking/undo-check-in/BookingUndoCheckIn';
 import { BookingUndoCheckInDO } from '../../../../../core/domain-layer/hotel-operations/booking/undo-check-in/BookingUndoCheckInDO';
+import { InvoiceGroupSearchResultRepoDO } from "../../../../../core/data-layer/invoices/repositories/IInvoiceGroupsRepository";
+import { InvoiceItemType } from "../../../../../core/data-layer/invoices/data-objects/items/InvoiceItemDO";
+import { RoomCommissionItemMetaDO } from "../../../../../core/data-layer/invoices/data-objects/items/room-commission/RoomCommissionItemMetaDO";
 
 describe("Hotel Booking Operations Tests", function () {
     var testContext: TestContext;
@@ -113,7 +116,21 @@ describe("Hotel Booking Operations Tests", function () {
             bookingChangeDatesDO.interval = dashboardHelper.getFromTodayTwoDaysInterval(testDataBuilder);
             var bookingChangeDates = new BookingChangeDates(testContext.appContext, testContext.sessionContext);
             bookingChangeDates.changeDates(bookingChangeDatesDO).then((updatedBooking: BookingDO) => {
-                should.equal(updatedBooking.price.totalBookingPrice, bookingToChange.price.totalBookingPrice * 2);
+                // commission is not deducted once for each night, so we add it, double the price, and remove it after that
+                // the commission is fixed
+                let expectedPrice = (bookingToChange.price.totalBookingPrice + bookingToChange.price.deductedCommissionPrice) * 2;
+                expectedPrice = expectedPrice - bookingToChange.price.deductedCommissionPrice;
+                expectedPrice = testUtils.thUtils.roundNumberToTwoDecimals(expectedPrice);
+
+                // also compute & test the new price using another formula
+                let expectedPrice2 = (bookingToChange.price.roomPricePerNightAvg + bookingToChange.price.totalOtherPrice) * 2;
+                expectedPrice2 = expectedPrice2 - bookingToChange.price.deductedCommissionPrice;
+                expectedPrice2 = testUtils.thUtils.roundNumberToTwoDecimals(expectedPrice2);
+
+                should.equal(updatedBooking.price.totalBookingPrice, expectedPrice);
+                should.equal(updatedBooking.price.totalBookingPrice, expectedPrice2);
+                should.equal(updatedBooking.price.deductedCommissionPrice, bookingToChange.price.deductedCommissionPrice);
+                should.equal(updatedBooking.price.totalRoomPrice, bookingToChange.price.totalRoomPrice * 2);
                 should.equal(updatedBooking.bookingHistory.actionList.length > 1, true);
                 bookingToChange = updatedBooking;
                 done();
@@ -321,6 +338,34 @@ describe("Hotel Booking Operations Tests", function () {
             assignRoom.checkIn(assignRoomDO).then((updatedBooking: BookingDO) => {
                 should.equal(updatedBooking.confirmationStatus, BookingConfirmationStatus.CheckedIn);
                 bookingToChange = updatedBooking;
+                done();
+            }).catch((error: any) => {
+                done(error);
+            });
+        });
+
+        it("Should check the invoice of the checked in booking", function (done) {
+            var invoiceGroupsRepo = testContext.appContext.getRepositoryFactory().getInvoiceGroupsRepository();
+            invoiceGroupsRepo.getInvoiceGroupList({ hotelId: testContext.sessionContext.sessionDO.hotel.id }, {
+                bookingId: bookingToChange.bookingId
+            }).then((result: InvoiceGroupSearchResultRepoDO) => {
+                should.equal(result.invoiceGroupList.length, 1);
+
+                let invoice = _.find(result.invoiceGroupList[0].invoiceList, invoice => {
+                    return invoice.bookingId === bookingToChange.bookingId;
+                });
+
+                should.equal(invoice.payerList.length, 1);
+                should.equal(invoice.getPrice(), bookingToChange.price.totalBookingPrice);
+                should.equal(invoice.payerList[0].priceToPay, bookingToChange.price.totalBookingPrice);
+
+                var commissionItem = _.find(invoice.itemList, item => { return item.type === InvoiceItemType.RoomCommission });
+                should.exist(commissionItem);
+                let meta = <RoomCommissionItemMetaDO>commissionItem.meta;
+                should.equal(meta.numberOfItems, -1);
+                // fixed commission in the default data builder
+                should.equal(meta.pricePerItem, bookingToChange.price.deductedCommissionPrice);
+
                 done();
             }).catch((error: any) => {
                 done(error);

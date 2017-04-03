@@ -109,6 +109,7 @@ export class BookingItemsConverter {
                 bookingDO.reservedAddOnProductIdList = [];
                 bookingDO.allotmentId = bookingItem.allotmentId;
                 bookingDO.notes = bookingItem.notes;
+                bookingDO.invoiceNotes = bookingItem.invoiceNotes;
                 bookingDO.interval = bookingInterval;
                 bookingDO.creationDate = this._converterParams.currentHotelTimestamp.thDateDO;
 
@@ -131,7 +132,10 @@ export class BookingItemsConverter {
                     currentHotelTimestamp: this._converterParams.currentHotelTimestamp
                 });
 
-                this._bookingUtils.updateBookingPriceUsingRoomCategoryAndSavePPSnapshot(bookingDO, this._converterParams.roomCategoryStatsList, priceProduct, groupBookingRoomCategoryIdList);
+                let billingCustomer = this._converterParams.customersContainer.getCustomerById(bookingDO.defaultBillingDetails.customerId);
+                this._bookingUtils.updateBookingPriceUsingRoomCategoryAndSavePPSnapshot(bookingDO, this._converterParams.roomCategoryStatsList,
+                    priceProduct, billingCustomer, groupBookingRoomCategoryIdList);
+
                 this._bookingUtils.updateDisplayCustomerId(bookingDO, this._converterParams.customersContainer);
                 this._bookingUtils.updateIndexedSearchTerms(bookingDO, this._converterParams.customersContainer);
 

@@ -109,6 +109,7 @@ export class PriceProductPriceDO extends BaseDO {
 	}
 
 	public getDynamicPriceById(dynamicPriceId: string): DynamicPriceDO {
+		if (!dynamicPriceId) { return null; }
 		return _.find(this.dynamicPriceList, dynamicPrice => {
 			return dynamicPrice.id === dynamicPriceId;
 		});

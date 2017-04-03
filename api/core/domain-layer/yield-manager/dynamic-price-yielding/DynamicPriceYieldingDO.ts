@@ -3,7 +3,7 @@ import { IValidationStructure } from '../../../utils/th-validation/structure/cor
 import { ObjectValidationStructure } from '../../../utils/th-validation/structure/ObjectValidationStructure';
 import { PrimitiveValidationStructure } from '../../../utils/th-validation/structure/PrimitiveValidationStructure';
 import { StringValidationRule } from '../../../utils/th-validation/rules/StringValidationRule';
-import { BookingValidationStructures } from '../../bookings/validators/BookingValidationStructures';
+import { CommonValidationStructures } from "../../common/CommonValidations";
 
 export class DynamicPriceYieldingDO {
     priceProductId: string;
@@ -22,7 +22,7 @@ export class DynamicPriceYieldingDO {
             },
             {
                 key: "interval",
-                validationStruct: BookingValidationStructures.getThDateIntervalDOValidationStructure()
+                validationStruct: CommonValidationStructures.getThDateIntervalDOValidationStructure()
             }
         ]);
     }

@@ -11,5 +11,9 @@ export enum MongoPatchType {
     SetInitialValuesForBookingReferenceSequencesOnHotel,
     AddDynamicPricesOnPriceProducts,
     AddDynamicPriceIdsOnBookingPrice,
+    AddDeductedOnCustomerCommissions,
+    AddDeductedCommissionPriceAndEmptyCommissionOnBookingPrice,
+    AddEmptyIntervalListOnPriceProductDiscounts,
+    EncapsulateDiscountInBookingPricePerDayOnBookings,
 
 }

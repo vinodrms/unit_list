@@ -20,7 +20,7 @@ export class CanCancelDaysBeforePolicyDO extends BaseDO implements IPriceProduct
 	}
 	public isValid(): boolean {
 		var rule = NumberValidationRule.buildIntegerNumberRule(0);
-		return rule.validate(this.daysBefore).isValid();
+		return rule.validate(this.daysBefore, "daysBefore").isValid();
 	}
 	public getValueDisplayString(thTranslation: ThTranslation): string {
 		return thTranslation.translate("Can cancel %daysBefore% days before arrival", { daysBefore: this.daysBefore });

@@ -90,7 +90,8 @@ export class DefaultBookingBuilder implements IBookingDataSource {
         booking.fileAttachmentList = [];
         booking.notes = "This is an automatic booking";
 
-        this._bookingUtils.updateBookingPriceUsingRoomCategoryAndSavePPSnapshot(booking, roomCategoryStatsList, priceProduct);
+        let billedCustomer = _.find(customerList, customer => { return customer.id === customerId });
+        this._bookingUtils.updateBookingPriceUsingRoomCategoryAndSavePPSnapshot(booking, roomCategoryStatsList, priceProduct, billedCustomer);
 
         return booking;
     }

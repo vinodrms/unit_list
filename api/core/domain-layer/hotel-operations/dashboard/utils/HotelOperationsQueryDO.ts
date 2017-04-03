@@ -1,7 +1,7 @@
-import {ThDateDO} from '../../../../utils/th-dates/data-objects/ThDateDO';
-import {BookingValidationStructures} from '../../../bookings/validators/BookingValidationStructures';
-import {IValidationStructure} from '../../../../utils/th-validation/structure/core/IValidationStructure';
-import {ObjectValidationStructure} from '../../../../utils/th-validation/structure/ObjectValidationStructure';
+import { ThDateDO } from '../../../../utils/th-dates/data-objects/ThDateDO';
+import { IValidationStructure } from '../../../../utils/th-validation/structure/core/IValidationStructure';
+import { ObjectValidationStructure } from '../../../../utils/th-validation/structure/ObjectValidationStructure';
+import { CommonValidationStructures } from "../../../common/CommonValidations";
 
 export class HotelOperationsQueryDO {
     referenceDate: ThDateDO;
@@ -10,7 +10,7 @@ export class HotelOperationsQueryDO {
         return new ObjectValidationStructure([
             {
                 key: "referenceDate",
-                validationStruct: BookingValidationStructures.getThDateDOValidationStructure()
+                validationStruct: CommonValidationStructures.getThDateDOValidationStructure()
             }
         ]);
     }

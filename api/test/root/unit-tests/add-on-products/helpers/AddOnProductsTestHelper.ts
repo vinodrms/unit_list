@@ -44,4 +44,10 @@ export class AddOnProductsTestHelper {
 		aopDO['id'] = product.id;
 		return aopDO;
 	}
+
+	public getSaveAddOnProductItemWithUpdatedPriceFrom(product: AddOnProductDO) {
+		var aopDO = this.getSaveAddOnProductItemDOFrom(product);
+		aopDO.price = aopDO.price + 100;
+		return aopDO;
+	}
 }

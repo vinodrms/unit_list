@@ -18,6 +18,8 @@ import { IncludedBookingItems } from './IncludedBookingItems';
 import { ConfigCapacityDO } from '../../../data-layer/common/data-objects/bed-config/ConfigCapacityDO';
 import { RoomCategoryStatsDO } from '../../../data-layer/room-categories/data-objects/RoomCategoryStatsDO';
 import { StringOccurenciesIndexer } from "../../../utils/indexers/StringOccurenciesIndexer";
+import { CustomerDO } from "../../../data-layer/customers/data-objects/CustomerDO";
+import { CommissionDO } from "../../../data-layer/common/data-objects/commission/CommissionDO";
 
 import _ = require('underscore');
 
@@ -83,7 +85,7 @@ export class BookingUtils {
      * `groupBookingRoomCategoryIdList`: the list of room category ids that are inside the same group booking; it needs to be passed only when the bookings are initially added to apply the min no rooms discount constraints if they exist
     */
     public updateBookingPriceUsingRoomCategoryAndSavePPSnapshot(bookingDO: BookingDO, roomCategoryStatsList: RoomCategoryStatsDO[],
-        priceProduct: PriceProductDO, groupBookingRoomCategoryIdList?: string[]) {
+        priceProduct: PriceProductDO, billingCustomer: CustomerDO, groupBookingRoomCategoryIdList?: string[]) {
         var indexedBookingInterval = new IndexedBookingInterval(bookingDO.interval);
 
         // update the snapshot of the price product applied on the booking
@@ -114,7 +116,7 @@ export class BookingUtils {
         if (!this._thUtils.isUndefinedOrNull(groupBookingRoomCategoryIdList)) {
             groupBookingRoomCategoryIdIndexer = new StringOccurenciesIndexer(groupBookingRoomCategoryIdList);
         }
-        let discount = bookingDO.priceProductSnapshot.discounts.getDiscountValueFor({
+        let discountPerDayBreakdown = bookingDO.priceProductSnapshot.discounts.getDiscountValuesBreakdownFor({
             indexedBookingInterval: indexedBookingInterval,
             bookingCreationDate: bookingDO.creationDate,
             configCapacity: bookingDO.configCapacity,
@@ -123,9 +125,8 @@ export class BookingUtils {
             roomCategoryIdListFromPriceProduct: bookingDO.priceProductSnapshot.roomCategoryIdList,
             bookingBilledCustomerId: bookingDO.defaultBillingDetails.customerId
         });
-        pricePerDayList = this.getPricePerDayListWithDiscount(pricePerDayList, discount);
+        pricePerDayList = this.getPricePerDayListWithDiscount(pricePerDayList, discountPerDayBreakdown);
 
-        bookingDO.price.appliedDiscountValue = discount;
         bookingDO.price.roomPricePerNightList = pricePerDayList;
         bookingDO.price.roomPricePerNightAvg = this._thUtils.getArrayAverage(pricePerDayList);
         bookingDO.price.roomPricePerNightAvg = this._thUtils.roundNumberToTwoDecimals(bookingDO.price.roomPricePerNightAvg);
@@ -133,10 +134,15 @@ export class BookingUtils {
         bookingDO.price.numberOfNights = indexedBookingInterval.getLengthOfStay();
         bookingDO.price.totalRoomPrice = this._thUtils.getArraySum(pricePerDayList);
         bookingDO.price.totalRoomPrice = this._thUtils.roundNumberToTwoDecimals(bookingDO.price.totalRoomPrice);
+
+        let commission: CommissionDO = billingCustomer.customerDetails.getCommission();
+        bookingDO.price.deductedCommissionPrice = commission.getCommissionFor(bookingDO.price.totalRoomPrice);
+        bookingDO.price.commissionSnapshot = commission;
+
         var includedBookingItems = this.getIncludedInvoiceItems(bookingDO.priceProductSnapshot, bookingDO.configCapacity, indexedBookingInterval);
         bookingDO.price.totalOtherPrice = includedBookingItems.getTotalPrice();
 
-        bookingDO.price.totalBookingPrice = bookingDO.price.totalRoomPrice + bookingDO.price.totalOtherPrice;
+        bookingDO.price.totalBookingPrice = bookingDO.price.totalRoomPrice - bookingDO.price.deductedCommissionPrice + bookingDO.price.totalOtherPrice;
         bookingDO.price.totalBookingPrice = this._thUtils.roundNumberToTwoDecimals(bookingDO.price.totalBookingPrice);
 
         bookingDO.price.breakfast = includedBookingItems.breakfast;
@@ -155,12 +161,13 @@ export class BookingUtils {
         bookingDO.priceProductSnapshot.openIntervalList = [];
         bookingDO.priceProductSnapshot.price.enabledDynamicPriceIdByDate = {};
     }
-    public getPricePerDayListWithDiscount(pricePerDayList: PricePerDayDO[], discount: number): PricePerDayDO[] {
-        return _.map(pricePerDayList, (pricePerDay) => {
-            if (discount > 0.0) {
-                pricePerDay.price = (1 - discount) * pricePerDay.price;
+    public getPricePerDayListWithDiscount(pricePerDayList: PricePerDayDO[], discountPerDayBreakdown: number[]): PricePerDayDO[] {
+        return _.map(pricePerDayList, (pricePerDay, index) => {
+            if (discountPerDayBreakdown[index] > 0.0) {
+                pricePerDay.price = (1 - discountPerDayBreakdown[index]) * pricePerDay.price;
             }
             pricePerDay.price = this._thUtils.roundNumberToTwoDecimals(pricePerDay.price);
+            pricePerDay.discount = discountPerDayBreakdown[index];
             return pricePerDay;
         });
     }

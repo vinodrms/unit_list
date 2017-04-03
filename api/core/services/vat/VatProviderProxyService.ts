@@ -37,7 +37,7 @@ export class VatProviderProxyService implements IVatProvider {
 
     private validVatNumber(): boolean {
         var vatNumberValidationRule = new VatNumberValidationRule();
-        return vatNumberValidationRule.validate(this._vat).isValid();
+        return vatNumberValidationRule.validate(this._vat, "vat").isValid();
     }
 
     private checkVATCore(resolve: { (result: VatDetailsDO): void }, reject: { (err: ThError): void }) {
