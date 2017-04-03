@@ -123,7 +123,7 @@ export class PricePerPersonDO extends BaseDO implements IPriceProductPrice {
 	}
 	private priceIsValid(price: number): boolean {
 		var priceRule = NumberValidationRule.buildPriceNumberRule();
-		return priceRule.validate(price).isValid();
+		return priceRule.validate(price, "price").isValid();
 	}
 	public getRoomCategoryId(): string {
 		return this.roomCategoryId;

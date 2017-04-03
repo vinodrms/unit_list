@@ -1,9 +1,12 @@
 import { PriceProductConstraintContainer } from "../../constraints/constraints-list/utils/PriceProductConstraintContainer";
 import { CustomerDO } from "../../../../../../../../../services/customers/data-objects/CustomerDO";
+import { PriceProductDiscountIntervalWrapperDO } from "../../../../../../../../../services/price-products/data-objects/discount/PriceProductDiscountIntervalWrapperDO";
+import { ThDateIntervalDO } from "../../../../../../../../../services/common/data-objects/th-dates/ThDateIntervalDO";
 
 export class PriceProductDiscountVM {
     private _index: number;
     private _constraintContainer: PriceProductConstraintContainer;
+    private _intervalList: ThDateIntervalDO[];
     private _name: string;
     private _value: number;
     private _customerIdList: string[];
@@ -15,6 +18,13 @@ export class PriceProductDiscountVM {
     public set index(index: number) {
         this._index = index;
     }
+
+    public get intervalList(): ThDateIntervalDO[] {
+        return this._intervalList;
+    }
+    public set intervalList(intervalList: ThDateIntervalDO[] ) {
+        this._intervalList = intervalList;
+    } 
 
     public get constraintContainer(): PriceProductConstraintContainer {
         return this._constraintContainer;
@@ -68,5 +78,9 @@ export class PriceProductDiscountVM {
             }
         });
         this._customerListLabel = label;
+    }
+
+    private removeInterval(index: number) {
+        this.intervalList.splice(index, 1);
     }
 }

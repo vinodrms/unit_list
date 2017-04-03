@@ -13,6 +13,8 @@ import { P10_AddDynamicPricesOnPriceProducts } from "./list/P10_AddDynamicPrices
 import { P11_AddDynamicPriceIdsOnBookingPrice } from "./list/P11_AddDynamicPriceIdsOnBookingPrice";
 import { P12_AddDeductedOnCustomerCommissions } from "./list/P12_AddDeductedOnCustomerCommissions";
 import { P13_AddDeductedCommissionPriceAndEmptyCommissionOnBookingPrice } from "./list/P13_AddDeductedCommissionPriceAndEmptyCommissionOnBookingPrice";
+import { P14_AddEmptyIntervalListOnPriceProductDiscounts } from "./list/P14_AddEmptyIntervalListOnPriceProductDiscounts";
+import { P15_EncapsulateDiscountInBookingPricePerDayOnBookings } from "./list/P15_EncapsulateDiscountInBookingPricePerDayOnBookings";
 
 export class MongoPatchUtils {
 	public static get PatchList(): ATransactionalMongoPatch[] {
@@ -31,7 +33,9 @@ export class MongoPatchUtils {
 			new P11_AddDynamicPriceIdsOnBookingPrice(),
 			new P12_AddDeductedOnCustomerCommissions(),
 			new P13_AddDeductedCommissionPriceAndEmptyCommissionOnBookingPrice(),
-
+			new P14_AddEmptyIntervalListOnPriceProductDiscounts(),
+			new P15_EncapsulateDiscountInBookingPricePerDayOnBookings(),
+			
 		];
 	}
 }

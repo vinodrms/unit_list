@@ -8,6 +8,7 @@ import { InvoiceItemDO } from '../../../../../../../../../../../services/invoice
 import { BookingChangePriceProductRight } from '../../../../../../../../../../../services/bookings/data-objects/BookingEditRights';
 import { ChangePriceProductModalService } from './components/change-pp/services/ChangePriceProductModalService';
 import { BookingCartItemVM } from '../../../../../../../../utils/new-booking/services/search/view-models/BookingCartItemVM';
+import { PricePerDayDO } from "../../../../../../../../../../../services/bookings/data-objects/price/PricePerDayDO";
 
 @Component({
     selector: 'booking-price-product-editor',
@@ -97,14 +98,27 @@ export class BookingPriceProductEditorComponent implements OnInit {
         return this.bookingDO.price.hasDeductedCommission();
     }
     public get discountValueString(): string {
-        return Math.round(this.bookingDO.price.appliedDiscountValue * 100) + "%";
+        let dayTranslation = this._appContext.thTranslation.translate('Day');
+        
+        let discountBreakdown = [];
+        
+        _.forEach(this.bookingDO.price.roomPricePerNightList, (pricePerDay: PricePerDayDO, index) => {
+            discountBreakdown.push(dayTranslation + ' ' + (index + 1) + ': ' + Math.round(pricePerDay.discount * 100) + '%');
+        });
+
+        let discountBreakdownString = '';
+        _.forEach(discountBreakdown, (discount) => {
+            discountBreakdownString += ' ' + discount;
+        });
+
+        return discountBreakdownString;
     }
     public get commissionValueString(): string {
         return this.currencySymbolString + this.bookingDO.price.deductedCommissionPrice;
     }
     public openDiscountInformAlert() {
         let title = this._appContext.thTranslation.translate("Discount");
-        let message = this._appContext.thTranslation.translate("A discount of %discountValue% defined on %priceProduct% has been applied on this booking\'s room price", {
+        let message = this._appContext.thTranslation.translate("A discount defined on %priceProduct% has been applied on this booking\'s room price. Discount breakdown per day: %discountValue%", {
             discountValue: this.discountValueString,
             priceProduct: this.bookingDO.priceProductSnapshot.name
         });

@@ -1,7 +1,8 @@
 import {ValidationResult, InvalidConstraintType} from '../../utils/th-validation/rules/core/ValidationResult';
 import {ThLogger, ThLogLevel} from '../../utils/logging/ThLogger';
 import {ThError} from '../../utils/th-responses/ThError';
-import {ThStatusCode} from '../../utils/th-responses/ThResponse';
+import { ThStatusCode } from '../../utils/th-responses/ThResponse';
+import { IntermediateValidationResult } from "../../utils/th-validation/rules/core/AValidationRule";
 
 export class ValidationResultParser {
 	constructor(private _validationResult: ValidationResult, private _inputDO: Object) {
@@ -26,7 +27,12 @@ export class ValidationResultParser {
 	}
 	private getValidationErrorsJson(): { type: InvalidConstraintType, key: string }[] {
 		var validationErrorsJson = [];
-		this._validationResult.getInvalidConstraintList().forEach((invalidConstraintType: InvalidConstraintType) => {
+		
+		
+
+		_.map(this._validationResult.getInvalidConstraintList(), (result: IntermediateValidationResult) => {
+			return result.constraintType;
+		}).forEach((invalidConstraintType: InvalidConstraintType) => {
 			validationErrorsJson.push({
 				type: invalidConstraintType,
 				key: this.getInvalidConstraintTypeStringRepresentation(invalidConstraintType)

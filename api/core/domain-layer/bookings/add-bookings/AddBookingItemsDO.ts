@@ -1,16 +1,17 @@
-import {DefaultBillingDetailsDO} from '../../../data-layer/bookings/data-objects/default-billing/DefaultBillingDetailsDO';
-import {ThDateIntervalDO} from '../../../utils/th-dates/data-objects/ThDateIntervalDO';
-import {ConfigCapacityDO} from '../../../data-layer/common/data-objects/bed-config/ConfigCapacityDO';
-import {BookingValidationStructures} from '../validators/BookingValidationStructures';
-import {InvoicePaymentMethodType} from '../../../data-layer/invoices/data-objects/payers/InvoicePaymentMethodDO';
-import {IValidationStructure} from '../../../utils/th-validation/structure/core/IValidationStructure';
-import {ObjectValidationStructure} from '../../../utils/th-validation/structure/ObjectValidationStructure';
-import {ArrayValidationStructure} from '../../../utils/th-validation/structure/ArrayValidationStructure';
-import {PrimitiveValidationStructure} from '../../../utils/th-validation/structure/PrimitiveValidationStructure';
-import {EmailValidationRule} from '../../../utils/th-validation/rules/EmailValidationRule';
-import {StringValidationRule} from '../../../utils/th-validation/rules/StringValidationRule';
-import {BooleanValidationRule} from '../../../utils/th-validation/rules/BooleanValidationRule';
-import {NumberInListValidationRule} from '../../../utils/th-validation/rules/NumberInListValidationRule';
+import { DefaultBillingDetailsDO } from '../../../data-layer/bookings/data-objects/default-billing/DefaultBillingDetailsDO';
+import { ThDateIntervalDO } from '../../../utils/th-dates/data-objects/ThDateIntervalDO';
+import { ConfigCapacityDO } from '../../../data-layer/common/data-objects/bed-config/ConfigCapacityDO';
+import { BookingValidationStructures } from '../validators/BookingValidationStructures';
+import { InvoicePaymentMethodType } from '../../../data-layer/invoices/data-objects/payers/InvoicePaymentMethodDO';
+import { IValidationStructure } from '../../../utils/th-validation/structure/core/IValidationStructure';
+import { ObjectValidationStructure } from '../../../utils/th-validation/structure/ObjectValidationStructure';
+import { ArrayValidationStructure } from '../../../utils/th-validation/structure/ArrayValidationStructure';
+import { PrimitiveValidationStructure } from '../../../utils/th-validation/structure/PrimitiveValidationStructure';
+import { EmailValidationRule } from '../../../utils/th-validation/rules/EmailValidationRule';
+import { StringValidationRule } from '../../../utils/th-validation/rules/StringValidationRule';
+import { BooleanValidationRule } from '../../../utils/th-validation/rules/BooleanValidationRule';
+import { NumberInListValidationRule } from '../../../utils/th-validation/rules/NumberInListValidationRule';
+import { CommonValidationStructures } from "../../common/CommonValidations";
 
 export class BookingItemDO {
     interval: ThDateIntervalDO;
@@ -35,7 +36,7 @@ export class AddBookingItemsDO {
                 validationStruct: new ArrayValidationStructure(new ObjectValidationStructure([
                     {
                         key: "interval",
-                        validationStruct: BookingValidationStructures.getThDateIntervalDOValidationStructure()
+                        validationStruct: CommonValidationStructures.getThDateIntervalDOValidationStructure()
                     },
                     {
                         key: "configCapacity",

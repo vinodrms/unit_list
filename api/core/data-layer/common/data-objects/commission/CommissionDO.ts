@@ -36,7 +36,7 @@ export class CommissionDO extends BaseDO {
         else {
             numberValidationRule = NumberValidationRule.buildPercentageNumberRule();
         }
-        return numberValidationRule.validate(this.amount).isValid();
+        return numberValidationRule.validate(this.amount, "amount").isValid();
     }
 
     public getCommissionFor(price: number): number {
