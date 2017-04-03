@@ -15,6 +15,7 @@ import { P12_AddDeductedOnCustomerCommissions } from "./list/P12_AddDeductedOnCu
 import { P13_AddDeductedCommissionPriceAndEmptyCommissionOnBookingPrice } from "./list/P13_AddDeductedCommissionPriceAndEmptyCommissionOnBookingPrice";
 import { P14_AddEmptyIntervalListOnPriceProductDiscounts } from "./list/P14_AddEmptyIntervalListOnPriceProductDiscounts";
 import { P15_EncapsulateDiscountInBookingPricePerDayOnBookings } from "./list/P15_EncapsulateDiscountInBookingPricePerDayOnBookings";
+import { P16_TransformPaymentMetehodIdListOnHotelIntoPaymentMethodInstanceList } from "./list/P16_TransformPaymentMetehodIdListOnHotelIntoPaymentMethodInstanceList";
 
 export class MongoPatchUtils {
 	public static get PatchList(): ATransactionalMongoPatch[] {
@@ -35,7 +36,8 @@ export class MongoPatchUtils {
 			new P13_AddDeductedCommissionPriceAndEmptyCommissionOnBookingPrice(),
 			new P14_AddEmptyIntervalListOnPriceProductDiscounts(),
 			new P15_EncapsulateDiscountInBookingPricePerDayOnBookings(),
-			
+			new P16_TransformPaymentMetehodIdListOnHotelIntoPaymentMethodInstanceList(),
+
 		];
 	}
 }

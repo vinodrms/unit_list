@@ -15,5 +15,6 @@ export enum MongoPatchType {
     AddDeductedCommissionPriceAndEmptyCommissionOnBookingPrice,
     AddEmptyIntervalListOnPriceProductDiscounts,
     EncapsulateDiscountInBookingPricePerDayOnBookings,
-
+    TransformPaymentMetehodIdListOnHotelIntoPaymentMethodInstanceList,
+    
 }
