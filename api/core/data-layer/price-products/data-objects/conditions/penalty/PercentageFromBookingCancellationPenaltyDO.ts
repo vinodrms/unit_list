@@ -17,7 +17,7 @@ export class PercentageFromBookingCancellationPenaltyDO extends BaseDO implement
 	}
 	public isValid(): boolean {
 		var rule = NumberValidationRule.buildPercentageNumberRule();
-		return rule.validate(this.percentage).isValid();
+		return rule.validate(this.percentage, "percentage").isValid();
 	}
 	public getValueDisplayString(thTranslation: ThTranslation): string {
 		return thTranslation.translate("Pay %percentage% % from booking", { percentage: this.percentage * 100 });

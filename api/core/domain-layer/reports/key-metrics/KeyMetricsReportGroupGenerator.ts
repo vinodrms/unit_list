@@ -6,7 +6,6 @@ import { IReportSectionGeneratorStrategy } from '../common/report-section-genera
 import { IValidationStructure } from '../../../utils/th-validation/structure/core/IValidationStructure';
 import { ObjectValidationStructure } from '../../../utils/th-validation/structure/ObjectValidationStructure';
 import { PrimitiveValidationStructure } from '../../../utils/th-validation/structure/PrimitiveValidationStructure';
-import { BookingValidationStructures } from '../../bookings/validators/BookingValidationStructures';
 import { NumberInListValidationRule } from '../../../utils/th-validation/rules/NumberInListValidationRule';
 import { ThDateDO } from '../../../utils/th-dates/data-objects/ThDateDO';
 import { ThDateIntervalDO } from '../../../utils/th-dates/data-objects/ThDateIntervalDO';
@@ -18,6 +17,7 @@ import { KeyMetricsResult, KeyMetricsResultItem } from '../../../domain-layer/yi
 import { ThPeriodType } from './period-converter/ThPeriodDO';
 import { ThDateToThPeriodConverterFactory } from './period-converter/ThDateToThPeriodConverterFactory';
 import { PageOrientation } from '../../../services/pdf-reports/PageOrientation';
+import { CommonValidationStructures } from "../../common/CommonValidations";
 
 export class KeyMetricsReportGroupGenerator extends AReportGeneratorStrategy {
 	private _period: YieldManagerPeriodDO;
@@ -28,11 +28,11 @@ export class KeyMetricsReportGroupGenerator extends AReportGeneratorStrategy {
 		return new ObjectValidationStructure([
 			{
 				key: "startDate",
-				validationStruct: BookingValidationStructures.getThDateDOValidationStructure()
+				validationStruct: CommonValidationStructures.getThDateDOValidationStructure()
 			},
 			{
 				key: "endDate",
-				validationStruct: BookingValidationStructures.getThDateDOValidationStructure()
+				validationStruct: CommonValidationStructures.getThDateDOValidationStructure()
 			},
 			{
 				key: "periodType",

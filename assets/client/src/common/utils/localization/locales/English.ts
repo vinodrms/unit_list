@@ -644,9 +644,9 @@ export var EnglishTranslations: Object = {
 	"Expand": "Expand",
 	"Less": "Less",
 	"No Booking": "No Booking",
-	"A discount of %discountValue% has been applied on the room\'s price": "A discount of %discountValue% has been applied on the room\'s price",
+	"A discount has been applied on the room\'s price": "A discount has been applied on the room\'s price",
 	"Discount": "Discount",
-	"A discount of %discountValue% defined on %priceProduct% has been applied on this booking\'s room price": "A discount of %discountValue% defined on %priceProduct% has been applied on this booking\'s room price",
+	"A discount defined on %priceProduct% has been applied on this booking\'s room price. Discount breakdown per day: %discountValue%": "A discount defined on %priceProduct% has been applied on this booking\'s room price. Discount breakdown per day: %discountValue%",
 	"Deducted Commission": "Deducted Commission",
 	"Reserved": "Reserved",
 	"Are you sure you want to check out this room?": "Are you sure you want to check out this room?",
@@ -857,5 +857,10 @@ export var EnglishTranslations: Object = {
 	"The maximum number of dynamic prices on this price product has been reached.": "The maximum number of dynamic prices on this price product has been reached.",
 	"%noAvailable% out of %noTotal%": "%noAvailable% out of %noTotal%",
 	"Available Rooms": "Available Rooms",
-	"Total Rooms": "Total Rooms"
+	"Total Rooms": "Total Rooms",
+	"Add Interval": "Add Interval",
+	"You cannot add more than 10 intervals on the same discount": "You cannot add more than 10 intervals on the same discount",
+	"Intervals": "Intervals",
+	"No intervals. The discount will apply no matter the booking interval.": "No intervals. The discount will apply no matter the booking interval.",
+	
 };

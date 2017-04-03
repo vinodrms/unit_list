@@ -3,6 +3,7 @@ import { PriceProductDiscountDO } from "../../../../../../../../../services/pric
 import { PriceProductConstraintContainer } from "../../constraints/constraints-list/utils/PriceProductConstraintContainer";
 import { PriceProductConstraintWrapperDO } from "../../../../../../../../../services/price-products/data-objects/constraint/PriceProductConstraintWrapperDO";
 import { PriceProductDiscountVM } from "./PriceProductDiscountVM";
+import { PriceProductDiscountIntervalWrapperDO } from "../../../../../../../../../services/price-products/data-objects/discount/PriceProductDiscountIntervalWrapperDO";
 
 export class PriceProductDiscountContainer {
     private _currentIndex: number;
@@ -24,6 +25,7 @@ export class PriceProductDiscountContainer {
         discountVM.value = discountDO.value;
         discountVM.constraintContainer = new PriceProductConstraintContainer(this._appContext);
         discountVM.constraintContainer.initFromConstraintList(discountDO.constraints.constraintList);
+        discountVM.intervalList = discountDO.intervals.intervalList;
         discountVM.customerIdList = discountDO.customerIdList;
         this._discountVMList.push(discountVM);
     }
@@ -54,6 +56,8 @@ export class PriceProductDiscountContainer {
             discountDO.value = discountVM.value;
             discountDO.constraints = new PriceProductConstraintWrapperDO();
             discountDO.constraints.constraintList = discountVM.constraintContainer.getConstraintDOList();
+            discountDO.intervals = new PriceProductDiscountIntervalWrapperDO();
+            discountDO.intervals.intervalList = discountVM.intervalList;
             discountDO.customerIdList = discountVM.customerIdList;
             return discountDO;
         });

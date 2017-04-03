@@ -20,6 +20,7 @@ import { ShiftReportByPaymentMethodSectionGenerator } from './strategies/ShiftRe
 import { ShiftReportByCategorySectionGenerator } from './strategies/ShiftReportByCategorySectionGenerator';
 import { ShiftReportByAopNameSectionGenerator } from './strategies/ShiftReportByAopNameSectionGenerator';
 import { ShiftReportPaidInvoicesSectionGenerator } from './strategies/ShiftReportPaidInvoicesSectionGenerator';
+import { CommonValidationStructures } from "../../common/CommonValidations";
 
 export class ShiftReportGroupGenerator extends AReportGeneratorStrategy {
 	private _params: ShiftReportParams;
@@ -31,11 +32,11 @@ export class ShiftReportGroupGenerator extends AReportGeneratorStrategy {
 		return new ObjectValidationStructure([
 			{
 				key: "startDate",
-				validationStruct: BookingValidationStructures.getThDateDOValidationStructure()
+				validationStruct: CommonValidationStructures.getThDateDOValidationStructure()
 			},
 			{
 				key: "endDate",
-				validationStruct: BookingValidationStructures.getThDateDOValidationStructure()
+				validationStruct: CommonValidationStructures.getThDateDOValidationStructure()
 			},
 			{
 				key: "startDateTime",

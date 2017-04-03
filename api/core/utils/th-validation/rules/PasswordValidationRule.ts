@@ -1,4 +1,4 @@
-import {AValidationRule} from './core/AValidationRule';
+import { AValidationRule, IntermediateValidationResult } from './core/AValidationRule';
 import {InvalidConstraintType} from './core/ValidationResult';
 import {StringValidationRule} from './StringValidationRule';
 
@@ -15,12 +15,12 @@ export class PasswordValidationRule extends AValidationRule {
 		super(InvalidConstraintType.Password);
 		this._stringValidationRule = new StringValidationRule();
 	}
-	protected validateCore(object: any): boolean {
-		var stringValidationResult = this._stringValidationRule.validate(object);
+	protected validateCore(object: any, key: string): IntermediateValidationResult {
+		var stringValidationResult = this._stringValidationRule.validate(object, key);
 		if (!stringValidationResult.isValid()) {
-			return false;
+			return this.buildIntermediateValidationResult(key, object, false);
 		}
-		return this.validateByPasswordRegex(object);
+		return this.buildIntermediateValidationResult(key, object, this.validateByPasswordRegex(object));
 	}
 	private validateByPasswordRegex(passwd: string): boolean {
 		var valueStr: string = passwd;

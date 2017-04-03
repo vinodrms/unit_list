@@ -1,4 +1,4 @@
-import {AValidationRule} from './core/AValidationRule';
+import { AValidationRule, IntermediateValidationResult } from './core/AValidationRule';
 import {InvalidConstraintType} from './core/ValidationResult';
 
 import _ = require("underscore");
@@ -44,15 +44,15 @@ export class StringValidationRule extends AValidationRule {
 		return this._maxLength;
 	}
 
-	protected validateCore(object: any): boolean {
+	protected validateCore(object: any, key: string): IntermediateValidationResult {
 		if (!_.isString(object)) {
-			return false;
+			return this.buildIntermediateValidationResult(key, object, false);
 		}
 		var str: string = object;
 		if (str.length >= this._minLength && str.length <= this._maxLength) {
-			return true;
+			return this.buildIntermediateValidationResult(key, object, true);
 		}
-		return false;
+		return this.buildIntermediateValidationResult(key, object, false);
 	}
 	public static buildNullable(maxLenght?: number): StringValidationRule {
 		var rule = new StringValidationRule(maxLenght);

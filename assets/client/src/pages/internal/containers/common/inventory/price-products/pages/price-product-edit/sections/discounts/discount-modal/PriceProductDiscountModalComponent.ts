@@ -9,6 +9,9 @@ import { PriceProductConstraintFactory } from "../../../../../../../../../servic
 import { CustomerRegisterModalService } from "../../../../../../customer-register/modal/services/CustomerRegisterModalService";
 import { CustomerDO } from "../../../../../../../../../services/customers/data-objects/CustomerDO";
 import { PriceProductDiscountModalResult } from "./services/utils/PriceProductDiscountModalResult";
+import { ThDateIntervalDO } from "../../../../../../../../../services/common/data-objects/th-dates/ThDateIntervalDO";
+import { ThDateUtils } from "../../../../../../../../../services/common/data-objects/th-dates/ThDateUtils";
+import { PriceProductDiscountIntervalWrapperDO } from "../../../../../../../../../services/price-products/data-objects/discount/PriceProductDiscountIntervalWrapperDO";
 
 @Component({
     selector: 'price-product-discount-modal',
@@ -18,6 +21,7 @@ import { PriceProductDiscountModalResult } from "./services/utils/PriceProductDi
 export class PriceProductDiscountModalComponent extends BaseComponent implements ICustomModalComponent {
     public static MaxCustomers = 10;
     public static MaxConstraints = 10;
+    public static MaxIntervals = 10;
     private _constraintFactory: PriceProductConstraintFactory;
 
     discount: PriceProductDiscountDO;
@@ -32,6 +36,8 @@ export class PriceProductDiscountModalComponent extends BaseComponent implements
         this.discount = new PriceProductDiscountDO();
         this.discount.constraints = new PriceProductConstraintWrapperDO();
         this.discount.constraints.constraintList = [];
+        this.discount.intervals = new PriceProductDiscountIntervalWrapperDO();
+        this.discount.intervals.intervalList = [];
         this.discount.customerIdList = [];
         this.customerMap = {};
     }
@@ -85,6 +91,26 @@ export class PriceProductDiscountModalComponent extends BaseComponent implements
     public removeConstraintAtIndex(index: number) {
         this.constraintIdList.splice(index, 1);
         this.discount.constraints.constraintList.splice(index, 1);
+    }
+
+    public createNewInterval() {
+        console.log("create new interval");
+        if (this.discount.intervals.intervalList.length > PriceProductDiscountModalComponent.MaxIntervals) {
+            let errorMessage = this._appContext.thTranslation.translate("You cannot add more than 10 intervals on the same discount");
+            this._appContext.toaster.error(errorMessage);
+            return;
+        }
+        this.discount.intervals.intervalList.push(this.getDefaultInterval());
+    }
+    private getDefaultInterval(): ThDateIntervalDO {
+        let dateUtils = new ThDateUtils();
+        return dateUtils.getTodayToTomorrowInterval();
+    }
+    public didSelectInterval(interval: ThDateIntervalDO, index: number) {
+        this.discount.intervals.intervalList[index] = interval;
+	}
+    public removeIntervalAtIndex(index: number) {
+        this.discount.intervals.intervalList.splice(index, 1);
     }
 
     public addDiscount() {

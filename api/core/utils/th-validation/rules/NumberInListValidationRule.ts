@@ -1,4 +1,4 @@
-import {AValidationRule} from './core/AValidationRule';
+import { AValidationRule, IntermediateValidationResult } from './core/AValidationRule';
 import {InvalidConstraintType} from './core/ValidationResult';
 import {NumberValidationRule} from './NumberValidationRule';
 
@@ -11,11 +11,11 @@ export class NumberInListValidationRule extends AValidationRule {
 		super(InvalidConstraintType.NumberInList);
 		this._numberValidationRule = new NumberValidationRule();
 	}
-	protected validateCore(object: any): boolean {
-		var numberValidationResult = this._numberValidationRule.validate(object);
+	protected validateCore(object: any, key: string): IntermediateValidationResult {
+		var numberValidationResult = this._numberValidationRule.validate(object, key);
 		if (!numberValidationResult.isValid()) {
-			return false;
+			return this.buildIntermediateValidationResult(key, object, false);
 		}
-		return _.contains(this._validValuesList, object);
+		return this.buildIntermediateValidationResult(key, object, _.contains(this._validValuesList, object));
 	}
 }
