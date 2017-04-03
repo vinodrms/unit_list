@@ -23,14 +23,14 @@ export class P15_EncapsulateDiscountInBookingPricePerDayOnBookings extends APagi
     }
 
     public static encapsulateDiscountInPricePerDay(bookingGroup: BookingGroupDO) {
-        _.forEach(bookingGroup.bookingList, (booking: BookingDO) => {
+        _.forEach(bookingGroup.bookingList, (booking: BookingDO) => {           
             let appliedDiscount = booking.price["appliedDiscountValue"];
-            delete booking.price["appliedDiscountValue"];
-
-            let discount = _.isNumber(appliedDiscount)? appliedDiscount : 0.0;
-            _.forEach(booking.price.roomPricePerNightList, (pricePerDay: PricePerDayDO) => {
-                pricePerDay.discount = discount;
-            });
+            if(_.isNumber(appliedDiscount)) {
+                delete booking.price["appliedDiscountValue"];
+                _.forEach(booking.price.roomPricePerNightList, (pricePerDay: PricePerDayDO) => {
+                    pricePerDay.discount = appliedDiscount;
+                });
+            }
         });
     }
 }
