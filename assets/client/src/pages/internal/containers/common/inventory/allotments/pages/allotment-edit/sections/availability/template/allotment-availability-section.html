@@ -6,7 +6,7 @@
 				<span class="input-group-addon"><small> 
 					{{ getISOWeekDayString(availabilityForDay.isoWeekDay) | translate | thtrim:2 }} 
 				</small> </span>
-				<input type="number" class="form-control" [(ngModel)]="availabilityForDay.availableCount" name="availableCount" />
+				<input type="number" class="form-control" [(ngModel)]="availabilityForDay.availableCount" [readonly]="readonly" name="availableCount" />
 			</div>
 			<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Invalid Number of Rooms' | translate }}</small></label>
 		</div>
