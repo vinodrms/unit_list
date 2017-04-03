@@ -6,7 +6,7 @@ import { PriceProductDiscountDO } from "../../../../../../data-layer/price-produ
 import _ = require('underscore');
 
 export class P14_AddEmptyIntervalListOnPriceProductDiscounts extends APaginatedTransactionalMongoPatch {
-    
+
     protected getMongoRepository(): MongoRepository {
         return this._priceProductRepository;
     }
@@ -21,14 +21,19 @@ export class P14_AddEmptyIntervalListOnPriceProductDiscounts extends APaginatedT
     }
 
     public static addEmptyIntervalListOnDiscounts(priceProduct) {
+        if (!_.isObject(priceProduct.discounts)) {
+            priceProduct.discounts = {
+                discountList: []
+            };
+        }
         if (_.isArray(priceProduct.discounts.discountList)) {
             _.forEach(priceProduct.discounts.discountList, (discount: any) => {
-                if(_.isUndefined(discount.intervals)) {
+                if (_.isUndefined(discount.intervals)) {
                     discount.intervals = {
                         "intervalList": []
                     };
                 }
-            });   
+            });
         }
     }
 }
