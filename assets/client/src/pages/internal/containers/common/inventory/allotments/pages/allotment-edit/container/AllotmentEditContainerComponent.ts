@@ -1,18 +1,18 @@
-import {Component, AfterViewInit, ViewChild, Input, Output, EventEmitter} from '@angular/core';
-import {BaseComponent} from '../../../../../../../../../common/base/BaseComponent';
-import {TranslationPipe} from '../../../../../../../../../common/utils/localization/TranslationPipe';
-import {AppContext, ThError} from '../../../../../../../../../common/utils/AppContext';
-import {CustomScroll} from '../../../../../../../../../common/utils/directives/CustomScroll';
-import {AllotmentVM} from '../../../../../../../services/allotments/view-models/AllotmentVM';
-import {AllotmentDO, AllotmentStatus} from '../../../../../../../services/allotments/data-objects/AllotmentDO';
-import {CustomerDO} from '../../../../../../../services/customers/data-objects/CustomerDO';
-import {AllotmentEditSectionContainer} from './utils/AllotmentEditSectionContainer';
-import {AllotmentEditTopSectionComponent} from '../sections/top-section/AllotmentEditTopSectionComponent';
-import {AllotmentOpenIntervalSectionComponent} from '../sections/open-interval/AllotmentOpenIntervalSectionComponent';
-import {AllotmentAvailabilitySectionComponent} from '../sections/availability/AllotmentAvailabilitySectionComponent';
-import {AllotmentEditConstraintsSectionComponent} from '../sections/constraints/constraint-list/AllotmentEditConstraintsSectionComponent';
-import {AllotmentNotesSectionComponent} from '../sections/notes/AllotmentNotesSectionComponent';
-import {AllotmentsService} from '../../../../../../../services/allotments/AllotmentsService';
+import { Component, AfterViewInit, ViewChild, Input, Output, EventEmitter } from '@angular/core';
+import { BaseComponent } from '../../../../../../../../../common/base/BaseComponent';
+import { TranslationPipe } from '../../../../../../../../../common/utils/localization/TranslationPipe';
+import { AppContext, ThError } from '../../../../../../../../../common/utils/AppContext';
+import { CustomScroll } from '../../../../../../../../../common/utils/directives/CustomScroll';
+import { AllotmentVM } from '../../../../../../../services/allotments/view-models/AllotmentVM';
+import { AllotmentDO, AllotmentStatus } from '../../../../../../../services/allotments/data-objects/AllotmentDO';
+import { CustomerDO } from '../../../../../../../services/customers/data-objects/CustomerDO';
+import { AllotmentEditSectionContainer } from './utils/AllotmentEditSectionContainer';
+import { AllotmentEditTopSectionComponent } from '../sections/top-section/AllotmentEditTopSectionComponent';
+import { AllotmentOpenIntervalSectionComponent } from '../sections/open-interval/AllotmentOpenIntervalSectionComponent';
+import { AllotmentAvailabilitySectionComponent } from '../sections/availability/AllotmentAvailabilitySectionComponent';
+import { AllotmentEditConstraintsSectionComponent } from '../sections/constraints/constraint-list/AllotmentEditConstraintsSectionComponent';
+import { AllotmentNotesSectionComponent } from '../sections/notes/AllotmentNotesSectionComponent';
+import { AllotmentsService } from '../../../../../../../services/allotments/AllotmentsService';
 
 @Component({
 	selector: 'allotment-edit-container',
@@ -75,6 +75,7 @@ export class AllotmentEditContainerComponent extends BaseComponent implements Af
 		this.isLoading = false;
 		this.didSubmit = false;
 		if (this._allotmentVM.allotment.status === AllotmentStatus.Active) {
+			this._availabilitySectionComponent.readonly = false;
 			this._notesSectionComponent.readonly = false;
 		}
 	}
