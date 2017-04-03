@@ -4,9 +4,9 @@ import { ReportGroupMeta } from "../common/result/ReportGroup";
 import { IReportSectionGeneratorStrategy } from "../common/report-section-generator/IReportSectionGeneratorStrategy";
 import { ObjectValidationStructure } from "../../../utils/th-validation/structure/ObjectValidationStructure";
 import { PageOrientation } from "../../../services/pdf-reports/PageOrientation";
-import { ArrivalsReportSectionGeneratorStrategy } from "./startegies/ArrivalsReportSectionGeneratorStrategy";
-import { InHouseReportSectionGeneratorStrategy } from "./startegies/InHouseReportSectionGeneratorStrategy";
-import { DeparturesReportSectionGeneratorStrategy } from "./startegies/DeparturesReportSectionGeneratorStrategy";
+import { ArrivalsReportSectionGeneratorStrategy } from "./strategies/ArrivalsReportSectionGeneratorStrategy";
+import { InHouseReportSectionGeneratorStrategy } from "./strategies/InHouseReportSectionGeneratorStrategy";
+import { DeparturesReportSectionGeneratorStrategy } from "./strategies/DeparturesReportSectionGeneratorStrategy";
 
 export class HousekeepingReportGroupGenerator extends AReportGeneratorStrategy {
     
