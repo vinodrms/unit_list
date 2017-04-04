@@ -12,6 +12,8 @@ import { AddOnProductCategoryDO, AddOnProductCategoryType } from '../../../data-
 import { BookingAggregatedData } from '../aggregators/BookingAggregatedData';
 import { InvoiceItemDO } from '../../../data-layer/invoices/data-objects/items/InvoiceItemDO';
 import { HotelDO } from '../../../data-layer/hotel/data-objects/HotelDO';
+import { PriceProductCancellationPenaltyType } from "../../../data-layer/price-products/data-objects/conditions/penalty/IPriceProductCancellationPenalty";
+import { PriceProductCancellationPolicyType } from "../../../data-layer/price-products/data-objects/conditions/cancellation/IPriceProductCancellationPolicy";
 
 import _ = require('underscore');
 
@@ -209,17 +211,28 @@ export class BookingConfirmationVM {
         this.constraints = '';
         var constraintStringList = this._bookingAggregatedData.booking.priceProductSnapshot.constraints.getValueDisplayStringList(this._thTranslation);
 
-        if (this._thUtils.isUndefinedOrNull(constraintStringList) || _.isEmpty(constraintStringList)) {
-            this.constraints = this._notAvailableTranslatedLabel;
-        }
-        else {
+        if (!this._thUtils.isUndefinedOrNull(constraintStringList) && !_.isEmpty(constraintStringList)) {
             _.forEach(constraintStringList, (constraintStr: string) => {
                 this.constraints += constraintStr + '; ';
             });
         }
     }
     private initCancellationPolicy() {
-        this.cancellationPolicyAndPenalty = this._bookingAggregatedData.booking.priceProductSnapshot.conditions.getValueDisplayString(this._thTranslation);
+        this.cancellationPolicyAndPenalty = '';
+
+        let ppCancellationConditions = this._bookingAggregatedData.booking.priceProductSnapshot.conditions;
+        if(ppCancellationConditions.penaltyType != PriceProductCancellationPenaltyType.NoPenalty ||
+            ppCancellationConditions.policyType != PriceProductCancellationPolicyType.NoPolicy) {
+                this.cancellationPolicyAndPenalty = this._bookingAggregatedData.booking.priceProductSnapshot.conditions.getValueDisplayString(this._thTranslation);               
+            }
+    }
+
+    public get hasCancellationPolicyOrPenalty(): boolean {
+        return this.cancellationPolicyAndPenalty.length > 0;
+    }
+
+    public get hasConstraints(): boolean {
+        return this.constraints.length > 0;
     }
 
     public get hasOtherAopsIncludedInPrice(): boolean {

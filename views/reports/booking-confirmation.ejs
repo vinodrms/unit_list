@@ -113,7 +113,7 @@
                     <!--<span><%= bodyBedSizesLabel %>: <%= bookingConfirmationVM.bedSizes %></span>-->
                 </div>
             </div>
-            
+
             <%if (bookingConfirmationVM.hasIncludedInPriceAops || bookingConfirmationVM.hasReservedAops) {%>
             <hr/>
 
@@ -164,22 +164,37 @@
                 </div>
             </div>
 
+            <%if (bookingConfirmationVM.hasCancellationPolicyOrPenalty || bookingConfirmationVM.hasConstraints) {%>
             <hr/>
             
             <div class="row">
+                
+                <%if (bookingConfirmationVM.hasCancellationPolicyOrPenalty) {%>
                 <div class="col-md-6">
+                    
+                    <%if (bookingConfirmationVM.hasConstraints) {%>
                     <div style="border-right: black solid; border-right-width: 1px; padding-right: 10px; min-height: 80px;"> 
+                    <% } else{ %>
+                    <div style="padding-right: 10px; min-height: 80px;"> 
+                    <%}%>    
+
                         <span style="font-size: 12px;"><b><%= bodyCancellationPolicyLabel %></b></span><br>
                         <span style="font-size: 9px;"><%= bookingConfirmationVM.cancellationPolicyAndPenalty %></span>
                     </div>
                 </div>
+                <%}%>
+                
+                <%if (bookingConfirmationVM.hasConstraints) {%>
                 <div class="col-md-6">
                     <div style="min-height: 80px;">
                         <span style="font-size: 12px;"><b><%= bodyConstraintsLabel %></b></span><br>
                         <span style="font-size: 9px;"><%= bookingConfirmationVM.constraints %></span>
                     </div>
                 </div>
+                <%}%>
+                
             </div>
+            <%}%>
 
             <div class="row">
                 <div class="col-md-12" style="text-align:center; width:100%; padding-top: 15px;">
