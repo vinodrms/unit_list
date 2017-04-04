@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AppContext, ThError} from '../../../../../../../../common/utils/AppContext';
 import {BaseComponent} from '../../../../../../../../common/base/BaseComponent';
 import {ICustomModalComponent, ModalSize} from '../../../../../../../../common/utils/modals/utils/ICustomModalComponent';
@@ -30,7 +30,7 @@ import {RoomMaintenanceStatus} from '../../../../../../services/rooms/data-objec
         EagerBookingsService, BookingOccupancyService,
         HotelOperationsRoomService]
 })
-export class AssignRoomModalComponent extends BaseComponent implements ICustomModalComponent {
+export class AssignRoomModalComponent extends BaseComponent implements ICustomModalComponent, OnInit {
     selectedRoomVM: RoomVM;
     selectedRoomCategoryId: string;
     isAssigningRoom: boolean = false;
@@ -38,8 +38,17 @@ export class AssignRoomModalComponent extends BaseComponent implements ICustomMo
     constructor(private _appContext: AppContext,
         private _modalDialogRef: ModalDialogRef<BookingDO>,
         private _modalInput: AssignRoomModalInput,
-        private _hotelOperationsRoomService: HotelOperationsRoomService) {
+        private _hotelOperationsRoomService: HotelOperationsRoomService,
+        private _roomsService: RoomsService) {
         super();
+    }
+
+    ngOnInit() {
+        if (this.didSelectRoom()) {
+            this._roomsService.getRoomById(this._modalInput.assignRoomParam.roomId).subscribe((roomVM: RoomVM) => {
+                this.selectedRoomVM = roomVM;
+            });
+        };
     }
 
     public closeDialog() {
@@ -69,8 +78,8 @@ export class AssignRoomModalComponent extends BaseComponent implements ICustomMo
     }
 
     public applyRoomAssign() {
-        if (!this._modalInput.didSelectRoom() || !this.selectedRoomCategoryId || this.isAssigningRoom) { return };
-        if (this.selectedRoomVM.room.maintenanceStatus != RoomMaintenanceStatus.Clean) {
+        if (!this._modalInput.didSelectRoom() || !this.selectedRoomCategoryId || this.isAssigningRoom || !this.selectedRoomVM) { return };
+        if (this.selectedRoomVM && this.selectedRoomVM.room.maintenanceStatus != RoomMaintenanceStatus.Clean) {
             var roomNotCleanWarningString = this._appContext.thTranslation.translate('The room is not clean.');
             var roomNotCleanWarningTitle = this._appContext.thTranslation.translate('Room maintenance warning');
             this._appContext.modalService.confirm(roomNotCleanWarningTitle, roomNotCleanWarningString, { positive: this._appContext.thTranslation.translate("Continue Anyway"), negative: this._appContext.thTranslation.translate("Back") },
