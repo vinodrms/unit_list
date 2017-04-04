@@ -34,6 +34,7 @@ export class AssignRoomModalComponent extends BaseComponent implements ICustomMo
     selectedRoomVM: RoomVM;
     selectedRoomCategoryId: string;
     isAssigningRoom: boolean = false;
+    isLoading: boolean = false;
 
     constructor(private _appContext: AppContext,
         private _modalDialogRef: ModalDialogRef<BookingDO>,
@@ -45,8 +46,13 @@ export class AssignRoomModalComponent extends BaseComponent implements ICustomMo
 
     ngOnInit() {
         if (this.didSelectRoom()) {
+            this.isLoading = true;
             this._roomsService.getRoomById(this._modalInput.assignRoomParam.roomId).subscribe((roomVM: RoomVM) => {
                 this.selectedRoomVM = roomVM;
+                this.isLoading = false;
+            }, (err: ThError) => {
+                this._appContext.toaster.error(err.message);
+                this.isLoading = false;
             });
         };
     }
