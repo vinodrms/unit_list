@@ -135,11 +135,27 @@ export class RoomCardComponent {
 									roomId: this.roomVM.roomVM.room.id,
 									roomCategoryId: this.roomVM.roomVM.room.categoryId
 								};
-								this._operationRoomService.checkIn(assignRoomParams).subscribe((r) => {
-									this.dropped.emit(outcome);
-								}, (e: any) => {
-									this._appContext.toaster.error(e.message);
-								})
+								if (this.roomVM.roomVM.room.maintenanceStatus != RoomMaintenanceStatus.Clean) {
+									var roomNotCleanWarningString = this._appContext.thTranslation.translate('The room is not clean.');
+									var roomNotCleanWarningTitle = this._appContext.thTranslation.translate('Room maintenance warning');
+									this._appContext.modalService.confirm(roomNotCleanWarningTitle, roomNotCleanWarningString, { positive: this._appContext.thTranslation.translate("Continue Anyway"), negative: this._appContext.thTranslation.translate("Back") },
+										() => {
+											this._operationRoomService.checkIn(assignRoomParams).subscribe((r) => {
+												this.dropped.emit(outcome);
+											}, (e: any) => {
+												this._appContext.toaster.error(e.message);
+											})
+										},
+										() => {
+											this.dropped.emit(outcome);
+										});
+								} else {
+									this._operationRoomService.checkIn(assignRoomParams).subscribe((r) => {
+										this.dropped.emit(outcome);
+									}, (e: any) => {
+										this._appContext.toaster.error(e.message);
+									})
+								}
 							}
 							else if (this.roomVM.canUpgrade(arrivalItem)) {
 								this.openCheckInModal(arrivalItem);

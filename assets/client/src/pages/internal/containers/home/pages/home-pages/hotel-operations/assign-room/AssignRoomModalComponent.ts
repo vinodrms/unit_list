@@ -20,6 +20,7 @@ import {EagerCustomersService} from '../../../../../../services/customers/EagerC
 import {RoomCategoriesStatsService} from '../../../../../../services/room-categories/RoomCategoriesStatsService';
 import {RoomsService} from '../../../../../../services/rooms/RoomsService';
 import {EagerBookingsService} from '../../../../../../services/bookings/EagerBookingsService';
+import {RoomMaintenanceStatus} from '../../../../../../services/rooms/data-objects/RoomDO';
 
 @Component({
     selector: 'assign-room-modal',
@@ -69,7 +70,26 @@ export class AssignRoomModalComponent extends BaseComponent implements ICustomMo
 
     public applyRoomAssign() {
         if (!this._modalInput.didSelectRoom() || !this.selectedRoomCategoryId || this.isAssigningRoom) { return };
+        if (this.selectedRoomVM.room.maintenanceStatus != RoomMaintenanceStatus.Clean) {
+            var roomNotCleanWarningString = this._appContext.thTranslation.translate('The room is not clean.');
+            var roomNotCleanWarningTitle = this._appContext.thTranslation.translate('Room maintenance warning');
+            this._appContext.modalService.confirm(roomNotCleanWarningTitle, roomNotCleanWarningString, { positive: this._appContext.thTranslation.translate("Continue Anyway"), negative: this._appContext.thTranslation.translate("Back") },
+                () => {
+                    this.assignRoom();
+                },
+                () => {
+                    return;
+                });
+        } else {
+            this.assignRoom();
+        }
+    }
 
+    public get strategyButtonText(): string {
+        return this._modalInput.assignRoomStrategy.getStrategyButtonText();
+    }
+
+    private assignRoom() {
         this.isAssigningRoom = true;
         var assignRoomParams: AssignRoomParam = {
             groupBookingId: this._modalInput.assignRoomParam.groupBookingId,
@@ -90,9 +110,5 @@ export class AssignRoomModalComponent extends BaseComponent implements ICustomMo
             this.isAssigningRoom = false;
             this._appContext.toaster.error(err.message);
         });
-    }
-
-    public get strategyButtonText(): string {
-        return this._modalInput.assignRoomStrategy.getStrategyButtonText();
     }
 }
