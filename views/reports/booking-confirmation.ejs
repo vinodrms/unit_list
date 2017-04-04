@@ -113,25 +113,45 @@
                     <!--<span><%= bodyBedSizesLabel %>: <%= bookingConfirmationVM.bedSizes %></span>-->
                 </div>
             </div>
-
+            
+            <%if (bookingConfirmationVM.hasIncludedInPriceAops || bookingConfirmationVM.hasReservedAops) {%>
             <hr/>
 
             <div class="row" style="min-height: 50px;">
+            
+                <%if (bookingConfirmationVM.hasIncludedInPriceAops) {%>
                 <div class="col-md-6">
+                    <%if (bookingConfirmationVM.hasReservedAops) {%>
                     <div style="border-right: black solid; border-right-width: 1px; padding-right: 10px; min-height: 50px;"> 
+                    <% } else{ %>
+                    <div style="padding-right: 10px; min-height: 50px;"> 
+                    <%}%>
+                        
                         <span style="font-size: 12px;"><b><%= bodyAddOnProductsLabel %></b></span><br>
+                        
+                        <%if (bookingConfirmationVM.hasBreakfastAopIncludedInPrice) {%>
                         <span style="font-size: 9px;"><%= bodyBreakfastAopLabel %>: <%= bookingConfirmationVM.breakfastAop %></span><br>
+                        <%}%>
+                        
+                        <%if (bookingConfirmationVM.hasOtherAopsIncludedInPrice) {%>
                         <span style="font-size: 9px;"><%= bodyOthersAopLabel %>: <%= bookingConfirmationVM.otherAops %></span>
+                        <%}%>
+
                     </div>
                 </div>
+                <%}%>
+
                 <div class="col-md-6">
-                    <div style="min-height: 50px;">
-                        <span style="font-size: 12px;"><b><%= bodyReservedAddOnProductsLabel %></b></span><br>
-                        <span style="font-size: 9px;"> <%= bookingConfirmationVM.reservedAops %> </span><br>
-                        <span style="font-size: 9px;"> <%= bookingConfirmationVM.reservedAopsDescription %> </span><br>
-                    </div>
+                    <%if (bookingConfirmationVM.hasReservedAops) {%>
+                        <div style="min-height: 50px;">
+                            <span style="font-size: 12px;"><b><%= bodyReservedAddOnProductsLabel %></b></span><br>
+                            <span style="font-size: 9px;"> <%= bookingConfirmationVM.reservedAops %> </span><br>
+                            <span style="font-size: 9px;"> <%= bookingConfirmationVM.reservedAopsDescription %> </span><br>
+                        </div>
+                    <%}%>
                 </div>
             </div>
+            <%}%>
 
             <hr/>
 

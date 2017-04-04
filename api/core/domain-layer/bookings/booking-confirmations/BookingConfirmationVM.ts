@@ -153,7 +153,6 @@ export class BookingConfirmationVM {
             this.breakfastAop += bookingPrice.breakfast.meta.getDisplayName(this._thTranslation) + " (" + this._thTranslation.translate("Included in Room Price") + ")";
             return;
         }
-        this.breakfastAop += this._notAvailableTranslatedLabel;
     }
     private initOthersAopsDisplayText() {
         this.otherAops = '';
@@ -166,18 +165,12 @@ export class BookingConfirmationVM {
             itemDisplayString += " (" + this.ccyCode + aopPrice + "); ";
             this.otherAops += itemDisplayString;
         });
-
-        if (this.otherAops.length == 0) {
-            this.otherAops = this._notAvailableTranslatedLabel;
-        }
     }
     private initReservedAopsDisplayText() {
-        var reservedAddOnProductIdList: string[] = this._bookingAggregatedData.booking.reservedAddOnProductIdList;
-        if (this._thUtils.isUndefinedOrNull(reservedAddOnProductIdList) || !_.isArray(reservedAddOnProductIdList)) {
-            this.reservedAops = this._notAvailableTranslatedLabel;
-            this.reservedAopsDescription = '';
-        }
+        this.reservedAopsDescription = '';
         this.reservedAops = '';
+
+        var reservedAddOnProductIdList: string[] = this._bookingAggregatedData.booking.reservedAddOnProductIdList;
         var reservedAopMap: { [id: string]: number; } = _.countBy(reservedAddOnProductIdList, (aopId: string) => { return aopId });
         var aopIdList: string[] = Object.keys(reservedAopMap);
         _.forEach(aopIdList, (aopId: string) => {
@@ -191,11 +184,7 @@ export class BookingConfirmationVM {
                 this.reservedAops += noReserved + " x " + addOnProduct.name + ' (' + this.ccyCode + ' ' + totalPrice + ')';
             }
         });
-        if (this.reservedAops.length == 0) {
-            this.reservedAops = "None reserved. Please contact the property for details.";
-            this.reservedAopsDescription = '';
-        }
-        else {
+        if (this.reservedAops.length > 0) {
             this.reservedAopsDescription = this._thTranslation.translate("* Not included in the reservation's price");
         }
     }
@@ -231,5 +220,21 @@ export class BookingConfirmationVM {
     }
     private initCancellationPolicy() {
         this.cancellationPolicyAndPenalty = this._bookingAggregatedData.booking.priceProductSnapshot.conditions.getValueDisplayString(this._thTranslation);
+    }
+
+    public get hasOtherAopsIncludedInPrice(): boolean {
+        return this.otherAops.length > 0;
+    }
+
+    public get hasBreakfastAopIncludedInPrice(): boolean {
+        return this.breakfastAop.length > 0;
+    }
+
+    public get hasIncludedInPriceAops(): boolean {
+        return this.hasOtherAopsIncludedInPrice || this.hasBreakfastAopIncludedInPrice;
+    }
+
+    public get hasReservedAops(): boolean {
+        return this.reservedAops.length > 0;
     }
 }
