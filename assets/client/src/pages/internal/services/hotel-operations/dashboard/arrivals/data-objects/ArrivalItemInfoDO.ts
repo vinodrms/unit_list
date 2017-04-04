@@ -20,9 +20,10 @@ export class ArrivalItemInfoDO extends BaseDO {
     groupBookingId: string;
     bookingInterval: ThDateIntervalDO;
     bookingCapacity: ConfigCapacityDO;
+    bookingNotes: string;
 
     protected getPrimitivePropertyKeys(): string[] {
-        return ["itemStatus", "roomCategoryId", "reservedRoomId", "customerId", "customerName", "bookingId", "groupBookingId"];
+        return ["itemStatus", "roomCategoryId", "reservedRoomId", "customerId", "customerName", "bookingId", "groupBookingId", "bookingNotes"];
     }
     public buildFromObject(object: Object) {
         super.buildFromObject(object);
