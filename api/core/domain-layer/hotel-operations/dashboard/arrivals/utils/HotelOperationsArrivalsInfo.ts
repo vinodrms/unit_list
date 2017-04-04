@@ -28,6 +28,7 @@ export interface ArrivalItemInfo {
     showCancellationTimestamp: boolean;
     cancellationTimestamp: ThTimestampDO;
     cancellationTimestampDisplayString: string;
+    bookingNotes: string;
 }
 
 export class HotelOperationsArrivalsInfo {

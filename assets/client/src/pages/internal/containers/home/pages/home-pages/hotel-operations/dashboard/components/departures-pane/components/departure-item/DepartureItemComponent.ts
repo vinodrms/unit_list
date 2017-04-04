@@ -37,4 +37,9 @@ export class DepartureItemComponent {
 		var customerId = this.departureItemVM.departureItemDO.customerId;
 		this._modalService.openInvoiceModal(invoiceGroupId, customerId);
 	}
+
+	public openBookingNotesModal() {
+		var bookingNotes = this.departureItemVM.departureItemDO.bookingNotes;
+		this._modalService.openBookingNotesModal(bookingNotes);
+	}
 }
