@@ -1,26 +1,26 @@
-import {Component, OnInit} from '@angular/core';
-import {AppContext, ThError} from '../../../../../../../../common/utils/AppContext';
-import {BaseComponent} from '../../../../../../../../common/base/BaseComponent';
-import {ICustomModalComponent, ModalSize} from '../../../../../../../../common/utils/modals/utils/ICustomModalComponent';
-import {ModalDialogRef} from '../../../../../../../../common/utils/modals/utils/ModalDialogRef';
-import {PriceSelectionVM} from './components/price-selection/services/view-models/PriceSelectionVM';
-import {BookingDO} from '../../../../../../services/bookings/data-objects/BookingDO';
-import {RoomVM} from '../../../../../../services/rooms/view-models/RoomVM';
-import {AssignRoomParam} from '../../../../../../services/hotel-operations/room/utils/AssignRoomParam';
-import {RoomSelectionComponent} from './components/room-selection/RoomSelectionComponent';
-import {PriceSelectionComponent} from './components/price-selection/PriceSelectionComponent';
-import {AssignRoomModalInput} from './services/utils/AssignRoomModalInput';
+import { Component, OnInit } from '@angular/core';
+import { AppContext, ThError } from '../../../../../../../../common/utils/AppContext';
+import { BaseComponent } from '../../../../../../../../common/base/BaseComponent';
+import { ICustomModalComponent, ModalSize } from '../../../../../../../../common/utils/modals/utils/ICustomModalComponent';
+import { ModalDialogRef } from '../../../../../../../../common/utils/modals/utils/ModalDialogRef';
+import { PriceSelectionVM } from './components/price-selection/services/view-models/PriceSelectionVM';
+import { BookingDO } from '../../../../../../services/bookings/data-objects/BookingDO';
+import { RoomVM } from '../../../../../../services/rooms/view-models/RoomVM';
+import { AssignRoomParam } from '../../../../../../services/hotel-operations/room/utils/AssignRoomParam';
+import { RoomSelectionComponent } from './components/room-selection/RoomSelectionComponent';
+import { PriceSelectionComponent } from './components/price-selection/PriceSelectionComponent';
+import { AssignRoomModalInput } from './services/utils/AssignRoomModalInput';
 
-import {SETTINGS_PROVIDERS} from '../../../../../../services/settings/SettingsProviders';
-import {BookingOccupancyService} from '../../../../../../services/bookings/occupancy/BookingOccupancyService';
-import {HotelService} from '../../../../../../services/hotel/HotelService';
-import {HotelAggregatorService} from '../../../../../../services/hotel/HotelAggregatorService';
-import {HotelOperationsRoomService} from '../../../../../../services/hotel-operations/room/HotelOperationsRoomService';
-import {EagerCustomersService} from '../../../../../../services/customers/EagerCustomersService';
-import {RoomCategoriesStatsService} from '../../../../../../services/room-categories/RoomCategoriesStatsService';
-import {RoomsService} from '../../../../../../services/rooms/RoomsService';
-import {EagerBookingsService} from '../../../../../../services/bookings/EagerBookingsService';
-import {RoomMaintenanceStatus} from '../../../../../../services/rooms/data-objects/RoomDO';
+import { SETTINGS_PROVIDERS } from '../../../../../../services/settings/SettingsProviders';
+import { BookingOccupancyService } from '../../../../../../services/bookings/occupancy/BookingOccupancyService';
+import { HotelService } from '../../../../../../services/hotel/HotelService';
+import { HotelAggregatorService } from '../../../../../../services/hotel/HotelAggregatorService';
+import { HotelOperationsRoomService } from '../../../../../../services/hotel-operations/room/HotelOperationsRoomService';
+import { EagerCustomersService } from '../../../../../../services/customers/EagerCustomersService';
+import { RoomCategoriesStatsService } from '../../../../../../services/room-categories/RoomCategoriesStatsService';
+import { RoomsService } from '../../../../../../services/rooms/RoomsService';
+import { EagerBookingsService } from '../../../../../../services/bookings/EagerBookingsService';
+import { RoomMaintenanceStatus } from '../../../../../../services/rooms/data-objects/RoomDO';
 
 @Component({
     selector: 'assign-room-modal',
@@ -86,9 +86,11 @@ export class AssignRoomModalComponent extends BaseComponent implements ICustomMo
     public applyRoomAssign() {
         if (!this._modalInput.didSelectRoom() || !this.selectedRoomCategoryId || this.isAssigningRoom || !this.selectedRoomVM) { return };
         if (this.selectedRoomVM && this.selectedRoomVM.room.maintenanceStatus != RoomMaintenanceStatus.Clean) {
-            var roomNotCleanWarningString = this._appContext.thTranslation.translate('The room is not clean.');
-            var roomNotCleanWarningTitle = this._appContext.thTranslation.translate('Room maintenance warning');
-            this._appContext.modalService.confirm(roomNotCleanWarningTitle, roomNotCleanWarningString, { positive: this._appContext.thTranslation.translate("Continue Anyway"), negative: this._appContext.thTranslation.translate("Back") },
+            var roomNotCleanWarningString = this._appContext.thTranslation.translate('%roomName% is not clean. Are you sure you want to move the booking to this room?', {
+                roomName: this.selectedRoomVM.room.name
+            });
+            var roomNotCleanWarningTitle = this._appContext.thTranslation.translate('Warning');
+            this._appContext.modalService.confirm(roomNotCleanWarningTitle, roomNotCleanWarningString, { positive: this._appContext.thTranslation.translate("Yes"), negative: this._appContext.thTranslation.translate("No") },
                 () => {
                     this.assignRoom();
                 },

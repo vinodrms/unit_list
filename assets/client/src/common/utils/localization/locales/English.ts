@@ -863,8 +863,6 @@ export var EnglishTranslations: Object = {
 	"Intervals": "Intervals",
 	"No intervals. The discount will apply no matter the booking interval.": "No intervals. The discount will apply no matter the booking interval.",
 	"Room maintenance warning": "Room maintenance warning",
-	"The room is not clean.": "The room is not clean.",
-	"Continue Anyway": "Continue Anyway",
-	"Back": "Back"
+	"%roomName% is not clean. Are you sure you want to move the booking to this room?": "%roomName% is not clean. Are you sure you want to move the booking to this room?",
 	
 };
