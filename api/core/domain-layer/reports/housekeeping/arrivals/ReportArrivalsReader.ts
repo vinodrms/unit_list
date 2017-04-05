@@ -12,10 +12,10 @@ import { RoomDO } from "../../../../data-layer/rooms/data-objects/RoomDO";
 import { BookingDO } from "../../../../data-layer/bookings/data-objects/BookingDO";
 import { RoomCategoryStatsAggregator } from "../../../room-categories/aggregators/RoomCategoryStatsAggregator";
 import { RoomCategoryStatsDO } from "../../../../data-layer/room-categories/data-objects/RoomCategoryStatsDO";
-
-import _ = require("underscore");
 import { CustomerDO } from "../../../../data-layer/customers/data-objects/CustomerDO";
 import { BookingCustomers } from "../common/BookingCustomers";
+
+import _ = require("underscore");
 
 export class ReportArrivalsReader {
 	private _meta;
