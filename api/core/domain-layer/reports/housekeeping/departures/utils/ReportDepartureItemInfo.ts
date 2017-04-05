@@ -1,7 +1,6 @@
-export interface ReportArrivalItemInfo {
+export interface ReportDepartureItemInfo {
 	floorNumber: number;
 	roomNumber: string;
-	roomCategory: string;
 	customerName: string;
 	noAdults: number;
 	noChildren: number;

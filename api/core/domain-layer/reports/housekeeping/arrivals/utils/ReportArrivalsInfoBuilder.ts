@@ -3,13 +3,15 @@ import { RoomCategoryDO } from "../../../../../data-layer/room-categories/data-o
 import { RoomDO } from "../../../../../data-layer/rooms/data-objects/RoomDO";
 import { BookingDO } from "../../../../../data-layer/bookings/data-objects/BookingDO";
 import { ReportArrivalItemInfo } from "./ReportArrivalsInfo";
+import { RoomCategoryStatsDO } from "../../../../../data-layer/room-categories/data-objects/RoomCategoryStatsDO";
 
 export class ReportArrivalsItemInfoBuilder {
 	private _arrivalInfo: ArrivalItemInfo;
 	private _roomCategory: RoomCategoryDO;
 	private _room: RoomDO;
 	private _booking: BookingDO;
-
+	private _roomCategoryStats: RoomCategoryStatsDO;
+	
 	constructor() {
 	}
 
@@ -29,18 +31,22 @@ export class ReportArrivalsItemInfoBuilder {
 		this._booking = booking;
 	}
 
+	public setRoomCategoryStats(roomCategoryStats: RoomCategoryStatsDO) {
+		this._roomCategoryStats = roomCategoryStats;
+	}
+
 	build(): ReportArrivalItemInfo {
 		var report: ReportArrivalItemInfo = {
 			floorNumber: this._room ? this._room.floor : null,
 			roomNumber: this._room ? this._room.name : null,
-			roomCategory: this._room ? this._roomCategory.displayName : null,		// room[roomId].displayName -> make test to create bookings with reserver Room number
+			roomCategory: this._roomCategory ? this._roomCategory.displayName : null,
 			customerName: this._arrivalInfo.customerName,
 			noAdults: this._arrivalInfo.bookingCapacity ? this._arrivalInfo.bookingCapacity.noAdults : null,
 			noChildren: this._arrivalInfo.bookingCapacity ? this._arrivalInfo.bookingCapacity.noChildren : null,
 			noBabies: this._arrivalInfo.bookingCapacity ? this._arrivalInfo.bookingCapacity.noBabies : null,
-			noBabyBeds: this._arrivalInfo.bookingCapacity ? this._arrivalInfo.bookingCapacity.noBabyBeds : null,
-			noBabyRollawayBeds: this._arrivalInfo.bookingCapacity ? this._arrivalInfo.bookingCapacity.noBabyBeds : null,
-			noOtherRollawayBeds: this._arrivalInfo.bookingCapacity ? -1 : null,
+			noBabiesSleepingInBabyBeds: this._arrivalInfo.bookingCapacity ? this._arrivalInfo.bookingCapacity.noBabyBeds : null,
+			stationaryBeds: this._roomCategoryStats? this._roomCategoryStats.getStationaryBedCount(): null,
+			rollawayBeds: this._roomCategoryStats? this._roomCategoryStats.getRollawayBedCount(): null,
 			notes: this._booking ? this._booking.notes : null
 		}
 		return report;

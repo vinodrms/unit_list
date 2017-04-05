@@ -1,7 +1,8 @@
-export interface ReportArrivalItemInfo {
+import { ThDateDO } from "../../../../../utils/th-dates/data-objects/ThDateDO";
+
+export interface ReportStayoverInfo {
 	floorNumber: number;
 	roomNumber: string;
-	roomCategory: string;
 	customerName: string;
 	noAdults: number;
 	noChildren: number;
@@ -9,5 +10,6 @@ export interface ReportArrivalItemInfo {
 	noBabiesSleepingInBabyBeds: number;
 	stationaryBeds: number;
 	rollawayBeds: number;
+	departingDate: ThDateDO;
 	notes: string;
 }

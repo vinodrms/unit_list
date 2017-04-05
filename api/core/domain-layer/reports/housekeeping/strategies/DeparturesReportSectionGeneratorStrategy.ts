@@ -1,21 +1,23 @@
 import { AReportSectionGeneratorStrategy } from "../../common/report-section-generator/AReportSectionGeneratorStrategy";
 import { ReportSectionHeader, ReportSectionMeta } from "../../common/result/ReportSection";
 import { ThError } from "../../../../utils/th-responses/ThError";
+import { ReportDeparturesReader } from "../departures/ReportDeparturesReader";
+import { ReportDepartureItemInfo } from "../departures/utils/ReportDepartureItemInfo";
 
 export class DeparturesReportSectionGeneratorStrategy extends AReportSectionGeneratorStrategy {
     protected getHeader(): ReportSectionHeader {
         return {
 			display: true,
 			values: [
-                "Floor number",
-                "Room number",
-				"Room category",
-                "Customer name",
+                "Floor",
+                "Room",
+                "Customer",
 				"Adults",
 				"Children",
 				"Babies",
-				"Rollaway Baby Beds",
-                "Other Rollaway Beds",
+				"Babies (in baby beds)",
+				"Stationary Beds",
+				"Rollaway Beds",
 				"Notes"
 			]
 		};
@@ -26,9 +28,28 @@ export class DeparturesReportSectionGeneratorStrategy extends AReportSectionGene
 		}
     }
     protected getDataCore(resolve: (result: any[][]) => void, reject: (err: ThError) => void) {
-        let data: any[][] = [[]];
-
-        resolve(data);
+        let depaturesReader = new ReportDeparturesReader(this._appContext, this._sessionContext);
+        depaturesReader.read().then((reportItems: ReportDepartureItemInfo[]) => {
+			var data = [];
+			reportItems.forEach((item: ReportDepartureItemInfo) => {
+				let row = [
+					item.floorNumber,
+					item.roomNumber,
+					item.customerName,
+					item.noAdults,
+					item.noChildren,
+					item.noBabies,
+					item.noBabiesSleepingInBabyBeds,
+					item.stationaryBeds,
+					item.rollawayBeds,
+					item.notes
+				];
+				data.push(row);
+			});
+			resolve(data);
+		}).catch((e) => {
+			reject(e);
+		});
     }
 
 

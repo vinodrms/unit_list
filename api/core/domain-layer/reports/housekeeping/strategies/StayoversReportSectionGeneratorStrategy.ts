@@ -1,17 +1,16 @@
 import { AReportSectionGeneratorStrategy } from "../../common/report-section-generator/AReportSectionGeneratorStrategy";
 import { ReportSectionHeader, ReportSectionMeta } from "../../common/result/ReportSection";
 import { ThError } from "../../../../utils/th-responses/ThError";
-import { ReportArrivalsReader } from "../arrivals/ReportArrivalsReader";
-import { ReportArrivalItemInfo } from "../arrivals/utils/ReportArrivalsInfo";
+import { ReportStayoversReader } from "../stayovers/ReportStayoversReader";
+import { ReportStayoverInfo } from "../stayovers/utils/ReportStayoverInfo";
 
-export class ArrivalsReportSectionGeneratorStrategy extends AReportSectionGeneratorStrategy {
+export class StayoversReportSectionGeneratorStrategy extends AReportSectionGeneratorStrategy {
     protected getHeader(): ReportSectionHeader {
         return {
 			display: true,
 			values: [
-				"Floor",
+                "Floor",
                 "Room",
-				"Room category",
                 "Customer",
 				"Adults",
 				"Children",
@@ -19,24 +18,24 @@ export class ArrivalsReportSectionGeneratorStrategy extends AReportSectionGenera
 				"Babies (in baby beds)",
 				"Stationary Beds",
 				"Rollaway Beds",
+				"Departure date",
 				"Notes"
 			]
 		};
     }
     protected getMeta(): ReportSectionMeta {
         return {
-			title: "Arrivals"
+			title: "Stayovers"
 		}
     }
     protected getDataCore(resolve: (result: any[][]) => void, reject: (err: ThError) => void) {
-		let arrivalsReader = new ReportArrivalsReader(this._appContext, this._sessionContext);
-        arrivalsReader.read().then((reportItems: ReportArrivalItemInfo[]) => {
+        let arrivalsReader = new ReportStayoversReader(this._appContext, this._sessionContext);
+        arrivalsReader.read().then((reportItems: ReportStayoverInfo[]) => {
 			var data = [];
-			reportItems.forEach((item: ReportArrivalItemInfo) => {
+			reportItems.forEach((item: ReportStayoverInfo) => {
 				let row = [
 					item.floorNumber,
 					item.roomNumber,
-					item.roomCategory,
 					item.customerName,
 					item.noAdults,
 					item.noChildren,
@@ -44,6 +43,7 @@ export class ArrivalsReportSectionGeneratorStrategy extends AReportSectionGenera
 					item.noBabiesSleepingInBabyBeds,
 					item.stationaryBeds,
 					item.rollawayBeds,
+					item.departingDate,
 					item.notes
 				];
 				data.push(row);

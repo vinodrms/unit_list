@@ -5,8 +5,8 @@ import { IReportSectionGeneratorStrategy } from "../common/report-section-genera
 import { ObjectValidationStructure } from "../../../utils/th-validation/structure/ObjectValidationStructure";
 import { PageOrientation } from "../../../services/pdf-reports/PageOrientation";
 import { ArrivalsReportSectionGeneratorStrategy } from "./strategies/ArrivalsReportSectionGeneratorStrategy";
-import { InHouseReportSectionGeneratorStrategy } from "./strategies/InHouseReportSectionGeneratorStrategy";
 import { DeparturesReportSectionGeneratorStrategy } from "./strategies/DeparturesReportSectionGeneratorStrategy";
+import { StayoversReportSectionGeneratorStrategy } from "./strategies/StayoversReportSectionGeneratorStrategy";
 
 export class HousekeepingReportGroupGenerator extends AReportGeneratorStrategy {
     
@@ -24,7 +24,7 @@ export class HousekeepingReportGroupGenerator extends AReportGeneratorStrategy {
     protected getSectionGenerators(): IReportSectionGeneratorStrategy[] {
         return [
 			new ArrivalsReportSectionGeneratorStrategy(this._appContext, this._sessionContext),
-			new InHouseReportSectionGeneratorStrategy(this._appContext, this._sessionContext),
+			new StayoversReportSectionGeneratorStrategy(this._appContext, this._sessionContext),
 			new DeparturesReportSectionGeneratorStrategy(this._appContext, this._sessionContext),
 		];
     }
