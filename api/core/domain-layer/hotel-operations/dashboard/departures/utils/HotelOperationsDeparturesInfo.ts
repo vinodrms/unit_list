@@ -21,6 +21,7 @@ export interface DeparturelItemInfo {
 
     invoiceGroupId?: string;
     invoicePrice?: number;
+    bookingNotes?: string;
 }
 
 export class HotelOperationsDeparturesInfo {

@@ -49,7 +49,8 @@ export class HotelOperationsArrivalsInfoBuilder {
             totalBookingPrice: booking.price.totalBookingPrice,
             showCancellationTimestamp: (booking.confirmationStatus === BookingConfirmationStatus.Confirmed || booking.confirmationStatus === BookingConfirmationStatus.Guaranteed),
             cancellationTimestamp: bookingCancellationTimestamp,
-            cancellationTimestampDisplayString: bookingCancellationTimestamp.toString()
+            cancellationTimestampDisplayString: bookingCancellationTimestamp.toString(),
+            bookingNotes: booking.notes,
         }
         this._arrivalsInfo.arrivalInfoList.push(arrivalItemInfo);
     }

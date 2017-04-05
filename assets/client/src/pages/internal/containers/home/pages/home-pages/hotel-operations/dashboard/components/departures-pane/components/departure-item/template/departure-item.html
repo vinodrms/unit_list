@@ -2,6 +2,7 @@
 	<div class="header" >
 		<span *ngIf="departureItemVM.hasAttachedRoom" class="reserved-room clickable ellipsis-text green-color" (click)="openRoomModal()" title="{{departureItemVM.roomName}}">{{departureItemVM.roomName}}</span>
 		<span class="customer-name ellipsis-text clickable" (click)="openCustomerModal()" title="{{departureItemVM.customerName}}">{{departureItemVM.customerName}}</span>
+		<i *ngIf="departureItemVM.hasBooking && departureItemVM.departureItemDO.bookingNotes" title="{{ departureItemVM.departureItemDO.bookingNotes }}" (click)="openBookingNotesModal()" class="clickable booking-notes-icon pull-right fa fa-sticky-note-o" ></i>
 	</div>
 	<div class="body" >
 		<div *ngIf="departureItemVM.hasBooking" class="room-type ellipsis-text" title="{{departureItemVM.roomCategoryLabel}}">{{departureItemVM.roomCategoryLabel}}</div>

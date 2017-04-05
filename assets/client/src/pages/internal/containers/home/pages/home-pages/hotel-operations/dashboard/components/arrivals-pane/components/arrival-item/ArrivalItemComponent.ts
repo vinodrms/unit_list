@@ -93,4 +93,9 @@ export class ArrivalItemComponent {
 		var groupBookingId = this.arrivalItemVM.arrivalItemDO.groupBookingId;
 		this._modalService.openCheckInModal(bookingId, groupBookingId);
 	}
+
+	public openBookingNotesModal() {
+		var bookingNotes = this.arrivalItemVM.arrivalItemDO.bookingNotes;
+		this._modalService.openBookingNotesModal(bookingNotes);
+	}
 }
