@@ -35,6 +35,7 @@ export class HotelOperationsDeparturesInfoBuilder {
             bookingItemStatus: departureItemStatus,
             roomCategoryId: booking.roomCategoryId,
             roomId: booking.roomId,
+            bookingNotes: booking.notes,
         }
         this._departuresInfo.departureInfoList.push(departureItemInfo);
     }

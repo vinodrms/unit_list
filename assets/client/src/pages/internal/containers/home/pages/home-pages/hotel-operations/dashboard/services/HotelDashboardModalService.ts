@@ -50,6 +50,10 @@ export class HotelDashboardModalService {
 		}).catch((err: any) => { });
 	}
 
+	public openBookingNotesModal(bookingNotes: string) {
+		this._hotelOperationsModalService.openBookingNotesModal(bookingNotes);
+	}
+
 	private handleHotelOperationsModalPromise(modalPromise: Promise<ModalDialogRef<HotelOperationsResult>>) {
 		modalPromise.then((modalDialogRef: ModalDialogRef<HotelOperationsResult>) => {
 			modalDialogRef.resultObservable.subscribe((operationsResult: HotelOperationsResult) => {

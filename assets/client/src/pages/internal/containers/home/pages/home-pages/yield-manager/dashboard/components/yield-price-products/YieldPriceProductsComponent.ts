@@ -392,6 +392,10 @@ export class YieldPriceProductsComponent {
 		if (dynamicPrice.openList[dayIndex] === YieldItemStateType.Open) {
 			return;
 		}
+		// optimistic loading
+		priceProductItem.dynamicPriceList.forEach(dP => { dP.openList[dayIndex] = YieldItemStateType.Closed; });
+		dynamicPrice.openList[dayIndex] = YieldItemStateType.Open;
+
 		let date = this.priceProductResults.dateList[dayIndex];
 		var interval = ThDateIntervalDO.buildThDateIntervalDO(date, date);
 		this._yieldPriceProductsService.openDynamicPrice({

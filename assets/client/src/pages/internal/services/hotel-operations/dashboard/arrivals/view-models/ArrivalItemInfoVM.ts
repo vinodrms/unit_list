@@ -11,6 +11,7 @@ export class ArrivalItemInfoVM {
     private _reservedRoomCategoryStats: RoomCategoryStatsDO;
     private _hasReservedRoom: boolean;
     private _reservedRoomVM: RoomVM;
+    
 
     constructor(private _thTranslation: ThTranslation) {
     }
@@ -74,6 +75,4 @@ export class ArrivalItemInfoVM {
     public get bookingCapacity() : ConfigCapacityDO {
         return this.arrivalItemDO.bookingCapacity;
     }
-    
-
 }

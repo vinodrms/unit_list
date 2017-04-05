@@ -1,18 +1,18 @@
-import {ThLogger, ThLogLevel} from '../../../../../utils/logging/ThLogger';
-import {ThError} from '../../../../../utils/th-responses/ThError';
-import {ThStatusCode} from '../../../../../utils/th-responses/ThResponse';
-import {MongoRepository} from '../../../../common/base/MongoRepository';
-import {AllotmentMetaRepoDO, AllotmentItemMetaRepoDO} from '../../IAllotmentRepository';
-import {AllotmentDO, AllotmentStatus} from '../../../data-objects/AllotmentDO';
-import {AllotmentRepositoryHelper} from './helpers/AllotmentRepositoryHelper';
+import { ThLogger, ThLogLevel } from '../../../../../utils/logging/ThLogger';
+import { ThError } from '../../../../../utils/th-responses/ThError';
+import { ThStatusCode } from '../../../../../utils/th-responses/ThResponse';
+import { MongoRepository } from '../../../../common/base/MongoRepository';
+import { AllotmentMetaRepoDO, AllotmentItemMetaRepoDO } from '../../IAllotmentRepository';
+import { AllotmentDO, AllotmentStatus } from '../../../data-objects/AllotmentDO';
+import { AllotmentRepositoryHelper } from './helpers/AllotmentRepositoryHelper';
 
 export class MongoAllotmentCrudOperationsRepository extends MongoRepository {
 	private _helper: AllotmentRepositoryHelper;
 
 	constructor(allotmentEntity: Sails.Model) {
-        super(allotmentEntity);
+		super(allotmentEntity);
 		this._helper = new AllotmentRepositoryHelper();
-    }
+	}
 	public addAllotment(meta: AllotmentMetaRepoDO, allotment: AllotmentDO): Promise<AllotmentDO> {
 		return new Promise<AllotmentDO>((resolve: { (result: AllotmentDO): void }, reject: { (err: ThError): void }) => {
 			this.addAllotmentCore(meta, allotment, resolve, reject);
@@ -60,7 +60,8 @@ export class MongoAllotmentCrudOperationsRepository extends MongoRepository {
 	public updateAllotment(meta: AllotmentMetaRepoDO, itemMeta: AllotmentItemMetaRepoDO, allotment: AllotmentDO): Promise<AllotmentDO> {
 		return this.findAndModifyAllotment(meta, itemMeta, {},
 			{
-				"notes": allotment.notes
+				"notes": allotment.notes,
+				"availability": allotment.availability
 			});
 	}
 	public updateAllotmentStatus(meta: AllotmentMetaRepoDO, itemMeta: AllotmentItemMetaRepoDO, status: AllotmentStatus): Promise<AllotmentDO> {

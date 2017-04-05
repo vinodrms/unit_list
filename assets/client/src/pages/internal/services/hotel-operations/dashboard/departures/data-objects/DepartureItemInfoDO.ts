@@ -22,8 +22,10 @@ export class DepartureItemInfoDO extends BaseDO {
     invoiceGroupId: string;
     invoicePrice: number;
 
+    bookingNotes: string;
+
     protected getPrimitivePropertyKeys(): string[] {
-        return ["customerId", "customerName", "bookingId", "groupBookingId", "roomCategoryId", "roomId", "bookingItemStatus", "invoiceGroupId", "invoicePrice"];
+        return ["customerId", "customerName", "bookingId", "groupBookingId", "roomCategoryId", "roomId", "bookingItemStatus", "invoiceGroupId", "invoicePrice", "bookingNotes"];
     }
     public buildFromObject(object: Object) {
         super.buildFromObject(object);
