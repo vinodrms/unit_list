@@ -12,6 +12,7 @@ import { BookingDO } from "../../../../data-layer/bookings/data-objects/BookingD
 import { ThUtils } from "../../../../utils/ThUtils";
 import { RoomCategoryStatsAggregator } from "../../../room-categories/aggregators/RoomCategoryStatsAggregator";
 import { RoomCategoryStatsDO } from "../../../../data-layer/room-categories/data-objects/RoomCategoryStatsDO";
+import { BookingCustomers } from "../common/BookingCustomers";
 
 export class ReportDeparturesReader {
 	private _thUtils: ThUtils;
@@ -78,18 +79,27 @@ export class ReportDeparturesReader {
 			let roomStatsAggregator = new RoomCategoryStatsAggregator(this._appContext, this._sessionContext);
 			let roomRepo = this._appContext.getRepositoryFactory().getRoomRepository();
 			let bookingRepo = this._appContext.getRepositoryFactory().getBookingRepository();
+			let bookingCustomers = new BookingCustomers(this._appContext, this._sessionContext);
 			
+			let bookingDO = null;
 			roomRepo.getRoomById(meta, departureInfo.roomId).then((room: RoomDO) =>{
 				departureInfoBuilder.setRoom(room);
 				return bookingRepo.getBookingById(meta, departureInfo.groupBookingId, departureInfo.bookingId);
 			}).then((booking: BookingDO) => {
-				departureInfoBuilder.setBooking(booking);
+				bookingDO = booking;
+				departureInfoBuilder.setBooking(bookingDO);
 
-				return roomStatsAggregator.getRoomCategoryStatsList([booking.roomCategoryId]);
+				return roomStatsAggregator.getRoomCategoryStatsList([bookingDO.roomCategoryId]);
 			}).then((roomStats: RoomCategoryStatsDO[]) => {
-				if(roomStats.length > 0) {
+				if (roomStats.length > 0) {
 					departureInfoBuilder.setRoomCategoryStats(roomStats[0]);
 				}
+
+				return bookingCustomers.getCompanyOrTAForGuest(bookingDO);
+			}).then((companyOrTA) => {
+            	if (!_.isUndefined(companyOrTA)) {
+					departureInfoBuilder.setCompanyOrTA(companyOrTA);
+            	}
 				resolve(departureInfoBuilder.build());
 			}).catch((error: any) => {
 				let thError = new ThError(ThStatusCode.HotelOperationsRoomInfoReaderError, error);

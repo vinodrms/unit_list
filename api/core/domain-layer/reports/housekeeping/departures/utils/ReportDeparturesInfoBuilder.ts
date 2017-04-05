@@ -4,12 +4,14 @@ import { RoomDO } from "../../../../../data-layer/rooms/data-objects/RoomDO";
 import { BookingDO } from "../../../../../data-layer/bookings/data-objects/BookingDO";
 import { ReportDepartureItemInfo } from "./ReportDepartureItemInfo";
 import { RoomCategoryStatsDO } from "../../../../../data-layer/room-categories/data-objects/RoomCategoryStatsDO";
+import { CustomerDO } from "../../../../../data-layer/customers/data-objects/CustomerDO";
 
 export class ReportDepartureInfoBuilder {
 	private _departureInfo: DeparturelItemInfo;
 	private _room: RoomDO;
 	private _booking: BookingDO;
 	private _roomCategoryStats: RoomCategoryStatsDO;
+	private _companyOrTravelAgency: CustomerDO;
 	
 	constructor() {
 	}
@@ -30,6 +32,10 @@ export class ReportDepartureInfoBuilder {
 		this._roomCategoryStats = roomCategoryStats;
 	}
 	
+	public setCompanyOrTA(companyOrTA: CustomerDO) {
+		this._companyOrTravelAgency = companyOrTA;
+	}
+
 	private defaults(value: any, defaultValue?: any) {
 		return (value) ? value : (defaultValue) ? defaultValue : null;
 	}
@@ -39,6 +45,7 @@ export class ReportDepartureInfoBuilder {
 			floorNumber: this._room ? this._room.floor : null,
 			roomNumber: this._room ? this._room.name : null,
 			customerName: this._departureInfo.customerName,
+			companyOrTA: this._companyOrTravelAgency ? this._companyOrTravelAgency.customerDetails.getName() : null,
 			noAdults: this._departureInfo.bookingCapacity ? this._departureInfo.bookingCapacity.noAdults: null,
 			noChildren: this._departureInfo.bookingCapacity ? this._departureInfo.bookingCapacity.noChildren: null,
 			noBabies: this._departureInfo.bookingCapacity ? this._departureInfo.bookingCapacity.noBabies: null,

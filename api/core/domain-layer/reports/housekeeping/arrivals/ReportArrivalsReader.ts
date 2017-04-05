@@ -14,6 +14,8 @@ import { RoomCategoryStatsAggregator } from "../../../room-categories/aggregator
 import { RoomCategoryStatsDO } from "../../../../data-layer/room-categories/data-objects/RoomCategoryStatsDO";
 
 import _ = require("underscore");
+import { CustomerDO } from "../../../../data-layer/customers/data-objects/CustomerDO";
+import { BookingCustomers } from "../common/BookingCustomers";
 
 export class ReportArrivalsReader {
 	private _meta;
@@ -89,24 +91,32 @@ export class ReportArrivalsReader {
 		let roomCategoryRepo = this._appContext.getRepositoryFactory().getRoomCategoryRepository();
 		let bookingRepo = this._appContext.getRepositoryFactory().getBookingRepository();
 		let roomStatsAggregator = new RoomCategoryStatsAggregator(this._appContext, this._sessionContext);
-		
+		let bookingCustomers = new BookingCustomers(this._appContext, this._sessionContext);
+
 		let arrivalsInfoBuilder = new ReportArrivalsItemInfoBuilder();
 		arrivalsInfoBuilder.setArrivalsItemInfo(arrivalInfo);
 		arrivalsInfoBuilder.setRoom(room);
 		
+		let bookingDO = null;
 		roomCategoryRepo.getRoomCategoryById(this._meta, arrivalInfo.roomCategoryId).then((roomCategory : RoomCategoryDO)=>{
 			arrivalsInfoBuilder.setRoomCategory(roomCategory);
 
 			return bookingRepo.getBookingById(this._meta, arrivalInfo.groupBookingId, arrivalInfo.bookingId);
 		}).then((booking: BookingDO) => {
-			arrivalsInfoBuilder.setBooking(booking);
+			bookingDO = booking;
+			arrivalsInfoBuilder.setBooking(bookingDO);
 
-			return roomStatsAggregator.getRoomCategoryStatsList([booking.roomCategoryId]);
-		}).then((roomStats: RoomCategoryStatsDO[]) => {
+			return roomStatsAggregator.getRoomCategoryStatsList([bookingDO.roomCategoryId]);
+		}).then((roomStats: RoomCategoryStatsDO[]) => {	
 			if (roomStats.length > 0) {
 				arrivalsInfoBuilder.setRoomCategoryStats(roomStats[0]);
 			}
-
+			return bookingCustomers.getCompanyOrTAForGuest(bookingDO);
+		}).then((companyOrTA: CustomerDO) => {
+			if(!_.isUndefined(companyOrTA)) {
+				arrivalsInfoBuilder.setCompanyOrTA(companyOrTA);
+			}
+			
 			resolve(arrivalsInfoBuilder.build());
 		}).catch((error: any) => {
 			let thError = new ThError(ThStatusCode.HotelOperationsArrivalsReaderError, error);

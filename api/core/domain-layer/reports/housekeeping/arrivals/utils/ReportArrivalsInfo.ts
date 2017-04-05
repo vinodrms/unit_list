@@ -3,6 +3,7 @@ export interface ReportArrivalItemInfo {
 	roomNumber: string;
 	roomCategory: string;
 	customerName: string;
+	companyOrTA: string;
 	noAdults: number;
 	noChildren: number;
 	noBabies: number;

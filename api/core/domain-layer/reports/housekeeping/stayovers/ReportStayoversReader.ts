@@ -13,6 +13,7 @@ import { BookingUtils } from "../../../bookings/utils/BookingUtils";
 import { HotelDO } from "../../../../data-layer/hotel/data-objects/HotelDO";
 import { RoomCategoryStatsAggregator } from "../../../room-categories/aggregators/RoomCategoryStatsAggregator";
 import { RoomCategoryStatsDO } from "../../../../data-layer/room-categories/data-objects/RoomCategoryStatsDO";
+import { BookingCustomers } from "../common/BookingCustomers";
 
 export class ReportStayoversReader {
     private _bookingUtils: BookingUtils;
@@ -72,28 +73,37 @@ export class ReportStayoversReader {
 
 	private buildReportInHouseItem(roomInfo: RoomItemInfo): Promise<ReportStayoverInfo> {
 		return new Promise<any>((resolve: { (result: any): void }, reject: { (err: ThError): void }) => {
-			let inHouseInfoBuilder = new ReportStayoverInfoBuilder();
-			inHouseInfoBuilder.setRoomItemInfo(roomInfo);
+			let stayoversInfoBuilder = new ReportStayoverInfoBuilder();
+			stayoversInfoBuilder.setRoomItemInfo(roomInfo);
 			
 			let roomStatsAggregator = new RoomCategoryStatsAggregator(this._appContext, this._sessionContext);
 			let roomRepo = this._appContext.getRepositoryFactory().getRoomRepository();
 			let bookingRepo = this._appContext.getRepositoryFactory().getBookingRepository();
+			let bookingCustomers = new BookingCustomers(this._appContext, this._sessionContext);
 			
 			let meta = { hotelId: this._sessionContext.sessionDO.hotel.id };
 			
+			let bookingDO = null;
 			roomRepo.getRoomById(meta, roomInfo.roomId).then((room: RoomDO) => {
-				inHouseInfoBuilder.setRoom(room);
+				stayoversInfoBuilder.setRoom(room);
 
 				return bookingRepo.getBookingById(meta, roomInfo.groupBookingId, roomInfo.bookingId);
 			}).then((booking: BookingDO) => {
-				inHouseInfoBuilder.setBooking(booking);
+				bookingDO = booking;
+				stayoversInfoBuilder.setBooking(bookingDO);
 				
 				return roomStatsAggregator.getRoomCategoryStatsList([booking.roomCategoryId]);
 			}).then((roomStats: RoomCategoryStatsDO[]) => {
 				if(roomStats.length > 0) {
-					inHouseInfoBuilder.setRoomCategoryStats(roomStats[0]);
+					stayoversInfoBuilder.setRoomCategoryStats(roomStats[0]);
 				}
-				resolve(inHouseInfoBuilder.build());
+				return bookingCustomers.getCompanyOrTAForGuest(bookingDO);
+			}).then((companyOrTA) => {
+            	if (!_.isUndefined(companyOrTA)) {
+					stayoversInfoBuilder.setCompanyOrTA(companyOrTA);
+            	}
+				
+				resolve(stayoversInfoBuilder.build());
 			}).catch((error: any) => {
 				let thError = new ThError(ThStatusCode.HotelOperationsRoomInfoReaderError, error);
 				if (thError.isNativeError()) {

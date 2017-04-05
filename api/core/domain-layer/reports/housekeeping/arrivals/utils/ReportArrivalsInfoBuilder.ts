@@ -4,6 +4,7 @@ import { RoomDO } from "../../../../../data-layer/rooms/data-objects/RoomDO";
 import { BookingDO } from "../../../../../data-layer/bookings/data-objects/BookingDO";
 import { ReportArrivalItemInfo } from "./ReportArrivalsInfo";
 import { RoomCategoryStatsDO } from "../../../../../data-layer/room-categories/data-objects/RoomCategoryStatsDO";
+import { CustomerDO } from "../../../../../data-layer/customers/data-objects/CustomerDO";
 
 export class ReportArrivalsItemInfoBuilder {
 	private _arrivalInfo: ArrivalItemInfo;
@@ -11,7 +12,8 @@ export class ReportArrivalsItemInfoBuilder {
 	private _room: RoomDO;
 	private _booking: BookingDO;
 	private _roomCategoryStats: RoomCategoryStatsDO;
-	
+	private _companyOrTravelAgency: CustomerDO;
+
 	constructor() {
 	}
 
@@ -35,12 +37,17 @@ export class ReportArrivalsItemInfoBuilder {
 		this._roomCategoryStats = roomCategoryStats;
 	}
 
+	public setCompanyOrTA(companyOrTA: CustomerDO) {
+		this._companyOrTravelAgency = companyOrTA;
+	}
+
 	build(): ReportArrivalItemInfo {
 		var report: ReportArrivalItemInfo = {
 			floorNumber: this._room ? this._room.floor : null,
 			roomNumber: this._room ? this._room.name : null,
 			roomCategory: this._roomCategory ? this._roomCategory.displayName : null,
 			customerName: this._arrivalInfo.customerName,
+			companyOrTA: this._companyOrTravelAgency ? this._companyOrTravelAgency.customerDetails.getName() : null,
 			noAdults: this._arrivalInfo.bookingCapacity ? this._arrivalInfo.bookingCapacity.noAdults : null,
 			noChildren: this._arrivalInfo.bookingCapacity ? this._arrivalInfo.bookingCapacity.noChildren : null,
 			noBabies: this._arrivalInfo.bookingCapacity ? this._arrivalInfo.bookingCapacity.noBabies : null,
