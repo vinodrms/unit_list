@@ -1,4 +1,5 @@
 import {Component, Input, Output, NgZone, ElementRef, EventEmitter} from '@angular/core';
+import {Injectable, ReflectiveInjector} from '@angular/core';
 import {AppContext} from '../../../../../../../../../../../../common/utils/AppContext';
 import {ModalDialogRef} from '../../../../../../../../../../../../common/utils/modals/utils/ModalDialogRef';
 import {RoomItemInfoVM} from '../../../../../../../../../../services/hotel-operations/dashboard/rooms/view-models/RoomItemInfoVM';
@@ -12,6 +13,9 @@ import {HotelOperationsDashboardService} from '../../../../../../../../../../ser
 import {HotelOperationsRoomService} from '../../../../../../../../../../services/hotel-operations/room/HotelOperationsRoomService';
 import {RoomsCanvasComponent} from '../../../rooms-canvas/RoomsCanvasComponent';
 import {HotelDashboardModalService} from '../../../../services/HotelDashboardModalService';
+import {RoomMaintenanceStatusModalModule} from './modal/RoomMaintenanceStatusModalModule';
+import {RoomMaintenanceStatusModalInput} from './modal/utils/RoomMaintenanceStatusModalInput';
+import {RoomMaintenanceStatusModalComponent} from './modal/RoomMaintenanceStatusModalComponent';
 
 declare var $: any;
 
@@ -51,7 +55,7 @@ export class RoomCardComponent {
 					title: 'Dirty',
 					icon: 'H',
 					clickHandler: () => {
-						this.openRoomModal();
+						this.openRoomMaintenanceStatusModal();
 					}
 				}
 				break;
@@ -62,7 +66,7 @@ export class RoomCardComponent {
 					title: 'Pickup',
 					icon: 'J',
 					clickHandler: () => {
-						this.openRoomModal();
+						this.openRoomMaintenanceStatusModal();
 					}
 				}
 				break;
@@ -73,7 +77,7 @@ export class RoomCardComponent {
 					title: 'Out of order',
 					icon: '+',
 					clickHandler: () => {
-						this.openRoomModal();
+						this.openRoomMaintenanceStatusModal();
 					}
 				}
 				break;
@@ -84,7 +88,7 @@ export class RoomCardComponent {
 					title: 'Out of service',
 					icon: 'K',
 					clickHandler: () => {
-						this.openRoomModal();
+						this.openRoomMaintenanceStatusModal();
 					}
 				}
 				break;
@@ -186,4 +190,12 @@ export class RoomCardComponent {
 		this._modalService.openBookingModal(bookingId, groupBookingId);
 	}
 
+	public openRoomMaintenanceStatusModal() {
+		var roomVM = this.roomVM.roomVM;
+		var hotelOperationsRoomService = this._operationRoomService;
+		var roomMaintenanceStatusModalInput = new RoomMaintenanceStatusModalInput(roomVM, hotelOperationsRoomService);
+		this._appContext.modalService.open<boolean>(RoomMaintenanceStatusModalModule, RoomMaintenanceStatusModalComponent, ReflectiveInjector.resolve([
+            { provide: RoomMaintenanceStatusModalInput, useValue: roomMaintenanceStatusModalInput }
+		]));
+	}
 }
