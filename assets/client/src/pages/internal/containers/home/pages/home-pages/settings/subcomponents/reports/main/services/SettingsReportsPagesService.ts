@@ -15,6 +15,7 @@ export class SettingsReportsPagesService {
 			new SettingsReportsPageVM("backup", ReportGroupType.Backup, "Backup"),
 			new SettingsReportsPageVM("key-metrics", ReportGroupType.KeyMetrics, "Key Metrics"),
 			new SettingsReportsPageVM("bookings-for-price-product", ReportGroupType.BookingsForPriceProduct, "Bookings"),
+			new SettingsReportsPageVM("housekeeping", ReportGroupType.Housekeeping, "Housekeeping"),
 
 		];
 	}
