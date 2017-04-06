@@ -34,6 +34,11 @@ export class HotelOperationsModalService {
         return this.openOperationsModal(invoiceOperationsPageParam);
     }
 
+    public openBookingNotesModal(bookingNotes: string) {
+        let title = this._appContext.thTranslation.translate("Booking Notes");
+        this._appContext.modalService.confirm(title, bookingNotes, { positive: this._appContext.thTranslation.translate("OK") }, () => { }, () => { });
+    }
+
     private openOperationsModal(pageParam: IHotelOperationsPageParam): Promise<ModalDialogRef<HotelOperationsResult>> {
         return this._appContext.modalService.open<HotelOperationsResult>(HotelOperationsModalModule, HotelOperationsModalComponent, ReflectiveInjector.resolve([
             { provide: IHotelOperationsPageParam, useValue: pageParam }

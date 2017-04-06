@@ -3967,6 +3967,7 @@ textarea.payer-details {
 .ps-container > .ps-scrollbar-y-rail {
   opacity: 0.6;
 }
+
 .margin-bottom-0px {
     margin-bottom: 0px;
 }
@@ -3980,4 +3981,8 @@ textarea.payer-details {
     width: 100%;
     margin: auto;
     float: none;
+}
+
+.booking-notes-icon {
+    padding: 10px 10px 0px 0px
 }
