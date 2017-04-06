@@ -517,12 +517,13 @@ export enum ThStatusCode {
 	BookingChangePriceProductError,
 	BookingChangePriceProductInvalidState,
 	BookingChangePriceProductPaidInvoice,
-
+	
 	// Reports
 	ReportsMetadataListFetchError,
 	ReportFetchError,
 	ReportsGenerateInvalidParameters,
 	ReportsControllerErrorParsingJson,
+	ReportsHKBookingCustomers,
 
 	//File service
 	FileServiceErrorWritingFile,
@@ -1040,6 +1041,7 @@ ThMessage[ThStatusCode.ReportsMetadataListFetchError] = "Error fetching list of 
 ThMessage[ThStatusCode.ReportFetchError] = "Error fetching report.";
 ThMessage[ThStatusCode.ReportsGenerateInvalidParameters] = "Invalid parameters for generate report";
 ThMessage[ThStatusCode.ReportsControllerErrorParsingJson] = "Error parsing the input parameters";
+ThMessage[ThStatusCode.ReportsHKBookingCustomers] = "Error getting compnay/TA for guest";
 
 // File service
 ThMessage[ThStatusCode.FileServiceErrorWritingFile] = "Error writing file";

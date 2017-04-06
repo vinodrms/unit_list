@@ -4,9 +4,11 @@
 	<h4 class="modal-title" *ngIf="didSelectRoom()">{{ 'Select Price' | translate }}</h4>
 </div>
 <div>
-    <room-selection *ngIf="!didSelectRoom()" (onRoomSelected)="updateCurrentSelectedRoom($event)" class="modal-body table-selection"></room-selection>
-	<price-selection *ngIf="didSelectRoom()" (onPriceSelection)="didChangePriceSelection($event)" class="modal-body table-selection"></price-selection>
-	
+	<loading-component [isLoading]="isLoading"></loading-component>
+	<div *ngIf="!isLoading">
+   		<room-selection *ngIf="!didSelectRoom()" (onRoomSelected)="updateCurrentSelectedRoom($event)" class="modal-body table-selection"></room-selection>
+		<price-selection *ngIf="didSelectRoom()" (onPriceSelection)="didChangePriceSelection($event)" class="modal-body table-selection"></price-selection>
+	</div>
 </div>
 <div class="modal-footer">
 	<button *ngIf="!didSelectRoom()" [disabled]="!selectedRoomVM" (click)="selectRoom()" type="button" class="btn btn-primary">

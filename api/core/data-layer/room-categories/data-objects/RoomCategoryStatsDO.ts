@@ -2,6 +2,9 @@ import { BaseDO } from '../../common/base/BaseDO';
 import { RoomCategoryDO } from './RoomCategoryDO';
 import { ConfigCapacityDO } from '../../common/data-objects/bed-config/ConfigCapacityDO';
 import { BedStatsDO } from './bed-stats/BedStatsDO';
+import { BedStorageType } from "../../common/data-objects/bed/BedDO";
+
+import _ = require("underscore");
 
 export class RoomCategoryCapacityDO extends BaseDO {
     constructor() {
@@ -95,4 +98,15 @@ export class RoomCategoryStatsDO extends BaseDO {
             return (roomCategoryStats.capacity.totalCapacity.noAdults * 2) + roomCategoryStats.capacity.totalCapacity.noChildren;
         });
     }
+
+    public getStationaryBedCount(): number {
+		return _.filter(this.bedStatsList, (bedStats: BedStatsDO) => {
+            return bedStats.storageType == BedStorageType.Stationary;
+        }).length;
+	}
+	public getRollawayBedCount(): number {
+		return _.filter(this.bedStatsList, (bedStats: BedStatsDO) => {
+            return bedStats.storageType == BedStorageType.Rollaway;
+        }).length;
+	}
 }

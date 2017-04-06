@@ -6,6 +6,7 @@ import { SettingsShiftReportComponent } from './pages/shift-report/SettingsShift
 import { SettingsBackUpReportComponent } from './pages/backup-report/SettingsBackUpReportComponent';
 import { SettingsKeyMetricsReportComponent } from './pages/key-metrics-report/SettingsKeyMetricsReportComponent';
 import { BookingsForPriceProductComponent } from "./pages/bookings-for-price-product/BookingsForPriceProductComponent";
+import { SettingsHousekeepingReportComponent } from "./pages/housekeeping-report/SettingsHousekeepingReportComponent";
 
 const settingsReportsRoutes: Routes = [
     {
@@ -16,7 +17,7 @@ const settingsReportsRoutes: Routes = [
             { path: 'backup', component: SettingsBackUpReportComponent },
             { path: 'key-metrics', component: SettingsKeyMetricsReportComponent },
             { path: 'bookings-for-price-product', component: BookingsForPriceProductComponent },
-
+            { path: 'housekeeping', component: SettingsHousekeepingReportComponent },
         ]
     }
 ];
