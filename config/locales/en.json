@@ -209,6 +209,11 @@
 	"Status": "Status",
 	"Customers": "Customers",
 	"Total Charge": "Total Charge",
+	"Floor": "Floor",
+	"Company/TA": "Company/TA",
+	"Babies (in baby beds)": "Babies (in baby beds)",
+	"Stationary Beds": "Stationary Beds",
+	"Rollaway Beds": "Rollaway Beds",
 
 	// Booking confirmations
 	"Booking confirmations are blocked for this booking.": "Booking confirmations are blocked for this booking."
