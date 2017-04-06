@@ -15,7 +15,7 @@ export class InvoicePaymentMethodVMGenerator {
     private initAllowedInvoicePaymentMethodVMList() {
 
         this._allowedPaymentMethodVMList = _.map(this._allowedPaymentMethods.paymentMethodList, (paymentMethod: AggregatedPaymentMethodDO) => {
-            return this.generatePaymentMethodVMFor(paymentMethod.paymentMethod);
+            return this.generateInvoicePaymentMethodVMFor(paymentMethod.paymentMethod);
         });
     }
 
@@ -41,16 +41,23 @@ export class InvoicePaymentMethodVMGenerator {
         pmVM.paymentMethod.value = "";
         return pmVM;
     }
-    private generatePaymentMethodVMFor(paymentMethod: PaymentMethodDO): InvoicePaymentMethodVM {
+    private generateInvoicePaymentMethodVMFor(paymentMethod: PaymentMethodDO): InvoicePaymentMethodVM {
+        let foundAllowedPM = _.find(this._allowedPaymentMethods.paymentMethodList, (aggregatedPaymentMethodItem: AggregatedPaymentMethodDO) => {
+            return aggregatedPaymentMethodItem.paymentMethod.id === paymentMethod.id;
+        });
+
         var pmVM = new InvoicePaymentMethodVM();
         pmVM.displayName = paymentMethod.name;
         pmVM.iconUrl = paymentMethod.iconUrl;
+        if (foundAllowedPM) {
+            pmVM.transactionFee = foundAllowedPM.transactionFee;
+        }
         pmVM.paymentMethod = new InvoicePaymentMethodDO();
         pmVM.paymentMethod.type = InvoicePaymentMethodType.DefaultPaymentMethod;
         pmVM.paymentMethod.value = paymentMethod.id;
         return pmVM;
     }
-    public generatePaymentMethodVMForPaymentMethod(invoicePaymentMethodDO: InvoicePaymentMethodDO, allPaymentMethods: HotelPaymentMethodsDO): InvoicePaymentMethodVM {
+    public generateInvoicePaymentMethodVMForPaymentMethod(invoicePaymentMethodDO: InvoicePaymentMethodDO, allPaymentMethods: HotelPaymentMethodsDO): InvoicePaymentMethodVM {
         if (invoicePaymentMethodDO.type === InvoicePaymentMethodType.PayInvoiceByAgreement) {
             return this.generatePayInvoiceByAgreementPaymentMethodVM();
         }
@@ -60,6 +67,6 @@ export class InvoicePaymentMethodVMGenerator {
         if (!foundPaymentMethodDO) {
             foundPaymentMethodDO = allPaymentMethods.paymentMethodList[0];
         }
-        return this.generatePaymentMethodVMFor(foundPaymentMethodDO);
+        return this.generateInvoicePaymentMethodVMFor(foundPaymentMethodDO);
     }
 }

@@ -79,7 +79,7 @@ export class InvoicePayerComponent implements OnInit {
         if (this._thUtils.isUndefinedOrNull(selectedPaymentMethodVM)) {
             let allPaymentMethods = this._invoiceGroupControllerService.invoiceOperationsPageData.allPaymentMethods;
             let selectedPaymentMethod = this.invoicePayerVM.invoicePayerDO.paymentMethod;
-            selectedPaymentMethodVM = this._pmGenerator.generatePaymentMethodVMForPaymentMethod(selectedPaymentMethod, allPaymentMethods);
+            selectedPaymentMethodVM = this._pmGenerator.generateInvoicePaymentMethodVMForPaymentMethod(selectedPaymentMethod, allPaymentMethods);
         }
         this.selectedPaymentMethodVM = selectedPaymentMethodVM;
     }
@@ -177,6 +177,12 @@ export class InvoicePayerComponent implements OnInit {
     }
     public get totalAmount(): number {
         return this.invoiceVM.invoiceDO.getPrice();
+    }
+    public get totalAmountWithTransactionFee(): number {
+        return this.invoicePayerVM.invoicePayerDO.priceToPay * (1 + this.transactionFee);
+    }
+    public get transactionFee(): number {
+        return _.isNumber(this.selectedPaymentMethodVM.transactionFee) ? this.selectedPaymentMethodVM.transactionFee : 0;
     }
     public get editMode(): boolean {
         return this.invoiceGroupVM.editMode;
