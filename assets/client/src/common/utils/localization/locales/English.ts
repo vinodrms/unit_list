@@ -863,7 +863,7 @@ export var EnglishTranslations: Object = {
 	"Intervals": "Intervals",
 	"No intervals. The discount will apply no matter the booking interval.": "No intervals. The discount will apply no matter the booking interval.",
 	"Housekeeping Report": "Housekeeping Report",
-	"Contains the arrivals, stayovers and departures for today - useful for the housekeeping staff.": "Contains the arrivals, stayovers and departures for today - useful for the housekeeping staff.",
+	"Contains the arrivals, stayovers and departures for today.": "Contains the arrivals, stayovers and departures for today.",
 	"Room maintenance warning": "Room maintenance warning",
 	"%roomName% is not clean. Are you sure you want to move the booking to this room?": "%roomName% is not clean. Are you sure you want to move the booking to this room?",
 	
