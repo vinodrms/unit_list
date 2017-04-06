@@ -55,8 +55,8 @@ export class ReportArrivalsReader {
 	}
 
 	private sortComparator(a:ReportArrivalItemInfo, b:ReportArrivalItemInfo) {
-		let aHasRoomNo = !_.isString(a.roomNumber);
-		let bHasRoomNo = !_.isString(b.roomNumber);
+		let aHasRoomNo = _.isString(a.roomNumber);
+		let bHasRoomNo = _.isString(b.roomNumber);
 
 		if (aHasRoomNo && !bHasRoomNo) {
 			return 1;
