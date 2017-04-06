@@ -1,0 +1,19 @@
+<div class="container full-height" customScroll>
+	<div class="row basic-info-form">
+		<div class="col-xs-12 col-md-6">
+			<label class="control-label">
+				<h3>{{ 'Housekeeping Report' | translate }}</h3><small>{{ 'Contains the arrivals, stayovers and departures for today.' | translate }}</small>
+			</label>
+			<hr>
+			<div class="row">
+				<div class="col-xs-12 col-md-6 form-group">
+					<label>{{ 'File Format' | translate }}</label>
+					<report-output-format (onFormatSelected)="didSelectFormat($event)"></report-output-format>
+				</div>
+				<div class="col-xs-12 col-md-offset-9 col-md-3">
+					<a class="btn btn-primary btn-block" [href]="reportCSVUrl()" target="_blank">{{ 'Generate' | translate }}</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

@@ -8,6 +8,7 @@ export enum ReportGroupType {
     KeyMetrics,
     Shift,
     BookingsForPriceProduct,
+    Housekeeping,
 
 }
 
@@ -16,7 +17,8 @@ var SupportedReportGroupTypes: ReportGroupType[] = [
     ReportGroupType.KeyMetrics,
     ReportGroupType.Shift,
     ReportGroupType.BookingsForPriceProduct,
-
+    ReportGroupType.Housekeeping,
+    
 ]
 
 export enum ReportOutputFormat {

@@ -13,6 +13,7 @@ import { SettingsShiftReportComponent } from './pages/shift-report/SettingsShift
 import { SettingsBackUpReportComponent } from './pages/backup-report/SettingsBackUpReportComponent';
 import { SettingsKeyMetricsReportComponent } from './pages/key-metrics-report/SettingsKeyMetricsReportComponent';
 import { BookingsForPriceProductComponent } from "./pages/bookings-for-price-product/BookingsForPriceProductComponent";
+import { SettingsHousekeepingReportComponent } from "./pages/housekeeping-report/SettingsHousekeepingReportComponent";
 
 import { TimezoneService } from '../../../../../../../services/timezones/TimezoneService';
 
@@ -22,7 +23,9 @@ var settingsReportsComponents = [
     SettingsShiftReportComponent,
     SettingsBackUpReportComponent,
     SettingsKeyMetricsReportComponent,
-    BookingsForPriceProductComponent
+    BookingsForPriceProductComponent,
+    SettingsHousekeepingReportComponent,
+
 ];
 @NgModule({
     imports: [CommonModule, FormsModule, SharedPipesModule, SharedComponentsModule, SharedDirectivesModule, settingsReportsRouting],
