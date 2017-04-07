@@ -1,36 +1,76 @@
 <loading-component [isLoading]="isLoading"></loading-component>
 <div class="basic-info-form-container container-fluid" customScroll>
 	<div class="row basic-info-form" *ngIf="!isLoading">
-		<div class="col-xs-12 col-md-4">
-			<label class="control-label">
-				<h3>{{ 'Default currency' | translate }}  </h3>
-				<small>{{ 'All rates and prices will be in the selected currency' | translate }}</small>
-			</label>
-			<div class="form-group">
-				<div class="input-group" [ngClass]="{'form-warning': (!hotel.ccyCode && didSubmitPage)}">
-					<select class="form-control" [ngModel]="hotel.ccyCode" (ngModelChange)="didChangeCurrencyCode($event)" name="hotelCcyCode">
-					<option value="" disabled>{{ 'Select a currency' | translate }}</option>
-					<option *ngFor="let currency of currencies.currencyList" [value]="currency.code">{{currency.code}} - {{currency.name}}</option>
-				</select>
-				</div>
-				<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Select a currency' | translate }}</small></label>
+		<div class="col-xs-12 col-md-3">
+			<div class="row">
+				<div class="col-xs-12">
+					<label class="control-label">
+						<h3>{{ 'Default currency' | translate }}  </h3>
+						<small>{{ 'All rates and prices will be in the selected currency' | translate }}</small>
+					</label>
+					<div class="form-group">
+						<div class="input-group" [ngClass]="{'form-warning': (!hotel.ccyCode && didSubmitPage)}">
+							<select class="form-control" [ngModel]="hotel.ccyCode" (ngModelChange)="didChangeCurrencyCode($event)" name="hotelCcyCode">
+							<option value="" disabled>{{ 'Select a currency' | translate }}</option>
+							<option *ngFor="let currency of currencies.currencyList" [value]="currency.code">{{currency.code}} - {{currency.name}}</option>
+						</select>
+						</div>
+						<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Select a currency' | translate }}</small></label>
+					</div>
+				</div>				
 			</div>
-
 			<hr>
+			<div class="row">
+				<div class="col-xs-12">
+					<label class="control-label">
+						<h3>{{ 'Additional Invoice Information' | translate }}  </h3>
+						<small>{{ 'All rates and prices will be in the selected currency' | translate }}</small>
+					</label>
+					<div class="form-group">
+						<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('additionalInvoiceDetails')}">
+						<textarea class="form-control" placeholder="{{ 'e.g. Banking details (iban, swift code) etc.' | translate}}"></textarea>
+					</div>
+					<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'No more than 2000 characters' | translate }}</small></label>
+					</div>
+				</div>				
+			</div>
+		</div>
 
-			<label class="control-label">{{'Supported payments' | translate}}</label>
+		<div class="col-xs-12 col-md-3">
+			<div class="row">
+				<div class="col-xs-12">
+					<basic-info-tax-list [ccyCode]="hotel.ccyCode" [taxType]="vatTaxType"></basic-info-tax-list>
+				</div>
+			</div>
+			<hr>
+			<div class="row">
+				<div class="col-xs-12">
+					<basic-info-tax-list [ccyCode]="hotel.ccyCode" [taxType]="otherTaxType"></basic-info-tax-list>
+				</div>
+			</div>
+		</div>
+		
+
+		<div class="col-xs-12 col-md-6">
+			<label class="control-label">
+				<h3>{{ 'Supported payments' | translate }}  </h3>
+				<small>{{ 'The payment methods that will be supported by the hotel.' | translate }}</small>
+			</label>
 			<div class="form-group">
 				<div class="well margin-bottom-0px border-radius-0px input-group" [ngClass]="{'form-warning': ((!didSelectPaymentMethod() || !didInputFeeWherePaymentMethodsHaveTransactionFees())&&didSubmitPage)}">
 					<div class="row">
-						<div class="col-xs-6">
+						<div class="col-xs-4">
 							<label class="control-label">{{'Payment method' | translate}}</label>
 						</div>
-						<div class="col-xs-6">
-							<label class="control-label">{{'Transaction Fee (in %)' | translate}}</label>
+						<div class="col-xs-4">
+							<label class="control-label">{{'Type of Fee' | translate}}</label>
+						</div>
+						<div class="col-xs-4">
+							<label class="control-label">{{'Fee' | translate}}</label>
 						</div>
 					</div>
 					<div class="row" *ngFor="let paymentMethodVM of allPaymentMethodsVMContainer.paymentMethodList">
-						<div class="col-xs-6">
+						<div class="col-xs-4">
 							<div class="input-group">
 								<div class="checkbox" >
 									<label>
@@ -39,8 +79,32 @@
 								</div>
 							</div>
 						</div>
-
-						<div class="col-xs-3">
+						
+						<div class="col-md-4 col-xs-12 form-group">
+							<div class="input-group">
+								<div class="btn-group" data-toggle="buttons">
+									<button class="btn btn-default" (click)="isFixedCommission=true" [ngClass]="{'active': isFixedCommission}">
+									{{ 'Fixed' | translate }}
+								</button>
+									<button class="btn btn-default" (click)="isFixedCommission=false" [ngClass]="{'active': !isFixedCommission}">
+									{{ 'Percent' | translate }}
+								</button>
+								</div>
+							</div>
+						</div>			
+						<div class="col-md-4 col-xs-12">
+							<div class="row">
+								<div class="col-xs-12">
+									<div class="form-group">
+										<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('commission')}">
+											<input type="number" class="form-control">
+										</div>
+										<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter a valid commission' | translate }}</small></label>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!--<div class="col-xs-3">
 							<div class="input-group">
 								<div class="checkbox">
 									<label>
@@ -61,28 +125,13 @@
 									(onPercentageChanged)="paymentMethodVM.transactionFee = $event">
 								</percentage-input-number>
 							</div>
-						</div>
+						</div>-->
 					</div>
 				</div>
 				<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Select at least a payment method and input fees where enabled' | translate }}</small></label>
 			</div>
-			
 		</div>
-
-		<div class="col-xs-12 col-md-4">
-			<basic-info-tax-list [ccyCode]="hotel.ccyCode" [taxType]="vatTaxType"></basic-info-tax-list>
-		</div>
-
-		<div class="col-xs-12 col-md-4">
-			<basic-info-tax-list [ccyCode]="hotel.ccyCode" [taxType]="otherTaxType"></basic-info-tax-list>
-		</div>
-		<div class="col-md-4 col-xs-12 form-group" [formGroup]="getDefaultFormGroup()">
-			<label>{{ 'Additional Invoice Information' | translate }}</label>
-			<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('additionalInvoiceDetails')}">
-				<textarea class="form-control" placeholder="{{ 'e.g. Banking details (iban, swift code) etc.' | translate}}" formControlName="additionalInvoiceDetails"></textarea>
-			</div>
-			<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'No more than 2000 characters' | translate }}</small></label>
-		</div>
+		
 		<div *ngIf="!isLoading && canAutoSave" class="col-xs-12 col-md-offset-9 col-md-3">
 			<button type="button" class="btn btn-primary btn-block" (click)="savePaymentsAndPolicies()">
 			<i *ngIf="isSaving" class="fa fa-spinner fa-pulse"></i> {{ 'Save Changes' | translate }}

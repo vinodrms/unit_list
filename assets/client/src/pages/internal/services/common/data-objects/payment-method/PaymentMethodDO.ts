@@ -1,4 +1,5 @@
-import {BaseDO} from '../../../../../../common/base/BaseDO';
+import { BaseDO } from '../../../../../../common/base/BaseDO';
+import { TransactionFeeDO } from "./TransactionFeeDO";
 
 export class PaymentMethodDO extends BaseDO {
     constructor() {
@@ -7,9 +8,8 @@ export class PaymentMethodDO extends BaseDO {
     id: string;
     name: string;
     iconUrl: string;
-	transactionFee: number;
 
     protected getPrimitivePropertyKeys(): string[] {
-        return ["id", "name", "iconUrl", "transactionFee"];
+        return ["id", "name", "iconUrl"];
     }
 }

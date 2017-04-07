@@ -3,6 +3,7 @@ import { MongoRepository } from "../../../../../../data-layer/common/base/MongoR
 import { MongoPatchType } from "../MongoPatchType";
 import { HotelDO } from "../../../../../../data-layer/hotel/data-objects/HotelDO";
 import { PaymentMethodInstanceDO } from "../../../../../../data-layer/common/data-objects/payment-method/PaymentMethodInstanceDO";
+import { TransactionFeeDO, TransactionFeeType } from "../../../../../../data-layer/common/data-objects/payment-method/TransactionFeeDO";
 
 export class P16_TransformPaymentMetehodIdListOnHotelIntoPaymentMethodInstanceList extends APaginatedTransactionalMongoPatch {
 
@@ -29,7 +30,9 @@ export class P16_TransformPaymentMetehodIdListOnHotelIntoPaymentMethodInstanceLi
             _.forEach(paymentMethodIdList, (paymentMethodId: string) => {
                 let pmInstance = new PaymentMethodInstanceDO();
                 pmInstance.paymentMethodId = paymentMethodId;
-                pmInstance.transactionFee = null;
+                pmInstance.transactionFee = new TransactionFeeDO();
+                pmInstance.transactionFee.amount = 0;
+                pmInstance.transactionFee.type = TransactionFeeType.Percentage;
                 hotel.paymentMethodList.push(pmInstance);
             });
         }

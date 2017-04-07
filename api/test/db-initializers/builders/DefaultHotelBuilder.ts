@@ -14,6 +14,7 @@ import { ThUtils } from '../../../core/utils/ThUtils';
 import { Locales } from '../../../core/utils/localization/ThTranslation';
 import { AppContext } from '../../../core/utils/AppContext';
 import { PaymentMethodInstanceDO } from "../../../core/data-layer/common/data-objects/payment-method/PaymentMethodInstanceDO";
+import { TransactionFeeDO, TransactionFeeType } from "../../../core/data-layer/common/data-objects/payment-method/TransactionFeeDO";
 
 export class DefaultHotelBuilder {
 	public static Timezone = "Europe/Bucharest";
@@ -84,6 +85,10 @@ export class DefaultHotelBuilder {
 		_.forEach(paymentIdList, (paymentMethodId: string) => {
 			let paymentMethod = new PaymentMethodInstanceDO();
 			paymentMethod.paymentMethodId = paymentMethodId;
+			paymentMethod.transactionFee = new TransactionFeeDO();
+			paymentMethod.transactionFee.amount = 0;
+			paymentMethod.transactionFee.type = TransactionFeeType.Percentage;
+			
 			paymentMethodList.push(paymentMethod);
 		});
 

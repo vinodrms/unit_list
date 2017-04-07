@@ -17,6 +17,7 @@ import { InvoicePaymentMethodVMGenerator } from '../../../../../../../../../../.
 import { InvoicePaymentMethodVM } from '../../../../../../../../../../../services/invoices/view-models/InvoicePaymentMethodVM';
 import { InvoicePaymentMethodDO, InvoicePaymentMethodType } from '../../../../../../../../../../../services/invoices/data-objects/payers/InvoicePaymentMethodDO';
 import { EmailSenderModalService } from '../../../../../../email-sender/services/EmailSenderModalService';
+import { TransactionFeeDO } from "../../../../../../../../../../../services/common/data-objects/payment-method/TransactionFeeDO";
 
 @Component({
     selector: 'invoice-payer',
@@ -44,7 +45,7 @@ export class InvoicePayerComponent implements OnInit {
         this._thUtils = new ThUtils();
     }
 
-    public get selectedPaymentMethodVM(): InvoicePaymentMethodVM {
+    public get selectedPaymentMethodVM(): InvoicePaymentMethodVM {``
         return this._selectedPaymentMethodVM;
     }
 
@@ -179,10 +180,10 @@ export class InvoicePayerComponent implements OnInit {
         return this.invoiceVM.invoiceDO.getPrice();
     }
     public get totalAmountWithTransactionFee(): number {
-        return this.invoicePayerVM.invoicePayerDO.priceToPay * (1 + this.transactionFee);
+        return this.transactionFee.getAmountWihtTransactionFeeIncluded(this.invoicePayerVM.invoicePayerDO.priceToPay);
     }
-    public get transactionFee(): number {
-        return _.isNumber(this.selectedPaymentMethodVM.transactionFee) ? this.selectedPaymentMethodVM.transactionFee : 0;
+    public get transactionFee(): TransactionFeeDO {
+        return this.selectedPaymentMethodVM.transactionFee;
     }
     public get editMode(): boolean {
         return this.invoiceGroupVM.editMode;

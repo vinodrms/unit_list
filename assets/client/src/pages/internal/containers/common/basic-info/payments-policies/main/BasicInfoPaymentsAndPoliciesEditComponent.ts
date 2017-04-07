@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { FormControl, Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/combineLatest';
+
 import { BaseFormComponent } from '../../../../../../../common/base/BaseFormComponent';
 import { ThError, AppContext } from '../../../../../../../common/utils/AppContext';
 import { CurrenciesService } from '../../../../../services/settings/CurrenciesService';
@@ -78,9 +79,6 @@ export class BasicInfoPaymentsAndPoliciesEditComponent extends BaseFormComponent
 	}
 	protected didSelectPaymentMethod() {
 		return this._paymPoliciesEditService.didSelectPaymentMethod();
-	}
-	protected didInputFeeWherePaymentMethodsHaveTransactionFees() {
-		return this._paymPoliciesEditService.didInputFeeWherePaymentMethodsHaveTransactionFees();
 	}
 	public getDefaultFormGroup(): FormGroup {
 		return this._formGroup;

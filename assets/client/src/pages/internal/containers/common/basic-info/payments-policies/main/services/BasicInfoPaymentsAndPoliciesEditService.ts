@@ -33,21 +33,8 @@ export class BasicInfoPaymentsAndPoliciesEditService {
 	public didSelectPaymentMethod(): boolean {
 		return this._paymentMethodVMContainer.getSelectedPaymentMethodList().length > 0;
 	}
-	public didInputFeeWherePaymentMethodsHaveTransactionFees(): boolean {
-		var selectedPaymentMethodVMList: PaymentMethodVM[] = _.filter(this._paymentMethodVMContainer.paymentMethodList, (paymMethodVM: PaymentMethodVM) => {
-			return paymMethodVM.isSelected;
-		});
-
-		let isValid = true;
-		_.forEach(selectedPaymentMethodVMList, (paymentMethodVM: PaymentMethodVM) => {
-			if(paymentMethodVM.hasTransactionFee && !_.isNumber(paymentMethodVM.transactionFee)) {
-				isValid = false;
-			}
-		});
-		return isValid;
-	}
 	private isValid() {
-		return this._hotel.ccyCode && this.didSelectPaymentMethod() && this.didInputFeeWherePaymentMethodsHaveTransactionFees();
+		return this._hotel.ccyCode && this.didSelectPaymentMethod();
 	}
 	private didAddTax(): boolean {
 		return this._taxContainer && this._taxContainer.vatList.length > 0;

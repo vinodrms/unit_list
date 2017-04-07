@@ -5,6 +5,8 @@ import { ArrayValidationStructure } from '../../../utils/th-validation/structure
 import { StringValidationRule } from '../../../utils/th-validation/rules/StringValidationRule';
 import { NumberValidationRule } from '../../../utils/th-validation/rules/NumberValidationRule';
 import { PaymentMethodInstanceDO } from "../../../data-layer/common/data-objects/payment-method/PaymentMethodInstanceDO";
+import { TransactionFeeType } from "../../../data-layer/common/data-objects/payment-method/TransactionFeeDO";
+import { NumberInListValidationRule } from "../../../utils/th-validation/rules/NumberInListValidationRule";
 
 export class HotelUpdatePaymentsPoliciesDO {
 	ccyCode: string;
@@ -26,7 +28,16 @@ export class HotelUpdatePaymentsPoliciesDO {
 					},
 					{
 						key: "transactionFee",
-						validationStruct: new PrimitiveValidationStructure(NumberValidationRule.buildNullable())
+						validationStruct: new ObjectValidationStructure([
+							{
+								key: "type",
+								validationStruct: new PrimitiveValidationStructure(new NumberInListValidationRule([TransactionFeeType.Fixed, TransactionFeeType.Percentage]))
+							},
+							{
+								key: "amount",
+								validationStruct: new PrimitiveValidationStructure(NumberValidationRule.buildNullable())
+							}
+						])
 					}
 				]))
 			},

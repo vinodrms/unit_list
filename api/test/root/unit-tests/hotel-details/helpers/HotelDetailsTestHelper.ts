@@ -8,6 +8,7 @@ import { HotelUpdatePropertyDetailsDO, HotelUpdatePropertyDetailsHourDO } from '
 import { PaymentMethodInstanceDO } from "../../../../../core/data-layer/common/data-objects/payment-method/PaymentMethodInstanceDO";
 
 import _ = require('underscore');
+import { TransactionFeeDO, TransactionFeeType } from "../../../../../core/data-layer/common/data-objects/payment-method/TransactionFeeDO";
 
 export class HotelDetailsTestHelper {
 	public getHotelUpdateBasicInfoDO(hotel: HotelDO): HotelUpdateBasicInfoDO {
@@ -54,6 +55,9 @@ export class HotelDetailsTestHelper {
 			paymentMethodList: _.map(paymentMethodIdList, (paymentMethodId: string) => {
 									let pmInstance = new PaymentMethodInstanceDO();
 									pmInstance.paymentMethodId = paymentMethodId;
+									pmInstance.transactionFee = new TransactionFeeDO();
+									pmInstance.transactionFee.amount = 0;
+									pmInstance.transactionFee.type = TransactionFeeType.Fixed;
 									return pmInstance;
 								}),
 			additionalInvoiceDetails: "IBAN RO34INGB736137812638"
