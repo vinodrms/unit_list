@@ -4,6 +4,11 @@ import { ThUtils } from "../../../../../../../../../common/utils/ThUtils";
 import { PaymentMethodInstanceDO } from "../../../../../../../services/common/data-objects/payment-method/PaymentMethodInstanceDO";
 import { AggregatedPaymentMethodDO } from "../../../../../../../services/common/data-objects/payment-method/AggregatedPaymentMethodDO";
 import { TransactionFeeType, TransactionFeeDO } from "../../../../../../../services/common/data-objects/payment-method/TransactionFeeDO";
+import { ThValidators } from "../../../../../../../../../common/utils/form-utils/ThValidators";
+import { PercentageValidator } from "../../../../../../../../../common/utils/form-utils/validators/PercentageValidator";
+import { PriceValidator } from "../../../../../../../../../common/utils/form-utils/validators/PriceValidator";
+import { AThValidator } from "../../../../../../../../../common/utils/form-utils/validators/AThValidator";
+import { ThDataValidators } from "../../../../../../../../../common/utils/form-utils/utils/ThDataValidators";
 
 export class PaymentMethodVM {
 	aggregatedPaymentMethod: AggregatedPaymentMethodDO;
@@ -52,6 +57,15 @@ export class PaymentMethodVM {
 
 	public set hasFixedTransactionFee(hasFixedTransactionFee: boolean) {
 		this.aggregatedPaymentMethod.transactionFee.type = hasFixedTransactionFee? TransactionFeeType.Fixed : TransactionFeeType.Percentage;
+	}
+
+	public trasactionFeeIsValid(): boolean {
+		if (this.hasFixedTransactionFee) {
+			return ThDataValidators.isValidPrice(this.transactionFeeAmount);			
+		}
+		else {
+			return ThDataValidators.isValidPercentage(this.transactionFeeAmount);
+		}
 	}
 }
 
@@ -107,5 +121,17 @@ export class PaymentMethodVMContainer {
 			paymentInstanceDO.transactionFee = paymMethodVM.aggregatedPaymentMethod.transactionFee;
 			return paymentInstanceDO;
 		});
+	}
+
+	public allSelectedPaymentMethodsHaveValidTransactionFees(): boolean {
+		let valid = true;
+		
+		_.forEach(this._paymentMethodList, (paymentVM: PaymentMethodVM) => {
+			if(!paymentVM.trasactionFeeIsValid()) {
+				valid = false;
+			}
+		});
+
+		return valid;
 	}
 }

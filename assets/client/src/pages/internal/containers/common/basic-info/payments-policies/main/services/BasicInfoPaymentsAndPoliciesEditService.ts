@@ -34,7 +34,7 @@ export class BasicInfoPaymentsAndPoliciesEditService {
 		return this._paymentMethodVMContainer.getSelectedPaymentMethodList().length > 0;
 	}
 	private isValid() {
-		return this._hotel.ccyCode && this.didSelectPaymentMethod();
+		return this._hotel.ccyCode && this.didSelectPaymentMethod() && this.allSelectedPaymentMethodsHaveValidTransactionFees();
 	}
 	private didAddTax(): boolean {
 		return this._taxContainer && this._taxContainer.vatList.length > 0;
@@ -42,6 +42,11 @@ export class BasicInfoPaymentsAndPoliciesEditService {
 	public updateAdditionalInvoiceDetails(additionalInvoiceDetails: string) {
 		this._hotel.additionalInvoiceDetails = additionalInvoiceDetails;
 	}
+
+	public allSelectedPaymentMethodsHaveValidTransactionFees(): boolean {
+		return this._paymentMethodVMContainer.allSelectedPaymentMethodsHaveValidTransactionFees();
+	}
+
 	public savePaymentsAndPolicies(): Observable<any> {
 		this.didSubmitForm = true;
 		if (!this.isValid()) {
