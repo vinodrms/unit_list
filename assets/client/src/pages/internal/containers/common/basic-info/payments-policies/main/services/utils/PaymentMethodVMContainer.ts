@@ -3,12 +3,11 @@ import { PaymentMethodDO } from '../../../../../../../services/common/data-objec
 import { ThUtils } from "../../../../../../../../../common/utils/ThUtils";
 import { PaymentMethodInstanceDO } from "../../../../../../../services/common/data-objects/payment-method/PaymentMethodInstanceDO";
 import { AggregatedPaymentMethodDO } from "../../../../../../../services/common/data-objects/payment-method/AggregatedPaymentMethodDO";
-import { TransactionFeeType } from "../../../../../../../services/common/data-objects/payment-method/TransactionFeeDO";
+import { TransactionFeeType, TransactionFeeDO } from "../../../../../../../services/common/data-objects/payment-method/TransactionFeeDO";
 
 export class PaymentMethodVM {
 	aggregatedPaymentMethod: AggregatedPaymentMethodDO;
 	_isSelected: boolean;
-	_hasTransactionFee: boolean;
 
 	public get iconUrl(): string {
 		return this.aggregatedPaymentMethod.paymentMethod.iconUrl;
@@ -40,6 +39,19 @@ export class PaymentMethodVM {
 
 	public set isSelected(isSelected: boolean) {
 		this._isSelected = isSelected;
+
+		if(!isSelected) {
+			this.transactionFeeType = TransactionFeeType.Fixed;
+			this.transactionFeeAmount = 0;
+		}
+	}
+
+	public get hasFixedTransactionFee(): boolean {
+		return this.aggregatedPaymentMethod.transactionFee.type === TransactionFeeType.Fixed;
+	}
+
+	public set hasFixedTransactionFee(hasFixedTransactionFee: boolean) {
+		this.aggregatedPaymentMethod.transactionFee.type = hasFixedTransactionFee? TransactionFeeType.Fixed : TransactionFeeType.Percentage;
 	}
 }
 
@@ -59,19 +71,19 @@ export class PaymentMethodVMContainer {
 			var paymMethodVM: PaymentMethodVM = new PaymentMethodVM();
 			paymMethodVM.aggregatedPaymentMethod = new AggregatedPaymentMethodDO();
 			paymMethodVM.aggregatedPaymentMethod.paymentMethod = paymentMethod;
-
+			
 			let paymentSupportedByHotel = _.contains(supportedPaymentMethodIdList, paymentMethod.id);
 			if(paymentSupportedByHotel) {
 				let paymentMethodInstance = _.find(supportedPaymentMethodInstanceList, (pmInstance: PaymentMethodInstanceDO) => {
 					return pmInstance.paymentMethodId == paymentMethod.id;
 				});
-
-				paymMethodVM.aggregatedPaymentMethod = new AggregatedPaymentMethodDO();
-				paymMethodVM.aggregatedPaymentMethod.paymentMethod = paymentMethod;
 				paymMethodVM.aggregatedPaymentMethod.transactionFee = paymentMethodInstance.transactionFee;
 			}
+			else {
+				paymMethodVM.aggregatedPaymentMethod.transactionFee = TransactionFeeDO.getDefaultTransactionFee();
+			}
 			paymMethodVM.isSelected = paymentSupportedByHotel;
-			
+
 			this._paymentMethodList.push(paymMethodVM);
 		});
 	}
