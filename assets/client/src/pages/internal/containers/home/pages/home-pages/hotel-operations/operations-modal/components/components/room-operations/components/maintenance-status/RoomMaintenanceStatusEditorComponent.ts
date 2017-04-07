@@ -6,6 +6,7 @@ import {RoomVM} from '../../../../../../../../../../../services/rooms/view-model
 import {RoomMaintenanceUtils} from '../../../../../../../../../../../services/rooms/utils/RoomMaintenanceUtils';
 import {RoomMaintenanceMeta} from '../../../../../../../../../../../services/rooms/utils/RoomMaintenanceMeta';
 import {HotelOperationsRoomService} from '../../../../../../../../../../../services/hotel-operations/room/HotelOperationsRoomService';
+import {RoomMaintenanceStatusUpdater} from '../../../../../../common/RoomMaintenanceStatusUpdater';
 
 @Component({
     selector: 'room-maintenance-status-editor',
@@ -41,10 +42,13 @@ export class RoomMaintenanceStatusEditorComponent implements OnInit {
     currentMaintenanceMetaCopy: RoomMaintenanceMeta;
     currentMaintenanceTextCopy: string;
 
+    private _roomMaintenanceStatusUpdater: RoomMaintenanceStatusUpdater;
+
     constructor(private _appContext: AppContext,
         private _hotelOperationsRoomService: HotelOperationsRoomService) {
         this._roomMaintenanceUtils = new RoomMaintenanceUtils();
         this.currentMaintenanceMeta = this.roomMaintenanceMetaList[0];
+        this._roomMaintenanceStatusUpdater = new RoomMaintenanceStatusUpdater(this._appContext, this._hotelOperationsRoomService);
     }
 
     ngOnInit() {
@@ -75,46 +79,16 @@ export class RoomMaintenanceStatusEditorComponent implements OnInit {
         this.currentMaintenanceText = this.currentMaintenanceTextCopy;
     }
     public saveMaintenanceStatus() {
-        if (this.currentMaintenanceMeta.maintenanceStatus !== RoomMaintenanceStatus.OutOfService
-            && this.currentMaintenanceMeta.maintenanceStatus !== RoomMaintenanceStatus.OutOfOrder) {
-            this.saveMaintenanceStatusCore();
-            return;
-        }
-        if(this.hasCheckedInBooking) {
-            var errMessage = this._appContext.thTranslation.translate("Please check out the room first or move the booking to another room");
-            this._appContext.toaster.error(errMessage);
-            return;
-        }
-
-        var message = "This action is used to signal long maintenances on this room and will remove it from your active inventory. Are you sure you want to mark the room as Out of Order?";
-        var title = "Out of Order";
-        if (this.currentMaintenanceMeta.maintenanceStatus === RoomMaintenanceStatus.OutOfService) {
-            message = "This action means that the room requires some maintenance and you can't check in customers. Are you sure you want to mark the room as Out of Service?";
-            title = "Out of Service";
-        }
-
-        var title = this._appContext.thTranslation.translate(title);
-        var content = this._appContext.thTranslation.translate(message);
-        this._appContext.modalService.confirm(title, content, { positive: this._appContext.thTranslation.translate("Yes"), negative: this._appContext.thTranslation.translate("No") },
-            () => {
-                this.saveMaintenanceStatusCore();
-            }, () => { });
-    }
-
-    private saveMaintenanceStatusCore() {
-        this.isSaving = true;
-        this._hotelOperationsRoomService.updateMaintenanceStatus({
-            id: this._roomVM.room.id,
-            maintenanceMessage: this.currentMaintenanceText,
-            maintenanceStatus: this.currentMaintenanceMeta.maintenanceStatus
-        }).subscribe((updatedRoom: RoomDO) => {
-            this._appContext.analytics.logEvent("room", "maintenance-status", "Changed the maintenance status for a room");
-            this.readonly = true;
+        this._roomMaintenanceStatusUpdater.saveMaintenanceStatus(this.roomVM.room.id, this.currentMaintenanceMeta, this.currentMaintenanceText, this.hasCheckedInBooking)
+        .then((updatedRoom: RoomDO) => {
+            if (updatedRoom != null) {
+                this.readonly = true;
+                this.isSaving = false;
+                this.triggerOnMaintenanceStatusChanged(updatedRoom);
+            }
+        })
+        .catch((error: ThError) => {
             this.isSaving = false;
-            this.triggerOnMaintenanceStatusChanged(updatedRoom);
-        }, (error: ThError) => {
-            this.isSaving = false;
-            this._appContext.toaster.error(error.message);
         });
     }
 

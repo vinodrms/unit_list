@@ -13,15 +13,14 @@ import {HotelOperationsDashboardService} from '../../../../../../../../../../ser
 import {HotelOperationsRoomService} from '../../../../../../../../../../services/hotel-operations/room/HotelOperationsRoomService';
 import {RoomsCanvasComponent} from '../../../rooms-canvas/RoomsCanvasComponent';
 import {HotelDashboardModalService} from '../../../../services/HotelDashboardModalService';
-import {RoomMaintenanceStatusModalModule} from './modal/RoomMaintenanceStatusModalModule';
-import {RoomMaintenanceStatusModalInput} from './modal/utils/RoomMaintenanceStatusModalInput';
-import {RoomMaintenanceStatusModalComponent} from './modal/RoomMaintenanceStatusModalComponent';
-
+import {RoomMaintenanceStatusModalService} from './modal/services/RoomMaintenanceStatusModalService';
+	
 declare var $: any;
 
 @Component({
 	selector: 'room-card',
-	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/dashboard/components/rooms-canvas/components/room-card/template/room-card.html'
+	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/dashboard/components/rooms-canvas/components/room-card/template/room-card.html',
+	providers: [RoomMaintenanceStatusModalService] 
 })
 export class RoomCardComponent {
 	public maintenance;
@@ -37,7 +36,8 @@ export class RoomCardComponent {
 		private _hotelOperationsDashboardService: HotelOperationsDashboardService,
 		private _hotelOperationsModalService: HotelOperationsModalService,
 		private _modalService: HotelDashboardModalService,
-		private _appContext: AppContext
+		private _appContext: AppContext,
+		private _roomMaintenanceStatusModalService: RoomMaintenanceStatusModalService
 	) {
 
 		this.enums = {
@@ -209,11 +209,6 @@ export class RoomCardComponent {
 	}
 
 	public openRoomMaintenanceStatusModal() {
-		var roomVM = this.roomVM.roomVM;
-		var hotelOperationsRoomService = this._operationRoomService;
-		var roomMaintenanceStatusModalInput = new RoomMaintenanceStatusModalInput(roomVM, hotelOperationsRoomService);
-		this._appContext.modalService.open<boolean>(RoomMaintenanceStatusModalModule, RoomMaintenanceStatusModalComponent, ReflectiveInjector.resolve([
-            { provide: RoomMaintenanceStatusModalInput, useValue: roomMaintenanceStatusModalInput }
-		]));
+		this._roomMaintenanceStatusModalService.openRoomMaintenanceStatusModal(this.roomVM.roomVM, this._operationRoomService);
 	}
 }

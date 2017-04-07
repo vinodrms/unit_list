@@ -10,6 +10,7 @@ import {BaseComponent} from '../../../../../../../../../../../../../common/base/
 import {ICustomModalComponent, ModalSize} from "../../../../../../../../../../../../../common/utils/modals/utils/ICustomModalComponent";
 import {ModalDialogRef} from "../../../../../../../../../../../../../common/utils/modals/utils/ModalDialogRef";
 import {RoomAttachedBookingResultVM} from '../../../../../../../../../../../services/hotel-operations/room/view-models/RoomAttachedBookingResultVM';
+import {RoomMaintenanceStatusUpdater} from '../../../../../../common/RoomMaintenanceStatusUpdater';
 
 @Component({
     selector: 'room-maintenance-status-modal',
@@ -22,6 +23,7 @@ export class RoomMaintenanceStatusModalComponent extends BaseComponent implement
     private _newMaintenanceText: string;
     private _hasCheckedInBooking: boolean;
     private _isLoading: boolean;
+    private _roomMaintenanceStatusUpdater: RoomMaintenanceStatusUpdater;
 
     constructor(private _appContext: AppContext,
         private _modalDialogRef: ModalDialogRef<boolean>,
@@ -29,7 +31,7 @@ export class RoomMaintenanceStatusModalComponent extends BaseComponent implement
         super();
         this._roomMaintenanceUtils = new RoomMaintenanceUtils();
         this._newMaintenanceMeta = this.roomMaintenanceMetaList[0];
-        debugger
+        this._roomMaintenanceStatusUpdater = new RoomMaintenanceStatusUpdater(this._appContext, this._roomMaintenanceStatusModalInput.hotelOperationsRoomService);
     }
 
     ngOnInit() {
@@ -58,43 +60,13 @@ export class RoomMaintenanceStatusModalComponent extends BaseComponent implement
     }
 
     public saveMaintenanceStatus() {
-        if (this._newMaintenanceMeta.maintenanceStatus !== RoomMaintenanceStatus.OutOfService
-            && this._newMaintenanceMeta.maintenanceStatus !== RoomMaintenanceStatus.OutOfOrder) {
-            this.saveMaintenanceStatusCore();
-            return;
-        }
-        
-        if(this._hasCheckedInBooking) {
-            var errMessage = this._appContext.thTranslation.translate("Please check out the room first or move the booking to another room");
-            this._appContext.toaster.error(errMessage);
-            return;
-        }
-
-        var message = "This action is used to signal long maintenances on this room and will remove it from your active inventory. Are you sure you want to mark the room as Out of Order?";
-        var title = "Out of Order";
-        if (this._newMaintenanceMeta.maintenanceStatus === RoomMaintenanceStatus.OutOfService) {
-            message = "This action means that the room requires some maintenance and you can't check in customers. Are you sure you want to mark the room as Out of Service?";
-            title = "Out of Service";
-        }
-
-        var title = this._appContext.thTranslation.translate(title);
-        var content = this._appContext.thTranslation.translate(message);
-        this._appContext.modalService.confirm(title, content, { positive: this._appContext.thTranslation.translate("Yes"), negative: this._appContext.thTranslation.translate("No") },
-            () => {
-                this.saveMaintenanceStatusCore();
-            }, () => { });
-    }
-
-    private saveMaintenanceStatusCore() {
-        this._roomMaintenanceStatusModalInput.hotelOperationsRoomService.updateMaintenanceStatus({
-            id: this._roomMaintenanceStatusModalInput.roomVM.room.id,
-            maintenanceMessage: this._newMaintenanceText,
-            maintenanceStatus: this._newMaintenanceMeta.maintenanceStatus
-        }).subscribe((updatedRoom: RoomDO) => {
-            this._appContext.analytics.logEvent("room", "maintenance-status", "Changed the maintenance status for a room");
-           this.closeDialog();
-        }, (error: ThError) => {
-            this._appContext.toaster.error(error.message);
+        this._roomMaintenanceStatusUpdater.saveMaintenanceStatus(this._roomMaintenanceStatusModalInput.roomVM.room.id, this._newMaintenanceMeta, this._newMaintenanceText, this._hasCheckedInBooking)
+        .then((updatedRoom: RoomDO) => {
+            if (updatedRoom != null) {
+                this.closeDialog();
+            }
+        })
+        .catch((error: ThError) => {
             this.closeDialog();
         });
     }
