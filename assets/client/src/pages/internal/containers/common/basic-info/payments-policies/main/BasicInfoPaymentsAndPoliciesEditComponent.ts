@@ -15,6 +15,7 @@ import { PaymentMethodVMContainer, PaymentMethodVM } from './services/utils/Paym
 import { TaxService } from '../../../../../services/taxes/TaxService';
 import { TaxType } from '../../../../../services/taxes/data-objects/TaxDO';
 import { TaxContainerDO } from '../../../../../services/taxes/data-objects/TaxContainerDO';
+import { CurrencyDO } from "../../../../../services/common/data-objects/currency/CurrencyDO";
 
 @Component({
 	selector: 'basic-info-payments-policies-edit',
@@ -82,6 +83,12 @@ export class BasicInfoPaymentsAndPoliciesEditComponent extends BaseFormComponent
 	}
 	public getDefaultFormGroup(): FormGroup {
 		return this._formGroup;
+	}
+
+	public get ccySymbol(): string {
+		return _.find(this.currencies.currencyList, (ccy: CurrencyDO) => {
+			return ccy.code === this.hotel.ccyCode;
+		}).symbol;
 	}
 
 	savePaymentsAndPolicies() {
