@@ -7,7 +7,7 @@ import { BaseCorporateDetailsDO } from '../../../customers/data-objects/customer
 export class InvoicePayerDO extends BaseDO {
     customerId: string;
     paymentMethod: InvoicePaymentMethodDO;
-    commissionSnapshot: CommissionDO;
+    // commissionSnapshot: CommissionDO;
     priceToPay: number;
     additionalInvoiceDetails: string;
 
@@ -18,15 +18,15 @@ export class InvoicePayerDO extends BaseDO {
     public buildFromObject(object: Object) {
         super.buildFromObject(object);
 
-        if (this.getObjectPropertyEnsureUndefined(object, "paymentMethod") != null) {
+        if (this.getObjectPropertyEnsureUndefined(object, "\paymentMethod") != null) {
             this.paymentMethod = new InvoicePaymentMethodDO();
             this.paymentMethod.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "paymentMethod"));
         }
 
-        if (this.getObjectPropertyEnsureUndefined(object, "commissionSnapshot") != null) {
-            this.commissionSnapshot = new CommissionDO();
-            this.commissionSnapshot.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "commissionSnapshot"));
-        }
+        // if (this.getObjectPropertyEnsureUndefined(object, "commissionSnapshot") != null) {
+        //     this.commissionSnapshot = new CommissionDO();
+        //     this.commissionSnapshot.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "commissionSnapshot"));
+        // }
     }
 
     public static buildFromCustomerDOAndPaymentMethod(customer: CustomerDO, paymentMethod: InvoicePaymentMethodDO): InvoicePayerDO {
@@ -35,11 +35,11 @@ export class InvoicePayerDO extends BaseDO {
         invoicePayer.customerId = customer.id;
         invoicePayer.paymentMethod = paymentMethod;
         invoicePayer.priceToPay = 0;
-        if (customer.isCompanyOrTravelAgency()) {
-            var baseCorporateDetails = new BaseCorporateDetailsDO();
-            baseCorporateDetails.buildFromObject(customer.customerDetails);
-            invoicePayer.commissionSnapshot = baseCorporateDetails.commission;
-        }
+        // if (customer.isCompanyOrTravelAgency()) {
+        //     var baseCorporateDetails = new BaseCorporateDetailsDO();
+        //     baseCorporateDetails.buildFromObject(customer.customerDetails);
+        //     invoicePayer.commissionSnapshot = baseCorporateDetails.commission;
+        // }
 
         return invoicePayer;
     }

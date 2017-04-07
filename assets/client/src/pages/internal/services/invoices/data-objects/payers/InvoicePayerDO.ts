@@ -7,7 +7,6 @@ import { CorporateDetailsDO } from '../../../customers/data-objects/customer-det
 export class InvoicePayerDO extends BaseDO {
     customerId: string;
     paymentMethod: InvoicePaymentMethodDO;
-    commissionSnapshot: CommissionDO;
     priceToPay: number;
     additionalInvoiceDetails: string;
 
@@ -23,10 +22,6 @@ export class InvoicePayerDO extends BaseDO {
             this.paymentMethod.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "paymentMethod"));
         }
 
-        if (this.getObjectPropertyEnsureUndefined(object, "commissionSnapshot") != null) {
-            this.commissionSnapshot = new CommissionDO();
-            this.commissionSnapshot.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "commissionSnapshot"));
-        }
     }
 
     public static buildFromCustomerDOAndPaymentMethod(customer: CustomerDO, paymentMethod: InvoicePaymentMethodDO): InvoicePayerDO {
@@ -38,7 +33,6 @@ export class InvoicePayerDO extends BaseDO {
         if (customer.isCompanyOrTravelAgency()) {
             var corporateDetails = new CorporateDetailsDO();
             corporateDetails.buildFromObject(customer.customerDetails);
-            invoicePayer.commissionSnapshot = corporateDetails.commission;
         }
 
         return invoicePayer;
