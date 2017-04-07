@@ -20,7 +20,16 @@ export class TransactionFeeDO extends BaseDO {
         super.buildFromObject(object);
     }
 
-public getAmountWihtTransactionFeeIncluded(amount: number): number {
-        return this.type === TransactionFeeType.Fixed ? amount + this.amount : amount * (1 + this.amount);
+    public getAmountWihtTransactionFeeIncluded(amount: number): number {
+        return this.type === TransactionFeeType.Fixed ? 
+            amount + this.amount : amount * (1 + this.amount);
+    }
+
+    public static getDefaultTransactionFee(): TransactionFeeDO {
+        let transactionFeeDO = new TransactionFeeDO();
+        transactionFeeDO.amount = 0;
+        transactionFeeDO.type = TransactionFeeType.Fixed;
+
+        return transactionFeeDO;
     }
 }

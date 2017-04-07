@@ -31,4 +31,12 @@ export class TransactionFeeDO extends BaseDO {
         }
         return numberValidationRule.validate(this.amount, "amount").isValid();
     }
+
+    public static getDefaultTransactionFee(): TransactionFeeDO {
+        let transactionFeeDO = new TransactionFeeDO();
+        transactionFeeDO.amount = 0;
+        transactionFeeDO.type = TransactionFeeType.Fixed;
+
+        return transactionFeeDO;
+    }
 }

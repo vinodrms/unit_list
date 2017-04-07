@@ -30,9 +30,8 @@ export class P16_TransformPaymentMetehodIdListOnHotelIntoPaymentMethodInstanceLi
             _.forEach(paymentMethodIdList, (paymentMethodId: string) => {
                 let pmInstance = new PaymentMethodInstanceDO();
                 pmInstance.paymentMethodId = paymentMethodId;
-                pmInstance.transactionFee = new TransactionFeeDO();
-                pmInstance.transactionFee.amount = 0;
-                pmInstance.transactionFee.type = TransactionFeeType.Percentage;
+                pmInstance.transactionFee = TransactionFeeDO.getDefaultTransactionFee();
+                
                 hotel.paymentMethodList.push(pmInstance);
             });
         }
