@@ -23,7 +23,7 @@ export class PaymentMethodVM {
 	}
 
 	public get transactionFeeAmount(): number {
-		return this.aggregatedPaymentMethod.transactionFee.printableAmount;
+		return this.aggregatedPaymentMethod.transactionFee.amount;
 	}
 
 	public set transactionFeeAmount(amount: number) {
