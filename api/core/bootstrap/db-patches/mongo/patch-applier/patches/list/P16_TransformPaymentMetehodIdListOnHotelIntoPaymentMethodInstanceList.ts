@@ -5,6 +5,8 @@ import { HotelDO } from "../../../../../../data-layer/hotel/data-objects/HotelDO
 import { PaymentMethodInstanceDO } from "../../../../../../data-layer/common/data-objects/payment-method/PaymentMethodInstanceDO";
 import { TransactionFeeDO, TransactionFeeType } from "../../../../../../data-layer/common/data-objects/payment-method/TransactionFeeDO";
 
+import _ = require('underscore');
+
 export class P16_TransformPaymentMetehodIdListOnHotelIntoPaymentMethodInstanceList extends APaginatedTransactionalMongoPatch {
 
     protected getMongoRepository(): MongoRepository {
