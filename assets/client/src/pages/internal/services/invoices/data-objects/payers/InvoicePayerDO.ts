@@ -3,15 +3,18 @@ import { InvoicePaymentMethodDO } from './InvoicePaymentMethodDO';
 import { CommissionDO } from '../../../common/data-objects/commission/CommissionDO';
 import { CustomerDO } from '../../../customers/data-objects/CustomerDO';
 import { CorporateDetailsDO } from '../../../customers/data-objects/customer-details/CorporateDetailsDO';
+import { TransactionFeeDO } from "../../../common/data-objects/payment-method/TransactionFeeDO";
 
 export class InvoicePayerDO extends BaseDO {
     customerId: string;
     paymentMethod: InvoicePaymentMethodDO;
+    transactionFeeSnapshot: TransactionFeeDO;
     priceToPay: number;
+    priceToPayPlusTransactionFee: number;
     additionalInvoiceDetails: string;
 
     protected getPrimitivePropertyKeys(): string[] {
-        return ["customerId", "priceToPay", "additionalInvoiceDetails"];
+        return ["customerId", "priceToPay", "priceToPayPlusTransactionFee", "additionalInvoiceDetails"];
     }
 
     public buildFromObject(object: Object) {
@@ -22,6 +25,10 @@ export class InvoicePayerDO extends BaseDO {
             this.paymentMethod.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "paymentMethod"));
         }
 
+        if (this.getObjectPropertyEnsureUndefined(object, "transactionFeeSnapshot") != null) {
+            this.transactionFeeSnapshot = new TransactionFeeDO();
+            this.transactionFeeSnapshot.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "transactionFeeSnapshot"));
+        }
     }
 
     public static buildFromCustomerDOAndPaymentMethod(customer: CustomerDO, paymentMethod: InvoicePaymentMethodDO): InvoicePayerDO {

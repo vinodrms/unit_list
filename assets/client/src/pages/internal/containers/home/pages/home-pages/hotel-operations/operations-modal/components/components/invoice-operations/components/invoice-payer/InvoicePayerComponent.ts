@@ -17,7 +17,7 @@ import { InvoicePaymentMethodVMGenerator } from '../../../../../../../../../../.
 import { InvoicePaymentMethodVM } from '../../../../../../../../../../../services/invoices/view-models/InvoicePaymentMethodVM';
 import { InvoicePaymentMethodDO, InvoicePaymentMethodType } from '../../../../../../../../../../../services/invoices/data-objects/payers/InvoicePaymentMethodDO';
 import { EmailSenderModalService } from '../../../../../../email-sender/services/EmailSenderModalService';
-import { TransactionFeeDO } from "../../../../../../../../../../../services/common/data-objects/payment-method/TransactionFeeDO";
+import { TransactionFeeDO, TransactionFeeType } from "../../../../../../../../../../../services/common/data-objects/payment-method/TransactionFeeDO";
 
 @Component({
     selector: 'invoice-payer',
@@ -58,6 +58,11 @@ export class InvoicePayerComponent implements OnInit {
             this.invoiceVM.isValid();
         }
         if (!this._pmWasSetForTheFirstTime) this._pmWasSetForTheFirstTime = true;
+
+        this.invoicePayerVM.invoicePayerDO.transactionFeeSnapshot = this.transactionFee;
+        this.invoicePayerVM.invoicePayerDO.priceToPayPlusTransactionFee = this.transactionFee.getAmountWihtTransactionFeeIncluded(this.invoicePayerVM.invoicePayerDO.priceToPay);
+
+        debugger
     }
 
     ngOnInit() {
@@ -184,6 +189,9 @@ export class InvoicePayerComponent implements OnInit {
     }
     public get transactionFee(): TransactionFeeDO {
         return this.selectedPaymentMethodVM.transactionFee;
+    }
+    public get transactionFeeIsFixed(): boolean {
+        return this.selectedPaymentMethodVM.transactionFee.type === TransactionFeeType.Fixed;
     }
     public get editMode(): boolean {
         return this.invoiceGroupVM.editMode;

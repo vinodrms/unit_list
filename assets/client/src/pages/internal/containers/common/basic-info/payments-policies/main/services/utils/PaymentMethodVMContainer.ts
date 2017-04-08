@@ -23,10 +23,13 @@ export class PaymentMethodVM {
 	}
 
 	public get transactionFeeAmount(): number {
-		return this.aggregatedPaymentMethod.transactionFee.amount;
+		return this.aggregatedPaymentMethod.transactionFee.printableAmount;
 	}
 
 	public set transactionFeeAmount(amount: number) {
+		if (this.transactionFeeType == TransactionFeeType.Percentage && amount != null) {
+			amount = amount / 100;
+		}
 		this.aggregatedPaymentMethod.transactionFee.amount = amount;
 	}
 
@@ -45,7 +48,7 @@ export class PaymentMethodVM {
 	public set isSelected(isSelected: boolean) {
 		this._isSelected = isSelected;
 
-		if(!isSelected) {
+		if (!isSelected) {
 			this.transactionFeeType = TransactionFeeType.Fixed;
 			this.transactionFeeAmount = 0;
 		}
@@ -56,12 +59,12 @@ export class PaymentMethodVM {
 	}
 
 	public set hasFixedTransactionFee(hasFixedTransactionFee: boolean) {
-		this.aggregatedPaymentMethod.transactionFee.type = hasFixedTransactionFee? TransactionFeeType.Fixed : TransactionFeeType.Percentage;
+		this.aggregatedPaymentMethod.transactionFee.type = hasFixedTransactionFee ? TransactionFeeType.Fixed : TransactionFeeType.Percentage;
 	}
 
 	public trasactionFeeIsValid(): boolean {
 		if (this.hasFixedTransactionFee) {
-			return ThDataValidators.isValidPrice(this.transactionFeeAmount);			
+			return ThDataValidators.isValidPrice(this.transactionFeeAmount);
 		}
 		else {
 			return ThDataValidators.isValidPercentage(this.transactionFeeAmount);
@@ -76,18 +79,18 @@ export class PaymentMethodVMContainer {
 	constructor(allAvailablePaymentMethods: HotelPaymentMethodsDO, supportedPaymentMethodInstanceList: PaymentMethodInstanceDO[]) {
 		this._thUtils = new ThUtils();
 		this._paymentMethodList = [];
-		
+
 		let supportedPaymentMethodIdList = _.map(supportedPaymentMethodInstanceList, (paymentMethod: PaymentMethodInstanceDO) => {
 			return paymentMethod.paymentMethodId;
 		});
-		
+
 		allAvailablePaymentMethods.paymentMethodList.forEach((paymentMethod: PaymentMethodDO) => {
 			var paymMethodVM: PaymentMethodVM = new PaymentMethodVM();
 			paymMethodVM.aggregatedPaymentMethod = new AggregatedPaymentMethodDO();
 			paymMethodVM.aggregatedPaymentMethod.paymentMethod = paymentMethod;
-			
+
 			let paymentSupportedByHotel = _.contains(supportedPaymentMethodIdList, paymentMethod.id);
-			if(paymentSupportedByHotel) {
+			if (paymentSupportedByHotel) {
 				let paymentMethodInstance = _.find(supportedPaymentMethodInstanceList, (pmInstance: PaymentMethodInstanceDO) => {
 					return pmInstance.paymentMethodId == paymentMethod.id;
 				});
@@ -105,7 +108,7 @@ export class PaymentMethodVMContainer {
 	public get paymentMethodList(): PaymentMethodVM[] {
 		return this._paymentMethodList;
 	}
-	
+
 	public set paymentMethodList(paymentMethodList: PaymentMethodVM[]) {
 		this._paymentMethodList = paymentMethodList;
 	}
@@ -125,9 +128,9 @@ export class PaymentMethodVMContainer {
 
 	public allSelectedPaymentMethodsHaveValidTransactionFees(): boolean {
 		let valid = true;
-		
+
 		_.forEach(this._paymentMethodList, (paymentVM: PaymentMethodVM) => {
-			if(!paymentVM.trasactionFeeIsValid()) {
+			if (!paymentVM.trasactionFeeIsValid()) {
 				valid = false;
 			}
 		});
