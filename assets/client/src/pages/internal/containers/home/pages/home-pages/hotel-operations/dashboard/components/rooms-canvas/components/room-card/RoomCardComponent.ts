@@ -1,23 +1,26 @@
-import { Component, Input, Output, NgZone, ElementRef, EventEmitter } from '@angular/core';
-import { AppContext } from '../../../../../../../../../../../../common/utils/AppContext';
-import { ModalDialogRef } from '../../../../../../../../../../../../common/utils/modals/utils/ModalDialogRef';
-import { RoomItemInfoVM } from '../../../../../../../../../../services/hotel-operations/dashboard/rooms/view-models/RoomItemInfoVM';
-import { RoomDropHandlerFactory } from './drop-handlers/RoomDropHandlerFactory';
-import { RoomMaintenanceStatus, RollawayBedStatus } from '../../../../../../../../../../services/rooms/data-objects/RoomDO';
-import { ArrivalItemInfoVM } from '../../../../../../../../../../services/hotel-operations/dashboard/arrivals/view-models/ArrivalItemInfoVM';
-import { HotelOperationsResult } from '../../../../../operations-modal/services/utils/HotelOperationsResult';
-import { HotelOperationsModalService } from '../../../../../operations-modal/services/HotelOperationsModalService';
-import { AssignRoomParam } from '../../../../../../../../../../services/hotel-operations/room/utils/AssignRoomParam';
-import { HotelOperationsDashboardService } from '../../../../../../../../../../services/hotel-operations/dashboard/HotelOperationsDashboardService';
-import { HotelOperationsRoomService } from '../../../../../../../../../../services/hotel-operations/room/HotelOperationsRoomService';
-import { RoomsCanvasComponent } from '../../../rooms-canvas/RoomsCanvasComponent';
-import { HotelDashboardModalService } from '../../../../services/HotelDashboardModalService';
-
+import {Component, Input, Output, NgZone, ElementRef, EventEmitter} from '@angular/core';
+import {Injectable, ReflectiveInjector} from '@angular/core';
+import {AppContext} from '../../../../../../../../../../../../common/utils/AppContext';
+import {ModalDialogRef} from '../../../../../../../../../../../../common/utils/modals/utils/ModalDialogRef';
+import {RoomItemInfoVM} from '../../../../../../../../../../services/hotel-operations/dashboard/rooms/view-models/RoomItemInfoVM';
+import {RoomDropHandlerFactory} from './drop-handlers/RoomDropHandlerFactory';
+import {RoomMaintenanceStatus, RollawayBedStatus} from '../../../../../../../../../../services/rooms/data-objects/RoomDO';
+import {ArrivalItemInfoVM} from '../../../../../../../../../../services/hotel-operations/dashboard/arrivals/view-models/ArrivalItemInfoVM';
+import {HotelOperationsResult} from '../../../../../operations-modal/services/utils/HotelOperationsResult';
+import {HotelOperationsModalService} from '../../../../../operations-modal/services/HotelOperationsModalService';
+import {AssignRoomParam} from '../../../../../../../../../../services/hotel-operations/room/utils/AssignRoomParam';
+import {HotelOperationsDashboardService} from '../../../../../../../../../../services/hotel-operations/dashboard/HotelOperationsDashboardService';
+import {HotelOperationsRoomService} from '../../../../../../../../../../services/hotel-operations/room/HotelOperationsRoomService';
+import {RoomsCanvasComponent} from '../../../rooms-canvas/RoomsCanvasComponent';
+import {HotelDashboardModalService} from '../../../../services/HotelDashboardModalService';
+import {RoomMaintenanceStatusModalService} from './modal/services/RoomMaintenanceStatusModalService';
+	
 declare var $: any;
 
 @Component({
 	selector: 'room-card',
-	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/dashboard/components/rooms-canvas/components/room-card/template/room-card.html'
+	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/dashboard/components/rooms-canvas/components/room-card/template/room-card.html',
+	providers: [RoomMaintenanceStatusModalService] 
 })
 export class RoomCardComponent {
 	public maintenance;
@@ -33,7 +36,8 @@ export class RoomCardComponent {
 		private _hotelOperationsDashboardService: HotelOperationsDashboardService,
 		private _hotelOperationsModalService: HotelOperationsModalService,
 		private _modalService: HotelDashboardModalService,
-		private _appContext: AppContext
+		private _appContext: AppContext,
+		private _roomMaintenanceStatusModalService: RoomMaintenanceStatusModalService
 	) {
 
 		this.enums = {
@@ -51,7 +55,7 @@ export class RoomCardComponent {
 					title: 'Dirty',
 					icon: 'H',
 					clickHandler: () => {
-						this.openRoomModal();
+						this.openRoomMaintenanceStatusModal();
 					}
 				}
 				break;
@@ -62,7 +66,7 @@ export class RoomCardComponent {
 					title: 'Pickup',
 					icon: 'J',
 					clickHandler: () => {
-						this.openRoomModal();
+						this.openRoomMaintenanceStatusModal();
 					}
 				}
 				break;
@@ -73,7 +77,7 @@ export class RoomCardComponent {
 					title: 'Out of order',
 					icon: '+',
 					clickHandler: () => {
-						this.openRoomModal();
+						this.openRoomMaintenanceStatusModal();
 					}
 				}
 				break;
@@ -84,7 +88,7 @@ export class RoomCardComponent {
 					title: 'Out of service',
 					icon: 'K',
 					clickHandler: () => {
-						this.openRoomModal();
+						this.openRoomMaintenanceStatusModal();
 					}
 				}
 				break;
@@ -204,4 +208,7 @@ export class RoomCardComponent {
 		this._modalService.openBookingModal(bookingId, groupBookingId);
 	}
 
+	public openRoomMaintenanceStatusModal() {
+		this._roomMaintenanceStatusModalService.openRoomMaintenanceStatusModal(this.roomVM.roomVM, this._operationRoomService);
+	}
 }
