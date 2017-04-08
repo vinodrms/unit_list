@@ -61,8 +61,6 @@ export class InvoicePayerComponent implements OnInit {
 
         this.invoicePayerVM.invoicePayerDO.transactionFeeSnapshot = this.transactionFee;
         this.invoicePayerVM.invoicePayerDO.priceToPayPlusTransactionFee = this.transactionFee.getAmountWihtTransactionFeeIncluded(this.invoicePayerVM.invoicePayerDO.priceToPay);
-
-        debugger
     }
 
     ngOnInit() {
