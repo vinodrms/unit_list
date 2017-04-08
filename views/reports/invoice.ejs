@@ -238,7 +238,9 @@
             <tr class="total">
                 <td></td>
                 <td colspan="4">
-                   <%= paymentMethodLabel %>: <%= paymentMethodValue %> <br>
+                   <%= paymentMethodLabel %>: <%= paymentMethodValue %> 
+                   <%if (hasTransactionFee > 0) {%>(<%= transactionFeeLabel %>: <%if (transactionFeeIsFlat) {%><%= ccySymbol %><%}%><%= transactionFeeValue %><%if (!transactionFeeIsFlat) {%>%<%}%>)<%}%>
+                   <br>
                    <%= subtotalLabel %>: <%= ccySymbol %><%= subtotalValue %> <br>
                    <%= vatLabel %>: <%= ccySymbol %><%= totalVat %> <br>
                    <%= totalLabel %>: <%= ccySymbol %><%= totalValue %>

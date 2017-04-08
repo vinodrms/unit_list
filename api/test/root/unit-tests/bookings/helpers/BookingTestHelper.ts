@@ -89,7 +89,7 @@ export class BookingTestHelper {
             paymentGuarantee: true,
             paymentMethod: {
                 type: InvoicePaymentMethodType.DefaultPaymentMethod,
-                value: this._testUtils.getRandomListElement(testDataBuilder.hotelDO.paymentMethodIdList)
+                value: this._testUtils.getRandomListElement(testDataBuilder.hotelDO.paymentMethodList).paymentMethodId
             }
         });
 

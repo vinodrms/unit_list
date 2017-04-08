@@ -1,18 +1,21 @@
-import {HotelPaymentMethodsDO} from '../../../settings/data-objects/HotelPaymentMethodsDO';
-import {PaymentMethodDO} from '../../../common/data-objects/payment-method/PaymentMethodDO';
-import {InvoicePaymentMethodVM} from '../InvoicePaymentMethodVM';
-import {CustomerDO} from '../../../customers/data-objects/CustomerDO';
-import {InvoicePaymentMethodDO, InvoicePaymentMethodType} from '../../data-objects/payers/InvoicePaymentMethodDO';
+import { HotelPaymentMethodsDO } from '../../../settings/data-objects/HotelPaymentMethodsDO';
+import { PaymentMethodDO } from '../../../common/data-objects/payment-method/PaymentMethodDO';
+import { InvoicePaymentMethodVM } from '../InvoicePaymentMethodVM';
+import { CustomerDO } from '../../../customers/data-objects/CustomerDO';
+import { InvoicePaymentMethodDO, InvoicePaymentMethodType } from '../../data-objects/payers/InvoicePaymentMethodDO';
+import { HotelAggregatedPaymentMethodsDO } from "../../../settings/data-objects/HotelAggregatedPaymentMethodsDO";
+import { AggregatedPaymentMethodDO } from "../../../common/data-objects/payment-method/AggregatedPaymentMethodDO";
 
 export class InvoicePaymentMethodVMGenerator {
     private _allowedPaymentMethodVMList: InvoicePaymentMethodVM[];
 
-    constructor(private _allowedPaymentMethods: HotelPaymentMethodsDO) {
+    constructor(private _allowedPaymentMethods: HotelAggregatedPaymentMethodsDO) {
         this.initAllowedInvoicePaymentMethodVMList();
     }
     private initAllowedInvoicePaymentMethodVMList() {
-        this._allowedPaymentMethodVMList = _.map(this._allowedPaymentMethods.paymentMethodList, (paymentMethod: PaymentMethodDO) => {
-            return this.generatePaymentMethodVMFor(paymentMethod);
+
+        this._allowedPaymentMethodVMList = _.map(this._allowedPaymentMethods.paymentMethodList, (paymentMethod: AggregatedPaymentMethodDO) => {
+            return this.generateInvoicePaymentMethodVMFor(paymentMethod.paymentMethod);
         });
     }
 
@@ -38,16 +41,23 @@ export class InvoicePaymentMethodVMGenerator {
         pmVM.paymentMethod.value = "";
         return pmVM;
     }
-    private generatePaymentMethodVMFor(paymentMethod: PaymentMethodDO): InvoicePaymentMethodVM {
+    private generateInvoicePaymentMethodVMFor(paymentMethod: PaymentMethodDO): InvoicePaymentMethodVM {
+        let foundAllowedPM = _.find(this._allowedPaymentMethods.paymentMethodList, (aggregatedPaymentMethodItem: AggregatedPaymentMethodDO) => {
+            return aggregatedPaymentMethodItem.paymentMethod.id === paymentMethod.id;
+        });
+
         var pmVM = new InvoicePaymentMethodVM();
         pmVM.displayName = paymentMethod.name;
         pmVM.iconUrl = paymentMethod.iconUrl;
+        if (foundAllowedPM) {
+            pmVM.transactionFee = foundAllowedPM.transactionFee;
+        }
         pmVM.paymentMethod = new InvoicePaymentMethodDO();
         pmVM.paymentMethod.type = InvoicePaymentMethodType.DefaultPaymentMethod;
         pmVM.paymentMethod.value = paymentMethod.id;
         return pmVM;
     }
-    public generatePaymentMethodVMForPaymentMethod(invoicePaymentMethodDO: InvoicePaymentMethodDO, allPaymentMethods: HotelPaymentMethodsDO): InvoicePaymentMethodVM {
+    public generateInvoicePaymentMethodVMForPaymentMethod(invoicePaymentMethodDO: InvoicePaymentMethodDO, allPaymentMethods: HotelPaymentMethodsDO): InvoicePaymentMethodVM {
         if (invoicePaymentMethodDO.type === InvoicePaymentMethodType.PayInvoiceByAgreement) {
             return this.generatePayInvoiceByAgreementPaymentMethodVM();
         }
@@ -57,6 +67,6 @@ export class InvoicePaymentMethodVMGenerator {
         if (!foundPaymentMethodDO) {
             foundPaymentMethodDO = allPaymentMethods.paymentMethodList[0];
         }
-        return this.generatePaymentMethodVMFor(foundPaymentMethodDO);
+        return this.generateInvoicePaymentMethodVMFor(foundPaymentMethodDO);
     }
 }

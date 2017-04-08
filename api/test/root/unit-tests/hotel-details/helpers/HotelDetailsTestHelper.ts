@@ -5,8 +5,10 @@ import { DefaultDataBuilder } from '../../../../db-initializers/DefaultDataBuild
 import { PaymentMethodDO } from '../../../../../core/data-layer/common/data-objects/payment-method/PaymentMethodDO';
 import { AmenityDO } from '../../../../../core/data-layer/common/data-objects/amenity/AmenityDO';
 import { HotelUpdatePropertyDetailsDO, HotelUpdatePropertyDetailsHourDO } from '../../../../../core/domain-layer/hotel-details/property-details/HotelUpdatePropertyDetailsDO';
+import { PaymentMethodInstanceDO } from "../../../../../core/data-layer/common/data-objects/payment-method/PaymentMethodInstanceDO";
 
 import _ = require('underscore');
+import { TransactionFeeDO, TransactionFeeType } from "../../../../../core/data-layer/common/data-objects/payment-method/TransactionFeeDO";
 
 export class HotelDetailsTestHelper {
 	public getHotelUpdateBasicInfoDO(hotel: HotelDO): HotelUpdateBasicInfoDO {
@@ -47,10 +49,17 @@ export class HotelDetailsTestHelper {
 
 	public getHotelUpdatePaymentsPoliciesDO(dataBuilder: DefaultDataBuilder): HotelUpdatePaymentsPoliciesDO {
 		var paymentMethodIdList: string[] = this.getPaymentMethodIdListFromPaymentMethodList(dataBuilder.paymentMethodList);
-
+		
 		return {
 			ccyCode: "EUR",
-			paymentMethodIdList: paymentMethodIdList,
+			paymentMethodList: _.map(paymentMethodIdList, (paymentMethodId: string) => {
+									let pmInstance = new PaymentMethodInstanceDO();
+									pmInstance.paymentMethodId = paymentMethodId;
+									pmInstance.transactionFee = new TransactionFeeDO();
+									pmInstance.transactionFee.amount = 0;
+									pmInstance.transactionFee.type = TransactionFeeType.Fixed;
+									return pmInstance;
+								}),
 			additionalInvoiceDetails: "IBAN RO34INGB736137812638"
 		}
 	}

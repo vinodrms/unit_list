@@ -38,7 +38,7 @@ export class PercentageInputNumberComponent implements OnInit {
 
 	didChangePercentage(percentage: number) {
 		this.percentage = percentage;
-		if (this.isValidPercentage()) {
+		if (ThDataValidators.isValidPercentage(percentage)) {
 			this.onPercentageChanged.next(this.percentage / 100);
 		}
 		else {
@@ -47,9 +47,6 @@ export class PercentageInputNumberComponent implements OnInit {
 	}
 
 	public displayError(): boolean {
-		return this.didSubmitForm && !this.isValidPercentage() && this.isRequired;
-	}
-	private isValidPercentage(): boolean {
-		return _.isNumber(this.percentage) && this.percentage >= 0 && this.percentage <= 100 && ThDataValidators.isValidInteger(this.percentage);
+		return this.didSubmitForm && !ThDataValidators.isValidPercentage(this.percentage) && this.isRequired;
 	}
 }

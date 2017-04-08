@@ -12,6 +12,7 @@ import { ThUtils } from '../../../utils/ThUtils';
 import { HotelMetaRepoDO, PaymentsPoliciesRepoDO } from '../../../data-layer/hotel/repositories/IHotelRepository';
 import { CurrencyDO } from '../../../data-layer/common/data-objects/currency/CurrencyDO';
 import { PaymentMethodIdListValidator } from './common/PaymentMethodIdListValidator';
+import { PaymentMethodInstanceDO } from "../../../data-layer/common/data-objects/payment-method/PaymentMethodInstanceDO";
 
 import _ = require("underscore");
 
@@ -42,8 +43,12 @@ export class HotelUpdatePaymentsPolicies {
 		hotelRepository.getHotelById(this._sessionContext.sessionDO.hotel.id)
 			.then((hotel: HotelDO) => {
 				this._loadedHotel = hotel;
+				
+				let paymentMethodIdList = _.map(this._paymentPoliciesDO.paymentMethodList, (paymentMethodInstance: PaymentMethodInstanceDO) => {
+					return paymentMethodInstance.paymentMethodId;
+				});
 
-				var paymentMethodValidator = new PaymentMethodIdListValidator(this._appContext, this._sessionContext, this._paymentPoliciesDO.paymentMethodIdList);
+				var paymentMethodValidator = new PaymentMethodIdListValidator(this._appContext, this._sessionContext, paymentMethodIdList);
 				return paymentMethodValidator.validate();
 			})
 			.then((validatedPaymentMethodIdList: string[]) => {
@@ -111,7 +116,7 @@ export class HotelUpdatePaymentsPolicies {
 	private getPaymentsPoliciesRepoDO(): PaymentsPoliciesRepoDO {
 		return {
 			ccyCode: this._paymentPoliciesDO.ccyCode,
-			paymentMethodIdList: this._paymentPoliciesDO.paymentMethodIdList,
+			paymentMethodList: this._paymentPoliciesDO.paymentMethodList,
 			additionalInvoiceDetails: this._paymentPoliciesDO.additionalInvoiceDetails
 		};
 	}

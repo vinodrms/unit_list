@@ -10,6 +10,7 @@ import { InvoiceItemDO } from '../../../../../core/data-layer/invoices/data-obje
 import { IInvoiceItemMeta } from '../../../../../core/data-layer/invoices/data-objects/items/IInvoiceItemMeta';
 import { BookingDO } from '../../../../../core/data-layer/bookings/data-objects/BookingDO';
 import { GenerateBookingInvoiceDO } from '../../../../../../api/core/domain-layer/invoices/generate-booking-invoice/GenerateBookingInvoiceDO';
+import { TransactionFeeDO } from "../../../../../core/data-layer/common/data-objects/payment-method/TransactionFeeDO";
 
 export class BookingInvoicesTestHelper {
 
@@ -78,6 +79,7 @@ export class BookingInvoicesTestHelper {
                 var invoicePayerWithUpdatedPricetoPay = new InvoicePayerBuilder()
                     .withCustomerId(invoicePayer.customerId)
                     .withPaymentMethod(invoicePayer.paymentMethod)
+                    .withTransactionFeeSnapshot(TransactionFeeDO.getDefaultTransactionFee())
                     .withPriceToPay(totalPrice).build();
 
                 invoiceGroupToUpdate.invoiceList.push(new InvoiceBuilder()

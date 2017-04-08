@@ -1,4 +1,5 @@
-import {BaseDO} from '../../../../../../common/base/BaseDO';
+import { BaseDO } from '../../../../../../common/base/BaseDO';
+import { TransactionFeeDO } from "./TransactionFeeDO";
 
 export class PaymentMethodDO extends BaseDO {
     constructor() {
