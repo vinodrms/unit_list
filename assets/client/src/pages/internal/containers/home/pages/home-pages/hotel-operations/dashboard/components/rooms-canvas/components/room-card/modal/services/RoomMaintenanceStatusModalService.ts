@@ -10,9 +10,9 @@ import {HotelOperationsRoomService} from '../../../../../../../../../../../../se
 export class RoomMaintenanceStatusModalService {
 	constructor(private _appContext: AppContext) { }
 	public openRoomMaintenanceStatusModal(roomVM: RoomVM, hotelOperationsRoomService: HotelOperationsRoomService): Promise<any> {
-        var roomMaintenanceStatusModalInput = new RoomMaintenanceStatusModalInput(roomVM, hotelOperationsRoomService);
+        var roomMaintenanceStatusModalInput = new RoomMaintenanceStatusModalInput(roomVM);
 		return this._appContext.modalService.open<any>(RoomMaintenanceStatusModalModule, RoomMaintenanceStatusModalComponent, ReflectiveInjector.resolve([
-            { provide: RoomMaintenanceStatusModalInput, useValue: roomMaintenanceStatusModalInput }
+            { provide: HotelOperationsRoomService, useValue: hotelOperationsRoomService }, { provide: RoomMaintenanceStatusModalInput, useValue: roomMaintenanceStatusModalInput }
 		]));
 	}
 }

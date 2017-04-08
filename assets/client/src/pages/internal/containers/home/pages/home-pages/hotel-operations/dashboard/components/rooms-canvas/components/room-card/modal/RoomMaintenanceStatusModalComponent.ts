@@ -27,16 +27,17 @@ export class RoomMaintenanceStatusModalComponent extends BaseComponent implement
 
     constructor(private _appContext: AppContext,
         private _modalDialogRef: ModalDialogRef<boolean>,
-        private _roomMaintenanceStatusModalInput: RoomMaintenanceStatusModalInput) {
+        private _roomMaintenanceStatusModalInput: RoomMaintenanceStatusModalInput,
+        private _hotelOperationsRoomService: HotelOperationsRoomService) {
         super();
         this._roomMaintenanceUtils = new RoomMaintenanceUtils();
         this._newMaintenanceMeta = this.roomMaintenanceMetaList[0];
-        this._roomMaintenanceStatusUpdater = new RoomMaintenanceStatusUpdater(this._appContext, this._roomMaintenanceStatusModalInput.hotelOperationsRoomService);
+        this._roomMaintenanceStatusUpdater = new RoomMaintenanceStatusUpdater(this._appContext, this._hotelOperationsRoomService);
     }
 
     ngOnInit() {
         this._isLoading = true;
-        this._roomMaintenanceStatusModalInput.hotelOperationsRoomService.getAttachedBooking(this._roomMaintenanceStatusModalInput.roomVM.room.id).subscribe((roomBookingResult: RoomAttachedBookingResultVM) => {
+        this._hotelOperationsRoomService.getAttachedBooking(this._roomMaintenanceStatusModalInput.roomVM.room.id).subscribe((roomBookingResult: RoomAttachedBookingResultVM) => {
             this._hasCheckedInBooking = roomBookingResult.roomAttachedBookingResultDO.hasCheckedInBooking();
             this._isLoading = false;
             this._newMaintenanceMeta = this.roomMaintenanceMetaList[0];

@@ -3,16 +3,11 @@ import {HotelOperationsRoomService} from '../../../../../../../../../../../../..
 
 export class RoomMaintenanceStatusModalInput {
     private _roomVM : RoomVM;
-    private _hotelOperationsRoomService: HotelOperationsRoomService;
 
-    constructor(roomVM : RoomVM, HotelOperationsRoomService: HotelOperationsRoomService) {
+    constructor(roomVM : RoomVM) {
         this._roomVM = roomVM;
-        this._hotelOperationsRoomService = HotelOperationsRoomService;
     }
     public get roomVM() : RoomVM {
         return this._roomVM;
-    }
-    public get hotelOperationsRoomService() : HotelOperationsRoomService {
-        return this._hotelOperationsRoomService;
     }
 }
