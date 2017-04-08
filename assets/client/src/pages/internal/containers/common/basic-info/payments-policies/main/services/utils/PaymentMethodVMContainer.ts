@@ -23,7 +23,12 @@ export class PaymentMethodVM {
 	}
 
 	public get transactionFeeAmount(): number {
-		return this.aggregatedPaymentMethod.transactionFee.amount;
+		let amount = this.aggregatedPaymentMethod.transactionFee.amount;
+		
+		if (this.transactionFeeType == TransactionFeeType.Percentage && amount != null) {
+			amount = amount * 100;
+		}
+		return amount;
 	}
 
 	public set transactionFeeAmount(amount: number) {
@@ -39,6 +44,7 @@ export class PaymentMethodVM {
 
 	public set transactionFeeType(type: TransactionFeeType) {
 		this.aggregatedPaymentMethod.transactionFee.type = type;
+		this.aggregatedPaymentMethod.transactionFee.amount = 0;
 	}
 
 	public get isSelected(): boolean {
@@ -55,11 +61,11 @@ export class PaymentMethodVM {
 	}
 
 	public get hasFixedTransactionFee(): boolean {
-		return this.aggregatedPaymentMethod.transactionFee.type === TransactionFeeType.Fixed;
+		return this.transactionFeeType === TransactionFeeType.Fixed;
 	}
 
 	public set hasFixedTransactionFee(hasFixedTransactionFee: boolean) {
-		this.aggregatedPaymentMethod.transactionFee.type = hasFixedTransactionFee ? TransactionFeeType.Fixed : TransactionFeeType.Percentage;
+		this.transactionFeeType = hasFixedTransactionFee ? TransactionFeeType.Fixed : TransactionFeeType.Percentage;
 	}
 
 	public trasactionFeeIsValid(): boolean {
