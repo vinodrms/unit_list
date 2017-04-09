@@ -228,7 +228,7 @@ export class InvoiceConfirmationVMContainer {
         invoiceItemVM.qty = 1;
         invoiceItemVM.name = this._thTranslation.translate("Transaction fee");
 
-        let vatValue = this._invoiceAggregatedData.vatList[0].value;
+        let vatValue = 0;
         invoiceItemVM.vat = this._thUtils.roundNumberToTwoDecimals(transactionFee - (transactionFee / (1 + vatValue)));
         invoiceItemVM.netUnitPrice = this._thUtils.roundNumberToTwoDecimals(transactionFee - invoiceItemVM.vat);
         invoiceItemVM.subtotal = invoiceItemVM.netUnitPrice;
