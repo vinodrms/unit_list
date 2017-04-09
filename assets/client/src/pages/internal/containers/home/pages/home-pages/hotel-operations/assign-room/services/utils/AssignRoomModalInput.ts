@@ -4,6 +4,7 @@ import {AssignRoomParam} from './AssignRoomParam';
 export class AssignRoomModalInput {
     private _assignRoomStrategy: IAssignRoomStrategy;
     private _assignRoomParam: AssignRoomParam;
+    private _oldRoomId: string;
 
     constructor(assignRoomStrategy: IAssignRoomStrategy, assignRoomParam: AssignRoomParam) {
         this._assignRoomStrategy = assignRoomStrategy;
@@ -28,5 +29,11 @@ export class AssignRoomModalInput {
     }
     public selectRoom(roomId: string) {
         this._assignRoomParam.roomId = roomId;
+    }
+    public get oldRoomId(): string {
+        return this._oldRoomId;
+    }
+    public set oldRoomId(id: string) {
+        this._oldRoomId = id;
     }
 }
