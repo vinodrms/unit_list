@@ -6,6 +6,7 @@ import { GeoLocationDO } from '../../common/data-objects/geo-location/GeoLocatio
 import { OperationHoursDO } from '../data-objects/operation-hours/OperationHoursDO';
 import { LazyLoadRepoDO } from '../../common/repo-data-objects/LazyLoadRepoDO';
 import { HotelSequenceType } from '../data-objects/sequences/HotelSequencesDO';
+import { PaymentMethodInstanceDO } from "../../common/data-objects/payment-method/PaymentMethodInstanceDO";
 
 export interface UserAccountActivationRepoDO {
 	email: string;
@@ -32,7 +33,7 @@ export interface BasicHotelInfoRepoDO {
 }
 export interface PaymentsPoliciesRepoDO {
 	ccyCode: string;
-	paymentMethodIdList: string[];
+	paymentMethodList: PaymentMethodInstanceDO[];
 	additionalInvoiceDetails: string;
 }
 export interface PropertyDetailsRepoDO {

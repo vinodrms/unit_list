@@ -135,7 +135,9 @@
 	"Shared Payment": "Shared Payment",
 	"Guest": "Guest",
 	"Accomodation for %date%": "Accomodation for %date%",
-
+	"Transaction fee": "Transaction fee",
+	"transaction fee": "transaction fee",
+	
 	// Reports
 	"TotalOccupancy" : "TotalOccupancy",
 	"ConfirmedOccupancy" : "ConfirmedOccupancy",

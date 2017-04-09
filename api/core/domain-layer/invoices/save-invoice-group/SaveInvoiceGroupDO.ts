@@ -9,6 +9,7 @@ import { InvoiceDO, InvoicePaymentStatus } from '../../../data-layer/invoices/da
 import { InvoicePaymentMethodType } from '../../../data-layer/invoices/data-objects/payers/InvoicePaymentMethodDO';
 import { CommissionType } from '../../../data-layer/common/data-objects/commission/CommissionDO';
 import { InvoiceItemType } from '../../../data-layer/invoices/data-objects/items/InvoiceItemDO';
+import { TransactionFeeType } from "../../../data-layer/common/data-objects/payment-method/TransactionFeeDO";
 
 export class SaveInvoiceGroupDO {
     id: string;
@@ -66,8 +67,25 @@ export class SaveInvoiceGroupDO {
                                 validationStruct: new PrimitiveValidationStructure(NumberValidationRule.buildPriceNumberRule())
                             },
                             {
+                                key: "priceToPayPlusTransactionFee",
+                                validationStruct: new PrimitiveValidationStructure(NumberValidationRule.buildPriceNumberRule())
+                            },
+                            {
                                 key: "additionalInvoiceDetails",
                                 validationStruct: new PrimitiveValidationStructure(StringValidationRule.buildNullable(2000))
+                            },
+                            {
+                                key: "transactionFeeSnapshot",
+                                validationStruct: new ObjectValidationStructure([
+                                    {
+                                        key: "type",
+                                        validationStruct: new PrimitiveValidationStructure(new NumberInListValidationRule([TransactionFeeType.Fixed, TransactionFeeType.Percentage]))
+                                    },
+                                    {
+                                        key: "amount",
+                                        validationStruct: new PrimitiveValidationStructure(NumberValidationRule.buildNullable())
+                                    }
+						        ])
                             }
                         ]))
                     },

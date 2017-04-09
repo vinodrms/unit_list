@@ -84,7 +84,7 @@ export var EnglishTranslations: Object = {
 	"Default currency": "Default currency",
 	"All rates and prices will be in the selected currency": "All rates and prices will be in the selected currency",
 	"Select a currency": "Select a currency",
-	"Select at least a payment method": "Select at least a payment method",
+	"Select at least a payment method and input fees where enabled": "Select at least a payment method and input fees where enabled.",
 	"Other Taxes": "Other Taxes",
 	"e.g. City Tax": "e.g. City Tax",
 	"VAT": "VAT",
@@ -855,6 +855,9 @@ export var EnglishTranslations: Object = {
 	"Click here to open %dynamicPrice% on %date%.": "Click here to open %dynamicPrice% on %date%.",
 	"Show/hide dynamic rates": "Show/hide dynamic rates",
 	"The maximum number of dynamic prices on this price product has been reached.": "The maximum number of dynamic prices on this price product has been reached.",
+	"Supported payments": "Supported payments",
+	"Payment method": "Payment method",
+	"Transaction Fee (in %)": "Transaction Fee (in %)",
 	"%noAvailable% out of %noTotal%": "%noAvailable% out of %noTotal%",
 	"Available Rooms": "Available Rooms",
 	"Total Rooms": "Total Rooms",
@@ -862,10 +865,11 @@ export var EnglishTranslations: Object = {
 	"You cannot add more than 10 intervals on the same discount": "You cannot add more than 10 intervals on the same discount",
 	"Intervals": "Intervals",
 	"No intervals. The discount will apply no matter the booking interval.": "No intervals. The discount will apply no matter the booking interval.",
+	"Change Room Status": "Change Room Status",
 	"Housekeeping Report": "Housekeeping Report",
 	"Contains the arrivals, stayovers and departures for today.": "Contains the arrivals, stayovers and departures for today.",
 	"Room maintenance warning": "Room maintenance warning",
 	"%roomName% is not clean. Are you sure you want to move the booking to this room?": "%roomName% is not clean. Are you sure you want to move the booking to this room?",
-	
-	
+	"The payment methods that will be supported by the hotel. On payment methods a fee per transaction can be configured.": "The payment methods that will be supported by the hotel. On payment methods a fee per transaction can be configured.",
+
 };

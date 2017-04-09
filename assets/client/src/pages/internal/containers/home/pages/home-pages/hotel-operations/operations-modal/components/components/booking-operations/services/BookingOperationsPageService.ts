@@ -1,27 +1,27 @@
-import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/combineLatest';
-import {ThError, AppContext} from '../../../../../../../../../../../../common/utils/AppContext';
-import {EagerBookingsService} from '../../../../../../../../../../services/bookings/EagerBookingsService';
-import {BookingDO} from '../../../../../../../../../../services/bookings/data-objects/BookingDO';
-import {HotelAggregatorService} from '../../../../../../../../../../services/hotel/HotelAggregatorService';
-import {HotelAggregatedInfo} from '../../../../../../../../../../services/hotel/utils/HotelAggregatedInfo';
-import {RoomCategoriesStatsService} from '../../../../../../../../../../services/room-categories/RoomCategoriesStatsService';
-import {RoomCategoryStatsDO} from '../../../../../../../../../../services/room-categories/data-objects/RoomCategoryStatsDO';
-import {RoomsService} from '../../../../../../../../../../services/rooms/RoomsService';
-import {RoomVM} from '../../../../../../../../../../services/rooms/view-models/RoomVM';
-import {EagerCustomersService} from '../../../../../../../../../../services/customers/EagerCustomersService';
-import {EagerAllotmentsService} from '../../../../../../../../../../services/allotments/EagerAllotmentsService';
-import {EagerInvoiceGroupsService} from '../../../../../../../../../../services/invoices/EagerInvoiceGroupsService';
-import {InvoiceGroupDO} from '../../../../../../../../../../services/invoices/data-objects/InvoiceGroupDO';
-import {InvoiceDO} from '../../../../../../../../../../services/invoices/data-objects/InvoiceDO';
-import {AllotmentDO} from '../../../../../../../../../../services/allotments/data-objects/AllotmentDO';
-import {CustomersDO} from '../../../../../../../../../../services/customers/data-objects/CustomersDO';
-import {EagerAddOnProductsService} from '../../../../../../../../../../services/add-on-products/EagerAddOnProductsService';
-import {AddOnProductsDO} from '../../../../../../../../../../services/add-on-products/data-objects/AddOnProductsDO';
-import {BookingOperationsPageData} from './utils/BookingOperationsPageData';
-import {HotelBookingOperationsPageParam} from '../utils/HotelBookingOperationsPageParam';
+import { ThError, AppContext } from '../../../../../../../../../../../../common/utils/AppContext';
+import { EagerBookingsService } from '../../../../../../../../../../services/bookings/EagerBookingsService';
+import { BookingDO } from '../../../../../../../../../../services/bookings/data-objects/BookingDO';
+import { HotelAggregatorService } from '../../../../../../../../../../services/hotel/HotelAggregatorService';
+import { HotelAggregatedInfo } from '../../../../../../../../../../services/hotel/utils/HotelAggregatedInfo';
+import { RoomCategoriesStatsService } from '../../../../../../../../../../services/room-categories/RoomCategoriesStatsService';
+import { RoomCategoryStatsDO } from '../../../../../../../../../../services/room-categories/data-objects/RoomCategoryStatsDO';
+import { RoomsService } from '../../../../../../../../../../services/rooms/RoomsService';
+import { RoomVM } from '../../../../../../../../../../services/rooms/view-models/RoomVM';
+import { EagerCustomersService } from '../../../../../../../../../../services/customers/EagerCustomersService';
+import { EagerAllotmentsService } from '../../../../../../../../../../services/allotments/EagerAllotmentsService';
+import { EagerInvoiceGroupsService } from '../../../../../../../../../../services/invoices/EagerInvoiceGroupsService';
+import { InvoiceGroupDO } from '../../../../../../../../../../services/invoices/data-objects/InvoiceGroupDO';
+import { InvoiceDO } from '../../../../../../../../../../services/invoices/data-objects/InvoiceDO';
+import { AllotmentDO } from '../../../../../../../../../../services/allotments/data-objects/AllotmentDO';
+import { CustomersDO } from '../../../../../../../../../../services/customers/data-objects/CustomersDO';
+import { EagerAddOnProductsService } from '../../../../../../../../../../services/add-on-products/EagerAddOnProductsService';
+import { AddOnProductsDO } from '../../../../../../../../../../services/add-on-products/data-objects/AddOnProductsDO';
+import { BookingOperationsPageData } from './utils/BookingOperationsPageData';
+import { HotelBookingOperationsPageParam } from '../utils/HotelBookingOperationsPageParam';
 
 @Injectable()
 export class BookingOperationsPageService {
@@ -47,7 +47,7 @@ export class BookingOperationsPageService {
             pageData.bookingDO = result[0];
             pageData.ccy = result[1].ccy;
             pageData.allowedPaymentMethods = result[1].allowedPaymentMethods;
-            pageData.allPaymentMethods = result[1].paymentMethods;
+            pageData.allPaymentMethods = result[1].allAvailablePaymentMethods;
             pageData.operationHours = result[1].hotelDetails.hotel.operationHours;
 
             return Observable.combineLatest(
