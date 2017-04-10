@@ -13,6 +13,6 @@ export class ThDataValidators {
 		return _.isString(email) && emailRegex.test(email);
 	}
 	public static isValidPercentage(value: any): boolean {
-		return _.isNumber(value) && value >= 0 && value <= 100 && ThDataValidators.isValidInteger(value);
+		return _.isNumber(value) && value >= 0 && value <= 100;
 	}
 }
