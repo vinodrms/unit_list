@@ -1,17 +1,19 @@
-import {NgModule} from '@angular/core';
-import {PercentagePipe} from '../PercentagePipe';
-import {PricePipe} from '../PricePipe';
-import {ThDateIntervalPipe} from '../ThDateIntervalPipe';
-import {ThDatePipe} from '../ThDatePipe';
-import {ThHourPipe} from '../ThHourPipe';
-import {ThLongDateIntervalPipe} from '../ThLongDateIntervalPipe';
-import {ThTimestampDistanceFromNowPipe} from '../ThTimestampDistanceFromNowPipe';
-import {ThTimestampPipe} from '../ThTimestampPipe';
-import {ThTrimPipe} from '../ThTrimPipe';
-import {TranslationPipe} from '../../localization/TranslationPipe';
+import { NgModule } from '@angular/core';
+import { PercentagePipe } from '../PercentagePipe';
+import { PricePipe } from '../PricePipe';
+import { ThDateIntervalPipe } from '../ThDateIntervalPipe';
+import { ThDatePipe } from '../ThDatePipe';
+import { ThHourPipe } from '../ThHourPipe';
+import { ThLongDateIntervalPipe } from '../ThLongDateIntervalPipe';
+import { ThTimestampDistanceFromNowPipe } from '../ThTimestampDistanceFromNowPipe';
+import { ThTimestampPipe } from '../ThTimestampPipe';
+import { ThTrimPipe } from '../ThTrimPipe';
+import { TranslationPipe } from '../../localization/TranslationPipe';
+import { PercentageWithDecimalsPipe } from "../PercentageWithDecimalsPipe";
 
 const SharedPipes = [
     PercentagePipe,
+    PercentageWithDecimalsPipe,
     PricePipe,
     ThDateIntervalPipe,
     ThDatePipe,
