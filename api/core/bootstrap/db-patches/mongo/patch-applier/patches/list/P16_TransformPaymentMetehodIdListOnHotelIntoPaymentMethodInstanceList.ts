@@ -14,7 +14,7 @@ export class P16_TransformPaymentMetehodIdListOnHotelIntoPaymentMethodInstanceLi
     }
 
     public getPatchType(): MongoPatchType {
-        return MongoPatchType.EncapsulateDiscountInBookingPricePerDayOnBookings;
+        return MongoPatchType.TransformPaymentMetehodIdListOnHotelIntoPaymentMethodInstanceList;
     }
 
     protected updateDocumentInMemory(hotel) {

@@ -41,9 +41,6 @@ class HotelsEntity extends BasePersistentEntity {
 			customAmenityList: {
 				type: 'array',
 			},
-			paymentMethodIdList: {
-				type: 'array',
-			},
 			configurationCompleted: {
 				type: 'boolean',
 			},
@@ -56,6 +53,9 @@ class HotelsEntity extends BasePersistentEntity {
 			operationHours: {
 				type: 'json',
 				defaultsTo: {}
+			},
+			paymentMethodList: {
+				type: 'array',
 			}
 		};
     }
