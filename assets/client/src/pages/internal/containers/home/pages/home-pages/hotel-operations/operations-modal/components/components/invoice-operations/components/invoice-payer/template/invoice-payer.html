@@ -82,7 +82,7 @@
                 <div class="input-group">
                     <span><b><i class="fa" [ngClass]="selectedPaymentMethodVM.iconUrl"></i> {{selectedPaymentMethodVM.displayName | translate}}</b> has a transaction fee of: 
                     <b *ngIf="transactionFeeIsFixed">{{ccySymbol}} {{ transactionFee.amount }}</b>
-                    <b *ngIf="!transactionFeeIsFixed">{{ transactionFee.amount | percentage}}</b>
+                    <b *ngIf="!transactionFeeIsFixed">{{ transactionFee.amount | percentageWithDecimals}}</b>
                     . <b>To pay</b> (transaction fee included): <b>{{ccySymbol}} {{totalAmountWithTransactionFee | price}}</b></span>
                 </div>
             </div>
