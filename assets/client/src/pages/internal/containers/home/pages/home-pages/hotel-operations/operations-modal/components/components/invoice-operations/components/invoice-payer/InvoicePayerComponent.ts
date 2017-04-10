@@ -59,8 +59,14 @@ export class InvoicePayerComponent implements OnInit {
         }
         if (!this._pmWasSetForTheFirstTime) this._pmWasSetForTheFirstTime = true;
 
+        if(selectedPaymentMethodVM.paymentMethod.type === InvoicePaymentMethodType.PayInvoiceByAgreement) {
+            this.transactionFee = TransactionFeeDO.getDefaultTransactionFee();
+        }
+        
         this.invoicePayerVM.invoicePayerDO.transactionFeeSnapshot = this.transactionFee;
-        this.invoicePayerVM.invoicePayerDO.priceToPayPlusTransactionFee = this.transactionFee.getAmountWihtTransactionFeeIncluded(this.invoicePayerVM.invoicePayerDO.priceToPay);
+        
+        this.invoicePayerVM.invoicePayerDO.priceToPayPlusTransactionFee = 
+            this.invoicePayerVM.invoicePayerDO.transactionFeeSnapshot.getAmountWihtTransactionFeeIncluded(this.invoicePayerVM.invoicePayerDO.priceToPay);
     }
 
     ngOnInit() {
@@ -187,6 +193,9 @@ export class InvoicePayerComponent implements OnInit {
     }
     public get transactionFee(): TransactionFeeDO {
         return this.selectedPaymentMethodVM.transactionFee;
+    }
+    public set transactionFee(transactionFee: TransactionFeeDO) {
+        this.selectedPaymentMethodVM.transactionFee = transactionFee;
     }
     public get transactionFeeIsFixed(): boolean {
         return this.selectedPaymentMethodVM.transactionFee.type === TransactionFeeType.Fixed;
