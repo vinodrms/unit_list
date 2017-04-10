@@ -21,6 +21,7 @@ import { ShiftReportByCategorySectionGenerator } from './strategies/ShiftReportB
 import { ShiftReportByAopNameSectionGenerator } from './strategies/ShiftReportByAopNameSectionGenerator';
 import { ShiftReportPaidInvoicesSectionGenerator } from './strategies/ShiftReportPaidInvoicesSectionGenerator';
 import { CommonValidationStructures } from "../../common/CommonValidations";
+import { ShiftReportPaidByAgreementSectionGenerator } from "./strategies/ShiftReportPaidByAgreementSectionGenerator";
 
 export class ShiftReportGroupGenerator extends AReportGeneratorStrategy {
 	private _params: ShiftReportParams;
@@ -118,6 +119,7 @@ export class ShiftReportGroupGenerator extends AReportGeneratorStrategy {
 	protected getSectionGenerators(): IReportSectionGeneratorStrategy[] {
 		return [
 			new ShiftReportByPaymentMethodSectionGenerator(this._appContext, this._sessionContext, this._paidInvoiceGroupList),
+			new ShiftReportPaidByAgreementSectionGenerator(this._appContext, this._sessionContext, this._paidInvoiceGroupList),
 			new ShiftReportPaidInvoicesSectionGenerator(this._appContext, this._sessionContext, this._paidInvoiceGroupList),
 			new ShiftReportByCategorySectionGenerator(this._appContext, this._sessionContext, this._paidInvoiceGroupList, this._aopContainer, {
 				title: "Transactions Grouped by Category"
