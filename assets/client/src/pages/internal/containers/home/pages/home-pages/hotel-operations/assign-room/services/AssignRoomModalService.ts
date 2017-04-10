@@ -21,12 +21,15 @@ export class AssignRoomModalService {
     public reserveRoom(assignRoomParam: AssignRoomParam): Promise<ModalDialogRef<BookingDO>> {
         return this.assignRoom(new ReserveRoomStrategy(), assignRoomParam);
     }
-    public changeRoom(assignRoomParam: AssignRoomParam): Promise<ModalDialogRef<BookingDO>> {
-        return this.assignRoom(new ChangeRoomStrategy(), assignRoomParam);
+    public changeRoom(assignRoomParam: AssignRoomParam, oldRoomId: string): Promise<ModalDialogRef<BookingDO>> {
+        return this.assignRoom(new ChangeRoomStrategy(), assignRoomParam, oldRoomId);
     }
 
-    private assignRoom(assignRoomStrategy: IAssignRoomStrategy, assignRoomParam: AssignRoomParam): Promise<ModalDialogRef<BookingDO>> {
+    private assignRoom(assignRoomStrategy: IAssignRoomStrategy, assignRoomParam: AssignRoomParam, oldRoomId?: string): Promise<ModalDialogRef<BookingDO>> {
         var assignRoomModalInput = new AssignRoomModalInput(assignRoomStrategy, assignRoomParam);
+        if (!this._appContext.thUtils.isUndefinedOrNull(oldRoomId)) {
+            assignRoomModalInput.oldRoomId = oldRoomId;
+        }
         return this._appContext.modalService.open<any>(AssignRoomModalModule, AssignRoomModalComponent, ReflectiveInjector.resolve([
             { provide: AssignRoomModalInput, useValue: assignRoomModalInput }
         ]));

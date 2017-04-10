@@ -865,7 +865,7 @@ export var EnglishTranslations: Object = {
 	"You cannot add more than 10 intervals on the same discount": "You cannot add more than 10 intervals on the same discount",
 	"Intervals": "Intervals",
 	"No intervals. The discount will apply no matter the booking interval.": "No intervals. The discount will apply no matter the booking interval.",
-	"Change Room Status": "Change Room Status",
+	"Change Room Status for Room %roomName%": "Change Room Status for Room %roomName",
 	"Housekeeping Report": "Housekeeping Report",
 	"Contains the arrivals, stayovers and departures for today.": "Contains the arrivals, stayovers and departures for today.",
 	"Room maintenance warning": "Room maintenance warning",
