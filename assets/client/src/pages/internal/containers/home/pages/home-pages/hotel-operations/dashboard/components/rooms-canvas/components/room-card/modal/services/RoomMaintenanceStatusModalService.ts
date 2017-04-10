@@ -11,8 +11,9 @@ import {RoomMaintenanceMeta} from '../../../../../../../../../../../../services/
 @Injectable()
 export class RoomMaintenanceStatusModalService {
 	constructor(private _appContext: AppContext) { }
-	public openRoomMaintenanceStatusModal(roomVM: RoomVM, hotelOperationsRoomService: HotelOperationsRoomService, roomMaintenanceMetaList?: RoomMaintenanceMeta[]): Promise<ModalDialogRef<boolean>> {
-        var roomMaintenanceStatusModalInput = new RoomMaintenanceStatusModalInput(roomVM, roomMaintenanceMetaList);
+    /*optional parameter restrictedRoomMaintenanceMetaList is used to show a customized list of room status options. If not provided, all options will be shown*/
+    public openRoomMaintenanceStatusModal(roomVM: RoomVM, hotelOperationsRoomService: HotelOperationsRoomService, restrictedRoomMaintenanceMetaList?: RoomMaintenanceMeta[]): Promise<ModalDialogRef<boolean>> {
+        var roomMaintenanceStatusModalInput = new RoomMaintenanceStatusModalInput(roomVM, restrictedRoomMaintenanceMetaList);
 		return this._appContext.modalService.open<any>(RoomMaintenanceStatusModalModule, RoomMaintenanceStatusModalComponent, ReflectiveInjector.resolve([
             { provide: HotelOperationsRoomService, useValue: hotelOperationsRoomService }, { provide: RoomMaintenanceStatusModalInput, useValue: roomMaintenanceStatusModalInput }
 		]));

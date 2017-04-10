@@ -23,7 +23,7 @@ import { RoomsService } from '../../../../../../services/rooms/RoomsService';
 import { EagerBookingsService } from '../../../../../../services/bookings/EagerBookingsService';
 import { RoomMaintenanceStatus } from '../../../../../../services/rooms/data-objects/RoomDO';
 import { RoomMaintenanceStatusModalService } from '../dashboard/components/rooms-canvas/components/room-card/modal/services/RoomMaintenanceStatusModalService';
-import { RoomMaintenanceMeta } from '../../../../../../services/rooms/utils/RoomMaintenanceMeta';
+import { RoomMaintenanceUtils } from '../../../../../../services/rooms/utils/RoomMaintenanceUtils';
 
 
 @Component({
@@ -41,6 +41,7 @@ export class AssignRoomModalComponent extends BaseComponent implements ICustomMo
     isLoading: boolean = false;
 
     private _getRoomByIdSubscription: Subscription;
+    private _roomMaintenanceUtils: RoomMaintenanceUtils;
 
     constructor(private _appContext: AppContext,
         private _modalDialogRef: ModalDialogRef<BookingDO>,
@@ -49,6 +50,7 @@ export class AssignRoomModalComponent extends BaseComponent implements ICustomMo
         private _roomsService: RoomsService,
         private _roomMaintenanceStatusModalService: RoomMaintenanceStatusModalService) {
         super();
+        this._roomMaintenanceUtils = new RoomMaintenanceUtils();
     }
 
     ngOnInit() {
@@ -128,9 +130,9 @@ export class AssignRoomModalComponent extends BaseComponent implements ICustomMo
         this._getRoomByIdSubscription = this._roomsService.getRoomById(this._modalInput.oldRoomId).subscribe((oldRoomVM: RoomVM) => {
             this._roomMaintenanceStatusModalService.openRoomMaintenanceStatusModal(oldRoomVM, this._hotelOperationsRoomService,
             [
-                RoomMaintenanceMeta.buildRoomMaintenanceMeta(RoomMaintenanceStatus.PickUp, "Pick Up", "J"),
-                RoomMaintenanceMeta.buildRoomMaintenanceMeta(RoomMaintenanceStatus.Clean, "Clean", "Z"),
-                RoomMaintenanceMeta.buildRoomMaintenanceMeta(RoomMaintenanceStatus.Dirty, "Dirty", "H")
+                this._roomMaintenanceUtils.getRoomMaintenanceMetaByStatus(RoomMaintenanceStatus.PickUp), 
+                this._roomMaintenanceUtils.getRoomMaintenanceMetaByStatus(RoomMaintenanceStatus.Clean),
+                this._roomMaintenanceUtils.getRoomMaintenanceMetaByStatus(RoomMaintenanceStatus.Dirty)
             ]).then((modalDialogInstance: ModalDialogRef<boolean>) => {
                     modalDialogInstance.resultObservable.subscribe((changeDone: boolean) => {
                     this.finalizeAssignRoom();
