@@ -67,4 +67,7 @@ export class BookingHistoryDashboardComponent extends AHomeContainerComponent im
 				});
 		}).catch((err: any) => { });
 	}
+	public addBookingToGroup(bookingVM: BookingVM) {
+		
+	}
 }
