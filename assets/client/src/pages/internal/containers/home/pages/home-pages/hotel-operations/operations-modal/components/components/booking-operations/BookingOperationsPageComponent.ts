@@ -42,7 +42,7 @@ export class BookingOperationsPageComponent implements OnInit {
         });
     }
     private updateContainerData() {
-        var title = " " + this._appContext.thTranslation.translate("ResNO") + " " + this.bookingDO.reservationNumber;
+        var title = " " + this._appContext.thTranslation.translate("ResNO") + " " + this.bookingDO.displayReservationNumber;
         var subtitle = this._appContext.thTranslation.translate(this.bookingMeta.displayName);
         this.bookingOperationsPageParam.updateTitle(title, subtitle);
     }

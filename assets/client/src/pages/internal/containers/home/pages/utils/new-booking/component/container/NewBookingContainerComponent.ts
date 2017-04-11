@@ -113,7 +113,7 @@ export class NewBookingContainerComponent extends BaseComponent {
 		let resNoList = _.map(bookingList, (booking: BookingDO) => { 
 			let bookingDO = new BookingDO();
 			bookingDO.buildFromObject(booking)
-			return bookingDO.reservationNumber; 
+			return bookingDO.displayReservationNumber; 
 		});
 
 		_.forEach(resNoList, (resNo: string) => {

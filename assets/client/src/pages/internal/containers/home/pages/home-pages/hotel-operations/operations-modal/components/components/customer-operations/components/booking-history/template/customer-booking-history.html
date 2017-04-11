@@ -8,7 +8,7 @@
                         <tr *ngFor="let bookingVM of bookingVMList">
                             <td width="30%" class="increased-font-weight clickable-item font-size-small">
                                 <span (click)="goToBooking(bookingVM)"> 
-                                     {{ 'ResNO' | translate }} {{ bookingVM.booking.reservationNumber }}
+                                     {{ 'ResNO' | translate }} {{ bookingVM.booking.displayReservationNumber }}
                                 </span>
                             </td>
                             <td width="70%">{{ bookingVM.booking.interval | thlongdateinterval }} / 
