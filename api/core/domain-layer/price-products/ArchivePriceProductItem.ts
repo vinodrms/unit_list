@@ -3,7 +3,7 @@ import { ThError } from '../../utils/th-responses/ThError';
 import { ThStatusCode } from '../../utils/th-responses/ThResponse';
 import { AppContext } from '../../utils/AppContext';
 import { SessionContext } from '../../utils/SessionContext';
-import { PriceProductMetaRepoDO, PriceProductItemMetaRepoDO } from '../../data-layer/price-products/repositories/IPriceProductRepository';
+import { PriceProductMetaRepoDO, PriceProductItemMetaRepoDO, PriceProductSearchResultRepoDO } from '../../data-layer/price-products/repositories/IPriceProductRepository';
 import { CustomerSearchResultRepoDO } from '../../data-layer/customers/repositories/ICustomerRepository';
 import { PriceProductInputIdDO } from './validation-structures/PriceProductInputIdDO';
 import { PriceProductDO, PriceProductStatus } from '../../data-layer/price-products/data-objects/PriceProductDO';
@@ -54,6 +54,15 @@ export class ArchivePriceProductItem {
 				this._ppItemRepoMeta = {
 					id: loadedPriceProduct.id,
 					versionId: loadedPriceProduct.versionId
+				}
+
+				ppRepo = this._appContext.getRepositoryFactory().getPriceProductRepository();
+				return ppRepo.getPriceProductList(this._ppRepoMeta, { parentId: loadedPriceProduct.id, status: PriceProductStatus.Active });
+			}).then((searchResult: PriceProductSearchResultRepoDO) => {
+				if (searchResult.priceProductList.length > 0) {
+					var thError = new ThError(ThStatusCode.ArchivePriceProductItemHasActiveRelatedPriceProducts, null);
+					ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "cannot archive because there are active related price products to it", this._inputDO, thError);
+					throw thError;
 				}
 
 				var custRepo = this._appContext.getRepositoryFactory().getCustomerRepository();

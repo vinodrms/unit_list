@@ -18,8 +18,8 @@ export class MongoPriceProductRepositoryWithParentDecorator extends MongoPricePr
                 .then((baseSearchResult: PriceProductSearchResultRepoDO) => {
                     searchResult = baseSearchResult;
                     return this.attachPricesFromParent(searchResult.priceProductList, meta, { searchCriteria: searchCriteria, meta: meta });
-                }).then((priceProductsWithAttachedPricesFromParentList: PriceProductDO[]) => {
-                    searchResult.priceProductList = priceProductsWithAttachedPricesFromParentList;
+                }).then((updatedPriceProductList: PriceProductDO[]) => {
+                    searchResult.priceProductList = updatedPriceProductList;
                     resolve(searchResult);
                 }).catch(e => {
                     reject(e);

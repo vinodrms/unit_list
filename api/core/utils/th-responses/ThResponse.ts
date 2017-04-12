@@ -245,6 +245,7 @@ export enum ThStatusCode {
 	PriceProductValidatorInvalidPrices,
 	ArchivePriceProductItemError,
 	ArchivePriceProductItemNonActiveStatus,
+	ArchivePriceProductItemHasActiveRelatedPriceProducts,
 	ArchivePriceProductItemUsedInCustomersError,
 	ArchivePriceProductItemUsedInBookingsError,
 	UpdatePriceProductItemStatusError,
@@ -775,6 +776,7 @@ ThMessage[ThStatusCode.PriceProductValidatorInvalidIncludedItems] = "Error valid
 ThMessage[ThStatusCode.PriceProductValidatorInvalidPrices] = "Please complete all the required price values.";
 ThMessage[ThStatusCode.ArchivePriceProductItemError] = "Please while archiving the price product.";
 ThMessage[ThStatusCode.ArchivePriceProductItemNonActiveStatus] = "Please while archiving the price product.";
+ThMessage[ThStatusCode.ArchivePriceProductItemHasActiveRelatedPriceProducts] = "Could not archive this price product because there are other active related price products derived from this.";
 ThMessage[ThStatusCode.ArchivePriceProductItemUsedInCustomersError] = "Could not archive the price product because it is assigned to customers.";
 ThMessage[ThStatusCode.ArchivePriceProductItemUsedInBookingsError] = "Could not archive the price product because it is used in active bookings. Please close it forever from the Yield Manager and you'll be able to archive it when it's not used anymore.";
 ThMessage[ThStatusCode.UpdatePriceProductItemStatusError] = "Error updating the status of the price product.";

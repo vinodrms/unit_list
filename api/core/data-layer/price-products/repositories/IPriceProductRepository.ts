@@ -32,6 +32,7 @@ export interface PriceProductSearchCriteriaRepoDO {
 	taxIdList?: string[];
 	availability?: PriceProductAvailability;
 	customerPriceProductDetails?: CustomerPriceProductDetailsDO;
+	parentId?: string;
 }
 export interface PriceProductSearchResultRepoDO {
 	lazyLoad?: LazyLoadRepoDO;
