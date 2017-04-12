@@ -26,9 +26,6 @@ export class MongoPriceProductRepositoryDecorator extends MongoRepository implem
     public updatePriceProduct(meta: PriceProductMetaRepoDO, itemMeta: PriceProductItemMetaRepoDO, priceProduct: PriceProductDO): Promise<PriceProductDO> {
         return this._basePPRepo.updatePriceProduct(meta, itemMeta, priceProduct);
     }
-    public updatePriceProductStatus(meta: PriceProductMetaRepoDO, itemMeta: PriceProductItemMetaRepoDO, params: PriceProductUpdateStatusParamsRepoDO): Promise<PriceProductDO> {
-        return this._basePPRepo.updatePriceProductStatus(meta, itemMeta, params);
-    }
     public updatePriceProductYieldManagerIntervals(meta: PriceProductMetaRepoDO, itemMeta: PriceProductItemMetaRepoDO, intervals: PriceProductUpdateYMIntervalsParamsRepoDO): Promise<PriceProductDO> {
         return this._basePPRepo.updatePriceProductYieldManagerIntervals(meta, itemMeta, intervals);
     }

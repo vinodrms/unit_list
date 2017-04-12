@@ -88,19 +88,6 @@ export class MongoPriceProductCrudOperationsRepository extends MongoRepository {
 				"notes": priceProduct.notes
 			});
 	}
-	public updatePriceProductStatus(meta: PriceProductMetaRepoDO, itemMeta: PriceProductItemMetaRepoDO, params: PriceProductUpdateStatusParamsRepoDO): Promise<PriceProductDO> {
-		var updateQuery = {
-			"status": params.newStatus
-		};
-		if (params.newStatus === PriceProductStatus.Deleted) {
-			updateQuery["name"] = this.appendUniqueSuffix(params.priceProduct.name);
-		}
-		return this.findAndModifyPriceProduct(meta, itemMeta,
-			{
-				"status": params.oldStatus
-			},
-			updateQuery);
-	}
 	public updatePriceProductYieldManagerIntervals(meta: PriceProductMetaRepoDO, itemMeta: PriceProductItemMetaRepoDO, intervals: PriceProductUpdateYMIntervalsParamsRepoDO): Promise<PriceProductDO> {
 		return this.findAndModifyPriceProduct(meta, itemMeta, {},
 			{
