@@ -101,4 +101,7 @@ export class PriceProductDO extends BaseDO {
 	public hasParent(): boolean {
 		return _.isString(this.parentId) && !_.isEmpty(this.parentId);
 	}
+	public deleteReferenceToParent() {
+		this.parentId = "";
+	}
 }

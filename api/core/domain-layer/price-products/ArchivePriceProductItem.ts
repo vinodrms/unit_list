@@ -86,14 +86,13 @@ export class ArchivePriceProductItem {
 					ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "price product used in bookings", this._inputDO, thError);
 					throw thError;
 				}
+
+				this._loadedPriceProduct.status = PriceProductStatus.Archived;
+				this._loadedPriceProduct.deleteReferenceToParent();
+
 				var ppRepo = this._appContext.getRepositoryFactory().getPriceProductRepository();
-				return ppRepo.updatePriceProductStatus(this._ppRepoMeta, this._ppItemRepoMeta, {
-					oldStatus: PriceProductStatus.Active,
-					newStatus: PriceProductStatus.Archived,
-					priceProduct: this._loadedPriceProduct
-				});
-			})
-			.then((updatedPriceProduct: PriceProductDO) => {
+				return ppRepo.updatePriceProduct(this._ppRepoMeta, this._ppItemRepoMeta, this._loadedPriceProduct);
+			}).then((updatedPriceProduct: PriceProductDO) => {
 				resolve(updatedPriceProduct);
 			}).catch((error: any) => {
 				var thError = new ThError(ThStatusCode.ArchivePriceProductItemError, error);
