@@ -18,11 +18,12 @@ import { PriceVM } from './utils/PriceVM';
 import { DynamicPriceVMContainer } from "./utils/DynamicPriceVMContainer";
 import { DynamicPriceModalService } from "./dynamic-price-modal/services/DynamicPriceModalService";
 import { PricingContainer } from "./utils/PricingContainer";
+import { CopyPriceProductValuesModalService } from './copy-price-product-values-modal/services/CopyPriceProductValuesModalService';
 
 @Component({
 	selector: 'price-product-edit-prices-section',
 	templateUrl: '/client/src/pages/internal/containers/common/inventory/price-products/pages/price-product-edit/sections/prices/template/price-product-edit-prices-section.html',
-	providers: [RoomCategoriesStatsService, PriceExceptionModalService, DynamicPriceModalService]
+	providers: [RoomCategoriesStatsService, PriceExceptionModalService, DynamicPriceModalService, CopyPriceProductValuesModalService]
 })
 export class PriceProductEditPricesSectionComponent extends BaseComponent implements IPriceProductEditSection {
 	private static MAX_NO_OF_DYNAMIC_PRICES = 15;
@@ -42,7 +43,8 @@ export class PriceProductEditPricesSectionComponent extends BaseComponent implem
 	constructor(private _appContext: AppContext,
 		private _roomCategoriesStatsService: RoomCategoriesStatsService,
 		private _priceExceptionModal: PriceExceptionModalService,
-		private _dynamicPriceModal: DynamicPriceModalService) {
+		private _dynamicPriceModal: DynamicPriceModalService,
+		private _copyPriceProductValuesModalService: CopyPriceProductValuesModalService) {
 
 		super();
 		this._isoWeekDayUtils = new ISOWeekDayUtils();
@@ -240,5 +242,20 @@ export class PriceProductEditPricesSectionComponent extends BaseComponent implem
 
 		this.pricingContainer.addDynamicPrice(newDynamicPrice);
 		this.selectDynamicPrice(this.dynamicPriceVMList.length - 1);
+	}
+
+	public openCopyPriceProductValuesModal(destinationRoomCategoryId: string) {
+		var roomCategories: RoomCategoryDO[] = new Array<RoomCategoryDO>();
+		this._currentRoomCategoryStatsList.map((roomCategoryStats: RoomCategoryStatsDO) => {
+ 			if (roomCategoryStats.roomCategory.id !== destinationRoomCategoryId) {
+ 				roomCategories.push(roomCategoryStats.roomCategory);
+ 			}
+		});
+		this._copyPriceProductValuesModalService.openCopyPriceProductValuesModal(roomCategories)
+		.then((modalDialogInstance: ModalDialogRef<RoomCategoryDO>) => {
+				modalDialogInstance.resultObservable.subscribe((sourceRoomCategory: RoomCategoryDO) => {
+					this.selectedDynamicPriceVM.copyPrices(sourceRoomCategory.id, destinationRoomCategoryId);
+				})
+		}).catch((e: any) => { });
 	}
 }
