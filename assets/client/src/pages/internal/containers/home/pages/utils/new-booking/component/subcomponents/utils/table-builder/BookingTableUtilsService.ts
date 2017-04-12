@@ -13,7 +13,7 @@ export class BookingTableUtilsService {
     }
 
     public customCellClassGeneratorForBookingCart(bookingCartItem: BookingCartItemVM, columnValueMeta: TableColumnValueMeta): string {
-        if (bookingCartItem.itemType === BookingCartItemVMType.Total) {
+        if (bookingCartItem.itemType === BookingCartItemVMType.Total || !bookingCartItem.isNew()) {
             var className = "default-cursor";
             if (columnValueMeta.objectPropertyId === "priceProductName" || columnValueMeta.objectPropertyId === "totalPriceString") {
                 className += " important";
@@ -32,7 +32,7 @@ export class BookingTableUtilsService {
         return "";
     }
     public canPerformCommandOnItemForBookingCart(bookingCartItem: BookingCartItemVM, command: TableRowCommand): boolean {
-        return bookingCartItem.itemType !== BookingCartItemVMType.Total;
+        return bookingCartItem.itemType !== BookingCartItemVMType.Total && bookingCartItem.isNew();
     }
 
     public updateBookingCartTotalsRow(bookingCartService: BookingCartService) {

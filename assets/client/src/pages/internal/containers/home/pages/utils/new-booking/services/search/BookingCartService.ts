@@ -29,6 +29,29 @@ export class BookingCartService extends ABookingService {
         return this.returnObservableWith(itemList);
     }
 
+    public newBookingsWereAddedToCart(): boolean {
+        let newBookingsCounter = 0;
+
+        _.forEach(this._bookingCartItemVMList, (bookingCartItem: BookingCartItemVM) => {
+            if(bookingCartItem.isNew()) {
+                newBookingsCounter++;
+            }
+        });
+
+        return newBookingsCounter > 0;
+    }
+
+    public getFirstNewBookingFromCart(): BookingCartItemVM {
+        let foundBookingCartItemVM: BookingCartItemVM;
+        _.forEach(this._bookingCartItemVMList, (bookingCartItem: BookingCartItemVM) => {
+            if(bookingCartItem.isNew()) {
+                foundBookingCartItemVM = bookingCartItem;
+            }
+        });
+
+        return foundBookingCartItemVM;
+    }
+
     public addBookingItem(bookingItemVM: BookingCartItemVM): AddBookingResult {
         var addTest = this.testIfcanAddBookingItem(bookingItemVM);
         if (!addTest.success) { return addTest };

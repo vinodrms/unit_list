@@ -16,9 +16,9 @@ export class NewBookingModalComponent extends BaseComponent implements ICustomMo
 		private _modalInput: NewBookingModalInput) {
 		super();
 	}
-
+	
 	ngOnInit() { }
-
+	
 	public closeDialog(closeWithoutConfirmation: boolean) {
 		if (closeWithoutConfirmation) {
 			this._modalDialogRef.closeForced();
@@ -41,5 +41,8 @@ export class NewBookingModalComponent extends BaseComponent implements ICustomMo
 	}
 	public getSize(): ModalSize {
 		return ModalSize.XLarge;
+	}
+	public get newBookingInput(): NewBookingModalInput {
+		return this._modalInput;
 	}
 }

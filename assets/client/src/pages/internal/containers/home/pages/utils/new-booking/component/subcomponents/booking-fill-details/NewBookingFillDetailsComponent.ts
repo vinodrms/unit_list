@@ -32,7 +32,6 @@ export class NewBookingFillDetailsComponent extends BaseComponent implements Aft
 
 	public ngAfterViewInit() {
 		var cartTableMeta: LazyLoadTableMeta = this._cartTableMetaBuilder.buildBookingCartTableMeta();
-		cartTableMeta.autoSelectRows = true;
 		this._bookingCartTableComponent.bootstrap(this._bookingCartService, cartTableMeta);
 		this._bookingCartTableComponent.attachCustomCellClassGenerator(this._bookingTableUtilsService.customCellClassGeneratorForBookingCart);
 		this._bookingCartTableComponent.attachCustomRowClassGenerator(this._bookingTableUtilsService.customRowClassGeneratorForBookingCart);
@@ -51,13 +50,13 @@ export class NewBookingFillDetailsComponent extends BaseComponent implements Aft
 	private viewDidAppear() {
 		var foundBookingCartItem: BookingCartItemVM = this._bookingCartService.getBookingCartItemByCartSequenceId(this._selectedCartSequenceId);
 		if (this._appContext.thUtils.isUndefinedOrNull(foundBookingCartItem)) {
-			foundBookingCartItem = this._bookingCartService.bookingItemVMList[0];
+			foundBookingCartItem = this._bookingCartService.getFirstNewBookingFromCart();
 		}
 		this.selectBookingCartItem(foundBookingCartItem);
 	}
 
 	public selectBookingCartItem(bookingCartItemVM: BookingCartItemVM) {
-		if (bookingCartItemVM.itemType === BookingCartItemVMType.Total) { return; }
+		if (bookingCartItemVM.itemType === BookingCartItemVMType.Total || !bookingCartItemVM.isNew()) { return; }
 		this.selectedBookingCartItemVM = bookingCartItemVM;
 	}
 

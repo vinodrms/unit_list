@@ -70,7 +70,8 @@ export class BookingHistoryDashboardComponent extends AHomeContainerComponent im
 	}
 	public addBookingToGroup(bookingVM: BookingVM) {
 		let newBookingModalInput = new NewBookingModalInput();
-
+		newBookingModalInput.groupBookingId = bookingVM.booking.groupBookingId;
+		
 		this.openNewBookingModal(newBookingModalInput);
 	}
 }
