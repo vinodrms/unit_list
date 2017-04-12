@@ -221,6 +221,8 @@ export enum ThStatusCode {
 	PriceProductRepositoryErrorUpdatingPriceProduct,
 	PriceProductRepositoryErrorReadingDocumentCount,
 	PriceProductRepositoryErrorGettingList,
+	MongoPriceProductRepositoryWithParentDecoratorError,
+	MongoPriceProductRepositoryWithParentDecoratorErrorParentNotFound,
 	SavePriceProductItemError,
 	SavePriceProductItemInvalidPrice,
 	SavePriceProductItemMaxNoDynamicRates,
@@ -749,6 +751,8 @@ ThMessage[ThStatusCode.PriceProductRepositoryProblemUpdatingPriceProduct] = "Pro
 ThMessage[ThStatusCode.PriceProductRepositoryErrorUpdatingPriceProduct] = "Error updating price product.";
 ThMessage[ThStatusCode.PriceProductRepositoryErrorReadingDocumentCount] = "Error reading the number of price products.";
 ThMessage[ThStatusCode.PriceProductRepositoryErrorGettingList] = "Error getting the list of price products.";
+ThMessage[ThStatusCode.MongoPriceProductRepositoryWithParentDecoratorError] = "Error attaching the prices of the parent price products.";
+ThMessage[ThStatusCode.MongoPriceProductRepositoryWithParentDecoratorErrorParentNotFound] = "The parent of the price product has not been found.";
 ThMessage[ThStatusCode.SavePriceProductItemError] = "Error saving price product.";
 ThMessage[ThStatusCode.SavePriceProductItemInvalidPrice] = "Invalid price submitted.";
 ThMessage[ThStatusCode.SavePriceProductItemMaxNoDynamicRates] = "You cannot add more than 15 dynamic daily rates on the same price product.";
