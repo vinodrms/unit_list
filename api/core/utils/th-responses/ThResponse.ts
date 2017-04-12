@@ -234,6 +234,7 @@ export enum ThStatusCode {
 	SavePriceProductItemTooManyDiscounts,
 	SavePriceProductItemTooManyConstraintsForTheSameDiscount,
 	SavePriceProductItemInvalidConditions,
+	SavePriceProductItemParentAlreadyRelated,
 	PriceProductItemUpdateStrategyOnlyActiveAndDraftCanBeUpdated,
 	PriceProductItemStrategyInvalidStatus,
 	PriceProductItemStrategyMissingDynamicRates,
@@ -765,6 +766,7 @@ ThMessage[ThStatusCode.SavePriceProductItemInvalidDiscountConstraints] = "Invali
 ThMessage[ThStatusCode.SavePriceProductItemTooManyDiscounts] = "You cannot add more than 20 discounts on the same Price Product.";
 ThMessage[ThStatusCode.SavePriceProductItemTooManyConstraintsForTheSameDiscount] = "You cannot add more than 20 constraints for one discount.";
 ThMessage[ThStatusCode.SavePriceProductItemInvalidConditions] = "Invalid conditions submitted.";
+ThMessage[ThStatusCode.SavePriceProductItemParentAlreadyRelated] = "You cannot create a related Price Product for a Price Product which is already related to another one.";
 ThMessage[ThStatusCode.PriceProductItemUpdateStrategyOnlyActiveAndDraftCanBeUpdated] = "Only draft or active price products can be updated.";
 ThMessage[ThStatusCode.PriceProductItemStrategyInvalidStatus] = "A price product can only be saved as draft or active.";
 ThMessage[ThStatusCode.PriceProductItemStrategyMissingDynamicRates] = "Some of the existing dynamic daily rates are missing from the price product.";
