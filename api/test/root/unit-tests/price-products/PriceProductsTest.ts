@@ -381,6 +381,7 @@ describe("Hotel Price Products Tests", function () {
 
 			var savePPItem = new SavePriceProductItem(testContext.appContext, testContext.sessionContext);
 			savePPItem.save(priceProductItem).then((relatedPriceProduct: PriceProductDO) => {
+				should.equal(relatedPriceProduct.parentId, parentPriceProduct.id);
 				should.equal(testUtils.stringArraysAreEqual(relatedPriceProduct.roomCategoryIdList, parentPriceProduct.roomCategoryIdList), true,
 					"The child price product should use its parent's room categories");
 
@@ -419,13 +420,32 @@ describe("Hotel Price Products Tests", function () {
 			});
 		});
 
+		it("Should not be able to archive the Related Price Product's parent", function (done) {
+			var archivePPItem = new ArchivePriceProductItem(testContext.appContext, testContext.sessionContext);
+			archivePPItem.archive({ id: addedPriceProduct.parentId }).then((priceProduct: PriceProductDO) => {
+				done(new Error("Managed to archive related price product's parent"));
+			}).catch((e: any) => {
+				should.equal(e.getThStatusCode(), ThStatusCode.ArchivePriceProductItemHasActiveRelatedPriceProducts);
+				done();
+			});
+		});
+
 		it("Should delete the reference to the parent when the child Price Product is archived", function (done) {
 			var archivePPItem = new ArchivePriceProductItem(testContext.appContext, testContext.sessionContext);
 			archivePPItem.archive({ id: addedPriceProduct.id }).then((priceProduct: PriceProductDO) => {
 				should.equal(priceProduct.id, addedPriceProduct.id);
 				should.equal(priceProduct.status, PriceProductStatus.Archived);
 				should.equal(priceProduct.hasParent(), false);
-				addedPriceProduct = priceProduct;
+				done();
+			}).catch((e: any) => {
+				done(e);
+			});
+		});
+
+		it("Should be able to archive the Related Price Product's parent after this was also Archived", function (done) {
+			var archivePPItem = new ArchivePriceProductItem(testContext.appContext, testContext.sessionContext);
+			archivePPItem.archive({ id: addedPriceProduct.parentId }).then((priceProduct: PriceProductDO) => {
+				should.equal(priceProduct.status, PriceProductStatus.Archived);
 				done();
 			}).catch((e: any) => {
 				done(e);
