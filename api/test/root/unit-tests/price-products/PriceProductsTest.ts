@@ -27,9 +27,11 @@ import { AllotmentsHelper } from '../allotments/helpers/AllotmentsHelper';
 import { SaveAllotmentItem } from '../../../../core/domain-layer/allotments/SaveAllotmentItem';
 import { AllotmentDO, AllotmentStatus } from '../../../../core/data-layer/allotments/data-objects/AllotmentDO';
 import { ArchiveAllotmentItem } from '../../../../core/domain-layer/allotments/ArchiveAllotmentItem';
-import {SaveAddOnProductItem} from '../../../../core/domain-layer/add-on-products/SaveAddOnProductItem';
-import {AddOnProductDO} from '../../../../core/data-layer/add-on-products/data-objects/AddOnProductDO';
-import {AddOnProductsTestHelper} from '../add-on-products/helpers/AddOnProductsTestHelper'
+import { SaveAddOnProductItem } from '../../../../core/domain-layer/add-on-products/SaveAddOnProductItem';
+import { AddOnProductDO } from '../../../../core/data-layer/add-on-products/data-objects/AddOnProductDO';
+import { AddOnProductsTestHelper } from '../add-on-products/helpers/AddOnProductsTestHelper'
+import { SinglePriceDO } from "../../../../core/data-layer/price-products/data-objects/price/single-price/SinglePriceDO";
+import { PriceProductPriceType } from "../../../../core/data-layer/price-products/data-objects/price/IPriceProductPrice";
 
 describe("Hotel Price Products Tests", function () {
 	var InvalidRoomCategoryId = "12121221211";
@@ -48,7 +50,7 @@ describe("Hotel Price Products Tests", function () {
 	var addedPriceProduct: PriceProductDO;
 	var addedCompanyCustomer: CustomerDO;
 	var addedAllotment: AllotmentDO;
-	
+
 	var addOnProdHelper: AddOnProductsTestHelper;
 
 	before(function (done: any) {
@@ -335,19 +337,95 @@ describe("Hotel Price Products Tests", function () {
 			addOnProduct.id = addOnProductSnapshot.id;
 			var addOnProdDO = addOnProdHelper.getSaveAddOnProductItemWithUpdatedPriceFrom(addOnProduct);
 			var saveAddOnProd = new SaveAddOnProductItem(testContext.appContext, testContext.sessionContext);
-			
+
 			saveAddOnProd.save(addOnProdDO).then((result: AddOnProductDO) => {
-			var ppRepo = testContext.appContext.getRepositoryFactory().getPriceProductRepository();
-			return ppRepo.getPriceProductList({ hotelId: testContext.sessionContext.sessionDO.hotel.id },
-				{ 
-				status: PriceProductStatus.Active,
-				addOnProductIdList: [addOnProduct.id]
-				})
-			})
-			.then((searchResult: PriceProductSearchResultRepoDO) => {
+				var ppRepo = testContext.appContext.getRepositoryFactory().getPriceProductRepository();
+				return ppRepo.getPriceProductList({ hotelId: testContext.sessionContext.sessionDO.hotel.id },
+					{
+						status: PriceProductStatus.Active,
+						addOnProductIdList: [addOnProduct.id]
+					})
+			}).then((searchResult: PriceProductSearchResultRepoDO) => {
 				for (let priceProduct of searchResult.priceProductList) {
 					should.equal(priceProduct.includedItems.attachedAddOnProductItemList[0].addOnProductSnapshot.price, addOnProdDO.price);
 				}
+				done();
+			}).catch((e: any) => {
+				done(e);
+			});
+		});
+	});
+	describe("Related Price Products Tests", function () {
+		it("Should create a related price product", function (done) {
+			// first extract the parent PP with price type `Single Price`
+			let parentPriceProduct = _.find(testDataBuilder.priceProductList, pp => { return pp.price.type === PriceProductPriceType​.SinglePrice; });
+
+			// we select a room category that does not exist in the parent PP
+			let roomCategoryStats = _.find(testDataBuilder.roomCategoryStatsList, (roomCategStats) => {
+				return !_.contains(parentPriceProduct.roomCategoryIdList, roomCategStats.roomCategory.id);
+			});
+			let childPrice = 99999;
+
+			// create a new PP with the selected room category
+			pphelper.roomCategoryStat = roomCategoryStats;
+			let priceProductItem = pphelper.getDraftSavePriceProductItemDO();
+			priceProductItem.name = "Related PP for " + parentPriceProduct.name;
+			priceProductItem.price = DefaultPriceProductBuilder.getPricePerRoomCategory(roomCategoryStats);
+			priceProductItem.price.dynamicPriceList.forEach(dynamicPrice => {
+				dynamicPrice.priceList.forEach(price => {
+					(<SinglePriceDO>price).price = childPrice;
+				});
+			});
+			priceProductItem.status = PriceProductStatus.Active;
+			priceProductItem.parentId = parentPriceProduct.id;
+
+			var savePPItem = new SavePriceProductItem(testContext.appContext, testContext.sessionContext);
+			savePPItem.save(priceProductItem).then((relatedPriceProduct: PriceProductDO) => {
+				should.equal(testUtils.stringArraysAreEqual(relatedPriceProduct.roomCategoryIdList, parentPriceProduct.roomCategoryIdList), true,
+					"The child price product should use its parent's room categories");
+
+				should.equal(_.contains(relatedPriceProduct.roomCategoryIdList, roomCategoryStats.roomCategory.id), false,
+					"The child price product should ignore the room category selected on it before creating it");
+
+				relatedPriceProduct.price.dynamicPriceList.forEach((dynamicPrice, dynamicPriceIndex) => {
+					dynamicPrice.priceList.forEach((price, priceIndex) => {
+						should.equal((<SinglePriceDO>price).price, (<SinglePriceDO>parentPriceProduct.price.dynamicPriceList[dynamicPriceIndex].priceList[priceIndex]).price,
+							"The related price product should have the same prices as its parent");
+						should.notEqual((<SinglePriceDO>price).price, childPrice, "The related price product should ignore its initial price and use the parent's price");
+						should.equal(_.contains(parentPriceProduct.roomCategoryIdList, price.getRoomCategoryId()), true,
+							"The related price product's price should exist within its parent's room categories");
+					});
+				});
+				addedPriceProduct = relatedPriceProduct;
+				done();
+			}).catch((e: ThError) => {
+				done(e);
+			});
+		});
+
+		it("Should not be able to create a Related Price Product using as a parent another Related Price Product", function (done) {
+			let parentPriceProduct = addedPriceProduct;
+
+			let priceProductItem = pphelper.getDraftSavePriceProductItemDO();
+			priceProductItem.name = "Related PP for " + parentPriceProduct.name + " v2";
+			priceProductItem.status = PriceProductStatus.Active;
+			priceProductItem.parentId = parentPriceProduct.id;
+			var savePPItem = new SavePriceProductItem(testContext.appContext, testContext.sessionContext);
+			savePPItem.save(priceProductItem).then((relatedPriceProduct: PriceProductDO) => {
+				done(new Error("Managed to create a related price product for another price product which is already related"));
+			}).catch((e: ThError) => {
+				should.equal(e.getThStatusCode(), ThStatusCode.SavePriceProductItemParentAlreadyRelated);
+				done();
+			});
+		});
+
+		it("Should delete the reference to the parent when the child Price Product is archived", function (done) {
+			var archivePPItem = new ArchivePriceProductItem(testContext.appContext, testContext.sessionContext);
+			archivePPItem.archive({ id: addedPriceProduct.id }).then((priceProduct: PriceProductDO) => {
+				should.equal(priceProduct.id, addedPriceProduct.id);
+				should.equal(priceProduct.status, PriceProductStatus.Archived);
+				should.equal(priceProduct.hasParent(), false);
+				addedPriceProduct = priceProduct;
 				done();
 			}).catch((e: any) => {
 				done(e);
