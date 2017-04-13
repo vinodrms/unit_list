@@ -67,6 +67,8 @@ export class NewBookingSearchComponent extends BaseComponent implements AfterVie
 		this._bookingCartTableComponent.attachCustomRowCommandPerformPolicy(this._bookingTableUtilsService.canPerformCommandOnItemForBookingCart);
 		
 		if(!this._appContext.thUtils.isUndefinedOrNull(this.newBookingInput)) {
+			this._bookingCartService.groupBookingId = this.newBookingInput.groupBookingId;
+
 			Observable.combineLatest(
 				this._hotelAggregatedService.getHotelAggregatedInfo(),
 				this._eagerBookingsService.getBookingVMListByGroupBookingId(this.newBookingInput.groupBookingId)	

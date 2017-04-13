@@ -13,6 +13,7 @@ export interface AddBookingResult {
 
 @Injectable()
 export class BookingCartService extends ABookingService {
+    private _groupBookingId: string;
     private _cartSequenceId: number = 0;
     private _totalsBookingItem: BookingCartItemVM;
 
@@ -29,6 +30,14 @@ export class BookingCartService extends ABookingService {
         return this.returnObservableWith(itemList);
     }
 
+    public set groupBookingId(groupBookingId: string) {
+        this._groupBookingId = groupBookingId;
+    }
+
+    public get groupBookingId(): string {
+        return this._groupBookingId;
+    }
+ 
     public newBookingsWereAddedToCart(): boolean {
         let newBookingsCounter = 0;
 

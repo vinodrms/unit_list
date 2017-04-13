@@ -160,6 +160,7 @@ export class BookingViewModelConverter {
         bookingCartItem.transientBookingItem.configCapacity = bookingVM.booking.configCapacity;
         bookingCartItem.transientBookingItem.interval = bookingVM.booking.interval;
         bookingCartItem.transientBookingItem.notes = bookingVM.booking.notes;
+        bookingCartItem.transientBookingItem.invoiceNotes = bookingVM.booking.invoiceNotes;
 
         bookingCartItem.bookingInterval = bookingVM.booking.interval;
 
