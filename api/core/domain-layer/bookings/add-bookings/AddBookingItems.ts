@@ -91,13 +91,10 @@ export class AddBookingItems {
         this.getExistingBookings().then((bookingList: BookingDO[]) => {
             this._existingBookingList = bookingList;
 
-            let existingBookingItemList = [];
-            if (this._existingBookingList.length > 0) {
-                _.forEach(this._existingBookingList, (bookingDO: BookingDO) => {
-                    existingBookingItemList.push(BookingItemDO.buildFromBookingDO(bookingDO));
-                });
-                this._addBookingItems.bookingList = existingBookingItemList.concat(this._addBookingItems.bookingList);
+            if(!this.newBookingGroup) {
+                this.addExistingBookingItemsToTheNewBookingItems();
             }
+            
             return this._appContext.getRepositoryFactory().getHotelRepository().getHotelById(this._sessionContext.sessionDO.hotel.id);
         }).then((loadedHotel: HotelDO) => {
             this._loadedHotel = loadedHotel;
