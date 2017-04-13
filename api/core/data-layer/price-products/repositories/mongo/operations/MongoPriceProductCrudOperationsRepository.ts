@@ -71,6 +71,7 @@ export class MongoPriceProductCrudOperationsRepository extends MongoRepository {
 		return this.findAndModifyPriceProduct(meta, itemMeta, {},
 			{
 				"status": priceProduct.status,
+				"parentId": priceProduct.parentId,
 				"name": priceProduct.name,
 				"availability": priceProduct.availability,
 				"lastRoomAvailability": priceProduct.lastRoomAvailability,
