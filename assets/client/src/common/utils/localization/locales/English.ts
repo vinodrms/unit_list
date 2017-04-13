@@ -232,6 +232,7 @@ export var EnglishTranslations: Object = {
 	"Price Per Person": "Price Per Person",
 	"Single Price": "Single Price",
 	"Type of Price": "Type of Price",
+	"Related To": "Related To",
 	"Price Brief": "Price Brief",
 	"Room Categories": "Room Categories",
 	"Can cancel before %timeOfArrival% on day of arrival": "Can cancel before %timeOfArrival% on day of arrival",
