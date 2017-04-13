@@ -248,6 +248,8 @@ export var EnglishTranslations: Object = {
 	"Delete": "Delete",
 	"Archive": "Archive",
 	"Mark as Draft": "Mark as Draft",
+	"Create Related Price Product": "Create Related Price Product",
+	"A related Price Product will have the same room categories and prices like the original Price Product - %priceProduct% in this case. Are you sure you want to continue?": "A related Price Product will have the same room categories and prices like the original Price Product - %priceProduct% in this case. Are you sure you want to continue?",
 	"Rooms": "Rooms",
 	"[Wizard Step 3] Rooms text": "Now it is time to build the rooms. Please add all bed types which can fit in the rooms at the same time, both stationary and moveable, to calculate the max capacity of your property.",
 	"Delete Price Product": "Delete Price Product",

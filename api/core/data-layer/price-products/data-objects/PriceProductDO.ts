@@ -28,7 +28,9 @@ export class PriceProductDO extends BaseDO {
 	status: PriceProductStatus;
 
 	/**
-	 * If the `parentId` is set, then this Price Product instance will always read the price property (PriceProductPriceDO)
+	 * If the `parentId` is set, then this Price Product instance will always read the following properties:
+	 *   a. `price` property (PriceProductPriceDO)
+	 *   b. `roomCategoryIdList` property
 	 * from its parent Price Product; this minimizes the users' effort to yield various dynamic prices or duplicate prices
 	 */
 	parentId: string;

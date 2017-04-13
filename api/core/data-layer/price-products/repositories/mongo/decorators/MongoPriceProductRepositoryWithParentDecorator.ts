@@ -43,6 +43,7 @@ export class MongoPriceProductRepositoryWithParentDecorator extends MongoPricePr
     public addPriceProduct(meta: PriceProductMetaRepoDO, priceProduct: PriceProductDO): Promise<PriceProductDO> {
         if (priceProduct.hasParent()) {
             priceProduct.price = new PriceProductPriceDO();
+            priceProduct.roomCategoryIdList = [];
         }
         return new Promise<PriceProductDO>((resolve: { (result: PriceProductDO): void }, reject: { (err: ThError): void }) => {
             super.addPriceProduct(meta, priceProduct)
@@ -59,6 +60,7 @@ export class MongoPriceProductRepositoryWithParentDecorator extends MongoPricePr
     public updatePriceProduct(meta: PriceProductMetaRepoDO, itemMeta: PriceProductItemMetaRepoDO, priceProduct: PriceProductDO): Promise<PriceProductDO> {
         if (priceProduct.hasParent()) {
             priceProduct.price = new PriceProductPriceDO();
+            priceProduct.roomCategoryIdList = [];
         }
         return new Promise<PriceProductDO>((resolve: { (result: PriceProductDO): void }, reject: { (err: ThError): void }) => {
             super.updatePriceProduct(meta, itemMeta, priceProduct)
@@ -112,6 +114,7 @@ export class MongoPriceProductRepositoryWithParentDecorator extends MongoPricePr
                         throw thError;
                     }
                     priceProduct.price = parentPriceProduct.price;
+                    priceProduct.roomCategoryIdList = parentPriceProduct.roomCategoryIdList;
                 }
             });
 
