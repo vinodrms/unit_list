@@ -441,15 +441,5 @@ describe("Hotel Price Products Tests", function () {
 				done(e);
 			});
 		});
-
-		it("Should be able to archive the Related Price Product's parent after this was also Archived", function (done) {
-			var archivePPItem = new ArchivePriceProductItem(testContext.appContext, testContext.sessionContext);
-			archivePPItem.archive({ id: addedPriceProduct.parentId }).then((priceProduct: PriceProductDO) => {
-				should.equal(priceProduct.status, PriceProductStatus.Archived);
-				done();
-			}).catch((e: any) => {
-				done(e);
-			});
-		});
 	});
 });
