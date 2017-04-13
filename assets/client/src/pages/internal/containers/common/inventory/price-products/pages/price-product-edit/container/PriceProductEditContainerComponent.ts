@@ -116,10 +116,15 @@ export class PriceProductEditContainerComponent extends BaseComponent implements
 
 			this._editSectionContainer.initializeFrom(this._priceProductVM, result[1]);
 			this._editSectionContainer.readonly = this.isReadOnly();
+
+			// set custom readonly flags for specific edit sections
 			this._editFiltersSection.readonly = this.yieldFiltersAreReadOnly();
 			this._editNotesSection.readonly = this.yieldFiltersAreReadOnly();
-			this._editCancellationSection.cancellationHour = result[0].hotelDetails.hotel.operationHours.cancellationHour;
+			this._roomCategoriesSectionComponent.readonly = this.isReadOnly() || this._priceProductVM.priceProduct.hasParent();
+			this._editPricesSection.readonly = this.isReadOnly() || this._priceProductVM.priceProduct.hasParent();
+			this._editPricesSection.editDynamicPrices = !this._priceProductVM.priceProduct.hasParent();
 
+			this._editCancellationSection.cancellationHour = result[0].hotelDetails.hotel.operationHours.cancellationHour;
 			this.isLoading = false;
 			this.didSubmit = false;
 		}, (error: ThError) => {

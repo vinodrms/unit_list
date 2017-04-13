@@ -28,6 +28,7 @@ export class PriceProductEditPricesSectionComponent extends BaseComponent implem
 	private static MAX_NO_OF_DYNAMIC_PRICES = 15;
 
 	private _readonly: boolean;
+	private _editDynamicPrices: boolean;
 
 	@Input() didSubmit: boolean;
 
@@ -66,6 +67,12 @@ export class PriceProductEditPricesSectionComponent extends BaseComponent implem
 	}
 	public set readonly(readonly: boolean) {
 		this._readonly = readonly;
+	}
+	public get editDynamicPrices(): boolean {
+		return this._editDynamicPrices;
+	}
+	public set editDynamicPrices(editDynamicPrices: boolean) {
+		this._editDynamicPrices = editDynamicPrices;
 	}
 
 	public isValid(): boolean {
