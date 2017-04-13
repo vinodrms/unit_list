@@ -36,5 +36,8 @@
 		<a class="btn btn-lg p-l-0" (click)="draftPriceProduct()" *ngIf="priceProductVM.priceProduct.isArchived()">
 			<i class="fa fa-retweet"></i> {{ 'Mark as Draft' | translate }}
 		</a>
+		<a class="btn btn-lg p-l-0" (click)="createRelatedPriceProduct()" *ngIf="priceProductVM.priceProduct.canCreateRelatedPriceProduct()">
+			<i class="fa fa-code-fork"></i> {{ 'Create Related Price Product' | translate }}
+		</a>
 	</div>
 </div>

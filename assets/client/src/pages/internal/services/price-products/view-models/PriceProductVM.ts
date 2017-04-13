@@ -1,16 +1,16 @@
-import {ThTranslation} from '../../../../../common/utils/localization/ThTranslation';
-import {ThUtils} from '../../../../../common/utils/ThUtils';
-import {PriceProductDO, PriceProductAvailability} from '../data-objects/PriceProductDO';
-import {PriceProductPriceType} from '../data-objects/price/IPriceProductPrice';
-import {TaxContainerDO} from '../../taxes/data-objects/TaxContainerDO';
-import {TaxDO} from '../../taxes/data-objects/TaxDO';
-import {RoomCategoryDO} from '../../room-categories/data-objects/RoomCategoryDO';
-import {YieldFiltersDO} from '../../hotel-configurations/data-objects/YieldFiltersDO';
-import {YieldFilterValueVM} from './YieldFilterValueVM';
-import {YieldFilterDO} from '../../common/data-objects/yield-filter/YieldFilterDO';
-import {YieldFilterValueDO} from '../../common/data-objects/yield-filter/YieldFilterValueDO';
-import {PriceProductYieldFilterMetaDO} from '../data-objects/yield-filter/PriceProductYieldFilterDO';
-import {CurrencyDO} from '../../common/data-objects/currency/CurrencyDO';
+import { ThTranslation } from '../../../../../common/utils/localization/ThTranslation';
+import { ThUtils } from '../../../../../common/utils/ThUtils';
+import { PriceProductDO, PriceProductAvailability } from '../data-objects/PriceProductDO';
+import { PriceProductPriceType } from '../data-objects/price/IPriceProductPrice';
+import { TaxContainerDO } from '../../taxes/data-objects/TaxContainerDO';
+import { TaxDO } from '../../taxes/data-objects/TaxDO';
+import { RoomCategoryDO } from '../../room-categories/data-objects/RoomCategoryDO';
+import { YieldFiltersDO } from '../../hotel-configurations/data-objects/YieldFiltersDO';
+import { YieldFilterValueVM } from './YieldFilterValueVM';
+import { YieldFilterDO } from '../../common/data-objects/yield-filter/YieldFilterDO';
+import { YieldFilterValueDO } from '../../common/data-objects/yield-filter/YieldFilterValueDO';
+import { PriceProductYieldFilterMetaDO } from '../data-objects/yield-filter/PriceProductYieldFilterDO';
+import { CurrencyDO } from '../../common/data-objects/currency/CurrencyDO';
 
 export class PriceProductVM {
 	private _thUtils: ThUtils;
@@ -21,6 +21,8 @@ export class PriceProductVM {
 	private _yieldFilterVMValues: YieldFilterValueVM[];
 	private _ccy: CurrencyDO;
 	private _priceBrief: string;
+	private _parentPriceProduct: PriceProductDO;
+
 
 	constructor(private _thTranslation: ThTranslation) {
 		this._thUtils = new ThUtils();
@@ -128,6 +130,18 @@ export class PriceProductVM {
 	}
 	public set priceBrief(priceBrief: string) {
 		this._priceBrief = priceBrief;
+	}
+	public get parentPriceProduct(): PriceProductDO {
+		return this._parentPriceProduct;
+	}
+	public set parentPriceProduct(parentPriceProduct: PriceProductDO) {
+		this._parentPriceProduct = parentPriceProduct;
+	}
+	public get parentPriceProductName(): string {
+		if (!this._parentPriceProduct) {
+			return "-";
+		}
+		return this._parentPriceProduct.name;
 	}
 
 	public buildPrototype(): PriceProductVM {

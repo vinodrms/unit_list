@@ -18,6 +18,7 @@ import { MongoCustomerRepository } from './customers/repositories/mongo/MongoCus
 import { ICustomerRepository } from './customers/repositories/ICustomerRepository';
 import { IPriceProductRepository } from './price-products/repositories/IPriceProductRepository';
 import { MongoPriceProductRepository } from './price-products/repositories/mongo/MongoPriceProductRepository';
+import { MongoPriceProductRepositoryWithParentDecorator } from "./price-products/repositories/mongo/decorators/MongoPriceProductRepositoryWithParentDecorator";
 import { IYieldFilterConfigurationRepository } from './hotel-configurations/repositories/IYieldFilterConfigurationRepository';
 import { MongoYieldFilterConfigurationRepository } from './hotel-configurations/repositories/mongo/MongoYieldFilterConfigurationRepository';
 import { IAllotmentRepository } from './allotments/repositories/IAllotmentRepository';
@@ -106,7 +107,7 @@ export class RepositoryFactory {
     getPriceProductRepository(): IPriceProductRepository {
         switch (this._databaseType) {
             default:
-                return new MongoPriceProductRepository();
+                return new MongoPriceProductRepositoryWithParentDecorator(new MongoPriceProductRepository());
         }
     }
 
