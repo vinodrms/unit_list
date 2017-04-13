@@ -35,7 +35,7 @@
 						</span>
 					</span>
 					<span class="p-r-8 f-s-14 clickable" 
-						*ngIf="priceProduct.hasMoreThanOneDynamicPrice()" 
+						*ngIf="priceProduct.canYieldDynamicPrices()" 
 						(click)="toggleExpanded(priceProduct)"
 						title="{{ 'Show/hide dynamic rates' | translate }}">
 						<i class="fa bold-text" [ngClass]="{'fa-angle-down': !isExpanded(priceProduct), 'fa-angle-up': isExpanded(priceProduct)}">
@@ -49,7 +49,7 @@
 				</div>
 			</div>
 
-			<span *ngIf="priceProduct.hasMoreThanOneDynamicPrice() && isExpanded(priceProduct)" >
+			<span *ngIf="priceProduct.canYieldDynamicPrices() && isExpanded(priceProduct)" >
 				<div class="price-products-row flex-row white" [ngClass]="getPriceProductRowClasses(priceProduct)" *ngFor="let dynamicPrice of priceProduct.dynamicPriceList">
 					<div class="price-products-col flex-jc-start wide">
 						<div class="filter-indicator dynamic-price"> </div>
