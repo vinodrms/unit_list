@@ -92,6 +92,7 @@ export class DraftPriceProductItem {
 				this._priceProduct.includedItems.indexedAddOnProductIdList = this._priceProduct.includedItems.getUniqueAddOnProductIdList()
 
 				this._priceProduct.status = PriceProductStatus.Draft;
+				this._priceProduct.deleteReferenceToParent();
 
 				var ppRepo = this._appContext.getRepositoryFactory().getPriceProductRepository();
 				return ppRepo.updatePriceProduct({ hotelId: this._sessionContext.sessionDO.hotel.id },

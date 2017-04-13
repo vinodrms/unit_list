@@ -37,11 +37,37 @@ export class SavePriceProductItem {
 		if (!this.submittedStructureIsValid(reject)) {
 			return;
 		}
+		if (!this._priceProductDO.hasParent()) {
+			this.finishSavingPriceProduct(resolve, reject);
+			return;
+		}
+
+		// validate the price product's parent before saving it
+		var ppRepoMeta = this.buildPriceProductMetaRepoDO();
+		let ppRepo = this._appContext.getRepositoryFactory().getPriceProductRepository();
+		ppRepo.getPriceProductById(ppRepoMeta, this._priceProductDO.parentId)
+			.then((parentPriceProduct: PriceProductDO) => {
+
+				// we don't want to create trees of price products
+				if (parentPriceProduct.hasParent()) {
+					let thError = new ThError(ThStatusCode.SavePriceProductItemParentAlreadyRelated, null);
+					ThLogger.getInstance().logBusiness(ThLogLevel.Error, "Tried to create a related PP using a PP which is already related to another PP", this._inputDO, thError);
+					throw thError;
+				}
+
+				this.finishSavingPriceProduct(resolve, reject);
+			}).catch((thError: ThError) => {
+				reject(thError);
+			});
+	}
+
+	private finishSavingPriceProduct(resolve: { (result: PriceProductDO): void }, reject: { (err: ThError): void }) {
 		var ppRepoMeta = this.buildPriceProductMetaRepoDO();
 		var actionFactory = new PriceProductItemActionFactory(this._appContext, this._sessionContext);
 		var actionStrategy = actionFactory.getActionStrategy(ppRepoMeta, this._priceProductDO);
 		actionStrategy.save(resolve, reject);
 	}
+
 	private submittedStructureIsValid(reject: { (err: ThError): void }): boolean {
 		var validationResult = SavePriceProductItemDO.getValidationStructure().validateStructure(this._inputDO);
 		if (!validationResult.isValid()) {
