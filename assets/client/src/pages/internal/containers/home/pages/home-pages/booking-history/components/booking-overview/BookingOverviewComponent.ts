@@ -11,6 +11,10 @@ export class BookingOverviewComponent {
     public editBooking() {
         this.onEdit.next(this._bookingVM);
     }
+    @Output() onAddBookingToGroup = new EventEmitter<BookingVM>();
+    public addBookingToGroup() {
+        this.onAddBookingToGroup.next(this._bookingVM);
+    }
 
     private _bookingVM: BookingVM;
     public get bookingVM(): BookingVM {

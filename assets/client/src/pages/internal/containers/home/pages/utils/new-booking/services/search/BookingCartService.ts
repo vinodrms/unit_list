@@ -13,6 +13,7 @@ export interface AddBookingResult {
 
 @Injectable()
 export class BookingCartService extends ABookingService {
+    private _groupBookingId: string;
     private _cartSequenceId: number = 0;
     private _totalsBookingItem: BookingCartItemVM;
 
@@ -27,6 +28,37 @@ export class BookingCartService extends ABookingService {
             itemList = itemList.concat(this.totalsBookingItem);
         }
         return this.returnObservableWith(itemList);
+    }
+
+    public set groupBookingId(groupBookingId: string) {
+        this._groupBookingId = groupBookingId;
+    }
+
+    public get groupBookingId(): string {
+        return this._groupBookingId;
+    }
+ 
+    public newBookingsWereAddedToCart(): boolean {
+        let newBookingsCounter = 0;
+
+        _.forEach(this._bookingCartItemVMList, (bookingCartItem: BookingCartItemVM) => {
+            if(bookingCartItem.isNew()) {
+                newBookingsCounter++;
+            }
+        });
+
+        return newBookingsCounter > 0;
+    }
+
+    public getFirstNewBookingFromCart(): BookingCartItemVM {
+        let foundBookingCartItemVM: BookingCartItemVM;
+        _.forEach(this._bookingCartItemVMList, (bookingCartItem: BookingCartItemVM) => {
+            if(bookingCartItem.isNew()) {
+                foundBookingCartItemVM = bookingCartItem;
+            }
+        });
+
+        return foundBookingCartItemVM;
     }
 
     public addBookingItem(bookingItemVM: BookingCartItemVM): AddBookingResult {

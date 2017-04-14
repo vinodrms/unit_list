@@ -12,6 +12,7 @@ import { StringValidationRule } from '../../../utils/th-validation/rules/StringV
 import { BooleanValidationRule } from '../../../utils/th-validation/rules/BooleanValidationRule';
 import { NumberInListValidationRule } from '../../../utils/th-validation/rules/NumberInListValidationRule';
 import { CommonValidationStructures } from "../../common/CommonValidations";
+import { BookingDO } from "../../../data-layer/bookings/data-objects/BookingDO";
 
 export class BookingItemDO {
     interval: ThDateIntervalDO;
@@ -23,15 +24,34 @@ export class BookingItemDO {
     allotmentId: string;
     notes: string;
     invoiceNotes: string;
+
+    public static buildFromBookingDO(bookingDO: BookingDO): BookingItemDO {
+        let bookingItemDO = new BookingItemDO();
+        bookingItemDO.interval = bookingDO.interval;
+        bookingItemDO.customerIdList = bookingDO.customerIdList;
+        bookingItemDO.configCapacity = bookingDO.configCapacity;
+        bookingItemDO.defaultBillingDetails = bookingDO.defaultBillingDetails;
+        bookingItemDO.roomCategoryId = bookingDO.roomCategoryId;
+        bookingItemDO.priceProductId = bookingDO.priceProductId;
+        bookingItemDO.allotmentId = bookingDO.allotmentId;
+        bookingItemDO.notes = bookingDO.notes;
+        bookingItemDO.invoiceNotes = bookingDO.invoiceNotes;
+        return bookingItemDO;
+    }
 }
 
 export class AddBookingItemsDO {
+    groupBookingId?: string;
     bookingList: BookingItemDO[];
     confirmationEmailList: string[];
 
     public static getValidationStructure(): IValidationStructure {
         return new ObjectValidationStructure([
             {
+                key: "groupBookingId",
+                validationStruct: new PrimitiveValidationStructure(StringValidationRule.buildNullable())
+            },
+            {   
                 key: "bookingList",
                 validationStruct: new ArrayValidationStructure(new ObjectValidationStructure([
                     {

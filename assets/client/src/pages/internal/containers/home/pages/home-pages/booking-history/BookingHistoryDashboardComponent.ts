@@ -1,20 +1,21 @@
-import {Component, AfterViewInit, ViewChild, ReflectiveInjector, Type, ResolvedReflectiveProvider} from '@angular/core';
-import {LazyLoadingTableComponent} from '../../../../../../../common/utils/components/lazy-loading/LazyLoadingTableComponent';
-import {HeaderPageService} from '../../utils/header/container/services/HeaderPageService';
-import {HeaderPageType} from '../../utils/header/container/services/HeaderPageType';
-import {AHomeContainerComponent} from '../../utils/AHomeContainerComponent';
-import {BookingsService} from '../../../../../services/bookings/BookingsService';
-import {BookingVM} from '../../../../../services/bookings/view-models/BookingVM';
-import {EagerCustomersService} from '../../../../../services/customers/EagerCustomersService';
-import {BookingsTableMetaBuilderService} from './services/BookingsTableMetaBuilderService';
-import {NewBookingModalService} from '../../utils/new-booking/modal/services/NewBookingModalService';
-import {NewBookingResult} from '../../utils/new-booking/modal/services/utils/NewBookingResult';
-import {ModalDialogRef} from '../../../../../../../common/utils/modals/utils/ModalDialogRef';
-import {BookingOverviewComponent} from './components/booking-overview/BookingOverviewComponent';
-import {BookingsDateFilterComponent} from './components/bookings-date-filter/BookingsDateFilterComponent';
-import {BookingsDateFilterModule} from './components/bookings-date-filter/BookingsDateFilterModule';
-import {HotelOperationsModalService} from '../hotel-operations/operations-modal/services/HotelOperationsModalService';
-import {HotelOperationsResult} from '../hotel-operations/operations-modal/services/utils/HotelOperationsResult';
+import { Component, AfterViewInit, ViewChild, ReflectiveInjector, Type, ResolvedReflectiveProvider } from '@angular/core';
+import { LazyLoadingTableComponent } from '../../../../../../../common/utils/components/lazy-loading/LazyLoadingTableComponent';
+import { HeaderPageService } from '../../utils/header/container/services/HeaderPageService';
+import { HeaderPageType } from '../../utils/header/container/services/HeaderPageType';
+import { AHomeContainerComponent } from '../../utils/AHomeContainerComponent';
+import { BookingsService } from '../../../../../services/bookings/BookingsService';
+import { BookingVM } from '../../../../../services/bookings/view-models/BookingVM';
+import { EagerCustomersService } from '../../../../../services/customers/EagerCustomersService';
+import { BookingsTableMetaBuilderService } from './services/BookingsTableMetaBuilderService';
+import { NewBookingModalService } from '../../utils/new-booking/modal/services/NewBookingModalService';
+import { NewBookingResult } from '../../utils/new-booking/modal/services/utils/NewBookingResult';
+import { ModalDialogRef } from '../../../../../../../common/utils/modals/utils/ModalDialogRef';
+import { BookingOverviewComponent } from './components/booking-overview/BookingOverviewComponent';
+import { BookingsDateFilterComponent } from './components/bookings-date-filter/BookingsDateFilterComponent';
+import { BookingsDateFilterModule } from './components/bookings-date-filter/BookingsDateFilterModule';
+import { HotelOperationsModalService } from '../hotel-operations/operations-modal/services/HotelOperationsModalService';
+import { HotelOperationsResult } from '../hotel-operations/operations-modal/services/utils/HotelOperationsResult';
+import { NewBookingModalInput } from "../../utils/new-booking/modal/services/utils/NewBookingModalInput";
 
 @Component({
 	selector: 'booking-history-dashboard',
@@ -44,8 +45,8 @@ export class BookingHistoryDashboardComponent extends AHomeContainerComponent im
 		this._bookingsTableComponent.bootstrap(this._bookingsService, this._tableBuilder.buildLazyLoadTableMeta());
 	}
 
-	public openNewBookingModal() {
-		this._newBookingModalService.openNewBookingModal().then((modalDialogInstance: ModalDialogRef<NewBookingResult>) => {
+	public openNewBookingModal(newBookingModalInput?: NewBookingModalInput) {
+		this._newBookingModalService.openNewBookingModal(newBookingModalInput).then((modalDialogInstance: ModalDialogRef<NewBookingResult>) => {
 			modalDialogInstance.resultObservable.subscribe((newBookingResult: NewBookingResult) => {
 				this._bookingsService.refreshData();
 			});
@@ -66,5 +67,11 @@ export class BookingHistoryDashboardComponent extends AHomeContainerComponent im
 				}, (err: any) => {
 				});
 		}).catch((err: any) => { });
+	}
+	public addBookingToGroup(bookingVM: BookingVM) {
+		let newBookingModalInput = new NewBookingModalInput();
+		newBookingModalInput.groupBookingId = bookingVM.booking.groupBookingId;
+		
+		this.openNewBookingModal(newBookingModalInput);
 	}
 }

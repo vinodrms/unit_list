@@ -8,6 +8,10 @@ import {ThTimestampDO} from '../../../utils/th-dates/data-objects/ThTimestampDO'
 export interface BookingMetaRepoDO {
     hotelId: string;
 }
+export interface BookingGroupMetaRepoDO {
+    groupBookingId: string;
+    versionId: number;
+}
 export interface BookingItemMetaRepoDO {
     groupBookingId: string;
     bookingId: string;
@@ -46,7 +50,7 @@ export interface IBookingRepository {
 
     getBookingById(meta: BookingMetaRepoDO, groupBookingId: string, bookingId: string): Promise<BookingDO>;
 
-    addBookings(meta: BookingMetaRepoDO, bookingList: BookingDO[]): Promise<BookingDO[]>;
+    addBookings(meta: BookingMetaRepoDO, bookingList: BookingDO[], groupMeta?: BookingGroupMetaRepoDO): Promise<BookingDO[]>;
     updateBooking(meta: BookingMetaRepoDO, itemMeta: BookingItemMetaRepoDO, booking: BookingDO): Promise<BookingDO>;
     updateMultipleBookings(meta: BookingMetaRepoDO, bookingList: BookingDO[]): Promise<BookingDO[]>;
 }

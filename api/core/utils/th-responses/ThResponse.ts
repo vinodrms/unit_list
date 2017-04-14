@@ -370,12 +370,14 @@ export enum ThStatusCode {
 	AddBookingsRepositoryEmptyBookingList,
 	AddBookingsRepositoryNoBookingsLimitExceeded,
 	AddBookingsRepositoryErrorAddingBookingGroup,
+	AddBookingsRepositoryErrorAddingBookingToExistingGroup,
 	AddBookingItemsError,
 	BookingIntervalValidatorError,
 	BookingIntervalValidatorInvalidInterval,
 	BookingIntervalValidatorInvalidStartDate,
 	BookingIntervalValidatorMaxSixMonths,
 	AddBookingItemsInvalidNoOfBookings,
+	AddBookingItemsErrorRetrievingExistingBookings,
 	BookingItemsConverterError,
 	BookingItemsConverterReferenceGenerationError,
 	BookingValidationError,
@@ -891,7 +893,9 @@ ThMessage[ThStatusCode.InvoiceEmailSenderErrorSendingEmail] = "Error sending inv
 ThMessage[ThStatusCode.SlackSendMessageError] = "Error sending the message using Slack.";
 ThMessage[ThStatusCode.AddBookingsRepositoryEmptyBookingList] = "Empty booking list.";
 ThMessage[ThStatusCode.AddBookingsRepositoryNoBookingsLimitExceeded] = "You can't create more than 50 bookings at once.";
+ThMessage[ThStatusCode.AddBookingItemsErrorRetrievingExistingBookings] = "Error retrieving existing bookings by group booking id."
 ThMessage[ThStatusCode.AddBookingsRepositoryErrorAddingBookingGroup] = "Error adding bookings.";
+ThMessage[ThStatusCode.AddBookingsRepositoryErrorAddingBookingToExistingGroup] = "Error adding bookings to existing group.";
 ThMessage[ThStatusCode.AddBookingItemsError] = "Error adding bookings.";
 ThMessage[ThStatusCode.BookingIntervalValidatorError] = "Error validating booking interval.";
 ThMessage[ThStatusCode.BookingIntervalValidatorInvalidInterval] = "Invalid interval.";
