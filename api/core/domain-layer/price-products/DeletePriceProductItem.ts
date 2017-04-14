@@ -58,14 +58,12 @@ export class DeletePriceProductItem {
 					id: loadedPriceProduct.id,
 					versionId: loadedPriceProduct.versionId
 				}
+				loadedPriceProduct.status = this._newStatus;
+				loadedPriceProduct.deleteReferenceToParent();
+
 				var ppRepo = this._appContext.getRepositoryFactory().getPriceProductRepository();
-				return ppRepo.updatePriceProductStatus(this._ppRepoMeta, ppItemRepoMeta, {
-					oldStatus: this._oldStatus,
-					newStatus: this._newStatus,
-					priceProduct: loadedPriceProduct
-				});
-			})
-			.then((updatedPriceProduct: PriceProductDO) => {
+				return ppRepo.updatePriceProduct(this._ppRepoMeta, ppItemRepoMeta, loadedPriceProduct);
+			}).then((updatedPriceProduct: PriceProductDO) => {
 				resolve(updatedPriceProduct);
 			}).catch((error: any) => {
 				var thError = new ThError(ThStatusCode.UpdatePriceProductItemStatusError, error);

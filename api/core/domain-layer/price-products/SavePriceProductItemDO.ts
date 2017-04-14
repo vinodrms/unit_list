@@ -49,6 +49,7 @@ export interface SavePriceProductItemConditionsDO {
 
 export class SavePriceProductItemDO {
 	status: PriceProductStatus;
+	parentId: string;
 	name: string;
 	availability: PriceProductAvailability;
 	lastRoomAvailability: boolean;
@@ -100,34 +101,34 @@ export class SavePriceProductItemDO {
 	}
 
 	public static getThDateIntervalDOValidationStructure(): IValidationStructure {
-        return new ObjectValidationStructure([
-            {
-                key: "start",
-                validationStruct: SavePriceProductItemDO.getThDateDOValidationStructure()
-            },
-            {
-                key: "end",
-                validationStruct: SavePriceProductItemDO.getThDateDOValidationStructure()
-            }
-        ]);
-    }
+		return new ObjectValidationStructure([
+			{
+				key: "start",
+				validationStruct: SavePriceProductItemDO.getThDateDOValidationStructure()
+			},
+			{
+				key: "end",
+				validationStruct: SavePriceProductItemDO.getThDateDOValidationStructure()
+			}
+		]);
+	}
 
 	public static getThDateDOValidationStructure(): IValidationStructure {
-        return new ObjectValidationStructure([
-            {
-                key: "year",
-                validationStruct: new PrimitiveValidationStructure(NumberValidationRule.buildIntegerNumberRule(0))
-            },
-            {
-                key: "month",
-                validationStruct: new PrimitiveValidationStructure(NumberValidationRule.buildIntegerNumberRule(0))
-            },
-            {
-                key: "day",
-                validationStruct: new PrimitiveValidationStructure(NumberValidationRule.buildIntegerNumberRule(1))
-            }
-        ]);
-    }
+		return new ObjectValidationStructure([
+			{
+				key: "year",
+				validationStruct: new PrimitiveValidationStructure(NumberValidationRule.buildIntegerNumberRule(0))
+			},
+			{
+				key: "month",
+				validationStruct: new PrimitiveValidationStructure(NumberValidationRule.buildIntegerNumberRule(0))
+			},
+			{
+				key: "day",
+				validationStruct: new PrimitiveValidationStructure(NumberValidationRule.buildIntegerNumberRule(1))
+			}
+		]);
+	}
 
 	public static getValidationStructure(): IValidationStructure {
 		var weekDayUtils = new ISOWeekDayUtils();
@@ -139,6 +140,10 @@ export class SavePriceProductItemDO {
 			{
 				key: "status",
 				validationStruct: new PrimitiveValidationStructure(new NumberInListValidationRule([PriceProductStatus.Active, PriceProductStatus.Draft]))
+			},
+			{
+				key: "parentId",
+				validationStruct: new PrimitiveValidationStructure(StringValidationRule.buildNullable())
 			},
 			{
 				key: "name",
