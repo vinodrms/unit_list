@@ -88,6 +88,7 @@ export class PriceProductReader {
         var yieldItem = new PriceProductYieldItem();
         yieldItem.priceProductId = priceProduct.id;
         yieldItem.priceProductName = priceProduct.name;
+        yieldItem.parentPriceProductId = priceProduct.parentId;
         yieldItem.lastRoomAvailability = priceProduct.lastRoomAvailability;
         yieldItem.yieldFilterList = priceProduct.yieldFilterList;
         yieldItem.stateList = [];

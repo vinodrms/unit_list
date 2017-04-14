@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {Subscription} from 'rxjs/Subscription';
 import { AppContext, ThError } from '../../../../../../../../common/utils/AppContext';
 import { BaseComponent } from '../../../../../../../../common/base/BaseComponent';
 import { ICustomModalComponent, ModalSize } from '../../../../../../../../common/utils/modals/utils/ICustomModalComponent';
@@ -21,6 +22,9 @@ import { RoomCategoriesStatsService } from '../../../../../../services/room-cate
 import { RoomsService } from '../../../../../../services/rooms/RoomsService';
 import { EagerBookingsService } from '../../../../../../services/bookings/EagerBookingsService';
 import { RoomMaintenanceStatus } from '../../../../../../services/rooms/data-objects/RoomDO';
+import { RoomMaintenanceStatusModalService } from '../dashboard/components/rooms-canvas/components/room-card/modal/services/RoomMaintenanceStatusModalService';
+import { RoomMaintenanceUtils } from '../../../../../../services/rooms/utils/RoomMaintenanceUtils';
+
 
 @Component({
     selector: 'assign-room-modal',
@@ -28,7 +32,7 @@ import { RoomMaintenanceStatus } from '../../../../../../services/rooms/data-obj
     providers: [SETTINGS_PROVIDERS, HotelService, HotelAggregatorService,
         RoomCategoriesStatsService, RoomsService, EagerCustomersService,
         EagerBookingsService, BookingOccupancyService,
-        HotelOperationsRoomService]
+        HotelOperationsRoomService, RoomMaintenanceStatusModalService]
 })
 export class AssignRoomModalComponent extends BaseComponent implements ICustomModalComponent, OnInit {
     selectedRoomVM: RoomVM;
@@ -36,12 +40,17 @@ export class AssignRoomModalComponent extends BaseComponent implements ICustomMo
     isAssigningRoom: boolean = false;
     isLoading: boolean = false;
 
+    private _getRoomByIdSubscription: Subscription;
+    private _roomMaintenanceUtils: RoomMaintenanceUtils;
+
     constructor(private _appContext: AppContext,
         private _modalDialogRef: ModalDialogRef<BookingDO>,
         private _modalInput: AssignRoomModalInput,
         private _hotelOperationsRoomService: HotelOperationsRoomService,
-        private _roomsService: RoomsService) {
+        private _roomsService: RoomsService,
+        private _roomMaintenanceStatusModalService: RoomMaintenanceStatusModalService) {
         super();
+        this._roomMaintenanceUtils = new RoomMaintenanceUtils();
     }
 
     ngOnInit() {
@@ -56,6 +65,12 @@ export class AssignRoomModalComponent extends BaseComponent implements ICustomMo
             });
         };
     }
+
+    public ngOnDestroy() {
+		if (this._getRoomByIdSubscription) {
+            this._getRoomByIdSubscription.unsubscribe();
+        }
+	}
 
     public closeDialog() {
         this._modalDialogRef.closeForced();
@@ -107,6 +122,31 @@ export class AssignRoomModalComponent extends BaseComponent implements ICustomMo
     }
 
     private assignRoom() {
+        if (this._appContext.thUtils.isUndefinedOrNull(this._modalInput.oldRoomId)) {
+            this.finalizeAssignRoom();
+            return;
+        }
+        if (this._getRoomByIdSubscription) this._getRoomByIdSubscription.unsubscribe();
+        this._getRoomByIdSubscription = this._roomsService.getRoomById(this._modalInput.oldRoomId).subscribe((oldRoomVM: RoomVM) => {
+            this._roomMaintenanceStatusModalService.openRoomMaintenanceStatusModal(oldRoomVM, this._hotelOperationsRoomService,
+            [
+                this._roomMaintenanceUtils.getRoomMaintenanceMetaByStatus(RoomMaintenanceStatus.PickUp), 
+                this._roomMaintenanceUtils.getRoomMaintenanceMetaByStatus(RoomMaintenanceStatus.Clean),
+                this._roomMaintenanceUtils.getRoomMaintenanceMetaByStatus(RoomMaintenanceStatus.Dirty)
+            ]).then((modalDialogInstance: ModalDialogRef<boolean>) => {
+                    modalDialogInstance.resultObservable.subscribe((changeDone: boolean) => {
+                    this.finalizeAssignRoom();
+                    this._getRoomByIdSubscription.unsubscribe();
+                }, (err: any) => {});
+		    }).catch((err: ThError) => {
+                this._appContext.toaster.error(err.message);
+            });
+        }, (err: ThError) => {
+            this._appContext.toaster.error(err.message);
+        });
+    }
+
+    private finalizeAssignRoom() {
         this.isAssigningRoom = true;
         var assignRoomParams: AssignRoomParam = {
             groupBookingId: this._modalInput.assignRoomParam.groupBookingId,

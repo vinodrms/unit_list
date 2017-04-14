@@ -42,8 +42,9 @@ export class PriceProductYieldItemVM {
         return this._priceProductYieldItemDO.lastRoomAvailability;
     }
 
-    public hasMoreThanOneDynamicPrice(): boolean {
-        return this._priceProductYieldItemDO.dynamicPriceList.length > 1;
+    public canYieldDynamicPrices(): boolean {
+        return this._priceProductYieldItemDO.dynamicPriceList.length > 1
+            && !this._priceProductYieldItemDO.hasParent();
     }
 
     public get dynamicPriceList(): DynamicPriceYieldItemDO[] {

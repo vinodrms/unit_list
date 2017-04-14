@@ -21,7 +21,9 @@ export class ShiftReportByPaymentMethodSectionGenerator extends AReportSectionGe
 			values: [
 				"Payment method",
 				"Transactions",
-				"Amount"
+				"Amount (fee included)",
+				"Amount (without fee)",
+				"Transaction fee"
 			]
 		};
 	}
@@ -36,22 +38,33 @@ export class ShiftReportByPaymentMethodSectionGenerator extends AReportSectionGe
 		this.createPaymentMethodIdToNameMap().then((pmIdToNameMap) => {
 			let mpmDetailsDict = this.getPaymentMethodsDetailsDict();
 			var totalTransaction = 0;
-			var totalAmount = 0;
+			var totalAmountWithoutFee = 0;
+			var totalAmountWithFee = 0;
+			var totalFees = 0;
+
 			var data: any[] = [];
 			Object.keys(mpmDetailsDict).forEach((pMethod) => {
 				let pmName = pmIdToNameMap[pMethod];
 				let transactions = mpmDetailsDict[pMethod].transactions;
 
-				let amount = this._thUtils.roundNumberToTwoDecimals(mpmDetailsDict[pMethod].amount);
-				let row = [pmName, transactions, amount];
+				let amountWithoutFee = this._thUtils.roundNumberToTwoDecimals(mpmDetailsDict[pMethod].amountWithoutFee);
+				let amountWithFee = this._thUtils.roundNumberToTwoDecimals(mpmDetailsDict[pMethod].amountWithFee);
+				let fee = this._thUtils.roundNumberToTwoDecimals(amountWithFee - amountWithoutFee);
+				
+				let row = [pmName, transactions, amountWithFee, amountWithoutFee, fee];
 
 				totalTransaction += transactions;
-				totalAmount += amount;
+				totalAmountWithoutFee += amountWithoutFee;
+				totalAmountWithFee += amountWithFee;
+				totalFees += fee;
 
 				data.push(row);
 			});
-			totalAmount = this._thUtils.roundNumberToTwoDecimals(totalAmount);
-			data.push([this._appContext.thTranslate.translate('Total'), totalTransaction, totalAmount]);
+			totalAmountWithoutFee = this._thUtils.roundNumberToTwoDecimals(totalAmountWithoutFee);
+			totalAmountWithFee = this._thUtils.roundNumberToTwoDecimals(totalAmountWithFee);
+			totalFees = this._thUtils.roundNumberToTwoDecimals(totalFees);
+			
+			data.push([this._appContext.thTranslate.translate('Total'), totalTransaction, totalAmountWithFee, totalAmountWithoutFee, totalFees]);
 			resolve(data);
 		}).catch((e) => { reject(e) });
 	}
@@ -78,15 +91,18 @@ export class ShiftReportByPaymentMethodSectionGenerator extends AReportSectionGe
 					pMethod = InvoicePaymentMethodType.PayInvoiceByAgreement + "";
 				}
 				let pPrice = ipayer.priceToPay;
+				let pPriceWithFeesIncluded = ipayer.priceToPayPlusTransactionFee;
 				if (!dic[pMethod]) {
 					dic[pMethod] = {
 						transactions: 1,
-						amount: pPrice
+						amountWithoutFee: pPrice,
+						amountWithFee: pPriceWithFeesIncluded
 					}
 				}
 				else {
 					dic[pMethod].transactions++;
-					dic[pMethod].amount += pPrice;
+					dic[pMethod].amountWithoutFee += pPrice;
+					dic[pMethod].amountWithFee += pPriceWithFeesIncluded;
 				}
 			})
 		});

@@ -24,6 +24,7 @@ export class DynamicPriceYieldItem {
 export class PriceProductYieldItem {
     priceProductId: string;
     priceProductName: string;
+    parentPriceProductId: string;
     lastRoomAvailability: boolean;
     yieldFilterList: PriceProductYieldFilterMetaDO[];
     stateList: YieldItemState[];

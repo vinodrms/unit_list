@@ -6,10 +6,11 @@ import {BookingDO} from '../../../core/data-layer/bookings/data-objects/BookingD
 import {CustomerDO} from '../../../core/data-layer/customers/data-objects/CustomerDO';
 import {AddOnProductDO} from '../../../core/data-layer/add-on-products/data-objects/AddOnProductDO'
 import {AddOnProductInvoiceItemMetaDO} from '../../../core/data-layer/invoices/data-objects/items/add-on-products/AddOnProductInvoiceItemMetaDO';
-import {TestContext} from '../../helpers/TestContext';
+import { TestContext } from '../../helpers/TestContext';
+import { HotelDO } from "../../../core/data-layer/hotel/data-objects/HotelDO";
 
 export interface IInvoiceGroupDataSource {
-    getInvoiceGroupList(customerList: CustomerDO[], aopList: AddOnProductDO[], bookingList: BookingDO[]): InvoiceGroupDO[];
+    getInvoiceGroupList(hotel: HotelDO, customerList: CustomerDO[], aopList: AddOnProductDO[], bookingList: BookingDO[]): InvoiceGroupDO[];
 }
 
 export class DefaultInvoiceGroupBuilder implements IInvoiceGroupDataSource {
@@ -17,13 +18,13 @@ export class DefaultInvoiceGroupBuilder implements IInvoiceGroupDataSource {
     constructor(private _testContext: TestContext) {
     }
 
-    public getInvoiceGroupList(customerList: CustomerDO[], aopList: AddOnProductDO[], bookingList: BookingDO[]): InvoiceGroupDO[] {
+    public getInvoiceGroupList(hotel: HotelDO, customerList: CustomerDO[], aopList: AddOnProductDO[], bookingList: BookingDO[]): InvoiceGroupDO[] {
         var invoiceGroupList: InvoiceGroupDO[] = [];
-        invoiceGroupList.push(this.buildBookingInvoiceGroup(customerList, aopList, bookingList));
+        invoiceGroupList.push(this.buildBookingInvoiceGroup(hotel, customerList, aopList, bookingList));
         return invoiceGroupList;
     }
 
-    public buildBookingInvoiceGroup(customerList: CustomerDO[], aopList: AddOnProductDO[], bookingList: BookingDO[]): InvoiceGroupDO {
+    public buildBookingInvoiceGroup(hotel: HotelDO, customerList: CustomerDO[], aopList: AddOnProductDO[], bookingList: BookingDO[]): InvoiceGroupDO {
         var bookingInvoiceGroup = new InvoiceGroupDO();
         var groupedBookings = _.groupBy(bookingList, (bookindDO: BookingDO) => {
             return bookindDO.groupBookingId;
@@ -35,7 +36,7 @@ export class DefaultInvoiceGroupBuilder implements IInvoiceGroupDataSource {
 
         var invoiceBuilderPromiseList = [];
         _.forEach(groupedBookings[groupBookingId], (booking: BookingDO) => {
-            var bookingInvoice = this.buildBookingInvoiceFromBooking(booking, customerList);
+            var bookingInvoice = this.buildBookingInvoiceFromBooking(hotel, booking, customerList);
             var invoicePayer = bookingInvoice.payerList[0];
             var aopOnlyInvoice = this.buildInvoiceWithTwoAddOnProducts(invoicePayer, aopList);
             bookingInvoiceGroup.invoiceList.push(bookingInvoice);
@@ -45,7 +46,7 @@ export class DefaultInvoiceGroupBuilder implements IInvoiceGroupDataSource {
         return bookingInvoiceGroup;   
     }
 
-    private buildBookingInvoiceFromBooking(booking: BookingDO, customerList: CustomerDO[]): InvoiceDO {
+    private buildBookingInvoiceFromBooking(hotel: HotelDO, booking: BookingDO, customerList: CustomerDO[]): InvoiceDO {
         var invoice = new InvoiceDO();
         invoice.bookingId = booking.bookingId;
         invoice.itemList = [];
@@ -94,15 +95,15 @@ export class DefaultInvoiceGroupBuilder implements IInvoiceGroupDataSource {
         return invoice;
     }
 
-    public loadInvoiceGroups(dataSource: IInvoiceGroupDataSource, customerList: CustomerDO[], aopList: AddOnProductDO[], bookingList: BookingDO[]): Promise<InvoiceGroupDO[]> {
+    public loadInvoiceGroups(dataSource: IInvoiceGroupDataSource, hotel: HotelDO, customerList: CustomerDO[], aopList: AddOnProductDO[], bookingList: BookingDO[]): Promise<InvoiceGroupDO[]> {
         return new Promise<InvoiceGroupDO[]>((resolve: { (result: InvoiceGroupDO[]): void }, reject: { (err: any): void }) => {
-            this.loadInvoiceGroupsCore(resolve, reject, dataSource, customerList, aopList, bookingList);
+            this.loadInvoiceGroupsCore(resolve, reject, dataSource, hotel, customerList, aopList, bookingList);
         });
     }
     private loadInvoiceGroupsCore(resolve: { (result: InvoiceGroupDO[]): void }, reject: { (err: any): void },
-        dataSource: IInvoiceGroupDataSource, customerList: CustomerDO[], aopList: AddOnProductDO[], bookingList: BookingDO[]) {
+        dataSource: IInvoiceGroupDataSource,  hotel: HotelDO, customerList: CustomerDO[], aopList: AddOnProductDO[], bookingList: BookingDO[]) {
 
-        var invoiceGroupList = dataSource.getInvoiceGroupList(customerList, aopList, bookingList);
+        var invoiceGroupList = dataSource.getInvoiceGroupList(hotel, customerList, aopList, bookingList);
         var addInvoiceGroupPromiseList: Promise<InvoiceGroupDO>[] = [];
         invoiceGroupList.forEach((invoiceGroup: InvoiceGroupDO) => {
             var invoiceGroupsRepository = this._testContext.appContext.getRepositoryFactory().getInvoiceGroupsRepository();

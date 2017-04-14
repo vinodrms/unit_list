@@ -3,16 +3,18 @@ import { InvoicePaymentMethodDO } from './InvoicePaymentMethodDO';
 import { CommissionDO } from '../../../common/data-objects/commission/CommissionDO';
 import { CustomerDO } from '../../../customers/data-objects/CustomerDO';
 import { CorporateDetailsDO } from '../../../customers/data-objects/customer-details/CorporateDetailsDO';
+import { TransactionFeeDO } from "../../../common/data-objects/payment-method/TransactionFeeDO";
 
 export class InvoicePayerDO extends BaseDO {
     customerId: string;
     paymentMethod: InvoicePaymentMethodDO;
-    commissionSnapshot: CommissionDO;
+    transactionFeeSnapshot: TransactionFeeDO;
     priceToPay: number;
+    priceToPayPlusTransactionFee: number;
     additionalInvoiceDetails: string;
 
     protected getPrimitivePropertyKeys(): string[] {
-        return ["customerId", "priceToPay", "additionalInvoiceDetails"];
+        return ["customerId", "priceToPay", "priceToPayPlusTransactionFee", "additionalInvoiceDetails"];
     }
 
     public buildFromObject(object: Object) {
@@ -23,9 +25,9 @@ export class InvoicePayerDO extends BaseDO {
             this.paymentMethod.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "paymentMethod"));
         }
 
-        if (this.getObjectPropertyEnsureUndefined(object, "commissionSnapshot") != null) {
-            this.commissionSnapshot = new CommissionDO();
-            this.commissionSnapshot.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "commissionSnapshot"));
+        if (this.getObjectPropertyEnsureUndefined(object, "transactionFeeSnapshot") != null) {
+            this.transactionFeeSnapshot = new TransactionFeeDO();
+            this.transactionFeeSnapshot.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "transactionFeeSnapshot"));
         }
     }
 
@@ -38,7 +40,6 @@ export class InvoicePayerDO extends BaseDO {
         if (customer.isCompanyOrTravelAgency()) {
             var corporateDetails = new CorporateDetailsDO();
             corporateDetails.buildFromObject(customer.customerDetails);
-            invoicePayer.commissionSnapshot = corporateDetails.commission;
         }
 
         return invoicePayer;

@@ -1,8 +1,13 @@
-import {BaseDO} from '../../../../../common/base/BaseDO';
-import {PriceProductDO} from './PriceProductDO';
+import { BaseDO } from '../../../../../common/base/BaseDO';
+import { PriceProductDO } from './PriceProductDO';
 
 export class PriceProductsDO extends BaseDO {
 	priceProductList: PriceProductDO[];
+
+	constructor() {
+		super();
+		this.priceProductList = [];
+	}
 
 	protected getPrimitivePropertyKeys(): string[] {
 		return [];
@@ -16,5 +21,15 @@ export class PriceProductsDO extends BaseDO {
 			ppDO.buildFromObject(ppObject);
 			this.priceProductList.push(ppDO);
 		});
+	}
+
+	public getParentIdList(): string[] {
+		let priceProductWithParentList = _.filter(this.priceProductList, pp => { return pp.hasParent(); });
+		let parentIdList: string[] = _.map(priceProductWithParentList, pp => { return pp.parentId });
+		return _.uniq(parentIdList);
+	}
+
+	public findById(priceProductId: string): PriceProductDO {
+		return _.find(this.priceProductList, pp => { return pp.id === priceProductId; });
 	}
 }

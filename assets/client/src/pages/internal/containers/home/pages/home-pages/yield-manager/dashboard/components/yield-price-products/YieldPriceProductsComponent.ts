@@ -363,7 +363,7 @@ export class YieldPriceProductsComponent {
 		return this.expandedPriceProductIds[priceProduct.id] === true;
 	}
 	private toggleExpanded(priceProduct: PriceProductYieldItemVM) {
-		if (!priceProduct.hasMoreThanOneDynamicPrice()) { return; }
+		if (!priceProduct.canYieldDynamicPrices()) { return; }
 		if (this.isExpanded(priceProduct)) {
 			delete this.expandedPriceProductIds[priceProduct.id];
 		} else {

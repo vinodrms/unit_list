@@ -1,13 +1,14 @@
-import {HotelDetailsDO} from '../data-objects/HotelDetailsDO';
-import {HotelAmenitiesDO} from '../../settings/data-objects/HotelAmenitiesDO';
-import {HotelPaymentMethodsDO} from '../../settings/data-objects/HotelPaymentMethodsDO';
-import {CurrencyDO} from '../../common/data-objects/currency/CurrencyDO';
+import { HotelDetailsDO } from '../data-objects/HotelDetailsDO';
+import { HotelAmenitiesDO } from '../../settings/data-objects/HotelAmenitiesDO';
+import { HotelPaymentMethodsDO } from '../../settings/data-objects/HotelPaymentMethodsDO';
+import { CurrencyDO } from '../../common/data-objects/currency/CurrencyDO';
+import { HotelAggregatedPaymentMethodsDO } from "../../settings/data-objects/HotelAggregatedPaymentMethodsDO";
 
 export class HotelAggregatedInfo {
 	private _hotelDetails: HotelDetailsDO;
 	private _hotelAmenities: HotelAmenitiesDO;
-	private _paymentMethods: HotelPaymentMethodsDO;
-	private _allowedPaymentMethods: HotelPaymentMethodsDO;
+	private _allAvailablePaymentMethods: HotelPaymentMethodsDO;
+	private _allowedPaymentMethods: HotelAggregatedPaymentMethodsDO;
 	private _ccy: CurrencyDO;
 
 	public get hotelDetails(): HotelDetailsDO {
@@ -22,16 +23,16 @@ export class HotelAggregatedInfo {
 	public set hotelAmenities(hotelAmenities: HotelAmenitiesDO) {
 		this._hotelAmenities = hotelAmenities;
 	}
-	public get paymentMethods(): HotelPaymentMethodsDO {
-		return this._paymentMethods;
+	public get allAvailablePaymentMethods(): HotelPaymentMethodsDO {
+		return this._allAvailablePaymentMethods;
 	}
-	public set paymentMethods(paymentMethods: HotelPaymentMethodsDO) {
-		this._paymentMethods = paymentMethods;
+	public set allAvailablePaymentMethods(paymentMethods: HotelPaymentMethodsDO) {
+		this._allAvailablePaymentMethods = paymentMethods;
 	}
-	public get allowedPaymentMethods(): HotelPaymentMethodsDO {
+	public get allowedPaymentMethods(): HotelAggregatedPaymentMethodsDO {
 		return this._allowedPaymentMethods;
 	}
-	public set allowedPaymentMethods(allowedPaymentMethods: HotelPaymentMethodsDO) {
+	public set allowedPaymentMethods(allowedPaymentMethods: HotelAggregatedPaymentMethodsDO) {
 		this._allowedPaymentMethods = allowedPaymentMethods;
 	}
 	public get ccy(): CurrencyDO {

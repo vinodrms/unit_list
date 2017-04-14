@@ -37,7 +37,7 @@ export class RoomMaintenanceStatusModalComponent extends BaseComponent implement
 
     ngOnInit() {
         this._isLoading = true;
-        this._hotelOperationsRoomService.getAttachedBooking(this._roomMaintenanceStatusModalInput.roomVM.room.id).subscribe((roomBookingResult: RoomAttachedBookingResultVM) => {
+        this._hotelOperationsRoomService.getAttachedBooking(this.roomId).subscribe((roomBookingResult: RoomAttachedBookingResultVM) => {
             this._hasCheckedInBooking = roomBookingResult.roomAttachedBookingResultDO.hasCheckedInBooking();
             this._isLoading = false;
             this._newMaintenanceMeta = this.roomMaintenanceMetaList[0];
@@ -46,6 +46,10 @@ export class RoomMaintenanceStatusModalComponent extends BaseComponent implement
             this._isLoading = false;
             this._newMaintenanceMeta = this.roomMaintenanceMetaList[0];
         });
+    }
+
+    private get roomId(): string {
+        return this._roomMaintenanceStatusModalInput.roomVM.room.id;
     }
 
     public isBlocking() : boolean {
@@ -61,9 +65,10 @@ export class RoomMaintenanceStatusModalComponent extends BaseComponent implement
     }
 
     public saveMaintenanceStatus() {
-        this._roomMaintenanceStatusUpdater.saveMaintenanceStatus(this._roomMaintenanceStatusModalInput.roomVM.room.id, this._newMaintenanceMeta, this._newMaintenanceText, this._hasCheckedInBooking)
+        this._roomMaintenanceStatusUpdater.saveMaintenanceStatus(this.roomId, this._newMaintenanceMeta, this._newMaintenanceText, this._hasCheckedInBooking)
         .then((updatedRoom: RoomDO) => {
             if (updatedRoom != null) {
+                this._modalDialogRef.addResult(true);
                 this.closeDialog();
             }
         })
@@ -73,7 +78,11 @@ export class RoomMaintenanceStatusModalComponent extends BaseComponent implement
     }
 
     public get roomMaintenanceMetaList(): RoomMaintenanceMeta[] {
-        return this._roomMaintenanceUtils.getRoomMaintenanceMetaList();
+        if (!this._appContext.thUtils.isUndefinedOrNull(this._roomMaintenanceStatusModalInput.roomMaintenanceMetaList)) {
+            return this._roomMaintenanceStatusModalInput.roomMaintenanceMetaList;
+        } else {
+            return this._roomMaintenanceUtils.getRoomMaintenanceMetaList();
+        }
     }
 
     public get isLoading(): boolean {
@@ -94,5 +103,9 @@ export class RoomMaintenanceStatusModalComponent extends BaseComponent implement
 
     public set newMaintenanceText(text: string) {
         this._newMaintenanceText = text;
+    }
+
+    public get roomName(): string {
+        return this._roomMaintenanceStatusModalInput.roomVM.room.name;
     }
 }

@@ -1,13 +1,13 @@
-import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import {AppContext, ThError} from '../../../../../../../../../../../../../common/utils/AppContext';
-import {BookingOperationsPageData} from '../../services/utils/BookingOperationsPageData';
-import {BookingPaymentGuaranteeEditRight} from '../../../../../../../../../../../services/bookings/data-objects/BookingEditRights';
-import {BookingDO} from '../../../../../../../../../../../services/bookings/data-objects/BookingDO';
-import {DefaultBillingDetailsDO} from '../../../../../../../../../../../services/bookings/data-objects/default-billing/DefaultBillingDetailsDO';
-import {HotelOperationsBookingService} from '../../../../../../../../../../../services/hotel-operations/booking/HotelOperationsBookingService';
-import {InvoicePaymentMethodVMGenerator} from '../../../../../../../../../../../services/invoices/view-models/utils/InvoicePaymentMethodVMGenerator';
-import {InvoicePaymentMethodVM} from '../../../../../../../../../../../services/invoices/view-models/InvoicePaymentMethodVM';
-import {InvoicePaymentMethodDO} from '../../../../../../../../../../../services/invoices/data-objects/payers/InvoicePaymentMethodDO';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { AppContext, ThError } from '../../../../../../../../../../../../../common/utils/AppContext';
+import { BookingOperationsPageData } from '../../services/utils/BookingOperationsPageData';
+import { BookingPaymentGuaranteeEditRight } from '../../../../../../../../../../../services/bookings/data-objects/BookingEditRights';
+import { BookingDO } from '../../../../../../../../../../../services/bookings/data-objects/BookingDO';
+import { DefaultBillingDetailsDO } from '../../../../../../../../../../../services/bookings/data-objects/default-billing/DefaultBillingDetailsDO';
+import { HotelOperationsBookingService } from '../../../../../../../../../../../services/hotel-operations/booking/HotelOperationsBookingService';
+import { InvoicePaymentMethodVMGenerator } from '../../../../../../../../../../../services/invoices/view-models/utils/InvoicePaymentMethodVMGenerator';
+import { InvoicePaymentMethodVM } from '../../../../../../../../../../../services/invoices/view-models/InvoicePaymentMethodVM';
+import { InvoicePaymentMethodDO } from '../../../../../../../../../../../services/invoices/data-objects/payers/InvoicePaymentMethodDO';
 
 @Component({
     selector: 'booking-payment-guarantee-editor',
@@ -53,7 +53,7 @@ export class BookingPaymentGuaranteeEditorComponent implements OnInit {
         var billedCustomerId = this.defaultBillingDetailsDO.customerId;
         var billedCustomer = this._bookingOperationsPageData.customersContainer.getCustomerById(billedCustomerId);
         this.paymentMethodVMList = pmGenerator.generatePaymentMethodsFor(billedCustomer);
-        this.selectedPaymentMethodVM = pmGenerator.generatePaymentMethodVMForPaymentMethod(this.defaultBillingDetailsDO.paymentMethod, this._bookingOperationsPageData.allPaymentMethods);
+        this.selectedPaymentMethodVM = pmGenerator.generateInvoicePaymentMethodVMForPaymentMethod(this.defaultBillingDetailsDO.paymentMethod, this._bookingOperationsPageData.allPaymentMethods);
     }
 
     public get hasPaymentGuaranteeEditAccess(): boolean {

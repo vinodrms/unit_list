@@ -6,13 +6,14 @@ import { DynamicPriceYieldItemDO } from './DynamicPriceYieldItemDO';
 export class PriceProductYieldItemDO extends BaseDO {
     priceProductId: string;
     priceProductName: string;
+    parentPriceProductId: string;
     lastRoomAvailability: boolean;
     yieldFilterList: PriceProductYieldFilterMetaDO[];
     stateList: YieldItemStateDO[];
     dynamicPriceList: DynamicPriceYieldItemDO[];
 
     protected getPrimitivePropertyKeys(): string[] {
-        return ["priceProductId", "priceProductName", "lastRoomAvailability"];
+        return ["priceProductId", "priceProductName", "parentPriceProductId", "lastRoomAvailability"];
     }
 
     public buildFromObject(object: Object) {
@@ -38,5 +39,8 @@ export class PriceProductYieldItemDO extends BaseDO {
             dynamicPrice.buildFromObject(dynamicPriceObject);
             this.dynamicPriceList.push(dynamicPrice);
         });
+    }
+    public hasParent(): boolean {
+        return _.isString(this.parentPriceProductId) && !_.isEmpty(this.parentPriceProductId);
     }
 }

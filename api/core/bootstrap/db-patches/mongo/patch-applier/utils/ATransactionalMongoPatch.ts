@@ -8,6 +8,7 @@ import { MongoBookingRepository } from '../../../../../data-layer/bookings/repos
 import { MongoPatchType } from '../patches/MongoPatchType';
 import { MongoHotelRepository } from "../../../../../data-layer/hotel/repositories/mongo/MongoHotelRepository";
 import { MongoCustomerRepository } from "../../../../../data-layer/customers/repositories/mongo/MongoCustomerRepository";
+import { MongoInvoiceGroupsRepository } from "../../../../../data-layer/invoices/repositories/mongo/MongoInvoiceGroupsRepository";
 
 /**
  * Extend this class when the multi update can be made with a simple MongoDB Query
@@ -20,6 +21,7 @@ export abstract class ATransactionalMongoPatch implements IMongoPatchApplier, IM
 	protected _priceProductRepository: MongoPriceProductRepository;
 	protected _customerRepository: MongoCustomerRepository​​;
 	protected _bookingRepository: MongoBookingRepository;
+	protected _invoiceGroupsRepository: MongoInvoiceGroupsRepository;
 
 	constructor() {
 		this._thUtils = new ThUtils();
@@ -29,6 +31,7 @@ export abstract class ATransactionalMongoPatch implements IMongoPatchApplier, IM
 		this._priceProductRepository = new MongoPriceProductRepository();
 		this._customerRepository = new MongoCustomerRepository​​();
 		this._bookingRepository = new MongoBookingRepository();
+		this._invoiceGroupsRepository = new MongoInvoiceGroupsRepository(this._hotelRepository);
 	}
 
 	public apply(): Promise<boolean> {

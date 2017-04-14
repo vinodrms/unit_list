@@ -1,19 +1,19 @@
-import {ThTranslation} from '../../../../../../../../../../common/utils/localization/ThTranslation';
-import {ThUtils} from '../../../../../../../../../../common/utils/ThUtils';
-import {CurrencyDO} from '../../../../../../../../services/common/data-objects/currency/CurrencyDO';
-import {ConfigCapacityDO} from '../../../../../../../../services/common/data-objects/bed-config/ConfigCapacityDO';
-import {ThDateIntervalDO} from '../../../../../../../../services/common/data-objects/th-dates/ThDateIntervalDO';
-import {BookingSearchResultDO} from '../data-objects/BookingSearchResultDO';
-import {BookingCartItemVM, BookingCartItemVMType} from '../view-models/BookingCartItemVM';
-import {RoomCategoryItemDO} from '../data-objects/room-category-item/RoomCategoryItemDO';
-import {AllotmentItemDO} from '../data-objects/allotment-item/AllotmentItemDO';
-import {PriceProductItemDO} from '../data-objects/price-product-item/PriceProductItemDO';
-import {TransientBookingItem} from '../../data-objects/TransientBookingItem';
-import {BookingSearchParams} from '../../data-objects/BookingSearchParams';
-import {DefaultBillingDetailsDO} from '../../../../../../../../services/bookings/data-objects/default-billing/DefaultBillingDetailsDO';
-import {CustomerDO} from '../../../../../../../../services/customers/data-objects/CustomerDO';
-import {InvoicePaymentMethodDO, InvoicePaymentMethodType} from '../../../../../../../../services/invoices/data-objects/payers/InvoicePaymentMethodDO';
-import {HotelAggregatedInfo} from '../../../../../../../../services/hotel/utils/HotelAggregatedInfo';
+import { ThTranslation } from '../../../../../../../../../../common/utils/localization/ThTranslation';
+import { ThUtils } from '../../../../../../../../../../common/utils/ThUtils';
+import { CurrencyDO } from '../../../../../../../../services/common/data-objects/currency/CurrencyDO';
+import { ConfigCapacityDO } from '../../../../../../../../services/common/data-objects/bed-config/ConfigCapacityDO';
+import { ThDateIntervalDO } from '../../../../../../../../services/common/data-objects/th-dates/ThDateIntervalDO';
+import { BookingSearchResultDO } from '../data-objects/BookingSearchResultDO';
+import { BookingCartItemVM, BookingCartItemVMType } from '../view-models/BookingCartItemVM';
+import { RoomCategoryItemDO } from '../data-objects/room-category-item/RoomCategoryItemDO';
+import { AllotmentItemDO } from '../data-objects/allotment-item/AllotmentItemDO';
+import { PriceProductItemDO } from '../data-objects/price-product-item/PriceProductItemDO';
+import { TransientBookingItem } from '../../data-objects/TransientBookingItem';
+import { BookingSearchParams } from '../../data-objects/BookingSearchParams';
+import { DefaultBillingDetailsDO } from '../../../../../../../../services/bookings/data-objects/default-billing/DefaultBillingDetailsDO';
+import { CustomerDO } from '../../../../../../../../services/customers/data-objects/CustomerDO';
+import { InvoicePaymentMethodDO, InvoicePaymentMethodType } from '../../../../../../../../services/invoices/data-objects/payers/InvoicePaymentMethodDO';
+import { HotelAggregatedInfo } from '../../../../../../../../services/hotel/utils/HotelAggregatedInfo';
 
 export class BookingViewModelConverter {
     private _thUtils: ThUtils;
@@ -126,7 +126,7 @@ export class BookingViewModelConverter {
         billingDetails.paymentGuarantee = false;
         billingDetails.paymentMethod = new InvoicePaymentMethodDO();
         billingDetails.paymentMethod.type = InvoicePaymentMethodType.DefaultPaymentMethod;
-        billingDetails.paymentMethod.value = hotelAggregatedInfo.allowedPaymentMethods.paymentMethodList[0].id;
+        billingDetails.paymentMethod.value = hotelAggregatedInfo.allowedPaymentMethods.paymentMethodList[0].paymentMethod.id;
         return billingDetails;
     }
 }

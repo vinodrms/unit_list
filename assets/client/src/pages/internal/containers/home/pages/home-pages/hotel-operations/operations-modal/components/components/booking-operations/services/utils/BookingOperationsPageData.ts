@@ -1,17 +1,18 @@
-import {ThUtils} from '../../../../../../../../../../../../../common/utils/ThUtils';
-import {BookingDO} from '../../../../../../../../../../../services/bookings/data-objects/BookingDO';
-import {BookingMeta} from '../../../../../../../../../../../services/bookings/data-objects/BookingMeta';
-import {BookingMetaFactory} from '../../../../../../../../../../../services/bookings/data-objects/BookingMetaFactory';
-import {CurrencyDO} from '../../../../../../../../../../../services/common/data-objects/currency/CurrencyDO';
-import {OperationHoursDO} from '../../../../../../../../../../../services/hotel/data-objects/hotel/operation-hours/OperationHoursDO';
-import {HotelPaymentMethodsDO} from '../../../../../../../../../../../services/settings/data-objects/HotelPaymentMethodsDO';
-import {CustomersDO} from '../../../../../../../../../../../services/customers/data-objects/CustomersDO';
-import {RoomVM} from '../../../../../../../../../../../services/rooms/view-models/RoomVM';
-import {RoomCategoryStatsDO} from '../../../../../../../../../../../services/room-categories/data-objects/RoomCategoryStatsDO';
-import {AllotmentDO} from '../../../../../../../../../../../services/allotments/data-objects/AllotmentDO';
-import {InvoiceGroupDO} from '../../../../../../../../../../../services/invoices/data-objects/InvoiceGroupDO';
-import {InvoiceDO} from '../../../../../../../../../../../services/invoices/data-objects/InvoiceDO';
-import {AddOnProductsDO} from '../../../../../../../../../../../services/add-on-products/data-objects/AddOnProductsDO';
+import { ThUtils } from '../../../../../../../../../../../../../common/utils/ThUtils';
+import { BookingDO } from '../../../../../../../../../../../services/bookings/data-objects/BookingDO';
+import { BookingMeta } from '../../../../../../../../../../../services/bookings/data-objects/BookingMeta';
+import { BookingMetaFactory } from '../../../../../../../../../../../services/bookings/data-objects/BookingMetaFactory';
+import { CurrencyDO } from '../../../../../../../../../../../services/common/data-objects/currency/CurrencyDO';
+import { OperationHoursDO } from '../../../../../../../../../../../services/hotel/data-objects/hotel/operation-hours/OperationHoursDO';
+import { HotelPaymentMethodsDO } from '../../../../../../../../../../../services/settings/data-objects/HotelPaymentMethodsDO';
+import { CustomersDO } from '../../../../../../../../../../../services/customers/data-objects/CustomersDO';
+import { RoomVM } from '../../../../../../../../../../../services/rooms/view-models/RoomVM';
+import { RoomCategoryStatsDO } from '../../../../../../../../../../../services/room-categories/data-objects/RoomCategoryStatsDO';
+import { AllotmentDO } from '../../../../../../../../../../../services/allotments/data-objects/AllotmentDO';
+import { InvoiceGroupDO } from '../../../../../../../../../../../services/invoices/data-objects/InvoiceGroupDO';
+import { InvoiceDO } from '../../../../../../../../../../../services/invoices/data-objects/InvoiceDO';
+import { AddOnProductsDO } from '../../../../../../../../../../../services/add-on-products/data-objects/AddOnProductsDO';
+import { HotelAggregatedPaymentMethodsDO } from "../../../../../../../../../../../services/settings/data-objects/HotelAggregatedPaymentMethodsDO";
 
 export class BookingOperationsPageData {
     private _thUtils: ThUtils;
@@ -21,8 +22,8 @@ export class BookingOperationsPageData {
     private _allotmentDO: AllotmentDO;
     private _ccy: CurrencyDO;
     private _operationHours: OperationHoursDO;
-    private _allPaymentMethods: HotelPaymentMethodsDO;
-    private _allowedPaymentMethods: HotelPaymentMethodsDO;
+    private _allAvailablePaymentMethods: HotelPaymentMethodsDO;
+    private _allowedPaymentMethods: HotelAggregatedPaymentMethodsDO;
     private _customersContainer: CustomersDO;
     private _roomVM: RoomVM;
     private _roomCategoryStats: RoomCategoryStatsDO;
@@ -55,15 +56,15 @@ export class BookingOperationsPageData {
         this._operationHours = operationHours;
     }
     public get allPaymentMethods(): HotelPaymentMethodsDO {
-        return this._allPaymentMethods;
+        return this._allAvailablePaymentMethods;
     }
     public set allPaymentMethods(allPaymentMethods: HotelPaymentMethodsDO) {
-        this._allPaymentMethods = allPaymentMethods;
+        this._allAvailablePaymentMethods = allPaymentMethods;
     }
-    public get allowedPaymentMethods(): HotelPaymentMethodsDO {
+    public get allowedPaymentMethods(): HotelAggregatedPaymentMethodsDO {
         return this._allowedPaymentMethods;
     }
-    public set allowedPaymentMethods(allowedPaymentMethods: HotelPaymentMethodsDO) {
+    public set allowedPaymentMethods(allowedPaymentMethods: HotelAggregatedPaymentMethodsDO) {
         this._allowedPaymentMethods = allowedPaymentMethods;
     }
     public get customersContainer(): CustomersDO {

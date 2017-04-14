@@ -22,6 +22,15 @@ export class PriceProductDO extends BaseDO {
 	id: string;
 	versionId: number;
 	status: PriceProductStatus;
+
+	/**
+	 * If the `parentId` is set, then this Price Product instance will always read the following properties:
+	 *   a. `price` property (PriceProductPriceDO)
+	 *   b. `roomCategoryIdList` property
+	 * from its parent Price Product; this minimizes the users' effort to yield various dynamic prices or duplicate prices
+	 */
+	parentId: string;
+
 	name: string;
 	availability: PriceProductAvailability;
 	lastRoomAvailability: boolean;
@@ -46,7 +55,7 @@ export class PriceProductDO extends BaseDO {
 	}
 
 	protected getPrimitivePropertyKeys(): string[] {
-		return ["id", "versionId", "status", "name", "availability", "lastRoomAvailability", "roomCategoryIdList", "taxIdList", "notes"];
+		return ["id", "versionId", "status", "parentId", "name", "availability", "lastRoomAvailability", "roomCategoryIdList", "taxIdList", "notes"];
 	}
 	public buildFromObject(object: Object) {
 		super.buildFromObject(object);
@@ -84,5 +93,11 @@ export class PriceProductDO extends BaseDO {
 	}
 	public containsRoomCategoryId(roomCategoryId: string): boolean {
 		return _.contains(this.roomCategoryIdList, roomCategoryId);
+	}
+	public hasParent(): boolean {
+		return _.isString(this.parentId) && !_.isEmpty(this.parentId);
+	}
+	public canCreateRelatedPriceProduct(): boolean {
+		return this.isActive() && !this.hasParent();
 	}
 }

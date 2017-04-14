@@ -95,7 +95,7 @@ export class HotelSignUp {
 		hotel.userList.push(user);
 		hotel.amenityIdList = [];
 		hotel.customAmenityList = [];
-		hotel.paymentMethodIdList = [];
+		hotel.paymentMethodList = [];
 		hotel.configurationCompleted = false;
 		hotel.sequences = new HotelSequencesDO();
 		hotel.sequences.setInitialValues();

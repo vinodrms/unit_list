@@ -21,6 +21,9 @@ import { IGenerateBookingInvoiceActionStrategy } from './actions/IGenerateBookin
 import { AddOnProductDO } from '../../../data-layer/add-on-products/data-objects/AddOnProductDO';
 import { BaseCorporateDetailsDO } from '../../../data-layer/customers/data-objects/customer-details/corporate/BaseCorporateDetailsDO';
 import { AddOnProductInvoiceItemMetaDO } from '../../../data-layer/invoices/data-objects/items/add-on-products/AddOnProductInvoiceItemMetaDO';
+import { HotelDO } from "../../../data-layer/hotel/data-objects/HotelDO";
+import { PaymentMethodInstanceDO } from "../../../data-layer/common/data-objects/payment-method/PaymentMethodInstanceDO";
+import { TransactionFeeDO } from "../../../data-layer/common/data-objects/payment-method/TransactionFeeDO";
 
 import _ = require('underscore');
 
@@ -82,6 +85,8 @@ export class GenerateBookingInvoice {
         invoice.itemList.push(bookingInvoiceItem);
         invoice.paymentStatus = InvoicePaymentStatus.Unpaid;
 
+        this._appContext.getRepositoryFactory().getHotelRepository().getHotelById(this.hotelId)
+
         this._appContext.getRepositoryFactory().getBookingRepository().getBookingById({ hotelId: this.hotelId }, this._generateBookingInvoiceDO.groupBookingId,
             this._generateBookingInvoiceDO.bookingId).then((booking: BookingDO) => {
                 invoice.payerList = [];
@@ -107,6 +112,22 @@ export class GenerateBookingInvoice {
                 });
 
                 invoice.notesFromBooking = booking.invoiceNotes;
+                
+                return this._appContext.getRepositoryFactory().getHotelRepository().getHotelById(this.hotelId);
+            }).then((hotel: HotelDO) => {
+                let transactionFee: TransactionFeeDO = null;
+                
+                if(invoice.payerList[0].paymentMethod.type != InvoicePaymentMethodType.PayInvoiceByAgreement) {
+                    transactionFee = _.find(hotel.paymentMethodList, (paymentMethodInstance: PaymentMethodInstanceDO) => {
+                        return paymentMethodInstance.paymentMethodId === invoice.payerList[0].paymentMethod.value;
+                    }).transactionFee;
+                }
+                else {
+                    transactionFee = TransactionFeeDO.getDefaultTransactionFee();
+                }
+                
+                invoice.payerList[0].transactionFeeSnapshot = transactionFee;
+                invoice.payerList[0].priceToPayPlusTransactionFee = transactionFee.getAmountWihtTransactionFeeIncluded(invoice.payerList[0].priceToPay);
 
                 resolve(invoice);
             });

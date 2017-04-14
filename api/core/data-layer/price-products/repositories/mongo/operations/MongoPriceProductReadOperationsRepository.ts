@@ -1,23 +1,23 @@
-import {ThLogger, ThLogLevel} from '../../../../../utils/logging/ThLogger';
-import {ThError} from '../../../../../utils/th-responses/ThError';
-import {ThStatusCode} from '../../../../../utils/th-responses/ThResponse';
-import {MongoRepository, MongoSearchCriteria} from '../../../../common/base/MongoRepository';
-import {MongoQueryBuilder} from '../../../../common/base/MongoQueryBuilder';
-import {MongoQueryUtils} from '../../../../common/base/mongo-utils/MongoQueryUtils';
-import {PriceProductMetaRepoDO, PriceProductSearchCriteriaRepoDO, PriceProductSearchResultRepoDO} from '../../IPriceProductRepository';
-import {PriceProductDO, PriceProductStatus, PriceProductAvailability} from '../../../data-objects/PriceProductDO';
-import {PriceProductRepositoryHelper} from './helpers/PriceProductRepositoryHelper';
-import {LazyLoadRepoDO, LazyLoadMetaResponseRepoDO} from '../../../../common/repo-data-objects/LazyLoadRepoDO';
+import { ThLogger, ThLogLevel } from '../../../../../utils/logging/ThLogger';
+import { ThError } from '../../../../../utils/th-responses/ThError';
+import { ThStatusCode } from '../../../../../utils/th-responses/ThResponse';
+import { MongoRepository, MongoSearchCriteria } from '../../../../common/base/MongoRepository';
+import { MongoQueryBuilder } from '../../../../common/base/MongoQueryBuilder';
+import { MongoQueryUtils } from '../../../../common/base/mongo-utils/MongoQueryUtils';
+import { PriceProductMetaRepoDO, PriceProductSearchCriteriaRepoDO, PriceProductSearchResultRepoDO } from '../../IPriceProductRepository';
+import { PriceProductDO, PriceProductStatus, PriceProductAvailability } from '../../../data-objects/PriceProductDO';
+import { PriceProductRepositoryHelper } from './helpers/PriceProductRepositoryHelper';
+import { LazyLoadRepoDO, LazyLoadMetaResponseRepoDO } from '../../../../common/repo-data-objects/LazyLoadRepoDO';
 
 import _ = require("underscore");
 
 export class MongoPriceProductReadOperationsRepository extends MongoRepository {
 	private _helper: PriceProductRepositoryHelper;
 
-    constructor(priceProdEntity: Sails.Model) {
-        super(priceProdEntity);
+	constructor(priceProdEntity: Sails.Model) {
+		super(priceProdEntity);
 		this._helper = new PriceProductRepositoryHelper();
-    }
+	}
 
 	public getPriceProductListCount(meta: PriceProductMetaRepoDO, searchCriteria: PriceProductSearchCriteriaRepoDO): Promise<LazyLoadMetaResponseRepoDO> {
 		return new Promise<LazyLoadMetaResponseRepoDO>((resolve: { (result: LazyLoadMetaResponseRepoDO): void }, reject: { (err: ThError): void }) => {
@@ -45,7 +45,7 @@ export class MongoPriceProductReadOperationsRepository extends MongoRepository {
 	private getPriceProductListCore(resolve: { (result: PriceProductSearchResultRepoDO): void }, reject: { (err: ThError): void }, meta: PriceProductMetaRepoDO, searchCriteria: PriceProductSearchCriteriaRepoDO, lazyLoad?: LazyLoadRepoDO) {
 		var mongoSearchCriteria: MongoSearchCriteria = {
 			criteria: this.buildSearchCriteria(meta, searchCriteria),
-			sortCriteria: { name: 1 },
+			sortCriteria: { parentId: 1, name: 1 },
 			lazyLoad: lazyLoad
 		}
 		this.findMultipleDocuments(mongoSearchCriteria,
@@ -83,6 +83,7 @@ export class MongoPriceProductReadOperationsRepository extends MongoRepository {
 		mongoQueryBuilder.addMultipleSelectOptionList("includedItems.indexedAddOnProductIdList", searchCriteria.addOnProductIdList);
 		mongoQueryBuilder.addMultipleSelectOptionList("taxIdList", searchCriteria.taxIdList);
 		this.appendCustomerPriceProductDetailsSearch(mongoQueryBuilder, searchCriteria);
+		mongoQueryBuilder.addExactMatch("parentId", searchCriteria.parentId);
 		return mongoQueryBuilder.processedQuery;
 	}
 	private appendCustomerPriceProductDetailsSearch(mongoQueryBuilder: MongoQueryBuilder, searchCriteria: PriceProductSearchCriteriaRepoDO) {

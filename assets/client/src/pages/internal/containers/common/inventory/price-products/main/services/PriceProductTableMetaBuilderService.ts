@@ -1,5 +1,5 @@
-import {Injectable} from '@angular/core';
-import {LazyLoadTableMeta, TableRowCommand, TableColumnMeta, TablePropertyType} from '../../../../../../../../common/utils/components/lazy-loading/utils/LazyLoadTableMeta';
+import { Injectable } from '@angular/core';
+import { LazyLoadTableMeta, TableRowCommand, TableColumnMeta, TablePropertyType } from '../../../../../../../../common/utils/components/lazy-loading/utils/LazyLoadTableMeta';
 
 @Injectable()
 export class PriceProductTableMetaBuilderService {
@@ -19,8 +19,17 @@ export class PriceProductTableMetaBuilderService {
 						objectPropertyId: "priceProduct.name",
 						propertyType: TablePropertyType.StringType,
 						showInCollapsedView: true,
-						normalStyle: "up-col-15p left",
+						normalStyle: "up-col-10p left",
 						collapsedStyle: "up-col-70p left"
+					}
+				},
+				{
+					displayName: "Related To",
+					valueMeta: {
+						objectPropertyId: "parentPriceProductName",
+						propertyType: TablePropertyType.StringType,
+						showInCollapsedView: false,
+						normalStyle: "up-col-10p center",
 					}
 				},
 				{
@@ -29,7 +38,7 @@ export class PriceProductTableMetaBuilderService {
 						objectPropertyId: "roomCategoriesString",
 						propertyType: TablePropertyType.NotesType,
 						showInCollapsedView: false,
-						normalStyle: "up-col-20p left"
+						normalStyle: "up-col-15p left"
 					}
 				},
 				{
@@ -65,7 +74,7 @@ export class PriceProductTableMetaBuilderService {
 						objectPropertyId: "cancellationConditionsString",
 						propertyType: TablePropertyType.NotesType,
 						showInCollapsedView: false,
-						normalStyle: "up-col-20p center"
+						normalStyle: "up-col-15p center"
 					}
 				}
 			]
