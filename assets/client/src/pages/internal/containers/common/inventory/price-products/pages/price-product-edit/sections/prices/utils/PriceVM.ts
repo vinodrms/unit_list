@@ -6,7 +6,6 @@ import { ISOWeekDay } from '../../../../../../../../../services/common/data-obje
 
 export class PriceVM {
     private _roomCategoryStats: RoomCategoryStatsDO;
-    private _previousRoomCategoryId: string;
     private _priceType: PriceProductPriceType;
     private _price: IPriceProductPrice;
     private _priceExceptionsByWeekday: { [index: number]: IPriceProductPrice };
@@ -23,13 +22,6 @@ export class PriceVM {
     }
     public set roomCategoryStats(roomCategoryStats: RoomCategoryStatsDO) {
         this._roomCategoryStats = roomCategoryStats;
-    }
-
-    public get previousRoomCategoryId(): string {
-        return this._previousRoomCategoryId;
-    }
-    public set previousRoomCategoryId(previousRoomCategoryId: string) {
-        this._previousRoomCategoryId = previousRoomCategoryId;
     }
 
     public get priceType(): PriceProductPriceType {
@@ -103,7 +95,6 @@ export class PriceVM {
         });
         priceCopy.indexExceptions();
         priceCopy.roomCategoryStats = this.roomCategoryStats;
-        priceCopy.previousRoomCategoryId = this.previousRoomCategoryId;
         return priceCopy;
     }
 }

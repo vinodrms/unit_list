@@ -57,9 +57,9 @@
 								</small>
 							</label>
 							<a class="btn" 
-								*ngIf="priceVM.previousRoomCategoryId && selectedDynamicPriceVM.editOnPricesAndExceptionsIsAllowed(_readonly)" 
-								(click)="selectedDynamicPriceVM.copyPrices(priceVM.previousRoomCategoryId, priceVM.roomCategoryStats.roomCategory.id)">
-								<i class="fa unitpal-font">[</i> <small>{{ 'Copy Prices from Previous Room Category' | translate }}</small>
+								*ngIf="selectedDynamicPriceVM.editOnPricesAndExceptionsIsAllowed(_readonly) && selectedDynamicPriceVM.priceVMList.length > 1" 
+								(click)="openCopyPriceProductValuesModal(priceVM.roomCategoryStats.roomCategory.id)">
+								<i class="fa unitpal-font">[</i> <small>{{ 'Copy Prices from Other Room Category' | translate }}</small>
 							</a>
 							<price-edit 
 								[displayError]="displayError()"
