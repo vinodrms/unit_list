@@ -88,12 +88,11 @@ export class AddBookingItems {
             return;
         }
 
-        this.getExistingBookings().then((bookingList: BookingDO[]) => {
+        this.getExistingBookingsIfTheGroupAlreadyExists().then((bookingList: BookingDO[]) => {
             this._existingBookingList = bookingList;
-
-            if(!this.newBookingGroup) {
-                this.addExistingBookingItemsToTheNewBookingItems();
-            }
+            // temporarilly add the existing bookings to the new booking items array
+            // in order to validate the bookings as a whole (some per group constraints might be active)
+            this.addExistingBookingItemsIfAnyToTheNewBookingItems();
             
             return this._appContext.getRepositoryFactory().getHotelRepository().getHotelById(this._sessionContext.sessionDO.hotel.id);
         }).then((loadedHotel: HotelDO) => {
@@ -171,7 +170,9 @@ export class AddBookingItems {
             var bookingsRepo = this._appContext.getRepositoryFactory().getBookingRepository();
 
             if (!this.newBookingGroup) {
-                this.removeExistingBookingsFromBookingList();
+                // the existing bookings were kept in the array in order to validate 
+                // the bookings as a whole
+                this.removeExistingBookingsFromTheBookingListSentToServer();
 
                 return bookingsRepo.addBookings(this._bookingMeta, this._bookingList, this._groupBookingMeta);
             }
@@ -222,7 +223,7 @@ export class AddBookingItems {
         return emailSender.sendBookingConfirmation(bookingQuery, this._addBookingItems.confirmationEmailList).then((emailResult: boolean) => { }).catch((err: any) => { });
     }
 
-    private addExistingBookingItemsToTheNewBookingItems() {
+    private addExistingBookingItemsIfAnyToTheNewBookingItems() {
         let existingBookingItemList = [];
 
         _.forEach(this._existingBookingList, (bookingDO: BookingDO) => {
@@ -242,7 +243,7 @@ export class AddBookingItems {
         return this._thUtils.isUndefinedOrNull(this._addBookingItems.groupBookingId);
     }
 
-    private getExistingBookings(): Promise<BookingDO[]> {
+    private getExistingBookingsIfTheGroupAlreadyExists(): Promise<BookingDO[]> {
         return new Promise<BookingDO[]>((resolve: { (result: BookingDO[]): void }, reject: { (err: ThError): void }) => {
             try {
                 this.getExistingBookingsCore(resolve, reject);
@@ -268,7 +269,7 @@ export class AddBookingItems {
         }
     }
 
-    private removeExistingBookingsFromBookingList() {
+    private removeExistingBookingsFromTheBookingListSentToServer() {
         this._bookingList.splice(0, this._existingBookingList.length);
     }
 
