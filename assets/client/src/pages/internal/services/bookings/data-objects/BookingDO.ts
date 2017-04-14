@@ -112,15 +112,11 @@ export class BookingDO extends BaseDO {
         return this.price;
     }
 
-    public get reservationNumber(): string {
-        return this.groupBookingReference + '/' + this.bookingReference;
-    }
-
-    public get displayReservationNumber(): string {
+    public get displayedReservationNumber(): string {
         if (this.noOfRooms <= 1) {
             return this.groupBookingReference;
         } else {
-            return this.reservationNumber;
+            return this.groupBookingReference + '/' + this.bookingReference;
         }
     }
 }
