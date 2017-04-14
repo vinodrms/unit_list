@@ -52,7 +52,7 @@
 								</small>
 							</label>
 							<a class="btn" 
-								*ngIf="selectedDynamicPriceVM.editOnPricesAndExceptionsIsAllowed(_readonly)" 
+								*ngIf="selectedDynamicPriceVM.editOnPricesAndExceptionsIsAllowed(_readonly) && selectedDynamicPriceVM.priceVMList.length > 1" 
 								(click)="openCopyPriceProductValuesModal(priceVM.roomCategoryStats.roomCategory.id)">
 								<i class="fa unitpal-font">[</i> <small>{{ 'Copy Prices from Other Room Category' | translate }}</small>
 							</a>
