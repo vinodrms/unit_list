@@ -69,6 +69,7 @@ export class MongoAddBookingsRepository extends MongoRepository {
         
         let updateQuery: any = {};
         updateQuery.$inc = { "versionId": 1 };
+        updateQuery.$inc = { "noOfRooms": bookingList.length };
         updateQuery.$push = {
             bookingList: {
                 $each: bookingList
@@ -78,6 +79,10 @@ export class MongoAddBookingsRepository extends MongoRepository {
         findQuery["hotelId"] = meta.hotelId;
         findQuery["id"] = groupMeta.groupBookingId;
         findQuery["versionId"] = groupMeta.versionId;
+
+        _.forEach(bookingList, (booking: BookingDO) => {
+            this.stripOutUnnecessaryFieldsOnBooking(booking);
+        });
 
         this.findAndModifyDocument(findQuery, updateQuery,
             () => {
@@ -108,15 +113,19 @@ export class MongoAddBookingsRepository extends MongoRepository {
         bookingGroup.noOfRooms = bookingList.length;
         bookingGroup.bookingList = [];
         _.forEach(bookingList, (booking: BookingDO) => {
-            delete booking.groupBookingId;
-            delete booking.hotelId;
-            delete booking.versionId;
-            delete booking.groupBookingReference;
-            delete booking.status;
-            delete booking.inputChannel;
-            delete booking.noOfRooms;
+            this.stripOutUnnecessaryFieldsOnBooking(booking);
             bookingGroup.bookingList.push(booking);
         });
         return bookingGroup;
+    }
+
+    private stripOutUnnecessaryFieldsOnBooking(booking: BookingDO) {
+        delete booking.groupBookingId;
+        delete booking.hotelId;
+        delete booking.versionId;
+        delete booking.groupBookingReference;
+        delete booking.status;
+        delete booking.inputChannel;
+        delete booking.noOfRooms;
     }
 }
