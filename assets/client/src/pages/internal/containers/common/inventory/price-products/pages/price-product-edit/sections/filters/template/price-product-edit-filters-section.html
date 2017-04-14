@@ -23,9 +23,11 @@
 					<div *ngIf="yieldFilterVM.hasValue()">
 						<div *ngIf="yieldFilterVM.isColor()" class="row">
 							<div class="color-box" [ngClass]="yieldFilterVM.yieldFilterValue.colorCode"></div>
+							<span><i class="fa fa-times clickable" (click)="removeFilter(yieldFilterVM.filterId)"></i></span>
 						</div>
 						<div *ngIf="yieldFilterVM.isText()" class="row">
 							<b>{{yieldFilterVM.yieldFilterValue.label}}</b>
+							<span><i class="fa fa-times clickable" (click)="removeFilter(yieldFilterVM.filterId)"></i></span>
 						</div>
 						<div *ngIf="yieldFilterVM.yieldFilterValue.description" class="row">
 							<small>{{yieldFilterVM.yieldFilterValue.description}}</small>

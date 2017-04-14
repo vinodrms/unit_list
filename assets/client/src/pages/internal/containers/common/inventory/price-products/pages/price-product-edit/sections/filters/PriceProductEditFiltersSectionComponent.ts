@@ -88,4 +88,15 @@ export class PriceProductEditFiltersSectionComponent extends BaseComponent imple
 		this._priceProductYieldFilterMetaList.push(newMeta);
 		this.updateYieldFilterVMValues();
 	}
+
+    private removeFilter(filterId: string) {
+        var yieldFilter: YieldFilterDO = this.yieldFiltersDO.getYieldFilterByFilterId(filterId);
+		if (!yieldFilter) {
+			return;
+		}
+        this._priceProductYieldFilterMetaList = this._priceProductYieldFilterMetaList.filter((meta: PriceProductYieldFilterMetaDO) => {
+            return meta.filterId != filterId;
+        });
+        this.updateYieldFilterVMValues();
+    }
 }
