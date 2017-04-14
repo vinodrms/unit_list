@@ -1,13 +1,13 @@
-import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
-import {Observer} from 'rxjs/Observer';
-import {AppContext, ThError, ThServerApi} from '../../../../../../../../../../../common/utils/AppContext';
-import {IBookingStepService} from '../../utils/IBookingStepService';
-import {ILastBookingStepService} from '../../utils/ILastBookingStepService';
-import {BookingStepType} from '../../utils/BookingStepType';
-import {BookingCartService} from '../../../../services/search/BookingCartService';
-import {TransientBookingItem} from '../../../../services/data-objects/TransientBookingItem';
-import {BookingCartItemVM} from '../../../../services/search/view-models/BookingCartItemVM';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { Observer } from 'rxjs/Observer';
+import { AppContext, ThError, ThServerApi } from '../../../../../../../../../../../common/utils/AppContext';
+import { IBookingStepService } from '../../utils/IBookingStepService';
+import { ILastBookingStepService } from '../../utils/ILastBookingStepService';
+import { BookingStepType } from '../../utils/BookingStepType';
+import { BookingCartService } from '../../../../services/search/BookingCartService';
+import { TransientBookingItem } from '../../../../services/data-objects/TransientBookingItem';
+import { BookingCartItemVM } from '../../../../services/search/view-models/BookingCartItemVM';
 import { AddBookingItemsDO } from '../../../../services/data-objects/AddBookingItemsDO';
 import { BookingDO } from "../../../../../../../../../services/bookings/data-objects/BookingDO";
 
@@ -84,12 +84,18 @@ export class BookingEmailConfigStepService implements IBookingStepService, ILast
     }
 
     private getAddBookingItemsDO(): AddBookingItemsDO {
-        var transientBookingItemList: TransientBookingItem[] = _.map(this._bookingCartService.bookingItemVMList, (bookingItemVM: BookingCartItemVM) => {
-            return bookingItemVM.transientBookingItem;
-        });
         var bookingItems = new AddBookingItemsDO();
-        bookingItems.bookingList = transientBookingItemList;
+        bookingItems.groupBookingId = this._bookingCartService.groupBookingId;
+        bookingItems.bookingList = this.getOnlyTheNewTransientBookingItems();
         bookingItems.confirmationEmailList = this.emailRecipientList;
         return bookingItems;
+    }
+
+    private getOnlyTheNewTransientBookingItems(): TransientBookingItem[] {
+        return _.chain(this._bookingCartService.bookingItemVMList).filter((bookingItemVM: BookingCartItemVM) => {
+            return this._appContext.thUtils.isUndefinedOrNull(bookingItemVM.bookingId);
+        }).map((bookingItemVM: BookingCartItemVM) => {
+            return bookingItemVM.transientBookingItem;
+        }).value();
     }
 }

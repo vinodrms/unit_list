@@ -35,7 +35,7 @@ export class BookingSearchStepService implements IBookingStepService {
 	public didDisappear() {}
 
 	public checkBookingCartValidity(bookingCartService: BookingCartService, roomCategoryList: RoomCategoryDO[]) {
-		if (bookingCartService.bookingItemVMList.length == 0) {
+		if (!bookingCartService.newBookingsWereAddedToCart()) {
 			this._canGoToNextStep = false;
 			this._errorString = "";
 			return;

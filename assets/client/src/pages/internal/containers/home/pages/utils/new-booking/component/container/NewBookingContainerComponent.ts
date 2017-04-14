@@ -14,6 +14,7 @@ import { BookingCustomerRegisterStepService } from '../subcomponents/booking-cus
 import { BookingEmailConfigStepService } from '../subcomponents/booking-email-config/services/BookingEmailConfigStepService';
 import { BookingControllerService } from '../subcomponents/utils/BookingControllerService';
 import { BookingDO } from "../../../../../../../services/bookings/data-objects/BookingDO";
+import { NewBookingModalInput } from "../../modal/services/utils/NewBookingModalInput";
 
 @Component({
 	selector: 'new-booking-container',
@@ -24,6 +25,7 @@ import { BookingDO } from "../../../../../../../services/bookings/data-objects/B
 })
 export class NewBookingContainerComponent extends BaseComponent {
 	@Input() showCloseButton: boolean = false;
+	@Input() newBookingInput: NewBookingModalInput;
 
 	@Output() onBookingsAdded = new EventEmitter<boolean>();
 	public triggerOnBookingsAdded() {
