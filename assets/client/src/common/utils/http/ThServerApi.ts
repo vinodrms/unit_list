@@ -209,10 +209,11 @@ ThServerApiUrl[ThServerApi.InvoiceGroupsCount] = "/invoiceGroups/count";
 ThServerApiUrl[ThServerApi.InvoiceGroupItem] = "/invoiceGroups/invoiceGroupItem";
 ThServerApiUrl[ThServerApi.InvoiceGroupsSaveItem] = "/invoiceGroups/saveInvoicegroupItem";
 
-ThServerApiUrl[ThServerApi.YieldManagerYieldPriceProducts] = "/yieldManager/yieldPriceProducts";
-ThServerApiUrl[ThServerApi.YieldManagerOpenDynamicPrice] = "/yieldManager/openDynamicPrice";
-ThServerApiUrl[ThServerApi.YieldManagerYieldGetPriceProductItems] = "/yieldManager/getPriceProductYieldItems";
-ThServerApiUrl[ThServerApi.YieldManagerGetKeyMetrics] = "/yieldManager/getKeyMetrics";
+/* URLs prefixed with yManager instead of yieldManager because of AdBlock rules (EasyList) which contain the following definition: "/yieldmanager/*" */
+ThServerApiUrl[ThServerApi.YieldManagerYieldPriceProducts] = "/yManager/yieldPriceProducts";
+ThServerApiUrl[ThServerApi.YieldManagerOpenDynamicPrice] = "/yManager/openDynamicPrice";
+ThServerApiUrl[ThServerApi.YieldManagerYieldGetPriceProductItems] = "/yManager/getPriceProductYieldItems";
+ThServerApiUrl[ThServerApi.YieldManagerGetKeyMetrics] = "/yManager/getKeyMetrics";
 
 ThServerApiUrl[ThServerApi.Report] = '/reports/report';
 
