@@ -38,6 +38,7 @@ export class BookingItemsConverterParams {
     addOnProductItemContainer: AddOnProductItemContainer;
     vatTaxList: TaxDO[];
     roomCategoryStatsList: RoomCategoryStatsDO[];
+    groupBookingReference?: string; 
 }
 
 export class BookingItemsConverter {
@@ -47,14 +48,14 @@ export class BookingItemsConverter {
     private _thUtils: ThUtils;
     private _bookingUtils: BookingUtils;
 
-    private _bookingItems: AddBookingItemsDO
+    private _bookingItems: BookingItemDO[];
     private _inputChannel: GroupBookingInputChannel;
 
     constructor(private _appContext: AppContext, private _sessionContext: SessionContext, private _converterParams: BookingItemsConverterParams) {
         this._thUtils = new ThUtils();
         this._bookingUtils = new BookingUtils();
     }
-    public convert(bookingItems: AddBookingItemsDO, inputChannel: GroupBookingInputChannel): Promise<BookingDO[]> {
+    public convert(bookingItems: BookingItemDO[], inputChannel: GroupBookingInputChannel): Promise<BookingDO[]> {
         this._bookingItems = bookingItems;
         this._inputChannel = inputChannel;
 
@@ -74,13 +75,13 @@ export class BookingItemsConverter {
 
         var hotelId = this._sessionContext.sessionDO.hotel.id;
         var groupBookingStatus = GroupBookingStatus.Active;
-        var noOfRooms = this._bookingItems.bookingList.length;
+        var noOfRooms = this._bookingItems.length;
         let groupBookingRoomCategoryIdList = this.getRoomCategoryIdListWithinGroupBooking();
 
         let bookingIndex = 1;
 
         this.generateReference().then((groupBookingReference: string) => {
-            _.forEach(this._bookingItems.bookingList, (bookingItem: BookingItemDO) => {
+            _.forEach(this._bookingItems, (bookingItem: BookingItemDO) => {
                 var bookingDO = new BookingDO();
 
                 var bookingInterval = new ThDateIntervalDO();
@@ -149,7 +150,7 @@ export class BookingItemsConverter {
         });
     }
     private getRoomCategoryIdListWithinGroupBooking(): string[] {
-        return _.map(this._bookingItems.bookingList, bookingItem => { return bookingItem.roomCategoryId; })
+        return _.map(this._bookingItems, bookingItem => { return bookingItem.roomCategoryId; })
     }
     private getBookingTaxId(priceProduct: PriceProductDO): string {
         var filteredTaxList: TaxDO[] = _.filter(this._converterParams.vatTaxList, (tax: TaxDO) => {
@@ -168,6 +169,11 @@ export class BookingItemsConverter {
     }
 
     private generateReferenceCore(resolve: { (result: string): void }, reject: { (err: ThError): void }) {
+        if(!this._thUtils.isUndefinedOrNull(this._converterParams.groupBookingReference)) {
+            resolve(this._converterParams.groupBookingReference);
+            return;
+        }
+
         let hotelRepo: IHotelRepository = this._appContext.getRepositoryFactory().getHotelRepository();
         hotelRepo.getNextSequenceValue(this._sessionContext.sessionDO.hotel.id, HotelSequenceType.BookingGroup)
             .then((seqValue: SequenceValue) => {
