@@ -97,7 +97,6 @@ describe("New Bookings Tests", function () {
             let noOfNewBookings = 0;
             let bookingRepo = testContext.appContext.getRepositoryFactory().getBookingRepository();
             bookingRepo.getBookingList({ hotelId: testContext.sessionContext.sessionDO.hotel.id }, { groupBookingId: randomGroupBookingReference }).then((result: BookingSearchResultRepoDO) => {
-                debugger
                 initialNumberOfBookings = result.bookingList.length;
                 
                 let addBookingsDO: AddBookingItemsDO = bookingTestHelper.getBookingItems(testDataBuilder, genericPriceProduct);
