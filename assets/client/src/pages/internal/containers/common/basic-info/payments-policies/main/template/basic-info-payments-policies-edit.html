@@ -26,9 +26,9 @@
 						<h3>{{ 'Additional Invoice Information' | translate }}  </h3>
 						<small>{{ 'All rates and prices will be in the selected currency' | translate }}</small>
 					</label>
-					<div class="form-group">
+					<div class="form-group" [formGroup]="getDefaultFormGroup()">
 						<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('additionalInvoiceDetails')}">
-						<textarea class="form-control" placeholder="{{ 'e.g. Banking details (iban, swift code) etc.' | translate}}"></textarea>
+						<textarea class="form-control" placeholder="{{ 'e.g. Banking details (iban, swift code) etc.' | translate}}" formControlName="additionalInvoiceDetails"></textarea>
 					</div>
 					<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'No more than 2000 characters' | translate }}</small></label>
 					</div>
