@@ -144,7 +144,7 @@ export class AddBookingItems {
             var addOnProductLoader = new AddOnProductLoader(this._appContext, this._sessionContext);
             return addOnProductLoader.load(this._loadedPriceProductsContainer.getAddOnProductIdList());
         }).then((addOnProductItemContainer: AddOnProductItemContainer) => {
-            var bookingItemsConverter = new BookingItemsConverter(this._appContext, this._sessionContext, {
+            let bookingItemsConverterParams: BookingItemsConverterParams = {
                 hotelDO: this._loadedHotel,
                 currentHotelTimestamp: ThTimestampDO.buildThTimestampForTimezone(this._loadedHotel.timezone),
                 priceProductsContainer: this._loadedPriceProductsContainer,
@@ -152,8 +152,13 @@ export class AddBookingItems {
                 addOnProductItemContainer: addOnProductItemContainer,
                 vatTaxList: this._loadedVatTaxList,
                 roomCategoryStatsList: this._loadedRoomCategoryStatsList
-            });
-            return bookingItemsConverter.convert(this._addBookingItems, this._inputChannel);
+            };
+            if(!this.newBookingGroup) {
+                bookingItemsConverterParams.groupBookingReference = this._existingBookingList[0].groupBookingReference;
+            }
+            var bookingItemsConverter = new BookingItemsConverter(this._appContext, this._sessionContext, bookingItemsConverterParams);
+            
+            return bookingItemsConverter.convert(this._addBookingItems.bookingList, this._inputChannel);
         }).then((convertedBookingList: BookingDO[]) => {
             this._bookingList = convertedBookingList;
 
