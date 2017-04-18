@@ -8,6 +8,7 @@ import {FileAttachmentDO} from '../../../../data-layer/common/data-objects/file/
 export class BookingChangeDetailsDO {
     groupBookingId: string;
     bookingId: string;
+    externalBookingReference: string;
     notes: string;
     invoiceNotes: string;
     fileAttachmentList: FileAttachmentDO[];
@@ -21,6 +22,10 @@ export class BookingChangeDetailsDO {
             {
                 key: "bookingId",
                 validationStruct: new PrimitiveValidationStructure(new StringValidationRule())
+            },
+            {
+                key: "externalBookingReference",
+                validationStruct: new PrimitiveValidationStructure(StringValidationRule.buildNullable())
             },
             {
                 key: "notes",
