@@ -23,14 +23,14 @@
 					<div *ngIf="yieldFilterVM.hasValue()">
 						<div *ngIf="yieldFilterVM.isColor()" class="row">
 							<div class="color-box" [ngClass]="yieldFilterVM.yieldFilterValue.colorCode"></div>
-							<a class="btn btn-default" role="button" (click)="removeFilter(yieldFilterVM.filterId)">
-								<i class="fa fa-times"></i> {{ 'Remove' | translate }}
+							<a class="btn btn-xs" role="button" (click)="removeFilter(yieldFilterVM.filterId)">
+								<i class="fa unitpal-font">\</i>
 							</a>
 						</div>
 						<div *ngIf="yieldFilterVM.isText()" class="row">
 							<b>{{yieldFilterVM.yieldFilterValue.label}}</b>
-							<a class="btn btn-default" role="button" (click)="removeFilter(yieldFilterVM.filterId)">
-								<i class="fa fa-times"></i> {{ 'Remove' | translate }}
+							<a class="btn btn-xs" role="button" (click)="removeFilter(yieldFilterVM.filterId)">
+								<i class="fa unitpal-font">\</i>
 							</a>
 						</div>
 						<div *ngIf="yieldFilterVM.yieldFilterValue.description" class="row">
