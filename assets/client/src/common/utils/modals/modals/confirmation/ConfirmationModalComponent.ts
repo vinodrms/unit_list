@@ -7,7 +7,7 @@ import {ConfirmationModalInput, ConfirmationModalButtons} from './utils/Confirma
 import {SharedPipesModule} from '../../../pipes/modules/SharedPipesModule';
 
 @Component({
-	selector: 'loading-modal-component',
+	selector: 'confirmation-modal-component',
 	template: `
 		<div class="modal-header text-center">
 			<h4 class="modal-title">{{ title | translate }}</h4>
