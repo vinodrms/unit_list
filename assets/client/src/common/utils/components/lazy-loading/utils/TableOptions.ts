@@ -13,6 +13,7 @@ export class TableOptions {
 	canAdd: boolean = false;
 	canSearch: boolean = false;
 	canAddExistingRow: boolean = false;
+	canShowDetails: boolean = false;
 
 	private _rowActionsNumber: number;
 
@@ -35,6 +36,7 @@ export class TableOptions {
 			tableMeta.searchInputPlaceholder = "Search";
 		}
 		this.canAddExistingRow = _.contains(tableMeta.supportedRowCommandList, TableRowCommand.AddExistingRow);
+		this.canShowDetails = _.contains(tableMeta.supportedRowCommandList, TableRowCommand.ShowDetails);
 		this._rowActionsNumber = this.getCountOfRowCommands(tableMeta, [TableRowCommand.Copy, TableRowCommand.Edit, TableRowCommand.Delete, TableRowCommand.AddExistingRow]);
 	}
 	private getCountOfRowCommands(tableMeta: LazyLoadTableMeta, rowCommandList: TableRowCommand[]): number {
