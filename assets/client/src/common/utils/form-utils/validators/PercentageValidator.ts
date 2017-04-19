@@ -1,5 +1,5 @@
-import {AThValidator} from './AThValidator';
-import {ThDataValidators} from '../utils/ThDataValidators';
+import { AThValidator } from './AThValidator';
+import { ThDataValidators } from '../utils/ThDataValidators';
 
 export class PercentageValidator extends AThValidator {
 	private _minValue: number = 0;
@@ -13,6 +13,6 @@ export class PercentageValidator extends AThValidator {
 		if (!_.isNumber(value)) {
 			return false;
 		}
-		return value >= this._minValue && value <= this._maxValue && ThDataValidators.isValidInteger(value);
+		return ThDataValidators.isValidPercentage(value, this._minValue, this._maxValue);
 	}
 }

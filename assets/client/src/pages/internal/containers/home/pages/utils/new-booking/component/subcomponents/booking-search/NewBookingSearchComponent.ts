@@ -29,26 +29,26 @@ import { BookingViewModelConverter } from "../../../services/search/utils/Bookin
 @Component({
 	selector: 'new-booking-search',
 	templateUrl: '/client/src/pages/internal/containers/home/pages/utils/new-booking/component/subcomponents/booking-search/template/new-booking-search.html',
-	providers: [EagerBookingsService, EagerCustomersService, HotelAggregatorService, RoomCategoriesService, BookingSearchService, BookingSearchResultsTableMetaBuilderService,
+	providers: [EagerBookingsService, EagerCustomersService, RoomCategoriesService, BookingSearchService, BookingSearchResultsTableMetaBuilderService,
 		BookingCartTableMetaBuilderService, BookingTableUtilsService, RoomAvailabilityModalService]
 })
 export class NewBookingSearchComponent extends BaseComponent implements AfterViewInit, OnInit {
 	@ViewChild('searchResults') private _searchResultsTableComponent: LazyLoadingTableComponent<BookingCartItemVM>;
 	@ViewChild('bookingCart') private _bookingCartTableComponent: LazyLoadingTableComponent<BookingCartItemVM>;
-	
+
 	@Input() newBookingInput: NewBookingModalInput;
-	
+
 	private _roomCategoryList: RoomCategoryDO[];
 	isSearching: boolean = false;
 	private _bookingSearchParams: BookingSearchParams;
 	private _roomCategoryItemList: RoomCategoryItemDO[];
 
-	constructor(private _appContext: AppContext, 
+	constructor(private _appContext: AppContext,
 		private _wizardBookingSearchService: BookingSearchStepService,
 		private _eagerBookingsService: EagerBookingsService,
 		private _hotelAggregatedService: HotelAggregatorService,
 		private _bookingSearchService: BookingSearchService,
-		private _searchTableMetaBuilder: BookingSearchResultsTableMetaBuilderService, 
+		private _searchTableMetaBuilder: BookingSearchResultsTableMetaBuilderService,
 		private _cartTableMetaBuilder: BookingCartTableMetaBuilderService,
 		private _bookingTableUtilsService: BookingTableUtilsService, private _bookingCartService: BookingCartService,
 		private _roomAvailabilityModalService: RoomAvailabilityModalService) {
@@ -65,13 +65,13 @@ export class NewBookingSearchComponent extends BaseComponent implements AfterVie
 		this._bookingCartTableComponent.attachCustomCellClassGenerator(this._bookingTableUtilsService.customCellClassGeneratorForBookingCart);
 		this._bookingCartTableComponent.attachCustomRowClassGenerator(this._bookingTableUtilsService.customRowClassGeneratorForBookingCart);
 		this._bookingCartTableComponent.attachCustomRowCommandPerformPolicy(this._bookingTableUtilsService.canPerformCommandOnItemForBookingCart);
-		
-		if(!this._appContext.thUtils.isUndefinedOrNull(this.newBookingInput)) {
+
+		if (!this._appContext.thUtils.isUndefinedOrNull(this.newBookingInput)) {
 			this._bookingCartService.groupBookingId = this.newBookingInput.groupBookingId;
 
 			Observable.combineLatest(
 				this._hotelAggregatedService.getHotelAggregatedInfo(),
-				this._eagerBookingsService.getBookingVMListByGroupBookingId(this.newBookingInput.groupBookingId)	
+				this._eagerBookingsService.getBookingVMListByGroupBookingId(this.newBookingInput.groupBookingId)
 			).subscribe((result: [HotelAggregatedInfo, BookingVM[]]) => {
 				let hotelAggregatedInfo = result[0];
 				let bookingVMList = result[1];

@@ -68,6 +68,13 @@ export class LazyLoadingTableComponent<T> {
 		this.onAddExistingItem.next(item);
 	}
 
+	@Output() protected onShowDetails = new EventEmitter();
+	protected showDetailsForItem(item: T) {
+		this.deselectItemIfNecessary(item);
+		this.selectTableItem(item);
+		this.onShowDetails.next(item);
+	}
+
 	@Output() protected onSelect = new EventEmitter();
 	@Output() protected onMultiSelect = new EventEmitter();
 
@@ -389,6 +396,9 @@ export class LazyLoadingTableComponent<T> {
 	}
 	protected canPerformAddExistingRowCommandOnItem(item: T): boolean {
 		return this.tableOptions.canAddExistingRow && this.canPerformCommandOnItem(item, TableRowCommand.AddExistingRow);
+	}
+	protected canPerformShowDetailsCommandOnItem(item: T): boolean {
+		return this.tableOptions.canShowDetails && this.canPerformCommandOnItem(item, TableRowCommand.ShowDetails);
 	}
 
 	private canPerformCommandOnItem(item: T, command: TableRowCommand): boolean {
