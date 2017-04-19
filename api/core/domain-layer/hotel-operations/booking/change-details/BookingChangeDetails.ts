@@ -118,6 +118,7 @@ export class BookingChangeDetails {
     }
 
     private updateDetailsOnLoadedBooking() {
+        this._bookingWithDependencies.bookingDO.externalBookingReference = this._changeDetailsDO.externalBookingReference;
         this._bookingWithDependencies.bookingDO.notes = this._changeDetailsDO.notes;
         this._bookingWithDependencies.bookingDO.invoiceNotes = this._changeDetailsDO.invoiceNotes;
         this._bookingWithDependencies.bookingDO.fileAttachmentList = this._changeDetailsDO.fileAttachmentList;

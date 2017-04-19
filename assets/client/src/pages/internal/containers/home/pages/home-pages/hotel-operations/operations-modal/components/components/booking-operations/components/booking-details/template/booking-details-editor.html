@@ -1,16 +1,17 @@
 <div class="col-xs-12">
     <div class="row">
         <div class="col-xs-12 col-sm-1">
-            <p>{{'Notes' | translate}}</p>
+            <p>{{'External Booking No' | translate}}</p>
         </div>
         <div class="col-xs-12 col-sm-8 field-value text-field" *ngIf="readonly">
-            <p class="notes" *ngIf="!notesAreEmpty">{{bookingDO.notes}}</p>
-            <p class="placeholder" *ngIf="notesAreEmpty">{{'None' | translate}}</p>
+            <p class="externalBookingReference" *ngIf="!externalBookingReferenceIsEmpty">{{bookingDO.externalBookingReference}}</p>
+            <p class="placeholder" *ngIf="externalBookingReferenceIsEmpty">{{'None' | translate}}</p>
         </div>
         <div class="col-xs-12 col-sm-8 form-group" *ngIf="!readonly">
-            <textarea class="form-control notes" [(ngModel)]="bookingDO.notes" name="bookingNotes"></textarea>
+            <div class="input-group">
+                <input type="text" class="form-control" [(ngModel)]="bookingDO.externalBookingReference" name="externalBookingReference" />
+            </div>
         </div>
-
         <div class="col-xs-12 col-sm-3" *ngIf="hasDetailsEditRight">
             <edit-save-button-group
                 (onEditStart)="startEdit()"
@@ -21,7 +22,21 @@
                 >
             </edit-save-button-group>
         </div>
+    </div>     
+    
+    <div class="row">
+        <div class="col-xs-12 col-sm-1">
+            <p>{{'Notes' | translate}}</p>
+        </div>
+        <div class="col-xs-12 col-sm-8 field-value text-field" *ngIf="readonly">
+            <p class="notes" *ngIf="!notesAreEmpty">{{bookingDO.notes}}</p>
+            <p class="placeholder" *ngIf="notesAreEmpty">{{'None' | translate}}</p>
+        </div>
+        <div class="col-xs-12 col-sm-8 form-group" *ngIf="!readonly">
+            <textarea class="form-control notes" [(ngModel)]="bookingDO.notes" name="bookingNotes"></textarea>
+        </div>
     </div>
+
     <div class="row padding-top-5px">
         <div class="col-xs-12 col-sm-1">
             <p>{{'Invoice Notes' | translate}}</p>
