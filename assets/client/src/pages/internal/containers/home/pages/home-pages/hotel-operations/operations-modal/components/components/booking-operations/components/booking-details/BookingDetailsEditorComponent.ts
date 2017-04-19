@@ -49,6 +49,9 @@ export class BookingDetailsEditorComponent implements OnInit {
     public get bookingDO(): BookingDO {
         return this._bookingOperationsPageData.bookingDO;
     }
+    public get externalBookingReferenceIsEmpty(): boolean {
+        return this._appContext.thUtils.isUndefinedOrNull(this.bookingDO.externalBookingReference) || this.bookingDO.externalBookingReference.length == 0;
+    }
     public get notesAreEmpty(): boolean {
         return this._appContext.thUtils.isUndefinedOrNull(this.bookingDO.notes) || this.bookingDO.notes.length == 0;
     }

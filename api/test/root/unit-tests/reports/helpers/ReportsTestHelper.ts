@@ -101,6 +101,7 @@ export class ReportsTestHelper {
             roomCategoryId: roomCategoryId,
             priceProductId: priceProduct.id,
             allotmentId: allotmentId,
+            externalBookingReference: "",
             notes: "This is an automatic booking",
             invoiceNotes: "This is an automatic booking - invoice notes"
         }

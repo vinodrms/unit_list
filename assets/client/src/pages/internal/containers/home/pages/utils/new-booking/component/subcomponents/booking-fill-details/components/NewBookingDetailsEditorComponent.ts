@@ -175,6 +175,13 @@ export class NewBookingDetailsEditorComponent extends BaseComponent {
         this._bookingCartItem.transientBookingItem.defaultBillingDetails.paymentMethod = paymentMethod;
         this.triggerBookingCartItemChange();
     }
+    
+    public get externalBookingReference() : string {
+        return this._bookingCartItem.transientBookingItem.externalBookingReference;
+    }
+    public set externalBookingReference(externalBookingReference : string) {
+        this._bookingCartItem.transientBookingItem.externalBookingReference = externalBookingReference;
+    }
     public get bookingNotes(): string {
         return this._bookingCartItem.transientBookingItem.notes;
     }

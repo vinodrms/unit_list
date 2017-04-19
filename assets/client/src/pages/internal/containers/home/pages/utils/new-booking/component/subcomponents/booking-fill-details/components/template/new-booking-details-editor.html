@@ -120,6 +120,14 @@
             </div>
             <div class="row">
                 <div class="col-md-12 col-xs-12 form-group">
+                    <label>{{ 'External Booking No' | translate }}</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" [(ngModel)]="externalBookingReference" name="externalBookingReference" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 col-xs-12 form-group">
                     <label>{{ 'Booking Notes' | translate }}</label>
                     <div class="input-group">
 		                <textarea class="form-control" [(ngModel)]="bookingNotes" name="bookingNotes"></textarea>

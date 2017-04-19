@@ -22,6 +22,7 @@ export class BookingItemDO {
     roomCategoryId: string;
     priceProductId: string;
     allotmentId: string;
+    externalBookingReference: string;
     notes: string;
     invoiceNotes: string;
 
@@ -34,6 +35,7 @@ export class BookingItemDO {
         bookingItemDO.roomCategoryId = bookingDO.roomCategoryId;
         bookingItemDO.priceProductId = bookingDO.priceProductId;
         bookingItemDO.allotmentId = bookingDO.allotmentId;
+        bookingItemDO.externalBookingReference = bookingDO.externalBookingReference;
         bookingItemDO.notes = bookingDO.notes;
         bookingItemDO.invoiceNotes = bookingDO.invoiceNotes;
         return bookingItemDO;
@@ -102,6 +104,10 @@ export class AddBookingItemsDO {
                     },
                     {
                         key: "allotmentId",
+                        validationStruct: new PrimitiveValidationStructure(StringValidationRule.buildNullable())
+                    },
+                    {
+                        key: "externalBookingReference",
                         validationStruct: new PrimitiveValidationStructure(StringValidationRule.buildNullable())
                     },
                     {

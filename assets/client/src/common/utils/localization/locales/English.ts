@@ -878,5 +878,6 @@ export var EnglishTranslations: Object = {
 	"Copy Prices from Other Room Category": "Copy Prices from Other Room Category",
 	"The payment methods that will be supported by the hotel. On payment methods a fee per transaction can be configured.": "The payment methods that will be supported by the hotel. On payment methods a fee per transaction can be configured.",
 	"Flat": "Flat",
+	"External Booking No": "External Booking No",
 
 };
