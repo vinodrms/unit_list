@@ -10,6 +10,7 @@ export class TransientBookingItem {
     roomCategoryId: string;
     priceProductId: string;
     allotmentId: string;
+    externalBookingReference: string;
     notes: string;
     invoiceNotes: string;
 }
