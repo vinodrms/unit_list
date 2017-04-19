@@ -1,4 +1,4 @@
-import {Pipe, PipeTransform} from '@angular/core';
+import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
 	name: 'percentage'
@@ -9,6 +9,6 @@ export class PercentagePipe implements PipeTransform {
 		if (!_.isNumber(value)) {
 			return "";
 		}
-		return Math.round(value * 100) + "%";
+		return (value * 100).toFixed(2) + "%";
 	}
 }
