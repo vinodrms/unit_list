@@ -7,6 +7,7 @@ import {InvoicePaymentMethodDO, InvoicePaymentMethodType} from '../../../data-la
 import {ThUtils} from '../../../utils/ThUtils';
 
 import _ = require('underscore');
+import { PaymentMethodInstanceDO } from "../../../data-layer/common/data-objects/payment-method/PaymentMethodInstanceDO";
 
 export class InvoicePaymentMethodValidator {
     private _thUtils: ThUtils;
@@ -42,10 +43,10 @@ export class InvoicePaymentMethodValidator {
         reject(thError);
     }
     private validateDefaultPaymentMethod(resolve: { (result: InvoicePaymentMethodDO): void }, reject: { (err: ThError): void }) {
-        var foundPaymentMethodId: string = _.find(this._hotelDO.paymentMethodIdList, (paymentMethodId: string) => {
-            return paymentMethodId === this._invoicePaymentMethod.value;
+        var foundPaymentMethod: PaymentMethodInstanceDO = _.find(this._hotelDO.paymentMethodList, (paymentMethodInstance: PaymentMethodInstanceDO) => {
+            return paymentMethodInstance.paymentMethodId === this._invoicePaymentMethod.value;
         });
-        if (this._thUtils.isUndefinedOrNull(foundPaymentMethodId) || !_.isString(foundPaymentMethodId)) {
+        if (this._thUtils.isUndefinedOrNull(foundPaymentMethod) || !_.isString(foundPaymentMethod.paymentMethodId)) {
             var thError = new ThError(ThStatusCode.InvoicePaymentMethodValidatorUnsupportedPaymentMethod, null);
             ThLogger.getInstance().logBusiness(ThLogLevel.Error, "unsupported payment method", this._invoicePaymentMethod, thError);
             reject(thError);

@@ -1,9 +1,11 @@
-import {InvoicePaymentMethodDO} from '../data-objects/payers/InvoicePaymentMethodDO';
+import { InvoicePaymentMethodDO } from '../data-objects/payers/InvoicePaymentMethodDO';
+import { TransactionFeeDO } from "../../common/data-objects/payment-method/TransactionFeeDO";
 
 export class InvoicePaymentMethodVM {
     private _paymentMethod: InvoicePaymentMethodDO;
     private _displayName: string;
     private _iconUrl: string;
+    private _transactionFee: TransactionFeeDO;
 
     public get paymentMethod(): InvoicePaymentMethodDO {
         return this._paymentMethod;
@@ -23,12 +25,19 @@ export class InvoicePaymentMethodVM {
     public set iconUrl(iconUrl: string) {
         this._iconUrl = iconUrl;
     }
+    public get transactionFee(): TransactionFeeDO {
+        return this._transactionFee;
+    }
+    public set transactionFee(transactionFee: TransactionFeeDO) {
+        this._transactionFee = transactionFee;
+    }
 
     public buildPrototype(): InvoicePaymentMethodVM {
         var pmVM = new InvoicePaymentMethodVM();
         pmVM.paymentMethod = this.paymentMethod.buildPrototype();
         pmVM.displayName = this.displayName;
         pmVM.iconUrl = this.iconUrl;
+        pmVM.transactionFee = this._transactionFee;
         return pmVM;
     }
 }

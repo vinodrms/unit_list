@@ -15,7 +15,8 @@ import {InvoicePayerDO} from '../../../../../core/data-layer/invoices/data-objec
 import {InvoiceItemDO, InvoiceItemType} from '../../../../../core/data-layer/invoices/data-objects/items/InvoiceItemDO';
 import {AddOnProductDO} from '../../../../../core/data-layer/add-on-products/data-objects/AddOnProductDO';
 import {InvoicePaymentMethodType} from '../../../../../../api/core/data-layer/invoices/data-objects/payers/InvoicePaymentMethodDO';
-import {InvoiceTestUtils} from '../utils/InvoiceTestUtils';
+import { InvoiceTestUtils } from '../utils/InvoiceTestUtils';
+import { TransactionFeeDO } from "../../../../../core/data-layer/common/data-objects/payment-method/TransactionFeeDO";
 
 export class CustomerInvoicesTestHelper {
 
@@ -55,6 +56,7 @@ export class CustomerInvoicesTestHelper {
                         .withValue(paymentMethod.id)
                         .build()    
                 )
+                .withTransactionFeeSnapshot(TransactionFeeDO.getDefaultTransactionFee())
                 .withPriceToPay(20)
                 .build()
         ];

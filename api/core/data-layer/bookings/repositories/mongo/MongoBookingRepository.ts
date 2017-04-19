@@ -1,12 +1,12 @@
-import {MongoRepository} from '../../../common/base/MongoRepository';
-import {LazyLoadRepoDO, LazyLoadMetaResponseRepoDO} from '../../../common/repo-data-objects/LazyLoadRepoDO';
-import {IBookingRepository, BookingMetaRepoDO, BookingItemMetaRepoDO, BookingSearchResultRepoDO, BookingSearchCriteriaRepoDO} from '../IBookingRepository';
-import {BookingDO} from '../../data-objects/BookingDO';
-import {MongoAddBookingsRepository} from './add-bookings/MongoAddBookingsRepository';
-import {MongoUpdateBookingRepository} from './update-booking/MongoUpdateBookingRepository';
-import {MongoUpdateMultipleBookingsRepository} from './update-booking/MongoUpdateMultipleBookingsRepository';
-import {MongoGetBookingsRepository} from './get-bookings/MongoGetBookingsRepository';
-import {MongoGetSingleBookingRepository} from './get-bookings/MongoGetSingleBookingRepository';
+import { MongoRepository } from '../../../common/base/MongoRepository';
+import { LazyLoadRepoDO, LazyLoadMetaResponseRepoDO } from '../../../common/repo-data-objects/LazyLoadRepoDO';
+import { IBookingRepository, BookingMetaRepoDO, BookingItemMetaRepoDO, BookingSearchResultRepoDO, BookingSearchCriteriaRepoDO, BookingGroupMetaRepoDO } from '../IBookingRepository';
+import { BookingDO } from '../../data-objects/BookingDO';
+import { MongoAddBookingsRepository } from './add-bookings/MongoAddBookingsRepository';
+import { MongoUpdateBookingRepository } from './update-booking/MongoUpdateBookingRepository';
+import { MongoUpdateMultipleBookingsRepository } from './update-booking/MongoUpdateMultipleBookingsRepository';
+import { MongoGetBookingsRepository } from './get-bookings/MongoGetBookingsRepository';
+import { MongoGetSingleBookingRepository } from './get-bookings/MongoGetSingleBookingRepository';
 
 export class MongoBookingRepository extends MongoRepository implements IBookingRepository {
     private _addBookingsRepo: MongoAddBookingsRepository;
@@ -25,8 +25,8 @@ export class MongoBookingRepository extends MongoRepository implements IBookingR
         this._getSingleBooking = new MongoGetSingleBookingRepository(bookingGroupsEntity);
     }
 
-    public addBookings(meta: BookingMetaRepoDO, bookingList: BookingDO[]): Promise<BookingDO[]> {
-        return this._addBookingsRepo.addBookings(meta, bookingList);
+    public addBookings(meta: BookingMetaRepoDO, bookingList: BookingDO[], groupMeta?: BookingGroupMetaRepoDO): Promise<BookingDO[]> {
+        return this._addBookingsRepo.addBookings(meta, bookingList, groupMeta);
     }
     public updateBooking(meta: BookingMetaRepoDO, itemMeta: BookingItemMetaRepoDO, booking: BookingDO): Promise<BookingDO> {
         return this._updateBookingRepo.updateBooking(meta, itemMeta, booking);

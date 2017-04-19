@@ -90,7 +90,6 @@ export class DynamicPriceVM {
 
     public updateFromRoomCategoryStatsList(roomCategoryStatsList: RoomCategoryStatsDO[]) {
         let newPriceVMList: PriceVM[] = [];
-        var previousRoomCategoryId: string;
         _.forEach(roomCategoryStatsList, (roomCategoryStats: RoomCategoryStatsDO) => {
             let newPriceVM = new PriceVM(this._priceType);
 
@@ -107,11 +106,7 @@ export class DynamicPriceVM {
 
             newPriceVM.roomCategoryStats = roomCategoryStats;
             newPriceVM.price = currentPrice.prototypeForStats(roomCategoryStats);
-            if (previousRoomCategoryId) {
-                newPriceVM.previousRoomCategoryId = previousRoomCategoryId;
-            }
             newPriceVMList.push(newPriceVM);
-            previousRoomCategoryId = roomCategoryStats.roomCategory.id;
         });
         this._priceVMList = newPriceVMList;
     }

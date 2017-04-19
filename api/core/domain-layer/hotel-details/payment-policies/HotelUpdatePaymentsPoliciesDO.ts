@@ -4,10 +4,13 @@ import { PrimitiveValidationStructure } from '../../../utils/th-validation/struc
 import { ArrayValidationStructure } from '../../../utils/th-validation/structure/ArrayValidationStructure';
 import { StringValidationRule } from '../../../utils/th-validation/rules/StringValidationRule';
 import { NumberValidationRule } from '../../../utils/th-validation/rules/NumberValidationRule';
+import { PaymentMethodInstanceDO } from "../../../data-layer/common/data-objects/payment-method/PaymentMethodInstanceDO";
+import { TransactionFeeType } from "../../../data-layer/common/data-objects/payment-method/TransactionFeeDO";
+import { NumberInListValidationRule } from "../../../utils/th-validation/rules/NumberInListValidationRule";
 
 export class HotelUpdatePaymentsPoliciesDO {
 	ccyCode: string;
-	paymentMethodIdList: string[];
+	paymentMethodList: PaymentMethodInstanceDO[];
 	additionalInvoiceDetails: string;
 
 	public static getValidationStructure(): IValidationStructure {
@@ -17,10 +20,26 @@ export class HotelUpdatePaymentsPoliciesDO {
 				validationStruct: new PrimitiveValidationStructure(new StringValidationRule(StringValidationRule.MaxCurrencyCodeLength))
 			},
 			{
-				key: "paymentMethodIdList",
-				validationStruct: new ArrayValidationStructure(
-					new PrimitiveValidationStructure(new StringValidationRule())
-				)
+				key: "paymentMethodList",
+				validationStruct: new ArrayValidationStructure(new ObjectValidationStructure([
+					{
+						key: "paymentMethodId",
+						validationStruct: new PrimitiveValidationStructure(new StringValidationRule())
+					},
+					{
+						key: "transactionFee",
+						validationStruct: new ObjectValidationStructure([
+							{
+								key: "type",
+								validationStruct: new PrimitiveValidationStructure(new NumberInListValidationRule([TransactionFeeType.Fixed, TransactionFeeType.Percentage]))
+							},
+							{
+								key: "amount",
+								validationStruct: new PrimitiveValidationStructure(NumberValidationRule.buildNullable())
+							}
+						])
+					}
+				]))
 			},
 			{
 				key: "additionalInvoiceDetails",

@@ -1,39 +1,56 @@
-import {Component, ViewChild, AfterViewInit, OnInit} from '@angular/core';
-import {BaseComponent} from '../../../../../../../../../../common/base/BaseComponent';
-import {LazyLoadingTableComponent} from '../../../../../../../../../../common/utils/components/lazy-loading/LazyLoadingTableComponent';
-import {TableColumnValueMeta} from '../../../../../../../../../../common/utils/components/lazy-loading/utils/LazyLoadTableMeta';
-import {AppContext, ThError} from '../../../../../../../../../../common/utils/AppContext';
-import {RoomCategoryDO} from '../../../../../../../../services/room-categories/data-objects/RoomCategoryDO';
-import {BookingSearchParams} from '../../../services/data-objects/BookingSearchParams';
-import {BookingSearchService} from '../../../services/search/BookingSearchService';
-import {BookingCartItemVM, BookingCartItemVMType} from '../../../services/search/view-models/BookingCartItemVM';
-import {BookingSearchResultsTableMetaBuilderService} from '../utils/table-builder/BookingSearchResultsTableMetaBuilderService';
-import {BookingCartTableMetaBuilderService} from '../utils/table-builder/BookingCartTableMetaBuilderService';
-import {BookingTableUtilsService} from '../utils/table-builder/BookingTableUtilsService';
-import {BookingSearchStepService} from './services/BookingSearchStepService';
-import {BookingCartService} from '../../../services/search/BookingCartService';
-import {RoomCategoryItemDO} from '../../../services/search/data-objects/room-category-item/RoomCategoryItemDO';
-import {RoomAvailabilityModalService} from './modal/service/RoomAvailabilityModalService';
+import { Component, ViewChild, AfterViewInit, OnInit, Input } from '@angular/core';
+import { BaseComponent } from '../../../../../../../../../../common/base/BaseComponent';
+import { LazyLoadingTableComponent } from '../../../../../../../../../../common/utils/components/lazy-loading/LazyLoadingTableComponent';
+import { TableColumnValueMeta } from '../../../../../../../../../../common/utils/components/lazy-loading/utils/LazyLoadTableMeta';
+import { AppContext, ThError } from '../../../../../../../../../../common/utils/AppContext';
+import { RoomCategoryDO } from '../../../../../../../../services/room-categories/data-objects/RoomCategoryDO';
+import { BookingSearchParams } from '../../../services/data-objects/BookingSearchParams';
+import { BookingSearchService } from '../../../services/search/BookingSearchService';
+import { BookingCartItemVM, BookingCartItemVMType } from '../../../services/search/view-models/BookingCartItemVM';
+import { BookingSearchResultsTableMetaBuilderService } from '../utils/table-builder/BookingSearchResultsTableMetaBuilderService';
+import { BookingCartTableMetaBuilderService } from '../utils/table-builder/BookingCartTableMetaBuilderService';
+import { BookingTableUtilsService } from '../utils/table-builder/BookingTableUtilsService';
+import { BookingSearchStepService } from './services/BookingSearchStepService';
+import { BookingCartService } from '../../../services/search/BookingCartService';
+import { RoomCategoryItemDO } from '../../../services/search/data-objects/room-category-item/RoomCategoryItemDO';
+import { RoomAvailabilityModalService } from './modal/service/RoomAvailabilityModalService';
+import { EagerBookingsService } from "../../../../../../../../services/bookings/EagerBookingsService";
+import { ConfigCapacityDO } from "../../../../../../../../services/common/data-objects/bed-config/ConfigCapacityDO";
+import { Observable } from "rxjs/Observable";
+import { BookingsDO } from "../../../../../../../../services/bookings/data-objects/BookingsDO";
+import { BookingVM } from "../../../../../../../../services/bookings/view-models/BookingVM";
+import { EagerCustomersService } from "../../../../../../../../services/customers/EagerCustomersService";
+import { HotelAggregatorService } from "../../../../../../../../services/hotel/HotelAggregatorService";
+import { RoomCategoriesService } from "../../../../../../../../services/room-categories/RoomCategoriesService";
+import { NewBookingModalInput } from "../../../modal/services/utils/NewBookingModalInput";
+import { HotelAggregatedInfo } from "../../../../../../../../services/hotel/utils/HotelAggregatedInfo";
+import { BookingViewModelConverter } from "../../../services/search/utils/BookingViewModelConverter";
 
 @Component({
 	selector: 'new-booking-search',
 	templateUrl: '/client/src/pages/internal/containers/home/pages/utils/new-booking/component/subcomponents/booking-search/template/new-booking-search.html',
-	providers: [BookingSearchService, BookingSearchResultsTableMetaBuilderService,
+	providers: [EagerBookingsService, EagerCustomersService, HotelAggregatorService, RoomCategoriesService, BookingSearchService, BookingSearchResultsTableMetaBuilderService,
 		BookingCartTableMetaBuilderService, BookingTableUtilsService, RoomAvailabilityModalService]
 })
 export class NewBookingSearchComponent extends BaseComponent implements AfterViewInit, OnInit {
 	@ViewChild('searchResults') private _searchResultsTableComponent: LazyLoadingTableComponent<BookingCartItemVM>;
 	@ViewChild('bookingCart') private _bookingCartTableComponent: LazyLoadingTableComponent<BookingCartItemVM>;
-
+	
+	@Input() newBookingInput: NewBookingModalInput;
+	
 	private _roomCategoryList: RoomCategoryDO[];
 	isSearching: boolean = false;
 	private _bookingSearchParams: BookingSearchParams;
 	private _roomCategoryItemList: RoomCategoryItemDO[];
 
-	constructor(private _appContext: AppContext, private _wizardBookingSearchService: BookingSearchStepService,
-		private _bookingSearchService: BookingSearchService, private _searchTableMetaBuilder: BookingSearchResultsTableMetaBuilderService,
-		private _cartTableMetaBuilder: BookingCartTableMetaBuilderService, private _bookingTableUtilsService: BookingTableUtilsService,
-		private _bookingCartService: BookingCartService,
+	constructor(private _appContext: AppContext, 
+		private _wizardBookingSearchService: BookingSearchStepService,
+		private _eagerBookingsService: EagerBookingsService,
+		private _hotelAggregatedService: HotelAggregatorService,
+		private _bookingSearchService: BookingSearchService,
+		private _searchTableMetaBuilder: BookingSearchResultsTableMetaBuilderService, 
+		private _cartTableMetaBuilder: BookingCartTableMetaBuilderService,
+		private _bookingTableUtilsService: BookingTableUtilsService, private _bookingCartService: BookingCartService,
 		private _roomAvailabilityModalService: RoomAvailabilityModalService) {
 		super();
 	}
@@ -48,6 +65,25 @@ export class NewBookingSearchComponent extends BaseComponent implements AfterVie
 		this._bookingCartTableComponent.attachCustomCellClassGenerator(this._bookingTableUtilsService.customCellClassGeneratorForBookingCart);
 		this._bookingCartTableComponent.attachCustomRowClassGenerator(this._bookingTableUtilsService.customRowClassGeneratorForBookingCart);
 		this._bookingCartTableComponent.attachCustomRowCommandPerformPolicy(this._bookingTableUtilsService.canPerformCommandOnItemForBookingCart);
+		
+		if(!this._appContext.thUtils.isUndefinedOrNull(this.newBookingInput)) {
+			this._bookingCartService.groupBookingId = this.newBookingInput.groupBookingId;
+
+			Observable.combineLatest(
+				this._hotelAggregatedService.getHotelAggregatedInfo(),
+				this._eagerBookingsService.getBookingVMListByGroupBookingId(this.newBookingInput.groupBookingId)	
+			).subscribe((result: [HotelAggregatedInfo, BookingVM[]]) => {
+				let hotelAggregatedInfo = result[0];
+				let bookingVMList = result[1];
+
+				let converter = new BookingViewModelConverter(this._appContext.thTranslation);
+				let bookingCartItemVMList = converter.createBookingCartItemVMListFromBookingVMList(hotelAggregatedInfo, bookingVMList);
+				_.forEach(bookingCartItemVMList, (bookingCartItem: BookingCartItemVM) => {
+					this.addBookingVMInCart(bookingCartItem);
+				});
+			});
+		}
+
 	}
 
 	public searchBookings(bookingSearchParams: BookingSearchParams) {

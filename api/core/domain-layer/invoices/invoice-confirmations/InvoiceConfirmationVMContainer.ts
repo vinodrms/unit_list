@@ -13,6 +13,8 @@ import { BookingConfirmationVMContainer } from '../../bookings/booking-confirmat
 import { BookingPriceDO } from "../../../data-layer/bookings/data-objects/price/BookingPriceDO";
 import { PricePerDayDO } from "../../../data-layer/bookings/data-objects/price/PricePerDayDO";
 import { AddOnProductInvoiceItemMetaDO } from "../../../data-layer/invoices/data-objects/items/add-on-products/AddOnProductInvoiceItemMetaDO";
+import { TransactionFeeDO, TransactionFeeType } from "../../../data-layer/common/data-objects/payment-method/TransactionFeeDO";
+import { InvoicePayerDO } from "../../../data-layer/invoices/data-objects/payers/InvoicePayerDO";
 
 import _ = require('underscore');
 
@@ -71,6 +73,8 @@ export class InvoiceConfirmationVMContainer {
 
     paymentMethodLabel: string;
     paymentMethodValue: string;
+    transactionFeeLabel: string;
+    transactionFeeValue: string;
 
     subtotalValue: number;
     totalVat: number;
@@ -204,9 +208,33 @@ export class InvoiceConfirmationVMContainer {
                 this.itemVMList.push(invoiceItemVM);
             }
         });
+
+        if (this.hasTransactionFee) {
+            let transactionFeeInvoiceItemVM = this.getTransactonFeeInvoiceItem();
+            this.itemVMList.push(transactionFeeInvoiceItemVM)
+
+            this.totalVat = this._thUtils.roundNumberToTwoDecimals(this.totalVat + transactionFeeInvoiceItemVM.vat);
+            this.subtotalValue = this._thUtils.roundNumberToTwoDecimals(this.subtotalValue + transactionFeeInvoiceItemVM.subtotal);
+            this.totalValue = this._thUtils.roundNumberToTwoDecimals(this.subtotalValue + transactionFeeInvoiceItemVM.subtotal);
+        }
+
         if (this.itemVMList.length > 0) {
             this.itemVMList[this.itemVMList.length - 1].isLastOne = true;
         }
+    }
+    private getTransactonFeeInvoiceItem(): InvoiceItemVM {
+        let transactionFee = this._thUtils.roundNumberToTwoDecimals(this.invoicePayer.priceToPayPlusTransactionFee - this.invoicePayer.priceToPay);
+        var invoiceItemVM = new InvoiceItemVM(this._thTranslation);
+        invoiceItemVM.qty = 1;
+        invoiceItemVM.name = this._thTranslation.translate("Transaction fee");
+
+        let vatValue = 0;
+        invoiceItemVM.vat = this._thUtils.roundNumberToTwoDecimals(transactionFee - (transactionFee / (1 + vatValue)));
+        invoiceItemVM.netUnitPrice = this._thUtils.roundNumberToTwoDecimals(transactionFee - invoiceItemVM.vat);
+        invoiceItemVM.subtotal = invoiceItemVM.netUnitPrice;
+        invoiceItemVM.vatPercentage = this._thUtils.roundNumberToTwoDecimals(vatValue * 100);
+
+        return invoiceItemVM;
     }
     private displayBookingDateBreakdown(invoiceItemDO: InvoiceItemDO): boolean {
         if (!invoiceItemDO.isBookingPrice()) {
@@ -238,6 +266,8 @@ export class InvoiceConfirmationVMContainer {
 
     private initPaymentMethodLabelsAndValues() {
         this.paymentMethodLabel = this._thTranslation.translate('Payment Method');
+        this.transactionFeeLabel = this._thTranslation.translate("transaction fee");
+        this.transactionFeeValue = (this.transactionFeeIsFlat ? this.transactionFee.amount : this.transactionFee.amount * 100).toString();
 
         if (this._invoice.paymentStatus === InvoicePaymentStatus.LossAcceptedByManagement) {
             this.paymentMethodValue = this._thTranslation.translate(InvoiceConfirmationVMContainer.LOSS_ACCEPTED_BY_MANAGEMENT_STR);
@@ -254,9 +284,25 @@ export class InvoiceConfirmationVMContainer {
         }
     }
 
+    public get invoicePayer(): InvoicePayerDO {
+        return this._invoice.payerList[this.payerIndex];
+    }
+
+    public get transactionFee(): TransactionFeeDO {
+        return this._invoice.payerList[this.payerIndex].transactionFeeSnapshot;
+    }
+
+    public get hasTransactionFee(): boolean {
+        return this.transactionFee.amount > 0;
+    }
+
+    public get transactionFeeIsFlat(): boolean {
+        return this.transactionFee.type === TransactionFeeType.Fixed;
+    }
+
     private initTotalValues() {
         this.totalLabel = this._thTranslation.translate('Total');
-        this.totalValue = this._invoice.payerList[this.payerIndex].priceToPay;
+        this.totalValue = this._thUtils.roundNumberToTwoDecimals(this._invoice.payerList[this.payerIndex].priceToPayPlusTransactionFee);
     }
 
     private initAdditionalFields() {

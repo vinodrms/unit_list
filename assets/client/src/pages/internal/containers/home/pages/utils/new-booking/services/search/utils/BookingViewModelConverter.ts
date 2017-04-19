@@ -1,19 +1,20 @@
-import {ThTranslation} from '../../../../../../../../../../common/utils/localization/ThTranslation';
-import {ThUtils} from '../../../../../../../../../../common/utils/ThUtils';
-import {CurrencyDO} from '../../../../../../../../services/common/data-objects/currency/CurrencyDO';
-import {ConfigCapacityDO} from '../../../../../../../../services/common/data-objects/bed-config/ConfigCapacityDO';
-import {ThDateIntervalDO} from '../../../../../../../../services/common/data-objects/th-dates/ThDateIntervalDO';
-import {BookingSearchResultDO} from '../data-objects/BookingSearchResultDO';
-import {BookingCartItemVM, BookingCartItemVMType} from '../view-models/BookingCartItemVM';
-import {RoomCategoryItemDO} from '../data-objects/room-category-item/RoomCategoryItemDO';
-import {AllotmentItemDO} from '../data-objects/allotment-item/AllotmentItemDO';
-import {PriceProductItemDO} from '../data-objects/price-product-item/PriceProductItemDO';
-import {TransientBookingItem} from '../../data-objects/TransientBookingItem';
-import {BookingSearchParams} from '../../data-objects/BookingSearchParams';
-import {DefaultBillingDetailsDO} from '../../../../../../../../services/bookings/data-objects/default-billing/DefaultBillingDetailsDO';
-import {CustomerDO} from '../../../../../../../../services/customers/data-objects/CustomerDO';
-import {InvoicePaymentMethodDO, InvoicePaymentMethodType} from '../../../../../../../../services/invoices/data-objects/payers/InvoicePaymentMethodDO';
-import {HotelAggregatedInfo} from '../../../../../../../../services/hotel/utils/HotelAggregatedInfo';
+import { ThTranslation } from '../../../../../../../../../../common/utils/localization/ThTranslation';
+import { ThUtils } from '../../../../../../../../../../common/utils/ThUtils';
+import { CurrencyDO } from '../../../../../../../../services/common/data-objects/currency/CurrencyDO';
+import { ConfigCapacityDO } from '../../../../../../../../services/common/data-objects/bed-config/ConfigCapacityDO';
+import { ThDateIntervalDO } from '../../../../../../../../services/common/data-objects/th-dates/ThDateIntervalDO';
+import { BookingSearchResultDO } from '../data-objects/BookingSearchResultDO';
+import { BookingCartItemVM, BookingCartItemVMType } from '../view-models/BookingCartItemVM';
+import { RoomCategoryItemDO } from '../data-objects/room-category-item/RoomCategoryItemDO';
+import { AllotmentItemDO } from '../data-objects/allotment-item/AllotmentItemDO';
+import { PriceProductItemDO } from '../data-objects/price-product-item/PriceProductItemDO';
+import { TransientBookingItem } from '../../data-objects/TransientBookingItem';
+import { BookingSearchParams } from '../../data-objects/BookingSearchParams';
+import { DefaultBillingDetailsDO } from '../../../../../../../../services/bookings/data-objects/default-billing/DefaultBillingDetailsDO';
+import { CustomerDO } from '../../../../../../../../services/customers/data-objects/CustomerDO';
+import { InvoicePaymentMethodDO, InvoicePaymentMethodType } from '../../../../../../../../services/invoices/data-objects/payers/InvoicePaymentMethodDO';
+import { HotelAggregatedInfo } from '../../../../../../../../services/hotel/utils/HotelAggregatedInfo';
+import { BookingVM } from "../../../../../../../../services/bookings/view-models/BookingVM";
 
 export class BookingViewModelConverter {
     private _thUtils: ThUtils;
@@ -126,7 +127,59 @@ export class BookingViewModelConverter {
         billingDetails.paymentGuarantee = false;
         billingDetails.paymentMethod = new InvoicePaymentMethodDO();
         billingDetails.paymentMethod.type = InvoicePaymentMethodType.DefaultPaymentMethod;
-        billingDetails.paymentMethod.value = hotelAggregatedInfo.allowedPaymentMethods.paymentMethodList[0].id;
+        billingDetails.paymentMethod.value = hotelAggregatedInfo.allowedPaymentMethods.paymentMethodList[0].paymentMethod.id;
         return billingDetails;
+    }
+
+    public createBookingCartItemVMListFromBookingVMList(hotelAggregatedInfo: HotelAggregatedInfo, bookingVMList: BookingVM[]): BookingCartItemVM[] {
+        let bookingCartItemList = [];
+
+        _.forEach(bookingVMList, (bookingVM: BookingVM, index: number) => {
+            bookingCartItemList.push(this.createBookingCartItemVMFromBookingVM(hotelAggregatedInfo, bookingVM, index));
+        });
+
+        return bookingCartItemList;
+    }
+
+    private createBookingCartItemVMFromBookingVM(hotelAggregatedInfo: HotelAggregatedInfo, bookingVM: BookingVM, indexInCart: number): BookingCartItemVM {
+        let bookingCartItem = new BookingCartItemVM();
+        bookingCartItem.transientBookingItem = new TransientBookingItem();
+
+        bookingCartItem.itemType = BookingCartItemVMType.NormalBooking;
+        bookingCartItem.uniqueId = bookingVM.booking.priceProductSnapshot.id + bookingVM.roomCategory.id;
+        bookingCartItem.priceProductName = bookingVM.booking.priceProductSnapshot.name;
+        bookingCartItem.roomCategoryName = bookingVM.roomCategory.displayName;
+
+        bookingCartItem.totalPrice = bookingVM.booking.price.totalBookingPrice
+        bookingCartItem.totalPriceString = bookingVM.totalPriceString;
+        bookingCartItem.conditionsString = bookingVM.booking.priceProductSnapshot.conditions.getCancellationConditionsString(this._thTranslation);
+        bookingCartItem.constraintsString = bookingVM.booking.priceProductSnapshot.constraints.getBriefValueDisplayString(this._thTranslation);
+
+        bookingCartItem.bookingCapacity = bookingVM.booking.configCapacity;
+
+        bookingCartItem.transientBookingItem.configCapacity = bookingVM.booking.configCapacity;
+        bookingCartItem.transientBookingItem.interval = bookingVM.booking.interval;
+        bookingCartItem.transientBookingItem.notes = bookingVM.booking.notes;
+        bookingCartItem.transientBookingItem.invoiceNotes = bookingVM.booking.invoiceNotes;
+
+        bookingCartItem.bookingInterval = bookingVM.booking.interval;
+
+        bookingCartItem.transientBookingItem.roomCategoryId = bookingVM.roomCategory.id;
+        bookingCartItem.transientBookingItem.priceProductId = bookingVM.booking.priceProductSnapshot.id;
+
+        bookingCartItem.priceProduct = bookingVM.booking.priceProductSnapshot;
+        bookingCartItem.ccy = bookingVM.ccy;
+        bookingCartItem.allowedPaymentMethods = hotelAggregatedInfo.allowedPaymentMethods;
+
+        bookingCartItem.cartSequenceId = indexInCart;
+        bookingCartItem.bookingId = bookingVM.booking.bookingId;
+
+        bookingCartItem.customerNameString = bookingVM.customerNameString;
+
+        bookingCartItem.customerList = bookingVM.customerList;
+        bookingCartItem.transientBookingItem.customerIdList = bookingVM.booking.customerIdList;
+        bookingCartItem.transientBookingItem.defaultBillingDetails = bookingVM.booking.defaultBillingDetails;
+
+        return bookingCartItem;
     }
 }

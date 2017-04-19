@@ -1,22 +1,22 @@
-import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/combineLatest';
-import {ThError, AppContext} from '../../../../../../../../../../../../common/utils/AppContext';
-import {InvoiceGroupsService} from '../../../../../../../../../../services/invoices/InvoiceGroupsService';
-import {EagerInvoiceGroupsService} from '../../../../../../../../../../services/invoices/EagerInvoiceGroupsService';
-import {EagerCustomersService} from '../../../../../../../../../../services/customers/EagerCustomersService';
-import {HotelAggregatorService} from '../../../../../../../../../../services/hotel/HotelAggregatorService';
-import {HotelInvoiceOperationsPageParam} from '../utils/HotelInvoiceOperationsPageParam';
-import {InvoiceGroupDO} from '../../../../../../../../../../services/invoices/data-objects/InvoiceGroupDO';
-import {InvoiceOperationsPageData} from './utils/InvoiceOperationsPageData';
-import {HotelAggregatedInfo} from '../../../../../../../../../../services/hotel/utils/HotelAggregatedInfo';
-import {CustomersDO} from '../../../../../../../../../../services/customers/data-objects/CustomersDO';
-import {InvoiceDO, InvoicePaymentStatus} from '../../../../../../../../../../services/invoices/data-objects/InvoiceDO';
-import {InvoicePayerDO} from '../../../../../../../../../../services/invoices/data-objects/payers/InvoicePayerDO';
-import {InvoicePaymentMethodDO} from '../../../../../../../../../../services/invoices/data-objects/payers/InvoicePaymentMethodDO';
-import {EagerBookingsService} from '../../../../../../../../../../services/bookings/EagerBookingsService';
-import {BookingsDO} from '../../../../../../../../../../services/bookings/data-objects/BookingsDO';
+import { ThError, AppContext } from '../../../../../../../../../../../../common/utils/AppContext';
+import { InvoiceGroupsService } from '../../../../../../../../../../services/invoices/InvoiceGroupsService';
+import { EagerInvoiceGroupsService } from '../../../../../../../../../../services/invoices/EagerInvoiceGroupsService';
+import { EagerCustomersService } from '../../../../../../../../../../services/customers/EagerCustomersService';
+import { HotelAggregatorService } from '../../../../../../../../../../services/hotel/HotelAggregatorService';
+import { HotelInvoiceOperationsPageParam } from '../utils/HotelInvoiceOperationsPageParam';
+import { InvoiceGroupDO } from '../../../../../../../../../../services/invoices/data-objects/InvoiceGroupDO';
+import { InvoiceOperationsPageData } from './utils/InvoiceOperationsPageData';
+import { HotelAggregatedInfo } from '../../../../../../../../../../services/hotel/utils/HotelAggregatedInfo';
+import { CustomersDO } from '../../../../../../../../../../services/customers/data-objects/CustomersDO';
+import { InvoiceDO, InvoicePaymentStatus } from '../../../../../../../../../../services/invoices/data-objects/InvoiceDO';
+import { InvoicePayerDO } from '../../../../../../../../../../services/invoices/data-objects/payers/InvoicePayerDO';
+import { InvoicePaymentMethodDO } from '../../../../../../../../../../services/invoices/data-objects/payers/InvoicePaymentMethodDO';
+import { EagerBookingsService } from '../../../../../../../../../../services/bookings/EagerBookingsService';
+import { BookingsDO } from '../../../../../../../../../../services/bookings/data-objects/BookingsDO';
 
 @Injectable()
 export class InvoiceOperationsPageService {
@@ -38,7 +38,7 @@ export class InvoiceOperationsPageService {
         ).flatMap((result: [InvoiceGroupDO, HotelAggregatedInfo]) => {
             this._pageData.ccy = result[1].ccy;
             this._pageData.allowedPaymentMethods = result[1].allowedPaymentMethods;
-            this._pageData.allPaymentMethods = result[1].paymentMethods;
+            this._pageData.allPaymentMethods = result[1].allAvailablePaymentMethods;
             this._pageData.invoiceGroupDO = result[0];
 
             if (this._appContext.thUtils.isUndefinedOrNull(this._pageData.invoiceGroupDO.invoiceList) || _.isEmpty(this._pageData.invoiceGroupDO.invoiceList)) {

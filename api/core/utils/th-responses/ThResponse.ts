@@ -221,6 +221,8 @@ export enum ThStatusCode {
 	PriceProductRepositoryErrorUpdatingPriceProduct,
 	PriceProductRepositoryErrorReadingDocumentCount,
 	PriceProductRepositoryErrorGettingList,
+	MongoPriceProductRepositoryWithParentDecoratorError,
+	MongoPriceProductRepositoryWithParentDecoratorErrorParentNotFound,
 	SavePriceProductItemError,
 	SavePriceProductItemInvalidPrice,
 	SavePriceProductItemMaxNoDynamicRates,
@@ -232,6 +234,7 @@ export enum ThStatusCode {
 	SavePriceProductItemTooManyDiscounts,
 	SavePriceProductItemTooManyConstraintsForTheSameDiscount,
 	SavePriceProductItemInvalidConditions,
+	SavePriceProductItemParentAlreadyRelated,
 	PriceProductItemUpdateStrategyOnlyActiveAndDraftCanBeUpdated,
 	PriceProductItemStrategyInvalidStatus,
 	PriceProductItemStrategyMissingDynamicRates,
@@ -243,6 +246,7 @@ export enum ThStatusCode {
 	PriceProductValidatorInvalidPrices,
 	ArchivePriceProductItemError,
 	ArchivePriceProductItemNonActiveStatus,
+	ArchivePriceProductItemHasActiveRelatedPriceProducts,
 	ArchivePriceProductItemUsedInCustomersError,
 	ArchivePriceProductItemUsedInBookingsError,
 	UpdatePriceProductItemStatusError,
@@ -366,12 +370,14 @@ export enum ThStatusCode {
 	AddBookingsRepositoryEmptyBookingList,
 	AddBookingsRepositoryNoBookingsLimitExceeded,
 	AddBookingsRepositoryErrorAddingBookingGroup,
+	AddBookingsRepositoryErrorAddingBookingToExistingGroup,
 	AddBookingItemsError,
 	BookingIntervalValidatorError,
 	BookingIntervalValidatorInvalidInterval,
 	BookingIntervalValidatorInvalidStartDate,
 	BookingIntervalValidatorMaxSixMonths,
 	AddBookingItemsInvalidNoOfBookings,
+	AddBookingItemsErrorRetrievingExistingBookings,
 	BookingItemsConverterError,
 	BookingItemsConverterReferenceGenerationError,
 	BookingValidationError,
@@ -749,6 +755,8 @@ ThMessage[ThStatusCode.PriceProductRepositoryProblemUpdatingPriceProduct] = "Pro
 ThMessage[ThStatusCode.PriceProductRepositoryErrorUpdatingPriceProduct] = "Error updating price product.";
 ThMessage[ThStatusCode.PriceProductRepositoryErrorReadingDocumentCount] = "Error reading the number of price products.";
 ThMessage[ThStatusCode.PriceProductRepositoryErrorGettingList] = "Error getting the list of price products.";
+ThMessage[ThStatusCode.MongoPriceProductRepositoryWithParentDecoratorError] = "Error attaching the prices of the parent price products.";
+ThMessage[ThStatusCode.MongoPriceProductRepositoryWithParentDecoratorErrorParentNotFound] = "The parent of the price product has not been found.";
 ThMessage[ThStatusCode.SavePriceProductItemError] = "Error saving price product.";
 ThMessage[ThStatusCode.SavePriceProductItemInvalidPrice] = "Invalid price submitted.";
 ThMessage[ThStatusCode.SavePriceProductItemMaxNoDynamicRates] = "You cannot add more than 15 dynamic daily rates on the same price product.";
@@ -760,6 +768,7 @@ ThMessage[ThStatusCode.SavePriceProductItemInvalidDiscountConstraints] = "Invali
 ThMessage[ThStatusCode.SavePriceProductItemTooManyDiscounts] = "You cannot add more than 20 discounts on the same Price Product.";
 ThMessage[ThStatusCode.SavePriceProductItemTooManyConstraintsForTheSameDiscount] = "You cannot add more than 20 constraints for one discount.";
 ThMessage[ThStatusCode.SavePriceProductItemInvalidConditions] = "Invalid conditions submitted.";
+ThMessage[ThStatusCode.SavePriceProductItemParentAlreadyRelated] = "You cannot create a related Price Product for a Price Product which is already related to another one.";
 ThMessage[ThStatusCode.PriceProductItemUpdateStrategyOnlyActiveAndDraftCanBeUpdated] = "Only draft or active price products can be updated.";
 ThMessage[ThStatusCode.PriceProductItemStrategyInvalidStatus] = "A price product can only be saved as draft or active.";
 ThMessage[ThStatusCode.PriceProductItemStrategyMissingDynamicRates] = "Some of the existing dynamic daily rates are missing from the price product.";
@@ -771,6 +780,7 @@ ThMessage[ThStatusCode.PriceProductValidatorInvalidIncludedItems] = "Error valid
 ThMessage[ThStatusCode.PriceProductValidatorInvalidPrices] = "Please complete all the required price values.";
 ThMessage[ThStatusCode.ArchivePriceProductItemError] = "Please while archiving the price product.";
 ThMessage[ThStatusCode.ArchivePriceProductItemNonActiveStatus] = "Please while archiving the price product.";
+ThMessage[ThStatusCode.ArchivePriceProductItemHasActiveRelatedPriceProducts] = "Could not archive this price product because there are other active related price products derived from this.";
 ThMessage[ThStatusCode.ArchivePriceProductItemUsedInCustomersError] = "Could not archive the price product because it is assigned to customers.";
 ThMessage[ThStatusCode.ArchivePriceProductItemUsedInBookingsError] = "Could not archive the price product because it is used in active bookings. Please close it forever from the Yield Manager and you'll be able to archive it when it's not used anymore.";
 ThMessage[ThStatusCode.UpdatePriceProductItemStatusError] = "Error updating the status of the price product.";
@@ -883,7 +893,9 @@ ThMessage[ThStatusCode.InvoiceEmailSenderErrorSendingEmail] = "Error sending inv
 ThMessage[ThStatusCode.SlackSendMessageError] = "Error sending the message using Slack.";
 ThMessage[ThStatusCode.AddBookingsRepositoryEmptyBookingList] = "Empty booking list.";
 ThMessage[ThStatusCode.AddBookingsRepositoryNoBookingsLimitExceeded] = "You can't create more than 50 bookings at once.";
+ThMessage[ThStatusCode.AddBookingItemsErrorRetrievingExistingBookings] = "Error retrieving existing bookings by group booking id."
 ThMessage[ThStatusCode.AddBookingsRepositoryErrorAddingBookingGroup] = "Error adding bookings.";
+ThMessage[ThStatusCode.AddBookingsRepositoryErrorAddingBookingToExistingGroup] = "Error adding bookings to existing group.";
 ThMessage[ThStatusCode.AddBookingItemsError] = "Error adding bookings.";
 ThMessage[ThStatusCode.BookingIntervalValidatorError] = "Error validating booking interval.";
 ThMessage[ThStatusCode.BookingIntervalValidatorInvalidInterval] = "Invalid interval.";

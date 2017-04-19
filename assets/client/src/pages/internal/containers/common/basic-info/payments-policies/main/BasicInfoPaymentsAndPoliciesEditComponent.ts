@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { FormControl, Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/combineLatest';
+
 import { BaseFormComponent } from '../../../../../../../common/base/BaseFormComponent';
 import { ThError, AppContext } from '../../../../../../../common/utils/AppContext';
 import { CurrenciesService } from '../../../../../services/settings/CurrenciesService';
@@ -14,6 +15,7 @@ import { PaymentMethodVMContainer, PaymentMethodVM } from './services/utils/Paym
 import { TaxService } from '../../../../../services/taxes/TaxService';
 import { TaxType } from '../../../../../services/taxes/data-objects/TaxDO';
 import { TaxContainerDO } from '../../../../../services/taxes/data-objects/TaxContainerDO';
+import { CurrencyDO } from "../../../../../services/common/data-objects/currency/CurrencyDO";
 
 @Component({
 	selector: 'basic-info-payments-policies-edit',
@@ -28,7 +30,7 @@ export class BasicInfoPaymentsAndPoliciesEditComponent extends BaseFormComponent
 
 	isLoading: boolean = true;
 	currencies: CurrenciesDO;
-	paymentMethods: PaymentMethodVMContainer;
+	allPaymentMethodsVMContainer: PaymentMethodVMContainer;
 	hotel: HotelDO;
 
 	private _additionalInvoiceDetailsControl: FormControl;
@@ -58,8 +60,8 @@ export class BasicInfoPaymentsAndPoliciesEditComponent extends BaseFormComponent
 			var hotelAggregatedInfo = result[1];
 
 			this.hotel = hotelAggregatedInfo.hotelDetails.hotel;
-			this.paymentMethods = new PaymentMethodVMContainer(hotelAggregatedInfo.paymentMethods, this.hotel.paymentMethodIdList);
-			this._paymPoliciesEditService.bootstrap(this.paymentMethods, this.hotel);
+			this.allPaymentMethodsVMContainer = new PaymentMethodVMContainer(hotelAggregatedInfo.allAvailablePaymentMethods, this.hotel.paymentMethodList);
+			this._paymPoliciesEditService.bootstrap(this.allPaymentMethodsVMContainer, this.hotel);
 			this._additionalInvoiceDetailsControl.setValue(this.hotel.additionalInvoiceDetails);
 			this.isLoading = false;
 		}, (error: ThError) => {
@@ -79,8 +81,18 @@ export class BasicInfoPaymentsAndPoliciesEditComponent extends BaseFormComponent
 	protected didSelectPaymentMethod() {
 		return this._paymPoliciesEditService.didSelectPaymentMethod();
 	}
+	protected allSelectedPaymentMethodsHaveValidTransactionFees(): boolean {
+		return this._paymPoliciesEditService.allSelectedPaymentMethodsHaveValidTransactionFees();
+	}
+
 	public getDefaultFormGroup(): FormGroup {
 		return this._formGroup;
+	}
+
+	public get ccySymbol(): string {
+		return _.find(this.currencies.currencyList, (ccy: CurrencyDO) => {
+			return ccy.code === this.hotel.ccyCode;
+		}).symbol;
 	}
 
 	savePaymentsAndPolicies() {

@@ -135,7 +135,9 @@
 	"Shared Payment": "Shared Payment",
 	"Guest": "Guest",
 	"Accomodation for %date%": "Accomodation for %date%",
-
+	"Transaction fee": "Transaction fee",
+	"transaction fee": "transaction fee",
+	
 	// Reports
 	"TotalOccupancy" : "TotalOccupancy",
 	"ConfirmedOccupancy" : "ConfirmedOccupancy",
@@ -214,6 +216,10 @@
 	"Babies (in baby beds)": "Babies (in baby beds)",
 	"Stationary Beds": "Stationary Beds",
 	"Rollaway Beds": "Rollaway Beds",
+	"Payd By Agreement Breakdown": "Payd By Agreement Breakdown",
+	"account no.": "account no.",
+	"Amount (fee included)": "Amount (fee included)",
+	"Amount (without fee)": "Amount (without fee)",
 
 	// Booking confirmations
 	"Booking confirmations are blocked for this booking.": "Booking confirmations are blocked for this booking."

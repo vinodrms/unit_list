@@ -3968,6 +3968,14 @@ textarea.payer-details {
   opacity: 0.6;
 }
 
+.margin-bottom-0px {
+    margin-bottom: 0px;
+}
+
+.border-radius-0px {
+    border-radius: 0px;
+}
+
 .room-availability-modal-table {
     font-size: 12px;
     width: 100%;

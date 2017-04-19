@@ -84,6 +84,7 @@ export class PriceProductsHelper {
 
 		return {
 			status: PriceProductStatus.Draft,
+			parentId: null,
 			name: "Test Price Product",
 			availability: PriceProductAvailability.Public,
 			lastRoomAvailability: false,
@@ -210,6 +211,9 @@ export class PriceProductsHelper {
 	public get roomCategoryStat(): RoomCategoryStatsDO {
 		this.ensureRoomCategoryStatWasSet();
 		return this._roomCategoryStat;
+	}
+	public set roomCategoryStat(roomCategoryStat: RoomCategoryStatsDO) {
+		this._roomCategoryStat = roomCategoryStat;
 	}
 	private ensureRoomCategoryStatWasSet() {
 		if (!this._roomCategoryStat) {

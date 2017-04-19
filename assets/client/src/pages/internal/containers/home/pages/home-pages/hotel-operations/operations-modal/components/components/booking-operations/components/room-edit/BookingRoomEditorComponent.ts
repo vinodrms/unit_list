@@ -70,7 +70,7 @@ export class BookingRoomEditorComponent {
         }).catch((err: any) => { });
     }
     private getAssignRoomModalPromise(): Promise<ModalDialogRef<BookingDO>> {
-        if (this.changeEditRight) { return this._assignRoomModalService.changeRoom(this.assignRoomParam); }
+        if (this.changeEditRight) { return this._assignRoomModalService.changeRoom(this.assignRoomParam, this.roomVM.room.id); }
         return this._assignRoomModalService.reserveRoom(this.assignRoomParam);
     }
     private get assignRoomParam(): AssignRoomParam {

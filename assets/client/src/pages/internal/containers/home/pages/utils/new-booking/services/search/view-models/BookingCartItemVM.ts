@@ -1,12 +1,19 @@
-import {ThUtils} from '../../../../../../../../../../common/utils/ThUtils';
-import {ConfigCapacityDO} from '../../../../../../../../services/common/data-objects/bed-config/ConfigCapacityDO';
-import {PriceProductDO} from '../../../../../../../../services/price-products/data-objects/PriceProductDO';
-import {TransientBookingItem} from '../../data-objects/TransientBookingItem';
-import {ThDateIntervalDO} from '../../../../../../../../services/common/data-objects/th-dates/ThDateIntervalDO';
-import {CurrencyDO} from '../../../../../../../../services/common/data-objects/currency/CurrencyDO';
-import {CustomerDO} from '../../../../../../../../services/customers/data-objects/CustomerDO';
-import {HotelPaymentMethodsDO} from '../../../../../../../../services/settings/data-objects/HotelPaymentMethodsDO';
-import {InvoicePaymentMethodType} from '../../../../../../../../services/invoices/data-objects/payers/InvoicePaymentMethodDO';
+import { ThUtils } from '../../../../../../../../../../common/utils/ThUtils';
+import { ConfigCapacityDO } from '../../../../../../../../services/common/data-objects/bed-config/ConfigCapacityDO';
+import { PriceProductDO } from '../../../../../../../../services/price-products/data-objects/PriceProductDO';
+import { TransientBookingItem } from '../../data-objects/TransientBookingItem';
+import { ThDateIntervalDO } from '../../../../../../../../services/common/data-objects/th-dates/ThDateIntervalDO';
+import { CurrencyDO } from '../../../../../../../../services/common/data-objects/currency/CurrencyDO';
+import { CustomerDO } from '../../../../../../../../services/customers/data-objects/CustomerDO';
+import { HotelPaymentMethodsDO } from '../../../../../../../../services/settings/data-objects/HotelPaymentMethodsDO';
+import { InvoicePaymentMethodType, InvoicePaymentMethodDO } from '../../../../../../../../services/invoices/data-objects/payers/InvoicePaymentMethodDO';
+import { HotelAggregatedPaymentMethodsDO } from "../../../../../../../../services/settings/data-objects/HotelAggregatedPaymentMethodsDO";
+import { BookingDO } from "../../../../../../../../services/bookings/data-objects/BookingDO";
+import { RoomCategoryDO } from "../../../../../../../../services/room-categories/data-objects/RoomCategoryDO";
+import { BookingVM } from "../../../../../../../../services/bookings/view-models/BookingVM";
+import { HotelAggregatedInfo } from "../../../../../../../../services/hotel/utils/HotelAggregatedInfo";
+import { DefaultBillingDetailsDO } from "../../../../../../../../services/bookings/data-objects/default-billing/DefaultBillingDetailsDO";
+import { ThTranslation } from "../../../../../../../../../../common/utils/localization/ThTranslation";
 
 export interface BillingValidationResult {
     valid: boolean;
@@ -27,6 +34,7 @@ export class BookingCartItemVM {
     itemType: BookingCartItemVMType;
     cartSequenceId: number;
     uniqueId: string;
+    bookingId: string;
     priceProductName: string;
     roomCategoryName: string;
     roomCapacity: ConfigCapacityDO;
@@ -49,7 +57,7 @@ export class BookingCartItemVM {
     priceProduct: PriceProductDO;
     ccy: CurrencyDO;
     customerList: CustomerDO[];
-    allowedPaymentMethods: HotelPaymentMethodsDO;
+    allowedPaymentMethods: HotelAggregatedPaymentMethodsDO;
 
     private _thUtils: ThUtils;
 
@@ -88,6 +96,10 @@ export class BookingCartItemVM {
 
     public getCustomerById(customerId: string): CustomerDO {
         return _.find(this.customerList, (customer: CustomerDO) => { return customer.id === customerId });
+    }
+
+    public isNew(): boolean {
+        return this._thUtils.isUndefinedOrNull(this.bookingId);
     }
 
     public updateValidationColumn() {
@@ -150,4 +162,5 @@ export class BookingCartItemVM {
     public isInitialCustomer(customer: CustomerDO): boolean {
         return this.initialCustomerId === customer.id;
     }
+
 }

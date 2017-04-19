@@ -29,14 +29,19 @@
 					<label>{{ 'Price configuration in %ccySymbol%' | translate:{ccySymbol: ccy.nativeSymbol} }}</label>
 				</div>
 				<div class="col-xs-6">
-					<a class="btn btn-xs" (click)="openNewDynamicPriceModal()"><i class="fa unitpal-font">'</i> {{ 'Add' | translate }} {{ 'Dynamic Daily Rate' | translate }}</a>
+					<a class="btn btn-xs" *ngIf="editDynamicPrices" (click)="openNewDynamicPriceModal()">
+						<i class="fa unitpal-font">'</i> {{ 'Add' | translate }} {{ 'Dynamic Daily Rate' | translate }}
+					</a>
 				</div>
 			</div>
 			<div class="basic-info-settings-tabbar">
 				<ul class="nav nav-tabs">
 					<li *ngFor="let dynamicPriceVM of dynamicPriceVMList; let i = index" [ngClass]="{'active': dynamicPriceVM.selected}">
 						<a [ngClass]="{'active': dynamicPriceVM.selected}" (click)="selectDynamicPrice(i)">
-							{{ dynamicPriceVM.name }} <a *ngIf="dynamicPriceVM.selected" (click)="openEditDynamicPriceModal(dynamicPriceVM, i)"><i class="fa unitpal-font">]</i></a>
+							{{ dynamicPriceVM.name }} 
+							<a *ngIf="dynamicPriceVM.selected && editDynamicPrices" (click)="openEditDynamicPriceModal(dynamicPriceVM, i)">
+								<i class="fa unitpal-font">]</i>
+							</a>
 						</a>
 					</li>
 				</ul>
@@ -52,9 +57,9 @@
 								</small>
 							</label>
 							<a class="btn" 
-								*ngIf="priceVM.previousRoomCategoryId && selectedDynamicPriceVM.editOnPricesAndExceptionsIsAllowed(_readonly)" 
-								(click)="selectedDynamicPriceVM.copyPrices(priceVM.previousRoomCategoryId, priceVM.roomCategoryStats.roomCategory.id)">
-								<i class="fa unitpal-font">[</i> <small>{{ 'Copy Prices from Previous Room Category' | translate }}</small>
+								*ngIf="selectedDynamicPriceVM.editOnPricesAndExceptionsIsAllowed(_readonly) && selectedDynamicPriceVM.priceVMList.length > 1" 
+								(click)="openCopyPriceProductValuesModal(priceVM.roomCategoryStats.roomCategory.id)">
+								<i class="fa unitpal-font">[</i> <small>{{ 'Copy Prices from Other Room Category' | translate }}</small>
 							</a>
 							<price-edit 
 								[displayError]="displayError()"
