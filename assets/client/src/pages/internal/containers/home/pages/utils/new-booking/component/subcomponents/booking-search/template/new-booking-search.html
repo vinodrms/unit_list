@@ -7,7 +7,7 @@
 			</booking-search-parameters>
 		</div>
 		<div class="row booking-search-results">
-			<lazy-loading-table #searchResults (onAddExistingItem)="addBookingVMInCart($event)">
+			<lazy-loading-table #searchResults (onAddExistingItem)="addBookingVMInCart($event)"  (onShowDetails)="showDetailsForBookingVM($event)">
 			</lazy-loading-table>
 		</div>
 		<div class="row booking-search-room-availability">

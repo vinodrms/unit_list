@@ -36,7 +36,6 @@ export class KeyValueModalComponent extends BaseComponent implements ICustomModa
 	constructor(private _modalDialogInstance: ModalDialogRef<any>,
 		KeyValueModalInput: KeyValueModalInput) {
 		super();
-		debugger
 		this.title = KeyValueModalInput.title;
 		this.content = KeyValueModalInput.content;
 		this.keys = Object.keys(this.content);
