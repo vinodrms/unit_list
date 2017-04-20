@@ -147,5 +147,24 @@ describe("Reports", function () {
 				done(e);
 			});
 		});
+
+		it("Should generate the bookings by interval report", function (done) {
+			let generator = new ReportGenerator(testContext.appContext, testContext.sessionContext);
+
+			let generatorDO = new ReportGeneratorDO();
+			generatorDO.properties = {
+				startDate: ThDateDO.buildThDateDO(2018, ThMonth.January, 22),
+				endDate: ThDateDO.buildThDateDO(2018, ThMonth.May, 22)
+			};
+			generatorDO.reportType = ReportGroupType.BookingsByInterval;
+			generatorDO.format = ReportOutputFormat.Pdf;
+			
+			generator.getReport(generatorDO).then((reportFile: ReportFileResult) => {
+				should.equal(reportFile.reportPath.length > 0, true);
+				done();
+			}).catch((e) => {
+				done(e);
+			});
+		});
 	});
 });
