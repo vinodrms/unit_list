@@ -4,5 +4,6 @@ export enum ReportGroupType {
 	Shift,
 	BookingsForPriceProduct,
 	Housekeeping,
-	
+	BookingsByInterval,
+
 }

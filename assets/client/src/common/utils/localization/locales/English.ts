@@ -879,5 +879,9 @@ export var EnglishTranslations: Object = {
 	"The payment methods that will be supported by the hotel. On payment methods a fee per transaction can be configured.": "The payment methods that will be supported by the hotel. On payment methods a fee per transaction can be configured.",
 	"Flat": "Flat",
 	"External Booking No": "External Booking No",
+	"Bookings by Interval Report": "Bookings by Interval Report",
+	"The list of bookings in a period of time": "The list of bookings in a period of time",
+	"Bookings by Price Product": "Bookings by Price Product",
+	"Bookings by Interval": "Bookings by Interval",
 
 };
