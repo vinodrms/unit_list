@@ -150,17 +150,20 @@ export class BookingSearchResultBuilder {
                         bookingBilledCustomerId: bookingBilledCustomerId
                     });
                     pricePerDayList = this._bookingUtils.getPricePerDayListWithDiscount(pricePerDayList, discountPerDayBreakdown);
-                    
+                    itemPrice.pricePerDayList = pricePerDayList;
+
                     let roomPrice = this._thUtils.getArraySum(pricePerDayList);
                     itemPrice.price = roomPrice;
 
                     if (!this._thUtils.isUndefinedOrNull(this._builderParams.bookingSearchDependencies.customer)) {
                         let commission = this._builderParams.bookingSearchDependencies.customer.customerDetails.getCommission();
-                        itemPrice.price -= commission.getCommissionFor(roomPrice);
+                        itemPrice.commision = commission.getCommissionFor(roomPrice);
+                        itemPrice.price -= itemPrice.commision;
                     }
 
                     var includedInvoiceItems = this._bookingUtils.getIncludedInvoiceItems(priceProduct, this._builderParams.searchParams.configCapacity, this._indexedBookingInterval);
-                    itemPrice.price += includedInvoiceItems.getTotalPrice();
+                    itemPrice.otherPrice = includedInvoiceItems.getTotalPrice();
+                    itemPrice.price += itemPrice.otherPrice;
 
                     itemPrice.price = this._thUtils.roundNumberToTwoDecimals(itemPrice.price);
                     priceProductItem.priceList.push(itemPrice);
