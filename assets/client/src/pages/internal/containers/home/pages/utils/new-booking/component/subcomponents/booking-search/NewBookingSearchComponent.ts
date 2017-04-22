@@ -26,7 +26,7 @@ import { NewBookingModalInput } from "../../../modal/services/utils/NewBookingMo
 import { HotelAggregatedInfo } from "../../../../../../../../services/hotel/utils/HotelAggregatedInfo";
 import { BookingViewModelConverter } from "../../../services/search/utils/BookingViewModelConverter";
 import { KeyValueModalService } from "../../../../../../../../../../common/utils/modals/modals/keyvalue/KeyValueModalService";
-import { PricePerDayDO } from "../../../services/search/data-objects/price-product-item/PricePerDayDO";
+import { PricePerDayDO } from "../../../../../../../../services/bookings/data-objects/price/PricePerDayDO";
 
 @Component({
 	selector: 'new-booking-search',
@@ -126,12 +126,12 @@ export class NewBookingSearchComponent extends BaseComponent implements AfterVie
 	}
 	public showDetailsForBookingVM(bookingCartItemVM: BookingCartItemVM) {
 		var title = this._appContext.thTranslation.translate("Price Breakdown");
-		var content = new Object();
+		var content = {};
 		_.forEach(bookingCartItemVM.pricePerDayList, (pricePerDay: PricePerDayDO) => {
 			content[pricePerDay.thDate.getLongDisplayString(this._appContext.thTranslation)] = pricePerDay.price + bookingCartItemVM.ccy.nativeSymbol;
 		});
 		content[this._appContext.thTranslation.translate("Commision")] = "-" + bookingCartItemVM.commisionString;
-		content[this._appContext.thTranslation.translate("Included Items")] = "+" + bookingCartItemVM.otherPriceString;
+		content[this._appContext.thTranslation.translate("Other")] = "+" + bookingCartItemVM.otherPriceString;
 		content[this._appContext.thTranslation.translate("Total Price")] = bookingCartItemVM.totalPriceString;
 		this._keyValueModalService.openModal(title, content);
 	}

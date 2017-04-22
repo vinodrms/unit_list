@@ -14,7 +14,7 @@ import { BookingVM } from "../../../../../../../../services/bookings/view-models
 import { HotelAggregatedInfo } from "../../../../../../../../services/hotel/utils/HotelAggregatedInfo";
 import { DefaultBillingDetailsDO } from "../../../../../../../../services/bookings/data-objects/default-billing/DefaultBillingDetailsDO";
 import { ThTranslation } from "../../../../../../../../../../common/utils/localization/ThTranslation";
-import { PricePerDayDO } from "../../../../../utils/new-booking/services/search/data-objects/price-product-item/PricePerDayDO";
+import { PricePerDayDO } from "../../../../../../../../services/bookings/data-objects/price/PricePerDayDO";
 
 export interface BillingValidationResult {
     valid: boolean;

@@ -1,5 +1,5 @@
 import {BaseDO} from '../../../../../../../../../../../common/base/BaseDO';
-import {PricePerDayDO} from './PricePerDayDO';
+import {PricePerDayDO} from '../../../../../../../../../services/bookings/data-objects/price/PricePerDayDO';
 
 export class PriceProductItemPriceDO extends BaseDO {
     constructor() {

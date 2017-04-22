@@ -882,5 +882,6 @@ export var EnglishTranslations: Object = {
 	"Included Items": "Included Items",
 	"Total Price": "Total Price",
 	"Price Breakdown": "Price Breakdown",
+	"Other": "Other",
 
 };
