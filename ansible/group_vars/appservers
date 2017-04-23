@@ -36,6 +36,3 @@ google_analytics_tracking_id: UA-67731917-5
 
 papertrail_host: logs5.papertrailapp.com
 papertrail_port: 13086
-
-librato_api_token: 91573edd6f1a8e285a82c07ac2c2b9902b45bcad7b47f73088670144024ffe56
-librato_email: ture@jubii.dk
