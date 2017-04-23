@@ -8,3 +8,4 @@
     - unitpal
     - pm2
     - nginx
+    - { role: librato.librato, librato_email: {{ librato_email }}, librato_token: {{ librato_api_token }} }
