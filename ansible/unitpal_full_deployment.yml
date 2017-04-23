@@ -8,3 +8,4 @@
     - unitpal
     - pm2
     - nginx
+    - librato

@@ -76,7 +76,7 @@
         </form>
         
     </div>
-    <div class="payment-container" [ngClass]="{'read-only p-12' : !editMode, 'p-6': editMode}">
+    <div *ngIf="invoicePayerVM.customerDO" class="payment-container" [ngClass]="{'read-only p-12' : !editMode, 'p-6': editMode}">
         <form class="form-inline">
             <div class="form-group m-t-0 m-r-12 m-b-0 m-l-0">
                 <div class="input-group">
