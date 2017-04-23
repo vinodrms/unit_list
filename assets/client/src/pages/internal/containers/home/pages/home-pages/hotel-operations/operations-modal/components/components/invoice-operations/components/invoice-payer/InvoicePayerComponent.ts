@@ -119,12 +119,15 @@ export class InvoicePayerComponent implements OnInit {
                 var newInvoicePayer = new InvoicePayerDO();
                 newInvoicePayer.customerId = selectedCustomer.id;
 
-                if (this.invoiceVM.invoicePayerVMList.length === 1) {
-                    newInvoicePayer.priceToPay = this.invoicePayerVM.invoicePayerDO.priceToPay;
-                }
                 this.paymentMethodVMList = this.generatePaymentMethodsFor(selectedCustomer);
                 this.selectedPaymentMethodVM = this.paymentMethodVMList[0];
                 newInvoicePayer.paymentMethod = this.paymentMethodVMList[0].paymentMethod;
+                
+                if (this.invoiceVM.invoicePayerVMList.length === 1) {
+                    newInvoicePayer.priceToPay = this.invoicePayerVM.invoicePayerDO.priceToPay;
+                    newInvoicePayer.transactionFeeSnapshot = this.selectedPaymentMethodVM.transactionFee;
+                    newInvoicePayer.priceToPayPlusTransactionFee = newInvoicePayer.transactionFeeSnapshot.getAmountWihtTransactionFeeIncluded(newInvoicePayer.priceToPay);
+                }
                 this.invoicePayerVM.invoicePayerDO = newInvoicePayer;
                 this.invoicePayerVM.customerDO = selectedCustomer;
                 this.invoiceVM.isValid();
