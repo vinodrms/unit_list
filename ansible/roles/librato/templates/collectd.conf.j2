@@ -1,0 +1,37 @@
+Interval 30
+
+LoadPlugin syslog
+LoadPlugin cpu
+LoadPlugin disk
+LoadPlugin load
+LoadPlugin memory
+LoadPlugin df
+LoadPlugin write_http
+
+#Log collectd events in syslog
+<Plugin syslog>
+  LogLevel info
+</Plugin>
+
+#Librato configuration
+<Plugin "write_http">
+  <Node "Librato">
+    URL "https://collectd.librato.com/v1/measurements"
+    User "{{ librato_email }}"
+    Password "{{ librato_api_token }}"
+    Format "JSON"
+  </Node>
+</Plugin>
+
+#Report aggregated CPU as % (not per core)
+<Plugin cpu>
+  ReportByCpu false
+  ReportByState false
+  ValuesPercentage true
+</Plugin>
+
+#Report disk-free in percent bytes (not of 1k blocks)
+<Plugin df>
+  ValuesAbsolute true
+  ValuesPercentage true
+</Plugin>
