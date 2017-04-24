@@ -58,7 +58,7 @@
     "gulp-typescript": "2.13.0",
     "lite-server": "2.2.2",
     "phantomjs": "2.1.7",
-    "systemjs-builder": "0.15.15",
+    "systemjs-builder": "^0.15.15",
     "protractor": "3.3.0",
     "typescript": "~2.2.0"
   }
