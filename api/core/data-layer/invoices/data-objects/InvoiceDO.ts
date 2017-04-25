@@ -19,6 +19,7 @@ export enum InvoicePaymentStatus {
 }
 
 export class InvoiceDO extends BaseDO {
+    id: string;
     bookingId: string;
     invoiceReference: string;
     payerList: InvoicePayerDO[];
@@ -31,7 +32,7 @@ export class InvoiceDO extends BaseDO {
     paidDateTimeUtcTimestamp: number;
 
     protected getPrimitivePropertyKeys(): string[] {
-        return ["bookingId", "invoiceReference", "paymentStatus", "notesFromBooking", "paidDateUtcTimestamp", "paidDateTimeUtcTimestamp"];
+        return ["id", "bookingId", "invoiceReference", "paymentStatus", "notesFromBooking", "paidDateUtcTimestamp", "paidDateTimeUtcTimestamp"];
     }
 
     public buildFromObject(object: Object) {

@@ -37,8 +37,9 @@ export class MongoInvoiceGroupsEditOperationsRepository extends MongoRepository 
         invoiceGroup.versionId = 0;
         invoiceGroup.status = InvoiceGroupStatus.Active;
         invoiceGroup.reindexByCustomerId();
+        invoiceGroup.attachIdsToInvoicesIfNecessary();
 
-        this.attachInvoiceGroupAndInvoiceReferencesIfNecessary(invoiceGroupMeta, invoiceGroup)
+        this.attachReferencesToInvoiceGroupAndInvoiceItemsIfNecessary(invoiceGroupMeta, invoiceGroup)
             .then((updatedGroup: InvoiceGroupDO) => {
                 this.createDocument(updatedGroup,
                     (err: Error) => {
@@ -55,9 +56,10 @@ export class MongoInvoiceGroupsEditOperationsRepository extends MongoRepository 
 
     public updateInvoiceGroup(invoiceGroupMeta: InvoiceGroupMetaRepoDO, invoiceGroupItemMeta: InvoiceGroupItemMetaRepoDO, invoiceGroup: InvoiceGroupDO): Promise<InvoiceGroupDO> {
         invoiceGroup.reindexByCustomerId();
+        invoiceGroup.attachIdsToInvoicesIfNecessary();
 
         return new Promise<InvoiceGroupDO>((resolve: { (result: InvoiceGroupDO): void }, reject: { (err: ThError): void }) => {
-            this.attachInvoiceGroupAndInvoiceReferencesIfNecessary(invoiceGroupMeta, invoiceGroup)
+            this.attachReferencesToInvoiceGroupAndInvoiceItemsIfNecessary(invoiceGroupMeta, invoiceGroup)
                 .then((updatedGroup: InvoiceGroupDO) => {
                     this.findAndModifyInvoiceGroupCore(invoiceGroupMeta, invoiceGroupItemMeta, invoiceGroup, resolve, reject);
                 }).catch((e) => {
@@ -102,7 +104,7 @@ export class MongoInvoiceGroupsEditOperationsRepository extends MongoRepository 
         );
     }
 
-    private attachInvoiceGroupAndInvoiceReferencesIfNecessary(invoiceGroupMeta: InvoiceGroupMetaRepoDO, invoiceGroup: InvoiceGroupDO): Promise<InvoiceGroupDO> {
+    private attachReferencesToInvoiceGroupAndInvoiceItemsIfNecessary(invoiceGroupMeta: InvoiceGroupMetaRepoDO, invoiceGroup: InvoiceGroupDO): Promise<InvoiceGroupDO> {
         return new Promise<InvoiceGroupDO>((resolve: { (result: InvoiceGroupDO): void }, reject: { (err: ThError): void }) => {
             return this.attachInvoiceGroupAndInvoiceReferencesIfNecessaryCore(resolve, reject, invoiceGroupMeta, invoiceGroup);
         });
