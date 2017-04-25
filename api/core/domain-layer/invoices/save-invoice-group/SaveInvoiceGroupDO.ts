@@ -8,7 +8,7 @@ import { NumberInListValidationRule } from '../../../utils/th-validation/rules/N
 import { InvoiceDO, InvoicePaymentStatus, InvoiceAccountingType } from '../../../data-layer/invoices/data-objects/InvoiceDO';
 import { InvoicePaymentMethodType } from '../../../data-layer/invoices/data-objects/payers/InvoicePaymentMethodDO';
 import { CommissionType } from '../../../data-layer/common/data-objects/commission/CommissionDO';
-import { InvoiceItemType } from '../../../data-layer/invoices/data-objects/items/InvoiceItemDO';
+import { InvoiceItemType, InvoiceItemAccountingType } from '../../../data-layer/invoices/data-objects/items/InvoiceItemDO';
 import { TransactionFeeType } from "../../../data-layer/common/data-objects/payment-method/TransactionFeeDO";
 
 export class SaveInvoiceGroupDO {
@@ -110,6 +110,10 @@ export class SaveInvoiceGroupDO {
                                     InvoiceItemType.AddOnProduct, InvoiceItemType.Booking,
                                     InvoiceItemType.InvoiceFee, InvoiceItemType.RoomCommission
                                 ]))
+                            },
+                            {
+                                key: "accountingType",
+                                validationStruct: new PrimitiveValidationStructure(new NumberInListValidationRule([InvoiceItemAccountingType.Debit, InvoiceItemAccountingType.Credit]))
                             }
                         ]))
                     },

@@ -69,36 +69,35 @@ export class BookingInvoicesTestHelper {
         invoiceGroupToUpdate.invoiceList[0].paymentStatus = InvoicePaymentStatus.Paid;
 
         var aopItemList = this._invoiceTestUtils.buildRandomItemListOfAddOnProducts(this._defaultDataBuilder.addOnProductList, 2);
-        var aopItemMetaPromiseList = [];
+        var aopItemMetaList = [];
         _.forEach(aopItemList, (aopItem: InvoiceItemDO) => {
-            aopItemMetaPromiseList.push(aopItem.meta);
+            aopItemMetaList.push(aopItem.meta);
         })
-        Promise.all(aopItemMetaPromiseList).then((invoiceItemMetaList: IInvoiceItemMeta[]) => {
-            this._invoiceTestUtils.getTotalPriceFromItemMetaList(invoiceItemMetaList).then((totalPrice: number) => {
-                var invoicePayer = invoiceGroupToUpdate.invoiceList[0].payerList[0];
-                var invoicePayerWithUpdatedPricetoPay = new InvoicePayerBuilder()
-                    .withCustomerId(invoicePayer.customerId)
-                    .withPaymentMethod(invoicePayer.paymentMethod)
-                    .withTransactionFeeSnapshot(TransactionFeeDO.getDefaultTransactionFee())
-                    .withPriceToPay(totalPrice).build();
-
-                invoiceGroupToUpdate.invoiceList.push(new InvoiceBuilder()
-                    .withAccountingType(InvoiceAccountingType.Debit)
-                    .withItemList(aopItemList)
-                    .withPayerList([invoicePayerWithUpdatedPricetoPay])
-                    .withPaymentStatus(InvoicePaymentStatus.Unpaid)
-                    .build());
-                resolve(
-                    new SaveInvoiceGroupBuilder()
-                        .withId(invoiceGroupToUpdate.id)
-                        .withGroupBookingId(invoiceGroupToUpdate.groupBookingId)
-                        .withInvoiceList(invoiceGroupToUpdate.invoiceList)
-                        .build()
-                );
-            });
+        
+        this._invoiceTestUtils.getTotalPriceFromItemMetaList(aopItemMetaList).then((totalPrice: number) => {
+            var invoicePayer = invoiceGroupToUpdate.invoiceList[0].payerList[0];
+            var invoicePayerWithUpdatedPricetoPay = new InvoicePayerBuilder()
+                .withCustomerId(invoicePayer.customerId)
+                .withPaymentMethod(invoicePayer.paymentMethod)
+                .withTransactionFeeSnapshot(TransactionFeeDO.getDefaultTransactionFee())
+                .withPriceToPay(totalPrice).build();
+            invoiceGroupToUpdate.invoiceList.push(new InvoiceBuilder()
+                .withAccountingType(InvoiceAccountingType.Debit)
+                .withItemList(aopItemList)
+                .withPayerList([invoicePayerWithUpdatedPricetoPay])
+                .withPaymentStatus(InvoicePaymentStatus.Unpaid)
+                .build());
+            resolve(
+                new SaveInvoiceGroupBuilder()
+                    .withId(invoiceGroupToUpdate.id)
+                    .withGroupBookingId(invoiceGroupToUpdate.groupBookingId)
+                    .withInvoiceList(invoiceGroupToUpdate.invoiceList)
+                    .build()
+            );
         }).catch((error) => {
             reject(error);
-        })
+        });
+        
     }
 
     private getOneBookingIdFromInvoiceGroup(invoiceGroup: InvoiceGroupDO): string {
