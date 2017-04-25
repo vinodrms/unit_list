@@ -1,19 +1,24 @@
-import {AppContext} from '../../../../../utils/AppContext';
-import {SessionContext} from '../../../../../utils/SessionContext';
-import {ThLogger, ThLogLevel} from '../../../../../utils/logging/ThLogger';
-import {ThError} from '../../../../../utils/th-responses/ThError';
-import {ThStatusCode} from '../../../../../utils/th-responses/ThResponse';
+import { AppContext } from '../../../../../utils/AppContext';
+import { SessionContext } from '../../../../../utils/SessionContext';
+import { ThLogger, ThLogLevel } from '../../../../../utils/logging/ThLogger';
+import { ThError } from '../../../../../utils/th-responses/ThError';
+import { ThStatusCode } from '../../../../../utils/th-responses/ThResponse';
 
-import {InvoiceGroupMetaRepoDO, InvoiceGroupItemMetaRepoDO} from '../../../../../data-layer/invoices/repositories/IInvoiceGroupsRepository';
-import {InvoiceGroupDO} from '../../../../../data-layer/invoices/data-objects/InvoiceGroupDO';
-import {IGenerateBookingInvoiceActionStrategy} from '../IGenerateBookingInvoiceActionStrategy';
+import { InvoiceGroupMetaRepoDO, InvoiceGroupItemMetaRepoDO } from '../../../../../data-layer/invoices/repositories/IInvoiceGroupsRepository';
+import { InvoiceGroupDO } from '../../../../../data-layer/invoices/data-objects/InvoiceGroupDO';
+import { IGenerateBookingInvoiceActionStrategy } from '../IGenerateBookingInvoiceActionStrategy';
+import { BookingDO } from "../../../../../data-layer/bookings/data-objects/BookingDO";
+import { ThUtils } from "../../../../../utils/ThUtils";
 
 export class GenerateBookingInvoiceByUpdatingGroupStrategy implements IGenerateBookingInvoiceActionStrategy {
+    private _thUtils: ThUtils;
+
     private _invoiceGroupMeta: InvoiceGroupMetaRepoDO;
     private _loadedInvoiceGroup: InvoiceGroupDO;
-    
+
     constructor(private _appContext: AppContext, private _sessionContext: SessionContext,
-        private _invoiceGroupDO: InvoiceGroupDO) {
+        private _invoiceGroupDO: InvoiceGroupDO, private _booking: BookingDO) {
+        this._thUtils = new ThUtils();
         this._invoiceGroupMeta = this.buildInvoiceGroupMetaRepoDO();
     }
 
@@ -25,18 +30,28 @@ export class GenerateBookingInvoiceByUpdatingGroupStrategy implements IGenerateB
                 loadedInvoiceGroup.removeItemsPopulatedFromBooking();
                 this._loadedInvoiceGroup = loadedInvoiceGroup;
                 var itemMeta = this.buildInvoiceGroupItemMetaRepoDO();
-                return invoiceGroupRepo.updateInvoiceGroup(this._invoiceGroupMeta, itemMeta, this._invoiceGroupDO);
+
+                let invoiceGroupToSave = this._invoiceGroupDO;
+                if (this.bookingAlreadyHasGeneratedInvoice()) {
+                    invoiceGroupToSave = this._loadedInvoiceGroup;
+                }
+                return invoiceGroupRepo.updateInvoiceGroup(this._invoiceGroupMeta, itemMeta, invoiceGroupToSave);
             })
             .then((result: InvoiceGroupDO) => {
                 resolve(result);
             })
             .catch((error: any) => {
-               var thError = new ThError(ThStatusCode.InvoiceGroupsItemUpdateStrategyErrorUpdating, error);
-				if (thError.isNativeError()) {
-					ThLogger.getInstance().logError(ThLogLevel.Error, "error updating invoice group item", this._invoiceGroupDO, thError);
-				}
-				reject(thError); 
+                var thError = new ThError(ThStatusCode.InvoiceGroupsItemUpdateStrategyErrorUpdating, error);
+                if (thError.isNativeError()) {
+                    ThLogger.getInstance().logError(ThLogLevel.Error, "error updating invoice group item", this._invoiceGroupDO, thError);
+                }
+                reject(thError);
             });
+    }
+
+    private bookingAlreadyHasGeneratedInvoice() {
+        let invoice = this._loadedInvoiceGroup.getInvoiceForBooking(this._booking.bookingId);
+        return !this._thUtils.isUndefinedOrNull(invoice);
     }
 
     private buildInvoiceGroupMetaRepoDO(): InvoiceGroupMetaRepoDO {
@@ -48,7 +63,7 @@ export class GenerateBookingInvoiceByUpdatingGroupStrategy implements IGenerateB
     private buildInvoiceGroupItemMetaRepoDO(): InvoiceGroupItemMetaRepoDO {
         return {
             id: this._loadedInvoiceGroup.id,
-			versionId: this._loadedInvoiceGroup.versionId
+            versionId: this._loadedInvoiceGroup.versionId
         }
     }
 }

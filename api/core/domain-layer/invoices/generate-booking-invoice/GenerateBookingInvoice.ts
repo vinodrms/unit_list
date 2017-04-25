@@ -59,7 +59,7 @@ export class GenerateBookingInvoice {
                 return this.getDefaultInvoiceDO();
             }).then((defaultInvoice: InvoiceDO) => {
                 var generateBookingInvoiceActionFactory = new GenerateBookingInvoiceActionFactory(this._appContext, this._sessionContext);
-                return generateBookingInvoiceActionFactory.getActionStrategy(this._loadedBooking.groupBookingId, defaultInvoice);
+                return generateBookingInvoiceActionFactory.getActionStrategy(this._loadedBooking, defaultInvoice);
             }).then((actionStrategy: IGenerateBookingInvoiceActionStrategy) => {
                 actionStrategy.generateBookingInvoice(resolve, reject);
             }).catch((error: any) => {
