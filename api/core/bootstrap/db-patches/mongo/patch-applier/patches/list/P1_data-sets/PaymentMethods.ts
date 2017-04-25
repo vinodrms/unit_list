@@ -66,6 +66,34 @@ export class PaymentMethods extends ABaseSetting {
         {
             name: "Bank Transfer",
             iconUrl: "fa-bank"
+        },
+        {
+            name: "DIBS Eurocard",
+            iconUrl: "fa-credit-card"
+        },
+        {
+            name: "DIBS Amex",
+            iconUrl: "fa-cc-amex"
+        },
+        {
+            name: "DIBS Dankort",
+            iconUrl: "fa-credit-card"
+        },
+        {
+            name: "Eurocard DK",
+            iconUrl: "fa-credit-card"
+        },
+        {
+            name: "Amex DK",
+            iconUrl: "fa-cc-amex"
+        },
+        {
+            name: "Diners DK",
+            iconUrl: "fa-cc-diners-club"
+        },
+        {
+            name: "STW Pre-paid",
+            iconUrl: "fa-credit-card"
         }
     ];
 }
