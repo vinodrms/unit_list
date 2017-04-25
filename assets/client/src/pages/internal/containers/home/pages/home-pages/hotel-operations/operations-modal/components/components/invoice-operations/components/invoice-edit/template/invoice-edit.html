@@ -19,7 +19,7 @@
             </span>
         </p>
 
-        <invoice-payer *ngFor="let invoicePayerVM of invoicePayerVMList; let invoicePayerVMIndex = index" [invoiceReference]="invoiceReference"
+        <invoice-payer *ngFor="let invoicePayerVM of invoicePayerVMList; let invoicePayerVMIndex = index" [invoiceUniqueId]="invoiceUniqueId"
             [invoicePayerVMIndex]="invoicePayerVMIndex"></invoice-payer>
 
         <p *ngIf="editMode" class="btn-add-invoice-payer">

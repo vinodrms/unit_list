@@ -211,7 +211,7 @@ export class InvoiceOperationsPageComponent implements OnInit {
 
     public newlyAddedInvoiceRemoved(newlyAddedInvoiceMeta: InvoiceMeta) {
         this.itemRemoved.next(newlyAddedInvoiceMeta.indexInDisplayedInvoiceList);
-        this.invoiceGroupVM.removeInvoiceVMByReference(newlyAddedInvoiceMeta.reference);
+        this.invoiceGroupVM.removeInvoiceVMByUniqueId(newlyAddedInvoiceMeta.uniqueId);
     }
 
     public get noEditableInvoicesExist(): boolean {
@@ -229,8 +229,8 @@ export class InvoiceOperationsPageComponent implements OnInit {
         return indexList;
     }
 
-    public getInvoiceReference(invoiceIndex: number): string {
-        return this.invoiceVMList[invoiceIndex].invoiceDO.invoiceReference;
+    public getInvoiceUniqueIdentifier(invoiceIndex: number): string {
+        return this.invoiceVMList[invoiceIndex].invoiceDO.getUniqueIdentifier();
     }
 
     public get filterMetaForEnabledFilter(): HotelOperationsPageFilterMeta {

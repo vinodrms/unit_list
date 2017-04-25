@@ -136,4 +136,15 @@ export class InvoiceDO extends BaseDO {
     public isWalkInInvoice(): boolean {
         return !_.isString(this.bookingId) || this.bookingId.length == 0;
     }
+
+    public getUniqueIdentifier(): string {
+        let thUtils = new ThUtils();
+        return thUtils.isUndefinedOrNull(this.id)? this.invoiceReference : this.id;
+    }
+
+    public uniqueIdentifierEquals(uniqueId: string): boolean {
+        let thUtils = new ThUtils();
+        return thUtils.isUndefinedOrNull(this.id)? 
+            this.invoiceReference === uniqueId : this.id === uniqueId;
+    }
 }
