@@ -150,12 +150,12 @@ export class InvoiceConfirmationVMContainer {
         this.payerAddressSecondLineValue = this.getFormattedAddressSecondLine(this._payerCustomer.customerDetails.getAddress());
         this.payerContactLabel = this._thTranslation.translate('Contact');
         this.payerContactValue = "";
-        var phone = this._payerCustomer.customerDetails.getPhone();
+        var phone = this._payerCustomer.customerDetails.getContactDetailsList[0].getPhone();
         if (_.isString(phone) && phone.length > 0) {
             this.payerContactValue += phone;
         }
 
-        var email = this._payerCustomer.customerDetails.getEmail();
+        var email = this._payerCustomer.customerDetails.getContactDetailsList[0].getEmail();
         if (_.isString(email) && email.length > 0) {
             this.payerContactValue += (this.payerContactValue.length > 0) ? " / " : "";
             this.payerContactValue += email;

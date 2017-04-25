@@ -3,6 +3,7 @@ import { AddressDO } from '../../../../common/data-objects/address/AddressDO';
 import { ICustomerDetailsDO } from '../ICustomerDetailsDO';
 import { CommissionDO } from '../../../../common/data-objects/commission/CommissionDO';
 import { ThUtils } from '../../../../../utils/ThUtils';
+import { ContactDetailsDO } from "../ContactDetailsDO";
 
 export class BaseCorporateDetailsDO extends BaseDO implements ICustomerDetailsDO {
 	constructor() {
@@ -12,19 +13,16 @@ export class BaseCorporateDetailsDO extends BaseDO implements ICustomerDetailsDO
 	governmentCode: string;
 	name: string;
 	address: AddressDO;
-	phone: string;
-	fax: string;
-	email: string;
 	websiteUrl: string;
-	contactName: string;
 	payInvoiceByAgreement: boolean;
 	invoiceFee: number;
 	accountNo: string;
 	commission: CommissionDO;
 	receiveBookingConfirmations: boolean;
+	contactDetailsList: ContactDetailsDO[];
 
 	protected getPrimitivePropertyKeys(): string[] {
-		return ["vatCode", "governmentCode", "name", "phone", "fax", "email", "websiteUrl", "contactName", "payInvoiceByAgreement",
+		return ["vatCode", "governmentCode", "name", "websiteUrl", "payInvoiceByAgreement",
 			"invoiceFee", "accountNo", "receiveBookingConfirmations"];
 	}
 	public buildFromObject(object: Object) {
@@ -34,6 +32,12 @@ export class BaseCorporateDetailsDO extends BaseDO implements ICustomerDetailsDO
 
 		this.commission = new CommissionDO();
 		this.commission.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "commission"));
+		this.contactDetailsList = [];
+		this.forEachElementOf(this.getObjectPropertyEnsureUndefined(object, "contactDetailsList"), (contactDetailsObject: Object) => {
+			var contactDetailsDO = new ContactDetailsDO();
+			contactDetailsDO.buildFromObject(contactDetailsObject);
+			this.contactDetailsList.push(contactDetailsDO);
+		});
 	}
 	public getAddress(): AddressDO {
 		return this.address;
@@ -52,12 +56,6 @@ export class BaseCorporateDetailsDO extends BaseDO implements ICustomerDetailsDO
 		this.invoiceFee = thUtils.roundNumberToTwoDecimals(this.invoiceFee);
 		this.commission.amount = thUtils.roundNumberToTwoDecimals(this.commission.amount);
 	}
-	public getEmail(): string {
-		return this.email;
-	}
-	public getPhone(): string {
-		return this.phone;
-	}
 	public getVatCode(): string {
 		return this.vatCode;
 	}
@@ -66,5 +64,8 @@ export class BaseCorporateDetailsDO extends BaseDO implements ICustomerDetailsDO
 	}
 	public getCommission(): CommissionDO {
 		return this.commission;
+	}
+	public getContactDetailsList(): ContactDetailsDO[] {
+		return this.contactDetailsList;
 	}
 }
