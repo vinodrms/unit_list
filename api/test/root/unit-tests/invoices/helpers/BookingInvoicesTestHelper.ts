@@ -34,7 +34,7 @@ export class BookingInvoicesTestHelper {
     }
 
     public getSecondBooking(): BookingDO {
-        return this._defaultDataBuilder.bookingList[0];
+        return this._defaultDataBuilder.bookingList[1];
     }
 
     public buildGenerateBookingInvoiceDOForExistingInvoiceGroup(): GenerateBookingInvoiceDO {
