@@ -17,5 +17,6 @@ export enum MongoPatchType {
     EncapsulateDiscountInBookingPricePerDayOnBookings,
     TransformPaymentMetehodIdListOnHotelIntoPaymentMethodInstanceList,
     AddTransactionFeeSnapshotOnInvoicePayers,
-
+    AddIdOnInvoices,
+    
 }
