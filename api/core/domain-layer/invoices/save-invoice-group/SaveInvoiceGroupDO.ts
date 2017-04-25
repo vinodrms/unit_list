@@ -5,7 +5,7 @@ import { ArrayValidationStructure } from '../../../utils/th-validation/structure
 import { StringValidationRule } from '../../../utils/th-validation/rules/StringValidationRule';
 import { NumberValidationRule } from '../../../utils/th-validation/rules/NumberValidationRule';
 import { NumberInListValidationRule } from '../../../utils/th-validation/rules/NumberInListValidationRule';
-import { InvoiceDO, InvoicePaymentStatus } from '../../../data-layer/invoices/data-objects/InvoiceDO';
+import { InvoiceDO, InvoicePaymentStatus, InvoiceAccountingType } from '../../../data-layer/invoices/data-objects/InvoiceDO';
 import { InvoicePaymentMethodType } from '../../../data-layer/invoices/data-objects/payers/InvoicePaymentMethodDO';
 import { CommissionType } from '../../../data-layer/common/data-objects/commission/CommissionDO';
 import { InvoiceItemType } from '../../../data-layer/invoices/data-objects/items/InvoiceItemDO';
@@ -34,6 +34,14 @@ export class SaveInvoiceGroupDO {
             {
                 key: "invoiceList",
                 validationStruct: new ArrayValidationStructure(new ObjectValidationStructure([
+                    {
+                        key: "id",
+                        validationStruct: new PrimitiveValidationStructure(StringValidationRule.buildNullable())
+                    },
+                    {
+                        key: "accountingType",
+                        validationStruct: new PrimitiveValidationStructure(new NumberInListValidationRule([InvoiceAccountingType.Debit, InvoiceAccountingType.Credit]))
+                    },
                     {
                         key: "bookingId",
                         validationStruct: new PrimitiveValidationStructure(StringValidationRule.buildNullable())
@@ -85,7 +93,7 @@ export class SaveInvoiceGroupDO {
                                         key: "amount",
                                         validationStruct: new PrimitiveValidationStructure(NumberValidationRule.buildNullable())
                                     }
-						        ])
+                                ])
                             }
                         ]))
                     },

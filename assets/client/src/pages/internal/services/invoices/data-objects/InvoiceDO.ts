@@ -7,12 +7,17 @@ import { CustomerDO } from '../../customers/data-objects/CustomerDO';
 import { BookingPriceDO } from "../../bookings/data-objects/price/BookingPriceDO";
 import { PricePerDayDO } from "../../bookings/data-objects/price/PricePerDayDO";
 
+export enum InvoiceAccountingType {
+    Debit, Credit
+}
+
 export enum InvoicePaymentStatus {
     Unpaid, Paid, LossAcceptedByManagement
 }
 
 export class InvoiceDO extends BaseDO {
     id: string;
+    accountingType: InvoiceAccountingType;
     bookingId: string;
     invoiceReference: string;
     payerList: InvoicePayerDO[];
@@ -21,7 +26,7 @@ export class InvoiceDO extends BaseDO {
     notesFromBooking: string;
 
     protected getPrimitivePropertyKeys(): string[] {
-        return ["id", "bookingId", "invoiceReference", "paymentStatus", "notesFromBooking"];
+        return ["id", "accountingType", "bookingId", "invoiceReference", "paymentStatus", "notesFromBooking"];
     }
 
     public buildFromObject(object: Object) {

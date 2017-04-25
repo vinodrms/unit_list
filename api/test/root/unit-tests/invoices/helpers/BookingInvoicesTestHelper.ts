@@ -5,7 +5,7 @@ import { SaveInvoiceGroupDO } from '../../../../../core/domain-layer/invoices/sa
 import { InvoiceBuilder } from '../builders/InvoiceBuilder';
 import { InvoicePayerBuilder } from '../builders/InvoicePayerBuilder';
 import { InvoiceGroupDO } from '../../../../../core/data-layer/invoices/data-objects/InvoiceGroupDO';
-import { InvoicePaymentStatus } from '../../../../../core/data-layer/invoices/data-objects/InvoiceDO';
+import { InvoicePaymentStatus, InvoiceAccountingType } from '../../../../../core/data-layer/invoices/data-objects/InvoiceDO';
 import { InvoiceItemDO } from '../../../../../core/data-layer/invoices/data-objects/items/InvoiceItemDO';
 import { IInvoiceItemMeta } from '../../../../../core/data-layer/invoices/data-objects/items/IInvoiceItemMeta';
 import { BookingDO } from '../../../../../core/data-layer/bookings/data-objects/BookingDO';
@@ -83,6 +83,7 @@ export class BookingInvoicesTestHelper {
                     .withPriceToPay(totalPrice).build();
 
                 invoiceGroupToUpdate.invoiceList.push(new InvoiceBuilder()
+                    .withAccountingType(InvoiceAccountingType.Debit)
                     .withItemList(aopItemList)
                     .withPayerList([invoicePayerWithUpdatedPricetoPay])
                     .withPaymentStatus(InvoicePaymentStatus.Unpaid)
