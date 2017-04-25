@@ -18,5 +18,6 @@ export enum MongoPatchType {
     TransformPaymentMetehodIdListOnHotelIntoPaymentMethodInstanceList,
     AddTransactionFeeSnapshotOnInvoicePayers,
     AddIdOnInvoices,
+    AddInvoiceAccountingTypeDebitOnInvoices,
     
 }

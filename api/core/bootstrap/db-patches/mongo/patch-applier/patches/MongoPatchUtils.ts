@@ -18,6 +18,7 @@ import { P15_EncapsulateDiscountInBookingPricePerDayOnBookings } from "./list/P1
 import { P16_TransformPaymentMetehodIdListOnHotelIntoPaymentMethodInstanceList } from "./list/P16_TransformPaymentMetehodIdListOnHotelIntoPaymentMethodInstanceList";
 import { P17_AddTransactionFeeSnapshotOnInvoicePayers } from "./list/P17_AddTransactionFeeSnapshotOnInvoicePayers";
 import { P19_AddIdOnInvoices } from "./list/P19_AddIdOnInvoices";
+import { P20_AddInvoiceAccountingTypeDebitOnInvoices } from "./list/P20_AddInvoiceAccountingTypeDebitOnInvoices";
 
 export class MongoPatchUtils {
 	public static get PatchList(): ATransactionalMongoPatch[] {
@@ -41,7 +42,8 @@ export class MongoPatchUtils {
 			new P16_TransformPaymentMetehodIdListOnHotelIntoPaymentMethodInstanceList(),
 			new P17_AddTransactionFeeSnapshotOnInvoicePayers(),
 			new P19_AddIdOnInvoices(),
-
+			new P20_AddInvoiceAccountingTypeDebitOnInvoices(),
+			
 		];
 	}
 }
