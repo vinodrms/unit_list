@@ -142,15 +142,15 @@ export class InvoicePayerComponent implements OnInit {
 
     public get invoicePdfUrl(): string {
         return 'api/invoiceGroups/pdf?invoiceGroupId='
-            + this.invoiceGroupVM.invoiceGroupDO.id + '&invoiceReference='
-            + this.invoiceReference + '&customerId=' + this.invoicePayerVM.customerDO.id
+            + this.invoiceGroupVM.invoiceGroupDO.id + '&invoiceId='
+            + this.invoiceVM.invoiceDO.id + '&customerId=' + this.invoicePayerVM.customerDO.id
             + '&payerIndex=' + this.invoicePayerVMIndex;
     }
 
     public onSend() {
         this._emailSenderModalService.sendInvoiceConfirmation([this.invoicePayerVM.customerDO],
             this.invoiceGroupVM.invoiceGroupDO.id,
-            this.invoiceVM.invoiceDO.invoiceReference,
+            this.invoiceVM.invoiceDO.id,
             this.invoicePayerVM.customerDO.id,
             this.invoicePayerVMIndex).then((modalDialogRef: ModalDialogRef<boolean>) => {
                 modalDialogRef.resultObservable.subscribe((sendResult: boolean) => {

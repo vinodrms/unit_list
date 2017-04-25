@@ -114,7 +114,7 @@ export class MongoInvoiceGroupsEditOperationsRepository extends MongoRepository 
 
         var group = invoiceGroup;
         var paymentStatusByInvoiceReferenceMap: { [index: string]: InvoicePaymentStatus };
-        this.getCurrentPaymentStatusByInvoiceReferenceMap(invoiceGroupMeta, invoiceGroup)
+        this.getCurrentPaymentStatusByInvoiceIdMap(invoiceGroupMeta, invoiceGroup)
             .then((map: { [index: string]: InvoicePaymentStatus }) => {
                 paymentStatusByInvoiceReferenceMap = map;
                 return this.attachInvoiceGroupReferenceIfNecessary(group);
@@ -134,7 +134,7 @@ export class MongoInvoiceGroupsEditOperationsRepository extends MongoRepository 
             });
     }
 
-    private getCurrentPaymentStatusByInvoiceReferenceMap(invoiceGroupMeta: InvoiceGroupMetaRepoDO, invoiceGroup: InvoiceGroupDO): Promise<{ [index: string]: InvoicePaymentStatus }> {
+    private getCurrentPaymentStatusByInvoiceIdMap(invoiceGroupMeta: InvoiceGroupMetaRepoDO, invoiceGroup: InvoiceGroupDO): Promise<{ [index: string]: InvoicePaymentStatus }> {
         return new Promise<{ [index: string]: InvoicePaymentStatus }>((resolve: { (result: { [index: string]: InvoicePaymentStatus }): void }, reject: { (err: ThError): void }) => {
             // if the invoice group is not created return an empty result
             if (this._thUtils.isUndefinedOrNull(invoiceGroup.id)) {
@@ -143,11 +143,11 @@ export class MongoInvoiceGroupsEditOperationsRepository extends MongoRepository 
             }
             this._invoiceReadRepository.getInvoiceGroupById(invoiceGroupMeta, invoiceGroup.id)
                 .then((readInvoiceGroup: InvoiceGroupDO) => {
-                    let paymentStatusByInvoiceReferenceMap: { [index: string]: InvoicePaymentStatus } = {};
+                    let paymentStatusByInvoiceIdMap: { [index: string]: InvoicePaymentStatus } = {};
                     _.forEach(readInvoiceGroup.invoiceList, (readInvoice: InvoiceDO) => {
-                        paymentStatusByInvoiceReferenceMap[readInvoice.invoiceReference] = readInvoice.paymentStatus;
+                        paymentStatusByInvoiceIdMap[readInvoice.id] = readInvoice.paymentStatus;
                     });
-                    resolve(paymentStatusByInvoiceReferenceMap);
+                    resolve(paymentStatusByInvoiceIdMap);
                 }).catch(e => { reject(e); });
         });
     }
@@ -169,11 +169,11 @@ export class MongoInvoiceGroupsEditOperationsRepository extends MongoRepository 
     }
 
     private attachInvoiceItemReferenceIfNecessary(hotelId: string, invoice: InvoiceDO,
-        paymentStatusByInvoiceReferenceMap: { [index: string]: InvoicePaymentStatus }): Promise<InvoiceDO> {
+        paymentStatusByInvoiceIdMap: { [index: string]: InvoicePaymentStatus }): Promise<InvoiceDO> {
         return new Promise<InvoiceDO>((resolve: { (result: InvoiceDO): void }, reject: { (err: ThError): void }) => {
             let oldPaymentStatus: InvoicePaymentStatus;
-            if (!this._thUtils.isUndefinedOrNull(invoice.invoiceReference)) {
-                oldPaymentStatus = paymentStatusByInvoiceReferenceMap[invoice.invoiceReference];
+            if (!this._thUtils.isUndefinedOrNull(invoice.id)) {
+                oldPaymentStatus = paymentStatusByInvoiceIdMap[invoice.id];
             }
             // only attach the invoice reference from the Invoice Sequence if it was marked as Paid and it was not Paid previously
             if (oldPaymentStatus !== invoice.paymentStatus

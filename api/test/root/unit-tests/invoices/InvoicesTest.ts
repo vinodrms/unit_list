@@ -198,10 +198,10 @@ describe("Invoices Tests", function () {
             var invoiceGroupId = createdBookingInvoiceGroup.id;
             var payerIndex = 0;
             var customerId = invoice.payerList[payerIndex].customerId;
-            var invoiceReference = invoice.invoiceReference;
+            var invoiceId = invoice.id;
             invoiceEmailSender.sendInvoiceConfirmation({
                 invoiceGroupId: invoiceGroupId,
-                invoiceReference: invoiceReference,
+                invoiceId: invoiceId,
                 payerIndex: payerIndex,
                 customerId: customerId
             }, ['dragos.pricope@gmail.com']).then((result: boolean) => {
