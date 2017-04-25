@@ -19,5 +19,6 @@ export enum MongoPatchType {
     AddTransactionFeeSnapshotOnInvoicePayers,
     AddIdOnInvoices,
     AddInvoiceAccountingTypeDebitOnInvoices,
+    AddInvoiceItemAccountingTypeDebitOnInvoices,
     
 }
