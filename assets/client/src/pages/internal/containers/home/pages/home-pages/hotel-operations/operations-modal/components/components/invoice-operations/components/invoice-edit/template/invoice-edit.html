@@ -137,14 +137,22 @@
     </div>
 
     <div *ngIf="!editMode" class="invoice-edit-footer">
+        
+        <button type="button" class="btn btn-danger" *ngIf="isPaid" (click)="onCreditInvoice()">
+            <i class="fa fa-2x unitpal-font">+</i> {{ 'Credit Invoice' | translate }}
+        </button>
+
         <button type="button" class="btn btn-primary" *ngIf="!isPaid" (click)="onPayInvoice()">
             <i class="fa fa-2x unitpal-font rotate-45">L</i> {{ 'Pay Invoice' | translate }}
         </button>
+        
         <p *ngIf="isLossAcceptedByManagement">
             <small class="text-muted"><i class="fa fa-info-circle"></i> {{ 'Even though you marked this booking as lost by management, you can always mark it as Paid whenever you get the money from the customer.' | translate }} </small>
         </p>
+        
         <button type="button" class="btn btn-danger" *ngIf="!isPaid && !isLossAcceptedByManagement" (click)="onLossByManagementInvoice()">
             <i class="fa fa-2x unitpal-font">+</i> {{ 'Loss Accepted By Management' | translate }}
         </button>
+
     </div>
 </div>

@@ -111,6 +111,10 @@ export class InvoiceEditComponent implements OnInit {
         });
     }
 
+    public onCreditInvoice() {
+        
+    }
+
     public onPayInvoice() {
         if (!this.totalAmountIsValid()) { return; }
         var title = this._appContext.thTranslation.translate("Info");
