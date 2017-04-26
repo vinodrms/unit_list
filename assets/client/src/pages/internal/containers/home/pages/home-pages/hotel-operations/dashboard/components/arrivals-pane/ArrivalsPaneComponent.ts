@@ -11,7 +11,6 @@ import {HotelDetailsDO} from '../../../../../../../../services/hotel/data-object
 import {AppContext} from '../../../../../../../../../../common/utils/AppContext';
 import {ThError} from '../../../../../../../../../../common/utils/responses/ThError';
 import {ThDateDO} from '../../../../../../../../services/common/data-objects/th-dates/ThDateDO';
-import {ThDatePickerComponent} from '../../../../../../../../../../common/utils/components/ThDatePickerComponent';
 
 @Component({
 	selector: 'arrivals-pane',
@@ -20,7 +19,6 @@ import {ThDatePickerComponent} from '../../../../../../../../../../common/utils/
 })
 export class ArrivalsPaneComponent implements OnInit {
 
-	@ViewChild(ThDatePickerComponent) thDatePickerComponent: ThDatePickerComponent;
 	public arrivalItemsVMList: ArrivalItemInfoVM[];
 	public filteredArrivalsVMList: ArrivalItemInfoVM[];
 	public selectedDate: ThDateDO;
@@ -78,13 +76,13 @@ export class ArrivalsPaneComponent implements OnInit {
 
 	public nextDay() {
 		this.selectedDate.addDays(1);
-		this.thDatePickerComponent.selectedThDate = this.selectedDate;
+		this.selectedDate = this.selectedDate.buildPrototype();
 		this.refresh();
 	}
 
 	public previousDay() {
 		this.selectedDate.addDays(-1);
-		this.thDatePickerComponent.selectedThDate = this.selectedDate;
+		this.selectedDate = this.selectedDate.buildPrototype();
 		this.refresh();
 	}
 

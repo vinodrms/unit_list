@@ -61,11 +61,9 @@ export class ThDatePickerComponent implements AfterViewInit {
 	public get selectedThDate() : ThDateDO {
 		return this._selectedThDate;
 	}
+	@Input()
 	public set selectedThDate(date: ThDateDO) {
-		this._selectedThDate = new ThDateDO();
-		this._selectedThDate.day = date.day;
-		this._selectedThDate.month = date.month;
-		this.selectedThDate.year = date.year;
+		this._selectedThDate = date;
 		if (this.getJQueryElement() && this.getJQueryElement().data('daterangepicker')){
 			this.getJQueryElement().data('daterangepicker').setStartDate(date);
 			this.getJQueryElement().data('daterangepicker').setEndDate(date);

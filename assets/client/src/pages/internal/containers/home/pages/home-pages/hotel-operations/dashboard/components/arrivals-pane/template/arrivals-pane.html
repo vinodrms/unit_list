@@ -8,6 +8,7 @@
 				<div *ngIf="selectedDate" class="clickable operations-datepicker">
 					<th-date-picker
 						[initialThDate]="selectedDate"
+						[selectedThDate]="selectedDate"
 						[showLabel]="false"
 						[showIcon]="false"
 						(didSelectThDate)="didSelectArrivalDate($event)"
