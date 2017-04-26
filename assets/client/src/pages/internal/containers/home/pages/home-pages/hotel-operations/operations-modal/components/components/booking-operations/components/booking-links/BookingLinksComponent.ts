@@ -4,6 +4,7 @@ import { HotelOperationsPageControllerService } from '../../../../services/Hotel
 import { BookingOperationsPageData } from '../../services/utils/BookingOperationsPageData';
 import { HotelOperationsBookingService } from "../../../../../../../../../../../services/hotel-operations/booking/HotelOperationsBookingService";
 import { InvoiceGroupDO } from "../../../../../../../../../../../services/invoices/data-objects/InvoiceGroupDO";
+import { BookingGenerateInvoiceRight } from "../../../../../../../../../../../services/bookings/data-objects/BookingEditRights";
 
 @Component({
     selector: 'booking-links',
@@ -43,9 +44,12 @@ export class BookingLinksComponent {
         if (!this.hasRoom) { return; }
         this._operationsPageControllerService.goToRoom(this.bookingOperationsPageData.bookingDO.roomId);
     }
+    public get hasGenerateInvoiceRight(): boolean {
+        return this.bookingOperationsPageData.bookingMeta.generateInvoiceRight === BookingGenerateInvoiceRight.Allowed;
+    }
 
     private generateInvoice() {
-        if (this.isSaving) { return; }
+        if (!this.hasGenerateInvoiceRight || this.isSaving) { return; }
         var title = this._appContext.thTranslation.translate("Generate Invoice");
         var content = this._appContext.thTranslation.translate("Are you sure you want to generate the associated invoice for this booking?");
         this._appContext.modalService.confirm(title, content, { positive: this._appContext.thTranslation.translate("Yes"), negative: this._appContext.thTranslation.translate("No") },
