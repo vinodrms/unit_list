@@ -1,5 +1,4 @@
 import { BaseController } from './base/BaseController';
-import { InvoiceGroupStatus } from "./../../../../../../..//api/core/data-layer/invoices/data-objects/InvoiceGroupDO";
 import { ThStatusCode } from '../core/utils/th-responses/ThResponse';
 import { AppContext } from '../core/utils/AppContext';
 import { SessionContext } from '../core/utils/SessionContext';
