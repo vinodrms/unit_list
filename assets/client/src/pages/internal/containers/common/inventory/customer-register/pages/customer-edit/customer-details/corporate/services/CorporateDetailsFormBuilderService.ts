@@ -8,6 +8,7 @@ import { ContactDetailsDO } from '../../../../../../../../../services/customers/
 @Injectable()
 export class CorporateDetailsFormBuilderService {
 	private _corporateFormGroup: FormGroup;
+	private _contactDetailsFormGroup: FormGroup;
 
 	private _governmentCodeControl: FormControl;
 	private _nameControl: FormControl;
@@ -31,6 +32,7 @@ export class CorporateDetailsFormBuilderService {
 	constructor(private _formBuilder: FormBuilder) {
 		this.initFormControls();
 		this.initFormGroup();
+		this.initContactDetailsFormGroup();
 	}
 	private initFormControls() {
 		this._governmentCodeControl = new FormControl(null, Validators.compose([Validators.maxLength(200)]));
@@ -39,7 +41,7 @@ export class CorporateDetailsFormBuilderService {
 		this._cityControl = new FormControl(null, Validators.compose([Validators.maxLength(ThFieldLengths.MaxCityLength)]));
 		this._postalCodeControl = new FormControl(null, Validators.compose([Validators.maxLength(50)]));
 		this._websiteUrlControl = new FormControl(null, Validators.compose([Validators.maxLength(ThFieldLengths.MaxUrlLength), ThValidators.nullableUrlValidator]));
-		this._contactNameControl = new FormControl(null, Validators.compose([Validators.maxLength(ThFieldLengths.MaxNameLength)]));
+		this._contactNameControl = new FormControl(null, Validators.compose([Validators.required, Validators.maxLength(ThFieldLengths.MaxNameLength)]));
 		this._phoneControl = new FormControl(null, Validators.compose([ThValidators.nullablePhoneValidator]));
 		this._faxControl = new FormControl(null, Validators.compose([ThValidators.nullablePhoneValidator]));
 		this._emailControl = new FormControl(null, Validators.compose([ThValidators.nullableEmailValidator]));
@@ -57,14 +59,19 @@ export class CorporateDetailsFormBuilderService {
 			"city": this._cityControl,
 			"postalCode": this._postalCodeControl,
 			"websiteUrl": this._websiteUrlControl,
-			"contactName": this._contactNameControl,
-			"phone": this._phoneControl,
-			"fax": this._faxControl,
-			"email": this._emailControl,
 			"invoiceFee": this._invoiceFeeControl,
 			"accountNo": this._accountNoControl,
 			"commission": this._commissionControl,
 			"commissionDeducted": this._commissionDeductedControl
+		});
+	}
+
+	private initContactDetailsFormGroup() {
+		this._contactDetailsFormGroup = this._formBuilder.group({
+			"contactName": this._contactNameControl,
+			"phone": this._phoneControl,
+			"fax": this._faxControl,
+			"email": this._emailControl
 		});
 	}
 
@@ -117,6 +124,9 @@ export class CorporateDetailsFormBuilderService {
 	}
 	public set individualFormGroup(individualFormGroup: FormGroup) {
 		this._corporateFormGroup = individualFormGroup;
+	}
+	public get contactDetailsFormGroup(): FormGroup {
+		return this._contactDetailsFormGroup;
 	}
 
 	public get payInvoiceByAgreement(): boolean {
