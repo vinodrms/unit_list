@@ -1,5 +1,6 @@
 import { BaseDO } from "../../base/BaseDO";
 import { NumberValidationRule } from "../../../../utils/th-validation/rules/NumberValidationRule";
+import { ThUtils } from "../../../../utils/ThUtils";
 
 export enum TransactionFeeType {
     Fixed, Percentage
@@ -33,8 +34,12 @@ export class TransactionFeeDO extends BaseDO {
     }
 
     public getAmountWihtTransactionFeeIncluded(amount: number): number {
-        return this.type === TransactionFeeType.Fixed ? 
-            amount + this.amount : amount * (1 + this.amount);
+        let totalAmount = 
+            this.type === TransactionFeeType.Fixed ? 
+                amount + this.amount : amount * (1 + this.amount);
+        
+        let thUtils = new ThUtils();
+        return thUtils.roundNumberToTwoDecimals(totalAmount);
     }
 
     public static getDefaultTransactionFee(): TransactionFeeDO {

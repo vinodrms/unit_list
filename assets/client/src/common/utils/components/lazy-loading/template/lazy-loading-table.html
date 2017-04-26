@@ -79,6 +79,9 @@
 					</span>
 				</td>
 				<td *ngIf="tableOptions.showRowActionsCell()" class="table-item-action-group" [ngClass]="tableOptions.getRowActionsCellClass(isCollapsed)">
+					<a class="btn btn-xs" *ngIf="canPerformShowDetailsCommandOnItem(item)" (click)="showDetailsForItem(item)" title="{{ 'Show Details' | translate }}">
+						<i class="fa fa-eye"></i>
+					</a>
 					<a class="btn btn-xs" *ngIf="canPerformCopyCommandOnItem(item)" (click)="copyItem(item)" title="{{ 'Clone' | translate }}">
 						<i class="fa unitpal-font">[</i>
 					</a>
@@ -90,9 +93,6 @@
 					</a>
 					<a class="btn btn-xs lazy-loading-table-row-command" *ngIf="canPerformAddExistingRowCommandOnItem(item)" (click)="addExistingItem(item)" title="{{ 'Add' | translate }}">
 						<i class="fa unitpal-font">G</i>
-					</a>
-					<a class="btn btn-xs" *ngIf="canPerformShowDetailsCommandOnItem(item)" (click)="showDetailsForItem(item)" title="{{ 'Show Details' | translate }}">
-						<i class="fa fa-eye"></i>
 					</a>
 				</td>
 			</tr>

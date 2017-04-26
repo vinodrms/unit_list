@@ -698,6 +698,7 @@ export var EnglishTranslations: Object = {
 	"Open invoice group": "Open invoice group",
 	"No Payment Guarantee": "No Payment Guarantee",
 	"Arrivals": "Arrivals",
+	"Departures": "Departures",
 	"No booking": "No booking",
 	"Arriving Today": "Arriving Today",
 	"All Rooms": "All Rooms",
@@ -880,5 +881,9 @@ export var EnglishTranslations: Object = {
 	"Flat": "Flat",
 	"External Booking No": "External Booking No",
 	"Update Contact Details": "Update Contact Details",
+	"Included Items": "Included Items",
+	"Total Price": "Total Price",
+	"Price Breakdown": "Price Breakdown",
+	"Other": "Other",
 
 };

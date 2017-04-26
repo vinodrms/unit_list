@@ -1,4 +1,4 @@
-import {Component, OnInit, Input} from '@angular/core';
+import {Component, ViewChild, OnInit, Input} from '@angular/core';
 
 import {IHotelOperationsDashboardDeparturesMediator} from '../../HotelOperationsDashboardComponent';
 import {DepartureItemInfoVM} from '../../../../../../../../services/hotel-operations/dashboard/departures/view-models/DepartureItemInfoVM';
@@ -19,6 +19,7 @@ declare var $: any;
 	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/dashboard/components/departures-pane/template/departures-pane.html'
 })
 export class DeparturesPaneComponent implements OnInit {
+
 	public departureItemsVMList: DepartureItemInfoVM[];
 	public filteredDeparturesVMList: DepartureItemInfoVM[];
 	public selectedDepartureItem: DepartureItemInfoVM;
@@ -96,11 +97,13 @@ export class DeparturesPaneComponent implements OnInit {
 
 	public nextDay() {
 		this.selectedDate.addDays(1);
+		this.selectedDate = this.selectedDate.buildPrototype();
 		this.refresh();
 	}
 
 	public previousDay() {
 		this.selectedDate.addDays(-1);
+		this.selectedDate = this.selectedDate.buildPrototype();
 		this.refresh();
 	}
 
@@ -121,5 +124,10 @@ export class DeparturesPaneComponent implements OnInit {
 	}
 
 	ngAfterViewInit() {
+	}
+
+	public didSelectDepartureDate(date: ThDateDO) {
+		this.selectedDate = date;
+		this.refresh();
 	}
 }

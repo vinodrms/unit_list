@@ -4,8 +4,17 @@
 		<div class="flex-row">
 			<span class="unitpal-font green-color p-r-12 f-32">.</span>
 			<div>
-				<div class="f-12">Departures</div>
-				<div *ngIf="selectedDate" class="current-date f-16"><b>{{getDateShortString()}}</b></div>			
+				<div class="f-12">{{ 'Departures' | translate }}</div>
+				<div *ngIf="selectedDate" class="clickable operations-datepicker">
+					<th-date-picker
+						[initialThDate]="selectedDate"
+						[selectedThDate]="selectedDate"
+						[showLabel]="false"
+						[showIcon]="false"
+						(didSelectThDate)="didSelectDepartureDate($event)"
+					>
+					</th-date-picker>
+				</div>
 			</div>
 		</div>
 		<div class="unitpal-font f-12 p-r-12 f-32 clickable" (click)="nextDay()">&gt;</div>

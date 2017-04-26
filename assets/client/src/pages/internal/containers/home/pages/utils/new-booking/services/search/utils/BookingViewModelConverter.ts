@@ -82,8 +82,14 @@ export class BookingViewModelConverter {
             bookingItemVM.noAvailableAllotmentsString = bookingItemVM.noAvailableAllotments + "";
             bookingItemVM.transientBookingItem.allotmentId = allotmentItem.allotment.id;
         }
-        bookingItemVM.totalPrice = priceProductItem.getPriceForRoomCategory(roomCategoryItem.stats.roomCategory.id);
+        var priceProductItemPrice = priceProductItem.getPriceForRoomCategory(roomCategoryItem.stats.roomCategory.id);
+        bookingItemVM.totalPrice = (priceProductItemPrice) ? priceProductItemPrice.price : 0.0;
         bookingItemVM.totalPriceString = bookingItemVM.totalPrice + hotelAggregatedInfo.ccy.nativeSymbol;
+        bookingItemVM.commision = (priceProductItemPrice) ? priceProductItemPrice.commision : 0.0;
+        bookingItemVM.commisionString = bookingItemVM.commision + hotelAggregatedInfo.ccy.nativeSymbol;
+        bookingItemVM.otherPrice = (priceProductItemPrice) ? priceProductItemPrice.otherPrice : 0.0;
+        bookingItemVM.otherPriceString = bookingItemVM.otherPrice + hotelAggregatedInfo.ccy.nativeSymbol;
+        bookingItemVM.pricePerDayList = (priceProductItemPrice) ? priceProductItemPrice.pricePerDayList : [];
         bookingItemVM.conditionsString = priceProductItem.priceProduct.conditions.getCancellationConditionsString(this._thTranslation);
         bookingItemVM.constraintsString = priceProductItem.priceProduct.constraints.getBriefValueDisplayString(this._thTranslation);
 

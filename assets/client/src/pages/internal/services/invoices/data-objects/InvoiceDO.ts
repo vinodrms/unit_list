@@ -4,6 +4,8 @@ import { InvoiceItemDO, InvoiceItemType } from './items/InvoiceItemDO';
 import { InvoicePayerDO } from './payers/InvoicePayerDO';
 import { InvoicePaymentMethodType } from './payers/InvoicePaymentMethodDO';
 import { CustomerDO } from '../../customers/data-objects/CustomerDO';
+import { BookingPriceDO } from "../../bookings/data-objects/price/BookingPriceDO";
+import { PricePerDayDO } from "../../bookings/data-objects/price/PricePerDayDO";
 
 export enum InvoicePaymentStatus {
     Unpaid, Paid, LossAcceptedByManagement
@@ -72,11 +74,25 @@ export class InvoiceDO extends BaseDO {
     }
 
     public getPrice(): number {
+        let totalPrice = 0;
+        _.forEach(this.itemList, (item: InvoiceItemDO) => {
+            if(item.isBookingPrice()) {
+                let bookingPrice = new BookingPriceDO();
+                bookingPrice.buildFromObject(item.meta);
+
+                _.forEach(bookingPrice.roomPricePerNightList, (pricePerDay: PricePerDayDO) => {
+                    totalPrice += pricePerDay.price;
+                });
+            }
+            else {
+                totalPrice += item.meta.getNumberOfItems() * item.meta.getUnitPrice();
+            }
+        });
+        
         var thUtils = new ThUtils();
-        return _.reduce(this.itemList, (memo: number, item: InvoiceItemDO) => {
-            return memo + item.meta.getNumberOfItems() * item.meta.getUnitPrice();
-        }, 0);
+        return thUtils.roundNumberToTwoDecimals(totalPrice);
     }
+
     public getAmountPaid(): number {
         var thUtils = new ThUtils();
         return _.reduce(this.payerList, (amountPaid: number, payerDO: InvoicePayerDO) => {

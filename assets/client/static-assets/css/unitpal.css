@@ -3986,3 +3986,19 @@ textarea.payer-details {
 .booking-notes-icon {
     padding: 10px 10px 0px 0px
 }
+
+.operations-datepicker .input-group {
+    height: auto;
+}
+
+.operations-datepicker .form-control {
+    font-size: 16px;
+    background: transparent;
+    border: none;
+    padding: 0px;
+    font-weight: 700;
+    height: auto;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+}
