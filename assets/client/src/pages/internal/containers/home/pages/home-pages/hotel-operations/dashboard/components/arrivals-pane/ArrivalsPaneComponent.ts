@@ -1,4 +1,4 @@
-import {Component, Output, EventEmitter, Input, OnInit} from '@angular/core';
+import {Component, ViewChild, Output, EventEmitter, Input, OnInit} from '@angular/core';
 import {NewBookingModalService} from '../../../../../utils/new-booking/modal/services/NewBookingModalService';
 import {NewBookingResult} from '../../../../../utils/new-booking/modal/services/utils/NewBookingResult';
 import {ModalDialogRef} from '../../../../../../../../../../common/utils/modals/utils/ModalDialogRef';
@@ -11,6 +11,7 @@ import {HotelDetailsDO} from '../../../../../../../../services/hotel/data-object
 import {AppContext} from '../../../../../../../../../../common/utils/AppContext';
 import {ThError} from '../../../../../../../../../../common/utils/responses/ThError';
 import {ThDateDO} from '../../../../../../../../services/common/data-objects/th-dates/ThDateDO';
+import {ThDatePickerComponent} from '../../../../../../../../../../common/utils/components/ThDatePickerComponent';
 
 @Component({
 	selector: 'arrivals-pane',
@@ -18,6 +19,8 @@ import {ThDateDO} from '../../../../../../../../services/common/data-objects/th-
 	providers: [NewBookingModalService]
 })
 export class ArrivalsPaneComponent implements OnInit {
+
+	@ViewChild(ThDatePickerComponent) thDatePickerComponent: ThDatePickerComponent;
 	public arrivalItemsVMList: ArrivalItemInfoVM[];
 	public filteredArrivalsVMList: ArrivalItemInfoVM[];
 	public selectedDate: ThDateDO;
@@ -47,7 +50,6 @@ export class ArrivalsPaneComponent implements OnInit {
 					this._appContext.toaster.error(error.message);
 				});
 		})
-
 	}
 
 	private sortByName(arrivalItemsVMList: ArrivalItemInfoVM[]) {
@@ -76,11 +78,13 @@ export class ArrivalsPaneComponent implements OnInit {
 
 	public nextDay() {
 		this.selectedDate.addDays(1);
+		this.thDatePickerComponent.selectedThDate = this.selectedDate;
 		this.refresh();
 	}
 
 	public previousDay() {
 		this.selectedDate.addDays(-1);
+		this.thDatePickerComponent.selectedThDate = this.selectedDate;
 		this.refresh();
 	}
 
@@ -125,5 +129,10 @@ export class ArrivalsPaneComponent implements OnInit {
 
 	public selectArrivalItem(arrivalItemVM) {
 		this.hotelOperationsDashboard.clickedArrivalItem(arrivalItemVM);
+	}
+
+	public didSelectArrivalDate(date: ThDateDO) {
+		this.selectedDate = date;
+		this.refresh();
 	}
 }

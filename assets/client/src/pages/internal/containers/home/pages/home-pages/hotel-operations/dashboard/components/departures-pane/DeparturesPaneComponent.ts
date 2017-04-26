@@ -1,4 +1,4 @@
-import {Component, OnInit, Input} from '@angular/core';
+import {Component, ViewChild, OnInit, Input} from '@angular/core';
 
 import {IHotelOperationsDashboardDeparturesMediator} from '../../HotelOperationsDashboardComponent';
 import {DepartureItemInfoVM} from '../../../../../../../../services/hotel-operations/dashboard/departures/view-models/DepartureItemInfoVM';
@@ -12,6 +12,7 @@ import {AppContext} from '../../../../../../../../../../common/utils/AppContext'
 import {ThError} from '../../../../../../../../../../common/utils/responses/ThError';
 
 import {ThDateDO} from '../../../../../../../../services/common/data-objects/th-dates/ThDateDO';
+import {ThDatePickerComponent} from '../../../../../../../../../../common/utils/components/ThDatePickerComponent';
 
 declare var $: any;
 @Component({
@@ -19,6 +20,8 @@ declare var $: any;
 	templateUrl: '/client/src/pages/internal/containers/home/pages/home-pages/hotel-operations/dashboard/components/departures-pane/template/departures-pane.html'
 })
 export class DeparturesPaneComponent implements OnInit {
+
+	@ViewChild(ThDatePickerComponent) thDatePickerComponent: ThDatePickerComponent;
 	public departureItemsVMList: DepartureItemInfoVM[];
 	public filteredDeparturesVMList: DepartureItemInfoVM[];
 	public selectedDepartureItem: DepartureItemInfoVM;
@@ -96,11 +99,13 @@ export class DeparturesPaneComponent implements OnInit {
 
 	public nextDay() {
 		this.selectedDate.addDays(1);
+		this.thDatePickerComponent.selectedThDate = this.selectedDate;
 		this.refresh();
 	}
 
 	public previousDay() {
 		this.selectedDate.addDays(-1);
+		this.thDatePickerComponent.selectedThDate = this.selectedDate;
 		this.refresh();
 	}
 
@@ -121,5 +126,10 @@ export class DeparturesPaneComponent implements OnInit {
 	}
 
 	ngAfterViewInit() {
+	}
+
+	public didSelectDepartureDate(date: ThDateDO) {
+		this.selectedDate = date;
+		this.refresh();
 	}
 }
