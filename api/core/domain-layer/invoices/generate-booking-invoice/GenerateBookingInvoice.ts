@@ -48,6 +48,13 @@ export class GenerateBookingInvoice {
     }
 
     private generateCore(resolve: { (result: InvoiceGroupDO): void }, reject: { (err: ThError): void }) {
+        var validationResult = GenerateBookingInvoiceDO.getValidationStructure().validateStructure(this._generateBookingInvoiceDO);
+        if (!validationResult.isValid()) {
+            var parser = new ValidationResultParser(validationResult, this._generateBookingInvoiceDO);
+            parser.logAndReject("Error validating data for Generate Booking Invoice", reject);
+            return;
+        }
+
         var bookignRepo = this._appContext.getRepositoryFactory().getBookingRepository();
         bookignRepo.getBookingById({ hotelId: this._sessionContext.sessionDO.hotel.id }, this._generateBookingInvoiceDO.groupBookingId, this._generateBookingInvoiceDO.bookingId)
             .then((booking: BookingDO) => {
