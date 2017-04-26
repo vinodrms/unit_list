@@ -54,7 +54,11 @@ export class CustomerVM {
 		this._customerTypeString = customerTypeString;
 	}
 	public get phoneString(): string {
-		return this._customer.customerDetails.getPhone();
+		if (!this.customer.customerDetails.getContactDetailsList() ||
+			this.customer.customerDetails.getContactDetailsList().length <= 0) {
+				return "";
+			}
+		return this._customer.customerDetails.getContactDetailsList()[0].phone;
 	}
 	public get emailString(): string {
 		return this._customer.emailString;

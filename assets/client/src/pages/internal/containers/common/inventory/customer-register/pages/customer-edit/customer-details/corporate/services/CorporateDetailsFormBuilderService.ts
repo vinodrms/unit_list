@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators, AbstractControl, FormControl } from
 import { ThValidators, ThFieldLengths } from '../../../../../../../../../../../common/utils/form-utils/ThFormUtils';
 import { CorporateDetailsDO } from '../../../../../../../../../services/customers/data-objects/customer-details/CorporateDetailsDO';
 import { CommissionType } from '../../../../../../../../../services/common/data-objects/commission/CommissionDO';
+import { ContactDetailsDO } from '../../../../../../../../../services/customers/data-objects/customer-details/ContactDetailsDO';
 
 @Injectable()
 export class CorporateDetailsFormBuilderService {
@@ -74,10 +75,6 @@ export class CorporateDetailsFormBuilderService {
 		this._cityControl.setValue(corporateDetails.address.city);
 		this._postalCodeControl.setValue(corporateDetails.address.postalCode);
 		this._websiteUrlControl.setValue(corporateDetails.websiteUrl);
-		this._contactNameControl.setValue(corporateDetails.contactName);
-		this._phoneControl.setValue(corporateDetails.phone);
-		this._faxControl.setValue(corporateDetails.fax);
-		this._emailControl.setValue(corporateDetails.email);
 		this._accountNoControl.setValue(corporateDetails.accountNo);
 
 		this.payInvoiceByAgreement = corporateDetails.payInvoiceByAgreement;
@@ -101,10 +98,6 @@ export class CorporateDetailsFormBuilderService {
 		corporateDetails.address.city = this._cityControl.value;
 		corporateDetails.address.postalCode = this._postalCodeControl.value;
 		corporateDetails.websiteUrl = this._websiteUrlControl.value;
-		corporateDetails.contactName = this._contactNameControl.value;
-		corporateDetails.phone = this._phoneControl.value;
-		corporateDetails.fax = this._faxControl.value;
-		corporateDetails.email = this._emailControl.value;
 		corporateDetails.invoiceFee = this._invoiceFeeControl.value;
 		corporateDetails.accountNo = this._accountNoControl.value;
 		corporateDetails.payInvoiceByAgreement = this._payInvoiceByAgreement;
@@ -161,5 +154,18 @@ export class CorporateDetailsFormBuilderService {
 	public updateCompanyNameAndAddress(companyName: string, streetAddress: string) {
 		this._nameControl.setValue(companyName);
 		this._streetAddressControl.setValue(streetAddress);
+	}
+	public updateCompanyContactDetailsFrom(contactDetails: ContactDetailsDO) {
+		this._contactNameControl.setValue(contactDetails.contactName);
+		this._emailControl.setValue(contactDetails.email);
+		this._faxControl.setValue(contactDetails.fax);
+		this._phoneControl.setValue(contactDetails.phone);
+	}
+	public updateContactDetailsValuesOn(contactDetails: ContactDetailsDO) {
+		contactDetails.contactName = this._contactNameControl.value;
+		contactDetails.email = this._emailControl.value;
+		contactDetails.fax = this._faxControl.value;
+		contactDetails.phone = this._phoneControl.value;
+
 	}
 }
