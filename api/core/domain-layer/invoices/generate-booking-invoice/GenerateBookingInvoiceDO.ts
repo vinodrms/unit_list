@@ -1,4 +1,4 @@
-import {AddOnProductDO} from '../../../data-layer/add-on-products/data-objects/AddOnProductDO';
+import { AddOnProductDO } from '../../../data-layer/add-on-products/data-objects/AddOnProductDO';
 
 export interface GenerateBookingInvoiceAopMeta {
     addOnProductDO: AddOnProductDO;
@@ -8,5 +8,5 @@ export interface GenerateBookingInvoiceAopMeta {
 export interface GenerateBookingInvoiceDO {
     groupBookingId: string;
     bookingId: string;
-    initialAddOnProducts?: GenerateBookingInvoiceAopMeta[];
+    attachReservedAddOnProductsFromBooking: boolean;
 }

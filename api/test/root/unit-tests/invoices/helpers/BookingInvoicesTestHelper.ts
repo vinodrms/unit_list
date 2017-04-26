@@ -29,7 +29,8 @@ export class BookingInvoicesTestHelper {
 
         return {
             groupBookingId: booking.groupBookingId,
-            bookingId: booking.bookingId
+            bookingId: booking.bookingId,
+            attachReservedAddOnProductsFromBooking: true
         };
     }
 
@@ -42,7 +43,8 @@ export class BookingInvoicesTestHelper {
 
         return {
             groupBookingId: booking.groupBookingId,
-            bookingId: booking.bookingId
+            bookingId: booking.bookingId,
+            attachReservedAddOnProductsFromBooking: true
         };
     }
 
@@ -51,6 +53,7 @@ export class BookingInvoicesTestHelper {
         if (booking.price.hasDeductedCommission()) {
             noItems++;
         }
+        noItems += booking.reservedAddOnProductIdList.length;
         return noItems;
     }
 

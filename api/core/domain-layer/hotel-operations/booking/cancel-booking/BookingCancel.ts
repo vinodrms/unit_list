@@ -140,7 +140,8 @@ export class BookingCancel {
         var generateBookingInvoice = new GenerateBookingInvoice(this._appContext, this._sessionContext);
         generateBookingInvoice.generate({
             groupBookingId: this._cancelDO.groupBookingId,
-            bookingId: this._cancelDO.bookingId
+            bookingId: this._cancelDO.bookingId,
+            attachReservedAddOnProductsFromBooking: false
         }).then((invoiceGroup: InvoiceGroupDO) => {
             resolve(true);
         }).catch((error: ThError) => {

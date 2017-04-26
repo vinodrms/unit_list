@@ -15,6 +15,7 @@ import { InvoicePaymentMethodType } from '../../../data-layer/invoices/data-obje
 import { CustomerIdValidator } from '../../customers/validators/CustomerIdValidator';
 import { CustomerDO, CustomerType } from '../../../data-layer/customers/data-objects/CustomerDO';
 import { CustomersContainer } from '../../customers/validators/results/CustomersContainer';
+import { AddOnProductLoader, AddOnProductItemContainer, AddOnProductItem } from "../../add-on-products/validators/AddOnProductLoader";
 import { GenerateBookingInvoiceActionFactory } from './actions/GenerateBookingInvoiceActionFactory';
 import { IGenerateBookingInvoiceActionStrategy } from './actions/IGenerateBookingInvoiceActionStrategy';
 import { AddOnProductDO } from '../../../data-layer/add-on-products/data-objects/AddOnProductDO';
@@ -32,6 +33,7 @@ export class GenerateBookingInvoice {
 
     private _loadedBooking: BookingDO;
     private _loadedDefaultBillingCustomer: CustomerDO;
+    private _reservedAopMetaList: GenerateBookingInvoiceAopMeta[];
 
     constructor(private _appContext: AppContext, private _sessionContext: SessionContext) {
         this._thUtils = new ThUtils();
@@ -51,6 +53,10 @@ export class GenerateBookingInvoice {
             .then((booking: BookingDO) => {
                 this._loadedBooking = booking;
 
+                return this.getReservedAopMetaList();
+            }).then((reservedAopMetaList: GenerateBookingInvoiceAopMeta[]) => {
+                this._reservedAopMetaList = reservedAopMetaList;
+
                 var customerIdValidator = new CustomerIdValidator(this._appContext, this._sessionContext);
                 return customerIdValidator.validateCustomerIdList([this._loadedBooking.defaultBillingDetails.customerId]);
             }).then((loadedCustomersContainer: CustomersContainer) => {
@@ -67,6 +73,45 @@ export class GenerateBookingInvoice {
                 ThLogger.getInstance().logError(ThLogLevel.Error, "error generating invoice related to booking", this._generateBookingInvoiceDO, thError);
                 reject(thError);
             });
+    }
+
+    private getReservedAopMetaList(): Promise<GenerateBookingInvoiceAopMeta[]> {
+        return new Promise<GenerateBookingInvoiceAopMeta[]>((resolve: { (result: GenerateBookingInvoiceAopMeta[]): void }, reject: { (err: ThError): void }) => {
+            this.getReservedAopMetaListCore(resolve, reject);
+        });
+    }
+    private getReservedAopMetaListCore(resolve: { (result: GenerateBookingInvoiceAopMeta[]): void }, reject: { (err: ThError): void }) {
+        if (!this._generateBookingInvoiceDO.attachReservedAddOnProductsFromBooking) {
+            resolve([]);
+            return;
+        }
+        var addOnProductLoader = new AddOnProductLoader(this._appContext, this._sessionContext);
+        addOnProductLoader.load(this._loadedBooking.reservedAddOnProductIdList)
+            .then((addOnProductItemContainer: AddOnProductItemContainer) => {
+                let initialAddOnProducts = this.getGenerateBookingInvoiceAop(this._loadedBooking.reservedAddOnProductIdList, addOnProductItemContainer);
+                resolve(initialAddOnProducts);
+            }).catch((error: ThError) => {
+                reject(error);
+            });
+    }
+    private getGenerateBookingInvoiceAop(addOnProductIdList: string[], addOnProductsContainer: AddOnProductItemContainer): GenerateBookingInvoiceAopMeta[] {
+        var initialAddOnProducts: GenerateBookingInvoiceAopMeta[] = [];
+        if (this._thUtils.isUndefinedOrNull(addOnProductIdList) || !_.isArray(addOnProductIdList)) {
+            return initialAddOnProducts;
+        }
+        var aopCountMap: { [id: string]: number; } = _.countBy(addOnProductIdList, (aopId: string) => { return aopId });
+        var aopIdList: string[] = Object.keys(aopCountMap);
+        _.forEach(aopIdList, (aopId: string) => {
+            var addOnProductItem: AddOnProductItem = addOnProductsContainer.getAddOnProductItemById(aopId);
+            if (!this._thUtils.isUndefinedOrNull(addOnProductItem)) {
+                var noOfItems = aopCountMap[aopId];
+                initialAddOnProducts.push({
+                    addOnProductDO: addOnProductItem.addOnProduct,
+                    noOfItems: noOfItems
+                });
+            }
+        });
+        return initialAddOnProducts;
     }
 
     private getDefaultInvoiceDO(): Promise<InvoiceDO> {
@@ -102,7 +147,7 @@ export class GenerateBookingInvoice {
 
         invoice.payerList.push(defaultInvoicePayer);
 
-        _.forEach(this._generateBookingInvoiceDO.initialAddOnProducts, (generateAopMeta: GenerateBookingInvoiceAopMeta) => {
+        _.forEach(this._reservedAopMetaList, (generateAopMeta: GenerateBookingInvoiceAopMeta) => {
             var aopInvoiceItem = new InvoiceItemDO();
             aopInvoiceItem.buildFromAddOnProductDO(generateAopMeta.addOnProductDO, generateAopMeta.noOfItems, true, generateAopMeta.addOnProductDO.getVatId());
             invoice.itemList.push(aopInvoiceItem);
