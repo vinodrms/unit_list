@@ -69,21 +69,48 @@
 				<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter a valid url' | translate }}</small></label>
 			</div>
 		</div>
+	</div>
+	<div class="row" *ngIf="corporateDetails">
+		<div class="col-md-4 col-xs-12 form-group">
+			<label>{{ 'Contact Details' | translate }}</label>
+			<div class="input-group">
+				<table class="table table-striped projects">
+					<tbody>
+						<tr *ngFor="let contactDetails of corporateDetails.contactDetailsList">
+							<td class="clickable" (click)="selectContactDetails(contactDetails)">{{contactDetails.contactName}}</td>
+							<td>
+								<a class="btn btn-xs" (click)="removeContactDetails(contactDetails)">
+									<i class="fa unitpal-font">\</i> {{ 'Remove' | translate }}
+								</a>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<a class="btn btn-xs" (click)="addContactDetails()">
+									<i class="fa unitpal-font">'</i> {{ 'Add' | translate }}
+								</a>
+							</td>
+							<td></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	<div [formGroup]="contactDetailsFormGroup" *ngIf="currentContactDetails" class="row">
 		<div class="col-md-4 col-xs-12">
 			<div class="form-group">
-				<label>{{ 'Contact Name' | translate }}</label>
-				<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('contactName')}">
+				<label>{{ 'Contact Name' | translate }}*</label>
+				<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('contactName', contactDetailsFormGroup)}">
 					<input type="text" class="form-control" formControlName="contactName">
 				</div>
 				<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Invalid name length' | translate }}</small></label>
 			</div>
 		</div>
-	</div>
-	<div class="row">
 		<div class="col-md-4 col-xs-12">
 			<div class="form-group">
 				<label>{{ 'Phone' | translate }}</label>
-				<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('phone')}">
+				<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('phone', contactDetailsFormGroup)}">
 					<input type="text" placeholder="e.g.: +45 XX XX XX XX" class="form-control" formControlName="phone">
 				</div>
 				<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter a valid phone' | translate }}</small></label>
@@ -92,7 +119,7 @@
 		<div class="col-md-4 col-xs-12">
 			<div class="form-group">
 				<label>{{ 'Fax' | translate }}</label>
-				<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('fax')}">
+				<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('fax', contactDetailsFormGroup)}">
 					<input type="text" class="form-control" formControlName="fax">
 				</div>
 				<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter a valid fax' | translate }}</small></label>
@@ -101,13 +128,21 @@
 		<div class="col-md-4 col-xs-12">
 			<div class="form-group">
 				<label>{{ 'Email' | translate }}</label>
-				<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('email')}">
+				<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('email', contactDetailsFormGroup)}">
 					<input type="text" class="form-control" formControlName="email">
 				</div>
 				<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter a valid email' | translate }}</small></label>
 			</div>
 		</div>
 	</div>
+	<div *ngIf="currentContactDetails" class="row">
+		<div class="col-xs-12 col-md-offset-4 col-md-4">
+			<button type="button" class="btn btn-primary btn-block" (click)="saveContactDetails()">
+				{{ 'Update Contact Details' | translate }}
+			</button>
+		</div>
+	</div>
+	<hr>
 	<div class="row">
 		<div class="col-md-4 col-xs-12 form-group">
 			<label>{{ 'Pay Invoice By Agreement' | translate }}</label>

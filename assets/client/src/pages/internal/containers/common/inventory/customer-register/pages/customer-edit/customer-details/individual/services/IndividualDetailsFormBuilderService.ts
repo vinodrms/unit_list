@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {FormBuilder, FormGroup, Validators, AbstractControl, FormControl} from '@angular/forms';
 import {ThValidators, ThFieldLengths} from '../../../../../../../../../../../common/utils/form-utils/ThFormUtils';
 import {IndividualDetailsDO} from '../../../../../../../../../services/customers/data-objects/customer-details/IndividualDetailsDO';
+import {ContactDetailsDO} from '../../../../../../../../../services/customers/data-objects/customer-details/ContactDetailsDO';
 
 @Injectable()
 export class IndividualDetailsFormBuilderService {
@@ -51,8 +52,10 @@ export class IndividualDetailsFormBuilderService {
 		this._cityControl.setValue(individualDetails.address.city);
 		this._streetAddressControl.setValue(individualDetails.address.streetAddress);
 		this._postalCodeControl.setValue(individualDetails.address.postalCode);
-		this._emailControl.setValue(individualDetails.email);
-		this._phoneControl.setValue(individualDetails.phone);
+		(individualDetails.getContactDetailsList() && individualDetails.getContactDetailsList().length > 0) ?
+			this._emailControl.setValue(individualDetails.getContactDetailsList()[0].email) : "";
+		(individualDetails.getContactDetailsList() && individualDetails.getContactDetailsList().length > 0) ?
+			this._phoneControl.setValue(individualDetails.getContactDetailsList()[0].phone) : "";
 	}
 	public updateControlValuesOn(individualDetails: IndividualDetailsDO) {
 		individualDetails.firstName = this._firstNameControl.value;
@@ -61,8 +64,10 @@ export class IndividualDetailsFormBuilderService {
 		individualDetails.address.city = this._cityControl.value;
 		individualDetails.address.streetAddress = this._streetAddressControl.value;
 		individualDetails.address.postalCode = this._postalCodeControl.value;
-		individualDetails.email = this._emailControl.value;
-		individualDetails.phone = this._phoneControl.value;
+		var contactDetails = new ContactDetailsDO();
+		contactDetails.email = this._emailControl.value;
+		contactDetails.phone = this._phoneControl.value;
+		individualDetails.contactDetailsList = [contactDetails];
 	}
 
 	public get individualFormGroup(): FormGroup {
