@@ -14,6 +14,7 @@ import { BookingVM } from "../../../../../../../../services/bookings/view-models
 import { HotelAggregatedInfo } from "../../../../../../../../services/hotel/utils/HotelAggregatedInfo";
 import { DefaultBillingDetailsDO } from "../../../../../../../../services/bookings/data-objects/default-billing/DefaultBillingDetailsDO";
 import { ThTranslation } from "../../../../../../../../../../common/utils/localization/ThTranslation";
+import { PricePerDayDO } from "../../../../../../../../services/bookings/data-objects/price/PricePerDayDO";
 
 export interface BillingValidationResult {
     valid: boolean;
@@ -45,6 +46,11 @@ export class BookingCartItemVM {
     noAvailableAllotmentsString: string;
     totalPrice: number;
     totalPriceString: string;
+    commision: number;
+    commisionString: string;
+    otherPrice: number;
+    otherPriceString: string;
+    pricePerDayList: PricePerDayDO[];
     conditionsString: string;
     constraintsString: string;
     customerNameString: string;

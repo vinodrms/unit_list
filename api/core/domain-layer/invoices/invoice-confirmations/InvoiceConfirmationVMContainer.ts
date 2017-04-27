@@ -150,12 +150,14 @@ export class InvoiceConfirmationVMContainer {
         this.payerAddressSecondLineValue = this.getFormattedAddressSecondLine(this._payerCustomer.customerDetails.getAddress());
         this.payerContactLabel = this._thTranslation.translate('Contact');
         this.payerContactValue = "";
-        var phone = this._payerCustomer.customerDetails.getPhone();
+        var phone = (this._payerCustomer.customerDetails.getContactDetailsList() && this._payerCustomer.customerDetails.getContactDetailsList().length > 0)?
+                this._payerCustomer.customerDetails.getContactDetailsList()[0].phone : "";
         if (_.isString(phone) && phone.length > 0) {
             this.payerContactValue += phone;
         }
 
-        var email = this._payerCustomer.customerDetails.getEmail();
+        var email = (this._payerCustomer.customerDetails.getContactDetailsList() && this._payerCustomer.customerDetails.getContactDetailsList().length > 0)?
+                this._payerCustomer.customerDetails.getContactDetailsList()[0].email : "";
         if (_.isString(email) && email.length > 0) {
             this.payerContactValue += (this.payerContactValue.length > 0) ? " / " : "";
             this.payerContactValue += email;
@@ -190,15 +192,13 @@ export class InvoiceConfirmationVMContainer {
         this.netUnitPriceLabel = this._thTranslation.translate('Net Unit Price');
         this.vatLabel = this._thTranslation.translate('VAT');
         this.subtotalLabel = this._thTranslation.translate('Net Subtotal');
-
+        
         this.itemVMList = [];
         this.totalVat = 0;
         this.subtotalValue = 0;
         _.forEach(this._invoice.itemList, (itemDO: InvoiceItemDO) => {
             var invoiceItemVM = new InvoiceItemVM(this._thTranslation);
             invoiceItemVM.buildFromInvoiceItemDO(itemDO, this._invoiceAggregatedData.vatList);
-            this.totalVat = this._thUtils.roundNumberToTwoDecimals(this.totalVat + invoiceItemVM.vat);
-            this.subtotalValue = this._thUtils.roundNumberToTwoDecimals(this.subtotalValue + invoiceItemVM.subtotal);
 
             if (this.displayBookingDateBreakdown(itemDO)) {
                 let bookingInvoiceItems = this.getBookingDateBreakdownItems(<BookingPriceDO>itemDO.meta);
@@ -208,6 +208,9 @@ export class InvoiceConfirmationVMContainer {
                 this.itemVMList.push(invoiceItemVM);
             }
         });
+
+        this.totalVat = this._thUtils.roundNumberToTwoDecimals(this.totalVat + _.reduce(this.itemVMList, function(sum, itemVM: InvoiceItemVM){ return sum + itemVM.vat; }, 0));
+        this.subtotalValue = this._thUtils.roundNumberToTwoDecimals(this.subtotalValue + _.reduce(this.itemVMList, function(sum, itemVM: InvoiceItemVM){ return sum + itemVM.netUnitPrice; }, 0));
 
         if (this.hasTransactionFee) {
             let transactionFeeInvoiceItemVM = this.getTransactonFeeInvoiceItem();
@@ -302,7 +305,7 @@ export class InvoiceConfirmationVMContainer {
 
     private initTotalValues() {
         this.totalLabel = this._thTranslation.translate('Total');
-        this.totalValue = this._thUtils.roundNumberToTwoDecimals(this._invoice.payerList[this.payerIndex].priceToPayPlusTransactionFee);
+        this.totalValue = this._thUtils.roundNumberToTwoDecimals(this.invoicePayer.priceToPayPlusTransactionFee);
     }
 
     private initAdditionalFields() {

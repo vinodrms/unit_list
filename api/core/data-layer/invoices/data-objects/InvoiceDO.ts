@@ -10,6 +10,7 @@ import { BookingPriceDO } from '../../bookings/data-objects/price/BookingPriceDO
 import { CustomerDO } from '../../customers/data-objects/CustomerDO';
 import { InvoicePaymentMethodType } from './payers/InvoicePaymentMethodDO';
 import { IndexedBookingInterval } from '../../price-products/utils/IndexedBookingInterval';
+import { PricePerDayDO } from "../../bookings/data-objects/price/PricePerDayDO";
 
 import _ = require('underscore');
 
@@ -144,10 +145,12 @@ export class InvoiceDO extends BaseDO {
     }
 
     public getPrice(): number {
-        var thUtils = new ThUtils();
-        return _.reduce(this.itemList, (memo: number, item: InvoiceItemDO) => {
-            return thUtils.roundNumberToTwoDecimals(memo + thUtils.roundNumberToTwoDecimals(item.meta.getNumberOfItems() * item.meta.getUnitPrice()));
-        }, 0);
+        let totalPrice = 0;
+        _.forEach(this.itemList, (item: InvoiceItemDO) => {
+            totalPrice += item.meta.getNumberOfItems() * item.meta.getUnitPrice();
+        });
+        let thUtils = new ThUtils();
+        return thUtils.roundNumberToTwoDecimals(totalPrice);
     }
 
     public isPaid(): boolean {

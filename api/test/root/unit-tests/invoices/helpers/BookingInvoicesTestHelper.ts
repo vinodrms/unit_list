@@ -34,7 +34,7 @@ export class BookingInvoicesTestHelper {
     }
 
     public getSecondBooking(): BookingDO {
-        return this._defaultDataBuilder.bookingList[0];
+        return this._defaultDataBuilder.bookingList[1];
     }
 
     public buildGenerateBookingInvoiceDOForExistingInvoiceGroup(): GenerateBookingInvoiceDO {
@@ -51,6 +51,7 @@ export class BookingInvoicesTestHelper {
         if (booking.price.hasDeductedCommission()) {
             noItems++;
         }
+        noItems += booking.reservedAddOnProductIdList.length;
         return noItems;
     }
 

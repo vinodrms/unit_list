@@ -52,12 +52,12 @@ export class BookingInvoiceSync {
             }
             let invoiceGroup = searchResult.invoiceGroupList[0];
             let syncIsRequired = false;
-            switch(syncType) {
+            switch (syncType) {
                 case BookingInvoiceSyncType.Pricing: syncIsRequired = this.syncInvoiceWithBookingPriceForGroup(invoiceGroup, booking); break;
                 case BookingInvoiceSyncType.Notes: syncIsRequired = this.syncInvoiceWithBookingNotesForGroup(invoiceGroup, booking); break;
                 default: syncIsRequired = false;
             }
-            
+
             if (!syncIsRequired) {
                 return new Promise<InvoiceGroupDO>((resolve: { (result: InvoiceGroupDO): void }, reject: { (err: ThError): void }) => {
                     resolve(invoiceGroup);
@@ -77,13 +77,16 @@ export class BookingInvoiceSync {
     private syncInvoiceWithBookingPriceForGroup(invoiceGroup: InvoiceGroupDO, booking: BookingDO): boolean {
         let invoice = this.getBookingInvoiceFromInvoiceGroup(invoiceGroup, booking);
 
+        if (invoice.isClosed()) {
+            return false;
+        }
         let priceToPay = invoice.getPrice();
         let payersPriceToPay = this.getInvoicePayersPriceToPay(invoice);
-        
+
         if (priceToPay == payersPriceToPay) {
             return false;
         }
-        
+
         let priceForEachPayer = (priceToPay - payersPriceToPay) / invoice.payerList.length;
         invoice.payerList.forEach((payer: InvoicePayerDO) => {
             payer.priceToPay += priceForEachPayer;
@@ -101,15 +104,15 @@ export class BookingInvoiceSync {
         return payerTotalPrice;
     }
 
-    private syncInvoiceWithBookingNotesForGroup(invoiceGroup: InvoiceGroupDO, booking: BookingDO): boolean {        
+    private syncInvoiceWithBookingNotesForGroup(invoiceGroup: InvoiceGroupDO, booking: BookingDO): boolean {
         let invoice = this.getBookingInvoiceFromInvoiceGroup(invoiceGroup, booking);
-
         if (invoice.notesFromBooking == booking.invoiceNotes) {
-            return false
+            return false;
         }
-        
+        if (invoice.isClosed()) {
+            return false;
+        }
         invoice.notesFromBooking = booking.invoiceNotes;
-        
         return true;
     }
 
@@ -124,16 +127,6 @@ export class BookingInvoiceSync {
             }, thError);
             throw thError;
         }
-        if (invoice.isClosed()) {
-            var thError = new ThError(ThStatusCode.BookingInvoiceUtilsInvoiceIsClosed, null);
-            ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Invoice cannot be changed because the invoice is closed", {
-                groupBookingId: booking.groupBookingId,
-                bookingId: booking.bookingId,
-                invoiceGroupId: invoiceGroup.id
-            }, thError);
-            throw thError;
-        }
-
         return invoice;
     }
 

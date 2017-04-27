@@ -84,7 +84,7 @@
 			<booking-undo-checkin [bookingOperationsPageData]="bookingOperationsPageData" (onBookingUndoCheckIn)="didChangeBooking($event) && loadPageData()"></booking-undo-checkin>
 		</div>
 		<div class="row padding-bottom-10px">
-			<booking-links [bookingOperationsPageData]="bookingOperationsPageData"></booking-links>
+			<booking-links [bookingOperationsPageData]="bookingOperationsPageData" (onInvoiceGenerated)="loadPageData()"></booking-links>
 		</div>
 	</div>
 </div>
