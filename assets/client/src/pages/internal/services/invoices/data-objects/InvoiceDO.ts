@@ -46,7 +46,8 @@ export class InvoiceDO extends BaseDO {
         });
     }
 
-    public buildCleanInvoice() {
+    public buildCleanInvoice(accountingType: InvoiceAccountingType = InvoiceAccountingType.Debit) {
+        this.accountingType = accountingType;
         this.payerList = [];
         var cleanInvoicePayerDO = new InvoicePayerDO();
         cleanInvoicePayerDO.priceToPay = this.getPrice();
