@@ -18,6 +18,11 @@ export interface InvoiceGroupsQuery {
     bookingId: string;
 }
 
+export interface CreditedInvoiceMetaDO {
+    invoiceGroupId: string;
+    invoiceId: string;
+}
+
 @Injectable()
 export class InvoiceGroupsService extends ALazyLoadRequestService<InvoiceGroupDO> {
     
@@ -42,11 +47,16 @@ export class InvoiceGroupsService extends ALazyLoadRequestService<InvoiceGroupDO
     }
 
     public saveInvoiceGroupDO(invoiceGroup: InvoiceGroupDO): Observable<InvoiceGroupDO> {
-		return this.runServerPostActionOnInvoiceGroup(ThServerApi.InvoiceGroupsSaveItem, invoiceGroup);
+		return this.runServerPostActionOnInvoiceGroup(ThServerApi.InvoiceGroupsSaveItem, { invoiceGroup: invoiceGroup });
 	}
 
-    private runServerPostActionOnInvoiceGroup(apiAction: ThServerApi, invoiceGroup: InvoiceGroupDO): Observable<InvoiceGroupDO> {
-        return this._appContext.thHttp.post(apiAction, { invoiceGroup: invoiceGroup }).map((invoiceGroupObject: Object) => {
+    public credit(creditedInvoice: CreditedInvoiceMetaDO): Observable<InvoiceGroupDO> {
+        debugger
+		return this.runServerPostActionOnInvoiceGroup(ThServerApi.InvoiceGroupsCredit, { creditedInvoiceMeta: creditedInvoice });
+	}
+
+    private runServerPostActionOnInvoiceGroup(apiAction: ThServerApi, postData: Object): Observable<InvoiceGroupDO> {
+        return this._appContext.thHttp.post(apiAction, postData).map((invoiceGroupObject: Object) => {
 			var updatedInvoiceGroupDO = new InvoiceGroupDO();
 			updatedInvoiceGroupDO.buildFromObject(invoiceGroupObject["invoiceGroup"]);
 			return updatedInvoiceGroupDO;
