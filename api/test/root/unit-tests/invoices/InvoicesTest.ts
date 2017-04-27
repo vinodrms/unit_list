@@ -18,6 +18,7 @@ import { SaveInvoiceGroupDO } from '../../../../core/domain-layer/invoices/save-
 import { InvoiceTestUtils } from './utils/InvoiceTestUtils';
 import { InvoiceDO } from '../../../../core/data-layer/invoices/data-objects/InvoiceDO';
 import { InvoicePayerDO } from '../../../../core/data-layer/invoices/data-objects/payers/InvoicePayerDO';
+import { GenerateCreditInvoice } from "../../../../core/domain-layer/invoices/generate-credit-invoice/GenerateCreditInvoice";
 
 describe("Invoices Tests", function () {
     var testUtils: TestUtils;
@@ -211,4 +212,20 @@ describe("Invoices Tests", function () {
             });
         });
     });
+
+    describe("Invoice crediting", function () {
+        it("Should credit an invoice", function (done) {
+            let creditGenerator = new GenerateCreditInvoice(testContext.appContext, testContext.sessionContext);
+            creditGenerator.generate({
+                invoiceGroupId: createdBookingInvoiceGroup.id,
+                invoiceId: createdBookingInvoiceGroup.invoiceList[0].id
+            }).then((updatedInvoiceGroup: InvoiceGroupDO) => {
+                done();
+            }).catch((err: any) => {
+                done(err);
+            });
+        });
+
+    });
+
 });
