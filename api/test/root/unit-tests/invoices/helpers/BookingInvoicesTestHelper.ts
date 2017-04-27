@@ -29,8 +29,7 @@ export class BookingInvoicesTestHelper {
 
         return {
             groupBookingId: booking.groupBookingId,
-            bookingId: booking.bookingId,
-            attachReservedAddOnProductsFromBooking: true
+            bookingId: booking.bookingId
         };
     }
 
@@ -43,8 +42,7 @@ export class BookingInvoicesTestHelper {
 
         return {
             groupBookingId: booking.groupBookingId,
-            bookingId: booking.bookingId,
-            attachReservedAddOnProductsFromBooking: true
+            bookingId: booking.bookingId
         };
     }
 

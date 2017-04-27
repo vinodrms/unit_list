@@ -132,11 +132,7 @@ export class HotelOperationsBookingService {
 
     public generateInvoice(booking: BookingDO): Observable<InvoiceGroupDO> {
         return this._appContext.thHttp.post(ThServerApi.HotelOperationsBookingGenerateInvoice, {
-            booking: {
-                groupBookingId: booking.groupBookingId,
-                bookingId: booking.bookingId,
-                attachReservedAddOnProductsFromBooking: true
-            }
+            booking: booking
         }).map(invoiceGroupObject => {
             var updatedInvoiceGroupDO = new InvoiceGroupDO();
             updatedInvoiceGroupDO.buildFromObject(invoiceGroupObject["invoiceGroup"]);

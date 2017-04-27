@@ -107,7 +107,7 @@ export class BookingMetaFactory {
                 reserveAddOnProductRight: BookingReserveAddOnProductRight.None,
                 changePriceProductRight: BookingChangePriceProductRight.None,
                 undoCheckInRight: BookingUndoCheckInRight.None,
-                generateInvoiceRight: BookingGenerateInvoiceRight.None,
+                generateInvoiceRight: BookingGenerateInvoiceRight.Allowed,
                 displayClassName: "",
                 fontName: "C"
             }),

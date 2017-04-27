@@ -28,6 +28,7 @@ export class BookingCancel {
     private _bookingUtils: BookingUtils;
 
     private _cancelDO: BookingCancelDO;
+    private _cancelResult: BookingCancelUpdateResult;
 
     private _loadedHotel: HotelDO;
     private _bookingWithDeps: BookingWithDependencies;
@@ -63,9 +64,8 @@ export class BookingCancel {
                     ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "cancel booking: invalid booking state", this._cancelDO, thError);
                     throw thError;
                 }
-                var bookingUpdateResult: BookingCancelUpdateResult = this.updateBooking();
-                return this.generateInvoiceIfNecessary(bookingUpdateResult);
-            }).then((invoiceGenerationResult: boolean) => {
+                this._cancelResult = this.updateBooking();
+
                 var bookingsRepo = this._appContext.getRepositoryFactory().getBookingRepository();
                 return bookingsRepo.updateBooking({ hotelId: this._sessionContext.sessionDO.hotel.id }, {
                     groupBookingId: this._bookingWithDeps.bookingDO.groupBookingId,
@@ -75,8 +75,11 @@ export class BookingCancel {
             }).then((updatedBooking: BookingDO) => {
                 this._bookingWithDeps.bookingDO = updatedBooking;
 
+                return this.generateInvoiceIfNecessary(this._cancelResult);
+            }).then((invoiceGenerationResult: boolean) => {
+
                 let bookingInvoiceSync = new BookingInvoiceSync(this._appContext, this._sessionContext);
-                return bookingInvoiceSync.syncInvoiceWithBookingPrice(updatedBooking);
+                return bookingInvoiceSync.syncInvoiceWithBookingPrice(this._bookingWithDeps.bookingDO);
             }).then((updatedGroup: InvoiceGroupDO) => {
                 resolve(this._bookingWithDeps.bookingDO);
             }).catch((error: any) => {
@@ -140,8 +143,7 @@ export class BookingCancel {
         var generateBookingInvoice = new GenerateBookingInvoice(this._appContext, this._sessionContext);
         generateBookingInvoice.generate({
             groupBookingId: this._cancelDO.groupBookingId,
-            bookingId: this._cancelDO.bookingId,
-            attachReservedAddOnProductsFromBooking: false
+            bookingId: this._cancelDO.bookingId
         }).then((invoiceGroup: InvoiceGroupDO) => {
             resolve(true);
         }).catch((error: ThError) => {

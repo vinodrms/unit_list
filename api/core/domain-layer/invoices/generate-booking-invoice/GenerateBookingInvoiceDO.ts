@@ -13,7 +13,6 @@ export interface GenerateBookingInvoiceAopMeta {
 export class GenerateBookingInvoiceDO {
 	groupBookingId: string;
 	bookingId: string;
-	attachReservedAddOnProductsFromBooking: boolean;
 
 	public static getValidationStructure(): IValidationStructure {
 		return new ObjectValidationStructure([
@@ -24,10 +23,6 @@ export class GenerateBookingInvoiceDO {
 			{
 				key: "bookingId",
 				validationStruct: new PrimitiveValidationStructure(new StringValidationRule())
-			},
-			{
-				key: "attachReservedAddOnProductsFromBooking",
-				validationStruct: new PrimitiveValidationStructure(new BooleanValidationRule())
 			}
 		]);
 	}

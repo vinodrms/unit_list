@@ -88,7 +88,7 @@ export class GenerateBookingInvoice {
         });
     }
     private getReservedAopMetaListCore(resolve: { (result: GenerateBookingInvoiceAopMeta[]): void }, reject: { (err: ThError): void }) {
-        if (!this._generateBookingInvoiceDO.attachReservedAddOnProductsFromBooking) {
+        if (this._loadedBooking.price.isPenalty()) {
             resolve([]);
             return;
         }

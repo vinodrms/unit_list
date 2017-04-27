@@ -55,8 +55,7 @@ export class CheckInStrategy extends AAssignRoomStrategy {
         let generateBookingInvoice = new GenerateBookingInvoice(this._appContext, this._sessionContext);
         generateBookingInvoice.generate({
             groupBookingId: booking.groupBookingId,
-            bookingId: booking.bookingId,
-            attachReservedAddOnProductsFromBooking: true
+            bookingId: booking.bookingId
         }).then((invoiceGroup: InvoiceGroupDO) => {
             resolve(booking);
         }).catch((error: ThError) => {
