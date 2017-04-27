@@ -10,7 +10,7 @@ import {ThDateUtils} from '../../../pages/internal/services/common/data-objects/
 				<span *ngIf="labelFont" class="unitpal-font" style="font-size: 18px;">{{labelFont}}</span>
 			</label>
 			<div class="input-group">
-				<span class="input-group-addon"><small></small> <i class="fa fa-calendar-o"></i></span>
+				<span *ngIf="showIcon" class="input-group-addon"><small></small> <i class="fa fa-calendar-o"></i></span>
 				<span class="form-control" [ngClass]="{'disabled-text': readonly}">{{ selectedThDate | thdate }}</span>
 			</div>
 		</div>
@@ -20,6 +20,7 @@ export class ThDatePickerComponent implements AfterViewInit {
 	@Input() showLabel: boolean = true;
 	@Input() label: string = "Select a date";
 	@Input() labelFont: string;
+	@Input() showIcon: boolean = true;
 
 	private _initialThDate: ThDateDO;
 	public get initialThDate(): ThDateDO {
@@ -56,8 +57,19 @@ export class ThDatePickerComponent implements AfterViewInit {
 	public triggerSelectedDate() {
 		this.didSelectThDate.next(this.selectedThDate);
 	}
+	private _selectedThDate: ThDateDO;
+	public get selectedThDate() : ThDateDO {
+		return this._selectedThDate;
+	}
+	@Input()
+	public set selectedThDate(date: ThDateDO) {
+		this._selectedThDate = date;
+		if (this.getJQueryElement() && this.getJQueryElement().data('daterangepicker')){
+			this.getJQueryElement().data('daterangepicker').setStartDate(date);
+			this.getJQueryElement().data('daterangepicker').setEndDate(date);
+		}
+	}
 
-	selectedThDate: ThDateDO;
 	private didInitView: boolean = false;
 	private _thDateUtils = new ThDateUtils();
 	private _didInitDateRangePickerElement: boolean = false;
