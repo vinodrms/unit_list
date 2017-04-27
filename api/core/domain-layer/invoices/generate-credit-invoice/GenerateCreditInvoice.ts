@@ -1,4 +1,4 @@
-import { CreditedInvoiceMetaDO } from "./CrediteInvoiceMetaDO";
+import { CreditedInvoiceMetaDO } from "./CreditedInvoiceMetaDO";
 import { AppContext } from "../../../utils/AppContext";
 import { SessionContext } from "../../../utils/SessionContext";
 import { ThUtils } from "../../../utils/ThUtils";
@@ -35,8 +35,6 @@ export class GenerateCreditInvoice {
                 let invoiceToBeCredited = _.find(invoiceGroup.invoiceList, (invoiceDO: InvoiceDO) => {
                     return invoiceDO.id === this._creditedInvoiceMeta.invoiceId;
                 });
-
-                debugger
 
                 resolve(invoiceGroup);
             }).catch((error: any) => {
