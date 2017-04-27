@@ -9,6 +9,7 @@ import { InvoiceGroupDO } from '../../../../../data-layer/invoices/data-objects/
 import { IGenerateBookingInvoiceActionStrategy } from '../IGenerateBookingInvoiceActionStrategy';
 import { BookingDO } from "../../../../../data-layer/bookings/data-objects/BookingDO";
 import { ThUtils } from "../../../../../utils/ThUtils";
+import { BookingInvoiceSync } from "../../../../bookings/invoice-sync/BookingInvoiceSync";
 
 export class GenerateBookingInvoiceByUpdatingGroupStrategy implements IGenerateBookingInvoiceActionStrategy {
     private _thUtils: ThUtils;
@@ -17,7 +18,7 @@ export class GenerateBookingInvoiceByUpdatingGroupStrategy implements IGenerateB
     private _loadedInvoiceGroup: InvoiceGroupDO;
 
     constructor(private _appContext: AppContext, private _sessionContext: SessionContext,
-        private _invoiceGroupDO: InvoiceGroupDO, private _booking: BookingDO) {
+        private _invoiceGroupDO: InvoiceGroupDO, private _bookingDO: BookingDO) {
         this._thUtils = new ThUtils();
         this._invoiceGroupMeta = this.buildInvoiceGroupMetaRepoDO();
     }
@@ -36,11 +37,13 @@ export class GenerateBookingInvoiceByUpdatingGroupStrategy implements IGenerateB
                     invoiceGroupToSave = this._loadedInvoiceGroup;
                 }
                 return invoiceGroupRepo.updateInvoiceGroup(this._invoiceGroupMeta, itemMeta, invoiceGroupToSave);
-            })
-            .then((result: InvoiceGroupDO) => {
-                resolve(result);
-            })
-            .catch((error: any) => {
+            }).then((result: InvoiceGroupDO) => {
+                // the repository may return other invoice items through its decorator => force sync total price
+                let bookingInvoiceSync = new BookingInvoiceSync(this._appContext, this._sessionContext);
+                return bookingInvoiceSync.syncInvoiceWithBookingPrice(this._bookingDO);
+            }).then((updatedGroup: InvoiceGroupDO) => {
+                resolve(updatedGroup);
+            }).catch((error: any) => {
                 var thError = new ThError(ThStatusCode.InvoiceGroupsItemUpdateStrategyErrorUpdating, error);
                 if (thError.isNativeError()) {
                     ThLogger.getInstance().logError(ThLogLevel.Error, "error updating invoice group item", this._invoiceGroupDO, thError);
@@ -50,7 +53,7 @@ export class GenerateBookingInvoiceByUpdatingGroupStrategy implements IGenerateB
     }
 
     private bookingAlreadyHasGeneratedInvoice() {
-        let invoice = this._loadedInvoiceGroup.getInvoiceForBooking(this._booking.bookingId);
+        let invoice = this._loadedInvoiceGroup.getInvoiceForBooking(this._bookingDO.bookingId);
         return !this._thUtils.isUndefinedOrNull(invoice);
     }
 

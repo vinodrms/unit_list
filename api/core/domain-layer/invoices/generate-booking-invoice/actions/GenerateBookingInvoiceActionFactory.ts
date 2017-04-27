@@ -36,7 +36,7 @@ export class GenerateBookingInvoiceActionFactory {
                 var bookingInvoiceGroup: InvoiceGroupDO;
                 if (_.isEmpty(result.invoiceGroupList)) {
                     bookingInvoiceGroup = this.buildInvoiceGroupDO(this._bookingInvoice);
-                    resolve(new GenerateBookingInvoiceByAddingGroupStrategy(this._appContext, this._sessionContext, bookingInvoiceGroup));
+                    resolve(new GenerateBookingInvoiceByAddingGroupStrategy(this._appContext, this._sessionContext, bookingInvoiceGroup, this._booking));
                 }
                 else {
                     bookingInvoiceGroup = this.buildInvoiceGroupDO(this._bookingInvoice, result.invoiceGroupList[0]);

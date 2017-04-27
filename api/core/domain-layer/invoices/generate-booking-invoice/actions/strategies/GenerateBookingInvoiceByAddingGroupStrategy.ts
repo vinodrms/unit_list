@@ -9,13 +9,15 @@ import { IGenerateBookingInvoiceActionStrategy } from '../IGenerateBookingInvoic
 
 import { TaxResponseRepoDO } from '../../../../../data-layer/taxes/repositories/ITaxRepository';
 import { TaxDO } from '../../../../../data-layer/taxes/data-objects/TaxDO';
+import { BookingDO } from "../../../../../data-layer/bookings/data-objects/BookingDO";
+import { BookingInvoiceSync } from "../../../../bookings/invoice-sync/BookingInvoiceSync";
 
 
 export class GenerateBookingInvoiceByAddingGroupStrategy implements IGenerateBookingInvoiceActionStrategy {
 	private _thUtils: ThUtils;
 
 	constructor(private _appContext: AppContext, private _sessionContext: SessionContext,
-		private _invoiceGroupDO: InvoiceGroupDO) {
+		private _invoiceGroupDO: InvoiceGroupDO, private _bookingDO: BookingDO) {
 		this._thUtils = new ThUtils();
 	}
 
@@ -27,7 +29,11 @@ export class GenerateBookingInvoiceByAddingGroupStrategy implements IGenerateBoo
 
 			return invoiceGroupRepo.addInvoiceGroup({ hotelId: this.hotelId }, this._invoiceGroupDO);
 		}).then((result: InvoiceGroupDO) => {
-			resolve(result);
+			// the repository may return other invoice items through its decorator => force sync total price
+			let bookingInvoiceSync = new BookingInvoiceSync(this._appContext, this._sessionContext);
+			return bookingInvoiceSync.syncInvoiceWithBookingPrice(this._bookingDO);
+		}).then((updatedGroup: InvoiceGroupDO) => {
+			resolve(updatedGroup);
 		}).catch((err: any) => {
 			reject(err);
 		});
