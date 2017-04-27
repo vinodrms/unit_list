@@ -112,7 +112,7 @@ export class InvoiceDO extends BaseDO {
     }
     private getBookingInvoiceItems(item: InvoiceItemDO, booking: BookingDO): InvoiceItemDO[] {
         let bookingInvoiceItemList: InvoiceItemDO[] = [];
-        // TODO movable should be false
+
         item.meta = booking.price;
         bookingInvoiceItemList.push(item);
 
@@ -125,7 +125,6 @@ export class InvoiceDO extends BaseDO {
         if (!booking.price.isPenalty()) {
             booking.price.includedInvoiceItemList.reverse();
             _.forEach(booking.price.includedInvoiceItemList, (invoiceItem: InvoiceItemDO) => {
-                // TODO movable should be false
                 bookingInvoiceItemList = bookingInvoiceItemList.concat(invoiceItem);
             });
         }

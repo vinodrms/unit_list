@@ -34,7 +34,6 @@ export class FeeInvoiceItemMetaDO extends BaseDO implements IInvoiceItemMeta {
         return this.vatId;
     }
     public buildFromCustomerDO(customerDO: CustomerDO) {
-        // TODO movable should be false
         this.numberOfItems = 1;
         this.displayName = 'Pay Invoice By Agreement Fee';
         var corporateDetails = new BaseCorporateDetailsDO();

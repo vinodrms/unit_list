@@ -32,7 +32,6 @@ export class RoomCommissionItemMetaDO extends BaseDO implements IInvoiceItemMeta
         return this.vatId;
     }
     public buildFromRoomCommission(deductedCommissionPrice: number) {
-        // TODO movable should be false
         this.numberOfItems = -1;
         this.displayName = 'Deducted Room Commission';
         this.pricePerItem = deductedCommissionPrice;

@@ -20,7 +20,6 @@ import { GenerateBookingInvoiceActionFactory } from './actions/GenerateBookingIn
 import { IGenerateBookingInvoiceActionStrategy } from './actions/IGenerateBookingInvoiceActionStrategy';
 import { AddOnProductDO } from '../../../data-layer/add-on-products/data-objects/AddOnProductDO';
 import { BaseCorporateDetailsDO } from '../../../data-layer/customers/data-objects/customer-details/corporate/BaseCorporateDetailsDO';
-import { AddOnProductInvoiceItemMetaDO } from '../../../data-layer/invoices/data-objects/items/add-on-products/AddOnProductInvoiceItemMetaDO';
 import { HotelDO } from "../../../data-layer/hotel/data-objects/HotelDO";
 import { PaymentMethodInstanceDO } from "../../../data-layer/common/data-objects/payment-method/PaymentMethodInstanceDO";
 import { TransactionFeeDO } from "../../../data-layer/common/data-objects/payment-method/TransactionFeeDO";
@@ -108,7 +107,6 @@ export class GenerateBookingInvoice {
 
                 _.forEach(this._generateBookingInvoiceDO.initialAddOnProducts, (generateAopMeta: GenerateBookingInvoiceAopMeta) => {
                     var aopInvoiceItem = new InvoiceItemDO();
-                    // TODO movable should be true
                     aopInvoiceItem.buildFromAddOnProductDO(generateAopMeta.addOnProductDO, generateAopMeta.noOfItems, generateAopMeta.addOnProductDO.getVatId());
                     invoice.itemList.push(aopInvoiceItem);
                 });

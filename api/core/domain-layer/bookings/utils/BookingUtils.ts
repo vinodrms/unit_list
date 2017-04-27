@@ -100,7 +100,6 @@ export class BookingUtils {
         bookingDO.price = new BookingPriceDO();
         bookingDO.price.vatId = previousBookingVatId;
 
-        // TODO movable should be false on booking price
         bookingDO.price.priceType = BookingPriceType.BookingStay;
 
         // get the breakdown of prices per night
