@@ -6,15 +6,13 @@ import { CustomerDO } from '../../../../customers/data-objects/CustomerDO';
 import { CorporateDetailsDO } from '../../../../customers/data-objects/customer-details/CorporateDetailsDO';
 
 export class FeeInvoiceItemMetaDO extends BaseDO implements IInvoiceItemMeta {
-    movable: boolean;
-
     pricePerItem: number;
     vatId: string;
     numberOfItems: number;
     displayName: string;
 
     protected getPrimitivePropertyKeys(): string[] {
-        return ["movable", "pricePerItem", "vatId", "numberOfItems", "displayName"];
+        return ["pricePerItem", "vatId", "numberOfItems", "displayName"];
     }
 
     public getUnitPrice(): number {
@@ -26,21 +24,16 @@ export class FeeInvoiceItemMetaDO extends BaseDO implements IInvoiceItemMeta {
     public getDisplayName(thTranslation: ThTranslation): string {
         return thTranslation.translate(this.displayName);
     }
-    public setMovable(movable: boolean) {
-        this.movable = movable;
-    }
     public isMovable(): boolean {
-        var thUtils = new ThUtils();
-        if (thUtils.isUndefinedOrNull(this.movable)) {
-            return true;
-        }
-        return this.movable;
+        return false;
+    }
+    public isDerivedFromBooking(): boolean {
+        return true;
     }
     public getVatId(): string {
         return this.vatId;
     }
     public buildFromCustomerDO(customerDO: CustomerDO) {
-        this.movable = false;
         this.numberOfItems = 1;
         this.displayName = 'Pay Invoice By Agreement Fee';
         var corporateDetails = new CorporateDetailsDO();

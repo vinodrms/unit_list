@@ -100,8 +100,7 @@ export class BookingUtils {
         bookingDO.price = new BookingPriceDO();
         bookingDO.price.vatId = previousBookingVatId;
 
-        bookingDO.price.movable = false;
-
+        // TODO movable should be false on booking price
         bookingDO.price.priceType = BookingPriceType.BookingStay;
 
         // get the breakdown of prices per night
@@ -197,6 +196,8 @@ export class BookingUtils {
         itemMeta.aopDisplayName = addOnProductSnapshot.name;
         itemMeta.numberOfItems = numberOfItems;
         itemMeta.pricePerItem = addOnProductSnapshot.price;
+        itemMeta.includedInBooking = true;
+        
         if (_.isArray(addOnProductSnapshot.taxIdList) && addOnProductSnapshot.taxIdList.length > 0) {
             itemMeta.vatId = addOnProductSnapshot.taxIdList[0];
         }

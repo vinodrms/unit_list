@@ -1,4 +1,4 @@
-import { InvoiceItemDO } from '../data-objects/items/InvoiceItemDO';
+import { InvoiceItemDO, InvoiceItemType } from '../data-objects/items/InvoiceItemDO';
 import { ThTranslation } from '../../../../../common/utils/localization/ThTranslation';
 import { ThUtils } from '../../../../../common/utils/ThUtils';
 import { BookingPriceDO } from "../../bookings/data-objects/price/BookingPriceDO";
@@ -32,7 +32,7 @@ export class InvoiceItemVM {
         return this.invoiceItemDO.meta.isMovable();
     }
     public displayBookingDateBreakdown(): boolean {
-        if (!this.invoiceItemDO.isBookingPrice()) {
+        if (!(this.invoiceItemDO.type === InvoiceItemType.Booking)) {
             return false;
         }
         let bookingPrice: BookingPriceDO = <BookingPriceDO>this.invoiceItemDO.meta;

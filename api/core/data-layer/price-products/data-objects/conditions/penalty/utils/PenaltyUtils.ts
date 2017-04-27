@@ -14,7 +14,6 @@ export class PenaltyUtils {
         }
         var penaltyPrice = new BookingPriceDO();
 
-        penaltyPrice.movable = bookingPrice.movable;
         penaltyPrice.vatId = bookingPrice.vatId;
 
         penaltyPrice.priceType = BookingPriceType.Penalty;

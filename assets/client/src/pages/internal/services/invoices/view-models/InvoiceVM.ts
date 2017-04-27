@@ -88,7 +88,6 @@ export class InvoiceVM {
 
         var invoiceItemMeta = new AddOnProductInvoiceItemMetaDO();
         invoiceItemMeta.aopDisplayName = aop.name;
-        invoiceItemMeta.movable = true;
         invoiceItemMeta.numberOfItems = qty;
         invoiceItemMeta.pricePerItem = aop.price;
         if(_.isArray(aop.taxIdList) && !_.isEmpty(aop.taxIdList)) {

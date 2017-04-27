@@ -4,8 +4,8 @@ import {ThTranslation} from '../../../../utils/localization/ThTranslation';
 export interface IInvoiceItemMeta extends BaseDO {
     getNumberOfItems(): number;
     getDisplayName(thTranslation: ThTranslation): string;
-    setMovable(movable: boolean);
     isMovable(): boolean;
+    isDerivedFromBooking(): boolean;
     getUnitPrice(): number;
     getVatId(): string;
 }

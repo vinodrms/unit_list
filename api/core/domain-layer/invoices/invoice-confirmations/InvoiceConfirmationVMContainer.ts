@@ -238,7 +238,7 @@ export class InvoiceConfirmationVMContainer {
         return invoiceItemVM;
     }
     private displayBookingDateBreakdown(invoiceItemDO: InvoiceItemDO): boolean {
-        if (!invoiceItemDO.isBookingPrice()) {
+        if (!(invoiceItemDO.type === InvoiceItemType.Booking)) {
             return false;
         }
         let bookingPrice: BookingPriceDO = <BookingPriceDO>invoiceItemDO.meta;

@@ -4,15 +4,19 @@ import {IInvoiceItemMeta} from '../IInvoiceItemMeta';
 import {ThTranslation} from '../../../../../utils/localization/ThTranslation';
 
 export class AddOnProductInvoiceItemMetaDO extends BaseDO implements IInvoiceItemMeta {
-    movable: boolean;
-
     pricePerItem: number;
     vatId: string;
     numberOfItems: number;
     aopDisplayName: string;
+    includedInBooking: boolean;
+    
+    constructor() {
+        super();
+        this.includedInBooking = false;
+    }
 
     protected getPrimitivePropertyKeys(): string[] {
-        return ["movable", "pricePerItem", "vatId", "numberOfItems", "aopDisplayName"];
+        return ["pricePerItem", "vatId", "numberOfItems", "aopDisplayName", "includedInBooking"];
     }
 
     public getUnitPrice(): number {
@@ -24,17 +28,16 @@ export class AddOnProductInvoiceItemMetaDO extends BaseDO implements IInvoiceIte
     public getDisplayName(thTranslation: ThTranslation): string {
         return this.aopDisplayName;
     }
-    public setMovable(movable: boolean) {
-        this.movable = movable;
-    }
-    public isMovable(): boolean {
-        var thUtils = new ThUtils();
-        if (thUtils.isUndefinedOrNull(this.movable)) {
-            return true;
-        }
-        return this.movable;
-    }
     public getVatId(): string {
         return this.vatId;
+    }
+    public isMovable(): boolean {
+        if(this.includedInBooking) {
+            return false;
+        }
+        return true;
+    }
+    public isDerivedFromBooking(): boolean {
+        return this.includedInBooking;
     }
 }

@@ -112,9 +112,8 @@ export class InvoiceDO extends BaseDO {
     }
     private getBookingInvoiceItems(item: InvoiceItemDO, booking: BookingDO): InvoiceItemDO[] {
         let bookingInvoiceItemList: InvoiceItemDO[] = [];
-
+        // TODO movable should be false
         item.meta = booking.price;
-        item.meta.setMovable(false);
         bookingInvoiceItemList.push(item);
 
         if (booking.price.hasDeductedCommission()) {
@@ -126,7 +125,7 @@ export class InvoiceDO extends BaseDO {
         if (!booking.price.isPenalty()) {
             booking.price.includedInvoiceItemList.reverse();
             _.forEach(booking.price.includedInvoiceItemList, (invoiceItem: InvoiceItemDO) => {
-                invoiceItem.meta.setMovable(false);
+                // TODO movable should be false
                 bookingInvoiceItemList = bookingInvoiceItemList.concat(invoiceItem);
             });
         }
@@ -153,7 +152,7 @@ export class InvoiceDO extends BaseDO {
     public getPrice(): number {
         let totalPrice = 0;
         _.forEach(this.itemList, (item: InvoiceItemDO) => {
-            if(item.isBookingPrice()) {
+            if(item.type === InvoiceItemType.Booking) {
                 let bookingPrice = new BookingPriceDO();
                 bookingPrice.buildFromObject(item.meta);
 
@@ -192,11 +191,11 @@ export class InvoiceDO extends BaseDO {
     public removeItemsPopulatedFromBooking() {
         var itemsToRemoveIdList = [];
         _.forEach(this.itemList, (invoiceItemDO: InvoiceItemDO) => {
-            if (invoiceItemDO.isDerivedFromBooking()) {
-                itemsToRemoveIdList.push(invoiceItemDO.id);
-            }
-            else if (invoiceItemDO.type === InvoiceItemType.Booking) {
+            if (invoiceItemDO.type === InvoiceItemType.Booking) {
                 delete invoiceItemDO.meta;
+            }
+            else if (invoiceItemDO.meta.isDerivedFromBooking()) {
+                itemsToRemoveIdList.push(invoiceItemDO.id);
             }
         });
         _.forEach(itemsToRemoveIdList, (id: string) => {

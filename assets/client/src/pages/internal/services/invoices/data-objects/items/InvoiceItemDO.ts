@@ -64,12 +64,4 @@ export class InvoiceItemDO extends BaseDO {
         this.type = InvoiceItemType.InvoiceFee;
         this.accountingType = accountingType;
     }
-    public isDerivedFromBooking(): boolean {
-        return this.type === InvoiceItemType.InvoiceFee
-            || this.type === InvoiceItemType.RoomCommission
-            || (this.type === InvoiceItemType.AddOnProduct && !this.meta.isMovable());
-    }
-    public isBookingPrice(): boolean {
-        return this.type === InvoiceItemType.Booking;
-    }
 }

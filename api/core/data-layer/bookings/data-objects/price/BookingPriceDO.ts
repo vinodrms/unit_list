@@ -14,8 +14,6 @@ export enum BookingPriceType {
 }
 
 export class BookingPriceDO extends BaseDO implements IInvoiceItemMeta {
-    movable: boolean;
-
     priceType: BookingPriceType;
 
     roomPricePerNightAvg: number;
@@ -117,14 +115,10 @@ export class BookingPriceDO extends BaseDO implements IInvoiceItemMeta {
         return !thUtils.isUndefinedOrNull(this.breakfast) && !thUtils.isUndefinedOrNull(this.breakfast.id);
     }
 
-    public setMovable(movable: boolean) {
-        this.movable = movable;
-    }
     public isMovable(): boolean {
-        var thUtils = new ThUtils();
-        if (thUtils.isUndefinedOrNull(this.movable)) {
-            return true;
-        }
-        return this.movable;
+        return false;
+    }
+    public isDerivedFromBooking(): boolean {
+        return false;
     }
 }
