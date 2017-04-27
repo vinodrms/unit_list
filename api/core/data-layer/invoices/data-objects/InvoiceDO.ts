@@ -36,6 +36,12 @@ export class InvoiceDO extends BaseDO {
     paidDateUtcTimestamp: number;
     paidDateTimeUtcTimestamp: number;
 
+    constructor() {
+        super();
+
+        this.accountingType = 0;
+    }
+
     protected getPrimitivePropertyKeys(): string[] {
         return ["id", "accountingType", "bookingId", "invoiceReference", "paymentStatus", "notesFromBooking", "paidDateUtcTimestamp", "paidDateTimeUtcTimestamp"];
     }
