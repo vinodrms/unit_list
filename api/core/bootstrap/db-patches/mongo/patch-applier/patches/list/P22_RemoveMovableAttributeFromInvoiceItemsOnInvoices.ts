@@ -6,29 +6,27 @@ import { ThUtils } from "../../../../../../utils/ThUtils";
 import { InvoiceDO, InvoiceAccountingType } from "../../../../../../data-layer/invoices/data-objects/InvoiceDO";
 import { InvoiceItemDO, InvoiceItemAccountingType } from "../../../../../../data-layer/invoices/data-objects/items/InvoiceItemDO";
 
-import _ = require('underscore');
-
-export class P21_AddInvoiceItemAccountingTypeDebitOnInvoices extends APaginatedTransactionalMongoPatch {
+export class P22_RemoveMovableAttributeFromInvoiceItemsOnInvoices extends APaginatedTransactionalMongoPatch {
 
     protected getMongoRepository(): MongoRepository {
         return this._invoiceGroupsRepository;
     }
 
     public getPatchType(): MongoPatchType {
-        return MongoPatchType.AddInvoiceItemAccountingTypeDebitOnInvoices;
+        return MongoPatchType.RemoveMovableAttributeFromInvoiceItemsOnInvoices;
     }
 
     protected updateDocumentInMemory(invoiceGroup) {
-        P21_AddInvoiceItemAccountingTypeDebitOnInvoices.addInvoiceItemAccountingTypeDebitOnInvoices(invoiceGroup);
+        P22_RemoveMovableAttributeFromInvoiceItemsOnInvoices.removeMovableAttributeFromInvoiceItemsOnInvoices(invoiceGroup);
         invoiceGroup.versionId++;
     }
 
-    public static addInvoiceItemAccountingTypeDebitOnInvoices(invoiceGroup: InvoiceGroupDO) {
+    public static removeMovableAttributeFromInvoiceItemsOnInvoices(invoiceGroup: InvoiceGroupDO) {
         let thUtils = new ThUtils();
-        _.forEach(invoiceGroup.invoiceList, (invoiceDO: InvoiceDO) => {
-            _.forEach(invoiceDO.itemList, (invoiceItemDO: InvoiceItemDO) => {
-                if(thUtils.isUndefinedOrNull(invoiceItemDO.accountingType)) {
-                    invoiceItemDO.accountingType = InvoiceItemAccountingType.Debit;
+        invoiceGroup.invoiceList.forEach((invoiceDO: InvoiceDO) => {
+            invoiceDO.itemList.forEach((invoiceItemDO: InvoiceItemDO) => {
+                if (!thUtils.isUndefinedOrNull(invoiceItemDO.meta) && !thUtils.isUndefinedOrNull(invoiceItemDO.meta["movable"])) {
+                    delete invoiceItemDO.meta["movable"];
                 }
             });
         });
