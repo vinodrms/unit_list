@@ -8,6 +8,9 @@
                 <small><i *ngIf="!isNewlyAdded">{{ invoiceReference }}</i></small>
                 <small *ngIf="isNewlyAdded"><i>{{ '(unsaved)' | translate }}</i></small>
                 <b *ngIf="isPaid"> {{ 'PAID' | translate }}</b>
+                <b *ngIf="isPaid && (isCredited || isCredit)"> - </b>
+                <b *ngIf="isCredited">{{ 'CREDITED' | translate }}</b>
+                <b *ngIf="isCredit">{{ 'CREDIT' | translate }}</b>
                 <b *ngIf="isLossAcceptedByManagement"> {{ 'LOSS ACCEPTED BY MANAGEMENT' | translate }}</b>
             </span>
             <span class="invoice-remove" *ngIf="editMode && isNewlyAdded">
@@ -138,7 +141,7 @@
 
     <div *ngIf="!editMode" class="invoice-edit-footer">
         
-        <button type="button" class="btn btn-danger" *ngIf="isPaid" (click)="onCreditInvoice()">
+        <button type="button" class="btn btn-danger" *ngIf="isPaid && !isCredited && !isCredit" (click)="onCreditInvoice()">
             <i class="fa fa-2x unitpal-font">+</i> {{ 'Credit Invoice' | translate }}
         </button>
 

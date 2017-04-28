@@ -7,7 +7,11 @@
 				{{ 'Only unpaid invoices are editable. No unpaid invoices exist in this invoice group.' | translate }}
 			</div> 
 		</span>
-		<invoice-edit *ngFor="let displayedInvoiceIndex of displayedInvoiceIndexList" [invoiceUniqueId]="getInvoiceUniqueIdentifier(displayedInvoiceIndex)" (newlyAddedInvoiceRemoved)="newlyAddedInvoiceRemoved($event)"></invoice-edit>
+		<invoice-edit *ngFor="let displayedInvoiceIndex of displayedInvoiceIndexList" 
+			[invoiceUniqueId]="getInvoiceUniqueIdentifier(displayedInvoiceIndex)" 
+			(newlyAddedInvoiceRemoved)="newlyAddedInvoiceRemoved($event)"
+			(creditInvoiceAdded)="creditInvoiceAdded($event)">
+		</invoice-edit>
 
 	</div>
 	<div class="invoice-operations-footer">

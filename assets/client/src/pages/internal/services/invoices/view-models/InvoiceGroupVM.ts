@@ -1,4 +1,4 @@
-import { InvoiceDO } from '../data-objects/InvoiceDO';
+import { InvoiceDO, InvoiceAccountingType } from '../data-objects/InvoiceDO';
 import { InvoiceGroupDO } from '../data-objects/InvoiceGroupDO';
 import { InvoiceVM } from './InvoiceVM';
 import { InvoiceItemDO, InvoiceItemType } from '../data-objects/items/InvoiceItemDO';
@@ -32,9 +32,26 @@ export class InvoiceGroupVM {
             if (this._thUtils.isUndefinedOrNull(this.invoiceGroupDO.id)) {
                 invoiceVM.newlyAdded = true;
             }
+
+            invoiceVM.credited = this.invoiceWasCredited(invoice);
             this.invoiceVMList.push(invoiceVM);
         });
         this.ccySymbol = invoiceOperationsPageData.ccy.symbol;
+    }
+
+    private invoiceWasCredited(invoice: InvoiceDO): boolean {
+        if(invoice.accountingType === InvoiceAccountingType.Credit) {
+            return false;
+        }
+        let invoiceRefToLookUp = invoice.invoiceReference;
+        let invoiceWasCredited = false;
+        _.forEach(this.invoiceGroupDO.invoiceList, (invoice: InvoiceDO) => {
+            if(invoiceRefToLookUp === invoice.invoiceReference && invoice.accountingType === InvoiceAccountingType.Credit) {
+                invoiceWasCredited = true;
+            }
+        });
+
+        return invoiceWasCredited;
     }
 
     public buildInvoiceGroupDO(): InvoiceGroupDO {

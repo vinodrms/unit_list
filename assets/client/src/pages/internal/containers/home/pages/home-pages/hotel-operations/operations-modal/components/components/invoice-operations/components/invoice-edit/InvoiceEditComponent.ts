@@ -8,7 +8,7 @@ import { ModalDialogRef } from '../../../../../../../../../../../../../common/ut
 import { CustomerRegisterModalService } from '../../../../../../../../../../common/inventory/customer-register/modal/services/CustomerRegisterModalService';
 import { InvoiceGroupDO } from '../../../../../../../../../../../services/invoices/data-objects/InvoiceGroupDO';
 import { InvoiceGroupVM } from '../../../../../../../../../../../services/invoices/view-models/InvoiceGroupVM';
-import { InvoiceDO, InvoicePaymentStatus } from '../../../../../../../../../../../services/invoices/data-objects/InvoiceDO';
+import { InvoiceDO, InvoicePaymentStatus, InvoiceAccountingType } from '../../../../../../../../../../../services/invoices/data-objects/InvoiceDO';
 import { InvoiceItemDO, InvoiceItemType } from '../../../../../../../../../../../services/invoices/data-objects/items/InvoiceItemDO';
 import { AddOnProductInvoiceItemMetaDO } from '../../../../../../../../../../../services/invoices/data-objects/items/add-on-products/AddOnProductInvoiceItemMetaDO';
 import { InvoiceVM } from '../../../../../../../../../../../services/invoices/view-models/InvoiceVM';
@@ -28,6 +28,7 @@ import { HotelOperationsResultService } from '../../../../../services/HotelOpera
 export class InvoiceEditComponent implements OnInit {
     @Input() invoiceUniqueId: string;
     @Output() newlyAddedInvoiceRemoved = new EventEmitter();
+    @Output() creditInvoiceAdded = new EventEmitter();
 
     private static MAX_NO_OF_INVOICE_ITEMS = 50;
 
@@ -172,18 +173,21 @@ export class InvoiceEditComponent implements OnInit {
     }
 
     private creditCurrentInvoice(logEventName: string, logMessage: string) {
-        let invoiceToBeCredited = _.find(this.invoiceGroupVM.invoiceVMList, (invoiceVM: InvoiceVM) => {
+        var invoiceGroupVMClone = this.invoiceGroupVM.buildPrototype();
+        let invoiceToBeCredited = _.find(invoiceGroupVMClone.invoiceVMList, (invoiceVM: InvoiceVM) => {
             return invoiceVM.invoiceDO.uniqueIdentifierEquals(this.invoiceUniqueId);
         });
 
         this._invoiceGroupsService.credit({
-            invoiceGroupId: this.invoiceGroupVM.invoiceGroupDO.id,
+            invoiceGroupId: invoiceGroupVMClone.invoiceGroupDO.id,
             invoiceId: invoiceToBeCredited.invoiceDO.id
         }).subscribe((updatedInvoiceGroupDO: InvoiceGroupDO) => {
             this._appContext.analytics.logEvent("invoice", logEventName, logMessage);
             this._invoiceGroupControllerService.updateInvoiceGroupVM(updatedInvoiceGroupDO);
             this._appContext.toaster.success(this._appContext.thTranslation.translate("The invoice was credited succesfully."));
             this._hotelOperationsResultService.markInvoiceChanged(updatedInvoiceGroupDO);
+
+            this.creditInvoiceAdded.emit();
         }, (error: ThError) => {
             this._appContext.toaster.error(error.message);
         });
@@ -239,6 +243,12 @@ export class InvoiceEditComponent implements OnInit {
     }
     public get isPaid(): boolean {
         return this.invoiceVM.invoiceDO.isPaid;
+    }
+    public get isCredited(): boolean {
+        return this.invoiceVM.credited;
+    }
+    public get isCredit(): boolean {
+        return this.invoiceVM.invoiceDO.accountingType === InvoiceAccountingType.Credit;
     }
     public get isLossAcceptedByManagement(): boolean {
         return this.invoiceVM.invoiceDO.isLossAcceptedByManagement;
