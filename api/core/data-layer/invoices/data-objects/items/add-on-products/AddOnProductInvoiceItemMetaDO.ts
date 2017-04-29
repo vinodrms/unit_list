@@ -31,12 +31,6 @@ export class AddOnProductInvoiceItemMetaDO extends BaseDO implements IInvoiceIte
     public getVatId(): string {
         return this.vatId;
     }
-    public isMovable(): boolean {
-        if(this.includedInBooking) {
-            return false;
-        }
-        return true;
-    }
     public isDerivedFromBooking(): boolean {
         return this.includedInBooking;
     }

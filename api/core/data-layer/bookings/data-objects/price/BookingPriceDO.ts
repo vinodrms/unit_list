@@ -114,10 +114,6 @@ export class BookingPriceDO extends BaseDO implements IInvoiceItemMeta {
         var thUtils = new ThUtils();
         return !thUtils.isUndefinedOrNull(this.breakfast) && !thUtils.isUndefinedOrNull(this.breakfast.id);
     }
-
-    public isMovable(): boolean {
-        return false;
-    }
     public isDerivedFromBooking(): boolean {
         return false;
     }
