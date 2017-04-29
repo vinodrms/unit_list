@@ -116,7 +116,7 @@ export class BookingPriceDO extends BaseDO implements IInvoiceItemMeta {
     public hasDiscount(): boolean {
         return _.reduce(this.roomPricePerNightList, function(sum, pricePerDay: PricePerDayDO){ return sum + pricePerDay.discount; }, 0) > 0.0;
     }
-    public isMovable(): boolean {
+    public isMovableByDefault(): boolean {
         return false;
     }
     public isDerivedFromBooking(): boolean {

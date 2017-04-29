@@ -1,4 +1,4 @@
-import { InvoiceItemDO, InvoiceItemType } from '../data-objects/items/InvoiceItemDO';
+import { InvoiceItemDO, InvoiceItemType, InvoiceItemAccountingType } from '../data-objects/items/InvoiceItemDO';
 import { ThTranslation } from '../../../../../common/utils/localization/ThTranslation';
 import { ThUtils } from '../../../../../common/utils/ThUtils';
 import { BookingPriceDO } from "../../bookings/data-objects/price/BookingPriceDO";
@@ -29,7 +29,8 @@ export class InvoiceItemVM {
         return this._thUtils.roundNumberToTwoDecimals(this.invoiceItemDO.meta.getUnitPrice() * this.qty);
     }
     public isMovable(): boolean {
-        return this.invoiceItemDO.meta.isMovable();
+        return this.invoiceItemDO.meta.isMovableByDefault() 
+            && this.invoiceItemDO.accountingType === InvoiceItemAccountingType.Debit;
     }
     public displayBookingDateBreakdown(): boolean {
         if (!(this.invoiceItemDO.type === InvoiceItemType.Booking)) {

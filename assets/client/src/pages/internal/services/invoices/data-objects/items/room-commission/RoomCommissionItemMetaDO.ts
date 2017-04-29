@@ -22,7 +22,7 @@ export class RoomCommissionItemMetaDO extends BaseDO implements IInvoiceItemMeta
     public getDisplayName(thTranslation: ThTranslation): string {
         return thTranslation.translate(this.displayName);
     }
-    public isMovable(): boolean {
+    public isMovableByDefault(): boolean {
         return false;
     }
     public isDerivedFromBooking(): boolean {
