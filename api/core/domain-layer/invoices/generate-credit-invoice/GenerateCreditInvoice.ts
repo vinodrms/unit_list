@@ -8,6 +8,7 @@ import { InvoiceDO, InvoiceAccountingType, InvoicePaymentStatus } from "../../..
 import { InvoiceGroupMetaRepoDO, InvoiceGroupItemMetaRepoDO } from "../../../data-layer/invoices/repositories/IInvoiceGroupsRepository";
 import { ThStatusCode } from "../../../utils/th-responses/ThResponse";
 import { ThLogLevel, ThLogger } from "../../../utils/logging/ThLogger";
+import { InvoiceItemDO, InvoiceItemAccountingType } from "../../../data-layer/invoices/data-objects/items/InvoiceItemDO";
 
 import _ = require('underscore');
 
@@ -67,6 +68,11 @@ export class GenerateCreditInvoice {
         creditInvoice.buildFromObject(invoiceToBeCredited);
         creditInvoice.accountingType = InvoiceAccountingType.Credit;
         creditInvoice.paymentStatus = InvoicePaymentStatus.Unpaid;
+
+        _.forEach(creditInvoice.itemList, (item: InvoiceItemDO) => {
+            item.accountingType = InvoiceItemAccountingType.Credit;
+        });
+        
         delete creditInvoice.id;
         return creditInvoice;
     }
