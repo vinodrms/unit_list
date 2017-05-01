@@ -1,6 +1,6 @@
 import { BaseDO } from '../../../../../common/base/BaseDO';
 import { ThUtils } from '../../../../../common/utils/ThUtils';
-import { InvoiceItemDO, InvoiceItemType } from './items/InvoiceItemDO';
+import { InvoiceItemDO, InvoiceItemType, InvoiceItemAccountingType } from './items/InvoiceItemDO';
 import { InvoicePayerDO } from './payers/InvoicePayerDO';
 import { InvoicePaymentMethodType } from './payers/InvoicePaymentMethodDO';
 import { CustomerDO } from '../../customers/data-objects/CustomerDO';
@@ -82,19 +82,9 @@ export class InvoiceDO extends BaseDO {
     public getPrice(): number {
         let totalPrice = 0;
         _.forEach(this.itemList, (item: InvoiceItemDO) => {
-            if(item.type === InvoiceItemType.Booking) {
-                let bookingPrice = new BookingPriceDO();
-                bookingPrice.buildFromObject(item.meta);
-
-                _.forEach(bookingPrice.getInvoicedRoomPricePerNightList(item.accountingType), (pricePerDay: PricePerDayDO) => {
-                    totalPrice += pricePerDay.price;
-                });
-            }
-            else {
-                totalPrice += item.getTotalPrice();
-            }
+            let factor = item.accountingType === InvoiceItemAccountingType.Credit ? -1 : 1;
+            totalPrice += item.meta.getNumberOfItems() * item.meta.getUnitPrice() * factor;
         });
-        
         var thUtils = new ThUtils();
         return thUtils.roundNumberToTwoDecimals(totalPrice);
     }

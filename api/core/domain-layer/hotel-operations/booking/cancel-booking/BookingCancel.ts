@@ -15,6 +15,8 @@ import { ValidationResultParser } from '../../../common/ValidationResultParser';
 import { GenerateBookingInvoice } from '../../../invoices/generate-booking-invoice/GenerateBookingInvoice';
 import { InvoiceGroupDO } from '../../../../data-layer/invoices/data-objects/InvoiceGroupDO';
 import { BookingInvoiceSync } from "../../../bookings/invoice-sync/BookingInvoiceSync";
+import { BookingWithDependencies } from "../utils/BookingWithDependencies";
+import { BookingWithDependenciesLoader } from "../utils/BookingWithDependenciesLoader";
 
 import _ = require('underscore');
 
@@ -26,9 +28,10 @@ export class BookingCancel {
     private _bookingUtils: BookingUtils;
 
     private _cancelDO: BookingCancelDO;
+    private _cancelResult: BookingCancelUpdateResult;
 
     private _loadedHotel: HotelDO;
-    private _loadedBooking: BookingDO;
+    private _bookingWithDeps: BookingWithDependencies;
 
     constructor(private _appContext: AppContext, private _sessionContext: SessionContext) {
         this._bookingUtils = new BookingUtils();
@@ -51,32 +54,34 @@ export class BookingCancel {
             .then((loadedHotel: HotelDO) => {
                 this._loadedHotel = loadedHotel;
 
-                var bookingsRepo = this._appContext.getRepositoryFactory().getBookingRepository();
-                return bookingsRepo.getBookingById({ hotelId: this._sessionContext.sessionDO.hotel.id }, this._cancelDO.groupBookingId, this._cancelDO.bookingId)
-            }).then((booking: BookingDO) => {
-                this._loadedBooking = booking;
+                let loader = new BookingWithDependenciesLoader(this._appContext, this._sessionContext);
+                return loader.load(this._cancelDO.groupBookingId, this._cancelDO.bookingId);
+            }).then((bookingWithDeps: BookingWithDependencies) => {
+                this._bookingWithDeps = bookingWithDeps;
 
                 if (!this.bookingHasValidStatus()) {
                     var thError = new ThError(ThStatusCode.BookingCancelInvalidState, null);
                     ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "cancel booking: invalid booking state", this._cancelDO, thError);
                     throw thError;
                 }
-                var bookingUpdateResult: BookingCancelUpdateResult = this.updateBooking();
-                return this.generateInvoiceIfNecessary(bookingUpdateResult);
-            }).then((invoiceGenerationResult: boolean) => {
+                this._cancelResult = this.updateBooking();
+
                 var bookingsRepo = this._appContext.getRepositoryFactory().getBookingRepository();
                 return bookingsRepo.updateBooking({ hotelId: this._sessionContext.sessionDO.hotel.id }, {
-                    groupBookingId: this._loadedBooking.groupBookingId,
-                    bookingId: this._loadedBooking.bookingId,
-                    versionId: this._loadedBooking.versionId
-                }, this._loadedBooking);
+                    groupBookingId: this._bookingWithDeps.bookingDO.groupBookingId,
+                    bookingId: this._bookingWithDeps.bookingDO.bookingId,
+                    versionId: this._bookingWithDeps.bookingDO.versionId
+                }, this._bookingWithDeps.bookingDO);
             }).then((updatedBooking: BookingDO) => {
-                this._loadedBooking = updatedBooking;
+                this._bookingWithDeps.bookingDO = updatedBooking;
+
+                return this.generateInvoiceIfNecessary(this._cancelResult);
+            }).then((invoiceGenerationResult: boolean) => {
 
                 let bookingInvoiceSync = new BookingInvoiceSync(this._appContext, this._sessionContext);
-                return bookingInvoiceSync.syncInvoiceWithBookingPrice(updatedBooking);
+                return bookingInvoiceSync.syncInvoiceWithBookingPrice(this._bookingWithDeps.bookingDO);
             }).then((updatedGroup: InvoiceGroupDO) => {
-                resolve(this._loadedBooking);
+                resolve(this._bookingWithDeps.bookingDO);
             }).catch((error: any) => {
                 var thError = new ThError(ThStatusCode.BookingCancelError, error);
                 if (thError.isNativeError()) {
@@ -86,25 +91,32 @@ export class BookingCancel {
             });
     }
     private bookingHasValidStatus(): boolean {
-        return _.contains(BookingDOConstraints.ConfirmationStatuses_CanCancel, this._loadedBooking.confirmationStatus);
+        return _.contains(BookingDOConstraints.ConfirmationStatuses_CanCancel, this._bookingWithDeps.bookingDO.confirmationStatus);
     }
 
     private updateBooking(): BookingCancelUpdateResult {
         var updateResult: BookingCancelUpdateResult = {
             hasPenalty: false
         }
-        this._loadedBooking.confirmationStatus = BookingConfirmationStatus.Cancelled;
-
+        this._bookingWithDeps.bookingDO.confirmationStatus = BookingConfirmationStatus.Cancelled;
         var logMessage = "The booking has been cancelled";
+
         if (this.hasPenalty()) {
-            if (this._loadedBooking.price.priceType === BookingPriceType.BookingStay) {
-                this._loadedBooking.price = this._loadedBooking.priceProductSnapshot.conditions.penalty.computePenaltyPrice(this._loadedBooking.price);
+            // only update the penalty if the booking's invoice is not paid
+            if (!this._bookingWithDeps.hasClosedInvoice()) {
+                if (this._bookingWithDeps.bookingDO.price.priceType === BookingPriceType.BookingStay) {
+                    this._bookingWithDeps.bookingDO.price = this._bookingWithDeps.bookingDO.priceProductSnapshot.conditions.penalty.computePenaltyPrice(this._bookingWithDeps.bookingDO.price);
+                }
+                logMessage = "The booking has been cancelled. The booking has a penalty.";
+                updateResult.hasPenalty = true;
             }
-            logMessage = "The booking has been cancelled. The booking has a penalty.";
-            updateResult.hasPenalty = true;
+            else {
+                // if the booking already has a paid invoice just log an according message
+                logMessage = "The booking has been cancelled. The penalty could not be generated because the invoice is already closed.";
+            }
         }
 
-        this._loadedBooking.bookingHistory.logDocumentAction(DocumentActionDO.buildDocumentActionDO({
+        this._bookingWithDeps.bookingDO.bookingHistory.logDocumentAction(DocumentActionDO.buildDocumentActionDO({
             actionParameterMap: {},
             actionString: logMessage,
             userId: this._sessionContext.sessionDO.user.id
@@ -112,7 +124,7 @@ export class BookingCancel {
         return updateResult;
     }
     private hasPenalty(): boolean {
-        return this._bookingUtils.hasPenalty(this._loadedBooking, {
+        return this._bookingUtils.hasPenalty(this._bookingWithDeps.bookingDO, {
             cancellationHour: this._loadedHotel.operationHours.cancellationHour,
             currentHotelTimestamp: ThTimestampDO.buildThTimestampForTimezone(this._loadedHotel.timezone)
         });

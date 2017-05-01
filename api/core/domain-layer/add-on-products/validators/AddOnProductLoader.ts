@@ -47,7 +47,7 @@ export class AddOnProductLoader {
 
     public load(addOnProductIdList: string[]): Promise<AddOnProductItemContainer> {
         return new Promise<AddOnProductItemContainer>((resolve: { (result: AddOnProductItemContainer): void }, reject: { (err: ThError): void }) => {
-            if (addOnProductIdList.length == 0) {
+            if (!_.isArray(addOnProductIdList) || addOnProductIdList.length == 0) {
                 resolve(new AddOnProductItemContainer([]));
                 return;
             }

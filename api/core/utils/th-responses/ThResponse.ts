@@ -420,7 +420,6 @@ export enum ThStatusCode {
 	BookingsControllerErrorAddingBookings,
 	BookingStatusChangerCronJobExecutorError,
 	BookingInvoiceUtilsInvoiceNotFound,
-	BookingInvoiceUtilsInvoiceIsClosed,
 	HotelTimeNullTimezone,
 	HotelTimeError,
 	HotelOperationsRoomInfoReaderError,
@@ -945,7 +944,6 @@ ThMessage[ThStatusCode.BookingsControllerErrorSearchingBookings] = "Error search
 ThMessage[ThStatusCode.BookingsControllerErrorAddingBookings] = "Error adding bookings.";
 ThMessage[ThStatusCode.BookingStatusChangerCronJobExecutorError] = "Error changing booking statuses from the process.";
 ThMessage[ThStatusCode.BookingInvoiceUtilsInvoiceNotFound] = "The invoice for the booking was not found.";
-ThMessage[ThStatusCode.BookingInvoiceUtilsInvoiceIsClosed] = "The price and the notes cannot be updated on the invoice because it is closed (Paid or Lost by Management).";
 ThMessage[ThStatusCode.HotelTimeNullTimezone] = "The timezone for the hotel is not set.";
 ThMessage[ThStatusCode.HotelTimeError] = "Error getting the current time for your hotel.";
 ThMessage[ThStatusCode.HotelOperationsRoomInfoReaderError] = "Error getting the hotel operations data.";
