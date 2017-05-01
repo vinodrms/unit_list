@@ -6,6 +6,7 @@ import { IBookingRepository } from '../../bookings/repositories/IBookingReposito
 import { BookingDO } from '../../bookings/data-objects/BookingDO';
 import { CustomerDO } from '../../customers/data-objects/CustomerDO';
 import { TaxDO } from '../../taxes/data-objects/TaxDO';
+import { ThUtils } from "../../../utils/ThUtils";
 
 export enum InvoiceGroupStatus {
     Active,
@@ -94,6 +95,16 @@ export class InvoiceGroupDO extends BaseDO {
     public getInvoiceForBooking(bookingId: string): InvoiceDO {
         return _.find(this.invoiceList, (innerInvoice: InvoiceDO) => {
             return innerInvoice.bookingId === bookingId;
+        });
+    }
+
+    public attachIdsToInvoicesIfNecessary() {
+        let thUtils = new ThUtils();
+        
+        _.forEach(this.invoiceList, (invoice: InvoiceDO) => {
+            if(thUtils.isUndefinedOrNull(invoice.id)) {
+                invoice.id = thUtils.generateUniqueID();
+            }
         });
     }
 }

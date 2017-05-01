@@ -26,7 +26,7 @@ import { HotelOperationsResultService } from '../../../../../services/HotelOpera
     providers: [AddOnProductsModalService, NumberOfAddOnProductsModalService, CustomerRegisterModalService]
 })
 export class InvoiceEditComponent implements OnInit {
-    @Input() invoiceReference: string;
+    @Input() invoiceUniqueId: string;
     @Output() newlyAddedInvoiceRemoved = new EventEmitter();
 
     private static MAX_NO_OF_INVOICE_ITEMS = 50;
@@ -73,7 +73,7 @@ export class InvoiceEditComponent implements OnInit {
         }
         else {
             this.invoiceVM.addItemOnInvoice(aopToBeAdded, qty);
-            this.invoiceGroupVM.updatePriceToPayIfSinglePayerByRef(this.invoiceReference);
+            this.invoiceGroupVM.updatePriceToPayIfSinglePayerByUniqueIdentifier(this.invoiceUniqueId);
         }
     }
 
@@ -106,9 +106,13 @@ export class InvoiceEditComponent implements OnInit {
         this._appContext.modalService.confirm(title, content, { positive: positiveLabel, negative: negativeLabel }, () => {
             this.newlyAddedInvoiceRemoved.emit({
                 indexInDisplayedInvoiceList: this.invoiceVMIndex,
-                reference: this.invoiceVM.invoiceDO.invoiceReference
+                uniqueId: this.invoiceVM.invoiceDO.getUniqueIdentifier()
             });
         });
+    }
+
+    public onCreditInvoice() {
+        
     }
 
     public onPayInvoice() {
@@ -146,7 +150,7 @@ export class InvoiceEditComponent implements OnInit {
     private updatePaymentStatusForCurrentInvoice(paymentStatus: InvoicePaymentStatus, logEventName: string, logMessage: string) {
         var invoiceGroupVMClone = this.invoiceGroupVM.buildPrototype();
         for (var i = 0; i < invoiceGroupVMClone.invoiceVMList.length; ++i) {
-            if (invoiceGroupVMClone.invoiceVMList[i].invoiceDO.invoiceReference === this.invoiceReference) {
+            if (invoiceGroupVMClone.invoiceVMList[i].invoiceDO.uniqueIdentifierEquals(this.invoiceUniqueId)) {
                 invoiceGroupVMClone.invoiceVMList[i].invoiceDO.paymentStatus = paymentStatus;
             }
         }
@@ -175,14 +179,14 @@ export class InvoiceEditComponent implements OnInit {
     }
     private get invoiceVM(): InvoiceVM {
         for (var i = 0; i < this.invoiceGroupVM.invoiceVMList.length; ++i) {
-            if (this.invoiceGroupVM.invoiceVMList[i].invoiceDO.invoiceReference === this.invoiceReference) {
+            if (this.invoiceGroupVM.invoiceVMList[i].invoiceDO.uniqueIdentifierEquals(this.invoiceUniqueId)) {
                 return this.invoiceGroupVM.invoiceVMList[i];
             }
         }
     }
     private get invoiceVMIndex(): number {
         for (var i = 0; i < this.invoiceGroupVM.invoiceVMList.length; ++i) {
-            if (this.invoiceGroupVM.invoiceVMList[i].invoiceDO.invoiceReference === this.invoiceReference) {
+            if (this.invoiceGroupVM.invoiceVMList[i].invoiceDO.uniqueIdentifierEquals(this.invoiceUniqueId)) {
                 return i;
             }
         }
@@ -223,21 +227,25 @@ export class InvoiceEditComponent implements OnInit {
         if (!this.hasLeftEditableNeighbor()) {
             return;
         }
-        this.invoiceGroupVM.moveInvoiceItemLeft(this.invoiceReference, invoiceItemVMIndex);
+        this.invoiceGroupVM.moveInvoiceItemLeft(this.invoiceUniqueId, invoiceItemVMIndex);
     }
 
     public moveRight(invoiceItemVMIndex: number) {
         if (!this.hasRightEditableNeighbor()) {
             return;
         }
-        this.invoiceGroupVM.moveInvoiceItemRight(this.invoiceReference, invoiceItemVMIndex);
+        this.invoiceGroupVM.moveInvoiceItemRight(this.invoiceUniqueId, invoiceItemVMIndex);
     }
 
     public hasRightEditableNeighbor(): boolean {
-        return this.invoiceGroupVM.getRightEditableNeighborIndex(this.invoiceReference) != -1;
+        return this.invoiceGroupVM.getRightEditableNeighborIndex(this.invoiceUniqueId) != -1;
     }
 
     public hasLeftEditableNeighbor(): boolean {
-        return this.invoiceGroupVM.getLeftEditableNeighborIndex(this.invoiceReference) != -1;
+        return this.invoiceGroupVM.getLeftEditableNeighborIndex(this.invoiceUniqueId) != -1;
+    }
+
+    public get invoiceReference(): string {
+        return this.invoiceVM.invoiceDO.invoiceReference;
     }
 }

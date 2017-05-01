@@ -25,7 +25,7 @@ import { TransactionFeeDO, TransactionFeeType } from "../../../../../../../../..
     providers: [CustomerRegisterModalService, EmailSenderModalService]
 })
 export class InvoicePayerComponent implements OnInit {
-    @Input() invoiceReference: string;
+    @Input() invoiceUniqueId: string;
     @Input() invoicePayerVMIndex: number;
 
     paymentMethodVMList: InvoicePaymentMethodVM[] = [];
@@ -54,7 +54,7 @@ export class InvoicePayerComponent implements OnInit {
         this.invoicePayerVM.invoicePayerDO.paymentMethod = selectedPaymentMethodVM.paymentMethod;
         if (this._pmWasSetForTheFirstTime) {
             this.invoiceVM.addOrRemoveInvoiceFeeIfNecessary(this._invoiceGroupControllerService.invoiceOperationsPageData.customersContainer.customerList);
-            this.invoiceGroupVM.updatePriceToPayIfSinglePayerByRef(this.invoiceReference);
+            this.invoiceGroupVM.updatePriceToPayIfSinglePayerByUniqueIdentifier(this.invoiceUniqueId);
             this.invoiceVM.isValid();
         }
         if (!this._pmWasSetForTheFirstTime) this._pmWasSetForTheFirstTime = true;
@@ -142,15 +142,15 @@ export class InvoicePayerComponent implements OnInit {
 
     public get invoicePdfUrl(): string {
         return 'api/invoiceGroups/pdf?invoiceGroupId='
-            + this.invoiceGroupVM.invoiceGroupDO.id + '&invoiceReference='
-            + this.invoiceReference + '&customerId=' + this.invoicePayerVM.customerDO.id
+            + this.invoiceGroupVM.invoiceGroupDO.id + '&invoiceId='
+            + this.invoiceVM.invoiceDO.id + '&customerId=' + this.invoicePayerVM.customerDO.id
             + '&payerIndex=' + this.invoicePayerVMIndex;
     }
 
     public onSend() {
         this._emailSenderModalService.sendInvoiceConfirmation([this.invoicePayerVM.customerDO],
             this.invoiceGroupVM.invoiceGroupDO.id,
-            this.invoiceVM.invoiceDO.invoiceReference,
+            this.invoiceVM.invoiceDO.id,
             this.invoicePayerVM.customerDO.id,
             this.invoicePayerVMIndex).then((modalDialogRef: ModalDialogRef<boolean>) => {
                 modalDialogRef.resultObservable.subscribe((sendResult: boolean) => {
@@ -177,7 +177,7 @@ export class InvoicePayerComponent implements OnInit {
     }
     private get invoiceVM(): InvoiceVM {
         for (var i = 0; i < this.invoiceGroupVM.invoiceVMList.length; ++i) {
-            if (this.invoiceGroupVM.invoiceVMList[i].invoiceDO.invoiceReference === this.invoiceReference) {
+            if (this.invoiceGroupVM.invoiceVMList[i].invoiceDO.uniqueIdentifierEquals(this.invoiceUniqueId)) {
                 return this.invoiceGroupVM.invoiceVMList[i];
             }
         }

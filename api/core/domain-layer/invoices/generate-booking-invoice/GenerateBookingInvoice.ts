@@ -8,7 +8,7 @@ import { ValidationResultParser } from '../../common/ValidationResultParser';
 import { GenerateBookingInvoiceDO, GenerateBookingInvoiceAopMeta } from './GenerateBookingInvoiceDO';
 import { InvoiceGroupDO } from '../../../data-layer/invoices/data-objects/InvoiceGroupDO';
 import { BookingDO } from '../../../data-layer/bookings/data-objects/BookingDO';
-import { InvoiceDO, InvoicePaymentStatus } from '../../../data-layer/invoices/data-objects/InvoiceDO';
+import { InvoiceDO, InvoicePaymentStatus, InvoiceAccountingType } from '../../../data-layer/invoices/data-objects/InvoiceDO';
 import { InvoiceItemDO, InvoiceItemType } from '../../../data-layer/invoices/data-objects/items/InvoiceItemDO';
 import { InvoicePayerDO } from '../../../data-layer/invoices/data-objects/payers/InvoicePayerDO';
 import { InvoicePaymentMethodType } from '../../../data-layer/invoices/data-objects/payers/InvoicePaymentMethodDO';
@@ -130,6 +130,7 @@ export class GenerateBookingInvoice {
     private getDefaultInvoiceDOCore(resolve: { (result: InvoiceDO): void }, reject: { (err: ThError): void }) {
         var invoice = new InvoiceDO();
         invoice.bookingId = this._loadedBooking.bookingId;
+        invoice.accountingType = InvoiceAccountingType.Debit;
         invoice.itemList = [];
         var bookingInvoiceItem = new InvoiceItemDO();
         bookingInvoiceItem.type = InvoiceItemType.Booking;

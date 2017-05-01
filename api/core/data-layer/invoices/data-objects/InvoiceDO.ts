@@ -14,11 +14,17 @@ import { PricePerDayDO } from "../../bookings/data-objects/price/PricePerDayDO";
 
 import _ = require('underscore');
 
+export enum InvoiceAccountingType {
+    Debit, Credit
+}
+
 export enum InvoicePaymentStatus {
     Unpaid, Paid, LossAcceptedByManagement
 }
 
 export class InvoiceDO extends BaseDO {
+    id: string;
+    accountingType: InvoiceAccountingType;
     bookingId: string;
     invoiceReference: string;
     payerList: InvoicePayerDO[];
@@ -31,7 +37,7 @@ export class InvoiceDO extends BaseDO {
     paidDateTimeUtcTimestamp: number;
 
     protected getPrimitivePropertyKeys(): string[] {
-        return ["bookingId", "invoiceReference", "paymentStatus", "notesFromBooking", "paidDateUtcTimestamp", "paidDateTimeUtcTimestamp"];
+        return ["id", "accountingType", "bookingId", "invoiceReference", "paymentStatus", "notesFromBooking", "paidDateUtcTimestamp", "paidDateTimeUtcTimestamp"];
     }
 
     public buildFromObject(object: Object) {

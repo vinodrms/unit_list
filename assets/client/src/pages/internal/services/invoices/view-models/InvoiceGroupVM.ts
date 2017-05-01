@@ -105,23 +105,23 @@ export class InvoiceGroupVM {
     public addInvoiceVM(newInvoiceVM: InvoiceVM) {
         this._invoiceVMList.push(newInvoiceVM);
     }
-    public removeInvoiceVMByReference(reference: string) {
-        var index = this.getInvoiceIndexByRefInTheEntireInvoiceList(reference);
+    public removeInvoiceVMByUniqueId(uniqueId: string) {
+        var index = this.getInvoiceIndexByUniqueIdInTheEntireInvoiceList(uniqueId);
         if (index != -1) {
             this._invoiceVMList.splice(index, 1);
         }
     }
-    private getInvoiceIndexByRefInTheEntireInvoiceList(reference: string): number {
+    private getInvoiceIndexByUniqueIdInTheEntireInvoiceList(uniqueId: string): number {
         for (var i = 0; i < this._invoiceVMList.length; ++i) {
-            if (this._invoiceVMList[i].invoiceDO.invoiceReference === reference) {
+            if (this._invoiceVMList[i].invoiceDO.uniqueIdentifierEquals(uniqueId)) {
                 return i;
             }
         }
         return -1;
     }
-    private getInvoiceIndexByRefInTheEditableInvoiceList(reference: string): number {
+    private getInvoiceIndexByUniqueIdInTheEditableInvoiceList(uniqueId: string): number {
         for (var i = 0; i < this.invoiceVMList.length; ++i) {
-            if (this.invoiceVMList[i].invoiceDO.invoiceReference === reference) {
+            if (this.invoiceVMList[i].invoiceDO.uniqueIdentifierEquals(uniqueId)) {
                 return i;
             }
         }
@@ -132,31 +132,31 @@ export class InvoiceGroupVM {
         return this._newInvoiceSeq++;
     }
 
-    public moveInvoiceItemLeft(sourceInvoiceRef: string, invoiceItemVMIndex: number) {
-        var sourceIndex = this.getInvoiceIndexByRefInTheEntireInvoiceList(sourceInvoiceRef);
-        var destinationIndex = this.getLeftEditableNeighborIndex(sourceInvoiceRef);
+    public moveInvoiceItemLeft(sourceInvoiceUniqueId: string, invoiceItemVMIndex: number) {
+        var sourceIndex = this.getInvoiceIndexByUniqueIdInTheEntireInvoiceList(sourceInvoiceUniqueId);
+        var destinationIndex = this.getLeftEditableNeighborIndex(sourceInvoiceUniqueId);
 
         this.moveInvoiceItem(sourceIndex, destinationIndex, invoiceItemVMIndex);
     }
-    public getLeftEditableNeighborIndex(sourceInvoiceRef: string): number {
-        var indexInTheEditableInvoiceList = this.getInvoiceIndexByRefInTheEditableInvoiceList(sourceInvoiceRef);
+    public getLeftEditableNeighborIndex(sourceInvoiceUniqueId: string): number {
+        var indexInTheEditableInvoiceList = this.getInvoiceIndexByUniqueIdInTheEditableInvoiceList(sourceInvoiceUniqueId);
         if (indexInTheEditableInvoiceList === 0) {
             return -1;
         }
-        return this.getInvoiceIndexByRefInTheEntireInvoiceList(this.invoiceVMList[indexInTheEditableInvoiceList - 1].invoiceDO.invoiceReference);
+        return this.getInvoiceIndexByUniqueIdInTheEntireInvoiceList(this.invoiceVMList[indexInTheEditableInvoiceList - 1].invoiceDO.getUniqueIdentifier());
     }
     public moveInvoiceItemRight(sourceInvoiceRef: string, invoiceItemVMIndex: number) {
-        var sourceIndex = this.getInvoiceIndexByRefInTheEntireInvoiceList(sourceInvoiceRef);
+        var sourceIndex = this.getInvoiceIndexByUniqueIdInTheEntireInvoiceList(sourceInvoiceRef);
         var destinationIndex = this.getRightEditableNeighborIndex(sourceInvoiceRef);
 
         this.moveInvoiceItem(sourceIndex, destinationIndex, invoiceItemVMIndex);
     }
     public getRightEditableNeighborIndex(sourceInvoiceRef: string): number {
-        var indexInTheEditableInvoiceList = this.getInvoiceIndexByRefInTheEditableInvoiceList(sourceInvoiceRef);
+        var indexInTheEditableInvoiceList = this.getInvoiceIndexByUniqueIdInTheEditableInvoiceList(sourceInvoiceRef);
         if (indexInTheEditableInvoiceList === this.invoiceVMList.length - 1) {
             return -1;
         }
-        return this.getInvoiceIndexByRefInTheEntireInvoiceList(this.invoiceVMList[indexInTheEditableInvoiceList + 1].invoiceDO.invoiceReference);
+        return this.getInvoiceIndexByUniqueIdInTheEntireInvoiceList(this.invoiceVMList[indexInTheEditableInvoiceList + 1].invoiceDO.getUniqueIdentifier());
     }
     private moveInvoiceItem(sourceInvoiceIndex: number, destinationInvoiceIndex: number, invoiceItemIndex: number) {
         this._invoiceVMList[destinationInvoiceIndex].invoceItemVMList.push(this._invoiceVMList[sourceInvoiceIndex].invoceItemVMList[invoiceItemIndex]);
@@ -169,8 +169,8 @@ export class InvoiceGroupVM {
         this.updatePriceToPayIfSinglePayerByIndex(destinationInvoiceIndex);
     }
 
-    public updatePriceToPayIfSinglePayerByRef(invoiceRef: string) {
-        var index = this.getInvoiceIndexByRefInTheEntireInvoiceList(invoiceRef);
+    public updatePriceToPayIfSinglePayerByUniqueIdentifier(invoiceUniqueId: string) {
+        var index = this.getInvoiceIndexByUniqueIdInTheEntireInvoiceList(invoiceUniqueId);
         this.updatePriceToPayIfSinglePayerByIndex(index);
     }
 

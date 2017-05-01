@@ -82,7 +82,7 @@ export class InvoiceGroupsController extends BaseController {
         var query: InvoiceDataAggregatorQuery = {
             customerId: req.query['customerId'],
             invoiceGroupId: req.query['invoiceGroupId'],
-            invoiceReference: req.query['invoiceReference'],
+            invoiceId: req.query['invoiceId'],
             payerIndex: req.query['payerIndex']
         };
         var thTranslation = new ThTranslation(req.sessionContext.language);
