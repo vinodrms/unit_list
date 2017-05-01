@@ -70,7 +70,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="row"  *ngIf="corporateDetails">
+	<div class="row" *ngIf="corporateDetails">
 		<div class="col-md-4 col-xs-12 form-group">
 			<label>{{ 'Contact Details' | translate }}</label>
 			<div class="input-group">
@@ -97,11 +97,11 @@
 			</div>
 		</div>
 	</div>
-	<div *ngIf="currentContactDetails" class="row">
+	<div [formGroup]="contactDetailsFormGroup" *ngIf="currentContactDetails" class="row">
 		<div class="col-md-4 col-xs-12">
 			<div class="form-group">
-				<label>{{ 'Contact Name' | translate }}</label>
-				<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('contactName')}">
+				<label>{{ 'Contact Name' | translate }}*</label>
+				<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('contactName', contactDetailsFormGroup)}">
 					<input type="text" class="form-control" formControlName="contactName">
 				</div>
 				<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Invalid name length' | translate }}</small></label>
@@ -110,7 +110,7 @@
 		<div class="col-md-4 col-xs-12">
 			<div class="form-group">
 				<label>{{ 'Phone' | translate }}</label>
-				<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('phone')}">
+				<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('phone', contactDetailsFormGroup)}">
 					<input type="text" placeholder="e.g.: +45 XX XX XX XX" class="form-control" formControlName="phone">
 				</div>
 				<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter a valid phone' | translate }}</small></label>
@@ -119,7 +119,7 @@
 		<div class="col-md-4 col-xs-12">
 			<div class="form-group">
 				<label>{{ 'Fax' | translate }}</label>
-				<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('fax')}">
+				<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('fax', contactDetailsFormGroup)}">
 					<input type="text" class="form-control" formControlName="fax">
 				</div>
 				<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter a valid fax' | translate }}</small></label>
@@ -128,7 +128,7 @@
 		<div class="col-md-4 col-xs-12">
 			<div class="form-group">
 				<label>{{ 'Email' | translate }}</label>
-				<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('email')}">
+				<div class="input-group" [ngClass]="{'form-warning': controlIsInvalid('email', contactDetailsFormGroup)}">
 					<input type="text" class="form-control" formControlName="email">
 				</div>
 				<label class="form-warning"><small><i class="fa fa-info-circle"></i> {{ 'Enter a valid email' | translate }}</small></label>
@@ -136,7 +136,7 @@
 		</div>
 	</div>
 	<div *ngIf="currentContactDetails" class="row">
-		<div class="col-xs-12 col-md-offset-6 col-md-3">
+		<div class="col-xs-12 col-md-offset-4 col-md-4">
 			<button type="button" class="btn btn-primary btn-block" (click)="saveContactDetails()">
 				{{ 'Update Contact Details' | translate }}
 			</button>

@@ -81,19 +81,9 @@ export class InvoiceDO extends BaseDO {
     public getPrice(): number {
         let totalPrice = 0;
         _.forEach(this.itemList, (item: InvoiceItemDO) => {
-            if(item.isBookingPrice()) {
-                let bookingPrice = new BookingPriceDO();
-                bookingPrice.buildFromObject(item.meta);
-
-                _.forEach(bookingPrice.roomPricePerNightList, (pricePerDay: PricePerDayDO) => {
-                    totalPrice += pricePerDay.price;
-                });
-            }
-            else {
-                totalPrice += item.meta.getNumberOfItems() * item.meta.getUnitPrice();
-            }
+            totalPrice += item.meta.getNumberOfItems() * item.meta.getUnitPrice();
         });
-        
+
         var thUtils = new ThUtils();
         return thUtils.roundNumberToTwoDecimals(totalPrice);
     }

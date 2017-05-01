@@ -52,3 +52,7 @@ export enum BookingUndoCheckInRight {
     Allowed,
     None
 }
+export enum BookingGenerateInvoiceRight {
+    Allowed,
+    None
+}

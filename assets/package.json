@@ -49,17 +49,17 @@
     "zone.js": "0.8.5"
   },
   "devDependencies": {
-    "concurrently": "3.1.0",
+    "concurrently": "3.4.0",
     "gulp": "3.9.0",
-    "gulp-angular-embed-templates": "2.2.0",
+    "gulp-angular-embed-templates": "2.3.0",
     "gulp-clean": "0.3.2",
     "gulp-minify": "0.0.11",
-    "gulp-sourcemaps": "1.6.0",
-    "gulp-typescript": "2.13.0",
-    "lite-server": "2.2.2",
+    "gulp-sourcemaps": "1.12.0",
+    "gulp-typescript": "2.14.1",
+    "lite-server": "2.3.0",
     "phantomjs": "2.1.7",
-    "systemjs-builder": "^0.15.15",
+    "systemjs-builder": "0.15.36",
     "protractor": "3.3.0",
-    "typescript": "~2.2.0"
+    "typescript": "2.2.2"
   }
 }

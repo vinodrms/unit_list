@@ -61,6 +61,9 @@ export class CorporateCustomerDetailsComponent extends BaseFormComponent {
 	protected getDefaultFormGroup(): FormGroup {
 		return this._formBuilder.individualFormGroup;
 	}
+	public get contactDetailsFormGroup(): FormGroup {
+		return this._formBuilder.contactDetailsFormGroup;
+	}
 
 	public get payInvoiceByAgreement(): boolean {
 		return this._formBuilder.payInvoiceByAgreement;
@@ -99,8 +102,10 @@ export class CorporateCustomerDetailsComponent extends BaseFormComponent {
 		this._formBuilder.updateCompanyContactDetailsFrom(contactDetails);
 	}
 	public removeContactDetails(contactDetailsToRemove: ContactDetailsDO) {
-		this._corporateDetails.contactDetailsList = _.filter(this._corporateDetails.contactDetailsList, (contactDetails: ContactDetailsDO) => {
-			return contactDetails.contactName !== contactDetailsToRemove.contactName });
+		var index = this._corporateDetails.contactDetailsList.indexOf(contactDetailsToRemove);
+		if (index >= 0) {
+			this._corporateDetails.contactDetailsList.splice(index, 1);
+		}
 		this.currentContactDetails = null;
 	}
 	public addContactDetails() {
@@ -109,8 +114,10 @@ export class CorporateCustomerDetailsComponent extends BaseFormComponent {
 	}
 	public saveContactDetails() {
 		this._formBuilder.updateContactDetailsValuesOn(this.currentContactDetails);
-		if (!this.currentContactDetails.contactName || this.currentContactDetails.contactName.length == 0) {
-			this.currentContactDetails.contactName = this._appContext.thTranslation.translate("default");
+		if (!this._formBuilder.contactDetailsFormGroup.valid) {
+			var errorMessage = this._appContext.thTranslation.translate("Please complete all the required fields");
+			this._appContext.toaster.error(errorMessage);
+			return;
 		}
 		var index = this._corporateDetails.contactDetailsList.indexOf(this.currentContactDetails);
 		if (index >= 0) {

@@ -9,6 +9,6 @@ export class PricePipe implements PipeTransform {
 		if (!value) {
 			return value;
 		}
-		return value.toFixed(2);
+		return value.toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 2});
 	}
 }

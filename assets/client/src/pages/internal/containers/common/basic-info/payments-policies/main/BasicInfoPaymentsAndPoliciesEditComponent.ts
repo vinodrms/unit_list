@@ -90,9 +90,10 @@ export class BasicInfoPaymentsAndPoliciesEditComponent extends BaseFormComponent
 	}
 
 	public get ccySymbol(): string {
-		return _.find(this.currencies.currencyList, (ccy: CurrencyDO) => {
+		var ccy = _.find(this.currencies.currencyList, (ccy: CurrencyDO) => {
 			return ccy.code === this.hotel.ccyCode;
-		}).symbol;
+		})
+		return (ccy)? ccy.symbol : "";
 	}
 
 	savePaymentsAndPolicies() {
