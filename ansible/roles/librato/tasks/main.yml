@@ -1,0 +1,19 @@
+---
+
+- block:
+    - name: Install collectd
+      apt: pkg="{{ item }}"
+      with_items:
+        - collectd=5.5.1-1build2
+    
+    - name: Create collectd conf file
+      template: src={{ item }}
+                dest={{ collectd_root }}/{{ item | regex_replace('\.j2$', '') }}
+      with_items:
+        - collectd.conf.j2
+    
+    - name: Restart collectd
+      service: name=collectd
+               state=restarted
+               
+  become: yes

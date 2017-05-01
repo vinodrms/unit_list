@@ -12,7 +12,7 @@ export class IncludedBookingItems {
     public getTotalPrice(): number {
         var totalPrice: number = 0.0;
         _.forEach(this._includedInvoiceItemList, (includedInvoiceItem: InvoiceItemDO) => {
-            totalPrice = totalPrice + includedInvoiceItem.meta.getNumberOfItems() * includedInvoiceItem.meta.getUnitPrice();
+            totalPrice = totalPrice + includedInvoiceItem.getTotalPrice();
         });
         return totalPrice;
     }

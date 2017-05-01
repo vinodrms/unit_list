@@ -41,7 +41,7 @@ export class ShiftReportByCategorySectionGenerator extends AReportSectionGenerat
 		var totalNet = 0, totalVat = 0, total = 0;
 		var data = [];
 		Object.keys(mpmDetailsDict).forEach((productId) => {
-			let transactions = mpmDetailsDict[productId].transactions;
+			let transactions = Math.abs(mpmDetailsDict[productId].transactions);
 			let itemNet = this._thUtils.roundNumberToTwoDecimals(mpmDetailsDict[productId].itemNet);
 			let itemVat = this._thUtils.roundNumberToTwoDecimals(mpmDetailsDict[productId].itemVat);
 			let itemTotal = this._thUtils.roundNumberToTwoDecimals(mpmDetailsDict[productId].itemTotal);

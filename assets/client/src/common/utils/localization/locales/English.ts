@@ -698,6 +698,7 @@ export var EnglishTranslations: Object = {
 	"Open invoice group": "Open invoice group",
 	"No Payment Guarantee": "No Payment Guarantee",
 	"Arrivals": "Arrivals",
+	"Departures": "Departures",
 	"No booking": "No booking",
 	"Arriving Today": "Arriving Today",
 	"All Rooms": "All Rooms",
@@ -827,6 +828,8 @@ export var EnglishTranslations: Object = {
 	"Booking Statuses": "Booking Statuses",
 	"Undo Check In": "Undo Check In",
 	"Are you sure you want to undo the check in? This will move the booking back to the arrivals pane.": "Are you sure you want to undo the check in? This will move the booking back to the arrivals pane.",
+	"Generate Invoice": "Generate Invoice",
+	"Are you sure you want to generate the associated invoice for this booking?": "Are you sure you want to generate the associated invoice for this booking?",
 	"When a company/travel agent on a booking has booking confirmations disabled, booking confirmations are blocked for that booking.": "When a company/travel agent on a booking has booking confirmations disabled, booking confirmations are blocked for that booking.",
 	"Billed customer": "Billed customer",
 	"Guest on invoice": "Guest on invoice",
@@ -883,5 +886,13 @@ export var EnglishTranslations: Object = {
 	"The list of bookings in a period of time": "The list of bookings in a period of time",
 	"Bookings by Price Product": "Bookings by Price Product",
 	"Bookings by Interval": "Bookings by Interval",
+	"Update Contact Details": "Update Contact Details",
+	"Included Items": "Included Items",
+	"Total Price": "Total Price",
+	"Price Breakdown": "Price Breakdown",
+	"Other": "Other",
+	"The invoice was credited succesfully.": "The invoice was credited succesfully.",
+	"The invoice was credited.": "The invoice was credited.",
+	
 
 };

@@ -187,7 +187,7 @@ export class DefaultDataBuilder {
                 this._allotmentList = allotmentList;
 
                 var bookingBuilder = new DefaultBookingBuilder(this._testContext);
-                return bookingBuilder.loadBookings(bookingBuilder, this._hotelDO, this._customerList, this._roomCategoryStatsList, this.priceProductList);
+                return bookingBuilder.loadBookings(bookingBuilder, this._hotelDO, this._customerList, this._roomCategoryStatsList, this.priceProductList, this.addOnProductList);
             }).then((bookingList: BookingDO[]) => {
                 this._bookingList = bookingList;
 

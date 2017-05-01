@@ -25,12 +25,14 @@ import { RoomCategoriesService } from "../../../../../../../../services/room-cat
 import { NewBookingModalInput } from "../../../modal/services/utils/NewBookingModalInput";
 import { HotelAggregatedInfo } from "../../../../../../../../services/hotel/utils/HotelAggregatedInfo";
 import { BookingViewModelConverter } from "../../../services/search/utils/BookingViewModelConverter";
+import { KeyValueModalService } from "../../../../../../../../../../common/utils/modals/modals/keyvalue/KeyValueModalService";
+import { PricePerDayDO } from "../../../../../../../../services/bookings/data-objects/price/PricePerDayDO";
 
 @Component({
 	selector: 'new-booking-search',
 	templateUrl: '/client/src/pages/internal/containers/home/pages/utils/new-booking/component/subcomponents/booking-search/template/new-booking-search.html',
 	providers: [EagerBookingsService, EagerCustomersService, RoomCategoriesService, BookingSearchService, BookingSearchResultsTableMetaBuilderService,
-		BookingCartTableMetaBuilderService, BookingTableUtilsService, RoomAvailabilityModalService]
+		BookingCartTableMetaBuilderService, BookingTableUtilsService, RoomAvailabilityModalService, KeyValueModalService]
 })
 export class NewBookingSearchComponent extends BaseComponent implements AfterViewInit, OnInit {
 	@ViewChild('searchResults') private _searchResultsTableComponent: LazyLoadingTableComponent<BookingCartItemVM>;
@@ -51,7 +53,8 @@ export class NewBookingSearchComponent extends BaseComponent implements AfterVie
 		private _searchTableMetaBuilder: BookingSearchResultsTableMetaBuilderService,
 		private _cartTableMetaBuilder: BookingCartTableMetaBuilderService,
 		private _bookingTableUtilsService: BookingTableUtilsService, private _bookingCartService: BookingCartService,
-		private _roomAvailabilityModalService: RoomAvailabilityModalService) {
+		private _roomAvailabilityModalService: RoomAvailabilityModalService,
+		private _keyValueModalService: KeyValueModalService) {
 		super();
 	}
 	public ngOnInit() {
@@ -120,6 +123,17 @@ export class NewBookingSearchComponent extends BaseComponent implements AfterVie
 			() => {
 				this.removeBookingVMFromCartCore(bookingCartItemVM);
 			}, () => { });
+	}
+	public showDetailsForBookingVM(bookingCartItemVM: BookingCartItemVM) {
+		var title = this._appContext.thTranslation.translate("Price Breakdown");
+		var content = {};
+		_.forEach(bookingCartItemVM.pricePerDayList, (pricePerDay: PricePerDayDO) => {
+			content[pricePerDay.thDate.getLongDisplayString(this._appContext.thTranslation)] = pricePerDay.price + bookingCartItemVM.ccy.nativeSymbol;
+		});
+		content[this._appContext.thTranslation.translate("Commision")] = "-" + bookingCartItemVM.commisionString;
+		content[this._appContext.thTranslation.translate("Other")] = "+" + bookingCartItemVM.otherPriceString;
+		content[this._appContext.thTranslation.translate("Total Price")] = bookingCartItemVM.totalPriceString;
+		this._keyValueModalService.openModal(title, content);
 	}
 	public getTotalNumberOfRooms() {
 		if (!this._roomCategoryItemList || this._roomCategoryItemList.length == 0) { return; }

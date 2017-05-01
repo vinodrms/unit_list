@@ -11,7 +11,7 @@ export class BookingSearchResultsTableMetaBuilderService {
 
     public buildSearchResultsTableMeta(): LazyLoadTableMeta {
         return {
-            supportedRowCommandList: [TableRowCommand.AddExistingRow],
+            supportedRowCommandList: [TableRowCommand.AddExistingRow, TableRowCommand.ShowDetails],
             rowIdPropertySelector: "uniqueId",
             addButtonText: "",
             autoSelectRows: false,

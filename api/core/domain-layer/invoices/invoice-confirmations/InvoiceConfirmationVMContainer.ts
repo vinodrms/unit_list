@@ -5,7 +5,7 @@ import { CustomerDO } from '../../../data-layer/customers/data-objects/CustomerD
 import { AddressDO } from '../../../data-layer/common/data-objects/address/AddressDO';
 import { PaymentMethodDO } from '../../../data-layer/common/data-objects/payment-method/PaymentMethodDO';
 import { InvoiceDO, InvoicePaymentStatus } from '../../../data-layer/invoices/data-objects/InvoiceDO';
-import { InvoiceItemDO, InvoiceItemType } from '../../../data-layer/invoices/data-objects/items/InvoiceItemDO';
+import { InvoiceItemDO, InvoiceItemType, InvoiceItemAccountingType } from '../../../data-layer/invoices/data-objects/items/InvoiceItemDO';
 import { InvoiceItemVM } from './InvoiceItemVM';
 import { InvoicePaymentMethodType } from '../../../data-layer/invoices/data-objects/payers/InvoicePaymentMethodDO';
 import { InvoiceAggregatedData } from '../aggregators/InvoiceAggregatedData';
@@ -150,12 +150,14 @@ export class InvoiceConfirmationVMContainer {
         this.payerAddressSecondLineValue = this.getFormattedAddressSecondLine(this._payerCustomer.customerDetails.getAddress());
         this.payerContactLabel = this._thTranslation.translate('Contact');
         this.payerContactValue = "";
-        var phone = this._payerCustomer.customerDetails.getPhone();
+        var phone = (this._payerCustomer.customerDetails.getContactDetailsList() && this._payerCustomer.customerDetails.getContactDetailsList().length > 0)?
+                this._payerCustomer.customerDetails.getContactDetailsList()[0].phone : "";
         if (_.isString(phone) && phone.length > 0) {
             this.payerContactValue += phone;
         }
 
-        var email = this._payerCustomer.customerDetails.getEmail();
+        var email = (this._payerCustomer.customerDetails.getContactDetailsList() && this._payerCustomer.customerDetails.getContactDetailsList().length > 0)?
+                this._payerCustomer.customerDetails.getContactDetailsList()[0].email : "";
         if (_.isString(email) && email.length > 0) {
             this.payerContactValue += (this.payerContactValue.length > 0) ? " / " : "";
             this.payerContactValue += email;
@@ -190,24 +192,25 @@ export class InvoiceConfirmationVMContainer {
         this.netUnitPriceLabel = this._thTranslation.translate('Net Unit Price');
         this.vatLabel = this._thTranslation.translate('VAT');
         this.subtotalLabel = this._thTranslation.translate('Net Subtotal');
-
+        
         this.itemVMList = [];
         this.totalVat = 0;
         this.subtotalValue = 0;
         _.forEach(this._invoice.itemList, (itemDO: InvoiceItemDO) => {
             var invoiceItemVM = new InvoiceItemVM(this._thTranslation);
             invoiceItemVM.buildFromInvoiceItemDO(itemDO, this._invoiceAggregatedData.vatList);
-            this.totalVat = this._thUtils.roundNumberToTwoDecimals(this.totalVat + invoiceItemVM.vat);
-            this.subtotalValue = this._thUtils.roundNumberToTwoDecimals(this.subtotalValue + invoiceItemVM.subtotal);
 
             if (this.displayBookingDateBreakdown(itemDO)) {
-                let bookingInvoiceItems = this.getBookingDateBreakdownItems(<BookingPriceDO>itemDO.meta);
+                let bookingInvoiceItems = this.getBookingDateBreakdownItems(itemDO);
                 this.itemVMList = this.itemVMList.concat(bookingInvoiceItems);
             }
             else {
                 this.itemVMList.push(invoiceItemVM);
             }
         });
+
+        this.totalVat = this._thUtils.roundNumberToTwoDecimals(this.totalVat + _.reduce(this.itemVMList, function(sum, itemVM: InvoiceItemVM){ return sum + itemVM.vat; }, 0));
+        this.subtotalValue = this._thUtils.roundNumberToTwoDecimals(this.subtotalValue + _.reduce(this.itemVMList, function(sum, itemVM: InvoiceItemVM){ return sum + itemVM.subtotal; }, 0));
 
         if (this.hasTransactionFee) {
             let transactionFeeInvoiceItemVM = this.getTransactonFeeInvoiceItem();
@@ -237,24 +240,27 @@ export class InvoiceConfirmationVMContainer {
         return invoiceItemVM;
     }
     private displayBookingDateBreakdown(invoiceItemDO: InvoiceItemDO): boolean {
-        if (!invoiceItemDO.isBookingPrice()) {
+        if (!(invoiceItemDO.type === InvoiceItemType.Booking)) {
             return false;
         }
         let bookingPrice: BookingPriceDO = <BookingPriceDO>invoiceItemDO.meta;
         return !bookingPrice.isPenalty();
     }
-    private getBookingDateBreakdownItems(bookingPrice: BookingPriceDO): InvoiceItemVM[] {
+    private getBookingDateBreakdownItems(itemDO: InvoiceItemDO): InvoiceItemVM[] {
+        let bookingPrice: BookingPriceDO = <BookingPriceDO>itemDO.meta;
+
         let invoiceItemVMList: InvoiceItemVM[] = [];
         bookingPrice.roomPricePerNightList.forEach((pricePerDay: PricePerDayDO) => {
-            let aopItem = new AddOnProductInvoiceItemMetaDO();
-            aopItem.aopDisplayName = this._thTranslation.translate("Accomodation for %date%", { date: pricePerDay.thDate.toString() });
-            aopItem.numberOfItems = 1;
-            aopItem.pricePerItem = pricePerDay.price;
-            aopItem.vatId = bookingPrice.vatId;
+            let aopItemMeta = new AddOnProductInvoiceItemMetaDO();
+            aopItemMeta.aopDisplayName = this._thTranslation.translate("Accomodation for %date%", { date: pricePerDay.thDate.toString() });
+            aopItemMeta.numberOfItems = 1;
+            aopItemMeta.pricePerItem = pricePerDay.price;
+            aopItemMeta.vatId = bookingPrice.vatId;
 
             let item = new InvoiceItemDO();
             item.type = InvoiceItemType.AddOnProduct;
-            item.meta = aopItem;
+            item.accountingType = itemDO.accountingType;
+            item.meta = aopItemMeta;
 
             var invoiceItemVM = new InvoiceItemVM(this._thTranslation);
             invoiceItemVM.buildFromInvoiceItemDO(item, this._invoiceAggregatedData.vatList);
@@ -302,7 +308,7 @@ export class InvoiceConfirmationVMContainer {
 
     private initTotalValues() {
         this.totalLabel = this._thTranslation.translate('Total');
-        this.totalValue = this._thUtils.roundNumberToTwoDecimals(this._invoice.payerList[this.payerIndex].priceToPayPlusTransactionFee);
+        this.totalValue = this._thUtils.roundNumberToTwoDecimals(this.invoicePayer.priceToPayPlusTransactionFee);
     }
 
     private initAdditionalFields() {

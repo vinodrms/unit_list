@@ -329,6 +329,7 @@ export enum ThStatusCode {
 	GeneratInvoiceGroupActionFactoryError,
 	GenerateBookingInvoiceError,
 	GenerateBookingInvoiceErrorBuildingDefaultInvoice,
+	GenerateCreditInvoiceError,
 	InvoiceConfirmationErrorGettingData,
 	InvoiceGroupsRepositoryErrorAddingInvoiceGroup,
 	InvoiceGroupsRepositoryProblemUpdatingInvoiceGroup,
@@ -419,7 +420,6 @@ export enum ThStatusCode {
 	BookingsControllerErrorAddingBookings,
 	BookingStatusChangerCronJobExecutorError,
 	BookingInvoiceUtilsInvoiceNotFound,
-	BookingInvoiceUtilsInvoiceIsClosed,
 	HotelTimeNullTimezone,
 	HotelTimeError,
 	HotelOperationsRoomInfoReaderError,
@@ -855,6 +855,7 @@ ThMessage[ThStatusCode.PhantomHtmlToPdfConverter] = "Error converting html to pd
 ThMessage[ThStatusCode.GeneratInvoiceGroupActionFactoryError] = "Error getting the invoice group generation action (update or add new invoice group).";
 ThMessage[ThStatusCode.GenerateBookingInvoiceError] = "Error adding booking related invoice group.";
 ThMessage[ThStatusCode.GenerateBookingInvoiceErrorBuildingDefaultInvoice] = "Error building the default booking invoice object.";
+ThMessage[ThStatusCode.GenerateCreditInvoiceError] = "Error crediting invoice.";
 ThMessage[ThStatusCode.InvoiceConfirmationErrorGettingData] = "Error getting data for the invoice confirmation.";
 ThMessage[ThStatusCode.InvoiceGroupsRepositoryErrorAddingInvoiceGroup] = "Error adding the invoice group.";
 ThMessage[ThStatusCode.InvoiceGroupsRepositoryProblemUpdatingInvoiceGroup] = "Problem updating the invoice group - concurrency.";
@@ -943,7 +944,6 @@ ThMessage[ThStatusCode.BookingsControllerErrorSearchingBookings] = "Error search
 ThMessage[ThStatusCode.BookingsControllerErrorAddingBookings] = "Error adding bookings.";
 ThMessage[ThStatusCode.BookingStatusChangerCronJobExecutorError] = "Error changing booking statuses from the process.";
 ThMessage[ThStatusCode.BookingInvoiceUtilsInvoiceNotFound] = "The invoice for the booking was not found.";
-ThMessage[ThStatusCode.BookingInvoiceUtilsInvoiceIsClosed] = "The price and the notes cannot be updated on the invoice because it is closed (Paid or Lost by Management).";
 ThMessage[ThStatusCode.HotelTimeNullTimezone] = "The timezone for the hotel is not set.";
 ThMessage[ThStatusCode.HotelTimeError] = "Error getting the current time for your hotel.";
 ThMessage[ThStatusCode.HotelOperationsRoomInfoReaderError] = "Error getting the hotel operations data.";

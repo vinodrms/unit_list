@@ -92,10 +92,12 @@ export enum ThServerApi {
 	HotelOperationsBookingReserveAddOnProducts,
 	HotelOperationsBookingChangePriceProduct,
 	HotelOperationsBookingUndoCheckIn,
+	HotelOperationsBookingGenerateInvoice,
 
 	InvoiceGroups,
 	InvoiceGroupsCount,
 	InvoiceGroupItem,
+	InvoiceGroupsCredit,
 	InvoiceGroupsSaveItem,
 
 	YieldManagerYieldPriceProducts,
@@ -201,12 +203,14 @@ ThServerApiUrl[ThServerApi.HotelOperationsBookingReactivate] = "/hotelOperations
 ThServerApiUrl[ThServerApi.HotelOperationsBookingReserveAddOnProducts] = "/hotelOperations/booking/reserveAddOnProducts";
 ThServerApiUrl[ThServerApi.HotelOperationsBookingChangePriceProduct] = "/hotelOperations/booking/changePriceProduct";
 ThServerApiUrl[ThServerApi.HotelOperationsBookingUndoCheckIn] = "/hotelOperations/booking/undoCheckIn";
+ThServerApiUrl[ThServerApi.HotelOperationsBookingGenerateInvoice] = "/hotelOperations/booking/generateInvoice";
 
 ThServerApiUrl[ThServerApi.HotelOperationsCommonSendEmail] = "/hotelOperations/common/sendEmail";
 
 ThServerApiUrl[ThServerApi.InvoiceGroups] = "/invoiceGroups";
 ThServerApiUrl[ThServerApi.InvoiceGroupsCount] = "/invoiceGroups/count";
 ThServerApiUrl[ThServerApi.InvoiceGroupItem] = "/invoiceGroups/invoiceGroupItem";
+ThServerApiUrl[ThServerApi.InvoiceGroupsCredit] = "/invoiceGroups/credit";
 ThServerApiUrl[ThServerApi.InvoiceGroupsSaveItem] = "/invoiceGroups/saveInvoicegroupItem";
 
 /* URLs prefixed with yManager instead of yieldManager because of AdBlock rules (EasyList) which contain the following definition: "/yieldmanager/*" */

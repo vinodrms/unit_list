@@ -17,6 +17,12 @@ import { P14_AddEmptyIntervalListOnPriceProductDiscounts } from "./list/P14_AddE
 import { P15_EncapsulateDiscountInBookingPricePerDayOnBookings } from "./list/P15_EncapsulateDiscountInBookingPricePerDayOnBookings";
 import { P16_TransformPaymentMetehodIdListOnHotelIntoPaymentMethodInstanceList } from "./list/P16_TransformPaymentMetehodIdListOnHotelIntoPaymentMethodInstanceList";
 import { P17_AddTransactionFeeSnapshotOnInvoicePayers } from "./list/P17_AddTransactionFeeSnapshotOnInvoicePayers";
+import { P18_CreateContactDetailsListOnCustomerDetails } from "./list/P18_CreateContactDetailsListOnCustomerDetails";
+import { P19_AddIdOnInvoices } from "./list/P19_AddIdOnInvoices";
+import { P20_AddInvoiceAccountingTypeDebitOnInvoices } from "./list/P20_AddInvoiceAccountingTypeDebitOnInvoices";
+import { P21_AddInvoiceItemAccountingTypeDebitOnInvoices } from "./list/P21_AddInvoiceItemAccountingTypeDebitOnInvoices";
+import { P22_RemoveMovableAttributeFromInvoiceItemsOnInvoices } from "./list/P22_RemoveMovableAttributeFromInvoiceItemsOnInvoices";
+import { P23_RemoveMovableAttributeFromIncludedInvoiceItemsOnBookings } from "./list/P23_RemoveMovableAttributeFromIncludedInvoiceItemsOnBookings";
 
 export class MongoPatchUtils {
 	public static get PatchList(): ATransactionalMongoPatch[] {
@@ -39,6 +45,12 @@ export class MongoPatchUtils {
 			new P15_EncapsulateDiscountInBookingPricePerDayOnBookings(),
 			new P16_TransformPaymentMetehodIdListOnHotelIntoPaymentMethodInstanceList(),
 			new P17_AddTransactionFeeSnapshotOnInvoicePayers(),
+			new P18_CreateContactDetailsListOnCustomerDetails(),
+			new P19_AddIdOnInvoices(),
+			new P20_AddInvoiceAccountingTypeDebitOnInvoices(),
+			new P21_AddInvoiceItemAccountingTypeDebitOnInvoices(),
+			new P22_RemoveMovableAttributeFromInvoiceItemsOnInvoices(),
+			new P23_RemoveMovableAttributeFromIncludedInvoiceItemsOnBookings(),
 			
 		];
 	}

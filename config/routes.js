@@ -124,6 +124,7 @@ module.exports.routes = {
 	'GET /api/invoiceGroups/invoiceGroupItem': 'InvoiceGroupsController.getInvoiceGroupById',
 	'GET /api/invoiceGroups/pdf': 'InvoiceGroupsController.downloadInvoicePdf',
 	'POST /api/invoiceGroups/saveInvoicegroupItem': 'InvoiceGroupsController.saveInvoiceGroupItem',
+	'POST /api/invoiceGroups/credit': 'InvoiceGroupsController.generateCreditInvoice',
 
 	'POST /api/hotelOperations/dashboard/arrivals': 'HotelDashboardOperationsController.getArrivals',
 	'POST /api/hotelOperations/dashboard/departures': 'HotelDashboardOperationsController.getDepartures',
@@ -150,6 +151,7 @@ module.exports.routes = {
 	'POST /api/hotelOperations/booking/reserveAddOnProducts': 'HotelBookingOperationsController.reserveAddOnProducts',
 	'POST /api/hotelOperations/booking/changePriceProduct': 'HotelBookingOperationsController.changePriceProduct',
 	'POST /api/hotelOperations/booking/undoCheckIn': 'HotelBookingOperationsController.undoCheckIn',
+	'POST /api/hotelOperations/booking/generateInvoice': 'HotelBookingOperationsController.generateInvoice',
 
 	'POST /api/hotelOperations/common/sendEmail': 'HotelCommonOperationsController.sendEmail',
 

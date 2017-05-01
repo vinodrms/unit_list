@@ -1,11 +1,11 @@
-import {InvoiceGroupDO} from '../../../core/data-layer/invoices/data-objects/InvoiceGroupDO';
-import {InvoiceDO, InvoicePaymentStatus} from '../../../core/data-layer/invoices/data-objects/InvoiceDO';
-import {InvoiceItemDO, InvoiceItemType} from '../../../core/data-layer/invoices/data-objects/items/InvoiceItemDO';
-import {InvoicePayerDO} from '../../../core/data-layer/invoices/data-objects/payers/InvoicePayerDO';
-import {BookingDO} from '../../../core/data-layer/bookings/data-objects/BookingDO';
-import {CustomerDO} from '../../../core/data-layer/customers/data-objects/CustomerDO';
-import {AddOnProductDO} from '../../../core/data-layer/add-on-products/data-objects/AddOnProductDO'
-import {AddOnProductInvoiceItemMetaDO} from '../../../core/data-layer/invoices/data-objects/items/add-on-products/AddOnProductInvoiceItemMetaDO';
+import { InvoiceGroupDO } from '../../../core/data-layer/invoices/data-objects/InvoiceGroupDO';
+import { InvoiceDO, InvoicePaymentStatus } from '../../../core/data-layer/invoices/data-objects/InvoiceDO';
+import { InvoiceItemDO, InvoiceItemType } from '../../../core/data-layer/invoices/data-objects/items/InvoiceItemDO';
+import { InvoicePayerDO } from '../../../core/data-layer/invoices/data-objects/payers/InvoicePayerDO';
+import { BookingDO } from '../../../core/data-layer/bookings/data-objects/BookingDO';
+import { CustomerDO } from '../../../core/data-layer/customers/data-objects/CustomerDO';
+import { AddOnProductDO } from '../../../core/data-layer/add-on-products/data-objects/AddOnProductDO'
+import { AddOnProductInvoiceItemMetaDO } from '../../../core/data-layer/invoices/data-objects/items/add-on-products/AddOnProductInvoiceItemMetaDO';
 import { TestContext } from '../../helpers/TestContext';
 import { HotelDO } from "../../../core/data-layer/hotel/data-objects/HotelDO";
 
@@ -43,7 +43,7 @@ export class DefaultInvoiceGroupBuilder implements IInvoiceGroupDataSource {
             bookingInvoiceGroup.invoiceList.push(aopOnlyInvoice);
         });
 
-        return bookingInvoiceGroup;   
+        return bookingInvoiceGroup;
     }
 
     private buildBookingInvoiceFromBooking(hotel: HotelDO, booking: BookingDO, customerList: CustomerDO[]): InvoiceDO {
@@ -69,7 +69,7 @@ export class DefaultInvoiceGroupBuilder implements IInvoiceGroupDataSource {
     private buildInvoiceWithTwoAddOnProducts(payerCustomer: InvoicePayerDO, aopList: AddOnProductDO[]): InvoiceDO {
         var invoice = new InvoiceDO();
         invoice.itemList = [];
-        
+
         var totalAmountToPay = 0;
         var aopSample = _.sample(aopList, 2);
         _.forEach(aopSample, (aop: AddOnProductDO) => {
@@ -82,16 +82,16 @@ export class DefaultInvoiceGroupBuilder implements IInvoiceGroupDataSource {
             aopItemMeta.numberOfItems = 1;
             aopItemMeta.pricePerItem = aop.price;
             aopInvoiceItem.meta = aopItemMeta;
-            
+
             invoice.itemList.push(aopInvoiceItem);
             totalAmountToPay += aop.price;
         });
-        
+
         invoice.paymentStatus = InvoicePaymentStatus.Unpaid;
         invoice.payerList = [];
         payerCustomer.priceToPay = totalAmountToPay;
         invoice.payerList.push(payerCustomer);
-        
+
         return invoice;
     }
 
@@ -101,7 +101,7 @@ export class DefaultInvoiceGroupBuilder implements IInvoiceGroupDataSource {
         });
     }
     private loadInvoiceGroupsCore(resolve: { (result: InvoiceGroupDO[]): void }, reject: { (err: any): void },
-        dataSource: IInvoiceGroupDataSource,  hotel: HotelDO, customerList: CustomerDO[], aopList: AddOnProductDO[], bookingList: BookingDO[]) {
+        dataSource: IInvoiceGroupDataSource, hotel: HotelDO, customerList: CustomerDO[], aopList: AddOnProductDO[], bookingList: BookingDO[]) {
 
         var invoiceGroupList = dataSource.getInvoiceGroupList(hotel, customerList, aopList, bookingList);
         var addInvoiceGroupPromiseList: Promise<InvoiceGroupDO>[] = [];

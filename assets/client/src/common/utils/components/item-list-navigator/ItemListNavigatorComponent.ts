@@ -2,7 +2,8 @@ import {Component, Input, Output, EventEmitter, OnInit, SimpleChange} from '@ang
 import {AppContext, ThError} from '../../AppContext';
 import {Interval} from './Interval';
 import {Observable} from 'rxjs/Observable';
-import {ItemListNavigatorConfig} from './ItemListNavigatorConfig';
+import { ItemListNavigatorConfig } from './ItemListNavigatorConfig';
+import { ItemAdditionMeta } from "./ItemAdditionMeta";
 
 @Component({
     selector: 'item-list-navigator',
@@ -13,7 +14,7 @@ export class ItemListNavigatorComponent implements OnInit {
 
     @Input() config: ItemListNavigatorConfig;
 
-    @Input() itemsAdded: Observable<number>;
+    @Input() itemsAdded: Observable<ItemAdditionMeta>;
     @Input() itemRemoved: Observable<number>;
     @Input() selectItemTriggered: Observable<number>;
     @Input() reset: Observable<ItemListNavigatorConfig>;
@@ -32,11 +33,13 @@ export class ItemListNavigatorComponent implements OnInit {
             this.init(newConfig);
         });
 
-        this.itemsAdded.subscribe((noOfItems: number) => {
-            for(var i = 0; i < noOfItems; ++i) {
+        this.itemsAdded.subscribe((itemAdditionMeta: ItemAdditionMeta) => {
+            for(var i = 0; i < itemAdditionMeta.noOfAddedItems; ++i) {
                 this.interval.addValue();
             }
-            this.selectItem(this.interval.maxValue);
+            if(itemAdditionMeta.shouldSelectLastElement) {
+                this.selectItem(this.interval.maxValue);
+            }
         });
 
         this.itemRemoved.subscribe((itemToBeRemovedIndex: number) => {

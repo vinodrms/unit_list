@@ -3,21 +3,28 @@ import { ThError } from '../../../utils/th-responses/ThError';
 import { BaseDO } from '../../common/base/BaseDO';
 import { ThDateDO } from '../../../utils/th-dates/data-objects/ThDateDO';
 import { InvoicePayerDO } from './payers/InvoicePayerDO';
-import { InvoiceItemDO, InvoiceItemType } from './items/InvoiceItemDO';
+import { InvoiceItemDO, InvoiceItemType, InvoiceItemAccountingType } from './items/InvoiceItemDO';
 import { IInvoiceItemMeta } from './items/IInvoiceItemMeta';
 import { BookingDO } from '../../bookings/data-objects/BookingDO';
 import { BookingPriceDO } from '../../bookings/data-objects/price/BookingPriceDO';
 import { CustomerDO } from '../../customers/data-objects/CustomerDO';
 import { InvoicePaymentMethodType } from './payers/InvoicePaymentMethodDO';
 import { IndexedBookingInterval } from '../../price-products/utils/IndexedBookingInterval';
+import { PricePerDayDO } from "../../bookings/data-objects/price/PricePerDayDO";
 
 import _ = require('underscore');
+
+export enum InvoiceAccountingType {
+    Debit, Credit
+}
 
 export enum InvoicePaymentStatus {
     Unpaid, Paid, LossAcceptedByManagement
 }
 
 export class InvoiceDO extends BaseDO {
+    id: string;
+    accountingType: InvoiceAccountingType;
     bookingId: string;
     invoiceReference: string;
     payerList: InvoicePayerDO[];
@@ -29,8 +36,14 @@ export class InvoiceDO extends BaseDO {
     paidDateUtcTimestamp: number;
     paidDateTimeUtcTimestamp: number;
 
+    constructor() {
+        super();
+
+        this.accountingType = 0;
+    }
+
     protected getPrimitivePropertyKeys(): string[] {
-        return ["bookingId", "invoiceReference", "paymentStatus", "notesFromBooking", "paidDateUtcTimestamp", "paidDateTimeUtcTimestamp"];
+        return ["id", "accountingType", "bookingId", "invoiceReference", "paymentStatus", "notesFromBooking", "paidDateUtcTimestamp", "paidDateTimeUtcTimestamp"];
     }
 
     public buildFromObject(object: Object) {
@@ -107,20 +120,23 @@ export class InvoiceDO extends BaseDO {
         let bookingInvoiceItemList: InvoiceItemDO[] = [];
 
         item.meta = booking.price;
-        item.meta.setMovable(false);
         bookingInvoiceItemList.push(item);
 
         if (booking.price.hasDeductedCommission()) {
             var invoiceRoomCommissionItem = new InvoiceItemDO();
             invoiceRoomCommissionItem.buildItemFromRoomCommission(booking.price.deductedCommissionPrice);
+            invoiceRoomCommissionItem.accountingType = item.accountingType;
             bookingInvoiceItemList.push(invoiceRoomCommissionItem);
         }
 
         if (!booking.price.isPenalty()) {
             booking.price.includedInvoiceItemList.reverse();
             _.forEach(booking.price.includedInvoiceItemList, (invoiceItem: InvoiceItemDO) => {
-                invoiceItem.meta.setMovable(false);
-                bookingInvoiceItemList = bookingInvoiceItemList.concat(invoiceItem);
+                var includedItem = new InvoiceItemDO();
+                includedItem.buildFromObject(invoiceItem);
+                includedItem.accountingType = item.accountingType;
+
+                bookingInvoiceItemList = bookingInvoiceItemList.concat(includedItem);
             });
         }
         return bookingInvoiceItemList;
@@ -137,17 +153,21 @@ export class InvoiceDO extends BaseDO {
 
                 var invoiceFeeItem = new InvoiceItemDO();
                 invoiceFeeItem.buildFeeItemFromCustomerDO(customerDO);
-
+                invoiceFeeItem.accountingType = 
+                    (this.accountingType === InvoiceAccountingType.Credit) ? InvoiceItemAccountingType.Credit : InvoiceItemAccountingType.Debit;
                 this.itemList.push(invoiceFeeItem);
             }
         });
     }
 
     public getPrice(): number {
+        let totalPrice = 0;
+        _.forEach(this.itemList, (item: InvoiceItemDO) => {
+            let factor = item.accountingType === InvoiceItemAccountingType.Credit ? -1 : 1;
+            totalPrice += item.meta.getNumberOfItems() * item.meta.getUnitPrice() * factor;
+        });
         var thUtils = new ThUtils();
-        return _.reduce(this.itemList, (memo: number, item: InvoiceItemDO) => {
-            return thUtils.roundNumberToTwoDecimals(memo + thUtils.roundNumberToTwoDecimals(item.meta.getNumberOfItems() * item.meta.getUnitPrice()));
-        }, 0);
+        return thUtils.roundNumberToTwoDecimals(totalPrice);
     }
 
     public isPaid(): boolean {
@@ -172,11 +192,11 @@ export class InvoiceDO extends BaseDO {
     public removeItemsPopulatedFromBooking() {
         var itemsToRemoveIdList = [];
         _.forEach(this.itemList, (invoiceItemDO: InvoiceItemDO) => {
-            if (invoiceItemDO.isDerivedFromBooking()) {
-                itemsToRemoveIdList.push(invoiceItemDO.id);
-            }
-            else if (invoiceItemDO.type === InvoiceItemType.Booking) {
+            if (invoiceItemDO.type === InvoiceItemType.Booking) {
                 delete invoiceItemDO.meta;
+            }
+            else if (invoiceItemDO.meta.isDerivedFromBooking()) {
+                itemsToRemoveIdList.push(invoiceItemDO.id);
             }
         });
         _.forEach(itemsToRemoveIdList, (id: string) => {

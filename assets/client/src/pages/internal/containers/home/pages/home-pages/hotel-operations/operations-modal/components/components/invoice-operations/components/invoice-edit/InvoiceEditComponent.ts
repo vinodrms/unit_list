@@ -8,7 +8,7 @@ import { ModalDialogRef } from '../../../../../../../../../../../../../common/ut
 import { CustomerRegisterModalService } from '../../../../../../../../../../common/inventory/customer-register/modal/services/CustomerRegisterModalService';
 import { InvoiceGroupDO } from '../../../../../../../../../../../services/invoices/data-objects/InvoiceGroupDO';
 import { InvoiceGroupVM } from '../../../../../../../../../../../services/invoices/view-models/InvoiceGroupVM';
-import { InvoiceDO, InvoicePaymentStatus } from '../../../../../../../../../../../services/invoices/data-objects/InvoiceDO';
+import { InvoiceDO, InvoicePaymentStatus, InvoiceAccountingType } from '../../../../../../../../../../../services/invoices/data-objects/InvoiceDO';
 import { InvoiceItemDO, InvoiceItemType } from '../../../../../../../../../../../services/invoices/data-objects/items/InvoiceItemDO';
 import { AddOnProductInvoiceItemMetaDO } from '../../../../../../../../../../../services/invoices/data-objects/items/add-on-products/AddOnProductInvoiceItemMetaDO';
 import { InvoiceVM } from '../../../../../../../../../../../services/invoices/view-models/InvoiceVM';
@@ -26,8 +26,9 @@ import { HotelOperationsResultService } from '../../../../../services/HotelOpera
     providers: [AddOnProductsModalService, NumberOfAddOnProductsModalService, CustomerRegisterModalService]
 })
 export class InvoiceEditComponent implements OnInit {
-    @Input() invoiceReference: string;
+    @Input() invoiceUniqueId: string;
     @Output() newlyAddedInvoiceRemoved = new EventEmitter();
+    @Output() creditInvoiceAdded = new EventEmitter();
 
     private static MAX_NO_OF_INVOICE_ITEMS = 50;
 
@@ -73,7 +74,7 @@ export class InvoiceEditComponent implements OnInit {
         }
         else {
             this.invoiceVM.addItemOnInvoice(aopToBeAdded, qty);
-            this.invoiceGroupVM.updatePriceToPayIfSinglePayerByRef(this.invoiceReference);
+            this.invoiceGroupVM.updatePriceToPayIfSinglePayerByUniqueIdentifier(this.invoiceUniqueId);
         }
     }
 
@@ -106,7 +107,7 @@ export class InvoiceEditComponent implements OnInit {
         this._appContext.modalService.confirm(title, content, { positive: positiveLabel, negative: negativeLabel }, () => {
             this.newlyAddedInvoiceRemoved.emit({
                 indexInDisplayedInvoiceList: this.invoiceVMIndex,
-                reference: this.invoiceVM.invoiceDO.invoiceReference
+                uniqueId: this.invoiceVM.invoiceDO.getUniqueIdentifier()
             });
         });
     }
@@ -131,6 +132,16 @@ export class InvoiceEditComponent implements OnInit {
             this.updatePaymentStatusForCurrentInvoice(InvoicePaymentStatus.LossAcceptedByManagement, "loss-accepted-by-management", "The invoice was marked as loss accepted by management.");
         });
     }
+    public onCreditInvoice() {
+        if (!this.totalAmountIsValid()) { return; }
+        var title = this._appContext.thTranslation.translate("Info");
+        var content = this._appContext.thTranslation.translate("By crediting this paid invoice a new invoice which will contain all the items on the original invoice (negative quantity) will be generated. Continue?");
+        var positiveLabel = this._appContext.thTranslation.translate("Yes");
+        var negativeLabel = this._appContext.thTranslation.translate("No");
+        this._appContext.modalService.confirm(title, content, { positive: positiveLabel, negative: negativeLabel }, () => {
+            this.creditCurrentInvoice("credit", "The invoice was credited.");
+        });
+    }
     private totalAmountIsValid(): boolean {
         if (!this.invoiceVM.invoiceDO.allAmountWasPaid()) {
             var title = this._appContext.thTranslation.translate("Info");
@@ -146,7 +157,7 @@ export class InvoiceEditComponent implements OnInit {
     private updatePaymentStatusForCurrentInvoice(paymentStatus: InvoicePaymentStatus, logEventName: string, logMessage: string) {
         var invoiceGroupVMClone = this.invoiceGroupVM.buildPrototype();
         for (var i = 0; i < invoiceGroupVMClone.invoiceVMList.length; ++i) {
-            if (invoiceGroupVMClone.invoiceVMList[i].invoiceDO.invoiceReference === this.invoiceReference) {
+            if (invoiceGroupVMClone.invoiceVMList[i].invoiceDO.uniqueIdentifierEquals(this.invoiceUniqueId)) {
                 invoiceGroupVMClone.invoiceVMList[i].invoiceDO.paymentStatus = paymentStatus;
             }
         }
@@ -156,6 +167,27 @@ export class InvoiceEditComponent implements OnInit {
             this._invoiceGroupControllerService.updateInvoiceGroupVM(updatedInvoiceGroupDO);
             this._appContext.toaster.success(this._appContext.thTranslation.translate("The invoice was changed succesfully."));
             this._hotelOperationsResultService.markInvoiceChanged(updatedInvoiceGroupDO);
+        }, (error: ThError) => {
+            this._appContext.toaster.error(error.message);
+        });
+    }
+
+    private creditCurrentInvoice(logEventName: string, logMessage: string) {
+        var invoiceGroupVMClone = this.invoiceGroupVM.buildPrototype();
+        let invoiceToBeCredited = _.find(invoiceGroupVMClone.invoiceVMList, (invoiceVM: InvoiceVM) => {
+            return invoiceVM.invoiceDO.uniqueIdentifierEquals(this.invoiceUniqueId);
+        });
+
+        this._invoiceGroupsService.credit({
+            invoiceGroupId: invoiceGroupVMClone.invoiceGroupDO.id,
+            invoiceId: invoiceToBeCredited.invoiceDO.id
+        }).subscribe((updatedInvoiceGroupDO: InvoiceGroupDO) => {
+            this._appContext.analytics.logEvent("invoice", logEventName, logMessage);
+            this._invoiceGroupControllerService.updateInvoiceGroupVM(updatedInvoiceGroupDO);
+            this._appContext.toaster.success(this._appContext.thTranslation.translate("The invoice was credited succesfully."));
+            this._hotelOperationsResultService.markInvoiceChanged(updatedInvoiceGroupDO);
+
+            this.creditInvoiceAdded.emit();
         }, (error: ThError) => {
             this._appContext.toaster.error(error.message);
         });
@@ -175,14 +207,14 @@ export class InvoiceEditComponent implements OnInit {
     }
     private get invoiceVM(): InvoiceVM {
         for (var i = 0; i < this.invoiceGroupVM.invoiceVMList.length; ++i) {
-            if (this.invoiceGroupVM.invoiceVMList[i].invoiceDO.invoiceReference === this.invoiceReference) {
+            if (this.invoiceGroupVM.invoiceVMList[i].invoiceDO.uniqueIdentifierEquals(this.invoiceUniqueId)) {
                 return this.invoiceGroupVM.invoiceVMList[i];
             }
         }
     }
     private get invoiceVMIndex(): number {
         for (var i = 0; i < this.invoiceGroupVM.invoiceVMList.length; ++i) {
-            if (this.invoiceGroupVM.invoiceVMList[i].invoiceDO.invoiceReference === this.invoiceReference) {
+            if (this.invoiceGroupVM.invoiceVMList[i].invoiceDO.uniqueIdentifierEquals(this.invoiceUniqueId)) {
                 return i;
             }
         }
@@ -212,6 +244,12 @@ export class InvoiceEditComponent implements OnInit {
     public get isPaid(): boolean {
         return this.invoiceVM.invoiceDO.isPaid;
     }
+    public get isCredited(): boolean {
+        return this.invoiceVM.credited;
+    }
+    public get isCredit(): boolean {
+        return this.invoiceVM.invoiceDO.accountingType === InvoiceAccountingType.Credit;
+    }
     public get isLossAcceptedByManagement(): boolean {
         return this.invoiceVM.invoiceDO.isLossAcceptedByManagement;
     }
@@ -223,21 +261,25 @@ export class InvoiceEditComponent implements OnInit {
         if (!this.hasLeftEditableNeighbor()) {
             return;
         }
-        this.invoiceGroupVM.moveInvoiceItemLeft(this.invoiceReference, invoiceItemVMIndex);
+        this.invoiceGroupVM.moveInvoiceItemLeft(this.invoiceUniqueId, invoiceItemVMIndex);
     }
 
     public moveRight(invoiceItemVMIndex: number) {
         if (!this.hasRightEditableNeighbor()) {
             return;
         }
-        this.invoiceGroupVM.moveInvoiceItemRight(this.invoiceReference, invoiceItemVMIndex);
+        this.invoiceGroupVM.moveInvoiceItemRight(this.invoiceUniqueId, invoiceItemVMIndex);
     }
 
     public hasRightEditableNeighbor(): boolean {
-        return this.invoiceGroupVM.getRightEditableNeighborIndex(this.invoiceReference) != -1;
+        return this.invoiceGroupVM.getRightEditableNeighborIndex(this.invoiceUniqueId) != -1;
     }
 
     public hasLeftEditableNeighbor(): boolean {
-        return this.invoiceGroupVM.getLeftEditableNeighborIndex(this.invoiceReference) != -1;
+        return this.invoiceGroupVM.getLeftEditableNeighborIndex(this.invoiceUniqueId) != -1;
+    }
+
+    public get invoiceReference(): string {
+        return this.invoiceVM.invoiceDO.invoiceReference;
     }
 }
