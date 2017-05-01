@@ -5,6 +5,8 @@ import { InvoiceGroupDO } from "../../../../../../data-layer/invoices/data-objec
 import { InvoiceDO } from "../../../../../../data-layer/invoices/data-objects/InvoiceDO";
 import { ThUtils } from "../../../../../../utils/ThUtils";
 
+import _ = require('underscore');
+
 export class P19_AddIdOnInvoices extends APaginatedTransactionalMongoPatch {
 
     protected getMongoRepository(): MongoRepository {

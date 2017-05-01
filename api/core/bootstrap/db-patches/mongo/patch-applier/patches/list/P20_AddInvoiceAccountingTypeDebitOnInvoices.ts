@@ -5,6 +5,8 @@ import { InvoiceGroupDO } from "../../../../../../data-layer/invoices/data-objec
 import { ThUtils } from "../../../../../../utils/ThUtils";
 import { InvoiceDO, InvoiceAccountingType } from "../../../../../../data-layer/invoices/data-objects/InvoiceDO";
 
+import _ = require('underscore');
+
 export class P20_AddInvoiceAccountingTypeDebitOnInvoices extends APaginatedTransactionalMongoPatch {
 
     protected getMongoRepository(): MongoRepository {

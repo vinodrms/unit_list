@@ -1,6 +1,6 @@
 import { BaseDO } from '../../../../../common/base/BaseDO';
 import { ThUtils } from '../../../../../common/utils/ThUtils';
-import { InvoiceItemDO, InvoiceItemType } from './items/InvoiceItemDO';
+import { InvoiceItemDO, InvoiceItemType, InvoiceItemAccountingType } from './items/InvoiceItemDO';
 import { InvoicePayerDO } from './payers/InvoicePayerDO';
 import { InvoicePaymentMethodType } from './payers/InvoicePaymentMethodDO';
 import { CustomerDO } from '../../customers/data-objects/CustomerDO';
@@ -46,7 +46,8 @@ export class InvoiceDO extends BaseDO {
         });
     }
 
-    public buildCleanInvoice() {
+    public buildCleanInvoice(accountingType: InvoiceAccountingType = InvoiceAccountingType.Debit) {
+        this.accountingType = accountingType;
         this.payerList = [];
         var cleanInvoicePayerDO = new InvoicePayerDO();
         cleanInvoicePayerDO.priceToPay = this.getPrice();
@@ -81,9 +82,9 @@ export class InvoiceDO extends BaseDO {
     public getPrice(): number {
         let totalPrice = 0;
         _.forEach(this.itemList, (item: InvoiceItemDO) => {
-            totalPrice += item.meta.getNumberOfItems() * item.meta.getUnitPrice();
+            let factor = item.accountingType === InvoiceItemAccountingType.Credit ? -1 : 1;
+            totalPrice += item.meta.getNumberOfItems() * item.meta.getUnitPrice() * factor;
         });
-
         var thUtils = new ThUtils();
         return thUtils.roundNumberToTwoDecimals(totalPrice);
     }
@@ -111,11 +112,11 @@ export class InvoiceDO extends BaseDO {
     public removeItemsPopulatedFromBooking() {
         var itemsToRemoveIdList = [];
         _.forEach(this.itemList, (invoiceItemDO: InvoiceItemDO) => {
-            if (invoiceItemDO.isDerivedFromBooking()) {
-                itemsToRemoveIdList.push(invoiceItemDO.id);
-            }
-            else if (invoiceItemDO.type === InvoiceItemType.Booking) {
+            if (invoiceItemDO.type === InvoiceItemType.Booking) {
                 delete invoiceItemDO.meta;
+            }
+            else if (invoiceItemDO.meta.isDerivedFromBooking()) {
+                itemsToRemoveIdList.push(invoiceItemDO.id);
             }
         });
         _.forEach(itemsToRemoveIdList, (id: string) => {

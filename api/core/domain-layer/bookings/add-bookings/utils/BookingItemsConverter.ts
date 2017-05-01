@@ -20,7 +20,6 @@ import { CustomersContainer } from '../../../customers/validators/results/Custom
 import { AddOnProductItemContainer, AddOnProductItem } from '../../../add-on-products/validators/AddOnProductLoader';
 import { AddOnProductDO } from '../../../../data-layer/add-on-products/data-objects/AddOnProductDO';
 import { InvoiceItemDO, InvoiceItemType } from '../../../../data-layer/invoices/data-objects/items/InvoiceItemDO';
-import { AddOnProductInvoiceItemMetaDO } from '../../../../data-layer/invoices/data-objects/items/add-on-products/AddOnProductInvoiceItemMetaDO';
 import { TaxDO, TaxType } from '../../../../data-layer/taxes/data-objects/TaxDO';
 import { RoomCategoryStatsDO } from '../../../../data-layer/room-categories/data-objects/RoomCategoryStatsDO';
 import { IHotelRepository, SequenceValue } from "../../../../data-layer/hotel/repositories/IHotelRepository";

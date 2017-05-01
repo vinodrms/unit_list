@@ -53,8 +53,9 @@ export class BookingPriceProductEditorComponent implements OnInit {
         }
         _.forEach(this.bookingDO.price.includedInvoiceItemList, (invoiceItem: InvoiceItemDO) => {
             if (this.includedString.length > 0) { this.includedString += ", "; }
-            var totalPrice: number = invoiceItem.meta.getNumberOfItems() * invoiceItem.meta.getUnitPrice();
-            totalPrice = this._appContext.thUtils.roundNumberToTwoDecimals(totalPrice);
+            
+            let totalPrice = invoiceItem.getTotalPrice();
+            
             this.includedString += invoiceItem.meta.getNumberOfItems() + "x" + invoiceItem.meta.getDisplayName(this._appContext.thTranslation) +
                 " (" + totalPrice + this.currencySymbolString + ")";
         });

@@ -11,7 +11,7 @@ import { InvoiceAccountingType } from "../InvoiceDO";
 export enum InvoiceItemAccountingType {
     Debit, Credit
 }
-
+    
 export enum InvoiceItemType {
     AddOnProduct, Booking, InvoiceFee, RoomCommission
 }
@@ -52,14 +52,13 @@ export class InvoiceItemDO extends BaseDO {
         }
     }
 
-    public buildFromAddOnProductDO(aop: AddOnProductDO, numberOfItems: number, isMovable: boolean, vatId: string, 
+    public buildFromAddOnProductDO(aop: AddOnProductDO, numberOfItems: number, vatId: string, 
         accountingType: InvoiceItemAccountingType = InvoiceItemAccountingType.Debit) {
         
         var aopInvoiceItemMeta = new AddOnProductInvoiceItemMetaDO();
         aopInvoiceItemMeta.aopDisplayName = aop.name;
         aopInvoiceItemMeta.numberOfItems = numberOfItems;
         aopInvoiceItemMeta.pricePerItem = aop.price;
-        aopInvoiceItemMeta.movable = isMovable;
         aopInvoiceItemMeta.vatId = vatId;
 
         this.meta = aopInvoiceItemMeta;
@@ -81,12 +80,10 @@ export class InvoiceItemDO extends BaseDO {
         this.type = InvoiceItemType.RoomCommission;
         this.accountingType = accountingType;
     }
-    public isDerivedFromBooking(): boolean {
-        return this.type === InvoiceItemType.InvoiceFee
-            || this.type === InvoiceItemType.RoomCommission
-            || (this.type === InvoiceItemType.AddOnProduct && !this.meta.isMovable());
-    }
-    public isBookingPrice(): boolean {
-        return this.type === InvoiceItemType.Booking;
+
+    public getTotalPrice(): number {
+        let thUtils = new ThUtils();
+        let factor = (this.accountingType === InvoiceItemAccountingType.Credit)? -1 : 1;
+        return thUtils.roundNumberToTwoDecimals(this.meta.getUnitPrice() * this.meta.getNumberOfItems() * factor);
     }
 }

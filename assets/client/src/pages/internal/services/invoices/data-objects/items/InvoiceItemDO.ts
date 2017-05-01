@@ -64,12 +64,14 @@ export class InvoiceItemDO extends BaseDO {
         this.type = InvoiceItemType.InvoiceFee;
         this.accountingType = accountingType;
     }
-    public isDerivedFromBooking(): boolean {
-        return this.type === InvoiceItemType.InvoiceFee
-            || this.type === InvoiceItemType.RoomCommission
-            || (this.type === InvoiceItemType.AddOnProduct && !this.meta.isMovable());
+
+    public getTotalPrice(): number {
+        let thUtils = new ThUtils();
+        let factor = (this.accountingType === InvoiceItemAccountingType.Credit)? -1 : 1;
+        return thUtils.roundNumberToTwoDecimals(this.meta.getUnitPrice() * this.meta.getNumberOfItems() * factor);
     }
-    public isBookingPrice(): boolean {
-        return this.type === InvoiceItemType.Booking;
+
+    public isOfTypeCredit(): boolean {
+        return this.accountingType === InvoiceItemAccountingType.Credit;
     }
 }

@@ -81,7 +81,7 @@ export class InvoiceIndexer {
         var otherRevenue = 0.0;
         _.forEach(invoice.itemList, (item: InvoiceItemDO) => {
             if (item.type === InvoiceItemType.AddOnProduct) {
-                otherRevenue += item.meta.getNumberOfItems() * item.meta.getUnitPrice();
+                otherRevenue += item.getTotalPrice();
             }
         });
         return otherRevenue;

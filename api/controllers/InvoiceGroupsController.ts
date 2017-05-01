@@ -13,6 +13,7 @@ import { InvoiceDataAggregator, InvoiceDataAggregatorQuery } from '../core/domai
 import { InvoiceAggregatedData } from '../core/domain-layer/invoices/aggregators/InvoiceAggregatedData';
 import { InvoiceConfirmationVMContainer } from '../core/domain-layer/invoices/invoice-confirmations/InvoiceConfirmationVMContainer';
 import { ReportType, PdfReportsServiceResponse } from '../core/services/pdf-reports/IPdfReportsService';
+import { GenerateCreditInvoice } from "../core/domain-layer/invoices/generate-credit-invoice/GenerateCreditInvoice";
 
 import path = require("path");
 
@@ -74,6 +75,16 @@ export class InvoiceGroupsController extends BaseController {
         });
     }
 
+    public generateCreditInvoice(req: Express.Request, res: Express.Response) {
+        let creditInvoiceGenerator = new GenerateCreditInvoice(req.appContext, req.sessionContext);
+        
+        creditInvoiceGenerator.generate(req.body.creditedInvoiceMeta).then((updatedInvoiceGroup: InvoiceGroupDO) => {
+            this.returnSuccesfulResponse(req, res, { invoiceGroup: updatedInvoiceGroup });
+        }).catch((err: any) => {
+            this.returnErrorResponse(req, res, err, ThStatusCode.InvoiceGroupsControllerErrorsavingInvoiceGroup);
+        });
+    }
+
     public downloadInvoicePdf(req: Express.Request, res: any) {
 
         var pdfReportsService = req.appContext.getServiceFactory().getPdfReportsService();
@@ -117,6 +128,7 @@ module.exports = {
     getInvoiceGroupList: invoiceGroupsController.getInvoiceGroupList.bind(invoiceGroupsController),
     getInvoiceGroupListCount: invoiceGroupsController.getInvoiceGroupListCount.bind(invoiceGroupsController),
     saveInvoiceGroupItem: invoiceGroupsController.saveInvoiceGroupItem.bind(invoiceGroupsController),
+    generateCreditInvoice: invoiceGroupsController.generateCreditInvoice.bind(invoiceGroupsController),
     downloadInvoicePdf: invoiceGroupsController.downloadInvoicePdf.bind(invoiceGroupsController),
 
 }
