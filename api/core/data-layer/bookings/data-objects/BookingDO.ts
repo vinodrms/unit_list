@@ -146,4 +146,13 @@ export class BookingDO extends BaseDO {
         }
         return custNames;
     }
+
+    public get displayedReservationNumber(): string {
+        debugger
+        if (this.noOfRooms <= 1) {
+            return this.groupBookingReference;
+        } else {
+            return this.groupBookingReference + '/' + this.bookingReference;
+        }
+    }
 }
