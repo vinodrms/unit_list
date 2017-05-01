@@ -3,7 +3,7 @@ import { ThError } from '../../../utils/th-responses/ThError';
 import { BaseDO } from '../../common/base/BaseDO';
 import { ThDateDO } from '../../../utils/th-dates/data-objects/ThDateDO';
 import { InvoicePayerDO } from './payers/InvoicePayerDO';
-import { InvoiceItemDO, InvoiceItemType } from './items/InvoiceItemDO';
+import { InvoiceItemDO, InvoiceItemType, InvoiceItemAccountingType } from './items/InvoiceItemDO';
 import { IInvoiceItemMeta } from './items/IInvoiceItemMeta';
 import { BookingDO } from '../../bookings/data-objects/BookingDO';
 import { BookingPriceDO } from '../../bookings/data-objects/price/BookingPriceDO';
@@ -125,13 +125,18 @@ export class InvoiceDO extends BaseDO {
         if (booking.price.hasDeductedCommission()) {
             var invoiceRoomCommissionItem = new InvoiceItemDO();
             invoiceRoomCommissionItem.buildItemFromRoomCommission(booking.price.deductedCommissionPrice);
+            invoiceRoomCommissionItem.accountingType = item.accountingType;
             bookingInvoiceItemList.push(invoiceRoomCommissionItem);
         }
 
         if (!booking.price.isPenalty()) {
             booking.price.includedInvoiceItemList.reverse();
             _.forEach(booking.price.includedInvoiceItemList, (invoiceItem: InvoiceItemDO) => {
-                bookingInvoiceItemList = bookingInvoiceItemList.concat(invoiceItem);
+                var includedItem = new InvoiceItemDO();
+                includedItem.buildFromObject(invoiceItem);
+                includedItem.accountingType = item.accountingType;
+
+                bookingInvoiceItemList = bookingInvoiceItemList.concat(includedItem);
             });
         }
         return bookingInvoiceItemList;
@@ -148,7 +153,8 @@ export class InvoiceDO extends BaseDO {
 
                 var invoiceFeeItem = new InvoiceItemDO();
                 invoiceFeeItem.buildFeeItemFromCustomerDO(customerDO);
-
+                invoiceFeeItem.accountingType = 
+                    (this.accountingType === InvoiceAccountingType.Credit) ? InvoiceItemAccountingType.Credit : InvoiceItemAccountingType.Debit;
                 this.itemList.push(invoiceFeeItem);
             }
         });
@@ -157,7 +163,7 @@ export class InvoiceDO extends BaseDO {
     public getPrice(): number {
         let totalPrice = 0;
         _.forEach(this.itemList, (item: InvoiceItemDO) => {
-            if(item.type === InvoiceItemType.Booking) {
+            if (item.type === InvoiceItemType.Booking) {
                 let bookingPrice = new BookingPriceDO();
                 bookingPrice.buildFromObject(item.meta);
 
@@ -166,10 +172,10 @@ export class InvoiceDO extends BaseDO {
                 });
             }
             else {
-                totalPrice += item.meta.getNumberOfItems() * item.meta.getUnitPrice();
+                totalPrice += item.getTotalPrice();
             }
         });
-        
+
         let thUtils = new ThUtils();
         return thUtils.roundNumberToTwoDecimals(totalPrice);
     }

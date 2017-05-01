@@ -20,13 +20,14 @@ export class InvoiceItemVM {
         return this.invoiceItemDO.meta.getDisplayName(this._thTranslation);
     }
     public get qty(): number {
-        return this.invoiceItemDO.meta.getNumberOfItems();
+        let noOfItems = this.invoiceItemDO.meta.getNumberOfItems();
+        return this.invoiceItemDO.accountingType === InvoiceItemAccountingType.Credit? noOfItems * -1 : noOfItems;
     }
     public get price(): number {
         return this.invoiceItemDO.meta.getUnitPrice();
     }
     public get totalPrice(): number {
-        return this._thUtils.roundNumberToTwoDecimals(this.invoiceItemDO.meta.getUnitPrice() * this.qty);
+        return this.invoiceItemDO.getTotalPrice();
     }
     public isMovable(): boolean {
         return this.invoiceItemDO.meta.isMovableByDefault() 

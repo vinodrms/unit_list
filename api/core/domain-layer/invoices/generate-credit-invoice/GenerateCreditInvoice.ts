@@ -9,6 +9,7 @@ import { InvoiceGroupMetaRepoDO, InvoiceGroupItemMetaRepoDO } from "../../../dat
 import { ThStatusCode } from "../../../utils/th-responses/ThResponse";
 import { ThLogLevel, ThLogger } from "../../../utils/logging/ThLogger";
 import { InvoiceItemDO, InvoiceItemAccountingType } from "../../../data-layer/invoices/data-objects/items/InvoiceItemDO";
+import { InvoicePayerDO } from "../../../data-layer/invoices/data-objects/payers/InvoicePayerDO";
 
 import _ = require('underscore');
 
@@ -73,6 +74,12 @@ export class GenerateCreditInvoice {
             item.accountingType = InvoiceItemAccountingType.Credit;
         });
         
+        _.forEach(creditInvoice.payerList, (payer: InvoicePayerDO) => {
+            let transactionFee = this._thUtils.roundNumberToTwoDecimals(payer.priceToPayPlusTransactionFee - payer.priceToPay);
+            payer.priceToPay = payer.priceToPay * -1;
+            payer.priceToPayPlusTransactionFee = this._thUtils.roundNumberToTwoDecimals(payer.priceToPay + transactionFee);
+        });
+
         delete creditInvoice.id;
         return creditInvoice;
     }

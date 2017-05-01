@@ -8,6 +8,8 @@ import { CustomerDO } from '../../customers/data-objects/CustomerDO';
 import { TaxDO } from '../../taxes/data-objects/TaxDO';
 import { ThUtils } from "../../../utils/ThUtils";
 
+import _ = require('underscore');
+
 export enum InvoiceGroupStatus {
     Active,
     Deleted

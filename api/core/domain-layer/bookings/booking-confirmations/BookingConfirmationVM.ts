@@ -162,8 +162,7 @@ export class BookingConfirmationVM {
         var bookingPrice = this._bookingAggregatedData.booking.price;
         _.forEach(bookingPrice.includedInvoiceItemList, (invoiceItem: InvoiceItemDO) => {
             var itemDisplayString = invoiceItem.meta.getNumberOfItems() + "x" + invoiceItem.meta.getDisplayName(this._thTranslation);
-            var aopPrice = invoiceItem.meta.getNumberOfItems() * invoiceItem.meta.getUnitPrice();
-            aopPrice = this._thUtils.roundNumberToTwoDecimals(aopPrice);
+            let aopPrice = invoiceItem.getTotalPrice();
             itemDisplayString += " (" + this.ccyCode + aopPrice + "); ";
             this.otherAops += itemDisplayString;
         });

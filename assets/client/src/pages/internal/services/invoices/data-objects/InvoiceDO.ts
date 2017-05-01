@@ -86,12 +86,12 @@ export class InvoiceDO extends BaseDO {
                 let bookingPrice = new BookingPriceDO();
                 bookingPrice.buildFromObject(item.meta);
 
-                _.forEach(bookingPrice.roomPricePerNightList, (pricePerDay: PricePerDayDO) => {
+                _.forEach(bookingPrice.getInvoicedRoomPricePerNightList(item.accountingType), (pricePerDay: PricePerDayDO) => {
                     totalPrice += pricePerDay.price;
                 });
             }
             else {
-                totalPrice += item.meta.getNumberOfItems() * item.meta.getUnitPrice();
+                totalPrice += item.getTotalPrice();
             }
         });
         

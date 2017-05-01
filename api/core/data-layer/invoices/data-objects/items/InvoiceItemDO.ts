@@ -11,7 +11,7 @@ import { InvoiceAccountingType } from "../InvoiceDO";
 export enum InvoiceItemAccountingType {
     Debit, Credit
 }
-
+    
 export enum InvoiceItemType {
     AddOnProduct, Booking, InvoiceFee, RoomCommission
 }
@@ -79,5 +79,11 @@ export class InvoiceItemDO extends BaseDO {
         this.meta = meta;
         this.type = InvoiceItemType.RoomCommission;
         this.accountingType = accountingType;
+    }
+
+    public getTotalPrice(): number {
+        let thUtils = new ThUtils();
+        let factor = (this.accountingType === InvoiceItemAccountingType.Credit)? -1 : 1;
+        return thUtils.roundNumberToTwoDecimals(this.meta.getUnitPrice() * this.meta.getNumberOfItems() * factor);
     }
 }

@@ -51,7 +51,6 @@ export class InvoiceGroupsService extends ALazyLoadRequestService<InvoiceGroupDO
 	}
 
     public credit(creditedInvoice: CreditedInvoiceMetaDO): Observable<InvoiceGroupDO> {
-        debugger
 		return this.runServerPostActionOnInvoiceGroup(ThServerApi.InvoiceGroupsCredit, { creditedInvoiceMeta: creditedInvoice });
 	}
 
