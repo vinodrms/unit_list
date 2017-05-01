@@ -24,6 +24,7 @@ import { InvoiceGroupsService } from '../../../../../../../../../services/invoic
 import { HotelOperationsResultService } from '../../../../operations-modal/services/HotelOperationsResultService';
 import { ModalDialogRef } from '../../../../../../../../../../../common/utils/modals/utils/ModalDialogRef';
 import { HotelOperationsResult } from '../../../services/utils/HotelOperationsResult';
+import { ItemAdditionMeta } from "../../../../../../../../../../../common/utils/components/item-list-navigator/ItemAdditionMeta";
 
 @Component({
     selector: 'invoice-operations-page',
@@ -51,8 +52,8 @@ export class InvoiceOperationsPageComponent implements OnInit {
 
     resetItemNavigator: Subject<ItemListNavigatorConfig>;
     resetItemNavigatorObservable: Observable<ItemListNavigatorConfig>;
-    itemsAdded: Subject<number>;
-    itemsAddedObservable: Observable<number>;
+    itemsAdded: Subject<ItemAdditionMeta>;
+    itemsAddedObservable: Observable<ItemAdditionMeta>;
     itemRemoved: Subject<number>;
     itemRemovedObservable: Observable<number>;
     selectItem: Subject<number>;
@@ -70,7 +71,7 @@ export class InvoiceOperationsPageComponent implements OnInit {
 
         this.resetItemNavigator = new Subject<ItemListNavigatorConfig>();
         this.resetItemNavigatorObservable = this.resetItemNavigator.asObservable();
-        this.itemsAdded = new Subject<number>();
+        this.itemsAdded = new Subject<ItemAdditionMeta>();
         this.itemsAddedObservable = this.itemsAdded.asObservable();
         this.itemRemoved = new Subject<number>();
         this.itemRemovedObservable = this.itemRemoved.asObservable();
@@ -193,7 +194,10 @@ export class InvoiceOperationsPageComponent implements OnInit {
             var invoiceVM = new InvoiceVM(this._appContext.thTranslation);
             invoiceVM.buildCleanInvoiceVM(this.newInvoiceRef);
             this.invoiceGroupVM.addInvoiceVM(invoiceVM);
-            this.itemsAdded.next(1);
+            this.itemsAdded.next({
+                noOfAddedItems: 1,
+                shouldSelectLastElement: true
+            });
         }
     }
 
@@ -211,7 +215,14 @@ export class InvoiceOperationsPageComponent implements OnInit {
 
     public newlyAddedInvoiceRemoved(newlyAddedInvoiceMeta: InvoiceMeta) {
         this.itemRemoved.next(newlyAddedInvoiceMeta.indexInDisplayedInvoiceList);
-        this.invoiceGroupVM.removeInvoiceVMByReference(newlyAddedInvoiceMeta.reference);
+        this.invoiceGroupVM.removeInvoiceVMByUniqueId(newlyAddedInvoiceMeta.uniqueId);
+    }
+
+    public creditInvoiceAdded() {
+        this.itemsAdded.next({
+            noOfAddedItems: 1,
+            shouldSelectLastElement: false
+        });
     }
 
     public get noEditableInvoicesExist(): boolean {
@@ -229,8 +240,8 @@ export class InvoiceOperationsPageComponent implements OnInit {
         return indexList;
     }
 
-    public getInvoiceReference(invoiceIndex: number): string {
-        return this.invoiceVMList[invoiceIndex].invoiceDO.invoiceReference;
+    public getInvoiceUniqueIdentifier(invoiceIndex: number): string {
+        return this.invoiceVMList[invoiceIndex].invoiceDO.getUniqueIdentifier();
     }
 
     public get filterMetaForEnabledFilter(): HotelOperationsPageFilterMeta {

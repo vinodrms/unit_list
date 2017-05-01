@@ -7,6 +7,10 @@ import { BookingPriceDO } from '../../../bookings/data-objects/price/BookingPric
 import { CustomerDO } from '../../../customers/data-objects/CustomerDO';
 import { RoomCommissionItemMetaDO } from "./room-commission/RoomCommissionItemMetaDO";
 
+export enum InvoiceItemAccountingType {
+    Debit, Credit
+}
+
 export enum InvoiceItemType {
     AddOnProduct, Booking, InvoiceFee, RoomCommission
 }
@@ -14,10 +18,16 @@ export enum InvoiceItemType {
 export class InvoiceItemDO extends BaseDO {
     id: string;
     type: InvoiceItemType;
+    accountingType: InvoiceItemAccountingType;
     meta: IInvoiceItemMeta;
 
+    constructor() {
+        super();
+        this.accountingType = InvoiceItemAccountingType.Debit;
+    }
+
     protected getPrimitivePropertyKeys(): string[] {
-        return ["id", "type"];
+        return ["id", "type", "accountingType"];
     }
 
     public buildFromObject(object: Object) {
@@ -45,18 +55,23 @@ export class InvoiceItemDO extends BaseDO {
             this.meta = roomCommissionItemMetaDO;
         }
     }
-    public buildFeeItemFromCustomerDO(customerDO: CustomerDO) {
+    public buildFeeItemFromCustomerDO(customerDO: CustomerDO,
+        accountingType: InvoiceItemAccountingType = InvoiceItemAccountingType.Debit) {
+
         var meta = new FeeInvoiceItemMetaDO();
         meta.buildFromCustomerDO(customerDO);
         this.meta = meta;
         this.type = InvoiceItemType.InvoiceFee;
+        this.accountingType = accountingType;
     }
-    public isDerivedFromBooking(): boolean {
-        return this.type === InvoiceItemType.InvoiceFee
-            || this.type === InvoiceItemType.RoomCommission
-            || (this.type === InvoiceItemType.AddOnProduct && !this.meta.isMovable());
+
+    public getTotalPrice(): number {
+        let thUtils = new ThUtils();
+        let factor = (this.accountingType === InvoiceItemAccountingType.Credit)? -1 : 1;
+        return thUtils.roundNumberToTwoDecimals(this.meta.getUnitPrice() * this.meta.getNumberOfItems() * factor);
     }
-    public isBookingPrice(): boolean {
-        return this.type === InvoiceItemType.Booking;
+
+    public isOfTypeCredit(): boolean {
+        return this.accountingType === InvoiceItemAccountingType.Credit;
     }
 }

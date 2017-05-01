@@ -13,7 +13,7 @@ import {InvoiceDataAggregatorQuery} from '../../../../../invoices/aggregators/In
 
 export interface InvoiceEmailConfirmationParams {
     invoiceGroupId: string;
-    invoiceReference: string;
+    invoiceId: string;
     customerId: string;
     payerIndex: number;
 }
@@ -28,7 +28,7 @@ export class InvoiceEmailConfirmationStrategy implements IEmailConfirmationStrat
                 validationStruct: new PrimitiveValidationStructure(new StringValidationRule())
             },
             {
-                key: "invoiceReference",
+                key: "invoiceId",
                 validationStruct: new PrimitiveValidationStructure(new StringValidationRule())
             },
             {
@@ -43,7 +43,7 @@ export class InvoiceEmailConfirmationStrategy implements IEmailConfirmationStrat
         var invoiceQuery: InvoiceDataAggregatorQuery = {
             customerId: invoiceConfirmationParams.customerId,
             invoiceGroupId: invoiceConfirmationParams.invoiceGroupId,
-            invoiceReference: invoiceConfirmationParams.invoiceReference,
+            invoiceId: invoiceConfirmationParams.invoiceId,
             payerIndex: invoiceConfirmationParams.payerIndex
         };
 
