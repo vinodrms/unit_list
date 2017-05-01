@@ -14,6 +14,7 @@ import { SettingsBackUpReportComponent } from './pages/backup-report/SettingsBac
 import { SettingsKeyMetricsReportComponent } from './pages/key-metrics-report/SettingsKeyMetricsReportComponent';
 import { BookingsForPriceProductComponent } from "./pages/bookings-for-price-product/BookingsForPriceProductComponent";
 import { SettingsHousekeepingReportComponent } from "./pages/housekeeping-report/SettingsHousekeepingReportComponent";
+import { BookingsByIntervalReportComponent } from "./pages/bookings-by-interval/BookingsByIntervalReportComponent";
 
 import { TimezoneService } from '../../../../../../../services/timezones/TimezoneService';
 
@@ -25,6 +26,7 @@ var settingsReportsComponents = [
     SettingsKeyMetricsReportComponent,
     BookingsForPriceProductComponent,
     SettingsHousekeepingReportComponent,
+    BookingsByIntervalReportComponent,
 
 ];
 @NgModule({

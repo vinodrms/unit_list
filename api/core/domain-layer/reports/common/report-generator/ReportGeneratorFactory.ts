@@ -7,6 +7,7 @@ import { BackUpReportGroupGenerator } from '../../backup-report/BackUpReportGrou
 import { ShiftReportGroupGenerator } from '../../shift-report/ShiftReportGroupGenerator';
 import { BookingsForPriceProductReportGroupGenerator } from "../../bookings-for-price-product/BookingsForPriceProductReportGroupGenerator";
 import { HousekeepingReportGroupGenerator } from "../../housekeeping/HousekeepingReportGroupGenerator";
+import { BookingsByIntervalReportGroupGenerator } from "../../bookings-by-interval/BookingsByIntervalReportGroupGenerator";
 
 export class ReportGeneratorFactory {
 	private _thUtils: ThUtils;
@@ -27,7 +28,8 @@ export class ReportGeneratorFactory {
 				return new BookingsForPriceProductReportGroupGenerator(this._appContext, this._sessionContext);
 			case ReportGroupType.Housekeeping:
 				return new HousekeepingReportGroupGenerator(this._appContext, this._sessionContext);
-			
+			case ReportGroupType.BookingsByInterval:
+				return new BookingsByIntervalReportGroupGenerator(this._appContext, this._sessionContext);
 		}
 	}
 }

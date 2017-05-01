@@ -222,7 +222,12 @@
 	"account no.": "account no.",
 	"Amount (fee included)": "Amount (fee included)",
 	"Amount (without fee)": "Amount (without fee)",
-
+	"Bookings by Interval": "Bookings by Interval",
+	"Booking No": "Booking No",
+	"External Booking No": "External Booking No",
+	"Guest Name": "Guest Name",
+	"Nights Billed": "Nights Billed",
+	
 	// Booking confirmations
 	"Booking confirmations are blocked for this booking.": "Booking confirmations are blocked for this booking."
 	
