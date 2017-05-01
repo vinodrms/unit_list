@@ -16,7 +16,7 @@ import { InvoiceConfirmationEmailSender } from '../../../../core/domain-layer/in
 import { SaveInvoiceGroup } from '../../../../core/domain-layer/invoices/save-invoice-group/SaveInvoiceGroup';
 import { SaveInvoiceGroupDO } from '../../../../core/domain-layer/invoices/save-invoice-group/SaveInvoiceGroupDO';
 import { InvoiceTestUtils } from './utils/InvoiceTestUtils';
-import { InvoiceDO } from '../../../../core/data-layer/invoices/data-objects/InvoiceDO';
+import { InvoiceDO, InvoiceAccountingType } from '../../../../core/data-layer/invoices/data-objects/InvoiceDO';
 import { InvoicePayerDO } from '../../../../core/data-layer/invoices/data-objects/payers/InvoicePayerDO';
 import { GenerateCreditInvoice } from "../../../../core/domain-layer/invoices/generate-credit-invoice/GenerateCreditInvoice";
 
@@ -220,6 +220,14 @@ describe("Invoices Tests", function () {
                 invoiceGroupId: createdBookingInvoiceGroup.id,
                 invoiceId: createdBookingInvoiceGroup.invoiceList[0].id
             }).then((updatedInvoiceGroup: InvoiceGroupDO) => {
+                let creditedInvoice = _.find(updatedInvoiceGroup.invoiceList, (invoice: InvoiceDO) => {
+                    return invoice.id === createdBookingInvoiceGroup.invoiceList[0].id;
+                });
+                let creditedInvoiceRef = creditedInvoice.invoiceReference;
+                let creditInvoice = _.find(updatedInvoiceGroup.invoiceList, (invoice: InvoiceDO) => {
+                    return invoice.invoiceReference === creditedInvoiceRef && invoice.accountingType === InvoiceAccountingType.Credit;
+                });
+                invoiceTestUtils.testIfCreditWasCorrect(creditedInvoice, creditInvoice);
                 done();
             }).catch((err: any) => {
                 done(err);
