@@ -8,7 +8,6 @@ import {IInvoiceGroupsRepository, InvoiceGroupMetaRepoDO, InvoiceGroupItemMetaRe
 import {InvoiceGroupDO, InvoiceGroupStatus} from '../../../data-objects/InvoiceGroupDO';
 import {InvoiceDO} from '../../../data-objects/InvoiceDO';
 import {LazyLoadRepoDO, LazyLoadMetaResponseRepoDO} from '../../../../common/repo-data-objects/LazyLoadRepoDO';
-import {MongoBookingRepository} from '../../../../bookings/repositories/mongo/MongoBookingRepository';
 
 export class MongoInvoiceGroupsReadOperationsRepository extends MongoRepository {
 

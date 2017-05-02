@@ -4,7 +4,7 @@ import { ThError } from '../../../../../utils/th-responses/ThError';
 import { ThUtils } from "../../../../../utils/ThUtils";
 import { MongoPriceProductRepository } from '../../../../../data-layer/price-products/repositories/mongo/MongoPriceProductRepository';
 import { MongoBedRepository } from '../../../../../data-layer/beds/repositories/mongo/MongoBedRepository';
-import { MongoBookingRepository } from '../../../../../data-layer/bookings/repositories/mongo/MongoBookingRepository';
+import { LegacyMongoGroupBookingRepository } from '../../../../../data-layer/bookings/repositories/legacy/LegacyMongoGroupBookingRepository';
 import { MongoPatchType } from '../patches/MongoPatchType';
 import { MongoHotelRepository } from "../../../../../data-layer/hotel/repositories/mongo/MongoHotelRepository";
 import { MongoCustomerRepository } from "../../../../../data-layer/customers/repositories/mongo/MongoCustomerRepository";
@@ -19,8 +19,8 @@ export abstract class ATransactionalMongoPatch implements IMongoPatchApplier, IM
 	protected _hotelRepository: MongoHotelRepository;
 	protected _bedRepository: MongoBedRepository;
 	protected _priceProductRepository: MongoPriceProductRepository;
-	protected _customerRepository: MongoCustomerRepository​​;
-	protected _bookingRepository: MongoBookingRepository;
+	protected _customerRepository: MongoCustomerRepository;
+	protected _legacyBookingGroupRepository: LegacyMongoGroupBookingRepository;
 	protected _invoiceGroupsRepository: MongoInvoiceGroupsRepository;
 
 	constructor() {
@@ -29,8 +29,8 @@ export abstract class ATransactionalMongoPatch implements IMongoPatchApplier, IM
 		this._hotelRepository = new MongoHotelRepository();
 		this._bedRepository = new MongoBedRepository();
 		this._priceProductRepository = new MongoPriceProductRepository();
-		this._customerRepository = new MongoCustomerRepository​​();
-		this._bookingRepository = new MongoBookingRepository();
+		this._customerRepository = new MongoCustomerRepository();
+		this._legacyBookingGroupRepository = new LegacyMongoGroupBookingRepository();
 		this._invoiceGroupsRepository = new MongoInvoiceGroupsRepository(this._hotelRepository);
 	}
 

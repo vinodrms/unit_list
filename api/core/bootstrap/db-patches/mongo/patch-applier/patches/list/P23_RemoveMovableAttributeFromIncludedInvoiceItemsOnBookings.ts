@@ -5,12 +5,12 @@ import { InvoiceGroupDO } from "../../../../../../data-layer/invoices/data-objec
 import { ThUtils } from "../../../../../../utils/ThUtils";
 import { InvoiceDO, InvoiceAccountingType } from "../../../../../../data-layer/invoices/data-objects/InvoiceDO";
 import { InvoiceItemDO, InvoiceItemAccountingType } from "../../../../../../data-layer/invoices/data-objects/items/InvoiceItemDO";
-import { BookingGroupDO } from "../../../../../../data-layer/bookings/repositories/mongo/utils/data-objects/BookingGroupDO";
+import { BookingGroupDO } from "../../../../../../data-layer/bookings/repositories/legacy/utils/data-objects/BookingGroupDO";
 
 export class P23_RemoveMovableAttributeFromIncludedInvoiceItemsOnBookings extends APaginatedTransactionalMongoPatch {
 
     protected getMongoRepository(): MongoRepository {
-        return this._bookingRepository;
+        return this._legacyBookingGroupRepository;
     }
 
     public getPatchType(): MongoPatchType {
@@ -26,7 +26,7 @@ export class P23_RemoveMovableAttributeFromIncludedInvoiceItemsOnBookings extend
         let thUtils = new ThUtils();
         bookingGroup.bookingList.forEach(booking => {
             booking.price.includedInvoiceItemList.forEach((invoiceItemDO: InvoiceItemDO) => {
-                if(!thUtils.isUndefinedOrNull(invoiceItemDO.meta) && !thUtils.isUndefinedOrNull(invoiceItemDO.meta["movable"])) {
+                if (!thUtils.isUndefinedOrNull(invoiceItemDO.meta) && !thUtils.isUndefinedOrNull(invoiceItemDO.meta["movable"])) {
                     delete invoiceItemDO.meta["movable"];
                 }
             });

@@ -29,7 +29,7 @@ import { IInvoiceGroupsRepository } from './invoices/repositories/IInvoiceGroups
 import { MongoInvoiceGroupsRepository } from './invoices/repositories/mongo/MongoInvoiceGroupsRepository';
 import { MongoInvoiceGroupsRepositoryWithBookingPriceLink } from './invoices/repositories/mongo/decorators/MongoInvoiceGroupsRepositoryWithBookingPriceLink';
 import { IBookingRepository } from './bookings/repositories/IBookingRepository';
-import { MongoBookingRepository } from './bookings/repositories/mongo/MongoBookingRepository';
+import { LegacyMongoGroupBookingRepository } from './bookings/repositories/legacy/LegacyMongoGroupBookingRepository';
 import { IHotelInventorySnapshotRepository } from './hotel-inventory-snapshots/repositories/IHotelInventorySnapshotRepository';
 import { MongoHotelInventorySnapshotRepository } from './hotel-inventory-snapshots/repositories/mongo/MongoHotelInventorySnapshotRepository';
 
@@ -45,7 +45,7 @@ export class RepositoryFactory {
                 return [new MongoHotelRepository(), new MongoBedRepository(), new MongoTaxRepository(), new MongoAddOnProductRepository(),
                 new MongoRoomRepository(), new MongoRoomCategoryRepository(), new MongoCustomerRepository(), new MongoPriceProductRepository(),
                 new MongoYieldFilterConfigurationRepository(), new MongoAllotmentRepository(), new MongoNotificationsRepository(),
-                new MongoBookingRepository(), new MongoInvoiceGroupsRepository(new MongoHotelRepository()), new MongoHotelInventorySnapshotRepository()];
+                new LegacyMongoGroupBookingRepository(), new MongoInvoiceGroupsRepository(new MongoHotelRepository()), new MongoHotelInventorySnapshotRepository()];
         }
     }
 
@@ -135,14 +135,14 @@ export class RepositoryFactory {
     getInvoiceGroupsRepository(): IInvoiceGroupsRepository {
         switch (this._databaseType) {
             default:
-                return new MongoInvoiceGroupsRepositoryWithBookingPriceLink(new MongoInvoiceGroupsRepository(new MongoHotelRepository()), new MongoBookingRepository(), new MongoCustomerRepository());
+                return new MongoInvoiceGroupsRepositoryWithBookingPriceLink(new MongoInvoiceGroupsRepository(new MongoHotelRepository()), new LegacyMongoGroupBookingRepository(), new MongoCustomerRepository());
         }
     }
 
     getBookingRepository(): IBookingRepository {
         switch (this._databaseType) {
             default:
-                return new MongoBookingRepository();
+                return new LegacyMongoGroupBookingRepository();
         }
     }
 

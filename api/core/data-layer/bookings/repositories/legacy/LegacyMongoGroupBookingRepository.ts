@@ -8,7 +8,7 @@ import { MongoUpdateMultipleBookingsRepository } from './update-booking/MongoUpd
 import { MongoGetBookingsRepository } from './get-bookings/MongoGetBookingsRepository';
 import { MongoGetSingleBookingRepository } from './get-bookings/MongoGetSingleBookingRepository';
 
-export class MongoBookingRepository extends MongoRepository implements IBookingRepository {
+export class LegacyMongoGroupBookingRepository extends MongoRepository implements IBookingRepository {
     private _addBookingsRepo: MongoAddBookingsRepository;
     private _updateBookingRepo: MongoUpdateBookingRepository;
     private _updateMultipleBookingsRepo: MongoUpdateMultipleBookingsRepository;

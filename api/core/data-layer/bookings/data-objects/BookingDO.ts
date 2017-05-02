@@ -11,6 +11,8 @@ import { DocumentHistoryDO } from '../../common/data-objects/document-history/Do
 import { BookingPriceDO } from './price/BookingPriceDO';
 import { IInvoiceItemMeta } from '../../invoices/data-objects/items/IInvoiceItemMeta';
 
+import _ = require('underscore');
+
 export enum GroupBookingStatus {
     Active,
     Deleted

@@ -16,7 +16,7 @@ export class P5_AddTheRoomPricePerNightListOnBookingPrice extends APaginatedTran
     }
 
     protected getMongoRepository(): MongoRepository {
-        return this._bookingRepository;
+        return this._legacyBookingGroupRepository;
     }
 
     protected updateDocumentInMemory(bookingGroup) {
