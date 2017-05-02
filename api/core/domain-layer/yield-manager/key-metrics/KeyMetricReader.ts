@@ -22,6 +22,8 @@ import { IHotelInventoryStats } from '../../hotel-inventory-snapshots/stats-read
 import { IMetricBuilderStrategy } from './utils/builder/IMetricBuilderStrategy';
 import { MetricBuilderStrategyFactory } from './utils/builder/MetricBuilderStrategyFactory';
 
+import _ = require('underscore');
+
 export class KeyMetricReader {
     private _currentIndexedInterval: IndexedBookingInterval;
     private _previousIndexedInterval: IndexedBookingInterval;
