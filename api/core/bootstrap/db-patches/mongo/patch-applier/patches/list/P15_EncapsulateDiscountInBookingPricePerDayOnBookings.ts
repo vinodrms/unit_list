@@ -5,7 +5,7 @@ import { MongoPatchType } from "../MongoPatchType";
 import _ = require('underscore');
 import { BookingDO } from "../../../../../../data-layer/bookings/data-objects/BookingDO";
 import { PricePerDayDO } from "../../../../../../data-layer/bookings/data-objects/price/PricePerDayDO";
-import { BookingGroupDO } from "../../../../../../data-layer/bookings/repositories/legacy/utils/data-objects/BookingGroupDO";
+import { BookingGroupDO } from "../../../../../../data-layer/bookings/repositories/mongo-legacy/utils/data-objects/BookingGroupDO";
 
 export class P15_EncapsulateDiscountInBookingPricePerDayOnBookings extends APaginatedTransactionalMongoPatch {
 

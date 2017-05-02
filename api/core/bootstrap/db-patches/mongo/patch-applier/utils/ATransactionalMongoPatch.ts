@@ -4,7 +4,7 @@ import { ThError } from '../../../../../utils/th-responses/ThError';
 import { ThUtils } from "../../../../../utils/ThUtils";
 import { MongoPriceProductRepository } from '../../../../../data-layer/price-products/repositories/mongo/MongoPriceProductRepository';
 import { MongoBedRepository } from '../../../../../data-layer/beds/repositories/mongo/MongoBedRepository';
-import { LegacyMongoGroupBookingRepository } from '../../../../../data-layer/bookings/repositories/legacy/LegacyMongoGroupBookingRepository';
+import { LegacyMongoGroupBookingRepository } from '../../../../../data-layer/bookings/repositories/mongo-legacy/LegacyMongoGroupBookingRepository';
 import { MongoPatchType } from '../patches/MongoPatchType';
 import { MongoHotelRepository } from "../../../../../data-layer/hotel/repositories/mongo/MongoHotelRepository";
 import { MongoCustomerRepository } from "../../../../../data-layer/customers/repositories/mongo/MongoCustomerRepository";
