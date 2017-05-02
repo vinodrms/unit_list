@@ -1,5 +1,5 @@
 import {BookingMetaRepoDO, BookingItemMetaRepoDO} from '../../IBookingRepository';
-import {BookingDO, GroupBookingStatus} from '../../../data-objects/BookingDO';
+import {BookingDO, BookingStatus} from '../../../data-objects/BookingDO';
 import {IUpdateSingleBookingRepository} from './IUpdateSingleBookingRepository';
 import {ThLogger, ThLogLevel} from '../../../../../utils/logging/ThLogger';
 import {ThError} from '../../../../../utils/th-responses/ThError';

@@ -1,12 +1,12 @@
 import {BaseDO} from '../../../../../common/base/BaseDO';
-import {GroupBookingStatus, BookingDO, GroupBookingInputChannel} from '../../../../data-objects/BookingDO';
+import {BookingStatus, BookingDO, GroupBookingInputChannel} from '../../../../data-objects/BookingDO';
 
 export class BookingGroupDO extends BaseDO {
     id: string;
     hotelId: string;
     versionId: number;
     groupBookingReference: string;
-    status: GroupBookingStatus;
+    status: BookingStatus;
     inputChannel: GroupBookingInputChannel;
     noOfRooms: number;
     bookingList: BookingDO[];

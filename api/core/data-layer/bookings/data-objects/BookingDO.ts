@@ -13,7 +13,7 @@ import { IInvoiceItemMeta } from '../../invoices/data-objects/items/IInvoiceItem
 
 import _ = require('underscore');
 
-export enum GroupBookingStatus {
+export enum BookingStatus {
     Active,
     Deleted
 }
@@ -50,7 +50,7 @@ export class BookingDO extends BaseDO {
     groupBookingReference: string;
     hotelId: string;
     versionId: number;
-    status: GroupBookingStatus;
+    status: BookingStatus;
     inputChannel: GroupBookingInputChannel;
     noOfRooms: number;
 

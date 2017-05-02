@@ -1,6 +1,6 @@
 import { ThError } from '../../../core/utils/th-responses/ThError';
 import { TestContext } from '../../helpers/TestContext';
-import { BookingDO, GroupBookingInputChannel, BookingConfirmationStatus } from '../../../core/data-layer/bookings/data-objects/BookingDO';
+import { BookingDO, GroupBookingInputChannel, BookingConfirmationStatus, BookingStatus } from '../../../core/data-layer/bookings/data-objects/BookingDO';
 import { BookingPriceDO, BookingPriceType } from '../../../core/data-layer/bookings/data-objects/price/BookingPriceDO';
 import { HotelDO } from '../../../core/data-layer/hotel/data-objects/HotelDO';
 import { CustomerDO } from '../../../core/data-layer/customers/data-objects/CustomerDO';
@@ -41,15 +41,15 @@ export class DefaultBookingBuilder implements IBookingDataSource {
         var bookingsList = [];
 
         let reservedAddOnProductIdList = _.map(addOnProductList, aop => { return aop.id; });
-        bookingsList.push(this.buildBooking("1", "2", "groupRef1", "ref1", hotelDO, customerList, roomCategoryStatsList, priceProductList, reservedAddOnProductIdList));
+        bookingsList.push(this.buildBooking("1", "groupRef1", "ref1", hotelDO, customerList, roomCategoryStatsList, priceProductList, reservedAddOnProductIdList));
 
-        bookingsList.push(this.buildBooking("1", "3", "groupRef1", "ref2", hotelDO, customerList, roomCategoryStatsList, priceProductList, []));
-        bookingsList.push(this.buildBooking("2", "4", "groupRef2", "ref3", hotelDO, customerList, roomCategoryStatsList, priceProductList, []));
+        bookingsList.push(this.buildBooking("1", "groupRef1", "ref2", hotelDO, customerList, roomCategoryStatsList, priceProductList, []));
+        bookingsList.push(this.buildBooking("2", "groupRef2", "ref3", hotelDO, customerList, roomCategoryStatsList, priceProductList, []));
 
         return bookingsList;
     }
 
-    private buildBooking(groupBookingId: string, bookingId: string, groupBookingRef: string, bookingRef: string, hotelDO: HotelDO, customerList: CustomerDO[],
+    private buildBooking(groupBookingId: string, groupBookingRef: string, bookingRef: string, hotelDO: HotelDO, customerList: CustomerDO[],
         roomCategoryStatsList: RoomCategoryStatsDO[], priceProductList: PriceProductDO[], reservedAddOnProductList: string[]): BookingDO {
         var priceProduct = priceProductList[0];
         var customerId = this._testUtils.getRandomListElement(customerList).id;
@@ -64,12 +64,11 @@ export class DefaultBookingBuilder implements IBookingDataSource {
             }
         });
         var booking = new BookingDO();
+        booking.status = BookingStatus.Active;
         booking.groupBookingId = groupBookingId;
         booking.groupBookingReference = groupBookingRef;
         booking.inputChannel = GroupBookingInputChannel.PropertyManagementSystem;
         booking.noOfRooms = 1;
-
-        booking.id = bookingId;
         booking.bookingReference = bookingRef;
         booking.confirmationStatus = BookingConfirmationStatus.Confirmed;
         booking.customerIdList = [customerId];
@@ -82,6 +81,7 @@ export class DefaultBookingBuilder implements IBookingDataSource {
         booking.priceProductSnapshot = priceProduct;
         booking.reservedAddOnProductIdList = reservedAddOnProductList;
         var indexedBookingInterval = new IndexedBookingInterval(booking.interval);
+        booking.creationDate = ThTimestampDO.buildThTimestampForTimezone(hotelDO.timezone).thDateDO;
         booking.startUtcTimestamp = indexedBookingInterval.getStartUtcTimestamp();
         booking.endUtcTimestamp = indexedBookingInterval.getEndUtcTimestamp();
         var currentHotelDate = this._bookingUtils.getCurrentThDateForHotel(hotelDO);

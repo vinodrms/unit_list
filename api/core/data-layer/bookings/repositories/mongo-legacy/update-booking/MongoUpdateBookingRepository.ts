@@ -2,7 +2,7 @@ import {MongoRepository} from '../../../../common/base/MongoRepository';
 import {ThLogger, ThLogLevel} from '../../../../../utils/logging/ThLogger';
 import {ThError} from '../../../../../utils/th-responses/ThError';
 import {ThStatusCode} from '../../../../../utils/th-responses/ThResponse';
-import {BookingDO, GroupBookingStatus} from '../../../data-objects/BookingDO';
+import {BookingDO, BookingStatus} from '../../../data-objects/BookingDO';
 import {BookingMetaRepoDO, BookingItemMetaRepoDO} from '../../IBookingRepository';
 import {BookingGroupDO} from '../utils/data-objects/BookingGroupDO';
 import {IUpdateSingleBookingRepository} from './IUpdateSingleBookingRepository';

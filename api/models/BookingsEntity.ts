@@ -41,8 +41,7 @@ class BookingsEntity extends BasePersistentEntity {
                 required: true
             },
             externalBookingReference: {
-                type: 'string',
-                required: true
+                type: 'string'
             },
             confirmationStatus: {
                 type: 'integer',

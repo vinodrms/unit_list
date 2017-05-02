@@ -2,7 +2,7 @@ import { MongoRepository } from '../../../../common/base/MongoRepository';
 import { ThLogger, ThLogLevel } from '../../../../../utils/logging/ThLogger';
 import { ThError } from '../../../../../utils/th-responses/ThError';
 import { ThStatusCode } from '../../../../../utils/th-responses/ThResponse';
-import { BookingDO, GroupBookingStatus } from '../../../data-objects/BookingDO';
+import { BookingDO, BookingStatus } from '../../../data-objects/BookingDO';
 import { BookingMetaRepoDO, BookingGroupMetaRepoDO } from '../../IBookingRepository';
 import { BookingGroupDO } from '../utils/data-objects/BookingGroupDO';
 import { BookingDOConstraints } from '../../../data-objects/BookingDOConstraints';
@@ -108,7 +108,7 @@ export class MongoAddBookingsRepository extends MongoRepository {
         bookingGroup.versionId = 0;
         bookingGroup.groupBookingReference = bookingList[0].groupBookingReference;
         bookingGroup.inputChannel = bookingList[0].inputChannel;
-        bookingGroup.status = GroupBookingStatus.Active;
+        bookingGroup.status = BookingStatus.Active;
         bookingGroup.noOfRooms = bookingList.length;
         bookingGroup.bookingList = [];
         _.forEach(bookingList, (booking: BookingDO) => {

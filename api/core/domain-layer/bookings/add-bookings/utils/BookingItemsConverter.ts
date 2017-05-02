@@ -5,7 +5,7 @@ import { ThLogger, ThLogLevel } from '../../../../utils/logging/ThLogger';
 import { ThError } from '../../../../utils/th-responses/ThError';
 import { ThStatusCode } from '../../../../utils/th-responses/ThResponse';
 import { ThTimestampDO } from '../../../../utils/th-dates/data-objects/ThTimestampDO';
-import { GroupBookingInputChannel, BookingDO, GroupBookingStatus, BookingConfirmationStatus } from '../../../../data-layer/bookings/data-objects/BookingDO';
+import { GroupBookingInputChannel, BookingDO, BookingStatus, BookingConfirmationStatus } from '../../../../data-layer/bookings/data-objects/BookingDO';
 import { ThUtils } from '../../../../utils/ThUtils';
 import { IndexedBookingInterval } from '../../../../data-layer/price-products/utils/IndexedBookingInterval';
 import { DocumentHistoryDO } from '../../../../data-layer/common/data-objects/document-history/DocumentHistoryDO';
@@ -73,7 +73,7 @@ export class BookingItemsConverter {
         var bookingList: BookingDO[] = [];
 
         var hotelId = this._sessionContext.sessionDO.hotel.id;
-        var groupBookingStatus = GroupBookingStatus.Active;
+        var groupBookingStatus = BookingStatus.Active;
         var noOfRooms = this._bookingItems.length;
         let groupBookingRoomCategoryIdList = this.getRoomCategoryIdListWithinGroupBooking();
 
