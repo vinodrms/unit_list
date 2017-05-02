@@ -148,7 +148,6 @@ export class BookingDO extends BaseDO {
     }
 
     public get displayedReservationNumber(): string {
-        debugger
         if (this.noOfRooms <= 1) {
             return this.groupBookingReference;
         } else {
