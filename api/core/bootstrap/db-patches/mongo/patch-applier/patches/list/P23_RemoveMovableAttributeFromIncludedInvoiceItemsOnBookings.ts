@@ -5,7 +5,6 @@ import { InvoiceGroupDO } from "../../../../../../data-layer/invoices/data-objec
 import { ThUtils } from "../../../../../../utils/ThUtils";
 import { InvoiceDO, InvoiceAccountingType } from "../../../../../../data-layer/invoices/data-objects/InvoiceDO";
 import { InvoiceItemDO, InvoiceItemAccountingType } from "../../../../../../data-layer/invoices/data-objects/items/InvoiceItemDO";
-import { BookingGroupDO } from "../../../../../../data-layer/bookings/repositories/mongo-legacy/utils/data-objects/BookingGroupDO";
 
 export class P23_RemoveMovableAttributeFromIncludedInvoiceItemsOnBookings extends APaginatedTransactionalMongoPatch {
 
@@ -22,7 +21,7 @@ export class P23_RemoveMovableAttributeFromIncludedInvoiceItemsOnBookings extend
         bookingGroup.versionId++;
     }
 
-    public static removeMovableAttributeFromIncludedInvoiceItemsOnBookings(bookingGroup: BookingGroupDO) {
+    public static removeMovableAttributeFromIncludedInvoiceItemsOnBookings(bookingGroup: any) {
         let thUtils = new ThUtils();
         bookingGroup.bookingList.forEach(booking => {
             booking.price.includedInvoiceItemList.forEach((invoiceItemDO: InvoiceItemDO) => {
