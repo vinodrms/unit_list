@@ -42,7 +42,7 @@ export class BookingInvoiceSync {
             hotelId: this._sessionContext.sessionDO.hotel.id
         }, {
                 groupBookingId: booking.groupBookingId,
-                bookingId: booking.bookingId
+                bookingId: booking.id
             }
         ).then((searchResult: InvoiceGroupSearchResultRepoDO) => {
             if (searchResult.invoiceGroupList.length == 0) {
@@ -117,12 +117,12 @@ export class BookingInvoiceSync {
     }
 
     private getBookingInvoiceFromInvoiceGroup(invoiceGroup: InvoiceGroupDO, booking: BookingDO): InvoiceDO {
-        let invoice = _.find(invoiceGroup.invoiceList, (invoice: InvoiceDO) => { return invoice.bookingId == booking.bookingId });
+        let invoice = _.find(invoiceGroup.invoiceList, (invoice: InvoiceDO) => { return invoice.bookingId == booking.id });
         if (this._thUtils.isUndefinedOrNull(invoice)) {
             var thError = new ThError(ThStatusCode.BookingInvoiceUtilsInvoiceNotFound, null);
             ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Invoice not found for booking in group", {
                 groupBookingId: booking.groupBookingId,
-                bookingId: booking.bookingId,
+                bookingId: booking.id,
                 invoiceGroupId: invoiceGroup.id
             }, thError);
             throw thError;

@@ -101,7 +101,7 @@ export class InvoiceDO extends BaseDO {
         _.forEach(this.itemList, (item: InvoiceItemDO) => {
             if (item.type === InvoiceItemType.Booking) {
                 let booking = _.find(bookingList, (booking: BookingDO) => {
-                    return booking.bookingId === item.id;
+                    return booking.id === item.id;
                 });
                 if (thUtils.isUndefinedOrNull(booking)) {
                     actualItemList.push(item);

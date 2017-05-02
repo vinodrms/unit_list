@@ -60,7 +60,7 @@ export class BookingReserveAddOnProducts {
             var bookingsRepo = this._appContext.getRepositoryFactory().getBookingRepository();
             return bookingsRepo.updateBooking({ hotelId: this._sessionContext.sessionDO.hotel.id }, {
                 groupBookingId: this._loadedBooking.groupBookingId,
-                bookingId: this._loadedBooking.bookingId,
+                bookingId: this._loadedBooking.id,
                 versionId: this._loadedBooking.versionId
             }, this._loadedBooking);
         }).then((updatedBooking: BookingDO) => {

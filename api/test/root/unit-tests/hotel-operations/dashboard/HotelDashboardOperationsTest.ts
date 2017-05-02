@@ -35,9 +35,9 @@ import {RoomAttachedBookingResult, RoomAttachedBookingResultType} from '../../..
 function checkArrivals(createdBookingList: BookingDO[], arrivalsInfo: HotelOperationsArrivalsInfo) {
     should.equal(arrivalsInfo.arrivalInfoList.length >= createdBookingList.length, true);
     createdBookingList.forEach((booking: BookingDO) => {
-        var arrivalItem = _.find(arrivalsInfo.arrivalInfoList, (item: ArrivalItemInfo) => { return item.bookingId === booking.bookingId });
+        var arrivalItem = _.find(arrivalsInfo.arrivalInfoList, (item: ArrivalItemInfo) => { return item.bookingId === booking.id });
         should.exist(arrivalItem);
-        should.equal(arrivalItem.bookingId, booking.bookingId);
+        should.equal(arrivalItem.bookingId, booking.id);
         should.equal(arrivalItem.roomCategoryId, booking.roomCategoryId);
         should.equal(arrivalItem.customerId, booking.displayCustomerId);
     });
@@ -121,7 +121,7 @@ describe("Hotel Dashboard Operations Tests", function () {
 
         it("Should reserve a room for one of the added bookings", function (done) {
             var assignRoomDO = new AssignRoomDO();
-            assignRoomDO.bookingId = booking.bookingId;
+            assignRoomDO.bookingId = booking.id;
             assignRoomDO.groupBookingId = booking.groupBookingId;
             assignRoomDO.roomId = attachedRoom.id;
             var assignRoom = new AssignRoom(testContext.appContext, testContext.sessionContext);
@@ -139,7 +139,7 @@ describe("Hotel Dashboard Operations Tests", function () {
             roomAttachedBooking.getBooking(new RoomAttachedBookingDO(attachedRoom.id)).then((attachedBookingResult: RoomAttachedBookingResult) => {
                 should.equal(attachedBookingResult.resultType, RoomAttachedBookingResultType.ReservedBooking);
                 should.exist(attachedBookingResult.booking);
-                should.equal(attachedBookingResult.booking.bookingId, booking.bookingId);
+                should.equal(attachedBookingResult.booking.id, booking.id);
                 should.equal(attachedBookingResult.booking.groupBookingId, booking.groupBookingId);
                 done();
             }).catch((error: any) => {
@@ -149,7 +149,7 @@ describe("Hotel Dashboard Operations Tests", function () {
         it("Should get the possible prices for the booking and include the current price", function (done) {
             var possiblePrices = new BookingPossiblePrices(testContext.appContext, testContext.sessionContext);
             var possiblePricesDO = new BookingPossiblePricesDO();
-            possiblePricesDO.bookingId = booking.bookingId;
+            possiblePricesDO.bookingId = booking.id;
             possiblePricesDO.groupBookingId = booking.groupBookingId;
             possiblePrices.getPossiblePrices(possiblePricesDO).then((priceItems: BookingPossiblePriceItems) => {
                 should.equal(priceItems.priceItemList.length > 0, true);
@@ -167,7 +167,7 @@ describe("Hotel Dashboard Operations Tests", function () {
             roomInfoReader.read().then((arrivalsInfo: HotelOperationsRoomInfo) => {
                 should.equal(arrivalsInfo.roomInfoList.length, 1);
                 should.equal(arrivalsInfo.roomInfoList[0].roomStatus, RoomItemStatus.Reserved);
-                should.equal(arrivalsInfo.roomInfoList[0].bookingId, booking.bookingId);
+                should.equal(arrivalsInfo.roomInfoList[0].bookingId, booking.id);
                 done();
             }).catch((error: any) => {
                 done(error);
@@ -214,10 +214,10 @@ describe("Hotel Dashboard Operations Tests", function () {
             });
         });
         it("Should check in the reserved booking", function (done) {
-            createdBookingList = _.filter(createdBookingList, (createdBooking: BookingDO) => { return createdBooking.bookingId !== booking.bookingId });
+            createdBookingList = _.filter(createdBookingList, (createdBooking: BookingDO) => { return createdBooking.id !== booking.id });
 
             var assignRoomDO = new AssignRoomDO();
-            assignRoomDO.bookingId = booking.bookingId;
+            assignRoomDO.bookingId = booking.id;
             assignRoomDO.groupBookingId = booking.groupBookingId;
             assignRoomDO.roomId = booking.roomId;
             var assignRoom = new AssignRoom(testContext.appContext, testContext.sessionContext);
@@ -235,7 +235,7 @@ describe("Hotel Dashboard Operations Tests", function () {
             roomAttachedBooking.getBooking(new RoomAttachedBookingDO(attachedRoom.id)).then((attachedBookingResult: RoomAttachedBookingResult) => {
                 should.equal(attachedBookingResult.resultType, RoomAttachedBookingResultType.CheckedInBooking);
                 should.exist(attachedBookingResult.booking);
-                should.equal(attachedBookingResult.booking.bookingId, booking.bookingId);
+                should.equal(attachedBookingResult.booking.id, booking.id);
                 should.equal(attachedBookingResult.booking.groupBookingId, booking.groupBookingId);
                 done();
             }).catch((error: any) => {
@@ -259,7 +259,7 @@ describe("Hotel Dashboard Operations Tests", function () {
             roomInfoReader.read().then((arrivalsInfo: HotelOperationsRoomInfo) => {
                 should.equal(arrivalsInfo.roomInfoList.length, 1);
                 should.equal(arrivalsInfo.roomInfoList[0].roomStatus, RoomItemStatus.Occupied);
-                should.equal(arrivalsInfo.roomInfoList[0].bookingId, booking.bookingId);
+                should.equal(arrivalsInfo.roomInfoList[0].bookingId, booking.id);
                 done();
             }).catch((error: any) => {
                 done(error);
@@ -279,7 +279,7 @@ describe("Hotel Dashboard Operations Tests", function () {
             departuresReader.read(dashboardHelper.getQueryForTomorrow(testDataBuilder)).then((departuresInfo: HotelOperationsDeparturesInfo) => {
                 should.equal(departuresInfo.departureInfoList.length, createdBookingList.length + 1 + testDataBuilder.getNoUnpaidInvoices());
                 departuresInfo.departureInfoList.forEach((departureItem: DeparturelItemInfo) => {
-                    if (departureItem.bookingId === booking.bookingId) {
+                    if (departureItem.bookingId === booking.id) {
                         should.equal(departureItem.bookingItemStatus, DeparturelItemBookingStatus.CanCheckOut);
                     }
                     else {
@@ -293,7 +293,7 @@ describe("Hotel Dashboard Operations Tests", function () {
         });
         it("Should check out the room", function (done) {
             var checkOutDO = new CheckOutRoomDO();
-            checkOutDO.bookingId = booking.bookingId;
+            checkOutDO.bookingId = booking.id;
             checkOutDO.groupBookingId = booking.groupBookingId;
             var checkOutRoomOp = new CheckOutRoom(testContext.appContext, testContext.sessionContext);
             checkOutRoomOp.checkOut(checkOutDO).then((checkedOutBooking: BookingDO) => {

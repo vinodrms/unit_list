@@ -69,7 +69,7 @@ export class BookingCancel {
                 var bookingsRepo = this._appContext.getRepositoryFactory().getBookingRepository();
                 return bookingsRepo.updateBooking({ hotelId: this._sessionContext.sessionDO.hotel.id }, {
                     groupBookingId: this._bookingWithDeps.bookingDO.groupBookingId,
-                    bookingId: this._bookingWithDeps.bookingDO.bookingId,
+                    bookingId: this._bookingWithDeps.bookingDO.id,
                     versionId: this._bookingWithDeps.bookingDO.versionId
                 }, this._bookingWithDeps.bookingDO);
             }).then((updatedBooking: BookingDO) => {

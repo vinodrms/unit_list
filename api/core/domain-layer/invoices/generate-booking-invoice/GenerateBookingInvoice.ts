@@ -128,12 +128,12 @@ export class GenerateBookingInvoice {
 
     private getDefaultInvoiceDOCore(resolve: { (result: InvoiceDO): void }, reject: { (err: ThError): void }) {
         var invoice = new InvoiceDO();
-        invoice.bookingId = this._loadedBooking.bookingId;
+        invoice.bookingId = this._loadedBooking.id;
         invoice.accountingType = InvoiceAccountingType.Debit;
         invoice.itemList = [];
         var bookingInvoiceItem = new InvoiceItemDO();
         bookingInvoiceItem.type = InvoiceItemType.Booking;
-        bookingInvoiceItem.id = this._loadedBooking.bookingId;
+        bookingInvoiceItem.id = this._loadedBooking.id;
         invoice.itemList.push(bookingInvoiceItem);
         invoice.paymentStatus = InvoicePaymentStatus.Unpaid;
 

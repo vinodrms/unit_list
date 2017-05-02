@@ -78,7 +78,6 @@ export class MongoAddBookingsRepository extends MongoRepository {
         let findQuery: any = {};
         findQuery["hotelId"] = meta.hotelId;
         findQuery["id"] = groupMeta.groupBookingId;
-        findQuery["versionId"] = groupMeta.versionId;
 
         _.forEach(bookingList, (booking: BookingDO) => {
             this.stripOutUnnecessaryFieldsOnBooking(booking);

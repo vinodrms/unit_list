@@ -106,7 +106,7 @@ export class BookingWithDependencies {
         let invoiceGroup = this.getInvoiceGroupDO();
         if (this._thUtils.isUndefinedOrNull(invoiceGroup)) { return false; }
 
-        let invoice = invoiceGroup.getInvoiceForBooking(this._bookingDO.bookingId);
+        let invoice = invoiceGroup.getInvoiceForBooking(this._bookingDO.id);
         if (this._thUtils.isUndefinedOrNull(invoice)) { return false; }
         return invoice.isClosed();
     }

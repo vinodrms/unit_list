@@ -134,7 +134,7 @@ export class HotelInventoryIndexer {
         var revenue = new RevenueForDate(0.0, 0.0);
         _.forEach(filteredBookingItemList, (bookingItem: BookingItemContainer) => {
             var noNights = bookingItem.indexedBookingInterval.getLengthOfStay();
-            if (noNights > 0 && !this._invoiceStats.bookingHasInvoiceWithLossAcceptedByManagement(bookingItem.booking.bookingId)) {
+            if (noNights > 0 && !this._invoiceStats.bookingHasInvoiceWithLossAcceptedByManagement(bookingItem.booking.id)) {
                 revenue.roomRevenue += this.getBookingRoomPriceForDate(bookingItem.booking.price, bookingItem.booking.configCapacity, noNights, thDate);
                 revenue.otherRevenue += this.getBookingOtherPriceAvgPerNight(bookingItem.booking.price, bookingItem.booking.configCapacity, noNights);
             }

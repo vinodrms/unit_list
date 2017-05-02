@@ -55,7 +55,7 @@ export class BookingDO extends BaseDO {
     noOfRooms: number;
 
     // individual booking
-    bookingId: string;
+    id: string;
     bookingReference: string;
     externalBookingReference: string;
     confirmationStatus: BookingConfirmationStatus;
@@ -83,7 +83,7 @@ export class BookingDO extends BaseDO {
     indexedSearchTerms: string[];
 
     protected getPrimitivePropertyKeys(): string[] {
-        return ["groupBookingId", "groupBookingReference", "externalBookingReference", "hotelId", "versionId", "status", "inputChannel", "noOfRooms", "bookingId", "bookingReference", "externalBookingReference", "confirmationStatus",
+        return ["groupBookingId", "groupBookingReference", "hotelId", "versionId", "status", "inputChannel", "noOfRooms", "id", "bookingReference", "externalBookingReference", "confirmationStatus",
             "customerIdList", "displayCustomerId", "startUtcTimestamp", "endUtcTimestamp", "roomCategoryId", "roomId", "priceProductId",
             "reservedAddOnProductIdList", "allotmentId", "notes", "invoiceNotes", "indexedSearchTerms"];
     }

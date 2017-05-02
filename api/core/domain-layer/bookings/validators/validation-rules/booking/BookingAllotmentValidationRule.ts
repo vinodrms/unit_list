@@ -65,7 +65,7 @@ export class BookingAllotmentValidationRule extends ABusinessValidationRule<Book
         ]);
         allotmentValidationRule.isValidOn(allotment).then((validatedAllotment: AllotmentDO) => {
             var occupancyCalculator = new BookingOccupancyCalculator(this._appContext, this._sessionContext, this._validationParams.roomList);
-            return occupancyCalculator.compute(booking.interval, this._validationParams.transientBookingList, booking.bookingId);
+            return occupancyCalculator.compute(booking.interval, this._validationParams.transientBookingList, booking.id);
         }).then((bookingOccupancy: IBookingOccupancy) => {
             var allotmentOccupancyNo = bookingOccupancy.getOccupancyForAllotmentId(booking.allotmentId);
             var allotmentAvailabilityNo = allotment.availability.getAllotmentAvailabilityForInterval(new IndexedBookingInterval(booking.interval));

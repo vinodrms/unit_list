@@ -69,7 +69,7 @@ export class DefaultBookingBuilder implements IBookingDataSource {
         booking.inputChannel = GroupBookingInputChannel.PropertyManagementSystem;
         booking.noOfRooms = 1;
 
-        booking.bookingId = bookingId;
+        booking.id = bookingId;
         booking.bookingReference = bookingRef;
         booking.confirmationStatus = BookingConfirmationStatus.Confirmed;
         booking.customerIdList = [customerId];

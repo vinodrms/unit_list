@@ -98,7 +98,7 @@ export class BookingChangeDates {
                 var bookingsRepo = this._appContext.getRepositoryFactory().getBookingRepository();
                 return bookingsRepo.updateBooking({ hotelId: this._sessionContext.sessionDO.hotel.id }, {
                     groupBookingId: this._bookingWithDependencies.bookingDO.groupBookingId,
-                    bookingId: this._bookingWithDependencies.bookingDO.bookingId,
+                    bookingId: this._bookingWithDependencies.bookingDO.id,
                     versionId: this._bookingWithDependencies.bookingDO.versionId
                 }, this._bookingWithDependencies.bookingDO);
             }).then((updatedBooking: BookingDO) => {

@@ -33,7 +33,7 @@ export class MongoGetSingleBookingRepository extends MongoRepository {
             (bookingGroupObject: Object) => {
                 var bookingGroup: BookingGroupDO = new BookingGroupDO();
                 bookingGroup.buildFromObject(bookingGroupObject);
-                var foundBooking: BookingDO = _.find(bookingGroup.bookingList, (booking: BookingDO) => { return booking.bookingId === bookingId }); 
+                var foundBooking: BookingDO = _.find(bookingGroup.bookingList, (booking: BookingDO) => { return booking.id === bookingId }); 
                 resolve(foundBooking);
             }
         );

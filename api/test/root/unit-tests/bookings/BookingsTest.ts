@@ -155,9 +155,9 @@ describe("New Bookings Tests", function () {
         it("Should get booking by id", function (done) {
             var randomBooking: BookingDO = testUtils.getRandomListElement(retrievedBookingList);
             var bookingRepo = testContext.appContext.getRepositoryFactory().getBookingRepository();
-            bookingRepo.getBookingById({ hotelId: testContext.sessionContext.sessionDO.hotel.id }, randomBooking.groupBookingId, randomBooking.bookingId
+            bookingRepo.getBookingById({ hotelId: testContext.sessionContext.sessionDO.hotel.id }, randomBooking.groupBookingId, randomBooking.id
             ).then((foundBooking: BookingDO) => {
-                should.equal(randomBooking.bookingId, foundBooking.bookingId);
+                should.equal(randomBooking.id, foundBooking.id);
                 should.equal(randomBooking.bookingReference, foundBooking.bookingReference);
                 should.equal(randomBooking.groupBookingId, foundBooking.groupBookingId);
                 should.equal(randomBooking.groupBookingReference, foundBooking.groupBookingReference);
@@ -263,7 +263,7 @@ describe("New Bookings Tests", function () {
         it("Should change the dates for the booking made with allotment", function (done) {
             var bookingChangeDatesDO = new BookingChangeDatesDO();
             bookingChangeDatesDO.groupBookingId = addedBooking.groupBookingId;
-            bookingChangeDatesDO.bookingId = addedBooking.bookingId;
+            bookingChangeDatesDO.bookingId = addedBooking.id;
             bookingChangeDatesDO.interval = bookingTestHelper.generateRandomFutureInterval(testDataBuilder);
             var bookingChangeDates = new BookingChangeDates(testContext.appContext, testContext.sessionContext);
             bookingChangeDates.changeDates(bookingChangeDatesDO).then((updatedBooking: BookingDO) => {

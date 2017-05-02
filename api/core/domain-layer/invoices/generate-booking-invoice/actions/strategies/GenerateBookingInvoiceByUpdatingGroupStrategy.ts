@@ -53,7 +53,7 @@ export class GenerateBookingInvoiceByUpdatingGroupStrategy implements IGenerateB
     }
 
     private bookingAlreadyHasGeneratedInvoice() {
-        let invoice = this._loadedInvoiceGroup.getInvoiceForBooking(this._bookingDO.bookingId);
+        let invoice = this._loadedInvoiceGroup.getInvoiceForBooking(this._bookingDO.id);
         return !this._thUtils.isUndefinedOrNull(invoice);
     }
 

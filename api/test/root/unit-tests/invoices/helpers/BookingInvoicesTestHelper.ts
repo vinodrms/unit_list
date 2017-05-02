@@ -29,7 +29,7 @@ export class BookingInvoicesTestHelper {
 
         return {
             groupBookingId: booking.groupBookingId,
-            bookingId: booking.bookingId
+            bookingId: booking.id
         };
     }
 
@@ -42,7 +42,7 @@ export class BookingInvoicesTestHelper {
 
         return {
             groupBookingId: booking.groupBookingId,
-            bookingId: booking.bookingId
+            bookingId: booking.id
         };
     }
 

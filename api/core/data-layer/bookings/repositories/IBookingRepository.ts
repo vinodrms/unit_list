@@ -10,7 +10,7 @@ export interface BookingMetaRepoDO {
 }
 export interface BookingGroupMetaRepoDO {
     groupBookingId: string;
-    versionId: number;
+    groupBookingReference: string;
 }
 export interface BookingItemMetaRepoDO {
     groupBookingId: string;

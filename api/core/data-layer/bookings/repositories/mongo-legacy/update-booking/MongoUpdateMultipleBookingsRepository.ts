@@ -63,7 +63,7 @@ export class MongoUpdateMultipleBookingsRepository {
             ((finishUpdateSingleBookingCallback: any) => {
                 var booking = bookingList[currentBookingIndex];
                 currentBookingIndex++;
-                this._updateSingleBookingRepo.updateBooking(meta, { groupBookingId: groupBookingId, bookingId: booking.bookingId, versionId: currentVersionId }, booking)
+                this._updateSingleBookingRepo.updateBooking(meta, { groupBookingId: groupBookingId, bookingId: booking.id, versionId: currentVersionId }, booking)
                     .then((updatedBooking: BookingDO) => {
                         currentVersionId = updatedBooking.versionId;
                         updatedBookingList.push(updatedBooking);

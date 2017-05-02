@@ -93,7 +93,7 @@ export class AddBookingItems {
             // temporarilly add the existing bookings to the new booking items array
             // in order to validate the bookings as a whole (some per group constraints might be active)
             this.addExistingBookingItemsIfAnyToTheNewBookingItems();
-            
+
             return this._appContext.getRepositoryFactory().getHotelRepository().getHotelById(this._sessionContext.sessionDO.hotel.id);
         }).then((loadedHotel: HotelDO) => {
             this._loadedHotel = loadedHotel;
@@ -153,11 +153,11 @@ export class AddBookingItems {
                 vatTaxList: this._loadedVatTaxList,
                 roomCategoryStatsList: this._loadedRoomCategoryStatsList
             };
-            if(!this.newBookingGroup) {
+            if (!this.newBookingGroup) {
                 bookingItemsConverterParams.groupBookingReference = this._existingBookingList[0].groupBookingReference;
             }
             var bookingItemsConverter = new BookingItemsConverter(this._appContext, this._sessionContext, bookingItemsConverterParams);
-            
+
             return bookingItemsConverter.convert(this._addBookingItems.bookingList, this._inputChannel);
         }).then((convertedBookingList: BookingDO[]) => {
             this._bookingList = convertedBookingList;
@@ -240,7 +240,7 @@ export class AddBookingItems {
     private get _groupBookingMeta(): BookingGroupMetaRepoDO {
         return {
             groupBookingId: this._existingBookingList[0].groupBookingId,
-            versionId: this._existingBookingList[0].versionId
+            groupBookingReference: this._existingBookingList[0].groupBookingReference
         }
     }
 

@@ -70,7 +70,7 @@ export class MongoUpdateBookingRepository extends MongoRepository implements IUp
                 var bookingGroupDO = new BookingGroupDO();
                 bookingGroupDO.buildFromObject(updatedDBBookingGroup);
                 var updatedBooking = _.find(bookingGroupDO.bookingList, (booking: BookingDO) => {
-                    return booking.bookingId === itemMeta.bookingId;
+                    return booking.id === itemMeta.bookingId;
                 });
                 resolve(updatedBooking);
             }
