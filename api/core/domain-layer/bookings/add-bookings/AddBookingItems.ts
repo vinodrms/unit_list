@@ -50,6 +50,7 @@ export class AddBookingItems {
 
     private _bookingList: BookingDO[];
     private _existingBookingList: BookingDO[];
+    private _noOfRooms: number;
 
     private _thUtils: ThUtils;
 
@@ -161,6 +162,7 @@ export class AddBookingItems {
             return bookingItemsConverter.convert(this._addBookingItems.bookingList, this._inputChannel);
         }).then((convertedBookingList: BookingDO[]) => {
             this._bookingList = convertedBookingList;
+            this._noOfRooms = this._bookingList.length;
 
             var newBookingValidationRules = new NewBookingsValidationRules(this._appContext, this._sessionContext, {
                 hotel: this._loadedHotel,
@@ -187,6 +189,11 @@ export class AddBookingItems {
         }).then((createdBookingList: BookingDO[]) => {
             this._bookingList = createdBookingList;
             this.sendConfirmationAsync(createdBookingList);
+
+            this._existingBookingList.forEach(b => { b.noOfRooms = this._noOfRooms });
+            let bookingsRepo = this._appContext.getRepositoryFactory().getBookingRepository();
+            return bookingsRepo.updateMultipleBookings(this._bookingMeta, this._existingBookingList);
+        }).then((updatedBookingList: BookingDO[]) => {
 
             resolve(this._bookingList);
         }).catch((error: any) => {

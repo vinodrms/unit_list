@@ -97,6 +97,9 @@ describe("New Bookings Tests", function () {
             bookingRepo.getBookingList({ hotelId: testContext.sessionContext.sessionDO.hotel.id }, { groupBookingId: randomGroupBookingId })
                 .then((result: BookingSearchResultRepoDO) => {
                     initialNumberOfBookings = result.bookingList.length;
+                    result.bookingList.forEach(booking => {
+                        should.equal(booking.noOfRooms, initialNumberOfBookings);
+                    });
 
                     let addBookingsDO: AddBookingItemsDO = bookingTestHelper.getBookingItems(testDataBuilder, genericPriceProduct);
                     addBookingsDO.groupBookingId = randomGroupBookingId;
@@ -108,6 +111,9 @@ describe("New Bookings Tests", function () {
                     return bookingRepo.getBookingList({ hotelId: testContext.sessionContext.sessionDO.hotel.id }, { groupBookingId: randomGroupBookingId });
                 }).then((result: BookingSearchResultRepoDO) => {
                     should.equal(result.bookingList.length, initialNumberOfBookings + noOfNewBookings);
+                    result.bookingList.forEach(booking => {
+                        should.equal(booking.noOfRooms, initialNumberOfBookings + noOfNewBookings);
+                    });
                     done();
                 }).catch((err: any) => {
                     done(err);
