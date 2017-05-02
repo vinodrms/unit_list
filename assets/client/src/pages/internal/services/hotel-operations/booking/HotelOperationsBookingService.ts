@@ -16,9 +16,9 @@ export class HotelOperationsBookingService {
 
     public getPossiblePrices(groupBookingId: string, bookingId: string): Observable<BookingPossiblePriceItemsDO> {
         return this._appContext.thHttp.post(ThServerApi.HotelOperationsBookingPossiblePrices, {
-            bookingReference: {
+            booking: {
                 groupBookingId: groupBookingId,
-                bookingId: bookingId
+                id: bookingId
             }
         }).map((possiblePricesObject: Object) => {
             var possiblePrices = new BookingPossiblePriceItemsDO();
@@ -39,7 +39,7 @@ export class HotelOperationsBookingService {
             this._appContext.thHttp.post(ThServerApi.HotelOperationsBookingChangeNoShowTime, {
                 booking: {
                     groupBookingId: booking.groupBookingId,
-                    bookingId: booking.bookingId,
+                    id: booking.id,
                     noShowTimestamp: noShowTimestamp
                 }
             })
@@ -59,7 +59,7 @@ export class HotelOperationsBookingService {
             this._appContext.thHttp.post(ThServerApi.HotelOperationsBookingAddPaymentGuarantee, {
                 booking: {
                     groupBookingId: booking.groupBookingId,
-                    bookingId: booking.bookingId,
+                    id: booking.id,
                     paymentMethod: paymentMethod
                 }
             })

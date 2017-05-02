@@ -178,7 +178,7 @@ export class BookingViewModelConverter {
         bookingCartItem.allowedPaymentMethods = hotelAggregatedInfo.allowedPaymentMethods;
 
         bookingCartItem.cartSequenceId = indexInCart;
-        bookingCartItem.bookingId = bookingVM.booking.bookingId;
+        bookingCartItem.bookingId = bookingVM.booking.id;
 
         bookingCartItem.customerNameString = bookingVM.customerNameString;
 

@@ -149,7 +149,7 @@ describe("Hotel Dashboard Operations Tests", function () {
         it("Should get the possible prices for the booking and include the current price", function (done) {
             var possiblePrices = new BookingPossiblePrices(testContext.appContext, testContext.sessionContext);
             var possiblePricesDO = new BookingPossiblePricesDO();
-            possiblePricesDO.bookingId = booking.id;
+            possiblePricesDO.id = booking.id;
             possiblePricesDO.groupBookingId = booking.groupBookingId;
             possiblePrices.getPossiblePrices(possiblePricesDO).then((priceItems: BookingPossiblePriceItems) => {
                 should.equal(priceItems.priceItemList.length > 0, true);

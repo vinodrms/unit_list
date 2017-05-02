@@ -47,7 +47,7 @@ export class CustomerBookingHistoryComponent implements OnInit {
     }
 
     public goToBooking(bookingVM: BookingVM) {
-        this._operationsPageControllerService.goToBooking(bookingVM.booking.groupBookingId, bookingVM.booking.bookingId);
+        this._operationsPageControllerService.goToBooking(bookingVM.booking.groupBookingId, bookingVM.booking.id);
     }
 
     public get totalCount(): number {

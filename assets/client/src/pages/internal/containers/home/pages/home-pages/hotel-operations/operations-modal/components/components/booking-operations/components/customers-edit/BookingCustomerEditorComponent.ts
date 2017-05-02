@@ -141,7 +141,7 @@ export class BookingCustomerEditorComponent implements OnInit {
             
             let bookingChangeGuestOnInvoiceDO = {
                 groupBookingId: this._bookingOperationsPageData.bookingDO.groupBookingId,
-                bookingId: this._bookingOperationsPageData.bookingDO.bookingId,
+                bookingId: this._bookingOperationsPageData.bookingDO.id,
                 customerIdDisplayedOnInvoice: this.bookingDO.defaultBillingDetails.customerIdDisplayedAsGuest
             };
 

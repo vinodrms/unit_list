@@ -45,7 +45,7 @@ export class BookingReserveAddOnProducts {
             this._loadedAddOnProductsContainer = addOnProductsContainer;
 
             var bookingsRepo = this._appContext.getRepositoryFactory().getBookingRepository();
-            return bookingsRepo.getBookingById({ hotelId: this._sessionContext.sessionDO.hotel.id }, this._reserveAddOnProductsDO.groupBookingId, this._reserveAddOnProductsDO.bookingId)
+            return bookingsRepo.getBookingById({ hotelId: this._sessionContext.sessionDO.hotel.id }, this._reserveAddOnProductsDO.groupBookingId, this._reserveAddOnProductsDO.id)
         }).then((booking: BookingDO) => {
             this._loadedBooking = booking;
 

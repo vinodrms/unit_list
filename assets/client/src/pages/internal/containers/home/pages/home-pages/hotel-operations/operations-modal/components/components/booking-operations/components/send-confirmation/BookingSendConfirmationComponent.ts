@@ -71,7 +71,7 @@ export class BookingSendConfirmationComponent implements OnInit {
         
         var customersAbleToReceiveConfirmations = this.getCustomersAllowedToReceiveConfirmations();
         var groupBookingId = this._bookingOperationsPageData.bookingDO.groupBookingId;
-        var bookingId = this._bookingOperationsPageData.bookingDO.bookingId;
+        var bookingId = this._bookingOperationsPageData.bookingDO.id;
         this._emailSenderModalService.sendBookingConfirmation(customersAbleToReceiveConfirmations, groupBookingId, bookingId).then((modalDialogRef: ModalDialogRef<boolean>) => {
             modalDialogRef.resultObservable.subscribe((sendResult: boolean) => {
                 this._appContext.analytics.logEvent("booking", "send-confirmation", "Sent a booking confirmation by email");

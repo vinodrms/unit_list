@@ -55,7 +55,7 @@ export class GenerateBookingInvoice {
         }
 
         var bookignRepo = this._appContext.getRepositoryFactory().getBookingRepository();
-        bookignRepo.getBookingById({ hotelId: this._sessionContext.sessionDO.hotel.id }, this._generateBookingInvoiceDO.groupBookingId, this._generateBookingInvoiceDO.bookingId)
+        bookignRepo.getBookingById({ hotelId: this._sessionContext.sessionDO.hotel.id }, this._generateBookingInvoiceDO.groupBookingId, this._generateBookingInvoiceDO.id)
             .then((booking: BookingDO) => {
                 this._loadedBooking = booking;
 

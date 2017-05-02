@@ -22,7 +22,7 @@ export class BookingChangeDetails {
 
     private _updatedBooking: BookingDO;
     private _bookingWithDependencies: BookingWithDependencies;
-    
+
     constructor(private _appContext: AppContext, private _sessionContext: SessionContext) {
         this._bookingInvoiceSync = new BookingInvoiceSync(this._appContext, this._sessionContext);
     }
@@ -40,9 +40,9 @@ export class BookingChangeDetails {
             parser.logAndReject("Error validating change details fields", reject);
             return;
         }
-        
+
         var bookingLoader = new BookingWithDependenciesLoader(this._appContext, this._sessionContext);
-        bookingLoader.load(this._changeDetailsDO.groupBookingId, this._changeDetailsDO.bookingId)
+        bookingLoader.load(this._changeDetailsDO.groupBookingId, this._changeDetailsDO.id)
             .then((bookingWithDependencies: BookingWithDependencies) => {
                 this._bookingWithDependencies = bookingWithDependencies;
 
@@ -51,7 +51,7 @@ export class BookingChangeDetails {
                     ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "change details: invalid booking state", this._changeDetailsDO, thError);
                     throw thError;
                 }
-                
+
                 this._invoiceSyncRequired = this.invoiceNotesWereChanged();
 
                 if (this._invoiceSyncRequired && !this.bookingHasValidStatusForInvoiceNotesUpdate()) {
@@ -71,7 +71,7 @@ export class BookingChangeDetails {
             }).then((updatedBooking: BookingDO) => {
                 this._updatedBooking = updatedBooking;
 
-                if(!this._invoiceSyncRequired) {
+                if (!this._invoiceSyncRequired) {
                     return new Promise<InvoiceGroupDO>((resolve: { (result: InvoiceGroupDO): void }, reject: { (err: ThError): void }) => {
                         resolve(null);
                     });
@@ -111,7 +111,7 @@ export class BookingChangeDetails {
             reject(error);
         });
     }
-    
+
 
     private invoiceNotesWereChanged(): boolean {
         return this._changeDetailsDO.invoiceNotes != this._bookingWithDependencies.bookingDO.invoiceNotes;

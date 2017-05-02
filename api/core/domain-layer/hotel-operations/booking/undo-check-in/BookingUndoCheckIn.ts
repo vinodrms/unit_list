@@ -59,7 +59,7 @@ export class BookingUndoCheckIn {
                 this._currentHotelTimestamp = ThTimestampDO.buildThTimestampForTimezone(this._loadedHotel.timezone);
 
                 var bookingLoader = new BookingWithDependenciesLoader(this._appContext, this._sessionContext);
-                return bookingLoader.load(this._bookingUndoCheckInDO.groupBookingId, this._bookingUndoCheckInDO.bookingId);
+                return bookingLoader.load(this._bookingUndoCheckInDO.groupBookingId, this._bookingUndoCheckInDO.id);
             }).then((bookingWithDependencies: BookingWithDependencies) => {
                 this._bookingWithDependencies = bookingWithDependencies;
 

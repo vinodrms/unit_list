@@ -47,7 +47,7 @@ export class BookingChangeCapacity {
             return;
         }
         var bookingLoader = new BookingWithDependenciesLoader(this._appContext, this._sessionContext);
-        bookingLoader.load(this._bookingChangeCapacityDO.groupBookingId, this._bookingChangeCapacityDO.bookingId)
+        bookingLoader.load(this._bookingChangeCapacityDO.groupBookingId, this._bookingChangeCapacityDO.id)
             .then((bookingWithDependencies: BookingWithDependencies) => {
                 this._bookingWithDependencies = bookingWithDependencies;
 

@@ -53,7 +53,7 @@ export class BookingChangeCustomers {
             this._loadedCustomersContainer = customersContainer;
 
             var bookingLoader = new BookingWithDependenciesLoader(this._appContext, this._sessionContext);
-            return bookingLoader.load(this._bookingChangeCustomersDO.groupBookingId, this._bookingChangeCustomersDO.bookingId);
+            return bookingLoader.load(this._bookingChangeCustomersDO.groupBookingId, this._bookingChangeCustomersDO.id);
         }).then((bookingWithDependencies: BookingWithDependencies) => {
             this._bookingWithDependencies = bookingWithDependencies;
             this._loadedBooking = bookingWithDependencies.bookingDO;

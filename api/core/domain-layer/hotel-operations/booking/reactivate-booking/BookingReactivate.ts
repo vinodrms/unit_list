@@ -62,7 +62,7 @@ export class BookingReactivate {
                 this._currentHotelTimestamp = ThTimestampDO.buildThTimestampForTimezone(this._loadedHotel.timezone);
 
                 var bookingLoader = new BookingWithDependenciesLoader(this._appContext, this._sessionContext);
-                return bookingLoader.load(this._reactivateDO.groupBookingId, this._reactivateDO.bookingId)
+                return bookingLoader.load(this._reactivateDO.groupBookingId, this._reactivateDO.id)
             })
             .then((bookingWithDependencies: BookingWithDependencies) => {
                 this._bookingWithDependencies = bookingWithDependencies;

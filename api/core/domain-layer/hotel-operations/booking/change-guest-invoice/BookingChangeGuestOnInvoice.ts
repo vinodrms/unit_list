@@ -48,7 +48,7 @@ export class BookingChangeGuestOnInvoice {
             this._loadedCustomersContainer = customersContainer;
 
             var bookingLoader = new BookingWithDependenciesLoader(this._appContext, this._sessionContext);
-            return bookingLoader.load(this._bookingChangeGuestOnInvoiceDO.groupBookingId, this._bookingChangeGuestOnInvoiceDO.bookingId);
+            return bookingLoader.load(this._bookingChangeGuestOnInvoiceDO.groupBookingId, this._bookingChangeGuestOnInvoiceDO.id);
         }).then((bookingWithDependencies: BookingWithDependencies) => {
             this._bookingWithDependencies = bookingWithDependencies;
             this._loadedBooking = bookingWithDependencies.bookingDO;

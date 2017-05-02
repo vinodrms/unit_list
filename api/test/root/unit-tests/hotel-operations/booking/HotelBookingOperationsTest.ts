@@ -112,7 +112,7 @@ describe("Hotel Booking Operations Tests", function () {
         it("Should change the date for a booking and double the price", function (done) {
             var bookingChangeDatesDO = new BookingChangeDatesDO();
             bookingChangeDatesDO.groupBookingId = bookingToChange.groupBookingId;
-            bookingChangeDatesDO.bookingId = bookingToChange.id;
+            bookingChangeDatesDO.id = bookingToChange.id;
             bookingChangeDatesDO.interval = dashboardHelper.getFromTodayTwoDaysInterval(testDataBuilder);
             var bookingChangeDates = new BookingChangeDates(testContext.appContext, testContext.sessionContext);
             bookingChangeDates.changeDates(bookingChangeDatesDO).then((updatedBooking: BookingDO) => {
@@ -141,7 +141,7 @@ describe("Hotel Booking Operations Tests", function () {
         it("Should change no show time for one of the added bookings", function (done) {
             var noShowTimeDO = new BookingChangeNoShowTimeDO();
             noShowTimeDO.groupBookingId = bookingToChange.groupBookingId;
-            noShowTimeDO.bookingId = bookingToChange.id;
+            noShowTimeDO.id = bookingToChange.id;
             noShowTimeDO.noShowTimestamp = new ThTimestampDO();
             noShowTimeDO.noShowTimestamp.thDateDO = bookingToChange.interval.start;
             noShowTimeDO.noShowTimestamp.thHourDO = ThHourDO.buildThHourDO(23, 30);
@@ -165,7 +165,7 @@ describe("Hotel Booking Operations Tests", function () {
             bookingToChange.configCapacity.noChildren++;
             var changeCapacityDO = new BookingChangeCapacityDO();
             changeCapacityDO.groupBookingId = bookingToChange.groupBookingId;
-            changeCapacityDO.bookingId = bookingToChange.id;
+            changeCapacityDO.id = bookingToChange.id;
             changeCapacityDO.configCapacity = bookingToChange.configCapacity;
 
             var bookingChangeCapacity = new BookingChangeCapacity(testContext.appContext, testContext.sessionContext);
@@ -184,7 +184,7 @@ describe("Hotel Booking Operations Tests", function () {
         it("Should add a payment guarantee on a booking", function (done) {
             var paymentGuaranteeDO = new BookingPaymentGuaranteeDO();
             paymentGuaranteeDO.groupBookingId = bookingToChange.groupBookingId;
-            paymentGuaranteeDO.bookingId = bookingToChange.id;
+            paymentGuaranteeDO.id = bookingToChange.id;
             paymentGuaranteeDO.paymentMethod = new InvoicePaymentMethodDO();
             paymentGuaranteeDO.paymentMethod.type = InvoicePaymentMethodType.DefaultPaymentMethod;
             var paymentMethod = testUtils.getRandomListElement(testDataBuilder.paymentMethodList);
@@ -205,7 +205,7 @@ describe("Hotel Booking Operations Tests", function () {
         it("Should change the details on a booking", function (done) {
             var bookingChangeDetailsDO = new BookingChangeDetailsDO();
             bookingChangeDetailsDO.groupBookingId = bookingToChange.groupBookingId;
-            bookingChangeDetailsDO.bookingId = bookingToChange.id;
+            bookingChangeDetailsDO.id = bookingToChange.id;
             bookingChangeDetailsDO.notes = "test test test!";
             var fileAttachment: FileAttachmentDO = new FileAttachmentDO();
             fileAttachment.name = "Supra File";
@@ -228,7 +228,7 @@ describe("Hotel Booking Operations Tests", function () {
         it("Should change the customers on a booking", function (done) {
             var changeCustomersDO = new BookingChangeCustomersDO();
             changeCustomersDO.groupBookingId = bookingToChange.groupBookingId;
-            changeCustomersDO.bookingId = bookingToChange.id;
+            changeCustomersDO.id = bookingToChange.id;
 
             var individualCustomerList = _.filter(testDataBuilder.customerList, (customer: CustomerDO) => {
                 return customer.type === CustomerType.Individual;
@@ -265,7 +265,7 @@ describe("Hotel Booking Operations Tests", function () {
         it("Should reactivate the booking", function (done) {
             var bookingReactivateDO = new BookingReactivateDO();
             bookingReactivateDO.groupBookingId = bookingToChange.groupBookingId;
-            bookingReactivateDO.bookingId = bookingToChange.id;
+            bookingReactivateDO.id = bookingToChange.id;
 
             var bookingReactivate = new BookingReactivate(testContext.appContext, testContext.sessionContext);
             bookingReactivate.reactivate(bookingReactivateDO).then((updatedBooking: BookingDO) => {
@@ -280,7 +280,7 @@ describe("Hotel Booking Operations Tests", function () {
         it("Should reserve some add on products for the booking", function (done) {
             var reserveAddOnProductsDO = new BookingReserveAddOnProductsDO();
             reserveAddOnProductsDO.groupBookingId = bookingToChange.groupBookingId;
-            reserveAddOnProductsDO.bookingId = bookingToChange.id;
+            reserveAddOnProductsDO.id = bookingToChange.id;
             reserveAddOnProductsDO.reservedAddOnProductIdList = _.map(testDataBuilder.addOnProductList, (addOnProduct: AddOnProductDO) => {
                 return addOnProduct.id;
             });
@@ -297,7 +297,7 @@ describe("Hotel Booking Operations Tests", function () {
         it("Should change the price product for the booking", function (done) {
             var bookingChangePriceProductDO = new BookingChangePriceProductDO();
             bookingChangePriceProductDO.groupBookingId = bookingToChange.groupBookingId;
-            bookingChangePriceProductDO.bookingId = bookingToChange.id;
+            bookingChangePriceProductDO.id = bookingToChange.id;
             bookingChangePriceProductDO.priceProductId = bookingToChange.priceProductId;
             bookingChangePriceProductDO.roomCategoryId = bookingToChange.roomCategoryId;
             bookingChangePriceProductDO.allotmentId = bookingToChange.allotmentId;
@@ -314,7 +314,7 @@ describe("Hotel Booking Operations Tests", function () {
         it("Should remove the reserved add on products for the booking", function (done) {
             var reserveAddOnProductsDO = new BookingReserveAddOnProductsDO();
             reserveAddOnProductsDO.groupBookingId = bookingToChange.groupBookingId;
-            reserveAddOnProductsDO.bookingId = bookingToChange.id;
+            reserveAddOnProductsDO.id = bookingToChange.id;
             reserveAddOnProductsDO.reservedAddOnProductIdList = [];
             var reserveAddOnProducts = new BookingReserveAddOnProducts(testContext.appContext, testContext.sessionContext);
             reserveAddOnProducts.reserve(reserveAddOnProductsDO).then((updatedBooking: BookingDO) => {
@@ -374,7 +374,7 @@ describe("Hotel Booking Operations Tests", function () {
 
         it("Should undo the check in", function (done) {
             let undoCheckInDO = new BookingUndoCheckInDO();
-            undoCheckInDO.bookingId = bookingToChange.id;
+            undoCheckInDO.id = bookingToChange.id;
             undoCheckInDO.groupBookingId = bookingToChange.groupBookingId;
             let undoCheckIn = new BookingUndoCheckIn(testContext.appContext, testContext.sessionContext);
             undoCheckIn.undo(undoCheckInDO).then((updatedBooking: BookingDO) => {
@@ -390,7 +390,7 @@ describe("Hotel Booking Operations Tests", function () {
         it("Should cancel the booking", function (done) {
             var bookingCancelDO = new BookingCancelDO();
             bookingCancelDO.groupBookingId = bookingToChange.groupBookingId;
-            bookingCancelDO.bookingId = bookingToChange.id;
+            bookingCancelDO.id = bookingToChange.id;
 
             var bookingCancel = new BookingCancel(testContext.appContext, testContext.sessionContext);
             bookingCancel.cancel(bookingCancelDO).then((updatedBooking: BookingDO) => {

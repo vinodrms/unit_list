@@ -268,7 +268,7 @@ describe("New Bookings Tests", function () {
         it("Should change the dates for the booking made with allotment", function (done) {
             var bookingChangeDatesDO = new BookingChangeDatesDO();
             bookingChangeDatesDO.groupBookingId = addedBooking.groupBookingId;
-            bookingChangeDatesDO.bookingId = addedBooking.id;
+            bookingChangeDatesDO.id = addedBooking.id;
             bookingChangeDatesDO.interval = bookingTestHelper.generateRandomFutureInterval(testDataBuilder);
             var bookingChangeDates = new BookingChangeDates(testContext.appContext, testContext.sessionContext);
             bookingChangeDates.changeDates(bookingChangeDatesDO).then((updatedBooking: BookingDO) => {

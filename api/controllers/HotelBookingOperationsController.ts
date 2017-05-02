@@ -26,7 +26,7 @@ class HotelBookingOperationsController extends BaseController {
         var sessionContext: SessionContext = req.sessionContext;
 
         var bookingPrices = new BookingPossiblePrices(appContext, sessionContext);
-        bookingPrices.getPossiblePrices(req.body.bookingReference).then((priceItems: BookingPossiblePriceItems) => {
+        bookingPrices.getPossiblePrices(req.body.booking).then((priceItems: BookingPossiblePriceItems) => {
             this.returnSuccesfulResponse(req, res, priceItems);
         }).catch((error: any) => {
             this.returnErrorResponse(req, res, error, ThStatusCode.HotelBookingOperationsControllerErrorGettingPossiblePrices);

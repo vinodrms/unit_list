@@ -55,7 +55,7 @@ export class BookingCancel {
                 this._loadedHotel = loadedHotel;
 
                 let loader = new BookingWithDependenciesLoader(this._appContext, this._sessionContext);
-                return loader.load(this._cancelDO.groupBookingId, this._cancelDO.bookingId);
+                return loader.load(this._cancelDO.groupBookingId, this._cancelDO.id);
             }).then((bookingWithDeps: BookingWithDependencies) => {
                 this._bookingWithDeps = bookingWithDeps;
 
@@ -143,7 +143,7 @@ export class BookingCancel {
         var generateBookingInvoice = new GenerateBookingInvoice(this._appContext, this._sessionContext);
         generateBookingInvoice.generate({
             groupBookingId: this._cancelDO.groupBookingId,
-            bookingId: this._cancelDO.bookingId
+            id: this._cancelDO.id
         }).then((invoiceGroup: InvoiceGroupDO) => {
             resolve(true);
         }).catch((error: ThError) => {

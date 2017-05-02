@@ -65,7 +65,7 @@ export class BookingChangeDates {
                 this._newBookingInterval = validatedBookingInterval;
 
                 var bookingLoader = new BookingWithDependenciesLoader(this._appContext, this._sessionContext);
-                return bookingLoader.load(this._bookingChangeDatesDO.groupBookingId, this._bookingChangeDatesDO.bookingId);
+                return bookingLoader.load(this._bookingChangeDatesDO.groupBookingId, this._bookingChangeDatesDO.id);
             }).then((bookingWithDependencies: BookingWithDependencies) => {
                 this._bookingWithDependencies = bookingWithDependencies;
 

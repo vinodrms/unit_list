@@ -1,11 +1,11 @@
-import {IValidationStructure} from '../../../../utils/th-validation/structure/core/IValidationStructure';
-import {ObjectValidationStructure} from '../../../../utils/th-validation/structure/ObjectValidationStructure';
-import {PrimitiveValidationStructure} from '../../../../utils/th-validation/structure/PrimitiveValidationStructure';
-import {StringValidationRule} from '../../../../utils/th-validation/rules/StringValidationRule';
+import { IValidationStructure } from '../../../../utils/th-validation/structure/core/IValidationStructure';
+import { ObjectValidationStructure } from '../../../../utils/th-validation/structure/ObjectValidationStructure';
+import { PrimitiveValidationStructure } from '../../../../utils/th-validation/structure/PrimitiveValidationStructure';
+import { StringValidationRule } from '../../../../utils/th-validation/rules/StringValidationRule';
 
 export class BookingCancelDO {
     groupBookingId: string;
-    bookingId: string;
+    id: string;
 
     public static getValidationStructure(): IValidationStructure {
         return new ObjectValidationStructure([
@@ -14,7 +14,7 @@ export class BookingCancelDO {
                 validationStruct: new PrimitiveValidationStructure(new StringValidationRule())
             },
             {
-                key: "bookingId",
+                key: "id",
                 validationStruct: new PrimitiveValidationStructure(new StringValidationRule())
             }
         ]);
