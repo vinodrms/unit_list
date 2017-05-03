@@ -76,7 +76,7 @@ export class BookingRoomEditorComponent {
     private get assignRoomParam(): AssignRoomParam {
         return {
             groupBookingId: this.bookingDO.groupBookingId,
-            bookingId: this.bookingDO.bookingId
+            bookingId: this.bookingDO.id
         }
     }
 }

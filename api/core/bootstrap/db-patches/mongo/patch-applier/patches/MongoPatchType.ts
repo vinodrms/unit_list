@@ -23,5 +23,6 @@ export enum MongoPatchType {
     AddInvoiceItemAccountingTypeDebitOnInvoices,
     RemoveMovableAttributeFromInvoiceItemsOnInvoices,
     RemoveMovableAttributeFromIncludedInvoiceItemsOnBookings,
+    MigrateBookingGroupsToBookings,
     
 }

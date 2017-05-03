@@ -22,25 +22,25 @@ export class CheckInStrategy extends AAssignRoomStrategy {
         var bookingDO = validationDO.booking;
         if (bookingDO.confirmationStatus !== BookingConfirmationStatus.Confirmed && bookingDO.confirmationStatus !== BookingConfirmationStatus.Guaranteed) {
             var thError = new ThError(ThStatusCode.CheckInStrategyOnlyConfirmedOrGuaranteed, null);
-            ThLogger.getInstance().logBusiness(ThLogLevel.Error, "Tried to check in a booking with status != {Confirmed,Guaranteed}", { sessionContext: this._sessionContext, bookingId: bookingDO.bookingId }, thError);
+            ThLogger.getInstance().logBusiness(ThLogLevel.Error, "Tried to check in a booking with status != {Confirmed,Guaranteed}", { sessionContext: this._sessionContext, bookingId: bookingDO.id }, thError);
             reject(thError);
             return;
         }
         if (!bookingDO.defaultBillingDetails.paymentGuarantee) {
             var thError = new ThError(ThStatusCode.CheckInStrategyNoPaymentGuarantee, null);
-            ThLogger.getInstance().logBusiness(ThLogLevel.Error, "Tried to check in a booking without payment guarantee", { sessionContext: this._sessionContext, bookingId: bookingDO.bookingId }, thError);
+            ThLogger.getInstance().logBusiness(ThLogLevel.Error, "Tried to check in a booking without payment guarantee", { sessionContext: this._sessionContext, bookingId: bookingDO.id }, thError);
             reject(thError);
             return;
         }
         if (bookingDO.interval.start.isAfter(validationDO.currentHotelTimestamp.thDateDO)) {
             var thError = new ThError(ThStatusCode.CheckInStrategyStartDateInFuture, null);
-            ThLogger.getInstance().logBusiness(ThLogLevel.Error, "Tried to check in a booking that starts in the future", { sessionContext: this._sessionContext, bookingId: bookingDO.bookingId }, thError);
+            ThLogger.getInstance().logBusiness(ThLogLevel.Error, "Tried to check in a booking that starts in the future", { sessionContext: this._sessionContext, bookingId: bookingDO.id }, thError);
             reject(thError);
             return;
         }
         if (bookingDO.interval.end.isBefore(validationDO.currentHotelTimestamp.thDateDO)) {
             var thError = new ThError(ThStatusCode.CheckInStrategyEndDateInPast, null);
-            ThLogger.getInstance().logBusiness(ThLogLevel.Error, "Tried to check in a booking that has end date in the past", { sessionContext: this._sessionContext, bookingId: bookingDO.bookingId }, thError);
+            ThLogger.getInstance().logBusiness(ThLogLevel.Error, "Tried to check in a booking that has end date in the past", { sessionContext: this._sessionContext, bookingId: bookingDO.id }, thError);
             reject(thError);
             return;
         }
@@ -55,7 +55,7 @@ export class CheckInStrategy extends AAssignRoomStrategy {
         let generateBookingInvoice = new GenerateBookingInvoice(this._appContext, this._sessionContext);
         generateBookingInvoice.generate({
             groupBookingId: booking.groupBookingId,
-            bookingId: booking.bookingId
+            id: booking.id
         }).then((invoiceGroup: InvoiceGroupDO) => {
             resolve(booking);
         }).catch((error: ThError) => {

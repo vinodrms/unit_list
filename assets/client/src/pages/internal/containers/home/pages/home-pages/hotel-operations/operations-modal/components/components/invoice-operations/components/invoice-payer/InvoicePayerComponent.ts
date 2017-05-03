@@ -212,7 +212,7 @@ export class InvoicePayerComponent implements OnInit {
 
         if (customer.isCompanyOrTravelAgency()) {
             var bookingDO = _.find(this._invoiceGroupControllerService.invoiceOperationsPageData.bookingsContainer.bookingList, (booking: BookingDO) => {
-                return booking.bookingId === this.invoiceVM.invoiceDO.bookingId;
+                return booking.id === this.invoiceVM.invoiceDO.bookingId;
             });
 
             if (!this._appContext.thUtils.isUndefinedOrNull(bookingDO) && customer.hasAccessOnPriceProduct(bookingDO.priceProductSnapshot)) {

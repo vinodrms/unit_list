@@ -13,7 +13,7 @@ export class P8_SetValueForFirstChildWithAdultInSharedBedPriceOnBookingsPricePro
     }
 
     protected getMongoRepository(): MongoRepository {
-        return this._bookingRepository;
+        return this._legacyBookingGroupRepository;
     }
 
     protected updateDocumentInMemory(bookingGroup) {

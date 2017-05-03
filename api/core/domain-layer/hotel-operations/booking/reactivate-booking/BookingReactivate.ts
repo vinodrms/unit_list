@@ -62,7 +62,7 @@ export class BookingReactivate {
                 this._currentHotelTimestamp = ThTimestampDO.buildThTimestampForTimezone(this._loadedHotel.timezone);
 
                 var bookingLoader = new BookingWithDependenciesLoader(this._appContext, this._sessionContext);
-                return bookingLoader.load(this._reactivateDO.groupBookingId, this._reactivateDO.bookingId)
+                return bookingLoader.load(this._reactivateDO.groupBookingId, this._reactivateDO.id)
             })
             .then((bookingWithDependencies: BookingWithDependencies) => {
                 this._bookingWithDependencies = bookingWithDependencies;
@@ -104,7 +104,7 @@ export class BookingReactivate {
                 var bookingsRepo = this._appContext.getRepositoryFactory().getBookingRepository();
                 return bookingsRepo.updateBooking({ hotelId: this._sessionContext.sessionDO.hotel.id }, {
                     groupBookingId: this._bookingWithDependencies.bookingDO.groupBookingId,
-                    bookingId: this._bookingWithDependencies.bookingDO.bookingId,
+                    bookingId: this._bookingWithDependencies.bookingDO.id,
                     versionId: this._bookingWithDependencies.bookingDO.versionId
                 }, this._bookingWithDependencies.bookingDO);
             }).then((updatedBooking: BookingDO) => {

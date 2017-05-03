@@ -8,7 +8,6 @@ import { InvoiceDO, InvoicePaymentStatus } from '../../../data-objects/InvoiceDO
 import { InvoiceGroupMetaRepoDO, InvoiceGroupItemMetaRepoDO } from '../../IInvoiceGroupsRepository';
 import { InvoiceGroupsRepositoryHelper } from '../helpers/InvoiceGroupsRepositoryHelper';
 import { MongoInvoiceGroupsReadOperationsRepository } from './MongoInvoiceGroupsReadOperationsRepository';
-import { MongoBookingRepository } from '../../../../bookings/repositories/mongo/MongoBookingRepository';
 import { IHotelRepository, SequenceValue } from '../../../../hotel/repositories/IHotelRepository';
 import { HotelSequenceType } from '../../../../hotel/data-objects/sequences/HotelSequencesDO';
 

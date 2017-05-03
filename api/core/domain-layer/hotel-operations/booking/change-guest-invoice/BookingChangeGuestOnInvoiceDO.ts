@@ -6,7 +6,7 @@ import { ArrayValidationStructure } from "../../../../utils/th-validation/struct
 
 export class BookingChangeGuestOnInvoiceDO {
     groupBookingId: string;
-    bookingId: string;
+    id: string;
     customerIdDisplayedOnInvoice: string;
 
     public static getValidationStructure(): IValidationStructure {
@@ -16,7 +16,7 @@ export class BookingChangeGuestOnInvoiceDO {
                 validationStruct: new PrimitiveValidationStructure(new StringValidationRule())
             },
             {
-                key: "bookingId",
+                key: "id",
                 validationStruct: new PrimitiveValidationStructure(new StringValidationRule())
             },
             {

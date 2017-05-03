@@ -74,16 +74,6 @@ export class P0_CreateUniqueIndexes extends ATransactionalMongoPatch {
             type: IndexType.Text
         });
         this._indexList.push({
-            entity: sails.models.bookinggroupsentity,
-            fields: { "bookingList.bookingId": 1 },
-            type: IndexType.Unique
-        });
-        // this._indexList.push({
-        //     entity: sails.models.invoicegroupsentity,
-        //     fields: { "groupBookingId": 1 },
-        //     type: IndexType.Unique
-        // });
-        this._indexList.push({
             entity: sails.models.hotelinventorysnapshotentity,
             fields: { "hotelId": 1, "thDateUtcTimestamp": 1 },
             type: IndexType.Unique

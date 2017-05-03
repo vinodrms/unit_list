@@ -48,11 +48,11 @@ export class DefaultInvoiceGroupBuilder implements IInvoiceGroupDataSource {
 
     private buildBookingInvoiceFromBooking(hotel: HotelDO, booking: BookingDO, customerList: CustomerDO[]): InvoiceDO {
         var invoice = new InvoiceDO();
-        invoice.bookingId = booking.bookingId;
+        invoice.bookingId = booking.id;
         invoice.itemList = [];
         var bookingInvoiceItem = new InvoiceItemDO();
         bookingInvoiceItem.type = InvoiceItemType.Booking;
-        bookingInvoiceItem.id = booking.bookingId;
+        bookingInvoiceItem.id = booking.id;
         invoice.itemList.push(bookingInvoiceItem);
         invoice.payerList = [];
         invoice.paymentStatus = InvoicePaymentStatus.Unpaid;

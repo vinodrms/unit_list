@@ -33,7 +33,7 @@ export class BookingLinksComponent {
     public viewInvoice() {
         if (!this.hasInvoice) { return; }
         this._operationsPageControllerService.goToInvoice(this.bookingOperationsPageData.invoiceGroupDO.id, {
-            bookingId: this.bookingOperationsPageData.bookingDO.bookingId
+            bookingId: this.bookingOperationsPageData.bookingDO.id
         }, false);
     }
 
