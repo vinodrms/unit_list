@@ -39,7 +39,7 @@ export class InvoiceDO extends BaseDO {
     constructor() {
         super();
 
-        this.accountingType = 0;
+        this.accountingType = InvoiceAccountingType.Debit;
     }
 
     protected getPrimitivePropertyKeys(): string[] {

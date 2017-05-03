@@ -9,6 +9,7 @@ export enum ReportGroupType {
     Shift,
     BookingsForPriceProduct,
     Housekeeping,
+    BookingsByInterval,
 
 }
 
@@ -18,6 +19,7 @@ var SupportedReportGroupTypes: ReportGroupType[] = [
     ReportGroupType.Shift,
     ReportGroupType.BookingsForPriceProduct,
     ReportGroupType.Housekeeping,
+    ReportGroupType.BookingsByInterval,
     
 ]
 

@@ -8,20 +8,21 @@ import { BookingConfirmationStatus, BookingDO } from "../../../data-layer/bookin
 import { LazyLoadRepoDO } from "../../../data-layer/common/repo-data-objects/LazyLoadRepoDO";
 import { BookingSearchResultRepoDO } from "../../../data-layer/bookings/repositories/IBookingRepository";
 import { BookingMeta, BookingDOConstraints } from "../../../data-layer/bookings/data-objects/BookingDOConstraints";
+import { ThDateDO } from "../../../utils/th-dates/data-objects/ThDateDO";
 
-export class BookingsForPriceProductReportSectionGenerator extends AReportSectionGeneratorStrategy {
+export class BookingsByIntervalReportSectionGenerator extends AReportSectionGeneratorStrategy {
     public static MaxBookings = 2000;
     private _bookingMetaByStatus: { [id: number]: BookingMeta };
 
-    constructor(appContext: AppContext, sessionContext: SessionContext,
-        private _priceProduct: PriceProductDO, private _confirmationStatusList: BookingConfirmationStatus[]) {
+    constructor(appContext: AppContext, sessionContext: SessionContext, private _startDate: ThDateDO, private _endDate: ThDateDO) {
         super(appContext, sessionContext);
+
         this._bookingMetaByStatus = _.indexBy(BookingDOConstraints.BookingMetaList, meta => { return meta.status; });
     }
 
     protected getMeta(): ReportSectionMeta {
         return {
-            title: this._priceProduct.name
+            title: "Bookings"
         }
     }
 
@@ -29,14 +30,14 @@ export class BookingsForPriceProductReportSectionGenerator extends AReportSectio
         return {
             display: true,
             values: [
-                "Reference",
+                "Booking No",
+                "External Booking No",
+                "Guest Name",
+                "Status",
+                "Rooms",
                 "Start Date",
                 "End Date",
-                "Status",
-                "Adults",
-                "Children",
-                "Babies",
-                "Customers",
+                "Nights Billed",
                 "Total Charge"
             ]
         };
@@ -48,11 +49,11 @@ export class BookingsForPriceProductReportSectionGenerator extends AReportSectio
 
         bookingsRepo.getBookingList({ hotelId: this._sessionContext.sessionDO.hotel.id },
             {
-                confirmationStatusList: this._confirmationStatusList,
-                priceProductId: this._priceProduct.id
+                startDate: this._startDate,
+                endDate: this._endDate
             }, {
                 pageNumber: 0,
-                pageSize: BookingsForPriceProductReportSectionGenerator.MaxBookings
+                pageSize: BookingsByIntervalReportSectionGenerator.MaxBookings
             }).then((bookingMetaRsp: BookingSearchResultRepoDO) => {
                 let bookingList: BookingDO[] = bookingMetaRsp.bookingList;
 
@@ -61,13 +62,13 @@ export class BookingsForPriceProductReportSectionGenerator extends AReportSectio
                     var custString = booking.getIndexedCustomerNames().join(" / ");
                     let row = [
                         booking.displayedReservationNumber,
+                        booking.externalBookingReference,
+                        custString,
+                        this._appContext.thTranslate.translate(this._bookingMetaByStatus[booking.confirmationStatus].name),
+                        1,
                         booking.interval.start.toString(),
                         booking.interval.end.toString(),
-                        this._appContext.thTranslate.translate(this._bookingMetaByStatus[booking.confirmationStatus].name),
-                        booking.configCapacity.noAdults,
-                        booking.configCapacity.noChildren,
-                        booking.configCapacity.noBabies,
-                        custString,
+                        booking.interval.getNumberOfDays(),
                         booking.price.totalBookingPrice.toString()
                     ];
                     data.push(row);
