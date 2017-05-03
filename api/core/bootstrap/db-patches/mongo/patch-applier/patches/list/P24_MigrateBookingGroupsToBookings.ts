@@ -9,6 +9,7 @@ import { InvoiceDO } from "../../../../../../data-layer/invoices/data-objects/In
 import { InvoiceItemDO, InvoiceItemType } from "../../../../../../data-layer/invoices/data-objects/items/InvoiceItemDO";
 import { MongoBookingRepository } from "../../../../../../data-layer/bookings/repositories/mongo/MongoBookingRepository";
 import { MongoInvoiceGroupsRepository } from "../../../../../../data-layer/invoices/repositories/mongo/MongoInvoiceGroupsRepository";
+import { ThUtils } from "../../../../../../utils/ThUtils";
 
 import _ = require('underscore');
 
@@ -23,86 +24,82 @@ export class P24_MigrateBookingGroupsToBookings extends APaginatedTransactionalM
     }
 
     protected updateDocumentInMemoryAsyncCore(resolve: { (result: any): void }, reject: { (err: ThError): void }, bookingGroup) {
-        let promiseList: Promise<any>[] = [];
-        bookingGroup.bookingList.forEach((booking: BookingDO) => {
-            promiseList.push(this.update(bookingGroup, booking));
-        });
-        Promise.all(promiseList).then((bookingList: any[]) => {
-            bookingGroup.bookingList = bookingList;
-            resolve(bookingGroup);
-        }).catch(e => {
-            reject(e);
-        });
+        let migrator = new BookingMigrator(this._bookingRepository, this._invoiceGroupsRepository);
+        migrator.migrate(resolve, reject, bookingGroup);
     }
 
-    private update(bookingGroup, bookingItem): Promise<any> {
-        return new Promise<any>((resolve: { (result: any): void }, reject: { (err: ThError): void }) => {
-            this.updateCore(resolve, reject, bookingGroup, bookingItem);
-        });
-    }
-    private updateCore(resolve: { (result: any): void }, reject: { (err: ThError): void }, bookingGroup, bookingItem) {
-        let migrator = new BookingMigrator(this._bookingRepository, this._invoiceGroupsRepository);
-        migrator.migrate(resolve, reject, bookingGroup, bookingItem);
-    }
     protected updateDocumentInMemory(bookingGroup) { }
 }
 
 class BookingMigrator {
-    private _legacyBookingId: string;
-    private _newBookingId: string;
+    private thUtils: ThUtils;
+    private hotelId: string;
+    private groupBookingId: string;
+    private legacyToNewBookingIdMap: { [id: string]: string };
 
     constructor(private _bookingRepository: MongoBookingRepository, private _invoiceGroupsRepository: MongoInvoiceGroupsRepository) {
+        this.thUtils = new ThUtils();
     }
 
-    public migrate(resolve: { (result: any): void }, reject: { (err: ThError): void }, bookingGroup, bookingItem) {
-        if (bookingItem.migrated === true) {
-            resolve(bookingItem);
+    public migrate(resolve: { (result: any): void }, reject: { (err: ThError): void }, bookingGroup) {
+        if (bookingGroup.migrated === true) {
+            resolve(bookingGroup);
             return;
         }
 
-        let booking: BookingDO = new BookingDO();
-        booking.buildFromObject(bookingItem);
-        booking.groupBookingId = bookingGroup.id;
-        booking.groupBookingReference = bookingGroup.groupBookingReference;
-        booking.hotelId = bookingGroup.hotelId;
-        booking.versionId = 0;
-        booking.status = bookingGroup.status;
-        booking.inputChannel = bookingGroup.inputChannel;
-        booking.noOfRooms = bookingGroup.noOfRooms;
+        let bookingList: BookingDO[] = [];
 
-        this._legacyBookingId = bookingItem.bookingId;
+        this.hotelId = bookingGroup.hotelId;
+        this.groupBookingId = bookingGroup.id;
 
-        this._bookingRepository.addBookings({ hotelId: booking.hotelId }, [booking])
+        bookingGroup.bookingList.forEach((bookingItem: any) => {
+            let booking: BookingDO = new BookingDO();
+            booking.buildFromObject(bookingItem);
+            booking.legacyBookingId = bookingItem.bookingId;
+
+            booking.groupBookingId = bookingGroup.id;
+            booking.groupBookingReference = bookingGroup.groupBookingReference;
+            booking.hotelId = this.hotelId;
+            booking.versionId = 0;
+            booking.status = bookingGroup.status;
+            booking.inputChannel = bookingGroup.inputChannel;
+            booking.noOfRooms = bookingGroup.noOfRooms;
+            bookingList.push(booking);
+        });
+
+        this._bookingRepository.addBookings({ hotelId: this.hotelId }, bookingList)
             .then((convertedBookingList: BookingDO[]) => {
-                let convertedBooking = convertedBookingList[0];
-                this._newBookingId = convertedBooking.id;
+                this.legacyToNewBookingIdMap = {};
+                convertedBookingList.forEach(booking => {
+                    this.legacyToNewBookingIdMap[booking.legacyBookingId] = booking.id;
+                });
 
-                return this._invoiceGroupsRepository.getInvoiceGroupList({ hotelId: booking.hotelId }, {
-                    bookingId: this._legacyBookingId
+                return this._invoiceGroupsRepository.getInvoiceGroupList({ hotelId: this.hotelId }, {
+                    groupBookingId: this.groupBookingId
                 });
             }).then((searchResult: InvoiceGroupSearchResultRepoDO) => {
                 let promiseList: Promise<InvoiceGroupDO>[] = [];
                 searchResult.invoiceGroupList.forEach(invoiceGroup => {
-                    promiseList.push(this.updateBookingIdOnInvoiceGroup(invoiceGroup, this._legacyBookingId, this._newBookingId));
+                    promiseList.push(this.updateBookingIdOnInvoiceGroup(invoiceGroup));
                 });
                 return Promise.all(promiseList);
             }).then(updatedInvoiceGroupList => {
-                bookingItem.migrated = true;
-                resolve(bookingItem);
+                bookingGroup.migrated = true;
+                resolve(bookingGroup);
             }).catch(e => {
                 reject(e);
             });
     }
 
-    private updateBookingIdOnInvoiceGroup(invoiceGroup: InvoiceGroupDO, legacyBookingId: string, newBookingId: string): Promise<InvoiceGroupDO> {
+    private updateBookingIdOnInvoiceGroup(invoiceGroup: InvoiceGroupDO): Promise<InvoiceGroupDO> {
         return new Promise<InvoiceGroupDO>((resolve: { (result: InvoiceGroupDO): void }, reject: { (err: ThError): void }) => {
             invoiceGroup.invoiceList = _.map(invoiceGroup.invoiceList, (invoice: InvoiceDO) => {
-                if (invoice.bookingId === legacyBookingId) {
-                    invoice.bookingId = newBookingId;
+                if (!this.thUtils.isUndefinedOrNull(this.legacyToNewBookingIdMap[invoice.bookingId])) {
+                    invoice.bookingId = this.legacyToNewBookingIdMap[invoice.bookingId];
                 }
                 invoice.itemList = _.map(invoice.itemList, (item: InvoiceItemDO) => {
-                    if (item.type === InvoiceItemType.Booking && item.id === legacyBookingId) {
-                        item.id = newBookingId;
+                    if (item.type === InvoiceItemType.Booking && !this.thUtils.isUndefinedOrNull(this.legacyToNewBookingIdMap[item.id])) {
+                        item.id = this.legacyToNewBookingIdMap[item.id];
                     }
                     return item;
                 });
