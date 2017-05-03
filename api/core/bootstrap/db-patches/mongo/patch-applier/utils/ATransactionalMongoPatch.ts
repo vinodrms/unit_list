@@ -9,6 +9,7 @@ import { MongoHotelRepository } from "../../../../../data-layer/hotel/repositori
 import { MongoCustomerRepository } from "../../../../../data-layer/customers/repositories/mongo/MongoCustomerRepository";
 import { MongoInvoiceGroupsRepository } from "../../../../../data-layer/invoices/repositories/mongo/MongoInvoiceGroupsRepository";
 import { MongoRepository } from "../../../../../data-layer/common/base/MongoRepository";
+import { MongoBookingRepository } from "../../../../../data-layer/bookings/repositories/mongo/MongoBookingRepository";
 
 /**
  * Extend this class when the multi update can be made with a simple MongoDB Query
@@ -21,6 +22,7 @@ export abstract class ATransactionalMongoPatch implements IMongoPatchApplier, IM
 	protected _priceProductRepository: MongoPriceProductRepository;
 	protected _customerRepository: MongoCustomerRepository;
 	protected _invoiceGroupsRepository: MongoInvoiceGroupsRepository;
+	protected _bookingRepository: MongoBookingRepository;
 
 	// TODO: remove along with all the old patches
 	protected _legacyBookingGroupRepository: MongoRepository;
@@ -33,6 +35,7 @@ export abstract class ATransactionalMongoPatch implements IMongoPatchApplier, IM
 		this._priceProductRepository = new MongoPriceProductRepository();
 		this._customerRepository = new MongoCustomerRepository();
 		this._invoiceGroupsRepository = new MongoInvoiceGroupsRepository(this._hotelRepository);
+		this._bookingRepository = new MongoBookingRepository();
 
 		// TODO: remove along with all the old patches
 		this._legacyBookingGroupRepository = new MongoRepository(sails.models.bookinggroupsentity);
