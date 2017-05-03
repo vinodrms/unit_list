@@ -81,6 +81,9 @@ export class P24_MigrateBookingGroupsToBookings extends APaginatedTransactionalM
 
     private updateBookingIdOnInvoiceGroup(invoiceGroup: InvoiceGroupDO, legacyBookingId: string, bookingId: string): Promise<InvoiceGroupDO> {
         invoiceGroup.invoiceList.forEach((invoice: InvoiceDO) => {
+            if (invoice.bookingId === legacyBookingId) {
+                invoice.bookingId = bookingId;
+            }
             invoice.itemList.forEach((item: InvoiceItemDO) => {
                 if (item.type === InvoiceItemType.Booking && item.id === legacyBookingId) {
                     item.id = bookingId;

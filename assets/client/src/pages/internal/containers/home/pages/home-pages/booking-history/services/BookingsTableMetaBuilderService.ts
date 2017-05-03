@@ -8,7 +8,7 @@ export class BookingsTableMetaBuilderService {
     public buildLazyLoadTableMeta(): LazyLoadTableMeta {
         return {
             supportedRowCommandList: [TableRowCommand.Edit, TableRowCommand.Select, TableRowCommand.Add, TableRowCommand.Search],
-            rowIdPropertySelector: "booking.bookingId",
+            rowIdPropertySelector: "booking.id",
             addButtonText: "Booking",
             searchInputPlaceholder: "Customer Name or References",
             autoSelectRows: true,
