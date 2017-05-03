@@ -1,16 +1,17 @@
-import {BaseDO} from '../../../../../common/base/BaseDO';
-import {ThUtils} from '../../../../../common/utils/ThUtils';
-import {ThDateIntervalDO} from '../../common/data-objects/th-dates/ThDateIntervalDO';
-import {ConfigCapacityDO} from '../../common/data-objects/bed-config/ConfigCapacityDO';
-import {PriceProductDO} from '../../price-products/data-objects/PriceProductDO';
-import {FileAttachmentDO} from '../../common/data-objects/file/FileAttachmentDO';
-import {BookingStateChangeTriggerTimeDO} from './state-change-time/BookingStateChangeTriggerTimeDO';
-import {DefaultBillingDetailsDO} from './default-billing/DefaultBillingDetailsDO';
-import {DocumentHistoryDO} from '../../common/data-objects/document-history/DocumentHistoryDO';
-import {BookingPriceDO} from './price/BookingPriceDO';
-import {IInvoiceItemMeta} from '../../invoices/data-objects/items/IInvoiceItemMeta';
+import { BaseDO } from '../../../../../common/base/BaseDO';
+import { ThUtils } from '../../../../../common/utils/ThUtils';
+import { ThDateIntervalDO } from '../../common/data-objects/th-dates/ThDateIntervalDO';
+import { ConfigCapacityDO } from '../../common/data-objects/bed-config/ConfigCapacityDO';
+import { PriceProductDO } from '../../price-products/data-objects/PriceProductDO';
+import { FileAttachmentDO } from '../../common/data-objects/file/FileAttachmentDO';
+import { BookingStateChangeTriggerTimeDO } from './state-change-time/BookingStateChangeTriggerTimeDO';
+import { DefaultBillingDetailsDO } from './default-billing/DefaultBillingDetailsDO';
+import { DocumentHistoryDO } from '../../common/data-objects/document-history/DocumentHistoryDO';
+import { BookingPriceDO } from './price/BookingPriceDO';
+import { IInvoiceItemMeta } from '../../invoices/data-objects/items/IInvoiceItemMeta';
+import { ThDateDO } from "../../common/data-objects/th-dates/ThDateDO";
 
-export enum GroupBookingStatus {
+export enum BookingStatus {
     Active,
     Deleted
 }
@@ -32,12 +33,12 @@ export class BookingDO extends BaseDO {
     groupBookingId: string;
     groupBookingReference: string;
     versionId: number;
-    status: GroupBookingStatus;
+    status: BookingStatus;
     inputChannel: GroupBookingInputChannel;
     noOfRooms: number;
 
     // individual booking
-    bookingId: string;
+    id: string;
     bookingReference: string;
     externalBookingReference: string;
     confirmationStatus: BookingConfirmationStatus;
@@ -45,6 +46,7 @@ export class BookingDO extends BaseDO {
     displayCustomerId: string;
     defaultBillingDetails: DefaultBillingDetailsDO;
     interval: ThDateIntervalDO;
+    creationDate: ThDateDO;
     startUtcTimestamp: number;
     endUtcTimestamp: number;
     configCapacity: ConfigCapacityDO;
@@ -64,9 +66,9 @@ export class BookingDO extends BaseDO {
     indexedSearchTerms: string[];
 
     protected getPrimitivePropertyKeys(): string[] {
-        return ["groupBookingId", "groupBookingReference", "externalBookingReference", "versionId", "status", "inputChannel", "noOfRooms", "bookingId", "bookingReference", "confirmationStatus",
+        return ["groupBookingId", "groupBookingReference", "versionId", "status", "inputChannel", "noOfRooms", "id", "bookingReference", "externalBookingReference", "confirmationStatus",
             "customerIdList", "displayCustomerId", "startUtcTimestamp", "endUtcTimestamp", "roomCategoryId", "roomId", "priceProductId",
-            "reservedAddOnProductIdList", "allotmentId", "invoiceNotes", "notes", "indexedSearchTerms"];
+            "reservedAddOnProductIdList", "allotmentId", "notes", "invoiceNotes", "indexedSearchTerms"];
     }
 
     public buildFromObject(object: Object) {
@@ -77,6 +79,9 @@ export class BookingDO extends BaseDO {
 
         this.interval = new ThDateIntervalDO();
         this.interval.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "interval"));
+
+        this.creationDate = new ThDateDO();
+        this.creationDate.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "creationDate"));
 
         this.configCapacity = new ConfigCapacityDO();
         this.configCapacity.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "configCapacity"));

@@ -41,7 +41,7 @@ export class MarkBookingsAsNoShowStategy implements IBookingProcessStrategy {
         }
 
         let loader = new BookingWithDependenciesLoader(this._appContext, this._sessionContext);
-        loader.load(bookingDO.groupBookingId, bookingDO.bookingId)
+        loader.load(bookingDO.groupBookingId, bookingDO.id)
             .then(bookingWithDeps => {
                 // only update the penalty if the booking's invoice is not paid
                 if (!bookingWithDeps.hasClosedInvoice()) {

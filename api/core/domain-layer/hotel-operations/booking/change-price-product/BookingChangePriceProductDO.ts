@@ -5,7 +5,7 @@ import { StringValidationRule } from '../../../../utils/th-validation/rules/Stri
 
 export class BookingChangePriceProductDO {
     groupBookingId: string;
-    bookingId: string;
+    id: string;
     roomCategoryId: string;
     priceProductId: string;
     allotmentId: string;
@@ -17,7 +17,7 @@ export class BookingChangePriceProductDO {
                 validationStruct: new PrimitiveValidationStructure(new StringValidationRule())
             },
             {
-                key: "bookingId",
+                key: "id",
                 validationStruct: new PrimitiveValidationStructure(new StringValidationRule())
             },
             {

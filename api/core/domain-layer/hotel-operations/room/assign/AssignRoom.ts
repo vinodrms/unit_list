@@ -113,7 +113,7 @@ export class AssignRoom {
                 this.updateBookingPriceIfNecessary();
 
                 var occupancyCalculator = new BookingOccupancyCalculator(this._appContext, this._sessionContext, this._bookingWithDependencies.roomList);
-                return occupancyCalculator.compute(this._bookingWithDependencies.bookingDO.interval, [], this._bookingWithDependencies.bookingDO.bookingId);
+                return occupancyCalculator.compute(this._bookingWithDependencies.bookingDO.interval, [], this._bookingWithDependencies.bookingDO.id);
             }).then((bookingOccupancy: IBookingOccupancy) => {
                 if (bookingOccupancy.getOccupancyForRoomId(this._assignRoomDO.roomId) > 0) {
                     var thError = new ThError(ThStatusCode.AssignRoomOccupied, null);
@@ -136,7 +136,7 @@ export class AssignRoom {
                 var bookingsRepo = this._appContext.getRepositoryFactory().getBookingRepository();
                 return bookingsRepo.updateBooking({ hotelId: this._sessionContext.sessionDO.hotel.id }, {
                     groupBookingId: this._bookingWithDependencies.bookingDO.groupBookingId,
-                    bookingId: this._bookingWithDependencies.bookingDO.bookingId,
+                    bookingId: this._bookingWithDependencies.bookingDO.id,
                     versionId: this._bookingWithDependencies.bookingDO.versionId
                 }, this._bookingWithDependencies.bookingDO);
             }).then((updatedBooking: BookingDO) => {

@@ -57,7 +57,7 @@ export class BookingPossiblePrices {
                 this._loadedRoomCategoryStatsList = roomCategoryStatsList;
 
                 let bookingsRepo = this._appContext.getRepositoryFactory().getBookingRepository();
-                return bookingsRepo.getBookingById({ hotelId: this._sessionContext.sessionDO.hotel.id }, this._possiblePricesDO.groupBookingId, this._possiblePricesDO.bookingId)
+                return bookingsRepo.getBookingById({ hotelId: this._sessionContext.sessionDO.hotel.id }, this._possiblePricesDO.groupBookingId, this._possiblePricesDO.id)
             }).then((booking: BookingDO) => {
                 this._loadedBooking = booking;
 

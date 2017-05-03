@@ -5,7 +5,7 @@ import { ThLogger, ThLogLevel } from '../../../../utils/logging/ThLogger';
 import { ThError } from '../../../../utils/th-responses/ThError';
 import { ThStatusCode } from '../../../../utils/th-responses/ThResponse';
 import { ThTimestampDO } from '../../../../utils/th-dates/data-objects/ThTimestampDO';
-import { GroupBookingInputChannel, BookingDO, GroupBookingStatus, BookingConfirmationStatus } from '../../../../data-layer/bookings/data-objects/BookingDO';
+import { GroupBookingInputChannel, BookingDO, BookingStatus, BookingConfirmationStatus } from '../../../../data-layer/bookings/data-objects/BookingDO';
 import { ThUtils } from '../../../../utils/ThUtils';
 import { IndexedBookingInterval } from '../../../../data-layer/price-products/utils/IndexedBookingInterval';
 import { DocumentHistoryDO } from '../../../../data-layer/common/data-objects/document-history/DocumentHistoryDO';
@@ -37,7 +37,7 @@ export class BookingItemsConverterParams {
     addOnProductItemContainer: AddOnProductItemContainer;
     vatTaxList: TaxDO[];
     roomCategoryStatsList: RoomCategoryStatsDO[];
-    groupBookingReference?: string; 
+    groupBookingReference?: string;
 }
 
 export class BookingItemsConverter {
@@ -73,11 +73,12 @@ export class BookingItemsConverter {
         var bookingList: BookingDO[] = [];
 
         var hotelId = this._sessionContext.sessionDO.hotel.id;
-        var groupBookingStatus = GroupBookingStatus.Active;
+        var groupBookingStatus = BookingStatus.Active;
         var noOfRooms = this._bookingItems.length;
         let groupBookingRoomCategoryIdList = this.getRoomCategoryIdListWithinGroupBooking();
 
         let bookingIndex = 1;
+        let groupBookingId = this._thUtils.generateUniqueID();
 
         this.generateReference().then((groupBookingReference: string) => {
             _.forEach(this._bookingItems, (bookingItem: BookingItemDO) => {
@@ -86,6 +87,7 @@ export class BookingItemsConverter {
                 var bookingInterval = new ThDateIntervalDO();
                 bookingInterval.buildFromObject(bookingItem.interval);
 
+                bookingDO.groupBookingId = groupBookingId;
                 bookingDO.groupBookingReference = groupBookingReference;
                 bookingDO.bookingReference = bookingIndex.toString();
                 bookingIndex++;
@@ -94,7 +96,6 @@ export class BookingItemsConverter {
                 bookingDO.inputChannel = this._inputChannel;
                 bookingDO.noOfRooms = noOfRooms;
 
-                bookingDO.bookingId = this._thUtils.generateUniqueID();
                 bookingDO.confirmationStatus = BookingConfirmationStatus.Confirmed;
                 bookingDO.customerIdList = bookingItem.customerIdList;
 
@@ -169,7 +170,7 @@ export class BookingItemsConverter {
     }
 
     private generateReferenceCore(resolve: { (result: string): void }, reject: { (err: ThError): void }) {
-        if(!this._thUtils.isUndefinedOrNull(this._converterParams.groupBookingReference)) {
+        if (!this._thUtils.isUndefinedOrNull(this._converterParams.groupBookingReference)) {
             resolve(this._converterParams.groupBookingReference);
             return;
         }

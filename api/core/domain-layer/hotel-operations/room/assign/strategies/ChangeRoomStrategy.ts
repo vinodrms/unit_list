@@ -16,13 +16,13 @@ export class ChangeRoomStrategy extends AAssignRoomStrategy {
         var bookingDO = validationDO.booking;
         if (bookingDO.confirmationStatus !== BookingConfirmationStatus.CheckedIn) {
             var thError = new ThError(ThStatusCode.ChangeRoomStrategyOnlyWhenCheckedIn, null);
-            ThLogger.getInstance().logBusiness(ThLogLevel.Error, "Tried to change room on a booking with status != CheckedIn", { sessionContext: this._sessionContext, bookingId: bookingDO.bookingId }, thError);
+            ThLogger.getInstance().logBusiness(ThLogLevel.Error, "Tried to change room on a booking with status != CheckedIn", { sessionContext: this._sessionContext, bookingId: bookingDO.id }, thError);
             reject(thError);
             return;
         }
         if (bookingDO.interval.end.isBefore(validationDO.currentHotelTimestamp.thDateDO)) {
             var thError = new ThError(ThStatusCode.ChangeRoomStrategyEndDateInPast, null);
-            ThLogger.getInstance().logBusiness(ThLogLevel.Error, "Tried to change the room for a booking that has end date in the past", { sessionContext: this._sessionContext, bookingId: bookingDO.bookingId }, thError);
+            ThLogger.getInstance().logBusiness(ThLogLevel.Error, "Tried to change the room for a booking that has end date in the past", { sessionContext: this._sessionContext, bookingId: bookingDO.id }, thError);
             reject(thError);
             return;
         }

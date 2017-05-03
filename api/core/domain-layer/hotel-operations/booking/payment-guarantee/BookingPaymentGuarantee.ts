@@ -46,7 +46,7 @@ export class BookingPaymentGuarantee {
             .then((loadedHotel: HotelDO) => {
                 this._loadedHotel = loadedHotel;
                 var bookingLoader = new BookingWithDependenciesLoader(this._appContext, this._sessionContext);
-                return bookingLoader.load(this._bookingPaymentGuaranteeDO.groupBookingId, this._bookingPaymentGuaranteeDO.bookingId)
+                return bookingLoader.load(this._bookingPaymentGuaranteeDO.groupBookingId, this._bookingPaymentGuaranteeDO.id)
             }).then((bookingWithDependencies: BookingWithDependencies) => {
                 this._bookingWithDependencies = bookingWithDependencies;
 
@@ -71,7 +71,7 @@ export class BookingPaymentGuarantee {
                 var bookingsRepo = this._appContext.getRepositoryFactory().getBookingRepository();
                 return bookingsRepo.updateBooking({ hotelId: this._sessionContext.sessionDO.hotel.id }, {
                     groupBookingId: this._bookingWithDependencies.bookingDO.groupBookingId,
-                    bookingId: this._bookingWithDependencies.bookingDO.bookingId,
+                    bookingId: this._bookingWithDependencies.bookingDO.id,
                     versionId: this._bookingWithDependencies.bookingDO.versionId
                 }, this._bookingWithDependencies.bookingDO);
             }).then((updatedBooking: BookingDO) => {

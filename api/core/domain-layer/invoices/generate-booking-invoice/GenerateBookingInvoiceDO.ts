@@ -12,7 +12,7 @@ export interface GenerateBookingInvoiceAopMeta {
 
 export class GenerateBookingInvoiceDO {
 	groupBookingId: string;
-	bookingId: string;
+	id: string;
 
 	public static getValidationStructure(): IValidationStructure {
 		return new ObjectValidationStructure([
@@ -21,7 +21,7 @@ export class GenerateBookingInvoiceDO {
 				validationStruct: new PrimitiveValidationStructure(new StringValidationRule())
 			},
 			{
-				key: "bookingId",
+				key: "id",
 				validationStruct: new PrimitiveValidationStructure(new StringValidationRule())
 			}
 		]);

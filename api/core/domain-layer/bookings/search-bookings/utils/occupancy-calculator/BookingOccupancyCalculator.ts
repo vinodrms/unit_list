@@ -64,7 +64,7 @@ export class BookingOccupancyCalculator {
             }).then((bookingSearchResult: BookingSearchResultRepoDO) => {
                 var bookingList = bookingSearchResult.bookingList;
                 if (!this._thUtils.isUndefinedOrNull(this._bookingIdToOmit) && _.isString(this._bookingIdToOmit)) {
-                    bookingList = _.filter(bookingList, (booking: BookingDO) => { return booking.bookingId !== this._bookingIdToOmit });
+                    bookingList = _.filter(bookingList, (booking: BookingDO) => { return booking.id !== this._bookingIdToOmit });
                 }
                 if (!this._thUtils.isUndefinedOrNull(this._transientBookingList) && _.isArray(this._transientBookingList)) {
                     bookingList = bookingList.concat(this._transientBookingList);

@@ -50,7 +50,7 @@ describe("Invoices Tests", function () {
                 should.equal(invoiceGroup.groupBookingId, generateBookingInvoiceDO.groupBookingId);
                 should.equal(createdBookingInvoiceGroup.invoiceList.length, 1);
                 should.equal(invoiceGroup.invoiceGroupReference, "IG0000002");
-                should.equal(createdBookingInvoiceGroup.invoiceList[0].bookingId, generateBookingInvoiceDO.bookingId);
+                should.equal(createdBookingInvoiceGroup.invoiceList[0].bookingId, generateBookingInvoiceDO.id);
                 var expectedNoInvoiceItems = bookingInvoiceGroupsHelper.getExpectedNoInvoiceItems(bookingInvoiceGroupsHelper.getFirstBooking());
                 should.equal(createdBookingInvoiceGroup.invoiceList[0].itemList.length, expectedNoInvoiceItems);
                 done();
@@ -66,7 +66,7 @@ describe("Invoices Tests", function () {
                 createdBookingInvoiceGroup = invoiceGroup;
                 should.equal(createdBookingInvoiceGroup.invoiceList.length, 2);
                 should.equal(invoiceGroup.invoiceGroupReference, "IG0000002");
-                should.equal(createdBookingInvoiceGroup.invoiceList[1].bookingId, generateBookingInvoiceDO.bookingId);
+                should.equal(createdBookingInvoiceGroup.invoiceList[1].bookingId, generateBookingInvoiceDO.id);
 
                 var expectedNoInvoiceItems = bookingInvoiceGroupsHelper.getExpectedNoInvoiceItems(bookingInvoiceGroupsHelper.getSecondBooking());
                 should.equal(createdBookingInvoiceGroup.invoiceList[1].itemList.length, expectedNoInvoiceItems);

@@ -58,7 +58,7 @@ export class BookingOperationsPageService {
                 this.getAttachedAllotment(pageData.bookingDO),
                 this._eagerInvoiceGroupsService.getInvoiceGroupList({
                     groupBookingId: pageData.bookingDO.groupBookingId,
-                    bookingId: pageData.bookingDO.bookingId
+                    bookingId: pageData.bookingDO.id
                 }),
                 this._eagerAddOnProductsService.getAddOnProductsById(pageData.bookingDO.reservedAddOnProductIdList)
             );
@@ -72,7 +72,7 @@ export class BookingOperationsPageService {
             if (invoiceGroupList.length > 0) {
                 pageData.invoiceGroupDO = invoiceGroupList[0];
                 pageData.invoiceDO = _.find(pageData.invoiceGroupDO.invoiceList, (invoice: InvoiceDO) => {
-                    return invoice.bookingId === pageData.bookingDO.bookingId;
+                    return invoice.bookingId === pageData.bookingDO.id;
                 });
             }
             pageData.reservedAddOnProductsContainer = result[6];

@@ -16,13 +16,13 @@ export class ReserveRoomStrategy extends AAssignRoomStrategy {
         var bookingDO = validationDO.booking;
         if (bookingDO.confirmationStatus !== BookingConfirmationStatus.Confirmed && bookingDO.confirmationStatus !== BookingConfirmationStatus.Guaranteed) {
             var thError = new ThError(ThStatusCode.ReserveRoomStrategyOnlyConfirmedOrGuaranteed, null);
-            ThLogger.getInstance().logBusiness(ThLogLevel.Error, "Tried to reserve a booking with status != {Confirmed,Guaranteed}", { sessionContext: this._sessionContext, bookingId: bookingDO.bookingId }, thError);
+            ThLogger.getInstance().logBusiness(ThLogLevel.Error, "Tried to reserve a booking with status != {Confirmed,Guaranteed}", { sessionContext: this._sessionContext, bookingId: bookingDO.id }, thError);
             reject(thError);
             return;
         }
         if (bookingDO.interval.end.isBefore(validationDO.currentHotelTimestamp.thDateDO)) {
             var thError = new ThError(ThStatusCode.ReserveRoomStrategyEndDateInPast, null);
-            ThLogger.getInstance().logBusiness(ThLogLevel.Error, "Tried to reserve a room for a booking that has end date in the past", { sessionContext: this._sessionContext, bookingId: bookingDO.bookingId }, thError);
+            ThLogger.getInstance().logBusiness(ThLogLevel.Error, "Tried to reserve a room for a booking that has end date in the past", { sessionContext: this._sessionContext, bookingId: bookingDO.id }, thError);
             reject(thError);
             return;
         }
