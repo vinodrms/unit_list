@@ -1,14 +1,14 @@
-import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import {AppContext, ThError} from '../../../../../../../../../../../../../common/utils/AppContext';
-import {ModalDialogRef} from '../../../../../../../../../../../../../common/utils/modals/utils/ModalDialogRef';
-import {HotelOperationsPageControllerService} from '../../../../services/HotelOperationsPageControllerService';
-import {BookingOperationsPageData} from '../../services/utils/BookingOperationsPageData';
-import {BookingCustomerEditRight} from '../../../../../../../../../../../services/bookings/data-objects/BookingEditRights';
-import {BookingDO} from '../../../../../../../../../../../services/bookings/data-objects/BookingDO';
-import {CustomerDO} from '../../../../../../../../../../../services/customers/data-objects/CustomerDO';
-import {CustomersDO} from '../../../../../../../../../../../services/customers/data-objects/CustomersDO';
-import {HotelOperationsBookingService} from '../../../../../../../../../../../services/hotel-operations/booking/HotelOperationsBookingService';
-import {CustomerRegisterModalService} from '../../../../../../../../../../common/inventory/customer-register/modal/services/CustomerRegisterModalService';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { AppContext, ThError } from '../../../../../../../../../../../../../common/utils/AppContext';
+import { ModalDialogRef } from '../../../../../../../../../../../../../common/utils/modals/utils/ModalDialogRef';
+import { HotelOperationsPageControllerService } from '../../../../services/HotelOperationsPageControllerService';
+import { BookingOperationsPageData } from '../../services/utils/BookingOperationsPageData';
+import { BookingCustomerEditRight } from '../../../../../../../../../../../services/bookings/data-objects/BookingEditRights';
+import { BookingDO } from '../../../../../../../../../../../services/bookings/data-objects/BookingDO';
+import { CustomerDO } from '../../../../../../../../../../../services/customers/data-objects/CustomerDO';
+import { CustomersDO } from '../../../../../../../../../../../services/customers/data-objects/CustomersDO';
+import { HotelOperationsBookingService } from '../../../../../../../../../../../services/hotel-operations/booking/HotelOperationsBookingService';
+import { CustomerRegisterModalService } from '../../../../../../../../../../common/inventory/customer-register/modal/services/CustomerRegisterModalService';
 
 @Component({
     selector: 'booking-customer-editor',
@@ -76,7 +76,7 @@ export class BookingCustomerEditorComponent implements OnInit {
         this.bookingDO.defaultBillingDetails.customerIdDisplayedAsGuest = selectedCustomer.id;
         this._didMakeChanges = true;
     }
-    
+
     public goToCustomer(customer: CustomerDO) {
         this._operationsPageControllerService.goToCustomer(customer.id);
     }
@@ -138,10 +138,10 @@ export class BookingCustomerEditorComponent implements OnInit {
             this._appContext.analytics.logEvent("booking", "edit-customers", "Changed the customers for a booking");
             this.readonly = true;
             this.isSaving = false;
-            
+
             let bookingChangeGuestOnInvoiceDO = {
                 groupBookingId: this._bookingOperationsPageData.bookingDO.groupBookingId,
-                bookingId: this._bookingOperationsPageData.bookingDO.id,
+                id: this._bookingOperationsPageData.bookingDO.id,
                 customerIdDisplayedOnInvoice: this.bookingDO.defaultBillingDetails.customerIdDisplayedAsGuest
             };
 
