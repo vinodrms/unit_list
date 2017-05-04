@@ -71,6 +71,10 @@ export class DepartureItemInfoVM {
         return this._departureItemDO.customerName;
     }
 
+    public get corporateCustomerName():string{
+        return this.departureItemDO.corporateCustomerName;
+    }
+
     public get roomCategoryLabel(): string {
         if (!this._roomCategory) { return ""; }
         return this._roomCategory.displayName;

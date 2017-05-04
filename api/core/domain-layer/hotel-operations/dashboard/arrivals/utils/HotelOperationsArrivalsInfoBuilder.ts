@@ -40,6 +40,7 @@ export class HotelOperationsArrivalsInfoBuilder {
             roomCategoryId: booking.roomCategoryId,
             reservedRoomId: booking.roomId,
             customerId: booking.displayCustomerId,
+            corporateCustomerId: booking.corporateDisplayCustomerId,
             bookingId: booking.bookingId,
             groupBookingId: booking.groupBookingId,
             bookingInterval: booking.interval,
@@ -57,12 +58,22 @@ export class HotelOperationsArrivalsInfoBuilder {
 
     public getCustomerIdList(): string[] {
         var customerIdList = _.map(this._arrivalsInfo.arrivalInfoList, (arrivalInfoItem: ArrivalItemInfo) => { return arrivalInfoItem.customerId });
+        var arrivalInfoListWithCorporateCustomerId = _.filter(this._arrivalsInfo.arrivalInfoList, (arrivalInfoItem: ArrivalItemInfo) => {return arrivalInfoItem.corporateCustomerId && arrivalInfoItem.corporateCustomerId.length > 0 });
+        customerIdList = _.union(customerIdList, _.map(arrivalInfoListWithCorporateCustomerId, (arrivalInfoItem: ArrivalItemInfo) => {
+            if (arrivalInfoItem.corporateCustomerId && arrivalInfoItem.corporateCustomerId.length > 0) {
+                return arrivalInfoItem.corporateCustomerId;
+            } else return;
+        }));
         return _.uniq(customerIdList);
     }
     public appendCustomerInformation(customersContainer: CustomersContainer) {
         _.forEach(this._arrivalsInfo.arrivalInfoList, (arrivalInfoItem: ArrivalItemInfo) => {
             var customer = customersContainer.getCustomerById(arrivalInfoItem.customerId);
             arrivalInfoItem.customerName = customer.customerDetails.getName();
+            if (arrivalInfoItem.corporateCustomerId && arrivalInfoItem.corporateCustomerId.length > 0) {
+                var corporateCustomer = customersContainer.getCustomerById(arrivalInfoItem.corporateCustomerId);
+                arrivalInfoItem.corporateCustomerName = corporateCustomer.customerDetails.getName();
+            }
         });
     }
 

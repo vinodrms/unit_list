@@ -95,6 +95,7 @@ export class BookingChangeCustomers {
         this._loadedBooking.customerIdList = this._bookingChangeCustomersDO.customerIdList;
         this._bookingUtils.updateIndexedSearchTerms(this._loadedBooking, this._loadedCustomersContainer);
         this._bookingUtils.updateDisplayCustomerId(this._loadedBooking, this._loadedCustomersContainer);
+        this._bookingUtils.updateCorporateDisplayCustomerId(this._loadedBooking, this._loadedCustomersContainer);
         this._loadedBooking.bookingHistory.logDocumentAction(DocumentActionDO.buildDocumentActionDO({
             actionParameterMap: {},
             actionString: "The customers from the booking have been changed",

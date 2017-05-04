@@ -1,6 +1,7 @@
 
 export interface ReportDepartureInfo {
 	customerName: string;
+	corporateCustomerName: string;
 	roomNumber: string;
 	noAdults: number,
 	noChildren: number,

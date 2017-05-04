@@ -61,6 +61,16 @@ export class BookingUtils {
             }
         }
     }
+    public updateCorporateDisplayCustomerId(booking: BookingDO, customersContainer: CustomersContainer) {
+        booking.corporateDisplayCustomerId = "";
+        for (var custIndex = 0; custIndex < booking.customerIdList.length; custIndex++) {
+            var currentCustomer = customersContainer.getCustomerById(booking.customerIdList[custIndex]);
+            if (currentCustomer.isCompanyOrTravelAgency()) {
+                booking.corporateDisplayCustomerId = currentCustomer.id;
+                return;
+            }
+        }
+    }
     public updateBookingGuaranteedAndNoShowTimes(bookingDO: BookingDO, params: {
         priceProduct: PriceProductDO,
         hotel: HotelDO,

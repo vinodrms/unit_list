@@ -65,7 +65,7 @@ export class BookingDO extends BaseDO {
 
     protected getPrimitivePropertyKeys(): string[] {
         return ["groupBookingId", "groupBookingReference", "externalBookingReference", "versionId", "status", "inputChannel", "noOfRooms", "bookingId", "bookingReference", "confirmationStatus",
-            "customerIdList", "displayCustomerId", "startUtcTimestamp", "endUtcTimestamp", "roomCategoryId", "roomId", "priceProductId",
+            "customerIdList", "displayCustomerId", "corporateDisplayCustomerId", "startUtcTimestamp", "endUtcTimestamp", "roomCategoryId", "roomId", "priceProductId",
             "reservedAddOnProductIdList", "allotmentId", "invoiceNotes", "notes", "indexedSearchTerms"];
     }
 

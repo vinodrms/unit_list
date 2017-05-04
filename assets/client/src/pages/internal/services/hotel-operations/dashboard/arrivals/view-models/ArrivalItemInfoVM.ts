@@ -51,6 +51,10 @@ export class ArrivalItemInfoVM {
         return this.arrivalItemDO.customerName;
     }
 
+    public get corporateCustomerName():string {
+        return this.arrivalItemDO.corporateCustomerName;
+    }
+
     public get roomCategoryLabel() : string {
         return this._reservedRoomCategoryStats.roomCategory.displayName;
     }

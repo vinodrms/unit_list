@@ -139,6 +139,7 @@ export class BookingItemsConverter {
                     priceProduct, billingCustomer, groupBookingRoomCategoryIdList);
 
                 this._bookingUtils.updateDisplayCustomerId(bookingDO, this._converterParams.customersContainer);
+                this._bookingUtils.updateCorporateDisplayCustomerId(bookingDO, this._converterParams.customersContainer);                
                 this._bookingUtils.updateIndexedSearchTerms(bookingDO, this._converterParams.customersContainer);
 
                 bookingDO.price.vatId = this.getBookingTaxId(priceProduct);
