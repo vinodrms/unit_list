@@ -56,6 +56,10 @@ export class ShiftReportByCategorySectionGenerator extends AReportSectionGenerat
 
 			data.push(row);
 		});
+		// sort by display name
+        data.sort((row1: string[], row2: string[]) => {
+            return row1[0].localeCompare(row2[0]);
+        });
 		totalNet = this._thUtils.roundNumberToTwoDecimals(totalNet);
 		totalVat = this._thUtils.roundNumberToTwoDecimals(totalVat);
 		total = this._thUtils.roundNumberToTwoDecimals(total);

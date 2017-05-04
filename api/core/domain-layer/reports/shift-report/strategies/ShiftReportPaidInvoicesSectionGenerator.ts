@@ -25,7 +25,9 @@ export class ShiftReportPaidInvoicesSectionGenerator extends AReportSectionGener
             values: [
                 "Invoice Reference",
                 "Customer",
-                "Subtotal"
+                "Amount",
+                "Transaction Fee",
+                "Total"
             ]
         };
     }
@@ -45,21 +47,39 @@ export class ShiftReportPaidInvoicesSectionGenerator extends AReportSectionGener
                 return customer.id
             });
             var data = [];
-            var totalAmount = 0;
+            var totalPriceToPay = 0.0, totalPriceToPayPlusTransactionFee = 0.0, totalTransactionFee = 0.0;
             this._paidInvoiceGroupList.forEach((invoiceGroup: InvoiceGroupDO) => {
                 invoiceGroup.invoiceList.forEach((invoice: InvoiceDO) => {
-                    var invoicePrice = _.reduce(invoice.payerList, (sum: number, payer: InvoicePayerDO) => {
-                        return sum + payer.priceToPay;
-                    }, 0);
-                    totalAmount += invoicePrice;
-                    invoicePrice = this._thUtils.roundNumberToTwoDecimals(invoicePrice);
+                    var priceToPay = 0.0, priceToPayPlusTransactionFee = 0.0;
+                    invoice.payerList.forEach(payer => {
+                        priceToPay += payer.priceToPay;
+                        priceToPayPlusTransactionFee += payer.priceToPayPlusTransactionFee;
+                    });
+                    var transactionFee = priceToPayPlusTransactionFee - priceToPay;
+
+                    priceToPay = this._thUtils.roundNumberToTwoDecimals(priceToPay);
+                    priceToPayPlusTransactionFee = this._thUtils.roundNumberToTwoDecimals(priceToPayPlusTransactionFee);
+                    transactionFee = this._thUtils.roundNumberToTwoDecimals(transactionFee);
+
                     let payerString = this.getPayerString(invoice);
-                    let row = [invoice.invoiceReference, payerString, invoicePrice];
+                    let row = [invoice.invoiceReference, payerString, priceToPay, transactionFee, priceToPayPlusTransactionFee];
                     data.push(row);
+
+                    totalPriceToPay += priceToPay;
+                    totalPriceToPayPlusTransactionFee += priceToPayPlusTransactionFee;
+                    totalTransactionFee += transactionFee;
                 });
             });
-            totalAmount = this._thUtils.roundNumberToTwoDecimals(totalAmount);
-            data.push([this._appContext.thTranslate.translate('Total'), "", totalAmount]);
+            // sort by invoice reference
+            data.sort((row1: string[], row2: string[]) => {
+                return row1[0].localeCompare(row2[0]);
+            });
+
+            totalPriceToPay = this._thUtils.roundNumberToTwoDecimals(totalPriceToPay);
+            totalPriceToPayPlusTransactionFee = this._thUtils.roundNumberToTwoDecimals(totalPriceToPayPlusTransactionFee);
+            totalTransactionFee = this._thUtils.roundNumberToTwoDecimals(totalTransactionFee);
+
+            data.push([this._appContext.thTranslate.translate('Total'), "", totalPriceToPay, totalTransactionFee, totalPriceToPayPlusTransactionFee]);
             resolve(data);
         }).catch((e) => {
             reject(e);

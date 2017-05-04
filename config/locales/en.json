@@ -198,6 +198,7 @@
 	"Part %partNo%": "Part %partNo%",
 	"Invoice Reference": "Invoice Reference",
 	"Customer": "Customer",
+	"Transaction Fee": "Transaction Fee",
 	"Paid Invoices": "Paid Invoices",
 	"Confirmed": "Confirmed",
 	"Guaranteed": "Guaranteed",
