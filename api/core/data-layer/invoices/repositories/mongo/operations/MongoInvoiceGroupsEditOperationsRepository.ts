@@ -10,6 +10,8 @@ import { InvoiceGroupsRepositoryHelper } from '../helpers/InvoiceGroupsRepositor
 import { MongoInvoiceGroupsReadOperationsRepository } from './MongoInvoiceGroupsReadOperationsRepository';
 import { IHotelRepository, SequenceValue } from '../../../../hotel/repositories/IHotelRepository';
 import { HotelSequenceType } from '../../../../hotel/data-objects/sequences/HotelSequencesDO';
+import { ThTimestampDO } from "../../../../../utils/th-dates/data-objects/ThTimestampDO";
+import { HotelDO } from "../../../../hotel/data-objects/HotelDO";
 
 import _ = require('underscore');
 
@@ -113,15 +115,22 @@ export class MongoInvoiceGroupsEditOperationsRepository extends MongoRepository 
 
         var group = invoiceGroup;
         var paymentStatusByInvoiceReferenceMap: { [index: string]: InvoicePaymentStatus };
+        var timezone: string;
+
         this.getCurrentPaymentStatusByInvoiceIdMap(invoiceGroupMeta, invoiceGroup)
             .then((map: { [index: string]: InvoicePaymentStatus }) => {
                 paymentStatusByInvoiceReferenceMap = map;
+
+                return this._hotelRepo.getHotelById(invoiceGroupMeta.hotelId);
+            }).then((hotel: HotelDO) => {
+                timezone = hotel.timezone;
+
                 return this.attachInvoiceGroupReferenceIfNecessary(group);
             }).then((updatedGroup: InvoiceGroupDO) => {
                 group = updatedGroup;
                 var promiseList = [];
                 group.invoiceList.forEach((invoice) => {
-                    let promise = this.attachInvoiceItemReferenceIfNecessary(group.hotelId, invoice, paymentStatusByInvoiceReferenceMap);
+                    let promise = this.attachInvoiceItemReferenceIfNecessary(group.hotelId, invoice, timezone, paymentStatusByInvoiceReferenceMap);
                     promiseList.push(promise);
                 });
                 return Promise.all(promiseList);
@@ -167,7 +176,7 @@ export class MongoInvoiceGroupsEditOperationsRepository extends MongoRepository 
         });
     }
 
-    private attachInvoiceItemReferenceIfNecessary(hotelId: string, invoice: InvoiceDO,
+    private attachInvoiceItemReferenceIfNecessary(hotelId: string, invoice: InvoiceDO, timezone: string,
         paymentStatusByInvoiceIdMap: { [index: string]: InvoicePaymentStatus }): Promise<InvoiceDO> {
         return new Promise<InvoiceDO>((resolve: { (result: InvoiceDO): void }, reject: { (err: ThError): void }) => {
             let oldPaymentStatus: InvoicePaymentStatus;
@@ -181,6 +190,7 @@ export class MongoInvoiceGroupsEditOperationsRepository extends MongoRepository 
                 this._hotelRepo.getNextSequenceValue(hotelId, HotelSequenceType.InvoiceItem)
                     .then((seq: SequenceValue) => {
                         invoice.invoiceReference = seq.hotelPrefix + this.getSequenceString(seq.sequence);
+                        this.setPaidDatesOnInvoice(invoice, timezone);
                         resolve(invoice);
                     }).catch((e) => {
                         reject(e);
@@ -191,11 +201,23 @@ export class MongoInvoiceGroupsEditOperationsRepository extends MongoRepository 
                 if (this._thUtils.isUndefinedOrNull(invoice.invoiceReference)) {
                     invoice.invoiceReference = this.getTemporaryInvoiceReference();
                 }
+
+                // attach the paid date for reporting if it has been marked as loss by management
+                if (oldPaymentStatus !== invoice.paymentStatus
+                    && invoice.paymentStatus === InvoicePaymentStatus.LossAcceptedByManagement) {
+                    this.setPaidDatesOnInvoice(invoice, timezone);
+                }
+
                 resolve(invoice);
             }
         });
     }
-
+    private setPaidDatesOnInvoice(invoice: InvoiceDO, timezone: string) {
+        var thTimestamp = ThTimestampDO.buildThTimestampForTimezone(timezone);
+        invoice.paidDate = thTimestamp.thDateDO;
+        invoice.paidDateUtcTimestamp = invoice.paidDate.getUtcTimestamp();
+        invoice.paidDateTimeUtcTimestamp = thTimestamp.getUtcTimestamp();
+    }
     private getSequenceString(seq: number): string {
         var seqStr: string = seq + "";
         while (seqStr.length < MongoInvoiceGroupsEditOperationsRepository.RefMaxLength) {
