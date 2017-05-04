@@ -20,6 +20,7 @@ import {TaxResponseRepoDO} from '../../../data-layer/taxes/repositories/ITaxRepo
 import {TaxDO} from '../../../data-layer/taxes/data-objects/TaxDO';
 import {CurrencyDO} from '../../../data-layer/common/data-objects/currency/CurrencyDO';
 import {PaymentMethodDO} from '../../../data-layer/common/data-objects/payment-method/PaymentMethodDO';
+import {RoomDO} from '../../../data-layer/rooms/data-objects/RoomDO';
 
 export interface InvoiceDataAggregatorQuery {
     invoiceGroupId: string;
@@ -38,6 +39,7 @@ export class InvoiceDataAggregator {
     private _loadedBooking: BookingDO;
     private _loadedRoomCateg: RoomCategoryDO;
     private _loadedGuest: CustomerDO;
+    private _loadedRoom: RoomDO;
 
     private _payerCustomer: CustomerDO;
     private _payerIndexOnInvoice: number;
@@ -138,7 +140,10 @@ export class InvoiceDataAggregator {
                 return custRepo.getCustomerById({ hotelId: this._hotel.id }, customerIdDisplayedAsGuest);
             }).then((customer: CustomerDO) => {
                 this._loadedGuest = customer;
-
+                var roomRepo = this._appContext.getRepositoryFactory().getRoomRepository();
+                return roomRepo.getRoomById({ hotelId: this._sessionContext.sessionDO.hotel.id }, this._loadedBooking.roomId);
+            }).then((room: RoomDO) => {
+                this._loadedRoom = room;
                 resolve(true);
             }).catch((err: any) => {
                 reject(err);
@@ -165,7 +170,9 @@ export class InvoiceDataAggregator {
             invoiceAggregatedData.bookingAttachment = {
                 exists: true,
                 guest: this._loadedGuest,
-                roomCategory: this._loadedRoomCateg
+                roomCategory: this._loadedRoomCateg,
+                booking: this._loadedBooking,
+                room: this._loadedRoom
             }
         }
         return invoiceAggregatedData;
