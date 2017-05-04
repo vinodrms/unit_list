@@ -142,6 +142,16 @@ export class InvoiceEditComponent implements OnInit {
             this.creditCurrentInvoice("credit", "The invoice was credited.");
         });
     }
+    public onReinstateInvoice() {
+        if (!this.totalAmountIsValid()) { return; }
+        var title = this._appContext.thTranslation.translate("Info");
+        var content = this._appContext.thTranslation.translate("By reinstating this paid invoice a new invoice which will contain all the items on the original invoice will be opened. Continue?");
+        var positiveLabel = this._appContext.thTranslation.translate("Yes");
+        var negativeLabel = this._appContext.thTranslation.translate("No");
+        this._appContext.modalService.confirm(title, content, { positive: positiveLabel, negative: negativeLabel }, () => {
+            this.reinstateCurrentInvoice("reinstate", "The invoice was reinstated.");
+        });
+    }
     private totalAmountIsValid(): boolean {
         if (!this.invoiceVM.invoiceDO.allAmountWasPaid()) {
             var title = this._appContext.thTranslation.translate("Info");
@@ -170,6 +180,27 @@ export class InvoiceEditComponent implements OnInit {
         }, (error: ThError) => {
             this._appContext.toaster.error(error.message);
         });
+    }
+
+    private reinstateCurrentInvoice(logEventName: string, logMessage: string) {
+        var invoiceGroupVMClone = this.invoiceGroupVM.buildPrototype();
+        let invoiceToBeReinstated = _.find(invoiceGroupVMClone.invoiceVMList, (invoiceVM: InvoiceVM) => {
+            return invoiceVM.invoiceDO.uniqueIdentifierEquals(this.invoiceUniqueId);
+        });
+
+        // this._invoiceGroupsService.credit({
+        //     invoiceGroupId: invoiceGroupVMClone.invoiceGroupDO.id,
+        //     invoiceId: invoiceToBeCredited.invoiceDO.id
+        // }).subscribe((updatedInvoiceGroupDO: InvoiceGroupDO) => {
+        //     this._appContext.analytics.logEvent("invoice", logEventName, logMessage);
+        //     this._invoiceGroupControllerService.updateInvoiceGroupVM(updatedInvoiceGroupDO);
+        //     this._appContext.toaster.success(this._appContext.thTranslation.translate("The invoice was credited succesfully."));
+        //     this._hotelOperationsResultService.markInvoiceChanged(updatedInvoiceGroupDO);
+
+        //     this.creditInvoiceAdded.emit();
+        // }, (error: ThError) => {
+        //     this._appContext.toaster.error(error.message);
+        // });
     }
 
     private creditCurrentInvoice(logEventName: string, logMessage: string) {

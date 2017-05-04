@@ -141,8 +141,13 @@
 
     <div *ngIf="!editMode" class="invoice-edit-footer">
         
-        <button type="button" class="btn btn-danger" *ngIf="isPaid && !isCredited && !isCredit" (click)="onCreditInvoice()">
+        <!--<button type="button" class="btn btn-danger" *ngIf="isPaid && !isCredited && !isCredit" (click)="onCreditInvoice()">
             <i class="fa fa-2x unitpal-font">+</i> {{ 'Credit Invoice' | translate }}
+        </button>
+        -->
+
+        <button type="button" class="btn btn-danger" *ngIf="isPaid && !isCredited && !isCredit" (click)="onReinstateInvoice()">
+            <i class="fa fa-2x unitpal-font">+</i> {{ 'Reinstate Invoice' | translate }}
         </button>
 
         <button type="button" class="btn btn-primary" *ngIf="!isPaid" (click)="onPayInvoice()">
