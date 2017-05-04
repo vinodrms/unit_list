@@ -58,6 +58,11 @@ export class ShiftReportPaidInvoicesSectionGenerator extends AReportSectionGener
                     data.push(row);
                 });
             });
+            // sort by invoice reference
+            data.sort((row1: string[], row2: string[]) => {
+                return row1[0].localeCompare(row2[0]);
+            });
+
             totalAmount = this._thUtils.roundNumberToTwoDecimals(totalAmount);
             data.push([this._appContext.thTranslate.translate('Total'), "", totalAmount]);
             resolve(data);
