@@ -24,9 +24,10 @@ export class InvoiceDO extends BaseDO {
     itemList: InvoiceItemDO[];
     paymentStatus: InvoicePaymentStatus;
     notesFromBooking: string;
+    reinstatedInvoiceId: string;
 
     protected getPrimitivePropertyKeys(): string[] {
-        return ["id", "accountingType", "bookingId", "invoiceReference", "paymentStatus", "notesFromBooking"];
+        return ["id", "accountingType", "bookingId", "invoiceReference", "paymentStatus", "notesFromBooking", "reinstatedInvoiceId"];
     }
 
     public buildFromObject(object: Object) {
@@ -142,5 +143,10 @@ export class InvoiceDO extends BaseDO {
         let thUtils = new ThUtils();
         return thUtils.isUndefinedOrNull(this.id)? 
             this.invoiceReference === uniqueId : this.id === uniqueId;
+    }
+
+    public isReinstatement(): boolean {
+        var thUtils = new ThUtils();
+        return !thUtils.isUndefinedOrNull(this.reinstatedInvoiceId);
     }
 }

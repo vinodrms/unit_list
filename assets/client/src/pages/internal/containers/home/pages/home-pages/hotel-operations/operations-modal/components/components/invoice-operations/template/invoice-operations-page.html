@@ -10,7 +10,7 @@
 		<invoice-edit *ngFor="let displayedInvoiceIndex of displayedInvoiceIndexList" 
 			[invoiceUniqueId]="getInvoiceUniqueIdentifier(displayedInvoiceIndex)" 
 			(newlyAddedInvoiceRemoved)="newlyAddedInvoiceRemoved($event)"
-			(creditInvoiceAdded)="creditInvoiceAdded($event)">
+			(invoiceAdded)="invoiceAdded($event)">
 		</invoice-edit>
 
 	</div>

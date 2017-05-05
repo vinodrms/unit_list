@@ -28,7 +28,7 @@ import { HotelOperationsResultService } from '../../../../../services/HotelOpera
 export class InvoiceEditComponent implements OnInit {
     @Input() invoiceUniqueId: string;
     @Output() newlyAddedInvoiceRemoved = new EventEmitter();
-    @Output() creditInvoiceAdded = new EventEmitter();
+    @Output() invoiceAdded = new EventEmitter();
 
     private static MAX_NO_OF_INVOICE_ITEMS = 50;
 
@@ -188,19 +188,19 @@ export class InvoiceEditComponent implements OnInit {
             return invoiceVM.invoiceDO.uniqueIdentifierEquals(this.invoiceUniqueId);
         });
 
-        // this._invoiceGroupsService.credit({
-        //     invoiceGroupId: invoiceGroupVMClone.invoiceGroupDO.id,
-        //     invoiceId: invoiceToBeCredited.invoiceDO.id
-        // }).subscribe((updatedInvoiceGroupDO: InvoiceGroupDO) => {
-        //     this._appContext.analytics.logEvent("invoice", logEventName, logMessage);
-        //     this._invoiceGroupControllerService.updateInvoiceGroupVM(updatedInvoiceGroupDO);
-        //     this._appContext.toaster.success(this._appContext.thTranslation.translate("The invoice was credited succesfully."));
-        //     this._hotelOperationsResultService.markInvoiceChanged(updatedInvoiceGroupDO);
+        this._invoiceGroupsService.reinstate({
+            invoiceGroupId: invoiceGroupVMClone.invoiceGroupDO.id,
+            invoiceId: invoiceToBeReinstated.invoiceDO.id
+        }).subscribe((updatedInvoiceGroupDO: InvoiceGroupDO) => {
+            this._appContext.analytics.logEvent("invoice", logEventName, logMessage);
+            this._invoiceGroupControllerService.updateInvoiceGroupVM(updatedInvoiceGroupDO);
+            this._appContext.toaster.success(this._appContext.thTranslation.translate("The invoice was reinstated succesfully."));
+            this._hotelOperationsResultService.markInvoiceChanged(updatedInvoiceGroupDO);
 
-        //     this.creditInvoiceAdded.emit();
-        // }, (error: ThError) => {
-        //     this._appContext.toaster.error(error.message);
-        // });
+            this.invoiceAdded.emit();
+        }, (error: ThError) => {
+            this._appContext.toaster.error(error.message);
+        });
     }
 
     private creditCurrentInvoice(logEventName: string, logMessage: string) {
@@ -218,7 +218,7 @@ export class InvoiceEditComponent implements OnInit {
             this._appContext.toaster.success(this._appContext.thTranslation.translate("The invoice was credited succesfully."));
             this._hotelOperationsResultService.markInvoiceChanged(updatedInvoiceGroupDO);
 
-            this.creditInvoiceAdded.emit();
+            this.invoiceAdded.emit();
         }, (error: ThError) => {
             this._appContext.toaster.error(error.message);
         });

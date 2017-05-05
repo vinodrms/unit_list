@@ -16,6 +16,7 @@ import { ReportType, PdfReportsServiceResponse } from '../core/services/pdf-repo
 import { GenerateCreditInvoice } from "../core/domain-layer/invoices/generate-credit-invoice/GenerateCreditInvoice";
 
 import path = require("path");
+import { ReinstateInvoice } from "../core/domain-layer/invoices/reinstate-invoice/ReinstateInvoice";
 
 export class InvoiceGroupsController extends BaseController {
 
@@ -85,6 +86,17 @@ export class InvoiceGroupsController extends BaseController {
         });
     }
 
+    public reinstateInvoice(req: Express.Request, res: Express.Response) {
+        debugger
+        let reinstatementInvoiceGenerator = new ReinstateInvoice(req.appContext, req.sessionContext);
+        
+        reinstatementInvoiceGenerator.reinstate(req.body.reinstatedInvoiceMeta).then((updatedInvoiceGroup: InvoiceGroupDO) => {
+            this.returnSuccesfulResponse(req, res, { invoiceGroup: updatedInvoiceGroup });
+        }).catch((err: any) => {
+            this.returnErrorResponse(req, res, err, ThStatusCode.InvoiceGroupsControllerErrorsavingInvoiceGroup);
+        });
+    }
+
     public downloadInvoicePdf(req: Express.Request, res: any) {
 
         var pdfReportsService = req.appContext.getServiceFactory().getPdfReportsService();
@@ -129,6 +141,7 @@ module.exports = {
     getInvoiceGroupListCount: invoiceGroupsController.getInvoiceGroupListCount.bind(invoiceGroupsController),
     saveInvoiceGroupItem: invoiceGroupsController.saveInvoiceGroupItem.bind(invoiceGroupsController),
     generateCreditInvoice: invoiceGroupsController.generateCreditInvoice.bind(invoiceGroupsController),
+    reinstateInvoice: invoiceGroupsController.reinstateInvoice.bind(invoiceGroupsController),
     downloadInvoicePdf: invoiceGroupsController.downloadInvoicePdf.bind(invoiceGroupsController),
 
 }

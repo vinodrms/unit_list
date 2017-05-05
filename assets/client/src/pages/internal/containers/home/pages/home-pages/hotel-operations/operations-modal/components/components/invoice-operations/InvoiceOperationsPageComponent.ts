@@ -218,7 +218,7 @@ export class InvoiceOperationsPageComponent implements OnInit {
         this.invoiceGroupVM.removeInvoiceVMByUniqueId(newlyAddedInvoiceMeta.uniqueId);
     }
 
-    public creditInvoiceAdded() {
+    public invoiceAdded() {
         this.itemsAdded.next({
             noOfAddedItems: 1,
             shouldSelectLastElement: false

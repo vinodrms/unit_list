@@ -895,6 +895,7 @@ export var EnglishTranslations: Object = {
 	"The invoice was credited.": "The invoice was credited.",
 	"By reinstating this paid invoice a new invoice which will contain all the items on the original invoice will be opened. Continue?": "By reinstating this paid invoice a new invoice which will contain all the items on the original invoice will be opened. Continue?",
 	"The invoice was reinstated.": "The invoice was reinstated.",
+	"The invoice was reinstated succesfully.": "The invoice was reinstated succesfully.",
 	
 
 };

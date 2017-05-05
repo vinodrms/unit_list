@@ -19,6 +19,7 @@ import { InvoiceTestUtils } from './utils/InvoiceTestUtils';
 import { InvoiceDO, InvoiceAccountingType } from '../../../../core/data-layer/invoices/data-objects/InvoiceDO';
 import { InvoicePayerDO } from '../../../../core/data-layer/invoices/data-objects/payers/InvoicePayerDO';
 import { GenerateCreditInvoice } from "../../../../core/domain-layer/invoices/generate-credit-invoice/GenerateCreditInvoice";
+import { ReinstateInvoice } from "../../../../core/domain-layer/invoices/reinstate-invoice/ReinstateInvoice";
 
 describe("Invoices Tests", function () {
     var testUtils: TestUtils;
@@ -228,6 +229,31 @@ describe("Invoices Tests", function () {
                     return invoice.invoiceReference === creditedInvoiceRef && invoice.accountingType === InvoiceAccountingType.Credit;
                 });
                 invoiceTestUtils.testIfCreditWasCorrect(creditedInvoice, creditInvoice);
+                done();
+            }).catch((err: any) => {
+                done(err);
+            });
+        });
+
+    });
+
+    describe("Invoice reinstatement", function () {
+        it("Should reinstate an invoice", function (done) {
+            let reinstatementGenerator = new ReinstateInvoice(testContext.appContext, testContext.sessionContext);
+            debugger
+            reinstatementGenerator.reinstate({
+                invoiceGroupId: createdBookingInvoiceGroup.id,
+                invoiceId: createdBookingInvoiceGroup.invoiceList[0].id
+            }).then((updatedInvoiceGroup: InvoiceGroupDO) => {
+                debugger
+                // let creditedInvoice = _.find(updatedInvoiceGroup.invoiceList, (invoice: InvoiceDO) => {
+                //     return invoice.id === createdBookingInvoiceGroup.invoiceList[0].id;
+                // });
+                // let creditedInvoiceRef = creditedInvoice.invoiceReference;
+                // let creditInvoice = _.find(updatedInvoiceGroup.invoiceList, (invoice: InvoiceDO) => {
+                //     return invoice.invoiceReference === creditedInvoiceRef && invoice.accountingType === InvoiceAccountingType.Credit;
+                // });
+                // invoiceTestUtils.testIfCreditWasCorrect(creditedInvoice, creditInvoice);
                 done();
             }).catch((err: any) => {
                 done(err);

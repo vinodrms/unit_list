@@ -330,6 +330,7 @@ export enum ThStatusCode {
 	GenerateBookingInvoiceError,
 	GenerateBookingInvoiceErrorBuildingDefaultInvoice,
 	GenerateCreditInvoiceError,
+	ReinstateInvoiceError,
 	InvoiceConfirmationErrorGettingData,
 	InvoiceGroupsRepositoryErrorAddingInvoiceGroup,
 	InvoiceGroupsRepositoryProblemUpdatingInvoiceGroup,
@@ -856,6 +857,7 @@ ThMessage[ThStatusCode.GeneratInvoiceGroupActionFactoryError] = "Error getting t
 ThMessage[ThStatusCode.GenerateBookingInvoiceError] = "Error adding booking related invoice group.";
 ThMessage[ThStatusCode.GenerateBookingInvoiceErrorBuildingDefaultInvoice] = "Error building the default booking invoice object.";
 ThMessage[ThStatusCode.GenerateCreditInvoiceError] = "Error crediting invoice.";
+ThMessage[ThStatusCode.ReinstateInvoiceError] = "Error reinstating invoice.";
 ThMessage[ThStatusCode.InvoiceConfirmationErrorGettingData] = "Error getting data for the invoice confirmation.";
 ThMessage[ThStatusCode.InvoiceGroupsRepositoryErrorAddingInvoiceGroup] = "Error adding the invoice group.";
 ThMessage[ThStatusCode.InvoiceGroupsRepositoryProblemUpdatingInvoiceGroup] = "Problem updating the invoice group - concurrency.";
