@@ -17,6 +17,8 @@ import { BookingDO } from '../../../../bookings/data-objects/BookingDO';
 import { LazyLoadRepoDO, LazyLoadMetaResponseRepoDO } from '../../../../common/repo-data-objects/LazyLoadRepoDO';
 import { MongoRepository, MongoErrorCodes, MongoSearchCriteria } from '../../../../common/base/MongoRepository';
 
+import _ = require('underscore');
+
 export class MongoInvoiceGroupsRepositoryWithBookingPriceLink extends MongoInvoiceGroupsRepositoryDecorator {
 
     constructor(invoiceGroupsRepo: MongoInvoiceGroupsRepository, private _bookingsRepo: IBookingRepository,

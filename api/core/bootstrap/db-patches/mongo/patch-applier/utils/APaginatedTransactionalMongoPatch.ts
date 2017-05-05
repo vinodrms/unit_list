@@ -35,25 +35,26 @@ export abstract class APaginatedTransactionalMongoPatch extends ATransactionalMo
                 finishSingleUpdateCallback(err);
             }, (documentList: any[]) => {
                 noToUpdate += documentList.length;
+
+                let documentUpdatePromiseList: Promise<any>[] = [];
                 documentList.forEach(document => {
-                    try {
-                        this.updateDocumentInMemory(document);
-                    } catch (e) {
-                        finishSingleUpdateCallback(e);
-                    }
+                    documentUpdatePromiseList.push(this.updateDocumentInMemoryAsync(document));
                 });
-                var promiseList = [];
-                documentList.forEach(document => {
-                    promiseList.push(this.updateDocumentInDatabase(document));
-                });
-                Promise.all(promiseList).then(result => {
-                    noUpdated += result.length;
-                    noUpdatedInCurrentStep = result.length;
-                    pageNumber++;
-                    finishSingleUpdateCallback(null);
-                }).catch(err => {
-                    finishSingleUpdateCallback(err);
-                });
+                Promise.all(documentUpdatePromiseList)
+                    .then((updatedDocumentList: any[]) => {
+                        var promiseList = [];
+                        updatedDocumentList.forEach(document => {
+                            promiseList.push(this.updateDocumentInDatabase(document));
+                        });
+                        return Promise.all(promiseList);
+                    }).then(result => {
+                        noUpdated += result.length;
+                        noUpdatedInCurrentStep = result.length;
+                        pageNumber++;
+                        finishSingleUpdateCallback(null);
+                    }).catch(err => {
+                        finishSingleUpdateCallback(err);
+                    });
             });
         }, () => {
             return noUpdatedInCurrentStep > 0;
@@ -86,6 +87,24 @@ export abstract class APaginatedTransactionalMongoPatch extends ATransactionalMo
                 }
             );
         });
+    }
+
+    private updateDocumentInMemoryAsync(document): Promise<any> {
+        return new Promise<any>((resolve: { (result: any): void }, reject: { (err: ThError): void }) => {
+            this.updateDocumentInMemoryAsyncCore(resolve, reject, document);
+        });
+    }
+
+    /**
+     * override this function when the update needs to be done async (e.g. it requires additional promises etc)
+     */
+    protected updateDocumentInMemoryAsyncCore(resolve: { (result: any): void }, reject: { (err: ThError): void }, document) {
+        try {
+            this.updateDocumentInMemory(document);
+            resolve(document);
+        } catch (e) {
+            reject(e);
+        }
     }
 
     /**

@@ -1,11 +1,11 @@
-import {ThError} from '../../../utils/th-responses/ThError';
-import {AppContext} from '../../../utils/AppContext';
-import {ThTimestampDO} from '../../../utils/th-dates/data-objects/ThTimestampDO';
-import {HotelDO} from '../../../data-layer/hotel/data-objects/HotelDO';
-import {BookingDO} from '../../../data-layer/bookings/data-objects/BookingDO';
-import {BookingSearchResultRepoDO} from '../../../data-layer/bookings/repositories/IBookingRepository';
-import {IBookingProcessStrategy, BookingStrategyMatchParams} from './strategies/IBookingProcessStrategy';
-import {IBookingStatusChangerProcess} from './IBookingStatusChangerProcess';
+import { ThError } from '../../../utils/th-responses/ThError';
+import { AppContext } from '../../../utils/AppContext';
+import { ThTimestampDO } from '../../../utils/th-dates/data-objects/ThTimestampDO';
+import { HotelDO } from '../../../data-layer/hotel/data-objects/HotelDO';
+import { BookingDO } from '../../../data-layer/bookings/data-objects/BookingDO';
+import { BookingSearchResultRepoDO } from '../../../data-layer/bookings/repositories/IBookingRepository';
+import { IBookingProcessStrategy, BookingStrategyMatchParams } from './strategies/IBookingProcessStrategy';
+import { IBookingStatusChangerProcess } from './IBookingStatusChangerProcess';
 
 import _ = require('underscore');
 
@@ -27,7 +27,8 @@ export class BookingStatusChangerProcess implements IBookingStatusChangerProcess
         bookingsRepo.getBookingList({ hotelId: this._hotel.id }, this._processStrategy.getMatchingSearchCriteria(this.getBookingStrategyMatchParams()))
             .then((bookingSearchResult: BookingSearchResultRepoDO) => {
                 var bookingList: BookingDO[] = bookingSearchResult.bookingList;
-                this.updateBookingList(bookingList);
+                return this.updateBookingList(bookingList);
+            }).then((bookingList: BookingDO[]) => {
                 var bookingsRepo = this._appContext.getRepositoryFactory().getBookingRepository();
                 return bookingsRepo.updateMultipleBookings({ hotelId: this._hotel.id }, bookingList);
             }).then((updatedBookingList: BookingDO[]) => {
@@ -36,10 +37,12 @@ export class BookingStatusChangerProcess implements IBookingStatusChangerProcess
                 reject(error);
             });
     }
-    private updateBookingList(bookingList: BookingDO[]) {
-        _.forEach(bookingList, (bookingDO: BookingDO) => {
-            this._processStrategy.updateMatchedBooking(bookingDO, this.getBookingStrategyMatchParams());
+    private updateBookingList(bookingList: BookingDO[]): Promise<BookingDO[]> {
+        let promiseList: Promise<BookingDO>[] = [];
+        bookingList.forEach(booking => {
+            promiseList.push(this._processStrategy.updateMatchedBooking(booking, this.getBookingStrategyMatchParams()));
         });
+        return Promise.all(promiseList);
     }
     private getBookingStrategyMatchParams(): BookingStrategyMatchParams {
         return {

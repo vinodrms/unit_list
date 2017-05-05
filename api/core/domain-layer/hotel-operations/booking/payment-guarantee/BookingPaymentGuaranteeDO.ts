@@ -7,7 +7,7 @@ import {InvoicePaymentMethodDO, InvoicePaymentMethodType} from '../../../../data
 
 export class BookingPaymentGuaranteeDO {
     groupBookingId: string;
-    bookingId: string;
+    id: string;
     paymentMethod: InvoicePaymentMethodDO;
 
     public static getValidationStructure(): IValidationStructure {
@@ -17,7 +17,7 @@ export class BookingPaymentGuaranteeDO {
                 validationStruct: new PrimitiveValidationStructure(new StringValidationRule())
             },
             {
-                key: "bookingId",
+                key: "id",
                 validationStruct: new PrimitiveValidationStructure(new StringValidationRule())
             },
             {

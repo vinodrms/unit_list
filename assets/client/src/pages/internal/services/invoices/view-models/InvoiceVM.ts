@@ -1,4 +1,4 @@
-import {InvoiceDO} from '../data-objects/InvoiceDO';
+import { InvoiceDO, InvoiceAccountingType } from '../data-objects/InvoiceDO';
 import {InvoicePayerDO} from '../data-objects/payers/InvoicePayerDO';
 import {InvoiceItemDO, InvoiceItemType} from '../data-objects/items/InvoiceItemDO';
 import {InvoicePayerVM} from './InvoicePayerVM';
@@ -23,6 +23,8 @@ export class InvoiceVM {
     invoicePayerVMList: InvoicePayerVM[];
     invoceItemVMList: InvoiceItemVM[];
     newlyAdded: boolean;
+
+    private _credited: boolean;
 
     constructor(private _thTranslation: ThTranslation) {
         this.errorMessageList = [];
@@ -88,7 +90,6 @@ export class InvoiceVM {
 
         var invoiceItemMeta = new AddOnProductInvoiceItemMetaDO();
         invoiceItemMeta.aopDisplayName = aop.name;
-        invoiceItemMeta.movable = true;
         invoiceItemMeta.numberOfItems = qty;
         invoiceItemMeta.pricePerItem = aop.price;
         if(_.isArray(aop.taxIdList) && !_.isEmpty(aop.taxIdList)) {
@@ -106,6 +107,13 @@ export class InvoiceVM {
         this.invoceItemVMList.push(newInvoiceItemVM);
 
         this.isValid();
+    }
+
+    public set credited(value: boolean) {
+        this._credited = value;
+    }
+    public get credited(): boolean {
+        return this._credited;
     }
 
     public isValid(): boolean {

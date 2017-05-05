@@ -37,7 +37,7 @@ export class BookingChangeNoShowTime {
         this._changeNoShowTimeDO.noShowTimestamp = this.getParsedThTimestamp();
 
         var bookingsRepo = this._appContext.getRepositoryFactory().getBookingRepository();
-        bookingsRepo.getBookingById({ hotelId: this._sessionContext.sessionDO.hotel.id }, this._changeNoShowTimeDO.groupBookingId, this._changeNoShowTimeDO.bookingId)
+        bookingsRepo.getBookingById({ hotelId: this._sessionContext.sessionDO.hotel.id }, this._changeNoShowTimeDO.groupBookingId, this._changeNoShowTimeDO.id)
             .then((booking: BookingDO) => {
                 this._loadedBooking = booking;
 
@@ -56,7 +56,7 @@ export class BookingChangeNoShowTime {
                 var bookingsRepo = this._appContext.getRepositoryFactory().getBookingRepository();
                 return bookingsRepo.updateBooking({ hotelId: this._sessionContext.sessionDO.hotel.id }, {
                     groupBookingId: this._loadedBooking.groupBookingId,
-                    bookingId: this._loadedBooking.bookingId,
+                    bookingId: this._loadedBooking.id,
                     versionId: this._loadedBooking.versionId
                 }, this._loadedBooking);
             }).then((updatedBooking: BookingDO) => {

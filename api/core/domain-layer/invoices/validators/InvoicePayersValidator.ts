@@ -31,7 +31,7 @@ export class InvoicePayersValidator {
             var thError = new ThError(ThStatusCode.InvoicePayersValidatorInvalidSplit, null);
             ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Tried to share bill using multiple PIA customers", {
                 bookingId: this._invoice.bookingId,
-                invoiceReference: this._invoice.invoiceReference
+                invoiceid: this._invoice.id
             }, thError);
             reject(thError);
             return;
@@ -44,7 +44,7 @@ export class InvoicePayersValidator {
                     var thError = new ThError(ThStatusCode.InvoicePayersValidatorNoAccessToWalkIn, null);
                     ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Tried to use a customer with PIA enabled on a walk in bill", {
                         bookingId: this._invoice.bookingId,
-                        invoiceReference: this._invoice.invoiceReference
+                        invoiceid: this._invoice.id
                     }, thError);
                     reject(thError);
                     return;

@@ -1,7 +1,7 @@
 import { ThTranslation } from '../../../utils/localization/ThTranslation';
 import { ThUtils } from '../../../../core/utils/ThUtils';
 
-import { InvoiceItemDO } from '../../../data-layer/invoices/data-objects/items/InvoiceItemDO';
+import { InvoiceItemDO, InvoiceItemAccountingType } from '../../../data-layer/invoices/data-objects/items/InvoiceItemDO';
 import { TaxDO } from '../../../data-layer/taxes/data-objects/TaxDO';
 
 export class InvoiceItemVM {
@@ -22,13 +22,13 @@ export class InvoiceItemVM {
 
     public buildFromInvoiceItemDO(invoiceItemDO: InvoiceItemDO, vatTaxList: TaxDO[]) {
         this.name = invoiceItemDO.meta.getDisplayName(this._thTranslation);
-        this.qty = invoiceItemDO.meta.getNumberOfItems();
-
+        this.qty = invoiceItemDO.meta.getNumberOfItems() * ((invoiceItemDO.accountingType === InvoiceItemAccountingType.Credit)? -1 : 1);
+        
         var vatValue = this.getVatValue(invoiceItemDO.meta.getVatId(), vatTaxList);
         this.vatPercentage = this._thUtils.roundNumberToTwoDecimals(vatValue * 100);
         this.netUnitPrice = this._thUtils.roundNumberToTwoDecimals(invoiceItemDO.meta.getUnitPrice() / (1 + vatValue));
         var unitVat = this._thUtils.roundNumberToTwoDecimals(invoiceItemDO.meta.getUnitPrice() - this.netUnitPrice);
-        this.vat = this._thUtils.roundNumberToTwoDecimals(unitVat * invoiceItemDO.meta.getNumberOfItems());
+        this.vat = this._thUtils.roundNumberToTwoDecimals(unitVat * this.qty);
         this.subtotal = this._thUtils.roundNumberToTwoDecimals(this.qty * this.netUnitPrice);
     }
 

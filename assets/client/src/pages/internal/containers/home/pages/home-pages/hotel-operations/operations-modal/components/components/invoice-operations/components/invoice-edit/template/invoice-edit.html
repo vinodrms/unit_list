@@ -8,9 +8,18 @@
                 <small><i *ngIf="!isNewlyAdded">{{ invoiceReference }}</i></small>
                 <small *ngIf="isNewlyAdded"><i>{{ '(unsaved)' | translate }}</i></small>
                 <b *ngIf="isPaid"> {{ 'PAID' | translate }}</b>
+                <b *ngIf="isPaid && (isCredited || isCredit)"> - </b>
+                <b *ngIf="isCredited">{{ 'CREDITED' | translate }}</b>
+                <b *ngIf="isCredit">{{ 'CREDIT' | translate }}</b>
                 <b *ngIf="isLossAcceptedByManagement"> {{ 'LOSS ACCEPTED BY MANAGEMENT' | translate }}</b>
             </span>
-            <span class="invoice-remove" *ngIf="editMode && isNewlyAdded">
+            <span class="pull-right clickable-item p-r-6" 
+                *ngIf="!editMode && !isNewlyAdded && bookingId && groupBookingId"
+                (click)="viewBooking()">
+                <i class="fa unitpal-font" title="{{'View Booking' | translate}}">8</i> 
+                {{ 'View Booking' | translate }} 
+            </span>
+            <span class="invoice-remove p-r-6" *ngIf="editMode && isNewlyAdded">
                 <a class="btn btn-xs" title="{{ 'Delete' | translate}}" (click)="onDelete()"><i class="fa unitpal-font">\</i></a>
             </span>            
             <br/>
@@ -19,7 +28,7 @@
             </span>
         </p>
 
-        <invoice-payer *ngFor="let invoicePayerVM of invoicePayerVMList; let invoicePayerVMIndex = index" [invoiceReference]="invoiceReference"
+        <invoice-payer *ngFor="let invoicePayerVM of invoicePayerVMList; let invoicePayerVMIndex = index" [invoiceUniqueId]="invoiceUniqueId"
             [invoicePayerVMIndex]="invoicePayerVMIndex"></invoice-payer>
 
         <p *ngIf="editMode" class="btn-add-invoice-payer">
@@ -68,12 +77,12 @@
                     </td>
                     <td width="40%">
                         <span *ngIf="!invoiceItemVM.displayBookingDateBreakdown()">
-                            <i *ngIf="!invoiceItemVM.isMovable()" class="unitpal-font">%</i> {{ invoiceItemVM.itemDisplayText | translate }}
+                            <i *ngIf="invoiceItemVM.invoiceItemDO.meta.isDerivedFromBooking()" class="unitpal-font">%</i> {{ invoiceItemVM.itemDisplayText | translate }}
                         </span>
                         
                         <!-- Booking price -->
                         <span *ngIf="invoiceItemVM.displayBookingDateBreakdown()">
-                            <span *ngFor="let roomPricePerNight of invoiceItemVM.invoiceItemDO.meta.roomPricePerNightList"
+                            <span *ngFor="let roomPricePerNight of invoiceItemVM.invoiceItemDO.meta.getInvoicedRoomPricePerNightList(invoiceItemVM.invoiceItemDO.accountingType)"
                                 title="{{ invoiceItemVM.itemDisplayText }}">
                                 <i class="unitpal-font">%</i>
                                 {{ 'Accomodation for' | translate }} {{ roomPricePerNight.thDate | thdate }}
@@ -88,8 +97,8 @@
                         </span>
                         <!-- Booking price -->
                         <span *ngIf="invoiceItemVM.displayBookingDateBreakdown()">
-                            <p *ngFor="let roomPricePerNight of invoiceItemVM.invoiceItemDO.meta.roomPricePerNightList" class="invoice-item-small">
-                                1
+                            <p *ngFor="let roomPricePerNight of invoiceItemVM.invoiceItemDO.meta.getInvoicedRoomPricePerNightList(invoiceItemVM.invoiceItemDO.accountingType)" class="invoice-item-small">
+                                {{ (invoiceItemVM.invoiceItemDO.isOfTypeCredit())? -1 : 1 }}
                             </p>
                         </span>
                         <!-- END Booking price -->
@@ -114,7 +123,7 @@
                         
                         <!-- Booking price -->
                         <span *ngIf="invoiceItemVM.displayBookingDateBreakdown()">
-                            <p *ngFor="let roomPricePerNight of invoiceItemVM.invoiceItemDO.meta.roomPricePerNightList" class="invoice-item-small">
+                            <p *ngFor="let roomPricePerNight of invoiceItemVM.invoiceItemDO.meta.getInvoicedRoomPricePerNightList(invoiceItemVM.invoiceItemDO.accountingType)" class="invoice-item-small">
                                 {{ ccySymbol }} <b>{{ roomPricePerNight.price | price }}</b>
                             </p>
                         </span>
@@ -137,14 +146,22 @@
     </div>
 
     <div *ngIf="!editMode" class="invoice-edit-footer">
+        
+        <button type="button" class="btn btn-danger" *ngIf="isPaid && !isCredited && !isCredit" (click)="onCreditInvoice()">
+            <i class="fa fa-2x unitpal-font">+</i> {{ 'Credit Invoice' | translate }}
+        </button>
+
         <button type="button" class="btn btn-primary" *ngIf="!isPaid" (click)="onPayInvoice()">
             <i class="fa fa-2x unitpal-font rotate-45">L</i> {{ 'Pay Invoice' | translate }}
         </button>
+        
         <p *ngIf="isLossAcceptedByManagement">
             <small class="text-muted"><i class="fa fa-info-circle"></i> {{ 'Even though you marked this booking as lost by management, you can always mark it as Paid whenever you get the money from the customer.' | translate }} </small>
         </p>
+        
         <button type="button" class="btn btn-danger" *ngIf="!isPaid && !isLossAcceptedByManagement" (click)="onLossByManagementInvoice()">
             <i class="fa fa-2x unitpal-font">+</i> {{ 'Loss Accepted By Management' | translate }}
         </button>
+
     </div>
 </div>

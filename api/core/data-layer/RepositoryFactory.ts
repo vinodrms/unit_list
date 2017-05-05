@@ -29,7 +29,7 @@ import { IInvoiceGroupsRepository } from './invoices/repositories/IInvoiceGroups
 import { MongoInvoiceGroupsRepository } from './invoices/repositories/mongo/MongoInvoiceGroupsRepository';
 import { MongoInvoiceGroupsRepositoryWithBookingPriceLink } from './invoices/repositories/mongo/decorators/MongoInvoiceGroupsRepositoryWithBookingPriceLink';
 import { IBookingRepository } from './bookings/repositories/IBookingRepository';
-import { MongoBookingRepository } from './bookings/repositories/mongo/MongoBookingRepository';
+import { MongoBookingRepository } from "./bookings/repositories/mongo/MongoBookingRepository";
 import { IHotelInventorySnapshotRepository } from './hotel-inventory-snapshots/repositories/IHotelInventorySnapshotRepository';
 import { MongoHotelInventorySnapshotRepository } from './hotel-inventory-snapshots/repositories/mongo/MongoHotelInventorySnapshotRepository';
 

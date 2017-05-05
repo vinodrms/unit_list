@@ -79,7 +79,7 @@ export class BookingChangePriceProduct {
                 this._loadedHotel = loadedHotel;
 
                 var bookingRepository = this._appContext.getRepositoryFactory().getBookingRepository();
-                return bookingRepository.getBookingById({ hotelId: this._sessionContext.sessionDO.hotel.id }, this._inputDO.groupBookingId, this._inputDO.bookingId);
+                return bookingRepository.getBookingById({ hotelId: this._sessionContext.sessionDO.hotel.id }, this._inputDO.groupBookingId, this._inputDO.id);
             }).then((loadedBooking: BookingDO) => {
                 this._booking = loadedBooking;
 
@@ -140,7 +140,7 @@ export class BookingChangePriceProduct {
                 var invoiceGroupsRepo = this._appContext.getRepositoryFactory().getInvoiceGroupsRepository();
                 return invoiceGroupsRepo.getInvoiceGroupList({ hotelId: this._sessionContext.sessionDO.hotel.id }, {
                     groupBookingId: this._booking.groupBookingId,
-                    bookingId: this._booking.bookingId
+                    bookingId: this._booking.id
                 });
             }).then((invoiceGroupSearchResult: InvoiceGroupSearchResultRepoDO) => {
                 this._loadedInvoiceGroupList = invoiceGroupSearchResult.invoiceGroupList;
@@ -154,7 +154,7 @@ export class BookingChangePriceProduct {
                 var bookingsRepo = this._appContext.getRepositoryFactory().getBookingRepository();
                 return bookingsRepo.updateBooking({ hotelId: this._sessionContext.sessionDO.hotel.id }, {
                     groupBookingId: this._booking.groupBookingId,
-                    bookingId: this._booking.bookingId,
+                    bookingId: this._booking.id,
                     versionId: this._booking.versionId
                 }, this._booking);
             }).then((updatedBooking: BookingDO) => {

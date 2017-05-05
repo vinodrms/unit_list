@@ -53,7 +53,7 @@ export class BookingChangeCustomers {
             this._loadedCustomersContainer = customersContainer;
 
             var bookingLoader = new BookingWithDependenciesLoader(this._appContext, this._sessionContext);
-            return bookingLoader.load(this._bookingChangeCustomersDO.groupBookingId, this._bookingChangeCustomersDO.bookingId);
+            return bookingLoader.load(this._bookingChangeCustomersDO.groupBookingId, this._bookingChangeCustomersDO.id);
         }).then((bookingWithDependencies: BookingWithDependencies) => {
             this._bookingWithDependencies = bookingWithDependencies;
             this._loadedBooking = bookingWithDependencies.bookingDO;
@@ -75,7 +75,7 @@ export class BookingChangeCustomers {
             var bookingsRepo = this._appContext.getRepositoryFactory().getBookingRepository();
             return bookingsRepo.updateBooking({ hotelId: this._sessionContext.sessionDO.hotel.id }, {
                 groupBookingId: this._loadedBooking.groupBookingId,
-                bookingId: this._loadedBooking.bookingId,
+                bookingId: this._loadedBooking.id,
                 versionId: this._loadedBooking.versionId
             }, this._loadedBooking);
         }).then((updatedBooking: BookingDO) => {

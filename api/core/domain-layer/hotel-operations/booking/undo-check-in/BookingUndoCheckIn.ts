@@ -59,7 +59,7 @@ export class BookingUndoCheckIn {
                 this._currentHotelTimestamp = ThTimestampDO.buildThTimestampForTimezone(this._loadedHotel.timezone);
 
                 var bookingLoader = new BookingWithDependenciesLoader(this._appContext, this._sessionContext);
-                return bookingLoader.load(this._bookingUndoCheckInDO.groupBookingId, this._bookingUndoCheckInDO.bookingId);
+                return bookingLoader.load(this._bookingUndoCheckInDO.groupBookingId, this._bookingUndoCheckInDO.id);
             }).then((bookingWithDependencies: BookingWithDependencies) => {
                 this._bookingWithDependencies = bookingWithDependencies;
 
@@ -84,7 +84,7 @@ export class BookingUndoCheckIn {
                     ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "undo checkin: invoice group not found", this._bookingUndoCheckInDO, thError);
                     throw thError;
                 }
-                this._invoice = this._invoiceGroup.getInvoiceForBooking(this._bookingWithDependencies.bookingDO.bookingId);
+                this._invoice = this._invoiceGroup.getInvoiceForBooking(this._bookingWithDependencies.bookingDO.id);
                 if (this._thUtils.isUndefinedOrNull(this._invoice)) {
                     var thError = new ThError(ThStatusCode.BookingUndoCheckInInvoiceNotFound, null);
                     ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "undo checkin: invoice not found", this._bookingUndoCheckInDO, thError);
@@ -102,7 +102,7 @@ export class BookingUndoCheckIn {
                 var bookingsRepo = this._appContext.getRepositoryFactory().getBookingRepository();
                 return bookingsRepo.updateBooking({ hotelId: this._sessionContext.sessionDO.hotel.id }, {
                     groupBookingId: this._bookingWithDependencies.bookingDO.groupBookingId,
-                    bookingId: this._bookingWithDependencies.bookingDO.bookingId,
+                    bookingId: this._bookingWithDependencies.bookingDO.id,
                     versionId: this._bookingWithDependencies.bookingDO.versionId
                 }, this._bookingWithDependencies.bookingDO);
             }).then((updatedBooking: BookingDO) => {
@@ -173,7 +173,7 @@ export class BookingUndoCheckIn {
 
     private updateInvoiceGroup() {
         this._invoiceGroup.invoiceList = _.reject(this._invoiceGroup.invoiceList, invoice => {
-            return invoice.bookingId === this._bookingWithDependencies.bookingDO.bookingId;
+            return invoice.bookingId === this._bookingWithDependencies.bookingDO.id;
         });
     }
 }

@@ -5,7 +5,7 @@ import {StringValidationRule} from '../../../../utils/th-validation/rules/String
 
 export class BookingReactivateDO {
     groupBookingId: string;
-    bookingId: string;
+    id: string;
 
     public static getValidationStructure(): IValidationStructure {
         return new ObjectValidationStructure([
@@ -14,7 +14,7 @@ export class BookingReactivateDO {
                 validationStruct: new PrimitiveValidationStructure(new StringValidationRule())
             },
             {
-                key: "bookingId",
+                key: "id",
                 validationStruct: new PrimitiveValidationStructure(new StringValidationRule())
             }
         ]);
