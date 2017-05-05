@@ -20,6 +20,8 @@ import { TotalInventoryForDate } from './data-objects/total-inventory/TotalInven
 import { SnapshotUtils } from '../utils/SnapshotUtils';
 import { HotelInventoryIndexer } from './indexer/HotelInventoryIndexer';
 
+import _ = require('underscore');
+
 export interface HotelInventoryStatsParams {
     currentRoomList: RoomDO[];
     currentAllotmentList: AllotmentDO[];
@@ -72,7 +74,8 @@ export class HotelInventoryStatsReader {
 
                 this._inventoryIndexer = new HotelInventoryIndexer(this._appContext, this._sessionContext, {
                     cancellationHour: this._readerParams.cancellationHour,
-                    currentHotelTimestamp: this._readerParams.currentHotelTimestamp
+                    currentHotelTimestamp: this._readerParams.currentHotelTimestamp,
+                    roomList: this._currentRoomSnapshots
                 });
                 return this._inventoryIndexer.indexInventory(this._indexedInterval);
             }).then((result: boolean) => {

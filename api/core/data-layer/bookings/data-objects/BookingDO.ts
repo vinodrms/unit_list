@@ -11,7 +11,9 @@ import { DocumentHistoryDO } from '../../common/data-objects/document-history/Do
 import { BookingPriceDO } from './price/BookingPriceDO';
 import { IInvoiceItemMeta } from '../../invoices/data-objects/items/IInvoiceItemMeta';
 
-export enum GroupBookingStatus {
+import _ = require('underscore');
+
+export enum BookingStatus {
     Active,
     Deleted
 }
@@ -48,12 +50,16 @@ export class BookingDO extends BaseDO {
     groupBookingReference: string;
     hotelId: string;
     versionId: number;
-    status: GroupBookingStatus;
+    status: BookingStatus;
     inputChannel: GroupBookingInputChannel;
     noOfRooms: number;
 
     // individual booking
-    bookingId: string;
+    id: string;
+
+    //TODO: remove after migrating the new bookings' repo
+    legacyBookingId: string;
+
     bookingReference: string;
     externalBookingReference: string;
     confirmationStatus: BookingConfirmationStatus;
@@ -81,7 +87,7 @@ export class BookingDO extends BaseDO {
     indexedSearchTerms: string[];
 
     protected getPrimitivePropertyKeys(): string[] {
-        return ["groupBookingId", "groupBookingReference", "externalBookingReference", "hotelId", "versionId", "status", "inputChannel", "noOfRooms", "bookingId", "bookingReference", "externalBookingReference", "confirmationStatus",
+        return ["groupBookingId", "groupBookingReference", "hotelId", "versionId", "status", "inputChannel", "noOfRooms", "id", "legacyBookingId", "bookingReference", "externalBookingReference", "confirmationStatus",
             "customerIdList", "displayCustomerId", "startUtcTimestamp", "endUtcTimestamp", "roomCategoryId", "roomId", "priceProductId",
             "reservedAddOnProductIdList", "allotmentId", "notes", "invoiceNotes", "indexedSearchTerms"];
     }

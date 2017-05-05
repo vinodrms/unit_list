@@ -17,6 +17,8 @@ import { BookingReserveAddOnProducts } from '../core/domain-layer/hotel-operatio
 import { BookingChangePriceProduct } from '../core/domain-layer/hotel-operations/booking/change-price-product/BookingChangePriceProduct';
 import { BookingUndoCheckIn } from '../core/domain-layer/hotel-operations/booking/undo-check-in/BookingUndoCheckIn';
 import { BookingChangeGuestOnInvoice } from "../core/domain-layer/hotel-operations/booking/change-guest-invoice/BookingChangeGuestOnInvoice";
+import { GenerateBookingInvoice } from "../core/domain-layer/invoices/generate-booking-invoice/GenerateBookingInvoice";
+import { InvoiceGroupDO } from "../core/data-layer/invoices/data-objects/InvoiceGroupDO";
 
 class HotelBookingOperationsController extends BaseController {
     public getPossiblePrices(req: Express.Request, res: Express.Response) {
@@ -24,7 +26,7 @@ class HotelBookingOperationsController extends BaseController {
         var sessionContext: SessionContext = req.sessionContext;
 
         var bookingPrices = new BookingPossiblePrices(appContext, sessionContext);
-        bookingPrices.getPossiblePrices(req.body.bookingReference).then((priceItems: BookingPossiblePriceItems) => {
+        bookingPrices.getPossiblePrices(req.body.booking).then((priceItems: BookingPossiblePriceItems) => {
             this.returnSuccesfulResponse(req, res, priceItems);
         }).catch((error: any) => {
             this.returnErrorResponse(req, res, error, ThStatusCode.HotelBookingOperationsControllerErrorGettingPossiblePrices);
@@ -111,7 +113,7 @@ class HotelBookingOperationsController extends BaseController {
     public changeCustomers(req: Express.Request, res: Express.Response) {
         var appContext: AppContext = req.appContext;
         var sessionContext: SessionContext = req.sessionContext;
-        
+
         var bookingChangeCustomers = new BookingChangeCustomers(appContext, sessionContext);
         bookingChangeCustomers.changeCustomers(req.body.booking).then((booking: BookingDO) => {
             booking.bookingHistory.translateActions(this.getThTranslation(sessionContext));
@@ -185,6 +187,18 @@ class HotelBookingOperationsController extends BaseController {
             this.returnErrorResponse(req, res, error, ThStatusCode.HotelBookingOperationsControllerErrorUndoCheckIn);
         });
     }
+
+    public generateInvoice(req: Express.Request, res: Express.Response) {
+        var appContext: AppContext = req.appContext;
+        var sessionContext: SessionContext = req.sessionContext;
+
+        let generateBookingInvoice = new GenerateBookingInvoice(appContext, sessionContext);
+        generateBookingInvoice.generate(req.body.booking).then((invoiceGroup: InvoiceGroupDO) => {
+            this.returnSuccesfulResponse(req, res, { invoiceGroup: invoiceGroup });
+        }).catch((error: any) => {
+            this.returnErrorResponse(req, res, error, ThStatusCode.HotelBookingOperationsControllerErrorUndoCheckIn);
+        });
+    }
 }
 
 var hotelBookingOperationsController = new HotelBookingOperationsController();
@@ -202,5 +216,6 @@ module.exports = {
     reserveAddOnProducts: hotelBookingOperationsController.reserveAddOnProducts.bind(hotelBookingOperationsController),
     changePriceProduct: hotelBookingOperationsController.changePriceProduct.bind(hotelBookingOperationsController),
     undoCheckIn: hotelBookingOperationsController.undoCheckIn.bind(hotelBookingOperationsController),
+    generateInvoice: hotelBookingOperationsController.generateInvoice.bind(hotelBookingOperationsController)
 
 }

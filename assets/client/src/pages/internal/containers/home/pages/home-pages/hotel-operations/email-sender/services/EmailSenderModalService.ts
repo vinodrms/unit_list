@@ -19,10 +19,10 @@ export class EmailSenderModalService {
         return this.sendConfirmation(customerList, EmailConfirmationType.Booking, parameters);
     }
 
-    public sendInvoiceConfirmation(customerList: CustomerDO[], invoiceGroupId: string, invoiceReference: string, customerId: string, payerIndex: number) {
+    public sendInvoiceConfirmation(customerList: CustomerDO[], invoiceGroupId: string, invoiceId: string, customerId: string, payerIndex: number) {
         var parameters = {
             invoiceGroupId: invoiceGroupId,
-            invoiceReference: invoiceReference,
+            invoiceId: invoiceId,
             customerId: customerId,
             payerIndex: payerIndex
         };

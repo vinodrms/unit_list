@@ -56,7 +56,7 @@ export class BookingHistoryDashboardComponent extends AHomeContainerComponent im
 		this.selectedBookingVM = bookingVM;
 	}
 	public editBooking(bookingVM: BookingVM) {
-		this._hotelOperationsModalService.openBookingOperationsModal(bookingVM.booking.groupBookingId, bookingVM.booking.bookingId).then((modalDialogRef: ModalDialogRef<HotelOperationsResult>) => {
+		this._hotelOperationsModalService.openBookingOperationsModal(bookingVM.booking.groupBookingId, bookingVM.booking.id).then((modalDialogRef: ModalDialogRef<HotelOperationsResult>) => {
 			modalDialogRef.resultObservable
 				.subscribe((result: HotelOperationsResult) => {
 					if (result.didChangeBooking) {

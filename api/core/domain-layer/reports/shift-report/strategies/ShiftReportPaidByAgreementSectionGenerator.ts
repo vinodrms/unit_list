@@ -32,7 +32,7 @@ export class ShiftReportPaidByAgreementSectionGenerator extends AReportSectionGe
 
     protected getMeta(): ReportSectionMeta {
         return {
-            title: "Payd By Agreement Breakdown"
+            title: "Paid by agreement breakdown"
         }
     }
 

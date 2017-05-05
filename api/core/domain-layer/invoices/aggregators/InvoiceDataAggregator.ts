@@ -24,7 +24,7 @@ import {RoomDO} from '../../../data-layer/rooms/data-objects/RoomDO';
 
 export interface InvoiceDataAggregatorQuery {
     invoiceGroupId: string;
-    invoiceReference: string;
+    invoiceId: string;
     customerId: string;
     payerIndex: number;
 }
@@ -69,7 +69,7 @@ export class InvoiceDataAggregator {
         }).then((invoiceGroupDO: InvoiceGroupDO) => {
             this._vatList = invoiceGroupDO.vatTaxListSnapshot;
             this._invoice = _.find(invoiceGroupDO.invoiceList, (invoice: InvoiceDO) => {
-                return query.invoiceReference === invoice.invoiceReference;
+                return query.invoiceId === invoice.id;
             });
 
             return this.loadBookingDependencies();

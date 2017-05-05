@@ -41,7 +41,7 @@ export class ShiftReportByCategorySectionGenerator extends AReportSectionGenerat
 		var totalNet = 0, totalVat = 0, total = 0;
 		var data = [];
 		Object.keys(mpmDetailsDict).forEach((productId) => {
-			let transactions = mpmDetailsDict[productId].transactions;
+			let transactions = Math.abs(mpmDetailsDict[productId].transactions);
 			let itemNet = this._thUtils.roundNumberToTwoDecimals(mpmDetailsDict[productId].itemNet);
 			let itemVat = this._thUtils.roundNumberToTwoDecimals(mpmDetailsDict[productId].itemVat);
 			let itemTotal = this._thUtils.roundNumberToTwoDecimals(mpmDetailsDict[productId].itemTotal);
@@ -56,6 +56,10 @@ export class ShiftReportByCategorySectionGenerator extends AReportSectionGenerat
 
 			data.push(row);
 		});
+		// sort by display name
+        data.sort((row1: string[], row2: string[]) => {
+            return row1[0].localeCompare(row2[0]);
+        });
 		totalNet = this._thUtils.roundNumberToTwoDecimals(totalNet);
 		totalVat = this._thUtils.roundNumberToTwoDecimals(totalVat);
 		total = this._thUtils.roundNumberToTwoDecimals(total);

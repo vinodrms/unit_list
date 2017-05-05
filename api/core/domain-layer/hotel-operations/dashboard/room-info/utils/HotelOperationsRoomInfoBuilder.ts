@@ -47,7 +47,7 @@ export class HotelOperationsRoomInfoBuilder {
             roomId: booking.roomId,
             roomStatus: roomItemStatus,
             customerId: booking.displayCustomerId,
-            bookingId: booking.bookingId,
+            bookingId: booking.id,
             groupBookingId: booking.groupBookingId,
             bookingInterval: booking.interval,
             bookingCapacity: booking.configCapacity

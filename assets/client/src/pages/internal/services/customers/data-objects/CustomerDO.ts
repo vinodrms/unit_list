@@ -61,11 +61,16 @@ export class CustomerDO extends BaseDO {
 		return this.customerDetails.getName();
 	}
 	public get emailString(): string {
-		if (!this.customerDetails.getEmail() ||
-			!_.isString(this.customerDetails.getEmail())) {
+		if (!this.hasEmailInContactDetails()){
 			return "";
 		}
-		return this.customerDetails.getEmail();
+		return this.customerDetails.getContactDetailsList()[0].email;
+	}
+	private hasEmailInContactDetails(): boolean {
+		return this.customerDetails.getContactDetailsList() &&
+			this.customerDetails.getContactDetailsList().length > 0 &&
+			this.customerDetails.getContactDetailsList()[0].email &&
+			_.isString(this.customerDetails.getContactDetailsList()[0].email);
 	}
 	public get customerNameAndEmailString(): string {
 		var custNameEmailStr = this.customerDetails.getName();

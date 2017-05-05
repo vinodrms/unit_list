@@ -1,22 +1,25 @@
-import { MongoRepository, MongoSearchCriteria, MongoAggregationOptions } from '../../../../common/base/MongoRepository';
-import { ThLogger, ThLogLevel } from '../../../../../utils/logging/ThLogger';
-import { ThError } from '../../../../../utils/th-responses/ThError';
-import { ThStatusCode } from '../../../../../utils/th-responses/ThResponse';
-import { LazyLoadRepoDO, LazyLoadMetaResponseRepoDO } from '../../../../common/repo-data-objects/LazyLoadRepoDO';
-import { BookingDO, GroupBookingStatus } from '../../../data-objects/BookingDO';
-import { BookingMetaRepoDO, BookingSearchCriteriaRepoDO, BookingSearchResultRepoDO } from '../../IBookingRepository';
-import { MongoQueryBuilder, QueryComparisonOperator } from '../../../../common/base/MongoQueryBuilder';
-import { ThDateIntervalDO } from '../../../../../utils/th-dates/data-objects/ThDateIntervalDO';
-import { IndexedBookingInterval } from '../../../../price-products/utils/IndexedBookingInterval';
-import { BookingAggregationResultDO } from '../utils/data-objects/BookingAggregationResultDO';
-import { BookingStateChangeTriggerType } from '../../../data-objects/state-change-time/BookingStateChangeTriggerTimeDO';
-import { ThDateDO } from '../../../../../utils/th-dates/data-objects/ThDateDO';
+import { ThError } from "../../../../../utils/th-responses/ThError";
+import { ThStatusCode } from "../../../../../utils/th-responses/ThResponse";
+import { ThLogger, ThLogLevel } from "../../../../../utils/logging/ThLogger";
+import { MongoRepository, MongoSearchCriteria } from "../../../../common/base/MongoRepository";
+import { BookingRepositoryHelper } from "./helpers/BookingRepositoryHelper";
+import { BookingMetaRepoDO, BookingSearchCriteriaRepoDO, BookingSearchResultRepoDO } from "../../IBookingRepository";
+import { LazyLoadMetaResponseRepoDO, LazyLoadRepoDO } from "../../../../common/repo-data-objects/LazyLoadRepoDO";
+import { MongoQueryBuilder } from "../../../../common/base/MongoQueryBuilder";
+import { ThDateIntervalDO } from "../../../../../utils/th-dates/data-objects/ThDateIntervalDO";
+import { IndexedBookingInterval } from "../../../../price-products/utils/IndexedBookingInterval";
+import { ThDateDO } from "../../../../../utils/th-dates/data-objects/ThDateDO";
+import { BookingDO } from "../../../data-objects/BookingDO";
+import { BookingStateChangeTriggerType } from "../../../data-objects/state-change-time/BookingStateChangeTriggerTimeDO";
 
 import _ = require('underscore');
 
-export class MongoGetBookingsRepository extends MongoRepository {
-    constructor(bookingGroupsEntity: Sails.Model) {
-        super(bookingGroupsEntity);
+export class MongoBookingReadRepository extends MongoRepository {
+    private helper: BookingRepositoryHelper;
+
+    constructor(bookingsEntity: Sails.Model) {
+        super(bookingsEntity);
+        this.helper = new BookingRepositoryHelper();
     }
 
     public getBookingListCount(meta: BookingMetaRepoDO, searchCriteria: BookingSearchCriteriaRepoDO): Promise<LazyLoadMetaResponseRepoDO> {
@@ -26,7 +29,7 @@ export class MongoGetBookingsRepository extends MongoRepository {
     }
     private getBookingListCountCore(resolve: { (result: LazyLoadMetaResponseRepoDO): void }, reject: { (err: ThError): void }, meta: BookingMetaRepoDO, searchCriteria: BookingSearchCriteriaRepoDO) {
         var query = this.buildSearchCriteria(meta, searchCriteria);
-        this.getAggregationDocumentCount({ criteria: query }, this.getAggregationOptions(),
+        return this.getDocumentCount(query,
             (err: Error) => {
                 var thError = new ThError(ThStatusCode.BookingRepositoryErrorReadingDocumentCount, err);
                 ThLogger.getInstance().logError(ThLogLevel.Error, "error reading document count", { meta: meta, searchCriteria: searchCriteria }, thError);
@@ -50,25 +53,24 @@ export class MongoGetBookingsRepository extends MongoRepository {
 
         var mongoSearchCriteria: MongoSearchCriteria = {
             criteria: this.buildSearchCriteria(meta, searchCriteria),
-            sortCriteria: { "bookingList.startUtcTimestamp": sortCriteria },
+            sortCriteria: { "startUtcTimestamp": sortCriteria },
             lazyLoad: lazyLoad
         };
-        this.getAggregationDocumentList(mongoSearchCriteria, this.getAggregationOptions(),
+        this.findMultipleDocuments(mongoSearchCriteria,
             (err: Error) => {
                 var thError = new ThError(ThStatusCode.BookingsRepositoryErrorGettingList, err);
                 ThLogger.getInstance().logError(ThLogLevel.Error, "Error getting booking list", { meta: meta, searchCriteria: searchCriteria }, thError);
                 reject(thError);
             },
             (foundBookingList: Object[]) => {
-                var aggregationResultList: BookingAggregationResultDO[] = this.getQueryResult(BookingAggregationResultDO, foundBookingList);
+                var bookingList = this.helper.buildBookingListFrom(foundBookingList);
                 resolve({
-                    bookingList: _.map(aggregationResultList, (aggregationResult: BookingAggregationResultDO) => { return aggregationResult.booking }),
+                    bookingList: bookingList,
                     lazyLoad: lazyLoad
                 });
             }
         );
     }
-
 
     private buildSearchCriteria(meta: BookingMetaRepoDO, searchCriteria: BookingSearchCriteriaRepoDO): Object {
         var mongoQueryBuilder = new MongoQueryBuilder();
@@ -87,14 +89,14 @@ export class MongoGetBookingsRepository extends MongoRepository {
                 mongoQueryBuilder.addCustomQuery("$or", [
                     {
                         $and: [
-                            { "bookingList.startUtcTimestamp": { $lte: queryStartUtcTimestamp } },
-                            { "bookingList.endUtcTimestamp": { $gte: queryStartUtcTimestamp } }
+                            { "startUtcTimestamp": { $lte: queryStartUtcTimestamp } },
+                            { "endUtcTimestamp": { $gte: queryStartUtcTimestamp } }
                         ]
                     },
                     {
                         $and: [
-                            { "bookingList.startUtcTimestamp": { $gte: queryStartUtcTimestamp } },
-                            { "bookingList.startUtcTimestamp": { $lte: queryEndUtcTimestamp } }
+                            { "startUtcTimestamp": { $gte: queryStartUtcTimestamp } },
+                            { "startUtcTimestamp": { $lte: queryEndUtcTimestamp } }
                         ]
                     }
                 ]);
@@ -103,15 +105,15 @@ export class MongoGetBookingsRepository extends MongoRepository {
         this.appendTriggerParamsIfNecessary(mongoQueryBuilder, searchCriteria);
         this.appendDateParamsIfNecessary(mongoQueryBuilder, searchCriteria);
         this.appendBeforeStartDateParamIfNecessary(mongoQueryBuilder, searchCriteria);
-        mongoQueryBuilder.addMultipleSelectOptionList("bookingList.confirmationStatus", searchCriteria.confirmationStatusList);
-        mongoQueryBuilder.addExactMatch("id", searchCriteria.groupBookingId);
-        mongoQueryBuilder.addMultipleSelectOptionList("id", searchCriteria.groupBookingIdList);
-        mongoQueryBuilder.addMultipleSelectOptionList("bookingList.bookingId", searchCriteria.bookingIdList);
-        mongoQueryBuilder.addRegex("bookingList.indexedSearchTerms", searchCriteria.searchTerm);
-        mongoQueryBuilder.addExactMatch("bookingList.roomId", searchCriteria.roomId);
-        mongoQueryBuilder.addMultipleSelectOption("bookingList.customerIdList", searchCriteria.customerId);
-        mongoQueryBuilder.addMultipleSelectOption("bookingList.reservedAddOnProductIdList", searchCriteria.reservedAddOnProductId);
-        mongoQueryBuilder.addExactMatch("bookingList.priceProductId", searchCriteria.priceProductId);
+        mongoQueryBuilder.addMultipleSelectOptionList("confirmationStatus", searchCriteria.confirmationStatusList);
+        mongoQueryBuilder.addExactMatch("groupBookingId", searchCriteria.groupBookingId);
+        mongoQueryBuilder.addMultipleSelectOptionList("groupBookingId", searchCriteria.groupBookingIdList);
+        mongoQueryBuilder.addMultipleSelectOptionList("id", searchCriteria.bookingIdList);
+        mongoQueryBuilder.addRegex("indexedSearchTerms", searchCriteria.searchTerm);
+        mongoQueryBuilder.addExactMatch("roomId", searchCriteria.roomId);
+        mongoQueryBuilder.addMultipleSelectOption("customerIdList", searchCriteria.customerId);
+        mongoQueryBuilder.addMultipleSelectOption("reservedAddOnProductIdList", searchCriteria.reservedAddOnProductId);
+        mongoQueryBuilder.addExactMatch("priceProductId", searchCriteria.priceProductId);
         return mongoQueryBuilder.processedQuery;
     }
     private appendTriggerParamsIfNecessary(mongoQueryBuilder: MongoQueryBuilder, searchCriteria: BookingSearchCriteriaRepoDO) {
@@ -122,8 +124,8 @@ export class MongoGetBookingsRepository extends MongoRepository {
             return;
         }
 
-        var triggerTypeSelector: string = "bookingList." + searchCriteria.triggerParams.triggerName + ".type";
-        var triggerUtcTimestampSelector: string = "bookingList." + searchCriteria.triggerParams.triggerName + ".utcTimestamp";
+        var triggerTypeSelector: string = searchCriteria.triggerParams.triggerName + ".type";
+        var triggerUtcTimestampSelector: string = searchCriteria.triggerParams.triggerName + ".utcTimestamp";
         var maxExactTimestamp = searchCriteria.triggerParams.currentHotelTimestamp.getUtcTimestamp();
         var maxDependentOnHourTimestamp = maxExactTimestamp - searchCriteria.triggerParams.cancellationHour.getMillis();
 
@@ -157,7 +159,7 @@ export class MongoGetBookingsRepository extends MongoRepository {
             return;
         }
         var overlappingUtcTimestampInterval = IndexedBookingInterval.getOverlappingUtcTimestampIntervalForDate(thDate);
-        var fieldNameSelector: string = "bookingList." + utcTimestampFieldName;
+        var fieldNameSelector: string = utcTimestampFieldName;
 
         var maxTimestampValue: Object = {};
         maxTimestampValue[fieldNameSelector] = { $lte: overlappingUtcTimestampInterval.maxUtcTimestamp };
@@ -176,14 +178,6 @@ export class MongoGetBookingsRepository extends MongoRepository {
             return;
         }
         var overlappingUtcTimestampInterval = IndexedBookingInterval.getOverlappingUtcTimestampIntervalForDate(maxThDate);
-        mongoQueryBuilder.addCustomQuery("bookingList.startUtcTimestamp", { $lte: overlappingUtcTimestampInterval.maxUtcTimestamp });
-    }
-
-    private getAggregationOptions(): MongoAggregationOptions {
-        return {
-            unwind: true,
-            unwindParam: "$bookingList",
-            subdocumentUnwindedPropertyIdSelector: "bookingList.bookingId"
-        }
+        mongoQueryBuilder.addCustomQuery("startUtcTimestamp", { $lte: overlappingUtcTimestampInterval.maxUtcTimestamp });
     }
 }

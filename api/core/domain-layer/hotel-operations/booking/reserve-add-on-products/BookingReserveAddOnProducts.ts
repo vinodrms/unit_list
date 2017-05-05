@@ -45,7 +45,7 @@ export class BookingReserveAddOnProducts {
             this._loadedAddOnProductsContainer = addOnProductsContainer;
 
             var bookingsRepo = this._appContext.getRepositoryFactory().getBookingRepository();
-            return bookingsRepo.getBookingById({ hotelId: this._sessionContext.sessionDO.hotel.id }, this._reserveAddOnProductsDO.groupBookingId, this._reserveAddOnProductsDO.bookingId)
+            return bookingsRepo.getBookingById({ hotelId: this._sessionContext.sessionDO.hotel.id }, this._reserveAddOnProductsDO.groupBookingId, this._reserveAddOnProductsDO.id)
         }).then((booking: BookingDO) => {
             this._loadedBooking = booking;
 
@@ -60,7 +60,7 @@ export class BookingReserveAddOnProducts {
             var bookingsRepo = this._appContext.getRepositoryFactory().getBookingRepository();
             return bookingsRepo.updateBooking({ hotelId: this._sessionContext.sessionDO.hotel.id }, {
                 groupBookingId: this._loadedBooking.groupBookingId,
-                bookingId: this._loadedBooking.bookingId,
+                bookingId: this._loadedBooking.id,
                 versionId: this._loadedBooking.versionId
             }, this._loadedBooking);
         }).then((updatedBooking: BookingDO) => {

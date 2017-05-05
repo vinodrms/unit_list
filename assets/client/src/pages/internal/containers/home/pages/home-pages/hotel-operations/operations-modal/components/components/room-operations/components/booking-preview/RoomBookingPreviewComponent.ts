@@ -85,7 +85,7 @@ export class RoomBookingPreviewComponent implements OnInit {
     public viewInvoice() {
         if (!this.hasUnpaidInvoice()) { return; }
         this._operationsPageControllerService.goToInvoice(this._roomOperationsPageData.invoiceGroupDO.id, {
-            bookingId: this.roomAttachedBookingResultVM.roomAttachedBookingResultDO.booking.bookingId
+            bookingId: this.roomAttachedBookingResultVM.roomAttachedBookingResultDO.booking.id
         }, false);
     }
 
@@ -143,7 +143,7 @@ export class RoomBookingPreviewComponent implements OnInit {
         this.isCheckingOut = true;
 
         var chechOutParams: CheckOutRoomParam = {
-            bookingId: this.bookingDO.bookingId,
+            bookingId: this.bookingDO.id,
             groupBookingId: this.bookingDO.groupBookingId
         }
         this._hotelOperationsRoomService.checkOut(chechOutParams).subscribe((updatedBooking: BookingDO) => {
@@ -194,6 +194,6 @@ export class RoomBookingPreviewComponent implements OnInit {
         this._operationsPageControllerService.goToCustomer(customer.id);
     }
     public goToBooking(booking: BookingDO) {
-        this._operationsPageControllerService.goToBooking(booking.groupBookingId, booking.bookingId);
+        this._operationsPageControllerService.goToBooking(booking.groupBookingId, booking.id);
     }
 }

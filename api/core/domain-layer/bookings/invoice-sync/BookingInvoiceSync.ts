@@ -42,7 +42,7 @@ export class BookingInvoiceSync {
             hotelId: this._sessionContext.sessionDO.hotel.id
         }, {
                 groupBookingId: booking.groupBookingId,
-                bookingId: booking.bookingId
+                bookingId: booking.id
             }
         ).then((searchResult: InvoiceGroupSearchResultRepoDO) => {
             if (searchResult.invoiceGroupList.length == 0) {
@@ -52,12 +52,12 @@ export class BookingInvoiceSync {
             }
             let invoiceGroup = searchResult.invoiceGroupList[0];
             let syncIsRequired = false;
-            switch(syncType) {
+            switch (syncType) {
                 case BookingInvoiceSyncType.Pricing: syncIsRequired = this.syncInvoiceWithBookingPriceForGroup(invoiceGroup, booking); break;
                 case BookingInvoiceSyncType.Notes: syncIsRequired = this.syncInvoiceWithBookingNotesForGroup(invoiceGroup, booking); break;
                 default: syncIsRequired = false;
             }
-            
+
             if (!syncIsRequired) {
                 return new Promise<InvoiceGroupDO>((resolve: { (result: InvoiceGroupDO): void }, reject: { (err: ThError): void }) => {
                     resolve(invoiceGroup);
@@ -77,13 +77,16 @@ export class BookingInvoiceSync {
     private syncInvoiceWithBookingPriceForGroup(invoiceGroup: InvoiceGroupDO, booking: BookingDO): boolean {
         let invoice = this.getBookingInvoiceFromInvoiceGroup(invoiceGroup, booking);
 
+        if (invoice.isClosed()) {
+            return false;
+        }
         let priceToPay = invoice.getPrice();
         let payersPriceToPay = this.getInvoicePayersPriceToPay(invoice);
-        
+
         if (priceToPay == payersPriceToPay) {
             return false;
         }
-        
+
         let priceForEachPayer = (priceToPay - payersPriceToPay) / invoice.payerList.length;
         invoice.payerList.forEach((payer: InvoicePayerDO) => {
             payer.priceToPay += priceForEachPayer;
@@ -101,39 +104,29 @@ export class BookingInvoiceSync {
         return payerTotalPrice;
     }
 
-    private syncInvoiceWithBookingNotesForGroup(invoiceGroup: InvoiceGroupDO, booking: BookingDO): boolean {        
+    private syncInvoiceWithBookingNotesForGroup(invoiceGroup: InvoiceGroupDO, booking: BookingDO): boolean {
         let invoice = this.getBookingInvoiceFromInvoiceGroup(invoiceGroup, booking);
-
         if (invoice.notesFromBooking == booking.invoiceNotes) {
-            return false
+            return false;
         }
-        
+        if (invoice.isClosed()) {
+            return false;
+        }
         invoice.notesFromBooking = booking.invoiceNotes;
-        
         return true;
     }
 
     private getBookingInvoiceFromInvoiceGroup(invoiceGroup: InvoiceGroupDO, booking: BookingDO): InvoiceDO {
-        let invoice = _.find(invoiceGroup.invoiceList, (invoice: InvoiceDO) => { return invoice.bookingId == booking.bookingId });
+        let invoice = _.find(invoiceGroup.invoiceList, (invoice: InvoiceDO) => { return invoice.bookingId == booking.id });
         if (this._thUtils.isUndefinedOrNull(invoice)) {
             var thError = new ThError(ThStatusCode.BookingInvoiceUtilsInvoiceNotFound, null);
             ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Invoice not found for booking in group", {
                 groupBookingId: booking.groupBookingId,
-                bookingId: booking.bookingId,
+                bookingId: booking.id,
                 invoiceGroupId: invoiceGroup.id
             }, thError);
             throw thError;
         }
-        if (invoice.isClosed()) {
-            var thError = new ThError(ThStatusCode.BookingInvoiceUtilsInvoiceIsClosed, null);
-            ThLogger.getInstance().logBusiness(ThLogLevel.Warning, "Invoice cannot be changed because the invoice is closed", {
-                groupBookingId: booking.groupBookingId,
-                bookingId: booking.bookingId,
-                invoiceGroupId: invoiceGroup.id
-            }, thError);
-            throw thError;
-        }
-
         return invoice;
     }
 

@@ -15,6 +15,7 @@ import { CommissionDO, CommissionType } from '../../../core/data-layer/common/da
 import { ThDateDO } from '../../../core/utils/th-dates/data-objects/ThDateDO';
 import { PriceProductDO } from '../../../core/data-layer/price-products/data-objects/PriceProductDO';
 import { TestUtils } from '../../helpers/TestUtils';
+import { ContactDetailsDO } from '../../../core/data-layer/customers/data-objects/customer-details/ContactDetailsDO';
 
 export interface ICustomerDataSource {
 	getCustomerList(): CustomerDO[];
@@ -103,10 +104,12 @@ export class DefaultCustomerBuilder implements ICustomerDataSource {
 		details.commission.type = CommissionType.Fixed;
 		details.commission.amount = 2.25;
 		details.commission.deducted = true;
-		details.contactName = "Ionut Paraschiv";
+		var contactDetails = new ContactDetailsDO();
+		contactDetails.contactName = "Ionut Paraschiv";
+		contactDetails.phone = "217893129371";
+		details.contactDetailsList = [contactDetails];
 		details.name = name;
 		details.payInvoiceByAgreement = false;
-		details.phone = "217893129371";
 		details.vatCode = "RO34121562";
 		details.websiteUrl = "www.3angle.tech";
 		details.receiveBookingConfirmations = true;

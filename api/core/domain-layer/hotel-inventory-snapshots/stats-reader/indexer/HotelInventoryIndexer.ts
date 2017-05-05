@@ -23,18 +23,22 @@ import { IRevenueForDate } from '../data-objects/revenue/IRevenueForDate';
 import { RevenueForDate } from '../data-objects/revenue/RevenueForDate';
 import { InvoiceIndexer } from './invoice/InvoiceIndexer';
 import { IInvoiceStats } from './invoice/IInvoiceStats';
+import { RoomSnapshotDO } from "../../../../data-layer/hotel-inventory-snapshots/data-objects/room/RoomSnapshotDO";
+import { IRoom } from "../../../../data-layer/rooms/data-objects/IRoom";
 
 import _ = require('underscore');
 
 export interface HotelInventoryIndexerParams {
     cancellationHour: ThHourDO;
     currentHotelTimestamp: ThTimestampDO;
+    roomList: RoomSnapshotDO[];
 }
 export class HotelInventoryIndexer {
     private _bookingUtils: BookingUtils;
     private _dateUtils: ThDateUtils;
     private _indexedInterval: IndexedBookingInterval;
-
+    private _indexedRoomsById: { [id: string]: IRoom; };
+    
     private _confirmedBookingsContainer: BookingsContainer;
     private _guaranteedBookingsContainer: BookingsContainer;
     private _penaltyBookingsContainer: BookingsContainer;
@@ -45,6 +49,8 @@ export class HotelInventoryIndexer {
         private _indexerParams: HotelInventoryIndexerParams) {
         this._bookingUtils = new BookingUtils();
         this._dateUtils = new ThDateUtils();
+
+        this._indexedRoomsById = _.indexBy(this._indexerParams.roomList, (room: IRoom) => { return room.id });
     }
 
     public indexInventory(indexedInterval: IndexedBookingInterval): Promise<boolean> {
@@ -112,7 +118,7 @@ export class HotelInventoryIndexer {
     private getOccupancy(bookingsContainer: BookingsContainer, thDate: ThDateDO): BookingOccupancy {
         var indexedSingleDayInterval = this.getSingleDayIntervalStartingFrom(thDate);
         var filteredBookingList: BookingDO[] = bookingsContainer.getBookingsFilteredByInterval(indexedSingleDayInterval);
-        var bookingOccupancy = new BookingOccupancy({});
+        var bookingOccupancy = new BookingOccupancy(this._indexedRoomsById);
         bookingOccupancy.initializeFromBookings(filteredBookingList);
         return bookingOccupancy;
     }
@@ -134,7 +140,7 @@ export class HotelInventoryIndexer {
         var revenue = new RevenueForDate(0.0, 0.0);
         _.forEach(filteredBookingItemList, (bookingItem: BookingItemContainer) => {
             var noNights = bookingItem.indexedBookingInterval.getLengthOfStay();
-            if (noNights > 0 && !this._invoiceStats.bookingHasInvoiceWithLossAcceptedByManagement(bookingItem.booking.bookingId)) {
+            if (noNights > 0 && !this._invoiceStats.bookingHasInvoiceWithLossAcceptedByManagement(bookingItem.booking.id)) {
                 revenue.roomRevenue += this.getBookingRoomPriceForDate(bookingItem.booking.price, bookingItem.booking.configCapacity, noNights, thDate);
                 revenue.otherRevenue += this.getBookingOtherPriceAvgPerNight(bookingItem.booking.price, bookingItem.booking.configCapacity, noNights);
             }

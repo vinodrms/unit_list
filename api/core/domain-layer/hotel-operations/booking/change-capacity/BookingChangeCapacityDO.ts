@@ -7,7 +7,7 @@ import {ConfigCapacityDO} from '../../../../data-layer/common/data-objects/bed-c
 
 export class BookingChangeCapacityDO {
     groupBookingId: string;
-    bookingId: string;
+    id: string;
     configCapacity: ConfigCapacityDO;
 
     public static getValidationStructure(): IValidationStructure {
@@ -17,7 +17,7 @@ export class BookingChangeCapacityDO {
                 validationStruct: new PrimitiveValidationStructure(new StringValidationRule())
             },
             {
-                key: "bookingId",
+                key: "id",
                 validationStruct: new PrimitiveValidationStructure(new StringValidationRule())
             },
             {

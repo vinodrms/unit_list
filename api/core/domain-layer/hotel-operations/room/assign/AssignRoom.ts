@@ -26,7 +26,6 @@ import { BookingRoomCategoryValidationRule } from '../../../bookings/validators/
 import { BookingOccupancyCalculator } from '../../../bookings/search-bookings/utils/occupancy-calculator/BookingOccupancyCalculator';
 import { IBookingOccupancy } from '../../../bookings/search-bookings/utils/occupancy-calculator/results/IBookingOccupancy';
 import { BookingUtils } from '../../../bookings/utils/BookingUtils';
-import { BookingInvoiceSync } from '../../../bookings/invoice-sync/BookingInvoiceSync';
 import { BookingWithDependencies } from '../../booking/utils/BookingWithDependencies';
 import { BookingWithDependenciesLoader } from '../../booking/utils/BookingWithDependenciesLoader';
 
@@ -35,7 +34,6 @@ import _ = require('underscore');
 export class AssignRoom {
     private _thUtils: ThUtils;
     private _bookingUtils: BookingUtils;
-    private _bookingInvoiceSync: BookingInvoiceSync;
 
     private _assignRoomStrategy: IAssignRoomStrategy;
     private _assignRoomDO: AssignRoomDO;
@@ -48,7 +46,6 @@ export class AssignRoom {
     constructor(private _appContext: AppContext, private _sessionContext: SessionContext) {
         this._thUtils = new ThUtils();
         this._bookingUtils = new BookingUtils();
-        this._bookingInvoiceSync = new BookingInvoiceSync(this._appContext, this._sessionContext);
     }
 
     public checkIn(assignRoomDO: AssignRoomDO): Promise<BookingDO> {
@@ -116,7 +113,7 @@ export class AssignRoom {
                 this.updateBookingPriceIfNecessary();
 
                 var occupancyCalculator = new BookingOccupancyCalculator(this._appContext, this._sessionContext, this._bookingWithDependencies.roomList);
-                return occupancyCalculator.compute(this._bookingWithDependencies.bookingDO.interval, [], this._bookingWithDependencies.bookingDO.bookingId);
+                return occupancyCalculator.compute(this._bookingWithDependencies.bookingDO.interval, [], this._bookingWithDependencies.bookingDO.id);
             }).then((bookingOccupancy: IBookingOccupancy) => {
                 if (bookingOccupancy.getOccupancyForRoomId(this._assignRoomDO.roomId) > 0) {
                     var thError = new ThError(ThStatusCode.AssignRoomOccupied, null);
@@ -136,19 +133,18 @@ export class AssignRoom {
                     throw thError;
                 }
 
-                return this._assignRoomStrategy.generateInvoiceIfNecessary(this._bookingWithDependencies.bookingDO);
-            }).then((bookingWithInvoice: BookingDO) => {
                 var bookingsRepo = this._appContext.getRepositoryFactory().getBookingRepository();
                 return bookingsRepo.updateBooking({ hotelId: this._sessionContext.sessionDO.hotel.id }, {
                     groupBookingId: this._bookingWithDependencies.bookingDO.groupBookingId,
-                    bookingId: this._bookingWithDependencies.bookingDO.bookingId,
+                    bookingId: this._bookingWithDependencies.bookingDO.id,
                     versionId: this._bookingWithDependencies.bookingDO.versionId
                 }, this._bookingWithDependencies.bookingDO);
             }).then((updatedBooking: BookingDO) => {
                 this._bookingWithDependencies.bookingDO = updatedBooking;
-                return this._bookingInvoiceSync.syncInvoiceWithBookingPrice(updatedBooking);
-            }).then((updatedGroup: InvoiceGroupDO) => {
-                resolve(this._bookingWithDependencies.bookingDO);
+
+                return this._assignRoomStrategy.generateInvoiceIfNecessary(this._bookingWithDependencies.bookingDO);
+            }).then((bookingWithInvoice: BookingDO) => {
+                resolve(bookingWithInvoice);
             }).catch((error: any) => {
                 var thError = new ThError(ThStatusCode.AssignRoomError, error);
                 if (thError.isNativeError()) {
