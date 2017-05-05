@@ -6,6 +6,8 @@ import { InvoicePaymentMethodType } from './payers/InvoicePaymentMethodDO';
 import { CustomerDO } from '../../customers/data-objects/CustomerDO';
 import { BookingPriceDO } from "../../bookings/data-objects/price/BookingPriceDO";
 import { PricePerDayDO } from "../../bookings/data-objects/price/PricePerDayDO";
+import { ThDateDO } from "../../common/data-objects/th-dates/ThDateDO";
+import { ThTimestampDO } from "../../common/data-objects/th-dates/ThTimestampDO";
 
 export enum InvoiceAccountingType {
     Debit, Credit
@@ -25,8 +27,13 @@ export class InvoiceDO extends BaseDO {
     paymentStatus: InvoicePaymentStatus;
     notesFromBooking: string;
 
+    paidDate: ThDateDO;
+    paidTimestamp: ThTimestampDO;
+    paidDateUtcTimestamp: number;
+    paidDateTimeUtcTimestamp: number;
+
     protected getPrimitivePropertyKeys(): string[] {
-        return ["id", "accountingType", "bookingId", "invoiceReference", "paymentStatus", "notesFromBooking"];
+        return ["id", "accountingType", "bookingId", "invoiceReference", "paymentStatus", "notesFromBooking", "paidDateUtcTimestamp", "paidDateTimeUtcTimestamp"];
     }
 
     public buildFromObject(object: Object) {
@@ -44,6 +51,12 @@ export class InvoiceDO extends BaseDO {
             itemDO.buildFromObject(itemObject);
             this.itemList.push(itemDO);
         });
+
+        this.paidDate = new ThDateDO();
+        this.paidDate.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "paidDate"));
+
+        this.paidTimestamp = new ThTimestampDO();
+        this.paidTimestamp.buildFromObject(this.getObjectPropertyEnsureUndefined(object, "paidTimestamp"));
     }
 
     public buildCleanInvoice(accountingType: InvoiceAccountingType = InvoiceAccountingType.Debit) {
@@ -135,12 +148,12 @@ export class InvoiceDO extends BaseDO {
 
     public getUniqueIdentifier(): string {
         let thUtils = new ThUtils();
-        return thUtils.isUndefinedOrNull(this.id)? this.invoiceReference : this.id;
+        return thUtils.isUndefinedOrNull(this.id) ? this.invoiceReference : this.id;
     }
 
     public uniqueIdentifierEquals(uniqueId: string): boolean {
         let thUtils = new ThUtils();
-        return thUtils.isUndefinedOrNull(this.id)? 
+        return thUtils.isUndefinedOrNull(this.id) ?
             this.invoiceReference === uniqueId : this.id === uniqueId;
     }
 }
