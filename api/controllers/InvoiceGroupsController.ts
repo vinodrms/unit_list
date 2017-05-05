@@ -14,9 +14,9 @@ import { InvoiceAggregatedData } from '../core/domain-layer/invoices/aggregators
 import { InvoiceConfirmationVMContainer } from '../core/domain-layer/invoices/invoice-confirmations/InvoiceConfirmationVMContainer';
 import { ReportType, PdfReportsServiceResponse } from '../core/services/pdf-reports/IPdfReportsService';
 import { GenerateCreditInvoice } from "../core/domain-layer/invoices/generate-credit-invoice/GenerateCreditInvoice";
+import { ReinstateInvoice } from "../core/domain-layer/invoices/reinstate-invoice/ReinstateInvoice";
 
 import path = require("path");
-import { ReinstateInvoice } from "../core/domain-layer/invoices/reinstate-invoice/ReinstateInvoice";
 
 export class InvoiceGroupsController extends BaseController {
 
