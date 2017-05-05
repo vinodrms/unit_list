@@ -228,6 +228,8 @@
 	"External Booking No": "External Booking No",
 	"Guest Name": "Guest Name",
 	"Nights Billed": "Nights Billed",
+	"Reservation number": "Reservation number",
+	"Paid/Lost by Management at": "Paid/Lost by Management at",
 	
 	// Booking confirmations
 	"Booking confirmations are blocked for this booking.": "Booking confirmations are blocked for this booking."
